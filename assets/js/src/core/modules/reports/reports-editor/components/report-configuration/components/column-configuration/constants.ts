@@ -9,7 +9,6 @@
  */
 
 export const COLUMN_KEYS = {
-  ROW_DRAG: 'rowDragCol',
   NAME: 'name',
   DISPLAY: 'display',
   EXPORT: 'export',

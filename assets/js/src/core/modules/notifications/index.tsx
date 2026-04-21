@@ -19,11 +19,13 @@ import { DemoProcess } from './process/demo-process'
 import { staticWidgetRestorer } from '../widget-manager/services/static-widget-restorer'
 import { type ComponentRegistry } from '../app/component-registry/component-registry'
 import { NotificationPopup } from './notification-popup/notification-popup'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 
 export const NOTIFICATIONS: WidgetManagerTabConfig = {
   component: 'notifications',
   name: 'Notifications',
   id: 'notifications',
+  permission: UserPermission.Notifications,
   config: {
     translationKey: 'notifications.label',
     icon: {

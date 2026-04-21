@@ -10,7 +10,7 @@
 
 import { type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 import { Form, Modal } from '@sdk/components'
-import React, { createContext, type Dispatch, type SetStateAction, useEffect, useMemo, useState } from 'react'
+import React, { createContext, type Dispatch, type SetStateAction, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useWidgetEditor } from '../hooks/use-widget-editor'
 import { type InputRef } from 'antd'
@@ -20,46 +20,49 @@ interface WidgetEditorProviderProps {
   children?: React.ReactNode
 }
 
-export interface WidgetEditorContextProps {
+export interface ActiveTabContextProps {
   activeTabId: string | undefined
   setActiveTabId: (id: string | undefined) => void
+}
+
+/** Data context: changes when `widgets` array changes (add/remove/update) */
+export interface WidgetEditorDataContextProps {
   widgets: WidgetConfig[]
+}
+
+/** Actions context: contains only stable function references that never change */
+export interface WidgetEditorActionsContextProps {
   setWidgets: Dispatch<SetStateAction<WidgetConfig[]>>
   openWidget: (id: string, type: string) => Promise<void>
   closeWidget: (id: string) => void
-  createWidget: () => Promise<void>
+  createWidget: () => void
 }
 
-export const WidgetEditorContext = createContext<WidgetEditorContextProps | undefined>(undefined)
+export const ActiveTabContext = createContext<ActiveTabContextProps | undefined>(undefined)
+export const WidgetEditorDataContext = createContext<WidgetEditorDataContextProps | undefined>(undefined)
+export const WidgetEditorActionsContext = createContext<WidgetEditorActionsContextProps | undefined>(undefined)
 
 export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): React.JSX.Element => {
   const [activeTabId, setActiveTabId] = useState<string | undefined>(undefined)
   const [widgets, setWidgets] = useState<WidgetConfig[]>([])
-  const { getWidgetById } = useWidgetEditor()
+  const { getWidgetById, createWidget: createWidgetHook, isLoading } = useWidgetEditor()
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-  const { createWidget: createWidgetHook, isLoading } = useWidgetEditor()
   const { t } = useTranslation()
   const [tmpForm] = Form.useForm()
   const inputRef = React.useRef<InputRef>(null)
+  const createWidgetHookRef = useRef(createWidgetHook)
+  createWidgetHookRef.current = createWidgetHook
 
-  useEffect(() => {
-    if (isModalOpen) {
-      inputRef.current?.focus()
-    }
-  }, [isModalOpen])
-
-  const openWidget = async (id: string, type: string): Promise<void> => {
+  const openWidget = useCallback(async (id: string, type: string): Promise<void> => {
     const widget = await getWidgetById(id, type)
 
     if (widget !== undefined) {
       setWidgets((prev) => {
         const existingIndex = prev.findIndex(p => p.id === widget.id)
         if (existingIndex >= 0) {
-          // Widget already exists, just activate it
           setActiveTabId(widget.id)
           return prev
         } else {
-          // Add new widget and activate it
           setActiveTabId(widget.id)
           return [
             ...prev,
@@ -68,25 +71,26 @@ export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): R
         }
       })
     }
-  }
+  }, [getWidgetById])
 
-  const closeWidget = (id: string): void => {
-    const updatedWidgets = widgets.filter(widget => widget.id !== id)
-    setWidgets(updatedWidgets)
+  const closeWidget = useCallback((id: string): void => {
+    setWidgets((prev) => {
+      const updatedWidgets = prev.filter(widget => widget.id !== id)
 
-    if (activeTabId === id) {
-      const remainingWidgets = updatedWidgets
-      if (remainingWidgets.length > 0) {
-        setActiveTabId(remainingWidgets[0].id)
-      } else {
-        setActiveTabId(undefined)
-      }
-    }
-  }
+      setActiveTabId((currentActiveTabId) => {
+        if (currentActiveTabId === id) {
+          return updatedWidgets.length > 0 ? updatedWidgets[0].id : undefined
+        }
+        return currentActiveTabId
+      })
 
-  const createWidget = async (): Promise<void> => {
+      return updatedWidgets
+    })
+  }, [])
+
+  const createWidget = useCallback((): void => {
     setIsModalOpen(true)
-  }
+  }, [])
 
   const submit = async (): Promise<any> => {
     await tmpForm.validateFields()
@@ -94,47 +98,63 @@ export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): R
         const values = tmpForm.getFieldsValue()
         const { name, widgetType } = values as WidgetForm
 
-        await createWidgetHook(name, widgetType, () => {
+        await createWidgetHookRef.current(name, widgetType, (id: string) => {
           setIsModalOpen(false)
-
           tmpForm.resetFields()
+          void openWidget(id, widgetType)
         })
       })
   }
 
-  const contextValue: WidgetEditorContextProps = useMemo(() => ({
+  const activeTabValue: ActiveTabContextProps = useMemo(() => ({
     activeTabId,
-    setActiveTabId,
-    widgets,
+    setActiveTabId
+  }), [activeTabId])
+
+  const dataValue: WidgetEditorDataContextProps = useMemo(() => ({
+    widgets
+  }), [widgets])
+
+  const actionsValue: WidgetEditorActionsContextProps = useMemo(() => ({
     setWidgets,
     openWidget,
     closeWidget,
     createWidget
-  }), [activeTabId, widgets])
+  }), [openWidget, closeWidget, createWidget])
 
   return (
-    <WidgetEditorContext.Provider value={ contextValue }>
-      {children}
+    <WidgetEditorActionsContext.Provider value={ actionsValue }>
+      <WidgetEditorDataContext.Provider value={ dataValue }>
+        <ActiveTabContext.Provider value={ activeTabValue }>
+          {children}
 
-      <Modal
-        okButtonProps={ {
-          loading: isLoading
-        } }
-        okText={ t('widget-editor.create-modal.create') }
-        onCancel={ () => {
-          setIsModalOpen(false)
-        } }
-        onOk={ async () => {
-          await submit()
-        } }
-        open={ isModalOpen }
-        size='M'
-      >
-        <CreateWidgetForm
-          form={ tmpForm }
-          inputRef={ inputRef }
-        />
-      </Modal>
-    </WidgetEditorContext.Provider>
+          <Modal
+            afterOpenChange={ (open) => {
+              if (open) {
+                inputRef.current?.focus()
+              }
+            } }
+            okButtonProps={ {
+              loading: isLoading
+            } }
+            okText={ t('widget-editor.create-modal.create') }
+            onCancel={ () => {
+              setIsModalOpen(false)
+            } }
+            onOk={ async () => {
+              await submit()
+            } }
+            open={ isModalOpen }
+            size='M'
+          >
+            <CreateWidgetForm
+              form={ tmpForm }
+              inputRef={ inputRef }
+              onPressEnter={ () => { void submit() } }
+            />
+          </Modal>
+        </ActiveTabContext.Provider>
+      </WidgetEditorDataContext.Provider>
+    </WidgetEditorActionsContext.Provider>
   )
 }

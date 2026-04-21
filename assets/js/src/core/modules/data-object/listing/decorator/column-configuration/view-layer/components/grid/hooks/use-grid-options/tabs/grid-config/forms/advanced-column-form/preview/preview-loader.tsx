@@ -18,6 +18,7 @@ import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorator
 import { PreviewValue } from './preview-value'
 import { Text } from '@Pimcore/components/text/text'
 import { usePreviewItem } from './preview-item-provider'
+import { useLanguageSelection } from '@Pimcore/components/language-selection'
 
 export interface PreviewProps {
   column: AvailableColumn
@@ -28,6 +29,7 @@ export const PreviewLoader = (props: PreviewProps): React.JSX.Element => {
 
   const { data: gridData } = useData()
   const { item } = usePreviewItem()
+  const { currentLanguage } = useLanguageSelection()
 
   const firstItem = gridData.items[0]
   const advancedColumnConfig = (column?.__meta?.advancedColumnConfig ?? column.config) as unknown as AdvancedColumnConfig[] | undefined
@@ -39,6 +41,9 @@ export const PreviewLoader = (props: PreviewProps): React.JSX.Element => {
       column: {
         type: column.type,
         key: column.key,
+        locale: column.localizable
+          ? ((column.locale ?? currentLanguage) === 'default' ? null : (column.locale ?? currentLanguage))
+          : undefined,
         config: advancedColumnConfig
       },
       objectId: item?.data?.id ?? firstItem?.id

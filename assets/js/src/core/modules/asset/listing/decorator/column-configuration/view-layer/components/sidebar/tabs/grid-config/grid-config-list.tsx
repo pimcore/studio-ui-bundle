@@ -20,6 +20,7 @@ import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { uuid } from '@Pimcore/utils/uuid'
 import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-list-item'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 interface GridConfigListProps {
   columns: AvailableColumn[]
@@ -33,7 +34,6 @@ interface ColumnStackListProps extends Omit<StackListProps, 'items'> {
   items: ColumnStackListItemProps[]
 }
 
-/* eslint-disable react/jsx-key */
 export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Element => {
   const { setColumns } = useGridConfig()
   const settings = useSettings()
@@ -46,7 +46,7 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
 
     if ('fieldDefinition' in column.config) {
       const fieldDefinition = column.config.fieldDefinition as Record<string, any>
-      translationKey = fieldDefinition?.title ?? column.key
+      translationKey = !isEmptyValue(fieldDefinition?.title) ? fieldDefinition?.title : column.key
     }
 
     return {

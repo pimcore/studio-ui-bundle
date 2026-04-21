@@ -12,6 +12,7 @@ import { type WidgetRestorer } from './widget-restorer-registry'
 import { updateWidget, type WidgetManagerTabConfig } from '../widget-manager-slice'
 import { type AppDispatch } from '@sdk/app'
 import { merge, isNil } from 'lodash'
+import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 
 export class StaticWidgetRestorer implements WidgetRestorer {
   private readonly widgets: WidgetManagerTabConfig[] = []
@@ -47,6 +48,10 @@ export class StaticWidgetRestorer implements WidgetRestorer {
     const staticConfig = this.getStaticWidget(config.id)
 
     if (!isNil(staticConfig)) {
+      if (!isNil(staticConfig.permission) && !isAllowed(staticConfig.permission)) {
+        return false
+      }
+
       const mergedConfig = merge({}, config, staticConfig)
       dispatch(updateWidget(mergedConfig))
       return true

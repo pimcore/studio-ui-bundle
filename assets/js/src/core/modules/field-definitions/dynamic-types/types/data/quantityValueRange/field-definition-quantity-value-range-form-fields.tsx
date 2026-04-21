@@ -16,7 +16,6 @@ import { useTranslation } from 'react-i18next'
 
 export const FieldDefinitionQuantityValueRangeFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const isCustomLayout = props.context.area.includes('custom-layout')
   const { getSelectOptions } = useQuantityValueUnits()
 
   return (
@@ -55,36 +54,31 @@ export const FieldDefinitionQuantityValueRangeFormFields = (props: FieldDefiniti
         />
       </Form.Item>
 
-      {!isCustomLayout && (
-      <>
-        <Form.Item
-          label={ t('default-unit') }
-          name="defaultUnit"
-        >
-          <Select
-            allowClear
-            options={ getSelectOptions() }
-            showSearch
-          />
-        </Form.Item>
+      <Form.Item
+        label={ t('default-unit') }
+        name="defaultUnit"
+      >
+        <Select
+          allowClear
+          options={ getSelectOptions() }
+          showSearch
+        />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('valid-units') }
-          name="validUnits"
-        >
-          <Select
-            mode="multiple"
-            options={ getSelectOptions() }
-            showSearch
-          />
-        </Form.Item>
-      </>
-      )}
+      <Form.Item
+        label={ t('valid-units') }
+        name="validUnits"
+      >
+        <Select
+          mode="multiple"
+          options={ getSelectOptions() }
+          showSearch
+        />
+      </Form.Item>
 
       <Form.Item name="autoConvert">
         <Switch labelRight={ t('auto-convert') } />
       </Form.Item>
-
     </>
   )
 }

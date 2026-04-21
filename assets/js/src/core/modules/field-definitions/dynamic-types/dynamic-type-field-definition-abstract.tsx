@@ -24,6 +24,7 @@ export interface FieldDefinitionContext extends Record<string, any> {
   path: string[]
   fieldDefinitions: ILayoutContext['fieldDefinitions']
   disableName?: boolean
+  isEncryptedField?: boolean
 }
 
 export interface FieldDefinitionConvertibleContext extends FieldDefinitionContext {

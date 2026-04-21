@@ -21,52 +21,55 @@ interface ImagePanelProps {
   fieldName: string | string[]
   width?: string | number | null
   height?: string | number | null
+  dataTestId?: string
 }
 
-export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, height = 150 }: ImagePanelProps): React.JSX.Element => {
+export const ImagePanel = ({ titleKey, descriptionKey, fieldName, width = 300, height = 150, dataTestId }: ImagePanelProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
-    <Panel
-      border={ false }
-      collapsed={ false }
-      collapsible
-      contentPadding="small"
-      theme="card-with-highlight"
-      title={ t(titleKey) }
-    >
-      <Form.Item
-        getValueFromEvent={ (value: ImagePickerValue | null) => {
-          return value !== null
-            ? {
-                id: value.id,
-                type: value.type ?? 'asset',
-                subtype: 'image', // Default subtype for images
-                fullPath: value.fullPath
-              }
-            : null
-        } }
-        getValueProps={ (value: RelatedElementData | null) => {
-          return {
-            value: value !== null
+    <div data-testid={ dataTestId }>
+      <Panel
+        border={ false }
+        collapsed={ false }
+        collapsible
+        contentPadding="small"
+        theme="card-with-highlight"
+        title={ t(titleKey) }
+      >
+        <Form.Item
+          getValueFromEvent={ (value: ImagePickerValue | null) => {
+            return value !== null
               ? {
-                  type: 'asset' as const,
                   id: value.id,
+                  type: value.type ?? 'asset',
+                  subtype: 'image', // Default subtype for images
                   fullPath: value.fullPath
                 }
               : null
-          }
-        } }
-        name={ fieldName }
-      >
-        <ImagePicker
-          allowedTypes={ ['image'] }
-          description={ descriptionKey }
-          height={ height }
-          type='add'
-          width={ width }
-        />
-      </Form.Item>
-    </Panel>
+          } }
+          getValueProps={ (value: RelatedElementData | null) => {
+            return {
+              value: value !== null
+                ? {
+                    type: 'asset' as const,
+                    id: value.id,
+                    fullPath: value.fullPath
+                  }
+                : null
+            }
+          } }
+          name={ fieldName }
+        >
+          <ImagePicker
+            allowedTypes={ ['image'] }
+            description={ descriptionKey }
+            height={ height }
+            type='add'
+            width={ width }
+          />
+        </Form.Item>
+      </Panel>
+    </div>
   )
 }

@@ -64,10 +64,11 @@ export const ClassificationStoreCallbackTab = <T,>({ tabId, queryHook, queryArgs
 
   const [fetchLayoutByKey] = useLazyClassificationStoreGetLayoutByKeyQuery()
 
-  const fetchLayoutDataByKey = async (keyId: string): Promise<ClassificationStoreCollection2> => {
+  const fetchLayoutDataByKey = async (keyId: string, groupId: number): Promise<ClassificationStoreCollection2> => {
     return await fetchLayoutByKey({
       fieldName: queryArgs.fieldName,
-      keyId: parseInt(keyId)
+      keyId: parseInt(keyId),
+      groupId
     }).unwrap()
   }
 
@@ -93,7 +94,7 @@ export const ClassificationStoreCallbackTab = <T,>({ tabId, queryHook, queryArgs
         const itemId = key.split('-')[1]
         const groupId = parseInt(key.split('-')[0])
 
-        const promise = fetchLayoutDataByKey(itemId).then((itemData) => {
+        const promise = fetchLayoutDataByKey(itemId, groupId).then((itemData) => {
           return {
             ...itemData,
             groupId

@@ -173,7 +173,7 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
         name="name"
         rules={ [{ required: true, message: t('form.validation.provide-name') }] }
       >
-        <Input />
+        <Input data-testid='listing-grid-config-template-name-input' />
       </Form.Item>
 
       <Form.Item
@@ -181,7 +181,7 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
         name="description"
         rules={ [{ required: false, message: t('form.validation.provide-description') }] }
       >
-        <Input.TextArea />
+        <Input.TextArea data-testid='listing-grid-config-template-description-input' />
       </Form.Item>
 
       <Space size="extra-small">

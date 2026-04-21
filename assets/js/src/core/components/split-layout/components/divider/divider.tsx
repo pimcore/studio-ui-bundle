@@ -75,7 +75,7 @@ export const Divider = ({ onMouseResize, onKeyboardResize, withToolbar = false }
   }
 
   return (
-    // eslint-disable-next-line jsx-a11y/no-static-element-interactions,jsx-a11y/interactive-supports-focus
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
       className={ cn(styles.dividerContainer, { [styles.resizable]: isResizable, [styles.withToolbar]: withToolbar }) }
       onMouseDown={ handleMouseDown }

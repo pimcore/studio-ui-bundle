@@ -22,6 +22,7 @@ export function formatNumber ({ value, lng, options = { useGrouping: false } }: 
     return ''
   }
 
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
   if (lng === undefined) {
     lng = i18n.language
   }

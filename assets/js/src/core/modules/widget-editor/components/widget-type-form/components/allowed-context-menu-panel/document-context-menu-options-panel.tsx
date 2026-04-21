@@ -9,7 +9,6 @@
  */
 
 import { Conditional } from '@Pimcore/components/form/conditional/conditional'
-import { useWidgetTypeForm } from '../../hooks/use-widget-type-form'
 import { useTranslation } from 'react-i18next'
 import React from 'react'
 import { FormKit } from '@Pimcore/components/form/form-kit'
@@ -19,14 +18,21 @@ import { Spin } from '@Pimcore/components/spin/spin'
 import { useStyles } from './allowed-context-menu.styles'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
-export const DocumentContextMenuOptionsPanel = (): React.JSX.Element => {
+interface DocumentContextMenuOptionsPanelProps {
+  items: string[]
+  isLoading: boolean
+}
+
+export const DocumentContextMenuOptionsPanel = ({ items, isLoading }: DocumentContextMenuOptionsPanelProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { documentContextMenuItems, isLoading } = useWidgetTypeForm()
   const { styles } = useStyles()
 
   if (isLoading) {
     return (
-      <Conditional condition={ (values) => values.elementType === elementTypes.document }>
+      <Conditional
+        condition={ (values) => values.elementType === elementTypes.document }
+        watchFields={ ['elementType'] }
+      >
         <FormKit.Panel
           collapsed={ false }
           collapsible
@@ -39,7 +45,10 @@ export const DocumentContextMenuOptionsPanel = (): React.JSX.Element => {
   }
 
   return (
-    <Conditional condition={ (values) => values.elementType === elementTypes.document }>
+    <Conditional
+      condition={ (values) => values.elementType === elementTypes.document }
+      watchFields={ ['elementType'] }
+    >
       <FormKit.Panel
         collapsed={ false }
         collapsible
@@ -49,7 +58,7 @@ export const DocumentContextMenuOptionsPanel = (): React.JSX.Element => {
           <Form.Group
             name={ 'contextPermissions' }
           >
-            {documentContextMenuItems.map(permission => (
+            {items.map(permission => (
               <Form.Item
                 key={ permission }
                 name={ permission }

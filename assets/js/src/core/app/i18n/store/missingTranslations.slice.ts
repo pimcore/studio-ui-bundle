@@ -39,6 +39,11 @@ export const selectMissingTranslations = (state: RootState): string[] => state.m
 
 const debouncedSendTranslations = debounce(async (listenerApi) => {
   const state = listenerApi.getState() as RootState
+
+  if (state.authentication?.isAuthenticated !== true) {
+    return
+  }
+
   const translations = selectMissingTranslations(state)
 
   listenerApi.dispatch(removeMissingTranslations(translations))

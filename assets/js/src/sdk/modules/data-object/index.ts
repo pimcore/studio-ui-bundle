@@ -44,6 +44,7 @@ export * from '@Pimcore/modules/data-object/editor/widget'
 export * from '@Pimcore/modules/data-object/tree/node/with-action-states'
 export * from '@Pimcore/modules/data-object/tree/utils/transform-api-data-to-node'
 
+export * from '@Pimcore/modules/data-object/listing/batch-actions/batch-append-mode/batch-append-mode'
 export * from '@Pimcore/modules/data-object/listing/listing-container'
 export * from '@Pimcore/modules/data-object/listing/builder/object-listing-builder'
 export * from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
@@ -51,3 +52,6 @@ export * from '@Pimcore/modules/data-object/data-object-provider'
 export * from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/components/data-component/data-component'
 
 export * from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
+
+export * from '@Pimcore/modules/data-object/listing/decorator/column-configuration/view-layer/components/grid/hooks/use-grid-options/tabs/grid-config/forms/advanced-column-form/advanced-column-form'
+export * from '@Pimcore/modules/data-object/listing/decorator/column-configuration/view-layer/components/grid/hooks/use-grid-options/tabs/grid-config/forms/advanced-column-form/pipeline-layout-provider'

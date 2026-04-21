@@ -9,9 +9,10 @@
  */
 
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { DynamicTypeFieldDefinitionDataAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
+import { DynamicTypeFieldDefinitionDataAbstract, type FieldDefinitionData } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
 import { FieldDefinitionLastnameFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/lastname/field-definition-lastname-form-fields'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
+import { t } from 'i18next'
 import React from 'react'
 
 export class DynamicTypeFieldDefinitionLastname extends DynamicTypeFieldDefinitionDataAbstract {
@@ -19,6 +20,14 @@ export class DynamicTypeFieldDefinitionLastname extends DynamicTypeFieldDefiniti
 
   getIcon (): ElementIcon {
     return { type: 'name', value: 'name' }
+  }
+
+  getDefaultData (): FieldDefinitionData {
+    return {
+      ...super.getDefaultData(),
+      name: 'lastname',
+      title: t('field-definition.crm.lastname.title')
+    }
   }
 
   getGroup (): string[] {
@@ -44,5 +53,13 @@ export class DynamicTypeFieldDefinitionLastname extends DynamicTypeFieldDefiniti
         type={ this.id }
       />
     )
+  }
+
+  normalizeFieldDefinition (fieldDef: Record<string, unknown>): Record<string, unknown> {
+    const normalized = super.normalizeFieldDefinition(fieldDef)
+    if (typeof normalized.title !== 'string' || normalized.title === '') {
+      normalized.title = t('field-definition.crm.lastname.title')
+    }
+    return normalized
   }
 }

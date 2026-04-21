@@ -1,0 +1,2630 @@
+common.owner: Eier
+common.modification-date: Endringsdato
+common.globally: Globalt
+common.apply-selection: Bruk utvalg
+dont-ask-again: Ikke spør igjen
+widget.missing-context.title: Manglende kontekst
+widget.missing-context.description: Ingen relatert element funnet
+widget.missing-tab-context.description: Denne funksjonen støttes ikke for det relaterte elementet
+block: Blokk
+error.error_something_generic_went_wrong: Noe gikk galt
+error.syntax_error: Syntaksfeil
+error.error_element_exists: Elementet finnes allerede
+error.error_folder_exists: Mappen finnes allerede
+error.error_invalid_argument: Ugyldig argument
+error.error_widget_name_missing: Widgetnavn må oppgis
+error.error_widget_name_invalid: Widgetnavnet er ugyldig (kun alfanumeriske tegn, understrek og mellomrom er tillatt, må være minst 3 tegn og mindre enn 80 tegn)
+error.error_validation_failed: Validering mislyktes
+error.error_validation.email_failed: Vennligst oppgi en gyldig e-postadresse
+error.error_element_not_found: Element ikke funnet
+error.error_inconsistent_asset_type: Kun ressurser av samme type er tillatt her.
+sidebar.selected_elements: Valgte elementer
+sidebar.grid_config: Rutenettskonfigurasjon
+sidebar.tag_filters: Taggfiltre
+sidebar.search_filter: Søk og filter
+sidebar.clear-all-filters: Fjern alle filtre
+add-areas: Legg til områder
+content-settings: Innholdsinnstillinger
+site-domain.main_site: Hovedside
+relation-invalid-key-in-columns: Ugyldig verdi brukt for nøkkelkolonne. Vennligst unngå spesialtegn og reserverte nøkkelord.
+import-modal.title: Importer
+import-modal.upload: Last opp
+import-modal.browse-files: Bla gjennom filer
+import-modal.drag-drop: Dra og slipp fil her eller klikk for å bla
+modal-search.field.mimeType: MIME-type
+modal-search.field.thumbnail: Miniatyrbilde
+modal-search.field.id: ID
+modal-search.field.userOwner: Eier (bruker)
+modal-search.field.userOwnerName: Eiernavn (bruker)
+modal-search.field.userModification: Endret av (bruker)
+modal-search.field.userModificationName: Endret av navn (bruker)
+modal-search.field.creationDate: Opprettelsesdato
+modal-search.field.modificationDate: Endringsdato
+modal-search.field.description: Beskrivelse
+modal-search.field.name: Navn
+modal-search.field.previewImage: Forhåndsvisningsbilde
+modal-search.field.title: Tittel
+modal-search.field.class: Klasse
+modal-search.field.language: Språk
+asset.sidebar.details: Detaljer
+asset.asset-tree.title: Ressurstre
+asset.asset-tree.search: Søk i {{folderName}}
+asset.asset-editor-tabs.view: Visning
+asset.asset-editor-tabs.embedded-metadata: Innebygde metadata
+asset.asset-editor-tabs.custom-metadata: Egendefinerte metadata
+asset.asset-editor-tabs.versions: Versjoner
+asset.asset-editor-tabs.list.columns.preview: Forhåndsvisning
+asset.asset-editor-tabs.list.columns.id: ID
+asset.asset-editor-tabs.list.columns.type: Type
+asset.asset-editor-tabs.list.columns.fullPath: Full sti
+asset.asset-editor-tabs.list.columns.creationDate: Opprettelsesdato
+asset.asset-editor-tabs.list.columns.modificationDate: Endringsdato
+asset.tree.context-menu.upload-new-version: Last opp ny versjon
+asset.copy-info: Kopier og info
+asset.upload: Last opp
+asset.upload.label: Velg fil
+asset.upload.files.uploading: "{{processedItems}}/{{totalItems}} filer lastes opp ..."
+asset.upload.files.uploaded: "{{successItems}} filer er lastet opp"
+asset.upload.files.completed: Fullført!
+asset.upload.files.successfully-uploaded: Opplasting fullført
+asset.upload.files.completed-actions: Fullførte handlinger
+asset.upload.validation: Vennligst legg til en fil
+asset.upload.file-exists.title: Filen finnes allerede
+asset.upload.file-exists.message: 'Filen "{{fileName}}" finnes allerede i denne mappen. Vil du overskrive den?'
+asset.upload.overwrite: Overskriv
+asset.upload.keep-both: Behold begge
+asset.upload.skip: Hopp over
+asset.upload.apply-to-all: Bruk på alle
+asset.upload.folder-drop.creating-folders: Oppretter mapper
+asset.upload.folder-drop.creating-folders-hint: Vennligst vent mens mappestrukturen opprettes…
+upload.error.file-too-large: Filen er større enn serverens gjeldende opplastingsgrense.
+upload.error.max-file-size-exceeded: "Filstørrelsen overskrider maksimalt tillatt størrelse på {{maxSize}}"
+upload.error.generic: Filen kunne ikke lastes opp.
+upload.error.upload-failed: Opplasting mislyktes
+upload.error.failed-to-fetch-asset-details: Kunne ikke hente ressursdetaljer
+upload.success: Fil lastet opp
+asset.select.type.nullable: Alle typer
+document.document-tree.title: Dokumenttre
+document.document-tree.search: Søk i {{folderName}}
+document.editable.inheritance.overwrite: Overskriv
+document.editable.inheritance.tooltip: Arvet fra innholdshoveddokument. Klikk for å overskrive.
+document.link.target: Lenke-mål
+document.hardlink.source: Kildedokument
+document.hardlink.properties-from-source: Bruk egenskaper fra kildedokument
+document.hardlink.children-from-source: Bruk underelementer fra kildedokument
+document.paste-as-new-language-variant: Lim inn som ny språkvariant
+document.paste-as-new-language-variant-recursive: Lim inn som ny språkvariant (rekursiv)
+document.paste-language-recursive-updating-references: Lim inn språk (rekursiv), oppdater referanser
+document.select-language-for-new-document: Velg språk for nytt dokument
+document.language-required: Vennligst velg et språk
+document.paste-inheritance: Lim inn (arv)
+document.tree.copy-paste.replacing-content: Erstatter innhold
+document.tree.context-menu.add-page: Ny side
+document.tree.context-menu.add-snippet: Ny snippet
+document.tree.context-menu.add-email: Ny e-post
+document.tree.context-menu.add-link: Ny lenke
+document.tree.context-menu.add-hardlink: Ny hardlink
+document.required-fields.validation-title: Påkrevde felt mangler
+document.required-fields.validation-message: Følgende påkrevde felt må fylles ut før publisering
+document.site.remove-site: Fjern nettsted
+document.site.remove-site-confirmation: Er du sikker på at du vil fjerne dette nettstedet? Denne handlingen kan ikke angres.
+document.site.use-as-site: Bruk som nettsted
+document.site.edit-site: Rediger nettsted
+document.site.form.main-domain: Hoveddomene
+document.site.form.additional-domains: Tilleggsdomener
+document.site.form.additional-domains-tooltip: Oppgi tilleggsdomener, ett per linje. Jokertegn støttes (*example.com)
+document.site.form.redirect-to-main-domain: Omdiriger tilleggsdomener til hoveddomenet
+document.site.form.error-documents: Feildokumenter
+document.site.form.default-error-document: Standard feildokument
+document.site.form.error-document-language: Feildokument ({{language}})
+save-and-continue: Lagre og fortsett
+discard-and-continue: Forkast og fortsett
+discard-changes: Forkast endringer
+unsaved-changes.title: Ulagrede endringer
+unsaved-changes.message: Du har ulagrede endringer. Hva vil du gjøre?
+unsaved-changes.close-message: Du har ulagrede endringer. Er du sikker på at du vil lukke uten å lagre?
+convert-to: Konverter til
+convert-document: Konverter dokument
+convert-document-warning: Alt innhold vil gå tapt. Er du sikker på at du vil konvertere dette dokumentet?
+page: Side
+email: E-post
+link: Lenke
+hardlink: Hardlink
+blank: Tom
+data-object.data-object-tree.title: Data Object-tre
+data-object.data-object-tree.search: Søk i {{folderName}}
+data-object.select-class-to-display: Velg en klasse å vise
+data-object.tree.context-menu.add-object: Nytt objekt
+data-object.tree.context-menu.add-variant: Ny variant
+data-object.variant-listing.create-data-variant: Ny variant
+data-object.create-data-object: Legg til nytt objekt av type {{className}}
+data-object.create-variant: Legg til ny variant av type {{className}}
+data-object.object-editor-tabs.variants: Varianter
+object.object-editor-tabs.children-listing: Underordnet rutenett
+workflow.label: Arbeidsflyt
+workflow.headline: Arbeidsflytdetaljer
+workflow.no-workflows-found: Ingen arbeidsflyter funnet
+folder.folder-editor-tabs.preview: Forhåndsvisning
+folder.folder-editor-tabs.view: Liste
+toolbar.reload.confirmation: Er du sikker på at du vil laste denne fanen på nytt? Alle ulagrede endringer vil gå tapt.
+toolbar.reload: Last på nytt
+toolbar.save-and-publish: Lagre og publiser
+toolbar.save: Lagre
+toolbar.save-draft: Lagre utkast
+toolbar.more: Mer
+toolbar.workflow: Arbeidsflyt
+toolbar.new: Ny
+toolbar.switch-layout: Bytt tilpasset layout
+import: Importer
+export: Eksporter
+more-actions: Flere handlinger
+class-definition.import: Importer klassedefinisjon
+class-definition.export: Eksporter klassedefinisjon
+class-definition.import-file-label: Velg JSON-fil
+class-definition.import-success: Klassedefinisjon importert
+class-definition.export-success: Klassedefinisjon eksportert
+class-definition.custom-layouts.default-layout: Standard Layout
+class-definition.create-new: Opprett ny klassedefinisjon
+class-definition.class-name: Klassenavn
+class-definition.unique-identifier: Unik identifikator
+class-definition.unique-identifier-warning: Vær forsiktig med den unike identifikatoren fordi tabellnavn kun kan inneholde opptil 64 tegn.
+class-definition.validation.enter-class-name: Vennligst oppgi et klassenavn
+class-definition.validation.class-name-format: Klassenavnet må begynne med en bokstav og kan kun inneholde bokstaver, tall og understrek.
+class-definition.validation.enter-unique-identifier: Vennligst oppgi en unik identifikator
+class-definition.validation.unique-identifier-in-use: Denne unike identifikatoren er allerede i bruk
+class-definition.validation.unique-identifier-format: Den unike identifikatoren må begynne med en bokstav og kan kun inneholde bokstaver, tall og understrek, med en maksimal lengde på 64 tegn.
+class-definition.general-settings.title: Generelt
+class-definition.general-settings.description: Beskrivelse
+class-definition.general-settings.id: ID
+class-definition.general-settings.php-class-name: PHP-klassenavn
+class-definition.general-settings.group: Gruppe
+class-definition.general-settings.icon: Ikon
+class-definition.general-settings.parent-class: Overordnet klasse
+class-definition.general-settings.implements-interfaces: Implementerer grensesnitt
+class-definition.general-settings.listing-parent-class: Overordnet klasse for oppføring
+class-definition.general-settings.use-traits: Bruk Traits
+class-definition.general-settings.listing-use-traits: Oppføring – Bruk Traits
+class-definition.general-settings.link-generator-reference: Link Generator-referanse
+class-definition.general-settings.preview-generator-reference: Preview Generator-referanse
+class-definition.general-settings.allow-inherit: Tillat arv
+class-definition.general-settings.allow-variants: Tillat varianter
+class-definition.general-settings.show-variants: Vis varianter
+class-definition.general-settings.show-app-logger-tab: Vis App Logger-fane
+class-definition.general-settings.show-field-lookup: Vis feltoppslag
+class-definition.general-settings.enable-grid-locking: Aktiver rutenettlåsing
+class-definition.general-settings.encrypt-data: Krypter data
+class-definition.general-settings.enter-name: Vennligst oppgi et navn
+class-definition.property-visibility.title: Egenskapssynlighet
+class-definition.property-visibility.id-grid: ID (rutenett)
+class-definition.property-visibility.id-search: ID (søk)
+class-definition.property-visibility.key-grid: Nøkkel (rutenett)
+class-definition.property-visibility.key-search: Nøkkel (søk)
+class-definition.property-visibility.path-grid: Sti (rutenett)
+class-definition.property-visibility.path-search: Sti (søk)
+class-definition.property-visibility.modification-date-grid: Endringsdato (rutenett)
+class-definition.property-visibility.modification-date-search: Endringsdato (søk)
+class-definition.property-visibility.creation-date-grid: Opprettelsesdato (rutenett)
+class-definition.property-visibility.creation-date-search: Opprettelsesdato (søk)
+class-definition.object-bricks.title: Object Bricks
+class-definition.composite-indices.title: Sammensatte indekser
+class-definition.composite-indices.index-name: Indeksnavn
+class-definition.composite-indices.type: Type
+class-definition.composite-indices.columns: Kolonner
+class-definition.composite-indices.enter-index-name: Oppgi indeksnavn
+class-definition.composite-indices.select-index-type: Velg indekstype
+class-definition.composite-indices.select-column-names: Velg eller oppgi kolonnenavn
+class-definition.composite-indices.type-query: Query
+class-definition.composite-indices.type-localized-query: Lokalisert Query
+class-definition.composite-indices.type-store: Store
+class-definition.composite-indices.type-localized-store: Lokalisert Store
+class-definition.composite-indices.index-label: Indeks
+field-collection.create-new: Opprett ny Field Collection
+field-collection.key: Nøkkel
+field-collection.validation.enter-key: Vennligst oppgi en nøkkel
+field-collection.validation.key-format: Nøkkelen må begynne med en bokstav og kan kun inneholde bokstaver, tall og understrek.
+field-collection.general-settings.title: Generelt
+field-collection.general-settings.key: Nøkkel
+field-collection.general-settings.title-label: Tittel
+field-collection.general-settings.enter-title: Vennligst oppgi en tittel
+field-collection.general-settings.group: Gruppe
+field-collection.general-settings.parent-class: Overordnet PHP-klasse
+field-collection.general-settings.implements-interfaces: Implementerer grensesnitt
+field-collection.general-settings.usages.title: Bruk
+field-collection.general-settings.usages.class: Klasse
+field-collection.general-settings.usages.field: Felt
+object-brick.create-new: Opprett ny Object Brick
+object-brick.key: Nøkkel
+object-brick.validation.enter-key: Vennligst oppgi en nøkkel
+object-brick.validation.key-format: Nøkkelen må begynne med en bokstav og kan kun inneholde bokstaver, tall og understrek.
+object-brick.general-settings.title: Generelt
+object-brick.general-settings.parent-class: Overordnet PHP-klasse
+object-brick.general-settings.implements-interfaces: Implementerer grensesnitt
+object-brick.general-settings.title-label: Tittel
+object-brick.general-settings.group: Gruppe
+object-brick.class-definitions-block.title: Klassedefinisjoner
+object-brick.class-definitions-block.new-entry: Ny oppføring
+object-brick.class-definitions-block.classname: Klasse
+object-brick.class-definitions-block.select-classname: Velg klasse
+object-brick.class-definitions-block.fieldname: Felt
+object-brick.class-definitions-block.select-fieldname: Velg felt
+select-option.create-new: Opprett ny Select Option
+select-option.id: ID
+select-option.enter-name-new-item: Oppgi navnet på det nye elementet
+select-option.validation.enter-id: Vennligst oppgi en ID
+select-option.validation.id-format: Navnet må begynne med stor bokstav, etterfulgt av alfanumeriske tegn
+select-option.general-settings.title: Generelt
+select-option.general-settings.enum-name: Enum-navn
+select-option.general-settings.use-traits: Bruk Traits
+select-option.general-settings.implements-interfaces: Implementerer grensesnitt
+select-option.general-settings.group: Gruppe
+select-option.general-settings.admin-only: Kun administrator
+select-option.entries.title: Alternativer
+select-option.entries.display-name: Visningsnavn
+select-option.entries.value: Verdi
+select-option.entries.name: Navn
+select-option.entries.action: Handling
+select-option.entries.move-up: Flytt opp
+select-option.entries.move-down: Flytt ned
+select-option.general-settings.usages.title: Bruk
+select-option.general-settings.usages.class: Klasse
+select-option.general-settings.usages.field: Felt
+select-option.create.success: Select Option opprettet
+select-option.update.success: Select Option oppdatert
+select-option.delete.success: Select Option slettet
+select-option.tree.all: Alle
+select-option.tree.search: Søk i Select Options
+select-option.tree.actions.select-option: Select Option
+custom-layout.import-success: Custom Layout importert
+custom-layout.delete.confirmation: Er du sikker på at du vil slette denne Custom Layout?
+custom-layout.delete.success: Custom Layout slettet
+example-prefix: Eksempel-prefiks
+pagination.show-total: Totalt {{total}} elementer
+pagination.page: Side
+preview-card.locate-in-tree: Finn i treet
+preview-card.rename: Gi nytt navn
+preview-card.download-zip: Last ned som ZIP
+preview-card.delete: Slett
+grid.aria.column-resize: Endre kolonnestørrelse
+tree.aria.expand-and-collapse: Utvid eller skjul treelement
+image-sidebar.tab.details.custom-download: Egendefinert nedlasting
+aria.asset.image-sidebar.tab.details.custom-thumbnail-mode: Velg tilpasset miniatyrbildemodus
+aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Velg tilpasset miniatyrbildeformat
+aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Last ned tilpasset miniatyrbilde
+aria.asset.image-sidebar.tab.details.precreated-thumbnail: Velg forhåndslaget miniatyrbilde for nedlasting
+aria.asset.image-sidebar.tab.details.download-thumbnail: Last ned miniatyrbilde
+notification.action-list.actions: Handlinger
+notification.action-list.cancel: Avbryt
+notification.action-list.cancel-all: Avbryt alle
+notification.action-list.completed-actions: Fullførte handlinger
+aria.notification.action-list.toggle-collapse: Slå av/på liste over handlinger
+aria.notification.action-list.cancel-all: Avbryt alle pågående handlinger
+aria.notification.action-list.cancel: Avbryt handling
+asset.image.editor.zoom.reset: Tilbakestill
+aria.asset.image.editor.zoom.reset: Tilbakestill zoom
+aria.asset.image.editor.zoom.zoom-in: Zoom inn
+aria.asset.image.editor.zoom.zoom-out: Zoom ut
+aria.asset.image.editor.zoom.preconfigured-zoom-levels: Velg forhåndsdefinert zoomnivå
+asset.preview.no-video-support: Nettleseren din støtter ikke video.
+asset.preview.no-audio-support: Nettleseren din støtter ikke lyd.
+grid.filter.before: Før
+grid.filter.after: Etter
+grid.filter.between: Mellom
+grid.filter.on: På
+grid.filter.from: Fra
+grid.filter.to: Til
+grid.filter.is: Er
+grid.filter.less: Mindre enn
+grid.filter.more: Mer enn
+grid.copy-notice: Kopiert til utklippstavlen
+grid.configuration.no-saved-templates: Ingen lagrede maler tilgjengelig
+grid.configuration.template: Mal
+grid.configuration.save-template: Lagre som mal
+grid.configuration.save-new-template: Lagre som ny mal
+grid.configuration.update-template: Oppdater malen
+grid.configuration.edit-template-details: Rediger maldetaljer
+grid.configuration.delete-template: Slett mal
+grid.configuration.delete-this-template: Slett denne malen
+grid.configuration.delete-template-confirmation: Er du sikker på at du vil slette denne malen?
+grid.configuration.save-template-configuration: Lagre konfigurasjon som mal
+grid.configuration.set-default-template: Sett som standardmal
+grid.configuration.shared: Delt
+grid.advanced-column.advancedColumns.group.boolean: Boolsk
+grid.advanced-column.advancedColumns.group.date: Dato
+grid.advanced-column.advancedColumns.group.string: Tekst
+grid.advanced-column.advancedColumns.group.other: Annet
+grid.advanced-column.title.placeholder: Legg til en tittel
+grid.advanced-column.advancedColumns: Kildefelt
+grid.advanced-column.advancedColumns.add: Legg til et kildefelt
+grid.advanced-column.transformers: Transformere
+grid.advanced-column.transformers.add: Legg til en transformer
+grid.advanced-column.preview: Forhåndsvisning
+grid.advanced-column.no-preview: Ingen forhåndsvisningselement tilgjengelig
+grid.advanced-column.no-preview-data: Ingen forhåndsvisningsdata tilgjengelig
+grid.advanced-column.error-preview-data: Feil ved lasting av forhåndsvisning
+grid.advanced-column.trim: Trim
+grid.advanced-column.find: Finn
+grid.advanced-column.replace: Erstatt
+grid.advanced-column.start: Start
+grid.advanced-column.length: Lengde
+grid.advanced-column.trueLabel: Sann-etikett
+grid.advanced-column.falseLabel: Usann-etikett
+grid.advanced-column.format: Format
+grid.advanced-column.delimiter: Skilletegn
+grid.advanced-column.twigTemplate: Twig-mal
+grid.advanced-column.blurringRule: Sløringsregel
+grid.advanced-column.anonymizationRule: Anonymiseringsregel
+grid.advanced-column.translationPrefix: Oversettelsesprefiks
+grid.advanced-column.advancedColumns.simpleField: Enkelt felt
+grid.advanced-column.advancedColumns.relationField: Relasjonsfelt
+grid.advanced-column.advancedColumns.staticText: Statisk tekst
+grid.advanced-column.advancedColumns.booleanFormatter: Boolsk formatering
+grid.advanced-column.advancedColumns.caseChange: Endre store/små bokstaver
+grid.advanced-column.advancedColumns.combine: Kombiner verdier
+grid.advanced-column.advancedColumns.dateFormatter: Datoformatering
+grid.advanced-column.advancedColumns.elementCounter: Elementteller
+grid.advanced-column.advancedColumns.explode: Splitt
+grid.advanced-column.advancedColumns.stringReplace: Teksterstatning
+grid.advanced-column.advancedColumns.substring: Delstreng
+grid.advanced-column.advancedColumns.trim: Trim
+grid.advanced-column.advancedColumns.twigOperator: Twig-operator
+grid.advanced-column.advancedColumns.anonymizer: Anonymisering
+grid.advanced-column.advancedColumns.blur: Sløring
+grid.advanced-column.advancedColumns.translate: Oversett
+grid.advanced-column.advancedColumns.phpCode: PHP-kode
+grid.advanced-column.advancedColumns.phpCodeKey: PHP Transformer-nøkkel
+grid.advanced-column.advancedColumns.arguments: Argumenter
+component.workflow-card.action-btn: Arbeidsflythandlinger
+component.pql.description: Pimcore Query Language (PQL) er et enkelt, men kraftig spørrespråk som lar deg søke i data ved hjelp av ulike kriterier, inkludert filtrering av verdier i relaterte elementer, for å muliggjøre presis og omfattende datauthenting. For detaljer se <anchorPQL>PQL-dokumentasjon</anchorPQL>
+component.pql.placeholder: Skriv inn spørringen din
+asset.asset-editor-tabs.embedded-metadata.headline: Metainfo
+asset.asset-editor-tabs.embedded-metadata.columns.name: Navn
+asset.asset-editor-tabs.embedded-metadata.columns.value: Verdi
+asset.asset-editor-tabs.preview.open-in-new-window: Åpne i nytt vindu
+login-form.remember-me: Husk meg
+login-form.forgot-password: Glemt passord
+login-form.login: Logg inn
+login-form-additional-logins.or: eller
+login-form.username: Brukernavn
+login-form.password: Passord
+aria.login-form-additional-logins.additional-login-provider: "Ekstra innloggingsleverandør:"
+aria.login-form-additional-logins.remember-me-checkbox: Husk meg-avkrysningsboks
+unsaved-notice: Vennligst lagre for å bekrefte endringene
+widget-manager.tab-title.close-confirmation: Du har ulagrede endringer, er du sikker på at du vil lukke denne fanen?
+action-applied-successfully: Handling utført
+action-could-not-be-applied: Handling kunne ikke utføres
+failed-to-assign-tag-to-element: Kunne ikke tilordne tagg til element
+failed-to-un-assign-tag-to-element: Kunne ikke fjerne tagg fra element
+workflow-modal.perform-action: Utfør handling
+workflow-modal.cancel: Avbryt
+workflow-modal.notes: Notater
+workflow-modal.notes-required: Vennligst skriv inn notatene dine
+workflow-transitions.start-workflow: Start arbeidsflyt
+workflow-transitions.finish-review: Fullfør gjennomgang
+workflow-transitions.restart-review: Start gjennomgang på nytt
+save-success: Lagret
+save-failed: Lagring mislyktes
+auto-save-failed: Automatisk lagring mislyktes
+version.label: Versjoner
+version.versions: Versjoner
+version.version: Versjon
+version.publish: Publiser
+version.published: Publisert
+version.autosaved: Automatisk lagret
+version.schedule-for: Planlagt for
+version.note: Notat
+version.note.add: Legg til et notat
+version.own-draft: Eget utkast
+version.compare-versions: Sammenlign versjoner
+version.fileName: Navn
+version.dimensions: Dimensjoner
+version.creationDate: Opprettelsesdato
+version.modificationDate: Endringsdato
+version.fileSize: Filstørrelse
+version.mimeType: MIME-type
+version.fullPath: Sti
+version.additionalAttributes: Tilleggsattributter
+version.image: Bilde
+version.no-versions-to-show: Det er ingen versjoner å vise.
+version.no-preview-available: Ingen forhåndsvisning tilgjengelig for denne filen.
+version.clear-unpublished: Fjern upubliserte
+version.clear-unpublished-versions: Fjern upubliserte versjoner
+version.confirm-clear-unpublished: Er du sikker på at du vil fjerne alle upubliserte versjoner?
+version.preview-notification: Forhåndsvisningsdetaljer vises når en versjon er valgt.
+version.expand-unmodified-fields: Utvid alle
+version.no-difference: Det er ingen forskjell mellom de valgte versjonene.
+version.category.title.systemData: Systemdata
+version.category.title.baseData: Grunndata
+version.category.title.meta: Metadata
+aria.version.delete: Slett versjon
+aria.version.expand: Utvid versjon
+clear-all: Fjern alle
+empty: Tom
+none: Ingen
+yes: Ja
+no: Nei
+by: Av
+field: Felt
+no-data-available: Ingen data tilgjengelig
+no-data-available-yet: Ingen data tilgjengelig ennå.
+no-items: Ingen elementer
+schedule.label: Planlegging
+schedule.headline: Planlegging
+schedule.columns.datetime: Dato og tid
+schedule.columns.action: Handling
+schedule.columns.version: Versjon
+schedule.columns.active: Aktiv
+schedule.columns.actions: Slett
+schedule.upcoming: Kommende
+schedule.all: Alle planlagte (kommende og arkiv)
+schedule.toolbar.filters.active-switch: Kun aktive
+schedule.toolbar.new: Ny
+schedule.toolbar.save-scheduled-tasks: Lagre planlagte oppgaver
+schedule.version.delete: Slett versjon
+schedule.version.publish: Publiser versjon
+schedule.select-an-action: Handling
+schedule.select-a-version: Versjon
+schedule.archived: Arkivert
+schedule.archived.cleanup-all: Rydd opp alle
+dependencies.label: Avhengigheter
+dependencies.requires: Krever
+dependencies.required-by: Krevd av
+dependencies.columns.subtype: Undertype
+dependencies.columns.path: Sti
+dependencies.columns.open: Åpne
+system: System
+default_metadata: Standard metadata
+predefined_metadata: Forhåndsdefinerte metadata
+preview: Forhåndsvisning
+id: ID
+type: Type
+position: Posisjon
+filename: Filnavn
+fullpath: Full sti
+modificationDate: Endringsdato
+creationDate: Opprettelsesdato
+fileSize: Filstørrelse
+mimetype: MIME-type
+key: Nøkkel
+published: Publisert
+classname: Klassenavn
+index: Indeks
+listing.grid-config.title: Rutenettskonfigurasjon
+listing.add-column: Legg til en kolonne
+listing.actions: Bruk på utvalg
+listing.non-selected.actions: Bruk på alle
+listing.actions.zip-download: ZIP-nedlasting
+listing.actions.delete: Slett
+listing.actions.export: Eksporter
+reports.csv-export-modal.title: CSV-eksportalternativer
+reports.csv-export-modal.include-headers: Inkluder kolonneoverskrifter
+reports.csv-export-modal.delimiter-label: Skilletegn
+reports.csv-export-modal.delimiter-placeholder: Oppgi skilletegn
+listing.actions.csv-export: CSV-eksport
+listing.actions.xlsx-export: Excel-eksport
+listing.actions.batch-edit: Masseredigering
+listing.selection.total: "{{total}} valgt"
+data-type.input: Input
+data-type.textarea: Tekstområde
+data-type.html: HTML
+data-type.number: Tall
+data-type.boolean: Boolsk
+data-type.date: Dato
+data-type.text: Tekst
+data-type.document: Dokument
+data-type.asset: Ressurs
+data-type.object: Objekt
+data-type.checkbox: Avkrysningsboks
+data-type.select: Nedtrekksliste
+open-data-object.button: Åpne Data Object
+open-data-object-modal.title: Åpne Data Object
+open-data-object-modal.label: Vennligst oppgi ID eller sti til dataobjektet
+open-data-object-modal.required-message: Vennligst oppgi en ID eller sti
+open-data-object-modal.ok-button: OK
+open-data-object-modal.cancel-button: Avbryt
+open-asset.button: Åpne ressurs
+open-asset-modal.title: Åpne ressurs
+open-asset-modal.label: Vennligst oppgi ID eller sti til ressursen
+open-asset-modal.ok-button: OK
+open-asset-modal.cancel-button: Avbryt
+open-asset-modal.required-message: Vennligst oppgi en ID eller sti til dokumentet
+open-document.button: Åpne dokument
+open-document-modal.title: Åpne dokument
+open-document-modal.label: Vennligst oppgi ID eller sti til dokumentet
+open-document-modal.ok-button: OK
+open-document-modal.cancel-button: Avbryt
+open-document-modal.required-message: Vennligst oppgi en ID, sti eller URL
+notes-and-events-modal.detail-information: Detaljinformasjon
+notes-and-events.columns.type: Type
+notes-and-events.columns.element: Element
+notes-and-events.columns.title: Tittel
+notes-and-events.columns.description: Beskrivelse
+notes-and-events.columns.details: Detaljer
+notes-and-events.columns.user: Bruker
+notes-and-events.columns.date: Dato
+notes-and-events.columns.actions: Handlinger
+website-settings.columns.type: Type
+website-settings.columns.name: Navn
+website-settings.columns.language: Språk
+website-settings.columns.value: Verdi
+website-settings.columns.site: Nettsted
+website-settings.columns.actions: Handlinger
+website-settings.website-settings-already-exist.title: Nettstedsinnstillingen finnes allerede
+website-settings.website-settings-already-exist.error: Navnet er allerede i bruk, vennligst velg et annet
+website-settings.website-settings.add-entry-mandatory-fields-missing.title: Obligatoriske felt mangler
+website-settings.website-settings.add-entry-mandatory-fields-missing.error: Navn og type er obligatoriske felt og må fylles ut.
+document-types.new: Ny
+document-types.columns.name: Navn
+document-types.columns.group: Gruppe
+document-types.columns.controller: Controller
+document-types.columns.template: Mal
+document-types.columns.type: Type
+document-types.columns.static: Statisk
+document-types.columns.priority: Prioritet
+document-types.columns.creation-date: Opprettelsesdato
+document-types.columns.modification-date: Endringsdato
+document-types.columns.actions: Handlinger
+properties.label: Egenskaper
+properties.editable-properties: Redigerbare egenskaper
+properties.all-properties: Alle egenskaper
+properties.predefined-properties: Forhåndsdefinerte egenskaper
+properties.new-custom-property: Ny egendefinert egenskap
+translations.columns.type: Type
+translations.columns.key: Nøkkel
+translations.columns.actions: Handlinger
+translations.select-languages: Velg språk
+translations.select-domain: Velg domene
+translations.show-all-languages: Vis alle
+translations.show-minimal-languages: Vis minimal
+translations.show-hide-locale: Vis/skjul språk
+translations.new-translation: Ny oversettelse
+translations.new: Legg til
+translations.type-options.custom: ICU-format
+translations.type-options.simple: Enkel tekst
+translations.edit-modal.tab.plain-text: Ren tekst
+translations.edit-modal.tab.html: HTML
+translations.edit-modal.save: Lagre
+translations.edit-modal.title: Rediger oversettelse
+translations.edit-modal.restore: Gjenopprett ren tekst
+properties.columns.type: Type
+properties.columns.key: Nøkkel
+properties.columns.name: Navn
+properties.columns.description: Beskrivelse
+properties.columns.data: Verdi
+properties.columns.configuration: Konfigurasjon
+properties.columns.content-type: Innholdstype
+properties.columns.inheritable: Arvbar
+properties.columns.actions: Handlinger
+properties.inherited.properties: Arvede egenskaper
+properties.add-custom-property.cancel: Avbryt
+properties.add-custom-property.key: Nøkkel
+translations.add-translation.key: Nøkkel
+properties.add-custom-property.create: Opprett
+properties.add-custom-property.type: Type
+properties.property-already-exist.title: Egenskapen finnes allerede
+properties.property-already-exist.error: Navnet er allerede i bruk, vennligst velg et annet
+properties.add-property-mandatory-fields-missing.title: Obligatoriske felt mangler
+properties.add-property-mandatory-fields-missing.error: Nøkkel og type er obligatoriske felt og må fylles ut.
+properties.property-key-disallowed.title: Egenskapsnøkkel ikke tillatt
+properties.property-key-disallowed.error: Denne egenskapsnøkkelen er reservert og kan ikke brukes. Vennligst velg et annet nøkkelnavn.
+translations.add-translation-mandatory-field-missing.title: Obligatorisk felt mangler
+translations.add-translation-mandatory-field-missing.error: Nøkkel er et obligatorisk felt og må fylles ut.
+button.ok: Ok
+button.apply: Bruk
+button.cancel: Avbryt
+button.save: Lagre
+button.confirm: Bekreft
+button.save-apply: Lagre og bruk
+button.add-edit: Legg til og rediger
+button.cancel-edits: Avbryt endringer
+toggle.advanced-mode: Avansert modus
+actions.open: Åpne
+open: Åpne
+edit: Rediger
+modify: Endre
+component.no-content.no-content-available: Ingen innhold tilgjengelig
+notifications.label: Varsler
+notifications.remove-all: Fjern alle
+notifications.new-notification: Nytt varsel
+notifications.from: Fra
+notifications.hide: Skjul
+notifications.new-notifications.show: Vis
+notifications.new-notifications.title.single: Du har et nytt varsel!
+notifications.new-notifications.title: Du har nye varsler!
+notes-and-events.label: Notater og hendelser
+notes-and-events.notes-and-events: Notater og hendelser
+notes-and-events.details: Detaljer
+notes-and-events.name: Navn
+notes-and-events.type: Type
+notes-and-events.value: Verdi
+notes-and-events.new-note: Nytt notat
+notes-and-events.content: innhold
+notes-and-events.seo: seo
+notes-and-events.warning: advarsel
+notes-and-events.notice: merknad
+notes-and-events.status-update: statusoppdatering
+notes-and-events.erp_import: erp_import
+notes-and-events.no-notes-and-events-to-show: Det er ingen notater eller hendelser å vise.
+tags.label: Tagger
+tags.assigned-tags-text: Tilordnede tagger
+tags.apply-tags-to-children: Bruk tagger på underelementer
+tags.remove-and-apply-tags-to-children: Fjern og bruk tagger på underelementer
+tags.columns.path: Sti
+tags.columns.actions: Fjern
+csv-separated-options: CSV-separerte alternativer
+csv-separated-options-info: Listen over tilgjengelige alternativer kan angis som kommaseparert liste, som verdier i enkeltkolonner eller blandet. For enkeltkolonne-metoden vil nøkkelen også brukes som verdi.
+add: Legg til
+new: Ny
+save: Lagre
+title: Tittel
+description: Beskrivelse
+select: Velg
+asset.asset-editor-tabs.custom-metadata.text: Egendefinerte metadata
+asset.asset-editor-tabs.custom-metadata.new-custom-metadata: Nye egendefinerte metadata
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.name: Navn
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.type: Type
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.language: Språk
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.cancel: Avbryt
+asset.asset-editor-tabs.custom-metadata.add-predefined-definition: Legg til forhåndsdefinert definisjon
+asset.asset-editor-tabs.custom-metadata.columns.type: Type
+asset.asset-editor-tabs.custom-metadata.columns.name: Navn
+asset.asset-editor-tabs.custom-metadata.columns.language: Språk
+asset.asset-editor-tabs.custom-metadata.columns.value: Verdi
+asset.asset-editor-tabs.custom-metadata.columns.actions: Handlinger
+asset.asset-editor-tabs.custom-metadata.new-custom-metadata.create: Opprett
+asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.title: Egendefinerte metadata finnes allerede
+asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.error: Navnet er allerede i bruk, vennligst velg et annet
+asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.title: Obligatoriske felt mangler
+asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error: Navn og type er obligatoriske felt og må fylles ut.
+width: Bredde
+height: Høyde
+width-tooltip: Bredden på denne komponenten. En numerisk verdi tolkes som antall piksler; en strengverdi behandles som en CSS-verdi med enheter.
+width-field: Bredde-felt
+width-unit: Bredde-enhet
+height-tooltip: Høyden på denne komponenten. En numerisk verdi tolkes som antall piksler; en strengverdi behandles som en CSS-verdi med enheter.
+table-data-tooltip: "Eksempel på hvordan du legger til data: \n\n en|to|tre \n fire|fem|seks \n sju|åtte|ni"
+use-current-date: Bruk gjeldende dato
+respect-timezone: Respekter tidssone
+column-type: Kolonnetype
+specific-settings: Spesifikke innstillinger
+restrict-selection-to: Begrens utvalg til
+only-configured-languages: Vis kun språk konfigurert i systeminnstillinger
+multiselect-render-type: Visningstype
+maximum-items: Maksimalt antall elementer
+enforce-validation: Tving validering
+options-source: Alternativkilde
+options-source-configure: Konfigurer
+options-source-select-options: Select Options
+options-source-options-provider: Options Provider
+options-provider-class: Options Provider-klasse eller tjenestenavn
+options-provider-data: Options Provider-data
+switch-to-selection-mode: Bytt til utvalgsmodus
+switch-to-drag-mode: Bytt til dra-modus
+select-options: Select Options
+value: Verdi
+display-name: Visningsnavn
+default-values-settings: Standardverdi-innstillinger
+default-values-tooltip: Standardverdien brukes hvis arv er deaktivert eller hvis den overordnede verdien er tom.
+default-value: Standardverdi
+default-value-generator: Standardverdigenerator-tjeneste / klasse
+enforce-validation-tooltip: Når aktivert, forhindrer det lagring av ugyldige alternativer. Som standard tillater API-et lagring av ugyldige alternativer
+show-char-count: Vis tegntelling
+column-length: Kolonnelengde
+max-length: Maksimal lengde
+exclude-from-search-index: Ekskluder fra søkeindeks
+toolbar-config: Verktøylinjekonfigurasjon
+min-length: Minimum lengde
+min-value: Minimumsverdi
+max-value: Maksimumsverdi
+increment-step: Økningssteg
+decimal-precision: Desimalpresisjon
+decimal-size: Desimalstørrelse
+decimal-settings: Desimalinnstillinger
+decimal-settings-tooltip: Hvis desimalstørrelse eller presisjon er angitt, brukes DECIMAL(decimalSize, decimalPrecision) MySQL-type. Standardverdier hvis de mangler er 64 som størrelse og 0 som presisjon. Merk at i MySQL-termer kalles decimalSize for precision og decimalPrecision for scale.
+integer: Heltall
+unsigned: Kun uten fortegn
+auto-convert: Autokonverter
+default-unit: Standardenhet
+valid-units: Gyldige enheter
+slider-min: Slider minimumsverdi
+slider-max: Slider maksimumsverdi
+slider-step: Slider-steg
+field-definitions.general-settings: Generelle innstillinger
+field-definitions.base: Basis
+field-definitions.configuration-invalid: Konfigurasjonen inneholder ugyldige feltdefinisjoner.
+field-definitions.saved-successfully: Lagret.
+field-definitions.select-item-configuration: Velg elementkonfigurasjon
+field-definitions.custom-layout-title: Custom Layout
+field-definitions.custom-layouts: Custom Layouts
+field-definitions.create-new-class-definition: Opprett ny Custom Layout
+field-definitions.select-field-message: Velg et felt fra treet for å redigere egenskapene.
+field-definitions.loading-general-settings: Laster generelle innstillinger...
+field-definitions.type-not-supported: Type ikke støttet
+field-definitions.validation.enter-class-name: Vennligst oppgi et klassenavn
+field-definitions.validation.class-name-format: Klassenavnet må begynne med en bokstav og kan kun inneholde bokstaver, tall og understrek.
+field-definitions.validation.unique-identifier: Unik identifikator
+field-definitions.validation.enter-unique-identifier: Vennligst oppgi en unik identifikator
+field-definitions.validation.unique-identifier-in-use: Denne unike identifikatoren er allerede i bruk
+field-definitions.validation.unique-identifier-format: Den unike identifikatoren må begynne med en bokstav og kan kun inneholde bokstaver, tall og understrek, med en maksimal lengde på 64 tegn.
+field-definitions.validation.errors-found: Feltdefinisjoner har feil
+field-definitions.validation.empty-name: "Følgende felttyper mangler et navn:"
+field-definitions.validation.reserved-word: "Reservert ord brukt som navn:"
+field-definitions.validation.invalid-format: "Ugyldig navneformat (må matche [A-Za-z][A-Za-z0-9_]*):"
+field-definitions.validation.duplicate-name: "Duplikat navn innenfor navnerom:"
+object-brick-key: Object Brick-nøkkel
+field-name: Feltnavn
+field-definition.geopoint: Geografisk punkt
+field-definition.geobounds: Geografiske grenser
+field-definition.geopolygon: Geografisk polygon
+field-definition.geopolyline: Geografisk polylinje
+field-definition.input: Input
+field-definition.textarea: Tekstområde
+field-definition.wysiwyg: WYSIWYG
+field-definition.password: Passord
+field-definition.numeric: Tall
+field-definition.numeric-range: Numerisk område
+field-definition.slider: Slider
+field-definition.quantity-value: Mengdeverdi
+field-definition.quantity-value-range: Mengdeverdi-område
+field-definition.input-quantity-value: Input mengdeverdi
+field-definition.date: Dato
+field-definition.datetime: Dato og tid
+field-definition.date-range: Datoperiode
+field-definition.time: Tid
+field-definition.image: Bilde
+field-definition.external-image: Eksternt bilde
+field-definition.image-gallery: Bildegalleri
+field-definition.video: Video
+field-definition.hotspotimage: Avansert bilde
+field-definition.many-to-one-relation: Many-to-One Relation
+field-definition.many-to-many-relation: Many-to-Many Relation
+field-definition.many-to-many-object-relation: Many-to-Many Object Relation
+field-definition.advanced-many-to-many-relation: Advanced Many-to-Many Relation
+field-definition.advanced-many-to-many-object-relation: Advanced Many-to-Many Object Relation
+field-definition.reverse-object-relation: Omvendt objektrelasjon
+allowed-class: Tillatt klasse
+allowed-classes: Tillatte klasser
+allowed-asset-types: Tillatte ressurstyper
+allowed-document-types: Tillatte dokumenttyper
+visible-fields: Synlige felt
+enable-text-selection: Aktiver tekstmarkering
+allow-to-create-new-object: Tillat å opprette nytt objekt i relasjonsfelt
+enable-async-load-in-admin: Aktiver asynkron lasting i admin
+enable-async-load-in-admin-tooltip: "ADVARSEL: Asynkron lasting er IKKE mulig innenfor lokaliserte felt og blokker."
+path-formatter-service: Formateringstjeneste / Klasse
+allow-to-clear-relation: Tillat å fjerne relasjoner fra dette feltet
+allow-multiple-assignments: Tillat flere tilordninger
+number: Tall
+bool: Boolsk
+column-bool: Kolonne Boolsk
+multiselect: Flervalg
+layout: Layout
+layout-options: Layout-alternativer
+allow-documents: Tillat dokumenter
+allow-assets: Tillat ressurser
+asset-inline-download-allowed: Tillat innebygd nedlasting av ressurs
+allow-objects: Tillat objekter
+path-restriction: Stibegrensning
+result-limit: Resultatgrense
+remote-owner: Ekstern eier
+columns: Kolonner
+enable-batch-edit: Aktiver masseredigering for kolonner
+owner-class: Eierklasse
+owner-field-name: Eier-feltnavn
+crop-settings: Beskjæringsinnstillinger
+ratio-x: Forhold X
+ratio-y: Forhold Y
+predefined-data-templates: Forhåndsdefinerte datamaler
+upload-path: Opplastingssti
+preview-width: Forhåndsvisningsbredde
+preview-height: Forhåndsvisningshøyde
+url-width: URL-bredde
+allowed-video-types: Tillatte videotyper
+allowed-video-types-tooltip: Tom = tillat alle
+field-definition.select: Select
+field-definition.multiselect: Multiselect
+field-definition.boolean-select: Boolean Select
+field-definition.country: Land
+field-definition.countrymultiselect: Land flervalg
+field-definition.language: Språk
+field-definition.languagemultiselect: Språk flervalg
+field-definition.rgba-color: RGBA-farge
+field-definition.encrypted-field: Kryptert felt
+field-definition.url-slug: URL Slug
+field-definition.checkbox: Avkrysningsboks
+field-definition.link: Lenke
+field-definition.calculated-value: Beregnet verdi
+field-definition.user: Bruker
+field-definition.block: Blokk
+field-definition.panel: Panel
+field-definition.table: Tabell
+field-definition.structured-table: Strukturert tabell
+field-definition.fieldcollections: Field Collections
+field-definition.objectbricks: Object Bricks
+field-definition.classificationstore: Classification Store
+field-definition.localizedfields: Lokaliserte felt
+field-definition.firstname: Fornavn
+field-definition.lastname: Etternavn
+field-definition.email: E-post
+field-definition.gender: Kjønn
+field-definition.consent: Samtykke
+field-definition.accordion: Accordion
+field-definition.fieldset: Feltsett
+field-definition.fieldcontainer: Feltbeholder
+field-definition.iframe: Iframe
+field-definition.region: Region
+field-definition.tabpanel: Fanepanel
+field-definition.text: Tekst
+field-definition.groups.layout: Layout-komponent
+field-definition.groups.layout.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.groups.layout)"
+field-definition.groups.layout.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.groups.layout)"
+field-definition.groups.data: Datakomponent
+field-definition.groups.data.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.groups.data)"
+field-definition.groups.data.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.groups.data)"
+field-definition.groups.data.text: Tekst
+field-definition.groups.data.numeric: Numerisk
+field-definition.groups.data.date: Dato
+field-definition.groups.data.select: Utvalg
+field-definition.groups.data.media: Media
+field-definition.groups.data.relation: Relasjon
+field-definition.groups.data.geographic: Geografisk
+field-definition.groups.data.crm: CRM
+field-definition.groups.data.structured: Strukturert
+field-definition.groups.data.other: Annet
+field-definition.geopoint.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geopoint)"
+field-definition.geopoint.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geopoint)"
+field-definition.geobounds.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geobounds)"
+field-definition.geobounds.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geobounds)"
+field-definition.geopolygon.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geopolygon)"
+field-definition.geopolygon.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geopolygon)"
+field-definition.geopolyline.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geopolyline)"
+field-definition.geopolyline.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geopolyline)"
+field-definition.input.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.input)"
+field-definition.input.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.input)"
+field-definition.textarea.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.textarea)"
+field-definition.textarea.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.textarea)"
+field-definition.wysiwyg.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.wysiwyg)"
+field-definition.wysiwyg.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.wysiwyg)"
+field-definition.password.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.password)"
+field-definition.password.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.password)"
+field-definition.numeric.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.numeric)"
+field-definition.numeric.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.numeric)"
+field-definition.numeric-range.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.numeric-range)"
+field-definition.numeric-range.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.numeric-range)"
+field-definition.slider.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.slider)"
+field-definition.slider.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.slider)"
+field-definition.quantity-value.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.quantity-value)"
+field-definition.quantity-value.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.quantity-value)"
+field-definition.quantity-value-range.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.quantity-value-range)"
+field-definition.quantity-value-range.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.quantity-value-range)"
+field-definition.input-quantity-value.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.input-quantity-value)"
+field-definition.input-quantity-value.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.input-quantity-value)"
+field-definition.date.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.date)"
+field-definition.date.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.date)"
+field-definition.datetime.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.datetime)"
+field-definition.datetime.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.datetime)"
+field-definition.date-range.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.date-range)"
+field-definition.date-range.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.date-range)"
+field-definition.time.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.time)"
+field-definition.time.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.time)"
+field-definition.image.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.image)"
+field-definition.image.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.image)"
+field-definition.external-image.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.external-image)"
+field-definition.external-image.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.external-image)"
+field-definition.image-gallery.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.image-gallery)"
+field-definition.image-gallery.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.image-gallery)"
+field-definition.video.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.video)"
+field-definition.video.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.video)"
+field-definition.hotspotimage.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.hotspotimage)"
+field-definition.hotspotimage.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.hotspotimage)"
+field-definition.select.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.select)"
+field-definition.select.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.select)"
+field-definition.multiselect.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.multiselect)"
+field-definition.multiselect.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.multiselect)"
+field-definition.boolean-select.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.boolean-select)"
+field-definition.boolean-select.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.boolean-select)"
+field-definition.country.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.country)"
+field-definition.country.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.country)"
+field-definition.countrymultiselect.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.countrymultiselect)"
+field-definition.countrymultiselect.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.countrymultiselect)"
+field-definition.language.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.language)"
+field-definition.language.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.language)"
+field-definition.languagemultiselect.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.languagemultiselect)"
+field-definition.languagemultiselect.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.languagemultiselect)"
+field-definition.user.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.user)"
+field-definition.user.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.user)"
+field-definition.block.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.block)"
+field-definition.block.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.block)"
+field-definition.panel.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.panel)"
+field-definition.panel.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.panel)"
+field-definition.accordion.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.accordion)"
+field-definition.accordion.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.accordion)"
+field-definition.firstname.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.firstname)"
+field-definition.firstname.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.firstname)"
+field-definition.lastname.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.lastname)"
+field-definition.lastname.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.lastname)"
+field-definition.email.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.email)"
+field-definition.email.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.email)"
+field-definition.gender.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.gender)"
+field-definition.gender.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.gender)"
+field-definition.consent.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.consent)"
+field-definition.consent.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.consent)"
+regex-validation: Validering med regulært uttrykk
+regex: RegEx
+regex-flags: RegEx-flagg
+regex-flags-tooltip: "RegExp uten skilletegn, må fungere i JS (Skilletegn: #)"
+test-string: Teststreng
+regex-validation-error-message: Strengen samsvarer ikke med det påkrevde formatet.
+calculator-class: Kalkulatorklasse
+calculator-expression: Kalkulatoruttrykk
+calculator-type: Kalkulatortype
+calculator-type-tooltip: Se den offisielle dokumentasjonen for å lære mer om å definere uttrykk eller klasser.
+expression: Uttrykk
+lazy-loading: Lat lasting
+disallow-add-remove: Ikke tillat legg til / fjern
+disallow-reorder: Ikke tillat omorganisering
+css-style: CSS-stil
+collapsible: Sammenleggbar
+collapsed: Opprinnelig sammenslått
+border: Kantlinje
+rows: Rader
+rows-fixed: Faste rader
+cols: Kolonner
+cols-fixed: Faste kolonner
+length: Lengde
+label-width: Etikettbredde
+padding: Utfylling
+label-first-cell: Etikett i første celle
+label-align: Etikettjustering
+allowed-types: Tillatte typer
+localized: Lokalisert
+allowed-group-ids: Tillatte gruppe-ID-er (csv)
+store: Store
+label: Etikett
+hide-empty-data: Skjul tomme data
+tab-position: Faneposisjon
+maximum-tabs: Maksimalt antall faner
+hide-labels-when-tabs-reached: Skjul språketiketter når antall faner er nådd
+provide-split-view: Tilby delt visning
+data: Data
+domain-label-width: Domene-etikettbredde
+controller-action: Controller-handling
+controller-action-tooltip: 'Oppgi controller og handling i følgende format: App\Controller\ProductController::slugAction'
+available-sites: Tilgjengelige nettsteder
+empty-equals-allow-all-tooltip: Tom = tillat alle
+reset: Tilbakestill
+name: Navn
+tooltip: Verktøytips
+mandatory: Obligatorisk
+unique: Unik
+not-editable: Ikke redigerbar
+invisible: Usynlig
+visible-in-gridview: Synlig i rutenettvisning
+visible-in-searchresult: Synlig i søkeresultat
+quality: Kvalitet
+mode: Modus
+format: Format
+default: standard
+resize: Endre størrelse
+scaleByWidth: Skaler etter bredde
+scaleByHeight: Skaler etter høyde
+min-max-settings: Min-Maks ganger
+download: Last ned
+asset.sidebar.original-file: Originalfil
+asset.sidebar.web-format: Webformat
+asset.sidebar.print-format: Utskriftsformat
+asset.sidebar.office-format: Kontorformat
+jobs.notification.title: Kjørende jobber
+jobs.notification.jobs_one: "{{count}} handling"
+jobs.notification.jobs_other: "{{count}} handlinger"
+jobs.job.in-progress: "{{title}} pågår"
+jobs.job.queued: "{{title}} i kø"
+jobs.job.failed: "{{title}} mislyktes"
+jobs.job.finished: "{{title}} fullført"
+jobs.job.finished-with-errors: "{{title}} fullført med feil"
+jobs.job.progress: "{{progress}} % fullført"
+jobs.job.button-retry: Prøv igjen
+jobs.job.button-reload: Last på nytt
+jobs.job.button-hide: skjul
+jobs.job.button-download: last ned
+jobs.job.button-ignore-and-reload: ignorer og last på nytt
+jobs.job.step_hint: "Steg {{step}}/{{total}}"
+jobs.job.step_hint_single: "Steg {{step}}"
+jobs.job.download-error: Nedlasting mislyktes
+jobs.job.button-show-errors: Vis feil
+jobs.job.error-modal.title: Jobbfeil
+jobs.job.button-abort: Avbryt jobb
+jobs.job.abort-confirm: Vil du virkelig avbryte denne jobben?
+jobs.zip-job.title: "ZIP-nedlasting av {{title}}"
+jobs.batch-edit-job.title: "Masseredigering av {{title}}"
+jobs.csv-job.title: "CSV-nedlasting av {{title}}"
+jobs.xlsx-job.title: "XLSX-nedlasting av {{title}}"
+batch-edit.job-title: Masseredigering
+jobs.zip-upload-job.title: Last opp ZIP
+jobs.zip-upload-job.step1.title: Pakker ut ZIP
+jobs.zip-upload-job.step2.title: Oppretter ressurser
+batch-edit.modal-title: Masseredigering
+batch-edit.no-content: Ingen kolonner lagt til ennå
+batch-edit.modal-footer.apply-changes: Bruk endringer
+batch-edit.modal-footer.discard-all-changes: Forkast alle endringer
+batch-edit.modal-footer.add-a-column: Legg til en kolonne
+batch-edit.append-mode.replace: Masseerstatt
+batch-edit.append-mode.add: Masselegg til
+batch-edit.append-mode.remove: Massefjerning
+batch-delete.job-title: Slett
+export-csv-form.modal-title: Eksporter CSV
+export-csv-form.export-notice: Vær oppmerksom på at eksporten ikke støtter noen felt (f.eks. forhåndsvisning, størrelse). Trykk OK for å fortsette med eksporten.
+export-csv-form.form-field.delimiter: Skilletegn
+export-csv-form.form-field.header: Overskrift
+export-csv-form.form-field.header.option.name: Systemnøkkel
+export-csv-form.form-field.header.option.title: Etikett
+export-csv-form.form-field.header.option.no-header: Ingen overskrift
+export-xlsx-form.modal-title: Eksporter Excel
+export-xlsx-form.export-notice: Vær oppmerksom på at eksporten ikke støtter noen felt (f.eks. forhåndsvisning, størrelse). Trykk OK for å fortsette med eksporten.
+export-xlsx-form.form-field.delimiter: Skilletegn
+export-xlsx-form.form-field.header: Overskrift
+export-xlsx-form.form-field.header.option.name: Systemnøkkel
+export-xlsx-form.form-field.header.option.title: Etikett
+export-xlsx-form.form-field.header.option.no-header: Ingen overskrift
+form.validation.required: Dette feltet er obligatorisk
+form.validation.max-length: Maksimal lengde for dette feltet er {{max}} tegn
+form.validation.min: Minimumsverdien er {{min}}
+validation.required: Dette feltet er obligatorisk
+validation.min: Minimumsverdien er {{min}}
+form.validation.numeric-range.first-value-missing: Første verdi mangler
+form.validation.numeric-range.second-value-missing: Andre verdi mangler
+form.validation.numeric-range.second-value-greater: Andre verdi kan ikke være mindre enn første verdi
+form.validation.provide-name: Vennligst oppgi et navn
+form.validation.provide-description: Vennligst oppgi en beskrivelse
+form.label.new-item: Oppgi navnet på det nye elementet
+thumbnail: Miniatyrbilde
+select-image-preview: Velg bildeforhåndsvisning
+choose-media: Velg media
+current-player-position: Gjeldende spillerposisjon
+drag-and-drop-asset: Dra og slipp ressurs
+ok: OK
+apply: Bruk
+cancel: Avbryt
+close-tab: Lukk fane
+close-others: Lukk andre
+close-unmodified: Lukk uendrede
+close-all: Lukk alle
+asset.tree.context-menu.download: Last ned
+asset.tree.context-menu.download-as-zip: Last ned som ZIP
+element.tree.context-menu.new-assets: Ny(e) ressurs(er)
+element.tree.context-menu.add-assets.upload-files: Last opp filer
+element.tree.context-menu.add-assets.upload-zip: Last opp ZIP
+element.tree.context-menu.advanced: Avansert
+element.tree.context-menu.search-and-move: Søk og flytt
+element.tree.context-menu.expand-children: Utvid underelementer
+asset.tree.context-menu.clear-thumbnails: Fjern miniatyrbilder
+element.tree.copy: Kopier
+element.tree.copy-success-description: '{{elementType}} "{{name}}" er kopiert og klar til å limes inn'
+element.tree.paste: Lim inn
+element.tree.paste-as-child: Lim inn som underelement
+element.tree.paste-as-child-recursive: Lim inn som underelement (rekursiv)
+element.tree.paste-recursive-updating-references: Lim inn rekursivt, oppdater referanser
+element.tree.paste-only-contents: Lim inn kun innhold her
+element.tree.cut: Klipp ut
+element.tree.cut-success-description: '{{elementType}} "{{name}}" er klippet ut og klar til å limes inn'
+element.tree.paste-cut: Lim inn utklippet element
+element.lock: Lås
+element.lock-and-propagate-to-children: Lås og propager til underelementer
+element.unlock: Lås opp
+element.unlock-and-propagate-to-children: Lås opp og propager til underelementer
+element.tree.sorting: Sorter underelementer etter
+element.tree.sorting.keyed-ascending: A til Å (nøkkel)
+element.tree.sorting.keyed-descending: Å til A (nøkkel)
+element.tree.sorting.indexed: Indeks (manuell)
+element.tree.refresh: Oppdater
+element.new-folder: Ny mappe
+element.new-folder.validation: Vennligst oppgi et gyldig navn
+element.rename: Gi nytt navn
+element.rename.label: Vennligst oppgi det nye navnet
+element.rename.validation: Vennligst oppgi et gyldig navn
+element.delete: Slett
+element.delete.confirmation.title: Slett element
+element.delete.confirmation.text: Vil du virkelig slette dette elementet?
+element.delete.confirmation.ok: Slett permanent
+element.open: Åpne
+element.toolbar.copy-id: Kopier ID
+element.toolbar.copy-full-path-to-clipboard: Kopier full sti
+element.toolbar.copy-deep-link-to-clipboard: Kopier Deeplink
+element.toolbar.show-full-info: Full info
+element.toolbar.copy-className: Klasse {{className}} – Kopier
+element.unpublish: Avpubliser
+element.publish: Publiser
+element.locate-in-tree: Finn i treet
+element.sidebar.filter.only-direct-children: kun direkte underelementer
+element.sidebar.field-filters: Feltfiltre
+element.full-information: Full informasjon
+system-information.id: ID
+system-information.path: Sti
+system-information.public-url: Offentlig URL
+system-information.parent-id: Overordnet ID
+system-information.type: Type
+system-information.class-id: Klasse-ID
+system-information.class: Klasse
+system-information.file-size: Filstørrelse
+system-information.modification-date: Endringsdato
+system-information.creation-date: Opprettelsesdato
+system-information.user-modification: Endret av bruker
+system-information.owner: Eier
+system-information.deeplink: Deeplink
+system-information.user-unknown: Ukjent bruker
+system-information.system: System
+system-information.click-to-open: klikk for å åpne
+male: Mann
+female: Kvinne
+other: Annet
+unknown: Ukjent
+warning: Advarsel
+error: Feil
+info: Info
+no-value-set: Ingen verdi satt
+set-to-null: Tom (sett til null)
+remove: Fjern
+delete: Slett
+clone: Klon
+jobs.clone-job.step2.title: Oppdaterer referanser
+jobs.asset-clone-job.title: Kloner ressurser
+jobs.document-clone-job.title: Kloner dokumenter
+jobs.data-object-clone-job.title: Kloner dataobjekter
+latitude: Breddegrad
+longitude: Lengdegrad
+search-address: Søk adresse
+search: Søk
+geocode.address-not-found: Den angitte adressen ble ikke funnet
+geocode.possible-causes: Mulige årsaker
+geocode.postal-code-format-error: 'Postnummerformat, f.eks. bruk "5020 Salzburg, Söllheimer Straße 16" i stedet for "A-5020 Salzburg, Söllheimer Straße 16"'
+delete-confirmation-advanced: Vil du virkelig slette {{type}} '{{value}}'?
+relations.id: ID
+relations.reference: Referanse
+relations.type: Type
+relations.subtype: Undertype
+relations.classname: Klasse
+relations.fullpath: Full sti
+relations.remove-all.confirm: Vil du virkelig slette alle relasjoner?
+relation: relasjon
+items-limit-reached: Maksimalt antall elementer ({{maxItems}}) er nådd.
+actions: Handlinger
+asset: Ressurs
+data-object: Data Object
+document: Dokument
+folder: Mappe
+archive: Arkiv
+audio: Lyd
+image: Bilde
+text: Tekst
+video: Video
+processing: Behandler
+upload: Last opp
+close: Lukk
+paste: Lim inn
+upload.assets-items-failed-message: Opplasting fullført med feil.
+quantity-value.converted-units: Konverterte enheter
+table.empty.confirm: Er du sikker på at du vil fjerne alle data?
+table.new-column: Ny kolonne
+table.delete-column: Slett kolonne
+table.new-row: Ny rad
+table.delete-row: Slett rad
+table.duplicate-row: Dupliser rad
+table.copy: Kopier
+table.paste: Lim inn
+clipboard.copy.success: Kopiert til utklippstavlen
+clipboard.copy.error: Kunne ikke kopiere til utklippstavlen
+table.empty: Tøm
+table.paste-placeholder: Lim inn dataene dine her
+empty.confirm: Er du sikker på at du vil fjerne alle data?
+tree.actions.prefix.add: "Legg til "
+tree.actions.convert: "Konverter til "
+tree.actions.clone: Klon
+tree.actions.copy: Kopier
+tree.actions.paste: Lim inn
+tree.actions.delete: Slett
+tree.actions.add-user: Legg til bruker
+tree.actions.clone-user: Klon bruker
+tree.actions.remove-user: Fjern bruker
+tree.actions.folder: Mappe
+tree.actions.user: Bruker
+tree.actions.add-folder: Ny mappe
+tree.actions.add-tag: Ny tagg
+tree.actions.delete-tag: Slett
+tree.actions.rename-tag: Gi nytt navn
+tree.actions.role: Rolle
+tree.actions.add-role: Legg til rolle
+tree.actions.clone-role: Klon rolle
+tree.actions.remove-role: Fjern rolle
+tree.actions.remove-folder: Fjern mappe
+tag-configuration.new: Ny
+tag-configuration.new-tag: Ny tagg
+tag-configuration.name: Navn
+tag-configuration.parent-tag: Overordnet tagg
+tag-configuration.create: Opprett
+tag-configuration.save: Lagre
+tag-configuration.rename: Gi nytt navn til tagg
+tag-configuration.successful-add: Tagg lagt til
+tag-configuration.successful-update: Tagg oppdatert
+tag-configuration.successful-deletion: Tagg slettet
+tag-configuration.warn-delete-tag-modal-title: Slett denne taggen
+tag-configuration.warn-delete-parent-tag-modal-title: Slett denne overordnede taggen
+tag-configuration.warn-delete-all-tags-title: Slett alle tagger
+tag-configuration.warn-delete-all-tags-modal-text: Er du sikker på at du vil slette alle tagger?
+tag-configuration.warn-delete-tag-modal-text: Er du sikker på at du vil slette denne taggen?
+tag-configuration.warn-delete-parent-tag-modal-text: Er du sikker på at du vil slette denne overordnede taggen? Alle tagger tilknyttet den vil bli slettet.
+tag-configuration.delete-tag: Slett
+tag-configuration.delete-all: Slett alle
+tag-configuration.delete-parent-tag: Slett overordnet tagg og alle underordnede tagger
+tag-configuration.cancel: Avbryt
+user-management.admin: Administrator
+user-management.search: Søk
+user-management.doc-types: Dokumenttyper
+user-management.tree.all: Alle brukere
+user-management.settings.title: Innstillinger
+user-management.workspaces.title: Workspaces
+user-management.key-bindings.title: Hurtigtaster
+key-bindings.info: Ikke glem å laste Pimcore på nytt etter endringene!
+key-bindings.reset: Tilbakestill til standard
+key-bindings.general: Generelt
+key-bindings.save: Lagre
+key-bindings.publish: Publiser
+key-bindings.unpublish: Avpubliser
+key-bindings.rename: Gi nytt navn
+key-bindings.refresh: Oppdater
+key-bindings.navigation: Navigasjon
+key-bindings.openDocument: Åpne dokument
+key-bindings.openAsset: Åpne ressurs
+key-bindings.openObject: Åpne objekt
+key-bindings.openClassEditor: Åpne klasseredaktør
+key-bindings.openInTree: Åpne i treet
+key-bindings.closeAllTabs: Lukk alle faner
+key-bindings.search: Søk
+key-bindings.searchDocument: Søk dokument
+key-bindings.searchAsset: Søk ressurs
+key-bindings.searchObject: Søk objekt
+key-bindings.searchAndReplaceAssignments: Søk og erstatt tilordninger
+key-bindings.quickSearch: Hurtigsøk
+key-bindings.system: System
+key-bindings.showMetaInfo: Vis metainfo
+key-bindings.showElementHistory: Vis elementhistorikk
+key-bindings.sharedTranslations: Delte oversettelser
+key-bindings.recycleBin: Papirkurv
+key-bindings.notesEvents: Notater og hendelser
+key-bindings.tagManager: Taggbehandler
+key-bindings.tagConfiguration: Taggkonfigurasjon
+key-bindings.user: Bruker
+key-bindings.users: Brukere
+key-bindings.role: Rolle
+key-bindings.roles: Roller
+key-bindings.clearAllCaches: Tøm alle hurtigbuffere
+key-bindings.clearDataCache: Tøm databuffer
+key-bindings.customReports: Egendefinerte rapporter
+key-bindings.reports: Rapporter
+key-bindings.applicationLogger: Applikasjonslogger
+key-bindings.glossary: Ordliste
+key-bindings.seoDocumentEditor: SEO-dokumentredigerer
+key-bindings.robots: Robots
+key-bindings.httpErrorLog: HTTP-feillogg
+key-bindings.seo: SEO
+key-bindings.redirects: Omdirigeringer
+key-bindings.bundles: Pakker
+user-management.references.title: Referanser
+user-management.references.documents: Dokumenter
+user-management.references.columns.id: ID
+user-management.references.columns.cpath: Sti
+user-management.references.columns.subtype: Undertype
+user-management.general: Generelt
+user-management.active: Aktiv
+user-management.name: Navn
+user-management.password: Passord
+user-management.user.search: Søk etter en bruker
+user-management.role.search: Søk etter en rolle
+user-management.twoFactorAuthenticationEnabled: Tofaktorautentisering aktivert
+user-management.firstname: Fornavn
+user-management.lastname: Etternavn
+user-management.email: E-post
+user-management.language: Språk
+user-management.dateTime: Dato og tid-locale
+user-management.welcomeScreen: Vis velkomstskjerm ved oppstart
+user-management.memorizeTabs: Husk åpne faner
+user-management.allowDirtyClose: Deaktiver advarsel om ulagret innhold
+user-management.closeWarning: Vis lukkeadvarsel
+user-management.admin.info: Administratorbrukere får ikke bare automatisk alle tillatelser nedenfor, de har også tillatelse til å utføre alle handlinger på dokumenter, ressurser og objekter uten begrensninger.
+user-management.admin.login: Logg inn som denne brukeren i en annen nettleser
+user-management.customisation: Tilpasning
+user-management.permissions.default: Tillatelser
+user-management.permissions.bundles: Pakketillatelser
+user-management.types-and-classes: Tillatte typer å opprette (standard er alle)
+user-management.editor-settings: Redaktørinnstillinger
+user-management.shared-translation-settings: Delte oversettelsesinnstillinger
+user-management.document-types: Dokumenttyper
+user-management.classes: Klasser
+user-management.settings.avatar: Avatar
+user-management.settings.upload-avatar: Velg en avatar
+user-management.settings.language.name: Språk
+user-management.settings.language.abbreviation: Forkortelse
+user-management.settings.language.view: Visning
+user-management.settings.language.edit: Rediger
+user-management.two-factor-authentication: Tofaktorautentisering
+user-management.workspaces.documents: Dokumenter
+user-management.workspaces.assets: Ressurser
+user-management.workspaces.objects: Data Objects
+user-management.workspaces.add: Legg til
+user-management.workspaces.columns.cpath: Sti
+user-management.workspaces.columns.list: Liste
+user-management.workspaces.columns.view: Visning
+user-management.workspaces.columns.save: Lagre
+user-management.workspaces.columns.publish: Publiser
+user-management.workspaces.columns.unpublish: Avpubliser
+user-management.workspaces.columns.delete: Slett
+user-management.workspaces.columns.rename: Gi nytt navn
+user-management.workspaces.columns.create: Opprett
+user-management.workspaces.columns.settings: Innstillinger
+user-management.workspaces.columns.versions: Versjoner
+user-management.workspaces.columns.properties: Egenskaper
+user-management.workspaces.columns.path: Sti
+user-management.workspaces.columns.id: ID
+user-management.workspaces.columns.subtype: Undertype
+user-management.workspaces.additional-settings: Tilleggsinnstillinger / Produkter
+user-management.workspaces.localized-fields: Lokaliserte felt
+user-management.workspaces.localized-fields.view: Visningstillatelser
+user-management.workspaces.localized-fields.edit: Redigeringstillatelser
+user-management.workspaces.custom-layouts: Custom Layouts
+user-management.workspaces.custom-layouts.select: Velg ett eller flere felt
+user-management.add-folder.success: Mappe lagt til
+user-management.remove-folder.success: Mappe fjernet
+user-management.clone-user: Klon bruker
+user-management.clone-user.text: Oppgi navnet på den nye brukeren
+user-management.clone-user.success: Bruker klonet
+user-management.save-user.success: Bruker lagret
+user-management.save-user.password.success: Passord oppdatert
+user-management.add-user.success: Bruker lagt til
+user-management.remove-user: Slett bruker
+user-management.remove-user.text: 'Er du sikker på at du vil slette brukeren "{{name}}" permanent? Denne handlingen kan ikke angres.'
+user-management.remove-user.success: Bruker fjernet
+user-management.perspectives: Perspektiver
+user-management.roles: Roller
+user-management.role: Rolle
+user-management.users: Brukere
+user-management.user: Bruker
+user-management.add-folder: Legg til ny mappe
+user-management.add-folder.label: Oppgi navnet på den nye mappen
+user-management.add-user: Legg til ny bruker
+user-management.add-user.label: Oppgi navnet på den nye brukeren
+user-management.last-login: Siste innlogging
+user-management.search.id: ID
+roles.tree.all: Alle roller
+roles.save-item.success: Rolle lagret
+roles.clone-item.success: Rolle klonet
+roles.clone-role: Klon rolle
+roles.clone-role.text: Oppgi navnet på den nye rollen
+roles.remove-role: Slett rolle
+roles.remove-role.text: 'Er du sikker på at du vil slette rollen "{{name}}" permanent? Denne handlingen kan ikke angres.'
+roles.remove-folder.success: Mappe fjernet
+roles.remove-item.success: Rolle fjernet
+roles.add-item.success: Rolle lagt til
+roles.add-folder.success: Mappe lagt til
+roles.settings.title: Innstillinger
+roles.workspaces.title: Workspaces
+roles.add-folder: Legg til ny mappe
+roles.add-folder.label: Oppgi navnet på den nye mappen
+roles.add-role: Legg til ny rolle
+roles.add-role.label: Oppgi navnet på den nye rollen
+roles.search.id: ID
+navigation.quick-access: Hurtigtilgang
+navigation.data-management: Databehandling
+navigation.data-model-definitions: Datamodelldefinisjoner
+navigation.class-definitions: Klasser
+navigation.field-collections: Field Collections
+navigation.object-bricks: Object Bricks
+navigation.bulk-export: Masseeksport
+navigation.bulk-import: Masseimport
+navigation.quantity-values: Mengdeverdier
+navigation.select-options: Select Options
+navigation.experience-ecommerce: Opplevelse og e-handel
+navigation.asset-management: Ressursbehandling
+navigation.image-thumbnails: Bildeminiatyrbilder
+navigation.video-thumbnails: Videominiatyrbilder
+navigation.predefined-asset-metadata: Forhåndsdefinerte ressursmetadata
+navigation.automation-integration: Automatisering og integrasjon
+navigation.translations: Oversettelser
+navigation.appearance-branding: Utseende og merkevare
+navigation.reporting: Rapportering
+navigation.system: System
+navigation.website-settings: Nettstedsinnstillinger
+navigation.document-types: Dokumenttyper
+navigation.clear-cache: Tøm fullsidebuffer
+navigation.reports: Alle rapporter
+navigation.custom-reports: Konfigurasjon av egendefinerte rapporter
+navigation.perspectives: Perspektiver
+navigation.customise: Tilpass
+navigation.tag-configuration: Taggkonfigurasjon
+navigation.predefined-properties: Forhåndsdefinerte egenskaper
+navigation.user-and-roles: Brukere og roller
+navigation.users: Brukere
+navigation.power-shortcuts: Hurtigtaster
+navigation.roles: Roller
+navigation.open-asset: Åpne ressurs
+navigation.open-document: Åpne dokument
+navigation.open-data-object: Åpne Data Object
+navigation.notes-and-events: Notater og hendelser
+navigation.search-replace-assignments: Søk og erstatt tilordninger
+navigation.sidebar-title: Navigasjon
+navigation.name: Navn
+navigation.exclude: Ekskluder fra navigasjon
+navigation.advanced-settings: Avanserte innstillinger
+predefined-properties.new: Ny
+website-settings.new: Legg til
+predefined-properties.type: Type
+predefined-properties.name: Navn
+redirects.beginner: Nybegynner
+redirects.expert: Ekspertmodus
+redirects.type: Type
+redirects.search: Søk
+redirects.source-site: Kildenettsted
+redirects.source: Kilde
+redirects.target-site: Målnettsted
+redirects.target: Mål
+redirects.status: Status
+redirects.priority: Prioritet
+redirects.regex: RegEx
+redirects.pass-through: Videresend
+redirects.active: Aktiv
+redirects.actions: Handlinger
+redirects.expiry: Utløp
+redirects.csv-import: Importer CSV
+redirects.csv-import-modal.redirects-import: CSV-import av omdirigeringer
+redirects.csv-export: CSV-eksport
+redirects.clean-up: Rydd opp utløpte omdirigeringer
+redirects.import-drag-drop: Bla gjennom filene dine eller slipp en CSV-fil direkte her
+redirects.browse-files: Bla gjennom filer
+redirects.upload: Last opp
+redirects.beginner-modal.title: Ny nybegynneromdirigering
+redirects.beginner-modal.type: Type
+redirects.beginner-modal.path: Sti
+redirects.beginner-modal.target: Mål
+redirects.beginner-modal.type.required: Vennligst legg til en type
+redirects.beginner-modal.path.required: Vennligst legg til en sti
+redirects.beginner-modal.target.required: Vennligst legg til et mål
+redirects.beginner-modal.create: Opprett
+redirects.beginner-modal.cancel: Avbryt
+redirects.csv-import-results.title: CSV-importresultater for omdirigeringer
+redirects.csv-import-results.total: Totalt
+redirects.csv-import-results.created: Opprettet
+redirects.csv-import-results.updated: Oppdatert
+redirects.csv-import-results.errored: Feilet
+redirects.csv-import-results.close: Lukk
+redirects.csv-import-results.errors-details: Feildetaljer
+redirects.csv-import-results.line: Linje {{line}}
+path: Sti
+entire_uri: Hele URI
+path_query: Sti og spørring
+auto_create: Opprett automatisk
+widget.redirects: Omdirigeringer
+navigation.redirects: Omdirigeringer
+perspective.default: Standard
+perspective.switching.title: Bytter perspektiv
+perspective.switching.description: Bytter nå til følgende perspektiv
+widget.translations: Oversettelser
+widget.notes-and-events: Notater og hendelser
+widget.tag-configuration: Taggkonfigurasjon
+widget.predefined-properties: Forhåndsdefinerte egenskaper
+widget.search-replace-assignments: Søk og erstatt tilordninger
+widget.document-types: Dokumenttyper
+widget.website-settings: Nettstedsinnstillinger
+widget.role-management: Roller
+widget.user-management: Brukere
+widget.class-definitions: Klasser
+widget.field-collections: Field Collections
+widget.object-bricks: Object Bricks
+widget.quantity-values: Mengdeverdier
+widget.select-options: Select Options
+widget.appearance-branding: Utseende og merkevare
+widget.image-thumbnails: Bildeminiatyrbilder
+widget.video-thumbnails: Videominiatyrbilder
+widget.predefined-asset-metadata: Forhåndsdefinerte ressursmetadata
+predefined-asset-metadata.new: Ny
+predefined-asset-metadata.columns.icon: " "
+predefined-asset-metadata.columns.name: Navn
+predefined-asset-metadata.columns.group: Gruppe
+predefined-asset-metadata.columns.description: Beskrivelse
+predefined-asset-metadata.columns.type: Type
+predefined-asset-metadata.columns.value: Verdi
+predefined-asset-metadata.columns.config: Konfigurasjon
+predefined-asset-metadata.columns.language: Språk
+predefined-asset-metadata.columns.target-type: Måltype
+predefined-asset-metadata.columns.actions: Handlinger
+predefined-asset-metadata.duplicate-entry.title: Forhåndsdefinerte metadata finnes allerede
+predefined-asset-metadata.duplicate-entry.error: En oppføring med denne kombinasjonen av navn og språk finnes allerede. Vennligst endre en av følgende verdier.
+appearance-branding.title: Utseende og merkevare
+image-thumbnails.title: Bildeminiatyrbilder
+image-thumbnails.description: Administrer og konfigurer innstillinger for bildeminiatyrbilder for ressursene dine.
+image-thumbnails.search.placeholder: Søk i miniatyrbilder...
+image-thumbnails.tree.empty: Ingen miniatyrbilder funnet
+image-thumbnails.configuration.title: Konfigurasjon
+image-thumbnails.configuration.description: Konfigurer miniatyrbildeinnstillinger
+image-thumbnails.preview.title: Forhåndsvisning
+image-thumbnails.preview.description: Forhåndsvis miniatyrbildekonfigurasjon
+image-thumbnails.editor.empty.title: Velg et miniatyrbilde
+image-thumbnails.editor.empty.description: Velg et miniatyrbilde fra treet for å vise eller redigere konfigurasjonen
+image-thumbnails.editor.select-thumbnail: Velg en miniatyrbildekonfigurasjon å redigere
+image-thumbnails.editor.general-settings: Generelle innstillinger
+image-thumbnails.editor.name: Navn
+image-thumbnails.editor.name-required: Navn er obligatorisk
+image-thumbnails.editor.description: Beskrivelse
+image-thumbnails.editor.description-placeholder: Oppgi beskrivelse av miniatyrbildet...
+image-thumbnails.editor.group: Gruppe
+image-thumbnails.editor.group-required: Gruppe er obligatorisk
+image-thumbnails.editor.group-placeholder: Velg en gruppe...
+image-thumbnails.editor.no-group: Ingen gruppe
+image-thumbnails.editor.format: Format
+image-thumbnails.editor.format-required: Format er obligatorisk
+image-thumbnails.editor.format-placeholder: Velg et format...
+image-thumbnails.editor.format-auto: Auto (nettoptimalisert – anbefalt)
+image-thumbnails.delete.confirm: Vil du virkelig slette miniatyrbildet
+image-thumbnails.add.content: Oppgi navnet på det nye miniatyrbildet (a-zA-Z0-9_-)
+image-thumbnails.add.validation.message: Miniatyrbildenavnet er ugyldig
+image-thumbnails.editor.advanced: Avansert
+image-thumbnails.editor.quality: Kvalitet
+image-thumbnails.editor.quality.tooltip: JPEG-kvalitetsinnstilling (1-100)
+image-thumbnails.editor.high-resolution: Høy oppløsning
+image-thumbnails.editor.high-resolution.tooltip: Høyoppløsningsfaktor for retina-skjermer
+image-thumbnails.editor.preserve-color: Bevar farge
+image-thumbnails.editor.preserve-color.tooltip: "Bevar farge (profil, fargerom) (Imagick, ORIGINAL)\n('Bevar metadata' og 'bevar farge' fungerer kun for transformasjoner uten komposisjoner (ramme, bakgrunnsfarge, ...) og fargemodifikasjoner (gråtoner, sepia, ...))"
+image-thumbnails.editor.force-process-icc: Tving prosessering av ICC-profiler
+image-thumbnails.editor.force-process-icc.tooltip: Tving prosessering av ICC-profiler (Imagick, ORIGINAL)
+image-thumbnails.editor.preserve-metadata: Bevar metadata
+image-thumbnails.editor.preserve-metadata.tooltip: "Bevar metadata (ikke fjern) (Imagick, ORIGINAL)\n('Bevar metadata' og 'bevar farge' fungerer kun for transformasjoner uten komposisjoner (ramme, bakgrunnsfarge, ...) og fargemodifikasjoner (gråtoner, sepia, ...))"
+image-thumbnails.editor.rasterize-svg: Rasteriser SVG-er
+image-thumbnails.editor.rasterize-svg.tooltip: "Rasteriser SVG-er (Imagick)\n(SVG-er rasteriseres automatisk når en annen transformasjon enn endre størrelse eller skaler etter bredde/høyde brukes.)"
+image-thumbnails.editor.use-cropbox: Bruk Cropbox
+image-thumbnails.editor.use-cropbox.tooltip: "Bruk Cropbox (Ghostscript)\n(Setter sidestørrelsen til CropBox i stedet for MediaBox, nyttig for å ekskludere marginer og ikke-innholdsområder.)"
+image-thumbnails.editor.downloadable: Nedlastbar
+image-thumbnails.editor.downloadable.tooltip: Vis som alternativ i nedlastingsseksjonen i bildedetaljvisningen
+image-thumbnails.editor.preserve-animation: Bevar animasjon
+image-thumbnails.editor.preserve-animation.tooltip: "Bevar animasjoner for GIF (Imagick)\n(Støttede transformasjoner er: Frame, Cover, Contain, Resize, ScaleByWidth, ScaleByHeight)"
+image-thumbnails.editor.media-queries: Media Queries
+image-thumbnails.editor.media-queries.new: Ny
+image-thumbnails.editor.media-queries.default: Standard
+image-thumbnails.editor.media-queries.empty: "Ingen media queries definert. Klikk 'Ny' for å legge til en CSS media query."
+image-thumbnails.editor.media-query.modal.title: Ny Media Query
+image-thumbnails.editor.media-query.modal.label: Oppgi en gyldig CSS media query
+image-thumbnails.editor.media-queries.add.title: Ny Media Query
+image-thumbnails.editor.media-queries.add.label: Oppgi en gyldig CSS media query
+image-thumbnails.editor.media-query.modal.placeholder: "(min-width: 576px)"
+image-thumbnails.editor.transformations: Transformasjoner
+image-thumbnails.editor.transformations.resize: Endre størrelse
+image-thumbnails.editor.transformations.scale-by-height: Skaler etter høyde
+image-thumbnails.editor.transformations.trim: Trim
+image-thumbnails.editor.transformations.effects: Effekter
+image-thumbnails.editor.transformations.effects.sepia: Sepia
+image-thumbnails.editor.transformations.effects.grayscale: Gråtoner
+image-thumbnails.editor.transformations.effects.sharpen: Skarp
+image-thumbnails.editor.transformations.empty: "Ingen transformasjoner definert. Bruk 'Transformasjoner'-knappen for å legge til bildetransformasjoner."
+image-thumbnails.editor.save-error: Kunne ikke lagre miniatyrbildekonfigurasjon
+
+# Transformasjonsgrupper
+image-thumbnails.transformations.groups.main: Transformasjoner
+image-thumbnails.transformations.groups.effects: Effekter
+
+# Media Query-oversettelser
+image-thumbnails.media-queries.add-transformation: Legg til transformasjon
+
+# Cover-transformasjon
+image-thumbnails.transformations.cover.title: Konfigurer Cover
+image-thumbnails.transformations.cover.width-height: Bredde, Høyde
+image-thumbnails.transformations.cover.width: Bredde
+image-thumbnails.transformations.cover.height: Høyde
+image-thumbnails.transformations.cover.focal-point-info: Bildet beskjæres automatisk basert på fokuspunktet angitt på kildebildet. Hvis det ikke er angitt noe fokuspunkt, brukes standardposisjoneringen nedenfor.
+image-thumbnails.transformations.cover.positioning: Standardposisjonering
+image-thumbnails.transformations.cover.positioning-center: Senter
+image-thumbnails.transformations.cover.positioning-topleft: Øverst til venstre
+image-thumbnails.transformations.cover.positioning-topright: Øverst til høyre
+image-thumbnails.transformations.cover.positioning-bottomleft: Nederst til venstre
+image-thumbnails.transformations.cover.positioning-bottomright: Nederst til høyre
+image-thumbnails.transformations.cover.force-resize: Tving endring av størrelse
+
+# Legg til overlegg-transformasjon
+image-thumbnails.transformations.add-overlay.overlay-image: Overleggsbilde
+image-thumbnails.transformations.add-overlay.x: X-posisjon
+image-thumbnails.transformations.add-overlay.y: Y-posisjon
+image-thumbnails.transformations.add-overlay.origin: Opprinnelse
+image-thumbnails.transformations.add-overlay.origin-top-left: Øverst til venstre
+image-thumbnails.transformations.add-overlay.origin-top-right: Øverst til høyre
+image-thumbnails.transformations.add-overlay.origin-center: Senter
+image-thumbnails.transformations.add-overlay.origin-bottom-left: Nederst til venstre
+image-thumbnails.transformations.add-overlay.origin-bottom-right: Nederst til høyre
+image-thumbnails.transformations.add-overlay.alpha: Gjennomsiktighet
+image-thumbnails.transformations.add-overlay.composite: Kompositt
+
+# Gaussisk uskarphet-transformasjon
+image-thumbnails.transformations.gaussian-blur.radius: Radius
+image-thumbnails.transformations.gaussian-blur.sigma: Sigma
+
+# Skaler etter bredde-transformasjon
+image-thumbnails.transformations.scale-by-width.title: Konfigurer skaler etter bredde
+image-thumbnails.transformations.scale-by-width.width: Bredde
+image-thumbnails.transformations.scale-by-width.force-resize: Tving endring av størrelse
+
+# Endre størrelse-transformasjon
+image-thumbnails.transformations.resize.config-title: Konfigurer endre størrelse
+image-thumbnails.transformations.resize.width: Bredde
+image-thumbnails.transformations.resize.height: Høyde
+
+# Skaler etter høyde-transformasjon
+image-thumbnails.transformations.scale-by-height.config-title: Konfigurer skaler etter høyde
+image-thumbnails.transformations.scale-by-height.height: Høyde
+image-thumbnails.transformations.scale-by-height.height-placeholder: Oppgi høyde i piksler
+image-thumbnails.transformations.scale-by-height.force-resize: Tving endring av størrelse
+
+# Trim-transformasjon
+image-thumbnails.transformations.trim.config-title: Konfigurer Trim
+image-thumbnails.transformations.trim.trim-option: Trim-alternativ
+image-thumbnails.transformations.trim.trim-option-placeholder: Velg trim-alternativ
+image-thumbnails.transformations.trim.disabled: Deaktivert
+image-thumbnails.transformations.trim.left: Venstre
+image-thumbnails.transformations.trim.right: Høyre
+image-thumbnails.transformations.trim.both: Begge
+
+# Effekt-transformasjon
+image-thumbnails.transformations.effects.config-title: Konfigurer effekt
+image-thumbnails.transformations.effects.effect-type: Effekttype
+image-thumbnails.transformations.effects.effect-type-placeholder: Velg effekttype
+image-thumbnails.transformations.effects.sepia: Sepia
+image-thumbnails.transformations.effects.grayscale: Gråtoner
+image-thumbnails.transformations.effects.sharpen: Skarp
+image-thumbnails.transformations.effects.intensity: Intensitet
+
+# Transformasjonsverktøylinje
+image-thumbnails.transformations.add: Legg til transformasjon
+image-thumbnails.transformations.move-up: Flytt opp
+image-thumbnails.transformations.move-down: Flytt ned
+image-thumbnails.transformations.remove: Fjern
+
+# Ukjent/fallback-transformasjon
+image-thumbnails.transformations.unknown-type: "Ukjent transformasjonstype: {{type}}"
+image-thumbnails.transformations.no-configuration-required: Ingen konfigurasjon nødvendig
+
+video-thumbnails.title: Videominiatyrbilder
+video-thumbnails.description: Administrer og konfigurer innstillinger for videominiatyrbilder for ressursene dine.
+video-thumbnails.search.placeholder: Søk i miniatyrbilder...
+video-thumbnails.tree.empty: Ingen miniatyrbilder funnet
+video-thumbnails.editor.select-thumbnail: Velg en videominiatyrbildekonfigurasjon å redigere
+video-thumbnails.editor.name: Navn
+video-thumbnails.editor.name-required: Navn er obligatorisk
+video-thumbnails.editor.description: Beskrivelse
+video-thumbnails.editor.group: Gruppe
+video-thumbnails.editor.no-group: Ingen gruppe
+video-thumbnails.editor.presetting: Velg en forhåndsinnstilling
+video-thumbnails.editor.video-bitrate: Video Bitrate
+video-thumbnails.editor.audio-bitrate: Audio Bitrate
+video-thumbnails.editor.transformations: Transformasjoner
+video-thumbnails.editor.media-segments: Mediesegmenter
+video-thumbnails.editor.media-segments.new: Ny
+video-thumbnails.editor.media-segments.empty: "Ingen mediesegmenter definert. Klikk 'Ny' for å legge til et segment (f.eks. 500K)."
+video-thumbnails.editor.media-segments.add.title: Nytt mediesegment
+video-thumbnails.editor.media-segments.add.label: Oppgi et segmentnavn (f.eks. 500K)
+video-thumbnails.editor.media-segments.add.bitrate-hint: Vennligst oppgi en gyldig bitrate (f.eks. 400k, 1500k, 1M)
+video-thumbnails.editor.media-segments.add.ok: Opprett
+video-thumbnails.editor.media-segments.default: Standard
+video-thumbnails.editor.transformations.empty: Ingen transformasjoner er valgt
+video-thumbnails.delete.confirm: Vil du virkelig slette miniatyrbildet
+video-thumbnails.add.content: Oppgi navnet på det nye miniatyrbildet (a-zA-Z0-9_-)
+video-thumbnails.add.validation.message: Miniatyrbildenavnet er ugyldig
+
+# Videotransformasjonsverktøylinje
+video-thumbnails.transformations.move-up: Flytt opp
+video-thumbnails.transformations.move-down: Flytt ned
+video-thumbnails.transformations.remove: Fjern
+
+# Endre størrelse-transformasjon
+video-thumbnails.transformations.resize.config-title: Konfigurer endre størrelse
+video-thumbnails.transformations.resize.width: Bredde
+video-thumbnails.transformations.resize.width-placeholder: Oppgi bredde i piksler
+video-thumbnails.transformations.resize.height: Høyde
+video-thumbnails.transformations.resize.height-placeholder: Oppgi høyde i piksler
+video-thumbnails.transformations.resize.even-number-hint: Bredde og høyde må være et partall
+
+# Skaler etter bredde-transformasjon
+video-thumbnails.transformations.scale-by-width.config-title: Konfigurer skaler etter bredde
+video-thumbnails.transformations.scale-by-width.width: Bredde
+video-thumbnails.transformations.scale-by-width.width-placeholder: Oppgi bredde i piksler
+
+# Skaler etter høyde-transformasjon
+video-thumbnails.transformations.scale-by-height.config-title: Konfigurer skaler etter høyde
+video-thumbnails.transformations.scale-by-height.height: Høyde
+video-thumbnails.transformations.scale-by-height.height-placeholder: Oppgi høyde i piksler
+
+# Klipp-transformasjon
+video-thumbnails.transformations.cut.config-title: Konfigurer klipp
+video-thumbnails.transformations.cut.start: Start
+video-thumbnails.transformations.cut.start-placeholder: "00:00:00.000"
+video-thumbnails.transformations.cut.duration: Varighet
+video-thumbnails.transformations.cut.duration-placeholder: "00:00:10.000"
+
+# Sett bildefrekvens-transformasjon
+video-thumbnails.transformations.set-framerate.config-title: Konfigurer bildefrekvens
+video-thumbnails.transformations.set-framerate.fps: FPS
+video-thumbnails.transformations.set-framerate.fps-placeholder: "25"
+
+# Fargekanalmikser-transformasjon
+video-thumbnails.transformations.color-channel-mixer.config-title: Konfigurer fargekanalmikser
+video-thumbnails.transformations.color-channel-mixer.effect: Effekt
+video-thumbnails.transformations.color-channel-mixer.effect-placeholder: Velg en effekt
+video-thumbnails.transformations.color-channel-mixer.grayscale: Gråtoner
+video-thumbnails.transformations.color-channel-mixer.sepia: Sepia
+video-thumbnails.transformations.color-channel-mixer.cold: Kald
+
+# Demp-transformasjon
+video-thumbnails.transformations.mute.config-title: Demp
+video-thumbnails.transformations.no-configuration-required: Ingen konfigurasjon nødvendig
+
+appearance-branding.color.title: Farge
+appearance-branding.color.brand-color.label: Merkefarge
+appearance-branding.color.brand-color.description: Brukes på abonnementsstatusindikatoren og standard brukeravatar.
+appearance-branding.color.background-shade.label: Bakgrunnsfarge
+appearance-branding.color.background-shade.description: Brukes på bakgrunnen med redusert gjennomsiktighet for en sømløs overgang.
+appearance-branding.custom-logo.title: Egendefinert logo
+appearance-branding.custom-logo.description: Brukes ved innlogging og i bakgrunnen
+appearance-branding.custom-login-background.title: Egendefinert bakgrunnsbilde for innlogging
+appearance-branding.custom-login-background.description: Brukes på innloggingssiden som bakgrunnsbilde
+appearance-branding.update.success: Utseendeinnstillinger oppdatert
+search-replace-assignments.search-for: Søk etter
+search-replace-assignments.replace-with: Erstatt med
+search-replace-assignments.select-element: Velg målelement
+search-replace-assignments.search: Søk etter bruk
+search-replace-assignments.apply-to-all: Bruk erstatning på alle
+search-replace-assignments.apply-to-selection: Bruk erstatning på utvalg
+search-replace-assignments.confirm.title: Bekreft erstatningen
+search-replace-assignments.confirm.description: Gjenoppretting av erstattede tilordninger kan være en tidkrevende prosess. Er du sikker på at du vil bruke det på alle?
+search-replace-assignments.columns.id: ID
+search-replace-assignments.columns.type: Type
+search-replace-assignments.columns.path: Sti
+search-replace-assignments.job.title-all: Erstatt alle tilordninger
+search-replace-assignments.job.title-selection: Erstatt {{count}} tilordning(er)
+hidden-dependencies-warning: Det finnes ytterligere avhengigheter brukeren din ikke har tillatelse til å se.
+external-image.preview-placeholder: Legg til et eksternt bilde
+empty-image: Tomt bilde
+image.dnd-target: Slipp et bilde her
+image.add.and.dnd: Legg til eller slipp et bilde direkte her
+image.upload.add.and.dnd: Last opp, legg til eller slipp et bilde direkte her
+fallback: Fallback
+url-slug.add-site: Legg til nettsted
+url-slug.invalid: Vennligst oppgi en gyldig URL-slug (starter med '/')
+site-id: Nettsted-ID
+deleted: slettet
+collection.empty: Ingen tilgjengelige felt ennå. Begynn med å legge til et felt.
+field-collection.add.default: Legg til samling
+video.type: Videotype
+video.type.asset: Ressurs
+video.type.youtube: YouTube
+video.type.vimeo: Vimeo
+video.type.dailymotion: Dailymotion
+video.id: Video-ID
+video.url: Video-URL
+video.settings: Videoinnstillinger
+video.poster: Plakatbilde
+video.path: Sti
+video.dnd-target: Slipp en video her
+pdf-editable.dnd-target: Slipp en dokumentressurs her
+many-to-one-relation.drop-placeholder: Slipp et element her
+many-to-one-relation.drop-placeholder-text-input: Slipp et element her eller oppgi en verdi
+reverse-object-relation.owner-hint: Det gjeldende objektet er ikke eier av disse relasjonene, endringer her kan gjøre lagring av objektet tregt.
+reverse-object-relation.owner-class: Eierklasse
+reverse-object-relation.owner-field: Eierfelt
+link.not-set: ikke satt
+link.edit-title: Rediger lenke
+link.tab.basic: Grunnleggende
+link.tab.advanced: Avansert
+link.text: Tekst
+link.path: Sti
+link.properties: Egenskaper
+link.target: Mål
+link.parameters: Parametere
+link.anchor: Anker
+link.title: Tittel
+link.accesskey: Tilgangstast
+link.rel: Relasjon
+link.tabindex: Tabindeks
+link.class: Klasse
+link.attributes: Attributter
+crop: Beskjær
+crop.remove: Fjern beskjæring
+hotspots-markers-modal.edit-button: Legg til og rediger data
+hotspots-markers-data-modal.title: Legg til og rediger data
+hotspots-markers-data-modal.new-data: Ny
+hotspots-markers-data-modal.apply: Bruk
+hotspots-markers-data-modal.name: Navn
+hotspots-markers-data-modal.data: Data
+hotspots-markers-data-modal.data-type.name: Navn
+hotspots-markers-data-modal.data-type.value: Verdi
+hotspots-markers-data-modal.data-type.text-field: Tekstfelt
+hotspots-markers-data-modal.data-type.text-area: Tekstområde
+hotspots-markers-data-modal.data-type.checkbox: Avkrysningsboks
+hotspots-markers-data-modal.data-type.object: Objekt
+hotspots-markers-data-modal.data-type.document: Dokument
+hotspots-markers-data-modal.data-type.asset: Ressurs
+hotspots.edit: Rediger markører og hotspots
+hotspots.show: Vis markører og hotspots
+hotspots.new-marker: Ny markør
+hotspots.new-hotspot: Ny hotspot
+hotspots.clear-data: Fjern alle hotspots og markører
+hotspots.clear-data.dnd-message: Dette bildet inneholder tilleggsdata som markører eller hotspots. Vil du fjerne disse også?
+hotspots.data-cleared: Hotspots- og markørdata fjernet
+hotspots.has-hotspots-or-marker: Hotspots eller markører er lagt til dette elementet
+classification-store.collection: Samling
+classification-store.group: Gruppe
+classification-store.group-by-key: Grupper etter nøkkel
+classification-store.column.id: ID
+classification-store.column.group: Gruppe
+classification-store.column.name: Navn
+classification-store.column.description: Beskrivelse
+navigation.classification-store: Classification Store
+widget.classification-store-config: Classification Store
+classification-store.tabs.collections: Samlinger
+classification-store.tabs.groups: Grupper
+classification-store.tabs.keys: Nøkler
+classification-store.add-store: Legg til store
+classification-store.rename-store: Gi nytt navn til store
+classification-store.delete-store: "Slette store \"{{storeName}}\"?"
+classification-store.add-group: Legg til gruppe
+classification-store.rename-group: Gi nytt navn til gruppe
+classification-store.delete-group: "Slette gruppe \"{{groupName}}\"?"
+classification-store.add-collection: Legg til samling
+classification-store.rename-collection: Gi nytt navn til samling
+classification-store.delete-collection: "Slette samling \"{{collectionName}}\"?"
+classification-store.add-key: Legg til nøkkel
+classification-store.rename-key: Gi nytt navn til nøkkel
+classification-store.delete-key: "Slette nøkkel \"{{keyName}}\"?"
+classification-store.delete-key-relation: "Fjerne nøkkel \"{{keyName}}\" fra denne gruppen?"
+classification-store.delete-group-relation: "Fjerne gruppe \"{{groupName}}\" fra denne samlingen?"
+classification-store.edit-definition: Rediger definisjon
+classification-store.edit-key-definition: "Rediger nøkkeldefinisjon: {{keyName}}"
+classification-store.columns.id: ID
+classification-store.columns.name: Navn
+classification-store.columns.title: Tittel
+classification-store.columns.type: Type
+classification-store.columns.description: Beskrivelse
+classification-store.columns.actions: Handlinger
+classification-store.columns.mandatory: Obligatorisk
+classification-store.columns.sorter: Sortering
+classification-store.columns.enabled: Aktivert
+classification-store.relations-title: "Nøkler i gruppe: {{name}}"
+classification-store.select-group-hint: Velg en gruppe for å se nøklene
+classification-store.collection-relations-title: "Grupper i samling: {{name}}"
+classification-store.select-collection-hint: Velg en samling for å se gruppene
+classification-store.select-key: Velg nøkkel
+classification-store.search-keys: Søk i nøkler…
+classification-store.select-group: Velg gruppe
+classification-store.search-groups: Søk i grupper…
+home: Hjem
+preview.label: Forhåndsvisning
+preview.desktop: Skrivebord
+preview.tablet: Nettbrett
+preview.phone-vertical: Telefon vertikal
+preview.phone-horizontal: Telefon horisontal
+preview.select_date_time: Velg dato og tid
+preview.screen_size_too_small: Tilgjengelig plass er for liten til å vise valgt forhåndsvisningsmodus.
+inheritance-active: "Data arvet fra objekt-ID {{id}}"
+inheritance-broken: Dataarv brutt
+main: Hoved
+main_admin: Hoved (administratormodus)
+draft-alert: Gjeldende versjon er et utkast. Du kan slette utkastet for å gjenopprette forrige versjon.
+draft-alert-auto-save: Gjeldende versjon er et automatisk lagret utkast. Du kan slette utkastet for å gjenopprette forrige versjon.
+delete-draft: Slett utkast
+delete-draft-auto-save: Slett automatisk lagret utkast
+delete-draft-confirmation: Er du sikker på at du vil slette utkastet?
+auto-save.tooltip: Denne versjonen er automatisk lagret.
+auto-save.loading-tooltip: Automatisk lagring pågår
+detached-tab.draft-tooltip: Gjeldende versjon er et utkast.
+detached-tab.draft-tooltip-addon: Du kan publisere i den tilknyttede elementets/objektets hoved-/morfane.
+details: Detaljer
+element: Element
+entries: oppføringer
+entry: oppføring
+error_element_validation_failed: Validering mislyktes
+element.delete.deleting-folder: Sletter mappe
+component.pagination.showing-items: Viser {{total}}
+edit-modal.inline-edit: Rediger innebygd
+edit-modal.apply-changes: Bruk endringer
+edit-modal.discard: Forkast
+preview-not-available: Forhåndsvisning ikke tilgjengelig
+user-menu.notifications: Varsler
+user-menu.my-profile: Min profil
+user-menu.log-out: Logg ut
+user-menu.title: Profil
+user-menu.notification.send: Send
+user-menu.notification.attachments: Vedlegg
+user-menu.notification.type-not-supported: Vedleggstypen støttes ikke
+user-menu.notification.cancel: Avbryt
+user-menu.notification.modal.send-a-notification: Send et varsel
+user-menu.notification.modal.success-notification-has-been-sent: Varsel er sendt
+user-menu.notification.modal.to: Til
+user-menu.notification.modal.select: Velg
+user-menu.notification.modal.title: Tittel
+user-menu.notification.modal.message: Melding
+user-menu.notification.modal.add-an-attachment: Legg til et vedlegg
+user-menu.notification.modal.form.validation.provide-recipient: Vennligst oppgi en mottaker
+user-menu.notification.modal.form.validation.provide-title: Vennligst oppgi en tittel
+user-menu.notification.modal.form.validation.provide-message: Vennligst oppgi en melding
+reports.reports-title: Rapporter
+reports.select-report-name: Velg rapportens navn
+reports.select-report: Velg rapport
+reports.export: Eksporter
+reports.csv-export: CSV-eksport
+reports.csv-export-with-headers: CSV-eksport med overskrifter
+reports.show-all-labels: Vis alle etiketter
+reports.show-fewer-labels: Vis færre etiketter
+reports.grid-config.title-columns: Kolonner
+reports.grid-config.restore-to-default: Gjenopprett til standard
+reports.grid-config.add-column: Legg til en kolonne
+reports.field-filters: Feltfiltre
+reports.editor.delete.content: Vil du virkelig slette egendefinert rapport "{{reportName}}"?
+reports.editor.clone.content: Oppgi navnet på det nye elementet (a-zA-Z-_)
+reports.editor.add.content: Oppgi navnet på det nye elementet. Navnet må være alfanumerisk og minst 3 tegn langt (a-zA-Z0-9_-)
+reports.editor.content.validation.message: Rapportnavnet er ugyldig
+reports.editor.general-settings.title: Generelle innstillinger
+reports.editor.general-settings.name-label: Navn
+reports.editor.general-settings.display-name-label: Visningsnavn
+reports.editor.general-settings.icon-class-label: Icon Class
+reports.editor.general-settings.group-label: Oppgi navnet på en eksisterende gruppe eller opprett en ny
+reports.editor.general-settings.group-tooltip: Du må bruke nøyaktig samme navn som den eksisterende menyetiketten. Hvis navnet er forskjellig eller nytt, opprettes en ny gruppe.
+reports.editor.general-settings.report-class-label: Rapportklasse
+reports.editor.general-settings.group-icon-class-label: Gruppeikon-klasse
+reports.editor.general-settings.shortcut-menu-label: Opprett snarvei i menyen
+reports.editor.source-definition.title: Kildedefinisjon
+reports.editor.source-definition.no-content: Ingen tilgjengelige felt ennå. Begynn med å legge til et felt.
+reports.editor.source-definition.select-source-definition: Velg en kildedefinisjon
+reports.editor.source-definition.sql-select-field: SELECT (f.eks. a,b,c)*
+reports.editor.source-definition.sql-from-field: FROM (f.eks. d INNER JOIN e ON c.a = e.b)*
+reports.editor.source-definition.sql-where-field: WHERE (f.eks. c = 'some_value')
+reports.editor.source-definition.sql-group-by-field: GROUP BY (f.eks. b, c)
+reports.editor.source-definition.sql-initial-field-order: Innledende sortering etter felt (f.eks. b, c)
+reports.editor.source-definition.sql-initial-direction-order: Innledende sorteringsretning
+reports.editor.manage-column-configuration.title: Administrer og del kolonnekonfigurasjon
+reports.editor.manage-column-configuration.name: Navn
+reports.editor.manage-column-configuration.display: Visning
+reports.editor.manage-column-configuration.export: Eksporter
+reports.editor.manage-column-configuration.order: Rekkefølge
+reports.editor.manage-column-configuration.filter-type: Filtertype
+reports.editor.manage-column-configuration.filter-type.empty: Tom
+reports.editor.manage-column-configuration.filter-type.text: Tekst
+reports.editor.manage-column-configuration.filter-type.number: Tall
+reports.editor.manage-column-configuration.filter-type.date: Dato
+reports.editor.manage-column-configuration.filter-type.bool: Boolsk
+reports.editor.manage-column-configuration.display-type: Visningstype
+reports.editor.manage-column-configuration.display-type.none: Ingen
+reports.editor.manage-column-configuration.display-type.text: Tekst
+reports.editor.manage-column-configuration.display-type.date: Dato
+reports.editor.manage-column-configuration.display-type.hide: Skjul
+reports.editor.manage-column-configuration.filter-drilldown: Filter Drilldown
+reports.editor.manage-column-configuration.filter-drilldown.empty: Tom
+reports.editor.manage-column-configuration.filter-drilldown.only-filter: Kun filter
+reports.editor.manage-column-configuration.filter-drilldown.filter-and-show: Filter og vis
+reports.editor.manage-column-configuration.width: Bredde
+reports.editor.manage-column-configuration.label: Etikett
+reports.editor.manage-column-configuration.action: Handling
+reports.editor.manage-column-configuration.action.none: Ingen
+reports.editor.manage-column-configuration.action.open-document: Åpne dokument
+reports.editor.manage-column-configuration.action.open-asset: Åpne ressurs
+reports.editor.manage-column-configuration.action.open-object: Åpne objekt
+reports.editor.manage-column-configuration.action.open-url: Åpne URL
+reports.editor.chart-settings.title: Diagraminnstillinger
+reports.editor.chart-settings.chart-type: Diagramtype
+reports.editor.chart-settings.chart-type.none: Ingen
+reports.editor.chart-settings.chart-type.pie-chart: Sektordiagram
+reports.editor.chart-settings.chart-type.line-chart: Linjediagram
+reports.editor.chart-settings.chart-type.bar-chart: Stolpediagram
+reports.editor.chart-settings.settings: Innstillinger
+reports.editor.chart-settings.pie-label: Etikettkolonne
+reports.editor.chart-settings.pie-data: Datakolonne
+reports.editor.chart-settings.x-axis: X-akse
+reports.editor.chart-settings.y-axis: Y-akse
+reports.editor.permissions.title: Tillatelser
+loading: Laster...
+please-wait: Vennligst vent...
+navigation.email: E-post
+navigation.email-blocklist: E-postblokkeringsliste
+widget.email-blocklist: E-postblokkeringsliste
+email-blocklist.new: Ny
+email-blocklist.add.validation: Vennligst oppgi en gyldig e-postadresse
+email-blocklist.add.label: Legg til e-postadresse
+email-blocklist.add.email-address.label: E-postadresse
+email-blocklist.add.email.success: E-postadresse lagt til
+aria.email-blocklist.remove.email: Fjern e-postadresse
+navigation.email-log: Sendte e-poster
+widget.email-log: Sendte e-poster
+widget.email-log.from: Fra
+widget.email-log.to: Til
+widget.email-log.cc: CC
+widget.email-log.bcc: BCC
+widget.email-log.tab.text: Tekst
+widget.email-log.tab.html: HTML
+widget.email-log.tab.parameters: Parametere
+widget.email-log.grid.name: Navn
+widget.email-log.grid.value: Verdi
+email-log.subject: Emne
+email-log.tooltip.resend: Send e-post på nytt
+email-log.tooltip.forward: Videresend e-post
+email-log.tooltip.delete: Slett e-post
+email-log.resend.email.success: E-post sendt på nytt
+email-log.resend.confirmation.title: Send e-post på nytt
+email-log.resend.confirmation.text: Vennligst bekreft at du vil sende e-posten igjen til alle mottakere.
+email-log.resend.confirmation.ok: Send e-post på nytt
+email-log.forward.email.success: E-post videresendt
+email-log.forward.label: Videresend e-post
+email-log.send.label: Send
+email-log.forward.email-address.label: E-postadresse
+email-log.delete.email.success: E-post slettet
+email-log.html.preview: HTML-forhåndsvisning
+aria.email-log.html.preview: HTML-forhåndsvisning
+user-profile.label: Min profil
+user-profile.general: Generelle data
+user-profile.change-password: Endre passord
+user-profile.password-old: Gammelt passord
+user-profile.password-new: Nytt passord
+user-profile.password-repeat: Gjenta passord
+user-profile.password-repeat-error: Passordene samsvarer ikke
+creatable-select.add-custom-option: Legg til egendefinert alternativ
+creatable-select.add: Legg til
+creatable-select.option-already-exists: Alternativet finnes allerede
+creatable-select.invalid-option: Ugyldig alternativ
+drag-snippet-here: Dra en snippet hit
+drop-snippet-here: Slipp en snippet her
+drop-document-here: Slipp et dokument her
+drop-document-asset-here: Slipp en dokumentressurs her
+drop-asset-here: Slipp en ressurs her
+drop-object-here: Slipp et objekt her
+drop-element-here: Slipp et element her
+error-loading-renderlet: Feil ved lasting av renderlet
+snippet: Snippet
+navigation.application-logger: Applikasjonslogger
+widget.application-logger: Applikasjonslogger
+application-logger.label: Applikasjonslogger
+application-logger.columns.timestamp: Tidsstempel
+application-logger.columns.pid: PID
+application-logger.columns.message: Melding
+application-logger.columns.file-object: Filobjekt
+application-logger.columns.related-object: Relatert objekt
+application-logger.columns.component: Komponent
+application-logger.columns.source: Kilde
+application-logger.columns.details: Detaljer
+application-logger.columns.type: Type
+application-logger.sidebar.search-parameter: Søkeparameter
+application-logger.detail-modal.title: Detaljinformasjon
+application-logger.filter.date-from: Fra
+application-logger.filter.date-to: Til
+application-logger.filter.priority: Type
+application-logger.filter.component: Komponent
+application-logger.filter.related-object-id: Relatert objekt-ID
+application-logger.filter.message: Melding
+application-logger.filter.pid: PID
+application-logger.refresh-interval: Oppdateringsintervall
+application-logger.refresh-interval.select: Velg oppdateringsfrekvens
+application-logger.refresh-interval.seconds: "{{seconds}} sekunder"
+application-logger.filter.priority-level.1: Nødsituasjon
+application-logger.filter.priority-level.2: Varsel
+application-logger.filter.priority-level.3: Kritisk
+application-logger.filter.priority-level.4: Feil
+application-logger.filter.priority-level.5: Advarsel
+application-logger.filter.priority-level.6: Merknad
+application-logger.filter.priority-level.7: Info
+application-logger.filter.priority-level.8: Feilsøking
+embed.url-modal.title: Rediger Embed-URL
+embed.url-modal.label: URL (f.eks. https://www.youtube.com/watch?v=nPntDiARQYw)
+embed.url-modal.required-message: Vennligst oppgi en gyldig URL
+embed.url-modal.ok-text: OK
+embed.url-modal.cancel-text: Avbryt
+embed.placeholder: Ingen URL satt – Klikk for å legge til en embed-URL
+embed.add-url: Legg til URL
+embed.edit-url: Rediger URL
+embed.clear: Tøm
+embed.loading: Laster...
+embed.iframe-title: Innebygd innhold
+invalid-iframe: Den angitte iframe-URL-en er ugyldig
+document.open-in-new-window: Åpne i nytt vindu
+document.open-preview-in-new-window: Åpne forhåndsvisning i nytt vindu
+document.translation.title: Oversettelse
+document.translation.open-translation: Åpne oversettelse
+document.translation.link-existing-document: Koble eksisterende dokument
+document.translation.unlink-existing-document: Koble fra eksisterende dokument
+document.translation.all-translations: Alle oversettelser
+document.translation.new-document: Nytt dokument
+document.translation.use-inheritance: Bruker arv
+document.translation.new-document-with-inheritance.modal-title: Nytt dokument (med arv)
+document.translation.new-document-blank.modal-title: Nytt dokument (tomt)
+document.translation.new-document-modal.label.parent: Overordnet
+document.translation.new-document-modal.label.language: Språk
+document.translation.new-document-modal.create: Opprett
+navigation.recycle-bin: Papirkurv
+widget.recycle-bin: Papirkurv
+recycle-bin.columns.type: Type
+recycle-bin.columns.path: Sti
+recycle-bin.columns.amount: Antall
+recycle-bin.columns.deleted-by: Slettet av
+recycle-bin.columns.date: Dato
+recycle-bin.columns.actions: Handlinger
+recycle-bin.actions.cleanup: Rydd opp
+recycle-bin.actions.delete: Slett
+recycle-bin.actions.delete.title: Sletter papirkurvelementer
+recycle-bin.actions.restore: Gjenopprett
+recycle-bin.actions.restore.title: Gjenoppretter papirkurvelementer
+component.search.pleaceholder: Søk
+focal-point.set: Sett fokuspunkt
+video.placeholder: Ingen video valgt – Klikk for å legge til en video
+video.add-video: Legg til video
+image.alt-text-placeholder: Skriv inn alt-tekst
+area-settings: Områdeinnstillinger
+unsupported_feature: Funksjonen støttes ikke – sjekk systemkravene!
+document.version.comparison.error.title: Feil ved versjonssammenligning
+document.version.comparison.unsupported.requirements: Chromium-binær og PHP-utvidelsen Imagick er påkrevd.
+navigation.test-email: Send test-e-post
+test-email.form.from: Fra
+test-email.form.to: Til
+test-email.form.subject: Emne
+test-email.form.contentType: Type
+test-email.form.title: Tittel
+test-email.form.message: Melding
+test-email.form.document: Dokument
+test-email.form.parameters: Parametere
+test-email.form.parameters.add-parameter: Legg til parameter
+test-email-modal-title: Send en test-e-post
+test-email-modal-send: Send
+test-email.contentType.document: Dokument
+test-email.contentType.html: HTML
+test-email.contentType.text: Tekst
+test-email.parameters.columns.key: Nøkkel
+test-email.parameters.columns.value: Verdi
+test-email.parameters.add: Legg til parameter
+test-email.send.error: En feil oppsto ved sending av test-e-posten
+test-email.success.modal.title: Test-e-post sendt
+test-email.success.modal.text: Test-e-posten din er sendt. Vil du holde dette vinduet åpent for å sende e-posten igjen?
+test-email.validation.documentPath.required: Vennligst oppgi en dokumentsti
+test-email.validation.documentParameters.required: Vennligst oppgi minst én parameter
+test-email.validation.content.required: Vennligst oppgi en melding
+test-email.validation.from.required: Vennligst oppgi en avsender-e-postadresse
+test-email.validation.from.email.type: Vennligst oppgi en gyldig avsender-e-postadresse
+test-email.validation.to.required: Vennligst oppgi en mottaker-e-postadresse
+test-email.validation.to.email.type: Vennligst oppgi en gyldig mottaker-e-postadresse
+test-email.validation.subject.required: Vennligst oppgi et emne
+navigation.widget-editor: Widget Editor
+widget.widget-editor.perspective-editor: Perspectives Editor
+navigation.widget-editor.perspective-editor: Perspectives Editor
+widget.widget-editor.widget-editor: Widget Editor
+navigation.widget-editor.widget-editor: Widget Editor
+refresh: Oppdater
+perspective-editor.add-modal.title: Legg til et nytt perspektiv
+perspective-editor.add-modal.name.label: Oppgi navnet på det nye perspektivet
+perspective-editor.add-modal.name.validation: Vennligst oppgi et gyldig perspektivnavn
+perspective-editor.form.name.placeholder: Oppgi perspektivnavn
+perspective-editor.form.general.title: Generelt
+perspective-editor.form.general.name: Navn
+perspective-editor.form.general.icon: Ikon
+perspective-editor.form.general.widget-configuration: Widget-områder
+perspective-editor.form.main-nav-permission.title: Tillatte hovednavigasjonshandlinger
+perspective-editor.form.main-nav-permission.category.quickAccess: Hurtigtilgang
+perspective-editor.form.main-nav-permission.quickAccess.hidden: Skjul hurtigtilgangsmeny
+perspective-editor.form.main-nav-permission.quickAccess.open_asset: Åpne ressurs
+perspective-editor.form.main-nav-permission.quickAccess.open_document: Åpne dokument
+perspective-editor.form.main-nav-permission.quickAccess.open_object: Åpne objekt
+perspective-editor.form.main-nav-permission.quickAccess.recycle_bin: Papirkurv
+perspective-editor.form.main-nav-permission.category.dataManagement: Databehandling
+perspective-editor.form.main-nav-permission.dataManagement.hidden: Skjul databehandlingsmeny
+perspective-editor.form.main-nav-permission.dataManagement.notesEvents: Notater og hendelser
+perspective-editor.form.main-nav-permission.dataManagement.gdprDataExtractor: GDPR Data Extractor
+perspective-editor.form.main-nav-permission.dataManagement.searchReplaceAssignments: Søk og erstatt tilordninger
+perspective-editor.form.main-nav-permission.dataManagement.predefinedProperties: Forhåndsdefinerte egenskaper
+perspective-editor.form.main-nav-permission.dataManagement.tagConfiguration: Taggkonfigurasjon
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_bulkExport: Datamodelldefinisjon > Masseeksport
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_bulkImport: Datamodelldefinisjon > Masseimport
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_classes: Datamodelldefinisjon > Klasser
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_classificationStore: Datamodelldefinisjon > Classification Store
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_fieldCollections: Datamodelldefinisjon > Field Collections
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_hidden: Skjul datamodelldefinisjonsmeny
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_objectBricks: Datamodelldefinisjon > Object Bricks
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_quantityValue: Datamodelldefinisjon > Mengdeverdi
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_selectOptions: Datamodelldefinisjon > Select Options
+perspective-editor.form.main-nav-permission.category.experienceEcommerce: Opplevelse og e-handel
+perspective-editor.form.main-nav-permission.experienceEcommerce.hidden: Skjul opplevelse og e-handel-meny
+perspective-editor.form.main-nav-permission.experienceEcommerce.emails: E-poster
+perspective-editor.form.main-nav-permission.experienceEcommerce.documentTypes: Dokumenttyper
+perspective-editor.form.main-nav-permission.experienceEcommerce.websiteSettings: Nettstedsinnstillinger
+perspective-editor.form.main-nav-permission.experienceEcommerce.redirects: Omdirigeringer
+perspective-editor.form.main-nav-permission.category.assetManagement: Ressursbehandling
+perspective-editor.form.main-nav-permission.assetManagement.hidden: Skjul ressursbehandlingsmeny
+perspective-editor.form.main-nav-permission.assetManagement.imageThumbnails: Bildeminiatyrbilder
+perspective-editor.form.main-nav-permission.assetManagement.videoThumbnails: Videominiatyrbilder
+perspective-editor.form.main-nav-permission.assetManagement.predefinedAssetMetadata: Forhåndsdefinerte ressursmetadata
+perspective-editor.form.main-nav-permission.category.translations: Oversettelser
+perspective-editor.form.main-nav-permission.translations.hidden: Skjul oversettelsesmeny
+perspective-editor.form.main-nav-permission.translations.translations: Oversettelser
+perspective-editor.form.main-nav-permission.category.system: System
+perspective-editor.form.main-nav-permission.system.hidden: Skjul systemmeny
+perspective-editor.form.main-nav-permission.system.applicationLogger: Applikasjonslogger
+perspective-editor.form.main-nav-permission.system.users_hidden: Skjul brukere/roller-meny
+perspective-editor.form.main-nav-permission.system.users_roles: Roller
+perspective-editor.form.main-nav-permission.system.users_users: Brukere
+perspective-editor.form.main-nav-permission.settings.appearanceBranding: Utseende og merkevare
+perspective-editor.form.main-nav-permission.system.perspectiveEditor: Perspectives Editor
+perspective-editor.form.main-nav-permission.system.widgetEditor: Widget Editor
+perspective-editor.form.main-nav-permission.system.maintenanceMode: Vedlikeholdsmodus
+perspective-editor.form.main-nav-permission.system.cache_clearAll: Buffer > Tøm alle
+perspective-editor.form.main-nav-permission.system.cache_clearData: Buffer > Databuffer
+perspective-editor.form.main-nav-permission.system.cache_clearOutput: Buffer > Tøm fullsidebuffer
+perspective-editor.form.main-nav-permission.system.cache_clearSymfony: Buffer > Tøm Symfony-buffer
+perspective-editor.form.main-nav-permission.system.cache_clearTemp: Buffer > Tøm midlertidige filer
+perspective-editor.form.main-nav-permission.system.cache_hidden: Skjul buffermeny
+perspective-editor.form.main-nav-permission.system.systemSettings: Systeminnstillinger
+perspective-editor.form.main-nav-permission.system.about: Om
+perspective-editor.form.main-nav-permission.category.reporting: Rapportering
+perspective-editor.form.main-nav-permission.reporting.hidden: Skjul rapporteringsmeny
+perspective-editor.form.main-nav-permission.reporting.reports: Rapporter
+perspective-editor.form.main-nav-permission.reporting.customReportsConfiguration: Konfigurasjon av egendefinerte rapporter
+perspective-editor.form.main-nav-permission.category.search: Søk
+perspective-editor.form.main-nav-permission.search.hidden: Skjul søkemeny
+perspective-editor.create.success: Perspektiv opprettet
+perspective-editor.delete.success: Perspektiv slettet
+perspective-editor.system-widgets.trees: Trær
+perspective-editor.system-widgets.left: Venstre widgeter
+perspective-editor.system-widgets.bottom: Bunn-widgeter
+perspective-editor.system-widgets.right: Høyre widgeter
+perspective-editor.update.success: Perspektiv oppdatert
+widget-editor.create-modal.create: Opprett widget
+widget-editor.create-form.name: Navn
+widget-editor.create-form.name.required: Vennligst oppgi et gyldig navn
+widget-editor.create-form.widgetType: Widget-type
+widget-editor.create-form.widgetType.element_tree: Elementtre
+widget-editor.create-form.widgetTypeGroup.system-widgets: Systemwidgeter
+widget-editor.form.name.placeholder: Oppgi widgetnavn
+widget-editor.create.success: Widget opprettet
+widget-editor.delete.success: Widget slettet
+widget-editor.update.success: Widget oppdatert
+widget-editor.widget-form.general.title: Generelt
+widget-editor.widget-form.general.name: Navn
+widget-editor.widget-form.general.icon: Ikon
+widget-editor.widget-form.general.icon.select: Velg ikon
+widget-editor.widget-form.specific.title: Spesifikt
+widget-editor.widget-form.specific.element-type: Elementtype
+widget-editor.widget-form.specific.root-folder: Rotmappe
+widget-editor.widget-form.specific.show-root: Vis rot
+widget-editor.widget-form.specific.page-size: Sidestørrelse
+widget-editor.widget-form.allowed-objects.title: Tillatte objekter (som standard er alt tillatt)
+widget-editor.widget-form.filters.title: Filtre
+widget-editor.widget-form.filters.pql: PQL-uttrykk
+widget-editor.widget-form.allowed-context-menu.title: Tillatte kontekstmenyhandlinger
+widget-editor.widget-form.allowed-context-menu.addObject: Nytt objekt
+widget-editor.widget-form.allowed-context-menu.addVariant: Ny variant
+widget-editor.widget-form.allowed-context-menu.copy: Kopier
+widget-editor.widget-form.allowed-context-menu.lock: Lås
+widget-editor.widget-form.allowed-context-menu.publish: Publiser
+widget-editor.widget-form.allowed-context-menu.searchAndMove: Søk og flytt
+widget-editor.widget-form.allowed-context-menu.unpublish: Avpubliser
+widget-editor.widget-form.allowed-context-menu.addFolder: Ny mappe
+widget-editor.widget-form.allowed-context-menu.cut: Klipp ut
+widget-editor.widget-form.allowed-context-menu.lockAndPropagate: Lås og propager til underelementer
+widget-editor.widget-form.allowed-context-menu.refresh: Oppdater
+widget-editor.widget-form.allowed-context-menu.unlock: Lås opp
+widget-editor.widget-form.allowed-context-menu.changeChildrenSortBy: Endre sortering av underelementer
+widget-editor.widget-form.allowed-context-menu.delete: Slett
+widget-editor.widget-form.allowed-context-menu.paste: Lim inn
+widget-editor.widget-form.allowed-context-menu.rename: Gi nytt navn
+widget-editor.widget-form.allowed-context-menu.unlockAndPropagate: Lås opp og propager til underelementer
+widget-editor.widget-form.allowed-context-menu.addUploadZip: Ny(e) ressurs(er) > Last opp ZIP
+widget-editor.widget-form.allowed-context-menu.addUpload: Ny(e) ressurs(er) > Last opp filer
+widget-editor.widget-form.allowed-context-menu.download: Last ned
+widget-editor.widget-form.allowed-context-menu.pasteCut: Lim inn utklipp
+widget-editor.widget-form.allowed-context-menu.uploadNewVersion: Last opp ny versjon
+widget-editor.widget-form.allowed-context-menu.downloadZip: Last ned som ZIP
+widget-editor.widget-form.allowed-context-menu.convert: Konverter
+widget-editor.widget-form.allowed-context-menu.removeSite: Fjern nettsted
+widget-editor.widget-form.allowed-context-menu.useAsSite: Bruk som nettsted
+widget-editor.widget-form.allowed-context-menu.editSite: Rediger nettsted
+widget-editor.widget-form.allowed-context-menu.open: Åpne
+widget-editor.widget-form.allowed-context-menu.addPage: Ny side
+widget-editor.widget-form.allowed-context-menu.addSnippet: Ny Snippet
+widget-editor.widget-form.allowed-context-menu.addLink: Ny lenke
+widget-editor.widget-form.allowed-context-menu.addEmail: Ny e-post
+widget-editor.widget-form.allowed-context-menu.addHardlink: Ny Hardlink
+edit.label: Rediger
+scheduled-block.delete-all-in-past: Slett alle tidligere tidsstempler
+scheduled-block.delete-all: Slett alle tidsstempler
+scheduled-block.delete-all-in-past-confirmation: Er du sikker på at du vil slette alle tidligere tidsstempler?
+scheduled-block.delete-all-confirmation: Er du sikker på at du vil slette alle tidsstempler?
+scheduled-block.delete-confirmation: Er du sikker på at du vil slette denne oppføringen?
+icon-selector.title: Ikonvelger
+icon-selector.all-icons: Alle ikoner
+icon-selector.pimcore-library: Pimcore-bibliotek
+icon-selector.search-placeholder: Søk
+icon-selector.current-selection: Gjeldende utvalg
+icon-selector.clear-selection: Fjern utvalg
+icon-selector.no-selection: Ingen ikon valgt
+icon-selector.save: Lagre
+icon-selector.custom-icon: Egendefinert ikon
+icon-selector.custom-icon-path: Egendefinert sti
+icon-selector.custom-icon-path-placeholder: Legg til en egendefinert sti og bekreft
+icon-selector.Twemoji: Twemoji-bibliotek
+icon-selector.Pimcore: Pimcore-bibliotek
+language: Språk
+pretty-url: Pretty URL / URL Slug
+pretty-url-override-notice: (overstyrer sti fra trestrukturen)
+content-main-document: Innholdshoveddokument
+content-main-document.apply: Bruk innholdshoveddokument
+content-main-document.apply-warning-title: Er du sikker?
+content-main-document.apply-warning-message: Alt innhold vil gå tapt
+never: aldri
+document-configuration.sidebar-title: Dokumentkonfigurasjon
+document-configuration.predefined-document-type: Forhåndsdefinert dokumenttype
+document-configuration.controller: Controller
+document-configuration.template: Mal
+document-configuration.static-page-generator: Statisk sidegenerator
+document-configuration.enable-server-side-static-rendering: Aktiver statisk rendering på serversiden
+document-configuration.lifetime-for-static-page: Levetid for statisk side (i minutter)
+document-configuration.last-generated: "Sist generert: {{timestamp}}"
+email-settings.sidebar-title: E-postinnstillinger
+email-settings.subject: Emne
+email-settings.from: Fra
+email-settings.reply-to: Svar til
+email-settings.recipients: Mottakere
+email-settings.to: Til
+email-settings.cc: Cc
+email-settings.bcc: Bcc
+email-settings.multiple-recipients-hint: "Flere mottakere kan angis ved å skille e-postadressene med semikolon. Eksempel: receiver@pimcore.org; receiver2@pimcore.org"
+email-settings.from-syntax-hint: "Du kan bruke syntaksen: Mitt Navn <my-name@example.com>"
+add-document-form.label.title: Tittel
+add-document-form.label.navigation: Navigasjon
+add-document-form.label.key: Nøkkel
+user-management.permissions.quantityValueUnits: Mengdeverdi-enheter
+user-management.permissions.recyclebin: Papirkurv
+user-management.permissions.redirects: Omdirigeringer
+user-management.permissions.seemode: Visnings-modus
+user-management.permissions.selectoptions: Select Options
+user-management.permissions.share_configurations: Del konfigurasjoner
+user-management.permissions.objects: Objekter
+user-management.permissions.objectbricks: Object Bricks
+user-management.permissions.notifications_send: Send varsler
+user-management.permissions.notifications: Varsler
+user-management.permissions.predefined_properties: Forhåndsdefinerte egenskaper
+user-management.permissions.perspective_editor: Perspectives Editor
+user-management.permissions.perspective_editor_view_edit: Perspectives Editor visning og redigering
+user-management.permissions.qr_codes: QR-koder
+user-management.permissions.plugins: Utvidelser
+user-management.permissions.notes_events: Notater og hendelser
+user-management.permissions.clear_cache: Tøm buffer
+user-management.permissions.classificationstore: Classification Store
+user-management.permissions.classes: Klasser
+user-management.permissions.workflow_details: Arbeidsflytdetaljer
+user-management.permissions.users: Brukere
+user-management.permissions.website_settings: Nettstedsinnstillinger
+user-management.permissions.asset_metadata: Ressursmetadata
+user-management.permissions.clear_fullpage_cache: Tøm fullsidebuffer
+user-management.permissions.clear_temp_files: Tøm midlertidige filer
+user-management.permissions.system_settings: Systeminnstillinger
+user-management.permissions.tags_assignment: Taggtilordning
+user-management.permissions.tags_configuration: Taggkonfigurasjon
+user-management.permissions.tags_search: Taggsøk
+user-management.permissions.thumbnails: Miniatyrbilder
+user-management.permissions.translations: Oversettelser
+user-management.permissions.fieldcollections: Field Collections
+user-management.permissions.emails: E-poster
+user-management.permissions.document_types: Dokumenttyper
+user-management.permissions.documents: Dokumenter
+user-management.permissions.dashboards: Dashbord
+user-management.permissions.assets: Ressurser
+user-management.permissions.system_appearance_settings: Utseende og merkevare
+user-management.permissions.gdpr_data_extractor: GDPR Data Extractor
+user-management.permissions.admin_translations: Administratoroversettelser
+user-management.permissions.application_logging: Applikasjonslogger
+user-management.permissions.reports_config: Rapportkonfigurasjon
+user-management.permissions.reports: Rapporter
+user-management.permissions.gee_job_run_permission: Jobbkjøringstillatelse
+user-management.permissions.gee_see_all_job_runs_permission: Se alle jobbkjøringer-tillatelse
+user-management.permissions.glossary: Ordliste
+user-management.permissions.google_marketing: Google Marketing
+user-management.permissions.newsletters: Nyhetsbrev
+user-management.permissions.targeting: Targeting
+user-management.permissions.http_errors: HTTP-feil
+user-management.permissions.seo_document_editor: SEO-dokumentredigerer
+user-management.permissions."robots.txt": robots.txt
+user-management.permissions.routes: Ruter
+user-management.permissions.word_export: Word-eksport
+user-management.permissions.xliff_import_export: XLIFF-import/eksport
+user-management.permissions.bptb_aet_configuration_permission: Konfigurasjon av alternative elementtrær
+user-management.permissions.bptb_bookmark_list_permission: Bokmerkelister
+user-management.permissions.bptb_bookmark_list_share_permission: Del bokmerkelister
+user-management.permissions.bundle_ecommerce_back-office_order: "Back Office - Bestillinger"
+user-management.permissions.bundle_ecommerce_pricing_rules: Prisregler
+user-management.permissions.pcp_general_permission: Pimcore Copilot
+user-management.permissions.pcp_configuration_permission: Konfigurasjon av Pimcore Copilot
+user-management.permissions.pcp_job_run_permission: Oversikt over jobbkjøringer
+user-management.permissions.pcp_job_runs_see_all_permission: Se alle jobbkjøringer
+user-management.permissions.permission_workflow_designer: Aktiver Workflow Designer
+user-management.permissions.permission_workflow_designer_place_permissions: Konfigurasjon av plasseringstillatelser
+user-management.permissions.permission_workflow_designer_trans_notifications: Konfigurasjon av overgangsvarsler
+user-management.permissions.plugin_cmf_perm_activityview: CMF Aktivitetsvisning
+user-management.permissions.plugin_cmf_perm_customer_automation_rules: CMF Automatiseringsregler for kunder
+user-management.permissions.plugin_cmf_perm_customerview: CMF Kundevisning
+user-management.permissions.plugin_cmf_perm_customerview_admin: CMF Administrasjon av kundefiltre
+user-management.permissions.plugin_cmf_perm_newsletter_enqueue_all_customers: CMF Kølegging av nyhetsbrev for kunder
+user-management.permissions.plugin_datahub_adapter_dataImporterDataObject: "Datahub Adapter - Dataobjektimportør"
+user-management.permissions.plugin_datahub_adapter_fileExport: "Datahub Adapter - Fileksport"
+user-management.permissions.plugin_datahub_adapter_graphql: "Datahub Adapter - GraphQL"
+user-management.permissions.plugin_datahub_adapter_headlessDocuments: "Datahub Adapter - Headless-dokumenter"
+user-management.permissions.plugin_datahub_adapter_productsup: "Datahub Adapter - Productsup"
+user-management.permissions.plugin_datahub_adapter_simpleRest: "Datahub Adapter - Simple REST"
+user-management.permissions.plugin_datahub_adapter_webhooks: "Datahub Adapter - Webhooks"
+user-management.permissions.plugin_datahub_admin: Datahub-administrasjon
+user-management.permissions.plugin_datahub_config: Datahub-konfigurasjon
+user-management.permissions.plugin_datahub_permission_delete: Datahub Sletting
+user-management.permissions.plugin_datahub_permission_read: Datahub Lesing
+user-management.permissions.plugin_datahub_permission_update: Datahub Oppdatering
+user-management.permissions.portal-engine_collection-access: Tilgang til backend-samlinger
+user-management.permissions.portal-engine_index-management: Portalindeksforvaltning
+user-management.permissions.portal-engine_wizard: Portalens oppsettveiviser
+user-management.permissions.wai_configuration_permission: Konfigurasjon av automatiseringsmaler
+forgot-password-form.username: Oppgi brukernavnet ditt, så sender Pimcore en innloggingslenke til e-postadressen din
+forgot-password-form.username.placeholder: Brukernavn
+forgot-password-form.reset-password: Tilbakestill passord
+forgot-password-form.success-message: En midlertidig innloggingslenke er sendt til e-postadressen din. Vennligst sjekk innboksen din.
+forgot-password-form.back: Tilbake til innlogging
+subscription-details.community-edition: Lær mer om Pimcore-utgaver
+config_not_writeable: Ikke skrivbar, dette kan ha flere årsaker. For detaljer se dokumentasjonen.
+navigation.about: Om
+about.title: Om
+about.platform-version: "Plattformversjon: {{version}}"
+about.version: "Kjerneversjon: {{version}}"
+about.copyright: © by Pimcore GmbH
+about.buttons.license: Lisens
+about.buttons.contact: Kontakt
+custom-language.default: Standard
+login-token-modal.title: Logg inn som denne brukeren i en annen nettleser
+login-token-modal.description: Følgende lenke er en midlertidig lenke som lar deg logge inn som denne brukeren i en annen nettleser
+login-token-modal.close: Lukk
+login-token-modal.copy-and-close: Kopier og lukk
+navigation.gdpr-extractor: GDPR Data Extractor
+widget.gdpr-extractor: GDPR Data Extractor
+gdpr-extractor.title: GDPR Data Extractor
+gdpr-extractor.search-form.field.id: ID
+gdpr-extractor.search-form.field.firstname: Fornavn
+gdpr-extractor.search-form.field.lastname: Etternavn
+gdpr-extractor.search-form.field.email: E-postadresse
+gdpr-extractor.search-form.submit: Søk
+gdpr-extractor.data-objects.table.field.type: Type
+gdpr-extractor.data-objects.table.field.id: ID
+gdpr-extractor.data-objects.table.field.fullPath: Sti
+gdpr-extractor.data-objects.table.field.className: Klasse
+gdpr-extractor.data-objects.table.actions.export: Eksporter DataObject-data
+gdpr-extractor.data-objects.table.actions.open: Åpne DataObject
+gdpr-extractor.data-objects.table.actions.delete: Slett DataObject
+gdpr-extractor.assets.table.field.type: Type
+gdpr-extractor.assets.table.field.id: ID
+gdpr-extractor.assets.table.field.fullPath: Full sti
+gdpr-extractor.assets.table.field.subType: Type
+gdpr-extractor.assets.table.actions.export: Eksporter ressursdata
+gdpr-extractor.assets.table.actions.open: Åpne ressurs
+gdpr-extractor.assets.table.actions.delete: Slett ressurs
+gdpr-extractor.users.table.field.id: ID
+gdpr-extractor.users.table.field.name: Brukernavn
+gdpr-extractor.users.table.field.firstname: Fornavn
+gdpr-extractor.users.table.field.lastname: Etternavn
+gdpr-extractor.users.table.field.email: E-post
+gdpr-extractor.users.table.actions.export: Eksporter brukerdata
+gdpr-extractor.users.table.actions.delete: Slett bruker
+gdpr-extractor.table.field.actions: Handlinger
+gdpr-extractor.emails.table.field.sentDate: Sendedato
+gdpr-extractor.emails.table.field.from: Fra
+gdpr-extractor.emails.table.field.to: Til
+gdpr-extractor.emails.table.field.cc: CC
+gdpr-extractor.emails.table.field.bcc: BCC
+gdpr-extractor.emails.table.field.subject: Emne
+gdpr-extractor.emails.table.actions.export: Eksporter e-postdata
+gdpr-extractor.emails.table.actions.parameters: Utvid parametere
+gdpr-extractor.emails.table.actions.html: Vis HTML
+navigation.systemSettings: Systeminnstillinger
+widget.system-settings: Systeminnstillinger
+system-settings.form.field.version-days: Lagre versjonshistorikk i x dager
+system-settings.form.field.version-count: Lagre versjonshistorikk i x steg
+system-settings.collapse.debug: Feilsøking
+system-settings.form.debug.field.enable-debug: Feilsøk administratoroversettelser (pakket inn i +)
+system-settings.form.debug.field.email-addresses: Feilsøk e-postadresser
+system-settings.form.debug.field.email-addresses.placeholder: Oppgi e-post og trykk Enter...
+system-settings.collapse.localization: Lokalisering og internasjonalisering (l10n/i18n)
+system-settings.form.localization.field.add-language: Legg til språk
+system-settings.form.localization.field.fallback-language: Reservespråk
+system-settings.form.localization.field.fallback-language-placeholder: Legg til reservespråk
+system-settings.form.localization.field.default-language: Standardspråk
+system-settings.form.localization.field.mandatory: Obligatorisk språk
+system-settings.form.localization.field.delete-language: Slett språk
+system-settings.collapse.website: Nettsted
+system-settings.form.field.main-domain: Hoveddomene
+system-settings.form.field.redirect-to-maindomain: Omdiriger ukjente domener (ikke brukt for nettsted og for omdirigeringer, ...) til hoveddomenet (ovenfor)
+system-settings.form.field.default-error-page: Feilside (standard)
+system-settings.update.success: Systeminnstillinger oppdatert
+rule-condition.operator.and: AND
+rule-condition.operator.or: OR
+rule-condition.operator.and-not: AND NOT
+rule-condition.add-condition: Legg til betingelse
+rule-condition.move-up: Flytt opp
+rule-condition.move-down: Flytt ned
+rule-condition.remove: Fjern
+rule-condition.bracket.toggle-left: Slå av/på venstre parentes
+rule-condition.bracket.toggle-right: Slå av/på høyre parentes
+rule-condition.validation.brackets-closing-without-opening: "Lukkende parentes ')' funnet uten matchende åpningsparentes '('"
+rule-condition.validation.brackets-missing-closing: "Åpningsparentes '(' funnet uten matchende lukkende parentes ')'"
+rule-condition.validation.brackets-invalid: Parenteser er ikke riktig balansert
+rule-builder.add-action: Legg til handling
+rule-builder.add-trigger: Legg til utløser
+rule-builder.move-up: Flytt opp
+rule-builder.move-down: Flytt ned
+rule-builder.remove: Fjern
+document-restrictions: Dokumentbegrensninger
+asset-restrictions: Ressursbegrensninger
+object-restrictions: Objektbegrensninger
+display-mode: Visningsmodus
+display-mode-display: Vis stireferanse
+display-mode-inline-search: Innebygd søk
+display-mode-grid-view: Rutenettvisning
+display-mode-tag-field: Taggfelt
+activate-column-configuration: Aktiver kolonnekonfigurasjon
+table-column-configuration: Tabellkolonnekonfigurasjon
+center: Senter
+north: Nord
+south: Sør
+east: Øst
+west: Vest
+top: Topp
+left: Venstre
+right: Høyre
+bottom: Bunn
+region: Region
+icon: Ikon
+iframe-url: Iframe-URL
+rendering-class: Egendefinert renderingsklasse
+rendering-data: Data sendt til rendering
+zoom-level: Zoomnivå
+class: Klasse
+layout.text.help: "Du kan bruke følgende markering (i kilderedigeringsmodus) for å lage egendefinerte varsler: <br> <pre>&lt;div class=&quot;alert alert-success&quot;&gt;Din melding&lt;/div&gt;</pre>Følgende kontekstuelle klasser er tilgjengelige: <pre>alert-primary, alert-secondary, alert-success, alert-danger, alert-warning, alert-info</pre> <pre>Du kan også bruke Twig-syntaks:</pre> <pre>Tilleggsdata {{data}}</pre>"
+configuration: Konfigurasjon
+drag-object-for-preview: Dra objekt for forhåndsvisning
+quantity-values.new: Ny
+quantity-values.columns.id: ID
+quantity-values.columns.abbreviation: Forkortelse
+quantity-values.columns.long-name: Fullt navn
+quantity-values.columns.base-unit: Basisenhet
+quantity-values.columns.factor: Konverteringsfaktor
+quantity-values.columns.conversion-offset: Konverteringsforskyvning
+quantity-values.columns.converter: Konverteringstjeneste
+quantity-values.columns.actions: Handlinger
+quantity-values.create-modal.title: Opprett mengdeverdi-enhet
+quantity-values.create-modal.id-label: Unik identifikator
+quantity-values.create-modal.id-placeholder: f.eks. km, kg, ...
+quantity-values.create-modal.id-required: Unik identifikator er påkrevd
+quantity-values.create-modal.create: Opprett
+quantity-values.export: Eksporter
+quantity-values.import: Importer
+quantity-values.import-modal.title: Importer mengdeverdi-enheter
+owner: Eier
+reverse-object-relation.tooltip: Ikke-eierobjekter representerer relasjoner til et annet objekt på samme måte som objekter gjør. Forskjellen er at et ikke-eierobjektfelt ikke er eier av relasjonsdataene, det er kun en visning av data lagret i andre objekter. Vennligst velg eier og feltnavn der dataene opprinnelig er lagret.
+disabled-fields: Deaktiverte felt
+allowed-targets: Tillatte mål
+bulk-export.title: Masseeksport
+bulk-export.select-all: Velg alle
+bulk-export.deselect-all: Fjern alle valg
+bulk-export.export: Eksporter
+bulk-export.cancel: Avbryt
+bulk-export.type.class: Klasser
+bulk-export.type.customlayout: Custom Layouts
+bulk-export.type.fieldcollection: Field Collections
+bulk-export.type.objectbrick: Object Bricks
+bulk-import.title: Masseimport
+bulk-import.cancel: Avbryt
+bulk-import.next: Neste
+bulk-import.back: Tilbake
+bulk-import.import: Importer
+bulk-import.job-title: Masseimport
+bulk-import.browse-files: Bla gjennom filer
+bulk-import.remove-file: Fjern
+bulk-import.select-all: Velg alle
+bulk-import.deselect-all: Fjern alle valg
+bulk-import.type.class: Klasser
+bulk-import.type.customlayout: Custom Layouts
+bulk-import.type.fieldcollection: Field Collections
+bulk-import.type.objectbrick: Object Bricks

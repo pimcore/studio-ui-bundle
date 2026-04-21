@@ -144,6 +144,9 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
     beforeUpload: async (file: RcFile, fileList) => {
       const isFileSizeValid = file.size < (settings.upload_max_filesize ?? 1024 * 1024 * 10)
       if (!isFileSizeValid) {
+        const uploadFile = file as RcFile & UploadFile
+        uploadFile.status = 'error'
+        uploadFile.error = { status: 413 }
         return false
       }
 

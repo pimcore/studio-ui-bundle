@@ -23,7 +23,8 @@ const api = baseApi.enhanceEndpoints({
 export type * from './roles-api-slice.gen'
 
 export const {
-  useRoleGetCollectionQuery
+  useRoleGetCollectionQuery,
+  useRoleGetShareCollectionQuery
 } = api
 
 export { api }

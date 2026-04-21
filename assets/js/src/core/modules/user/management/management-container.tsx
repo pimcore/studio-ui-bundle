@@ -60,7 +60,7 @@ const ManagementContainer = ({ userId, ...props }: Record<string, any>): React.J
             { key: 'remove-folder', icon: 'trash' }
           ],
       children: [],
-      isLeaf: item.hasChildren === false
+      isLeaf: item.type === 'user'
     }))
   }
 

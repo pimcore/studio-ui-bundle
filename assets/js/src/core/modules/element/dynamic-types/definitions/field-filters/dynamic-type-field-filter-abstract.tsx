@@ -13,7 +13,6 @@ import { type DynamicTypeAbstract } from '../../registry/dynamic-type-registry-a
 import { isNil, isEmpty, isArray } from 'lodash'
 import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface AbstractFieldFilterDefinition {}
 
 export abstract class DynamicTypeFieldFilterAbstract implements DynamicTypeAbstract {

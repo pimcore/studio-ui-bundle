@@ -17,6 +17,7 @@ import { isUndefined } from 'lodash'
 import cn from 'classnames'
 import { Tooltip } from '../tooltip/tooltip'
 import useElementOverflow from '../../utils/use-element-overflow'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 export interface ElementTagProps extends Omit<TagProps, 'id' | 'children'> {
   path: string
@@ -36,7 +37,7 @@ export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, p
 
   const isUnpublished = published === false
 
-  const isClickable = !isUndefined(elementType) && !isUndefined(id)
+  const isClickable = !isUndefined(elementType) && !isUndefined(id) && !isEmptyValue(path)
 
   const onClick = async (): Promise<void> => {
     if (isClickable) {

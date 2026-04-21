@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next'
 export const FieldDefinitionLastnameFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
   const isCustomLayout = props.context.area.includes('custom-layout')
+  const isEncryptedField = props.context.isEncryptedField === true
 
   return (
     <>
@@ -27,7 +28,7 @@ export const FieldDefinitionLastnameFormFields = (props: FieldDefinitionAbstract
         <Input />
       </Form.Item>
 
-      {!isCustomLayout && (
+      {(!isCustomLayout && !isEncryptedField) && (
         <Form.Item
           label={ t('column-length') }
           name="columnLength"

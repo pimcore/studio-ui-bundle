@@ -9,7 +9,6 @@
  */
 
 import { Conditional } from '@Pimcore/components/form/conditional/conditional'
-import { useWidgetTypeForm } from '../../hooks/use-widget-type-form'
 import { useTranslation } from 'react-i18next'
 import React from 'react'
 import { FormKit } from '@Pimcore/components/form/form-kit'
@@ -19,14 +18,21 @@ import { Spin } from '@Pimcore/components/spin/spin'
 import { useStyles } from './allowed-context-menu.styles'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
-export const DataObjectContextMenuOptionsPanel = (): React.JSX.Element => {
+interface DataObjectContextMenuOptionsPanelProps {
+  items: string[]
+  isLoading: boolean
+}
+
+export const DataObjectContextMenuOptionsPanel = ({ items, isLoading }: DataObjectContextMenuOptionsPanelProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { dataObjectContextMenuItems, isLoading } = useWidgetTypeForm()
   const { styles } = useStyles()
 
   if (isLoading) {
     return (
-      <Conditional condition={ (values) => values.elementType === elementTypes.dataObject }>
+      <Conditional
+        condition={ (values) => values.elementType === elementTypes.dataObject }
+        watchFields={ ['elementType'] }
+      >
         <FormKit.Panel
           collapsed={ false }
           collapsible
@@ -39,7 +45,10 @@ export const DataObjectContextMenuOptionsPanel = (): React.JSX.Element => {
   }
 
   return (
-    <Conditional condition={ (values) => values.elementType === elementTypes.dataObject }>
+    <Conditional
+      condition={ (values) => values.elementType === elementTypes.dataObject }
+      watchFields={ ['elementType'] }
+    >
       <FormKit.Panel
         collapsed={ false }
         collapsible
@@ -49,7 +58,7 @@ export const DataObjectContextMenuOptionsPanel = (): React.JSX.Element => {
           <Form.Group
             name={ 'contextPermissions' }
           >
-            {dataObjectContextMenuItems.map(permission => (
+            {items.map(permission => (
               <Form.Item
                 key={ permission }
                 name={ permission }

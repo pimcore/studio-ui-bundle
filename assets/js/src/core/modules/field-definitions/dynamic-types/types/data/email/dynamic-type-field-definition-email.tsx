@@ -9,9 +9,10 @@
  */
 
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { DynamicTypeFieldDefinitionDataAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
+import { DynamicTypeFieldDefinitionDataAbstract, type FieldDefinitionData } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
 import { FieldDefinitionEmailFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/email/field-definition-email-form-fields'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
+import { t } from 'i18next'
 import React from 'react'
 
 export class DynamicTypeFieldDefinitionEmail extends DynamicTypeFieldDefinitionDataAbstract {
@@ -19,6 +20,14 @@ export class DynamicTypeFieldDefinitionEmail extends DynamicTypeFieldDefinitionD
 
   getIcon (): ElementIcon {
     return { type: 'name', value: 'email' }
+  }
+
+  getDefaultData (): FieldDefinitionData {
+    return {
+      ...super.getDefaultData(),
+      name: 'email',
+      title: t('field-definition.crm.email.title')
+    }
   }
 
   getGroup (): string[] {
@@ -44,5 +53,13 @@ export class DynamicTypeFieldDefinitionEmail extends DynamicTypeFieldDefinitionD
         type={ this.id }
       />
     )
+  }
+
+  normalizeFieldDefinition (fieldDef: Record<string, unknown>): Record<string, unknown> {
+    const normalized = super.normalizeFieldDefinition(fieldDef)
+    if (typeof normalized.title !== 'string' || normalized.title === '') {
+      normalized.title = t('field-definition.crm.email.title')
+    }
+    return normalized
   }
 }

@@ -66,10 +66,10 @@ export interface ColumnMetaType {
 }
 
 declare module '@tanstack/react-table' {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   export interface ColumnMeta<TData extends RowData, TValue> extends ColumnMetaType { }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   export interface TableMeta<TData extends RowData> {
     onUpdateCellData?: ({ rowIndex, columnId, value }: { rowIndex: number, columnId: string, value: any, rowData: TData, meta?: Record<string, any> }) => void
   }
@@ -159,12 +159,12 @@ export const Grid = ({
     () =>
       props.isLoading === true
         ? props.columns.map((column) => ({
-          ...column,
-          cell: <Skeleton.Input
-            active
-            size={ 'small' }
-                />
-        }))
+            ...column,
+            cell: <Skeleton.Input
+              active
+              size={ 'small' }
+                  />
+          }))
         : props.columns,
     [props.isLoading, props.columns]
   ) as Array<ColumnDef<any>>
@@ -188,8 +188,9 @@ export const Grid = ({
   })
 
   useMemo(() => {
+    updateRowDragColumn()
     updateRowSelectionColumn()
-  }, [columns, isRowSelectionEnabled, selectedRows])
+  }, [columns, isRowSelectionEnabled, enableRowDrag, selectedRows])
 
   const tableProps: TableOptions<any> = useMemo(() => ({
     data,
@@ -371,17 +372,17 @@ export const Grid = ({
   const renderRows = (): React.JSX.Element[] => {
     const rowsData = isEnableRowVirtualizer
       ? virtualRows.map(vRow => ({
-        row: rowsList[vRow.index],
-        virtualIndex: vRow.index,
-        rowStyle: { position: 'absolute', top: `${vRow.start}px`, left: 0, right: 0, display: 'flex' },
-        measureElement: rowVirtualizer.measureElement
-      }))
+          row: rowsList[vRow.index],
+          virtualIndex: vRow.index,
+          rowStyle: { position: 'absolute', top: `${vRow.start}px`, left: 0, right: 0, display: 'flex' },
+          measureElement: rowVirtualizer.measureElement
+        }))
       : rowsList.map(row => ({
-        row,
-        virtualIndex: undefined,
-        rowStyle: isEnableColumnVirtualizer ? { display: 'flex', width: '100%' } : {},
-        measureElement: undefined
-      }))
+          row,
+          virtualIndex: undefined,
+          rowStyle: isEnableColumnVirtualizer ? { display: 'flex', width: '100%' } : {},
+          measureElement: undefined
+        }))
 
     return rowsData.map(({ row, virtualIndex, rowStyle, measureElement }) => (
       <GridRow
@@ -389,7 +390,6 @@ export const Grid = ({
         columns={ columns }
         contextMenu={ props.contextMenu }
         enableColumnVirtualizer={ isEnableColumnVirtualizer }
-        enableRowDrag={ enableRowDrag }
         isSelected={ row.getIsSelected() }
         key={ row.id }
         measureElement={ measureElement }
@@ -604,6 +604,46 @@ export const Grid = ({
       addRowSelectionColumn()
     } else {
       removeRowSelectionColumn()
+    }
+  }
+
+  function hasRowDragColumn (): boolean {
+    return columns.some(column => column.id === 'drag-handle')
+  }
+
+  function addRowDragColumn (): void {
+    if (hasRowDragColumn()) {
+      return
+    }
+
+    const column: ColumnDef<any> = {
+      id: 'drag-handle',
+      header: '',
+      cell: '',
+      enableResizing: false,
+      size: 50
+    }
+
+    columns.unshift(column)
+  }
+
+  function removeRowDragColumn (): void {
+    if (!hasRowDragColumn()) {
+      return
+    }
+
+    const index = columns.findIndex(column => column.id === 'drag-handle')
+
+    if (index !== -1) {
+      columns.splice(index, 1)
+    }
+  }
+
+  function updateRowDragColumn (): void {
+    if (enableRowDrag === true) {
+      addRowDragColumn()
+    } else {
+      removeRowDragColumn()
     }
   }
 

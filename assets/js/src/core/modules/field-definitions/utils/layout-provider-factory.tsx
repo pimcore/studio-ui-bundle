@@ -444,12 +444,10 @@ export const create = (): LayoutProviderFactoryReturn => {
         const children = node.children.map(buildLayoutFromNode)
         const { id, ...restFieldDef } = fieldDef
 
-        /* eslint-disable @typescript-eslint/consistent-type-assertions */
         return {
           ...restFieldDef,
           children: (children.length > 0 ? children : null) as Layout['children']
         } as unknown as Layout
-        /* eslint-enable @typescript-eslint/consistent-type-assertions */
       }
 
       const targetNode = findNode(currentStructure, nodeId)
@@ -535,12 +533,10 @@ export const create = (): LayoutProviderFactoryReturn => {
 
         const { id, ...restFieldDef } = fieldDef
 
-        /* eslint-disable @typescript-eslint/consistent-type-assertions */
         return {
           ...restFieldDef,
           children: (children.length > 0 ? children : null) as Layout['children']
         } as unknown as Layout
-        /* eslint-enable @typescript-eslint/consistent-type-assertions */
       }
 
       return buildLayoutRecursively(structureToConvert)

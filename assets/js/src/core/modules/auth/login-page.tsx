@@ -63,10 +63,14 @@ export const LoginPage = (): React.JSX.Element => {
   }, [token])
 
   return (
-    <div className={ styles.loginPage }>
+    <div
+      className={ styles.loginPage }
+      data-testid="login-page"
+    >
       <div className={ styles.loginWidget }>
         <img
           alt={ 'Logo' }
+          data-testid="login-page-logo"
           src={ customLogoSmall }
         />
         <LoginFormContainer />

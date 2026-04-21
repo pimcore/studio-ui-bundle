@@ -14,6 +14,7 @@ import React from 'react'
 import { type FieldCollectionProps } from './field-collection'
 import { useTranslation } from 'react-i18next'
 import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
+import { useFieldCollection } from './providers/use-field-collection'
 
 export interface FieldCollectionAddButtonProps {
   allowedTypes: FieldCollectionProps['allowedTypes']
@@ -23,12 +24,13 @@ export const FieldCollectionAddButton = (props: FieldCollectionAddButtonProps): 
   const { allowedTypes } = props
   const { operations } = useNumberedList()
   const { t } = useTranslation()
+  const fieldCollection = useFieldCollection()
 
   const fieldCollectionDropdownItems: DropdownMenuProps['items'] = allowedTypes.map((type) => {
     return {
       key: type,
-      label: type,
-      onClick: (e) => {
+      label: fieldCollection?.data?.items?.find(item => item.key === type)?.title === '' || fieldCollection?.data?.items?.find(item => item.key === type)?.title === undefined ? type : t(fieldCollection?.data?.items?.find(item => item.key === type).title as string),
+      onClick: (e: any) => {
         e.domEvent.stopPropagation()
         operations.add({ type })
       }

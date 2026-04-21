@@ -1,0 +1,2630 @@
+common.owner: Eigentümer
+common.modification-date: Änderungsdatum
+common.globally: Global
+common.apply-selection: Auswahl übernehmen
+dont-ask-again: Nicht erneut fragen
+widget.missing-context.title: Fehlender Kontext
+widget.missing-context.description: Kein zugehöriges Element gefunden
+widget.missing-tab-context.description: Diese Funktion wird für das zugehörige Element nicht unterstützt
+block: Block
+error.error_something_generic_went_wrong: Etwas ist schiefgelaufen
+error.syntax_error: Syntaxfehler
+error.error_element_exists: Element existiert bereits
+error.error_folder_exists: Ordner existiert bereits
+error.error_invalid_argument: Ungültiges Argument
+error.error_widget_name_missing: Widget-Name muss angegeben werden
+error.error_widget_name_invalid: Widget-Name ist ungültig (nur alphanumerische Zeichen, Unterstriche und Leerzeichen sind erlaubt, muss mindestens 3 Zeichen lang und weniger als 80 Zeichen lang sein)
+error.error_validation_failed: Validierung fehlgeschlagen
+error.error_validation.email_failed: Bitte geben Sie eine gültige E-Mail-Adresse ein
+error.error_element_not_found: Element nicht gefunden
+error.error_inconsistent_asset_type: Nur Assets desselben Typs sind hier erlaubt.
+sidebar.selected_elements: Ausgewählte Elemente
+sidebar.grid_config: Grid-Konfiguration
+sidebar.tag_filters: Tag-Filter
+sidebar.search_filter: Suchen & Filtern
+sidebar.clear-all-filters: Alle Filter zurücksetzen
+add-areas: Bereiche hinzufügen
+content-settings: Inhaltseinstellungen
+site-domain.main_site: Hauptseite
+relation-invalid-key-in-columns: Ungültiger Wert für Schlüsselspalte verwendet. Bitte vermeiden Sie Sonderzeichen und reservierte Schlüsselwörter.
+import-modal.title: Import
+import-modal.upload: Hochladen
+import-modal.browse-files: Dateien durchsuchen
+import-modal.drag-drop: Datei hierher ziehen und ablegen oder klicken zum Durchsuchen
+modal-search.field.mimeType: MIME-Typ
+modal-search.field.thumbnail: Vorschaubild
+modal-search.field.id: ID
+modal-search.field.userOwner: Eigentümer
+modal-search.field.userOwnerName: Name des Eigentümers
+modal-search.field.userModification: Benutzer Änderung
+modal-search.field.userModificationName: Name des ändernden Benutzers
+modal-search.field.creationDate: Erstellungsdatum
+modal-search.field.modificationDate: Änderungsdatum
+modal-search.field.description: Beschreibung
+modal-search.field.name: Name
+modal-search.field.previewImage: Vorschaubild
+modal-search.field.title: Titel
+modal-search.field.class: Klasse
+modal-search.field.language: Sprache
+asset.sidebar.details: Details
+asset.asset-tree.title: Asset-Baum
+asset.asset-tree.search: Suche in {{folderName}}
+asset.asset-editor-tabs.view: Ansicht
+asset.asset-editor-tabs.embedded-metadata: Eingebettete Metadaten
+asset.asset-editor-tabs.custom-metadata: Benutzerdefinierte Metadaten
+asset.asset-editor-tabs.versions: Versionen
+asset.asset-editor-tabs.list.columns.preview: Vorschau
+asset.asset-editor-tabs.list.columns.id: ID
+asset.asset-editor-tabs.list.columns.type: Typ
+asset.asset-editor-tabs.list.columns.fullPath: Vollständiger Pfad
+asset.asset-editor-tabs.list.columns.creationDate: Erstellungsdatum
+asset.asset-editor-tabs.list.columns.modificationDate: Änderungsdatum
+asset.tree.context-menu.upload-new-version: Neue Version hochladen
+asset.copy-info: Kopieren & Info
+asset.upload: Hochladen
+asset.upload.label: Datei auswählen
+asset.upload.files.uploading: "{{processedItems}}/{{totalItems}} Dateien werden hochgeladen ..."
+asset.upload.files.uploaded: "{{successItems}} Dateien wurden hochgeladen"
+asset.upload.files.completed: Abgeschlossen!
+asset.upload.files.successfully-uploaded: Upload erfolgreich abgeschlossen
+asset.upload.files.completed-actions: Abgeschlossene Aktionen
+asset.upload.validation: Bitte fügen Sie eine Datei hinzu
+asset.upload.file-exists.title: Datei existiert bereits
+asset.upload.file-exists.message: 'Die Datei "{{fileName}}" existiert bereits in diesem Ordner. Möchten Sie sie überschreiben?'
+asset.upload.overwrite: Überschreiben
+asset.upload.keep-both: Beide behalten
+asset.upload.skip: Überspringen
+asset.upload.apply-to-all: Auf alle anwenden
+asset.upload.folder-drop.creating-folders: Ordner werden erstellt
+asset.upload.folder-drop.creating-folders-hint: Bitte warten Sie, während die Ordnerstruktur erstellt wird…
+upload.error.file-too-large: Die Datei ist größer als das aktuelle Upload-Limit des Servers.
+upload.error.max-file-size-exceeded: "Dateigröße überschreitet die maximal erlaubte Größe von {{maxSize}}"
+upload.error.generic: Die Datei konnte nicht hochgeladen werden.
+upload.error.upload-failed: Upload fehlgeschlagen
+upload.error.failed-to-fetch-asset-details: Asset-Details konnten nicht abgerufen werden
+upload.success: Datei erfolgreich hochgeladen
+asset.select.type.nullable: Alle Typen
+document.document-tree.title: Dokument-Baum
+document.document-tree.search: Suche in {{folderName}}
+document.editable.inheritance.overwrite: Überschreiben
+document.editable.inheritance.tooltip: Geerbt vom Content-Main-Dokument. Klicken zum Überschreiben.
+document.link.target: Link-Ziel
+document.hardlink.source: Quelldokument
+document.hardlink.properties-from-source: Eigenschaften vom Quelldokument verwenden
+document.hardlink.children-from-source: Kinder vom Quelldokument verwenden
+document.paste-as-new-language-variant: Als neue Sprachvariante einfügen
+document.paste-as-new-language-variant-recursive: Als neue Sprachvariante einfügen (rekursiv)
+document.paste-language-recursive-updating-references: Sprache einfügen (rekursiv), Referenzen aktualisieren
+document.select-language-for-new-document: Sprache für neues Dokument auswählen
+document.language-required: Bitte wählen Sie eine Sprache
+document.paste-inheritance: Einfügen (Vererbung)
+document.tree.copy-paste.replacing-content: Inhalt wird ersetzt
+document.tree.context-menu.add-page: Neue Seite
+document.tree.context-menu.add-snippet: Neues Snippet
+document.tree.context-menu.add-email: Neue E-Mail
+document.tree.context-menu.add-link: Neuer Link
+document.tree.context-menu.add-hardlink: Neuer Hardlink
+document.required-fields.validation-title: Pflichtfelder fehlen
+document.required-fields.validation-message: Die folgenden Pflichtfelder müssen vor dem Veröffentlichen ausgefüllt werden
+document.site.remove-site: Site entfernen
+document.site.remove-site-confirmation: Sind Sie sicher, dass Sie diese Site entfernen möchten? Diese Aktion kann nicht rückgängig gemacht werden.
+document.site.use-as-site: Als Site verwenden
+document.site.edit-site: Site bearbeiten
+document.site.form.main-domain: Hauptdomain
+document.site.form.additional-domains: Zusätzliche Domains
+document.site.form.additional-domains-tooltip: Geben Sie zusätzliche Domains ein, eine pro Zeile. Wildcards werden unterstützt (*example.com)
+document.site.form.redirect-to-main-domain: Zusätzliche Domains zur Hauptdomain weiterleiten
+document.site.form.error-documents: Fehlerdokumente
+document.site.form.default-error-document: Standard-Fehlerdokument
+document.site.form.error-document-language: Fehlerdokument ({{language}})
+save-and-continue: Speichern und fortfahren
+discard-and-continue: Verwerfen und fortfahren
+discard-changes: Änderungen verwerfen
+unsaved-changes.title: Ungespeicherte Änderungen
+unsaved-changes.message: Sie haben ungespeicherte Änderungen. Was möchten Sie tun?
+unsaved-changes.close-message: Sie haben ungespeicherte Änderungen. Sind Sie sicher, dass Sie ohne Speichern schließen möchten?
+convert-to: Konvertieren zu
+convert-document: Dokument konvertieren
+convert-document-warning: Alle Inhalte gehen verloren. Sind Sie sicher, dass Sie dieses Dokument konvertieren möchten?
+page: Seite
+email: E-Mail
+link: Link
+hardlink: Hardlink
+blank: Leer
+data-object.data-object-tree.title: Data Object-Baum
+data-object.data-object-tree.search: Suche in {{folderName}}
+data-object.select-class-to-display: Wählen Sie eine Klasse zur Anzeige
+data-object.tree.context-menu.add-object: Neues Objekt
+data-object.tree.context-menu.add-variant: Neue Variante
+data-object.variant-listing.create-data-variant: Neue Variante
+data-object.create-data-object: Neues Objekt vom Typ {{className}} hinzufügen
+data-object.create-variant: Neue Variante vom Typ {{className}} hinzufügen
+data-object.object-editor-tabs.variants: Varianten
+object.object-editor-tabs.children-listing: Kinder-Grid
+workflow.label: Workflow
+workflow.headline: Workflow-Details
+workflow.no-workflows-found: Keine Workflows gefunden
+folder.folder-editor-tabs.preview: Vorschau
+folder.folder-editor-tabs.view: Liste
+toolbar.reload.confirmation: Sind Sie sicher, dass Sie diesen Tab neu laden möchten? Alle ungespeicherten Änderungen gehen verloren.
+toolbar.reload: Neu laden
+toolbar.save-and-publish: Speichern & Veröffentlichen
+toolbar.save: Speichern
+toolbar.save-draft: Entwurf speichern
+toolbar.more: Mehr
+toolbar.workflow: Workflow
+toolbar.new: Neu
+toolbar.switch-layout: Benutzerdefiniertes Layout wechseln
+import: Import
+export: Export
+more-actions: Weitere Aktionen
+class-definition.import: Klassendefinition importieren
+class-definition.export: Klassendefinition exportieren
+class-definition.import-file-label: JSON-Datei auswählen
+class-definition.import-success: Klassendefinition erfolgreich importiert
+class-definition.export-success: Klassendefinition erfolgreich exportiert
+class-definition.custom-layouts.default-layout: Standard-Layout
+class-definition.create-new: Neue Klassendefinition erstellen
+class-definition.class-name: Klassenname
+class-definition.unique-identifier: Eindeutiger Bezeichner
+class-definition.unique-identifier-warning: Seien Sie vorsichtig mit dem eindeutigen Bezeichner, da Tabellennamen nur bis zu 64 Zeichen enthalten können.
+class-definition.validation.enter-class-name: Bitte geben Sie einen Klassennamen ein
+class-definition.validation.class-name-format: Der Klassenname muss mit einem Buchstaben beginnen und darf nur Buchstaben, Zahlen und Unterstriche enthalten.
+class-definition.validation.enter-unique-identifier: Bitte geben Sie einen eindeutigen Bezeichner ein
+class-definition.validation.unique-identifier-in-use: Dieser eindeutige Bezeichner wird bereits verwendet
+class-definition.validation.unique-identifier-format: Der eindeutige Bezeichner muss mit einem Buchstaben beginnen und darf nur Buchstaben, Zahlen und Unterstriche enthalten, mit einer maximalen Länge von 64 Zeichen.
+class-definition.general-settings.title: Allgemein
+class-definition.general-settings.description: Beschreibung
+class-definition.general-settings.id: ID
+class-definition.general-settings.php-class-name: PHP-Klassenname
+class-definition.general-settings.group: Gruppe
+class-definition.general-settings.icon: Icon
+class-definition.general-settings.parent-class: Elternklasse
+class-definition.general-settings.implements-interfaces: Implementiert Interfaces
+class-definition.general-settings.listing-parent-class: Listing-Elternklasse
+class-definition.general-settings.use-traits: Traits verwenden
+class-definition.general-settings.listing-use-traits: Listing Traits verwenden
+class-definition.general-settings.link-generator-reference: Link-Generator-Referenz
+class-definition.general-settings.preview-generator-reference: Vorschau-Generator-Referenz
+class-definition.general-settings.allow-inherit: Vererbung erlauben
+class-definition.general-settings.allow-variants: Varianten erlauben
+class-definition.general-settings.show-variants: Varianten anzeigen
+class-definition.general-settings.show-app-logger-tab: App-Logger-Tab anzeigen
+class-definition.general-settings.show-field-lookup: Feldsuche anzeigen
+class-definition.general-settings.enable-grid-locking: Grid-Sperrung aktivieren
+class-definition.general-settings.encrypt-data: Daten verschlüsseln
+class-definition.general-settings.enter-name: Bitte geben Sie einen Namen ein
+class-definition.property-visibility.title: Eigenschaftssichtbarkeit
+class-definition.property-visibility.id-grid: ID (Grid)
+class-definition.property-visibility.id-search: ID (Suche)
+class-definition.property-visibility.key-grid: Schlüssel (Grid)
+class-definition.property-visibility.key-search: Schlüssel (Suche)
+class-definition.property-visibility.path-grid: Pfad (Grid)
+class-definition.property-visibility.path-search: Pfad (Suche)
+class-definition.property-visibility.modification-date-grid: Änderungsdatum (Grid)
+class-definition.property-visibility.modification-date-search: Änderungsdatum (Suche)
+class-definition.property-visibility.creation-date-grid: Erstellungsdatum (Grid)
+class-definition.property-visibility.creation-date-search: Erstellungsdatum (Suche)
+class-definition.object-bricks.title: Object Bricks
+class-definition.composite-indices.title: Zusammengesetzte Indizes
+class-definition.composite-indices.index-name: Indexname
+class-definition.composite-indices.type: Typ
+class-definition.composite-indices.columns: Spalten
+class-definition.composite-indices.enter-index-name: Indexnamen eingeben
+class-definition.composite-indices.select-index-type: Indextyp auswählen
+class-definition.composite-indices.select-column-names: Spaltennamen auswählen oder eingeben
+class-definition.composite-indices.type-query: Query
+class-definition.composite-indices.type-localized-query: Lokalisierte Query
+class-definition.composite-indices.type-store: Store
+class-definition.composite-indices.type-localized-store: Lokalisierter Store
+class-definition.composite-indices.index-label: Index
+field-collection.create-new: Neue Field Collection erstellen
+field-collection.key: Schlüssel
+field-collection.validation.enter-key: Bitte geben Sie einen Schlüssel ein
+field-collection.validation.key-format: Der Schlüssel muss mit einem Buchstaben beginnen und darf nur Buchstaben, Zahlen und Unterstriche enthalten.
+field-collection.general-settings.title: Allgemein
+field-collection.general-settings.key: Schlüssel
+field-collection.general-settings.title-label: Titel
+field-collection.general-settings.enter-title: Bitte geben Sie einen Titel ein
+field-collection.general-settings.group: Gruppe
+field-collection.general-settings.parent-class: Eltern-PHP-Klasse
+field-collection.general-settings.implements-interfaces: Implementiert Interfaces
+field-collection.general-settings.usages.title: Verwendungen
+field-collection.general-settings.usages.class: Klasse
+field-collection.general-settings.usages.field: Feld
+object-brick.create-new: Neuen Object Brick erstellen
+object-brick.key: Schlüssel
+object-brick.validation.enter-key: Bitte geben Sie einen Schlüssel ein
+object-brick.validation.key-format: Der Schlüssel muss mit einem Buchstaben beginnen und darf nur Buchstaben, Zahlen und Unterstriche enthalten.
+object-brick.general-settings.title: Allgemein
+object-brick.general-settings.parent-class: Eltern-PHP-Klasse
+object-brick.general-settings.implements-interfaces: Implementiert Interfaces
+object-brick.general-settings.title-label: Titel
+object-brick.general-settings.group: Gruppe
+object-brick.class-definitions-block.title: Klassendefinitionen
+object-brick.class-definitions-block.new-entry: Neuer Eintrag
+object-brick.class-definitions-block.classname: Klasse
+object-brick.class-definitions-block.select-classname: Klasse auswählen
+object-brick.class-definitions-block.fieldname: Feld
+object-brick.class-definitions-block.select-fieldname: Feld auswählen
+select-option.create-new: Neue Auswahloption erstellen
+select-option.id: ID
+select-option.enter-name-new-item: Geben Sie den Namen des neuen Eintrags ein
+select-option.validation.enter-id: Bitte geben Sie eine ID ein
+select-option.validation.id-format: Der Name muss mit einem Großbuchstaben beginnen, gefolgt von alphanumerischen Zeichen
+select-option.general-settings.title: Allgemein
+select-option.general-settings.enum-name: Enum-Name
+select-option.general-settings.use-traits: Traits verwenden
+select-option.general-settings.implements-interfaces: Implementiert Interfaces
+select-option.general-settings.group: Gruppe
+select-option.general-settings.admin-only: Nur für Administratoren
+select-option.entries.title: Optionen
+select-option.entries.display-name: Anzeigename
+select-option.entries.value: Wert
+select-option.entries.name: Name
+select-option.entries.action: Aktion
+select-option.entries.move-up: Nach oben verschieben
+select-option.entries.move-down: Nach unten verschieben
+select-option.general-settings.usages.title: Verwendungen
+select-option.general-settings.usages.class: Klasse
+select-option.general-settings.usages.field: Feld
+select-option.create.success: Auswahloption erfolgreich erstellt
+select-option.update.success: Auswahloption erfolgreich aktualisiert
+select-option.delete.success: Auswahloption erfolgreich gelöscht
+select-option.tree.all: Alle
+select-option.tree.search: Auswahloptionen suchen
+select-option.tree.actions.select-option: Auswahloption
+custom-layout.import-success: Benutzerdefiniertes Layout erfolgreich importiert
+custom-layout.delete.confirmation: Sind Sie sicher, dass Sie dieses benutzerdefinierte Layout löschen möchten?
+custom-layout.delete.success: Benutzerdefiniertes Layout erfolgreich gelöscht
+example-prefix: Beispiel-Präfix
+pagination.show-total: Insgesamt {{total}} Einträge
+pagination.page: Seite
+preview-card.locate-in-tree: Im Baum anzeigen
+preview-card.rename: Umbenennen
+preview-card.download-zip: Als ZIP herunterladen
+preview-card.delete: Löschen
+grid.aria.column-resize: Spaltengröße ändern
+tree.aria.expand-and-collapse: Baumelement auf- oder zuklappen
+image-sidebar.tab.details.custom-download: Benutzerdefinierter Download
+aria.asset.image-sidebar.tab.details.custom-thumbnail-mode: Auswahl des benutzerdefinierten Vorschaubild-Modus
+aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Auswahl des benutzerdefinierten Vorschaubild-Formats
+aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Benutzerdefiniertes Vorschaubild herunterladen
+aria.asset.image-sidebar.tab.details.precreated-thumbnail: Vorgefertigtes Vorschaubild zum Herunterladen auswählen
+aria.asset.image-sidebar.tab.details.download-thumbnail: Vorschaubild herunterladen
+notification.action-list.actions: Aktionen
+notification.action-list.cancel: Abbrechen
+notification.action-list.cancel-all: Alle abbrechen
+notification.action-list.completed-actions: Abgeschlossene Aktionen
+aria.notification.action-list.toggle-collapse: Aktionsliste ein-/ausklappen
+aria.notification.action-list.cancel-all: Alle laufenden Aktionen abbrechen
+aria.notification.action-list.cancel: Aktion abbrechen
+asset.image.editor.zoom.reset: Zurücksetzen
+aria.asset.image.editor.zoom.reset: Zoom zurücksetzen
+aria.asset.image.editor.zoom.zoom-in: Vergrößern
+aria.asset.image.editor.zoom.zoom-out: Verkleinern
+aria.asset.image.editor.zoom.preconfigured-zoom-levels: Auswahl vordefinierter Zoomstufen
+asset.preview.no-video-support: Ihr Browser unterstützt kein Video.
+asset.preview.no-audio-support: Ihr Browser unterstützt kein Audio.
+grid.filter.before: Vor
+grid.filter.after: Nach
+grid.filter.between: Zwischen
+grid.filter.on: Am
+grid.filter.from: Von
+grid.filter.to: Bis
+grid.filter.is: Ist
+grid.filter.less: Kleiner als
+grid.filter.more: Größer als
+grid.copy-notice: In die Zwischenablage kopiert
+grid.configuration.no-saved-templates: Keine gespeicherten Vorlagen verfügbar
+grid.configuration.template: Vorlage
+grid.configuration.save-template: Als Vorlage speichern
+grid.configuration.save-new-template: Als neue Vorlage speichern
+grid.configuration.update-template: Vorlage aktualisieren
+grid.configuration.edit-template-details: Vorlagendetails bearbeiten
+grid.configuration.delete-template: Vorlage löschen
+grid.configuration.delete-this-template: Diese Vorlage löschen
+grid.configuration.delete-template-confirmation: Sind Sie sicher, dass Sie diese Vorlage löschen möchten?
+grid.configuration.save-template-configuration: Konfiguration als Vorlage speichern
+grid.configuration.set-default-template: Als Standardvorlage festlegen
+grid.configuration.shared: Geteilt
+grid.advanced-column.advancedColumns.group.boolean: Boolean
+grid.advanced-column.advancedColumns.group.date: Datum
+grid.advanced-column.advancedColumns.group.string: Zeichenkette
+grid.advanced-column.advancedColumns.group.other: Sonstige
+grid.advanced-column.title.placeholder: Titel hinzufügen
+grid.advanced-column.advancedColumns: Quellfeld
+grid.advanced-column.advancedColumns.add: Quellfeld hinzufügen
+grid.advanced-column.transformers: Transformatoren
+grid.advanced-column.transformers.add: Transformator hinzufügen
+grid.advanced-column.preview: Vorschau
+grid.advanced-column.no-preview: Kein Vorschauelement verfügbar
+grid.advanced-column.no-preview-data: Keine Vorschaudaten verfügbar
+grid.advanced-column.error-preview-data: Fehler beim Laden der Vorschau
+grid.advanced-column.trim: Kürzen
+grid.advanced-column.find: Suchen
+grid.advanced-column.replace: Ersetzen
+grid.advanced-column.start: Start
+grid.advanced-column.length: Länge
+grid.advanced-column.trueLabel: Wahr-Bezeichnung
+grid.advanced-column.falseLabel: Falsch-Bezeichnung
+grid.advanced-column.format: Format
+grid.advanced-column.delimiter: Trennzeichen
+grid.advanced-column.twigTemplate: Twig-Vorlage
+grid.advanced-column.blurringRule: Unschärferegel
+grid.advanced-column.anonymizationRule: Anonymisierungsregel
+grid.advanced-column.translationPrefix: Übersetzungspräfix
+grid.advanced-column.advancedColumns.simpleField: Einfaches Feld
+grid.advanced-column.advancedColumns.relationField: Relationsfeld
+grid.advanced-column.advancedColumns.staticText: Statischer Text
+grid.advanced-column.advancedColumns.booleanFormatter: Boolean-Formatierer
+grid.advanced-column.advancedColumns.caseChange: Groß-/Kleinschreibung ändern
+grid.advanced-column.advancedColumns.combine: Werte kombinieren
+grid.advanced-column.advancedColumns.dateFormatter: Datums-Formatierer
+grid.advanced-column.advancedColumns.elementCounter: Elementzähler
+grid.advanced-column.advancedColumns.explode: Aufteilen
+grid.advanced-column.advancedColumns.stringReplace: Zeichenkette ersetzen
+grid.advanced-column.advancedColumns.substring: Teilzeichenkette
+grid.advanced-column.advancedColumns.trim: Kürzen
+grid.advanced-column.advancedColumns.twigOperator: Twig-Operator
+grid.advanced-column.advancedColumns.anonymizer: Anonymisierer
+grid.advanced-column.advancedColumns.blur: Unschärfe
+grid.advanced-column.advancedColumns.translate: Übersetzen
+grid.advanced-column.advancedColumns.phpCode: PHP-Code
+grid.advanced-column.advancedColumns.phpCodeKey: PHP-Transformator-Schlüssel
+grid.advanced-column.advancedColumns.arguments: Argumente
+component.workflow-card.action-btn: Workflow-Aktionen
+component.pql.description: Pimcore Query Language (PQL) ist eine einfache, aber leistungsstarke Abfragesprache, mit der Sie Daten anhand verschiedener Kriterien durchsuchen können, einschließlich der Filterung von Werten in verknüpften Elementen, um eine präzise und umfassende Datenabfrage zu ermöglichen. Weitere Informationen finden Sie in der <anchorPQL>PQL-Dokumentation</anchorPQL>
+component.pql.placeholder: Ihre Abfrage eingeben
+asset.asset-editor-tabs.embedded-metadata.headline: Meta-Informationen
+asset.asset-editor-tabs.embedded-metadata.columns.name: Name
+asset.asset-editor-tabs.embedded-metadata.columns.value: Wert
+asset.asset-editor-tabs.preview.open-in-new-window: In neuem Fenster öffnen
+login-form.remember-me: Angemeldet bleiben
+login-form.forgot-password: Passwort vergessen
+login-form.login: Anmelden
+login-form-additional-logins.or: oder
+login-form.username: Benutzername
+login-form.password: Passwort
+aria.login-form-additional-logins.additional-login-provider: "Zusätzlicher Login-Anbieter:"
+aria.login-form-additional-logins.remember-me-checkbox: Angemeldet-bleiben-Kontrollkästchen
+unsaved-notice: Bitte speichern Sie, um Ihre Änderungen zu bestätigen
+widget-manager.tab-title.close-confirmation: Sie haben ungespeicherte Änderungen. Sind Sie sicher, dass Sie diesen Tab schließen möchten?
+action-applied-successfully: Aktion erfolgreich angewendet
+action-could-not-be-applied: Aktion konnte nicht angewendet werden
+failed-to-assign-tag-to-element: Tag konnte dem Element nicht zugewiesen werden
+failed-to-un-assign-tag-to-element: Tag konnte vom Element nicht entfernt werden
+workflow-modal.perform-action: Aktion ausführen
+workflow-modal.cancel: Abbrechen
+workflow-modal.notes: Notizen
+workflow-modal.notes-required: Bitte geben Sie Ihre Notizen ein
+workflow-transitions.start-workflow: Workflow starten
+workflow-transitions.finish-review: Überprüfung abschließen
+workflow-transitions.restart-review: Überprüfung neu starten
+save-success: Erfolgreich gespeichert
+save-failed: Speichern fehlgeschlagen
+auto-save-failed: Automatisches Speichern fehlgeschlagen
+version.label: Versionen
+version.versions: Versionen
+version.version: Version
+version.publish: Veröffentlichen
+version.published: Veröffentlicht
+version.autosaved: Automatisch gespeichert
+version.schedule-for: Geplant für
+version.note: Notiz
+version.note.add: Notiz hinzufügen
+version.own-draft: Eigener Entwurf
+version.compare-versions: Versionen vergleichen
+version.fileName: Name
+version.dimensions: Abmessungen
+version.creationDate: Erstellungsdatum
+version.modificationDate: Änderungsdatum
+version.fileSize: Dateigröße
+version.mimeType: MIME-Typ
+version.fullPath: Pfad
+version.additionalAttributes: Zusätzliche Attribute
+version.image: Bild
+version.no-versions-to-show: Es sind keine Versionen vorhanden.
+version.no-preview-available: Für diese Datei ist keine Vorschau verfügbar.
+version.clear-unpublished: Unveröffentlichte löschen
+version.clear-unpublished-versions: Unveröffentlichte Versionen löschen
+version.confirm-clear-unpublished: Sind Sie sicher, dass Sie alle unveröffentlichten Versionen löschen möchten?
+version.preview-notification: Vorschaudetails werden angezeigt, sobald eine Version ausgewählt ist.
+version.expand-unmodified-fields: Alle aufklappen
+version.no-difference: Es gibt keinen Unterschied zwischen den ausgewählten Versionen.
+version.category.title.systemData: Systemdaten
+version.category.title.baseData: Basisdaten
+version.category.title.meta: Metadaten
+aria.version.delete: Version löschen
+aria.version.expand: Version aufklappen
+clear-all: Alle löschen
+empty: Leer
+none: Keine
+yes: Ja
+no: Nein
+by: Von
+field: Feld
+no-data-available: Keine Daten verfügbar
+no-data-available-yet: Noch keine Daten verfügbar.
+no-items: Keine Einträge
+schedule.label: Zeitplan
+schedule.headline: Zeitplan
+schedule.columns.datetime: Datum & Uhrzeit
+schedule.columns.action: Aktion
+schedule.columns.version: Version
+schedule.columns.active: Aktiv
+schedule.columns.actions: Löschen
+schedule.upcoming: Bevorstehend
+schedule.all: Alle geplant (bevorstehend & Archiv)
+schedule.toolbar.filters.active-switch: Nur aktive
+schedule.toolbar.new: Neu
+schedule.toolbar.save-scheduled-tasks: Geplante Aufgaben speichern
+schedule.version.delete: Version löschen
+schedule.version.publish: Version veröffentlichen
+schedule.select-an-action: Aktion
+schedule.select-a-version: Version
+schedule.archived: Archiviert
+schedule.archived.cleanup-all: Alle bereinigen
+dependencies.label: Abhängigkeiten
+dependencies.requires: Benötigt
+dependencies.required-by: Benötigt von
+dependencies.columns.subtype: Untertyp
+dependencies.columns.path: Pfad
+dependencies.columns.open: Öffnen
+system: System
+default_metadata: Standard-Metadaten
+predefined_metadata: Vordefinierte Metadaten
+preview: Vorschau
+id: ID
+type: Typ
+position: Position
+filename: Dateiname
+fullpath: Vollständiger Pfad
+modificationDate: Änderungsdatum
+creationDate: Erstellungsdatum
+fileSize: Dateigröße
+mimetype: MIME-Typ
+key: Schlüssel
+published: Veröffentlicht
+classname: Klassenname
+index: Index
+listing.grid-config.title: Grid-Konfiguration
+listing.add-column: Spalte hinzufügen
+listing.actions: Auf Auswahl anwenden
+listing.non-selected.actions: Auf alle anwenden
+listing.actions.zip-download: ZIP-Download
+listing.actions.delete: Löschen
+listing.actions.export: Export
+reports.csv-export-modal.title: CSV-Exportoptionen
+reports.csv-export-modal.include-headers: Spaltenüberschriften einbeziehen
+reports.csv-export-modal.delimiter-label: Trennzeichen
+reports.csv-export-modal.delimiter-placeholder: Trennzeichen eingeben
+listing.actions.csv-export: CSV-Export
+listing.actions.xlsx-export: Excel-Export
+listing.actions.batch-edit: Stapelbearbeitung
+listing.selection.total: "{{total}} ausgewählt"
+data-type.input: Eingabe
+data-type.textarea: Textbereich
+data-type.html: HTML
+data-type.number: Zahl
+data-type.boolean: Boolean
+data-type.date: Datum
+data-type.text: Text
+data-type.document: Dokument
+data-type.asset: Asset
+data-type.object: Objekt
+data-type.checkbox: Kontrollkästchen
+data-type.select: Auswahl
+open-data-object.button: Data Object öffnen
+open-data-object-modal.title: Data Object öffnen
+open-data-object-modal.label: Bitte geben Sie die ID oder den Pfad des Data Objects ein
+open-data-object-modal.required-message: Bitte geben Sie eine ID oder einen Pfad ein
+open-data-object-modal.ok-button: OK
+open-data-object-modal.cancel-button: Abbrechen
+open-asset.button: Asset öffnen
+open-asset-modal.title: Asset öffnen
+open-asset-modal.label: Bitte geben Sie die ID oder den Pfad des Assets ein
+open-asset-modal.ok-button: OK
+open-asset-modal.cancel-button: Abbrechen
+open-asset-modal.required-message: Bitte geben Sie eine ID oder einen Pfad des Dokuments ein
+open-document.button: Dokument öffnen
+open-document-modal.title: Dokument öffnen
+open-document-modal.label: Bitte geben Sie die ID oder den Pfad des Dokuments ein
+open-document-modal.ok-button: OK
+open-document-modal.cancel-button: Abbrechen
+open-document-modal.required-message: Bitte geben Sie eine ID, einen Pfad oder eine URL ein
+notes-and-events-modal.detail-information: Detailinformationen
+notes-and-events.columns.type: Typ
+notes-and-events.columns.element: Element
+notes-and-events.columns.title: Titel
+notes-and-events.columns.description: Beschreibung
+notes-and-events.columns.details: Details
+notes-and-events.columns.user: Benutzer
+notes-and-events.columns.date: Datum
+notes-and-events.columns.actions: Aktionen
+website-settings.columns.type: Typ
+website-settings.columns.name: Name
+website-settings.columns.language: Sprache
+website-settings.columns.value: Wert
+website-settings.columns.site: Site
+website-settings.columns.actions: Aktionen
+website-settings.website-settings-already-exist.title: Website Einstellung existiert bereits
+website-settings.website-settings-already-exist.error: Name wird bereits verwendet, bitte wählen Sie einen anderen
+website-settings.website-settings.add-entry-mandatory-fields-missing.title: Pflichtfelder fehlen
+website-settings.website-settings.add-entry-mandatory-fields-missing.error: Name und Typ sind Pflichtfelder und müssen ausgefüllt werden.
+document-types.new: Neu
+document-types.columns.name: Name
+document-types.columns.group: Gruppe
+document-types.columns.controller: Controller
+document-types.columns.template: Vorlage
+document-types.columns.type: Typ
+document-types.columns.static: Statisch
+document-types.columns.priority: Priorität
+document-types.columns.creation-date: Erstellungsdatum
+document-types.columns.modification-date: Änderungsdatum
+document-types.columns.actions: Aktionen
+properties.label: Eigenschaften
+properties.editable-properties: Bearbeitbare Eigenschaften
+properties.all-properties: Alle Eigenschaften
+properties.predefined-properties: Vordefinierte Eigenschaften
+properties.new-custom-property: Neue benutzerdefinierte Eigenschaft
+translations.columns.type: Typ
+translations.columns.key: Schlüssel
+translations.columns.actions: Aktionen
+translations.select-languages: Sprachen auswählen
+translations.select-domain: Domain auswählen
+translations.show-all-languages: Alle anzeigen
+translations.show-minimal-languages: Minimal anzeigen
+translations.show-hide-locale: Sprache ein-/ausblenden
+translations.new-translation: Neue Übersetzung
+translations.new: Hinzufügen
+translations.type-options.custom: ICU-Format
+translations.type-options.simple: Einfacher Text
+translations.edit-modal.tab.plain-text: Klartext
+translations.edit-modal.tab.html: HTML
+translations.edit-modal.save: Speichern
+translations.edit-modal.title: Übersetzung bearbeiten
+translations.edit-modal.restore: Klartext wiederherstellen
+properties.columns.type: Typ
+properties.columns.key: Schlüssel
+properties.columns.name: Name
+properties.columns.description: Beschreibung
+properties.columns.data: Wert
+properties.columns.configuration: Konfiguration
+properties.columns.content-type: Content-Type
+properties.columns.inheritable: Vererbbar
+properties.columns.actions: Aktionen
+properties.inherited.properties: Geerbte Eigenschaften
+properties.add-custom-property.cancel: Abbrechen
+properties.add-custom-property.key: Schlüssel
+translations.add-translation.key: Schlüssel
+properties.add-custom-property.create: Erstellen
+properties.add-custom-property.type: Typ
+properties.property-already-exist.title: Eigenschaft existiert bereits
+properties.property-already-exist.error: Name wird bereits verwendet, bitte wählen Sie einen anderen
+properties.add-property-mandatory-fields-missing.title: Pflichtfelder fehlen
+properties.add-property-mandatory-fields-missing.error: Schlüssel und Typ sind Pflichtfelder und müssen ausgefüllt werden.
+properties.property-key-disallowed.title: Eigenschaftsschlüssel nicht erlaubt
+properties.property-key-disallowed.error: Dieser Eigenschaftsschlüssel ist reserviert und kann nicht verwendet werden. Bitte wählen Sie einen anderen Schlüsselnamen.
+translations.add-translation-mandatory-field-missing.title: Pflichtfeld fehlt
+translations.add-translation-mandatory-field-missing.error: Schlüssel ist ein Pflichtfeld und muss ausgefüllt werden.
+button.ok: Ok
+button.apply: Übernehmen
+button.cancel: Abbrechen
+button.save: Speichern
+button.confirm: Bestätigen
+button.save-apply: Speichern & Übernehmen
+button.add-edit: Hinzufügen & Bearbeiten
+button.cancel-edits: Bearbeitungen abbrechen
+toggle.advanced-mode: Erweiterter Modus
+actions.open: Öffnen
+open: Öffnen
+edit: Bearbeiten
+modify: Ändern
+component.no-content.no-content-available: Kein Inhalt verfügbar
+notifications.label: Benachrichtigungen
+notifications.remove-all: Alle entfernen
+notifications.new-notification: Neue Benachrichtigung
+notifications.from: Von
+notifications.hide: Ausblenden
+notifications.new-notifications.show: Anzeigen
+notifications.new-notifications.title.single: Sie haben eine neue Benachrichtigung!
+notifications.new-notifications.title: Sie haben neue Benachrichtigungen!
+notes-and-events.label: Notizen & Ereignisse
+notes-and-events.notes-and-events: Notizen & Ereignisse
+notes-and-events.details: Details
+notes-and-events.name: Name
+notes-and-events.type: Typ
+notes-and-events.value: Wert
+notes-and-events.new-note: Neue Notiz
+notes-and-events.content: Inhalt
+notes-and-events.seo: SEO
+notes-and-events.warning: Warnung
+notes-and-events.notice: Hinweis
+notes-and-events.status-update: Statusaktualisierung
+notes-and-events.erp_import: erp_import
+notes-and-events.no-notes-and-events-to-show: Es sind keine Notizen oder Ereignisse vorhanden.
+tags.label: Tags
+tags.assigned-tags-text: Zugewiesene Tags
+tags.apply-tags-to-children: Tags auf Kinder anwenden
+tags.remove-and-apply-tags-to-children: Tags entfernen und auf Kinder anwenden
+tags.columns.path: Pfad
+tags.columns.actions: Entfernen
+csv-separated-options: CSV-getrennte Optionen
+csv-separated-options-info: Die Liste der verfügbaren Optionen kann als kommagetrennte Liste, als einspaltiger Wert oder gemischt angegeben werden. Bei der einspaltigen Variante wird der Schlüssel auch als Wert verwendet.
+add: Hinzufügen
+new: Neu
+save: Speichern
+title: Titel
+description: Beschreibung
+select: Auswahl
+asset.asset-editor-tabs.custom-metadata.text: Benutzerdefinierte Metadaten
+asset.asset-editor-tabs.custom-metadata.new-custom-metadata: Neue benutzerdefinierte Metadaten
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.name: Name
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.type: Typ
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.language: Sprache
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.cancel: Abbrechen
+asset.asset-editor-tabs.custom-metadata.add-predefined-definition: Vordefinierte Definition hinzufügen
+asset.asset-editor-tabs.custom-metadata.columns.type: Typ
+asset.asset-editor-tabs.custom-metadata.columns.name: Name
+asset.asset-editor-tabs.custom-metadata.columns.language: Sprache
+asset.asset-editor-tabs.custom-metadata.columns.value: Wert
+asset.asset-editor-tabs.custom-metadata.columns.actions: Aktionen
+asset.asset-editor-tabs.custom-metadata.new-custom-metadata.create: Erstellen
+asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.title: Benutzerdefinierte Metadaten existieren bereits
+asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.error: Name wird bereits verwendet, bitte wählen Sie einen anderen
+asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.title: Pflichtfelder fehlen
+asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error: Name und Typ sind Pflichtfelder und müssen ausgefüllt werden.
+width: Breite
+height: Höhe
+width-tooltip: Die Breite dieser Komponente. Ein numerischer Wert wird als Pixelanzahl interpretiert; ein Zeichenkettenwert wird als CSS-Wert mit Einheiten behandelt.
+width-field: Breitenfeld
+width-unit: Breiteneinheit
+height-tooltip: Die Höhe dieser Komponente. Ein numerischer Wert wird als Pixelanzahl interpretiert; ein Zeichenkettenwert wird als CSS-Wert mit Einheiten behandelt.
+table-data-tooltip: "Beispiel zum Hinzufügen von Daten: \n\n eins|zwei|drei \n vier|fünf|sechs \n sieben|acht|neun"
+use-current-date: Aktuelles Datum verwenden
+respect-timezone: Zeitzone berücksichtigen
+column-type: Spaltentyp
+specific-settings: Spezifische Einstellungen
+restrict-selection-to: Auswahl beschränken auf
+only-configured-languages: Nur in den Systemeinstellungen konfigurierte Sprachen anzeigen
+multiselect-render-type: Darstellungstyp
+maximum-items: Maximale Anzahl
+enforce-validation: Validierung erzwingen
+options-source: Optionsquelle
+options-source-configure: Konfigurieren
+options-source-select-options: Select Options
+options-source-options-provider: Options Provider
+options-provider-class: Options Provider Klasse oder Service-Name
+options-provider-data: Options Provider Daten
+switch-to-selection-mode: Zum Auswahlmodus wechseln
+switch-to-drag-mode: Zum Ziehmodus wechseln
+select-options: Select Options
+value: Wert
+display-name: Anzeigename
+default-values-settings: Standardwert-Einstellungen
+default-values-tooltip: Der Standardwert wird verwendet, wenn entweder die Vererbung deaktiviert ist oder der Elternwert leer ist.
+default-value: Standardwert
+default-value-generator: Standardwert-Generator Service / Klasse
+enforce-validation-tooltip: Wenn aktiviert, wird das Speichern ungültiger Optionen verhindert. Standardmäßig erlaubt die API das Speichern ungültiger Optionen
+show-char-count: Zeichenanzahl anzeigen
+column-length: Spaltenlänge
+max-length: Maximale Länge
+exclude-from-search-index: Vom Suchindex ausschließen
+toolbar-config: Toolbar-Konfiguration
+min-length: Minimale Länge
+min-value: Minimalwert
+max-value: Maximalwert
+increment-step: Schrittweite
+decimal-precision: Dezimalgenauigkeit
+decimal-size: Dezimalgröße
+decimal-settings: Dezimaleinstellungen
+decimal-settings-tooltip: Wenn Dezimalgröße oder -genauigkeit angegeben sind, wird der MySQL-Typ DECIMAL(decimalSize, decimalPrecision) verwendet. Standardwerte bei fehlenden Angaben sind 64 als Größe und 0 als Genauigkeit. Bitte beachten Sie, dass in MySQL-Begriffen die decimalSize als Precision und die decimalPrecision als Scale bezeichnet wird.
+integer: Ganzzahl
+unsigned: Nur vorzeichenlos
+auto-convert: Automatische Konvertierung
+default-unit: Standardeinheit
+valid-units: Gültige Einheiten
+slider-min: Schieberegler Minimalwert
+slider-max: Schieberegler Maximalwert
+slider-step: Schieberegler Schrittweite
+field-definitions.general-settings: Allgemeine Einstellungen
+field-definitions.base: Basis
+field-definitions.configuration-invalid: Die Konfiguration enthält ungültige Felddefinitionen.
+field-definitions.saved-successfully: Erfolgreich gespeichert.
+field-definitions.select-item-configuration: Elementkonfiguration auswählen
+field-definitions.custom-layout-title: Benutzerdefiniertes Layout
+field-definitions.custom-layouts: Benutzerdefinierte Layouts
+field-definitions.create-new-class-definition: Neues benutzerdefiniertes Layout erstellen
+field-definitions.select-field-message: Bitte wählen Sie ein Feld aus dem Baum, um dessen Eigenschaften zu bearbeiten.
+field-definitions.loading-general-settings: Allgemeine Einstellungen werden geladen...
+field-definitions.type-not-supported: Typ nicht unterstützt
+field-definitions.validation.enter-class-name: Bitte geben Sie einen Klassennamen ein
+field-definitions.validation.class-name-format: Der Klassenname muss mit einem Buchstaben beginnen und darf nur Buchstaben, Zahlen und Unterstriche enthalten.
+field-definitions.validation.unique-identifier: Eindeutiger Bezeichner
+field-definitions.validation.enter-unique-identifier: Bitte geben Sie einen eindeutigen Bezeichner ein
+field-definitions.validation.unique-identifier-in-use: Dieser eindeutige Bezeichner wird bereits verwendet
+field-definitions.validation.unique-identifier-format: Der eindeutige Bezeichner muss mit einem Buchstaben beginnen und darf nur Buchstaben, Zahlen und Unterstriche enthalten, mit einer maximalen Länge von 64 Zeichen.
+field-definitions.validation.errors-found: Felddefinitionen enthalten Fehler
+field-definitions.validation.empty-name: "Den folgenden Feldtypen fehlt ein Name:"
+field-definitions.validation.reserved-word: "Reserviertes Wort als Name verwendet:"
+field-definitions.validation.invalid-format: "Ungültiges Namensformat (muss [A-Za-z][A-Za-z0-9_]* entsprechen):"
+field-definitions.validation.duplicate-name: "Doppelter Name innerhalb des Namensraums:"
+object-brick-key: Object Brick-Schlüssel
+field-name: Feldname
+field-definition.geopoint: Geografischer Punkt
+field-definition.geobounds: Geografische Begrenzung
+field-definition.geopolygon: Geografisches Polygon
+field-definition.geopolyline: Geografische Polylinie
+field-definition.input: Eingabe
+field-definition.textarea: Textbereich
+field-definition.wysiwyg: WYSIWYG
+field-definition.password: Passwort
+field-definition.numeric: Zahl
+field-definition.numeric-range: Zahlenbereich
+field-definition.slider: Schieberegler
+field-definition.quantity-value: Mengenwert
+field-definition.quantity-value-range: Mengenwertbereich
+field-definition.input-quantity-value: Eingabe Mengenwert
+field-definition.date: Datum
+field-definition.datetime: Datum und Uhrzeit
+field-definition.date-range: Datumsbereich
+field-definition.time: Uhrzeit
+field-definition.image: Bild
+field-definition.external-image: Externes Bild
+field-definition.image-gallery: Bildergalerie
+field-definition.video: Video
+field-definition.hotspotimage: Bild Erweitert
+field-definition.many-to-one-relation: Many-to-One Relation
+field-definition.many-to-many-relation: Many-to-Many Relation
+field-definition.many-to-many-object-relation: Many-to-Many Object Relation
+field-definition.advanced-many-to-many-relation: Erweiterte Many-to-Many Relation
+field-definition.advanced-many-to-many-object-relation: Erweiterte Many-to-Many Object Relation
+field-definition.reverse-object-relation: Umgekehrte Objektrelation
+allowed-class: Erlaubte Klasse
+allowed-classes: Erlaubte Klassen
+allowed-asset-types: Erlaubte Asset-Typen
+allowed-document-types: Erlaubte Dokumenttypen
+visible-fields: Sichtbare Felder
+enable-text-selection: Textauswahl aktivieren
+allow-to-create-new-object: Neues Objekt im Relationsfeld erstellen erlauben
+enable-async-load-in-admin: Asynchrones Laden im Admin aktivieren
+enable-async-load-in-admin-tooltip: "WARNUNG: Asynchrones Laden ist NICHT möglich innerhalb von Localized Fields und Blocks."
+path-formatter-service: Formatierer-Service / Klasse
+allow-to-clear-relation: Relationen dieses Feldes löschen erlauben
+allow-multiple-assignments: Mehrfachzuweisungen erlauben
+number: Zahl
+bool: Bool
+column-bool: Spalten-Bool
+multiselect: Mehrfachauswahl
+layout: Layout
+layout-options: Layout-Optionen
+allow-documents: Dokumente erlauben
+allow-assets: Assets erlauben
+asset-inline-download-allowed: Asset-Inline-Download erlauben
+allow-objects: Objekte erlauben
+path-restriction: Pfadbeschränkung
+result-limit: Ergebnislimit
+remote-owner: Entfernter Eigentümer
+columns: Spalten
+enable-batch-edit: Stapelbearbeitung für Spalten aktivieren
+owner-class: Eigentümerklasse
+owner-field-name: Eigentümer-Feldname
+crop-settings: Zuschnitteinstellungen
+ratio-x: Verhältnis X
+ratio-y: Verhältnis Y
+predefined-data-templates: Vordefinierte Datenvorlagen
+upload-path: Upload-Pfad
+preview-width: Vorschaubreite
+preview-height: Vorschauhöhe
+url-width: URL-Breite
+allowed-video-types: Erlaubte Videotypen
+allowed-video-types-tooltip: Leer = alle erlauben
+field-definition.select: Auswahl
+field-definition.multiselect: Mehrfachauswahl
+field-definition.boolean-select: Boolean-Auswahl
+field-definition.country: Land
+field-definition.countrymultiselect: Länder-Mehrfachauswahl
+field-definition.language: Sprache
+field-definition.languagemultiselect: Sprachen-Mehrfachauswahl
+field-definition.rgba-color: RGBA-Farbe
+field-definition.encrypted-field: Verschlüsseltes Feld
+field-definition.url-slug: URL Slug
+field-definition.checkbox: Kontrollkästchen
+field-definition.link: Link
+field-definition.calculated-value: Berechneter Wert
+field-definition.user: Benutzer
+field-definition.block: Block
+field-definition.panel: Panel
+field-definition.table: Tabelle
+field-definition.structured-table: Strukturierte Tabelle
+field-definition.fieldcollections: Field Collections
+field-definition.objectbricks: Object Bricks
+field-definition.classificationstore: Classification Store
+field-definition.localizedfields: Lokalisierte Felder
+field-definition.firstname: Vorname
+field-definition.lastname: Nachname
+field-definition.email: E-Mail
+field-definition.gender: Geschlecht
+field-definition.consent: Einwilligung
+field-definition.accordion: Akkordeon
+field-definition.fieldset: Fieldset
+field-definition.fieldcontainer: Feldcontainer
+field-definition.iframe: Iframe
+field-definition.region: Region
+field-definition.tabpanel: Tab-Panel
+field-definition.text: Text
+field-definition.groups.layout: Layout-Komponente
+field-definition.groups.layout.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.groups.layout)"
+field-definition.groups.layout.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.groups.layout)"
+field-definition.groups.data: Daten-Komponente
+field-definition.groups.data.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.groups.data)"
+field-definition.groups.data.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.groups.data)"
+field-definition.groups.data.text: Text
+field-definition.groups.data.numeric: Numerisch
+field-definition.groups.data.date: Datum
+field-definition.groups.data.select: Auswahl
+field-definition.groups.data.media: Medien
+field-definition.groups.data.relation: Relation
+field-definition.groups.data.geographic: Geografisch
+field-definition.groups.data.crm: CRM
+field-definition.groups.data.structured: Strukturiert
+field-definition.groups.data.other: Sonstige
+field-definition.geopoint.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geopoint)"
+field-definition.geopoint.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geopoint)"
+field-definition.geobounds.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geobounds)"
+field-definition.geobounds.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geobounds)"
+field-definition.geopolygon.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geopolygon)"
+field-definition.geopolygon.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geopolygon)"
+field-definition.geopolyline.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geopolyline)"
+field-definition.geopolyline.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geopolyline)"
+field-definition.input.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.input)"
+field-definition.input.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.input)"
+field-definition.textarea.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.textarea)"
+field-definition.textarea.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.textarea)"
+field-definition.wysiwyg.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.wysiwyg)"
+field-definition.wysiwyg.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.wysiwyg)"
+field-definition.password.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.password)"
+field-definition.password.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.password)"
+field-definition.numeric.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.numeric)"
+field-definition.numeric.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.numeric)"
+field-definition.numeric-range.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.numeric-range)"
+field-definition.numeric-range.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.numeric-range)"
+field-definition.slider.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.slider)"
+field-definition.slider.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.slider)"
+field-definition.quantity-value.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.quantity-value)"
+field-definition.quantity-value.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.quantity-value)"
+field-definition.quantity-value-range.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.quantity-value-range)"
+field-definition.quantity-value-range.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.quantity-value-range)"
+field-definition.input-quantity-value.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.input-quantity-value)"
+field-definition.input-quantity-value.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.input-quantity-value)"
+field-definition.date.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.date)"
+field-definition.date.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.date)"
+field-definition.datetime.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.datetime)"
+field-definition.datetime.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.datetime)"
+field-definition.date-range.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.date-range)"
+field-definition.date-range.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.date-range)"
+field-definition.time.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.time)"
+field-definition.time.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.time)"
+field-definition.image.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.image)"
+field-definition.image.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.image)"
+field-definition.external-image.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.external-image)"
+field-definition.external-image.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.external-image)"
+field-definition.image-gallery.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.image-gallery)"
+field-definition.image-gallery.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.image-gallery)"
+field-definition.video.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.video)"
+field-definition.video.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.video)"
+field-definition.hotspotimage.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.hotspotimage)"
+field-definition.hotspotimage.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.hotspotimage)"
+field-definition.select.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.select)"
+field-definition.select.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.select)"
+field-definition.multiselect.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.multiselect)"
+field-definition.multiselect.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.multiselect)"
+field-definition.boolean-select.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.boolean-select)"
+field-definition.boolean-select.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.boolean-select)"
+field-definition.country.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.country)"
+field-definition.country.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.country)"
+field-definition.countrymultiselect.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.countrymultiselect)"
+field-definition.countrymultiselect.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.countrymultiselect)"
+field-definition.language.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.language)"
+field-definition.language.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.language)"
+field-definition.languagemultiselect.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.languagemultiselect)"
+field-definition.languagemultiselect.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.languagemultiselect)"
+field-definition.user.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.user)"
+field-definition.user.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.user)"
+field-definition.block.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.block)"
+field-definition.block.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.block)"
+field-definition.panel.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.panel)"
+field-definition.panel.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.panel)"
+field-definition.accordion.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.accordion)"
+field-definition.accordion.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.accordion)"
+field-definition.firstname.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.firstname)"
+field-definition.firstname.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.firstname)"
+field-definition.lastname.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.lastname)"
+field-definition.lastname.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.lastname)"
+field-definition.email.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.email)"
+field-definition.email.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.email)"
+field-definition.gender.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.gender)"
+field-definition.gender.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.gender)"
+field-definition.consent.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.consent)"
+field-definition.consent.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.consent)"
+regex-validation: Validierung mit regulärem Ausdruck
+regex: RegEx
+regex-flags: RegEx-Flags
+regex-flags-tooltip: "RegExp ohne Begrenzer, muss in JS funktionieren (Begrenzer: #)"
+test-string: Testzeichenkette
+regex-validation-error-message: Die Zeichenkette entspricht nicht dem erforderlichen Format.
+calculator-class: Berechnungsklasse
+calculator-expression: Berechnungsausdruck
+calculator-type: Berechnungstyp
+calculator-type-tooltip: Lesen Sie die offizielle Dokumentation, um mehr über das Definieren von Ausdrücken oder Klassen zu erfahren.
+expression: Ausdruck
+lazy-loading: Lazy Loading
+disallow-add-remove: Hinzufügen / Entfernen verbieten
+disallow-reorder: Neuordnung verbieten
+css-style: CSS-Stil
+collapsible: Einklappbar
+collapsed: Anfangs eingeklappt
+border: Rahmen
+rows: Zeilen
+rows-fixed: Zeilen fest
+cols: Spalten
+cols-fixed: Spalten fest
+length: Länge
+label-width: Bezeichnungsbreite
+padding: Abstand
+label-first-cell: Bezeichnung Erste Zelle
+label-align: Bezeichnung Ausrichtung
+allowed-types: Erlaubte Typen
+localized: Lokalisiert
+allowed-group-ids: Erlaubte Gruppen-IDs (csv)
+store: Store
+label: Bezeichnung
+hide-empty-data: Leere Daten ausblenden
+tab-position: Tab-Position
+maximum-tabs: Maximale Tabs
+hide-labels-when-tabs-reached: Sprach-Bezeichnungen ausblenden wenn Tab-Limit erreicht
+provide-split-view: Geteilte Ansicht bereitstellen
+data: Daten
+domain-label-width: Domain-Bezeichnungsbreite
+controller-action: Controller-Aktion
+controller-action-tooltip: 'Geben Sie den Controller und die Aktion im folgenden Format ein: App\Controller\ProductController::slugAction'
+available-sites: Verfügbare Sites
+empty-equals-allow-all-tooltip: Leer = alle erlauben
+reset: Zurücksetzen
+name: Name
+tooltip: Tooltip
+mandatory: Pflichtfeld
+unique: Eindeutig
+not-editable: Nicht bearbeitbar
+invisible: Unsichtbar
+visible-in-gridview: Sichtbar in der Grid-Ansicht
+visible-in-searchresult: Sichtbar im Suchergebnis
+quality: Qualität
+mode: Modus
+format: Format
+default: Standard
+resize: Größe ändern
+scaleByWidth: Skalierung nach Breite
+scaleByHeight: Skalierung nach Höhe
+min-max-settings: Min-Max-Zeiten
+download: Herunterladen
+asset.sidebar.original-file: Originaldatei
+asset.sidebar.web-format: Web-Format
+asset.sidebar.print-format: Druck-Format
+asset.sidebar.office-format: Office-Format
+jobs.notification.title: Laufende Aufträge
+jobs.notification.jobs_one: "{{count}} Aktion"
+jobs.notification.jobs_other: "{{count}} Aktionen"
+jobs.job.in-progress: "{{title}} in Bearbeitung"
+jobs.job.queued: "{{title}} in Warteschlange"
+jobs.job.failed: "{{title}} fehlgeschlagen"
+jobs.job.finished: "{{title}} abgeschlossen"
+jobs.job.finished-with-errors: "{{title}} mit Fehlern abgeschlossen"
+jobs.job.progress: "{{progress}}% abgeschlossen"
+jobs.job.button-retry: Wiederholen
+jobs.job.button-reload: Neu laden
+jobs.job.button-hide: Ausblenden
+jobs.job.button-download: Herunterladen
+jobs.job.button-ignore-and-reload: Ignorieren und neu laden
+jobs.job.step_hint: "Schritt {{step}}/{{total}}"
+jobs.job.step_hint_single: "Schritt {{step}}"
+jobs.job.download-error: Download fehlgeschlagen
+jobs.job.button-show-errors: Fehler anzeigen
+jobs.job.error-modal.title: Auftragsfehler
+jobs.job.button-abort: Auftrag abbrechen
+jobs.job.abort-confirm: Möchten Sie diesen Auftrag wirklich abbrechen?
+jobs.zip-job.title: "ZIP-Download von {{title}}"
+jobs.batch-edit-job.title: "Stapelbearbeitung von {{title}}"
+jobs.csv-job.title: "CSV-Download von {{title}}"
+jobs.xlsx-job.title: "XLSX-Download von {{title}}"
+batch-edit.job-title: Stapelbearbeitung
+jobs.zip-upload-job.title: ZIP hochladen
+jobs.zip-upload-job.step1.title: ZIP wird entpackt
+jobs.zip-upload-job.step2.title: Assets werden erstellt
+batch-edit.modal-title: Stapelbearbeitung
+batch-edit.no-content: Es sind noch keine Spalten hinzugefügt
+batch-edit.modal-footer.apply-changes: Änderungen übernehmen
+batch-edit.modal-footer.discard-all-changes: Alle Änderungen verwerfen
+batch-edit.modal-footer.add-a-column: Spalte hinzufügen
+batch-edit.append-mode.replace: Stapel ersetzen
+batch-edit.append-mode.add: Stapel hinzufügen
+batch-edit.append-mode.remove: Stapel entfernen
+batch-delete.job-title: Löschen
+export-csv-form.modal-title: CSV exportieren
+export-csv-form.export-notice: Bitte beachten Sie, dass der Export einige Felder nicht unterstützt (z.B. Vorschau, Größe). Klicken Sie auf OK, um mit dem Export fortzufahren.
+export-csv-form.form-field.delimiter: Trennzeichen
+export-csv-form.form-field.header: Kopfzeile
+export-csv-form.form-field.header.option.name: Systemschlüssel
+export-csv-form.form-field.header.option.title: Bezeichnung
+export-csv-form.form-field.header.option.no-header: Keine Kopfzeile
+export-xlsx-form.modal-title: Excel exportieren
+export-xlsx-form.export-notice: Bitte beachten Sie, dass der Export einige Felder nicht unterstützt (z.B. Vorschau, Größe). Klicken Sie auf OK, um mit dem Export fortzufahren.
+export-xlsx-form.form-field.delimiter: Trennzeichen
+export-xlsx-form.form-field.header: Kopfzeile
+export-xlsx-form.form-field.header.option.name: Systemschlüssel
+export-xlsx-form.form-field.header.option.title: Bezeichnung
+export-xlsx-form.form-field.header.option.no-header: Keine Kopfzeile
+form.validation.required: Dieses Feld ist erforderlich
+form.validation.max-length: Die maximale Länge für dieses Feld beträgt {{max}} Zeichen
+form.validation.min: Der Minimalwert ist {{min}}
+validation.required: Dieses Feld ist erforderlich
+validation.min: Der Minimalwert ist {{min}}
+form.validation.numeric-range.first-value-missing: Erster Wert fehlt
+form.validation.numeric-range.second-value-missing: Zweiter Wert fehlt
+form.validation.numeric-range.second-value-greater: Der zweite Wert darf nicht kleiner als der erste Wert sein
+form.validation.provide-name: Bitte geben Sie einen Namen an
+form.validation.provide-description: Bitte geben Sie eine Beschreibung an
+form.label.new-item: Geben Sie den Namen des neuen Eintrags ein
+thumbnail: Vorschaubild
+select-image-preview: Bildvorschau auswählen
+choose-media: Medien auswählen
+current-player-position: Aktuelle Wiedergabeposition
+drag-and-drop-asset: Asset per Drag-and-Drop ablegen
+ok: OK
+apply: Übernehmen
+cancel: Abbrechen
+close-tab: Tab schließen
+close-others: Andere schließen
+close-unmodified: Unveränderte schließen
+close-all: Alle schließen
+asset.tree.context-menu.download: Herunterladen
+asset.tree.context-menu.download-as-zip: Als ZIP herunterladen
+element.tree.context-menu.new-assets: Neue(s) Asset(s)
+element.tree.context-menu.add-assets.upload-files: Dateien hochladen
+element.tree.context-menu.add-assets.upload-zip: ZIP hochladen
+element.tree.context-menu.advanced: Erweitert
+element.tree.context-menu.search-and-move: Suchen & Verschieben
+element.tree.context-menu.expand-children: Kinder aufklappen
+asset.tree.context-menu.clear-thumbnails: Vorschaubilder löschen
+element.tree.copy: Kopieren
+element.tree.copy-success-description: '{{elementType}} "{{name}}" wurde kopiert und kann eingefügt werden'
+element.tree.paste: Einfügen
+element.tree.paste-as-child: Als Kind einfügen
+element.tree.paste-as-child-recursive: Als Kind einfügen (rekursiv)
+element.tree.paste-recursive-updating-references: Rekursiv einfügen, Referenzen aktualisieren
+element.tree.paste-only-contents: Nur Inhalte hier einfügen
+element.tree.cut: Ausschneiden
+element.tree.cut-success-description: '{{elementType}} "{{name}}" wurde ausgeschnitten und kann eingefügt werden'
+element.tree.paste-cut: Ausgeschnittenes Element einfügen
+element.lock: Sperren
+element.lock-and-propagate-to-children: Sperren und auf Kinder übertragen
+element.unlock: Entsperren
+element.unlock-and-propagate-to-children: Entsperren und auf Kinder übertragen
+element.tree.sorting: Kinder sortieren nach
+element.tree.sorting.keyed-ascending: A bis Z (Schlüssel)
+element.tree.sorting.keyed-descending: Z bis A (Schlüssel)
+element.tree.sorting.indexed: Index (Manuell)
+element.tree.refresh: Aktualisieren
+element.new-folder: Neuer Ordner
+element.new-folder.validation: Bitte geben Sie einen gültigen Namen ein
+element.rename: Umbenennen
+element.rename.label: Bitte geben Sie den neuen Namen ein
+element.rename.validation: Bitte geben Sie einen gültigen Namen ein
+element.delete: Löschen
+element.delete.confirmation.title: Element löschen
+element.delete.confirmation.text: Möchten Sie dieses Element wirklich löschen?
+element.delete.confirmation.ok: Endgültig löschen
+element.open: Öffnen
+element.toolbar.copy-id: ID kopieren
+element.toolbar.copy-full-path-to-clipboard: Vollständigen Pfad kopieren
+element.toolbar.copy-deep-link-to-clipboard: Deeplink kopieren
+element.toolbar.show-full-info: Vollständige Info
+element.toolbar.copy-className: Klasse {{className}} - Kopieren
+element.unpublish: Veröffentlichung zurücknehmen
+element.publish: Veröffentlichen
+element.locate-in-tree: Im Baum anzeigen
+element.sidebar.filter.only-direct-children: Nur direkte Kinder
+element.sidebar.field-filters: Feldfilter
+element.full-information: Vollständige Informationen
+system-information.id: ID
+system-information.path: Pfad
+system-information.public-url: Öffentliche URL
+system-information.parent-id: Eltern-ID
+system-information.type: Typ
+system-information.class-id: Klassen-ID
+system-information.class: Klasse
+system-information.file-size: Dateigröße
+system-information.modification-date: Änderungsdatum
+system-information.creation-date: Erstellungsdatum
+system-information.user-modification: Benutzer Änderung
+system-information.owner: Eigentümer
+system-information.deeplink: Deeplink
+system-information.user-unknown: Benutzer unbekannt
+system-information.system: System
+system-information.click-to-open: Klicken zum Öffnen
+male: Männlich
+female: Weiblich
+other: Sonstige
+unknown: Unbekannt
+warning: Warnung
+error: Fehler
+info: Info
+no-value-set: Kein Wert gesetzt
+set-to-null: Leer (auf null setzen)
+remove: Entfernen
+delete: Löschen
+clone: Klonen
+jobs.clone-job.step2.title: Referenzen werden aktualisiert
+jobs.asset-clone-job.title: Assets werden geklont
+jobs.document-clone-job.title: Dokumente werden geklont
+jobs.data-object-clone-job.title: Data Objects werden geklont
+latitude: Breitengrad
+longitude: Längengrad
+search-address: Adresse suchen
+search: Suche
+geocode.address-not-found: Die eingegebene Adresse wurde nicht gefunden
+geocode.possible-causes: Mögliche Ursachen
+geocode.postal-code-format-error: 'Postleitzahlenformat, z.B. verwenden Sie "5020 Salzburg, Söllheimer Straße 16" anstatt "A-5020 Salzburg, Söllheimer Straße 16"'
+delete-confirmation-advanced: Möchten Sie {{type}} '{{value}}' wirklich löschen?
+relations.id: ID
+relations.reference: Referenz
+relations.type: Typ
+relations.subtype: Untertyp
+relations.classname: Klasse
+relations.fullpath: Vollständiger Pfad
+relations.remove-all.confirm: Möchten Sie wirklich alle Relationen löschen?
+relation: Relation
+items-limit-reached: Die maximale Anzahl von Einträgen ({{maxItems}}) wurde erreicht.
+actions: Aktionen
+asset: Asset
+data-object: Data Object
+document: Dokument
+folder: Ordner
+archive: Archiv
+audio: Audio
+image: Bild
+text: Text
+video: Video
+processing: Verarbeitung
+upload: Hochladen
+close: Schließen
+paste: Einfügen
+upload.assets-items-failed-message: Upload mit Fehlern abgeschlossen.
+quantity-value.converted-units: Umgerechnete Einheiten
+table.empty.confirm: Sind Sie sicher, dass Sie alle Daten löschen möchten?
+table.new-column: Neue Spalte
+table.delete-column: Spalte löschen
+table.new-row: Neue Zeile
+table.delete-row: Zeile löschen
+table.duplicate-row: Zeile duplizieren
+table.copy: Kopieren
+table.paste: Einfügen
+clipboard.copy.success: Erfolgreich in die Zwischenablage kopiert
+clipboard.copy.error: Kopieren in die Zwischenablage fehlgeschlagen
+table.empty: Leeren
+table.paste-placeholder: Fügen Sie hier Ihre Daten ein
+empty.confirm: Sind Sie sicher, dass Sie alle Daten löschen möchten?
+tree.actions.prefix.add: "Hinzufügen "
+tree.actions.convert: "Konvertieren zu "
+tree.actions.clone: Klonen
+tree.actions.copy: Kopieren
+tree.actions.paste: Einfügen
+tree.actions.delete: Löschen
+tree.actions.add-user: Benutzer hinzufügen
+tree.actions.clone-user: Benutzer klonen
+tree.actions.remove-user: Benutzer entfernen
+tree.actions.folder: Ordner
+tree.actions.user: Benutzer
+tree.actions.add-folder: Neuer Ordner
+tree.actions.add-tag: Neuer Tag
+tree.actions.delete-tag: Löschen
+tree.actions.rename-tag: Umbenennen
+tree.actions.role: Rolle
+tree.actions.add-role: Rolle hinzufügen
+tree.actions.clone-role: Rolle klonen
+tree.actions.remove-role: Rolle entfernen
+tree.actions.remove-folder: Ordner entfernen
+tag-configuration.new: Neu
+tag-configuration.new-tag: Neuer Tag
+tag-configuration.name: Name
+tag-configuration.parent-tag: Übergeordneter Tag
+tag-configuration.create: Erstellen
+tag-configuration.save: Speichern
+tag-configuration.rename: Tag umbenennen
+tag-configuration.successful-add: Tag wurde erfolgreich hinzugefügt
+tag-configuration.successful-update: Tag wurde erfolgreich aktualisiert
+tag-configuration.successful-deletion: Tag wurde erfolgreich gelöscht
+tag-configuration.warn-delete-tag-modal-title: Diesen Tag löschen
+tag-configuration.warn-delete-parent-tag-modal-title: Diesen übergeordneten Tag löschen
+tag-configuration.warn-delete-all-tags-title: Alle Tags löschen
+tag-configuration.warn-delete-all-tags-modal-text: Sind Sie sicher, dass Sie alle Tags löschen möchten?
+tag-configuration.warn-delete-tag-modal-text: Sind Sie sicher, dass Sie diesen Tag löschen möchten?
+tag-configuration.warn-delete-parent-tag-modal-text: Sind Sie sicher, dass Sie diesen übergeordneten Tag löschen möchten? Alle zugehörigen Tags werden ebenfalls gelöscht.
+tag-configuration.delete-tag: Löschen
+tag-configuration.delete-all: Alle löschen
+tag-configuration.delete-parent-tag: Übergeordneten Tag und alle untergeordneten Tags löschen
+tag-configuration.cancel: Abbrechen
+user-management.admin: Admin
+user-management.search: Suche
+user-management.doc-types: Dokumenttypen
+user-management.tree.all: Alle Benutzer
+user-management.settings.title: Einstellungen
+user-management.workspaces.title: Workspaces
+user-management.key-bindings.title: Tastenkürzel
+key-bindings.info: Bitte vergessen Sie nicht, Pimcore nach Ihren Änderungen neu zu laden!
+key-bindings.reset: Auf Standard zurücksetzen
+key-bindings.general: Allgemein
+key-bindings.save: Speichern
+key-bindings.publish: Veröffentlichen
+key-bindings.unpublish: Veröffentlichung zurücknehmen
+key-bindings.rename: Umbenennen
+key-bindings.refresh: Aktualisieren
+key-bindings.navigation: Navigation
+key-bindings.openDocument: Dokument öffnen
+key-bindings.openAsset: Asset öffnen
+key-bindings.openObject: Objekt öffnen
+key-bindings.openClassEditor: Klassen-Editor öffnen
+key-bindings.openInTree: Im Baum öffnen
+key-bindings.closeAllTabs: Alle Tabs schließen
+key-bindings.search: Suche
+key-bindings.searchDocument: Dokument suchen
+key-bindings.searchAsset: Asset suchen
+key-bindings.searchObject: Objekt suchen
+key-bindings.searchAndReplaceAssignments: Zuweisungen suchen und ersetzen
+key-bindings.quickSearch: Schnellsuche
+key-bindings.system: System
+key-bindings.showMetaInfo: Meta-Info anzeigen
+key-bindings.showElementHistory: Elementverlauf anzeigen
+key-bindings.sharedTranslations: Gemeinsame Übersetzungen
+key-bindings.recycleBin: Papierkorb
+key-bindings.notesEvents: Notizen & Ereignisse
+key-bindings.tagManager: Tag-Manager
+key-bindings.tagConfiguration: Tag Konfiguration
+key-bindings.user: Benutzer
+key-bindings.users: Benutzer
+key-bindings.role: Rolle
+key-bindings.roles: Rollen
+key-bindings.clearAllCaches: Alle Caches löschen
+key-bindings.clearDataCache: Daten Cache löschen
+key-bindings.customReports: Benutzerdefinierte Berichte
+key-bindings.reports: Berichte
+key-bindings.applicationLogger: Application Logger
+key-bindings.glossary: Glossar
+key-bindings.seoDocumentEditor: SEO-Dokument-Editor
+key-bindings.robots: Robots
+key-bindings.httpErrorLog: HTTP-Fehlerprotokoll
+key-bindings.seo: SEO
+key-bindings.redirects: Weiterleitungen
+key-bindings.bundles: Bundles
+user-management.references.title: Referenzen
+user-management.references.documents: Dokumente
+user-management.references.columns.id: ID
+user-management.references.columns.cpath: Pfad
+user-management.references.columns.subtype: Untertyp
+user-management.general: Allgemein
+user-management.active: Aktiv
+user-management.name: Name
+user-management.password: Passwort
+user-management.user.search: Nach einem Benutzer suchen
+user-management.role.search: Nach einer Rolle suchen
+user-management.twoFactorAuthenticationEnabled: Zwei-Faktor-Authentifizierung aktiviert
+user-management.firstname: Vorname
+user-management.lastname: Nachname
+user-management.email: E-Mail
+user-management.language: Sprache
+user-management.dateTime: Datum/Uhrzeit-Gebietsschema
+user-management.welcomeScreen: Willkommensbildschirm beim Start anzeigen
+user-management.memorizeTabs: Offene Tabs merken
+user-management.allowDirtyClose: Warnung bei ungespeicherten Inhalten deaktivieren
+user-management.closeWarning: Schließen-Warnung anzeigen
+user-management.admin.info: Admin-Benutzer erhalten nicht nur automatisch alle unten aufgeführten Berechtigungen, sie dürfen auch alle Aktionen an Dokumenten, Assets und Objekten ohne Einschränkungen durchführen.
+user-management.admin.login: Als dieser Benutzer in einem anderen Browser anmelden
+user-management.customisation: Anpassung
+user-management.permissions.default: Berechtigungen
+user-management.permissions.bundles: Berechtigungen Bundles
+user-management.types-and-classes: Erlaubte Typen zum Erstellen (Standard ist alle)
+user-management.editor-settings: Editor-Einstellungen
+user-management.shared-translation-settings: Einstellungen für gemeinsame Übersetzungen
+user-management.document-types: Dokumenttypen
+user-management.classes: Klassen
+user-management.settings.avatar: Avatar
+user-management.settings.upload-avatar: Avatar auswählen
+user-management.settings.language.name: Sprache
+user-management.settings.language.abbreviation: Abkürzung
+user-management.settings.language.view: Ansicht
+user-management.settings.language.edit: Bearbeiten
+user-management.two-factor-authentication: Zwei-Faktor-Authentifizierung
+user-management.workspaces.documents: Dokumente
+user-management.workspaces.assets: Assets
+user-management.workspaces.objects: Data Objects
+user-management.workspaces.add: Hinzufügen
+user-management.workspaces.columns.cpath: Pfad
+user-management.workspaces.columns.list: Liste
+user-management.workspaces.columns.view: Ansicht
+user-management.workspaces.columns.save: Speichern
+user-management.workspaces.columns.publish: Veröffentlichen
+user-management.workspaces.columns.unpublish: Veröffentlichung zurücknehmen
+user-management.workspaces.columns.delete: Löschen
+user-management.workspaces.columns.rename: Umbenennen
+user-management.workspaces.columns.create: Erstellen
+user-management.workspaces.columns.settings: Einstellungen
+user-management.workspaces.columns.versions: Versionen
+user-management.workspaces.columns.properties: Eigenschaften
+user-management.workspaces.columns.path: Pfad
+user-management.workspaces.columns.id: ID
+user-management.workspaces.columns.subtype: Untertyp
+user-management.workspaces.additional-settings: Zusätzliche Einstellungen /Produkte
+user-management.workspaces.localized-fields: Lokalisierte Felder
+user-management.workspaces.localized-fields.view: Ansichtsberechtigungen
+user-management.workspaces.localized-fields.edit: Bearbeitungsberechtigungen
+user-management.workspaces.custom-layouts: Benutzerdefinierte Layouts
+user-management.workspaces.custom-layouts.select: Ein oder mehrere Felder auswählen
+user-management.add-folder.success: Ordner erfolgreich hinzugefügt
+user-management.remove-folder.success: Ordner erfolgreich entfernt
+user-management.clone-user: Benutzer klonen
+user-management.clone-user.text: Geben Sie den Namen des neuen Benutzers ein
+user-management.clone-user.success: Benutzer erfolgreich geklont
+user-management.save-user.success: Benutzer erfolgreich gespeichert
+user-management.save-user.password.success: Passwort erfolgreich aktualisiert
+user-management.add-user.success: Benutzer erfolgreich hinzugefügt
+user-management.remove-user: Benutzer löschen
+user-management.remove-user.text: 'Sind Sie sicher, dass Sie den Benutzer "{{name}}" endgültig löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.'
+user-management.remove-user.success: Benutzer erfolgreich entfernt
+user-management.perspectives: Perspektiven
+user-management.roles: Rollen
+user-management.role: Rolle
+user-management.users: Benutzer
+user-management.user: Benutzer
+user-management.add-folder: Neuen Ordner hinzufügen
+user-management.add-folder.label: Geben Sie den Namen des neuen Ordners ein
+user-management.add-user: Neuen Benutzer hinzufügen
+user-management.add-user.label: Geben Sie den Namen des neuen Benutzers ein
+user-management.last-login: Letzte Anmeldung
+user-management.search.id: ID
+roles.tree.all: Alle Rollen
+roles.save-item.success: Rolle erfolgreich gespeichert
+roles.clone-item.success: Rolle erfolgreich geklont
+roles.clone-role: Rolle klonen
+roles.clone-role.text: Geben Sie den Namen der neuen Rolle ein
+roles.remove-role: Rolle löschen
+roles.remove-role.text: 'Sind Sie sicher, dass Sie die Rolle "{{name}}" endgültig löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.'
+roles.remove-folder.success: Ordner erfolgreich entfernt
+roles.remove-item.success: Rolle erfolgreich entfernt
+roles.add-item.success: Rolle erfolgreich hinzugefügt
+roles.add-folder.success: Ordner erfolgreich hinzugefügt
+roles.settings.title: Einstellungen
+roles.workspaces.title: Workspaces
+roles.add-folder: Neuen Ordner hinzufügen
+roles.add-folder.label: Geben Sie den Namen des neuen Ordners ein
+roles.add-role: Neue Rolle hinzufügen
+roles.add-role.label: Geben Sie den Namen der neuen Rolle ein
+roles.search.id: ID
+navigation.quick-access: Schnellzugriff
+navigation.data-management: Datenverwaltung
+navigation.data-model-definitions: Datenmodell Definitionen
+navigation.class-definitions: Klassen
+navigation.field-collections: Field Collections
+navigation.object-bricks: Object Bricks
+navigation.bulk-export: Massenexport
+navigation.bulk-import: Massenimport
+navigation.quantity-values: Mengenwerte
+navigation.select-options: Select Options
+navigation.experience-ecommerce: Experience & E-Commerce
+navigation.asset-management: Asset Verwaltung
+navigation.image-thumbnails: Bilder Thumbnails
+navigation.video-thumbnails: Video Thumbnails
+navigation.predefined-asset-metadata: Vordefinierte Asset-Metadaten
+navigation.automation-integration: Automatisierung & Integration
+navigation.translations: Übersetzungen
+navigation.appearance-branding: Erscheinungsbild & Branding
+navigation.reporting: Berichte
+navigation.system: System
+navigation.website-settings: Website Einstellungen
+navigation.document-types: Dokumenttypen
+navigation.clear-cache: Ganzseitigen Cache löschen
+navigation.reports: Alle Berichte
+navigation.custom-reports: Benutzerdefinierte Berichte
+navigation.perspectives: Perspektiven
+navigation.customise: Anpassen
+navigation.tag-configuration: Tag Konfiguration
+navigation.predefined-properties: Vordefinierte Eigenschaften
+navigation.user-and-roles: Benutzer & Rollen
+navigation.users: Benutzer
+navigation.power-shortcuts: Tastenkombinationen
+navigation.roles: Rollen
+navigation.open-asset: Asset öffnen
+navigation.open-document: Dokument öffnen
+navigation.open-data-object: Data Object öffnen
+navigation.notes-and-events: Notizen & Ereignisse
+navigation.search-replace-assignments: Zuweisungen suchen & ersetzen
+navigation.sidebar-title: Navigation
+navigation.name: Name
+navigation.exclude: Aus Navigation ausschließen
+navigation.advanced-settings: Erweiterte Einstellungen
+predefined-properties.new: Neu
+website-settings.new: Hinzufügen
+predefined-properties.type: Typ
+predefined-properties.name: Name
+redirects.beginner: Einsteiger
+redirects.expert: Expertenmodus
+redirects.type: Typ
+redirects.search: Suche
+redirects.source-site: Quell-Site
+redirects.source: Quelle
+redirects.target-site: Ziel-Site
+redirects.target: Ziel
+redirects.status: Status
+redirects.priority: Priorität
+redirects.regex: RegEx
+redirects.pass-through: Durchleitung
+redirects.active: Aktiv
+redirects.actions: Aktionen
+redirects.expiry: Ablaufdatum
+redirects.csv-import: CSV importieren
+redirects.csv-import-modal.redirects-import: Weiterleitungen CSV-Import
+redirects.csv-export: CSV-Export
+redirects.clean-up: Abgelaufene Weiterleitungen bereinigen
+redirects.import-drag-drop: Durchsuchen Sie Ihre Dateien oder legen Sie eine CSV-Datei direkt hier ab
+redirects.browse-files: Dateien durchsuchen
+redirects.upload: Hochladen
+redirects.beginner-modal.title: Neue Einsteiger-Weiterleitung
+redirects.beginner-modal.type: Typ
+redirects.beginner-modal.path: Pfad
+redirects.beginner-modal.target: Ziel
+redirects.beginner-modal.type.required: Bitte fügen Sie einen Typ hinzu
+redirects.beginner-modal.path.required: Bitte fügen Sie einen Pfad hinzu
+redirects.beginner-modal.target.required: Bitte fügen Sie ein Ziel hinzu
+redirects.beginner-modal.create: Erstellen
+redirects.beginner-modal.cancel: Abbrechen
+redirects.csv-import-results.title: Weiterleitungen CSV-Import Ergebnisse
+redirects.csv-import-results.total: Gesamt
+redirects.csv-import-results.created: Erstellt
+redirects.csv-import-results.updated: Aktualisiert
+redirects.csv-import-results.errored: Fehlerhaft
+redirects.csv-import-results.close: Schließen
+redirects.csv-import-results.errors-details: Fehlerdetails
+redirects.csv-import-results.line: Zeile {{line}}
+path: Pfad
+entire_uri: Gesamte URI
+path_query: Pfad und Query
+auto_create: Automatisch erstellen
+widget.redirects: Weiterleitungen
+navigation.redirects: Weiterleitungen
+perspective.default: Standard
+perspective.switching.title: Perspektive wechseln
+perspective.switching.description: Es wird zur folgenden Perspektive gewechselt
+widget.translations: Übersetzungen
+widget.notes-and-events: Notizen & Ereignisse
+widget.tag-configuration: Tag Konfiguration
+widget.predefined-properties: Vordefinierte Eigenschaften
+widget.search-replace-assignments: Zuweisungen suchen & ersetzen
+widget.document-types: Dokumenttypen
+widget.website-settings: Website Einstellungen
+widget.role-management: Rollen
+widget.user-management: Benutzer
+widget.class-definitions: Klassen
+widget.field-collections: Field Collections
+widget.object-bricks: Object Bricks
+widget.quantity-values: Mengenwerte
+widget.select-options: Select Options
+widget.appearance-branding: Erscheinungsbild & Branding
+widget.image-thumbnails: Bilder Thumbnails
+widget.video-thumbnails: Video Thumbnails
+widget.predefined-asset-metadata: Vordefinierte Asset-Metadaten
+predefined-asset-metadata.new: Neu
+predefined-asset-metadata.columns.icon: " "
+predefined-asset-metadata.columns.name: Name
+predefined-asset-metadata.columns.group: Gruppe
+predefined-asset-metadata.columns.description: Beschreibung
+predefined-asset-metadata.columns.type: Typ
+predefined-asset-metadata.columns.value: Wert
+predefined-asset-metadata.columns.config: Konfiguration
+predefined-asset-metadata.columns.language: Sprache
+predefined-asset-metadata.columns.target-type: Zieltyp
+predefined-asset-metadata.columns.actions: Aktionen
+predefined-asset-metadata.duplicate-entry.title: Vordefinierte Metadaten existieren bereits
+predefined-asset-metadata.duplicate-entry.error: Ein Eintrag mit dieser Kombination aus Name und Sprache existiert bereits. Bitte ändern Sie einen der folgenden Werte.
+appearance-branding.title: Erscheinungsbild & Branding
+image-thumbnails.title: Bilder Thumbnails
+image-thumbnails.description: Verwalten und konfigurieren Sie die Vorschaubild-Einstellungen für Ihre Assets.
+image-thumbnails.search.placeholder: Vorschaubilder suchen...
+image-thumbnails.tree.empty: Keine Vorschaubilder gefunden
+image-thumbnails.configuration.title: Konfiguration
+image-thumbnails.configuration.description: Vorschaubild-Einstellungen konfigurieren
+image-thumbnails.preview.title: Vorschau
+image-thumbnails.preview.description: Vorschaubild-Konfiguration ansehen
+image-thumbnails.editor.empty.title: Vorschaubild auswählen
+image-thumbnails.editor.empty.description: Wählen Sie ein Vorschaubild aus dem Baum, um dessen Konfiguration anzuzeigen oder zu bearbeiten
+image-thumbnails.editor.select-thumbnail: Wählen Sie eine Vorschaubild-Konfiguration zum Bearbeiten
+image-thumbnails.editor.general-settings: Allgemeine Einstellungen
+image-thumbnails.editor.name: Name
+image-thumbnails.editor.name-required: Name ist erforderlich
+image-thumbnails.editor.description: Beschreibung
+image-thumbnails.editor.description-placeholder: Vorschaubild-Beschreibung eingeben...
+image-thumbnails.editor.group: Gruppe
+image-thumbnails.editor.group-required: Gruppe ist erforderlich
+image-thumbnails.editor.group-placeholder: Gruppe auswählen...
+image-thumbnails.editor.no-group: Keine Gruppe
+image-thumbnails.editor.format: Format
+image-thumbnails.editor.format-required: Format ist erforderlich
+image-thumbnails.editor.format-placeholder: Format auswählen...
+image-thumbnails.editor.format-auto: Auto (Web-optimiert - empfohlen)
+image-thumbnails.delete.confirm: Möchten Sie das Vorschaubild wirklich löschen
+image-thumbnails.add.content: Geben Sie den Namen des neuen Vorschaubilds ein (a-zA-Z0-9_-)
+image-thumbnails.add.validation.message: Der Vorschaubild-Name ist ungültig
+image-thumbnails.editor.advanced: Erweitert
+image-thumbnails.editor.quality: Qualität
+image-thumbnails.editor.quality.tooltip: JPEG-Qualitätseinstellung (1-100)
+image-thumbnails.editor.high-resolution: Hohe Auflösung
+image-thumbnails.editor.high-resolution.tooltip: Hochauflösungsfaktor für Retina-Displays
+image-thumbnails.editor.preserve-color: Farbe beibehalten
+image-thumbnails.editor.preserve-color.tooltip: "Farbe beibehalten (Profil, Farbraum) (Imagick, ORIGINAL)\n('Metadaten beibehalten' und 'Farbe beibehalten' funktioniert nur bei Transformationen ohne Kompositionen (Rahmen, Hintergrundfarbe, ...) und Farbänderungen (Graustufen, Sepia, ...))"
+image-thumbnails.editor.force-process-icc: ICC-Profile zwingend verarbeiten
+image-thumbnails.editor.force-process-icc.tooltip: ICC-Profile zwingend verarbeiten (Imagick, ORIGINAL)
+image-thumbnails.editor.preserve-metadata: Metadaten beibehalten
+image-thumbnails.editor.preserve-metadata.tooltip: "Metadaten beibehalten (nicht entfernen) (Imagick, ORIGINAL)\n('Metadaten beibehalten' und 'Farbe beibehalten' funktioniert nur bei Transformationen ohne Kompositionen (Rahmen, Hintergrundfarbe, ...) und Farbänderungen (Graustufen, Sepia, ...))"
+image-thumbnails.editor.rasterize-svg: SVGs rastern
+image-thumbnails.editor.rasterize-svg.tooltip: "SVGs rastern (Imagick)\n(SVGs werden automatisch gerastert, wenn eine andere Transformation als Größenänderung oder Skalierung nach Breite/Höhe verwendet wird.)"
+image-thumbnails.editor.use-cropbox: Cropbox verwenden
+image-thumbnails.editor.use-cropbox.tooltip: "Cropbox verwenden (Ghostscript)\n(Setzt die Seitengröße auf die CropBox statt auf die MediaBox, nützlich um einige Ränder und nicht-inhaltliche Bereiche auszuschließen.)"
+image-thumbnails.editor.downloadable: Herunterladbar
+image-thumbnails.editor.downloadable.tooltip: Als Option im Download-Bereich der Bilddetailansicht auflisten
+image-thumbnails.editor.preserve-animation: Animation beibehalten
+image-thumbnails.editor.preserve-animation.tooltip: "Animationen für GIF beibehalten (Imagick)\n(Unterstützte Transformationen sind: Frame, Cover, Contain, Resize, ScaleByWidth, ScaleByHeight)"
+image-thumbnails.editor.media-queries: Media Queries
+image-thumbnails.editor.media-queries.new: Neu
+image-thumbnails.editor.media-queries.default: Standard
+image-thumbnails.editor.media-queries.empty: "Keine Media Queries definiert. Klicken Sie auf 'Neu', um eine CSS-Media-Query hinzuzufügen."
+image-thumbnails.editor.media-query.modal.title: Neue Media Query
+image-thumbnails.editor.media-query.modal.label: Geben Sie eine gültige CSS-Media-Query ein
+image-thumbnails.editor.media-queries.add.title: Neue Media Query
+image-thumbnails.editor.media-queries.add.label: Geben Sie eine gültige CSS-Media-Query ein
+image-thumbnails.editor.media-query.modal.placeholder: "(min-width: 576px)"
+image-thumbnails.editor.transformations: Transformationen
+image-thumbnails.editor.transformations.resize: Größe ändern
+image-thumbnails.editor.transformations.scale-by-height: Nach Höhe skalieren
+image-thumbnails.editor.transformations.trim: Zuschneiden
+image-thumbnails.editor.transformations.effects: Effekte
+image-thumbnails.editor.transformations.effects.sepia: Sepia
+image-thumbnails.editor.transformations.effects.grayscale: Graustufen
+image-thumbnails.editor.transformations.effects.sharpen: Schärfen
+image-thumbnails.editor.transformations.empty: "Keine Transformationen definiert. Verwenden Sie die Schaltfläche 'Transformationen', um Bildtransformationen hinzuzufügen."
+image-thumbnails.editor.save-error: Vorschaubild-Konfiguration konnte nicht gespeichert werden
+
+# Transformation Groups
+image-thumbnails.transformations.groups.main: Transformationen
+image-thumbnails.transformations.groups.effects: Effekte
+
+# Media Query Translations
+image-thumbnails.media-queries.add-transformation: Transformation hinzufügen
+
+# Cover Transformation
+image-thumbnails.transformations.cover.title: Cover konfigurieren
+image-thumbnails.transformations.cover.width-height: Breite, Höhe
+image-thumbnails.transformations.cover.width: Breite
+image-thumbnails.transformations.cover.height: Höhe
+image-thumbnails.transformations.cover.focal-point-info: Das Bild wird automatisch basierend auf dem im Quellbild gesetzten Fokuspunkt zugeschnitten. Wenn kein Fokuspunkt vorhanden ist, wird die unten stehende Standard-Positionierung verwendet.
+image-thumbnails.transformations.cover.positioning: Standard-Positionierung
+image-thumbnails.transformations.cover.positioning-center: Mitte
+image-thumbnails.transformations.cover.positioning-topleft: Oben Links
+image-thumbnails.transformations.cover.positioning-topright: Oben Rechts
+image-thumbnails.transformations.cover.positioning-bottomleft: Unten Links
+image-thumbnails.transformations.cover.positioning-bottomright: Unten Rechts
+image-thumbnails.transformations.cover.force-resize: Größenänderung erzwingen
+
+# Add Overlay Transformation
+image-thumbnails.transformations.add-overlay.overlay-image: Überlagerungsbild
+image-thumbnails.transformations.add-overlay.x: X-Position
+image-thumbnails.transformations.add-overlay.y: Y-Position
+image-thumbnails.transformations.add-overlay.origin: Ursprung
+image-thumbnails.transformations.add-overlay.origin-top-left: Oben Links
+image-thumbnails.transformations.add-overlay.origin-top-right: Oben Rechts
+image-thumbnails.transformations.add-overlay.origin-center: Mitte
+image-thumbnails.transformations.add-overlay.origin-bottom-left: Unten Links
+image-thumbnails.transformations.add-overlay.origin-bottom-right: Unten Rechts
+image-thumbnails.transformations.add-overlay.alpha: Deckkraft
+image-thumbnails.transformations.add-overlay.composite: Komposition
+
+# Gaussian Blur Transformation
+image-thumbnails.transformations.gaussian-blur.radius: Radius
+image-thumbnails.transformations.gaussian-blur.sigma: Sigma
+
+# Scale by Width Transformation
+image-thumbnails.transformations.scale-by-width.title: Nach Breite skalieren konfigurieren
+image-thumbnails.transformations.scale-by-width.width: Breite
+image-thumbnails.transformations.scale-by-width.force-resize: Größenänderung erzwingen
+
+# Resize Transformation
+image-thumbnails.transformations.resize.config-title: Größenänderung konfigurieren
+image-thumbnails.transformations.resize.width: Breite
+image-thumbnails.transformations.resize.height: Höhe
+
+# Scale by Height Transformation
+image-thumbnails.transformations.scale-by-height.config-title: Nach Höhe skalieren konfigurieren
+image-thumbnails.transformations.scale-by-height.height: Höhe
+image-thumbnails.transformations.scale-by-height.height-placeholder: Höhe in Pixel eingeben
+image-thumbnails.transformations.scale-by-height.force-resize: Größenänderung erzwingen
+
+# Trim Transformation
+image-thumbnails.transformations.trim.config-title: Zuschneiden konfigurieren
+image-thumbnails.transformations.trim.trim-option: Zuschneideoption
+image-thumbnails.transformations.trim.trim-option-placeholder: Zuschneideoption auswählen
+image-thumbnails.transformations.trim.disabled: Deaktiviert
+image-thumbnails.transformations.trim.left: Links
+image-thumbnails.transformations.trim.right: Rechts
+image-thumbnails.transformations.trim.both: Beide
+
+# Effects Transformation
+image-thumbnails.transformations.effects.config-title: Effekt konfigurieren
+image-thumbnails.transformations.effects.effect-type: Effekttyp
+image-thumbnails.transformations.effects.effect-type-placeholder: Effekttyp auswählen
+image-thumbnails.transformations.effects.sepia: Sepia
+image-thumbnails.transformations.effects.grayscale: Graustufen
+image-thumbnails.transformations.effects.sharpen: Schärfen
+image-thumbnails.transformations.effects.intensity: Intensität
+
+# Transformation tool strip
+image-thumbnails.transformations.add: Transformation hinzufügen
+image-thumbnails.transformations.move-up: Nach oben
+image-thumbnails.transformations.move-down: Nach unten
+image-thumbnails.transformations.remove: Entfernen
+
+# Unknown/Fallback Transformation
+image-thumbnails.transformations.unknown-type: "Unbekannter Transformationstyp: {{type}}"
+image-thumbnails.transformations.no-configuration-required: Keine Konfiguration erforderlich
+
+video-thumbnails.title: Video Thumbnails
+video-thumbnails.description: Verwalten und konfigurieren Sie die Video-Vorschaubild-Einstellungen für Ihre Assets.
+video-thumbnails.search.placeholder: Vorschaubilder suchen...
+video-thumbnails.tree.empty: Keine Vorschaubilder gefunden
+video-thumbnails.editor.select-thumbnail: Wählen Sie eine Video-Vorschaubild-Konfiguration zum Bearbeiten
+video-thumbnails.editor.name: Name
+video-thumbnails.editor.name-required: Name ist erforderlich
+video-thumbnails.editor.description: Beschreibung
+video-thumbnails.editor.group: Gruppe
+video-thumbnails.editor.no-group: Keine Gruppe
+video-thumbnails.editor.presetting: Voreinstellung auswählen
+video-thumbnails.editor.video-bitrate: Video-Bitrate
+video-thumbnails.editor.audio-bitrate: Audio-Bitrate
+video-thumbnails.editor.transformations: Transformationen
+video-thumbnails.editor.media-segments: Mediensegmente
+video-thumbnails.editor.media-segments.new: Neu
+video-thumbnails.editor.media-segments.empty: "Keine Mediensegmente definiert. Klicken Sie auf 'Neu', um ein Segment hinzuzufügen (z.B. 500K)."
+video-thumbnails.editor.media-segments.add.title: Neues Mediensegment
+video-thumbnails.editor.media-segments.add.label: Geben Sie einen Segmentnamen ein (z.B. 500K)
+video-thumbnails.editor.media-segments.add.bitrate-hint: Bitte geben Sie eine gültige Bitrate ein (z.B. 400k, 1500k, 1M)
+video-thumbnails.editor.media-segments.add.ok: Erstellen
+video-thumbnails.editor.media-segments.default: Standard
+video-thumbnails.editor.transformations.empty: Keine Transformationen ausgewählt
+video-thumbnails.delete.confirm: Möchten Sie das Vorschaubild wirklich löschen
+video-thumbnails.add.content: Geben Sie den Namen des neuen Vorschaubilds ein (a-zA-Z0-9_-)
+video-thumbnails.add.validation.message: Der Vorschaubild-Name ist ungültig
+
+# Video Transformation tool strip
+video-thumbnails.transformations.move-up: Nach oben
+video-thumbnails.transformations.move-down: Nach unten
+video-thumbnails.transformations.remove: Entfernen
+
+# Resize Transformation
+video-thumbnails.transformations.resize.config-title: Größenänderung konfigurieren
+video-thumbnails.transformations.resize.width: Breite
+video-thumbnails.transformations.resize.width-placeholder: Breite in Pixel eingeben
+video-thumbnails.transformations.resize.height: Höhe
+video-thumbnails.transformations.resize.height-placeholder: Höhe in Pixel eingeben
+video-thumbnails.transformations.resize.even-number-hint: Breite und Höhe müssen eine gerade Zahl sein
+
+# Scale by Width Transformation
+video-thumbnails.transformations.scale-by-width.config-title: Nach Breite skalieren konfigurieren
+video-thumbnails.transformations.scale-by-width.width: Breite
+video-thumbnails.transformations.scale-by-width.width-placeholder: Breite in Pixel eingeben
+
+# Scale by Height Transformation
+video-thumbnails.transformations.scale-by-height.config-title: Nach Höhe skalieren konfigurieren
+video-thumbnails.transformations.scale-by-height.height: Höhe
+video-thumbnails.transformations.scale-by-height.height-placeholder: Höhe in Pixel eingeben
+
+# Cut Transformation
+video-thumbnails.transformations.cut.config-title: Schnitt konfigurieren
+video-thumbnails.transformations.cut.start: Start
+video-thumbnails.transformations.cut.start-placeholder: "00:00:00.000"
+video-thumbnails.transformations.cut.duration: Dauer
+video-thumbnails.transformations.cut.duration-placeholder: "00:00:10.000"
+
+# Set Framerate Transformation
+video-thumbnails.transformations.set-framerate.config-title: Bildrate konfigurieren
+video-thumbnails.transformations.set-framerate.fps: FPS
+video-thumbnails.transformations.set-framerate.fps-placeholder: "25"
+
+# Color Channel Mixer Transformation
+video-thumbnails.transformations.color-channel-mixer.config-title: Farbkanalmischer konfigurieren
+video-thumbnails.transformations.color-channel-mixer.effect: Effekt
+video-thumbnails.transformations.color-channel-mixer.effect-placeholder: Effekt auswählen
+video-thumbnails.transformations.color-channel-mixer.grayscale: Graustufen
+video-thumbnails.transformations.color-channel-mixer.sepia: Sepia
+video-thumbnails.transformations.color-channel-mixer.cold: Kalt
+
+# Mute Transformation
+video-thumbnails.transformations.mute.config-title: Stummschalten
+video-thumbnails.transformations.no-configuration-required: Keine Konfiguration erforderlich
+
+appearance-branding.color.title: Farbe
+appearance-branding.color.brand-color.label: Markenfarbe
+appearance-branding.color.brand-color.description: Wird auf den Abonnementstatus-Indikator und den Standard-Benutzer-Avatar angewendet.
+appearance-branding.color.background-shade.label: Hintergrundton
+appearance-branding.color.background-shade.description: Wird mit verringerter Deckkraft auf den Canvas-Hintergrund angewendet, um einen nahtlosen Übergang zu erzielen.
+appearance-branding.custom-logo.title: Benutzerdefiniertes Logo
+appearance-branding.custom-logo.description: Wird beim Login und im Canvas-Hintergrund verwendet
+appearance-branding.custom-login-background.title: Benutzerdefiniertes Login-Hintergrundbild
+appearance-branding.custom-login-background.description: Wird auf dem Login-Bildschirm als Hintergrundbild verwendet
+appearance-branding.update.success: Erscheinungsbild-Einstellungen erfolgreich aktualisiert
+search-replace-assignments.search-for: Suchen nach
+search-replace-assignments.replace-with: Ersetzen durch
+search-replace-assignments.select-element: Zielelement auswählen
+search-replace-assignments.search: Verwendungen suchen
+search-replace-assignments.apply-to-all: Ersetzung auf alle anwenden
+search-replace-assignments.apply-to-selection: Ersetzung auf Auswahl anwenden
+search-replace-assignments.confirm.title: Ersetzung bestätigen
+search-replace-assignments.confirm.description: Das Wiederherstellen ersetzter Zuweisungen kann ein zeitaufwändiger Prozess sein. Sind Sie sicher, dass Sie die Ersetzung auf alle anwenden möchten?
+search-replace-assignments.columns.id: ID
+search-replace-assignments.columns.type: Typ
+search-replace-assignments.columns.path: Pfad
+search-replace-assignments.job.title-all: Alle Zuweisungen ersetzen
+search-replace-assignments.job.title-selection: "{{count}} Zuweisung(en) ersetzen"
+hidden-dependencies-warning: Es gibt zusätzliche Abhängigkeiten, für die Ihr Benutzer keine Berechtigung hat, sie zu sehen.
+external-image.preview-placeholder: Externes Bild hinzufügen
+empty-image: Leeres Bild
+image.dnd-target: Bild hier ablegen
+image.add.and.dnd: Bild hinzufügen oder direkt hier ablegen
+image.upload.add.and.dnd: Hochladen, hinzufügen oder Bild direkt hier ablegen
+fallback: Fallback
+url-slug.add-site: Site hinzufügen
+url-slug.invalid: Bitte geben Sie einen gültigen URL-Slug ein (beginnend mit '/')
+site-id: Site-ID
+deleted: gelöscht
+collection.empty: Noch keine verfügbaren Felder. Beginnen Sie mit dem Hinzufügen eines Feldes.
+field-collection.add.default: Collection hinzufügen
+video.type: Videotyp
+video.type.asset: Asset
+video.type.youtube: YouTube
+video.type.vimeo: Vimeo
+video.type.dailymotion: Dailymotion
+video.id: Video-ID
+video.url: Video-URL
+video.settings: Video-Einstellungen
+video.poster: Poster-Bild
+video.path: Pfad
+video.dnd-target: Video hier ablegen
+pdf-editable.dnd-target: Dokument-Asset hier ablegen
+many-to-one-relation.drop-placeholder: Element hier ablegen
+many-to-one-relation.drop-placeholder-text-input: Element hier ablegen oder Wert eingeben
+reverse-object-relation.owner-hint: Das aktuelle Objekt ist nicht der Eigentümer dieser Relationen, Änderungen hier können das Speichern des Objekts verlangsamen.
+reverse-object-relation.owner-class: Eigentümerklasse
+reverse-object-relation.owner-field: Eigentümerfeld
+link.not-set: nicht gesetzt
+link.edit-title: Link bearbeiten
+link.tab.basic: Basis
+link.tab.advanced: Erweitert
+link.text: Text
+link.path: Pfad
+link.properties: Eigenschaften
+link.target: Ziel
+link.parameters: Parameter
+link.anchor: Anker
+link.title: Titel
+link.accesskey: Zugriffstaste
+link.rel: Relation
+link.tabindex: Tabindex
+link.class: Klasse
+link.attributes: Attribute
+crop: Zuschnitt
+crop.remove: Zuschnitt entfernen
+hotspots-markers-modal.edit-button: Daten hinzufügen & bearbeiten
+hotspots-markers-data-modal.title: Daten hinzufügen & bearbeiten
+hotspots-markers-data-modal.new-data: Neu
+hotspots-markers-data-modal.apply: Übernehmen
+hotspots-markers-data-modal.name: Name
+hotspots-markers-data-modal.data: Daten
+hotspots-markers-data-modal.data-type.name: Name
+hotspots-markers-data-modal.data-type.value: Wert
+hotspots-markers-data-modal.data-type.text-field: Textfeld
+hotspots-markers-data-modal.data-type.text-area: Textbereich
+hotspots-markers-data-modal.data-type.checkbox: Kontrollkästchen
+hotspots-markers-data-modal.data-type.object: Objekt
+hotspots-markers-data-modal.data-type.document: Dokument
+hotspots-markers-data-modal.data-type.asset: Asset
+hotspots.edit: Marker und Hotspots bearbeiten
+hotspots.show: Marker und Hotspots anzeigen
+hotspots.new-marker: Neuer Marker
+hotspots.new-hotspot: Neuer Hotspot
+hotspots.clear-data: Alle Hotspots und Marker löschen
+hotspots.clear-data.dnd-message: Dieses Bild enthält zusätzliche Daten wie Marker oder Hotspots. Möchten Sie diese ebenfalls löschen?
+hotspots.data-cleared: Hotspot- und Marker-Daten gelöscht
+hotspots.has-hotspots-or-marker: Hotspots oder Marker wurden zu diesem Element hinzugefügt
+classification-store.collection: Collection
+classification-store.group: Gruppe
+classification-store.group-by-key: Nach Schlüssel gruppieren
+classification-store.column.id: ID
+classification-store.column.group: Gruppe
+classification-store.column.name: Name
+classification-store.column.description: Beschreibung
+navigation.classification-store: Classification Store
+widget.classification-store-config: Classification Store
+classification-store.tabs.collections: Collections
+classification-store.tabs.groups: Gruppen
+classification-store.tabs.keys: Schlüssel
+classification-store.add-store: Store hinzufügen
+classification-store.rename-store: Store umbenennen
+classification-store.delete-store: "Store \"{{storeName}}\" löschen?"
+classification-store.add-group: Gruppe hinzufügen
+classification-store.rename-group: Gruppe umbenennen
+classification-store.delete-group: "Gruppe \"{{groupName}}\" löschen?"
+classification-store.add-collection: Collection hinzufügen
+classification-store.rename-collection: Collection umbenennen
+classification-store.delete-collection: "Collection \"{{collectionName}}\" löschen?"
+classification-store.add-key: Schlüssel hinzufügen
+classification-store.rename-key: Schlüssel umbenennen
+classification-store.delete-key: "Schlüssel \"{{keyName}}\" löschen?"
+classification-store.delete-key-relation: "Schlüssel \"{{keyName}}\" aus dieser Gruppe entfernen?"
+classification-store.delete-group-relation: "Gruppe \"{{groupName}}\" aus dieser Collection entfernen?"
+classification-store.edit-definition: Definition bearbeiten
+classification-store.edit-key-definition: "Schlüsseldefinition bearbeiten: {{keyName}}"
+classification-store.columns.id: ID
+classification-store.columns.name: Name
+classification-store.columns.title: Titel
+classification-store.columns.type: Typ
+classification-store.columns.description: Beschreibung
+classification-store.columns.actions: Aktionen
+classification-store.columns.mandatory: Pflichtfeld
+classification-store.columns.sorter: Sortierung
+classification-store.columns.enabled: Aktiviert
+classification-store.relations-title: "Schlüssel in Gruppe: {{name}}"
+classification-store.select-group-hint: Wählen Sie eine Gruppe, um deren Schlüssel anzuzeigen
+classification-store.collection-relations-title: "Gruppen in Collection: {{name}}"
+classification-store.select-collection-hint: Wählen Sie eine Collection, um deren Gruppen anzuzeigen
+classification-store.select-key: Schlüssel auswählen
+classification-store.search-keys: Schlüssel suchen…
+classification-store.select-group: Gruppe auswählen
+classification-store.search-groups: Gruppen suchen…
+home: Startseite
+preview.label: Vorschau
+preview.desktop: Desktop
+preview.tablet: Tablet
+preview.phone-vertical: Hochformat Telefon
+preview.phone-horizontal: Querformat Telefon
+preview.select_date_time: Datum & Uhrzeit auswählen
+preview.screen_size_too_small: Der verfügbare Platz ist zu klein, um den ausgewählten Vorschaumodus anzuzeigen.
+inheritance-active: "Daten geerbt von Objekt-ID {{id}}"
+inheritance-broken: Datenvererbung unterbrochen
+main: Haupt
+main_admin: Haupt (Admin-Modus)
+draft-alert: Die aktuelle Version ist ein Entwurf. Sie können den Entwurf löschen, um die vorherige Version wiederherzustellen.
+draft-alert-auto-save: Die aktuelle Version ist ein automatisch gespeicherter Entwurf. Sie können den Entwurf löschen, um die vorherige Version wiederherzustellen.
+delete-draft: Entwurf löschen
+delete-draft-auto-save: Automatisch gespeicherten Entwurf löschen
+delete-draft-confirmation: Sind Sie sicher, dass Sie den Entwurf löschen möchten?
+auto-save.tooltip: Diese Version wurde automatisch gespeichert.
+auto-save.loading-tooltip: Automatisches Speichern läuft
+detached-tab.draft-tooltip: Die aktuelle Version ist ein Entwurf.
+detached-tab.draft-tooltip-addon: Sie können im zugehörigen Element/Objekt-Haupt-Tab veröffentlichen.
+details: Details
+element: Element
+entries: Einträge
+entry: Eintrag
+error_element_validation_failed: Validierung fehlgeschlagen
+element.delete.deleting-folder: Ordner wird gelöscht
+component.pagination.showing-items: "{{total}} werden angezeigt"
+edit-modal.inline-edit: Inline-Bearbeitung
+edit-modal.apply-changes: Änderungen übernehmen
+edit-modal.discard: Verwerfen
+preview-not-available: Vorschau nicht verfügbar
+user-menu.notifications: Benachrichtigungen
+user-menu.my-profile: Mein Profil
+user-menu.log-out: Abmelden
+user-menu.title: Profil
+user-menu.notification.send: Senden
+user-menu.notification.attachments: Anhänge
+user-menu.notification.type-not-supported: Anhangstyp nicht unterstützt
+user-menu.notification.cancel: Abbrechen
+user-menu.notification.modal.send-a-notification: Benachrichtigung senden
+user-menu.notification.modal.success-notification-has-been-sent: Erfolgreich - Benachrichtigung wurde gesendet
+user-menu.notification.modal.to: An
+user-menu.notification.modal.select: Auswählen
+user-menu.notification.modal.title: Titel
+user-menu.notification.modal.message: Nachricht
+user-menu.notification.modal.add-an-attachment: Anhang hinzufügen
+user-menu.notification.modal.form.validation.provide-recipient: Bitte geben Sie einen Empfänger an
+user-menu.notification.modal.form.validation.provide-title: Bitte geben Sie einen Titel an
+user-menu.notification.modal.form.validation.provide-message: Bitte geben Sie eine Nachricht an
+reports.reports-title: Berichte
+reports.select-report-name: Wählen Sie den Namen des Berichts
+reports.select-report: Bericht auswählen
+reports.export: Export
+reports.csv-export: CSV-Export
+reports.csv-export-with-headers: CSV-Export mit Kopfzeilen
+reports.show-all-labels: Alle Bezeichnungen anzeigen
+reports.show-fewer-labels: Weniger Bezeichnungen anzeigen
+reports.grid-config.title-columns: Spalten
+reports.grid-config.restore-to-default: Auf Standard zurücksetzen
+reports.grid-config.add-column: Spalte hinzufügen
+reports.field-filters: Feldfilter
+reports.editor.delete.content: Möchten Sie den benutzerdefinierten Bericht "{{reportName}}" wirklich löschen?
+reports.editor.clone.content: Geben Sie den Namen des neuen Eintrags ein (a-zA-Z-_)
+reports.editor.add.content: Geben Sie den Namen des neuen Eintrags ein. Der Name muss alphanumerisch und mindestens 3 Zeichen lang sein (a-zA-Z0-9_-)
+reports.editor.content.validation.message: Der Name des benutzerdefinierten Berichts ist ungültig
+reports.editor.general-settings.title: Allgemeine Einstellungen
+reports.editor.general-settings.name-label: Name
+reports.editor.general-settings.display-name-label: Anzeigename
+reports.editor.general-settings.icon-class-label: Icon Klasse
+reports.editor.general-settings.group-label: Bestehende Gruppe benennen oder neue Gruppe erstellen
+reports.editor.general-settings.group-tooltip: Sie müssen exakt denselben Namen wie das bestehende Menü-Label verwenden. Wenn der Name anders oder neu ist, wird eine neue Gruppe erstellt.
+reports.editor.general-settings.report-class-label: Bericht Klasse
+reports.editor.general-settings.group-icon-class-label: Gruppen-Icon Klasse
+reports.editor.general-settings.shortcut-menu-label: Verknüpfung im Menü erstellen
+reports.editor.source-definition.title: Quelldefinition
+reports.editor.source-definition.no-content: Noch keine verfügbaren Felder. Beginnen Sie mit dem Hinzufügen eines Feldes.
+reports.editor.source-definition.select-source-definition: Quelldefinition auswählen
+reports.editor.source-definition.sql-select-field: SELECT (z.B. a,b,c)*
+reports.editor.source-definition.sql-from-field: FROM (z.B. d INNER JOIN e ON c.a = e.b)*
+reports.editor.source-definition.sql-where-field: WHERE (z.B. c = 'some_value')
+reports.editor.source-definition.sql-group-by-field: GROUP BY (z.B. b, c)
+reports.editor.source-definition.sql-initial-field-order: Initiale Sortierung nach Feld (z.B. b, c)
+reports.editor.source-definition.sql-initial-direction-order: Initiale Sortierrichtung
+reports.editor.manage-column-configuration.title: Spaltenkonfiguration verwalten & teilen
+reports.editor.manage-column-configuration.name: Name
+reports.editor.manage-column-configuration.display: Anzeige
+reports.editor.manage-column-configuration.export: Export
+reports.editor.manage-column-configuration.order: Reihenfolge
+reports.editor.manage-column-configuration.filter-type: Filtertyp
+reports.editor.manage-column-configuration.filter-type.empty: Leer
+reports.editor.manage-column-configuration.filter-type.text: Text
+reports.editor.manage-column-configuration.filter-type.number: Zahl
+reports.editor.manage-column-configuration.filter-type.date: Datum
+reports.editor.manage-column-configuration.filter-type.bool: Bool
+reports.editor.manage-column-configuration.display-type: Anzeigetyp
+reports.editor.manage-column-configuration.display-type.none: Keine
+reports.editor.manage-column-configuration.display-type.text: Text
+reports.editor.manage-column-configuration.display-type.date: Datum
+reports.editor.manage-column-configuration.display-type.hide: Ausblenden
+reports.editor.manage-column-configuration.filter-drilldown: Filter-Drilldown
+reports.editor.manage-column-configuration.filter-drilldown.empty: Leer
+reports.editor.manage-column-configuration.filter-drilldown.only-filter: Nur Filter
+reports.editor.manage-column-configuration.filter-drilldown.filter-and-show: Filtern und anzeigen
+reports.editor.manage-column-configuration.width: Breite
+reports.editor.manage-column-configuration.label: Bezeichnung
+reports.editor.manage-column-configuration.action: Aktion
+reports.editor.manage-column-configuration.action.none: Keine
+reports.editor.manage-column-configuration.action.open-document: Dokument öffnen
+reports.editor.manage-column-configuration.action.open-asset: Asset öffnen
+reports.editor.manage-column-configuration.action.open-object: Objekt öffnen
+reports.editor.manage-column-configuration.action.open-url: URL öffnen
+reports.editor.chart-settings.title: Diagrammeinstellungen
+reports.editor.chart-settings.chart-type: Diagrammtyp
+reports.editor.chart-settings.chart-type.none: Keine
+reports.editor.chart-settings.chart-type.pie-chart: Kreisdiagramm
+reports.editor.chart-settings.chart-type.line-chart: Liniendiagramm
+reports.editor.chart-settings.chart-type.bar-chart: Balkendiagramm
+reports.editor.chart-settings.settings: Einstellungen
+reports.editor.chart-settings.pie-label: Bezeichnungsspalte
+reports.editor.chart-settings.pie-data: Datenspalte
+reports.editor.chart-settings.x-axis: X-Achse
+reports.editor.chart-settings.y-axis: Y-Achse
+reports.editor.permissions.title: Berechtigungen
+loading: Laden...
+please-wait: Bitte warten...
+navigation.email: E-Mail
+navigation.email-blocklist: E-Mail Sperrliste
+widget.email-blocklist: E-Mail Sperrliste
+email-blocklist.new: Neu
+email-blocklist.add.validation: Bitte geben Sie eine gültige E-Mail-Adresse ein
+email-blocklist.add.label: E-Mail-Adresse hinzufügen
+email-blocklist.add.email-address.label: E-Mail-Adresse
+email-blocklist.add.email.success: E-Mail-Adresse wurde erfolgreich hinzugefügt
+aria.email-blocklist.remove.email: E-Mail-Adresse entfernen
+navigation.email-log: Gesendete E-Mails
+widget.email-log: Gesendete E-Mails
+widget.email-log.from: Von
+widget.email-log.to: An
+widget.email-log.cc: CC
+widget.email-log.bcc: BCC
+widget.email-log.tab.text: Text
+widget.email-log.tab.html: HTML
+widget.email-log.tab.parameters: Parameter
+widget.email-log.grid.name: Name
+widget.email-log.grid.value: Wert
+email-log.subject: Betreff
+email-log.tooltip.resend: E-Mail erneut senden
+email-log.tooltip.forward: E-Mail weiterleiten
+email-log.tooltip.delete: E-Mail löschen
+email-log.resend.email.success: E-Mail wurde erfolgreich erneut gesendet
+email-log.resend.confirmation.title: E-Mail erneut senden
+email-log.resend.confirmation.text: Bitte bestätigen Sie, dass Sie die E-Mail erneut an alle Empfänger senden möchten.
+email-log.resend.confirmation.ok: E-Mail erneut senden
+email-log.forward.email.success: E-Mail wurde erfolgreich weitergeleitet
+email-log.forward.label: E-Mail weiterleiten
+email-log.send.label: Senden
+email-log.forward.email-address.label: E-Mail-Adresse
+email-log.delete.email.success: E-Mail wurde erfolgreich gelöscht
+email-log.html.preview: HTML-Vorschau
+aria.email-log.html.preview: HTML-Vorschau
+user-profile.label: Mein Profil
+user-profile.general: Allgemeine Daten
+user-profile.change-password: Passwort ändern
+user-profile.password-old: Altes Passwort
+user-profile.password-new: Neues Passwort
+user-profile.password-repeat: Passwort wiederholen
+user-profile.password-repeat-error: Passwörter stimmen nicht überein
+creatable-select.add-custom-option: Benutzerdefinierte Option hinzufügen
+creatable-select.add: Hinzufügen
+creatable-select.option-already-exists: Option existiert bereits
+creatable-select.invalid-option: Ungültige Option
+drag-snippet-here: Snippet hierher ziehen
+drop-snippet-here: Snippet hier ablegen
+drop-document-here: Dokument hier ablegen
+drop-document-asset-here: Dokument-Asset hier ablegen
+drop-asset-here: Asset hier ablegen
+drop-object-here: Objekt hier ablegen
+drop-element-here: Element hier ablegen
+error-loading-renderlet: Fehler beim Laden des Renderlets
+snippet: Snippet
+navigation.application-logger: Application Logger
+widget.application-logger: Application Logger
+application-logger.label: Application Logger
+application-logger.columns.timestamp: Zeitstempel
+application-logger.columns.pid: PID
+application-logger.columns.message: Nachricht
+application-logger.columns.file-object: Dateiobjekt
+application-logger.columns.related-object: Verknüpftes Objekt
+application-logger.columns.component: Komponente
+application-logger.columns.source: Quelle
+application-logger.columns.details: Details
+application-logger.columns.type: Typ
+application-logger.sidebar.search-parameter: Suchparameter
+application-logger.detail-modal.title: Detailinformationen
+application-logger.filter.date-from: Von
+application-logger.filter.date-to: Bis
+application-logger.filter.priority: Typ
+application-logger.filter.component: Komponente
+application-logger.filter.related-object-id: Verknüpfte Objekt-ID
+application-logger.filter.message: Nachricht
+application-logger.filter.pid: PID
+application-logger.refresh-interval: Aktualisierungsintervall
+application-logger.refresh-interval.select: Aktualisierungsfrequenz auswählen
+application-logger.refresh-interval.seconds: "{{seconds}} Sekunden"
+application-logger.filter.priority-level.1: Notfall
+application-logger.filter.priority-level.2: Alarm
+application-logger.filter.priority-level.3: Kritisch
+application-logger.filter.priority-level.4: Fehler
+application-logger.filter.priority-level.5: Warnung
+application-logger.filter.priority-level.6: Hinweis
+application-logger.filter.priority-level.7: Info
+application-logger.filter.priority-level.8: Debug
+embed.url-modal.title: Embed-URL bearbeiten
+embed.url-modal.label: URL (z.B. https://www.youtube.com/watch?v=nPntDiARQYw)
+embed.url-modal.required-message: Bitte geben Sie eine gültige URL ein
+embed.url-modal.ok-text: OK
+embed.url-modal.cancel-text: Abbrechen
+embed.placeholder: Keine URL gesetzt - Klicken, um eine Embed-URL hinzuzufügen
+embed.add-url: URL hinzufügen
+embed.edit-url: URL bearbeiten
+embed.clear: Leeren
+embed.loading: Laden...
+embed.iframe-title: Eingebetteter Inhalt
+invalid-iframe: Die eingegebene Iframe-URL ist ungültig
+document.open-in-new-window: In neuem Fenster öffnen
+document.open-preview-in-new-window: Vorschau in neuem Fenster öffnen
+document.translation.title: Übersetzung
+document.translation.open-translation: Übersetzung öffnen
+document.translation.link-existing-document: Bestehendes Dokument verknüpfen
+document.translation.unlink-existing-document: Bestehendes Dokument trennen
+document.translation.all-translations: Alle Übersetzungen
+document.translation.new-document: Neues Dokument
+document.translation.use-inheritance: Vererbung verwenden
+document.translation.new-document-with-inheritance.modal-title: Neues Dokument (mit Vererbung)
+document.translation.new-document-blank.modal-title: Neues Dokument (leer)
+document.translation.new-document-modal.label.parent: Elternelement
+document.translation.new-document-modal.label.language: Sprache
+document.translation.new-document-modal.create: Erstellen
+navigation.recycle-bin: Papierkorb
+widget.recycle-bin: Papierkorb
+recycle-bin.columns.type: Typ
+recycle-bin.columns.path: Pfad
+recycle-bin.columns.amount: Anzahl
+recycle-bin.columns.deleted-by: Gelöscht von
+recycle-bin.columns.date: Datum
+recycle-bin.columns.actions: Aktionen
+recycle-bin.actions.cleanup: Bereinigen
+recycle-bin.actions.delete: Löschen
+recycle-bin.actions.delete.title: Papierkorb-Einträge löschen
+recycle-bin.actions.restore: Wiederherstellen
+recycle-bin.actions.restore.title: Papierkorb-Einträge wiederherstellen
+component.search.pleaceholder: Suche
+focal-point.set: Fokuspunkt setzen
+video.placeholder: Kein Video ausgewählt - Klicken, um ein Video hinzuzufügen
+video.add-video: Video hinzufügen
+image.alt-text-placeholder: Alternativtext eingeben
+area-settings: Bereichseinstellungen
+unsupported_feature: Nicht unterstützte Funktion - bitte überprüfen Sie die Systemvoraussetzungen!
+document.version.comparison.error.title: Fehler beim Versionsvergleich
+document.version.comparison.unsupported.requirements: Chromium-Binary und PHP-Erweiterung Imagick sind erforderlich.
+navigation.test-email: Test-E-Mail senden
+test-email.form.from: Von
+test-email.form.to: An
+test-email.form.subject: Betreff
+test-email.form.contentType: Typ
+test-email.form.title: Titel
+test-email.form.message: Nachricht
+test-email.form.document: Dokument
+test-email.form.parameters: Parameter
+test-email.form.parameters.add-parameter: Parameter hinzufügen
+test-email-modal-title: Test-E-Mail senden
+test-email-modal-send: Senden
+test-email.contentType.document: Dokument
+test-email.contentType.html: HTML
+test-email.contentType.text: Text
+test-email.parameters.columns.key: Schlüssel
+test-email.parameters.columns.value: Wert
+test-email.parameters.add: Parameter hinzufügen
+test-email.send.error: Beim Senden der Test-E-Mail ist ein Fehler aufgetreten
+test-email.success.modal.title: Test-E-Mail gesendet
+test-email.success.modal.text: Ihre Test-E-Mail wurde gesendet. Möchten Sie dieses Fenster geöffnet lassen, um die E-Mail erneut zu senden?
+test-email.validation.documentPath.required: Bitte geben Sie einen Dokumentpfad an
+test-email.validation.documentParameters.required: Bitte geben Sie mindestens einen Parameter an
+test-email.validation.content.required: Bitte geben Sie eine Nachricht an
+test-email.validation.from.required: Bitte geben Sie eine Absender-E-Mail-Adresse an
+test-email.validation.from.email.type: Bitte geben Sie eine gültige Absender-E-Mail-Adresse an
+test-email.validation.to.required: Bitte geben Sie eine Empfänger-E-Mail-Adresse an
+test-email.validation.to.email.type: Bitte geben Sie eine gültige Empfänger-E-Mail-Adresse an
+test-email.validation.subject.required: Bitte geben Sie einen Betreff an
+navigation.widget-editor: Widget Editor
+widget.widget-editor.perspective-editor: Perspektiven Editor
+navigation.widget-editor.perspective-editor: Perspektiven Editor
+widget.widget-editor.widget-editor: Widget Editor
+navigation.widget-editor.widget-editor: Widget Editor
+refresh: Aktualisieren
+perspective-editor.add-modal.title: Neue Perspektive hinzufügen
+perspective-editor.add-modal.name.label: Geben Sie den Namen der neuen Perspektive ein
+perspective-editor.add-modal.name.validation: Bitte geben Sie einen gültigen Perspektivennamen ein
+perspective-editor.form.name.placeholder: Perspektivennamen eingeben
+perspective-editor.form.general.title: Allgemein
+perspective-editor.form.general.name: Name
+perspective-editor.form.general.icon: Icon
+perspective-editor.form.general.widget-configuration: Widget-Bereiche
+perspective-editor.form.main-nav-permission.title: Erlaubte Hauptnavigationsaktionen
+perspective-editor.form.main-nav-permission.category.quickAccess: Schnellzugriff
+perspective-editor.form.main-nav-permission.quickAccess.hidden: Schnellzugriff Menü ausblenden
+perspective-editor.form.main-nav-permission.quickAccess.open_asset: Asset öffnen
+perspective-editor.form.main-nav-permission.quickAccess.open_document: Dokument öffnen
+perspective-editor.form.main-nav-permission.quickAccess.open_object: Objekt öffnen
+perspective-editor.form.main-nav-permission.quickAccess.recycle_bin: Papierkorb
+perspective-editor.form.main-nav-permission.category.dataManagement: Datenverwaltung
+perspective-editor.form.main-nav-permission.dataManagement.hidden: Datenverwaltung Menü ausblenden
+perspective-editor.form.main-nav-permission.dataManagement.notesEvents: Notizen & Ereignisse
+perspective-editor.form.main-nav-permission.dataManagement.gdprDataExtractor: DSGVO-Datenexport
+perspective-editor.form.main-nav-permission.dataManagement.searchReplaceAssignments: Zuweisungen suchen & ersetzen
+perspective-editor.form.main-nav-permission.dataManagement.predefinedProperties: Vordefinierte Eigenschaften
+perspective-editor.form.main-nav-permission.dataManagement.tagConfiguration: Tag Konfiguration
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_bulkExport: Datenmodell Definition > Massenexport
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_bulkImport: Datenmodell Definition > Massenimport
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_classes: Datenmodell Definition > Klassen
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_classificationStore: Datenmodell Definition > Classification Store
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_fieldCollections: Datenmodell Definition > Field Collections
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_hidden: Datenmodell Definition Menü ausblenden
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_objectBricks: Datenmodell Definition > Object Bricks
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_quantityValue: Datenmodell Definition > Mengenwert
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_selectOptions: Datenmodell Definition > Select Options
+perspective-editor.form.main-nav-permission.category.experienceEcommerce: Experience & E-Commerce
+perspective-editor.form.main-nav-permission.experienceEcommerce.hidden: Experience & E-Commerce Menü ausblenden
+perspective-editor.form.main-nav-permission.experienceEcommerce.emails: E-Mails
+perspective-editor.form.main-nav-permission.experienceEcommerce.documentTypes: Dokumenttypen
+perspective-editor.form.main-nav-permission.experienceEcommerce.websiteSettings: Website Einstellungen
+perspective-editor.form.main-nav-permission.experienceEcommerce.redirects: Weiterleitungen
+perspective-editor.form.main-nav-permission.category.assetManagement: Asset Verwaltung
+perspective-editor.form.main-nav-permission.assetManagement.hidden: Asset Verwaltung Menü ausblenden
+perspective-editor.form.main-nav-permission.assetManagement.imageThumbnails: Bilder Thumbnails
+perspective-editor.form.main-nav-permission.assetManagement.videoThumbnails: Video Thumbnails
+perspective-editor.form.main-nav-permission.assetManagement.predefinedAssetMetadata: Vordefinierte Asset-Metadaten
+perspective-editor.form.main-nav-permission.category.translations: Übersetzungen
+perspective-editor.form.main-nav-permission.translations.hidden: Übersetzung Menü ausblenden
+perspective-editor.form.main-nav-permission.translations.translations: Übersetzungen
+perspective-editor.form.main-nav-permission.category.system: System
+perspective-editor.form.main-nav-permission.system.hidden: System Menü ausblenden
+perspective-editor.form.main-nav-permission.system.applicationLogger: Application Logger
+perspective-editor.form.main-nav-permission.system.users_hidden: Benutzer/Rollen Menü ausblenden
+perspective-editor.form.main-nav-permission.system.users_roles: Rollen
+perspective-editor.form.main-nav-permission.system.users_users: Benutzer
+perspective-editor.form.main-nav-permission.settings.appearanceBranding: Erscheinungsbild & Branding
+perspective-editor.form.main-nav-permission.system.perspectiveEditor: Perspektiven Editor
+perspective-editor.form.main-nav-permission.system.widgetEditor: Widget Editor
+perspective-editor.form.main-nav-permission.system.maintenanceMode: Wartungsmodus
+perspective-editor.form.main-nav-permission.system.cache_clearAll: Cache > Alle löschen
+perspective-editor.form.main-nav-permission.system.cache_clearData: Cache > Daten Cache
+perspective-editor.form.main-nav-permission.system.cache_clearOutput: Cache > Ganzseitigen Cache löschen
+perspective-editor.form.main-nav-permission.system.cache_clearSymfony: Cache > Symfony Cache bereinigen
+perspective-editor.form.main-nav-permission.system.cache_clearTemp: Cache > Temporäre Dateien löschen
+perspective-editor.form.main-nav-permission.system.cache_hidden: Cache Menü ausblenden
+perspective-editor.form.main-nav-permission.system.systemSettings: Systemeinstellungen
+perspective-editor.form.main-nav-permission.system.about: Über
+perspective-editor.form.main-nav-permission.category.reporting: Berichte
+perspective-editor.form.main-nav-permission.reporting.hidden: Berichte Menü ausblenden
+perspective-editor.form.main-nav-permission.reporting.reports: Berichte
+perspective-editor.form.main-nav-permission.reporting.customReportsConfiguration: Benutzerdefinierte Berichte
+perspective-editor.form.main-nav-permission.category.search: Suche
+perspective-editor.form.main-nav-permission.search.hidden: Suche-Menü ausblenden
+perspective-editor.create.success: Perspektive erfolgreich erstellt
+perspective-editor.delete.success: Perspektive erfolgreich gelöscht
+perspective-editor.system-widgets.trees: Bäume
+perspective-editor.system-widgets.left: Linke Widgets
+perspective-editor.system-widgets.bottom: Untere Widgets
+perspective-editor.system-widgets.right: Rechte Widgets
+perspective-editor.update.success: Perspektive erfolgreich aktualisiert
+widget-editor.create-modal.create: Widget erstellen
+widget-editor.create-form.name: Name
+widget-editor.create-form.name.required: Bitte geben Sie einen gültigen Namen ein
+widget-editor.create-form.widgetType: Widget-Typ
+widget-editor.create-form.widgetType.element_tree: Element-Baum
+widget-editor.create-form.widgetTypeGroup.system-widgets: System-Widgets
+widget-editor.form.name.placeholder: Widget-Namen eingeben
+widget-editor.create.success: Widget erfolgreich erstellt
+widget-editor.delete.success: Widget erfolgreich gelöscht
+widget-editor.update.success: Widget erfolgreich aktualisiert
+widget-editor.widget-form.general.title: Allgemein
+widget-editor.widget-form.general.name: Name
+widget-editor.widget-form.general.icon: Icon
+widget-editor.widget-form.general.icon.select: Icon auswählen
+widget-editor.widget-form.specific.title: Spezifisch
+widget-editor.widget-form.specific.element-type: Elementtyp
+widget-editor.widget-form.specific.root-folder: Stammordner
+widget-editor.widget-form.specific.show-root: Stamm anzeigen
+widget-editor.widget-form.specific.page-size: Seitengröße
+widget-editor.widget-form.allowed-objects.title: Erlaubte Objekte (standardmäßig ist alles erlaubt)
+widget-editor.widget-form.filters.title: Filter
+widget-editor.widget-form.filters.pql: PQL-Anweisung
+widget-editor.widget-form.allowed-context-menu.title: Erlaubte Kontextmenü-Aktionen
+widget-editor.widget-form.allowed-context-menu.addObject: Neues Objekt
+widget-editor.widget-form.allowed-context-menu.addVariant: Neue Variante
+widget-editor.widget-form.allowed-context-menu.copy: Kopieren
+widget-editor.widget-form.allowed-context-menu.lock: Sperren
+widget-editor.widget-form.allowed-context-menu.publish: Veröffentlichen
+widget-editor.widget-form.allowed-context-menu.searchAndMove: Suchen & Verschieben
+widget-editor.widget-form.allowed-context-menu.unpublish: Veröffentlichung zurücknehmen
+widget-editor.widget-form.allowed-context-menu.addFolder: Neuer Ordner
+widget-editor.widget-form.allowed-context-menu.cut: Ausschneiden
+widget-editor.widget-form.allowed-context-menu.lockAndPropagate: Sperren und auf Kinder übertragen
+widget-editor.widget-form.allowed-context-menu.refresh: Aktualisieren
+widget-editor.widget-form.allowed-context-menu.unlock: Entsperren
+widget-editor.widget-form.allowed-context-menu.changeChildrenSortBy: Sortierung der Kinder ändern
+widget-editor.widget-form.allowed-context-menu.delete: Löschen
+widget-editor.widget-form.allowed-context-menu.paste: Einfügen
+widget-editor.widget-form.allowed-context-menu.rename: Umbenennen
+widget-editor.widget-form.allowed-context-menu.unlockAndPropagate: Entsperren und auf Kinder übertragen
+widget-editor.widget-form.allowed-context-menu.addUploadZip: Neue(s) Asset(s) > ZIP hochladen
+widget-editor.widget-form.allowed-context-menu.addUpload: Neue(s) Asset(s) > Dateien hochladen
+widget-editor.widget-form.allowed-context-menu.download: Herunterladen
+widget-editor.widget-form.allowed-context-menu.pasteCut: Ausgeschnittenes einfügen
+widget-editor.widget-form.allowed-context-menu.uploadNewVersion: Neue Version hochladen
+widget-editor.widget-form.allowed-context-menu.downloadZip: Als ZIP herunterladen
+widget-editor.widget-form.allowed-context-menu.convert: Konvertieren
+widget-editor.widget-form.allowed-context-menu.removeSite: Site entfernen
+widget-editor.widget-form.allowed-context-menu.useAsSite: Als Site verwenden
+widget-editor.widget-form.allowed-context-menu.editSite: Site bearbeiten
+widget-editor.widget-form.allowed-context-menu.open: Öffnen
+widget-editor.widget-form.allowed-context-menu.addPage: Neue Seite
+widget-editor.widget-form.allowed-context-menu.addSnippet: Neues Snippet
+widget-editor.widget-form.allowed-context-menu.addLink: Neuer Link
+widget-editor.widget-form.allowed-context-menu.addEmail: Neue E-Mail
+widget-editor.widget-form.allowed-context-menu.addHardlink: Neuer Hardlink
+edit.label: Bearbeiten
+scheduled-block.delete-all-in-past: Alle vergangenen Zeitstempel löschen
+scheduled-block.delete-all: Alle Zeitstempel löschen
+scheduled-block.delete-all-in-past-confirmation: Sind Sie sicher, dass Sie alle vergangenen Zeitstempel löschen möchten?
+scheduled-block.delete-all-confirmation: Sind Sie sicher, dass Sie alle Zeitstempel löschen möchten?
+scheduled-block.delete-confirmation: Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?
+icon-selector.title: Icon-Auswahl
+icon-selector.all-icons: Alle Icons
+icon-selector.pimcore-library: Pimcore-Bibliothek
+icon-selector.search-placeholder: Suche
+icon-selector.current-selection: Aktuelle Auswahl
+icon-selector.clear-selection: Auswahl löschen
+icon-selector.no-selection: Kein Icon ausgewählt
+icon-selector.save: Speichern
+icon-selector.custom-icon: Benutzerdefiniertes Icon
+icon-selector.custom-icon-path: Benutzerdefinierter Pfad
+icon-selector.custom-icon-path-placeholder: Benutzerdefinierten Pfad eingeben und absenden
+icon-selector.Twemoji: Twemoji-Bibliothek
+icon-selector.Pimcore: Pimcore-Bibliothek
+language: Sprache
+pretty-url: Pretty URL / URL Slug
+pretty-url-override-notice: (überschreibt Pfad aus der Baumstruktur)
+content-main-document: Content-Main-Dokument
+content-main-document.apply: Content-Main-Dokument anwenden
+content-main-document.apply-warning-title: Sind Sie sicher?
+content-main-document.apply-warning-message: Alle Inhalte gehen verloren
+never: nie
+document-configuration.sidebar-title: Dokumentkonfiguration
+document-configuration.predefined-document-type: Vordefinierter Dokumenttyp
+document-configuration.controller: Controller
+document-configuration.template: Vorlage
+document-configuration.static-page-generator: Statischer Seitengenerator
+document-configuration.enable-server-side-static-rendering: Serverseitiges statisches Rendering aktivieren
+document-configuration.lifetime-for-static-page: Lebensdauer für statische Seite (in Minuten)
+document-configuration.last-generated: "Zuletzt generiert: {{timestamp}}"
+email-settings.sidebar-title: E-Mail-Einstellungen
+email-settings.subject: Betreff
+email-settings.from: Von
+email-settings.reply-to: Antwort an
+email-settings.recipients: Empfänger
+email-settings.to: An
+email-settings.cc: Cc
+email-settings.bcc: Bcc
+email-settings.multiple-recipients-hint: "Mehrere Empfänger können durch Semikolon getrennt angegeben werden. Beispiel: receiver@pimcore.org; receiver2@pimcore.org"
+email-settings.from-syntax-hint: "Sie können folgende Syntax verwenden: Mein Name <my-name@example.com>"
+add-document-form.label.title: Titel
+add-document-form.label.navigation: Navigation
+add-document-form.label.key: Schlüssel
+user-management.permissions.quantityValueUnits: Mengenwert-Einheiten
+user-management.permissions.recyclebin: Papierkorb
+user-management.permissions.redirects: Weiterleitungen
+user-management.permissions.seemode: Ansichtsmodus
+user-management.permissions.selectoptions: Select Options
+user-management.permissions.share_configurations: Konfigurationen teilen
+user-management.permissions.objects: Objekte
+user-management.permissions.objectbricks: Object Bricks
+user-management.permissions.notifications_send: Benachrichtigungen senden
+user-management.permissions.notifications: Benachrichtigungen
+user-management.permissions.predefined_properties: Vordefinierte Eigenschaften
+user-management.permissions.perspective_editor: Perspektiven Editor
+user-management.permissions.perspective_editor_view_edit: Perspektiven Editor Ansicht & Bearbeitung
+user-management.permissions.qr_codes: QR-Codes
+user-management.permissions.plugins: Plugins
+user-management.permissions.notes_events: Notizen & Ereignisse
+user-management.permissions.clear_cache: Cache löschen
+user-management.permissions.classificationstore: Classification Store
+user-management.permissions.classes: Klassen
+user-management.permissions.workflow_details: Workflow-Details
+user-management.permissions.users: Benutzer
+user-management.permissions.website_settings: Website Einstellungen
+user-management.permissions.asset_metadata: Asset-Metadaten
+user-management.permissions.clear_fullpage_cache: Ganzseitigen Cache löschen
+user-management.permissions.clear_temp_files: Temporäre Dateien löschen
+user-management.permissions.system_settings: Systemeinstellungen
+user-management.permissions.tags_assignment: Tag-Zuweisungen
+user-management.permissions.tags_configuration: Tag Konfiguration
+user-management.permissions.tags_search: Tag-Suche
+user-management.permissions.thumbnails: Vorschaubilder
+user-management.permissions.translations: Übersetzungen
+user-management.permissions.fieldcollections: Field Collections
+user-management.permissions.emails: E-Mails
+user-management.permissions.document_types: Dokumenttypen
+user-management.permissions.documents: Dokumente
+user-management.permissions.dashboards: Dashboards
+user-management.permissions.assets: Assets
+user-management.permissions.system_appearance_settings: Erscheinungsbild & Branding
+user-management.permissions.gdpr_data_extractor: DSGVO-Datenexport
+user-management.permissions.admin_translations: Admin-Übersetzungen
+user-management.permissions.application_logging: Application Logger
+user-management.permissions.reports_config: Berichts-Konfiguration
+user-management.permissions.reports: Berichte
+user-management.permissions.gee_job_run_permission: Auftragsausführungsberechtigung
+user-management.permissions.gee_see_all_job_runs_permission: Alle Auftragsausführungen sehen
+user-management.permissions.glossary: Glossar
+user-management.permissions.google_marketing: Google Marketing
+user-management.permissions.newsletters: Newsletter
+user-management.permissions.targeting: Targeting
+user-management.permissions.http_errors: HTTP-Fehler
+user-management.permissions.seo_document_editor: SEO-Dokument-Editor
+user-management.permissions."robots.txt": robots.txt
+user-management.permissions.routes: Routen
+user-management.permissions.word_export: Word-Export
+user-management.permissions.xliff_import_export: XLIFF Import/Export
+user-management.permissions.bptb_aet_configuration_permission: Konfiguration alternativer Elementbäume
+user-management.permissions.bptb_bookmark_list_permission: Lesezeichen
+user-management.permissions.bptb_bookmark_list_share_permission: Lesezeichen teilen
+user-management.permissions.bundle_ecommerce_back-office_order: "Back Office - Bestellungen"
+user-management.permissions.bundle_ecommerce_pricing_rules: Preisregeln
+user-management.permissions.pcp_general_permission: Pimcore Copilot
+user-management.permissions.pcp_configuration_permission: Pimcore Copilot Konfiguration
+user-management.permissions.pcp_job_run_permission: Auftragsausführungsübersicht
+user-management.permissions.pcp_job_runs_see_all_permission: Alle Auftragsausführungen sehen
+user-management.permissions.permission_workflow_designer: Workflow Designer aktivieren
+user-management.permissions.permission_workflow_designer_place_permissions: Konfiguration der Platzierungsberechtigungen
+user-management.permissions.permission_workflow_designer_trans_notifications: Konfiguration der Übergangsbenachrichtigungen
+user-management.permissions.plugin_cmf_perm_activityview: CMF Aktivitäten
+user-management.permissions.plugin_cmf_perm_customer_automation_rules: CMF Automatisierungsregeln für Kunden
+user-management.permissions.plugin_cmf_perm_customerview: CMF Kunden
+user-management.permissions.plugin_cmf_perm_customerview_admin: CMF Kunden Filter-Administrator
+user-management.permissions.plugin_cmf_perm_newsletter_enqueue_all_customers: CMF Newsletter Kunden exportieren
+user-management.permissions.plugin_datahub_adapter_dataImporterDataObject: "Datahub Adapter - Datenobjekt-Importer"
+user-management.permissions.plugin_datahub_adapter_fileExport: "Datahub Adapter - Dateiexport"
+user-management.permissions.plugin_datahub_adapter_graphql: "Datahub Adapter - GraphQL"
+user-management.permissions.plugin_datahub_adapter_headlessDocuments: "Datahub Adapter - Headless Documents"
+user-management.permissions.plugin_datahub_adapter_productsup: "Datahub Adapter - Productsup"
+user-management.permissions.plugin_datahub_adapter_simpleRest: "Datahub Adapter - Simple REST"
+user-management.permissions.plugin_datahub_adapter_webhooks: "Datahub Adapter - Webhooks"
+user-management.permissions.plugin_datahub_admin: Datahub-Verwaltung
+user-management.permissions.plugin_datahub_config: Datahub-Konfiguration
+user-management.permissions.plugin_datahub_permission_delete: Datahub Löschen
+user-management.permissions.plugin_datahub_permission_read: Datahub Lesen
+user-management.permissions.plugin_datahub_permission_update: Datahub Aktualisieren
+user-management.permissions.portal-engine_collection-access: Backend Collection Access
+user-management.permissions.portal-engine_index-management: Portal Indexverwaltung
+user-management.permissions.portal-engine_wizard: Portal Setup-Assistent
+user-management.permissions.wai_configuration_permission: Konfiguration der Automatisierungsvorlagen
+forgot-password-form.username: Geben Sie Ihren Benutzernamen ein und Pimcore sendet einen Login-Link an Ihre E-Mail-Adresse
+forgot-password-form.username.placeholder: Benutzername
+forgot-password-form.reset-password: Passwort zurücksetzen
+forgot-password-form.success-message: Ein temporärer Login-Link wurde an Ihre E-Mail-Adresse gesendet. Bitte überprüfen Sie Ihr Postfach.
+forgot-password-form.back: Zurück zur Anmeldung
+subscription-details.community-edition: Erfahren Sie mehr über Pimcore Editionen
+config_not_writeable: Nicht beschreibbar, dies kann verschiedene Ursachen haben. Weitere Details finden Sie in der Dokumentation.
+navigation.about: Über
+about.title: Über
+about.platform-version: "Plattform-Version: {{version}}"
+about.version: "Core-Version: {{version}}"
+about.copyright: © by Pimcore GmbH
+about.buttons.license: Lizenz
+about.buttons.contact: Kontakt
+custom-language.default: Standard
+login-token-modal.title: Als dieser Benutzer in einem anderen Browser anmelden
+login-token-modal.description: Der folgende Link ist ein temporärer Link, mit dem Sie sich als dieser Benutzer in einem anderen Browser anmelden können
+login-token-modal.close: Schließen
+login-token-modal.copy-and-close: Kopieren & Schließen
+navigation.gdpr-extractor: DSGVO-Datenexport
+widget.gdpr-extractor: DSGVO-Datenexport
+gdpr-extractor.title: DSGVO-Datenexport
+gdpr-extractor.search-form.field.id: ID
+gdpr-extractor.search-form.field.firstname: Vorname
+gdpr-extractor.search-form.field.lastname: Nachname
+gdpr-extractor.search-form.field.email: E-Mail-Adresse
+gdpr-extractor.search-form.submit: Suche
+gdpr-extractor.data-objects.table.field.type: Typ
+gdpr-extractor.data-objects.table.field.id: ID
+gdpr-extractor.data-objects.table.field.fullPath: Pfad
+gdpr-extractor.data-objects.table.field.className: Klasse
+gdpr-extractor.data-objects.table.actions.export: DataObject-Daten exportieren
+gdpr-extractor.data-objects.table.actions.open: DataObject öffnen
+gdpr-extractor.data-objects.table.actions.delete: DataObject löschen
+gdpr-extractor.assets.table.field.type: Typ
+gdpr-extractor.assets.table.field.id: ID
+gdpr-extractor.assets.table.field.fullPath: Vollständiger Pfad
+gdpr-extractor.assets.table.field.subType: Typ
+gdpr-extractor.assets.table.actions.export: Asset-Daten exportieren
+gdpr-extractor.assets.table.actions.open: Asset öffnen
+gdpr-extractor.assets.table.actions.delete: Asset löschen
+gdpr-extractor.users.table.field.id: ID
+gdpr-extractor.users.table.field.name: Benutzername
+gdpr-extractor.users.table.field.firstname: Vorname
+gdpr-extractor.users.table.field.lastname: Nachname
+gdpr-extractor.users.table.field.email: E-Mail
+gdpr-extractor.users.table.actions.export: Benutzerdaten exportieren
+gdpr-extractor.users.table.actions.delete: Benutzer löschen
+gdpr-extractor.table.field.actions: Aktionen
+gdpr-extractor.emails.table.field.sentDate: Sendedatum
+gdpr-extractor.emails.table.field.from: Von
+gdpr-extractor.emails.table.field.to: An
+gdpr-extractor.emails.table.field.cc: CC
+gdpr-extractor.emails.table.field.bcc: BCC
+gdpr-extractor.emails.table.field.subject: Betreff
+gdpr-extractor.emails.table.actions.export: E-Mail-Daten exportieren
+gdpr-extractor.emails.table.actions.parameters: Parameter aufklappen
+gdpr-extractor.emails.table.actions.html: HTML anzeigen
+navigation.systemSettings: Systemeinstellungen
+widget.system-settings: Systemeinstellungen
+system-settings.form.field.version-days: Versionsverlauf für x Tage speichern
+system-settings.form.field.version-count: Versionsverlauf für x Schritte speichern
+system-settings.collapse.debug: Debug
+system-settings.form.debug.field.enable-debug: Debug Admin-Übersetzungen (in + eingeschlossen)
+system-settings.form.debug.field.email-addresses: Debug-E-Mail-Adressen
+system-settings.form.debug.field.email-addresses.placeholder: E-Mail eingeben und Enter drücken...
+system-settings.collapse.localization: Lokalisierung & Internationalisierung (l10n/i18n)
+system-settings.form.localization.field.add-language: Sprache hinzufügen
+system-settings.form.localization.field.fallback-language: Fallback-Sprachen
+system-settings.form.localization.field.fallback-language-placeholder: Fallback-Sprachen hinzufügen
+system-settings.form.localization.field.default-language: Standardsprache
+system-settings.form.localization.field.mandatory: Pflichtsprache
+system-settings.form.localization.field.delete-language: Sprache löschen
+system-settings.collapse.website: Website
+system-settings.form.field.main-domain: Hauptdomain
+system-settings.form.field.redirect-to-maindomain: Unbekannte Domains (die nicht für eine Site und für Weiterleitungen verwendet werden, ...) zur Hauptdomain (oben) weiterleiten
+system-settings.form.field.default-error-page: Fehlerseite (Standard)
+system-settings.update.success: Systemeinstellungen erfolgreich aktualisiert
+rule-condition.operator.and: UND
+rule-condition.operator.or: ODER
+rule-condition.operator.and-not: UND NICHT
+rule-condition.add-condition: Bedingung hinzufügen
+rule-condition.move-up: Nach oben
+rule-condition.move-down: Nach unten
+rule-condition.remove: Entfernen
+rule-condition.bracket.toggle-left: Linke Klammer umschalten
+rule-condition.bracket.toggle-right: Rechte Klammer umschalten
+rule-condition.validation.brackets-closing-without-opening: "Schließende Klammer ')' ohne passende öffnende Klammer '(' gefunden"
+rule-condition.validation.brackets-missing-closing: "Öffnende Klammer '(' ohne passende schließende Klammer ')' gefunden"
+rule-condition.validation.brackets-invalid: Klammern sind nicht korrekt ausbalanciert
+rule-builder.add-action: Aktion hinzufügen
+rule-builder.add-trigger: Trigger hinzufügen
+rule-builder.move-up: Nach oben
+rule-builder.move-down: Nach unten
+rule-builder.remove: Entfernen
+document-restrictions: Dokumentbeschränkungen
+asset-restrictions: Asset-Beschränkungen
+object-restrictions: Objektbeschränkungen
+display-mode: Anzeigemodus
+display-mode-display: Pfadreferenz anzeigen
+display-mode-inline-search: Inline-Suche
+display-mode-grid-view: Grid-Ansicht
+display-mode-tag-field: Tag-Feld
+activate-column-configuration: Spaltenkonfiguration aktivieren
+table-column-configuration: Tabellen-Spaltenkonfiguration
+center: Mitte
+north: Norden
+south: Süden
+east: Osten
+west: Westen
+top: Oben
+left: Links
+right: Rechts
+bottom: Unten
+region: Region
+icon: Icon
+iframe-url: Iframe-URL
+rendering-class: Benutzerdefinierte Rendering-Klasse
+rendering-data: An das Rendering übergebene Daten
+zoom-level: Zoomstufe
+class: Klasse
+layout.text.help: "Sie können das folgende Markup (im Quellbearbeitungsmodus) verwenden, um benutzerdefinierte Hinweise zu erstellen: <br> <pre>&lt;div class=&quot;alert alert-success&quot;&gt;Ihre Nachricht&lt;/div&gt;</pre>Die folgenden Kontextklassen sind verfügbar: <pre>alert-primary, alert-secondary, alert-success, alert-danger, alert-warning, alert-info</pre> <pre>Sie können auch Twig-Syntax verwenden:</pre> <pre>Zusätzliche Daten {{data}}</pre>"
+configuration: Konfiguration
+drag-object-for-preview: Objekt für Vorschau hierher ziehen
+quantity-values.new: Neu
+quantity-values.columns.id: ID
+quantity-values.columns.abbreviation: Abkürzung
+quantity-values.columns.long-name: Langname
+quantity-values.columns.base-unit: Basiseinheit
+quantity-values.columns.factor: Umrechnungsfaktor
+quantity-values.columns.conversion-offset: Umrechnungsoffset
+quantity-values.columns.converter: Konverter-Service
+quantity-values.columns.actions: Aktionen
+quantity-values.create-modal.title: Mengenwert-Einheit erstellen
+quantity-values.create-modal.id-label: Eindeutiger Bezeichner
+quantity-values.create-modal.id-placeholder: z.B. km, kg, ...
+quantity-values.create-modal.id-required: Eindeutiger Bezeichner ist erforderlich
+quantity-values.create-modal.create: Erstellen
+quantity-values.export: Export
+quantity-values.import: Import
+quantity-values.import-modal.title: Mengenwert-Einheiten importieren
+owner: Eigentümer
+reverse-object-relation.tooltip: Nicht-Eigentümer-Objekte stellen Relationen zu einem anderen Objekt auf die gleiche Weise dar wie Objekte. Der Unterschied ist, dass ein Nicht-Eigentümer-Objektfeld nicht der Eigentümer der Relationsdaten ist, sondern lediglich eine Ansicht auf Daten, die in anderen Objekten gespeichert sind. Bitte wählen Sie den Eigentümer und Feldnamen, wo die Daten ursprünglich gespeichert sind.
+disabled-fields: Deaktivierte Felder
+allowed-targets: Erlaubte Ziele
+bulk-export.title: Massenexport
+bulk-export.select-all: Alle auswählen
+bulk-export.deselect-all: Alle abwählen
+bulk-export.export: Export
+bulk-export.cancel: Abbrechen
+bulk-export.type.class: Klassen
+bulk-export.type.customlayout: Benutzerdefinierte Layouts
+bulk-export.type.fieldcollection: Field Collections
+bulk-export.type.objectbrick: Object Bricks
+bulk-import.title: Massenimport
+bulk-import.cancel: Abbrechen
+bulk-import.next: Weiter
+bulk-import.back: Zurück
+bulk-import.import: Import
+bulk-import.job-title: Massenimport
+bulk-import.browse-files: Dateien durchsuchen
+bulk-import.remove-file: Entfernen
+bulk-import.select-all: Alle auswählen
+bulk-import.deselect-all: Alle abwählen
+bulk-import.type.class: Klassen
+bulk-import.type.customlayout: Benutzerdefinierte Layouts
+bulk-import.type.fieldcollection: Field Collections
+bulk-import.type.objectbrick: Object Bricks

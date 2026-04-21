@@ -24,4 +24,5 @@ export enum ErrorKeyTypes {
   WIDGET_NAME_INVALID = 'error_widget_name_invalid',
   VALIDATION_FAILED = 'error_validation_failed',
   ELEMENT_VALIDATION_FAILED = 'error_element_validation_failed',
+  GDI_PARSING_EXCEPTION = 'error_gdi_parsing_exception',
 }

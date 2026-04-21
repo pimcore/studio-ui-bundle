@@ -25,9 +25,10 @@ export interface DynamicGroupContentProps {
   id: DynamicGroupProps['id']
   dynamicTypeRegistryId: DynamicGroupProps['dynamicTypeRegistryId']
   showTitle?: DynamicGroupProps['showTitle']
+  translationKeyPrefix?: DynamicGroupProps['translationKeyPrefix']
 }
 
-export const DynamicGroupContent = ({ dynamicTypeRegistryId, id, showTitle = false }: DynamicGroupContentProps): React.JSX.Element => {
+export const DynamicGroupContent = ({ dynamicTypeRegistryId, id, showTitle = false, translationKeyPrefix = 'grid.advanced-column' }: DynamicGroupContentProps): React.JSX.Element => {
   const { values, operations } = useNumberedList()
   const [items, setItems] = React.useState(() => values.map((_, index) => index + 1))
   const isEmpty = values.length === 0
@@ -79,13 +80,13 @@ export const DynamicGroupContent = ({ dynamicTypeRegistryId, id, showTitle = fal
       <IconTextButton
         icon={ { value: 'new' } }
         type="link"
-      >{ t(`grid.advanced-column.${id}.add`) }</IconTextButton>
+      >{ t(`${translationKeyPrefix}.${id}.add`) }</IconTextButton>
     </DynamicGroupDropdown>
   ), [dynamicTypeRegistryId, id])
 
   const headerElement = useMemo(() => (
     <Flex align="center">
-      <Header title={ t(`grid.advanced-column.${id}`) }>
+      <Header title={ t(`${translationKeyPrefix}.${id}`) }>
         <DynamicGroupDropdown dynamicTypeRegistryId={ dynamicTypeRegistryId }>
           <IconTextButton icon={ { value: 'new' } }>{t('add')}</IconTextButton>
         </DynamicGroupDropdown>

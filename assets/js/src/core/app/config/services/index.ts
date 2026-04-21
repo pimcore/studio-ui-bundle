@@ -272,6 +272,7 @@ import { DynamicTypeFieldFilterQuantityValue } from '@Pimcore/modules/element/dy
 import { DynamicTypeFieldFilterColor } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/color/dynamic-type-field-filter-color'
 import { DynamicTypeFieldFilterDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/datetime/dynamic-type-field-filter-datetime'
 import { DynamicTypeFieldFilterTime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/time/dynamic-type-field-filter-time'
+import { DynamicTypeFieldFilterRelation } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/relation/dynamic-type-field-filter-relation'
 import { AppLoaderRegistry } from '@Pimcore/modules/app/app-loader/services/app-loader-registry'
 import { DynamicTypeObjectLayoutIframe } from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/types/dynamic-type-object-layout-iframe'
 import { DynamicTypeFieldDefinitionInput } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/input/dynamic-type-field-definition-input'
@@ -471,6 +472,7 @@ container.bind(serviceIds['DynamicTypes/FieldFilter/QuantityValue']).to(DynamicT
 container.bind(serviceIds['DynamicTypes/FieldFilter/Color']).to(DynamicTypeFieldFilterColor).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Datetime']).to(DynamicTypeFieldFilterDatetime).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Time']).to(DynamicTypeFieldFilterTime).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/Relation']).to(DynamicTypeFieldFilterRelation).inSingletonScope()
 // dynamic types batch edit
 container.bind(serviceIds['DynamicTypes/BatchEditRegistry']).to(DynamicTypeBatchEditRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/BatchEdit/Text']).to(DynamicTypeBatchEditText).inSingletonScope()

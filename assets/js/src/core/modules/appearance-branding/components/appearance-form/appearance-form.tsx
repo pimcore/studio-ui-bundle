@@ -91,6 +91,7 @@ export const AppearanceForm = (): React.JSX.Element => {
             <ColorPanel />
 
             <ImagePanel
+              dataTestId="appearance-branding-custom-logo"
               descriptionKey="appearance-branding.custom-logo.description"
               fieldName={ ['branding', 'customLogo'] }
               height={ 150 }
@@ -99,6 +100,7 @@ export const AppearanceForm = (): React.JSX.Element => {
             />
 
             <ImagePanel
+              dataTestId="appearance-branding-login-background"
               descriptionKey="appearance-branding.custom-login-background.description"
               fieldName={ ['branding', 'loginScreenCustomBackgroundImage'] }
               height={ 150 }
@@ -111,6 +113,7 @@ export const AppearanceForm = (): React.JSX.Element => {
         <Toolbar justify="flex-end">
           <Tooltip title={ isWriteable ? '' : t('config_not_writeable') }>
             <Button
+              data-testid="appearance-branding-save-button"
               disabled={ !isWriteable }
               htmlType="submit"
               loading={ isLoading }

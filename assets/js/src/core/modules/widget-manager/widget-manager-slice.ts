@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isUndefined } from 'lodash'
 import { injectSliceWithState } from '@sdk/app'
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { type IJsonModel, type IJsonTabNode, Model, Actions, DockLocation, type Node, BorderNode } from 'flexlayout-react'
@@ -16,6 +17,7 @@ import { getInitialModelJson as getInitialInnerModelJson } from './utils/widget-
 import { createWidgetManagerPersistedReducer } from './widget-manager-persistence'
 import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
 import { type ElementIcon } from '@sdk/components'
+import { type UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 
 export interface IMainWidgetContext {
   nodeId: string
@@ -30,6 +32,7 @@ export interface WidgetManagerState {
 }
 
 export interface WidgetManagerTabConfig extends Omit<IJsonTabNode, 'icon'> {
+  permission?: UserPermission
   config: {
     translationKey?: string
     label?: string
@@ -45,7 +48,25 @@ export const initialState: WidgetManagerState = {
   mainWidgetContext: null
 }
 
-export const slice = createSlice({
+const getNextTabId = (node: Node): string | undefined => {
+  const parent = node.getParent()
+
+  if (isUndefined(parent)) {
+    return undefined
+  }
+
+  const siblings = parent.getChildren()
+  const closedIndex = siblings.findIndex((child) => child.getId() === node.getId())
+
+  if (siblings.length <= 1) {
+    return undefined
+  }
+
+  const nextIndex = closedIndex < siblings.length - 1 ? closedIndex + 1 : closedIndex - 1
+  return siblings[nextIndex].getId()
+}
+
+const slice = createSlice({
   name: 'widget-manager',
 
   initialState,
@@ -221,45 +242,18 @@ export const slice = createSlice({
       }
 
       if (node !== undefined) {
+        const nextTabId = isOuterModelNode ? undefined : getNextTabId(node)
+
         model.doAction(Actions.deleteTab(node.getId()))
+
+        if (!isUndefined(nextTabId) && !isUndefined(model.getNodeById(nextTabId))) {
+          model.doAction(Actions.selectTab(nextTabId))
+        }
       }
 
       if (isOuterModelNode) {
         state.outerModel = { ...model.toJson() }
       } else {
-        const currentTabset = model.getActiveTabset()
-        let hasValidNode = false
-
-        if (currentTabset !== undefined) {
-          const currentNode = currentTabset.getChildren()?.[0]
-
-          if (currentNode !== undefined) {
-            model.doAction(Actions.selectTab(currentNode.getId()))
-            hasValidNode = true
-          }
-        }
-
-        if (!hasValidNode) {
-          const firstTabset = model.getFirstTabSet()
-          const parent = firstTabset.getParent()
-
-          const tabsets = parent!.getChildren()
-          let validChildNode: Node | undefined
-
-          for (const tabset of tabsets) {
-            const childNodes = tabset.getChildren()
-
-            if (childNodes.length > 0) {
-              validChildNode = childNodes[0]
-              break
-            };
-          }
-
-          if (validChildNode !== undefined) {
-            model.doAction(Actions.selectTab(validChildNode.getId()))
-          }
-        }
-
         state.innerModel = { ...model.toJson() }
       }
     }

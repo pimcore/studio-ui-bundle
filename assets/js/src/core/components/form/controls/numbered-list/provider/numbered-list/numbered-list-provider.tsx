@@ -9,6 +9,7 @@
  */
 
 import { KeyedListContext } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/keyed-list-provider'
+import { LocalizedFieldsContext } from '@Pimcore/components/form/localisation/localized-fields/provider/localized-fields-provider/localized-fields-provider'
 import { type NamePath } from 'antd/es/form/interface'
 import React, { createContext, useMemo } from 'react'
 
@@ -47,9 +48,11 @@ export const NumberedListProvider = ({ children, values, operations, onChange, g
 
   return (
     <KeyedListContext.Provider value={ undefined }>
-      <NumberedListContext.Provider value={ contextValue }>
-        {children}
-      </NumberedListContext.Provider>
+      <LocalizedFieldsContext.Provider value={ undefined }>
+        <NumberedListContext.Provider value={ contextValue }>
+          {children}
+        </NumberedListContext.Provider>
+      </LocalizedFieldsContext.Provider>
     </KeyedListContext.Provider>
   )
 }

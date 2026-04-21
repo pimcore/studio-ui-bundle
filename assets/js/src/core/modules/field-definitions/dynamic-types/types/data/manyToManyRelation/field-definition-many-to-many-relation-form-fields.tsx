@@ -22,31 +22,29 @@ export const FieldDefinitionManyToManyRelationFormFields = (props: FieldDefiniti
   const { options: classOptions } = useClassDefinitionOptions(true)
   const assetTypeOptions = useAssetTypeOptions()
   const documentTypeOptions = useDocumentTypeOptions()
+  const isCustomLayout = props.context.area.includes('custom-layout')
 
   return (
     <>
 
-      <FormKit.Panel
-        border
-        theme="fieldset"
-        title={ t('layout') }
+      <Form.Item
+        label={ t('width') }
+        name="width"
+        tooltip={ t('width-tooltip') }
       >
-        <Form.Item
-          label={ t('width') }
-          name="width"
-          tooltip={ t('width-tooltip') }
-        >
-          <Input />
-        </Form.Item>
+        <Input />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('height') }
-          name="height"
-          tooltip={ t('height-tooltip') }
-        >
-          <Input />
-        </Form.Item>
+      <Form.Item
+        label={ t('height') }
+        name="height"
+        tooltip={ t('height-tooltip') }
+      >
+        <Input />
+      </Form.Item>
 
+      {!isCustomLayout && (
+      <>
         <Form.Item
           label={ t('maximum-items') }
           name="maxItems"
@@ -72,95 +70,94 @@ export const FieldDefinitionManyToManyRelationFormFields = (props: FieldDefiniti
           <Switch labelRight={ t('enable-text-selection') } />
         </Form.Item>
 
-      </FormKit.Panel>
+        <FormKit.Panel
+          border
+          theme="fieldset"
+          title={ t('document-restrictions') }
+        >
 
-      <FormKit.Panel
-        border
-        theme="fieldset"
-        title={ t('document-restrictions') }
-      >
-
-        <Form.Item name="documentsAllowed">
-          <Switch labelRight={ t('allow-documents') } />
-        </Form.Item>
-
-        <Form.Conditional condition={ (values) => values.documentsAllowed === true }>
-          <Form.Item
-            { ...relationSelectFormItemTransformation('documentTypes') }
-            label={ t('allowed-document-types') }
-            name="documentTypes"
-          >
-            <Select
-              mode="multiple"
-              options={ documentTypeOptions }
-            />
+          <Form.Item name="documentsAllowed">
+            <Switch labelRight={ t('allow-documents') } />
           </Form.Item>
-        </Form.Conditional>
 
-      </FormKit.Panel>
-
-      <FormKit.Panel
-        border
-        theme="fieldset"
-        title={ t('asset-restrictions') }
-      >
-
-        <Form.Item name="assetsAllowed">
-          <Switch labelRight={ t('allow-assets') } />
-        </Form.Item>
-
-        <Form.Conditional condition={ (values) => values.assetsAllowed === true }>
-          <>
-            <Form.Item name="assetInlineDownloadAllowed">
-              <Switch labelRight={ t('asset-inline-download-allowed') } />
-            </Form.Item>
-
+          <Form.Conditional condition={ (values) => values.documentsAllowed === true }>
             <Form.Item
-              { ...relationSelectFormItemTransformation('assetTypes') }
-              label={ t('allowed-asset-types') }
-              name="assetTypes"
+              { ...relationSelectFormItemTransformation('documentTypes') }
+              label={ t('allowed-document-types') }
+              name="documentTypes"
             >
               <Select
                 mode="multiple"
-                options={ assetTypeOptions }
+                options={ documentTypeOptions }
               />
             </Form.Item>
+          </Form.Conditional>
 
-            <Form.Item
-              label={ t('upload-path') }
-              name="assetUploadPath"
-            >
-              <Input />
-            </Form.Item>
-          </>
-        </Form.Conditional>
-      </FormKit.Panel>
+        </FormKit.Panel>
 
-      <FormKit.Panel
-        border
-        theme="fieldset"
-        title={ t('object-restrictions') }
-      >
+        <FormKit.Panel
+          border
+          theme="fieldset"
+          title={ t('asset-restrictions') }
+        >
 
-        <Form.Item name="objectsAllowed">
-          <Switch labelRight={ t('allow-objects') } />
-        </Form.Item>
-
-        <Form.Conditional condition={ (values) => values.objectsAllowed === true }>
-          <Form.Item
-            { ...relationSelectFormItemTransformation('classes') }
-            label={ t('allowed-classes') }
-            name="classes"
-          >
-            <Select
-              mode="multiple"
-              options={ classOptions }
-              showSearch
-            />
+          <Form.Item name="assetsAllowed">
+            <Switch labelRight={ t('allow-assets') } />
           </Form.Item>
-        </Form.Conditional>
-      </FormKit.Panel>
 
+          <Form.Conditional condition={ (values) => values.assetsAllowed === true }>
+            <>
+              <Form.Item name="assetInlineDownloadAllowed">
+                <Switch labelRight={ t('asset-inline-download-allowed') } />
+              </Form.Item>
+
+              <Form.Item
+                { ...relationSelectFormItemTransformation('assetTypes') }
+                label={ t('allowed-asset-types') }
+                name="assetTypes"
+              >
+                <Select
+                  mode="multiple"
+                  options={ assetTypeOptions }
+                />
+              </Form.Item>
+
+              <Form.Item
+                label={ t('upload-path') }
+                name="assetUploadPath"
+              >
+                <Input />
+              </Form.Item>
+            </>
+          </Form.Conditional>
+        </FormKit.Panel>
+
+        <FormKit.Panel
+          border
+          theme="fieldset"
+          title={ t('object-restrictions') }
+        >
+
+          <Form.Item name="objectsAllowed">
+            <Switch labelRight={ t('allow-objects') } />
+          </Form.Item>
+
+          <Form.Conditional condition={ (values) => values.objectsAllowed === true }>
+            <Form.Item
+              { ...relationSelectFormItemTransformation('classes') }
+              label={ t('allowed-classes') }
+              name="classes"
+            >
+              <Select
+                mode="multiple"
+                options={ classOptions }
+                showSearch
+              />
+            </Form.Item>
+          </Form.Conditional>
+        </FormKit.Panel>
+      </>
+      )}
     </>
   )
 }

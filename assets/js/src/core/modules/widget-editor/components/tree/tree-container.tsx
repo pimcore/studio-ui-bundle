@@ -10,9 +10,9 @@
 
 import { Content, ContentLayout, Icon, IconButton, IconTextButton, SearchInput, Toolbar, type TreeDataItem, TreeElement } from '@sdk/components'
 import { isNil, isString, isUndefined } from 'lodash'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useWidgetEditorContext } from '../../context/hooks/use-widget-editor-context'
+import { useWidgetEditorActions } from '../../context/hooks/use-widget-editor-context'
 import { usePerspectiveWidgetGetConfigCollectionQuery } from '@sdk/api/perspectives'
 import { type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 
@@ -20,11 +20,11 @@ export const TreeContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [treeDataFiltered, setTreeDataFiltered] = useState<TreeDataItem[]>([])
-  const { openWidget, createWidget } = useWidgetEditorContext()
+  const { openWidget, createWidget } = useWidgetEditorActions()
   const { data: widgets, isFetching, isLoading, refetch } = usePerspectiveWidgetGetConfigCollectionQuery({ skipWrapperWidgets: true })
 
-  const generateTreeStructure = (widgets: WidgetConfig[]): TreeDataItem[] => {
-    return [...widgets]
+  const generateTreeStructure = useCallback((items: WidgetConfig[]): TreeDataItem[] => {
+    return [...items]
       .sort((a, b) => a.name.localeCompare(b.name))
       .map((item: WidgetConfig) => ({
         title: item.name,
@@ -34,7 +34,7 @@ export const TreeContainer = (): React.JSX.Element => {
           value={ item.icon.value }
               />
       }))
-  }
+  }, [])
 
   useEffect(() => {
     if (isUndefined(widgets)) {
@@ -44,9 +44,9 @@ export const TreeContainer = (): React.JSX.Element => {
     if (!isUndefined(widgets)) {
       setTreeDataFiltered(generateTreeStructure(widgets.items))
     }
-  }, [widgets])
+  }, [widgets, generateTreeStructure])
 
-  const handleSearch = (value: string): void => {
+  const handleSearch = useCallback((value: string): void => {
     if (value.length === 0) {
       if (!isUndefined(widgets)) {
         setTreeDataFiltered(generateTreeStructure(widgets.items))
@@ -65,46 +65,62 @@ export const TreeContainer = (): React.JSX.Element => {
 
       setTreeDataFiltered(generateTreeStructure(filteredData))
     }
-  }
+  }, [widgets, generateTreeStructure])
 
-  const clearSearch = (): void => {
+  const clearSearch = useCallback((): void => {
     setSearchTerm('')
     if (!isUndefined(widgets)) {
       setTreeDataFiltered(generateTreeStructure(widgets.items))
     }
-  }
+  }, [widgets, generateTreeStructure])
+
+  const handleRefresh = useCallback(async (): Promise<void> => {
+    await refetch()
+  }, [refetch])
+
+  const handleSelected = useCallback((key: React.Key): void => {
+    const widget = widgets?.items.find((w) => isString(w.id) && isString(key) && w.id === key)
+
+    if (widget !== undefined) {
+      void openWidget(widget.id, widget.widgetType)
+    }
+  }, [widgets, openWidget])
+
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>): void => {
+    setSearchTerm(e.target.value)
+  }, [])
+
+  const toolbar = useMemo(() => (
+    <Toolbar justify="space-between">
+      <IconButton
+        data-testid="widget-tree-refresh-button"
+        icon={ { value: 'refresh' } }
+        loading={ isLoading || isFetching }
+        onClick={ handleRefresh }
+        title={ t('refresh') }
+      />
+
+      <IconTextButton
+        data-testid="widget-tree-create-button"
+        icon={ { value: 'new' } }
+        loading={ isLoading || isFetching }
+        onClick={ createWidget }
+      >
+        {t('toolbar.new')}
+      </IconTextButton>
+    </Toolbar>
+  ), [isLoading, isFetching, handleRefresh, createWidget, t])
 
   return (
     <ContentLayout
-      renderToolbar={ (
-        <Toolbar justify="space-between">
-          <IconButton
-            data-testid="widget-tree-refresh-button"
-            icon={ { value: 'refresh' } }
-            loading={ isLoading || isFetching }
-            onClick={ async () => {
-              await refetch()
-            } }
-            title={ t('refresh') }
-          />
-
-          <IconTextButton
-            data-testid="widget-tree-create-button"
-            icon={ { value: 'new' } }
-            loading={ isLoading || isFetching }
-            onClick={ createWidget }
-          >
-            {t('toolbar.new')}
-          </IconTextButton>
-        </Toolbar>
-      ) }
+      renderToolbar={ toolbar }
     >
       <Content
         loading={ isLoading || isFetching }
         padded
       >
         <SearchInput
-          onChange={ (e) => { setSearchTerm(e.target.value) } }
+          onChange={ handleSearchChange }
           onClear={ clearSearch }
           onSearch={ handleSearch }
           value={ searchTerm }
@@ -112,13 +128,7 @@ export const TreeContainer = (): React.JSX.Element => {
         />
         <TreeElement
           hasRoot={ false }
-          onSelected={ (key) => {
-            const widget = widgets!.items.find((w) => isString(w.id) && isString(key) && w.id === key)
-
-            if (widget !== undefined) {
-              void openWidget(widget.id, widget.widgetType)
-            }
-          } }
+          onSelected={ handleSelected }
           treeData={ treeDataFiltered }
         />
       </Content>

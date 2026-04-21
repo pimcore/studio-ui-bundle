@@ -17,6 +17,7 @@ import { useSettingsCountryCollectionQuery } from '@Pimcore/modules/app/settings
 
 export const FieldDefinitionCountryMultiselectFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const isCustomLayout = props.context.area.includes('custom-layout')
 
   const { data: countriesData } = useSettingsCountryCollectionQuery()
 
@@ -45,33 +46,36 @@ export const FieldDefinitionCountryMultiselectFormFields = (props: FieldDefiniti
         <Input />
       </Form.Item>
 
-      <Form.Item
-        label={ t('multiselect-render-type') }
-        name="renderType"
-      >
-        <Select
-          options={ [
-            { label: 'List', value: 'list' },
-            { label: 'Tags', value: 'tags' }
-          ] }
-        />
-      </Form.Item>
+      {!isCustomLayout && (
+      <>
+        <Form.Item
+          label={ t('multiselect-render-type') }
+          name="renderType"
+        >
+          <Select
+            options={ [
+              { label: 'List', value: 'list' },
+              { label: 'Tags', value: 'tags' }
+            ] }
+          />
+        </Form.Item>
 
-      <Form.Item
-        getValueFromEvent={ (value: string[]) => value.join(',') }
-        getValueProps={ (value: string | string[]) => ({
-          value: isString(value) ? value.split(',').filter(Boolean) : value
-        }) }
-        label={ t('restrict-selection-to') }
-        name="restrictTo"
-      >
-        <Select
-          mode="multiple"
-          options={ countryOptions }
-          showSearch
-        />
-      </Form.Item>
-
+        <Form.Item
+          getValueFromEvent={ (value: string[]) => value.join(',') }
+          getValueProps={ (value: string | string[]) => ({
+            value: isString(value) ? value.split(',').filter(Boolean) : value
+          }) }
+          label={ t('restrict-selection-to') }
+          name="restrictTo"
+        >
+          <Select
+            mode="multiple"
+            options={ countryOptions }
+            showSearch
+          />
+        </Form.Item>
+      </>
+      )}
     </>
   )
 }

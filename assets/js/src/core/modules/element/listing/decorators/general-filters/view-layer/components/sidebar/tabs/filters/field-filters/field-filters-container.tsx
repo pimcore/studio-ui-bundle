@@ -8,8 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-/* eslint-disable max-lines */
-
 import React, { useEffect, useMemo, useState } from 'react'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { Space } from 'antd'
@@ -277,6 +275,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
 
       <Dropdown menu={ { items: getFilteredDropDownMenuItems } }>
         <IconTextButton
+          data-testid="listing-field-filter-add-button"
           icon={ { value: 'new' } }
           type='link'
         >

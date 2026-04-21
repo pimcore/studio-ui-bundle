@@ -14,11 +14,11 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { api, usePerspectiveWidgetCreateMutation, usePerspectiveWidgetDeleteMutation, usePerspectiveWidgetUpdateConfigByIdMutation, type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 import { isUndefined } from 'lodash'
-import React from 'react'
+import React, { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface UseWidgetEditorReturn {
-  createWidget: (name: string, widgetType: string, onFinish?: (newName: string) => void) => Promise<void>
+  createWidget: (name: string, widgetType: string, onFinish?: (id: string) => void) => Promise<void>
   getWidgetById: (widgetId: string, widgetType: string) => Promise<WidgetConfig | undefined>
   updateWidget: (widgetId: string, widgetType: string, config: any, onFinish?: (updated: any) => void) => Promise<void>
   removeWithConfirmation: (widgetId: string, widgetType: string, onFinish?: () => void) => void
@@ -34,7 +34,36 @@ export const useWidgetEditor = (): UseWidgetEditorReturn => {
   const [widgetDeleteMutation, { isLoading: isDeleteLoading }] = usePerspectiveWidgetDeleteMutation()
   const [widgetUpdateMutation, { isLoading: isUpdateLoading }] = usePerspectiveWidgetUpdateConfigByIdMutation()
 
-  const createWidget = async (name: string, widgetType: string, onFinish?: (name: string) => void): Promise<void> => {
+  // Use refs for values that change often but shouldn't invalidate callbacks
+  const tRef = useRef(t)
+  tRef.current = t
+  const successRef = useRef(success)
+  successRef.current = success
+  const modalRef = useRef(modal)
+  modalRef.current = modal
+
+  const remove = useCallback(async (widgetId: string, widgetType: string, onFinish?: () => void): Promise<void> => {
+    const deleteWidgetTask = widgetDeleteMutation({
+      widgetId,
+      widgetType
+    })
+
+    try {
+      const response = await deleteWidgetTask
+
+      if (!isUndefined(response.error)) {
+        trackError(new ApiError(response.error))
+        return
+      }
+
+      onFinish?.()
+      void successRef.current(tRef.current('widget-editor.delete.success'))
+    } catch {
+      trackError(new GeneralError('Failed to delete widget'))
+    }
+  }, [widgetDeleteMutation])
+
+  const createWidget = useCallback(async (name: string, widgetType: string, onFinish?: (id: string) => void): Promise<void> => {
     const widgetCreateTask = widgetCreateMutation({
       widgetType,
       body: {
@@ -49,16 +78,18 @@ export const useWidgetEditor = (): UseWidgetEditorReturn => {
 
       if (response.error !== undefined) {
         trackError(new ApiError(response.error))
+        return
       }
 
-      onFinish?.(name)
-      void success(t('widget-editor.create.success'))
+      const { id } = response.data as { id: string }
+      onFinish?.(id)
+      void successRef.current(tRef.current('widget-editor.create.success'))
     } catch {
       trackError(new GeneralError('Failed to create new widget.'))
     }
-  }
+  }, [widgetCreateMutation])
 
-  const getWidgetById = async (widgetId: string, widgetType: string): Promise<WidgetConfig | undefined> => {
+  const getWidgetById = useCallback(async (widgetId: string, widgetType: string): Promise<WidgetConfig | undefined> => {
     try {
       const { data, isError, error } = await dispatch(api.endpoints.perspectiveWidgetGetConfigById.initiate({
         widgetId,
@@ -74,9 +105,9 @@ export const useWidgetEditor = (): UseWidgetEditorReturn => {
     } catch {
       trackError(new GeneralError('Failed to load widget data of widget "' + widgetId + '" with type "' + widgetType + '".'))
     }
-  }
+  }, [dispatch])
 
-  const updateWidget = async (widgetId: string, widgetType: string, config: any, onFinish?: (updated: any) => void): Promise<void> => {
+  const updateWidget = useCallback(async (widgetId: string, widgetType: string, config: any, onFinish?: (updated: any) => void): Promise<void> => {
     const classes: object | undefined = config.classes ?? undefined
     const widgetUpdateTask = widgetUpdateMutation({
       widgetId,
@@ -100,46 +131,25 @@ export const useWidgetEditor = (): UseWidgetEditorReturn => {
       }
 
       onFinish?.(config)
-      void success(t('widget-editor.update.success'))
+      void successRef.current(tRef.current('widget-editor.update.success'))
     } catch {
       trackError(new GeneralError('Failed to create new perspective.'))
       onFinish?.(config)
     }
-  }
+  }, [widgetUpdateMutation])
 
-  const removeWithConfirmation = (widgetId: string, widgetType: string, onFinish?: () => void): void => {
-    modal.confirm({
-      title: t('element.delete.confirmation.title'),
-      content: <span>{t('element.delete.confirmation.text')} </span>,
-      okText: t('element.delete.confirmation.ok'),
+  const removeWithConfirmation = useCallback((widgetId: string, widgetType: string, onFinish?: () => void): void => {
+    modalRef.current.confirm({
+      title: tRef.current('element.delete.confirmation.title'),
+      content: <span>{tRef.current('element.delete.confirmation.text')} </span>,
+      okText: tRef.current('element.delete.confirmation.ok'),
       onOk: async () => {
         await remove(widgetId, widgetType, () => {
           onFinish?.()
         })
       }
     })
-  }
-
-  const remove = async (widgetId: string, widgetType: string, onFinish?: () => void): Promise<void> => {
-    const deleteWidgetTask = widgetDeleteMutation({
-      widgetId,
-      widgetType
-    })
-
-    try {
-      const response = await deleteWidgetTask
-
-      if (!isUndefined(response.error)) {
-        trackError(new ApiError(response.error))
-        return
-      }
-
-      onFinish?.()
-      void success(t('widget-editor.delete.success'))
-    } catch {
-      trackError(new GeneralError('Failed to delete widget'))
-    }
-  }
+  }, [remove])
 
   const isLoading = isCreateLoading || isDeleteLoading || isUpdateLoading
 

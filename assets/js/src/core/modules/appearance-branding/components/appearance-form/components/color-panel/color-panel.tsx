@@ -20,16 +20,16 @@ export const ColorPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
   const form = Form.useFormInstance()
 
-  const formatColor = (color: any): string | null => {
+  const formatColor = (color: any): string => {
     if (isObject(color) && has(color, 'cleared') && color.cleared === true) {
-      return null
+      return ''
     }
 
     if (isObject(color)) {
       return (color as any).toHexString()
     }
 
-    return null
+    return ''
   }
 
   return (
@@ -51,6 +51,8 @@ export const ColorPanel = (): React.JSX.Element => {
             noStyle
           >
             <ColorPicker
+              allowClear
+              data-testid="appearance-branding-brand-color"
               format="hex"
               onChange={ (color) => {
                 const hexValue = formatColor(color)
@@ -70,6 +72,8 @@ export const ColorPanel = (): React.JSX.Element => {
             noStyle
           >
             <ColorPicker
+              allowClear
+              data-testid="appearance-branding-background-shade"
               format="hex"
               onChange={ (color) => {
                 const hexValue = formatColor(color)

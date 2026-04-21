@@ -49,7 +49,6 @@ export const KeyGroupRelationsGrid = ({
   const [pageSize, setPageSize] = useState(20)
 
   const { data, isLoading, isFetching, refetch } = useClassificationStoreConfigurationKeyGroupRelationCollectionQuery(
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     { groupId: groupId!, body: { filters: { page, pageSize } } },
     { skip: groupId === undefined }
   )

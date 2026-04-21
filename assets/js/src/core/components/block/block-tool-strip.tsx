@@ -65,6 +65,7 @@ export const BlockToolStrip = ({ field, disallowAdd, disallowDelete, disallowReo
       >
         <Space size="mini">
           <IconButton
+            data-testid={ `block-tool-strip-${field}-add` }
             disabled={ disallowAdd }
             icon={ { value: 'new' } }
             onClick={ handleAdd }

@@ -15,7 +15,6 @@ import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider
 import { Form } from '@Pimcore/components/form/form'
 import { useStyles } from './allowed-objects-panel.styles'
 import { Switch } from '@Pimcore/components/switch/switch'
-import { uniqueId } from 'lodash'
 
 export const AllowedObjectsPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -34,7 +33,7 @@ export const AllowedObjectsPanel = (): React.JSX.Element => {
         >
           {getClassDefinitionsForCurrentUser().map(classDefinition => (
             <Form.Item
-              key={ uniqueId() }
+              key={ classDefinition.id }
               name={ classDefinition.id }
             >
               <Switch

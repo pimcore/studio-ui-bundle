@@ -50,23 +50,23 @@ export const ObjectBlockItem = (props: ObjectBlockItemProps): React.JSX.Element 
       {
         Array.isArray(children)
           ? children.map((child, index) => {
-            return (
-              <CombinedFieldNameProvider
-                combinedFieldNameParent={ [...(Array.isArray(props.name) ? props.name : [props.name])] }
-                key={ index }
-              >
-                <Form.Group
-                  name={ field }
+              return (
+                <CombinedFieldNameProvider
+                  combinedFieldNameParent={ [...(Array.isArray(props.name) ? props.name : [props.name])] }
+                  key={ index }
                 >
-                  <ObjectComponent
-                    key={ field }
-                    { ...child }
-                    noteditable={ noteditable === true }
-                  />
-                </Form.Group>
-              </CombinedFieldNameProvider>
-            )
-          })
+                  <Form.Group
+                    name={ field }
+                  >
+                    <ObjectComponent
+                      key={ field }
+                      { ...child }
+                      noteditable={ noteditable === true }
+                    />
+                  </Form.Group>
+                </CombinedFieldNameProvider>
+              )
+            })
           : undefined
       }
     </ToolStripBox>

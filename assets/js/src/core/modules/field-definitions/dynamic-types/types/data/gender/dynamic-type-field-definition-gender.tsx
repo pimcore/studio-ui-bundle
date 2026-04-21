@@ -9,15 +9,27 @@
  */
 
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { DynamicTypeFieldDefinitionDataAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
+import { DynamicTypeFieldDefinitionDataAbstract, type FieldDefinitionData } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
+import { t } from 'i18next'
 import React from 'react'
 
 export class DynamicTypeFieldDefinitionGender extends DynamicTypeFieldDefinitionDataAbstract {
   id: string = 'gender'
 
   getIcon (): ElementIcon {
-    return { type: 'name', value: 'gender' }
+    return {
+      type: 'name',
+      value: 'gender'
+    }
+  }
+
+  getDefaultData (): FieldDefinitionData {
+    return {
+      ...super.getDefaultData(),
+      name: 'gender',
+      title: t('field-definition.crm.gender.title')
+    }
   }
 
   getGroup (): string[] {
@@ -34,5 +46,13 @@ export class DynamicTypeFieldDefinitionGender extends DynamicTypeFieldDefinition
 
   getSpecificFormFields (_context: FieldDefinitionContext): React.JSX.Element {
     return <></>
+  }
+
+  normalizeFieldDefinition (fieldDef: Record<string, unknown>): Record<string, unknown> {
+    const normalized = super.normalizeFieldDefinition(fieldDef)
+    if (typeof normalized.title !== 'string' || normalized.title === '') {
+      normalized.title = t('field-definition.crm.gender.title')
+    }
+    return normalized
   }
 }

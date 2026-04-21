@@ -16,25 +16,28 @@ import { useKeyedList } from '@Pimcore/components/form/controls/keyed-list/provi
 
 export interface ObjectBrickAddButtonProps {
   allowedTypes: string[]
+  objectBrick: any[]
 }
 
 export const ObjectBrickAddButton = (props: ObjectBrickAddButtonProps): React.JSX.Element => {
-  const { allowedTypes } = props
+  const { allowedTypes, objectBrick } = props
   const { t } = useTranslation()
   const { operations } = useKeyedList()
 
-  const dropdownItems: DropdownMenuProps['items'] = allowedTypes.map((type) => {
-    return {
-      key: type,
-      label: type,
-      onClick: (e) => {
-        e.domEvent.stopPropagation()
-        operations.add(type, {})
+  const dropdownItems: DropdownMenuProps['items'] = useMemo(() => {
+    return allowedTypes.map((type) => {
+      return {
+        key: type,
+        label: objectBrick?.find(item => item.key === type)?.title === '' || objectBrick?.find(item => item.key === type)?.title === undefined ? type : t(objectBrick?.find(item => item.key === type).title as string),
+        onClick: (e: any) => {
+          e.domEvent.stopPropagation()
+          operations.add(type, {})
+        }
       }
-    }
-  })
+    })
+  }, [allowedTypes, objectBrick])
 
-  return useMemo(() => (
+  return (
     <Dropdown
       menu={ { items: dropdownItems } }
     >
@@ -43,5 +46,5 @@ export const ObjectBrickAddButton = (props: ObjectBrickAddButtonProps): React.JS
         onClick={ (e) => { e.stopPropagation() } }
       >{t('add')}</IconTextButton>
     </Dropdown>
-  ), [allowedTypes])
+  )
 }

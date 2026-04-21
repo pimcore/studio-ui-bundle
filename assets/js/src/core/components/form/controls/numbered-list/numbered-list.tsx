@@ -16,6 +16,7 @@ import { NumberedListIterator } from './iterator/numbered-list-iterator'
 import { cloneDeep, isEqual, set, get, isArray, isUndefined } from 'lodash'
 import { useItem } from '../../item/provider/item/use-item'
 import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
+import { useFormGroupOptional } from '../../group/provider/use-form-group-optional'
 
 export interface NumberedListProps {
   children: React.ReactNode
@@ -32,10 +33,18 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
   const bufferedValue = useDebounce(value, 10)
 
   const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
-  const name = useMemo(() => itemName[itemName.length - 1], [itemName])
+  const groupContext = useFormGroupOptional()
+
+  const name = useMemo(() => {
+    const parentLength = !isUndefined(groupContext) ? (isArray(groupContext.name) ? groupContext.name.length : 1) : 0
+    const suffix = itemName.slice(parentLength)
+
+    return suffix.length === 1 ? suffix[0] : suffix
+  }, [itemName, groupContext])
 
   const onChange: NumberedListData['onChange'] = useCallback((newValue: NumberedListData['values']) => {
     setValue(() => newValue)
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     baseOnChange !== undefined && baseOnChange(newValue)
   }, [baseOnChange])
 

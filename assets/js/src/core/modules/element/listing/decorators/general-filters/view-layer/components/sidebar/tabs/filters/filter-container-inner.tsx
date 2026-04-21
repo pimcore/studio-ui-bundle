@@ -8,8 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { getErrorKey, ErrorKeyTypes } from '@Pimcore/modules/app/error-handler'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
 import { Checkbox, Space } from 'antd'
@@ -39,13 +41,16 @@ import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/pr
 
 export const FilterContainerInner = (): React.JSX.Element => {
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
+  const [isShowPqlError, setIsShowPqlError] = useState<boolean>(false)
+  const [pqlError, setPqlError] = useState<FetchBaseQueryError | undefined>(undefined)
+
   const { setPage } = usePaging()
   const { setFieldFilters: setListingFieldFilters } = useFieldFilters()
   const { setOnlyDirectChildren: setListingOnlyDirectChildren } = useDirectChildrenFilter()
   const { setPqlQuery: setListingPqlQuery } = usePqlFilter()
   const { setSearchTerm: setListingSearchTerm } = useSearchTermFilter()
   const { handleSearchTermInSidebar } = useGeneralFiltersConfig()
-  const { setDataLoadingState } = useData()
+  const { setDataLoadingState, dataQueryResult } = useData()
 
   const {
     fieldFilters,
@@ -59,6 +64,14 @@ export const FilterContainerInner = (): React.JSX.Element => {
   } = useFilter()
 
   const { t } = useTranslation()
+
+  useEffect(() => {
+    const error = dataQueryResult?.error
+    if (dataQueryResult?.isError === true && getErrorKey(error) === ErrorKeyTypes.GDI_PARSING_EXCEPTION) {
+      setIsShowPqlError(true)
+      setPqlError(error as FetchBaseQueryError)
+    }
+  }, [dataQueryResult?.error])
 
   const handleApplyClick = (): void => {
     setListingFieldFilters(fieldFilters)
@@ -88,6 +101,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme='secondary'>
           <IconTextButton
+            data-testid="listing-filter-clear-button"
             icon={ { value: 'close' } }
             onClick={ handleResetAllFiltersClick }
             type='link'
@@ -96,6 +110,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
           </IconTextButton>
 
           <Button
+            data-testid="listing-filter-apply-button"
             onClick={ handleApplyClick }
             type='primary'
           >
@@ -114,6 +129,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
             <Text>{t('toggle.advanced-mode')}</Text>
             <Switch
               checked={ isAdvancedMode }
+              data-testid="listing-filter-advanced-toggle"
               onChange={ () => {
                 setIsAdvancedMode(!isAdvancedMode)
               } }
@@ -124,9 +140,13 @@ export const FilterContainerInner = (): React.JSX.Element => {
         {isAdvancedMode
           ? (
             <PQLQueryInput
-              handleBlur={ (e) => { setPqlQuery(e.target.value) } }
-              handleChange={ (e) => { setPqlQuery(e.target.value) } }
-              isShowError={ false }
+              errorData={ pqlError }
+              handleChange={ (val) => {
+                setPqlQuery(val)
+                setIsShowPqlError(false)
+                setPqlError(undefined)
+              } }
+              isShowError={ isShowPqlError }
               value={ pqlQuery }
             />
             )

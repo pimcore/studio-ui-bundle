@@ -22,4 +22,6 @@ export interface IApiErrorDetails {
   errorKey?: string
   message?: string
   error?: string
+  position?: number
+  token?: string
 }

@@ -33,6 +33,7 @@ export const Refetch = (): React.JSX.Element => {
 
   return (
     <IconButton
+      data-testid="listing-reload-button"
       icon={ { value: 'refresh' } }
       onClick={ async () => await refetch() }
     />

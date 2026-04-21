@@ -36,7 +36,6 @@ export const addGeoBoundsToolbar = (leafletMap: L.Map, featureGroup: L.FeatureGr
       circle: false,
       marker: false,
       circlemarker: false,
-      // eslint-disable-next-line
       rectangle: { showArea: false } as any
     },
     edit: {

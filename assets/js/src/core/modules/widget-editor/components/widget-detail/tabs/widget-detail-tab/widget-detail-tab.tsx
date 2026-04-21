@@ -8,25 +8,18 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useWidgetEditorContext } from '@Pimcore/modules/widget-editor/context/hooks/use-widget-editor-context'
+import { type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 import { type DynamicTypeWidgetTypeRegistry } from '@Pimcore/modules/widget-editor/dynmic-types/registry/dynamic-type-widget-type-registry'
 import { container } from '@sdk/app'
-import React from 'react'
+import React, { memo } from 'react'
 import { WidgetFormProvider } from '../../../widget-type-form/context/widget-form-provider'
 import { WidgetForm } from '../../../widget-type-form/widget-form'
 
 interface WidgetDetailTabProps {
-  id: string
+  widget: WidgetConfig
 }
 
-export const WidgetDetailTab = ({ id }: WidgetDetailTabProps): React.JSX.Element => {
-  const { widgets } = useWidgetEditorContext()
-  const widget = widgets.find(w => w.id === id)
-
-  if (widget === undefined) {
-    return <></>
-  }
-
+const WidgetDetailTabComponent = ({ widget }: WidgetDetailTabProps): React.JSX.Element => {
   const widgetType = container.get<DynamicTypeWidgetTypeRegistry>('DynamicTypes/WidgetEditor/WidgetTypeRegistry').getDynamicType(widget.widgetType)
   const { form: Form } = widgetType
 
@@ -36,3 +29,7 @@ export const WidgetDetailTab = ({ id }: WidgetDetailTabProps): React.JSX.Element
     </WidgetFormProvider>
   )
 }
+
+export const WidgetDetailTab = memo(WidgetDetailTabComponent, (prevProps, nextProps) => {
+  return prevProps.widget === nextProps.widget
+})

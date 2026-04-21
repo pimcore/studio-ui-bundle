@@ -108,7 +108,10 @@ export const BatchActions = (): React.JSX.Element => {
       <Dropdown
         menu={ menu }
       >
-        <DropdownButton key={ 'dropdown-button' }>{hasSelectedItems ? t('listing.actions') : t('listing.non-selected.actions')}</DropdownButton>
+        <DropdownButton
+          data-testid="listing-batch-actions-button"
+          key={ 'dropdown-button' }
+        >{hasSelectedItems ? t('listing.actions') : t('listing.non-selected.actions')}</DropdownButton>
       </Dropdown>
 
       <CsvModal

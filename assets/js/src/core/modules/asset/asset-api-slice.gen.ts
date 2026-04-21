@@ -1133,16 +1133,10 @@ export type Asset = Element & {
     permissions: AssetPermissions;
 };
 export type Image = Asset & {
-    /** Format */
-    format: string;
     /** width */
     width: number;
     /** height */
     height: number;
-    /** is vector graphic */
-    isVectorGraphic: boolean;
-    /** is animated */
-    isAnimated: boolean;
     /** path to thumbnail */
     imageThumbnailPath: string;
 };

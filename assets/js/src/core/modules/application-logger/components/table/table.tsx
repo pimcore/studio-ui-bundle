@@ -21,6 +21,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type BundleApplicationLoggerGetCollectionApiResponse, type BundleApplicationLoggerLogEntry } from '../../application-logger-api-slice.gen'
 import { DetailModal } from '../detail-modal/detail-modal'
+import { useStyles } from './table.styles'
 
 interface TableProps {
   items: BundleApplicationLoggerGetCollectionApiResponse['items']
@@ -34,6 +35,7 @@ export interface BundleApplicationLoggerLogEntryWithActions extends BundleApplic
 export const Table = ({ items }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openElement } = useElementHelper()
+  const { styles } = useStyles()
   const [open, setOpen] = useState<boolean>(false)
   const [modelData, setModelData] = useState<BundleApplicationLoggerLogEntryWithActions | null>(null)
 
@@ -61,7 +63,12 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
       size: 60
     }),
     columnHelper.accessor('message', {
-      header: t('application-logger.columns.message')
+      header: t('application-logger.columns.message'),
+      cell: ({ getValue }) => (
+        <span className={ styles.cellTruncate }>
+          {getValue()}
+        </span>
+      )
     }),
     columnHelper.accessor('translatedPriority', {
       header: t('application-logger.columns.type'),

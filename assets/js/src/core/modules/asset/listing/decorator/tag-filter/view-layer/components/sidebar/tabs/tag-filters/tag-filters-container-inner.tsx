@@ -50,6 +50,7 @@ export const TagFiltersContainerInner = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme='secondary'>
           <IconTextButton
+            data-testid="listing-tag-filter-clear-button"
             icon={ { value: 'close' } }
             onClick={ handleResetAllFiltersClick }
             type='link'
@@ -58,6 +59,7 @@ export const TagFiltersContainerInner = (): React.JSX.Element => {
           </IconTextButton>
 
           <Button
+            data-testid="listing-tag-filter-apply-button"
             onClick={ handleApplyClick }
             type='primary'
           >
