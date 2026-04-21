@@ -73,31 +73,31 @@ const Component = ({ items, className, activeKey, onClose, hasStickyHeader = fal
     return items?.map(item => {
       const button = (
         <button
-          className={ styles.middleClickButton }
-          data-tab-key={ item.key }
-          onMouseDown={ handleMiddleClick }
+          className={styles.middleClickButton}
+          data-tab-key={item.key}
+          onMouseDown={handleMiddleClick}
           type="button"
         >
           {item.label}
         </button>
       )
 
-      const label = onClose !== undefined
-        ? (
+      const label = isUndefined(onClose)
+        ? button
+        : (
           <ContextMenuWrapper
-            calculateAutoHeight={ false }
-            renderMenu={ () => (
+            calculateAutoHeight={false}
+            renderMenu={() => (
               <TabContextMenu
-                allKeys={ allKeys }
-                onClose={ onClose }
-                tabKey={ item.key }
+                allKeys={allKeys}
+                onClose={onClose}
+                tabKey={item.key}
               />
-            ) }
+            )}
           >
             {button}
           </ContextMenuWrapper>
-          )
-        : button
+        )
 
       return {
         ...item,
@@ -108,13 +108,13 @@ const Component = ({ items, className, activeKey, onClose, hasStickyHeader = fal
 
   return (
     <AntdTabs
-      activeKey={ activeKey }
-      className={ classNames }
+      activeKey={activeKey}
+      className={classNames}
       hideAdd
-      items={ enhancedItems }
-      onEdit={ onEdit }
-      type={ tabType }
-      { ...props }
+      items={enhancedItems}
+      onEdit={onEdit}
+      type={tabType}
+      {...props}
     />
   )
 }
