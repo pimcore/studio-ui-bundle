@@ -20,6 +20,12 @@ export interface DownloadJobOptions {
   title: string
   action: () => Promise<number>
   downloadUrl: string
+  /**
+   * Number of handler-owned steps to display (e.g. 2 for folder exports that
+   * spawn a child job: step 1 = collect, step 2 = create file).
+   * When set, the UI shows "Step 1/N" / "Step 2/N" etc.
+   */
+  totalSteps?: number
 }
 
 export class DownloadJob implements JobInterface {
@@ -46,11 +52,12 @@ export class DownloadJob implements JobInterface {
   }
 
   private createHandler (jobRunId: number, options: JobRunOptions): MessageBusJobHandler {
-    const { title, downloadUrl } = this.options
+    const { title, downloadUrl, totalSteps } = this.options
 
     return new MessageBusJobHandler({
       jobRunId,
       title,
+      totalSteps,
       progressStrategy: new ProgressFieldStrategy(),
       onRetry: async () => {
         await this.run(options)
