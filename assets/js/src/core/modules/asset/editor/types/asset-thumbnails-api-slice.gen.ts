@@ -86,23 +86,23 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type ThumbnailImageGetCollectionApiResponse = /** status 200 thumbnail_image_get_collection_success_response */ {
+export type ThumbnailImageGetCollectionApiResponse = /** status 200 All downloadable image thumbnails */ {
     items: Thumbnail[];
 };
 export type ThumbnailImageGetCollectionApiArg = void;
 export type ThumbnailImageCreateApiResponse =
-    /** status 200 thumbnail_image_create_success_response */ ImageThumbnailConfigDetail;
+    /** status 200 Created image thumbnail configuration as JSON */ ImageThumbnailConfigDetail;
 export type ThumbnailImageCreateApiArg = {
     createThumbnailConfig: CreateThumbnailConfig;
 };
 export type ThumbnailImageGetByNameApiResponse =
-    /** status 200 thumbnail_image_get_by_name_success_response */ ImageThumbnailConfigDetail;
+    /** status 200 Image thumbnail configuration as JSON */ ImageThumbnailConfigDetail;
 export type ThumbnailImageGetByNameApiArg = {
     /** Image thumbnail configuration name */
     name: string;
 };
 export type ThumbnailImageUpdateApiResponse =
-    /** status 200 thumbnail_image_update_success_response */ ImageThumbnailConfigDetail;
+    /** status 200 Updated image thumbnail configuration as JSON */ ImageThumbnailConfigDetail;
 export type ThumbnailImageUpdateApiArg = {
     /** Image thumbnail configuration name */
     name: string;
@@ -113,28 +113,28 @@ export type ThumbnailImageDeleteApiArg = {
     /** Image thumbnail configuration name */
     name: string;
 };
-export type ThumbnailImageGetTreeApiResponse = /** status 200 thumbnail_image_get_tree_success_response */ {
+export type ThumbnailImageGetTreeApiResponse = /** status 200 Image thumbnail configuration tree as JSON */ {
     totalItems: number;
     items: (ThumbnailConfigurationData | ThumbnailConfigurationFolderData)[];
 };
 export type ThumbnailImageGetTreeApiArg = void;
-export type ThumbnailVideoGetCollectionApiResponse = /** status 200 thumbnail_video_get_collection_success_response */ {
+export type ThumbnailVideoGetCollectionApiResponse = /** status 200 All video thumbnails */ {
     items: Thumbnail[];
 };
 export type ThumbnailVideoGetCollectionApiArg = void;
 export type ThumbnailVideoCreateApiResponse =
-    /** status 200 thumbnail_video_create_success_response */ VideoThumbnailConfigDetail;
+    /** status 200 Successfully created video thumbnail configuration */ VideoThumbnailConfigDetail;
 export type ThumbnailVideoCreateApiArg = {
     createThumbnailConfig: CreateThumbnailConfig;
 };
 export type ThumbnailVideoGetByNameApiResponse =
-    /** status 200 thumbnail_video_get_by_name_success_response */ VideoThumbnailConfigDetail;
+    /** status 200 Successfully retrieved video thumbnail configuration details */ VideoThumbnailConfigDetail;
 export type ThumbnailVideoGetByNameApiArg = {
     /** Video thumbnail configuration name */
     name: string;
 };
 export type ThumbnailVideoUpdateApiResponse =
-    /** status 200 thumbnail_video_update_success_response */ VideoThumbnailConfigDetail;
+    /** status 200 Successfully updated video thumbnail configuration */ VideoThumbnailConfigDetail;
 export type ThumbnailVideoUpdateApiArg = {
     /** Video thumbnail configuration name */
     name: string;
@@ -145,10 +145,11 @@ export type ThumbnailVideoDeleteApiArg = {
     /** Video thumbnail configuration name */
     name: string;
 };
-export type ThumbnailVideoGetTreeApiResponse = /** status 200 thumbnail_video_get_tree_success_response */ {
-    totalItems: number;
-    items: (ThumbnailConfigurationData | ThumbnailConfigurationFolderData)[];
-};
+export type ThumbnailVideoGetTreeApiResponse =
+    /** status 200 Successfully retrieved video thumbnail configuration tree */ {
+        totalItems: number;
+        items: (ThumbnailConfigurationData | ThumbnailConfigurationFolderData)[];
+    };
 export type ThumbnailVideoGetTreeApiArg = void;
 export type Thumbnail = {
     /** AdditionalAttributes */

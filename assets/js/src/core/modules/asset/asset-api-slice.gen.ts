@@ -457,38 +457,40 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type AssetGetTypesApiResponse = /** status 200 asset_get_types_success_response */ {
+export type AssetGetTypesApiResponse = /** status 200 Successfully retrieved all available asset types */ {
     totalItems: number;
     items: AssetType[];
 };
 export type AssetGetTypesApiArg = void;
-export type AssetBatchDeleteApiResponse = /** status 201 asset_batch_delete_created_response */ {
-    /** ID of created jobRun */
-    jobRunId: number;
-};
+export type AssetBatchDeleteApiResponse =
+    /** status 201 Successfully created <strong>jobRun</strong> for batch delete */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
 export type AssetBatchDeleteApiArg = {
     body: {
         ids?: number[];
     };
 };
-export type AssetCloneApiResponse = /** status 201 asset_clone_created_response */ {
-    /** ID of created jobRun */
-    jobRunId: number;
-};
+export type AssetCloneApiResponse =
+    /** status 201 Successfully copied parent asset and created <strong>jobRun</strong> for copying child assets */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
 export type AssetCloneApiArg = {
     /** Id of the asset */
     id: number;
     /** ParentId of the asset */
     parentId: number;
 };
-export type AssetCustomSettingsGetByIdApiResponse = /** status 200 asset_custom_settings_get_by_id_success_response */ {
+export type AssetCustomSettingsGetByIdApiResponse = /** status 200 Successfully retrieved custom settings as JSON */ {
     items?: CustomSettings;
 };
 export type AssetCustomSettingsGetByIdApiArg = {
     /** Id of the asset */
     id: number;
 };
-export type AssetGetTextDataByIdApiResponse = /** status 200 asset_get_text_data_by_id_success_response */ {
+export type AssetGetTextDataByIdApiResponse = /** status 200 Successfully retrieved UTF8 encoded text data of asset */ {
     /** UTF 8 encoded text data */
     data: string;
 };
@@ -496,8 +498,7 @@ export type AssetGetTextDataByIdApiArg = {
     /** Id of the asset */
     id: number;
 };
-export type AssetDocumentDownloadCustomApiResponse =
-    /** status 200 asset_document_download_custom_success_response */ Blob;
+export type AssetDocumentDownloadCustomApiResponse = /** status 200 Custom document image binary file */ Blob;
 export type AssetDocumentDownloadCustomApiArg = {
     /** Id of the document */
     id: number;
@@ -516,7 +517,7 @@ export type AssetDocumentDownloadCustomApiArg = {
     /** Dpi of downloaded image */
     dpi?: number;
 };
-export type AssetDocumentStreamCustomApiResponse = /** status 200 asset_document_stream_custom_success_response */ Blob;
+export type AssetDocumentStreamCustomApiResponse = /** status 200 Custom document image stream */ Blob;
 export type AssetDocumentStreamCustomApiArg = {
     /** Id of the document */
     id: number;
@@ -545,21 +546,19 @@ export type AssetDocumentStreamCustomApiArg = {
     cropLeft?: number;
 };
 export type AssetDocumentStreamDynamicApiResponse =
-    /** status 200 asset_document_stream_dynamic_success_response */ Blob;
+    /** status 200 Document image stream based on dynamic thumbnail configuration */ Blob;
 export type AssetDocumentStreamDynamicApiArg = {
     /** Id of the document */
     id: number;
     /** A JSON encoded thumbnail configuration. */
     config: string;
 };
-export type AssetDocumentStreamPreviewApiResponse =
-    /** status 200 asset_document_stream_preview_success_response */ Blob;
+export type AssetDocumentStreamPreviewApiResponse = /** status 200 Asset PDF preview stream */ Blob;
 export type AssetDocumentStreamPreviewApiArg = {
     /** Id of the document */
     id: number;
 };
-export type AssetDocumentDownloadByThumbnailApiResponse =
-    /** status 200 asset_document_download_by_thumbnail_success_response */ Blob;
+export type AssetDocumentDownloadByThumbnailApiResponse = /** status 200 Document image binary file */ Blob;
 export type AssetDocumentDownloadByThumbnailApiArg = {
     /** Id of the document */
     id: number;
@@ -568,8 +567,7 @@ export type AssetDocumentDownloadByThumbnailApiArg = {
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
 };
-export type AssetDocumentStreamByThumbnailApiResponse =
-    /** status 200 asset_document_stream_by_thumbnail_success_response */ Blob;
+export type AssetDocumentStreamByThumbnailApiResponse = /** status 200 Stream of document image */ Blob;
 export type AssetDocumentStreamByThumbnailApiArg = {
     /** Id of the document */
     id: number;
@@ -587,7 +585,7 @@ export type AssetDocumentStreamByThumbnailApiArg = {
     /** CropLeft of image thumbnail */
     cropLeft?: number;
 };
-export type AssetDownloadZipApiResponse = /** status 200 asset_download_zip_success_response */ Blob;
+export type AssetDownloadZipApiResponse = /** status 200 ZIP archive as attachment */ Blob;
 export type AssetDownloadZipApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
@@ -597,31 +595,33 @@ export type AssetDeleteZipApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
 };
-export type AssetDownloadByIdApiResponse = /** status 200 asset_download_by_id_success_response */ Blob;
+export type AssetDownloadByIdApiResponse = /** status 200 Original asset binary file */ Blob;
 export type AssetDownloadByIdApiArg = {
     /** Id of the asset */
     id: number;
 };
-export type AssetExportZipAssetApiResponse = /** status 201 asset_export_zip_created_response */ {
-    /** ID of created jobRun */
-    jobRunId: number;
-};
+export type AssetExportZipAssetApiResponse =
+    /** status 201 Successfully created <strong>jobRun</strong> for zip export */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
 export type AssetExportZipAssetApiArg = {
     body: {
         assets?: number[];
     };
 };
-export type AssetExportZipFolderApiResponse = /** status 201 asset_export_zip_created_response */ {
-    /** ID of created jobRun */
-    jobRunId: number;
-};
+export type AssetExportZipFolderApiResponse =
+    /** status 201 Successfully created <strong>jobRun</strong> for zip export */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
 export type AssetExportZipFolderApiArg = {
     body: {
         folders?: number[];
         filters?: ExportAllFilter;
     };
 };
-export type AssetGetByIdApiResponse = /** status 200 asset_get_by_id_success_response */
+export type AssetGetByIdApiResponse = /** status 200 Successfully retrieved one of asset type data as JSON */
     | Image
     | AssetDocument
     | Audio
@@ -667,12 +667,12 @@ export type AssetDeleteGridConfigurationByConfigurationIdApiArg = {
     configurationId: number;
 };
 export type AssetGetAvailableGridColumnsApiResponse =
-    /** status 200 asset_get_available_grid_columns_success_response */ {
+    /** status 200 All available grid column configurations for assets */ {
         columns?: GridColumnConfiguration[];
     };
 export type AssetGetAvailableGridColumnsApiArg = void;
 export type AssetGetGridConfigurationByFolderIdApiResponse =
-    /** status 200 asset_get_grid_configuration_by_folderId_success_response */ GridDetailedConfiguration;
+    /** status 200 Asset grid configuration */ GridDetailedConfiguration;
 export type AssetGetGridConfigurationByFolderIdApiArg = {
     /** FolderId of the element */
     folderId: number;
@@ -680,7 +680,7 @@ export type AssetGetGridConfigurationByFolderIdApiArg = {
     configurationId?: number;
 };
 export type AssetGetSavedGridConfigurationsApiResponse =
-    /** status 200 asset_get_saved_grid_configurations_success_response */ {
+    /** status 200 List of saved grid configurations for the given folder */ {
         totalItems: number;
         items: GridConfiguration[];
     };
@@ -693,7 +693,7 @@ export type AssetRemoveGridConfigurationAsFavoriteApiArg = {
     folderId: number;
 };
 export type AssetSaveGridConfigurationApiResponse =
-    /** status 200 asset_save_grid_configuration_success_response */ GridConfiguration;
+    /** status 200 Asset grid configuration saved successfully */ GridConfiguration;
 export type AssetSaveGridConfigurationApiArg = {
     body: {
         folderId: number;
@@ -734,7 +734,7 @@ export type AssetUpdateGridConfigurationApiArg = {
         filter?: GridFilter | null;
     };
 };
-export type AssetGetGridApiResponse = /** status 200 asset_get_grid_success_response */ {
+export type AssetGetGridApiResponse = /** status 200 Asset grid data */ {
     totalItems: number;
     items: {
         id?: number;
@@ -750,7 +750,7 @@ export type AssetGetGridApiArg = {
         filters?: GridFilter;
     };
 };
-export type AssetImageDownloadCustomApiResponse = /** status 200 asset_image_download_custom_success_response */ Blob;
+export type AssetImageDownloadCustomApiResponse = /** status 200 Custom image binary file */ Blob;
 export type AssetImageDownloadCustomApiArg = {
     /** Id of the image */
     id: number;
@@ -767,7 +767,8 @@ export type AssetImageDownloadCustomApiArg = {
     /** Dpi of downloaded image */
     dpi?: number;
 };
-export type AssetImageStreamCustomApiResponse = /** status 200 asset_image_stream_custom_success_response */ Blob;
+export type AssetImageStreamCustomApiResponse =
+    /** status 200 Image asset stream based on custom thumbnail configuration */ Blob;
 export type AssetImageStreamCustomApiArg = {
     /** Id of the image */
     id: number;
@@ -801,33 +802,33 @@ export type AssetImageStreamCustomApiArg = {
     /** CropLeft of image thumbnail */
     cropLeft?: number;
 };
-export type AssetImageStreamDynamicApiResponse = /** status 200 asset_image_stream_dynamic_success_response */ Blob;
+export type AssetImageStreamDynamicApiResponse =
+    /** status 200 Image asset stream based on dynamic thumbnail configuration */ Blob;
 export type AssetImageStreamDynamicApiArg = {
     /** Id of the asset */
     id: number;
     /** A JSON encoded thumbnail configuration. */
     config: string;
 };
-export type AssetImageDownloadByFormatApiResponse =
-    /** status 200 asset_image_download_by_format_success_response */ Blob;
+export type AssetImageDownloadByFormatApiResponse = /** status 200 Image asset binary file based on format */ Blob;
 export type AssetImageDownloadByFormatApiArg = {
     /** Id of the image */
     id: number;
     /** Find asset by matching format type. */
     format: "office" | "print" | "web";
 };
-export type AssetImageStreamPreviewApiResponse = /** status 200 asset_image_stream_preview_success_response */ Blob;
+export type AssetImageStreamPreviewApiResponse = /** status 200 Image preview stream */ Blob;
 export type AssetImageStreamPreviewApiArg = {
     /** Id of the image */
     id: number;
 };
-export type AssetImageStreamApiResponse = /** status 200 asset_image_stream_success_response */ Blob;
+export type AssetImageStreamApiResponse = /** status 200 Stream of an original image asset */ Blob;
 export type AssetImageStreamApiArg = {
     /** Id of the image */
     id: number;
 };
 export type AssetImageDownloadByThumbnailApiResponse =
-    /** status 200 asset_image_download_by_thumbnail_success_response */ Blob;
+    /** status 200 Image asset binary file based on thumbnail name */ Blob;
 export type AssetImageDownloadByThumbnailApiArg = {
     /** Id of the image */
     id: number;
@@ -835,7 +836,7 @@ export type AssetImageDownloadByThumbnailApiArg = {
     thumbnailName: string;
 };
 export type AssetImageStreamByThumbnailApiResponse =
-    /** status 200 asset_image_stream_by_thumbnail_success_response */ Blob;
+    /** status 200 Stream of image asset based on thumbnail name */ Blob;
 export type AssetImageStreamByThumbnailApiArg = {
     /** Id of the image */
     id: number;
@@ -853,7 +854,7 @@ export type AssetImageStreamByThumbnailApiArg = {
     /** Mime type of steamed image. */
     mimeType?: "JPEG" | "PNG" | "source" | "original" | "print";
 };
-export type AssetPatchByIdApiResponse = /** status 201 asset_patch_by_id_created_response */ {
+export type AssetPatchByIdApiResponse = /** status 201 Successfully created jobRun for patching multiple assets */ {
     /** ID of created jobRun */
     jobRunId: number;
 };
@@ -869,10 +870,11 @@ export type AssetPatchByIdApiArg = {
         }[];
     };
 };
-export type AssetPatchFolderByIdApiResponse = /** status 201 asset_patch_by_id_created_response */ {
-    /** ID of created jobRun */
-    jobRunId: number;
-};
+export type AssetPatchFolderByIdApiResponse =
+    /** status 201 Successfully created jobRun for patching multiple assets */ {
+        /** ID of created jobRun */
+        jobRunId: number;
+    };
 export type AssetPatchFolderByIdApiArg = {
     /** Id of the folder */
     id: number;
@@ -915,7 +917,7 @@ export type AssetGetTreeApiArg = {
     /** Include all descendants in the result. */
     pathIncludeDescendants?: boolean;
 };
-export type AssetAddApiResponse = /** status 200 asset_add_success_response */ {
+export type AssetAddApiResponse = /** status 200 ID of successfully uploaded new asset */ {
     /** ID of created asset */
     id: number;
 };
@@ -929,14 +931,15 @@ export type AssetAddApiArg = {
         assetType?: string | null;
     };
 };
-export type AssetUploadInfoApiResponse = /** status 200 asset_upload_info_success_response */ AssetUploadInfo;
+export type AssetUploadInfoApiResponse =
+    /** status 200 Returns true and existing asset ID, if asset with the same name and in the same path already exists, false otherwise */ AssetUploadInfo;
 export type AssetUploadInfoApiArg = {
     /** ParentId of the asset */
     parentId: number;
     /** Name of the file to upload */
     fileName: string;
 };
-export type AssetReplaceApiResponse = /** status 200 asset_replace_success_response */ {
+export type AssetReplaceApiResponse = /** status 200 File name of the successfully replaced asset */ {
     /** new file name of the asset */
     data: string;
 };
@@ -948,7 +951,7 @@ export type AssetReplaceApiArg = {
         file: Blob;
     };
 };
-export type AssetUploadZipApiResponse = /** status 201 asset_upload_zip_created_response */ {
+export type AssetUploadZipApiResponse = /** status 201 Successfully created jobRun ID to upload multiple assets */ {
     /** ID of created jobRun */
     jobRunId: number;
 };
@@ -960,8 +963,7 @@ export type AssetUploadZipApiArg = {
         zipFile: Blob;
     };
 };
-export type AssetVideoImageThumbnailStreamApiResponse =
-    /** status 200 asset_video_image_thumbnail_stream_success_response */ Blob;
+export type AssetVideoImageThumbnailStreamApiResponse = /** status 200 Video image thumbnail stream */ Blob;
 export type AssetVideoImageThumbnailStreamApiArg = {
     /** Id of the video */
     id: number;
@@ -976,28 +978,26 @@ export type AssetVideoImageThumbnailStreamApiArg = {
     /** Generate the asset asynchronously */
     async?: boolean;
 };
-export type AssetVideoDownloadByThumbnailApiResponse =
-    /** status 200 asset_video_download_by_thumbnail_success_response */ Blob;
+export type AssetVideoDownloadByThumbnailApiResponse = /** status 200 Video binary file based on thumbnail name */ Blob;
 export type AssetVideoDownloadByThumbnailApiArg = {
     /** Id of the video */
     id: number;
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
 };
-export type AssetVideoStreamByThumbnailApiResponse =
-    /** status 200 asset_video_stream_by_thumbnail_success_response */ Blob;
+export type AssetVideoStreamByThumbnailApiResponse = /** status 200 Video stream based on thumbnail name */ Blob;
 export type AssetVideoStreamByThumbnailApiArg = {
     /** Id of the video */
     id: number;
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
 };
-export type AssetGetVideoTypesApiResponse = /** status 200 asset_get_video_types_success_response */ {
+export type AssetGetVideoTypesApiResponse = /** status 200 Successfully retrieved all available video types */ {
     totalItems: number;
     items: VideoType[];
 };
 export type AssetGetVideoTypesApiArg = void;
-export type AssetCustomMetadataGetByIdApiResponse = /** status 200 asset_custom_metadata_get_by_id_success_response */ {
+export type AssetCustomMetadataGetByIdApiResponse = /** status 200 Successfully retrieved custom metadata as JSON */ {
     items?: CustomMetadata[];
 };
 export type AssetCustomMetadataGetByIdApiArg = {

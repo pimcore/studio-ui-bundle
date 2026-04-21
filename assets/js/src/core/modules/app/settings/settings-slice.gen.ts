@@ -56,7 +56,7 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type AdminSettingsGetApiResponse = /** status 200 admin_settings_get_success_response */ AdminSettings;
+export type AdminSettingsGetApiResponse = /** status 200 Admin system settings data */ AdminSettings;
 export type AdminSettingsGetApiArg = void;
 export type AdminSettingsUpdateApiResponse = unknown;
 export type AdminSettingsUpdateApiArg = {
@@ -64,12 +64,12 @@ export type AdminSettingsUpdateApiArg = {
 };
 export type SettingAdminThumbnailApiResponse = /** status 200 Success */ AdminSettingsThumbnailPath;
 export type SettingAdminThumbnailApiArg = void;
-export type SettingsCountryCollectionApiResponse = /** status 200 settings_country_collection_success_response */ {
+export type SettingsCountryCollectionApiResponse = /** status 200 List of available countries */ {
     totalItems: number;
     items: AvailableCountry[];
 };
 export type SettingsCountryCollectionApiArg = void;
-export type SystemSettingsGetApiResponse = /** status 200 system_settings_get_success_response */ {
+export type SystemSettingsGetApiResponse = /** status 200 System settings data */ {
     [key: string]: any;
 };
 export type SystemSettingsGetApiArg = void;
@@ -132,7 +132,7 @@ export type SettingsUpdateApiArg = {
 };
 export type SettingsImageAdapterCheckApiResponse = unknown;
 export type SettingsImageAdapterCheckApiArg = void;
-export type ActiveBundlesGetApiResponse = /** status 200 active_bundles_get_success_response */ {
+export type ActiveBundlesGetApiResponse = /** status 200 List of active bundles */ {
     /** List of active and installed bundles in the system. */
     bundles: ActiveBundle[];
 };

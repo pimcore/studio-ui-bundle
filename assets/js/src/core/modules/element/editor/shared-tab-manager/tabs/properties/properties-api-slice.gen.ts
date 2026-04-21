@@ -43,18 +43,20 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type PropertyGetCollectionApiResponse = /** status 200 property_get_collection_success_response */ {
-    items?: PredefinedProperty[];
-};
+export type PropertyGetCollectionApiResponse =
+    /** status 200 Predefined properties filtered based on type and query parameters */ {
+        items?: PredefinedProperty[];
+    };
 export type PropertyGetCollectionApiArg = {
     /** Filter elements by matching element type. */
     elementType?: "asset" | "document" | "data-object";
     /** Filter for properties */
     filter?: string;
 };
-export type PropertyCreateApiResponse = /** status 200 property_create_success_response */ PredefinedProperty;
+export type PropertyCreateApiResponse =
+    /** status 200 Created predefined property with default values */ PredefinedProperty;
 export type PropertyCreateApiArg = void;
-export type PropertyUpdateApiResponse = /** status 200 property_update_success_response */ PredefinedProperty;
+export type PropertyUpdateApiResponse = /** status 200 Updated predefined property */ PredefinedProperty;
 export type PropertyUpdateApiArg = {
     /** Id of the property */
     id: string;
@@ -65,10 +67,9 @@ export type PropertyDeleteApiArg = {
     /** Id of the property */
     id: string;
 };
-export type PropertyGetCollectionForElementByTypeAndIdApiResponse =
-    /** status 200 property_get_collection_for_element_by_type_and_id_success_response */ {
-        items?: DataProperty[];
-    };
+export type PropertyGetCollectionForElementByTypeAndIdApiResponse = /** status 200 Element Properties data as json */ {
+    items?: DataProperty[];
+};
 export type PropertyGetCollectionForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";

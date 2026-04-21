@@ -59,7 +59,7 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type NotificationGetCollectionApiResponse = /** status 200 notification_get_collection_success_response */ {
+export type NotificationGetCollectionApiResponse = /** status 200 Paginated notifications with total count */ {
     totalItems: number;
     items: NotificationListItem[];
 };
@@ -75,7 +75,7 @@ export type NotificationGetCollectionApiArg = {
 };
 export type NotificationDeleteAllApiResponse = unknown;
 export type NotificationDeleteAllApiArg = void;
-export type NotificationGetByIdApiResponse = /** status 200 notification_get_by_id_success_response */ Notification;
+export type NotificationGetByIdApiResponse = /** status 200 Notification data as JSON */ Notification;
 export type NotificationGetByIdApiArg = {
     /** Id of the notification */
     id: number;
@@ -91,12 +91,13 @@ export type NotificationDeleteByIdApiArg = {
     id: number;
 };
 export type NotificationGetUnreadCountApiResponse =
-    /** status 200 notification_get_unread_count_success_response */ UnreadCount;
+    /** status 200 Count of unread notifications for the current user */ UnreadCount;
 export type NotificationGetUnreadCountApiArg = void;
-export type NotificationGetRecipientsApiResponse = /** status 200 notification_get_recipients_success_response */ {
-    totalItems: number;
-    items: Recipient[];
-};
+export type NotificationGetRecipientsApiResponse =
+    /** status 200 List of notification recipients for the current user */ {
+        totalItems: number;
+        items: Recipient[];
+    };
 export type NotificationGetRecipientsApiArg = void;
 export type NotificationSendApiResponse = unknown;
 export type NotificationSendApiArg = {
