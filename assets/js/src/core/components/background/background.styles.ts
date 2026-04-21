@@ -193,7 +193,7 @@ export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => 
       border-radius: 50%;
       background: rgba(253, 255, 255, 0.35);
       filter: blur(90px);
-      animation: ${logoOrbitCW} 5s linear infinite;
+      animation: ${logoOrbitCW} 3s linear infinite;
       pointer-events: none;
     `,
     logoOrbitCCW: css`
@@ -205,7 +205,7 @@ export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => 
       border-radius: 50%;
       background: rgba(253, 255, 255, 0.35);
       filter: blur(90px);
-      animation: ${logoOrbitCCW} 7s linear infinite;
+      animation: ${logoOrbitCCW} 4s linear infinite;
       pointer-events: none;
     `
   }
