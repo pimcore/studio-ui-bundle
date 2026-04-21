@@ -56,7 +56,7 @@ export const useStyle = createStyles(({ token, css }, { loading }: StyleProps) =
       inset: 0;
       background: #FFF;
       overflow: hidden;
-      opacity: 0.3;
+      opacity: ${loading ? 1 : 0.3};
 
       .background-figure {
         position: absolute;
