@@ -12,16 +12,18 @@ import { isNil } from 'lodash'
 import { PROGRESS_NO_UPDATE, type ProgressResult, type ProgressStrategy, type ProgressStrategyContext } from './progress-strategy'
 
 /**
- * Consumes currentStep / totalSteps to derive progress.
+ * Consumes currentStep / totalSteps to derive progress as a completion percentage.
  *
- * The bar advances at step boundaries:
- *   step 1 of 4 → 0%, step 2 of 4 → 25%, step 3 of 4 → 50%, step 4 of 4 → 75%
+ * Each step fires progress: 100 when it finishes. We advance the bar to
+ * currentStep/totalSteps only once that completion signal arrives:
+ *   step 1/7 completes (progress:100) → 14%
+ *   step 2/7 completes (progress:100) → 29%
+ *   step 7/7 completes (progress:100) → 100%
  *
- * Falls back to the raw `progress` field for single-step jobs (totalSteps === 1)
- * where no step-based calculation is possible.
+ * While a step is still running (progress < 100), we hold at the previous
+ * boundary so the bar never jumps forward prematurely.
  *
- * The `progress` field is otherwise ignored — suitable for jobs where each step
- * completes instantly or where within-step granularity is not meaningful.
+ * Falls back to the raw `progress` field for single-step jobs (totalSteps === 1).
  *
  * Used as the default strategy when none is specified.
  */
@@ -31,7 +33,17 @@ export class StepCountProgressStrategy implements ProgressStrategy {
     const hasProgress = !isNil(data?.progress)
 
     if (hasSteps) {
-      return Math.max(0, Math.round(((data.currentStep - 1) / data.totalSteps) * 100))
+      const currentStep = data.currentStep as number
+      const totalSteps = data.totalSteps as number
+      const stepProgress = hasProgress ? (data.progress as number) : 100
+
+      // Advance to currentStep/totalSteps only once the step reports completion.
+      // While the step is in progress, hold at the previous boundary.
+      if (stepProgress >= 100) {
+        return Math.round((currentStep / totalSteps) * 100)
+      }
+
+      return Math.round(((currentStep - 1) / totalSteps) * 100)
     }
 
     if (hasProgress) {
