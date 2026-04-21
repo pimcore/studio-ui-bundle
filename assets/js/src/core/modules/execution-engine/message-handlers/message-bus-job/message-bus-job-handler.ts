@@ -274,23 +274,24 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
 
     const stepChanges: Partial<MessageBusJob> = {}
     if (!isNil(data?.currentStep) && data.currentStep !== this.currentStep) {
-      this.currentStep = data.currentStep
+      // When the handler owns its step structure (totalSteps set at construction),
+      // currentStep is managed internally via transitionToChildJob and must not be
+      // overwritten by the backend's own step counter (which resets to 1 for each
+      // child job). Only advance this.currentStep for same-job multi-step backends
+      // where no handler-owned totalSteps exists.
+      if (isNil(this.totalSteps)) {
+        this.currentStep = data.currentStep
 
-      // Only surface currentStep/totalSteps in the Redux job state (and thus the UI
-      // step label) when the handler was constructed with an explicit totalSteps —
-      // i.e. the job has a known, handler-owned step structure to display.
-      // For jobs like delete where totalSteps comes purely from the backend and can be
-      // arbitrarily large, we track currentStep internally for the strategy only.
-      if (!isNil(this.totalSteps)) {
-        stepChanges.currentStep = data.currentStep
-        stepChanges.stepDescriptionKey = this.stepDescriptions?.[data.currentStep]
+        // Notify strategy and reset progress tracking on step change.
+        this.progressStrategy.onStepTransition?.()
+        this.lastProgressValue = -1
       }
 
-      // Notify strategy and reset progress tracking on every step change.
-      // For handler-owned steps (totalSteps set at construction), transitionToChildJob
-      // handles this for child-job transitions; here we cover same-job step advances.
-      this.progressStrategy.onStepTransition?.()
-      this.lastProgressValue = -1
+      // Only surface currentStep in Redux when the handler owns the step structure.
+      if (!isNil(this.totalSteps)) {
+        stepChanges.currentStep = this.currentStep
+        stepChanges.stepDescriptionKey = this.stepDescriptions?.[this.currentStep]
+      }
     }
     if (Object.keys(stepChanges).length > 0) {
       this.updateJob(stepChanges)
