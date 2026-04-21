@@ -21,7 +21,6 @@ import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Toolbar } from '@Pimcore/modules/reports/reports-editor/components/reports-sidebar/components/toolbar/toolbar'
 import {
   type BundleCustomReportsConfigurationTreeNode,
-  type BundleCustomReportsTreeNodeFolder,
   type CustomReportsConfigGetTreeApiResponse
 } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
@@ -40,15 +39,9 @@ interface IReportsSidebarProps {
   handleCloseReport: (id: BundleCustomReportsConfigurationTreeNode['id']) => void
 }
 
-type ReportsTreeNode = BundleCustomReportsConfigurationTreeNode | BundleCustomReportsTreeNodeFolder
-
-const isConfigNode = (node: ReportsTreeNode): node is BundleCustomReportsConfigurationTreeNode => {
-  return 'text' in node
-}
-
 export const ReportsSidebar = ({ isLoading, refetch, isFetching, reportsList, handleOpenReport, handleCloseReport }: IReportsSidebarProps): React.JSX.Element => {
-  const [reportsListData, setReportsListData] = useState<ReportsTreeNode[]>([])
-  const [contextItem, setContextItem] = useState<ReportsTreeNode | null>(null)
+  const [reportsListData, setReportsListData] = useState<BundleCustomReportsConfigurationTreeNode[]>([])
+  const [contextItem, setContextItem] = useState<BundleCustomReportsConfigurationTreeNode | null>(null)
 
   useEffect(() => {
     if (!isNil(reportsList?.items)) {
@@ -76,7 +69,7 @@ export const ReportsSidebar = ({ isLoading, refetch, isFetching, reportsList, ha
 
         const addedReport = updatedData?.items?.find((item) => item.id === value)
 
-        !isUndefined(addedReport) && isConfigNode(addedReport) && handleOpenReport(addedReport)
+        !isUndefined(addedReport) && handleOpenReport(addedReport)
       }
     })
   }
@@ -91,14 +84,14 @@ export const ReportsSidebar = ({ isLoading, refetch, isFetching, reportsList, ha
       onOk: async (value: string) => {
         if (isNil(contextItem)) return
 
-        await cloneReport({ name: contextItem.id!, bundleCustomReportClone: { newName: value } })
+        await cloneReport({ name: contextItem.id, bundleCustomReportClone: { newName: value } })
 
         const { data: updatedData } = await refetch()
         void loadReportsMenuItems()
 
         const clonedReport = updatedData?.items?.find((item) => item.id === value)
 
-        !isUndefined(clonedReport) && isConfigNode(clonedReport) && handleOpenReport(clonedReport)
+        !isUndefined(clonedReport) && handleOpenReport(clonedReport)
       }
     })
   }
@@ -106,12 +99,12 @@ export const ReportsSidebar = ({ isLoading, refetch, isFetching, reportsList, ha
   const handleReportDelete = (): void => {
     modal.confirm({
       title: t('delete'),
-      content: t('reports.editor.delete.content', { reportName: contextItem !== null && isConfigNode(contextItem) ? contextItem.text : contextItem?.id }),
+      content: t('reports.editor.delete.content', { reportName: contextItem?.text }),
       onOk: async () => {
         if (isNil(contextItem)) return
 
-        void deleteReport({ name: contextItem.id! }).then(() => {
-          handleCloseReport(contextItem.id!)
+        void deleteReport({ name: contextItem.id }).then(() => {
+          handleCloseReport(contextItem.id)
           void loadReportsMenuItems()
         })
       }
@@ -125,7 +118,7 @@ export const ReportsSidebar = ({ isLoading, refetch, isFetching, reportsList, ha
     }
 
     const filteredReportsList = reportsList?.items?.filter((item) =>
-      isConfigNode(item) && item.text.toLowerCase().includes(value.toLowerCase())
+      item.text.toLowerCase().includes(value.toLowerCase())
     ) ?? []
 
     setReportsListData(filteredReportsList)
@@ -162,14 +155,14 @@ export const ReportsSidebar = ({ isLoading, refetch, isFetching, reportsList, ha
             className={ styles.sidebarReportItem }
             data-testid={ `reports-editor-sidebar-item-${item.id}` }
             gap="mini"
-            onClick={ () => { isConfigNode(item) && handleOpenReport(item) } }
+            onClick={ () => { handleOpenReport(item) } }
           >
             <Icon
               className={ styles.sidebarReportItemIcon }
               value="chart-scatter"
             />
             <Text className={ styles.sidebarReportItemTitle }>
-              {isConfigNode(item) ? item.text : item.id}
+              {item.text}
             </Text>
           </Flex>
         </Dropdown>

@@ -30,7 +30,7 @@ export const ReportsEditor = (): React.JSX.Element => {
   const hasPermission = isAllowed(UserPermission.ReportsConfig)
 
   const { data: reportsConfigTreeData, isLoading, isFetching, refetch } = useCustomReportsConfigGetTreeQuery(
-    {},
+    { page: 1, pageSize: 9999 },
     { skip: !hasPermission }
   )
 

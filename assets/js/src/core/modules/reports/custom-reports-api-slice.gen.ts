@@ -87,7 +87,8 @@ const injectedRtkApi = api
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/bundle/custom-reports/tree/config`,
                     params: {
-                        withGroup: queryArg.withGroup,
+                        page: queryArg.page,
+                        pageSize: queryArg.pageSize,
                     },
                 }),
                 providesTags: ["Bundle Custom Reports"],
@@ -101,7 +102,13 @@ const injectedRtkApi = api
                 invalidatesTags: ["Bundle Custom Reports"],
             }),
             customReportsGetTree: build.query<CustomReportsGetTreeApiResponse, CustomReportsGetTreeApiArg>({
-                query: () => ({ url: `/pimcore-studio/api/bundle/custom-reports/tree` }),
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/bundle/custom-reports/tree`,
+                    params: {
+                        page: queryArg.page,
+                        pageSize: queryArg.pageSize,
+                    },
+                }),
                 providesTags: ["Bundle Custom Reports"],
             }),
         }),
@@ -184,13 +191,14 @@ export type CustomReportsReportApiArg = {
     name: string;
 };
 export type CustomReportsConfigGetTreeApiResponse =
-    /** status 200 Configuration tree with nodes and optional group folders. */ {
-        totalItems: number;
-        items: (BundleCustomReportsConfigurationTreeNode | BundleCustomReportsTreeNodeFolder)[];
+    /** status 200 Get all reports for the current user to display in configuration tree. */ {
+        items?: BundleCustomReportsConfigurationTreeNode[];
     };
 export type CustomReportsConfigGetTreeApiArg = {
-    /** Whether to group the results by report group. */
-    withGroup?: boolean;
+    /** Page number */
+    page: number;
+    /** Number of items per page */
+    pageSize: number;
 };
 export type CustomReportExportCsvApiResponse =
     /** status 201 Successfully created <strong>jobRun</strong> for csv export */ {
@@ -220,7 +228,12 @@ export type CustomReportsGetTreeApiResponse =
     /** status 200 Get all reports for the current user to display in tree. */ {
         items?: BundleCustomReportsTreeNode[];
     };
-export type CustomReportsGetTreeApiArg = void;
+export type CustomReportsGetTreeApiArg = {
+    /** Page number */
+    page: number;
+    /** Number of items per page */
+    pageSize: number;
+};
 export type BundleCustomReportsDrillDownOption = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -430,20 +443,6 @@ export type BundleCustomReportsConfigurationTreeNode = {
     cls: string;
     /** writeable */
     writeable: boolean;
-};
-export type BundleCustomReportsTreeNodeFolder = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** id */
-    id?: string;
-    /** group */
-    group: string;
-    /** group icon class */
-    groupIconClass: string;
-    /** Child nodes */
-    children: BundleCustomReportsConfigurationTreeNode[];
 };
 export type BundleCustomReportsTreeNode = {
     /** AdditionalAttributes */
