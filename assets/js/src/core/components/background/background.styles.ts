@@ -55,6 +55,20 @@ const orbitBR = keyframes`
   to   { transform: translate(-50%, -50%) rotate(600deg) translateX(400px); }
 `
 
+// ---------------------------------------------------------------------------
+// Logo orbit — two small near-white blobs counter-rotating around the logo.
+// The logo bounding box (~586×373px) sets the orbit radius (~320px).
+// ---------------------------------------------------------------------------
+const logoOrbitCW = keyframes`
+  from { transform: translate(-50%, -50%) rotate(0deg)   translateX(320px); }
+  to   { transform: translate(-50%, -50%) rotate(360deg) translateX(320px); }
+`
+
+const logoOrbitCCW = keyframes`
+  from { transform: translate(-50%, -50%) rotate(180deg)  translateX(320px); }
+  to   { transform: translate(-50%, -50%) rotate(-180deg) translateX(320px); }
+`
+
 export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => {
   const isLoading = phase === 'loading'
   const isOrbiting = phase === 'loading' || phase === 'outro'
@@ -168,6 +182,30 @@ export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => 
       max-width: 586px;
       max-height: 373px;
       z-index: 1;
+    `,
+    logoOrbitCW: css`
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: rgba(253, 255, 255, 0.65);
+      filter: blur(60px);
+      animation: ${logoOrbitCW} 5s linear infinite;
+      pointer-events: none;
+    `,
+    logoOrbitCCW: css`
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: rgba(253, 255, 255, 0.65);
+      filter: blur(60px);
+      animation: ${logoOrbitCCW} 7s linear infinite;
+      pointer-events: none;
     `
   }
 }, { hashPriority: 'low' })

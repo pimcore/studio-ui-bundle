@@ -85,6 +85,29 @@
         z-index: 1;
         opacity: 1;
     }
+
+    #app-preloader .logo-orbit {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: rgba(253, 255, 255, 0.65);
+        filter: blur(60px);
+        pointer-events: none;
+    }
+    #app-preloader .logo-orbit--cw  { animation: pimcore-logo-orbit-cw  5s linear infinite; }
+    #app-preloader .logo-orbit--ccw { animation: pimcore-logo-orbit-ccw 7s linear infinite; }
+
+    @keyframes pimcore-logo-orbit-cw {
+        from { transform: translate(-50%, -50%) rotate(0deg)   translateX(320px); }
+        to   { transform: translate(-50%, -50%) rotate(360deg) translateX(320px); }
+    }
+    @keyframes pimcore-logo-orbit-ccw {
+        from { transform: translate(-50%, -50%) rotate(180deg)  translateX(320px); }
+        to   { transform: translate(-50%, -50%) rotate(-180deg) translateX(320px); }
+    }
 </style>
 
 {% if branding.brandColor %}
@@ -105,6 +128,8 @@
     <div class="background-figure background-figure--bottom-left"></div>
     <div class="background-figure background-figure--bottom-right"></div>
     <div class="background-figure background-figure--top-left"></div>
+    <div class="logo-orbit logo-orbit--cw"></div>
+    <div class="logo-orbit logo-orbit--ccw"></div>
     <img
         class="preloader-logo"
         src="{{ branding.logoUrl ?? '/bundles/pimcorestudioui/img/logo-purple.svg' }}"
