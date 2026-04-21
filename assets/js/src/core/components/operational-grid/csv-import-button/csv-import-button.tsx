@@ -31,18 +31,18 @@ export const CsvImportButton = (): React.JSX.Element | null => {
   return (
     <>
       <IconButton
-        icon={{ value: 'edit-pen' }}
-        onClick={() => { setIsOpen(true) }}
-        tooltip={{ title: t('operational-grid.csv-import.title') }}
+        icon={ { value: 'edit-pen' } }
+        onClick={ () => { setIsOpen(true) } }
+        tooltip={ { title: t('operational-grid.csv-import.title') } }
         type="default"
       />
 
       <CsvImportModal
-        columns={columns}
-        onCancel={() => { setIsOpen(false) }}
-        onConfirm={handleConfirm}
-        open={isOpen}
-        value={value}
+        columns={ columns }
+        onCancel={ () => { setIsOpen(false) } }
+        onConfirm={ handleConfirm }
+        open={ isOpen }
+        value={ value }
       />
     </>
   )
