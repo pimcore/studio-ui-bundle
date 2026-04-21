@@ -128,8 +128,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
       if (!isAuthenticated) {
         await Promise.all([
           loadPublicTranslations(),
-          loadBrandThumbnailUrls(),
-          loadAdminSettings()
+          loadBrandThumbnailUrls()
         ]).then(() => {
             finishLoading()
           }).catch((error) => {
