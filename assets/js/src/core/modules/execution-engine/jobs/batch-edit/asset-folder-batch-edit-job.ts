@@ -8,10 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { AbstractBatchEditJob, type AbstractBatchEditJobOptions } from './abstract-batch-edit-job'
-import { MessageBusJobHandler, type MessageBusJobHandlerOptions } from '../../message-handlers/message-bus-job/message-bus-job-handler'
-import { ProgressFieldCalculator } from '../../message-handlers/message-bus-job/progress-calculator/progress-field-calculator'
-import { DefaultStepTracker } from '../../message-handlers/message-bus-job/step-tracker/default-step-tracker'
+import { AbstractFolderBatchEditJob } from './abstract-folder-batch-edit-job'
+import { type AbstractBatchEditJobOptions } from './abstract-batch-edit-job'
 
 export interface AssetFolderBatchEditJobOptions extends AbstractBatchEditJobOptions {
   patchAssetsInFolder: (args: any) => Promise<any>
@@ -20,7 +18,7 @@ export interface AssetFolderBatchEditJobOptions extends AbstractBatchEditJobOpti
   filters: any
 }
 
-export class AssetFolderBatchEditJob extends AbstractBatchEditJob {
+export class AssetFolderBatchEditJob extends AbstractFolderBatchEditJob {
   private readonly patchAssetsInFolder: (args: any) => Promise<any>
   private readonly folderId: number
   private readonly patches: any[]
@@ -32,19 +30,6 @@ export class AssetFolderBatchEditJob extends AbstractBatchEditJob {
     this.folderId = options.folderId
     this.patches = options.patches
     this.filters = options.filters
-  }
-
-  protected override createHandler (options: MessageBusJobHandlerOptions): MessageBusJobHandler {
-    return new MessageBusJobHandler({
-      ...options,
-      
-      stepDescriptions: {
-        1: 'jobs.job.step.batch-edit.preparing',
-        2: 'jobs.job.step.batch-edit.applying'
-      },
-      stepTracker: new DefaultStepTracker({ showStepLabel: true }),
-      progressCalculator: new ProgressFieldCalculator()
-    })
   }
 
   protected async executeEditRequest (): Promise<number | null> {
