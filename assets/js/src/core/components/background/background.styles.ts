@@ -69,9 +69,8 @@ export const useStyle = createStyles(({ token, css }, { loading }: StyleProps) =
 
   return {
     background: css`
-      position: fixed;
+      position: absolute;
       inset: 0;
-      z-index: ${loading ? 10000 : 0};
       pointer-events: none;
       background: #FFF;
       overflow: hidden;
