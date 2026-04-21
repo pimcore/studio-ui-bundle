@@ -24,10 +24,20 @@ export default config
 
 type Story = StoryObj<typeof Background>
 
-export const _default: Story = {}
+export const _default: Story = {
+  args: {
+    phase: 'idle'
+  }
+}
 
 export const Loading: Story = {
   args: {
-    loading: true
+    phase: 'loading'
+  }
+}
+
+export const Outro: Story = {
+  args: {
+    phase: 'outro'
   }
 }

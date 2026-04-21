@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { isNil } from 'lodash'
 import { store } from '@Pimcore/app/store'
 import { Background } from '@Pimcore/components/background/background'
@@ -38,8 +38,11 @@ export interface IAppLoaderProps {
   children: React.ReactNode
 }
 
+export type LoadPhase = 'loading' | 'outro' | 'idle'
+
 export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
-  const [isLoading, setIsLoading] = useState(true)
+  const [phase, setPhase] = useState<LoadPhase>('loading')
+  const isLoading = phase === 'loading' || phase === 'outro'
 
   const [pendingLoaders, setPendingLoaders] = useState<Set<string>>(new Set())
   const registerLoader = useCallback((id: string) => {
@@ -55,6 +58,22 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const loading = isLoading || pendingLoaders.size > 0
 
   const appLoadingContextValue: AppLoadingContextValue = { registerLoader, unregisterLoader, isAppLoading: loading }
+
+  const outroTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const finishLoading = useCallback(() => {
+    setPhase('outro')
+    outroTimerRef.current = setTimeout(() => {
+      setPhase('idle')
+    }, 500)
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      if (outroTimerRef.current !== null) {
+        clearTimeout(outroTimerRef.current)
+      }
+    }
+  }, [])
 
   const modal = useAlertModal()
   const { modal: studioModal } = App.useApp()
@@ -85,19 +104,19 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
 
   useEffect(() => {
     void (async () => {
-      setIsLoading(() => true)
+      setPhase('loading')
 
       if (isAuthenticated === undefined) {
         return
       }
 
       if (!isAuthenticated) {
-        await Promise.all([
-          loadPublicTranslations(),
-          loadBrandThumbnailUrls()
-        ]).then(() => {
-          setIsLoading(() => false)
-        }).catch((error) => {
+          await Promise.all([
+            loadPublicTranslations(),
+            loadBrandThumbnailUrls()
+          ]).then(() => {
+            finishLoading()
+          }).catch((error) => {
           console.error('Error during login preparation', error)
         })
       }
@@ -125,7 +144,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
 
         await appLoaderRegistry.loadAll()
 
-        setIsLoading(() => false)
+        finishLoading()
       }
     })()
   }, [isAuthenticated])
@@ -135,8 +154,8 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
       <GlobalStyles />
 
       <AppLoadingContext.Provider value={ appLoadingContextValue }>
-        <Background loading={ loading } />
-        {!isLoading && (
+        <Background phase={ phase } />
+        {phase === 'idle' && (
           <div style={ {
             position: 'absolute',
             inset: 0,

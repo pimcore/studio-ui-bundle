@@ -10,9 +10,10 @@
 
 import { createStyles } from 'antd-style'
 import { keyframes } from 'antd-style'
+import { type LoadPhase } from '@Pimcore/modules/app/app-loader/app-loader'
 
 interface StyleProps {
-  loading: boolean
+  phase: LoadPhase
 }
 
 // ---------------------------------------------------------------------------
@@ -54,7 +55,9 @@ const orbitBR = keyframes`
   to   { transform: translate(-50%, -50%) rotate(600deg) translateX(400px); }
 `
 
-export const useStyle = createStyles(({ token, css }, { loading }: StyleProps) => {
+export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => {
+  const isLoading = phase === 'loading'
+  const isOutro = phase === 'outro'
   // -------------------------------------------------------------------------
   // colorPulse — defined inside createStyles so token.colorPrimary is in scope.
   // Oscillates the background between the brand primary colour (at 42% mix)
@@ -74,14 +77,14 @@ export const useStyle = createStyles(({ token, css }, { loading }: StyleProps) =
       pointer-events: none;
       background: #FFF;
       overflow: hidden;
-      opacity: ${loading ? 1 : 0.3};
-      transition: opacity 1200ms ease;
+      opacity: ${isLoading ? 1 : isOutro ? 0 : 0.3};
+      transition: opacity ${isOutro ? '400ms' : '1200ms'} ease;
 
       .background-figure {
         position: absolute;
         filter: blur(310px);
 
-        ${loading
+        ${isLoading
           ? /* Loading — all figures orbit the viewport centre */
             css`
               top: 50%;
@@ -100,7 +103,7 @@ export const useStyle = createStyles(({ token, css }, { loading }: StyleProps) =
           border-radius: 1324px;
           background: rgba(55, 217, 243, 0.20);
 
-          ${loading
+          ${isLoading
             ? css`
                 animation:
                   ${orbitTL} 11s linear infinite,
@@ -121,7 +124,7 @@ export const useStyle = createStyles(({ token, css }, { loading }: StyleProps) =
           border-radius: 1503.398px;
           background: #FDFFFF;
 
-          ${loading
+          ${isLoading
             ? css`
                 animation:
                   ${orbitBL} 9s linear infinite,
@@ -142,7 +145,7 @@ export const useStyle = createStyles(({ token, css }, { loading }: StyleProps) =
           border-radius: 1642px;
           background: var(--pimcore-brand-background-color, rgba(122, 58, 212, 0.42));
 
-          ${loading
+          ${isLoading
             ? css`
                 animation:
                   ${orbitBR} 14s linear infinite,
