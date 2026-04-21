@@ -57,7 +57,7 @@ const orbitBR = keyframes`
 
 export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => {
   const isLoading = phase === 'loading'
-  const isOutro = phase === 'outro'
+  const isOrbiting = phase === 'loading' || phase === 'outro'
   // -------------------------------------------------------------------------
   // colorPulse — defined inside createStyles so token.colorPrimary is in scope.
   // Oscillates the background between the brand primary colour (at 42% mix)
@@ -84,8 +84,8 @@ export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => 
         position: absolute;
         filter: blur(310px);
 
-        ${isLoading
-          ? /* Loading — all figures orbit the viewport centre */
+        ${isOrbiting
+          ? /* Orbiting — all figures orbit the viewport centre */
             css`
               top: 50%;
               left: 50%;
@@ -103,7 +103,7 @@ export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => 
           border-radius: 1324px;
           background: rgba(55, 217, 243, 0.20);
 
-          ${isLoading
+          ${isOrbiting
             ? css`
                 animation:
                   ${orbitTL} 11s linear infinite,
@@ -124,7 +124,7 @@ export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => 
           border-radius: 1503.398px;
           background: #FDFFFF;
 
-          ${isLoading
+          ${isOrbiting
             ? css`
                 animation:
                   ${orbitBL} 9s linear infinite,
@@ -145,7 +145,7 @@ export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => 
           border-radius: 1642px;
           background: var(--pimcore-brand-background-color, rgba(122, 58, 212, 0.42));
 
-          ${isLoading
+          ${isOrbiting
             ? css`
                 animation:
                   ${orbitBR} 14s linear infinite,
