@@ -61,13 +61,13 @@ const orbitBR = keyframes`
 // Heavy blur and low opacity make them a barely-visible soft halo.
 // ---------------------------------------------------------------------------
 const logoOrbitCW = keyframes`
-  from { transform: translate(-50%, -50%) rotate(0deg)   translateX(80px); }
-  to   { transform: translate(-50%, -50%) rotate(360deg) translateX(80px); }
+  from { transform: translate(-50%, -50%) rotate(0deg)    translateX(80px); }
+  to   { transform: translate(-50%, -50%) rotate(-360deg) translateX(80px); }
 `
 
 const logoOrbitCCW = keyframes`
-  from { transform: translate(-50%, -50%) rotate(180deg)  translateX(80px); }
-  to   { transform: translate(-50%, -50%) rotate(-180deg) translateX(80px); }
+  from { transform: translate(-50%, -50%) rotate(180deg) translateX(80px); }
+  to   { transform: translate(-50%, -50%) rotate(540deg) translateX(80px); }
 `
 
 export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => {
@@ -191,7 +191,7 @@ export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => 
       width: 500px;
       height: 500px;
       border-radius: 50%;
-      background: rgba(253, 255, 255, 0.18);
+      background: rgba(253, 255, 255, 0.35);
       filter: blur(90px);
       animation: ${logoOrbitCW} 5s linear infinite;
       pointer-events: none;
@@ -203,7 +203,7 @@ export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => 
       width: 500px;
       height: 500px;
       border-radius: 50%;
-      background: rgba(253, 255, 255, 0.18);
+      background: rgba(253, 255, 255, 0.35);
       filter: blur(90px);
       animation: ${logoOrbitCCW} 7s linear infinite;
       pointer-events: none;

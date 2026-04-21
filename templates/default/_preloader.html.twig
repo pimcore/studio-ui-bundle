@@ -93,7 +93,7 @@
         width: 500px;
         height: 500px;
         border-radius: 50%;
-        background: rgba(253, 255, 255, 0.18);
+        background: rgba(253, 255, 255, 0.35);
         filter: blur(90px);
         pointer-events: none;
     }
@@ -101,12 +101,12 @@
     #app-preloader .logo-orbit--ccw { animation: pimcore-logo-orbit-ccw 7s linear infinite; }
 
     @keyframes pimcore-logo-orbit-cw {
-        from { transform: translate(-50%, -50%) rotate(0deg)   translateX(80px); }
-        to   { transform: translate(-50%, -50%) rotate(360deg) translateX(80px); }
+        from { transform: translate(-50%, -50%) rotate(0deg)    translateX(80px); }
+        to   { transform: translate(-50%, -50%) rotate(-360deg) translateX(80px); }
     }
     @keyframes pimcore-logo-orbit-ccw {
-        from { transform: translate(-50%, -50%) rotate(180deg)  translateX(80px); }
-        to   { transform: translate(-50%, -50%) rotate(-180deg) translateX(80px); }
+        from { transform: translate(-50%, -50%) rotate(180deg) translateX(80px); }
+        to   { transform: translate(-50%, -50%) rotate(540deg) translateX(80px); }
     }
 </style>
 
