@@ -1029,8 +1029,8 @@ jobs.job.button-download: last ned
 jobs.job.button-ignore-and-reload: ignorer og last på nytt
 jobs.job.step_hint: "Steg {{step}}/{{total}}"
 jobs.job.step_hint_single: "Steg {{step}}"
-jobs.job.step.batch-edit.preparing: Preparing batch edit
-jobs.job.step.batch-edit.applying: Applying batch edit
+jobs.job.step.batch-edit.preparing: Forbereder masseredigering
+jobs.job.step.batch-edit.applying: Bruker masseredigering
 jobs.job.download-error: Nedlasting mislyktes
 jobs.job.button-show-errors: Vis feil
 jobs.job.error-modal.title: Jobbfeil

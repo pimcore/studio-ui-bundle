@@ -1029,8 +1029,8 @@ jobs.job.button-download: télécharger
 jobs.job.button-ignore-and-reload: ignorer et recharger
 jobs.job.step_hint: "Étape {{step}}/{{total}}"
 jobs.job.step_hint_single: "Étape {{step}}"
-jobs.job.step.batch-edit.preparing: Preparing batch edit
-jobs.job.step.batch-edit.applying: Applying batch edit
+jobs.job.step.batch-edit.preparing: Préparation de l'édition par lot
+jobs.job.step.batch-edit.applying: Application de l'édition par lot
 jobs.job.download-error: Le téléchargement a échoué
 jobs.job.button-show-errors: Afficher les erreurs
 jobs.job.error-modal.title: Erreurs de la tâche
