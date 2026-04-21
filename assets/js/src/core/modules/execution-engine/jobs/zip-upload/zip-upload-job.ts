@@ -41,6 +41,7 @@ export class ZipUploadJob implements JobInterface {
           if (isNumber(jobRunId)) {
             const handler = new MessageBusJobHandler({
               jobRunId: Number(jobRunId),
+              totalSteps: 2,
               progressStrategy: new ProgressFieldStrategy(),
               onJobCompletion: async (data) => {
                 if (data.isFinished && !isUndefined(onJobCompletion)) {
