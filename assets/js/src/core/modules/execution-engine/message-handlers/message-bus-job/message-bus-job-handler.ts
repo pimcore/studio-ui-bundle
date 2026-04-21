@@ -274,23 +274,27 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
 
     const stepChanges: Partial<MessageBusJob> = {}
     if (!isNil(data?.currentStep) && data.currentStep !== this.currentStep) {
-      // When the handler owns its step structure (totalSteps set at construction),
-      // currentStep is managed internally via transitionToChildJob and must not be
-      // overwritten by the backend's own step counter (which resets to 1 for each
-      // child job). Only advance this.currentStep for same-job multi-step backends
-      // where no handler-owned totalSteps exists.
-      if (isNil(this.totalSteps)) {
-        this.currentStep = data.currentStep
+      const backendStep = data.currentStep as number
 
-        // Notify strategy and reset progress tracking on step change.
+      // Accept forward step movement from the backend in all cases.
+      // Block backward movement: when a child job starts it resets its own
+      // currentStep to 1, but transitionToChildJob already advanced
+      // this.currentStep to the correct handler-owned value — we must not
+      // let the child's step 1 clobber it.
+      if (backendStep > this.currentStep) {
+        this.currentStep = backendStep
+
+        // Surface currentStep in Redux only when the handler owns the step structure
+        // (totalSteps set at construction). For backend-driven jobs (delete etc.)
+        // we track currentStep internally but never show the step label.
+        if (!isNil(this.totalSteps)) {
+          stepChanges.currentStep = this.currentStep
+          stepChanges.stepDescriptionKey = this.stepDescriptions?.[this.currentStep]
+        }
+
+        // Notify strategy and reset progress tracking on step advance.
         this.progressStrategy.onStepTransition?.()
         this.lastProgressValue = -1
-      }
-
-      // Only surface currentStep in Redux when the handler owns the step structure.
-      if (!isNil(this.totalSteps)) {
-        stepChanges.currentStep = this.currentStep
-        stepChanges.stepDescriptionKey = this.stepDescriptions?.[this.currentStep]
       }
     }
     if (Object.keys(stepChanges).length > 0) {
