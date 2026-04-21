@@ -2427,6 +2427,39 @@ user-management.permissions."robots.txt": robots.txt
 user-management.permissions.routes: Routes
 user-management.permissions.word_export: Export Word
 user-management.permissions.xliff_import_export: Import/Export XLIFF
+user-management.permissions.bptb_aet_configuration_permission: Configuration des arborescences alternatives
+user-management.permissions.bptb_bookmark_list_permission: Listes de signets
+user-management.permissions.bptb_bookmark_list_share_permission: Partager les listes de signets
+user-management.permissions.bundle_ecommerce_back-office_order: "Back Office - Commandes"
+user-management.permissions.bundle_ecommerce_pricing_rules: Règles de tarification
+user-management.permissions.pcp_general_permission: Pimcore Copilot
+user-management.permissions.pcp_configuration_permission: Configuration de Pimcore Copilot
+user-management.permissions.pcp_job_run_permission: Aperçu des exécutions de tâches
+user-management.permissions.pcp_job_runs_see_all_permission: Voir toutes les exécutions de tâches
+user-management.permissions.permission_workflow_designer: Activer le Workflow Designer
+user-management.permissions.permission_workflow_designer_place_permissions: Configuration des permissions de placement
+user-management.permissions.permission_workflow_designer_trans_notifications: Configuration des notifications de transition
+user-management.permissions.plugin_cmf_perm_activityview: CMF Vue des activités
+user-management.permissions.plugin_cmf_perm_customer_automation_rules: CMF Règles d'automatisation client
+user-management.permissions.plugin_cmf_perm_customerview: CMF Vue client
+user-management.permissions.plugin_cmf_perm_customerview_admin: CMF Administration des filtres client
+user-management.permissions.plugin_cmf_perm_newsletter_enqueue_all_customers: CMF Mise en file d'attente des newsletters
+user-management.permissions.plugin_datahub_adapter_dataImporterDataObject: "Datahub Adapter - Importateur d'objets de données"
+user-management.permissions.plugin_datahub_adapter_fileExport: "Datahub Adapter - Export de fichiers"
+user-management.permissions.plugin_datahub_adapter_graphql: "Datahub Adapter - GraphQL"
+user-management.permissions.plugin_datahub_adapter_headlessDocuments: "Datahub Adapter - Documents Headless"
+user-management.permissions.plugin_datahub_adapter_productsup: "Datahub Adapter - Productsup"
+user-management.permissions.plugin_datahub_adapter_simpleRest: "Datahub Adapter - Simple REST"
+user-management.permissions.plugin_datahub_adapter_webhooks: "Datahub Adapter - Webhooks"
+user-management.permissions.plugin_datahub_admin: Administration Datahub
+user-management.permissions.plugin_datahub_config: Configuration Datahub
+user-management.permissions.plugin_datahub_permission_delete: Datahub Suppression
+user-management.permissions.plugin_datahub_permission_read: Datahub Lecture
+user-management.permissions.plugin_datahub_permission_update: Datahub Mise à jour
+user-management.permissions.portal-engine_collection-access: Accès aux collections du backend
+user-management.permissions.portal-engine_index-management: Gestion des index du portail
+user-management.permissions.portal-engine_wizard: Assistant de configuration du portail
+user-management.permissions.wai_configuration_permission: Configuration des modèles d'automatisation
 forgot-password-form.username: Entrez votre nom d'utilisateur et Pimcore enverra un lien de connexion à votre adresse e-mail
 forgot-password-form.username.placeholder: Nom d'utilisateur
 forgot-password-form.reset-password: Réinitialiser le mot de passe
