@@ -11,13 +11,12 @@
 import { type BaseQuery } from '@Pimcore/app/api/pimcore'
 import { type ClassDefinitionCollectionApiArg, type ClassDefinitionCollectionApiResponse, api } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { type TypedUseQueryHookResult } from '@reduxjs/toolkit/dist/query/react'
-import React, { createContext, useEffect, useMemo, useRef, useState } from 'react'
+import React, { createContext, useEffect, useMemo, useState } from 'react'
 import { type ClassDefinitionFolderCollectionApiResponse, useClassDefinitionCollectionQuery } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { useAppDispatch } from '@sdk/app'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/types'
 import { Content } from '@Pimcore/components/content/content'
-import { useIsAppLoading } from '@Pimcore/modules/app/app-loader/context/app-loading-context'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 
@@ -30,6 +29,7 @@ export const ClassDefinitionContext = createContext<ClassDefinitionsContextProps
 export interface ClassDefinitionsProviderProps {
   children: React.ReactNode
   elementId?: number
+  showLoadingIndicator?: boolean
 }
 
 export interface FolderQueryState {
@@ -37,10 +37,8 @@ export interface FolderQueryState {
   data: ClassDefinitionFolderCollectionApiResponse | undefined
 }
 
-export const ClassDefinitionsProvider = ({ children, elementId }: ClassDefinitionsProviderProps): React.JSX.Element => {
+export const ClassDefinitionsProvider = ({ children, elementId, showLoadingIndicator = true }: ClassDefinitionsProviderProps): React.JSX.Element => {
   const hasObjectsPermission = isAllowed(UserPermission.Objects)
-  const isAppLoading = useIsAppLoading()
-  const mountedDuringAppLoad = useRef(isAppLoading)
   const queryResultReturn = useClassDefinitionCollectionQuery(undefined, {
     skip: !hasObjectsPermission
   })
@@ -103,7 +101,7 @@ export const ClassDefinitionsProvider = ({ children, elementId }: ClassDefinitio
   }
 
   return useMemo(() => {
-    if (transformedQueryResult.isLoading && !mountedDuringAppLoad.current) {
+    if (transformedQueryResult.isLoading && showLoadingIndicator) {
       return (
         <Content loading />
       )

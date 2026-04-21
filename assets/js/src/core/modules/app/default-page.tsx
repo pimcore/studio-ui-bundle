@@ -30,7 +30,7 @@ export const DefaultPage = (): React.JSX.Element => {
       onDrop={ preventDrop }
     >
       <WidgetRestorer>
-        <ClassDefinitionsProvider>
+        <ClassDefinitionsProvider showLoadingIndicator={ false }>
           <ElementSelectorProvider>
             <BaseLayoutView />
           </ElementSelectorProvider>
