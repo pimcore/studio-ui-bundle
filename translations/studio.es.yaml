@@ -1037,7 +1037,6 @@ jobs.job.error-modal.title: Errores del trabajo
 jobs.job.button-abort: Cancelar trabajo
 jobs.job.abort-confirm: ¿Realmente desea cancelar este trabajo?
 jobs.zip-job.title: "Descarga ZIP de {{title}}"
-jobs.batch-edit-job.title: "Edición por lotes de {{title}}"
 jobs.csv-job.title: "Descarga CSV de {{title}}"
 jobs.xlsx-job.title: "Descarga XLSX de {{title}}"
 batch-edit.job-title: Edición por lotes

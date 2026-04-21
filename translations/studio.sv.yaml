@@ -1037,7 +1037,6 @@ jobs.job.error-modal.title: Jobbfel
 jobs.job.button-abort: Avbryt jobb
 jobs.job.abort-confirm: Vill du verkligen avbryta det här jobbet?
 jobs.zip-job.title: "ZIP-nedladdning av {{title}}"
-jobs.batch-edit-job.title: "Massredigering av {{title}}"
 jobs.csv-job.title: "CSV-nedladdning av {{title}}"
 jobs.xlsx-job.title: "XLSX-nedladdning av {{title}}"
 batch-edit.job-title: Massredigering

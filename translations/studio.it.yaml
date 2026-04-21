@@ -1037,7 +1037,6 @@ jobs.job.error-modal.title: Errori lavoro
 jobs.job.button-abort: Interrompi lavoro
 jobs.job.abort-confirm: Interrompere questo lavoro?
 jobs.zip-job.title: "Download ZIP di {{title}}"
-jobs.batch-edit-job.title: "Modifica in blocco di {{title}}"
 jobs.csv-job.title: "Download CSV di {{title}}"
 jobs.xlsx-job.title: "Download XLSX di {{title}}"
 batch-edit.job-title: Modifica in blocco

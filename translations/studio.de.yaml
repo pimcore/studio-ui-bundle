@@ -1037,7 +1037,6 @@ jobs.job.error-modal.title: Auftragsfehler
 jobs.job.button-abort: Auftrag abbrechen
 jobs.job.abort-confirm: Möchten Sie diesen Auftrag wirklich abbrechen?
 jobs.zip-job.title: "ZIP-Download von {{title}}"
-jobs.batch-edit-job.title: "Stapelbearbeitung von {{title}}"
 jobs.csv-job.title: "CSV-Download von {{title}}"
 jobs.xlsx-job.title: "XLSX-Download von {{title}}"
 batch-edit.job-title: Stapelbearbeitung
