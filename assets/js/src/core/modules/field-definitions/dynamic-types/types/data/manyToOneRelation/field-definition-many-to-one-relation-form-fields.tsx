@@ -34,20 +34,15 @@ export const FieldDefinitionManyToOneRelationFormFields = (props: FieldDefinitio
 
   return (
     <>
-      <FormKit.Panel
-        border
-        theme="fieldset"
-        title={ t('layout') }
+      <Form.Item
+        label={ t('width') }
+        name="width"
+        tooltip={ t('width-tooltip') }
       >
-        <Form.Item
-          label={ t('width') }
-          name="width"
-          tooltip={ t('width-tooltip') }
-        >
-          <Input />
-        </Form.Item>
+        <Input />
+      </Form.Item>
 
-        {!isCustomLayout && (
+      {!isCustomLayout && (
         <>
           <Form.Item
             label={ t('path-formatter-service') }
@@ -59,13 +54,7 @@ export const FieldDefinitionManyToOneRelationFormFields = (props: FieldDefinitio
           <Form.Item name="allowToClearRelation">
             <Switch labelRight={ t('allow-to-clear-relation') } />
           </Form.Item>
-        </>
-        )}
 
-      </FormKit.Panel>
-
-      {!isCustomLayout && (
-        <>
           <FormKit.Panel
             border
             theme="fieldset"
