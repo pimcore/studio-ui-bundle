@@ -23,6 +23,10 @@ export const useStyles = createStyles(({ css }, { height }: UseStylesProps) => {
       width: 100%;
       max-height: ${maxHeight};
       overflow: auto;
+      
+      .ant-table-content table {
+        width: calc(100% - 2px) !important;
+      }
     `
   }
 })
