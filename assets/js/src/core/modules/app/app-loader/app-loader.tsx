@@ -32,7 +32,6 @@ import { loadReportsMenuItems } from '@Pimcore/modules/reports/utils/reports-loa
 import { type AppLoaderRegistry } from './services/app-loader-registry'
 import { container, serviceIds } from '@sdk/app'
 import { useGlobalMessageBusLoader } from './loader/global-message-bus/loader'
-import { WidgetRestorer } from '@Pimcore/modules/widget-manager/components/widget-restorer'
 import { AppLoadingContext, type AppLoadingContextValue } from './context/app-loading-context'
 
 export interface IAppLoaderProps {
@@ -141,9 +140,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
           <div style={ {
             animation: `${appIntro} 600ms ease 200ms both`
           } }>
-            <WidgetRestorer>
-              {props.children}
-            </WidgetRestorer>
+            {props.children}
           </div>
         )}
       </AppLoadingContext.Provider>
