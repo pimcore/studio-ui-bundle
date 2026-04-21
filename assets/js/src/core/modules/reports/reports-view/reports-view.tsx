@@ -34,7 +34,7 @@ export const ReportsView = ({ reportId }: IReportsViewProps): React.JSX.Element 
   const hasPermission = isAllowed(UserPermission.Reports)
 
   const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery(
-    { page: 1, pageSize: 9999 },
+    undefined,
     { skip: !hasPermission }
   )
 

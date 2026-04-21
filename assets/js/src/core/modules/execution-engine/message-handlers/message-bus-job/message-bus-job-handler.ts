@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
 import { AbstractMessageHandler } from '@Pimcore/modules/global-message-bus/message-handlers/abstract-message-handler'
 import { type AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
 import { store } from '@Pimcore/app/store'
@@ -23,7 +24,7 @@ import { JobRunPolling, type JobStatusUpdateData } from './job-run-polling'
 import { type MessageBusJob, type JobCompletionData, type MessageBusJobHandlerOptions } from './message-bus-job-handler-types'
 import { DefaultStepTracker } from './step-tracker/default-step-tracker'
 import { type StepTracker } from './step-tracker/step-tracker.interface'
-import { StepCompletionCalculator } from './progress-calculator/step-completion-calculator'
+import { ProgressFieldCalculator } from './progress-calculator/progress-field-calculator'
 import { PROGRESS_NO_UPDATE, type ProgressCalculator } from './progress-calculator/progress-calculator.interface'
 
 export type { MessageBusJob, JobCompletionData, MessageBusJobHandlerOptions } from './message-bus-job-handler-types'
@@ -55,7 +56,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     this.title = options.title
     this.stepDescriptions = options.stepDescriptions
     this.stepTracker = options.stepTracker ?? new DefaultStepTracker()
-    this.progressCalculator = options.progressCalculator ?? new StepCompletionCalculator()
+    this.progressCalculator = options.progressCalculator ?? new ProgressFieldCalculator()
 
     this.onJobCompletion = options.onJobCompletion
     this.onRetry = options.onRetry

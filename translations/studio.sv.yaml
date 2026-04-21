@@ -1029,6 +1029,8 @@ jobs.job.button-download: ladda ner
 jobs.job.button-ignore-and-reload: ignorera och ladda om
 jobs.job.step_hint: "Steg {{step}}/{{total}}"
 jobs.job.step_hint_single: "Steg {{step}}"
+jobs.job.step.batch-edit.preparing: Preparing batch edit
+jobs.job.step.batch-edit.applying: Applying batch edit
 jobs.job.download-error: Nedladdning misslyckades
 jobs.job.button-show-errors: Visa fel
 jobs.job.error-modal.title: Jobbfel

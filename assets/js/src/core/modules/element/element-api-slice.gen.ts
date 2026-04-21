@@ -93,18 +93,17 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type ElementDeleteApiResponse =
-    /** status 201 Successfully created jobRun for deleting element and its children */ {
-        /** ID of created jobRun */
-        jobRunId: number;
-    };
+export type ElementDeleteApiResponse = /** status 201 element_delete_created_response */ {
+    /** ID of created jobRun */
+    jobRunId: number;
+};
 export type ElementDeleteApiArg = {
     /** Id of the element */
     id: number;
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
 };
-export type ElementGetDeleteInfoApiResponse = /** status 200 Get delete info for an element */ DeleteInfo;
+export type ElementGetDeleteInfoApiResponse = /** status 200 element_get_delete_info_success_response */ DeleteInfo;
 export type ElementGetDeleteInfoApiArg = {
     /** Id of the element */
     id: number;
@@ -119,14 +118,16 @@ export type ElementFolderCreateApiArg = {
     elementType: "asset" | "document" | "data-object";
     folderData: FolderData;
 };
-export type ElementGetContextPermissionsApiResponse = /** status 200 Context permission list */ {
-    [key: string]: boolean;
-};
+export type ElementGetContextPermissionsApiResponse =
+    /** status 200 element_get_context_permissions_success_response */ {
+        [key: string]: boolean;
+    };
 export type ElementGetContextPermissionsApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
 };
-export type ElementGetTreeLocationApiResponse = /** status 200 Location data of the element */ ElementLocationData;
+export type ElementGetTreeLocationApiResponse =
+    /** status 200 element_get_tree_location_success_response */ ElementLocationData;
 export type ElementGetTreeLocationApiArg = {
     /** Id of the element */
     id: number;
@@ -135,7 +136,7 @@ export type ElementGetTreeLocationApiArg = {
     /** Get perspective by matching Id */
     perspectiveId: string;
 };
-export type ElementGetIdByPathApiResponse = /** status 200 element_get_id_by_path_response_description */ {
+export type ElementGetIdByPathApiResponse = /** status 200 element_get_id_by_path_success_response */ {
     /** ID of the element */
     id: number;
 };
@@ -145,14 +146,14 @@ export type ElementGetIdByPathApiArg = {
     /** Filter elements by matching element path. */
     elementPath: string;
 };
-export type ElementGetSubtypeApiResponse = /** status 200 Subtype of the element */ Subtype;
+export type ElementGetSubtypeApiResponse = /** status 200 element_get_subtype_success_response */ Subtype;
 export type ElementGetSubtypeApiArg = {
     /** Id of the element */
     id: number;
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
 };
-export type ElementGetUsageApiResponse = /** status 200 Where the element is referenced */ ElementUsage;
+export type ElementGetUsageApiResponse = /** status 200 element_get_usage_success_response */ ElementUsage;
 export type ElementGetUsageApiArg = {
     /** Id of the element */
     id: number;
@@ -167,7 +168,7 @@ export type ElementGetUsageApiArg = {
     /** Sort by field. */
     sortBy?: "id" | "path" | "type";
 };
-export type ElementUsageReplaceApiResponse = /** status 200 Id of the created job run */ {
+export type ElementUsageReplaceApiResponse = /** status 200 element_usage_replace_success_response */ {
     /** ID of created jobRun */
     jobRunId: number;
 };
@@ -182,7 +183,7 @@ export type ElementUsageReplaceApiArg = {
         elements?: ElementUsageBaseItem[];
     };
 };
-export type ElementResolveBySearchTermApiResponse = /** status 200 ID of the element with given search term */ {
+export type ElementResolveBySearchTermApiResponse = /** status 200 element_resolve_success_response */ {
     /** ID of the element */
     id: number;
 };

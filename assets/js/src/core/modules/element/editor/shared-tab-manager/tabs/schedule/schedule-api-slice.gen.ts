@@ -38,6 +38,13 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Schedule"],
             }),
+            scheduleListActionsForElementType: build.query<
+                ScheduleListActionsForElementTypeApiResponse,
+                ScheduleListActionsForElementTypeApiArg
+            >({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/schedules/actions/${queryArg.elementType}` }),
+                providesTags: ["Schedule"],
+            }),
         }),
         overrideExisting: false,
     });
@@ -47,18 +54,20 @@ export type ScheduleDeleteByIdApiArg = {
     /** Id of the schedule */
     id: number;
 };
-export type ScheduleGetCollectionForElementByTypeAndIdApiResponse = /** status 200 List of schedules for element */ {
-    items?: Schedule[];
-};
+export type ScheduleGetCollectionForElementByTypeAndIdApiResponse =
+    /** status 200 schedule_get_collection_for_element_by_type_and_id_success_response */ {
+        items?: Schedule[];
+    };
 export type ScheduleGetCollectionForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
     /** Id of the element */
     id: number;
 };
-export type ScheduleUpdateForElementByTypeAndIdApiResponse = /** status 200 List of updated schedules */ {
-    items?: Schedule[];
-};
+export type ScheduleUpdateForElementByTypeAndIdApiResponse =
+    /** status 200 schedule_update_for_element_by_type_and_id_success_response */ {
+        items?: Schedule[];
+    };
 export type ScheduleUpdateForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
@@ -68,12 +77,21 @@ export type ScheduleUpdateForElementByTypeAndIdApiArg = {
         items?: UpdateSchedule[];
     };
 };
-export type ScheduleCreateForElementByTypeAndIdApiResponse = /** status 200 Created schedule for element */ Schedule;
+export type ScheduleCreateForElementByTypeAndIdApiResponse =
+    /** status 200 schedule_create_for_element_by_type_and_id_success_response */ Schedule;
 export type ScheduleCreateForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
     /** Id of the element */
     id: number;
+};
+export type ScheduleListActionsForElementTypeApiResponse =
+    /** status 200 schedule_list_actions_for_element_type_success_response */ {
+        items: ScheduleAction[];
+    };
+export type ScheduleListActionsForElementTypeApiArg = {
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
 };
 export type Error = {
     /** Message */
@@ -97,7 +115,9 @@ export type Schedule = {
     /** Date of schedule */
     date: number;
     /** Action */
-    action?: ("publish" | "delete") | ("publish" | "delete");
+    action?:
+        | ("publish-version" | "publish" | "unpublish" | "delete")
+        | ("publish-version" | "publish" | "unpublish" | "delete");
     /** Version ID */
     version?: number | null;
     /** Active */
@@ -113,15 +133,26 @@ export type UpdateSchedule = {
     /** Date of schedule */
     date: number;
     /** Action */
-    action?: ("publish" | "delete") | ("publish" | "delete");
+    action?:
+        | ("publish-version" | "publish" | "unpublish" | "delete")
+        | ("publish-version" | "publish" | "unpublish" | "delete");
     /** Version ID */
     version?: number | null;
     /** Active */
     active: boolean;
+};
+export type ScheduleAction = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Action key */
+    key: string;
 };
 export const {
     useScheduleDeleteByIdMutation,
     useScheduleGetCollectionForElementByTypeAndIdQuery,
     useScheduleUpdateForElementByTypeAndIdMutation,
     useScheduleCreateForElementByTypeAndIdMutation,
+    useScheduleListActionsForElementTypeQuery,
 } = injectedRtkApi;

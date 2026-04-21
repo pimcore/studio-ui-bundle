@@ -56,7 +56,7 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type ExportDownloadCsvApiResponse = /** status 200 CSV File as attachment */ Blob;
+export type ExportDownloadCsvApiResponse = /** status 200 export_download_csv_success_response */ Blob;
 export type ExportDownloadCsvApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
@@ -66,7 +66,7 @@ export type ExportDeleteCsvApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
 };
-export type ExportCsvApiResponse = /** status 201 Successfully created <strong>jobRun</strong> for csv export */ {
+export type ExportCsvApiResponse = /** status 201 export_csv_created_response */ {
     /** ID of created jobRun */
     jobRunId: number;
 };
@@ -105,7 +105,7 @@ export type ExportCsvApiArg = {
         classId?: string | null;
     };
 };
-export type ExportCsvFolderApiResponse = /** status 201 Successfully created <strong>jobRun</strong> for csv export */ {
+export type ExportCsvFolderApiResponse = /** status 201 export_csv_created_response */ {
     /** ID of created jobRun */
     jobRunId: number;
 };
@@ -146,7 +146,7 @@ export type ExportCsvFolderApiArg = {
         classId?: string | null;
     };
 };
-export type ExportDownloadXlsxApiResponse = /** status 200 XLSX File as attachment */ Blob;
+export type ExportDownloadXlsxApiResponse = /** status 200 export_download_xlsx_success_response */ Blob;
 export type ExportDownloadXlsxApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
@@ -156,7 +156,7 @@ export type ExportDeleteXlsxApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
 };
-export type ExportXlsxApiResponse = /** status 201 Successfully created <strong>jobRun</strong> for XLSX export */ {
+export type ExportXlsxApiResponse = /** status 201 export_xlsx_created_response */ {
     /** ID of created jobRun */
     jobRunId: number;
 };
@@ -194,11 +194,10 @@ export type ExportXlsxApiArg = {
         classId?: string | null;
     };
 };
-export type ExportXlsxFolderApiResponse =
-    /** status 201 Successfully created <strong>jobRun</strong> for XLSX export */ {
-        /** ID of created jobRun */
-        jobRunId: number;
-    };
+export type ExportXlsxFolderApiResponse = /** status 201 export_xlsx_created_response */ {
+    /** ID of created jobRun */
+    jobRunId: number;
+};
 export type ExportXlsxFolderApiArg = {
     /** Id of the folder */
     id: number;

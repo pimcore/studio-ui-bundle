@@ -1029,6 +1029,8 @@ jobs.job.button-download: scarica
 jobs.job.button-ignore-and-reload: ignora e ricarica
 jobs.job.step_hint: "Passo {{step}}/{{total}}"
 jobs.job.step_hint_single: "Passo {{step}}"
+jobs.job.step.batch-edit.preparing: Preparing batch edit
+jobs.job.step.batch-edit.applying: Applying batch edit
 jobs.job.download-error: Download fallito
 jobs.job.button-show-errors: Mostra errori
 jobs.job.error-modal.title: Errori lavoro

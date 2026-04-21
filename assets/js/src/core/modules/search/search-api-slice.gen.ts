@@ -74,9 +74,9 @@ const injectedRtkApi = api
     });
 export { injectedRtkApi as api };
 export type AssetGetSearchConfigurationApiResponse =
-    /** status 200 Asset search configuration */ GridDetailedConfiguration;
+    /** status 200 asset_get_search_configuration_success_response */ GridDetailedConfiguration;
 export type AssetGetSearchConfigurationApiArg = void;
-export type AssetGetSearchApiResponse = /** status 200 Assets for search grid */ {
+export type AssetGetSearchApiResponse = /** status 200 asset_get_search_success_response */ {
     totalItems: number;
     items: {
         id?: number;
@@ -92,12 +92,12 @@ export type AssetGetSearchApiArg = {
     };
 };
 export type DataObjectGetSearchConfigurationApiResponse =
-    /** status 200 Data object search configuration */ GridDetailedConfiguration;
+    /** status 200 data_object_get_search_configuration_success_response */ GridDetailedConfiguration;
 export type DataObjectGetSearchConfigurationApiArg = {
     /** Class Id of the data object */
     classId?: string;
 };
-export type DataObjectGetSearchApiResponse = /** status 200 Data object search results */ {
+export type DataObjectGetSearchApiResponse = /** status 200 data_object_get_search_success_response */ {
     totalItems: number;
     items: {
         id?: number;
@@ -129,7 +129,7 @@ export type DocumentGetSearchApiArg = {
         filters?: GridFilter;
     };
 };
-export type SimpleSearchPreviewGetApiResponse = /** status 200 Simple search results preview for elements */
+export type SimpleSearchPreviewGetApiResponse = /** status 200 simple_search_preview_get_success_response */
     | SimpleSearchAssetDetail
     | SimpleSearchDataObjectDetail
     | SimpleSearchDocumentDetail;
@@ -139,7 +139,7 @@ export type SimpleSearchPreviewGetApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
 };
-export type SimpleSearchGetApiResponse = /** status 200 Search results for elements */ {
+export type SimpleSearchGetApiResponse = /** status 200 simple_search_get_success_response */ {
     totalItems: number;
     items: SimpleSearchResult[];
 };
@@ -148,7 +148,7 @@ export type SimpleSearchGetApiArg = {
     page: number;
     /** Number of items per page */
     pageSize: number;
-    /** Search term */
+    /** simple_search_get_search_term_parameter */
     searchTerm?: string;
 };
 export type Column = {

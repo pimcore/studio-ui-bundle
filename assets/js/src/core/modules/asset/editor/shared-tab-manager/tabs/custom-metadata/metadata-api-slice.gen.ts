@@ -66,24 +66,23 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type MetadataAssetGetCollectionApiResponse =
-    /** status 200 Filtered predefined metadata entries for the specified asset type */ {
-        items?: PredefinedMetadata[];
-    };
+export type MetadataAssetGetCollectionApiResponse = /** status 200 metadata_asset_get_collection_success_response */ {
+    items?: PredefinedMetadata[];
+};
 export type MetadataAssetGetCollectionApiArg = {
-    /** Filter by asset sub-type (e.g. image, video). */
+    /** metadata_asset_get_collection_param_sub_type */
     subType?: string;
-    /** Filter by metadata group. Use 'default' to match entries with no group assigned. */
+    /** metadata_asset_get_collection_param_group */
     group?: string;
 };
-export type AssetCustomMetadataGetByIdApiResponse = /** status 200 Successfully retrieved custom metadata as JSON */ {
+export type AssetCustomMetadataGetByIdApiResponse = /** status 200 asset_custom_metadata_get_by_id_success_response */ {
     items?: CustomMetadata[];
 };
 export type AssetCustomMetadataGetByIdApiArg = {
     /** Id of the asset */
     id: number;
 };
-export type MetadataGetCollectionApiResponse = /** status 200 Predefined metadata collection with total item count */ {
+export type MetadataGetCollectionApiResponse = /** status 200 metadata_get_collection_success_response */ {
     totalItems: number;
     items: PredefinedMetadata[];
 };
@@ -107,12 +106,12 @@ export type MetadataGetCollectionApiArg = {
     };
 };
 export type MetadataPredefinedCreateApiResponse =
-    /** status 200 Newly created predefined metadata entry */ PredefinedMetadata;
+    /** status 200 metadata_predefined_create_success_response */ PredefinedMetadata;
 export type MetadataPredefinedCreateApiArg = {
     createPredefinedMetadata: CreatePredefinedMetadata;
 };
 export type MetadataPredefinedUpdateApiResponse =
-    /** status 200 Updated predefined metadata entry */ PredefinedMetadata;
+    /** status 200 metadata_predefined_update_success_response */ PredefinedMetadata;
 export type MetadataPredefinedUpdateApiArg = {
     /** Id of the metadata */
     id: string;

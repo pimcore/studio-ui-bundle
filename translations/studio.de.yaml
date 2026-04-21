@@ -1029,6 +1029,8 @@ jobs.job.button-download: Herunterladen
 jobs.job.button-ignore-and-reload: Ignorieren und neu laden
 jobs.job.step_hint: "Schritt {{step}}/{{total}}"
 jobs.job.step_hint_single: "Schritt {{step}}"
+jobs.job.step.batch-edit.preparing: Preparing batch edit
+jobs.job.step.batch-edit.applying: Applying batch edit
 jobs.job.download-error: Download fehlgeschlagen
 jobs.job.button-show-errors: Fehler anzeigen
 jobs.job.error-modal.title: Auftragsfehler
