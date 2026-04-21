@@ -53,7 +53,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
       return next
     })
   }, [])
-  const appLoadingContextValue: AppLoadingContextValue = { registerLoader, unregisterLoader }
+  const appLoadingContextValue: AppLoadingContextValue = { registerLoader, unregisterLoader, isAppLoading: loading }
 
   const loading = isLoading || pendingLoaders.size > 0
 

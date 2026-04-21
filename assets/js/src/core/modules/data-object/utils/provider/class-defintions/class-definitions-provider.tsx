@@ -17,6 +17,7 @@ import { useAppDispatch } from '@sdk/app'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/types'
 import { Content } from '@Pimcore/components/content/content'
+import { useIsAppLoading } from '@Pimcore/modules/app/app-loader/context/app-loading-context'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 
@@ -38,6 +39,7 @@ export interface FolderQueryState {
 
 export const ClassDefinitionsProvider = ({ children, elementId }: ClassDefinitionsProviderProps): React.JSX.Element => {
   const hasObjectsPermission = isAllowed(UserPermission.Objects)
+  const isAppLoading = useIsAppLoading()
   const queryResultReturn = useClassDefinitionCollectionQuery(undefined, {
     skip: !hasObjectsPermission
   })
@@ -100,7 +102,7 @@ export const ClassDefinitionsProvider = ({ children, elementId }: ClassDefinitio
   }
 
   return useMemo(() => {
-    if (transformedQueryResult.isLoading) {
+    if (transformedQueryResult.isLoading && !isAppLoading) {
       return (
         <Content loading />
       )
