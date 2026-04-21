@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Box, ButtonGroup, IconButton, OperationalGrid, Space } from '@sdk/components'
+import { Box, ButtonGroup, CsvImportButton, IconButton, OperationalGrid, Space } from '@sdk/components'
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -138,15 +138,7 @@ export const SelectOptionEntriesGrid = ({ value = [], onChange }: SelectOptionEn
                   tooltip={ { title: t('add') } }
                   type="default"
                 />
-                {operations.openCsvImport !== undefined && (
-                  <IconButton
-                    icon={ { value: 'edit-pen' } }
-                    onClick={ operations.openCsvImport }
-                    tooltip={ { title: t('operational-grid.csv-import.title') } }
-                    type="default"
-                  />
-                )}
-                {operations.csvImportModal}
+                <CsvImportButton />
               </Space>
             )
           }}

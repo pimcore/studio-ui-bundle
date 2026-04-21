@@ -15,6 +15,7 @@ import { createColumnHelper, type RowSelectionState, type ColumnDef } from '@tan
 import { DefaultCell } from '../grid/columns/default-cell'
 import { Space } from 'antd'
 import { IconButton } from '../icon-button/icon-button'
+import { CsvImportButton } from './csv-import-button/csv-import-button'
 import { type DragEndEvent } from '@dnd-kit/core'
 
 const config: Meta = {
@@ -82,15 +83,7 @@ const config: Meta = {
                         </IconButton>
                       </>
                     )}
-                    {operations.openCsvImport !== undefined && (
-                      <IconButton
-                        icon={ { value: 'edit-pen' } }
-                        onClick={ operations.openCsvImport }
-                      >
-                        Import CSV
-                      </IconButton>
-                    )}
-                    {operations.csvImportModal}
+                    <CsvImportButton />
                   </Space>
                 )
               }}
@@ -331,15 +324,7 @@ export const WithColumnOperations = {
                         </IconButton>
                       </Space>
                     </div>
-                    {operations.openCsvImport !== undefined && (
-                      <IconButton
-                        icon={ { value: 'edit-pen' } }
-                        onClick={ operations.openCsvImport }
-                      >
-                        Import CSV
-                      </IconButton>
-                    )}
-                    {operations.csvImportModal}
+                    <CsvImportButton />
                   </Space>
                 )
               }}
@@ -455,15 +440,7 @@ export const WithDragAndDrop = {
                           Reset Order
                         </IconButton>
                       </div>
-                      {operations.openCsvImport !== undefined && (
-                        <IconButton
-                          icon={ { value: 'edit-pen' } }
-                          onClick={ operations.openCsvImport }
-                        >
-                          Import CSV
-                        </IconButton>
-                      )}
-                      {operations.csvImportModal}
+                      <CsvImportButton />
                     </Space>
                   )
                 }}

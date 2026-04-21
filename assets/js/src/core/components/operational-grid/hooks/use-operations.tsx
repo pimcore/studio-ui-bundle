@@ -11,8 +11,6 @@
 import { useOperationalGridContext } from '../provider/operational-grid-provider'
 import { type ColumnDef } from '@tanstack/react-table'
 import { isNil } from 'lodash'
-import React, { useState } from 'react'
-import { CsvImportModal } from '../csv-import-modal/csv-import-modal'
 
 export interface UseOperationsReturn {
   addRow: (data?: any) => void
@@ -23,16 +21,13 @@ export interface UseOperationsReturn {
   addColumn: (column: ColumnDef<any>, defaultValue?: any) => void
   removeColumn: (columnId: string) => void
   updateColumn: (columnId: string, updatedColumn: ColumnDef<any>) => void
-  openCsvImport?: () => void
-  csvImportModal: React.JSX.Element | null
 }
 
 export const useOperations = (): UseOperationsReturn => {
-  const { value, onChange, finalGridProps, columns, onColumnsChange, disableCsvImport } = useOperationalGridContext()
+  const { value, onChange, finalGridProps, columns, onColumnsChange } = useOperationalGridContext()
   const selectedRows = finalGridProps.selectedRows
   const onSelectedRowsChange = finalGridProps.onSelectedRowsChange
   const setRowId = finalGridProps.setRowId
-  const [isCsvImportOpen, setIsCsvImportOpen] = useState(false)
 
   const getRowId = (row: any, index: number): string => {
     if (!isNil(setRowId)) {
@@ -127,33 +122,6 @@ export const useOperations = (): UseOperationsReturn => {
     onColumnsChange?.(newColumns)
   }
 
-  const handleCsvImportConfirm = (newRows: any[]): void => {
-    onChange?.(newRows)
-    setIsCsvImportOpen(false)
-  }
-
-  const handleCsvImportCancel = (): void => {
-    setIsCsvImportOpen(false)
-  }
-
-  const csvEnabled = disableCsvImport !== true
-
-  const openCsvImport = csvEnabled
-    ? (): void => { setIsCsvImportOpen(true) }
-    : undefined
-
-  const csvImportModal = csvEnabled
-    ? (
-      <CsvImportModal
-        columns={ columns }
-        onCancel={ handleCsvImportCancel }
-        onConfirm={ handleCsvImportConfirm }
-        open={ isCsvImportOpen }
-        value={ value }
-      />
-      )
-    : null
-
   return {
     addRow,
     clearAll,
@@ -162,8 +130,6 @@ export const useOperations = (): UseOperationsReturn => {
     getSelectedRowsData,
     addColumn,
     removeColumn,
-    updateColumn,
-    openCsvImport,
-    csvImportModal
+    updateColumn
   }
 }
