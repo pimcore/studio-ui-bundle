@@ -33,6 +33,8 @@ import { type AppLoaderRegistry } from './services/app-loader-registry'
 import { container, serviceIds } from '@sdk/app'
 import { useGlobalMessageBusLoader } from './loader/global-message-bus/loader'
 import { AppLoadingContext, type AppLoadingContextValue } from './context/app-loading-context'
+import { useAppDispatch } from '@sdk/app'
+import { setPreloaderBranding } from '@Pimcore/modules/app/settings/settings-slice'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -43,6 +45,7 @@ export type LoadPhase = 'loading' | 'outro' | 'idle'
 export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const [phase, setPhase] = useState<LoadPhase>('loading')
   const isLoading = phase === 'loading' || phase === 'outro'
+  const dispatch = useAppDispatch()
 
   const [pendingLoaders, setPendingLoaders] = useState<Set<string>>(new Set())
   const registerLoader = useCallback((id: string) => {
@@ -72,6 +75,18 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
       if (outroTimerRef.current !== null) {
         clearTimeout(outroTimerRef.current)
       }
+    }
+  }, [])
+
+  // Read brand colors from the Twig preloader's data- attributes and pre-populate
+  // the Redux store so Background uses the correct colors before adminSettings loads.
+  useEffect(() => {
+    const preloader = document.getElementById('app-preloader')
+    if (preloader === null) return
+    const brandColor = preloader.dataset.brandColor ?? ''
+    const backgroundShade = preloader.dataset.brandBackgroundColor ?? ''
+    if (brandColor !== '' || backgroundShade !== '') {
+      dispatch(setPreloaderBranding({ brandColor, backgroundShade }))
     }
   }, [])
 
@@ -111,10 +126,11 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
       }
 
       if (!isAuthenticated) {
-          await Promise.all([
-            loadPublicTranslations(),
-            loadBrandThumbnailUrls()
-          ]).then(() => {
+        await Promise.all([
+          loadPublicTranslations(),
+          loadBrandThumbnailUrls(),
+          loadAdminSettings()
+        ]).then(() => {
             finishLoading()
           }).catch((error) => {
           console.error('Error during login preparation', error)

@@ -15,6 +15,7 @@ import {
   type SystemSettingsGetApiResponse,
   type AdminSettings,
   type AdminSettingsThumbnailPath,
+  type Branding,
   api
 } from '@Pimcore/modules/app/settings/settings-slice.gen'
 
@@ -46,6 +47,25 @@ const slice = createSlice({
       state.adminSettings = payload
     },
 
+    // Pre-populate branding from the Twig preloader's data- attributes so the
+    // Background component uses the correct brand color before adminSettings loads.
+    setPreloaderBranding: (
+      state,
+      { payload }: PayloadAction<Pick<Branding, 'brandColor' | 'backgroundShade'>>
+    ) => {
+      if (state.adminSettings === undefined) {
+        state.adminSettings = {
+          branding: {
+            brandColor: payload.brandColor,
+            backgroundShade: payload.backgroundShade,
+            loginScreenCustomBackgroundImage: null
+          },
+          assets: { hide_edit_image: false, disable_tree_preview: false },
+          writeable: false
+        }
+      }
+    },
+
     setThumbnails: (
       state,
       { payload }: PayloadAction<AdminSettingsThumbnailPath>
@@ -65,7 +85,7 @@ const slice = createSlice({
 
 injectSliceWithState(slice)
 
-export const { setSettings, setAdminSettings, setThumbnails } = slice.actions
+export const { setSettings, setAdminSettings, setPreloaderBranding, setThumbnails } = slice.actions
 
 export const getSettings = (state: RootState): SystemSettingsGetApiResponse => state.settings.settings
 export const getAdminSettings = (state: RootState): AdminSettings => state.settings.adminSettings
