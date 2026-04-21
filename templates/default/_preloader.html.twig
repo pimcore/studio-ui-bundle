@@ -124,7 +124,7 @@
 </style>
 {% endif %}
 
-<div id="app-preloader"{% if branding.brandColor %} style="--pimcore-brand-color: {{ branding.brandColor }}; --pimcore-brand-background-color: {{ branding.backgroundShade ?? branding.brandColor }}" data-brand-color="{{ branding.brandColor }}" data-brand-background-color="{{ branding.backgroundShade ?? branding.brandColor }}"{% endif %}>
+<div id="app-preloader" data-logo-url="{{ branding.logoUrl ?? '/bundles/pimcorestudioui/img/logo-purple.svg' }}"{% if branding.brandColor %} style="--pimcore-brand-color: {{ branding.brandColor }}; --pimcore-brand-background-color: {{ branding.backgroundShade ?? branding.brandColor }}" data-brand-color="{{ branding.brandColor }}" data-brand-background-color="{{ branding.backgroundShade ?? branding.brandColor }}"{% endif %}>
     <div class="background-figure background-figure--bottom-left"></div>
     <div class="background-figure background-figure--bottom-right"></div>
     <div class="background-figure background-figure--top-left"></div>

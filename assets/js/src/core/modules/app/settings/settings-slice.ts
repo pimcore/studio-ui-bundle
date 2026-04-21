@@ -47,7 +47,20 @@ const slice = createSlice({
       state.adminSettings = payload
     },
 
-    // Pre-populate branding from the Twig preloader's data- attributes so the
+    // Pre-populate logo URL from the Twig preloader's data-logo-url attribute so
+    // the Background component shows the correct logo before thumbnails load.
+    setPreloaderThumbnails: (
+      state,
+      { payload }: PayloadAction<string>
+    ) => {
+      if (state.thumbnails === undefined) {
+        state.thumbnails = {
+          customLogo: payload,
+          customLogoSmall: payload,
+          loginScreenCustomBackgroundImage: null
+        }
+      }
+    },
     // Background component uses the correct brand color before adminSettings loads.
     setPreloaderBranding: (
       state,
@@ -85,7 +98,7 @@ const slice = createSlice({
 
 injectSliceWithState(slice)
 
-export const { setSettings, setAdminSettings, setPreloaderBranding, setThumbnails } = slice.actions
+export const { setSettings, setAdminSettings, setPreloaderBranding, setPreloaderThumbnails, setThumbnails } = slice.actions
 
 export const getSettings = (state: RootState): SystemSettingsGetApiResponse => state.settings.settings
 export const getAdminSettings = (state: RootState): AdminSettings => state.settings.adminSettings

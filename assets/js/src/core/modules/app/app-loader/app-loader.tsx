@@ -34,7 +34,7 @@ import { container, serviceIds } from '@sdk/app'
 import { useGlobalMessageBusLoader } from './loader/global-message-bus/loader'
 import { AppLoadingContext, type AppLoadingContextValue } from './context/app-loading-context'
 import { useAppDispatch } from '@sdk/app'
-import { setPreloaderBranding } from '@Pimcore/modules/app/settings/settings-slice'
+import { setPreloaderBranding, setPreloaderThumbnails } from '@Pimcore/modules/app/settings/settings-slice'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -88,6 +88,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
     if (preloader === null) return
     const brandColor = preloader.dataset.brandColor ?? ''
     const backgroundShade = preloader.dataset.brandBackgroundColor ?? ''
+    const logoUrl = preloader.dataset.logoUrl ?? ''
     if (brandColor !== '') {
       document.documentElement.style.setProperty('--pimcore-brand-color', brandColor)
     }
@@ -96,6 +97,9 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
     }
     if (brandColor !== '' || backgroundShade !== '') {
       dispatch(setPreloaderBranding({ brandColor, backgroundShade }))
+    }
+    if (logoUrl !== '') {
+      dispatch(setPreloaderThumbnails(logoUrl))
     }
   }, [])
 
