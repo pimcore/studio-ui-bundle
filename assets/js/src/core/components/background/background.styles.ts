@@ -14,6 +14,7 @@ import { type LoadPhase } from '@Pimcore/modules/app/app-loader/app-loader'
 
 interface StyleProps {
   phase: LoadPhase
+  brandColor: string
 }
 
 // ---------------------------------------------------------------------------
@@ -70,19 +71,19 @@ const logoOrbitCCW = keyframes`
   to   { transform: translate(-50%, -50%) rotate(540deg) translateX(80px); }
 `
 
-export const useStyle = createStyles(({ token, css }, { phase }: StyleProps) => {
+export const useStyle = createStyles(({ css }, { phase, brandColor }: StyleProps) => {
   const isLoading = phase === 'loading'
   const isOrbiting = phase === 'loading' || phase === 'outro'
   // -------------------------------------------------------------------------
-  // colorPulse — defined inside createStyles so token.colorPrimary is in scope.
-  // Oscillates the background between the brand primary colour (at 42% mix)
-  // and the signature blueish.  Each figure uses the same keyframe but with a
-  // different animation-delay, creating a dreamy, desynchronised colour drift.
+  // colorPulse — uses the brand color as a literal value baked into the
+  // keyframe at render time, so the browser can smoothly interpolate.
+  // Falls back to the default Pimcore purple if no brand color is configured.
   // -------------------------------------------------------------------------
+  const resolvedBrandColor = brandColor !== '' ? brandColor : '#722ed1'
   const colorPulse = keyframes`
-    0%   { background: color-mix(in srgb, ${token.colorPrimary} 42%, transparent); }
+    0%   { background: color-mix(in srgb, ${resolvedBrandColor} 42%, transparent); }
     50%  { background: rgba(55, 217, 243, 0.20); }
-    100% { background: color-mix(in srgb, ${token.colorPrimary} 42%, transparent); }
+    100% { background: color-mix(in srgb, ${resolvedBrandColor} 42%, transparent); }
   `
 
   return {

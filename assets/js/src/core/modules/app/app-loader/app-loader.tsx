@@ -80,11 +80,20 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
 
   // Read brand colors from the Twig preloader's data- attributes and pre-populate
   // the Redux store so Background uses the correct colors before adminSettings loads.
+  // Also set CSS variables directly on :root immediately — before any React render —
+  // so --pimcore-brand-color and --pimcore-brand-background-color are available
+  // from frame 1 without waiting for base-layout-view to mount.
   useEffect(() => {
     const preloader = document.getElementById('app-preloader')
     if (preloader === null) return
     const brandColor = preloader.dataset.brandColor ?? ''
     const backgroundShade = preloader.dataset.brandBackgroundColor ?? ''
+    if (brandColor !== '') {
+      document.documentElement.style.setProperty('--pimcore-brand-color', brandColor)
+    }
+    if (backgroundShade !== '') {
+      document.documentElement.style.setProperty('--pimcore-brand-background-color', backgroundShade)
+    }
     if (brandColor !== '' || backgroundShade !== '') {
       dispatch(setPreloaderBranding({ brandColor, backgroundShade }))
     }

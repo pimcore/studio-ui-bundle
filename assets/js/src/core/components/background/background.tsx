@@ -9,8 +9,10 @@
  */
 
 import React from 'react'
+import { useSelector } from 'react-redux'
 import { useStyle } from './background.styles'
 import { useAdminThumbnails } from '@Pimcore/modules/app/branding/hooks/use-admin-thumbnails'
+import { getAdminSettings } from '@Pimcore/modules/app/settings/settings-slice'
 import { type LoadPhase } from '@Pimcore/modules/app/app-loader/app-loader'
 
 export interface BackgroundProps {
@@ -18,7 +20,9 @@ export interface BackgroundProps {
 }
 
 const Background = ({ phase = 'idle' }: BackgroundProps): React.JSX.Element => {
-  const { styles } = useStyle({ phase })
+  const adminSettings = useSelector(getAdminSettings)
+  const brandColor = adminSettings?.branding?.brandColor ?? ''
+  const { styles } = useStyle({ phase, brandColor })
   const { logoUrl } = useAdminThumbnails()
 
   return (
