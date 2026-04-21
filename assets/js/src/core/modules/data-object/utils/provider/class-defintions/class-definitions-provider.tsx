@@ -11,7 +11,7 @@
 import { type BaseQuery } from '@Pimcore/app/api/pimcore'
 import { type ClassDefinitionCollectionApiArg, type ClassDefinitionCollectionApiResponse, api } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { type TypedUseQueryHookResult } from '@reduxjs/toolkit/dist/query/react'
-import React, { createContext, useEffect, useMemo, useState } from 'react'
+import React, { createContext, useEffect, useMemo, useRef, useState } from 'react'
 import { type ClassDefinitionFolderCollectionApiResponse, useClassDefinitionCollectionQuery } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { useAppDispatch } from '@sdk/app'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
@@ -40,6 +40,7 @@ export interface FolderQueryState {
 export const ClassDefinitionsProvider = ({ children, elementId }: ClassDefinitionsProviderProps): React.JSX.Element => {
   const hasObjectsPermission = isAllowed(UserPermission.Objects)
   const isAppLoading = useIsAppLoading()
+  const mountedDuringAppLoad = useRef(isAppLoading)
   const queryResultReturn = useClassDefinitionCollectionQuery(undefined, {
     skip: !hasObjectsPermission
   })
@@ -102,7 +103,7 @@ export const ClassDefinitionsProvider = ({ children, elementId }: ClassDefinitio
   }
 
   return useMemo(() => {
-    if (transformedQueryResult.isLoading && !isAppLoading) {
+    if (transformedQueryResult.isLoading && !mountedDuringAppLoad.current) {
       return (
         <Content loading />
       )

@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState, type PropsWithChildren } from 'react'
+import React, { useEffect, useRef, useState, type PropsWithChildren } from 'react'
 import { loadReduxState } from '../../../utils/redux-state-persistence'
 import { type WidgetManagerTabConfig, updateInnerModel, closeWidget } from '../widget-manager-slice'
 import { getWidgetManagerStorageKey } from '../widget-manager-persistence'
@@ -27,6 +27,10 @@ export const WidgetRestorer = ({ children }: PropsWithChildren): React.JSX.Eleme
   const user = useUser()
   const [isLoading, setIsLoading] = useState(true)
   const isAppLoading = useIsAppLoading()
+  // Capture whether this instance mounted during the initial app load.
+  // We use a ref so it freezes the value at mount time — subsequent
+  // re-renders (e.g. after app loading finishes) don't flip it back.
+  const mountedDuringAppLoad = useRef(isAppLoading)
 
   useEffect(() => {
     const restore = async (): Promise<void> => {
@@ -65,7 +69,7 @@ export const WidgetRestorer = ({ children }: PropsWithChildren): React.JSX.Eleme
     void restore()
   }, [user.id])
 
-  if (isLoading && !isAppLoading) {
+  if (isLoading && !mountedDuringAppLoad.current) {
     return <Content loading />
   }
 
