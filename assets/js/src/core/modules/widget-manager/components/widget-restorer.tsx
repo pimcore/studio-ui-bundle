@@ -16,6 +16,7 @@ import { type WidgetRestorerRegistry } from '../services/widget-restorer-registr
 import { useAppDispatch } from '@sdk/app'
 import { type IJsonModel, Model, type TabNode } from 'flexlayout-react'
 import { Content } from '@Pimcore/components/content/content'
+import { useIsAppLoading } from '@Pimcore/modules/app/app-loader/context/app-loading-context'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { isNil } from 'lodash'
 import { container } from '@Pimcore/app/depency-injection'
@@ -25,6 +26,7 @@ export const WidgetRestorer = ({ children }: PropsWithChildren): React.JSX.Eleme
   const dispatch = useAppDispatch()
   const user = useUser()
   const [isLoading, setIsLoading] = useState(true)
+  const isAppLoading = useIsAppLoading()
 
   useEffect(() => {
     const restore = async (): Promise<void> => {
@@ -63,7 +65,7 @@ export const WidgetRestorer = ({ children }: PropsWithChildren): React.JSX.Eleme
     void restore()
   }, [user.id])
 
-  if (isLoading) {
+  if (isLoading && !isAppLoading) {
     return <Content loading />
   }
 
