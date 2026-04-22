@@ -48,6 +48,7 @@ export interface ManyToManyRelationProps extends IRelationAllowedTypesDataCompon
   className?: string
   disableInlineUpload?: boolean
   enableRowDrag?: boolean
+  noteditable?: boolean | null
 }
 
 export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToManyRelationProps): React.JSX.Element => {
@@ -57,7 +58,7 @@ export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToMan
   const { onDrop, deleteItem, onSearch, onOrderChange, addAssets, addItems, updateDisplayValue, maxRemainingItems, getOriginalIndex, hasActiveSearch } = useValue(
     value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments, { name: props.combinedFieldName, class: props.pathFormatterClass ?? undefined }, props?.visibleFieldsValue
   )
-  const allowDragAndDrop = !isNil(displayedValue) && displayedValue?.length > 1 && !hasActiveSearch
+  const allowDragAndDrop = !isNil(displayedValue) && displayedValue?.length > 1 && !hasActiveSearch && !props?.noteditable
 
   // Wrapper for onUpdateCellData that maps displayed row index to original index
   const handleUpdateCellData = (event: OnUpdateCellDataEvent): void => {
@@ -109,6 +110,7 @@ export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToMan
           deleteItem={ deleteItem }
           disabled={ props.disabled }
           enableRowDrag={ enableRowDrag && allowDragAndDrop }
+          enableRowVirtualizer={ !props.noteditable }
           enrichRowData={ props.enrichRowData }
           handleOrderChange={ onOrderChange }
           height={ props.height }
