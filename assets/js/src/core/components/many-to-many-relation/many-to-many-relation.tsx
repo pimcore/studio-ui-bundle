@@ -48,7 +48,7 @@ export interface ManyToManyRelationProps extends IRelationAllowedTypesDataCompon
   className?: string
   disableInlineUpload?: boolean
   enableRowDrag?: boolean
-  noteditable?: boolean
+  noteditable?: boolean | null
 }
 
 export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToManyRelationProps): React.JSX.Element => {
@@ -110,6 +110,7 @@ export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToMan
           deleteItem={ deleteItem }
           disabled={ props.disabled }
           enableRowDrag={ enableRowDrag && allowDragAndDrop }
+          enableRowVirtualizer={ !props.noteditable }
           enrichRowData={ props.enrichRowData }
           handleOrderChange={ onOrderChange }
           height={ props.height }

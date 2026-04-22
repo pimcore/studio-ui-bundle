@@ -221,7 +221,7 @@ export const useStyles = createStyles(({ token, css }, { size = 'normal', enable
           }
       }
       
-      &.versionFieldItem:not(.enabledVirtualizer) {
+      &.versionFieldItem {
         .ant-table-content {
           table {
             width: 100% !important;
