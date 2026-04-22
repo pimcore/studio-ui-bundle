@@ -42,6 +42,8 @@ export interface ManyToManyRelationGridProps {
   pathFormatterConfig?: { name: string | undefined, class: string | undefined }
 }
 
+const IS_ROW_VIRTUALIZER_ENABLED = true
+
 export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid (props: ManyToManyRelationGridProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
   const { getStateClasses } = useDroppable()
   const { mapToLegacyElementType } = useElementHelper()
@@ -97,12 +99,13 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
       <div style={ { maxWidth: 'calc(100% - 2px)' } }>
         <Grid
           autoWidth
-          className={ cn(styles.grid, props.className) }
+          // enabledVirtualizer is needed to prevent overriding styles in the Versions view due to the specifics of the virtualizer styles
+          className={ cn(styles.grid, props.className, { enabledVirtualizer: IS_ROW_VIRTUALIZER_ENABLED }) }
           columns={ columns }
           data={ data }
           disabled={ props.disabled === true || props.inherited === true }
           enableRowDrag={ props.enableRowDrag }
-          enableRowVirtualizer
+          enableRowVirtualizer={ IS_ROW_VIRTUALIZER_ENABLED }
           handleDragEnd={ handleDragEnd }
           onUpdateCellData={ props.onUpdateCellData }
           resizable
