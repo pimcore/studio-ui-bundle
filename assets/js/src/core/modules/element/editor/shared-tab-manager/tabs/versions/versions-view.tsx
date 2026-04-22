@@ -84,7 +84,7 @@ export const VersionsView = ({
     if (!isSelected) {
       tempComparedVersions.push(vId)
     } else {
-      tempComparedVersions.splice(tempComparedVersions.indexOf(vId), 1)
+      tempComparedVersions = tempComparedVersions.filter(v => v.id !== vId.id)
     }
 
     setDetailedVersions(tempComparedVersions)

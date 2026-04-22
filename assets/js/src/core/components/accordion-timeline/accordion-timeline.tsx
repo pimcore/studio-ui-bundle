@@ -13,7 +13,6 @@ import cn from 'classnames'
 import { useStyle } from './accordion-timeline.styles'
 import { VerticalTimeline } from '@Pimcore/components/vertical-timeline/vertical-timeline'
 import { Accordion, type AccordionItemType } from '@Pimcore/components/accordion/accordion'
-import { isUndefined } from 'lodash'
 
 export interface TimeLineAccordionItemType extends AccordionItemType {
   selected?: boolean
@@ -27,17 +26,15 @@ interface AccordionTimelineProps {
 export const AccordionTimeline = ({ items }: AccordionTimelineProps): React.JSX.Element => {
   const { styles } = useStyle()
 
-  const selectedItem = items.find(item => item.selected)
-  const activeKey = !isUndefined(selectedItem) ? selectedItem.key : undefined
-
   const ItemAccordions = items.map((item) => {
+    const activeKey = item.selected === true ? item.key : undefined
+
     return (
       <div
         className={ cn(styles.card, item.className) }
         key={ item.key }
       >
         <Accordion
-          accordion={ item.selected === true }
           activeKey={ activeKey }
           expandIconPosition="after-title"
           items={ [item] }

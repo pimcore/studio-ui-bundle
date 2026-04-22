@@ -55,6 +55,8 @@ export const Accordion = ({
       setExpandedIds(activeKey.map(String))
     } else if (activeKey != null) {
       setExpandedIds([String(activeKey)])
+    } else {
+      setExpandedIds([])
     }
   }, [activeKey])
 
