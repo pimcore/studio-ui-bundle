@@ -2232,7 +2232,7 @@ perspective-editor.form.main-nav-permission.experienceEcommerce.websiteSettings:
 perspective-editor.form.main-nav-permission.experienceEcommerce.redirects: Omdirigeringer
 perspective-editor.form.main-nav-permission.category.assetManagement: Ressursbehandling
 perspective-editor.form.main-nav-permission.assetManagement.hidden: Skjul ressursbehandlingsmeny
-perspective-editor.form.main-nav-permission.assetManagement.imageThumbnails: Bildeminiatyrbilder
+perspective-editor.form.main-nav-permission.assetManagement.assetThumbnails: Bildeminiatyrbilder
 perspective-editor.form.main-nav-permission.assetManagement.videoThumbnails: Videominiatyrbilder
 perspective-editor.form.main-nav-permission.assetManagement.predefinedAssetMetadata: Forhåndsdefinerte ressursmetadata
 perspective-editor.form.main-nav-permission.category.translations: Oversettelser
@@ -2244,7 +2244,7 @@ perspective-editor.form.main-nav-permission.system.applicationLogger: Applikasjo
 perspective-editor.form.main-nav-permission.system.users_hidden: Skjul brukere/roller-meny
 perspective-editor.form.main-nav-permission.system.users_roles: Roller
 perspective-editor.form.main-nav-permission.system.users_users: Brukere
-perspective-editor.form.main-nav-permission.settings.appearanceBranding: Utseende og merkevare
+perspective-editor.form.main-nav-permission.system.appearanceBranding: Utseende og merkevare
 perspective-editor.form.main-nav-permission.system.perspectiveEditor: Perspectives Editor
 perspective-editor.form.main-nav-permission.system.widgetEditor: Widget Editor
 perspective-editor.form.main-nav-permission.system.maintenanceMode: Vedlikeholdsmodus
