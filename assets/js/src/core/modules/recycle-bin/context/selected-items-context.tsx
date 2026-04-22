@@ -27,10 +27,10 @@ interface SelectedRowsProviderProps {
 }
 
 export const SelectedRowsProvider = ({ children }: SelectedRowsProviderProps): React.JSX.Element => {
-  const [selectedRows, setSelectedRowsState] = useState<RowSelectionState>({})
+  const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
   const [selectedRowsTypes, setSelectedRowsTypes] = useState<Record<string, string>>({})
 
-  const setSelectedRows = (newState: RowSelectionState, pageItems: RecycleBin[]): void => {
+  const updateSelectedRows = (newState: RowSelectionState, pageItems: RecycleBin[]): void => {
     const addedIds = Object.keys(newState).filter((id) => isUndefined(selectedRows[id]))
     const removedIds = Object.keys(selectedRows).filter((id) => isUndefined(newState[id]))
 
@@ -52,18 +52,18 @@ export const SelectedRowsProvider = ({ children }: SelectedRowsProviderProps): R
       return updated
     })
 
-    setSelectedRowsState(newState)
+    setSelectedRows(newState)
   }
 
   const resetSelectedRows = (): void => {
-    setSelectedRowsState({})
+    setSelectedRows({})
     setSelectedRowsTypes({})
   }
 
   const contextValue = useMemo(() => ({
     selectedRows,
     selectedRowsTypes,
-    setSelectedRows,
+    setSelectedRows: updateSelectedRows,
     resetSelectedRows
   }), [selectedRows, selectedRowsTypes])
 

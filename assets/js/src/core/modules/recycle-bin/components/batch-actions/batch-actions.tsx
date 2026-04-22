@@ -22,11 +22,11 @@ export const BatchActions = (): React.JSX.Element => {
   const { selectedRows, selectedRowsTypes, resetSelectedRows } = useSelectedRowsContext()
   const { removeItems, restoreItems } = useRecycleBin()
 
-  const getSelectedItems = (): RecycleBin[] => {
-    return Object.keys(selectedRows).map((id) => ({
-      id: parseInt(id, 10),
+  const getSelectedItems = (): Array<Pick<RecycleBin, 'id' | 'type'>> => {
+    return Object.keys(selectedRows).map((id): Pick<RecycleBin, 'id' | 'type'> => ({
+      id: Number.parseInt(id, 10),
       type: selectedRowsTypes[id] ?? ''
-    } as RecycleBin))
+    }))
   }
 
   const menu: DropdownMenuProps = {
