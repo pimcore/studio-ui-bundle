@@ -23,7 +23,7 @@ interface IPermissionsAccordionProps {
 const PermissionsAccordion = ({ permissions, ...props }: IPermissionsAccordionProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  const translatePermissionOptions = (permission) => ({
+  const translatePermissionOptions = (permission: { key: string }): { value: string, label: string }  => ({
     value: permission.key,
     label: t(`user-management.permissions.${permission.key}`)
   })
