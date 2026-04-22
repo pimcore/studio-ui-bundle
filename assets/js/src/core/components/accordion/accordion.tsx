@@ -45,7 +45,6 @@ export const Accordion = ({
   className,
   activeKey,
   expandIconPosition = 'after-title',
-  onChange,
   ...props
 }: AccordionProps): React.JSX.Element => {
   const { styles } = useStyles()
@@ -161,9 +160,7 @@ export const Accordion = ({
       className={ allClassNames.join(' ') }
       items={ itemsWithCardClassName }
       onChange={ (keys) => {
-        const normalized = Array.isArray(keys) ? keys : [keys]
-        setExpandedIds(normalized)
-        onChange?.(keys)
+        setExpandedIds(Array.isArray(keys) ? keys : [keys])
       } }
       { ...props }
     />
