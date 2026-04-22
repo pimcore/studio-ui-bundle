@@ -19,6 +19,7 @@ import { useWebsiteSetting } from '../hooks/use-website-settings'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
 import { type Site } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { type WebsiteSettingsUpdate } from '../website-settings-api-slice.gen'
+import { type SortingState } from '@tanstack/react-table'
 import { isUndefined } from 'lodash'
 
 type WebsiteSettingEnrichedRow = WebsiteSettingRow & {
@@ -33,9 +34,11 @@ interface TableProps {
   websiteSettingRows: WebsiteSettingRow[]
   setWebsiteSettingRows: React.Dispatch<React.SetStateAction<WebsiteSettingRow[]>>
   typeSelectOptions: SelectOption[]
+  sorting?: SortingState
+  onSortingChange?: (sorting: SortingState) => void
 }
 
-export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOptions }: TableProps): React.JSX.Element => {
+export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOptions, sorting, onSortingChange }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { updateSettingById } = useWebsiteSetting()
   const [modifiedCells, setModifiedCells] = useState <ModifiedCells>([])
@@ -146,6 +149,7 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
     columnHelper.accessor('actions', {
       header: t('properties.columns.actions'),
       size: 60,
+      enableSorting: false,
       cell: (info) => (
         <ActionsCell
           info={ info }
@@ -162,10 +166,13 @@ export const Table = ({ websiteSettingRows, setWebsiteSettingRows, typeSelectOpt
         columns={ tableColumns }
         data={ tableData }
         enableSorting
+        manualSorting
         modifiedCells={ modifiedCells }
+        onSortingChange={ onSortingChange }
         onUpdateCellData={ onUpdateCellData }
         resizable
         setRowId={ (row: WebsiteSettingRow) => row.rowId }
+        sorting={ sorting }
       />
     </div>
   )
