@@ -159,7 +159,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
       data={ tableItems }
       enableMultipleRowSelection
       modifiedCells={ [] }
-      onSelectedRowsChange={ (row: RowSelectionState) => { setSelectedRows(row) } }
+      onSelectedRowsChange={ (row: RowSelectionState) => { setSelectedRows(row, items) } }
       resizable
       selectedRows={ selectedRows }
       setRowId={ (row) => String(row.id) }

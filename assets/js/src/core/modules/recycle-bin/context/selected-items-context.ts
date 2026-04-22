@@ -8,10 +8,74 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createSelectedRowsContext } from '@Pimcore/components/grid/contexts/selected-rows-context'
+import { isUndefined } from 'lodash'
+import React, { createContext, type ReactNode, useContext, useMemo, useState } from 'react'
 import { type RowSelectionState } from '@tanstack/react-table'
+import { type RecycleBin } from '../recycle-bin-api-slice.gen'
 
-export const {
-  SelectedRowsProvider,
-  useSelectedRowsContext
-} = createSelectedRowsContext<RowSelectionState>()
+export interface SelectedItemsContext {
+  selectedRows: RowSelectionState
+  selectedRowsTypes: Record<string, string>
+  setSelectedRows: (newState: RowSelectionState, pageItems: RecycleBin[]) => void
+  resetSelectedRows: () => void
+}
+
+const SelectedItemsContext = createContext<SelectedItemsContext | undefined>(undefined)
+
+interface SelectedRowsProviderProps {
+  children: ReactNode
+}
+
+export const SelectedRowsProvider = ({ children }: SelectedRowsProviderProps): React.JSX.Element => {
+  const [selectedRows, setSelectedRowsState] = useState<RowSelectionState>({})
+  const [selectedRowsTypes, setSelectedRowsTypes] = useState<Record<string, string>>({})
+
+  const setSelectedRows = (newState: RowSelectionState, pageItems: RecycleBin[]): void => {
+    const addedIds = Object.keys(newState).filter((id) => isUndefined(selectedRows[id]))
+    const removedIds = Object.keys(selectedRows).filter((id) => isUndefined(newState[id]))
+
+    setSelectedRowsTypes((prev) => {
+      const updated = { ...prev }
+
+      for (const id of addedIds) {
+        const item = pageItems.find((i) => String(i.id) === id)
+        if (!isUndefined(item)) {
+          updated[id] = item.type
+        }
+      }
+
+      for (const id of removedIds) {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+        delete updated[id]
+      }
+
+      return updated
+    })
+
+    setSelectedRowsState(newState)
+  }
+
+  const resetSelectedRows = (): void => {
+    setSelectedRowsState({})
+    setSelectedRowsTypes({})
+  }
+
+  const contextValue = useMemo(() => ({
+    selectedRows,
+    selectedRowsTypes,
+    setSelectedRows,
+    resetSelectedRows
+  }), [selectedRows, selectedRowsTypes])
+
+  return React.createElement(SelectedItemsContext.Provider, { value: contextValue }, children)
+}
+
+export const useSelectedRowsContext = (): SelectedItemsContext => {
+  const context = useContext(SelectedItemsContext)
+
+  if (isUndefined(context)) {
+    throw new Error('useSelectedRowsContext must be used within a SelectedRowsProvider')
+  }
+
+  return context
+}

@@ -14,7 +14,7 @@ import { RecycleBinContainerInner } from './recycle-bin-container-inner'
 
 export const RecycleBinContainer = (): React.JSX.Element => {
   return (
-    <SelectedRowsProvider initialValue={ {} }>
+    <SelectedRowsProvider>
       <RecycleBinContainerInner />
     </SelectedRowsProvider>
   )
