@@ -1,3 +1,3 @@
 
-      window.StudioUIBundleRemoteUrl = 'http://localhost:3030/pimcore_studio_ui_bundle.6b2ed0921a57b0ee.hot-update.js'
+      window.StudioUIBundleRemoteUrl = 'http://localhost:3030/pimcore_studio_ui_bundle.8466030532da979d.hot-update.js'
     
