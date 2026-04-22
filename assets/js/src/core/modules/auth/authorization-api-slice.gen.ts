@@ -1,5 +1,5 @@
 import { api } from "@sdk/api";
-export const addTagTypes = ["Authorization", "Bundle OpenID Connect"] as const;
+export const addTagTypes = ["Authorization"] as const;
 const injectedRtkApi = api
     .enhanceEndpoints({
         addTagTypes,
@@ -22,13 +22,6 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Authorization"],
             }),
-            bundleOpenidConnectAuthLogin: build.query<
-                BundleOpenidConnectAuthLoginApiResponse,
-                BundleOpenidConnectAuthLoginApiArg
-            >({
-                query: () => ({ url: `/pimcore-studio/api/bundle/openid-connect/auth/login` }),
-                providesTags: ["Bundle OpenID Connect"],
-            }),
         }),
         overrideExisting: false,
     });
@@ -43,8 +36,6 @@ export type LoginTokenApiResponse = unknown;
 export type LoginTokenApiArg = {
     authenticationToken: AuthenticationToken;
 };
-export type BundleOpenidConnectAuthLoginApiResponse = unknown;
-export type BundleOpenidConnectAuthLoginApiArg = void;
 export type InvalidCredentials = {
     /** Error */
     error: string;
@@ -69,5 +60,4 @@ export type AuthenticationToken = {
     /** Token */
     token: string;
 };
-export const { useLoginMutation, useLogoutMutation, useLoginTokenMutation, useBundleOpenidConnectAuthLoginQuery } =
-    injectedRtkApi;
+export const { useLoginMutation, useLogoutMutation, useLoginTokenMutation } = injectedRtkApi;

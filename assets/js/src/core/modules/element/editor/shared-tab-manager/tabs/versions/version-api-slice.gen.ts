@@ -65,22 +65,22 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type VersionAssetDownloadByIdApiResponse = /** status 200 version_asset_download_by_id_success_response */ Blob;
+export type VersionAssetDownloadByIdApiResponse = /** status 200 Asset version binary file */ Blob;
 export type VersionAssetDownloadByIdApiArg = {
     /** Id of the version */
     id: number;
 };
-export type VersionImageStreamByIdApiResponse = /** status 200 version_image_stream_by_id_success_response */ Blob;
+export type VersionImageStreamByIdApiResponse = /** status 200 Image thumbnail version stream */ Blob;
 export type VersionImageStreamByIdApiArg = {
     /** Id of the version */
     id: number;
 };
-export type VersionPdfStreamByIdApiResponse = /** status 200 version_pdf_stream_by_id_success_response */ Blob;
+export type VersionPdfStreamByIdApiResponse = /** status 200 PDF version stream */ Blob;
 export type VersionPdfStreamByIdApiArg = {
     /** Id of the version */
     id: number;
 };
-export type VersionGetByIdApiResponse = /** status 200 version_get_by_id_success_response */
+export type VersionGetByIdApiResponse = /** status 200 Successfully retrieved version data as JSON */
     | AssetVersion
     | DataObjectVersion
     | DocumentVersion;
@@ -94,7 +94,7 @@ export type VersionUpdateByIdApiArg = {
     id: number;
     updateVersion: UpdateVersion;
 };
-export type VersionPublishByIdApiResponse = /** status 200 version_publish_by_id_success_response */ {
+export type VersionPublishByIdApiResponse = /** status 200 ID of the published version */ {
     /** ID of published version */
     id: number;
 };
@@ -108,7 +108,7 @@ export type VersionDeleteByIdApiArg = {
     id: number;
 };
 export type VersionGetCollectionForElementByTypeAndIdApiResponse =
-    /** status 200 version_get_collection_for_element_by_type_and_id_success_response */ {
+    /** status 200 Paginated element Versions data as JSON with total count as header param */ {
         totalItems: number;
         items: Version[];
     };
@@ -122,11 +122,10 @@ export type VersionGetCollectionForElementByTypeAndIdApiArg = {
     /** Number of items per page */
     pageSize: number;
 };
-export type VersionCleanupForElementByTypeAndIdApiResponse =
-    /** status 200 version_cleanup_for_element_by_type_and_id_success_response */ {
-        /** IDs of deleted versions */
-        ids: number[];
-    };
+export type VersionCleanupForElementByTypeAndIdApiResponse = /** status 200 IDs of the removed versions */ {
+    /** IDs of deleted versions */
+    ids: number[];
+};
 export type VersionCleanupForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";

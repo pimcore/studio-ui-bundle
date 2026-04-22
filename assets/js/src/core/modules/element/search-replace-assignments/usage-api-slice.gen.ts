@@ -30,7 +30,7 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type ElementGetUsageApiResponse = /** status 200 element_get_usage_success_response */ ElementUsage;
+export type ElementGetUsageApiResponse = /** status 200 Where the element is referenced */ ElementUsage;
 export type ElementGetUsageApiArg = {
     /** Id of the element */
     id: number;
@@ -45,7 +45,7 @@ export type ElementGetUsageApiArg = {
     /** Sort by field. */
     sortBy?: "id" | "path" | "type";
 };
-export type ElementUsageReplaceApiResponse = /** status 200 element_usage_replace_success_response */ {
+export type ElementUsageReplaceApiResponse = /** status 200 Id of the created job run */ {
     /** ID of created jobRun */
     jobRunId: number;
 };

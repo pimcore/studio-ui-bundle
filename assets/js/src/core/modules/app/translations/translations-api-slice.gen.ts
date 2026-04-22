@@ -109,13 +109,12 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type TranslationGetAvailableLocalesApiResponse =
-    /** status 200 translation_get_available_locales_success_response */ {
-        /** Locale code. */
-        locale?: string;
-        /** The display name of the locale. */
-        displayName: string;
-    }[];
+export type TranslationGetAvailableLocalesApiResponse = /** status 200 List of available locales in the system */ {
+    /** Locale code. */
+    locale?: string;
+    /** The display name of the locale. */
+    displayName: string;
+}[];
 export type TranslationGetAvailableLocalesApiArg = void;
 export type TranslationCleanupByDomainApiResponse = unknown;
 export type TranslationCleanupByDomainApiArg = {
@@ -127,7 +126,7 @@ export type TranslationCreateApiArg = {
     createTranslation: TranslationCreate;
 };
 export type TranslationDetermineCsvSettingsForImportApiResponse =
-    /** status 200 translation_determine_csv_settings_for_import_success_response */ CsvSettings;
+    /** status 200 Detected CSV dialect settings */ CsvSettings;
 export type TranslationDetermineCsvSettingsForImportApiArg = {
     body: {
         /** Sample CSV content (first few lines) */
@@ -141,14 +140,14 @@ export type TranslationDeleteByKeyApiArg = {
     /** Domain of the translation, defaults to "studio" */
     domain?: string;
 };
-export type TranslationGetDomainsApiResponse = /** status 200 translation_get_domains_success_response */ {
+export type TranslationGetDomainsApiResponse = /** status 200 List of available translation domains */ {
     /** The domain name. */
     domain: string;
     /** If the domain is a frontend or admin domain. */
     isFrontendDomain: boolean;
 }[];
 export type TranslationGetDomainsApiArg = void;
-export type TranslationExportListApiResponse = /** status 200 translation_export_list_success_response */ Blob;
+export type TranslationExportListApiResponse = /** status 200 CSV export file for the given domain */ Blob;
 export type TranslationExportListApiArg = {
     /** Domain to filter translations by */
     domain?: string;
@@ -159,7 +158,7 @@ export type TranslationExportListApiArg = {
         };
     };
 };
-export type TranslationImportCsvApiResponse = /** status 200 translation_import_csv_success_response */ {
+export type TranslationImportCsvApiResponse = /** status 200 Translation delta based on imported data */ {
     items: DeltaItem[];
 };
 export type TranslationImportCsvApiArg = {
@@ -177,10 +176,11 @@ export type TranslationImportCsvApiArg = {
         };
     };
 };
-export type TranslationGetListApiResponse = /** status 200 translation_get_list_success_response */ {
-    totalItems: number;
-    items: Translations[];
-};
+export type TranslationGetListApiResponse =
+    /** status 200 List of translations for the given domain including all languages */ {
+        totalItems: number;
+        items: Translations[];
+    };
 export type TranslationGetListApiArg = {
     /** Domain to filter translations by */
     domain?: string;
@@ -194,7 +194,7 @@ export type TranslationGetListApiArg = {
     };
 };
 export type TranslationGetCollectionApiResponse =
-    /** status 200 translation_get_collection_success_response */ Translation;
+    /** status 200 Key value pairs for given keys and locale */ Translation;
 export type TranslationGetCollectionApiArg = {
     translation: Translation;
 };
