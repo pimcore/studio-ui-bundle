@@ -23,6 +23,11 @@ interface IPermissionsAccordionProps {
 const PermissionsAccordion = ({ permissions, ...props }: IPermissionsAccordionProps): React.JSX.Element => {
   const { t } = useTranslation()
 
+  const translatePermissionOptions = (permission: { key: string }): { value: string, label: string }  => ({
+    value: permission.key,
+    label: t(`user-management.permissions.${permission.key}`)
+  })
+
   const content = [
     {
       key: '1',
@@ -35,14 +40,7 @@ const PermissionsAccordion = ({ permissions, ...props }: IPermissionsAccordionPr
             <Select
               dataTestId="permissions-select-default"
               mode="multiple"
-              options={ permissions.default.map(
-                (permission) => ({
-                  value: permission.key,
-                  label: t(
-                    `user-management.permissions.${permission.key}`
-                  )
-                })
-              ) }
+              options={ permissions.default.map(translatePermissionOptions) }
               placeholder={
                 t('user-management.permissions.default')
               }
@@ -54,12 +52,7 @@ const PermissionsAccordion = ({ permissions, ...props }: IPermissionsAccordionPr
             <Select
               dataTestId="permissions-select-bundles"
               mode="multiple"
-              options={ permissions.bundles.map(
-                (permission) => ({
-                  value: permission.key,
-                  label: permission.key
-                })
-              ) }
+              options={ permissions.bundles.map(translatePermissionOptions) }
               placeholder={
                 t('user-management.permissions.bundles')
               }
