@@ -67,7 +67,11 @@ export const SelectedRowsProvider = ({ children }: SelectedRowsProviderProps): R
     resetSelectedRows
   }), [selectedRows, selectedRowsTypes])
 
-  return React.createElement(SelectedItemsContext.Provider, { value: contextValue }, children)
+  return (
+    <SelectedItemsContext.Provider value={ contextValue }>
+      {children}
+    </SelectedItemsContext.Provider>
+  )
 }
 
 export const useSelectedRowsContext = (): SelectedItemsContext => {
