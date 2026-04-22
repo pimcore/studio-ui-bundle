@@ -56,4 +56,6 @@ export enum ContextMenuActionName {
   clearImageThumbnails = 'clearImageThumbnails',
   clearVideoThumbnails = 'clearVideoThumbnails',
   clearPdfThumbnails = 'clearPdfThumbnails',
+
+  shareViaNotification = 'shareViaNotification',
 }

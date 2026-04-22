@@ -20,11 +20,11 @@ const api = baseApi.enhanceEndpoints({
     },
 
     unitQuantityValueUnitsUpdate: {
-      invalidatesTags: () => []
+      invalidatesTags: () => [tagNames.QUANTITY_VALUE_UNITS]
     },
 
     unitQuantityValueUnitsDelete: {
-      invalidatesTags: () => []
+      invalidatesTags: () => [tagNames.QUANTITY_VALUE_UNITS]
     },
 
     unitQuantityValueUnitsCreate: {
@@ -32,7 +32,7 @@ const api = baseApi.enhanceEndpoints({
     },
 
     unitQuantityValueList: {
-      providesTags: () => []
+      providesTags: () => providingTags.QUANTITY_VALUE_UNITS()
     },
 
     unitQuantityValueUnitsExport: {
