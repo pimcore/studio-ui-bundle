@@ -39,10 +39,22 @@ const Component = ({ loading, children, className, type, color, ...props }: Butt
     className
   )
 
+  // Track the button's natural size so it can be locked when loading starts.
+  const naturalSize = useRef<{ width: number, height: number } | null>(null)
+
   useLayoutEffect(() => {
-    if (loading === true && buttonRef.current !== null) {
-      buttonRef.current.style.width = buttonRef.current.getBoundingClientRect().width + 'px'
-      buttonRef.current.style.height = buttonRef.current.getBoundingClientRect().height + 'px'
+    if (loading !== true && buttonRef.current !== null) {
+      const { width, height } = buttonRef.current.getBoundingClientRect()
+      if (width > 0 && height > 0) {
+        naturalSize.current = { width, height }
+      }
+    }
+  })
+
+  useLayoutEffect(() => {
+    if (loading === true && buttonRef.current !== null && naturalSize.current !== null) {
+      buttonRef.current.style.width = naturalSize.current.width + 'px'
+      buttonRef.current.style.height = naturalSize.current.height + 'px'
     }
 
     return () => {
