@@ -35,21 +35,18 @@ export const SelectedRowsProvider = ({ children }: SelectedRowsProviderProps): R
     const removedIds = Object.keys(selectedRows).filter((id) => isUndefined(newState[id]))
 
     setSelectedRowsTypes((prev) => {
-      const updated = { ...prev }
+      const withAdded = { ...prev }
 
       for (const id of addedIds) {
         const item = pageItems.find((i) => String(i.id) === id)
         if (!isUndefined(item)) {
-          updated[id] = item.type
+          withAdded[id] = item.type
         }
       }
 
-      for (const id of removedIds) {
-        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-        delete updated[id]
-      }
-
-      return updated
+      return Object.fromEntries(
+        Object.entries(withAdded).filter(([id]) => !removedIds.includes(id))
+      )
     })
 
     setSelectedRows(newState)
