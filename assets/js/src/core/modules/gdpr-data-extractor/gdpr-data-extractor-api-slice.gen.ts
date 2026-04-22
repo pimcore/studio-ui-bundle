@@ -34,24 +34,22 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type GdprExportApiResponse =
-    /** status 200 Successfully retrieved the data export as a downloadable JSON file. */ Blob;
+export type GdprExportApiResponse = /** status 200 gdpr_export_success_response */ Blob;
 export type GdprExportApiArg = {
     /** Id of the element */
     id: number;
     /** The key of the single provider to export */
     providerKey: string;
 };
-export type GdprListProvidersApiResponse = /** status 200 Successfully retrieved the list of GDPR providers */ {
+export type GdprListProvidersApiResponse = /** status 200 gdpr_list_providers_success_response */ {
     totalItems: number;
     items: GdprDataProvider[];
 };
 export type GdprListProvidersApiArg = void;
-export type GdprSearchDataApiResponse =
-    /** status 200 Successfully retrieved the list of matching data from all searched providers. */ {
-        totalItems: number;
-        items: GdprDataRow[];
-    };
+export type GdprSearchDataApiResponse = /** status 200 gdpr_search_data_success_response */ {
+    totalItems: number;
+    items: GdprDataRow[];
+};
 export type GdprSearchDataApiArg = {
     /** Define the data provider to search in. */
     provider?: string;

@@ -78,10 +78,9 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type TagGetCollectionApiResponse =
-    /** status 200 All tags for a parent filtered based on type and query parameters */ {
-        items?: Tag[];
-    };
+export type TagGetCollectionApiResponse = /** status 200 tag_get_collection_success_response */ {
+    items?: Tag[];
+};
 export type TagGetCollectionApiArg = {
     /** Page number */
     page: number;
@@ -98,18 +97,18 @@ export type TagCreateApiResponse = /** status 200 tag_create_success_description
 export type TagCreateApiArg = {
     createTagParameters: CreateTagParameters;
 };
-export type TagGetByIdApiResponse = /** status 200 Successfully retrieved tag data as JSON */ Tag;
+export type TagGetByIdApiResponse = /** status 200 tag_get_by_id_success_response */ Tag;
 export type TagGetByIdApiArg = {
     /** Id of the tag */
     id: number;
 };
-export type TagUpdateByIdApiResponse = /** status 200 Successfully updated tag data as JSON */ Tag;
+export type TagUpdateByIdApiResponse = /** status 200 tag_update_by_id_success_response */ Tag;
 export type TagUpdateByIdApiArg = {
     /** Id of the tag */
     id: number;
     updateTagParameters: ChangeTagParameters;
 };
-export type TagDeleteByIdApiResponse = /** status 200 ID of successfully deleted tag */ {
+export type TagDeleteByIdApiResponse = /** status 200 tag_delete_by_id_success_response */ {
     /** ID of deleted tag */
     id: number;
 };
@@ -127,7 +126,7 @@ export type TagAssignToElementApiArg = {
     tagId: number;
 };
 export type TagBatchOperationToElementsByTypeAndIdApiResponse =
-    /** status 201 Successfully created jobRun for batch tag assignment/replacement */ {
+    /** status 201 tag_batch_operation_to_elements_by_type_and_id_created_response */ {
         /** ID of created jobRun */
         jobRunId: number;
     };
@@ -139,10 +138,11 @@ export type TagBatchOperationToElementsByTypeAndIdApiArg = {
     /** Execute operation based on provided type. */
     operation: "assign" | "replace";
 };
-export type TagGetCollectionForElementByTypeAndIdApiResponse = /** status 200 Paginated tags for element */ {
-    totalItems: number;
-    items: Tag[];
-};
+export type TagGetCollectionForElementByTypeAndIdApiResponse =
+    /** status 200 tag_get_collection_for_element_by_type_and_id_success_response */ {
+        totalItems: number;
+        items: Tag[];
+    };
 export type TagGetCollectionForElementByTypeAndIdApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";

@@ -105,14 +105,15 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type BundleSeoRedirectAddApiResponse = /** status 200 New redirect data as JSON */ BundleSeoRedirect;
+export type BundleSeoRedirectAddApiResponse =
+    /** status 200 bundle_seo_redirect_add_success_response */ BundleSeoRedirect;
 export type BundleSeoRedirectAddApiArg = {
     bundleSeoRedirectAdd: BundleSeoRedirectAdd;
 };
 export type BundleSeoRedirectCleanupApiResponse = unknown;
 export type BundleSeoRedirectCleanupApiArg = void;
 export type BundleSeoRedirectsGetCollectionApiResponse =
-    /** status 200 Paginated redirects with total count as header param as JSON */ {
+    /** status 200 bundle_seo_redirects_get_collection_success_response */ {
         totalItems: number;
         items: BundleSeoRedirect[];
     };
@@ -126,7 +127,8 @@ export type BundleSeoRedirectsGetCollectionApiArg = {
         };
     };
 };
-export type BundleSeoRedirectUpdateByIdApiResponse = /** status 200 Successfully updated redirect */ BundleSeoRedirect;
+export type BundleSeoRedirectUpdateByIdApiResponse =
+    /** status 200 bundle_seo_redirect_update_by_id_success_response */ BundleSeoRedirect;
 export type BundleSeoRedirectUpdateByIdApiArg = {
     /** Id of the redirect */
     id: number;
@@ -137,35 +139,38 @@ export type BundleSeoRedirectDeleteApiArg = {
     /** Id of the redirect */
     id: number;
 };
-export type BundleSeoRedirectsExportApiResponse = /** status 200 CSV file with redirects as attachment */ Blob;
+export type BundleSeoRedirectsExportApiResponse = /** status 200 bundle_seo_redirects_export_success_response */ Blob;
 export type BundleSeoRedirectsExportApiArg = void;
 export type BundleSeoRedirectsImportApiResponse =
-    /** status 200 Import statistics data as JSON */ BundleSeoRedirectsImportStatistics;
+    /** status 200 bundle_seo_redirects_import_success_response */ BundleSeoRedirectsImportStatistics;
 export type BundleSeoRedirectsImportApiArg = {
     body: {
         /** CSV import file to upload */
         file: Blob;
     };
 };
-export type BundleSeoRedirectListPrioritiesApiResponse = /** status 200 List of available redirect priorities */ {
-    /** Redirect priority used in the PimcoreSeoBundle. */
-    priorities: number[];
-};
+export type BundleSeoRedirectListPrioritiesApiResponse =
+    /** status 200 bundle_seo_redirect_list_priorities_success_response */ {
+        /** Redirect priority used in the PimcoreSeoBundle. */
+        priorities: number[];
+    };
 export type BundleSeoRedirectListPrioritiesApiArg = void;
-export type BundleSeoRedirectListStatusesApiResponse = /** status 200 List of available redirect statuses */ {
-    /** List of redirect statuses used in the PimcoreSeoBundle. */
-    statuses: BundleSeoRedirectStatus[];
-};
+export type BundleSeoRedirectListStatusesApiResponse =
+    /** status 200 bundle_seo_redirect_list_statuses_success_response */ {
+        /** List of redirect statuses used in the PimcoreSeoBundle. */
+        statuses: BundleSeoRedirectStatus[];
+    };
 export type BundleSeoRedirectListStatusesApiArg = void;
-export type BundleSeoRedirectListTypesApiResponse = /** status 200 List of available redirect types */ {
+export type BundleSeoRedirectListTypesApiResponse = /** status 200 bundle_seo_redirect_list_types_success_response */ {
     /** List of redirect types used in the PimcoreSeoBundle. */
     types: string[];
 };
 export type BundleSeoRedirectListTypesApiArg = void;
-export type BundleSeoRobotsTxtGetApiResponse = /** status 200 Robots.txt configuration data */ BundleSeoRobotsTxtConfig;
+export type BundleSeoRobotsTxtGetApiResponse =
+    /** status 200 bundle_seo_robots_txt_get_success_response */ BundleSeoRobotsTxtConfig;
 export type BundleSeoRobotsTxtGetApiArg = void;
 export type BundleSeoRobotsTxtUpdateApiResponse =
-    /** status 200 Updated robots.txt configuration data */ BundleSeoRobotsTxtConfig;
+    /** status 200 bundle_seo_robots_txt_update_success_response */ BundleSeoRobotsTxtConfig;
 export type BundleSeoRobotsTxtUpdateApiArg = {
     bundleSeoRobotsTxtUpdate: BundleSeoRobotsTxtUpdate;
 };

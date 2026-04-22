@@ -47,7 +47,7 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type NoteGetCollectionApiResponse = /** status 200 Paginated notes with total count */ {
+export type NoteGetCollectionApiResponse = /** status 200 note_get_collection_success_response */ {
     totalItems: number;
     items: Note[];
 };
@@ -71,7 +71,7 @@ export type NoteDeleteByIdApiArg = {
     /** Id of the element */
     id: number;
 };
-export type NoteElementGetCollectionApiResponse = /** status 200 Paginated notes with total count */ {
+export type NoteElementGetCollectionApiResponse = /** status 200 note_element_get_collection_success_response */ {
     totalItems: number;
     items: Note[];
 };
@@ -94,7 +94,7 @@ export type NoteElementGetCollectionApiArg = {
                 [{"operator":"like","value":"John","field":"name","type":"string"}] */
     fieldFilters?: string;
 };
-export type NoteElementCreateApiResponse = /** status 200 Created note for element */ Note;
+export type NoteElementCreateApiResponse = /** status 200 note_element_create_success_response */ Note;
 export type NoteElementCreateApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
@@ -102,9 +102,10 @@ export type NoteElementCreateApiArg = {
     id: number;
     createNote: CreateNote;
 };
-export type NoteElementGetTypeCollectionApiResponse = /** status 200 Note types collection */ {
-    items: NoteType[];
-};
+export type NoteElementGetTypeCollectionApiResponse =
+    /** status 200 note_element_get_type_collection_success_response */ {
+        items: NoteType[];
+    };
 export type NoteElementGetTypeCollectionApiArg = {
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";

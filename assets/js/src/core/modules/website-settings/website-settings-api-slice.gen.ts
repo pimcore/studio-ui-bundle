@@ -45,14 +45,15 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type WebsiteSettingsAddApiResponse = /** status 200 Successfully added website setting */ WebsiteSetting;
+export type WebsiteSettingsAddApiResponse = /** status 200 website_settings_add_success_response */ WebsiteSetting;
 export type WebsiteSettingsAddApiArg = {
     websiteSettingsAdd: WebsiteSettingsAdd;
 };
-export type WebsiteSettingsGetCollectionApiResponse = /** status 200 Paginated website settings with total count */ {
-    totalItems: number;
-    items: WebsiteSetting[];
-};
+export type WebsiteSettingsGetCollectionApiResponse =
+    /** status 200 website_settings_get_collection_success_response */ {
+        totalItems: number;
+        items: WebsiteSetting[];
+    };
 export type WebsiteSettingsGetCollectionApiArg = {
     body: {
         filters?: {
@@ -63,7 +64,8 @@ export type WebsiteSettingsGetCollectionApiArg = {
         };
     };
 };
-export type WebsiteSettingsUpdateApiResponse = /** status 200 Successfully updated website setting */ WebsiteSetting;
+export type WebsiteSettingsUpdateApiResponse =
+    /** status 200 website_settings_update_success_response */ WebsiteSetting;
 export type WebsiteSettingsUpdateApiArg = {
     /** Id of the website setting */
     id: number;
@@ -74,7 +76,7 @@ export type WebsiteSettingsDeleteApiArg = {
     /** Id of the website setting */
     id: number;
 };
-export type WebsiteSettingsListTypesApiResponse = /** status 200 List of all available website setting types */ {
+export type WebsiteSettingsListTypesApiResponse = /** status 200 website_settings_list_types_success_response */ {
     items: WebsiteSettingsType[];
 };
 export type WebsiteSettingsListTypesApiArg = void;

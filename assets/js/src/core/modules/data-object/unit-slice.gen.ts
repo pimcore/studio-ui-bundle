@@ -100,7 +100,7 @@ const injectedRtkApi = api
     });
 export { injectedRtkApi as api };
 export type UnitQuantityValueUnitsCollectionApiResponse =
-    /** status 200 Paginated collection of quantity value units */ {
+    /** status 200 unit_quantity_value_units_collection_success_response */ {
         totalItems: number;
         items: QuantityValueUnit[];
     };
@@ -114,14 +114,15 @@ export type UnitQuantityValueUnitsCollectionApiArg = {
         };
     };
 };
-export type UnitQuantityValueConvertAllApiResponse = /** status 200 Converted quantity value */ ConvertedQuantityValues;
+export type UnitQuantityValueConvertAllApiResponse =
+    /** status 200 unit_quantity_value_convert_all_success_response */ ConvertedQuantityValues;
 export type UnitQuantityValueConvertAllApiArg = {
     /** Id of the unit to convert from */
     fromUnitId: string;
     /** Value to convert. */
     value: number;
 };
-export type UnitQuantityValueConvertApiResponse = /** status 200 Converted quantity value */ {
+export type UnitQuantityValueConvertApiResponse = /** status 200 unit_quantity_value_convert_success_response */ {
     /** Converted value */
     data: number | number;
 };
@@ -133,22 +134,25 @@ export type UnitQuantityValueConvertApiArg = {
     /** Value to convert. */
     value: number;
 };
-export type UnitQuantityValueUnitsCreateApiResponse = /** status 200 Created quantity value unit */ QuantityValueUnit;
+export type UnitQuantityValueUnitsCreateApiResponse =
+    /** status 200 unit_quantity_value_units_create_success_response */ QuantityValueUnit;
 export type UnitQuantityValueUnitsCreateApiArg = {
     createUnitParameters: CreateUnitParameters;
 };
-export type UnitQuantityValueUnitsUpdateApiResponse = /** status 200 Updated quantity value unit */ QuantityValueUnit;
+export type UnitQuantityValueUnitsUpdateApiResponse =
+    /** status 200 unit_quantity_value_units_update_success_response */ QuantityValueUnit;
 export type UnitQuantityValueUnitsUpdateApiArg = {
-    /** ID of the unit to update */
+    /** unit_quantity_value_units_update_param_id */
     id: string;
     updateUnitParameters: UpdateUnitParameters;
 };
 export type UnitQuantityValueUnitsDeleteApiResponse = unknown;
 export type UnitQuantityValueUnitsDeleteApiArg = {
-    /** ID of the unit to delete */
+    /** unit_quantity_value_units_delete_param_id */
     id: string;
 };
-export type UnitQuantityValueUnitsExportApiResponse = /** status 200 JSON export of quantity value units */ Blob;
+export type UnitQuantityValueUnitsExportApiResponse =
+    /** status 200 unit_quantity_value_units_export_success_response */ Blob;
 export type UnitQuantityValueUnitsExportApiArg = void;
 export type UnitQuantityValueUnitsImportApiResponse = unknown;
 export type UnitQuantityValueUnitsImportApiArg = {
@@ -157,7 +161,7 @@ export type UnitQuantityValueUnitsImportApiArg = {
         file: Blob;
     };
 };
-export type UnitQuantityValueListApiResponse = /** status 200 List of quantity value units */ {
+export type UnitQuantityValueListApiResponse = /** status 200 unit_quantity_value_list_success_response */ {
     items: QuantityValueUnit[];
 };
 export type UnitQuantityValueListApiArg = void;

@@ -38,7 +38,7 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type RecycleBinGetCollectionApiResponse = /** status 200 Paginated recycle bin items with total count */ {
+export type RecycleBinGetCollectionApiResponse = /** status 200 recycle_bin_get_collection_success_response */ {
     totalItems: number;
     items: RecycleBin[];
 };
@@ -52,11 +52,10 @@ export type RecycleBinGetCollectionApiArg = {
         };
     };
 };
-export type RecycleBinDeleteItemsApiResponse =
-    /** status 201 Successfully created <strong>jobRun</strong> to delete recycle bin items */ {
-        /** ID of created jobRun */
-        jobRunId: number;
-    };
+export type RecycleBinDeleteItemsApiResponse = /** status 201 recycle_bin_delete_items_created_response */ {
+    /** ID of created jobRun */
+    jobRunId: number;
+};
 export type RecycleBinDeleteItemsApiArg = {
     body: {
         items?: number[];
@@ -64,11 +63,10 @@ export type RecycleBinDeleteItemsApiArg = {
 };
 export type RecycleBinFlushApiResponse = unknown;
 export type RecycleBinFlushApiArg = void;
-export type RecycleBinRestoreItemsApiResponse =
-    /** status 201 Successfully created <strong>jobRun</strong> to restore recycle bin items */ {
-        /** ID of created jobRun */
-        jobRunId: number;
-    };
+export type RecycleBinRestoreItemsApiResponse = /** status 201 recycle_bin_restore_items_created_response */ {
+    /** ID of created jobRun */
+    jobRunId: number;
+};
 export type RecycleBinRestoreItemsApiArg = {
     body: {
         items?: number[];

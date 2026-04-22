@@ -122,9 +122,25 @@ export const useStyles = createStyles(({ token, css }) => {
 
       &.tabs--full-height {
         height: 100%;
+        display: flex;
+        flex-direction: column;
+
+        .ant-tabs-content-holder {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          min-height: 0;
+          overflow: hidden;
+        }
           
         .ant-tabs-content {
           height: 100%;
+        }
+
+        .ant-tabs-tabpane {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
         }
       }
     `,

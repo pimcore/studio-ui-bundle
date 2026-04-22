@@ -545,7 +545,7 @@ const injectedRtkApi = api
     });
 export { injectedRtkApi as api };
 export type ClassGetAvailableVisibleFieldsApiResponse =
-    /** status 200 Successfully retrieved available visible fields */ {
+    /** status 200 class_get_available_visible_fields_success_response */ {
         totalItems: number;
         items: ClassDefinitionVisibleField[];
     };
@@ -553,15 +553,15 @@ export type ClassGetAvailableVisibleFieldsApiArg = {
     /** Comma-separated list of class names */
     classNames?: string;
 };
-export type ClassBulkExportAvailableApiResponse = /** status 200 List of available exportable items */ {
+export type ClassBulkExportAvailableApiResponse = /** status 200 class_bulk_export_available_success_response */ {
     items: BulkExportAvailableItem[];
 };
 export type ClassBulkExportAvailableApiArg = void;
-export type ClassBulkExportApiResponse = /** status 200 Bulk export JSON file download */ Blob;
+export type ClassBulkExportApiResponse = /** status 200 class_bulk_export_success_response */ Blob;
 export type ClassBulkExportApiArg = {
     bulkExportParameters: BulkExportParameters;
 };
-export type ClassBulkImportApiResponse = /** status 201 Successfully created jobRun for bulk import */ {
+export type ClassBulkImportApiResponse = /** status 201 class_bulk_import_created_response */ {
     /** ID of created jobRun */
     jobRunId: number;
 };
@@ -576,63 +576,63 @@ export type ClassBulkImportDeleteFileApiArg = {
     fileId: string;
 };
 export type ClassBulkImportPrepareApiResponse =
-    /** status 200 File identifier and list of importable items */ BulkImportPrepareResponse;
+    /** status 200 class_bulk_import_prepare_success_response */ BulkImportPrepareResponse;
 export type ClassBulkImportPrepareApiArg = {
     body: {
         /** Bulk export JSON file to analyze */
         file: Blob;
     };
 };
-export type ClassDefinitionCollectionApiResponse = /** status 200 List of class definitions */ {
+export type ClassDefinitionCollectionApiResponse = /** status 200 class_definition_collection_success_response */ {
     totalItems: number;
     items: ClassDefinitionListItem[];
 };
 export type ClassDefinitionCollectionApiArg = void;
 export type ClassDefinitionCollectionCreatableApiResponse =
-    /** status 200 List of class definitions that can be created. */ {
+    /** status 200 class_definition_collection_creatable_success_response */ {
         totalItems: number;
         items: ClassDefinitionListItem[];
     };
 export type ClassDefinitionCollectionCreatableApiArg = void;
-export type ClassCustomLayoutCollectionApiResponse =
-    /** status 200 List of custom layouts for the given data object class in a simple and compact format for listings.
-     */ {
-        totalItems: number;
-        items: CustomLayoutsInCompactFormatToBeUsedForEGListings[];
-    };
+export type ClassCustomLayoutCollectionApiResponse = /** status 200 class_custom_layout_collection_success_response */ {
+    totalItems: number;
+    items: CustomLayoutsInCompactFormatToBeUsedForEGListings[];
+};
 export type ClassCustomLayoutCollectionApiArg = {
     /** Comma-separated list of class Ids */
     classIds?: string;
 };
-export type ClassAllLayoutCollectionApiResponse = /** status 200 List of all available class layouts */ {
+export type ClassAllLayoutCollectionApiResponse = /** status 200 class_all_layout_collection_success_response */ {
     totalItems: number;
     items: ClassLayoutDataInCompactFormatToBeUsedForEGListingInWorkspaces[];
 };
 export type ClassAllLayoutCollectionApiArg = void;
-export type ClassCustomLayoutGetApiResponse = /** status 200 Custom layout data */ CustomLayouts;
+export type ClassCustomLayoutGetApiResponse = /** status 200 class_custom_layout_get_success_response */ CustomLayouts;
 export type ClassCustomLayoutGetApiArg = {
-    /** Id of custom layout */
+    /** class_custom_layout_get_layout_id */
     customLayoutId: string;
 };
-export type ClassCustomLayoutUpdateApiResponse = /** status 200 Custom layout updated */ CustomLayouts;
+export type ClassCustomLayoutUpdateApiResponse =
+    /** status 200 class_custom_layout_update_success_response */ CustomLayouts;
 export type ClassCustomLayoutUpdateApiArg = {
-    /** Id of custom layout */
+    /** class_custom_layout_update_layout_id */
     customLayoutId: string;
     customLayoutUpdate: SchemaUsedToUpdateCustomLayouts;
 };
-export type ClassCustomLayoutCreateApiResponse = /** status 200 Custom layout created */ CustomLayouts;
+export type ClassCustomLayoutCreateApiResponse =
+    /** status 200 class_custom_layout_create_success_response */ CustomLayouts;
 export type ClassCustomLayoutCreateApiArg = {
-    /** Id of custom layout */
+    /** class_custom_layout_create_layout_id */
     customLayoutId: string;
     customLayoutNew: SchemaUsedToCreateCustomLayouts;
 };
 export type ClassCustomLayoutDeleteApiResponse = unknown;
 export type ClassCustomLayoutDeleteApiArg = {
-    /** Id of custom layout */
+    /** class_custom_layout_delete_layout_id */
     customLayoutId: string;
 };
 export type ClassCustomLayoutEditorCollectionApiResponse =
-    /** status 200 List of custom layouts for the given data object ID */ {
+    /** status 200 class_custom_layout_editor_collection_success_response */ {
         totalItems: number;
         items: CustomLayoutsInCompactFormatToBeUsedForEGListings[];
     };
@@ -640,46 +640,47 @@ export type ClassCustomLayoutEditorCollectionApiArg = {
     /** ObjectId of the element */
     objectId: number;
 };
-export type ClassCustomLayoutExportApiResponse = /** status 200 Custom layout data as JSON */ Blob;
+export type ClassCustomLayoutExportApiResponse = /** status 200 class_custom_layout_export_success_response */ Blob;
 export type ClassCustomLayoutExportApiArg = {
-    /** Id of custom layout */
+    /** class_custom_layout_export_layout_id */
     customLayoutId: string;
 };
 export type ClassCustomLayoutGetIdentifierDataApiResponse =
-    /** status 200 Identifier data for new custom layout as JSON */ CustomLayoutIdentifierData;
+    /** status 200 class_custom_layout_get_identifier_data_success_response */ CustomLayoutIdentifierData;
 export type ClassCustomLayoutGetIdentifierDataApiArg = {
     /** Class definition unique identifier for custom layouts */
     classDefinitionId: string;
 };
 export type ClassCustomLayoutImportApiResponse =
-    /** status 200 Successfully imported custom layout configuration */ CustomLayouts;
+    /** status 200 class_custom_layout_import_success_response */ CustomLayouts;
 export type ClassCustomLayoutImportApiArg = {
-    /** Id of custom layout */
+    /** class_custom_layout_import_layout_id */
     customLayoutId: string;
     body: {
         /** Import file to upload */
         file: Blob;
     };
 };
-export type ClassDefinitionGetBricksUsagesApiResponse = /** status 200 Object bricks usage data */ {
-    items: ClassDefinitionObjectBrickData[];
-};
+export type ClassDefinitionGetBricksUsagesApiResponse =
+    /** status 200 class_definition_get_bricks_usages_success_response */ {
+        items: ClassDefinitionObjectBrickData[];
+    };
 export type ClassDefinitionGetBricksUsagesApiArg = {
     /** Class definition unique identifier */
     id: string;
 };
-export type ClassDefinitionCreateApiResponse =
-    /** status 200 Successfully created class definition configuration */ CustomLayouts;
+export type ClassDefinitionCreateApiResponse = /** status 200 class_definition_create_success_response */ CustomLayouts;
 export type ClassDefinitionCreateApiArg = {
     createClassDefinition: SchemaUsedToCreateClassDefinitions;
 };
-export type ClassDefinitionGetByIdApiResponse = /** status 200 Class definition data */ ClassDefinition;
+export type ClassDefinitionGetByIdApiResponse =
+    /** status 200 class_definition_get_by_id_success_response */ ClassDefinition;
 export type ClassDefinitionGetByIdApiArg = {
     /** Class definition unique identifier */
     id: string;
 };
 export type ClassDefinitionUpdateApiResponse =
-    /** status 200 Successfully updated class definition configuration */ ClassDefinition;
+    /** status 200 class_definition_update_success_response */ ClassDefinition;
 export type ClassDefinitionUpdateApiArg = {
     /** Class definition unique identifier */
     id: string;
@@ -690,16 +691,16 @@ export type ClassDefinitionDeleteApiArg = {
     /** Class definition unique identifier */
     id: string;
 };
-export type ClassDefinitionExportApiResponse = /** status 200 Exported class definition configuration as JSON */ Blob;
+export type ClassDefinitionExportApiResponse = /** status 200 class_definition_export_success_response */ Blob;
 export type ClassDefinitionExportApiArg = {
     /** Class definition unique identifier */
     id: string;
 };
 export type ClassDefinitionGetIdentifierDataApiResponse =
-    /** status 200 Suggested unique ID and existing class IDs */ ClassDefinitionIdentifierData;
+    /** status 200 class_definition_get_identifier_data_success_response */ ClassDefinitionIdentifierData;
 export type ClassDefinitionGetIdentifierDataApiArg = void;
 export type ClassDefinitionImportApiResponse =
-    /** status 200 Successfully imported class definition configuration */ ClassDefinition;
+    /** status 200 class_definition_import_success_response */ ClassDefinition;
 export type ClassDefinitionImportApiArg = {
     /** Class definition unique identifier */
     id: string;
@@ -708,13 +709,14 @@ export type ClassDefinitionImportApiArg = {
         file: Blob;
     };
 };
-export type ClassDefinitionGetLayoutByIdApiResponse = /** status 200 Layout definition data */ Layout;
+export type ClassDefinitionGetLayoutByIdApiResponse =
+    /** status 200 class_definition_get_layout_by_id_success_response */ Layout;
 export type ClassDefinitionGetLayoutByIdApiArg = {
     /** Class definition unique identifier */
     id: string;
 };
 export type ClassGetSelectedVisibleFieldsApiResponse =
-    /** status 200 Successfully retrieved selected visible fields */ {
+    /** status 200 class_get_selected_visible_fields_success_response */ {
         columns?: GridColumnConfiguration[];
     };
 export type ClassGetSelectedVisibleFieldsApiArg = {
@@ -723,7 +725,8 @@ export type ClassGetSelectedVisibleFieldsApiArg = {
     /** Relation field name for which the selected fields should be retrieved as dot notation. */
     relationField?: string;
 };
-export type ClassDefinitionGetTextLayoutPreviewApiResponse = /** status 200 Text layout preview as HTML */ Blob;
+export type ClassDefinitionGetTextLayoutPreviewApiResponse =
+    /** status 200 class_definition_get_text_layout_preview_success_response */ Blob;
 export type ClassDefinitionGetTextLayoutPreviewApiArg = {
     /** Class definition name where layout is defined */
     className: string;
@@ -736,7 +739,7 @@ export type ClassDefinitionGetTextLayoutPreviewApiArg = {
     /** Optional static HTML to be used for rendering the layout */
     html?: string;
 };
-export type ClassDefinitionGetTreeApiResponse = /** status 200 Class definition data for the tree view */ {
+export type ClassDefinitionGetTreeApiResponse = /** status 200 class_definition_get_tree_success_response */ {
     totalItems: number;
     items: (ClassDefinitionTreeNodeItem | ClassDefinitionTreeNodeFolder)[];
 };
@@ -744,24 +747,25 @@ export type ClassDefinitionGetTreeApiArg = {
     /** Whether to group the results. */
     withGroup: boolean;
 };
-export type ClassFieldCollectionCollectionApiResponse = /** status 200 List of field collection configurations */ {
-    totalItems: number;
-    items: FieldCollectionConfiguration[];
-};
+export type ClassFieldCollectionCollectionApiResponse =
+    /** status 200 class_field_collection_collection_success_response */ {
+        totalItems: number;
+        items: FieldCollectionConfiguration[];
+    };
 export type ClassFieldCollectionCollectionApiArg = void;
 export type ClassFieldCollectionCreateApiResponse =
-    /** status 200 Successfully created field collection definition */ FieldCollectionDetail;
+    /** status 200 class_field_collection_create_success_response */ FieldCollectionDetail;
 export type ClassFieldCollectionCreateApiArg = {
     createFieldCollection: SchemaUsedToCreateFieldCollectionDefinitions;
 };
 export type ClassFieldCollectionGetByKeyApiResponse =
-    /** status 200 Field collection detail data */ FieldCollectionDetail;
+    /** status 200 class_field_collection_get_by_key_success_response */ FieldCollectionDetail;
 export type ClassFieldCollectionGetByKeyApiArg = {
     /** Field collection unique key */
     key: string;
 };
 export type ClassFieldCollectionUpdateApiResponse =
-    /** status 200 Successfully updated field collection definition */ FieldCollectionDetail;
+    /** status 200 class_field_collection_update_success_response */ FieldCollectionDetail;
 export type ClassFieldCollectionUpdateApiArg = {
     /** Field collection unique key */
     key: string;
@@ -772,13 +776,14 @@ export type ClassFieldCollectionDeleteApiArg = {
     /** Field collection unique key */
     key: string;
 };
-export type ClassFieldCollectionExportApiResponse = /** status 200 Exported field collection definition as JSON */ Blob;
+export type ClassFieldCollectionExportApiResponse =
+    /** status 200 class_field_collection_export_success_response */ Blob;
 export type ClassFieldCollectionExportApiArg = {
     /** Field collection unique key */
     key: string;
 };
 export type ClassFieldCollectionImportApiResponse =
-    /** status 200 Successfully imported field collection definition */ FieldCollectionDetail;
+    /** status 200 class_field_collection_import_success_response */ FieldCollectionDetail;
 export type ClassFieldCollectionImportApiArg = {
     /** Field collection unique key */
     key: string;
@@ -787,126 +792,129 @@ export type ClassFieldCollectionImportApiArg = {
         file: Blob;
     };
 };
-export type ClassFieldCollectionObjectLayoutApiResponse = /** status 200 List of layouts */ {
-    totalItems: number;
-    items: FieldCollectionLayoutDefinition[];
-};
+export type ClassFieldCollectionObjectLayoutApiResponse =
+    /** status 200 class_field_collection_object_layout_success_response */ {
+        totalItems: number;
+        items: FieldCollectionLayoutDefinition[];
+    };
 export type ClassFieldCollectionObjectLayoutApiArg = {
     /** ObjectId of the element */
     objectId: number;
 };
 export type ClassFieldCollectionGetLayoutByKeyApiResponse =
-    /** status 200 Field collection layout definition data */ ConfigLayoutDefinition;
+    /** status 200 class_field_collection_get_layout_by_key_success_response */ ConfigLayoutDefinition;
 export type ClassFieldCollectionGetLayoutByKeyApiArg = {
     /** Field collection unique key */
     key: string;
 };
-export type ClassFieldCollectionGetTreeApiResponse = /** status 200 Field collection tree with nodes and folders */ {
-    totalItems: number;
-    items: (FieldCollectionTreeNodeItem | FieldCollectionTreeNodeFolder)[];
-};
+export type ClassFieldCollectionGetTreeApiResponse =
+    /** status 200 class_field_collection_get_tree_success_response */ {
+        totalItems: number;
+        items: (FieldCollectionTreeNodeItem | FieldCollectionTreeNodeFolder)[];
+    };
 export type ClassFieldCollectionGetTreeApiArg = {
     /** Comma-separated list of allowed field collection types to filter by. */
     allowedTypes?: string;
 };
-export type ClassFieldCollectionGetUsagesApiResponse = /** status 200 Field collection usage data */ {
-    items: FieldCollectionUsageData[];
-};
+export type ClassFieldCollectionGetUsagesApiResponse =
+    /** status 200 class_field_collection_get_usages_success_response */ {
+        items: FieldCollectionUsageData[];
+    };
 export type ClassFieldCollectionGetUsagesApiArg = {
     /** Field collection unique key */
     key: string;
 };
-export type ClassGetFieldsByTypeApiResponse =
-    /** status 200 Successfully retrieved class definition fields for the requested types */ {
-        totalItems: number;
-        items: FieldKeyByType[];
-    };
+export type ClassGetFieldsByTypeApiResponse = /** status 200 class_get_fields_by_type_success_response */ {
+    totalItems: number;
+    items: FieldKeyByType[];
+};
 export type ClassGetFieldsByTypeApiArg = {
     /** The class ID to retrieve fields for. */
     classId: string;
     /** Comma-separated list of field types to filter by. */
     type: string;
 };
-export type ClassDefinitionFolderCollectionApiResponse = /** status 200 List of all data object classes in a folder */ {
-    totalItems: number;
-    items: ClassInDataObjectFolder[];
-};
+export type ClassDefinitionFolderCollectionApiResponse =
+    /** status 200 class_definition_folder_collection_success_response */ {
+        totalItems: number;
+        items: ClassInDataObjectFolder[];
+    };
 export type ClassDefinitionFolderCollectionApiArg = {
     /** FolderId of the data-object */
     folderId: number;
 };
-export type ClassDefinitionGetApiResponse = /** status 200 Class definition */ ClassDefinition;
+export type ClassDefinitionGetApiResponse = /** status 200 class_definition_get_success_response */ ClassDefinition;
 export type ClassDefinitionGetApiArg = {
-    /** Data object class */
+    /** class_definition_get_data_object_class */
     dataObjectClass: string;
 };
-export type ClassObjectBrickClassesApiResponse =
-    /** status 200 Collection of class definitions with ObjectBricks fields */ {
-        totalItems: number;
-        items: ClassDefinitionListItem[];
-    };
+export type ClassObjectBrickClassesApiResponse = /** status 200 class_object_brick_classes_success_response */ {
+    totalItems: number;
+    items: ClassDefinitionListItem[];
+};
 export type ClassObjectBrickClassesApiArg = void;
-export type ClassObjectBrickCollectionApiResponse = /** status 200 Collection of object brick definitions */ {
+export type ClassObjectBrickCollectionApiResponse = /** status 200 class_object_brick_collection_success_response */ {
     totalItems: number;
     items: ObjectBrickConfiguration[];
 };
 export type ClassObjectBrickCollectionApiArg = void;
 export type ClassObjectBrickCreateApiResponse =
-    /** status 200 Created object brick definition detail */ ObjectBrickDetail;
+    /** status 200 class_object_brick_create_success_response */ ObjectBrickDetail;
 export type ClassObjectBrickCreateApiArg = {
     createObjectBrick: SchemaUsedToCreateObjectBrickDefinitions;
 };
 export type ClassObjectBrickCustomLayoutGetApiResponse =
-    /** status 200 Object brick custom layout data */ CustomLayouts;
+    /** status 200 class_object_brick_custom_layout_get_success_response */ CustomLayouts;
 export type ClassObjectBrickCustomLayoutGetApiArg = {
-    /** Object brick key */
+    /** class_object_brick_custom_layout_get_key */
     key: string;
-    /** Id of the base custom layout */
+    /** class_object_brick_custom_layout_get_layout_id */
     customLayoutId: string;
 };
 export type ClassObjectBrickCustomLayoutUpdateApiResponse =
-    /** status 200 Updated object brick custom layout */ CustomLayouts;
+    /** status 200 class_object_brick_custom_layout_update_success_response */ CustomLayouts;
 export type ClassObjectBrickCustomLayoutUpdateApiArg = {
-    /** Object brick key */
+    /** class_object_brick_custom_layout_update_key */
     key: string;
-    /** Id of the base custom layout */
+    /** class_object_brick_custom_layout_update_layout_id */
     customLayoutId: string;
     customLayoutUpdate: SchemaUsedToUpdateCustomLayouts;
 };
 export type ClassObjectBrickCustomLayoutDeleteApiResponse = unknown;
 export type ClassObjectBrickCustomLayoutDeleteApiArg = {
-    /** Object brick key */
+    /** class_object_brick_custom_layout_delete_key */
     key: string;
-    /** Id of the base custom layout */
+    /** class_object_brick_custom_layout_delete_layout_id */
     customLayoutId: string;
 };
 export type ClassObjectBrickCustomLayoutExportApiResponse =
-    /** status 200 Object brick custom layout data as JSON */ Blob;
+    /** status 200 class_object_brick_custom_layout_export_success_response */ Blob;
 export type ClassObjectBrickCustomLayoutExportApiArg = {
-    /** Object brick key */
+    /** class_object_brick_custom_layout_export_key */
     key: string;
-    /** Id of the base custom layout */
+    /** class_object_brick_custom_layout_export_layout_id */
     customLayoutId: string;
 };
 export type ClassObjectBrickCustomLayoutImportApiResponse =
-    /** status 200 Successfully imported object brick custom layout */ CustomLayouts;
+    /** status 200 class_object_brick_custom_layout_import_success_response */ CustomLayouts;
 export type ClassObjectBrickCustomLayoutImportApiArg = {
-    /** Object brick key */
+    /** class_object_brick_custom_layout_import_key */
     key: string;
-    /** Id of the base custom layout */
+    /** class_object_brick_custom_layout_import_layout_id */
     customLayoutId: string;
     body: {
         /** Import file to upload */
         file: Blob;
     };
 };
-export type ClassObjectBrickGetByKeyApiResponse = /** status 200 Object brick definition detail */ ObjectBrickDetail;
+export type ClassObjectBrickGetByKeyApiResponse =
+    /** status 200 class_object_brick_get_by_key_success_response */ ObjectBrickDetail;
 export type ClassObjectBrickGetByKeyApiArg = {
     /** Object brick unique key */
     key: string;
 };
 export type ClassObjectBrickUpdateApiResponse =
-    /** status 200 Updated object brick definition detail */ ObjectBrickDetail;
+    /** status 200 class_object_brick_update_success_response */ ObjectBrickDetail;
 export type ClassObjectBrickUpdateApiArg = {
     /** Object brick unique key */
     key: string;
@@ -917,13 +925,13 @@ export type ClassObjectBrickDeleteApiArg = {
     /** Object brick unique key */
     key: string;
 };
-export type ClassObjectBrickExportApiResponse = /** status 200 JSON export of the object brick definition */ Blob;
+export type ClassObjectBrickExportApiResponse = /** status 200 class_object_brick_export_success_response */ Blob;
 export type ClassObjectBrickExportApiArg = {
     /** Object brick unique key */
     key: string;
 };
 export type ClassObjectBrickImportApiResponse =
-    /** status 200 Imported object brick definition detail */ ObjectBrickDetail;
+    /** status 200 class_object_brick_import_success_response */ ObjectBrickDetail;
 export type ClassObjectBrickImportApiArg = {
     /** Object brick unique key */
     key: string;
@@ -932,26 +940,27 @@ export type ClassObjectBrickImportApiArg = {
         file: Blob;
     };
 };
-export type ClassObjectBrickObjectLayoutApiResponse = /** status 200 List of layouts */ {
-    totalItems: number;
-    items: ObjectBrickLayoutDefinition[];
-};
+export type ClassObjectBrickObjectLayoutApiResponse =
+    /** status 200 class_object_brick_object_layout_success_response */ {
+        totalItems: number;
+        items: ObjectBrickLayoutDefinition[];
+    };
 export type ClassObjectBrickObjectLayoutApiArg = {
     /** ObjectId of the element */
     objectId: number;
 };
 export type ClassObjectBrickGetLayoutByKeyApiResponse =
-    /** status 200 Object brick layout definition */ ConfigLayoutDefinition;
+    /** status 200 class_object_brick_get_layout_by_key_success_response */ ConfigLayoutDefinition;
 export type ClassObjectBrickGetLayoutByKeyApiArg = {
     /** Object brick unique key */
     key: string;
 };
-export type ClassObjectBrickGetTreeApiResponse = /** status 200 Object brick tree with nodes and folders */ {
+export type ClassObjectBrickGetTreeApiResponse = /** status 200 class_object_brick_get_tree_success_response */ {
     totalItems: number;
     items: (ObjectBrickTreeNodeItem | ObjectBrickTreeNodeFolder)[];
 };
 export type ClassObjectBrickGetTreeApiArg = void;
-export type ClassObjectBrickGetUsagesApiResponse = /** status 200 List of classes and fields using the object brick */ {
+export type ClassObjectBrickGetUsagesApiResponse = /** status 200 class_object_brick_get_usages_success_response */ {
     items: ObjectBrickUsageData[];
 };
 export type ClassObjectBrickGetUsagesApiArg = {
@@ -959,17 +968,18 @@ export type ClassObjectBrickGetUsagesApiArg = {
     key: string;
 };
 export type ClassSelectOptionCreateApiResponse =
-    /** status 200 Newly created select option configuration detail */ SelectOptionDetail;
+    /** status 200 class_select_option_create_success_response */ SelectOptionDetail;
 export type ClassSelectOptionCreateApiArg = {
     createSelectOption: SchemaUsedToCreateSelectOptionConfigurations;
 };
-export type ClassSelectOptionGetApiResponse = /** status 200 Select option configuration detail */ SelectOptionDetail;
+export type ClassSelectOptionGetApiResponse =
+    /** status 200 class_select_option_get_success_response */ SelectOptionDetail;
 export type ClassSelectOptionGetApiArg = {
     /** Select option configuration ID */
     id: string;
 };
 export type ClassSelectOptionUpdateApiResponse =
-    /** status 200 Updated select option configuration detail */ SelectOptionDetail;
+    /** status 200 class_select_option_update_success_response */ SelectOptionDetail;
 export type ClassSelectOptionUpdateApiArg = {
     /** Select option configuration ID */
     id: string;
@@ -980,7 +990,7 @@ export type ClassSelectOptionDeleteApiArg = {
     /** Select option configuration ID */
     id: string;
 };
-export type ClassSelectOptionGetTreeApiResponse = /** status 200 Select options data for the tree view */ {
+export type ClassSelectOptionGetTreeApiResponse = /** status 200 class_select_option_get_tree_success_response */ {
     totalItems: number;
     items: (SelectOptionTreeItem | SelectOptionTreeFolder)[];
 };
@@ -988,10 +998,9 @@ export type ClassSelectOptionGetTreeApiArg = {
     /** Whether to group the results. */
     withGroup: boolean;
 };
-export type ClassSelectOptionGetUsagesApiResponse =
-    /** status 200 List of classes and fields using the select option configuration */ {
-        items: SelectOptionUsageItem[];
-    };
+export type ClassSelectOptionGetUsagesApiResponse = /** status 200 class_select_option_get_usages_success_response */ {
+    items: SelectOptionUsageItem[];
+};
 export type ClassSelectOptionGetUsagesApiArg = {
     /** Select option configuration ID */
     id: string;
