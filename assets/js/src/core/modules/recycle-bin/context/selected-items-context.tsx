@@ -34,6 +34,8 @@ export const SelectedRowsProvider = ({ children }: SelectedRowsProviderProps): R
     const addedIds = Object.keys(newState).filter((id) => isUndefined(selectedRows[id]))
     const removedIds = Object.keys(selectedRows).filter((id) => isUndefined(newState[id]))
 
+    const removedIdsSet = new Set(removedIds)
+
     setSelectedRowsTypes((prev) => {
       const withAdded = { ...prev }
 
@@ -45,7 +47,7 @@ export const SelectedRowsProvider = ({ children }: SelectedRowsProviderProps): R
       }
 
       return Object.fromEntries(
-        Object.entries(withAdded).filter(([id]) => !removedIds.includes(id))
+        Object.entries(withAdded).filter(([id]) => !removedIdsSet.has(id))
       )
     })
 
