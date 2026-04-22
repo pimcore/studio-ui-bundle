@@ -18,8 +18,8 @@ const UNCATEGORIZED_AREABLOCK_GROUP = 'Uncategorized'
 
 export { DEFAULT_AREABLOCK_GROUP, UNCATEGORIZED_AREABLOCK_GROUP }
 
-export function buildGroupedTypes (editableDefinitions: AbstractDocumentEditableDefinition[]): AreablockGroupedTypes {
-  const areablockEditables = editableDefinitions.filter(e => e.type === 'areablock')
+export function buildGroupedTypes (editableDefinitions: AbstractDocumentEditableDefinition[], typeId: string = 'areablock'): AreablockGroupedTypes {
+  const areablockEditables = editableDefinitions.filter(e => e.type === typeId)
   if (areablockEditables.length === 0) return {}
 
   const allGroupedTypes: AreablockGroupedTypes = {}

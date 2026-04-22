@@ -52,7 +52,7 @@ export class DynamicTypeDocumentEditableAreablock extends DynamicTypeDocumentEdi
   onDocumentReady (documentId: number, editableDefinitions: AbstractDocumentEditableDefinition[]): void {
     try {
       const { document: documentApi } = getPimcoreStudioApi()
-      const allGroupedTypes = buildGroupedTypes(editableDefinitions)
+      const allGroupedTypes = buildGroupedTypes(editableDefinitions, this.id)
       documentApi.notifyAreablockTypes(documentId, this.id, allGroupedTypes)
     } catch (error) {
       console.warn('Could not notify parent about areablock types:', error)
