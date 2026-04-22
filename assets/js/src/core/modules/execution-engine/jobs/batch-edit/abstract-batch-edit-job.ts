@@ -11,7 +11,7 @@
 import { isNil } from 'lodash'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
-import { MessageBusJobHandler, type JobCompletionData } from '../../message-handlers/message-bus-job/message-bus-job-handler'
+import { MessageBusJobHandler, type JobCompletionData, type MessageBusJobHandlerOptions } from '../../message-handlers/message-bus-job/message-bus-job-handler'
 import { type JobButtonCustomizationContext } from '../../message-handlers/message-bus-job/message-bus-job-notification'
 import { t } from 'i18next'
 
@@ -46,7 +46,7 @@ export abstract class AbstractBatchEditJob implements JobInterface {
         return
       }
 
-      const handler = new MessageBusJobHandler({
+      const handler = this.createHandler({
         jobRunId,
         title: this.title,
         onJobCompletion: async (data: JobCompletionData) => {
@@ -81,6 +81,10 @@ export abstract class AbstractBatchEditJob implements JobInterface {
       await this.handleJobFailure(error)
       trackError(new GeneralError(error.message as string))
     }
+  }
+
+  protected createHandler (options: MessageBusJobHandlerOptions): MessageBusJobHandler {
+    return new MessageBusJobHandler(options)
   }
 
   protected abstract executeEditRequest (): Promise<number | null>

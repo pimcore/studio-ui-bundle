@@ -113,7 +113,8 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
     const job = new DownloadJob({
       title: t('jobs.csv-job.title', { title: jobTitle }),
       downloadUrl: `${getPrefix()}/export/download/csv/{jobRunId}`,
-      action: async () => await getDownloadAction(values.delimiter, values.header)
+      action: async () => await getDownloadAction(values.delimiter, values.header),
+      ...(numberedSelectedRows.length === 0 && { hasChildJob: true })
     })
     void executionEngine.runJob(job)
 
@@ -148,8 +149,8 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
       }
 
       const promise = fetchCreateFolderCsv({
+        id,
         body: {
-          folders: [id],
           elementType,
           columns: extractedColumnsFromColumnArg,
           config: {
@@ -175,7 +176,8 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
           config: {
             delimiter,
             header
-          }
+          },
+          ...(!isNil(selectedClassDefinition?.id) && { classId: selectedClassDefinition.id })
         }
       })
 

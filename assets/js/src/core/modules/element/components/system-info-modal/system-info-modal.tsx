@@ -122,14 +122,26 @@ export const SystemInfoModal = ({ onClose, data }: ISystemInfoModalProps): React
     return renderLabel(t('system-information.user-unknown'))
   }
 
+  const shouldShowPublicUrl = (): boolean => {
+    if (data.elementType === elementTypes.asset) {
+      return data.type !== 'folder'
+    }
+
+    if (data.elementType === elementTypes.document) {
+      return data.type === 'page'
+    }
+
+    return false
+  }
+
   return (
     <FormKit formProps={ { initialValues: data } }>
       <FormKit.Panel>
         {renderInputItem({ label: t('system-information.id'), name: 'id' })}
         {renderInputItem({ label: t('system-information.path'), name: 'fullPath' })}
-        {(data.type === 'image' || data.type === 'page') &&
-            renderInputItem({ label: t('system-information.public-url'), value: `${currentDomain}${data.fullPath}` })
-          }
+        {shouldShowPublicUrl() &&
+          renderInputItem({ label: t('system-information.public-url'), value: `${currentDomain}${data.fullPath}` })
+        }
         {!isNil(data?.parentId) && renderInputItem({ label: t('system-information.parent-id'), name: 'parentId' })}
         {renderInputItem({
           label: t('system-information.type'),

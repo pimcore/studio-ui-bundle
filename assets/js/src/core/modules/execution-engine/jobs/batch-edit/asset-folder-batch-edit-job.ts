@@ -8,7 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { AbstractBatchEditJob, type AbstractBatchEditJobOptions } from './abstract-batch-edit-job'
+import { AbstractFolderBatchEditJob } from './abstract-folder-batch-edit-job'
+import { type AbstractBatchEditJobOptions } from './abstract-batch-edit-job'
 
 export interface AssetFolderBatchEditJobOptions extends AbstractBatchEditJobOptions {
   patchAssetsInFolder: (args: any) => Promise<any>
@@ -17,7 +18,7 @@ export interface AssetFolderBatchEditJobOptions extends AbstractBatchEditJobOpti
   filters: any
 }
 
-export class AssetFolderBatchEditJob extends AbstractBatchEditJob {
+export class AssetFolderBatchEditJob extends AbstractFolderBatchEditJob {
   private readonly patchAssetsInFolder: (args: any) => Promise<any>
   private readonly folderId: number
   private readonly patches: any[]
@@ -33,13 +34,11 @@ export class AssetFolderBatchEditJob extends AbstractBatchEditJob {
 
   protected async executeEditRequest (): Promise<number | null> {
     const response = await this.patchAssetsInFolder({
+      id: this.folderId,
       body: {
-        data: [
-          {
-            folderId: this.folderId,
-            metadata: this.patches
-          }
-        ],
+        data: {
+          metadata: this.patches
+        },
         filters: this.filters
       }
     })

@@ -21,13 +21,27 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Box, IconTextButton, Pagination, SearchInput, Split } from '@sdk/components'
 import { uuid } from '@sdk/utils'
 import { isNil, isUndefined } from 'lodash'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { type SortingState } from '@tanstack/react-table'
 import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { downloadFile } from '../app/utils/download'
 import { useLazyUnitQuantityValueUnitsExportQuery, useUnitQuantityValueUnitsCollectionQuery } from '../data-object/unit-slice-enhanced'
 import { type QuantityValueUnitRow, useQuantityValueUnit } from './hooks/use-quantity-value-unit'
 import { Table } from './table/table'
+
+/**
+ * Maps camelCase column IDs from the TypeScript QuantityValueUnit type
+ * to the actual database column names expected by the backend sort filter.
+ */
+const SORT_KEY_MAP: Record<string, string> = {
+  longName: 'longname',
+  baseUnit: 'baseunit'
+}
+
+function toSortKey (columnId: string): string {
+  return SORT_KEY_MAP[columnId] ?? columnId
+}
 
 export const QuantityValueContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -36,14 +50,26 @@ export const QuantityValueContainer = (): React.JSX.Element => {
 
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
+  const [sorting, setSorting] = useState<SortingState>([])
   const [filter, setFilter] = useState<string>('')
 
-  const handleSearch = (value: string): void => {
-    setFilter(value)
-    setCurrentPage(1)
-  }
+  const queryArgs = useMemo(() => ({
+    body: {
+      filters: {
+        page: currentPage,
+        pageSize,
+        columnFilters: isNil(filter) ? [] : [{ type: 'search', filterValue: filter }],
+        sortFilter: sorting.length > 0
+          ? {
+              key: toSortKey(sorting[0].id),
+              direction: sorting[0].desc ? 'DESC' : 'ASC'
+            }
+          : {}
+      }
+    }
+  }), [currentPage, pageSize, filter, sorting])
 
-  const { data, isLoading, isFetching, error, refetch } = useUnitQuantityValueUnitsCollectionQuery({ body: { filters: { page: currentPage, pageSize, columnFilters: isNil(filter) ? [] : [{ type: 'search', filterValue: filter }] } } })
+  const { data, isLoading, isFetching, error, refetch } = useUnitQuantityValueUnitsCollectionQuery(queryArgs)
 
   const handleRefetch = (): void => {
     void refetch().catch(() => {
@@ -98,6 +124,11 @@ export const QuantityValueContainer = (): React.JSX.Element => {
       )
     }
     return { success }
+  }
+
+  const handleSortingChange = (newSorting: SortingState): void => {
+    setSorting(newSorting)
+    setCurrentPage(1)
   }
 
   const handleImportSuccess = (): void => {
@@ -197,7 +228,10 @@ export const QuantityValueContainer = (): React.JSX.Element => {
           </Flex>
           <SearchInput
             loading={ isFetching }
-            onSearch={ handleSearch }
+            onSearch={ (value) => {
+                setFilter(value)
+                setCurrentPage(1)
+            } }
             placeholder={ t('quantity-values.search') }
             withPrefix={ false }
             withoutAddon={ false }
@@ -206,12 +240,12 @@ export const QuantityValueContainer = (): React.JSX.Element => {
       }
     >
       <Content
-        loading={ isLoading || isFetching }
+        loading={ isLoading }
         margin={ {
           x: 'extra-small',
           y: 'none'
         } }
-        none={ isUndefined(items) || items.length === 0 }
+        none={ !isLoading && (isUndefined(items) || items.length === 0) }
       >
         <Box
           margin={ {
@@ -220,8 +254,10 @@ export const QuantityValueContainer = (): React.JSX.Element => {
           } }
         >
           <Table
+            onSortingChange={ handleSortingChange }
             quantityValueUnitRows={ quantityValueUnitRows }
             setQuantityValueUnitRows={ setQuantityValueUnitRows }
+            sorting={ sorting }
           />
         </Box>
       </Content>

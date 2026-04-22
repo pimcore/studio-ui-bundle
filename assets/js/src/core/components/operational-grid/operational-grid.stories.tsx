@@ -15,6 +15,7 @@ import { createColumnHelper, type RowSelectionState, type ColumnDef } from '@tan
 import { DefaultCell } from '../grid/columns/default-cell'
 import { Space } from 'antd'
 import { IconButton } from '../icon-button/icon-button'
+import { CsvImportButton } from './csv-import-button/csv-import-button'
 import { type DragEndEvent } from '@dnd-kit/core'
 
 const config: Meta = {
@@ -82,6 +83,7 @@ const config: Meta = {
                         </IconButton>
                       </>
                     )}
+                    <CsvImportButton />
                   </Space>
                 )
               }}
@@ -322,6 +324,7 @@ export const WithColumnOperations = {
                         </IconButton>
                       </Space>
                     </div>
+                    <CsvImportButton />
                   </Space>
                 )
               }}
@@ -437,6 +440,7 @@ export const WithDragAndDrop = {
                           Reset Order
                         </IconButton>
                       </div>
+                      <CsvImportButton />
                     </Space>
                   )
                 }}

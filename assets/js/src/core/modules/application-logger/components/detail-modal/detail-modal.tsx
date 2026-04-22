@@ -37,7 +37,7 @@ export const DetailModal = (props: DetailModalProps): React.JSX.Element => {
   const formData = {
     date: props.data?.date ?? '',
     message: props.data?.message ?? '',
-    priority: props.data?.priority ?? '',
+    priority: t(`application-logger.filter.priority-level.${props.data?.priority ?? ''}`),
     component: props.data?.component ?? '',
     source: props.data?.source ?? '',
     fileObject: props.data?.relatedElementData ?? null

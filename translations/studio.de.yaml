@@ -1029,13 +1029,14 @@ jobs.job.button-download: Herunterladen
 jobs.job.button-ignore-and-reload: Ignorieren und neu laden
 jobs.job.step_hint: "Schritt {{step}}/{{total}}"
 jobs.job.step_hint_single: "Schritt {{step}}"
+jobs.job.step.batch-edit.preparing: Stapelbearbeitung wird vorbereitet
+jobs.job.step.batch-edit.applying: Stapelbearbeitung wird angewendet
 jobs.job.download-error: Download fehlgeschlagen
 jobs.job.button-show-errors: Fehler anzeigen
 jobs.job.error-modal.title: Auftragsfehler
 jobs.job.button-abort: Auftrag abbrechen
 jobs.job.abort-confirm: Möchten Sie diesen Auftrag wirklich abbrechen?
 jobs.zip-job.title: "ZIP-Download von {{title}}"
-jobs.batch-edit-job.title: "Stapelbearbeitung von {{title}}"
 jobs.csv-job.title: "CSV-Download von {{title}}"
 jobs.xlsx-job.title: "XLSX-Download von {{title}}"
 batch-edit.job-title: Stapelbearbeitung
@@ -2427,6 +2428,39 @@ user-management.permissions."robots.txt": robots.txt
 user-management.permissions.routes: Routen
 user-management.permissions.word_export: Word-Export
 user-management.permissions.xliff_import_export: XLIFF Import/Export
+user-management.permissions.bptb_aet_configuration_permission: Konfiguration alternativer Elementbäume
+user-management.permissions.bptb_bookmark_list_permission: Lesezeichen
+user-management.permissions.bptb_bookmark_list_share_permission: Lesezeichen teilen
+user-management.permissions.bundle_ecommerce_back-office_order: "Back Office - Bestellungen"
+user-management.permissions.bundle_ecommerce_pricing_rules: Preisregeln
+user-management.permissions.pcp_general_permission: Pimcore Copilot
+user-management.permissions.pcp_configuration_permission: Pimcore Copilot Konfiguration
+user-management.permissions.pcp_job_run_permission: Auftragsausführungsübersicht
+user-management.permissions.pcp_job_runs_see_all_permission: Alle Auftragsausführungen sehen
+user-management.permissions.permission_workflow_designer: Workflow Designer aktivieren
+user-management.permissions.permission_workflow_designer_place_permissions: Konfiguration der Platzierungsberechtigungen
+user-management.permissions.permission_workflow_designer_trans_notifications: Konfiguration der Übergangsbenachrichtigungen
+user-management.permissions.plugin_cmf_perm_activityview: CMF Aktivitäten
+user-management.permissions.plugin_cmf_perm_customer_automation_rules: CMF Automatisierungsregeln für Kunden
+user-management.permissions.plugin_cmf_perm_customerview: CMF Kunden
+user-management.permissions.plugin_cmf_perm_customerview_admin: CMF Kunden Filter-Administrator
+user-management.permissions.plugin_cmf_perm_newsletter_enqueue_all_customers: CMF Newsletter Kunden exportieren
+user-management.permissions.plugin_datahub_adapter_dataImporterDataObject: "Datahub Adapter - Datenobjekt-Importer"
+user-management.permissions.plugin_datahub_adapter_fileExport: "Datahub Adapter - Dateiexport"
+user-management.permissions.plugin_datahub_adapter_graphql: "Datahub Adapter - GraphQL"
+user-management.permissions.plugin_datahub_adapter_headlessDocuments: "Datahub Adapter - Headless Documents"
+user-management.permissions.plugin_datahub_adapter_productsup: "Datahub Adapter - Productsup"
+user-management.permissions.plugin_datahub_adapter_simpleRest: "Datahub Adapter - Simple REST"
+user-management.permissions.plugin_datahub_adapter_webhooks: "Datahub Adapter - Webhooks"
+user-management.permissions.plugin_datahub_admin: Datahub-Verwaltung
+user-management.permissions.plugin_datahub_config: Datahub-Konfiguration
+user-management.permissions.plugin_datahub_permission_delete: Datahub Löschen
+user-management.permissions.plugin_datahub_permission_read: Datahub Lesen
+user-management.permissions.plugin_datahub_permission_update: Datahub Aktualisieren
+user-management.permissions.portal-engine_collection-access: Backend Collection Access
+user-management.permissions.portal-engine_index-management: Portal Indexverwaltung
+user-management.permissions.portal-engine_wizard: Portal Setup-Assistent
+user-management.permissions.wai_configuration_permission: Konfiguration der Automatisierungsvorlagen
 forgot-password-form.username: Geben Sie Ihren Benutzernamen ein und Pimcore sendet einen Login-Link an Ihre E-Mail-Adresse
 forgot-password-form.username.placeholder: Benutzername
 forgot-password-form.reset-password: Passwort zurücksetzen

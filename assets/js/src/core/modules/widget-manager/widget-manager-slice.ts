@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isUndefined } from 'lodash'
 import { injectSliceWithState } from '@sdk/app'
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { type IJsonModel, type IJsonTabNode, Model, Actions, DockLocation, type Node, BorderNode } from 'flexlayout-react'
@@ -45,6 +46,24 @@ export const initialState: WidgetManagerState = {
   outerModel: getInitialOuterModelJson(),
   innerModel: getInitialInnerModelJson(),
   mainWidgetContext: null
+}
+
+const getNextTabId = (node: Node): string | undefined => {
+  const parent = node.getParent()
+
+  if (isUndefined(parent)) {
+    return undefined
+  }
+
+  const siblings = parent.getChildren()
+  const closedIndex = siblings.findIndex((child) => child.getId() === node.getId())
+
+  if (siblings.length <= 1) {
+    return undefined
+  }
+
+  const nextIndex = closedIndex < siblings.length - 1 ? closedIndex + 1 : closedIndex - 1
+  return siblings[nextIndex].getId()
 }
 
 const slice = createSlice({
@@ -223,45 +242,18 @@ const slice = createSlice({
       }
 
       if (node !== undefined) {
+        const nextTabId = isOuterModelNode ? undefined : getNextTabId(node)
+
         model.doAction(Actions.deleteTab(node.getId()))
+
+        if (!isUndefined(nextTabId) && !isUndefined(model.getNodeById(nextTabId))) {
+          model.doAction(Actions.selectTab(nextTabId))
+        }
       }
 
       if (isOuterModelNode) {
         state.outerModel = { ...model.toJson() }
       } else {
-        const currentTabset = model.getActiveTabset()
-        let hasValidNode = false
-
-        if (currentTabset !== undefined) {
-          const currentNode = currentTabset.getChildren()?.[0]
-
-          if (currentNode !== undefined) {
-            model.doAction(Actions.selectTab(currentNode.getId()))
-            hasValidNode = true
-          }
-        }
-
-        if (!hasValidNode) {
-          const firstTabset = model.getFirstTabSet()
-          const parent = firstTabset.getParent()
-
-          const tabsets = parent!.getChildren()
-          let validChildNode: Node | undefined
-
-          for (const tabset of tabsets) {
-            const childNodes = tabset.getChildren()
-
-            if (childNodes.length > 0) {
-              validChildNode = childNodes[0]
-              break
-            };
-          }
-
-          if (validChildNode !== undefined) {
-            model.doAction(Actions.selectTab(validChildNode.getId()))
-          }
-        }
-
         state.innerModel = { ...model.toJson() }
       }
     }

@@ -8,15 +8,16 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo } from 'react'
-import { type Tag } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice.gen'
+import React from 'react'
+import { Flex } from 'antd'
 import { createColumnHelper } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
+import { type Tag, useTagUnassignFromElementMutation } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { Flex } from 'antd'
-import { useHandleCheck } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/hooks/use-handle-check-tags'
+import { useOptimisticUpdate } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/hooks/use-optimistic-update'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 type TagWithActions = Tag & {
   actions: React.ReactNode
@@ -24,31 +25,20 @@ type TagWithActions = Tag & {
 
 export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading: boolean }): React.JSX.Element => {
   const { t } = useTranslation()
+
   const { id: elementId, elementType } = useElementContext()
+  const { removeTagFromElement } = useOptimisticUpdate()
+  const [unassignTag] = useTagUnassignFromElementMutation()
 
-  const checkedTags = useMemo(() => {
-    const tagEntries = Object.entries(tags)
-    return tagEntries
-      .map(([key, tag]) => ({ ...tag }))
-      .filter((tag) => tag.id !== undefined)
-  }, [tags])
+  const handleRemoveTag = async (tagId: number): Promise<void> => {
+    const patchResult = removeTagFromElement({ elementType, id: elementId, tagId })
 
-  const { handleCheck } = useHandleCheck({
-    elementId,
-    elementType,
-    flatTags: checkedTags,
-    setDefaultCheckedTags: () => {}
-  })
-
-  const handleRemoveTag = async (tagId: string): Promise<void> => {
-    const updatedCheckedTags = checkedTags.filter((tag) => tag.id?.toString() !== tagId).map((tag) => tag.id.toString())
-    await handleCheck(
-      {
-        checked: updatedCheckedTags,
-        halfChecked: []
-      },
-      { node: { key: tagId }, checked: false }
-    )
+    try {
+      await unassignTag({ elementType, id: elementId, tagId })
+    } catch {
+      patchResult.undo()
+      trackError(new GeneralError('Failed to unassign tag from element'))
+    }
   }
 
   const columnHelper = createColumnHelper<TagWithActions>()
@@ -73,7 +63,7 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
           <IconButton
             aria-label={ t('tags.actions.delete') }
             icon={ { value: 'trash' } }
-            onClick={ async () => { await handleRemoveTag(info.row.original.id.toString()) } }
+            onClick={ async () => { await handleRemoveTag(info.row.original.id) } }
             type="link"
           />
         </Flex>

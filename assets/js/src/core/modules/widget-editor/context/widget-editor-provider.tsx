@@ -98,10 +98,10 @@ export const WidgetEditorProvider = ({ children }: WidgetEditorProviderProps): R
         const values = tmpForm.getFieldsValue()
         const { name, widgetType } = values as WidgetForm
 
-        await createWidgetHookRef.current(name, widgetType, () => {
+        await createWidgetHookRef.current(name, widgetType, (id: string) => {
           setIsModalOpen(false)
-
           tmpForm.resetFields()
+          void openWidget(id, widgetType)
         })
       })
   }

@@ -1029,13 +1029,14 @@ jobs.job.button-download: ladda ner
 jobs.job.button-ignore-and-reload: ignorera och ladda om
 jobs.job.step_hint: "Steg {{step}}/{{total}}"
 jobs.job.step_hint_single: "Steg {{step}}"
+jobs.job.step.batch-edit.preparing: Förbereder massredigering
+jobs.job.step.batch-edit.applying: Tillämpar massredigering
 jobs.job.download-error: Nedladdning misslyckades
 jobs.job.button-show-errors: Visa fel
 jobs.job.error-modal.title: Jobbfel
 jobs.job.button-abort: Avbryt jobb
 jobs.job.abort-confirm: Vill du verkligen avbryta det här jobbet?
 jobs.zip-job.title: "ZIP-nedladdning av {{title}}"
-jobs.batch-edit-job.title: "Massredigering av {{title}}"
 jobs.csv-job.title: "CSV-nedladdning av {{title}}"
 jobs.xlsx-job.title: "XLSX-nedladdning av {{title}}"
 batch-edit.job-title: Massredigering
@@ -2427,6 +2428,39 @@ user-management.permissions."robots.txt": robots.txt
 user-management.permissions.routes: Rutter
 user-management.permissions.word_export: Word-export
 user-management.permissions.xliff_import_export: XLIFF Import/Export
+user-management.permissions.bptb_aet_configuration_permission: Konfiguration av alternativa elementträd
+user-management.permissions.bptb_bookmark_list_permission: Bokmärkeslistor
+user-management.permissions.bptb_bookmark_list_share_permission: Dela bokmärkeslistor
+user-management.permissions.bundle_ecommerce_back-office_order: "Back Office - Beställningar"
+user-management.permissions.bundle_ecommerce_pricing_rules: Prisregler
+user-management.permissions.pcp_general_permission: Pimcore Copilot
+user-management.permissions.pcp_configuration_permission: Konfiguration av Pimcore Copilot
+user-management.permissions.pcp_job_run_permission: Översikt över jobbkörningar
+user-management.permissions.pcp_job_runs_see_all_permission: Visa alla jobbkörningar
+user-management.permissions.permission_workflow_designer: Aktivera Workflow Designer
+user-management.permissions.permission_workflow_designer_place_permissions: Konfiguration av platsbehörigheter
+user-management.permissions.permission_workflow_designer_trans_notifications: Konfiguration av övergångsnotifieringar
+user-management.permissions.plugin_cmf_perm_activityview: CMF Aktivitetsvy
+user-management.permissions.plugin_cmf_perm_customer_automation_rules: CMF Automatiseringsregler för kunder
+user-management.permissions.plugin_cmf_perm_customerview: CMF Kundvy
+user-management.permissions.plugin_cmf_perm_customerview_admin: CMF Administration av kundfilter
+user-management.permissions.plugin_cmf_perm_newsletter_enqueue_all_customers: CMF Köläggning av nyhetsbrev för kunder
+user-management.permissions.plugin_datahub_adapter_dataImporterDataObject: "Datahub Adapter - Dataobjektimportör"
+user-management.permissions.plugin_datahub_adapter_fileExport: "Datahub Adapter - Filexport"
+user-management.permissions.plugin_datahub_adapter_graphql: "Datahub Adapter - GraphQL"
+user-management.permissions.plugin_datahub_adapter_headlessDocuments: "Datahub Adapter - Headless-dokument"
+user-management.permissions.plugin_datahub_adapter_productsup: "Datahub Adapter - Productsup"
+user-management.permissions.plugin_datahub_adapter_simpleRest: "Datahub Adapter - Simple REST"
+user-management.permissions.plugin_datahub_adapter_webhooks: "Datahub Adapter - Webhooks"
+user-management.permissions.plugin_datahub_admin: Datahub-administration
+user-management.permissions.plugin_datahub_config: Datahub-konfiguration
+user-management.permissions.plugin_datahub_permission_delete: Datahub Radering
+user-management.permissions.plugin_datahub_permission_read: Datahub Läsning
+user-management.permissions.plugin_datahub_permission_update: Datahub Uppdatering
+user-management.permissions.portal-engine_collection-access: Åtkomst till backend-samlingar
+user-management.permissions.portal-engine_index-management: Hantering av portalindex
+user-management.permissions.portal-engine_wizard: Portalens installationsguide
+user-management.permissions.wai_configuration_permission: Konfiguration av automatiseringsmallar
 forgot-password-form.username: Ange ditt användarnamn så skickar Pimcore en inloggningslänk till din e-postadress
 forgot-password-form.username.placeholder: Användarnamn
 forgot-password-form.reset-password: Återställ lösenord

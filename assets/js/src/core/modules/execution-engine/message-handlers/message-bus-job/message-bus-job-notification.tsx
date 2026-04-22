@@ -22,6 +22,7 @@ import { type GlobalMessageBus } from '@Pimcore/modules/global-message-bus/servi
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export interface JobButtonCustomizationContext {
+  jobRunId: number
   addSuccessButton: (action: ButtonAction, position?: 'start' | 'end') => void
   addFinishedWithErrorsButton: (action: ButtonAction, position?: 'start' | 'end') => void
   addFailureButton: (action: ButtonAction, position?: 'start' | 'end') => void
@@ -69,6 +70,7 @@ export const MessageBusJobNotification = (props: MessageBusJobProps): React.JSX.
 
   if (!isUndefined(props.onCustomizeButtons)) {
     const context: JobButtonCustomizationContext = {
+      jobRunId: props.jobRunId,
       addSuccessButton: (action, position) => { addButton(successButtonActions, action, position) },
       addFinishedWithErrorsButton: (action, position) => { addButton(finishedWithErrorsButtonActions, action, position) },
       addFailureButton: (action, position) => { addButton(failureButtonActions, action, position) }

@@ -1029,13 +1029,14 @@ jobs.job.button-download: last ned
 jobs.job.button-ignore-and-reload: ignorer og last på nytt
 jobs.job.step_hint: "Steg {{step}}/{{total}}"
 jobs.job.step_hint_single: "Steg {{step}}"
+jobs.job.step.batch-edit.preparing: Forbereder masseredigering
+jobs.job.step.batch-edit.applying: Bruker masseredigering
 jobs.job.download-error: Nedlasting mislyktes
 jobs.job.button-show-errors: Vis feil
 jobs.job.error-modal.title: Jobbfeil
 jobs.job.button-abort: Avbryt jobb
 jobs.job.abort-confirm: Vil du virkelig avbryte denne jobben?
 jobs.zip-job.title: "ZIP-nedlasting av {{title}}"
-jobs.batch-edit-job.title: "Masseredigering av {{title}}"
 jobs.csv-job.title: "CSV-nedlasting av {{title}}"
 jobs.xlsx-job.title: "XLSX-nedlasting av {{title}}"
 batch-edit.job-title: Masseredigering
@@ -2427,6 +2428,39 @@ user-management.permissions."robots.txt": robots.txt
 user-management.permissions.routes: Ruter
 user-management.permissions.word_export: Word-eksport
 user-management.permissions.xliff_import_export: XLIFF-import/eksport
+user-management.permissions.bptb_aet_configuration_permission: Konfigurasjon av alternative elementtrær
+user-management.permissions.bptb_bookmark_list_permission: Bokmerkelister
+user-management.permissions.bptb_bookmark_list_share_permission: Del bokmerkelister
+user-management.permissions.bundle_ecommerce_back-office_order: "Back Office - Bestillinger"
+user-management.permissions.bundle_ecommerce_pricing_rules: Prisregler
+user-management.permissions.pcp_general_permission: Pimcore Copilot
+user-management.permissions.pcp_configuration_permission: Konfigurasjon av Pimcore Copilot
+user-management.permissions.pcp_job_run_permission: Oversikt over jobbkjøringer
+user-management.permissions.pcp_job_runs_see_all_permission: Se alle jobbkjøringer
+user-management.permissions.permission_workflow_designer: Aktiver Workflow Designer
+user-management.permissions.permission_workflow_designer_place_permissions: Konfigurasjon av plasseringstillatelser
+user-management.permissions.permission_workflow_designer_trans_notifications: Konfigurasjon av overgangsvarsler
+user-management.permissions.plugin_cmf_perm_activityview: CMF Aktivitetsvisning
+user-management.permissions.plugin_cmf_perm_customer_automation_rules: CMF Automatiseringsregler for kunder
+user-management.permissions.plugin_cmf_perm_customerview: CMF Kundevisning
+user-management.permissions.plugin_cmf_perm_customerview_admin: CMF Administrasjon av kundefiltre
+user-management.permissions.plugin_cmf_perm_newsletter_enqueue_all_customers: CMF Kølegging av nyhetsbrev for kunder
+user-management.permissions.plugin_datahub_adapter_dataImporterDataObject: "Datahub Adapter - Dataobjektimportør"
+user-management.permissions.plugin_datahub_adapter_fileExport: "Datahub Adapter - Fileksport"
+user-management.permissions.plugin_datahub_adapter_graphql: "Datahub Adapter - GraphQL"
+user-management.permissions.plugin_datahub_adapter_headlessDocuments: "Datahub Adapter - Headless-dokumenter"
+user-management.permissions.plugin_datahub_adapter_productsup: "Datahub Adapter - Productsup"
+user-management.permissions.plugin_datahub_adapter_simpleRest: "Datahub Adapter - Simple REST"
+user-management.permissions.plugin_datahub_adapter_webhooks: "Datahub Adapter - Webhooks"
+user-management.permissions.plugin_datahub_admin: Datahub-administrasjon
+user-management.permissions.plugin_datahub_config: Datahub-konfigurasjon
+user-management.permissions.plugin_datahub_permission_delete: Datahub Sletting
+user-management.permissions.plugin_datahub_permission_read: Datahub Lesing
+user-management.permissions.plugin_datahub_permission_update: Datahub Oppdatering
+user-management.permissions.portal-engine_collection-access: Tilgang til backend-samlinger
+user-management.permissions.portal-engine_index-management: Portalindeksforvaltning
+user-management.permissions.portal-engine_wizard: Portalens oppsettveiviser
+user-management.permissions.wai_configuration_permission: Konfigurasjon av automatiseringsmaler
 forgot-password-form.username: Oppgi brukernavnet ditt, så sender Pimcore en innloggingslenke til e-postadressen din
 forgot-password-form.username.placeholder: Brukernavn
 forgot-password-form.reset-password: Tilbakestill passord

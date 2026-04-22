@@ -345,7 +345,7 @@ const injectedRtkApi = api
             }),
             assetPatchFolderById: build.mutation<AssetPatchFolderByIdApiResponse, AssetPatchFolderByIdApiArg>({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/folder`,
+                    url: `/pimcore-studio/api/assets/folder/${queryArg.id}`,
                     method: "PATCH",
                     body: queryArg.body,
                 }),
@@ -876,15 +876,15 @@ export type AssetPatchFolderByIdApiResponse =
         jobRunId: number;
     };
 export type AssetPatchFolderByIdApiArg = {
+    /** Id of the folder */
+    id: number;
     body: {
         data: {
-            /** Folder ID */
-            folderId: number;
             parentId?: number | null;
             key?: string | null;
             locked?: string | null;
             metadata?: PatchCustomMetadata[] | null;
-        }[];
+        };
         filters?: ExportAllFilter;
     };
 };

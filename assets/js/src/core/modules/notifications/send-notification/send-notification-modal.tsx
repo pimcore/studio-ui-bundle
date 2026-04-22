@@ -13,21 +13,29 @@ import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal
 import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 import { Button, Flex, Icon, ModalFooter, useMessage } from '@sdk/components'
 import { GeneralError, trackError } from '@sdk/modules/app'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNotification } from '../hooks/use-send-notification'
 import { NotificationForm } from './components/notification-form/notification-form'
+import { type ManyToOneRelationValue } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
 
 interface SendNotificationModalProps {
   open: boolean
   onClose: () => void
+  initialAttachment?: ManyToOneRelationValue
 }
 
-export const SendNotificationModal = ({ open, ...props }: SendNotificationModalProps): React.JSX.Element => {
+export const SendNotificationModal = ({ open, initialAttachment, ...props }: SendNotificationModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const { sendNotification, isLoading } = useNotification()
   const { success } = useMessage()
+
+  useEffect(() => {
+    if (open && initialAttachment !== undefined) {
+      form.setFieldValue('attachment', initialAttachment)
+    }
+  }, [open, initialAttachment])
 
   const onClose = (): void => {
     form.resetFields()
