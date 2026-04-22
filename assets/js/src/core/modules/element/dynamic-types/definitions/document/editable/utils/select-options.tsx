@@ -16,7 +16,12 @@ import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 export type DocumentEditableStoreEntry = [string | number | null, string] | string | number
 
 /**
- * Transforms document editable store entries into SelectOptionType array with sanitized HTML labels
+ * Transforms document editable store entries into SelectOptionType array.
+ *
+ * The `label` is returned as a plain string so that antd's built-in search
+ * (driven by `optionFilterProp="label"`) can match against it. HTML sanitization
+ * happens at render time via `renderSanitizedLabel`, used by the consuming
+ * components in their `optionRender` / `labelRender` props.
  */
 export const transformDocumentEditableStoreToOptions = (
   store?: DocumentEditableStoreEntry[]
@@ -27,15 +32,25 @@ export const transformDocumentEditableStoreToOptions = (
 
       return {
         value: String(value),
-        label: <SanitizeHtml html={ label } />
+        label: String(label)
       }
     } else {
       const stringValue = String(item)
 
       return {
         value: stringValue,
-        label: <SanitizeHtml html={ stringValue } />
+        label: stringValue
       }
     }
   }) ?? []
 }
+
+/**
+ * Renders a label with HTML sanitization. Intended for use in antd's
+ * `labelRender` / `optionRender` props, so that sanitization happens at the
+ * moment the label becomes DOM — while `label` itself stays a plain string
+ * so antd's built-in filter keeps working.
+ */
+export const renderSanitizedLabel = (label: React.ReactNode): React.JSX.Element => (
+  <SanitizeHtml html={ typeof label === 'string' ? label : String(label ?? '') } />
+)

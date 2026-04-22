@@ -40,6 +40,7 @@ export interface ManyToManyRelationGridProps {
   enableRowDrag: boolean
   handleOrderChange: (data: ManyToManyRelationValue) => void
   pathFormatterConfig?: { name: string | undefined, class: string | undefined }
+  enableRowVirtualizer: boolean
 }
 
 export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid (props: ManyToManyRelationGridProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
@@ -102,7 +103,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
           data={ data }
           disabled={ props.disabled === true || props.inherited === true }
           enableRowDrag={ props.enableRowDrag }
-          enableRowVirtualizer
+          enableRowVirtualizer={ props?.enableRowVirtualizer }
           handleDragEnd={ handleDragEnd }
           onUpdateCellData={ props.onUpdateCellData }
           resizable
