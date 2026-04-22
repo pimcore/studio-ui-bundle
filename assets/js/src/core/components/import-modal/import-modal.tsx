@@ -208,7 +208,7 @@ export const ImportModal = ({
             divider
             justify={ !hasFiles ? 'space-between' : 'end' }
           >
-            {(!hasFiles || multiple) && (
+            {!hasFiles && (
               <IconTextButton
                 disabled={ isProcessing }
                 icon={ { value: 'upload-import' } }
@@ -248,7 +248,7 @@ export const ImportModal = ({
           gap="mini"
           vertical
         >
-          {(!hasFiles || multiple) && (
+          {!hasFiles && (
             <FileDropZone
               dragDropLabel={ dragDropLabel }
               uploadProps={ uploadProps }
