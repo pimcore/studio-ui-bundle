@@ -69,7 +69,7 @@ export const QuantityValueContainer = (): React.JSX.Element => {
     }
   }), [currentPage, pageSize, filter, sorting])
 
-  const { data, isLoading, isFetching, error, refetch } = useUnitQuantityValueUnitsCollectionQuery(queryArgs)
+  const { data, isLoading, isFetching, error, refetch } = useUnitQuantityValueUnitsCollectionQuery(queryArgs, { refetchOnMountOrArgChange: true })
 
   const handleRefetch = (): void => {
     void refetch().catch(() => {
@@ -212,7 +212,7 @@ export const QuantityValueContainer = (): React.JSX.Element => {
         <Toolbar
           justify='space-between'
           margin={ {
-            x: 'mini',
+            x: 'extra-small',
             y: 'none'
           } }
           theme='secondary'
@@ -232,7 +232,7 @@ export const QuantityValueContainer = (): React.JSX.Element => {
               setFilter(value)
               setCurrentPage(1)
             } }
-            placeholder="Search"
+            placeholder={ t('quantity-values.search') }
             withPrefix={ false }
             withoutAddon={ false }
           />

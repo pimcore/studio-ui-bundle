@@ -22,7 +22,15 @@
     "globalName": "pimcore_studio_ui_bundle_core",
     "pluginVersion": "2.2.3",
     "prefetchInterface": false,
+<<<<<<<< HEAD:public/build/bb0b87ff-a065-4a40-96b5-e517e4e28df2/mf-stats.json
     "publicPath": "/bundles/pimcorestudioui/build/bb0b87ff-a065-4a40-96b5-e517e4e28df2/"
+========
+<<<<<<<< HEAD:public/build/bae279b1-664a-4739-8ad2-e6f978fa8155/mf-stats.json
+    "publicPath": "/bundles/pimcorestudioui/build/bae279b1-664a-4739-8ad2-e6f978fa8155/"
+========
+    "publicPath": "/bundles/pimcorestudioui/build/df929aa3-c90f-4081-8e79-485e77ef517d/"
+>>>>>>>> 2025.4:public/build/df929aa3-c90f-4081-8e79-485e77ef517d/mf-stats.json
+>>>>>>>> 2026.1:public/build/bae279b1-664a-4739-8ad2-e6f978fa8155/mf-stats.json
   },
   "shared": [],
   "remotes": [
