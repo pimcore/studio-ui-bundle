@@ -174,7 +174,7 @@ export const DynamicTypeFieldFilterQuantityValueComponent = (props: DynamicTypeF
             unitId
           })
         }}
-        options={getSelectOptions(config?.fieldDefinition?.validUnits ?? undefined)}
+        options={getSelectOptions(config?.fieldDefinition?.validUnits as string[] ?? undefined)}
         placeholder={'(' + t('empty') + ')'}
         value={data?.unitId ?? undefined}
       />
