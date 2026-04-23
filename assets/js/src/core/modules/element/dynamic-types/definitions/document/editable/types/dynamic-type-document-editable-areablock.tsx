@@ -39,13 +39,17 @@ export class DynamicTypeDocumentEditableAreablock extends DynamicTypeDocumentEdi
         containerRef={ props.containerRef }
         disabled={ props.inherited }
         editableName={ props.name }
+        editableType={ this.id }
         isInherited={ props.inherited }
       />
     )
   }
 
   transformValue (value: any, props: AreablockEditableDefinition): AreablockValue {
-    const areablockManager = new AreablockManager(props.name, props.containerRef)
+    const containerElement = document.getElementById(props.id) as HTMLDivElement | null
+    const fallbackContainerRef: React.RefObject<HTMLDivElement> = { current: containerElement }
+    const containerRef = props.containerRef ?? fallbackContainerRef
+    const areablockManager = new AreablockManager(props.name, containerRef, this.id)
     return areablockManager.getAreablockValue()
   }
 

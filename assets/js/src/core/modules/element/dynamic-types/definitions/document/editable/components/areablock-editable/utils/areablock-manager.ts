@@ -8,16 +8,21 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import type React from 'react'
 import { type AreablockValue } from '../areablock-editable'
 import { AbstractBlockManager } from '../../../managers/abstract-block-manager'
 
 export class AreablockManager extends AbstractBlockManager {
+  constructor (editableName: string, containerRef?: React.RefObject<HTMLDivElement>, private readonly editableType: string = 'areablock') {
+    super(editableName, containerRef)
+  }
+
   protected getEditableType (): string {
-    return 'areablock'
+    return this.editableType
   }
 
   protected getElementSelector (): string {
-    return `.pimcore_area_entry[data-name="${this.editableName}"]`
+    return `.pimcore_area_entry[data-name="${this.editableName}"], .pimcore_area_entry[data-name^="${this.editableName}:"]`
   }
 
   getElementType (element: HTMLElement): string | null {
