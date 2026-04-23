@@ -19,9 +19,14 @@ import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { useTranslation } from 'react-i18next'
 import { Content } from '@Pimcore/components/content/content'
 import { Box } from '@Pimcore/components/box/box'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { useAppDispatch } from '@sdk/app'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { api } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
 
 const NotesAndEventsContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
   const {
     totalItems,
     notesAndEvents,
@@ -35,12 +40,21 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
 
   return (
     <ContentLayout
-      renderToolbar={ notesAndEvents.length !== 0
-        ? (
-          <Toolbar
-            justify='flex-end'
-            theme='secondary'
-          >
+      renderToolbar={
+        <Toolbar theme="secondary">
+          <IconButton
+            disabled={ isFetching }
+            icon={ { value: 'refresh' } }
+            onClick={ () => {
+              dispatch(
+                api.util.invalidateTags(
+                  invalidatingTags.NOTES_AND_EVENTS()
+                )
+              )
+            } }
+          />
+
+          {notesAndEvents.length !== 0 && (
             <Pagination
               current={ page }
               onChange={ (page, pageSize) => {
@@ -51,9 +65,9 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
               showTotal={ (total) => t('pagination.show-total', { total }) }
               total={ totalItems }
             />
-          </Toolbar>
-          )
-        : undefined }
+          )}
+        </Toolbar>
+      }
       renderTopBar={
         <Toolbar
           justify='space-between'
