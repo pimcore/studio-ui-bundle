@@ -127,33 +127,33 @@ export const DynamicTypeFieldFilterQuantityValueComponent = (props: DynamicTypeF
       gap="extra-small"
     >
       <Select
-        defaultValue={QuantityValueFilterSettingValue.IS}
-        onChange={(value: QuantityValueFilterSettingValue) => { handleSettingChange(value) }}
-        options={SETTING_OPTIONS}
-        width={currentSetting === QuantityValueFilterSettingValue.MORE ? 100 : 90}
+        defaultValue={ QuantityValueFilterSettingValue.IS }
+        onChange={ (value: QuantityValueFilterSettingValue) => { handleSettingChange(value) } }
+        options={ SETTING_OPTIONS }
+        width={ currentSetting === QuantityValueFilterSettingValue.MORE ? 100 : 90 }
       />
 
       {currentSetting === QuantityValueFilterSettingValue.BETWEEN && (
         <>
           <InputNumber
-            onChange={(value: number | null) => {
+            onChange={ (value: number | null) => {
               handleChange('from', value)
-            }}
-            placeholder={t('grid.filter.from')}
-            value={data?.from ?? null}
+            } }
+            placeholder={ t('grid.filter.from') }
+            value={ data?.from ?? null }
           />
           <InputNumber
-            onChange={(value: number | null) => {
+            onChange={ (value: number | null) => {
               handleRangeChange('to', value)
-            }}
-            placeholder={t('grid.filter.to')}
-            value={data?.to ?? null}
+            } }
+            placeholder={ t('grid.filter.to') }
+            value={ data?.to ?? null }
           />
         </>
       )}
       {currentSetting !== QuantityValueFilterSettingValue.BETWEEN && (
         <InputNumber
-          onChange={(value: number | null) => {
+          onChange={ (value: number | null) => {
             if (currentSetting === QuantityValueFilterSettingValue.IS) {
               handleChange('is', value)
             } else if (currentSetting === QuantityValueFilterSettingValue.LESS) {
@@ -161,22 +161,22 @@ export const DynamicTypeFieldFilterQuantityValueComponent = (props: DynamicTypeF
             } else if (currentSetting === QuantityValueFilterSettingValue.MORE) {
               handleChange('from', value)
             }
-          }}
-          value={getValue()}
+          } }
+          value={ getValue() }
         />
       )}
 
       <Select
-        minWidth={80}
-        onChange={(unitId) => {
+        minWidth={ 80 }
+        onChange={ (unitId) => {
           setData({
             ...data,
             unitId
           })
-        }}
-        options={getSelectOptions(config?.fieldDefinition?.validUnits as string[] ?? undefined)}
-        placeholder={'(' + t('empty') + ')'}
-        value={data?.unitId ?? undefined}
+        } }
+        options={ getSelectOptions(config?.fieldDefinition?.validUnits as string[] ?? undefined) }
+        placeholder={ '(' + t('empty') + ')' }
+        value={ data?.unitId ?? undefined }
       />
     </Flex>
   )
