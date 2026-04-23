@@ -43,12 +43,14 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   }
 
   const handleAddNewWorkspaces = (workspaces: UserWorkspace[], type): void => {
-    const newWorkspace = {
+    const workspace = {
       cid: new Date().getTime(), // after path update is set to document id
       cpath: '',
       list: false,
       view: false,
+      save: false,
       publish: false,
+      unpublish: false,
       delete: false,
       rename: false,
       create: false,
@@ -59,13 +61,13 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
 
     switch (type) {
       case 'document':
-        setDocumentWorkspaces([...workspaces, newWorkspace])
+        setDocumentWorkspaces([...workspaces, workspace])
         break
       case 'asset':
-        setAssetWorkspaces([...workspaces, newWorkspace])
+        setAssetWorkspaces([...workspaces, workspace])
         break
       case 'object':
-        setObjectWorkspaces([...workspaces, newWorkspace])
+        setObjectWorkspaces([...workspaces, workspace])
         break
     }
   }
