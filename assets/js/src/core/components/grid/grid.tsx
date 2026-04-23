@@ -146,7 +146,7 @@ export const Grid = ({
 
   const data = useMemo(
     () => {
-      return props.isLoading === true ? Array(5).fill({}) : props.data
+      return props.isLoading === true ? Array(5).fill({}) : (props.data ?? [])
     },
     [props.isLoading, props.data]
   )
