@@ -59,13 +59,13 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
 
     switch (type) {
       case 'document':
-        setDocumentWorkspaces([...workspaces, { ...newWorkspace, save: false, unpublish: false }])
+        setDocumentWorkspaces([...workspaces, { ...newWorkspace, save: false, unpublish: false } as UserWorkspace])
         break
       case 'asset':
         setAssetWorkspaces([...workspaces, newWorkspace])
         break
       case 'object':
-        setObjectWorkspaces([...workspaces, { ...newWorkspace, save: false, unpublish: false }])
+        setObjectWorkspaces([...workspaces, { ...newWorkspace, save: false, unpublish: false } as UserWorkspace])
         break
     }
   }
