@@ -53,7 +53,7 @@ export const DynamicTypeFieldFilterInputQuantityValueComponent = (): React.JSX.E
             unitId
           })
         } }
-        options={ getSelectOptions(config?.validUnits as string[]) }
+        options={ getSelectOptions(config?.fieldDefinition?.validUnits ?? config?.validUnits ?? undefined) }
         placeholder={ '(' + t('empty') + ')' }
         style={ { minWidth: 120 } }
         value={ value?.unitId ?? undefined }
