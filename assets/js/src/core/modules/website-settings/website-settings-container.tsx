@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Title } from '@Pimcore/components/title/title'
 import { t } from 'i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -25,6 +25,7 @@ import { Table } from './table/table'
 import { useWebsiteSetting } from './hooks/use-website-settings'
 import { useAppDispatch } from '@sdk/app'
 import { invalidatingTags } from '@sdk/api'
+import { type SortingState } from '@tanstack/react-table'
 
 export type WebsiteSettingRow = WebsiteSetting & { rowId: string }
 
@@ -44,6 +45,12 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
   const [nameFilter, setNameFilter] = useState<string>('')
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
+  const [sorting, setSorting] = useState<SortingState>([])
+
+  const onSortingChange = useCallback((newSorting: SortingState) => {
+    setSorting(newSorting)
+    setPage(1)
+  }, [])
 
   const { data: settingTypes } = useWebsiteSettingsListTypesQuery()
 
@@ -69,10 +76,18 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
                 filterValue: nameFilter
               }
             ]
-          : []
+          : [],
+        ...(sorting.length > 0
+          ? {
+              sortFilter: {
+                key: sorting[0].id === 'siteDomain' ? 'siteId' : sorting[0].id,
+                direction: sorting[0].desc ? 'DESC' : 'ASC'
+              }
+            }
+          : {})
       }
     }
-  }), [nameFilter, page, pageSize])
+  }), [nameFilter, page, pageSize, sorting])
 
   const { data, isLoading: websiteSettingsLoading, isFetching: websiteSettingsFetching, error } = useWebsiteSettingsGetCollectionQuery(queryArgs, {
     refetchOnMountOrArgChange: true
@@ -89,12 +104,6 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
   const [websiteSettingRows, setWebsiteSettingRows] = useState<WebsiteSettingRow[]>([])
 
   const websiteSettings = data?.items ?? []
-
-  const sortedSettings = [...websiteSettingRows].sort((a, b) => {
-    const nameA = a.name ?? ''
-    const nameB = b.name ?? ''
-    return nameA.localeCompare(nameB)
-  })
 
   useEffect(() => {
     if (!isUndefined(websiteSettings)) {
@@ -270,9 +279,11 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
           } }
         >
           <Table
+            onSortingChange={ onSortingChange }
             setWebsiteSettingRows={ setWebsiteSettingRows }
+            sorting={ sorting }
             typeSelectOptions={ typeOptions }
-            websiteSettingRows={ sortedSettings }
+            websiteSettingRows={ websiteSettingRows }
           />
           {errorModals}
         </Box>
