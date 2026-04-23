@@ -29,6 +29,7 @@ export type DatePickerProps = PickerProps & {
   onChange?: (date: DatePickerValueType) => void
   outputType?: OutputType
   outputFormat?: string
+  displayFormat?: string
   disabled?: boolean
   inherited?: boolean
   showSuffixIcon?: boolean
@@ -53,7 +54,7 @@ const DatePickerComponent = (props: DatePickerProps): React.JSX.Element => {
   return (
     <OriginalDatePicker
       { ...props }
-      format={ props.outputFormat }
+      format={ props.displayFormat ?? props.outputFormat }
       onChange={ handleChange }
       popupClassName={ styles.datePickerDropdown }
       rootClassName={ cn(styles.datePicker, props.className, {

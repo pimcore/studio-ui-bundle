@@ -17,6 +17,7 @@ import type { Dayjs } from 'dayjs'
 import dayjs from 'dayjs'
 import { FormattedDateTime } from '@Pimcore/components/formatted-date-time/formatted-date-time'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
+import { getLocaleDateFormat, getLocaleDateTimeFormat } from '@Pimcore/utils/date-time'
 
 export interface DateCellConfig {
   showTime: boolean
@@ -29,7 +30,7 @@ export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
   const { column } = props
   const config: DateCellConfig | undefined = column.columnDef.meta?.config as DateCellConfig | undefined
   const showTime = config?.showTime ?? false
-  const dateFormat = showTime ? 'YYYY-MM-DD HH:mm' : 'YYYY-MM-DD'
+  const dateFormat = showTime ? getLocaleDateTimeFormat() : getLocaleDateFormat()
 
   useEffect(() => {
     if (isInEditMode) {

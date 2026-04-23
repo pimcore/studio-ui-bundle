@@ -57,3 +57,43 @@ export function formatDate (timestamp: number | string): string {
 export function formatTime (timestamp: number | string): string {
   return formatDateTime({ timestamp, timeStyle: 'short' })
 }
+
+
+export function getLocaleDateFormat (): string {
+  const locale = i18n.language
+  const parts = new Intl.DateTimeFormat(locale, { dateStyle: 'short' }).formatToParts(new Date(2026, 11, 31))
+
+  return parts.map(part => {
+    switch (part.type) {
+      case 'day': return part.value.length === 1 ? 'D' : 'DD'
+      case 'month': return part.value.length === 1 ? 'M' : 'MM'
+      case 'year': return part.value.length <= 2 ? 'YY' : 'YYYY'
+      case 'literal': return part.value
+      default: return ''
+    }
+  }).join('')
+}
+
+export function getLocaleDateTimeFormat (): string {
+  const locale = i18n.language
+  const formatter = new Intl.DateTimeFormat(locale, { dateStyle: 'short', timeStyle: 'short' })
+  const resolvedOptions = formatter.resolvedOptions()
+  const is12Hour = resolvedOptions.hour12 === true
+  const parts = formatter.formatToParts(new Date(2026, 11, 31, 23, 59))
+
+  return parts.map(part => {
+    switch (part.type) {
+      case 'day': return part.value.length === 1 ? 'D' : 'DD'
+      case 'month': return part.value.length === 1 ? 'M' : 'MM'
+      case 'year': return part.value.length <= 2 ? 'YY' : 'YYYY'
+      case 'hour': {
+        const token = is12Hour ? 'h' : 'H'
+        return part.value.length === 1 ? token : token + token
+      }
+      case 'minute': return part.value.length === 1 ? 'm' : 'mm'
+      case 'dayPeriod': return 'A'
+      case 'literal': return part.value
+      default: return ''
+    }
+  }).join('')
+}
