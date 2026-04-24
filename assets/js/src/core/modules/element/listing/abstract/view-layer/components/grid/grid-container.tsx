@@ -9,7 +9,6 @@
  */
 
 import React, { useMemo } from 'react'
-import { isNil } from 'lodash'
 import { useSelectedColumns } from '../../../configuration-layer/provider/selected-columns/use-selected-columns'
 import { useData } from '../../../data-layer/provider/data/use-data'
 import { type AccessorKeyColumnDef, createColumnHelper } from '@tanstack/react-table'
@@ -37,7 +36,7 @@ export const GridContainer = (): React.JSX.Element => {
   }, [selectedColumns])
 
   const gridData = useMemo(() => {
-    if (isNil(data)) {
+    if (data === undefined) {
       return []
     }
 
