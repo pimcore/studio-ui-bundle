@@ -170,6 +170,24 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
     // This method is intentionally left empty - can be implemented in subclasses
   }
 
+  /**
+   * Optional. When defined, controls how an incoming changedValue for this field
+   * type is merged into the already-accumulated modified-attributes map.
+   *
+   * If not implemented, the edit-form provider falls back to replacing the current
+   * value with the incoming one.
+   *
+   * This method is only invoked when the dynamic type's id matches the form key of
+   * the changed value. This is the case for field types that register themselves as
+   * a named form group (e.g. localizedfields uses Form.Group name="localizedfields",
+   * so its form key and type id are both "localizedfields").
+   *
+   * @param current  The value currently accumulated for this field's key.
+   * @param incoming The new partial value arriving from the form's onValuesChange event.
+   * @returns        The value that should be stored for this field's key.
+   */
+  mergeChangedValues?: (current: any, incoming: any) => any
+
   getDefaultGridColumnWidth (props?: AbstractObjectDataDefinition): number | undefined {
     return undefined
   }
