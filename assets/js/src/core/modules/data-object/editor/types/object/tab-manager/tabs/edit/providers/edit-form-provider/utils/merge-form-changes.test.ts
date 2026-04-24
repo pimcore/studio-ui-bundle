@@ -11,37 +11,28 @@
 import { mergeFormChanges } from './merge-form-changes'
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 
+jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract', () => ({
+  DynamicTypeObjectDataAbstract: class DynamicTypeObjectDataAbstract {}
+}))
+
+jest.mock('@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/localized-fields/object-localized-fields', () => ({
+  ObjectLocalizedFields: () => null
+}))
+
+jest.mock('@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/localized-fields/versions/version-object-localized-fields', () => ({
+  VersionObjectLocalizedFields: () => null
+}))
+
+const { DynamicTypeObjectDataLocalizedFields } = jest.requireActual(
+  '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-localized-fields'
+) as { DynamicTypeObjectDataLocalizedFields: new () => { mergeChangedValues: (current: any, incoming: any) => any } }
+
 const createMockRegistry = (types: Record<string, any> = {}): DynamicTypeObjectDataRegistry => ({
   hasDynamicType: (id: string) => id in types,
   getDynamicType: (id: string) => types[id]
 } as unknown as DynamicTypeObjectDataRegistry)
 
 const emptyMap = new Map<string, string>()
-
-const mergeLocalizedFieldChanges = (
-  current: Record<string, Record<string, unknown>> | undefined,
-  incoming: Record<string, Record<string, unknown>> | undefined
-): Record<string, Record<string, unknown>> => {
-  const currentValue = current ?? {}
-  const incomingValue = incoming ?? {}
-
-  const mergedFieldValues: Record<string, Record<string, unknown>> = {}
-
-  Object.keys(currentValue).forEach((fieldName) => {
-    mergedFieldValues[fieldName] = { ...currentValue[fieldName] }
-  })
-
-  Object.keys(incomingValue).forEach((fieldName) => {
-    const currentLocales = mergedFieldValues[fieldName] ?? {}
-    const incomingLocales = incomingValue[fieldName]
-    mergedFieldValues[fieldName] = {
-      ...currentLocales,
-      ...incomingLocales
-    }
-  })
-
-  return mergedFieldValues
-}
 
 describe('mergeFormChanges', () => {
   it('replaces unknown field types wholesale (default fallback)', () => {
@@ -77,7 +68,6 @@ describe('mergeFormChanges', () => {
     })
     const localizedFields = { mergeChangedValues }
     const registry = createMockRegistry({ localizedfields: localizedFields })
-    // "localizedfields" field name maps to type id "localizedfields"
     const fieldTypeMap = new Map([['localizedfields', 'localizedfields']])
 
     const current = { localizedfields: { name: { de: 'Hallo' } } }
@@ -90,10 +80,7 @@ describe('mergeFormChanges', () => {
   })
 
   it('accumulates multiple localized field changes without losing previous ones', () => {
-    const localizedFields = {
-      mergeChangedValues: mergeLocalizedFieldChanges
-    }
-    const registry = createMockRegistry({ localizedfields: localizedFields })
+    const registry = createMockRegistry({ localizedfields: new DynamicTypeObjectDataLocalizedFields() })
     const fieldTypeMap = new Map([['localizedfields', 'localizedfields']])
 
     let state: Record<string, any> = {}
@@ -111,10 +98,7 @@ describe('mergeFormChanges', () => {
   })
 
   it('mixes localized and non-localized field changes correctly', () => {
-    const localizedFields = {
-      mergeChangedValues: mergeLocalizedFieldChanges
-    }
-    const registry = createMockRegistry({ localizedfields: localizedFields })
+    const registry = createMockRegistry({ localizedfields: new DynamicTypeObjectDataLocalizedFields() })
     const fieldTypeMap = new Map([['localizedfields', 'localizedfields']])
 
     let state: Record<string, any> = {}
@@ -131,8 +115,6 @@ describe('mergeFormChanges', () => {
   })
 
   it('does not dispatch mergeChangedValues when field name has no type mapping', () => {
-    // Even if a type with the same id as the field name exists, without a fieldTypeMap
-    // entry the field falls through to wholesale replace — no coincidental matches.
     const mergeChangedValues = jest.fn().mockReturnValue({})
     const localizedFields = { mergeChangedValues }
     const registry = createMockRegistry({ localizedfields: localizedFields })
@@ -140,7 +122,6 @@ describe('mergeFormChanges', () => {
     const current = { localizedfields: { name: { de: 'Hallo' } } }
     const incoming = { localizedfields: { name: { en: 'Hello' } } }
 
-    // emptyMap — no field→type mapping registered, so should wholesale-replace
     expect(mergeFormChanges(current, incoming, registry, emptyMap)).toEqual({
       localizedfields: { name: { en: 'Hello' } }
     })
