@@ -10,9 +10,10 @@
 
 import { mergeFormChanges } from './merge-form-changes'
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
+import { DynamicTypeObjectDataLocalizedFields } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-localized-fields'
 
 jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract', () => ({
-  DynamicTypeObjectDataAbstract: class DynamicTypeObjectDataAbstract {}
+  DynamicTypeObjectDataAbstract: class DynamicTypeObjectDataAbstract {} // eslint-disable-line @typescript-eslint/no-extraneous-class
 }))
 
 jest.mock('@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/localized-fields/object-localized-fields', () => ({
@@ -22,10 +23,6 @@ jest.mock('@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-re
 jest.mock('@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/localized-fields/versions/version-object-localized-fields', () => ({
   VersionObjectLocalizedFields: () => null
 }))
-
-const { DynamicTypeObjectDataLocalizedFields } = jest.requireActual(
-  '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-localized-fields'
-) as { DynamicTypeObjectDataLocalizedFields: new () => { mergeChangedValues: (current: any, incoming: any) => any } }
 
 const createMockRegistry = (types: Record<string, any> = {}): DynamicTypeObjectDataRegistry => ({
   hasDynamicType: (id: string) => id in types,

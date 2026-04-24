@@ -9,7 +9,7 @@
  */
 
 jest.mock('../dynamic-type-object-data-abstract', () => ({
-  DynamicTypeObjectDataAbstract: class DynamicTypeObjectDataAbstract {}
+  DynamicTypeObjectDataAbstract: class DynamicTypeObjectDataAbstract {} // eslint-disable-line @typescript-eslint/no-extraneous-class
 }))
 
 jest.mock('../../../../defintinitions/objects/data-related/components/localized-fields/object-localized-fields', () => ({
