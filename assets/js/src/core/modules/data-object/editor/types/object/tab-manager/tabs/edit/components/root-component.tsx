@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { ObjectComponent } from './object-component'
 import { Form } from '@Pimcore/components/form/form'
 import { ConfigProvider } from 'antd'
@@ -22,6 +22,7 @@ import {
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/root-component/draft-alert'
 import { FieldWidthProvider } from '../../../../../../../../element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
+import { buildFieldTypeMap } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/utils/build-field-type-map'
 
 interface RootComponentProps {
   layout: DataObjectGetLayoutByIdApiResponse
@@ -30,8 +31,12 @@ interface RootComponentProps {
 }
 
 export const RootComponent = ({ layout, data, className }: RootComponentProps): React.JSX.Element => {
-  const { form, updateModifiedDataObjectAttributes, updateDraft, getChangedFieldName, disabled } = useEditFormContext()
+  const { form, setFieldTypeMap, updateModifiedDataObjectAttributes, updateDraft, getChangedFieldName, disabled } = useEditFormContext()
   const inheritanceState = useInheritanceState()
+
+  useEffect(() => {
+    setFieldTypeMap(buildFieldTypeMap(layout))
+  }, [layout, setFieldTypeMap])
 
   const handleValuesChange = (changedValues: Record<string, any>, allValues: any): void => {
     if (disabled) {

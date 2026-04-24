@@ -8,17 +8,28 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type JestConfigWithTsJest } from 'ts-jest'
+import { type Config } from 'jest'
 
-const config: JestConfigWithTsJest = {
-  preset: 'ts-jest',
+const config: Config = {
   testEnvironment: 'jsdom',
+  transform: {
+    '^.+\\.(t|j)sx?$': ['@swc/jest', {
+      jsc: {
+        parser: { syntax: 'typescript', tsx: true, decorators: true },
+        transform: { react: { runtime: 'automatic' } }
+      }
+    }]
+  },
   setupFilesAfterEnv: [
     '@testing-library/jest-dom',
     './js/test-utils/jest-setup.ts'
   ],
   moduleNameMapper: {
+    '^.+\\.inline\\.svg\\?react$': '<rootDir>/js/test-utils/mocks/svg-react-mock.tsx',
+    '^.+\\.svg\\?react$': '<rootDir>/js/test-utils/mocks/svg-react-mock.tsx',
+    '^.+\\.(css|less|scss|sass)$': '<rootDir>/js/test-utils/mocks/style-mock.ts',
     '^@Pimcore/(.*)$': '<rootDir>/js/src/core/$1',
+    '^@sdk/(.*)$': '<rootDir>/js/src/sdk/$1',
     '^@test-utils/(.*)$': '<rootDir>/js/test-utils/$1'
   },
 }
