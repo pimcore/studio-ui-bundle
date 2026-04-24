@@ -9,7 +9,7 @@
  */
 
 import 'whatwg-fetch'
-import { TextDecoder, TextEncoder } from 'util'
+import { TextDecoder, TextEncoder } from 'node:util'
 
 if (globalThis.TextEncoder === undefined) {
   Object.defineProperty(globalThis, 'TextEncoder', {
