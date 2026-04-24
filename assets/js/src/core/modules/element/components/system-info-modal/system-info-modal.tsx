@@ -27,6 +27,7 @@ import { currentDomain } from '@Pimcore/app/config/app-config'
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { type ClassDefinitionListItem, useClassDefinitionCollectionQuery } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 
 export type ISystemInfoModalData = Element & {
   elementType: ElementType
@@ -52,6 +53,7 @@ export const SystemInfoModal = ({ onClose, data }: ISystemInfoModalProps): React
   const { data: userList } = useUserGetCollectionQuery()
   const { openMainWidget } = useWidgetManager()
   const { data: classDefinitionData } = useClassDefinitionCollectionQuery()
+  const { asset_frontend_prefix: assetFrontendPrefix } = useSettings()
 
   if (isNil(data)) {
     return <></>
@@ -134,13 +136,23 @@ export const SystemInfoModal = ({ onClose, data }: ISystemInfoModalProps): React
     return false
   }
 
+  const getPublicUrl = (): string => {
+    const fullPath = data.fullPath
+
+    if (data.elementType === elementTypes.asset && !isNil(assetFrontendPrefix)) {
+      return `${assetFrontendPrefix}${fullPath}`
+    }
+
+    return `${currentDomain}${fullPath}`
+  }
+
   return (
     <FormKit formProps={ { initialValues: data } }>
       <FormKit.Panel>
         {renderInputItem({ label: t('system-information.id'), name: 'id' })}
         {renderInputItem({ label: t('system-information.path'), name: 'fullPath' })}
         {shouldShowPublicUrl() &&
-          renderInputItem({ label: t('system-information.public-url'), value: `${currentDomain}${data.fullPath}` })
+          renderInputItem({ label: t('system-information.public-url'), value: getPublicUrl() })
         }
         {!isNil(data?.parentId) && renderInputItem({ label: t('system-information.parent-id'), name: 'parentId' })}
         {renderInputItem({
