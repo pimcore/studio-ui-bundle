@@ -8,14 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isUndefined, isEmpty, find, isNil } from 'lodash'
 import { ManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/many-to-many-relation'
 import { type ColumnDef } from '@tanstack/react-table'
 import type { ManyToManyRelationValue, ManyToManyRelationValueItem } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
 import type { IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
-import { enrichRowData, visibleFieldsToColumnDefinitions } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/utils/column-definition'
+import { enrichRowData, visibleFieldsToColumnDefinitions, encodeColumnId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/utils/column-definition'
 import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
 import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
@@ -29,6 +29,8 @@ import { type IUseDataObjectGridsReturn, useDataObjectGrids } from '@Pimcore/mod
 import { useGridOptions } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-grid-options'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
+import { SelectedColumnsContext, type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
+import { useUserContentLanguage } from '@Pimcore/modules/auth/hooks/use-user-content-language'
 
 export interface ManyToManyObjectRelationClassDefinitionProps {
   allowToClearRelation: boolean
@@ -76,6 +78,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   const { getByName } = useClassDefinitions()
 
   const { transformGridColumn, getDefaultVisibleFieldDefinitions } = useGridOptions()
+  const userLanguage = useUserContentLanguage()
 
   const classId = !isUndefined(dataObject) ? getByName(dataObject.className)?.id : ''
   const relationField = props?.combinedFieldName
@@ -83,6 +86,14 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
 
   const [loadedIds, setLoadedIds] = useState<number[]>([])
   const [cachedGridFullData, setCachedGridFullData] = useState<IUseDataObjectGridsReturn['data']>([])
+  const prevLanguageRef = useRef(userLanguage)
+
+  // Synchronously reset caches when language changes, before useDataObjectGrids is called
+  if (prevLanguageRef.current !== userLanguage) {
+    prevLanguageRef.current = userLanguage
+    loadedIds.length > 0 && setLoadedIds([])
+    cachedGridFullData.length > 0 && setCachedGridFullData([])
+  }
 
   const { isLoading: isAvailableGridColumnsLoading, data: availableGridColumnsData } = useDataObjectGetAvailableGridColumnsForRelationQuery({
     classId,
@@ -123,8 +134,11 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   }, [availableGridColumnsData])
 
   const visibleColumns = (visibleFieldDefinitions ?? []).map(col => ({
-    ...col,
-    group: col?.group
+    key: col.key,
+    type: col.type,
+    group: col.group,
+    config: col.config,
+    locale: col.localizable ? userLanguage : undefined
   }))
 
   const { data: gridFullData, isLoading: isGridFullDataLoading } = useDataObjectGrids({
@@ -168,8 +182,36 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     visibleFieldDefinitions,
     disabled: props.inherited === true || props.disabled === true,
     pathFormatterClass: props.pathFormatterClass ?? '',
-    transformGridColumn
+    transformGridColumn,
+    userLanguage
   })
+
+  const selectedColumns = useMemo<SelectedColumn[]>(() => {
+    return (visibleFieldDefinitions ?? []).map(col => {
+      const locale = col.localizable ? userLanguage : null
+      return {
+        key: col.key,
+        type: col.type,
+        config: col.config,
+        sortable: col.sortable ?? false,
+        editable: col.editable ?? false,
+        localizable: col.localizable ?? false,
+        frontendType: col.frontendType,
+        locale,
+        group: col.group as SelectedColumn['group']
+      }
+    })
+  }, [visibleFieldDefinitions, userLanguage])
+
+  const decodeColumnIdentifier = useMemo(() => (columnIdentifier: string): SelectedColumn | undefined => {
+    try {
+      const { key, locale } = JSON.parse(columnIdentifier)
+      const formattedKey = (key as string).replaceAll('**', '.')
+      return selectedColumns.find(col => col.key === formattedKey && (col.locale ?? null) === (locale ?? null))
+    } catch {
+      return undefined
+    }
+  }, [selectedColumns])
 
   const mergedGridFullData = useMemo(() => {
     const existingIds = new Set(cachedGridFullData.map(item => item.id))
@@ -197,15 +239,24 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   )
 
   return (
-    <ManyToManyRelation
-      { ...props }
-      columnDefinition={ [...columnDefinition, ...(props.columnDefinition ?? [])] }
-      dataObjectsAllowed
-      enrichRowData={ handleEnrichRowData }
-      isLoading={ isAvailableGridColumnsLoading || isGridFullDataLoading }
-      value={ props.value }
-      visibleFieldsValue={ visibleFieldsValue }
-    />
+    <SelectedColumnsContext.Provider value={ {
+      selectedColumns,
+      setSelectedColumns: () => {},
+      encodeColumnIdentifier: (col) => encodeColumnId(col.key ?? '', col.locale),
+      decodeColumnIdentifier,
+      shouldMapDataToColumn: (data, col) => data.key === col.key && (data.locale ?? null) === (col.locale ?? null)
+    } }
+    >
+      <ManyToManyRelation
+        { ...props }
+        columnDefinition={ [...columnDefinition, ...(props.columnDefinition ?? [])] }
+        dataObjectsAllowed
+        enrichRowData={ handleEnrichRowData }
+        isLoading={ isAvailableGridColumnsLoading || isGridFullDataLoading }
+        value={ props.value }
+        visibleFieldsValue={ visibleFieldsValue }
+      />
+    </SelectedColumnsContext.Provider>
   )
 }
 
