@@ -20,11 +20,7 @@ jest.mock('@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-re
   VersionObjectLocalizedFields: () => null
 }))
 
-const { DynamicTypeObjectDataLocalizedFields } = jest.requireActual('./dynamic-type-object-data-localized-fields') as {
-  DynamicTypeObjectDataLocalizedFields: new () => {
-    mergeChangedValues: (current: any, incoming: any) => any
-  }
-}
+const { DynamicTypeObjectDataLocalizedFields } = jest.requireActual('./dynamic-type-object-data-localized-fields')
 
 interface DynamicTypeObjectDataLocalizedFieldsLike {
   mergeChangedValues: (current: any, incoming: any) => any
