@@ -433,7 +433,6 @@ export type DataObjectGetGridApiArg = {
         folderId: number;
         columns?: GridColumnRequest[];
         filters?: GridFilter;
-        applyFallbackLanguages?: boolean;
     };
 };
 export type DataObjectGetPhpcodeTransformersApiResponse = /** status 200 List of available PHPCode transformers */ {
