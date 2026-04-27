@@ -1501,6 +1501,10 @@ path_query: Sti og spørring
 auto_create: Opprett automatisk
 widget.redirects: Omdirigeringer
 navigation.redirects: Omdirigeringer
+robots-txt.save-success: robots.txt ble lagret
+robots-txt.on-file-system-warning: En fysisk robots.txt-fil finnes i filsystemet. Konfigurasjonen nedenfor kan bli overstyrt av den filen.
+widget.robots-txt: robots.txt
+navigation.robots-txt: robots.txt
 perspective.default: Standard
 perspective.switching.title: Bytter perspektiv
 perspective.switching.description: Bytter nå til følgende perspektiv
@@ -2229,6 +2233,7 @@ perspective-editor.form.main-nav-permission.experienceEcommerce.emails: E-poster
 perspective-editor.form.main-nav-permission.experienceEcommerce.documentTypes: Dokumenttyper
 perspective-editor.form.main-nav-permission.experienceEcommerce.websiteSettings: Nettstedsinnstillinger
 perspective-editor.form.main-nav-permission.experienceEcommerce.redirects: Omdirigeringer
+perspective-editor.form.main-nav-permission.experienceEcommerce.robotsTxt: robots.txt
 perspective-editor.form.main-nav-permission.category.assetManagement: Ressursbehandling
 perspective-editor.form.main-nav-permission.assetManagement.hidden: Skjul ressursbehandlingsmeny
 perspective-editor.form.main-nav-permission.assetManagement.imageThumbnails: Bildeminiatyrbilder

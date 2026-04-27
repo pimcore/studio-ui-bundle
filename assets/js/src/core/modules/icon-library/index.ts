@@ -318,6 +318,7 @@ import requires from '@Pimcore/assets/icons/requires.inline.svg?react'
 import restore from '@Pimcore/assets/icons/restore.inline.svg?react'
 import reverseObjectRelation from '@Pimcore/assets/icons/reverse-object-relation.inline.svg?react'
 import reverse from '@Pimcore/assets/icons/reverse.inline.svg?react'
+import robot from '@Pimcore/assets/icons/robot.inline.svg?react'
 import run from '@Pimcore/assets/icons/run.inline.svg?react'
 import save from '@Pimcore/assets/icons/save.inline.svg?react'
 import schedule from '@Pimcore/assets/icons/schedule.inline.svg?react'
@@ -1607,6 +1608,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'reverse',
       component: reverse
+    })
+    iconLibrary.register({
+      name: 'robot',
+      component: robot
     })
     iconLibrary.register({
       name: 'run',

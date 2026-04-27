@@ -1501,6 +1501,10 @@ path_query: Percorso e query
 auto_create: Creazione automatica
 widget.redirects: Reindirizzamenti
 navigation.redirects: Reindirizzamenti
+robots-txt.save-success: robots.txt salvato con successo
+robots-txt.on-file-system-warning: Esiste un file fisico robots.txt nel filesystem. La configurazione seguente potrebbe essere sovrascritta da quel file.
+widget.robots-txt: robots.txt
+navigation.robots-txt: robots.txt
 perspective.default: Predefinita
 perspective.switching.title: Cambio prospettiva
 perspective.switching.description: Passaggio alla seguente prospettiva in corso
@@ -2229,6 +2233,7 @@ perspective-editor.form.main-nav-permission.experienceEcommerce.emails: E-mail
 perspective-editor.form.main-nav-permission.experienceEcommerce.documentTypes: Tipi di documento
 perspective-editor.form.main-nav-permission.experienceEcommerce.websiteSettings: Impostazioni sito web
 perspective-editor.form.main-nav-permission.experienceEcommerce.redirects: Reindirizzamenti
+perspective-editor.form.main-nav-permission.experienceEcommerce.robotsTxt: robots.txt
 perspective-editor.form.main-nav-permission.category.assetManagement: Gestione asset
 perspective-editor.form.main-nav-permission.assetManagement.hidden: Nascondi menu gestione asset
 perspective-editor.form.main-nav-permission.assetManagement.imageThumbnails: Anteprime immagini

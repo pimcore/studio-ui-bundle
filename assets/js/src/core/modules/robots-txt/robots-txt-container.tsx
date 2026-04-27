@@ -90,7 +90,7 @@ export const RobotsTxtContainer = (): React.JSX.Element => {
   const tabItems = [
     {
       key: '0',
-      label: t('robots-txt.main-site'),
+      label: t('site-domain.main_site'),
       children: (
         <RobotsTxtSiteEditor
           content={ getContentForSite(0) }
@@ -118,7 +118,7 @@ export const RobotsTxtContainer = (): React.JSX.Element => {
             disabled={ isLoadingOrFetching }
             icon={ { value: 'refresh' } }
             onClick={ () => { void refetch() } }
-            tooltip={ { title: t('robots-txt.refresh') } }
+            tooltip={ { title: t('toolbar.reload') } }
           />
 
           <Button
@@ -126,7 +126,7 @@ export const RobotsTxtContainer = (): React.JSX.Element => {
             onClick={ handleSave }
             type='primary'
           >
-            { t('robots-txt.save') }
+            { t('save') }
           </Button>
         </Toolbar>
       }

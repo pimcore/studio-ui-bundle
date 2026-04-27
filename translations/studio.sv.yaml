@@ -1501,6 +1501,10 @@ path_query: Sökväg och Query
 auto_create: Skapa automatiskt
 widget.redirects: Omdirigeringar
 navigation.redirects: Omdirigeringar
+robots-txt.save-success: robots.txt sparades
+robots-txt.on-file-system-warning: En fysisk robots.txt-fil finns i filsystemet. Konfigurationen nedan kan åsidosättas av den filen.
+widget.robots-txt: robots.txt
+navigation.robots-txt: robots.txt
 perspective.default: Standard
 perspective.switching.title: Byter perspektiv
 perspective.switching.description: Byter just nu till följande perspektiv
@@ -2229,6 +2233,7 @@ perspective-editor.form.main-nav-permission.experienceEcommerce.emails: E-postme
 perspective-editor.form.main-nav-permission.experienceEcommerce.documentTypes: Dokumenttyper
 perspective-editor.form.main-nav-permission.experienceEcommerce.websiteSettings: Webbplatsinställningar
 perspective-editor.form.main-nav-permission.experienceEcommerce.redirects: Omdirigeringar
+perspective-editor.form.main-nav-permission.experienceEcommerce.robotsTxt: robots.txt
 perspective-editor.form.main-nav-permission.category.assetManagement: Assethantering
 perspective-editor.form.main-nav-permission.assetManagement.hidden: Dölj assethanteringsmenyn
 perspective-editor.form.main-nav-permission.assetManagement.imageThumbnails: Bildminiatyrbilder
