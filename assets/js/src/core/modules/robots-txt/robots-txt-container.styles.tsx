@@ -12,22 +12,10 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ css }) => {
   return {
-    editorWrapper: css`
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-
-      > div {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .cm-editor {
-        flex: 1;
-        min-height: 0;
-      }
+    tabsWrapper: css`
+      position: relative;
+      flex: 1;
+      min-height: 0;
     `
   }
 })
