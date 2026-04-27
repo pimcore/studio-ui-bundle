@@ -19,7 +19,7 @@ import { RobotsTxtContainer } from './robots-txt-container'
 import type { WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 
 export const ROBOTS_TXT_WIDGET: WidgetManagerTabConfig = {
-  name: 'Robots.txt',
+  name: 'robots.txt',
   id: 'robots-txt',
   component: 'robots-txt',
   config: {
