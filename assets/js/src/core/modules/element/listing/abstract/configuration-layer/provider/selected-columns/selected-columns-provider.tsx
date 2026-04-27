@@ -45,12 +45,15 @@ export const SelectedColumnsContext = createContext<SelectedColumnsContextProps>
 
 export interface SelectedColumnsProviderProps {
   children: React.ReactNode
+  columns?: SelectedColumn[]
 }
 
-export const SelectedColumnsProvider = ({ children }: SelectedColumnsProviderProps): React.JSX.Element => {
-  const [selectedColumns, setSelectedColumns] = useState<SelectedColumn[]>([])
+export const SelectedColumnsProvider = ({ children, columns: controlledColumns }: SelectedColumnsProviderProps): React.JSX.Element => {
+  const [internalColumns, setSelectedColumns] = useState<SelectedColumn[]>([])
   const { useColumnMapper } = useSettings()
   const columnMapper = useColumnMapper()
+
+  const selectedColumns = controlledColumns ?? internalColumns
 
   const formattedSelectedColumns: SelectedColumn[] = useMemo(() => {
     return selectedColumns.map(column => ({

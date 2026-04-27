@@ -15,7 +15,7 @@ import { ManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/defin
 import { type ColumnDef } from '@tanstack/react-table'
 import type { ManyToManyRelationValue, ManyToManyRelationValueItem } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
 import type { IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
-import { enrichRowData, visibleFieldsToColumnDefinitions, encodeColumnId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/utils/column-definition'
+import { enrichRowData, visibleFieldsToColumnDefinitions } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/utils/column-definition'
 import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
 import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
@@ -29,7 +29,7 @@ import { type IUseDataObjectGridsReturn, useDataObjectGrids } from '@Pimcore/mod
 import { useGridOptions } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-grid-options'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
-import { SelectedColumnsContext, type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
+import { SelectedColumnsProvider, type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
 import { useUserContentLanguage } from '@Pimcore/modules/auth/hooks/use-user-content-language'
 
 export interface ManyToManyObjectRelationClassDefinitionProps {
@@ -203,16 +203,6 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     })
   }, [visibleFieldDefinitions, userLanguage])
 
-  const decodeColumnIdentifier = useMemo(() => (columnIdentifier: string): SelectedColumn | undefined => {
-    try {
-      const { key, locale } = JSON.parse(columnIdentifier)
-      const formattedKey = (key as string).replaceAll('**', '.')
-      return selectedColumns.find(col => col.key === formattedKey && (col.locale ?? null) === (locale ?? null))
-    } catch {
-      return undefined
-    }
-  }, [selectedColumns])
-
   const mergedGridFullData = useMemo(() => {
     const existingIds = new Set(cachedGridFullData.map(item => item.id))
 
@@ -238,16 +228,8 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     [mergedGridFullData, visibleFieldDefinitions]
   )
 
-  const selectedColumnsContextValue = useMemo(() => ({
-    selectedColumns,
-    setSelectedColumns: () => {},
-    encodeColumnIdentifier: (col: SelectedColumn) => encodeColumnId(col.key ?? '', col.locale),
-    decodeColumnIdentifier,
-    shouldMapDataToColumn: (data: any, col: SelectedColumn) => data.key === col.key && (data.locale ?? null) === (col.locale ?? null)
-  }), [selectedColumns, decodeColumnIdentifier])
-
   return (
-    <SelectedColumnsContext.Provider value={ selectedColumnsContextValue }>
+    <SelectedColumnsProvider columns={ selectedColumns }>
       <ManyToManyRelation
         { ...props }
         columnDefinition={ [...columnDefinition, ...(props.columnDefinition ?? [])] }
@@ -257,7 +239,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
         value={ props.value }
         visibleFieldsValue={ visibleFieldsValue }
       />
-    </SelectedColumnsContext.Provider>
+    </SelectedColumnsProvider>
   )
 }
 
