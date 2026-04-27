@@ -122,6 +122,7 @@ export const RobotsTxtContainer = (): React.JSX.Element => {
           />
 
           <Button
+            disabled={ data?.onFileSystem === true }
             loading={ isSaving }
             onClick={ handleSave }
             type='primary'
