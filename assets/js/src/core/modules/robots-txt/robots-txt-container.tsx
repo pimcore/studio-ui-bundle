@@ -121,14 +121,24 @@ export const RobotsTxtContainer = (): React.JSX.Element => {
             tooltip={ { title: t('toolbar.reload') } }
           />
 
-          <Button
-            disabled={ data?.onFileSystem === true }
-            loading={ isSaving }
-            onClick={ handleSave }
-            type='primary'
-          >
-            { t('save') }
-          </Button>
+          <div className={ styles.toolbarRight }>
+            { data?.onFileSystem === true && (
+              <Alert
+                message={ t('robots-txt.on-file-system-warning') }
+                showIcon
+                type='warning'
+              />
+            ) }
+
+            <Button
+              disabled={ data?.onFileSystem === true }
+              loading={ isSaving }
+              onClick={ handleSave }
+              type='primary'
+            >
+              { t('save') }
+            </Button>
+          </div>
         </Toolbar>
       }
     >
@@ -143,14 +153,6 @@ export const RobotsTxtContainer = (): React.JSX.Element => {
           )
         : (
           <div className={ styles.inner }>
-            { !isNil(data) && data.onFileSystem && (
-              <Alert
-                message={ t('robots-txt.on-file-system-warning') }
-                showIcon
-                type='warning'
-              />
-            ) }
-
             <Tabs
               destroyInactiveTabPane
               fullHeight

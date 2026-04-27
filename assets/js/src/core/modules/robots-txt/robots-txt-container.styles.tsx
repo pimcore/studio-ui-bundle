@@ -32,6 +32,11 @@ export const useStyles = createStyles(({ token, css }) => {
         flex: 1;
         min-height: 0;
       }
+    `,
+    toolbarRight: css`
+      display: flex;
+      align-items: center;
+      gap: ${token.marginSM}px;
     `
   }
 })
