@@ -56,7 +56,7 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, dataVa
           }
         }
       },
-      { skip: isEmpty(columns) || isEmptyValue(filterValue) }
+      { skip: isEmpty(columns) || isEmptyValue(filterValue), refetchOnMountOrArgChange: true }
     )
   })
 
