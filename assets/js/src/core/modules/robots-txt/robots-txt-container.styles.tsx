@@ -36,18 +36,6 @@ export const useStyles = createStyles(({ token, css }) => {
     toolbarRight: css`
       display: flex;
       align-items: center;
-      gap: ${token.marginSM}px;
-    `,
-    filesystemWarning: css`
-      display: flex;
-      align-items: center;
-      gap: ${token.marginXS}px;
-      color: ${token.colorWarning};
-
-      .ant-typography {
-        color: ${token.colorWarning};
-        font-size: ${token.fontSizeSM}px;
-      }
     `
   }
 })

@@ -11,8 +11,7 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, ContentLayout, IconButton, Toolbar } from '@sdk/components'
-import { Icon } from '@Pimcore/components/icon/icon'
-import { Typography } from 'antd'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { isNil } from 'lodash'
 import { useStyles } from './robots-txt-container.styles'
 import { useBundleSeoRobotsTxtGetQuery, useBundleSeoRobotsTxtUpdateMutation } from '../redirects/seo-api-slice-enhanced'
@@ -123,21 +122,18 @@ export const RobotsTxtContainer = (): React.JSX.Element => {
           />
 
           <div className={ styles.toolbarRight }>
-            { data?.onFileSystem === true && (
-              <div className={ styles.filesystemWarning }>
-                <Icon value='alert-circle' />
-                <Typography.Text>{ t('robots-txt.on-file-system-warning') }</Typography.Text>
-              </div>
-            ) }
-
-            <Button
-              disabled={ data?.onFileSystem === true }
-              loading={ isSaving }
-              onClick={ handleSave }
-              type='primary'
-            >
-              { t('save') }
-            </Button>
+            <Tooltip title={ data?.onFileSystem === true ? t('robots-txt.on-file-system-warning') : undefined }>
+              <span>
+                <Button
+                  disabled={ data?.onFileSystem === true }
+                  loading={ isSaving }
+                  onClick={ handleSave }
+                  type='primary'
+                >
+                  { t('save') }
+                </Button>
+              </span>
+            </Tooltip>
           </div>
         </Toolbar>
       }
