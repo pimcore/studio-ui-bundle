@@ -247,8 +247,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   }), [selectedColumns, decodeColumnIdentifier])
 
   return (
-    <SelectedColumnsContext.Provider value={ selectedColumnsContextValue }
-    >
+    <SelectedColumnsContext.Provider value={ selectedColumnsContextValue }>
       <ManyToManyRelation
         { ...props }
         columnDefinition={ [...columnDefinition, ...(props.columnDefinition ?? [])] }
