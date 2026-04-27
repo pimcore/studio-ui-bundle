@@ -9,7 +9,7 @@
  */
 
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
-import React, { createContext, useCallback, useMemo, useState } from 'react'
+import React, { createContext, useMemo, useState } from 'react'
 import { useColumnMapper as defaultUseColumnMapper } from './use-column-mapper'
 import { useSettings } from '../../../settings/use-settings'
 
@@ -49,66 +49,29 @@ export interface SelectedColumnsProviderProps {
   columns?: SelectedColumn[]
 }
 
-type SetSelectedColumns = SelectedColumnsContextProps['setSelectedColumns']
-type ColumnMapper = ReturnType<typeof defaultUseColumnMapper>
-
-const NOOP_SET_SELECTED_COLUMNS: SetSelectedColumns = () => {}
-
-const formatSelectedColumns = (columns: SelectedColumn[]): SelectedColumn[] => {
-  return columns.map(column => ({
-    ...column,
-    key: column.originalApiDefinition?.__meta?.advancedColumnConfig?.title ?? column.key
-  }))
-}
-
-const useSelectedColumnsContextValue = ({
-  selectedColumns,
-  setSelectedColumns,
-  columnMapper
-}: {
-  selectedColumns: SelectedColumn[]
-  setSelectedColumns: SetSelectedColumns
-  columnMapper: ColumnMapper
-}): SelectedColumnsContextProps => {
-  const formattedSelectedColumns: SelectedColumn[] = useMemo(() => formatSelectedColumns(selectedColumns), [selectedColumns])
-
-  const encodeColumnIdentifier = useCallback((column: SelectedColumn): string => {
-    return columnMapper.encodeColumnIdentifier(column)
-  }, [columnMapper])
-
-  const decodeColumnIdentifier = useCallback((columnIdentifier: string): SelectedColumn | undefined => {
-    return columnMapper.decodeColumnIdentifier(columnIdentifier, formattedSelectedColumns)
-  }, [columnMapper, formattedSelectedColumns])
-
-  const shouldMapDataToColumn = useCallback((data: any, column: SelectedColumn): boolean => {
-    return columnMapper.shouldMapDataToColumn(data, column)
-  }, [columnMapper])
-
-  return useMemo(() => ({
-    selectedColumns: formattedSelectedColumns,
-    setSelectedColumns,
-    encodeColumnIdentifier,
-    decodeColumnIdentifier,
-    shouldMapDataToColumn
-  }), [
-    decodeColumnIdentifier,
-    encodeColumnIdentifier,
-    formattedSelectedColumns,
-    setSelectedColumns,
-    shouldMapDataToColumn
-  ])
-}
-
 // When columns are controlled externally (e.g. ManyToManyObjectRelation), we skip
 // useSettings (which requires SettingsProvider) and use the default column mapper directly.
 const ControlledSelectedColumnsProvider = ({ children, columns }: { children: React.ReactNode, columns: SelectedColumn[] }): React.JSX.Element => {
   const columnMapper = defaultUseColumnMapper()
 
-  const contextValue = useSelectedColumnsContextValue({
-    selectedColumns: columns,
-    setSelectedColumns: NOOP_SET_SELECTED_COLUMNS,
-    columnMapper
-  })
+  const formattedSelectedColumns: SelectedColumn[] = useMemo(() => {
+    return columns.map(column => ({
+      ...column,
+      key: column.originalApiDefinition?.__meta?.advancedColumnConfig?.title ?? column.key
+    }))
+  }, [columns])
+
+  const encodeColumnIdentifier = (column: SelectedColumn): string => columnMapper.encodeColumnIdentifier(column)
+  const decodeColumnIdentifier = (columnIdentifier: string): SelectedColumn | undefined => columnMapper.decodeColumnIdentifier(columnIdentifier, formattedSelectedColumns)
+  const shouldMapDataToColumn = (data: any, column: SelectedColumn): boolean => columnMapper.shouldMapDataToColumn(data, column)
+
+  const contextValue = useMemo(() => ({
+    selectedColumns: formattedSelectedColumns,
+    setSelectedColumns: () => {},
+    encodeColumnIdentifier,
+    decodeColumnIdentifier,
+    shouldMapDataToColumn
+  }), [formattedSelectedColumns])
 
   return (
     <SelectedColumnsContext.Provider value={ contextValue }>
@@ -122,11 +85,24 @@ const UncontrolledSelectedColumnsProvider = ({ children }: { children: React.Rea
   const { useColumnMapper } = useSettings()
   const columnMapper = useColumnMapper()
 
-  const contextValue = useSelectedColumnsContextValue({
-    selectedColumns,
+  const formattedSelectedColumns: SelectedColumn[] = useMemo(() => {
+    return selectedColumns.map(column => ({
+      ...column,
+      key: column.originalApiDefinition?.__meta?.advancedColumnConfig?.title ?? column.key
+    })) ?? []
+  }, [selectedColumns])
+
+  const encodeColumnIdentifier = (column: SelectedColumn): string => columnMapper.encodeColumnIdentifier(column)
+  const decodeColumnIdentifier = (columnIdentifier: string): SelectedColumn | undefined => columnMapper.decodeColumnIdentifier(columnIdentifier, formattedSelectedColumns)
+  const shouldMapDataToColumn = (data: any, column: SelectedColumn): boolean => columnMapper.shouldMapDataToColumn(data, column)
+
+  const contextValue = useMemo(() => ({
+    selectedColumns: formattedSelectedColumns,
     setSelectedColumns,
-    columnMapper
-  })
+    encodeColumnIdentifier,
+    decodeColumnIdentifier,
+    shouldMapDataToColumn
+  }), [formattedSelectedColumns])
 
   return (
     <SelectedColumnsContext.Provider value={ contextValue }>
