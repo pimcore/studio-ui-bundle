@@ -2424,7 +2424,7 @@ user-management.permissions.newsletters: Nyhetsbrev
 user-management.permissions.targeting: Targeting
 user-management.permissions.http_errors: HTTP-fel
 user-management.permissions.seo_document_editor: SEO-dokumentredigerare
-user-management.permissions."robots.txt": robots.txt
+user-management.permissions.robots.txt: robots.txt
 user-management.permissions.routes: Rutter
 user-management.permissions.word_export: Word-export
 user-management.permissions.xliff_import_export: XLIFF Import/Export
@@ -2460,6 +2460,8 @@ user-management.permissions.plugin_datahub_permission_update: Datahub Uppdaterin
 user-management.permissions.portal-engine_collection-access: Åtkomst till backend-samlingar
 user-management.permissions.portal-engine_index-management: Hantering av portalindex
 user-management.permissions.portal-engine_wizard: Portalens installationsguide
+user-management.permissions.studio_perspective_editor: Perspektivredigerare
+user-management.permissions.studio_perspective_widget_editor: Perspektiv-widgetredigerare
 user-management.permissions.wai_configuration_permission: Konfiguration av automatiseringsmallar
 forgot-password-form.username: Ange ditt användarnamn så skickar Pimcore en inloggningslänk till din e-postadress
 forgot-password-form.username.placeholder: Användarnamn
