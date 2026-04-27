@@ -29,7 +29,7 @@ export const loadReportsMenuItems = async (): Promise<void> => {
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
     try {
-      const reportsData = await store.dispatch(api.endpoints.customReportsGetTree.initiate({ page: 1, pageSize: 999999 }, { forceRefetch: true })).unwrap()
+      const reportsData = await store.dispatch(api.endpoints.customReportsGetTree.initiate(undefined, { forceRefetch: true })).unwrap()
 
       if (!isUndefined(reportsData?.items)) {
         const validPaths = new Set<string>()
