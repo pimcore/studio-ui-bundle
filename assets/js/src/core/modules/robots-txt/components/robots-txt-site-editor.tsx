@@ -22,12 +22,14 @@ export const RobotsTxtSiteEditor = (props: RobotsTxtSiteEditorProps): React.JSX.
   const { styles } = useStyles()
 
   return (
-    <CodeEditor
-      className={ styles.editor }
-      height='100%'
-      onChange={ onChange }
-      preset='text'
-      value={ content }
-    />
+    <div className={ styles.editorWrapper }>
+      <CodeEditor
+        height='100%'
+        onChange={ onChange }
+        preset='text'
+        value={ content }
+      />
+    </div>
+  )
   )
 }
