@@ -11,22 +11,20 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, ContentLayout, IconButton, Toolbar } from '@sdk/components'
+import { Content } from '@Pimcore/components/content/content'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { isNil } from 'lodash'
-import { useStyles } from './robots-txt-container.styles'
 import { useBundleSeoRobotsTxtGetQuery, useBundleSeoRobotsTxtUpdateMutation } from '../redirects/seo-api-slice-enhanced'
 import trackError, { ApiError } from '../app/error-handler'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
-import { Spin } from '@Pimcore/components/spin/spin'
 import { RobotsTxtSiteEditor } from './components/robots-txt-site-editor'
 import type { BundleSeoRobotsTxtSiteConfig } from '../redirects/seo-api-slice-enhanced'
 
 export const RobotsTxtContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const messageApi = useMessage()
-  const { styles } = useStyles()
   const { getAllSites } = useSites({ excludeMainSite: true })
 
   const { data, isLoading, isFetching, error: loadError, refetch } = useBundleSeoRobotsTxtGetQuery(undefined, {
@@ -121,42 +119,29 @@ export const RobotsTxtContainer = (): React.JSX.Element => {
             tooltip={ { title: t('toolbar.reload') } }
           />
 
-          <div className={ styles.toolbarRight }>
-            <Tooltip title={ data?.onFileSystem === true ? t('robots-txt.on-file-system-warning') : undefined }>
-              <span>
-                <Button
-                  disabled={ isLoadingOrFetching || data?.onFileSystem === true }
-                  loading={ isSaving }
-                  onClick={ handleSave }
-                  type='primary'
-                >
-                  { t('save') }
-                </Button>
-              </span>
-            </Tooltip>
-          </div>
+          <Tooltip title={ data?.onFileSystem === true ? t('robots-txt.on-file-system-warning') : undefined }>
+            <span>
+              <Button
+                disabled={ isLoadingOrFetching || data?.onFileSystem === true }
+                loading={ isSaving }
+                onClick={ handleSave }
+                type='primary'
+              >
+                { t('save') }
+              </Button>
+            </span>
+          </Tooltip>
         </Toolbar>
       }
     >
-      { isLoadingOrFetching
-        ? (
-          <div className={ styles.loadingContainer }>
-            <Spin
-              asContainer
-              tip='Loading'
-            />
-          </div>
-          )
-        : (
-          <div className={ styles.inner }>
-            <Tabs
-              destroyInactiveTabPane
-              fullHeight
-              items={ tabItems }
-              type='card'
-            />
-          </div>
-          ) }
+      <Content loading={ isLoadingOrFetching }>
+        <Tabs
+          destroyInactiveTabPane
+          fullHeight
+          items={ tabItems }
+          type='card'
+        />
+      </Content>
     </ContentLayout>
   )
 }
