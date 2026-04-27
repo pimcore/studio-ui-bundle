@@ -13121,6 +13121,10 @@
                                     },
                                     "filters": {
                                         "$ref": "#/components/schemas/Filter"
+                                    },
+                                    "applyFallbackLanguages": {
+                                        "type": "boolean",
+                                        "example": false
                                     }
                                 },
                                 "type": "object"
