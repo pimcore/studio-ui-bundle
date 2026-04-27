@@ -1502,7 +1502,7 @@ auto_create: Automatisch erstellen
 widget.redirects: Weiterleitungen
 navigation.redirects: Weiterleitungen
 robots-txt.save-success: robots.txt erfolgreich gespeichert
-robots-txt.on-file-system-warning: Es existiert eine physische robots.txt-Datei im Dateisystem. Die unten stehende Konfiguration kann durch diese Datei überschrieben werden.
+robots-txt.on-file-system-warning: Speichern deaktiviert: Eine physische robots.txt-Datei existiert im Dateisystem.
 widget.robots-txt: robots.txt
 navigation.robots-txt: robots.txt
 perspective.default: Standard

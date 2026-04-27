@@ -1502,7 +1502,7 @@ redirects.csv-import-results.close: Close
 redirects.csv-import-results.errors-details: Error Details
 redirects.csv-import-results.line: Line {{line}}
 robots-txt.save-success: robots.txt saved successfully
-robots-txt.on-file-system-warning: A physical robots.txt file exists on the filesystem. The configuration below may be overridden by that file.
+robots-txt.on-file-system-warning: Saving disabled: a physical robots.txt file exists on the filesystem.
 path: Path
 entire_uri: Entire URI
 path_query: Path and Query

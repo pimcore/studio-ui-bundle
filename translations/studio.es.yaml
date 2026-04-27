@@ -1502,7 +1502,7 @@ auto_create: Creación automática
 widget.redirects: Redirecciones
 navigation.redirects: Redirecciones
 robots-txt.save-success: robots.txt guardado correctamente
-robots-txt.on-file-system-warning: Existe un archivo robots.txt físico en el sistema de archivos. La configuración a continuación puede ser reemplazada por ese archivo.
+robots-txt.on-file-system-warning: Guardado desactivado: existe un archivo robots.txt físico en el sistema de archivos.
 widget.robots-txt: robots.txt
 navigation.robots-txt: robots.txt
 perspective.default: Predeterminada

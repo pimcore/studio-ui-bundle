@@ -1502,7 +1502,7 @@ auto_create: Skapa automatiskt
 widget.redirects: Omdirigeringar
 navigation.redirects: Omdirigeringar
 robots-txt.save-success: robots.txt sparades
-robots-txt.on-file-system-warning: En fysisk robots.txt-fil finns i filsystemet. Konfigurationen nedan kan åsidosättas av den filen.
+robots-txt.on-file-system-warning: Sparande inaktiverat: en fysisk robots.txt-fil finns i filsystemet.
 widget.robots-txt: robots.txt
 navigation.robots-txt: robots.txt
 perspective.default: Standard
