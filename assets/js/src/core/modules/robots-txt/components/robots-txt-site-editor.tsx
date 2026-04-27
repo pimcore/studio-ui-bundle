@@ -10,7 +10,6 @@
 
 import React from 'react'
 import { CodeEditor } from '@Pimcore/components/code-editor/code-editor'
-import { useStyles } from './robots-txt-site-editor.styles'
 
 interface RobotsTxtSiteEditorProps {
   content: string
@@ -19,16 +18,13 @@ interface RobotsTxtSiteEditorProps {
 
 export const RobotsTxtSiteEditor = (props: RobotsTxtSiteEditorProps): React.JSX.Element => {
   const { content, onChange } = props
-  const { styles } = useStyles()
 
   return (
-    <div className={ styles.editorWrapper }>
-      <CodeEditor
-        height='100%'
-        onChange={ onChange }
-        preset='text'
-        value={ content }
-      />
-    </div>
+    <CodeEditor
+      minHeight='100%'
+      onChange={ onChange }
+      preset='text'
+      value={ content }
+    />
   )
 }

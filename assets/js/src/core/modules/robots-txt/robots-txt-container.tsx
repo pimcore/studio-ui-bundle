@@ -137,7 +137,6 @@ export const RobotsTxtContainer = (): React.JSX.Element => {
       <Content loading={ isLoadingOrFetching }>
         <Tabs
           destroyInactiveTabPane
-          fullHeight
           items={ tabItems }
           type='card'
         />
