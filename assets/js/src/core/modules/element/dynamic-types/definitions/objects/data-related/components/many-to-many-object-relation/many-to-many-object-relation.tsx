@@ -87,10 +87,16 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   const [loadedIds, setLoadedIds] = useState<number[]>([])
   const [cachedGridFullData, setCachedGridFullData] = useState<IUseDataObjectGridsReturn['data']>([])
   const prevLanguageRef = useRef(userLanguage)
+  const prevModificationDateRef = useRef(dataObject?.modificationDate)
 
-  // Synchronously reset caches when language changes, before useDataObjectGrids is called
-  if (prevLanguageRef.current !== userLanguage) {
+  // Synchronously reset caches when language changes or the object is refreshed,
+  // before useDataObjectGrids is called
+  const shouldReset = prevLanguageRef.current !== userLanguage ||
+    (dataObject?.modificationDate !== undefined && prevModificationDateRef.current !== dataObject.modificationDate)
+
+  if (shouldReset) {
     prevLanguageRef.current = userLanguage
+    prevModificationDateRef.current = dataObject?.modificationDate
     loadedIds.length > 0 && setLoadedIds([])
     cachedGridFullData.length > 0 && setCachedGridFullData([])
   }
