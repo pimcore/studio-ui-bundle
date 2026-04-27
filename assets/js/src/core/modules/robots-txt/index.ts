@@ -26,7 +26,7 @@ export const ROBOTS_TXT_WIDGET: WidgetManagerTabConfig = {
     translationKey: 'widget.robots-txt',
     icon: {
       type: 'name',
-      value: 'file-text'
+      value: 'robot'
     }
   }
 }
