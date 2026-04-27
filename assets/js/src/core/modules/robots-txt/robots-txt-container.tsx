@@ -14,7 +14,6 @@ import { Button, ContentLayout, IconButton, Toolbar } from '@sdk/components'
 import { Content } from '@Pimcore/components/content/content'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { isNil } from 'lodash'
-import { useStyles } from './robots-txt-container.styles'
 import { useBundleSeoRobotsTxtGetQuery, useBundleSeoRobotsTxtUpdateMutation } from '../redirects/seo-api-slice-enhanced'
 import trackError, { ApiError } from '../app/error-handler'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
@@ -26,7 +25,6 @@ import type { BundleSeoRobotsTxtSiteConfig } from '../redirects/seo-api-slice-en
 export const RobotsTxtContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const messageApi = useMessage()
-  const { styles } = useStyles()
   const { getAllSites } = useSites({ excludeMainSite: true })
 
   const { data, isLoading, isFetching, error: loadError, refetch } = useBundleSeoRobotsTxtGetQuery(undefined, {
@@ -137,13 +135,12 @@ export const RobotsTxtContainer = (): React.JSX.Element => {
       }
     >
       <Content loading={ isLoadingOrFetching }>
-        <div className={ styles.tabsWrapper }>
-          <Tabs
-            destroyInactiveTabPane
-            items={ tabItems }
-            type='card'
-          />
-        </div>
+        <Tabs
+          destroyInactiveTabPane
+          fullHeight
+          items={ tabItems }
+          type='card'
+        />
       </Content>
     </ContentLayout>
   )

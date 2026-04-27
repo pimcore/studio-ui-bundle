@@ -13,8 +13,7 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ css }) => {
   return {
     editorWrapper: css`
-      position: absolute;
-      inset: 0;
+      height: 100%;
       display: flex;
       flex-direction: column;
 
