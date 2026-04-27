@@ -17,7 +17,6 @@ import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
 import type { FormInstance } from 'antd'
 import type { NamePath } from 'rc-field-form/es/interface'
 import { toCssDimension } from '@Pimcore/utils/css'
-import { getLocaleDateFormat, getLocaleDateTimeFormat } from '@Pimcore/utils/date-time'
 
 export type AbstractDateObjectDataDefinition = AbstractObjectDataDefinition & {
   defaultValue?: number | string | null
@@ -42,13 +41,11 @@ const getDefaultValue = (props: AbstractDateObjectDataDefinition): number | stri
 export abstract class DynamicTypeObjectDataAbstractDate extends DynamicTypeObjectDataAbstract {
   getObjectDataComponent (props: AbstractDateObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     const outputType = props.outputType ?? 'dateString'
-    const displayFormat = props.showTime !== undefined && props.showTime !== false ? getLocaleDateTimeFormat() : getLocaleDateFormat()
     return (
       <DatePicker
         allowClear
         className={ cn('w-full', props.className) }
         disabled={ props.noteditable === true }
-        displayFormat={ displayFormat }
         inherited={ props.inherited }
         outputFormat={ props.respectTimezone !== false || outputType !== 'dateString' ? undefined : props.outputFormat }
         outputType={ outputType }
