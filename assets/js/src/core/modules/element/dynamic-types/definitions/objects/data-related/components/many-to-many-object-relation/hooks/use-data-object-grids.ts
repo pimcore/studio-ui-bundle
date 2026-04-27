@@ -19,6 +19,7 @@ import { type UseClassDefinitionsReturn } from '@Pimcore/modules/data-object/uti
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 interface IUseDataObjectGridsProps {
+  elementId: number
   classIds?: string[]
   convertClassName: UseClassDefinitionsReturn['getByName']
   columns?: GridColumnRequest[]
@@ -30,7 +31,7 @@ export interface IUseDataObjectGridsReturn {
   data: DataObjectGetGridApiResponse['items']
 }
 
-export const useDataObjectGrids = ({ classIds, convertClassName, columns, dataValue }: IUseDataObjectGridsProps): IUseDataObjectGridsReturn => {
+export const useDataObjectGrids = ({ elementId, classIds, convertClassName, columns, dataValue }: IUseDataObjectGridsProps): IUseDataObjectGridsReturn => {
   const queries = (classIds ?? []).map((classId: string) => {
     const filterValue = map(
       filter(dataValue, { subtype: classId }),
@@ -42,6 +43,7 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, dataVa
         classId: convertClassName(classId)?.id ?? '',
         body: {
           folderId: 1,
+          elementId,
           columns,
           applyFallbackLanguages: true,
           filters: {

@@ -142,6 +142,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   }))
 
   const { data: gridFullData, isLoading: isGridFullDataLoading } = useDataObjectGrids({
+    elementId: id,
     classIds: dataRelationClasses,
     convertClassName: getByName,
     columns: visibleColumns,

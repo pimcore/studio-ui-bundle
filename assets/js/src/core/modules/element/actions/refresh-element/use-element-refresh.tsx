@@ -12,7 +12,7 @@ import { type ElementType } from '../../../../types/enums/element/element-type'
 import { useAppDispatch } from '@sdk/app'
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { api as dataObjectApi } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
-import { invalidatingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { removeAsset } from '@Pimcore/modules/asset/asset-draft-slice'
 import { removeDataObject } from '@Pimcore/modules/data-object/data-object-draft-slice'
 import { useDataObjectDraftFetcher } from '@Pimcore/modules/data-object/hooks/use-data-object-draft-fetcher'
@@ -50,10 +50,9 @@ export const useElementRefresh = (elementType: ElementType): UseElementRefreshHo
     } else if (elementType === 'data-object') {
       dispatch(removeDataObject(id))
       dispatch(
-        dataObjectApi.util.invalidateTags([
-          ...invalidatingTags.DATA_OBJECT_DETAIL_ID(id),
-          tagNames.DATA_OBJECT_GRID
-        ])
+        dataObjectApi.util.invalidateTags(
+          invalidatingTags.DATA_OBJECT_DETAIL_ID(id)
+        )
       )
 
       void updateDataObjectDraft(id, true)
