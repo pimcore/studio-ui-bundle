@@ -2424,7 +2424,7 @@ user-management.permissions.newsletters: Newsletters
 user-management.permissions.targeting: Ciblage
 user-management.permissions.http_errors: Erreurs HTTP
 user-management.permissions.seo_document_editor: Éditeur SEO de documents
-user-management.permissions."robots.txt": robots.txt
+user-management.permissions.robots.txt: robots.txt
 user-management.permissions.routes: Routes
 user-management.permissions.word_export: Export Word
 user-management.permissions.xliff_import_export: Import/Export XLIFF
@@ -2460,6 +2460,8 @@ user-management.permissions.plugin_datahub_permission_update: Datahub Mise à jo
 user-management.permissions.portal-engine_collection-access: Accès aux collections du backend
 user-management.permissions.portal-engine_index-management: Gestion des index du portail
 user-management.permissions.portal-engine_wizard: Assistant de configuration du portail
+user-management.permissions.studio_perspective_editor: Éditeur de perspectives
+user-management.permissions.studio_perspective_widget_editor: Éditeur de widgets de perspectives
 user-management.permissions.wai_configuration_permission: Configuration des modèles d'automatisation
 forgot-password-form.username: Entrez votre nom d'utilisateur et Pimcore enverra un lien de connexion à votre adresse e-mail
 forgot-password-form.username.placeholder: Nom d'utilisateur
