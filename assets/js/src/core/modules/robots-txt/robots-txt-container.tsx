@@ -11,13 +11,14 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, ContentLayout, IconButton, Toolbar } from '@sdk/components'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { Typography } from 'antd'
 import { isNil } from 'lodash'
 import { useStyles } from './robots-txt-container.styles'
 import { useBundleSeoRobotsTxtGetQuery, useBundleSeoRobotsTxtUpdateMutation } from '../redirects/seo-api-slice-enhanced'
 import trackError, { ApiError } from '../app/error-handler'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
 import { useMessage } from '@Pimcore/components/message/useMessage'
-import { Alert } from '@Pimcore/components/alert/alert'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { RobotsTxtSiteEditor } from './components/robots-txt-site-editor'
@@ -123,11 +124,10 @@ export const RobotsTxtContainer = (): React.JSX.Element => {
 
           <div className={ styles.toolbarRight }>
             { data?.onFileSystem === true && (
-              <Alert
-                message={ t('robots-txt.on-file-system-warning') }
-                showIcon
-                type='warning'
-              />
+              <div className={ styles.filesystemWarning }>
+                <Icon value='alert-circle' />
+                <Typography.Text>{ t('robots-txt.on-file-system-warning') }</Typography.Text>
+              </div>
             ) }
 
             <Button
