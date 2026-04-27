@@ -87,20 +87,12 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   const [loadedIds, setLoadedIds] = useState<number[]>([])
   const [cachedGridFullData, setCachedGridFullData] = useState<IUseDataObjectGridsReturn['data']>([])
   const prevLanguageRef = useRef(userLanguage)
-  const prevDataObjectRef = useRef(dataObject)
 
-  // Synchronously reset caches when language changes, or when the draft transitions
-  // from undefined back to defined (i.e. the object was refreshed and re-fetched).
-  const dataObjectReloaded = prevDataObjectRef.current === undefined && dataObject !== undefined
-  const shouldReset = prevLanguageRef.current !== userLanguage || dataObjectReloaded
-
-  if (shouldReset) {
+  // Synchronously reset caches when language changes, before useDataObjectGrids is called
+  if (prevLanguageRef.current !== userLanguage) {
     prevLanguageRef.current = userLanguage
-    prevDataObjectRef.current = dataObject
     loadedIds.length > 0 && setLoadedIds([])
     cachedGridFullData.length > 0 && setCachedGridFullData([])
-  } else {
-    prevDataObjectRef.current = dataObject
   }
 
   const { isLoading: isAvailableGridColumnsLoading, data: availableGridColumnsData } = useDataObjectGetAvailableGridColumnsForRelationQuery({
