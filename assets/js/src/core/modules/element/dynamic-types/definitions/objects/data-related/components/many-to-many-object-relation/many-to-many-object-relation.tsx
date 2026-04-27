@@ -238,14 +238,16 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     [mergedGridFullData, visibleFieldDefinitions]
   )
 
+  const selectedColumnsContextValue = useMemo(() => ({
+    selectedColumns,
+    setSelectedColumns: () => {},
+    encodeColumnIdentifier: (col: SelectedColumn) => encodeColumnId(col.key ?? '', col.locale),
+    decodeColumnIdentifier,
+    shouldMapDataToColumn: (data: any, col: SelectedColumn) => data.key === col.key && (data.locale ?? null) === (col.locale ?? null)
+  }), [selectedColumns, decodeColumnIdentifier])
+
   return (
-    <SelectedColumnsContext.Provider value={ {
-      selectedColumns,
-      setSelectedColumns: () => {},
-      encodeColumnIdentifier: (col) => encodeColumnId(col.key ?? '', col.locale),
-      decodeColumnIdentifier,
-      shouldMapDataToColumn: (data, col) => data.key === col.key && (data.locale ?? null) === (col.locale ?? null)
-    } }
+    <SelectedColumnsContext.Provider value={ selectedColumnsContextValue }
     >
       <ManyToManyRelation
         { ...props }
