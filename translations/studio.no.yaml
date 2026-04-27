@@ -1502,7 +1502,7 @@ auto_create: Opprett automatisk
 widget.redirects: Omdirigeringer
 navigation.redirects: Omdirigeringer
 robots-txt.save-success: robots.txt ble lagret
-robots-txt.on-file-system-warning: Lagring deaktivert: en fysisk robots.txt-fil finnes i filsystemet.
+robots-txt.on-file-system-warning: "Lagring deaktivert: en fysisk robots.txt-fil finnes i filsystemet."
 widget.robots-txt: robots.txt
 navigation.robots-txt: robots.txt
 perspective.default: Standard

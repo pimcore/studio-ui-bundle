@@ -1502,7 +1502,7 @@ auto_create: Creazione automatica
 widget.redirects: Reindirizzamenti
 navigation.redirects: Reindirizzamenti
 robots-txt.save-success: robots.txt salvato con successo
-robots-txt.on-file-system-warning: Salvataggio disabilitato: esiste un file fisico robots.txt nel filesystem.
+robots-txt.on-file-system-warning: "Salvataggio disabilitato: esiste un file fisico robots.txt nel filesystem."
 widget.robots-txt: robots.txt
 navigation.robots-txt: robots.txt
 perspective.default: Predefinita

@@ -1502,7 +1502,7 @@ auto_create: Création automatique
 widget.redirects: Redirections
 navigation.redirects: Redirections
 robots-txt.save-success: robots.txt enregistré avec succès
-robots-txt.on-file-system-warning: Enregistrement désactivé : un fichier robots.txt physique existe sur le système de fichiers.
+robots-txt.on-file-system-warning: "Enregistrement désactivé : un fichier robots.txt physique existe sur le système de fichiers."
 widget.robots-txt: robots.txt
 navigation.robots-txt: robots.txt
 perspective.default: Par défaut
