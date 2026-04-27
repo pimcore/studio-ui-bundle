@@ -42,7 +42,8 @@ moduleSystem.registerModule({
       order: 610,
       permission: UserPermission.RobotsTxt,
       perspectivePermission: NavPermission.RobotsTxt,
-      widgetConfig: ROBOTS_TXT_WIDGET
+      widgetConfig: ROBOTS_TXT_WIDGET,
+      dividerBottom: true
     })
 
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
