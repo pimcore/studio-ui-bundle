@@ -125,7 +125,7 @@ export const RobotsTxtContainer = (): React.JSX.Element => {
             <Tooltip title={ data?.onFileSystem === true ? t('robots-txt.on-file-system-warning') : undefined }>
               <span>
                 <Button
-                  disabled={ data?.onFileSystem === true }
+                  disabled={ isLoadingOrFetching || data?.onFileSystem === true }
                   loading={ isSaving }
                   onClick={ handleSave }
                   type='primary'
