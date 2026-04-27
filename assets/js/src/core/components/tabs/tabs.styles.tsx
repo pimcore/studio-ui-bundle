@@ -130,7 +130,6 @@ export const useStyles = createStyles(({ token, css }) => {
           flex-direction: column;
           flex: 1;
           min-height: 0;
-          overflow: hidden;
         }
           
         .ant-tabs-content {
