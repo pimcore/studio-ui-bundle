@@ -31,5 +31,4 @@ export const RobotsTxtSiteEditor = (props: RobotsTxtSiteEditorProps): React.JSX.
       />
     </div>
   )
-  )
 }
