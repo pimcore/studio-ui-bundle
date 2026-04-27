@@ -12,21 +12,26 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
-    sidebarReportItem: css`
-      padding: 2px ${token.paddingXS}px;
-      
-      &:hover {
-        background-color: ${token.controlItemBgActiveHover};
-        cursor: pointer;
+    tree: css`
+      .ant-tree-treenode {
+        height: 24px;
       }
-    `,
 
-    sidebarReportItemIcon: css`
-      color: ${token.colorIconTree};
-    `,
+      .ant-tree-switcher {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px !important;
+        margin-right: 0 !important;
+      }
 
-    sidebarReportItemTitle: css`
-      color: ${token.colorTextTreeElement};
+      .ant-tree-switcher-noop {
+        width: 0 !important;
+      }
+
+      .ant-tree-node-content-wrapper {
+        padding-left: 0 !important;
+      }
     `,
 
     tabsContainer: css`
