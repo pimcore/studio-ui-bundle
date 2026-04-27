@@ -130,7 +130,7 @@ export const SystemInfoModal = ({ onClose, data }: ISystemInfoModalProps): React
     }
 
     if (data.elementType === elementTypes.document) {
-      return data.type === 'page'
+      return data.type === 'page' || data.type === 'headlessdocument'
     }
 
     return false
