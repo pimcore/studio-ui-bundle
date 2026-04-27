@@ -28,10 +28,7 @@ const api = baseApi.enhanceEndpoints({
     },
 
     dataObjectGetGrid: {
-      providesTags: (result, error, args) => [
-        ...providingTags.DATA_OBJECT_GRID_ID(args.body.folderId),
-        ...(args.body.elementId !== undefined ? providingTags.DATA_OBJECT_DETAIL_ID(args.body.elementId) : [])
-      ]
+      providesTags: (result, error, args) => providingTags.DATA_OBJECT_GRID_ID(args.body.folderId)
     },
 
     dataObjectUpdateById: {

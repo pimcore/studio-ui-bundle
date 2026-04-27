@@ -19,7 +19,6 @@ import { type UseClassDefinitionsReturn } from '@Pimcore/modules/data-object/uti
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 interface IUseDataObjectGridsProps {
-  elementId: number
   classIds?: string[]
   convertClassName: UseClassDefinitionsReturn['getByName']
   columns?: GridColumnRequest[]
@@ -29,9 +28,10 @@ interface IUseDataObjectGridsProps {
 export interface IUseDataObjectGridsReturn {
   isLoading: boolean
   data: DataObjectGetGridApiResponse['items']
+  refetchAll: () => void
 }
 
-export const useDataObjectGrids = ({ elementId, classIds, convertClassName, columns, dataValue }: IUseDataObjectGridsProps): IUseDataObjectGridsReturn => {
+export const useDataObjectGrids = ({ classIds, convertClassName, columns, dataValue }: IUseDataObjectGridsProps): IUseDataObjectGridsReturn => {
   const queries = (classIds ?? []).map((classId: string) => {
     const filterValue = map(
       filter(dataValue, { subtype: classId }),
@@ -43,7 +43,6 @@ export const useDataObjectGrids = ({ elementId, classIds, convertClassName, colu
         classId: convertClassName(classId)?.id ?? '',
         body: {
           folderId: 1,
-          elementId,
           columns,
           applyFallbackLanguages: true,
           filters: {
@@ -65,6 +64,7 @@ export const useDataObjectGrids = ({ elementId, classIds, convertClassName, colu
 
   const isLoading = queries.some(q => q.isLoading || q.isFetching)
   const data = queries.flatMap(q => q.data?.items ?? [])
+  const refetchAll = (): void => { queries.forEach(q => { void q.refetch() }) }
 
-  return { isLoading, data }
+  return { isLoading, data, refetchAll }
 }

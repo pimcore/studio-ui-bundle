@@ -87,6 +87,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   const [loadedIds, setLoadedIds] = useState<number[]>([])
   const [cachedGridFullData, setCachedGridFullData] = useState<IUseDataObjectGridsReturn['data']>([])
   const prevLanguageRef = useRef(userLanguage)
+  const prevDataObjectRef = useRef(dataObject)
 
   // Synchronously reset caches when language changes, before useDataObjectGrids is called
   if (prevLanguageRef.current !== userLanguage) {
@@ -141,8 +142,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     locale: col.localizable ? userLanguage : undefined
   }))
 
-  const { data: gridFullData, isLoading: isGridFullDataLoading } = useDataObjectGrids({
-    elementId: id,
+  const { data: gridFullData, isLoading: isGridFullDataLoading, refetchAll } = useDataObjectGrids({
     classIds: dataRelationClasses,
     convertClassName: getByName,
     columns: visibleColumns,
@@ -178,6 +178,17 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
       setCachedGridFullData(prev => prev.filter(item => !isUndefined(item.id) && currentIds.has(item.id)))
     }
   }, [props?.value])
+
+  // When the draft transitions undefined → defined (object refreshed), force a
+  // fresh fetch and clear local caches so stale RTK Query cache is not displayed.
+  useEffect(() => {
+    if (prevDataObjectRef.current === undefined && dataObject !== undefined) {
+      setLoadedIds([])
+      setCachedGridFullData([])
+      refetchAll()
+    }
+    prevDataObjectRef.current = dataObject
+  }, [dataObject])
 
   const columnDefinition = visibleFieldsToColumnDefinitions({
     visibleFieldDefinitions,
