@@ -152,7 +152,9 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   })
 
   useEffect(() => {
-    if (!isGridFullDataLoading && !isEmptyValue(gridFullData)) {
+    // Guard against populating cache with stale RTK data during a pending refresh.
+    // shouldRefetchRef is true between clearing loadedIds and the forced refetch being dispatched.
+    if (!isGridFullDataLoading && !isEmptyValue(gridFullData) && !shouldRefetchRef.current) {
       setLoadedIds(prev => {
         const ids = gridFullData.map(item => item.id).filter(id => !isUndefined(id))
         const next = [...new Set([...prev, ...ids])]
