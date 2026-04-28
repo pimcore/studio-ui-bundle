@@ -48,6 +48,6 @@ export class DynamicTypeObjectDataDate extends DynamicTypeObjectDataAbstractDate
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
     const value = props.cellProps.getValue()
 
-    return <GridCellPreviewWrapper>{isNumber(value) ? formatDate(value) : value}</GridCellPreviewWrapper>
+    return <GridCellPreviewWrapper>{(isNumber(value) || typeof value === 'string') ? formatDate(value) : ''}</GridCellPreviewWrapper>
   }
 }
