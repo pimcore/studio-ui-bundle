@@ -10,7 +10,7 @@
 
 /* eslint-disable max-lines */
 
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { App } from 'antd'
 import { kebabCase } from 'lodash'
@@ -98,6 +98,18 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
 
   const keys = data?.items ?? []
   const total = data?.totalItems ?? 0
+
+  useEffect(() => {
+    if (data !== undefined && data.items.length === 0 && data.totalItems > 0 && page > 1) {
+      setPage(page - 1)
+    }
+  }, [data, page])
+
+  useEffect(() => {
+    if (data !== undefined && data.items.length === 0 && data.totalItems > 0 && page > 1) {
+      setPage(Math.max(1, Math.ceil(data.totalItems / pageSize)))
+    }
+  }, [data, page, pageSize])
 
   // Derive the current key object from the live cache by ID so the definition
   // modal always receives the latest values (e.g. after an optimistic type change).
