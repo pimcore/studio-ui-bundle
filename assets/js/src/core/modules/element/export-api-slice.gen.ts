@@ -286,6 +286,8 @@ export type GridColumnRequest = {
     group?: string[] | null;
     /** Config */
     config?: (string | AdvancedColumnConfig)[];
+    /** When true, empty localized values fall back to configured fallback languages */
+    applyFallbackLanguages?: boolean;
 };
 export type ExportAllFilter = {
     /** Column Filter */

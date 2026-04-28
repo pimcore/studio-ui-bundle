@@ -13119,15 +13119,11 @@
                                             "$ref": "#/components/schemas/Column"
                                         }
                                     },
-                                    "filters": {
-                                        "$ref": "#/components/schemas/Filter"
-                                    },
-                                    "applyFallbackLanguages": {
-                                        "type": "boolean",
-                                        "example": false
-                                    }
-                                },
-                                "type": "object"
+                                     "filters": {
+                                         "$ref": "#/components/schemas/Filter"
+                                     }
+                                 },
+                                 "type": "object"
                             }
                         }
                     }
@@ -66996,6 +66992,11 @@
                         "example": {
                             "key": "value"
                         }
+                    },
+                    "applyFallbackLanguages": {
+                        "description": "When true, empty localized values fall back to configured fallback languages",
+                        "type": "boolean",
+                        "default": false
                     }
                 },
                 "type": "object"

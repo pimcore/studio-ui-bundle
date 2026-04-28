@@ -433,7 +433,6 @@ export type DataObjectGetGridApiArg = {
         folderId: number;
         columns?: GridColumnRequest[];
         filters?: GridFilter;
-        applyFallbackLanguages?: boolean;
     };
 };
 export type DataObjectGetPhpcodeTransformersApiResponse = /** status 200 List of available PHPCode transformers */ {
@@ -782,6 +781,8 @@ export type GridColumnRequest = {
     group?: string[] | null;
     /** Config */
     config?: (string | AdvancedColumnConfig)[];
+    /** When true, empty localized values fall back to configured fallback languages */
+    applyFallbackLanguages?: boolean;
 };
 export type Column = {
     /** Key of the Column */

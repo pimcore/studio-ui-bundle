@@ -44,7 +44,6 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, dataVa
         body: {
           folderId: 1,
           columns,
-          applyFallbackLanguages: true,
           filters: {
             page: 1,
             pageSize: 999,

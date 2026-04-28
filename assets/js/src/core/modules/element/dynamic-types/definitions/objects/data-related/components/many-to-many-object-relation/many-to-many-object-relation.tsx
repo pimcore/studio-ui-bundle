@@ -139,7 +139,8 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     type: col.type,
     group: col.group,
     config: col.config,
-    locale: col.localizable ? userLanguage : undefined
+    locale: col.localizable ? userLanguage : undefined,
+    applyFallbackLanguages: col.localizable ? true : undefined
   }))
 
   const { data: gridFullData, isLoading: isGridFullDataLoading, refetchAll } = useDataObjectGrids({
