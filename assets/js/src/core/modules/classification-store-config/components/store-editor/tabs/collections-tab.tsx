@@ -93,11 +93,10 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
   const total = data?.totalItems ?? 0
 
   useEffect(() => {
-    if (data !== undefined && data.items.length === 0 && data.totalItems > 0 && page > 1) {
+    if (data?.items.length === 0 && data.totalItems > 0 && page > 1) {
       setPage(page - 1)
     }
   }, [data, page])
-
   const [createCollection] = useClassificationStoreConfigurationCollectionCreateMutation()
   const [updateCollection] = useClassificationStoreConfigurationCollectionUpdateMutation()
   const [deleteCollection] = useClassificationStoreConfigurationCollectionDeleteMutation()

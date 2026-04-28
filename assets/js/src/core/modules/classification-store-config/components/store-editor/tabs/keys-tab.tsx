@@ -100,7 +100,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   const total = data?.totalItems ?? 0
 
   useEffect(() => {
-    if (data !== undefined && data.items.length === 0 && data.totalItems > 0 && page > 1) {
+    if (data?.items.length === 0 && data.totalItems > 0 && page > 1) {
       setPage(page - 1)
     }
   }, [data, page])
