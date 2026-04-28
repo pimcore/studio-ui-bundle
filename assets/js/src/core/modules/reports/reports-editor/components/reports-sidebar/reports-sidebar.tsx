@@ -207,8 +207,7 @@ export const ReportsSidebar = ({ isLoading, refetch, isFetching, reportsList, ha
         <Content loading={ isFetching }>
           <TreeElement
             className={ styles.tree }
-            defaultExpandAll
-            hasRoot={ false }
+            hasRoot
             onActionsClick={ handleActionsClick }
             onSelected={ (_key, node) => {
               const report = node.meta?.report as BundleCustomReportsConfigurationTreeNode | undefined

@@ -16,22 +16,6 @@ export const useStyles = createStyles(({ css, token }) => {
       .ant-tree-treenode {
         height: 24px;
       }
-
-      .ant-tree-switcher {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 24px !important;
-        margin-right: 0 !important;
-      }
-
-      .ant-tree-switcher-noop {
-        width: 0 !important;
-      }
-
-      .ant-tree-node-content-wrapper {
-        padding-left: 0 !important;
-      }
     `,
 
     tabsContainer: css`
