@@ -140,13 +140,13 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     group: col.group,
     config: col.config,
     locale: col.localizable ? userLanguage : undefined,
-    applyFallbackLanguages: col.localizable ? true : undefined
   }))
 
   const { data: gridFullData, isLoading: isGridFullDataLoading, refetchAll } = useDataObjectGrids({
     classIds: dataRelationClasses,
     convertClassName: getByName,
     columns: visibleColumns,
+    applyFallbackLanguages: true,
     dataValue: props?.value?.filter(item => !loadedIds.includes(item.id))
   })
 

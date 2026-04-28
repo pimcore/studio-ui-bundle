@@ -13113,6 +13113,11 @@
                                         "type": "integer",
                                         "example": 1
                                     },
+                                    "applyFallbackLanguages": {
+                                        "description": "When true, empty localized values fall back to configured fallback languages",
+                                        "type": "boolean",
+                                        "default": false
+                                    },
                                     "columns": {
                                         "type": "array",
                                         "items": {
@@ -66993,11 +66998,6 @@
                             "key": "value"
                         }
                     },
-                    "applyFallbackLanguages": {
-                        "description": "When true, empty localized values fall back to configured fallback languages",
-                        "type": "boolean",
-                        "default": false
-                    }
                 },
                 "type": "object"
             },

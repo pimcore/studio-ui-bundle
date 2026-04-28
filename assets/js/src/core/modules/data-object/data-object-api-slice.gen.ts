@@ -431,6 +431,8 @@ export type DataObjectGetGridApiArg = {
     classId: string;
     body: {
         folderId: number;
+        /** When true, empty localized values fall back to configured fallback languages */
+        applyFallbackLanguages?: boolean;
         columns?: GridColumnRequest[];
         filters?: GridFilter;
     };
@@ -781,8 +783,6 @@ export type GridColumnRequest = {
     group?: string[] | null;
     /** Config */
     config?: (string | AdvancedColumnConfig)[];
-    /** When true, empty localized values fall back to configured fallback languages */
-    applyFallbackLanguages?: boolean;
 };
 export type Column = {
     /** Key of the Column */
