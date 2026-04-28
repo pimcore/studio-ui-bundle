@@ -84,16 +84,13 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   const relationField = props?.combinedFieldName
   const dataRelationClasses = props?.allowedClasses
 
-  const [loadedIds, setLoadedIds] = useState<number[]>([])
   const [cachedGridFullData, setCachedGridFullData] = useState<IUseDataObjectGridsReturn['data']>([])
   const prevLanguageRef = useRef(userLanguage)
   const prevDataObjectRef = useRef(dataObject)
-  const shouldRefetchRef = useRef(false)
 
-  // Synchronously reset caches when language changes, before useDataObjectGrids is called
+  // Synchronously reset cache when language changes, before useDataObjectGrids is called
   if (prevLanguageRef.current !== userLanguage) {
     prevLanguageRef.current = userLanguage
-    loadedIds.length > 0 && setLoadedIds([])
     cachedGridFullData.length > 0 && setCachedGridFullData([])
   }
 
@@ -148,61 +145,30 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     convertClassName: getByName,
     columns: visibleColumns,
     applyFallbackLanguages: true,
-    dataValue: props?.value?.filter(item => !loadedIds.includes(item.id))
+    dataValue: props?.value
   })
 
   useEffect(() => {
-    // Guard against populating cache with stale RTK data during a pending refresh.
-    // shouldRefetchRef is true between clearing loadedIds and the forced refetch being dispatched.
-    if (!isGridFullDataLoading && !isEmptyValue(gridFullData) && !shouldRefetchRef.current) {
-      setLoadedIds(prev => {
-        const ids = gridFullData.map(item => item.id).filter(id => !isUndefined(id))
-        const next = [...new Set([...prev, ...ids])]
-
-        return next.length === prev.length ? prev : next
-      })
-
-      setCachedGridFullData(prev => {
-        const existingIds = new Set(prev.map(item => item.id))
-        const next = gridFullData.filter(item => !existingIds.has(item.id))
-
-        if (next.length === 0) return prev
-
-        return [...prev, ...next]
-      })
+    if (!isGridFullDataLoading && !isEmptyValue(gridFullData)) {
+      setCachedGridFullData(gridFullData)
     }
   }, [gridFullData, isGridFullDataLoading])
 
   useEffect(() => {
-    // Remove IDs from loadedIds and cachedGridFullData if they no longer exist in the new props.value
     if (!isEmpty(props.value)) {
       const currentIds = new Set((props?.value ?? []).map(item => item.id))
-
-      setLoadedIds(prev => prev.filter(id => currentIds.has(id)))
       setCachedGridFullData(prev => prev.filter(item => !isUndefined(item.id) && currentIds.has(item.id)))
     }
   }, [props?.value])
 
-  // When the draft transitions undefined → defined (object refreshed), clear caches.
-  // refetchAll() is NOT called here because loadedIds hasn't been cleared yet at this point
-  // (React state updates are async), so queries are still skipped and refetch would be a no-op.
+  // When the draft transitions undefined → defined (object refreshed), force a refetch.
+  // Queries are always active (dataValue = props.value, unfiltered), so refetchAll() works immediately.
   useEffect(() => {
     if (prevDataObjectRef.current === undefined && dataObject !== undefined) {
-      shouldRefetchRef.current = true
-      setLoadedIds([])
-      setCachedGridFullData([])
-    }
-    prevDataObjectRef.current = dataObject
-  }, [dataObject])
-
-  // Once loadedIds is cleared (queries become active), trigger the forced refetch.
-  // This runs after the state update, so queries are no longer skipped and refetch hits the server.
-  useEffect(() => {
-    if (shouldRefetchRef.current && loadedIds.length === 0) {
-      shouldRefetchRef.current = false
       refetchAll()
     }
-  }, [loadedIds, refetchAll])
+    prevDataObjectRef.current = dataObject
+  }, [dataObject]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const columnDefinition = visibleFieldsToColumnDefinitions({
     visibleFieldDefinitions,
@@ -229,12 +195,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     })
   }, [visibleFieldDefinitions, userLanguage])
 
-  const mergedGridFullData = useMemo(() => {
-    const existingIds = new Set(cachedGridFullData.map(item => item.id))
-
-    const newData = gridFullData.filter(item => !existingIds.has(item.id))
-    return [...cachedGridFullData, ...newData]
-  }, [cachedGridFullData, gridFullData])
+  const mergedGridFullData = !isEmptyValue(gridFullData) ? gridFullData : cachedGridFullData
 
   const visibleFieldsValue = useMemo(() => {
     return mergedGridFullData.map(item => {
