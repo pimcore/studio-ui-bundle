@@ -20,7 +20,8 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { Input } from '@Pimcore/components/input/input'
-import { createColumnHelper } from '@tanstack/react-table'
+import { SearchInput } from '@Pimcore/components/search-input/search-input'
+import { createColumnHelper, type SortingState } from '@tanstack/react-table'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Header } from '@Pimcore/components/header/header'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
@@ -64,11 +65,36 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   const [definitionModalOpen, setDefinitionModalOpen] = useState(false)
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [sorting, setSorting] = useState<SortingState>([])
 
-  const { data, isLoading, isFetching, refetch } = useClassificationStoreConfigurationKeyCollectionQuery({
+  const onSortingChange = useCallback((newSorting: SortingState) => {
+    setSorting(newSorting)
+    setPage(1)
+  }, [])
+
+  const queryArgs = useMemo(() => ({
     storeId,
-    body: { filters: { page, pageSize } }
-  })
+    body: {
+      filters: {
+        page,
+        pageSize,
+        columnFilters: searchTerm.length > 0
+          ? [{ type: 'search', filterValue: searchTerm }]
+          : [],
+        ...(sorting.length > 0
+          ? {
+              sortFilter: {
+                key: sorting[0].id,
+                direction: sorting[0].desc ? 'DESC' : 'ASC'
+              }
+            }
+          : {})
+      }
+    }
+  }), [storeId, page, pageSize, searchTerm, sorting])
+
+  const { data, isLoading, isFetching, refetch } = useClassificationStoreConfigurationKeyCollectionQuery(queryArgs)
 
   const keys = data?.items ?? []
   const total = data?.totalItems ?? 0
@@ -324,13 +350,26 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
             justify="space-between"
             style={ { padding: '8px 16px' } }
           >
-            <Header title={ t('classification-store.tabs.keys') } />
-            <IconTextButton
-              icon={ { value: 'new' } }
-              onClick={ handleAdd }
+            <Flex
+              align="center"
+              gap="small"
             >
-              {t('classification-store.add-key')}
-            </IconTextButton>
+              <Header title={ t('classification-store.tabs.keys') } />
+              <IconTextButton
+                icon={ { value: 'new' } }
+                onClick={ handleAdd }
+              >
+                {t('classification-store.add-key')}
+              </IconTextButton>
+            </Flex>
+            <SearchInput
+              loading={ isFetching }
+              onSearch={ (value) => {
+                setSearchTerm(value)
+                setPage(1)
+              } }
+              placeholder={ t('search') }
+            />
           </Flex>
         }
       >
@@ -341,7 +380,10 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
           <Grid
             columns={ columns }
             data={ gridData }
+            enableSorting
             isLoading={ isLoading || isFetching }
+            manualSorting
+            onSortingChange={ onSortingChange }
             onUpdateCellData={ ({ columnId, value, rowData }) => {
               const typedRow = rowData as KeyRow
               if (columnId === 'name') {
@@ -374,6 +416,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
                 }).then((response) => { if ('error' in response) trackError(new ApiError(response.error!)) })
               }
             } }
+            sorting={ sorting }
           />
         </Flex>
       </ContentLayout>
