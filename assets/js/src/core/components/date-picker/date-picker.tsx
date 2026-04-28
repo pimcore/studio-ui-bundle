@@ -61,7 +61,7 @@ const DatePickerComponent = (props: DatePickerProps): React.JSX.Element => {
   return (
     <OriginalDatePicker
       { ...props }
-      format={ formatDisplayValue }
+      format={ props.format ?? formatDisplayValue }
       onChange={ handleChange }
       popupClassName={ styles.datePickerDropdown }
       rootClassName={ cn(styles.datePicker, props.className, {
