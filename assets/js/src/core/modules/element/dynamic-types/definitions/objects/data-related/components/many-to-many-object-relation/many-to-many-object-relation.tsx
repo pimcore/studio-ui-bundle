@@ -88,6 +88,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   const [cachedGridFullData, setCachedGridFullData] = useState<IUseDataObjectGridsReturn['data']>([])
   const prevLanguageRef = useRef(userLanguage)
   const prevDataObjectRef = useRef(dataObject)
+  const shouldRefetchRef = useRef(false)
 
   // Synchronously reset caches when language changes, before useDataObjectGrids is called
   if (prevLanguageRef.current !== userLanguage) {
@@ -180,16 +181,26 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     }
   }, [props?.value])
 
-  // When the draft transitions undefined → defined (object refreshed), force a
-  // fresh fetch and clear local caches so stale RTK Query cache is not displayed.
+  // When the draft transitions undefined → defined (object refreshed), clear caches.
+  // refetchAll() is NOT called here because loadedIds hasn't been cleared yet at this point
+  // (React state updates are async), so queries are still skipped and refetch would be a no-op.
   useEffect(() => {
     if (prevDataObjectRef.current === undefined && dataObject !== undefined) {
+      shouldRefetchRef.current = true
       setLoadedIds([])
       setCachedGridFullData([])
-      refetchAll()
     }
     prevDataObjectRef.current = dataObject
   }, [dataObject])
+
+  // Once loadedIds is cleared (queries become active), trigger the forced refetch.
+  // This runs after the state update, so queries are no longer skipped and refetch hits the server.
+  useEffect(() => {
+    if (shouldRefetchRef.current && loadedIds.length === 0) {
+      shouldRefetchRef.current = false
+      refetchAll()
+    }
+  }, [loadedIds, refetchAll])
 
   const columnDefinition = visibleFieldsToColumnDefinitions({
     visibleFieldDefinitions,
