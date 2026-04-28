@@ -10,31 +10,23 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ css, token }) => {
+export const useStyles = createStyles(({ css }) => {
   return {
-    tree: css`
-      .ant-tree-treenode {
-        height: 24px;
-      }
-    `,
-
-    tabsContainer: css`
+    editorWrapper: css`
       height: 100%;
-        
-      .ant-tabs-content,
-      .ant-tabs-tabpane {
+      display: flex;
+      flex-direction: column;
+
+      > div {
         height: 100%;
+        display: flex;
+        flex-direction: column;
       }
-    `,
 
-    tabs: css`
-      .ant-tabs-tab {
-        padding: ${token.paddingSM}px ${token.paddingXXS}px !important;
+      .cm-editor {
+        flex: 1;
+        min-height: 0;
       }
-    `,
-
-    dropdownButton: css`
-      padding: 0 ${token.paddingXS}px;
     `
   }
 })

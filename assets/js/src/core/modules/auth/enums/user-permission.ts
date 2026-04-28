@@ -28,6 +28,7 @@ export enum UserPermission {
   ReportsConfig = 'reports_config',
   RecycleBin = 'recyclebin',
   Redirects = 'redirects',
+  RobotsTxt = 'robots.txt',
   ApplicationLogger = 'application_logging',
   PerspectiveEditor = 'studio_perspective_editor',
   WidgetEditor = 'studio_perspective_widget_editor',
