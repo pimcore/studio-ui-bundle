@@ -98,12 +98,6 @@ export const GroupsTab = ({ storeId }: IGroupsTabProps): React.JSX.Element => {
     }
   }, [data, page])
 
-  useEffect(() => {
-    if (data !== undefined && data.items.length === 0 && data.totalItems > 0 && page > 1) {
-      setPage(Math.max(1, Math.ceil(data.totalItems / pageSize)))
-    }
-  }, [data, page, pageSize])
-
   const [createGroup] = useClassificationStoreConfigurationGroupCreateMutation()
   const [updateGroup] = useClassificationStoreConfigurationGroupUpdateMutation()
   const [deleteGroup] = useClassificationStoreConfigurationGroupDeleteMutation()

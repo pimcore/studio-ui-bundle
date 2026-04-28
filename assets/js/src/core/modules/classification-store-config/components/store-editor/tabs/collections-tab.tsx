@@ -98,12 +98,6 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
     }
   }, [data, page])
 
-  useEffect(() => {
-    if (data !== undefined && data.items.length === 0 && data.totalItems > 0 && page > 1) {
-      setPage(Math.max(1, Math.ceil(data.totalItems / pageSize)))
-    }
-  }, [data, page, pageSize])
-
   const [createCollection] = useClassificationStoreConfigurationCollectionCreateMutation()
   const [updateCollection] = useClassificationStoreConfigurationCollectionUpdateMutation()
   const [deleteCollection] = useClassificationStoreConfigurationCollectionDeleteMutation()
