@@ -1503,12 +1503,16 @@ redirects.csv-import-results.errored: Errored
 redirects.csv-import-results.close: Close
 redirects.csv-import-results.errors-details: Error Details
 redirects.csv-import-results.line: Line {{line}}
+robots-txt.save-success: robots.txt saved successfully
+robots-txt.on-file-system-warning: "Saving disabled: a physical robots.txt file exists on the filesystem."
 path: Path
 entire_uri: Entire URI
 path_query: Path and Query
 auto_create: Auto Create
 widget.redirects: Redirects
 navigation.redirects: Redirects
+widget.robots-txt: robots.txt
+navigation.robots-txt: robots.txt
 perspective.default: Default
 perspective.switching.title: Switching perspective
 perspective.switching.description: Currently switching to the following perspective
@@ -2237,6 +2241,7 @@ perspective-editor.form.main-nav-permission.experienceEcommerce.emails: E-Mails
 perspective-editor.form.main-nav-permission.experienceEcommerce.documentTypes: Document Types
 perspective-editor.form.main-nav-permission.experienceEcommerce.websiteSettings: Website Settings
 perspective-editor.form.main-nav-permission.experienceEcommerce.redirects: Redirects
+perspective-editor.form.main-nav-permission.experienceEcommerce.robotsTxt: robots.txt
 perspective-editor.form.main-nav-permission.category.assetManagement: Asset Management
 perspective-editor.form.main-nav-permission.assetManagement.hidden: Hide Asset Management Menu
 perspective-editor.form.main-nav-permission.assetManagement.assetThumbnails: Image Thumbnails

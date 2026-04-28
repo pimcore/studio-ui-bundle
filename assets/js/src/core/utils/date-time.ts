@@ -57,3 +57,4 @@ export function formatDate (timestamp: number | string): string {
 export function formatTime (timestamp: number | string): string {
   return formatDateTime({ timestamp, timeStyle: 'short' })
 }
+

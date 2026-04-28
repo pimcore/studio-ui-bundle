@@ -29,7 +29,6 @@ export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
   const { column } = props
   const config: DateCellConfig | undefined = column.columnDef.meta?.config as DateCellConfig | undefined
   const showTime = config?.showTime ?? false
-  const dateFormat = showTime ? 'YYYY-MM-DD HH:mm' : 'YYYY-MM-DD'
 
   useEffect(() => {
     if (isInEditMode) {
@@ -63,7 +62,6 @@ export const DateCell = (props: DefaultCellProps): React.JSX.Element => {
 
     return (
       <DatePicker
-        format={ dateFormat }
         needConfirm
         onChange={ (date: Dayjs) => {
           saveValue(date === null ? 0 : date.unix())

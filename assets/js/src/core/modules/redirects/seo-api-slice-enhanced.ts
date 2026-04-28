@@ -12,7 +12,7 @@ import { providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './seo-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.REDIRECTS],
+  addTagTypes: [tagNames.REDIRECTS, tagNames.ROBOTS_TXT],
   endpoints: {
 
     bundleSeoRedirectsGetCollection: {
@@ -52,6 +52,14 @@ const api = baseApi.enhanceEndpoints({
         }
       },
       invalidatesTags: () => [tagNames.REDIRECTS]
+    },
+
+    bundleSeoRobotsTxtGet: {
+      providesTags: () => providingTags.ROBOTS_TXT()
+    },
+
+    bundleSeoRobotsTxtUpdate: {
+      invalidatesTags: () => []
     }
   }
 })
@@ -68,7 +76,9 @@ export const {
   useBundleSeoRedirectsImportMutation,
   useBundleSeoRedirectListPrioritiesQuery,
   useBundleSeoRedirectListStatusesQuery,
-  useBundleSeoRedirectListTypesQuery
+  useBundleSeoRedirectListTypesQuery,
+  useBundleSeoRobotsTxtGetQuery,
+  useBundleSeoRobotsTxtUpdateMutation
 } = api
 
 export { api }

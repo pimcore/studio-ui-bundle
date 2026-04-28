@@ -1502,6 +1502,10 @@ path_query: Pfad und Query
 auto_create: Automatisch erstellen
 widget.redirects: Weiterleitungen
 navigation.redirects: Weiterleitungen
+robots-txt.save-success: robots.txt erfolgreich gespeichert
+robots-txt.on-file-system-warning: "Speichern deaktiviert: Eine physische robots.txt-Datei existiert im Dateisystem."
+widget.robots-txt: robots.txt
+navigation.robots-txt: robots.txt
 perspective.default: Standard
 perspective.switching.title: Perspektive wechseln
 perspective.switching.description: Es wird zur folgenden Perspektive gewechselt
@@ -2230,6 +2234,7 @@ perspective-editor.form.main-nav-permission.experienceEcommerce.emails: E-Mails
 perspective-editor.form.main-nav-permission.experienceEcommerce.documentTypes: Dokumenttypen
 perspective-editor.form.main-nav-permission.experienceEcommerce.websiteSettings: Website Einstellungen
 perspective-editor.form.main-nav-permission.experienceEcommerce.redirects: Weiterleitungen
+perspective-editor.form.main-nav-permission.experienceEcommerce.robotsTxt: robots.txt
 perspective-editor.form.main-nav-permission.category.assetManagement: Asset Verwaltung
 perspective-editor.form.main-nav-permission.assetManagement.hidden: Asset Verwaltung Menü ausblenden
 perspective-editor.form.main-nav-permission.assetManagement.assetThumbnails: Bilder Thumbnails
