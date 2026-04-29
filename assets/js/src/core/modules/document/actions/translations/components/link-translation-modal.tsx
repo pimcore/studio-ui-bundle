@@ -14,6 +14,7 @@ import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
 import { Spin } from '@Pimcore/components/spin/spin'
+import { Alert } from '@Pimcore/components/alert/alert'
 import { ManyToOneRelation } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
 import type { ManyToOneRelationValue } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
 import { FormKit } from '@Pimcore/components/form/form-kit'
@@ -26,6 +27,7 @@ import { isNull, isString, isUndefined } from 'lodash'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { Form } from '@sdk/components'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import type { ApiErrorData } from '@Pimcore/modules/app/error-handler/types'
 
 export interface LinkTranslationModalProps {
   isOpen: boolean
@@ -33,6 +35,8 @@ export interface LinkTranslationModalProps {
   onSelectedDocumentChange: (document: ManyToOneRelationValue | null) => void
   onClose: () => void
   onSubmit: () => Promise<void>
+  isTranslationsLoading?: boolean
+  translationsError?: ApiErrorData
 }
 
 export const LinkTranslationModal = ({
@@ -40,7 +44,9 @@ export const LinkTranslationModal = ({
   selectedDocument,
   onSelectedDocumentChange,
   onClose,
-  onSubmit
+  onSubmit,
+  isTranslationsLoading = false,
+  translationsError
 }: LinkTranslationModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { getDisplayName } = useLanguageLookup()
@@ -74,6 +80,13 @@ export const LinkTranslationModal = ({
     }
   }
 
+  const getTranslationsErrorMessage = (): string => {
+    if (translationsError === undefined) return ''
+    const content = new ApiError(translationsError).getContent()
+    if (isString(content)) return content
+    return t(`error.${content.errorKey}`)
+  }
+
   const renderLanguageInfo = (): React.ReactNode => {
     if (isLoadingDocumentProperties) {
       return <Spin size="small" />
@@ -101,6 +114,44 @@ export const LinkTranslationModal = ({
     )
   }
 
+  const renderBody = (): React.ReactNode => {
+    if (translationsError !== undefined) {
+      return (
+        <Alert
+          banner
+          message={ getTranslationsErrorMessage() }
+          type="error"
+        />
+      )
+    }
+
+    return (
+      <>
+        <Form.Item
+          label={ t('document.translation.title') }
+          layout="vertical"
+        >
+          <ManyToOneRelation
+            allowToClearRelation
+            documentsAllowed
+            onChange={ onSelectedDocumentChange }
+            value={ selectedDocument }
+          />
+        </Form.Item>
+
+        {!isNull(selectedDocument) && (
+          <FormKit.Panel
+            border
+            theme="border-highlight"
+            title={ t('language') }
+          >
+            {renderLanguageInfo()}
+          </FormKit.Panel>
+        )}
+      </>
+    )
+  }
+
   return (
     <WindowModal
       footer={
@@ -112,7 +163,7 @@ export const LinkTranslationModal = ({
             {t('cancel')}
           </Button>
           <Button
-            disabled={ isNull(selectedDocument) }
+            disabled={ isNull(selectedDocument) || isTranslationsLoading || translationsError !== undefined }
             loading={ isSubmitting }
             onClick={ handleSubmit }
             type="primary"
@@ -126,27 +177,9 @@ export const LinkTranslationModal = ({
       size="L"
       title={ t('document.translation.link-existing-document') }
     >
-      <Form.Item
-        label={ t('document.translation.title') }
-        layout="vertical"
-      >
-        <ManyToOneRelation
-          allowToClearRelation
-          documentsAllowed
-          onChange={ onSelectedDocumentChange }
-          value={ selectedDocument }
-        />
-      </Form.Item>
-
-      {!isNull(selectedDocument) && (
-        <FormKit.Panel
-          border
-          theme="border-highlight"
-          title={ t('language') }
-        >
-          {renderLanguageInfo()}
-        </FormKit.Panel>
-      )}
+      <Spin spinning={ isTranslationsLoading }>
+        {renderBody()}
+      </Spin>
     </WindowModal>
   )
 }

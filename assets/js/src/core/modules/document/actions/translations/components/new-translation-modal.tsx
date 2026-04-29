@@ -13,6 +13,8 @@ import { useTranslation } from 'react-i18next'
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
+import { Spin } from '@Pimcore/components/spin/spin'
+import { Alert } from '@Pimcore/components/alert/alert'
 import { ManyToOneRelation } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
 import type { ManyToOneRelationValue } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
 import { Form } from '@sdk/components'
@@ -24,6 +26,8 @@ import { has, isNil, isString } from 'lodash'
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
 import { useDocumentGetTranslationParentByLanguageQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { type Element } from '@Pimcore/modules/element/element-helper'
+import { ApiError } from '@Pimcore/modules/app/error-handler'
+import type { ApiErrorData } from '@Pimcore/modules/app/error-handler/types'
 
 export interface NewTranslationModalProps {
   isOpen: boolean
@@ -31,6 +35,8 @@ export interface NewTranslationModalProps {
   onClose: () => void
   onSubmit: (values: NewTranslationFormValues) => Promise<void>
   currentDocument: Element | null
+  isTranslationsLoading?: boolean
+  translationsError?: ApiErrorData
 }
 
 export interface NewTranslationFormValues {
@@ -46,7 +52,9 @@ export const NewTranslationModal = ({
   useInheritance,
   onClose,
   onSubmit,
-  currentDocument
+  currentDocument,
+  isTranslationsLoading = false,
+  translationsError
 }: NewTranslationModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { getDisplayName } = useLanguageLookup()
@@ -116,34 +124,29 @@ export const NewTranslationModal = ({
     form.setFieldValue('parent', null)
   }
 
+  const getTranslationsErrorMessage = (): string => {
+    if (translationsError === undefined) return ''
+    const content = new ApiError(translationsError).getContent()
+    if (isString(content)) return content
+    return t(`error.${content.errorKey}`)
+  }
+
   const modalTitle = useInheritance
     ? t('document.translation.new-document-with-inheritance.modal-title')
     : t('document.translation.new-document-blank.modal-title')
 
-  return (
-    <WindowModal
-      footer={
-        <ModalFooter>
-          <Button
-            onClick={ onClose }
-            type="default"
-          >
-            {t('cancel')}
-          </Button>
-          <Button
-            loading={ isSubmitting }
-            onClick={ handleSubmit }
-            type="primary"
-          >
-            {t('document.translation.new-document-modal.create')}
-          </Button>
-        </ModalFooter>
-      }
-      onCancel={ onClose }
-      open={ isOpen }
-      size="L"
-      title={ modalTitle }
-    >
+  const renderBody = (): React.ReactNode => {
+    if (translationsError !== undefined) {
+      return (
+        <Alert
+          banner
+          message={ getTranslationsErrorMessage() }
+          type="error"
+        />
+      )
+    }
+
+    return (
       <Form
         form={ form }
         initialValues={ {
@@ -202,6 +205,37 @@ export const NewTranslationModal = ({
           <Input />
         </Form.Item>
       </Form>
+    )
+  }
+
+  return (
+    <WindowModal
+      footer={
+        <ModalFooter>
+          <Button
+            onClick={ onClose }
+            type="default"
+          >
+            {t('cancel')}
+          </Button>
+          <Button
+            disabled={ isTranslationsLoading || translationsError !== undefined }
+            loading={ isSubmitting }
+            onClick={ handleSubmit }
+            type="primary"
+          >
+            {t('document.translation.new-document-modal.create')}
+          </Button>
+        </ModalFooter>
+      }
+      onCancel={ onClose }
+      open={ isOpen }
+      size="L"
+      title={ modalTitle }
+    >
+      <Spin spinning={ isTranslationsLoading }>
+        {renderBody()}
+      </Spin>
     </WindowModal>
   )
 }
