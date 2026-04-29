@@ -148,7 +148,6 @@ export const NewTranslationModal = ({
     if (!isUndefined(translationsError)) {
       return (
         <Alert
-          banner
           message={ getTranslationsErrorMessage() }
           type="error"
         />
