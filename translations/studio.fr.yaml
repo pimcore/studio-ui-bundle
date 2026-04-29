@@ -17,6 +17,7 @@ error.error_widget_name_invalid: Le nom du widget est invalide (seuls les caract
 error.error_validation_failed: La validation a échoué
 error.error_validation.email_failed: Veuillez entrer une adresse e-mail valide
 error.error_element_not_found: Élément non trouvé
+error.error_document_language_not_set: Veuillez sélectionner un document cible avec une langue valide
 error.error_inconsistent_asset_type: Seuls les assets du même type sont autorisés ici.
 sidebar.selected_elements: Éléments sélectionnés
 sidebar.grid_config: Configuration de la grille

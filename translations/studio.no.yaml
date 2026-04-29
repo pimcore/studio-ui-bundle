@@ -17,6 +17,7 @@ error.error_widget_name_invalid: Widgetnavnet er ugyldig (kun alfanumeriske tegn
 error.error_validation_failed: Validering mislyktes
 error.error_validation.email_failed: Vennligst oppgi en gyldig e-postadresse
 error.error_element_not_found: Element ikke funnet
+error.error_document_language_not_set: Vennligst velg et måldokument med et gyldig språk
 error.error_inconsistent_asset_type: Kun ressurser av samme type er tillatt her.
 sidebar.selected_elements: Valgte elementer
 sidebar.grid_config: Rutenettskonfigurasjon
