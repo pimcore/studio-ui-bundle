@@ -14,7 +14,6 @@ import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
 import { Content } from '@Pimcore/components/content/content'
-import { Alert } from '@Pimcore/components/alert/alert'
 import { ManyToOneRelation } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
 import type { ManyToOneRelationValue } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
 import { Form } from '@sdk/components'
@@ -26,7 +25,7 @@ import { has, isNil, isString, isUndefined } from 'lodash'
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
 import { useDocumentGetTranslationParentByLanguageQuery, useLazyDocumentGetTranslationsQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { type Element } from '@Pimcore/modules/element/element-helper'
-import { ApiError } from '@Pimcore/modules/app/error-handler'
+import { TranslationErrorAlert } from './translation-error-alert'
 
 export interface NewTranslationModalProps {
   isOpen: boolean
@@ -129,13 +128,6 @@ export const NewTranslationModal = ({
     form.setFieldValue('parent', null)
   }
 
-  const getTranslationsErrorMessage = (): string => {
-    if (isUndefined(translationsError)) return ''
-    const content = new ApiError(translationsError).getContent()
-    if (isString(content)) return content
-    return t(`error.${content.errorKey}`)
-  }
-
   const modalTitle = useInheritance
     ? t('document.translation.new-document-with-inheritance.modal-title')
     : t('document.translation.new-document-blank.modal-title')
@@ -146,12 +138,7 @@ export const NewTranslationModal = ({
     }
 
     if (!isUndefined(translationsError)) {
-      return (
-        <Alert
-          message={ getTranslationsErrorMessage() }
-          type="error"
-        />
-      )
+      return <TranslationErrorAlert error={ translationsError } />
     }
 
     return (

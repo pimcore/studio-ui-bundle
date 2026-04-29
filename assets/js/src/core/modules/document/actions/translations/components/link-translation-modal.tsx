@@ -15,7 +15,6 @@ import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { Content } from '@Pimcore/components/content/content'
-import { Alert } from '@Pimcore/components/alert/alert'
 import { ManyToOneRelation } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
 import type { ManyToOneRelationValue } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
 import { FormKit } from '@Pimcore/components/form/form-kit'
@@ -29,6 +28,7 @@ import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { Form } from '@sdk/components'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useLazyDocumentGetTranslationsQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
+import { TranslationErrorAlert } from './translation-error-alert'
 
 export interface LinkTranslationModalProps {
   isOpen: boolean
@@ -87,13 +87,6 @@ export const LinkTranslationModal = ({
     }
   }
 
-  const getTranslationsErrorMessage = (): string => {
-    if (translationsError === undefined) return ''
-    const content = new ApiError(translationsError).getContent()
-    if (isString(content)) return content
-    return t(`error.${content.errorKey}`)
-  }
-
   const renderLanguageInfo = (): React.ReactNode => {
     if (isLoadingDocumentProperties) {
       return <Spin size="small" />
@@ -127,12 +120,7 @@ export const LinkTranslationModal = ({
     }
 
     if (!isUndefined(translationsError)) {
-      return (
-        <Alert
-          message={ getTranslationsErrorMessage() }
-          type="error"
-        />
-      )
+      return <TranslationErrorAlert error={ translationsError } />
     }
 
     return (
