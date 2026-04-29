@@ -11,14 +11,7 @@
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 
-/**
- * Returns the logged-in user's admin profile language if it is also a valid
- * system content language, or null otherwise.
- *
- * This mirrors the ExtJS/classic-UI behavior: the backend resolves the locale
- * for visible relation columns via AdminTool::getCurrentUser()->getLanguage(),
- * which is the user's profile language (Sprache in "Mein Profil").
- */
+/** Returns the user's profile language if it is a valid system content language, or null otherwise. */
 export const useUserContentLanguage = (): string | null => {
   const user = useUser()
   const settings = useSettings()
