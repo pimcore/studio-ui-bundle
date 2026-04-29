@@ -750,6 +750,7 @@ field-definitions.validation.empty-name: "Följande fälttyper saknar ett namn:"
 field-definitions.validation.reserved-word: "Reserverat ord använt som namn:"
 field-definitions.validation.invalid-format: "Ogiltigt namnformat (måste matcha [A-Za-z][A-Za-z0-9_]*):"
 field-definitions.validation.duplicate-name: "Duplikatnamn inom namnrymd:"
+field-definitions.delete.content: Vill du verkligen ta bort "{{name}}"?
 object-brick-key: Object Brick-nyckel
 field-name: Fältnamn
 field-definition.geopoint: Geografisk punkt
