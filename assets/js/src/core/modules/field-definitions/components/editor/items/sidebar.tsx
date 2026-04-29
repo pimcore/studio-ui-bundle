@@ -69,7 +69,7 @@ export const ItemsSidebar = (): React.JSX.Element => {
           meta: { configuration },
           actions: canDelete
             ? [
-                { key: 'delete', icon: 'delete' }
+                { key: 'delete', icon: 'trash' }
               ]
             : []
         })
@@ -93,7 +93,7 @@ export const ItemsSidebar = (): React.JSX.Element => {
         meta: { configuration },
         actions: canDelete
           ? [
-              { key: 'delete', icon: 'delete' }
+              { key: 'delete', icon: 'trash' }
             ]
           : []
       }
