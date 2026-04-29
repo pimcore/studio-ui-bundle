@@ -63,9 +63,9 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
 
   const [definitionKeyId, setDefinitionKeyId] = useState<number | undefined>(undefined)
   const [definitionModalOpen, setDefinitionModalOpen] = useState(false)
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(20)
-  const [searchTerm, setSearchTerm] = useState('')
+  const [page, setPage] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(20)
+  const [searchTerm, setSearchTerm] = useState<string>('')
   const [sorting, setSorting] = useState<SortingState>([])
 
   const onSortingChange = useCallback((newSorting: SortingState) => {
