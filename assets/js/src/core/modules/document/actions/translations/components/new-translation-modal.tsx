@@ -24,7 +24,7 @@ import { type LanguageOption } from '@Pimcore/modules/document/actions/paste/use
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { has, isNil, isString, isUndefined } from 'lodash'
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
-import { useDocumentGetTranslationParentByLanguageQuery, useDocumentGetTranslationsQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
+import { useDocumentGetTranslationParentByLanguageQuery, useLazyDocumentGetTranslationsQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import { ApiError } from '@Pimcore/modules/app/error-handler'
 
@@ -60,10 +60,13 @@ export const NewTranslationModal = ({
 
   const documentId = isNil(currentDocument?.id) ? 0 : Number(currentDocument.id)
 
-  const { isLoading: isTranslationsLoading, error: translationsError } = useDocumentGetTranslationsQuery(
-    { id: documentId },
-    { skip: !isOpen || documentId === 0 }
-  )
+  const [fetchTranslations, { isFetching: isTranslationsLoading, error: translationsError }] = useLazyDocumentGetTranslationsQuery()
+
+  useEffect(() => {
+    if (isOpen && documentId !== 0) {
+      void fetchTranslations({ id: documentId })
+    }
+  }, [isOpen, documentId])
 
   const languageProperty = (!isNil(currentDocument) && has(currentDocument, 'properties') && Array.isArray(currentDocument?.properties))
     ? currentDocument.properties?.find(prop => prop.key === 'language')

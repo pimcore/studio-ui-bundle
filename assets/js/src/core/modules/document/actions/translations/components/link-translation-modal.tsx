@@ -28,7 +28,7 @@ import { isNull, isString, isUndefined } from 'lodash'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { Form } from '@sdk/components'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { useDocumentGetTranslationsQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
+import { useLazyDocumentGetTranslationsQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 
 export interface LinkTranslationModalProps {
   isOpen: boolean
@@ -51,10 +51,13 @@ export const LinkTranslationModal = ({
   const { getDisplayName } = useLanguageLookup()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const { isLoading: isTranslationsLoading, error: translationsError } = useDocumentGetTranslationsQuery(
-    { id: documentId },
-    { skip: !isOpen || documentId === 0 }
-  )
+  const [fetchTranslations, { isFetching: isTranslationsLoading, error: translationsError }] = useLazyDocumentGetTranslationsQuery()
+
+  useEffect(() => {
+    if (isOpen && documentId !== 0) {
+      void fetchTranslations({ id: documentId })
+    }
+  }, [isOpen, documentId])
 
   const { data: selectedDocumentProperties, isLoading: isLoadingDocumentProperties, error: propertiesError } = usePropertyGetCollectionForElementByTypeAndIdQuery(
     {
