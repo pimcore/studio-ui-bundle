@@ -176,8 +176,13 @@ export const useStyle = createStyles(({ css }, { phase, brandColor }: StyleProps
         }
       }
     `,
-    logoImage: css`
+    backdropBlur: css`
       position: absolute;
+      inset: 0;
+      backdrop-filter: blur(15px);
+      pointer-events: none;
+    `,
+    logoImage: css`      position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);

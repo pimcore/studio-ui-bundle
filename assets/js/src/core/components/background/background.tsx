@@ -35,6 +35,7 @@ const Background = ({ phase = 'idle' }: BackgroundProps): React.JSX.Element => {
       <div className='background-figure background-figure--top-left'></div>
       <div className={ styles.logoOrbitCW } />
       <div className={ styles.logoOrbitCCW } />
+      <div className={ styles.backdropBlur } />
       <img
         alt="Logo"
         className={ styles.logoImage }

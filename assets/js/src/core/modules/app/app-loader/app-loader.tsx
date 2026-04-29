@@ -33,8 +33,6 @@ import { type AppLoaderRegistry } from './services/app-loader-registry'
 import { container, serviceIds } from '@sdk/app'
 import { useGlobalMessageBusLoader } from './loader/global-message-bus/loader'
 import { AppLoadingContext, type AppLoadingContextValue } from './context/app-loading-context'
-import { useAppDispatch } from '@sdk/app'
-import { setPreloaderBranding, setPreloaderThumbnails } from '@Pimcore/modules/app/settings/settings-slice'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -45,7 +43,6 @@ export type LoadPhase = 'loading' | 'outro' | 'idle'
 export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const [phase, setPhase] = useState<LoadPhase>('loading')
   const isLoading = phase === 'loading' || phase === 'outro'
-  const dispatch = useAppDispatch()
 
   const [pendingLoaders, setPendingLoaders] = useState<Set<string>>(new Set())
   const registerLoader = useCallback((id: string) => {
@@ -75,31 +72,6 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
       if (outroTimerRef.current !== null) {
         clearTimeout(outroTimerRef.current)
       }
-    }
-  }, [])
-
-  // Read brand colors from the Twig preloader's data- attributes and pre-populate
-  // the Redux store so Background uses the correct colors before adminSettings loads.
-  // Also set CSS variables directly on :root immediately — before any React render —
-  // so --pimcore-brand-color and --pimcore-brand-background-color are available
-  // from frame 1 without waiting for base-layout-view to mount.
-  useEffect(() => {
-    const preloader = document.getElementById('app-preloader')
-    if (preloader === null) return
-    const brandColor = preloader.dataset.brandColor ?? ''
-    const backgroundShade = preloader.dataset.brandBackgroundColor ?? ''
-    const logoUrl = preloader.dataset.logoUrl ?? ''
-    if (brandColor !== '') {
-      document.documentElement.style.setProperty('--pimcore-brand-color', brandColor)
-    }
-    if (backgroundShade !== '') {
-      document.documentElement.style.setProperty('--pimcore-brand-background-color', backgroundShade)
-    }
-    if (brandColor !== '' || backgroundShade !== '') {
-      dispatch(setPreloaderBranding({ brandColor, backgroundShade }))
-    }
-    if (logoUrl !== '') {
-      dispatch(setPreloaderThumbnails(logoUrl))
     }
   }, [])
 
