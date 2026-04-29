@@ -17,7 +17,7 @@ error.error_widget_name_invalid: El nombre del widget no es válido (solo se per
 error.error_validation_failed: La validación falló
 error.error_validation.email_failed: Introduzca una dirección de correo electrónico válida
 error.error_element_not_found: Elemento no encontrado
-error.error_document_language_not_set: Por favor, seleccione un documento de destino con un idioma válido
+error.error_document_language_not_set: El documento no tiene ninguna propiedad de idioma establecida
 error.error_inconsistent_asset_type: Solo se permiten assets del mismo tipo aquí.
 sidebar.selected_elements: Elementos seleccionados
 sidebar.grid_config: Configuración de cuadrícula
