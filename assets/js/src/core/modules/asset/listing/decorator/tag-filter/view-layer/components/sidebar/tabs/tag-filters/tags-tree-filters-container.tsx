@@ -8,10 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type Key, useEffect, useState } from 'react'
+import React, { type Key, useState } from 'react'
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { type TreeDataItem, TreeElement } from '@Pimcore/components/tree-element/tree-element'
+import { TreeElement } from '@Pimcore/components/tree-element/tree-element'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import {
   createTreeStructure
@@ -19,27 +19,8 @@ import {
 import {
   useTagGetCollectionQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
-import { isEmpty, isNil, isNull, isUndefined } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
-
-const getAllTreeKeys = (treeData: TreeDataItem[]): string[] => {
-  const result: string[] = []
-
-  const traverse = (nodes: TreeDataItem[]): void => {
-    for (const node of nodes) {
-      if (!isUndefined(node.key)) {
-        result.push(String(node.key))
-      }
-      if (!isNull(node.children)) {
-        traverse(node.children as TreeDataItem[])
-      }
-    }
-  }
-
-  traverse(treeData)
-
-  return result
-}
 
 interface TagsTreeFiltersContainerProps {
   checkedKeys: Key[]
@@ -60,11 +41,17 @@ export const TagsTreeFiltersContainer = ({ checkedKeys, setCheckedKeys }: TagsTr
     ? createTreeStructure({ tags: tags.items, loadingNodes: new Set<string>() })
     : []
 
-  useEffect(() => {
-    if (!isNil(filter) && !isEmpty(filter)) {
-      setExpandedKeys([0, ...getAllTreeKeys(treeData)])
+  const handleSearch = (value: string): void => {
+    setFilter(value)
+
+    if (!isEmpty(value)) {
+      setExpandedKeys((prevKeys) => {
+        const hasRoot = prevKeys.some((key) => String(key) === '0')
+
+        return hasRoot ? prevKeys : [0, ...prevKeys]
+      })
     }
-  }, [filter, tags])
+  }
 
   if (tagsLoading) {
     return <Content loading />
@@ -89,14 +76,14 @@ export const TagsTreeFiltersContainer = ({ checkedKeys, setCheckedKeys }: TagsTr
     >
       <SearchInput
         loading={ tagsLoading }
-        onSearch={ setFilter }
+        onSearch={ handleSearch }
         placeholder={ t('search') }
       />
 
       <TreeElement
         checkStrictly
         checkedKeys={ { checked: checkedKeys, halfChecked: [] } }
-        expandedKeys={ expandedKeys }
+        defaultExpandedKeys={ expandedKeys }
         onCheck={ handleCheck }
         onExpand={ (keys) => { setExpandedKeys(keys) } }
         treeData={ treeData }
