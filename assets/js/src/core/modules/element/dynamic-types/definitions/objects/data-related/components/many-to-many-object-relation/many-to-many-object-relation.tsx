@@ -168,7 +168,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
       refetchAll()
     }
     prevDataObjectRef.current = dataObject
-  }, [dataObject]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [dataObject])
 
   const columnDefinition = visibleFieldsToColumnDefinitions({
     visibleFieldDefinitions,
