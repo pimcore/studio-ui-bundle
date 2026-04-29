@@ -70,6 +70,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
 
   useEffect(() => {
     if (!isUndefined(translationsError)) {
+      handleModalClose()
       trackError(new ApiError(translationsError))
     }
   }, [translationsError])
