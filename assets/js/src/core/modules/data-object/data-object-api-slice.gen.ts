@@ -431,8 +431,6 @@ export type DataObjectGetGridApiArg = {
     classId: string;
     body: {
         folderId: number;
-        /** When true, empty localized values fall back to configured fallback languages */
-        applyFallbackLanguages?: boolean;
         columns?: GridColumnRequest[];
         filters?: GridFilter;
     };

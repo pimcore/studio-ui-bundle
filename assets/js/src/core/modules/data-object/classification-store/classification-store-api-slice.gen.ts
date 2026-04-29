@@ -355,7 +355,7 @@ export type ClassificationStoreConfigurationCollectionCollectionApiResponse =
     };
 export type ClassificationStoreConfigurationCollectionCollectionApiArg = {
     /** ID of the store to list collections for */
-    storeId: number;
+    storeId: any;
     body: {
         filters?: {
             page?: number;
@@ -389,7 +389,7 @@ export type ClassificationStoreConfigurationCollectionRelationCollectionApiRespo
     };
 export type ClassificationStoreConfigurationCollectionRelationCollectionApiArg = {
     /** ID of the collection to list relations for */
-    colId: number;
+    colId: any;
     body: {
         filters?: {
             page?: number;
@@ -415,7 +415,7 @@ export type ClassificationStoreConfigurationGroupCollectionApiResponse =
     };
 export type ClassificationStoreConfigurationGroupCollectionApiArg = {
     /** ID of the store to list groups for */
-    storeId: number;
+    storeId: any;
     body: {
         filters?: {
             page?: number;
@@ -449,7 +449,7 @@ export type ClassificationStoreConfigurationKeyCollectionApiResponse =
     };
 export type ClassificationStoreConfigurationKeyCollectionApiArg = {
     /** ID of the store to list keys for */
-    storeId: number;
+    storeId: any;
     body: {
         filters?: {
             page?: number;
@@ -483,7 +483,7 @@ export type ClassificationStoreConfigurationKeyGroupRelationCollectionApiRespons
     };
 export type ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg = {
     /** ID of the group to list key relations for */
-    groupId: number;
+    groupId: any;
     body: {
         filters?: {
             page?: number;
