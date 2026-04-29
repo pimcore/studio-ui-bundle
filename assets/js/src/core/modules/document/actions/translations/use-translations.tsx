@@ -52,7 +52,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
   const LINK_MODAL_ID = useMemo(() => `link-translation-modal-${uuid()}`, [])
   const NEW_MODAL_ID = useMemo(() => `new-translation-modal-${uuid()}`, [])
 
-  const [fetchTranslations, { data: translations, error: translationsError, isLoading: isTranslationsLoading }] = useLazyDocumentGetTranslationsQuery()
+  const [fetchTranslations, { data: translations }] = useLazyDocumentGetTranslationsQuery()
 
   const { data: docTypeTypes } = useDocumentDocTypeTypeListQuery()
 
@@ -270,13 +270,12 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
     if (isLinkModalOpen && !isNull(currentDocument)) {
       addModal(LINK_MODAL_ID, (
         <LinkTranslationModal
+          documentId={ Number(currentDocument.id) }
           isOpen={ isLinkModalOpen }
-          isTranslationsLoading={ isTranslationsLoading }
           onClose={ handleModalClose }
           onSelectedDocumentChange={ setSelectedDocument }
           onSubmit={ handleLinkDocument }
           selectedDocument={ selectedDocument }
-          translationsError={ translationsError }
         />
       ))
     } else {
@@ -286,7 +285,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
     return () => {
       removeModal(LINK_MODAL_ID)
     }
-  }, [isLinkModalOpen, currentDocument, selectedDocument, isTranslationsLoading, translationsError])
+  }, [isLinkModalOpen, currentDocument, selectedDocument])
 
   useEffect(() => {
     if (isNewTranslationModalOpen) {
@@ -294,10 +293,8 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
         <NewTranslationModal
           currentDocument={ currentDocument }
           isOpen={ isNewTranslationModalOpen }
-          isTranslationsLoading={ isTranslationsLoading }
           onClose={ handleModalClose }
           onSubmit={ handleNewTranslationSubmit }
-          translationsError={ translationsError }
           useInheritance={ useInheritance }
         />
       ))
@@ -308,7 +305,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
     return () => {
       removeModal(NEW_MODAL_ID)
     }
-  }, [isNewTranslationModalOpen, useInheritance, isTranslationsLoading, translationsError])
+  }, [isNewTranslationModalOpen, useInheritance])
 
   return {
     translationContextMenuItem

@@ -14,6 +14,7 @@ import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
 import { Spin } from '@Pimcore/components/spin/spin'
+import { Content } from '@Pimcore/components/content/content'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { ManyToOneRelation } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
 import type { ManyToOneRelationValue } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
@@ -27,30 +28,33 @@ import { isNull, isString, isUndefined } from 'lodash'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { Form } from '@sdk/components'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import type { ApiErrorData } from '@Pimcore/modules/app/error-handler/types'
+import { useDocumentGetTranslationsQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 
 export interface LinkTranslationModalProps {
   isOpen: boolean
+  documentId: number
   selectedDocument: ManyToOneRelationValue | null
   onSelectedDocumentChange: (document: ManyToOneRelationValue | null) => void
   onClose: () => void
   onSubmit: () => Promise<void>
-  isTranslationsLoading?: boolean
-  translationsError?: ApiErrorData
 }
 
 export const LinkTranslationModal = ({
   isOpen,
+  documentId,
   selectedDocument,
   onSelectedDocumentChange,
   onClose,
-  onSubmit,
-  isTranslationsLoading = false,
-  translationsError
+  onSubmit
 }: LinkTranslationModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { getDisplayName } = useLanguageLookup()
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const { isLoading: isTranslationsLoading, error: translationsError } = useDocumentGetTranslationsQuery(
+    { id: documentId },
+    { skip: !isOpen || documentId === 0 }
+  )
 
   const { data: selectedDocumentProperties, isLoading: isLoadingDocumentProperties, error: propertiesError } = usePropertyGetCollectionForElementByTypeAndIdQuery(
     {
@@ -115,7 +119,11 @@ export const LinkTranslationModal = ({
   }
 
   const renderBody = (): React.ReactNode => {
-    if (translationsError !== undefined) {
+    if (isTranslationsLoading) {
+      return <Content loading />
+    }
+
+    if (!isUndefined(translationsError)) {
       return (
         <Alert
           banner
@@ -163,7 +171,7 @@ export const LinkTranslationModal = ({
             {t('cancel')}
           </Button>
           <Button
-            disabled={ isNull(selectedDocument) || isTranslationsLoading || translationsError !== undefined }
+            disabled={ isNull(selectedDocument) || isTranslationsLoading || !isUndefined(translationsError) }
             loading={ isSubmitting }
             onClick={ handleSubmit }
             type="primary"
@@ -177,9 +185,7 @@ export const LinkTranslationModal = ({
       size="L"
       title={ t('document.translation.link-existing-document') }
     >
-      <Spin spinning={ isTranslationsLoading }>
-        {renderBody()}
-      </Spin>
+      {renderBody()}
     </WindowModal>
   )
 }
