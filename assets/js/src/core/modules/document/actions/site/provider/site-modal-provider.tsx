@@ -9,7 +9,7 @@
  */
 
 import { Form, type formInstanceType } from '@Pimcore/components/form/form'
-import React, { createContext, useMemo, useState } from 'react'
+import React, { createContext, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type SiteFormValues } from '../site-form'
 import { App } from 'antd'
@@ -39,7 +39,6 @@ interface CurrentModal {
   config: SiteModalConfig
   form: formInstanceType<SiteFormValues>
   isLoading: boolean
-  hasUnsavedChanges: boolean
 }
 
 export const SiteModalContext = createContext<SiteModalContextProps | undefined>(undefined)
@@ -50,17 +49,31 @@ export const SiteModalProvider = ({ children }: SiteModalProviderProps): React.J
   const [currentModal, setCurrentModal] = useState<CurrentModal | null>(null)
   const [form] = Form.useForm<SiteFormValues>()
 
-  const hasUnsavedChanges = (modal: CurrentModal): boolean => {
-    return modal.hasUnsavedChanges
-  }
+  // Track unsaved-changes via ref to avoid re-rendering the entire provider tree on every keystroke
+  const hasUnsavedChangesRef = useRef(false)
+
+  const isOpen = currentModal !== null
+  const currentDocumentId = currentModal?.config.documentId ?? null
 
   const markFormAsChanged = (): void => {
-    setCurrentModal(prev => isNull(prev) ? null : { ...prev, hasUnsavedChanges: true })
+    hasUnsavedChangesRef.current = true
   }
 
   const markFormAsClean = (): void => {
-    setCurrentModal(prev => isNull(prev) ? null : { ...prev, hasUnsavedChanges: false })
+    hasUnsavedChangesRef.current = false
   }
+
+  const openNewModal = useCallback((config: SiteModalConfig): void => {
+    form.resetFields()
+    form.setFieldsValue(config.initialValues)
+    hasUnsavedChangesRef.current = false
+
+    setCurrentModal({
+      config,
+      form,
+      isLoading: false
+    })
+  }, [form])
 
   const openModal = (config: SiteModalConfig): void => {
     if (!isNull(currentModal)) {
@@ -69,7 +82,7 @@ export const SiteModalProvider = ({ children }: SiteModalProviderProps): React.J
         return
       }
 
-      if (hasUnsavedChanges(currentModal)) {
+      if (hasUnsavedChangesRef.current) {
         void modal.confirm({
           title: t('unsaved-changes.title'),
           content: t('unsaved-changes.message'),
@@ -97,23 +110,10 @@ export const SiteModalProvider = ({ children }: SiteModalProviderProps): React.J
     openNewModal(config)
   }
 
-  const openNewModal = (config: SiteModalConfig): void => {
-    form.resetFields()
-    form.setFieldsValue(config.initialValues)
-
-    const newModal: CurrentModal = {
-      config,
-      form,
-      isLoading: false,
-      hasUnsavedChanges: false
-    }
-
-    setCurrentModal(newModal)
-  }
-
   const closeModal = (): void => {
-    if (isNull(currentModal) || !hasUnsavedChanges(currentModal)) {
+    if (isNull(currentModal) || !hasUnsavedChangesRef.current) {
       setCurrentModal(null)
+      hasUnsavedChangesRef.current = false
     } else {
       void modal.confirm({
         title: t('unsaved-changes.title'),
@@ -122,6 +122,7 @@ export const SiteModalProvider = ({ children }: SiteModalProviderProps): React.J
         cancelText: t('cancel'),
         onOk: () => {
           setCurrentModal(null)
+          hasUnsavedChangesRef.current = false
         }
       })
     }
@@ -147,12 +148,12 @@ export const SiteModalProvider = ({ children }: SiteModalProviderProps): React.J
     }
   }
 
-  const contextValue = useMemo(() => ({
+  const contextValue = useMemo<SiteModalContextProps>(() => ({
     openModal,
     closeModal,
-    isOpen: currentModal !== null,
-    currentDocumentId: currentModal?.config.documentId ?? null
-  }), [currentModal])
+    isOpen,
+    currentDocumentId
+  }), [openModal, closeModal, isOpen, currentDocumentId])
 
   return (
     <SiteModalContext.Provider value={ contextValue }>

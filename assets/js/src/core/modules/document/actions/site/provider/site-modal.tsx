@@ -23,7 +23,6 @@ interface CurrentModal {
   config: SiteModalConfig
   form: formInstanceType<SiteFormValues>
   isLoading: boolean
-  hasUnsavedChanges: boolean
 }
 
 interface SiteModalProps {
