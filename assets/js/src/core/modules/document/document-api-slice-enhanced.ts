@@ -71,15 +71,15 @@ const api = baseApi.enhanceEndpoints({
     },
 
     documentGetTranslations: {
-      providesTags: (result, error, args) => providingTags.DOCUMENT_DETAIL_ID(args.id)
+      providesTags: () => []
     },
 
     documentAddTranslation: {
-      invalidatesTags: (result, error, args) => invalidatingTags.DOCUMENT_DETAIL_ID(args.id)
+      invalidatesTags: () => []
     },
 
     documentDeleteTranslation: {
-      invalidatesTags: (result, error, args) => invalidatingTags.DOCUMENT_DETAIL_ID(args.id)
+      invalidatesTags: () => []
     }
   }
 }).injectEndpoints({
