@@ -101,6 +101,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
       key: 'link-existing-document',
       icon: <Icon value="link-document" />,
       onClick: () => {
+        void fetchTranslations({ id: document.id })
         setCurrentDocument(document)
         setCurrentOnFinish(() => onFinish)
         setIsLinkModalOpen(true)
@@ -177,6 +178,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
           hidden: !isTranslatableInheritance,
           icon: <Icon value="inheritance-active" />,
           onClick: () => {
+            void fetchTranslations({ id: document.id })
             setCurrentDocument(document)
             setCurrentOnFinish(() => onFinish)
             setUseInheritance(true)
@@ -188,6 +190,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
           key: 'new-document-blank',
           icon: <Icon value="blank" />,
           onClick: () => {
+            void fetchTranslations({ id: document.id })
             setCurrentDocument(document)
             setCurrentOnFinish(() => onFinish)
             setUseInheritance(false)
@@ -202,11 +205,6 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
       key: 'translation',
       icon: <Icon value="translate" />,
       hidden: false,
-      onTitleMouseEnter: () => {
-        if (!isNil(document.id)) {
-          void fetchTranslations({ id: document.id })
-        }
-      },
       children: translationItems
     }
   }
