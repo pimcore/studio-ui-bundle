@@ -56,9 +56,9 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
   const [detailForm] = Form.useForm<ICollectionDetailFormValues>()
 
   const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(20)
-  const [searchTerm, setSearchTerm] = useState('')
+  const [page, setPage] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(20)
+  const [searchTerm, setSearchTerm] = useState<string>('')
   const [sorting, setSorting] = useState<SortingState>([])
 
   const onSortingChange = useCallback((newSorting: SortingState) => {
