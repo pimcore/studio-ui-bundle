@@ -14,6 +14,7 @@ import { type GridColumnConfiguration as AssetGridColumnConfig } from '@Pimcore/
 import { type GridColumnConfiguration as ObjectGridColumnConfig } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useTranslation } from 'react-i18next'
 import { isEmpty, isNil } from 'lodash'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 // @todo: Create a union type for all the different element types
 export type AvailableColumn = (AssetGridColumnConfig | ObjectGridColumnConfig) & {
@@ -143,7 +144,7 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
 
               if ('fieldDefinition' in column.config && !isNil(column.config)) {
                 const fieldDefinition = column.config.fieldDefinition as Record<string, any>
-                translationKey = fieldDefinition?.title ?? column.key
+                translationKey = !isEmptyValue(fieldDefinition?.title) ? fieldDefinition?.title : column.key
               }
 
               return {

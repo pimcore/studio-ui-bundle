@@ -17,6 +17,7 @@ error.error_widget_name_invalid: Widget-Name ist ungültig (nur alphanumerische 
 error.error_validation_failed: Validierung fehlgeschlagen
 error.error_validation.email_failed: Bitte geben Sie eine gültige E-Mail-Adresse ein
 error.error_element_not_found: Element nicht gefunden
+error.error_document_language_not_set: Für das Dokument ist keine Sprache festgelegt
 error.error_inconsistent_asset_type: Nur Assets desselben Typs sind hier erlaubt.
 sidebar.selected_elements: Ausgewählte Elemente
 sidebar.grid_config: Grid-Konfiguration
@@ -750,6 +751,7 @@ field-definitions.validation.empty-name: "Den folgenden Feldtypen fehlt ein Name
 field-definitions.validation.reserved-word: "Reserviertes Wort als Name verwendet:"
 field-definitions.validation.invalid-format: "Ungültiges Namensformat (muss [A-Za-z][A-Za-z0-9_]* entsprechen):"
 field-definitions.validation.duplicate-name: "Doppelter Name innerhalb des Namensraums:"
+field-definitions.delete.content: Möchten Sie "{{name}}" wirklich löschen?
 object-brick-key: Object Brick-Schlüssel
 field-name: Feldname
 field-definition.geopoint: Geografischer Punkt
@@ -1502,6 +1504,10 @@ path_query: Pfad und Query
 auto_create: Automatisch erstellen
 widget.redirects: Weiterleitungen
 navigation.redirects: Weiterleitungen
+robots-txt.save-success: robots.txt erfolgreich gespeichert
+robots-txt.on-file-system-warning: "Speichern deaktiviert: Eine physische robots.txt-Datei existiert im Dateisystem."
+widget.robots-txt: robots.txt
+navigation.robots-txt: robots.txt
 perspective.default: Standard
 perspective.switching.title: Perspektive wechseln
 perspective.switching.description: Es wird zur folgenden Perspektive gewechselt
@@ -2230,6 +2236,7 @@ perspective-editor.form.main-nav-permission.experienceEcommerce.emails: E-Mails
 perspective-editor.form.main-nav-permission.experienceEcommerce.documentTypes: Dokumenttypen
 perspective-editor.form.main-nav-permission.experienceEcommerce.websiteSettings: Website Einstellungen
 perspective-editor.form.main-nav-permission.experienceEcommerce.redirects: Weiterleitungen
+perspective-editor.form.main-nav-permission.experienceEcommerce.robotsTxt: robots.txt
 perspective-editor.form.main-nav-permission.category.assetManagement: Asset Verwaltung
 perspective-editor.form.main-nav-permission.assetManagement.hidden: Asset Verwaltung Menü ausblenden
 perspective-editor.form.main-nav-permission.assetManagement.assetThumbnails: Bilder Thumbnails
@@ -2424,7 +2431,7 @@ user-management.permissions.newsletters: Newsletter
 user-management.permissions.targeting: Targeting
 user-management.permissions.http_errors: HTTP-Fehler
 user-management.permissions.seo_document_editor: SEO-Dokument-Editor
-user-management.permissions."robots.txt": robots.txt
+user-management.permissions.robots.txt: robots.txt
 user-management.permissions.routes: Routen
 user-management.permissions.word_export: Word-Export
 user-management.permissions.xliff_import_export: XLIFF Import/Export
@@ -2460,6 +2467,8 @@ user-management.permissions.plugin_datahub_permission_update: Datahub Aktualisie
 user-management.permissions.portal-engine_collection-access: Backend Collection Access
 user-management.permissions.portal-engine_index-management: Portal Indexverwaltung
 user-management.permissions.portal-engine_wizard: Portal Setup-Assistent
+user-management.permissions.studio_perspective_editor: Perspektiven-Editor
+user-management.permissions.studio_perspective_widget_editor: Perspektiven-Widget-Editor
 user-management.permissions.wai_configuration_permission: Konfiguration der Automatisierungsvorlagen
 forgot-password-form.username: Geben Sie Ihren Benutzernamen ein und Pimcore sendet einen Login-Link an Ihre E-Mail-Adresse
 forgot-password-form.username.placeholder: Benutzername

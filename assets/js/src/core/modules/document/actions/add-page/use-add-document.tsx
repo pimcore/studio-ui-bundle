@@ -73,38 +73,40 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
         type: 'custom',
         component: (<Spin type="classic" />)
       }]
-    } else if (!isUndefined(error) || isNil(documentTypes) || isEmpty(documentTypes.items)) {
-      return documentHierarchy // Return empty if empty or error occurs
+    } else if (!isUndefined(error) || isNil(documentTypes)) {
+      return documentHierarchy // Return empty on error or missing data
     }
 
-    const structuredDocumentTypes = [...(documentTypes.items)]
-      .filter(docType => docType.type === type) // Filter for a certain docType
-      .sort((a, b) => a.name.localeCompare(b.name))
-      .reduce<Record<string, DocType[]>>((acc, docType) => {
-        const groupName = isNil(docType.group) || isEmpty(docType.group) ? 'undefined' : docType.group
+    if (!isEmpty(documentTypes.items)) {
+      const structuredDocumentTypes = [...(documentTypes.items)]
+        .filter(docType => docType.type === type) // Filter for a certain docType
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .reduce<Record<string, DocType[]>>((acc, docType) => {
+          const groupName = isNil(docType.group) || isEmpty(docType.group) ? 'undefined' : docType.group
 
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-        if (acc[groupName] === undefined) {
-          acc[groupName] = []
+          // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+          if (acc[groupName] === undefined) {
+            acc[groupName] = []
+          }
+
+          acc[groupName].push(docType)
+
+          return acc
+        }, {})
+
+      if (structuredDocumentTypes.undefined !== undefined) {
+        documentHierarchy = structuredDocumentTypes.undefined.map(docType => getDocumentEntry(docType, node))
+      }
+
+      for (const [group, docTypes] of Object.entries(structuredDocumentTypes)) {
+        if (group !== 'undefined') {
+          documentHierarchy.push({
+            label: t(group),
+            key: 'add-document-group-' + type + group,
+            icon: <Icon value={ 'folder' } />,
+            children: docTypes.map(docType => getDocumentEntry(docType, node))
+          })
         }
-
-        acc[groupName].push(docType)
-
-        return acc
-      }, {})
-
-    if (structuredDocumentTypes.undefined !== undefined) {
-      documentHierarchy = structuredDocumentTypes.undefined.map(docType => getDocumentEntry(docType, node))
-    }
-
-    for (const [group, docTypes] of Object.entries(structuredDocumentTypes)) {
-      if (group !== 'undefined') {
-        documentHierarchy.push({
-          label: t(group),
-          key: 'add-document-group-' + type + group,
-          icon: <Icon value={ 'folder' } />,
-          children: docTypes.map(docType => getDocumentEntry(docType, node))
-        })
       }
     }
 

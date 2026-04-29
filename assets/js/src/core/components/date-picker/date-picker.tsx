@@ -23,6 +23,7 @@ import { TimePicker, type TimePickerProps } from '@Pimcore/components/date-picke
 import { useStyles } from './date-picker.styles'
 import cn from 'classnames'
 import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
+import { formatDate, formatDateTime } from '@Pimcore/utils/date-time'
 
 export type DatePickerProps = PickerProps & {
   value?: DatePickerValueType
@@ -50,10 +51,17 @@ const DatePickerComponent = (props: DatePickerProps): React.JSX.Element => {
     props.onChange?.(fromDayJs(date, props.outputType, props.outputFormat))
   }
 
+  const formatDisplayValue = (date: Dayjs): string => {
+    const timestamp = date.unix()
+    return props.showTime !== undefined && props.showTime !== false
+      ? formatDateTime({ timestamp, dateStyle: 'short', timeStyle: 'short' })
+      : formatDate(timestamp)
+  }
+
   return (
     <OriginalDatePicker
       { ...props }
-      format={ props.outputFormat }
+      format={ props.format ?? formatDisplayValue }
       onChange={ handleChange }
       popupClassName={ styles.datePickerDropdown }
       rootClassName={ cn(styles.datePicker, props.className, {

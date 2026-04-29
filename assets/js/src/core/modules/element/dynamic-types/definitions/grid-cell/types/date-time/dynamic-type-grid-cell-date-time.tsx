@@ -15,7 +15,7 @@ import { DateCell } from '../../components/date/date-cell'
 
 @injectable()
 export class DynamicTypeGridCellDateTime extends DynamicTypeGridCellAbstract {
-  readonly id = 'datetime'
+  readonly id: string = 'datetime'
 
   getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
     // @todo create date time cell
