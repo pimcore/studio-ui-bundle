@@ -13,9 +13,9 @@ import { useStyles } from '@Pimcore/modules/field-definitions/components/editor/
 import { AddModalProvider } from '@Pimcore/modules/field-definitions/components/editor/items/sidebar/add-modal'
 import { SidebarModalHolder } from '@Pimcore/modules/field-definitions/components/editor/items/sidebar/modal-holder'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
-import { Content, ContentLayout, Icon, IconButton, IconTextButton, type ITreeElementProps, SearchInput, Toolbar, type TreeDataItem, TreeElement } from '@sdk/components'
+import { Content, ContentLayout, Icon, IconButton, IconTextButton, type ITreeElementProps, SearchInput, Toolbar, type TreeDataItem, TreeElement, useFormModal } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
-import { useDebounce } from '@sdk/utils'
+import { isEmptyValue, useDebounce } from '@sdk/utils'
 import { isNil } from 'lodash'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -41,6 +41,8 @@ export const ItemsSidebar = (): React.JSX.Element => {
   const debouncedSearchTerm = useDebounce(searchTerm, 300)
   const [showNewModal, setShowNewModal] = useState<boolean>(false)
   const { setActiveConfiguration, activeConfiguration, closeConfiguration } = useItems()
+
+  const modal = useFormModal()
 
   const treeData: ITreeElementProps['treeData'] = useMemo(() => {
     if (data === undefined) {
@@ -69,7 +71,7 @@ export const ItemsSidebar = (): React.JSX.Element => {
           meta: { configuration },
           actions: canDelete
             ? [
-                { key: 'delete', icon: 'delete' }
+                { key: 'delete', icon: 'trash' }
               ]
             : []
         })
@@ -93,7 +95,7 @@ export const ItemsSidebar = (): React.JSX.Element => {
         meta: { configuration },
         actions: canDelete
           ? [
-              { key: 'delete', icon: 'delete' }
+              { key: 'delete', icon: 'trash' }
             ]
           : []
       }
@@ -122,10 +124,20 @@ export const ItemsSidebar = (): React.JSX.Element => {
 
   const deleteConfiguration = (node: TreeDataItem): void => {
     const configuration = node.meta!.configuration! as ConfigurationPartial
+    const displayName = !isEmptyValue(configuration?.name) ? configuration.name : configuration.id
 
-    closeConfiguration(configuration)
-    deleteConfigurationMutation({ id: configuration.id }).catch((err: Error) => {
-      trackError(new ApiError(err))
+    modal.confirm({
+      title: t('delete'),
+      content: t('field-definitions.delete.content', { name: displayName }),
+      onOk: async () => {
+        closeConfiguration(configuration)
+
+        try {
+          await deleteConfigurationMutation({ id: configuration.id })
+        } catch (error) {
+          trackError(new ApiError(error as Error))
+        }
+      }
     })
   }
 

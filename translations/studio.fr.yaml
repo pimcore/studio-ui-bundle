@@ -17,6 +17,7 @@ error.error_widget_name_invalid: Le nom du widget est invalide (seuls les caract
 error.error_validation_failed: La validation a échoué
 error.error_validation.email_failed: Veuillez entrer une adresse e-mail valide
 error.error_element_not_found: Élément non trouvé
+error.error_document_language_not_set: Le document n'a pas de propriété de langue définie
 error.error_inconsistent_asset_type: Seuls les assets du même type sont autorisés ici.
 sidebar.selected_elements: Éléments sélectionnés
 sidebar.grid_config: Configuration de la grille
@@ -750,6 +751,7 @@ field-definitions.validation.empty-name: "Les types de champs suivants n'ont pas
 field-definitions.validation.reserved-word: "Mot réservé utilisé comme nom :"
 field-definitions.validation.invalid-format: "Format de nom invalide (doit correspondre à [A-Za-z][A-Za-z0-9_]*) :"
 field-definitions.validation.duplicate-name: "Nom en double dans l'espace de noms :"
+field-definitions.delete.content: Voulez-vous vraiment supprimer "{{name}}" ?
 object-brick-key: Clé Object Brick
 field-name: Nom du champ
 field-definition.geopoint: Point géographique

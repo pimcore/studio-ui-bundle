@@ -21,17 +21,31 @@ interface IVisibleFieldsToColumnDefinitionsProps {
   disabled: boolean
   pathFormatterClass: string
   transformGridColumn: (column: VisibleFieldDefinition, disabled: boolean) => IdentifiedColumnDef<unknown, never>
+  userLanguage: string | null
 }
 
-export const visibleFieldsToColumnDefinitions = ({ visibleFieldDefinitions, disabled, pathFormatterClass, transformGridColumn }: IVisibleFieldsToColumnDefinitionsProps): Array<ColumnDef<any>> => {
+/**
+ * Encode a column id as JSON matching the format expected by decodeColumnIdentifier
+ * in use-column-mapper.tsx: { key, locale }
+ */
+export const encodeColumnId = (key: string, locale: string | null | undefined): string => {
+  return JSON.stringify({
+    key: key.replaceAll('.', '**'),
+    locale: locale ?? null
+  })
+}
+
+export const visibleFieldsToColumnDefinitions = ({ visibleFieldDefinitions, disabled, pathFormatterClass, transformGridColumn, userLanguage }: IVisibleFieldsToColumnDefinitionsProps): Array<ColumnDef<any>> => {
   const columnDefinition: Array<ColumnDef<any>> = []
   const columnHelper = createColumnHelper()
 
   for (const column of visibleFieldDefinitions ?? []) {
     const baseColumn = transformGridColumn(column, disabled)
+    const locale = column.localizable ? userLanguage : null
     columnDefinition.push(
       columnHelper.accessor(column.key, {
         ...baseColumn,
+        id: encodeColumnId(column.key, locale),
         ...(isNonEmptyString(pathFormatterClass) && baseColumn.meta?.columnKey === 'fullpath' ? { cell: renderFullPathCell } : {})
       })
     )
@@ -58,6 +72,7 @@ export const enrichRowData = (visibleFieldDefinitions: VisibleFieldDefinition[] 
 
   return {
     ...row,
-    ...additionalColumns
+    ...additionalColumns,
+    '__api-data': { columns: rowData }
   }
 }

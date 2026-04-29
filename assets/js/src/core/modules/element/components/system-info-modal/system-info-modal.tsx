@@ -39,6 +39,11 @@ export type ISystemInfoModalData = Element & {
   fileSize?: number
   mimeType?: string | null
   className?: string
+  draftData?: {
+    id: number
+    modificationDate: number
+    isAutoSave: boolean
+  } | null
 }
 
 export interface ISystemInfoModalProps {
@@ -58,6 +63,8 @@ export const SystemInfoModal = ({ onClose, data }: ISystemInfoModalProps): React
   if (isNil(data)) {
     return <></>
   }
+
+  const modificationDate = data?.draftData?.modificationDate ?? data?.modificationDate
 
   const getByName = (name: string): ClassDefinitionListItem | undefined => {
     return classDefinitionData?.items?.find((classDefinition) => classDefinition.name === name)
@@ -172,9 +179,9 @@ export const SystemInfoModal = ({ onClose, data }: ISystemInfoModalProps): React
           value: formatDataUnit(data.fileSize)
         })}
 
-        {!isNil(data.modificationDate) && renderInputItem({
+        {!isNil(modificationDate) && renderInputItem({
           label: t('system-information.modification-date'),
-          value: formatDateTime({ timestamp: data.modificationDate, dateStyle: 'full', timeStyle: 'full' })
+          value: formatDateTime({ timestamp: modificationDate, dateStyle: 'full', timeStyle: 'full' })
         })}
         {renderInputItem({
           label: t('system-information.creation-date'),
