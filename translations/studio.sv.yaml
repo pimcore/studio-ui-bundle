@@ -17,6 +17,7 @@ error.error_widget_name_invalid: Widgetnamnet är ogiltigt (bara alfanumeriska t
 error.error_validation_failed: Validering misslyckades
 error.error_validation.email_failed: Ange en giltig e-postadress
 error.error_element_not_found: Elementet hittades inte
+error.error_document_language_not_set: Dokumentet har ingen språkegenskap angiven
 error.error_inconsistent_asset_type: Bara assets av samma typ tillåts här.
 sidebar.selected_elements: Valda element
 sidebar.grid_config: Rutnätskonfiguration
@@ -750,6 +751,7 @@ field-definitions.validation.empty-name: "Följande fälttyper saknar ett namn:"
 field-definitions.validation.reserved-word: "Reserverat ord använt som namn:"
 field-definitions.validation.invalid-format: "Ogiltigt namnformat (måste matcha [A-Za-z][A-Za-z0-9_]*):"
 field-definitions.validation.duplicate-name: "Duplikatnamn inom namnrymd:"
+field-definitions.delete.content: Vill du verkligen ta bort "{{name}}"?
 object-brick-key: Object Brick-nyckel
 field-name: Fältnamn
 field-definition.geopoint: Geografisk punkt

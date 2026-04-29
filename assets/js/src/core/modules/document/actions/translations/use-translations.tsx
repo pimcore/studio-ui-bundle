@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { type ItemType } from '@Pimcore/components/menu/menu'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { FlagIcon } from '@Pimcore/components/flag-icon/flag-icon'
-import { useDocumentGetTranslationsQuery, useDocumentDeleteTranslationMutation, useDocumentAddTranslationMutation, useDocumentAddMutation, useDocumentDocTypeTypeListQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
+import { useLazyDocumentGetTranslationsQuery, useDocumentDeleteTranslationMutation, useDocumentAddTranslationMutation, useDocumentAddMutation, useDocumentDocTypeTypeListQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 
 import { useDocumentHelper } from '@Pimcore/modules/document/hooks/use-document-helper'
 import { type Element } from '@Pimcore/modules/element/element-helper'
@@ -52,11 +52,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
   const LINK_MODAL_ID = useMemo(() => `link-translation-modal-${uuid()}`, [])
   const NEW_MODAL_ID = useMemo(() => `new-translation-modal-${uuid()}`, [])
 
-  const { data: translations, error: translationsError } = useDocumentGetTranslationsQuery({
-    id: document.id
-  }, {
-    skip: isNil(document.id)
-  })
+  const [fetchTranslations, { data: translations }] = useLazyDocumentGetTranslationsQuery()
 
   const { data: docTypeTypes } = useDocumentDocTypeTypeListQuery()
 
@@ -72,11 +68,6 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
     }
   }, [addError])
 
-  useEffect(() => {
-    if (!isUndefined(translationsError)) {
-      trackError(new ApiError(translationsError))
-    }
-  }, [translationsError])
 
   useEffect(() => {
     if (!isUndefined(addDocumentError)) {
@@ -105,6 +96,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
       key: 'link-existing-document',
       icon: <Icon value="link-document" />,
       onClick: () => {
+        void fetchTranslations({ id: document.id })
         setCurrentDocument(document)
         setCurrentOnFinish(() => onFinish)
         setIsLinkModalOpen(true)
@@ -181,6 +173,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
           hidden: !isTranslatableInheritance,
           icon: <Icon value="inheritance-active" />,
           onClick: () => {
+            void fetchTranslations({ id: document.id })
             setCurrentDocument(document)
             setCurrentOnFinish(() => onFinish)
             setUseInheritance(true)
@@ -192,6 +185,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
           key: 'new-document-blank',
           icon: <Icon value="blank" />,
           onClick: () => {
+            void fetchTranslations({ id: document.id })
             setCurrentDocument(document)
             setCurrentOnFinish(() => onFinish)
             setUseInheritance(false)
@@ -276,6 +270,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
     if (isLinkModalOpen && !isNull(currentDocument)) {
       addModal(LINK_MODAL_ID, (
         <LinkTranslationModal
+          documentId={ Number(currentDocument.id) }
           isOpen={ isLinkModalOpen }
           onClose={ handleModalClose }
           onSelectedDocumentChange={ setSelectedDocument }
