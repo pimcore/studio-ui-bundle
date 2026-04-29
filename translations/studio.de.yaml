@@ -750,6 +750,7 @@ field-definitions.validation.empty-name: "Den folgenden Feldtypen fehlt ein Name
 field-definitions.validation.reserved-word: "Reserviertes Wort als Name verwendet:"
 field-definitions.validation.invalid-format: "Ungültiges Namensformat (muss [A-Za-z][A-Za-z0-9_]* entsprechen):"
 field-definitions.validation.duplicate-name: "Doppelter Name innerhalb des Namensraums:"
+field-definitions.delete.content: Möchten Sie "{{name}}" wirklich löschen?
 object-brick-key: Object Brick-Schlüssel
 field-name: Feldname
 field-definition.geopoint: Geografischer Punkt
