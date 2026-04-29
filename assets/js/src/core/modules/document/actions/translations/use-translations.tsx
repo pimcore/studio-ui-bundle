@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { type ItemType } from '@Pimcore/components/menu/menu'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { FlagIcon } from '@Pimcore/components/flag-icon/flag-icon'
-import { useDocumentGetTranslationsQuery, useDocumentDeleteTranslationMutation, useDocumentAddTranslationMutation, useDocumentAddMutation, useDocumentDocTypeTypeListQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
+import { useLazyDocumentGetTranslationsQuery, useDocumentDeleteTranslationMutation, useDocumentAddTranslationMutation, useDocumentAddMutation, useDocumentDocTypeTypeListQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 
 import { useDocumentHelper } from '@Pimcore/modules/document/hooks/use-document-helper'
 import { type Element } from '@Pimcore/modules/element/element-helper'
@@ -52,11 +52,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
   const LINK_MODAL_ID = useMemo(() => `link-translation-modal-${uuid()}`, [])
   const NEW_MODAL_ID = useMemo(() => `new-translation-modal-${uuid()}`, [])
 
-  const { data: translations, error: translationsError } = useDocumentGetTranslationsQuery({
-    id: document.id
-  }, {
-    skip: isNil(document.id)
-  })
+  const [fetchTranslations, { data: translations, error: translationsError }] = useLazyDocumentGetTranslationsQuery()
 
   const { data: docTypeTypes } = useDocumentDocTypeTypeListQuery()
 
@@ -206,6 +202,11 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
       key: 'translation',
       icon: <Icon value="translate" />,
       hidden: false,
+      onTitleMouseEnter: () => {
+        if (!isNil(document.id)) {
+          void fetchTranslations({ id: document.id })
+        }
+      },
       children: translationItems
     }
   }
