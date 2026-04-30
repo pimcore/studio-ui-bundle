@@ -29,7 +29,7 @@ export function registerAllJobRehydrations (registry: JobRehydrationRegistry): v
     ['studio_ee_job_delete_assets', 'studio_ee_job_delete_data_objects', 'studio_ee_job_delete_documents'],
     (parent: JobRun) => new MessageBusJobHandler({
       jobRunId: parent.id,
-      title: t('jobs.delete-job.title'),
+      title: t('element.delete.deleting-folder'),
       progressCalculator: new StepCompletionCalculator()
     })
   )
@@ -39,12 +39,17 @@ export function registerAllJobRehydrations (registry: JobRehydrationRegistry): v
     ['studio_ee_job_batch_delete_assets', 'studio_ee_job_batch_delete_data_objects'],
     (parent: JobRun) => new MessageBusJobHandler({
       jobRunId: parent.id,
-      title: t('jobs.batch-delete-job.title'),
+      title: t('batch-delete.job-title'),
       progressCalculator: new StepCompletionCalculator()
     })
   )
 
   // Clone (may have child job)
+  const cloneTitleKeys: Record<string, string> = {
+    studio_ee_job_clone_assets: 'jobs.asset-clone-job.title',
+    studio_ee_job_clone_documents: 'jobs.document-clone-job.title',
+    studio_ee_job_clone_data_objects: 'jobs.data-object-clone-job.title'
+  }
   registry.register(
     ['studio_ee_job_clone_assets', 'studio_ee_job_clone_data_objects', 'studio_ee_job_clone_documents'],
     (parent: JobRun, child?: JobRun) => {
@@ -52,7 +57,7 @@ export function registerAllJobRehydrations (registry: JobRehydrationRegistry): v
       return new MessageBusJobHandler({
         jobRunId: child?.id ?? parent.id,
         ancestorJobRunIds: isChild ? [parent.id] : undefined,
-        title: t('jobs.clone-job.title'),
+        title: t(cloneTitleKeys[parent.jobName] ?? 'jobs.asset-clone-job.title'),
         stepTracker: new ChildJobStepTracker({ startAtStep: isChild ? 2 : 1 }),
         progressCalculator: new StepCompletionCalculator()
       })
@@ -64,7 +69,7 @@ export function registerAllJobRehydrations (registry: JobRehydrationRegistry): v
     ['studio_ee_job_patch_elements', 'studio_ee_job_rewrite_element_references'],
     (parent: JobRun) => new MessageBusJobHandler({
       jobRunId: parent.id,
-      title: t('jobs.batch-edit-job.title')
+      title: t('batch-edit.job-title')
     })
   )
 
@@ -87,13 +92,14 @@ export function registerAllJobRehydrations (registry: JobRehydrationRegistry): v
   registry.register(
     ['studio_ee_job_create_csv', 'studio_ee_job_create_xlsx'],
     (parent: JobRun) => {
-      const downloadUrl = parent.jobName === 'studio_ee_job_create_csv'
+      const isCsv = parent.jobName === 'studio_ee_job_create_csv'
+      const downloadUrl = isCsv
         ? `${getPrefix()}/export/download/csv/{jobRunId}`
         : `${getPrefix()}/export/download/xlsx/{jobRunId}`
 
       return new MessageBusJobHandler({
         jobRunId: parent.id,
-        title: t('jobs.download-job.title'),
+        title: t(isCsv ? 'jobs.download-csv-job.title' : 'jobs.download-xlsx-job.title'),
         stepTracker: new DefaultStepTracker(),
         progressCalculator: new ProgressFieldCalculator(),
         onCustomizeButtons: buildDownloadButton(downloadUrl)
@@ -106,7 +112,7 @@ export function registerAllJobRehydrations (registry: JobRehydrationRegistry): v
     ['studio_ee_job_create_download_zip'],
     (parent: JobRun) => new MessageBusJobHandler({
       jobRunId: parent.id,
-      title: t('jobs.download-job.title'),
+      title: t('jobs.download-zip-job.title'),
       stepTracker: new DefaultStepTracker(),
       progressCalculator: new ProgressFieldCalculator(),
       onCustomizeButtons: buildDownloadButton(`${getPrefix()}/assets/download/zip/{jobRunId}`)
@@ -120,16 +126,21 @@ export function registerAllJobRehydrations (registry: JobRehydrationRegistry): v
       const isChild = child !== undefined
       const childJobName = child?.jobName ?? ''
       let downloadUrl: string | undefined
+      let title: string
       if (childJobName === 'studio_ee_job_create_csv') {
         downloadUrl = `${getPrefix()}/export/download/csv/{jobRunId}`
+        title = t('jobs.download-csv-job.title')
       } else if (childJobName === 'studio_ee_job_create_xlsx') {
         downloadUrl = `${getPrefix()}/export/download/xlsx/{jobRunId}`
+        title = t('jobs.download-xlsx-job.title')
+      } else {
+        title = t('jobs.download-csv-job.title')
       }
 
       return new MessageBusJobHandler({
         jobRunId: child?.id ?? parent.id,
         ancestorJobRunIds: isChild ? [parent.id] : undefined,
-        title: t('jobs.download-job.title'),
+        title,
         stepTracker: new ChildJobStepTracker({ totalSteps: 2, startAtStep: isChild ? 2 : 1 }),
         progressCalculator: new ProgressFieldCalculator(),
         ...(downloadUrl !== undefined && { onCustomizeButtons: buildDownloadButton(downloadUrl) })
@@ -144,7 +155,7 @@ export function registerAllJobRehydrations (registry: JobRehydrationRegistry): v
       const isActive = ['running', 'not_started'].includes(parent.state)
       return new MessageBusJobHandler({
         jobRunId: parent.id,
-        title: t('jobs.recycle-bin-restore-job.title'),
+        title: t('recycle-bin.actions.restore.title'),
         ...(isActive && {
           onJobCompletion: async (data) => {
             if (data.isFinished) {
@@ -164,7 +175,7 @@ export function registerAllJobRehydrations (registry: JobRehydrationRegistry): v
       const isActive = ['running', 'not_started'].includes(parent.state)
       return new MessageBusJobHandler({
         jobRunId: parent.id,
-        title: t('jobs.recycle-bin-delete-job.title'),
+        title: t('recycle-bin.actions.delete.title'),
         ...(isActive && {
           onJobCompletion: async (data) => {
             if (data.isFinished) {
@@ -181,7 +192,9 @@ export function registerAllJobRehydrations (registry: JobRehydrationRegistry): v
     ['studio_ee_job_batch_tag_assign', 'studio_ee_job_batch_tag_replace'],
     (parent: JobRun) => new MessageBusJobHandler({
       jobRunId: parent.id,
-      title: t('jobs.tag-assign-job.title')
+      title: t(parent.jobName === 'studio_ee_job_batch_tag_assign'
+        ? 'tags.apply-tags-to-children'
+        : 'tags.remove-and-apply-tags-to-children')
     })
   )
 
@@ -190,7 +203,7 @@ export function registerAllJobRehydrations (registry: JobRehydrationRegistry): v
     ['studio_ee_job_element_usage_replace'],
     (parent: JobRun) => new MessageBusJobHandler({
       jobRunId: parent.id,
-      title: t('jobs.search-replace-assignments-job.title')
+      title: t('search-replace-assignments.job.title-all')
     })
   )
 }

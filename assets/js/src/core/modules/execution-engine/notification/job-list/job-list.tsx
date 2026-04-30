@@ -12,25 +12,29 @@ import React from 'react'
 import { Job } from '../job/job'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
+import { useStyles } from './job-list.styles'
 
 export const JobList = (): React.JSX.Element => {
   const { jobs } = useJobs()
+  const { styles } = useStyles()
 
   return (
-    <AnimatePresence>
-      {jobs.map((job) => (
-        <motion.div
-          animate={ { opacity: 1, height: 'auto' } }
-          exit={ { opacity: 0, height: 1 } }
-          initial={ { opacity: 0, height: 1 } }
-          key={ `${job.id}` }
-        >
-          <Job
-            { ...job }
-            key={ job.id }
-          />
-        </motion.div>
-      ))}
-    </AnimatePresence>
+    <div className={ styles.container }>
+      <AnimatePresence>
+        {jobs.map((job) => (
+          <motion.div
+            animate={ { opacity: 1, height: 'auto' } }
+            exit={ { opacity: 0, height: 1 } }
+            initial={ { opacity: 0, height: 1 } }
+            key={ `${job.id}` }
+          >
+            <Job
+              { ...job }
+              key={ job.id }
+            />
+          </motion.div>
+        ))}
+      </AnimatePresence>
+    </div>
   )
 }

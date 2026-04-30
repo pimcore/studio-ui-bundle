@@ -1051,6 +1051,9 @@ batch-edit.job-title: Batch Edit
 jobs.zip-upload-job.title: Upload ZIP
 jobs.zip-upload-job.step1.title: Extracting ZIP
 jobs.zip-upload-job.step2.title: Creating assets
+jobs.download-csv-job.title: CSV export
+jobs.download-xlsx-job.title: XLSX export
+jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Batch Edit
 batch-edit.no-content: There are no added columns yet
 batch-edit.modal-footer.apply-changes: Apply changes

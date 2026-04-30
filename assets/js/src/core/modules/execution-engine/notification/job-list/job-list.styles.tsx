@@ -12,6 +12,10 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
+    container: css`
+      max-height: 400px;
+      overflow-y: auto;
+    `,
     jobList: css`
       &.ant-collapse>.ant-collapse-item >.ant-collapse-header {
         padding: ${token.paddingXXS}px 0;
