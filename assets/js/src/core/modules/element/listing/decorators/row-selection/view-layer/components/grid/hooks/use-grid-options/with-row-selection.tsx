@@ -37,7 +37,7 @@ export const WithRowSelection = (useBaseHook: IRowSelectionDecoratorProps['useGr
       let selectionChanged = false
 
       for (const key in selectedRows) {
-        if (dataItemIds.has(parseInt(key))) {
+        if (dataItemIds.has(Number.parseInt(key))) {
           prunedSelectedRows[key] = selectedRows[key]
         } else {
           selectionChanged = true
