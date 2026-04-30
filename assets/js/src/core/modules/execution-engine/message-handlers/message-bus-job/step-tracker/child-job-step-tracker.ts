@@ -17,6 +17,11 @@ export interface ChildJobStepTrackerOptions {
    * the UI will show "Step 1", "Step 2" etc. without a fraction.
    */
   totalSteps?: number
+  /**
+   * Initial step to start at. Used during rehydration when the job has
+   * already transitioned to a child run — pass 2 to skip step 1.
+   */
+  startAtStep?: number
 }
 
 /**
@@ -38,7 +43,7 @@ export class ChildJobStepTracker implements StepTracker {
   private _state: StepTrackerState
 
   constructor (options: ChildJobStepTrackerOptions = {}) {
-    this._state = { currentStep: 1, totalSteps: options.totalSteps }
+    this._state = { currentStep: options.startAtStep ?? 1, totalSteps: options.totalSteps }
   }
 
   get state (): StepTrackerState {

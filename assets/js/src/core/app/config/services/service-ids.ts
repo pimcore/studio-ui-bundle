@@ -379,6 +379,7 @@ export const serviceIds = {
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',
+  'ExecutionEngine/JobRehydrationRegistry': 'ExecutionEngine/JobRehydrationRegistry',
 
   // Execution Engine
   executionEngine: 'ExecutionEngine',

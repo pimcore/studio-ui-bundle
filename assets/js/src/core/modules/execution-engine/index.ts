@@ -11,14 +11,23 @@
 import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem, type AbstractModule } from '@Pimcore/app/module-system/module-system'
 import { type JobComponentRegistry } from './services/job-component-registry'
+import { type JobRehydrationRegistry } from './services/job-rehydration-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { MessageBusJobNotification as MessageBusJobContainer } from './message-handlers/message-bus-job/message-bus-job-notification'
+import { registerAllJobRehydrations } from './job-rehydrations'
+import { rehydrateJobsLoader } from './app-loader/rehydrate-jobs-loader'
+import { type AppLoaderRegistry } from '@Pimcore/modules/app/app-loader/services/app-loader-registry'
 
 export const executionEngineModule: AbstractModule = {
   onInit () {
     const jobComponentRegistry = container.get<JobComponentRegistry>(serviceIds['ExecutionEngine/JobComponentRegistry'])
-
     jobComponentRegistry.registerComponent('default-message-bus', MessageBusJobContainer)
+
+    const rehydrationRegistry = container.get<JobRehydrationRegistry>(serviceIds['ExecutionEngine/JobRehydrationRegistry'])
+    registerAllJobRehydrations(rehydrationRegistry)
+
+    const appLoaderRegistry = container.get<AppLoaderRegistry>(serviceIds['AppLoader/Registry'])
+    appLoaderRegistry.registerLoader(rehydrateJobsLoader)
   }
 }
 

@@ -15,6 +15,9 @@ import { type MainNavRegistry } from '@Pimcore/modules/app/base-layout/main-nav/
 import { useBulkImportContext } from '@Pimcore/modules/bulk-import/components/bulk-import-modal/context/bulk-import-context'
 import { UserPermission } from '@sdk/modules/auth'
 import { NavPermission } from '@sdk/modules/perspectives'
+import { type JobRehydrationRegistry } from '@Pimcore/modules/execution-engine/services/job-rehydration-registry'
+import { MessageBusJobHandler } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/message-bus-job-handler'
+import { t } from 'i18next'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -41,5 +44,15 @@ moduleSystem.registerModule({
         }
       }
     })
+
+    const rehydrationRegistry = container.get<JobRehydrationRegistry>(serviceIds['ExecutionEngine/JobRehydrationRegistry'])
+
+    rehydrationRegistry.register(
+      ['studio_ee_job_bulk_import_class_definitions'],
+      (parent) => new MessageBusJobHandler({
+        jobRunId: parent.id,
+        title: t('jobs.bulk-import-job.title')
+      })
+    )
   }
 })

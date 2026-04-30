@@ -23,6 +23,7 @@ import { ImageTabManager } from '@Pimcore/modules/asset/editor/types/image/tab-m
 import { TextTabManager } from '@Pimcore/modules/asset/editor/types/text/tab-manager/text-tab-manager'
 import { UnknownTabManager } from '@Pimcore/modules/asset/editor/types/unknown/tab-manager/unknown-tab-manager'
 import { JobComponentRegistry } from '@Pimcore/modules/execution-engine/services/job-component-registry'
+import { JobRehydrationRegistry } from '@Pimcore/modules/execution-engine/services/job-rehydration-registry'
 import { ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
 import { VideoTabManager } from '@Pimcore/modules/asset/editor/types/video/tab-manager/video-tab-manager'
 import { ThumbnailService } from '@Pimcore/modules/asset/services/thumbnail-service'
@@ -711,6 +712,7 @@ container.bind(serviceIds['DynamicTypes/Grid/Transformers/PHPCode']).to(DynamicT
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()
+container.bind(serviceIds['ExecutionEngine/JobRehydrationRegistry']).to(JobRehydrationRegistry).inSingletonScope()
 container.bind(serviceIds.executionEngine).to(ExecutionEngine).inSingletonScope()
 
 // Background processor

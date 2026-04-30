@@ -31,6 +31,7 @@ export type { MessageBusJob, JobCompletionData, MessageBusJobHandlerOptions } fr
 
 export class MessageBusJobHandler extends AbstractMessageHandler {
   private jobRunId: number
+  private ancestorJobRunIds: number[] | undefined
   private job: MessageBusJob | null = null
   private readonly onJobCompletion?: (data: JobCompletionData) => void | Promise<void>
   private readonly onRetry?: () => void | Promise<void>
@@ -53,6 +54,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
   constructor (options: MessageBusJobHandlerOptions) {
     super()
     this.jobRunId = options.jobRunId
+    this.ancestorJobRunIds = options.ancestorJobRunIds
     this.title = options.title
     this.stepDescriptions = options.stepDescriptions
     this.stepTracker = options.stepTracker ?? new DefaultStepTracker()
@@ -136,7 +138,8 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       stepDescriptionKey: this.stepDescriptions?.[currentStep],
       onRetry: this.onRetry,
       onCustomizeButtons: this.onCustomizeButtons,
-      jobRunId: this.jobRunId
+      jobRunId: this.jobRunId,
+      ancestorJobRunIds: this.ancestorJobRunIds
     }
 
     job.title = this.getTitle(job)
@@ -164,6 +167,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
 
   private transitionToChildJob (newJobRunId: number): void {
     const oldJobRunId = this.jobRunId
+    this.ancestorJobRunIds = [...(this.ancestorJobRunIds ?? []), oldJobRunId]
 
     this.jobRunId = newJobRunId
 
@@ -191,7 +195,8 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
         totalSteps: newState.totalSteps,
         stepDescriptionKey: this.stepDescriptions?.[newState.currentStep]
       }),
-      jobRunId: newJobRunId
+      jobRunId: newJobRunId,
+      ancestorJobRunIds: this.ancestorJobRunIds
     })
   }
 
