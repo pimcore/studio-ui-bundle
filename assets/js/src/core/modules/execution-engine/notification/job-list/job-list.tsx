@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Job } from '../job/job'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
@@ -17,9 +17,19 @@ import { useStyles } from './job-list.styles'
 export const JobList = (): React.JSX.Element => {
   const { jobs } = useJobs()
   const { styles } = useStyles()
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (containerRef.current != null) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight
+    }
+  }, [jobs.length])
 
   return (
-    <div className={ styles.container }>
+    <div
+      className={ styles.container }
+      ref={ containerRef }
+    >
       <AnimatePresence>
         {jobs.map((job) => (
           <motion.div
