@@ -13,7 +13,7 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ css, token }) => {
   return {
     container: css`
-      max-height: 400px;
+      max-height: 90vh;
       overflow-y: auto;
     `,
     jobList: css`
