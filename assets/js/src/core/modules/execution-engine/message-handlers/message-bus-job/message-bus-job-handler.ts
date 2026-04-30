@@ -82,6 +82,10 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
 
   public onRegister (): void {
     store.dispatch(jobReceived(this.getJob()))
+    const terminalStatuses = [JobStatus.SUCCESS, JobStatus.FINISHED_WITH_ERRORS, JobStatus.FAILED]
+    if (!terminalStatuses.includes(this.initialStatus)) {
+      this.polling.start()
+    }
   }
 
   public async handleMessage (message: AbstractMercureMessage): Promise<void> {
@@ -194,6 +198,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       onStatusUpdate: async (data) => { await this.handlePolledStatusUpdate(data) },
       onError: (error) => { console.error('Job run polling error:', error) }
     })
+    this.polling.start()
 
     this.lastProgressValue = -1
     this.progressCalculator.onStepChange?.()
