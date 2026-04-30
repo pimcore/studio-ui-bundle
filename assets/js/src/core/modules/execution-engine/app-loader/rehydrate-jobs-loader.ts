@@ -22,7 +22,7 @@ export const rehydrateJobsLoader: Loader = {
   async onLoad (): Promise<void> {
     const { data } = await store.dispatch(
       api.endpoints.executionEngineListJobs.initiate(
-        { body: { filters: { page: 1, pageSize: 100, sortFilter: { key: 'id', direction: 'asc' } } } },
+        { body: { filters: { page: 1, pageSize: 200, sortFilter: { key: 'id', direction: 'desc' } } } },
         { forceRefetch: true }
       )
     )
