@@ -35,6 +35,7 @@ export const MessageBusJobNotification = (props: MessageBusJobProps): React.JSX.
   const { removeJob } = useJobs()
   const { t } = useTranslation()
   const [showErrorModal, setShowErrorModal] = useState(false)
+  const [isHiding, setIsHiding] = useState(false)
   const [abortJobRun] = useExecutionEngineAbortJobRunByIdMutation()
   const [hideJobRuns] = useExecutionEngineHideJobRunsMutation()
 
@@ -54,11 +55,15 @@ export const MessageBusJobNotification = (props: MessageBusJobProps): React.JSX.
 
   const hideButtonAction: ButtonAction = {
     label: t('jobs.job.button-hide'),
-    handler: () => {
+    loading: isHiding,
+    handler: async () => {
+      setIsHiding(true)
       const idsToHide = [props.jobRunId, ...(props.ancestorJobRunIds ?? [])]
-      void hideJobRuns({ body: { jobRunIds: idsToHide } }).finally(() => {
+      try {
+        await hideJobRuns({ body: { jobRunIds: idsToHide } })
+      } finally {
         removeJob(props.id)
-      })
+      }
     }
   }
 
