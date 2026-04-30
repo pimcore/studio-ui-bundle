@@ -28,8 +28,9 @@ export const WithRowSelection = (useBaseHook: IRowSelectionDecoratorProps['useGr
         return
       }
 
+      const items = data.items as Array<{ columns: Array<{ key: string, value: unknown }> }>
       const dataItemIds = new Set(
-        data.items.map(item => item.columns.find(column => column.key === 'id')?.value).filter(Boolean)
+        items.map(item => item.columns.find(column => column.key === 'id')?.value).filter(Boolean)
       )
 
       const prunedSelectedRows: Record<string, boolean> = {}
