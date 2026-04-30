@@ -28,6 +28,7 @@ export interface CreateTreeStructureProps {
 export interface CustomTreeDataNode extends TreeDataNode {
   actions?: TreeAction[]
   'data-testid'?: string
+  allowDrop?: boolean | ((params: { dropNode: CustomTreeDataNode, dropPosition: number, dragNode: CustomTreeDataNode }) => boolean)
 }
 export const createTreeStructure = ({ tags, loadingNodes, actions, rootActions }: CreateTreeStructureProps): CustomTreeDataNode[] => {
   const getTitle = (tagText: string | undefined, isLoading: boolean): React.ReactNode => {
@@ -61,6 +62,7 @@ export const createTreeStructure = ({ tags, loadingNodes, actions, rootActions }
         icon: <Icon value='tag' />,
         'data-testid': createTreeNodeTestId(tag.id, 'tag'),
         disableCheckbox: isLoading(tag.id.toString()),
+        allowDrop: !isLoading(tag.id.toString()),
         children: tag.hasChildren ? treeWalker(tag.children!) : [],
         actions
       }
@@ -72,6 +74,7 @@ export const createTreeStructure = ({ tags, loadingNodes, actions, rootActions }
     title: getTitle('All Tags', false),
     icon: <Icon value='folder' />,
     'data-testid': createTreeNodeTestId(0, 'folder'),
+    allowDrop: true,
     children: tags.length > 0 ? treeWalker(tags) : [],
     actions: rootActions
   }]

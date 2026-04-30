@@ -47,7 +47,7 @@ export const staticAvailableColumns: AvailableColumn[] = [
     localizable: false,
     locale: null,
     type: 'system.string',
-    frontendType: 'asset-link',
+    frontendType: 'object-link',
     filterable: true
   },
   {
