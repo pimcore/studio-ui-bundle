@@ -18,11 +18,22 @@ export const JobList = (): React.JSX.Element => {
   const { jobs } = useJobs()
   const { styles } = useStyles()
   const containerRef = useRef<HTMLDivElement>(null)
+  const prevLengthRef = useRef(0)
 
   useEffect(() => {
-    if (containerRef.current != null) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight
-    }
+    const wasAdded = jobs.length > prevLengthRef.current
+    prevLengthRef.current = jobs.length
+
+    if (!wasAdded) return
+
+    // Defer until framer-motion height animations have settled
+    const timer = setTimeout(() => {
+      if (containerRef.current != null) {
+        containerRef.current.scrollTop = containerRef.current.scrollHeight
+      }
+    }, 400)
+
+    return () => { clearTimeout(timer) }
   }, [jobs.length])
 
   return (
