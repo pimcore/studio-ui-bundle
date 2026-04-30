@@ -42,7 +42,8 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
       filters: {
         page: currentPage,
         pageSize,
-        columnFilters
+        columnFilters,
+        sortFilter: { key: 'id', direction: 'DESC' }
       }
     }
   })
