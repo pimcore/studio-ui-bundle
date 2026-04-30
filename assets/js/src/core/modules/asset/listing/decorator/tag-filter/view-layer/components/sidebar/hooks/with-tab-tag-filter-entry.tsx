@@ -15,6 +15,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { TagFiltersContainer } from '../tabs/tag-filters/tag-filters-container'
 import { useTagFilter } from '../../../../context-layer/provider/tag-filter/use-tag-filter'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 
 export const withTabTagFilterEntry = (useBaseHook: AbstractDecoratorProps['useSidebarOptions']): AbstractDecoratorProps['useSidebarOptions'] => {
   const useTabTagFilterEntry: typeof useBaseHook = () => {
@@ -25,7 +26,7 @@ export const withTabTagFilterEntry = (useBaseHook: AbstractDecoratorProps['useSi
     const getProps: typeof baseGetProps = () => {
       const baseProps = baseGetProps()
 
-      if (!isAllowed('tags_search')) {
+      if (!isAllowed(UserPermission.TagsSearch)) {
         return baseProps
       }
 
