@@ -21,9 +21,13 @@ export const rehydrateJobsLoader: Loader = {
 
   async onLoad (): Promise<void> {
     const { data } = await store.dispatch(
-      api.endpoints.executionEngineListJobs.initiate({ body: {} }, { forceRefetch: true })
+      api.endpoints.executionEngineListJobs.initiate(
+        { body: { filters: { page: 1, pageSize: 100 } } },
+        { forceRefetch: true }
+      )
     )
-    const items: JobRun[] = data?.items ?? []
+    const activeStates = ['running', 'not_started']
+    const items: JobRun[] = (data?.items ?? []).filter(j => activeStates.includes(j.state))
 
     const executionEngine = container.get<ExecutionEngine>(serviceIds.executionEngine)
     executionEngine.rehydrateRunningJobs(items)
