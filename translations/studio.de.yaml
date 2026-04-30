@@ -17,6 +17,7 @@ error.error_widget_name_invalid: Widget-Name ist ungültig (nur alphanumerische 
 error.error_validation_failed: Validierung fehlgeschlagen
 error.error_validation.email_failed: Bitte geben Sie eine gültige E-Mail-Adresse ein
 error.error_element_not_found: Element nicht gefunden
+error.error_document_language_not_set: Für das Dokument ist keine Sprache festgelegt
 error.error_inconsistent_asset_type: Nur Assets desselben Typs sind hier erlaubt.
 sidebar.selected_elements: Ausgewählte Elemente
 sidebar.grid_config: Grid-Konfiguration

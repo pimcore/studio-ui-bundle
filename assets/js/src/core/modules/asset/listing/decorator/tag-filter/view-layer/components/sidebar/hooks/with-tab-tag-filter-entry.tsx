@@ -30,6 +30,11 @@ export const withTabTagFilterEntry = (useBaseHook: AbstractDecoratorProps['useSi
         return baseProps
       }
 
+
+      if (!isAllowed('tags_search')) {
+        return baseProps
+      }
+
       let sidebarHighlights: typeof baseProps['highlights'] = baseProps.highlights ?? []
 
       if (tags.length > 0) {

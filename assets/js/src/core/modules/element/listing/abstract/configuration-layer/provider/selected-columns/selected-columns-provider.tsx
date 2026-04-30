@@ -10,6 +10,7 @@
 
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import React, { createContext, useMemo, useState } from 'react'
+import { useColumnMapper as defaultUseColumnMapper } from './use-column-mapper'
 import { useSettings } from '../../../settings/use-settings'
 
 export interface SelectedColumn {
@@ -45,9 +46,41 @@ export const SelectedColumnsContext = createContext<SelectedColumnsContextProps>
 
 export interface SelectedColumnsProviderProps {
   children: React.ReactNode
+  columns?: SelectedColumn[]
 }
 
-export const SelectedColumnsProvider = ({ children }: SelectedColumnsProviderProps): React.JSX.Element => {
+// When columns are controlled externally (e.g. ManyToManyObjectRelation), we skip
+// useSettings (which requires SettingsProvider) and use the default column mapper directly.
+const ControlledSelectedColumnsProvider = ({ children, columns }: { children: React.ReactNode, columns: SelectedColumn[] }): React.JSX.Element => {
+  const columnMapper = defaultUseColumnMapper()
+
+  const formattedSelectedColumns: SelectedColumn[] = useMemo(() => {
+    return columns.map(column => ({
+      ...column,
+      key: column.originalApiDefinition?.__meta?.advancedColumnConfig?.title ?? column.key
+    }))
+  }, [columns])
+
+  const encodeColumnIdentifier = (column: SelectedColumn): string => columnMapper.encodeColumnIdentifier(column)
+  const decodeColumnIdentifier = (columnIdentifier: string): SelectedColumn | undefined => columnMapper.decodeColumnIdentifier(columnIdentifier, formattedSelectedColumns)
+  const shouldMapDataToColumn = (data: any, column: SelectedColumn): boolean => columnMapper.shouldMapDataToColumn(data, column)
+
+  const contextValue = useMemo(() => ({
+    selectedColumns: formattedSelectedColumns,
+    setSelectedColumns: () => {},
+    encodeColumnIdentifier,
+    decodeColumnIdentifier,
+    shouldMapDataToColumn
+  }), [formattedSelectedColumns])
+
+  return (
+    <SelectedColumnsContext.Provider value={ contextValue }>
+      {children}
+    </SelectedColumnsContext.Provider>
+  )
+}
+
+const UncontrolledSelectedColumnsProvider = ({ children }: { children: React.ReactNode }): React.JSX.Element => {
   const [selectedColumns, setSelectedColumns] = useState<SelectedColumn[]>([])
   const { useColumnMapper } = useSettings()
   const columnMapper = useColumnMapper()
@@ -59,21 +92,29 @@ export const SelectedColumnsProvider = ({ children }: SelectedColumnsProviderPro
     })) ?? []
   }, [selectedColumns])
 
-  const encodeColumnIdentifier = (column: SelectedColumn): string => {
-    return columnMapper.encodeColumnIdentifier(column)
-  }
+  const encodeColumnIdentifier = (column: SelectedColumn): string => columnMapper.encodeColumnIdentifier(column)
+  const decodeColumnIdentifier = (columnIdentifier: string): SelectedColumn | undefined => columnMapper.decodeColumnIdentifier(columnIdentifier, formattedSelectedColumns)
+  const shouldMapDataToColumn = (data: any, column: SelectedColumn): boolean => columnMapper.shouldMapDataToColumn(data, column)
 
-  const decodeColumnIdentifier = (columnIdentifier: string): SelectedColumn | undefined => {
-    return columnMapper.decodeColumnIdentifier(columnIdentifier, formattedSelectedColumns)
-  }
+  const contextValue = useMemo(() => ({
+    selectedColumns: formattedSelectedColumns,
+    setSelectedColumns,
+    encodeColumnIdentifier,
+    decodeColumnIdentifier,
+    shouldMapDataToColumn
+  }), [formattedSelectedColumns])
 
-  const shouldMapDataToColumn = (data: any, column: SelectedColumn): boolean => {
-    return columnMapper.shouldMapDataToColumn(data, column)
-  }
-
-  return useMemo(() => (
-    <SelectedColumnsContext.Provider value={ { selectedColumns: formattedSelectedColumns, setSelectedColumns, encodeColumnIdentifier, decodeColumnIdentifier, shouldMapDataToColumn } }>
+  return (
+    <SelectedColumnsContext.Provider value={ contextValue }>
       {children}
     </SelectedColumnsContext.Provider>
-  ), [formattedSelectedColumns])
+  )
+}
+
+export const SelectedColumnsProvider = ({ children, columns: controlledColumns }: SelectedColumnsProviderProps): React.JSX.Element => {
+  if (controlledColumns !== undefined) {
+    return <ControlledSelectedColumnsProvider columns={ controlledColumns }>{children}</ControlledSelectedColumnsProvider>
+  }
+
+  return <UncontrolledSelectedColumnsProvider>{children}</UncontrolledSelectedColumnsProvider>
 }

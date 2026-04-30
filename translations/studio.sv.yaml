@@ -17,6 +17,7 @@ error.error_widget_name_invalid: Widgetnamnet är ogiltigt (bara alfanumeriska t
 error.error_validation_failed: Validering misslyckades
 error.error_validation.email_failed: Ange en giltig e-postadress
 error.error_element_not_found: Elementet hittades inte
+error.error_document_language_not_set: Dokumentet har ingen språkegenskap angiven
 error.error_inconsistent_asset_type: Bara assets av samma typ tillåts här.
 sidebar.selected_elements: Valda element
 sidebar.grid_config: Rutnätskonfiguration
