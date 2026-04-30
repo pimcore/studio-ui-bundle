@@ -43,6 +43,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
   private lastProgressValue: number = -1
   private readonly title: string | ((job: MessageBusJob) => string)
   private polling: JobRunPolling
+  private initialStatus: JobStatus = JobStatus.QUEUED
 
   private readonly throttledProgressUpdate = throttle((progress: number | null, data: any) => {
     this.performProgressUpdate(progress, data)
@@ -106,6 +107,16 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     this.polling.destroy()
   }
 
+  public setInitialStatus (state: string): void {
+    const stateMap: Record<string, JobStatus> = {
+      running: JobStatus.RUNNING,
+      finished: JobStatus.SUCCESS,
+      finished_with_errors: JobStatus.FINISHED_WITH_ERRORS,
+      failed: JobStatus.FAILED
+    }
+    this.initialStatus = stateMap[state] ?? JobStatus.QUEUED
+  }
+
   private getTitle (job: MessageBusJob): string {
     if (isFunction(this.title)) {
       return this.title(job)
@@ -131,7 +142,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       id: getUniqueId(),
       type: 'default-message-bus',
       title: '',
-      status: JobStatus.QUEUED,
+      status: this.initialStatus,
       progress: 0,
       currentStep: this.stepTracker.showStepLabel ? currentStep : undefined,
       totalSteps: this.stepTracker.showStepLabel ? totalSteps : undefined,

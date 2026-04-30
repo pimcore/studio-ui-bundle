@@ -26,8 +26,7 @@ export const rehydrateJobsLoader: Loader = {
         { forceRefetch: true }
       )
     )
-    const activeStates = ['running', 'not_started']
-    const items: JobRun[] = (data?.items ?? []).filter(j => activeStates.includes(j.state))
+    const items: JobRun[] = data?.items ?? []
 
     const executionEngine = container.get<ExecutionEngine>(serviceIds.executionEngine)
     executionEngine.rehydrateRunningJobs(items)

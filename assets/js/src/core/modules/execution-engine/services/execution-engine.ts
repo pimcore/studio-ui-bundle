@@ -42,8 +42,8 @@ export class ExecutionEngine {
     // IDs that appear as a child of another item in this response
     const childIds = new Set<number>(
       items
-        .filter(j => j.jobRunChildId != null)
-        .map(j => j.jobRunChildId as number)
+        .filter(j => j.childJobRunId != null)
+        .map(j => j.childJobRunId as number)
     )
 
     // Process only top-level (parent) items; pass child as second argument
@@ -51,11 +51,13 @@ export class ExecutionEngine {
       const fn = this.rehydrationRegistry.get(parent.jobName)
       if (fn === undefined) continue
 
-      const child = parent.jobRunChildId != null
-        ? items.find(j => j.id === parent.jobRunChildId)
+      const child = parent.childJobRunId != null
+        ? items.find(j => j.id === parent.childJobRunId)
         : undefined
 
-      this.messageBus.registerHandler(fn(parent, child))
+      const handler = fn(parent, child)
+      handler.setInitialStatus((child ?? parent).state)
+      this.messageBus.registerHandler(handler)
     }
   }
 }

@@ -140,30 +140,40 @@ export function registerAllJobRehydrations (registry: JobRehydrationRegistry): v
   // Recycle bin restore
   registry.register(
     ['studio_ee_job_recycle_bin_restore'],
-    (parent: JobRun) => new MessageBusJobHandler({
-      jobRunId: parent.id,
-      title: t('jobs.recycle-bin-restore-job.title'),
-      onJobCompletion: async (data) => {
-        if (data.isFinished) {
-          store.dispatch(refreshTreeByElementType({ elementTypes: ['asset', 'data-object', 'document'] }))
-          store.dispatch(api.util.invalidateTags(invalidatingTags.RECYCLING_BIN()))
-        }
-      }
-    })
+    (parent: JobRun) => {
+      const isActive = ['running', 'not_started'].includes(parent.state)
+      return new MessageBusJobHandler({
+        jobRunId: parent.id,
+        title: t('jobs.recycle-bin-restore-job.title'),
+        ...(isActive && {
+          onJobCompletion: async (data) => {
+            if (data.isFinished) {
+              store.dispatch(refreshTreeByElementType({ elementTypes: ['asset', 'data-object', 'document'] }))
+              store.dispatch(api.util.invalidateTags(invalidatingTags.RECYCLING_BIN()))
+            }
+          }
+        })
+      })
+    }
   )
 
   // Recycle bin delete
   registry.register(
     ['studio_ee_job_recycle_bin_delete'],
-    (parent: JobRun) => new MessageBusJobHandler({
-      jobRunId: parent.id,
-      title: t('jobs.recycle-bin-delete-job.title'),
-      onJobCompletion: async (data) => {
-        if (data.isFinished) {
-          store.dispatch(api.util.invalidateTags(invalidatingTags.RECYCLING_BIN()))
-        }
-      }
-    })
+    (parent: JobRun) => {
+      const isActive = ['running', 'not_started'].includes(parent.state)
+      return new MessageBusJobHandler({
+        jobRunId: parent.id,
+        title: t('jobs.recycle-bin-delete-job.title'),
+        ...(isActive && {
+          onJobCompletion: async (data) => {
+            if (data.isFinished) {
+              store.dispatch(api.util.invalidateTags(invalidatingTags.RECYCLING_BIN()))
+            }
+          }
+        })
+      })
+    }
   )
 
   // Tag assign/replace
