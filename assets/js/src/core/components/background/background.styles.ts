@@ -8,8 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
-import { keyframes } from 'antd-style'
+import { createStyles, keyframes } from 'antd-style'
 import { type LoadPhase } from '@Pimcore/modules/app/app-loader/app-loader'
 
 interface StyleProps {

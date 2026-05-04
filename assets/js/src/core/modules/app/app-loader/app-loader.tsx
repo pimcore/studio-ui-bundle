@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { isNil } from 'lodash'
 import { store } from '@Pimcore/app/store'
 import { appIntro } from '@Pimcore/components/background/background.styles'
@@ -57,7 +57,10 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   }, [])
   const loading = isLoading || pendingLoaders.size > 0
 
-  const appLoadingContextValue: AppLoadingContextValue = { registerLoader, unregisterLoader, isAppLoading: loading }
+  const appLoadingContextValue: AppLoadingContextValue = useMemo(
+    () => ({ registerLoader, unregisterLoader, isAppLoading: loading }),
+    [registerLoader, unregisterLoader, loading]
+  )
 
   const outroTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const finishLoading = useCallback(() => {
@@ -115,8 +118,8 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
           loadPublicTranslations(),
           loadBrandThumbnailUrls()
         ]).then(() => {
-            finishLoading()
-          }).catch((error) => {
+          finishLoading()
+        }).catch((error) => {
           console.error('Error during login preparation', error)
         })
       }
@@ -163,8 +166,8 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
             position: 'absolute',
             inset: 0,
             animation: `${appIntro} 600ms ease 200ms both`
-          } }>
-            {props.children}
+          } }
+          >            {props.children}
           </div>
         )}
       </AppLoadingContext.Provider>
