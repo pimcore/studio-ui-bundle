@@ -13,7 +13,10 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { Content } from '@Pimcore/components/content/content'
 import { Table } from './table/table'
 import { Box } from '@sdk/components'
-import { api, useBundleSeoRedirectsGetCollectionQuery } from './seo-api-slice-enhanced'
+import {
+  api,
+  useBundleSeoRedirectsGetCollectionQuery
+} from './seo-api-slice-enhanced'
 import trackError, { ApiError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { type RedirectRow, useRedirects } from './hooks/use-redirects'

@@ -16,10 +16,10 @@ import { type RedirectRow, useRedirects } from '../hooks/use-redirects'
 import { type ModifiedCells } from '@sdk/modules/element'
 import { ActionsCell } from './actions-cell'
 import {
-  useBundleSeoRedirectListTypesQuery,
-  useBundleSeoRedirectListStatusesQuery,
-  useBundleSeoRedirectListPrioritiesQuery
-} from '../seo-api-slice-enhanced'
+  useRedirectTypeOptions,
+  useRedirectStatusOptions,
+  useRedirectPriorityOptions
+} from '../hooks/use-redirect-options'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
 import { type Site } from '@Pimcore/modules/document/document-api-slice-enhanced'
 
@@ -36,9 +36,6 @@ export const Table = ({ onSortingChange, sorting, redirectRows, setRedirectRows 
   const { t } = useTranslation()
 
   const { updateRedirectById } = useRedirects()
-  const { data: typesData } = useBundleSeoRedirectListTypesQuery()
-  const { data: statusesData } = useBundleSeoRedirectListStatusesQuery()
-  const { data: prioritiesData } = useBundleSeoRedirectListPrioritiesQuery()
   const { getAllSites } = useSites()
 
   const [modifiedCells, setModifiedCells] = useState<ModifiedCells>([])
@@ -49,36 +46,15 @@ export const Table = ({ onSortingChange, sorting, redirectRows, setRedirectRows 
     label: t(site.domain)
   }))
 
-  const typeOptions = useMemo(() =>
-    typesData?.types?.map(type => ({ label: t(type), value: type })) ?? [],
-  [typesData]
-  )
-
-  const statusOptions = useMemo(() =>
-    statusesData?.statuses?.map(status => ({
-      label: `${status.code} - ${status.label}`,
-      value: status.code
-    })) ?? [],
-  [statusesData]
-  )
-
-  const priorityOptions = useMemo(() =>
-    prioritiesData?.priorities?.map(priority => ({
-      label: priority.toString(),
-      value: priority
-    })) ?? [],
-  [prioritiesData]
-  )
-
   const columnHelper = createColumnHelper<RedirectWithActions>()
 
-  const tableColumns = [
+  const tableColumns = useMemo(() => [
     columnHelper.accessor('type', {
       header: t('redirects.type'),
       meta: {
         type: 'select',
         editable: true,
-        config: { options: typeOptions }
+        config: { useOptionsHook: () => useRedirectTypeOptions() }
       },
       size: 120
     }),
@@ -115,7 +91,7 @@ export const Table = ({ onSortingChange, sorting, redirectRows, setRedirectRows 
       meta: {
         type: 'select',
         editable: true,
-        config: { options: statusOptions }
+        config: { useOptionsHook: () => useRedirectStatusOptions() }
       },
       size: 100
     }),
@@ -124,7 +100,7 @@ export const Table = ({ onSortingChange, sorting, redirectRows, setRedirectRows 
       meta: {
         type: 'select',
         editable: true,
-        config: { options: priorityOptions }
+        config: { useOptionsHook: () => useRedirectPriorityOptions() }
       },
       size: 80
     }),
@@ -159,7 +135,7 @@ export const Table = ({ onSortingChange, sorting, redirectRows, setRedirectRows 
         />
       )
     })
-  ]
+  ], [siteOptions, t])
 
   const onUpdateCellData = async ({
     columnId,
