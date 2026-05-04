@@ -15,6 +15,7 @@ namespace Pimcore\Bundle\StudioUiBundle\Controller;
 
 use Pimcore\Bundle\StudioBackendBundle\Mercure\Service\UrlServiceInterface;
 use Pimcore\Bundle\StudioUiBundle\AppConfig\AppConfigProviderInterface;
+use Pimcore\Bundle\StudioUiBundle\Branding\BrandingProviderInterface;
 use Pimcore\Bundle\StudioUiBundle\Service\StaticResourcesResolverInterface;
 use Pimcore\Controller\FrontendController;
 use Pimcore\Tool;
@@ -30,6 +31,7 @@ final class DefaultController extends FrontendController
     public function __construct(
         private StaticResourcesResolverInterface $staticResourcesResolver,
         private UrlServiceInterface $mercureUrlService,
+        private BrandingProviderInterface $brandingProvider,
         #[TaggedIterator('pimcore_studio_ui.app_config_provider')]
         private iterable $appConfigProviders,
     ) {
@@ -63,6 +65,7 @@ final class DefaultController extends FrontendController
             'additionalJsFiles' => $this->staticResourcesResolver->getAdditionalJsFiles(),
             'appConfig' => $appConfig,
             'hostname' => Tool::getHostname(),
+            'branding' => $this->brandingProvider->getBranding(),
         ]);
     }
 }
