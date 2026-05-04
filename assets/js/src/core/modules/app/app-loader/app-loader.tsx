@@ -11,8 +11,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { isNil } from 'lodash'
 import { store } from '@Pimcore/app/store'
-import { Background } from '@Pimcore/components/background/background'
 import { appIntro } from '@Pimcore/components/background/background.styles'
+import { componentConfig, ComponentRenderer } from '@Pimcore/modules/app/component-registry/component-registry'
 import { GlobalStyles } from '@Pimcore/styles/global.styles'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
@@ -154,7 +154,10 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
       <GlobalStyles />
 
       <AppLoadingContext.Provider value={ appLoadingContextValue }>
-        <Background phase={ phase } />
+        <ComponentRenderer
+          component={ componentConfig.app.background.name }
+          props={ { phase } }
+        />
         {phase === 'idle' && (
           <div style={ {
             position: 'absolute',

@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useStyle } from './background.styles'
 import { useAdminThumbnails } from '@Pimcore/modules/app/branding/hooks/use-admin-thumbnails'
@@ -21,9 +21,19 @@ export interface BackgroundProps {
 
 const Background = ({ phase = 'idle' }: BackgroundProps): React.JSX.Element => {
   const adminSettings = useSelector(getAdminSettings)
-  const brandColor = adminSettings?.branding?.brandColor ?? ''
-  const { styles } = useStyle({ phase, brandColor })
+  const backgroundShade = adminSettings?.branding?.backgroundShade ?? ''
+  const { styles } = useStyle({ phase, backgroundShade })
   const { logoUrl } = useAdminThumbnails()
+
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      const preloader = document.getElementById('app-preloader')
+      if (preloader !== null) {
+        preloader.classList.add('app-preloader--fading')
+        preloader.addEventListener('transitionend', () => { preloader.remove() }, { once: true })
+      }
+    })
+  }, [])
 
   return (
     <div

@@ -14,7 +14,7 @@ import { type LoadPhase } from '@Pimcore/modules/app/app-loader/app-loader'
 
 interface StyleProps {
   phase: LoadPhase
-  brandColor: string
+  backgroundShade: string
 }
 
 // ---------------------------------------------------------------------------
@@ -71,19 +71,14 @@ const logoOrbitCCW = keyframes`
   to   { transform: translate(-50%, -50%) rotate(540deg) translateX(80px); }
 `
 
-export const useStyle = createStyles(({ css }, { phase, brandColor }: StyleProps) => {
+export const useStyle = createStyles(({ css }, { phase, backgroundShade }: StyleProps) => {
   const isLoading = phase === 'loading'
   const isOrbiting = phase === 'loading' || phase === 'outro'
-  // -------------------------------------------------------------------------
-  // colorPulse — uses the brand color as a literal value baked into the
-  // keyframe at render time, so the browser can smoothly interpolate.
-  // Falls back to the default Pimcore purple if no brand color is configured.
-  // -------------------------------------------------------------------------
-  const resolvedBrandColor = brandColor !== '' ? brandColor : '#722ed1'
+  const resolvedBackgroundShade = backgroundShade !== '' ? backgroundShade : '#722ed1'
   const colorPulse = keyframes`
-    0%   { background: color-mix(in srgb, ${resolvedBrandColor} 42%, transparent); }
+    0%   { background: color-mix(in srgb, ${resolvedBackgroundShade} 42%, transparent); }
     50%  { background: rgba(55, 217, 243, 0.20); }
-    100% { background: color-mix(in srgb, ${resolvedBrandColor} 42%, transparent); }
+    100% { background: color-mix(in srgb, ${resolvedBackgroundShade} 42%, transparent); }
   `
 
   return {
@@ -101,13 +96,11 @@ export const useStyle = createStyles(({ css }, { phase, brandColor }: StyleProps
         filter: blur(310px);
 
         ${isOrbiting
-          ? /* Orbiting — all figures orbit the viewport centre */
-            css`
+          ? css`
               top: 50%;
               left: 50%;
             `
-          : /* Done — transition each figure to its final resting position */
-            css`
+          : css`
               transition: top 1200ms ease, left 1200ms ease, transform 1200ms ease;
             `
         }
@@ -159,7 +152,7 @@ export const useStyle = createStyles(({ css }, { phase, brandColor }: StyleProps
           height: 686px;
           flex-shrink: 0;
           border-radius: 1642px;
-          background: var(--pimcore-brand-background-color, rgba(122, 58, 212, 0.42));
+          background: color-mix(in srgb, ${resolvedBackgroundShade} 42%, transparent);
 
           ${isOrbiting
             ? css`
@@ -179,7 +172,7 @@ export const useStyle = createStyles(({ css }, { phase, brandColor }: StyleProps
     backdropBlur: css`
       position: absolute;
       inset: 0;
-      backdrop-filter: blur(15px);
+      backdrop-filter: blur(20px);
       pointer-events: none;
     `,
     logoImage: css`      position: absolute;
