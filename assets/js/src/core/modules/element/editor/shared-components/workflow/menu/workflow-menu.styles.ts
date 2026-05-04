@@ -13,7 +13,7 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ css }) => {
   return {
     overlay: css`
-      max-width: 300px;
+      max-width: 250px;
 
       .ant-dropdown-menu {
         overflow: hidden;
