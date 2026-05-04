@@ -37,6 +37,7 @@ export const WorkflowTransitionGroup = ({ workflow }: WorkflowItemProps): React.
         onClick={ () => {
           triggerAction(action)
         } }
+        title={ t(action.label) }
         type='text'
       >
         {t(action.label)}

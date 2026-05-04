@@ -19,9 +19,11 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { useWorkflow } from '@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-workflow'
+import { useStyles } from '@Pimcore/modules/element/editor/shared-components/workflow/menu/workflow-menu.styles'
 
 export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyles()
   const [items, setItems] = React.useState<DropdownMenuProps['items']>([])
   const { workflowDetailsData, isFetchingWorkflowDetails } = useWorkflow()
 
@@ -86,6 +88,7 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
       <Dropdown
         disabled={ isFetchingWorkflowDetails }
         menu={ { items } }
+        overlayClassName={ styles.overlay }
       >
         <DropdownButton>
           <Icon

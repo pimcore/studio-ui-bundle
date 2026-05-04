@@ -13,8 +13,17 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     button: css`
-              min-width: 100%;
-              justify-items: flex-start;
+              width: 100%;
+              justify-content: flex-start;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              height: auto;
+
+              > span {
+                overflow: hidden;
+                text-overflow: ellipsis;
+              }
     `,
     'not-first': css`
               margin-top: ${token.marginXXS}px;
