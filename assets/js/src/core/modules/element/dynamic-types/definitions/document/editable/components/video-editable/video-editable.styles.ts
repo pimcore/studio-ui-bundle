@@ -26,6 +26,25 @@ export const useStyles = createStyles(({ token, css }) => {
       border: 1px solid ${token.colorBorder};
       border-radius: ${token.borderRadius}px;
       box-shadow: ${token.boxShadow};
+    `,
+
+    progressOverlay: css`
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: ${token.marginSM}px;
+      background-color: ${token.colorBgContainer};
+      border: 2px dashed ${token.colorBorder};
+      border-radius: ${token.borderRadius}px;
+      pointer-events: none;
+    `,
+
+    progressLabel: css`
+      color: ${token.colorTextSecondary};
+      font-size: ${token.fontSizeSM}px;
     `
   }
 })
