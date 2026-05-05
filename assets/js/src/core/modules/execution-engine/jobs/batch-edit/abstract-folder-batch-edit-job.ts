@@ -18,7 +18,7 @@ import { type RehydratableJob, type JobRunList } from '../../services/job-rehydr
 export type AbstractFolderBatchEditJobOptions = AbstractBatchEditJobOptions
 
 export abstract class AbstractFolderBatchEditJob extends AbstractBatchEditJob {
-  static override readonly jobNames = ['studio_ee_job_patch_folder_elements']
+  static override readonly jobNames = ['studio_ee_job_patch_folder_elements'] as const
 
   protected static override buildHandler (options: BatchEditHandlerOptions): MessageBusJobHandler {
     return new MessageBusJobHandler({

@@ -91,7 +91,7 @@ export class RecycleBinDeleteJob implements JobInterface {
     console.error('Recycle bin delete job failed:', error)
   }
 
-  static readonly jobNames = ['studio_ee_job_recycle_bin_delete']
+  static readonly jobNames = ['studio_ee_job_recycle_bin_delete'] as const
 
   static rehydrate (jobRuns: JobRunList): MessageBusJobHandler {
     const [parent] = jobRuns

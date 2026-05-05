@@ -103,7 +103,7 @@ export class SearchReplaceAssignmentsJob implements JobInterface {
     console.error('Search replace assignments job failed:', error)
   }
 
-  static readonly jobNames = ['studio_ee_job_element_usage_replace']
+  static readonly jobNames = ['studio_ee_job_element_usage_replace'] as const
 
   static rehydrate (jobRuns: JobRunList): MessageBusJobHandler {
     const [parent] = jobRuns

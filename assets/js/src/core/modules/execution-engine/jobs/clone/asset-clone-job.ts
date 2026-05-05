@@ -22,7 +22,7 @@ import { resolveChildJobRunOptions } from '../rehydration-helpers'
 export type AssetCloneJobOptions = Omit<AbstractCloneJobOptions, 'elementType'>
 
 export class AssetCloneJob extends AbstractCloneJob {
-  static readonly jobNames = ['studio_ee_job_clone_assets']
+  static readonly jobNames = ['studio_ee_job_clone_assets'] as const
 
   constructor (options: AssetCloneJobOptions) {
     super({ ...options, elementType: elementTypes.asset })

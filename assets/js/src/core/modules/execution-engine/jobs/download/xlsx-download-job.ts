@@ -20,7 +20,7 @@ export interface XlsxDownloadJobOptions extends AbstractDownloadJobOptions {
 }
 
 export class XlsxDownloadJob extends AbstractDownloadJob {
-  static readonly jobNames = ['studio_ee_job_create_xlsx', 'studio_ee_job_collect_xlsx_folder_export_elements']
+  static readonly jobNames = ['studio_ee_job_create_xlsx', 'studio_ee_job_collect_xlsx_folder_export_elements'] as const
 
   private readonly isFolderExport: boolean
 

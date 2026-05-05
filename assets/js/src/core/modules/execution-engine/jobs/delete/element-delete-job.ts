@@ -29,7 +29,7 @@ export interface DeleteJobOptions {
 }
 
 export class DeleteJob implements JobInterface {
-  static readonly jobNames = ['studio_ee_job_delete_assets', 'studio_ee_job_delete_data_objects', 'studio_ee_job_delete_documents']
+  static readonly jobNames = ['studio_ee_job_delete_assets', 'studio_ee_job_delete_data_objects', 'studio_ee_job_delete_documents'] as const
 
   private readonly elementId: number
   private readonly elementType: ElementType

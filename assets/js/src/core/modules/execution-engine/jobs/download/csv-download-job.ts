@@ -20,7 +20,7 @@ export interface CsvDownloadJobOptions extends AbstractDownloadJobOptions {
 }
 
 export class CsvDownloadJob extends AbstractDownloadJob {
-  static readonly jobNames = ['studio_ee_job_create_csv', 'studio_ee_job_collect_csv_folder_export_elements']
+  static readonly jobNames = ['studio_ee_job_create_csv', 'studio_ee_job_collect_csv_folder_export_elements'] as const
 
   private readonly isFolderExport: boolean
 

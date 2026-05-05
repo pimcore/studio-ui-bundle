@@ -61,7 +61,7 @@ export class ZipUploadJob implements JobInterface {
     })
   }
 
-  static readonly jobNames = ['studio_ee_job_upload_zip_file']
+  static readonly jobNames = ['studio_ee_job_upload_zip_file'] as const
 
   static rehydrate (jobRuns: JobRunList): MessageBusJobHandler {
     return this.buildHandler(resolveChildJobRunOptions(jobRuns))

@@ -24,7 +24,7 @@ export interface DocumentCloneJobOptions extends Omit<AbstractCloneJobOptions, '
 }
 
 export class DocumentCloneJob extends AbstractCloneJob {
-  static readonly jobNames = ['studio_ee_job_clone_documents']
+  static readonly jobNames = ['studio_ee_job_clone_documents'] as const
 
   private readonly parameters: DocumentCloneParameters
 

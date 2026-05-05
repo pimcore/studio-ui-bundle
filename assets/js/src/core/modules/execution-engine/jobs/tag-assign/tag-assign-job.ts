@@ -85,11 +85,12 @@ export class TagAssignJob implements JobInterface {
     console.error('Tag assign job failed:', error)
   }
 
-  static readonly jobNames = ['studio_ee_job_batch_tag_assign', 'studio_ee_job_batch_tag_replace']
+  static readonly jobNames = ['studio_ee_job_batch_tag_assign', 'studio_ee_job_batch_tag_replace'] as const
 
   static rehydrate (jobRuns: JobRunList): MessageBusJobHandler {
     const [parent] = jobRuns
-    return this.buildHandler({ jobRunId: parent.id, operation: operationByJobName[parent.jobName] })
+    const operation = operationByJobName[parent.jobName] ?? 'assign'
+    return this.buildHandler({ jobRunId: parent.id, operation })
   }
 
   private static buildHandler (options: {

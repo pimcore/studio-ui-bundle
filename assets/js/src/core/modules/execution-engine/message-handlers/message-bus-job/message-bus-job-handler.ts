@@ -217,8 +217,10 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
   }
 
   private async handleStatusUpdate (data: any): Promise<boolean> {
-    if (data.status === 'finished' && !isNil(data.messages?.jobRunChildId) && String(data.messages.jobRunChildId) !== String(this.jobRunId)) {
-      this.transitionToChildJob(Number(data.messages.jobRunChildId))
+    // Mercure payloads carry jobRunChildId in data.messages; polling fallback carries it at data.jobRunChildId
+    const childId = data.messages?.jobRunChildId ?? data.jobRunChildId
+    if (data.status === 'finished' && !isNil(childId) && String(childId) !== String(this.jobRunId)) {
+      this.transitionToChildJob(Number(childId))
       return true
     }
 
@@ -285,6 +287,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       status: data.status,
       currentStep: data.currentStep,
       totalSteps: data.totalSteps,
+      jobRunChildId: data.jobRun.jobRunChildId ?? undefined,
       messages: !isNil(data.currentMessage) ? [data.currentMessage] : undefined
     }
 

@@ -18,7 +18,7 @@ import { type RehydratableJob } from '../../services/job-rehydration-registry'
 export interface AssetBatchDeleteJobOptions extends AbstractBatchDeleteJobOptions {}
 
 export class AssetBatchDeleteJob extends AbstractBatchDeleteJob {
-  static readonly jobNames = ['studio_ee_job_batch_delete_assets']
+  static readonly jobNames = ['studio_ee_job_batch_delete_assets'] as const
 
   protected async executeDeleteRequest (): Promise<number | null> {
     const response = await store.dispatch(

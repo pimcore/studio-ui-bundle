@@ -30,7 +30,7 @@ export interface BatchEditHandlerOptions {
 }
 
 export abstract class AbstractBatchEditJob implements JobInterface {
-  static readonly jobNames = ['studio_ee_job_patch_elements', 'studio_ee_job_rewrite_element_references']
+  static readonly jobNames: readonly string[] = ['studio_ee_job_patch_elements', 'studio_ee_job_rewrite_element_references']
 
   protected readonly assetContextId: number
   protected readonly onFinish?: () => Promise<void>

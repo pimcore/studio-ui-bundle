@@ -24,7 +24,7 @@ export interface DataObjectCloneJobOptions extends Omit<AbstractCloneJobOptions,
 }
 
 export class DataObjectCloneJob extends AbstractCloneJob {
-  static readonly jobNames = ['studio_ee_job_clone_data_objects']
+  static readonly jobNames = ['studio_ee_job_clone_data_objects'] as const
 
   private readonly parameters: DataObjectCloneParameters
 

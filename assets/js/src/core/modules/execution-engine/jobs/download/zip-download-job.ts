@@ -15,7 +15,7 @@ import { t } from 'i18next'
 import { type RehydratableJob, type JobRunList } from '../../services/job-rehydration-registry'
 
 export class ZipDownloadJob extends AbstractDownloadJob {
-  static readonly jobNames = ['studio_ee_job_create_download_zip']
+  static readonly jobNames = ['studio_ee_job_create_download_zip'] as const
 
   protected static override getTitle (): string { return t('jobs.download-zip-job.title') }
   protected static override getDownloadUrl (): string { return `${getPrefix()}/assets/download/zip/{jobRunId}` }

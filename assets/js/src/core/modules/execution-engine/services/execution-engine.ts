@@ -30,7 +30,7 @@ export class ExecutionEngine {
     }
 
     const ctor = job.constructor as Partial<RehydratableJob>
-    if (Array.isArray(ctor.jobNames)) {
+    if (ctor.jobNames != null) {
       for (const name of ctor.jobNames) {
         if (this.rehydrationRegistry.get(name) === undefined) {
           throw new Error(`Job "${name}" (${job.constructor.name}) is not registered in the rehydration registry. Call registry.register(${job.constructor.name}) in your module's onInit().`)
@@ -51,21 +51,26 @@ export class ExecutionEngine {
     // IDs that appear as a child of another item in this response
     const childIds = new Set<number>(
       items
-        .filter(j => j.childJobRunId != null)
-        .map(j => j.childJobRunId!)
+        .filter(j => j.jobRunChildId != null)
+        .map(j => j.jobRunChildId!)
     )
 
-    // Process only top-level (parent) items; pass child as second argument
+    // Process only top-level (parent) items; walk the full chain to any depth
     for (const parent of items.filter(j => !childIds.has(j.id))) {
       const fn = this.rehydrationRegistry.get(parent.jobName)
       if (fn === undefined) continue
 
-      const child = parent.childJobRunId != null
-        ? items.find(j => j.id === parent.childJobRunId)
-        : undefined
+      const chain: JobRun[] = [parent]
+      let cursor: JobRun = parent
+      while (cursor.jobRunChildId != null) {
+        const next = items.find(j => j.id === cursor.jobRunChildId)
+        if (next === undefined) break
+        chain.push(next)
+        cursor = next
+      }
 
-      const handler = fn(child != null ? [parent, child] : [parent])
-      handler.setInitialStatus((child ?? parent).state)
+      const handler = fn(chain as [JobRun, ...JobRun[]])
+      handler.setInitialStatus(chain[chain.length - 1].state)
       this.messageBus.registerHandler(handler)
     }
   }

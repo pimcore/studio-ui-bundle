@@ -97,7 +97,7 @@ export class RecycleBinRestoreJob implements JobInterface {
     console.error('Recycle bin restore job failed:', error)
   }
 
-  static readonly jobNames = ['studio_ee_job_recycle_bin_restore']
+  static readonly jobNames = ['studio_ee_job_recycle_bin_restore'] as const
 
   static rehydrate (jobRuns: JobRunList): MessageBusJobHandler {
     const [parent] = jobRuns

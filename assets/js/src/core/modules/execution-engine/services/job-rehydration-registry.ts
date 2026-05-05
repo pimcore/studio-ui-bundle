@@ -17,7 +17,7 @@ export type JobRunList = [JobRun, ...JobRun[]]
 export type RehydrationFn = (jobRuns: JobRunList) => MessageBusJobHandler
 
 export interface RehydratableJob {
-  readonly jobNames: string[]
+  readonly jobNames: readonly string[]
   rehydrate: (jobRuns: JobRunList) => MessageBusJobHandler
 }
 
