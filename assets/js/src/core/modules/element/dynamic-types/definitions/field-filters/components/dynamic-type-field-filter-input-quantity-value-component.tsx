@@ -16,7 +16,7 @@ import { useQuantityValueUnits } from '@sdk/modules/data-object'
 import { Flex, Input, Select } from '@sdk/components'
 import { useTranslation } from 'react-i18next'
 
-export interface DynamicTypeFieldFilterInputQuantityValueProps extends AbstractFieldFilterDefinition {}
+export interface DynamicTypeFieldFilterInputQuantityValueProps extends AbstractFieldFilterDefinition { }
 
 export const DynamicTypeFieldFilterInputQuantityValueComponent = (): React.JSX.Element => {
   const { data, setData, config } = useDynamicFilter()
@@ -53,7 +53,7 @@ export const DynamicTypeFieldFilterInputQuantityValueComponent = (): React.JSX.E
             unitId
           })
         } }
-        options={ getSelectOptions(config?.validUnits as string[]) }
+        options={ getSelectOptions(config?.fieldDefinition?.validUnits as string[] ?? undefined) }
         placeholder={ '(' + t('empty') + ')' }
         style={ { minWidth: 120 } }
         value={ value?.unitId ?? undefined }
