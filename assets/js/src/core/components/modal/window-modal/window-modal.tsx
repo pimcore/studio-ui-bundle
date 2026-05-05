@@ -9,6 +9,7 @@
  */
 
 import React, { useState, useRef } from 'react'
+import { ConfigProvider } from 'antd'
 import { type IModalProps, Modal } from '@Pimcore/components/modal/modal'
 import type { DraggableData, DraggableEvent } from 'react-draggable'
 import Draggable from 'react-draggable'
@@ -83,7 +84,11 @@ export const WindowModal = (props: IWindowModalProps): React.JSX.Element => {
       }
       wrapClassName={ styles.wrapper }
     >
-      {props.children}
+      {/* Render popups (Select, DatePicker, etc.) inside the modal's draggable container */}
+      {/* so they inherit its stacking context and appear above the modal overlay. */}
+      <ConfigProvider getPopupContainer={ () => draggleRef.current ?? document.body }>
+        {props.children}
+      </ConfigProvider>
     </Modal>
   )
 }
