@@ -101,7 +101,7 @@ export type JobRun = {
     creationDate: number | null;
     /** Modification date */
     modificationDate: number | null;
-    /** Job name */
+    /** The name of the job */
     jobName: string;
 };
 export const {
