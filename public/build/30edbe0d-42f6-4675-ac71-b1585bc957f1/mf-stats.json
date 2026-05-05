@@ -22,7 +22,11 @@
     "globalName": "pimcore_studio_ui_bundle",
     "pluginVersion": "2.2.3",
     "prefetchInterface": false,
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
     "publicPath": "/bundles/pimcorestudioui/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/"
+========
+    "publicPath": "/bundles/pimcorestudioui/build/85f6d4e1-4152-4241-a00c-7a60102a834d/"
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
   },
   "shared": [
     {
@@ -1004,7 +1008,11 @@
         "css": {
           "async": [],
           "sync": [
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/css/async/6411.8473c3f0.css"
+========
+            "static/css/async/6411.cfe77206.css"
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
           ]
         }
       },
@@ -1049,12 +1057,16 @@
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
             "static/js/async/2202.bd928b8b.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/9454.03f9cbf9.js",
             "static/js/async/__federation_expose_modules__data_object.2ecdf3fd.js",
             "static/js/async/__federation_expose_modules__field_definitions.d894d4b4.js",
@@ -1062,9 +1074,9 @@
             "static/js/async/1693.b279e0e9.js",
             "static/js/async/2843.82520e7d.js",
             "static/js/async/2545.c7df0bd3.js",
-            "static/js/async/7623.ab3779f8.js",
+            "static/js/async/6180.71c8305f.js",
             "static/js/async/4530.72904f19.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap.4f627824.js"
+            "static/js/async/__federation_expose__internal___mf_bootstrap.f5ebb5b5.js"
           ],
           "async": [
             "static/js/async/9765.07ec2c12.js",
@@ -1330,8 +1342,13 @@
         },
         "css": {
           "sync": [
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/css/async/6411.8473c3f0.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.0c30ac79.css"
+========
+            "static/css/async/6411.cfe77206.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.1a851b2b.css"
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
           ],
           "async": []
         }
@@ -1352,12 +1369,16 @@
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
             "static/js/async/2202.bd928b8b.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/9454.03f9cbf9.js",
             "static/js/async/__federation_expose_modules__data_object.2ecdf3fd.js",
             "static/js/async/__federation_expose_modules__field_definitions.d894d4b4.js",
@@ -1365,8 +1386,8 @@
             "static/js/async/1693.b279e0e9.js",
             "static/js/async/2843.82520e7d.js",
             "static/js/async/2545.c7df0bd3.js",
-            "static/js/async/7623.ab3779f8.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.6e3a6840.js"
+            "static/js/async/6180.71c8305f.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.3a33b648.js"
           ],
           "async": [
             "static/js/async/9765.07ec2c12.js",
@@ -1635,12 +1656,16 @@
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
             "static/js/async/2202.bd928b8b.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/9454.03f9cbf9.js",
             "static/js/async/__federation_expose_modules__data_object.2ecdf3fd.js",
             "static/js/async/__federation_expose_modules__field_definitions.d894d4b4.js",
@@ -1648,19 +1673,28 @@
             "static/js/async/1693.b279e0e9.js",
             "static/js/async/2843.82520e7d.js",
             "static/js/async/2545.c7df0bd3.js",
-            "static/js/async/7623.ab3779f8.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap.4f627824.js",
+            "static/js/async/6180.71c8305f.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.f5ebb5b5.js",
             "static/js/async/2103.0449b778.js"
           ]
         },
         "css": {
           "sync": [
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/css/async/6411.8473c3f0.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.0c30ac79.css"
           ],
           "async": [
             "static/css/async/6411.8473c3f0.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.0c30ac79.css"
+========
+            "static/css/async/6411.cfe77206.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.1a851b2b.css"
+          ],
+          "async": [
+            "static/css/async/6411.cfe77206.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.1a851b2b.css"
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
           ]
         }
       }
@@ -1706,12 +1740,16 @@
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
             "static/js/async/2202.bd928b8b.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/9454.03f9cbf9.js",
             "static/js/async/__federation_expose_modules__data_object.2ecdf3fd.js",
             "static/js/async/__federation_expose_modules__field_definitions.d894d4b4.js",
@@ -1719,10 +1757,10 @@
             "static/js/async/1693.b279e0e9.js",
             "static/js/async/2843.82520e7d.js",
             "static/js/async/2545.c7df0bd3.js",
-            "static/js/async/7623.ab3779f8.js",
+            "static/js/async/6180.71c8305f.js",
             "static/js/async/4530.72904f19.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap.4f627824.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.6e3a6840.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.f5ebb5b5.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.3a33b648.js",
             "static/js/async/__federation_expose_modules__application_logger.557a5c31.js",
             "static/js/async/__federation_expose_modules__asset.8cd128af.js",
             "static/js/async/__federation_expose_modules__document.5167229e.js",
@@ -2002,12 +2040,16 @@
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
             "static/js/async/2202.bd928b8b.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/9454.03f9cbf9.js",
             "static/js/async/__federation_expose_modules__data_object.2ecdf3fd.js",
             "static/js/async/__federation_expose_modules__field_definitions.d894d4b4.js",
@@ -2015,13 +2057,14 @@
             "static/js/async/1693.b279e0e9.js",
             "static/js/async/2843.82520e7d.js",
             "static/js/async/2545.c7df0bd3.js",
-            "static/js/async/7623.ab3779f8.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap.4f627824.js",
+            "static/js/async/6180.71c8305f.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.f5ebb5b5.js",
             "static/js/async/2103.0449b778.js"
           ]
         },
         "css": {
           "sync": [
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/css/async/6411.8473c3f0.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.0c30ac79.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.0c30ac79.css"
@@ -2029,6 +2072,15 @@
           "async": [
             "static/css/async/6411.8473c3f0.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.0c30ac79.css"
+========
+            "static/css/async/6411.cfe77206.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.1a851b2b.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.1a851b2b.css"
+          ],
+          "async": [
+            "static/css/async/6411.cfe77206.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.1a851b2b.css"
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
           ]
         }
       }
@@ -2048,12 +2100,16 @@
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
             "static/js/async/2202.bd928b8b.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/9454.03f9cbf9.js",
             "static/js/async/__federation_expose_modules__data_object.2ecdf3fd.js",
             "static/js/async/__federation_expose_modules__field_definitions.d894d4b4.js",
@@ -2061,17 +2117,17 @@
             "static/js/async/1693.b279e0e9.js",
             "static/js/async/2843.82520e7d.js",
             "static/js/async/2545.c7df0bd3.js",
-            "static/js/async/7623.ab3779f8.js",
+            "static/js/async/6180.71c8305f.js",
             "static/js/async/4530.72904f19.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap.4f627824.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.6e3a6840.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.f5ebb5b5.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.3a33b648.js",
             "static/js/async/__federation_expose_api__asset.9dee10b3.js",
             "static/js/async/__federation_expose_api__class_definition.6192771c.js",
             "static/js/async/__federation_expose_api__custom_metadata.10d73b97.js",
             "static/js/async/__federation_expose_api__data_object.516bc5d5.js",
             "static/js/async/__federation_expose_api__dependencies.a9508cf9.js",
             "static/js/async/__federation_expose_api__documents.09a24f16.js",
-            "static/js/async/__federation_expose_api__elements.5babca9f.js",
+            "static/js/async/__federation_expose_api__elements.6770f2ea.js",
             "static/js/async/__federation_expose_api__metadata.e9f2a028.js",
             "static/js/async/__federation_expose_api__perspectives.936945cf.js",
             "static/js/async/__federation_expose_api__properties.314180ef.js",
@@ -2107,12 +2163,16 @@
             "static/js/async/385.d9b4f6a1.js",
             "static/js/async/2287.6a200c82.js",
             "static/js/async/2202.bd928b8b.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/9454.03f9cbf9.js",
             "static/js/async/__federation_expose_modules__data_object.2ecdf3fd.js",
             "static/js/async/__federation_expose_modules__field_definitions.d894d4b4.js",
@@ -2120,10 +2180,10 @@
             "static/js/async/1693.b279e0e9.js",
             "static/js/async/2843.82520e7d.js",
             "static/js/async/2545.c7df0bd3.js",
-            "static/js/async/7623.ab3779f8.js",
+            "static/js/async/6180.71c8305f.js",
             "static/js/async/4530.72904f19.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap.4f627824.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.6e3a6840.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.f5ebb5b5.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.3a33b648.js",
             "static/js/async/__federation_expose_modules__application_logger.557a5c31.js",
             "static/js/async/__federation_expose_modules__asset.8cd128af.js",
             "static/js/async/__federation_expose_modules__document.5167229e.js",
@@ -2398,6 +2458,7 @@
         },
         "css": {
           "sync": [
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/css/async/6411.8473c3f0.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.0c30ac79.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.0c30ac79.css"
@@ -2406,6 +2467,16 @@
             "static/css/async/6411.8473c3f0.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.0c30ac79.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.0c30ac79.css"
+========
+            "static/css/async/6411.cfe77206.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.1a851b2b.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.1a851b2b.css"
+          ],
+          "async": [
+            "static/css/async/6411.cfe77206.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.1a851b2b.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.1a851b2b.css"
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
           ]
         }
       }
@@ -2421,7 +2492,7 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/175.780b640e.js",
             "static/js/async/__federation_expose_api__asset.9dee10b3.js"
           ],
@@ -2444,7 +2515,7 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/__federation_expose_api__class_definition.6192771c.js"
           ],
@@ -2467,7 +2538,7 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/__federation_expose_api__custom_metadata.10d73b97.js"
           ],
           "async": []
@@ -2489,7 +2560,7 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/__federation_expose_api__data_object.516bc5d5.js"
           ],
           "async": []
@@ -2511,7 +2582,7 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/__federation_expose_api__dependencies.a9508cf9.js"
           ],
           "async": []
@@ -2533,7 +2604,7 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/__federation_expose_api__documents.09a24f16.js"
           ],
           "async": []
@@ -2555,8 +2626,8 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
-            "static/js/async/__federation_expose_api__elements.5babca9f.js"
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
+            "static/js/async/__federation_expose_api__elements.6770f2ea.js"
           ],
           "async": []
         },
@@ -2577,7 +2648,7 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/__federation_expose_api__metadata.e9f2a028.js"
           ],
           "async": []
@@ -2599,7 +2670,7 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/__federation_expose_api__perspectives.936945cf.js"
           ],
           "async": []
@@ -2621,7 +2692,7 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/__federation_expose_api__properties.314180ef.js"
           ],
           "async": []
@@ -2643,7 +2714,7 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/__federation_expose_api__role.89b3367b.js"
           ],
           "async": []
@@ -2665,7 +2736,7 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/__federation_expose_api__schedule.9ccfa450.js"
           ],
           "async": []
@@ -2687,7 +2758,7 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/__federation_expose_api__settings.2c556240.js"
           ],
           "async": []
@@ -2709,7 +2780,7 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/__federation_expose_api__tags.f737e834.js"
           ],
           "async": []
@@ -2731,7 +2802,7 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/__federation_expose_api__thumbnails.a167200d.js"
           ],
           "async": []
@@ -2753,7 +2824,7 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/__federation_expose_api__translations.7a8790cb.js"
           ],
           "async": []
@@ -2775,7 +2846,7 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/__federation_expose_api__user.0c42ebe1.js"
           ],
           "async": []
@@ -2797,7 +2868,7 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/__federation_expose_api__version.7220c1e1.js"
           ],
           "async": []
@@ -2819,7 +2890,7 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/__federation_expose_api__workflow.ad14d72f.js"
           ],
           "async": []
@@ -2841,7 +2912,7 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/__federation_expose_api__reports.e7c4ed9b.js"
           ],
           "async": []
@@ -2883,12 +2954,16 @@
             "static/js/async/385.d9b4f6a1.js",
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/2843.82520e7d.js",
             "static/js/async/__federation_expose_modules__application_logger.557a5c31.js"
           ],
@@ -3155,7 +3230,11 @@
         },
         "css": {
           "sync": [
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/css/async/6411.8473c3f0.css"
+========
+            "static/css/async/6411.cfe77206.css"
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
           ],
           "async": []
         }
@@ -3175,12 +3254,16 @@
             "static/js/async/385.d9b4f6a1.js",
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/9454.03f9cbf9.js",
             "static/js/async/2545.c7df0bd3.js",
             "static/js/async/__federation_expose_modules__asset.8cd128af.js"
@@ -3448,7 +3531,11 @@
         },
         "css": {
           "sync": [
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/css/async/6411.8473c3f0.css"
+========
+            "static/css/async/6411.cfe77206.css"
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
           ],
           "async": []
         }
@@ -3465,7 +3552,7 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/__federation_expose_modules__class_definitions.009acac4.js"
           ],
@@ -3494,12 +3581,16 @@
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
             "static/js/async/2202.bd928b8b.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/9454.03f9cbf9.js",
             "static/js/async/__federation_expose_modules__data_object.2ecdf3fd.js",
             "static/js/async/__federation_expose_modules__field_definitions.d894d4b4.js",
@@ -3507,10 +3598,10 @@
             "static/js/async/1693.b279e0e9.js",
             "static/js/async/2843.82520e7d.js",
             "static/js/async/2545.c7df0bd3.js",
-            "static/js/async/7623.ab3779f8.js",
+            "static/js/async/6180.71c8305f.js",
             "static/js/async/4530.72904f19.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap.4f627824.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.6e3a6840.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.f5ebb5b5.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.3a33b648.js",
             "static/js/async/__federation_expose_modules__document.5167229e.js"
           ],
           "async": [
@@ -3780,12 +3871,16 @@
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
             "static/js/async/2202.bd928b8b.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/9454.03f9cbf9.js",
             "static/js/async/__federation_expose_modules__data_object.2ecdf3fd.js",
             "static/js/async/__federation_expose_modules__field_definitions.d894d4b4.js",
@@ -3793,13 +3888,14 @@
             "static/js/async/1693.b279e0e9.js",
             "static/js/async/2843.82520e7d.js",
             "static/js/async/2545.c7df0bd3.js",
-            "static/js/async/7623.ab3779f8.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap.4f627824.js",
+            "static/js/async/6180.71c8305f.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.f5ebb5b5.js",
             "static/js/async/2103.0449b778.js"
           ]
         },
         "css": {
           "sync": [
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/css/async/6411.8473c3f0.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.0c30ac79.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.0c30ac79.css"
@@ -3807,6 +3903,15 @@
           "async": [
             "static/css/async/6411.8473c3f0.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.0c30ac79.css"
+========
+            "static/css/async/6411.cfe77206.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.1a851b2b.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.1a851b2b.css"
+          ],
+          "async": [
+            "static/css/async/6411.cfe77206.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.1a851b2b.css"
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
           ]
         }
       }
@@ -3828,12 +3933,16 @@
             "static/js/async/385.d9b4f6a1.js",
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/9454.03f9cbf9.js",
             "static/js/async/__federation_expose_modules__data_object.2ecdf3fd.js",
             "static/js/async/1693.b279e0e9.js",
@@ -4102,7 +4211,11 @@
         },
         "css": {
           "sync": [
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/css/async/6411.8473c3f0.css"
+========
+            "static/css/async/6411.cfe77206.css"
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
           ],
           "async": []
         }
@@ -4144,12 +4257,16 @@
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
             "static/js/async/2202.bd928b8b.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/9454.03f9cbf9.js",
             "static/js/async/__federation_expose_modules__data_object.2ecdf3fd.js",
             "static/js/async/__federation_expose_modules__field_definitions.d894d4b4.js",
@@ -4157,10 +4274,10 @@
             "static/js/async/1693.b279e0e9.js",
             "static/js/async/2843.82520e7d.js",
             "static/js/async/2545.c7df0bd3.js",
-            "static/js/async/7623.ab3779f8.js",
+            "static/js/async/6180.71c8305f.js",
             "static/js/async/4530.72904f19.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap.4f627824.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.6e3a6840.js"
+            "static/js/async/__federation_expose__internal___mf_bootstrap.f5ebb5b5.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.3a33b648.js"
           ],
           "async": [
             "static/js/async/9765.07ec2c12.js",
@@ -4429,12 +4546,16 @@
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
             "static/js/async/2202.bd928b8b.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/9454.03f9cbf9.js",
             "static/js/async/__federation_expose_modules__data_object.2ecdf3fd.js",
             "static/js/async/__federation_expose_modules__field_definitions.d894d4b4.js",
@@ -4442,13 +4563,14 @@
             "static/js/async/1693.b279e0e9.js",
             "static/js/async/2843.82520e7d.js",
             "static/js/async/2545.c7df0bd3.js",
-            "static/js/async/7623.ab3779f8.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap.4f627824.js",
+            "static/js/async/6180.71c8305f.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.f5ebb5b5.js",
             "static/js/async/2103.0449b778.js"
           ]
         },
         "css": {
           "sync": [
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/css/async/6411.8473c3f0.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.0c30ac79.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.0c30ac79.css"
@@ -4456,6 +4578,15 @@
           "async": [
             "static/css/async/6411.8473c3f0.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.0c30ac79.css"
+========
+            "static/css/async/6411.cfe77206.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.1a851b2b.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.1a851b2b.css"
+          ],
+          "async": [
+            "static/css/async/6411.cfe77206.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.1a851b2b.css"
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
           ]
         }
       }
@@ -4474,12 +4605,16 @@
             "static/js/async/385.d9b4f6a1.js",
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/__federation_expose_modules__auth.65d96793.js"
           ],
           "async": [
@@ -4745,7 +4880,11 @@
         },
         "css": {
           "sync": [
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/css/async/6411.8473c3f0.css"
+========
+            "static/css/async/6411.cfe77206.css"
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
           ],
           "async": []
         }
@@ -4785,12 +4924,16 @@
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
             "static/js/async/2202.bd928b8b.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/7045.df7d1c19.js",
             "static/js/async/__federation_expose_modules__reports.1b5c941c.js"
           ],
@@ -5058,7 +5201,11 @@
         },
         "css": {
           "sync": [
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/css/async/6411.8473c3f0.css"
+========
+            "static/css/async/6411.cfe77206.css"
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
           ],
           "async": []
         }
@@ -5088,12 +5235,16 @@
             "static/js/async/385.d9b4f6a1.js",
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/__federation_expose_modules__rule_builder.4b54b656.js"
           ],
           "async": [
@@ -5359,7 +5510,11 @@
         },
         "css": {
           "sync": [
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/css/async/6411.8473c3f0.css"
+========
+            "static/css/async/6411.cfe77206.css"
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
           ],
           "async": []
         }
@@ -5376,7 +5531,7 @@
           "sync": [
             "static/js/async/4693.552164ec.js",
             "static/js/async/385.d9b4f6a1.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/__federation_expose_modules__translations.e3016a50.js"
           ],
           "async": []
@@ -5401,12 +5556,16 @@
             "static/js/async/385.d9b4f6a1.js",
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/__federation_expose_modules__user.1df0f8e6.js"
           ],
           "async": [
@@ -5672,7 +5831,11 @@
         },
         "css": {
           "sync": [
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/css/async/6411.8473c3f0.css"
+========
+            "static/css/async/6411.cfe77206.css"
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
           ],
           "async": []
         }
@@ -5692,12 +5855,16 @@
             "static/js/async/385.d9b4f6a1.js",
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/__federation_expose_modules__widget_editor.85abfdd5.js"
           ],
           "async": [
@@ -5963,7 +6130,11 @@
         },
         "css": {
           "sync": [
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/css/async/6411.8473c3f0.css"
+========
+            "static/css/async/6411.cfe77206.css"
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
           ],
           "async": []
         }
@@ -6019,12 +6190,16 @@
             "static/js/async/385.d9b4f6a1.js",
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/__federation_expose_modules__notifications.212009d9.js"
           ],
           "async": [
@@ -6290,7 +6465,11 @@
         },
         "css": {
           "sync": [
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/css/async/6411.8473c3f0.css"
+========
+            "static/css/async/6411.cfe77206.css"
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
           ],
           "async": []
         }
@@ -6310,12 +6489,16 @@
             "static/js/async/385.d9b4f6a1.js",
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/__federation_expose_modules__perspectives.d879ce19.js"
           ],
           "async": [
@@ -6581,7 +6764,11 @@
         },
         "css": {
           "sync": [
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/css/async/6411.8473c3f0.css"
+========
+            "static/css/async/6411.cfe77206.css"
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
           ],
           "async": []
         }
@@ -6621,12 +6808,16 @@
             "static/js/async/385.d9b4f6a1.js",
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/__federation_expose_modules__gdpr_data_extractor.bc4331aa.js"
           ],
           "async": [
@@ -6892,7 +7083,11 @@
         },
         "css": {
           "sync": [
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/css/async/6411.8473c3f0.css"
+========
+            "static/css/async/6411.cfe77206.css"
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
           ],
           "async": []
         }
@@ -6920,12 +7115,16 @@
             "static/js/async/2287.6a200c82.js",
             "static/js/async/45.e217286d.js",
             "static/js/async/2202.bd928b8b.js",
-            "static/js/async/__federation_expose_api.4ae07ea5.js",
+            "static/js/async/__federation_expose_api.1fcbfcea.js",
             "static/js/async/2188.72e65c95.js",
             "static/js/async/3902.82a55216.js",
             "static/js/async/7442.4534a6e3.js",
             "static/js/async/175.780b640e.js",
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/js/async/__federation_expose_app.45feb6ef.js",
+========
+            "static/js/async/__federation_expose_app.987042de.js",
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
             "static/js/async/9454.03f9cbf9.js",
             "static/js/async/__federation_expose_modules__data_object.2ecdf3fd.js",
             "static/js/async/__federation_expose_modules__field_definitions.d894d4b4.js",
@@ -6933,10 +7132,10 @@
             "static/js/async/1693.b279e0e9.js",
             "static/js/async/2843.82520e7d.js",
             "static/js/async/2545.c7df0bd3.js",
-            "static/js/async/7623.ab3779f8.js",
+            "static/js/async/6180.71c8305f.js",
             "static/js/async/4530.72904f19.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap.4f627824.js",
-            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.6e3a6840.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap.f5ebb5b5.js",
+            "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.3a33b648.js",
             "static/js/async/__federation_expose_modules__application_logger.557a5c31.js",
             "static/js/async/__federation_expose_modules__asset.8cd128af.js",
             "static/js/async/__federation_expose_modules__document.5167229e.js",
@@ -6953,9 +7152,15 @@
         "css": {
           "sync": [],
           "async": [
+<<<<<<<< HEAD:public/build/30edbe0d-42f6-4675-ac71-b1585bc957f1/mf-stats.json
             "static/css/async/6411.8473c3f0.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap.0c30ac79.css",
             "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.0c30ac79.css"
+========
+            "static/css/async/6411.cfe77206.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap.1a851b2b.css",
+            "static/css/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.1a851b2b.css"
+>>>>>>>> 2025.4:public/build/85f6d4e1-4152-4241-a00c-7a60102a834d/mf-stats.json
           ]
         }
       }

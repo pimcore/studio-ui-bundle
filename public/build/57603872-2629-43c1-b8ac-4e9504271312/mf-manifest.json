@@ -22,7 +22,11 @@
     "globalName": "pimcore_studio_ui_bundle_core",
     "pluginVersion": "2.2.3",
     "prefetchInterface": false,
+<<<<<<<< HEAD:public/build/57603872-2629-43c1-b8ac-4e9504271312/mf-manifest.json
     "publicPath": "/bundles/pimcorestudioui/build/57603872-2629-43c1-b8ac-4e9504271312/"
+========
+    "publicPath": "/bundles/pimcorestudioui/build/4d36226c-9141-42ee-a09f-905cc3b786a8/"
+>>>>>>>> 2025.4:public/build/4d36226c-9141-42ee-a09f-905cc3b786a8/mf-manifest.json
   },
   "shared": [],
   "remotes": [

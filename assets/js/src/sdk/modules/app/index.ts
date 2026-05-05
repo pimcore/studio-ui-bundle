@@ -35,6 +35,9 @@ export * from '@Pimcore/modules/app/base-layout/main-nav/hooks/use-main-nav'
 export * from '@Pimcore/modules/app/base-layout/right-sidebar/logo/subscription-details'
 
 export * from '@Pimcore/modules/app/app-loader/services/app-loader-registry'
+export type { LoadPhase } from '@Pimcore/modules/app/app-loader/app-loader'
+export { Background } from '@Pimcore/components/background/background'
+export type { BackgroundProps } from '@Pimcore/components/background/background'
 
 export * from '@Pimcore/modules/app/utils/auto-hide-empty-content/auto-hide-empty-content'
 export * from '@Pimcore/modules/app/utils/download'

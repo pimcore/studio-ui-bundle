@@ -18,6 +18,7 @@ export enum UserPermission {
   Assets = 'assets',
   Thumbnails = 'thumbnails',
   TagsConfiguration = 'tags_configuration',
+  TagsSearch = 'tags_search',
   PredefinedProperties = 'predefined_properties',
   WebsiteSettings = 'website_settings',
   Users = 'users',

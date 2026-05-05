@@ -29,6 +29,7 @@ export const ClassDefinitionContext = createContext<ClassDefinitionsContextProps
 export interface ClassDefinitionsProviderProps {
   children: React.ReactNode
   elementId?: number
+  showLoadingIndicator?: boolean
 }
 
 export interface FolderQueryState {
@@ -36,7 +37,7 @@ export interface FolderQueryState {
   data: ClassDefinitionFolderCollectionApiResponse | undefined
 }
 
-export const ClassDefinitionsProvider = ({ children, elementId }: ClassDefinitionsProviderProps): React.JSX.Element => {
+export const ClassDefinitionsProvider = ({ children, elementId, showLoadingIndicator = true }: ClassDefinitionsProviderProps): React.JSX.Element => {
   const hasObjectsPermission = isAllowed(UserPermission.Objects)
   const queryResultReturn = useClassDefinitionCollectionQuery(undefined, {
     skip: !hasObjectsPermission
@@ -100,7 +101,7 @@ export const ClassDefinitionsProvider = ({ children, elementId }: ClassDefinitio
   }
 
   return useMemo(() => {
-    if (transformedQueryResult.isLoading) {
+    if (transformedQueryResult.isLoading && showLoadingIndicator) {
       return (
         <Content loading />
       )
