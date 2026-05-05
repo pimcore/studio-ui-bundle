@@ -86,6 +86,13 @@
         opacity: 1;
     }
 
+    #app-preloader .backdrop-blur {
+        position: absolute;
+        inset: 0;
+        backdrop-filter: blur(20px);
+        pointer-events: none;
+    }
+
     #app-preloader .logo-orbit {
         position: absolute;
         top: 50%;
@@ -128,6 +135,7 @@
     <div class="background-figure background-figure--bottom-left"></div>
     <div class="background-figure background-figure--bottom-right"></div>
     <div class="background-figure background-figure--top-left"></div>
+    <div class="backdrop-blur"></div>
     <div class="logo-orbit logo-orbit--cw"></div>
     <div class="logo-orbit logo-orbit--ccw"></div>
     <img
