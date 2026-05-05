@@ -23,8 +23,8 @@ import { useTranslation } from 'react-i18next'
 import { api, type RecycleBin, useRecycleBinFlushMutation } from '../recycle-bin-api-slice-enhanced'
 
 interface UseRecycleBinHookReturn {
-  restoreItems: (items: RecycleBin[], onFinish?: () => void) => Promise<void>
-  removeItems: (items: RecycleBin[], onFinish?: () => void) => Promise<void>
+  restoreItems: (items: Array<Pick<RecycleBin, 'id' | 'type'>>, onFinish?: () => void) => Promise<void>
+  removeItems: (items: Array<Pick<RecycleBin, 'id' | 'type'>>, onFinish?: () => void) => Promise<void>
   flush: (onFinish?: () => void) => Promise<void>
   refreshRecycleBin: () => void
 }
@@ -35,7 +35,7 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
   const [recycleBinFlushMutation] = useRecycleBinFlushMutation()
   const executionEngine = container.get<ExecutionEngine>(serviceIds.executionEngine)
 
-  const restoreItems = async (items: RecycleBin[], onFinish?: () => void): Promise<void> => {
+  const restoreItems = async (items: Array<Pick<RecycleBin, 'id' | 'type'>>, onFinish?: () => void): Promise<void> => {
     try {
       const job = new RecycleBinRestoreJob({
         itemIds: items.map(item => item.id),
@@ -51,7 +51,7 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
     }
   }
 
-  const removeItems = async (items: RecycleBin[], onFinish?: () => void): Promise<void> => {
+  const removeItems = async (items: Array<Pick<RecycleBin, 'id' | 'type'>>, onFinish?: () => void): Promise<void> => {
     try {
       const job = new RecycleBinDeleteJob({
         itemIds: items.map(item => item.id),

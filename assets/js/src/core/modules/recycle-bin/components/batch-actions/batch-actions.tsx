@@ -17,21 +17,16 @@ import { useSelectedRowsContext } from '../../context/selected-items-context'
 import { useRecycleBin } from '../../hooks/use-recycle-bin'
 import { type RecycleBin } from '../../recycle-bin-api-slice.gen'
 
-interface BatchActionsProps {
-  items: RecycleBin[]
-}
-
-export const BatchActions = ({ items }: BatchActionsProps): React.JSX.Element => {
+export const BatchActions = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { selectedRows, resetSelectedRows } = useSelectedRowsContext()
+  const { selectedRows, selectedRowsTypes, resetSelectedRows } = useSelectedRowsContext()
   const { removeItems, restoreItems } = useRecycleBin()
 
-  const getItemToSelectedRowsId = (): RecycleBin[] => {
-    return Object.keys(selectedRows)
-      .map((key) => {
-        return items.find((item) => item.id === parseInt(key, 10))
-      })
-      .filter((item): item is RecycleBin => item !== undefined)
+  const getSelectedItems = (): Array<Pick<RecycleBin, 'id' | 'type'>> => {
+    return Object.keys(selectedRows).map((id): Pick<RecycleBin, 'id' | 'type'> => ({
+      id: Number.parseInt(id, 10),
+      type: selectedRowsTypes[id] ?? ''
+    }))
   }
 
   const menu: DropdownMenuProps = {
@@ -41,9 +36,7 @@ export const BatchActions = ({ items }: BatchActionsProps): React.JSX.Element =>
         label: t('recycle-bin.actions.delete'),
         icon: <Icon value={ 'trash' } />,
         onClick: () => {
-          const itemsToDelete = getItemToSelectedRowsId()
-
-          void removeItems(itemsToDelete, () => {
+          void removeItems(getSelectedItems(), () => {
             resetSelectedRows()
           })
         }
@@ -53,9 +46,7 @@ export const BatchActions = ({ items }: BatchActionsProps): React.JSX.Element =>
         label: t('recycle-bin.actions.restore'),
         icon: <Icon value={ 'restore' } />,
         onClick: () => {
-          const itemsToRestore = getItemToSelectedRowsId()
-
-          void restoreItems(itemsToRestore, () => {
+          void restoreItems(getSelectedItems(), () => {
             resetSelectedRows()
           })
         }
