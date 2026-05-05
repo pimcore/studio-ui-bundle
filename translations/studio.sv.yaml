@@ -1931,6 +1931,9 @@ entries: poster
 entry: post
 error_element_validation_failed: Validering misslyckades
 element.delete.deleting-folder: Tar bort mapp
+element.delete.job-title-asset: Tar bort tillgång
+element.delete.job-title-document: Tar bort dokument
+element.delete.job-title-data-object: Tar bort dataobjekt
 component.pagination.showing-items: Visar {{total}}
 edit-modal.inline-edit: Inline-redigering
 edit-modal.apply-changes: Tillämpa ändringar

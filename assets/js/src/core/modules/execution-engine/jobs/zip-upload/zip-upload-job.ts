@@ -39,6 +39,10 @@ export class ZipUploadJob implements JobInterface {
         name: 'zipFile',
         multiple: false,
         onSuccess: async (response: any): Promise<void> => {
+          if (!Array.isArray(response) || response.length === 0 || response[0]?.response == null) {
+            resolve()
+            return
+          }
           const jobRunId = response[0].response.jobRunId ?? undefined
           if (isNumber(jobRunId)) {
             const handler = ZipUploadJob.buildHandler({

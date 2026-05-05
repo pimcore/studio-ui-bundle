@@ -1931,6 +1931,9 @@ entries: entradas
 entry: entrada
 error_element_validation_failed: La validación falló
 element.delete.deleting-folder: Eliminando carpeta
+element.delete.job-title-asset: Eliminando asset
+element.delete.job-title-document: Eliminando documento
+element.delete.job-title-data-object: Eliminando objeto de datos
 component.pagination.showing-items: Mostrando {{total}}
 edit-modal.inline-edit: Edición en línea
 edit-modal.apply-changes: Aplicar cambios

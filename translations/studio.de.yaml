@@ -1931,6 +1931,9 @@ entries: Einträge
 entry: Eintrag
 error_element_validation_failed: Validierung fehlgeschlagen
 element.delete.deleting-folder: Ordner wird gelöscht
+element.delete.job-title-asset: Asset wird gelöscht
+element.delete.job-title-document: Dokument wird gelöscht
+element.delete.job-title-data-object: Datenobjekt wird gelöscht
 component.pagination.showing-items: "{{total}} werden angezeigt"
 edit-modal.inline-edit: Inline-Bearbeitung
 edit-modal.apply-changes: Änderungen übernehmen

@@ -1931,6 +1931,9 @@ entries: voci
 entry: voce
 error_element_validation_failed: Validazione fallita
 element.delete.deleting-folder: Eliminazione cartella
+element.delete.job-title-asset: Eliminazione asset
+element.delete.job-title-document: Eliminazione documento
+element.delete.job-title-data-object: Eliminazione oggetto dati
 component.pagination.showing-items: Visualizzati {{total}}
 edit-modal.inline-edit: Modifica in linea
 edit-modal.apply-changes: Applica modifiche

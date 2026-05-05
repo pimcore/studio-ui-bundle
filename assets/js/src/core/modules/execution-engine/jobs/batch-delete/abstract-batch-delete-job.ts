@@ -13,7 +13,6 @@ import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { MessageBusJobHandler, type JobCompletionData } from '../../message-handlers/message-bus-job/message-bus-job-handler'
 import { StepCompletionCalculator } from '../../message-handlers/message-bus-job/progress-calculator/step-completion-calculator'
-import { type JobRunList } from '../../services/job-rehydration-registry'
 import { t } from 'i18next'
 
 export interface AbstractBatchDeleteJobOptions {
@@ -76,11 +75,6 @@ export abstract class AbstractBatchDeleteJob implements JobInterface {
 
   protected async handleJobFailure (error: any): Promise<void> {
     console.error('Batch delete job failed:', error)
-  }
-
-  static rehydrate (jobRuns: JobRunList): MessageBusJobHandler {
-    const [parent] = jobRuns
-    return this.buildHandler({ jobRunId: parent.id })
   }
 
   protected static buildHandler (options: {

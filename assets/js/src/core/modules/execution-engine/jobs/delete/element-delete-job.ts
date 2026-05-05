@@ -20,6 +20,18 @@ import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.ge
 import { t } from 'i18next'
 import { type RehydratableJob, type JobRunList } from '../../services/job-rehydration-registry'
 
+const titleKeyByElementType: Record<ElementType, string> = {
+  asset: 'element.delete.job-title-asset',
+  document: 'element.delete.job-title-document',
+  'data-object': 'element.delete.job-title-data-object'
+}
+
+const elementTypeByJobName: Record<string, ElementType> = {
+  studio_ee_job_delete_assets: 'asset',
+  studio_ee_job_delete_data_objects: 'data-object',
+  studio_ee_job_delete_documents: 'document'
+}
+
 export interface DeleteJobOptions {
   elementId: number
   elementType: ElementType
@@ -69,6 +81,7 @@ export class DeleteJob implements JobInterface {
 
       const handler = DeleteJob.buildHandler({
         jobRunId,
+        elementType: this.elementType,
         onJobCompletion: async (data: JobCompletionData) => {
           if (data.isFinished) {
             try {
@@ -143,17 +156,24 @@ export class DeleteJob implements JobInterface {
 
   static rehydrate (jobRuns: JobRunList): MessageBusJobHandler {
     const [parent] = jobRuns
-    return this.buildHandler({ jobRunId: parent.id })
+    return this.buildHandler({
+      jobRunId: parent.id,
+      elementType: elementTypeByJobName[parent.jobName]
+    })
   }
 
   private static buildHandler (options: {
     jobRunId: number
+    elementType?: ElementType
     onJobCompletion?: (data: JobCompletionData) => Promise<void>
     onRetry?: () => Promise<void>
   }): MessageBusJobHandler {
+    const titleKey = options.elementType !== undefined
+      ? titleKeyByElementType[options.elementType]
+      : 'element.delete.deleting-folder'
     return new MessageBusJobHandler({
       jobRunId: options.jobRunId,
-      title: t('element.delete.deleting-folder'),
+      title: t(titleKey),
       progressCalculator: new StepCompletionCalculator(),
       onJobCompletion: options.onJobCompletion,
       onRetry: options.onRetry
