@@ -51,6 +51,7 @@
     </head>
 
     <body>
+        {% include '@PimcoreStudioUi/default/_preloader.html.twig' %}
         <div id="app" data-app-config="{{ appConfig|json_encode }}"></div>
 
         {% for jsFile in bundleJsFiles %}

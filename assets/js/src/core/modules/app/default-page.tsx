@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Background } from '@Pimcore/components/background/background'
 import { BaseLayoutView } from '@Pimcore/modules/app/base-layout/base-layout-view'
 import React from 'react'
 import { ClassDefinitionsProvider } from '../data-object/utils/provider/class-defintions/class-definitions-provider'
@@ -31,8 +30,7 @@ export const DefaultPage = (): React.JSX.Element => {
       onDrop={ preventDrop }
     >
       <WidgetRestorer>
-        <Background />
-        <ClassDefinitionsProvider>
+        <ClassDefinitionsProvider showLoadingIndicator={ false }>
           <ElementSelectorProvider>
             <BaseLayoutView />
           </ElementSelectorProvider>

@@ -8,14 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState, type PropsWithChildren } from 'react'
+import React, { useEffect, type PropsWithChildren } from 'react'
 import { loadReduxState } from '../../../utils/redux-state-persistence'
 import { type WidgetManagerTabConfig, updateInnerModel, closeWidget } from '../widget-manager-slice'
 import { getWidgetManagerStorageKey } from '../widget-manager-persistence'
 import { type WidgetRestorerRegistry } from '../services/widget-restorer-registry'
 import { useAppDispatch } from '@sdk/app'
 import { type IJsonModel, Model, type TabNode } from 'flexlayout-react'
-import { Content } from '@Pimcore/components/content/content'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { isNil } from 'lodash'
 import { container } from '@Pimcore/app/depency-injection'
@@ -24,7 +23,6 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 export const WidgetRestorer = ({ children }: PropsWithChildren): React.JSX.Element | null => {
   const dispatch = useAppDispatch()
   const user = useUser()
-  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const restore = async (): Promise<void> => {
@@ -56,16 +54,10 @@ export const WidgetRestorer = ({ children }: PropsWithChildren): React.JSX.Eleme
           console.warn('Failed to restore widget layout', e)
         }
       }
-
-      setIsLoading(false)
     }
 
     void restore()
   }, [user.id])
-
-  if (isLoading) {
-    return <Content loading />
-  }
 
   return <>{children}</>
 }
