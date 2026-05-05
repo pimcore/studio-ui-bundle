@@ -1018,6 +1018,7 @@ asset.sidebar.office-format: Office-Format
 jobs.notification.title: Laufende Aufträge
 jobs.notification.jobs_one: "{{count}} Aktion"
 jobs.notification.jobs_other: "{{count}} Aktionen"
+jobs.notification.hide-all-finished: Alle abgeschlossenen ausblenden
 jobs.job.in-progress: "{{title}} in Bearbeitung"
 jobs.job.queued: "{{title}} in Warteschlange"
 jobs.job.failed: "{{title}} fehlgeschlagen"

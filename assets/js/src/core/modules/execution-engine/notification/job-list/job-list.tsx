@@ -26,14 +26,17 @@ export const JobList = (): React.JSX.Element => {
 
     if (!wasAdded) return
 
-    // Defer until framer-motion height animations have settled
-    const timer = setTimeout(() => {
+    // Chase framer-motion height animations with RAF until they settle (~600ms)
+    const end = Date.now() + 600
+    const scroll = (): void => {
       if (containerRef.current != null) {
         containerRef.current.scrollTop = containerRef.current.scrollHeight
       }
-    }, 400)
-
-    return () => { clearTimeout(timer) }
+      if (Date.now() < end) {
+        requestAnimationFrame(scroll)
+      }
+    }
+    requestAnimationFrame(scroll)
   }, [jobs.length])
 
   return (

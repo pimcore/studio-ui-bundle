@@ -1024,6 +1024,7 @@ asset.sidebar.office-format: Office Format
 jobs.notification.title: Running jobs
 jobs.notification.jobs_one: "{{count}} Action"
 jobs.notification.jobs_other: "{{count}} Actions"
+jobs.notification.hide-all-finished: Hide all finished
 jobs.job.in-progress: "{{title}} in progress"
 jobs.job.queued: "{{title}} queued"
 jobs.job.failed: "{{title}} failed"
@@ -1038,6 +1039,7 @@ jobs.job.button-ignore-and-reload: ignore and reload
 jobs.job.step_hint: "Step {{step}}/{{total}}"
 jobs.job.step_hint_single: "Step {{step}}"
 jobs.job.download-error: Download failed
+jobs.job.download-not-available: The download is no longer available.
 jobs.job.button-show-errors: Show errors
 jobs.job.error-modal.title: Job Errors
 jobs.job.button-abort: Abort Job

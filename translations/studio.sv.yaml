@@ -1018,6 +1018,7 @@ asset.sidebar.office-format: Kontorsformat
 jobs.notification.title: Pågående jobb
 jobs.notification.jobs_one: "{{count}} åtgärd"
 jobs.notification.jobs_other: "{{count}} åtgärder"
+jobs.notification.hide-all-finished: Dölj alla avslutade
 jobs.job.in-progress: "{{title}} pågår"
 jobs.job.queued: "{{title}} köad"
 jobs.job.failed: "{{title}} misslyckades"

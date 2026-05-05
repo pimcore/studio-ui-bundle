@@ -1018,6 +1018,7 @@ asset.sidebar.office-format: Formato ufficio
 jobs.notification.title: Lavori in corso
 jobs.notification.jobs_one: "{{count}} Azione"
 jobs.notification.jobs_other: "{{count}} Azioni"
+jobs.notification.hide-all-finished: Nascondi tutti i completati
 jobs.job.in-progress: "{{title}} in corso"
 jobs.job.queued: "{{title}} in coda"
 jobs.job.failed: "{{title}} fallito"

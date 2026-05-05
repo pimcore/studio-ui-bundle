@@ -15,6 +15,8 @@ import { type JobInterface, type JobRunOptions } from '@Pimcore/modules/executio
 import { MessageBusJobHandler, type JobCompletionData } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/message-bus-job-handler'
 import { api as classDefinitionApi } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { type BulkImportItem } from '../components/bulk-import-modal/context/bulk-import-context'
+import { type RehydratableJob, type JobRunList } from '@Pimcore/modules/execution-engine/services/job-rehydration-registry'
+import { t } from 'i18next'
 
 export interface BulkImportJobOptions {
   fileId: string
@@ -24,6 +26,16 @@ export interface BulkImportJobOptions {
 }
 
 export class BulkImportJob implements JobInterface {
+  static readonly jobNames = ['studio_ee_job_bulk_import_class_definitions']
+
+  static rehydrate (jobRuns: JobRunList): MessageBusJobHandler {
+    const [parent] = jobRuns
+    return new MessageBusJobHandler({
+      jobRunId: parent.id,
+      title: t('bulk-import.job-title')
+    })
+  }
+
   private readonly fileId: string
   private readonly items: BulkImportItem[]
   private readonly title: string
@@ -80,3 +92,5 @@ export class BulkImportJob implements JobInterface {
     }
   }
 }
+
+void (BulkImportJob satisfies RehydratableJob)

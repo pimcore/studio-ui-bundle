@@ -31,7 +31,8 @@ import { useTreeCopyPasteContext } from './tree-copy-paste-context'
 import { useCloseContextMenu } from '@Pimcore/components/context-menu-wrapper/context-menu-wrapper'
 import { usePasteVisibility } from './use-paste-visibility'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
-import { ElementCloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/element-clone-job'
+import { AssetCloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/asset-clone-job'
+import { DataObjectCloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/data-object-clone-job'
 
 type ElementPartial = Pick<Element, 'id' | 'parentId'>
 type StoreNode = TreeNodeProps | Element | undefined
@@ -59,7 +60,7 @@ export interface MoveProps {
 
 export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn => {
   const { getStoredNode, getNodeTask, copyNode, cutNode, clearCopyPaste } = useTreeCopyPasteContext(elementType)
-  const { elementPatch, elementClone } = useElementApi(elementType)
+  const { elementPatch } = useElementApi(elementType)
   const { t } = useTranslation()
   const { isTreeActionAllowed } = useTreePermission()
   const dispatch = useAppDispatch()
@@ -118,16 +119,9 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       ? node.id
       : parseInt(node.id)
 
-    const job = new ElementCloneJob({
-      sourceId: id,
-      targetId: parentId,
-      parameters: cloneParameters,
-      title: t(`jobs.${elementType}-clone-job.title`),
-      elementType,
-      elementClone,
-      treeId,
-      nodeId: String(parentId)
-    })
+    const job = elementType === 'asset'
+      ? new AssetCloneJob({ sourceId: id, targetId: parentId, treeId, nodeId: String(parentId) })
+      : new DataObjectCloneJob({ sourceId: id, targetId: parentId, parameters: cloneParameters, treeId, nodeId: String(parentId) })
 
     await executionEngine.runJob(job)
   }

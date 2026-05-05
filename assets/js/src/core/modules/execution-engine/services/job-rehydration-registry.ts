@@ -12,15 +12,22 @@ import { injectable } from 'inversify'
 import { type JobRun } from '../execution-engine-api-slice.gen'
 import { type MessageBusJobHandler } from '../message-handlers/message-bus-job/message-bus-job-handler'
 
-export type RehydrationFn = (parent: JobRun, child?: JobRun) => MessageBusJobHandler
+export type JobRunList = [JobRun, ...JobRun[]]
+
+export type RehydrationFn = (jobRuns: JobRunList) => MessageBusJobHandler
+
+export interface RehydratableJob {
+  readonly jobNames: string[]
+  rehydrate: (jobRuns: JobRunList) => MessageBusJobHandler
+}
 
 @injectable()
 export class JobRehydrationRegistry {
   private readonly registry = new Map<string, RehydrationFn>()
 
-  register (jobNames: string[], fn: RehydrationFn): void {
-    for (const name of jobNames) {
-      this.registry.set(name, fn)
+  register (job: RehydratableJob): void {
+    for (const name of job.jobNames) {
+      this.registry.set(name, (jobRuns) => job.rehydrate(jobRuns))
     }
   }
 

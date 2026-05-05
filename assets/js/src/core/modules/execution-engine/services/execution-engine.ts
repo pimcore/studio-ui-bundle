@@ -13,7 +13,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type GlobalMessageBus } from '@Pimcore/modules/global-message-bus'
 import { type GlobalMessageBusProcess } from '@Pimcore/modules/background-processor'
 import { type JobInterface } from '../jobs/job-interface'
-import { type JobRehydrationRegistry } from './job-rehydration-registry'
+import { type JobRehydrationRegistry, type RehydratableJob } from './job-rehydration-registry'
 import { type JobRun } from '../execution-engine-api-slice.gen'
 
 @injectable()
@@ -27,6 +27,15 @@ export class ExecutionEngine {
   async runJob (job: JobInterface): Promise<void> {
     if (!this.globalProcess.isConnected()) {
       this.globalProcess.start()
+    }
+
+    const ctor = job.constructor as Partial<RehydratableJob>
+    if (Array.isArray(ctor.jobNames)) {
+      for (const name of ctor.jobNames) {
+        if (this.rehydrationRegistry.get(name) === undefined) {
+          throw new Error(`Job "${name}" (${job.constructor.name}) is not registered in the rehydration registry. Call registry.register(${job.constructor.name}) in your module's onInit().`)
+        }
+      }
     }
 
     await job.run({ messageBus: this.messageBus })
@@ -43,7 +52,7 @@ export class ExecutionEngine {
     const childIds = new Set<number>(
       items
         .filter(j => j.childJobRunId != null)
-        .map(j => j.childJobRunId as number)
+        .map(j => j.childJobRunId!)
     )
 
     // Process only top-level (parent) items; pass child as second argument
@@ -55,7 +64,7 @@ export class ExecutionEngine {
         ? items.find(j => j.id === parent.childJobRunId)
         : undefined
 
-      const handler = fn(parent, child)
+      const handler = fn(child != null ? [parent, child] : [parent])
       handler.setInitialStatus((child ?? parent).state)
       this.messageBus.registerHandler(handler)
     }

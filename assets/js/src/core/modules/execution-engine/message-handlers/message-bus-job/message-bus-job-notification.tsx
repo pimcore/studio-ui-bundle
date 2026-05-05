@@ -20,12 +20,14 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type GlobalMessageBus } from '@Pimcore/modules/global-message-bus/services/global-message-bus'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 
 export interface JobButtonCustomizationContext {
   jobRunId: number
   addSuccessButton: (action: ButtonAction, position?: 'start' | 'end') => void
   addFinishedWithErrorsButton: (action: ButtonAction, position?: 'start' | 'end') => void
   addFailureButton: (action: ButtonAction, position?: 'start' | 'end') => void
+  showWarning: (titleKey: string, content: string) => void
 }
 
 export interface MessageBusJobProps extends MessageBusJob {
@@ -38,6 +40,7 @@ export const MessageBusJobNotification = (props: MessageBusJobProps): React.JSX.
   const [isHiding, setIsHiding] = useState(false)
   const [abortJobRun] = useExecutionEngineAbortJobRunByIdMutation()
   const [hideJobRuns] = useExecutionEngineHideJobRunsMutation()
+  const { warn } = useAlertModal()
 
   const handleAbort = async (): Promise<void> => {
     const { error } = await abortJobRun({ jobRunId: Number(props.jobRunId) })
@@ -84,7 +87,8 @@ export const MessageBusJobNotification = (props: MessageBusJobProps): React.JSX.
       jobRunId: props.jobRunId,
       addSuccessButton: (action, position) => { addButton(successButtonActions, action, position) },
       addFinishedWithErrorsButton: (action, position) => { addButton(finishedWithErrorsButtonActions, action, position) },
-      addFailureButton: (action, position) => { addButton(failureButtonActions, action, position) }
+      addFailureButton: (action, position) => { addButton(failureButtonActions, action, position) },
+      showWarning: (titleKey, content) => { warn({ title: titleKey, content }) }
     }
     props.onCustomizeButtons(context)
   }

@@ -1018,6 +1018,7 @@ asset.sidebar.office-format: Format bureautique
 jobs.notification.title: Tâches en cours
 jobs.notification.jobs_one: "{{count}} action"
 jobs.notification.jobs_other: "{{count}} actions"
+jobs.notification.hide-all-finished: Masquer tous les terminés
 jobs.job.in-progress: "{{title}} en cours"
 jobs.job.queued: "{{title}} en file d'attente"
 jobs.job.failed: "{{title}} a échoué"

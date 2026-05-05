@@ -13,10 +13,13 @@ import { store } from '@Pimcore/app/store'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { AbstractBatchDeleteJob, type AbstractBatchDeleteJobOptions } from './abstract-batch-delete-job'
 import { api } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { type RehydratableJob } from '../../services/job-rehydration-registry'
 
 export interface DataObjectBatchDeleteJobOptions extends AbstractBatchDeleteJobOptions {}
 
 export class DataObjectBatchDeleteJob extends AbstractBatchDeleteJob {
+  static readonly jobNames = ['studio_ee_job_batch_delete_data_objects']
+
   protected async executeDeleteRequest (): Promise<number | null> {
     const response = await store.dispatch(
       api.endpoints.dataObjectBatchDelete.initiate({
@@ -34,3 +37,5 @@ export class DataObjectBatchDeleteJob extends AbstractBatchDeleteJob {
     return response.data?.jobRunId ?? null
   }
 }
+
+void (DataObjectBatchDeleteJob satisfies RehydratableJob)
