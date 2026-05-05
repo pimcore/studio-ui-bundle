@@ -92,7 +92,7 @@ export type JobRun = {
     /** Current Message og the last Event */
     currentMessage: string;
     /** Id of the child Job run */
-    childJobRunId: number | null;
+    jobRunChildId: number | null;
     /** Current Step of a running Job */
     currentStep: number | null;
     /** Number of total Steps of a running Job */
@@ -101,8 +101,6 @@ export type JobRun = {
     creationDate: number | null;
     /** Modification date */
     modificationDate: number | null;
-    /** Job name */
-    jobName: string;
 };
 export const {
     useExecutionEngineAbortJobRunByIdMutation,
