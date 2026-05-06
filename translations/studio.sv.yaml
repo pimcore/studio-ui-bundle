@@ -1035,7 +1035,7 @@ jobs.job.step_hint_single: "Steg {{step}}"
 jobs.job.step.batch-edit.preparing: Förbereder massredigering
 jobs.job.step.batch-edit.applying: Tillämpar massredigering
 jobs.job.download-error: Nedladdning misslyckades
-jobs.job.download-not-available: The download is no longer available.
+jobs.job.download-not-available: Nedladdningen är inte längre tillgänglig.
 jobs.job.button-show-errors: Visa fel
 jobs.job.error-modal.title: Jobbfel
 jobs.job.button-abort: Avbryt jobb

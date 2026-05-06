@@ -1035,7 +1035,7 @@ jobs.job.step_hint_single: "Passo {{step}}"
 jobs.job.step.batch-edit.preparing: Preparazione modifica in blocco
 jobs.job.step.batch-edit.applying: Applicazione modifica in blocco
 jobs.job.download-error: Download fallito
-jobs.job.download-not-available: The download is no longer available.
+jobs.job.download-not-available: Il download non è più disponibile.
 jobs.job.button-show-errors: Mostra errori
 jobs.job.error-modal.title: Errori lavoro
 jobs.job.button-abort: Interrompi lavoro

@@ -1035,7 +1035,7 @@ jobs.job.step_hint_single: "Paso {{step}}"
 jobs.job.step.batch-edit.preparing: Preparando edición por lotes
 jobs.job.step.batch-edit.applying: Aplicando edición por lotes
 jobs.job.download-error: Error en la descarga
-jobs.job.download-not-available: The download is no longer available.
+jobs.job.download-not-available: La descarga ya no está disponible.
 jobs.job.button-show-errors: Mostrar errores
 jobs.job.error-modal.title: Errores del trabajo
 jobs.job.button-abort: Cancelar trabajo

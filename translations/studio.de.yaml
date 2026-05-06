@@ -1035,7 +1035,7 @@ jobs.job.step_hint_single: "Schritt {{step}}"
 jobs.job.step.batch-edit.preparing: Stapelbearbeitung wird vorbereitet
 jobs.job.step.batch-edit.applying: Stapelbearbeitung wird angewendet
 jobs.job.download-error: Download fehlgeschlagen
-jobs.job.download-not-available: The download is no longer available.
+jobs.job.download-not-available: Der Download ist nicht mehr verfügbar.
 jobs.job.button-show-errors: Fehler anzeigen
 jobs.job.error-modal.title: Auftragsfehler
 jobs.job.button-abort: Auftrag abbrechen
