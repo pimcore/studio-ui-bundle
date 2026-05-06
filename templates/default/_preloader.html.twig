@@ -14,6 +14,7 @@
         overflow: hidden;
         transition: opacity 500ms ease;
         --pimcore-brand-color: #7a3ad4;
+        --pimcore-brand-background-color: #722ed1;
     }
     #app-preloader.app-preloader--fading { opacity: 0; }
 
@@ -46,7 +47,7 @@
         width: 1642px;
         height: 686px;
         border-radius: 1642px;
-        background: color-mix(in srgb, var(--pimcore-brand-color) 42%, transparent);
+        background: color-mix(in srgb, var(--pimcore-brand-background-color) 42%, transparent);
         animation:
             pimcore-orbit-br 14s linear infinite,
             pimcore-color-pulse 6s linear -4s infinite;
@@ -70,9 +71,9 @@
        so the browser can smoothly interpolate between keyframe values.
        Overridden below if branding.brandColor is provided. */
     @keyframes pimcore-color-pulse {
-        0%   { background: color-mix(in srgb, #7a3ad4 42%, transparent); }
+        0%   { background: color-mix(in srgb, #722ed1 42%, transparent); }
         50%  { background: rgba(55, 217, 243, 0.20); }
-        100% { background: color-mix(in srgb, #7a3ad4 42%, transparent); }
+        100% { background: color-mix(in srgb, #722ed1 42%, transparent); }
     }
 
     #app-preloader .preloader-logo {
@@ -117,21 +118,31 @@
     }
 </style>
 
-{% if branding.brandColor %}
-{# Override the colour-pulse keyframe with the actual brand colour as a literal value.
+{% if branding.backgroundShade %}
+{# Override the colour-pulse keyframe with the actual background shade as a literal value.
    A later @keyframes with the same name overrides the earlier one — last wins.
    Literal colour values (not CSS variables) are required for smooth CSS animation
    interpolation without @property registration. #}
 <style>
     @keyframes pimcore-color-pulse {
-        0%   { background: color-mix(in srgb, {{ branding.brandColor }} 42%, transparent); }
+        0%   { background: color-mix(in srgb, {{ branding.backgroundShade }} 42%, transparent); }
         50%  { background: rgba(55, 217, 243, 0.20); }
-        100% { background: color-mix(in srgb, {{ branding.brandColor }} 42%, transparent); }
+        100% { background: color-mix(in srgb, {{ branding.backgroundShade }} 42%, transparent); }
     }
 </style>
 {% endif %}
 
-<div id="app-preloader" data-logo-url="{{ branding.logoUrl ?? '/bundles/pimcorestudioui/img/logo-purple.svg' }}"{% if branding.brandColor %} style="--pimcore-brand-color: {{ branding.brandColor }}; --pimcore-brand-background-color: {{ branding.backgroundShade ?? branding.brandColor }}" data-brand-color="{{ branding.brandColor }}" data-brand-background-color="{{ branding.backgroundShade ?? branding.brandColor }}"{% endif %}>
+<div
+    id="app-preloader"
+    data-logo-url="{{ branding.logoUrl ?? '/bundles/pimcorestudioui/img/logo-purple.svg' }}"
+    {% if branding.brandColor %}
+        style="--pimcore-brand-color: {{ branding.brandColor }};{% if branding.backgroundShade %} --pimcore-brand-background-color: {{ branding.backgroundShade }};{% endif %}"
+        data-brand-color="{{ branding.brandColor }}"
+    {% endif %}
+    {% if branding.backgroundShade %}
+        data-brand-background-color="{{ branding.backgroundShade }}"
+    {% endif %}
+>
     <div class="background-figure background-figure--bottom-left"></div>
     <div class="background-figure background-figure--bottom-right"></div>
     <div class="background-figure background-figure--top-left"></div>
