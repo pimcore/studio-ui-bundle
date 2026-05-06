@@ -1931,9 +1931,6 @@ entries: oppføringer
 entry: oppføring
 error_element_validation_failed: Validering mislyktes
 element.delete.deleting-folder: Sletter mappe
-element.delete.job-title-asset: Sletter ressurs
-element.delete.job-title-document: Sletter dokument
-element.delete.job-title-data-object: Sletter dataobjekt
 component.pagination.showing-items: Viser {{total}}
 edit-modal.inline-edit: Rediger innebygd
 edit-modal.apply-changes: Bruk endringer

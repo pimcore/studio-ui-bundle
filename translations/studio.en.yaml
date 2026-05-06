@@ -1942,9 +1942,6 @@ entries: entries
 entry: entry
 error_element_validation_failed: Validation failed
 element.delete.deleting-folder: Deleting Folder
-element.delete.job-title-asset: Deleting Asset
-element.delete.job-title-document: Deleting Document
-element.delete.job-title-data-object: Deleting Data Object
 component.pagination.showing-items: Showing {{total}}
 edit-modal.inline-edit: Inline edit
 edit-modal.apply-changes: Apply changes

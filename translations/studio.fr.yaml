@@ -1931,9 +1931,6 @@ entries: entrées
 entry: entrée
 error_element_validation_failed: La validation a échoué
 element.delete.deleting-folder: Suppression du dossier
-element.delete.job-title-asset: Suppression de l'asset
-element.delete.job-title-document: Suppression du document
-element.delete.job-title-data-object: Suppression de l'objet de données
 component.pagination.showing-items: Affichage de {{total}}
 edit-modal.inline-edit: Édition en ligne
 edit-modal.apply-changes: Appliquer les modifications
