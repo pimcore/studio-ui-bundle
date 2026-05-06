@@ -15,7 +15,7 @@ export function resolveChildJobRunOptions (jobRuns: JobRunList): {
   ancestorJobRunIds: number[] | undefined
   startAtStep: number
 } {
-  const leaf = jobRuns[jobRuns.length - 1]
+  const leaf = jobRuns.at(-1)!
   const hasAncestors = jobRuns.length > 1
   return {
     jobRunId: leaf.id,

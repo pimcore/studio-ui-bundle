@@ -18,7 +18,6 @@ import { downloadFromUrl } from '@Pimcore/utils/files'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { t } from 'i18next'
 import { isNull } from 'lodash'
-import { type JobRunList } from '../../services/job-rehydration-registry'
 
 export interface AbstractDownloadJobOptions {
   action: () => Promise<number>

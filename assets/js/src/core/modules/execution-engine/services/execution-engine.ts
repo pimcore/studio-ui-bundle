@@ -73,7 +73,7 @@ export class ExecutionEngine {
       }
 
       const handler = fn(chain as [JobRun, ...JobRun[]])
-      handler.setInitialStatus(chain[chain.length - 1].state)
+      handler.setInitialStatus(chain.at(-1)!.state)
       this.messageBus.registerHandler(handler)
     }
   }

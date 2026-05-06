@@ -12,6 +12,19 @@
 
 // ─── Mocks ───────────────────────────────────────────────────────────────────
 
+// ─── Imports ─────────────────────────────────────────────────────────────────
+
+import { MessageBusJobHandler } from '../message-bus-job-handler'
+import { jobUpdated } from '@Pimcore/modules/execution-engine/execution-engine-slice'
+import { JobStatus } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
+import { type JobRun } from '@Pimcore/modules/execution-engine/execution-engine-api-slice.gen'
+import { type JobStatusUpdateData } from '../job-run-polling'
+import { type AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
+import { store } from '@Pimcore/app/store'
+import { type JobCompletionData } from '../message-bus-job-handler'
+import { ChildJobStepTracker } from '../step-tracker/child-job-step-tracker'
+import { DefaultStepTracker } from '../step-tracker/default-step-tracker'
+
 jest.mock('@Pimcore/modules/global-message-bus/message-handlers/abstract-message-handler', () => ({
   AbstractMessageHandler: class AbstractMessageHandler {} // eslint-disable-line @typescript-eslint/no-extraneous-class
 }))
@@ -56,20 +69,9 @@ jest.mock('@Pimcore/app/depency-injection', () => ({
   container: { get: jest.fn(() => mockMessageBus) }
 }))
 
-// ─── Imports ─────────────────────────────────────────────────────────────────
-
-import { MessageBusJobHandler } from '../message-bus-job-handler'
-import { jobUpdated } from '@Pimcore/modules/execution-engine/execution-engine-slice'
-import { JobStatus } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
-import { type JobRun } from '@Pimcore/modules/execution-engine/execution-engine-api-slice.gen'
-import { type JobStatusUpdateData } from '../job-run-polling'
-import { type JobCompletionData } from '../message-bus-job-handler'
-import { ChildJobStepTracker } from '../step-tracker/child-job-step-tracker'
-import { DefaultStepTracker } from '../step-tracker/default-step-tracker'
-
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-const mockJobUpdated = jobUpdated as jest.Mock
+const mockJobUpdated = jest.mocked(jobUpdated)
 
 /** Build a minimal JobRun for use inside JobStatusUpdateData.jobRun */
 function jobRunFixture (overrides: Partial<JobRun> = {}): JobRun {
@@ -96,7 +98,7 @@ function makeHandler (opts: { jobRunId?: number, onJobCompletion?: (data: JobCom
   const handler = new MessageBusJobHandler({ jobRunId: opts.jobRunId ?? 1, title: 'Test', onJobCompletion: opts.onJobCompletion })
   handler.onRegister()
   // Clear dispatch calls from onRegister (jobReceived)
-  ;(jest.mocked(require('@Pimcore/app/store').store.dispatch)).mockClear()
+  jest.mocked(store.dispatch).mockClear()
   mockJobUpdated.mockClear()
   mockMessageBus.registerHandler.mockClear()
   mockMessageBus.unregisterHandler.mockClear()
@@ -105,12 +107,26 @@ function makeHandler (opts: { jobRunId?: number, onJobCompletion?: (data: JobCom
 
 /** Send a Mercure-style update message. */
 async function sendMercureUpdate (handler: MessageBusJobHandler, payload: Record<string, unknown>): Promise<void> {
-  await handler.handleMessage({ type: 'update', payload })
+  await handler.handleMessage({ type: 'update', payload } as unknown as AbstractMercureMessage)
 }
 
 /** Send a polling status update via the captured callback. */
 async function sendPollingUpdate (data: JobStatusUpdateData): Promise<void> {
   await capturedOnStatusUpdate!(data)
+}
+
+/** Create a handler with DefaultStepTracker (showStepLabel=true) for step-tracking tests. */
+function makeStepHandler (): MessageBusJobHandler {
+  capturedOnStatusUpdate = undefined
+  const handler = new MessageBusJobHandler({
+    jobRunId: 1,
+    title: 'Test',
+    stepTracker: new DefaultStepTracker({ showStepLabel: true }),
+    stepDescriptions: { 1: 'step.one', 2: 'step.two' }
+  })
+  handler.onRegister()
+  mockJobUpdated.mockClear()
+  return handler
 }
 
 // ─── Tests ───────────────────────────────────────────────────────────────────
@@ -310,7 +326,7 @@ describe('child job transition', () => {
     mockMessageBus.unregisterHandler.mockClear()
     mockMessageBus.registerHandler.mockClear()
 
-    const h2 = makeHandler({ jobRunId: 1 })
+    makeHandler({ jobRunId: 1 })
     await sendPollingUpdate({
       status: 'finished',
       jobRun: jobRunFixture({ state: 'finished', jobRunChildId: 99 })
@@ -417,19 +433,6 @@ describe('ChildJobStepTracker ignores backend currentStep from polling', () => {
 // does via Mercure. Polling maps JobRun.currentStep into polledData.currentStep.
 
 describe('DefaultStepTracker advances step via polling currentStep', () => {
-  function makeStepHandler (): MessageBusJobHandler {
-    capturedOnStatusUpdate = undefined
-    const handler = new MessageBusJobHandler({
-      jobRunId: 1,
-      title: 'Test',
-      stepTracker: new DefaultStepTracker({ showStepLabel: true }),
-      stepDescriptions: { 1: 'step.one', 2: 'step.two' }
-    })
-    handler.onRegister()
-    mockJobUpdated.mockClear()
-    return handler
-  }
-
   it('polling currentStep=2 dispatches jobUpdated with currentStep: 2', async () => {
     makeStepHandler()
     await sendPollingUpdate({ status: 'running', currentStep: 2, jobRun: jobRunFixture({ currentStep: 2 }) })
