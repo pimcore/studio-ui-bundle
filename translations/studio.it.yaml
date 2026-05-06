@@ -17,7 +17,6 @@ error.error_widget_name_invalid: Il nome del widget non è valido (sono consenti
 error.error_validation_failed: Validazione fallita
 error.error_validation.email_failed: Inserire un indirizzo email valido
 error.error_element_not_found: Elemento non trovato
-error.error_document_language_not_set: Il documento non ha una proprietà lingua impostata
 error.error_inconsistent_asset_type: Qui sono consentiti solo asset dello stesso tipo.
 sidebar.selected_elements: Elementi selezionati
 sidebar.grid_config: Configurazione griglia
@@ -751,7 +750,6 @@ field-definitions.validation.empty-name: "I seguenti tipi di campo non hanno un 
 field-definitions.validation.reserved-word: "Parola riservata utilizzata come nome:"
 field-definitions.validation.invalid-format: "Formato nome non valido (deve corrispondere a [A-Za-z][A-Za-z0-9_]*):"
 field-definitions.validation.duplicate-name: "Nome duplicato all'interno del namespace:"
-field-definitions.delete.content: Eliminare davvero "{{name}}"?
 object-brick-key: Chiave Object Brick
 field-name: Nome campo
 field-definition.geopoint: Punto geografico
@@ -1129,7 +1127,6 @@ element.new-folder.validation: Inserire un nome valido
 element.rename: Rinomina
 element.rename.label: Inserire il nuovo nome
 element.rename.validation: Inserire un nome valido
-element.share-via-notification: Share via Notifications
 element.delete: Elimina
 element.delete.confirmation.title: Elimina elemento
 element.delete.confirmation.text: Eliminare questo elemento?
@@ -1510,10 +1507,6 @@ path_query: Percorso e query
 auto_create: Creazione automatica
 widget.redirects: Reindirizzamenti
 navigation.redirects: Reindirizzamenti
-robots-txt.save-success: robots.txt salvato con successo
-robots-txt.on-file-system-warning: "Salvataggio disabilitato: esiste un file fisico robots.txt nel filesystem."
-widget.robots-txt: robots.txt
-navigation.robots-txt: robots.txt
 perspective.default: Predefinita
 perspective.switching.title: Cambio prospettiva
 perspective.switching.description: Passaggio alla seguente prospettiva in corso
@@ -2242,10 +2235,8 @@ perspective-editor.form.main-nav-permission.experienceEcommerce.emails: E-mail
 perspective-editor.form.main-nav-permission.experienceEcommerce.documentTypes: Tipi di documento
 perspective-editor.form.main-nav-permission.experienceEcommerce.websiteSettings: Impostazioni sito web
 perspective-editor.form.main-nav-permission.experienceEcommerce.redirects: Reindirizzamenti
-perspective-editor.form.main-nav-permission.experienceEcommerce.robotsTxt: robots.txt
 perspective-editor.form.main-nav-permission.category.assetManagement: Gestione asset
 perspective-editor.form.main-nav-permission.assetManagement.hidden: Nascondi menu gestione asset
-perspective-editor.form.main-nav-permission.assetManagement.assetThumbnails: Anteprime immagini
 perspective-editor.form.main-nav-permission.assetManagement.videoThumbnails: Anteprime video
 perspective-editor.form.main-nav-permission.assetManagement.predefinedAssetMetadata: Metadati asset predefiniti
 perspective-editor.form.main-nav-permission.category.translations: Traduzioni
@@ -2257,7 +2248,6 @@ perspective-editor.form.main-nav-permission.system.applicationLogger: Applicatio
 perspective-editor.form.main-nav-permission.system.users_hidden: Nascondi menu utenti/ruoli
 perspective-editor.form.main-nav-permission.system.users_roles: Ruoli
 perspective-editor.form.main-nav-permission.system.users_users: Utenti
-perspective-editor.form.main-nav-permission.system.appearanceBranding: Aspetto e branding
 perspective-editor.form.main-nav-permission.system.perspectiveEditor: Editor prospettive
 perspective-editor.form.main-nav-permission.system.widgetEditor: Editor widget
 perspective-editor.form.main-nav-permission.system.maintenanceMode: Modalità manutenzione
@@ -2357,10 +2347,6 @@ icon-selector.custom-icon-path: Percorso personalizzato
 icon-selector.custom-icon-path-placeholder: Aggiungere un percorso personalizzato e inviare
 icon-selector.Twemoji: Libreria Twemoji
 icon-selector.Pimcore: Libreria Pimcore
-operational-grid.csv-import.title: Import CSV
-operational-grid.csv-import.description: "Enter CSV data. Each line represents a row, columns are separated by commas."
-operational-grid.csv-import.ok: Import
-operational-grid.csv-import.cancel: Cancel
 language: Lingua
 pretty-url: URL leggibile / URL Slug
 pretty-url-override-notice: (sovrascrive il percorso dalla struttura ad albero)
@@ -2441,7 +2427,6 @@ user-management.permissions.newsletters: Newsletter
 user-management.permissions.targeting: Targeting
 user-management.permissions.http_errors: Errori HTTP
 user-management.permissions.seo_document_editor: Editor documenti SEO
-user-management.permissions.robots.txt: robots.txt
 user-management.permissions.routes: Route
 user-management.permissions.word_export: Esportazione Word
 user-management.permissions.xliff_import_export: Importazione/esportazione XLIFF
@@ -2477,8 +2462,6 @@ user-management.permissions.plugin_datahub_permission_update: Datahub Aggiorname
 user-management.permissions.portal-engine_collection-access: Accesso alle collezioni del backend
 user-management.permissions.portal-engine_index-management: Gestione indici del portale
 user-management.permissions.portal-engine_wizard: Procedura guidata configurazione portale
-user-management.permissions.studio_perspective_editor: Editor delle prospettive
-user-management.permissions.studio_perspective_widget_editor: Editor dei widget delle prospettive
 user-management.permissions.wai_configuration_permission: Configurazione dei modelli di automazione
 forgot-password-form.username: Inserire il nome utente e Pimcore invierà un link di accesso al Suo indirizzo email
 forgot-password-form.username.placeholder: Nome utente
@@ -2621,7 +2604,6 @@ quantity-values.create-modal.create: Crea
 quantity-values.export: Esporta
 quantity-values.import: Importa
 quantity-values.import-modal.title: Importa unità valori quantitativi
-quantity-values.search: Search
 owner: Proprietario
 reverse-object-relation.tooltip: Gli oggetti non proprietari rappresentano le relazioni verso un altro oggetto nello stesso modo degli oggetti. La differenza è che un campo oggetto non proprietario non è il proprietario dei dati della relazione, è semplicemente una vista sui dati memorizzati in altri oggetti. Scegliere il proprietario e il nome del campo in cui i dati sono originariamente memorizzati.
 disabled-fields: Campi disabilitati
