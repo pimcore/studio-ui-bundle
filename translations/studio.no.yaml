@@ -17,6 +17,7 @@ error.error_widget_name_invalid: Widgetnavnet er ugyldig (kun alfanumeriske tegn
 error.error_validation_failed: Validering mislyktes
 error.error_validation.email_failed: Vennligst oppgi en gyldig e-postadresse
 error.error_element_not_found: Element ikke funnet
+error.error_document_language_not_set: Dokumentet har ingen språkegenskap angitt
 error.error_inconsistent_asset_type: Kun ressurser av samme type er tillatt her.
 sidebar.selected_elements: Valgte elementer
 sidebar.grid_config: Rutenettskonfigurasjon
@@ -750,6 +751,7 @@ field-definitions.validation.empty-name: "Følgende felttyper mangler et navn:"
 field-definitions.validation.reserved-word: "Reservert ord brukt som navn:"
 field-definitions.validation.invalid-format: "Ugyldig navneformat (må matche [A-Za-z][A-Za-z0-9_]*):"
 field-definitions.validation.duplicate-name: "Duplikat navn innenfor navnerom:"
+field-definitions.delete.content: Vil du virkelig slette "{{name}}"?
 object-brick-key: Object Brick-nøkkel
 field-name: Feltnavn
 field-definition.geopoint: Geografisk punkt
@@ -1507,6 +1509,8 @@ path_query: Sti og spørring
 auto_create: Opprett automatisk
 widget.redirects: Omdirigeringer
 navigation.redirects: Omdirigeringer
+widget.robots-txt: robots.txt
+navigation.robots-txt: robots.txt
 perspective.default: Standard
 perspective.switching.title: Bytter perspektiv
 perspective.switching.description: Bytter nå til følgende perspektiv
@@ -2235,8 +2239,10 @@ perspective-editor.form.main-nav-permission.experienceEcommerce.emails: E-poster
 perspective-editor.form.main-nav-permission.experienceEcommerce.documentTypes: Dokumenttyper
 perspective-editor.form.main-nav-permission.experienceEcommerce.websiteSettings: Nettstedsinnstillinger
 perspective-editor.form.main-nav-permission.experienceEcommerce.redirects: Omdirigeringer
+perspective-editor.form.main-nav-permission.experienceEcommerce.robotsTxt: robots.txt
 perspective-editor.form.main-nav-permission.category.assetManagement: Ressursbehandling
 perspective-editor.form.main-nav-permission.assetManagement.hidden: Skjul ressursbehandlingsmeny
+perspective-editor.form.main-nav-permission.assetManagement.assetThumbnails: Bildeminiatyrbilder
 perspective-editor.form.main-nav-permission.assetManagement.videoThumbnails: Videominiatyrbilder
 perspective-editor.form.main-nav-permission.assetManagement.predefinedAssetMetadata: Forhåndsdefinerte ressursmetadata
 perspective-editor.form.main-nav-permission.category.translations: Oversettelser
@@ -2248,6 +2254,7 @@ perspective-editor.form.main-nav-permission.system.applicationLogger: Applikasjo
 perspective-editor.form.main-nav-permission.system.users_hidden: Skjul brukere/roller-meny
 perspective-editor.form.main-nav-permission.system.users_roles: Roller
 perspective-editor.form.main-nav-permission.system.users_users: Brukere
+perspective-editor.form.main-nav-permission.system.appearanceBranding: Utseende og merkevare
 perspective-editor.form.main-nav-permission.system.perspectiveEditor: Perspectives Editor
 perspective-editor.form.main-nav-permission.system.widgetEditor: Widget Editor
 perspective-editor.form.main-nav-permission.system.maintenanceMode: Vedlikeholdsmodus
@@ -2427,6 +2434,7 @@ user-management.permissions.newsletters: Nyhetsbrev
 user-management.permissions.targeting: Targeting
 user-management.permissions.http_errors: HTTP-feil
 user-management.permissions.seo_document_editor: SEO-dokumentredigerer
+user-management.permissions.robots.txt: robots.txt
 user-management.permissions.routes: Ruter
 user-management.permissions.word_export: Word-eksport
 user-management.permissions.xliff_import_export: XLIFF-import/eksport

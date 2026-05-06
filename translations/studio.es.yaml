@@ -17,6 +17,7 @@ error.error_widget_name_invalid: El nombre del widget no es válido (solo se per
 error.error_validation_failed: La validación falló
 error.error_validation.email_failed: Introduzca una dirección de correo electrónico válida
 error.error_element_not_found: Elemento no encontrado
+error.error_document_language_not_set: El documento no tiene ninguna propiedad de idioma establecida
 error.error_inconsistent_asset_type: Solo se permiten assets del mismo tipo aquí.
 sidebar.selected_elements: Elementos seleccionados
 sidebar.grid_config: Configuración de cuadrícula
@@ -750,6 +751,7 @@ field-definitions.validation.empty-name: "Los siguientes tipos de campo no tiene
 field-definitions.validation.reserved-word: "Palabra reservada usada como nombre:"
 field-definitions.validation.invalid-format: "Formato de nombre no válido (debe coincidir con [A-Za-z][A-Za-z0-9_]*):"
 field-definitions.validation.duplicate-name: "Nombre duplicado dentro del espacio de nombres:"
+field-definitions.delete.content: ¿Realmente desea eliminar "{{name}}"?
 object-brick-key: Clave de Object Brick
 field-name: Nombre del campo
 field-definition.geopoint: Punto geográfico
@@ -1507,6 +1509,8 @@ path_query: Ruta y consulta
 auto_create: Creación automática
 widget.redirects: Redirecciones
 navigation.redirects: Redirecciones
+widget.robots-txt: robots.txt
+navigation.robots-txt: robots.txt
 perspective.default: Predeterminada
 perspective.switching.title: Cambiando perspectiva
 perspective.switching.description: Cambiando actualmente a la siguiente perspectiva
@@ -2235,8 +2239,10 @@ perspective-editor.form.main-nav-permission.experienceEcommerce.emails: Correos 
 perspective-editor.form.main-nav-permission.experienceEcommerce.documentTypes: Tipos de documento
 perspective-editor.form.main-nav-permission.experienceEcommerce.websiteSettings: Configuración del sitio web
 perspective-editor.form.main-nav-permission.experienceEcommerce.redirects: Redirecciones
+perspective-editor.form.main-nav-permission.experienceEcommerce.robotsTxt: robots.txt
 perspective-editor.form.main-nav-permission.category.assetManagement: Gestión de Assets
 perspective-editor.form.main-nav-permission.assetManagement.hidden: Ocultar menú de gestión de Assets
+perspective-editor.form.main-nav-permission.assetManagement.assetThumbnails: Miniaturas de imagen
 perspective-editor.form.main-nav-permission.assetManagement.videoThumbnails: Miniaturas de vídeo
 perspective-editor.form.main-nav-permission.assetManagement.predefinedAssetMetadata: Metadatos de asset predefinidos
 perspective-editor.form.main-nav-permission.category.translations: Traducciones
@@ -2248,6 +2254,7 @@ perspective-editor.form.main-nav-permission.system.applicationLogger: Applicatio
 perspective-editor.form.main-nav-permission.system.users_hidden: Ocultar menú de usuarios/roles
 perspective-editor.form.main-nav-permission.system.users_roles: Roles
 perspective-editor.form.main-nav-permission.system.users_users: Usuarios
+perspective-editor.form.main-nav-permission.system.appearanceBranding: Apariencia y marca
 perspective-editor.form.main-nav-permission.system.perspectiveEditor: Editor de perspectivas
 perspective-editor.form.main-nav-permission.system.widgetEditor: Editor de widgets
 perspective-editor.form.main-nav-permission.system.maintenanceMode: Modo de mantenimiento
@@ -2427,6 +2434,7 @@ user-management.permissions.newsletters: Newsletters
 user-management.permissions.targeting: Targeting
 user-management.permissions.http_errors: Errores HTTP
 user-management.permissions.seo_document_editor: Editor de documentos SEO
+user-management.permissions.robots.txt: robots.txt
 user-management.permissions.routes: Rutas
 user-management.permissions.word_export: Exportación de Word
 user-management.permissions.xliff_import_export: Importación/Exportación XLIFF
