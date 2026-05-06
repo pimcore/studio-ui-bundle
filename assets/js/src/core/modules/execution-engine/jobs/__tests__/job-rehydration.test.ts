@@ -8,17 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-jest.mock('@Pimcore/modules/execution-engine/message-handlers/message-bus-job/message-bus-job-handler', () => ({
-  MessageBusJobHandler: jest.fn().mockImplementation(() => ({}))
-}))
-jest.mock('i18next', () => ({ t: (key: string) => key }))
-jest.mock('@Pimcore/app/api/pimcore/route', () => ({ getPrefix: () => '' }))
-jest.mock('@Pimcore/utils/files', () => ({ downloadFromUrl: jest.fn() }))
-jest.mock('@Pimcore/modules/app/error-handler', () => ({
-  default: jest.fn(),
-  GeneralError: class {}
-}))
-
+/* eslint-disable max-lines */
 import { MessageBusJobHandler } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/message-bus-job-handler'
 import { ChildJobStepTracker } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/step-tracker/child-job-step-tracker'
 import { DefaultStepTracker } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/step-tracker/default-step-tracker'
@@ -30,6 +20,17 @@ import { AbstractBatchEditJob } from '@Pimcore/modules/execution-engine/jobs/bat
 import { AbstractFolderBatchEditJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/abstract-folder-batch-edit-job'
 import { ZipUploadJob } from '@Pimcore/modules/execution-engine/jobs/zip-upload/zip-upload-job'
 import { type JobRun } from '@Pimcore/modules/execution-engine/execution-engine-api-slice.gen'
+
+jest.mock('@Pimcore/modules/execution-engine/message-handlers/message-bus-job/message-bus-job-handler', () => ({
+  MessageBusJobHandler: jest.fn().mockImplementation(() => ({}))
+}))
+jest.mock('i18next', () => ({ t: (key: string) => key }))
+jest.mock('@Pimcore/app/api/pimcore/route', () => ({ getPrefix: () => '' }))
+jest.mock('@Pimcore/utils/files', () => ({ downloadFromUrl: jest.fn() }))
+jest.mock('@Pimcore/modules/app/error-handler', () => ({
+  default: jest.fn(),
+  GeneralError: class {} // eslint-disable-line @typescript-eslint/no-extraneous-class
+}))
 
 const HandlerMock = MessageBusJobHandler as jest.MockedClass<typeof MessageBusJobHandler>
 
