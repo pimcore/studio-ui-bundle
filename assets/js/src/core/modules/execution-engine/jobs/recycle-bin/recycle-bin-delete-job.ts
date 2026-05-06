@@ -12,28 +12,23 @@ import { isNil, isUndefined } from 'lodash'
 import { store } from '@Pimcore/app/store'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
-import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { MessageBusJobHandler } from '../../message-handlers/message-bus-job/message-bus-job-handler'
+import { MessageBusJobHandler, type JobCompletionData } from '../../message-handlers/message-bus-job/message-bus-job-handler'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { api } from '@Pimcore/modules/recycle-bin/recycle-bin-api-slice-enhanced'
+import { t } from 'i18next'
+import { type RehydratableJob, type JobRunList } from '../../services/job-rehydration-registry'
 
 export interface RecycleBinDeleteJobOptions {
   itemIds: number[]
-  elementTypes: ElementType[]
-  title: string
   onFinish?: () => void
 }
 
 export class RecycleBinDeleteJob implements JobInterface {
   private readonly itemIds: number[]
-  private readonly elementTypes: ElementType[]
-  private readonly title: string
   private readonly onFinish?: () => void
 
   constructor (options: RecycleBinDeleteJobOptions) {
     this.itemIds = options.itemIds
-    this.elementTypes = options.elementTypes
-    this.title = options.title
     this.onFinish = options.onFinish
   }
 
@@ -48,10 +43,9 @@ export class RecycleBinDeleteJob implements JobInterface {
         return
       }
 
-      const handler = new MessageBusJobHandler({
+      const handler = RecycleBinDeleteJob.buildHandler({
         jobRunId,
-        title: this.title,
-        onJobCompletion: async (data: any) => {
+        onJobCompletion: async () => {
           try {
             await this.handleCompletion()
           } catch (error) {
@@ -84,18 +78,46 @@ export class RecycleBinDeleteJob implements JobInterface {
     return response.data?.jobRunId ?? null
   }
 
-  private async handleCompletion (): Promise<void> {
-    // Refresh the recycle bin data
-    store.dispatch(
-      api.util.invalidateTags(
-        invalidatingTags.RECYCLING_BIN()
-      )
-    )
+  private static invalidateCache (): void {
+    store.dispatch(api.util.invalidateTags(invalidatingTags.RECYCLING_BIN()))
+  }
 
+  private async handleCompletion (): Promise<void> {
+    RecycleBinDeleteJob.invalidateCache()
     this.onFinish?.()
   }
 
   private async handleJobFailure (error: any): Promise<void> {
     console.error('Recycle bin delete job failed:', error)
   }
+
+  static readonly jobNames = ['studio_ee_job_recycle_bin_delete'] as const
+
+  static rehydrate (jobRuns: JobRunList): MessageBusJobHandler {
+    const [parent] = jobRuns
+    const isActive = ['running', 'queued'].includes(parent.state)
+    return this.buildHandler({
+      jobRunId: parent.id,
+      onJobCompletion: isActive
+        ? async (data) => {
+          if (data.isFinished) {
+            RecycleBinDeleteJob.invalidateCache()
+          }
+        }
+        : undefined
+    })
+  }
+
+  private static buildHandler (options: {
+    jobRunId: number
+    onJobCompletion?: (data: JobCompletionData) => Promise<void>
+  }): MessageBusJobHandler {
+    return new MessageBusJobHandler({
+      jobRunId: options.jobRunId,
+      title: t('recycle-bin.actions.delete.title'),
+      onJobCompletion: options.onJobCompletion
+    })
+  }
 }
+
+void (RecycleBinDeleteJob satisfies RehydratableJob)

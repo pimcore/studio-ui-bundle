@@ -1018,6 +1018,7 @@ asset.sidebar.office-format: Kontorsformat
 jobs.notification.title: Pågående jobb
 jobs.notification.jobs_one: "{{count}} åtgärd"
 jobs.notification.jobs_other: "{{count}} åtgärder"
+jobs.notification.hide-all-finished: Dölj alla avslutade
 jobs.job.in-progress: "{{title}} pågår"
 jobs.job.queued: "{{title}} köad"
 jobs.job.failed: "{{title}} misslyckades"
@@ -1034,6 +1035,7 @@ jobs.job.step_hint_single: "Steg {{step}}"
 jobs.job.step.batch-edit.preparing: Förbereder massredigering
 jobs.job.step.batch-edit.applying: Tillämpar massredigering
 jobs.job.download-error: Nedladdning misslyckades
+jobs.job.download-not-available: Nedladdningen är inte längre tillgänglig.
 jobs.job.button-show-errors: Visa fel
 jobs.job.error-modal.title: Jobbfel
 jobs.job.button-abort: Avbryt jobb
@@ -1045,6 +1047,9 @@ batch-edit.job-title: Massredigering
 jobs.zip-upload-job.title: Ladda upp ZIP
 jobs.zip-upload-job.step1.title: Extraherar ZIP
 jobs.zip-upload-job.step2.title: Skapar assets
+jobs.download-csv-job.title: CSV export
+jobs.download-xlsx-job.title: XLSX export
+jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Massredigering
 batch-edit.no-content: Det finns inga tillagda kolumner ännu
 batch-edit.modal-footer.apply-changes: Tillämpa ändringar

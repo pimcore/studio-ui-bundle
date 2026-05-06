@@ -23,6 +23,7 @@ import { Popconfirm } from '@Pimcore/components/modal/popconfirm/popconfirm'
 
 export interface ButtonAction {
   label: string
+  loading?: boolean
   handler: () => void | Promise<void>
 }
 
@@ -155,7 +156,8 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
                   <Button
                     className={ styles.buttonStyle }
                     key={ index }
-                    onClick={ action.handler }
+                    loading={ action.loading === true }
+                    onClick={ () => { void action.handler() } }
                     type='link'
                   >{action.label}</Button>
                 )) }
@@ -180,7 +182,8 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
                   <Button
                     className={ styles.buttonStyle }
                     key={ index }
-                    onClick={ action.handler }
+                    loading={ action.loading === true }
+                    onClick={ () => { void action.handler() } }
                     type='link'
                   >{action.label}</Button>
                 )) }
@@ -204,7 +207,8 @@ export const JobView = (props: JobViewProps): React.JSX.Element => {
                   <Button
                     className={ styles.buttonStyle }
                     key={ index }
-                    onClick={ action.handler }
+                    loading={ action.loading === true }
+                    onClick={ () => { void action.handler() } }
                     type='link'
                   >{action.label}</Button>
                 )) }

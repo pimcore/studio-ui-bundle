@@ -66,7 +66,6 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
           const job = new DeleteJob({
             elementId: id,
             elementType,
-            title: t('element.delete.deleting-folder'),
             treeId,
             nodeId: String(id),
             parentFolderId: parentId

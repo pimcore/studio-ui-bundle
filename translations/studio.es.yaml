@@ -1018,6 +1018,7 @@ asset.sidebar.office-format: Formato de oficina
 jobs.notification.title: Trabajos en ejecución
 jobs.notification.jobs_one: "{{count}} Acción"
 jobs.notification.jobs_other: "{{count}} Acciones"
+jobs.notification.hide-all-finished: Ocultar todos los completados
 jobs.job.in-progress: "{{title}} en progreso"
 jobs.job.queued: "{{title}} en cola"
 jobs.job.failed: "{{title}} falló"
@@ -1034,6 +1035,7 @@ jobs.job.step_hint_single: "Paso {{step}}"
 jobs.job.step.batch-edit.preparing: Preparando edición por lotes
 jobs.job.step.batch-edit.applying: Aplicando edición por lotes
 jobs.job.download-error: Error en la descarga
+jobs.job.download-not-available: La descarga ya no está disponible.
 jobs.job.button-show-errors: Mostrar errores
 jobs.job.error-modal.title: Errores del trabajo
 jobs.job.button-abort: Cancelar trabajo
@@ -1045,6 +1047,9 @@ batch-edit.job-title: Edición por lotes
 jobs.zip-upload-job.title: Subir ZIP
 jobs.zip-upload-job.step1.title: Extrayendo ZIP
 jobs.zip-upload-job.step2.title: Creando assets
+jobs.download-csv-job.title: CSV export
+jobs.download-xlsx-job.title: XLSX export
+jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Edición por lotes
 batch-edit.no-content: Aún no se han añadido columnas
 batch-edit.modal-footer.apply-changes: Aplicar cambios

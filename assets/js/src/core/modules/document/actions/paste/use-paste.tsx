@@ -78,7 +78,6 @@ export const usePaste = (): UsePasteHookReturn => {
       sourceId,
       targetId,
       parameters,
-      title: t('jobs.document-clone-job.title'),
       treeId,
       nodeId: String(targetId)
     })

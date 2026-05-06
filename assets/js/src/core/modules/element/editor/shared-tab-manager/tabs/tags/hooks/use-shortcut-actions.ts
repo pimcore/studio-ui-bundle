@@ -13,7 +13,6 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
 import { TagAssignJob } from '@Pimcore/modules/execution-engine/jobs/tag-assign/tag-assign-job'
-import { useTranslation } from 'react-i18next'
 
 interface UseShortcutActionsReturn {
   removeAndApplyTagsToChildren: () => Promise<void>
@@ -23,14 +22,12 @@ interface UseShortcutActionsReturn {
 export const useShortcutActions = (): UseShortcutActionsReturn => {
   const { id, elementType } = useElementContext()
   const executionEngine = container.get<ExecutionEngine>(serviceIds.executionEngine)
-  const { t } = useTranslation()
 
   const applyTagsToChildren = async (): Promise<void> => {
     const job = new TagAssignJob({
       elementType,
       elementId: id,
-      operation: 'assign',
-      title: t('tags.apply-tags-to-children')
+      operation: 'assign'
     })
 
     await executionEngine.runJob(job)
@@ -40,8 +37,7 @@ export const useShortcutActions = (): UseShortcutActionsReturn => {
     const job = new TagAssignJob({
       elementType,
       elementId: id,
-      operation: 'replace',
-      title: t('tags.remove-and-apply-tags-to-children')
+      operation: 'replace'
     })
 
     await executionEngine.runJob(job)

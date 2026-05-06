@@ -1018,6 +1018,7 @@ asset.sidebar.office-format: Office-Format
 jobs.notification.title: Laufende Aufträge
 jobs.notification.jobs_one: "{{count}} Aktion"
 jobs.notification.jobs_other: "{{count}} Aktionen"
+jobs.notification.hide-all-finished: Alle abgeschlossenen ausblenden
 jobs.job.in-progress: "{{title}} in Bearbeitung"
 jobs.job.queued: "{{title}} in Warteschlange"
 jobs.job.failed: "{{title}} fehlgeschlagen"
@@ -1034,6 +1035,7 @@ jobs.job.step_hint_single: "Schritt {{step}}"
 jobs.job.step.batch-edit.preparing: Stapelbearbeitung wird vorbereitet
 jobs.job.step.batch-edit.applying: Stapelbearbeitung wird angewendet
 jobs.job.download-error: Download fehlgeschlagen
+jobs.job.download-not-available: Der Download ist nicht mehr verfügbar.
 jobs.job.button-show-errors: Fehler anzeigen
 jobs.job.error-modal.title: Auftragsfehler
 jobs.job.button-abort: Auftrag abbrechen
@@ -1045,6 +1047,9 @@ batch-edit.job-title: Stapelbearbeitung
 jobs.zip-upload-job.title: ZIP hochladen
 jobs.zip-upload-job.step1.title: ZIP wird entpackt
 jobs.zip-upload-job.step2.title: Assets werden erstellt
+jobs.download-csv-job.title: CSV export
+jobs.download-xlsx-job.title: XLSX export
+jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Stapelbearbeitung
 batch-edit.no-content: Es sind noch keine Spalten hinzugefügt
 batch-edit.modal-footer.apply-changes: Änderungen übernehmen
