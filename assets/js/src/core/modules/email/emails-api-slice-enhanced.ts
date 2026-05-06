@@ -48,7 +48,7 @@ export const api = baseApi.enhanceEndpoints({
     },
     emailLogDelete: {
       invalidatesTags: () => {
-        return []
+        return invalidatingTags.EMAIL_LOG()
       }
     }
   }
