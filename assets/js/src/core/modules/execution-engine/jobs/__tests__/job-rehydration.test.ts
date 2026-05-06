@@ -20,6 +20,7 @@ import { AbstractBatchEditJob } from '@Pimcore/modules/execution-engine/jobs/bat
 import { AbstractFolderBatchEditJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/abstract-folder-batch-edit-job'
 import { ZipUploadJob } from '@Pimcore/modules/execution-engine/jobs/zip-upload/zip-upload-job'
 import { type JobRun } from '@Pimcore/modules/execution-engine/execution-engine-api-slice.gen'
+import { type JobRunOptions } from '@Pimcore/modules/execution-engine/jobs/job-interface'
 
 jest.mock('@Pimcore/modules/execution-engine/message-handlers/message-bus-job/message-bus-job-handler', () => ({
   MessageBusJobHandler: jest.fn().mockImplementation(() => ({}))
@@ -345,5 +346,164 @@ describe('ZipUploadJob.rehydrate()', () => {
     ZipUploadJob.rehydrate([jobRun(50, 'studio_ee_job_upload_zip_file')])
     const opts = HandlerMock.mock.calls.at(-1)![0]
     expect(opts.progressCalculator).toBeInstanceOf(ProgressFieldCalculator)
+  })
+})
+
+// ─── run() vs rehydrate() structural parity ───────────────────────────────────
+//
+// Verify that the refactoring did not change what run() produces compared to
+// rehydrate(): title, stepTracker type and initial state, progressCalculator type,
+// and onCustomizeButtons presence must be identical.
+//
+// Intentional differences (onRetry, onJobCompletion) are not compared —
+// rehydrate() deliberately omits callbacks that require the original call context.
+
+const mockBus: Pick<JobRunOptions['messageBus'], 'registerHandler'> = { registerHandler: jest.fn() }
+
+// Concrete subclasses for testing abstract batch-edit jobs
+class TestableBatchEditJob extends AbstractBatchEditJob { // eslint-disable-line @typescript-eslint/no-extraneous-class
+  protected async executeEditRequest (): Promise<number | null> { return 42 }
+}
+
+class TestableFolderBatchEditJob extends AbstractFolderBatchEditJob { // eslint-disable-line @typescript-eslint/no-extraneous-class
+  protected async executeEditRequest (): Promise<number | null> { return 77 }
+}
+
+interface HandlerSnapshot {
+  title: unknown
+  stepTrackerType: string | null
+  stepTrackerCurrentStep: number | null
+  stepTrackerTotalSteps: number | null
+  progressCalculatorType: string | null
+  hasCustomizeButtons: boolean
+}
+
+function structuralSnapshot (opts: any): HandlerSnapshot {
+  return {
+    // Normalise function titles so two different closures with the same shape compare equal
+    title: typeof opts.title === 'function' ? '[function]' : opts.title,
+    stepTrackerType: opts.stepTracker?.constructor.name ?? null,
+    stepTrackerCurrentStep: opts.stepTracker?.state?.currentStep ?? null,
+    stepTrackerTotalSteps: opts.stepTracker?.state?.totalSteps ?? null,
+    progressCalculatorType: opts.progressCalculator?.constructor.name ?? null,
+    hasCustomizeButtons: typeof opts.onCustomizeButtons === 'function'
+  }
+}
+
+describe('ZipDownloadJob: run() matches rehydrate() structurally', () => {
+  it('produces identical title, stepTracker, progressCalculator and button presence', async () => {
+    const job = new ZipDownloadJob({ action: async () => 10 })
+    await job.run({ messageBus: mockBus as any })
+    const runSnapshot = structuralSnapshot(HandlerMock.mock.calls.at(-1)![0])
+    HandlerMock.mockClear()
+
+    ZipDownloadJob.rehydrate([jobRun(10, 'studio_ee_job_create_download_zip')])
+    const rehydrateSnapshot = structuralSnapshot(HandlerMock.mock.calls.at(-1)![0])
+
+    expect(runSnapshot).toEqual(rehydrateSnapshot)
+  })
+})
+
+describe('CsvDownloadJob: run() matches rehydrate() structurally', () => {
+  it('non-folder export: identical structure', async () => {
+    const job = new CsvDownloadJob({ action: async () => 20, isFolderExport: false })
+    await job.run({ messageBus: mockBus as any })
+    const runSnapshot = structuralSnapshot(HandlerMock.mock.calls.at(-1)![0])
+    HandlerMock.mockClear()
+
+    CsvDownloadJob.rehydrate([jobRun(20, 'studio_ee_job_create_csv')])
+    const rehydrateSnapshot = structuralSnapshot(HandlerMock.mock.calls.at(-1)![0])
+
+    expect(runSnapshot).toEqual(rehydrateSnapshot)
+  })
+
+  it('folder export (parent step): identical structure', async () => {
+    const job = new CsvDownloadJob({ action: async () => 30, isFolderExport: true })
+    await job.run({ messageBus: mockBus as any })
+    const runSnapshot = structuralSnapshot(HandlerMock.mock.calls.at(-1)![0])
+    HandlerMock.mockClear()
+
+    CsvDownloadJob.rehydrate([jobRun(30, 'studio_ee_job_collect_csv_folder_export_elements')])
+    const rehydrateSnapshot = structuralSnapshot(HandlerMock.mock.calls.at(-1)![0])
+
+    expect(runSnapshot).toEqual(rehydrateSnapshot)
+  })
+})
+
+describe('XlsxDownloadJob: run() matches rehydrate() structurally', () => {
+  it('non-folder export: identical structure', async () => {
+    const job = new XlsxDownloadJob({ action: async () => 40, isFolderExport: false })
+    await job.run({ messageBus: mockBus as any })
+    const runSnapshot = structuralSnapshot(HandlerMock.mock.calls.at(-1)![0])
+    HandlerMock.mockClear()
+
+    XlsxDownloadJob.rehydrate([jobRun(40, 'studio_ee_job_create_xlsx')])
+    const rehydrateSnapshot = structuralSnapshot(HandlerMock.mock.calls.at(-1)![0])
+
+    expect(runSnapshot).toEqual(rehydrateSnapshot)
+  })
+
+  it('folder export (parent step): identical structure', async () => {
+    const job = new XlsxDownloadJob({ action: async () => 50, isFolderExport: true })
+    await job.run({ messageBus: mockBus as any })
+    const runSnapshot = structuralSnapshot(HandlerMock.mock.calls.at(-1)![0])
+    HandlerMock.mockClear()
+
+    XlsxDownloadJob.rehydrate([jobRun(50, 'studio_ee_job_collect_xlsx_folder_export_elements')])
+    const rehydrateSnapshot = structuralSnapshot(HandlerMock.mock.calls.at(-1)![0])
+
+    expect(runSnapshot).toEqual(rehydrateSnapshot)
+  })
+})
+
+describe('ZipUploadJob: run() matches rehydrate() structurally', () => {
+  it('produces identical title type, stepTracker, progressCalculator and button presence', async () => {
+    let capturedOnSuccess: ((response: any) => Promise<void>) | undefined
+    const job = new ZipUploadJob({
+      triggerUpload: (opts: any) => { capturedOnSuccess = opts.onSuccess },
+      parentFolder: '1'
+    })
+    const runPromise = job.run({ messageBus: mockBus as any })
+    await capturedOnSuccess!([{ response: { jobRunId: 50 } }])
+    await runPromise
+    const runSnapshot = structuralSnapshot(HandlerMock.mock.calls.at(-1)![0])
+    HandlerMock.mockClear()
+
+    ZipUploadJob.rehydrate([jobRun(50, 'studio_ee_job_upload_zip_file')])
+    const rehydrateSnapshot = structuralSnapshot(HandlerMock.mock.calls.at(-1)![0])
+
+    expect(runSnapshot).toEqual(rehydrateSnapshot)
+  })
+})
+
+describe('AbstractBatchEditJob: run() matches rehydrate() structurally', () => {
+  it('produces identical title, stepTracker (none) and progressCalculator (none)', async () => {
+    const job = new TestableBatchEditJob({ assetContextId: 1, refreshGrid: async () => {} })
+    await job.run({ messageBus: mockBus as any })
+    const runSnapshot = structuralSnapshot(HandlerMock.mock.calls.at(-1)![0])
+    HandlerMock.mockClear()
+
+    AbstractBatchEditJob.rehydrate([jobRun(42, 'studio_ee_job_patch_elements')])
+    const rehydrateSnapshot = structuralSnapshot(HandlerMock.mock.calls.at(-1)![0])
+
+    expect(runSnapshot.title).toEqual(rehydrateSnapshot.title)
+    expect(runSnapshot.stepTrackerType).toEqual(rehydrateSnapshot.stepTrackerType)
+    expect(runSnapshot.progressCalculatorType).toEqual(rehydrateSnapshot.progressCalculatorType)
+  })
+})
+
+describe('AbstractFolderBatchEditJob: run() matches rehydrate() structurally', () => {
+  it('produces identical title, DefaultStepTracker (showStepLabel=true) and ProgressFieldCalculator', async () => {
+    const job = new TestableFolderBatchEditJob({ assetContextId: 1, refreshGrid: async () => {} })
+    await job.run({ messageBus: mockBus as any })
+    const runSnapshot = structuralSnapshot(HandlerMock.mock.calls.at(-1)![0])
+    HandlerMock.mockClear()
+
+    AbstractFolderBatchEditJob.rehydrate([jobRun(77, 'studio_ee_job_patch_folder_elements')])
+    const rehydrateSnapshot = structuralSnapshot(HandlerMock.mock.calls.at(-1)![0])
+
+    expect(runSnapshot.title).toEqual(rehydrateSnapshot.title)
+    expect(runSnapshot.stepTrackerType).toEqual(rehydrateSnapshot.stepTrackerType)
+    expect(runSnapshot.progressCalculatorType).toEqual(rehydrateSnapshot.progressCalculatorType)
   })
 })
