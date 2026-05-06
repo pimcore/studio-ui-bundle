@@ -64,6 +64,8 @@ import { JobStatus } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
 import { type JobRun } from '@Pimcore/modules/execution-engine/execution-engine-api-slice.gen'
 import { type JobStatusUpdateData } from '../job-run-polling'
 import { type JobCompletionData } from '../message-bus-job-handler'
+import { ChildJobStepTracker } from '../step-tracker/child-job-step-tracker'
+import { DefaultStepTracker } from '../step-tracker/default-step-tracker'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -338,5 +340,229 @@ describe('child job transition', () => {
       jobRun: jobRunFixture({ state: 'finished', jobRunChildId: 99 })
     })
     expect(handler.getId()).toBe(99)
+  })
+
+  it('polling: no second transition when childId already equals current jobRunId', async () => {
+    // First transition: parent(1) → child(99)
+    makeHandler({ jobRunId: 1 })
+    await sendPollingUpdate({
+      status: 'finished',
+      jobRun: jobRunFixture({ state: 'finished', jobRunChildId: 99 })
+    })
+    // capturedOnStatusUpdate is now the child handler's callback (jobRunId=99)
+    mockMessageBus.unregisterHandler.mockClear()
+    mockMessageBus.registerHandler.mockClear()
+
+    // Second poll on the child handler — same childId (99) equals current jobRunId (99)
+    await sendPollingUpdate({
+      status: 'finished',
+      jobRun: jobRunFixture({ state: 'finished', jobRunChildId: 99 })
+    })
+    // Should be a normal finish (unregister 99), not another re-registration
+    expect(mockMessageBus.registerHandler).not.toHaveBeenCalled()
+    expect(mockMessageBus.unregisterHandler).toHaveBeenCalledWith(99)
+  })
+})
+
+// ─── Step tracking: ChildJobStepTracker ───────────────────────────────────────
+//
+// ChildJobStepTracker intentionally ignores backend currentStep values (the child
+// job resets to step 1 internally). Polling maps currentStep from the JobRun — that
+// value must NOT overwrite the step counter that the handler owns.
+
+describe('ChildJobStepTracker ignores backend currentStep from polling', () => {
+  it('polling currentStep=1 on a child-step handler does not dispatch a currentStep update', async () => {
+    capturedOnStatusUpdate = undefined
+    const handler = new MessageBusJobHandler({
+      jobRunId: 1,
+      title: 'Test',
+      stepTracker: new ChildJobStepTracker({ totalSteps: 2, startAtStep: 2 })
+    })
+    handler.onRegister()
+    mockJobUpdated.mockClear()
+
+    // Backend child job sends currentStep: 1 (reset inside the child run)
+    await sendPollingUpdate({ status: 'running', currentStep: 1, jobRun: jobRunFixture({ currentStep: 1 }) })
+
+    const stepUpdates = mockJobUpdated.mock.calls.filter((args: unknown[]) => {
+      const payload = args[0] as { changes?: Record<string, unknown> }
+      return 'currentStep' in (payload?.changes ?? {})
+    })
+    expect(stepUpdates).toHaveLength(0)
+  })
+
+  it('Mercure currentStep=1 on a child-step handler also does not dispatch a currentStep update', async () => {
+    capturedOnStatusUpdate = undefined
+    const handler = new MessageBusJobHandler({
+      jobRunId: 1,
+      title: 'Test',
+      stepTracker: new ChildJobStepTracker({ totalSteps: 2, startAtStep: 2 })
+    })
+    handler.onRegister()
+    mockJobUpdated.mockClear()
+
+    await sendMercureUpdate(handler, { currentStep: 1 })
+
+    const stepUpdates = mockJobUpdated.mock.calls.filter((args: unknown[]) => {
+      const payload = args[0] as { changes?: Record<string, unknown> }
+      return 'currentStep' in (payload?.changes ?? {})
+    })
+    expect(stepUpdates).toHaveLength(0)
+  })
+})
+
+// ─── Step tracking: DefaultStepTracker (showStepLabel=true) ───────────────────
+//
+// For folder batch-edit jobs, step advancement must work via polling just as it
+// does via Mercure. Polling maps JobRun.currentStep into polledData.currentStep.
+
+describe('DefaultStepTracker advances step via polling currentStep', () => {
+  function makeStepHandler (): MessageBusJobHandler {
+    capturedOnStatusUpdate = undefined
+    const handler = new MessageBusJobHandler({
+      jobRunId: 1,
+      title: 'Test',
+      stepTracker: new DefaultStepTracker({ showStepLabel: true }),
+      stepDescriptions: { 1: 'step.one', 2: 'step.two' }
+    })
+    handler.onRegister()
+    mockJobUpdated.mockClear()
+    return handler
+  }
+
+  it('polling currentStep=2 dispatches jobUpdated with currentStep: 2', async () => {
+    makeStepHandler()
+    await sendPollingUpdate({ status: 'running', currentStep: 2, jobRun: jobRunFixture({ currentStep: 2 }) })
+    expect(mockJobUpdated).toHaveBeenCalledWith(expect.objectContaining({
+      changes: expect.objectContaining({ currentStep: 2 })
+    }))
+  })
+
+  it('polling currentStep=2 includes the step description key', async () => {
+    makeStepHandler()
+    await sendPollingUpdate({ status: 'running', currentStep: 2, jobRun: jobRunFixture({ currentStep: 2 }) })
+    expect(mockJobUpdated).toHaveBeenCalledWith(expect.objectContaining({
+      changes: expect.objectContaining({ stepDescriptionKey: 'step.two' })
+    }))
+  })
+
+  it('Mercure and polling dispatch identical jobUpdated for step advancement', async () => {
+    const h1 = makeStepHandler()
+    await sendMercureUpdate(h1, { currentStep: 2 })
+    const mercureCall = mockJobUpdated.mock.calls.find((args: unknown[]) => {
+      const payload = args[0] as { changes?: Record<string, unknown> }
+      return 'currentStep' in (payload?.changes ?? {})
+    })
+
+    mockJobUpdated.mockClear()
+    makeStepHandler()
+    await sendPollingUpdate({ status: 'running', currentStep: 2, jobRun: jobRunFixture({ currentStep: 2 }) })
+    const pollingCall = mockJobUpdated.mock.calls.find((args: unknown[]) => {
+      const payload = args[0] as { changes?: Record<string, unknown> }
+      return 'currentStep' in (payload?.changes ?? {})
+    })
+
+    expect(pollingCall).toEqual(mercureCall)
+  })
+
+  it('backwards step from polling is ignored (no update dispatched)', async () => {
+    const handler = makeStepHandler()
+    // Advance to step 2 first
+    await sendPollingUpdate({ status: 'running', currentStep: 2, jobRun: jobRunFixture({ currentStep: 2 }) })
+    mockJobUpdated.mockClear()
+
+    // Backwards step — must be ignored
+    await sendPollingUpdate({ status: 'running', currentStep: 1, jobRun: jobRunFixture({ currentStep: 1 }) })
+    const stepUpdates = mockJobUpdated.mock.calls.filter((args: unknown[]) => {
+      const payload = args[0] as { changes?: Record<string, unknown> }
+      return 'currentStep' in (payload?.changes ?? {})
+    })
+    expect(stepUpdates).toHaveLength(0)
+    void handler
+  })
+})
+
+// ─── totalSteps initialisation via polling ────────────────────────────────────
+//
+// DefaultStepTracker derives totalSteps from the first backend message that carries
+// it. When that message arrives via polling (not Mercure) the handler must still
+// dispatch jobUpdated({ totalSteps }) so the UI shows "Step X / Y".
+
+describe('totalSteps initialised via polling', () => {
+  it('polling totalSteps dispatches jobUpdated with totalSteps', async () => {
+    capturedOnStatusUpdate = undefined
+    const handler = new MessageBusJobHandler({
+      jobRunId: 1,
+      title: 'Test',
+      stepTracker: new DefaultStepTracker({ showStepLabel: true })
+    })
+    handler.onRegister()
+    mockJobUpdated.mockClear()
+
+    await sendPollingUpdate({ status: 'running', totalSteps: 3, jobRun: jobRunFixture({ totalSteps: 3 }) })
+
+    expect(mockJobUpdated).toHaveBeenCalledWith(expect.objectContaining({
+      changes: expect.objectContaining({ totalSteps: 3 })
+    }))
+    void handler
+  })
+
+  it('totalSteps is only set once — subsequent polling with same value is a no-op', async () => {
+    capturedOnStatusUpdate = undefined
+    const handler = new MessageBusJobHandler({
+      jobRunId: 1,
+      title: 'Test',
+      stepTracker: new DefaultStepTracker({ showStepLabel: true })
+    })
+    handler.onRegister()
+    mockJobUpdated.mockClear()
+
+    await sendPollingUpdate({ status: 'running', totalSteps: 3, jobRun: jobRunFixture({ totalSteps: 3 }) })
+    const firstCallCount = mockJobUpdated.mock.calls.filter((args: unknown[]) => {
+      const payload = args[0] as { changes?: Record<string, unknown> }
+      return 'totalSteps' in (payload?.changes ?? {})
+    }).length
+
+    mockJobUpdated.mockClear()
+    await sendPollingUpdate({ status: 'running', totalSteps: 3, jobRun: jobRunFixture({ totalSteps: 3 }) })
+    const secondCallCount = mockJobUpdated.mock.calls.filter((args: unknown[]) => {
+      const payload = args[0] as { changes?: Record<string, unknown> }
+      return 'totalSteps' in (payload?.changes ?? {})
+    }).length
+
+    expect(firstCallCount).toBe(1)
+    expect(secondCallCount).toBe(0)
+    void handler
+  })
+})
+
+// ─── Progress via polling ─────────────────────────────────────────────────────
+//
+// ProgressFieldCalculator reads data.progress. Polling's polledData does not
+// include a progress field, so ProgressFieldCalculator returns PROGRESS_NO_UPDATE
+// and no progress jobUpdated is dispatched. This is expected behaviour — progress
+// granularity is only available via real-time Mercure messages.
+
+describe('progress field absent from polling data', () => {
+  it('polling update does not dispatch a progress jobUpdated', async () => {
+    makeHandler()
+    await sendPollingUpdate({ status: 'running', jobRun: jobRunFixture() })
+
+    const progressUpdates = mockJobUpdated.mock.calls.filter((args: unknown[]) => {
+      const payload = args[0] as { changes?: Record<string, unknown> }
+      return 'progress' in (payload?.changes ?? {})
+    })
+    expect(progressUpdates).toHaveLength(0)
+  })
+
+  it('Mercure update with progress=50 does dispatch a progress jobUpdated', async () => {
+    const handler = makeHandler()
+    await sendMercureUpdate(handler, { progress: 50 })
+
+    const progressUpdates = mockJobUpdated.mock.calls.filter((args: unknown[]) => {
+      const payload = args[0] as { changes?: Record<string, unknown> }
+      return 'progress' in (payload?.changes ?? {})
+    })
+    expect(progressUpdates.length).toBeGreaterThan(0)
   })
 })
