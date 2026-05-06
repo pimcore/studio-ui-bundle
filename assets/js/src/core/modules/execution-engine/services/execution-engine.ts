@@ -58,7 +58,10 @@ export class ExecutionEngine {
     // Process only top-level (parent) items; walk the full chain to any depth
     for (const parent of items.filter(j => !childIds.has(j.id))) {
       const fn = this.rehydrationRegistry.get(parent.jobName)
-      if (fn === undefined) continue
+      if (fn === undefined) {
+        console.warn(`[ExecutionEngine] No rehydration handler for job "${parent.jobName}" (id ${parent.id}). Register it with JobRehydrationRegistry in your module's onInit().`)
+        continue
+      }
 
       const chain: JobRun[] = [parent]
       let cursor: JobRun = parent

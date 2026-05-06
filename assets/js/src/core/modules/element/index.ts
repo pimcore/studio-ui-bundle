@@ -68,6 +68,8 @@ moduleSystem.registerModule({
     rehydrationRegistry.register(AssetCloneJob)
     rehydrationRegistry.register(DataObjectCloneJob)
     rehydrationRegistry.register(DocumentCloneJob)
+    // Abstract classes registered directly: all concrete batch-edit subclasses share the same
+    // backend job names and buildHandler, so one registration per abstract class covers them all.
     rehydrationRegistry.register(AbstractBatchEditJob)
     rehydrationRegistry.register(AbstractFolderBatchEditJob)
     rehydrationRegistry.register(CsvDownloadJob)

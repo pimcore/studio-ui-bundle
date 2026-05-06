@@ -15,11 +15,11 @@ export function resolveChildJobRunOptions (jobRuns: JobRunList): {
   ancestorJobRunIds: number[] | undefined
   startAtStep: number
 } {
-  const [parent, child] = jobRuns
-  const isChild = child !== undefined
+  const leaf = jobRuns[jobRuns.length - 1]
+  const hasAncestors = jobRuns.length > 1
   return {
-    jobRunId: child?.id ?? parent.id,
-    ancestorJobRunIds: isChild ? [parent.id] : undefined,
-    startAtStep: isChild ? 2 : 1
+    jobRunId: leaf.id,
+    ancestorJobRunIds: hasAncestors ? jobRuns.slice(0, -1).map(j => j.id) : undefined,
+    startAtStep: jobRuns.length  // 1 for parent-only, 2 for one child, etc.
   }
 }

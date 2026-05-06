@@ -26,7 +26,7 @@ export interface BulkImportJobOptions {
 }
 
 export class BulkImportJob implements JobInterface {
-  static readonly jobNames = ['studio_ee_job_bulk_import_class_definitions']
+  static readonly jobNames = ['studio_ee_job_bulk_import_class_definitions'] as const
 
   static rehydrate (jobRuns: JobRunList): MessageBusJobHandler {
     const [parent] = jobRuns

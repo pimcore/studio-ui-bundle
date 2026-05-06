@@ -15,12 +15,14 @@ import { t } from 'i18next'
 import { type RehydratableJob, type JobRunList } from '../../services/job-rehydration-registry'
 import { resolveChildJobRunOptions } from '../rehydration-helpers'
 
+const XLSX_FOLDER_EXPORT_JOB_NAME = 'studio_ee_job_collect_xlsx_folder_export_elements' as const
+
 export interface XlsxDownloadJobOptions extends AbstractDownloadJobOptions {
   isFolderExport?: boolean
 }
 
 export class XlsxDownloadJob extends AbstractDownloadJob {
-  static readonly jobNames = ['studio_ee_job_create_xlsx', 'studio_ee_job_collect_xlsx_folder_export_elements'] as const
+  static readonly jobNames = ['studio_ee_job_create_xlsx', XLSX_FOLDER_EXPORT_JOB_NAME] as const
 
   private readonly isFolderExport: boolean
 
@@ -37,7 +39,7 @@ export class XlsxDownloadJob extends AbstractDownloadJob {
     const [parent] = jobRuns
     return this.buildHandler({
       ...resolveChildJobRunOptions(jobRuns),
-      hasChildJob: parent.jobName === this.jobNames[1]
+      hasChildJob: parent.jobName === XLSX_FOLDER_EXPORT_JOB_NAME
     })
   }
 }

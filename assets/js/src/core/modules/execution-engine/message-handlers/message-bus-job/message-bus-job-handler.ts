@@ -118,6 +118,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       finished_with_errors: JobStatus.FINISHED_WITH_ERRORS,
       failed: JobStatus.FAILED
     }
+    // 'queued' and any unrecognised state fall through to QUEUED intentionally
     this.initialStatus = stateMap[state] ?? JobStatus.QUEUED
   }
 
@@ -188,17 +189,16 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
 
     const newState = this.stepTracker.onChildJobTransition()
 
-    // Re-register handler with new ID
     const messageBus = container.get<GlobalMessageBus>(serviceIds.globalMessageBus)
-    messageBus.unregisterHandler(oldJobRunId)
-    messageBus.registerHandler(this)
+    messageBus.unregisterHandler(oldJobRunId) // → onUnregister() destroys this.polling
 
-    // Recreate polling for the child job
+    // Assign child polling before registerHandler so onRegister() starts the correct instance
     this.polling = new JobRunPolling(this.jobRunId, {
       onStatusUpdate: async (data) => { await this.handlePolledStatusUpdate(data) },
       onError: (error) => { console.error('Job run polling error:', error) }
     })
-    this.polling.start()
+
+    messageBus.registerHandler(this) // → onRegister() calls this.polling.start()
 
     this.lastProgressValue = -1
     this.progressCalculator.onStepChange?.()

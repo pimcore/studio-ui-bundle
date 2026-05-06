@@ -95,7 +95,7 @@ export class RecycleBinDeleteJob implements JobInterface {
 
   static rehydrate (jobRuns: JobRunList): MessageBusJobHandler {
     const [parent] = jobRuns
-    const isActive = ['running', 'not_started'].includes(parent.state)
+    const isActive = ['running', 'queued'].includes(parent.state)
     return this.buildHandler({
       jobRunId: parent.id,
       onJobCompletion: isActive
