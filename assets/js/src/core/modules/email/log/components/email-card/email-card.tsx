@@ -37,7 +37,10 @@ export const EmailCard = ({ emails }: EmailCardProps): React.JSX.Element => {
       {
         label: t('widget.email-log.tab.text'),
         key: 'text',
-        children: <TextPreview email={ email } hasTextLog={ email.hasTextLog } />
+        children: <TextPreview
+          email={ email }
+          hasTextLog={ email.hasTextLog }
+                  />
       },
       {
         label: t('widget.email-log.tab.html'),
