@@ -1509,6 +1509,8 @@ path_query: Sti og spørring
 auto_create: Opprett automatisk
 widget.redirects: Omdirigeringer
 navigation.redirects: Omdirigeringer
+robots-txt.save-success: robots.txt ble lagret
+robots-txt.on-file-system-warning: "Lagring deaktivert: en fysisk robots.txt-fil finnes i filsystemet."
 widget.robots-txt: robots.txt
 navigation.robots-txt: robots.txt
 perspective.default: Standard
@@ -2470,6 +2472,8 @@ user-management.permissions.plugin_datahub_permission_update: Datahub Oppdaterin
 user-management.permissions.portal-engine_collection-access: Tilgang til backend-samlinger
 user-management.permissions.portal-engine_index-management: Portalindeksforvaltning
 user-management.permissions.portal-engine_wizard: Portalens oppsettveiviser
+user-management.permissions.studio_perspective_editor: Perspektivredigerer
+user-management.permissions.studio_perspective_widget_editor: Perspektiv-widgetredigerer
 user-management.permissions.wai_configuration_permission: Konfigurasjon av automatiseringsmaler
 forgot-password-form.username: Oppgi brukernavnet ditt, så sender Pimcore en innloggingslenke til e-postadressen din
 forgot-password-form.username.placeholder: Brukernavn

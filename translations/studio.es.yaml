@@ -1509,6 +1509,8 @@ path_query: Ruta y consulta
 auto_create: Creación automática
 widget.redirects: Redirecciones
 navigation.redirects: Redirecciones
+robots-txt.save-success: robots.txt guardado correctamente
+robots-txt.on-file-system-warning: "Guardado desactivado: existe un archivo robots.txt físico en el sistema de archivos."
 widget.robots-txt: robots.txt
 navigation.robots-txt: robots.txt
 perspective.default: Predeterminada
@@ -2470,6 +2472,8 @@ user-management.permissions.plugin_datahub_permission_update: Datahub Actualizac
 user-management.permissions.portal-engine_collection-access: Acceso a colecciones del backend
 user-management.permissions.portal-engine_index-management: Gestión de índices del portal
 user-management.permissions.portal-engine_wizard: Asistente de configuración del portal
+user-management.permissions.studio_perspective_editor: Editor de perspectivas
+user-management.permissions.studio_perspective_widget_editor: Editor de widgets de perspectivas
 user-management.permissions.wai_configuration_permission: Configuración de plantillas de automatización
 forgot-password-form.username: Introduzca su nombre de usuario y Pimcore le enviará un enlace de inicio de sesión a su dirección de correo electrónico
 forgot-password-form.username.placeholder: Nombre de usuario
