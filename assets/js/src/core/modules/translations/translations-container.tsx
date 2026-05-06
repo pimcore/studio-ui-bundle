@@ -35,6 +35,9 @@ import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useTranslationDomain } from './hooks/translation-domain-provider'
 import { type SortingState } from '@tanstack/react-table'
 import { TranslationErrorModals } from './components/translation-error-modals'
+import { ExportTranslationsButton } from './components/export-translations-button'
+import { ImportTranslationsButton } from './components/import-translations-button'
+import { CleanupTranslationsButton } from './components/cleanup-translations-button'
 
 const TESTID_PREFIX = 'translations'
 
@@ -163,12 +166,36 @@ export const TranslationsContainer = (): React.JSX.Element => {
     <ContentLayout
       renderToolbar={
         <Toolbar theme="secondary">
-          <IconButton
-            data-testid={ `${TESTID_PREFIX}-refresh-button` }
-            disabled={ translationsLoading }
-            icon={ { value: 'refresh' } }
-            onClick={ reload }
-          />
+          <Flex gap="extra-small">
+            <IconButton
+              data-testid={ `${TESTID_PREFIX}-refresh-button` }
+              disabled={ translationsLoading }
+              icon={ { value: 'refresh' } }
+              onClick={ reload }
+            />
+            <ExportTranslationsButton
+              domain={ domain }
+              filters={ {
+                columnFilters: searchTerm.length > 0
+                  ? [{ type: 'search', filterValue: searchTerm }]
+                  : [],
+                sortFilter: sorting.length > 0
+                  ? {
+                      key: sorting[0].id.startsWith('_') ? sorting[0].id.substring(1) : sorting[0].id,
+                      direction: sorting[0].desc ? 'DESC' : 'ASC'
+                    }
+                  : {}
+              } }
+            />
+            <ImportTranslationsButton
+              domain={ domain }
+              onSuccess={ reload }
+            />
+            <CleanupTranslationsButton
+              domain={ domain }
+              onSuccess={ reload }
+            />
+          </Flex>
           <Pagination
             current={ currentPage }
             onChange={ (page, pageSize) => {

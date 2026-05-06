@@ -49,7 +49,11 @@ export const {
   useTranslationGetDomainsQuery,
   useTranslationGetListQuery,
   useTranslationGetAvailableLocalesQuery,
-  useTranslationUpdateMutation
+  useTranslationUpdateMutation,
+  useTranslationCleanupByDomainMutation,
+  useTranslationExportListMutation,
+  useTranslationImportCsvMutation,
+  useTranslationDetermineCsvSettingsForImportMutation
 } = api
 
 export { api }

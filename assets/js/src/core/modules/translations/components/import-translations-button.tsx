@@ -1,0 +1,44 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React, { useState } from 'react'
+import { IconButton, Tooltip } from '@sdk/components'
+import { t } from 'i18next'
+import { ImportTranslationsModal } from './import-translations-modal/import-translations-modal'
+
+interface ImportTranslationsButtonProps {
+  domain: string
+  onSuccess: () => void
+}
+
+export const ImportTranslationsButton = ({ domain, onSuccess }: ImportTranslationsButtonProps): React.JSX.Element => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+
+  return (
+    <>
+      <Tooltip title={ t('translations.toolbar.import') }>
+        <IconButton
+          icon={ { value: 'upload-cloud' } }
+          onClick={ () => { setIsModalOpen(true) } }
+        />
+      </Tooltip>
+
+      <ImportTranslationsModal
+        domain={ domain }
+        onCancel={ () => { setIsModalOpen(false) } }
+        onSuccess={ () => {
+          setIsModalOpen(false)
+          onSuccess()
+        } }
+        open={ isModalOpen }
+      />
+    </>
+  )
+}
