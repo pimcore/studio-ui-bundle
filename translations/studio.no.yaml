@@ -1311,7 +1311,7 @@ key-bindings.seo: SEO
 key-bindings.redirects: Omdirigeringer
 key-bindings.bundles: Pakker
 user-management.references.title: Referanser
-user-management.references.documents: Dokumenter
+user-management.references.object-dependencies: Objektavhengigheter
 user-management.references.columns.id: ID
 user-management.references.columns.cpath: Sti
 user-management.references.columns.subtype: Undertype
