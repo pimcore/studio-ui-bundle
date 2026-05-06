@@ -149,6 +149,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       title: '',
       status: this.initialStatus,
       progress: 0,
+      indeterminate: this.initialStatus === JobStatus.RUNNING ? true : undefined,
       currentStep: this.stepTracker.showStepLabel ? currentStep : undefined,
       totalSteps: this.stepTracker.showStepLabel ? totalSteps : undefined,
       stepDescriptionKey: this.stepDescriptions?.[currentStep],
