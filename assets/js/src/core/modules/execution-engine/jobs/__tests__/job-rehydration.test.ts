@@ -361,11 +361,11 @@ describe('ZipUploadJob.rehydrate()', () => {
 const mockBus: Pick<JobRunOptions['messageBus'], 'registerHandler'> = { registerHandler: jest.fn() }
 
 // Concrete subclasses for testing abstract batch-edit jobs
-class TestableBatchEditJob extends AbstractBatchEditJob { // eslint-disable-line @typescript-eslint/no-extraneous-class
+class TestableBatchEditJob extends AbstractBatchEditJob {  
   protected async executeEditRequest (): Promise<number | null> { return 42 }
 }
 
-class TestableFolderBatchEditJob extends AbstractFolderBatchEditJob { // eslint-disable-line @typescript-eslint/no-extraneous-class
+class TestableFolderBatchEditJob extends AbstractFolderBatchEditJob {  
   protected async executeEditRequest (): Promise<number | null> { return 77 }
 }
 
