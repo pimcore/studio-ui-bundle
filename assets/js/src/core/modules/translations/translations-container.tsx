@@ -191,10 +191,6 @@ export const TranslationsContainer = (): React.JSX.Element => {
               domain={ domain }
               onSuccess={ reload }
             />
-            <CleanupTranslationsButton
-              domain={ domain }
-              onSuccess={ reload }
-            />
           </Flex>
           <Pagination
             current={ currentPage }
@@ -263,6 +259,10 @@ export const TranslationsContainer = (): React.JSX.Element => {
             />
           </Flex>
           <Flex gap="small">
+            <CleanupTranslationsButton
+              domain={ domain }
+              onSuccess={ reload }
+            />
             <Select
               allowClear
               data-testid={ `${TESTID_PREFIX}-locale-select` }

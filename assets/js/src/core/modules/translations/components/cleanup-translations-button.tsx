@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { IconButton, Tooltip, useFormModal } from '@sdk/components'
+import { IconTextButton, Tooltip, useFormModal } from '@sdk/components'
 import { t } from 'i18next'
 import { useTranslationCleanupByDomainMutation } from '../../app/translations/translations-api-slice-enhanced'
 import trackError, { ApiError } from '../../app/error-handler'
@@ -43,12 +43,14 @@ export const CleanupTranslationsButton = ({ domain, onSuccess }: CleanupTranslat
 
   return (
     <Tooltip title={ t('translations.toolbar.cleanup') }>
-      <IconButton
+      <IconTextButton
         disabled={ isLoading }
         icon={ { value: 'trash' } }
         loading={ isLoading }
         onClick={ handleCleanup }
-      />
+      >
+        {t('translations.toolbar.cleanup')}
+      </IconTextButton>
     </Tooltip>
   )
 }
