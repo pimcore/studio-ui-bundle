@@ -1035,6 +1035,7 @@ jobs.job.step_hint_single: "Schritt {{step}}"
 jobs.job.step.batch-edit.preparing: Stapelbearbeitung wird vorbereitet
 jobs.job.step.batch-edit.applying: Stapelbearbeitung wird angewendet
 jobs.job.download-error: Download fehlgeschlagen
+jobs.job.download-not-available: The download is no longer available.
 jobs.job.button-show-errors: Fehler anzeigen
 jobs.job.error-modal.title: Auftragsfehler
 jobs.job.button-abort: Auftrag abbrechen
@@ -1046,6 +1047,9 @@ batch-edit.job-title: Stapelbearbeitung
 jobs.zip-upload-job.title: ZIP hochladen
 jobs.zip-upload-job.step1.title: ZIP wird entpackt
 jobs.zip-upload-job.step2.title: Assets werden erstellt
+jobs.download-csv-job.title: CSV export
+jobs.download-xlsx-job.title: XLSX export
+jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Stapelbearbeitung
 batch-edit.no-content: Es sind noch keine Spalten hinzugefügt
 batch-edit.modal-footer.apply-changes: Änderungen übernehmen
@@ -1125,6 +1129,7 @@ element.new-folder.validation: Bitte geben Sie einen gültigen Namen ein
 element.rename: Umbenennen
 element.rename.label: Bitte geben Sie den neuen Namen ein
 element.rename.validation: Bitte geben Sie einen gültigen Namen ein
+element.share-via-notification: Share via Notifications
 element.delete: Löschen
 element.delete.confirmation.title: Element löschen
 element.delete.confirmation.text: Möchten Sie dieses Element wirklich löschen?
@@ -2352,6 +2357,10 @@ icon-selector.custom-icon-path: Benutzerdefinierter Pfad
 icon-selector.custom-icon-path-placeholder: Benutzerdefinierten Pfad eingeben und absenden
 icon-selector.Twemoji: Twemoji-Bibliothek
 icon-selector.Pimcore: Pimcore-Bibliothek
+operational-grid.csv-import.title: Import CSV
+operational-grid.csv-import.description: "Enter CSV data. Each line represents a row, columns are separated by commas."
+operational-grid.csv-import.ok: Import
+operational-grid.csv-import.cancel: Cancel
 language: Sprache
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (überschreibt Pfad aus der Baumstruktur)
@@ -2612,6 +2621,7 @@ quantity-values.create-modal.create: Erstellen
 quantity-values.export: Export
 quantity-values.import: Import
 quantity-values.import-modal.title: Mengenwert-Einheiten importieren
+quantity-values.search: Search
 owner: Eigentümer
 reverse-object-relation.tooltip: Nicht-Eigentümer-Objekte stellen Relationen zu einem anderen Objekt auf die gleiche Weise dar wie Objekte. Der Unterschied ist, dass ein Nicht-Eigentümer-Objektfeld nicht der Eigentümer der Relationsdaten ist, sondern lediglich eine Ansicht auf Daten, die in anderen Objekten gespeichert sind. Bitte wählen Sie den Eigentümer und Feldnamen, wo die Daten ursprünglich gespeichert sind.
 disabled-fields: Deaktivierte Felder

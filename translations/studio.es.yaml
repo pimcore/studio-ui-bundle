@@ -1035,6 +1035,7 @@ jobs.job.step_hint_single: "Paso {{step}}"
 jobs.job.step.batch-edit.preparing: Preparando edición por lotes
 jobs.job.step.batch-edit.applying: Aplicando edición por lotes
 jobs.job.download-error: Error en la descarga
+jobs.job.download-not-available: The download is no longer available.
 jobs.job.button-show-errors: Mostrar errores
 jobs.job.error-modal.title: Errores del trabajo
 jobs.job.button-abort: Cancelar trabajo
@@ -1046,6 +1047,9 @@ batch-edit.job-title: Edición por lotes
 jobs.zip-upload-job.title: Subir ZIP
 jobs.zip-upload-job.step1.title: Extrayendo ZIP
 jobs.zip-upload-job.step2.title: Creando assets
+jobs.download-csv-job.title: CSV export
+jobs.download-xlsx-job.title: XLSX export
+jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Edición por lotes
 batch-edit.no-content: Aún no se han añadido columnas
 batch-edit.modal-footer.apply-changes: Aplicar cambios
@@ -1125,6 +1129,7 @@ element.new-folder.validation: Introduzca un nombre válido
 element.rename: Renombrar
 element.rename.label: Introduzca el nuevo nombre
 element.rename.validation: Introduzca un nombre válido
+element.share-via-notification: Share via Notifications
 element.delete: Eliminar
 element.delete.confirmation.title: Eliminar elemento
 element.delete.confirmation.text: ¿Realmente desea eliminar este elemento?
@@ -2352,6 +2357,10 @@ icon-selector.custom-icon-path: Ruta personalizada
 icon-selector.custom-icon-path-placeholder: Añada una ruta personalizada y envíe
 icon-selector.Twemoji: Biblioteca Twemoji
 icon-selector.Pimcore: Biblioteca Pimcore
+operational-grid.csv-import.title: Import CSV
+operational-grid.csv-import.description: "Enter CSV data. Each line represents a row, columns are separated by commas."
+operational-grid.csv-import.ok: Import
+operational-grid.csv-import.cancel: Cancel
 language: Idioma
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (sobrescribe la ruta de la estructura del árbol)
@@ -2612,6 +2621,7 @@ quantity-values.create-modal.create: Crear
 quantity-values.export: Exportar
 quantity-values.import: Importar
 quantity-values.import-modal.title: Importar unidades de valor de cantidad
+quantity-values.search: Search
 owner: Propietario
 reverse-object-relation.tooltip: Los objetos no propietarios representan relaciones con otro objeto de la misma manera que los objetos. La diferencia es que un campo de objeto no propietario no es el dueño de los datos de la relación, es simplemente una vista de los datos almacenados en otros objetos. Seleccione el propietario y el nombre del campo donde se almacenan originalmente los datos.
 disabled-fields: Campos deshabilitados

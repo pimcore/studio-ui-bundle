@@ -1035,6 +1035,7 @@ jobs.job.step_hint_single: "Étape {{step}}"
 jobs.job.step.batch-edit.preparing: Préparation de l'édition par lot
 jobs.job.step.batch-edit.applying: Application de l'édition par lot
 jobs.job.download-error: Le téléchargement a échoué
+jobs.job.download-not-available: The download is no longer available.
 jobs.job.button-show-errors: Afficher les erreurs
 jobs.job.error-modal.title: Erreurs de la tâche
 jobs.job.button-abort: Abandonner la tâche
@@ -1046,6 +1047,9 @@ batch-edit.job-title: Édition par lot
 jobs.zip-upload-job.title: Téléverser un ZIP
 jobs.zip-upload-job.step1.title: Extraction du ZIP
 jobs.zip-upload-job.step2.title: Création des assets
+jobs.download-csv-job.title: CSV export
+jobs.download-xlsx-job.title: XLSX export
+jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Édition par lot
 batch-edit.no-content: Il n'y a pas encore de colonnes ajoutées
 batch-edit.modal-footer.apply-changes: Appliquer les modifications
@@ -1125,6 +1129,7 @@ element.new-folder.validation: Veuillez entrer un nom valide
 element.rename: Renommer
 element.rename.label: Veuillez entrer le nouveau nom
 element.rename.validation: Veuillez entrer un nom valide
+element.share-via-notification: Share via Notifications
 element.delete: Supprimer
 element.delete.confirmation.title: Supprimer l'élément
 element.delete.confirmation.text: Voulez-vous vraiment supprimer cet élément ?
@@ -2352,6 +2357,10 @@ icon-selector.custom-icon-path: Chemin personnalisé
 icon-selector.custom-icon-path-placeholder: Ajoutez un chemin personnalisé et validez
 icon-selector.Twemoji: Bibliothèque Twemoji
 icon-selector.Pimcore: Bibliothèque Pimcore
+operational-grid.csv-import.title: Import CSV
+operational-grid.csv-import.description: "Enter CSV data. Each line represents a row, columns are separated by commas."
+operational-grid.csv-import.ok: Import
+operational-grid.csv-import.cancel: Cancel
 language: Langue
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (remplace le chemin de l'arborescence)
@@ -2612,6 +2621,7 @@ quantity-values.create-modal.create: Créer
 quantity-values.export: Exporter
 quantity-values.import: Importer
 quantity-values.import-modal.title: Importer des unités de valeur de quantité
+quantity-values.search: Search
 owner: Propriétaire
 reverse-object-relation.tooltip: "Les objets non propriétaires représentent des relations vers un autre objet de la même manière que les objets. La différence est qu'un champ d'objet non propriétaire n'est pas le propriétaire des données de relation, il s'agit simplement d'une vue sur les données stockées dans d'autres objets. Veuillez choisir le propriétaire et le nom du champ où les données sont stockées à l'origine."
 disabled-fields: Champs désactivés

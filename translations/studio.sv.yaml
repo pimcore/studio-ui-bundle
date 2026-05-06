@@ -1035,6 +1035,7 @@ jobs.job.step_hint_single: "Steg {{step}}"
 jobs.job.step.batch-edit.preparing: Förbereder massredigering
 jobs.job.step.batch-edit.applying: Tillämpar massredigering
 jobs.job.download-error: Nedladdning misslyckades
+jobs.job.download-not-available: The download is no longer available.
 jobs.job.button-show-errors: Visa fel
 jobs.job.error-modal.title: Jobbfel
 jobs.job.button-abort: Avbryt jobb
@@ -1046,6 +1047,9 @@ batch-edit.job-title: Massredigering
 jobs.zip-upload-job.title: Ladda upp ZIP
 jobs.zip-upload-job.step1.title: Extraherar ZIP
 jobs.zip-upload-job.step2.title: Skapar assets
+jobs.download-csv-job.title: CSV export
+jobs.download-xlsx-job.title: XLSX export
+jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Massredigering
 batch-edit.no-content: Det finns inga tillagda kolumner ännu
 batch-edit.modal-footer.apply-changes: Tillämpa ändringar
@@ -1125,6 +1129,7 @@ element.new-folder.validation: Ange ett giltigt namn
 element.rename: Byt namn
 element.rename.label: Ange det nya namnet
 element.rename.validation: Ange ett giltigt namn
+element.share-via-notification: Share via Notifications
 element.delete: Ta bort
 element.delete.confirmation.title: Ta bort objekt
 element.delete.confirmation.text: Vill du verkligen ta bort det här objektet?
@@ -2252,6 +2257,7 @@ perspective-editor.form.main-nav-permission.system.applicationLogger: Applicatio
 perspective-editor.form.main-nav-permission.system.users_hidden: Dölj Användare/Roller-menyn
 perspective-editor.form.main-nav-permission.system.users_roles: Roller
 perspective-editor.form.main-nav-permission.system.users_users: Användare
+perspective-editor.form.main-nav-permission.system.appearanceBranding: Appearance & Branding
 perspective-editor.form.main-nav-permission.settings.appearanceBranding: Utseende & Varumärke
 perspective-editor.form.main-nav-permission.system.perspectiveEditor: Perspektivredigerare
 perspective-editor.form.main-nav-permission.system.widgetEditor: Widgetredigerare
@@ -2352,6 +2358,10 @@ icon-selector.custom-icon-path: Anpassad sökväg
 icon-selector.custom-icon-path-placeholder: Lägg till en anpassad sökväg och bekräfta
 icon-selector.Twemoji: Twemoji-bibliotek
 icon-selector.Pimcore: Pimcore-bibliotek
+operational-grid.csv-import.title: Import CSV
+operational-grid.csv-import.description: "Enter CSV data. Each line represents a row, columns are separated by commas."
+operational-grid.csv-import.ok: Import
+operational-grid.csv-import.cancel: Cancel
 language: Språk
 pretty-url: Snygg URL / URL Slug
 pretty-url-override-notice: (åsidosätter sökväg från trädstruktur)
@@ -2612,6 +2622,7 @@ quantity-values.create-modal.create: Skapa
 quantity-values.export: Exportera
 quantity-values.import: Importera
 quantity-values.import-modal.title: Importera kvantitetsvärdets enheter
+quantity-values.search: Search
 owner: Ägare
 reverse-object-relation.tooltip: Icke-ägande objekt representerar relationer till ett annat objekt på samma sätt som objekt gör. Skillnaden är att ett icke-ägande objektfält inte äger relationsdata, utan det är bara en vy av data lagrad i andra objekt. Välj ägare och fältnamn där data ursprungligen lagras.
 disabled-fields: Inaktiverade fält
