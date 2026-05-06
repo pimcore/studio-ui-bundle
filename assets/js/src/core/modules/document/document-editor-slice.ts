@@ -91,11 +91,27 @@ export const selectDocumentAreablockGroupedTypes = createSelector(
   (documentEditorState, documentId) => {
     const editableTypeCollections = documentEditorState.documentAreablocks[documentId] ?? {}
 
-    return mergeWith({}, ...Object.values(editableTypeCollections), (objValue, srcValue) => {
+    const merged = mergeWith({}, ...Object.values(editableTypeCollections), (objValue, srcValue) => {
       if (isArray(objValue)) {
         return objValue.concat(srcValue)
       }
     }) as AreablockGroupedTypes
+
+    const deduplicated: AreablockGroupedTypes = {}
+
+    for (const [groupName, entries] of Object.entries(merged)) {
+      const resultedList = new Set<string>()
+
+      deduplicated[groupName] = entries.filter(entry => {
+        if (resultedList.has(entry.type)) return false
+
+        resultedList.add(entry.type)
+
+        return true
+      })
+    }
+
+    return deduplicated
   }
 )
 
