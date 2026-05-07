@@ -2638,7 +2638,7 @@ bulk-import.type.class: Klassen
 bulk-import.type.customlayout: Benutzerdefinierte Layouts
 bulk-import.type.fieldcollection: Field Collections
 bulk-import.type.objectbrick: Object Bricks
-translations.toolbar.export: Exportieren
+translations.toolbar.export: CSV-Export
 translations.toolbar.import: Importieren
 translations.toolbar.cleanup: Bereinigen
 translations.import.modal.title: Übersetzungen importieren
@@ -2646,12 +2646,36 @@ translations.import.modal.browse: Dateien durchsuchen
 translations.import.modal.import: Importieren
 translations.import.modal.drag-drop: CSV-Datei hierher ziehen
 translations.import.modal.invalid-file: Bitte wählen Sie eine gültige CSV-Datei
+translations.import.modal.csv-settings: CSV-Einstellungen
+translations.import.modal.delimiter: Trennzeichen
+translations.import.modal.quotechar: Anführungszeichen
+translations.import.modal.escapechar: Escape-Zeichen
+translations.import.modal.lineterminator: Zeilenende
+translations.import.modal.field-required: Dieses Feld ist erforderlich
 translations.cleanup.confirm.title: Übersetzungen bereinigen
 translations.cleanup.confirm.content: Dies entfernt alle nicht verwendeten Übersetzungsschlüssel. Diese Aktion kann nicht rückgängig gemacht werden.
 translations.cleanup.confirm.ok: Bereinigen
 translations.import.delta.title: Importergebnisse
-translations.import.delta.description: Die folgenden Übersetzungen existierten bereits und wurden nicht überschrieben.
+translations.import.delta.description: Die folgenden Übersetzungen unterscheiden sich von den importierten Werten. Wählen Sie die aus, die mit den importierten Werten überschrieben werden sollen.
 translations.import.delta.column.key: Schlüssel
 translations.import.delta.column.locale: Sprache
 translations.import.delta.column.current: Aktuelle Übersetzung
 translations.import.delta.column.imported: Importierte Übersetzung
+translations.toolbar.import-merge: CSV importieren & zusammenführen
+translations.import.delta.skip: Überspringen
+translations.import.delta.apply: Ausgewählte anwenden ({{count}})
+widget.translation-merger: Übersetzungen zusammenführen
+translations.merger.column.locale: Sprache
+translations.merger.column.key: Schlüssel
+translations.merger.column.csv-value: CSV-Wert
+translations.merger.column.action: Aktion
+translations.merger.column.current: Aktueller Wert
+translations.merger.column.state: Status
+translations.merger.state.applied: Angewendet
+translations.merger.state.reverted: Zurückgesetzt
+translations.merger.state.pending: Ausstehend
+translations.merger.apply-all: Alle anwenden
+translations.merger.revert-all: Alle zurücksetzen
+translations.merger.title: "Übersetzungen zusammenführen (Domain: {{domain}})"
+translations.merger.column.language: Sprache
+translations.merger.items: Einträge

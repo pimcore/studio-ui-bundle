@@ -2638,7 +2638,7 @@ bulk-import.type.class: Classi
 bulk-import.type.customlayout: Layout personalizzati
 bulk-import.type.fieldcollection: Field Collections
 bulk-import.type.objectbrick: Object Bricks
-translations.toolbar.export: Esporta
+translations.toolbar.export: Esporta CSV
 translations.toolbar.import: Importa
 translations.toolbar.cleanup: Pulisci
 translations.import.modal.title: Importa traduzioni
@@ -2646,12 +2646,36 @@ translations.import.modal.browse: Sfoglia file
 translations.import.modal.import: Importa
 translations.import.modal.drag-drop: Trascina e rilascia un file CSV qui
 translations.import.modal.invalid-file: Seleziona un file CSV valido
+translations.import.modal.csv-settings: Impostazioni CSV
+translations.import.modal.delimiter: Delimitatore
+translations.import.modal.quotechar: Carattere di virgolette
+translations.import.modal.escapechar: Carattere di escape
+translations.import.modal.lineterminator: Terminatore di riga
+translations.import.modal.field-required: Questo campo è obbligatorio
 translations.cleanup.confirm.title: Pulisci traduzioni
 translations.cleanup.confirm.content: Questo rimuoverà tutte le chiavi di traduzione non utilizzate. Questa azione non può essere annullata.
 translations.cleanup.confirm.ok: Pulisci
 translations.import.delta.title: Risultati dell'importazione
-translations.import.delta.description: Le seguenti traduzioni esistevano già e non sono state sovrascritte.
+translations.import.delta.description: Le seguenti traduzioni differiscono dai valori importati. Seleziona quelle che vuoi sovrascrivere con i valori importati.
 translations.import.delta.column.key: Chiave
 translations.import.delta.column.locale: Lingua
 translations.import.delta.column.current: Traduzione attuale
 translations.import.delta.column.imported: Traduzione importata
+translations.toolbar.import-merge: Importa e unisci CSV
+translations.import.delta.skip: Salta
+translations.import.delta.apply: Applica selezionati ({{count}})
+widget.translation-merger: Unisci traduzioni
+translations.merger.column.locale: Lingua
+translations.merger.column.key: Chiave
+translations.merger.column.csv-value: Valore CSV
+translations.merger.column.action: Azione
+translations.merger.column.current: Valore attuale
+translations.merger.column.state: Stato
+translations.merger.state.applied: Applicato
+translations.merger.state.reverted: Ripristinato
+translations.merger.state.pending: In sospeso
+translations.merger.apply-all: Applica tutto
+translations.merger.revert-all: Ripristina tutto
+translations.merger.title: "Unisci traduzioni (Dominio: {{domain}})"
+translations.merger.column.language: Lingua
+translations.merger.items: elementi

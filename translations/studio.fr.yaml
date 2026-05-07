@@ -2638,7 +2638,7 @@ bulk-import.type.class: Classes
 bulk-import.type.customlayout: Custom Layouts
 bulk-import.type.fieldcollection: Field Collections
 bulk-import.type.objectbrick: Object Bricks
-translations.toolbar.export: Exporter
+translations.toolbar.export: Export CSV
 translations.toolbar.import: Importer
 translations.toolbar.cleanup: Nettoyer
 translations.import.modal.title: Importer des traductions
@@ -2646,12 +2646,36 @@ translations.import.modal.browse: Parcourir les fichiers
 translations.import.modal.import: Importer
 translations.import.modal.drag-drop: Glisser-déposer un fichier CSV ici
 translations.import.modal.invalid-file: Veuillez sélectionner un fichier CSV valide
+translations.import.modal.csv-settings: Paramètres CSV
+translations.import.modal.delimiter: Délimiteur
+translations.import.modal.quotechar: Caractère de citation
+translations.import.modal.escapechar: Caractère d'échappement
+translations.import.modal.lineterminator: Terminateur de ligne
+translations.import.modal.field-required: Ce champ est obligatoire
 translations.cleanup.confirm.title: Nettoyer les traductions
 translations.cleanup.confirm.content: Cela supprimera toutes les clés de traduction inutilisées. Cette action est irréversible.
 translations.cleanup.confirm.ok: Nettoyer
 translations.import.delta.title: Résultats de l'import
-translations.import.delta.description: Les traductions suivantes existaient déjà et n'ont pas été écrasées.
+translations.import.delta.description: Les traductions suivantes diffèrent des valeurs importées. Sélectionnez celles que vous souhaitez écraser avec les valeurs importées.
 translations.import.delta.column.key: Clé
 translations.import.delta.column.locale: Langue
 translations.import.delta.column.current: Traduction actuelle
 translations.import.delta.column.imported: Traduction importée
+translations.toolbar.import-merge: Importer et fusionner CSV
+translations.import.delta.skip: Ignorer
+translations.import.delta.apply: Appliquer la sélection ({{count}})
+widget.translation-merger: Fusionner les traductions
+translations.merger.column.locale: Langue
+translations.merger.column.key: Clé
+translations.merger.column.csv-value: Valeur CSV
+translations.merger.column.action: Action
+translations.merger.column.current: Valeur actuelle
+translations.merger.column.state: État
+translations.merger.state.applied: Appliqué
+translations.merger.state.reverted: Rétabli
+translations.merger.state.pending: En attente
+translations.merger.apply-all: Tout appliquer
+translations.merger.revert-all: Tout rétablir
+translations.merger.title: "Fusionner les traductions (Domaine : {{domain}})"
+translations.merger.column.language: Langue
+translations.merger.items: éléments

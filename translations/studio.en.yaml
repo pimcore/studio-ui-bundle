@@ -2650,7 +2650,7 @@ bulk-import.type.class: Classes
 bulk-import.type.customlayout: Custom Layouts
 bulk-import.type.fieldcollection: Field Collections
 bulk-import.type.objectbrick: Object Bricks
-translations.toolbar.export: Export
+translations.toolbar.export: CSV Export
 translations.toolbar.import: Import
 translations.toolbar.cleanup: Cleanup
 translations.import.modal.title: Import Translations
@@ -2658,12 +2658,36 @@ translations.import.modal.browse: Browse Files
 translations.import.modal.import: Import
 translations.import.modal.drag-drop: Drag & drop a CSV file here
 translations.import.modal.invalid-file: Please select a valid CSV file
+translations.import.modal.csv-settings: CSV Settings
+translations.import.modal.delimiter: Delimiter
+translations.import.modal.quotechar: Quote Character
+translations.import.modal.escapechar: Escape Character
+translations.import.modal.lineterminator: Line Terminator
+translations.import.modal.field-required: This field is required
 translations.cleanup.confirm.title: Cleanup Translations
 translations.cleanup.confirm.content: This will remove all unused translation keys. This action cannot be undone.
 translations.cleanup.confirm.ok: Cleanup
 translations.import.delta.title: Import Results
-translations.import.delta.description: The following translations already existed and were not overwritten.
+translations.import.delta.description: The following translations differ from the imported values. Select the ones you want to overwrite with the imported values.
 translations.import.delta.column.key: Key
 translations.import.delta.column.locale: Locale
 translations.import.delta.column.current: Current Translation
 translations.import.delta.column.imported: Imported Translation
+translations.toolbar.import-merge: Import & Merge CSV
+translations.import.delta.skip: Skip
+translations.import.delta.apply: Apply Selected ({{count}})
+widget.translation-merger: Merge Translations
+translations.merger.column.locale: Locale
+translations.merger.column.key: Key
+translations.merger.column.csv-value: CSV Value
+translations.merger.column.action: Action
+translations.merger.column.current: Current Value
+translations.merger.column.state: State
+translations.merger.state.applied: Applied
+translations.merger.state.reverted: Reverted
+translations.merger.state.pending: Pending
+translations.merger.apply-all: Apply All
+translations.merger.revert-all: Revert All
+translations.merger.title: "Merge Translations (Domain: {{domain}})"
+translations.merger.column.language: Language
+translations.merger.items: items
