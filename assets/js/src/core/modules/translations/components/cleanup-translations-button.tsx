@@ -12,8 +12,7 @@ import React from 'react'
 import { IconTextButton, Tooltip, useFormModal } from '@sdk/components'
 import { t } from 'i18next'
 import { useTranslationCleanupByDomainMutation } from '../../app/translations/translations-api-slice-enhanced'
-import trackError, { ApiError } from '../../app/error-handler'
-import { type ApiErrorData } from '../../app/error-handler/types'
+import trackError, { GeneralError } from '../../app/error-handler'
 
 interface CleanupTranslationsButtonProps {
   domain: string
@@ -34,8 +33,8 @@ export const CleanupTranslationsButton = ({ domain, onSuccess }: CleanupTranslat
         try {
           await cleanupTranslations({ domain }).unwrap()
           onSuccess()
-        } catch (error) {
-          trackError(new ApiError(error as ApiErrorData))
+        } catch {
+          trackError(new GeneralError('Failed to cleanup translations'))
         }
       }
     })

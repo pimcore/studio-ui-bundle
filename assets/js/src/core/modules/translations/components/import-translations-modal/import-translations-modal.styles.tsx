@@ -12,30 +12,6 @@ import { createStyles } from 'antd-style'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
-    fileTargetContainer: css`
-      border-radius: ${token.borderRadiusLG}px;
-      outline: 2px dashed ${token.colorBorder};
-      background: ${token.controlItemBgHover};
-      padding: ${token.paddingLG}px;
-      max-width: 100%;
-      min-height: 100px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-
-      &:hover {
-        outline-color: ${token.colorPrimary};
-        background: ${token.controlItemBgActive};
-      }
-
-      .file-target-title {
-        text-align: center;
-        color: ${token.colorTextSecondary};
-      }
-
-      .icon-container {
-        color: ${token.colorIcon};
-      }
-    `,
     uploadedFile: css`
       .file-name {
         font-weight: ${token.fontWeightStrong};

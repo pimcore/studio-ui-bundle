@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Modal } from '@sdk/components'
 import { t } from 'i18next'
 import { Button, Table } from 'antd'
@@ -21,7 +21,7 @@ interface ImportDeltaModalProps {
 }
 
 export const ImportDeltaModal = ({ open, deltaItems, onClose }: ImportDeltaModalProps): React.JSX.Element => {
-  const dataSource = deltaItems.flatMap(item =>
+  const dataSource = useMemo(() => deltaItems.flatMap(item =>
     item.deltaValues.map((delta, index) => ({
       key: `${item.key}-${index}`,
       translationKey: item.key,
@@ -29,7 +29,7 @@ export const ImportDeltaModal = ({ open, deltaItems, onClose }: ImportDeltaModal
       currentTranslation: delta.currentTranslation,
       importTranslation: delta.importTranslation
     }))
-  )
+  ), [deltaItems])
 
   const columns = [
     {

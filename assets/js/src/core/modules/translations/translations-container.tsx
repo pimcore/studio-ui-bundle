@@ -87,7 +87,7 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
         page: currentPage,
         pageSize,
         columnFilters:
-          searchTerm.length >= 0
+          searchTerm.length > 0
             ? [{
                 type: 'search',
                 filterValue: searchTerm

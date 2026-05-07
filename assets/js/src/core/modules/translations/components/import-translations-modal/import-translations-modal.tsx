@@ -49,6 +49,7 @@ export const ImportTranslationsModal = ({
     if (open) {
       setSelectedFile(null)
       setDeltaItems(null)
+      setFileError(null)
       if (fileInputRef.current !== null) {
         fileInputRef.current.value = ''
       }
@@ -78,9 +79,9 @@ export const ImportTranslationsModal = ({
         }
       }).unwrap()
 
-      const importResult = result as { items: DeltaItem[] }
+      const importResult = result as { items?: DeltaItem[] }
 
-      if (importResult.items.length > 0) {
+      if (importResult.items !== undefined && importResult.items.length > 0) {
         setDeltaItems(importResult.items)
       } else {
         onSuccess()
@@ -96,9 +97,14 @@ export const ImportTranslationsModal = ({
     onCancel()
   }
 
+  const [fileError, setFileError] = useState<string | null>(null)
+
   const handleFileSelect = (file: File): void => {
     if (file.name.endsWith('.csv') || file.type === 'text/csv') {
       setSelectedFile(file)
+      setFileError(null)
+    } else {
+      setFileError(t('translations.import.modal.invalid-file'))
     }
   }
 
@@ -217,6 +223,9 @@ export const ImportTranslationsModal = ({
               </div>
             </Flex>
           </Dragger>
+          {fileError !== null && (
+            <div style={ { color: 'var(--ant-color-error)', marginTop: 8, fontSize: 12 } }>{fileError}</div>
+          )}
           )
         : (
           <div className={ styles.uploadedFile }>
