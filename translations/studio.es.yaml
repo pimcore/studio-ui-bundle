@@ -2638,3 +2638,20 @@ bulk-import.type.class: Clases
 bulk-import.type.customlayout: Custom Layouts
 bulk-import.type.fieldcollection: Field Collections
 bulk-import.type.objectbrick: Object Bricks
+translations.toolbar.export: Exportar
+translations.toolbar.import: Importar
+translations.toolbar.cleanup: Limpiar
+translations.import.modal.title: Importar traducciones
+translations.import.modal.browse: Explorar archivos
+translations.import.modal.import: Importar
+translations.import.modal.drag-drop: Arrastre y suelte un archivo CSV aquí
+translations.import.modal.invalid-file: Por favor seleccione un archivo CSV válido
+translations.cleanup.confirm.title: Limpiar traducciones
+translations.cleanup.confirm.content: Esto eliminará todas las claves de traducción no utilizadas. Esta acción no se puede deshacer.
+translations.cleanup.confirm.ok: Limpiar
+translations.import.delta.title: Resultados de la importación
+translations.import.delta.description: Las siguientes traducciones ya existían y no se sobrescribieron.
+translations.import.delta.column.key: Clave
+translations.import.delta.column.locale: Idioma
+translations.import.delta.column.current: Traducción actual
+translations.import.delta.column.imported: Traducción importada

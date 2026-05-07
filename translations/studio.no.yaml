@@ -2638,3 +2638,20 @@ bulk-import.type.class: Klasser
 bulk-import.type.customlayout: Custom Layouts
 bulk-import.type.fieldcollection: Field Collections
 bulk-import.type.objectbrick: Object Bricks
+translations.toolbar.export: Eksporter
+translations.toolbar.import: Importer
+translations.toolbar.cleanup: Rydd opp
+translations.import.modal.title: Importer oversettelser
+translations.import.modal.browse: Bla gjennom filer
+translations.import.modal.import: Importer
+translations.import.modal.drag-drop: Dra og slipp en CSV-fil her
+translations.import.modal.invalid-file: Vennligst velg en gyldig CSV-fil
+translations.cleanup.confirm.title: Rydd opp oversettelser
+translations.cleanup.confirm.content: Dette vil fjerne alle ubrukte oversettelsesnøkler. Denne handlingen kan ikke angres.
+translations.cleanup.confirm.ok: Rydd opp
+translations.import.delta.title: Importresultater
+translations.import.delta.description: Følgende oversettelser eksisterte allerede og ble ikke overskrevet.
+translations.import.delta.column.key: Nøkkel
+translations.import.delta.column.locale: Språk
+translations.import.delta.column.current: Nåværende oversettelse
+translations.import.delta.column.imported: Importert oversettelse

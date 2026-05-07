@@ -2638,3 +2638,20 @@ bulk-import.type.class: Klasser
 bulk-import.type.customlayout: Custom Layouts
 bulk-import.type.fieldcollection: Field Collections
 bulk-import.type.objectbrick: Object Bricks
+translations.toolbar.export: Exportera
+translations.toolbar.import: Importera
+translations.toolbar.cleanup: Städa upp
+translations.import.modal.title: Importera översättningar
+translations.import.modal.browse: Bläddra bland filer
+translations.import.modal.import: Importera
+translations.import.modal.drag-drop: Dra och släpp en CSV-fil här
+translations.import.modal.invalid-file: Vänligen välj en giltig CSV-fil
+translations.cleanup.confirm.title: Städa upp översättningar
+translations.cleanup.confirm.content: Detta tar bort alla oanvända översättningsnycklar. Denna åtgärd kan inte ångras.
+translations.cleanup.confirm.ok: Städa upp
+translations.import.delta.title: Importresultat
+translations.import.delta.description: Följande översättningar fanns redan och skrevs inte över.
+translations.import.delta.column.key: Nyckel
+translations.import.delta.column.locale: Språk
+translations.import.delta.column.current: Nuvarande översättning
+translations.import.delta.column.imported: Importerad översättning
