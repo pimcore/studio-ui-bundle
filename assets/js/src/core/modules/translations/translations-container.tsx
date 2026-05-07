@@ -92,13 +92,13 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
                 type: 'search',
                 filterValue: searchTerm
               }]
-            : [],
+            : undefined,
         sortFilter: sorting.length > 0
           ? {
               key: sorting[0].id.startsWith('_') ? sorting[0].id.substring(1) : sorting[0].id,
               direction: sorting[0].desc ? 'DESC' : 'ASC'
             }
-          : []
+          : undefined
       }
     }
   }), [domain, currentPage, pageSize, searchTerm, sorting])

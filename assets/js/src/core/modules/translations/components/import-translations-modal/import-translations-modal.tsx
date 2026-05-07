@@ -194,6 +194,7 @@ export const ImportTranslationsModal = ({
 
       {selectedFile === null
         ? (
+          <>
           <Dragger { ...uploadProps }>
             <Flex
               align="center"
@@ -226,6 +227,7 @@ export const ImportTranslationsModal = ({
           {fileError !== null && (
             <div style={ { color: 'var(--ant-color-error)', marginTop: 8, fontSize: 12 } }>{fileError}</div>
           )}
+          </>
           )
         : (
           <div className={ styles.uploadedFile }>
