@@ -45,7 +45,11 @@ interface FormValues {
   translationKey: string
 }
 
-export const TranslationsContainer = (): React.JSX.Element => {
+export interface TranslationsContainerProps {
+  initialSearchTerm?: string
+}
+
+export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContainerProps): React.JSX.Element => {
   const [form] = Form.useForm<FormValues>()
   const dispatch = useAppDispatch()
   const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
@@ -55,7 +59,14 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const { domain, setDomain } = useTranslationDomain()
   const [visibleLocales, setVisibleLocales] = useState<string[] | null>(null)
   const [translationRows, setTranslationRows] = useState<TranslationRow[]>([])
-  const [searchTerm, setSearchTerm] = useState<string>('')
+  const [searchTerm, setSearchTerm] = useState<string>(initialSearchTerm ?? '')
+
+  useEffect(() => {
+    if (initialSearchTerm !== undefined) {
+      setSearchTerm(initialSearchTerm)
+      setCurrentPage(1)
+    }
+  }, [initialSearchTerm])
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
   const [sorting, setSorting] = useState<SortingState>([{ id: 'key', desc: false }])
