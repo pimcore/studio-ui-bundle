@@ -16,14 +16,21 @@ import {
   type ClassificationStoreConfigurationCollectionCollectionApiResponse,
   type ClassificationStoreConfigurationKeyCollectionApiResponse,
   type ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse,
-  type ClassificationStoreConfigurationCollectionRelationCollectionApiResponse
+  type ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg,
+  type ClassificationStoreConfigurationCollectionRelationCollectionApiResponse,
+  type ClassificationStoreConfigurationCollectionRelationCollectionApiArg
 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 
 // Helper: scan all active query cache entries for a given endpoint name and patch each one
 type PatchFn<T> = (draft: T) => void
 interface PatchResult { undo: () => void }
 
-function patchAllCacheEntries<T> (dispatch: (thunk: any) => void, endpointName: string, patch: PatchFn<T>): void {
+function patchAllCacheEntries<T, A = unknown> (
+  dispatch: (thunk: any) => void,
+  endpointName: string,
+  patch: PatchFn<T>,
+  argFilter?: (args: A) => boolean
+): void {
   // Accessing internal RTK Query store state to fan-out cache patches across all pages
   dispatch((innerDispatch: unknown, getState: () => unknown) => {
     const state = getState() as Record<string, unknown>
@@ -32,6 +39,7 @@ function patchAllCacheEntries<T> (dispatch: (thunk: any) => void, endpointName: 
     for (const [queryKey, queryState] of Object.entries(queries)) {
       if (!queryKey.startsWith(`${endpointName}(`)) continue
       const qs = queryState as { originalArgs: unknown }
+      if (argFilter !== undefined && !argFilter(qs.originalArgs as A)) continue
       try {
         // @ts-expect-error — dynamic endpoint name not in the union
         innerDispatch(baseApi.util.updateQueryData(endpointName, qs.originalArgs, patch))
@@ -43,7 +51,12 @@ function patchAllCacheEntries<T> (dispatch: (thunk: any) => void, endpointName: 
 }
 
 // Like patchAllCacheEntries but returns PatchResults so callers can undo on failure.
-function optimisticPatchAllCacheEntries<T> (dispatch: (thunk: any) => any, endpointName: string, patch: PatchFn<T>): PatchResult[] {
+function optimisticPatchAllCacheEntries<T, A = unknown> (
+  dispatch: (thunk: any) => any,
+  endpointName: string,
+  patch: PatchFn<T>,
+  argFilter?: (args: A) => boolean
+): PatchResult[] {
   const results: PatchResult[] = []
 
   dispatch((innerDispatch: (action: unknown) => PatchResult, getState: () => unknown) => {
@@ -53,6 +66,7 @@ function optimisticPatchAllCacheEntries<T> (dispatch: (thunk: any) => any, endpo
     for (const [queryKey, queryState] of Object.entries(queries)) {
       if (!queryKey.startsWith(`${endpointName}(`)) continue
       const qs = queryState as { originalArgs: unknown }
+      if (argFilter !== undefined && !argFilter(qs.originalArgs as A)) continue
       try {
         // @ts-expect-error — dynamic endpoint name not in the union
         const result = innerDispatch(baseApi.util.updateQueryData(endpointName, qs.originalArgs, patch))
@@ -258,7 +272,13 @@ const api = baseApi.enhanceEndpoints({
       invalidatesTags: () => [],
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
         const { keyId, groupId, sorter, mandatory } = args.classificationStoreConfigurationKeyGroupRelationCreate
-        const patchResults = optimisticPatchAllCacheEntries<ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse>(
+        // Cache entries are keyed by groupId — only patch entries for the affected group,
+        // otherwise the new relation gets pushed into every other group's cache too.
+        const matchesGroup = (a: ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg): boolean => a.groupId === groupId
+        const patchResults = optimisticPatchAllCacheEntries<
+          ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse,
+          ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg
+        >(
           dispatch,
           'classificationStoreConfigurationKeyGroupRelationCollection',
           (draft) => {
@@ -271,11 +291,15 @@ const api = baseApi.enhanceEndpoints({
               draft.items.push({ keyId, groupId, sorter, mandatory, keyName: null, keyDescription: null, groupName: null })
               draft.totalItems += 1
             }
-          }
+          },
+          matchesGroup
         )
         try {
           const { data: updated } = await queryFulfilled
-          patchAllCacheEntries<ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse>(
+          patchAllCacheEntries<
+            ClassificationStoreConfigurationKeyGroupRelationCollectionApiResponse,
+            ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg
+          >(
             dispatch,
             'classificationStoreConfigurationKeyGroupRelationCollection',
             (draft) => {
@@ -283,7 +307,8 @@ const api = baseApi.enhanceEndpoints({
                 (r) => r.keyId === updated.keyId && r.groupId === updated.groupId
               )
               if (idx !== -1) draft.items[idx] = updated
-            }
+            },
+            matchesGroup
           )
         } catch {
           patchResults.forEach((r) => { r.undo() })
@@ -325,7 +350,13 @@ const api = baseApi.enhanceEndpoints({
       invalidatesTags: () => [],
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
         const { colId, groupId, sorter } = args.classificationStoreConfigurationCollectionRelationCreate
-        const patchResults = optimisticPatchAllCacheEntries<ClassificationStoreConfigurationCollectionRelationCollectionApiResponse>(
+        // Cache entries are keyed by colId — only patch entries for the affected collection,
+        // otherwise the new relation gets pushed into every other collection's cache too.
+        const matchesCollection = (a: ClassificationStoreConfigurationCollectionRelationCollectionApiArg): boolean => a.colId === colId
+        const patchResults = optimisticPatchAllCacheEntries<
+          ClassificationStoreConfigurationCollectionRelationCollectionApiResponse,
+          ClassificationStoreConfigurationCollectionRelationCollectionApiArg
+        >(
           dispatch,
           'classificationStoreConfigurationCollectionRelationCollection',
           (draft) => {
@@ -338,11 +369,15 @@ const api = baseApi.enhanceEndpoints({
               draft.items.push({ id: '', colId, groupId, sorter, groupName: null, groupDescription: null })
               draft.totalItems += 1
             }
-          }
+          },
+          matchesCollection
         )
         try {
           const { data: updated } = await queryFulfilled
-          patchAllCacheEntries<ClassificationStoreConfigurationCollectionRelationCollectionApiResponse>(
+          patchAllCacheEntries<
+            ClassificationStoreConfigurationCollectionRelationCollectionApiResponse,
+            ClassificationStoreConfigurationCollectionRelationCollectionApiArg
+          >(
             dispatch,
             'classificationStoreConfigurationCollectionRelationCollection',
             (draft) => {
@@ -350,7 +385,8 @@ const api = baseApi.enhanceEndpoints({
                 (r) => r.colId === updated.colId && r.groupId === updated.groupId
               )
               if (idx !== -1) draft.items[idx] = updated
-            }
+            },
+            matchesCollection
           )
         } catch {
           patchResults.forEach((r) => { r.undo() })

@@ -133,7 +133,7 @@ export const KeySelectionDialog = ({
             isLoading={ isLoading }
             onSelectedRowsChange={ setSelectedRows }
             selectedRows={ selectedRows }
-            setRowId={ (row: ClassificationStoreConfigurationKeyDetail) => row.id !== undefined ? String(row.id) : '' }
+            setRowId={ (row: ClassificationStoreConfigurationKeyDetail) => row.id !== undefined ? String(row.id) : undefined as unknown as string }
           />
         </Content>
       </Flex>
