@@ -14,9 +14,11 @@ import { Upload, Button } from 'antd'
 import { t } from 'i18next'
 import { useStyle } from './import-translations-modal.styles'
 import type { UploadProps } from 'antd'
-import trackError, { ApiError } from '../../../app/error-handler'
-import { type ApiErrorData } from '../../../app/error-handler/types'
-import { useTranslationDetermineCsvSettingsForImportMutation } from '../../../app/translations/translations-api-slice-enhanced'
+import trackError, { GeneralError } from '../../../app/error-handler'
+import {
+  useTranslationImportCsvMutation,
+  useTranslationDetermineCsvSettingsForImportMutation
+} from '../../../app/translations/translations-api-slice-enhanced'
 import { ImportDeltaModal } from '../import-delta-modal'
 import type { DeltaItem } from '../../../app/translations/translations-api-slice.gen'
 
@@ -40,7 +42,7 @@ export const ImportTranslationsModal = ({
   const [deltaItems, setDeltaItems] = useState<DeltaItem[] | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const [isImporting, setIsImporting] = useState(false)
+  const [importCsv, { isLoading: isImporting }] = useTranslationImportCsvMutation()
   const [detectCsvSettings] = useTranslationDetermineCsvSettingsForImportMutation()
 
   useEffect(() => {
@@ -56,43 +58,35 @@ export const ImportTranslationsModal = ({
   const handleUpload = async (): Promise<void> => {
     if (selectedFile === null) return
 
-    setIsImporting(true)
     try {
-      // Read first few lines to auto-detect CSV settings
-      const sample = await readFileSample(selectedFile)
+      // Read first few lines to auto-detect CSV settings using Blob.text()
+      const sampleText = await selectedFile.slice(0, 4096).text()
+      const sample = sampleText.split('\n').slice(0, 5).join('\n')
+
       const csvSettings = await detectCsvSettings({ body: { sample } }).unwrap()
 
-      const formData = new FormData()
-      formData.append('file', selectedFile)
-      formData.append('csvSettings', JSON.stringify({
-        delimiter: csvSettings.delimiter,
-        quoteChar: csvSettings.quoteChar,
-        escapeChar: csvSettings.escapeChar,
-        lineTerminator: csvSettings.lineTerminator
-      }))
+      const result = await importCsv({
+        domain,
+        body: {
+          file: selectedFile,
+          csvSettings: {
+            delimiter: csvSettings.delimiter,
+            quoteChar: csvSettings.quoteChar,
+            escapeChar: csvSettings.escapeChar,
+            lineTerminator: csvSettings.lineTerminator
+          }
+        }
+      }).unwrap()
 
-      const response = await fetch(`/pimcore-studio/api/translations/${encodeURIComponent(domain)}/import`, {
-        method: 'POST',
-        body: formData
-      })
+      const importResult = result as { items: DeltaItem[] }
 
-      if (!response.ok) {
-        const errorData = await response.json()
-        trackError(new ApiError(errorData as ApiErrorData))
-        return
-      }
-
-      const result = await response.json() as { items: DeltaItem[] }
-
-      if (result.items.length > 0) {
-        setDeltaItems(result.items)
+      if (importResult.items.length > 0) {
+        setDeltaItems(importResult.items)
       } else {
         onSuccess()
       }
-    } catch (error) {
-      trackError(new ApiError(error as ApiErrorData))
-    } finally {
-      setIsImporting(false)
+    } catch {
+      trackError(new GeneralError('Failed to import translations'))
     }
   }
 
@@ -254,17 +248,4 @@ export const ImportTranslationsModal = ({
           )}
     </Modal>
   )
-}
-
-async function readFileSample (file: File): Promise<string> {
-  return await new Promise((resolve) => {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      const text = e.target?.result as string
-      // Take first 5 lines as sample
-      const lines = text.split('\n').slice(0, 5).join('\n')
-      resolve(lines)
-    }
-    reader.readAsText(file.slice(0, 4096))
-  })
 }

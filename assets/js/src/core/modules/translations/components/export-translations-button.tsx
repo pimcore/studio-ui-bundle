@@ -8,11 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React from 'react'
 import { IconButton, Tooltip } from '@sdk/components'
 import { t } from 'i18next'
-import trackError, { ApiError } from '../../app/error-handler'
-import { type ApiErrorData } from '../../app/error-handler/types'
+import { useTranslationExportListMutation } from '../../app/translations/translations-api-slice-enhanced'
+import trackError, { GeneralError } from '../../app/error-handler'
+import { downloadFile } from '../../app/utils/download'
 
 interface ExportTranslationsButtonProps {
   domain: string
@@ -23,42 +24,24 @@ interface ExportTranslationsButtonProps {
 }
 
 export const ExportTranslationsButton = ({ domain, filters }: ExportTranslationsButtonProps): React.JSX.Element => {
-  const [isLoading, setIsLoading] = useState(false)
+  const [exportTranslations, { isLoading }] = useTranslationExportListMutation()
 
   const handleExport = async (): Promise<void> => {
-    setIsLoading(true)
     try {
-      const response = await fetch(`/pimcore-studio/api/translations/export?domain=${encodeURIComponent(domain)}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
+      const result = await exportTranslations({
+        domain,
+        body: {
           filters: filters ?? {}
-        })
-      })
+        }
+      }).unwrap()
 
-      if (!response.ok) {
-        const errorData = await response.json()
-        trackError(new ApiError(errorData as ApiErrorData))
-        return
+      if (result instanceof Blob) {
+        downloadFile(`export_${domain}_translations.csv`, result)
+      } else {
+        trackError(new GeneralError('Export failed: No blob data received'))
       }
-
-      const blob = await response.blob()
-      const url = window.URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `export_${domain}_translations.csv`
-      a.rel = 'noopener'
-      a.style.display = 'none'
-      document.body.appendChild(a)
-      a.click()
-      a.remove()
-      window.URL.revokeObjectURL(url)
-    } catch (error) {
-      trackError(new ApiError(error as ApiErrorData))
-    } finally {
-      setIsLoading(false)
+    } catch {
+      trackError(new GeneralError('Failed to export translations'))
     }
   }
 
