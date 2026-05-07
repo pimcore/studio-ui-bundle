@@ -195,38 +195,38 @@ export const ImportTranslationsModal = ({
       {selectedFile === null
         ? (
           <>
-          <Dragger { ...uploadProps }>
-            <Flex
-              align="center"
-              gap="mini"
-              justify="center"
-              style={ { padding: '20px' } }
-              vertical
-            >
-              <div className="icon-container">
-                <Flex
-                  align="center"
-                  gap="mini"
-                  justify="center"
-                >
-                  <Icon
-                    options={ { height: 20, width: 20 } }
-                    value="new"
-                  />
-                  <Icon
-                    options={ { height: 20, width: 20 } }
-                    value="drop-target"
-                  />
-                </Flex>
-              </div>
-              <div className="file-target-title">
-                {t('translations.import.modal.drag-drop')}
-              </div>
-            </Flex>
-          </Dragger>
-          {fileError !== null && (
+            <Dragger { ...uploadProps }>
+              <Flex
+                align="center"
+                gap="mini"
+                justify="center"
+                style={ { padding: '20px' } }
+                vertical
+              >
+                <div className="icon-container">
+                  <Flex
+                    align="center"
+                    gap="mini"
+                    justify="center"
+                  >
+                    <Icon
+                      options={ { height: 20, width: 20 } }
+                      value="new"
+                    />
+                    <Icon
+                      options={ { height: 20, width: 20 } }
+                      value="drop-target"
+                    />
+                  </Flex>
+                </div>
+                <div className="file-target-title">
+                  {t('translations.import.modal.drag-drop')}
+                </div>
+              </Flex>
+            </Dragger>
+            {fileError !== null && (
             <div style={ { color: 'var(--ant-color-error)', marginTop: 8, fontSize: 12 } }>{fileError}</div>
-          )}
+            )}
           </>
           )
         : (
