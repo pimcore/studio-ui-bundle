@@ -9,8 +9,8 @@
  */
 
 import React, { useState, useRef, useEffect } from 'react'
-import { Modal, IconTextButton, IconButton, ModalFooter, Icon, Flex } from '@sdk/components'
-import { Upload, Button } from 'antd'
+import { Modal, IconTextButton, IconButton, ModalFooter, Icon, Flex, FormKit, Form, Input } from '@sdk/components'
+import { Upload, Button, Spin } from 'antd'
 import { t } from 'i18next'
 import { useStyle } from './import-translations-modal.styles'
 import type { UploadProps } from 'antd'
@@ -19,10 +19,20 @@ import {
   useTranslationImportCsvMutation,
   useTranslationDetermineCsvSettingsForImportMutation
 } from '../../../app/translations/translations-api-slice-enhanced'
-import { ImportDeltaModal } from '../import-delta-modal'
 import type { DeltaItem } from '../../../app/translations/translations-api-slice.gen'
+import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
+import { setMergerData } from '../translation-merger/merger-data-store'
 
 const { Dragger } = Upload
+
+interface CsvSettings {
+  delimiter: string
+  quoteChar: string
+  escapeChar: string
+  lineTerminator: string
+}
+
+type ModalStep = 'file-select' | 'csv-settings'
 
 interface ImportTranslationsModalProps {
   open: boolean
@@ -39,42 +49,80 @@ export const ImportTranslationsModal = ({
 }: ImportTranslationsModalProps): React.JSX.Element => {
   const { styles } = useStyle()
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [deltaItems, setDeltaItems] = useState<DeltaItem[] | null>(null)
+  const [step, setStep] = useState<ModalStep>('file-select')
+  const [csvSettings, setCsvSettings] = useState<CsvSettings | null>(null)
+  const [isDetecting, setIsDetecting] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const { openMainWidget } = useWidgetManager()
+  const [form] = Form.useForm<CsvSettings>()
 
   const [importCsv, { isLoading: isImporting }] = useTranslationImportCsvMutation()
   const [detectCsvSettings] = useTranslationDetermineCsvSettingsForImportMutation()
 
+  const [fileError, setFileError] = useState<string | null>(null)
+
   useEffect(() => {
     if (open) {
       setSelectedFile(null)
-      setDeltaItems(null)
       setFileError(null)
+      setStep('file-select')
+      setCsvSettings(null)
+      setIsDetecting(false)
+      form.resetFields()
       if (fileInputRef.current !== null) {
         fileInputRef.current.value = ''
       }
     }
-  }, [open])
+  }, [open, form])
+
+  const handleFileSelected = async (file: File): Promise<void> => {
+    setSelectedFile(file)
+    setIsDetecting(true)
+    setStep('csv-settings')
+
+    try {
+      const sampleText = await file.slice(0, 4096).text()
+      const sample = sampleText.split('\n').slice(0, 5).join('\n')
+      const detected = await detectCsvSettings({ body: { sample } }).unwrap()
+
+      const settings: CsvSettings = {
+        delimiter: detected.delimiter,
+        quoteChar: detected.quoteChar,
+        escapeChar: detected.escapeChar,
+        lineTerminator: detected.lineTerminator
+      }
+
+      setCsvSettings(settings)
+      form.setFieldsValue(settings)
+    } catch {
+      const defaults: CsvSettings = {
+        delimiter: ',',
+        quoteChar: '"',
+        escapeChar: '"',
+        lineTerminator: '\\r\\n'
+      }
+      setCsvSettings(defaults)
+      form.setFieldsValue(defaults)
+    } finally {
+      setIsDetecting(false)
+    }
+  }
 
   const handleUpload = async (): Promise<void> => {
     if (selectedFile === null) return
 
     try {
-      // Read first few lines to auto-detect CSV settings using Blob.text()
-      const sampleText = await selectedFile.slice(0, 4096).text()
-      const sample = sampleText.split('\n').slice(0, 5).join('\n')
-
-      const csvSettings = await detectCsvSettings({ body: { sample } }).unwrap()
+      const values = await form.validateFields()
 
       const result = await importCsv({
         domain,
         body: {
           file: selectedFile,
           csvSettings: {
-            delimiter: csvSettings.delimiter,
-            quoteChar: csvSettings.quoteChar,
-            escapeChar: csvSettings.escapeChar,
-            lineTerminator: csvSettings.lineTerminator
+            delimiter: values.delimiter,
+            quoteChar: values.quoteChar,
+            escapeChar: values.escapeChar,
+            lineTerminator: values.lineTerminator
           }
         }
       }).unwrap()
@@ -82,10 +130,18 @@ export const ImportTranslationsModal = ({
       const importResult = result as { items?: DeltaItem[] }
 
       if (importResult.items !== undefined && importResult.items.length > 0) {
-        setDeltaItems(importResult.items)
-      } else {
-        onSuccess()
+        setMergerData({ domain, deltaItems: importResult.items })
+        openMainWidget({
+          name: 'Translation Merger',
+          id: `translation-merger-${Date.now()}`,
+          component: 'translation-merger',
+          config: {
+            translationKey: 'widget.translation-merger',
+            icon: { type: 'name', value: 'translate' }
+          }
+        })
       }
+      onSuccess()
     } catch {
       trackError(new GeneralError('Failed to import translations'))
     }
@@ -93,16 +149,13 @@ export const ImportTranslationsModal = ({
 
   const handleCancel = (): void => {
     setSelectedFile(null)
-    setDeltaItems(null)
     onCancel()
   }
 
-  const [fileError, setFileError] = useState<string | null>(null)
-
   const handleFileSelect = (file: File): void => {
     if (file.name.endsWith('.csv') || file.type === 'text/csv') {
-      setSelectedFile(file)
       setFileError(null)
+      void handleFileSelected(file)
     } else {
       setFileError(t('translations.import.modal.invalid-file'))
     }
@@ -117,6 +170,13 @@ export const ImportTranslationsModal = ({
     if (file !== undefined) {
       handleFileSelect(file)
     }
+  }
+
+  const handleBack = (): void => {
+    setSelectedFile(null)
+    setStep('file-select')
+    setCsvSettings(null)
+    form.resetFields()
   }
 
   const formatFileSize = (bytes: number): string => {
@@ -139,27 +199,132 @@ export const ImportTranslationsModal = ({
     disabled: isImporting
   }
 
-  if (deltaItems !== null) {
-    return (
-      <ImportDeltaModal
-        deltaItems={ deltaItems }
-        onClose={ () => {
-          setDeltaItems(null)
-          onSuccess()
-        } }
-        open
-      />
-    )
-  }
+  const renderFileSelectStep = (): React.JSX.Element => (
+    <>
+      <Dragger { ...uploadProps }>
+        <Flex
+          align="center"
+          gap="mini"
+          justify="center"
+          style={ { padding: '20px' } }
+          vertical
+        >
+          <div className="icon-container">
+            <Flex
+              align="center"
+              gap="mini"
+              justify="center"
+            >
+              <Icon
+                options={ { height: 20, width: 20 } }
+                value="new"
+              />
+              <Icon
+                options={ { height: 20, width: 20 } }
+                value="drop-target"
+              />
+            </Flex>
+          </div>
+          <div className="file-target-title">
+            {t('translations.import.modal.drag-drop')}
+          </div>
+        </Flex>
+      </Dragger>
+      {fileError !== null && (
+        <div style={ { color: 'var(--ant-color-error)', marginTop: 8, fontSize: 12 } }>{fileError}</div>
+      )}
+    </>
+  )
+
+  const renderCsvSettingsStep = (): React.JSX.Element => (
+    <>
+      {selectedFile !== null && (
+        <div className={ styles.uploadedFile }>
+          <Flex
+            align="start"
+            gap={ 10 }
+          >
+            <Flex>
+              <div>
+                <div className="file-name">{selectedFile.name}</div>
+                <div className="file-size">{formatFileSize(selectedFile.size)}</div>
+              </div>
+            </Flex>
+            {!isImporting && (
+              <IconButton
+                icon={ { value: 'close' } }
+                onClick={ handleBack }
+                type="link"
+                variant="minimal"
+              />
+            )}
+          </Flex>
+        </div>
+      )}
+
+      {isDetecting
+        ? (
+          <Flex
+            align="center"
+            justify="center"
+            style={ { padding: '20px' } }
+          >
+            <Spin />
+          </Flex>
+          )
+        : (
+          <FormKit
+            formProps={ {
+              form,
+              component: false
+            } }
+          >
+            <FormKit.Panel title={ t('translations.import.modal.csv-settings') }>
+              <Form.Item
+                label={ t('translations.import.modal.delimiter') }
+                name="delimiter"
+                rules={ [{ required: true, message: t('translations.import.modal.field-required') }] }
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                label={ t('translations.import.modal.quotechar') }
+                name="quoteChar"
+                rules={ [{ required: true, message: t('translations.import.modal.field-required') }] }
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                label={ t('translations.import.modal.escapechar') }
+                name="escapeChar"
+                rules={ [{ required: true, message: t('translations.import.modal.field-required') }] }
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                label={ t('translations.import.modal.lineterminator') }
+                name="lineTerminator"
+                rules={ [{ required: true, message: t('translations.import.modal.field-required') }] }
+              >
+                <Input />
+              </Form.Item>
+            </FormKit.Panel>
+          </FormKit>
+          )}
+    </>
+  )
 
   return (
     <Modal
       footer={
         <ModalFooter
           divider
-          justify={ selectedFile === null ? 'space-between' : 'end' }
+          justify={ step === 'file-select' ? 'space-between' : 'end' }
         >
-          {selectedFile === null && (
+          {step === 'file-select' && (
             <IconTextButton
               disabled={ isImporting }
               icon={ { value: 'upload-import' } }
@@ -169,7 +334,7 @@ export const ImportTranslationsModal = ({
             </IconTextButton>
           )}
           <Button
-            disabled={ selectedFile === null || isImporting }
+            disabled={ selectedFile === null || isImporting || isDetecting }
             loading={ isImporting }
             onClick={ () => { void handleUpload() } }
             type="primary"
@@ -192,71 +357,7 @@ export const ImportTranslationsModal = ({
         type="file"
       />
 
-      {selectedFile === null
-        ? (
-          <>
-          <Dragger { ...uploadProps }>
-            <Flex
-              align="center"
-              gap="mini"
-              justify="center"
-              style={ { padding: '20px' } }
-              vertical
-            >
-              <div className="icon-container">
-                <Flex
-                  align="center"
-                  gap="mini"
-                  justify="center"
-                >
-                  <Icon
-                    options={ { height: 20, width: 20 } }
-                    value="new"
-                  />
-                  <Icon
-                    options={ { height: 20, width: 20 } }
-                    value="drop-target"
-                  />
-                </Flex>
-              </div>
-              <div className="file-target-title">
-                {t('translations.import.modal.drag-drop')}
-              </div>
-            </Flex>
-          </Dragger>
-          {fileError !== null && (
-            <div style={ { color: 'var(--ant-color-error)', marginTop: 8, fontSize: 12 } }>{fileError}</div>
-          )}
-          </>
-          )
-        : (
-          <div className={ styles.uploadedFile }>
-            <Flex
-              align="start"
-              gap={ 10 }
-            >
-              <Flex>
-                <div>
-                  <div className="file-name">{selectedFile.name}</div>
-                  <div className="file-size">{formatFileSize(selectedFile.size)}</div>
-                </div>
-              </Flex>
-              {!isImporting && (
-                <IconButton
-                  icon={ { value: 'close' } }
-                  onClick={ () => {
-                    setSelectedFile(null)
-                    if (fileInputRef.current !== null) {
-                      fileInputRef.current.value = ''
-                    }
-                  } }
-                  type="link"
-                  variant="minimal"
-                />
-              )}
-            </Flex>
-          </div>
-          )}
+      {step === 'file-select' ? renderFileSelectStep() : renderCsvSettingsStep()}
     </Modal>
   )
 }

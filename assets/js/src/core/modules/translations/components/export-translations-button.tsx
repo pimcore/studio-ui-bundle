@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { IconButton, Tooltip } from '@sdk/components'
+import { IconTextButton } from '@sdk/components'
 import { t } from 'i18next'
 import { useTranslationExportListMutation } from '../../app/translations/translations-api-slice-enhanced'
 import trackError, { GeneralError } from '../../app/error-handler'
@@ -46,13 +46,13 @@ export const ExportTranslationsButton = ({ domain, filters }: ExportTranslations
   }
 
   return (
-    <Tooltip title={ t('translations.toolbar.export') }>
-      <IconButton
-        disabled={ isLoading }
-        icon={ { value: 'download-cloud' } }
-        loading={ isLoading }
-        onClick={ () => { void handleExport() } }
-      />
-    </Tooltip>
+    <IconTextButton
+      disabled={ isLoading }
+      icon={ { value: 'export' } }
+      loading={ isLoading }
+      onClick={ () => { void handleExport() } }
+    >
+      {t('translations.toolbar.export')}
+    </IconTextButton>
   )
 }

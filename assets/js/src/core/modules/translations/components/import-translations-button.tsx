@@ -9,7 +9,7 @@
  */
 
 import React, { useState } from 'react'
-import { IconButton, Tooltip } from '@sdk/components'
+import { IconTextButton } from '@sdk/components'
 import { t } from 'i18next'
 import { ImportTranslationsModal } from './import-translations-modal/import-translations-modal'
 
@@ -23,12 +23,12 @@ export const ImportTranslationsButton = ({ domain, onSuccess }: ImportTranslatio
 
   return (
     <>
-      <Tooltip title={ t('translations.toolbar.import') }>
-        <IconButton
-          icon={ { value: 'upload-cloud' } }
-          onClick={ () => { setIsModalOpen(true) } }
-        />
-      </Tooltip>
+      <IconTextButton
+        icon={ { value: 'import' } }
+        onClick={ () => { setIsModalOpen(true) } }
+      >
+        {t('translations.toolbar.import-merge')}
+      </IconTextButton>
 
       <ImportTranslationsModal
         domain={ domain }

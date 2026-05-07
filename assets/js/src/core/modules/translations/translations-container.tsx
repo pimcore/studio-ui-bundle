@@ -178,11 +178,9 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
       renderToolbar={
         <Toolbar theme="secondary">
           <Flex gap="extra-small">
-            <IconButton
-              data-testid={ `${TESTID_PREFIX}-refresh-button` }
-              disabled={ translationsLoading }
-              icon={ { value: 'refresh' } }
-              onClick={ reload }
+            <CleanupTranslationsButton
+              domain={ domain }
+              onSuccess={ reload }
             />
             <ExportTranslationsButton
               domain={ domain }
@@ -203,16 +201,27 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
               onSuccess={ reload }
             />
           </Flex>
-          <Pagination
-            current={ currentPage }
-            onChange={ (page, pageSize) => {
-              setCurrentPage(page)
-              setPageSize(pageSize)
-            } }
-            showSizeChanger
-            showTotal={ (total) => t('pagination.show-total', { total }) }
-            total={ data?.totalItems ?? 0 }
-          />
+          <Flex
+            align="center"
+            gap="extra-small"
+          >
+            <IconButton
+              data-testid={ `${TESTID_PREFIX}-refresh-button` }
+              disabled={ translationsLoading }
+              icon={ { value: 'refresh' } }
+              onClick={ reload }
+            />
+            <Pagination
+              current={ currentPage }
+              onChange={ (page, pageSize) => {
+                setCurrentPage(page)
+                setPageSize(pageSize)
+              } }
+              showSizeChanger
+              showTotal={ (total) => t('pagination.show-total', { total }) }
+              total={ data?.totalItems ?? 0 }
+            />
+          </Flex>
         </Toolbar> }
       renderTopBar={
         <Toolbar
@@ -270,10 +279,6 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
             />
           </Flex>
           <Flex gap="small">
-            <CleanupTranslationsButton
-              domain={ domain }
-              onSuccess={ reload }
-            />
             <Select
               allowClear
               data-testid={ `${TESTID_PREFIX}-locale-select` }
