@@ -15,9 +15,14 @@ const dynamicBaseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryE
   const prefix = getPrefix()
   const defaultBaseUrl = '/pimcore-studio/api'
 
+  const replaceBaseUrl = (url: string): string =>
+    url.startsWith(defaultBaseUrl)
+      ? `${prefix}${url.slice(defaultBaseUrl.length)}`
+      : url
+
   const adjustedArgs = typeof args === 'string'
-    ? args.replace(defaultBaseUrl, prefix)
-    : { ...args, url: args.url.replace(defaultBaseUrl, prefix) }
+    ? replaceBaseUrl(args)
+    : { ...args, url: replaceBaseUrl(args.url) }
 
   return await fetchBaseQuery({ baseUrl: '/' })(adjustedArgs, api, extraOptions)
 }
