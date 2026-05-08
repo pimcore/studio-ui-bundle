@@ -281,6 +281,7 @@ custom-layout.delete.success: Mise en page personnalisée supprimée avec succè
 example-prefix: Préfixe d'exemple
 pagination.show-total: Total {{total}} éléments
 pagination.page: Page
+pagination.showing-x-of-y: Affichage de {{loaded}} sur {{total}}
 preview-card.locate-in-tree: Localiser dans l'arborescence
 preview-card.rename: Renommer
 preview-card.download-zip: Télécharger en ZIP
@@ -1316,7 +1317,7 @@ key-bindings.seo: SEO
 key-bindings.redirects: Redirections
 key-bindings.bundles: Bundles
 user-management.references.title: Références
-user-management.references.documents: Documents
+user-management.references.object-dependencies: Dépendances d'objets
 user-management.references.columns.id: ID
 user-management.references.columns.cpath: Chemin
 user-management.references.columns.subtype: Sous-type
