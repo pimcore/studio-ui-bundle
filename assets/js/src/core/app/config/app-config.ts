@@ -15,6 +15,7 @@ export interface AppConfig {
   baseUrl: string
   mercureUrl: string
   wysiwyg: WysiwygAppConfigInterface
+  apiPrefix?: string
 }
 
 const appElement = getParentDocument().querySelector('#app')

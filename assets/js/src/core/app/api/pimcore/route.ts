@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-export function getPrefix (): string {
-  return '/pimcore-studio/api'
+import { appConfig } from '@Pimcore/app/config/app-config'
+
+export function getPrefix(): string {
+  return appConfig.apiPrefix
 }

@@ -6,6 +6,7 @@ services:
         bind:
             $studioWysiwygConfiguration: '%pimcore_studio_ui.wysiwyg_configuration%'
             $studioUrlPath: '%pimcore_studio_ui.url_path%'
+            $studioApiPrefix: '%pimcore_studio_backend.url_prefix%'
 
     _instanceof:
         Pimcore\Bundle\StudioUiBundle\AppConfig\AppConfigProviderInterface:
