@@ -23,16 +23,21 @@ import { t } from 'i18next'
 export interface AbstractCloneJobOptions {
   sourceId: number
   targetId: number
-  title: string
   elementType: ElementType
   treeId?: string
   nodeId?: string
 }
 
+interface BuildHandlerOptions {
+  jobRunId: number
+  ancestorJobRunIds?: number[]
+  startAtStep?: number
+  onJobCompletion?: (data: any) => Promise<void>
+}
+
 export abstract class AbstractCloneJob implements JobInterface {
   protected readonly sourceId: number
   protected readonly targetId: number
-  protected readonly title: string
   protected readonly elementType: ElementType
   protected readonly treeId?: string
   protected readonly nodeId?: string
@@ -40,7 +45,6 @@ export abstract class AbstractCloneJob implements JobInterface {
   constructor (options: AbstractCloneJobOptions) {
     this.sourceId = options.sourceId
     this.targetId = options.targetId
-    this.title = options.title
     this.elementType = options.elementType
     this.treeId = options.treeId
     this.nodeId = options.nodeId
@@ -61,17 +65,9 @@ export abstract class AbstractCloneJob implements JobInterface {
         return
       }
 
-      const handler = new MessageBusJobHandler({
+      const handler = this.createHandler({
         jobRunId,
-        title: (job: MessageBusJob) => {
-          if (job.status === JobStatus.RUNNING && job.currentStep === 2) {
-            return t('jobs.clone-job.step2.title')
-          }
-          return this.title
-        },
-        stepTracker: new ChildJobStepTracker(),
-        progressCalculator: new StepCompletionCalculator(),
-        onJobCompletion: async (data: any) => {
+        onJobCompletion: async () => {
           try {
             await this.handleCompletion()
           } catch (error) {
@@ -106,5 +102,28 @@ export abstract class AbstractCloneJob implements JobInterface {
     }
 
     console.error('Clone job failed:', error)
+  }
+
+  // Bridge: lets run() use instance polymorphism to reach the subclass's static buildHandler
+  private createHandler (options: BuildHandlerOptions): MessageBusJobHandler {
+    return (this.constructor as typeof AbstractCloneJob).buildHandler(options)
+  }
+
+  protected static getTitle (): string { return '' }
+
+  protected static buildHandler (options: BuildHandlerOptions): MessageBusJobHandler {
+    return new MessageBusJobHandler({
+      jobRunId: options.jobRunId,
+      ancestorJobRunIds: options.ancestorJobRunIds,
+      title: (job: MessageBusJob) => {
+        if (job.status === JobStatus.RUNNING && job.currentStep === 2) {
+          return t('jobs.clone-job.step2.title')
+        }
+        return this.getTitle()
+      },
+      stepTracker: new ChildJobStepTracker({ startAtStep: options.startAtStep }),
+      progressCalculator: new StepCompletionCalculator(),
+      onJobCompletion: options.onJobCompletion
+    })
   }
 }

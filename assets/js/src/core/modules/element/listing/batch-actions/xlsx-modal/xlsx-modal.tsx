@@ -11,7 +11,7 @@
 import { Alert, Modal, Space } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { CreateXLSXForm, type XLSXFormValues } from './create-xlsx-form/create-xlsx-form'
-import { DownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/download-job'
+import { XlsxDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/xlsx-download-job'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useTranslation } from 'react-i18next'
 import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
@@ -109,12 +109,8 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
   )
 
   function onFinish (values: XLSXFormValues): void {
-    const job = new DownloadJob({
-      title: t('jobs.xlsx-job.title', { title: jobTitle }),
-      downloadUrl: `${getPrefix()}/export/download/xlsx/{jobRunId}`,
-      action: async () => await getDownloadAction(values.header),
-      ...(numberedSelectedRows.length === 0 && { hasChildJob: true })
-    })
+    const isFolderExport = numberedSelectedRows.length === 0
+    const job = new XlsxDownloadJob({ action: async () => await getDownloadAction(values.header), isFolderExport })
     void executionEngine.runJob(job)
 
     props.setOpen(false)

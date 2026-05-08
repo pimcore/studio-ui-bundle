@@ -31,6 +31,7 @@ export type { MessageBusJob, JobCompletionData, MessageBusJobHandlerOptions } fr
 
 export class MessageBusJobHandler extends AbstractMessageHandler {
   private jobRunId: number
+  private ancestorJobRunIds: number[] | undefined
   private job: MessageBusJob | null = null
   private readonly onJobCompletion?: (data: JobCompletionData) => void | Promise<void>
   private readonly onRetry?: () => void | Promise<void>
@@ -42,6 +43,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
   private lastProgressValue: number = -1
   private readonly title: string | ((job: MessageBusJob) => string)
   private polling: JobRunPolling
+  private initialStatus: JobStatus = JobStatus.QUEUED
 
   private readonly throttledProgressUpdate = throttle((progress: number | null, data: any) => {
     this.performProgressUpdate(progress, data)
@@ -53,6 +55,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
   constructor (options: MessageBusJobHandlerOptions) {
     super()
     this.jobRunId = options.jobRunId
+    this.ancestorJobRunIds = options.ancestorJobRunIds
     this.title = options.title
     this.stepDescriptions = options.stepDescriptions
     this.stepTracker = options.stepTracker ?? new DefaultStepTracker()
@@ -79,6 +82,10 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
 
   public onRegister (): void {
     store.dispatch(jobReceived(this.getJob()))
+    const terminalStatuses = [JobStatus.SUCCESS, JobStatus.FINISHED_WITH_ERRORS, JobStatus.FAILED]
+    if (!terminalStatuses.includes(this.initialStatus)) {
+      this.polling.start()
+    }
   }
 
   public async handleMessage (message: AbstractMercureMessage): Promise<void> {
@@ -102,6 +109,17 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
   public onUnregister (): void {
     this.throttledProgressUpdate.cancel()
     this.polling.destroy()
+  }
+
+  public setInitialStatus (state: string): void {
+    const stateMap: Record<string, JobStatus> = {
+      running: JobStatus.RUNNING,
+      finished: JobStatus.SUCCESS,
+      finished_with_errors: JobStatus.FINISHED_WITH_ERRORS,
+      failed: JobStatus.FAILED
+    }
+    // 'queued' and any unrecognised state fall through to QUEUED intentionally
+    this.initialStatus = stateMap[state] ?? JobStatus.QUEUED
   }
 
   private getTitle (job: MessageBusJob): string {
@@ -129,14 +147,16 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       id: getUniqueId(),
       type: 'default-message-bus',
       title: '',
-      status: JobStatus.QUEUED,
+      status: this.initialStatus,
       progress: 0,
+      indeterminate: this.initialStatus === JobStatus.RUNNING ? true : undefined,
       currentStep: this.stepTracker.showStepLabel ? currentStep : undefined,
       totalSteps: this.stepTracker.showStepLabel ? totalSteps : undefined,
       stepDescriptionKey: this.stepDescriptions?.[currentStep],
       onRetry: this.onRetry,
       onCustomizeButtons: this.onCustomizeButtons,
-      jobRunId: this.jobRunId
+      jobRunId: this.jobRunId,
+      ancestorJobRunIds: this.ancestorJobRunIds
     }
 
     job.title = this.getTitle(job)
@@ -164,21 +184,22 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
 
   private transitionToChildJob (newJobRunId: number): void {
     const oldJobRunId = this.jobRunId
+    this.ancestorJobRunIds = [...(this.ancestorJobRunIds ?? []), oldJobRunId]
 
     this.jobRunId = newJobRunId
 
     const newState = this.stepTracker.onChildJobTransition()
 
-    // Re-register handler with new ID
     const messageBus = container.get<GlobalMessageBus>(serviceIds.globalMessageBus)
-    messageBus.unregisterHandler(oldJobRunId)
-    messageBus.registerHandler(this)
+    messageBus.unregisterHandler(oldJobRunId) // → onUnregister() destroys this.polling
 
-    // Recreate polling for the child job
+    // Assign child polling before registerHandler so onRegister() starts the correct instance
     this.polling = new JobRunPolling(this.jobRunId, {
       onStatusUpdate: async (data) => { await this.handlePolledStatusUpdate(data) },
       onError: (error) => { console.error('Job run polling error:', error) }
     })
+
+    messageBus.registerHandler(this) // → onRegister() calls this.polling.start()
 
     this.lastProgressValue = -1
     this.progressCalculator.onStepChange?.()
@@ -191,13 +212,16 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
         totalSteps: newState.totalSteps,
         stepDescriptionKey: this.stepDescriptions?.[newState.currentStep]
       }),
-      jobRunId: newJobRunId
+      jobRunId: newJobRunId,
+      ancestorJobRunIds: this.ancestorJobRunIds
     })
   }
 
   private async handleStatusUpdate (data: any): Promise<boolean> {
-    if (data.status === 'finished' && !isNil(data.messages?.jobRunChildId) && String(data.messages.jobRunChildId) !== String(this.jobRunId)) {
-      this.transitionToChildJob(Number(data.messages.jobRunChildId))
+    // Mercure payloads carry jobRunChildId in data.messages; polling fallback carries it at data.jobRunChildId
+    const childId = data.messages?.jobRunChildId ?? data.jobRunChildId
+    if (data.status === 'finished' && !isNil(childId) && String(childId) !== String(this.jobRunId)) {
+      this.transitionToChildJob(Number(childId))
       return true
     }
 
@@ -264,6 +288,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       status: data.status,
       currentStep: data.currentStep,
       totalSteps: data.totalSteps,
+      jobRunChildId: data.jobRun.jobRunChildId ?? undefined,
       messages: !isNil(data.currentMessage) ? [data.currentMessage] : undefined
     }
 

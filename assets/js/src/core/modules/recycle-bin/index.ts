@@ -17,6 +17,9 @@ import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-
 import { UserPermission } from '../auth/enums/user-permission'
 import { NavPermission } from '../perspectives/enums/nav-permission'
 import { type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+import { type JobRehydrationRegistry } from '@Pimcore/modules/execution-engine/services/job-rehydration-registry'
+import { RecycleBinRestoreJob } from '@Pimcore/modules/execution-engine/jobs/recycle-bin/recycle-bin-restore-job'
+import { RecycleBinDeleteJob } from '@Pimcore/modules/execution-engine/jobs/recycle-bin/recycle-bin-delete-job'
 
 export const RECYCLE_BIN_WIDGET: WidgetManagerTabConfig = {
   name: 'recycleBin',
@@ -50,5 +53,9 @@ moduleSystem.registerModule({
       perspectivePermission: NavPermission.RecycleBin,
       widgetConfig: RECYCLE_BIN_WIDGET
     })
+
+    const rehydrationRegistry = container.get<JobRehydrationRegistry>(serviceIds['ExecutionEngine/JobRehydrationRegistry'])
+    rehydrationRegistry.register(RecycleBinRestoreJob)
+    rehydrationRegistry.register(RecycleBinDeleteJob)
   }
 })

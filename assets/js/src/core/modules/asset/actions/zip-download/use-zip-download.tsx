@@ -9,25 +9,23 @@
  */
 
 import { type AssetExportZipAssetApiArg, type AssetExportZipAssetApiResponse, type AssetExportZipFolderApiArg, type AssetExportZipFolderApiResponse, useAssetExportZipAssetMutation, useAssetExportZipFolderMutation } from '../../asset-api-slice-enhanced'
-import { DownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/download-job'
+import { ZipDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/zip-download-job'
 import { useTranslation } from 'react-i18next'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React, { useEffect } from 'react'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
+import { type Element } from '@Pimcore/modules/element/element-helper'
 import { useTreePermission } from '@Pimcore/components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { isUndefined } from 'lodash'
-import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/types'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
 
 export interface ICreateZipDownloadProps {
-  jobTitle: string
   requestData: unknown
 }
 
@@ -65,10 +63,8 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
     }
   }, [isError])
 
-  const createZipDownload = ({ jobTitle, requestData }: ICreateZipFolderDownloadProps | ICreateZipFolderAssetListProps): void => {
-    const job = new DownloadJob({
-      title: t('jobs.zip-job.title', { title: jobTitle }),
-      downloadUrl: `${getPrefix()}/assets/download/zip/{jobRunId}`,
+  const createZipDownload = ({ requestData }: ICreateZipFolderDownloadProps | ICreateZipFolderAssetListProps): void => {
+    const job = new ZipDownloadJob({
       action: async () => {
         let promise: ReturnType<typeof fetchFolder> | ReturnType<typeof fetchAssets>
 
@@ -100,7 +96,6 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
       hidden: node.type !== 'folder' || !checkElementPermission(node.permissions, 'view'),
       onClick: () => {
         createZipDownload({
-          jobTitle: getElementKey(node, 'asset'),
           requestData: { body: { folders: [node.id] } }
         })
       }
@@ -115,7 +110,6 @@ export const useZipDownload = (props: UseZipDownloadHookProps): UseZipDownloadHo
       hidden: !isTreeActionAllowed(TreePermission.DownloadZip) || node.type !== 'folder' || !checkElementPermission(node.permissions, 'view'),
       onClick: () => {
         createZipDownload({
-          jobTitle: node.label,
           requestData: { body: { folders: [parseInt(node.id)] } }
         })
       }

@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { DynamicTypeFieldDefinitionDataAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
+import { DynamicTypeFieldDefinitionDataAbstract, type FieldDefinitionData } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
 import { FieldDefinitionClassificationstoreFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/classificationstore/field-definition-classificationstore-form-fields'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import React from 'react'
@@ -23,6 +23,15 @@ export class DynamicTypeFieldDefinitionClassificationstore extends DynamicTypeFi
 
   getGroup (): string[] {
     return [...super.getGroup(), 'structured']
+  }
+
+  getDefaultData (): FieldDefinitionData {
+    return {
+      ...super.getDefaultData(),
+      allowedGroupIds: '',
+      visibleGridView: false,
+      visibleSearch: false
+    }
   }
 
   getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {

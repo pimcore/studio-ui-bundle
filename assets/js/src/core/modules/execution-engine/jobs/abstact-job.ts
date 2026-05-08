@@ -21,4 +21,5 @@ export interface AbstractJob {
   type: string
   title: string
   status: JobStatus
+  jobRunId?: number
 }

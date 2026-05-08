@@ -21,6 +21,10 @@ import '@Pimcore/modules/asset/listing/decorator/context-menu'
 import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { TreeNodeLockIcon } from '@Pimcore/components/element-tree/node/content/tree-node-lock-icon'
+import { type JobRehydrationRegistry } from '@Pimcore/modules/execution-engine/services/job-rehydration-registry'
+import { AssetBatchDeleteJob } from '@Pimcore/modules/execution-engine/jobs/batch-delete/asset-batch-delete-job'
+import { ZipUploadJob } from '@Pimcore/modules/execution-engine/jobs/zip-upload/zip-upload-job'
+import { ZipDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/zip-download-job'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -42,5 +46,10 @@ moduleSystem.registerModule({
       component: TreeNodeLockIcon,
       priority: 100
     })
+
+    const rehydrationRegistry = container.get<JobRehydrationRegistry>(serviceIds['ExecutionEngine/JobRehydrationRegistry'])
+    rehydrationRegistry.register(AssetBatchDeleteJob)
+    rehydrationRegistry.register(ZipUploadJob)
+    rehydrationRegistry.register(ZipDownloadJob)
   }
 })

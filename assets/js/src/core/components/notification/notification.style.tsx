@@ -13,9 +13,14 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     notification: css`
-      .ant-notification-notice-content {          
+      &.ant-notification-notice {
+        max-height: calc(100vh - 24px) !important;
+        overflow: hidden !important;
+      }
+
+      .ant-notification-notice-content {
         .ant-notification-notice-message {
-            font-size: 16px !important;
+          font-size: 16px !important;
         }
       }
     `

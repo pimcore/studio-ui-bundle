@@ -44,12 +44,14 @@ final class DefaultController extends FrontendController
     #[Route('/{elementType}/{id}', requirements: ['elementType' => 'asset|data-object|document', 'id' => '\d+'])]
     public function indexAction(
         string $studioUrlPath,
-        array $studioWysiwygConfiguration
+        array $studioWysiwygConfiguration,
+        string $studioApiPrefix
     ): Response {
         $appConfig = [
             'baseUrl' => $studioUrlPath . '/',
             'mercureUrl' => $this->mercureUrlService->getClientSideUrl(),
             'wysiwyg' => $studioWysiwygConfiguration,
+            'apiPrefix' => $studioApiPrefix,
         ];
 
         foreach ($this->appConfigProviders as $provider) {

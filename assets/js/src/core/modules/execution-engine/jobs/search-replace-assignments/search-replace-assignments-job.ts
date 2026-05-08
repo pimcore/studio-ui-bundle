@@ -13,8 +13,10 @@ import { store } from '@Pimcore/app/store'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import { MessageBusJobHandler } from '../../message-handlers/message-bus-job/message-bus-job-handler'
+import { MessageBusJobHandler, type JobCompletionData } from '../../message-handlers/message-bus-job/message-bus-job-handler'
 import { api, type ElementUsageBaseItem } from '@Pimcore/modules/element/search-replace-assignments/usage-api-slice-enhanced'
+import { t } from 'i18next'
+import { type RehydratableJob, type JobRunList } from '../../services/job-rehydration-registry'
 
 export interface SearchReplaceAssignmentsJobOptions {
   sourceElementType: ElementType
@@ -22,7 +24,6 @@ export interface SearchReplaceAssignmentsJobOptions {
   targetElementType: ElementType
   targetElementId: number
   elements?: ElementUsageBaseItem[]
-  title: string
   onFinish?: () => void
 }
 
@@ -32,7 +33,6 @@ export class SearchReplaceAssignmentsJob implements JobInterface {
   private readonly targetElementType: ElementType
   private readonly targetElementId: number
   private readonly elements?: ElementUsageBaseItem[]
-  private readonly title: string
   private readonly onFinish?: () => void
 
   constructor (options: SearchReplaceAssignmentsJobOptions) {
@@ -41,7 +41,6 @@ export class SearchReplaceAssignmentsJob implements JobInterface {
     this.targetElementType = options.targetElementType
     this.targetElementId = options.targetElementId
     this.elements = options.elements
-    this.title = options.title
     this.onFinish = options.onFinish
   }
 
@@ -56,10 +55,10 @@ export class SearchReplaceAssignmentsJob implements JobInterface {
         return
       }
 
-      const handler = new MessageBusJobHandler({
+      const handler = SearchReplaceAssignmentsJob.buildHandler({
         jobRunId,
-        title: this.title,
-        onJobCompletion: async (data: any) => {
+        elementCount: this.elements?.length ?? 0,
+        onJobCompletion: async () => {
           try {
             await this.handleCompletion()
           } catch (error) {
@@ -103,4 +102,27 @@ export class SearchReplaceAssignmentsJob implements JobInterface {
   private async handleJobFailure (error: any): Promise<void> {
     console.error('Search replace assignments job failed:', error)
   }
+
+  static readonly jobNames = ['studio_ee_job_element_usage_replace'] as const
+
+  static rehydrate (jobRuns: JobRunList): MessageBusJobHandler {
+    const [parent] = jobRuns
+    return this.buildHandler({ jobRunId: parent.id, elementCount: parent.totalElements })
+  }
+
+  private static buildHandler (options: {
+    jobRunId: number
+    elementCount?: number
+    onJobCompletion?: (data: JobCompletionData) => Promise<void>
+  }): MessageBusJobHandler {
+    return new MessageBusJobHandler({
+      jobRunId: options.jobRunId,
+      title: options.elementCount != null && options.elementCount > 0
+        ? t('search-replace-assignments.job.title-selection', { count: options.elementCount })
+        : t('search-replace-assignments.job.title-all'),
+      onJobCompletion: options.onJobCompletion
+    })
+  }
 }
+
+void (SearchReplaceAssignmentsJob satisfies RehydratableJob)
