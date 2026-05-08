@@ -24,7 +24,7 @@ import { type ManyToManyRelationValueItem } from '@Pimcore/components/many-to-ma
 import { type ManyToManyObjectRelationProps, type VisibleFieldDefinition } from '../../../many-to-many-object-relation'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
-import { buildLabel, processItems } from '../combo-field-utils'
+import { processItems } from '../combo-field-utils'
 
 export const COMBO_PAGE_SIZE = 200
 export const BACKGROUND_LOAD_THRESHOLD = 1000
