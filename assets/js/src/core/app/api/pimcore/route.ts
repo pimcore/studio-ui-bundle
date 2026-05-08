@@ -10,6 +10,6 @@
 
 import { appConfig } from '@Pimcore/app/config/app-config'
 
-export function getPrefix(): string {
+export function getPrefix (): string {
   return appConfig.apiPrefix
 }
