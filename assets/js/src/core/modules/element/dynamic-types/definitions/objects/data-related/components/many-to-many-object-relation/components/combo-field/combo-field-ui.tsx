@@ -11,13 +11,13 @@
 import React from 'react'
 import { Skeleton } from 'antd'
 
-const SKELETON_ROWS = 3
+const SKELETON_ROW_KEYS = ['skeleton-0', 'skeleton-1', 'skeleton-2']
 
 export const LoadingRows = (): React.JSX.Element => (
   <>
-    { Array.from({ length: SKELETON_ROWS }).map((_, i) => (
+    { SKELETON_ROW_KEYS.map(key => (
       <div
-        key={ i }
+        key={ key }
         style={ { padding: '5px 12px', display: 'flex', alignItems: 'center' } }
       >
         <Skeleton.Input
