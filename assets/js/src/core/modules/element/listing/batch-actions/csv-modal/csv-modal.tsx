@@ -11,7 +11,7 @@
 import { Alert, Modal, Space } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { CreateCSVForm, type CSVFormValues } from './create-csv-form/create-csv-form'
-import { DownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/download-job'
+import { CsvDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/csv-download-job'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useTranslation } from 'react-i18next'
 import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
@@ -110,12 +110,8 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
   )
 
   function onFinish (values: CSVFormValues): void {
-    const job = new DownloadJob({
-      title: t('jobs.csv-job.title', { title: jobTitle }),
-      downloadUrl: `${getPrefix()}/export/download/csv/{jobRunId}`,
-      action: async () => await getDownloadAction(values.delimiter, values.header),
-      ...(numberedSelectedRows.length === 0 && { hasChildJob: true })
-    })
+    const isFolderExport = numberedSelectedRows.length === 0
+    const job = new CsvDownloadJob({ action: async () => await getDownloadAction(values.delimiter, values.header), isFolderExport })
     void executionEngine.runJob(job)
 
     props.setOpen(false)

@@ -40,7 +40,6 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
       const job = new RecycleBinRestoreJob({
         itemIds: items.map(item => item.id),
         elementTypes: items.map(item => mapToElementType(item.type)!),
-        title: t('recycle-bin.actions.restore.title'),
         onFinish
       })
 
@@ -55,8 +54,6 @@ export const useRecycleBin = (): UseRecycleBinHookReturn => {
     try {
       const job = new RecycleBinDeleteJob({
         itemIds: items.map(item => item.id),
-        elementTypes: items.map(item => mapToElementType(item.type)!),
-        title: t('recycle-bin.actions.delete.title'),
         onFinish
       })
 

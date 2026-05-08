@@ -13,10 +13,19 @@ import { store } from '@Pimcore/app/store'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { AbstractBatchDeleteJob, type AbstractBatchDeleteJobOptions } from './abstract-batch-delete-job'
 import { api } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { type RehydratableJob, type JobRunList } from '../../services/job-rehydration-registry'
+import { type MessageBusJobHandler } from '../../message-handlers/message-bus-job/message-bus-job-handler'
 
 export interface AssetBatchDeleteJobOptions extends AbstractBatchDeleteJobOptions {}
 
 export class AssetBatchDeleteJob extends AbstractBatchDeleteJob {
+  static readonly jobNames = ['studio_ee_job_batch_delete_assets'] as const
+
+  static rehydrate (jobRuns: JobRunList): MessageBusJobHandler {
+    const [parent] = jobRuns
+    return this.buildHandler({ jobRunId: parent.id })
+  }
+
   protected async executeDeleteRequest (): Promise<number | null> {
     const response = await store.dispatch(
       api.endpoints.assetBatchDelete.initiate({
@@ -34,3 +43,5 @@ export class AssetBatchDeleteJob extends AbstractBatchDeleteJob {
     return response.data?.jobRunId ?? null
   }
 }
+
+void (AssetBatchDeleteJob satisfies RehydratableJob)

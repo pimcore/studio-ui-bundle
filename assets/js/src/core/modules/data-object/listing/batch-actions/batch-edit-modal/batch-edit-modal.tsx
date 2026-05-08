@@ -167,7 +167,6 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
       delete filters.pageSize
 
       const job = new DataObjectFolderBatchEditJob({
-        title: t('batch-edit.job-title'),
         patchObjectsInFolder,
         folderId: id,
         values,
@@ -190,7 +189,6 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
       })
     } else {
       const job = new DataObjectBatchEditJob({
-        title: t('batch-edit.job-title'),
         patchObjectsByIds,
         selectedRowsIds: selectedRowsIds.map(Number),
         values,

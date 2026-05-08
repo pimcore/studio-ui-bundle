@@ -21,7 +21,12 @@ interface UseJobsReturn {
 
 export const useJobs = (): UseJobsReturn => {
   const dispatch = useAppDispatch()
-  const jobs = useAppSelector(selectAll)
+  const rawJobs = useAppSelector(selectAll)
+  const jobs = [...rawJobs].sort((a, b) => {
+    const aId = a.jobRunId ?? a.id
+    const bId = b.jobRunId ?? b.id
+    return aId - bId
+  })
 
   function updateJob (jobId: number, update: Partial<AbstractJob>): void {
     dispatch(jobUpdated({ id: jobId, changes: { ...update } }))

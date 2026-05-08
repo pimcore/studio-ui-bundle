@@ -98,7 +98,8 @@ export type ExportCsvApiArg = {
                 | "array"
                 | "int"
                 | "string"
-                | "bool";
+                | "bool"
+                | "items_to_restore";
             delimiter?: string;
         };
         elementType?: "data-object" | "object" | "asset" | "document";
@@ -139,7 +140,8 @@ export type ExportCsvFolderApiArg = {
                 | "array"
                 | "int"
                 | "string"
-                | "bool";
+                | "bool"
+                | "items_to_restore";
             delimiter?: string;
         };
         elementType?: "data-object" | "object" | "asset" | "document";
@@ -188,7 +190,8 @@ export type ExportXlsxApiArg = {
                 | "array"
                 | "int"
                 | "string"
-                | "bool";
+                | "bool"
+                | "items_to_restore";
         };
         elementType?: "data-object" | "object" | "asset" | "document";
         classId?: string | null;
@@ -229,7 +232,8 @@ export type ExportXlsxFolderApiArg = {
                 | "array"
                 | "int"
                 | "string"
-                | "bool";
+                | "bool"
+                | "items_to_restore";
         };
         elementType?: "data-object" | "object" | "asset" | "document";
         classId?: string | null;

@@ -15,17 +15,19 @@ import { useTranslation } from 'react-i18next'
 import { isUndefined, isEmpty } from 'lodash'
 import { type MessageBusJob } from './message-bus-job-handler'
 import { JobErrorModal } from './job-error-modal'
-import { useExecutionEngineAbortJobRunByIdMutation } from '@Pimcore/modules/execution-engine/execution-engine-api-slice-enhanced'
+import { useExecutionEngineAbortJobRunByIdMutation, useExecutionEngineHideJobRunsMutation } from '@Pimcore/modules/execution-engine/execution-engine-api-slice-enhanced'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type GlobalMessageBus } from '@Pimcore/modules/global-message-bus/services/global-message-bus'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 
 export interface JobButtonCustomizationContext {
   jobRunId: number
   addSuccessButton: (action: ButtonAction, position?: 'start' | 'end') => void
   addFinishedWithErrorsButton: (action: ButtonAction, position?: 'start' | 'end') => void
   addFailureButton: (action: ButtonAction, position?: 'start' | 'end') => void
+  showWarning: (titleKey: string, content: string) => void
 }
 
 export interface MessageBusJobProps extends MessageBusJob {
@@ -35,7 +37,10 @@ export const MessageBusJobNotification = (props: MessageBusJobProps): React.JSX.
   const { removeJob } = useJobs()
   const { t } = useTranslation()
   const [showErrorModal, setShowErrorModal] = useState(false)
+  const [isHiding, setIsHiding] = useState(false)
   const [abortJobRun] = useExecutionEngineAbortJobRunByIdMutation()
+  const [hideJobRuns] = useExecutionEngineHideJobRunsMutation()
+  const { warn } = useAlertModal()
 
   const handleAbort = async (): Promise<void> => {
     const { error } = await abortJobRun({ jobRunId: Number(props.jobRunId) })
@@ -53,7 +58,16 @@ export const MessageBusJobNotification = (props: MessageBusJobProps): React.JSX.
 
   const hideButtonAction: ButtonAction = {
     label: t('jobs.job.button-hide'),
-    handler: () => { removeJob(props.id) }
+    loading: isHiding,
+    handler: async () => {
+      setIsHiding(true)
+      const idsToHide = [props.jobRunId, ...(props.ancestorJobRunIds ?? [])]
+      try {
+        await hideJobRuns({ body: { jobRunIds: idsToHide } })
+      } finally {
+        removeJob(props.id)
+      }
+    }
   }
 
   const successButtonActions: ButtonAction[] = [hideButtonAction]
@@ -73,7 +87,8 @@ export const MessageBusJobNotification = (props: MessageBusJobProps): React.JSX.
       jobRunId: props.jobRunId,
       addSuccessButton: (action, position) => { addButton(successButtonActions, action, position) },
       addFinishedWithErrorsButton: (action, position) => { addButton(finishedWithErrorsButtonActions, action, position) },
-      addFailureButton: (action, position) => { addButton(failureButtonActions, action, position) }
+      addFailureButton: (action, position) => { addButton(failureButtonActions, action, position) },
+      showWarning: (titleKey, content) => { warn({ title: titleKey, content }) }
     }
     props.onCustomizeButtons(context)
   }

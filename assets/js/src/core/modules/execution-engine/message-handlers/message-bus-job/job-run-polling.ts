@@ -50,7 +50,12 @@ export class JobRunPolling {
       maxDelay: 300000,
       multiplier: 1.25
     })
-    this.schedulePolling()
+  }
+
+  public start (): void {
+    if (!this.isDestroyed) {
+      this.schedulePolling()
+    }
   }
 
   public notifyUpdate (): void {

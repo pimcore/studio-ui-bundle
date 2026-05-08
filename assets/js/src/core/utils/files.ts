@@ -20,3 +20,20 @@ export function saveFileLocal (url: string, name?: string): void {
   a.href = url
   a.click()
 }
+
+/**
+ * Performs a HEAD-check before triggering a browser download.
+ * Returns false when the server reports the file is unavailable (non-2xx),
+ * so the caller can show an appropriate error message.
+ * On network errors the download is attempted anyway.
+ */
+export async function downloadFromUrl (url: string, filename?: string): Promise<boolean> {
+  try {
+    const response = await fetch(url, { method: 'HEAD' })
+    if (!response.ok) return false
+  } catch {
+    // Network error — attempt download anyway
+  }
+  saveFileLocal(url, filename)
+  return true
+}
