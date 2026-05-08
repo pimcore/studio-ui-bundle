@@ -1324,7 +1324,7 @@ key-bindings.seo: SEO
 key-bindings.redirects: Redirects
 key-bindings.bundles: Bundles
 user-management.references.title: References
-user-management.references.documents: Documents
+user-management.references.object-dependencies: Object Dependencies
 user-management.references.columns.id: ID
 user-management.references.columns.cpath: Path
 user-management.references.columns.subtype: Subtype

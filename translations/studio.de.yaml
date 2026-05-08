@@ -1317,7 +1317,7 @@ key-bindings.seo: SEO
 key-bindings.redirects: Weiterleitungen
 key-bindings.bundles: Bundles
 user-management.references.title: Referenzen
-user-management.references.documents: Dokumente
+user-management.references.object-dependencies: Objekt-Abhängigkeiten
 user-management.references.columns.id: ID
 user-management.references.columns.cpath: Pfad
 user-management.references.columns.subtype: Untertyp
