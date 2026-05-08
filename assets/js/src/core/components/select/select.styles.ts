@@ -167,7 +167,20 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
             padding: 2px ${token.controlPaddingHorizontal}px 2px ${token.paddingXXS}px !important;
           }
         }
-        
+
+        // The !important padding above skews Ant Design's JS mirror width measurement.
+        // Override all three levels so the search input expands to fill available space.
+        .ant-select-selection-overflow-item-suffix {
+          flex: 1 1 100%;
+          width: 100% !important;
+        }
+        .ant-select-selection-search {
+          width: 100% !important;
+        }
+        .ant-select-selection-search-input {
+          width: 100% !important;
+        }
+
         &:hover {
           .ant-select-selection-item {
             .ant-select-selection-item-content {
