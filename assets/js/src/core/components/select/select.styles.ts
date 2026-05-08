@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 /**
  * This source file is available under the terms of the
  * Pimcore Open Core License (POCL)
@@ -9,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
 import { createStyles } from 'antd-style'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type SelectTheme } from './select'
