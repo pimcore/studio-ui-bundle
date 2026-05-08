@@ -11,7 +11,7 @@
 import { isArray, isEmpty, isNil, isPlainObject, isString } from 'lodash'
 import { type DataObjectGetSearchApiResponse } from '@Pimcore/modules/search/search-api-slice.gen'
 import { type ManyToManyRelationValueItem } from '@Pimcore/components/many-to-many-relation/hooks/use-value'
-import { type VisibleFieldDefinition } from '../../../many-to-many-object-relation'
+import { type VisibleFieldDefinition } from '../../many-to-many-object-relation'
 
 export type SearchItem = NonNullable<DataObjectGetSearchApiResponse['items']>[number]
 

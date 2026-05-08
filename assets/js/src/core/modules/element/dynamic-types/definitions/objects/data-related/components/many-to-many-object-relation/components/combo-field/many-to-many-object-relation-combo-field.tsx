@@ -12,7 +12,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Select } from '@Pimcore/components/select/select'
 import { type ManyToManyObjectRelationProps } from '../../many-to-many-object-relation'
-import { useComboFieldData, type ComboOption } from './hooks/use-combo-field-data'
+import { useComboFieldData } from './hooks/use-combo-field-data'
 import { DropdownFooter, LoadingRows } from './combo-field-ui'
 
 export const ManyToManyObjectRelationComboField = (props: ManyToManyObjectRelationProps): React.JSX.Element => {
@@ -37,7 +37,7 @@ export const ManyToManyObjectRelationComboField = (props: ManyToManyObjectRelati
   } = useComboFieldData(props)
 
   return (
-    <Select<number[], ComboOption>
+    <Select
       className={ props.className }
       disabled={ isDisabled }
       dropdownRender={ (menu) => (
