@@ -10,6 +10,8 @@
 
 import React from 'react'
 import { Skeleton } from 'antd'
+import { useTranslation } from 'react-i18next'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyles } from './combo-field-ui.styles'
 
 const SKELETON_ROW_KEYS = ['skeleton-0', 'skeleton-1', 'skeleton-2']
@@ -19,7 +21,8 @@ export const LoadingRows = (): React.JSX.Element => {
   return (
     <>
       { SKELETON_ROW_KEYS.map(key => (
-        <div
+        <Flex
+          align="center"
           className={ styles.loadingRow }
           key={ key }
         >
@@ -28,7 +31,7 @@ export const LoadingRows = (): React.JSX.Element => {
             block
             size="small"
           />
-        </div>
+        </Flex>
       )) }
     </>
   )
@@ -42,11 +45,12 @@ interface DropdownFooterProps {
 }
 
 export const DropdownFooter = ({ loaded, total, allLoaded, backgroundMode }: DropdownFooterProps): React.JSX.Element | null => {
+  const { t } = useTranslation()
   const { styles } = useStyles()
   if (loaded === 0 || allLoaded || backgroundMode || total === undefined) return null
   return (
     <div className={ styles.dropdownFooter }>
-      { `Showing ${loaded} of ${total}` }
+      { t('pagination.showing-x-of-y', { loaded, total }) }
     </div>
   )
 }

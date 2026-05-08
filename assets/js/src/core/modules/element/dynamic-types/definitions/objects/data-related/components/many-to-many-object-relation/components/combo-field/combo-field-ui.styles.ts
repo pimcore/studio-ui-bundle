@@ -13,8 +13,6 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ css, token }) => ({
   loadingRow: css`
     padding: ${token.paddingXXS}px ${token.paddingSM}px;
-    display: flex;
-    align-items: center;
   `,
 
   dropdownFooter: css`

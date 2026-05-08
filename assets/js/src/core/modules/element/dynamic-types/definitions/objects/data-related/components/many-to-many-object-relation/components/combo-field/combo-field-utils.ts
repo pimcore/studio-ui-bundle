@@ -15,6 +15,13 @@ import { type VisibleFieldDefinition } from '../../many-to-many-object-relation'
 
 export type SearchItem = NonNullable<DataObjectGetSearchApiResponse['items']>[number]
 
+const isBlankColumnValue = (v: unknown): boolean => {
+  if (isNil(v)) return true
+  if (isString(v)) return isEmpty(v) || v === 'null'
+  if (isArray(v) || isPlainObject(v)) return isEmpty(v)
+  return false
+}
+
 export const buildLabel = (item: SearchItem, resolvedVisibleDefs: VisibleFieldDefinition[]): string => {
   const fullpath = item.columns?.find(c => c.key === 'fullpath')?.value as string ?? String(item.id)
   if (resolvedVisibleDefs.length === 0) return fullpath
@@ -22,9 +29,7 @@ export const buildLabel = (item: SearchItem, resolvedVisibleDefs: VisibleFieldDe
   return resolvedVisibleDefs
     .map(fd => {
       const v = item.columns?.find(c => c.key === fd.key)?.value
-      if (isNil(v) || (isString(v) && (isEmpty(v) || v === 'null')) || ((isArray(v) || isPlainObject(v)) && isEmpty(v))) {
-        return '-'
-      }
+      if (isBlankColumnValue(v)) return '-'
       return isArray(v) || isPlainObject(v) ? JSON.stringify(v) : String(v)
     })
     .join(', ')
