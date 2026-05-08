@@ -10,25 +10,29 @@
 
 import React from 'react'
 import { Skeleton } from 'antd'
+import { useStyles } from './combo-field-ui.styles'
 
 const SKELETON_ROW_KEYS = ['skeleton-0', 'skeleton-1', 'skeleton-2']
 
-export const LoadingRows = (): React.JSX.Element => (
-  <>
-    { SKELETON_ROW_KEYS.map(key => (
-      <div
-        key={ key }
-        style={ { padding: '5px 12px', display: 'flex', alignItems: 'center' } }
-      >
-        <Skeleton.Input
-          active
-          block
-          size="small"
-        />
-      </div>
-    )) }
-  </>
-)
+export const LoadingRows = (): React.JSX.Element => {
+  const { styles } = useStyles()
+  return (
+    <>
+      { SKELETON_ROW_KEYS.map(key => (
+        <div
+          className={ styles.loadingRow }
+          key={ key }
+        >
+          <Skeleton.Input
+            active
+            block
+            size="small"
+          />
+        </div>
+      )) }
+    </>
+  )
+}
 
 interface DropdownFooterProps {
   loaded: number
@@ -38,18 +42,10 @@ interface DropdownFooterProps {
 }
 
 export const DropdownFooter = ({ loaded, total, allLoaded, backgroundMode }: DropdownFooterProps): React.JSX.Element | null => {
-  // In background mode the loading is silent — no footer needed.
-  // Once all items are loaded the footer is also not needed.
+  const { styles } = useStyles()
   if (loaded === 0 || allLoaded || backgroundMode || total === undefined) return null
   return (
-    <div style={ {
-      padding: '4px 12px',
-      fontSize: '11px',
-      color: '#999',
-      borderTop: '1px solid #f0f0f0',
-      textAlign: 'right'
-    } }
-    >
+    <div className={ styles.dropdownFooter }>
       { `Showing ${loaded} of ${total}` }
     </div>
   )
