@@ -15,7 +15,7 @@ export interface AppConfig {
   baseUrl: string
   mercureUrl: string
   wysiwyg: WysiwygAppConfigInterface
-  apiPrefix?: string
+  apiPrefix: string
 }
 
 const appElement = getParentDocument().querySelector('#app')
@@ -41,5 +41,6 @@ export const appConfig: AppConfig = {
       document: {}
     }
   },
+  apiPrefix: appConfigData?.apiPrefix ?? '/pimcore-studio/api',
   ...(appConfigData ?? {})
 }
