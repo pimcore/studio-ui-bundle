@@ -24,7 +24,7 @@ const ReferenceContainer = ({ ...props }): React.JSX.Element => {
   const accordionContent = [
     {
       key: '1',
-      title: <>{ t('user-management.references.documents') }</>,
+      title: <>{ t('user-management.references.object-dependencies') }</>,
       children: <Table
         data={ user?.objectDependencies?.dependencies ?? [] }
         isLoading={ false }

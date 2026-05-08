@@ -18,16 +18,17 @@ import { useStyles } from './text-preview.styles'
 
 interface TextPreviewProps {
   email: EmailLog
+  hasTextLog: boolean
 }
 
-export const TextPreview = ({ email }: TextPreviewProps): React.JSX.Element => {
-  const { data, isLoading } = useEmailLogGetTextQuery({ id: email.id })
+export const TextPreview = ({ email, hasTextLog }: TextPreviewProps): React.JSX.Element => {
+  const { data, isLoading } = useEmailLogGetTextQuery({ id: email.id }, { skip: !hasTextLog })
   const { styles } = useStyles()
 
   return (
     <Content
       loading={ isLoading }
-      none={ isUndefined(data?.data) || data.data.length === 0 }
+      none={ !hasTextLog || isUndefined(data?.data) || data.data.length === 0 }
     >
       <ReactCodeMirror
         basicSetup={ {

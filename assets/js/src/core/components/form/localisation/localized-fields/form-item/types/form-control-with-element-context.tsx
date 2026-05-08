@@ -62,7 +62,7 @@ export const FormControlWithElementContext = ({ children, ...props }: KeyedFormI
     <Component
       { ...Child.props }
       { ...props }
-      disabled={ props.disabled !== true ? isDisabled : false }
+      disabled={ Child.props.disabled === true || (props.disabled !== true ? isDisabled : false) }
     />
   ), [Child, props])
 }

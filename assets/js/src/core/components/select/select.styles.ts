@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
 import { createStyles } from 'antd-style'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type SelectTheme } from './select'
@@ -167,7 +168,21 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
             padding: 2px ${token.controlPaddingHorizontal}px 2px ${token.paddingXXS}px !important;
           }
         }
-        
+
+        // The !important padding above skews Ant Design's JS mirror width measurement,
+        // causing the search input to clip typed text. flex: 1 (= flex: 1 1 0%) overrides
+        // the JS-set width via flex-basis precedence and grows to fill the remaining row
+        // space without wrapping to a new line (unlike flex-basis: 100%).
+        .ant-select-selection-overflow-item-suffix {
+          flex: 1 !important;
+        }
+        .ant-select-selection-search {
+          width: 100% !important;
+        }
+        .ant-select-selection-search-input {
+          width: 100% !important;
+        }
+
         &:hover {
           .ant-select-selection-item {
             .ant-select-selection-item-content {
