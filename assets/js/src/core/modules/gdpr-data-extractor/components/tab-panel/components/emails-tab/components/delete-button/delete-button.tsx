@@ -15,6 +15,7 @@ import { useEmailLog } from '@Pimcore/modules/email/log/hooks/use-email-log'
 import { IconButton } from '@sdk/components'
 import React, { useState } from 'react'
 
+
 interface DeleteButtonProps extends Omit<React.ComponentProps<typeof IconButton>, 'id' | 'icon'> {
   id: number
   providerKey: string
@@ -34,12 +35,6 @@ export const DeleteButton = ({ id, providerKey, label, onClick, ...iconButtonPro
       onClick={ (e) => {
         setIsDeleting(true)
         removeWithConfirmation(id, () => {
-          dispatch(
-            api.util.invalidateTags(
-              invalidatingTags.EMAIL_LOG()
-            )
-          )
-
           dispatch(
             api.util.invalidateTags(
               invalidatingTags.GDPR_DATA(providerKey)
