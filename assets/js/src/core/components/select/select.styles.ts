@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 /**
  * This source file is available under the terms of the
  * Pimcore Open Core License (POCL)
