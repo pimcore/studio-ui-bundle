@@ -20,7 +20,7 @@ import { type Layout } from '@Pimcore/modules/field-definitions/utils/layout-pro
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { ConfigLayout, Content, ContentLayout, Flex, IconButton, Toolbar } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 export interface ItemDetailProps {
   configuration: ConfigurationPartial
@@ -42,24 +42,20 @@ export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
   const { isLoading: isDetailLoading, isFetching: isDetailFetching, refetch: refetchDetail, data: detailData } = detailResult
   const detailError = detailResult.error as FetchBaseQueryError | undefined
 
-  const [layout, setLayout] = useState<Layout | undefined>(layoutResult?.data as Layout | undefined)
   const [layoutKey, setLayoutKey] = useState(0)
 
-  useEffect(() => {
-    setLayout(layoutResult?.data as Layout | undefined)
-  }, [layoutResult?.data])
-
-  useEffect(() => {
+  // Derive layout synchronously so the LayoutProvider remount on `layoutKey`
+  // bump always sees the latest data. Using useState + useEffect to sync
+  // would lag by one render (effects run after commit), causing the
+  // LayoutProvider to initialize from stale props on the refresh path.
+  const layout = useMemo<Layout | undefined>(() => {
     if (layoutAccessor !== undefined && detailData !== undefined) {
-      const accessedLayout = layoutAccessor.accessor(detailData as Record<string, any>)
-      setLayout(accessedLayout)
+      return layoutAccessor.accessor(detailData as Record<string, any>)
     }
-  }, [detailData, layoutAccessor])
 
-  useEffect(() => {
     // @todo check this with backend team why 404 is returned for missing layouts
     if (layoutError !== undefined && 'status' in layoutError && layoutError.status === 404) {
-      setLayout({
+      return {
         name: 'pimcore_root',
         children: [],
         fieldtype: 'panel',
@@ -79,11 +75,14 @@ export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
         region: '',
         type: 'layout',
         additionalAttributes: {}
-      })
-      return
+      }
     }
 
-    if (layoutError !== undefined) {
+    return layoutResult?.data as Layout | undefined
+  }, [layoutAccessor, detailData, layoutError, layoutResult?.data])
+
+  useEffect(() => {
+    if (layoutError !== undefined && (!('status' in layoutError) || layoutError.status !== 404)) {
       trackError(new ApiError(layoutError))
     }
   }, [layoutError])
@@ -107,9 +106,12 @@ export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
               <Flex gap={ 'mini' }>
                 <IconButton
                   icon={ { value: 'refresh' } }
-                  onClick={ () => {
-                    void layoutResult?.refetch()
-                    void refetchDetail()
+                  onClick={ async () => {
+                    const promises: Array<Promise<unknown>> = [refetchDetail()]
+                    if (layoutResult?.refetch !== undefined) {
+                      promises.push(layoutResult.refetch())
+                    }
+                    await Promise.all(promises)
                     setLayoutKey((prev) => prev + 1)
                     setDetailView('general')
                   } }
