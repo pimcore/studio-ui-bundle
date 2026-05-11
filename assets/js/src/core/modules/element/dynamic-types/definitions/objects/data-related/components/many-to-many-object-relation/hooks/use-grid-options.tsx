@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmpty, isObject } from 'lodash'
+import { isEmpty } from 'lodash'
 import { type ColumnMeta, type IdentifiedColumnDef } from '@tanstack/react-table'
 import { Alert } from '@Pimcore/components/alert/alert'
 import { DefaultCell } from '@Pimcore/components/grid/columns/default-cell'
@@ -20,6 +20,7 @@ import { type GridProps as BaseGridProps } from '@Pimcore/types/components/types
 import type { VisibleFieldDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/many-to-many-object-relation'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { getElementCellConfig } from '@Pimcore/components/many-to-many-relation'
+import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
 export type GridProps = Pick<BaseGridProps, 'contextMenu' | 'enableMultipleRowSelection' | 'enableRowSelection' | 'enableSorting' | 'modifiedCells' | 'onSelectedRowsChange' | 'onSortingChange' | 'onUpdateCellData' | 'selectedRows' | 'sorting' | 'onRowDoubleClick' | 'manualSorting'>
 
@@ -114,7 +115,7 @@ export const useGridOptions = (): UseGridOptionsReturn => {
           }
     }
 
-    const fieldDefinition = isObject(column.config) && 'fieldDefinition' in column.config ? column.config?.fieldDefinition as Record<string, any> : undefined
+    const fieldDefinition = hasFieldDefinition(column.config) ? column.config.fieldDefinition as Record<string, any> : undefined
 
     const advancedDataObjectHeader = getDataObjectHeader(isEmptyValue(fieldDefinition?.title) ? undefined : t(String(fieldDefinition?.title)))
     const defaultDataObjectHeader = getDataObjectHeader(column.title)
