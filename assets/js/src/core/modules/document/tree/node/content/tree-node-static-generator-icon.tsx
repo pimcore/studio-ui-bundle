@@ -16,8 +16,7 @@ import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 export const TreeNodeStaticGeneratorIcon = (props: TreeNodeContentMetaProps): React.JSX.Element | null => {
   const { node } = props
 
-  // Need to update this check once we have the static generator field from the backend.
-  if (node.elementType !== elementTypes.document || node.metaData?.document?.staticGeneratorEnabled !== true) {
+  if (node.elementType !== elementTypes.document || node?.metaData?.document?.staticGeneratorEnabled !== true) {
     return null
   }
 
