@@ -113,14 +113,14 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
   }
 
   const applyAll = async (): Promise<void> => {
-    const pendingRows = rows.filter(r => r.state === 'pending')
-    if (pendingRows.length === 0) return
+    const applyableRows = rows.filter(r => r.state === 'pending' || r.state === 'reverted')
+    if (applyableRows.length === 0) return
 
-    const allKeys = new Set(pendingRows.map(r => r.key))
+    const allKeys = new Set(applyableRows.map(r => r.key))
     setLoadingRows(allKeys)
 
     const grouped = new Map<string, Array<{ locale: string, translation: string }>>()
-    for (const row of pendingRows) {
+    for (const row of applyableRows) {
       const existing = grouped.get(row.translationKey) ?? []
       existing.push({ locale: row.locale, translation: row.importTranslation })
       grouped.set(row.translationKey, existing)
@@ -135,7 +135,7 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
     try {
       await updateTranslations({ domain, body: { data } }).unwrap()
       setRows(prev => prev.map(r =>
-        r.state === 'pending' ? { ...r, state: 'applied' } : r
+        r.state === 'pending' || r.state === 'reverted' ? { ...r, state: 'applied' } : r
       ))
     } catch {
       trackError(new GeneralError('Failed to apply all translations'))
@@ -145,14 +145,14 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
   }
 
   const revertAll = async (): Promise<void> => {
-    const appliedRows = rows.filter(r => r.state === 'applied')
-    if (appliedRows.length === 0) return
+    const revertableRows = rows.filter(r => r.state === 'applied' || r.state === 'pending')
+    if (revertableRows.length === 0) return
 
-    const allKeys = new Set(appliedRows.map(r => r.key))
+    const allKeys = new Set(revertableRows.map(r => r.key))
     setLoadingRows(allKeys)
 
     const grouped = new Map<string, Array<{ locale: string, translation: string }>>()
-    for (const row of appliedRows) {
+    for (const row of revertableRows) {
       const existing = grouped.get(row.translationKey) ?? []
       existing.push({ locale: row.locale, translation: row.currentTranslation })
       grouped.set(row.translationKey, existing)
@@ -167,7 +167,7 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
     try {
       await updateTranslations({ domain, body: { data } }).unwrap()
       setRows(prev => prev.map(r =>
-        r.state === 'applied' ? { ...r, state: 'reverted' } : r
+        r.state === 'applied' || r.state === 'pending' ? { ...r, state: 'reverted' } : r
       ))
     } catch {
       trackError(new GeneralError('Failed to revert all translations'))
@@ -176,8 +176,10 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
     }
   }
 
-  const pendingCount = rows.filter(r => r.state === 'pending').length
-  const appliedCount = rows.filter(r => r.state === 'applied').length
+  const applyableCount = rows.filter(r => r.state === 'pending' || r.state === 'reverted').length
+  const revertableCount = rows.filter(r => r.state === 'applied' || r.state === 'pending').length
+
+  const languageDisplayNames = useMemo(() => new Intl.DisplayNames(['en'], { type: 'language' }), [])
 
   const columns = useMemo(() => [
     {
@@ -186,7 +188,7 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
       width: 150,
       render: (_: unknown, record: MergerRow) => (
         <LanguageColumnHeader
-          display={ record.locale }
+          display={ languageDisplayNames.of(record.locale) ?? record.locale }
           language={ record.locale }
         />
       )
@@ -299,7 +301,7 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
           <Title>{t('translations.merger.title', { domain })}</Title>
           <Flex gap="small">
             <IconTextButton
-              disabled={ pendingCount === 0 || loadingRows.size > 0 }
+              disabled={ applyableCount === 0 || loadingRows.size > 0 }
               icon={ { value: 'arrow-square-right' } }
               onClick={ () => { void applyAll() } }
             >
@@ -308,7 +310,7 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
 
             <IconTextButton
               danger
-              disabled={ appliedCount === 0 || loadingRows.size > 0 }
+              disabled={ revertableCount === 0 || loadingRows.size > 0 }
               icon={ { value: 'corner-up-left' } }
               onClick={ () => { void revertAll() } }
             >
@@ -337,6 +339,7 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
             pagination={ false }
             rowClassName={ (record: MergerRow) => {
               if (record.state === 'pending') return 'row-conflict'
+              if (record.state === 'applied' || record.state === 'reverted') return 'row-applied'
               return ''
             } }
             size="small"

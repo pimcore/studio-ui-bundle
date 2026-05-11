@@ -13,6 +13,10 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ css }) => {
   return {
     translationsContainer: css`
+      .ant-form-inline {
+        flex-wrap: nowrap;
+      }
+
       .translations-key-input {
         width: 200px;
       }

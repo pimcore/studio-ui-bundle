@@ -13,8 +13,12 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     mergerContainer: css`
-      .row-conflict {
+      .row-conflict td.ant-table-cell {
         background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
+      }
+
+      .row-applied td.ant-table-cell {
+        background-color: ${token.colorBgContainerDisabled} !important;
       }
 
       .ant-table-content table {
