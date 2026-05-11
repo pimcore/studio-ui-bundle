@@ -12,6 +12,18 @@
  * i18next post-processor that returns the key if the translation value is empty
  * Used consistently across main app and iframe i18n setup
  */
+export const createDebugTranslationsProcessor = (getDebugMode: () => boolean): {
+  type: 'postProcessor'
+  name: string
+  process: (value: string) => string
+} => ({
+  type: 'postProcessor' as const,
+  name: 'debugTranslations',
+  process (value: string): string {
+    return getDebugMode() ? `+ ${value} +` : value
+  }
+})
+
 export const returnKeyIfEmptyProcessor = {
   type: 'postProcessor' as const,
   name: 'returnKeyIfEmpty',
