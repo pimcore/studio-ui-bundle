@@ -37,7 +37,7 @@ i18n
 i18n.use(returnKeyIfEmptyProcessor)
 
 const debugTranslationsProcessor = createDebugTranslationsProcessor(
-  () => (store.getState() as RootState).settings?.settings?.debug_admin_translations === true
+  () => (store.getState()).settings?.settings?.debug_admin_translations === true
 )
 i18n.use(debugTranslationsProcessor)
 
