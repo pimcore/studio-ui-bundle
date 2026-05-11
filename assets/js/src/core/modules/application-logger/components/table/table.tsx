@@ -47,7 +47,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
   const tableItems = items.map((item) => {
     return {
       ...item,
-      date: formatDateTime({ timestamp: item.date, dateStyle: 'short', timeStyle: 'short' }),
+      date: formatDateTime({ timestamp: item.date, dateStyle: 'short', timeStyle: 'medium' }),
       translatedPriority: t(`application-logger.filter.priority-level.${item.priority}`)
     }
   })
