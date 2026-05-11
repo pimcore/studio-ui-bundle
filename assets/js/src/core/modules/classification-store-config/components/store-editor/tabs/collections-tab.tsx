@@ -277,6 +277,7 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
                     setPageSize(newPageSize)
                   } }
                   showSizeChanger
+                  showTotal={ (total) => t('pagination.show-total', { total }) }
                   total={ total }
                 />
               </Toolbar>

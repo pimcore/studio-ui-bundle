@@ -19,6 +19,7 @@ import { LanguageSelection, transformLanguage } from '@Pimcore/components/langua
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { useBatchEdit } from './hooks/use-batch-edit'
 import { DefaultBatchEdit } from './default-batch-edit'
+import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
 export const BatchEditListContainer = (): React.JSX.Element => {
   const { batchEdits, removeBatchEdit } = useBatchEdit()
@@ -31,7 +32,7 @@ export const BatchEditListContainer = (): React.JSX.Element => {
     // @todo infer selected language from grid config when available
     const selectedLanguage = batchEdit.locale ?? settings.requiredLanguages[0]
 
-    const batchEditTitle = 'fieldDefinition' in batchEdit.config ? (batchEdit.config.fieldDefinition as { title: string }).title : batchEdit.key
+    const batchEditTitle = hasFieldDefinition(batchEdit.config) ? (batchEdit.config.fieldDefinition as { title: string }).title : batchEdit.key
     const key = batchEdit.type === 'dataobject.classificationstore' ? `${batchEdit.key}-${(batchEdit.config as { keyId: number }).keyId}-${(batchEdit.config as { groupId: number }).groupId}` : batchEdit.key
 
     return ({
