@@ -21,6 +21,7 @@ import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { TreeNodeNavigationExcludeIcon } from '@Pimcore/modules/document/tree/node/content/tree-node-navigation-exclude-icon'
 import { TreeNodeLockIcon } from '@Pimcore/components/element-tree/node/content/tree-node-lock-icon'
+import { TreeNodeStaticGeneratorIcon } from '@Pimcore/modules/document/tree/node/content/tree-node-static-generator-icon'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -38,15 +39,21 @@ moduleSystem.registerModule({
     })
 
     componentRegistry.registerToSlot(componentConfig.document.tree.node.meta.name, {
+      name: 'staticGeneratorIcon',
+      component: TreeNodeStaticGeneratorIcon,
+      priority: 100
+    })
+
+    componentRegistry.registerToSlot(componentConfig.document.tree.node.meta.name, {
       name: 'navigationExcludeIcon',
       component: TreeNodeNavigationExcludeIcon,
-      priority: 100
+      priority: 200
     })
 
     componentRegistry.registerToSlot(componentConfig.document.tree.node.meta.name, {
       name: 'lockIcon',
       component: TreeNodeLockIcon,
-      priority: 200
+      priority: 300
     })
   }
 })

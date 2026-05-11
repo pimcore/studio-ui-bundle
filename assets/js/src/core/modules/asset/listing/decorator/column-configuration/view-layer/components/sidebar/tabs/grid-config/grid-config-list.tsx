@@ -21,6 +21,7 @@ import { uuid } from '@Pimcore/utils/uuid'
 import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-list-item'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
 interface GridConfigListProps {
   columns: AvailableColumn[]
@@ -44,7 +45,7 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
 
     let translationKey = `${column.key}`
 
-    if ('fieldDefinition' in column.config) {
+    if (hasFieldDefinition(column.config)) {
       const fieldDefinition = column.config.fieldDefinition as Record<string, any>
       translationKey = !isEmptyValue(fieldDefinition?.title) ? fieldDefinition?.title : column.key
     }
