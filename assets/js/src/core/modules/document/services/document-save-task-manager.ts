@@ -11,7 +11,6 @@
 /* eslint-disable max-lines */
 import { store } from '@Pimcore/app/store'
 import { api } from '@Pimcore/modules/document/document-api-slice.gen'
-import { api as documentRtkApi } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { selectDocumentById, setDraftData, setModificationDate } from '@Pimcore/modules/document/document-draft-slice'
 import { setNodePublished, setDocumentNodeStaticGeneratorEnabled } from '@Pimcore/components/element-tree/element-tree-slice'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
