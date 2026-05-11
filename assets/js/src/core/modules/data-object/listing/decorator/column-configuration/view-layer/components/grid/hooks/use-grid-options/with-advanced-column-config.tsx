@@ -9,9 +9,9 @@
  */
 
 import { useTranslation } from 'react-i18next'
-import { isNil } from 'lodash'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
 export const withAdvancedColumnConfig = (useBaseHook: AbstractDecoratorProps['useGridOptions']): AbstractDecoratorProps['useGridOptions'] => {
   const useAdvancedColumnConfigExtension: AbstractDecoratorProps['useGridOptions'] = () => {
@@ -27,7 +27,7 @@ export const withAdvancedColumnConfig = (useBaseHook: AbstractDecoratorProps['us
 
       let translationKey = column.key!
 
-      if ('fieldDefinition' in column.config && !isNil(column.config)) {
+      if (hasFieldDefinition(column.config)) {
         const fieldDefinition = column.config.fieldDefinition as Record<string, any>
         translationKey = !isEmptyValue(fieldDefinition?.title) ? fieldDefinition?.title : column.key
       }

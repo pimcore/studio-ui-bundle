@@ -12,6 +12,7 @@ import React, { useEffect, useState } from 'react'
 import { Select } from '@Pimcore/components/select/select'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { type DefaultOptionType } from 'antd/es/select'
+import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
 interface IObjectSelectConfig {
   fieldDefinition: {
@@ -52,8 +53,9 @@ export const DynamicTypeFieldFilterBooleanSelectComponent = (): React.JSX.Elemen
   ]
 
   let formattedOptions: DefaultOptionType[] = []
-  if ('fieldDefinition' in config && Array.isArray(config?.fieldDefinition?.options)) {
-    formattedOptions = config.fieldDefinition.options.map((opt) => ({
+  if (hasFieldDefinition(config) && Array.isArray(config.fieldDefinition?.options)) {
+    const options: IObjectSelectConfig['fieldDefinition']['options'] = config.fieldDefinition.options
+    formattedOptions = options.map((opt) => ({
       label: opt.key,
       value: opt.value
     }))

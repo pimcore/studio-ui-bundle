@@ -39,6 +39,7 @@ import { useClassDefinitionSelection } from '../../decorator/class-definition-se
 import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
+import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 import { DataObjectBatchEditJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/data-object-batch-edit-job'
 import { DataObjectFolderBatchEditJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/data-object-folder-batch-edit-job'
 import { container } from '@Pimcore/app/depency-injection'
@@ -139,7 +140,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
   const onColumnClick = (column: AvailableColumn): void => {
     if (column.type === 'dataobject.classificationstore') {
-      if (!('fieldDefinition' in column.config)) {
+      if (!hasFieldDefinition(column.config)) {
         throw new Error('Field definition is missing in config')
       }
 
