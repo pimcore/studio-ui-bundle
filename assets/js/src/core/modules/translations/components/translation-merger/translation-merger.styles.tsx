@@ -17,10 +17,6 @@ export const useStyle = createStyles(({ token, css }) => {
         background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
       }
 
-      .row-applied td.ant-table-cell {
-        background-color: ${token.colorBgContainerDisabled} !important;
-      }
-
       .ant-table-content table {
         border: 1px solid ${token.Table.colorBorderSecondary};
         border-radius: 8px;
