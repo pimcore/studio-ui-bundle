@@ -41,12 +41,12 @@ export const useResolvedFieldName = (columnId: string | undefined, fallback: str
           const objectBrick = cfg.objectBrick
           const attribute = cfg.attribute
           if (isNonEmptyString(field) && isNonEmptyString(objectBrick) && isNonEmptyString(attribute)) {
-            return withLocalizedfieldsLeaf([field, objectBrick, attribute], column.localizable === true)
+            return withLocalizedfieldsLeaf([field, objectBrick, attribute], column.localizable)
           }
         }
 
         if (isNonEmptyString(column.key)) {
-          return withLocalizedfieldsLeaf([column.key], column.localizable === true)
+          return withLocalizedfieldsLeaf([column.key], column.localizable)
         }
       }
     }
