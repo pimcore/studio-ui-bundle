@@ -10,6 +10,7 @@
 
 import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useAppDispatch } from '@sdk/app'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { Form } from '@Pimcore/components/form/form'
 import { Select } from '@Pimcore/components/select/select'
@@ -22,6 +23,7 @@ import { isNil } from 'lodash'
 import { FormattedDateTime } from '@Pimcore/components/formatted-date-time/formatted-date-time'
 import { useDebouncedFormChange } from '@Pimcore/components/form/hooks/use-debounced-form-change'
 import { createDocumentDebounceTag } from '@Pimcore/modules/document/utils/document-debounce-tag'
+import { setDocumentNodeStaticGeneratorEnabled } from '@Pimcore/components/element-tree/element-tree-slice'
 
 interface DocumentConfigurationFormValues {
   predefinedDocumentType: string
@@ -53,6 +55,7 @@ export const DocumentConfigurationForm = ({
   const { t } = useTranslation()
   const { updateSettingsData, document } = useDocumentDraft(documentId)
   const { debouncedAutoSave } = useSave()
+  const dispatch = useAppDispatch()
   const [form] = Form.useForm<DocumentConfigurationFormValues>()
 
   const canEdit = hasSavePermission
@@ -114,7 +117,14 @@ export const DocumentConfigurationForm = ({
       updateSettingsData(settingsUpdates)
       debouncedAutoSave()
     }
-  }, [updateSettingsData, debouncedAutoSave, predefinedDocTypes, form, canEdit])
+
+    if ('staticGeneratorEnabled' in changedValues) {
+      dispatch(setDocumentNodeStaticGeneratorEnabled({
+        nodeId: String(documentId),
+        staticGeneratorEnabled: Boolean(changedValues.staticGeneratorEnabled)
+      }))
+    }
+  }, [updateSettingsData, debouncedAutoSave, predefinedDocTypes, form, canEdit, documentId])
 
   const { handleFormChange: handleFormChangeDebounced } = useDebouncedFormChange(handleFormChange, {
     delay: 500,
