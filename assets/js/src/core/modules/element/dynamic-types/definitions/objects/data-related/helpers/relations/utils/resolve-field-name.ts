@@ -12,6 +12,7 @@ import { useMemo } from 'react'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 
+const ADAPTER_COLUMN_TYPE = 'dataobject.adapter'
 const OBJECTBRICK_COLUMN_TYPE = 'dataobject.objectbrick'
 
 const withLocalizedfieldsLeaf = (parts: string[], localized: boolean): string => {
@@ -22,11 +23,13 @@ const withLocalizedfieldsLeaf = (parts: string[], localized: boolean): string =>
  * Resolves the dot-notation field name for the format-path API from the
  * listing grid's decoded SelectedColumn.
  *
+ * - dataobject.adapter columns are keyed by column.key.
  * - dataobject.objectbrick columns expose the segments explicitly via
  *   column.config.{field, objectBrick, attribute} (see PHP ObjectBrickCollector).
- * - All other relation columns are top-level fields keyed by column.key.
  * - Localizable columns get `localizedfields` inserted before the leaf segment,
  *   matching the backend's DotNotationParser resolvers.
+ * - Other column types (notably dataobject.classificationstore) have no
+ *   matching backend resolver — return undefined so the caller skips the call.
  */
 export const useResolvedFieldName = (columnId: string | undefined, fallback: string | null | undefined): string | undefined => {
   const { decodeColumnIdentifier } = useSelectedColumns()
@@ -43,11 +46,14 @@ export const useResolvedFieldName = (columnId: string | undefined, fallback: str
           if (isNonEmptyString(field) && isNonEmptyString(objectBrick) && isNonEmptyString(attribute)) {
             return withLocalizedfieldsLeaf([field, objectBrick, attribute], column.localizable)
           }
+          return undefined
         }
 
-        if (isNonEmptyString(column.key)) {
+        if (column.type === ADAPTER_COLUMN_TYPE && isNonEmptyString(column.key)) {
           return withLocalizedfieldsLeaf([column.key], column.localizable)
         }
+
+        return undefined
       }
     }
     return isNonEmptyString(fallback) ? fallback : undefined
