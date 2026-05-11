@@ -40,10 +40,13 @@ import { eventBus } from '@Pimcore/lib/event-bus'
 import { eventTypes } from '@Pimcore/lib/event-bus/event-types'
 import { type AssetPostUpdateEvent } from '@Pimcore/modules/asset/events/post-update-event'
 import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
+import { useAppDispatch } from '@sdk/app'
+import { setModificationDate } from '@Pimcore/modules/asset/asset-draft-slice'
 
 export const EditorToolbarSaveButton = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useElementContext()
+  const dispatch = useAppDispatch()
 
   const { asset, properties, removeTrackedChanges, customMetadata, customSettings, imageSettings, textData } = useAssetDraft(id)
 
@@ -177,6 +180,10 @@ export const EditorToolbarSaveButton = (): React.JSX.Element => {
       }
     }).then((response) => {
       if (response.error === undefined) {
+        if ('modificationDate' in response.data) {
+          dispatch(setModificationDate({ id, modificationDate: response.data.modificationDate ?? null }))
+        }
+
         const event: AssetPostUpdateEvent = {
           identifier: {
             type: eventTypes['asset:editor:post-update'],
