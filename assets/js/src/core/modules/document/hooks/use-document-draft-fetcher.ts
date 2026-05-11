@@ -15,6 +15,7 @@ import { addFailedDraftId, removeFailedDraftId } from '../document-draft-error-s
 import { isUndefined } from 'lodash'
 import { initialTabsStateValue } from '@Pimcore/modules/element/draft/hooks/use-tabs'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { setDocumentNodeStaticGeneratorEnabled } from '@Pimcore/components/element-tree/element-tree-slice'
 
 // Global map to track fetching drafts
 const fetchingDrafts = new Map<number, boolean>()
@@ -54,6 +55,15 @@ export const useDocumentDraftFetcher = (): UseDocumentDraftFetcherReturn => {
 
         dispatch(documentReceived(mergedDocumentData))
         dispatch(removeFailedDraftId(id))
+
+        const settingsData = documentData.settingsData as Record<string, unknown> | undefined
+
+        if (!isUndefined(settingsData?.staticGeneratorEnabled)) {
+          dispatch(setDocumentNodeStaticGeneratorEnabled({
+            nodeId: String(id),
+            staticGeneratorEnabled: Boolean(settingsData.staticGeneratorEnabled)
+          }))
+        }
       }
     } finally {
       fetchingDrafts.delete(id)
