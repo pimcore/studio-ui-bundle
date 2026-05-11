@@ -84,8 +84,8 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
     return (
       <FormattedAdvancedManyToManyRelationList
         columnDefinition={ columns }
-        dataObjectId={ dataObjectId }
         columnId={ props.cellProps.column.id }
+        dataObjectId={ dataObjectId }
         fieldNameFallback={ objectProps.combinedFieldName }
         pathFormatterClass={ objectProps.pathFormatterClass }
         value={ value }

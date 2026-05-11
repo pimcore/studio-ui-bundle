@@ -64,7 +64,12 @@ export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, p
         { ...props }
       >
         {pathIsHtml
-          ? <span className="tag-content"><SanitizeHtml html={ path } tag="span" /></span>
+          ? (
+            <span className="tag-content"><SanitizeHtml
+              html={ path }
+              tag="span"
+                                          /></span>
+            )
           : <span className="tag-content">{path}</span>}
       </Tag>
     </Tooltip>

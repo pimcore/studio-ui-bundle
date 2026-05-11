@@ -24,7 +24,7 @@ export const useResolvedFieldName = (columnId: string | undefined, fallback: str
     if (columnId !== undefined) {
       const column = decodeColumnIdentifier(columnId)
       if (column?.key !== undefined && column.key.length > 0) {
-        if (column.localizable === true) {
+        if (column.localizable) {
           return `localizedfields.${column.key}`
         }
         return column.key

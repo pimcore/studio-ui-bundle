@@ -70,8 +70,8 @@ export class DynamicTypeObjectDataReverseObjectRelation extends DynamicTypeObjec
 
     return (
       <FormattedRelationList
-        dataObjectId={ dataObjectId }
         columnId={ props.cellProps.column.id }
+        dataObjectId={ dataObjectId }
         fieldNameFallback={ objectProps.combinedFieldName }
         pathFormatterClass={ objectProps.pathFormatterClass }
         relations={ value }

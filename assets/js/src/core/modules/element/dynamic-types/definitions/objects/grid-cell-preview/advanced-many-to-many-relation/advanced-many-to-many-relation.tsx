@@ -49,7 +49,12 @@ export const AdvancedManyToManyRelationList = ({ value, columnDefinition, pathIs
       fullPath: item.element.fullPath,
       isPublished: item.element.isPublished
     }))
-    return <RelationList pathIsHtml={ pathIsHtml } relations={ items } />
+    return (
+      <RelationList
+        pathIsHtml={ pathIsHtml }
+        relations={ items }
+      />
+    )
   }
 
   const formatMetaValue = (metaValue: any): string => {
