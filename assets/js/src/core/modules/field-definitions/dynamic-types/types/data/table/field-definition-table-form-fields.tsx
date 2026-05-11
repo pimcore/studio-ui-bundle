@@ -14,12 +14,14 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { OperationalGrid } from '@Pimcore/components/operational-grid/operational-grid'
 import { isArray, isNumber } from 'lodash'
-import { type ColumnDef } from '@tanstack/react-table'
+import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 
 interface ColumnConfigItem {
   key: string | number
   label: string
 }
+
+const columnHelper = createColumnHelper<ColumnConfigItem>()
 
 export const FieldDefinitionTableFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -32,9 +34,9 @@ export const FieldDefinitionTableFormFields = (props: FieldDefinitionAbstractFor
   const columnConfigActivated = Form.useWatch<boolean>('columnConfigActivated') ?? false
   const columnConfig = Form.useWatch<ColumnConfigItem[]>('columnConfig') ?? []
 
-  const gridColumns = useMemo<Array<ColumnDef<ColumnConfigItem>>>(() => [
-    { id: 'key', header: t('key'), accessorKey: 'key' },
-    { id: 'label', header: t('label'), accessorKey: 'label' }
+  const gridColumns = useMemo<Array<ColumnDef<ColumnConfigItem, any>>>(() => [
+    columnHelper.accessor('key', { header: t('key'), meta: { editable: true, type: 'input' } }),
+    columnHelper.accessor('label', { header: t('label'), meta: { editable: true, type: 'input' } })
   ], [t])
 
   const ensureColumnConfigSize = (count: number): void => {
