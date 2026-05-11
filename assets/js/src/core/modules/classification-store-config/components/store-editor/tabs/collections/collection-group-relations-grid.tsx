@@ -180,6 +180,7 @@ export const CollectionGroupRelationsGrid = ({
                 setPageSize(newPageSize)
               } }
               showSizeChanger
+              showTotal={ (total) => t('pagination.show-total', { total }) }
               total={ total }
             />
           </Toolbar>

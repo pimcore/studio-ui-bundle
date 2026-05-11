@@ -346,6 +346,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
                 setPageSize(newPageSize)
               } }
               showSizeChanger
+              showTotal={ (total) => t('pagination.show-total', { total }) }
               total={ total }
             />
           </Toolbar>
