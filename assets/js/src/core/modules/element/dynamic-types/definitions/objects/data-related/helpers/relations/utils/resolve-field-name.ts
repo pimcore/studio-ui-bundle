@@ -13,9 +13,17 @@ import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/co
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 
 /**
- * Resolves the dot-notation field name for the format-path API from the listing grid's
- * encoded column id. Matches the editor convention: localized fields use the
- * `localizedfields.` prefix (handled by the backend's LocalizedFieldResolver).
+ * Resolves the dot-notation field name for the format-path API from the listing
+ * grid's encoded column id.
+ *
+ * The column key already contains the container path:
+ *  - top-level field:   "relatedProducts"
+ *  - object brick field: "myBricks.SomeBrick.relatedProducts"
+ *
+ * When the column is localizable, `localizedfields` is inserted right before
+ * the leaf, matching the backend resolvers:
+ *  - LocalizedFieldResolver expects     ["localizedfields", "relatedProducts"]
+ *  - ObjectBrickResolver  expects [..., "localizedfields", "relatedProducts"]
  */
 export const useResolvedFieldName = (columnId: string | undefined, fallback: string | null | undefined): string | undefined => {
   const { decodeColumnIdentifier } = useSelectedColumns()
@@ -25,7 +33,9 @@ export const useResolvedFieldName = (columnId: string | undefined, fallback: str
       const column = decodeColumnIdentifier(columnId)
       if (column?.key !== undefined && column.key.length > 0) {
         if (column.localizable) {
-          return `localizedfields.${column.key}`
+          const parts = column.key.split('.')
+          parts.splice(parts.length - 1, 0, 'localizedfields')
+          return parts.join('.')
         }
         return column.key
       }
