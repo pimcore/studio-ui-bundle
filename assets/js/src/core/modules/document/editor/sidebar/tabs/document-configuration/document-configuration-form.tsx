@@ -124,7 +124,7 @@ export const DocumentConfigurationForm = ({
         staticGeneratorEnabled: Boolean(changedValues.staticGeneratorEnabled)
       }))
     }
-  }, [updateSettingsData, debouncedAutoSave, predefinedDocTypes, form, canEdit, dispatch, documentId])
+  }, [updateSettingsData, debouncedAutoSave, predefinedDocTypes, form, canEdit, documentId])
 
   const { handleFormChange: handleFormChangeDebounced } = useDebouncedFormChange(handleFormChange, {
     delay: 500,
