@@ -161,10 +161,10 @@ export const KeyDefinitionModal = ({
 
     const defaultData = fieldDefinitionRegistry.hasDynamicType(keyDetail.type)
       ? fieldDefinitionRegistry.getDynamicType(keyDetail.type).getDefaultData({
-        area: AREA,
-        path: [],
-        fieldDefinitions: {}
-      })
+          area: AREA,
+          path: [],
+          fieldDefinitions: {}
+        })
       : {}
 
     // Merge stored definition over the defaults (stored values take priority),
