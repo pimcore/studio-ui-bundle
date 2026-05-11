@@ -59,8 +59,7 @@ export const DataObjectSelectorListing = (): React.JSX.Element => {
       ClassDefinitionSelectionDecorator,
       {
         showConfigLayer: false,
-        classRestriction: classRestriction.length > 0 ? classRestriction : undefined,
-        isResolvingClassDefinitionsBasedOnElementId: classRestriction.length === 0
+        classRestriction: classRestriction.length > 0 ? classRestriction : undefined
       } as ClassDefinitionSelectionDecoratorConfig
     ],
     [GeneralFiltersDecorator, { handleSearchTermInSidebar: false } as GeneralFiltersDecoratorConfig],
