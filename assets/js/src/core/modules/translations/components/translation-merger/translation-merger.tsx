@@ -40,8 +40,8 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
   const { styles } = useStyle()
   const [updateTranslations] = useTranslationUpdateMutation()
   const [loadingRows, setLoadingRows] = useState<Set<string>>(new Set())
-  const [currentPage, setCurrentPage] = useState(1)
-  const [pageSize, setPageSize] = useState(20)
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(20)
 
   const initialRows: MergerRow[] = useMemo(() => deltaItems.flatMap(item =>
     item.deltaValues.map(delta => ({
