@@ -21,7 +21,7 @@ export const withClassDefinitionSelectionContext = (Component: AbstractDecorator
     const { getId } = useElementId()
 
     return (
-      <ClassDefinitionsProvider elementId={ config.isResolvingClassDefinitionsBasedOnElementId === false ? 1 : getId() }>
+      <ClassDefinitionsProvider elementId={ config.isResolvingClassDefinitionsBasedOnElementId === false ? undefined : getId() }>
         <ClassDefinitionSelectionProvider config={ config }>
           <Component />
         </ClassDefinitionSelectionProvider>
