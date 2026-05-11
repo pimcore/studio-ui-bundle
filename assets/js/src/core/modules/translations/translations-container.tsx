@@ -19,6 +19,7 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Box, Form, IconTextButton, Input, SearchInput, useModal, Select, Pagination } from '@sdk/components'
+import { Divider } from 'antd'
 import trackError, { ApiError } from '../app/error-handler'
 import { useTranslationGetListQuery, useTranslationGetDomainsQuery, api } from '../app/translations/translations-api-slice-enhanced'
 import { useTranslation } from './hooks/use-translation'
@@ -38,6 +39,7 @@ import { TranslationErrorModals } from './components/translation-error-modals'
 import { ExportTranslationsButton } from './components/export-translations-button'
 import { ImportTranslationsButton } from './components/import-translations-button'
 import { CleanupTranslationsButton } from './components/cleanup-translations-button'
+import { useStyle } from './translations-container.styles'
 
 const TESTID_PREFIX = 'translations'
 
@@ -50,6 +52,7 @@ export interface TranslationsContainerProps {
 }
 
 export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContainerProps): React.JSX.Element => {
+  const { styles } = useStyle()
   const [form] = Form.useForm<FormValues>()
   const dispatch = useAppDispatch()
   const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
@@ -174,6 +177,7 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
   }
 
   return (
+    <div className={ styles.translationsContainer }>
     <ContentLayout
       renderToolbar={
         <Toolbar theme="secondary">
@@ -203,13 +207,16 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
           </Flex>
           <Flex
             align="center"
-            gap="extra-small"
           >
             <IconButton
               data-testid={ `${TESTID_PREFIX}-refresh-button` }
               disabled={ translationsLoading }
               icon={ { value: 'refresh' } }
               onClick={ reload }
+            />
+            <Divider
+              style={ { height: 24 } }
+              type="vertical"
             />
             <Pagination
               current={ currentPage }
@@ -232,7 +239,10 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
           } }
           theme='secondary'
         >
-          <Flex gap={ 'small' }>
+          <Flex
+            align="center"
+            gap={ 'extra-small' }
+          >
             <Title>{t('translations.new-translation')}</Title>
             <Form
               form={ form }
@@ -241,11 +251,11 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
                 void onCreateTranslation(translationKey)
               } }
             >
-              <Flex>
                 <Form.Item
                   name="translationKey"
                 >
                   <Input
+                    className="translations-key-input"
                     data-testid={ `${TESTID_PREFIX}-key-input` }
                     placeholder={ t('translations.add-translation.key') }
                   />
@@ -259,10 +269,11 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
                   >
                     {t('translations.new')}
                   </IconTextButton>
-                </Form.Item>
-              </Flex>
-            </Form>
+                </Form.Item>            </Form>
+          </Flex>
+          <Flex gap="small">
             <Select
+              className="translations-domain-select"
               data-testid={ `${TESTID_PREFIX}-domain-select` }
               loading={ domainsLoading }
               onChange={ (value: string) => {
@@ -271,16 +282,14 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
               } }
               options={ availableDomains.map(domainInfo => ({
                 value: domainInfo.domain,
-                label: domainInfo.domain
+                label: t(`translations.domain.${domainInfo.domain}`, { defaultValue: domainInfo.domain })
               })) }
               placeholder={ t('translations.select-domain') }
-              style={ { minWidth: 120 } }
               value={ domain }
             />
-          </Flex>
-          <Flex gap="small">
             <Select
               allowClear
+              className="translations-locale-select"
               data-testid={ `${TESTID_PREFIX}-locale-select` }
               disabled={ viewableLanguages.length === 0 || languagesLoading }
               dropdownStyle={ { minWidth: 250 } }
@@ -300,10 +309,10 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
               })) }
               placeholder={ t('translations.show-hide-locale') }
               showSearch
-              style={ { minWidth: 220 } }
               value={ visibleLocales ?? [] }
             />
             <SearchInput
+              className="translations-search-input"
               data-testid={ `${TESTID_PREFIX}-search-input` }
               loading={ translationsLoading }
               onSearch={ (value) => {
@@ -348,5 +357,6 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
         </Box>
       </Content>
     </ContentLayout>
+    </div>
   )
 }

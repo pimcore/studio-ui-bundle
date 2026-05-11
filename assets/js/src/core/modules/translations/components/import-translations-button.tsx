@@ -26,6 +26,7 @@ export const ImportTranslationsButton = ({ domain, onSuccess }: ImportTranslatio
       <IconTextButton
         icon={ { value: 'import' } }
         onClick={ () => { setIsModalOpen(true) } }
+        type="link"
       >
         {t('translations.toolbar.import-merge')}
       </IconTextButton>

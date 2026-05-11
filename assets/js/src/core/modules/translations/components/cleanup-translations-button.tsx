@@ -47,6 +47,7 @@ export const CleanupTranslationsButton = ({ domain, onSuccess }: CleanupTranslat
         icon={ { value: 'trash' } }
         loading={ isLoading }
         onClick={ handleCleanup }
+        type="link"
       >
         {t('translations.toolbar.cleanup')}
       </IconTextButton>

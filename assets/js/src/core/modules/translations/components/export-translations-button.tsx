@@ -51,6 +51,7 @@ export const ExportTranslationsButton = ({ domain, filters }: ExportTranslations
       icon={ { value: 'export' } }
       loading={ isLoading }
       onClick={ () => { void handleExport() } }
+      type="link"
     >
       {t('translations.toolbar.export')}
     </IconTextButton>

@@ -62,6 +62,12 @@ export const ImportTranslationsModal = ({
   const [fileError, setFileError] = useState<string | null>(null)
 
   useEffect(() => {
+    if (csvSettings !== null && !isDetecting) {
+      form.setFieldsValue(csvSettings)
+    }
+  }, [csvSettings, isDetecting, form])
+
+  useEffect(() => {
     if (open) {
       setSelectedFile(null)
       setFileError(null)
@@ -82,7 +88,8 @@ export const ImportTranslationsModal = ({
 
     try {
       const sampleText = await file.slice(0, 4096).text()
-      const sample = sampleText.split('\n').slice(0, 5).join('\n')
+      const sampleLines = sampleText.split(/(?<=\n)/)
+      const sample = sampleLines.slice(0, 5).join('')
       const detected = await detectCsvSettings({ body: { sample } }).unwrap()
 
       const settings: CsvSettings = {
@@ -93,16 +100,14 @@ export const ImportTranslationsModal = ({
       }
 
       setCsvSettings(settings)
-      form.setFieldsValue(settings)
     } catch {
       const defaults: CsvSettings = {
         delimiter: ',',
         quoteChar: '"',
         escapeChar: '"',
-        lineTerminator: '\\r\\n'
+        lineTerminator: '0d0a'
       }
       setCsvSettings(defaults)
-      form.setFieldsValue(defaults)
     } finally {
       setIsDetecting(false)
     }
@@ -276,7 +281,13 @@ export const ImportTranslationsModal = ({
           <FormKit
             formProps={ {
               form,
-              component: false
+              component: false,
+              initialValues: csvSettings ?? {
+                delimiter: ',',
+                quoteChar: '"',
+                escapeChar: '"',
+                lineTerminator: '0d0a'
+              }
             } }
           >
             <FormKit.Panel title={ t('translations.import.modal.csv-settings') }>
