@@ -26,7 +26,7 @@ export interface UseConvertRelationEditableColumnsResult {
 
 const EDITABLE_COLUMN_PREFIX = 'edit::'
 
-const mapColumnType = (type: string, value?: string): ColumnMeta<any, any> => {
+const mapColumnType = (type: string, t: (key: string) => string, value?: string): ColumnMeta<any, any> => {
   if (type === 'bool' || type === 'columnbool') {
     return {
       type: 'checkbox',
@@ -46,7 +46,7 @@ const mapColumnType = (type: string, value?: string): ColumnMeta<any, any> => {
       type: 'select',
       editable: true,
       config: {
-        options: value?.split(';') ?? []
+        options: value?.split(';').map(opt => ({ label: t(opt), value: opt })) ?? []
       }
     }
   }
@@ -56,7 +56,7 @@ const mapColumnType = (type: string, value?: string): ColumnMeta<any, any> => {
       type: 'multi-select',
       editable: true,
       config: {
-        options: value?.split(';') ?? []
+        options: value?.split(';').map(opt => ({ label: t(opt), value: opt })) ?? []
       }
     }
   }
@@ -85,7 +85,7 @@ export const useConvertRelationEditableColumns = (
         columnHelper.accessor(EDITABLE_COLUMN_PREFIX + column.key, {
           header: !_.isEmpty(column.label) ? t(String(column.label)) : undefined,
           size: column.width ?? 150,
-          meta: mapColumnType(column.type ?? 'text', column.value)
+          meta: mapColumnType(column.type ?? 'text', t, column.value)
         })
       )
     }
