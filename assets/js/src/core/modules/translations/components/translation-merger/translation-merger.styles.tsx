@@ -13,18 +13,33 @@ import { createStyles } from 'antd-style'
 export const useStyle = createStyles(({ token, css }) => {
   return {
     mergerContainer: css`
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-
-      .toolbar-label {
-        font-size: ${token.fontSizeSM}px;
-        color: ${token.colorTextSecondary};
-        margin-right: ${token.marginMD}px;
-      }
-
       .row-conflict {
         background-color: ${token.Colors.Brand.Warning.colorWarningBg} !important;
+      }
+
+      .ant-table-content table {
+        border: 1px solid ${token.Table.colorBorderSecondary};
+        border-radius: 8px;
+      }
+
+      .ant-table-thead .ant-table-cell {
+        border-top: 1px solid ${token.Table.colorBorderSecondary};
+      }
+
+      .ant-table-cell {
+        border-left: 1px solid ${token.Table.colorBorderSecondary};
+      }
+
+      .ant-table-cell:first-of-type {
+        border-left: none;
+      }
+
+      .ant-table-tbody > tr:last-child > td:first-child {
+        border-bottom-left-radius: 8px;
+      }
+
+      .ant-table-tbody > tr:last-child > td:last-child {
+        border-bottom-right-radius: 8px;
       }
     `
   }

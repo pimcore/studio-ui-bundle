@@ -339,7 +339,6 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
               if (record.state === 'pending') return 'row-conflict'
               return ''
             } }
-            scroll={ { y: 'calc(100vh - 250px)' } }
             size="small"
           />
         </Box>

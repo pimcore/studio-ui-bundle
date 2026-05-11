@@ -177,8 +177,8 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
   }
 
   return (
-    <div className={ styles.translationsContainer }>
     <ContentLayout
+      className={ styles.translationsContainer }
       renderToolbar={
         <Toolbar theme="secondary">
           <Flex gap="extra-small">
@@ -357,6 +357,5 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
         </Box>
       </Content>
     </ContentLayout>
-    </div>
   )
 }
