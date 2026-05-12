@@ -24,6 +24,7 @@ import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { type SerializedError } from '@reduxjs/toolkit'
 import { useAppDispatch } from '@sdk/app'
 import { setNodePublished } from '@Pimcore/components/element-tree/element-tree-slice'
+import { setModificationDate } from '@Pimcore/modules/data-object/data-object-draft-slice'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import {
@@ -139,6 +140,10 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
       if (response.error === undefined) {
         if ('draftData' in response.data) {
           setDraftData(response.data?.draftData ?? null)
+        }
+
+        if ('modificationDate' in response.data) {
+          dispatch(setModificationDate({ id, modificationDate: response.data?.modificationDate ?? null }))
         }
 
         if (task === SaveTaskType.Publish) {
