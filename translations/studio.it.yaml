@@ -491,6 +491,8 @@ published: Pubblicato
 classname: Nome classe
 index: Indice
 listing.grid-config.title: Configurazione griglia
+grid-config.discard-all-changes: Annulla tutte le modifiche
+grid-config.apply-changes: Applica modifiche
 listing.add-column: Aggiungi una colonna
 listing.actions: Applica alla selezione
 listing.non-selected.actions: Applica a tutti

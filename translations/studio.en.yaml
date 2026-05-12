@@ -493,6 +493,8 @@ published: Published
 classname: Classname
 index: Index
 listing.grid-config.title: Grid config
+grid-config.discard-all-changes: Discard all changes
+grid-config.apply-changes: Apply changes
 listing.add-column: Add a column
 listing.actions: Apply to selection
 listing.non-selected.actions: Apply to all
