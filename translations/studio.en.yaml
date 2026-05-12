@@ -580,7 +580,13 @@ translations.show-all-languages: Show all
 translations.show-minimal-languages: Show minimal
 translations.show-hide-locale: Show/ Hide Locale
 translations.new-translation: New Translation
-translations.new: Add
+translations.new: New
+translations.domain.messages: Messages
+translations.domain.admin: Admin
+translations.domain.studio: Studio
+translations.domain.dataQualityManagement: Data Quality Management
+translations.domain.portal_engine_frontend: Portal Engine Frontend
+translations.domain.pimcore_copilot: Pimcore Copilot
 translations.type-options.custom: ICU Format
 translations.type-options.simple: Simple Text
 translations.edit-modal.tab.plain-text: Plain Text
@@ -2652,7 +2658,7 @@ bulk-import.type.fieldcollection: Field Collections
 bulk-import.type.objectbrick: Object Bricks
 translations.toolbar.export: CSV Export
 translations.toolbar.import: Import
-translations.toolbar.cleanup: Cleanup
+translations.toolbar.cleanup: Clean up
 translations.import.modal.title: Import Translations
 translations.import.modal.browse: Browse Files
 translations.import.modal.import: Import
@@ -2664,9 +2670,9 @@ translations.import.modal.quotechar: Quote Character
 translations.import.modal.escapechar: Escape Character
 translations.import.modal.lineterminator: Line Terminator
 translations.import.modal.field-required: This field is required
-translations.cleanup.confirm.title: Cleanup Translations
+translations.cleanup.confirm.title: Clean up Translations
 translations.cleanup.confirm.content: This will remove all unused translation keys. This action cannot be undone.
-translations.cleanup.confirm.ok: Cleanup
+translations.cleanup.confirm.ok: Clean up
 translations.import.delta.title: Import Results
 translations.import.delta.description: The following translations differ from the imported values. Select the ones you want to overwrite with the imported values.
 translations.import.delta.column.key: Key

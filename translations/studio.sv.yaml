@@ -578,7 +578,13 @@ translations.show-all-languages: Visa alla
 translations.show-minimal-languages: Visa minimalt
 translations.show-hide-locale: Visa/dölj språk
 translations.new-translation: Ny översättning
-translations.new: Lägg till
+translations.new: Ny
+translations.domain.messages: Meddelanden
+translations.domain.admin: Admin
+translations.domain.studio: Studio
+translations.domain.dataQualityManagement: Datakvalitetshantering
+translations.domain.portal_engine_frontend: Portal Engine Frontend
+translations.domain.pimcore_copilot: Pimcore Copilot
 translations.type-options.custom: ICU-format
 translations.type-options.simple: Enkel text
 translations.edit-modal.tab.plain-text: Ren text

@@ -578,7 +578,13 @@ translations.show-all-languages: Mostra tutte
 translations.show-minimal-languages: Mostra minimali
 translations.show-hide-locale: Mostra/Nascondi lingua
 translations.new-translation: Nuova traduzione
-translations.new: Aggiungi
+translations.new: Nuovo
+translations.domain.messages: Messaggi
+translations.domain.admin: Admin
+translations.domain.studio: Studio
+translations.domain.dataQualityManagement: Gestione qualità dei dati
+translations.domain.portal_engine_frontend: Portal Engine Frontend
+translations.domain.pimcore_copilot: Pimcore Copilot
 translations.type-options.custom: Formato ICU
 translations.type-options.simple: Testo semplice
 translations.edit-modal.tab.plain-text: Testo normale
