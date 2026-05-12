@@ -22,6 +22,7 @@ import {
 import type { DeltaItem } from '../../../app/translations/translations-api-slice.gen'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { setMergerData } from '../translation-merger/merger-data-store'
+import { formatDataUnit } from '@Pimcore/utils/data-unit'
 
 const { Dragger } = Upload
 
@@ -184,14 +185,6 @@ export const ImportTranslationsModal = ({
     form.resetFields()
   }
 
-  const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return '0 Bytes'
-    const k = 1024
-    const sizes = ['Bytes', 'KB', 'MB', 'GB']
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
-  }
-
   const uploadProps: UploadProps = {
     name: 'file',
     multiple: false,
@@ -252,7 +245,7 @@ export const ImportTranslationsModal = ({
             <Flex>
               <div>
                 <div className="file-name">{selectedFile.name}</div>
-                <div className="file-size">{formatFileSize(selectedFile.size)}</div>
+                <div className="file-size">{formatDataUnit(selectedFile.size)}</div>
               </div>
             </Flex>
             {!isImporting && (
