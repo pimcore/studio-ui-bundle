@@ -579,7 +579,13 @@ translations.show-all-languages: Visa alla
 translations.show-minimal-languages: Visa minimalt
 translations.show-hide-locale: Visa/dölj språk
 translations.new-translation: Ny översättning
-translations.new: Lägg till
+translations.new: Ny
+translations.domain.messages: Meddelanden
+translations.domain.admin: Admin
+translations.domain.studio: Studio
+translations.domain.dataQualityManagement: Datakvalitetshantering
+translations.domain.portal_engine_frontend: Portal Engine Frontend
+translations.domain.pimcore_copilot: Pimcore Copilot
 translations.type-options.custom: ICU-format
 translations.type-options.simple: Enkel text
 translations.edit-modal.tab.plain-text: Ren text
@@ -2644,3 +2650,44 @@ bulk-import.type.class: Klasser
 bulk-import.type.customlayout: Custom Layouts
 bulk-import.type.fieldcollection: Field Collections
 bulk-import.type.objectbrick: Object Bricks
+translations.toolbar.export: CSV-export
+translations.toolbar.import: Importera
+translations.toolbar.cleanup: Städa upp
+translations.import.modal.title: Importera översättningar
+translations.import.modal.browse: Bläddra bland filer
+translations.import.modal.import: Importera
+translations.import.modal.drag-drop: Dra och släpp en CSV-fil här
+translations.import.modal.invalid-file: Vänligen välj en giltig CSV-fil
+translations.import.modal.csv-settings: CSV-inställningar
+translations.import.modal.delimiter: Avgränsare
+translations.import.modal.quotechar: Citattecken
+translations.import.modal.escapechar: Escape-tecken
+translations.import.modal.lineterminator: Radavslutare
+translations.import.modal.field-required: Detta fält är obligatoriskt
+translations.cleanup.confirm.title: Städa upp översättningar
+translations.cleanup.confirm.content: Detta tar bort alla oanvända översättningsnycklar. Denna åtgärd kan inte ångras.
+translations.cleanup.confirm.ok: Städa upp
+translations.import.delta.title: Importresultat
+translations.import.delta.description: Följande översättningar skiljer sig från de importerade värdena. Välj de du vill skriva över med de importerade värdena.
+translations.import.delta.column.key: Nyckel
+translations.import.delta.column.locale: Språk
+translations.import.delta.column.current: Nuvarande översättning
+translations.import.delta.column.imported: Importerad översättning
+translations.toolbar.import-merge: Importera och sammanfoga CSV
+translations.import.delta.skip: Hoppa över
+translations.import.delta.apply: Tillämpa valda ({{count}})
+widget.translation-merger: Sammanfoga översättningar
+translations.merger.column.locale: Språk
+translations.merger.column.key: Nyckel
+translations.merger.column.csv-value: CSV-värde
+translations.merger.column.action: Åtgärd
+translations.merger.column.current: Nuvarande värde
+translations.merger.column.state: Status
+translations.merger.state.applied: Tillämpad
+translations.merger.state.reverted: Återställd
+translations.merger.state.pending: Väntande
+translations.merger.apply-all: Tillämpa alla
+translations.merger.revert-all: Återställ alla
+translations.merger.title: "Sammanfoga översättningar (Domän: {{domain}})"
+translations.merger.column.language: Språk
+translations.merger.items: objekt

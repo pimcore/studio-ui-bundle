@@ -579,7 +579,13 @@ translations.show-all-languages: Vis alle
 translations.show-minimal-languages: Vis minimal
 translations.show-hide-locale: Vis/skjul språk
 translations.new-translation: Ny oversettelse
-translations.new: Legg til
+translations.new: Ny
+translations.domain.messages: Meldinger
+translations.domain.admin: Admin
+translations.domain.studio: Studio
+translations.domain.dataQualityManagement: Datakvalitetsstyring
+translations.domain.portal_engine_frontend: Portal Engine Frontend
+translations.domain.pimcore_copilot: Pimcore Copilot
 translations.type-options.custom: ICU-format
 translations.type-options.simple: Enkel tekst
 translations.edit-modal.tab.plain-text: Ren tekst
@@ -2644,3 +2650,44 @@ bulk-import.type.class: Klasser
 bulk-import.type.customlayout: Custom Layouts
 bulk-import.type.fieldcollection: Field Collections
 bulk-import.type.objectbrick: Object Bricks
+translations.toolbar.export: CSV-eksport
+translations.toolbar.import: Importer
+translations.toolbar.cleanup: Rydd opp
+translations.import.modal.title: Importer oversettelser
+translations.import.modal.browse: Bla gjennom filer
+translations.import.modal.import: Importer
+translations.import.modal.drag-drop: Dra og slipp en CSV-fil her
+translations.import.modal.invalid-file: Vennligst velg en gyldig CSV-fil
+translations.import.modal.csv-settings: CSV-innstillinger
+translations.import.modal.delimiter: Skilletegn
+translations.import.modal.quotechar: Anførselstegn
+translations.import.modal.escapechar: Escape-tegn
+translations.import.modal.lineterminator: Linjeavslutning
+translations.import.modal.field-required: Dette feltet er påkrevd
+translations.cleanup.confirm.title: Rydd opp oversettelser
+translations.cleanup.confirm.content: Dette vil fjerne alle ubrukte oversettelsesnøkler. Denne handlingen kan ikke angres.
+translations.cleanup.confirm.ok: Rydd opp
+translations.import.delta.title: Importresultater
+translations.import.delta.description: Følgende oversettelser skiller seg fra de importerte verdiene. Velg de du vil overskrive med de importerte verdiene.
+translations.import.delta.column.key: Nøkkel
+translations.import.delta.column.locale: Språk
+translations.import.delta.column.current: Nåværende oversettelse
+translations.import.delta.column.imported: Importert oversettelse
+translations.toolbar.import-merge: Importer og slå sammen CSV
+translations.import.delta.skip: Hopp over
+translations.import.delta.apply: Bruk valgte ({{count}})
+widget.translation-merger: Slå sammen oversettelser
+translations.merger.column.locale: Språk
+translations.merger.column.key: Nøkkel
+translations.merger.column.csv-value: CSV-verdi
+translations.merger.column.action: Handling
+translations.merger.column.current: Nåværende verdi
+translations.merger.column.state: Status
+translations.merger.state.applied: Brukt
+translations.merger.state.reverted: Tilbakestilt
+translations.merger.state.pending: Ventende
+translations.merger.apply-all: Bruk alle
+translations.merger.revert-all: Tilbakestill alle
+translations.merger.title: "Slå sammen oversettelser (Domene: {{domain}})"
+translations.merger.column.language: Språk
+translations.merger.items: elementer

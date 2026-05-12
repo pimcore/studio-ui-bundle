@@ -579,7 +579,13 @@ translations.show-all-languages: Mostrar todos
 translations.show-minimal-languages: Mostrar mínimo
 translations.show-hide-locale: Mostrar/Ocultar idioma
 translations.new-translation: Nueva traducción
-translations.new: Añadir
+translations.new: Nuevo
+translations.domain.messages: Mensajes
+translations.domain.admin: Admin
+translations.domain.studio: Studio
+translations.domain.dataQualityManagement: Gestión de calidad de datos
+translations.domain.portal_engine_frontend: Portal Engine Frontend
+translations.domain.pimcore_copilot: Pimcore Copilot
 translations.type-options.custom: Formato ICU
 translations.type-options.simple: Texto simple
 translations.edit-modal.tab.plain-text: Texto plano
@@ -2644,3 +2650,44 @@ bulk-import.type.class: Clases
 bulk-import.type.customlayout: Custom Layouts
 bulk-import.type.fieldcollection: Field Collections
 bulk-import.type.objectbrick: Object Bricks
+translations.toolbar.export: Exportar CSV
+translations.toolbar.import: Importar
+translations.toolbar.cleanup: Limpiar
+translations.import.modal.title: Importar traducciones
+translations.import.modal.browse: Explorar archivos
+translations.import.modal.import: Importar
+translations.import.modal.drag-drop: Arrastre y suelte un archivo CSV aquí
+translations.import.modal.invalid-file: Por favor seleccione un archivo CSV válido
+translations.import.modal.csv-settings: Configuración CSV
+translations.import.modal.delimiter: Delimitador
+translations.import.modal.quotechar: Carácter de comillas
+translations.import.modal.escapechar: Carácter de escape
+translations.import.modal.lineterminator: Terminador de línea
+translations.import.modal.field-required: Este campo es obligatorio
+translations.cleanup.confirm.title: Limpiar traducciones
+translations.cleanup.confirm.content: Esto eliminará todas las claves de traducción no utilizadas. Esta acción no se puede deshacer.
+translations.cleanup.confirm.ok: Limpiar
+translations.import.delta.title: Resultados de la importación
+translations.import.delta.description: Las siguientes traducciones difieren de los valores importados. Seleccione las que desea sobrescribir con los valores importados.
+translations.import.delta.column.key: Clave
+translations.import.delta.column.locale: Idioma
+translations.import.delta.column.current: Traducción actual
+translations.import.delta.column.imported: Traducción importada
+translations.toolbar.import-merge: Importar y fusionar CSV
+translations.import.delta.skip: Omitir
+translations.import.delta.apply: Aplicar seleccionados ({{count}})
+widget.translation-merger: Fusionar traducciones
+translations.merger.column.locale: Idioma
+translations.merger.column.key: Clave
+translations.merger.column.csv-value: Valor CSV
+translations.merger.column.action: Acción
+translations.merger.column.current: Valor actual
+translations.merger.column.state: Estado
+translations.merger.state.applied: Aplicado
+translations.merger.state.reverted: Revertido
+translations.merger.state.pending: Pendiente
+translations.merger.apply-all: Aplicar todo
+translations.merger.revert-all: Revertir todo
+translations.merger.title: "Fusionar traducciones (Dominio: {{domain}})"
+translations.merger.column.language: Idioma
+translations.merger.items: elementos

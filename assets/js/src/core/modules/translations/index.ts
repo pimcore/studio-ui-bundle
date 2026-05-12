@@ -16,6 +16,7 @@ import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-
 import { NavPermission } from '../perspectives/enums/nav-permission'
 import { UserPermission } from '../auth/enums/user-permission'
 import { TranslationsWrapper } from './translations-wrapper'
+import { TranslationMergerContainer } from './components/translation-merger/translation-merger-container'
 import { type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 
 export const TRANSLATIONS_WIDGET: WidgetManagerTabConfig = {
@@ -50,6 +51,11 @@ moduleSystem.registerModule({
     widgetRegistryService.registerWidget({
       name: 'translations',
       component: TranslationsWrapper
+    })
+
+    widgetRegistryService.registerWidget({
+      name: 'translation-merger',
+      component: TranslationMergerContainer
     })
   }
 })
