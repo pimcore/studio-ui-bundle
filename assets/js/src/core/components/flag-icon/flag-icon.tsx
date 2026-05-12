@@ -267,7 +267,10 @@ export const FlagIcon = ({ value, width = 21, height = 15 }: IFlagIconProps): Re
   }
 
   return (
-    <span ref={ containerRef } style={ { display: 'inline-flex', lineHeight: 0 } }>
+    <span
+      ref={ containerRef }
+      style={ { display: 'inline-flex', lineHeight: 0 } }
+    >
       {React.cloneElement(flag as React.ReactElement<any>, {
         style: { width, height },
         width: width.toString(),

@@ -251,25 +251,25 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
                 void onCreateTranslation(translationKey)
               } }
             >
-                <Form.Item
-                  name="translationKey"
+              <Form.Item
+                name="translationKey"
+              >
+                <Input
+                  className="translations-key-input"
+                  data-testid={ `${TESTID_PREFIX}-key-input` }
+                  placeholder={ t('translations.add-translation.key') }
+                />
+              </Form.Item>
+              <Form.Item>
+                <IconTextButton
+                  data-testid={ `${TESTID_PREFIX}-add-button` }
+                  htmlType="submit"
+                  icon={ { value: 'new' } }
+                  loading={ createLoading }
                 >
-                  <Input
-                    className="translations-key-input"
-                    data-testid={ `${TESTID_PREFIX}-key-input` }
-                    placeholder={ t('translations.add-translation.key') }
-                  />
-                </Form.Item>
-                <Form.Item>
-                  <IconTextButton
-                    data-testid={ `${TESTID_PREFIX}-add-button` }
-                    htmlType="submit"
-                    icon={ { value: 'new' } }
-                    loading={ createLoading }
-                  >
-                    {t('translations.new')}
-                  </IconTextButton>
-                </Form.Item>            </Form>
+                  {t('translations.new')}
+                </IconTextButton>
+              </Form.Item>            </Form>
           </Flex>
           <Flex gap="small">
             <Select
