@@ -9,21 +9,20 @@
  */
 
 import React from 'react'
-import { IconButton, Flex, FormKit, Form, Input } from '@sdk/components'
+import { IconButton, Flex, FormKit, Form, Input, type formInstanceType } from '@sdk/components'
 import { Spin } from 'antd'
 import { t } from 'i18next'
 import { useStyle } from './import-translations-modal.styles'
 import { formatDataUnit } from '@Pimcore/utils/data-unit'
 import type { CsvSettings } from './types'
 import { DEFAULT_CSV_SETTINGS } from './types'
-import type { FormInstance } from 'antd'
 
 interface CsvSettingsStepProps {
   selectedFile: File
   isDetecting: boolean
   isImporting: boolean
   csvSettings: CsvSettings | null
-  form: FormInstance<CsvSettings>
+  form: formInstanceType<CsvSettings>
   onBack: () => void
 }
 

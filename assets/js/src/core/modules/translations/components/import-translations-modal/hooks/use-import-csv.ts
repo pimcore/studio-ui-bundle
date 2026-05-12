@@ -9,7 +9,7 @@
  */
 
 import { useState, useRef, useEffect } from 'react'
-import { Form } from '@sdk/components'
+import { Form, type formInstanceType } from '@sdk/components'
 import trackError, { GeneralError } from '../../../../app/error-handler'
 import {
   useTranslationImportCsvMutation,
@@ -20,7 +20,6 @@ import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widg
 import { setMergerData } from '../../translation-merger/merger-data-store'
 import type { CsvSettings, ModalStep } from '../types'
 import { DEFAULT_CSV_SETTINGS } from '../types'
-import type { FormInstance } from 'antd'
 import { t } from 'i18next'
 
 interface UseImportCsvReturn {
@@ -30,8 +29,8 @@ interface UseImportCsvReturn {
   isDetecting: boolean
   isImporting: boolean
   fileError: string | null
-  form: FormInstance<CsvSettings>
-  fileInputRef: React.RefObject<HTMLInputElement | null>
+  form: formInstanceType<CsvSettings>
+  fileInputRef: React.RefObject<HTMLInputElement>
   handleFileSelect: (file: File) => void
   handleUpload: () => Promise<void>
   handleCancel: () => void
@@ -51,7 +50,7 @@ export const useImportCsv = (
   const [csvSettings, setCsvSettings] = useState<CsvSettings | null>(null)
   const [isDetecting, setIsDetecting] = useState<boolean>(false)
   const [fileError, setFileError] = useState<string | null>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null!)
   const { openMainWidget } = useWidgetManager()
   const [form] = Form.useForm<CsvSettings>()
 
