@@ -35,7 +35,7 @@ export const ActionsCell = ({ info, setTranslationRows }: ActionsCellProps): Rea
     <Flex
       align="center"
       className="translations-table--actions-column"
-      justify="center"
+      justify="flex-start"
     >
       <IconButton
         data-testid="translations-delete-button"

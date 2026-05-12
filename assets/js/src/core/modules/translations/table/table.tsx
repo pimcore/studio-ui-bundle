@@ -118,7 +118,7 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales, edi
     columnHelper.accessor('key', {
       header: t('translations.columns.key'),
       meta: { editable: false },
-      size: 200
+      size: 150
     }),
     columnHelper.accessor('type', {
       header: t('translations.columns.type'),
@@ -128,7 +128,7 @@ export const Table = ({ translationRows, setTranslationRows, visibleLocales, edi
     ...languageColumns,
     columnHelper.accessor('actions', {
       header: t('translations.columns.actions'),
-      size: 80,
+      size: 50,
       enableSorting: false,
       cell: (info) => (
         <ActionsCell
