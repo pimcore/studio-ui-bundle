@@ -15,21 +15,21 @@ import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 const ADAPTER_COLUMN_TYPE = 'dataobject.adapter'
 const OBJECTBRICK_COLUMN_TYPE = 'dataobject.objectbrick'
 
-const withLocalizedfieldsLeaf = (parts: string[], localized: boolean): string => {
-  return localized ? [...parts.slice(0, -1), 'localizedfields', parts[parts.length - 1]].join('.') : parts.join('.')
+const toDotPath = (parts: string[]): string => parts.join('.')
+
+const toLocalizedDotPath = (parts: string[]): string => {
+  const leaf = parts[parts.length - 1]
+  return toDotPath([...parts.slice(0, -1), 'localizedfields', leaf])
 }
 
 /**
- * Resolves the dot-notation field name for the format-path API from the
- * listing grid's decoded SelectedColumn.
+ * Builds the dot-notation field name expected by the format-path API.
  *
- * - dataobject.adapter columns are keyed by column.key.
- * - dataobject.objectbrick columns expose the segments explicitly via
- *   column.config.{field, objectBrick, attribute} (see PHP ObjectBrickCollector).
- * - Localizable columns get `localizedfields` inserted before the leaf segment,
- *   matching the backend's DotNotationParser resolvers.
- * - Other column types (notably dataobject.classificationstore) have no
- *   matching backend resolver — return undefined so the caller skips the call.
+ * Object brick segments are read from column.config so we don't depend on the
+ * column.key string shape. Localizable columns insert `localizedfields` before
+ * the leaf to match the backend's DotNotationParser resolvers. Unknown column
+ * types (e.g. classificationstore — no matching resolver) return undefined so
+ * the caller skips the API call.
  */
 export const useResolvedFieldName = (columnId: string | undefined, fallback: string | null | undefined): string | undefined => {
   const { decodeColumnIdentifier } = useSelectedColumns()
@@ -39,18 +39,16 @@ export const useResolvedFieldName = (columnId: string | undefined, fallback: str
       const column = decodeColumnIdentifier(columnId)
       if (column !== undefined) {
         if (column.type === OBJECTBRICK_COLUMN_TYPE) {
-          const cfg = column.config ?? {}
-          const field = cfg.field
-          const objectBrick = cfg.objectBrick
-          const attribute = cfg.attribute
+          const { field, objectBrick, attribute } = column.config ?? {}
           if (isNonEmptyString(field) && isNonEmptyString(objectBrick) && isNonEmptyString(attribute)) {
-            return withLocalizedfieldsLeaf([field, objectBrick, attribute], column.localizable)
+            const parts = [field, objectBrick, attribute]
+            return column.localizable ? toLocalizedDotPath(parts) : toDotPath(parts)
           }
           return undefined
         }
 
         if (column.type === ADAPTER_COLUMN_TYPE && isNonEmptyString(column.key)) {
-          return withLocalizedfieldsLeaf([column.key], column.localizable)
+          return column.localizable ? toLocalizedDotPath([column.key]) : toDotPath([column.key])
         }
 
         return undefined
