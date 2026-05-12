@@ -193,7 +193,12 @@ export const PathTarget = forwardRef(function PathTarget (
             placeholder={ showElementTagPrefix ? undefined : t(props.allowPathTextInput === true ? 'many-to-one-relation.drop-placeholder-text-input' : 'many-to-one-relation.drop-placeholder') }
             prefix={ inputPrefix }
             readOnly={ props.allowPathTextInput !== true }
-            suffix={ isNil(value) && !props.disabled ? <Icon className={ styles.dropTargetIcon } value="drop-target" /> : undefined }
+            suffix={ isNil(value) && !props.disabled ? (
+              <Icon
+                className={ styles.dropTargetIcon }
+                value="drop-target"
+              />
+            ) : undefined }
             value={ showElementTagPrefix ? undefined : displayText }
             { ...searchProps }
           />
