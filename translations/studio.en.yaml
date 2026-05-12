@@ -2,6 +2,9 @@ common.owner: Owner
 common.modification-date: Modification date
 common.globally: Globally
 common.apply-selection: Apply selection
+cache.clear-cache-success: Cache successfully cleared
+cache.clear-full-page-cache-success: Full page cache successfully cleared
+cache.clear-temporary-files-success: Temporary files successfully cleared
 dont-ask-again: "Don't ask again"
 widget.missing-context.title: Missing Context
 widget.missing-context.description: No related element found
@@ -1454,6 +1457,10 @@ navigation.reporting: Reporting
 navigation.system: System
 navigation.website-settings: Website Settings
 navigation.document-types: Document Types
+navigation.cache: Cache
+navigation.cache.clear-cache: Clear Cache
+navigation.cache.clear-full-page-cache: Clear Full Page Cache
+navigation.cache.clear-temporary-files: Clear Temporary Files
 navigation.clear-cache: Clear Full Page Cache
 navigation.reports: All Reports
 navigation.custom-reports: Custom Reports Configuration

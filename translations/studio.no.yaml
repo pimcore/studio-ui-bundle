@@ -2,6 +2,9 @@ common.owner: Eier
 common.modification-date: Endringsdato
 common.globally: Globalt
 common.apply-selection: Bruk utvalg
+cache.clear-cache-success: Hurtigbufferen ble tømt
+cache.clear-full-page-cache-success: Fullsidebufferen ble tømt
+cache.clear-temporary-files-success: Midlertidige filer ble slettet
 dont-ask-again: Ikke spør igjen
 widget.missing-context.title: Manglende kontekst
 widget.missing-context.description: Ingen relatert element funnet
@@ -1447,6 +1450,10 @@ navigation.reporting: Rapportering
 navigation.system: System
 navigation.website-settings: Nettstedsinnstillinger
 navigation.document-types: Dokumenttyper
+navigation.cache: Hurtigbuffer
+navigation.cache.clear-cache: Tøm hurtigbuffer
+navigation.cache.clear-full-page-cache: Tøm fullsidebuffer
+navigation.cache.clear-temporary-files: Slett midlertidige filer
 navigation.clear-cache: Tøm fullsidebuffer
 navigation.reports: Alle rapporter
 navigation.custom-reports: Konfigurasjon av egendefinerte rapporter

@@ -2,6 +2,9 @@ common.owner: Eigentümer
 common.modification-date: Änderungsdatum
 common.globally: Global
 common.apply-selection: Auswahl übernehmen
+cache.clear-cache-success: Cache wurde erfolgreich geleert
+cache.clear-full-page-cache-success: Ganzseitiger Cache wurde erfolgreich geleert
+cache.clear-temporary-files-success: Temporäre Dateien wurden erfolgreich gelöscht
 dont-ask-again: Nicht erneut fragen
 widget.missing-context.title: Fehlender Kontext
 widget.missing-context.description: Kein zugehöriges Element gefunden
@@ -1447,6 +1450,10 @@ navigation.reporting: Berichte
 navigation.system: System
 navigation.website-settings: Website Einstellungen
 navigation.document-types: Dokumenttypen
+navigation.cache: Cache
+navigation.cache.clear-cache: Cache leeren
+navigation.cache.clear-full-page-cache: Ganzseitigen Cache leeren
+navigation.cache.clear-temporary-files: Temporäre Dateien löschen
 navigation.clear-cache: Ganzseitigen Cache löschen
 navigation.reports: Alle Berichte
 navigation.custom-reports: Benutzerdefinierte Berichte
