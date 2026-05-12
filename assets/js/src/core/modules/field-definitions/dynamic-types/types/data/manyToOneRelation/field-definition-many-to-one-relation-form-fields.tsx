@@ -16,6 +16,7 @@ import { useClassDefinitionOptions } from '@Pimcore/modules/field-definitions/dy
 import { useAssetTypeOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-asset-type-options'
 import { useDocumentTypeOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-document-type-options'
 import { relationSelectFormItemTransformation } from '@Pimcore/modules/field-definitions/dynamic-types/utils/relations-helper'
+import { ManyToOneRelationPath } from '@Pimcore/components/many-to-one-relation'
 
 export const FieldDefinitionManyToOneRelationFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -111,7 +112,11 @@ export const FieldDefinitionManyToOneRelationFormFields = (props: FieldDefinitio
                   label={ t('upload-path') }
                   name="assetUploadPath"
                 >
-                  <Input />
+                  <ManyToOneRelationPath
+                    allowToClearRelation
+                    allowedAssetTypes={ ['folder'] }
+                    assetsAllowed
+                  />
                 </Form.Item>
               </>
             </Form.Conditional>

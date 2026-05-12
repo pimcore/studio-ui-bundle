@@ -13,6 +13,8 @@ import { type CellContext } from '@tanstack/react-table'
 import { type PredefinedProperty } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice-enhanced'
 import { IconButton } from '@sdk/components'
 import { type PredefinedPropertyRow, usePredefinedProperty } from '../hooks/use-predefined-property'
+import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
+import { TRANSLATIONS_WIDGET } from '@Pimcore/modules/translations'
 
 type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
 
@@ -23,7 +25,9 @@ interface ActionsCellProps {
 
 export const ActionsCell = ({ info, setPredefinedPropertyRows }: ActionsCellProps): JSX.Element => {
   const id = info.row.original.id
+  const name = info.row.original.name
   const { deletePropertyById, deleteLoading } = usePredefinedProperty()
+  const { openMainWidget, updateWidget } = useWidgetManager()
 
   const handleDelete = async (): Promise<void> => {
     const { success } = await deletePropertyById(id)
@@ -32,11 +36,25 @@ export const ActionsCell = ({ info, setPredefinedPropertyRows }: ActionsCellProp
     }
   }
 
+  const handleTranslate = (): void => {
+    const widgetConfig = {
+      ...TRANSLATIONS_WIDGET,
+      config: {
+        ...TRANSLATIONS_WIDGET.config,
+        initialDomain: 'admin',
+        initialSearchTerm: name
+      }
+    }
+
+    openMainWidget(widgetConfig)
+    updateWidget(widgetConfig)
+  }
+
   return (
     <div className="properties-table--actions-column">
       <IconButton
         icon={ { value: 'translate' } }
-        onClick={ () => { console.log('Open Translate View') } }
+        onClick={ handleTranslate }
         type="link"
       />
       <IconButton
