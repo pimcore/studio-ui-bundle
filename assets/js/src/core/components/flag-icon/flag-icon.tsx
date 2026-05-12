@@ -243,7 +243,7 @@ export const FlagIcon = ({ value, width = 21, height = 15 }: IFlagIconProps): Re
     const svg = container.querySelector('svg')
     if (svg === null) return
 
-    const prefix = uniqueId.replace(/:/g, '_')
+    const prefix = uniqueId.replaceAll(':', '_')
     const urlAttrs = ['clip-path', 'fill']
 
     svg.querySelectorAll('[id]').forEach(el => {

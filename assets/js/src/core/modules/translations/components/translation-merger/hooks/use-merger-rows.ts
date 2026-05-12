@@ -73,7 +73,7 @@ export const useMergerRows = (domain: string, deltaItems: DeltaItem[]): UseMerge
       locale: delta.locale,
       currentTranslation: delta.currentTranslation,
       importTranslation: delta.importTranslation,
-      state: 'pending' as RowState
+      state: 'pending'
     }))
   ), [deltaItems])
 
