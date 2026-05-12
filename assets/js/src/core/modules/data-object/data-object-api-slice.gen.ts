@@ -704,6 +704,8 @@ export type DataObjectWithDetailData = DataObject & {
     allowInheritance: boolean;
     /** Has preview */
     hasPreview: boolean;
+    /** Show application logger tab */
+    showAppLoggerTab: boolean;
     /** Has workflow available */
     hasWorkflowAvailable: boolean;
     /** Detail object data */

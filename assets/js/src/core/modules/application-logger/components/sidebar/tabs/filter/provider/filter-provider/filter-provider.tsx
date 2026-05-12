@@ -48,13 +48,24 @@ export interface DateFromFilter {
 
 export interface ColumnFilters extends Array<DateFromFilter> { }
 
-export const FilterProvider = (props: FilterProviderProps): React.JSX.Element => {
+export interface ApplicationLoggerFilterProviderProps extends FilterProviderProps {
+  initialRelatedObjectId?: number | null
+}
+
+const getInitialColumnFilters = (initialRelatedObjectId?: number | null): ColumnFilters => {
+  if (!isNil(initialRelatedObjectId)) {
+    return [{ key: 'relatedobject', type: 'equals', filterValue: initialRelatedObjectId }]
+  }
+  return []
+}
+
+export const FilterProvider = (props: ApplicationLoggerFilterProviderProps): React.JSX.Element => {
   const [dateFrom, setDateFrom] = React.useState<string | null>(null)
   const [dateTo, setDateTo] = React.useState<string | null>(null)
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFilters>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFilters>(() => getInitialColumnFilters(props.initialRelatedObjectId))
   const [logLevel, setLogLevel] = React.useState<string | null>(null)
   const [component, setComponent] = React.useState<string | null>(null)
-  const [relatedObjectId, setRelatedObjectId] = React.useState<number | null>(null)
+  const [relatedObjectId, setRelatedObjectId] = React.useState<number | null>(props.initialRelatedObjectId ?? null)
   const [message, setMessage] = React.useState<string | null>(null)
   const [pid, setPid] = React.useState<number | null>(null)
   const [isLoading, setIsLoading] = React.useState<boolean>(false)

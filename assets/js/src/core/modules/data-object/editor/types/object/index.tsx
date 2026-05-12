@@ -21,6 +21,7 @@ import { TAB_PREVIEW, TAB_VERSIONS } from '@Pimcore/modules/data-object/editor/s
 import { TAB_EDIT } from './tab-manager/tabs/edit/edit-container'
 import { TAB_LISTING } from '../folder/tab-manager/tabs/listing/listing-container'
 import { TAB_VARIANTS } from '../variant/tab-manager/tabs/variants/variants-tab-container'
+import { TAB_APPLICATION_LOGGER } from '@Pimcore/modules/application-logger/tabs/object-tab/object-tab'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -42,5 +43,6 @@ moduleSystem.registerModule({
     objectEditorTabManager.register(childrenTab)
     objectEditorTabManager.register(TAB_VARIANTS)
     objectEditorTabManager.register(TAB_WORKFLOW)
+    objectEditorTabManager.register(TAB_APPLICATION_LOGGER)
   }
 })
