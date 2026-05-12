@@ -13,6 +13,7 @@ import { Icon, Flex } from '@sdk/components'
 import { Upload } from 'antd'
 import { t } from 'i18next'
 import type { UploadProps } from 'antd'
+import { useStyle } from './import-translations-modal.styles'
 
 const { Dragger } = Upload
 
@@ -23,6 +24,8 @@ interface FileSelectStepProps {
 }
 
 export const FileSelectStep = ({ isImporting, fileError, onFileSelect }: FileSelectStepProps): React.JSX.Element => {
+  const { styles } = useStyle()
+
   const uploadProps: UploadProps = {
     name: 'file',
     multiple: false,
@@ -40,9 +43,9 @@ export const FileSelectStep = ({ isImporting, fileError, onFileSelect }: FileSel
       <Dragger { ...uploadProps }>
         <Flex
           align="center"
+          className={ styles.draggerContent }
           gap="mini"
           justify="center"
-          style={ { padding: '20px' } }
           vertical
         >
           <div className="icon-container">
@@ -67,7 +70,7 @@ export const FileSelectStep = ({ isImporting, fileError, onFileSelect }: FileSel
         </Flex>
       </Dragger>
       {fileError !== null && (
-        <div style={ { color: 'var(--ant-color-error)', marginTop: 8, fontSize: 12 } }>{fileError}</div>
+        <div className={ styles.fileError }>{fileError}</div>
       )}
     </>
   )

@@ -64,8 +64,8 @@ export const CsvSettingsStep = ({
         ? (
           <Flex
             align="center"
+            className={ styles.spinnerContainer }
             justify="center"
-            style={ { padding: '20px' } }
           >
             <Spin />
           </Flex>

@@ -25,6 +25,20 @@ export const useStyle = createStyles(({ token, css }) => {
       .icon-button--theme-primary {
         margin-top: 3px;
       }
+    `,
+
+    draggerContent: css`
+      padding: ${token.paddingLG}px;
+    `,
+
+    fileError: css`
+      color: ${token.colorError};
+      margin-top: ${token.marginXS}px;
+      font-size: ${token.fontSizeSM}px;
+    `,
+
+    spinnerContainer: css`
+      padding: ${token.paddingLG}px;
     `
   }
 })

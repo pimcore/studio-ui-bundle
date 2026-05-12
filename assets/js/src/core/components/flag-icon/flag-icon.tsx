@@ -9,6 +9,7 @@
  */
 
 import React from 'react'
+import { uniqueId } from 'lodash'
 import UnknownFlag from '@Pimcore/assets/images/flags/_unknown.inline.svg?react'
 import { GeneralError, trackError } from '@sdk/modules/app'
 
@@ -199,7 +200,7 @@ const flagCache: Record<string, React.ReactElement | null> = {}
 export const FlagIcon = ({ value, width = 21, height = 15 }: IFlagIconProps): React.JSX.Element => {
   const [flag, setFlag] = React.useState<React.ReactElement | null>(null)
   const [loading, setLoading] = React.useState(true)
-  const uniqueId = React.useId()
+  const [flagUniqueId] = React.useState(() => uniqueId('flag_'))
   const containerRef = React.useRef<HTMLSpanElement>(null)
 
   React.useEffect(() => {
@@ -243,7 +244,7 @@ export const FlagIcon = ({ value, width = 21, height = 15 }: IFlagIconProps): Re
     const svg = container.querySelector('svg')
     if (svg === null) return
 
-    const prefix = uniqueId.replaceAll(':', '_')
+    const prefix = flagUniqueId
     const urlAttrs = ['clip-path', 'fill']
 
     svg.querySelectorAll('[id]').forEach(el => {
@@ -257,7 +258,7 @@ export const FlagIcon = ({ value, width = 21, height = 15 }: IFlagIconProps): Re
         })
       }
     })
-  }, [flag, uniqueId])
+  }, [flag, flagUniqueId])
 
   if (loading) return <div style={ { width, height, background: '#f0f0f0' } } />
 
