@@ -19,7 +19,7 @@ export const useStyle = createStyles(({ token, css }) => {
 
       .ant-table-content table {
         border: 1px solid ${token.Table.colorBorderSecondary};
-        border-radius: 8px;
+        border-radius: ${token.borderRadiusLG}px;
       }
 
       .ant-table-thead .ant-table-cell {
@@ -35,11 +35,11 @@ export const useStyle = createStyles(({ token, css }) => {
       }
 
       .ant-table-tbody > tr:last-child > td:first-child {
-        border-bottom-left-radius: 8px;
+        border-bottom-left-radius: ${token.borderRadiusLG}px;
       }
 
       .ant-table-tbody > tr:last-child > td:last-child {
-        border-bottom-right-radius: 8px;
+        border-bottom-right-radius: ${token.borderRadiusLG}px;
       }
     `
   }
