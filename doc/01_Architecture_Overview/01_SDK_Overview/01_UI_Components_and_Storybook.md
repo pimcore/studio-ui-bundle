@@ -28,4 +28,4 @@ Explore our [Storybook](../../05_Development_Details/01_Studio_UI_Core_Developme
 
 ## Source
 
-- [Component Overview](https://github.com/pimcore/studio-ui-bundle/tree/1.x/assets/js/src/core/components)
+- [Component Overview](https://github.com/pimcore/studio-ui-bundle/tree/2026.x/assets/js/src/core/components)

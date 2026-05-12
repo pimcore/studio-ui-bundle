@@ -192,4 +192,4 @@ refer to the [Widget Manager example](../../04_Extending/02_Plugin_Development_E
 
 ### Source
 
-- [Widget Manager Hooks](https://github.com/pimcore/studio-ui-bundle/tree/1.x/assets/js/src/core/modules/widget-manager/hooks)
+- [Widget Manager Hooks](https://github.com/pimcore/studio-ui-bundle/tree/2026.x/assets/js/src/core/modules/widget-manager/hooks)
