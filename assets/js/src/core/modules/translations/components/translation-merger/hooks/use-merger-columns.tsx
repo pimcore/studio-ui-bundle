@@ -12,6 +12,7 @@ import React, { useMemo } from 'react'
 import { IconButton } from '@sdk/components'
 import { LanguageColumnHeader } from '../../../table/language-column-header'
 import { t } from 'i18next'
+import type { ColumnsType } from 'antd/es/table'
 import type { MergerRow } from './use-merger-rows'
 
 interface UseMergerColumnsProps {
@@ -20,7 +21,7 @@ interface UseMergerColumnsProps {
   revertRow: (row: MergerRow) => Promise<void>
 }
 
-export const useMergerColumns = ({ loadingRows, applyRow, revertRow }: UseMergerColumnsProps) => {
+export const useMergerColumns = ({ loadingRows, applyRow, revertRow }: UseMergerColumnsProps): ColumnsType<MergerRow> => {
   const languageDisplayNames = useMemo(() => new Intl.DisplayNames(['en'], { type: 'language' }), [])
 
   return useMemo(() => [
