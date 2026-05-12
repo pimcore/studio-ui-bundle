@@ -53,8 +53,8 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
         <PreviewItemProvider>
           <PipelineLayoutProvider pipelineLayout="verbose">
             <Modal
-              footer={ null }
               closable={ false }
+              footer={ null }
               onCancel={ () => onOpenChange?.(false) }
               onClose={ () => onOpenChange?.(false) }
               open={ open }
