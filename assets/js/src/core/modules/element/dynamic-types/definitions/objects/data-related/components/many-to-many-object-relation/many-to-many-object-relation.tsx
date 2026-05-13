@@ -84,9 +84,11 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   const { transformGridColumn, getDefaultVisibleFieldDefinitions } = useGridOptions()
   const userLanguage = useUserContentLanguage()
 
-  const classId = !isUndefined(dataObject)
-    ? getByName(dataObject.className)?.id
-    : listingClassSelection?.selectedClassDefinition?.id
+  const editorClassId = !isUndefined(dataObject) ? getByName(dataObject.className)?.id : undefined
+  const listingClassId = listingClassSelection?.selectedClassDefinition?.id
+  // Prefer the listing's selected class when available; the editor's element
+  // context can point to an unrelated open object (or a folder) in inline edit.
+  const classId = listingClassId ?? editorClassId
   const relationField = props?.combinedFieldName
   const dataRelationClasses = props?.allowedClasses
 
