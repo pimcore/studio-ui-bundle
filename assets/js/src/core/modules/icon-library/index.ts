@@ -305,7 +305,6 @@ import quantityValue from '@Pimcore/assets/icons/quantity-value.inline.svg?react
 import questionmark from '@Pimcore/assets/icons/questionmark.inline.svg?react'
 import quickAccess from '@Pimcore/assets/icons/quick-access.inline.svg?react'
 import redirect from '@Pimcore/assets/icons/redirect.inline.svg?react'
-import refreshOne from '@Pimcore/assets/icons/refresh-one.inline.svg?react'
 import refresh from '@Pimcore/assets/icons/refresh.inline.svg?react'
 import region from '@Pimcore/assets/icons/region.inline.svg?react'
 import relation from '@Pimcore/assets/icons/relation.inline.svg?react'
@@ -373,6 +372,7 @@ import txtDocs from '@Pimcore/assets/icons/txt-docs.inline.svg?react'
 import unknown from '@Pimcore/assets/icons/unknown.inline.svg?react'
 import unlinkDocument from '@Pimcore/assets/icons/unlink-document.inline.svg?react'
 import unlocked from '@Pimcore/assets/icons/unlocked.inline.svg?react'
+import updateBuild from '@Pimcore/assets/icons/update-build.inline.svg?react'
 import uploadCloud from '@Pimcore/assets/icons/upload-cloud.inline.svg?react'
 import uploadImport from '@Pimcore/assets/icons/upload-import.inline.svg?react'
 import uploadZip from '@Pimcore/assets/icons/upload-zip.inline.svg?react'
@@ -1560,10 +1560,6 @@ moduleSystem.registerModule({
       component: redirect
     })
     iconLibrary.register({
-      name: 'refresh-one',
-      component: refreshOne
-    })
-    iconLibrary.register({
       name: 'refresh',
       component: refresh
     })
@@ -1830,6 +1826,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'unlocked',
       component: unlocked
+    })
+    iconLibrary.register({
+      name: 'update-build',
+      component: updateBuild
     })
     iconLibrary.register({
       name: 'upload-cloud',
