@@ -18,7 +18,7 @@ const OBJECTBRICK_COLUMN_TYPE = 'dataobject.objectbrick'
 const toDotPath = (parts: string[]): string => parts.join('.')
 
 const toLocalizedDotPath = (parts: string[]): string => {
-  const leaf = parts[parts.length - 1]
+  const leaf = parts.at(-1) ?? ''
   return toDotPath([...parts.slice(0, -1), 'localizedfields', leaf])
 }
 
