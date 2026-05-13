@@ -134,6 +134,7 @@ export const FormattedAdvancedManyToManyRelationList = ({
   )
 
   useEffect(() => {
+    let cancelled = false
     setDisplayValue(value)
     setIsFormatted(false)
 
@@ -153,8 +154,8 @@ export const FormattedAdvancedManyToManyRelationList = ({
 
     setIsLoading(true)
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    formatPath(items, fieldName, dataObjectId, false).then(data => {
+    void formatPath(items, fieldName, dataObjectId, false).then(data => {
+      if (cancelled) return
       if (!isNil(data)) {
         setDisplayValue(
           value.map((item): AdvancedManyToManyRelationValueItem => {
@@ -168,6 +169,8 @@ export const FormattedAdvancedManyToManyRelationList = ({
       }
       setIsLoading(false)
     })
+
+    return () => { cancelled = true }
   }, [value, pathFormatterClass, fieldName, dataObjectId])
 
   if (isLoading) {

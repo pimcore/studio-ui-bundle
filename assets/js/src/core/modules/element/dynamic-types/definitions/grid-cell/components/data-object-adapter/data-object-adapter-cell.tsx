@@ -34,6 +34,10 @@ export const DataObjectAdapterCell = (props: DataObjectAdapterCellProps): React.
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const { isInEditMode } = useEditMode(props)
   const currentLanguage = useLanguageSelection().currentLanguage
+  // Mirror DataComponent's role in the editor: derive the dot-notation
+  // combinedFieldName from the cell's column context and put it on objectProps
+  // so the field component receives it as a normal prop.
+  const combinedFieldName = useResolvedFieldName(props.column.id, undefined)
 
   if (config !== undefined && !isObject(config)) {
     throw new Error('Invalid data object config')
@@ -51,10 +55,6 @@ export const DataObjectAdapterCell = (props: DataObjectAdapterCellProps): React.
   }
 
   const fieldDefinition = config?.fieldDefinition ?? {}
-  // Mirror DataComponent's role in the editor: derive the dot-notation
-  // combinedFieldName from the cell's column context and put it on objectProps
-  // so the field component receives it as a normal prop.
-  const combinedFieldName = useResolvedFieldName(props.column.id, undefined)
   const enrichedObjectProps = { ...fieldDefinition, combinedFieldName }
   const column = decodeColumnIdentifier(props.column.id)
   const apiColumns = props?.row?.original?.['__api-data']

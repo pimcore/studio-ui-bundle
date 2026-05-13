@@ -44,6 +44,7 @@ export const FormattedRelationList = ({
   )
 
   useEffect(() => {
+    let cancelled = false
     setDisplayRelations(relations)
     setIsFormatted(false)
 
@@ -63,8 +64,8 @@ export const FormattedRelationList = ({
 
     setIsLoading(true)
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    formatPath(items, fieldName, dataObjectId, false).then(data => {
+    void formatPath(items, fieldName, dataObjectId, false).then(data => {
+      if (cancelled) return
       if (!isNil(data)) {
         setDisplayRelations(
           relations.map(r => {
@@ -76,6 +77,8 @@ export const FormattedRelationList = ({
       }
       setIsLoading(false)
     })
+
+    return () => { cancelled = true }
   }, [relations, pathFormatterClass, fieldName, dataObjectId])
 
   if (isLoading) {

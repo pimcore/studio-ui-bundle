@@ -51,7 +51,7 @@ export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, p
   }
 
   return (
-    <Tooltip title={ isOverflow ? path : '' }>
+    <Tooltip title={ isOverflow && !pathIsHtml ? path : '' }>
       <Tag
         bordered={ false }
         className={ cn(inline ? styles.tagInline : styles.tag, { [styles.tagClickable]: isClickable, [styles.tagDisabled]: disabled }) }
