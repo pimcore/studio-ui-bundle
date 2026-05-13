@@ -32,11 +32,12 @@ export interface StackListItemProps {
   children: React.ReactNode
   renderRightToolbar?: React.ReactNode
   body?: React.ReactNode
+  defaultActive?: boolean
   meta?: unknown
 }
 
 export const StackListItem = (props: StackListItemProps): React.JSX.Element => {
-  const { id, children, body, sortable = false, renderLeftToolbar, renderRightToolbar, type = StackListItemTypes.DEFAULT } = props
+  const { id, children, body, sortable = false, renderLeftToolbar, renderRightToolbar, type = StackListItemTypes.DEFAULT, defaultActive } = props
   const { styles } = useStyles()
   const { listeners, setNodeRef, setActivatorNodeRef, transform, transition } = useSortable({ id })
 
@@ -108,6 +109,7 @@ export const StackListItem = (props: StackListItemProps): React.JSX.Element => {
           <CollapseItem
             className={ styles.stackListItem }
             contentPadding={ 'none' }
+            defaultActive={ defaultActive }
             extra={ renderRightToolbar }
             extraPosition='end'
             label={ <>{leftSidebarContent}</> }

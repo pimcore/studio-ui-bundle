@@ -491,6 +491,8 @@ published: Publié
 classname: Nom de classe
 index: Index
 listing.grid-config.title: Configuration de la grille
+grid-config.discard-all-changes: Annuler toutes les modifications
+grid-config.apply-changes: Appliquer les modifications
 listing.add-column: Ajouter une colonne
 listing.actions: Appliquer à la sélection
 listing.non-selected.actions: Appliquer à tous
