@@ -9,6 +9,7 @@
  */
 
 import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
+import { useRefresh } from '@Pimcore/modules/field-definitions/components/editor/items/detail/refresh-provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { Dropdown, type DropdownMenuProps, Icon, IconTextButton, useMessage } from '@sdk/components'
 import { ImportModal } from '@Pimcore/components/import-modal/import-modal'
@@ -23,20 +24,13 @@ const defaultValidateFile = (file: File): boolean => {
 export const ImportExportActions = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { activeConfiguration } = useItems()
-  const { useDetailLayoutQuery, useDetailGeneralSettingsQuery, importExportConfig } = useSettings()
+  const { importExportConfig } = useSettings()
+  const { refreshLayout } = useRefresh()
   const messageApi = useMessage()
 
   const [isImportModalOpen, setIsImportModalOpen] = useState(false)
 
   const itemId = activeConfiguration?.id
-
-  const layoutResult = useDetailLayoutQuery?.({
-    id: itemId ?? ''
-  })
-
-  const generalSettingsResult = useDetailGeneralSettingsQuery({
-    id: itemId ?? ''
-  })
 
   if (isNil(importExportConfig)) {
     return <></>
@@ -67,8 +61,7 @@ export const ImportExportActions = (): React.JSX.Element => {
   const handleImportSuccess = (): void => {
     void messageApi.success(t(successMessageKey))
     setIsImportModalOpen(false)
-    void layoutResult?.refetch()
-    void generalSettingsResult?.refetch()
+    void refreshLayout()
   }
 
   const uploadUrl = !isNil(itemId)
