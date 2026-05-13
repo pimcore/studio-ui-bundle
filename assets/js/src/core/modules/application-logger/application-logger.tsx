@@ -9,6 +9,7 @@
  */
 
 import { ContentLayout, Sidebar } from '@sdk/components'
+import { type SortingState } from '@tanstack/react-table'
 import { isNil } from 'lodash'
 import React from 'react'
 import { type BundleApplicationLoggerGetCollectionApiResponse } from './application-logger-api-slice.gen'
@@ -17,9 +18,12 @@ import { Table } from './components/table/table'
 
 interface ApplicationLoggerProps {
   items: BundleApplicationLoggerGetCollectionApiResponse['items']
+  isLoading?: boolean
+  sorting?: SortingState
+  onSortingChange?: (sorting: SortingState) => void
 }
 
-export const ApplicationLogger = ({ items }: ApplicationLoggerProps): React.JSX.Element => {
+export const ApplicationLogger = ({ items, isLoading, sorting, onSortingChange }: ApplicationLoggerProps): React.JSX.Element => {
   if (isNil(items)) {
     return <></>
   }
@@ -32,7 +36,12 @@ export const ApplicationLogger = ({ items }: ApplicationLoggerProps): React.JSX.
         />
       }
     >
-      <Table items={ items } />
+      <Table
+        isLoading={ isLoading }
+        items={ items }
+        onSortingChange={ onSortingChange }
+        sorting={ sorting }
+      />
     </ContentLayout>
   )
 }
