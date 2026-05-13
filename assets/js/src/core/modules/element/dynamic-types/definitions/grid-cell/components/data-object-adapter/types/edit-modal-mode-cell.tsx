@@ -20,6 +20,7 @@ import { FieldCollectionProvider } from '../../../../objects/data-related/compon
 import { InheritanceLayer } from '../inheritance-layer'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { DataObjectProvider } from '@Pimcore/modules/data-object/data-object-provider'
+import { InlineEditCombinedFieldNameContext } from '../inline-edit/inline-edit-combined-field-name-context'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { META_SUPPORTS_BATCH_APPEND_MODE } from '@Pimcore/modules/data-object/listing/batch-actions/batch-append-mode/batch-append-mode'
 import { useTranslation } from 'react-i18next'
@@ -31,18 +32,6 @@ export interface EditModalModeCellProps {
   cellProps: DefaultCellProps
 }
 
-interface InlineEditFieldBridgeProps {
-  combinedFieldName: string | undefined
-  editComponent: React.ReactElement
-  value?: unknown
-  onChange?: (value: unknown) => void
-}
-
-// Lets antd Form.Item see a clean child it can clone with value/onChange.
-// We then re-inject those (plus combinedFieldName) into the real editComponent.
-const InlineEditFieldBridge = ({ combinedFieldName, editComponent, value, onChange }: InlineEditFieldBridgeProps): React.JSX.Element => {
-  return React.cloneElement(editComponent, { combinedFieldName, value, onChange })
-}
 
 export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element => {
   const { decodeColumnIdentifier } = useSelectedColumns()
@@ -119,26 +108,25 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
           title={ t('edit-modal.inline-edit') }
         >
           <DataObjectProvider id={ rowDataObjectId }>
-            <FieldWidthProvider>
-              <FieldCollectionProvider id={ rowDataObjectId }>
-                <Form
-                  form={ form }
-                  initialValues={ initialFormValues }
-                  layout={ props.objectCellDefinition.editModalSettings.formLayout }
-                  onFinish={ onFormFinish }
-                >
-                  <Form.Item
-                    { ...props.objectCellDefinition.formItemProps }
-                    name={ 'value' }
+            <InlineEditCombinedFieldNameContext.Provider value={ combinedFieldName }>
+              <FieldWidthProvider>
+                <FieldCollectionProvider id={ rowDataObjectId }>
+                  <Form
+                    form={ form }
+                    initialValues={ initialFormValues }
+                    layout={ props.objectCellDefinition.editModalSettings.formLayout }
+                    onFinish={ onFormFinish }
                   >
-                    <InlineEditFieldBridge
-                      combinedFieldName={ combinedFieldName }
-                      editComponent={ props.objectCellDefinition.editComponent }
-                    />
-                  </Form.Item>
-                </Form>
-              </FieldCollectionProvider>
-            </FieldWidthProvider>
+                    <Form.Item
+                      { ...props.objectCellDefinition.formItemProps }
+                      name={ 'value' }
+                    >
+                      {props.objectCellDefinition.editComponent}
+                    </Form.Item>
+                  </Form>
+                </FieldCollectionProvider>
+              </FieldWidthProvider>
+            </InlineEditCombinedFieldNameContext.Provider>
           </DataObjectProvider>
         </WindowModal>
       )}

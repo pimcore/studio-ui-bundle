@@ -33,6 +33,7 @@ export const ManyToManyObjectRelationComboField = (props: ManyToManyObjectRelati
     handlePopupScroll,
     handleSelect,
     handleDeselect,
+    handleChange,
     localFilterOption
   } = useComboFieldData(props)
 
@@ -60,6 +61,7 @@ export const ManyToManyObjectRelationComboField = (props: ManyToManyObjectRelati
       maxCount={ props.maxItems ?? undefined }
       mode="multiple"
       notFoundContent={ isFetching ? <LoadingRows /> : undefined }
+      onChange={ handleChange }
       onDeselect={ handleDeselect }
       onDropdownVisibleChange={ handleDropdownVisibleChange }
       onPopupScroll={ handlePopupScroll }

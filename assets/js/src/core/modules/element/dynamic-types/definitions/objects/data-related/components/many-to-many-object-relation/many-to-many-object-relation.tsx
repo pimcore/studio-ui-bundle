@@ -32,6 +32,7 @@ import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-ty
 import { SelectedColumnsProvider, type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
 import { useUserContentLanguage } from '@Pimcore/modules/auth/hooks/use-user-content-language'
 import { useClassDefinitionSelectionOptional } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
+import { useInlineEditCombinedFieldName } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/data-object-adapter/inline-edit/inline-edit-combined-field-name-context'
 
 export interface ManyToManyObjectRelationClassDefinitionProps {
   allowToClearRelation: boolean
@@ -89,7 +90,8 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   // Prefer the listing's selected class when available; the editor's element
   // context can point to an unrelated open object (or a folder) in inline edit.
   const classId = listingClassId ?? editorClassId
-  const relationField = props?.combinedFieldName
+  const inlineEditCombinedFieldName = useInlineEditCombinedFieldName()
+  const relationField = props?.combinedFieldName ?? inlineEditCombinedFieldName
   const dataRelationClasses = props?.allowedClasses
 
   const [cachedGridFullData, setCachedGridFullData] = useState<IUseDataObjectGridsReturn['data']>([])
