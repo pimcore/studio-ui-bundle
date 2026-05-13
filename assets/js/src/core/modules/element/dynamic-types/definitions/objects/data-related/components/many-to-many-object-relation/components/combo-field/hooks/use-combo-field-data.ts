@@ -24,6 +24,7 @@ import { type ManyToManyRelationValueItem } from '@Pimcore/components/many-to-ma
 import { type ManyToManyObjectRelationProps, type VisibleFieldDefinition } from '../../../many-to-many-object-relation'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
+import { useClassDefinitionSelectionOptional } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { processItems } from '../combo-field-utils'
 
 export const COMBO_PAGE_SIZE = 200
@@ -49,7 +50,12 @@ export const useComboFieldData = (props: ManyToManyObjectRelationProps) => {
 
   const { id: elementId } = useElementContext()
   const { dataObject } = useDataObjectDraft(elementId)
-  const containingClassId = !isUndefined(dataObject) ? (getByName(dataObject.className)?.id ?? '') : ''
+  const listingClassSelection = useClassDefinitionSelectionOptional()
+  const editorClassId = !isUndefined(dataObject) ? getByName(dataObject.className)?.id : undefined
+  const listingClassId = listingClassSelection?.selectedClassDefinition?.id
+  // Inline edit has no editor draft for the row, so fall back to the
+  // listing's selected class (mirrors the regular relation grid component).
+  const containingClassId = listingClassId ?? editorClassId ?? ''
   const relationField = props.combinedFieldName
 
   const { data: availableColumnsData, isLoading: isColumnsLoading } = useDataObjectGetAvailableGridColumnsForRelationQuery(
