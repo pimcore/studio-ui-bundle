@@ -31,6 +31,19 @@ export interface EditModalModeCellProps {
   cellProps: DefaultCellProps
 }
 
+interface InlineEditFieldBridgeProps {
+  combinedFieldName: string | undefined
+  editComponent: React.ReactElement
+  value?: unknown
+  onChange?: (value: unknown) => void
+}
+
+// Lets antd Form.Item see a clean child it can clone with value/onChange.
+// We then re-inject those (plus combinedFieldName) into the real editComponent.
+const InlineEditFieldBridge = ({ combinedFieldName, editComponent, value, onChange }: InlineEditFieldBridgeProps): React.JSX.Element => {
+  return React.cloneElement(editComponent, { combinedFieldName, value, onChange })
+}
+
 export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element => {
   const { decodeColumnIdentifier } = useSelectedColumns()
   const { isInEditMode, fireOnUpdateCellDataEvent, disableEditMode } = useEditMode(props.cellProps)
@@ -40,9 +53,10 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
 
   // Mirror DataComponent: assemble combinedFieldName from the cell context so
   // relation fields can resolve their backend dot-notation in the inline-edit
-  // modal too.
+  // modal too. Done via a wrapper so antd Form.Item clones a clean component
+  // and forwards value/onChange to us — we then re-inject everything into the
+  // real editComponent below.
   const combinedFieldName = useResolvedFieldName(props.cellProps.column.id, undefined)
-  const editComponent = React.cloneElement(props.objectCellDefinition.editComponent, { combinedFieldName })
 
   const onFormFinish = (values): void => {
     fireOnUpdateCellDataEvent(values.value, {
@@ -111,7 +125,10 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
                     { ...props.objectCellDefinition.formItemProps }
                     name={ 'value' }
                   >
-                    {editComponent}
+                    <InlineEditFieldBridge
+                      combinedFieldName={ combinedFieldName }
+                      editComponent={ props.objectCellDefinition.editComponent }
+                    />
                   </Form.Item>
                 </Form>
               </FieldCollectionProvider>
