@@ -20,12 +20,10 @@ import { FieldCollectionProvider } from '../../../../objects/data-related/compon
 import { InheritanceLayer } from '../inheritance-layer'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { DataObjectProvider } from '@Pimcore/modules/data-object/data-object-provider'
-import { InlineEditCombinedFieldNameContext } from '../inline-edit/inline-edit-combined-field-name-context'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { META_SUPPORTS_BATCH_APPEND_MODE } from '@Pimcore/modules/data-object/listing/batch-actions/batch-append-mode/batch-append-mode'
 import { useTranslation } from 'react-i18next'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
-import { useResolvedFieldName } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/utils/resolve-field-name'
 
 export interface EditModalModeCellProps {
   objectCellDefinition: WithEditModalGridCellDefinition
@@ -40,17 +38,8 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
   const { t } = useTranslation()
   const { currentLanguage } = useLanguageSelection()
 
-  // Mirror DataComponent: assemble combinedFieldName from the cell context so
-  // relation fields can resolve their backend dot-notation in the inline-edit
-  // modal too. Done via a wrapper so antd Form.Item clones a clean component
-  // and forwards value/onChange to us — we then re-inject everything into the
-  // real editComponent below.
-  const combinedFieldName = useResolvedFieldName(props.cellProps.column.id, undefined)
-  // Stabilize initialValues so antd Form doesn't see a new reference each
-  // render — defensive against re-initialisation that could revert user edits.
+  // Stabilize initialValues so antd Form doesn't see a new reference each render.
   const initialFormValues = useMemo(() => ({ value: props.cellProps.getValue() }), [])
-  // Same for DataObjectProvider's value — avoid forcing all context consumers
-  // to re-render on every parent render.
   const rowDataObjectId = props.cellProps.row.original.id as number
 
   const onFormFinish = (values): void => {
@@ -108,25 +97,23 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
           title={ t('edit-modal.inline-edit') }
         >
           <DataObjectProvider id={ rowDataObjectId }>
-            <InlineEditCombinedFieldNameContext.Provider value={ combinedFieldName }>
-              <FieldWidthProvider>
-                <FieldCollectionProvider id={ rowDataObjectId }>
-                  <Form
-                    form={ form }
-                    initialValues={ initialFormValues }
-                    layout={ props.objectCellDefinition.editModalSettings.formLayout }
-                    onFinish={ onFormFinish }
+            <FieldWidthProvider>
+              <FieldCollectionProvider id={ rowDataObjectId }>
+                <Form
+                  form={ form }
+                  initialValues={ initialFormValues }
+                  layout={ props.objectCellDefinition.editModalSettings.formLayout }
+                  onFinish={ onFormFinish }
+                >
+                  <Form.Item
+                    { ...props.objectCellDefinition.formItemProps }
+                    name={ 'value' }
                   >
-                    <Form.Item
-                      { ...props.objectCellDefinition.formItemProps }
-                      name={ 'value' }
-                    >
-                      {props.objectCellDefinition.editComponent}
-                    </Form.Item>
-                  </Form>
-                </FieldCollectionProvider>
-              </FieldWidthProvider>
-            </InlineEditCombinedFieldNameContext.Provider>
+                    {props.objectCellDefinition.editComponent}
+                  </Form.Item>
+                </Form>
+              </FieldCollectionProvider>
+            </FieldWidthProvider>
           </DataObjectProvider>
         </WindowModal>
       )}

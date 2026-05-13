@@ -25,7 +25,6 @@ import { type ManyToManyObjectRelationProps, type VisibleFieldDefinition } from 
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { useClassDefinitionSelectionOptional } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
-import { useInlineEditCombinedFieldName } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/data-object-adapter/inline-edit/inline-edit-combined-field-name-context'
 import { processItems } from '../combo-field-utils'
 
 export const COMBO_PAGE_SIZE = 200
@@ -57,8 +56,7 @@ export const useComboFieldData = (props: ManyToManyObjectRelationProps) => {
   // Inline edit has no editor draft for the row, so fall back to the
   // listing's selected class (mirrors the regular relation grid component).
   const containingClassId = listingClassId ?? editorClassId ?? ''
-  const inlineEditCombinedFieldName = useInlineEditCombinedFieldName()
-  const relationField = props.combinedFieldName ?? inlineEditCombinedFieldName
+  const relationField = props.combinedFieldName
 
   const { data: availableColumnsData, isLoading: isColumnsLoading } = useDataObjectGetAvailableGridColumnsForRelationQuery(
     { classId: containingClassId, relationField: relationField ?? '' },
@@ -271,17 +269,6 @@ export const useComboFieldData = (props: ManyToManyObjectRelationProps) => {
     props.onChange?.((props.value ?? []).filter(item => item.id !== id))
   }
 
-  // Authoritative handler antd Select requires for fully controlled multi-select.
-  // Receives the new array of ids and resolves them to items via itemMap (newly
-  // added) or props.value (already selected). Idempotent with handleSelect/
-  // handleDeselect; the value antd ends up with matches either path.
-  const handleChange = (ids: number[]): void => {
-    const items = ids
-      .map(id => itemMapRef.current.get(id) ?? (props.value ?? []).find(item => item.id === id))
-      .filter((item): item is ManyToManyRelationValueItem => item !== undefined)
-    props.onChange?.(items)
-  }
-
   const localFilterOption = useCallback(
     (input: string, option?: ComboOption): boolean =>
       (option?.label ?? '').toLowerCase().includes(input.toLowerCase()),
@@ -306,7 +293,6 @@ export const useComboFieldData = (props: ManyToManyObjectRelationProps) => {
     handlePopupScroll,
     handleSelect,
     handleDeselect,
-    handleChange,
     localFilterOption
   }
 }
