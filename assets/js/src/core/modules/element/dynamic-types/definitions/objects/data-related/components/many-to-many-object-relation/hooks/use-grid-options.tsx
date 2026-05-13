@@ -28,9 +28,6 @@ type IGetDefaultVisibleFieldDefinitionsReturn = Array<{
   key: string
   title: string
   fieldtype: string
-  type: string
-  group: string[]
-  config: never[]
 }>
 
 export interface UseGridOptionsReturn {
@@ -46,26 +43,17 @@ export const useGridOptions = (): UseGridOptionsReturn => {
     {
       key: 'id',
       title: 'id',
-      fieldtype: 'input',
-      type: 'system.id',
-      group: ['system'],
-      config: []
+      fieldtype: 'input'
     },
     {
       key: 'fullpath',
       title: t('relations.reference'),
-      fieldtype: 'input',
-      type: 'system.string',
-      group: ['system'],
-      config: []
+      fieldtype: 'input'
     },
     {
       key: 'classname',
       title: t('relations.class'),
-      fieldtype: 'input',
-      type: 'system.string',
-      group: ['system'],
-      config: []
+      fieldtype: 'input'
     }
   ])
 

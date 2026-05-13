@@ -40,11 +40,8 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
   // Mirror DataComponent: assemble combinedFieldName from the cell context so
   // relation fields can resolve their backend dot-notation in the inline-edit
   // modal too.
-  const editComponentProps = props.objectCellDefinition.editComponent.props as AbstractObjectDataDefinition
-  const combinedFieldName = useResolvedFieldName(props.cellProps.column.id, editComponentProps.combinedFieldName)
-  const editComponent = combinedFieldName !== undefined
-    ? React.cloneElement(props.objectCellDefinition.editComponent, { combinedFieldName })
-    : props.objectCellDefinition.editComponent
+  const combinedFieldName = useResolvedFieldName(props.cellProps.column.id, undefined)
+  const editComponent = React.cloneElement(props.objectCellDefinition.editComponent, { combinedFieldName })
 
   const onFormFinish = (values): void => {
     fireOnUpdateCellDataEvent(values.value, {
