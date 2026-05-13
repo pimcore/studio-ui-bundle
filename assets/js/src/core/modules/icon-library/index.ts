@@ -305,6 +305,7 @@ import quantityValue from '@Pimcore/assets/icons/quantity-value.inline.svg?react
 import questionmark from '@Pimcore/assets/icons/questionmark.inline.svg?react'
 import quickAccess from '@Pimcore/assets/icons/quick-access.inline.svg?react'
 import redirect from '@Pimcore/assets/icons/redirect.inline.svg?react'
+import refreshOne from '@Pimcore/assets/icons/refresh-one.inline.svg?react'
 import refresh from '@Pimcore/assets/icons/refresh.inline.svg?react'
 import region from '@Pimcore/assets/icons/region.inline.svg?react'
 import relation from '@Pimcore/assets/icons/relation.inline.svg?react'
@@ -1557,6 +1558,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'redirect',
       component: redirect
+    })
+    iconLibrary.register({
+      name: 'refresh-one',
+      component: refreshOne
     })
     iconLibrary.register({
       name: 'refresh',
