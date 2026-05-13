@@ -23,6 +23,7 @@ import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/co
 import { META_SUPPORTS_BATCH_APPEND_MODE } from '@Pimcore/modules/data-object/listing/batch-actions/batch-append-mode/batch-append-mode'
 import { useTranslation } from 'react-i18next'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
+import { useResolvedFieldName } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/utils/resolve-field-name'
 
 export interface EditModalModeCellProps {
   objectCellDefinition: WithEditModalGridCellDefinition
@@ -35,6 +36,15 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
   const [form] = Form.useForm()
   const { t } = useTranslation()
   const { currentLanguage } = useLanguageSelection()
+
+  // Mirror DataComponent: assemble combinedFieldName from the cell context so
+  // relation fields can resolve their backend dot-notation in the inline-edit
+  // modal too.
+  const editComponentProps = props.objectCellDefinition.editComponent.props as AbstractObjectDataDefinition
+  const combinedFieldName = useResolvedFieldName(props.cellProps.column.id, editComponentProps.combinedFieldName)
+  const editComponent = combinedFieldName !== undefined
+    ? React.cloneElement(props.objectCellDefinition.editComponent, { combinedFieldName })
+    : props.objectCellDefinition.editComponent
 
   const onFormFinish = (values): void => {
     fireOnUpdateCellDataEvent(values.value, {
@@ -102,7 +112,7 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
                   { ...props.objectCellDefinition.formItemProps }
                   name={ 'value' }
                 >
-                  {props.objectCellDefinition.editComponent}
+                  {editComponent}
                 </Form.Item>
               </Form>
             </FieldCollectionProvider>
