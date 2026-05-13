@@ -11,6 +11,7 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
+import { Icon } from '@Pimcore/components/icon/icon'
 import { Input } from '@Pimcore/components/input/input'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
@@ -192,6 +193,12 @@ export const PathTarget = forwardRef(function PathTarget (
             placeholder={ showElementTagPrefix ? undefined : t(props.allowPathTextInput === true ? 'many-to-one-relation.drop-placeholder-text-input' : 'many-to-one-relation.drop-placeholder') }
             prefix={ inputPrefix }
             readOnly={ props.allowPathTextInput !== true }
+            suffix={ isNil(value) && !props.disabled ? (
+              <Icon
+                className={ styles.dropTargetIcon }
+                value="drop-target"
+              />
+            ) : undefined }
             value={ showElementTagPrefix ? undefined : displayText }
             { ...searchProps }
           />

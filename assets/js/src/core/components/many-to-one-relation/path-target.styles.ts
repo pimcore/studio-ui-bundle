@@ -53,6 +53,9 @@ export const useStyles = createStyles(({ token, css }, { isDragActive, isOver, i
   }
 
   return {
-    input: getDragStyle()
+    input: getDragStyle(),
+    dropTargetIcon: css`
+      color: ${token.colorIcon};
+    `
   }
 })
