@@ -491,6 +491,8 @@ published: Veröffentlicht
 classname: Klassenname
 index: Index
 listing.grid-config.title: Grid-Konfiguration
+grid-config.discard-all-changes: Alle Änderungen verwerfen
+grid-config.apply-changes: Änderungen übernehmen
 listing.add-column: Spalte hinzufügen
 listing.actions: Auf Auswahl anwenden
 listing.non-selected.actions: Auf alle anwenden

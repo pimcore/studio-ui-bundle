@@ -491,6 +491,8 @@ published: Publicerad
 classname: Klassnamn
 index: Index
 listing.grid-config.title: Rutnätskonfiguration
+grid-config.discard-all-changes: Förkasta alla ändringar
+grid-config.apply-changes: Tillämpa ändringar
 listing.add-column: Lägg till en kolumn
 listing.actions: Tillämpa på val
 listing.non-selected.actions: Tillämpa på alla
