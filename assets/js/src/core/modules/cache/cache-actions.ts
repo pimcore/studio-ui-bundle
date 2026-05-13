@@ -15,10 +15,6 @@ import i18n from 'i18next'
 import { message } from 'antd'
 import { isUndefined } from 'lodash'
 
-const showSuccess = (key: string): void => {
-  void message.success(i18n.t(key))
-}
-
 export const clearCache = async (): Promise<void> => {
   const response = await store.dispatch(api.endpoints.cacheClear.initiate({}))
 
@@ -27,7 +23,7 @@ export const clearCache = async (): Promise<void> => {
     return
   }
 
-  showSuccess('cache.clear-cache-success')
+  void message.success(i18n.t('cache.clear-cache-success'))
 }
 
 export const clearFullPageCache = async (): Promise<void> => {
@@ -38,7 +34,7 @@ export const clearFullPageCache = async (): Promise<void> => {
     return
   }
 
-  showSuccess('cache.clear-full-page-cache-success')
+  void message.success(i18n.t('cache.clear-full-page-cache-success'))
 }
 
 export const clearTemporaryFiles = async (): Promise<void> => {
@@ -49,5 +45,5 @@ export const clearTemporaryFiles = async (): Promise<void> => {
     return
   }
 
-  showSuccess('cache.clear-temporary-files-success')
+  void message.success(i18n.t('cache.clear-temporary-files-success'))
 }
