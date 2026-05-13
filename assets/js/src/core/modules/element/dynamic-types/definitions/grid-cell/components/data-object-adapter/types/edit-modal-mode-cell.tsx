@@ -20,6 +20,7 @@ import { FieldCollectionProvider } from '../../../../objects/data-related/compon
 import { InheritanceLayer } from '../inheritance-layer'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { DataObjectProvider } from '@Pimcore/modules/data-object/data-object-provider'
+import { useMemo } from 'react'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { META_SUPPORTS_BATCH_APPEND_MODE } from '@Pimcore/modules/data-object/listing/batch-actions/batch-append-mode/batch-append-mode'
 import { useTranslation } from 'react-i18next'
@@ -57,6 +58,12 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
   // and forwards value/onChange to us — we then re-inject everything into the
   // real editComponent below.
   const combinedFieldName = useResolvedFieldName(props.cellProps.column.id, undefined)
+  // Stabilize initialValues so antd Form doesn't see a new reference each
+  // render — defensive against re-initialisation that could revert user edits.
+  const initialFormValues = useMemo(() => ({ value: props.cellProps.getValue() }), [])
+  // Same for DataObjectProvider's value — avoid forcing all context consumers
+  // to re-render on every parent render.
+  const rowDataObjectId = props.cellProps.row.original.id as number
 
   const onFormFinish = (values): void => {
     fireOnUpdateCellDataEvent(values.value, {
@@ -112,12 +119,12 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
           size={ props.objectCellDefinition.editModalSettings.modalSize }
           title={ t('edit-modal.inline-edit') }
         >
-          <DataObjectProvider id={ props.cellProps.row.original.id }>
+          <DataObjectProvider id={ rowDataObjectId }>
             <FieldWidthProvider>
-              <FieldCollectionProvider id={ props.cellProps.row.original.id }>
+              <FieldCollectionProvider id={ rowDataObjectId }>
                 <Form
                   form={ form }
-                  initialValues={ { value: props.cellProps.getValue() } }
+                  initialValues={ initialFormValues }
                   layout={ props.objectCellDefinition.editModalSettings.formLayout }
                   onFinish={ onFormFinish }
                 >
