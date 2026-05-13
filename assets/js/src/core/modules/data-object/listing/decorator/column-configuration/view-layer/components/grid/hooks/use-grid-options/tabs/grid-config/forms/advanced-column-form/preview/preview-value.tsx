@@ -40,7 +40,7 @@ export const PreviewValue = (props: PreviewValueProps): React.JSX.Element => {
         type: isAdvancedCellType ? item.type : 'dataobject.adapter',
         config: {
           ...(isAdvancedCellType
-            ? {}
+            ? { renderAsHtml: true }
             : {
                 dataObjectType: item.type,
                 dataObjectConfig: {}
