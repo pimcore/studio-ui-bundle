@@ -491,6 +491,8 @@ published: Publisert
 classname: Klassenavn
 index: Indeks
 listing.grid-config.title: Rutenettskonfigurasjon
+grid-config.discard-all-changes: Forkast alle endringer
+grid-config.apply-changes: Bruk endringer
 listing.add-column: Legg til en kolonne
 listing.actions: Bruk på utvalg
 listing.non-selected.actions: Bruk på alle

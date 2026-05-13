@@ -491,6 +491,8 @@ published: Publicado
 classname: Nombre de clase
 index: Índice
 listing.grid-config.title: Configuración de cuadrícula
+grid-config.discard-all-changes: Descartar todos los cambios
+grid-config.apply-changes: Aplicar cambios
 listing.add-column: Añadir una columna
 listing.actions: Aplicar a la selección
 listing.non-selected.actions: Aplicar a todos

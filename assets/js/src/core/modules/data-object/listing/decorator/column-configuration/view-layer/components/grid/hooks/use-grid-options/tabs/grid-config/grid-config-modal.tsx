@@ -53,6 +53,7 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
         <PreviewItemProvider>
           <PipelineLayoutProvider pipelineLayout="verbose">
             <Modal
+              closable={ false }
               footer={ null }
               onCancel={ () => onOpenChange?.(false) }
               onClose={ () => onOpenChange?.(false) }
@@ -98,17 +99,17 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
 
                   <Space size="extra-small">
                     <Button
-                      onClick={ onCancelClick }
+                      onClick={ () => { onCancelClick(); onOpenChange?.(false) } }
                       type='default'
                     >
-                      { t('button.cancel') }
+                      { t('grid-config.discard-all-changes') }
                     </Button>
 
                     <Button
                       onClick={ onApplyClick }
                       type='primary'
                     >
-                      { t('button.apply') }
+                      { t('grid-config.apply-changes') }
                     </Button>
                   </Space>
                 </Toolbar>
