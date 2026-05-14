@@ -160,7 +160,10 @@ const api = baseApi.enhanceEndpoints({
       providesTags: () => providingTags.OBJECT_BRICK_COLLECTION()
     },
     classObjectBrickUpdate: {
-      invalidatesTags: () => invalidatingTags.OBJECT_BRICK_COLLECTION(),
+      invalidatesTags: (result, error, args) => [
+        ...invalidatingTags.OBJECT_BRICK_COLLECTION(),
+        ...invalidatingTags.OBJECT_BRICK_DETAIL(args.key)
+      ],
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
