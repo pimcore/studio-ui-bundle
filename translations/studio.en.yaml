@@ -2598,6 +2598,7 @@ display-mode-display: Display path reference
 display-mode-inline-search: Inline search
 display-mode-grid-view: Grid view
 display-mode-tag-field: Tag field
+language-comparison-modal.title: Language comparison
 activate-column-configuration: Activate column configuration
 table-column-configuration: Table column configuration
 center: Center

@@ -21,6 +21,7 @@ import { type TypeRegistryInterface } from '@Pimcore/modules/element/editor/serv
 import { componentConfig, type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { EditorToolbarContextMenu } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/context-menu'
 import { ConditionalLanguageSelection } from '@Pimcore/modules/data-object/editor/toolbar/language-selection/conditional-language-selection'
+import { SplitViewButton } from '@Pimcore/modules/data-object/editor/toolbar/split-view/split-view-button'
 import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/element/editor/shared-components/workflow/menu/workflow-menu'
 import { EditorToolbarSaveButtons as DataObjectEditorToolbarSaveButtons } from '@Pimcore/modules/data-object/editor/toolbar/save-buttons/save-buttons'
 import { PreviewView } from './shared-tab-manager/tabs/preview/preview-view'
@@ -64,6 +65,12 @@ moduleSystem.registerModule({
       name: 'languageSelection',
       priority: 200,
       component: ConditionalLanguageSelection
+    })
+
+    componentRegistry.registerToSlot('dataObject.editor.toolbar.slots.left', {
+      name: 'splitView',
+      priority: 300,
+      component: SplitViewButton
     })
 
     componentRegistry.registerToSlot('dataObject.editor.toolbar.slots.right', {
