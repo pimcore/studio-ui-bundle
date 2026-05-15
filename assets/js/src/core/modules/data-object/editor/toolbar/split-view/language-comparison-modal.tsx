@@ -10,7 +10,7 @@
 
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmpty, isNil, merge } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
@@ -51,11 +51,11 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   const { id } = useContext(DataObjectContext)
   const { currentLayout } = useLayoutSelection()
   const { currentLanguage } = useLanguageSelection()
-  const { form: editForm, updateModifiedDataObjectAttributes } = useEditFormContext()
+  const { form: editForm, updateModifiedDataObjectAttributes, updateDraft } = useEditFormContext()
 
   const { data: layoutData, isLoading: isLayoutLoading, error: layoutError } =
     useDataObjectGetLayoutByIdQuery({ id, layoutId: currentLayout ?? undefined }, { skip: !open })
-  const { dataObject, isLoading: isDraftLoading } = useDataObjectDraft(id)
+  const { isLoading: isDraftLoading } = useDataObjectDraft(id)
 
   const [leftLocale, setLeftLocale] = useState<string | null>(currentLanguage)
   const [rightLocale, setRightLocale] = useState<string | null>(null)
@@ -82,23 +82,47 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
     [layoutData]
   )
 
-  const objectData = (dataObject !== undefined && 'objectData' in dataObject)
-    ? dataObject.objectData as Record<string, unknown> | undefined
-    : undefined
+  // Read live unsaved localized field values directly from the main editor form.
+  // This is a snapshot taken each time the modal opens (open changes to true).
+  const localizedFieldValues = useMemo((): Record<string, Record<string, unknown>> => {
+    if (!open) return {}
+    const all = editForm.getFieldsValue(true) as { localizedfields?: Record<string, Record<string, unknown>> }
+    return all.localizedfields ?? {}
+  }, [open])
 
   const isLoading = isLayoutLoading || isDraftLoading
   const hasLocalizedFields = sections.length > 0
 
   const handleApplyChanges = (): void => {
-    const leftValues = leftColumnRef.current?.getValues() ?? {}
-    const rightValues = rightColumnRef.current?.getValues() ?? {}
+    // Collect only the values for each column's selected locale.
+    // getLocaleValues() returns {} when locale is null — those are skipped by isEmpty check.
+    const leftLocaleValues = leftColumnRef.current?.getLocaleValues() ?? {}
+    const rightLocaleValues = rightColumnRef.current?.getLocaleValues() ?? {}
 
-    const mergedChanges = merge({}, leftValues, rightValues) as { localizedfields?: Record<string, unknown> }
+    // Build field updates: one entry per field+locale pair.
+    const fieldUpdates: Array<{ name: string[], value: unknown }> = []
+    const localizedfields: Record<string, Record<string, unknown>> = {}
 
-    if (!isEmpty(mergedChanges?.localizedfields)) {
-      editForm.setFieldsValue({ localizedfields: mergedChanges.localizedfields })
+    const applyLocaleValues = (localeValues: Record<string, unknown>, locale: string | null): void => {
+      if (isNil(locale) || isEmpty(locale) || isEmpty(localeValues)) return
+      Object.entries(localeValues).forEach(([fieldName, value]) => {
+        fieldUpdates.push({ name: ['localizedfields', fieldName, locale], value })
+        localizedfields[fieldName] = { ...localizedfields[fieldName], [locale]: value }
+      })
+    }
 
-      updateModifiedDataObjectAttributes({ localizedfields: mergedChanges.localizedfields })
+    applyLocaleValues(leftLocaleValues, leftLocale)
+    applyLocaleValues(rightLocaleValues, rightLocale)
+
+    if (!isEmpty(fieldUpdates)) {
+      // Update individual field paths in the main editor form without touching sibling fields.
+      editForm.setFields(fieldUpdates)
+
+      // Register with the modified-attributes ref so the next save picks up these changes.
+      updateModifiedDataObjectAttributes({ localizedfields })
+
+      // Trigger the debounced autosave — same path as a normal field edit in the main form.
+      updateDraft().catch((error: unknown) => { console.error(error) })
     }
 
     onClose()
@@ -171,8 +195,8 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
             >
               <div className={ styles.columnWrapper }>
                 <LanguageComparisonColumn
-                  data={ objectData }
                   locale={ leftLocale }
+                  localizedFieldValues={ localizedFieldValues }
                   ref={ leftColumnRef }
                   sections={ sections }
                 />
@@ -180,8 +204,8 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
 
               <div className={ styles.columnWrapper }>
                 <LanguageComparisonColumn
-                  data={ objectData }
                   locale={ rightLocale }
+                  localizedFieldValues={ localizedFieldValues }
                   ref={ rightColumnRef }
                   sections={ sections }
                 />

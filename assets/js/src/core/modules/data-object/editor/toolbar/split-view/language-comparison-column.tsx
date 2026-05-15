@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, useImperativeHandle, useMemo } from 'react'
+import React, { forwardRef, useEffect, useImperativeHandle, useMemo } from 'react'
 import { ConfigProvider } from 'antd'
 import cn from 'classnames'
 import { isEmpty, isNil } from 'lodash'
@@ -34,27 +34,50 @@ import { type LocalizedFieldSection } from './helpers/process-layout-data'
 import { useStyles } from './language-comparison-modal.styles'
 
 export interface LanguageComparisonColumnHandle {
-  getValues: () => Record<string, unknown>
+  /** Returns only the fields for the currently selected locale: { fieldName: value } */
+  getLocaleValues: () => Record<string, unknown>
 }
 
 interface LanguageComparisonColumnProps {
   locale: string | null
   sections: LocalizedFieldSection[]
-  data: Record<string, unknown> | undefined
+  /** Live localized field values from the main editor form: { fieldName: { locale: value } } */
+  localizedFieldValues: Record<string, Record<string, unknown>>
 }
 
 export const LanguageComparisonColumn = forwardRef<LanguageComparisonColumnHandle, LanguageComparisonColumnProps>(
-  function LanguageComparisonColumn ({ locale, sections, data }, ref) {
+  function LanguageComparisonColumn ({ locale, sections, localizedFieldValues }, ref) {
     const { styles } = useStyles()
     const [form] = Form.useForm()
 
-    useImperativeHandle(ref, () => ({
-      getValues: () => form.getFieldsValue(true)
-    }), [form])
-
+    // Build initial values for this column's form seeded from the live main editor values.
     const initialValues = useMemo(() => ({
-      localizedfields: data?.localizedfields ?? {}
-    }), [data])
+      localizedfields: localizedFieldValues
+    }), [])
+
+    // Whenever the modal re-opens (localizedFieldValues reference changes), reset the form
+    // so the column always reflects the latest unsaved edits from the main editor.
+    useEffect(() => {
+      form.setFieldsValue({ localizedfields: localizedFieldValues })
+    }, [localizedFieldValues])
+
+    useImperativeHandle(ref, () => ({
+      getLocaleValues: (): Record<string, unknown> => {
+        if (isNil(locale) || isEmpty(locale)) {
+          return {}
+        }
+
+        // Extract only the selected locale's values: { fieldName: value }
+        const all = form.getFieldsValue(true) as { localizedfields?: Record<string, Record<string, unknown>> }
+        const localeMap = all.localizedfields ?? {}
+
+        return Object.fromEntries(
+          Object.entries(localeMap)
+            .filter(([, localeValues]) => locale in localeValues)
+            .map(([fieldName, localeValues]) => [fieldName, localeValues[locale]])
+        )
+      }
+    }), [form, locale])
 
     const renderSectionTitle = (breadcrumbTitle: string): React.JSX.Element | null => {
       if (isEmptyValue(breadcrumbTitle)) return null
