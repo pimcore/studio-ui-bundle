@@ -6,6 +6,8 @@ on:
       - "[0-9]+.[0-9]+"
       - "feature-*"
       - "nightly"
+    paths:
+      - "assets/**"
   pull_request_target:
     branches:
       - "[0-9]+.[0-9]+"
@@ -13,6 +15,8 @@ on:
       - "*_actions"
       - "feature-*"
       - "nightly"
+    paths:
+      - "assets/**"
   workflow_dispatch:
   
 env:

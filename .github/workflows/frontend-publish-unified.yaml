@@ -6,6 +6,8 @@ on:
       - "[0-9]+.x"
     tags:
       - "v*"
+    paths:
+      - "assets/**"
   workflow_dispatch:
 
 env:
