@@ -229,7 +229,7 @@ export const ClassDefinitionGeneralSettingsFormFields = (): React.JSX.Element =>
         </Form.Item>
 
         <Form.Item
-          initialValue={ true }
+          initialValue
           name={ ['propertyVisibility', 'grid', 'published'] }
           valuePropName="checked"
         >
@@ -237,7 +237,7 @@ export const ClassDefinitionGeneralSettingsFormFields = (): React.JSX.Element =>
         </Form.Item>
 
         <Form.Item
-          initialValue={ true }
+          initialValue
           name={ ['propertyVisibility', 'search', 'published'] }
           valuePropName="checked"
         >
