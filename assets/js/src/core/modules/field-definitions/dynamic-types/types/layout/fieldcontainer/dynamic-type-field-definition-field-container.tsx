@@ -25,6 +25,17 @@ export class DynamicTypeFieldDefinitionFieldContainer extends DynamicTypeFieldDe
     return { type: 'name', value: 'field-container' }
   }
 
+  getAllowedChildTags (props: FieldDefinitionContext): string[] {
+    return ['text', 'iframe', 'group:data']
+  }
+
+  getDropdownTags (props: FieldDefinitionContext): string[] {
+    if (props.area.includes('custom-layout')) {
+      return ['text', 'iframe']
+    }
+    return this.getAllowedChildTags(props)
+  }
+
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
     return super.getFormFields({ ...context, hideTitle: true })
   }
