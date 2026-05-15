@@ -25,17 +25,6 @@ export class DynamicTypeFieldDefinitionFieldset extends DynamicTypeFieldDefiniti
     return { type: 'name', value: 'fieldset' }
   }
 
-  getAllowedChildTags (props: FieldDefinitionContext): string[] {
-    return ['text', 'iframe', 'group:data']
-  }
-
-  getDropdownTags (props: FieldDefinitionContext): string[] {
-    if (props.area.includes('custom-layout')) {
-      return ['text', 'iframe']
-    }
-    return this.getAllowedChildTags(props)
-  }
-
   getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = context.path.at(-1) ?? ''
     const fieldDefinition = context.fieldDefinitions[id]
