@@ -14,11 +14,10 @@ import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
 import { TAB_EDIT } from '../../types/object/tab-manager/tabs/edit/edit-container'
-import { TAB_LISTING } from '../../types/folder/tab-manager/tabs/listing/listing-container'
 import { TAB_VARIANTS } from '../../types/variant/tab-manager/tabs/variants/variants-tab-container'
 import { LanguageComparisonModal } from './language-comparison-modal'
 
-const VISIBLE_TABS = [TAB_EDIT.key, TAB_LISTING.key, TAB_VARIANTS.key]
+const VISIBLE_TABS = [TAB_EDIT.key, TAB_VARIANTS.key]
 
 export const SplitViewButton = (): React.JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -27,10 +26,10 @@ export const SplitViewButton = (): React.JSX.Element => {
   const { activeTab, editorType } = useDataObjectDraft(id)
   const { hasLocalizedFields } = useLanguageSelection()
 
+  const isObject = editorType?.name !== 'folder'
   const isTabVisible = VISIBLE_TABS.includes(activeTab ?? '')
-  const hasLanguages = hasLocalizedFields || editorType?.name === 'folder'
 
-  if (!isTabVisible || !hasLanguages) {
+  if (!isObject || !isTabVisible || !hasLocalizedFields) {
     return <></>
   }
 

@@ -10,7 +10,7 @@
 
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isNil } from 'lodash'
+import { isEmpty, isNil, merge } from 'lodash'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
@@ -29,6 +29,9 @@ import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-prov
 import {
   PermissionBasedLanguageSelectionControl
 } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
+import {
+  useEditFormContext
+} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { processLayoutData } from './helpers/process-layout-data'
 import {
@@ -48,6 +51,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   const { id } = useContext(DataObjectContext)
   const { currentLayout } = useLayoutSelection()
   const { currentLanguage } = useLanguageSelection()
+  const { form: editForm, updateModifiedDataObjectAttributes } = useEditFormContext()
 
   const { data: layoutData, isLoading: isLayoutLoading, error: layoutError } =
     useDataObjectGetLayoutByIdQuery({ id, layoutId: currentLayout ?? undefined }, { skip: !open })
@@ -86,11 +90,17 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   const hasLocalizedFields = localizedFieldNodes.length > 0
 
   const handleApplyChanges = (): void => {
-    // TODO (step 3): collect values from both columns and persist via useSave().
     const leftValues = leftColumnRef.current?.getValues() ?? {}
     const rightValues = rightColumnRef.current?.getValues() ?? {}
 
-    console.debug('[language-comparison] apply changes', { leftLocale, leftValues, rightLocale, rightValues })
+    const mergedChanges = merge({}, leftValues, rightValues) as { localizedfields?: Record<string, unknown> }
+
+    if (!isEmpty(mergedChanges?.localizedfields)) {
+      editForm.setFieldsValue({ localizedfields: mergedChanges.localizedfields })
+
+      updateModifiedDataObjectAttributes({ localizedfields: mergedChanges.localizedfields })
+    }
+
     onClose()
   }
 
