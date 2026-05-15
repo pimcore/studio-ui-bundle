@@ -10,6 +10,7 @@
 
 import React, { forwardRef, useImperativeHandle, useMemo } from 'react'
 import { ConfigProvider } from 'antd'
+import { isEmpty, isNil } from 'lodash'
 import { Form, type formInstanceType } from '@Pimcore/components/form/form'
 import { Space } from '@Pimcore/components/space/space'
 import {
@@ -25,11 +26,7 @@ import {
 import {
   FieldWidthProvider
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
-import {
-  PermissionBasedLanguageSelectionControl
-} from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
 import { type LayoutNode } from './helpers/process-layout-data'
-import { useStyles } from './language-comparison-modal.styles'
 
 export interface LanguageComparisonColumnHandle {
   getValues: () => Record<string, unknown>
@@ -37,14 +34,12 @@ export interface LanguageComparisonColumnHandle {
 
 interface LanguageComparisonColumnProps {
   locale: string | null
-  onLocaleChange: (locale: string | null) => void
   localizedFieldNodes: LayoutNode[]
   data: Record<string, unknown> | undefined
 }
 
 export const LanguageComparisonColumn = forwardRef<LanguageComparisonColumnHandle, LanguageComparisonColumnProps>(
-  function LanguageComparisonColumn ({ locale, onLocaleChange, localizedFieldNodes, data }, ref) {
-    const { styles } = useStyles()
+  function LanguageComparisonColumn ({ locale, localizedFieldNodes, data }, ref) {
     const [form] = Form.useForm()
 
     useImperativeHandle(ref, () => ({
@@ -56,7 +51,7 @@ export const LanguageComparisonColumn = forwardRef<LanguageComparisonColumnHandl
     }), [data])
 
     const renderedColumnContent = useMemo(() => {
-      if (locale === null || locale === '') {
+      if (isNil(locale) || isEmpty(locale)) {
         return null
       }
 
@@ -95,16 +90,7 @@ export const LanguageComparisonColumn = forwardRef<LanguageComparisonColumnHandl
             layout='vertical'
             preserve
           >
-            <div className={ styles.headerItem }>
-              <PermissionBasedLanguageSelectionControl
-                onChange={ onLocaleChange }
-                value={ locale }
-              />
-            </div>
-
-            <div style={ { paddingTop: 12 } }>
-              {renderedColumnContent}
-            </div>
+            {renderedColumnContent}
           </Form>
         </FieldWidthProvider>
       </ConfigProvider>

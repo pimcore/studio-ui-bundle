@@ -13,9 +13,6 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     body: css`
-      display: flex;
-      flex-direction: column;
-      gap: ${token.paddingSM}px;
       max-height: 70vh;
       overflow-y: auto;
       position: relative;
@@ -25,42 +22,71 @@ export const useStyles = createStyles(({ token, css }) => {
       position: sticky;
       top: 0;
       width: 100%;
-      z-index: 10;
-      background-color: ${token.colorBgContainer};
-      display: flex;
-      gap: ${token.paddingXS}px;
+      z-index: 999999999;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: -15px;
+        bottom: 0;
+        width: 100%;
+        height: 20px;
+        background-color: #fff;
+        z-index: -1;
+      }
     `,
 
     headerItem: css`
       flex: 1 1 50%;
-      min-width: 50%;
-      padding: ${token.paddingXXS}px ${token.paddingXS}px;
-      background-color: ${token.colorFillAlter};
-      border: 1px solid ${token.colorBorderSecondary};
-      border-radius: ${token.borderRadius}px;
+      padding: ${token.paddingXS}px;
+      background-color: ${token.Table.headerBg};
+      border: 0.5px solid ${token.Table.colorBorderSecondary};
+      border-top-width: 0;
+      box-shadow: 0 2px 4px 0 rgba(35, 11, 100, .2);
       display: flex;
       align-items: center;
-      justify-content: flex-start;
+
+      &:first-child {
+        border-right: 0;
+      }
+
+      &:last-child {
+        border-left: 0;
+      }
+
+      &:only-child {
+        flex: 1 1 100%;
+        border-right: 0.5px;
+        border-left: 0.5px;
+      }
+    `,
+
+    content: css`
+      position: relative;
+      min-width: 220px;
     `,
 
     columns: css`
-      display: flex;
-      gap: ${token.paddingSM}px;
-      align-items: stretch;
+      width: 100%;
     `,
 
-    column: css`
+    columnWrapper: css`
       flex: 1 1 50%;
       min-width: 50%;
+      max-width: 900px;
+      width: 100%;
       padding: ${token.paddingXS}px;
-      border: 1px solid ${token.colorBorderSecondary};
-      border-radius: ${token.borderRadius}px;
+
+      &:only-child {
+        flex: 1 1 100%;
+        max-width: 100%;
+      }
     `,
 
     emptyState: css`
-      padding: ${token.paddingLG}px;
+      margin-top: 40px;
+      max-width: 320px;
       text-align: center;
-      color: ${token.colorTextSecondary};
     `
   }
 })

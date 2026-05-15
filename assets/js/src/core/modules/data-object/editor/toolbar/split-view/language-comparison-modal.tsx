@@ -16,6 +16,7 @@ import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
 import { Content } from '@Pimcore/components/content/content'
+import { Flex } from '@Pimcore/components/flex/flex'
 import {
   useDataObjectGetLayoutByIdQuery
 } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
@@ -25,6 +26,9 @@ import {
 } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/use-layout-selection'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
+import {
+  PermissionBasedLanguageSelectionControl
+} from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { processLayoutData } from './helpers/process-layout-data'
 import {
@@ -85,7 +89,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
     // TODO (step 3): collect values from both columns and persist via useSave().
     const leftValues = leftColumnRef.current?.getValues() ?? {}
     const rightValues = rightColumnRef.current?.getValues() ?? {}
-     
+
     console.debug('[language-comparison] apply changes', { leftLocale, leftValues, rightLocale, rightValues })
     onClose()
   }
@@ -114,33 +118,66 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
         {isLoading && <Content loading />}
 
         {!isLoading && !hasLocalizedFields && (
-          <div className={ styles.emptyState }>
-            {t('toolbar.split-view.no-localized-fields')}
-          </div>
+          <Flex justify='center'>
+            <div className={ styles.emptyState }>
+              {t('toolbar.split-view.no-localized-fields')}
+            </div>
+          </Flex>
         )}
 
         {!isLoading && hasLocalizedFields && (
-          <div className={ styles.columns }>
-            <div className={ styles.column }>
-              <LanguageComparisonColumn
-                data={ objectData }
-                locale={ leftLocale }
-                localizedFieldNodes={ localizedFieldNodes }
-                onLocaleChange={ setLeftLocale }
-                ref={ leftColumnRef }
-              />
-            </div>
+          <Flex
+            className={ styles.content }
+            vertical
+          >
+            <Flex
+              className={ styles.headerContainer }
+              wrap='wrap'
+            >
+              <Flex
+                align='center'
+                className={ styles.headerItem }
+              >
+                <PermissionBasedLanguageSelectionControl
+                  onChange={ setLeftLocale }
+                  value={ leftLocale }
+                />
+              </Flex>
 
-            <div className={ styles.column }>
-              <LanguageComparisonColumn
-                data={ objectData }
-                locale={ rightLocale }
-                localizedFieldNodes={ localizedFieldNodes }
-                onLocaleChange={ setRightLocale }
-                ref={ rightColumnRef }
-              />
-            </div>
-          </div>
+              <Flex
+                align='center'
+                className={ styles.headerItem }
+              >
+                <PermissionBasedLanguageSelectionControl
+                  onChange={ setRightLocale }
+                  value={ rightLocale }
+                />
+              </Flex>
+            </Flex>
+
+            <Flex
+              className={ styles.columns }
+              wrap='wrap'
+            >
+              <div className={ styles.columnWrapper }>
+                <LanguageComparisonColumn
+                  data={ objectData }
+                  locale={ leftLocale }
+                  localizedFieldNodes={ localizedFieldNodes }
+                  ref={ leftColumnRef }
+                />
+              </div>
+
+              <div className={ styles.columnWrapper }>
+                <LanguageComparisonColumn
+                  data={ objectData }
+                  locale={ rightLocale }
+                  localizedFieldNodes={ localizedFieldNodes }
+                  ref={ rightColumnRef }
+                />
+              </div>
+            </Flex>
+          </Flex>
         )}
       </div>
     </Modal>
