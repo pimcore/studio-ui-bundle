@@ -10,9 +10,13 @@
 
 import React, { forwardRef, useImperativeHandle, useMemo } from 'react'
 import { ConfigProvider } from 'antd'
+import cn from 'classnames'
 import { isEmpty, isNil } from 'lodash'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Form, type formInstanceType } from '@Pimcore/components/form/form'
 import { Space } from '@Pimcore/components/space/space'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Text } from '@Pimcore/components/text/text'
 import {
   LocalizedFieldsProvider
 } from '@Pimcore/components/form/localisation/localized-fields/provider/localized-fields-provider/localized-fields-provider'
@@ -26,7 +30,8 @@ import {
 import {
   FieldWidthProvider
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
-import { type LayoutNode } from './helpers/process-layout-data'
+import { type LocalizedFieldSection } from './helpers/process-layout-data'
+import { useStyles } from './language-comparison-modal.styles'
 
 export interface LanguageComparisonColumnHandle {
   getValues: () => Record<string, unknown>
@@ -34,12 +39,13 @@ export interface LanguageComparisonColumnHandle {
 
 interface LanguageComparisonColumnProps {
   locale: string | null
-  localizedFieldNodes: LayoutNode[]
+  sections: LocalizedFieldSection[]
   data: Record<string, unknown> | undefined
 }
 
 export const LanguageComparisonColumn = forwardRef<LanguageComparisonColumnHandle, LanguageComparisonColumnProps>(
-  function LanguageComparisonColumn ({ locale, localizedFieldNodes, data }, ref) {
+  function LanguageComparisonColumn ({ locale, sections, data }, ref) {
+    const { styles } = useStyles()
     const [form] = Form.useForm()
 
     useImperativeHandle(ref, () => ({
@@ -50,7 +56,26 @@ export const LanguageComparisonColumn = forwardRef<LanguageComparisonColumnHandl
       localizedfields: data?.localizedfields ?? {}
     }), [data])
 
-    const renderedColumnContent = useMemo(() => {
+    const renderSectionTitle = (breadcrumbTitle: string): React.JSX.Element | null => {
+      if (isEmptyValue(breadcrumbTitle)) return null
+
+      const titleParts = breadcrumbTitle.split('/')
+      const [firstTitlePart, ...remainingTitleParts] = titleParts
+      const secondTitlePart = remainingTitleParts.length > 0 ? ` | ${remainingTitleParts.join(' | ')}` : ''
+      const isSubSection = !isEmpty(secondTitlePart) || titleParts.length > 1
+
+      return (
+        <Text
+          className={ cn(styles.sectionTitle, { [styles.subSectionTitle]: isSubSection }) }
+          strong
+        >
+          {firstTitlePart}
+          {!isEmptyValue(secondTitlePart) && <span className={ styles.subSectionText }>{secondTitlePart}</span>}
+        </Text>
+      )
+    }
+
+    const renderedContent = useMemo(() => {
       if (isNil(locale) || isEmpty(locale)) {
         return null
       }
@@ -64,22 +89,33 @@ export const LanguageComparisonColumn = forwardRef<LanguageComparisonColumnHandl
                 direction='vertical'
                 size='small'
               >
-                {localizedFieldNodes.map((node, nodeIndex) => (
-                  <React.Fragment key={ `${node.name ?? 'lf'}-${nodeIndex}` }>
-                    {(node.children ?? []).map((child, childIndex) => (
-                      <ObjectComponent
-                        key={ `${child.name ?? 'child'}-${childIndex}` }
-                        { ...(child as unknown as ObjectComponentProps) }
-                      />
-                    ))}
-                  </React.Fragment>
+                {sections.map((section, sectionIndex) => (
+                  <div key={ `section-${sectionIndex}-${section.breadcrumbTitle}` }>
+                    {renderSectionTitle(section.breadcrumbTitle)}
+
+                    <Flex
+                      className={ cn(styles.sectionFields, { [styles.sectionFieldsWithoutBorder]: isEmptyValue(section.breadcrumbTitle) }) }
+                      vertical
+                    >
+                      {section.nodes.map((node, nodeIndex) => (
+                        <React.Fragment key={ `${node.name ?? 'lf'}-${nodeIndex}` }>
+                          {(node.children ?? []).map((child, childIndex) => (
+                            <ObjectComponent
+                              key={ `${child.name ?? 'child'}-${childIndex}` }
+                              { ...(child as unknown as ObjectComponentProps) }
+                            />
+                          ))}
+                        </React.Fragment>
+                      ))}
+                    </Flex>
+                  </div>
                 ))}
               </Space>
             </Form.Group>
           </CombinedFieldNameProvider>
         </LocalizedFieldsProvider>
       )
-    }, [locale, localizedFieldNodes])
+    }, [locale, sections])
 
     return (
       <ConfigProvider theme={ { components: { Form: { itemMarginBottom: 8 } } } }>
@@ -90,7 +126,7 @@ export const LanguageComparisonColumn = forwardRef<LanguageComparisonColumnHandl
             layout='vertical'
             preserve
           >
-            {renderedColumnContent}
+            {renderedContent}
           </Form>
         </FieldWidthProvider>
       </ConfigProvider>

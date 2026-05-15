@@ -16,7 +16,14 @@ export interface LayoutNode {
   name?: string
   title?: string | null
   children?: LayoutNode[]
+  fieldBreadcrumbTitle?: string
   [key: string]: unknown
+}
+
+export interface LocalizedFieldSection {
+  /** Hierarchical path of layout panel titles joined with '/', e.g. 'General Information/Content' */
+  breadcrumbTitle: string
+  nodes: LayoutNode[]
 }
 
 const DATATYPE_LAYOUT = 'layout'
@@ -24,38 +31,65 @@ const DATATYPE_DATA = 'data'
 const FIELDTYPE_LOCALIZED_FIELDS = 'localizedfields'
 
 /**
- * Walks the data-object layout tree and returns ONLY the descendant nodes that
- * are `localizedfields` data nodes. Layout containers (panel / tabpanel /
- * region / fieldset / accordion) are recursed into; non-localized data leaves
- * (input, numeric, block, ...) are dropped.
+ * Walks the data-object layout tree and returns localizedfields nodes grouped
+ * by their ancestor panel path (fieldBreadcrumbTitle), matching the object-merger pattern.
  *
- * The returned nodes preserve their original `children` so the regular
- * `<ObjectComponent>` renderer can render them as-is inside a per-column
- * `<LocalizedFieldsProvider>`.
+ * Layout containers (panel / tabpanel / region / fieldset / accordion) are recursed
+ * into while building the breadcrumb string from their `title` values joined with '/'.
+ * Non-localized data leaves are dropped.
  */
 export const processLayoutData = (
   layout: DataObjectGetLayoutByIdApiResponse | LayoutNode | undefined
-): LayoutNode[] => {
+): LocalizedFieldSection[] => {
   if (layout === undefined || layout === null) {
     return []
   }
 
-  return collectLocalizedFields((layout as LayoutNode).children ?? [])
+  const flat = collectLocalizedFields((layout as LayoutNode).children ?? [], '')
+  return groupByBreadcrumb(flat)
 }
 
-const collectLocalizedFields = (nodes: LayoutNode[]): LayoutNode[] => {
-  const result: LayoutNode[] = []
+interface LocalizedFieldEntry {
+  breadcrumbTitle: string
+  node: LayoutNode
+}
+
+const collectLocalizedFields = (nodes: LayoutNode[], breadcrumb: string): LocalizedFieldEntry[] => {
+  const result: LocalizedFieldEntry[] = []
 
   for (const node of nodes) {
     if (node.datatype === DATATYPE_LAYOUT) {
-      result.push(...collectLocalizedFields(node.children ?? []))
+      const childBreadcrumb = buildBreadcrumb(breadcrumb, node.title ?? '')
+      result.push(...collectLocalizedFields(node.children ?? [], childBreadcrumb))
       continue
     }
 
     if (node.datatype === DATATYPE_DATA && node.fieldtype === FIELDTYPE_LOCALIZED_FIELDS) {
-      result.push(node)
+      result.push({ breadcrumbTitle: breadcrumb, node: { ...node, fieldBreadcrumbTitle: breadcrumb } })
     }
   }
 
   return result
+}
+
+const buildBreadcrumb = (current: string, next: string | null | undefined): string => {
+  const part = (next ?? '').trim()
+  if (current === '') return part
+  if (part === '') return current
+  return `${current}/${part}`
+}
+
+const groupByBreadcrumb = (entries: LocalizedFieldEntry[]): LocalizedFieldSection[] => {
+  const map = new Map<string, LayoutNode[]>()
+
+  for (const { breadcrumbTitle, node } of entries) {
+    const existing = map.get(breadcrumbTitle)
+    if (existing !== undefined) {
+      existing.push(node)
+    } else {
+      map.set(breadcrumbTitle, [node])
+    }
+  }
+
+  return Array.from(map.entries()).map(([breadcrumbTitle, nodes]) => ({ breadcrumbTitle, nodes }))
 }

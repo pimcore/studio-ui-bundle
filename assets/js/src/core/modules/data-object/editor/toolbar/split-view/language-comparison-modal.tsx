@@ -77,7 +77,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
     }
   }, [open, currentLanguage])
 
-  const localizedFieldNodes = useMemo(
+  const sections = useMemo(
     () => processLayoutData(layoutData),
     [layoutData]
   )
@@ -87,7 +87,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
     : undefined
 
   const isLoading = isLayoutLoading || isDraftLoading
-  const hasLocalizedFields = localizedFieldNodes.length > 0
+  const hasLocalizedFields = sections.length > 0
 
   const handleApplyChanges = (): void => {
     const leftValues = leftColumnRef.current?.getValues() ?? {}
@@ -173,8 +173,8 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
                 <LanguageComparisonColumn
                   data={ objectData }
                   locale={ leftLocale }
-                  localizedFieldNodes={ localizedFieldNodes }
                   ref={ leftColumnRef }
+                  sections={ sections }
                 />
               </div>
 
@@ -182,8 +182,8 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
                 <LanguageComparisonColumn
                   data={ objectData }
                   locale={ rightLocale }
-                  localizedFieldNodes={ localizedFieldNodes }
                   ref={ rightColumnRef }
+                  sections={ sections }
                 />
               </div>
             </Flex>

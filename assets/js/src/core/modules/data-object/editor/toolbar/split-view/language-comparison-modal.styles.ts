@@ -83,6 +83,42 @@ export const useStyles = createStyles(({ token, css }) => {
       }
     `,
 
+    sectionTitle: css`
+      position: relative;
+      display: block;
+      padding: ${token.paddingSM}px ${token.paddingXS}px ${token.paddingXS}px ${token.paddingXS}px;
+      font-size: 14px;
+      font-weight: 900;
+    `,
+
+    subSectionTitle: css`
+      margin-left: 5px;
+
+      &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 2px;
+        width: 2px;
+        height: 22px;
+        background-color: ${token.Colors.Neutral.Fill.colorFill};
+      }
+    `,
+
+    subSectionText: css`
+      font-weight: 400;
+    `,
+
+    sectionFields: css`
+      padding: ${token.paddingXS}px;
+      border: 1px solid ${token.colorBorderContainer};
+      border-radius: ${token.borderRadius}px;
+    `,
+
+    sectionFieldsWithoutBorder: css`
+      border-width: 0;
+    `,
+
     emptyState: css`
       margin-top: 40px;
       max-width: 320px;
