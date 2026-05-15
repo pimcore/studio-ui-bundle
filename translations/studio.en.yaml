@@ -156,6 +156,10 @@ toolbar.more: More
 toolbar.workflow: Workflow
 toolbar.new: New
 toolbar.switch-layout: Switch custom layout
+toolbar.split-view: Split view
+toolbar.split-view.title: Language comparison
+toolbar.split-view.apply-changes: Apply changes
+toolbar.split-view.no-localized-fields: This data object has no localized fields to compare.
 import: Import
 export: Export
 more-actions: More Actions
