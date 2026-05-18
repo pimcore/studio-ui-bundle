@@ -26,6 +26,7 @@ import {
 } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/use-layout-selection'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import {
   PermissionBasedLanguageSelectionControl
 } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
@@ -52,13 +53,15 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   const { currentLayout } = useLayoutSelection()
   const { currentLanguage } = useLanguageSelection()
   const { form: editForm, updateModifiedDataObjectAttributes, updateDraft } = useEditFormContext()
+  const user = useUser()
+  const contentLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
 
   const { data: layoutData, isLoading: isLayoutLoading, error: layoutError } =
     useDataObjectGetLayoutByIdQuery({ id, layoutId: currentLayout ?? undefined }, { skip: !open })
   const { isLoading: isDraftLoading } = useDataObjectDraft(id)
 
-  const [leftLocale, setLeftLocale] = useState<string | null>(currentLanguage)
-  const [rightLocale, setRightLocale] = useState<string | null>(null)
+  const [leftLocale, setLeftLocale] = useState<string | null>(contentLanguages[0] ?? currentLanguage)
+  const [rightLocale, setRightLocale] = useState<string | null>(contentLanguages[1] ?? null)
 
   const leftColumnRef = useRef<LanguageComparisonColumnHandle>(null)
   const rightColumnRef = useRef<LanguageComparisonColumnHandle>(null)
@@ -72,10 +75,10 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   // Reset locale selection when the modal is reopened
   useEffect(() => {
     if (open) {
-      setLeftLocale(currentLanguage)
-      setRightLocale(null)
+      setLeftLocale(contentLanguages[0] ?? currentLanguage)
+      setRightLocale(contentLanguages[1] ?? null)
     }
-  }, [open, currentLanguage])
+  }, [open, currentLanguage, contentLanguages])
 
   const sections = useMemo(
     () => processLayoutData(layoutData),
