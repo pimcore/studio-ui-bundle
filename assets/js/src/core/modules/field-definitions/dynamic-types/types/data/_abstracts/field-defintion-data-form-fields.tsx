@@ -9,12 +9,14 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
+import { useSyncTitleFromName } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/use-sync-title-from-name'
 import { Form, FormKit, Input, Switch, TextArea } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { kebabCase } from 'lodash'
 
 export const FieldDefinitionDataFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
+  useSyncTitleFromName()
   const { t } = useTranslation()
   const isCustomLayout = props.context.area.includes('custom-layout')
   const typeTranslation = t('field-definition.' + kebabCase(props.type))
