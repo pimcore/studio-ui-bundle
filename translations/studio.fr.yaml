@@ -976,6 +976,7 @@ lazy-loading: Chargement paresseux
 disallow-add-remove: Interdire l'ajout / la suppression
 disallow-reorder: Interdire la réorganisation
 css-style: Style CSS
+css-style-tooltip: "CSS en ligne appliqué au corps, par ex. \"float: left; margin: 10px;\". Les déclarations non valides sont ignorées."
 collapsible: Réductible
 collapsed: Initialement réduit
 border: Bordure

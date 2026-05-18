@@ -976,6 +976,7 @@ lazy-loading: Lazy Loading
 disallow-add-remove: Tillåt inte lägg till / ta bort
 disallow-reorder: Tillåt inte omordning
 css-style: CSS-stil
+css-style-tooltip: "Inline-CSS som tillämpas på kroppen, t.ex. \"float: left; margin: 10px;\". Ogiltiga deklarationer ignoreras."
 collapsible: Ihopfällbar
 collapsed: Initialt ihopfälld
 border: Ram

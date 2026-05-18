@@ -976,6 +976,7 @@ lazy-loading: Lazy Loading
 disallow-add-remove: Hinzufügen / Entfernen verbieten
 disallow-reorder: Neuordnung verbieten
 css-style: CSS-Stil
+css-style-tooltip: "Inline-CSS für den Body, z.B. \"float: left; margin: 10px;\". Ungültige Deklarationen werden ignoriert."
 collapsible: Einklappbar
 collapsed: Anfangs eingeklappt
 border: Rahmen
