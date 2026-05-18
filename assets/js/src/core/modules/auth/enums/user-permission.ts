@@ -41,5 +41,6 @@ export enum UserPermission {
   ClassificationStore = 'classificationstore',
   SelectOptions = 'selectoptions',
   QuantityValues = 'quantityValueUnits',
-  AssetMetadata = 'asset_metadata'
+  AssetMetadata = 'asset_metadata',
+  ClearCache = 'clear_cache'
 }

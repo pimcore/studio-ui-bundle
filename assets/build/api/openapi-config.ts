@@ -236,6 +236,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/gdpr-data-extractor/gdpr-data-extractor-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/gdpr\/?/i)
+    },
+    '../../js/src/core/modules/cache/cache-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/cache\/?/i)
     }
   },
   exportName: 'api',

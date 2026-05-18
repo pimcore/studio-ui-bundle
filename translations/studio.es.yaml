@@ -2,6 +2,9 @@ common.owner: Propietario
 common.modification-date: Fecha de modificación
 common.globally: Globalmente
 common.apply-selection: Aplicar selección
+cache.clear-cache-success: Caché limpiada con éxito
+cache.clear-full-page-cache-success: Caché de página completa limpiada con éxito
+cache.clear-temporary-files-success: Archivos temporales eliminados con éxito
 dont-ask-again: No volver a preguntar
 widget.missing-context.title: Contexto faltante
 widget.missing-context.description: No se encontró ningún elemento relacionado
@@ -1452,6 +1455,10 @@ navigation.reporting: Informes
 navigation.system: Sistema
 navigation.website-settings: Configuración del sitio web
 navigation.document-types: Tipos de documento
+navigation.cache: Caché
+navigation.cache.clear-cache: Limpiar caché
+navigation.cache.clear-full-page-cache: Limpiar caché de página completa
+navigation.cache.clear-temporary-files: Eliminar archivos temporales
 navigation.clear-cache: Limpiar caché de página completa
 navigation.reports: Todos los informes
 navigation.custom-reports: Configuración de informes personalizados

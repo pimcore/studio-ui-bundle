@@ -2,6 +2,9 @@ common.owner: Ägare
 common.modification-date: Ändringsdatum
 common.globally: Globalt
 common.apply-selection: Tillämpa val
+cache.clear-cache-success: Cachen har rensats
+cache.clear-full-page-cache-success: Helsidescachen har rensats
+cache.clear-temporary-files-success: Temporära filer har tagits bort
 dont-ask-again: Fråga inte igen
 widget.missing-context.title: Saknar kontext
 widget.missing-context.description: Inget relaterat element hittades
@@ -1452,6 +1455,10 @@ navigation.reporting: Rapportering
 navigation.system: System
 navigation.website-settings: Webbplatsinställningar
 navigation.document-types: Dokumenttyper
+navigation.cache: Cache
+navigation.cache.clear-cache: Rensa cache
+navigation.cache.clear-full-page-cache: Rensa helsidescache
+navigation.cache.clear-temporary-files: Ta bort temporära filer
 navigation.clear-cache: Rensa helsidescache
 navigation.reports: Alla rapporter
 navigation.custom-reports: Konfiguration av anpassade rapporter
