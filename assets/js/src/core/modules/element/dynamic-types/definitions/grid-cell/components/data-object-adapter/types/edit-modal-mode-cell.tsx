@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo } from 'react'
+import React from 'react'
 import { type AbstractObjectDataDefinition, type WithEditModalGridCellDefinition } from '../../../../objects/data-related/dynamic-type-object-data-abstract'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
@@ -38,8 +38,7 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
   const { t } = useTranslation()
   const { currentLanguage } = useLanguageSelection()
 
-  // Stabilize initialValues so antd Form doesn't see a new reference each render.
-  const initialFormValues = useMemo(() => ({ value: props.cellProps.getValue() }), [])
+  const initialFormValues = { value: props.cellProps.getValue() }
   const rowDataObjectId = props.cellProps.row.original.id as number
 
   const onFormFinish = (values): void => {
