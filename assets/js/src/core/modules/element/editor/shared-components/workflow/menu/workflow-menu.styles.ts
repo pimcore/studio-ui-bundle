@@ -10,7 +10,7 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ css }) => {
+export const useStyles = createStyles(({ css, token }) => {
   return {
     dropdownOverlay: css`
       min-width: 0 !important;
@@ -20,7 +20,7 @@ export const useStyles = createStyles(({ css }) => {
       }
 
       .ant-dropdown-menu-item-group-title {
-        padding-left: 15px !important;
+        padding-left: ${token.padding}px !important;
       }
 
       .ant-dropdown-menu-item-group-list {
