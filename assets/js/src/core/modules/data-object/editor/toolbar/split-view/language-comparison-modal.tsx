@@ -135,9 +135,6 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
     <Modal
       footer={
         <ModalFooter divider>
-          <Button onClick={ onClose }>
-            {t('cancel')}
-          </Button>
           <Button
             onClick={ handleApplyChanges }
             type='primary'
@@ -169,10 +166,11 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
           >
             <Flex
               className={ styles.headerContainer }
-              wrap='wrap'
+              wrap="wrap"
             >
               <Flex
-                align='center'
+                align="center"
+                justify="center"
                 className={ styles.headerItem }
               >
                 <PermissionBasedLanguageSelectionControl
@@ -183,7 +181,8 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
               </Flex>
 
               <Flex
-                align='center'
+                align="center"
+                justify="center"
                 className={ styles.headerItem }
               >
                 <PermissionBasedLanguageSelectionControl
@@ -196,7 +195,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
 
             <Flex
               className={ styles.columns }
-              wrap='wrap'
+              wrap="wrap"
             >
               <div className={ styles.columnWrapper }>
                 <LanguageComparisonColumn
