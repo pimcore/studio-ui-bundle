@@ -73,11 +73,9 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
 
   const [leftLocale, setLeftLocale] = useState<string | null>(contentLanguages[0] ?? currentLanguage)
   const [rightLocale, setRightLocale] = useState<string | null>(contentLanguages[1] ?? null)
-  const [sections, setSections] = useState<IFormattedDataStructureData[]>([])
+  const [localizedFields, setLocalizedFields] = useState<IFormattedDataStructureData[]>([])
   const [isSectionsLoading, setIsSectionsLoading] = useState(false)
   const [layoutsList, setLayoutsList] = useState<ILayoutItem[]>([])
-
-  console.log('======>>>> sections: ', sections)
 
   const leftColumnRef = useRef<LanguageComparisonColumnHandle>(null)
   const rightColumnRef = useRef<LanguageComparisonColumnHandle>(null)
@@ -96,10 +94,10 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
     }
   }, [open, currentLanguage, contentLanguages])
 
-  // Process layout data asynchronously whenever the layout changes
+  // Process layout data and filter to localized fields only
   useEffect(() => {
     if (isNil(layoutData) || !open) {
-      setSections([])
+      setLocalizedFields([])
       return
     }
 
@@ -113,26 +111,26 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
       setLayoutsList
     })
       .then(result => {
-        setSections(result)
+        setLocalizedFields(result.filter(item => item.fieldPath?.includes('localizedfields')))
       })
       .catch((error: unknown) => {
         console.error(error)
-        setSections([])
+        setLocalizedFields([])
       })
       .finally(() => {
         setIsSectionsLoading(false)
       })
   }, [layoutData, open])
 
-  // Read live unsaved values from the main editor form — full form values so that
-  // nested containers (objectbricks etc.) are included.
-  const formValues = useMemo((): Record<string, unknown> => {
+  // Read live unsaved localized field values from the main editor form.
+  const localizedFieldValues = useMemo((): Record<string, Record<string, unknown>> => {
     if (!open) return {}
-    return editForm.getFieldsValue(true) as Record<string, unknown>
+    const all = editForm.getFieldsValue(true) as { localizedfields?: Record<string, Record<string, unknown>> }
+    return all.localizedfields ?? {}
   }, [open])
 
   const isLoading = isLayoutLoading || isDraftLoading || isSectionsLoading
-  const hasLocalizedFields = sections.length > 0
+  const hasLocalizedFields = localizedFields.length > 0
 
   const handleApplyChanges = (): void => {
     const leftLocaleValues = leftColumnRef.current?.getLocaleValues() ?? {}
@@ -229,18 +227,18 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
             >
               <div className={ styles.columnWrapper }>
                 <LanguageComparisonColumn
-                  layoutData={ sections }
+                  layoutData={ localizedFields }
                   locale={ leftLocale }
-                  localizedFieldValues={ formValues }
+                  localizedFieldValues={ localizedFieldValues }
                   ref={ leftColumnRef }
                 />
               </div>
 
               <div className={ styles.columnWrapper }>
                 <LanguageComparisonColumn
-                  layoutData={ sections }
+                  layoutData={ localizedFields }
                   locale={ rightLocale }
-                  localizedFieldValues={ formValues }
+                  localizedFieldValues={ localizedFieldValues }
                   ref={ rightColumnRef }
                 />
               </div>
