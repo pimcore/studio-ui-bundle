@@ -18,6 +18,7 @@ import cn from 'classnames'
 import { Tooltip } from '../tooltip/tooltip'
 import useElementOverflow from '../../utils/use-element-overflow'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 
 export interface ElementTagProps extends Omit<TagProps, 'id' | 'children'> {
   path: string
@@ -27,9 +28,10 @@ export interface ElementTagProps extends Omit<TagProps, 'id' | 'children'> {
   disabled?: boolean
   onClose?: () => void
   inline?: boolean
+  pathIsHtml?: boolean
 }
 
-export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, published, disabled, onClose, inline = false, ...props }) => {
+export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, published, disabled, onClose, inline = false, pathIsHtml = false, ...props }) => {
   const { openElement } = useElementHelper()
   const { styles } = useStyles()
   const textRef = useRef<HTMLSpanElement>(null)
@@ -49,7 +51,7 @@ export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, p
   }
 
   return (
-    <Tooltip title={ isOverflow ? path : '' }>
+    <Tooltip title={ isOverflow && !pathIsHtml ? path : '' }>
       <Tag
         bordered={ false }
         className={ cn(inline ? styles.tagInline : styles.tag, { [styles.tagClickable]: isClickable, [styles.tagDisabled]: disabled }) }
@@ -61,7 +63,14 @@ export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, p
         ref={ textRef }
         { ...props }
       >
-        <span className="tag-content">{path}</span>
+        {pathIsHtml
+          ? (
+            <span className="tag-content"><SanitizeHtml
+              html={ path }
+              tag="span"
+                                          /></span>
+            )
+          : <span className="tag-content">{path}</span>}
       </Tag>
     </Tooltip>
   )

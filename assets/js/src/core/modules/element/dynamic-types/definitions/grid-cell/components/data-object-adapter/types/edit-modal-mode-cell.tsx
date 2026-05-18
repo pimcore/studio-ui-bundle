@@ -19,6 +19,7 @@ import { isUndefined } from 'lodash'
 import { FieldCollectionProvider } from '../../../../objects/data-related/components/field-collection/providers/field-collection-provider'
 import { InheritanceLayer } from '../inheritance-layer'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { DataObjectProvider } from '@Pimcore/modules/data-object/data-object-provider'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { META_SUPPORTS_BATCH_APPEND_MODE } from '@Pimcore/modules/data-object/listing/batch-actions/batch-append-mode/batch-append-mode'
 import { useTranslation } from 'react-i18next'
@@ -29,12 +30,16 @@ export interface EditModalModeCellProps {
   cellProps: DefaultCellProps
 }
 
+
 export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element => {
   const { decodeColumnIdentifier } = useSelectedColumns()
   const { isInEditMode, fireOnUpdateCellDataEvent, disableEditMode } = useEditMode(props.cellProps)
   const [form] = Form.useForm()
   const { t } = useTranslation()
   const { currentLanguage } = useLanguageSelection()
+
+  const initialFormValues = { value: props.cellProps.getValue() }
+  const rowDataObjectId = props.cellProps.row.original.id as number
 
   const onFormFinish = (values): void => {
     fireOnUpdateCellDataEvent(values.value, {
@@ -90,23 +95,25 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
           size={ props.objectCellDefinition.editModalSettings.modalSize }
           title={ t('edit-modal.inline-edit') }
         >
-          <FieldWidthProvider>
-            <FieldCollectionProvider id={ props.cellProps.row.original.id }>
-              <Form
-                form={ form }
-                initialValues={ { value: props.cellProps.getValue() } }
-                layout={ props.objectCellDefinition.editModalSettings.formLayout }
-                onFinish={ onFormFinish }
-              >
-                <Form.Item
-                  { ...props.objectCellDefinition.formItemProps }
-                  name={ 'value' }
+          <DataObjectProvider id={ rowDataObjectId }>
+            <FieldWidthProvider>
+              <FieldCollectionProvider id={ rowDataObjectId }>
+                <Form
+                  form={ form }
+                  initialValues={ initialFormValues }
+                  layout={ props.objectCellDefinition.editModalSettings.formLayout }
+                  onFinish={ onFormFinish }
                 >
-                  {props.objectCellDefinition.editComponent}
-                </Form.Item>
-              </Form>
-            </FieldCollectionProvider>
-          </FieldWidthProvider>
+                  <Form.Item
+                    { ...props.objectCellDefinition.formItemProps }
+                    name={ 'value' }
+                  >
+                    {props.objectCellDefinition.editComponent}
+                  </Form.Item>
+                </Form>
+              </FieldCollectionProvider>
+            </FieldWidthProvider>
+          </DataObjectProvider>
         </WindowModal>
       )}
     </Flex>
