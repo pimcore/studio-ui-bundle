@@ -80,7 +80,7 @@ export const DataObjectAdapterCell = (props: DataObjectAdapterCellProps): React.
   const dynType = objectDataRegistry.getDynamicType(type)
   const cellDefinition = dynType.getGridCellDefinition({
     cellProps: props,
-    objectProps: enrichedObjectProps as unknown as AbstractObjectDataDefinition
+    objectProps: enrichedObjectProps as AbstractObjectDataDefinition
   })
 
   if (cellDefinition.mode === 'default') {
