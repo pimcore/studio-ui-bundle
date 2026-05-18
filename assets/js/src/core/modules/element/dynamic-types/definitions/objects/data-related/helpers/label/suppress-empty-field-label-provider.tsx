@@ -18,7 +18,7 @@ export interface SuppressEmptyFieldLabelProviderProps {
 
 export const SuppressEmptyFieldLabelProvider = ({ children }: SuppressEmptyFieldLabelProviderProps): React.JSX.Element => {
   return (
-    <SuppressEmptyFieldLabelContext.Provider value={ true }>
+    <SuppressEmptyFieldLabelContext.Provider value>
       { children }
     </SuppressEmptyFieldLabelContext.Provider>
   )
