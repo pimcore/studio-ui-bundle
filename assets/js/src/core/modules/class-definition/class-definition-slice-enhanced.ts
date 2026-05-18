@@ -305,6 +305,7 @@ export const {
   useClassSelectOptionGetTreeQuery,
   useClassGetAvailableVisibleFieldsQuery,
   useClassGetSelectedVisibleFieldsQuery,
+  useClassDefinitionGetBrickFieldsQuery,
   useClassDefinitionGetBricksUsagesQuery,
   useClassFieldCollectionCollectionQuery,
   useClassFieldCollectionCreateMutation,
