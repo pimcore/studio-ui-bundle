@@ -22,7 +22,7 @@ export class AreablockManager extends AbstractBlockManager {
   }
 
   protected getElementSelector (): string {
-    return `.pimcore_area_entry[data-name="${this.editableName}"], .pimcore_area_entry[data-name^="${this.editableName}:"]`
+    return `.pimcore_area_entry[data-name="${this.editableName}"]`
   }
 
   getElementType (element: HTMLElement): string | null {
