@@ -173,6 +173,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
                 className={ styles.headerItem }
               >
                 <PermissionBasedLanguageSelectionControl
+                  excludeLocales={ rightLocale !== null ? [rightLocale] : [] }
                   onChange={ setLeftLocale }
                   value={ leftLocale }
                 />
@@ -183,6 +184,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
                 className={ styles.headerItem }
               >
                 <PermissionBasedLanguageSelectionControl
+                  excludeLocales={ leftLocale !== null ? [leftLocale] : [] }
                   onChange={ setRightLocale }
                   value={ rightLocale }
                 />
