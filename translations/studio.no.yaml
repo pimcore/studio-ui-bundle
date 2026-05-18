@@ -976,6 +976,7 @@ lazy-loading: Lat lasting
 disallow-add-remove: Ikke tillat legg til / fjern
 disallow-reorder: Ikke tillat omorganisering
 css-style: CSS-stil
+css-style-tooltip: "Inline-CSS som brukes på kroppen, f.eks. \"float: left; margin: 10px;\". Ugyldige deklarasjoner ignoreres."
 collapsible: Sammenleggbar
 collapsed: Opprinnelig sammenslått
 border: Kantlinje

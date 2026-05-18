@@ -976,6 +976,7 @@ lazy-loading: Carga diferida
 disallow-add-remove: No permitir añadir/eliminar
 disallow-reorder: No permitir reordenar
 css-style: Estilo CSS
+css-style-tooltip: "CSS en línea aplicado al cuerpo, p. ej. \"float: left; margin: 10px;\". Las declaraciones no válidas se ignoran."
 collapsible: Plegable
 collapsed: Plegado inicialmente
 border: Borde

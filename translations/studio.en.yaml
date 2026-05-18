@@ -982,6 +982,7 @@ lazy-loading: Lazy Loading
 disallow-add-remove: Disallow Add / Remove
 disallow-reorder: Disallow Reorder
 css-style: CSS Style
+css-style-tooltip: "Inline CSS applied to the body, e.g. \"float: left; margin: 10px;\". Invalid declarations are ignored."
 collapsible: Collapsible
 collapsed: Initially Collapsed
 border: Border
