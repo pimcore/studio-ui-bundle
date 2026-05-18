@@ -243,6 +243,8 @@ export type DataObjectVersion = Element & {
     allowInheritance: boolean;
     /** Has preview */
     hasPreview: boolean;
+    /** Show application logger tab */
+    showAppLoggerTab?: boolean;
     /** Has workflow available */
     hasWorkflowAvailable: boolean;
     /** Key */
