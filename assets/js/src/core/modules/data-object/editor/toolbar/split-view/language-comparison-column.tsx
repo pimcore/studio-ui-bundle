@@ -11,7 +11,7 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useMemo } from 'react'
 import { ConfigProvider } from 'antd'
 import cn from 'classnames'
-import { isEmpty, isNil } from 'lodash'
+import { get, isEmpty, isNil } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Form, type formInstanceType } from '@Pimcore/components/form/form'
 import { Space } from '@Pimcore/components/space/space'
@@ -34,50 +34,87 @@ import { type LocalizedFieldSection } from './helpers/process-layout-data'
 import { useStyles } from './language-comparison-modal.styles'
 
 export interface LanguageComparisonColumnHandle {
-  /** Returns only the fields for the currently selected locale: { fieldName: value } */
-  getLocaleValues: () => Record<string, unknown>
+  /** Returns all localized field values for the current locale, grouped by their form path context.
+   *  Shape: Array of { formPath: string[], values: Record<fieldName, value> }
+   *  formPath is the path ABOVE the localizedfields node (e.g. [] for top-level, ['objectbricks','BrickType'] for nested).
+   */
+  getLocaleValues: () => LocaleValueEntry[]
+}
+
+export interface LocaleValueEntry {
+  /** Form path segments above the localizedfields group, e.g. [] or ['objectbricks', 'BrickType'] */
+  formPath: string[]
+  /** Field name → locale value map for the selected locale */
+  values: Record<string, unknown>
 }
 
 interface LanguageComparisonColumnProps {
   locale: string | null
   sections: LocalizedFieldSection[]
   /** Live localized field values from the main editor form: { fieldName: { locale: value } } */
-  localizedFieldValues: Record<string, Record<string, unknown>>
+  localizedFieldValues: Record<string, unknown>
 }
 
 export const LanguageComparisonColumn = forwardRef<LanguageComparisonColumnHandle, LanguageComparisonColumnProps>(
-  function LanguageComparisonColumn ({ locale, sections, localizedFieldValues }, ref) {
+  function LanguageComparisonColumn (props, ref) {
+    const { locale, sections, localizedFieldValues } = props
     const { styles } = useStyles()
     const [form] = Form.useForm()
 
     // Build initial values for this column's form seeded from the live main editor values.
-    const initialValues = useMemo(() => ({
-      localizedfields: localizedFieldValues
-    }), [])
+    const initialValues = useMemo(() => localizedFieldValues, [])
 
     // Whenever the modal re-opens (localizedFieldValues reference changes), reset the form
     // so the column always reflects the latest unsaved edits from the main editor.
     useEffect(() => {
-      form.setFieldsValue({ localizedfields: localizedFieldValues })
+      form.setFieldsValue(localizedFieldValues)
     }, [localizedFieldValues])
 
     useImperativeHandle(ref, () => ({
-      getLocaleValues: (): Record<string, unknown> => {
+      getLocaleValues: (): LocaleValueEntry[] => {
         if (isNil(locale) || isEmpty(locale)) {
-          return {}
+          return []
         }
 
-        // Extract only the selected locale's values: { fieldName: value }
-        const all = form.getFieldsValue(true) as { localizedfields?: Record<string, Record<string, unknown>> }
-        const localeMap = all.localizedfields ?? {}
+        const all = form.getFieldsValue(true) as Record<string, unknown>
 
-        return Object.fromEntries(
-          Object.entries(localeMap)
-            .filter(([, localeValues]) => locale in localeValues)
-            .map(([fieldName, localeValues]) => [fieldName, localeValues[locale]])
-        )
+        // Collect unique formPaths across all sections
+        const seen = new Set<string>()
+        const result: LocaleValueEntry[] = []
+
+        for (const section of sections) {
+          const key = section.formPath.join('|')
+          if (seen.has(key)) continue
+          seen.add(key)
+
+          // Navigate to the localizedfields map at this formPath level
+          // Form structure: { ...formPath..., localizedfields: { fieldName: { locale: value } } }
+          const container = isEmpty(section.formPath)
+            ? all
+            : get(all, section.formPath) as Record<string, unknown> | undefined
+
+          if (isNil(container)) continue
+
+          const localeMap = (container as Record<string, unknown>).localizedfields as
+            Record<string, Record<string, unknown>> | undefined
+
+          if (isNil(localeMap)) continue
+
+          const values: Record<string, unknown> = {}
+          for (const [fieldName, localeValues] of Object.entries(localeMap)) {
+            if (!isNil(localeValues) && locale in localeValues) {
+              values[fieldName] = localeValues[locale]
+            }
+          }
+
+          if (!isEmpty(values)) {
+            result.push({ formPath: section.formPath, values })
+          }
+        }
+
+        return result
       }
-    }), [form, locale])
+    }), [form, locale, sections])
 
     const renderSectionTitle = (breadcrumbTitle: string): React.JSX.Element | null => {
       if (isEmptyValue(breadcrumbTitle)) return null
@@ -98,45 +135,62 @@ export const LanguageComparisonColumn = forwardRef<LanguageComparisonColumnHandl
       )
     }
 
+    /**
+     * Wraps children in nested Form.Group elements for each formPath segment,
+     * then wraps in a localizedfields Form.Group and CombinedFieldNameProvider.
+     */
+    const renderSectionContent = (section: LocalizedFieldSection, sectionIndex: number): React.JSX.Element => {
+      const localizedContent = (
+        <LocalizedFieldsProvider locales={ [locale ?? ''] }>
+          <CombinedFieldNameProvider combinedFieldNameParent={ [...section.formPath, 'localizedfields'] }>
+            <Form.Group name={ 'localizedfields' }>
+              <Flex
+                className={ cn(styles.sectionFields, { [styles.sectionFieldsWithoutBorder]: isEmptyValue(section.breadcrumbTitle) }) }
+                vertical
+              >
+                {section.nodes.map((node, nodeIndex) => (
+                  <React.Fragment key={ `${node.name ?? 'lf'}-${nodeIndex}` }>
+                    {(node.children ?? []).map((child, childIndex) => (
+                      <ObjectComponent
+                        key={ `${child.name ?? 'child'}-${childIndex}` }
+                        { ...(child as unknown as ObjectComponentProps) }
+                      />
+                    ))}
+                  </React.Fragment>
+                ))}
+              </Flex>
+            </Form.Group>
+          </CombinedFieldNameProvider>
+        </LocalizedFieldsProvider>
+      )
+
+      // Wrap in nested Form.Group elements for each formPath segment
+      const wrapped = section.formPath.reduceRight<React.JSX.Element>(
+        (inner, segment) => <Form.Group name={ segment }>{inner}</Form.Group>,
+        localizedContent
+      )
+
+      return (
+        <div key={ `section-${sectionIndex}-${section.formPath.join('-')}-${section.breadcrumbTitle}` }>
+          {renderSectionTitle(section.breadcrumbTitle)}
+          {wrapped}
+        </div>
+      )
+    }
+
     const renderedContent = useMemo(() => {
       if (isNil(locale) || isEmpty(locale)) {
         return null
       }
 
       return (
-        <LocalizedFieldsProvider locales={ [locale] }>
-          <CombinedFieldNameProvider combinedFieldNameParent={ ['localizedfields'] }>
-            <Form.Group name={ 'localizedfields' }>
-              <Space
-                className="w-full"
-                direction='vertical'
-                size='small'
-              >
-                {sections.map((section, sectionIndex) => (
-                  <div key={ `section-${sectionIndex}-${section.breadcrumbTitle}` }>
-                    {renderSectionTitle(section.breadcrumbTitle)}
-
-                    <Flex
-                      className={ cn(styles.sectionFields, { [styles.sectionFieldsWithoutBorder]: isEmptyValue(section.breadcrumbTitle) }) }
-                      vertical
-                    >
-                      {section.nodes.map((node, nodeIndex) => (
-                        <React.Fragment key={ `${node.name ?? 'lf'}-${nodeIndex}` }>
-                          {(node.children ?? []).map((child, childIndex) => (
-                            <ObjectComponent
-                              key={ `${child.name ?? 'child'}-${childIndex}` }
-                              { ...(child as unknown as ObjectComponentProps) }
-                            />
-                          ))}
-                        </React.Fragment>
-                      ))}
-                    </Flex>
-                  </div>
-                ))}
-              </Space>
-            </Form.Group>
-          </CombinedFieldNameProvider>
-        </LocalizedFieldsProvider>
+        <Space
+          className="w-full"
+          direction='vertical'
+          size='small'
+        >
+          {sections.map((section, sectionIndex) => renderSectionContent(section, sectionIndex))}
+        </Space>
       )
     }, [locale, sections])
 
@@ -156,3 +210,5 @@ export const LanguageComparisonColumn = forwardRef<LanguageComparisonColumnHandl
     )
   }
 )
+
+LanguageComparisonColumn.displayName = 'LanguageComparisonColumn'
