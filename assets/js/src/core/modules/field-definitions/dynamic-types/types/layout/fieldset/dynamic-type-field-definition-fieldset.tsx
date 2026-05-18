@@ -8,9 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { DynamicTypeFieldDefinitionLayoutAbstract } from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/_abstracts/dynamic-type-field-defintion-layout-abstract'
-import { FieldDefinitionFieldsetFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/fieldset/field-definition-fieldset-form-fields'
 import { type ElementIcon } from '@sdk/components'
 import React from 'react'
 
@@ -25,16 +23,7 @@ export class DynamicTypeFieldDefinitionFieldset extends DynamicTypeFieldDefiniti
     return { type: 'name', value: 'fieldset' }
   }
 
-  getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
-    const id = context.path.at(-1) ?? ''
-    const fieldDefinition = context.fieldDefinitions[id]
-
-    return (
-      <FieldDefinitionFieldsetFormFields
-        context={ context }
-        id={ fieldDefinition?.name ?? id }
-        type={ this.id }
-      />
-    )
+  getSpecificSettingsPanel (): React.JSX.Element {
+    return <></>
   }
 }
