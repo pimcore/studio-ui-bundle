@@ -10,7 +10,7 @@
 
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmpty, isNil, set } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
@@ -37,8 +37,11 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type ILayoutItem } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
-import { processLayoutData, type LocalizedFieldSection } from './helpers/process-layout-data'
+import {
+  type IFormattedDataStructureData,
+  type ILayoutItem
+} from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
+import { processLayoutData } from './helpers/process-layout-data'
 import {
   LanguageComparisonColumn,
   type LanguageComparisonColumnHandle
@@ -70,11 +73,11 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
 
   const [leftLocale, setLeftLocale] = useState<string | null>(contentLanguages[0] ?? currentLanguage)
   const [rightLocale, setRightLocale] = useState<string | null>(contentLanguages[1] ?? null)
-  const [sections, setSections] = useState<LocalizedFieldSection[]>([])
+  const [sections, setSections] = useState<IFormattedDataStructureData[]>([])
   const [isSectionsLoading, setIsSectionsLoading] = useState(false)
   const [layoutsList, setLayoutsList] = useState<ILayoutItem[]>([])
 
-  console.log('====== sections: ', sections)
+  console.log('======>>>> sections: ', sections)
 
   const leftColumnRef = useRef<LanguageComparisonColumnHandle>(null)
   const rightColumnRef = useRef<LanguageComparisonColumnHandle>(null)
@@ -132,45 +135,26 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   const hasLocalizedFields = sections.length > 0
 
   const handleApplyChanges = (): void => {
-    const leftLocaleValues = leftColumnRef.current?.getLocaleValues() ?? []
-    const rightLocaleValues = rightColumnRef.current?.getLocaleValues() ?? []
+    const leftLocaleValues = leftColumnRef.current?.getLocaleValues() ?? {}
+    const rightLocaleValues = rightColumnRef.current?.getLocaleValues() ?? {}
 
-    // Build field updates: one entry per field+locale pair, respecting formPath nesting.
-    const fieldUpdates: Array<{ name: (string | number)[], value: unknown }> = []
-    // Accumulate modified attributes using the same nested structure as the form.
-    const modifiedAttributes: Record<string, unknown> = {}
+    const fieldUpdates: Array<{ name: string[], value: unknown }> = []
+    const localizedfields: Record<string, Record<string, unknown>> = {}
 
-    const applyLocaleValues = (
-      entries: ReturnType<LanguageComparisonColumnHandle['getLocaleValues']>,
-      locale: string | null
-    ): void => {
-      if (isNil(locale) || isEmpty(locale)) return
-
-      for (const { formPath, values } of entries) {
-        if (isEmpty(values)) continue
-
-        for (const [fieldName, value] of Object.entries(values)) {
-          // Ant Design form path: [...formPath, 'localizedfields', fieldName, locale]
-          const namePath = [...formPath, 'localizedfields', fieldName, locale]
-          fieldUpdates.push({ name: namePath, value })
-
-          // Build the same nested path in modifiedAttributes
-          set(modifiedAttributes, namePath, value)
-        }
-      }
+    const applyLocaleValues = (localeValues: Record<string, unknown>, locale: string | null): void => {
+      if (isNil(locale) || isEmpty(locale) || isEmpty(localeValues)) return
+      Object.entries(localeValues).forEach(([fieldName, value]) => {
+        fieldUpdates.push({ name: ['localizedfields', fieldName, locale], value })
+        localizedfields[fieldName] = { ...localizedfields[fieldName], [locale]: value }
+      })
     }
 
     applyLocaleValues(leftLocaleValues, leftLocale)
     applyLocaleValues(rightLocaleValues, rightLocale)
 
     if (!isEmpty(fieldUpdates)) {
-      // Update individual field paths in the main editor form without touching sibling fields.
       editForm.setFields(fieldUpdates)
-
-      // Register with the modified-attributes ref so the next save picks up these changes.
-      updateModifiedDataObjectAttributes(modifiedAttributes)
-
-      // Trigger the debounced autosave — same path as a normal field edit in the main form.
+      updateModifiedDataObjectAttributes({ localizedfields })
       updateDraft().catch((error: unknown) => { console.error(error) })
     }
 
@@ -245,19 +229,19 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
             >
               <div className={ styles.columnWrapper }>
                 <LanguageComparisonColumn
+                  layoutData={ sections }
                   locale={ leftLocale }
                   localizedFieldValues={ formValues }
                   ref={ leftColumnRef }
-                  sections={ sections }
                 />
               </div>
 
               <div className={ styles.columnWrapper }>
                 <LanguageComparisonColumn
+                  layoutData={ sections }
                   locale={ rightLocale }
                   localizedFieldValues={ formValues }
                   ref={ rightColumnRef }
-                  sections={ sections }
                 />
               </div>
             </Flex>
