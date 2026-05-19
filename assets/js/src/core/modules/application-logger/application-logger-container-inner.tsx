@@ -21,6 +21,7 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { api } from '@Pimcore/modules/application-logger/application-logger-api-slice-enhanced'
 import { useAppDispatch } from '@sdk/app'
 import { CreatableSelect } from '@sdk/components'
+import { type SortingState } from '@tanstack/react-table'
 import { isNil } from 'lodash'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -35,7 +36,21 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
   const [pageSize, setPageSize] = useState<number>(20)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [refreshInterval, setRefreshInterval] = useState<string | undefined>(undefined)
+  const [sorting, setSorting] = useState<SortingState>([])
   const { columnFilters, setIsLoading: setFilterLoading } = useFilter()
+
+  const sortKeyMap: Record<string, string> = {
+    date: 'date',
+    message: 'message',
+    translatedPriority: 'priority',
+    fileObject: 'fileobject',
+    component: 'component',
+    source: 'source'
+  }
+
+  const sortFilter = sorting.length > 0
+    ? { key: sortKeyMap[sorting[0].id] ?? sorting[0].id, direction: sorting[0].desc ? 'DESC' : 'ASC' }
+    : { key: 'id', direction: 'DESC' }
 
   const { data, isFetching: isRTKFetching } = useBundleApplicationLoggerGetCollectionQuery({
     body: {
@@ -43,7 +58,7 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
         page: currentPage,
         pageSize,
         columnFilters,
-        sortFilter: { key: 'id', direction: 'DESC' }
+        sortFilter
       }
     }
   })
@@ -178,7 +193,12 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
             y: 'none'
           } }
         >
-          <ApplicationLogger items={ data?.items ?? [] } />
+          <ApplicationLogger
+            isLoading={ isRTKFetching }
+            items={ data?.items ?? [] }
+            onSortingChange={ setSorting }
+            sorting={ sorting }
+          />
         </Box>
       </Content>
     </ContentLayout>

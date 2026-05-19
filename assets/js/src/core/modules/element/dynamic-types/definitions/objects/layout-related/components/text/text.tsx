@@ -12,6 +12,7 @@ import React from 'react'
 import { type AbstractObjectLayoutDefinition } from '../../dynamic-type-object-layout-abstract'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { BaseView } from '../../views/base-view'
+import { parseInlineCss } from '@Pimcore/utils/css'
 
 export interface TextProps extends AbstractObjectLayoutDefinition {
   html: string
@@ -19,9 +20,15 @@ export interface TextProps extends AbstractObjectLayoutDefinition {
   border?: boolean
   collapsible?: boolean
   collapsed?: boolean
+  bodyStyle?: string | null
 }
 
 export const Text = (props: TextProps): React.JSX.Element => {
+  const style = parseInlineCss(props.bodyStyle)
+  const content = style !== undefined
+    ? <div style={ style }><SanitizeHtml html={ props.html } /></div>
+    : <SanitizeHtml html={ props.html } />
+
   return (
     <BaseView
       border={ props.border }
@@ -29,7 +36,7 @@ export const Text = (props: TextProps): React.JSX.Element => {
       collapsible={ props.collapsible }
       title={ props.title }
     >
-      <SanitizeHtml html={ props.html } />
+      {content}
     </BaseView>
   )
 }

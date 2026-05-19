@@ -2,6 +2,9 @@ common.owner: Propriétaire
 common.modification-date: Date de modification
 common.globally: Globalement
 common.apply-selection: Appliquer la sélection
+cache.clear-cache-success: Cache vidé avec succès
+cache.clear-full-page-cache-success: Cache des pages complètes vidé avec succès
+cache.clear-temporary-files-success: Fichiers temporaires supprimés avec succès
 dont-ask-again: Ne plus demander
 widget.missing-context.title: Contexte manquant
 widget.missing-context.description: Aucun élément associé trouvé
@@ -976,6 +979,7 @@ lazy-loading: Chargement paresseux
 disallow-add-remove: Interdire l'ajout / la suppression
 disallow-reorder: Interdire la réorganisation
 css-style: Style CSS
+css-style-tooltip: "CSS en ligne appliqué au corps, par ex. \"float: left; margin: 10px;\". Les déclarations non valides sont ignorées."
 collapsible: Réductible
 collapsed: Initialement réduit
 border: Bordure
@@ -1451,6 +1455,10 @@ navigation.reporting: Rapports
 navigation.system: Système
 navigation.website-settings: Paramètres du site web
 navigation.document-types: Types de documents
+navigation.cache: Cache
+navigation.cache.clear-cache: Vider le cache
+navigation.cache.clear-full-page-cache: Vider le cache des pages complètes
+navigation.cache.clear-temporary-files: Supprimer les fichiers temporaires
 navigation.clear-cache: Vider le cache des pages complètes
 navigation.reports: Tous les rapports
 navigation.custom-reports: Configuration des rapports personnalisés

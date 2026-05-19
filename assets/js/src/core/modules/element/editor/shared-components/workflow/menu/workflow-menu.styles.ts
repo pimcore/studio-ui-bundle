@@ -10,17 +10,21 @@
 
 import { createStyles } from 'antd-style'
 
-export const useStyles = createStyles(({ token, css }) => {
+export const useStyles = createStyles(({ css, token }) => {
   return {
-    button: css`
-      &&& {
-        display: flex;
-        justify-content: flex-start;
+    dropdownOverlay: css`
+      min-width: 0 !important;
+
+      .ant-dropdown-menu {
+        width: max-content !important;
       }
-    `,
-    'not-first': css`
-      &&& {
-        margin-top: ${token.marginXXS}px;
+
+      .ant-dropdown-menu-item-group-title {
+        padding-left: ${token.padding}px !important;
+      }
+
+      .ant-dropdown-menu-item-group-list {
+        margin: 0 !important;
       }
     `
   }

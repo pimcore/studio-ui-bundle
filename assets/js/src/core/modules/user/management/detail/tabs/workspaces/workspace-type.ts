@@ -8,20 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
-
-export const useStyles = createStyles(({ token, css }) => {
-  return {
-    button: css`
-      &&& {
-        display: flex;
-        justify-content: flex-start;
-      }
-    `,
-    'not-first': css`
-      &&& {
-        margin-top: ${token.marginXXS}px;
-      }
-    `
-  }
-})
+export enum WorkspaceType {
+  DOCUMENT = 'document',
+  ASSET = 'asset',
+  OBJECT = 'object'
+}

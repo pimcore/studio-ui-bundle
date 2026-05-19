@@ -23,7 +23,7 @@ const KeyBindingsContainer = (): React.JSX.Element => {
   const { id } = useUserManagementContext()
   const { user, updateUserKeyBinding } = useUserManagementDraft(id)
   const { resetUserKeyBindings } = useUserManagementHelper()
-  const { mergedKeyBindings, isLoading: isMergingKeyBindings } = useMergedKeyBindings(user?.keyBindings)
+  const { mergedKeyBindings, isLoading: isMergingKeyBindings } = useMergedKeyBindings(user?.keyBindings, id)
 
   const handleOnChange = (name: string, code: object): void => {
     updateUserKeyBinding(name, code)

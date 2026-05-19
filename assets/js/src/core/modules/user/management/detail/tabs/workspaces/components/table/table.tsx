@@ -16,7 +16,7 @@ import { type UserWorkspace } from '@Pimcore/modules/auth/user/user-api-slice.ge
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from 'antd'
 import { createTableTestId } from '@Pimcore/utils/test-id-generator'
-import { WorkspaceType } from '@Pimcore/modules/user/management/detail/tabs/workspaces/workspaces-container'
+import { WorkspaceType } from '@Pimcore/modules/user/management/detail/tabs/workspaces/workspace-type'
 
 interface ITableProps {
   data: UserWorkspace[]
@@ -180,22 +180,33 @@ export const Table = ({
         }
       }
     }),
-    ...isObject
-      ? [columnHelper.accessor('specialSettings', {
+    ...isObject && onShowSpecialSettings !== undefined
+      ? [columnHelper.display({
+          id: 'specialSettings',
           header: '',
           size: 40,
           cell: (context) => {
             return (
-              <IconButton
-                icon={ { value: 'settings' } }
-                onClick={ () => onShowSpecialSettings?.((context.row.original as UserWorkspace).cid) }
-                type="link"
-              />
+              <Flex
+                align='center'
+                className='w-full h-full'
+                justify='center'
+              >
+                <IconButton
+                  icon={ { value: 'settings' } }
+                  onClick={ () => {
+                    const cid = (context.row.original as UserWorkspace).cid
+                    onShowSpecialSettings(cid)
+                  } }
+                  type="link"
+                />
+              </Flex>
             )
           }
         })]
       : [],
-    columnHelper.accessor('actions', {
+    columnHelper.display({
+      id: 'actions',
       header: '',
       size: 40,
       cell: (context) => {

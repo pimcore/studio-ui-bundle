@@ -14,13 +14,14 @@ import { GeneralSettingsProvider } from '@Pimcore/modules/field-definitions/comp
 import { DetailSave } from '@Pimcore/modules/field-definitions/components/editor/items/detail/save'
 import { DetailSidebar } from '@Pimcore/modules/field-definitions/components/editor/items/detail/sidebar'
 import { ImportExportActions } from '@Pimcore/modules/field-definitions/components/editor/items/detail/import-export-actions'
+import { RefreshProvider } from '@Pimcore/modules/field-definitions/components/editor/items/detail/refresh-provider'
 import { type ConfigurationPartial, useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { type Layout } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { ConfigLayout, Content, ContentLayout, Flex, IconButton, Toolbar } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 export interface ItemDetailProps {
   configuration: ConfigurationPartial
@@ -93,58 +94,62 @@ export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
     }
   }, [detailError])
 
+  const refreshLayout = useCallback(async (): Promise<void> => {
+    const promises: Array<Promise<unknown>> = [refetchDetail()]
+    if (layoutResult?.refetch !== undefined) {
+      promises.push(layoutResult.refetch())
+    }
+    await Promise.all(promises)
+    setLayoutKey((prev) => prev + 1)
+    setDetailView('general')
+  }, [refetchDetail, layoutResult?.refetch, setDetailView])
+
   return (
-    <GeneralSettingsProvider generalSettings={ detailData }>
-      <LayoutProvider
-        key={ layoutKey }
-        layout={ layout }
-      >
-        <ContentLayout
-          className="absolute-stretch"
-          renderToolbar={
-            <Toolbar>
-              <Flex gap={ 'mini' }>
-                <IconButton
-                  icon={ { value: 'refresh' } }
-                  onClick={ async () => {
-                    const promises: Array<Promise<unknown>> = [refetchDetail()]
-                    if (layoutResult?.refetch !== undefined) {
-                      promises.push(layoutResult.refetch())
-                    }
-                    await Promise.all(promises)
-                    setLayoutKey((prev) => prev + 1)
-                    setDetailView('general')
-                  } }
-                />
-
-                <ImportExportActions />
-
-                {customLayouts?.ModalContent !== undefined && <CustomLayout />}
-              </Flex>
-
-              <DetailSave />
-            </Toolbar>
-          }
+    <RefreshProvider refreshLayout={ refreshLayout }>
+      <GeneralSettingsProvider generalSettings={ detailData }>
+        <LayoutProvider
+          key={ layoutKey }
+          layout={ layout }
         >
-          <Content loading={ layoutResult?.isLoading === true || isDetailLoading || layoutResult?.isFetching === true || isDetailFetching }>
-            <ConfigLayout
-              leftItem={ {
-                minSize: 250,
-                maxSize: 350,
-                size: 250,
-                children: (
-                  <DetailSidebar />
-                )
-              } }
-              resizeAble
+          <ContentLayout
+            className="absolute-stretch"
+            renderToolbar={
+              <Toolbar>
+                <Flex gap={ 'mini' }>
+                  <IconButton
+                    icon={ { value: 'refresh' } }
+                    onClick={ () => { void refreshLayout() } }
+                  />
 
-              rightItem={ {
-                children: <DetailContent />
-              } }
-            />
-          </Content>
-        </ContentLayout>
-      </LayoutProvider>
-    </GeneralSettingsProvider>
+                  <ImportExportActions />
+
+                  {customLayouts?.ModalContent !== undefined && <CustomLayout />}
+                </Flex>
+
+                <DetailSave />
+              </Toolbar>
+            }
+          >
+            <Content loading={ layoutResult?.isLoading === true || isDetailLoading || layoutResult?.isFetching === true || isDetailFetching }>
+              <ConfigLayout
+                leftItem={ {
+                  minSize: 250,
+                  maxSize: 350,
+                  size: 250,
+                  children: (
+                    <DetailSidebar />
+                  )
+                } }
+                resizeAble
+
+                rightItem={ {
+                  children: <DetailContent />
+                } }
+              />
+            </Content>
+          </ContentLayout>
+        </LayoutProvider>
+      </GeneralSettingsProvider>
+    </RefreshProvider>
   )
 }

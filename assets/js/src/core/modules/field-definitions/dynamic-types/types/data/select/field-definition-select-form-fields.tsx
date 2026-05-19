@@ -15,19 +15,31 @@ import { Form, FormKit, Input, InputNumber, Select, Switch } from '@sdk/componen
 import { FieldDefinitionOptionsSourceFields } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-options-source-fields/field-definition-options-source-fields'
 import { type SelectOption } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-select-options-grid/field-definition-select-options-grid'
 
-export const FieldDefinitionSelectFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
+const ConfigureDefaultValueField = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const isCustomLayout = props.context.area.includes('custom-layout')
-  const isInClassificationStore = props.context.area.includes('classification-store')
-
-  const optionsProviderType = Form.useWatch<string | undefined>('optionsProviderType')
   const configuredOptions = Form.useWatch<SelectOption[] | undefined>('options')
-
-  const isConfigureMode = optionsProviderType === 'configure' || optionsProviderType === undefined || optionsProviderType === ''
   const defaultValueOptions = (configuredOptions ?? []).map(opt => ({
     label: opt.key,
     value: opt.value
   }))
+
+  return (
+    <Form.Item
+      label={ t('default-value') }
+      name="defaultValue"
+    >
+      <Select
+        allowClear
+        options={ defaultValueOptions }
+      />
+    </Form.Item>
+  )
+}
+
+export const FieldDefinitionSelectFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
+  const { t } = useTranslation()
+  const isCustomLayout = props.context.area.includes('custom-layout')
+  const isInClassificationStore = props.context.area.includes('classification-store')
 
   return (
     <>
@@ -41,8 +53,7 @@ export const FieldDefinitionSelectFormFields = (props: FieldDefinitionAbstractFo
 
       {!isCustomLayout && (
         <>
-
-            {!isInClassificationStore && (
+          {!isInClassificationStore && (
             <Form.Item
               label={ t('column-length') }
               name="columnLength"
@@ -53,26 +64,24 @@ export const FieldDefinitionSelectFormFields = (props: FieldDefinitionAbstractFo
                 precision={ 0 }
               />
             </Form.Item>
-            )}
+          )}
 
           <FormKit.Panel
             border
             theme="fieldset"
             title={ t('default-values-settings') }
           >
-            <Form.Item
-              label={ t('default-value') }
-              name="defaultValue"
+            <Form.Conditional
+              condition={ (values) => values.optionsProviderType === 'select_options' || values.optionsProviderType === 'class' }
+              watchFields={ ['optionsProviderType'] }
             >
-              {isConfigureMode
-                ? (
-                  <Select
-                    allowClear
-                    options={ defaultValueOptions }
-                  />
-                  )
-                : <Input />}
-            </Form.Item>
+              <Form.Item
+                label={ t('default-value') }
+                name="defaultValue"
+              >
+                <Input />
+              </Form.Item>
+            </Form.Conditional>
 
             <Form.Item
               label={ t('default-value-generator') }
@@ -89,10 +98,11 @@ export const FieldDefinitionSelectFormFields = (props: FieldDefinitionAbstractFo
             <Switch labelRight={ t('enforce-validation') } />
           </Form.Item>
 
-          <FieldDefinitionOptionsSourceFields />
+          <FieldDefinitionOptionsSourceFields
+            renderAdditionalConfigureFields={ () => <ConfigureDefaultValueField /> }
+          />
         </>
       )}
-
     </>
   )
 }
