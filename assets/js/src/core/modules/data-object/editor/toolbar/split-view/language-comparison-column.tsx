@@ -31,8 +31,8 @@ import {
   FieldWidthProvider
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 import {
-  type IFormattedDataStructureData
-} from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
+  type ILocalizedFieldDescriptor
+} from './helpers/process-layout-data'
 import { useStyles } from './language-comparison-modal.styles'
 
 export interface LanguageComparisonColumnHandle {
@@ -42,19 +42,19 @@ export interface LanguageComparisonColumnHandle {
 
 interface LanguageComparisonColumnProps {
   locale: string | null
-  /** Flat list of localized field items (fieldPath contains 'localizedfields'), grouped internally by breadcrumbTitle */
-  layoutData: IFormattedDataStructureData[]
+  /** Flat list of localized field items grouped internally by breadcrumbTitle */
+  layoutData: ILocalizedFieldDescriptor[]
   /** Live localized field values from the main editor form: { fieldName: { locale: value } } */
   localizedFieldValues: Record<string, Record<string, unknown>>
 }
 
 interface LocalizedSection {
   breadcrumbTitle: string
-  fields: IFormattedDataStructureData[]
+  fields: ILocalizedFieldDescriptor[]
 }
 
 /** Group the flat layoutData list into sections keyed by fieldBreadcrumbTitle, preserving order. */
-const groupIntoSections = (items: IFormattedDataStructureData[]): LocalizedSection[] => {
+const groupIntoSections = (items: ILocalizedFieldDescriptor[]): LocalizedSection[] => {
   const sections: LocalizedSection[] = []
   for (const item of items) {
     const title = item.fieldBreadcrumbTitle ?? ''

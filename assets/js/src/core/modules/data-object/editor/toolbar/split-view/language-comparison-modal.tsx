@@ -37,11 +37,8 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import {
-  type IFormattedDataStructureData,
-  type ILayoutItem
-} from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
-import { processLayoutData } from './helpers/process-layout-data'
+import { type ILocalizedFieldDescriptor, processLayoutData } from './helpers/process-layout-data'
+import { type ILayoutItem } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 import {
   LanguageComparisonColumn,
   type LanguageComparisonColumnHandle
@@ -73,8 +70,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
 
   const [leftLocale, setLeftLocale] = useState<string | null>(contentLanguages[0] ?? currentLanguage)
   const [rightLocale, setRightLocale] = useState<string | null>(contentLanguages[1] ?? null)
-  const [localizedFields, setLocalizedFields] = useState<IFormattedDataStructureData[]>([])
-  const [isSectionsLoading, setIsSectionsLoading] = useState(false)
+  const [localizedFields, setLocalizedFields] = useState<ILocalizedFieldDescriptor[]>([])
   const [layoutsList, setLayoutsList] = useState<ILayoutItem[]>([])
 
   const leftColumnRef = useRef<LanguageComparisonColumnHandle>(null)
@@ -94,31 +90,30 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
     }
   }, [open, currentLanguage, contentLanguages])
 
-  // Process layout data and filter to localized fields only
+  // Process layout data to extract localized fields
   useEffect(() => {
     if (isNil(layoutData) || !open) {
       setLocalizedFields([])
       return
     }
 
-    setIsSectionsLoading(true)
-
     processLayoutData({
       objectId: id,
       layout: layoutData,
+      objectData: editForm.getFieldsValue(true) as Record<string, any>,
       objectDataRegistry,
       layoutsList,
       setLayoutsList
     })
       .then(result => {
-        setLocalizedFields(result.filter(item => item.fieldPath?.includes('localizedfields')))
+        console.log('------>>>>>> result: ', result)
+        setLocalizedFields(result)
       })
       .catch((error: unknown) => {
         console.error(error)
         setLocalizedFields([])
       })
       .finally(() => {
-        setIsSectionsLoading(false)
       })
   }, [layoutData, open])
 
@@ -129,7 +124,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
     return all.localizedfields ?? {}
   }, [open])
 
-  const isLoading = isLayoutLoading || isDraftLoading || isSectionsLoading
+  const isLoading = isLayoutLoading || isDraftLoading
   const hasLocalizedFields = localizedFields.length > 0
 
   const handleApplyChanges = (): void => {
@@ -198,8 +193,8 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
             >
               <Flex
                 align="center"
-                justify="center"
                 className={ styles.headerItem }
+                justify="center"
               >
                 <PermissionBasedLanguageSelectionControl
                   excludeLocales={ rightLocale !== null ? [rightLocale] : [] }
@@ -210,8 +205,8 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
 
               <Flex
                 align="center"
-                justify="center"
                 className={ styles.headerItem }
+                justify="center"
               >
                 <PermissionBasedLanguageSelectionControl
                   excludeLocales={ leftLocale !== null ? [leftLocale] : [] }

@@ -59,6 +59,10 @@ export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
     )
   }
 
+  async extractLocalizedFields (): Promise<false> {
+    return false
+  }
+
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
     const value: [] | null = props.cellProps.getValue()
 

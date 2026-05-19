@@ -55,4 +55,8 @@ export class DynamicTypeObjectDataFieldCollection extends DynamicTypeObjectDataA
       <ItemsCount count={ value?.length ?? 0 } />
     )
   }
+
+  async extractLocalizedFields (): Promise<false> {
+    return false
+  }
 }
