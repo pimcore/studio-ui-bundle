@@ -18,16 +18,14 @@ import { useUserManagementDraft } from '@Pimcore/modules/user/hooks/use-user-man
 import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-management-context'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useModal } from '@Pimcore/components/modal/useModal'
+import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
 import { createTabContentTestId } from '@Pimcore/utils/test-id-generator'
+import { SpecialSettingsContext, WorkspaceType } from '@Pimcore/modules/user/management/detail/tabs/workspaces/special-settings-context'
 import { SpecialSettings } from '@Pimcore/modules/user/management/detail/tabs/workspaces/components/special-settings'
 
-export enum WorkspaceType {
-  DOCUMENT = 'document',
-  ASSET = 'asset',
-  OBJECT = 'object'
-}
+export { WorkspaceType } from '@Pimcore/modules/user/management/detail/tabs/workspaces/special-settings-context'
 
 const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -54,7 +52,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
     type: 'error'
   })
 
-  const { renderModal: SpecialSettingsModal, showModal: showSpecialSettingsModal, handleCancel, handleOk } = useModal({ type: 'default' })
+  const [isSpecialSettingsModalOpen, setIsSpecialSettingsModalOpen] = useState(false)
 
   if (user === undefined) {
     return <></>
@@ -185,7 +183,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
           isLoading={ isLoading }
           onShowSpecialSettings={ (id) => {
             setSpecialModalContext(id)
-            showSpecialSettingsModal()
+            setIsSpecialSettingsModalOpen(true)
           } }
           onUpdateData={ (data) => { changeUserInState({ dataObjectWorkspaces: data }) } }
           showDuplicatePropertyModal={ () => {
@@ -198,6 +196,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   ]
 
   return (
+    <SpecialSettingsContext.Provider value={ { showSpecialSettings: (cid) => { setSpecialModalContext(cid); setIsSpecialSettingsModalOpen(true) } } }>
     <Flex
       data-testid={ createTabContentTestId(id.toString(), { prefix: 'user-detail-tab', tabKey: 'workspaces' }) }
       gap={ 'small' }
@@ -246,11 +245,11 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         {t('properties.property-already-exist.error')}
       </DuplicatePropertyModal>
 
-      <SpecialSettingsModal
+      <Modal
         footer={
           <ModalFooter>
             <Button
-              onClick={ handleCancel }
+              onClick={ () => { setIsSpecialSettingsModalOpen(false) } }
               type={ 'default' }
             >
               {t('button.cancel')}
@@ -261,7 +260,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
                   dataObjectWorkspaces: user.dataObjectWorkspaces.map(ws => ws.cid === specialModalContext ? { ...ws, ...currentSpecialModalData } : ws)
                 })
 
-                handleOk()
+                setIsSpecialSettingsModalOpen(false)
               } }
               type={ 'primary' }
             >
@@ -269,6 +268,8 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
             </Button>
           </ModalFooter>
             }
+        onCancel={ () => { setIsSpecialSettingsModalOpen(false) } }
+        open={ isSpecialSettingsModalOpen }
         size={ 'L' }
         title={ t('user-management.workspaces.additional-settings') }
       >
@@ -281,8 +282,9 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
             currentSpecialModalData = mergedData
           } }
         />
-      </SpecialSettingsModal>
+      </Modal>
     </Flex>
+    </SpecialSettingsContext.Provider>
   )
 }
 

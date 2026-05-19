@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
 import { Table } from '@Pimcore/modules/user/management/detail/tabs/workspaces/components/table/table'
@@ -18,8 +18,11 @@ import { useRoleContext } from '@Pimcore/modules/user/roles/hooks/use-role-conte
 import { useRoleDraft } from '@Pimcore/modules/user/roles/hooks/use-roles-draft'
 import { Flex } from 'antd'
 import { useModal } from '@Pimcore/components/modal/useModal'
+import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
+import { SpecialSettingsContext } from '@Pimcore/modules/user/management/detail/tabs/workspaces/special-settings-context'
+import { SpecialSettings } from '@Pimcore/modules/user/management/detail/tabs/workspaces/components/special-settings'
 
 const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -29,6 +32,9 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const [assetWorkspaces, setAssetWorkspaces] = React.useState<UserWorkspace[]>(role?.assetWorkspaces ?? [])
   const [documentWorkspaces, setDocumentWorkspaces] = React.useState<UserWorkspace[]>(role?.documentWorkspaces ?? [])
   const [objectWorkspaces, setObjectWorkspaces] = React.useState<UserWorkspace[]>(role?.dataObjectWorkspaces ?? [])
+
+  const [specialModalContext, setSpecialModalContext] = useState<number | null>(null)
+  const [isSpecialSettingsModalOpen, setIsSpecialSettingsModalOpen] = useState(false)
 
   const {
     showModal: showDuplicatePropertyModal,
@@ -70,6 +76,13 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         setObjectWorkspaces([...workspaces, workspace])
         break
     }
+  }
+
+  let currentSpecialModalData: object = {}
+
+  const getSpecialModalValues = (type: string): string[] => {
+    const ws = role?.dataObjectWorkspaces.find(ws => ws.cid === specialModalContext) as Record<string, any> | undefined
+    return ws?.[type] ?? []
   }
 
   const documentsAccordion = [
@@ -133,49 +146,90 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   ]
 
   return (
-    <Flex
-      gap={ 'middle' }
-      vertical
-    >
-      <Accordion
-        activeKey={ '1' }
-        bordered
-        collapsible="icon"
-        items={ documentsAccordion }
-        size={ 'small' }
-        table
-      />
-
-      <Accordion
-        activeKey={ '1' }
-        bordered
-        collapsible="icon"
-        items={ assetsAccordion }
-        size={ 'small' }
-        table
-      />
-
-      <Accordion
-        activeKey={ '1' }
-        bordered
-        collapsible="icon"
-        items={ objectsAccordion }
-        size={ 'small' }
-        table
-      />
-
-      <DuplicatePropertyModal
-        footer={ <ModalFooter>
-          <Button
-            onClick={ closeDuplicatePropertyModal }
-            type='primary'
-          >{t('button.ok')}</Button>
-        </ModalFooter> }
-        title={ t('properties.property-already-exist.title') }
+    <SpecialSettingsContext.Provider value={ { showSpecialSettings: (cid) => { setSpecialModalContext(cid); setIsSpecialSettingsModalOpen(true) } } }>
+      <Flex
+        gap={ 'middle' }
+        vertical
       >
-        {t('properties.property-already-exist.error')}
-      </DuplicatePropertyModal>
-    </Flex>
+        <Accordion
+          activeKey={ '1' }
+          bordered
+          collapsible="icon"
+          items={ documentsAccordion }
+          size={ 'small' }
+          table
+        />
+
+        <Accordion
+          activeKey={ '1' }
+          bordered
+          collapsible="icon"
+          items={ assetsAccordion }
+          size={ 'small' }
+          table
+        />
+
+        <Accordion
+          activeKey={ '1' }
+          bordered
+          collapsible="icon"
+          items={ objectsAccordion }
+          size={ 'small' }
+          table
+        />
+
+        <DuplicatePropertyModal
+          footer={ <ModalFooter>
+            <Button
+              onClick={ closeDuplicatePropertyModal }
+              type='primary'
+            >{t('button.ok')}</Button>
+          </ModalFooter> }
+          title={ t('properties.property-already-exist.title') }
+        >
+          {t('properties.property-already-exist.error')}
+        </DuplicatePropertyModal>
+
+        <Modal
+          footer={
+            <ModalFooter>
+              <Button
+                onClick={ () => { setIsSpecialSettingsModalOpen(false) } }
+                type={ 'default' }
+              >
+                {t('button.cancel')}
+              </Button>
+              <Button
+                onClick={ () => {
+                  changeRoleInState({
+                    dataObjectWorkspaces: role.dataObjectWorkspaces.map(ws => ws.cid === specialModalContext ? { ...ws, ...currentSpecialModalData } : ws)
+                  })
+
+                  setIsSpecialSettingsModalOpen(false)
+                } }
+                type={ 'primary' }
+              >
+                {t('button.apply')}
+              </Button>
+            </ModalFooter>
+          }
+          onCancel={ () => { setIsSpecialSettingsModalOpen(false) } }
+          open={ isSpecialSettingsModalOpen }
+          size={ 'L' }
+          title={ t('user-management.workspaces.additional-settings') }
+        >
+          <SpecialSettings
+            layouts={ getSpecialModalValues('layouts') }
+            localizedEdit={ getSpecialModalValues('localizedEdit') }
+            localizedView={ getSpecialModalValues('localizedView') }
+            onValuesChange={ (changedValues) => {
+              const mergedData = { ...currentSpecialModalData, ...changedValues }
+              currentSpecialModalData = mergedData
+            } }
+          />
+        </Modal>
+      </Flex>
+    </SpecialSettingsContext.Provider>
   )
 }
 
