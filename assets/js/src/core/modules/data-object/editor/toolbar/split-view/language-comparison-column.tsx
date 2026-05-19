@@ -36,16 +36,15 @@ import {
 import { useStyles } from './language-comparison-modal.styles'
 
 export interface LanguageComparisonColumnHandle {
-  /** Returns only the fields for the currently selected locale: { fieldName: value } */
-  getLocaleValues: () => Record<string, unknown>
+  getFormValues: () => Record<string, unknown>
 }
 
 interface LanguageComparisonColumnProps {
   locale: string | null
   /** Flat list of localized field items grouped internally by breadcrumbTitle */
   layoutData: ILocalizedFieldDescriptor[]
-  /** Live localized field values from the main editor form: { fieldName: { locale: value } } */
-  localizedFieldValues: Record<string, Record<string, unknown>>
+  /** Live object form values from the main editor form. */
+  allFormValues: Record<string, unknown>
 }
 
 interface LocalizedSection {
@@ -69,36 +68,20 @@ const groupIntoSections = (items: ILocalizedFieldDescriptor[]): LocalizedSection
 }
 
 export const LanguageComparisonColumn = forwardRef<LanguageComparisonColumnHandle, LanguageComparisonColumnProps>(
-  function LanguageComparisonColumn ({ locale, layoutData, localizedFieldValues }, ref) {
+  function LanguageComparisonColumn ({ locale, layoutData, allFormValues }, ref) {
     const { styles } = useStyles()
     const [form] = Form.useForm()
 
-    // Build initial values seeded from the live main editor values.
-    const initialValues = useMemo(() => ({
-      localizedfields: localizedFieldValues
-    }), [])
+    const initialValues = useMemo(() => allFormValues, [])
 
-    // Whenever localizedFieldValues changes (modal re-open), sync the form.
+    // Whenever live editor values change (modal re-open), sync the form.
     useEffect(() => {
-      form.setFieldsValue({ localizedfields: localizedFieldValues })
-    }, [localizedFieldValues])
+      form.setFieldsValue(allFormValues)
+    }, [allFormValues])
 
     useImperativeHandle(ref, () => ({
-      getLocaleValues: (): Record<string, unknown> => {
-        if (isNil(locale) || isEmpty(locale)) {
-          return {}
-        }
-
-        const all = form.getFieldsValue(true) as { localizedfields?: Record<string, Record<string, unknown>> }
-        const localeMap = all.localizedfields ?? {}
-
-        return Object.fromEntries(
-          Object.entries(localeMap)
-            .filter(([, localeValues]) => locale in localeValues)
-            .map(([fieldName, localeValues]) => [fieldName, localeValues[locale]])
-        )
-      }
-    }), [form, locale])
+      getFormValues: (): Record<string, unknown> => form.getFieldsValue(true) as Record<string, unknown>
+    }), [form])
 
     const renderSectionTitle = (breadcrumbTitle: string): React.JSX.Element | null => {
       if (isEmptyValue(breadcrumbTitle)) return null
@@ -121,6 +104,31 @@ export const LanguageComparisonColumn = forwardRef<LanguageComparisonColumnHandl
 
     const sections = useMemo(() => groupIntoSections(layoutData), [layoutData])
 
+    const renderField = (item: ILocalizedFieldDescriptor, fieldIndex: number): React.JSX.Element => {
+      const groupPath = item.formPath.slice(0, -1)
+      const combinedFieldNameParent = groupPath.map(pathPart => String(pathPart))
+      const shouldWrapLocalizedProvider = item.localeInFormPath !== true
+
+      const fieldNode = (
+        <CombinedFieldNameProvider
+          combinedFieldNameParent={ combinedFieldNameParent }
+          key={ `${item.formPath.join('.')}-${fieldIndex}` }
+        >
+          <Form.Group name={ groupPath }>
+            <ObjectComponent
+              { ...(item.fieldData as unknown as ObjectComponentProps) }
+            />
+          </Form.Group>
+        </CombinedFieldNameProvider>
+      )
+
+      if (!shouldWrapLocalizedProvider) {
+        return fieldNode
+      }
+
+      return fieldNode
+    }
+
     const renderedContent = useMemo(() => {
       if (isNil(locale) || isEmpty(locale)) {
         return null
@@ -128,33 +136,24 @@ export const LanguageComparisonColumn = forwardRef<LanguageComparisonColumnHandl
 
       return (
         <LocalizedFieldsProvider locales={ [locale] }>
-          <CombinedFieldNameProvider combinedFieldNameParent={ ['localizedfields'] }>
-            <Form.Group name={ 'localizedfields' }>
-              <Space
-                className="w-full"
-                direction='vertical'
-                size='small'
-              >
-                {sections.map((section, sectionIndex) => (
-                  <div key={ `section-${sectionIndex}-${section.breadcrumbTitle}` }>
-                    {renderSectionTitle(section.breadcrumbTitle)}
+          <Space
+            className="w-full"
+            direction='vertical'
+            size='small'
+          >
+            {sections.map((section, sectionIndex) => (
+              <div key={ `section-${sectionIndex}-${section.breadcrumbTitle}` }>
+                {renderSectionTitle(section.breadcrumbTitle)}
 
-                    <Flex
-                      className={ cn(styles.sectionFields, { [styles.sectionFieldsWithoutBorder]: isEmptyValue(section.breadcrumbTitle) }) }
-                      vertical
-                    >
-                      {section.fields.map((item, fieldIndex) => (
-                        <ObjectComponent
-                          key={ `${item.fieldData?.name ?? 'field'}-${fieldIndex}` }
-                          { ...(item.fieldData as unknown as ObjectComponentProps) }
-                        />
-                      ))}
-                    </Flex>
-                  </div>
-                ))}
-              </Space>
-            </Form.Group>
-          </CombinedFieldNameProvider>
+                <Flex
+                  className={ cn(styles.sectionFields, { [styles.sectionFieldsWithoutBorder]: isEmptyValue(section.breadcrumbTitle) }) }
+                  vertical
+                >
+                  {section.fields.map((item, fieldIndex) => renderField(item, fieldIndex))}
+                </Flex>
+              </div>
+            ))}
+          </Space>
         </LocalizedFieldsProvider>
       )
     }, [locale, sections])

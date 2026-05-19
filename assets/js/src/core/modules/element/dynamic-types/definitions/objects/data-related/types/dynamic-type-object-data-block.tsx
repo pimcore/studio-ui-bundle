@@ -9,6 +9,8 @@
  */
 
 import React from 'react'
+import { getBreadcrumbTitle } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
+import { processNestedLayoutData, type IExtractLocalizedFieldsProps, type ILocalizedFieldDescriptor } from '@Pimcore/modules/data-object/editor/toolbar/split-view/helpers/process-layout-data'
 
 import {
   type AbstractObjectDataDefinition,
@@ -59,8 +61,39 @@ export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
     )
   }
 
-  async extractLocalizedFields (): Promise<false> {
-    return false
+  async extractLocalizedFields (props: IExtractLocalizedFieldsProps): Promise<ILocalizedFieldDescriptor[] | false> {
+    const {
+      objectId,
+      item,
+      objectData,
+      fieldBreadcrumbTitle,
+      formPath,
+      objectDataRegistry,
+      layoutsList,
+      setLayoutsList
+    } = props
+
+    const blockItems = objectData[item.name]
+
+    if (!Array.isArray(blockItems) || blockItems.length === 0) {
+      return []
+    }
+
+    const nextBreadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, item.title ?? '')
+    const descriptors = await Promise.all(blockItems.map(async (blockItem, index) => {
+      return await processNestedLayoutData({
+        objectId,
+        data: item.children ?? [],
+        objectData: blockItem,
+        objectDataRegistry,
+        fieldBreadcrumbTitle: nextBreadcrumbTitle,
+        formPath: [...formPath, item.name, index],
+        layoutsList,
+        setLayoutsList
+      })
+    }))
+
+    return descriptors.flatMap(item => item)
   }
 
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {

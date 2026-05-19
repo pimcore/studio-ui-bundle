@@ -10,7 +10,7 @@
 
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmpty, isNil } from 'lodash'
+import { get, isEmpty, isNil } from 'lodash'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
@@ -73,6 +73,11 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   const [localizedFields, setLocalizedFields] = useState<ILocalizedFieldDescriptor[]>([])
   const [layoutsList, setLayoutsList] = useState<ILayoutItem[]>([])
 
+  const allFormValues = useMemo((): Record<string, unknown> => {
+    if (!open) return {}
+    return editForm.getFieldsValue(true) as Record<string, unknown>
+  }, [open])
+
   const leftColumnRef = useRef<LanguageComparisonColumnHandle>(null)
   const rightColumnRef = useRef<LanguageComparisonColumnHandle>(null)
 
@@ -100,13 +105,12 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
     processLayoutData({
       objectId: id,
       layout: layoutData,
-      objectData: editForm.getFieldsValue(true) as Record<string, any>,
+      objectData: allFormValues,
       objectDataRegistry,
       layoutsList,
       setLayoutsList
     })
       .then(result => {
-        console.log('------>>>>>> result: ', result)
         setLocalizedFields(result)
       })
       .catch((error: unknown) => {
@@ -117,37 +121,63 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
       })
   }, [layoutData, open])
 
-  // Read live unsaved localized field values from the main editor form.
-  const localizedFieldValues = useMemo((): Record<string, Record<string, unknown>> => {
-    if (!open) return {}
-    const all = editForm.getFieldsValue(true) as { localizedfields?: Record<string, Record<string, unknown>> }
-    return all.localizedfields ?? {}
-  }, [open])
-
   const isLoading = isLayoutLoading || isDraftLoading
   const hasLocalizedFields = localizedFields.length > 0
 
   const handleApplyChanges = (): void => {
-    const leftLocaleValues = leftColumnRef.current?.getLocaleValues() ?? {}
-    const rightLocaleValues = rightColumnRef.current?.getLocaleValues() ?? {}
+    const leftColumnValues = leftColumnRef.current?.getFormValues() ?? {}
+    const rightColumnValues = rightColumnRef.current?.getFormValues() ?? {}
 
-    const fieldUpdates: Array<{ name: string[], value: unknown }> = []
-    const localizedfields: Record<string, Record<string, unknown>> = {}
+    const fieldUpdates: Array<{ name: Array<string | number>, value: unknown }> = []
+    const modifiedAttributes: Record<string, unknown> = {}
+    const blockFieldNames = Array.from(new Set(localizedFields
+      .map(item => item.formPath[0])
+      .filter(pathPart => pathPart !== 'localizedfields'))) as string[]
 
-    const applyLocaleValues = (localeValues: Record<string, unknown>, locale: string | null): void => {
-      if (isNil(locale) || isEmpty(locale) || isEmpty(localeValues)) return
-      Object.entries(localeValues).forEach(([fieldName, value]) => {
-        fieldUpdates.push({ name: ['localizedfields', fieldName, locale], value })
-        localizedfields[fieldName] = { ...localizedfields[fieldName], [locale]: value }
+    const applyLocaleValues = (formValues: Record<string, unknown>, locale: string | null): void => {
+      if (isNil(locale) || isEmpty(locale)) return
+
+      localizedFields.forEach((item) => {
+        const valuePath = item.localeInFormPath === true
+          ? item.formPath.map(pathPart => pathPart === 'split-view-locale' ? locale : pathPart)
+          : [...item.formPath, locale]
+        const value = get(formValues, valuePath)
+
+        if (value !== undefined) {
+          fieldUpdates.push({ name: valuePath, value })
+        }
+      })
+
+      const localizedfields = (modifiedAttributes.localizedfields ?? {}) as Record<string, Record<string, unknown>>
+
+      localizedFields
+        .filter(item => item.formPath[0] === 'localizedfields')
+        .forEach((item) => {
+          const fieldName = item.formPath[1] as string
+          const value = get(formValues, [...item.formPath, locale])
+
+          if (value !== undefined) {
+            localizedfields[fieldName] = { ...localizedfields[fieldName], [locale]: value }
+          }
+        })
+
+      modifiedAttributes.localizedfields = localizedfields
+
+      blockFieldNames.forEach((blockFieldName) => {
+        const blockValue = get(formValues, [blockFieldName])
+
+        if (blockValue !== undefined) {
+          modifiedAttributes[blockFieldName] = blockValue
+        }
       })
     }
 
-    applyLocaleValues(leftLocaleValues, leftLocale)
-    applyLocaleValues(rightLocaleValues, rightLocale)
+    applyLocaleValues(leftColumnValues, leftLocale)
+    applyLocaleValues(rightColumnValues, rightLocale)
 
     if (!isEmpty(fieldUpdates)) {
       editForm.setFields(fieldUpdates)
-      updateModifiedDataObjectAttributes({ localizedfields })
+      updateModifiedDataObjectAttributes(modifiedAttributes)
       updateDraft().catch((error: unknown) => { console.error(error) })
     }
 
@@ -222,18 +252,18 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
             >
               <div className={ styles.columnWrapper }>
                 <LanguageComparisonColumn
+                  allFormValues={ allFormValues }
                   layoutData={ localizedFields }
                   locale={ leftLocale }
-                  localizedFieldValues={ localizedFieldValues }
                   ref={ leftColumnRef }
                 />
               </div>
 
               <div className={ styles.columnWrapper }>
                 <LanguageComparisonColumn
+                  allFormValues={ allFormValues }
                   layoutData={ localizedFields }
                   locale={ rightLocale }
-                  localizedFieldValues={ localizedFieldValues }
                   ref={ rightColumnRef }
                 />
               </div>

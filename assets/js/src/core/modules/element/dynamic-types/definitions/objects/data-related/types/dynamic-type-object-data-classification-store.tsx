@@ -13,6 +13,7 @@ import { get, isEmpty, isUndefined } from 'lodash'
 import { type FormItemProps } from 'antd'
 import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { ClassificationStore, type ClassificationStoreProps } from '../components/classification-store/classification-store'
+import { type IExtractLocalizedFieldsProps, type ILocalizedFieldDescriptor } from '@Pimcore/modules/data-object/editor/toolbar/split-view/helpers/process-layout-data'
 import {
   type IFormattedDataStructureData,
   type IProcessVersionFieldDataProps
@@ -33,6 +34,73 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
       ...super.getObjectDataFormItemProps(props),
       label: null
     }
+  }
+
+  async extractLocalizedFields (props: IExtractLocalizedFieldsProps): Promise<ILocalizedFieldDescriptor[] | false> {
+    const { item, fieldBreadcrumbTitle, formPath, objectData } = props
+
+    if (isEmpty(item?.activeGroupDefinitions)) {
+      return []
+    }
+
+    const storeValue = objectData[item.name]
+    const localizationGroup = item.localized === true ? 'split-view-locale' : 'default'
+    const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, item.title ?? item.name)
+
+    const processClassificationStoreData = ({
+      data,
+      updatedFieldBreadcrumbTitle = breadcrumbTitle,
+      groupId
+    }: {
+      data: ClassificationStoreGroup[]
+      updatedFieldBreadcrumbTitle?: string
+      groupId?: number
+    }): ILocalizedFieldDescriptor[] => {
+      return data.flatMap((dataItem: any) => {
+        if (!isEmpty(dataItem.keys)) {
+          const nextBreadcrumbTitle = getBreadcrumbTitle(updatedFieldBreadcrumbTitle, dataItem.title ?? dataItem.name)
+
+          return processClassificationStoreData({
+            data: dataItem.keys,
+            updatedFieldBreadcrumbTitle: nextBreadcrumbTitle,
+            groupId: dataItem.id
+          })
+        }
+
+        if (isEmpty(dataItem.definition) || isUndefined(groupId)) {
+          return []
+        }
+
+        const groupValue = get(storeValue, [String(groupId), localizationGroup])
+
+        if (item.localized !== true && isEmpty(groupValue)) {
+          return [{
+            fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle,
+            fieldData: { ...dataItem.definition, name: dataItem.id },
+            formPath: [...formPath, item.name, String(groupId), 'default', dataItem.id],
+            localeInFormPath: true
+          }]
+        }
+
+        if (item.localized === true) {
+          return [{
+            fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle,
+            fieldData: { ...dataItem.definition, name: dataItem.id },
+            formPath: [...formPath, item.name, String(groupId), 'split-view-locale', dataItem.id],
+            localeInFormPath: true
+          }]
+        }
+
+        return [{
+          fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle,
+          fieldData: { ...dataItem.definition, name: dataItem.id },
+          formPath: [...formPath, item.name, String(groupId), 'default', dataItem.id],
+          localeInFormPath: true
+        }]
+      })
+    }
+
+    return processClassificationStoreData({ data: item.activeGroupDefinitions })
   }
 
   async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<IFormattedDataStructureData[]> {

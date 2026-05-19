@@ -22,6 +22,7 @@ export interface ILocalizedFieldDescriptor {
   fieldBreadcrumbTitle: string
   fieldData: Layout
   formPath: Array<string | number>
+  localeInFormPath?: boolean
 }
 
 export interface IExtractLocalizedFieldsProps {
@@ -91,7 +92,8 @@ export const processNestedLayoutData = async ({
       return (item.children ?? []).map((child: Layout) => ({
         fieldBreadcrumbTitle,
         fieldData: child,
-        formPath: [...formPath, item.name, child.name]
+        formPath: [...formPath, item.name, child.name],
+        localeInFormPath: false
       }))
     }
 
