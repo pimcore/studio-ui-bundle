@@ -21,7 +21,7 @@ import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
 import { SpecialSettingsModal } from '@Pimcore/modules/user/management/detail/tabs/workspaces/components/special-settings-modal'
-import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { WorkspaceType } from '@Pimcore/modules/user/management/detail/tabs/workspaces/workspace-type'
 
 const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -65,13 +65,13 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
     }
 
     switch (type) {
-      case elementTypes.document:
+      case WorkspaceType.DOCUMENT:
         setDocumentWorkspaces([...workspaces, workspace])
         break
-      case elementTypes.asset:
+      case WorkspaceType.ASSET:
         setAssetWorkspaces([...workspaces, workspace])
         break
-      case elementTypes.dataObject:
+      case WorkspaceType.OBJECT:
         setObjectWorkspaces([...workspaces, workspace])
         break
     }
@@ -97,7 +97,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
-        type={ elementTypes.document }
+        type={ WorkspaceType.DOCUMENT }
                 />
     }
   ]
@@ -117,7 +117,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
-        type={ elementTypes.asset }
+        type={ WorkspaceType.ASSET }
                 />
     }
   ]
@@ -141,7 +141,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
-        type={ elementTypes.dataObject }
+        type={ WorkspaceType.OBJECT }
                 />
     }
   ]
