@@ -14,7 +14,7 @@ import { Select } from '@Pimcore/components/select/select'
 import { FormKit } from '@sdk/components'
 import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
 import {
-  useClassDefinitionGetBricksUsagesQuery,
+  useClassDefinitionGetBrickFieldsQuery,
   useClassObjectBrickClassesQuery
 } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import React, { useEffect, useMemo, useRef } from 'react'
@@ -43,21 +43,14 @@ const FieldnameSelect = ({ blockIndex, value, onChange }: FieldnameSelectProps):
     prevClassnameRef.current = classname
   }, [classname])
 
-  const { data, isFetching } = useClassDefinitionGetBricksUsagesQuery(
+  const { data, isFetching } = useClassDefinitionGetBrickFieldsQuery(
     { id: classname! },
     { skip: classname === undefined || classname === '' }
   )
 
   const options = useMemo(() => {
     if (data?.items === undefined) return []
-    const seen = new Set<string>()
-    return data.items.reduce<Array<{ label: string, value: string }>>((acc, item) => {
-      if (!seen.has(item.fieldName)) {
-        seen.add(item.fieldName)
-        acc.push({ label: item.fieldName, value: item.fieldName })
-      }
-      return acc
-    }, [])
+    return data.items.map((item) => ({ label: item.fieldName, value: item.fieldName }))
   }, [data])
 
   return (

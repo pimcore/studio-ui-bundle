@@ -2,6 +2,9 @@ common.owner: Ägare
 common.modification-date: Ändringsdatum
 common.globally: Globalt
 common.apply-selection: Tillämpa val
+cache.clear-cache-success: Cachen har rensats
+cache.clear-full-page-cache-success: Helsidescachen har rensats
+cache.clear-temporary-files-success: Temporära filer har tagits bort
 dont-ask-again: Fråga inte igen
 widget.missing-context.title: Saknar kontext
 widget.missing-context.description: Inget relaterat element hittades
@@ -202,6 +205,8 @@ class-definition.property-visibility.key-grid: Nyckel (Rutnät)
 class-definition.property-visibility.key-search: Nyckel (Sök)
 class-definition.property-visibility.path-grid: Sökväg (Rutnät)
 class-definition.property-visibility.path-search: Sökväg (Sök)
+class-definition.property-visibility.published-grid: Publicerad (Rutnät)
+class-definition.property-visibility.published-search: Publicerad (Sök)
 class-definition.property-visibility.modification-date-grid: Ändringsdatum (Rutnät)
 class-definition.property-visibility.modification-date-search: Ändringsdatum (Sök)
 class-definition.property-visibility.creation-date-grid: Skapandedatum (Rutnät)
@@ -974,6 +979,7 @@ lazy-loading: Lazy Loading
 disallow-add-remove: Tillåt inte lägg till / ta bort
 disallow-reorder: Tillåt inte omordning
 css-style: CSS-stil
+css-style-tooltip: "Inline-CSS som tillämpas på kroppen, t.ex. \"float: left; margin: 10px;\". Ogiltiga deklarationer ignoreras."
 collapsible: Ihopfällbar
 collapsed: Initialt ihopfälld
 border: Ram
@@ -1449,6 +1455,10 @@ navigation.reporting: Rapportering
 navigation.system: System
 navigation.website-settings: Webbplatsinställningar
 navigation.document-types: Dokumenttyper
+navigation.cache: Cache
+navigation.cache.clear-cache: Rensa cache
+navigation.cache.clear-full-page-cache: Rensa helsidescache
+navigation.cache.clear-temporary-files: Ta bort temporära filer
 navigation.clear-cache: Rensa helsidescache
 navigation.reports: Alla rapporter
 navigation.custom-reports: Konfiguration av anpassade rapporter

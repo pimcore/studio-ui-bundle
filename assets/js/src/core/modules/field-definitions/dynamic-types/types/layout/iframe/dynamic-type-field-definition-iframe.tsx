@@ -25,6 +25,14 @@ export class DynamicTypeFieldDefinitionIframe extends DynamicTypeFieldDefinition
     return { type: 'name', value: 'preview' }
   }
 
+  getAllowedChildTags (props: FieldDefinitionContext): string[] {
+    return []
+  }
+
+  getDropdownTags (props: FieldDefinitionContext): string[] {
+    return []
+  }
+
   getFormFields (context: FieldDefinitionContext): React.JSX.Element {
     return super.getFormFields({ ...context, hideRegion: true, hideCollapsible: true })
   }

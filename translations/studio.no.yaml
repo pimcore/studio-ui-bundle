@@ -2,6 +2,9 @@ common.owner: Eier
 common.modification-date: Endringsdato
 common.globally: Globalt
 common.apply-selection: Bruk utvalg
+cache.clear-cache-success: Hurtigbufferen ble tømt
+cache.clear-full-page-cache-success: Fullsidebufferen ble tømt
+cache.clear-temporary-files-success: Midlertidige filer ble slettet
 dont-ask-again: Ikke spør igjen
 widget.missing-context.title: Manglende kontekst
 widget.missing-context.description: Ingen relatert element funnet
@@ -202,6 +205,8 @@ class-definition.property-visibility.key-grid: Nøkkel (rutenett)
 class-definition.property-visibility.key-search: Nøkkel (søk)
 class-definition.property-visibility.path-grid: Sti (rutenett)
 class-definition.property-visibility.path-search: Sti (søk)
+class-definition.property-visibility.published-grid: Publisert (rutenett)
+class-definition.property-visibility.published-search: Publisert (søk)
 class-definition.property-visibility.modification-date-grid: Endringsdato (rutenett)
 class-definition.property-visibility.modification-date-search: Endringsdato (søk)
 class-definition.property-visibility.creation-date-grid: Opprettelsesdato (rutenett)
@@ -974,6 +979,7 @@ lazy-loading: Lat lasting
 disallow-add-remove: Ikke tillat legg til / fjern
 disallow-reorder: Ikke tillat omorganisering
 css-style: CSS-stil
+css-style-tooltip: "Inline-CSS som brukes på kroppen, f.eks. \"float: left; margin: 10px;\". Ugyldige deklarasjoner ignoreres."
 collapsible: Sammenleggbar
 collapsed: Opprinnelig sammenslått
 border: Kantlinje
@@ -1449,6 +1455,10 @@ navigation.reporting: Rapportering
 navigation.system: System
 navigation.website-settings: Nettstedsinnstillinger
 navigation.document-types: Dokumenttyper
+navigation.cache: Hurtigbuffer
+navigation.cache.clear-cache: Tøm hurtigbuffer
+navigation.cache.clear-full-page-cache: Tøm fullsidebuffer
+navigation.cache.clear-temporary-files: Slett midlertidige filer
 navigation.clear-cache: Tøm fullsidebuffer
 navigation.reports: Alle rapporter
 navigation.custom-reports: Konfigurasjon av egendefinerte rapporter

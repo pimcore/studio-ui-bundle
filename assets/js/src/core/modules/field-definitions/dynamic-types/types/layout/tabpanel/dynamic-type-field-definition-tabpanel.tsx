@@ -25,6 +25,17 @@ export class DynamicTypeFieldDefinitionTabpanel extends DynamicTypeFieldDefiniti
     return { type: 'name', value: 'tab-panel' }
   }
 
+  getAllowedChildTags (props: FieldDefinitionContext): string[] {
+    return ['panel', 'region', 'accordion', 'tabpanel', 'text', 'iframe', 'localizedfields']
+  }
+
+  getDropdownTags (props: FieldDefinitionContext): string[] {
+    if (props.area.includes('custom-layout')) {
+      return ['panel', 'region', 'accordion', 'tabpanel', 'text', 'iframe']
+    }
+    return this.getAllowedChildTags(props)
+  }
+
   getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = context.path.at(-1) ?? ''
     const fieldDefinition = context.fieldDefinitions[id]

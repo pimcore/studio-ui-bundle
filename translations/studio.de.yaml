@@ -2,6 +2,9 @@ common.owner: Eigentümer
 common.modification-date: Änderungsdatum
 common.globally: Global
 common.apply-selection: Auswahl übernehmen
+cache.clear-cache-success: Cache wurde erfolgreich geleert
+cache.clear-full-page-cache-success: Ganzseitiger Cache wurde erfolgreich geleert
+cache.clear-temporary-files-success: Temporäre Dateien wurden erfolgreich gelöscht
 dont-ask-again: Nicht erneut fragen
 widget.missing-context.title: Fehlender Kontext
 widget.missing-context.description: Kein zugehöriges Element gefunden
@@ -202,6 +205,8 @@ class-definition.property-visibility.key-grid: Schlüssel (Grid)
 class-definition.property-visibility.key-search: Schlüssel (Suche)
 class-definition.property-visibility.path-grid: Pfad (Grid)
 class-definition.property-visibility.path-search: Pfad (Suche)
+class-definition.property-visibility.published-grid: Veröffentlicht (Grid)
+class-definition.property-visibility.published-search: Veröffentlicht (Suche)
 class-definition.property-visibility.modification-date-grid: Änderungsdatum (Grid)
 class-definition.property-visibility.modification-date-search: Änderungsdatum (Suche)
 class-definition.property-visibility.creation-date-grid: Erstellungsdatum (Grid)
@@ -974,6 +979,7 @@ lazy-loading: Lazy Loading
 disallow-add-remove: Hinzufügen / Entfernen verbieten
 disallow-reorder: Neuordnung verbieten
 css-style: CSS-Stil
+css-style-tooltip: "Inline-CSS für den Body, z.B. \"float: left; margin: 10px;\". Ungültige Deklarationen werden ignoriert."
 collapsible: Einklappbar
 collapsed: Anfangs eingeklappt
 border: Rahmen
@@ -1449,6 +1455,10 @@ navigation.reporting: Berichte
 navigation.system: System
 navigation.website-settings: Website Einstellungen
 navigation.document-types: Dokumenttypen
+navigation.cache: Cache
+navigation.cache.clear-cache: Cache leeren
+navigation.cache.clear-full-page-cache: Ganzseitigen Cache leeren
+navigation.cache.clear-temporary-files: Temporäre Dateien löschen
 navigation.clear-cache: Ganzseitigen Cache löschen
 navigation.reports: Alle Berichte
 navigation.custom-reports: Benutzerdefinierte Berichte

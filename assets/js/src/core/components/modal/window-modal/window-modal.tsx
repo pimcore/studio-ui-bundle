@@ -9,6 +9,7 @@
  */
 
 import React, { useState, useRef } from 'react'
+import { isInIframe } from '@Pimcore/utils/iframe'
 import { ConfigProvider } from 'antd'
 import { type IModalProps, Modal } from '@Pimcore/components/modal/modal'
 import type { DraggableData, DraggableEvent } from 'react-draggable'
@@ -42,6 +43,14 @@ export const WindowModal = (props: IWindowModalProps): React.JSX.Element => {
       top: -targetRect.top + uiData.y,
       bottom: clientHeight - (targetRect.bottom - uiData.y)
     })
+  }
+
+  // In an iframe (e.g. document editor) popups must render inside the draggable container to
+  // inherit the correct stacking context. In the top-level window the modal wrapper has
+  // pointer-events:none, so popups rendered inside it would be unclickable — use document.body.
+  const getPopupContainer = (): HTMLElement => {
+    if (isInIframe()) return draggleRef.current ?? document.body
+    return document.body
   }
 
   return (
@@ -84,9 +93,7 @@ export const WindowModal = (props: IWindowModalProps): React.JSX.Element => {
       }
       wrapClassName={ styles.wrapper }
     >
-      {/* Render popups (Select, DatePicker, etc.) inside the modal's draggable container */}
-      {/* so they inherit its stacking context and appear above the modal overlay. */}
-      <ConfigProvider getPopupContainer={ () => draggleRef.current ?? document.body }>
+      <ConfigProvider getPopupContainer={ getPopupContainer }>
         {props.children}
       </ConfigProvider>
     </Modal>
