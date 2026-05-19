@@ -23,6 +23,7 @@ import { useNodeApiHook as useNodeApiHookAsset } from '@Pimcore/modules/asset/tr
 import { useNodeApiHook as useNodeApiHookDocument } from '@Pimcore/modules/document/tree/hooks/use-node-api-hook'
 import { NodeApiHookProvider } from '@Pimcore/components/element-tree/provider/node-api-hook-provider/node-api-hook-provider'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
+import { useStyles } from './tree-widget.styles'
 
 export interface TreeWidgetProps {
   id: string
@@ -36,6 +37,7 @@ export interface TreeWidgetProps {
 }
 export const TreeWidget = ({ id, elementType, rootFolder, classes, pql, pageSize, contextPermissions, showRoot = false }: TreeWidgetProps): React.JSX.Element => {
   const { asset_tree_paging_limit: pageSizeAsset, object_tree_paging_limit: pageSizeObject } = useSettings()
+  const { styles } = useStyles()
 
   const usedPageSize = pageSize ?? (elementType === elementTypes.asset ? pageSizeAsset : pageSizeObject)
 
@@ -47,32 +49,34 @@ export const TreeWidget = ({ id, elementType, rootFolder, classes, pql, pageSize
           pageSize={ usedPageSize }
           pqlQuery={ isNonEmptyString(pql) ? pql : undefined }
         >
-          { elementType === elementTypes.asset && (
-          <NodeApiHookProvider nodeApiHook={ useNodeApiHookAsset }>
-            <AssetTreeContainer
-              id={ rootFolder?.id ?? 1 }
-              showRoot={ showRoot }
-            />
-          </NodeApiHookProvider>
-          )}
-          { elementType === elementTypes.dataObject && (
+          <div className={ !showRoot ? styles.treeWidgetPadding : undefined }>
+            { elementType === elementTypes.asset && (
+            <NodeApiHookProvider nodeApiHook={ useNodeApiHookAsset }>
+              <AssetTreeContainer
+                id={ rootFolder?.id ?? 1 }
+                showRoot={ showRoot }
+              />
+            </NodeApiHookProvider>
+            )}
+            { elementType === elementTypes.dataObject && (
 
-          <NodeApiHookProvider nodeApiHook={ useNodeApiHookDataObject }>
-            <DataObjectTreeContainer
-              id={ rootFolder?.id ?? 1 }
-              showRoot={ showRoot }
-            />
-          </NodeApiHookProvider>
-          )}
-          { elementType === elementTypes.document && (
+            <NodeApiHookProvider nodeApiHook={ useNodeApiHookDataObject }>
+              <DataObjectTreeContainer
+                id={ rootFolder?.id ?? 1 }
+                showRoot={ showRoot }
+              />
+            </NodeApiHookProvider>
+            )}
+            { elementType === elementTypes.document && (
 
-          <NodeApiHookProvider nodeApiHook={ useNodeApiHookDocument }>
-            <DocumentTreeContainer
-              id={ rootFolder?.id ?? 1 }
-              showRoot={ showRoot }
-            />
-          </NodeApiHookProvider>
-          )}
+            <NodeApiHookProvider nodeApiHook={ useNodeApiHookDocument }>
+              <DocumentTreeContainer
+                id={ rootFolder?.id ?? 1 }
+                showRoot={ showRoot }
+              />
+            </NodeApiHookProvider>
+            )}
+          </div>
         </TreeFilterProvider>
       </TreePermissionProvider>
     </TreeIdProvider>
