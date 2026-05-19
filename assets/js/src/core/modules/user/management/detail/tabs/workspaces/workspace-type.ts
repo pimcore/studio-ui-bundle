@@ -8,18 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createContext, useContext } from 'react'
-
 export enum WorkspaceType {
   DOCUMENT = 'document',
   ASSET = 'asset',
   OBJECT = 'object'
 }
-
-export interface SpecialSettingsContextType {
-  showSpecialSettings: (id: number) => void
-}
-
-export const SpecialSettingsContext = createContext<SpecialSettingsContextType | null>(null)
-
-export const useSpecialSettingsContext = (): SpecialSettingsContextType | null => useContext(SpecialSettingsContext)

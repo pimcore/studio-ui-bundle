@@ -22,10 +22,8 @@ import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
 import { createTabContentTestId } from '@Pimcore/utils/test-id-generator'
-import { SpecialSettingsContext, WorkspaceType } from '@Pimcore/modules/user/management/detail/tabs/workspaces/special-settings-context'
 import { SpecialSettings } from '@Pimcore/modules/user/management/detail/tabs/workspaces/components/special-settings'
-
-export { WorkspaceType } from '@Pimcore/modules/user/management/detail/tabs/workspaces/special-settings-context'
+import { WorkspaceType } from '@Pimcore/modules/user/management/detail/tabs/workspaces/workspace-type'
 
 const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -196,7 +194,6 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   ]
 
   return (
-    <SpecialSettingsContext.Provider value={ { showSpecialSettings: (cid) => { setSpecialModalContext(cid); setIsSpecialSettingsModalOpen(true) } } }>
     <Flex
       data-testid={ createTabContentTestId(id.toString(), { prefix: 'user-detail-tab', tabKey: 'workspaces' }) }
       gap={ 'small' }
@@ -284,7 +281,6 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         />
       </Modal>
     </Flex>
-    </SpecialSettingsContext.Provider>
   )
 }
 

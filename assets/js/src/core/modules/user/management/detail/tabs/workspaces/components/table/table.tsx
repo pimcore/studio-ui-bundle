@@ -16,7 +16,7 @@ import { type UserWorkspace } from '@Pimcore/modules/auth/user/user-api-slice.ge
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from 'antd'
 import { createTableTestId } from '@Pimcore/utils/test-id-generator'
-import { WorkspaceType, useSpecialSettingsContext } from '@Pimcore/modules/user/management/detail/tabs/workspaces/special-settings-context'
+import { WorkspaceType } from '@Pimcore/modules/user/management/detail/tabs/workspaces/workspace-type'
 
 interface ITableProps {
   data: UserWorkspace[]
@@ -35,7 +35,6 @@ export const Table = ({
   onUpdateData, onShowSpecialSettings
 }: ITableProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const specialSettingsContext = useSpecialSettingsContext()
   const [gridData, setGridData] = React.useState<UserWorkspace[]>(data)
 
   const isAsset = type === WorkspaceType.ASSET
@@ -194,15 +193,9 @@ export const Table = ({
               >
                 <IconButton
                   icon={ { value: 'settings' } }
-                  onClick={ (e) => {
-                    e.stopPropagation()
-                    e.preventDefault()
+                  onClick={ () => {
                     const cid = (context.row.original as UserWorkspace).cid
-                    if (onShowSpecialSettings !== undefined) {
-                      onShowSpecialSettings(cid)
-                    } else if (specialSettingsContext !== null) {
-                      specialSettingsContext.showSpecialSettings(cid)
-                    }
+                    onShowSpecialSettings?.(cid)
                   } }
                   type="link"
                 />
