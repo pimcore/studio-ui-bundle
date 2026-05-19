@@ -150,63 +150,63 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       gap={ 'middle' }
       vertical
     >
-        <Accordion
-          activeKey={ '1' }
-          bordered
-          collapsible="icon"
-          items={ documentsAccordion }
-          size={ 'small' }
-          table
-        />
+      <Accordion
+        activeKey={ '1' }
+        bordered
+        collapsible="icon"
+        items={ documentsAccordion }
+        size={ 'small' }
+        table
+      />
 
-        <Accordion
-          activeKey={ '1' }
-          bordered
-          collapsible="icon"
-          items={ assetsAccordion }
-          size={ 'small' }
-          table
-        />
+      <Accordion
+        activeKey={ '1' }
+        bordered
+        collapsible="icon"
+        items={ assetsAccordion }
+        size={ 'small' }
+        table
+      />
 
-        <Accordion
-          activeKey={ '1' }
-          bordered
-          collapsible="icon"
-          items={ objectsAccordion }
-          size={ 'small' }
-          table
-        />
+      <Accordion
+        activeKey={ '1' }
+        bordered
+        collapsible="icon"
+        items={ objectsAccordion }
+        size={ 'small' }
+        table
+      />
 
-        <DuplicatePropertyModal
-          footer={ <ModalFooter>
-            <Button
-              onClick={ closeDuplicatePropertyModal }
-              type='primary'
-            >{t('button.ok')}</Button>
-          </ModalFooter> }
-          title={ t('properties.property-already-exist.title') }
-        >
-          {t('properties.property-already-exist.error')}
-        </DuplicatePropertyModal>
+      <DuplicatePropertyModal
+        footer={ <ModalFooter>
+          <Button
+            onClick={ closeDuplicatePropertyModal }
+            type='primary'
+          >{t('button.ok')}</Button>
+        </ModalFooter> }
+        title={ t('properties.property-already-exist.title') }
+      >
+        {t('properties.property-already-exist.error')}
+      </DuplicatePropertyModal>
 
-        <SpecialSettingsModal
-          cpath={ role.dataObjectWorkspaces.find(ws => ws.cid === specialModalContext)?.cpath ?? '' }
-          initialValues={ {
-            layouts: getSpecialModalValues('layouts'),
-            localizedEdit: getSpecialModalValues('localizedEdit'),
-            localizedView: getSpecialModalValues('localizedView')
-          } }
-          key={ specialModalContext ?? 'none' }
-          onApply={ (changes) => {
-            changeRoleInState({
-              dataObjectWorkspaces: role.dataObjectWorkspaces.map(ws => ws.cid === specialModalContext ? { ...ws, ...changes } : ws)
-            })
-            setIsSpecialSettingsModalOpen(false)
-          } }
-          onCancel={ () => { setIsSpecialSettingsModalOpen(false) } }
-          open={ isSpecialSettingsModalOpen }
-        />
-      </Flex>
+      <SpecialSettingsModal
+        cpath={ role.dataObjectWorkspaces.find(ws => ws.cid === specialModalContext)?.cpath ?? '' }
+        initialValues={ {
+          layouts: getSpecialModalValues('layouts'),
+          localizedEdit: getSpecialModalValues('localizedEdit'),
+          localizedView: getSpecialModalValues('localizedView')
+        } }
+        key={ specialModalContext ?? 'none' }
+        onApply={ (changes) => {
+          changeRoleInState({
+            dataObjectWorkspaces: role.dataObjectWorkspaces.map(ws => ws.cid === specialModalContext ? { ...ws, ...changes } : ws)
+          })
+          setIsSpecialSettingsModalOpen(false)
+        } }
+        onCancel={ () => { setIsSpecialSettingsModalOpen(false) } }
+        open={ isSpecialSettingsModalOpen }
+      />
+    </Flex>
   )
 }
 
