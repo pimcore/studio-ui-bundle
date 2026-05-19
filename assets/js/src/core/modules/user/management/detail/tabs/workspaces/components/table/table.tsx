@@ -180,8 +180,9 @@ export const Table = ({
         }
       }
     }),
-    ...isObject
-      ? [columnHelper.accessor('specialSettings', {
+    ...isObject && onShowSpecialSettings !== undefined
+      ? [columnHelper.display({
+          id: 'specialSettings',
           header: '',
           size: 40,
           cell: (context) => {
@@ -195,7 +196,7 @@ export const Table = ({
                   icon={ { value: 'settings' } }
                   onClick={ () => {
                     const cid = (context.row.original as UserWorkspace).cid
-                    onShowSpecialSettings?.(cid)
+                    onShowSpecialSettings(cid)
                   } }
                   type="link"
                 />
@@ -204,7 +205,8 @@ export const Table = ({
           }
         })]
       : [],
-    columnHelper.accessor('actions', {
+    columnHelper.display({
+      id: 'actions',
       header: '',
       size: 40,
       cell: (context) => {

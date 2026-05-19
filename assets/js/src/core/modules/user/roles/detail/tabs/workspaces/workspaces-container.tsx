@@ -18,10 +18,9 @@ import { useRoleContext } from '@Pimcore/modules/user/roles/hooks/use-role-conte
 import { useRoleDraft } from '@Pimcore/modules/user/roles/hooks/use-roles-draft'
 import { Flex } from 'antd'
 import { useModal } from '@Pimcore/components/modal/useModal'
-import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
-import { SpecialSettings } from '@Pimcore/modules/user/management/detail/tabs/workspaces/components/special-settings'
+import { SpecialSettingsModal } from '@Pimcore/modules/user/management/detail/tabs/workspaces/components/special-settings-modal'
 
 const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -76,8 +75,6 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         break
     }
   }
-
-  let currentSpecialModalData: object = {}
 
   const getSpecialModalValues = (type: string): string[] => {
     const ws = role?.dataObjectWorkspaces.find(ws => ws.cid === specialModalContext) as Record<string, any> | undefined
@@ -192,44 +189,21 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
           {t('properties.property-already-exist.error')}
         </DuplicatePropertyModal>
 
-        <Modal
-          footer={
-            <ModalFooter>
-              <Button
-                onClick={ () => { setIsSpecialSettingsModalOpen(false) } }
-                type={ 'default' }
-              >
-                {t('button.cancel')}
-              </Button>
-              <Button
-                onClick={ () => {
-                  changeRoleInState({
-                    dataObjectWorkspaces: role.dataObjectWorkspaces.map(ws => ws.cid === specialModalContext ? { ...ws, ...currentSpecialModalData } : ws)
-                  })
-
-                  setIsSpecialSettingsModalOpen(false)
-                } }
-                type={ 'primary' }
-              >
-                {t('button.apply')}
-              </Button>
-            </ModalFooter>
-          }
+        <SpecialSettingsModal
+          initialValues={ {
+            layouts: getSpecialModalValues('layouts'),
+            localizedEdit: getSpecialModalValues('localizedEdit'),
+            localizedView: getSpecialModalValues('localizedView')
+          } }
+          onApply={ (changes) => {
+            changeRoleInState({
+              dataObjectWorkspaces: role.dataObjectWorkspaces.map(ws => ws.cid === specialModalContext ? { ...ws, ...changes } : ws)
+            })
+            setIsSpecialSettingsModalOpen(false)
+          } }
           onCancel={ () => { setIsSpecialSettingsModalOpen(false) } }
           open={ isSpecialSettingsModalOpen }
-          size={ 'L' }
-          title={ t('user-management.workspaces.additional-settings') }
-        >
-          <SpecialSettings
-            layouts={ getSpecialModalValues('layouts') }
-            localizedEdit={ getSpecialModalValues('localizedEdit') }
-            localizedView={ getSpecialModalValues('localizedView') }
-            onValuesChange={ (changedValues) => {
-              const mergedData = { ...currentSpecialModalData, ...changedValues }
-              currentSpecialModalData = mergedData
-            } }
-          />
-        </Modal>
+        />
       </Flex>
   )
 }
