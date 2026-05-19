@@ -49,7 +49,7 @@ export const TreeWidget = ({ id, elementType, rootFolder, classes, pql, pageSize
           pageSize={ usedPageSize }
           pqlQuery={ isNonEmptyString(pql) ? pql : undefined }
         >
-          <div className={ !showRoot ? styles.treeWidgetPadding : undefined }>
+          <div className={ styles.treeWidget }>
             { elementType === elementTypes.asset && (
             <NodeApiHookProvider nodeApiHook={ useNodeApiHookAsset }>
               <AssetTreeContainer
@@ -59,7 +59,6 @@ export const TreeWidget = ({ id, elementType, rootFolder, classes, pql, pageSize
             </NodeApiHookProvider>
             )}
             { elementType === elementTypes.dataObject && (
-
             <NodeApiHookProvider nodeApiHook={ useNodeApiHookDataObject }>
               <DataObjectTreeContainer
                 id={ rootFolder?.id ?? 1 }
@@ -68,7 +67,6 @@ export const TreeWidget = ({ id, elementType, rootFolder, classes, pql, pageSize
             </NodeApiHookProvider>
             )}
             { elementType === elementTypes.document && (
-
             <NodeApiHookProvider nodeApiHook={ useNodeApiHookDocument }>
               <DocumentTreeContainer
                 id={ rootFolder?.id ?? 1 }

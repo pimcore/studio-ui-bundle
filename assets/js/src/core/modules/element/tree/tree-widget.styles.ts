@@ -12,7 +12,7 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    treeWidgetPadding: css`
+    treeWidget: css`
       .tree {
         padding-left: ${token.paddingSM}px;
       }
