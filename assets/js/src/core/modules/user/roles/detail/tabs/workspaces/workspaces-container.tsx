@@ -21,6 +21,7 @@ import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
 import { SpecialSettingsModal } from '@Pimcore/modules/user/management/detail/tabs/workspaces/components/special-settings-modal'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -64,13 +65,13 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
     }
 
     switch (type) {
-      case 'document':
+      case elementTypes.document:
         setDocumentWorkspaces([...workspaces, workspace])
         break
-      case 'asset':
+      case elementTypes.asset:
         setAssetWorkspaces([...workspaces, workspace])
         break
-      case 'object':
+      case elementTypes.dataObject:
         setObjectWorkspaces([...workspaces, workspace])
         break
     }
@@ -96,7 +97,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
-        type={ 'document' }
+        type={ elementTypes.document }
                 />
     }
   ]
@@ -116,7 +117,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
-        type={ 'asset' }
+        type={ elementTypes.asset }
                 />
     }
   ]
@@ -140,7 +141,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
-        type={ 'object' }
+        type={ elementTypes.dataObject }
                 />
     }
   ]

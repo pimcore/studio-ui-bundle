@@ -22,7 +22,7 @@ import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
 import { createTabContentTestId } from '@Pimcore/utils/test-id-generator'
 import { SpecialSettingsModal } from '@Pimcore/modules/user/management/detail/tabs/workspaces/components/special-settings-modal'
-import { WorkspaceType } from '@Pimcore/modules/user/management/detail/tabs/workspaces/workspace-type'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -92,7 +92,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
           showDuplicatePropertyModal={ () => {
             showDuplicatePropertyModal()
           } }
-          type={ WorkspaceType.DOCUMENT }
+          type={ elementTypes.document }
         />
       )
     }
@@ -133,7 +133,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
           showDuplicatePropertyModal={ () => {
             showDuplicatePropertyModal()
           } }
-          type={ WorkspaceType.ASSET }
+          type={ elementTypes.asset }
         />
       )
     }
@@ -184,7 +184,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
           showDuplicatePropertyModal={ () => {
             showDuplicatePropertyModal()
           } }
-          type={ WorkspaceType.OBJECT }
+          type={ elementTypes.dataObject }
         />
       )
     }

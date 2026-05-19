@@ -16,12 +16,12 @@ import { type UserWorkspace } from '@Pimcore/modules/auth/user/user-api-slice.ge
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from 'antd'
 import { createTableTestId } from '@Pimcore/utils/test-id-generator'
-import { WorkspaceType } from '@Pimcore/modules/user/management/detail/tabs/workspaces/workspace-type'
+import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 interface ITableProps {
   data: UserWorkspace[]
   isLoading: boolean
-  type?: string
+  type?: ElementType
   showDuplicatePropertyModal: () => void
   onUpdateData: (data: UserWorkspace[]) => void
   onShowSpecialSettings?: (id: number) => void
@@ -37,8 +37,8 @@ export const Table = ({
   const { t } = useTranslation()
   const [gridData, setGridData] = React.useState<UserWorkspace[]>(data)
 
-  const isAsset = type === WorkspaceType.ASSET
-  const isObject = type === WorkspaceType.OBJECT
+  const isAsset = type === elementTypes.asset
+  const isObject = type === elementTypes.dataObject
 
   useEffect(() => {
     setGridData(data)
