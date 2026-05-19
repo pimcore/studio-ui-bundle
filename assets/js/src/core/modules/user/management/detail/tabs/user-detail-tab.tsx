@@ -66,23 +66,23 @@ const UserDetailTab = ({ id, ...props }: IUserDetailTabProps): React.JSX.Element
     {
       key: 'settings',
       label: t('user-management.settings.title'),
-      children: <SettingsContainer />
+      children: <SettingsContainer key={ id } />
     },
     {
       key: 'workspaces',
       label: t('user-management.workspaces.title'),
-      children: <WorkspacesContainer />,
+      children: <WorkspacesContainer key={ id } />,
       disabled: user.admin
     },
     {
       key: 'key-bindings',
       label: t('user-management.key-bindings.title'),
-      children: <KeyBindingsContainer />
+      children: <KeyBindingsContainer key={ id } />
     },
     {
       key: 'user-references',
       label: t('user-management.references.title'),
-      children: <ReferenceContainer />
+      children: <ReferenceContainer key={ id } />
     }
   ]
 
