@@ -195,6 +195,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
             localizedEdit: getSpecialModalValues('localizedEdit'),
             localizedView: getSpecialModalValues('localizedView')
           } }
+          key={ specialModalContext ?? 'none' }
           onApply={ (changes) => {
             changeRoleInState({
               dataObjectWorkspaces: role.dataObjectWorkspaces.map(ws => ws.cid === specialModalContext ? { ...ws, ...changes } : ws)

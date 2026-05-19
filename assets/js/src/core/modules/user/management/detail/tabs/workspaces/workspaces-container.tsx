@@ -139,8 +139,6 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
     }
   ]
 
-  let currentSpecialModalData: object = {}
-
   const getSpecialModalValues = (type: string): string[] => {
     return user?.dataObjectWorkspaces.find(ws => ws.cid === specialModalContext)?.[type] ?? []
   }
@@ -247,6 +245,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
           localizedEdit: getSpecialModalValues('localizedEdit'),
           localizedView: getSpecialModalValues('localizedView')
         } }
+        key={ specialModalContext ?? 'none' }
         onApply={ (values) => {
           changeUserInState({
             dataObjectWorkspaces: user.dataObjectWorkspaces.map(ws => ws.cid === specialModalContext ? { ...ws, ...values } : ws)

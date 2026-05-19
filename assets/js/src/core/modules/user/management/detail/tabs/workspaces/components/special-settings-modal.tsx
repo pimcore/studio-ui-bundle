@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
@@ -25,12 +25,18 @@ interface ISpecialSettingsModalProps {
   open: boolean
   initialValues: SpecialSettingsValues
   onCancel: () => void
-  onApply: (values: Partial<SpecialSettingsValues>) => void
+  onApply: (values: SpecialSettingsValues) => void
 }
 
 const SpecialSettingsModal = ({ open, initialValues, onCancel, onApply }: ISpecialSettingsModalProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const pendingChangesRef = useRef<Partial<SpecialSettingsValues>>({})
+  const pendingChangesRef = useRef<SpecialSettingsValues>({ ...initialValues })
+
+  useEffect(() => {
+    if (open) {
+      pendingChangesRef.current = { ...initialValues }
+    }
+  }, [open])
 
   return (
     <Modal
@@ -45,7 +51,6 @@ const SpecialSettingsModal = ({ open, initialValues, onCancel, onApply }: ISpeci
           <Button
             onClick={ () => {
               onApply(pendingChangesRef.current)
-              pendingChangesRef.current = {}
             } }
             type={ 'primary' }
           >
