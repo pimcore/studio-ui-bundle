@@ -190,6 +190,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         </DuplicatePropertyModal>
 
         <SpecialSettingsModal
+          cpath={ role.dataObjectWorkspaces.find(ws => ws.cid === specialModalContext)?.cpath ?? '' }
           initialValues={ {
             layouts: getSpecialModalValues('layouts'),
             localizedEdit: getSpecialModalValues('localizedEdit'),

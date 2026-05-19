@@ -23,12 +23,13 @@ export interface SpecialSettingsValues {
 
 interface ISpecialSettingsModalProps {
   open: boolean
+  cpath: string
   initialValues: SpecialSettingsValues
   onCancel: () => void
   onApply: (values: SpecialSettingsValues) => void
 }
 
-const SpecialSettingsModal = ({ open, initialValues, onCancel, onApply }: ISpecialSettingsModalProps): React.JSX.Element => {
+const SpecialSettingsModal = ({ open, cpath, initialValues, onCancel, onApply }: ISpecialSettingsModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const pendingChangesRef = useRef<SpecialSettingsValues>({ ...initialValues })
 
@@ -61,7 +62,7 @@ const SpecialSettingsModal = ({ open, initialValues, onCancel, onApply }: ISpeci
       onCancel={ onCancel }
       open={ open }
       size={ 'L' }
-      title={ t('user-management.workspaces.additional-settings') }
+      title={ `${t('user-management.workspaces.additional-settings')} — ${cpath}` }
     >
       <SpecialSettings
         layouts={ initialValues.layouts }
