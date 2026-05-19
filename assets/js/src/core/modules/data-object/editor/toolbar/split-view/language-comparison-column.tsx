@@ -105,8 +105,11 @@ export const LanguageComparisonColumn = forwardRef<LanguageComparisonColumnHandl
     const sections = useMemo(() => groupIntoSections(layoutData), [layoutData])
 
     const renderField = (item: ILocalizedFieldDescriptor, fieldIndex: number): React.JSX.Element => {
-      const groupPath = item.formPath.slice(0, -1)
-      const combinedFieldNameParent = groupPath.map(pathPart => String(pathPart))
+      const resolvedGroupPath = item.formPath
+        .slice(0, -1)
+        .map(pathPart => pathPart === 'split-view-locale' ? locale : pathPart)
+
+      const combinedFieldNameParent = resolvedGroupPath.map(pathPart => String(pathPart))
       const shouldWrapLocalizedProvider = item.localeInFormPath !== true
 
       const fieldNode = (
@@ -114,7 +117,7 @@ export const LanguageComparisonColumn = forwardRef<LanguageComparisonColumnHandl
           combinedFieldNameParent={ combinedFieldNameParent }
           key={ `${item.formPath.join('.')}-${fieldIndex}` }
         >
-          <Form.Group name={ groupPath }>
+          <Form.Group name={ resolvedGroupPath }>
             <ObjectComponent
               { ...(item.fieldData as unknown as ObjectComponentProps) }
             />

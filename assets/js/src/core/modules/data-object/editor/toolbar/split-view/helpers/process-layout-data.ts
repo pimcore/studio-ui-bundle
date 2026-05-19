@@ -97,11 +97,13 @@ export const processNestedLayoutData = async ({
       }))
     }
 
-    if (!objectDataRegistry.hasDynamicType(item.fieldtype)) {
+    const currentFieldType: string = item.fieldtype
+
+    if (!objectDataRegistry.hasDynamicType(currentFieldType)) {
       return []
     }
 
-    const objectDataType = objectDataRegistry.getDynamicType(item.fieldtype)
+    const objectDataType = objectDataRegistry.getDynamicType(currentFieldType)
     const extractedDescriptors = await objectDataType.extractLocalizedFields({
       objectId,
       item,

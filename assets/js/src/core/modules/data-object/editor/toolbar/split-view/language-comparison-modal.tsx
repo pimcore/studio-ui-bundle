@@ -10,7 +10,7 @@
 
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { get, isEmpty, isNil } from 'lodash'
+import { cloneDeep, get, isEmpty, isNil, set } from 'lodash'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
@@ -124,60 +124,45 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   const isLoading = isLayoutLoading || isDraftLoading
   const hasLocalizedFields = localizedFields.length > 0
 
+  const getDescriptorValuePath = (
+    item: ILocalizedFieldDescriptor,
+    locale: string
+  ): Array<string | number> => {
+    return item.localeInFormPath === true
+      ? item.formPath.map(pathPart => pathPart === 'split-view-locale' ? locale : pathPart)
+      : [...item.formPath, locale]
+  }
+
   const handleApplyChanges = (): void => {
     const leftColumnValues = leftColumnRef.current?.getFormValues() ?? {}
     const rightColumnValues = rightColumnRef.current?.getFormValues() ?? {}
-
+    const mergedFormValues = cloneDeep(allFormValues)
+    const touchedRoots = new Set<string>()
     const fieldUpdates: Array<{ name: Array<string | number>, value: unknown }> = []
-    const modifiedAttributes: Record<string, unknown> = {}
-    const blockFieldNames = Array.from(new Set(localizedFields
-      .map(item => item.formPath[0])
-      .filter(pathPart => pathPart !== 'localizedfields'))) as string[]
-
     const applyLocaleValues = (formValues: Record<string, unknown>, locale: string | null): void => {
       if (isNil(locale) || isEmpty(locale)) return
-
       localizedFields.forEach((item) => {
-        const valuePath = item.localeInFormPath === true
-          ? item.formPath.map(pathPart => pathPart === 'split-view-locale' ? locale : pathPart)
-          : [...item.formPath, locale]
+        const valuePath = getDescriptorValuePath(item, locale)
         const value = get(formValues, valuePath)
-
-        if (value !== undefined) {
-          fieldUpdates.push({ name: valuePath, value })
+        if (value === undefined) {
+          return
         }
-      })
-
-      const localizedfields = (modifiedAttributes.localizedfields ?? {}) as Record<string, Record<string, unknown>>
-
-      localizedFields
-        .filter(item => item.formPath[0] === 'localizedfields')
-        .forEach((item) => {
-          const fieldName = item.formPath[1] as string
-          const value = get(formValues, [...item.formPath, locale])
-
-          if (value !== undefined) {
-            localizedfields[fieldName] = { ...localizedfields[fieldName], [locale]: value }
-          }
-        })
-
-      modifiedAttributes.localizedfields = localizedfields
-
-      blockFieldNames.forEach((blockFieldName) => {
-        const blockValue = get(formValues, [blockFieldName])
-
-        if (blockValue !== undefined) {
-          modifiedAttributes[blockFieldName] = blockValue
-        }
+        set(mergedFormValues, valuePath, value)
+        fieldUpdates.push({ name: valuePath, value })
+        touchedRoots.add(String(valuePath[0]))
       })
     }
-
     applyLocaleValues(leftColumnValues, leftLocale)
     applyLocaleValues(rightColumnValues, rightLocale)
 
+    const changedValues: Record<string, unknown> = {}
+    touchedRoots.forEach((root) => {
+      changedValues[root] = get(mergedFormValues, [root])
+    })
+
     if (!isEmpty(fieldUpdates)) {
       editForm.setFields(fieldUpdates)
-      updateModifiedDataObjectAttributes(modifiedAttributes)
+      updateModifiedDataObjectAttributes(changedValues)
       updateDraft().catch((error: unknown) => { console.error(error) })
     }
 
