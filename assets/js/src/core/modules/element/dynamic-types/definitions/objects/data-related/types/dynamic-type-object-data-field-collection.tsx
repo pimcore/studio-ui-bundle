@@ -22,6 +22,7 @@ import { getBreadcrumbTitle } from '@Pimcore/modules/data-object/editor/shared-t
 import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/constants/typesList'
 import { processNestedLayoutData, type IExtractLocalizedFieldsProps, type ILocalizedFieldDescriptor } from '@Pimcore/modules/data-object/editor/toolbar/language-comparison-view/helpers/process-layout-data'
 import { type ClassFieldCollectionObjectLayoutApiResponse, type FieldCollectionLayoutDefinition } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 export class DynamicTypeObjectDataFieldCollection extends DynamicTypeObjectDataAbstract {
   id: string = 'fieldcollections'
@@ -105,7 +106,7 @@ export class DynamicTypeObjectDataFieldCollection extends DynamicTypeObjectDataA
       return []
     }
 
-    const nextBreadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, item.title ?? '')
+    const nextBreadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, (item?.title ?? '') as string)
     const descriptors = await Promise.all(collectionItems.map(async (collectionItem, index) => {
       const layoutDefinition = layoutDefinitions.find(layout => layout.key === collectionItem?.type)
 
@@ -113,12 +114,14 @@ export class DynamicTypeObjectDataFieldCollection extends DynamicTypeObjectDataA
         return []
       }
 
+      const currentBreadcrumbTitle: string | undefined = !isEmptyValue(layoutDefinition?.title) ? `${layoutDefinition?.title}/${collectionItem?.type}` : collectionItem?.type
+
       return await processNestedLayoutData({
         objectId,
         data: (layoutDefinition.children as any[]) ?? [],
         objectData: (collectionItem?.data ?? {}) as Record<string, any>,
         objectDataRegistry,
-        fieldBreadcrumbTitle: getBreadcrumbTitle(nextBreadcrumbTitle, layoutDefinition.title ?? layoutDefinition.name ?? collectionItem?.type ?? ''),
+        fieldBreadcrumbTitle: getBreadcrumbTitle(nextBreadcrumbTitle, currentBreadcrumbTitle ?? ''),
         formPath: [...formPath, item.name, index, 'data'],
         layoutsList,
         setLayoutsList
