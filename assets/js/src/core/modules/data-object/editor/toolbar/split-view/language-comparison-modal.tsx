@@ -44,6 +44,7 @@ import {
   type LanguageComparisonColumnHandle
 } from './language-comparison-column'
 import { useStyles } from './language-comparison-modal.styles'
+import { Form, type formInstanceType } from '@Pimcore/components/form/form'
 
 interface LanguageComparisonModalProps {
   open: boolean
@@ -59,6 +60,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   const { form: editForm, updateModifiedDataObjectAttributes, updateDraft } = useEditFormContext()
   const user = useUser()
   const contentLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
+  const [form] = Form.useForm()
 
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(
     serviceIds['DynamicTypes/ObjectDataRegistry']
@@ -73,14 +75,20 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   const [localizedFields, setLocalizedFields] = useState<ILocalizedFieldDescriptor[]>([])
   const [layoutsList, setLayoutsList] = useState<ILayoutItem[]>([])
 
-  const allFormValues = useMemo(() => {
-    if (!open) return {}
+  console.log('======== localizedFields: ', localizedFields)
 
+  const initialValues: Partial<any> = useMemo(() => {
     return editForm.getFieldsValue(true)
   }, [open])
 
-  const leftColumnRef = useRef<LanguageComparisonColumnHandle>(null)
-  const rightColumnRef = useRef<LanguageComparisonColumnHandle>(null)
+  useEffect(() => {
+    if (!open) {
+      form.resetFields()
+      return
+    }
+
+    form.setFieldsValue(initialValues)
+  }, [open, initialValues])
 
   useEffect(() => {
     if (!isNil(layoutError)) {
@@ -96,7 +104,6 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
     }
   }, [open, currentLanguage, contentLanguages])
 
-  // Process layout data to extract localized fields
   useEffect(() => {
     if (isNil(layoutData) || !open) {
       setLocalizedFields([])
@@ -106,34 +113,25 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
     processLayoutData({
       objectId: id,
       layout: layoutData,
-      objectData: allFormValues,
+      objectData: initialValues,
       objectDataRegistry,
       layoutsList,
       setLayoutsList
     })
-      .then(result => {
-        setLocalizedFields(result)
-      })
-      .catch(() => {
-        setLocalizedFields([])
-      })
-      .finally(() => {
-      })
+      .then(setLocalizedFields)
+      .catch(() => { setLocalizedFields([]) })
   }, [layoutData, open])
 
   const isLoading = isLayoutLoading || isDraftLoading
   const hasLocalizedFields = localizedFields.length > 0
 
   const handleApplyChanges = (): void => {
-    const leftChanges = leftColumnRef.current?.getCurrentFormValues() ?? {}
-    const rightChanges = rightColumnRef.current?.getCurrentFormValues() ?? {}
+    const values: Partial<any> = form.getFieldsValue(true)
 
-    const mergedChanges = merge({}, leftChanges, rightChanges)
+    if (isEmpty(values)) onClose()
 
-    if (isEmpty(mergedChanges)) onClose()
-
-    editForm.setFieldsValue(mergedChanges)
-    updateModifiedDataObjectAttributes(mergedChanges)
+    editForm.setFieldsValue(values)
+    updateModifiedDataObjectAttributes(values)
     updateDraft().catch((error: unknown) => { console.error(error) })
 
     onClose()
@@ -201,30 +199,30 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
               </Flex>
             </Flex>
 
-            <Flex
-              className={ styles.columns }
-              wrap="wrap"
+            <Form
+              form={ form as formInstanceType }
+              layout='vertical'
+              preserve
             >
-              <div className={ styles.columnWrapper }>
-                <LanguageComparisonColumn
-                  allFormValues={ allFormValues }
-                  layoutData={ localizedFields }
-                  locale={ leftLocale }
-                  open={ open }
-                  ref={ leftColumnRef }
-                />
-              </div>
+              <Flex
+                className={ styles.columns }
+                wrap="wrap"
+              >
+                <div className={ styles.columnWrapper }>
+                  <LanguageComparisonColumn
+                    layoutData={ localizedFields }
+                    locale={ leftLocale }
+                  />
+                </div>
 
-              <div className={ styles.columnWrapper }>
-                <LanguageComparisonColumn
-                  allFormValues={ allFormValues }
-                  layoutData={ localizedFields }
-                  locale={ rightLocale }
-                  open={ open }
-                  ref={ rightColumnRef }
-                />
-              </div>
-            </Flex>
+                <div className={ styles.columnWrapper }>
+                  <LanguageComparisonColumn
+                    layoutData={ localizedFields }
+                    locale={ rightLocale }
+                  />
+                </div>
+              </Flex>
+            </Form>
           </Flex>
         )}
       </div>

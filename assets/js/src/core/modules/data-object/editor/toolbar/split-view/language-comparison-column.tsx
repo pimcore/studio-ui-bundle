@@ -8,12 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from 'react'
+import React, { useMemo } from 'react'
 import { ConfigProvider } from 'antd'
 import cn from 'classnames'
 import { isEmpty, isNil } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
-import { Form, type formInstanceType } from '@Pimcore/components/form/form'
+import { Form } from '@Pimcore/components/form/form'
 import { Space } from '@Pimcore/components/space/space'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
@@ -34,7 +34,6 @@ import {
   type ILocalizedFieldDescriptor
 } from './helpers/process-layout-data'
 import { useStyles } from './language-comparison-modal.styles'
-import { deepDiff } from '@Pimcore/modules/data-object/editor/toolbar/split-view/helpers/deep-diff'
 
 export interface LanguageComparisonColumnHandle {
   getCurrentFormValues: () => Record<string, unknown>
@@ -43,8 +42,6 @@ export interface LanguageComparisonColumnHandle {
 interface LanguageComparisonColumnProps {
   locale: string | null
   layoutData: ILocalizedFieldDescriptor[]
-  allFormValues: Record<string, unknown>
-  open: boolean
 }
 
 interface LocalizedSection {
@@ -67,127 +64,92 @@ const groupIntoSections = (items: ILocalizedFieldDescriptor[]): LocalizedSection
   return sections
 }
 
-export const LanguageComparisonColumn = forwardRef<LanguageComparisonColumnHandle, LanguageComparisonColumnProps>(
-  function LanguageComparisonColumn ({ locale, layoutData, allFormValues, open }, ref) {
-    const { styles } = useStyles()
-    const [form] = Form.useForm()
+export const LanguageComparisonColumn = ({ layoutData, locale }: LanguageComparisonColumnProps): React.JSX.Element => {
+  const { styles } = useStyles()
 
-    const initialSnapshotDataRef = useRef<any>({})
+  const renderSectionTitle = (breadcrumbTitle: string): React.JSX.Element | null => {
+    if (isEmptyValue(breadcrumbTitle)) return null
 
-    useEffect(() => {
-      if (!open) return
+    const titleParts = breadcrumbTitle.split('/')
+    const [firstTitlePart, ...remainingTitleParts] = titleParts
+    const secondTitlePart = remainingTitleParts.length > 0 ? ` | ${remainingTitleParts.join(' | ')}` : ''
+    const isSubSection = !isEmpty(secondTitlePart) || titleParts.length > 1
 
-      form.setFieldsValue(allFormValues)
-    }, [open, allFormValues])
+    return (
+      <Text
+        className={ cn(styles.sectionTitle, { [styles.subSectionTitle]: isSubSection }) }
+        strong
+      >
+        {firstTitlePart}
+        {!isEmptyValue(secondTitlePart) && <span className={ styles.subSectionText }>{secondTitlePart}</span>}
+      </Text>
+    )
+  }
 
-    useEffect(() => {
-      if (!open) return
+  const sections = useMemo(() => groupIntoSections(layoutData), [layoutData])
 
-      requestAnimationFrame(() => {
-        initialSnapshotDataRef.current = structuredClone(form.getFieldsValue(true))
-      })
-    }, [open])
+  const renderField = (item: ILocalizedFieldDescriptor, fieldIndex: number): React.JSX.Element => {
+    const resolvedGroupPath = item.formPath
+      .slice(0, -1)
+      .map(pathPart => pathPart === 'split-view-locale' ? locale : pathPart)
 
-    useImperativeHandle(ref, () => ({
-      getCurrentFormValues: () => {
-        const current = form.getFieldsValue(true)
+    const combinedFieldNameParent = resolvedGroupPath.map(pathPart => String(pathPart))
+    const shouldWrapLocalizedProvider = item.localeInFormPath !== true
 
-        return deepDiff(current, initialSnapshotDataRef.current)
-      }
-    }), [form])
+    const fieldNode = (
+      <CombinedFieldNameProvider
+        combinedFieldNameParent={ combinedFieldNameParent }
+        key={ `${item.formPath.join('.')}-${fieldIndex}` }
+      >
+        <Form.Group name={ resolvedGroupPath }>
+          <ObjectComponent
+            { ...(item.fieldData as unknown as ObjectComponentProps) }
+          />
+        </Form.Group>
+      </CombinedFieldNameProvider>
+    )
 
-    const renderSectionTitle = (breadcrumbTitle: string): React.JSX.Element | null => {
-      if (isEmptyValue(breadcrumbTitle)) return null
-
-      const titleParts = breadcrumbTitle.split('/')
-      const [firstTitlePart, ...remainingTitleParts] = titleParts
-      const secondTitlePart = remainingTitleParts.length > 0 ? ` | ${remainingTitleParts.join(' | ')}` : ''
-      const isSubSection = !isEmpty(secondTitlePart) || titleParts.length > 1
-
-      return (
-        <Text
-          className={ cn(styles.sectionTitle, { [styles.subSectionTitle]: isSubSection }) }
-          strong
-        >
-          {firstTitlePart}
-          {!isEmptyValue(secondTitlePart) && <span className={ styles.subSectionText }>{secondTitlePart}</span>}
-        </Text>
-      )
-    }
-
-    const sections = useMemo(() => groupIntoSections(layoutData), [layoutData])
-
-    const renderField = (item: ILocalizedFieldDescriptor, fieldIndex: number): React.JSX.Element => {
-      const resolvedGroupPath = item.formPath
-        .slice(0, -1)
-        .map(pathPart => pathPart === 'split-view-locale' ? locale : pathPart)
-
-      const combinedFieldNameParent = resolvedGroupPath.map(pathPart => String(pathPart))
-      const shouldWrapLocalizedProvider = item.localeInFormPath !== true
-
-      const fieldNode = (
-        <CombinedFieldNameProvider
-          combinedFieldNameParent={ combinedFieldNameParent }
-          key={ `${item.formPath.join('.')}-${fieldIndex}` }
-        >
-          <Form.Group name={ resolvedGroupPath }>
-            <ObjectComponent
-              { ...(item.fieldData as unknown as ObjectComponentProps) }
-            />
-          </Form.Group>
-        </CombinedFieldNameProvider>
-      )
-
-      if (!shouldWrapLocalizedProvider) {
-        return fieldNode
-      }
-
+    if (!shouldWrapLocalizedProvider) {
       return fieldNode
     }
 
-    const renderedContent = useMemo(() => {
-      if (isNil(locale) || isEmpty(locale)) {
-        return null
-      }
+    return fieldNode
+  }
 
-      return (
-        <LocalizedFieldsProvider locales={ [locale] }>
-          <Space
-            className="w-full"
-            direction='vertical'
-            size='small'
-          >
-            {sections.map((section, sectionIndex) => (
-              <div key={ `section-${sectionIndex}-${section.breadcrumbTitle}` }>
-                {renderSectionTitle(section.breadcrumbTitle)}
-
-                <Flex
-                  className={ cn(styles.sectionFields, { [styles.sectionFieldsWithoutBorder]: isEmptyValue(section.breadcrumbTitle) }) }
-                  vertical
-                >
-                  {section.fields.map((item, fieldIndex) => renderField(item, fieldIndex))}
-                </Flex>
-              </div>
-            ))}
-          </Space>
-        </LocalizedFieldsProvider>
-      )
-    }, [locale, sections])
+  const renderedContent = useMemo(() => {
+    if (isNil(locale) || isEmpty(locale)) {
+      return null
+    }
 
     return (
-      <ConfigProvider theme={ { components: { Form: { itemMarginBottom: 8 } } } }>
-        <FieldWidthProvider>
-          <Form
-            form={ form as formInstanceType }
-            layout='vertical'
-            preserve
-          >
-            {renderedContent}
-          </Form>
-        </FieldWidthProvider>
-      </ConfigProvider>
-    )
-  }
-)
+      <LocalizedFieldsProvider locales={ [locale] }>
+        <Space
+          className="w-full"
+          direction='vertical'
+          size='small'
+        >
+          {sections.map((section, sectionIndex) => (
+            <div key={ `section-${sectionIndex}-${section.breadcrumbTitle}` }>
+              {renderSectionTitle(section.breadcrumbTitle)}
 
-LanguageComparisonColumn.displayName = 'LanguageComparisonColumn'
+              <Flex
+                className={ cn(styles.sectionFields, { [styles.sectionFieldsWithoutBorder]: isEmptyValue(section.breadcrumbTitle) }) }
+                vertical
+              >
+                {section.fields.map((item, fieldIndex) => renderField(item, fieldIndex))}
+              </Flex>
+            </div>
+          ))}
+        </Space>
+      </LocalizedFieldsProvider>
+    )
+  }, [locale, sections])
+
+  return (
+    <ConfigProvider theme={ { components: { Form: { itemMarginBottom: 8 } } } }>
+      <FieldWidthProvider>
+        {renderedContent}
+      </FieldWidthProvider>
+    </ConfigProvider>
+  )
+}
