@@ -43,7 +43,7 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
           data.items.map((item) => ({
             value: item.id,
             label: item.name
-          })).sort((a, b) => a.label.localeCompare(b.label))
+          })).sort((a, b) => (a.label ?? '').localeCompare(b.label ?? ''))
         )
       }).catch((error) => {
         console.error('Error fetching perspective config collection:', error)
@@ -58,7 +58,7 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
         setRoleOptions(data.items.map((item) => ({
           value: item.id,
           label: item.name
-        })).sort((a, b) => a.label.localeCompare(b.label)))
+        })).sort((a, b) => (a.label ?? '').localeCompare(b.label ?? '')))
       }).catch((error) => {
         console.error('Error fetching role collection:', error)
       })

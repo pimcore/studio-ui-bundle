@@ -111,7 +111,7 @@ const SpecialSettings = ({ localizedView, localizedEdit, layouts, onValuesChange
                   options={ data?.items.map((layout) => ({
                     value: layout.id,
                     label: layout.name
-                  })).sort((a, b) => a.label.localeCompare(b.label)) }
+                  })).sort((a, b) => (a.label ?? '').localeCompare(b.label ?? '')) }
                   placeholder={ t('user-management.workspaces.custom-layouts.select') }
                 ></Select>
               </Form.Item>
