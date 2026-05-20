@@ -13,7 +13,7 @@ import { get, isEmpty, isUndefined } from 'lodash'
 import { type FormItemProps } from 'antd'
 import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { ClassificationStore, type ClassificationStoreProps } from '../components/classification-store/classification-store'
-import { type IExtractLocalizedFieldsProps, type ILocalizedFieldDescriptor } from '@Pimcore/modules/data-object/editor/toolbar/split-view/helpers/process-layout-data'
+import { type IExtractLocalizedFieldsProps, type ILocalizedFieldDescriptor } from '@Pimcore/modules/data-object/editor/toolbar/language-comparison-view/helpers/process-layout-data'
 import {
   type IFormattedDataStructureData,
   type IProcessVersionFieldDataProps

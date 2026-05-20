@@ -15,7 +15,7 @@ import {
   type IFormattedDataStructureData,
   type IProcessVersionFieldDataProps
 } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
-import { type IExtractLocalizedFieldsProps, type ILocalizedFieldDescriptor } from '@Pimcore/modules/data-object/editor/toolbar/split-view/helpers/process-layout-data'
+import { type IExtractLocalizedFieldsProps, type ILocalizedFieldDescriptor } from '@Pimcore/modules/data-object/editor/toolbar/language-comparison-view/helpers/process-layout-data'
 import { type DataComponentProps } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/data-component'
 import { FieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label'
 import { defaultFieldWidthValues, type IFieldWidthContext } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'

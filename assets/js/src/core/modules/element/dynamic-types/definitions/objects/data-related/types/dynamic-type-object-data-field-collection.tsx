@@ -20,7 +20,7 @@ import { type FormItemProps } from 'antd'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { getBreadcrumbTitle } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
 import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/constants/typesList'
-import { processNestedLayoutData, type IExtractLocalizedFieldsProps, type ILocalizedFieldDescriptor } from '@Pimcore/modules/data-object/editor/toolbar/split-view/helpers/process-layout-data'
+import { processNestedLayoutData, type IExtractLocalizedFieldsProps, type ILocalizedFieldDescriptor } from '@Pimcore/modules/data-object/editor/toolbar/language-comparison-view/helpers/process-layout-data'
 import { type ClassFieldCollectionObjectLayoutApiResponse, type FieldCollectionLayoutDefinition } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 
 export class DynamicTypeObjectDataFieldCollection extends DynamicTypeObjectDataAbstract {

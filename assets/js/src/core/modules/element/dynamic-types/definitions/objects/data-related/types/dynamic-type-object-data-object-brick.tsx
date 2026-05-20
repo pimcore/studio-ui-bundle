@@ -16,7 +16,7 @@ import { type FormItemProps } from 'antd'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { getBreadcrumbTitle } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
 import { type ClassObjectBrickObjectLayoutApiResponse, type ObjectBrickLayoutDefinition } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
-import { processNestedLayoutData, type IExtractLocalizedFieldsProps, type ILocalizedFieldDescriptor } from '@Pimcore/modules/data-object/editor/toolbar/split-view/helpers/process-layout-data'
+import { processNestedLayoutData, type IExtractLocalizedFieldsProps, type ILocalizedFieldDescriptor } from '@Pimcore/modules/data-object/editor/toolbar/language-comparison-view/helpers/process-layout-data'
 import {
   DATATYPE_LIST,
   type IFormattedDataStructureData,
