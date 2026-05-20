@@ -79,7 +79,8 @@ export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
       return []
     }
 
-    const nextBreadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, item.title ?? '')
+    const title: string = item?.title ?? ''
+    const nextBreadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, title)
     const descriptors = await Promise.all(blockItems.map(async (blockItem, index) => {
       return await processNestedLayoutData({
         objectId,
