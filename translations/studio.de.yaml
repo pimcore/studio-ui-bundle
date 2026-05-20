@@ -22,6 +22,8 @@ error.error_validation.email_failed: Bitte geben Sie eine gültige E-Mail-Adress
 error.error_element_not_found: Element nicht gefunden
 error.error_document_language_not_set: Für das Dokument ist keine Sprache festgelegt
 error.error_inconsistent_asset_type: Nur Assets desselben Typs sind hier erlaubt.
+error.error_recycle_bin_restore: Element kann nicht aus dem Papierkorb wiederhergestellt werden
+error.error_recycle_bin_restore_missing_parent: Element kann nicht aus dem Papierkorb wiederhergestellt werden, übergeordnetes Element fehlt
 sidebar.selected_elements: Ausgewählte Elemente
 sidebar.grid_config: Grid-Konfiguration
 sidebar.tag_filters: Tag-Filter
