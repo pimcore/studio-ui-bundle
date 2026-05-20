@@ -8,9 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmpty, isNil, merge, set } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
@@ -75,20 +75,13 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   const [localizedFields, setLocalizedFields] = useState<ILocalizedFieldDescriptor[]>([])
   const [layoutsList, setLayoutsList] = useState<ILayoutItem[]>([])
 
-  console.log('======== localizedFields: ', localizedFields)
-
   const initialValues: Partial<any> = useMemo(() => {
     return editForm.getFieldsValue(true)
   }, [open])
 
   useEffect(() => {
-    if (!open) {
-      form.resetFields()
-      return
-    }
-
     form.setFieldsValue(initialValues)
-  }, [open, initialValues])
+  }, [initialValues])
 
   useEffect(() => {
     if (!isNil(layoutError)) {
@@ -96,7 +89,6 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
     }
   }, [layoutError])
 
-  // Reset locale selection when the modal is reopened
   useEffect(() => {
     if (open) {
       setLeftLocale(contentLanguages[0] ?? currentLanguage)
