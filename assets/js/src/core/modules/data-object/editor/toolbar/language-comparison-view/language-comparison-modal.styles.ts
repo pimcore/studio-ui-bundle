@@ -89,10 +89,6 @@ export const useStyles = createStyles(({ token, css }) => {
       padding: ${token.paddingSM}px ${token.paddingXS}px ${token.paddingXS}px ${token.paddingXS}px;
       font-size: 14px;
       font-weight: 900;
-    `,
-
-    subSectionTitle: css`
-      margin-left: 5px;
 
       &::before {
         content: '';
@@ -105,18 +101,12 @@ export const useStyles = createStyles(({ token, css }) => {
       }
     `,
 
+    sectionTitleHidden: css`
+      visibility: hidden;
+    `,
+
     subSectionText: css`
       font-weight: 400;
-    `,
-
-    sectionFields: css`
-      padding: ${token.paddingXS}px;
-      border: 1px solid ${token.colorBorderContainer};
-      border-radius: ${token.borderRadius}px;
-    `,
-
-    sectionFieldsWithoutBorder: css`
-      border-width: 0;
     `,
 
     emptyState: css`

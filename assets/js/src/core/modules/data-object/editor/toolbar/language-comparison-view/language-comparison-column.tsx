@@ -27,6 +27,7 @@ import { useStyles } from './language-comparison-modal.styles'
 interface ILanguageComparisonColumnProps {
   locale: string | null
   layoutData: ILocalizedFieldDescriptor[]
+  hideSectionTitle?: boolean
 }
 
 interface ILocalizedSection {
@@ -52,7 +53,7 @@ const groupIntoSections = (items: ILocalizedFieldDescriptor[]): ILocalizedSectio
   return sections
 }
 
-export const LanguageComparisonColumn = ({ layoutData, locale }: ILanguageComparisonColumnProps): React.JSX.Element => {
+export const LanguageComparisonColumn = ({ layoutData, locale, hideSectionTitle = false }: ILanguageComparisonColumnProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   const renderSectionTitle = (breadcrumbTitle: string): React.JSX.Element | null => {
@@ -61,11 +62,10 @@ export const LanguageComparisonColumn = ({ layoutData, locale }: ILanguageCompar
     const titleParts = breadcrumbTitle.split('/')
     const [firstTitlePart, ...remainingTitleParts] = titleParts
     const secondTitlePart = remainingTitleParts.length > 0 ? ` | ${remainingTitleParts.join(' | ')}` : ''
-    const isSubSection = !isEmpty(secondTitlePart) || titleParts.length > 1
 
     return (
       <Text
-        className={ cn(styles.sectionTitle, { [styles.subSectionTitle]: isSubSection }) }
+        className={ cn(styles.sectionTitle, { [styles.sectionTitleHidden]: hideSectionTitle }) }
         strong
       >
         {firstTitlePart}
@@ -120,10 +120,7 @@ export const LanguageComparisonColumn = ({ layoutData, locale }: ILanguageCompar
             <div key={ `section-${sectionIndex}-${section.breadcrumbTitle}` }>
               {renderSectionTitle(section.breadcrumbTitle)}
 
-              <Flex
-                className={ cn(styles.sectionFields, { [styles.sectionFieldsWithoutBorder]: isEmptyValue(section.breadcrumbTitle) }) }
-                vertical
-              >
+              <Flex vertical>
                 {section.fields.map((item, fieldIndex) => renderField(item, fieldIndex))}
               </Flex>
             </div>

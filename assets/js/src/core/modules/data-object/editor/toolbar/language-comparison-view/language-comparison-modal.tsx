@@ -209,6 +209,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
 
                 <div className={ styles.columnWrapper }>
                   <LanguageComparisonColumn
+                    hideSectionTitle
                     layoutData={ localizedFields }
                     locale={ rightLocale }
                   />
