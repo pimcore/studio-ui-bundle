@@ -14,12 +14,11 @@ import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
 import { TAB_EDIT } from '../../types/object/tab-manager/tabs/edit/edit-container'
-import { TAB_VARIANTS } from '../../types/variant/tab-manager/tabs/variants/variants-tab-container'
 import { LanguageComparisonModal } from './language-comparison-modal'
 
-const VISIBLE_TABS = [TAB_EDIT.key, TAB_VARIANTS.key]
+const VISIBLE_TABS = [TAB_EDIT.key]
 
-export const SplitViewButton = (): React.JSX.Element => {
+export const LanguageComparisonViewButton = (): React.JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
   const { id } = useContext(DataObjectContext)
@@ -36,7 +35,7 @@ export const SplitViewButton = (): React.JSX.Element => {
   return (
     <>
       <IconButton
-        data-testid="data-object-editor-split-view-button"
+        data-testid="data-object-editor-language-comparison-button"
         icon={ { value: 'split-view' } }
         onClick={ () => { setIsModalOpen(true) } }
       />

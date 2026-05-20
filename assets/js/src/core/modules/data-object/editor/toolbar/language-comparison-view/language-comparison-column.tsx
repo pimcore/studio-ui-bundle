@@ -17,44 +17,32 @@ import { Form } from '@Pimcore/components/form/form'
 import { Space } from '@Pimcore/components/space/space'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
-import {
-  LocalizedFieldsProvider
-} from '@Pimcore/components/form/localisation/localized-fields/provider/localized-fields-provider/localized-fields-provider'
-import {
-  ObjectComponent,
-  type ObjectComponentProps
-} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
-import {
-  CombinedFieldNameProvider
-} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/combined-field-name-provider/combined-field-name-provider'
-import {
-  FieldWidthProvider
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
-import {
-  type ILocalizedFieldDescriptor
-} from './helpers/process-layout-data'
+import { LocalizedFieldsProvider } from '@Pimcore/components/form/localisation/localized-fields/provider/localized-fields-provider/localized-fields-provider'
+import { ObjectComponent, type ObjectComponentProps } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
+import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/combined-field-name-provider/combined-field-name-provider'
+import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
+import { type ILocalizedFieldDescriptor } from './helpers/process-layout-data'
 import { useStyles } from './language-comparison-modal.styles'
 
-export interface LanguageComparisonColumnHandle {
-  getCurrentFormValues: () => Record<string, unknown>
-}
-
-interface LanguageComparisonColumnProps {
+interface ILanguageComparisonColumnProps {
   locale: string | null
   layoutData: ILocalizedFieldDescriptor[]
 }
 
-interface LocalizedSection {
+interface ILocalizedSection {
   breadcrumbTitle: string
   fields: ILocalizedFieldDescriptor[]
 }
 
-/** Group the flat layoutData list into sections keyed by fieldBreadcrumbTitle, preserving order. */
-const groupIntoSections = (items: ILocalizedFieldDescriptor[]): LocalizedSection[] => {
-  const sections: LocalizedSection[] = []
+/** Group the flat layoutData list into sections keyed by fieldBreadcrumbTitle, preserving order */
+const groupIntoSections = (items: ILocalizedFieldDescriptor[]): ILocalizedSection[] => {
+  const sections: ILocalizedSection[] = []
+
   for (const item of items) {
     const title = item.fieldBreadcrumbTitle ?? ''
+
     const existing = sections.find(s => s.breadcrumbTitle === title)
+
     if (existing !== undefined) {
       existing.fields.push(item)
     } else {
@@ -64,7 +52,7 @@ const groupIntoSections = (items: ILocalizedFieldDescriptor[]): LocalizedSection
   return sections
 }
 
-export const LanguageComparisonColumn = ({ layoutData, locale }: LanguageComparisonColumnProps): React.JSX.Element => {
+export const LanguageComparisonColumn = ({ layoutData, locale }: ILanguageComparisonColumnProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   const renderSectionTitle = (breadcrumbTitle: string): React.JSX.Element | null => {

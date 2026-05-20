@@ -11,12 +11,8 @@
 import { isEmpty, isNil } from 'lodash'
 import { type Layout } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
-import {
-  DATATYPE_LIST,
-  type ILayoutItem
-} from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
-import { getBreadcrumbTitle } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
 import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/constants/typesList'
+import { DATATYPE_LIST, type ILayoutItem } from '@Pimcore/modules/data-object/editor/toolbar/language-comparison-view/types'
 
 export interface ILocalizedFieldDescriptor {
   fieldBreadcrumbTitle: string
@@ -54,6 +50,10 @@ interface IProcessNestedLayoutDataProps {
   formPath: Array<string | number>
   layoutsList: ILayoutItem[]
   setLayoutsList: (layouts: ILayoutItem[]) => void
+}
+
+export const getBreadcrumbTitle = (value1: string, value2: string): string => {
+  return [value1, value2].filter(Boolean).join('/')
 }
 
 export const processNestedLayoutData = async ({

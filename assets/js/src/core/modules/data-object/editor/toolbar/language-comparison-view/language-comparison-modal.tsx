@@ -14,36 +14,26 @@ import { isEmpty, isNil, merge } from 'lodash'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
+import { Form, type formInstanceType } from '@Pimcore/components/form/form'
 import { Button } from '@Pimcore/components/button/button'
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
-import {
-  useDataObjectGetLayoutByIdQuery
-} from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { useDataObjectGetLayoutByIdQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
-import {
-  useLayoutSelection
-} from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/use-layout-selection'
+import { useLayoutSelection } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/use-layout-selection'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
-import {
-  PermissionBasedLanguageSelectionControl
-} from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
-import {
-  useEditFormContext
-} from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
+import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
+import { useEditFormContext } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ILocalizedFieldDescriptor, processLayoutData } from './helpers/process-layout-data'
 import { type ILayoutItem } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
-import {
-  LanguageComparisonColumn
-} from './language-comparison-column'
+import { LanguageComparisonColumn } from './language-comparison-column'
 import { useStyles } from './language-comparison-modal.styles'
-import { Form, type formInstanceType } from '@Pimcore/components/form/form'
 
 interface LanguageComparisonModalProps {
   open: boolean
