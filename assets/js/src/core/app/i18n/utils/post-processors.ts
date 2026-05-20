@@ -15,12 +15,19 @@
 export const createDebugTranslationsProcessor = (getDebugMode: () => boolean): {
   type: 'postProcessor'
   name: string
-  process: (value: string) => string
+  process: (value: string, key: string | string[]) => string
 } => ({
   type: 'postProcessor' as const,
   name: 'debugTranslations',
-  process (value: string): string {
-    return getDebugMode() ? `+ ${value} +` : value
+  process (value: string, key: string | string[]): string {
+    if (!getDebugMode()) {
+      return value
+    }
+
+    const keyString = Array.isArray(key) ? key[0] : key
+    const isMissingTranslation = value === keyString
+
+    return isMissingTranslation ? `+ ${value} +` : value
   }
 })
 
