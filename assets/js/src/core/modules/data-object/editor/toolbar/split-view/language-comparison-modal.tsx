@@ -10,7 +10,7 @@
 
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmpty, isNil } from 'lodash'
+import { isEmpty, isNil, merge } from 'lodash'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
@@ -40,8 +40,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ILocalizedFieldDescriptor, processLayoutData } from './helpers/process-layout-data'
 import { type ILayoutItem } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 import {
-  LanguageComparisonColumn,
-  type LanguageComparisonColumnHandle
+  LanguageComparisonColumn
 } from './language-comparison-column'
 import { useStyles } from './language-comparison-modal.styles'
 import { Form, type formInstanceType } from '@Pimcore/components/form/form'
@@ -61,6 +60,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   const user = useUser()
   const contentLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
   const [form] = Form.useForm()
+  const [changedValues, setChangedValues] = useState<Record<string, any>>({})
 
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(
     serviceIds['DynamicTypes/ObjectDataRegistry']
@@ -117,14 +117,14 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   const isLoading = isLayoutLoading || isDraftLoading
   const hasLocalizedFields = localizedFields.length > 0
 
+  const onValuesChange = (changedValues: Record<string, any>, allValues: Record<string, any>): void => {
+    setChangedValues(prev => merge({}, prev, changedValues))
+  }
+
   const handleApplyChanges = (): void => {
-    const values: Partial<any> = form.getFieldsValue(true)
-
-    if (isEmpty(values)) onClose()
-
-    editForm.setFieldsValue(values)
-    updateModifiedDataObjectAttributes(values)
-    updateDraft().catch((error: unknown) => { console.error(error) })
+    editForm.setFieldsValue(changedValues)
+    updateModifiedDataObjectAttributes(changedValues)
+    void updateDraft().then(() => { setChangedValues({}) })
 
     onClose()
   }
@@ -134,6 +134,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
       footer={
         <ModalFooter divider>
           <Button
+            disabled={ isEmpty(changedValues) }
             onClick={ handleApplyChanges }
             type='primary'
           >
@@ -194,6 +195,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
             <Form
               form={ form as formInstanceType }
               layout='vertical'
+              onValuesChange={ onValuesChange }
               preserve
             >
               <Flex
