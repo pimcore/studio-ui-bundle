@@ -22,6 +22,8 @@ error.error_validation.email_failed: Veuillez entrer une adresse e-mail valide
 error.error_element_not_found: Élément non trouvé
 error.error_document_language_not_set: Le document n'a pas de propriété de langue définie
 error.error_inconsistent_asset_type: Seuls les assets du même type sont autorisés ici.
+error.error_recycle_bin_restore: "Impossible de restaurer l'élément depuis la corbeille"
+error.error_recycle_bin_restore_missing_parent: "Impossible de restaurer l'élément depuis la corbeille, l'élément parent est manquant"
 sidebar.selected_elements: Éléments sélectionnés
 sidebar.grid_config: Configuration de la grille
 sidebar.tag_filters: Filtres par tags
