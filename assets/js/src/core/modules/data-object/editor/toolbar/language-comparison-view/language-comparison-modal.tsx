@@ -118,7 +118,15 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   const hasLocalizedFields = localizedFields.length > 0
 
   const onValuesChange = (changedValues: Record<string, any>, allValues: Record<string, any>): void => {
-    setChangedValues(prev => merge({}, prev, changedValues))
+    const changedKey = Object.keys(changedValues)[0]
+
+    if (isNil(changedKey)) return
+
+    const fullValue = form.getFieldValue(changedKey)
+
+    setChangedValues(prev => merge({}, prev, {
+      [changedKey]: fullValue
+    }))
   }
 
   const handleApplyChanges = (): void => {
