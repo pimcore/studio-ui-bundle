@@ -8,13 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal, Input } from 'antd'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { Content } from '@Pimcore/components/content/content'
-import { createColumnHelper } from '@tanstack/react-table'
-import { type RowSelectionState } from '@tanstack/react-table'
+import { Pagination } from '@Pimcore/components/pagination/pagination'
+import { createColumnHelper, type RowSelectionState, type SortingState } from '@tanstack/react-table'
 import {
   type ClassificationStoreConfigurationKeyDetail,
   useClassificationStoreConfigurationKeyCollectionQuery
@@ -29,6 +29,8 @@ interface IKeySelectionDialogProps {
   onCancel: () => void
 }
 
+const DEFAULT_PAGE_SIZE = 20
+
 export const KeySelectionDialog = ({
   open,
   storeId,
@@ -40,34 +42,57 @@ export const KeySelectionDialog = ({
 
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [page, setPage] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(DEFAULT_PAGE_SIZE)
+
+  const onSortingChange = useCallback((newSorting: SortingState) => {
+    setSorting(newSorting)
+    setPage(1)
+  }, [])
+
+  const queryArgs = useMemo(() => ({
+    storeId,
+    body: {
+      filters: {
+        page,
+        pageSize,
+        columnFilters: searchTerm.trim().length > 0
+          ? [{ type: 'search', filterValue: searchTerm.trim() }]
+          : [],
+        ...(sorting.length > 0
+          ? {
+              sortFilter: {
+                key: sorting[0].id,
+                direction: sorting[0].desc ? 'DESC' : 'ASC'
+              }
+            }
+          : {})
+      }
+    }
+  }), [storeId, page, pageSize, searchTerm, sorting])
 
   const { data, isLoading } = useClassificationStoreConfigurationKeyCollectionQuery(
-    { storeId, body: { filters: { page: 1, pageSize: 9999 } } },
+    queryArgs,
     { skip: !open }
   )
 
-  const allKeys = data?.items ?? []
+  const total = data?.totalItems ?? 0
 
-  // Reset selection and search when dialog opens
+  // Reset selection, search and pagination when dialog opens
   useEffect(() => {
     if (open) {
       setSelectedRows({})
       setSearchTerm('')
+      setSorting([])
+      setPage(1)
     }
   }, [open])
 
   const availableKeys = useMemo(() => {
     const excludedSet = new Set(excludedKeyIds)
-    return allKeys.filter((k) => {
-      if (excludedSet.has(k.id)) return false
-      if (searchTerm.trim() === '') return true
-      const term = searchTerm.trim().toLowerCase()
-      return (
-        k.name.toLowerCase().includes(term) ||
-        (k.description ?? '').toLowerCase().includes(term)
-      )
-    })
-  }, [allKeys, excludedKeyIds, searchTerm])
+    return (data?.items ?? []).filter((k) => !excludedSet.has(k.id))
+  }, [data?.items, excludedKeyIds])
 
   const columnHelper = createColumnHelper<ClassificationStoreConfigurationKeyDetail>()
 
@@ -117,25 +142,44 @@ export const KeySelectionDialog = ({
         vertical
       >
         <Input.Search
-          onChange={ (e) => { setSearchTerm(e.target.value) } }
+          onChange={ (e) => {
+            setSearchTerm(e.target.value)
+            setPage(1)
+          } }
           placeholder={ t('classification-store.search-keys') }
           value={ searchTerm }
         />
 
         <Content
           overflow={ { x: 'hidden', y: 'auto' } }
-          style={ { maxHeight: 'calc(65vh - 80px)', minHeight: 120 } }
+          style={ { maxHeight: 'calc(65vh - 120px)', minHeight: 120 } }
         >
           <Grid
             columns={ columns }
             data={ availableKeys }
             enableMultipleRowSelection
+            enableSorting
             isLoading={ isLoading }
+            manualSorting
             onSelectedRowsChange={ setSelectedRows }
+            onSortingChange={ onSortingChange }
             selectedRows={ selectedRows }
             setRowId={ (row: ClassificationStoreConfigurationKeyDetail) => row.id !== undefined ? String(row.id) : undefined as unknown as string }
+            sorting={ sorting }
           />
         </Content>
+
+        <Pagination
+          current={ page }
+          defaultPageSize={ pageSize }
+          onChange={ (newPage, newPageSize) => {
+            setPage(newPage)
+            setPageSize(newPageSize)
+          } }
+          showSizeChanger
+          showTotal={ (total) => t('pagination.show-total', { total }) }
+          total={ total }
+        />
       </Flex>
     </Modal>
   )
