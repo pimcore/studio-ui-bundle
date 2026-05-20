@@ -147,6 +147,9 @@ const api = baseApi.enhanceEndpoints({
     classFieldCollectionGetTree: {
       providesTags: () => providingTags.FIELD_COLLECTION_COLLECTION()
     },
+    classObjectBrickClasses: {
+      providesTags: () => providingTags.CLASS_DEFINITION_COLLECTION()
+    },
     classObjectBrickCollection: {
       providesTags: () => providingTags.OBJECT_BRICK_COLLECTION()
     },
