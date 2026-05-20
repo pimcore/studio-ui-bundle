@@ -106,7 +106,7 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
             options={ availableAdminLanguages.map((language: string) => ({
               value: language,
               label: getDisplayName(language)
-            })).sort((a, b) => a.label.localeCompare(b.label)) }
+            })).sort((a, b) => (a.label ?? 'UNKNOWN').localeCompare(b.label ?? 'UNKNOWN')) }
             placeholder={ t('user-management.language') }
             showSearch
           />

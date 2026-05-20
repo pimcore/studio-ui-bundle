@@ -70,7 +70,7 @@ const SpecialSettings = ({ localizedView, localizedEdit, layouts, onValuesChange
                     options={ validLanguages.map((lang: string) => ({
                       value: lang,
                       label: getDisplayName(lang)
-                    })).sort((a, b) => a.label.localeCompare(b.label)) }
+                    })).sort((a, b) => (a.label ?? 'UNKNOWN').localeCompare(b.label ?? 'UNKNOWN')) }
                     placeholder={ t('user-management.workspaces.localized-fields.view') }
                   ></Select>
                 </Form.Item>
@@ -84,7 +84,7 @@ const SpecialSettings = ({ localizedView, localizedEdit, layouts, onValuesChange
                     options={ validLanguages.map((lang: string) => ({
                       value: lang,
                       label: getDisplayName(lang)
-                    })).sort((a, b) => a.label.localeCompare(b.label)) }
+                    })).sort((a, b) => (a.label ?? 'UNKNOWN').localeCompare(b.label ?? 'UNKNOWN')) }
                     placeholder={ t('user-management.workspaces.localized-fields.edit') }
                   ></Select>
                 </Form.Item>
