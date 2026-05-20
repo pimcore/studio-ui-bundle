@@ -10,7 +10,7 @@
 
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cloneDeep, get, isEmpty, isNil, set } from 'lodash'
+import { isEmpty, isNil, merge, set } from 'lodash'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
@@ -73,9 +73,10 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   const [localizedFields, setLocalizedFields] = useState<ILocalizedFieldDescriptor[]>([])
   const [layoutsList, setLayoutsList] = useState<ILayoutItem[]>([])
 
-  const allFormValues = useMemo((): Record<string, unknown> => {
+  const allFormValues = useMemo(() => {
     if (!open) return {}
-    return editForm.getFieldsValue(true) as Record<string, unknown>
+
+    return editForm.getFieldsValue(true)
   }, [open])
 
   const leftColumnRef = useRef<LanguageComparisonColumnHandle>(null)
@@ -113,8 +114,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
       .then(result => {
         setLocalizedFields(result)
       })
-      .catch((error: unknown) => {
-        console.error(error)
+      .catch(() => {
         setLocalizedFields([])
       })
       .finally(() => {
@@ -124,47 +124,17 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   const isLoading = isLayoutLoading || isDraftLoading
   const hasLocalizedFields = localizedFields.length > 0
 
-  const getDescriptorValuePath = (
-    item: ILocalizedFieldDescriptor,
-    locale: string
-  ): Array<string | number> => {
-    return item.localeInFormPath === true
-      ? item.formPath.map(pathPart => pathPart === 'split-view-locale' ? locale : pathPart)
-      : [...item.formPath, locale]
-  }
-
   const handleApplyChanges = (): void => {
-    const leftColumnValues = leftColumnRef.current?.getFormValues() ?? {}
-    const rightColumnValues = rightColumnRef.current?.getFormValues() ?? {}
-    const mergedFormValues = cloneDeep(allFormValues)
-    const touchedRoots = new Set<string>()
-    const fieldUpdates: Array<{ name: Array<string | number>, value: unknown }> = []
-    const applyLocaleValues = (formValues: Record<string, unknown>, locale: string | null): void => {
-      if (isNil(locale) || isEmpty(locale)) return
-      localizedFields.forEach((item) => {
-        const valuePath = getDescriptorValuePath(item, locale)
-        const value = get(formValues, valuePath)
-        if (value === undefined) {
-          return
-        }
-        set(mergedFormValues, valuePath, value)
-        fieldUpdates.push({ name: valuePath, value })
-        touchedRoots.add(String(valuePath[0]))
-      })
-    }
-    applyLocaleValues(leftColumnValues, leftLocale)
-    applyLocaleValues(rightColumnValues, rightLocale)
+    const leftChanges = leftColumnRef.current?.getCurrentFormValues() ?? {}
+    const rightChanges = rightColumnRef.current?.getCurrentFormValues() ?? {}
 
-    const changedValues: Record<string, unknown> = {}
-    touchedRoots.forEach((root) => {
-      changedValues[root] = get(mergedFormValues, [root])
-    })
+    const mergedChanges = merge({}, leftChanges, rightChanges)
 
-    if (!isEmpty(fieldUpdates)) {
-      editForm.setFields(fieldUpdates)
-      updateModifiedDataObjectAttributes(changedValues)
-      updateDraft().catch((error: unknown) => { console.error(error) })
-    }
+    if (isEmpty(mergedChanges)) onClose()
+
+    editForm.setFieldsValue(mergedChanges)
+    updateModifiedDataObjectAttributes(mergedChanges)
+    updateDraft().catch((error: unknown) => { console.error(error) })
 
     onClose()
   }
@@ -240,6 +210,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
                   allFormValues={ allFormValues }
                   layoutData={ localizedFields }
                   locale={ leftLocale }
+                  open={ open }
                   ref={ leftColumnRef }
                 />
               </div>
@@ -249,6 +220,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
                   allFormValues={ allFormValues }
                   layoutData={ localizedFields }
                   locale={ rightLocale }
+                  open={ open }
                   ref={ rightColumnRef }
                 />
               </div>

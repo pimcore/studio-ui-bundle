@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, useEffect, useImperativeHandle, useMemo } from 'react'
+import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from 'react'
 import { ConfigProvider } from 'antd'
 import cn from 'classnames'
 import { isEmpty, isNil } from 'lodash'
@@ -34,17 +34,17 @@ import {
   type ILocalizedFieldDescriptor
 } from './helpers/process-layout-data'
 import { useStyles } from './language-comparison-modal.styles'
+import { deepDiff } from '@Pimcore/modules/data-object/editor/toolbar/split-view/helpers/deep-diff'
 
 export interface LanguageComparisonColumnHandle {
-  getFormValues: () => Record<string, unknown>
+  getCurrentFormValues: () => Record<string, unknown>
 }
 
 interface LanguageComparisonColumnProps {
   locale: string | null
-  /** Flat list of localized field items grouped internally by breadcrumbTitle */
   layoutData: ILocalizedFieldDescriptor[]
-  /** Live object form values from the main editor form. */
   allFormValues: Record<string, unknown>
+  open: boolean
 }
 
 interface LocalizedSection {
@@ -68,19 +68,32 @@ const groupIntoSections = (items: ILocalizedFieldDescriptor[]): LocalizedSection
 }
 
 export const LanguageComparisonColumn = forwardRef<LanguageComparisonColumnHandle, LanguageComparisonColumnProps>(
-  function LanguageComparisonColumn ({ locale, layoutData, allFormValues }, ref) {
+  function LanguageComparisonColumn ({ locale, layoutData, allFormValues, open }, ref) {
     const { styles } = useStyles()
     const [form] = Form.useForm()
 
-    const initialValues = useMemo(() => allFormValues, [])
+    const initialSnapshotDataRef = useRef<any>({})
 
-    // Whenever live editor values change (modal re-open), sync the form.
     useEffect(() => {
+      if (!open) return
+
       form.setFieldsValue(allFormValues)
-    }, [allFormValues])
+    }, [open, allFormValues])
+
+    useEffect(() => {
+      if (!open) return
+
+      requestAnimationFrame(() => {
+        initialSnapshotDataRef.current = structuredClone(form.getFieldsValue(true))
+      })
+    }, [open])
 
     useImperativeHandle(ref, () => ({
-      getFormValues: (): Record<string, unknown> => form.getFieldsValue(true) as Record<string, unknown>
+      getCurrentFormValues: () => {
+        const current = form.getFieldsValue(true)
+
+        return deepDiff(current, initialSnapshotDataRef.current)
+      }
     }), [form])
 
     const renderSectionTitle = (breadcrumbTitle: string): React.JSX.Element | null => {
@@ -166,7 +179,6 @@ export const LanguageComparisonColumn = forwardRef<LanguageComparisonColumnHandl
         <FieldWidthProvider>
           <Form
             form={ form as formInstanceType }
-            initialValues={ initialValues }
             layout='vertical'
             preserve
           >
