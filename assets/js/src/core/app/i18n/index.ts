@@ -8,13 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { isNonEmptyString } from '@sdk/utils'
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { store } from '../store'
 import { addMissingTranslation } from './store/missingTranslations.slice'
-import { store, type RootState } from '../store'
 import { createDebugTranslationsProcessor, returnKeyIfEmptyProcessor } from './utils/post-processors'
-import { isNonEmptyString } from '@sdk/utils'
 
 export const FALLBACK_LANGUAGE = 'en'
 
