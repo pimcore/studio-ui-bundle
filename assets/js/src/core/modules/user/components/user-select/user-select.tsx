@@ -20,7 +20,7 @@ export const UserSelect = ({ ...selectProps }: UserSelectProps): React.JSX.Eleme
   const options = data?.items.map((user) => ({
     label: user.username,
     value: user.id
-  })) ?? []
+  })).sort((a, b) => a.label.localeCompare(b.label)) ?? []
 
   return (
     <Select

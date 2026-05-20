@@ -43,7 +43,7 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
           data.items.map((item) => ({
             value: item.id,
             label: item.name
-          }))
+          })).sort((a, b) => a.label.localeCompare(b.label))
         )
       }).catch((error) => {
         console.error('Error fetching perspective config collection:', error)
@@ -58,7 +58,7 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
         setRoleOptions(data.items.map((item) => ({
           value: item.id,
           label: item.name
-        })))
+        })).sort((a, b) => a.label.localeCompare(b.label)))
       }).catch((error) => {
         console.error('Error fetching role collection:', error)
       })
@@ -69,7 +69,7 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
     ...Object.entries(validLocales as Record<string, string>).map(([key, value]) => ({
       value: key,
       label: value
-    }))]
+    })).sort((a, b) => a.label.localeCompare(b.label))]
 
   const content = [
     {
@@ -106,7 +106,7 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
             options={ availableAdminLanguages.map((language: string) => ({
               value: language,
               label: getDisplayName(language)
-            })) }
+            })).sort((a, b) => a.label.localeCompare(b.label)) }
             placeholder={ t('user-management.language') }
             showSearch
           />

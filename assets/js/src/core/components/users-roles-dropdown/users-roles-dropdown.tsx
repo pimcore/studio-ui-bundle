@@ -87,6 +87,7 @@ export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, ini
         label: renderLabel({ labelName: item?.username, iconName: 'user' }),
         searchValue: item?.username
       }))
+      ?.sort((a, b) => (a.searchValue ?? '').localeCompare(b.searchValue ?? ''))
 
     return renderSelect({
       options,
@@ -101,7 +102,7 @@ export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, ini
       value: item.id,
       label: renderLabel({ labelName: item?.name, iconName: 'shield' }),
       searchValue: item?.name
-    }))
+    }))?.sort((a, b) => (a.searchValue ?? '').localeCompare(b.searchValue ?? ''))
 
     return renderSelect({
       options,

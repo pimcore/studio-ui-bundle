@@ -30,7 +30,7 @@ const GeneralAccordion = (): React.JSX.Element => {
             data.items.map((item) => ({
               value: item.id,
               label: item.name
-            }))
+            })).sort((a, b) => a.label.localeCompare(b.label))
           )
         }
       })
