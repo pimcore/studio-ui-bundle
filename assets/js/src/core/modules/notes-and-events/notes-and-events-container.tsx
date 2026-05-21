@@ -71,11 +71,10 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
       renderTopBar={
         <Toolbar
           justify='space-between'
-          margin={ {
-            x: 'mini',
-            y: 'none'
-          }
-                    }
+          padding={ {
+            left: 'small',
+            right: 'extra-small'
+          } }
           theme='secondary'
         >
           <Title>{t('notes-and-events.label')}</Title>
@@ -89,7 +88,7 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
             withoutAddon={ false }
           />
         </Toolbar>
-            }
+      }
     >
       <Content
         loading={ isLoading }
