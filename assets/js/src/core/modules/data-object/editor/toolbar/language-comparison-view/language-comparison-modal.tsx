@@ -178,25 +178,34 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
             vertical
           >
             <div className={ styles.headerContainer }>
-              <div
-                className={ styles.headerGrid }
-                style={ gridStyle }
-              >
+              <Flex className={ styles.headerRow }>
                 {selectedLocales.map((locale, index) => (
-                  <Flex
-                    align="center"
+                  <div
                     className={ styles.headerItem }
-                    justify="center"
                     key={ `${locale}-${index}` }
                   >
-                    <PermissionBasedLanguageSelectionControl
-                      excludeLocales={ selectedLocales.filter((_, currentIndex) => currentIndex !== index) }
-                      onChange={ (value: string) => { updateLocale(index, value) } }
-                      value={ locale }
-                    />
-                  </Flex>
+                    <Flex
+                      align="center"
+                      justify="center"
+                    >
+                      <PermissionBasedLanguageSelectionControl
+                        excludeLocales={ selectedLocales.filter((_, currentIndex) => currentIndex !== index) }
+                        onChange={ (value) => {
+                          if (value == null || value === '') {
+                            return
+                          }
+                          setSelectedLocales(previousLocales => {
+                            const nextLocales = [...previousLocales]
+                            nextLocales[index] = value
+                            return nextLocales
+                          })
+                        } }
+                        value={ locale }
+                      />
+                    </Flex>
+                  </div>
                 ))}
-              </div>
+              </Flex>
             </div>
 
             <Form

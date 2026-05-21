@@ -35,34 +35,19 @@ export const useStyles = createStyles(({ token, css }) => {
         z-index: -1;
       }
     `,
-    headerGrid: css`
-      display: grid;
+
+    headerRow: css`
       width: 100%;
     `,
 
     headerItem: css`
-      flex: 1 1 50%;
+      flex: 1 1 0;
+      min-width: 320px;
       padding: ${token.paddingXS}px;
       background-color: ${token.Table.headerBg};
       border: 0.5px solid ${token.Table.colorBorderSecondary};
       border-top-width: 0;
       box-shadow: 0 2px 4px 0 rgba(35, 11, 100, .2);
-      display: flex;
-      align-items: center;
-
-      &:first-child {
-        border-right: 0;
-      }
-
-      &:last-child {
-        border-left: 0;
-      }
-
-      &:only-child {
-        flex: 1 1 100%;
-        border-right: 0.5px;
-        border-left: 0.5px;
-      }
     `,
 
     content: css`
@@ -70,21 +55,34 @@ export const useStyles = createStyles(({ token, css }) => {
       min-width: 220px;
     `,
 
-    columns: css`
+    comparisonSections: css`
       width: 100%;
     `,
 
-    columnWrapper: css`
-      flex: 1 1 50%;
-      min-width: 50%;
-      max-width: 900px;
+    sectionBlock: css`
       width: 100%;
-      padding: ${token.paddingXS}px;
+    `,
 
-      &:only-child {
-        flex: 1 1 100%;
-        max-width: 100%;
-      }
+    sectionHeaderRow: css`
+      width: 100%;
+    `,
+
+    sectionHeaderCell: css`
+      flex: 1 1 0;
+      min-width: 320px;
+    `,
+
+    sectionFields: css`
+      width: 100%;
+    `,
+
+    fieldRow: css`
+      width: 100%;
+    `,
+
+    fieldCell: css`
+      flex: 1 1 0;
+      min-width: 320px;
     `,
 
     sectionTitle: css`
@@ -117,37 +115,6 @@ export const useStyles = createStyles(({ token, css }) => {
       margin-top: 40px;
       max-width: 320px;
       text-align: center;
-    `,
-
-    comparisonSections: css`
-      width: 100%;
-    `,
-
-    sectionBlock: css`
-      width: 100%;
-    `,
-
-    sectionHeaderRow: css`
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: ${token.paddingXS}px;
-      width: 100%;
-    `,
-
-    sectionHeaderCell: css`
-      min-width: 0;
-    `,
-
-    fieldRow: css`
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: ${token.paddingXS}px;
-      width: 100%;
-      align-items: stretch;
-    `,
-
-    fieldCell: css`
-      min-width: 0;
     `
   }
 })

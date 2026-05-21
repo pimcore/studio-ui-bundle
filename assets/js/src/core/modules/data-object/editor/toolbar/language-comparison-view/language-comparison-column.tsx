@@ -129,29 +129,39 @@ export const LanguageComparisonColumn = ({ layoutData, locales }: ILanguageCompa
         vertical
       >
         {sections.map((section, sectionIndex) => (
-          <div
+          <Flex
             className={ styles.sectionBlock }
+            gap="mini"
             key={ `section-${sectionIndex}-${section.breadcrumbTitle}` }
+            vertical
           >
-            <div
+            <Flex
               className={ styles.sectionHeaderRow }
-              style={ gridStyle }
+              gap="extra-small"
             >
               {locales.map((locale, localeIndex) => (
                 <div
                   className={ styles.sectionHeaderCell }
                   key={ `${section.breadcrumbTitle}-${locale}-${localeIndex}` }
                 >
-                  {renderSectionTitle({ breadcrumbTitle: section.breadcrumbTitle, hideSectionTitle: localeIndex > 0 })}
+                  {renderSectionTitle({
+                    breadcrumbTitle: section.breadcrumbTitle,
+                    hideSectionTitle: localeIndex > 0
+                  })}
                 </div>
               ))}
-            </div>
-            <Flex vertical>
+            </Flex>
+            <Flex
+              className={ styles.sectionFields }
+              gap="mini"
+              vertical
+            >
               {section.fields.map((item, fieldIndex) => (
-                <div
+                <Flex
+                  align="stretch"
                   className={ styles.fieldRow }
+                  gap="extra-small"
                   key={ `${item.formPath.join('.')}-${fieldIndex}` }
-                  style={ gridStyle }
                 >
                   {locales.map((locale, localeIndex) => (
                     <div
@@ -161,10 +171,10 @@ export const LanguageComparisonColumn = ({ layoutData, locales }: ILanguageCompa
                       {renderField({ item, fieldIndex, locale })}
                     </div>
                   ))}
-                </div>
+                </Flex>
               ))}
             </Flex>
-          </div>
+          </Flex>
         ))}
       </Flex>
     )
