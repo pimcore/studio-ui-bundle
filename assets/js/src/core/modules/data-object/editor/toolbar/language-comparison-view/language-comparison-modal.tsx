@@ -126,23 +126,6 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
     onClose()
   }
 
-  const gridStyle = {
-    gridTemplateColumns: `repeat(${Math.max(selectedLocales.length, 1)}, minmax(320px, 1fr))`
-  }
-
-  const updateLocale = (index: number, nextLocale: string): void => {
-    setSelectedLocales((previousLocales: string[]): string[] => {
-      if (isEmptyValue(nextLocale)) {
-        return []
-      }
-
-      const nextLocales: string[] = [...previousLocales]
-      nextLocales[index] = nextLocale
-
-      return nextLocales
-    })
-  }
-
   return (
     <Modal
       footer={
@@ -194,6 +177,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
                           if (value == null || value === '') {
                             return
                           }
+
                           setSelectedLocales(previousLocales => {
                             const nextLocales = [...previousLocales]
                             nextLocales[index] = value

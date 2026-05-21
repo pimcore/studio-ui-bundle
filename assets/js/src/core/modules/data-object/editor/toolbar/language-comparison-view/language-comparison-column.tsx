@@ -53,12 +53,6 @@ const groupIntoSections = (items: ILocalizedFieldDescriptor[]): ILocalizedSectio
 export const LanguageComparisonColumn = ({ layoutData, locales }: ILanguageComparisonColumnProps): React.JSX.Element => {
   const { styles } = useStyles()
 
-  const gridStyle = useMemo(() => {
-    return {
-      gridTemplateColumns: `repeat(${Math.max(locales.length, 1)}, minmax(320px, 1fr))`
-    }
-  }, [locales.length])
-
   const renderSectionTitle = ({ breadcrumbTitle, hideSectionTitle }: { breadcrumbTitle: string, hideSectionTitle: boolean }): React.JSX.Element | null => {
     if (isEmptyValue(breadcrumbTitle)) return null
 
