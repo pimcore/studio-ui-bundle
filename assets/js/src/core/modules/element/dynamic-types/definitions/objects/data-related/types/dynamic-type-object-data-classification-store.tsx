@@ -39,13 +39,29 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
   async extractLocalizedFields (props: IExtractLocalizedFieldsProps): Promise<ILocalizedFieldDescriptor[] | false> {
     const { item, fieldBreadcrumbTitle, formPath, objectData } = props
 
-    if (isEmpty(item?.activeGroupDefinitions)) {
+    const normalizeGroups = (value: unknown): any[] => {
+      if (Array.isArray(value)) {
+        return value
+      }
+
+      if (value != null && typeof value === 'object') {
+        return Object.values(value)
+      }
+
+      return []
+    }
+
+    const activeGroupDefinitions = normalizeGroups(item.activeGroupDefinitions)
+
+    if ((activeGroupDefinitions.length === 0)) {
       return []
     }
 
     const storeValue = objectData[item.name]
     const localizationGroup = item.localized === true ? 'split-view-locale' : 'default'
-    const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, item.title ?? item.name)
+
+    const getTitle: string | undefined = !isEmptyValue(item?.title) ? item?.title : item?.name
+    const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, getTitle ?? '')
 
     const processClassificationStoreData = ({
       data,
@@ -56,12 +72,15 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
       updatedFieldBreadcrumbTitle?: string
       groupId?: number
     }): ILocalizedFieldDescriptor[] => {
-      return data.flatMap((dataItem: any) => {
-        if (!isEmpty(dataItem.keys)) {
-          const nextBreadcrumbTitle = getBreadcrumbTitle(updatedFieldBreadcrumbTitle, dataItem.title ?? dataItem.name)
+      return normalizeGroups(data).flatMap((dataItem: any) => {
+        const keys = normalizeGroups(dataItem.keys)
+
+        if (keys.length > 0) {
+          const getTitle: string | undefined = !isEmptyValue(dataItem?.title) ? dataItem?.title : dataItem?.name
+          const nextBreadcrumbTitle = getBreadcrumbTitle(updatedFieldBreadcrumbTitle, getTitle ?? '')
 
           return processClassificationStoreData({
-            data: dataItem.keys,
+            data: keys,
             updatedFieldBreadcrumbTitle: nextBreadcrumbTitle,
             groupId: dataItem.id
           })

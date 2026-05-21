@@ -101,7 +101,14 @@ export const LanguageComparisonColumn = ({ layoutData, locale, hideSectionTitle 
       return fieldNode
     }
 
-    return fieldNode
+    return (
+      <LocalizedFieldsProvider
+        key={ `${item.formPath.join('.')}-${fieldIndex}` }
+        locales={ [locale!] }
+      >
+        {fieldNode}
+      </LocalizedFieldsProvider>
+    )
   }
 
   const renderedContent = useMemo(() => {
@@ -110,23 +117,21 @@ export const LanguageComparisonColumn = ({ layoutData, locale, hideSectionTitle 
     }
 
     return (
-      <LocalizedFieldsProvider locales={ [locale] }>
-        <Space
-          className="w-full"
-          direction='vertical'
-          size='small'
-        >
-          {sections.map((section, sectionIndex) => (
-            <div key={ `section-${sectionIndex}-${section.breadcrumbTitle}` }>
-              {renderSectionTitle(section.breadcrumbTitle)}
+      <Space
+        className="w-full"
+        direction='vertical'
+        size='small'
+      >
+        {sections.map((section, sectionIndex) => (
+          <div key={ `section-${sectionIndex}-${section.breadcrumbTitle}` }>
+            {renderSectionTitle(section.breadcrumbTitle)}
 
-              <Flex vertical>
-                {section.fields.map((item, fieldIndex) => renderField(item, fieldIndex))}
-              </Flex>
-            </div>
-          ))}
-        </Space>
-      </LocalizedFieldsProvider>
+            <Flex vertical>
+              {section.fields.map((item, fieldIndex) => renderField(item, fieldIndex))}
+            </Flex>
+          </div>
+        ))}
+      </Space>
     )
   }, [locale, sections])
 
