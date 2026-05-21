@@ -16,7 +16,7 @@ import { useLanguageSelection } from '@Pimcore/components/language-selection/pro
 import { TAB_EDIT } from '../../types/object/tab-manager/tabs/edit/edit-container'
 import { LanguageComparisonModal } from './language-comparison-modal'
 
-const VISIBLE_TABS = [TAB_EDIT.key]
+const VISIBLE_TABS = new Set([TAB_EDIT.key])
 
 export const LanguageComparisonViewButton = (): React.JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -26,7 +26,7 @@ export const LanguageComparisonViewButton = (): React.JSX.Element => {
   const { hasLocalizedFields } = useLanguageSelection()
 
   const isObject = editorType?.name !== 'folder'
-  const isTabVisible = VISIBLE_TABS.includes(activeTab ?? '')
+  const isTabVisible = VISIBLE_TABS.has(activeTab ?? '')
 
   if (!isObject || !isTabVisible || !hasLocalizedFields) {
     return <></>

@@ -93,12 +93,17 @@ export class DynamicTypeObjectDataObjectBrick extends DynamicTypeObjectDataAbstr
         return []
       }
 
+
+      const brickTitle = layoutDefinition.title !== brickType ? `${layoutDefinition.title}/${brickType}` : layoutDefinition.title
+      const brickName = !isEmptyValue(layoutDefinition.name) && layoutDefinition.name !== brickType ? `${layoutDefinition.name}/${brickType}` : layoutDefinition.name
+      const brickFieldBreadcrumbTitle: string = !isEmptyValue(layoutDefinition.title) ? brickTitle : brickName
+
       return await processNestedLayoutData({
         objectId,
         data: (layoutDefinition.children as any[]) ?? [],
         objectData: brickValues[brickType] as Record<string, any>,
         objectDataRegistry,
-        fieldBreadcrumbTitle: getBreadcrumbTitle(fieldBreadcrumbTitle, layoutDefinition.title ?? layoutDefinition.name ?? brickType),
+        fieldBreadcrumbTitle: getBreadcrumbTitle(fieldBreadcrumbTitle, brickFieldBreadcrumbTitle),
         formPath: [...formPath, item.name, brickType],
         layoutsList,
         setLayoutsList

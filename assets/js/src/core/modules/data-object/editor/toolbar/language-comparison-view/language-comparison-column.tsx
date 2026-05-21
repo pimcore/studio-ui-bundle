@@ -81,7 +81,7 @@ export const LanguageComparisonColumn = ({ layoutData, locale, hideSectionTitle 
       .slice(0, -1)
       .map(pathPart => pathPart === 'split-view-locale' ? locale : pathPart)
 
-    const combinedFieldNameParent = resolvedGroupPath.map(pathPart => String(pathPart))
+    const combinedFieldNameParent = resolvedGroupPath.map(String)
     const shouldWrapLocalizedProvider = item.localeInFormPath !== true
 
     const fieldNode = (
@@ -91,7 +91,7 @@ export const LanguageComparisonColumn = ({ layoutData, locale, hideSectionTitle 
       >
         <Form.Group name={ resolvedGroupPath }>
           <ObjectComponent
-            { ...(item.fieldData as unknown as ObjectComponentProps) }
+            { ...item.fieldData }
           />
         </Form.Group>
       </CombinedFieldNameProvider>

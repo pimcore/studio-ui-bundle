@@ -114,7 +114,7 @@ export class DynamicTypeObjectDataFieldCollection extends DynamicTypeObjectDataA
         return []
       }
 
-      const currentBreadcrumbTitle: string | undefined = !isEmptyValue(layoutDefinition?.title) ? `${layoutDefinition?.title}/${collectionItem?.type}` : collectionItem?.type
+      const currentBreadcrumbTitle: string | undefined = !isEmptyValue(layoutDefinition?.title) && layoutDefinition?.title !== collectionItem?.type ? `${layoutDefinition.title}/${collectionItem?.type}` : collectionItem?.type ?? layoutDefinition?.title
 
       return await processNestedLayoutData({
         objectId,
