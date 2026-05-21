@@ -13,6 +13,7 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     toolbar: css`
+      width: 100%;
       height: 48px;
       padding: ${token.paddingXS}px;
 

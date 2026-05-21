@@ -206,12 +206,9 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
       renderTopBar={
         <Toolbar
           justify='space-between'
-          margin={ {
-            x: 'mini',
-            y: 'none'
-          } }
           padding={ {
-            x: 'small'
+            left: 'small',
+            right: 'extra-small'
           } }
           theme='secondary'
         >
