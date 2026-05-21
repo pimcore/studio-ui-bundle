@@ -37,7 +37,11 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
   }
 
   async extractLocalizedFields (props: IExtractLocalizedFieldsProps): Promise<ILocalizedFieldDescriptor[] | false> {
-    const { item, fieldBreadcrumbTitle, formPath, objectData } = props
+    const { item, fieldBreadcrumbTitle, formPath } = props
+
+    if (item?.localized === false) {
+      return []
+    }
 
     const normalizeGroups = (value: unknown): any[] => {
       if (Array.isArray(value)) {
@@ -53,12 +57,7 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
 
     const activeGroupDefinitions = normalizeGroups(item.activeGroupDefinitions)
 
-    if ((activeGroupDefinitions.length === 0)) {
-      return []
-    }
-
-    const storeValue = objectData[item.name]
-    const localizationGroup = item.localized === true ? 'split-view-locale' : 'default'
+    if (activeGroupDefinitions.length === 0) return []
 
     const getTitle: string | undefined = !isEmptyValue(item?.title) ? item?.title : item?.name
     const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, getTitle ?? '')
@@ -68,7 +67,7 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
       updatedFieldBreadcrumbTitle = breadcrumbTitle,
       groupId
     }: {
-      data: ClassificationStoreGroup[]
+      data: any[]
       updatedFieldBreadcrumbTitle?: string
       groupId?: number
     }): ILocalizedFieldDescriptor[] => {
@@ -76,8 +75,8 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
         const keys = normalizeGroups(dataItem.keys)
 
         if (keys.length > 0) {
-          const getTitle: string | undefined = !isEmptyValue(dataItem?.title) ? dataItem?.title : dataItem?.name
-          const nextBreadcrumbTitle = getBreadcrumbTitle(updatedFieldBreadcrumbTitle, getTitle ?? '')
+          const currentTitle: string | undefined = !isEmptyValue(dataItem?.title) ? dataItem?.title : dataItem?.name
+          const nextBreadcrumbTitle = getBreadcrumbTitle(updatedFieldBreadcrumbTitle, currentTitle ?? '')
 
           return processClassificationStoreData({
             data: keys,
@@ -90,36 +89,16 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
           return []
         }
 
-        const groupValue = get(storeValue, [String(groupId), localizationGroup])
-
-        if (item.localized !== true && isEmpty(groupValue)) {
-          return [{
-            fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle,
-            fieldData: { ...dataItem.definition, name: dataItem.id },
-            formPath: [...formPath, item.name, String(groupId), 'default', dataItem.id],
-            localeInFormPath: true
-          }]
-        }
-
-        if (item.localized === true) {
-          return [{
-            fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle,
-            fieldData: { ...dataItem.definition, name: dataItem.id },
-            formPath: [...formPath, item.name, String(groupId), 'split-view-locale', dataItem.id],
-            localeInFormPath: true
-          }]
-        }
-
         return [{
           fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle,
           fieldData: { ...dataItem.definition, name: dataItem.id },
-          formPath: [...formPath, item.name, String(groupId), 'default', dataItem.id],
+          formPath: [...formPath, item.name, String(groupId), 'split-view-locale', dataItem.id],
           localeInFormPath: true
         }]
       })
     }
 
-    return processClassificationStoreData({ data: item.activeGroupDefinitions })
+    return processClassificationStoreData({ data: activeGroupDefinitions })
   }
 
   async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<IFormattedDataStructureData[]> {
