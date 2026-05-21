@@ -211,9 +211,9 @@ export const QuantityValueContainer = (): React.JSX.Element => {
       renderTopBar={
         <Toolbar
           justify='space-between'
-          margin={ {
-            x: 'extra-small',
-            y: 'none'
+          padding={ {
+            left: 'small',
+            right: 'extra-small'
           } }
           theme='secondary'
         >
