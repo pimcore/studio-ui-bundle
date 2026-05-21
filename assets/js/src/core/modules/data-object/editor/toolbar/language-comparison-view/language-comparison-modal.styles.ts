@@ -35,6 +35,10 @@ export const useStyles = createStyles(({ token, css }) => {
         z-index: -1;
       }
     `,
+    headerGrid: css`
+      display: grid;
+      width: 100%;
+    `,
 
     headerItem: css`
       flex: 1 1 50%;
@@ -113,6 +117,37 @@ export const useStyles = createStyles(({ token, css }) => {
       margin-top: 40px;
       max-width: 320px;
       text-align: center;
+    `,
+
+    comparisonSections: css`
+      width: 100%;
+    `,
+
+    sectionBlock: css`
+      width: 100%;
+    `,
+
+    sectionHeaderRow: css`
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: ${token.paddingXS}px;
+      width: 100%;
+    `,
+
+    sectionHeaderCell: css`
+      min-width: 0;
+    `,
+
+    fieldRow: css`
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: ${token.paddingXS}px;
+      width: 100%;
+      align-items: stretch;
+    `,
+
+    fieldCell: css`
+      min-width: 0;
     `
   }
 })

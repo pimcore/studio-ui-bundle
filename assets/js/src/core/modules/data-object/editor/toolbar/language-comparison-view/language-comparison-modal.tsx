@@ -33,6 +33,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ILocalizedFieldDescriptor, processLayoutData } from './helpers/process-layout-data'
 import { type ILayoutItem } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 import { LanguageComparisonColumn } from './language-comparison-column'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { useStyles } from './language-comparison-modal.styles'
 
 interface LanguageComparisonModalProps {
@@ -60,10 +61,9 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
     useDataObjectGetLayoutByIdQuery({ id, layoutId: currentLayout ?? undefined }, { skip: !open })
   const { isLoading: isDraftLoading } = useDataObjectDraft(id)
 
-  const [leftLocale, setLeftLocale] = useState<string | null>(contentLanguages[0] ?? currentLanguage)
-  const [rightLocale, setRightLocale] = useState<string | null>(contentLanguages[1] ?? null)
   const [localizedFields, setLocalizedFields] = useState<ILocalizedFieldDescriptor[]>([])
   const [layoutsList, setLayoutsList] = useState<ILayoutItem[]>([])
+  const [selectedLocales, setSelectedLocales] = useState<string[]>([])
 
   const initialValues: Partial<any> = useMemo(() => {
     return editForm.getFieldsValue(true)
@@ -81,8 +81,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
 
   useEffect(() => {
     if (open) {
-      setLeftLocale(contentLanguages[0] ?? currentLanguage)
-      setRightLocale(contentLanguages[1] ?? null)
+      setSelectedLocales([contentLanguages[0] ?? currentLanguage, contentLanguages[1] ?? null])
     }
   }, [open, currentLanguage, contentLanguages])
 
@@ -127,6 +126,23 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
     onClose()
   }
 
+  const gridStyle = {
+    gridTemplateColumns: `repeat(${Math.max(selectedLocales.length, 1)}, minmax(320px, 1fr))`
+  }
+
+  const updateLocale = (index: number, nextLocale: string): void => {
+    setSelectedLocales((previousLocales: string[]): string[] => {
+      if (isEmptyValue(nextLocale)) {
+        return []
+      }
+
+      const nextLocales: string[] = [...previousLocales]
+      nextLocales[index] = nextLocale
+
+      return nextLocales
+    })
+  }
+
   return (
     <Modal
       footer={
@@ -161,34 +177,27 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
             className={ styles.content }
             vertical
           >
-            <Flex
-              className={ styles.headerContainer }
-              wrap="wrap"
-            >
-              <Flex
-                align="center"
-                className={ styles.headerItem }
-                justify="center"
+            <div className={ styles.headerContainer }>
+              <div
+                className={ styles.headerGrid }
+                style={ gridStyle }
               >
-                <PermissionBasedLanguageSelectionControl
-                  excludeLocales={ rightLocale !== null ? [rightLocale] : [] }
-                  onChange={ setLeftLocale }
-                  value={ leftLocale }
-                />
-              </Flex>
-
-              <Flex
-                align="center"
-                className={ styles.headerItem }
-                justify="center"
-              >
-                <PermissionBasedLanguageSelectionControl
-                  excludeLocales={ leftLocale !== null ? [leftLocale] : [] }
-                  onChange={ setRightLocale }
-                  value={ rightLocale }
-                />
-              </Flex>
-            </Flex>
+                {selectedLocales.map((locale, index) => (
+                  <Flex
+                    align="center"
+                    className={ styles.headerItem }
+                    justify="center"
+                    key={ `${locale}-${index}` }
+                  >
+                    <PermissionBasedLanguageSelectionControl
+                      excludeLocales={ selectedLocales.filter((_, currentIndex) => currentIndex !== index) }
+                      onChange={ (value: string) => { updateLocale(index, value) } }
+                      value={ locale }
+                    />
+                  </Flex>
+                ))}
+              </div>
+            </div>
 
             <Form
               form={ form as formInstanceType }
@@ -196,25 +205,10 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
               onValuesChange={ onValuesChange }
               preserve
             >
-              <Flex
-                className={ styles.columns }
-                wrap="wrap"
-              >
-                <div className={ styles.columnWrapper }>
-                  <LanguageComparisonColumn
-                    layoutData={ localizedFields }
-                    locale={ leftLocale }
-                  />
-                </div>
-
-                <div className={ styles.columnWrapper }>
-                  <LanguageComparisonColumn
-                    hideSectionTitle
-                    layoutData={ localizedFields }
-                    locale={ rightLocale }
-                  />
-                </div>
-              </Flex>
+              <LanguageComparisonColumn
+                layoutData={ localizedFields }
+                locales={ selectedLocales }
+              />
             </Form>
           </Flex>
         )}

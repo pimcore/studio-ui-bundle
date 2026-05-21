@@ -11,23 +11,21 @@
 import React, { useMemo } from 'react'
 import { ConfigProvider } from 'antd'
 import cn from 'classnames'
-import { isEmpty, isNil } from 'lodash'
+import { isEmpty, isNil, isUndefined } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Form } from '@Pimcore/components/form/form'
-import { Space } from '@Pimcore/components/space/space'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { LocalizedFieldsProvider } from '@Pimcore/components/form/localisation/localized-fields/provider/localized-fields-provider/localized-fields-provider'
-import { ObjectComponent, type ObjectComponentProps } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
+import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/combined-field-name-provider/combined-field-name-provider'
 import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 import { type ILocalizedFieldDescriptor } from './helpers/process-layout-data'
 import { useStyles } from './language-comparison-modal.styles'
 
 interface ILanguageComparisonColumnProps {
-  locale: string | null
+  locales: string[]
   layoutData: ILocalizedFieldDescriptor[]
-  hideSectionTitle?: boolean
 }
 
 interface ILocalizedSection {
@@ -41,10 +39,9 @@ const groupIntoSections = (items: ILocalizedFieldDescriptor[]): ILocalizedSectio
 
   for (const item of items) {
     const title = item.fieldBreadcrumbTitle ?? ''
+    const existing = sections.find(section => section.breadcrumbTitle === title)
 
-    const existing = sections.find(s => s.breadcrumbTitle === title)
-
-    if (existing !== undefined) {
+    if (!isUndefined(existing)) {
       existing.fields.push(item)
     } else {
       sections.push({ breadcrumbTitle: title, fields: [item] })
@@ -53,10 +50,16 @@ const groupIntoSections = (items: ILocalizedFieldDescriptor[]): ILocalizedSectio
   return sections
 }
 
-export const LanguageComparisonColumn = ({ layoutData, locale, hideSectionTitle = false }: ILanguageComparisonColumnProps): React.JSX.Element => {
+export const LanguageComparisonColumn = ({ layoutData, locales }: ILanguageComparisonColumnProps): React.JSX.Element => {
   const { styles } = useStyles()
 
-  const renderSectionTitle = (breadcrumbTitle: string): React.JSX.Element | null => {
+  const gridStyle = useMemo(() => {
+    return {
+      gridTemplateColumns: `repeat(${Math.max(locales.length, 1)}, minmax(320px, 1fr))`
+    }
+  }, [locales.length])
+
+  const renderSectionTitle = ({ breadcrumbTitle, hideSectionTitle }: { breadcrumbTitle: string, hideSectionTitle: boolean }): React.JSX.Element | null => {
     if (isEmptyValue(breadcrumbTitle)) return null
 
     const titleParts = breadcrumbTitle.split('/')
@@ -73,21 +76,23 @@ export const LanguageComparisonColumn = ({ layoutData, locale, hideSectionTitle 
       </Text>
     )
   }
+  const renderField = ({ item, fieldIndex, locale }: { item: ILocalizedFieldDescriptor, fieldIndex: number, locale: string | null }): React.JSX.Element | null => {
+    if (isNil(locale) || isEmpty(locale)) {
+      return null
+    }
 
-  const sections = useMemo(() => groupIntoSections(layoutData), [layoutData])
-
-  const renderField = (item: ILocalizedFieldDescriptor, fieldIndex: number): React.JSX.Element => {
     const resolvedGroupPath = item.formPath
       .slice(0, -1)
       .map(pathPart => pathPart === 'split-view-locale' ? locale : pathPart)
 
     const combinedFieldNameParent = resolvedGroupPath.map(String)
     const shouldWrapLocalizedProvider = item.localeInFormPath !== true
+    const fieldKey = `${item.formPath.join('.')}-${fieldIndex}-${locale}`
 
     const fieldNode = (
       <CombinedFieldNameProvider
         combinedFieldNameParent={ combinedFieldNameParent }
-        key={ `${item.formPath.join('.')}-${fieldIndex}` }
+        key={ fieldKey }
       >
         <Form.Group name={ resolvedGroupPath }>
           <ObjectComponent
@@ -103,37 +108,67 @@ export const LanguageComparisonColumn = ({ layoutData, locale, hideSectionTitle 
 
     return (
       <LocalizedFieldsProvider
-        key={ `${item.formPath.join('.')}-${fieldIndex}` }
-        locales={ [locale!] }
+        key={ `${fieldKey}-localized` }
+        locales={ [locale] }
       >
         {fieldNode}
       </LocalizedFieldsProvider>
     )
   }
 
+  const sections = useMemo(() => groupIntoSections(layoutData), [layoutData])
   const renderedContent = useMemo(() => {
-    if (isNil(locale) || isEmpty(locale)) {
+    if (locales.length === 0) {
       return null
     }
 
     return (
-      <Space
-        className="w-full"
-        direction='vertical'
-        size='small'
+      <Flex
+        className={ styles.comparisonSections }
+        gap="extra-small"
+        vertical
       >
         {sections.map((section, sectionIndex) => (
-          <div key={ `section-${sectionIndex}-${section.breadcrumbTitle}` }>
-            {renderSectionTitle(section.breadcrumbTitle)}
-
+          <div
+            className={ styles.sectionBlock }
+            key={ `section-${sectionIndex}-${section.breadcrumbTitle}` }
+          >
+            <div
+              className={ styles.sectionHeaderRow }
+              style={ gridStyle }
+            >
+              {locales.map((locale, localeIndex) => (
+                <div
+                  className={ styles.sectionHeaderCell }
+                  key={ `${section.breadcrumbTitle}-${locale}-${localeIndex}` }
+                >
+                  {renderSectionTitle({ breadcrumbTitle: section.breadcrumbTitle, hideSectionTitle: localeIndex > 0 })}
+                </div>
+              ))}
+            </div>
             <Flex vertical>
-              {section.fields.map((item, fieldIndex) => renderField(item, fieldIndex))}
+              {section.fields.map((item, fieldIndex) => (
+                <div
+                  className={ styles.fieldRow }
+                  key={ `${item.formPath.join('.')}-${fieldIndex}` }
+                  style={ gridStyle }
+                >
+                  {locales.map((locale, localeIndex) => (
+                    <div
+                      className={ styles.fieldCell }
+                      key={ `${item.formPath.join('.')}-${fieldIndex}-${locale}-${localeIndex}` }
+                    >
+                      {renderField({ item, fieldIndex, locale })}
+                    </div>
+                  ))}
+                </div>
+              ))}
             </Flex>
           </div>
         ))}
-      </Space>
+      </Flex>
     )
-  }, [locale, sections])
+  }, [locales, sections])
 
   return (
     <ConfigProvider theme={ { components: { Form: { itemMarginBottom: 8 } } } }>
