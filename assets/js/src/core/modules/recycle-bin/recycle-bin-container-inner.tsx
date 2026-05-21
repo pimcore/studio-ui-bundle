@@ -138,9 +138,9 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
       renderTopBar={
         <Toolbar
           justify='space-between'
-          margin={ {
-            x: 'mini',
-            y: 'none'
+          padding={ {
+            left: 'small',
+            right: 'extra-small'
           } }
           theme='secondary'
         >

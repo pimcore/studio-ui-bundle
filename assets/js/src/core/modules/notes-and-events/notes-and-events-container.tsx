@@ -43,27 +43,27 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme="secondary">
           <IconButton
-            disabled={ isFetching }
-            icon={ { value: 'refresh' } }
-            onClick={ () => {
+            disabled={isFetching}
+            icon={{ value: 'refresh' }}
+            onClick={() => {
               dispatch(
                 api.util.invalidateTags(
                   invalidatingTags.NOTES_AND_EVENTS()
                 )
               )
-            } }
+            }}
           />
 
           {notesAndEvents.length !== 0 && (
             <Pagination
-              current={ page }
-              onChange={ (page, pageSize) => {
+              current={page}
+              onChange={(page, pageSize) => {
                 setPage(page)
                 setPageSize(pageSize)
-              } }
+              }}
               showSizeChanger
-              showTotal={ (total) => t('pagination.show-total', { total }) }
-              total={ totalItems }
+              showTotal={(total) => t('pagination.show-total', { total })}
+              total={totalItems}
             />
           )}
         </Toolbar>
@@ -71,39 +71,38 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
       renderTopBar={
         <Toolbar
           justify='space-between'
-          margin={ {
-            x: 'mini',
-            y: 'none'
-          }
-                    }
+          padding={{
+            left: 'small',
+            right: 'extra-small'
+          }}
           theme='secondary'
         >
           <Title>{t('notes-and-events.label')}</Title>
           <SearchInput
-            loading={ isFetching }
-            onSearch={ (value) => {
+            loading={isFetching}
+            onSearch={(value) => {
               setFilter(value)
-            } }
+            }}
             placeholder="Search"
-            withPrefix={ false }
-            withoutAddon={ false }
+            withPrefix={false}
+            withoutAddon={false}
           />
         </Toolbar>
-            }
+      }
     >
       <Content
-        loading={ isLoading }
-        none={ notesAndEvents.length === 0 }
+        loading={isLoading}
+        none={notesAndEvents.length === 0}
       >
         <Box
-          margin={ {
+          margin={{
             x: 'extra-small',
             y: 'none'
-          } }
+          }}
         >
           <Table
-            notesAndEvents={ notesAndEvents }
-            notesAndEventsFetching={ isFetching }
+            notesAndEvents={notesAndEvents}
+            notesAndEventsFetching={isFetching}
           />
         </Box>
       </Content>
