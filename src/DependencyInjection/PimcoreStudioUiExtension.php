@@ -69,12 +69,8 @@ class PimcoreStudioUiExtension extends Extension implements PrependExtensionInte
     }
 
     /**
-     * Registers the configured studio url_path under a dedicated "studio" Pimcore
-     * context so RoutingListener short-circuits before site resolution and document
-     * routing, preventing sites or documents from overwriting the studio route.
-     *
-     * A dedicated context (rather than reusing "admin") avoids triggering
-     * admin-ui-classic listeners such as the classic CSRF protection.
+     * Registers the configured studio url_path under the "studio" Pimcore context
+     * so site resolution and document routing are bypassed for studio requests.
      *
      * @throws Exception
      */
