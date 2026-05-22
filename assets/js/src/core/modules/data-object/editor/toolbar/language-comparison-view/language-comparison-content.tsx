@@ -50,7 +50,7 @@ const groupIntoSections = (items: ILocalizedFieldDescriptor[]): ILocalizedSectio
   return sections
 }
 
-export const LanguageComparisonColumn = ({ layoutData, locales }: ILanguageComparisonColumnProps): React.JSX.Element => {
+export const LanguageComparisonContent = ({ layoutData, locales }: ILanguageComparisonColumnProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   const renderSectionTitle = ({ breadcrumbTitle, hideSectionTitle }: { breadcrumbTitle: string, hideSectionTitle: boolean }): React.JSX.Element | null => {

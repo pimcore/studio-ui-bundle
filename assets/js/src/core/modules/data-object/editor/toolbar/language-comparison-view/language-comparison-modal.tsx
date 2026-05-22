@@ -32,8 +32,7 @@ import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dyn
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ILocalizedFieldDescriptor, processLayoutData } from './helpers/process-layout-data'
 import { type ILayoutItem } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
-import { LanguageComparisonColumn } from './language-comparison-column'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { LanguageComparisonContent } from './language-comparison-content'
 import { useStyles } from './language-comparison-modal.styles'
 
 interface LanguageComparisonModalProps {
@@ -44,19 +43,19 @@ interface LanguageComparisonModalProps {
 export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const { id } = useContext(DataObjectContext)
+
   const { currentLayout } = useLayoutSelection()
   const { currentLanguage } = useLanguageSelection()
   const { form: editForm, updateModifiedDataObjectAttributes, updateDraft } = useEditFormContext()
   const user = useUser()
   const contentLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
   const [form] = Form.useForm()
-  const [changedValues, setChangedValues] = useState<Record<string, any>>({})
 
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(
     serviceIds['DynamicTypes/ObjectDataRegistry']
   )
 
+  const { id } = useContext(DataObjectContext)
   const { data: layoutData, isLoading: isLayoutLoading, error: layoutError } =
     useDataObjectGetLayoutByIdQuery({ id, layoutId: currentLayout ?? undefined }, { skip: !open })
   const { isLoading: isDraftLoading } = useDataObjectDraft(id)
@@ -64,6 +63,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   const [localizedFields, setLocalizedFields] = useState<ILocalizedFieldDescriptor[]>([])
   const [layoutsList, setLayoutsList] = useState<ILayoutItem[]>([])
   const [selectedLocales, setSelectedLocales] = useState<string[]>([])
+  const [changedValues, setChangedValues] = useState<Record<string, any>>({})
 
   const initialValues: Partial<any> = useMemo(() => {
     return editForm.getFieldsValue(true)
@@ -135,14 +135,14 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
             onClick={ handleApplyChanges }
             type='primary'
           >
-            {t('toolbar.split-view.apply-changes')}
+            {t('language-comparison-view.apply-changes')}
           </Button>
         </ModalFooter>
       }
       onCancel={ onClose }
       open={ open }
       size={ 'XL' }
-      title={ <ModalTitle>{t('toolbar.split-view.title')}</ModalTitle> }
+      title={ <ModalTitle>{t('language-comparison-view.title')}</ModalTitle> }
     >
       <div className={ styles.body }>
         {isLoading && <Content loading />}
@@ -150,7 +150,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
         {!isLoading && !hasLocalizedFields && (
           <Flex justify='center'>
             <div className={ styles.emptyState }>
-              {t('toolbar.split-view.no-localized-fields')}
+              {t('language-comparison-view.no-localized-fields')}
             </div>
           </Flex>
         )}
@@ -198,7 +198,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
               onValuesChange={ onValuesChange }
               preserve
             >
-              <LanguageComparisonColumn
+              <LanguageComparisonContent
                 layoutData={ localizedFields }
                 locales={ selectedLocales }
               />
