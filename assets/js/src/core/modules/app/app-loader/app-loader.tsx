@@ -38,11 +38,11 @@ export interface IAppLoaderProps {
   children: React.ReactNode
 }
 
-export type LoadPhase = 'loading' | 'outro' | 'idle'
+export type LoadPhase = 'loading' | 'idle'
 
 export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const [phase, setPhase] = useState<LoadPhase>('loading')
-  const isLoading = phase === 'loading' || phase === 'outro'
+  const isLoading = phase === 'loading'
 
   const [pendingLoaders, setPendingLoaders] = useState<Set<string>>(new Set())
   const registerLoader = useCallback((id: string) => {
@@ -62,20 +62,8 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
     [registerLoader, unregisterLoader, loading]
   )
 
-  const outroTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const finishLoading = useCallback(() => {
-    setPhase('outro')
-    outroTimerRef.current = setTimeout(() => {
-      setPhase('idle')
-    }, 1000)
-  }, [])
-
-  useEffect(() => {
-    return () => {
-      if (outroTimerRef.current !== null) {
-        clearTimeout(outroTimerRef.current)
-      }
-    }
+    setPhase('idle')
   }, [])
 
   const modal = useAlertModal()

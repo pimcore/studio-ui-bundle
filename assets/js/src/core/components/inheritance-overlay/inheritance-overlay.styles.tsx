@@ -19,9 +19,8 @@ export const useStyles = createStyles(({ token, css }) => {
     width: 100%;
     height: 100%;
     background-color: ${token.colorBgContainerDisabled};
-    backdrop-filter: grayscale(70%);
     pointer-events: none;
-    opacity: 1;
+    opacity: 0.4;
   `
 
   return {

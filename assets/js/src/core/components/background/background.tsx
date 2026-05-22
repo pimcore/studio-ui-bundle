@@ -26,14 +26,24 @@ const Background = ({ phase = 'idle' }: BackgroundProps): React.JSX.Element => {
   const { logoUrl } = useAdminThumbnails()
 
   useEffect(() => {
+    if (phase !== 'idle') {
+      return
+    }
+
     requestAnimationFrame(() => {
       const preloader = document.getElementById('app-preloader')
       if (preloader !== null) {
         preloader.classList.add('app-preloader--fading')
-        preloader.addEventListener('transitionend', () => { preloader.remove() }, { once: true })
+        const fallback = setTimeout(() => preloader.remove(), 600)
+        preloader.addEventListener('transitionend', (e: TransitionEvent) => {
+          if (e.target === preloader && e.propertyName === 'opacity') {
+            clearTimeout(fallback)
+            preloader.remove()
+          }
+        })
       }
     })
-  }, [])
+  }, [phase])
 
   return (
     <div
@@ -43,9 +53,9 @@ const Background = ({ phase = 'idle' }: BackgroundProps): React.JSX.Element => {
       <div className='background-figure background-figure--bottom-left'></div>
       <div className='background-figure background-figure--bottom-right'></div>
       <div className='background-figure background-figure--top-left'></div>
-      <div className={ styles.logoOrbitCW } />
-      <div className={ styles.logoOrbitCCW } />
-      <div className={ styles.backdropBlur } />
+      {phase === 'loading' && <div className={styles.logoOrbitCW}/>}
+      {phase === 'loading' && <div className={styles.logoOrbitCCW}/>}
+      {phase === 'loading' && <div className={styles.backdropBlur}/>}
       <img
         alt="Logo"
         className={ styles.logoImage }
