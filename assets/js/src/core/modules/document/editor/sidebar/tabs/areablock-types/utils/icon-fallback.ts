@@ -9,7 +9,7 @@
  */
 
 import { type ElementIcon } from '@Pimcore/components/icon/icon'
-import { normalizeIcon } from '@Pimcore/components/icon/normalize-icon'
+import { normalizeIcon } from '@Pimcore/utils/normalize-icon'
 
 const FALLBACK_AREABLOCK_ICON: ElementIcon = { type: 'name', value: 'area-brick' }
 

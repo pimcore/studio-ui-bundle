@@ -11,7 +11,7 @@
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
-import { type ElementIcon } from './icon'
+import { type ElementIcon } from '@Pimcore/components/icon/icon'
 
 export const normalizeIcon = (
   value: ElementIcon | string | null | undefined

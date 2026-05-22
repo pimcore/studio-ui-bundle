@@ -11,7 +11,7 @@
 import { type OverrideResultType } from '@reduxjs/toolkit/query'
 import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { type ElementIcon } from '@Pimcore/components/icon/icon'
-import { denormalizeLayoutTreeIcons, normalizeLayoutTreeIcons } from '@Pimcore/components/icon/normalize-icon'
+import { denormalizeLayoutTreeIcons, normalizeLayoutTreeIcons } from '@Pimcore/utils/normalize-icon'
 import { api as baseApi, type ConfigLayoutDefinition, type CustomLayouts, type Layout } from './class-definition-slice.gen'
 
 // Backend returns the root layout's icon as `string` for field-collection and

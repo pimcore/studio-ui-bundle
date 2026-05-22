@@ -9,7 +9,7 @@
  */
 
 import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
-import { normalizeLayoutTreeIcons } from '@Pimcore/components/icon/normalize-icon'
+import { normalizeLayoutTreeIcons } from '@Pimcore/utils/normalize-icon'
 import { api as baseApi, type Layout } from './data-object-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
