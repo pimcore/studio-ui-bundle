@@ -62,6 +62,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
     useDataObjectGetLayoutByIdQuery({ id, layoutId: currentLayout ?? undefined }, { skip: !open })
   const { dataObject, isLoading: isDraftLoading } = useDataObjectDraft(id)
 
+  const [isLocalizedFieldsLoading, setIsLoadingLocalizedFields] = useState<boolean>(false)
   const [localizedFields, setLocalizedFields] = useState<ILocalizedFieldDescriptor[]>([])
   const [layoutsList, setLayoutsList] = useState<ILayoutItem[]>([])
   const [selectedLocales, setSelectedLocales] = useState<string[]>([])
@@ -95,6 +96,8 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
       return
     }
 
+    setIsLoadingLocalizedFields(true)
+
     processLayoutData({
       objectId: id,
       layout: layoutData,
@@ -105,9 +108,10 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
     })
       .then(setLocalizedFields)
       .catch(() => { setLocalizedFields([]) })
+      .finally(() => { setIsLoadingLocalizedFields(false) })
   }, [layoutData, open])
 
-  const isLoading = isLayoutLoading || isDraftLoading
+  const isLoading = isLayoutLoading || isDraftLoading || isLocalizedFieldsLoading
   const hasLocalizedFields = localizedFields.length > 0
 
   const onValuesChange = (changedValues: Record<string, any>, allValues: Record<string, any>): void => {
