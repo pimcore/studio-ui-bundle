@@ -8,30 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { isNonEmptyString } from '@Pimcore/utils/type-utils'
+import { type ElementIcon } from '@Pimcore/components/icon/icon'
+import { normalizeIcon } from '@Pimcore/components/icon/normalize-icon'
 
-/**
- * Gets the icon for an areablock type, applying fallback icon if no icon is provided
- */
-export const getAreablockTypeIcon = (icon: string | undefined, index: number): ElementIcon => {
-  if (isNonEmptyString(icon)) {
-    // If icon contains a dot, treat it as a path, otherwise as a name
-    if (icon.includes('.')) {
-      return {
-        type: 'path',
-        value: icon
-      }
-    } else {
-      return {
-        type: 'name',
-        value: icon
-      }
-    }
-  }
+const FALLBACK_AREABLOCK_ICON: ElementIcon = { type: 'name', value: 'area-brick' }
 
-  return {
-    type: 'name',
-    value: 'area-brick'
-  }
-}
+export const getAreablockTypeIcon = (icon: string | undefined): ElementIcon =>
+  normalizeIcon(icon) ?? FALLBACK_AREABLOCK_ICON

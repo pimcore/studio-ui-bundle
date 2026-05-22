@@ -8,11 +8,31 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { type OverrideResultType } from '@reduxjs/toolkit/query'
 import { invalidatingTags, providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
-import { api as baseApi } from './class-definition-slice.gen'
+import { type ElementIcon } from '@Pimcore/components/icon/icon'
+import { denormalizeLayoutTreeIcons, normalizeLayoutTreeIcons } from '@Pimcore/components/icon/normalize-icon'
+import { api as baseApi, type ConfigLayoutDefinition, type CustomLayouts, type Layout } from './class-definition-slice.gen'
+
+// Backend returns the root layout's icon as `string` for field-collection and
+// object-brick layouts. The codegen for ConfigLayoutDefinition reflects that
+// (`icon: string | null`), so we both convert it at runtime and override the
+// result type. For the other layout endpoints (classDefinitionGetLayoutById,
+// classCustomLayoutGet, classObjectBrickCustomLayoutGet) the codegen claims
+// `ElementIcon | null` already, but the same string-runtime mismatch can
+// occur, so we normalize defensively without any type override.
+export type NormalizedConfigLayoutDefinition =
+  Omit<ConfigLayoutDefinition, 'icon'> & { icon: ElementIcon | null }
+
+const normalizeLayout = (raw: Layout): Layout => normalizeLayoutTreeIcons(raw)
+
+const normalizeCustomLayouts = (raw: CustomLayouts): CustomLayouts => ({
+  ...raw,
+  layoutDefinition: raw.layoutDefinition !== null ? normalizeLayout(raw.layoutDefinition) : null
+})
 
 /* eslint-disable max-lines */
-const api = baseApi.enhanceEndpoints({
+const apiWithTags = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_DETAIL, tagNames.CLASS_DEFINITION, tagNames.CLASS_DEFINITION_DETAIL, tagNames.CLASS_DEFINITION_COLLECTION, tagNames.CUSTOM_LAYOUT, tagNames.CUSTOM_LAYOUT_DETAIL, tagNames.CUSTOM_LAYOUT_COLLECTION, tagNames.FIELD_COLLECTION, tagNames.FIELD_COLLECTION_DETAIL, tagNames.FIELD_COLLECTION_COLLECTION, tagNames.OBJECT_BRICK, tagNames.OBJECT_BRICK_DETAIL, tagNames.OBJECT_BRICK_COLLECTION, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL, tagNames.OBJECT_BRICK_CUSTOM_LAYOUT_COLLECTION, tagNames.SELECT_OPTION_DETAIL, tagNames.SELECT_OPTION_COLLECTION],
   endpoints: {
     classDefinitionCollection: {
@@ -22,7 +42,8 @@ const api = baseApi.enhanceEndpoints({
       providesTags: (result, error, args) => providingTags.CLASS_DEFINITION_DETAIL(args.id)
     },
     classDefinitionGetLayoutById: {
-      providesTags: (result, error, args) => providingTags.CLASS_DEFINITION_DETAIL(args.id)
+      providesTags: (result, error, args) => providingTags.CLASS_DEFINITION_DETAIL(args.id),
+      transformResponse: normalizeLayout
     },
     classCustomLayoutCollection: {
       providesTags: () => providingTags.CUSTOM_LAYOUT_COLLECTION()
@@ -33,7 +54,7 @@ const api = baseApi.enhanceEndpoints({
         try {
           const { data } = await queryFulfilled
           dispatch(
-            api.util.updateQueryData('classDefinitionGetById', { id: args.id }, (draft) => {
+            apiWithTags.util.updateQueryData('classDefinitionGetById', { id: args.id }, (draft) => {
               Object.assign(draft, data)
             })
           )
@@ -61,15 +82,17 @@ const api = baseApi.enhanceEndpoints({
       ]
     },
     classCustomLayoutGet: {
-      providesTags: (result, error, args) => providingTags.CUSTOM_LAYOUT_DETAIL(args.customLayoutId)
+      providesTags: (result, error, args) => providingTags.CUSTOM_LAYOUT_DETAIL(args.customLayoutId),
+      transformResponse: normalizeCustomLayouts
     },
     classCustomLayoutUpdate: {
       invalidatesTags: () => [],
+      transformResponse: normalizeCustomLayouts,
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
           dispatch(
-            api.util.updateQueryData('classCustomLayoutGet', { customLayoutId: args.customLayoutId }, (draft) => {
+            apiWithTags.util.updateQueryData('classCustomLayoutGet', { customLayoutId: args.customLayoutId }, (draft) => {
               Object.assign(draft, data)
             })
           )
@@ -120,7 +143,7 @@ const api = baseApi.enhanceEndpoints({
         try {
           const { data } = await queryFulfilled
           dispatch(
-            api.util.updateQueryData('classFieldCollectionGetByKey', { key: args.key }, (draft) => {
+            apiWithTags.util.updateQueryData('classFieldCollectionGetByKey', { key: args.key }, (draft) => {
               Object.assign(draft, data)
             })
           )
@@ -168,7 +191,7 @@ const api = baseApi.enhanceEndpoints({
         try {
           const { data } = await queryFulfilled
           dispatch(
-            api.util.updateQueryData('classObjectBrickGetByKey', { key: args.key }, (draft) => {
+            apiWithTags.util.updateQueryData('classObjectBrickGetByKey', { key: args.key }, (draft) => {
               Object.assign(draft, data)
             })
           )
@@ -193,15 +216,17 @@ const api = baseApi.enhanceEndpoints({
       ]
     },
     classObjectBrickCustomLayoutGet: {
-      providesTags: (result, error, args) => providingTags.OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL(args.key, args.customLayoutId)
+      providesTags: (result, error, args) => providingTags.OBJECT_BRICK_CUSTOM_LAYOUT_DETAIL(args.key, args.customLayoutId),
+      transformResponse: normalizeCustomLayouts
     },
     classObjectBrickCustomLayoutUpdate: {
       invalidatesTags: () => [],
+      transformResponse: normalizeCustomLayouts,
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
           dispatch(
-            api.util.updateQueryData('classObjectBrickCustomLayoutGet', { key: args.key, customLayoutId: args.customLayoutId }, (draft) => {
+            apiWithTags.util.updateQueryData('classObjectBrickCustomLayoutGet', { key: args.key, customLayoutId: args.customLayoutId }, (draft) => {
               Object.assign(draft, data)
             })
           )
@@ -234,7 +259,7 @@ const api = baseApi.enhanceEndpoints({
         try {
           const { data } = await queryFulfilled
           dispatch(
-            api.util.updateQueryData('classSelectOptionGet', { id: args.id }, (draft) => {
+            apiWithTags.util.updateQueryData('classSelectOptionGet', { id: args.id }, (draft) => {
               Object.assign(draft, data)
             })
           )
@@ -272,6 +297,69 @@ const api = baseApi.enhanceEndpoints({
         }
       }
     }
+  }
+})
+
+// Retype the two layout-by-key queries so callers see the normalized icon,
+// and wire transformResponse to do the runtime conversion. Both happen in the
+// same enhanceEndpoints call so transformResponse's return type matches the
+// overridden result type.
+const apiWithReadTransforms = apiWithTags.enhanceEndpoints<never, {
+  classFieldCollectionGetLayoutByKey: OverrideResultType<
+  typeof apiWithTags.endpoints.classFieldCollectionGetLayoutByKey.Types.QueryDefinition,
+  NormalizedConfigLayoutDefinition
+  >
+  classObjectBrickGetLayoutByKey: OverrideResultType<
+  typeof apiWithTags.endpoints.classObjectBrickGetLayoutByKey.Types.QueryDefinition,
+  NormalizedConfigLayoutDefinition
+  >
+}>({
+  endpoints: {
+    classFieldCollectionGetLayoutByKey: {
+      transformResponse: (raw: ConfigLayoutDefinition): NormalizedConfigLayoutDefinition =>
+        normalizeLayoutTreeIcons(raw) as unknown as NormalizedConfigLayoutDefinition
+    },
+    classObjectBrickGetLayoutByKey: {
+      transformResponse: (raw: ConfigLayoutDefinition): NormalizedConfigLayoutDefinition =>
+        normalizeLayoutTreeIcons(raw) as unknown as NormalizedConfigLayoutDefinition
+    }
+  }
+})
+
+const denormalizeConfigurationOnQuery = (endpoint: { query?: (arg: any) => any }): void => {
+  const originalQuery = endpoint.query
+  if (originalQuery === undefined) {
+    return
+  }
+
+  endpoint.query = (queryArg: any) => {
+    const baseResult = originalQuery(queryArg)
+    if (baseResult === null || typeof baseResult !== 'object' || !('body' in baseResult)) {
+      return baseResult
+    }
+
+    const body = baseResult.body as { configuration?: unknown }
+    if (body.configuration === undefined) {
+      return baseResult
+    }
+
+    return {
+      ...baseResult,
+      body: {
+        ...body,
+        configuration: denormalizeLayoutTreeIcons(body.configuration)
+      }
+    }
+  }
+}
+
+const api = apiWithReadTransforms.enhanceEndpoints({
+  endpoints: {
+    classDefinitionUpdate: denormalizeConfigurationOnQuery,
+    classCustomLayoutUpdate: denormalizeConfigurationOnQuery,
+    classFieldCollectionUpdate: denormalizeConfigurationOnQuery,
+    classObjectBrickUpdate: denormalizeConfigurationOnQuery,
+    classObjectBrickCustomLayoutUpdate: denormalizeConfigurationOnQuery
   }
 })
 

@@ -12,6 +12,7 @@ import React from 'react'
 import { type AbstractObjectLayoutDefinition } from '../../dynamic-type-object-layout-abstract'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { Panel as CorePanel } from '@Pimcore/components/panel/panel'
+import { type ElementIcon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import { isNonEmptyString } from '@sdk/utils'
 
@@ -20,11 +21,12 @@ export interface PanelProps extends AbstractObjectLayoutDefinition {
   border?: boolean
   collapsible?: boolean
   collapsed?: boolean
+  icon?: ElementIcon | null
   children: AbstractObjectLayoutDefinition[]
   theme?: 'fieldset' | 'card-with-highlight'
 }
 
-export const Panel = ({ children, name, border, collapsed, collapsible, title, theme = 'card-with-highlight', noteditable, ...props }: PanelProps): React.JSX.Element => {
+export const Panel = ({ children, name, border, collapsed, collapsible, title, icon, theme = 'card-with-highlight', noteditable, ...props }: PanelProps): React.JSX.Element => {
   const isMainPanel = name === 'pimcore_root'
   const isParentNotEditable = noteditable === true
   const { t } = useTranslation()
@@ -34,6 +36,7 @@ export const Panel = ({ children, name, border, collapsed, collapsible, title, t
       border={ border }
       collapsed={ collapsed }
       collapsible={ collapsible }
+      icon={ icon }
       name={ name }
       theme={ theme }
       title={ isNonEmptyString(title) ? t(title) : title }
