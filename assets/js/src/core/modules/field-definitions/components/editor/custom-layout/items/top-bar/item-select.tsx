@@ -10,7 +10,7 @@
 
 import { type ConfigurationPartial, useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
-import { Dropdown, type DropdownMenuProps, IconTextButton } from '@sdk/components'
+import { Dropdown, type DropdownMenuProps, IconTextButton, Space, Text } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -40,13 +40,18 @@ export const TopBarItemSelect = (): React.JSX.Element => {
         isLoading || data === undefined || data?.items?.length === 0
           ? <></>
           : (
-            <Dropdown menu={ { items: dropdownItems } }>
-              <IconTextButton
-                icon={ { value: 'edit' } }
-              >
-                { activeConfiguration !== undefined ? activeConfiguration.name : t('field-definitions.select-item-configuration') }
-              </IconTextButton>
-            </Dropdown>
+            <Space size="extra-small">
+              <Dropdown menu={ { items: dropdownItems } }>
+                <IconTextButton
+                  icon={ { value: 'edit' } }
+                >
+                  { activeConfiguration !== undefined ? activeConfiguration.name : t('field-definitions.select-item-configuration') }
+                </IconTextButton>
+              </Dropdown>
+              { activeConfiguration !== undefined && (
+                <Text type="secondary">{ activeConfiguration.id }</Text>
+              ) }
+            </Space>
             )
       }
     </>
