@@ -21,6 +21,7 @@ import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/objec
 import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/combined-field-name-provider/combined-field-name-provider'
 import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 import { type ILocalizedFieldDescriptor } from './helpers/process-layout-data'
+import { CLASSIFICATION_STORE_LANGUAGE_COMPARISON_DYNAMIC_LOCALE } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-classification-store'
 import { useStyles } from './language-comparison-modal.styles'
 
 interface ILanguageComparisonColumnProps {
@@ -78,7 +79,7 @@ export const LanguageComparisonContent = ({ layoutData, locales, isAllowedToEdit
 
     const resolvedGroupPath = item.formPath
       .slice(0, -1)
-      .map(pathPart => pathPart === 'split-view-locale' ? locale : pathPart)
+      .map(pathPart => pathPart === CLASSIFICATION_STORE_LANGUAGE_COMPARISON_DYNAMIC_LOCALE ? locale : pathPart)
 
     const combinedFieldNameParent = resolvedGroupPath.map(String)
     const shouldWrapLocalizedProvider = item.localeInFormPath !== true

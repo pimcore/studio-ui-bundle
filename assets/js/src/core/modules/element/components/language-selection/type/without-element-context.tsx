@@ -25,6 +25,7 @@ export const WithoutElementContext = (props: PermissionBasedLanguageSelectionCon
 
   if (props.excludeLocales !== undefined && props.excludeLocales.length > 0) {
     const excluded = new Set(props.excludeLocales)
+
     availableLanguages.splice(0, availableLanguages.length, ...availableLanguages.filter(lang => !excluded.has(lang)))
   }
 

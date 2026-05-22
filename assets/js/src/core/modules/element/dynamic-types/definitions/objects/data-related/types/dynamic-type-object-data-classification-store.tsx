@@ -22,6 +22,8 @@ import { getBreadcrumbTitle } from '@Pimcore/modules/data-object/editor/shared-t
 import { type ClassificationStoreGroup } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
+export const CLASSIFICATION_STORE_LANGUAGE_COMPARISON_DYNAMIC_LOCALE = 'language-comparison-locale'
+
 export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectDataAbstract {
   id: string = 'classificationstore'
 
@@ -92,7 +94,7 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
         return [{
           fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle,
           fieldData: { ...dataItem.definition, name: dataItem.id },
-          formPath: [...formPath, item.name, String(groupId), 'split-view-locale', dataItem.id],
+          formPath: [...formPath, item.name, String(groupId), CLASSIFICATION_STORE_LANGUAGE_COMPARISON_DYNAMIC_LOCALE, dataItem.id],
           localeInFormPath: true
         }]
       })

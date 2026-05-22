@@ -62,7 +62,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
     useDataObjectGetLayoutByIdQuery({ id, layoutId: currentLayout ?? undefined }, { skip: !open })
   const { dataObject, isLoading: isDraftLoading } = useDataObjectDraft(id)
 
-  const [isLocalizedFieldsLoading, setIsLoadingLocalizedFields] = useState<boolean>(false)
+  const [isLocalizedFieldsLoading, setIsLocalizedFieldsLoading] = useState<boolean>(false)
   const [localizedFields, setLocalizedFields] = useState<ILocalizedFieldDescriptor[]>([])
   const [layoutsList, setLayoutsList] = useState<ILayoutItem[]>([])
   const [selectedLocales, setSelectedLocales] = useState<string[]>([])
@@ -96,7 +96,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
       return
     }
 
-    setIsLoadingLocalizedFields(true)
+    setIsLocalizedFieldsLoading(true)
 
     processLayoutData({
       objectId: id,
@@ -108,7 +108,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
     })
       .then(setLocalizedFields)
       .catch(() => { setLocalizedFields([]) })
-      .finally(() => { setIsLoadingLocalizedFields(false) })
+      .finally(() => { setIsLocalizedFieldsLoading(false) })
   }, [layoutData, open])
 
   const isLoading = isLayoutLoading || isDraftLoading || isLocalizedFieldsLoading
@@ -151,7 +151,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
       }
       onCancel={ onClose }
       open={ open }
-      size={ 'XL' }
+      size={ 'XXL' }
       title={ <ModalTitle>{t('language-comparison-view.title')}</ModalTitle> }
     >
       <div className={ styles.body }>
