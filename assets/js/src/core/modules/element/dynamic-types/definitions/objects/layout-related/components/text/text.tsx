@@ -12,6 +12,7 @@ import React from 'react'
 import { type AbstractObjectLayoutDefinition } from '../../dynamic-type-object-layout-abstract'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { BaseView } from '../../views/base-view'
+import { type ElementIcon } from '@Pimcore/components/icon/icon'
 import { parseInlineCss } from '@Pimcore/utils/css'
 
 export interface TextProps extends AbstractObjectLayoutDefinition {
@@ -21,6 +22,7 @@ export interface TextProps extends AbstractObjectLayoutDefinition {
   collapsible?: boolean
   collapsed?: boolean
   bodyStyle?: string | null
+  icon?: ElementIcon | null
 }
 
 export const Text = (props: TextProps): React.JSX.Element => {
@@ -34,6 +36,7 @@ export const Text = (props: TextProps): React.JSX.Element => {
       border={ props.border }
       collapsed={ props.collapsed }
       collapsible={ props.collapsible }
+      icon={ props.icon }
       title={ props.title }
     >
       {content}
