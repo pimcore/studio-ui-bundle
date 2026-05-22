@@ -159,6 +159,9 @@ toolbar.switch-layout: Changer de mise en page personnalisée
 import: Importer
 export: Exporter
 more-actions: Plus d'actions
+language-comparison-view.apply-changes: Appliquer les modifications
+language-comparison-view.title: Comparaison des langues
+language-comparison-view.no-localized-fields: Cet objet de données n'a pas de champs localisés.
 class-definition.import: Importer la définition de classe
 class-definition.export: Exporter la définition de classe
 class-definition.import-file-label: Sélectionner un fichier JSON

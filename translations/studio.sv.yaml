@@ -159,6 +159,9 @@ toolbar.switch-layout: Byt anpassad layout
 import: Import
 export: Export
 more-actions: Fler åtgärder
+language-comparison-view.apply-changes: Tillämpa ändringar
+language-comparison-view.title: Jämförelse av språk
+language-comparison-view.no-localized-fields: Det här dataobjektet har inga lokaliserade fält.
 class-definition.import: Importera klassdefinition
 class-definition.export: Exportera klassdefinition
 class-definition.import-file-label: Välj JSON-fil

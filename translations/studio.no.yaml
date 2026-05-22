@@ -159,6 +159,9 @@ toolbar.switch-layout: Bytt tilpasset layout
 import: Importer
 export: Eksporter
 more-actions: Flere handlinger
+language-comparison-view.apply-changes: Bruk endringer
+language-comparison-view.title: Spraksammenligning
+language-comparison-view.no-localized-fields: Dette dataobjektet har ingen lokaliserte felter.
 class-definition.import: Importer klassedefinisjon
 class-definition.export: Eksporter klassedefinisjon
 class-definition.import-file-label: Velg JSON-fil
