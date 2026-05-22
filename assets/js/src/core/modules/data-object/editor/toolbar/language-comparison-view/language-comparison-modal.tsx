@@ -14,6 +14,7 @@ import { isEmpty, isNil, merge } from 'lodash'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { Form, type formInstanceType } from '@Pimcore/components/form/form'
 import { Button } from '@Pimcore/components/button/button'
 import { Content } from '@Pimcore/components/content/content'
@@ -33,6 +34,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ILocalizedFieldDescriptor, processLayoutData } from './helpers/process-layout-data'
 import { type ILayoutItem } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
 import { LanguageComparisonContent } from './language-comparison-content'
+import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useStyles } from './language-comparison-modal.styles'
 
 interface LanguageComparisonModalProps {
@@ -58,12 +60,14 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   const { id } = useContext(DataObjectContext)
   const { data: layoutData, isLoading: isLayoutLoading, error: layoutError } =
     useDataObjectGetLayoutByIdQuery({ id, layoutId: currentLayout ?? undefined }, { skip: !open })
-  const { isLoading: isDraftLoading } = useDataObjectDraft(id)
+  const { dataObject, isLoading: isDraftLoading } = useDataObjectDraft(id)
 
   const [localizedFields, setLocalizedFields] = useState<ILocalizedFieldDescriptor[]>([])
   const [layoutsList, setLayoutsList] = useState<ILayoutItem[]>([])
   const [selectedLocales, setSelectedLocales] = useState<string[]>([])
   const [changedValues, setChangedValues] = useState<Record<string, any>>({})
+
+  const isAllowedToEdit = checkElementPermission(dataObject?.permissions, 'save')
 
   const initialValues: Partial<any> = useMemo(() => {
     return editForm.getFieldsValue(true)
@@ -130,13 +134,15 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
     <Modal
       footer={
         <ModalFooter divider>
-          <Button
-            disabled={ isEmpty(changedValues) }
-            onClick={ handleApplyChanges }
-            type='primary'
-          >
-            {t('language-comparison-view.apply-changes')}
-          </Button>
+          <Tooltip title={ !isAllowedToEdit ? t('language-comparison-view.no-permission') : undefined }>
+            <Button
+              disabled={ isEmpty(changedValues) || !isAllowedToEdit }
+              onClick={ handleApplyChanges }
+              type='primary'
+            >
+              {t('language-comparison-view.apply-changes')}
+            </Button>
+          </Tooltip>
         </ModalFooter>
       }
       onCancel={ onClose }
@@ -199,6 +205,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
               preserve
             >
               <LanguageComparisonContent
+                isAllowedToEdit={ isAllowedToEdit }
                 layoutData={ localizedFields }
                 locales={ selectedLocales }
               />

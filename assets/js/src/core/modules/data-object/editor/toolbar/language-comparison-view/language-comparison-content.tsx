@@ -26,6 +26,7 @@ import { useStyles } from './language-comparison-modal.styles'
 interface ILanguageComparisonColumnProps {
   locales: string[]
   layoutData: ILocalizedFieldDescriptor[]
+  isAllowedToEdit: boolean
 }
 
 interface ILocalizedSection {
@@ -50,7 +51,7 @@ const groupIntoSections = (items: ILocalizedFieldDescriptor[]): ILocalizedSectio
   return sections
 }
 
-export const LanguageComparisonContent = ({ layoutData, locales }: ILanguageComparisonColumnProps): React.JSX.Element => {
+export const LanguageComparisonContent = ({ layoutData, locales, isAllowedToEdit }: ILanguageComparisonColumnProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   const renderSectionTitle = ({ breadcrumbTitle, hideSectionTitle }: { breadcrumbTitle: string, hideSectionTitle: boolean }): React.JSX.Element | null => {
@@ -91,6 +92,7 @@ export const LanguageComparisonContent = ({ layoutData, locales }: ILanguageComp
         <Form.Group name={ resolvedGroupPath }>
           <ObjectComponent
             { ...item.fieldData }
+            noteditable={ !isAllowedToEdit }
           />
         </Form.Group>
       </CombinedFieldNameProvider>

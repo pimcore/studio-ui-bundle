@@ -162,6 +162,7 @@ more-actions: Flere handlinger
 language-comparison-view.apply-changes: Bruk endringer
 language-comparison-view.title: Spraksammenligning
 language-comparison-view.no-localized-fields: Dette dataobjektet har ingen lokaliserte felter.
+language-comparison-view.no-permission: Du har ikke tillatelse til å lagre dette objektet.
 class-definition.import: Importer klassedefinisjon
 class-definition.export: Eksporter klassedefinisjon
 class-definition.import-file-label: Velg JSON-fil
