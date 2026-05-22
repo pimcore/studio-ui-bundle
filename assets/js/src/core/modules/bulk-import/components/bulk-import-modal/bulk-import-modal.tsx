@@ -82,7 +82,7 @@ export const BulkImportModal = (props: BulkImportModalProps): React.JSX.Element 
   const onImport = (): void => {
     if (isNil(fileId)) return
 
-    handleImport(fileId, selectedItems, t('bulk-import.job-title'))
+    handleImport(fileId, selectedItems)
     closeModal()
   }
 

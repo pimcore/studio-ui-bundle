@@ -145,6 +145,15 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Class Definition"],
             }),
+            classDefinitionGetBrickFields: build.query<
+                ClassDefinitionGetBrickFieldsApiResponse,
+                ClassDefinitionGetBrickFieldsApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/definition/configuration-view/detail/${queryArg.id}/brick-fields`,
+                }),
+                providesTags: ["Class Definition"],
+            }),
             classDefinitionGetBricksUsages: build.query<
                 ClassDefinitionGetBricksUsagesApiResponse,
                 ClassDefinitionGetBricksUsagesApiArg
@@ -660,6 +669,13 @@ export type ClassCustomLayoutImportApiArg = {
         /** Import file to upload */
         file: Blob;
     };
+};
+export type ClassDefinitionGetBrickFieldsApiResponse = /** status 200 List of object brick field names */ {
+    items: ClassDefinitionObjectBrickField[];
+};
+export type ClassDefinitionGetBrickFieldsApiArg = {
+    /** Class definition unique identifier */
+    id: string;
 };
 export type ClassDefinitionGetBricksUsagesApiResponse = /** status 200 Object bricks usage data */ {
     items: ClassDefinitionObjectBrickData[];
@@ -1192,6 +1208,14 @@ export type CustomLayoutIdentifierData = {
     /** Array of existing custom layout names */
     existingNames: string[];
 };
+export type ClassDefinitionObjectBrickField = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Name of the class definition field of type object brick */
+    fieldName: string;
+};
 export type ClassDefinitionObjectBrickData = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -1716,6 +1740,7 @@ export const {
     useClassCustomLayoutExportQuery,
     useClassCustomLayoutGetIdentifierDataQuery,
     useClassCustomLayoutImportMutation,
+    useClassDefinitionGetBrickFieldsQuery,
     useClassDefinitionGetBricksUsagesQuery,
     useClassDefinitionCreateMutation,
     useClassDefinitionGetByIdQuery,

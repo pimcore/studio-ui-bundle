@@ -13,11 +13,15 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     button: css`
-              min-width: 100%;
-              justify-items: flex-start;
+      &&& {
+        display: flex;
+        justify-content: flex-start;
+      }
     `,
     'not-first': css`
-              margin-top: ${token.marginXXS}px;
+      &&& {
+        margin-top: ${token.marginXXS}px;
+      }
     `
   }
-}, { hashPriority: 'low' })
+})

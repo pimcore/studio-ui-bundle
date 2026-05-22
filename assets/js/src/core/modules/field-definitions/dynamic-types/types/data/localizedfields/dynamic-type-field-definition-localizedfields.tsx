@@ -28,7 +28,19 @@ export class DynamicTypeFieldDefinitionLocalizedfields extends DynamicTypeFieldD
   }
 
   getDisallowedRecursiveChildTags (props: FieldDefinitionContext): string[] {
-    return [...super.getDisallowedRecursiveChildTags(props), 'localizedfields']
+    return [
+      ...super.getDisallowedRecursiveChildTags(props),
+      'localizedfields',
+      'classificationstore',
+      'consent',
+      'objectbricks',
+      'fieldcollections',
+      'reverseObjectRelation',
+      'email',
+      'firstname',
+      'lastname',
+      'gender'
+    ]
   }
 
   getGroup (): string[] {

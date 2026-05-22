@@ -2,6 +2,9 @@ common.owner: Ägare
 common.modification-date: Ändringsdatum
 common.globally: Globalt
 common.apply-selection: Tillämpa val
+cache.clear-cache-success: Cachen har rensats
+cache.clear-full-page-cache-success: Helsidescachen har rensats
+cache.clear-temporary-files-success: Temporära filer har tagits bort
 dont-ask-again: Fråga inte igen
 widget.missing-context.title: Saknar kontext
 widget.missing-context.description: Inget relaterat element hittades
@@ -19,6 +22,8 @@ error.error_validation.email_failed: Ange en giltig e-postadress
 error.error_element_not_found: Elementet hittades inte
 error.error_document_language_not_set: Dokumentet har ingen språkegenskap angiven
 error.error_inconsistent_asset_type: Bara assets av samma typ tillåts här.
+error.error_recycle_bin_restore: Kan inte återställa elementet från papperskorgen
+error.error_recycle_bin_restore_missing_parent: Kan inte återställa elementet från papperskorgen, överordnat element saknas
 sidebar.selected_elements: Valda element
 sidebar.grid_config: Rutnätskonfiguration
 sidebar.tag_filters: Taggfilter
@@ -206,6 +211,8 @@ class-definition.property-visibility.key-grid: Nyckel (Rutnät)
 class-definition.property-visibility.key-search: Nyckel (Sök)
 class-definition.property-visibility.path-grid: Sökväg (Rutnät)
 class-definition.property-visibility.path-search: Sökväg (Sök)
+class-definition.property-visibility.published-grid: Publicerad (Rutnät)
+class-definition.property-visibility.published-search: Publicerad (Sök)
 class-definition.property-visibility.modification-date-grid: Ändringsdatum (Rutnät)
 class-definition.property-visibility.modification-date-search: Ändringsdatum (Sök)
 class-definition.property-visibility.creation-date-grid: Skapandedatum (Rutnät)
@@ -978,6 +985,7 @@ lazy-loading: Lazy Loading
 disallow-add-remove: Tillåt inte lägg till / ta bort
 disallow-reorder: Tillåt inte omordning
 css-style: CSS-stil
+css-style-tooltip: "Inline-CSS som tillämpas på kroppen, t.ex. \"float: left; margin: 10px;\". Ogiltiga deklarationer ignoreras."
 collapsible: Ihopfällbar
 collapsed: Initialt ihopfälld
 border: Ram
@@ -1453,6 +1461,10 @@ navigation.reporting: Rapportering
 navigation.system: System
 navigation.website-settings: Webbplatsinställningar
 navigation.document-types: Dokumenttyper
+navigation.cache: Cache
+navigation.cache.clear-cache: Rensa cache
+navigation.cache.clear-full-page-cache: Rensa helsidescache
+navigation.cache.clear-temporary-files: Ta bort temporära filer
 navigation.clear-cache: Rensa helsidescache
 navigation.reports: Alla rapporter
 navigation.custom-reports: Konfiguration av anpassade rapporter

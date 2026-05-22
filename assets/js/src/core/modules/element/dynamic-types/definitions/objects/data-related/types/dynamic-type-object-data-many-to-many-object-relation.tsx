@@ -32,7 +32,7 @@ import {
   ManyToManyObjectRelationComboField
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/components/combo-field/many-to-many-object-relation-combo-field'
 import { type ManyToManyRelationValue } from '../components/many-to-many-relation/hooks/use-value'
-import { RelationList } from '../../grid-cell-preview/relation-list/relation-list'
+import { FormattedRelationList } from '../../grid-cell-preview/relation-list/formatted-relation-list'
 import { type DynamicTypeFieldFilterAbstract } from '../../../field-filters/dynamic-type-field-filter-abstract'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
@@ -89,8 +89,18 @@ export class DynamicTypeObjectDataManyToManyObjectRelation extends DynamicTypeOb
 
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
     const value: ManyToManyRelationValue | null = props.cellProps.getValue()
+    const objectProps = props.objectProps as ManyToManyObjectRelationObjectDataDefinition
+    const dataObjectId = props.cellProps.row.original.id as number | undefined
 
-    return <RelationList relations={ value } />
+    return (
+      <FormattedRelationList
+        columnId={ props.cellProps.column.id }
+        dataObjectId={ dataObjectId }
+        fieldNameFallback={ objectProps.combinedFieldName }
+        pathFormatterClass={ objectProps.pathFormatterClass }
+        relations={ value }
+      />
+    )
   }
 
   getDefaultGridColumnWidth (): number | undefined {

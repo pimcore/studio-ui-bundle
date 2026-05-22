@@ -2,6 +2,9 @@ common.owner: Owner
 common.modification-date: Modification date
 common.globally: Globally
 common.apply-selection: Apply selection
+cache.clear-cache-success: Cache successfully cleared
+cache.clear-full-page-cache-success: Full page cache successfully cleared
+cache.clear-temporary-files-success: Temporary files successfully cleared
 dont-ask-again: "Don't ask again"
 widget.missing-context.title: Missing Context
 widget.missing-context.description: No related element found
@@ -18,6 +21,8 @@ error.error_validation.email_failed: Please enter a valid email address
 error.error_element_not_found: Element not found
 error.error_document_language_not_set: The document has no language property set
 error.error_inconsistent_asset_type: Only assets of same type are allowed here.
+error.error_recycle_bin_restore: Cannot restore element from recycle bin
+error.error_recycle_bin_restore_missing_parent: Cannot restore element from recycle bin, parent element is missing
 error.syntax_error: Syntax error
 sidebar.selected_elements: Selected Elements
 sidebar.grid_config: Grid config
@@ -206,6 +211,8 @@ class-definition.property-visibility.key-grid: Key (Grid)
 class-definition.property-visibility.key-search: Key (Search)
 class-definition.property-visibility.path-grid: Path (Grid)
 class-definition.property-visibility.path-search: Path (Search)
+class-definition.property-visibility.published-grid: Published (Grid)
+class-definition.property-visibility.published-search: Published (Search)
 class-definition.property-visibility.modification-date-grid: Modification Date (Grid)
 class-definition.property-visibility.modification-date-search: Modification Date (Search)
 class-definition.property-visibility.creation-date-grid: Creation Date (Grid)
@@ -984,6 +991,7 @@ lazy-loading: Lazy Loading
 disallow-add-remove: Disallow Add / Remove
 disallow-reorder: Disallow Reorder
 css-style: CSS Style
+css-style-tooltip: "Inline CSS applied to the body, e.g. \"float: left; margin: 10px;\". Invalid declarations are ignored."
 collapsible: Collapsible
 collapsed: Initially Collapsed
 border: Border
@@ -1460,6 +1468,10 @@ navigation.reporting: Reporting
 navigation.system: System
 navigation.website-settings: Website Settings
 navigation.document-types: Document Types
+navigation.cache: Cache
+navigation.cache.clear-cache: Clear Cache
+navigation.cache.clear-full-page-cache: Clear Full Page Cache
+navigation.cache.clear-temporary-files: Clear Temporary Files
 navigation.clear-cache: Clear Full Page Cache
 navigation.reports: All Reports
 navigation.custom-reports: Custom Reports Configuration

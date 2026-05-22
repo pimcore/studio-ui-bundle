@@ -30,6 +30,7 @@ export * from '@Pimcore/utils/relative-time'
 export * from '@Pimcore/utils/url-cache-buster'
 export * from '@Pimcore/utils/uuid'
 export * from '@Pimcore/utils/type-utils'
+export * from '@Pimcore/utils/normalize-icon'
 export * from '@Pimcore/utils/local-storage'
 export * from '@Pimcore/utils/css'
 

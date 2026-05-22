@@ -2,6 +2,9 @@ common.owner: Proprietario
 common.modification-date: Data di modifica
 common.globally: Globalmente
 common.apply-selection: Applica selezione
+cache.clear-cache-success: Cache svuotata con successo
+cache.clear-full-page-cache-success: Cache delle pagine complete svuotata con successo
+cache.clear-temporary-files-success: File temporanei eliminati con successo
 dont-ask-again: Non chiedere più
 widget.missing-context.title: Contesto mancante
 widget.missing-context.description: Nessun elemento correlato trovato
@@ -19,6 +22,8 @@ error.error_validation.email_failed: Inserire un indirizzo email valido
 error.error_element_not_found: Elemento non trovato
 error.error_document_language_not_set: Il documento non ha una proprietà lingua impostata
 error.error_inconsistent_asset_type: Qui sono consentiti solo asset dello stesso tipo.
+error.error_recycle_bin_restore: "Impossibile ripristinare l'elemento dal cestino"
+error.error_recycle_bin_restore_missing_parent: "Impossibile ripristinare l'elemento dal cestino, l'elemento padre è mancante"
 sidebar.selected_elements: Elementi selezionati
 sidebar.grid_config: Configurazione griglia
 sidebar.tag_filters: Filtri tag
@@ -206,6 +211,8 @@ class-definition.property-visibility.key-grid: Chiave (Griglia)
 class-definition.property-visibility.key-search: Chiave (Ricerca)
 class-definition.property-visibility.path-grid: Percorso (Griglia)
 class-definition.property-visibility.path-search: Percorso (Ricerca)
+class-definition.property-visibility.published-grid: Pubblicato (Griglia)
+class-definition.property-visibility.published-search: Pubblicato (Ricerca)
 class-definition.property-visibility.modification-date-grid: Data di modifica (Griglia)
 class-definition.property-visibility.modification-date-search: Data di modifica (Ricerca)
 class-definition.property-visibility.creation-date-grid: Data di creazione (Griglia)
@@ -978,6 +985,7 @@ lazy-loading: Caricamento lazy
 disallow-add-remove: Non consentire aggiunta / rimozione
 disallow-reorder: Non consentire riordinamento
 css-style: Stile CSS
+css-style-tooltip: "CSS in linea applicato al corpo, ad es. \"float: left; margin: 10px;\". Le dichiarazioni non valide vengono ignorate."
 collapsible: Comprimibile
 collapsed: Inizialmente compresso
 border: Bordo
@@ -1453,6 +1461,10 @@ navigation.reporting: Reportistica
 navigation.system: Sistema
 navigation.website-settings: Impostazioni sito web
 navigation.document-types: Tipi di documento
+navigation.cache: Cache
+navigation.cache.clear-cache: Svuota cache
+navigation.cache.clear-full-page-cache: Svuota cache pagine complete
+navigation.cache.clear-temporary-files: Elimina file temporanei
 navigation.clear-cache: Cancella cache pagine complete
 navigation.reports: Tutti i report
 navigation.custom-reports: Configurazione report personalizzati

@@ -25,7 +25,7 @@ interface UseMergedKeyBindingsReturn {
 /**
  * Hook that merges user keybindings with default keybindings
  */
-export const useMergedKeyBindings = (userKeyBindings?: KeyBindingForAUser[]): UseMergedKeyBindingsReturn => {
+export const useMergedKeyBindings = (userKeyBindings?: KeyBindingForAUser[], userId?: number): UseMergedKeyBindingsReturn => {
   const [mergedKeyBindings, setMergedKeyBindings] = useState<KeyBindingForAUser[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const { getDefaultKeyBindings } = useUserManagementHelper()
@@ -60,7 +60,7 @@ export const useMergedKeyBindings = (userKeyBindings?: KeyBindingForAUser[]): Us
     }
 
     void loadAndMergeKeyBindings()
-  }, [userKeyBindings, isAuthenticated])
+  }, [userKeyBindings, isAuthenticated, userId])
 
   return {
     mergedKeyBindings,

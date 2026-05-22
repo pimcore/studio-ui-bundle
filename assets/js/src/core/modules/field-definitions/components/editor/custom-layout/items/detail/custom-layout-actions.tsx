@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { useRefresh } from '@Pimcore/modules/field-definitions/components/editor/items/detail/refresh-provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { IconButton, useMessage, useFormModal, ButtonGroup } from '@sdk/components'
@@ -24,8 +25,9 @@ const defaultValidateFile = (file: File): boolean => {
 
 export const CustomLayoutActions = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { useDetailLayoutQuery, useDetailGeneralSettingsQuery, importExportConfig, useItemsDeleteMutation } = useSettings()
+  const { importExportConfig, useItemsDeleteMutation } = useSettings()
   const { activeConfiguration, closeConfiguration } = useItems()
+  const { refreshLayout } = useRefresh()
   const messageApi = useMessage()
   const modal = useFormModal()
 
@@ -42,14 +44,6 @@ export const CustomLayoutActions = (): React.JSX.Element => {
   // customLayoutId.  activeConfiguration.id is always the stable, clean UUID
   // that was used to open this detail view.
   const itemId = activeConfiguration?.id
-
-  const layoutResult = useDetailLayoutQuery?.({
-    id: itemId ?? ''
-  })
-
-  const generalSettingsResult = useDetailGeneralSettingsQuery({
-    id: itemId ?? ''
-  })
 
   if (isNil(importExportConfig)) {
     return <></>
@@ -80,8 +74,7 @@ export const CustomLayoutActions = (): React.JSX.Element => {
   const handleImportSuccess = (): void => {
     void messageApi.success(t(successMessageKey))
     setIsImportModalOpen(false)
-    void layoutResult?.refetch()
-    void generalSettingsResult?.refetch()
+    void refreshLayout()
   }
 
   const handleDelete = (): void => {

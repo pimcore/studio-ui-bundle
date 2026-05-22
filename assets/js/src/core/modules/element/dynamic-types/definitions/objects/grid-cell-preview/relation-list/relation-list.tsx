@@ -28,9 +28,10 @@ interface RelationListProps {
   relations: RelationItem[] | null
   isClickable?: boolean
   noWrapper?: boolean
+  pathIsHtml?: boolean
 }
 
-export const RelationList = ({ relations, isClickable = false, noWrapper = false }: RelationListProps): React.JSX.Element => {
+export const RelationList = ({ relations, isClickable = false, noWrapper = false, pathIsHtml = false }: RelationListProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   if (isNil(relations) || isEmpty(relations)) {
@@ -52,6 +53,7 @@ export const RelationList = ({ relations, isClickable = false, noWrapper = false
             id={ relation.id }
             key={ index }
             path={ relation.fullPath }
+            pathIsHtml={ pathIsHtml }
             published={ relation.isPublished ?? undefined }
           />
           )
