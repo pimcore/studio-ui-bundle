@@ -16,7 +16,8 @@ import { useEditableDropzoneStyles } from '../components/editable-dropzone/edita
 import { EditableDropzone } from '../components/editable-dropzone/editable-dropzone'
 import {
   DROPZONE_ATTRIBUTES,
-  DROPZONE_CONFIG
+  DROPZONE_CONFIG,
+  DROPZONE_SELECTORS
 } from '../constants/dropzone-constants'
 import {
   updateDropzoneVisibility,
@@ -58,6 +59,8 @@ export const useBlockManagerDropzones = <T extends BlockManagerInterface>({
   const [, startTransition] = useTransition()
   const isDraggingRef = useRef<boolean>(false)
   const activeDropzoneRef = useRef<string | null>(null)
+  // Cached so the dragOver hot path doesn't need to querySelectorAll per event.
+  const cachedDropzonesRef = useRef<HTMLElement[]>([])
 
   const container = useMemo(() => blockManager.getContainer(), [blockManager])
   const editableName = useMemo(() => container?.getAttribute(DROPZONE_ATTRIBUTES.DATA_NAME) ?? null, [container])
@@ -72,10 +75,14 @@ export const useBlockManagerDropzones = <T extends BlockManagerInterface>({
     })
   }, [startTransition])
 
-  const updateStyles = useCallback(() => {
+  // Drag-state runs per dragOver; visibility only changes at drag start/end.
+  const updateDragStates = useCallback(() => {
+    updateDropzoneDragStates(container, activeDropzoneRef.current, isDraggingRef.current, cachedDropzonesRef.current)
+  }, [container])
+
+  const updateVisibility = useCallback(() => {
     updateDropzoneVisibility(editableName, isDraggingRef.current)
-    updateDropzoneDragStates(container, activeDropzoneRef.current, isDraggingRef.current)
-  }, [container, editableName])
+  }, [editableName])
 
   const addDropzonePortal = useCallback((containerElement: HTMLElement) => {
     // Find all existing dropzone containers to determine the index
@@ -135,9 +142,19 @@ export const useBlockManagerDropzones = <T extends BlockManagerInterface>({
     setDropzonePortals(newPortals)
   }, [container, editableName, currentElements.length])
 
+  // Refresh the dropzone cache only when portals change (add/remove/refresh).
   useEffect(() => {
-    updateStyles()
-  }, [updateStyles, activeId])
+    if (container === null) {
+      cachedDropzonesRef.current = []
+      return
+    }
+    cachedDropzonesRef.current = Array.from(container.querySelectorAll(DROPZONE_SELECTORS.DROPZONE))
+  }, [container, dropzonePortals])
+
+  useEffect(() => {
+    updateVisibility()
+    updateDragStates()
+  }, [updateVisibility, updateDragStates, activeId])
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
     const activeElementId = String(event.active.id)
@@ -154,20 +171,20 @@ export const useBlockManagerDropzones = <T extends BlockManagerInterface>({
   const handleDragOver = useCallback((event: DragOverEvent) => {
     const { over } = event
 
+    let nextActiveDropzone: string | null = null
     if (!isUndefined(over?.id)) {
       const overId = String(over.id)
-
       if (overId.startsWith(DROPZONE_CONFIG.ID_PREFIX)) {
-        activeDropzoneRef.current = overId
-      } else {
-        activeDropzoneRef.current = null
+        nextActiveDropzone = overId
       }
-    } else {
-      activeDropzoneRef.current = null
     }
 
-    updateStyles()
-  }, [updateStyles])
+    // Most dragOver events keep the same `over` target — bail out before the DOM writes.
+    if (nextActiveDropzone === activeDropzoneRef.current) return
+
+    activeDropzoneRef.current = nextActiveDropzone
+    updateDragStates()
+  }, [updateDragStates])
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event

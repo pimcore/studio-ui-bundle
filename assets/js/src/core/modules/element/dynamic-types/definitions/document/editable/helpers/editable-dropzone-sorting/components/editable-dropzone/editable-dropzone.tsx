@@ -20,9 +20,21 @@ export interface EditableDropzoneProps {
   isValidDrop?: (info: any) => boolean
 }
 
-export const EditableDropzone = ({ id, index, onDropItem, isValidDrop }: EditableDropzoneProps): React.JSX.Element => {
-  const { setNodeRef } = useSortDroppable({ id })
+// Leaf isolating the dnd-kit subscription: useSortDroppable re-renders on every
+// store update during a drag, bypassing parent React.memo. Confining that
+// re-render to a tiny leaf keeps the surrounding <Droppable> (heavy useStyles
+// chain) idle.
+interface DroppableSubscriberProps {
+  id: string
+  children: (setNodeRef: (element: HTMLElement | null) => void) => React.ReactNode
+}
 
+const DroppableSubscriber = ({ id, children }: DroppableSubscriberProps): React.JSX.Element => {
+  const { setNodeRef } = useSortDroppable({ id })
+  return <>{children(setNodeRef)}</>
+}
+
+const EditableDropzoneComponent = ({ id, index, onDropItem, isValidDrop }: EditableDropzoneProps): React.JSX.Element => {
   const handleDrop = async (info: any): Promise<void> => {
     if (onDropItem != null) {
       await onDropItem(info, index)
@@ -38,11 +50,17 @@ export const EditableDropzone = ({ id, index, onDropItem, isValidDrop }: Editabl
       isValidData={ validateDrop }
       onDrop={ handleDrop }
     >
-      <EditableDropzoneContent
-        id={ id }
-        index={ index }
-        setNodeRef={ setNodeRef }
-      />
+      <DroppableSubscriber id={ id }>
+        {(setNodeRef) => (
+          <EditableDropzoneContent
+            id={ id }
+            index={ index }
+            setNodeRef={ setNodeRef }
+          />
+        )}
+      </DroppableSubscriber>
     </Droppable>
   )
 }
+
+export const EditableDropzone = React.memo(EditableDropzoneComponent)
