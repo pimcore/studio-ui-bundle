@@ -86,7 +86,9 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
 
   useEffect(() => {
     if (open) {
-      setSelectedLocales([contentLanguages[0] ?? currentLanguage, contentLanguages[1] ?? null])
+      const languagesByPriority = [currentLanguage, ...contentLanguages.filter(language => language !== currentLanguage)]
+
+      setSelectedLocales([languagesByPriority[0] ?? currentLanguage, languagesByPriority[1] ?? null])
     }
   }, [open, currentLanguage, contentLanguages])
 
