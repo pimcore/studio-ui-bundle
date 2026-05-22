@@ -11,8 +11,8 @@
 /* eslint-disable max-lines */
 import { store } from '@Pimcore/app/store'
 import { api } from '@Pimcore/modules/document/document-api-slice.gen'
-import { selectDocumentById, setDraftData } from '@Pimcore/modules/document/document-draft-slice'
-import { setNodePublished } from '@Pimcore/components/element-tree/element-tree-slice'
+import { selectDocumentById, setDraftData, setModificationDate } from '@Pimcore/modules/document/document-draft-slice'
+import { setNodePublished, setDocumentNodeStaticGeneratorEnabled } from '@Pimcore/components/element-tree/element-tree-slice'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import type { DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
 import type {
@@ -156,11 +156,27 @@ export class DocumentSaveTaskManager {
           draftData: result.data?.draftData ?? null
         }))
 
+        if (!isUndefined(result.data?.modificationDate)) {
+          store.dispatch(setModificationDate({
+            id: this.documentId,
+            modificationDate: result.data?.modificationDate ?? null
+          }))
+        }
+
         if (task === SaveTaskType.Publish) {
           store.dispatch(setNodePublished({
             nodeId: String(this.documentId),
             elementType: 'document',
             isPublished: true
+          }))
+        }
+
+        const settingsData = result.data?.settingsData as Record<string, unknown> | undefined
+
+        if (!isUndefined(settingsData?.staticGeneratorEnabled)) {
+          store.dispatch(setDocumentNodeStaticGeneratorEnabled({
+            nodeId: String(this.documentId),
+            staticGeneratorEnabled: Boolean(settingsData.staticGeneratorEnabled)
           }))
         }
 

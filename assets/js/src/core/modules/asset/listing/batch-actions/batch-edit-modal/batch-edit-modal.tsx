@@ -113,7 +113,6 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
     if (selectedRowsCount === 0) {
       const job = new AssetFolderBatchEditJob({
-        title: t('batch-edit.job-title'),
         patchAssetsInFolder,
         folderId: id,
         patches,
@@ -135,7 +134,6 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
       })
     } else {
       const job = new AssetBatchEditJob({
-        title: t('batch-edit.job-title'),
         patchAssets,
         selectedRowsIds,
         patches,

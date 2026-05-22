@@ -71,15 +71,15 @@ const api = baseApi.enhanceEndpoints({
     },
 
     documentGetTranslations: {
-      providesTags: (result, error, args) => providingTags.DOCUMENT_DETAIL_ID(args.id)
+      providesTags: () => []
     },
 
     documentAddTranslation: {
-      invalidatesTags: (result, error, args) => invalidatingTags.DOCUMENT_DETAIL_ID(args.id)
+      invalidatesTags: () => []
     },
 
     documentDeleteTranslation: {
-      invalidatesTags: (result, error, args) => invalidatingTags.DOCUMENT_DETAIL_ID(args.id)
+      invalidatesTags: () => []
     }
   }
 }).injectEndpoints({
@@ -88,13 +88,7 @@ const api = baseApi.enhanceEndpoints({
       queryFn: async (arg, api, extraOptions, baseQuery) => {
         const result = await baseQuery({
           url: `${getPrefix()}/documents/renderlet/render`,
-          params: {
-            id: arg.id,
-            type: arg.type,
-            controller: arg.controller,
-            parentDocumentId: arg.parentDocumentId,
-            template: arg.template
-          },
+          params: arg,
           responseHandler: async (response) => await response.blob()
         })
 

@@ -19,8 +19,8 @@ import { SaveView } from './views/save-view'
 import { defaultValues } from './forms/save-form'
 import { type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Content } from '@Pimcore/components/content/content'
-import { useRoleGetCollectionQuery } from '@Pimcore/modules/user/roles/roles-api-slice-enhanced'
-import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
+import { useRoleGetShareCollectionQuery } from '@Pimcore/modules/user/roles/roles-api-slice-enhanced'
+import { useUserGetShareCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
@@ -32,6 +32,7 @@ import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listin
 import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
+import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 import { Form } from '@sdk/components'
 
 enum ViewState {
@@ -55,8 +56,8 @@ export const GridConfigInner = (): React.JSX.Element => {
   const { isLoading, isFetching, data } = useDataObjectListSavedGridConfigurationsQuery({
     classId: selectedClassDefinition?.id ?? ''
   }, { skip: selectedClassDefinition === undefined })
-  const { data: roleList } = useRoleGetCollectionQuery()
-  const { data: userList } = useUserGetCollectionQuery()
+  const { data: roleList } = useRoleGetShareCollectionQuery()
+  const { data: userList } = useUserGetShareCollectionQuery()
   const { isFetching: gridConfigIsLoading } = useDataObjectGetGridConfigurationQuery({
     classId: selectedClassDefinition?.id ?? '',
     folderId: getId(),
@@ -129,7 +130,7 @@ export const GridConfigInner = (): React.JSX.Element => {
 
   const onColumnClick = (column: AvailableColumn): void => {
     if (column.type === 'dataobject.classificationstore') {
-      if (!('fieldDefinition' in column.config)) {
+      if (!hasFieldDefinition(column.config)) {
         throw new Error('Field definition is missing in column config')
       }
 

@@ -231,6 +231,9 @@ const defaultComponentConfig = {
       }
     }
   },
+  app: {
+    background: { type: ComponentType.SINGLE, name: 'app.background' }
+  },
   wysiwyg: {
     editor: { type: ComponentType.SINGLE, name: 'wysiwyg.editor' }
   },

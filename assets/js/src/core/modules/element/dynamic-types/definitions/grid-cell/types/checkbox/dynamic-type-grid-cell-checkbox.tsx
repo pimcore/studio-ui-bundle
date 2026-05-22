@@ -17,7 +17,7 @@ export const DEFAULT_CHECKBOX_COLUMN_WIDTH = 100
 
 @injectable()
 export class DynamicTypeGridCellCheckbox extends DynamicTypeGridCellAbstract {
-  readonly id = 'checkbox'
+  readonly id: string = 'checkbox'
 
   getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
     return <CheckboxCell { ...props } />

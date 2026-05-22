@@ -8,13 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { isNonEmptyString } from '@sdk/utils'
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { addMissingTranslation } from './store/missingTranslations.slice'
 import { store } from '../store'
-import { returnKeyIfEmptyProcessor } from './utils/post-processors'
-import { isNonEmptyString } from '@sdk/utils'
+import { addMissingTranslation } from './store/missingTranslations.slice'
+import { createDebugTranslationsProcessor, returnKeyIfEmptyProcessor } from './utils/post-processors'
 
 export const FALLBACK_LANGUAGE = 'en'
 
@@ -27,7 +27,7 @@ i18n
     resources: {},
     keySeparator: false,
     saveMissing: true,
-    postProcess: ['returnKeyIfEmpty']
+    postProcess: ['returnKeyIfEmpty', 'debugTranslations']
   })
 
   .catch(() => {
@@ -35,6 +35,11 @@ i18n
   })
 
 i18n.use(returnKeyIfEmptyProcessor)
+
+const debugTranslationsProcessor = createDebugTranslationsProcessor(
+  () => (store.getState()).settings?.settings?.debug_admin_translations === true
+)
+i18n.use(debugTranslationsProcessor)
 
 i18n.on('missingKey', (lngs, namespace, key, res) => {
   if (isNonEmptyString(key)) {

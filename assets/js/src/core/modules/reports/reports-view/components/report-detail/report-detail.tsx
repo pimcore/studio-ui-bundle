@@ -100,7 +100,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
   const renderColumnActionCell = ({ id, actionType }: { id: string, actionType: ReportActionType | undefined }): React.JSX.Element => (
     <Flex
       align='center'
-      justify='center'
+      justify='flex-start'
     >
       <IconButton
         icon={ { value: 'open-folder' } }
@@ -148,7 +148,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
                 id: `${columnId}-action`,
                 header: t('actions.open'),
                 enableSorting: false,
-                size: 50,
+                size: 40,
                 cell: (info) => {
                   const rowData = info.row.original as object
                   const id = rowData[columnId]

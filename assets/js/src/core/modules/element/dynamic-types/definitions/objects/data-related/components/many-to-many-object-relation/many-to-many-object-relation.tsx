@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isUndefined, isEmpty, find, isNil } from 'lodash'
 import { ManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/many-to-many-relation'
@@ -29,6 +29,9 @@ import { type IUseDataObjectGridsReturn, useDataObjectGrids } from '@Pimcore/mod
 import { useGridOptions } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-grid-options'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
+import { SelectedColumnsProvider, type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
+import { useUserContentLanguage } from '@Pimcore/modules/auth/hooks/use-user-content-language'
+import { useClassDefinitionSelectionOptional } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 
 export interface ManyToManyObjectRelationClassDefinitionProps {
   allowToClearRelation: boolean
@@ -74,15 +77,30 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   const { id } = useElementContext()
   const { dataObject } = useDataObjectDraft(id)
   const { getByName } = useClassDefinitions()
+  // Inline-edit context: there is no editor draft for the row being edited, so
+  // fall back to the listing's selected class.
+  const listingClassSelection = useClassDefinitionSelectionOptional()
 
   const { transformGridColumn, getDefaultVisibleFieldDefinitions } = useGridOptions()
+  const userLanguage = useUserContentLanguage()
 
-  const classId = !isUndefined(dataObject) ? getByName(dataObject.className)?.id : ''
+  const editorClassId = !isUndefined(dataObject) ? getByName(dataObject.className)?.id : undefined
+  const listingClassId = listingClassSelection?.selectedClassDefinition?.id
+  // Prefer the listing's selected class when available; the editor's element
+  // context can point to an unrelated open object (or a folder) in inline edit.
+  const classId = listingClassId ?? editorClassId
   const relationField = props?.combinedFieldName
   const dataRelationClasses = props?.allowedClasses
 
-  const [loadedIds, setLoadedIds] = useState<number[]>([])
   const [cachedGridFullData, setCachedGridFullData] = useState<IUseDataObjectGridsReturn['data']>([])
+  const prevLanguageRef = useRef(userLanguage)
+  const prevDataObjectRef = useRef(dataObject)
+
+  // Synchronously reset cache when language changes, before useDataObjectGrids is called
+  if (prevLanguageRef.current !== userLanguage) {
+    prevLanguageRef.current = userLanguage
+    cachedGridFullData.length > 0 && setCachedGridFullData([])
+  }
 
   const { isLoading: isAvailableGridColumnsLoading, data: availableGridColumnsData } = useDataObjectGetAvailableGridColumnsForRelationQuery({
     classId,
@@ -123,60 +141,69 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   }, [availableGridColumnsData])
 
   const visibleColumns = (visibleFieldDefinitions ?? []).map(col => ({
-    ...col,
-    group: col?.group
+    key: col.key,
+    type: col.type,
+    group: col.group,
+    config: col.config,
+    locale: col.localizable ? userLanguage : undefined
   }))
 
-  const { data: gridFullData, isLoading: isGridFullDataLoading } = useDataObjectGrids({
+  const { data: gridFullData, isLoading: isGridFullDataLoading, refetchAll } = useDataObjectGrids({
     classIds: dataRelationClasses,
     convertClassName: getByName,
     columns: visibleColumns,
-    dataValue: props?.value?.filter(item => !loadedIds.includes(item.id))
+    applyFallbackLanguages: true,
+    dataValue: props?.value
   })
 
   useEffect(() => {
     if (!isGridFullDataLoading && !isEmptyValue(gridFullData)) {
-      setLoadedIds(prev => {
-        const ids = gridFullData.map(item => item.id).filter(id => !isUndefined(id))
-        const next = [...new Set([...prev, ...ids])]
-
-        return next.length === prev.length ? prev : next
-      })
-
-      setCachedGridFullData(prev => {
-        const existingIds = new Set(prev.map(item => item.id))
-        const next = gridFullData.filter(item => !existingIds.has(item.id))
-
-        if (next.length === 0) return prev
-
-        return [...prev, ...next]
-      })
+      setCachedGridFullData(gridFullData)
     }
   }, [gridFullData, isGridFullDataLoading])
 
   useEffect(() => {
-    // Remove IDs from loadedIds and cachedGridFullData if they no longer exist in the new props.value
     if (!isEmpty(props.value)) {
       const currentIds = new Set((props?.value ?? []).map(item => item.id))
-
-      setLoadedIds(prev => prev.filter(id => currentIds.has(id)))
       setCachedGridFullData(prev => prev.filter(item => !isUndefined(item.id) && currentIds.has(item.id)))
     }
   }, [props?.value])
+
+  // When the draft transitions undefined → defined (object refreshed), force a refetch.
+  // Queries are always active (dataValue = props.value, unfiltered), so refetchAll() works immediately.
+  useEffect(() => {
+    if (prevDataObjectRef.current === undefined && dataObject !== undefined) {
+      refetchAll()
+    }
+    prevDataObjectRef.current = dataObject
+  }, [dataObject])
 
   const columnDefinition = visibleFieldsToColumnDefinitions({
     visibleFieldDefinitions,
     disabled: props.inherited === true || props.disabled === true,
     pathFormatterClass: props.pathFormatterClass ?? '',
-    transformGridColumn
+    transformGridColumn,
+    userLanguage
   })
 
-  const mergedGridFullData = useMemo(() => {
-    const existingIds = new Set(cachedGridFullData.map(item => item.id))
+  const selectedColumns = useMemo<SelectedColumn[]>(() => {
+    return (visibleFieldDefinitions ?? []).map(col => {
+      const locale = col.localizable ? userLanguage : null
+      return {
+        key: col.key,
+        type: col.type,
+        config: col.config,
+        sortable: col.sortable ?? false,
+        editable: col.editable ?? false,
+        localizable: col.localizable ?? false,
+        frontendType: col.frontendType,
+        locale,
+        group: col.group as SelectedColumn['group']
+      }
+    })
+  }, [visibleFieldDefinitions, userLanguage])
 
-    const newData = gridFullData.filter(item => !existingIds.has(item.id))
-    return [...cachedGridFullData, ...newData]
-  }, [cachedGridFullData, gridFullData])
+  const mergedGridFullData = !isEmptyValue(gridFullData) ? gridFullData : cachedGridFullData
 
   const visibleFieldsValue = useMemo(() => {
     return mergedGridFullData.map(item => {
@@ -197,15 +224,17 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   )
 
   return (
-    <ManyToManyRelation
-      { ...props }
-      columnDefinition={ [...columnDefinition, ...(props.columnDefinition ?? [])] }
-      dataObjectsAllowed
-      enrichRowData={ handleEnrichRowData }
-      isLoading={ isAvailableGridColumnsLoading || isGridFullDataLoading }
-      value={ props.value }
-      visibleFieldsValue={ visibleFieldsValue }
-    />
+    <SelectedColumnsProvider columns={ selectedColumns }>
+      <ManyToManyRelation
+        { ...props }
+        columnDefinition={ [...columnDefinition, ...(props.columnDefinition ?? [])] }
+        dataObjectsAllowed
+        enrichRowData={ handleEnrichRowData }
+        isLoading={ isAvailableGridColumnsLoading || isGridFullDataLoading }
+        value={ props.value }
+        visibleFieldsValue={ visibleFieldsValue }
+      />
+    </SelectedColumnsProvider>
   )
 }
 

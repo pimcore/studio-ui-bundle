@@ -23,14 +23,6 @@ export class DynamicTypeFieldDefinitionFieldcollections extends DynamicTypeField
     return { type: 'name', value: 'field-collection-field' }
   }
 
-  getAllowedChildTags (props: FieldDefinitionContext): string[] {
-    return [...super.getAllowedChildTags(props), 'group:layout', 'group:data']
-  }
-
-  getDisallowedRecursiveChildTags (props: FieldDefinitionContext): string[] {
-    return [...super.getDisallowedRecursiveChildTags(props), 'fieldcollections']
-  }
-
   getGroup (): string[] {
     return [...super.getGroup(), 'structured']
   }

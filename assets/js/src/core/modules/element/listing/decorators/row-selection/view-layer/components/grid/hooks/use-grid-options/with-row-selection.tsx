@@ -24,6 +24,32 @@ export const WithRowSelection = (useBaseHook: IRowSelectionDecoratorProps['useGr
     const { availableColumns } = useAvailableColumns()
 
     useEffect(() => {
+      if (data?.items === undefined) {
+        return
+      }
+
+      const items = data.items as Array<{ columns: Array<{ key: string, value: unknown }> }>
+      const dataItemIds = new Set(
+        items.map(item => item.columns.find(column => column.key === 'id')?.value).filter(Boolean)
+      )
+
+      const prunedSelectedRows: Record<string, boolean> = {}
+      let selectionChanged = false
+
+      for (const key in selectedRows) {
+        if (dataItemIds.has(Number.parseInt(key))) {
+          prunedSelectedRows[key] = selectedRows[key]
+        } else {
+          selectionChanged = true
+        }
+      }
+
+      if (selectionChanged) {
+        setSelectedRows(prunedSelectedRows)
+      }
+    }, [data?.items])
+
+    useEffect(() => {
       const newSelectedRowsData: RowSelectionData['selectedRowsData'] = {}
       const systemColumns = availableColumns.filter(column => Array.isArray(column.group) && column.group.includes('system'))
       const systemColumnKeys = systemColumns.map(column => column.key)

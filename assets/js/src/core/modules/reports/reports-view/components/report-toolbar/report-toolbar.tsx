@@ -21,11 +21,10 @@ import { Checkbox } from '@Pimcore/components/checkbox/checkbox'
 import { Input } from '@Pimcore/components/input/input'
 import { useCustomReportExportCsvMutation } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
-import { DownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/download-job'
+import { CsvDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/csv-download-job'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
-import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 
 interface IReportToolbarProps {
   currentReport: string | null
@@ -50,9 +49,7 @@ export const ReportToolbar = ({ currentReport, showPagination, page, setPage, pa
   const { styles } = useStyles()
 
   const handleExportCSV = (): void => {
-    const job = new DownloadJob({
-      title: t('jobs.csv-job.title', { title: currentReport }),
-      downloadUrl: `${getPrefix()}/export/download/csv/{jobRunId}`,
+    const job = new CsvDownloadJob({
       action: async (): Promise<number> => {
         const response = await fetchExportCSV({
           body: {

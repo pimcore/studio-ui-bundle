@@ -10,21 +10,12 @@
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { Form, Input, InputNumber, Select } from '@sdk/components'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const FieldDefinitionCalculatedValueFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
   const isCustomLayout = props.context.area.includes('custom-layout')
-
-  const form = Form.useFormInstance()
-  const useCalculatorType = Form.useWatch('calculatorType')
-
-  useEffect(() => {
-    if (useCalculatorType === null) {
-      form.setFieldValue('calculatorType', 'class')
-    }
-  }, [useCalculatorType, form])
 
   return (
     <>

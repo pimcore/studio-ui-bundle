@@ -2,6 +2,9 @@ common.owner: Proprietario
 common.modification-date: Data di modifica
 common.globally: Globalmente
 common.apply-selection: Applica selezione
+cache.clear-cache-success: Cache svuotata con successo
+cache.clear-full-page-cache-success: Cache delle pagine complete svuotata con successo
+cache.clear-temporary-files-success: File temporanei eliminati con successo
 dont-ask-again: Non chiedere più
 widget.missing-context.title: Contesto mancante
 widget.missing-context.description: Nessun elemento correlato trovato
@@ -17,7 +20,10 @@ error.error_widget_name_invalid: Il nome del widget non è valido (sono consenti
 error.error_validation_failed: Validazione fallita
 error.error_validation.email_failed: Inserire un indirizzo email valido
 error.error_element_not_found: Elemento non trovato
+error.error_document_language_not_set: Il documento non ha una proprietà lingua impostata
 error.error_inconsistent_asset_type: Qui sono consentiti solo asset dello stesso tipo.
+error.error_recycle_bin_restore: "Impossibile ripristinare l'elemento dal cestino"
+error.error_recycle_bin_restore_missing_parent: "Impossibile ripristinare l'elemento dal cestino, l'elemento padre è mancante"
 sidebar.selected_elements: Elementi selezionati
 sidebar.grid_config: Configurazione griglia
 sidebar.tag_filters: Filtri tag
@@ -201,6 +207,8 @@ class-definition.property-visibility.key-grid: Chiave (Griglia)
 class-definition.property-visibility.key-search: Chiave (Ricerca)
 class-definition.property-visibility.path-grid: Percorso (Griglia)
 class-definition.property-visibility.path-search: Percorso (Ricerca)
+class-definition.property-visibility.published-grid: Pubblicato (Griglia)
+class-definition.property-visibility.published-search: Pubblicato (Ricerca)
 class-definition.property-visibility.modification-date-grid: Data di modifica (Griglia)
 class-definition.property-visibility.modification-date-search: Data di modifica (Ricerca)
 class-definition.property-visibility.creation-date-grid: Data di creazione (Griglia)
@@ -280,6 +288,7 @@ custom-layout.delete.success: Layout personalizzato eliminato con successo
 example-prefix: Prefisso di esempio
 pagination.show-total: Totale {{total}} elementi
 pagination.page: Pagina
+pagination.showing-x-of-y: Mostrando {{loaded}} di {{total}}
 preview-card.locate-in-tree: Individua nell'albero
 preview-card.rename: Rinomina
 preview-card.download-zip: Scarica come ZIP
@@ -489,6 +498,8 @@ published: Pubblicato
 classname: Nome classe
 index: Indice
 listing.grid-config.title: Configurazione griglia
+grid-config.discard-all-changes: Annulla tutte le modifiche
+grid-config.apply-changes: Applica modifiche
 listing.add-column: Aggiungi una colonna
 listing.actions: Applica alla selezione
 listing.non-selected.actions: Applica a tutti
@@ -577,7 +588,13 @@ translations.show-all-languages: Mostra tutte
 translations.show-minimal-languages: Mostra minimali
 translations.show-hide-locale: Mostra/Nascondi lingua
 translations.new-translation: Nuova traduzione
-translations.new: Aggiungi
+translations.new: Nuovo
+translations.domain.messages: Messaggi
+translations.domain.admin: Admin
+translations.domain.studio: Studio
+translations.domain.dataQualityManagement: Gestione qualità dei dati
+translations.domain.portal_engine_frontend: Portal Engine Frontend
+translations.domain.pimcore_copilot: Pimcore Copilot
 translations.type-options.custom: Formato ICU
 translations.type-options.simple: Testo semplice
 translations.edit-modal.tab.plain-text: Testo normale
@@ -750,6 +767,7 @@ field-definitions.validation.empty-name: "I seguenti tipi di campo non hanno un 
 field-definitions.validation.reserved-word: "Parola riservata utilizzata come nome:"
 field-definitions.validation.invalid-format: "Formato nome non valido (deve corrispondere a [A-Za-z][A-Za-z0-9_]*):"
 field-definitions.validation.duplicate-name: "Nome duplicato all'interno del namespace:"
+field-definitions.delete.content: Eliminare davvero "{{name}}"?
 object-brick-key: Chiave Object Brick
 field-name: Nome campo
 field-definition.geopoint: Punto geografico
@@ -963,6 +981,7 @@ lazy-loading: Caricamento lazy
 disallow-add-remove: Non consentire aggiunta / rimozione
 disallow-reorder: Non consentire riordinamento
 css-style: Stile CSS
+css-style-tooltip: "CSS in linea applicato al corpo, ad es. \"float: left; margin: 10px;\". Le dichiarazioni non valide vengono ignorate."
 collapsible: Comprimibile
 collapsed: Inizialmente compresso
 border: Bordo
@@ -1016,6 +1035,7 @@ asset.sidebar.office-format: Formato ufficio
 jobs.notification.title: Lavori in corso
 jobs.notification.jobs_one: "{{count}} Azione"
 jobs.notification.jobs_other: "{{count}} Azioni"
+jobs.notification.hide-all-finished: Nascondi tutti i completati
 jobs.job.in-progress: "{{title}} in corso"
 jobs.job.queued: "{{title}} in coda"
 jobs.job.failed: "{{title}} fallito"
@@ -1032,6 +1052,7 @@ jobs.job.step_hint_single: "Passo {{step}}"
 jobs.job.step.batch-edit.preparing: Preparazione modifica in blocco
 jobs.job.step.batch-edit.applying: Applicazione modifica in blocco
 jobs.job.download-error: Download fallito
+jobs.job.download-not-available: Il download non è più disponibile.
 jobs.job.button-show-errors: Mostra errori
 jobs.job.error-modal.title: Errori lavoro
 jobs.job.button-abort: Interrompi lavoro
@@ -1043,6 +1064,9 @@ batch-edit.job-title: Modifica in blocco
 jobs.zip-upload-job.title: Carica ZIP
 jobs.zip-upload-job.step1.title: Estrazione ZIP
 jobs.zip-upload-job.step2.title: Creazione asset
+jobs.download-csv-job.title: CSV export
+jobs.download-xlsx-job.title: XLSX export
+jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Modifica in blocco
 batch-edit.no-content: Non sono ancora state aggiunte colonne
 batch-edit.modal-footer.apply-changes: Applica modifiche
@@ -1309,7 +1333,7 @@ key-bindings.seo: SEO
 key-bindings.redirects: Reindirizzamenti
 key-bindings.bundles: Bundle
 user-management.references.title: Riferimenti
-user-management.references.documents: Documenti
+user-management.references.object-dependencies: Dipendenze degli oggetti
 user-management.references.columns.id: ID
 user-management.references.columns.cpath: Percorso
 user-management.references.columns.subtype: Sottotipo
@@ -1433,6 +1457,10 @@ navigation.reporting: Reportistica
 navigation.system: Sistema
 navigation.website-settings: Impostazioni sito web
 navigation.document-types: Tipi di documento
+navigation.cache: Cache
+navigation.cache.clear-cache: Svuota cache
+navigation.cache.clear-full-page-cache: Svuota cache pagine complete
+navigation.cache.clear-temporary-files: Elimina file temporanei
 navigation.clear-cache: Cancella cache pagine complete
 navigation.reports: Tutti i report
 navigation.custom-reports: Configurazione report personalizzati
@@ -1502,6 +1530,10 @@ path_query: Percorso e query
 auto_create: Creazione automatica
 widget.redirects: Reindirizzamenti
 navigation.redirects: Reindirizzamenti
+robots-txt.save-success: robots.txt salvato con successo
+robots-txt.on-file-system-warning: "Salvataggio disabilitato: esiste un file fisico robots.txt nel filesystem."
+widget.robots-txt: robots.txt
+navigation.robots-txt: robots.txt
 perspective.default: Predefinita
 perspective.switching.title: Cambio prospettiva
 perspective.switching.description: Passaggio alla seguente prospettiva in corso
@@ -2230,6 +2262,7 @@ perspective-editor.form.main-nav-permission.experienceEcommerce.emails: E-mail
 perspective-editor.form.main-nav-permission.experienceEcommerce.documentTypes: Tipi di documento
 perspective-editor.form.main-nav-permission.experienceEcommerce.websiteSettings: Impostazioni sito web
 perspective-editor.form.main-nav-permission.experienceEcommerce.redirects: Reindirizzamenti
+perspective-editor.form.main-nav-permission.experienceEcommerce.robotsTxt: robots.txt
 perspective-editor.form.main-nav-permission.category.assetManagement: Gestione asset
 perspective-editor.form.main-nav-permission.assetManagement.hidden: Nascondi menu gestione asset
 perspective-editor.form.main-nav-permission.assetManagement.assetThumbnails: Anteprime immagini
@@ -2424,7 +2457,7 @@ user-management.permissions.newsletters: Newsletter
 user-management.permissions.targeting: Targeting
 user-management.permissions.http_errors: Errori HTTP
 user-management.permissions.seo_document_editor: Editor documenti SEO
-user-management.permissions."robots.txt": robots.txt
+user-management.permissions.robots.txt: robots.txt
 user-management.permissions.routes: Route
 user-management.permissions.word_export: Esportazione Word
 user-management.permissions.xliff_import_export: Importazione/esportazione XLIFF
@@ -2460,6 +2493,8 @@ user-management.permissions.plugin_datahub_permission_update: Datahub Aggiorname
 user-management.permissions.portal-engine_collection-access: Accesso alle collezioni del backend
 user-management.permissions.portal-engine_index-management: Gestione indici del portale
 user-management.permissions.portal-engine_wizard: Procedura guidata configurazione portale
+user-management.permissions.studio_perspective_editor: Editor delle prospettive
+user-management.permissions.studio_perspective_widget_editor: Editor dei widget delle prospettive
 user-management.permissions.wai_configuration_permission: Configurazione dei modelli di automazione
 forgot-password-form.username: Inserire il nome utente e Pimcore invierà un link di accesso al Suo indirizzo email
 forgot-password-form.username.placeholder: Nome utente
@@ -2629,3 +2664,44 @@ bulk-import.type.class: Classi
 bulk-import.type.customlayout: Layout personalizzati
 bulk-import.type.fieldcollection: Field Collections
 bulk-import.type.objectbrick: Object Bricks
+translations.toolbar.export: Esporta CSV
+translations.toolbar.import: Importa
+translations.toolbar.cleanup: Pulisci
+translations.import.modal.title: Importa traduzioni
+translations.import.modal.browse: Sfoglia file
+translations.import.modal.import: Importa
+translations.import.modal.drag-drop: Trascina e rilascia un file CSV qui
+translations.import.modal.invalid-file: Seleziona un file CSV valido
+translations.import.modal.csv-settings: Impostazioni CSV
+translations.import.modal.delimiter: Delimitatore
+translations.import.modal.quotechar: Carattere di virgolette
+translations.import.modal.escapechar: Carattere di escape
+translations.import.modal.lineterminator: Terminatore di riga
+translations.import.modal.field-required: Questo campo è obbligatorio
+translations.cleanup.confirm.title: Pulisci traduzioni
+translations.cleanup.confirm.content: Questo rimuoverà tutte le chiavi di traduzione non utilizzate. Questa azione non può essere annullata.
+translations.cleanup.confirm.ok: Pulisci
+translations.import.delta.title: Risultati dell'importazione
+translations.import.delta.description: Le seguenti traduzioni differiscono dai valori importati. Seleziona quelle che vuoi sovrascrivere con i valori importati.
+translations.import.delta.column.key: Chiave
+translations.import.delta.column.locale: Lingua
+translations.import.delta.column.current: Traduzione attuale
+translations.import.delta.column.imported: Traduzione importata
+translations.toolbar.import-merge: Importa e unisci CSV
+translations.import.delta.skip: Salta
+translations.import.delta.apply: Applica selezionati ({{count}})
+widget.translation-merger: Unisci traduzioni
+translations.merger.column.locale: Lingua
+translations.merger.column.key: Chiave
+translations.merger.column.csv-value: Valore CSV
+translations.merger.column.action: Azione
+translations.merger.column.current: Valore attuale
+translations.merger.column.state: Stato
+translations.merger.state.applied: Applicato
+translations.merger.state.reverted: Ripristinato
+translations.merger.state.pending: In sospeso
+translations.merger.apply-all: Applica tutto
+translations.merger.revert-all: Ripristina tutto
+translations.merger.title: "Unisci traduzioni (Dominio: {{domain}})"
+translations.merger.column.language: Lingua
+translations.merger.items: elementi

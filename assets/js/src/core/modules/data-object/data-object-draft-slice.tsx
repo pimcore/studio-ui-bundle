@@ -67,6 +67,12 @@ export const slice = createSlice({
       }
     },
 
+    setModificationDate (state, action: PayloadAction<{ id: number, modificationDate: number | null }>): void {
+      if (state.entities[action.payload.id] !== undefined) {
+        state.entities[action.payload.id].modificationDate = action.payload.modificationDate
+      }
+    },
+
     ...useTrackableChangesReducers(dataObjectsAdapter),
     ...usePropertiesReducers(dataObjectsAdapter),
     ...useSchedulesReducers(dataObjectsAdapter),
@@ -85,6 +91,7 @@ export const {
   removeDataObject,
   resetDataObject,
   updateKey,
+  setModificationDate,
 
   resetChanges,
   setModifiedCells,

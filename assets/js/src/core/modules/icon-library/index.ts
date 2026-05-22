@@ -272,6 +272,7 @@ import order from '@Pimcore/assets/icons/order.inline.svg?react'
 import otherOperators from '@Pimcore/assets/icons/other-operators.inline.svg?react'
 import other from '@Pimcore/assets/icons/other.inline.svg?react'
 import packageIcon from '@Pimcore/assets/icons/package.inline.svg?react'
+import pageStatic from '@Pimcore/assets/icons/page-static.inline.svg?react'
 import panel from '@Pimcore/assets/icons/panel.inline.svg?react'
 import password from '@Pimcore/assets/icons/password.inline.svg?react'
 import paste from '@Pimcore/assets/icons/paste.inline.svg?react'
@@ -318,6 +319,7 @@ import requires from '@Pimcore/assets/icons/requires.inline.svg?react'
 import restore from '@Pimcore/assets/icons/restore.inline.svg?react'
 import reverseObjectRelation from '@Pimcore/assets/icons/reverse-object-relation.inline.svg?react'
 import reverse from '@Pimcore/assets/icons/reverse.inline.svg?react'
+import robot from '@Pimcore/assets/icons/robot.inline.svg?react'
 import run from '@Pimcore/assets/icons/run.inline.svg?react'
 import save from '@Pimcore/assets/icons/save.inline.svg?react'
 import schedule from '@Pimcore/assets/icons/schedule.inline.svg?react'
@@ -370,6 +372,7 @@ import txtDocs from '@Pimcore/assets/icons/txt-docs.inline.svg?react'
 import unknown from '@Pimcore/assets/icons/unknown.inline.svg?react'
 import unlinkDocument from '@Pimcore/assets/icons/unlink-document.inline.svg?react'
 import unlocked from '@Pimcore/assets/icons/unlocked.inline.svg?react'
+import updateBuild from '@Pimcore/assets/icons/update-build.inline.svg?react'
 import uploadCloud from '@Pimcore/assets/icons/upload-cloud.inline.svg?react'
 import uploadImport from '@Pimcore/assets/icons/upload-import.inline.svg?react'
 import uploadZip from '@Pimcore/assets/icons/upload-zip.inline.svg?react'
@@ -1425,6 +1428,10 @@ moduleSystem.registerModule({
       component: packageIcon
     })
     iconLibrary.register({
+      name: 'page-static',
+      component: pageStatic
+    })
+    iconLibrary.register({
       name: 'panel',
       component: panel
     })
@@ -1607,6 +1614,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'reverse',
       component: reverse
+    })
+    iconLibrary.register({
+      name: 'robot',
+      component: robot
     })
     iconLibrary.register({
       name: 'run',
@@ -1815,6 +1826,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'unlocked',
       component: unlocked
+    })
+    iconLibrary.register({
+      name: 'update-build',
+      component: updateBuild
     })
     iconLibrary.register({
       name: 'upload-cloud',

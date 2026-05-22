@@ -1,0 +1,157 @@
+{#
+  App preloader — shown before JavaScript loads.
+  To customise the loading screen in your bundle, override this template:
+  templates/bundles/PimcoreStudioUIBundle/default/_preloader.html.twig
+
+  @var branding array{brandColor: string|null, backgroundShade: string|null, logoUrl: string|null}
+#}
+<style>
+    #app-preloader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: #fff;
+        overflow: hidden;
+        transition: opacity 500ms ease;
+        --pimcore-brand-color: #7a3ad4;
+        --pimcore-brand-background-color: #722ed1;
+    }
+    #app-preloader.app-preloader--fading { opacity: 0; }
+
+    #app-preloader .background-figure {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        filter: blur(310px);
+    }
+
+    #app-preloader .background-figure--top-left {
+        width: 1324px;
+        height: 1324px;
+        border-radius: 1324px;
+        background: rgba(55, 217, 243, 0.20);
+        animation:
+            pimcore-orbit-tl 11s linear infinite,
+            pimcore-color-pulse 6s linear 0s infinite;
+    }
+    #app-preloader .background-figure--bottom-left {
+        width: 651.152px;
+        height: 1503.398px;
+        border-radius: 1503.398px;
+        background: #FDFFFF;
+        animation:
+            pimcore-orbit-bl 9s linear infinite,
+            pimcore-color-pulse 6s linear -2s infinite;
+    }
+    #app-preloader .background-figure--bottom-right {
+        width: 1642px;
+        height: 686px;
+        border-radius: 1642px;
+        background: color-mix(in srgb, var(--pimcore-brand-background-color) 42%, transparent);
+        animation:
+            pimcore-orbit-br 14s linear infinite,
+            pimcore-color-pulse 6s linear -4s infinite;
+    }
+
+    /* Orbit keyframes — same geometry as the React Background component */
+    @keyframes pimcore-orbit-tl {
+        from { transform: translate(-50%, -50%) rotate(0deg)   translateX(340px); }
+        to   { transform: translate(-50%, -50%) rotate(360deg) translateX(340px); }
+    }
+    @keyframes pimcore-orbit-bl {
+        from { transform: translate(-50%, -50%) rotate(120deg) translateX(220px); }
+        to   { transform: translate(-50%, -50%) rotate(480deg) translateX(220px); }
+    }
+    @keyframes pimcore-orbit-br {
+        from { transform: translate(-50%, -50%) rotate(240deg) translateX(400px); }
+        to   { transform: translate(-50%, -50%) rotate(600deg) translateX(400px); }
+    }
+
+    /* Default colour pulse — uses the hardcoded default brand colour as a literal
+       so the browser can smoothly interpolate between keyframe values.
+       Overridden below if branding.brandColor is provided. */
+    @keyframes pimcore-color-pulse {
+        0%   { background: color-mix(in srgb, #722ed1 42%, transparent); }
+        50%  { background: rgba(55, 217, 243, 0.20); }
+        100% { background: color-mix(in srgb, #722ed1 42%, transparent); }
+    }
+
+    #app-preloader .preloader-logo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 586px;
+        max-height: 373px;
+        z-index: 1;
+        opacity: 1;
+    }
+
+    #app-preloader .backdrop-blur {
+        position: absolute;
+        inset: 0;
+        backdrop-filter: blur(20px);
+        pointer-events: none;
+    }
+
+    #app-preloader .logo-orbit {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 400px;
+        height: 400px;
+        border-radius: 50%;
+        background: rgba(253, 255, 255, 0.35);
+        filter: blur(90px);
+        pointer-events: none;
+    }
+    #app-preloader .logo-orbit--cw  { animation: pimcore-logo-orbit-cw  3s linear infinite; }
+    #app-preloader .logo-orbit--ccw { animation: pimcore-logo-orbit-ccw 4s linear infinite; }
+
+    @keyframes pimcore-logo-orbit-cw {
+        from { transform: translate(-50%, -50%) rotate(0deg)    translateX(80px); }
+        to   { transform: translate(-50%, -50%) rotate(-360deg) translateX(80px); }
+    }
+    @keyframes pimcore-logo-orbit-ccw {
+        from { transform: translate(-50%, -50%) rotate(180deg) translateX(80px); }
+        to   { transform: translate(-50%, -50%) rotate(540deg) translateX(80px); }
+    }
+</style>
+
+{% if branding.backgroundShade %}
+{# Override the colour-pulse keyframe with the actual background shade as a literal value.
+   A later @keyframes with the same name overrides the earlier one — last wins.
+   Literal colour values (not CSS variables) are required for smooth CSS animation
+   interpolation without @property registration. #}
+<style>
+    @keyframes pimcore-color-pulse {
+        0%   { background: color-mix(in srgb, {{ branding.backgroundShade }} 42%, transparent); }
+        50%  { background: rgba(55, 217, 243, 0.20); }
+        100% { background: color-mix(in srgb, {{ branding.backgroundShade }} 42%, transparent); }
+    }
+</style>
+{% endif %}
+
+<div
+    id="app-preloader"
+    data-logo-url="{{ branding.logoUrl ?? '/bundles/pimcorestudioui/img/logo-purple.svg' }}"
+    {% if branding.brandColor %}
+        style="--pimcore-brand-color: {{ branding.brandColor }};{% if branding.backgroundShade %} --pimcore-brand-background-color: {{ branding.backgroundShade }};{% endif %}"
+        data-brand-color="{{ branding.brandColor }}"
+    {% endif %}
+    {% if branding.backgroundShade %}
+        data-brand-background-color="{{ branding.backgroundShade }}"
+    {% endif %}
+>
+    <div class="background-figure background-figure--bottom-left"></div>
+    <div class="background-figure background-figure--bottom-right"></div>
+    <div class="background-figure background-figure--top-left"></div>
+    <div class="backdrop-blur"></div>
+    <div class="logo-orbit logo-orbit--cw"></div>
+    <div class="logo-orbit logo-orbit--ccw"></div>
+    <img
+        class="preloader-logo"
+        src="{{ branding.logoUrl ?? '/bundles/pimcorestudioui/img/logo-purple.svg' }}"
+        alt="Logo"
+    />
+</div>

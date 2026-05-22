@@ -25,7 +25,7 @@ interface UseBulkImportReturn {
   fileId: string | null
   availableItems: BulkExportAvailableItem[]
   setUploadResult: (result: PrepareResult) => void
-  handleImport: (fileId: string, items: BulkImportItem[], title: string) => void
+  handleImport: (fileId: string, items: BulkImportItem[]) => void
   reset: () => void
 }
 
@@ -40,11 +40,10 @@ export const useBulkImport = (): UseBulkImportReturn => {
     setAvailableItems(result.items)
   }, [])
 
-  const handleImport = useCallback((importFileId: string, items: BulkImportItem[], title: string): void => {
+  const handleImport = useCallback((importFileId: string, items: BulkImportItem[]): void => {
     const job = new BulkImportJob({
       fileId: importFileId,
-      items,
-      title
+      items
     })
 
     void executionEngine.runJob(job)

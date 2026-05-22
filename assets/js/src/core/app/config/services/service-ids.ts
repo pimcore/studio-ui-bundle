@@ -177,6 +177,11 @@ export const serviceIds = {
   'DynamicTypes/GridCell/Integer': 'DynamicTypes/GridCell/Integer',
   'DynamicTypes/GridCell/Error': 'DynamicTypes/GridCell/Error',
   'DynamicTypes/GridCell/Array': 'DynamicTypes/GridCell/Array',
+  'DynamicTypes/GridCell/SystemId': 'DynamicTypes/GridCell/SystemId',
+  'DynamicTypes/GridCell/SystemString': 'DynamicTypes/GridCell/SystemString',
+  'DynamicTypes/GridCell/SystemBoolean': 'DynamicTypes/GridCell/SystemBoolean',
+  'DynamicTypes/GridCell/SystemDatetime': 'DynamicTypes/GridCell/SystemDatetime',
+  'DynamicTypes/GridCell/SystemInteger': 'DynamicTypes/GridCell/SystemInteger',
   'DynamicTypes/GridCell/Textarea': 'DynamicTypes/GridCell/Textarea',
   'DynamicTypes/GridCell/Number': 'DynamicTypes/GridCell/Number',
   'DynamicTypes/GridCell/Select': 'DynamicTypes/GridCell/Select',
@@ -374,6 +379,7 @@ export const serviceIds = {
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',
+  'ExecutionEngine/JobRehydrationRegistry': 'ExecutionEngine/JobRehydrationRegistry',
 
   // Execution Engine
   executionEngine: 'ExecutionEngine',

@@ -8,10 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { isNil } from 'lodash'
 import { store } from '@Pimcore/app/store'
-import { Content } from '@Pimcore/components/content/content'
+import { appIntro } from '@Pimcore/components/background/background.styles'
+import { componentConfig, ComponentRenderer } from '@Pimcore/modules/app/component-registry/component-registry'
 import { GlobalStyles } from '@Pimcore/styles/global.styles'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
@@ -31,13 +32,51 @@ import { loadReportsMenuItems } from '@Pimcore/modules/reports/utils/reports-loa
 import { type AppLoaderRegistry } from './services/app-loader-registry'
 import { container, serviceIds } from '@sdk/app'
 import { useGlobalMessageBusLoader } from './loader/global-message-bus/loader'
+import { AppLoadingContext, type AppLoadingContextValue } from './context/app-loading-context'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
 }
 
+export type LoadPhase = 'loading' | 'outro' | 'idle'
+
 export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
-  const [isLoading, setIsLoading] = useState(true)
+  const [phase, setPhase] = useState<LoadPhase>('loading')
+  const isLoading = phase === 'loading' || phase === 'outro'
+
+  const [pendingLoaders, setPendingLoaders] = useState<Set<string>>(new Set())
+  const registerLoader = useCallback((id: string) => {
+    setPendingLoaders(prev => new Set(prev).add(id))
+  }, [])
+  const unregisterLoader = useCallback((id: string) => {
+    setPendingLoaders(prev => {
+      const next = new Set(prev)
+      next.delete(id)
+      return next
+    })
+  }, [])
+  const loading = isLoading || pendingLoaders.size > 0
+
+  const appLoadingContextValue: AppLoadingContextValue = useMemo(
+    () => ({ registerLoader, unregisterLoader, isAppLoading: loading }),
+    [registerLoader, unregisterLoader, loading]
+  )
+
+  const outroTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const finishLoading = useCallback(() => {
+    setPhase('outro')
+    outroTimerRef.current = setTimeout(() => {
+      setPhase('idle')
+    }, 1000)
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      if (outroTimerRef.current !== null) {
+        clearTimeout(outroTimerRef.current)
+      }
+    }
+  }, [])
 
   const modal = useAlertModal()
   const { modal: studioModal } = App.useApp()
@@ -68,7 +107,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
 
   useEffect(() => {
     void (async () => {
-      setIsLoading(() => true)
+      setPhase('loading')
 
       if (isAuthenticated === undefined) {
         return
@@ -79,7 +118,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
           loadPublicTranslations(),
           loadBrandThumbnailUrls()
         ]).then(() => {
-          setIsLoading(() => false)
+          finishLoading()
         }).catch((error) => {
           console.error('Error during login preparation', error)
         })
@@ -108,7 +147,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
 
         await appLoaderRegistry.loadAll()
 
-        setIsLoading(() => false)
+        finishLoading()
       }
     })()
   }, [isAuthenticated])
@@ -117,8 +156,21 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
     <>
       <GlobalStyles />
 
-      {isLoading && <Content loading />}
-      {!isLoading && props.children}
+      <AppLoadingContext.Provider value={ appLoadingContextValue }>
+        <ComponentRenderer
+          component={ componentConfig.app.background.name }
+          props={ { phase } }
+        />
+        {phase === 'idle' && (
+          <div style={ {
+            position: 'absolute',
+            inset: 0,
+            animation: `${appIntro} 600ms ease 200ms both`
+          } }
+          >            {props.children}
+          </div>
+        )}
+      </AppLoadingContext.Provider>
     </>
   )
 }

@@ -50,7 +50,6 @@ export const BatchActions = (): React.JSX.Element => {
   const handleBatchDelete = async (): Promise<void> => {
     const job = new DataObjectBatchDeleteJob({
       itemIds: numberedSelectedRows,
-      title: t('batch-delete.job-title'),
       onFinish: async () => {
         await refreshGrid()
         setSelectedRows({})

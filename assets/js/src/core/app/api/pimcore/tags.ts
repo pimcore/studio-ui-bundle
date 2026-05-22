@@ -45,6 +45,7 @@ export const tagNames = {
   SETTINGS_ADMIN: 'SETTINGS_ADMIN',
   WEBSITE_SETTINGS: 'WEBSITE_SETTINGS',
   REDIRECTS: 'REDIRECTS',
+  ROBOTS_TXT: 'ROBOTS_TXT',
   ELEMENT_TAGS: 'TAGS',
   ROLE: 'ROLE',
   DOMAIN_TRANSLATIONS: 'DOMAIN_TRANSLATIONS',
@@ -128,6 +129,7 @@ export const providingTags = {
   SETTINGS_ADMIN: () => [tagNames.SETTINGS_ADMIN],
   WEBSITE_SETTINGS: () => [tagNames.WEBSITE_SETTINGS],
   REDIRECTS: () => [tagNames.REDIRECTS],
+  ROBOTS_TXT: () => [tagNames.ROBOTS_TXT],
   ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.PROPERTIES, elementType, id)],
   SCHEDULE_DETAIL: (id: number) => [{ type: tagNames.SCHEDULES, id }, tagNames.SCHEDULES],
   ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.SCHEDULES, elementType, id)],
@@ -214,6 +216,7 @@ export const invalidatingTags = {
   SETTINGS_ADMIN: () => [tagNames.SETTINGS_ADMIN],
   WEBSITE_SETTINGS: () => [tagNames.WEBSITE_SETTINGS],
   REDIRECTS: () => [tagNames.REDIRECTS],
+  ROBOTS_TXT: () => [tagNames.ROBOTS_TXT],
   SCHEDULE_DETAIL: (id: number) => [{ type: tagNames.SCHEDULES, id }],
   ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.SCHEDULES, elementType, id)],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],
@@ -227,7 +230,7 @@ export const invalidatingTags = {
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.ELEMENT_TAGS, elementType, id)],
   ROLE: () => [tagNames.ROLE],
   PREDEFINED_ASSET_METADATA: () => [tagNames.PREDEFINED_ASSET_METADATA],
-  ELEMENT_DETAIL: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
+  ELEMENT_DETAIL: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementGridTag(elementType)],
   EMAIL_BLOCKLIST: () => [tagNames.EMAIL_BLOCKLIST],
   EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }],
   APPLICATION_LOGGER: () => [tagNames.APPLICATION_LOGGER],
@@ -273,5 +276,16 @@ const getElementDetailTag = (elementType: ElementType, id: number): Tag => {
       return { type: tagNames.DATA_OBJECT_DETAIL, id }
     case 'document':
       return { type: tagNames.DOCUMENT_DETAIL, id }
+  }
+}
+
+const getElementGridTag = (elementType: ElementType): Tag => {
+  switch (elementType) {
+    case 'asset':
+      return tagNames.ASSET_GRID
+    case 'data-object':
+      return tagNames.DATA_OBJECT_GRID
+    case 'document':
+      return tagNames.DOCUMENT
   }
 }

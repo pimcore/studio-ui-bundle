@@ -23,6 +23,7 @@ import { ImageTabManager } from '@Pimcore/modules/asset/editor/types/image/tab-m
 import { TextTabManager } from '@Pimcore/modules/asset/editor/types/text/tab-manager/text-tab-manager'
 import { UnknownTabManager } from '@Pimcore/modules/asset/editor/types/unknown/tab-manager/unknown-tab-manager'
 import { JobComponentRegistry } from '@Pimcore/modules/execution-engine/services/job-component-registry'
+import { JobRehydrationRegistry } from '@Pimcore/modules/execution-engine/services/job-rehydration-registry'
 import { ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
 import { VideoTabManager } from '@Pimcore/modules/asset/editor/types/video/tab-manager/video-tab-manager'
 import { ThumbnailService } from '@Pimcore/modules/asset/services/thumbnail-service'
@@ -234,6 +235,11 @@ import { DynamicTypeGridCellString } from '@Pimcore/modules/element/dynamic-type
 import { DynamicTypeGridCellInteger } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/integer/dynamic-type-grid-cell-integer'
 import { DynamicTypeGridCellError } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/error/dynamic-type-grid-cell-error'
 import { DynamicTypeGridCellArray } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/array/dynamic-type-grid-cell-array'
+import { DynamicTypeGridCellSystemId } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-id/dynamic-type-grid-cell-system-id'
+import { DynamicTypeGridCellSystemString } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-string/dynamic-type-grid-cell-system-string'
+import { DynamicTypeGridCellSystemBoolean } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-boolean/dynamic-type-grid-cell-system-boolean'
+import { DynamicTypeGridCellSystemDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-datetime/dynamic-type-grid-cell-system-datetime'
+import { DynamicTypeGridCellSystemInteger } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-integer/dynamic-type-grid-cell-system-integer'
 import { DynamicTypeFieldFilterNone } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/none/dynamic-type-field-filter-none'
 import { DynamicTypeDocumentPage } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-page'
 import { DynamicTypeDocumentRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/dynamic-type-document-registry'
@@ -528,6 +534,11 @@ container.bind(serviceIds['DynamicTypes/GridCell/String']).to(DynamicTypeGridCel
 container.bind(serviceIds['DynamicTypes/GridCell/Integer']).to(DynamicTypeGridCellInteger).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Error']).to(DynamicTypeGridCellError).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Array']).to(DynamicTypeGridCellArray).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/SystemId']).to(DynamicTypeGridCellSystemId).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/SystemString']).to(DynamicTypeGridCellSystemString).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/SystemBoolean']).to(DynamicTypeGridCellSystemBoolean).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/SystemDatetime']).to(DynamicTypeGridCellSystemDatetime).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/SystemInteger']).to(DynamicTypeGridCellSystemInteger).inSingletonScope()
 
 // Advanced grid cell registry
 container.bind(serviceIds['DynamicTypes/AdvancedGridCellRegistry']).to(DynamicTypeGridCellRegistry).inSingletonScope()
@@ -701,6 +712,7 @@ container.bind(serviceIds['DynamicTypes/Grid/Transformers/PHPCode']).to(DynamicT
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()
+container.bind(serviceIds['ExecutionEngine/JobRehydrationRegistry']).to(JobRehydrationRegistry).inSingletonScope()
 container.bind(serviceIds.executionEngine).to(ExecutionEngine).inSingletonScope()
 
 // Background processor

@@ -14,6 +14,7 @@ import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
 import { Spin } from '@Pimcore/components/spin/spin'
+import { Content } from '@Pimcore/components/content/content'
 import { ManyToOneRelation } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
 import type { ManyToOneRelationValue } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
 import { FormKit } from '@Pimcore/components/form/form-kit'
@@ -26,9 +27,12 @@ import { isNull, isString, isUndefined } from 'lodash'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { Form } from '@sdk/components'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { useLazyDocumentGetTranslationsQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
+import { TranslationErrorAlert } from './translation-error-alert'
 
 export interface LinkTranslationModalProps {
   isOpen: boolean
+  documentId: number
   selectedDocument: ManyToOneRelationValue | null
   onSelectedDocumentChange: (document: ManyToOneRelationValue | null) => void
   onClose: () => void
@@ -37,6 +41,7 @@ export interface LinkTranslationModalProps {
 
 export const LinkTranslationModal = ({
   isOpen,
+  documentId,
   selectedDocument,
   onSelectedDocumentChange,
   onClose,
@@ -45,6 +50,14 @@ export const LinkTranslationModal = ({
   const { t } = useTranslation()
   const { getDisplayName } = useLanguageLookup()
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const [fetchTranslations, { isFetching: isTranslationsLoading, error: translationsError }] = useLazyDocumentGetTranslationsQuery()
+
+  useEffect(() => {
+    if (isOpen && documentId !== 0) {
+      void fetchTranslations({ id: documentId })
+    }
+  }, [isOpen, documentId])
 
   const { data: selectedDocumentProperties, isLoading: isLoadingDocumentProperties, error: propertiesError } = usePropertyGetCollectionForElementByTypeAndIdQuery(
     {
@@ -101,6 +114,42 @@ export const LinkTranslationModal = ({
     )
   }
 
+  const renderBody = (): React.ReactNode => {
+    if (isTranslationsLoading) {
+      return <Content loading />
+    }
+
+    if (!isUndefined(translationsError)) {
+      return <TranslationErrorAlert error={ translationsError } />
+    }
+
+    return (
+      <>
+        <Form.Item
+          label={ t('document.translation.title') }
+          layout="vertical"
+        >
+          <ManyToOneRelation
+            allowToClearRelation
+            documentsAllowed
+            onChange={ onSelectedDocumentChange }
+            value={ selectedDocument }
+          />
+        </Form.Item>
+
+        {!isNull(selectedDocument) && (
+          <FormKit.Panel
+            border
+            theme="border-highlight"
+            title={ t('language') }
+          >
+            {renderLanguageInfo()}
+          </FormKit.Panel>
+        )}
+      </>
+    )
+  }
+
   return (
     <WindowModal
       footer={
@@ -112,7 +161,7 @@ export const LinkTranslationModal = ({
             {t('cancel')}
           </Button>
           <Button
-            disabled={ isNull(selectedDocument) }
+            disabled={ isNull(selectedDocument) || isTranslationsLoading || !isUndefined(translationsError) }
             loading={ isSubmitting }
             onClick={ handleSubmit }
             type="primary"
@@ -126,27 +175,7 @@ export const LinkTranslationModal = ({
       size="L"
       title={ t('document.translation.link-existing-document') }
     >
-      <Form.Item
-        label={ t('document.translation.title') }
-        layout="vertical"
-      >
-        <ManyToOneRelation
-          allowToClearRelation
-          documentsAllowed
-          onChange={ onSelectedDocumentChange }
-          value={ selectedDocument }
-        />
-      </Form.Item>
-
-      {!isNull(selectedDocument) && (
-        <FormKit.Panel
-          border
-          theme="border-highlight"
-          title={ t('language') }
-        >
-          {renderLanguageInfo()}
-        </FormKit.Panel>
-      )}
+      {renderBody()}
     </WindowModal>
   )
 }

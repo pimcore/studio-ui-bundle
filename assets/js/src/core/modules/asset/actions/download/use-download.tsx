@@ -15,7 +15,8 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
-import { saveFileLocal } from '@Pimcore/utils/files'
+import { downloadFromUrl } from '@Pimcore/utils/files'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useTreePermission } from '@Pimcore/components/element-tree/provider/tree-permission-provider/use-tree-permission'
@@ -35,7 +36,11 @@ export const useDownload = (): UseDownloadReturn => {
 
   const download = (id: string, label?: string): void => {
     const downloadUrl = `${getPrefix()}/assets/${id}/download`
-    saveFileLocal(downloadUrl, label)
+    void downloadFromUrl(downloadUrl, label).then(available => {
+      if (!available) {
+        trackError(new GeneralError(t('asset.download.not-available')))
+      }
+    })
   }
 
   const handleDownload = (node: Asset | TreeNodeProps | GridContextMenuProps, onFinish?: () => void): void => {

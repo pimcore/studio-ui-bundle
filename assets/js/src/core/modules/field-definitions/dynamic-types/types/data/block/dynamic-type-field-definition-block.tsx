@@ -38,8 +38,16 @@ export class DynamicTypeFieldDefinitionBlock extends DynamicTypeFieldDefinitionD
   }
 
   getDisallowedRecursiveChildTags (props: FieldDefinitionContext): string[] {
-    // @todo check other types here as well
-    return [...super.getDisallowedRecursiveChildTags(props), 'block']
+    return [
+      ...super.getDisallowedRecursiveChildTags(props),
+      'block',
+      'classificationstore',
+      'consent',
+      'objectbricks',
+      'fieldcollections',
+      'reverseObjectRelation',
+      'urlSlug'
+    ]
   }
 
   opensNamespace (): boolean {

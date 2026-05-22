@@ -146,6 +146,14 @@ export const FieldDefinitionTextFormFields = (props: FieldDefinitionAbstractForm
         <Switch labelRight={ t('border') } />
       </Form.Item>
 
+      <Form.Item
+        label={ t('css-style') }
+        name="bodyStyle"
+        tooltip={ t('css-style-tooltip') }
+      >
+        <Input />
+      </Form.Item>
+
       <Tabpanel
         items={ [configurationTab, previewTab] }
         onChange={ handleTabChange }

@@ -206,6 +206,11 @@ import { type DynamicTypeGridCellString } from './definitions/grid-cell/types/st
 import { type DynamicTypeGridCellInteger } from './definitions/grid-cell/types/integer/dynamic-type-grid-cell-integer'
 import { type DynamicTypeGridCellError } from './definitions/grid-cell/types/error/dynamic-type-grid-cell-error'
 import { type DynamicTypeGridCellArray } from './definitions/grid-cell/types/array/dynamic-type-grid-cell-array'
+import { type DynamicTypeGridCellSystemId } from './definitions/grid-cell/types/system-id/dynamic-type-grid-cell-system-id'
+import { type DynamicTypeGridCellSystemString } from './definitions/grid-cell/types/system-string/dynamic-type-grid-cell-system-string'
+import { type DynamicTypeGridCellSystemBoolean } from './definitions/grid-cell/types/system-boolean/dynamic-type-grid-cell-system-boolean'
+import { type DynamicTypeGridCellSystemDatetime } from './definitions/grid-cell/types/system-datetime/dynamic-type-grid-cell-system-datetime'
+import { type DynamicTypeGridCellSystemInteger } from './definitions/grid-cell/types/system-integer/dynamic-type-grid-cell-system-integer'
 import { type DynamicTypeDocumentRegistry } from './definitions/document/dynamic-type-document-registry'
 import { type DynamicTypeDocumentEmail } from './definitions/document/types/dynamic-type-document-email'
 import { type DynamicTypeDocumentFolder } from './definitions/document/types/dynamic-type-document-folder'
@@ -311,6 +316,11 @@ moduleSystem.registerModule({
     advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellInteger>(serviceIds['DynamicTypes/GridCell/Integer']))
     advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellError>(serviceIds['DynamicTypes/GridCell/Error']))
     advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellArray>(serviceIds['DynamicTypes/GridCell/Array']))
+    advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellSystemId>(serviceIds['DynamicTypes/GridCell/SystemId']))
+    advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellSystemString>(serviceIds['DynamicTypes/GridCell/SystemString']))
+    advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellSystemBoolean>(serviceIds['DynamicTypes/GridCell/SystemBoolean']))
+    advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellSystemDatetime>(serviceIds['DynamicTypes/GridCell/SystemDatetime']))
+    advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellSystemInteger>(serviceIds['DynamicTypes/GridCell/SystemInteger']))
 
     const metadataRegistry = container.get<DynamicTypeMetaDataRegistry>(serviceIds['DynamicTypes/MetadataRegistry'])
 

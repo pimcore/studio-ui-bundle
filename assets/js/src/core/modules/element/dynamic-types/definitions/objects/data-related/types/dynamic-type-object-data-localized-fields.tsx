@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { get, isEmpty } from 'lodash'
+import { get, isEmpty, isPlainObject } from 'lodash'
 import { DynamicTypeObjectDataAbstract, type AbstractObjectDataDefinition } from '../dynamic-type-object-data-abstract'
 import { ObjectLocalizedFields } from '../../../../defintinitions/objects/data-related/components/localized-fields/object-localized-fields'
 import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/constants/typesList'
@@ -30,6 +30,40 @@ export class DynamicTypeObjectDataLocalizedFields extends DynamicTypeObjectDataA
 
   getVersionObjectDataComponent (props: AbstractObjectDataDefinition & { children?: any[] }): React.ReactElement<AbstractObjectDataDefinition> {
     return <VersionObjectLocalizedFields { ...props } />
+  }
+
+  /**
+   * The localizedfields payload has a fixed three-level structure:
+   *   { [fieldName]: { [locale]: value } }
+   *
+   * Two merges are needed to avoid losing tracked changes:
+   *   1. Field-name level  — so editing "name" does not drop a previously tracked "title"
+   *   2. Locale level      — so editing "name.en" does not drop a previously tracked "name.de"
+   *
+   * The actual field values (level 3) are always scalars or arrays and must replace,
+   * never merge — so recursion stops there.
+   */
+  mergeChangedValues = (current: any, incoming: any): any => {
+    const currentRecord = isPlainObject(current) ? current : {}
+
+    if (!isPlainObject(incoming)) {
+      console.error('localizedfields mergeChangedValues received invalid payload:', incoming)
+      return currentRecord
+    }
+
+    const incomingRecord = incoming as Record<string, any>
+    const result: Record<string, any> = { ...currentRecord }
+
+    for (const [fieldName, incomingLocales] of Object.entries(incomingRecord)) {
+      const currentLocales = currentRecord[fieldName]
+      if (isPlainObject(incomingLocales) && isPlainObject(currentLocales)) {
+        // Merge locale keys; actual values (scalars/arrays) replace wholesale
+        result[fieldName] = { ...currentLocales, ...incomingLocales }
+      } else {
+        result[fieldName] = incomingLocales
+      }
+    }
+    return result
   }
 
   async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<IFormattedDataStructureData[]> {

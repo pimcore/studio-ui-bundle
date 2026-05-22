@@ -20,6 +20,17 @@ import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { has } from 'lodash'
 import { type WidgetRestorerRegistry } from '@Pimcore/modules/widget-manager/services/widget-restorer-registry'
 import { elementWidgetRestorer } from './services/element-widget-restorer'
+import { type JobRehydrationRegistry } from '@Pimcore/modules/execution-engine/services/job-rehydration-registry'
+import { DeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/element-delete-job'
+import { AssetCloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/asset-clone-job'
+import { DataObjectCloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/data-object-clone-job'
+import { DocumentCloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/document-clone-job'
+import { AbstractBatchEditJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/abstract-batch-edit-job'
+import { AbstractFolderBatchEditJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/abstract-folder-batch-edit-job'
+import { CsvDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/csv-download-job'
+import { XlsxDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/xlsx-download-job'
+import { TagAssignJob } from '@Pimcore/modules/execution-engine/jobs/tag-assign/tag-assign-job'
+import { SearchReplaceAssignmentsJob } from '@Pimcore/modules/execution-engine/jobs/search-replace-assignments/search-replace-assignments-job'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -51,5 +62,19 @@ moduleSystem.registerModule({
         return true
       }
     })
+
+    const rehydrationRegistry = container.get<JobRehydrationRegistry>(serviceIds['ExecutionEngine/JobRehydrationRegistry'])
+    rehydrationRegistry.register(DeleteJob)
+    rehydrationRegistry.register(AssetCloneJob)
+    rehydrationRegistry.register(DataObjectCloneJob)
+    rehydrationRegistry.register(DocumentCloneJob)
+    // Abstract classes registered directly: all concrete batch-edit subclasses share the same
+    // backend job names and buildHandler, so one registration per abstract class covers them all.
+    rehydrationRegistry.register(AbstractBatchEditJob)
+    rehydrationRegistry.register(AbstractFolderBatchEditJob)
+    rehydrationRegistry.register(CsvDownloadJob)
+    rehydrationRegistry.register(XlsxDownloadJob)
+    rehydrationRegistry.register(TagAssignJob)
+    rehydrationRegistry.register(SearchReplaceAssignmentsJob)
   }
 })

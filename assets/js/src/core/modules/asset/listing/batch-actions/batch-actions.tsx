@@ -9,11 +9,8 @@
  */
 
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
-import {
-  useAssetGetByIdQuery
-} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
@@ -40,20 +37,12 @@ export const BatchActions = (): React.JSX.Element => {
 
   const { createZipDownload: createZipFolderDownload } = useZipDownload({ type: 'folder' })
   const { createZipDownload: createZipAssetListDownload } = useZipDownload({ type: 'asset-list' })
-  const { data } = useAssetGetByIdQuery({ id })
-
-  const [jobTitle, setJobTitle] = useState<string>('Asset')
   const [csvModalOpen, setCsvModalOpen] = useState<boolean>(false)
   const [xlsxModalOpen, setXlsxModalOpen] = useState<boolean>(false)
   const [batchEditModalOpen, setBatchEditModalOpen] = useState<boolean>(false)
 
   const { t } = useTranslation()
 
-  useEffect(() => {
-    if (data !== undefined) {
-      setJobTitle(`${data.filename}`)
-    }
-  }, [data])
 
   if (rowSelection === undefined) {
     return <></>
@@ -67,7 +56,6 @@ export const BatchActions = (): React.JSX.Element => {
   const handleBatchDelete = async (): Promise<void> => {
     const job = new AssetBatchDeleteJob({
       itemIds: numberedSelectedRows,
-      title: t('batch-delete.job-title'),
       onFinish: async () => {
         await refreshGrid()
         setSelectedRows({})
@@ -160,10 +148,9 @@ export const BatchActions = (): React.JSX.Element => {
 
   function createZip (): void {
     if (hasSelectedItems) {
-      createZipAssetListDownload({ jobTitle, requestData: { body: { assets: numberedSelectedRows } } })
+      createZipAssetListDownload({ requestData: { body: { assets: numberedSelectedRows } } })
     } else {
       createZipFolderDownload({
-        jobTitle,
         requestData: {
           body: {
             folders: [id],

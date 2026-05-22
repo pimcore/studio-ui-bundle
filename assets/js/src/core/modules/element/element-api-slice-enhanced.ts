@@ -17,7 +17,7 @@ import { invalidatingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { type DocumentPermissions } from '../document/document-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.DATA_OBJECT_DETAIL, tagNames.ASSET_DETAIL],
+  addTagTypes: [tagNames.DATA_OBJECT_DETAIL, tagNames.ASSET_DETAIL, tagNames.ASSET_GRID, tagNames.DATA_OBJECT_GRID],
   endpoints: {
     elementDelete: {
       invalidatesTags: (result, error, args) => invalidatingTags.ELEMENT_DETAIL(args.elementType, args.id)

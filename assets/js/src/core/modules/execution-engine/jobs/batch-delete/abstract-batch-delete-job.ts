@@ -13,21 +13,19 @@ import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { MessageBusJobHandler, type JobCompletionData } from '../../message-handlers/message-bus-job/message-bus-job-handler'
 import { StepCompletionCalculator } from '../../message-handlers/message-bus-job/progress-calculator/step-completion-calculator'
+import { t } from 'i18next'
 
 export interface AbstractBatchDeleteJobOptions {
   itemIds: number[]
-  title: string
   onFinish?: () => Promise<void>
 }
 
 export abstract class AbstractBatchDeleteJob implements JobInterface {
   protected readonly itemIds: number[]
-  protected readonly title: string
   protected readonly onFinish?: () => Promise<void>
 
   constructor (options: AbstractBatchDeleteJobOptions) {
     this.itemIds = options.itemIds
-    this.title = options.title
     this.onFinish = options.onFinish
   }
 
@@ -42,10 +40,8 @@ export abstract class AbstractBatchDeleteJob implements JobInterface {
         return
       }
 
-      const handler = new MessageBusJobHandler({
+      const handler = AbstractBatchDeleteJob.buildHandler({
         jobRunId,
-        title: this.title,
-        progressCalculator: new StepCompletionCalculator(),
         onJobCompletion: async (data: JobCompletionData) => {
           if (data.isFinished) {
             try {
@@ -79,5 +75,19 @@ export abstract class AbstractBatchDeleteJob implements JobInterface {
 
   protected async handleJobFailure (error: any): Promise<void> {
     console.error('Batch delete job failed:', error)
+  }
+
+  protected static buildHandler (options: {
+    jobRunId: number
+    onJobCompletion?: (data: JobCompletionData) => Promise<void>
+    onRetry?: () => Promise<void>
+  }): MessageBusJobHandler {
+    return new MessageBusJobHandler({
+      jobRunId: options.jobRunId,
+      title: t('batch-delete.job-title'),
+      progressCalculator: new StepCompletionCalculator(),
+      onJobCompletion: options.onJobCompletion,
+      onRetry: options.onRetry
+    })
   }
 }

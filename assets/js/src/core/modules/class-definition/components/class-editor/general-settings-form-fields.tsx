@@ -229,6 +229,22 @@ export const ClassDefinitionGeneralSettingsFormFields = (): React.JSX.Element =>
         </Form.Item>
 
         <Form.Item
+          initialValue
+          name={ ['propertyVisibility', 'grid', 'published'] }
+          valuePropName="checked"
+        >
+          <Switch labelRight={ t('class-definition.property-visibility.published-grid') } />
+        </Form.Item>
+
+        <Form.Item
+          initialValue
+          name={ ['propertyVisibility', 'search', 'published'] }
+          valuePropName="checked"
+        >
+          <Switch labelRight={ t('class-definition.property-visibility.published-search') } />
+        </Form.Item>
+
+        <Form.Item
           name={ ['propertyVisibility', 'grid', 'modificationDate'] }
           valuePropName="checked"
         >

@@ -2,6 +2,9 @@ common.owner: Ägare
 common.modification-date: Ändringsdatum
 common.globally: Globalt
 common.apply-selection: Tillämpa val
+cache.clear-cache-success: Cachen har rensats
+cache.clear-full-page-cache-success: Helsidescachen har rensats
+cache.clear-temporary-files-success: Temporära filer har tagits bort
 dont-ask-again: Fråga inte igen
 widget.missing-context.title: Saknar kontext
 widget.missing-context.description: Inget relaterat element hittades
@@ -17,7 +20,10 @@ error.error_widget_name_invalid: Widgetnamnet är ogiltigt (bara alfanumeriska t
 error.error_validation_failed: Validering misslyckades
 error.error_validation.email_failed: Ange en giltig e-postadress
 error.error_element_not_found: Elementet hittades inte
+error.error_document_language_not_set: Dokumentet har ingen språkegenskap angiven
 error.error_inconsistent_asset_type: Bara assets av samma typ tillåts här.
+error.error_recycle_bin_restore: Kan inte återställa elementet från papperskorgen
+error.error_recycle_bin_restore_missing_parent: Kan inte återställa elementet från papperskorgen, överordnat element saknas
 sidebar.selected_elements: Valda element
 sidebar.grid_config: Rutnätskonfiguration
 sidebar.tag_filters: Taggfilter
@@ -201,6 +207,8 @@ class-definition.property-visibility.key-grid: Nyckel (Rutnät)
 class-definition.property-visibility.key-search: Nyckel (Sök)
 class-definition.property-visibility.path-grid: Sökväg (Rutnät)
 class-definition.property-visibility.path-search: Sökväg (Sök)
+class-definition.property-visibility.published-grid: Publicerad (Rutnät)
+class-definition.property-visibility.published-search: Publicerad (Sök)
 class-definition.property-visibility.modification-date-grid: Ändringsdatum (Rutnät)
 class-definition.property-visibility.modification-date-search: Ändringsdatum (Sök)
 class-definition.property-visibility.creation-date-grid: Skapandedatum (Rutnät)
@@ -280,6 +288,7 @@ custom-layout.delete.success: Anpassad layout har tagits bort
 example-prefix: Exempelprefix
 pagination.show-total: Totalt {{total}} objekt
 pagination.page: Sida
+pagination.showing-x-of-y: Visar {{loaded}} av {{total}}
 preview-card.locate-in-tree: Hitta i träd
 preview-card.rename: Byt namn
 preview-card.download-zip: Ladda ner som ZIP
@@ -489,6 +498,8 @@ published: Publicerad
 classname: Klassnamn
 index: Index
 listing.grid-config.title: Rutnätskonfiguration
+grid-config.discard-all-changes: Förkasta alla ändringar
+grid-config.apply-changes: Tillämpa ändringar
 listing.add-column: Lägg till en kolumn
 listing.actions: Tillämpa på val
 listing.non-selected.actions: Tillämpa på alla
@@ -577,7 +588,13 @@ translations.show-all-languages: Visa alla
 translations.show-minimal-languages: Visa minimalt
 translations.show-hide-locale: Visa/dölj språk
 translations.new-translation: Ny översättning
-translations.new: Lägg till
+translations.new: Ny
+translations.domain.messages: Meddelanden
+translations.domain.admin: Admin
+translations.domain.studio: Studio
+translations.domain.dataQualityManagement: Datakvalitetshantering
+translations.domain.portal_engine_frontend: Portal Engine Frontend
+translations.domain.pimcore_copilot: Pimcore Copilot
 translations.type-options.custom: ICU-format
 translations.type-options.simple: Enkel text
 translations.edit-modal.tab.plain-text: Ren text
@@ -750,6 +767,7 @@ field-definitions.validation.empty-name: "Följande fälttyper saknar ett namn:"
 field-definitions.validation.reserved-word: "Reserverat ord använt som namn:"
 field-definitions.validation.invalid-format: "Ogiltigt namnformat (måste matcha [A-Za-z][A-Za-z0-9_]*):"
 field-definitions.validation.duplicate-name: "Duplikatnamn inom namnrymd:"
+field-definitions.delete.content: Vill du verkligen ta bort "{{name}}"?
 object-brick-key: Object Brick-nyckel
 field-name: Fältnamn
 field-definition.geopoint: Geografisk punkt
@@ -963,6 +981,7 @@ lazy-loading: Lazy Loading
 disallow-add-remove: Tillåt inte lägg till / ta bort
 disallow-reorder: Tillåt inte omordning
 css-style: CSS-stil
+css-style-tooltip: "Inline-CSS som tillämpas på kroppen, t.ex. \"float: left; margin: 10px;\". Ogiltiga deklarationer ignoreras."
 collapsible: Ihopfällbar
 collapsed: Initialt ihopfälld
 border: Ram
@@ -1016,6 +1035,7 @@ asset.sidebar.office-format: Kontorsformat
 jobs.notification.title: Pågående jobb
 jobs.notification.jobs_one: "{{count}} åtgärd"
 jobs.notification.jobs_other: "{{count}} åtgärder"
+jobs.notification.hide-all-finished: Dölj alla avslutade
 jobs.job.in-progress: "{{title}} pågår"
 jobs.job.queued: "{{title}} köad"
 jobs.job.failed: "{{title}} misslyckades"
@@ -1032,6 +1052,7 @@ jobs.job.step_hint_single: "Steg {{step}}"
 jobs.job.step.batch-edit.preparing: Förbereder massredigering
 jobs.job.step.batch-edit.applying: Tillämpar massredigering
 jobs.job.download-error: Nedladdning misslyckades
+jobs.job.download-not-available: Nedladdningen är inte längre tillgänglig.
 jobs.job.button-show-errors: Visa fel
 jobs.job.error-modal.title: Jobbfel
 jobs.job.button-abort: Avbryt jobb
@@ -1043,6 +1064,9 @@ batch-edit.job-title: Massredigering
 jobs.zip-upload-job.title: Ladda upp ZIP
 jobs.zip-upload-job.step1.title: Extraherar ZIP
 jobs.zip-upload-job.step2.title: Skapar assets
+jobs.download-csv-job.title: CSV export
+jobs.download-xlsx-job.title: XLSX export
+jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Massredigering
 batch-edit.no-content: Det finns inga tillagda kolumner ännu
 batch-edit.modal-footer.apply-changes: Tillämpa ändringar
@@ -1309,7 +1333,7 @@ key-bindings.seo: SEO
 key-bindings.redirects: Omdirigeringar
 key-bindings.bundles: Paket
 user-management.references.title: Referenser
-user-management.references.documents: Dokument
+user-management.references.object-dependencies: Objektberoenden
 user-management.references.columns.id: ID
 user-management.references.columns.cpath: Sökväg
 user-management.references.columns.subtype: Undertyp
@@ -1433,6 +1457,10 @@ navigation.reporting: Rapportering
 navigation.system: System
 navigation.website-settings: Webbplatsinställningar
 navigation.document-types: Dokumenttyper
+navigation.cache: Cache
+navigation.cache.clear-cache: Rensa cache
+navigation.cache.clear-full-page-cache: Rensa helsidescache
+navigation.cache.clear-temporary-files: Ta bort temporära filer
 navigation.clear-cache: Rensa helsidescache
 navigation.reports: Alla rapporter
 navigation.custom-reports: Konfiguration av anpassade rapporter
@@ -1502,6 +1530,10 @@ path_query: Sökväg och Query
 auto_create: Skapa automatiskt
 widget.redirects: Omdirigeringar
 navigation.redirects: Omdirigeringar
+robots-txt.save-success: robots.txt sparades
+robots-txt.on-file-system-warning: "Sparande inaktiverat: en fysisk robots.txt-fil finns i filsystemet."
+widget.robots-txt: robots.txt
+navigation.robots-txt: robots.txt
 perspective.default: Standard
 perspective.switching.title: Byter perspektiv
 perspective.switching.description: Byter just nu till följande perspektiv
@@ -2230,6 +2262,7 @@ perspective-editor.form.main-nav-permission.experienceEcommerce.emails: E-postme
 perspective-editor.form.main-nav-permission.experienceEcommerce.documentTypes: Dokumenttyper
 perspective-editor.form.main-nav-permission.experienceEcommerce.websiteSettings: Webbplatsinställningar
 perspective-editor.form.main-nav-permission.experienceEcommerce.redirects: Omdirigeringar
+perspective-editor.form.main-nav-permission.experienceEcommerce.robotsTxt: robots.txt
 perspective-editor.form.main-nav-permission.category.assetManagement: Assethantering
 perspective-editor.form.main-nav-permission.assetManagement.hidden: Dölj assethanteringsmenyn
 perspective-editor.form.main-nav-permission.assetManagement.assetThumbnails: Bildminiatyrbilder
@@ -2424,7 +2457,7 @@ user-management.permissions.newsletters: Nyhetsbrev
 user-management.permissions.targeting: Targeting
 user-management.permissions.http_errors: HTTP-fel
 user-management.permissions.seo_document_editor: SEO-dokumentredigerare
-user-management.permissions."robots.txt": robots.txt
+user-management.permissions.robots.txt: robots.txt
 user-management.permissions.routes: Rutter
 user-management.permissions.word_export: Word-export
 user-management.permissions.xliff_import_export: XLIFF Import/Export
@@ -2460,6 +2493,8 @@ user-management.permissions.plugin_datahub_permission_update: Datahub Uppdaterin
 user-management.permissions.portal-engine_collection-access: Åtkomst till backend-samlingar
 user-management.permissions.portal-engine_index-management: Hantering av portalindex
 user-management.permissions.portal-engine_wizard: Portalens installationsguide
+user-management.permissions.studio_perspective_editor: Perspektivredigerare
+user-management.permissions.studio_perspective_widget_editor: Perspektiv-widgetredigerare
 user-management.permissions.wai_configuration_permission: Konfiguration av automatiseringsmallar
 forgot-password-form.username: Ange ditt användarnamn så skickar Pimcore en inloggningslänk till din e-postadress
 forgot-password-form.username.placeholder: Användarnamn
@@ -2629,3 +2664,44 @@ bulk-import.type.class: Klasser
 bulk-import.type.customlayout: Custom Layouts
 bulk-import.type.fieldcollection: Field Collections
 bulk-import.type.objectbrick: Object Bricks
+translations.toolbar.export: CSV-export
+translations.toolbar.import: Importera
+translations.toolbar.cleanup: Städa upp
+translations.import.modal.title: Importera översättningar
+translations.import.modal.browse: Bläddra bland filer
+translations.import.modal.import: Importera
+translations.import.modal.drag-drop: Dra och släpp en CSV-fil här
+translations.import.modal.invalid-file: Vänligen välj en giltig CSV-fil
+translations.import.modal.csv-settings: CSV-inställningar
+translations.import.modal.delimiter: Avgränsare
+translations.import.modal.quotechar: Citattecken
+translations.import.modal.escapechar: Escape-tecken
+translations.import.modal.lineterminator: Radavslutare
+translations.import.modal.field-required: Detta fält är obligatoriskt
+translations.cleanup.confirm.title: Städa upp översättningar
+translations.cleanup.confirm.content: Detta tar bort alla oanvända översättningsnycklar. Denna åtgärd kan inte ångras.
+translations.cleanup.confirm.ok: Städa upp
+translations.import.delta.title: Importresultat
+translations.import.delta.description: Följande översättningar skiljer sig från de importerade värdena. Välj de du vill skriva över med de importerade värdena.
+translations.import.delta.column.key: Nyckel
+translations.import.delta.column.locale: Språk
+translations.import.delta.column.current: Nuvarande översättning
+translations.import.delta.column.imported: Importerad översättning
+translations.toolbar.import-merge: Importera och sammanfoga CSV
+translations.import.delta.skip: Hoppa över
+translations.import.delta.apply: Tillämpa valda ({{count}})
+widget.translation-merger: Sammanfoga översättningar
+translations.merger.column.locale: Språk
+translations.merger.column.key: Nyckel
+translations.merger.column.csv-value: CSV-värde
+translations.merger.column.action: Åtgärd
+translations.merger.column.current: Nuvarande värde
+translations.merger.column.state: Status
+translations.merger.state.applied: Tillämpad
+translations.merger.state.reverted: Återställd
+translations.merger.state.pending: Väntande
+translations.merger.apply-all: Tillämpa alla
+translations.merger.revert-all: Återställ alla
+translations.merger.title: "Sammanfoga översättningar (Domän: {{domain}})"
+translations.merger.column.language: Språk
+translations.merger.items: objekt

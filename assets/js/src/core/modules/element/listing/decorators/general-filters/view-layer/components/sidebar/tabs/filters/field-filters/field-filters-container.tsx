@@ -24,6 +24,8 @@ import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-ty
 import { useClassDefinitionSelectionOptional } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
 export const FieldFiltersContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -119,7 +121,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
   }
 
   const handleClassificationStoreClick = (column: AvailableColumn): void => {
-    if (!('fieldDefinition' in column.config) || isNil(column.config) || classDefinitionContext === undefined) {
+    if (!hasFieldDefinition(column.config) || classDefinitionContext === undefined) {
       throw new Error('Column configuration is missing field definition or class definition context is undefined')
     }
 
@@ -235,9 +237,9 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
           const columnItems = groupData.items.map((column: AvailableColumn) => {
             let translationKey = `${column.key}`
 
-            if ('fieldDefinition' in column.config && !isNil(column.config)) {
+            if (hasFieldDefinition(column.config)) {
               const fieldDefinition = column.config.fieldDefinition as Record<string, any>
-              translationKey = fieldDefinition?.title ?? column.key
+              translationKey = !isEmptyValue(fieldDefinition?.title) ? fieldDefinition?.title : column.key
             }
 
             return {

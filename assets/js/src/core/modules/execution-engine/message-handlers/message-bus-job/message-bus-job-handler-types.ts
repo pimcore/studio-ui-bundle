@@ -23,6 +23,7 @@ export interface MessageBusJob extends AbstractJob {
   onCustomizeButtons?: (context: JobButtonCustomizationContext) => void
   messages?: string[]
   jobRunId: number
+  ancestorJobRunIds?: number[]
 }
 
 export interface JobCompletionData {
@@ -35,6 +36,7 @@ export interface JobCompletionData {
 
 export interface MessageBusJobHandlerOptions {
   jobRunId: number
+  ancestorJobRunIds?: number[]
   title: string | ((job: MessageBusJob) => string)
   stepDescriptions?: Record<number, string>
   stepTracker?: StepTracker

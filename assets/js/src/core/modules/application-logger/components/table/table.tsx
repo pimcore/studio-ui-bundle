@@ -15,7 +15,7 @@ import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-hel
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { Button } from '@sdk/components'
-import { createColumnHelper } from '@tanstack/react-table'
+import { createColumnHelper, type SortingState } from '@tanstack/react-table'
 import { isNil } from 'lodash'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -25,6 +25,9 @@ import { useStyles } from './table.styles'
 
 interface TableProps {
   items: BundleApplicationLoggerGetCollectionApiResponse['items']
+  isLoading?: boolean
+  sorting?: SortingState
+  onSortingChange?: (sorting: SortingState) => void
 }
 
 export interface BundleApplicationLoggerLogEntryWithActions extends BundleApplicationLoggerLogEntry {
@@ -32,7 +35,7 @@ export interface BundleApplicationLoggerLogEntryWithActions extends BundleApplic
   actions: React.ReactNode
 }
 
-export const Table = ({ items }: TableProps): React.JSX.Element => {
+export const Table = ({ items, isLoading, sorting, onSortingChange }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openElement } = useElementHelper()
   const { styles } = useStyles()
@@ -47,7 +50,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
   const tableItems = items.map((item) => {
     return {
       ...item,
-      date: formatDateTime({ timestamp: item.date, dateStyle: 'short', timeStyle: 'short' }),
+      date: formatDateTime({ timestamp: item.date, dateStyle: 'short', timeStyle: 'medium' }),
       translatedPriority: t(`application-logger.filter.priority-level.${item.priority}`)
     }
   })
@@ -56,7 +59,8 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
   const columns = [
     columnHelper.accessor('date', {
       header: t('application-logger.columns.timestamp'),
-      size: 80
+      size: 80,
+      enableSorting: true
     }),
     columnHelper.accessor('pid', {
       header: t('application-logger.columns.pid'),
@@ -64,6 +68,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     }),
     columnHelper.accessor('message', {
       header: t('application-logger.columns.message'),
+      enableSorting: true,
       cell: ({ getValue }) => (
         <span className={ styles.cellTruncate }>
           {getValue()}
@@ -72,10 +77,12 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     }),
     columnHelper.accessor('translatedPriority', {
       header: t('application-logger.columns.type'),
-      size: 60
+      size: 60,
+      enableSorting: true
     }),
     columnHelper.accessor('fileObject', {
       header: t('application-logger.columns.file-object'),
+      enableSorting: true,
       cell: ({ row }): React.JSX.Element => {
         const column = row.original
         const fileObjectBasePath = '/admin/bundle/applicationlogger/log/show-file-object?filePath='
@@ -125,13 +132,16 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
     }),
     columnHelper.accessor('component', {
       header: t('application-logger.columns.component'),
-      size: 100
+      size: 100,
+      enableSorting: true
     }),
     columnHelper.accessor('source', {
-      header: t('application-logger.columns.source')
+      header: t('application-logger.columns.source'),
+      enableSorting: true
     }),
     columnHelper.accessor('actions', {
       header: t('application-logger.columns.details'),
+      enableSorting: false,
       cell: ({ row }): React.JSX.Element => {
         const column = row.original
 
@@ -160,9 +170,13 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
         autoWidth
         columns={ columns }
         data={ tableItems }
-        // isLoading={notesAndEventsFetching}
+        enableSorting
+        isLoading={ isLoading }
+        manualSorting
         modifiedCells={ [] }
+        onSortingChange={ onSortingChange }
         resizable
+        sorting={ sorting }
       />
 
       <DetailModal
