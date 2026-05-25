@@ -12,9 +12,11 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Form, type FormProps } from '@Pimcore/components/form/form'
 import { Select } from '@Pimcore/components/select/select'
+import { Input } from '@Pimcore/components/input/input'
 
 export interface XLSXFormValues {
   header: 'name' | 'title' | 'no_header'
+  sheetName: string
 }
 
 export interface CreateXLSXFormProps extends FormProps {}
@@ -41,6 +43,14 @@ export const CreateXLSXForm = ({ ...props }: CreateXLSXFormProps): React.JSX.Ele
             ]
           }
         />
+      </Form.Item>
+
+      <Form.Item
+        label={ t('export-xlsx-form.form-field.sheet-name') }
+        name={ 'sheetName' }
+        rules={ [{ required: true, message: t('form.validation.required') }] }
+      >
+        <Input />
       </Form.Item>
     </Form>
   )

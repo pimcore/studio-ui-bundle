@@ -49,7 +49,8 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
   const classDefinitionSelection = useClassDefinitionSelection(true)
   const selectedClassDefinition = classDefinitionSelection?.selectedClassDefinition
   const initialFormValues: XLSXFormValues = {
-    header: 'name'
+    header: 'name',
+    sheetName: 'Sheet1'
   }
   const { t } = useTranslation()
 
@@ -110,13 +111,13 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
 
   function onFinish (values: XLSXFormValues): void {
     const isFolderExport = numberedSelectedRows.length === 0
-    const job = new XlsxDownloadJob({ action: async () => await getDownloadAction(values.header), isFolderExport })
+    const job = new XlsxDownloadJob({ action: async () => await getDownloadAction(values.header, values.sheetName), isFolderExport })
     void executionEngine.runJob(job)
 
     props.setOpen(false)
   }
 
-  async function getDownloadAction (header: XLSXFormValues['header']): Promise<number> {
+  async function getDownloadAction (header: XLSXFormValues['header'], sheetName: XLSXFormValues['sheetName']): Promise<number> {
     const extractedColumnsFromColumnArg: GridColumnRequest[] = []
     const columns = getArgs()?.body?.columns ?? []
 
@@ -148,8 +149,9 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
           elementType,
           columns: extractedColumnsFromColumnArg,
           config: {
-            header
-          },
+            header,
+            sheetName
+          } as any,
           filters: {
             ...filters
           },
@@ -167,8 +169,9 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
           elementType,
           columns: extractedColumnsFromColumnArg,
           config: {
-            header
-          },
+            header,
+            sheetName
+          } as any,
           ...(!isNil(selectedClassDefinition?.id) && { classId: selectedClassDefinition.id })
         }
       })

@@ -991,7 +991,7 @@ lazy-loading: Lazy Loading
 disallow-add-remove: Disallow Add / Remove
 disallow-reorder: Disallow Reorder
 css-style: CSS Style
-css-style-tooltip: "Inline CSS applied to the body, e.g. \"float: left; margin: 10px;\". Invalid declarations are ignored."
+css-style-tooltip: 'Inline CSS applied to the body, e.g. "float: left; margin: 10px;". Invalid declarations are ignored.'
 collapsible: Collapsible
 collapsed: Initially Collapsed
 border: Border
@@ -1099,6 +1099,7 @@ export-xlsx-form.form-field.header: Header
 export-xlsx-form.form-field.header.option.name: System key
 export-xlsx-form.form-field.header.option.title: Label
 export-xlsx-form.form-field.header.option.no-header: No header
+export-xlsx-form.form-field.sheet-name: Sheet name
 form.validation.required: This field is required
 form.validation.max-length: The maximum length for this field is {{max}} characters
 form.validation.min: The minimum value is {{min}}
@@ -1908,18 +1909,18 @@ classification-store.tabs.groups: Groups
 classification-store.tabs.keys: Keys
 classification-store.add-store: Add store
 classification-store.rename-store: Rename store
-classification-store.delete-store: "Delete store \"{{storeName}}\"?"
+classification-store.delete-store: 'Delete store "{{storeName}}"?'
 classification-store.add-group: Add group
 classification-store.rename-group: Rename group
-classification-store.delete-group: "Delete group \"{{groupName}}\"?"
+classification-store.delete-group: 'Delete group "{{groupName}}"?'
 classification-store.add-collection: Add collection
 classification-store.rename-collection: Rename collection
-classification-store.delete-collection: "Delete collection \"{{collectionName}}\"?"
+classification-store.delete-collection: 'Delete collection "{{collectionName}}"?'
 classification-store.add-key: Add key
 classification-store.rename-key: Rename key
-classification-store.delete-key: "Delete key \"{{keyName}}\"?"
-classification-store.delete-key-relation: "Remove key \"{{keyName}}\" from this group?"
-classification-store.delete-group-relation: "Remove group \"{{groupName}}\" from this collection?"
+classification-store.delete-key: 'Delete key "{{keyName}}"?'
+classification-store.delete-key-relation: 'Remove key "{{keyName}}" from this group?'
+classification-store.delete-group-relation: 'Remove group "{{groupName}}" from this collection?'
 classification-store.edit-definition: Edit definition
 classification-store.edit-key-definition: "Edit key definition: {{keyName}}"
 classification-store.columns.id: ID
