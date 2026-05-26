@@ -13,6 +13,7 @@ import { type AbstractObjectLayoutDefinition } from '../../dynamic-type-object-l
 import { BaseView } from '../../views/base-view'
 import { Iframe as BaseIframe, type IframeRef } from '@Pimcore/components/iframe/iframe'
 import { Alert, IconTextButton } from '@sdk/components'
+import { type ElementIcon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import { useLayoutSelection } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/use-layout-selection'
 import { useElementContext } from '@sdk/modules/element'
@@ -21,6 +22,7 @@ export interface IframeProps extends AbstractObjectLayoutDefinition {
   iframeUrl: string
   width: number
   height: number
+  icon?: ElementIcon | null
 }
 
 export const Iframe = (props: IframeProps): React.JSX.Element => {
@@ -72,6 +74,7 @@ export const Iframe = (props: IframeProps): React.JSX.Element => {
       border
       contentPadding={ 'none' }
       extra={ extraContent }
+      icon={ props.icon }
       style={ { height: props.height } }
       title={ props.title }
     >

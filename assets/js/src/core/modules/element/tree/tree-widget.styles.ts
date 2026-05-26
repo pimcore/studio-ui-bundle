@@ -8,10 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type ElementIcon } from '@Pimcore/components/icon/icon'
-import { normalizeIcon } from '@Pimcore/utils/normalize-icon'
+import { createStyles } from 'antd-style'
 
-const FALLBACK_AREABLOCK_ICON: ElementIcon = { type: 'name', value: 'area-brick' }
-
-export const getAreablockTypeIcon = (icon: string | undefined): ElementIcon =>
-  normalizeIcon(icon) ?? FALLBACK_AREABLOCK_ICON
+export const useStyles = createStyles(({ token, css }) => {
+  return {
+    treeWidget: css`
+      .tree {
+        padding-left: ${token.paddingSM}px;
+      }
+    `
+  }
+}, { hashPriority: 'low' })
