@@ -29,8 +29,6 @@ interface IKeySelectionDialogProps {
   onCancel: () => void
 }
 
-const DEFAULT_PAGE_SIZE = 20
-
 export const KeySelectionDialog = ({
   open,
   storeId,
@@ -44,7 +42,7 @@ export const KeySelectionDialog = ({
   const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
   const [sorting, setSorting] = useState<SortingState>([])
   const [page, setPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(DEFAULT_PAGE_SIZE)
+  const [pageSize, setPageSize] = useState<number>(20)
 
   const onSortingChange = useCallback((newSorting: SortingState) => {
     setSorting(newSorting)
