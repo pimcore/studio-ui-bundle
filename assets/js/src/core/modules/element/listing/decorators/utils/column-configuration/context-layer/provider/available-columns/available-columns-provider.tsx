@@ -164,6 +164,7 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
             // Combine sub-groups and column items as children
             const allChildren = [...subGroupItems, ...columnItems]
 
+            // Do not render a group level when it contains the Advanced column
             if (allChildren.length === 1 && allChildren[0].key === 'advanced') {
               return allChildren
             }

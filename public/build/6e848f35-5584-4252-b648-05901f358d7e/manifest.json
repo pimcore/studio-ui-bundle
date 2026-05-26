@@ -380,7 +380,9 @@
     "http://localhost:3030/static/svg/spritesheet.ac8b36fa.svg",
     "http://localhost:3030/index.html",
     "http://localhost:3030/static/js/index.js.map",
+    "http://localhost:3030/index.7544ee7a8feac791.hot-update.js.map",
     "http://localhost:3030/static/js/remoteEntry.js.map",
+    "http://localhost:3030/pimcore_studio_ui_bundle.7544ee7a8feac791.hot-update.js.map",
     "http://localhost:3030/static/js/async/vendors-node_modules_codemirror_lang-javascript_dist_index_js.js.map",
     "http://localhost:3030/static/js/async/node_modules_codemirror_lang-json_dist_index_js-_bc1b0.js.map",
     "http://localhost:3030/static/js/async/vendors-node_modules_codemirror_lang-xml_dist_index_js.js.map",
@@ -407,6 +409,7 @@
     "http://localhost:3030/static/js/async/__federation_expose__internal___mf_bootstrap.js.map",
     "http://localhost:3030/static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_app.js.map",
+    "http://localhost:3030/__federation_expose_app.7544ee7a8feac791.hot-update.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_api.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_api__asset.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_api__class_definition.js.map",
@@ -789,7 +792,8 @@
         "static/js/async/vendors-node_modules_codemirror_lang-xml_dist_index_js.js.map",
         "static/js/async/node_modules_codemirror_lang-json_dist_index_js-_bc1b0.js.map",
         "static/js/async/vendors-node_modules_codemirror_lang-javascript_dist_index_js.js.map",
-        "static/js/index.js.map"
+        "static/js/index.js.map",
+        "index.7544ee7a8feac791.hot-update.js.map"
       ],
       "html": [
         "http://localhost:3030/index.html"
@@ -797,6 +801,7 @@
       "initial": {
         "js": [
           "http://localhost:3030/static/js/vendors-node_modules_ant-design_colors_es_index_js-node_modules_antd_es_index_js-node_modules-805070.js",
+          "http://localhost:3030/index.7544ee7a8feac791.hot-update.js",
           "http://localhost:3030/static/js/index.js"
         ]
       },
@@ -1188,6 +1193,7 @@
         "static/js/async/__federation_expose_api__asset.js.map",
         "static/js/async/__federation_expose_api.js.map",
         "static/js/async/__federation_expose_app.js.map",
+        "__federation_expose_app.7544ee7a8feac791.hot-update.js.map",
         "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.js.map",
         "static/js/async/__federation_expose__internal___mf_bootstrap.js.map",
         "static/js/async/__federation_expose_default_export.js.map",
@@ -1213,10 +1219,12 @@
         "static/js/async/vendors-node_modules_codemirror_lang-xml_dist_index_js.js.map",
         "static/js/async/node_modules_codemirror_lang-json_dist_index_js-_bc1b0.js.map",
         "static/js/async/vendors-node_modules_codemirror_lang-javascript_dist_index_js.js.map",
-        "static/js/remoteEntry.js.map"
+        "static/js/remoteEntry.js.map",
+        "pimcore_studio_ui_bundle.7544ee7a8feac791.hot-update.js.map"
       ],
       "initial": {
         "js": [
+          "http://localhost:3030/pimcore_studio_ui_bundle.7544ee7a8feac791.hot-update.js",
           "http://localhost:3030/static/js/remoteEntry.js"
         ]
       },
