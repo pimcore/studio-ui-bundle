@@ -18,36 +18,36 @@ handles them. They serve as boilerplate for creating or extending types by cover
 implementation details, from the edit view to versions and listings.
 
 #### Source
-  - [Data types](https://github.com/pimcore/studio-ui-bundle/tree/1.x/assets/js/src/core/modules/element/dynamic-types/definitions/objects/data-related)
-  - [Layout types](https://github.com/pimcore/studio-ui-bundle/tree/1.x/assets/js/src/core/modules/element/dynamic-types/definitions/objects/layout-related)
+  - [Data types](https://github.com/pimcore/studio-ui-bundle/tree/2026.x/assets/js/src/core/modules/element/dynamic-types/definitions/objects/data-related)
+  - [Layout types](https://github.com/pimcore/studio-ui-bundle/tree/2026.x/assets/js/src/core/modules/element/dynamic-types/definitions/objects/layout-related)
 
 ### Meta-Data
 Dynamic types define how asset metadata appears in different views,
 such as grids and version comparisons.
 
 #### Source
-  - [Meta-data](https://github.com/pimcore/studio-ui-bundle/tree/1.x/assets/js/src/core/modules/element/dynamic-types/definitions/meta-data)
+  - [Meta-data](https://github.com/pimcore/studio-ui-bundle/tree/2026.x/assets/js/src/core/modules/element/dynamic-types/definitions/meta-data)
 
 ### Grid-Cells
 For grid cells, dynamic types describe how each cell renders its value and whether it supports
 inline editing. Grid cell types range from simple text to images and other complex types.
 
 #### Source
-- [Grid cells](https://github.com/pimcore/studio-ui-bundle/tree/1.x/assets/js/src/core/modules/element/dynamic-types/definitions/grid-cell)
+- [Grid cells](https://github.com/pimcore/studio-ui-bundle/tree/2026.x/assets/js/src/core/modules/element/dynamic-types/definitions/grid-cell)
 
 ### Assets
 Defines which asset types (image, audio, folder, etc.) are available in Pimcore Studio.
 
 #### Source
 
-- [Assets](https://github.com/pimcore/studio-ui-bundle/tree/1.x/assets/js/src/core/modules/element/dynamic-types/definitions/asset)
+- [Assets](https://github.com/pimcore/studio-ui-bundle/tree/2026.x/assets/js/src/core/modules/element/dynamic-types/definitions/asset)
 
 ### Batch-Edit
 In the context of batch editing, dynamic types specify how form fields should behave.
 
 #### Source
 
-- [Batch-edit](https://github.com/pimcore/studio-ui-bundle/tree/1.x/assets/js/src/core/modules/element/dynamic-types/definitions/batch-edits)
+- [Batch-edit](https://github.com/pimcore/studio-ui-bundle/tree/2026.x/assets/js/src/core/modules/element/dynamic-types/definitions/batch-edits)
 
 ### Field-Filters
 Dynamic types define filter behavior within grids,
@@ -55,7 +55,7 @@ mapping each data or asset metadata type to a suitable filter UI component.
 
 #### Source
 
-- [Field-filters](https://github.com/pimcore/studio-ui-bundle/tree/1.x/assets/js/src/core/modules/element/dynamic-types/definitions/field-filters)
+- [Field-filters](https://github.com/pimcore/studio-ui-bundle/tree/2026.x/assets/js/src/core/modules/element/dynamic-types/definitions/field-filters)
 
 ## Overriding Dynamic Types
 
