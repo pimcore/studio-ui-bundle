@@ -164,7 +164,7 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
             // Combine sub-groups and column items as children
             const allChildren = [...subGroupItems, ...columnItems]
 
-            if (allChildren.length === 1) {
+            if (allChildren.length === 1 && allChildren[0].key === 'advanced') {
               return allChildren
             }
 
