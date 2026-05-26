@@ -40,7 +40,7 @@ const PermissionsAccordion = ({ permissions, ...props }: IPermissionsAccordionPr
             <Select
               dataTestId="permissions-select-default"
               mode="multiple"
-              options={ permissions.default.map(translatePermissionOptions) }
+              options={ permissions.default.map(translatePermissionOptions).sort((a, b) => a.label.localeCompare(b.label)) }
               placeholder={
                 t('user-management.permissions.default')
               }
@@ -52,7 +52,7 @@ const PermissionsAccordion = ({ permissions, ...props }: IPermissionsAccordionPr
             <Select
               dataTestId="permissions-select-bundles"
               mode="multiple"
-              options={ permissions.bundles.map(translatePermissionOptions) }
+              options={ permissions.bundles.map(translatePermissionOptions).sort((a, b) => a.label.localeCompare(b.label)) }
               placeholder={
                 t('user-management.permissions.bundles')
               }
