@@ -33,6 +33,22 @@ export const useStyles = createStyles(({ token, css }) => {
         text-transform: uppercase;
         gap: 4px;
       }
+    `,
+
+    languageSelectValue: css`
+      cursor: pointer;
+      border-radius: ${token.borderRadius}px;
+      padding: 2px 4px;
+      min-width: 48px;
+
+      &:hover {
+        background-color: ${token.colorBgTextHover};
+      }
+    `,
+
+    languageItem: css`
+      text-transform: uppercase;
     `
   }
 })
+

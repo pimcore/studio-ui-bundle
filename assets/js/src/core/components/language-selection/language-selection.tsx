@@ -8,12 +8,17 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Button } from '@Pimcore/components/button/button'
 import React, { type MouseEvent, useEffect, useMemo, useState } from 'react'
-import { Icon } from '@Pimcore/components/icon/icon'
-import { useStyles } from './langguage-selection.styles'
-import { FlagIcon } from '@Pimcore/components/flag-icon/flag-icon'
 import { useTranslation } from 'react-i18next'
+import cn from 'classnames'
+import { Dropdown, type ItemType } from '@Pimcore/components/dropdown/dropdown'
+import { Input } from '@Pimcore/components/input/input'
+import { Button } from '@Pimcore/components/button/button'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { FlagIcon } from '@Pimcore/components/flag-icon/flag-icon'
+import { useStyles } from './langguage-selection.styles'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { Flex } from '@Pimcore/components/flex/flex'
 
 interface LanguageSelectionProps {
   languages: string[]
@@ -25,9 +30,12 @@ interface LanguageSelectionProps {
 export const transformLanguage = (language: string): string | null => language === '-' ? null : language
 
 export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage, onSelectLanguage }: LanguageSelectionProps): React.JSX.Element => {
-  const { styles } = useStyles()
-  const [language, setLanguage] = useState<string>(selectedLanguage)
   const { t } = useTranslation()
+  const { styles } = useStyles()
+
+  const [language, setLanguage] = useState<string>(selectedLanguage)
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false)
+  const [searchQuery, setSearchQuery] = useState<string>('')
 
   const hasMultipleLanguages = useMemo(() => languages?.length > 1, [languages])
 
@@ -35,8 +43,87 @@ export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage
     setLanguage(selectedLanguage)
   }, [selectedLanguage])
 
+  const goToNextLanguage = (e: MouseEvent): void => {
+    e.stopPropagation()
+
+    const currentIndex = languages.indexOf(language)
+    const nextIndex = currentIndex === languages.length - 1 ? 0 : currentIndex + 1
+
+    handleLanguageChange(languages[nextIndex])
+  }
+
+  const goToPreviousLanguage = (e: MouseEvent): void => {
+    e.stopPropagation()
+
+    const currentIndex = languages.indexOf(language)
+    const previousIndex = currentIndex === 0 ? languages.length - 1 : currentIndex - 1
+
+    handleLanguageChange(languages[previousIndex])
+  }
+
+  const handleLanguageChange = (language: string): void => {
+    setLanguage(language)
+    onSelectLanguage(language)
+  }
+
+  const menuItems = useMemo((): ItemType[] => {
+    const filteredLanguages = isEmptyValue(searchQuery)
+      ? languages
+      : languages.filter((lang) => {
+          const label = customKeys.includes(lang) ? t(`custom-language.${lang}`) : lang
+          return label.toLowerCase().includes(searchQuery.toLowerCase())
+        })
+
+    const searchItem: ItemType = {
+      key: 'search-item',
+      type: 'custom',
+      component: (
+        <div>
+          <Input
+            onChange={ (e) => { setSearchQuery(e.target.value) } }
+            placeholder={ t('search') }
+            size="middle"
+            value={ searchQuery }
+          />
+        </div>
+      )
+    }
+
+    const languageItems: ItemType[] = filteredLanguages.map((lang) => ({
+      key: lang,
+      label: (
+        <Flex
+          align="center"
+          className={ styles.languageItem }
+          gap="extra-small"
+        >
+          { lang === '-' && (
+            <Icon
+              options={ { width: 16, height: 16 } }
+              value='minus'
+            />
+          )}
+          { customKeys.includes(lang) && t(`custom-language.${lang}`) }
+          { lang !== '-' && !customKeys.includes(lang) && (
+            <>
+              <FlagIcon value={ transformLanguage(lang) } />
+              { lang }
+            </>
+          )}
+        </Flex>
+      ),
+      onClick: () => {
+        handleLanguageChange(lang)
+        setDropdownOpen(false)
+        setSearchQuery('')
+      }
+    }))
+
+    return [searchItem, ...languageItems]
+  }, [languages, customKeys, searchQuery, t])
+
   return (
-    <div className={ ['language-select', styles.languageSelect].join(' ') }>
+    <div className={ cn('language-select', styles.languageSelect) }>
       {hasMultipleLanguages && (
         <Button
           onClick={ goToPreviousLanguage }
@@ -49,25 +136,39 @@ export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage
         </Button>
       )}
 
-      <div className='language-select__current-value'>
-        { language === '-' && (
-        <Icon
-          options={ { width: 18, height: 18 } }
-          value='minus'
-        />
-        )}
+      <Dropdown
+        menu={ { items: menuItems } }
+        onOpenChange={ (open) => {
+          setDropdownOpen(open)
 
-        {customKeys.includes(language) && (
-          <span>{ t(`custom-language.${language}`) }</span>
-        )}
+          if (!open) setSearchQuery('')
+        } }
+        open={ dropdownOpen }
+        trigger={ ['click'] }
+      >
+        <div
+          className={ cn('language-select__current-value', styles.languageSelectValue) }
+          onClick={ (e: MouseEvent) => { e.stopPropagation() } }
+        >
+          { language === '-' && (
+            <Icon
+              options={ { width: 18, height: 18 } }
+              value='minus'
+            />
+          )}
 
-        { language !== '-' && !customKeys.includes(language) && (
-          <>
-            <FlagIcon value={ transformLanguage(language) } />
-            <span>{ language }</span>
-          </>
-        )}
-      </div>
+          { customKeys.includes(language) && (
+            <span>{ t(`custom-language.${language}`) }</span>
+          )}
+
+          { language !== '-' && !customKeys.includes(language) && (
+            <>
+              <FlagIcon value={ transformLanguage(language) } />
+              <span>{ language }</span>
+            </>
+          )}
+        </div>
+      </Dropdown>
 
       {hasMultipleLanguages && (
         <Button
@@ -82,23 +183,4 @@ export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage
       )}
     </div>
   )
-
-  function goToNextLanguage (e: MouseEvent): void {
-    e.stopPropagation()
-    const currentIndex = languages.indexOf(language)
-    const nextIndex = currentIndex === languages.length - 1 ? 0 : currentIndex + 1
-    handleLanguageChange(languages[nextIndex])
-  }
-
-  function goToPreviousLanguage (e: MouseEvent): void {
-    e.stopPropagation()
-    const currentIndex = languages.indexOf(language)
-    const previousIndex = currentIndex === 0 ? languages.length - 1 : currentIndex - 1
-    handleLanguageChange(languages[previousIndex])
-  }
-
-  function handleLanguageChange (language: string): void {
-    setLanguage(language)
-    onSelectLanguage(language)
-  }
 }
