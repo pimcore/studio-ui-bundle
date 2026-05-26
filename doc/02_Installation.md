@@ -8,8 +8,8 @@ title: Installation of the Studio UI Bundle
 
 1) Verify these prerequisites:
 
-- [GenericExecutionEngineBundle](https://docs.pimcore.com/platform/Pimcore/Development_Tools_and_Details/Generic_Execution_Engine/) installed and activated
-- [GenericDataIndexBundle](https://docs.pimcore.com/platform/Generic_Data_Index/Installation/) installed and activated
+- [GenericExecutionEngineBundle](https://github.com/pimcore/pimcore/blob/2026.x/doc/09_Development_Tools/01_Generic_Execution_Engine/README.md) installed and activated
+- [GenericDataIndexBundle](https://github.com/pimcore/generic-data-index-bundle/blob/2026.x/doc/01_Installation/README.md) installed and activated
 - StudioBackendBundle installed and activated
 
 2) Install the required dependencies:
