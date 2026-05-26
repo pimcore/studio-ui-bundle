@@ -150,7 +150,7 @@ export const KeySelectionDialog = ({
 
         <Content
           overflow={ { x: 'hidden', y: 'auto' } }
-          style={ { maxHeight: 'calc(65vh - 120px)', minHeight: 120 } }
+          style={ { maxHeight: 'calc(65vh - 80px)', minHeight: 120 } }
         >
           <Grid
             columns={ columns }
