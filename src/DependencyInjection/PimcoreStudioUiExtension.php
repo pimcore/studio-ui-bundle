@@ -18,6 +18,7 @@ use Exception;
 use Pimcore\Bundle\StudioUiBundle\Security\Csp\ContentSecurityPolicyHandlerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
@@ -26,7 +27,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  *
  * @link http://symfony.com/doc/current/cookbook/bundles/extension.html
  */
-class PimcoreStudioUiExtension extends Extension
+class PimcoreStudioUiExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * {@inheritdoc}
@@ -65,5 +66,28 @@ class PimcoreStudioUiExtension extends Extension
         $cspSubscriberDefinition
             ->setArgument('$cspEnabled', $config['csp_header']['enabled'])
             ->setArgument('$excludePaths', $config['csp_header']['exclude_paths']);
+    }
+
+    /**
+     * Registers the configured studio url_path under the "studio" Pimcore context
+     * so site resolution and document routing are bypassed for studio requests.
+     *
+     * @throws Exception
+     */
+    public function prepend(ContainerBuilder $container): void
+    {
+        $configs = $container->getExtensionConfig($this->getAlias());
+        $config = $this->processConfiguration(new Configuration(), $configs);
+        $urlPath = rtrim($config['url_path'] ?? '/pimcore-studio', '/');
+
+        $container->prependExtensionConfig('pimcore', [
+            'context' => [
+                'studio' => [
+                    'routes' => [
+                        ['path' => '^' . preg_quote($urlPath, '@') . '(/.*)?$'],
+                    ],
+                ],
+            ],
+        ]);
     }
 }

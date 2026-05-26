@@ -8,8 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
-import { useSortable } from '@dnd-kit/sortable'
+import React, { useRef } from 'react'
+import { useDraggable } from '@dnd-kit/core'
 
 export interface UseSortableElementProps {
   id: string
@@ -17,12 +17,13 @@ export interface UseSortableElementProps {
 }
 
 export interface UseSortableElementReturn {
-  listeners: ReturnType<typeof useSortable>['listeners']
+  listeners: ReturnType<typeof useDraggable>['listeners']
 }
 
 /**
- * Custom hook to handle sortable element setup for both block and areablock toolbars.
- * Manages the connection between dnd-kit's useSortable and DOM elements.
+ * Sets up the toolbar element as a drag source. Uses `useDraggable` rather than
+ * `useSortable` because the toolbars don't move during a drag (they're portaled
+ * into static pimcore HTML) and the user only drops on dropzones.
  */
 export const useSortableElement = ({
   id,
@@ -32,18 +33,25 @@ export const useSortableElement = ({
     attributes,
     listeners,
     setNodeRef
-  } = useSortable({ id })
+  } = useDraggable({ id })
+
+  // dnd-kit returns a fresh `attributes` object every drag tick — dedup writes
+  // against the last-applied values to keep the per-tick effect a no-op.
+  const lastAttributesRef = useRef<Record<string, string>>({})
 
   React.useEffect(() => {
-    if (setNodeRef !== null) {
-      setNodeRef(element)
+    if (setNodeRef === null) return
 
-      Object.keys(attributes).forEach(key => {
-        if (attributes[key] !== undefined && key.startsWith('data-')) {
-          element.setAttribute(key, String(attributes[key]))
-        }
-      })
-    }
+    setNodeRef(element)
+
+    const lastAttributes = lastAttributesRef.current
+    Object.keys(attributes).forEach(key => {
+      if (attributes[key] === undefined || !key.startsWith('data-')) return
+      const nextValue = String(attributes[key])
+      if (lastAttributes[key] === nextValue) return
+      element.setAttribute(key, nextValue)
+      lastAttributes[key] = nextValue
+    })
   }, [setNodeRef, element, attributes])
 
   return {

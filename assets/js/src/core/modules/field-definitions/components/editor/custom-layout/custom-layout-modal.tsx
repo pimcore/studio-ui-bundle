@@ -17,7 +17,7 @@ const {
   Modal: ModalTemplate,
   Provider: CustomLayoutModalProvider,
   useModal: useCustomLayoutModal
-} = create({ defaultProps: { children: <></>, size: 'XXL', footer: null } })
+} = create({ defaultProps: { children: <></>, size: 'XXL', footer: null, maskClosable: false } })
 
 export { CustomLayoutModalProvider, useCustomLayoutModal }
 

@@ -70,7 +70,7 @@ const SpecialSettings = ({ localizedView, localizedEdit, layouts, onValuesChange
                     options={ validLanguages.map((lang: string) => ({
                       value: lang,
                       label: getDisplayName(lang)
-                    })) }
+                    })).sort((a, b) => (a.label ?? 'UNKNOWN').localeCompare(b.label ?? 'UNKNOWN')) }
                     placeholder={ t('user-management.workspaces.localized-fields.view') }
                   ></Select>
                 </Form.Item>
@@ -84,7 +84,7 @@ const SpecialSettings = ({ localizedView, localizedEdit, layouts, onValuesChange
                     options={ validLanguages.map((lang: string) => ({
                       value: lang,
                       label: getDisplayName(lang)
-                    })) }
+                    })).sort((a, b) => (a.label ?? 'UNKNOWN').localeCompare(b.label ?? 'UNKNOWN')) }
                     placeholder={ t('user-management.workspaces.localized-fields.edit') }
                   ></Select>
                 </Form.Item>
@@ -111,7 +111,7 @@ const SpecialSettings = ({ localizedView, localizedEdit, layouts, onValuesChange
                   options={ data?.items.map((layout) => ({
                     value: layout.id,
                     label: layout.name
-                  })) }
+                  })).sort((a, b) => (a.label ?? '').localeCompare(b.label ?? '')) }
                   placeholder={ t('user-management.workspaces.custom-layouts.select') }
                 ></Select>
               </Form.Item>

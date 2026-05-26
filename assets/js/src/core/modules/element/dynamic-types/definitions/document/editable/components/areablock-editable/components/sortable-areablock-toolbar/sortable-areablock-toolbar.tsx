@@ -14,7 +14,6 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Split } from '@Pimcore/components/split/split'
 import { Space, Dropdown } from '@sdk/components'
 import { useStyles } from '../../areablock-editable.styles'
-import { type AreablockManager } from '../../utils/areablock-manager'
 import { type AreaType, type AreablockEditableConfig } from '../../areablock-editable'
 import { useTranslation } from 'react-i18next'
 import { useSortableElement } from '../../../../helpers/editable-dropzone-sorting/hooks/use-sortable-element'
@@ -23,12 +22,16 @@ import { InheritanceWrapper } from '../../../inheritance-wrapper/inheritance-wra
 
 export interface SortableAreablockToolbarProps {
   id: string
-  buttonsContainer: HTMLElement
   element: HTMLElement
   limitReached: boolean
   areaTypes: AreaType[]
   config?: AreablockEditableConfig
-  areablockManager: AreablockManager
+  // Pre-computed in the parent (use-areablock-controls) so this component can be memoized.
+  isFirst: boolean
+  isLast: boolean
+  isHidden: boolean
+  toolbarTitle?: string
+  hasDialogBox: boolean
   onAddArea: (element: HTMLElement | null, areaType?: string) => void
   onRemoveArea: (element: HTMLElement) => void
   onMoveAreaUp: (element: HTMLElement) => void
@@ -39,14 +42,25 @@ export interface SortableAreablockToolbarProps {
   onOverwrite?: () => void
 }
 
-export const SortableAreablockToolbar = ({
+type DragListeners = ReturnType<typeof useSortableElement>['listeners']
+
+interface SortableAreablockToolbarInnerProps extends SortableAreablockToolbarProps {
+  dragListeners: DragListeners
+}
+
+// Inner toolbar — memoized, doesn't subscribe to dnd-kit. The outer wrapper
+// owns the subscription so re-renders on drag don't reach this body.
+const SortableAreablockToolbarInnerComponent = ({
   id,
-  buttonsContainer,
   element,
   limitReached,
   areaTypes,
   config,
-  areablockManager,
+  isFirst,
+  isLast,
+  isHidden,
+  toolbarTitle,
+  hasDialogBox,
   onAddArea,
   onRemoveArea,
   onMoveAreaUp,
@@ -54,26 +68,16 @@ export const SortableAreablockToolbar = ({
   onOpenDialog,
   onToggleHidden,
   isInherited = false,
-  onOverwrite
-}: SortableAreablockToolbarProps): React.JSX.Element => {
+  onOverwrite,
+  dragListeners
+}: SortableAreablockToolbarInnerProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
-  const { listeners } = useSortableElement({ id, element })
 
   const { menuItems } = useAreablockMenu({
     config,
     onAddArea: (areaType: string) => { onAddArea(element, areaType) }
   })
-
-  const elements = areablockManager.queryElements()
-  const elementIndex = areablockManager.findElementIndex(element)
-  const isFirst = elementIndex === 0
-  const isLast = elementIndex === elements.length - 1
-  const isHidden = areablockManager.isElementHidden(element)
-
-  const elementType = areablockManager.getElementType(element)
-  const areaTypeConfig = areaTypes.find(areaType => areaType.type === elementType)
-  const toolbarTitle = (areaTypeConfig?.name != null) ? t(areaTypeConfig.name) : undefined
 
   const buttons: React.ReactNode[] = []
   let deleteButton: React.ReactNode = null
@@ -127,7 +131,7 @@ export const SortableAreablockToolbar = ({
     />
   )
 
-  if (areaTypeConfig?.hasDialogBoxConfiguration === true) {
+  if (hasDialogBox) {
     buttons.push(
       <IconButton
         icon={ { value: 'settings' } }
@@ -163,7 +167,7 @@ export const SortableAreablockToolbar = ({
       additionalIcon={ isInherited ? 'inheritance-active' : undefined }
       className={ styles.areablockToolstrip }
       disabled={ isInherited }
-      dragger={ isInherited ? true : { listeners } }
+      dragger={ isInherited ? true : { listeners: dragListeners } }
       key={ `toolbar-${element.getAttribute('key')}` }
       theme="inverse"
       title={ toolbarTitle }
@@ -188,5 +192,18 @@ export const SortableAreablockToolbar = ({
     >
       {toolStripContent}
     </InheritanceWrapper>
+  )
+}
+
+const SortableAreablockToolbarInner = React.memo(SortableAreablockToolbarInnerComponent)
+
+// Outer wrapper isolates the dnd-kit subscription from the memoized inner.
+export const SortableAreablockToolbar = (props: SortableAreablockToolbarProps): React.JSX.Element => {
+  const { listeners } = useSortableElement({ id: props.id, element: props.element })
+  return (
+    <SortableAreablockToolbarInner
+      { ...props }
+      dragListeners={ listeners }
+    />
   )
 }
