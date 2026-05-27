@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next'
 
 interface FieldnameSelectProps {
   blockIndex: number
+  classIdByName: Record<string, string>
   // Injected by NumberedFormItemControl — must be forwarded to inner <Select>
   value?: string | null
   onChange?: (value: string | null) => void
@@ -30,7 +31,7 @@ interface FieldnameSelectProps {
 // Per-row fieldname select: reads classname from the NumberedList's internal
 // state via operations.getValue (Form.useWatch reads the Ant Design form store
 // which does NOT contain values managed by NumberedList's own useState).
-const FieldnameSelect = ({ blockIndex, value, onChange }: FieldnameSelectProps): React.JSX.Element => {
+const FieldnameSelect = ({ blockIndex, classIdByName, value, onChange }: FieldnameSelectProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { operations } = useNumberedList()
   const classname = operations.getValue(['classDefinitions', blockIndex, 'classname']) as string | undefined
@@ -43,9 +44,11 @@ const FieldnameSelect = ({ blockIndex, value, onChange }: FieldnameSelectProps):
     prevClassnameRef.current = classname
   }, [classname])
 
+  const classId = classname !== undefined ? classIdByName[classname] : undefined
+
   const { data, isFetching } = useClassDefinitionGetBrickFieldsQuery(
-    { id: classname! },
-    { skip: classname === undefined || classname === '' }
+    { id: classId! },
+    { skip: classId === undefined || classId === '' }
   )
 
   const options = useMemo(() => {
@@ -74,21 +77,21 @@ export const ObjectBrickClassDefinitionsBlock = (): React.JSX.Element => {
     if (classesData?.items === undefined) return []
     return classesData.items.map((item) => ({
       label: item.name,
-      value: item.id
+      value: item.name
     }))
   }, [classesData])
 
-  // Map class id -> name for the block item title
-  const classNameById = useMemo(() => {
+  // Map class name -> id so FieldnameSelect can call the bricks-usages API with the correct identifier
+  const classIdByName = useMemo(() => {
     const map: Record<string, string> = {}
-    classesData?.items?.forEach((item) => { map[item.id] = item.name })
+    classesData?.items?.forEach((item) => { map[item.name] = item.id })
     return map
   }, [classesData])
 
   return (
     <Form.Item name="classDefinitions">
       <Block
-        getItemTitle={ (item) => (item?.classname !== undefined ? classNameById[item.classname] ?? item.classname : t('object-brick.class-definitions-block.new-entry')) }
+        getItemTitle={ (item) => (item?.classname !== undefined ? item.classname : t('object-brick.class-definitions-block.new-entry')) }
         title={ t('object-brick.class-definitions-block.title') }
       >
         { ({ blockIndex }) => (
@@ -109,7 +112,10 @@ export const ObjectBrickClassDefinitionsBlock = (): React.JSX.Element => {
               label={ t('object-brick.class-definitions-block.fieldname') }
               name="fieldname"
             >
-              <FieldnameSelect blockIndex={ blockIndex } />
+              <FieldnameSelect
+                blockIndex={ blockIndex }
+                classIdByName={ classIdByName }
+              />
             </Form.Item>
           </FormKit.Panel>
         ) }
