@@ -164,6 +164,10 @@ toolbar.switch-layout: Cambia layout personalizzato
 import: Importa
 export: Esporta
 more-actions: Altre azioni
+language-comparison-view.apply-changes: Applica modifiche
+language-comparison-view.title: Confronto tra lingue
+language-comparison-view.no-localized-fields: Questo oggetto dati non ha campi localizzati.
+language-comparison-view.no-permission: Non si dispone dei permessi per salvare questo oggetto.
 class-definition.import: Importa definizione classe
 class-definition.export: Esporta definizione classe
 class-definition.import-file-label: Seleziona file JSON
@@ -1003,7 +1007,6 @@ hide-empty-data: Nascondi dati vuoti
 tab-position: Posizione scheda
 maximum-tabs: Numero massimo schede
 hide-labels-when-tabs-reached: Nascondi etichette lingue quando raggiunte le schede
-provide-split-view: Fornisci vista divisa
 data: Dati
 domain-label-width: Larghezza etichetta dominio
 controller-action: Azione controller
@@ -2378,6 +2381,7 @@ icon-selector.custom-icon-path-placeholder: Aggiungere un percorso personalizzat
 icon-selector.Twemoji: Libreria Twemoji
 icon-selector.Pimcore: Libreria Pimcore
 language: Lingua
+no-languages-found: Nessuna lingua trovata
 pretty-url: URL leggibile / URL Slug
 pretty-url-override-notice: (sovrascrive il percorso dalla struttura ad albero)
 content-main-document: Documento content-main

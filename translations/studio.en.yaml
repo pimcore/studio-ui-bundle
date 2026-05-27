@@ -164,6 +164,10 @@ toolbar.switch-layout: Switch custom layout
 import: Import
 export: Export
 more-actions: More Actions
+language-comparison-view.apply-changes: Apply changes
+language-comparison-view.title: Language comparison
+language-comparison-view.no-localized-fields: This data object has no localized fields.
+language-comparison-view.no-permission: You don't have permission to save this object.
 class-definition.import: Import Class Definition
 class-definition.export: Export Class Definition
 class-definition.import-file-label: Select JSON file
@@ -1009,7 +1013,6 @@ hide-empty-data: Hide Empty Data
 tab-position: Tab Position
 maximum-tabs: Maximum Tabs
 hide-labels-when-tabs-reached: Hide Locale Labels When Tabs Reached
-provide-split-view: Provide Split View
 data: Data
 domain-label-width: Domain label width
 controller-action: Controller action
@@ -2389,6 +2392,7 @@ operational-grid.csv-import.description: Enter CSV data. Each line represents a 
 operational-grid.csv-import.ok: Import
 operational-grid.csv-import.cancel: Cancel
 language: Language
+no-languages-found: No languages found
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (overrides path from tree-structure)
 content-main-document: Content-Main Document
@@ -2610,6 +2614,7 @@ display-mode-display: Display path reference
 display-mode-inline-search: Inline search
 display-mode-grid-view: Grid view
 display-mode-tag-field: Tag field
+language-comparison-modal.title: Language comparison
 activate-column-configuration: Activate column configuration
 table-column-configuration: Table column configuration
 center: Center

@@ -164,6 +164,10 @@ toolbar.switch-layout: Changer de mise en page personnalisée
 import: Importer
 export: Exporter
 more-actions: Plus d'actions
+language-comparison-view.apply-changes: Appliquer les modifications
+language-comparison-view.title: Comparaison des langues
+language-comparison-view.no-localized-fields: Cet objet de données n'a pas de champs localisés.
+language-comparison-view.no-permission: Vous n'avez pas la permission d'enregistrer cet objet.
 class-definition.import: Importer la définition de classe
 class-definition.export: Exporter la définition de classe
 class-definition.import-file-label: Sélectionner un fichier JSON
@@ -1003,7 +1007,6 @@ hide-empty-data: Masquer les données vides
 tab-position: Position de l'onglet
 maximum-tabs: Nombre maximum d'onglets
 hide-labels-when-tabs-reached: Masquer les libellés de locale quand le nombre d'onglets est atteint
-provide-split-view: Fournir la vue fractionnée
 data: Données
 domain-label-width: Largeur du libellé de domaine
 controller-action: Action du contrôleur
@@ -2378,6 +2381,7 @@ icon-selector.custom-icon-path-placeholder: Ajoutez un chemin personnalisé et v
 icon-selector.Twemoji: Bibliothèque Twemoji
 icon-selector.Pimcore: Bibliothèque Pimcore
 language: Langue
+no-languages-found: Aucune langue trouvée
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (remplace le chemin de l'arborescence)
 content-main-document: Document content-main
