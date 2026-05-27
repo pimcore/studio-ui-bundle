@@ -164,6 +164,10 @@ toolbar.switch-layout: Benutzerdefiniertes Layout wechseln
 import: Import
 export: Export
 more-actions: Weitere Aktionen
+language-comparison-view.apply-changes: Änderungen anwenden
+language-comparison-view.title: Sprachvergleich
+language-comparison-view.no-localized-fields: Dieses Datenobjekt hat keine lokalisierten Felder
+language-comparison-view.no-permission: Sie haben keine Berechtigung, dieses Objekt zu speichern.
 class-definition.import: Klassendefinition importieren
 class-definition.export: Klassendefinition exportieren
 class-definition.import-file-label: JSON-Datei auswählen

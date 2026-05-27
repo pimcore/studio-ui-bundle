@@ -18,6 +18,7 @@ export interface PermissionBasedLanguageSelectionControlProps {
   onChange: (value: string | null) => void
   isNullable?: boolean
   customKeys?: string[]
+  excludeLocales?: string[]
 }
 
 export const PermissionBasedLanguageSelectionControl = (props: PermissionBasedLanguageSelectionControlProps): React.JSX.Element => {
