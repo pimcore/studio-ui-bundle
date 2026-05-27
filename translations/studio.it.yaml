@@ -2382,6 +2382,7 @@ icon-selector.custom-icon-path-placeholder: Aggiungere un percorso personalizzat
 icon-selector.Twemoji: Libreria Twemoji
 icon-selector.Pimcore: Libreria Pimcore
 language: Lingua
+no-languages-found: Nessuna lingua trovata
 pretty-url: URL leggibile / URL Slug
 pretty-url-override-notice: (sovrascrive il percorso dalla struttura ad albero)
 content-main-document: Documento content-main

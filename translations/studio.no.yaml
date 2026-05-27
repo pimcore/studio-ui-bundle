@@ -2382,6 +2382,7 @@ icon-selector.custom-icon-path-placeholder: Legg til en egendefinert sti og bekr
 icon-selector.Twemoji: Twemoji-bibliotek
 icon-selector.Pimcore: Pimcore-bibliotek
 language: Språk
+no-languages-found: Ingen språk funnet
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (overstyrer sti fra trestrukturen)
 content-main-document: Innholdshoveddokument

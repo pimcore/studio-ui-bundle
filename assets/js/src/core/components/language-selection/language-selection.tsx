@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
 import { Dropdown } from 'antd'
 import type { MenuProps } from 'antd'
-import { Input } from '@Pimcore/components/input/input'
+import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Button } from '@Pimcore/components/button/button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { FlagIcon } from '@Pimcore/components/flag-icon/flag-icon'
@@ -72,13 +72,25 @@ export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage
 
   const hasMultipleLanguages = useMemo(() => languages?.length > 1, [languages])
   const filteredLanguages = useMemo(() => {
-    return isEmptyValue(searchQuery)
-      ? languages
-      : languages.filter((lang) => {
-          const label = customKeys.includes(lang) ? t(`custom-language.${lang}`) : lang
-          return label.toLowerCase().includes(searchQuery.toLowerCase())
-        })
-  }, [languages, searchQuery, t, customKeys])
+    if (isEmptyValue(searchQuery)) {
+      return languages
+    }
+
+    const normalizedQuery = searchQuery.toLowerCase().trim()
+
+    return languages.filter((lang) => {
+      const localeData: string = validLocales?.[lang] ?? validLocales?.[lang.toLowerCase()] ?? ''
+
+      const parsed = parseLocaleLabel(localeData)
+      const customLabel = customKeys.includes(lang) ? t(`custom-language.${lang}`) : ''
+
+      const searchableValues = [lang, formatLocaleKey(lang), parsed?.name, localeData, customLabel]
+        .filter(Boolean)
+        .map((value) => value?.toLowerCase())
+
+      return searchableValues.some((value) => value?.includes(normalizedQuery))
+    })
+  }, [languages, searchQuery, t, customKeys, validLocales])
 
   const languageItems = useMemo(() => {
     return filteredLanguages.map((lang) => {
@@ -154,21 +166,32 @@ export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage
             vertical
           >
             <div className={ styles.inputWrapper }>
-              <Input
+              <SearchInput
                 onChange={ (e) => { setSearchQuery(e.target.value) } }
                 placeholder={ t('search') }
-                size="middle"
                 value={ searchQuery }
+                withClear
+                withoutAddon
               />
             </div>
 
-            <Menu
-              items={ languageItems }
-              onClick={ handleMenuClick }
-              rootClassName={ styles.languageList }
-              selectable
-              selectedKeys={ [language] }
-            />
+            {filteredLanguages.length > 0 ? (
+              <Menu
+                items={ languageItems }
+                onClick={ handleMenuClick }
+                rootClassName={ styles.languageList }
+                selectable
+                selectedKeys={ [language] }
+              />
+            ) : (
+              <Flex
+                align="center"
+                className={ styles.emptyState }
+                justify="center"
+              >
+                {t('no-languages-found')}
+              </Flex>
+            )}
           </Flex>
         ) }
         menu={ { items: [] } }

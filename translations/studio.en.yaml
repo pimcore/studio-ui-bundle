@@ -2393,6 +2393,7 @@ operational-grid.csv-import.description: Enter CSV data. Each line represents a 
 operational-grid.csv-import.ok: Import
 operational-grid.csv-import.cancel: Cancel
 language: Language
+no-languages-found: No languages found
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (overrides path from tree-structure)
 content-main-document: Content-Main Document

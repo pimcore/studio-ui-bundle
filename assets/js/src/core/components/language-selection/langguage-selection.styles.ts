@@ -80,6 +80,11 @@ export const useStyles = createStyles(({ token, css }) => {
 
     label: css`
       color: ${token.colorTextLabel};
+    `,
+
+    emptyState: css`
+      padding: ${token.paddingSM}px;
+      color: ${token.colorTextLabel};
     `
   }
 })

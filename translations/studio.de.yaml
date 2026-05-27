@@ -2382,6 +2382,7 @@ icon-selector.custom-icon-path-placeholder: Benutzerdefinierten Pfad eingeben un
 icon-selector.Twemoji: Twemoji-Bibliothek
 icon-selector.Pimcore: Pimcore-Bibliothek
 language: Sprache
+no-languages-found: Keine Sprachen gefunden
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (überschreibt Pfad aus der Baumstruktur)
 content-main-document: Content-Main-Dokument
