@@ -28,14 +28,15 @@ export const DocumentConfigurationSidebar = (): React.JSX.Element => {
 
   const hasSavePermission = checkDocumentPermission(context, 'save') || checkDocumentPermission(context, 'publish')
 
-  // Load API data with refetch on mount
-  const { data: controllersData, isLoading: isLoadingControllers } = useDocumentAvailableControllersListQuery(undefined, {
+  // Load API data with refetch on mount. Use isFetching so the skeleton stays
+  // visible during the on-mount refetch, not just during the very first fetch.
+  const { data: controllersData, isFetching: isLoadingControllers } = useDocumentAvailableControllersListQuery(undefined, {
     refetchOnMountOrArgChange: true
   })
-  const { data: templatesData, isLoading: isLoadingTemplates } = useDocumentAvailableTemplatesListQuery(undefined, {
+  const { data: templatesData, isFetching: isLoadingTemplates } = useDocumentAvailableTemplatesListQuery(undefined, {
     refetchOnMountOrArgChange: true
   })
-  const { data: predefinedDocTypesData, isLoading: isLoadingDocTypes } = useDocumentDocTypeListQuery({
+  const { data: predefinedDocTypesData, isFetching: isLoadingDocTypes } = useDocumentDocTypeListQuery({
     type: document?.type ?? 'page'
   }, {
     refetchOnMountOrArgChange: true
@@ -58,8 +59,6 @@ export const DocumentConfigurationSidebar = (): React.JSX.Element => {
     }
   }, [document?.settingsData])
 
-  const isDataReady = !isUndefined(document) && !isLoadingControllers && !isLoadingTemplates && !isLoadingDocTypes
-
   const apiData = {
     controllers: controllersData?.items ?? [],
     templates: templatesData?.items ?? [],
@@ -67,19 +66,22 @@ export const DocumentConfigurationSidebar = (): React.JSX.Element => {
   }
 
   return (
-    <Content loading={ !isDataReady }>
+    <Content>
       <SidebarTitle withBorder>
         {t('document-configuration.sidebar-title')}
       </SidebarTitle>
 
       <Box padding={ { x: 'extra-small', bottom: 'small' } }>
-        {isDataReady && (
+        {!isUndefined(document) && (
           <DocumentConfigurationForm
             apiData={ apiData }
             documentId={ id }
             documentType={ document?.type }
             hasSavePermission={ hasSavePermission }
             initialValues={ initialValues }
+            isLoadingControllers={ isLoadingControllers }
+            isLoadingDocTypes={ isLoadingDocTypes }
+            isLoadingTemplates={ isLoadingTemplates }
           />
         )}
       </Box>
