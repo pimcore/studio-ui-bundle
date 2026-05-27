@@ -92,8 +92,8 @@ export const useStyle = createStyles(({ css }, { phase, backgroundShade }: Style
 
       .background-figure {
         position: absolute;
-        will-change: transform;
         flex-shrink: 0;
+        filter: blur(90px);
 
         ${isOrbiting
           ? css`
@@ -198,13 +198,6 @@ export const useStyle = createStyles(({ css }, { phase, backgroundShade }: Style
         }
       }
     `,
-    backdropBlur: css`
-      position: absolute;
-      inset: 0;
-      backdrop-filter: blur(90px);
-      -webkit-backdrop-filter: blur(90px);
-      pointer-events: none;
-    `,
     logoImage: css`      position: absolute;
       top: 50%;
       left: 50%;
@@ -223,10 +216,9 @@ export const useStyle = createStyles(({ css }, { phase, backgroundShade }: Style
       background: rgba(253, 255, 255, 0.35);
       filter: blur(75px);
       pointer-events: none;
-      will-change: transform;
 
       ${isOrbiting
-        ? css`animation: ${logoOrbitCW} 3s linear infinite;`
+        ? css`animation: ${logoOrbitCW} 3s linear infinite; will-change: transform;`
         : css`transform: translate(-50%, -50%) rotate(0deg) translateX(80px);`
       }
 
@@ -245,10 +237,9 @@ export const useStyle = createStyles(({ css }, { phase, backgroundShade }: Style
       background: rgba(253, 255, 255, 0.35);
       filter: blur(75px);
       pointer-events: none;
-      will-change: transform;
 
       ${isOrbiting
-        ? css`animation: ${logoOrbitCCW} 4s linear infinite;`
+        ? css`animation: ${logoOrbitCCW} 4s linear infinite; will-change: transform;`
         : css`transform: translate(-50%, -50%) rotate(180deg) translateX(80px);`
       }
 

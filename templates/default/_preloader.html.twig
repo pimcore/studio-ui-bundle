@@ -23,7 +23,7 @@
         top: 50%;
         left: 50%;
         opacity: 0.7;
-        will-change: transform;
+        filter: blur(90px);
     }
 
     #app-preloader .background-figure--top-left {
@@ -88,14 +88,6 @@
         opacity: 1;
     }
 
-    #app-preloader .backdrop-blur {
-        position: absolute;
-        inset: 0;
-        backdrop-filter: blur(90px);
-        -webkit-backdrop-filter: blur(90px);
-        pointer-events: none;
-    }
-
     #app-preloader .logo-orbit {
         position: absolute;
         top: 50%;
@@ -106,7 +98,6 @@
         background: rgba(253, 255, 255, 0.35);
         filter: blur(75px);
         pointer-events: none;
-        will-change: transform;
     }
     #app-preloader .logo-orbit--cw  { animation: pimcore-logo-orbit-cw  3s linear infinite; }
     #app-preloader .logo-orbit--ccw { animation: pimcore-logo-orbit-ccw 4s linear infinite; }
