@@ -19,6 +19,7 @@ import { FlagIcon } from '@Pimcore/components/flag-icon/flag-icon'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { formatLocaleKey, parseLocaleLabel, transformLanguage } from '@Pimcore/components/language-selection/helpers'
 import { useStyles } from './langguage-selection.styles'
 
 interface LanguageSelectionProps {
@@ -26,30 +27,6 @@ interface LanguageSelectionProps {
   customKeys?: string[]
   selectedLanguage: string
   onSelectLanguage: (language: string) => void
-}
-
-export const transformLanguage = (lang: string): string | null => lang === '-' ? null : lang
-const formatLocaleKey = (code: string): string => {
-  if (!code || code === '-') return code
-
-  const [lang, region] = code.split('-')
-
-  if (!region) return lang.toUpperCase()
-
-  return `${lang}_${region}`
-}
-
-const parseLocaleLabel = (value?: string): { name: string, code: string } | null => {
-  if (!value) return null
-
-  const match = value.match(/^(.*?)\s*\[(.*?)\]$/)
-
-  if (!match) return { name: value, code: '' }
-
-  return {
-    name: match[1],
-    code: match[2]
-  }
 }
 
 export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage, onSelectLanguage }: LanguageSelectionProps): React.JSX.Element => {
