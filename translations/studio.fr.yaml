@@ -2382,6 +2382,7 @@ icon-selector.custom-icon-path-placeholder: Ajoutez un chemin personnalisé et v
 icon-selector.Twemoji: Bibliothèque Twemoji
 icon-selector.Pimcore: Bibliothèque Pimcore
 language: Langue
+no-languages-found: Aucune langue trouvée
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (remplace le chemin de l'arborescence)
 content-main-document: Document content-main

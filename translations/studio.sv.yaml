@@ -2382,6 +2382,7 @@ icon-selector.custom-icon-path-placeholder: Lägg till en anpassad sökväg och 
 icon-selector.Twemoji: Twemoji-bibliotek
 icon-selector.Pimcore: Pimcore-bibliotek
 language: Språk
+no-languages-found: Inga språk hittades
 pretty-url: Snygg URL / URL Slug
 pretty-url-override-notice: (åsidosätter sökväg från trädstruktur)
 content-main-document: Content-Main-dokument
