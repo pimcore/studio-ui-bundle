@@ -607,7 +607,10 @@ export type AssetExportZipAssetApiResponse =
     };
 export type AssetExportZipAssetApiArg = {
     body: {
+        /** Asset IDs to include in the zip */
         assets?: number[];
+        /** ID of the parent folder. Defaults to root (1). */
+        parentId?: number;
     };
 };
 export type AssetExportZipFolderApiResponse =

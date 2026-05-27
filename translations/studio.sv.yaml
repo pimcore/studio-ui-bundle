@@ -164,6 +164,10 @@ toolbar.switch-layout: Byt anpassad layout
 import: Import
 export: Export
 more-actions: Fler åtgärder
+language-comparison-view.apply-changes: Tillämpa ändringar
+language-comparison-view.title: Jämförelse av språk
+language-comparison-view.no-localized-fields: Det här dataobjektet har inga lokaliserade fält.
+language-comparison-view.no-permission: Du har inte behörighet att spara detta objekt.
 class-definition.import: Importera klassdefinition
 class-definition.export: Exportera klassdefinition
 class-definition.import-file-label: Välj JSON-fil
@@ -1003,7 +1007,6 @@ hide-empty-data: Dölj tom data
 tab-position: Flikposition
 maximum-tabs: Maximalt antal flikar
 hide-labels-when-tabs-reached: Dölj språketiketter när flikar nåtts
-provide-split-view: Tillhandahåll delad vy
 data: Data
 domain-label-width: Domänetikettbredd
 controller-action: Controller-åtgärd
@@ -2378,6 +2381,7 @@ icon-selector.custom-icon-path-placeholder: Lägg till en anpassad sökväg och 
 icon-selector.Twemoji: Twemoji-bibliotek
 icon-selector.Pimcore: Pimcore-bibliotek
 language: Språk
+no-languages-found: Inga språk hittades
 pretty-url: Snygg URL / URL Slug
 pretty-url-override-notice: (åsidosätter sökväg från trädstruktur)
 content-main-document: Content-Main-dokument

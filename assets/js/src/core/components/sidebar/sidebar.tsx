@@ -9,8 +9,9 @@
  */
 
 import { useStyle } from './sidebar.styles'
-import React, { isValidElement, useState, useContext } from 'react'
+import React, { isValidElement, useState, useContext, useRef } from 'react'
 import { type ISidebarButton, type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
+import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { SidebarContext } from './sidebar-provider'
@@ -131,22 +132,40 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
         </div>
 
         <div className={ `sidebar__content sidebar__content--sizing-${sizing} ` + (activeTab !== '' ? 'expanded' : '') }>
-          {preparedEntries.map((entry, index) => {
-            return (
-              <div
-                aria-labelledby={ entry.key }
-                className={ 'tab ' + (entry.key === activeTab ? 'sidebar--active' : '') }
-                id={ entry.key }
-                key={ entry.key }
-                role="tabpanel"
-                tabIndex={ index }
-              >
-                {entry.component}
-              </div>
-            )
-          })}
+          {preparedEntries.map((entry, index) => (
+            <LazyTabPanel
+              entry={ entry }
+              isActive={ entry.key === activeTab }
+              key={ entry.key }
+              tabIndex={ index }
+            />
+          ))}
         </div>
       </div>
     </ContentConfigProvider>
+  )
+}
+
+interface LazyTabPanelProps {
+  entry: ISidebarEntry
+  isActive: boolean
+  tabIndex: number
+}
+
+const LazyTabPanel = ({ entry, isActive, tabIndex }: LazyTabPanelProps): React.JSX.Element => {
+  const ref = useRef<HTMLDivElement>(null)
+  const hasBeenVisible = useElementVisible(ref)
+
+  return (
+    <div
+      aria-labelledby={ entry.key }
+      className={ 'tab ' + (isActive ? 'sidebar--active' : '') }
+      id={ entry.key }
+      ref={ ref }
+      role="tabpanel"
+      tabIndex={ tabIndex }
+    >
+      {hasBeenVisible ? entry.component : null}
+    </div>
   )
 }

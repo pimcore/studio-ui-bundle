@@ -164,6 +164,10 @@ toolbar.switch-layout: Benutzerdefiniertes Layout wechseln
 import: Import
 export: Export
 more-actions: Weitere Aktionen
+language-comparison-view.apply-changes: Änderungen anwenden
+language-comparison-view.title: Sprachvergleich
+language-comparison-view.no-localized-fields: Dieses Datenobjekt hat keine lokalisierten Felder
+language-comparison-view.no-permission: Sie haben keine Berechtigung, dieses Objekt zu speichern.
 class-definition.import: Klassendefinition importieren
 class-definition.export: Klassendefinition exportieren
 class-definition.import-file-label: JSON-Datei auswählen
@@ -1003,7 +1007,6 @@ hide-empty-data: Leere Daten ausblenden
 tab-position: Tab-Position
 maximum-tabs: Maximale Tabs
 hide-labels-when-tabs-reached: Sprach-Bezeichnungen ausblenden wenn Tab-Limit erreicht
-provide-split-view: Geteilte Ansicht bereitstellen
 data: Daten
 domain-label-width: Domain-Bezeichnungsbreite
 controller-action: Controller-Aktion
@@ -2378,6 +2381,7 @@ icon-selector.custom-icon-path-placeholder: Benutzerdefinierten Pfad eingeben un
 icon-selector.Twemoji: Twemoji-Bibliothek
 icon-selector.Pimcore: Pimcore-Bibliothek
 language: Sprache
+no-languages-found: Keine Sprachen gefunden
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (überschreibt Pfad aus der Baumstruktur)
 content-main-document: Content-Main-Dokument

@@ -13,6 +13,7 @@ import { get, isEmpty, isUndefined } from 'lodash'
 import { type FormItemProps } from 'antd'
 import { DynamicTypeObjectDataAbstract } from '../dynamic-type-object-data-abstract'
 import { ClassificationStore, type ClassificationStoreProps } from '../components/classification-store/classification-store'
+import { type IExtractLocalizedFieldsProps, type ILocalizedFieldDescriptor } from '@Pimcore/modules/data-object/editor/toolbar/language-comparison-view/helpers/process-layout-data'
 import {
   type IFormattedDataStructureData,
   type IProcessVersionFieldDataProps
@@ -20,6 +21,8 @@ import {
 import { getBreadcrumbTitle } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
 import { type ClassificationStoreGroup } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+
+export const CLASSIFICATION_STORE_LANGUAGE_COMPARISON_DYNAMIC_LOCALE = 'language-comparison-locale'
 
 export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectDataAbstract {
   id: string = 'classificationstore'
@@ -33,6 +36,71 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
       ...super.getObjectDataFormItemProps(props),
       label: null
     }
+  }
+
+  async extractLocalizedFields (props: IExtractLocalizedFieldsProps): Promise<ILocalizedFieldDescriptor[] | false> {
+    const { item, fieldBreadcrumbTitle, formPath } = props
+
+    if (item?.localized === false) {
+      return []
+    }
+
+    const normalizeGroups = (value: unknown): any[] => {
+      if (Array.isArray(value)) {
+        return value
+      }
+
+      if (value != null && typeof value === 'object') {
+        return Object.values(value)
+      }
+
+      return []
+    }
+
+    const activeGroupDefinitions = normalizeGroups(item.activeGroupDefinitions)
+
+    if (activeGroupDefinitions.length === 0) return []
+
+    const getTitle: string | undefined = !isEmptyValue(item?.title) ? item?.title : item?.name
+    const breadcrumbTitle = getBreadcrumbTitle(fieldBreadcrumbTitle, getTitle ?? '')
+
+    const processClassificationStoreData = ({
+      data,
+      updatedFieldBreadcrumbTitle = breadcrumbTitle,
+      groupId
+    }: {
+      data: any[]
+      updatedFieldBreadcrumbTitle?: string
+      groupId?: number
+    }): ILocalizedFieldDescriptor[] => {
+      return normalizeGroups(data).flatMap((dataItem: any) => {
+        const keys = normalizeGroups(dataItem.keys)
+
+        if (keys.length > 0) {
+          const currentTitle: string | undefined = !isEmptyValue(dataItem?.title) ? dataItem?.title : dataItem?.name
+          const nextBreadcrumbTitle = getBreadcrumbTitle(updatedFieldBreadcrumbTitle, currentTitle ?? '')
+
+          return processClassificationStoreData({
+            data: keys,
+            updatedFieldBreadcrumbTitle: nextBreadcrumbTitle,
+            groupId: dataItem.id
+          })
+        }
+
+        if (isEmpty(dataItem.definition) || isUndefined(groupId)) {
+          return []
+        }
+
+        return [{
+          fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle,
+          fieldData: { ...dataItem.definition, name: dataItem.id },
+          formPath: [...formPath, item.name, String(groupId), CLASSIFICATION_STORE_LANGUAGE_COMPARISON_DYNAMIC_LOCALE, dataItem.id],
+          localeInFormPath: true
+        }]
+      })
+    }
+
+    return processClassificationStoreData({ data: activeGroupDefinitions })
   }
 
   async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<IFormattedDataStructureData[]> {

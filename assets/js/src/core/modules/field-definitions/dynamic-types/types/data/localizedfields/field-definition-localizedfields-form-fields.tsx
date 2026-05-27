@@ -127,10 +127,6 @@ export const FieldDefinitionLocalizedfieldsFormFields = (props: FieldDefinitionA
           ] }
         />
       </Form.Item>
-
-      <Form.Item name="provideSplitView">
-        <Switch labelRight={ t('provide-split-view') } />
-      </Form.Item>
     </>
   )
 }

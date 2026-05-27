@@ -164,6 +164,10 @@ toolbar.switch-layout: Bytt tilpasset layout
 import: Importer
 export: Eksporter
 more-actions: Flere handlinger
+language-comparison-view.apply-changes: Bruk endringer
+language-comparison-view.title: Spraksammenligning
+language-comparison-view.no-localized-fields: Dette dataobjektet har ingen lokaliserte felter.
+language-comparison-view.no-permission: Du har ikke tillatelse til å lagre dette objektet.
 class-definition.import: Importer klassedefinisjon
 class-definition.export: Eksporter klassedefinisjon
 class-definition.import-file-label: Velg JSON-fil
@@ -1003,7 +1007,6 @@ hide-empty-data: Skjul tomme data
 tab-position: Faneposisjon
 maximum-tabs: Maksimalt antall faner
 hide-labels-when-tabs-reached: Skjul språketiketter når antall faner er nådd
-provide-split-view: Tilby delt visning
 data: Data
 domain-label-width: Domene-etikettbredde
 controller-action: Controller-handling
@@ -2378,6 +2381,7 @@ icon-selector.custom-icon-path-placeholder: Legg til en egendefinert sti og bekr
 icon-selector.Twemoji: Twemoji-bibliotek
 icon-selector.Pimcore: Pimcore-bibliotek
 language: Språk
+no-languages-found: Ingen språk funnet
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (overstyrer sti fra trestrukturen)
 content-main-document: Innholdshoveddokument
