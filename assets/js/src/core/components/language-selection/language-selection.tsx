@@ -9,7 +9,7 @@
  */
 
 import { Button } from '@Pimcore/components/button/button'
-import React, { type MouseEvent, useEffect, useState } from 'react'
+import React, { type MouseEvent, useEffect, useMemo, useState } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useStyles } from './langguage-selection.styles'
 import { FlagIcon } from '@Pimcore/components/flag-icon/flag-icon'
@@ -29,21 +29,25 @@ export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage
   const [language, setLanguage] = useState<string>(selectedLanguage)
   const { t } = useTranslation()
 
+  const hasMultipleLanguages = useMemo(() => languages?.length > 1, [languages])
+
   useEffect(() => {
     setLanguage(selectedLanguage)
   }, [selectedLanguage])
 
   return (
     <div className={ ['language-select', styles.languageSelect].join(' ') }>
-      <Button
-        onClick={ goToPreviousLanguage }
-        type='link'
-      >
-        <Icon
-          options={ { width: 18, height: 18 } }
-          value='chevron-left'
-        />
-      </Button>
+      {hasMultipleLanguages && (
+        <Button
+          onClick={ goToPreviousLanguage }
+          type='link'
+        >
+          <Icon
+            options={ { width: 18, height: 18 } }
+            value='chevron-left'
+          />
+        </Button>
+      )}
 
       <div className='language-select__current-value'>
         { language === '-' && (
@@ -65,15 +69,17 @@ export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage
         )}
       </div>
 
-      <Button
-        onClick={ goToNextLanguage }
-        type='link'
-      >
-        <Icon
-          options={ { width: 18, height: 18 } }
-          value='chevron-right'
-        />
-      </Button>
+      {hasMultipleLanguages && (
+        <Button
+          onClick={ goToNextLanguage }
+          type='link'
+        >
+          <Icon
+            options={ { width: 18, height: 18 } }
+            value='chevron-right'
+          />
+        </Button>
+      )}
     </div>
   )
 

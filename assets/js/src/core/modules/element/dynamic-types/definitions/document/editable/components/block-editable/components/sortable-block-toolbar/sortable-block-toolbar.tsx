@@ -9,23 +9,26 @@
  */
 
 import React from 'react'
-import { isNull } from 'lodash'
 import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Split } from '@Pimcore/components/split/split'
 import { Space } from 'antd'
 import { useBlockEditableStyles } from '../../block-editable.styles'
-import { type BlockManager } from '../../utils/block-manager'
 import { useTranslation } from 'react-i18next'
 import { useSortableElement } from '../../../../helpers/editable-dropzone-sorting/hooks/use-sortable-element'
 import { InheritanceWrapper } from '../../../inheritance-wrapper/inheritance-wrapper'
 
 export interface SortableBlockToolbarProps {
   id: string
-  buttonsContainer: HTMLElement
   element: HTMLElement
   limitReached: boolean
-  blockManager: BlockManager
+  // Pre-computed in the parent (use-block-controls) so this component can be memoized.
+  isFirst: boolean
+  isLast: boolean
+  hasPlus: boolean
+  hasMinus: boolean
+  hasUp: boolean
+  hasDown: boolean
   onAddBlock: (element: HTMLElement | null, amount?: number) => void
   onRemoveBlock: (element: HTMLElement) => void
   onMoveBlockUp: (element: HTMLElement) => void
@@ -34,32 +37,34 @@ export interface SortableBlockToolbarProps {
   onOverwrite?: () => void
 }
 
-export const SortableBlockToolbar = ({
+type DragListeners = ReturnType<typeof useSortableElement>['listeners']
+
+interface SortableBlockToolbarInnerProps extends SortableBlockToolbarProps {
+  dragListeners: DragListeners
+}
+
+// Inner toolbar — memoized, doesn't subscribe to dnd-kit. The outer wrapper
+// owns the subscription so re-renders on drag don't reach this body.
+const SortableBlockToolbarInnerComponent = ({
   id,
-  buttonsContainer,
   element,
   limitReached,
-  blockManager,
+  isFirst,
+  isLast,
+  hasPlus,
+  hasMinus,
+  hasUp,
+  hasDown,
   onAddBlock,
   onRemoveBlock,
   onMoveBlockUp,
   onMoveBlockDown,
   isInherited = false,
-  onOverwrite
-}: SortableBlockToolbarProps): React.JSX.Element => {
+  onOverwrite,
+  dragListeners
+}: SortableBlockToolbarInnerProps): React.JSX.Element => {
   const { styles } = useBlockEditableStyles()
   const { t } = useTranslation()
-  const { listeners } = useSortableElement({ id, element })
-
-  const elements = blockManager.queryElements()
-  const elementIndex = blockManager.findElementIndex(element)
-  const isFirst = elementIndex === 0
-  const isLast = elementIndex === elements.length - 1
-
-  const hasPlus = !isNull(buttonsContainer.querySelector('.pimcore_block_plus'))
-  const hasMinus = !isNull(buttonsContainer.querySelector('.pimcore_block_minus'))
-  const hasUp = !isNull(buttonsContainer.querySelector('.pimcore_block_up'))
-  const hasDown = !isNull(buttonsContainer.querySelector('.pimcore_block_down'))
 
   const buttons: React.ReactNode[] = []
   let deleteButton: React.ReactNode = null
@@ -120,7 +125,7 @@ export const SortableBlockToolbar = ({
         additionalIcon={ isInherited ? 'inheritance-active' : undefined }
         className={ styles.blockToolstrip }
         disabled={ isInherited }
-        dragger={ { listeners } }
+        dragger={ { listeners: dragListeners } }
         key={ `toolbar-${element.getAttribute('key')}` }
         theme="inverse"
         title={ t('block') }
@@ -137,5 +142,18 @@ export const SortableBlockToolbar = ({
         </Split>
       </ToolStrip>
     </InheritanceWrapper>
+  )
+}
+
+const SortableBlockToolbarInner = React.memo(SortableBlockToolbarInnerComponent)
+
+// Outer wrapper isolates the dnd-kit subscription from the memoized inner.
+export const SortableBlockToolbar = (props: SortableBlockToolbarProps): React.JSX.Element => {
+  const { listeners } = useSortableElement({ id: props.id, element: props.element })
+  return (
+    <SortableBlockToolbarInner
+      { ...props }
+      dragListeners={ listeners }
+    />
   )
 }

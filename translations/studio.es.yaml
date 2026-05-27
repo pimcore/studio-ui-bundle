@@ -2,6 +2,9 @@ common.owner: Propietario
 common.modification-date: Fecha de modificación
 common.globally: Globalmente
 common.apply-selection: Aplicar selección
+cache.clear-cache-success: Caché limpiada con éxito
+cache.clear-full-page-cache-success: Caché de página completa limpiada con éxito
+cache.clear-temporary-files-success: Archivos temporales eliminados con éxito
 dont-ask-again: No volver a preguntar
 widget.missing-context.title: Contexto faltante
 widget.missing-context.description: No se encontró ningún elemento relacionado
@@ -19,6 +22,8 @@ error.error_validation.email_failed: Introduzca una dirección de correo electr�
 error.error_element_not_found: Elemento no encontrado
 error.error_document_language_not_set: El documento no tiene ninguna propiedad de idioma establecida
 error.error_inconsistent_asset_type: Solo se permiten assets del mismo tipo aquí.
+error.error_recycle_bin_restore: No se puede restaurar el elemento de la papelera de reciclaje
+error.error_recycle_bin_restore_missing_parent: No se puede restaurar el elemento de la papelera de reciclaje, el elemento padre no existe
 sidebar.selected_elements: Elementos seleccionados
 sidebar.grid_config: Configuración de cuadrícula
 sidebar.tag_filters: Filtros de etiquetas
@@ -159,6 +164,10 @@ toolbar.switch-layout: Cambiar diseño personalizado
 import: Importar
 export: Exportar
 more-actions: Más acciones
+language-comparison-view.apply-changes: Aplicar cambios
+language-comparison-view.title: Comparación de idiomas
+language-comparison-view.no-localized-fields: Este objeto de datos no tiene campos localizados.
+language-comparison-view.no-permission: No tiene permiso para guardar este objeto.
 class-definition.import: Importar definición de clase
 class-definition.export: Exportar definición de clase
 class-definition.import-file-label: Seleccionar archivo JSON
@@ -202,6 +211,8 @@ class-definition.property-visibility.key-grid: Clave (Cuadrícula)
 class-definition.property-visibility.key-search: Clave (Búsqueda)
 class-definition.property-visibility.path-grid: Ruta (Cuadrícula)
 class-definition.property-visibility.path-search: Ruta (Búsqueda)
+class-definition.property-visibility.published-grid: Publicado (Cuadrícula)
+class-definition.property-visibility.published-search: Publicado (Búsqueda)
 class-definition.property-visibility.modification-date-grid: Fecha de modificación (Cuadrícula)
 class-definition.property-visibility.modification-date-search: Fecha de modificación (Búsqueda)
 class-definition.property-visibility.creation-date-grid: Fecha de creación (Cuadrícula)
@@ -974,6 +985,7 @@ lazy-loading: Carga diferida
 disallow-add-remove: No permitir añadir/eliminar
 disallow-reorder: No permitir reordenar
 css-style: Estilo CSS
+css-style-tooltip: "CSS en línea aplicado al cuerpo, p. ej. \"float: left; margin: 10px;\". Las declaraciones no válidas se ignoran."
 collapsible: Plegable
 collapsed: Plegado inicialmente
 border: Borde
@@ -1449,6 +1461,10 @@ navigation.reporting: Informes
 navigation.system: Sistema
 navigation.website-settings: Configuración del sitio web
 navigation.document-types: Tipos de documento
+navigation.cache: Caché
+navigation.cache.clear-cache: Limpiar caché
+navigation.cache.clear-full-page-cache: Limpiar caché de página completa
+navigation.cache.clear-temporary-files: Eliminar archivos temporales
 navigation.clear-cache: Limpiar caché de página completa
 navigation.reports: Todos los informes
 navigation.custom-reports: Configuración de informes personalizados

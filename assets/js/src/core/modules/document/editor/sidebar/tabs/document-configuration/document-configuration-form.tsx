@@ -42,6 +42,9 @@ interface DocumentConfigurationFormProps {
     templates: Array<{ path: string }>
     predefinedDocTypes: Array<{ id: string, name?: string | null, controller?: string | null, template?: string | null }>
   }
+  isLoadingControllers?: boolean
+  isLoadingTemplates?: boolean
+  isLoadingDocTypes?: boolean
   hasSavePermission?: boolean
 }
 
@@ -50,6 +53,9 @@ export const DocumentConfigurationForm = ({
   documentType,
   initialValues,
   apiData,
+  isLoadingControllers = false,
+  isLoadingTemplates = false,
+  isLoadingDocTypes = false,
   hasSavePermission = true
 }: DocumentConfigurationFormProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -163,6 +169,7 @@ export const DocumentConfigurationForm = ({
         <Select
           allowClear
           disabled={ !canEdit }
+          loadingSkeleton={ isLoadingDocTypes }
           options={ predefinedDocTypeOptions }
           popupMatchSelectWidth={ false }
           showSearch
@@ -176,6 +183,7 @@ export const DocumentConfigurationForm = ({
         <Select
           allowClear
           disabled={ !canEdit }
+          loadingSkeleton={ isLoadingControllers }
           options={ controllerOptions }
           popupMatchSelectWidth={ false }
           showSearch
@@ -189,6 +197,7 @@ export const DocumentConfigurationForm = ({
         <Select
           allowClear
           disabled={ !canEdit }
+          loadingSkeleton={ isLoadingTemplates }
           options={ templateOptions }
           popupMatchSelectWidth={ false }
           showSearch

@@ -127,7 +127,7 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
 
         // Convert the tree structure into Ant Design menu format
         const convertTreeToMenuItems = (tree: Record<string, any>, parentPath = ''): any[] => {
-          return Object.entries(tree).map(([groupName, groupData]) => {
+          return Object.entries(tree).flatMap(([groupName, groupData]) => {
             const currentPath = parentPath !== '' ? `${parentPath}.${groupName}` : groupName
             const menuItem: any = {
               key: `group-${menuIndex++}`,
@@ -163,6 +163,12 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
 
             // Combine sub-groups and column items as children
             const allChildren = [...subGroupItems, ...columnItems]
+
+            // Do not render a group level when it contains the Advanced column
+            if (allChildren.length === 1 && allChildren[0].key === 'advanced') {
+              return allChildren
+            }
+
             if (allChildren.length > 0) {
               menuItem.children = allChildren
             }

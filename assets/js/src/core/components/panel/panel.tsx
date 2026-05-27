@@ -10,16 +10,18 @@
 
 import React, { type ReactNode } from 'react'
 import { isNil } from 'lodash'
-import { Space } from '@Pimcore/components/space/space'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { Box, type BoxProps } from '@Pimcore/components/box/box'
 import { BaseView } from '@Pimcore/components/base-view/base-view'
 import { TooltipIcon } from '@Pimcore/components/tooltip-icon/tooltip-icon'
+import { Icon, type ElementIcon } from '@Pimcore/components/icon/icon'
 import { type CollapseProps } from 'antd'
 import { ItemSpacer } from '@Pimcore/components/form/layouts/item-spacer/item-spacer'
 
 export interface PanelProps {
   title?: ReactNode
   tooltip?: ReactNode
+  icon?: ElementIcon | null
   border?: boolean
   collapsible?: boolean
   collapsed?: boolean
@@ -43,6 +45,7 @@ export const Panel = ({
   collapsible,
   title,
   tooltip,
+  icon,
   theme = 'card-with-highlight',
   extra,
   extraPosition,
@@ -55,15 +58,28 @@ export const Panel = ({
       return undefined
     }
 
-    if (isNil(tooltip)) {
+    const iconNode = !isNil(icon)
+      ? (
+        <Icon
+          type={ icon.type }
+          value={ icon.value }
+        />
+        )
+      : null
+
+    if (isNil(tooltip) && iconNode === null) {
       return title
     }
 
     return (
-      <Space size='extra-small'>
+      <Flex
+        align='center'
+        gap='extra-small'
+      >
+        {iconNode}
         {title}
-        <TooltipIcon tooltip={ tooltip } />
-      </Space>
+        {!isNil(tooltip) && <TooltipIcon tooltip={ tooltip } />}
+      </Flex>
     )
   }
 

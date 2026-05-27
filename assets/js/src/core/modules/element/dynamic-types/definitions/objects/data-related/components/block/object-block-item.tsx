@@ -17,6 +17,7 @@ import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-dat
 import { Form, type FormItemProps } from '@Pimcore/components/form/form'
 import { BlockToolStrip } from '@Pimcore/components/block/block-tool-strip'
 import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/combined-field-name-provider/combined-field-name-provider'
+import { Flex } from '@sdk/components'
 
 export interface ObjectBlockItemProps {
   field: number
@@ -47,28 +48,33 @@ export const ObjectBlockItem = (props: ObjectBlockItemProps): React.JSX.Element 
         </ToolStrip>
         ) }
     >
-      {
-        Array.isArray(children)
-          ? children.map((child, index) => {
-              return (
-                <CombinedFieldNameProvider
-                  combinedFieldNameParent={ [...(Array.isArray(props.name) ? props.name : [props.name])] }
-                  key={ index }
-                >
-                  <Form.Group
-                    name={ field }
-                  >
-                    <ObjectComponent
-                      key={ field }
-                      { ...child }
-                      noteditable={ noteditable === true }
-                    />
-                  </Form.Group>
-                </CombinedFieldNameProvider>
-              )
-            })
-          : undefined
-      }
+      <Flex
+        gap={ 'extra-small' }
+        vertical
+      >
+        {
+            Array.isArray(children)
+              ? children.map((child, index) => {
+                  return (
+                    <CombinedFieldNameProvider
+                      combinedFieldNameParent={ [...(Array.isArray(props.name) ? props.name : [props.name])] }
+                      key={ index }
+                    >
+                      <Form.Group
+                        name={ field }
+                      >
+                        <ObjectComponent
+                          key={ field }
+                          { ...child }
+                          noteditable={ noteditable === true }
+                        />
+                      </Form.Group>
+                    </CombinedFieldNameProvider>
+                  )
+                })
+              : undefined
+        }
+      </Flex>
     </ToolStripBox>
   ), [field, noteditable, children, props.disallowAdd, props.disallowDelete, props.disallowReorder, props.name])
 }

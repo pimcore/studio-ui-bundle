@@ -39,6 +39,12 @@ export const WithElementContext = (props: PermissionBasedLanguageSelectionContro
     availableLanguages.unshift(...props.customKeys)
   }
 
+  if (props.excludeLocales !== undefined && props.excludeLocales.length > 0) {
+    const excluded = new Set(props.excludeLocales)
+
+    availableLanguages.splice(0, availableLanguages.length, ...availableLanguages.filter(lang => !excluded.has(lang)))
+  }
+
   if (props.isNullable === true) {
     availableLanguages.unshift('-')
   }

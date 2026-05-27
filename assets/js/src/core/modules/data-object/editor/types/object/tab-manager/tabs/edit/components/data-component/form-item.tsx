@@ -18,6 +18,9 @@ import {
 import cn from 'classnames'
 import { useInheritanceOverlayStyle } from '@Pimcore/components/inheritance-overlay/hooks/use-inheritance-overlay-style'
 import { AutoHideEmptyContent } from '@Pimcore/modules/app/utils/auto-hide-empty-content/auto-hide-empty-content'
+import { useSuppressEmptyFieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/suppress-empty-field-label-provider'
+import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
+import { isNonEmptyString } from '@sdk/utils'
 
 interface DataComponentFormItemProps {
   objectDataType: DynamicTypeObjectDataAbstract
@@ -30,6 +33,17 @@ const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDat
   const objectDataComponent = objectDataType.getObjectDataComponent(_props)
   const inheritanceOverlayStyle = useInheritanceOverlayStyle({ inherited: _props.inherited, type: objectDataType.inheritedMaskOverlay })
 
+  const suppressEmptyLabel = useSuppressEmptyFieldLabel()
+  const inheritanceStateContext = useInheritanceState()
+  const inheritedState = inheritanceStateContext?.getInheritanceState(formFieldName)?.inherited
+  const hasInheritanceIcon = inheritedState === true || inheritedState === 'broken'
+  const labelIsEmpty = !isNonEmptyString(_props.title) && !isNonEmptyString(_props.tooltip) && !hasInheritanceIcon
+  const shouldSuppressLabel = suppressEmptyLabel && labelIsEmpty
+
+  const effectiveFormItemProps = shouldSuppressLabel
+    ? { ...formItemProps, label: null, colon: false, labelCol: { span: 0 }, wrapperCol: { span: 24 } }
+    : formItemProps
+
   return useMemo(() => (
     <ErrorBoundary>
       <AutoHideEmptyContent
@@ -37,15 +51,15 @@ const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDat
         parentSelector=".ant-space-item"
       >
         <Form.Item
-          { ...formItemProps }
-          className={ cn(formItemProps.className, inheritanceOverlayStyle) }
+          { ...effectiveFormItemProps }
+          className={ cn(effectiveFormItemProps.className, inheritanceOverlayStyle) }
           name={ formFieldName }
         >
           { objectDataComponent }
         </Form.Item>
       </AutoHideEmptyContent>
     </ErrorBoundary>
-  ), [formItemProps, inheritanceOverlayStyle, objectDataComponent])
+  ), [effectiveFormItemProps, inheritanceOverlayStyle, objectDataComponent])
 }
 
 export default DataComponentFormItem

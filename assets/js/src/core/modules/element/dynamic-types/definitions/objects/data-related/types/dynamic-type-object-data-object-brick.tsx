@@ -16,6 +16,7 @@ import { type FormItemProps } from 'antd'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { getBreadcrumbTitle } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/details-functions'
 import { type ClassObjectBrickObjectLayoutApiResponse, type ObjectBrickLayoutDefinition } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+import { processNestedLayoutData, type IExtractLocalizedFieldsProps, type ILocalizedFieldDescriptor } from '@Pimcore/modules/data-object/editor/toolbar/language-comparison-view/helpers/process-layout-data'
 import {
   DATATYPE_LIST,
   type IFormattedDataStructureData,
@@ -39,6 +40,77 @@ export class DynamicTypeObjectDataObjectBrick extends DynamicTypeObjectDataAbstr
       ...super.getObjectDataFormItemProps(props),
       label: null
     }
+  }
+
+  async extractLocalizedFields (props: IExtractLocalizedFieldsProps): Promise<ILocalizedFieldDescriptor[] | false> {
+    const {
+      objectId,
+      item,
+      objectData,
+      fieldBreadcrumbTitle,
+      formPath,
+      objectDataRegistry,
+      layoutsList,
+      setLayoutsList
+    } = props
+
+    const brickValues = objectData[item.name]
+
+    if (brickValues == null || typeof brickValues !== 'object') {
+      return []
+    }
+
+    const loadObjectBrickLayouts = async (): Promise<ObjectBrickLayoutDefinition[]> => {
+      const cachedLayouts = layoutsList.find((layout) => layout.type === DynamicTypesList.OBJECT_BRICKS)
+
+      if (cachedLayouts !== undefined) {
+        return cachedLayouts.data as ObjectBrickLayoutDefinition[]
+      }
+
+      try {
+        const response = await fetch(`${getPrefix()}/class/object-brick/${objectId}/object/layout`)
+        const data: ClassObjectBrickObjectLayoutApiResponse = await response.json()
+
+        setLayoutsList([...layoutsList, { type: DynamicTypesList.OBJECT_BRICKS, data: data.items }])
+
+        return data.items
+      } catch (error) {
+        console.error(error)
+        return []
+      }
+    }
+
+    const layoutDefinitions = await loadObjectBrickLayouts()
+
+    if (layoutDefinitions.length === 0) {
+      return []
+    }
+
+    const descriptors = await Promise.all(layoutDefinitions.map(async (layoutDefinition: any) => {
+      const brickType = layoutDefinition.key
+
+      if (isEmpty(brickType) || !(brickType in brickValues) || item?.allowedTypes?.includes(brickType) !== true) {
+        return []
+      }
+
+
+      const brickTitle = layoutDefinition.title !== brickType ? `${layoutDefinition.title}/${brickType}` : layoutDefinition.title
+      const brickName = !isEmptyValue(layoutDefinition.name) && layoutDefinition.name !== brickType ? `${layoutDefinition.name}/${brickType}` : layoutDefinition.name
+      const brickFieldBreadcrumbTitle: string = !isEmptyValue(layoutDefinition.title) ? brickTitle : brickName
+
+      return await processNestedLayoutData({
+        objectId,
+        data: (layoutDefinition.children as any[]) ?? [],
+        objectData: brickValues[brickType] as Record<string, any>,
+        objectDataRegistry,
+        fieldBreadcrumbTitle: getBreadcrumbTitle(fieldBreadcrumbTitle, brickFieldBreadcrumbTitle),
+        formPath: [...formPath, item.name, brickType],
+        layoutsList,
+        setLayoutsList
+      })
+    }))
+
+    return descriptors.flatMap(item => item)
   }
 
   async processVersionFieldData (props: IProcessVersionFieldDataProps): Promise<IFormattedDataStructureData[]> {

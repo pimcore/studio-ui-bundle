@@ -31,6 +31,14 @@ export class DynamicTypeFieldDefinitionAccordion extends DynamicTypeFieldDefinit
     return { type: 'name', value: 'accordion' }
   }
 
+  getAllowedChildTags (props: FieldDefinitionContext): string[] {
+    return ['panel', 'region', 'tabpanel', 'text', 'iframe']
+  }
+
+  getDropdownTags (props: FieldDefinitionContext): string[] {
+    return this.getAllowedChildTags(props)
+  }
+
   getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = context.path.at(-1) ?? ''
     const fieldDefinition = context.fieldDefinitions[id]

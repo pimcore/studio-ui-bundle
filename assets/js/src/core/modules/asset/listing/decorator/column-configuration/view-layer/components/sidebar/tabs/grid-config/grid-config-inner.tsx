@@ -24,8 +24,8 @@ import { SaveView } from './views/save-view'
 import { defaultValues } from './forms/save-form'
 import { type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Content } from '@Pimcore/components/content/content'
-import { useRoleGetCollectionQuery } from '@Pimcore/modules/user/roles/roles-api-slice-enhanced'
-import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
+import { useRoleGetShareCollectionQuery } from '@Pimcore/modules/user/roles/roles-api-slice-enhanced'
+import { useUserGetShareCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
@@ -51,8 +51,8 @@ export const GridConfigInner = (): React.JSX.Element => {
   const { id: selectedGridConfigId, setId: setSelectedGridConfigId } = useSelectedGridConfigId()
   const { gridConfig, setGridConfig } = useGridConfig()
   const { isLoading, isFetching, data } = useAssetGetSavedGridConfigurationsQuery()
-  const { data: roleList } = useRoleGetCollectionQuery()
-  const { data: userList } = useUserGetCollectionQuery()
+  const { data: roleList } = useRoleGetShareCollectionQuery()
+  const { data: userList } = useUserGetShareCollectionQuery()
   const { isFetching: gridConfigIsLoading } = useAssetGetGridConfigurationByFolderIdQuery({
     folderId: getId(),
     configurationId: selectedGridConfigId

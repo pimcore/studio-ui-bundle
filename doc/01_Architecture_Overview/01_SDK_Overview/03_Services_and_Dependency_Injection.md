@@ -76,4 +76,4 @@ The DI container is used in multiple examples. For instance, refer to the [How t
 
 ### Source
 
-- [Core services](https://github.com/pimcore/studio-ui-bundle/blob/1.x/assets/js/src/core/app/config/services/index.ts)
+- [Core services](https://github.com/pimcore/studio-ui-bundle/blob/2026.x/assets/js/src/core/app/config/services/index.ts)
