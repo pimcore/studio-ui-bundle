@@ -112,7 +112,10 @@ export const ObjectBrickClassDefinitionsBlock = (): React.JSX.Element => {
               label={ t('object-brick.class-definitions-block.fieldname') }
               name="fieldname"
             >
-              <FieldnameSelect blockIndex={ blockIndex } classIdByName={ classIdByName } />
+              <FieldnameSelect
+                blockIndex={ blockIndex }
+                classIdByName={ classIdByName }
+              />
             </Form.Item>
           </FormKit.Panel>
         ) }
