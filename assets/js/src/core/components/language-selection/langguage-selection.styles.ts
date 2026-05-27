@@ -12,6 +12,12 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
+    dropdownContent: css`
+      .ant-dropdown-menu-item-selected {
+        color: ${token.colorText} !important;
+      }
+    `,
+
     languageSelect: css`
       display: flex;
       gap: 2px;
@@ -30,24 +36,29 @@ export const useStyles = createStyles(({ token, css }) => {
         display: flex;
         align-items: center;
         justify-content: center;
-        text-transform: uppercase;
         gap: 4px;
       }
     `,
 
     languageSelectValue: css`
       cursor: pointer;
-      border-radius: ${token.borderRadius}px;
-      padding: 2px 4px;
-      min-width: 48px;
-
-      &:hover {
-        background-color: ${token.colorBgTextHover};
-      }
+      min-width: 40px;
     `,
 
-    languageItem: css`
-      text-transform: uppercase;
+    languageDropdownItem: css`
+      width: 100%;
+    `,
+
+    inputWrapper: css`
+      padding: ${token.paddingXS}px;
+    `,
+
+    icon: css`
+      color: ${token.Colors.Neutral.Icon.colorIcon};
+    `,
+
+    label: css`
+      color: ${token.colorTextLabel};
     `
   }
 })

@@ -16,9 +16,10 @@ import { Input } from '@Pimcore/components/input/input'
 import { Button } from '@Pimcore/components/button/button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { FlagIcon } from '@Pimcore/components/flag-icon/flag-icon'
-import { useStyles } from './langguage-selection.styles'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { useStyles } from './langguage-selection.styles'
 
 interface LanguageSelectionProps {
   languages: string[]
@@ -27,11 +28,35 @@ interface LanguageSelectionProps {
   onSelectLanguage: (language: string) => void
 }
 
-export const transformLanguage = (language: string): string | null => language === '-' ? null : language
+export const transformLanguage = (lang: string): string | null => lang === '-' ? null : lang
+const formatLocaleKey = (code: string): string => {
+  if (!code || code === '-') return code
+
+  const [lang, region] = code.split('-')
+
+  if (!region) return lang.toUpperCase()
+
+  return `${lang}_${region}`
+}
+
+const parseLocaleLabel = (value?: string): { name: string, code: string } | null => {
+  if (!value) return null
+
+  const match = value.match(/^(.*?)\s*\[(.*?)\]$/)
+
+  if (!match) return { name: value, code: '' }
+
+  return {
+    name: match[1],
+    code: match[2]
+  }
+}
 
 export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage, onSelectLanguage }: LanguageSelectionProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
+
+  const { validLocales } = useSettings()
 
   const [language, setLanguage] = useState<string>(selectedLanguage)
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false)
@@ -78,7 +103,7 @@ export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage
       key: 'search-item',
       type: 'custom',
       component: (
-        <div>
+        <div className={ styles.inputWrapper }>
           <Input
             onChange={ (e) => { setSearchQuery(e.target.value) } }
             placeholder={ t('search') }
@@ -89,35 +114,52 @@ export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage
       )
     }
 
-    const languageItems: ItemType[] = filteredLanguages.map((lang) => ({
-      key: lang,
-      label: (
-        <Flex
-          align="center"
-          className={ styles.languageItem }
-          gap="extra-small"
-        >
-          { lang === '-' && (
-            <Icon
-              options={ { width: 16, height: 16 } }
-              value='minus'
-            />
-          )}
-          { customKeys.includes(lang) && t(`custom-language.${lang}`) }
-          { lang !== '-' && !customKeys.includes(lang) && (
-            <>
-              <FlagIcon value={ transformLanguage(lang) } />
-              { lang }
-            </>
-          )}
-        </Flex>
-      ),
-      onClick: () => {
-        handleLanguageChange(lang)
-        setDropdownOpen(false)
-        setSearchQuery('')
+    const languageItems: ItemType[] = filteredLanguages.map((lang) => {
+      const localeData: string = validLocales?.[lang] ?? validLocales?.[lang.toLowerCase()]
+      const parsed = parseLocaleLabel(localeData)
+      const formattedCode = formatLocaleKey(lang)
+
+      return {
+        key: lang,
+        label: (
+          <Flex
+            align="center"
+            gap="extra-small"
+          >
+            { lang === '-' && (
+              <Icon
+                options={ { width: 16, height: 16 } }
+                value='minus'
+              />
+            )}
+            { customKeys.includes(lang) && t(`custom-language.${lang}`) }
+            { lang !== '-' && !customKeys.includes(lang) && (
+              <Flex
+                align="center"
+                className={ styles.languageDropdownItem }
+                justify="space-between"
+              >
+                <Flex
+                  align="center"
+                  gap="mini"
+                >
+                  <FlagIcon value={ transformLanguage(lang) } />
+                  <div>{parsed?.name ?? lang}</div>
+                </Flex>
+                <Flex align="center">
+                  <div className={ styles.label }>{formattedCode.toUpperCase()}</div>
+                </Flex>
+              </Flex>
+            )}
+          </Flex>
+        ),
+        onClick: () => {
+          handleLanguageChange(lang)
+          setDropdownOpen(false)
+          setSearchQuery('')
+        }
       }
-    }))
+    })
 
     return [searchItem, ...languageItems]
   }, [languages, customKeys, searchQuery, t])
@@ -130,6 +172,7 @@ export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage
           type='link'
         >
           <Icon
+            className={ styles.icon }
             options={ { width: 18, height: 18 } }
             value='chevron-left'
           />
@@ -137,21 +180,23 @@ export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage
       )}
 
       <Dropdown
-        menu={ { items: menuItems } }
+        menu={ { items: menuItems, selectable: true } }
         onOpenChange={ (open) => {
           setDropdownOpen(open)
 
           if (!open) setSearchQuery('')
         } }
         open={ dropdownOpen }
+        overlayClassName={ styles.dropdownContent }
         trigger={ ['click'] }
       >
-        <div
+        <Flex
           className={ cn('language-select__current-value', styles.languageSelectValue) }
           onClick={ (e: MouseEvent) => { e.stopPropagation() } }
         >
           { language === '-' && (
             <Icon
+              className={ styles.icon }
               options={ { width: 18, height: 18 } }
               value='minus'
             />
@@ -164,10 +209,10 @@ export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage
           { language !== '-' && !customKeys.includes(language) && (
             <>
               <FlagIcon value={ transformLanguage(language) } />
-              <span>{ language }</span>
+              <span className={ styles.label }>{ formatLocaleKey(language) }</span>
             </>
           )}
-        </div>
+        </Flex>
       </Dropdown>
 
       {hasMultipleLanguages && (
@@ -176,6 +221,7 @@ export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage
           type='link'
         >
           <Icon
+            className={ styles.icon }
             options={ { width: 18, height: 18 } }
             value='chevron-right'
           />
