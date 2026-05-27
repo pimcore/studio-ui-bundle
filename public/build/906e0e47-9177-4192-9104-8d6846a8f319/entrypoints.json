@@ -1,0 +1,23 @@
+{
+  "entrypoints": {
+    "index": {
+      "js": [
+        "/bundles/pimcorestudioui/build/906e0e47-9177-4192-9104-8d6846a8f319/static/js/7366.cc04fcb0.js",
+        "/bundles/pimcorestudioui/build/906e0e47-9177-4192-9104-8d6846a8f319/static/js/index.c32700ec.js"
+      ],
+      "css": []
+    },
+    "pimcore_studio_ui_bundle": {
+      "js": [
+        "/bundles/pimcorestudioui/build/906e0e47-9177-4192-9104-8d6846a8f319/static/js/remoteEntry.js"
+      ],
+      "css": []
+    },
+    "exposeRemote": {
+      "js": [
+        "/bundles/pimcorestudioui/build/906e0e47-9177-4192-9104-8d6846a8f319/exposeRemote.js"
+      ],
+      "css": []
+    }
+  }
+}
