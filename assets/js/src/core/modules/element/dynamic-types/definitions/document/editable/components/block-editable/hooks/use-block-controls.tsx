@@ -9,7 +9,7 @@
  */
 
 import React, { useCallback } from 'react'
-import { isNumber } from 'lodash'
+import { isNull, isNumber } from 'lodash'
 import { type BlockManager } from '../utils/block-manager'
 import ReactDOM from 'react-dom'
 import { SortableBlockToolbar } from '../components/sortable-block-toolbar'
@@ -111,32 +111,43 @@ export const useBlockControls = ({
       .map(entry => blockManager.getElementKey(entry))
       .filter((key): key is string => Boolean(key))
 
-    currentBlockEntries.forEach(blockEntry => {
+    // Compute per-block flags here so SortableBlockToolbar can be memoized
+    // (props are stable primitives, no DOM queries inside the toolbar render).
+    const lastIndex = currentBlockEntries.length - 1
+    currentBlockEntries.forEach((blockEntry, index) => {
       const buttonsContainer = blockEntry.querySelector('.pimcore_block_buttons')
-      if (buttonsContainer !== null) {
-        const blockKey = blockManager.getElementKey(blockEntry)
+      if (buttonsContainer === null) return
 
-        if (blockKey !== null) {
-          const sortableToolbar = (
-            <SortableBlockToolbar
-              blockManager={ blockManager }
-              buttonsContainer={ buttonsContainer as HTMLElement }
-              element={ blockEntry }
-              id={ blockKey }
-              isInherited={ isInherited }
-              key={ blockKey }
-              limitReached={ limitReached }
-              onAddBlock={ handleAddBlock }
-              onMoveBlockDown={ onMoveBlockDown }
-              onMoveBlockUp={ onMoveBlockUp }
-              onOverwrite={ onOverwrite }
-              onRemoveBlock={ handleRemoveBlock }
-            />
-          )
-          const portal = ReactDOM.createPortal(sortableToolbar, buttonsContainer)
-          portals.push(portal)
-        }
-      }
+      const blockKey = blockManager.getElementKey(blockEntry)
+      if (blockKey === null) return
+
+      const hasPlus = !isNull(buttonsContainer.querySelector('.pimcore_block_plus'))
+      const hasMinus = !isNull(buttonsContainer.querySelector('.pimcore_block_minus'))
+      const hasUp = !isNull(buttonsContainer.querySelector('.pimcore_block_up'))
+      const hasDown = !isNull(buttonsContainer.querySelector('.pimcore_block_down'))
+
+      const sortableToolbar = (
+        <SortableBlockToolbar
+          element={ blockEntry }
+          hasDown={ hasDown }
+          hasMinus={ hasMinus }
+          hasPlus={ hasPlus }
+          hasUp={ hasUp }
+          id={ blockKey }
+          isFirst={ index === 0 }
+          isInherited={ isInherited }
+          isLast={ index === lastIndex }
+          key={ blockKey }
+          limitReached={ limitReached }
+          onAddBlock={ handleAddBlock }
+          onMoveBlockDown={ onMoveBlockDown }
+          onMoveBlockUp={ onMoveBlockUp }
+          onOverwrite={ onOverwrite }
+          onRemoveBlock={ handleRemoveBlock }
+        />
+      )
+      const portal = ReactDOM.createPortal(sortableToolbar, buttonsContainer)
+      portals.push(portal)
     })
 
     return (

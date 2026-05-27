@@ -15,7 +15,7 @@ import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/us
 import { ElementTag } from '@Pimcore/components/element-tag/element-tag'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
-import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
+import { ElementSelectorProvider, SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import {
   convertAllowedTypes,
   createElementSelectorAreas,
@@ -212,19 +212,21 @@ export const DynamicTypeFieldFilterRelationComponent = (): React.JSX.Element => 
   }
 
   return (
-    <Droppable
-      isValidContext={ (info: DragAndDropInfo) => isValidElementType(info.type) }
-      isValidData={ (info: DragAndDropInfo) => dndIsValidData(info, allowedTypes) }
-      onDrop={ handleDrop }
-    >
-      <RelationFilterInner
-        items={ items }
-        onFinish={ handleFinish }
-        onRemove={ removeItem }
-        onSelect={ () => {} }
-        selectorAreas={ selectorAreas }
-        selectorConfig={ selectorConfig }
-      />
-    </Droppable>
+    <ElementSelectorProvider>
+      <Droppable
+        isValidContext={ (info: DragAndDropInfo) => isValidElementType(info.type) }
+        isValidData={ (info: DragAndDropInfo) => dndIsValidData(info, allowedTypes) }
+        onDrop={ handleDrop }
+      >
+        <RelationFilterInner
+          items={ items }
+          onFinish={ handleFinish }
+          onRemove={ removeItem }
+          onSelect={ () => {} }
+          selectorAreas={ selectorAreas }
+          selectorConfig={ selectorConfig }
+        />
+      </Droppable>
+    </ElementSelectorProvider>
   )
 }

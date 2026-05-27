@@ -66,5 +66,5 @@ For the step-by-step guide, see
 in the Pimcore core documentation. For backend details
 (interfaces, constructor signatures, predefined columns,
 transformers), see
-[Extending Grid with Custom Columns](https://github.com/pimcore/studio-backend-bundle/blob/1.x/doc/03_Extending/08_Extending_Grid_with_Custom_Columns.md)
+[Extending Grid with Custom Columns](https://github.com/pimcore/studio-backend-bundle/blob/2026.x/doc/03_Extending/08_Extending_Grid_with_Custom_Columns.md)
 in the Studio Backend documentation.

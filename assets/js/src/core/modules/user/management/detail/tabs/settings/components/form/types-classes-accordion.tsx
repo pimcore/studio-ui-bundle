@@ -38,7 +38,7 @@ const TypesAndClassesAccordion = (): React.JSX.Element => {
               options={ documentTypesData?.items.map((item) => ({
                 label: item.name,
                 value: item.id
-              })) }
+              })).sort((a, b) => (a.label ?? '').localeCompare(b.label ?? '')) }
               placeholder={ t('user-management.doc-types') }
             ></Select>
           </Form.Item>
@@ -51,7 +51,7 @@ const TypesAndClassesAccordion = (): React.JSX.Element => {
               options={ classesData?.items.map((item) => ({
                 label: item.name,
                 value: item.id
-              })) }
+              })).sort((a, b) => (a.label ?? '').localeCompare(b.label ?? '')) }
               placeholder={ t('user-management.classes') }
             ></Select>
           </Form.Item>

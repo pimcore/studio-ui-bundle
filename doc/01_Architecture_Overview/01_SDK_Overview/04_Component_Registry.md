@@ -67,7 +67,7 @@ This configuration ensures that components are registered in the correct context
 ### Default Configuration
 
 The default configuration is defined in
-[`component-config.ts`](https://github.com/pimcore/studio-ui-bundle/blob/1.x/assets/js/src/core/modules/app/component-registry/component-config.ts).
+[`component-config.ts`](https://github.com/pimcore/studio-ui-bundle/blob/2026.x/assets/js/src/core/modules/app/component-registry/component-config.ts).
 It organizes components into a hierarchical structure based on their context,
 such as `asset`, `dataObject`, or `wysiwyg`.
 
@@ -116,7 +116,7 @@ componentRegistry.registerConfig({
 })
 ```
 
-Refer to the [Component Configuration Source](https://github.com/pimcore/studio-ui-bundle/blob/1.x/assets/js/src/core/modules/app/component-registry/component-config.ts)
+Refer to the [Component Configuration Source](https://github.com/pimcore/studio-ui-bundle/blob/2026.x/assets/js/src/core/modules/app/component-registry/component-config.ts)
 for the complete default configuration and available single components and slots.
 This file lists the extension points available in Pimcore Studio via the component registry.
 

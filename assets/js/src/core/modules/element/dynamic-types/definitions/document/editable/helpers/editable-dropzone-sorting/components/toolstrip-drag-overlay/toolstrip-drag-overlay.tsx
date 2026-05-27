@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { DragOverlay } from '@dnd-kit/core'
 import { snapCenterToCursor } from '@dnd-kit/modifiers'
 import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
@@ -19,29 +19,39 @@ export interface ToolstripDragOverlayProps {
   title?: string
 }
 
-export const ToolstripDragOverlay = ({
+// Module-level so dnd-kit doesn't see a new modifiers array per render.
+const DRAG_OVERLAY_MODIFIERS = [snapCenterToCursor]
+
+const ToolstripDragOverlayComponent = ({
   activeId,
   title
 }: ToolstripDragOverlayProps): React.JSX.Element => {
   const { styles } = useStyles()
 
+  // DragOverlay re-renders to update its transform on every drag tick. Memoize
+  // the children so the inner ToolStrip isn't rebuilt with it.
+  const overlayContent = useMemo(() => {
+    if (activeId === null) return null
+    return (
+      <div className={ styles.dragOverlay }>
+        <ToolStrip
+          dragger
+          rounded
+          theme="inverse"
+          title={ title }
+        />
+      </div>
+    )
+  }, [activeId, title, styles.dragOverlay])
+
   return (
     <DragOverlay
       dropAnimation={ null }
-      modifiers={ [snapCenterToCursor] }
+      modifiers={ DRAG_OVERLAY_MODIFIERS }
     >
-      {activeId !== null
-        ? (
-          <div className={ styles.dragOverlay }>
-            <ToolStrip
-              dragger
-              rounded
-              theme="inverse"
-              title={ title }
-            />
-          </div>
-          )
-        : null}
+      {overlayContent}
     </DragOverlay>
   )
 }
+
+export const ToolstripDragOverlay = React.memo(ToolstripDragOverlayComponent)

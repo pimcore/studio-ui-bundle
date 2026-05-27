@@ -62,7 +62,7 @@ The widget type string must match between:
 
 ## Related
 
-- [Extending Widgets (Backend)](https://github.com/pimcore/studio-backend-bundle/blob/1.x/doc/03_Extending/11_Perspectives/01_Extending_Widgets.md) -
+- [Extending Widgets (Backend)](https://github.com/pimcore/studio-backend-bundle/blob/2026.x/doc/03_Extending/11_Perspectives/01_Extending_Widgets.md) -
   widget type registration, repository, hydrator, schema
 - [Custom Perspective Widgets](https://github.com/pimcore/pimcore/blob/2026.x/doc/10_Extending_Pimcore/03_Custom_Extension_Guides/14_Custom_Perspective_Widgets.md) -
   cross-layer guide

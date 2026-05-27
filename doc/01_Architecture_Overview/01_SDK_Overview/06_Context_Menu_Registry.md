@@ -70,7 +70,7 @@ contextMenuRegistry.registerToSlot(contextMenuConfig.assetListGrid.name, {
 })
 ```
 
-The [Context Menu Configuration Source](https://github.com/pimcore/studio-ui-bundle/blob/1.x/assets/js/src/core/modules/app/context-menu-registry/context-menu-config.ts) contains all available slot names and their priority configurations for consistent referencing.
+The [Context Menu Configuration Source](https://github.com/pimcore/studio-ui-bundle/blob/2026.x/assets/js/src/core/modules/app/context-menu-registry/context-menu-config.ts) contains all available slot names and their priority configurations for consistent referencing.
 
 ## Modifying Existing Context Menu Items
 

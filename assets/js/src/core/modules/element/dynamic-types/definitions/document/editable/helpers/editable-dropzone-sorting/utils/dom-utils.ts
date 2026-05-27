@@ -32,7 +32,8 @@ export const createDropzoneContainer = (editableName: string | null, isFirst?: b
 }
 
 /**
- * Updates dropzone visibility based on editable name hierarchy
+ * Updates dropzone visibility based on editable name hierarchy.
+ * Called only on drag start/end, so we don't bother caching the global query.
  */
 export const updateDropzoneVisibility = (
   editableName: string | null,
@@ -57,31 +58,29 @@ export const updateDropzoneVisibility = (
 }
 
 /**
- * Updates dropzone drag states based on active dropzone
+ * Updates dropzone drag states based on active dropzone. Hot path on dragOver —
+ * pass `cachedDropzones` to skip a per-event querySelectorAll.
  */
 export const updateDropzoneDragStates = (
   container: HTMLElement | null,
   activeDropzoneId: string | null,
-  isDragging: boolean
+  isDragging: boolean,
+  cachedDropzones?: readonly HTMLElement[]
 ): void => {
-  if (isNull(container)) return
+  const dropzones = cachedDropzones ??
+    (isNull(container) ? [] : container.querySelectorAll<HTMLElement>(DROPZONE_SELECTORS.DROPZONE))
 
-  const dropzones = container.querySelectorAll(DROPZONE_SELECTORS.DROPZONE)
-
-  dropzones.forEach(dropzone => {
-    const dropzoneElement = dropzone as HTMLElement
-    const dropzoneId = dropzoneElement.getAttribute(DROPZONE_ATTRIBUTES.DATA_DROPZONE_ID)
-
-    if (isDragging) {
-      if (dropzoneId === activeDropzoneId) {
-        dropzoneElement.setAttribute(DROPZONE_ATTRIBUTES.DATA_DRAG_STATE, DROPZONE_STATES.ACTIVE)
-      } else {
-        dropzoneElement.setAttribute(DROPZONE_ATTRIBUTES.DATA_DRAG_STATE, DROPZONE_STATES.DRAGGING)
-      }
-    } else {
+  for (const dropzoneElement of dropzones) {
+    if (!isDragging) {
       dropzoneElement.removeAttribute(DROPZONE_ATTRIBUTES.DATA_DRAG_STATE)
+      continue
     }
-  })
+    const dropzoneId = dropzoneElement.getAttribute(DROPZONE_ATTRIBUTES.DATA_DROPZONE_ID)
+    const nextState = dropzoneId === activeDropzoneId ? DROPZONE_STATES.ACTIVE : DROPZONE_STATES.DRAGGING
+    if (dropzoneElement.getAttribute(DROPZONE_ATTRIBUTES.DATA_DRAG_STATE) !== nextState) {
+      dropzoneElement.setAttribute(DROPZONE_ATTRIBUTES.DATA_DRAG_STATE, nextState)
+    }
+  }
 }
 
 export const removeDropzoneContainers = (
