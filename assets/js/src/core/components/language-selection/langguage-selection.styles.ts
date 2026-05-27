@@ -12,7 +12,12 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    dropdownContent: css`
+    dropdownPanel: css`
+      min-width: 200px;
+      background: ${token.colorBgElevated};
+      border-radius: ${token.borderRadiusLG}px;
+      box-shadow: ${token.boxShadowSecondary} !important;
+
       .ant-dropdown-menu-item-selected {
         color: ${token.colorText} !important;
       }
@@ -50,7 +55,23 @@ export const useStyles = createStyles(({ token, css }) => {
     `,
 
     inputWrapper: css`
+      position: sticky;
+      top: 0;
+      z-index: 1;
       padding: ${token.paddingXS}px;
+      background: ${token.colorBgElevated};
+      border-radius: ${token.borderRadiusLG}px ${token.borderRadiusLG}px 0 0;
+    `,
+
+    languageList: css`
+      border-radius: 0 0 ${token.borderRadiusLG}px ${token.borderRadiusLG}px !important;
+      max-height: 300px !important;
+      overflow-y: auto;
+      
+      .ant-dropdown-menu-title-content,
+      .ant-dropdown-menu-title-content > span {
+        width: 100% !important;
+      }
     `,
 
     icon: css`
@@ -62,4 +83,3 @@ export const useStyles = createStyles(({ token, css }) => {
     `
   }
 })
-

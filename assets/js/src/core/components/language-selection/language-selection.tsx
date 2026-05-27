@@ -11,12 +11,15 @@
 import React, { type MouseEvent, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
-import { Dropdown, type ItemType } from '@Pimcore/components/dropdown/dropdown'
+import { Dropdown } from 'antd'
+import type { MenuProps } from 'antd'
 import { Input } from '@Pimcore/components/input/input'
 import { Button } from '@Pimcore/components/button/button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { FlagIcon } from '@Pimcore/components/flag-icon/flag-icon'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { Menu } from '@Pimcore/components/menu/menu'
+import { useStyle as useDropdownStyle } from '@Pimcore/components/dropdown/dropdown.styles'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { formatLocaleKey, parseLocaleLabel, transformLanguage } from '@Pimcore/components/language-selection/helpers'
@@ -32,14 +35,13 @@ interface LanguageSelectionProps {
 export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage, onSelectLanguage }: LanguageSelectionProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
+  const { styles: dropdownStyles } = useDropdownStyle()
 
   const { validLocales } = useSettings()
 
   const [language, setLanguage] = useState<string>(selectedLanguage)
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false)
   const [searchQuery, setSearchQuery] = useState<string>('')
-
-  const hasMultipleLanguages = useMemo(() => languages?.length > 1, [languages])
 
   useEffect(() => {
     setLanguage(selectedLanguage)
@@ -68,30 +70,18 @@ export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage
     onSelectLanguage(language)
   }
 
-  const menuItems = useMemo((): ItemType[] => {
-    const filteredLanguages = isEmptyValue(searchQuery)
+  const hasMultipleLanguages = useMemo(() => languages?.length > 1, [languages])
+  const filteredLanguages = useMemo(() => {
+    return isEmptyValue(searchQuery)
       ? languages
       : languages.filter((lang) => {
           const label = customKeys.includes(lang) ? t(`custom-language.${lang}`) : lang
           return label.toLowerCase().includes(searchQuery.toLowerCase())
         })
+  }, [languages, searchQuery, t, customKeys])
 
-    const searchItem: ItemType = {
-      key: 'search-item',
-      type: 'custom',
-      component: (
-        <div className={ styles.inputWrapper }>
-          <Input
-            onChange={ (e) => { setSearchQuery(e.target.value) } }
-            placeholder={ t('search') }
-            size="middle"
-            value={ searchQuery }
-          />
-        </div>
-      )
-    }
-
-    const languageItems: ItemType[] = filteredLanguages.map((lang) => {
+  const languageItems = useMemo(() => {
+    return filteredLanguages.map((lang) => {
       const localeData: string = validLocales?.[lang] ?? validLocales?.[lang.toLowerCase()]
       const parsed = parseLocaleLabel(localeData)
       const formattedCode = formatLocaleKey(lang)
@@ -102,6 +92,7 @@ export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage
           <Flex
             align="center"
             gap="extra-small"
+            key={ lang }
           >
             { lang === '-' && (
               <Icon
@@ -114,6 +105,7 @@ export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage
               <Flex
                 align="center"
                 className={ styles.languageDropdownItem }
+                gap="extra-small"
                 justify="space-between"
               >
                 <Flex
@@ -129,17 +121,16 @@ export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage
               </Flex>
             )}
           </Flex>
-        ),
-        onClick: () => {
-          handleLanguageChange(lang)
-          setDropdownOpen(false)
-          setSearchQuery('')
-        }
+        )
       }
     })
+  }, [customKeys, filteredLanguages, t, validLocales])
 
-    return [searchItem, ...languageItems]
-  }, [languages, customKeys, searchQuery, t])
+  const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
+    handleLanguageChange(String(key))
+    setDropdownOpen(false)
+    setSearchQuery('')
+  }
 
   return (
     <div className={ cn('language-select', styles.languageSelect) }>
@@ -157,14 +148,37 @@ export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage
       )}
 
       <Dropdown
-        menu={ { items: menuItems, selectable: true } }
+        dropdownRender={ () => (
+          <Flex
+            className={ styles.dropdownPanel }
+            vertical
+          >
+            <div className={ styles.inputWrapper }>
+              <Input
+                onChange={ (e) => { setSearchQuery(e.target.value) } }
+                placeholder={ t('search') }
+                size="middle"
+                value={ searchQuery }
+              />
+            </div>
+
+            <Menu
+              items={ languageItems }
+              onClick={ handleMenuClick }
+              rootClassName={ styles.languageList }
+              selectable
+              selectedKeys={ [language] }
+            />
+          </Flex>
+        ) }
+        menu={ { items: [] } }
         onOpenChange={ (open) => {
           setDropdownOpen(open)
 
           if (!open) setSearchQuery('')
         } }
         open={ dropdownOpen }
-        overlayClassName={ styles.dropdownContent }
+        overlayClassName={ cn(dropdownStyles.dropdown) }
         trigger={ ['click'] }
       >
         <Flex
