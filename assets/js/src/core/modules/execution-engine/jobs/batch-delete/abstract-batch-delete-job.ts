@@ -12,7 +12,7 @@ import { isNil } from 'lodash'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { MessageBusJobHandler, type JobCompletionData } from '../../message-handlers/message-bus-job/message-bus-job-handler'
-import { StepCompletionCalculator } from '../../message-handlers/message-bus-job/progress-calculator/step-completion-calculator'
+import { BatchedStepProgressCalculator } from '../../message-handlers/message-bus-job/progress-calculator/batched-step-progress-calculator'
 import { t } from 'i18next'
 
 export interface AbstractBatchDeleteJobOptions {
@@ -85,7 +85,7 @@ export abstract class AbstractBatchDeleteJob implements JobInterface {
     return new MessageBusJobHandler({
       jobRunId: options.jobRunId,
       title: t('batch-delete.job-title'),
-      progressCalculator: new StepCompletionCalculator(),
+      progressCalculator: new BatchedStepProgressCalculator(),
       onJobCompletion: options.onJobCompletion,
       onRetry: options.onRetry
     })

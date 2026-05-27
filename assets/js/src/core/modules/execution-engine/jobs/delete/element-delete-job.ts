@@ -15,7 +15,7 @@ import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-h
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { MessageBusJobHandler, type JobCompletionData } from '../../message-handlers/message-bus-job/message-bus-job-handler'
-import { StepCompletionCalculator } from '../../message-handlers/message-bus-job/progress-calculator/step-completion-calculator'
+import { BatchedStepProgressCalculator } from '../../message-handlers/message-bus-job/progress-calculator/batched-step-progress-calculator'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
 import { t } from 'i18next'
 import { type RehydratableJob, type JobRunList } from '../../services/job-rehydration-registry'
@@ -155,7 +155,7 @@ export class DeleteJob implements JobInterface {
     return new MessageBusJobHandler({
       jobRunId: options.jobRunId,
       title: t('element.delete.deleting-folder'),
-      progressCalculator: new StepCompletionCalculator(),
+      progressCalculator: new BatchedStepProgressCalculator(),
       onJobCompletion: options.onJobCompletion,
       onRetry: options.onRetry
     })
