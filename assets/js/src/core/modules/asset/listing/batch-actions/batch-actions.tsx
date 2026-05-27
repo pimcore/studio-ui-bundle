@@ -148,7 +148,7 @@ export const BatchActions = (): React.JSX.Element => {
 
   function createZip (): void {
     if (hasSelectedItems) {
-      createZipAssetListDownload({ requestData: { body: { assets: numberedSelectedRows } } })
+      createZipAssetListDownload({ requestData: { body: { assets: numberedSelectedRows, parentId: id } } })
     } else {
       createZipFolderDownload({
         requestData: {
