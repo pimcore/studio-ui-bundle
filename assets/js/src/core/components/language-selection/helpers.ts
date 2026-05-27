@@ -25,12 +25,15 @@ export const formatLocaleKey = (code: string): string => {
 export const parseLocaleLabel = (value?: string): { name: string, code: string } | null => {
   if (!value) return null
 
-  const match = value.match(/^(.*?)\s*\[(.*?)\]$/)
+  const openBracketIndex = value.lastIndexOf('[')
+  const closeBracketIndex = value.lastIndexOf(']')
 
-  if (!match) return { name: value, code: '' }
+  if (openBracketIndex === -1 || closeBracketIndex === -1 || closeBracketIndex < openBracketIndex) {
+    return { name: value, code: '' }
+  }
 
   return {
-    name: match[1],
-    code: match[2]
+    name: value?.slice(0, openBracketIndex)?.trim(),
+    code: value?.slice(openBracketIndex + 1, closeBracketIndex)?.trim()
   }
 }
