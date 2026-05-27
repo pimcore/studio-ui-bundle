@@ -1007,7 +1007,6 @@ hide-empty-data: Leere Daten ausblenden
 tab-position: Tab-Position
 maximum-tabs: Maximale Tabs
 hide-labels-when-tabs-reached: Sprach-Bezeichnungen ausblenden wenn Tab-Limit erreicht
-provide-split-view: Geteilte Ansicht bereitstellen
 data: Daten
 domain-label-width: Domain-Bezeichnungsbreite
 controller-action: Controller-Aktion

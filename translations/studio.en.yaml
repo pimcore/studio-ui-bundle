@@ -1013,7 +1013,6 @@ hide-empty-data: Hide Empty Data
 tab-position: Tab Position
 maximum-tabs: Maximum Tabs
 hide-labels-when-tabs-reached: Hide Locale Labels When Tabs Reached
-provide-split-view: Provide Split View
 data: Data
 domain-label-width: Domain label width
 controller-action: Controller action

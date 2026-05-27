@@ -1007,7 +1007,6 @@ hide-empty-data: Nascondi dati vuoti
 tab-position: Posizione scheda
 maximum-tabs: Numero massimo schede
 hide-labels-when-tabs-reached: Nascondi etichette lingue quando raggiunte le schede
-provide-split-view: Fornisci vista divisa
 data: Dati
 domain-label-width: Larghezza etichetta dominio
 controller-action: Azione controller

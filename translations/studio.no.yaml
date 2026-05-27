@@ -1007,7 +1007,6 @@ hide-empty-data: Skjul tomme data
 tab-position: Faneposisjon
 maximum-tabs: Maksimalt antall faner
 hide-labels-when-tabs-reached: Skjul språketiketter når antall faner er nådd
-provide-split-view: Tilby delt visning
 data: Data
 domain-label-width: Domene-etikettbredde
 controller-action: Controller-handling
