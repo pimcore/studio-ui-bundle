@@ -26,6 +26,7 @@ import { useStyles } from './language-comparison-modal.styles'
 
 interface ILanguageComparisonColumnProps {
   locales: string[]
+  editableLanguages: string[]
   layoutData: ILocalizedFieldDescriptor[]
   isAllowedToEdit: boolean
 }
@@ -52,7 +53,7 @@ const groupIntoSections = (items: ILocalizedFieldDescriptor[]): ILocalizedSectio
   return sections
 }
 
-export const LanguageComparisonContent = ({ layoutData, locales, isAllowedToEdit }: ILanguageComparisonColumnProps): React.JSX.Element => {
+export const LanguageComparisonContent = ({ layoutData, locales, editableLanguages, isAllowedToEdit }: ILanguageComparisonColumnProps): React.JSX.Element => {
   const { styles } = useStyles()
 
   const renderSectionTitle = ({ breadcrumbTitle, hideSectionTitle }: { breadcrumbTitle: string, hideSectionTitle: boolean }): React.JSX.Element | null => {
@@ -85,6 +86,9 @@ export const LanguageComparisonContent = ({ layoutData, locales, isAllowedToEdit
     const shouldWrapLocalizedProvider = item.localeInFormPath !== true
     const fieldKey = `${item.formPath.join('.')}-${fieldIndex}-${locale}`
 
+    // empty array means all languages are editable
+    const isEmptyEditableLanguages = editableLanguages.length === 0
+
     const fieldNode = (
       <CombinedFieldNameProvider
         combinedFieldNameParent={ combinedFieldNameParent }
@@ -93,7 +97,7 @@ export const LanguageComparisonContent = ({ layoutData, locales, isAllowedToEdit
         <Form.Group name={ resolvedGroupPath }>
           <ObjectComponent
             { ...item.fieldData }
-            noteditable={ !isAllowedToEdit }
+            noteditable={ !isAllowedToEdit || (!isEmptyEditableLanguages && !editableLanguages.includes(locale)) }
           />
         </Form.Group>
       </CombinedFieldNameProvider>

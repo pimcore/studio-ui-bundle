@@ -92,7 +92,6 @@ export const useStyle = createStyles(({ css }, { phase, backgroundShade }: Style
 
       .background-figure {
         position: absolute;
-        will-change: transform;
         flex-shrink: 0;
 
         ${isOrbiting
@@ -132,6 +131,7 @@ export const useStyle = createStyles(({ css }, { phase, backgroundShade }: Style
                 top: -80%;
                 left: -30%;
                 transform: rotate(65.637deg);
+                filter: blur(90px);
               `
           }
         }
@@ -155,6 +155,7 @@ export const useStyle = createStyles(({ css }, { phase, backgroundShade }: Style
                 top: 0;
                 left: 0;
                 transform: rotate(28.303deg);
+                filter: blur(90px);
               `
           }
         }
@@ -178,6 +179,7 @@ export const useStyle = createStyles(({ css }, { phase, backgroundShade }: Style
                 top: 55%;
                 left: 33%;
                 transform: rotate(65.637deg);
+                filter: blur(90px);
               `
           }
         }
@@ -201,9 +203,16 @@ export const useStyle = createStyles(({ css }, { phase, backgroundShade }: Style
     backdropBlur: css`
       position: absolute;
       inset: 0;
-      backdrop-filter: blur(90px);
-      -webkit-backdrop-filter: blur(90px);
       pointer-events: none;
+      opacity: ${isOrbiting ? 1 : 0};
+
+      ${isOrbiting
+        ? css`
+            backdrop-filter: blur(90px);
+            -webkit-backdrop-filter: blur(90px);
+          `
+        : ''
+      }
     `,
     logoImage: css`      position: absolute;
       top: 50%;
@@ -223,7 +232,6 @@ export const useStyle = createStyles(({ css }, { phase, backgroundShade }: Style
       background: rgba(253, 255, 255, 0.35);
       filter: blur(75px);
       pointer-events: none;
-      will-change: transform;
 
       ${isOrbiting
         ? css`animation: ${logoOrbitCW} 3s linear infinite;`
@@ -245,7 +253,6 @@ export const useStyle = createStyles(({ css }, { phase, backgroundShade }: Style
       background: rgba(253, 255, 255, 0.35);
       filter: blur(75px);
       pointer-events: none;
-      will-change: transform;
 
       ${isOrbiting
         ? css`animation: ${logoOrbitCCW} 4s linear infinite;`
