@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { useMemo } from 'react'
 import { map, filter, isEmpty } from 'lodash'
 import {
   type DataObjectGetGridApiResponse,
@@ -64,7 +65,7 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, applyF
   })
 
   const isLoading = queries.some(q => q.isLoading || q.isFetching)
-  const data = queries.flatMap(q => q.data?.items ?? [])
+  const data = useMemo(() => queries.flatMap(q => q.data?.items ?? []), queries.map(q => q.data))
   const refetchAll = (): void => { queries.forEach(q => { void q.refetch() }) }
 
   return { isLoading, data, refetchAll }
