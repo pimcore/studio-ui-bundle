@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type DataObjectGetGridApiArg } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { type AdvancedColumnConfig, type DataObjectGetGridApiArg } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { type SettingsProviderProps } from '@Pimcore/modules/element/listing/abstract/settings/settings-provider'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
@@ -19,6 +19,7 @@ import { type DynamicTypeObjectRegistry } from '@Pimcore/modules/element/dynamic
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type DataObjectGetSearchApiArg } from '@Pimcore/modules/search/search-api-slice.gen'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
+import { useLanguageSelection } from '@Pimcore/components/language-selection'
 
 export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = () => {
   const { selectedColumns } = useSelectedColumns()
@@ -26,6 +27,7 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
   const { selectedClassDefinition } = useClassDefinitionSelection()
   const { dataLoadingState, setDataLoadingState } = useData()
   const { value } = useTypeSelect()
+  const { currentLanguage } = useLanguageSelection()
   const objectRegistry = useInjection<DynamicTypeObjectRegistry>(serviceIds['DynamicTypes/ObjectRegistry'])
   let isValidClass = false
   const hasType = typeof value === 'string' && objectRegistry.hasDynamicType(value)
@@ -35,12 +37,21 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
     isValidClass = type.allowClassSelectionInSearch && selectedClassDefinition?.id !== undefined
   }
 
-  const columnsArg: DataObjectGetGridApiArg['body']['columns'] = selectedColumns.map(column => ({
-    key: column.key,
-    type: column.type,
-    locale: column.locale,
-    config: column.config
-  }))
+  const columnsArg: DataObjectGetGridApiArg['body']['columns'] = selectedColumns.map(column => {
+    let advancedColumnConfig: AdvancedColumnConfig | undefined
+
+    if (column.type === 'dataobject.advanced') {
+      advancedColumnConfig = column.originalApiDefinition?.__meta?.advancedColumnConfig as unknown as AdvancedColumnConfig
+    }
+
+    return {
+      key: column.key,
+      type: column.type,
+      locale: column.localizable ? ((column.locale ?? currentLanguage) === 'default' ? null : (column.locale ?? currentLanguage)) : undefined,
+      group: column.group as unknown as string[] | undefined,
+      config: advancedColumnConfig ?? column.config
+    }
+  })
 
   const systemColumns = availableColumns.filter(column => Array.isArray(column.group) && column.group.includes('system'))
 
