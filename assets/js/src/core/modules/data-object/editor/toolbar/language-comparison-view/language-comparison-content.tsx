@@ -86,6 +86,9 @@ export const LanguageComparisonContent = ({ layoutData, locales, editableLanguag
     const shouldWrapLocalizedProvider = item.localeInFormPath !== true
     const fieldKey = `${item.formPath.join('.')}-${fieldIndex}-${locale}`
 
+    // empty array means all languages are editable
+    const isEmptyEditableLanguages = editableLanguages.length === 0
+
     const fieldNode = (
       <CombinedFieldNameProvider
         combinedFieldNameParent={ combinedFieldNameParent }
@@ -94,7 +97,7 @@ export const LanguageComparisonContent = ({ layoutData, locales, editableLanguag
         <Form.Group name={ resolvedGroupPath }>
           <ObjectComponent
             { ...item.fieldData }
-            noteditable={ !isAllowedToEdit || !editableLanguages.includes(locale) }
+            noteditable={ !isAllowedToEdit || (!isEmptyEditableLanguages && !editableLanguages.includes(locale)) }
           />
         </Form.Group>
       </CombinedFieldNameProvider>
