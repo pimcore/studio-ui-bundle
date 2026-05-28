@@ -138,8 +138,10 @@ export const LanguageSelection = ({ languages, customKeys = [], selectedLanguage
     })
   }, [customKeys, filteredLanguages, t, validLocales])
 
-  const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
-    handleLanguageChange(String(key))
+  const handleMenuClick: MenuProps['onClick'] = (e) => {
+    e.domEvent.stopPropagation()
+
+    handleLanguageChange(String(e.key))
     setDropdownOpen(false)
     setSearchQuery('')
   }

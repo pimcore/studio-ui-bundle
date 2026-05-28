@@ -82,7 +82,13 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
               sortFilter: {
                 key: sorting[0].id === 'siteDomain' ? 'siteId' : sorting[0].id,
                 direction: sorting[0].desc ? 'DESC' : 'ASC'
-              }
+              },
+              additionalSortFilters: [
+                {
+                  key: 'id',
+                  direction: 'ASC'
+                }
+              ]
             }
           : {})
       }

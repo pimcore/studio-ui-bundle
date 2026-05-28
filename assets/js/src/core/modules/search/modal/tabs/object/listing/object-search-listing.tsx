@@ -27,6 +27,7 @@ import { useDataQueryHelper } from './data-layer/use-data-query-helper'
 import { ClassDefinitionSelectionDecorator, type ClassDefinitionSelectionDecoratorConfig } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/class-definition-selection-decorator'
 import { ColumnConfigurationDecorator } from './decorator/column-configuration/column-configuration-decorator'
 import { useDataObjectColumnMapper } from '@Pimcore/modules/data-object/listing/column-mapper/use-column-mapper'
+import { LanguageSelectionProvider } from '@Pimcore/components/language-selection/provider/language-selection-provider'
 
 const defaultProps = {
   ...listingDefaultProps,
@@ -52,16 +53,18 @@ const listingProps = compose<AbstractDecoratorProps>(
 
 export const ObjectSearchListing = (): React.JSX.Element => {
   return (
-    <DynamicTypeRegistryProvider serviceIds={ [
-      'DynamicTypes/GridCellRegistry',
-      'DynamicTypes/ListingRegistry',
-      'DynamicTypes/ObjectDataRegistry',
-      'DynamicTypes/FieldFilterRegistry'
-    ] }
-    >
-      <ListingContainer
-        { ...listingProps }
-      />
-    </DynamicTypeRegistryProvider>
+    <LanguageSelectionProvider>
+      <DynamicTypeRegistryProvider serviceIds={ [
+        'DynamicTypes/GridCellRegistry',
+        'DynamicTypes/ListingRegistry',
+        'DynamicTypes/ObjectDataRegistry',
+        'DynamicTypes/FieldFilterRegistry'
+      ] }
+      >
+        <ListingContainer
+          { ...listingProps }
+        />
+      </DynamicTypeRegistryProvider>
+    </LanguageSelectionProvider>
   )
 }

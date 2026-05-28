@@ -15,6 +15,7 @@ import { Split } from '@Pimcore/components/split/split'
 import { Refetch } from '@Pimcore/modules/element/listing/abstract/view-layer/components/refetch/refetch'
 import { Pagination } from '@Pimcore/modules/element/listing/decorators/paging/pagination/pagination'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { LanguageSelectionWithProvider } from '@Pimcore/components/language-selection/language-selection-with-provider'
 
 export const Toolbar = (): React.JSX.Element => {
   return (
@@ -32,6 +33,7 @@ export const Toolbar = (): React.JSX.Element => {
           <RowSelectionTotal />
           <Refetch />
           <Pagination />
+          <LanguageSelectionWithProvider />
         </Split>
       </Flex>
     </BaseToolbar>

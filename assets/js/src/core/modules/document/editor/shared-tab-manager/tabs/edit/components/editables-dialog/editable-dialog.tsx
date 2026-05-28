@@ -142,10 +142,10 @@ export const EditableDialog = ({ config, visible, onClose, editableDefinitions }
   return (
     <WindowModal
       cancelButtonProps={ { style: { display: 'none' } } }
+      closable={ false }
       destroyOnClose
       getContainer={ () => document.body }
       okText={ t('save') }
-      onCancel={ onClose }
       onOk={ onClose }
       open={ visible }
       size="L"
