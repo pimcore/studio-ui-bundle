@@ -69,6 +69,8 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
   const [changedValues, setChangedValues] = useState<Record<string, any>>({})
 
   const isAllowedToEdit = checkElementPermission(dataObject?.permissions, 'save')
+  const viewableLanguages: string[] = useMemo(() => dataObject?.permissions?.localizedView?.split(',') ?? [], [dataObject?.permissions])
+  const editableLanguages: string[] = useMemo(() => dataObject?.permissions?.localizedEdit?.split(',') ?? [], [dataObject?.permissions])
 
   const initialValues: Partial<any> = useMemo(() => {
     return editForm.getFieldsValue(true)
@@ -86,11 +88,11 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
 
   useEffect(() => {
     if (open) {
-      const languagesByPriority = [currentLanguage, ...contentLanguages.filter(language => language !== currentLanguage)]
+      const languagesByPriority = [currentLanguage, ...contentLanguages.filter(language => viewableLanguages.includes(language) && language !== currentLanguage)]
 
       setSelectedLocales([languagesByPriority[0] ?? currentLanguage, languagesByPriority[1] ?? null])
     }
-  }, [open, currentLanguage, contentLanguages])
+  }, [open, currentLanguage, contentLanguages, viewableLanguages])
 
   useEffect(() => {
     if (isNil(layoutData) || !open) {
@@ -211,6 +213,7 @@ export const LanguageComparisonModal = ({ open, onClose }: LanguageComparisonMod
               preserve
             >
               <LanguageComparisonContent
+                editableLanguages={ editableLanguages }
                 isAllowedToEdit={ isAllowedToEdit }
                 layoutData={ localizedFields }
                 locales={ selectedLocales }
