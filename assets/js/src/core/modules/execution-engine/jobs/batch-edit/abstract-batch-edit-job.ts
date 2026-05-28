@@ -12,6 +12,7 @@ import { isNil } from 'lodash'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { MessageBusJobHandler, type JobCompletionData } from '../../message-handlers/message-bus-job/message-bus-job-handler'
+import { BatchedStepProgressCalculator } from '../../message-handlers/message-bus-job/progress-calculator/batched-step-progress-calculator'
 import { type JobButtonCustomizationContext } from '../../message-handlers/message-bus-job/message-bus-job-notification'
 import { t } from 'i18next'
 import { type RehydratableJob, type JobRunList } from '../../services/job-rehydration-registry'
@@ -109,6 +110,7 @@ export abstract class AbstractBatchEditJob implements JobInterface {
     return new MessageBusJobHandler({
       jobRunId: options.jobRunId,
       title: t('batch-edit.job-title'),
+      progressCalculator: new BatchedStepProgressCalculator(),
       onJobCompletion: options.onJobCompletion,
       onRetry: options.onRetry,
       onCustomizeButtons: options.onCustomizeButtons
