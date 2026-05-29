@@ -17,10 +17,16 @@ interface IFormatDateTimeProps {
   lng?: string
   timeStyle?: 'short' | 'medium' | 'long' | 'full'
   dateStyle?: 'short' | 'medium' | 'long' | 'full'
+  /**
+   * IANA timezone (e.g. the server timezone) to render the instant in. When omitted the browser's
+   * local timezone is used. Pass the server timezone for non-respect-timezone (wall-clock) fields so
+   * grid previews match the editor regardless of the browser timezone.
+   */
+  timeZone?: string
   options?: Intl.DateTimeFormatOptions
 }
 
-export function formatDateTime ({ timestamp, lng, timeStyle, dateStyle, options }: IFormatDateTimeProps): string {
+export function formatDateTime ({ timestamp, lng, timeStyle, dateStyle, timeZone, options }: IFormatDateTimeProps): string {
   // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
   if (lng === undefined) {
     lng = i18n.language
@@ -40,6 +46,7 @@ export function formatDateTime ({ timestamp, lng, timeStyle, dateStyle, options 
       {
         timeStyle,
         dateStyle,
+        ...(timeZone !== undefined ? { timeZone } : {}),
         ...options
       }
     )
@@ -50,11 +57,11 @@ export function formatDateTime ({ timestamp, lng, timeStyle, dateStyle, options 
   }
 }
 
-export function formatDate (timestamp: number | string): string {
-  return formatDateTime({ timestamp, dateStyle: 'short' })
+export function formatDate (timestamp: number | string, timeZone?: string): string {
+  return formatDateTime({ timestamp, dateStyle: 'short', timeZone })
 }
 
-export function formatTime (timestamp: number | string): string {
-  return formatDateTime({ timestamp, timeStyle: 'short' })
+export function formatTime (timestamp: number | string, timeZone?: string): string {
+  return formatDateTime({ timestamp, timeStyle: 'short', timeZone })
 }
 

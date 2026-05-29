@@ -24,6 +24,8 @@ import { useStyles } from './date-picker.styles'
 import cn from 'classnames'
 import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 import { formatDate, formatDateTime } from '@Pimcore/utils/date-time'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 
 export type DatePickerProps = PickerProps & {
   value?: DatePickerValueType
@@ -33,10 +35,18 @@ export type DatePickerProps = PickerProps & {
   disabled?: boolean
   inherited?: boolean
   showSuffixIcon?: boolean
+  /**
+   * When explicitly `false`, the value is treated as a server-timezone wall-clock so the displayed
+   * value does not drift with the browser timezone (see `toDayJs`). Defaults to the previous
+   * absolute-instant behaviour when omitted.
+   */
+  respectTimezone?: boolean
 }
 
 const DatePickerComponent = (props: DatePickerProps): React.JSX.Element => {
-  const value = toDayJs(props.value)
+  const { timezone } = useSettings()
+  const serverTimezone = isNonEmptyString(timezone) ? timezone : undefined
+  const value = toDayJs(props.value, undefined, { respectTimezone: props.respectTimezone, timezone: serverTimezone })
   const fieldWidths = useFieldWidthOptional()
 
   const { styles } = useStyles()
