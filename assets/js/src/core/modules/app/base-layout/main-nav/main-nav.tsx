@@ -37,6 +37,7 @@ import { CUSTOM_REPORTS_WIDGET, REPORTS_WIDGET } from '@Pimcore/modules/reports'
 import { REDIRECTS_WIDGET } from '@Pimcore/modules/redirects'
 import { TAG_CONFIGURATION_WIDGET } from '@Pimcore/modules/tags'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
+import { normalizeIcon } from '@Pimcore/utils/normalize-icon'
 
 export const MainNav = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -81,26 +82,30 @@ export const MainNav = (): React.JSX.Element => {
     return hasChildren && (isOpen || isNestedItem)
   }
 
+  const renderMainNavIcon = ({ iconValue, isExpanded }: { iconValue: IMainNavItem['icon'], isExpanded: boolean }): React.JSX.Element | null => {
+    const icon = normalizeIcon(iconValue)
+
+    if (isUndefined(icon?.value)) return null
+
+    return (
+      <Icon
+        { ...icon }
+        className={ isExpanded ? undefined : 'plain-icon' }
+        options={ isExpanded ? { width: 16, height: 16 } : undefined }
+        sphere={ isExpanded }
+      />
+    )
+  }
+
   const renderNavItem = (item: IMainNavItem, index: string, level = 0): React.JSX.Element => {
     const hasChildren = !isEmpty(item.children)
     const isVisible = hasChildren || !isUndefined(item.widgetConfig) || !isUndefined(item.useCustomMainNavItem)
-
     const isHiddenInPerspective = !isUndefined(item.perspectivePermissionHide) && isAllowedInPerspective(item.perspectivePermissionHide)
-
     const isHidden = !isUndefined(item.hidden) && item.hidden()
 
     if (!isVisible || isHiddenInPerspective || isHidden) {
       return <></>
     }
-
-    const renderIcon = (value: string): React.JSX.Element => (
-      <Icon
-        className={ openKeys.includes(index) ? undefined : 'plain-icon' }
-        options={ openKeys.includes(index) ? { width: 16, height: 16 } : undefined }
-        sphere={ openKeys.includes(index) }
-        value={ value }
-      />
-    )
 
     const elementWithGroupIcon = hasChildren ? item.children?.find(child => !isEmpty(child.groupIcon)) : undefined
 
@@ -125,7 +130,7 @@ export const MainNav = (): React.JSX.Element => {
                       setIsOpen(false)
                     } }
                   >
-                    {!isUndefined(item.icon) && renderIcon(item.icon)}
+                    {!isUndefined(item.icon) && renderMainNavIcon({ iconValue: item.icon, isExpanded: openKeys.includes(index) })}
 
                     <SanitizeHtml html={ t(`${item.label}`) } />
                   </button>
@@ -148,10 +153,9 @@ export const MainNav = (): React.JSX.Element => {
                   }
                 } }
               >
-                {!isUndefined(item.icon) && renderIcon(item.icon)}
-
+                {!isUndefined(item.icon) && renderMainNavIcon({ iconValue: item.icon, isExpanded: openKeys.includes(index) })}
                 {!isUndefined(elementWithGroupIcon?.groupIcon) && isUndefined(item.icon) && (
-                  renderIcon(elementWithGroupIcon?.groupIcon)
+                  renderMainNavIcon({ iconValue: elementWithGroupIcon.groupIcon, isExpanded: openKeys.includes(index) })
                 )}
 
                 <SanitizeHtml html={ t(`${item.label}`) } />
@@ -164,7 +168,6 @@ export const MainNav = (): React.JSX.Element => {
                   />
                 )}
               </button>
-
               {renderDivider(item.dividerBottom)}
             </>
             )}
@@ -276,7 +279,6 @@ export const MainNav = (): React.JSX.Element => {
                 className={ ['main-nav', styles.mainNav].join(' ') }
                 data-testid="main-nav-menu"
               >
-
                 <ul
                   className={ 'main-nav__list main-nav__list--level-0' }
                   data-testid="nav-list-main"
@@ -286,9 +288,7 @@ export const MainNav = (): React.JSX.Element => {
                     renderNavItem(item, `${index}`)
                   ))}
                 </ul>
-
                 <Divider className={ 'main-nav__divider' } />
-
                 <PerspectiveSwitch setIsOpen={ setIsOpen } />
               </div>
               )
