@@ -32,7 +32,8 @@ import { Permissions } from '@Pimcore/modules/reports/reports-editor/components/
 import {
   normalizeChartData,
   normalizeColumnConfigurations,
-  normalizeDataSourceConfig
+  normalizeDataSourceConfig,
+  normalizeIconFields
 } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/helpers'
 import { Form } from '@Pimcore/components/form/form'
 import { loadReportsMenuItems } from '@Pimcore/modules/reports/utils/reports-loader'
@@ -104,6 +105,7 @@ export const ReportConfiguration = ({ report, isActive, modifiedReports, setModi
 
     const bundleCustomReportUpdateData: BundleCustomReportUpdate = {
       ...currentData,
+      ...normalizeIconFields(currentData),
       ...normalizeDataSourceConfig(currentData),
       ...normalizeChartData(currentData),
       ...normalizeColumnConfigurations(currentData),
