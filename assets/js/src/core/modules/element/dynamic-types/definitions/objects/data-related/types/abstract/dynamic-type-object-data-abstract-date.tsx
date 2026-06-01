@@ -15,7 +15,6 @@ import { isNumber } from 'lodash'
 import { type PickerProps } from 'antd/lib/date-picker/generatePicker/interface'
 import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract } from '../../dynamic-type-object-data-abstract'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
-import { Form } from '@Pimcore/components/form/form'
 import { GridCellPreviewWrapper } from '../../../grid-cell-preview/grid-cell-cell-preview-wrapper/grid-cell-preview-wrapper'
 import type { FormInstance } from 'antd'
 import type { NamePath } from 'rc-field-form/es/interface'
@@ -23,8 +22,6 @@ import { toCssDimension } from '@Pimcore/utils/css'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { formatDate, formatDateTime } from '@Pimcore/utils/date-time'
-import { type AbstractBatchEditDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/dynamic-type-batch-edit-abstract'
-import { type BatchEdit } from '@Pimcore/modules/data-object/listing/batch-actions/batch-edit-modal/batch-edit-provider'
 
 export type AbstractDateObjectDataDefinition = AbstractObjectDataDefinition & {
   defaultValue?: number | string | null
@@ -65,16 +62,6 @@ export abstract class DynamicTypeObjectDataAbstractDate extends DynamicTypeObjec
     )
   }
 
-  /**
-   * The data-object date and datetime types own their batch-edit too — exposing a tz-aware picker
-   * with the right `outputFormat` / `showTime` derived from this field's runtime config. Asset
-   * metadata datetime keeps using the generic batch-edit component since it doesn't load the
-   * ObjectDataRegistry, so the resolver falls back to that.
-   */
-  getBatchEditComponent ({ batchEdit }: AbstractBatchEditDefinition): React.ReactElement<AbstractBatchEditDefinition> {
-    return <DateObjectBatchEditComponent batchEdit={ batchEdit } />
-  }
-
   handleDefaultValue (props: AbstractDateObjectDataDefinition, form: FormInstance, fieldName: NamePath): void {
     const defaultValue = getDefaultValue(props)
     if (defaultValue === undefined) {
@@ -108,35 +95,8 @@ interface DateObjectGridCellPreviewProps {
 }
 
 /**
- * Tz-aware batch-edit picker for the `date` and `datetime` object-data fields. Mirrors the editor's
- * DatePicker semantics so a value batch-set through this modal round-trips identically to one
- * entered through the detail editor.
- */
-const DateObjectBatchEditComponent = ({ batchEdit }: { batchEdit: BatchEdit }): React.ReactElement => {
-  const { key, type } = batchEdit
-  const fieldDefinition = (batchEdit.config as { fieldDefinition?: { columnType?: string, respectTimezone?: boolean | null } } | undefined)?.fieldDefinition
-  const isDateOnly = type === 'date'
-  const respectTimezone = isFieldRespectTimezone(type, fieldDefinition)
-  const outputFormat = respectTimezone
-    ? undefined
-    : (isDateOnly ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm')
-
-  return (
-    <Form.Item name={ key }>
-      <DatePicker
-        outputFormat={ outputFormat }
-        outputType='dateString'
-        respectTimezone={ respectTimezone }
-        showTime={ isDateOnly ? undefined : { format: 'HH:mm' } }
-      />
-    </Form.Item>
-  )
-}
-
-/**
- * Shared grid-cell preview for the `date` and `datetime` object-data fields. Renders the value in
- * the configured server timezone when `respectTimezone` is false (wall-clock semantics), and in
- * the browser timezone when true (absolute-instant semantics).
+ * Grid-cell preview for the `date` and `datetime` object-data fields. Renders in the server
+ * timezone for wall-clock (`respectTimezone=false`) fields, browser timezone otherwise.
  */
 export const DateObjectGridCellPreview = ({ value, respectTimezone, showTime = false }: DateObjectGridCellPreviewProps): React.ReactElement => {
   const { timezone } = useSettings()
