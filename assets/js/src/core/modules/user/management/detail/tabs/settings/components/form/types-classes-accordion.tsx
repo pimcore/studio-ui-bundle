@@ -23,6 +23,21 @@ const TypesAndClassesAccordion = (): React.JSX.Element => {
   const { data: classesData, isLoading: classesLoading } = useClassDefinitionCollectionQuery()
   const { data: documentTypesData, isLoading: documentTypesLoading } = useDocumentDocTypeListQuery({})
 
+  const sortByLabel = (values: any[], options: Array<{ value: any, label: string }>): any[] => {
+    const labelMap = new Map(options.map((o) => [o.value, o.label ?? '']))
+    return [...values].sort((a, b) => (labelMap.get(a) ?? '').localeCompare(labelMap.get(b) ?? ''))
+  }
+
+  const docTypeOptions = documentTypesData?.items.map((item) => ({
+    label: item.name ?? '',
+    value: item.id
+  })).sort((a, b) => a.label.localeCompare(b.label)) ?? []
+
+  const classOptions = classesData?.items.map((item) => ({
+    label: item.name ?? '',
+    value: item.id
+  })).sort((a, b) => a.label.localeCompare(b.label)) ?? []
+
   const content = [
     {
       key: '1',
@@ -31,27 +46,23 @@ const TypesAndClassesAccordion = (): React.JSX.Element => {
         <>
           <Form.Item
             name="docTypes"
+            normalize={ (values) => sortByLabel(values, docTypeOptions) }
           >
             <Select
               disabled={ documentTypesLoading }
               mode="multiple"
-              options={ documentTypesData?.items.map((item) => ({
-                label: item.name,
-                value: item.id
-              })).sort((a, b) => (a.label ?? '').localeCompare(b.label ?? '')) }
+              options={ docTypeOptions }
               placeholder={ t('user-management.doc-types') }
             ></Select>
           </Form.Item>
           <Form.Item
             name="classes"
+            normalize={ (values) => sortByLabel(values, classOptions) }
           >
             <Select
               disabled={ classesLoading }
               mode="multiple"
-              options={ classesData?.items.map((item) => ({
-                label: item.name,
-                value: item.id
-              })).sort((a, b) => (a.label ?? '').localeCompare(b.label ?? '')) }
+              options={ classOptions }
               placeholder={ t('user-management.classes') }
             ></Select>
           </Form.Item>
