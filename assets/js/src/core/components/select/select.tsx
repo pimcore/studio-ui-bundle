@@ -179,8 +179,8 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   const shouldShowClearOption = showClearOption && !isEmptyValue(value)
 
   const handleClearSelection = (): void => {
-    const clearedValue = mode === 'multiple' ? [] : undefined
-    antdSelectProps.onChange?.(clearedValue as any, [] as any)
+    const clearedValue = mode === 'multiple' ? [] as string[] : undefined
+    antdSelectProps.onChange?.(clearedValue, [])
     selectRef.current?.blur()
   }
 
@@ -189,15 +189,18 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
       <div className={ styles.clearOptionWrapper }>
         <div
           className={ styles.clearOption }
-          onMouseDown={ (e) => { e.preventDefault() } }
           onClick={ handleClearSelection }
+          onKeyDown={ (e) => { if (e.key === 'Enter' || e.key === ' ') { handleClearSelection() } } }
+          onMouseDown={ (e) => { e.preventDefault() } }
+          role="button"
+          tabIndex={ 0 }
         >
           <Icon value={ 'trash' } />
           <span>{t('select.clear-selection')}</span>
         </div>
         {menu}
       </div>
-    )
+      )
     : antdSelectProps.dropdownRender
 
   return (
