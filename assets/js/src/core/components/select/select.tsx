@@ -186,7 +186,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
 
   const dropdownRender = shouldShowClearOption
     ? (menu: React.ReactElement): React.JSX.Element => (
-      <>
+      <div className={ styles.clearOptionWrapper }>
         <div
           className={ styles.clearOption }
           onMouseDown={ (e) => { e.preventDefault() } }
@@ -196,7 +196,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
           <span>{t('select.clear-selection')}</span>
         </div>
         {menu}
-      </>
+      </div>
     )
     : antdSelectProps.dropdownRender
 

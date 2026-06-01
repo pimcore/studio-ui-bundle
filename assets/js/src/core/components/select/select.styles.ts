@@ -299,6 +299,12 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
       }
     `,
 
+    clearOptionWrapper: css`
+      &:has(> div:first-child:hover) .ant-select-item-option-active {
+        background-color: transparent !important;
+      }
+    `,
+
     clearOption: css`
       display: flex;
       align-items: center;
