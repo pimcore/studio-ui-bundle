@@ -22,8 +22,10 @@ import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { useRoleDraft } from '@Pimcore/modules/user/roles/hooks/use-roles-draft'
 import { getGroupedPermissions } from '@Pimcore/modules/user/management/detail/tabs/settings/settings-helper'
 import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
+import { useTranslation } from 'react-i18next'
 
 const SettingsContainer = ({ ...props }): React.JSX.Element => {
+  const { t } = useTranslation()
   const { validLanguages } = useSettings()
   const [form] = Form.useForm()
   const { id } = useRoleContext()
@@ -38,8 +40,8 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
         classes: role?.classes ?? [],
         docTypes: role?.docTypes,
         perspectives: role?.perspectives ?? [],
-        permissionsDefault: Array.isArray(role?.permissions) ? role.permissions.filter((permission) => permissions.default.some((defaultPermission) => defaultPermission.key === permission)) : [],
-        permissionsBundles: Array.isArray(role?.permissions) ? role.permissions.filter((permission) => permissions.bundles.some((defaultPermission) => defaultPermission.key === permission)) : []
+        permissionsDefault: Array.isArray(role?.permissions) ? role.permissions.filter((permission) => permissions.default.some((defaultPermission) => defaultPermission.key === permission)).sort((a, b) => t(`user-management.permissions.${a}`).localeCompare(t(`user-management.permissions.${b}`))) : [],
+        permissionsBundles: Array.isArray(role?.permissions) ? role.permissions.filter((permission) => permissions.bundles.some((defaultPermission) => defaultPermission.key === permission)).sort((a, b) => t(`user-management.permissions.${a}`).localeCompare(t(`user-management.permissions.${b}`))) : []
       })
     }
   }, [role, isLoading])
