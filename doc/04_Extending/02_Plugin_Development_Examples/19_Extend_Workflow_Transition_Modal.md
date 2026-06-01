@@ -83,15 +83,14 @@ Use the existing context hooks to filter for the workflow and
 element you care about, and return `null` otherwise:
 
 ```tsx
-import { useWorkflow } from '@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-workflow'
-import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { useWorkflow, useElementContext } from '@pimcore/studio-ui-bundle/modules/element'
 
 export const ReviewersField = (): React.JSX.Element | null => {
   const { triggeredWorkflowAction } = useWorkflow()
   const { elementType } = useElementContext()
 
-  if (triggeredWorkflowAction?.workflowName !== 'simple_approval') return null
-  if (triggeredWorkflowAction?.transitionName !== 'request_review') return null
+  if (triggeredWorkflowAction?.workflowId !== 'simple_approval') return null
+  if (triggeredWorkflowAction?.transitionId !== 'request_review') return null
   if (elementType !== 'data-object') return null
 
   return (
