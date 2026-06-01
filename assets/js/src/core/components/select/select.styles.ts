@@ -303,10 +303,14 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
       display: flex;
       align-items: center;
       gap: ${token.marginXS}px;
-      padding: ${token.paddingXXS}px ${token.paddingSM}px;
+      min-height: ${token.controlHeight}px;
+      padding: ${(token.controlHeight - token.fontSize * token.lineHeight) / 2}px ${token.controlPaddingHorizontal}px;
+      font-size: ${token.fontSize}px;
+      line-height: ${token.lineHeight};
       color: ${token.colorTextSecondary};
       cursor: pointer;
-      border-bottom: 1px solid ${token.colorBorderSecondary};
+      border-radius: ${token.borderRadiusSM}px;
+      transition: background ${token.motionDurationSlow} ease;
 
       &:hover {
         background-color: ${token.controlItemBgHover};
