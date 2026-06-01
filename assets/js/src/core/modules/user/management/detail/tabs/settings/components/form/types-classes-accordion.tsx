@@ -23,17 +23,17 @@ const TypesAndClassesAccordion = (): React.JSX.Element => {
   const { data: classesData, isLoading: classesLoading } = useClassDefinitionCollectionQuery()
   const { data: documentTypesData, isLoading: documentTypesLoading } = useDocumentDocTypeListQuery({})
 
-  const sortByLabel = (values: any[], options: Array<{ value: any, label: string }>): any[] => {
+  const sortByLabel = (values: string[], options: Array<{ value: string, label: string }>): string[] => {
     const labelMap = new Map(options.map((o) => [o.value, o.label ?? '']))
     return [...values].sort((a, b) => (labelMap.get(a) ?? '').localeCompare(labelMap.get(b) ?? ''))
   }
 
-  const docTypeOptions = documentTypesData?.items.map((item) => ({
+  const docTypeOptions: Array<{ label: string, value: string }> = documentTypesData?.items.map((item) => ({
     label: item.name ?? '',
     value: item.id
   })).sort((a, b) => a.label.localeCompare(b.label)) ?? []
 
-  const classOptions = classesData?.items.map((item) => ({
+  const classOptions: Array<{ label: string, value: string }> = classesData?.items.map((item) => ({
     label: item.name ?? '',
     value: item.id
   })).sort((a, b) => a.label.localeCompare(b.label)) ?? []
@@ -46,7 +46,7 @@ const TypesAndClassesAccordion = (): React.JSX.Element => {
         <>
           <Form.Item
             name="docTypes"
-            normalize={ (values) => sortByLabel(values, docTypeOptions) }
+            normalize={ (values: string[]) => sortByLabel(values, docTypeOptions) }
           >
             <Select
               disabled={ documentTypesLoading }
@@ -57,7 +57,7 @@ const TypesAndClassesAccordion = (): React.JSX.Element => {
           </Form.Item>
           <Form.Item
             name="classes"
-            normalize={ (values) => sortByLabel(values, classOptions) }
+            normalize={ (values: string[]) => sortByLabel(values, classOptions) }
           >
             <Select
               disabled={ classesLoading }

@@ -32,7 +32,7 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
   const { getRoleCollection } = useRoleHelper()
   const { getPerspectiveConfigCollection } = usePerspectives()
 
-  const sortByLabel = (values: any[], options: Array<{ value: any, label: string }>): any[] => {
+  const sortByLabel = (values: Array<string | number>, options: Array<{ value: string | number, label: string }>): Array<string | number> => {
     const labelMap = new Map(options.map((o) => [o.value, o.label ?? '']))
     return [...values].sort((a, b) => (labelMap.get(a) ?? '').localeCompare(labelMap.get(b) ?? ''))
   }
@@ -123,7 +123,7 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
               <Form.Item
                 label={ t('user-management.roles') }
                 name="roles"
-                normalize={ (values) => sortByLabel(values, roleOptions) }
+                normalize={ (values: Array<string | number>) => sortByLabel(values, roleOptions as Array<{ value: string | number, label: string }>) }
               >
                 <Select
                   mode="multiple"
@@ -135,7 +135,7 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
               <Form.Item
                 label={ t('user-management.perspectives') }
                 name="perspectives"
-                normalize={ (values) => sortByLabel(values, perspectiveOptions) }
+                normalize={ (values: Array<string | number>) => sortByLabel(values, perspectiveOptions as Array<{ value: string | number, label: string }>) }
               >
                 <Select
                   mode="multiple"

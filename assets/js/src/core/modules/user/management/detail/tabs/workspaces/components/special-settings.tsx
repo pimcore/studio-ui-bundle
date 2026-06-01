@@ -35,17 +35,17 @@ const SpecialSettings = ({ localizedView, localizedEdit, layouts, onValuesChange
 
   const [form] = Form.useForm()
 
-  const languageOptions = validLanguages.map((lang: string) => ({
+  const languageOptions: Array<{ value: string, label: string }> = validLanguages.map((lang: string) => ({
     value: lang,
-    label: getDisplayName(lang)
-  })).sort((a, b) => (a.label ?? 'UNKNOWN').localeCompare(b.label ?? 'UNKNOWN'))
+    label: getDisplayName(lang) ?? lang
+  })).sort((a, b) => a.label.localeCompare(b.label))
 
-  const layoutOptions = data?.items.map((layout) => ({
+  const layoutOptions: Array<{ value: string, label: string }> = data?.items.map((layout) => ({
     value: layout.id,
     label: layout.name ?? ''
   })).sort((a, b) => a.label.localeCompare(b.label)) ?? []
 
-  const sortByLabel = (values: any[], options: Array<{ value: any, label: string }>): any[] => {
+  const sortByLabel = (values: string[], options: Array<{ value: string, label: string }>): string[] => {
     const labelMap = new Map(options.map((o) => [o.value, o.label ?? '']))
     return [...values].sort((a, b) => (labelMap.get(a) ?? '').localeCompare(labelMap.get(b) ?? ''))
   }
@@ -79,7 +79,7 @@ const SpecialSettings = ({ localizedView, localizedEdit, layouts, onValuesChange
                 <Form.Item
                   label={ t('user-management.workspaces.localized-fields.view') }
                   name="localizedView"
-                  normalize={ (values) => sortByLabel(values, languageOptions) }
+                  normalize={ (values: string[]) => sortByLabel(values, languageOptions) }
                 >
                   <Select
                     mode="multiple"
@@ -91,7 +91,7 @@ const SpecialSettings = ({ localizedView, localizedEdit, layouts, onValuesChange
                 <Form.Item
                   label={ t('user-management.workspaces.localized-fields.edit') }
                   name="localizedEdit"
-                  normalize={ (values) => sortByLabel(values, languageOptions) }
+                  normalize={ (values: string[]) => sortByLabel(values, languageOptions) }
                 >
                   <Select
                     mode="multiple"
@@ -116,7 +116,7 @@ const SpecialSettings = ({ localizedView, localizedEdit, layouts, onValuesChange
               children: <Form.Item
                 label={ t('user-management.workspaces.custom-layouts.select') }
                 name="layouts"
-                normalize={ (values) => sortByLabel(values, layoutOptions) }
+                normalize={ (values: string[]) => sortByLabel(values, layoutOptions) }
                         >
                 <Select
                   mode="multiple"
