@@ -15,12 +15,15 @@ import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { Space } from 'antd'
 import { WorkFlowProvider } from '@Pimcore/modules/element/editor/shared-components/workflow/provider/workflow-provider'
-import { WorkflowModal } from '@Pimcore/modules/element/editor/shared-components/workflow/modal/workflow-modal'
 import { useWorkflow } from '@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-workflow'
+import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+import { useComponentRegistry } from '@Pimcore/modules/app/component-registry/use-component-registry'
 
 export const WorkflowTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { workflowDetailsData, isFetchingWorkflowDetails } = useWorkflow()
+  const componentRegistry = useComponentRegistry()
+  const WorkflowModal = componentRegistry.get(componentConfig.element.editor.workflow.modal.component.name)
 
   return (
     <Content

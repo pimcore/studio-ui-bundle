@@ -256,6 +256,8 @@ export * from '@Pimcore/modules/element/editor/shared-tab-manager/hooks/use-tab-
 export * from '@Pimcore/modules/element/editor/tab-manager/tab-manager'
 export * from '@Pimcore/modules/element/editor/tab-manager/interface/IElementEditorTabManager'
 
+export * from '@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-workflow'
+
 export * from '@Pimcore/modules/element/element-helper'
 
 export * from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'

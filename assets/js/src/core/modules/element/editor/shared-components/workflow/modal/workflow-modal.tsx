@@ -23,6 +23,8 @@ import { isNull } from 'lodash'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { useWorkflowFieldRenderer } from '@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-workflow-field-renderer'
 import { useDateConverter } from '@Pimcore/modules/app/hook/use-date-converter'
+import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
+import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 
 export const WorkflowModal = (): React.JSX.Element => {
   const { isModalOpen, closeModal, triggeredWorkflowAction } = useWorkflow()
@@ -43,11 +45,12 @@ export const WorkflowModal = (): React.JSX.Element => {
   const onFinish = (values: FormValues): void => {
     if (triggeredWorkflowAction === null) return
 
-    const additionalValues: Record<string, any> = {}
+    const { notes, ...additionalValues } = values
+
     dynamicFields.forEach(field => {
-      additionalValues[field.name] = values[field.name] ?? null
+      additionalValues[field.name] = additionalValues[field.name] ?? null
       if (field.fieldType === 'date' || field.fieldType === 'datetime') {
-        const fieldValue = values[field.name]
+        const fieldValue = additionalValues[field.name]
         if (isNonEmptyString(fieldValue)) {
           additionalValues[field.name] = convertToTimestamp(fieldValue, true, false)
         }
@@ -55,7 +58,7 @@ export const WorkflowModal = (): React.JSX.Element => {
     })
 
     submitWorkflowAction(triggeredWorkflowAction, {
-      notes: values.notes,
+      notes,
       additional: additionalValues
     })
   }
@@ -94,6 +97,8 @@ export const WorkflowModal = (): React.JSX.Element => {
       size={ 'M' }
       title={ <ModalTitle>{!isNull(triggeredWorkflowAction) ? t(triggeredWorkflowAction.label) : ''}</ModalTitle> }
     >
+      <SlotRenderer slot={ componentConfig.element.editor.workflow.modal.slots.top.name } />
+
       <Form
         form={ form }
         initialValues={ {
@@ -113,6 +118,8 @@ export const WorkflowModal = (): React.JSX.Element => {
           </Form.Item>
         ))}
 
+        <SlotRenderer slot={ componentConfig.element.editor.workflow.modal.slots.center.name } />
+
         {triggeredWorkflowAction?.notes?.commentEnabled === true && (
           <Form.Item
             label={ t('workflow-modal.notes') }
@@ -123,6 +130,8 @@ export const WorkflowModal = (): React.JSX.Element => {
           </Form.Item>
         )}
       </Form>
+
+      <SlotRenderer slot={ componentConfig.element.editor.workflow.modal.slots.bottom.name } />
     </Modal>
   )
 }
