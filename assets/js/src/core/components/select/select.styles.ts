@@ -297,6 +297,33 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
         min-width: ${toCssDimension(props.skeletonMinWidth, 'auto')} !important;
         display: block;
       }
+    `,
+
+    clearOptionWrapper: css`
+      &:has(> button:first-child:hover) .ant-select-item-option-active {
+        background-color: transparent !important;
+      }
+    `,
+
+    clearOption: css`
+      display: flex;
+      align-items: center;
+      gap: ${token.marginXS}px;
+      width: 100%;
+      min-height: ${token.controlHeight}px;
+      padding: ${(token.controlHeight - token.fontSize * token.lineHeight) / 2}px ${token.controlPaddingHorizontal}px;
+      font-size: ${token.fontSize}px;
+      line-height: ${token.lineHeight};
+      color: ${token.colorTextSecondary};
+      cursor: pointer;
+      border: none;
+      border-radius: ${token.borderRadiusSM}px;
+      background: none;
+      transition: background ${token.motionDurationSlow} ease;
+
+      &:hover {
+        background-color: ${token.controlItemBgHover};
+      }
     `
   }
 })

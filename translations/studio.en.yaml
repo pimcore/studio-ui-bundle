@@ -2722,3 +2722,4 @@ translations.merger.revert-all: Revert All
 translations.merger.title: "Merge Translations (Domain: {{domain}})"
 translations.merger.column.language: Language
 translations.merger.items: items
+select.clear-selection: Clear selection
