@@ -198,7 +198,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
         </button>
         {menu}
       </div>
-    )
+      )
     : antdSelectProps.dropdownRender
 
   return (
