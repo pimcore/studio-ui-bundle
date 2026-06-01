@@ -2709,3 +2709,4 @@ translations.merger.revert-all: Revertir todo
 translations.merger.title: "Fusionar traducciones (Dominio: {{domain}})"
 translations.merger.column.language: Idioma
 translations.merger.items: elementos
+select.clear-selection: Borrar selección

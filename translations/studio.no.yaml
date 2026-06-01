@@ -2709,3 +2709,4 @@ translations.merger.revert-all: Tilbakestill alle
 translations.merger.title: "Slå sammen oversettelser (Domene: {{domain}})"
 translations.merger.column.language: Språk
 translations.merger.items: elementer
+select.clear-selection: Fjern valg

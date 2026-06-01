@@ -2709,3 +2709,4 @@ translations.merger.revert-all: Återställ alla
 translations.merger.title: "Sammanfoga översättningar (Domän: {{domain}})"
 translations.merger.column.language: Språk
 translations.merger.items: objekt
+select.clear-selection: Rensa val

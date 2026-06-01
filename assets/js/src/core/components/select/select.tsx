@@ -34,6 +34,7 @@ export interface SelectProps extends AntdSelectProps {
   minWidth?: number | keyof typeof sizeOptions
   theme?: SelectTheme
   loadingSkeleton?: boolean
+  showClearOption?: boolean
 }
 
 export const Select = forwardRef<RefSelectProps, SelectProps>(({
@@ -49,6 +50,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   minWidth,
   theme = 'default',
   loadingSkeleton = false,
+  showClearOption = true,
   dataTestId,
   ...antdSelectProps
 }, ref): React.JSX.Element => {
@@ -174,6 +176,30 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
     ...antdSelectProps.style
   }
 
+  const shouldShowClearOption = showClearOption && !isEmptyValue(value)
+
+  const handleClearSelection = (): void => {
+    const clearedValue = mode === 'multiple' ? [] : undefined
+    antdSelectProps.onChange?.(clearedValue as any, [] as any)
+    selectRef.current?.blur()
+  }
+
+  const dropdownRender = shouldShowClearOption
+    ? (menu: React.ReactElement): React.JSX.Element => (
+      <>
+        <div
+          className={ styles.clearOption }
+          onMouseDown={ (e) => { e.preventDefault() } }
+          onClick={ handleClearSelection }
+        >
+          <Icon value={ 'trash' } />
+          <span>{t('select.clear-selection')}</span>
+        </div>
+        {menu}
+      </>
+    )
+    : antdSelectProps.dropdownRender
+
   return (
     <div
       className={ selectContainerClassNames }
@@ -185,8 +211,9 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
     />
     )}
       <AntdSelect
-        allowClear={ allowClear }
+        allowClear={ showClearOption ? false : allowClear }
         className={ selectClassNames }
+        dropdownRender={ dropdownRender }
         menuItemSelectedIcon={ getItemSelectedIcon() }
         mode={ mode }
         notFoundContent={ <Flex

@@ -297,6 +297,20 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
         min-width: ${toCssDimension(props.skeletonMinWidth, 'auto')} !important;
         display: block;
       }
+    `,
+
+    clearOption: css`
+      display: flex;
+      align-items: center;
+      gap: ${token.marginXS}px;
+      padding: ${token.paddingXXS}px ${token.paddingSM}px;
+      color: ${token.colorTextSecondary};
+      cursor: pointer;
+      border-bottom: 1px solid ${token.colorBorderSecondary};
+
+      &:hover {
+        background-color: ${token.controlItemBgHover};
+      }
     `
   }
 })

@@ -2709,3 +2709,4 @@ translations.merger.revert-all: Alle zurücksetzen
 translations.merger.title: "Übersetzungen zusammenführen (Domain: {{domain}})"
 translations.merger.column.language: Sprache
 translations.merger.items: Einträge
+select.clear-selection: Auswahl löschen
