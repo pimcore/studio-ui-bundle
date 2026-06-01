@@ -300,7 +300,7 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
     `,
 
     clearOptionWrapper: css`
-      &:has(> div:first-child:hover) .ant-select-item-option-active {
+      &:has(> button:first-child:hover) .ant-select-item-option-active {
         background-color: transparent !important;
       }
     `,
@@ -309,13 +309,16 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
       display: flex;
       align-items: center;
       gap: ${token.marginXS}px;
+      width: 100%;
       min-height: ${token.controlHeight}px;
       padding: ${(token.controlHeight - token.fontSize * token.lineHeight) / 2}px ${token.controlPaddingHorizontal}px;
       font-size: ${token.fontSize}px;
       line-height: ${token.lineHeight};
       color: ${token.colorTextSecondary};
       cursor: pointer;
+      border: none;
       border-radius: ${token.borderRadiusSM}px;
+      background: none;
       transition: background ${token.motionDurationSlow} ease;
 
       &:hover {

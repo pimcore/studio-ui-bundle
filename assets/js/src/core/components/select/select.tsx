@@ -187,20 +187,18 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   const dropdownRender = shouldShowClearOption
     ? (menu: React.ReactElement): React.JSX.Element => (
       <div className={ styles.clearOptionWrapper }>
-        <div
+        <button
           className={ styles.clearOption }
           onClick={ handleClearSelection }
-          onKeyDown={ (e) => { if (e.key === 'Enter' || e.key === ' ') { handleClearSelection() } } }
           onMouseDown={ (e) => { e.preventDefault() } }
-          role="button"
-          tabIndex={ 0 }
+          type="button"
         >
           <Icon value={ 'trash' } />
           <span>{t('select.clear-selection')}</span>
-        </div>
+        </button>
         {menu}
       </div>
-      )
+    )
     : antdSelectProps.dropdownRender
 
   return (
