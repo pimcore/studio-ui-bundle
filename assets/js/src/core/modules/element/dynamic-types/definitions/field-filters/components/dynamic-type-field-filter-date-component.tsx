@@ -9,7 +9,6 @@
  */
 
 import React from 'react'
-import dayjs from 'dayjs'
 import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
@@ -17,7 +16,7 @@ import { DateRangePicker } from '@Pimcore/components/date-picker/date-range-pick
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { t } from 'i18next'
 import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
-import { formatFilterDate } from '@Pimcore/components/date-picker/utils/date-picker-utils'
+import { formatFilterDate, parseFilterDate } from '@Pimcore/components/date-picker/utils/date-picker-utils'
 import { isFieldRespectTimezone } from '../../objects/data-related/types/abstract/dynamic-type-object-data-abstract-date'
 
 export enum DatePickerSettingValue {
@@ -97,9 +96,7 @@ export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilte
   }
 
   const convertISOToTimestamp = (dateStr: string | null): number | null => {
-    if (dateStr === null) return null
-
-    return dayjs(dateStr).startOf('day').unix()
+    return parseFilterDate(dateStr)
   }
 
   const handleDateChange = (field: 'on' | 'from' | 'to', value: string | null): void => {

@@ -11,7 +11,7 @@
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
-import { toDayJs, fromDayJs, toServerWallClock, formatFilterDate } from './date-picker-utils'
+import { toDayJs, fromDayJs, toServerWallClock, formatFilterDate, parseFilterDate } from './date-picker-utils'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -115,6 +115,34 @@ describe('formatFilterDate', () => {
     expect(out).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}([+-]\d{2}:\d{2}|Z)$/)
     // Round-trips back to the same instant when parsed.
     expect(dayjs(out).unix()).toBe(tsBrowserLocalMidnight)
+  })
+})
+
+describe('parseFilterDate (read-back round-trip)', () => {
+  // Pins the regression: stored UTC ISO must not shift the picker day in browsers west of UTC.
+  const tsBrowserLocalMidnight = new Date(2026, 2, 15).getTime() / 1000
+
+  it('returns null for null', () => {
+    expect(parseFilterDate(null)).toBeNull()
+  })
+
+  it('round-trips a respect=false stored value back to the originally picked day', () => {
+    const stored = formatFilterDate(tsBrowserLocalMidnight, false)!
+    expect(stored).toBe('2026-03-15T00:00:00Z')
+    const recovered = parseFilterDate(stored)!
+    expect(dayjs.unix(recovered).format('YYYY-MM-DD')).toBe('2026-03-15')
+  })
+
+  it('round-trips a respect=true stored value back to the originally picked day', () => {
+    const stored = formatFilterDate(tsBrowserLocalMidnight, true)!
+    const recovered = parseFilterDate(stored)!
+    expect(dayjs.unix(recovered).format('YYYY-MM-DD')).toBe('2026-03-15')
+  })
+
+  it('ignores any offset or Z marker on the stored value (calendar day only)', () => {
+    expect(dayjs.unix(parseFilterDate('2026-03-15T00:00:00Z')!).format('YYYY-MM-DD')).toBe('2026-03-15')
+    expect(dayjs.unix(parseFilterDate('2026-03-15T00:00:00-04:00')!).format('YYYY-MM-DD')).toBe('2026-03-15')
+    expect(dayjs.unix(parseFilterDate('2026-03-15T00:00:00+09:00')!).format('YYYY-MM-DD')).toBe('2026-03-15')
   })
 })
 

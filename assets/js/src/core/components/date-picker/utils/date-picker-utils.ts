@@ -60,6 +60,17 @@ export const formatFilterDate = (timestamp: number | null, respectTimezone: bool
   return `${dj.format('YYYY-MM-DD')}T00:00:00Z`
 }
 
+/**
+ * Inverse of `formatFilterDate`. Slices the calendar prefix so the read-back picker shows the
+ * picked day regardless of any offset / `Z` marker on the stored value.
+ */
+export const parseFilterDate = (dateStr: string | null): number | null => {
+  if (dateStr === null) {
+    return null
+  }
+  return dayjs(dateStr.slice(0, 10), 'YYYY-MM-DD').unix()
+}
+
 export const toDayJs = (value?: unknown, format?: string, options?: ToDayJsOptions): Dayjs | null => {
   if (dayjs.isDayjs(value)) {
     return value
