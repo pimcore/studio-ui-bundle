@@ -11,8 +11,8 @@
 import type { DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import React from 'react'
 import { useVersionGetCollectionForElementByTypeAndIdQuery, type Version } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice-enhanced'
-import i18n from 'i18next'
 import { type SelectProps } from 'rc-select/lib/Select'
+import { formatDateTime } from '@Pimcore/utils/date-time'
 import { SelectCell, type SelectCellConfig } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/select/select-cell'
 import { useStyles } from './version-id-cell.styles'
 import { addColumnConfig } from '@Pimcore/components/grid/columns/helpers'
@@ -47,23 +47,12 @@ export const VersionIdCell = (props: DefaultCellProps): React.JSX.Element => {
             <b>{value.versionCount}</b>
             <span className={ 'version-id__selection-item-hidden' }> | {value.user.name ?? 'not found'}</span>
           </div>
-          <div className={ 'version-id__selection-item-hidden' }>{formatDate(value.date)}</div>
+          <div className={ 'version-id__selection-item-hidden' }>{formatDateTime({ timestamp: value.date, dateStyle: 'short', timeStyle: 'short' })}</div>
         </div>
       )
     }
   })
 
-  function formatDate (timestamp: number): string {
-    return i18n.format(
-      new Date(timestamp * 1000),
-      'datetime',
-      i18n.language,
-      {
-        dateStyle: 'short',
-        timeStyle: 'short'
-      }
-    )
-  }
   const { styles } = useStyles()
 
   const columnConfig: SelectCellConfig = {
