@@ -29,7 +29,7 @@ export interface ItemDetailProps {
 
 export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
   const { useDetailGeneralSettingsQuery, useDetailLayoutQuery, useDetailLayoutAccessor, customLayouts, LayoutProvider } = useSettings()
-  const { setDetailView } = useItems()
+  const { setDetailView, setIsModified } = useItems()
   const layoutResult = useDetailLayoutQuery?.({
     id: props.configuration.id
   })
@@ -100,16 +100,21 @@ export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
       promises.push(layoutResult.refetch())
     }
     await Promise.all(promises)
+    setIsModified(false)
     setLayoutKey((prev) => prev + 1)
     setDetailView('general')
-  }, [refetchDetail, layoutResult?.refetch, setDetailView])
+  }, [refetchDetail, layoutResult?.refetch, setDetailView, setIsModified])
 
   return (
     <RefreshProvider refreshLayout={ refreshLayout }>
-      <GeneralSettingsProvider generalSettings={ detailData }>
+      <GeneralSettingsProvider
+        generalSettings={ detailData }
+        onModified={ () => { setIsModified(true) } }
+      >
         <LayoutProvider
           key={ layoutKey }
           layout={ layout }
+          onModified={ () => { setIsModified(true) } }
         >
           <ContentLayout
             className="absolute-stretch"

@@ -21,6 +21,7 @@ export const GeneralSettingsContext = createContext<IGeneralSettingsContext | un
 export interface IGeneralSettingsProviderProps {
   generalSettings: GeneralSettings | undefined
   children: React.ReactNode
+  onModified?: () => void
 }
 
 export const GeneralSettingsProvider = (props: IGeneralSettingsProviderProps): React.JSX.Element => {
@@ -31,6 +32,7 @@ export const GeneralSettingsProvider = (props: IGeneralSettingsProviderProps): R
   }, [props.generalSettings])
 
   const updateGeneralSettings = (settings: GeneralSettings | undefined): void => {
+    props.onModified?.()
     /* eslint-disable  @typescript-eslint/consistent-type-assertions */
     setGeneralSettings((oldSettings) => {
       return {

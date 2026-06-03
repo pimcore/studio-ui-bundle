@@ -11,13 +11,15 @@
 import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
 import { useGeneralSettings } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
+import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
+import { useOptionalUnsavedChanges } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/unsaved-changes-provider'
 import { isReservedWord } from '@Pimcore/modules/field-definitions/dynamic-types/utils/reserved-words'
 import { buildPathMap, getNamesInNamespace } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { Button, type ButtonProps, useMessage } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
-import React from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 const NAME_FORMAT_REGEX = /^[A-Za-z][A-Za-z0-9_]*$/
@@ -27,6 +29,8 @@ export const DetailSave = (): React.JSX.Element => {
   const { useDetailUpdateMutation, useLayout } = useSettings()
   const { fieldDefinitions, setInvalidFieldDefinitionIds, structure } = useLayout()
   const { generalSettings } = useGeneralSettings()
+  const { setIsModified, registerSaveCallback } = useItems()
+  const unsavedChanges = useOptionalUnsavedChanges()
   const [updateDetailMutation, result] = useDetailUpdateMutation()
   const { isLoading } = result
   const messageApi = useMessage()
@@ -34,7 +38,7 @@ export const DetailSave = (): React.JSX.Element => {
   const fieldDefinitionRegistry = useSettings().fieldDefinitionRegistry
   const { area } = useArea()
 
-  const onClick: ButtonProps['onClick'] = () => {
+  const performSave = useCallback(async (): Promise<void> => {
     if (generalSettings === undefined) {
       return
     }
@@ -49,15 +53,11 @@ export const DetailSave = (): React.JSX.Element => {
 
     const pathMap = structure !== undefined ? buildPathMap(structure) : {}
 
-    // Validate all field definitions before saving
     for (const [key, definition] of Object.entries(fieldDefinitions)) {
-      // Skip the root layout node — its name is structural, not user-editable,
-      // and it is stripped from the payload before saving anyway
       // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
       if (structure !== undefined && key === structure.id) continue
       if (fieldDefinitionRegistry.hasDynamicType(definition.fieldtype)) {
         const dynamicType = fieldDefinitionRegistry.getDynamicType(definition.fieldtype)
-        // @todo check if we can handle the path here
         const isValid = dynamicType.isValid(definition, { area, fieldDefinitions, path: [] })
 
         if (!isValid) {
@@ -67,13 +67,11 @@ export const DetailSave = (): React.JSX.Element => {
 
       const name: string = typeof definition.name === 'string' ? definition.name : ''
 
-      // All types: check for empty name
       if (name.trim() === '') {
         emptyNameViolations.push({ id: key, label: definition.fieldtype })
         if (!invalidDefinitions.includes(key)) invalidDefinitions.push(key)
       }
 
-      // Data types only, skip localizedfields
       if (definition.datatype === 'data' && definition.fieldtype !== 'localizedfields') {
         if (isReservedWord(name)) {
           reservedWordViolations.push({ id: key, label: name })
@@ -137,16 +135,27 @@ export const DetailSave = (): React.JSX.Element => {
       )
 
       alertModal.error({ content })
-      return
+      throw new Error('Validation failed')
     }
 
-    updateDetailMutation({}).unwrap()
-      .then(() => {
-        messageApi.success(t('field-definitions.saved-successfully'))
-      })
-      .catch((e) => {
+    await updateDetailMutation({}).unwrap()
+    setIsModified(false)
+    void messageApi.success(t('field-definitions.saved-successfully'))
+  }, [generalSettings, fieldDefinitions, structure, fieldDefinitionRegistry, area, setInvalidFieldDefinitionIds, updateDetailMutation, setIsModified, messageApi, t, alertModal])
+
+  useEffect(() => {
+    registerSaveCallback(performSave)
+    if (unsavedChanges !== undefined) {
+      unsavedChanges.saveFnRef.current = performSave
+    }
+  }, [registerSaveCallback, performSave, unsavedChanges])
+
+  const onClick: ButtonProps['onClick'] = () => {
+    performSave().catch((e) => {
+      if ((e as Error).message !== 'Validation failed') {
         trackError(new ApiError(e as FetchBaseQueryError))
-      })
+      }
+    })
   }
 
   return (

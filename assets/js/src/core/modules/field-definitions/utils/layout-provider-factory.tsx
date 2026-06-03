@@ -60,6 +60,7 @@ export interface LayoutProviderProps {
   layout: Layout | undefined
   fieldDefinitionRegistry: DynamicTypeFieldDefinitionRegistry
   children: React.ReactNode
+  onModified?: () => void
 }
 
 export interface LayoutProviderFactoryReturn {
@@ -202,6 +203,7 @@ export const create = (): LayoutProviderFactoryReturn => {
     }, [props.layout])
 
     const updateFieldDefinition = useCallback((structureNodeId: StructureNode['id'], updatedFieldDefinition: FieldDefinition, overwriteValues: boolean = false): void => {
+      props.onModified?.()
       setFieldDefinitions((prevDefs) => ({
         ...prevDefs,
         [structureNodeId]: {
@@ -211,6 +213,7 @@ export const create = (): LayoutProviderFactoryReturn => {
     }, [])
 
     const addFieldDefinition = useCallback((structureNodeId: StructureNode['id'], newFieldDefinition: FieldDefinition): StructureNode['id'] => {
+      props.onModified?.()
       const newId = uuid()
 
       const addNodeRecursively = (node: StructureNode): StructureNode => {
@@ -237,6 +240,7 @@ export const create = (): LayoutProviderFactoryReturn => {
     }, [])
 
     const removeFieldDefinition = useCallback((structureNodeId: StructureNode['id']): void => {
+      props.onModified?.()
       const removeNodeRecursively = (node: StructureNode): StructureNode | undefined => {
         if (node.id === structureNodeId) {
           return undefined
@@ -269,6 +273,7 @@ export const create = (): LayoutProviderFactoryReturn => {
     }, [])
 
     const removeChildren = useCallback((structureNodeId: StructureNode['id']): void => {
+      props.onModified?.()
       const removeChildrenRecursively = (node: StructureNode): StructureNode => {
         if (node.id === structureNodeId) {
           return {
@@ -309,6 +314,7 @@ export const create = (): LayoutProviderFactoryReturn => {
     }, [])
 
     const cloneFieldDefinition = useCallback((structureNodeId: StructureNode['id']): StructureNode['id'] => {
+      props.onModified?.()
       const insertClonedNodeAsSibling = (node: StructureNode, targetId: string, clonedNode: StructureNode): StructureNode => {
         const childIndex = node.children.findIndex(child => child.id === targetId)
 
@@ -384,6 +390,7 @@ export const create = (): LayoutProviderFactoryReturn => {
     }, [])
 
     const moveFieldDefinition = useCallback((structureNodeId: StructureNode['id'], newParentId: StructureNode['id'], newIndex: number): void => {
+      props.onModified?.()
       const findAndRemoveNode = (node: StructureNode, targetId: string): { updatedNode: StructureNode | null, removedNode: StructureNode | null } => {
         if (node.id === targetId) {
           return { updatedNode: null, removedNode: node }
@@ -457,6 +464,7 @@ export const create = (): LayoutProviderFactoryReturn => {
     }, [])
 
     const pasteFieldDefinition = useCallback((path: string[]): void => {
+      props.onModified?.()
       setCopiedPath((currentCopiedPath) => {
         if (currentCopiedPath === undefined) {
           return currentCopiedPath
@@ -707,6 +715,7 @@ export const create = (): LayoutProviderFactoryReturn => {
     }, [fieldDefinitionRegistry])
 
     const addExternalFieldDefinition: ILayoutContext['addExternalFieldDefinition'] = useCallback((structureNodeId, layout, insertIndex) => {
+      props.onModified?.()
       const { structure: externalStructure, fieldDefinitions: externalFieldDefinitions } = reduce({ layout })!
 
       const addNodeRecursively = (node: StructureNode): StructureNode => {

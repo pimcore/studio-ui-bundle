@@ -9,12 +9,14 @@
  */
 
 import { create } from '@Pimcore/components/modal/factory/modal-factory'
+import { useUnsavedChanges } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/unsaved-changes-provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
+import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
+import { Modal, useFormModal } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 const {
-  Modal: ModalTemplate,
   Provider: CustomLayoutModalProvider,
   useModal: useCustomLayoutModal
 } = create({ defaultProps: { children: <></>, size: 'XXL', footer: null, maskClosable: false } })
@@ -24,14 +26,52 @@ export { CustomLayoutModalProvider, useCustomLayoutModal }
 export const CustomLayoutModal = (): React.JSX.Element => {
   const { t } = useTranslation()
   const settings = useSettings()
-  const { open } = useCustomLayoutModal()
+  const { open, closeModal } = useCustomLayoutModal()
+  const { isModified, setIsModified, saveFnRef } = useUnsavedChanges()
+  const { setIsModified: setItemsIsModified } = useItems()
+  const modal = useFormModal()
+
+  const handleClose = (): void => {
+    if (isModified) {
+      modal.confirm({
+        type: 'warning',
+        title: t('unsaved-changes.title'),
+        content: t('field-definitions.unsaved-changes.message'),
+        okText: t('save'),
+        cancelText: t('discard-changes'),
+        onOk: async () => {
+          if (saveFnRef.current !== null) {
+            await saveFnRef.current()
+          }
+
+          setIsModified(false)
+          closeModal()
+        },
+        onCancel: () => {
+          setIsModified(false)
+          setItemsIsModified(false)
+          closeModal()
+        }
+      })
+      return
+    }
+
+    closeModal()
+  }
 
   return (
     <>
       { open && (
-        <ModalTemplate title={ t('field-definitions.custom-layouts') }>
+        <Modal
+          footer={ null }
+          maskClosable={ false }
+          onCancel={ handleClose }
+          open={ open }
+          size={ 'XXL' }
+          title={ t('field-definitions.custom-layouts') }
+        >
           {settings.customLayouts?.ModalContent}
-        </ModalTemplate>
+        </Modal>
       )}
     </>
   )

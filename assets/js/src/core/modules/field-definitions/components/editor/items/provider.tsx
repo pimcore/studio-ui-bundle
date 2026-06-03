@@ -8,7 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { createContext, useContext, useMemo, useState } from 'react'
+import { useFormModal } from '@sdk/components'
+import React, { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export interface ConfigurationPartial {
   id: string
@@ -31,6 +33,9 @@ export interface IItemsContext {
   closeActiveConfiguration: () => void
   detailView: DetailView
   setDetailView: (view: DetailView) => void
+  isModified: boolean
+  setIsModified: (modified: boolean) => void
+  registerSaveCallback: (cb: () => Promise<void>) => void
 }
 
 export const ItemsContext = createContext<IItemsContext | undefined>(undefined)
@@ -40,9 +45,17 @@ export interface ItemsProviderProps {
 }
 
 export const ItemsProvider = (props: ItemsProviderProps): React.JSX.Element => {
+  const { t } = useTranslation()
+  const modal = useFormModal()
   const [configurations, setConfigurations] = useState<ConfigurationPartial[]>([])
   const [activeConfiguration, setActiveConfigurationInternal] = useState<ConfigurationPartial | undefined>(undefined)
   const [detailView, setDetailView] = useState<DetailView>('general')
+  const [isModified, setIsModified] = useState(false)
+  const saveCallbackRef = useRef<(() => Promise<void>) | null>(null)
+
+  const registerSaveCallback = useCallback((cb: () => Promise<void>): void => {
+    saveCallbackRef.current = cb
+  }, [])
 
   const closeActiveConfiguration = (): void => {
     if (activeConfiguration === undefined) {
@@ -63,14 +76,39 @@ export const ItemsProvider = (props: ItemsProviderProps): React.JSX.Element => {
     setActiveConfigurationInternal(undefined)
   }
 
-  const setActiveConfiguration = (config: ConfigurationPartial): void => {
+  const setActiveConfiguration = useCallback((config: ConfigurationPartial): void => {
+    if (isModified && config.id !== activeConfiguration?.id) {
+      modal.confirm({
+        type: 'warning',
+        title: t('unsaved-changes.title'),
+        content: t('field-definitions.unsaved-changes.message'),
+        okText: t('save'),
+        cancelText: t('discard-changes'),
+        onOk: async () => {
+          if (saveCallbackRef.current !== null) {
+            await saveCallbackRef.current()
+          }
+
+          setIsModified(false)
+          saveCallbackRef.current = null
+          openConfiguration(config)
+        },
+        onCancel: () => {
+          setIsModified(false)
+          saveCallbackRef.current = null
+          openConfiguration(config)
+        }
+      })
+      return
+    }
+
     if (configurations.find((cd) => cd.id === config.id) === undefined) {
       openConfiguration(config)
       return
     }
 
     setActiveConfigurationInternal(config)
-  }
+  }, [isModified, activeConfiguration, configurations, modal, t])
 
   const openConfiguration = (config: ConfigurationPartial): void => {
     setConfigurations((prevConfigs) => {
@@ -95,23 +133,25 @@ export const ItemsProvider = (props: ItemsProviderProps): React.JSX.Element => {
     })
   }
 
-  return useMemo(() => {
-    return (
-      <ItemsContext.Provider value={ {
-        configurations,
-        closeConfiguration,
-        openConfiguration,
-        activeConfiguration,
-        setActiveConfiguration,
-        closeActiveConfiguration,
-        detailView,
-        setDetailView
-      } }
-      >
-        {props.children}
-      </ItemsContext.Provider>
-    )
-  }, [props.children, configurations, activeConfiguration, detailView])
+  const contextValue = useMemo(() => ({
+    configurations,
+    closeConfiguration,
+    openConfiguration,
+    activeConfiguration,
+    setActiveConfiguration,
+    closeActiveConfiguration,
+    detailView,
+    setDetailView,
+    isModified,
+    setIsModified,
+    registerSaveCallback
+  }), [configurations, activeConfiguration, detailView, isModified, setActiveConfiguration, registerSaveCallback])
+
+  return (
+    <ItemsContext.Provider value={ contextValue }>
+      {props.children}
+    </ItemsContext.Provider>
+  )
 }
 
 export const useItems = (): IItemsContext => {

@@ -17,6 +17,7 @@ import { RefreshProvider } from '@Pimcore/modules/field-definitions/components/e
 import { DetailSave } from '@Pimcore/modules/field-definitions/components/editor/items/detail/save'
 import { DetailSidebar } from '@Pimcore/modules/field-definitions/components/editor/items/detail/sidebar'
 import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
+import { useUnsavedChanges } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/unsaved-changes-provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { type Layout } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
@@ -26,6 +27,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 export const ItemDetail = (): React.JSX.Element => {
   const { activeConfiguration, setDetailView } = useItems()
+  const { setIsModified } = useUnsavedChanges()
   const configuration = activeConfiguration!
   const { useDetailGeneralSettingsQuery, useDetailLayoutQuery, useDetailLayoutAccessor, customLayouts, LayoutProvider } = useSettings()
   const layoutResult = useDetailLayoutQuery?.({
@@ -100,16 +102,21 @@ export const ItemDetail = (): React.JSX.Element => {
       promises.push(layoutResult.refetch())
     }
     await Promise.all(promises)
+    setIsModified(false)
     setLayoutKey((prev) => prev + 1)
     setDetailView('general')
-  }, [refetchDetail, layoutResult?.refetch, setDetailView])
+  }, [refetchDetail, layoutResult?.refetch, setDetailView, setIsModified])
 
   return (
     <RefreshProvider refreshLayout={ refreshLayout }>
-      <GeneralSettingsProvider generalSettings={ detailData }>
+      <GeneralSettingsProvider
+        generalSettings={ detailData }
+        onModified={ () => { setIsModified(true) } }
+      >
         <LayoutProvider
           key={ layoutKey }
           layout={ layout }
+          onModified={ () => { setIsModified(true) } }
         >
           <ContentLayout
             className="absolute-stretch"

@@ -13,7 +13,7 @@ import { useSettings } from '@Pimcore/modules/field-definitions/components/edito
 import { Content, FormKit, type FormProps } from '@sdk/components'
 import { useDebounce } from '@sdk/utils'
 import { isNil } from 'lodash'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 const PADDING = { x: 'small', bottom: 'small', top: 'none' } as const
@@ -24,13 +24,15 @@ export const GeneralSettingsForm = (): React.JSX.Element => {
   const { GeneralSettingsFormFields } = useSettings()
   const [formValues, setFormValues] = useState(generalSettings)
   const debouncedValues = useDebounce(formValues, 300)
+  const hasUserModified = useRef(false)
 
   const handleValuesChange: FormProps['onValuesChange'] = useCallback((changedValues, allValues) => {
+    hasUserModified.current = true
     setFormValues(allValues as typeof generalSettings)
   }, [])
 
   useEffect(() => {
-    if (debouncedValues !== generalSettings) {
+    if (hasUserModified.current && debouncedValues !== generalSettings) {
       setGeneralSettings(debouncedValues)
     }
   }, [debouncedValues])

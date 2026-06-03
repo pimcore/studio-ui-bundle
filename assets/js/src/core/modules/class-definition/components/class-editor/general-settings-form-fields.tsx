@@ -10,7 +10,7 @@
 
 import { FormKit } from '@sdk/components'
 import { isNil, isString, upperFirst } from 'lodash'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { Input } from '@Pimcore/components/input/input'
 import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { IconSelector } from '@Pimcore/components/icon-selector/icon-selector'
@@ -29,6 +29,7 @@ export const ClassDefinitionGeneralSettingsFormFields = (): React.JSX.Element =>
   const form = Form.useFormInstance()
   const nameValue = Form.useWatch('name', form)
   const classId = form.getFieldValue('id')
+  const isPhpClassNameInitializedRef = useRef(false)
 
   useEffect(() => {
     if (isString(nameValue)) {
@@ -36,8 +37,13 @@ export const ClassDefinitionGeneralSettingsFormFields = (): React.JSX.Element =>
       const currentPhpClassName = form.getFieldValue('phpClassName')
 
       if (currentPhpClassName !== newPhpClassName) {
-        form.setFieldValue('phpClassName', newPhpClassName, { triggerChange: true })
+        // Only trigger change (marking form dirty) after the initial derived value has been
+        // set. On first load phpClassName is absent from the API response, so setting it
+        // silently avoids a false "unsaved changes" state when switching between classes.
+        form.setFieldValue('phpClassName', newPhpClassName, isPhpClassNameInitializedRef.current ? { triggerChange: true } : undefined)
       }
+
+      isPhpClassNameInitializedRef.current = true
     }
   }, [nameValue])
 
