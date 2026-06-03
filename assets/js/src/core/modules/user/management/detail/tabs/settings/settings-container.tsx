@@ -64,8 +64,8 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
         allowDirtyClose: openedUser?.allowDirtyClose,
         closeWarning: openedUser?.closeWarning,
         roles: openedUser?.roles ?? [],
-        permissionsDefault: Array.isArray(openedUser?.permissions) ? openedUser.permissions.filter((permission) => permissions.default.some((defaultPermission) => defaultPermission.key === permission)) : [],
-        permissionsBundles: Array.isArray(openedUser?.permissions) ? openedUser.permissions.filter((permission) => permissions.bundles.some((defaultPermission) => defaultPermission.key === permission)) : []
+        permissionsDefault: Array.isArray(openedUser?.permissions) ? openedUser.permissions.filter((permission) => permissions.default.some((defaultPermission) => defaultPermission.key === permission)).sort((a, b) => t(`user-management.permissions.${a}`).localeCompare(t(`user-management.permissions.${b}`))) : [],
+        permissionsBundles: Array.isArray(openedUser?.permissions) ? openedUser.permissions.filter((permission) => permissions.bundles.some((defaultPermission) => defaultPermission.key === permission)).sort((a, b) => t(`user-management.permissions.${a}`).localeCompare(t(`user-management.permissions.${b}`))) : []
       })
     }
   }, [openedUser, isLoading, permissions])
