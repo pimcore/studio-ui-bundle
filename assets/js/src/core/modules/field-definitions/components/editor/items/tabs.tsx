@@ -8,18 +8,30 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { ItemDetail } from '@Pimcore/modules/field-definitions/components/editor/items/detail'
-import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
-import { Icon, type ITabsProps, Tabs } from '@sdk/components'
 import React from 'react'
+import { ItemDetail } from '@Pimcore/modules/field-definitions/components/editor/items/detail'
+import { type ConfigurationPartial, useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
+import { normalizeIcon } from '@Pimcore/utils/normalize-icon'
+import { isEmptyValue } from '@sdk/utils'
+import { Icon, type ITabsProps, Tabs } from '@sdk/components'
+
+const renderConfigurationIcon = (icon?: ConfigurationPartial['icon'] & { type?: 'name' | 'path' }): React.JSX.Element => {
+  if (icon === undefined || isEmptyValue(icon.value)) {
+    return <Icon value='class' />
+  }
+
+  const normalizedIcon = icon.type !== undefined ? icon : normalizeIcon(icon.value)
+
+  return normalizedIcon !== null ? <Icon { ...normalizedIcon } /> : <Icon value='class' />
+}
 
 export const ItemsTabs = (): React.JSX.Element => {
   const { configurations, activeConfiguration, setActiveConfiguration, closeConfiguration } = useItems()
 
-  const items: ITabsProps['items'] = configurations.map((configuration) => ({
+  const items: ITabsProps['items'] = configurations.map((configuration: ConfigurationPartial) => ({
     key: `${configuration.id}`,
     label: (configuration.name !== '' && configuration.name !== undefined && configuration.name !== configuration.id) ? `${configuration.name} (${configuration.id})` : `${configuration.id}`,
-    icon: <Icon { ...(configuration.icon ?? { value: 'class' }) } />,
+    icon: renderConfigurationIcon(configuration.icon),
     closable: true,
     children: (
       <ItemDetail configuration={ configuration } />
