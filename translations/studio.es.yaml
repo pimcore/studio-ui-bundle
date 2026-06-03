@@ -1153,6 +1153,12 @@ element.delete: Eliminar
 element.delete.confirmation.title: Eliminar elemento
 element.delete.confirmation.text: ¿Realmente desea eliminar este elemento?
 element.delete.confirmation.ok: Eliminar permanentemente
+element.delete.folder.title: Eliminar carpeta
+element.delete.folder.question: ¿Realmente desea eliminar esta carpeta?
+element.delete.folder.small.note: 'Tenga en cuenta: Las dependencias serán eliminadas. Es posible que no pueda deshacer completamente esta operación.'
+element.delete.folder.large.note: 'Tenga en cuenta: La carpeta y su contenido se eliminarán de forma permanente y no podrán ser restaurados.'
+element.delete.folder.ok: Eliminar
+element.delete.folder.ok.permanent: Eliminar permanentemente
 element.open: Abrir
 element.toolbar.copy-id: Copiar ID
 element.toolbar.copy-full-path-to-clipboard: Copiar ruta completa

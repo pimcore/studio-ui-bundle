@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { useAppDispatch } from '@Pimcore/app/store'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
@@ -16,6 +17,7 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
+import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
 import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
@@ -42,6 +44,7 @@ export interface UseDeleteHookReturn {
 export const useDelete = (elementType: ElementType, cacheKey?: string): UseDeleteHookReturn => {
   const { t } = useTranslation()
   const modal = useFormModal()
+  const dispatch = useAppDispatch()
   const executionEngine = useExecutionEngine()
   const { refreshGrid } = useRefreshGrid(elementType)
   const { getElementById } = useElementApi(elementType)
@@ -51,43 +54,77 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { treeId } = useTreeId(true)
 
-  const deleteElement = (id: number, label: string, parentId?: number, onFinish?: () => void): void => {
-    modal.confirm({
-      title: t('element.delete.confirmation.title'),
-      content: <>
-        <span>{t('element.delete.confirmation.text')}</span>
-        <br />
-        <b>{label}</b>
-      </>,
-      okText: t('element.delete.confirmation.ok'),
-      onOk: async () => {
-        setIsLoading(true)
-        try {
-          const job = new DeleteJob({
-            elementId: id,
-            elementType,
-            treeId,
-            nodeId: String(id),
-            parentFolderId: parentId
-          })
+  const runDeleteJob = async (id: number, parentId?: number, onFinish?: () => void): Promise<void> => {
+    setIsLoading(true)
+    try {
+      const job = new DeleteJob({
+        elementId: id,
+        elementType,
+        treeId,
+        nodeId: String(id),
+        parentFolderId: parentId
+      })
 
-          await executionEngine.runJob(job)
+      await executionEngine.runJob(job)
 
-          // Handle widget closing and recycle bin refresh here since job can't use hooks
-          const widgetId = getWidgetId(elementType, id)
-          if (isMainWidgetOpen(widgetId)) {
-            closeWidget(widgetId)
-          }
-          refreshRecycleBin()
-
-          onFinish?.()
-        } catch (error: any) {
-          trackError(new GeneralError(error.message as string))
-        } finally {
-          setIsLoading(false)
-        }
+      // Handle widget closing and recycle bin refresh here since job can't use hooks
+      const widgetId = getWidgetId(elementType, id)
+      if (isMainWidgetOpen(widgetId)) {
+        closeWidget(widgetId)
       }
-    })
+      refreshRecycleBin()
+
+      onFinish?.()
+    } catch (error: any) {
+      trackError(new GeneralError(error.message as string))
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const deleteElement = (id: number, label: string, parentId?: number, onFinish?: () => void, isFolder?: boolean): void => {
+    if (isFolder === true) {
+      void dispatch(elementApi.endpoints.elementGetDeleteInfo.initiate({ elementType, id }))
+        .then(({ data }) => {
+          const canUseRecycleBin = data?.canUseRecycleBin ?? true
+
+          if (canUseRecycleBin) {
+            modal.confirm({
+              title: t('element.delete.folder.title'),
+              content: <>
+                <p>{t('element.delete.folder.small.note')}</p>
+                <p>{t('element.delete.folder.question')}</p>
+                <b>{label}</b>
+              </>,
+              okText: t('element.delete.folder.ok'),
+              onOk: async () => { await runDeleteJob(id, parentId, onFinish) }
+            })
+          } else {
+            modal.confirm({
+              title: t('element.delete.folder.title'),
+              content: <>
+                <p>{t('element.delete.folder.large.note')}</p>
+                <p>{t('element.delete.folder.question')}</p>
+                <b>{label}</b>
+              </>,
+              okText: t('element.delete.folder.ok.permanent'),
+
+              onOk: async () => { await runDeleteJob(id, parentId, onFinish) }
+            })
+          }
+        })
+    } else {
+      modal.confirm({
+        title: t('element.delete.confirmation.title'),
+        content: <>
+          <span>{t('element.delete.confirmation.text')}</span>
+          <br />
+          <b>{label}</b>
+        </>,
+        okText: t('element.delete.confirmation.ok'),
+        onOk: async () => { await runDeleteJob(id, parentId, onFinish) }
+      })
+    }
   }
 
   const deleteTreeContextMenuItem = (node: TreeNodeProps, onFinish?: () => void): ItemType => {
@@ -99,7 +136,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
       onClick: () => {
         const id = parseInt(node.id)
         const parentId = node.parentId !== undefined ? parseInt(node.parentId) : undefined
-        deleteElement(id, node.label, parentId, onFinish)
+        deleteElement(id, node.label, parentId, onFinish, node.type === 'folder')
       }
     }
   }

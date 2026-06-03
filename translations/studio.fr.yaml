@@ -1153,6 +1153,12 @@ element.delete: Supprimer
 element.delete.confirmation.title: Supprimer l'élément
 element.delete.confirmation.text: Voulez-vous vraiment supprimer cet élément ?
 element.delete.confirmation.ok: Supprimer définitivement
+element.delete.folder.title: Supprimer le dossier
+element.delete.folder.question: Voulez-vous vraiment supprimer ce dossier ?
+element.delete.folder.small.note: 'Remarque : Les dépendances seront supprimées. Il se peut que vous ne puissiez pas annuler entièrement cette opération.'
+element.delete.folder.large.note: 'Remarque : Le dossier et son contenu seront définitivement supprimés et ne pourront pas être restaurés.'
+element.delete.folder.ok: Supprimer
+element.delete.folder.ok.permanent: Supprimer définitivement
 element.open: Ouvrir
 element.toolbar.copy-id: Copier l'ID
 element.toolbar.copy-full-path-to-clipboard: Copier le chemin complet
