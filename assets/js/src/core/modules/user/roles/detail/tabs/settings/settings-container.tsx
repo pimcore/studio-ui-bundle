@@ -37,7 +37,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
         name: role?.name,
         classes: role?.classes ?? [],
         docTypes: role?.docTypes,
-        perspectives: role?.perspectives ?? [],
+        perspectives: Array.isArray(role?.perspectives) ? role.perspectives.map((p) => p.id) : [],
         permissionsDefault: Array.isArray(role?.permissions) ? role.permissions.filter((permission) => permissions.default.some((defaultPermission) => defaultPermission.key === permission)) : [],
         permissionsBundles: Array.isArray(role?.permissions) ? role.permissions.filter((permission) => permissions.bundles.some((defaultPermission) => defaultPermission.key === permission)) : []
       })
