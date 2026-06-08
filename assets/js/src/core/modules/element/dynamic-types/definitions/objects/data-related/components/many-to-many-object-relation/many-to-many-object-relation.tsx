@@ -102,10 +102,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     cachedGridFullData.length > 0 && setCachedGridFullData([])
   }
 
-  const {
-    isLoading: isAvailableGridColumnsLoading,
-    data: availableGridColumnsData
-  } = useDataObjectGetAvailableGridColumnsForRelationQuery({
+  const { isLoading: isAvailableGridColumnsLoading, data: availableGridColumnsData } = useDataObjectGetAvailableGridColumnsForRelationQuery({
     classId,
     relationField
   }, { skip: isUndefined(classId) || isUndefined(relationField) })
