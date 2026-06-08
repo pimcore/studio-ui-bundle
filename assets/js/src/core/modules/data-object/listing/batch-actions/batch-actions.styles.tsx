@@ -18,6 +18,7 @@ export const useStyles = createStyles(({ token }) => ({
     maxHeight: 200,
     overflowY: 'auto',
     marginTop: token.marginXS,
-    paddingLeft: token.padding
+    paddingLeft: 0,
+    listStyle: 'none'
   }
 }))
