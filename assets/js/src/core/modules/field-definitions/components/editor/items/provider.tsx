@@ -57,7 +57,7 @@ export const ItemsProvider = (props: ItemsProviderProps): React.JSX.Element => {
     saveCallbackRef.current = cb
   }, [])
 
-  const closeActiveConfiguration = (): void => {
+const closeActiveConfiguration = (): void => {
     if (activeConfiguration === undefined) {
       return
     }
@@ -81,7 +81,7 @@ export const ItemsProvider = (props: ItemsProviderProps): React.JSX.Element => {
       modal.confirm({
         type: 'warning',
         title: t('unsaved-changes.title'),
-        content: t('field-definitions.unsaved-changes.message'),
+        content: t('unsaved-changes.message'),
         okText: t('save'),
         cancelText: t('discard-changes'),
         onOk: async () => {

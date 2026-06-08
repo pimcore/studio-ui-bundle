@@ -36,7 +36,7 @@ export const CustomLayoutModal = (): React.JSX.Element => {
       modal.confirm({
         type: 'warning',
         title: t('unsaved-changes.title'),
-        content: t('field-definitions.unsaved-changes.message'),
+        content: t('unsaved-changes.message'),
         okText: t('save'),
         cancelText: t('discard-changes'),
         onOk: async () => {

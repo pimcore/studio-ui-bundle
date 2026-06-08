@@ -24,6 +24,115 @@ import { useTranslation } from 'react-i18next'
 
 const NAME_FORMAT_REGEX = /^[A-Za-z][A-Za-z0-9_]*$/
 
+interface Violation { id: string, label: string }
+
+interface ValidationResult {
+  invalidDefinitions: string[]
+  emptyNameViolations: Violation[]
+  reservedWordViolations: Violation[]
+  formatViolations: Violation[]
+  duplicateViolations: Violation[]
+}
+
+function validateFieldDefinitions (
+  fieldDefinitions: ReturnType<ReturnType<typeof useSettings>['useLayout']>['fieldDefinitions'],
+  structure: ReturnType<ReturnType<typeof useSettings>['useLayout']>['structure'],
+  fieldDefinitionRegistry: ReturnType<typeof useSettings>['fieldDefinitionRegistry'],
+  area: ReturnType<typeof useArea>['area']
+): ValidationResult {
+  const invalidDefinitions: string[] = []
+  const emptyNameViolations: Violation[] = []
+  const reservedWordViolations: Violation[] = []
+  const formatViolations: Violation[] = []
+  const duplicateViolations: Violation[] = []
+
+  const pathMap = structure !== undefined ? buildPathMap(structure) : {}
+
+  const addInvalid = (key: string): void => {
+    if (!invalidDefinitions.includes(key)) invalidDefinitions.push(key)
+  }
+
+  for (const [key, definition] of Object.entries(fieldDefinitions)) {
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+    if (structure !== undefined && key === structure.id) continue
+
+    if (fieldDefinitionRegistry.hasDynamicType(definition.fieldtype)) {
+      const dynamicType = fieldDefinitionRegistry.getDynamicType(definition.fieldtype)
+      if (!dynamicType.isValid(definition, { area, fieldDefinitions, path: [] })) {
+        invalidDefinitions.push(key)
+      }
+    }
+
+    const name: string = typeof definition.name === 'string' ? definition.name : ''
+
+    if (name.trim() === '') {
+      emptyNameViolations.push({ id: key, label: definition.fieldtype })
+      addInvalid(key)
+      continue
+    }
+
+    if (definition.datatype === 'data' && definition.fieldtype !== 'localizedfields') {
+      if (isReservedWord(name)) {
+        reservedWordViolations.push({ id: key, label: name })
+        addInvalid(key)
+      }
+
+      if (!NAME_FORMAT_REGEX.test(name)) {
+        formatViolations.push({ id: key, label: name })
+        addInvalid(key)
+      }
+
+      if (structure !== undefined) {
+        const namesInNamespace = getNamesInNamespace(structure, fieldDefinitions, key, pathMap)
+        if (namesInNamespace.filter(n => n === name).length > 1) {
+          duplicateViolations.push({ id: key, label: name })
+          addInvalid(key)
+        }
+      }
+    }
+  }
+
+  return { invalidDefinitions, emptyNameViolations, reservedWordViolations, formatViolations, duplicateViolations }
+}
+
+interface ViolationContentProps {
+  emptyNameViolations: Violation[]
+  reservedWordViolations: Violation[]
+  formatViolations: Violation[]
+  duplicateViolations: Violation[]
+  t: (key: string) => string
+}
+
+const ViolationContent = ({ emptyNameViolations, reservedWordViolations, formatViolations, duplicateViolations, t }: ViolationContentProps): React.JSX.Element => (
+  <div style={ { display: 'flex', flexDirection: 'column', gap: 8 } }>
+    <span>{t('field-definitions.validation.errors-found')}</span>
+    {emptyNameViolations.length > 0 && (
+      <div>
+        <strong>{t('field-definitions.validation.empty-name')}</strong>
+        <ul>{emptyNameViolations.map(v => <li key={ v.id }>{v.label}</li>)}</ul>
+      </div>
+    )}
+    {reservedWordViolations.length > 0 && (
+      <div>
+        <strong>{t('field-definitions.validation.reserved-word')}</strong>
+        <ul>{reservedWordViolations.map(v => <li key={ v.id }>{v.label}</li>)}</ul>
+      </div>
+    )}
+    {formatViolations.length > 0 && (
+      <div>
+        <strong>{t('field-definitions.validation.invalid-format')}</strong>
+        <ul>{formatViolations.map(v => <li key={ v.id }>{v.label}</li>)}</ul>
+      </div>
+    )}
+    {duplicateViolations.length > 0 && (
+      <div>
+        <strong>{t('field-definitions.validation.duplicate-name')}</strong>
+        <ul>{duplicateViolations.map(v => <li key={ v.id }>{v.label}</li>)}</ul>
+      </div>
+    )}
+  </div>
+)
+
 export const DetailSave = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { useDetailUpdateMutation, useLayout } = useSettings()
@@ -43,56 +152,8 @@ export const DetailSave = (): React.JSX.Element => {
       return
     }
 
-    const invalidDefinitions: string[] = []
-
-    interface Violation { id: string, label: string }
-    const emptyNameViolations: Violation[] = []
-    const reservedWordViolations: Violation[] = []
-    const formatViolations: Violation[] = []
-    const duplicateViolations: Violation[] = []
-
-    const pathMap = structure !== undefined ? buildPathMap(structure) : {}
-
-    for (const [key, definition] of Object.entries(fieldDefinitions)) {
-      // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-      if (structure !== undefined && key === structure.id) continue
-      if (fieldDefinitionRegistry.hasDynamicType(definition.fieldtype)) {
-        const dynamicType = fieldDefinitionRegistry.getDynamicType(definition.fieldtype)
-        const isValid = dynamicType.isValid(definition, { area, fieldDefinitions, path: [] })
-
-        if (!isValid) {
-          invalidDefinitions.push(key)
-        }
-      }
-
-      const name: string = typeof definition.name === 'string' ? definition.name : ''
-
-      if (name.trim() === '') {
-        emptyNameViolations.push({ id: key, label: definition.fieldtype })
-        if (!invalidDefinitions.includes(key)) invalidDefinitions.push(key)
-      }
-
-      if (definition.datatype === 'data' && definition.fieldtype !== 'localizedfields') {
-        if (isReservedWord(name)) {
-          reservedWordViolations.push({ id: key, label: name })
-          if (!invalidDefinitions.includes(key)) invalidDefinitions.push(key)
-        }
-
-        if (!NAME_FORMAT_REGEX.test(name)) {
-          formatViolations.push({ id: key, label: name })
-          if (!invalidDefinitions.includes(key)) invalidDefinitions.push(key)
-        }
-
-        if (structure !== undefined) {
-          const namesInNamespace = getNamesInNamespace(structure, fieldDefinitions, key, pathMap)
-          const occurrences = namesInNamespace.filter(n => n === name).length
-          if (occurrences > 1) {
-            duplicateViolations.push({ id: key, label: name })
-            if (!invalidDefinitions.includes(key)) invalidDefinitions.push(key)
-          }
-        }
-      }
-    }
+    const { invalidDefinitions, emptyNameViolations, reservedWordViolations, formatViolations, duplicateViolations } =
+      validateFieldDefinitions(fieldDefinitions, structure, fieldDefinitionRegistry, area)
 
     setInvalidFieldDefinitionIds(invalidDefinitions)
 
@@ -104,42 +165,23 @@ export const DetailSave = (): React.JSX.Element => {
       invalidDefinitions.length > 0
 
     if (hasViolations) {
-      const content = (
-        <div style={ { display: 'flex', flexDirection: 'column', gap: 8 } }>
-          <span>{t('field-definitions.validation.errors-found')}</span>
-          {emptyNameViolations.length > 0 && (
-            <div>
-              <strong>{t('field-definitions.validation.empty-name')}</strong>
-              <ul>{emptyNameViolations.map(v => <li key={ v.id }>{v.label}</li>)}</ul>
-            </div>
-          )}
-          {reservedWordViolations.length > 0 && (
-            <div>
-              <strong>{t('field-definitions.validation.reserved-word')}</strong>
-              <ul>{reservedWordViolations.map(v => <li key={ v.id }>{v.label}</li>)}</ul>
-            </div>
-          )}
-          {formatViolations.length > 0 && (
-            <div>
-              <strong>{t('field-definitions.validation.invalid-format')}</strong>
-              <ul>{formatViolations.map(v => <li key={ v.id }>{v.label}</li>)}</ul>
-            </div>
-          )}
-          {duplicateViolations.length > 0 && (
-            <div>
-              <strong>{t('field-definitions.validation.duplicate-name')}</strong>
-              <ul>{duplicateViolations.map(v => <li key={ v.id }>{v.label}</li>)}</ul>
-            </div>
-          )}
-        </div>
-      )
-
-      alertModal.error({ content })
+      alertModal.error({
+        content: (
+          <ViolationContent
+            duplicateViolations={ duplicateViolations }
+            emptyNameViolations={ emptyNameViolations }
+            formatViolations={ formatViolations }
+            reservedWordViolations={ reservedWordViolations }
+            t={ t }
+          />
+        )
+      })
       throw new Error('Validation failed')
     }
 
     await updateDetailMutation({}).unwrap()
     setIsModified(false)
+    unsavedChanges?.setIsModified(false)
     void messageApi.success(t('field-definitions.saved-successfully'))
   }, [generalSettings, fieldDefinitions, structure, fieldDefinitionRegistry, area, setInvalidFieldDefinitionIds, updateDetailMutation, setIsModified, messageApi, t, alertModal])
 
