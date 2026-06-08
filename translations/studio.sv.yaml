@@ -1153,6 +1153,17 @@ element.delete: Ta bort
 element.delete.confirmation.title: Ta bort objekt
 element.delete.confirmation.text: Vill du verkligen ta bort det här objektet?
 element.delete.confirmation.ok: Ta bort permanent
+element.delete.folder.title: Ta bort mapp
+element.delete.folder.question: Vill du verkligen ta bort den här mappen?
+element.delete.folder.small.note: 'Observera: Beroendena kommer att tas bort. Det kanske inte går att ångra åtgärden helt.'
+element.delete.folder.large.note: 'Observera: Mappen och dess innehåll kommer att tas bort permanent och kan inte återställas.'
+element.delete.folder.ok: Ta bort
+element.delete.folder.ok.permanent: Ta bort permanent
+element.delete.batch.title: Ta bort element
+element.delete.batch.note: 'Obs: Dessa element kommer att tas bort permanent och kan inte återställas.'
+element.delete.batch.question: 'Vill du verkligen ta bort {{count}} element?'
+element.delete.batch.ok: Ta bort permanent
+element.delete.batch.show-paths: 'Visa alla {{count}} element'
 element.open: Öppna
 element.toolbar.copy-id: Kopiera ID
 element.toolbar.copy-full-path-to-clipboard: Kopiera fullständig sökväg
@@ -2709,3 +2720,4 @@ translations.merger.revert-all: Återställ alla
 translations.merger.title: "Sammanfoga översättningar (Domän: {{domain}})"
 translations.merger.column.language: Språk
 translations.merger.items: objekt
+select.clear-selection: Rensa val

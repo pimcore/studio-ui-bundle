@@ -25,6 +25,7 @@ Each example covers a specific feature or integration pattern:
 - [Add a Custom Object Layout Type](./16_Custom_Object_Layout_Type.md)
 - [Customize Tree Icons and Tooltips](./17_Custom_Tree_Icons_and_Tooltips.md)
 - [Add a Custom Grid Column](./18_Custom_Grid_Column.md)
+- [Extend the Workflow Transition Modal](./19_Extend_Workflow_Transition_Modal.md)
 
 All examples are part of the
 [Pimcore Studio Example Bundle](https://github.com/pimcore/studio-example-bundle/) on GitHub.

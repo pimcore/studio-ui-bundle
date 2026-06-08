@@ -1153,6 +1153,17 @@ element.delete: Slett
 element.delete.confirmation.title: Slett element
 element.delete.confirmation.text: Vil du virkelig slette dette elementet?
 element.delete.confirmation.ok: Slett permanent
+element.delete.folder.title: Slett mappe
+element.delete.folder.question: Vil du virkelig slette denne mappen?
+element.delete.folder.small.note: 'Merk: Avhengighetene vil bli slettet. Du kan kanskje ikke angre denne operasjonen fullstendig.'
+element.delete.folder.large.note: 'Merk: Mappen og dens innhold vil bli permanent slettet og kan ikke gjenopprettes.'
+element.delete.folder.ok: Slett
+element.delete.folder.ok.permanent: Slett permanent
+element.delete.batch.title: Slett elementer
+element.delete.batch.note: 'Merk: Disse elementene vil bli slettet permanent og kan ikke gjenopprettes.'
+element.delete.batch.question: 'Vil du virkelig slette {{count}} elementer?'
+element.delete.batch.ok: Slett permanent
+element.delete.batch.show-paths: 'Vis alle {{count}} elementer'
 element.open: Åpne
 element.toolbar.copy-id: Kopier ID
 element.toolbar.copy-full-path-to-clipboard: Kopier full sti
@@ -2709,3 +2720,4 @@ translations.merger.revert-all: Tilbakestill alle
 translations.merger.title: "Slå sammen oversettelser (Domene: {{domain}})"
 translations.merger.column.language: Språk
 translations.merger.items: elementer
+select.clear-selection: Fjern valg

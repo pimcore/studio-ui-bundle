@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
+import { IconSelector } from '@Pimcore/components/icon-selector/icon-selector'
 import { Switch } from '@Pimcore/components/switch/switch'
 
 export const GeneralSettings = (): React.JSX.Element => {
@@ -32,14 +33,24 @@ export const GeneralSettings = (): React.JSX.Element => {
     <FormKit.Panel title={ t('reports.editor.general-settings.title') }>
       {renderInputItem({ label: t('reports.editor.general-settings.name-label'), name: 'name', disabled: true })}
       {renderInputItem({ label: t('reports.editor.general-settings.display-name-label'), name: 'niceName' })}
-      {renderInputItem({ label: t('reports.editor.general-settings.icon-class-label'), name: 'iconClass' })}
+      <Form.Item
+        label={ t('reports.editor.general-settings.icon-class-label') }
+        name="iconClass"
+      >
+        <IconSelector />
+      </Form.Item>
       {renderInputItem({
         label: t('reports.editor.general-settings.group-label'),
         name: 'group',
         tooltip: t('reports.editor.general-settings.group-tooltip')
       })}
       {renderInputItem({ label: t('reports.editor.general-settings.report-class-label'), name: 'reportClass' })}
-      {renderInputItem({ label: t('reports.editor.general-settings.group-icon-class-label'), name: 'groupIconClass' })}
+      <Form.Item
+        label={ t('reports.editor.general-settings.group-icon-class-label') }
+        name="groupIconClass"
+      >
+        <IconSelector />
+      </Form.Item>
       <Form.Item name="menuShortcut">
         <Switch labelRight={ t('reports.editor.general-settings.shortcut-menu-label') } />
       </Form.Item>

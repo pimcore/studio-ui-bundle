@@ -10,7 +10,7 @@ Plugins provide additional tools, widgets, or settings that enhance the user exp
 
 ## Getting started
 
-Create your Pimcore Studio Plugin either in a [Pimcore Bundle](https://pimcore.com/docs/platform/Pimcore/Extending_Pimcore/Bundle_Developers_Guide/)
+Create your Pimcore Studio Plugin either in a [Pimcore Bundle](https://docs.pimcore.com/platform/Pimcore/Extending_Pimcore/Pimcore_Bundle_Developers_Guide/)
 (the way to go when your Studio Plugin should be reused in multiple Pimcore installations), or directly in your Pimcore App
 without creating a Pimcore Bundle.
 

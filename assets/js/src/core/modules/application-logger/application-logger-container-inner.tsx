@@ -40,7 +40,7 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
   const { columnFilters, setIsLoading: setFilterLoading } = useFilter()
 
   const sortKeyMap: Record<string, string> = {
-    date: 'date',
+    date: 'timestamp',
     message: 'message',
     translatedPriority: 'priority',
     fileObject: 'fileobject',

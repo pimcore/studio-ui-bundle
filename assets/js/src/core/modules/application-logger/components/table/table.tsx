@@ -85,7 +85,7 @@ export const Table = ({ items, isLoading, sorting, onSortingChange }: TableProps
       enableSorting: true,
       cell: ({ row }): React.JSX.Element => {
         const column = row.original
-        const fileObjectBasePath = '/admin/bundle/applicationlogger/log/show-file-object?filePath='
+        const fileObjectBasePath = '/pimcore-studio/api/bundle/application-logger/file-object?filePath='
 
         if (isNil(column.fileObject)) {
           return <></>

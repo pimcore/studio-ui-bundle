@@ -49,7 +49,7 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
         options={ options }
         showSearch
         style={ { maxWidth: toCssDimension(props.width, props.defaultFieldWidth.medium) } }
-        value={ props.value }
+        value={ this.normalizeValue(props.value) }
       />
     )
   }
@@ -71,9 +71,19 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
       const translatedKey = i18n.t(option.key)
       return {
         ...renderSelectOptionLabel(translatedKey),
-        value: option.value
+        // Stored values come back as strings and antd matches options by strict comparison,
+        // so coerce numeric provider values to string too (#3322).
+        value: String(option.value)
       }
     })
+  }
+
+  // Normalize the selected value(s) to string to match the string-coerced options (#3322).
+  normalizeValue (value: unknown): string | string[] | null | undefined {
+    if (isNil(value)) {
+      return value
+    }
+    return Array.isArray(value) ? value.map(String) : String(value)
   }
 
   getGridCellColumnMeta (props: GetGridCellDefinitionProps): GridCellColumnMeta {

@@ -45,6 +45,11 @@ const GeneralAccordion = (): React.JSX.Element => {
     }
   }, [id])
 
+  const sortByLabel = (values: any[]): any[] => {
+    const labelMap = new Map(perspectiveOptions.map((o) => [o.value, o.label ?? '']))
+    return [...values].sort((a, b) => (labelMap.get(a) ?? '').localeCompare(labelMap.get(b) ?? ''))
+  }
+
   const content = [
     {
       key: '1',
@@ -54,6 +59,7 @@ const GeneralAccordion = (): React.JSX.Element => {
         <Form.Item
           label={ t('user-management.perspectives') }
           name="perspectives"
+          normalize={ sortByLabel }
         >
           <Select
             mode="multiple"

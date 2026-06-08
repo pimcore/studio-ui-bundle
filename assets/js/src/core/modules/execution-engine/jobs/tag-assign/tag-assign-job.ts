@@ -14,6 +14,7 @@ import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-h
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { MessageBusJobHandler } from '../../message-handlers/message-bus-job/message-bus-job-handler'
+import { BatchedStepProgressCalculator } from '../../message-handlers/message-bus-job/progress-calculator/batched-step-progress-calculator'
 import { api, type TagBatchOperationToElementsByTypeAndIdApiArg } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
 import { t } from 'i18next'
 import { type RehydratableJob, type JobRunList } from '../../services/job-rehydration-registry'
@@ -99,7 +100,8 @@ export class TagAssignJob implements JobInterface {
   }): MessageBusJobHandler {
     return new MessageBusJobHandler({
       jobRunId: options.jobRunId,
-      title: t(titleKeyByOperation[options.operation])
+      title: t(titleKeyByOperation[options.operation]),
+      progressCalculator: new BatchedStepProgressCalculator()
     })
   }
 }
