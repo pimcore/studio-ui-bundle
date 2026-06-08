@@ -13,6 +13,8 @@ import React, { useState } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { useStyles } from './batch-actions.styles'
 import { useRowSelectionOptional } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection-optional'
 import { BatchEditProvider } from './batch-edit-modal/batch-edit-provider'
 import { BatchEditModal } from './batch-edit-modal/batch-edit-modal'
@@ -37,6 +39,8 @@ export const BatchActions = (): React.JSX.Element => {
   const [xlsxModalOpen, setXlsxModalOpen] = useState<boolean>(false)
 
   const { t } = useTranslation()
+  const modal = useFormModal()
+  const { styles } = useStyles()
 
   if (rowSelection === undefined) {
     return <></>
@@ -57,6 +61,20 @@ export const BatchActions = (): React.JSX.Element => {
     })
 
     await executionEngine.runJob(job)
+  }
+
+  const handleBatchDeleteConfirm = (): void => {
+    const count = numberedSelectedRows.length
+    modal.confirm({
+      title: t('element.delete.batch.title'),
+      content: <>
+        <p><span className={ styles.warningText }>{t('element.delete.batch.note')}</span></p>
+        <p>{t('element.delete.batch.question', { count })}</p>
+      </>,
+      cancelText: t('cancel'),
+      okText: t('element.delete.batch.ok'),
+      onOk: async () => { await handleBatchDelete() }
+    })
   }
 
   const menu: DropdownMenuProps = {
@@ -97,7 +115,7 @@ export const BatchActions = (): React.JSX.Element => {
         hidden: !hasSelectedItems,
         label: t('listing.actions.delete'),
         icon: <Icon value={ 'trash' } />,
-        onClick: handleBatchDelete
+        onClick: handleBatchDeleteConfirm
       }
     ]
   }
