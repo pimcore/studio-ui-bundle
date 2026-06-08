@@ -34,7 +34,6 @@ export interface SelectProps extends AntdSelectProps {
   minWidth?: number | keyof typeof sizeOptions
   theme?: SelectTheme
   loadingSkeleton?: boolean
-  showClearOption?: boolean
 }
 
 export const Select = forwardRef<RefSelectProps, SelectProps>(({
@@ -50,7 +49,6 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   minWidth,
   theme = 'default',
   loadingSkeleton = false,
-  showClearOption = true,
   dataTestId,
   ...antdSelectProps
 }, ref): React.JSX.Element => {
@@ -176,7 +174,8 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
     ...antdSelectProps.style
   }
 
-  const shouldShowClearOption = showClearOption && !isEmptyValue(value)
+  const isClearable = allowClear !== undefined && allowClear !== false
+  const shouldShowClearOption = isClearable && !isEmptyValue(value)
 
   const handleClearSelection = (): void => {
     const clearedValue = mode === 'multiple' ? [] as string[] : undefined
@@ -212,7 +211,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
     />
     )}
       <AntdSelect
-        allowClear={ showClearOption ? false : allowClear }
+        allowClear={ false }
         className={ selectClassNames }
         dropdownRender={ dropdownRender }
         menuItemSelectedIcon={ getItemSelectedIcon() }
