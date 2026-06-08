@@ -19,4 +19,9 @@ export class DynamicTypeObjectDataMultiSelect extends DynamicTypeObjectDataAbstr
   id: string = 'multiselect'
 
   dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/Multiselect'])
+
+  // Dynamic options depend on the individual object, so they can't be batch-assigned.
+  isAllowedInBatchEditForField (fieldDefinition?: Record<string, any>): boolean {
+    return super.isAllowedInBatchEditForField(fieldDefinition) && fieldDefinition?.dynamicOptions !== true
+  }
 }

@@ -13,12 +13,22 @@ import { Select } from '@Pimcore/components/select/select'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { type DefaultOptionType } from 'antd/es/select'
 import { renderSelectOptionLabel } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/utils/select-options'
+import { DynamicTypeFieldFilterTextComponent } from './dynamic-type-field-filter-text-component'
 
 export type MultiselectValue = string[]
 
 export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element => {
   const { setData, data, config } = useDynamicFilter()
   const [value, setValue] = useState<string[]>(data as MultiselectValue)
+
+  useEffect(() => {
+    setValue(data as MultiselectValue)
+  }, [data])
+
+  // Dynamic options differ per object, so there's no fixed list to offer: use a free-text filter.
+  if (config?.fieldDefinition?.dynamicOptions === true) {
+    return <DynamicTypeFieldFilterTextComponent />
+  }
 
   let formattedOptions: DefaultOptionType[] = []
   const options = config?.fieldDefinition?.options ?? config?.definition?.options
@@ -29,10 +39,6 @@ export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element 
       value: opt?.value
     }))
   }
-
-  useEffect(() => {
-    setValue(data as MultiselectValue)
-  }, [data])
 
   const handleChange = (value: MultiselectValue): void => {
     setValue(value)

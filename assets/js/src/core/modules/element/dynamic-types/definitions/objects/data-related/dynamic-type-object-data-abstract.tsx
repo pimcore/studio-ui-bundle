@@ -89,6 +89,12 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
   supportsBatchAppendModes: boolean = false
   isAllowedInBatchEdit: boolean = true
 
+  // Batch-edit eligibility for a concrete field definition. Defaults to isAllowedInBatchEdit;
+  // overridden where it depends on the field config (e.g. select with a dynamic options provider).
+  isAllowedInBatchEditForField (_fieldDefinition?: Record<string, any>): boolean {
+    return this.isAllowedInBatchEdit
+  }
+
   gridCellEditMode: EditMode = 'default'
   gridCellEditModalSettings: EditModalSettings = {
     modalSize: 'M',
