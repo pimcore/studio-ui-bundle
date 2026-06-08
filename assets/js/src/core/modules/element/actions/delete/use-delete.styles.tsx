@@ -12,6 +12,6 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ token }) => ({
   warningText: {
-    color: token.colorWarningText
+    color: token.Colors.Brand.Warning.colorWarningText
   }
 }))
