@@ -34,12 +34,12 @@ interface ValidationResult {
   duplicateViolations: Violation[]
 }
 
-function validateFieldDefinitions (
+const validateFieldDefinitions = (
   fieldDefinitions: ReturnType<ReturnType<typeof useSettings>['useLayout']>['fieldDefinitions'],
   structure: ReturnType<ReturnType<typeof useSettings>['useLayout']>['structure'],
   fieldDefinitionRegistry: ReturnType<typeof useSettings>['fieldDefinitionRegistry'],
   area: ReturnType<typeof useArea>['area']
-): ValidationResult {
+): ValidationResult => {
   const invalidDefinitions: string[] = []
   const emptyNameViolations: Violation[] = []
   const reservedWordViolations: Violation[] = []
@@ -183,7 +183,7 @@ export const DetailSave = (): React.JSX.Element => {
     setIsModified(false)
     unsavedChanges?.setIsModified(false)
     void messageApi.success(t('field-definitions.saved-successfully'))
-  }, [generalSettings, fieldDefinitions, structure, fieldDefinitionRegistry, area, setInvalidFieldDefinitionIds, updateDetailMutation, setIsModified, messageApi, t, alertModal])
+  }, [generalSettings, fieldDefinitions, structure, fieldDefinitionRegistry, area, setInvalidFieldDefinitionIds, updateDetailMutation, setIsModified, unsavedChanges, messageApi, t, alertModal])
 
   useEffect(() => {
     registerSaveCallback(performSave)

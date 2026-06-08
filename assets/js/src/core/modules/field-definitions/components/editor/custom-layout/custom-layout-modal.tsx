@@ -11,8 +11,9 @@
 import { create } from '@Pimcore/components/modal/factory/modal-factory'
 import { useUnsavedChanges } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/unsaved-changes-provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
-import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
+import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { Modal, useFormModal } from '@sdk/components'
+import { ApiError, trackError } from '@sdk/modules/app'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -28,7 +29,6 @@ export const CustomLayoutModal = (): React.JSX.Element => {
   const settings = useSettings()
   const { open, closeModal } = useCustomLayoutModal()
   const { isModified, setIsModified, saveFnRef } = useUnsavedChanges()
-  const { setIsModified: setItemsIsModified } = useItems()
   const modal = useFormModal()
 
   const handleClose = (): void => {
@@ -41,7 +41,14 @@ export const CustomLayoutModal = (): React.JSX.Element => {
         cancelText: t('discard-changes'),
         onOk: async () => {
           if (saveFnRef.current !== null) {
-            await saveFnRef.current()
+            try {
+              await saveFnRef.current()
+            } catch (e) {
+              if ((e as Error).message !== 'Validation failed') {
+                trackError(new ApiError(e as FetchBaseQueryError))
+              }
+              return
+            }
           }
 
           setIsModified(false)
@@ -49,7 +56,6 @@ export const CustomLayoutModal = (): React.JSX.Element => {
         },
         onCancel: () => {
           setIsModified(false)
-          setItemsIsModified(false)
           closeModal()
         }
       })

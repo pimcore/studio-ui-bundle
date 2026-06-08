@@ -163,13 +163,15 @@ export const create = (): LayoutProviderFactoryReturn => {
     const structureRef = React.useRef(structure)
     const fieldDefinitionsRef = React.useRef(fieldDefinitions)
     const areaRef = React.useRef(area)
+    const onModifiedRef = React.useRef(props.onModified)
     const isInitializedRef = useRef(false)
 
     React.useEffect(() => {
       structureRef.current = structure
       fieldDefinitionsRef.current = fieldDefinitions
       areaRef.current = area
-    }, [structure, fieldDefinitions, area])
+      onModifiedRef.current = props.onModified
+    }, [structure, fieldDefinitions, area, props.onModified])
 
     useEffect(() => {
       if (props.layout === undefined) {
@@ -203,7 +205,7 @@ export const create = (): LayoutProviderFactoryReturn => {
     }, [props.layout])
 
     const updateFieldDefinition = useCallback((structureNodeId: StructureNode['id'], updatedFieldDefinition: FieldDefinition, overwriteValues: boolean = false): void => {
-      props.onModified?.()
+      onModifiedRef.current?.()
       setFieldDefinitions((prevDefs) => ({
         ...prevDefs,
         [structureNodeId]: {
@@ -213,7 +215,7 @@ export const create = (): LayoutProviderFactoryReturn => {
     }, [])
 
     const addFieldDefinition = useCallback((structureNodeId: StructureNode['id'], newFieldDefinition: FieldDefinition): StructureNode['id'] => {
-      props.onModified?.()
+      onModifiedRef.current?.()
       const newId = uuid()
 
       const addNodeRecursively = (node: StructureNode): StructureNode => {
@@ -240,7 +242,7 @@ export const create = (): LayoutProviderFactoryReturn => {
     }, [])
 
     const removeFieldDefinition = useCallback((structureNodeId: StructureNode['id']): void => {
-      props.onModified?.()
+      onModifiedRef.current?.()
       const removeNodeRecursively = (node: StructureNode): StructureNode | undefined => {
         if (node.id === structureNodeId) {
           return undefined
@@ -273,7 +275,7 @@ export const create = (): LayoutProviderFactoryReturn => {
     }, [])
 
     const removeChildren = useCallback((structureNodeId: StructureNode['id']): void => {
-      props.onModified?.()
+      onModifiedRef.current?.()
       const removeChildrenRecursively = (node: StructureNode): StructureNode => {
         if (node.id === structureNodeId) {
           return {
@@ -314,7 +316,7 @@ export const create = (): LayoutProviderFactoryReturn => {
     }, [])
 
     const cloneFieldDefinition = useCallback((structureNodeId: StructureNode['id']): StructureNode['id'] => {
-      props.onModified?.()
+      onModifiedRef.current?.()
       const insertClonedNodeAsSibling = (node: StructureNode, targetId: string, clonedNode: StructureNode): StructureNode => {
         const childIndex = node.children.findIndex(child => child.id === targetId)
 
@@ -390,7 +392,7 @@ export const create = (): LayoutProviderFactoryReturn => {
     }, [])
 
     const moveFieldDefinition = useCallback((structureNodeId: StructureNode['id'], newParentId: StructureNode['id'], newIndex: number): void => {
-      props.onModified?.()
+      onModifiedRef.current?.()
       const findAndRemoveNode = (node: StructureNode, targetId: string): { updatedNode: StructureNode | null, removedNode: StructureNode | null } => {
         if (node.id === targetId) {
           return { updatedNode: null, removedNode: node }
@@ -464,7 +466,7 @@ export const create = (): LayoutProviderFactoryReturn => {
     }, [])
 
     const pasteFieldDefinition = useCallback((path: string[]): void => {
-      props.onModified?.()
+      onModifiedRef.current?.()
       setCopiedPath((currentCopiedPath) => {
         if (currentCopiedPath === undefined) {
           return currentCopiedPath
@@ -715,7 +717,7 @@ export const create = (): LayoutProviderFactoryReturn => {
     }, [fieldDefinitionRegistry])
 
     const addExternalFieldDefinition: ILayoutContext['addExternalFieldDefinition'] = useCallback((structureNodeId, layout, insertIndex) => {
-      props.onModified?.()
+      onModifiedRef.current?.()
       const { structure: externalStructure, fieldDefinitions: externalFieldDefinitions } = reduce({ layout })!
 
       const addNodeRecursively = (node: StructureNode): StructureNode => {
