@@ -127,7 +127,7 @@ save-and-continue: Salva e continua
 discard-and-continue: Scarta e continua
 discard-changes: Scarta modifiche
 unsaved-changes.title: Modifiche non salvate
-unsaved-changes.message: Sono presenti modifiche non salvate. Cosa desidera fare?
+unsaved-changes.message: Sono presenti modifiche non salvate. Se si continua senza salvare, queste modifiche andranno perse.
 unsaved-changes.close-message: Sono presenti modifiche non salvate. Chiudere senza salvare?
 convert-to: Converti in
 convert-document: Converti documento

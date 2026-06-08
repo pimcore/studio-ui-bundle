@@ -127,7 +127,7 @@ save-and-continue: Lagre og fortsett
 discard-and-continue: Forkast og fortsett
 discard-changes: Forkast endringer
 unsaved-changes.title: Ulagrede endringer
-unsaved-changes.message: Du har ulagrede endringer. Hva vil du gjøre?
+unsaved-changes.message: Du har ulagrede endringer. Hvis du fortsetter uten å lagre, vil disse endringene gå tapt.
 unsaved-changes.close-message: Du har ulagrede endringer. Er du sikker på at du vil lukke uten å lagre?
 convert-to: Konverter til
 convert-document: Konverter dokument
