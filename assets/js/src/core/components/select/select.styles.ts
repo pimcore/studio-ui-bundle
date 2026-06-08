@@ -9,7 +9,7 @@
  */
 
 /* eslint-disable max-lines */
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type SelectTheme } from './select'
 import { toCssDimension } from '@sdk/utils'
