@@ -25,6 +25,7 @@ import { DeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/element
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { theme } from 'antd'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ContextMenuActionName } from '..'
@@ -51,6 +52,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   const { refreshRecycleBin } = useRecycleBin()
   const { isMainWidgetOpen, closeWidget } = useWidgetManager()
   const { isTreeActionAllowed } = useTreePermission()
+  const { token } = theme.useToken()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { treeId } = useTreeId(true)
 
@@ -92,9 +94,9 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
             modal.confirm({
               title: t('element.delete.folder.title'),
               content: <>
-                <p>{t('element.delete.folder.small.note')}</p>
+                <p><span style={ { color: token.colorWarningText } }>{t('element.delete.folder.small.note')}</span></p>
                 <p>{t('element.delete.folder.question')}</p>
-                <b>{label}</b>
+                <b>/{label}</b>
               </>,
               okText: t('element.delete.folder.ok'),
               onOk: async () => { await runDeleteJob(id, parentId, onFinish) }
@@ -103,9 +105,9 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
             modal.confirm({
               title: t('element.delete.folder.title'),
               content: <>
-                <p>{t('element.delete.folder.large.note')}</p>
+                <p><span style={ { color: token.colorWarningText } }>{t('element.delete.folder.large.note')}</span></p>
                 <p>{t('element.delete.folder.question')}</p>
-                <b>{label}</b>
+                <b>/{label}</b>
               </>,
               okText: t('element.delete.folder.ok.permanent'),
 
