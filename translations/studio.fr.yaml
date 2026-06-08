@@ -1159,6 +1159,11 @@ element.delete.folder.small.note: 'Remarque : Les dépendances seront supprimée
 element.delete.folder.large.note: 'Remarque : Le dossier et son contenu seront définitivement supprimés et ne pourront pas être restaurés.'
 element.delete.folder.ok: Supprimer
 element.delete.folder.ok.permanent: Supprimer définitivement
+element.delete.batch.title: Supprimer des éléments
+element.delete.batch.note: 'Remarque : Ces éléments seront supprimés définitivement et ne pourront pas être restaurés.'
+element.delete.batch.question: 'Voulez-vous vraiment supprimer {{count}} éléments ?'
+element.delete.batch.ok: Supprimer définitivement
+element.delete.batch.show-paths: 'Afficher les {{count}} éléments'
 element.open: Ouvrir
 element.toolbar.copy-id: Copier l'ID
 element.toolbar.copy-full-path-to-clipboard: Copier le chemin complet
