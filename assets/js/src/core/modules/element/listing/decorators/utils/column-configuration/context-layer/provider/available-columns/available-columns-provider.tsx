@@ -155,6 +155,7 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
                 mainType: column.type,
                 frontendType: column.frontendType,
                 editable: column.editable,
+                config: column.config,
                 onClick: () => {
                   onMenuItemClick(column)
                 }
