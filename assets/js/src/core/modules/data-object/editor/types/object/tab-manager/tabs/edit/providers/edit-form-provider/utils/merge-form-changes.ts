@@ -33,9 +33,11 @@ export const mergeFormChanges = (
     const dynamicType = typeId !== undefined && objectDataRegistry.hasDynamicType(typeId)
       ? objectDataRegistry.getDynamicType(typeId)
       : undefined
-    merged[key] = isUndefined(dynamicType?.mergeChangedValues)
+    const mergedValue = isUndefined(dynamicType?.mergeChangedValues)
       ? incoming
       : dynamicType.mergeChangedValues(current[key], incoming)
+    // Cleared values are undefined; JSON.stringify drops them, so coerce to null.
+    merged[key] = isUndefined(mergedValue) ? null : mergedValue
   }
 
   return merged
