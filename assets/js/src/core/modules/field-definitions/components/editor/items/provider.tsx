@@ -57,7 +57,7 @@ export const ItemsProvider = (props: ItemsProviderProps): React.JSX.Element => {
     saveCallbackRef.current = cb
   }, [])
 
-const closeActiveConfiguration = (): void => {
+  const closeActiveConfiguration = (): void => {
     if (activeConfiguration === undefined) {
       return
     }
