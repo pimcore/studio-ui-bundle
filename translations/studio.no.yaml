@@ -1159,6 +1159,11 @@ element.delete.folder.small.note: 'Merk: Avhengighetene vil bli slettet. Du kan 
 element.delete.folder.large.note: 'Merk: Mappen og dens innhold vil bli permanent slettet og kan ikke gjenopprettes.'
 element.delete.folder.ok: Slett
 element.delete.folder.ok.permanent: Slett permanent
+element.delete.batch.title: Slett elementer
+element.delete.batch.note: 'Merk: Disse elementene vil bli slettet permanent og kan ikke gjenopprettes.'
+element.delete.batch.question: 'Vil du virkelig slette {{count}} elementer?'
+element.delete.batch.ok: Slett permanent
+element.delete.batch.show-paths: 'Vis alle {{count}} elementer'
 element.open: Åpne
 element.toolbar.copy-id: Kopier ID
 element.toolbar.copy-full-path-to-clipboard: Kopier full sti

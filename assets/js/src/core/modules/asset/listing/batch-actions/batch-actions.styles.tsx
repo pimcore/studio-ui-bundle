@@ -13,5 +13,12 @@ import { createStyles } from 'antd-style'
 export const useStyles = createStyles(({ token }) => ({
   warningText: {
     color: token.Colors.Brand.Warning.colorWarningText
+  },
+  pathList: {
+    maxHeight: 200,
+    overflowY: 'auto',
+    marginTop: token.marginXS,
+    paddingLeft: 0,
+    listStyle: 'none'
   }
 }))

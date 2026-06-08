@@ -1159,6 +1159,11 @@ element.delete.folder.small.note: 'Bitte beachten: Die Abhängigkeiten werden ge
 element.delete.folder.large.note: 'Bitte beachten: Der Ordner und seine Inhalte werden dauerhaft gelöscht und können nicht wiederhergestellt werden.'
 element.delete.folder.ok: Löschen
 element.delete.folder.ok.permanent: Endgültig löschen
+element.delete.batch.title: Elemente löschen
+element.delete.batch.note: 'Bitte beachten: Diese Elemente werden dauerhaft gelöscht und können nicht wiederhergestellt werden.'
+element.delete.batch.question: 'Möchten Sie wirklich {{count}} Elemente löschen?'
+element.delete.batch.ok: Endgültig löschen
+element.delete.batch.show-paths: 'Alle {{count}} Elemente anzeigen'
 element.open: Öffnen
 element.toolbar.copy-id: ID kopieren
 element.toolbar.copy-full-path-to-clipboard: Vollständigen Pfad kopieren
