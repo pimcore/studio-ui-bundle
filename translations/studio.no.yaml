@@ -1153,6 +1153,12 @@ element.delete: Slett
 element.delete.confirmation.title: Slett element
 element.delete.confirmation.text: Vil du virkelig slette dette elementet?
 element.delete.confirmation.ok: Slett permanent
+element.delete.folder.title: Slett mappe
+element.delete.folder.question: Vil du virkelig slette denne mappen?
+element.delete.folder.small.note: 'Merk: Avhengighetene vil bli slettet. Du kan kanskje ikke angre denne operasjonen fullstendig.'
+element.delete.folder.large.note: 'Merk: Mappen og dens innhold vil bli permanent slettet og kan ikke gjenopprettes.'
+element.delete.folder.ok: Slett
+element.delete.folder.ok.permanent: Slett permanent
 element.open: Åpne
 element.toolbar.copy-id: Kopier ID
 element.toolbar.copy-full-path-to-clipboard: Kopier full sti

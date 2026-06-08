@@ -1153,6 +1153,12 @@ element.delete: Löschen
 element.delete.confirmation.title: Element löschen
 element.delete.confirmation.text: Möchten Sie dieses Element wirklich löschen?
 element.delete.confirmation.ok: Endgültig löschen
+element.delete.folder.title: Ordner löschen
+element.delete.folder.question: Möchten Sie diesen Ordner wirklich löschen?
+element.delete.folder.small.note: 'Bitte beachten: Die Abhängigkeiten werden gelöscht. Dieser Vorgang kann möglicherweise nicht vollständig rückgängig gemacht werden.'
+element.delete.folder.large.note: 'Bitte beachten: Der Ordner und seine Inhalte werden dauerhaft gelöscht und können nicht wiederhergestellt werden.'
+element.delete.folder.ok: Löschen
+element.delete.folder.ok.permanent: Endgültig löschen
 element.open: Öffnen
 element.toolbar.copy-id: ID kopieren
 element.toolbar.copy-full-path-to-clipboard: Vollständigen Pfad kopieren

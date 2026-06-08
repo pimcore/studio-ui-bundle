@@ -1160,6 +1160,12 @@ element.delete: Delete
 element.delete.confirmation.title: Delete item
 element.delete.confirmation.text: Do you really want to delete this item?
 element.delete.confirmation.ok: Delete permanently
+element.delete.folder.title: Delete folder
+element.delete.folder.question: Do you really want to delete this folder?
+element.delete.folder.small.note: 'Please note: The dependencies will be deleted. You may not be able to fully undo this operation.'
+element.delete.folder.large.note: 'Please note: The folder and its children will be permanently deleted and can not be restored.'
+element.delete.folder.ok: Delete
+element.delete.folder.ok.permanent: Delete permanently
 element.open: Open
 element.toolbar.copy-id: Copy ID
 element.toolbar.copy-full-path-to-clipboard: Copy Full Path
