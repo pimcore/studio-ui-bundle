@@ -15,6 +15,7 @@ import { SidebarModalHolder } from '@Pimcore/modules/field-definitions/component
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { Content, ContentLayout, Icon, IconButton, IconTextButton, type ITreeElementProps, SearchInput, Toolbar, type TreeDataItem, TreeElement, useFormModal } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
+import { normalizeIcon } from '@Pimcore/utils/normalize-icon'
 import { isEmptyValue, useDebounce } from '@sdk/utils'
 import { isNil } from 'lodash'
 import React, { useMemo, useState } from 'react'
@@ -26,6 +27,14 @@ const useNoOpDeleteMutation: AnyMutationHook = () => [
   (async () => { }) as any,
   {} as any
 ]
+
+const renderConfigurationIcon = (icon?: ConfigurationPartial['icon'] & { type?: 'name' | 'path' }): React.JSX.Element | undefined => {
+  if (icon === undefined || isEmptyValue(icon.value)) return undefined
+
+  const normalizedIcon = icon.type !== undefined ? icon : normalizeIcon(icon.value)
+
+  return normalizedIcon !== null ? <Icon { ...normalizedIcon } /> : undefined
+}
 
 export const ItemsSidebar = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -61,13 +70,13 @@ export const ItemsSidebar = (): React.JSX.Element => {
       return (configuration.name as string).toLowerCase().includes(debouncedSearchTerm.toLowerCase()) || (configuration.id as string).toLowerCase().includes(debouncedSearchTerm.toLowerCase())
     })
 
-    filteredData.forEach((configuration) => {
+    filteredData.forEach((configuration: ConfigurationPartial) => {
       const groupName = configuration.group
       if (isNil(groupName) || groupName === '') {
         formattedTreeData.push({
           title: (configuration.name !== '' && configuration.name !== undefined && configuration.name !== configuration.id) ? `${configuration.name} (${configuration.id})` : `${configuration.id}`,
           key: `${configuration.id}`,
-          icon: configuration.icon !== undefined ? <Icon { ...configuration.icon } /> : undefined,
+          icon: renderConfigurationIcon(configuration.icon),
           meta: { configuration },
           actions: canDelete
             ? [
@@ -91,7 +100,7 @@ export const ItemsSidebar = (): React.JSX.Element => {
       const treeDataItem: TreeDataItem = {
         title: (configuration.name !== '' && configuration.name !== undefined && configuration.name !== configuration.id) ? `${configuration.name} (${configuration.id})` : `${configuration.id}`,
         key: `${configuration.id}`,
-        icon: configuration.icon !== undefined ? <Icon { ...configuration.icon } /> : <Icon value='class' />,
+        icon: renderConfigurationIcon(configuration.icon) ?? <Icon value='class' />,
         meta: { configuration },
         actions: canDelete
           ? [
