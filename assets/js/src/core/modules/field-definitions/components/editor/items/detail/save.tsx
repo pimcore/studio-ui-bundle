@@ -34,11 +34,63 @@ interface ValidationResult {
   duplicateViolations: Violation[]
 }
 
+interface NameViolations {
+  empty: Violation | null
+  reservedWord: Violation | null
+  invalidFormat: Violation | null
+  duplicate: Violation | null
+}
+
+type FieldDefs = ReturnType<ReturnType<typeof useSettings>['useLayout']>['fieldDefinitions']
+type FieldDef = FieldDefs[string]
+type Structure = ReturnType<ReturnType<typeof useSettings>['useLayout']>['structure']
+type FieldDefinitionRegistry = ReturnType<typeof useSettings>['fieldDefinitionRegistry']
+type Area = ReturnType<typeof useArea>['area']
+
+const isDynamicTypeInvalid = (
+  definition: FieldDef,
+  fieldDefinitionRegistry: FieldDefinitionRegistry,
+  area: Area,
+  fieldDefinitions: FieldDefs
+): boolean => {
+  if (!fieldDefinitionRegistry.hasDynamicType(definition.fieldtype)) return false
+  const dynamicType = fieldDefinitionRegistry.getDynamicType(definition.fieldtype)
+  return !dynamicType.isValid(definition, { area, fieldDefinitions, path: [] })
+}
+
+const collectNameViolations = (
+  key: string,
+  definition: FieldDef,
+  structure: Structure,
+  fieldDefinitions: FieldDefs,
+  pathMap: Record<string, string[]>
+): NameViolations => {
+  const name: string = typeof definition.name === 'string' ? definition.name : ''
+
+  if (name.trim() === '') {
+    return { empty: { id: key, label: definition.fieldtype }, reservedWord: null, invalidFormat: null, duplicate: null }
+  }
+
+  if (definition.datatype !== 'data' || definition.fieldtype === 'localizedfields') {
+    return { empty: null, reservedWord: null, invalidFormat: null, duplicate: null }
+  }
+
+  const hasDuplicate = structure !== undefined &&
+    getNamesInNamespace(structure, fieldDefinitions, key, pathMap).filter(n => n === name).length > 1
+
+  return {
+    empty: null,
+    reservedWord: isReservedWord(name) ? { id: key, label: name } : null,
+    invalidFormat: !NAME_FORMAT_REGEX.test(name) ? { id: key, label: name } : null,
+    duplicate: hasDuplicate ? { id: key, label: name } : null
+  }
+}
+
 const validateFieldDefinitions = (
-  fieldDefinitions: ReturnType<ReturnType<typeof useSettings>['useLayout']>['fieldDefinitions'],
-  structure: ReturnType<ReturnType<typeof useSettings>['useLayout']>['structure'],
-  fieldDefinitionRegistry: ReturnType<typeof useSettings>['fieldDefinitionRegistry'],
-  area: ReturnType<typeof useArea>['area']
+  fieldDefinitions: FieldDefs,
+  structure: Structure,
+  fieldDefinitionRegistry: FieldDefinitionRegistry,
+  area: Area
 ): ValidationResult => {
   const invalidDefinitions: string[] = []
   const emptyNameViolations: Violation[] = []
@@ -56,40 +108,17 @@ const validateFieldDefinitions = (
     // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     if (structure !== undefined && key === structure.id) continue
 
-    if (fieldDefinitionRegistry.hasDynamicType(definition.fieldtype)) {
-      const dynamicType = fieldDefinitionRegistry.getDynamicType(definition.fieldtype)
-      if (!dynamicType.isValid(definition, { area, fieldDefinitions, path: [] })) {
-        invalidDefinitions.push(key)
-      }
+    if (isDynamicTypeInvalid(definition, fieldDefinitionRegistry, area, fieldDefinitions)) {
+      invalidDefinitions.push(key)
     }
 
-    const name: string = typeof definition.name === 'string' ? definition.name : ''
+    const { empty, reservedWord, invalidFormat, duplicate } =
+      collectNameViolations(key, definition, structure, fieldDefinitions, pathMap)
 
-    if (name.trim() === '') {
-      emptyNameViolations.push({ id: key, label: definition.fieldtype })
-      addInvalid(key)
-      continue
-    }
-
-    if (definition.datatype === 'data' && definition.fieldtype !== 'localizedfields') {
-      if (isReservedWord(name)) {
-        reservedWordViolations.push({ id: key, label: name })
-        addInvalid(key)
-      }
-
-      if (!NAME_FORMAT_REGEX.test(name)) {
-        formatViolations.push({ id: key, label: name })
-        addInvalid(key)
-      }
-
-      if (structure !== undefined) {
-        const namesInNamespace = getNamesInNamespace(structure, fieldDefinitions, key, pathMap)
-        if (namesInNamespace.filter(n => n === name).length > 1) {
-          duplicateViolations.push({ id: key, label: name })
-          addInvalid(key)
-        }
-      }
-    }
+    if (empty !== null) { emptyNameViolations.push(empty); addInvalid(key); continue }
+    if (reservedWord !== null) { reservedWordViolations.push(reservedWord); addInvalid(key) }
+    if (invalidFormat !== null) { formatViolations.push(invalidFormat); addInvalid(key) }
+    if (duplicate !== null) { duplicateViolations.push(duplicate); addInvalid(key) }
   }
 
   return { invalidDefinitions, emptyNameViolations, reservedWordViolations, formatViolations, duplicateViolations }
