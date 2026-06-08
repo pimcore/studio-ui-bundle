@@ -27,6 +27,8 @@ export interface ManyToManyRelationValueItem {
   subtype: string | null
   fullPath: string
   isPublished: boolean | null
+  hasAccess?: boolean
+  canEdit?: boolean
 }
 
 export interface DisplayManyToManyRelationValueItem extends ManyToManyRelationValueItem {

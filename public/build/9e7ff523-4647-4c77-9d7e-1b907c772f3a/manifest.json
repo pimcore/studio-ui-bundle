@@ -1,0 +1,53 @@
+{
+  "allFiles": [
+    "/static/js/main.js",
+    "/static/js/documentEditorIframe.js",
+    "/static/js/vendors-node_modules_rsbuild_core_dist_client_overlay_js-node_modules_rspack_plugin-react-ref-d7d6b1.js",
+    "/static/js/data_text_javascript_import_20_7B_20init_20_7D_20from_20_2Fvar_2Fwww_2Fhtml_2Fbundles_2Fstudi-f4cec0.js",
+    "/mf-stats.json",
+    "/mf-manifest.json",
+    "/documentEditorIframe.html",
+    "/main.html",
+    "/static/js/main.js.map",
+    "/static/js/documentEditorIframe.js.map",
+    "/static/js/vendors-node_modules_rsbuild_core_dist_client_overlay_js-node_modules_rspack_plugin-react-ref-d7d6b1.js.map",
+    "/static/js/data_text_javascript_import_20_7B_20init_20_7D_20from_20_2Fvar_2Fwww_2Fhtml_2Fbundles_2Fstudi-f4cec0.js.map"
+  ],
+  "entries": {
+    "main": {
+      "assets": [
+        "static/js/data_text_javascript_import_20_7B_20init_20_7D_20from_20_2Fvar_2Fwww_2Fhtml_2Fbundles_2Fstudi-f4cec0.js.map",
+        "static/js/vendors-node_modules_rsbuild_core_dist_client_overlay_js-node_modules_rspack_plugin-react-ref-d7d6b1.js.map",
+        "static/js/main.js.map"
+      ],
+      "html": [
+        "/main.html"
+      ],
+      "initial": {
+        "js": [
+          "/static/js/vendors-node_modules_rsbuild_core_dist_client_overlay_js-node_modules_rspack_plugin-react-ref-d7d6b1.js",
+          "/static/js/data_text_javascript_import_20_7B_20init_20_7D_20from_20_2Fvar_2Fwww_2Fhtml_2Fbundles_2Fstudi-f4cec0.js",
+          "/static/js/main.js"
+        ]
+      }
+    },
+    "documentEditorIframe": {
+      "assets": [
+        "static/js/data_text_javascript_import_20_7B_20init_20_7D_20from_20_2Fvar_2Fwww_2Fhtml_2Fbundles_2Fstudi-f4cec0.js.map",
+        "static/js/vendors-node_modules_rsbuild_core_dist_client_overlay_js-node_modules_rspack_plugin-react-ref-d7d6b1.js.map",
+        "static/js/documentEditorIframe.js.map"
+      ],
+      "html": [
+        "/documentEditorIframe.html"
+      ],
+      "initial": {
+        "js": [
+          "/static/js/vendors-node_modules_rsbuild_core_dist_client_overlay_js-node_modules_rspack_plugin-react-ref-d7d6b1.js",
+          "/static/js/data_text_javascript_import_20_7B_20init_20_7D_20from_20_2Fvar_2Fwww_2Fhtml_2Fbundles_2Fstudi-f4cec0.js",
+          "/static/js/documentEditorIframe.js"
+        ]
+      }
+    }
+  },
+  "integrity": {}
+}

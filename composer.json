@@ -49,7 +49,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-2025.4": "1.x-dev"
+            "dev-2025.4": "2025.4.x-dev"
         },
         "pimcore": {
             "bundles": [

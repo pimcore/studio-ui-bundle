@@ -133,6 +133,7 @@
     "@uiw/react-codemirror": "^4.23.6",
     "antd": "5.22.x",
     "antd-style": "3.7.x",
+    "axios": "1.13.6",
     "classnames": "^2.5.1",
     "dompurify": "^3.2.1",
     "flexlayout-react": "^0.7.15",
@@ -155,8 +156,5 @@
     "reflect-metadata": "0.2.x",
     "ts-patch": "^3.3.0",
     "uuid": "^10.0.0"
-  },
-  "overrides": {
-    "axios": "1.13.6"
   }
 }
