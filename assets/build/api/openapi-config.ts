@@ -38,6 +38,10 @@ const config: ConfigFile = {
       type: 'query',
     },
     {
+      pattern: 'dataObjectGetSelectOptions',
+      type: 'query',
+    },
+    {
       pattern: 'noteGetCollection',
       type: 'query'
     },

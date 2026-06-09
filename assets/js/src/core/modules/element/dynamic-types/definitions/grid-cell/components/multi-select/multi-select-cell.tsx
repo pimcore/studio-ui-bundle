@@ -17,13 +17,16 @@ import { Tag } from '@Pimcore/components/tag/tag'
 import { useStyles } from './multi-select-cell.styles'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { Spin } from '@Pimcore/components/spin/spin'
-import { resolveOptions, type SelectOptionType } from '../../utils/select-options'
+import { resolveOptions, type SelectOptionsHookContext, type SelectOptionType, stringifyOptionValue } from '../../utils/select-options'
 import { isNil } from 'lodash'
 import { META_SUPPORTS_BATCH_APPEND_MODE } from '@Pimcore/modules/data-object/listing/batch-actions/batch-append-mode/batch-append-mode'
 
 export interface MultiSelectCellConfig {
   options?: string[] | SelectOptionType[]
-  useOptionsHook?: (fieldName: string) => { isLoading: boolean, options: SelectOptionType[] } | undefined
+  useOptionsHook?: (
+    fieldName: string,
+    context?: SelectOptionsHookContext
+  ) => { isLoading: boolean, options: SelectOptionType[] } | undefined
   fieldName?: string
   [META_SUPPORTS_BATCH_APPEND_MODE]?: boolean
 }
@@ -44,7 +47,9 @@ export const MultiSelectCell = (props: DefaultCellProps): React.JSX.Element => {
   }, [isInEditMode])
 
   const fieldName = config?.fieldName ?? String(props.column.columnDef.meta?.columnKey)
-  const optionsResult = !isNil(config) ? resolveOptions(config, fieldName) : { isLoading: false, options: [] }
+  const optionsResult = !isNil(config)
+    ? resolveOptions(config, fieldName, { objectId: props.row.original?.id, enabled: isInEditMode })
+    : { isLoading: false, options: [] }
   if (optionsResult.isLoading) {
     return (
       <div className={ [styles['multi-select-cell'], 'default-cell__content'].join(' ') }>
@@ -54,14 +59,16 @@ export const MultiSelectCell = (props: DefaultCellProps): React.JSX.Element => {
   }
   const options = optionsResult.options
 
-  const value: [] = Array.isArray(getValue()) ? getValue() : []
+  const rawValue: unknown[] = Array.isArray(getValue()) ? getValue() : []
+  // Coerce stored values to string so numeric provider values match the (string-coerced) options.
+  const value: string[] = rawValue.map((item) => stringifyOptionValue(item) ?? '')
 
   if (config === undefined) {
     return <>{value.join(', ')}</>
   }
 
   const displayOptions = value.map((_value: string) => {
-    const option = options.find((option: SelectOptionType) => option.value === _value)
+    const option = options.find((option: SelectOptionType) => stringifyOptionValue(option.value) === _value)
     return { key: _value, display: option?.displayValue ?? option?.label ?? _value }
   })
 

@@ -15,6 +15,7 @@ import cn from 'classnames'
 import { isString } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { Spin } from '@Pimcore/components/spin/spin'
 import { useStyles } from './select.styles'
 import { useTranslation } from 'react-i18next'
 import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
@@ -50,6 +51,10 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   theme = 'default',
   loadingSkeleton = false,
   dataTestId,
+  loading = false,
+  onDropdownVisibleChange,
+  onFocus,
+  onBlur,
   ...antdSelectProps
 }, ref): React.JSX.Element => {
   const { t } = useTranslation()
@@ -143,9 +148,27 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
     [styles.customIconError]: (isActive || isFocus) && isStatusError
   })
 
-  const handleClick = (): void => { setIsActive(!isActive) }
+  // Compose internal dropdown/focus state with optional consumer handlers (don't override them).
+  const handleDropdownVisibleChange = (open: boolean): void => {
+    setIsActive(open)
+    onDropdownVisibleChange?.(open)
+  }
+
+  const handleFocus = (event: React.FocusEvent<HTMLElement>): void => {
+    setIsFocus(true)
+    onFocus?.(event)
+  }
+
+  const handleBlur = (event: React.FocusEvent<HTMLElement>): void => {
+    setIsFocus(false)
+    onBlur?.(event)
+  }
 
   const getSuffixIcon = (): React.JSX.Element => {
+    if (loading) {
+      return <Spin type="classic" />
+    }
+
     const isShowCustomIcon = !isEmptyValue(customArrowIcon) && isString(customArrowIcon)
     const defaultIcon = isActive ? 'chevron-up' : 'chevron-down'
 
@@ -224,9 +247,9 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
             className={ 'm-r-mini' }
             value={ 'warning-circle' }
           /> {t('no-data-available')}</Flex> }
-        onBlur={ () => { setIsFocus(false) } }
-        onDropdownVisibleChange={ handleClick }
-        onFocus={ () => { setIsFocus(true) } }
+        onBlur={ handleBlur }
+        onDropdownVisibleChange={ handleDropdownVisibleChange }
+        onFocus={ handleFocus }
         ref={ selectRef }
         status={ status }
         style={ computedStyle }
