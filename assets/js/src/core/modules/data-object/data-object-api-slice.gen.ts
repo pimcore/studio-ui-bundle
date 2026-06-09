@@ -219,7 +219,7 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
-            dataObjectGetSelectOptions: build.mutation<
+            dataObjectGetSelectOptions: build.query<
                 DataObjectGetSelectOptionsApiResponse,
                 DataObjectGetSelectOptionsApiArg
             >({
@@ -228,7 +228,7 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Data Objects"],
+                providesTags: ["Data Objects"],
             }),
             dataObjectGetTree: build.query<DataObjectGetTreeApiResponse, DataObjectGetTreeApiArg>({
                 query: (queryArg) => ({
@@ -982,6 +982,6 @@ export const {
     useDataObjectFormatPathQuery,
     useDataObjectPreviewByIdQuery,
     useDataObjectReplaceContentMutation,
-    useDataObjectGetSelectOptionsMutation,
+    useDataObjectGetSelectOptionsQuery,
     useDataObjectGetTreeQuery,
 } = injectedRtkApi;
