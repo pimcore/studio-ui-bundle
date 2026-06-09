@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type Key, useEffect, useState } from 'react'
+import React, { type Key, useEffect, useMemo, useState } from 'react'
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { type TreeDataItem, TreeElement } from '@Pimcore/components/tree-element/tree-element'
@@ -37,9 +37,12 @@ export const TagsTreeFiltersContainer = ({ checkedKeys, setCheckedKeys }: TagsTr
     filter
   })
 
-  const treeData = !isUndefined(tags?.items)
-    ? createTreeStructure({ tags: tags.items, loadingNodes: new Set<string>() })
-    : []
+  const treeData = useMemo(
+    () => !isUndefined(tags?.items)
+      ? createTreeStructure({ tags: tags.items, loadingNodes: new Set<string>() })
+      : [],
+    [tags?.items]
+  )
 
   const getAllTreeKeys = (nodes: TreeDataItem[]): string[] => {
     const result: string[] = []
@@ -54,10 +57,10 @@ export const TagsTreeFiltersContainer = ({ checkedKeys, setCheckedKeys }: TagsTr
   }
 
   useEffect(() => {
-    if (!isEmpty(filter)) {
+    if (!isEmpty(filter) && treeData.length > 0) {
       setExpandedKeys([0, ...getAllTreeKeys(treeData)])
     }
-  }, [filter])
+  }, [treeData])
 
   const handleSearch = (value: string): void => {
     setFilter(value)
