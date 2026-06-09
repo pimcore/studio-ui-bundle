@@ -10,6 +10,7 @@
 
 import { type AbstractObjectDataDefinition } from '../dynamic-type-object-data-abstract'
 import { type FormItemProps } from 'antd/es/form/FormItem'
+import i18n from '@Pimcore/app/i18n'
 
 import {
   DynamicTypeObjectDataAbstractInput, type InputProps
@@ -37,7 +38,11 @@ export class DynamicTypeObjectDataInput extends DynamicTypeObjectDataAbstractInp
       ...super.getObjectDataFormItemProps(props),
       rules: [
         {
-          pattern: typeof props.regex === 'string' && props.regex.length > 0 ? new RegExp(props.regex, props.regexFlags?.join('')) : undefined
+          validator: async (rule, value: unknown) => {
+            if (typeof value === 'string' && value !== '' && typeof props.regex === 'string' && props.regex.length > 0 && !new RegExp(props.regex, props.regexFlags?.join('')).test(value)) {
+              throw new Error(i18n.t('regex-validation-error-message'))
+            }
+          }
         }
       ]
     }
