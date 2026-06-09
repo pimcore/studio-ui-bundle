@@ -8,10 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type Key, useState } from 'react'
+import React, { type Key, useEffect, useState } from 'react'
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { TreeElement } from '@Pimcore/components/tree-element/tree-element'
+import { type TreeDataItem, TreeElement } from '@Pimcore/components/tree-element/tree-element'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import {
   createTreeStructure
@@ -19,7 +19,7 @@ import {
 import {
   useTagGetCollectionQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
-import { isEmpty, isUndefined } from 'lodash'
+import { isEmpty, isNull, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
 interface TagsTreeFiltersContainerProps {
@@ -41,16 +41,26 @@ export const TagsTreeFiltersContainer = ({ checkedKeys, setCheckedKeys }: TagsTr
     ? createTreeStructure({ tags: tags.items, loadingNodes: new Set<string>() })
     : []
 
+  const getAllTreeKeys = (nodes: TreeDataItem[]): string[] => {
+    const result: string[] = []
+    const traverse = (items: TreeDataItem[]): void => {
+      for (const item of items) {
+        if (item.key !== undefined) result.push(String(item.key))
+        if (!isNull(item.children)) traverse(item.children as TreeDataItem[])
+      }
+    }
+    traverse(nodes)
+    return result
+  }
+
+  useEffect(() => {
+    if (!isEmpty(filter)) {
+      setExpandedKeys([0, ...getAllTreeKeys(treeData)])
+    }
+  }, [filter])
+
   const handleSearch = (value: string): void => {
     setFilter(value)
-
-    if (!isEmpty(value)) {
-      setExpandedKeys((prevKeys) => {
-        const hasRoot = prevKeys.some((key) => String(key) === '0')
-
-        return hasRoot ? prevKeys : [0, ...prevKeys]
-      })
-    }
   }
 
   if (tagsLoading) {
