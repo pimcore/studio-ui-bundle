@@ -10,10 +10,10 @@
 
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type WidgetManagerService } from '../services/widget-manager-service'
+import { type WidgetManagerActionService } from '../services/widget-manager-action-service'
 
-export type { WidgetManagerService as useWidgetManagerReturn }
+export type { WidgetManagerActionService as useWidgetManagerReturn }
 
-export const useWidgetManager = (): WidgetManagerService => {
-  return useInjection<WidgetManagerService>(serviceIds.widgetManagerService)
+export const useWidgetManager = (): WidgetManagerActionService => {
+  return useInjection<WidgetManagerActionService>(serviceIds.widgetManagerActionService)
 }

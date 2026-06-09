@@ -36,7 +36,7 @@ import {
 import { isNull, isUndefined } from 'lodash'
 
 @injectable()
-export class WidgetManagerService {
+export class WidgetManagerActionService {
   openMainWidget (tabConfig: WidgetManagerTabConfig): void {
     store.dispatch(openMainWidgetAction(tabConfig))
   }
