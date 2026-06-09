@@ -32,6 +32,8 @@ interface ResponsiveAssetPreviewProps {
   lastImageDimensions?: { width: number, height: number } | null
   thumbnailUrl?: string | null
   onImageLoadedChange?: (isLoaded: boolean) => void
+  minWidth?: number
+  minHeight?: number
 }
 
 export const ResponsiveAssetPreview = ({
@@ -44,7 +46,9 @@ export const ResponsiveAssetPreview = ({
   onResize,
   lastImageDimensions,
   thumbnailUrl,
-  onImageLoadedChange
+  onImageLoadedChange,
+  minWidth,
+  minHeight
 }: ResponsiveAssetPreviewProps): React.JSX.Element => {
   const { getStateClasses } = useDroppable()
   const { styles } = useStyle()
@@ -119,6 +123,7 @@ export const ResponsiveAssetPreview = ({
           ...getStateClasses()
         ) }
         ref={ imageContainerRef }
+        style={ (minWidth !== undefined || minHeight !== undefined) ? { minWidth, minHeight } : undefined }
       >
         {finalImageSrc !== undefined && (
           <Image
