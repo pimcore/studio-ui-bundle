@@ -35,7 +35,7 @@ import { css as serializeCSS, type FullToken } from 'antd-style'
 // `exports` map, so subpath imports resolve. Pinned to the ESM build used by the bundler.
 import { createCSS } from 'antd-style/es/core'
 import { isReactCssResult } from 'antd-style/es/utils'
-import { styleManager } from 'antd-style'
+import { createInstance } from 'antd-style'
 
 interface StyleUtils {
   token: FullToken
@@ -49,14 +49,11 @@ type GetStyles<Props, S extends StyleRecord> = (utils: StyleUtils, props: Props)
 interface CreateStylesOptions {
   hashPriority?: 'low' | 'high'
   label?: string
-  // Injected by antd-style's babel plugin for readable class-name labels. Only present when
-  // the import resolves to 'antd-style'; absent here, so labels fall back to emotion defaults.
   __BABEL_FILE_NAME__?: string
 }
 
-// Reuse antd-style's shared emotion cache so generated styles live in the same <style> sheet
-// (consistent key/hashing, dedup) as the remaining antd-style usages (ThemeProvider, etc.).
-const sharedCache = (styleManager as unknown as { cache: Parameters<typeof createCSS>[0] }).cache
+const pimcoreStyleInstance = createInstance({ key: 'pimcore', speedy: true })
+const sharedCache = (pimcoreStyleInstance.styleManager as unknown as { cache: Parameters<typeof createCSS>[0] }).cache
 
 export function createStyles<Props = void, S extends StyleRecord = StyleRecord> (
   styleOrGetStyle: GetStyles<Props, S> | S,
@@ -65,13 +62,10 @@ export function createStyles<Props = void, S extends StyleRecord = StyleRecord> 
   const fileName = options?.__BABEL_FILE_NAME__
 
   return function useStyles (props: Props) {
-    // Shared reference across every consumer — this is the whole point.
     const { token } = antdThemeApi.useToken() as unknown as { token: FullToken }
 
-    // hashPriority-aware className generator + cx, bound to the shared cache. Stable across renders.
     const { css: toClassName, cx } = useMemo(
       () => createCSS(sharedCache, { hashPriority: options?.hashPriority ?? 'high', label: options?.label }),
-      // options object is defined once at module scope per createStyles() call
       []
     )
 
@@ -84,30 +78,25 @@ export function createStyles<Props = void, S extends StyleRecord = StyleRecord> 
         return raw as { [K in keyof S]: string }
       }
 
-      // Callback returned a single css`` result rather than a keyed object — pass through as-is.
       if (isReactCssResult(raw)) {
         return raw as unknown as { [K in keyof S]: string }
       }
 
-      // Keyed object of serialized styles -> convert each to a className (mirrors antd-style factory).
       return Object.fromEntries(
         Object.entries(raw as StyleRecord).map(([key, value]) => {
           if (value !== null && typeof value === 'object') {
             const label = fileName !== undefined ? `${fileName}-${key}` : undefined
             return [key, label !== undefined ? toClassName(value, `label:${label}`) : toClassName(value)]
           }
-          // Already a className string (e.g. produced via cx) — keep as-is.
+
           return [key, value]
         })
       ) as { [K in keyof S]: string }
     }, [token, props, cx, toClassName])
 
-    // `theme: token` is the SHARED reference (not a per-consumer copy), so consumers that read
-    // `const { theme } = useStyles()` keep working without producing extra heap objects.
     return { styles, cx, theme: token }
   }
 }
 
-// Convenience re-exports so files importing these alongside createStyles can swap the whole import.
-export { css, cx, keyframes } from 'antd-style'
+export const { css, cx, keyframes } = pimcoreStyleInstance
 export type { SerializedStyles, FullToken } from 'antd-style'

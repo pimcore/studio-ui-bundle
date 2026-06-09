@@ -35,7 +35,7 @@ const NestedThemeProviders = ({
   const [currentTheme, ...remainingThemes] = themeChain
 
   return (
-    <AntdThemeProvider theme={ { ...currentTheme.config, cssVar: true } }>
+    <AntdThemeProvider theme={ currentTheme.config }>
       <NestedThemeProviders themeChain={ remainingThemes }>
         {children}
       </NestedThemeProviders>
