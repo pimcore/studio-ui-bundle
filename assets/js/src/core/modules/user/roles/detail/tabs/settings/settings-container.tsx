@@ -9,7 +9,7 @@
  */
 
 import { debounce } from 'lodash'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback } from 'react'
 import { Col, Row } from 'antd'
 import { Form } from '@Pimcore/components/form/form'
 import { useRoleContext } from '@Pimcore/modules/user/roles/hooks/use-role-context'
@@ -21,30 +21,26 @@ import { SharedTranslationSettingsAccordion } from '@Pimcore/modules/user/manage
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { useRoleDraft } from '@Pimcore/modules/user/roles/hooks/use-roles-draft'
 import { getGroupedPermissions } from '@Pimcore/modules/user/management/detail/tabs/settings/settings-helper'
-import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
-import { useTranslation } from 'react-i18next'
+import { useUserGetAvailablePermissionsQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
+import { usePerspectiveGetConfigCollectionQuery } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 
 const SettingsContainer = ({ ...props }): React.JSX.Element => {
-  const { t } = useTranslation()
   const { validLanguages } = useSettings()
   const [form] = Form.useForm()
   const { id } = useRoleContext()
   const { role, isLoading, changeRoleInState } = useRoleDraft(id)
-  const { getAvailablePermissions } = useUserManagementHelper()
-  const permissions = getGroupedPermissions(getAvailablePermissions())
+  const { data: availablePermissionsData, isLoading: permissionsLoading } = useUserGetAvailablePermissionsQuery()
+  const { isLoading: perspectivesLoading } = usePerspectiveGetConfigCollectionQuery()
+  const permissions = getGroupedPermissions(availablePermissionsData?.items ?? [])
 
-  useEffect(() => {
-    if (!isLoading) {
-      form.setFieldsValue({
-        name: role?.name,
-        classes: role?.classes ?? [],
-        docTypes: role?.docTypes,
-        perspectives: role?.perspectives ?? [],
-        permissionsDefault: Array.isArray(role?.permissions) ? role.permissions.filter((permission) => permissions.default.some((defaultPermission) => defaultPermission.key === permission)).sort((a, b) => t(`user-management.permissions.${a}`).localeCompare(t(`user-management.permissions.${b}`))) : [],
-        permissionsBundles: Array.isArray(role?.permissions) ? role.permissions.filter((permission) => permissions.bundles.some((defaultPermission) => defaultPermission.key === permission)).sort((a, b) => t(`user-management.permissions.${a}`).localeCompare(t(`user-management.permissions.${b}`))) : []
-      })
-    }
-  }, [role, isLoading])
+  const buildFormValues = (): object => ({
+    name: role?.name,
+    classes: role?.classes ?? [],
+    docTypes: role?.docTypes,
+    perspectives: (role?.perspectives as unknown as string[]) ?? [],
+    permissionsDefault: Array.isArray(role?.permissions) ? role.permissions.filter((permission) => permissions.default.some((defaultPermission) => defaultPermission.key === permission)) : [],
+    permissionsBundles: Array.isArray(role?.permissions) ? role.permissions.filter((permission) => permissions.bundles.some((defaultPermission) => defaultPermission.key === permission)) : []
+  })
 
   const onValuesChange = useCallback(
     debounce((changedValues, allValues) => {
@@ -59,13 +55,16 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
     }, 300),
     [changeRoleInState]
   )
-  if (isLoading) {
+
+  if (isLoading || permissionsLoading || perspectivesLoading) {
     return <Content loading></Content>
   }
 
   return (
     <Form
       form={ form }
+      initialValues={ buildFormValues() }
+      key={ id }
       layout="vertical"
       onValuesChange={ onValuesChange }
     >
