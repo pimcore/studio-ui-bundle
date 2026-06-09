@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { EditableEmptyPlaceholder } from '@Pimcore/components/editable-empty-placeholder'
 import { Spin } from '@Pimcore/components/spin/spin'
@@ -26,6 +26,12 @@ import { useAssetVideoThumbnailStatusQuery } from '@Pimcore/modules/asset/asset-
 import { skipToken } from '@reduxjs/toolkit/query'
 
 const VIDEO_THUMBNAIL_POLL_INTERVAL_MS = 5000
+
+const MARKER_CLASS = {
+  empty: '.pimcore_editable_video_empty',
+  progress: '.pimcore_editable_video_progress',
+  error: '.pimcore_editable_video_error'
+} as const
 
 export interface VideoEditableProps {
   value?: VideoValue | null
@@ -59,6 +65,7 @@ export const VideoEditable = ({
   const [emptyElement, setEmptyElement] = useState<HTMLDivElement | null>(null)
   const [progressElement, setProgressElement] = useState<HTMLDivElement | null>(null)
   const [errorElement, setErrorElement] = useState<HTMLDivElement | null>(null)
+  const reloadTriggeredRef = useRef(false)
 
   const videoValue = value ?? null
 
@@ -90,42 +97,49 @@ export const VideoEditable = ({
   }
 
   useEffect(() => {
-    if (!isNull(containerRef?.current)) {
-      const emptyVideoElement: HTMLDivElement | null = containerRef.current.querySelector('.pimcore_editable_video_empty')
-      if (!isNull(emptyVideoElement) && isNull(emptyElement)) {
-        emptyVideoElement.className = cn(emptyVideoElement.className, 'studio-required-field-target')
-        setEmptyElement(emptyVideoElement)
+    const container = containerRef?.current
+    if (isNil(container)) {
+      return
+    }
+
+    const captureMarker = (
+      selector: string,
+      current: HTMLDivElement | null,
+      onFound: (element: HTMLDivElement) => void
+    ): void => {
+      const element = container.querySelector<HTMLDivElement>(selector)
+      if (!isNull(element) && isNull(current)) {
+        onFound(element)
       }
+    }
 
-      const progressVideoElement: HTMLDivElement | null = containerRef.current.querySelector(
-        '.pimcore_editable_video_progress'
-      )
-      if (!isNull(progressVideoElement) && isNull(progressElement)) {
-        progressVideoElement.style.position = 'relative'
-        setProgressElement(progressVideoElement)
-      }
+    captureMarker(MARKER_CLASS.empty, emptyElement, (element) => {
+      element.className = cn(element.className, 'studio-required-field-target')
+      setEmptyElement(element)
+    })
 
-      const errorVideoElement: HTMLDivElement | null = containerRef.current.querySelector(
-        '.pimcore_editable_video_error'
-      )
-      if (!isNull(errorVideoElement) && isNull(errorElement)) {
-        errorVideoElement.style.position = 'relative'
-        setErrorElement(errorVideoElement)
-      }
+    captureMarker(MARKER_CLASS.progress, progressElement, (element) => {
+      element.style.position = 'relative'
+      setProgressElement(element)
+    })
 
-      const videoElement = containerRef.current.querySelector('iframe, video')
+    captureMarker(MARKER_CLASS.error, errorElement, (element) => {
+      element.style.position = 'relative'
+      setErrorElement(element)
+    })
 
-      if (!isNull(videoElement) && isNull(wrapperElement)) {
-        const wrapper = document.createElement('div')
-        wrapper.className = cn(styles.wrapper, className)
-        wrapper.style.position = 'relative'
+    const videoElement = container.querySelector('iframe, video')
 
-        if (!isNull(containerRef.current.parentNode)) {
-          containerRef.current.parentNode.insertBefore(wrapper, containerRef.current)
-          wrapper.appendChild(containerRef.current)
+    if (!isNull(videoElement) && isNull(wrapperElement)) {
+      const wrapper = document.createElement('div')
+      wrapper.className = cn(styles.wrapper, className)
+      wrapper.style.position = 'relative'
 
-          setWrapperElement(wrapper)
-        }
+      if (!isNull(container.parentNode)) {
+        container.parentNode.insertBefore(wrapper, container)
+        wrapper.appendChild(container)
+
+        setWrapperElement(wrapper)
       }
     }
   }, [containerRef, className, wrapperElement, progressElement, errorElement])
@@ -145,10 +159,11 @@ export const VideoEditable = ({
   )
 
   useEffect(() => {
-    if (isNil(thumbnailStatus)) {
+    if (isNil(thumbnailStatus) || reloadTriggeredRef.current) {
       return
     }
     if (thumbnailStatus.status === 'finished' || thumbnailStatus.status === 'error') {
+      reloadTriggeredRef.current = true
       triggerSaveAndReload()
     }
   }, [thumbnailStatus, triggerSaveAndReload])
@@ -156,6 +171,33 @@ export const VideoEditable = ({
   const showModal = (): void => {
     openModal(videoValue)
   }
+
+  const renderEditButtonOverlay = (target: HTMLDivElement): React.ReactPortal => ReactDOM.createPortal(
+    <InheritanceOverlay
+      display="block"
+      hideButtons
+      isInherited={ inherited }
+      noPadding
+      onOverwrite={ handleOverwrite }
+      shape="angular"
+      style={ {
+        position: 'absolute',
+        inset: 0
+      } }
+    >
+      <IconButton
+        className={ styles.editButton }
+        disabled={ disabled }
+        icon={ { value: 'edit' } }
+        onClick={ showModal }
+        size="small"
+        style={ { pointerEvents: 'auto' } }
+        title={ t('video.edit') }
+        type="default"
+      />
+    </InheritanceOverlay>,
+    target
+  )
 
   return (
     <>
@@ -168,32 +210,7 @@ export const VideoEditable = ({
         </div>,
         progressElement
       )}
-      {!isNull(errorElement) && ReactDOM.createPortal(
-        <InheritanceOverlay
-          display="block"
-          hideButtons
-          isInherited={ inherited }
-          noPadding
-          onOverwrite={ handleOverwrite }
-          shape="angular"
-          style={ {
-            position: 'absolute',
-            inset: 0
-          } }
-        >
-          <IconButton
-            className={ styles.editButton }
-            disabled={ disabled }
-            icon={ { value: 'edit' } }
-            onClick={ showModal }
-            size="small"
-            style={ { pointerEvents: 'auto' } }
-            title={ t('video.edit') }
-            type="default"
-          />
-        </InheritanceOverlay>,
-        errorElement
-      )}
+      {!isNull(errorElement) && renderEditButtonOverlay(errorElement)}
       {!hasVideo
         ? (
             !isNull(emptyElement) && ReactDOM.createPortal(
@@ -217,32 +234,7 @@ export const VideoEditable = ({
             )
           )
         : (
-            !isNull(wrapperElement) && ReactDOM.createPortal(
-              <InheritanceOverlay
-                display="block"
-                hideButtons
-                isInherited={ inherited }
-                noPadding
-                onOverwrite={ handleOverwrite }
-                shape="angular"
-                style={ {
-                  position: 'absolute',
-                  inset: 0
-                } }
-              >
-                <IconButton
-                  className={ styles.editButton }
-                  disabled={ disabled }
-                  icon={ { value: 'edit' } }
-                  onClick={ showModal }
-                  size="small"
-                  style={ { pointerEvents: 'auto' } }
-                  title={ t('video.edit') }
-                  type="default"
-                />
-              </InheritanceOverlay>,
-              wrapperElement
-            )
+            !isNull(wrapperElement) && renderEditButtonOverlay(wrapperElement)
           )}
     </>
   )
