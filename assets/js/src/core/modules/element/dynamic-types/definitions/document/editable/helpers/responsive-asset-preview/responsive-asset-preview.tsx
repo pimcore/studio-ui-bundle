@@ -16,7 +16,7 @@ import { Image } from 'antd'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { ImagePreviewDropdown } from '@Pimcore/components/image-preview/components/dropdown/dropdown'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
-import { isNil } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import { getImageDimensions } from './image-dimensions'
 import useElementResize from '@Pimcore/utils/hooks/use-element-resize'
 import { useStyle } from '../../components/image-editable/image-editable-preview.styles'
@@ -123,7 +123,7 @@ export const ResponsiveAssetPreview = ({
           ...getStateClasses()
         ) }
         ref={ imageContainerRef }
-        style={ (minWidth !== undefined || minHeight !== undefined) ? { minWidth, minHeight } : undefined }
+        style={ (!isUndefined(minWidth) || !isUndefined(minHeight)) ? { minWidth, minHeight } : undefined }
       >
         {finalImageSrc !== undefined && (
           <Image

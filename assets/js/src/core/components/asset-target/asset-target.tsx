@@ -110,8 +110,8 @@ export const AssetTarget = ({
         style={ {
           height: toCssDimension(height),
           width: toCssDimension(width),
-          ...(minWidth !== undefined && { minWidth: toCssDimension(minWidth) }),
-          ...(minHeight !== undefined && { minHeight: toCssDimension(minHeight) })
+          ...(!isUndefined(minWidth) && { minWidth: toCssDimension(minWidth) }),
+          ...(!isUndefined(minHeight) && { minHeight: toCssDimension(minHeight) })
         } }
       >
         <Flex
