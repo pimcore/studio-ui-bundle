@@ -8,42 +8,22 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState, useCallback, useEffect } from 'react'
+import React from 'react'
 import { Form } from 'antd'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
 import { Select } from '@Pimcore/components/select/select'
 import { useRoleContext } from '@Pimcore/modules/user/roles/hooks/use-role-context'
-import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
+import { usePerspectiveGetConfigCollectionQuery } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 
 const GeneralAccordion = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useRoleContext()
-  const [perspectiveOptions, setPerspectiveOptions] = useState<any[]>([])
-  const { getPerspectiveConfigCollection } = usePerspectives()
+  const { data: perspectivesData } = usePerspectiveGetConfigCollectionQuery()
 
-  const fetchPerspectiveConfig = useCallback(() => {
-    getPerspectiveConfigCollection()
-      .then((data) => {
-        if (data?.items !== undefined) {
-          setPerspectiveOptions(
-            data.items.map((item) => ({
-              value: item.id,
-              label: item.name
-            })).sort((a, b) => (a.label ?? '').localeCompare(b.label ?? ''))
-          )
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching perspective config collection:', error)
-      })
-  }, [getPerspectiveConfigCollection])
-
-  useEffect(() => {
-    if (perspectiveOptions.length === 0) {
-      fetchPerspectiveConfig()
-    }
-  }, [id])
+  const perspectiveOptions = (perspectivesData?.items ?? [])
+    .map((item) => ({ value: item.id, label: item.name }))
+    .sort((a, b) => (a.label ?? '').localeCompare(b.label ?? ''))
 
   const sortByLabel = (values: any[]): any[] => {
     const labelMap = new Map(perspectiveOptions.map((o) => [o.value, o.label ?? '']))
