@@ -25,7 +25,7 @@ const GeneralAccordion = (): React.JSX.Element => {
     .map((item) => ({ value: item.id, label: item.name }))
     .sort((a, b) => (a.label ?? '').localeCompare(b.label ?? ''))
 
-  const sortByLabel = (values: any[]): any[] => {
+  const sortByLabel = (values: string[]): string[] => {
     const labelMap = new Map(perspectiveOptions.map((o) => [o.value, o.label ?? '']))
     return [...values].sort((a, b) => (labelMap.get(a) ?? '').localeCompare(labelMap.get(b) ?? ''))
   }
