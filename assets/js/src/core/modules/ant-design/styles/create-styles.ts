@@ -36,6 +36,7 @@ import { css as serializeCSS, type FullToken } from 'antd-style'
 import { createCSS } from 'antd-style/es/core'
 import { isReactCssResult } from 'antd-style/es/utils'
 import { createInstance } from 'antd-style'
+import type { CSSInterpolation } from '@emotion/serialize'
 
 interface StyleUtils {
   token: FullToken
@@ -55,13 +56,13 @@ interface CreateStylesOptions {
 const pimcoreStyleInstance = createInstance({ key: 'pimcore', speedy: true })
 const sharedCache = (pimcoreStyleInstance.styleManager as unknown as { cache: Parameters<typeof createCSS>[0] }).cache
 
-export function createStyles<Props = void, S extends StyleRecord = StyleRecord> (
+export function createStyles<Props, S extends StyleRecord = StyleRecord> (
   styleOrGetStyle: GetStyles<Props, S> | S,
   options?: CreateStylesOptions
-): (props: Props) => { styles: { [K in keyof S]: string }, cx: StyleUtils['cx'], theme: FullToken } {
+): (props?: Props) => { styles: { [K in keyof S]: string }, cx: StyleUtils['cx'], theme: FullToken } {
   const fileName = options?.__BABEL_FILE_NAME__
 
-  return function useStyles (props: Props) {
+  return function useStyles (props?: Props) {
     const { token } = antdThemeApi.useToken() as unknown as { token: FullToken }
 
     const { css: toClassName, cx } = useMemo(
@@ -71,7 +72,7 @@ export function createStyles<Props = void, S extends StyleRecord = StyleRecord> 
 
     const styles = useMemo(() => {
       const raw: unknown = typeof styleOrGetStyle === 'function'
-        ? (styleOrGetStyle)({ token, css: serializeCSS, cx }, props)
+        ? (styleOrGetStyle)({ token, css: serializeCSS, cx }, props as Props)
         : styleOrGetStyle
 
       if (raw === null || typeof raw !== 'object') {
@@ -86,7 +87,7 @@ export function createStyles<Props = void, S extends StyleRecord = StyleRecord> 
         Object.entries(raw as StyleRecord).map(([key, value]) => {
           if (value !== null && typeof value === 'object') {
             const label = fileName !== undefined ? `${fileName}-${key}` : undefined
-            return [key, label !== undefined ? toClassName(value, `label:${label}`) : toClassName(value)]
+            return [key, label !== undefined ? toClassName(value as CSSInterpolation, `label:${label}`) : toClassName(value as CSSInterpolation)]
           }
 
           return [key, value]
