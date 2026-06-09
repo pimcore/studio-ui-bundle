@@ -14,6 +14,7 @@ if (module.hot !== undefined) {
 
 export * from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 export * from '@Pimcore/modules/widget-manager/services/widget-registry'
+export { WidgetManagerService } from '@Pimcore/modules/widget-manager/services/widget-manager-service'
 export * from '@Pimcore/modules/widget-manager/widget-manager-slice'
 // Additional types
 export type { Widget } from '@Pimcore/modules/widget-manager/services/widget-registry'

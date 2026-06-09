@@ -78,6 +78,7 @@ export const serviceIds = {
 
   // Widget manager
   widgetManager: 'WidgetManagerService',
+  widgetManagerService: 'WidgetManager/ActionService',
   widgetRestorerRegistry: 'WidgetRestorerRegistry',
   elementTreeWidgetPermissionRegistry: 'ElementTreeWidgetPermissionRegistry',
 
