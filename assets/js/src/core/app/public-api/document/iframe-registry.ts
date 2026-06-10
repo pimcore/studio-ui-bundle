@@ -40,6 +40,21 @@ class IframeDocumentEditorRegistry {
   }
 
   unregister (documentId: number): void {
+    const reference = this.iframes.get(documentId)
+
+    // Unmount the iframe's React app while its realm is still live, so all effect
+    // cleanups run (observers disconnected, timers cleared, listeners removed). This
+    // is what allows the browser to reclaim the iframe's realm; without it the whole
+    // context leaks on every document open/close cycle.
+    if (!isNil(reference)) {
+      try {
+        const api = (reference.contentWindow as any).PimcoreDocumentEditor as PublicApiDocumentEditorIframe | undefined
+        api?.unmount?.()
+      } catch (error) {
+        console.warn(`Could not unmount document editor iframe app for document ${documentId}:`, error)
+      }
+    }
+
     this.iframes.delete(documentId)
   }
 

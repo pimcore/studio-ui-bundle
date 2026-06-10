@@ -104,11 +104,16 @@ class DocumentApiImpl implements DocumentApi {
   }
 
   notifyAreablockTypes (documentId: number, editableTypeId: string, areablockTypes: AreablockGroupedTypes): void {
-    store.dispatch(setDocumentAreablockTypes({ documentId, editableTypeId, areablockTypes }))
+    // `areablockTypes` is built inside the document editmode iframe, so its objects carry
+    // that iframe realm's prototype chain. Storing them as-is lets the redux state and the
+    // reselect selector caches (which retain a result per documentId) pin the entire iframe
+    // realm — ~50MB per distinct document — long after the editor is closed. structuredClone
+    // copies them into plain objects of this (parent) realm, severing that link.
+    store.dispatch(setDocumentAreablockTypes({ documentId, editableTypeId, areablockTypes: structuredClone(areablockTypes) }))
   }
 
   mergeAreablockTypes (documentId: number, editableTypeId: string, areablockTypes: AreablockGroupedTypes): void {
-    store.dispatch(mergeDocumentAreablockTypes({ documentId, editableTypeId, areablockTypes }))
+    store.dispatch(mergeDocumentAreablockTypes({ documentId, editableTypeId, areablockTypes: structuredClone(areablockTypes) }))
   }
 
   notifyTimeSliderVisible (documentId: number, visible: boolean): void {
