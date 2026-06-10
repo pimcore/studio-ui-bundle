@@ -20,10 +20,11 @@ import { Box } from '@Pimcore/components/box/box'
 import { withDroppable } from './node/with-droppable/with-droppable'
 import { withActionStates } from './node/with-action-states'
 import { withDroppableStyling } from '@Pimcore/modules/element/tree/node/with-droppable/with-droppable-styling'
-import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
+import { setNodeOpeningInAllTree, type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
 import { useElementTreeRootNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-root-node'
 import { useComponentRegistry } from '@Pimcore/modules/app/component-registry/use-component-registry'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+import { useAppDispatch } from '@sdk/app'
 import { withDndUpload } from './node/with-dnd-upload'
 import { withContextMenu } from './node/with-context-menu'
 
@@ -38,6 +39,7 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
   const { openAsset } = useAssetHelper()
   const { rootNode, isLoading } = useElementTreeRootNode(id, showRoot)
   const componentRegistry = useComponentRegistry()
+  const dispatch = useAppDispatch()
   const contextMenu = componentRegistry.get(componentConfig.asset.tree.contextMenu.name)
 
   if (showRoot && isLoading) {
@@ -49,11 +51,17 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
   }
 
   async function onSelect (node: TreeNode): Promise<void> {
-    openAsset({
-      config: {
-        id: parseInt(node.id)
-      }
-    })
+    dispatch(setNodeOpeningInAllTree({ nodeId: node.id, elementType: 'asset', opening: true }))
+
+    try {
+      await openAsset({
+        config: {
+          id: parseInt(node.id)
+        }
+      })
+    } finally {
+      dispatch(setNodeOpeningInAllTree({ nodeId: node.id, elementType: 'asset', opening: false }))
+    }
   }
 
   return (

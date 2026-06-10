@@ -26,7 +26,7 @@ export const AssetActionsCell = ({ row }: DefaultCellProps): React.JSX.Element =
       >
         <IconButton
           icon={ { value: 'open-folder' } }
-          onClick={ () => { openAsset({ config: { id: data.id } }) } }
+          onClick={ () => { void openAsset({ config: { id: data.id } }) } }
           type='link'
         />
       </Flex>
