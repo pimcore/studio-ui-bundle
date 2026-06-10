@@ -1161,9 +1161,11 @@ element.delete.folder.ok: Slett
 element.delete.folder.ok.permanent: Slett permanent
 element.delete.batch.title: Slett elementer
 element.delete.batch.note: 'Merk: Disse elementene vil bli slettet permanent og kan ikke gjenopprettes.'
-element.delete.batch.question: 'Vil du virkelig slette {{count}} elementer?'
+element.delete.batch.question_one: 'Vil du virkelig slette dette elementet?'
+element.delete.batch.question_other: 'Vil du virkelig slette disse {{count}} elementene?'
 element.delete.batch.ok: Slett permanent
-element.delete.batch.show-paths: 'Vis alle {{count}} elementer'
+element.delete.batch.show-paths: Vis elementer
+element.delete.batch.dependencies-warning: 'Det kan finnes avhengigheter, slett likevel?'
 element.open: Åpne
 element.toolbar.copy-id: Kopier ID
 element.toolbar.copy-full-path-to-clipboard: Kopier full sti

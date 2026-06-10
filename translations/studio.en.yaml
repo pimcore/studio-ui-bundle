@@ -1168,9 +1168,11 @@ element.delete.folder.ok: Delete
 element.delete.folder.ok.permanent: Delete permanently
 element.delete.batch.title: Delete items
 element.delete.batch.note: 'Please note: These items will be permanently deleted and can not be restored.'
-element.delete.batch.question: 'Do you really want to delete {{count}} items?'
+element.delete.batch.question_one: 'Do you really want to delete this item?'
+element.delete.batch.question_other: 'Do you really want to delete these {{count}} items?'
 element.delete.batch.ok: Delete permanently
-element.delete.batch.show-paths: 'Show all {{count}} items'
+element.delete.batch.show-paths: Show items
+element.delete.batch.dependencies-warning: 'There may be dependencies, delete anyway?'
 element.open: Open
 element.toolbar.copy-id: Copy ID
 element.toolbar.copy-full-path-to-clipboard: Copy Full Path
