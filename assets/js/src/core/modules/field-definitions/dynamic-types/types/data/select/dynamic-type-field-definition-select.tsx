@@ -11,6 +11,7 @@
 import { type FieldDefinitionContext } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { DynamicTypeFieldDefinitionDataAbstract, type FieldDefinitionData } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
 import { FieldDefinitionSelectFormFields } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/select/field-definition-select-form-fields'
+import { inferOptionsProviderType } from '@Pimcore/modules/field-definitions/dynamic-types/utils/options-provider-helper'
 import { type ElementIcon } from '@sdk/modules/widget-manager'
 import React from 'react'
 
@@ -30,6 +31,13 @@ export class DynamicTypeFieldDefinitionSelect extends DynamicTypeFieldDefinition
       ...super.getDefaultData(),
       optionsProviderType: 'configure'
     }
+  }
+
+  // Infer optionsProviderType for legacy definitions that leave it null (#3651).
+  normalizeFieldDefinition (fieldDef: Record<string, unknown>): Record<string, unknown> {
+    const normalized = super.normalizeFieldDefinition(fieldDef)
+    normalized.optionsProviderType = inferOptionsProviderType(normalized)
+    return normalized
   }
 
   getTags (props: FieldDefinitionContext): string[] {

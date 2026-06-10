@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 import { CONDITION_ANIMATION_DURATION } from '../../rule-condition.constants'
 
 export const useStyles = createStyles(({ token, css }) => {

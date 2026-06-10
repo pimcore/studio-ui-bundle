@@ -9,7 +9,6 @@
  */
 
 import React from 'react'
-import dayjs from 'dayjs'
 import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
@@ -17,6 +16,8 @@ import { DateRangePicker } from '@Pimcore/components/date-picker/date-range-pick
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { t } from 'i18next'
 import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
+import { formatFilterDate, parseFilterDate } from '@Pimcore/components/date-picker/utils/date-picker-utils'
+import { isFieldRespectTimezone } from '../../objects/data-related/types/abstract/dynamic-type-object-data-abstract-date'
 
 export enum DatePickerSettingValue {
   ON = 'on',
@@ -24,8 +25,6 @@ export enum DatePickerSettingValue {
   BEFORE = 'before',
   AFTER = 'after'
 }
-
-const DATE_FORMAT = 'YYYY-MM-DD'
 
 export interface DateValue {
   setting: DatePickerSettingValue
@@ -37,7 +36,8 @@ export interface DateValue {
 export interface DynamicTypeFieldFilterDateProps extends AbstractFieldFilterDefinition {}
 
 export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilterDateProps): React.JSX.Element => {
-  const { data: rawData, setData } = useDynamicFilter()
+  const { data: rawData, setData, type: filterType, config: filterConfig } = useDynamicFilter()
+  const respectTimezone = isFieldRespectTimezone(filterType, (filterConfig as { fieldDefinition?: { columnType?: string, respectTimezone?: boolean | null } } | undefined)?.fieldDefinition)
 
   const data: DateValue = rawData ?? {
     setting: DatePickerSettingValue.ON,
@@ -92,15 +92,11 @@ export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilte
   }
 
   const convertValueToISOFormat = (timestamp: number | null): string | null => {
-    if (timestamp === null) return null
-
-    return dayjs.unix(timestamp).format()
+    return formatFilterDate(timestamp, respectTimezone)
   }
 
   const convertISOToTimestamp = (dateStr: string | null): number | null => {
-    if (dateStr === null) return null
-
-    return dayjs(dateStr).startOf('day').unix()
+    return parseFilterDate(dateStr)
   }
 
   const handleDateChange = (field: 'on' | 'from' | 'to', value: string | null): void => {
@@ -146,7 +142,6 @@ export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilte
       {currentSetting === DatePickerSettingValue.BETWEEN && (
         <DateRangePicker
           allowEmpty={ [true, true] }
-          format={ DATE_FORMAT }
           onChange={ (value: unknown) => {
             const [newFrom, newTo] = value as [number | null, number | null]
 
@@ -159,7 +154,6 @@ export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilte
           }
       {currentSetting !== DatePickerSettingValue.BETWEEN && (
       <DatePicker
-        format={ DATE_FORMAT }
         onChange={ (value: unknown) => {
           const newValue = typeof value === 'number' ? value : null
           const convertedValue = convertValueToISOFormat(newValue)

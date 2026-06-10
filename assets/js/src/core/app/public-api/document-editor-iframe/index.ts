@@ -12,8 +12,16 @@ import { documentEditableApi, type DocumentEditableApi } from './editable-data/e
 
 export interface PublicApiDocumentEditorIframe {
   documentEditable: DocumentEditableApi
+  /**
+   * Unmounts the iframe's React application. Called by the parent window when the
+   * document tab is closed so that all effect cleanups run (observers disconnected,
+   * timers cleared, listeners removed), allowing the browser to reclaim the iframe's
+   * realm instead of retaining it. Wired up in mf-bootstrap-document-editor-iframe.
+   */
+  unmount: () => void
 }
 
 export const PimcoreDocumentEditor: PublicApiDocumentEditorIframe = {
-  documentEditable: documentEditableApi
+  documentEditable: documentEditableApi,
+  unmount: () => {}
 }

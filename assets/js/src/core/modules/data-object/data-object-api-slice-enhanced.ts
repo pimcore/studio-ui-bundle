@@ -45,6 +45,11 @@ const api = baseApi.enhanceEndpoints({
       transformResponse: (raw: Layout): Layout => normalizeLayoutTreeIcons(raw)
     },
 
+    // Cache dynamic select options per object; drop them when that object's detail is invalidated.
+    dataObjectGetSelectOptions: {
+      providesTags: (result, error, args) => providingTags.DATA_OBJECT_DETAIL_ID(args.body.objectId)
+    },
+
     dataObjectFormatPath: {
       providesTags: (result, error, args) => providingTags.DATA_OBJECT_DETAIL_ID(args.body.objectId)
     },
@@ -73,7 +78,8 @@ export const {
   useDataObjectPatchByIdMutation,
   useDataObjectPatchFolderByIdMutation,
   useDataObjectGetTreeQuery,
-  useDataObjectGetLayoutByIdQuery
+  useDataObjectGetLayoutByIdQuery,
+  useLazyDataObjectGetSelectOptionsQuery
 } = api
 
 export { api }
