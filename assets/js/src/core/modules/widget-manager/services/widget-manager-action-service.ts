@@ -9,6 +9,7 @@
  */
 
 import { injectable } from 'inversify'
+import { isUndefined } from 'lodash'
 import { store } from '@Pimcore/app/store'
 import {
   closeWidget as closeWidgetAction,
@@ -28,77 +29,72 @@ import { Model, TabNode } from 'flexlayout-react'
 import { eventBus } from '@Pimcore/lib/event-bus'
 import { eventTypes } from '@Pimcore/lib/event-bus/event-types'
 import {
-  type CloseMainWidgetEvent,
   type CloseMainWidgetEventPayload,
-  type CloseOuterWidgetEvent,
   type CloseOuterWidgetEventPayload
 } from '../events'
-import { isNull, isUndefined } from 'lodash'
 
 @injectable()
 export class WidgetManagerActionService {
-  openMainWidget (tabConfig: WidgetManagerTabConfig): void {
+  openMainWidget = (tabConfig: WidgetManagerTabConfig): void => {
     store.dispatch(openMainWidgetAction(tabConfig))
   }
 
-  updateWidget (tabConfig: WidgetManagerTabConfig): void {
+  updateWidget = (tabConfig: WidgetManagerTabConfig): void => {
     store.dispatch(updateWidgetAction(tabConfig))
   }
 
-  openBottomWidget (tabConfig: WidgetManagerTabConfig): void {
+  openBottomWidget = (tabConfig: WidgetManagerTabConfig): void => {
     store.dispatch(openBottomWidgetAction(tabConfig))
   }
 
-  openLeftWidget (tabConfig: WidgetManagerTabConfig): void {
+  openLeftWidget = (tabConfig: WidgetManagerTabConfig): void => {
     store.dispatch(openLeftWidgetAction(tabConfig))
   }
 
-  openRightWidget (tabConfig: WidgetManagerTabConfig): void {
+  openRightWidget = (tabConfig: WidgetManagerTabConfig): void => {
     store.dispatch(openRightWidgetAction(tabConfig))
   }
 
-  switchToWidget (id: string): void {
+  switchToWidget = (id: string): void => {
     store.dispatch(setActiveWidgetById(id))
   }
 
-  closeWidget (id: string): void {
+  closeWidget = (id: string): void => {
     const innerWidgetData = this.getInnerWidgetData(id)
     const outerWidgetData = this.getOuterWidgetData(id)
 
     store.dispatch(closeWidgetAction(id))
 
-    if (!isNull(innerWidgetData)) {
-      const event: CloseMainWidgetEvent = {
+    if (innerWidgetData) {
+      eventBus.publish({
         identifier: {
           type: eventTypes['widget-manager:inner:widget-closed'],
           id
         },
         payload: innerWidgetData
-      }
-      eventBus.publish(event)
+      })
     }
 
-    if (!isNull(outerWidgetData)) {
-      const event: CloseOuterWidgetEvent = {
+    if (outerWidgetData) {
+      eventBus.publish({
         identifier: {
           type: eventTypes['widget-manager:outer:widget-closed'],
           id
         },
         payload: outerWidgetData
-      }
-      eventBus.publish(event)
+      })
     }
   }
 
-  isMainWidgetOpen (id: string): boolean {
+  isMainWidgetOpen = (id: string): boolean => {
     return this.getInnerModel().getNodeById(id) !== undefined
   }
 
-  hasOuterWidget (id: string): boolean {
+  hasOuterWidget = (id: string): boolean => {
     return this.getOuterModel().getNodeById(id) !== undefined
   }
 
-  getOpenedMainWidget (): TabNode | undefined {
+  getOpenedMainWidget = (): TabNode | undefined => {
     return this.getInnerModel().getActiveTabset()?.getSelectedNode() as TabNode | undefined
   }
 
