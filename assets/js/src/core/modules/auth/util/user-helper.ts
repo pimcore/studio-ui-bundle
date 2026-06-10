@@ -13,5 +13,15 @@ import { type UserInformation } from '../user/user-api-slice.gen'
 import { selectCurrentUser } from '../user/user-slice'
 
 export const getCurrentUser = (): UserInformation => {
-  return selectCurrentUser(store.getState())
+  const user = selectCurrentUser(store.getState())
+
+  if (user.id === 0) {
+    console.warn(
+      'getCurrentUser() returned the system user (id 0). This usually means it was ' +
+      'called before the current user was loaded, e.g. during a module\'s onInit(). ' +
+      'Read the user inside a component instead, for example via the useUser() hook.'
+    )
+  }
+
+  return user
 }
