@@ -64,7 +64,6 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
     <Form
       form={ form }
       initialValues={ buildFormValues() }
-      key={ id }
       layout="vertical"
       onValuesChange={ onValuesChange }
     >
