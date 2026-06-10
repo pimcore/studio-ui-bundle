@@ -1153,6 +1153,17 @@ element.delete: Elimina
 element.delete.confirmation.title: Elimina elemento
 element.delete.confirmation.text: Eliminare questo elemento?
 element.delete.confirmation.ok: Elimina definitivamente
+element.delete.folder.title: Elimina cartella
+element.delete.folder.question: Eliminare questa cartella?
+element.delete.folder.small.note: 'Attenzione: Le dipendenze verranno eliminate. Potrebbe non essere possibile annullare completamente questa operazione.'
+element.delete.folder.large.note: 'Attenzione: La cartella e il suo contenuto verranno eliminati definitivamente e non potranno essere ripristinati.'
+element.delete.folder.ok: Elimina
+element.delete.folder.ok.permanent: Elimina definitivamente
+element.delete.batch.title: Elimina elementi
+element.delete.batch.note: 'Nota: Questi elementi verranno eliminati definitivamente e non potranno essere ripristinati.'
+element.delete.batch.question: 'Vuoi davvero eliminare {{count}} elementi?'
+element.delete.batch.ok: Elimina definitivamente
+element.delete.batch.show-paths: 'Mostra tutti i {{count}} elementi'
 element.open: Apri
 element.toolbar.copy-id: Copia ID
 element.toolbar.copy-full-path-to-clipboard: Copia percorso completo
@@ -2709,3 +2720,4 @@ translations.merger.revert-all: Ripristina tutto
 translations.merger.title: "Unisci traduzioni (Dominio: {{domain}})"
 translations.merger.column.language: Lingua
 translations.merger.items: elementi
+select.clear-selection: Cancella selezione

@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 import { type UseCssContainerProps } from './use-css-container'
 
 export const useCssContainerStyles = createStyles(({ token, css }, props: UseCssContainerProps) => {

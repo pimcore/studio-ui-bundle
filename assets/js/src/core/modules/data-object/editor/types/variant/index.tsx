@@ -20,6 +20,7 @@ import { type ObjectTabManager } from '@Pimcore/modules/data-object/editor/types
 import { TAB_PREVIEW, TAB_VERSIONS } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tab-definitions'
 import { TAB_EDIT } from '../object/tab-manager/tabs/edit/edit-container'
 import { TAB_VARIANTS } from './tab-manager/tabs/variants/variants-tab-container'
+import { TAB_APPLICATION_LOGGER } from '@Pimcore/modules/application-logger/tabs/object-tab/object-tab'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -35,5 +36,6 @@ moduleSystem.registerModule({
     objectEditorTabManager.register(TAB_TAGS)
     objectEditorTabManager.register(TAB_VARIANTS)
     objectEditorTabManager.register(TAB_WORKFLOW)
+    objectEditorTabManager.register(TAB_APPLICATION_LOGGER)
   }
 })

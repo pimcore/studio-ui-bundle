@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 import { DROPZONE_CONFIG } from '../../constants/dropzone-constants'
 
 export const useEditableDropzoneStyles = createStyles(({ token }) => ({
