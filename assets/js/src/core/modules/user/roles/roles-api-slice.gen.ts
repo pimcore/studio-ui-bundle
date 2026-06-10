@@ -274,7 +274,7 @@ export type UpdateUserRole = {
     /** Document Workspace */
     documentWorkspaces: UserWorkspace[];
     /** Allowed studio perspectives */
-    perspectives: string[];
+    perspectives: object;
 };
 export type SimpleUserRole = {
     /** AdditionalAttributes */
