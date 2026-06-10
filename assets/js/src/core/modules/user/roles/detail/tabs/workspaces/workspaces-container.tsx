@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
 import { Table } from '@Pimcore/modules/user/management/detail/tabs/workspaces/components/table/table'
@@ -31,12 +31,6 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const [assetWorkspaces, setAssetWorkspaces] = React.useState<UserWorkspace[]>(role?.assetWorkspaces ?? [])
   const [documentWorkspaces, setDocumentWorkspaces] = React.useState<UserWorkspace[]>(role?.documentWorkspaces ?? [])
   const [objectWorkspaces, setObjectWorkspaces] = React.useState<UserWorkspace[]>(role?.dataObjectWorkspaces ?? [])
-
-  useEffect(() => {
-    setAssetWorkspaces(role?.assetWorkspaces ?? [])
-    setDocumentWorkspaces(role?.documentWorkspaces ?? [])
-    setObjectWorkspaces(role?.dataObjectWorkspaces ?? [])
-  }, [id])
 
   const [specialModalContext, setSpecialModalContext] = useState<number | null>(null)
   const [isSpecialSettingsModalOpen, setIsSpecialSettingsModalOpen] = useState(false)
