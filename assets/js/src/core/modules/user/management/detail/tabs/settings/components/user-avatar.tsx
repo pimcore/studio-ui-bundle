@@ -11,8 +11,8 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Card } from '@Pimcore/components/card/card'
-import { Avatar, Flex, Upload, Skeleton } from 'antd'
-import { UserOutlined } from '@ant-design/icons'
+import { Flex, Upload, Skeleton } from 'antd'
+import { Avatar } from '@Pimcore/components/avatar/avatar'
 import { Button } from '@Pimcore/components/button/button'
 import { useStyle } from '@Pimcore/modules/user/management/detail/tabs/settings/components/user-avatar.styles'
 import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
@@ -77,7 +77,6 @@ const UserAvatar = ({ user, onUserImageChanged, ...props }: IUserAvatar): React.
           : (
             <Avatar
               className={ classNames.join(' ') }
-              icon={ <UserOutlined /> }
               size={ 64 }
               src={ user?.hasImage === true && user?.image != null ? user.image : undefined }
             />

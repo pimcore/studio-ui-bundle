@@ -15,35 +15,46 @@ export const useStyle = createStyles(({ token, css }) => {
     userMenu: css`
       .user-menu__title {
         text-transform: uppercase;
+        font-size: ${token.fontSize}px;
+        line-height: 22px;
+        color: ${token.colorTextDescription};
       }
       .user-menu__title-username {
         text-transform: none;
       }
-      
+
       .user-menu__item-extra {
         margin-left: auto;
       }
 
-      .ant-dropdown-menu-title-content.ant-dropdown-menu-title-content {
-        gap: ${token.marginXXS}px;
-        width: 100%;
+      .ant-dropdown-menu-item-group-title {
+        height: ${token.controlHeight}px;
+        padding: 5px ${token.controlPaddingHorizontal}px;
+        display: flex;
+        align-items: center;
       }
-      
+
+      .ant-dropdown-menu-item,
+      .ant-dropdown-menu-submenu-title {
+        height: ${token.controlHeight}px;
+        padding-block: 5px;
+        font-size: ${token.fontSize}px;
+        line-height: 22px;
+      }
+
+      .ant-dropdown-menu-title-content.ant-dropdown-menu-title-content {
+        gap: ${token.marginXS}px;
+        width: 100%;
+        font-size: ${token.fontSize}px;
+      }
+
       .user-menu__item-icon {
         width: 20px;
-        line-height: 1;
-      }
-    
-      .ant-badge .ant-badge-count {
-        background: ${token.colorPrimary};
-        width: 20px;
         height: 20px;
-        border-radius: 100%;
-        font-size: 8px;
-        font-weight: ${token.fontWeightStrong};
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-shrink: 0;
       }
     `
   }
