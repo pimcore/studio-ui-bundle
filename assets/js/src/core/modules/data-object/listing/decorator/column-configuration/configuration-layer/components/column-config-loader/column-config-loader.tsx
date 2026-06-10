@@ -67,6 +67,7 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
           exportable: availableColumn.exportable,
           frontendType: availableColumn.frontendType,
           group: availableColumn.group,
+          width: column.width,
           originalApiDefinition: apiColumn
         })
       }

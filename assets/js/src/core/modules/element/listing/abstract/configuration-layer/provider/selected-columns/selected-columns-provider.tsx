@@ -24,6 +24,7 @@ export interface SelectedColumn {
   frontendType?: string
   locale?: string | null
   group?: AvailableColumn['group']
+  width?: number | null
   originalApiDefinition?: Record<string, any>
   meta?: Record<string, any>
 }

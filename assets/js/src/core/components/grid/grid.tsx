@@ -36,7 +36,7 @@ import {
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { Checkbox, ConfigProvider, Skeleton } from 'antd'
 import cn from 'classnames'
-import { isEmpty, isNumber, isFunction, isNull } from 'lodash'
+import { isEmpty, isNumber, isFunction, isNull, isString, isUndefined } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
@@ -242,6 +242,7 @@ export const Grid = ({
   tableProps.onColumnSizingInfoChange = (updater) => {
     // Update your own state with the new column sizing info
     const newValue = functionalUpdate(updater, columnSizingInfo)
+    const previousResizingColumn = columnSizingInfo?.isResizingColumn
 
     if (tableAutoWidth && typeof newValue !== 'undefined' && typeof newValue?.isResizingColumn === 'string') {
       const column = table.getColumn(newValue.isResizingColumn)
@@ -267,6 +268,22 @@ export const Grid = ({
     }
 
     setColumnSizingInfo(updater)
+
+    if (
+      !isUndefined(props.onColumnResizeEnd) &&
+      isString(previousResizingColumn) &&
+      newValue?.isResizingColumn === false
+    ) {
+      const column = table.getColumn(previousResizingColumn)
+
+      if (!isUndefined(column)) {
+        props.onColumnResizeEnd({
+          columnId: previousResizingColumn,
+          width: column.getSize(),
+          columnSizing: table.getState().columnSizing
+        })
+      }
+    }
   }
 
   // validate if only one column has autoWidth set to true

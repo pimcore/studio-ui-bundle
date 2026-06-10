@@ -92,7 +92,8 @@ export const GridConfigInner = (): React.JSX.Element => {
     setColumns(selectedColumns.map(column => {
       return {
         ...column.originalApiDefinition!,
-        locale: column?.locale
+        locale: column?.locale,
+        width: column.width
       }
     }) as AvailableColumn[])
   }, [selectedColumns])
@@ -184,13 +185,14 @@ export const GridConfigInner = (): React.JSX.Element => {
     })
   }
 
-  function prepareColumns (columns: AvailableColumn[]): Array<{ key: string, locale: string | null, type: string }> {
+  function prepareColumns (columns: AvailableColumn[]): Array<{ key: string, locale: string | null, type: string, width: number | null }> {
     return columns.map((column) => ({
       key: column.key,
       locale: column.locale ?? null,
       group: column.group,
       type: column.type,
-      config: column.__meta?.advancedColumnConfig ?? column.config
+      config: column.__meta?.advancedColumnConfig ?? column.config,
+      width: column.width ?? null
     }))
   }
 
@@ -260,7 +262,7 @@ export const GridConfigInner = (): React.JSX.Element => {
     }
   }
 
-  const onCancelClick = (): void => { setColumns(selectedColumns.map(column => column.originalApiDefinition!) as AvailableColumn[]) }
+  const onCancelClick = (): void => { setColumns(selectedColumns.map(column => ({ ...column.originalApiDefinition!, width: column.width })) as AvailableColumn[]) }
 
   const onApplyClick = (): void => {
     setSelectedColumns(columns.map(column => {
@@ -275,6 +277,7 @@ export const GridConfigInner = (): React.JSX.Element => {
         exportable: column.exportable,
         frontendType: column.frontendType,
         group: column.group,
+        width: column.width,
         originalApiDefinition: column
       }
     }))
