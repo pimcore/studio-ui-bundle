@@ -64,12 +64,12 @@ const DetailTab = ({ id }: IDetailTabProps): React.JSX.Element => {
     {
       key: 'settings',
       label: t('roles.settings.title'),
-      children: <SettingsContainer />
+      children: <SettingsContainer key={ id } />
     },
     {
       key: 'workspaces',
       label: t('roles.workspaces.title'),
-      children: <WorkspacesContainer />
+      children: <WorkspacesContainer key={ id } />
     }
   ]
 
