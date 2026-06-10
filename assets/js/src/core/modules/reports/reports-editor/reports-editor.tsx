@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo, useState } from 'react'
+import React, { createContext, useMemo, useState } from 'react'
 import { isUndefined } from 'lodash'
 import { ConfigLayout } from '@Pimcore/components/predefined-layouts/config/config-layout'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
@@ -26,6 +26,8 @@ import { useStyles } from './reports-editor.styles'
 
 export const REFETCH_BTN_PORTAL_ID = 'reports-editor-toolbar-refetch-btn'
 export const SAVE_BTN_PORTAL_ID = 'reports-editor-toolbar-save-btn'
+
+export const ActiveReportTabContext = createContext<string | undefined>(undefined)
 
 export const ReportsEditor = (): React.JSX.Element => {
   const hasPermission = isAllowed(UserPermission.ReportsConfig)
@@ -54,14 +56,13 @@ export const ReportsEditor = (): React.JSX.Element => {
         label: `${report.text} ${modifiedReports.includes(report.id) ? '*' : ''}`,
         children: (
           <ReportConfiguration
-            isActive={ activeTabKey === report.id }
             modifiedReports={ modifiedReports }
             report={ report }
             setModifiedReports={ setModifiedReports }
           />
         )
       }))
-  }, [reportsConfigTreeData, openedReports, activeTabKey, modifiedReports])
+  }, [reportsConfigTreeData, openedReports, modifiedReports])
 
   const handleOpenReport = (report: BundleCustomReportsConfigurationTreeNode): void => {
     const isAlreadyOpened = openedReports.some(item => item.id === report.id)
@@ -110,15 +111,17 @@ export const ReportsEditor = (): React.JSX.Element => {
           </Toolbar>
         ) }
       >
-        <Tabs
-          activeKey={ activeTabKey }
-          className={ styles.tabs }
-          hasStickyHeader
-          items={ tabItems }
-          onChange={ handleChangeTab }
-          onClose={ handleCloseTab }
-          rootClassName={ styles.tabsContainer }
-        />
+        <ActiveReportTabContext.Provider value={ activeTabKey }>
+          <Tabs
+            activeKey={ activeTabKey }
+            className={ styles.tabs }
+            hasStickyHeader
+            items={ tabItems }
+            onChange={ handleChangeTab }
+            onClose={ handleCloseTab }
+            rootClassName={ styles.tabsContainer }
+          />
+        </ActiveReportTabContext.Provider>
       </ContentLayout>
     )
   }

@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { memo } from 'react'
 import cn from 'classnames'
 import { Layout, type ILayoutProps, type TabNode } from 'flexlayout-react'
 import { useStyles } from './widget-manager-view.styles'
@@ -22,7 +22,7 @@ export interface WidgetManagerProps extends ILayoutProps {
   createContextMenuItems?: (args: CreateContextMenuItemsProps) => DropdownProps['menu']['items']
 }
 
-export const WidgetManagerView = ({ className, createContextMenuItems, ...props }: WidgetManagerProps): React.JSX.Element => {
+const WidgetManagerViewInner = ({ className, createContextMenuItems, ...props }: WidgetManagerProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { showContextMenu, dropdown } = useContextMenu(props.model, createContextMenuItems)
   const { closeWidget } = useWidgetManager()
@@ -43,3 +43,5 @@ export const WidgetManagerView = ({ className, createContextMenuItems, ...props 
     </div>
   )
 }
+
+export const WidgetManagerView = memo(WidgetManagerViewInner)

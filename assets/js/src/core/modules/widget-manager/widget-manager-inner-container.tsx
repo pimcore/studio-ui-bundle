@@ -8,10 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { memo, useEffect } from 'react'
+import React, { memo, useCallback, useEffect, useRef } from 'react'
 import { WidgetManagerView } from './widget-manager-view'
 import { widgetManagerFactory } from './utils/widget-manager-factory'
-import { Actions, type ITabRenderValues, Model, type TabNode } from 'flexlayout-react'
+import { Actions, type IJsonModel, type ITabRenderValues, Model, type TabNode } from 'flexlayout-react'
 import { useAppDispatch, useAppSelector } from '@sdk/app'
 import { selectInnerModel, updateInnerModel, updateMainWidgetContext } from './widget-manager-slice'
 import { TabTitleOuterContainer } from './title/tab-title-outer-container'
@@ -20,11 +20,28 @@ import { createContextMenuItems } from '@Pimcore/modules/widget-manager/context-
 const WidgetManagerInnerContainer = (): React.JSX.Element => {
   const modelJson = useAppSelector(selectInnerModel)
   const dispatch = useAppDispatch()
-  const model = Model.fromJson(modelJson)
+
+  // keep a stable model instance: only recreate when the redux action
+  // changes the JSON (e.g. openMainWidget, closeWidget).
+  const modelRef = useRef<Model>(Model.fromJson(modelJson))
+  const prevModelJsonRef = useRef<IJsonModel>(modelJson)
+  const skipModelSyncRef = useRef(false)
+
+  if (modelJson !== prevModelJsonRef.current) {
+    prevModelJsonRef.current = modelJson
+
+    if (!skipModelSyncRef.current) {
+      modelRef.current = Model.fromJson(modelJson)
+    }
+
+    skipModelSyncRef.current = false
+  }
+
+  const model = modelRef.current
   const tabCount = model.getActiveTabset()?.getChildren().length ?? 0
 
   useEffect(() => {
-    model.doAction(Actions.updateModelAttributes({
+    modelRef.current.doAction(Actions.updateModelAttributes({
       tabSetTabStripHeight: 34,
       tabSetTabHeaderHeight: 34,
       borderBarSize: 50
@@ -41,16 +58,25 @@ const WidgetManagerInnerContainer = (): React.JSX.Element => {
     } else {
       dispatch(updateMainWidgetContext(null))
     }
-  }, [model])
+  }, [model, dispatch])
 
-  function onModelChange (model: Model): void {
-    dispatch(updateInnerModel(model.toJson()))
-  }
+  const onModelChange = useCallback((updatedModel: Model): void => {
+    const selectedNode: TabNode | undefined = updatedModel.getActiveTabset()?.getSelectedNode() as TabNode | undefined
 
-  function onRenderTab (node: TabNode, renderValues: ITabRenderValues): void {
+    if (selectedNode !== undefined) {
+      dispatch(updateMainWidgetContext({ nodeId: selectedNode.getId() }))
+    } else {
+      dispatch(updateMainWidgetContext(null))
+    }
+
+    skipModelSyncRef.current = true
+    dispatch(updateInnerModel(updatedModel.toJson()))
+  }, [dispatch])
+
+  const onRenderTab = useCallback((node: TabNode, renderValues: ITabRenderValues): void => {
     renderValues.content = <TabTitleOuterContainer node={ node } />
     renderValues.leading = <></>
-  }
+  }, [])
 
   return (
     <WidgetManagerView

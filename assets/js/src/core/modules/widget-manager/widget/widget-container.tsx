@@ -11,6 +11,7 @@
 import React, { createContext, type ComponentType, useState, useMemo, useEffect } from 'react'
 import { BorderNode, type TabNode } from 'flexlayout-react'
 import { WidgetView } from '@Pimcore/modules/widget-manager/widget/widget-view'
+import { WidgetContent } from '@Pimcore/modules/widget-manager/widget/widget-content'
 import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 import { useAppSelector } from '@sdk/app'
 import { selectMainWidgetContext } from '../widget-manager-slice'
@@ -62,7 +63,9 @@ const WidgetContainer = (props: WidgetContainerProps): React.JSX.Element => {
           showTitle={ isBorderNode }
           title={ title }
         >
-          <Component { ...node.getConfig() } />
+          <WidgetContent node={ node }>
+            <Component { ...node.getConfig() } />
+          </WidgetContent>
         </WidgetView>
       </WidgetContext.Provider>
     </ErrorBoundary>
