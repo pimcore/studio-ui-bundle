@@ -86,7 +86,7 @@ export const BatchActions = (): React.JSX.Element => {
         {count > 5
           ? <Accordion items={ [{ key: 'paths', title: <span>{t('element.delete.batch.show-paths')}</span>, children: pathList }] } />
           : pathList}
-          <p><span className={ styles.warningText }>{t('element.delete.batch.dependencies-warning')}</span></p>
+        <p><span className={ styles.warningText }>{t('element.delete.batch.dependencies-warning')}</span></p>
       </>,
       cancelText: t('cancel'),
       okText: t('element.delete.batch.ok'),
