@@ -66,7 +66,8 @@ export const contextMenuConfig = {
     priority: {
       unpublish: 100,
       delete: 200,
-      rename: 300
+      rename: 300,
+      open: 400
     }
   },
 

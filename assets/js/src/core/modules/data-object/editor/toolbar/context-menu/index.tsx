@@ -14,6 +14,7 @@ import { moduleSystem } from '@Pimcore/app/module-system/module-system'
 import { type ContextMenuRegistry } from '@Pimcore/modules/app/context-menu-registry/context-menu-registry'
 import { type DataObjectEditorContextMenuProps } from '@Pimcore/modules/app/context-menu-registry/context-types'
 import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/context-menu-config'
+import { useOpenPreviewInNewWindow } from '@Pimcore/modules/data-object/actions/open-preview-in-new-window/use-open-preview-in-new-window'
 import { useDelete } from '@Pimcore/modules/element/actions/delete/use-delete'
 import { useRename } from '@Pimcore/modules/element/actions/rename/use-rename'
 import { useUnpublish } from '@Pimcore/modules/element/actions/unpublish/use-unpublish'
@@ -47,6 +48,15 @@ moduleSystem.registerModule({
       useMenuItem: (context: DataObjectEditorContextMenuProps) => {
         const { renameContextMenuItem } = useRename('data-object')
         return renameContextMenuItem(context.target)
+      }
+    })
+
+    contextMenuRegistry.registerToSlot(config.name, {
+      name: 'open',
+      priority: config.priority.open,
+      useMenuItem: (context: DataObjectEditorContextMenuProps) => {
+        const { openPreviewInNewWindowContextMenuItem } = useOpenPreviewInNewWindow()
+        return openPreviewInNewWindowContextMenuItem(context.target, context.onComplete)
       }
     })
   }
