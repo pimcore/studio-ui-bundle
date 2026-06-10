@@ -36,5 +36,14 @@ window.addEventListener('load', async () => {
   pluginSystem.initPlugins()
   pluginSystem.startupPlugins()
   moduleSystem.initModules()
-  runApp()
+  const root = runApp()
+
+  // Expose teardown so the parent window can unmount this iframe's React app when the
+  // document tab closes. Without this the realm is never collected (observers/timers/
+  // listeners stay alive), leaking the whole iframe context on every open/close.
+  if (root !== undefined) {
+    window.PimcoreDocumentEditor.unmount = () => {
+      root.unmount()
+    }
+  }
 })

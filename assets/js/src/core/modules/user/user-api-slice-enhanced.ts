@@ -9,7 +9,7 @@
  */
 
 import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
-import { api as baseApi } from '@Pimcore/modules/auth/user/user-api-slice.gen'
+import { api as baseApi, type User } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
   addTagTypes: [
@@ -52,7 +52,13 @@ const api = baseApi.enhanceEndpoints({
       }
     },
     userGetById: {
-      providesTags: (result, error, args) => providingTags.USER_DETAIL(args.id)
+      providesTags: (result, error, args) => providingTags.USER_DETAIL(args.id),
+      transformResponse: (raw: User): any => ({
+        ...raw,
+        perspectives: (raw.perspectives ?? [])
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map(p => p.id)
+      })
     },
     userDeleteById: {
       invalidatesTags: (result, error, args) => invalidatingTags.USER_DETAIL(args.id)

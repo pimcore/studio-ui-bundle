@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef, useState, useImperativeHandle } from 'react'
+import React, { forwardRef, useState, useImperativeHandle, useEffect, useRef } from 'react'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyle } from './iframe.styles'
@@ -44,6 +44,7 @@ export const Iframe = forwardRef<IframeRef, IframeProps>(
     const [isReloading, setIsReloading] = useState(false)
     const [isActuallyLoading, setIsActuallyLoading] = useState(true) // Track actual iframe loading state
     const [iframeElement, setIframeElement] = useState<HTMLIFrameElement | null>(null)
+    const iframeElementRef = useRef<HTMLIFrameElement | null>(null)
     const [savedScrollPosition, setSavedScrollPosition] = useState<{ x: number, y: number } | null>(null)
     const { styles } = useStyle({
       isLoaded: useExternalReadyState ? isReady : isLoaded,
@@ -161,8 +162,34 @@ export const Iframe = forwardRef<IframeRef, IframeProps>(
     }
 
     const handleIframeRef = (element: HTMLIFrameElement | null): void => {
+      iframeElementRef.current = element
       setIframeElement(element)
     }
+
+    // On unmount (e.g. closing the tab), navigate the iframe to about:blank so the
+    // browser discards the (potentially heavy) browsing context instead of retaining
+    // the detached document. Deferred behind an isConnected check so we don't blank a
+    // live iframe during React StrictMode's simulated mount/unmount cycle in dev: the
+    // DOM node stays connected then, but is truly detached on a real close.
+    useEffect(() => {
+      return () => {
+        const element = iframeElementRef.current
+
+        if (element === null) {
+          return
+        }
+
+        setTimeout(() => {
+          if (!element.isConnected) {
+            try {
+              element.src = 'about:blank'
+            } catch (error) {
+              console.warn('Could not reset iframe source on unmount:', error)
+            }
+          }
+        }, 0)
+      }
+    }, [])
 
     const showLoadingOverlay = useExternalReadyState
       ? (!isReady || isReloading)
