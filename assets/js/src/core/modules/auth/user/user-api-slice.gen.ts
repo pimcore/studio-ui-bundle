@@ -591,7 +591,7 @@ export type User2 = {
     /** Document Workspace */
     documentWorkspaces: UserWorkspace[];
     /** Allowed studio perspectives */
-    perspectives: object;
+    perspectives: string[];
 };
 export type UserPermission = {
     /** AdditionalAttributes */
