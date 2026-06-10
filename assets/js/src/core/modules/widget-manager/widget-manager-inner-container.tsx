@@ -61,7 +61,7 @@ const WidgetManagerInnerContainer = (): React.JSX.Element => {
   }, [model, dispatch])
 
   const onModelChange = useCallback((updatedModel: Model): void => {
-    const selectedNode: TabNode | undefined = updatedModel.getActiveTabset()?.getSelectedNode() as TabNode | undefined
+    const selectedNode = updatedModel.getActiveTabset()?.getSelectedNode()
 
     if (selectedNode !== undefined) {
       dispatch(updateMainWidgetContext({ nodeId: selectedNode.getId() }))
