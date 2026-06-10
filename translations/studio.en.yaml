@@ -1449,6 +1449,7 @@ roles.remove-folder.success: Folder removed successfully
 roles.remove-item.success: Role removed successfully
 roles.add-item.success: Role added successfully
 roles.add-folder.success: Folder added successfully
+roles.general: General
 roles.settings.title: Settings
 roles.workspaces.title: Workspaces
 roles.add-folder: Add new Folder

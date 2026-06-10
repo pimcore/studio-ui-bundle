@@ -1442,6 +1442,7 @@ roles.remove-folder.success: Mappen har tagits bort
 roles.remove-item.success: Rollen har tagits bort
 roles.add-item.success: Rollen har lagts till
 roles.add-folder.success: Mappen har lagts till
+roles.general: Allmänt
 roles.settings.title: Inställningar
 roles.workspaces.title: Workspaces
 roles.add-folder: Lägg till ny mapp

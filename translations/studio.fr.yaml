@@ -1442,6 +1442,7 @@ roles.remove-folder.success: Dossier supprimé avec succès
 roles.remove-item.success: Rôle supprimé avec succès
 roles.add-item.success: Rôle ajouté avec succès
 roles.add-folder.success: Dossier ajouté avec succès
+roles.general: Général
 roles.settings.title: Paramètres
 roles.workspaces.title: Workspaces
 roles.add-folder: Ajouter un nouveau dossier
