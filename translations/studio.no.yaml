@@ -1444,6 +1444,7 @@ roles.remove-folder.success: Mappe fjernet
 roles.remove-item.success: Rolle fjernet
 roles.add-item.success: Rolle lagt til
 roles.add-folder.success: Mappe lagt til
+roles.general: Generelt
 roles.settings.title: Innstillinger
 roles.workspaces.title: Workspaces
 roles.add-folder: Legg til ny mappe

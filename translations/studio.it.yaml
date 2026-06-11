@@ -1444,6 +1444,7 @@ roles.remove-folder.success: Cartella rimossa con successo
 roles.remove-item.success: Ruolo rimosso con successo
 roles.add-item.success: Ruolo aggiunto con successo
 roles.add-folder.success: Cartella aggiunta con successo
+roles.general: Generale
 roles.settings.title: Impostazioni
 roles.workspaces.title: Workspaces
 roles.add-folder: Aggiungi nuova cartella

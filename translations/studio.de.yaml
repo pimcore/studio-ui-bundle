@@ -1444,6 +1444,7 @@ roles.remove-folder.success: Ordner erfolgreich entfernt
 roles.remove-item.success: Rolle erfolgreich entfernt
 roles.add-item.success: Rolle erfolgreich hinzugefügt
 roles.add-folder.success: Ordner erfolgreich hinzugefügt
+roles.general: Allgemein
 roles.settings.title: Einstellungen
 roles.workspaces.title: Workspaces
 roles.add-folder: Neuen Ordner hinzufügen
