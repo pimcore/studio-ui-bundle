@@ -87,8 +87,6 @@ export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
 
     const newValue = isEmpty(filteredValue) ? [] : filteredValue
 
-    console.log({ newValue, old: valueRef.current })
-
     if (!isEqual(newValue, valueRef.current)) {
       props.onChange(newValue)
       valueRef.current = newValue

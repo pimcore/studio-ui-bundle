@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { memo } from 'react'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type WidgetRegistry } from '../services/widget-registry'
 import { TabTitleContainer, type TabTitleContainerProps } from './tab-title-container'
@@ -18,7 +18,7 @@ export interface TabTitleOuterContainerProps {
   node: TabTitleContainerProps['node']
 }
 
-export const TabTitleOuterContainer = ({ node }: TabTitleOuterContainerProps): React.JSX.Element => {
+const TabTitleOuterContainerInner = ({ node }: TabTitleOuterContainerProps): React.JSX.Element => {
   const componentName = node.getComponent()
   const widgetConfig = useInjection<WidgetRegistry>(serviceIds.widgetManager)
 
@@ -37,3 +37,5 @@ export const TabTitleOuterContainer = ({ node }: TabTitleOuterContainerProps): R
 
   return <> {Component} </>
 }
+
+export const TabTitleOuterContainer = memo(TabTitleOuterContainerInner)

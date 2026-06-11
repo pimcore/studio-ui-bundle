@@ -18,8 +18,8 @@ export const EditorView = (): React.JSX.Element => {
     <ConfigLayout
       leftItem={ {
         minSize: 250,
-        maxSize: 350,
-        size: 250,
+        maxSize: 600,
+        size: 25,
         children: <ItemsSidebar />
       } }
       resizeAble
