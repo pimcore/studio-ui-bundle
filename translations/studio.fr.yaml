@@ -1834,6 +1834,7 @@ empty-image: Image vide
 image.dnd-target: Déposez une image ici
 image.add.and.dnd: Ajoutez ou déposez une image directement ici
 image.upload.add.and.dnd: Téléversez, ajoutez ou déposez une image directement ici
+image.too-small: L'image sélectionnée est trop petite. Veuillez utiliser une image plus grande.
 fallback: Valeur de repli
 url-slug.add-site: Ajouter un site
 url-slug.invalid: Veuillez entrer un URL slug valide (commençant par '/')

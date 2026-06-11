@@ -1834,6 +1834,7 @@ empty-image: Leeres Bild
 image.dnd-target: Bild hier ablegen
 image.add.and.dnd: Bild hinzufügen oder direkt hier ablegen
 image.upload.add.and.dnd: Hochladen, hinzufügen oder Bild direkt hier ablegen
+image.too-small: Das ausgewählte Bild ist zu klein. Bitte verwenden Sie ein größeres Bild.
 fallback: Fallback
 url-slug.add-site: Site hinzufügen
 url-slug.invalid: Bitte geben Sie einen gültigen URL-Slug ein (beginnend mit '/')
