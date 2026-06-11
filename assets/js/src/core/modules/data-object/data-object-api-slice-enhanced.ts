@@ -13,7 +13,7 @@ import { normalizeLayoutTreeIcons } from '@Pimcore/utils/normalize-icon'
 import { api as baseApi, type Layout } from './data-object-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_TREE, tagNames.DATA_OBJECT_DETAIL],
+  addTagTypes: [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_TREE, tagNames.DATA_OBJECT_DETAIL, tagNames.DATA_OBJECT_GRID_CONFIGURATION, tagNames.DATA_OBJECT_GRID_CONFIGURATION_LIST, tagNames.DATA_OBJECT_GRID_CONFIGURATION_DETAIL],
   endpoints: {
 
     dataObjectClone: {
@@ -30,6 +30,34 @@ const api = baseApi.enhanceEndpoints({
 
     dataObjectGetGrid: {
       providesTags: (result, error, args) => providingTags.DATA_OBJECT_GRID_ID(args.body.folderId)
+    },
+
+    dataObjectGetGridConfiguration: {
+      providesTags: (result, error, args) => providingTags.DATA_OBJECT_GRID_CONFIGURATION_DETAIL(args.configurationId)
+    },
+
+    dataObjectListSavedGridConfigurations: {
+      providesTags: (result, error, args) => providingTags.DATA_OBJECT_GRID_CONFIGURATION_LIST()
+    },
+
+    dataObjectSaveGridConfiguration: {
+      invalidatesTags: (result, error, args) => invalidatingTags.DATA_OBJECT_GRID_CONFIGURATION()
+    },
+
+    dataObjectSetGridConfigurationAsFavorite: {
+      invalidatesTags: (result, error, args) => invalidatingTags.DATA_OBJECT_GRID_CONFIGURATION()
+    },
+
+    dataObjectRemoveGridConfigurationAsFavorite: {
+      invalidatesTags: (result, error, args) => invalidatingTags.DATA_OBJECT_GRID_CONFIGURATION()
+    },
+
+    dataObjectUpdateGridConfiguration: {
+      invalidatesTags: (result, error, args) => invalidatingTags.DATA_OBJECT_GRID_CONFIGURATION_DETAIL(args.configurationId)
+    },
+
+    dataObjectDeleteGridConfigurationByConfigurationId: {
+      invalidatesTags: (result, error, args) => [...invalidatingTags.DATA_OBJECT_GRID_CONFIGURATION_DETAIL(), ...invalidatingTags.DATA_OBJECT_GRID_CONFIGURATION_LIST()]
     },
 
     dataObjectUpdateById: {
@@ -79,7 +107,15 @@ export const {
   useDataObjectPatchFolderByIdMutation,
   useDataObjectGetTreeQuery,
   useDataObjectGetLayoutByIdQuery,
-  useLazyDataObjectGetSelectOptionsQuery
+  useLazyDataObjectGetSelectOptionsQuery,
+  useDataObjectGetAvailableGridColumnsQuery,
+  useDataObjectGetGridConfigurationQuery,
+  useDataObjectListSavedGridConfigurationsQuery,
+  useDataObjectSaveGridConfigurationMutation,
+  useDataObjectUpdateGridConfigurationMutation,
+  useDataObjectDeleteGridConfigurationByConfigurationIdMutation,
+  useDataObjectSetGridConfigurationAsFavoriteMutation,
+  useDataObjectRemoveGridConfigurationAsFavoriteMutation
 } = api
 
 export { api }
