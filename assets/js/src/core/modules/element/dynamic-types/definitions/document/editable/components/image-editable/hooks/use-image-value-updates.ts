@@ -29,7 +29,7 @@ interface UseImageValueUpdatesProps {
 interface UseImageValueUpdatesReturn {
   handleCropChange: (crop: CropSettings | null) => void
   handleHotspotsChange: (hotspots: Hotspot[], marker: Marker[]) => void
-  handleReplaceImage: (assetId: number) => void
+  handleReplaceImage: (assetId: number) => Promise<boolean>
   handleEmptyValue: () => void
   handleAltTextChange: (alt: string) => void
 }
@@ -86,35 +86,35 @@ export const useImageValueUpdates = ({ value: imageValue, onChange, minWidth, mi
     return (!isNil(minWidth) && image.width < minWidth) || (!isNil(minHeight) && image.height < minHeight)
   }, [minWidth, minHeight, dispatch])
 
-  const handleReplaceImage = useCallback((assetId: number) => {
-    void (async () => {
-      if (await isImageTooSmall(assetId)) {
-        handleEmptyValue()
+  const handleReplaceImage = useCallback(async (assetId: number): Promise<boolean> => {
+    if (await isImageTooSmall(assetId)) {
+      handleEmptyValue()
 
-        alertModal.error({ content: t('image.too-small') })
+      alertModal.error({ content: t('image.too-small') })
 
-        return
-      }
+      return false
+    }
 
-      const hasData = !isEmpty(imageValue?.hotspots) || !isEmpty(imageValue?.marker)
+    const hasData = !isEmpty(imageValue?.hotspots) || !isEmpty(imageValue?.marker)
 
-      if (hasData) {
-        confirm({
-          title: t('hotspots.clear-data'),
-          content: t('hotspots.clear-data.dnd-message'),
-          okText: t('yes'),
-          cancelText: t('no'),
-          onOk: () => {
-            onChange?.({ id: assetId, alt: '', title: '', hotspots: [], marker: [], crop: {} })
-          },
-          onCancel: () => {
-            onChange?.(createNewValue({ id: assetId, crop: {} }))
-          }
-        })
-      } else {
-        onChange?.({ id: assetId, alt: '', title: '', hotspots: [], marker: [], crop: {} })
-      }
-    })()
+    if (hasData) {
+      confirm({
+        title: t('hotspots.clear-data'),
+        content: t('hotspots.clear-data.dnd-message'),
+        okText: t('yes'),
+        cancelText: t('no'),
+        onOk: () => {
+          onChange?.({ id: assetId, alt: '', title: '', hotspots: [], marker: [], crop: {} })
+        },
+        onCancel: () => {
+          onChange?.(createNewValue({ id: assetId, crop: {} }))
+        }
+      })
+    } else {
+      onChange?.({ id: assetId, alt: '', title: '', hotspots: [], marker: [], crop: {} })
+    }
+
+    return true
   }, [imageValue?.hotspots, imageValue?.marker, createNewValue, onChange, isImageTooSmall, handleEmptyValue, alertModal])
 
   const handleAltTextChange = useCallback((alt: string) => {

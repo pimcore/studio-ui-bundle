@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
 import { DocumentHotspotImagePreview } from './hotspot-image-preview'
@@ -73,6 +73,7 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
   const { width: containerWidth } = useElementResize(props.containerRef ?? { current: null })
 
   const { triggerUpload } = useUploadModal({})
+  const showSuccessMessage = useRef(true)
   const {
     handleCropChange,
     handleHotspotsChange,
@@ -95,7 +96,7 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
     },
     onFinish: (event) => {
       if (event.items.length > 0) {
-        handleReplaceImage(event.items[0].data.id)
+        void handleReplaceImage(event.items[0].data.id)
       }
     }
   })
@@ -169,20 +170,21 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
       accept: 'image/*',
       multiple: false,
       maxItems: 1,
+      showSuccessMessage,
       onSuccess: async (assets) => {
         if (assets.length > 0) {
-          handleReplaceImage(Number(assets[0].id))
+          showSuccessMessage.current = await handleReplaceImage(Number(assets[0].id))
         }
       }
     })
   }, [props.config?.disableInlineUpload, props.config?.uploadPath, triggerUpload, handleReplaceImage])
 
   const handleFileSystemUpload = async (asset: any): Promise<void> => {
-    handleReplaceImage(Number(asset.id))
+    await handleReplaceImage(Number(asset.id))
   }
 
   const handleDroppableDrop = useCallback((info: DragAndDropInfo) => {
-    handleReplaceImage(info.data.id as number)
+    void handleReplaceImage(info.data.id as number)
   }, [handleReplaceImage])
 
   const renderDroppableContent = useCallback((children: React.ReactNode): React.JSX.Element => {
