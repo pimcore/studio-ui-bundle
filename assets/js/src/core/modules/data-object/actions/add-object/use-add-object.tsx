@@ -48,7 +48,7 @@ export const useAddObject = (): UseAddObjectHookReturn => {
     const classDefinitions = getClassDefinitionsForCurrentUser()
 
     const structuredClassDefinitions = [...classDefinitions]
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => t(a.name).localeCompare(t(b.name), undefined, { sensitivity: 'base' }))
       .reduce<Record<string, ClassDefinitionListItem[]>>((acc, classDefinition) => {
         const groupName = isNil(classDefinition.group) || isEmpty(classDefinition.group)
           ? 'undefined'
@@ -68,7 +68,10 @@ export const useAddObject = (): UseAddObjectHookReturn => {
       classHierarchy = structuredClassDefinitions.undefined.map(classDefinition => getDataObjectEntry(classDefinition, node))
     }
 
-    for (const [group, classDefinitions] of Object.entries(structuredClassDefinitions)) {
+    const sortedGroups = Object.entries(structuredClassDefinitions)
+      .sort(([groupA], [groupB]) => t(groupA).localeCompare(t(groupB), undefined, { sensitivity: 'base' }))
+
+    for (const [group, classDefinitions] of sortedGroups) {
       if (group !== 'undefined') {
         classHierarchy.push({
           label: t(group),
