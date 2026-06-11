@@ -289,6 +289,9 @@ select-option.tree.actions.select-option: Select Option
 custom-layout.import-success: Custom Layout importert
 custom-layout.delete.confirmation: Er du sikker på at du vil slette denne Custom Layout?
 custom-layout.delete.success: Custom Layout slettet
+custom-layout.add: Ny layout
+custom-layout.empty-state.create-or-edit: Opprett en ny custom layout eller rediger en eksisterende
+custom-layout.empty-state.edit: Velg en eksisterende custom layout for å begynne å redigere
 example-prefix: Eksempel-prefiks
 pagination.show-total: Totalt {{total}} elementer
 pagination.page: Side
@@ -1235,6 +1238,8 @@ folder: Mappe
 archive: Arkiv
 audio: Lyd
 image: Bilde
+image-gallery.clear-image-selection: Fjern bildevalg
+image-gallery.delete-frame: Slett ramme
 text: Tekst
 video: Video
 processing: Behandler
@@ -2724,3 +2729,6 @@ translations.merger.title: "Slå sammen oversettelser (Domene: {{domain}})"
 translations.merger.column.language: Språk
 translations.merger.items: elementer
 select.clear-selection: Fjern valg
+asset.folder.preview.image-display: Bildevisning
+asset.folder.preview.image-display.small: Liten
+asset.folder.preview.image-display.large: Stor

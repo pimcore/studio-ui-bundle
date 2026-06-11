@@ -9,7 +9,7 @@
  */
 
 import { BorderNode, type TabNode } from 'flexlayout-react'
-import React, { useState } from 'react'
+import React, { memo, useCallback, useRef, useState } from 'react'
 import { BorderTitleView } from './border-title-view'
 import { TabTitleView } from './tab-title-view'
 import { useWidgetManager } from '../hooks/use-widget-manager'
@@ -24,7 +24,7 @@ export interface TabTitleContainerProps {
   icon?: ElementIcon
 }
 
-export const TabTitleContainer = ({ node, modified, title: titleProp, icon: iconProp }: TabTitleContainerProps): React.JSX.Element => {
+const TabTitleContainerInner = ({ node, modified, title: titleProp, icon: iconProp }: TabTitleContainerProps): React.JSX.Element => {
   const [isBorderNode] = useState(node.getParent() instanceof BorderNode)
   const { closeWidget } = useWidgetManager()
   const { title, icon } = useWidgetTitle(node, { titleOverride: titleProp, iconOverride: iconProp })
@@ -32,15 +32,19 @@ export const TabTitleContainer = ({ node, modified, title: titleProp, icon: icon
 
   const isCloseable = node.isEnableClose()
 
-  const onClose = (): void => {
-    if (modified === false || modified === undefined) {
-      closeWidget(node.getId())
-    }
-  }
+  // keep closeWidget in a ref so the stable callbacks below always call the latest version
+  const closeWidgetRef = useRef(closeWidget)
+  closeWidgetRef.current = closeWidget
 
-  const onConfirm = (): void => {
-    closeWidget(node.getId())
-  }
+  const onClose = useCallback((): void => {
+    if (modified === false || modified === undefined) {
+      closeWidgetRef.current(node.getId())
+    }
+  }, [modified, node])
+
+  const onConfirm = useCallback((): void => {
+    closeWidgetRef.current(node.getId())
+  }, [node])
 
   // Type-safe config extraction
   const nodeId = typeof config.id === 'string' || typeof config.id === 'number' ? String(config.id) : undefined
@@ -77,3 +81,5 @@ export const TabTitleContainer = ({ node, modified, title: titleProp, icon: icon
     return title + (modified === true ? '*' : '')
   }
 }
+
+export const TabTitleContainer = memo(TabTitleContainerInner)

@@ -12,7 +12,7 @@ import { type ElementIcon, Icon } from '@Pimcore/components/icon/icon'
 import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
 import { Popconfirm } from 'antd'
 import { Button } from '@Pimcore/components/button/button'
-import React, { useState, type MouseEvent } from 'react'
+import React, { memo, useCallback, useState, type MouseEvent } from 'react'
 import { useStyles } from './tab-title-view.styles'
 import { useTranslation } from 'react-i18next'
 import { Space } from '@Pimcore/components/space/space'
@@ -28,21 +28,21 @@ interface TabTitleViewProps {
   iconColorGroup?: IconColorGroup
 }
 
-export const TabTitleView = ({ icon, title, onClose, onConfirm, dataTestId, iconColorGroup }: TabTitleViewProps): React.JSX.Element => {
+const TabTitleViewInner = ({ icon, title, onClose, onConfirm, dataTestId, iconColorGroup }: TabTitleViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
   const { user } = useUserDraft()
   const [isOpen, setIsOpen] = useState(false)
 
-  const triggerClose = (): void => {
+  const triggerClose = useCallback((): void => {
     onClose?.()
-  }
+  }, [onClose])
 
-  const triggerConfirm = (): void => {
+  const triggerConfirm = useCallback((): void => {
     onConfirm?.()
-  }
+  }, [onConfirm])
 
-  const handleAllowDirtyClose = (open: boolean): void => {
+  const handleAllowDirtyClose = useCallback((open: boolean): void => {
     if (!open) {
       setIsOpen(open)
       return
@@ -53,17 +53,19 @@ export const TabTitleView = ({ icon, title, onClose, onConfirm, dataTestId, icon
     } else {
       setIsOpen(open)
     }
-  }
+  }, [user?.allowDirtyClose, triggerConfirm])
+
+  const handleSpaceMouseDown = useCallback((evt: MouseEvent): void => {
+    if (evt.button === 1) {
+      triggerClose()
+    }
+  }, [triggerClose])
 
   return (
     <Space
       className={ ['widget-manager-tab-title', styles.title].join(' ') }
       data-testid={ dataTestId }
-      onMouseDown={ (evt: MouseEvent) => {
-        if (evt.button === 1) {
-          triggerClose()
-        }
-      } }
+      onMouseDown={ handleSpaceMouseDown }
       size='mini'
     >
       <Icon
@@ -109,3 +111,5 @@ export const TabTitleView = ({ icon, title, onClose, onConfirm, dataTestId, icon
     )
   }
 }
+
+export const TabTitleView = memo(TabTitleViewInner)

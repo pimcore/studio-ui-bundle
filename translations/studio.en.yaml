@@ -289,6 +289,9 @@ select-option.tree.actions.select-option: Select Option
 custom-layout.import-success: Custom layout imported successfully
 custom-layout.delete.confirmation: Are you sure you want to delete this custom layout?
 custom-layout.delete.success: Custom layout deleted successfully
+custom-layout.add: New layout
+custom-layout.empty-state.create-or-edit: Create a new custom layout or edit an existing one
+custom-layout.empty-state.edit: Select an existing custom layout to start editing
 example-prefix: Example Prefix
 pagination.show-total: Total {{total}} items
 pagination.page: Page
@@ -1242,6 +1245,8 @@ folder: Folder
 archive: Archive
 audio: Audio
 image: Image
+image-gallery.clear-image-selection: Clear Image Selection
+image-gallery.delete-frame: Delete Frame
 text: Text
 video: Video
 processing: Processing
@@ -2737,3 +2742,6 @@ translations.merger.title: "Merge Translations (Domain: {{domain}})"
 translations.merger.column.language: Language
 translations.merger.items: items
 select.clear-selection: Clear selection
+asset.folder.preview.image-display: Image display
+asset.folder.preview.image-display.small: Small
+asset.folder.preview.image-display.large: Large

@@ -19,6 +19,7 @@ import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/
 
 // @todo: Create a union type for all the different element types
 export type AvailableColumn = (AssetGridColumnConfig | ObjectGridColumnConfig) & {
+  width?: number | null
   __meta?: {
     uniqueId?: string
     advancedColumnConfig?: Record<string, any>

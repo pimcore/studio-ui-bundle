@@ -289,6 +289,9 @@ select-option.tree.actions.select-option: Option de sélection
 custom-layout.import-success: Mise en page personnalisée importée avec succès
 custom-layout.delete.confirmation: Êtes-vous sûr de vouloir supprimer cette mise en page personnalisée ?
 custom-layout.delete.success: Mise en page personnalisée supprimée avec succès
+custom-layout.add: Nouvelle mise en page
+custom-layout.empty-state.create-or-edit: Créez une nouvelle mise en page personnalisée ou modifiez-en une existante
+custom-layout.empty-state.edit: Sélectionnez une mise en page personnalisée existante pour commencer l'édition
 example-prefix: Préfixe d'exemple
 pagination.show-total: Total {{total}} éléments
 pagination.page: Page
@@ -1235,6 +1238,8 @@ folder: Dossier
 archive: Archive
 audio: Audio
 image: Image
+image-gallery.clear-image-selection: Effacer la sélection d'image
+image-gallery.delete-frame: Supprimer le cadre
 text: Texte
 video: Vidéo
 processing: Traitement
@@ -2724,3 +2729,6 @@ translations.merger.title: "Fusionner les traductions (Domaine : {{domain}})"
 translations.merger.column.language: Langue
 translations.merger.items: éléments
 select.clear-selection: Effacer la sélection
+asset.folder.preview.image-display: Affichage des images
+asset.folder.preview.image-display.small: Petit
+asset.folder.preview.image-display.large: Grand

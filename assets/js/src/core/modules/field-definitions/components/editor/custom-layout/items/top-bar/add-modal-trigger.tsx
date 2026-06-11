@@ -12,8 +12,10 @@ import { useAddModal } from '@Pimcore/modules/field-definitions/components/edito
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { IconTextButton } from '@sdk/components'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const AddModalTrigger = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const { openModal } = useAddModal()
   const { AddModal } = useSettings()
 
@@ -27,7 +29,7 @@ export const AddModalTrigger = (): React.JSX.Element => {
       icon={ { value: 'new-something' } }
       onClick={ openModal }
     >
-      New layout
+      {t('custom-layout.add')}
     </IconTextButton>
   )
 }

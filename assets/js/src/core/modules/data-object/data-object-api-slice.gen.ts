@@ -785,6 +785,8 @@ export type GridColumnRequest = {
     group?: string[] | null;
     /** Config */
     config?: (string | AdvancedColumnConfig)[];
+    /** Width of the Column */
+    width?: number | null;
 };
 export type Column = {
     /** Key of the Column */
@@ -793,6 +795,8 @@ export type Column = {
     locale: string | null;
     /** Define the group structure */
     group: object;
+    /** Width of the Column */
+    width?: number | null;
 };
 export type GridFilter = {
     /** Page */
