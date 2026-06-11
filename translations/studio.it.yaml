@@ -1161,9 +1161,11 @@ element.delete.folder.ok: Elimina
 element.delete.folder.ok.permanent: Elimina definitivamente
 element.delete.batch.title: Elimina elementi
 element.delete.batch.note: 'Nota: Questi elementi verranno eliminati definitivamente e non potranno essere ripristinati.'
-element.delete.batch.question: 'Vuoi davvero eliminare {{count}} elementi?'
+element.delete.batch.question_one: 'Vuoi davvero eliminare questo elemento?'
+element.delete.batch.question_other: 'Vuoi davvero eliminare questi {{count}} elementi?'
 element.delete.batch.ok: Elimina definitivamente
-element.delete.batch.show-paths: 'Mostra tutti i {{count}} elementi'
+element.delete.batch.show-paths: Mostra elementi
+element.delete.batch.dependencies-warning: 'Potrebbero esserci dipendenze, eliminare comunque?'
 element.open: Apri
 element.toolbar.copy-id: Copia ID
 element.toolbar.copy-full-path-to-clipboard: Copia percorso completo
