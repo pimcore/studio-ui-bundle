@@ -117,15 +117,25 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
       }
     }
 
+    const normalizeGroups = (value: unknown): any[] => {
+      if (Array.isArray(value)) return value
+
+      if (value != null && typeof value === 'object') return Object.values(value)
+
+      return []
+    }
+
     const processClassificationStoreData = ({ data, updatedFieldBreadcrumbTitle = fieldBreadcrumbTitle, groupId, fieldPathValue = fieldPath }: { data: ClassificationStoreGroup[], updatedFieldBreadcrumbTitle?: string, groupId?: number, fieldPathValue?: string }): IFormattedDataStructureData[] => {
-      return data.flatMap((dataItem: any) => {
-        if (!isEmpty(dataItem.keys)) {
+      return normalizeGroups(data).flatMap((dataItem: any) => {
+        const keys = normalizeGroups(dataItem.keys)
+
+        if (keys.length > 0) {
           const breadcrumbField = dataItem.title ?? dataItem.name
           const breadcrumbTitle = getBreadcrumbTitle(updatedFieldBreadcrumbTitle, breadcrumbField as string)
 
           const getFieldPathValue = isEmptyValue(fieldPathValue) ? `${dataItem.id}` : `${fieldPathValue}.${dataItem.id}`
 
-          return processClassificationStoreData({ data: dataItem.keys, updatedFieldBreadcrumbTitle: breadcrumbTitle, groupId: dataItem.id, fieldPathValue: getFieldPathValue })
+          return processClassificationStoreData({ data: keys, updatedFieldBreadcrumbTitle: breadcrumbTitle, groupId: dataItem.id, fieldPathValue: getFieldPathValue })
         }
 
         if (!isEmpty(dataItem.definition)) {
@@ -136,13 +146,13 @@ export class DynamicTypeObjectDataClassificationStore extends DynamicTypeObjectD
           if (isEmpty(fieldValue)) {
             const getFieldPathValue = isEmptyValue(fieldPathValue) ? `${dataItem.id}` : `${fieldPathValue}.${dataItem.id}`
 
-            return getFieldData({ fieldData: { ...dataItem.definition }, fieldValue, fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle, fieldPathValue: getFieldPathValue })
+            return getFieldData({ fieldData: { ...dataItem.definition, name: dataItem.id }, fieldValue, fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle, fieldPathValue: getFieldPathValue })
           }
 
           return Object.entries(fieldValue).map(([key, value]) => {
             const getFieldPathValue = isEmptyValue(fieldPathValue) ? `${key}` : `${fieldPathValue}.${key}.${dataItem.id}`
 
-            return getFieldData({ fieldData: { ...dataItem.definition, locale: key }, fieldValue: value[dataItem.id], fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle, fieldPathValue: getFieldPathValue })
+            return getFieldData({ fieldData: { ...dataItem.definition, name: dataItem.id, locale: key }, fieldValue: value?.[dataItem.id], fieldBreadcrumbTitle: updatedFieldBreadcrumbTitle, fieldPathValue: getFieldPathValue })
           })
         }
 
