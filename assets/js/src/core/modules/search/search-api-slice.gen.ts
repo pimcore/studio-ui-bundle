@@ -158,6 +158,8 @@ export type Column = {
     locale: string | null;
     /** Define the group structure */
     group: object;
+    /** Width of the Column */
+    width?: number | null;
 };
 export type RelationFieldConfig = {
     /** Relation Getter */
@@ -200,6 +202,8 @@ export type GridColumnRequest = {
     group?: string[] | null;
     /** Config */
     config?: (string | AdvancedColumnConfig)[];
+    /** Width of the Column */
+    width?: number | null;
 };
 export type GridFilter = {
     /** Page */

@@ -17,13 +17,13 @@ export const withActionStates = (Component: typeof TreeNode): typeof TreeNode =>
   const ActionStates = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
     const originalLoadingState = props.isLoading ?? false
     const [, { isLoading: isDeleteLoading }] = useElementDeleteMutation({ fixedCacheKey: `DOCUMENT_ACTION_DELETE_ID_${props.id}` })
-    const { isFetching: isMarkedAsFetching, isLoading: isMarkedAsLoading, isDeleting: isMarkedAsDeleting } = useElementTreeNode(props.id)
+    const { isFetching: isMarkedAsFetching, isLoading: isMarkedAsLoading, isDeleting: isMarkedAsDeleting, isOpening: isMarkedAsOpening } = useElementTreeNode(props.id)
 
     return (
       <Component
         { ...props }
         danger={ originalLoadingState || isDeleteLoading || isMarkedAsDeleting }
-        isLoading={ originalLoadingState || (isMarkedAsLoading !== true && isMarkedAsFetching) || isDeleteLoading || isMarkedAsDeleting || isMarkedAsLoading }
+        isLoading={ originalLoadingState || (isMarkedAsLoading !== true && isMarkedAsFetching) || isDeleteLoading || isMarkedAsDeleting || isMarkedAsLoading === true || isMarkedAsOpening === true }
         ref={ ref }
       />
     )

@@ -77,15 +77,16 @@ export const BatchActions = (): React.JSX.Element => {
         {paths.map((path) => <li key={ path }>{path}</li>)}
       </ul>
     )
+
     modal.confirm({
       title: t('element.delete.batch.title'),
       width: 530,
       content: <>
-        <p><span className={ styles.warningText }>{t('element.delete.batch.note')}</span></p>
         <p>{t('element.delete.batch.question', { count })}</p>
         {count > 5
-          ? <Accordion items={ [{ key: 'paths', title: <span>{t('element.delete.batch.show-paths', { count })}</span>, children: pathList }] } />
+          ? <Accordion items={ [{ key: 'paths', title: <span>{t('element.delete.batch.show-paths')}</span>, children: pathList }] } />
           : pathList}
+        <p><span className={ styles.warningText }>{t('element.delete.batch.dependencies-warning')}</span></p>
       </>,
       cancelText: t('cancel'),
       okText: t('element.delete.batch.ok'),

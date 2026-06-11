@@ -289,6 +289,9 @@ select-option.tree.actions.select-option: Opción de selección
 custom-layout.import-success: Diseño personalizado importado con éxito
 custom-layout.delete.confirmation: ¿Está seguro de que desea eliminar este diseño personalizado?
 custom-layout.delete.success: Diseño personalizado eliminado con éxito
+custom-layout.add: Nuevo diseño
+custom-layout.empty-state.create-or-edit: Cree un nuevo diseño personalizado o edite uno existente
+custom-layout.empty-state.edit: Seleccione un diseño personalizado existente para empezar a editar
 example-prefix: Prefijo de ejemplo
 pagination.show-total: Total {{total}} elementos
 pagination.page: Página
@@ -1161,9 +1164,11 @@ element.delete.folder.ok: Eliminar
 element.delete.folder.ok.permanent: Eliminar permanentemente
 element.delete.batch.title: Eliminar elementos
 element.delete.batch.note: 'Tenga en cuenta: Estos elementos se eliminarán permanentemente y no se podrán restaurar.'
-element.delete.batch.question: '¿Realmente desea eliminar {{count}} elementos?'
+element.delete.batch.question_one: '¿Realmente desea eliminar este elemento?'
+element.delete.batch.question_other: '¿Realmente desea eliminar estos {{count}} elementos?'
 element.delete.batch.ok: Eliminar permanentemente
-element.delete.batch.show-paths: 'Mostrar todos los {{count}} elementos'
+element.delete.batch.show-paths: Mostrar elementos
+element.delete.batch.dependencies-warning: 'Puede haber dependencias, ¿eliminar de todas formas?'
 element.open: Abrir
 element.toolbar.copy-id: Copiar ID
 element.toolbar.copy-full-path-to-clipboard: Copiar ruta completa
@@ -1233,6 +1238,8 @@ folder: Carpeta
 archive: Archivo
 audio: Audio
 image: Imagen
+image-gallery.clear-image-selection: Borrar selección de imagen
+image-gallery.delete-frame: Eliminar marco
 text: Texto
 video: Vídeo
 processing: Procesando
@@ -1442,6 +1449,7 @@ roles.remove-folder.success: Carpeta eliminada con éxito
 roles.remove-item.success: Rol eliminado con éxito
 roles.add-item.success: Rol añadido con éxito
 roles.add-folder.success: Carpeta añadida con éxito
+roles.general: General
 roles.settings.title: Configuración
 roles.workspaces.title: Workspaces
 roles.add-folder: Añadir nueva carpeta
@@ -2721,3 +2729,6 @@ translations.merger.title: "Fusionar traducciones (Dominio: {{domain}})"
 translations.merger.column.language: Idioma
 translations.merger.items: elementos
 select.clear-selection: Borrar selección
+asset.folder.preview.image-display: Visualización de imágenes
+asset.folder.preview.image-display.small: Pequeño
+asset.folder.preview.image-display.large: Grande

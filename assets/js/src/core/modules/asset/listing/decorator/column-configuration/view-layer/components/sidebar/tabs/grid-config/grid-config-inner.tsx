@@ -33,12 +33,17 @@ import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils
 import { useSelectedGridConfigId } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/selected-grid-config-id/use-selected-grid-config-id'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import { type GridConfigColumnPayload, prepareGridConfigColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/prepare-grid-config-column'
 import { Form } from '@sdk/components'
 
 enum ViewState {
   Edit = 'edit',
   Save = 'save',
   Update = 'update'
+}
+
+const prepareColumns = (columns: AvailableColumn[]): GridConfigColumnPayload[] => {
+  return columns.map(prepareGridConfigColumn)
 }
 
 export const GridConfigInner = (): React.JSX.Element => {
@@ -105,7 +110,8 @@ export const GridConfigInner = (): React.JSX.Element => {
     setColumns(selectedColumns.map(column => {
       return {
         ...column.originalApiDefinition!,
-        locale: column?.locale
+        locale: column?.locale,
+        width: column.width
       }
     }) as AvailableColumn[])
   }, [selectedColumns])
@@ -146,14 +152,6 @@ export const GridConfigInner = (): React.JSX.Element => {
         pageSize: 0
       }
     })
-  }
-
-  function prepareColumns (columns: AvailableColumn[]): Array<{ key: string, locale: string | null, group: AvailableColumn['group'] }> {
-    return columns.map((column) => ({
-      key: column.key,
-      locale: column.locale ?? null,
-      group: column.group
-    }))
   }
 
   const onFormFinish = async (values: any): Promise<void> => {
@@ -214,7 +212,7 @@ export const GridConfigInner = (): React.JSX.Element => {
     }
   }
 
-  const onCancelClick = (): void => { setColumns(selectedColumns.map(column => column.originalApiDefinition!) as AvailableColumn[]) }
+  const onCancelClick = (): void => { setColumns(selectedColumns.map(column => ({ ...column.originalApiDefinition!, width: column.width })) as AvailableColumn[]) }
 
   const onApplyClick = (): void => {
     setSelectedColumns(columns.map(column => {
@@ -229,6 +227,7 @@ export const GridConfigInner = (): React.JSX.Element => {
         exportable: column.exportable,
         frontendType: column.frontendType,
         group: column.group,
+        width: column.width,
         originalApiDefinition: column
       }
     }))

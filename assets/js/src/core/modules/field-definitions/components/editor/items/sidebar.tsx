@@ -112,6 +112,9 @@ export const ItemsSidebar = (): React.JSX.Element => {
       groupMap[groupName].children!.push(treeDataItem)
     })
 
+    const compareByTitle = (a: TreeDataItem, b: TreeDataItem): number =>
+      String(a.title).localeCompare(String(b.title), undefined, { sensitivity: 'base' })
+
     formattedTreeData.sort((a, b) => {
       if ((a.children?.length ?? 0) !== 0 && (b.children?.length ?? 0) === 0) {
         return -1
@@ -121,7 +124,11 @@ export const ItemsSidebar = (): React.JSX.Element => {
         return 1
       }
 
-      return 0
+      return compareByTitle(a, b)
+    })
+
+    Object.values(groupMap).forEach((group) => {
+      group.children!.sort(compareByTitle)
     })
 
     return formattedTreeData
