@@ -10,7 +10,7 @@
 
 import { type NamePath } from 'antd/es/form/interface'
 import { Form } from '../../form'
-import React, { useEffect, useMemo, useState, useCallback } from 'react'
+import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import { type NumberedListData, NumberedListProvider } from './provider/numbered-list/numbered-list-provider'
 import { NumberedListIterator } from './iterator/numbered-list-iterator'
 import { cloneDeep, isEqual, set, get, isArray, isUndefined } from 'lodash'
@@ -29,6 +29,9 @@ export interface NumberedListProps {
 const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps }: NumberedListProps): React.JSX.Element => {
   const initialValue = baseValue ?? []
   const [value, setValue] = useState(cloneDeep(initialValue))
+  // the initial value enriched with the values the child fields register on mount,
+  // so that those registrations are not reported as changes
+  const baselineValue = useRef(cloneDeep(initialValue))
   const { name: tempItemName } = useItem()
   const bufferedValue = useDebounce(value, 10)
 
@@ -52,6 +55,7 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
     if (!isEqual(value, initialValue)) {
       setValue(() => initialValue)
     }
+    baselineValue.current = cloneDeep(initialValue)
   }, [baseValue])
 
   const add: NumberedListData['operations']['add'] = useCallback((newValue, key) => {
@@ -86,6 +90,10 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
 
     if (!isInitialValue) {
       onFieldChange?.(currentSubFieldname, newSubValue)
+    } else {
+      const newBaseline = cloneDeep(baselineValue.current)
+      set(newBaseline, nameDifference, newSubValue)
+      baselineValue.current = newBaseline
     }
 
     setValue((currentValue) => {
@@ -106,7 +114,7 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
 
   // Trigger onChange when value changes, but outside of setState
   useEffect(() => {
-    if (!isEqual(value, initialValue) && !isUndefined(value)) {
+    if (!isEqual(value, baselineValue.current) && !isUndefined(value)) {
       onChange(value)
     }
   }, [bufferedValue])
