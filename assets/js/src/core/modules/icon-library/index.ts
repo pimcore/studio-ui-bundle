@@ -144,6 +144,7 @@ import edit from '@Pimcore/assets/icons/edit.inline.svg?react'
 import email from '@Pimcore/assets/icons/email.inline.svg?react'
 import embeddedMetadata from '@Pimcore/assets/icons/embedded-metadata.inline.svg?react'
 import encrypted from '@Pimcore/assets/icons/encrypted.inline.svg?react'
+import eraser from '@Pimcore/assets/icons/eraser.inline.svg?react'
 import event from '@Pimcore/assets/icons/event.inline.svg?react'
 import excludedFromNav from '@Pimcore/assets/icons/excluded-from-nav.inline.svg?react'
 import expand01 from '@Pimcore/assets/icons/expand-01.inline.svg?react'
@@ -914,6 +915,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'encrypted',
       component: encrypted
+    })
+    iconLibrary.register({
+      name: 'eraser',
+      component: eraser
     })
     iconLibrary.register({
       name: 'event',

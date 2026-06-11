@@ -1233,6 +1233,8 @@ folder: Mapp
 archive: Arkiv
 audio: Ljud
 image: Bild
+image-gallery.clear-image-selection: Rensa bildval
+image-gallery.delete-frame: Ta bort ram
 text: Text
 video: Video
 processing: Bearbetar

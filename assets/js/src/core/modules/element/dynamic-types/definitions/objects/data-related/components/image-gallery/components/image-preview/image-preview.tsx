@@ -219,17 +219,6 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
               }
             },
             {
-              hidden: disabled,
-              key: 'delete',
-              label: t('delete'),
-              icon: <Icon value={ 'trash' } />,
-              onClick: () => {
-                const newValue = [...value]
-                newValue.splice(index, 1)
-                setValue(newValue)
-              }
-            },
-            {
               label: t('crop'),
               key: 'crop',
               icon: <Icon value={ 'crop' } />,
@@ -278,11 +267,22 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
             },
             {
               hidden: disabled,
-              label: t('empty'),
+              label: t('image-gallery.clear-image-selection'),
               key: 'empty',
-              icon: <Icon value={ 'trash' } />,
+              icon: <Icon value={ 'eraser' } />,
               onClick: async () => {
                 setValue(value.map((v, i) => i === index ? { image: null, hotspots: [], marker: [], crop: {} } : v))
+              }
+            },
+            {
+              hidden: disabled,
+              key: 'delete',
+              label: t('image-gallery.delete-frame'),
+              icon: <Icon value={ 'trash' } />,
+              onClick: () => {
+                const newValue = [...value]
+                newValue.splice(index, 1)
+                setValue(newValue)
               }
             }
           ] }
