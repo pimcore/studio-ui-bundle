@@ -79,7 +79,7 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
     handleReplaceImage,
     handleEmptyValue,
     handleAltTextChange
-  } = useImageValueUpdates({ value: imageValue, onChange: props.onChange })
+  } = useImageValueUpdates({ value: imageValue, onChange: props.onChange, minWidth, minHeight })
 
   const { open: openElementSelector } = useElementSelector({
     selectionType: SelectionType.Single,
