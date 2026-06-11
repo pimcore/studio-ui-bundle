@@ -289,6 +289,9 @@ select-option.tree.actions.select-option: Option de sélection
 custom-layout.import-success: Mise en page personnalisée importée avec succès
 custom-layout.delete.confirmation: Êtes-vous sûr de vouloir supprimer cette mise en page personnalisée ?
 custom-layout.delete.success: Mise en page personnalisée supprimée avec succès
+custom-layout.add: Nouvelle mise en page
+custom-layout.empty-state.create-or-edit: Créez une nouvelle mise en page personnalisée ou modifiez-en une existante
+custom-layout.empty-state.edit: Sélectionnez une mise en page personnalisée existante pour commencer l'édition
 example-prefix: Préfixe d'exemple
 pagination.show-total: Total {{total}} éléments
 pagination.page: Page

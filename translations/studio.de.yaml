@@ -289,6 +289,9 @@ select-option.tree.actions.select-option: Auswahloption
 custom-layout.import-success: Benutzerdefiniertes Layout erfolgreich importiert
 custom-layout.delete.confirmation: Sind Sie sicher, dass Sie dieses benutzerdefinierte Layout löschen möchten?
 custom-layout.delete.success: Benutzerdefiniertes Layout erfolgreich gelöscht
+custom-layout.add: Neues Layout
+custom-layout.empty-state.create-or-edit: Erstellen Sie ein neues benutzerdefiniertes Layout oder bearbeiten Sie ein bestehendes
+custom-layout.empty-state.edit: Wählen Sie ein bestehendes benutzerdefiniertes Layout aus, um mit der Bearbeitung zu beginnen
 example-prefix: Beispiel-Präfix
 pagination.show-total: Insgesamt {{total}} Einträge
 pagination.page: Seite

@@ -289,6 +289,9 @@ select-option.tree.actions.select-option: Select Option
 custom-layout.import-success: Custom layout imported successfully
 custom-layout.delete.confirmation: Are you sure you want to delete this custom layout?
 custom-layout.delete.success: Custom layout deleted successfully
+custom-layout.add: New layout
+custom-layout.empty-state.create-or-edit: Create a new custom layout or edit an existing one
+custom-layout.empty-state.edit: Select an existing custom layout to start editing
 example-prefix: Example Prefix
 pagination.show-total: Total {{total}} items
 pagination.page: Page
