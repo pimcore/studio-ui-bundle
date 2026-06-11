@@ -291,7 +291,7 @@ custom-layout.delete.confirmation: Êtes-vous sûr de vouloir supprimer cette mi
 custom-layout.delete.success: Mise en page personnalisée supprimée avec succès
 custom-layout.add: Nouvelle mise en page
 custom-layout.empty-state.create-or-edit: Créez une nouvelle mise en page personnalisée ou modifiez-en une existante
-custom-layout.empty-state.edit: Sélectionnez une mise en page personnalisée existante pour la modifier
+custom-layout.empty-state.edit: Sélectionnez une mise en page personnalisée existante pour commencer l'édition
 example-prefix: Préfixe d'exemple
 pagination.show-total: Total {{total}} éléments
 pagination.page: Page

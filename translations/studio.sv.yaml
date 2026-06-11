@@ -291,7 +291,7 @@ custom-layout.delete.confirmation: Är du säker på att du vill ta bort den hä
 custom-layout.delete.success: Anpassad layout har tagits bort
 custom-layout.add: Ny layout
 custom-layout.empty-state.create-or-edit: Skapa en ny anpassad layout eller redigera en befintlig
-custom-layout.empty-state.edit: Välj en befintlig anpassad layout för att redigera den
+custom-layout.empty-state.edit: Välj en befintlig anpassad layout för att börja redigera
 example-prefix: Exempelprefix
 pagination.show-total: Totalt {{total}} objekt
 pagination.page: Sida

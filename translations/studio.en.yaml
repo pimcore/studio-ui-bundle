@@ -291,7 +291,7 @@ custom-layout.delete.confirmation: Are you sure you want to delete this custom l
 custom-layout.delete.success: Custom layout deleted successfully
 custom-layout.add: New layout
 custom-layout.empty-state.create-or-edit: Create a new Custom Layout or edit an existing one
-custom-layout.empty-state.edit: Select an existing Custom Layout to edit it
+custom-layout.empty-state.edit: Select an existing custom layout to start editing
 example-prefix: Example Prefix
 pagination.show-total: Total {{total}} items
 pagination.page: Page
