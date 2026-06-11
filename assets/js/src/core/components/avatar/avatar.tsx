@@ -15,7 +15,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 export interface AvatarProps extends AntAvatarProps {}
 
 const getDefaultIconSize = (size: AvatarProps['size']): number => {
-  if (typeof size === 'number') return Math.round(size / 2)
+  if (typeof size === 'number') return Math.round(size * 14 / 24)
   if (size === 'small') return 14
   if (size === 'large') return 24
   return 18

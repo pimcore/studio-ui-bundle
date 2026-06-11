@@ -74,7 +74,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       key: 'title',
       label: (
         <div className={ 'user-menu__title' }>
-          PROFILE
+          {t('user-menu.title')}
           {' '}
           <span className={ 'user-menu__title-username' }>
             ({user.username})
