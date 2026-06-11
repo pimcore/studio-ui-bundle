@@ -85,6 +85,7 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
   const columns = [
     columnHelper.accessor('type', {
       header: t('asset.asset-editor-tabs.custom-metadata.columns.type'),
+      enableSorting: false,
       meta: {
         type: 'asset-custom-metadata-icon'
       },
@@ -107,6 +108,7 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
     }),
     columnHelper.accessor('data', {
       header: t('asset.asset-editor-tabs.custom-metadata.columns.value'),
+      enableSorting: false,
       meta: {
         type: 'asset-custom-metadata-value',
         editable: isEditable,
@@ -120,6 +122,7 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
     columns.push(
       columnHelper.accessor('actions', {
         header: t('asset.asset-editor-tabs.custom-metadata.columns.actions'),
+        enableSorting: false,
         cell: (info) => {
           return (
             <Box padding={ 'mini' }>
@@ -166,6 +169,7 @@ export const CustomMetadataTable = ({ showDuplicateEntryModal, showMandatoryModa
       autoWidth
       columns={ columns }
       data={ formattedCustomMetadata ?? [] }
+      enableSorting
       isLoading={ isLoading }
       modifiedCells={ modifiedCells }
       onUpdateCellData={ onUpdateCellData }
