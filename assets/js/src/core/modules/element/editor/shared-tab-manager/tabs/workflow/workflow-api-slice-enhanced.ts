@@ -33,4 +33,4 @@ const api = baseApi.enhanceEndpoints({
 })
 
 export type * from './workflow-api-slice.gen'
-export const { useWorkflowActionSubmitMutation, useWorkflowGetDetailsQuery } = api
+export const { useWorkflowActionSubmitMutation, useWorkflowGetDetailsQuery, useWorkflowGetNamesQuery, useWorkflowGetPlacesQuery } = api

@@ -39,12 +39,12 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
                                         }
                   />
                                 }
-                key={ `${index}-${status.title}` }
+                key={ `${index}-${status.label}` }
                 style={ status.colorInverted
                   ? { backgroundColor: `${status.color}33` }
                   : {}
                                 }
-                title={ status.title }
+                title={ status.label }
               >
                 {status.label}
               </Tag>

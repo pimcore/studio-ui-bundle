@@ -16,6 +16,19 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Workflows"],
             }),
+            workflowGetNames: build.query<WorkflowGetNamesApiResponse, WorkflowGetNamesApiArg>({
+                query: () => ({
+                    url: `/pimcore-studio/api/workflows/names`,
+                }),
+                providesTags: ["Workflows"],
+            }),
+            workflowGetPlaces: build.query<WorkflowGetPlacesApiResponse, WorkflowGetPlacesApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/workflows/places`,
+                    params: { workflowName: queryArg.workflowName },
+                }),
+                providesTags: ["Workflows"],
+            }),
             workflowActionSubmit: build.mutation<WorkflowActionSubmitApiResponse, WorkflowActionSubmitApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/workflows/action`,
@@ -44,6 +57,16 @@ export type WorkflowActionSubmitApiResponse =
         actionName?: string;
         actionType?: string;
     };
+export type WorkflowGetNamesApiResponse = /** status 200 List of all configured workflow names */ {
+    items: string[];
+};
+export type WorkflowGetNamesApiArg = void;
+export type WorkflowGetPlacesApiResponse = /** status 200 List of all configured place names for the workflow */ {
+    items: string[];
+};
+export type WorkflowGetPlacesApiArg = {
+    workflowName: string;
+};
 export type WorkflowActionSubmitApiArg = {
     submitAction: SubmitAction;
 };

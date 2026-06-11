@@ -13,6 +13,11 @@
   src: url(../fonts/Lato-Regular.ttf);
 }
 
+/* Dashboard widget table cells: match body cell padding to header padding */
+.ant-card-body--widget .ant-table-small .ant-table-tbody > tr > td.ant-table-cell {
+  padding: 4px 8px !important;
+}
+
 @font-face {
   font-family: Lato;
   src: url(../fonts/Lato-Light.ttf);
