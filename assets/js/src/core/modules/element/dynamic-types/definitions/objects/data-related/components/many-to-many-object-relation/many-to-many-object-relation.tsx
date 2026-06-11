@@ -140,13 +140,13 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     })
   }, [availableGridColumnsData])
 
-  const visibleColumns = (visibleFieldDefinitions ?? []).map(col => ({
+  const visibleColumns = useMemo(() => (visibleFieldDefinitions ?? []).map(col => ({
     key: col.key,
     type: col.type,
     group: col.group,
     config: col.config,
     locale: col.localizable ? userLanguage : undefined
-  }))
+  })), [visibleFieldDefinitions, userLanguage])
 
   const { data: gridFullData, isLoading: isGridFullDataLoading, refetchAll } = useDataObjectGrids({
     classIds: dataRelationClasses,
@@ -178,13 +178,13 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     prevDataObjectRef.current = dataObject
   }, [dataObject])
 
-  const columnDefinition = visibleFieldsToColumnDefinitions({
+  const columnDefinition = useMemo(() => visibleFieldsToColumnDefinitions({
     visibleFieldDefinitions,
     disabled: props.inherited === true || props.disabled === true,
     pathFormatterClass: props.pathFormatterClass ?? '',
     transformGridColumn,
     userLanguage
-  })
+  }), [visibleFieldDefinitions, props.inherited, props.disabled, props.pathFormatterClass, transformGridColumn, userLanguage])
 
   const selectedColumns = useMemo<SelectedColumn[]>(() => {
     return (visibleFieldDefinitions ?? []).map(col => {
@@ -203,7 +203,15 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     })
   }, [visibleFieldDefinitions, userLanguage])
 
-  const mergedGridFullData = !isEmptyValue(gridFullData) ? gridFullData : cachedGridFullData
+  const mergedGridFullData = useMemo(
+    () => !isEmptyValue(gridFullData) ? gridFullData : cachedGridFullData,
+    [gridFullData, cachedGridFullData]
+  )
+
+  const gridDataMap = useMemo(
+    () => new Map(mergedGridFullData.map(item => [item.id, item])),
+    [mergedGridFullData]
+  )
 
   const visibleFieldsValue = useMemo(() => {
     return mergedGridFullData.map(item => {
@@ -216,11 +224,11 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
 
   const handleEnrichRowData = useCallback(
     (row: ManyToManyRelationValueItem) => {
-      const rowData: GridColumnData[] = mergedGridFullData?.find(item => item.id === row.id)?.columns ?? []
+      const rowData: GridColumnData[] = gridDataMap.get(row.id)?.columns ?? []
 
       return enrichRowData(visibleFieldDefinitions, row, rowData)
     },
-    [mergedGridFullData, visibleFieldDefinitions]
+    [gridDataMap, visibleFieldDefinitions]
   )
 
   return (

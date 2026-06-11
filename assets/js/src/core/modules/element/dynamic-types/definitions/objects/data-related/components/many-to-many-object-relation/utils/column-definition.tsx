@@ -56,17 +56,17 @@ export const visibleFieldsToColumnDefinitions = ({ visibleFieldDefinitions, disa
 
 export const enrichRowData = (visibleFieldDefinitions: VisibleFieldDefinition[] | undefined, row: ManyToManyRelationValueItem, rowData: GridColumnData[]): ManyToManyRelationValueItem & Record<string, any> => {
   const additionalColumns = {}
+  const rowDataMap = new Map(rowData.map(item => [item.key, item.value]))
 
   for (const field of visibleFieldDefinitions ?? []) {
     const key = field.key
-    const value = rowData?.find(item => item.key === key)?.value
 
     if (key === 'fullpath') {
       additionalColumns[key] = row.fullPath
     } else if (key === 'classname') {
       additionalColumns[key] = row.subtype
     } else if (key !== 'id') {
-      additionalColumns[key] = value
+      additionalColumns[key] = rowDataMap.get(key)
     }
   }
 

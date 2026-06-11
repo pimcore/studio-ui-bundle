@@ -127,6 +127,19 @@ export const Grid = ({
   const autoColumnRef = useRef<HTMLTableCellElement>(null)
   const warnedUndefinedRowIdRef = useRef(false)
 
+  const rowStyleCache = useRef<Map<string, { style: React.CSSProperties, top: number }>>(new Map())
+
+  const getStableRowStyle = useCallback((rowId: string, top: number): React.CSSProperties => {
+    const existing = rowStyleCache.current.get(rowId)
+
+    if (existing?.top === top) return existing.style
+
+    const style: React.CSSProperties = { position: 'absolute', top: `${top}px`, left: 0, right: 0, display: 'flex' }
+    rowStyleCache.current.set(rowId, { style, top })
+
+    return style
+  }, [])
+
   const isRowSelectionEnabled = useMemo(() => enableMultipleRowSelection || enableRowSelection, [enableMultipleRowSelection, enableRowSelection])
   const [internalSorting, setInternalSorting] = useState<SortingState>(sorting ?? [])
   const memoModifiedCells = useMemo(() => { return modifiedCells ?? [] }, [JSON.stringify(modifiedCells)])
@@ -374,7 +387,7 @@ export const Grid = ({
       ? virtualRows.map(vRow => ({
           row: rowsList[vRow.index],
           virtualIndex: vRow.index,
-          rowStyle: { position: 'absolute', top: `${vRow.start}px`, left: 0, right: 0, display: 'flex' },
+          rowStyle: getStableRowStyle(rowsList[vRow.index].id, vRow.start),
           measureElement: rowVirtualizer.measureElement
         }))
       : rowsList.map(row => ({
