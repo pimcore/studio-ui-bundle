@@ -290,8 +290,8 @@ custom-layout.import-success: Custom Layout importert
 custom-layout.delete.confirmation: Er du sikker på at du vil slette denne Custom Layout?
 custom-layout.delete.success: Custom Layout slettet
 custom-layout.add: Ny layout
-custom-layout.empty-state.create-or-edit: Opprett en ny Custom Layout eller rediger en eksisterende
-custom-layout.empty-state.edit: Velg en eksisterende Custom Layout for å begynne å redigere
+custom-layout.empty-state.create-or-edit: Opprett en ny custom layout eller rediger en eksisterende
+custom-layout.empty-state.edit: Velg en eksisterende custom layout for å begynne å redigere
 example-prefix: Eksempel-prefiks
 pagination.show-total: Totalt {{total}} elementer
 pagination.page: Side
