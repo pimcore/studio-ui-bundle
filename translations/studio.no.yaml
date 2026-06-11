@@ -1179,6 +1179,7 @@ element.unpublish: Avpubliser
 element.publish: Publiser
 element.locate-in-tree: Finn i treet
 element.sidebar.filter.only-direct-children: kun direkte underelementer
+element.sidebar.filter.only-unreferenced: kun elementer uten referanser
 element.sidebar.field-filters: Feltfiltre
 element.full-information: Full informasjon
 system-information.id: ID

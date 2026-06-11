@@ -1186,6 +1186,7 @@ element.unpublish: Unpublish
 element.publish: Publish
 element.locate-in-tree: Locate in Tree
 element.sidebar.filter.only-direct-children: only direct children
+element.sidebar.filter.only-unreferenced: only unreferenced
 element.sidebar.field-filters: Field Filters
 element.full-information: Full information
 system-information.id: ID

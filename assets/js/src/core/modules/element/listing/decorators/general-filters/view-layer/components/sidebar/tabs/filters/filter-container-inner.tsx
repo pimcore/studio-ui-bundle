@@ -34,6 +34,9 @@ import { useFieldFilters } from '../../../../../context-layer/provider/field-fil
 import {
   useDirectChildrenFilter
 } from '../../../../../context-layer/provider/direct-children-filter/use-direct-children-filter'
+import {
+  useUnreferencedFilter
+} from '../../../../../context-layer/provider/unreferenced-filter/use-unreferenced-filter'
 import { useSearchTermFilter } from '../../../../../context-layer/provider/search-term-filter/use-search-term-filter'
 import { useGeneralFiltersConfig } from '../../../../../context-layer/provider/general-filters-config/use-general-filters-config'
 import { SearchTermFilter } from '../../../search/search-term-filter'
@@ -47,18 +50,21 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const { setPage } = usePaging()
   const { setFieldFilters: setListingFieldFilters } = useFieldFilters()
   const { setOnlyDirectChildren: setListingOnlyDirectChildren } = useDirectChildrenFilter()
+  const { setOnlyUnreferenced: setListingOnlyUnreferenced } = useUnreferencedFilter()
   const { setPqlQuery: setListingPqlQuery } = usePqlFilter()
   const { setSearchTerm: setListingSearchTerm } = useSearchTermFilter()
-  const { handleSearchTermInSidebar } = useGeneralFiltersConfig()
+  const { handleSearchTermInSidebar, showOnlyUnreferencedFilter } = useGeneralFiltersConfig()
   const { setDataLoadingState, dataQueryResult } = useData()
 
   const {
     fieldFilters,
     onlyDirectChildren,
+    onlyUnreferenced,
     pqlQuery,
     searchTerm,
     setFieldFilters,
     setOnlyDirectChildren,
+    setOnlyUnreferenced,
     setPqlQuery,
     setSearchTerm
   } = useFilter()
@@ -78,6 +84,10 @@ export const FilterContainerInner = (): React.JSX.Element => {
     setListingOnlyDirectChildren(onlyDirectChildren)
     setListingPqlQuery(isAdvancedMode ? pqlQuery : '')
 
+    if (showOnlyUnreferencedFilter === true) {
+      setListingOnlyUnreferenced(onlyUnreferenced)
+    }
+
     if (handleSearchTermInSidebar) {
       setListingSearchTerm(searchTerm)
     }
@@ -89,6 +99,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const handleResetAllFiltersClick = (): void => {
     setFieldFilters([])
     setOnlyDirectChildren(false)
+    setOnlyUnreferenced(false)
     setPqlQuery('')
 
     if (handleSearchTermInSidebar) {
@@ -168,12 +179,14 @@ export const FilterContainerInner = (): React.JSX.Element => {
                     {t('element.sidebar.filter.only-direct-children')}
                   </Checkbox>
 
-                  {/* <Checkbox */}
-                  {/*  checked={ false } */}
-                  {/*  value={ 'referenced' } */}
-                  {/* > */}
-                  {/*  only unreferenced */}
-                  {/* </Checkbox> */}
+                  {showOnlyUnreferencedFilter === true && (
+                    <Checkbox
+                      checked={ onlyUnreferenced }
+                      onChange={ (e) => { setOnlyUnreferenced(e.target.checked) } }
+                    >
+                      {t('element.sidebar.filter.only-unreferenced')}
+                    </Checkbox>
+                  )}
                 </Space>
               </Form>
 
