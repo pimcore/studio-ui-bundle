@@ -931,6 +931,18 @@ export type Layout = {
     labelWidth: number;
     /** Border */
     border: boolean;
+    /** Preview configuration for locale/site selectors */
+    previewConfig?: PreviewConfigEntry[] | null;
+};
+export type PreviewConfigEntry = {
+    /** Parameter name */
+    name: string;
+    /** Display label */
+    label: string;
+    /** Available values as key-value pairs */
+    values: Array<{ key: string; value: string }>;
+    /** Default selected value */
+    defaultValue: string;
 };
 export type ExportAllFilter = {
     /** Column Filter */
