@@ -9,7 +9,7 @@
  */
 
 import { type AssetGetTreeApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { PreviewCard } from '@Pimcore/components/preview-card/preview-card'
+import { PreviewCard, type SizeTypes } from '@Pimcore/components/preview-card/preview-card'
 import React from 'react'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { isString } from 'lodash'
@@ -18,9 +18,10 @@ import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/co
 
 interface PreviewCardContainerProps {
   asset: AssetGetTreeApiResponse['items'][number]
+  size?: SizeTypes
 }
 
-export const PreviewCardContainer = ({ asset }: PreviewCardContainerProps): React.JSX.Element => {
+export const PreviewCardContainer = ({ asset, size }: PreviewCardContainerProps): React.JSX.Element => {
   const { openAsset } = useAssetHelper()
 
   const onClickCard = (e): void => {
@@ -45,6 +46,7 @@ export const PreviewCardContainer = ({ asset }: PreviewCardContainerProps): Reac
       key={ asset.id }
       name={ asset.filename }
       onClick={ onClickCard }
+      size={ size }
     />
   )
 }
