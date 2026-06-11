@@ -27,18 +27,27 @@ import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/co
 import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/use-grid-config'
 import { useSelectedGridConfigId } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/selected-grid-config-id/use-selected-grid-config-id'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
-import { useDataObjectDeleteGridConfigurationByConfigurationIdMutation, useDataObjectGetGridConfigurationQuery, useDataObjectListSavedGridConfigurationsQuery, useDataObjectSaveGridConfigurationMutation, useDataObjectUpdateGridConfigurationMutation } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { type GridColumnRequest, useDataObjectDeleteGridConfigurationByConfigurationIdMutation, useDataObjectGetGridConfigurationQuery, useDataObjectListSavedGridConfigurationsQuery, useDataObjectSaveGridConfigurationMutation, useDataObjectUpdateGridConfigurationMutation } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
+import { prepareGridConfigColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/prepare-grid-config-column'
 import { Form } from '@sdk/components'
 
 enum ViewState {
   Edit = 'edit',
   Save = 'save',
   Update = 'update'
+}
+
+const prepareColumns = (columns: AvailableColumn[]): GridColumnRequest[] => {
+  return columns.map((column) => ({
+    ...prepareGridConfigColumn(column),
+    type: column.type,
+    config: (column.__meta?.advancedColumnConfig ?? column.config) as GridColumnRequest['config']
+  }))
 }
 
 export const GridConfigInner = (): React.JSX.Element => {
@@ -183,17 +192,6 @@ export const GridConfigInner = (): React.JSX.Element => {
     }).catch((error) => {
       console.error('Failed to update grid configuration', error)
     })
-  }
-
-  function prepareColumns (columns: AvailableColumn[]): Array<{ key: string, locale: string | null, type: string, width: number | null }> {
-    return columns.map((column) => ({
-      key: column.key,
-      locale: column.locale ?? null,
-      group: column.group,
-      type: column.type,
-      config: column.__meta?.advancedColumnConfig ?? column.config,
-      width: column.width ?? null
-    }))
   }
 
   function onFormFinish (values: any): void {
