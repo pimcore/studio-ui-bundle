@@ -1238,6 +1238,8 @@ folder: Ordner
 archive: Archiv
 audio: Audio
 image: Bild
+image-gallery.clear-image-selection: Bildauswahl leeren
+image-gallery.delete-frame: Rahmen löschen
 text: Text
 video: Video
 processing: Verarbeitung

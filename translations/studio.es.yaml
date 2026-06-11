@@ -1238,6 +1238,8 @@ folder: Carpeta
 archive: Archivo
 audio: Audio
 image: Imagen
+image-gallery.clear-image-selection: Borrar selección de imagen
+image-gallery.delete-frame: Eliminar marco
 text: Texto
 video: Vídeo
 processing: Procesando

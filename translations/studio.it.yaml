@@ -1238,6 +1238,8 @@ folder: Cartella
 archive: Archivio
 audio: Audio
 image: Immagine
+image-gallery.clear-image-selection: Cancella selezione immagine
+image-gallery.delete-frame: Elimina cornice
 text: Testo
 video: Video
 processing: Elaborazione

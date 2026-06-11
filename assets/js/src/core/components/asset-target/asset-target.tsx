@@ -36,6 +36,7 @@ interface AssetTargetProps {
   uploadIcon?: boolean
   addIcon?: boolean
   dropClass?: string
+  removeLabel?: string
 }
 
 export const AssetTarget = ({
@@ -50,7 +51,8 @@ export const AssetTarget = ({
   onSearch,
   onUpload,
   onResize,
-  dropClass
+  dropClass,
+  removeLabel
 }: AssetTargetProps): React.JSX.Element => {
   const { getStateClasses } = useDroppable()
   const { styles } = useStyle()
@@ -70,7 +72,7 @@ export const AssetTarget = ({
     dropdownItems.push({
       icon: <Icon value="trash" />,
       key: 'remove',
-      label: t('remove'),
+      label: removeLabel ?? t('remove'),
       onClick: onRemove
     })
   }

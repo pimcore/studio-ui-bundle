@@ -1245,6 +1245,8 @@ folder: Folder
 archive: Archive
 audio: Audio
 image: Image
+image-gallery.clear-image-selection: Clear Image Selection
+image-gallery.delete-frame: Delete Frame
 text: Text
 video: Video
 processing: Processing

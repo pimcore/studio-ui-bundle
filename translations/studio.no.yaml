@@ -1238,6 +1238,8 @@ folder: Mappe
 archive: Arkiv
 audio: Lyd
 image: Bilde
+image-gallery.clear-image-selection: Fjern bildevalg
+image-gallery.delete-frame: Slett ramme
 text: Tekst
 video: Video
 processing: Behandler
