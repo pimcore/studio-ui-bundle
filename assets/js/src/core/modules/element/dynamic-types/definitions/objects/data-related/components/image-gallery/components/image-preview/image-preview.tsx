@@ -269,7 +269,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
               hidden: disabled,
               label: t('image-gallery.clear-image-selection'),
               key: 'empty',
-              icon: <Icon value={ 'eraser' } />,
+              icon: <Icon value={ 'clear-erase' } />,
               onClick: async () => {
                 setValue(value.map((v, i) => i === index ? { image: null, hotspots: [], marker: [], crop: {} } : v))
               }
