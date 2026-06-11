@@ -2737,3 +2737,6 @@ translations.merger.title: "Merge Translations (Domain: {{domain}})"
 translations.merger.column.language: Language
 translations.merger.items: items
 select.clear-selection: Clear selection
+asset.folder.preview.image-display: Image display
+asset.folder.preview.image-display.small: Small
+asset.folder.preview.image-display.large: Large

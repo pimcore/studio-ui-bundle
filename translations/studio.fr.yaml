@@ -2724,3 +2724,6 @@ translations.merger.title: "Fusionner les traductions (Domaine : {{domain}})"
 translations.merger.column.language: Langue
 translations.merger.items: éléments
 select.clear-selection: Effacer la sélection
+asset.folder.preview.image-display: Affichage des images
+asset.folder.preview.image-display.small: Petit
+asset.folder.preview.image-display.large: Grand

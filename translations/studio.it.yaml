@@ -2724,3 +2724,6 @@ translations.merger.title: "Unisci traduzioni (Dominio: {{domain}})"
 translations.merger.column.language: Lingua
 translations.merger.items: elementi
 select.clear-selection: Cancella selezione
+asset.folder.preview.image-display: Visualizzazione immagini
+asset.folder.preview.image-display.small: Piccolo
+asset.folder.preview.image-display.large: Grande
