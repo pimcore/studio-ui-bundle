@@ -11,8 +11,7 @@
 import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
 import { useGeneralSettings } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
-import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
-import { useOptionalUnsavedChanges } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/unsaved-changes-provider'
+import { useUnsavedChanges } from '@Pimcore/modules/field-definitions/components/editor/unsaved-changes-provider'
 import { isReservedWord } from '@Pimcore/modules/field-definitions/dynamic-types/utils/reserved-words'
 import { buildPathMap, getNamesInNamespace } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
@@ -167,8 +166,7 @@ export const DetailSave = (): React.JSX.Element => {
   const { useDetailUpdateMutation, useLayout } = useSettings()
   const { fieldDefinitions, setInvalidFieldDefinitionIds, structure } = useLayout()
   const { generalSettings } = useGeneralSettings()
-  const { setIsModified, registerSaveCallback } = useItems()
-  const unsavedChanges = useOptionalUnsavedChanges()
+  const { setIsModified, saveFnRef } = useUnsavedChanges()
   const [updateDetailMutation, result] = useDetailUpdateMutation()
   const { isLoading } = result
   const messageApi = useMessage()
@@ -176,9 +174,9 @@ export const DetailSave = (): React.JSX.Element => {
   const fieldDefinitionRegistry = useSettings().fieldDefinitionRegistry
   const { area } = useArea()
 
-  const performSave = useCallback(async (): Promise<void> => {
+  const performSave = useCallback(async (): Promise<boolean> => {
     if (generalSettings === undefined) {
-      return
+      return true
     }
 
     const { invalidDefinitions, emptyNameViolations, reservedWordViolations, formatViolations, duplicateViolations } =
@@ -205,28 +203,31 @@ export const DetailSave = (): React.JSX.Element => {
           />
         )
       })
-      throw new Error('Validation failed')
+      return false
     }
 
-    await updateDetailMutation({}).unwrap()
+    try {
+      await updateDetailMutation({}).unwrap()
+    } catch (e) {
+      trackError(new ApiError(e as FetchBaseQueryError))
+      return false
+    }
+
     setIsModified(false)
-    unsavedChanges?.setIsModified(false)
     void messageApi.success(t('field-definitions.saved-successfully'))
-  }, [generalSettings, fieldDefinitions, structure, fieldDefinitionRegistry, area, setInvalidFieldDefinitionIds, updateDetailMutation, setIsModified, unsavedChanges, messageApi, t, alertModal])
+    return true
+  }, [generalSettings, fieldDefinitions, structure, fieldDefinitionRegistry, area, setInvalidFieldDefinitionIds, updateDetailMutation, setIsModified, messageApi, t, alertModal])
 
   useEffect(() => {
-    registerSaveCallback(performSave)
-    if (unsavedChanges !== undefined) {
-      unsavedChanges.saveFnRef.current = performSave
+    saveFnRef.current = performSave
+
+    return () => {
+      saveFnRef.current = null
     }
-  }, [registerSaveCallback, performSave, unsavedChanges])
+  }, [saveFnRef, performSave])
 
   const onClick: ButtonProps['onClick'] = () => {
-    performSave().catch((e) => {
-      if ((e as Error).message !== 'Validation failed') {
-        trackError(new ApiError(e as FetchBaseQueryError))
-      }
-    })
+    void performSave()
   }
 
   return (

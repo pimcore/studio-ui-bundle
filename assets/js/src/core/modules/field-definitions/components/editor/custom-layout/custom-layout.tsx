@@ -11,8 +11,8 @@
 import { CurrentConfigurationProvider } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/current-configuration-provider'
 import { CustomLayoutModal, CustomLayoutModalProvider } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/custom-layout-modal'
 import { CustomLayoutModalTrigger } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/custom-layout-modal-trigger'
-import { UnsavedChangesProvider } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/unsaved-changes-provider'
 import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
+import { UnsavedChangesProvider } from '@Pimcore/modules/field-definitions/components/editor/unsaved-changes-provider'
 import React from 'react'
 
 export const CustomLayout = (): React.JSX.Element => {
@@ -20,6 +20,9 @@ export const CustomLayout = (): React.JSX.Element => {
 
   return (
     <CurrentConfigurationProvider configuration={ activeConfiguration }>
+      {/* Scope for everything inside the custom layout modal: the nested
+          editor joins it instead of creating its own, so closing the modal
+          is guarded by the nested editor's unsaved changes. */}
       <UnsavedChangesProvider>
         <CustomLayoutModalProvider>
           <CustomLayoutModal />

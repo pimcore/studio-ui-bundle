@@ -9,15 +9,13 @@
  */
 
 import { create } from '@Pimcore/components/modal/factory/modal-factory'
-import { useUnsavedChanges } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/unsaved-changes-provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
-import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
-import { Modal, useFormModal } from '@sdk/components'
-import { ApiError, trackError } from '@sdk/modules/app'
+import { useUnsavedChanges } from '@Pimcore/modules/field-definitions/components/editor/unsaved-changes-provider'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 const {
+  Modal: ModalTemplate,
   Provider: CustomLayoutModalProvider,
   useModal: useCustomLayoutModal
 } = create({ defaultProps: { children: <></>, size: 'XXL', footer: null, maskClosable: false } })
@@ -28,56 +26,17 @@ export const CustomLayoutModal = (): React.JSX.Element => {
   const { t } = useTranslation()
   const settings = useSettings()
   const { open, closeModal } = useCustomLayoutModal()
-  const { isModified, setIsModified, saveFnRef } = useUnsavedChanges()
-  const modal = useFormModal()
-
-  const handleClose = (): void => {
-    if (isModified) {
-      modal.confirm({
-        type: 'warning',
-        title: t('unsaved-changes.title'),
-        content: t('unsaved-changes.message'),
-        okText: t('save'),
-        cancelText: t('discard-changes'),
-        onOk: async () => {
-          if (saveFnRef.current !== null) {
-            try {
-              await saveFnRef.current()
-            } catch (e) {
-              if ((e as Error).message !== 'Validation failed') {
-                trackError(new ApiError(e as FetchBaseQueryError))
-              }
-              return
-            }
-          }
-
-          setIsModified(false)
-          closeModal()
-        },
-        onCancel: () => {
-          setIsModified(false)
-          closeModal()
-        }
-      })
-      return
-    }
-
-    closeModal()
-  }
+  const { guard } = useUnsavedChanges()
 
   return (
     <>
       { open && (
-        <Modal
-          footer={ null }
-          maskClosable={ false }
-          onCancel={ handleClose }
-          open={ open }
-          size={ 'XXL' }
+        <ModalTemplate
+          onCancel={ () => { guard(closeModal) } }
           title={ t('field-definitions.custom-layouts') }
         >
           {settings.customLayouts?.ModalContent}
-        </Modal>
+        </ModalTemplate>
       )}
     </>
   )

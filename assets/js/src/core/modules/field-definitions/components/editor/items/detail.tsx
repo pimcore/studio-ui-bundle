@@ -17,6 +17,7 @@ import { ImportExportActions } from '@Pimcore/modules/field-definitions/componen
 import { RefreshProvider } from '@Pimcore/modules/field-definitions/components/editor/items/detail/refresh-provider'
 import { type ConfigurationPartial, useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
+import { useUnsavedChanges } from '@Pimcore/modules/field-definitions/components/editor/unsaved-changes-provider'
 import { type Layout } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { ConfigLayout, Content, ContentLayout, Flex, IconButton, Toolbar } from '@sdk/components'
@@ -29,7 +30,8 @@ export interface ItemDetailProps {
 
 export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
   const { useDetailGeneralSettingsQuery, useDetailLayoutQuery, useDetailLayoutAccessor, customLayouts, LayoutProvider } = useSettings()
-  const { setDetailView, setIsModified } = useItems()
+  const { setDetailView } = useItems()
+  const { setIsModified } = useUnsavedChanges()
   const layoutResult = useDetailLayoutQuery?.({
     id: props.configuration.id
   })

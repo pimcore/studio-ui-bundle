@@ -8,9 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useFormModal } from '@sdk/components'
-import React, { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useUnsavedChanges } from '@Pimcore/modules/field-definitions/components/editor/unsaved-changes-provider'
+import React, { createContext, useCallback, useContext, useMemo, useState } from 'react'
 
 export interface ConfigurationPartial {
   id: string
@@ -33,9 +32,6 @@ export interface IItemsContext {
   closeActiveConfiguration: () => void
   detailView: DetailView
   setDetailView: (view: DetailView) => void
-  isModified: boolean
-  setIsModified: (modified: boolean) => void
-  registerSaveCallback: (cb: () => Promise<void>) => void
 }
 
 export const ItemsContext = createContext<IItemsContext | undefined>(undefined)
@@ -45,17 +41,10 @@ export interface ItemsProviderProps {
 }
 
 export const ItemsProvider = (props: ItemsProviderProps): React.JSX.Element => {
-  const { t } = useTranslation()
-  const modal = useFormModal()
+  const { guard } = useUnsavedChanges()
   const [configurations, setConfigurations] = useState<ConfigurationPartial[]>([])
   const [activeConfiguration, setActiveConfigurationInternal] = useState<ConfigurationPartial | undefined>(undefined)
   const [detailView, setDetailView] = useState<DetailView>('general')
-  const [isModified, setIsModified] = useState(false)
-  const saveCallbackRef = useRef<(() => Promise<void>) | null>(null)
-
-  const registerSaveCallback = useCallback((cb: () => Promise<void>): void => {
-    saveCallbackRef.current = cb
-  }, [])
 
   const closeActiveConfiguration = (): void => {
     if (activeConfiguration === undefined) {
@@ -77,38 +66,22 @@ export const ItemsProvider = (props: ItemsProviderProps): React.JSX.Element => {
   }
 
   const setActiveConfiguration = useCallback((config: ConfigurationPartial): void => {
-    if (isModified && config.id !== activeConfiguration?.id) {
-      modal.confirm({
-        type: 'warning',
-        title: t('unsaved-changes.title'),
-        content: t('unsaved-changes.message'),
-        okText: t('save'),
-        cancelText: t('discard-changes'),
-        onOk: async () => {
-          if (saveCallbackRef.current !== null) {
-            await saveCallbackRef.current()
-          }
+    const activate = (): void => {
+      if (configurations.find((cd) => cd.id === config.id) === undefined) {
+        openConfiguration(config)
+        return
+      }
 
-          setIsModified(false)
-          saveCallbackRef.current = null
-          openConfiguration(config)
-        },
-        onCancel: () => {
-          setIsModified(false)
-          saveCallbackRef.current = null
-          openConfiguration(config)
-        }
-      })
+      setActiveConfigurationInternal(config)
+    }
+
+    if (config.id === activeConfiguration?.id) {
+      activate()
       return
     }
 
-    if (configurations.find((cd) => cd.id === config.id) === undefined) {
-      openConfiguration(config)
-      return
-    }
-
-    setActiveConfigurationInternal(config)
-  }, [isModified, activeConfiguration, configurations, modal, t])
+    guard(activate)
+  }, [activeConfiguration, configurations, guard])
 
   const openConfiguration = (config: ConfigurationPartial): void => {
     setConfigurations((prevConfigs) => {
@@ -141,11 +114,8 @@ export const ItemsProvider = (props: ItemsProviderProps): React.JSX.Element => {
     setActiveConfiguration,
     closeActiveConfiguration,
     detailView,
-    setDetailView,
-    isModified,
-    setIsModified,
-    registerSaveCallback
-  }), [configurations, activeConfiguration, detailView, isModified, setActiveConfiguration, registerSaveCallback])
+    setDetailView
+  }), [configurations, activeConfiguration, detailView, setActiveConfiguration])
 
   return (
     <ItemsContext.Provider value={ contextValue }>
