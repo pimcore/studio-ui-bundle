@@ -23,7 +23,12 @@ const getDefaultIconSize = (size: AvatarProps['size']): number => {
 
 export const Avatar = ({ icon, size, ...props }: AvatarProps): React.JSX.Element => {
   const iconSize = getDefaultIconSize(size)
-  const resolvedIcon = icon ?? <Icon options={ { width: iconSize, height: iconSize } } value='user' />
+  const resolvedIcon = icon ?? (
+  <Icon
+    options={ { width: iconSize, height: iconSize } }
+    value='user'
+  />
+  )
 
   return (
     <AntAvatar
