@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { useCallback } from 'react'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type SaveTaskType } from '@Pimcore/modules/data-object/actions/save/use-save'
 import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
@@ -32,10 +33,10 @@ export const useElementHelper = (): UseElementReturn => {
   const { executeDataObjectTask } = useDataObjectHelper()
   const { executeDocumentTask } = useDocumentHelper()
 
-  async function openElement (props: OpenElementWidgetProps): Promise<void> {
+  const openElement = useCallback(async (props: OpenElementWidgetProps): Promise<void> => {
     const { element } = getPimcoreStudioApi()
     await element.openElement(props.id, props.type)
-  }
+  }, [])
 
   function mapToElementType (elementType: string, silent?: boolean): ElementType | undefined {
     const targetType = mapType(elementType)
