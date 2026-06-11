@@ -82,7 +82,12 @@ export const DataObjectPreview = ({ id }: DataObjectPreviewProps): React.JSX.Ele
     setMode(updatedMode)
   }
 
-  const params = new URLSearchParams({ timestamp: String(timestamp), ...customParams })
+  const params = new URLSearchParams({ timestamp: String(timestamp) })
+  Object.entries(customParams).forEach(([key, value]) => {
+    if (value !== '' && value != null) {
+      params.set(key, value)
+    }
+  })
   const previewUrl = `${getPrefix()}/data-objects/preview/${id}?${params.toString()}`
 
   const iframeStyle: React.CSSProperties = mode.device === 'desktop'
@@ -144,9 +149,10 @@ export const DataObjectPreview = ({ id }: DataObjectPreviewProps): React.JSX.Ele
 
             { previewConfig != null && previewConfig.map((entry) => (
               <Select
+                allowClear={ entry.defaultValue === '' }
                 key={ entry.name }
-                onChange={ (value: string) => {
-                  setCustomParams((prev) => ({ ...prev, [entry.name]: value }))
+                onChange={ (value: string | undefined) => {
+                  setCustomParams((prev) => ({ ...prev, [entry.name]: value ?? '' }))
                 } }
                 options={ entry.values.map((v) => ({ label: v.key, value: v.value })) }
                 value={ customParams[entry.name] ?? entry.defaultValue }
