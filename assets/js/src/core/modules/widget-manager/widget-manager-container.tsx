@@ -8,10 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { WidgetManagerView } from './widget-manager-view'
 import { widgetManagerFactory } from './utils/widget-manager-factory'
-import { Actions, type ITabRenderValues, Model, type TabNode, type TabSetNode } from 'flexlayout-react'
+import { Actions, type IJsonModel, type ITabRenderValues, Model, type TabNode, type TabSetNode } from 'flexlayout-react'
 import { useAppDispatch, useAppSelector } from '@sdk/app'
 import { selectOuterModel, updateOuterModel } from './widget-manager-slice'
 import { TabTitleOuterContainer } from './title/tab-title-outer-container'
@@ -19,29 +19,55 @@ import { TabTitleOuterContainer } from './title/tab-title-outer-container'
 export const WidgetManagerContainer = (): React.JSX.Element => {
   const modelJson = useAppSelector(selectOuterModel)
   const dispatch = useAppDispatch()
-  const model = Model.fromJson(modelJson)
-  const bottomTabset = model.getNodeById('bottom_tabset') as TabSetNode
 
-  model.doAction(Actions.updateModelAttributes({
-    tabSetTabStripHeight: 34,
-    tabSetTabHeaderHeight: 34,
-    borderBarSize: 50
-  }))
+  const modelRef = useRef<Model>(Model.fromJson(modelJson))
+  const prevModelJsonRef = useRef<IJsonModel>(modelJson)
+  const skipModelSyncRef = useRef(false)
 
-  if (bottomTabset.getChildren().length === 0) {
-    model.doAction(Actions.updateNodeAttributes(bottomTabset.getId(), { height: -8 }))
-  } else if (bottomTabset.getHeight() === -8) {
-    model.doAction(Actions.updateNodeAttributes(bottomTabset.getId(), { height: 34 }))
+  if (modelJson !== prevModelJsonRef.current) {
+    prevModelJsonRef.current = modelJson
+
+    if (!skipModelSyncRef.current) {
+      modelRef.current = Model.fromJson(modelJson)
+    }
+
+    skipModelSyncRef.current = false
   }
 
-  function onModelChange (model: Model): void {
-    dispatch(updateOuterModel(model.toJson()))
-  }
+  const model = modelRef.current
 
-  function onRenderTab (node: TabNode, renderValues: ITabRenderValues): void {
+  useEffect(() => {
+    modelRef.current.doAction(Actions.updateModelAttributes({
+      tabSetTabStripHeight: 34,
+      tabSetTabHeaderHeight: 34,
+      borderBarSize: 50
+    }))
+  }, [])
+
+  useEffect(() => {
+    const bottomTabset = model.getNodeById('bottom_tabset') as TabSetNode
+
+    if (bottomTabset === undefined) {
+      return
+    }
+
+    if (bottomTabset.getChildren().length === 0) {
+      model.doAction(Actions.updateNodeAttributes(bottomTabset.getId(), { height: -8 }))
+    } else if (bottomTabset.getHeight() === -8) {
+      model.doAction(Actions.updateNodeAttributes(bottomTabset.getId(), { height: 34 }))
+    }
+  }, [model])
+
+  const onModelChange = useCallback((updatedModel: Model): void => {
+    skipModelSyncRef.current = true
+
+    dispatch(updateOuterModel(updatedModel.toJson()))
+  }, [dispatch])
+
+  const onRenderTab = useCallback((node: TabNode, renderValues: ITabRenderValues): void => {
     renderValues.content = <TabTitleOuterContainer node={ node } />
     renderValues.leading = <></>
-  }
+  }, [])
 
   return (
     <WidgetManagerView
