@@ -147,7 +147,7 @@ export const DataObjectPreview = ({ id }: DataObjectPreviewProps): React.JSX.Ele
               </IconTextButton>
             </Compact>
 
-            { previewConfig != null && previewConfig.map((entry) => (
+            { previewConfig?.map((entry) => (
               <Select
                 allowClear={ entry.defaultValue === '' }
                 key={ entry.name }
