@@ -10,10 +10,13 @@
 
 import React, { useEffect } from 'react'
 import { useClassDefinitionSelection } from '../../context-layer/provider/use-class-definition-selection'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Icon } from '@Pimcore/components/icon/icon'
 import { Select, type SelectProps } from '@Pimcore/components/select/select'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
 import { useTypeSelectOptional } from '@Pimcore/modules/element/components/type-select/provider/use-type-select-optional'
+import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypeObjectRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/dynamic-type-object-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
@@ -29,18 +32,34 @@ export const ClassDefinitionSelect = ({ nullable = false }: ClassDefinitionSelec
   const { setPage } = usePaging()
   const { setDataLoadingState } = useDataQueryHelper()
   const objectRegistry = useInjection<DynamicTypeObjectRegistry>(serviceIds['DynamicTypes/ObjectRegistry'])
+  const fieldWidth = useFieldWidth()
   let isDisabled = false
 
   const isNullable = config.classRestriction === undefined && nullable
 
-  const options: SelectProps['options'] = availableClassDefinitions.map((classDefinition) => ({
-    value: classDefinition.id,
-    label: classDefinition.name
-  }))
+  const options: SelectProps['options'] = [...availableClassDefinitions]
+    .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }))
+    .map((classDefinition) => ({
+      value: classDefinition.id,
+      name: classDefinition.name,
+      label: (
+        <Flex
+          align="center"
+          gap="extra-small"
+        >
+          <Icon
+            type={ classDefinition.icon.type }
+            value={ classDefinition.icon.value }
+          />
+          {classDefinition.name}
+        </Flex>
+      )
+    }))
 
   if (isNullable) {
     options.unshift({
       value: null,
+      name: 'All classes',
       label: 'All classes'
     })
   }
@@ -84,12 +103,13 @@ export const ClassDefinitionSelect = ({ nullable = false }: ClassDefinitionSelec
       className='w-full'
       data-testid="listing-class-definition-select"
       disabled={ isDisabled }
-      minWidth={ 'normal' }
+      minWidth={ fieldWidth.small }
       onChange={ (value) => { onChange(value) } }
-      optionFilterProp="label"
+      optionFilterProp="name"
       options={ options }
+      popupMatchSelectWidth={ false }
       showSearch
-      value={ isNullable ? selectedClassDefinition?.name ?? null : selectedClassDefinition?.name }
+      value={ isNullable ? selectedClassDefinition?.id ?? null : selectedClassDefinition?.id }
     />
   )
 }
