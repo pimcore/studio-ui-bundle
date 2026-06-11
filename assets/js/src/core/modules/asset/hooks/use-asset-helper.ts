@@ -16,7 +16,7 @@ interface OpenAssetWidgetProps {
 }
 
 interface UseAssetReturn {
-  openAsset: (props: OpenAssetWidgetProps) => Promise<void>
+  openAsset: (props: OpenAssetWidgetProps) => void
 }
 
 export const useAssetHelper = (): UseAssetReturn => {

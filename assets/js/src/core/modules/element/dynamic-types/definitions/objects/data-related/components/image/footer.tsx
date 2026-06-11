@@ -50,7 +50,7 @@ export const ImageFooter = (props: ImageFooterProps): React.JSX.Element => {
         icon={ { value: 'open-folder' } }
         onClick={ () => {
           if (typeof props.value?.id === 'number') {
-            void openAsset({ config: { id: props.value.id } })
+            openAsset({ config: { id: props.value.id } })
           }
         } }
       />

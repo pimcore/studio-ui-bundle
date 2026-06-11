@@ -24,7 +24,7 @@ export const PreviewCardContainer = ({ asset }: PreviewCardContainerProps): Reac
   const { openAsset } = useAssetHelper()
 
   const onClickCard = (e): void => {
-    void openAsset({
+    openAsset({
       config: {
         id: asset.id
       }

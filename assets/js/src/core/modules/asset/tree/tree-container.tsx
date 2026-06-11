@@ -12,7 +12,7 @@ import { defaultTreeProps, ElementTree, type TreeContextMenuProps } from '@Pimco
 import React from 'react'
 import { TreeNode as TreeNodeComponent } from '@Pimcore/components/element-tree/node/tree-node'
 import { PagerContainer } from '@Pimcore/components/element-tree/pager/pager-container'
-import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
+import { assetOpeningService } from '@Pimcore/modules/asset/services/asset-opening-service'
 import { SearchContainer } from './search/search-container'
 import { withDraggable } from './node/with-draggable'
 import { Skeleton } from '@Pimcore/components/element-tree/skeleton/skeleton'
@@ -36,7 +36,6 @@ export interface TreeContainerProps {
 export const AssetTreeNode = withDroppableStyling(withDroppable((withDndUpload(withActionStates(withDraggable(withContextMenu(TreeNodeComponent)))))))
 
 const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
-  const { openAsset } = useAssetHelper()
   const { rootNode, isLoading } = useElementTreeRootNode(id, showRoot)
   const componentRegistry = useComponentRegistry()
   const dispatch = useAppDispatch()
@@ -54,10 +53,8 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
     dispatch(setNodeOpeningInAllTree({ nodeId: node.id, elementType: 'asset', opening: true }))
 
     try {
-      await openAsset({
-        config: {
-          id: parseInt(node.id)
-        }
+      await assetOpeningService.openAsset({
+        id: parseInt(node.id)
       })
     } finally {
       dispatch(setNodeOpeningInAllTree({ nodeId: node.id, elementType: 'asset', opening: false }))

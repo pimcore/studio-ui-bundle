@@ -64,7 +64,7 @@ export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.El
         icon={ { value: 'open-folder' } }
         onClick={ () => {
           if (typeof props.value?.image?.id === 'number') {
-            void openAsset({ config: { id: props.value.image.id } })
+            openAsset({ config: { id: props.value.image.id } })
           }
         } }
       />

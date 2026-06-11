@@ -253,7 +253,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
               key: 'open',
               icon: <Icon value={ 'open-folder' } />,
               onClick: async () => {
-                await openAsset({
+                openAsset({
                   config: {
                     id: item.image!.id
                   }

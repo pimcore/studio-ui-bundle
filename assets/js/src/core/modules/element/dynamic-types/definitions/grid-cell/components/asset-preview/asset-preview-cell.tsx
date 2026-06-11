@@ -30,7 +30,7 @@ const AssetPreviewCell = (props: PreviewContainerProps): React.JSX.Element => {
     if (props !== undefined) {
       const asset = props.row.original
 
-      void openAsset({
+      openAsset({
         config: {
           id: asset.id
         }
