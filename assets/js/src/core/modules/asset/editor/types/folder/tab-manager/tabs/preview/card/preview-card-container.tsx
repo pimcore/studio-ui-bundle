@@ -9,7 +9,7 @@
  */
 
 import { type AssetGetTreeApiResponse } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { PreviewCard, SizeTypes } from '@Pimcore/components/preview-card/preview-card'
+import { PreviewCard, type SizeTypes } from '@Pimcore/components/preview-card/preview-card'
 import React from 'react'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { isString } from 'lodash'
