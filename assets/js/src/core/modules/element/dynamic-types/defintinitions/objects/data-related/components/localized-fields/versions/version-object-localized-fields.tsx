@@ -59,7 +59,7 @@ export const VersionObjectLocalizedFields = ({ children, className, value }: Obj
               <Text>
                 {child?.title} {!isEmpty(locale) && <Text type="secondary">| {locale?.toUpperCase()}</Text>}
               </Text>
-              {objectDataType.getObjectDataComponent(_props)}
+              {objectDataType.getVersionObjectDataComponent(_props)}
             </Flex>
           )
         })

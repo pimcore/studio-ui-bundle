@@ -289,6 +289,9 @@ select-option.tree.actions.select-option: Valalternativ
 custom-layout.import-success: Anpassad layout har importerats
 custom-layout.delete.confirmation: Är du säker på att du vill ta bort den här anpassade layouten?
 custom-layout.delete.success: Anpassad layout har tagits bort
+custom-layout.add: Ny layout
+custom-layout.empty-state.create-or-edit: Skapa en ny anpassad layout eller redigera en befintlig
+custom-layout.empty-state.edit: Välj en befintlig anpassad layout för att börja redigera
 example-prefix: Exempelprefix
 pagination.show-total: Totalt {{total}} objekt
 pagination.page: Sida
@@ -1161,9 +1164,11 @@ element.delete.folder.ok: Ta bort
 element.delete.folder.ok.permanent: Ta bort permanent
 element.delete.batch.title: Ta bort element
 element.delete.batch.note: 'Obs: Dessa element kommer att tas bort permanent och kan inte återställas.'
-element.delete.batch.question: 'Vill du verkligen ta bort {{count}} element?'
+element.delete.batch.question_one: 'Vill du verkligen ta bort det här elementet?'
+element.delete.batch.question_other: 'Vill du verkligen ta bort dessa {{count}} element?'
 element.delete.batch.ok: Ta bort permanent
-element.delete.batch.show-paths: 'Visa alla {{count}} element'
+element.delete.batch.show-paths: Visa element
+element.delete.batch.dependencies-warning: 'Det kan finnas beroenden, ta bort ändå?'
 element.open: Öppna
 element.toolbar.copy-id: Kopiera ID
 element.toolbar.copy-full-path-to-clipboard: Kopiera fullständig sökväg
@@ -1233,6 +1238,8 @@ folder: Mapp
 archive: Arkiv
 audio: Ljud
 image: Bild
+image-gallery.clear-image-selection: Rensa bildval
+image-gallery.delete-frame: Ta bort ram
 text: Text
 video: Video
 processing: Bearbetar
@@ -1442,6 +1449,7 @@ roles.remove-folder.success: Mappen har tagits bort
 roles.remove-item.success: Rollen har tagits bort
 roles.add-item.success: Rollen har lagts till
 roles.add-folder.success: Mappen har lagts till
+roles.general: Allmänt
 roles.settings.title: Inställningar
 roles.workspaces.title: Workspaces
 roles.add-folder: Lägg till ny mapp
@@ -2721,3 +2729,6 @@ translations.merger.title: "Sammanfoga översättningar (Domän: {{domain}})"
 translations.merger.column.language: Språk
 translations.merger.items: objekt
 select.clear-selection: Rensa val
+asset.folder.preview.image-display: Bildvisning
+asset.folder.preview.image-display.small: Liten
+asset.folder.preview.image-display.large: Stor

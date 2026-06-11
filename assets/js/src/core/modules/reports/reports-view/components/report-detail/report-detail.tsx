@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { isNil, isNull, isUndefined } from 'lodash'
 import { type AccessorFnColumnDef, createColumnHelper, type SortingState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
@@ -74,7 +74,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
     return !isUndefined(sorting) ? [{ id: sorting.sortBy, desc: sorting.sortOrder === 'DESC' }] : []
   }, [sorting])
 
-  const handleSortingChange = (updatedSorting: SortingState): void => {
+  const handleSortingChange = useCallback((updatedSorting: SortingState): void => {
     if (updatedSorting.length > 0) {
       const { id, desc } = updatedSorting[0]
 
@@ -85,9 +85,9 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
     } else {
       setSorting(undefined)
     }
-  }
+  }, [setSorting])
 
-  const handleElementOpen = ({ id, actionType }: { id: number, actionType?: ReportActionType }): void => {
+  const handleElementOpen = useCallback(({ id, actionType }: { id: number, actionType?: ReportActionType }): void => {
     if (actionType === ReportActionType.OPEN_URL) {
       window.open(`${currentDomain}/pimcore-studio/${id}`, '_blank')
     } else {
@@ -95,9 +95,9 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
 
       void openElement({ id: Number(id), type })
     }
-  }
+  }, [openElement])
 
-  const renderColumnActionCell = ({ id, actionType }: { id: string, actionType: ReportActionType | undefined }): React.JSX.Element => (
+  const renderColumnActionCell = useCallback(({ id, actionType }: { id: string, actionType: ReportActionType | undefined }): React.JSX.Element => (
     <Flex
       align='center'
       justify='flex-start'
@@ -108,9 +108,9 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
         type="link"
       />
     </Flex>
-  )
+  ), [handleElementOpen])
 
-  const getColumns = (): Array<AccessorFnColumnDef<unknown, never>> | undefined => {
+  const getColumns = useCallback((): Array<AccessorFnColumnDef<unknown, never>> | undefined => {
     const list: Array<AccessorFnColumnDef<unknown, never>> = []
 
     reportDetailData?.columnConfigurations?.forEach((item, index) => {
@@ -165,24 +165,24 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
     })
 
     return list.filter(item => !isUndefined(item))
-  }
+  }, [reportDetailData, renderColumnActionCell, t])
 
   useEffect(() => {
-    setColumns(getColumns() ?? [])
-    setInitialColumns(getColumns() ?? [])
-  }, [reportDetailData, setColumns])
+    const cols = getColumns() ?? []
 
-  const getDrillDownSelectList = (): BundleCustomReportsColumnConfiguration[] | undefined => (
+    setColumns(cols)
+    setInitialColumns(cols)
+  }, [getColumns, setColumns, setInitialColumns])
+
+  const drillDownFields = useMemo(() => (
     reportDetailData?.columnConfigurations
       ?.filter((item) => !isEmptyValue(item.filterDrilldown))
       .map(item => item)
-  )
-
-  const drillDownFields = useMemo(() => getDrillDownSelectList(), [reportDetailData])
+  ), [reportDetailData])
 
   const isShowChart = !isEmptyValue(reportDetailData?.chartType)
-  const chartData = chartDetailData?.items?.map((item) => item.data)
-  const fullChartData = fullChartDataList?.items?.map((item) => item.data)
+  const chartData = useMemo(() => chartDetailData?.items?.map((item) => item.data), [chartDetailData])
+  const fullChartData = useMemo(() => fullChartDataList?.items?.map((item) => item.data), [fullChartDataList])
 
   if (isLoading && isShowLoading) {
     return <Content loading />
