@@ -16,7 +16,11 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { isObject, has } from 'lodash'
 
-export const ColorPanel = (): React.JSX.Element => {
+interface ColorPanelProps {
+  disabled?: boolean
+}
+
+export const ColorPanel = ({ disabled }: ColorPanelProps): React.JSX.Element => {
   const { t } = useTranslation()
   const form = Form.useFormInstance()
 
@@ -53,6 +57,7 @@ export const ColorPanel = (): React.JSX.Element => {
             <ColorPicker
               allowClear
               data-testid="appearance-branding-brand-color"
+              disabled={ disabled }
               format="hex"
               onChange={ (color) => {
                 const hexValue = formatColor(color)
@@ -74,6 +79,7 @@ export const ColorPanel = (): React.JSX.Element => {
             <ColorPicker
               allowClear
               data-testid="appearance-branding-background-shade"
+              disabled={ disabled }
               format="hex"
               onChange={ (color) => {
                 const hexValue = formatColor(color)

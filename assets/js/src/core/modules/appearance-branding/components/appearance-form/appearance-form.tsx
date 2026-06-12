@@ -88,11 +88,12 @@ export const AppearanceForm = (): React.JSX.Element => {
             direction="vertical"
             size="large"
           >
-            <ColorPanel />
+            <ColorPanel disabled={ !isWriteable } />
 
             <ImagePanel
               dataTestId="appearance-branding-custom-logo"
               descriptionKey="appearance-branding.custom-logo.description"
+              disabled={ !isWriteable }
               fieldName={ ['branding', 'customLogo'] }
               height={ 150 }
               titleKey="appearance-branding.custom-logo.title"
@@ -102,6 +103,7 @@ export const AppearanceForm = (): React.JSX.Element => {
             <ImagePanel
               dataTestId="appearance-branding-login-background"
               descriptionKey="appearance-branding.custom-login-background.description"
+              disabled={ !isWriteable }
               fieldName={ ['branding', 'loginScreenCustomBackgroundImage'] }
               height={ 150 }
               titleKey="appearance-branding.custom-login-background.title"

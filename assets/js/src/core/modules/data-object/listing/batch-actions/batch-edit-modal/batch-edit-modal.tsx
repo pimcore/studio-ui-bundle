@@ -55,7 +55,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const { getAvailableColumnsDropdown } = useAvailableColumns()
   const { batchEdits, addOrUpdateBatchEdit, addOrUpdateBatchEdits, resetBatchEdits } = useBatchEdit()
   const [form] = Form.useForm()
-  const { selectedRows } = useRowSelection()
+  const { selectedRows, setSelectedRows } = useRowSelection()
   const [patchObjectsInFolder, { error: folderPatchError, isError: isFolderPatchError, isSuccess: isFolderPatchSuccess }] = useDataObjectPatchFolderByIdMutation()
   const [patchObjectsByIds, { error: idPatchError, isError: isIdPatchError, isSuccess: isIdPatchSuccess }] = useDataObjectPatchByIdMutation()
   const { useDataQueryHelper } = useSettings()
@@ -174,7 +174,10 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         filters,
         classId: String(selectedClassDefinition?.id),
         assetContextId: id,
-        refreshGrid
+        refreshGrid,
+        onFinish: async () => {
+          await refreshGrid()
+        }
       })
       await executionEngine.runJob(job)
     } else if (selectedRowsCount === 1) {
@@ -194,7 +197,11 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         selectedRowsIds: selectedRowsIds.map(Number),
         values,
         assetContextId: id,
-        refreshGrid
+        refreshGrid,
+        onFinish: async () => {
+          await refreshGrid()
+          setSelectedRows({})
+        }
       })
       await executionEngine.runJob(job)
     }
