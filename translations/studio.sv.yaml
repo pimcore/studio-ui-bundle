@@ -1843,6 +1843,7 @@ empty-image: Tom bild
 image.dnd-target: Släpp en bild här
 image.add.and.dnd: Lägg till eller släpp en bild direkt här
 image.upload.add.and.dnd: Ladda upp, lägg till eller släpp en bild direkt här
+image.too-small: Den valda bilden är för liten. Använd en större bild.
 fallback: Reserv
 url-slug.add-site: Lägg till sajt
 url-slug.invalid: Ange en giltig URL slug (börjar med '/')

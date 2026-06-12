@@ -48,6 +48,8 @@ interface DocumentHotspotImagePreviewProps {
   dropClass?: string
   onResize?: (dimensions: { width: number, height: number }) => void
   lastImageDimensions?: { width: number, height: number } | null
+  minWidth?: number
+  minHeight?: number
   // Alt text overlay props
   altText?: string
   onAltTextChange?: (alt: string) => void
@@ -79,6 +81,8 @@ export const DocumentHotspotImagePreview = ({
   dropClass,
   onResize,
   lastImageDimensions,
+  minWidth,
+  minHeight,
   altText,
   onAltTextChange,
   hideAltTextInput,
@@ -195,6 +199,8 @@ export const DocumentHotspotImagePreview = ({
         height={ height }
         imgAttributes={ imgAttributes }
         lastImageDimensions={ lastImageDimensions }
+        minHeight={ minHeight }
+        minWidth={ minWidth }
         onImageLoadedChange={ onImageLoadedChange }
         onResize={ onResize }
         thumbnailConfig={ thumbnailConfig }
