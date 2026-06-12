@@ -66,7 +66,12 @@ export const WindowModal = (props: IWindowModalProps): React.JSX.Element => {
           nodeRef={ draggleRef }
           onStart={ (event, uiData) => { onStart(event, uiData) } }
         >
-          <div ref={ draggleRef }>{modal}</div>
+          <div
+            className={ styles.draggableContainer }
+            ref={ draggleRef }
+          >
+            {modal}
+          </div>
         </Draggable>
       ) }
       title={
