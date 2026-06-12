@@ -44,6 +44,24 @@ export class WidgetRegistry {
     this.widgets.push(newWidget)
   }
 
+  /**
+   * Replaces an already registered widget, e.g. to let a bundle take over
+   * a core view. Throws when no widget with the given name is registered.
+   */
+  overrideWidget (widget: Widget): void {
+    const index = this.widgets.findIndex((registeredWidget) => registeredWidget.name === widget.name)
+
+    if (index === -1) {
+      throw new Error(`Widget with name "${widget.name}" not found`)
+    }
+
+    this.widgets[index] = {
+      ...widget,
+      component: memo(widget.component),
+      defaultGlobalContext: widget.defaultGlobalContext ?? true
+    }
+  }
+
   getWidget (name: string): Widget | undefined {
     return this.widgets.find((widget) => widget.name === name)
   }
