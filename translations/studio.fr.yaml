@@ -1861,6 +1861,7 @@ video.settings: Paramètres vidéo
 video.poster: Image d'affiche
 video.path: Chemin
 video.dnd-target: Déposez une vidéo ici
+video.add-target: Ajoutez une vidéo ici
 pdf-editable.dnd-target: Déposez un document asset ici
 many-to-one-relation.drop-placeholder: Déposez un élément ici
 many-to-one-relation.drop-placeholder-text-input: Déposez un élément ici ou entrez une valeur

@@ -1861,6 +1861,7 @@ video.settings: Configuración de vídeo
 video.poster: Imagen de póster
 video.path: Ruta
 video.dnd-target: Suelte un vídeo aquí
+video.add-target: Añada un vídeo aquí
 pdf-editable.dnd-target: Suelte un asset de documento aquí
 many-to-one-relation.drop-placeholder: Suelte un elemento aquí
 many-to-one-relation.drop-placeholder-text-input: Suelte un elemento aquí o introduzca un valor
