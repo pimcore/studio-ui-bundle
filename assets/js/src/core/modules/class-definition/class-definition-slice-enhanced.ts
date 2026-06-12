@@ -228,10 +228,8 @@ const apiWithTags = baseApi.enhanceEndpoints({
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
-          dispatch(
-            apiWithTags.util.updateQueryData('classObjectBrickCustomLayoutGet', { key: args.key, customLayoutId: args.customLayoutId }, (draft) => {
-              Object.assign(draft, data)
-            })
+          await dispatch(
+            apiWithTags.util.upsertQueryData('classObjectBrickCustomLayoutGet', { key: args.key, customLayoutId: args.customLayoutId }, data)
           )
         } catch {
           // Mutation failed, no cache update needed

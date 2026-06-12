@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { useUnsavedChanges } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/unsaved-changes-provider'
 import { type ConfigurationPartial, useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { Dropdown, type DropdownMenuProps, IconTextButton, Space, Text } from '@sdk/components'
@@ -19,6 +20,7 @@ export const TopBarItemSelect = (): React.JSX.Element => {
   const { useItemsQuery } = useSettings()
   const { isLoading, data } = useItemsQuery()
   const { setActiveConfiguration, activeConfiguration } = useItems()
+  const { guard } = useUnsavedChanges()
 
   const dropdownItems: DropdownMenuProps['items'] = React.useMemo(() => {
     if (data === undefined) {
@@ -29,10 +31,21 @@ export const TopBarItemSelect = (): React.JSX.Element => {
       key: configuration.id,
       label: configuration.name,
       onClick: () => {
-        setActiveConfiguration(configuration as ConfigurationPartial)
+        const activate = (): void => {
+          setActiveConfiguration(configuration as ConfigurationPartial)
+        }
+
+        // Switching layouts remounts the detail view and discards its
+        // state; selecting the already active layout does not.
+        if (configuration.id === activeConfiguration?.id) {
+          activate()
+          return
+        }
+
+        guard(activate, 'switch')
       }
     }))
-  }, [data, setActiveConfiguration])
+  }, [data, setActiveConfiguration, activeConfiguration?.id, guard])
 
   return (
     <>

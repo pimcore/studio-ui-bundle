@@ -9,6 +9,7 @@
  */
 
 import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
+import { useOptionalUnsavedChanges } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/unsaved-changes-provider'
 import { useGeneralSettings } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { isReservedWord } from '@Pimcore/modules/field-definitions/dynamic-types/utils/reserved-words'
@@ -17,7 +18,7 @@ import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { Button, type ButtonProps, useMessage } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 const NAME_FORMAT_REGEX = /^[A-Za-z][A-Za-z0-9_]*$/
@@ -25,18 +26,19 @@ const NAME_FORMAT_REGEX = /^[A-Za-z][A-Za-z0-9_]*$/
 export const DetailSave = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { useDetailUpdateMutation, useLayout } = useSettings()
-  const { fieldDefinitions, setInvalidFieldDefinitionIds, structure } = useLayout()
-  const { generalSettings } = useGeneralSettings()
+  const { fieldDefinitions, setInvalidFieldDefinitionIds, structure, markClean, getIsDirty: isLayoutDirty } = useLayout()
+  const { generalSettings, getIsDirty: areGeneralSettingsDirty } = useGeneralSettings()
   const [updateDetailMutation, result] = useDetailUpdateMutation()
   const { isLoading } = result
   const messageApi = useMessage()
   const alertModal = useAlertModal()
   const fieldDefinitionRegistry = useSettings().fieldDefinitionRegistry
   const { area } = useArea()
+  const unsavedChanges = useOptionalUnsavedChanges()
 
-  const onClick: ButtonProps['onClick'] = () => {
+  const performSave = async (): Promise<boolean> => {
     if (generalSettings === undefined) {
-      return
+      return false
     }
 
     const invalidDefinitions: string[] = []
@@ -137,16 +139,33 @@ export const DetailSave = (): React.JSX.Element => {
       )
 
       alertModal.error({ content })
-      return
+      return false
     }
 
-    updateDetailMutation({}).unwrap()
-      .then(() => {
-        messageApi.success(t('field-definitions.saved-successfully'))
-      })
-      .catch((e) => {
-        trackError(new ApiError(e as FetchBaseQueryError))
-      })
+    try {
+      await updateDetailMutation({}).unwrap()
+    } catch (e) {
+      trackError(new ApiError(e as FetchBaseQueryError))
+      return false
+    }
+
+    // The saved state is the new clean baseline for unsaved-changes checks
+    markClean()
+    messageApi.success(t('field-definitions.saved-successfully'))
+    return true
+  }
+
+  // When rendered inside the custom layout modal, this detail view is the
+  // modal's unsaved-changes handler. Registered without a dependency array
+  // so the guard always sees the latest closures; outside the modal this
+  // is a no-op.
+  useEffect(() => unsavedChanges?.register({
+    isDirty: () => isLayoutDirty() || areGeneralSettingsDirty(),
+    save: performSave
+  }))
+
+  const onClick: ButtonProps['onClick'] = () => {
+    void performSave()
   }
 
   return (
