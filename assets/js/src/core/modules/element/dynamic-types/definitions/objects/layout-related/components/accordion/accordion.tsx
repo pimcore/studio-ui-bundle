@@ -34,7 +34,7 @@ export const Accordion = ({ children, title, border, collapsed, collapsible, ico
     children: (
       <ObjectComponent
         { ...{ ...child, title: '' } }
-        noteditable={ noteditable }
+        noteditable={ noteditable === true || child.noteditable }
       />
     )
   }))

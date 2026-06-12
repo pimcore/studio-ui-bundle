@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
 import { DocumentHotspotImagePreview } from './hotspot-image-preview'
@@ -27,7 +27,7 @@ import { useUploadModal } from '@Pimcore/components/modal-upload/hooks/use-uploa
 import { InlineUpload } from '@Pimcore/components/inline-upload'
 import { useImageValueUpdates } from './hooks/use-image-value-updates'
 import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
-import { DEFAULT_HEIGHT, MIN_WIDTH } from '../../helpers/responsive-asset-preview/image-dimensions'
+import { DEFAULT_HEIGHT, MIN_WIDTH, MIN_HEIGHT } from '../../helpers/responsive-asset-preview/image-dimensions'
 import { locateElementInTree } from '@Pimcore/modules/element/utils/tree-utils'
 import { useAssetDimensions } from '../../helpers/responsive-asset-preview/hooks/use-asset-dimensions'
 import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
@@ -57,6 +57,8 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
   const imageValue = props.value
   const width = props.config?.width
   const height = props.config?.height
+  const minWidth = props.config?.minWidth
+  const minHeight = props.config?.minHeight
   const hasImage = !isNil(imageValue?.id)
   const isInherited = isBoolean(props.inherited) && props.inherited
   const disabled = props.disabled === true || isInherited
@@ -71,13 +73,14 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
   const { width: containerWidth } = useElementResize(props.containerRef ?? { current: null })
 
   const { triggerUpload } = useUploadModal({})
+  const showSuccessMessage = useRef(true)
   const {
     handleCropChange,
     handleHotspotsChange,
     handleReplaceImage,
     handleEmptyValue,
     handleAltTextChange
-  } = useImageValueUpdates({ value: imageValue, onChange: props.onChange })
+  } = useImageValueUpdates({ value: imageValue, onChange: props.onChange, minWidth, minHeight })
 
   const { open: openElementSelector } = useElementSelector({
     selectionType: SelectionType.Single,
@@ -93,7 +96,7 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
     },
     onFinish: (event) => {
       if (event.items.length > 0) {
-        handleReplaceImage(event.items[0].data.id)
+        void handleReplaceImage(event.items[0].data.id)
       }
     }
   })
@@ -167,20 +170,21 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
       accept: 'image/*',
       multiple: false,
       maxItems: 1,
+      showSuccessMessage,
       onSuccess: async (assets) => {
         if (assets.length > 0) {
-          handleReplaceImage(Number(assets[0].id))
+          showSuccessMessage.current = await handleReplaceImage(Number(assets[0].id))
         }
       }
     })
   }, [props.config?.disableInlineUpload, props.config?.uploadPath, triggerUpload, handleReplaceImage])
 
   const handleFileSystemUpload = async (asset: any): Promise<void> => {
-    handleReplaceImage(Number(asset.id))
+    await handleReplaceImage(Number(asset.id))
   }
 
   const handleDroppableDrop = useCallback((info: DragAndDropInfo) => {
-    handleReplaceImage(info.data.id as number)
+    void handleReplaceImage(info.data.id as number)
   }, [handleReplaceImage])
 
   const renderDroppableContent = useCallback((children: React.ReactNode): React.JSX.Element => {
@@ -239,7 +243,7 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
       hideButtons
       isInherited={ isInherited }
       onOverwrite={ handleOverwrite }
-      style={ { minWidth: MIN_WIDTH } }
+      style={ { minWidth: minWidth ?? MIN_WIDTH, minHeight: minHeight ?? MIN_HEIGHT } }
     >
       {renderDroppableContent(
         hasImage
@@ -262,6 +266,8 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
               imgAttributes={ props.config?.imgAttributes }
               isImageLoaded={ isImageLoaded }
               lastImageDimensions={ smartDimensions }
+              minHeight={ minHeight }
+              minWidth={ minWidth }
               onAltTextChange={ handleAltTextChange }
               onChange={ handleHotspotImageChange }
               onImageLoadedChange={ setIsImageLoaded }
@@ -279,6 +285,8 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
               dndIcon
               dropClass={ props.config?.dropClass }
               height={ smartDimensions?.height ?? height ?? DEFAULT_HEIGHT }
+              minHeight={ minHeight }
+              minWidth={ minWidth }
               onResize={ handleAssetTargetResize }
               onSearch={ openElementSelector }
               onUpload={ props.config?.disableInlineUpload === true ? undefined : handleUpload }

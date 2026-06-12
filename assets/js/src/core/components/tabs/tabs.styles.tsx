@@ -118,6 +118,7 @@ export const useStyles = createStyles(({ token, css }) => {
       
       &.ant-tabs-line > .ant-tabs-nav .ant-tabs-ink-bar {
         visibility: visible;
+        transition: left ${token.motionDurationMid} ease, right ${token.motionDurationMid} ease, width ${token.motionDurationMid} ease, transform ${token.motionDurationMid} ease;
       }
 
       &.tabs--full-height {

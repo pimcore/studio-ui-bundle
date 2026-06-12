@@ -53,7 +53,24 @@ interface CreateStylesOptions {
   __BABEL_FILE_NAME__?: string
 }
 
-const pimcoreStyleInstance = createInstance({ key: 'pimcore', speedy: true })
+// The instance gets a dedicated container appended to <head> while this module loads:
+// federated bundles inject their styles through antd-style's DEFAULT cache, whose
+// <style> tags are appended to the end of <head> once the bundle renders — i.e. after
+// this container. Without the container, the default cache's tag can end up after the
+// instance's tags, and consumer styles of equal specificity (e.g. a bundle's
+// `width: 100%` on a SDK Select) would lose against the SDK styles they could
+// override by insertion order before the dedicated instance existed.
+const createSdkStyleContainer = (): Node | undefined => {
+  if (typeof document === 'undefined') {
+    return undefined
+  }
+
+  const styleContainer = document.createElement('pimcore-sdk-styles')
+  document.head.appendChild(styleContainer)
+  return styleContainer
+}
+
+const pimcoreStyleInstance = createInstance({ key: 'pimcore', speedy: true, container: createSdkStyleContainer() })
 const sharedCache = (pimcoreStyleInstance.styleManager as unknown as { cache: Parameters<typeof createCSS>[0] }).cache
 
 export function createStyles<Props, S extends StyleRecord = StyleRecord> (

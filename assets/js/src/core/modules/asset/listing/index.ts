@@ -20,6 +20,7 @@ import { ContextMenuDecorator } from './decorator/context-menu/context-menu-deco
 import { SortingDecorator } from '@Pimcore/modules/element/listing/decorators/sorting/sorting-decorator'
 import { TagFilterDecorator } from './decorator/tag-filter/tag-filter-decorator'
 import { GeneralFiltersDecorator } from '../../element/listing/decorators/general-filters/general-filters-decorator'
+import { generalFiltersDecoratorDefaultConfig } from '../../element/listing/decorators/general-filters/context-layer/provider/general-filters-config/general-filters-config-provider'
 import { GlobalContextDecorator } from '@Pimcore/modules/element/listing/decorators/global-context/global-context-decorator'
 import { PagingDecorator } from '@Pimcore/modules/element/listing/decorators/paging/paging-decorator'
 import { useInlineEditApiUpdate } from './decorator/inline-editing/hooks/use-inline-edit-api-update'
@@ -112,7 +113,11 @@ moduleSystem.registerModule({
 
     listingBuilder.addDecorator({
       name: 'generalFilters',
-      decorator: GeneralFiltersDecorator
+      decorator: GeneralFiltersDecorator,
+      config: {
+        ...generalFiltersDecoratorDefaultConfig,
+        showOnlyUnreferencedFilter: true
+      }
     })
   }
 })

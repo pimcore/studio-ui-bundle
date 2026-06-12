@@ -1179,6 +1179,7 @@ element.unpublish: Avpubliser
 element.publish: Publiser
 element.locate-in-tree: Finn i treet
 element.sidebar.filter.only-direct-children: kun direkte underelementer
+element.sidebar.filter.only-unreferenced: kun elementer uten referanser
 element.sidebar.field-filters: Feltfiltre
 element.full-information: Full informasjon
 system-information.id: ID
@@ -1842,6 +1843,7 @@ empty-image: Tomt bilde
 image.dnd-target: Slipp et bilde her
 image.add.and.dnd: Legg til eller slipp et bilde direkte her
 image.upload.add.and.dnd: Last opp, legg til eller slipp et bilde direkte her
+image.too-small: Det valgte bildet er for lite. Vennligst bruk et større bilde.
 fallback: Fallback
 url-slug.add-site: Legg til nettsted
 url-slug.invalid: Vennligst oppgi en gyldig URL-slug (starter med '/')
@@ -1860,6 +1862,7 @@ video.settings: Videoinnstillinger
 video.poster: Plakatbilde
 video.path: Sti
 video.dnd-target: Slipp en video her
+video.add-target: Legg til en video her
 pdf-editable.dnd-target: Slipp en dokumentressurs her
 many-to-one-relation.drop-placeholder: Slipp et element her
 many-to-one-relation.drop-placeholder-text-input: Slipp et element her eller oppgi en verdi

@@ -38,6 +38,9 @@ const apiWithTags = baseApi.enhanceEndpoints({
     classDefinitionCollection: {
       providesTags: () => providingTags.CLASS_DEFINITION_COLLECTION()
     },
+    classDefinitionCollectionCreatable: {
+      providesTags: () => providingTags.CLASS_DEFINITION_COLLECTION()
+    },
     classDefinitionGetById: {
       providesTags: (result, error, args) => providingTags.CLASS_DEFINITION_DETAIL(args.id)
     },
