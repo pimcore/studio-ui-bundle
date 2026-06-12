@@ -32,6 +32,7 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
   // the initial value enriched with the values the child fields register on mount,
   // so that those registrations are not reported as changes
   const baselineValue = useRef(cloneDeep(initialValue))
+  const previousInitialValue = useRef(initialValue)
   const { name: tempItemName } = useItem()
   const bufferedValue = useDebounce(value, 10)
 
@@ -52,6 +53,15 @@ const NumberedList = ({ children, value: baseValue, onChange: baseOnChange, onFi
   }, [baseOnChange])
 
   useEffect(() => {
+    // only react to actual content changes of the incoming value — this effect runs
+    // after the child effects on mount, so an unconditional reset would wipe the
+    // initial registrations the children already added to the value and the baseline
+    if (isEqual(previousInitialValue.current, initialValue)) {
+      return
+    }
+
+    previousInitialValue.current = initialValue
+
     if (!isEqual(value, initialValue)) {
       setValue(() => initialValue)
     }

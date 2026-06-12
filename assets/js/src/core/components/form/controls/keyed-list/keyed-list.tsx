@@ -31,6 +31,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   // the initial value enriched with the values the child fields register on mount,
   // so that those registrations are not reported as changes
   const baselineValue = useRef(cloneDeep(initialValue))
+  const previousInitialValue = useRef(initialValue)
   const { name: tempItemName } = useItem()
   const itemName = useMemo(() => isArray(tempItemName) ? tempItemName : [tempItemName], [tempItemName])
   const name = useMemo(() => itemName[itemName.length - 1], [itemName])
@@ -44,6 +45,15 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   }, [baseOnChange])
 
   useEffect(() => {
+    // only react to actual content changes of the incoming value — this effect runs
+    // after the child effects on mount, so an unconditional reset would wipe the
+    // initial registrations the children already added to the value and the baseline
+    if (isEqual(previousInitialValue.current, initialValue)) {
+      return
+    }
+
+    previousInitialValue.current = initialValue
+
     if (!isEqual(value, initialValue)) {
       setValue(() => initialValue)
     }
