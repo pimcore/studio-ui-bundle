@@ -12,7 +12,7 @@ import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/fi
 import { Form, Input, Select } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { ManyToOneRelation } from '@Pimcore/components/many-to-one-relation'
+import { ManyToOneRelationPath } from '@Pimcore/components/many-to-one-relation'
 
 export const FieldDefinitionVideoFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -45,7 +45,7 @@ export const FieldDefinitionVideoFormFields = (props: FieldDefinitionAbstractFor
         label={ t('upload-path') }
         name="uploadPath"
       >
-        <ManyToOneRelation
+        <ManyToOneRelationPath
           allowToClearRelation
           allowedAssetTypes={ ['folder'] }
           assetsAllowed

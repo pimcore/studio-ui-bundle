@@ -1179,6 +1179,7 @@ element.unpublish: Annulla pubblicazione
 element.publish: Pubblica
 element.locate-in-tree: Individua nell'albero
 element.sidebar.filter.only-direct-children: solo figli diretti
+element.sidebar.filter.only-unreferenced: solo non referenziati
 element.sidebar.field-filters: Filtri campo
 element.full-information: Informazioni complete
 system-information.id: ID
@@ -1842,6 +1843,7 @@ empty-image: Immagine vuota
 image.dnd-target: Rilascia un'immagine qui
 image.add.and.dnd: Aggiungi o rilascia un'immagine direttamente qui
 image.upload.add.and.dnd: Carica, aggiungi o rilascia un'immagine direttamente qui
+image.too-small: L'immagine selezionata è troppo piccola. Si prega di usare un'immagine più grande.
 fallback: Fallback
 url-slug.add-site: Aggiungi sito
 url-slug.invalid: Inserire un URL slug valido (che inizi con '/')
@@ -1860,6 +1862,7 @@ video.settings: Impostazioni video
 video.poster: Immagine poster
 video.path: Percorso
 video.dnd-target: Rilascia un video qui
+video.add-target: Aggiungi un video qui
 pdf-editable.dnd-target: Rilascia un asset documento qui
 many-to-one-relation.drop-placeholder: Rilascia un elemento qui
 many-to-one-relation.drop-placeholder-text-input: Rilascia un elemento qui o inserisci un valore

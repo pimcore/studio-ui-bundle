@@ -1179,6 +1179,7 @@ element.unpublish: Veröffentlichung zurücknehmen
 element.publish: Veröffentlichen
 element.locate-in-tree: Im Baum anzeigen
 element.sidebar.filter.only-direct-children: Nur direkte Kinder
+element.sidebar.filter.only-unreferenced: Nur nicht referenzierte
 element.sidebar.field-filters: Feldfilter
 element.full-information: Vollständige Informationen
 system-information.id: ID
@@ -1842,6 +1843,7 @@ empty-image: Leeres Bild
 image.dnd-target: Bild hier ablegen
 image.add.and.dnd: Bild hinzufügen oder direkt hier ablegen
 image.upload.add.and.dnd: Hochladen, hinzufügen oder Bild direkt hier ablegen
+image.too-small: Das ausgewählte Bild ist zu klein. Bitte verwenden Sie ein größeres Bild.
 fallback: Fallback
 url-slug.add-site: Site hinzufügen
 url-slug.invalid: Bitte geben Sie einen gültigen URL-Slug ein (beginnend mit '/')
@@ -1860,6 +1862,7 @@ video.settings: Video-Einstellungen
 video.poster: Poster-Bild
 video.path: Pfad
 video.dnd-target: Video hier ablegen
+video.add-target: Video hier hinzufügen
 pdf-editable.dnd-target: Dokument-Asset hier ablegen
 many-to-one-relation.drop-placeholder: Element hier ablegen
 many-to-one-relation.drop-placeholder-text-input: Element hier ablegen oder Wert eingeben
