@@ -22,6 +22,17 @@ export const TopBarItemSelect = (): React.JSX.Element => {
   const { setActiveConfiguration, activeConfiguration } = useItems()
   const { guard } = useUnsavedChanges()
 
+  const selectConfiguration = React.useCallback((configuration: ConfigurationPartial): void => {
+    // Switching layouts remounts the detail view and discards its
+    // state; selecting the already active layout does not.
+    if (configuration.id === activeConfiguration?.id) {
+      setActiveConfiguration(configuration)
+      return
+    }
+
+    guard(() => { setActiveConfiguration(configuration) }, 'switch')
+  }, [setActiveConfiguration, activeConfiguration?.id, guard])
+
   const dropdownItems: DropdownMenuProps['items'] = React.useMemo(() => {
     if (data === undefined) {
       return []
@@ -30,22 +41,9 @@ export const TopBarItemSelect = (): React.JSX.Element => {
     return data.items.map((configuration) => ({
       key: configuration.id,
       label: configuration.name,
-      onClick: () => {
-        const activate = (): void => {
-          setActiveConfiguration(configuration as ConfigurationPartial)
-        }
-
-        // Switching layouts remounts the detail view and discards its
-        // state; selecting the already active layout does not.
-        if (configuration.id === activeConfiguration?.id) {
-          activate()
-          return
-        }
-
-        guard(activate, 'switch')
-      }
+      onClick: () => { selectConfiguration(configuration as ConfigurationPartial) }
     }))
-  }, [data, setActiveConfiguration, activeConfiguration?.id, guard])
+  }, [data, selectConfiguration])
 
   return (
     <>

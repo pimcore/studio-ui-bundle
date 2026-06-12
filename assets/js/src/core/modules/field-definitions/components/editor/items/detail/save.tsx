@@ -23,6 +23,8 @@ import { useTranslation } from 'react-i18next'
 
 const NAME_FORMAT_REGEX = /^[A-Za-z][A-Za-z0-9_]*$/
 
+interface Violation { id: string, label: string }
+
 export const DetailSave = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { useDetailUpdateMutation, useLayout } = useSettings()
@@ -36,14 +38,12 @@ export const DetailSave = (): React.JSX.Element => {
   const { area } = useArea()
   const unsavedChanges = useOptionalUnsavedChanges()
 
-  const performSave = async (): Promise<boolean> => {
-    if (generalSettings === undefined) {
-      return false
-    }
-
-    const invalidDefinitions: string[] = []
-
-    interface Violation { id: string, label: string }
+  // Validate all field definitions before saving. Extracted from performSave
+  // to satisfy the cognitive-complexity limit; the checks are unchanged, only
+  // the duplicated `includes` dedup became a Set and the data-type name
+  // checks moved into a helper.
+  const collectViolations = (): { invalidDefinitions: string[], emptyNameViolations: Violation[], reservedWordViolations: Violation[], formatViolations: Violation[], duplicateViolations: Violation[] } => {
+    const invalidIds = new Set<string>()
     const emptyNameViolations: Violation[] = []
     const reservedWordViolations: Violation[] = []
     const formatViolations: Violation[] = []
@@ -51,20 +51,37 @@ export const DetailSave = (): React.JSX.Element => {
 
     const pathMap = structure !== undefined ? buildPathMap(structure) : {}
 
-    // Validate all field definitions before saving
+    // Data types only, skip localizedfields
+    const checkDataTypeName = (key: string, name: string): void => {
+      if (isReservedWord(name)) {
+        reservedWordViolations.push({ id: key, label: name })
+        invalidIds.add(key)
+      }
+
+      if (!NAME_FORMAT_REGEX.test(name)) {
+        formatViolations.push({ id: key, label: name })
+        invalidIds.add(key)
+      }
+
+      if (structure !== undefined) {
+        const namesInNamespace = getNamesInNamespace(structure, fieldDefinitions, key, pathMap)
+        const occurrences = namesInNamespace.filter(n => n === name).length
+        if (occurrences > 1) {
+          duplicateViolations.push({ id: key, label: name })
+          invalidIds.add(key)
+        }
+      }
+    }
+
     for (const [key, definition] of Object.entries(fieldDefinitions)) {
       // Skip the root layout node — its name is structural, not user-editable,
       // and it is stripped from the payload before saving anyway
-      // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-      if (structure !== undefined && key === structure.id) continue
-      if (fieldDefinitionRegistry.hasDynamicType(definition.fieldtype)) {
-        const dynamicType = fieldDefinitionRegistry.getDynamicType(definition.fieldtype)
-        // @todo check if we can handle the path here
-        const isValid = dynamicType.isValid(definition, { area, fieldDefinitions, path: [] })
+      if (key === structure?.id) continue
 
-        if (!isValid) {
-          invalidDefinitions.push(key)
-        }
+      // @todo check if we can handle the path here
+      if (fieldDefinitionRegistry.hasDynamicType(definition.fieldtype) &&
+        !fieldDefinitionRegistry.getDynamicType(definition.fieldtype).isValid(definition, { area, fieldDefinitions, path: [] })) {
+        invalidIds.add(key)
       }
 
       const name: string = typeof definition.name === 'string' ? definition.name : ''
@@ -72,31 +89,23 @@ export const DetailSave = (): React.JSX.Element => {
       // All types: check for empty name
       if (name.trim() === '') {
         emptyNameViolations.push({ id: key, label: definition.fieldtype })
-        if (!invalidDefinitions.includes(key)) invalidDefinitions.push(key)
+        invalidIds.add(key)
       }
 
-      // Data types only, skip localizedfields
       if (definition.datatype === 'data' && definition.fieldtype !== 'localizedfields') {
-        if (isReservedWord(name)) {
-          reservedWordViolations.push({ id: key, label: name })
-          if (!invalidDefinitions.includes(key)) invalidDefinitions.push(key)
-        }
-
-        if (!NAME_FORMAT_REGEX.test(name)) {
-          formatViolations.push({ id: key, label: name })
-          if (!invalidDefinitions.includes(key)) invalidDefinitions.push(key)
-        }
-
-        if (structure !== undefined) {
-          const namesInNamespace = getNamesInNamespace(structure, fieldDefinitions, key, pathMap)
-          const occurrences = namesInNamespace.filter(n => n === name).length
-          if (occurrences > 1) {
-            duplicateViolations.push({ id: key, label: name })
-            if (!invalidDefinitions.includes(key)) invalidDefinitions.push(key)
-          }
-        }
+        checkDataTypeName(key, name)
       }
     }
+
+    return { invalidDefinitions: [...invalidIds], emptyNameViolations, reservedWordViolations, formatViolations, duplicateViolations }
+  }
+
+  const performSave = async (): Promise<boolean> => {
+    if (generalSettings === undefined) {
+      return false
+    }
+
+    const { invalidDefinitions, emptyNameViolations, reservedWordViolations, formatViolations, duplicateViolations } = collectViolations()
 
     setInvalidFieldDefinitionIds(invalidDefinitions)
 
