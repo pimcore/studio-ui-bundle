@@ -28,6 +28,8 @@ export interface UseAreablockControlsParams {
   onMoveAreaUp: (element: HTMLElement) => void
   onMoveAreaDown: (element: HTMLElement) => void
   onMoveArea: (fromIndex: number, toIndex: number) => void
+  onCopyArea: (element: HTMLElement) => void
+  onPasteArea: (element: HTMLElement | null) => void
   onOpenDialog?: (areaKey: string) => void
   onToggleHidden?: (element: HTMLElement) => void
   isInherited?: boolean
@@ -47,6 +49,8 @@ export const useAreablockControls = ({
   onMoveAreaUp,
   onMoveAreaDown,
   onMoveArea,
+  onCopyArea,
+  onPasteArea,
   onOpenDialog,
   onToggleHidden,
   isInherited = false,
@@ -163,10 +167,12 @@ export const useAreablockControls = ({
           isLast={ index === lastIndex }
           limitReached={ limitReached }
           onAddArea={ handleAddArea }
+          onCopyArea={ onCopyArea }
           onMoveAreaDown={ onMoveAreaDown }
           onMoveAreaUp={ onMoveAreaUp }
           onOpenDialog={ onOpenDialog }
           onOverwrite={ onOverwrite }
+          onPasteArea={ onPasteArea }
           onRemoveArea={ handleRemoveArea }
           onToggleHidden={ onToggleHidden }
           toolbarTitle={ toolbarTitle }
@@ -188,7 +194,7 @@ export const useAreablockControls = ({
         <>{portals}</>
       </EditableSortContext>
     )
-  }, [areablockManager, areaTypes, config, handleDragStart, handleDragOver, handleDragEnd, handleAddArea, handleRemoveArea, onMoveAreaUp, onMoveAreaDown, onToggleHidden, onOpenDialog, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal, isInherited, onOverwrite])
+  }, [areablockManager, areaTypes, config, handleDragStart, handleDragOver, handleDragEnd, handleAddArea, handleRemoveArea, onMoveAreaUp, onMoveAreaDown, onCopyArea, onPasteArea, onToggleHidden, onOpenDialog, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal, isInherited, onOverwrite])
 
   return {
     renderAreablockToolbar

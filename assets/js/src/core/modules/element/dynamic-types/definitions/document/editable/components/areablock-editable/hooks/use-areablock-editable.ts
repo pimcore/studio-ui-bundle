@@ -21,6 +21,8 @@ import { type AreablockManager } from '../utils/areablock-manager'
 import { createEditableDataFromDefinitions } from '../../../utils/editable-utils'
 import { createDropzoneContainer } from '../../../helpers/editable-dropzone-sorting/utils/dom-utils'
 import { areablockValueUtils, configUtils, buildGroupedTypes } from '../utils/areablock-utils'
+import { getAreablockClipboard, setAreablockClipboard } from '../utils/areablock-clipboard'
+import { type ValueType } from '@Pimcore/app/public-api/document-editor-iframe/editable-data/editable-data'
 import { usePendingElementsReveal } from '../../../hooks/use-pending-elements-reveal'
 import { useStyles } from '../areablock-editable.styles'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
@@ -41,6 +43,8 @@ export interface UseAreablockEditableReturn {
   moveAreaUp: (element: HTMLElement) => void
   moveAreaDown: (element: HTMLElement) => void
   moveArea: (fromIndex: number, toIndex: number) => void
+  copyArea: (element: HTMLElement) => void
+  pasteArea: (element: HTMLElement | null) => void
 }
 
 function mergeAreablockTypesFromDefinitions (documentId: number, editableDefinitions: AbstractDocumentEditableDefinition[]): void {
@@ -62,7 +66,7 @@ export const useAreablockEditable = ({
   disabled = false,
   renderTrigger
 }: UseAreablockEditableParams): UseAreablockEditableReturn => {
-  const { initializeData, getValues, removeValues } = useDocumentEditor()
+  const { initializeData, getValues, removeValues, triggerSaveAndReload } = useDocumentEditor()
   const { id: documentId } = useContext(DocumentContext)
   const [dynamicEditables, setDynamicEditables] = useState<AbstractDocumentEditableDefinition[]>([])
   const reloadModeElementsRef = useRef<HTMLElement[]>(areablockManager.queryElements())
@@ -305,12 +309,92 @@ export const useAreablockEditable = ({
     }
   }, [disabled, config, handleReloadMode, handlePostOperation, areablockManager])
 
+  const copyArea = useCallback((element: HTMLElement) => {
+    const elementKey = areablockManager.getElementKey(element)
+    const elementType = areablockManager.getElementType(element)
+
+    if (isNil(elementKey) || isNil(elementType)) return
+
+    const editableName = areablockManager.getEditableName()
+    const areaPrefix = `${editableName}:${elementKey}.`
+    const copiedValues: Record<string, ValueType> = {}
+
+    Object.entries(getValues()).forEach(([name, value]) => {
+      if (name.startsWith(areaPrefix)) {
+        copiedValues[name.substring(areaPrefix.length)] = value
+      }
+    })
+
+    setAreablockClipboard({
+      identifier: {
+        name: editableName,
+        realName: areablockManager.getRealEditableName(),
+        key: elementKey
+      },
+      type: elementType,
+      values: copiedValues
+    })
+  }, [areablockManager])
+
+  const pasteArea = useCallback((element: HTMLElement | null) => {
+    if (disabled) return
+
+    const clipboardItem = getAreablockClipboard()
+
+    if (isNil(clipboardItem)) return
+
+    if (!configUtils.isTypeAllowed(config, clipboardItem.type)) return
+
+    const limit = configUtils.getEffectiveLimit(config)
+    const currentElements = configUtils.isReloadMode(config) ? reloadModeElementsRef.current : areablockManager.queryElements()
+
+    if (configUtils.isLimitReached(currentElements.length, limit)) return
+
+    const index = !isNil(element) ? areablockManager.findElementIndex(element) + 1 : 0
+    const nextKey = areablockManager.calculateNextKey()
+    const editableName = areablockManager.getEditableName()
+
+    const pastedValues: Record<string, ValueType> = {}
+
+    Object.entries(clipboardItem.values).forEach(([relativeName, value]) => {
+      pastedValues[`${editableName}:${nextKey}.${relativeName}`] = value
+    })
+
+    initializeData(pastedValues)
+
+    if (configUtils.isReloadMode(config)) {
+      handleReloadMode((elements) => {
+        const placeholderElement = document.createElement('div')
+
+        areablockManager.setElementKey(placeholderElement, nextKey.toString())
+        areablockManager.setElementType(placeholderElement, clipboardItem.type)
+        placeholderElement.setAttribute('data-hidden', 'false')
+
+        const newElements = [...elements]
+        newElements.splice(index, 0, placeholderElement)
+
+        return newElements
+      })
+      return
+    }
+
+    const newValue = areablockManager.getAreablockValue()
+
+    newValue.splice(index, 0, { key: nextKey.toString(), type: clipboardItem.type, hidden: false })
+
+    onChange?.(newValue)
+
+    triggerSaveAndReload()
+  }, [disabled, config, handleReloadMode, onChange, areablockManager, triggerSaveAndReload])
+
   return {
     dynamicEditables,
     addArea,
     removeArea,
     moveAreaUp,
     moveAreaDown,
-    moveArea
+    moveArea,
+    copyArea,
+    pasteArea
   }
 }

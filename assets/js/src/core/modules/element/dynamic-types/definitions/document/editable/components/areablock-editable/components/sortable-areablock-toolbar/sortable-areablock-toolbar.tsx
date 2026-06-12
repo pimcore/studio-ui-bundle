@@ -9,6 +9,7 @@
  */
 
 import React from 'react'
+import { isNil } from 'lodash'
 import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Split } from '@Pimcore/components/split/split'
@@ -18,6 +19,8 @@ import { type AreaType, type AreablockEditableConfig } from '../../areablock-edi
 import { useTranslation } from 'react-i18next'
 import { useSortableElement } from '../../../../helpers/editable-dropzone-sorting/hooks/use-sortable-element'
 import { useAreablockMenu } from '../../hooks/use-areablock-menu'
+import { useAreablockClipboard } from '../../hooks/use-areablock-clipboard'
+import { configUtils } from '../../utils/areablock-utils'
 import { InheritanceWrapper } from '../../../inheritance-wrapper/inheritance-wrapper'
 
 export interface SortableAreablockToolbarProps {
@@ -36,6 +39,8 @@ export interface SortableAreablockToolbarProps {
   onRemoveArea: (element: HTMLElement) => void
   onMoveAreaUp: (element: HTMLElement) => void
   onMoveAreaDown: (element: HTMLElement) => void
+  onCopyArea: (element: HTMLElement) => void
+  onPasteArea: (element: HTMLElement | null) => void
   onOpenDialog?: (areaKey: string) => void
   onToggleHidden?: (element: HTMLElement) => void
   isInherited?: boolean
@@ -65,6 +70,8 @@ const SortableAreablockToolbarInnerComponent = ({
   onRemoveArea,
   onMoveAreaUp,
   onMoveAreaDown,
+  onCopyArea,
+  onPasteArea,
   onOpenDialog,
   onToggleHidden,
   isInherited = false,
@@ -73,6 +80,9 @@ const SortableAreablockToolbarInnerComponent = ({
 }: SortableAreablockToolbarInnerProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
+
+  const clipboardItem = useAreablockClipboard()
+  const canPaste = !isNil(clipboardItem) && !limitReached && configUtils.isTypeAllowed(config, clipboardItem.type)
 
   const { menuItems } = useAreablockMenu({
     config,
@@ -128,6 +138,27 @@ const SortableAreablockToolbarInnerComponent = ({
       key="down"
       onClick={ () => { onMoveAreaDown(element) } }
       size="small"
+    />
+  )
+
+  buttons.push(
+    <IconButton
+      icon={ { value: 'copy' } }
+      key="copy"
+      onClick={ () => { onCopyArea(element) } }
+      size="small"
+      title={ t('copy') }
+    />
+  )
+
+  buttons.push(
+    <IconButton
+      disabled={ !canPaste }
+      icon={ { value: 'paste' } }
+      key="paste"
+      onClick={ () => { onPasteArea(element) } }
+      size="small"
+      title={ t('paste') }
     />
   )
 
