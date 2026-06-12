@@ -22,6 +22,9 @@ export * from '@Pimcore/modules/app/error-handler/types'
 
 export * from '@Pimcore/modules/app/theme/theme-provider'
 export * from '@Pimcore/modules/app/theme/utils/themes/theme-tokens'
+export * from '@Pimcore/modules/app/theme/dynamic-types/definitions/dynamic-type-theme-abstract'
+export * from '@Pimcore/modules/app/theme/dynamic-types/registry/dynamic-type-theme-registry'
+export * from '@Pimcore/modules/app/theme/constants/theme-ids'
 
 export * from '@Pimcore/modules/app/hook/use-handle-keybindings'
 export * from '@Pimcore/modules/app/hook/use-date-converter'

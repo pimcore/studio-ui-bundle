@@ -226,7 +226,6 @@ import { GlobalMessageBusProcess } from '@Pimcore/modules/background-processor/p
 import { GlobalMessageBus } from '@Pimcore/modules/global-message-bus/services/global-message-bus'
 import { DynamicTypeThemeRegistry } from '@Pimcore/modules/app/theme/dynamic-types/registry/dynamic-type-theme-registry'
 import { DynamicTypeThemeStudioDefaultLight } from '@Pimcore/modules/app/theme/dynamic-types/definitions/studio-default-light/dynamic-type-theme-studio-default-light'
-import { DynamicTypeThemeStudioDefaultDark } from '@Pimcore/modules/app/theme/dynamic-types/definitions/studio-default-dark/dynamic-type-theme-studio-default-dark'
 import { DynamicTypeGridCellDataObjectAdvanced } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/data-object-advanced/dynamic-type-grid-cell-data-object-advanced'
 import { DynamicTypeEditableDialogLayoutRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/editable-dialog-layout/dynamic-type-editable-dialog-layout-registry'
 import { DynamicTypeEditableDialogLayoutTabpanel } from '@Pimcore/modules/element/dynamic-types/definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-tabpanel'
@@ -728,7 +727,6 @@ container.bind(serviceIds['Asset/ThumbnailService']).to(ThumbnailService).inSing
 // Theme system
 container.bind(serviceIds['DynamicTypes/ThemeRegistry']).to(DynamicTypeThemeRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Theme/StudioDefaultLight']).to(DynamicTypeThemeStudioDefaultLight).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Theme/StudioDefaultDark']).to(DynamicTypeThemeStudioDefaultDark).inSingletonScope()
 
 // Icon set
 container.bind(serviceIds['DynamicTypes/IconSetRegistry']).to(DynamicTypeIconSetRegistry).inSingletonScope()
