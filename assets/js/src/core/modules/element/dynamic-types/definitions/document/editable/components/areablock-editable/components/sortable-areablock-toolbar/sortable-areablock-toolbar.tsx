@@ -82,7 +82,7 @@ const SortableAreablockToolbarInnerComponent = ({
   const { t } = useTranslation()
 
   const clipboardItem = useAreablockClipboard()
-  const canPaste = !isNil(clipboardItem) && !limitReached && configUtils.isTypeAllowed(config, clipboardItem.type)
+  const canPaste = !isNil(clipboardItem) && !limitReached && configUtils.isTypePasteable(config, clipboardItem.type)
 
   const { menuItems } = useAreablockMenu({
     config,

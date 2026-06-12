@@ -343,7 +343,7 @@ export const useAreablockEditable = ({
 
     if (isNil(clipboardItem)) return
 
-    if (!configUtils.isTypeAllowed(config, clipboardItem.type)) return
+    if (!configUtils.isTypePasteable(config, clipboardItem.type)) return
 
     const limit = configUtils.getEffectiveLimit(config)
     const currentElements = configUtils.isReloadMode(config) ? reloadModeElementsRef.current : areablockManager.queryElements()
