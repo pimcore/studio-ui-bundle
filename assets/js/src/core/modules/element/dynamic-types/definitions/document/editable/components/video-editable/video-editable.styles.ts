@@ -45,6 +45,18 @@ export const useStyles = createStyles(({ token, css }) => {
     progressLabel: css`
       color: ${token.colorTextSecondary};
       font-size: ${token.fontSizeSM}px;
+    `,
+
+    errorMessage: css`
+      position: absolute;
+      inset-inline: ${token.paddingXS}px;
+      bottom: ${token.paddingXS}px;
+      text-align: center;
+      color: ${token.colorTextSecondary};
+      font-size: ${token.fontSizeSM}px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     `
   }
 })

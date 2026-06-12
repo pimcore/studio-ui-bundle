@@ -65,6 +65,7 @@ export const VideoEditable = ({
   const [emptyElement, setEmptyElement] = useState<HTMLDivElement | null>(null)
   const [progressElement, setProgressElement] = useState<HTMLDivElement | null>(null)
   const [errorElement, setErrorElement] = useState<HTMLDivElement | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const reloadTriggeredRef = useRef(false)
 
   const videoValue = value ?? null
@@ -125,6 +126,7 @@ export const VideoEditable = ({
 
     captureMarker(MARKER_CLASS.error, errorElement, (element) => {
       element.style.position = 'relative'
+      setErrorMessage(element.dataset.message ?? null)
       setErrorElement(element)
     })
 
@@ -145,17 +147,22 @@ export const VideoEditable = ({
   }, [containerRef, className, wrapperElement, progressElement, errorElement])
 
   const assetId = videoValue?.type === 'asset' ? videoValue.data?.id : undefined
+  // the thumbnail config of an editable may also be an inline configuration object,
+  // polling is only possible for named configurations
+  const isNamedThumbnail = typeof thumbnailName === 'string' && !isEmpty(thumbnailName)
   const skipPolling = isNull(progressElement) ||
     isNil(assetId) ||
     assetId <= 0 ||
-    isNil(thumbnailName) ||
-    isEmpty(thumbnailName)
+    !isNamedThumbnail
 
   const { data: thumbnailStatus } = useAssetVideoThumbnailStatusQuery(
     skipPolling
       ? skipToken
       : { id: assetId, thumbnailName },
-    { pollingInterval: VIDEO_THUMBNAIL_POLL_INTERVAL_MS }
+    {
+      pollingInterval: VIDEO_THUMBNAIL_POLL_INTERVAL_MS,
+      skipPollingIfUnfocused: true
+    }
   )
 
   useEffect(() => {
@@ -172,7 +179,7 @@ export const VideoEditable = ({
     openModal(videoValue)
   }
 
-  const renderEditButtonOverlay = (target: HTMLDivElement): React.ReactPortal => ReactDOM.createPortal(
+  const renderEditButtonOverlay = (target: HTMLDivElement, message?: string | null): React.ReactPortal => ReactDOM.createPortal(
     <InheritanceOverlay
       display="block"
       hideButtons
@@ -195,6 +202,9 @@ export const VideoEditable = ({
         title={ t('video.edit') }
         type="default"
       />
+      {!isNil(message) && !isEmpty(message) && (
+        <span className={ styles.errorMessage }>{ message }</span>
+      )}
     </InheritanceOverlay>,
     target
   )
@@ -210,7 +220,7 @@ export const VideoEditable = ({
         </div>,
         progressElement
       )}
-      {!isNull(errorElement) && renderEditButtonOverlay(errorElement)}
+      {!isNull(errorElement) && renderEditButtonOverlay(errorElement, errorMessage)}
       {!hasVideo
         ? (
             !isNull(emptyElement) && ReactDOM.createPortal(

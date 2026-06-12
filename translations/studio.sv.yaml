@@ -2157,6 +2157,7 @@ component.search.pleaceholder: Sök
 focal-point.set: Ange fokuspunkt
 video.placeholder: Ingen video vald - Klicka för att lägga till en video
 video.add-video: Lägg till video
+video.preview-in-progress: Förhandsvisning av video genereras…
 image.alt-text-placeholder: Ange alt-text
 area-settings: Områdesinställningar
 unsupported_feature: Funktionen stöds inte - kontrollera systemkraven!
