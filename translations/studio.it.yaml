@@ -1860,6 +1860,7 @@ video.settings: Impostazioni video
 video.poster: Immagine poster
 video.path: Percorso
 video.dnd-target: Rilascia un video qui
+video.add-target: Aggiungi un video qui
 pdf-editable.dnd-target: Rilascia un asset documento qui
 many-to-one-relation.drop-placeholder: Rilascia un elemento qui
 many-to-one-relation.drop-placeholder-text-input: Rilascia un elemento qui o inserisci un valore

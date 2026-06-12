@@ -1860,6 +1860,7 @@ video.settings: Video-Einstellungen
 video.poster: Poster-Bild
 video.path: Pfad
 video.dnd-target: Video hier ablegen
+video.add-target: Video hier hinzufügen
 pdf-editable.dnd-target: Dokument-Asset hier ablegen
 many-to-one-relation.drop-placeholder: Element hier ablegen
 many-to-one-relation.drop-placeholder-text-input: Element hier ablegen oder Wert eingeben

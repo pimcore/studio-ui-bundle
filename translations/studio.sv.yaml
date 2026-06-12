@@ -1860,6 +1860,7 @@ video.settings: Videoinställningar
 video.poster: Posterbild
 video.path: Sökväg
 video.dnd-target: Släpp en video här
+video.add-target: Lägg till en video här
 pdf-editable.dnd-target: Släpp en dokumentasset här
 many-to-one-relation.drop-placeholder: Släpp ett objekt här
 many-to-one-relation.drop-placeholder-text-input: Släpp ett objekt här eller ange ett värde

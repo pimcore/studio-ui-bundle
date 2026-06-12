@@ -1860,6 +1860,7 @@ video.settings: Videoinnstillinger
 video.poster: Plakatbilde
 video.path: Sti
 video.dnd-target: Slipp en video her
+video.add-target: Legg til en video her
 pdf-editable.dnd-target: Slipp en dokumentressurs her
 many-to-one-relation.drop-placeholder: Slipp et element her
 many-to-one-relation.drop-placeholder-text-input: Slipp et element her eller oppgi en verdi
