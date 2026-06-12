@@ -1179,6 +1179,7 @@ element.unpublish: Dépublier
 element.publish: Publier
 element.locate-in-tree: Localiser dans l'arborescence
 element.sidebar.filter.only-direct-children: uniquement les enfants directs
+element.sidebar.filter.only-unreferenced: uniquement les non référencés
 element.sidebar.field-filters: Filtres de champs
 element.full-information: Informations complètes
 system-information.id: ID

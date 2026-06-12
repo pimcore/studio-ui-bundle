@@ -11,6 +11,7 @@
 import React from 'react'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { DirectChildrenFilterProvider } from './provider/direct-children-filter/direct-children-filter-provider'
+import { UnreferencedFilterProvider } from './provider/unreferenced-filter/unreferenced-filter-provider'
 import { FieldFiltersProvider } from './provider/field-filters/field-filters-provider'
 import { PqlFilterProvider } from './provider/pql-filter/pql-filter-provider'
 import { SearchTermFilterProvider } from './provider/search-term-filter/search-term-filter-provider'
@@ -22,13 +23,15 @@ export const withGeneralFiltersContext = (Component: AbstractDecoratorProps['Con
     return (
       <GeneralFiltersConfigProvider config={ config }>
         <DirectChildrenFilterProvider>
-          <SearchTermFilterProvider>
-            <PqlFilterProvider>
-              <FieldFiltersProvider>
-                <Component />
-              </FieldFiltersProvider>
-            </PqlFilterProvider>
-          </SearchTermFilterProvider>
+          <UnreferencedFilterProvider>
+            <SearchTermFilterProvider>
+              <PqlFilterProvider>
+                <FieldFiltersProvider>
+                  <Component />
+                </FieldFiltersProvider>
+              </PqlFilterProvider>
+            </SearchTermFilterProvider>
+          </UnreferencedFilterProvider>
         </DirectChildrenFilterProvider>
       </GeneralFiltersConfigProvider>
     )
