@@ -47,13 +47,24 @@ export const DynamicThemeProvider = ({ children, id = studioThemeIds.light }: Dy
   const themeRegistry = useInjection<DynamicTypeThemeRegistry>(serviceIds['DynamicTypes/ThemeRegistry'])
 
   const themeChain = useMemo(() => {
-    try {
-      const resolved = themeRegistry.resolveThemeChain(id)
-      return resolved.themes.map(theme => ({
+    const resolve = (themeId: string): Array<{ config: PimcoreThemeConfig }> =>
+      themeRegistry.resolveThemeChain(themeId).themes.map(theme => ({
         config: theme.config
       }))
+
+    try {
+      return resolve(id)
     } catch (error) {
       console.error('Failed to resolve theme chain:', error)
+
+      if (id !== studioThemeIds.light) {
+        try {
+          return resolve(studioThemeIds.light)
+        } catch (fallbackError) {
+          console.error('Failed to resolve light theme fallback:', fallbackError)
+        }
+      }
+
       return []
     }
   }, [themeRegistry, id])

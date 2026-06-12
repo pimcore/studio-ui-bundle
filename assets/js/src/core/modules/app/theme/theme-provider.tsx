@@ -9,16 +9,24 @@
  */
 
 import React from 'react'
+import { useAppSelector } from '@Pimcore/app/store'
 import { DynamicThemeProvider } from './dynamic-theme-provider'
+import { selectThemeId } from './theme-slice'
 
 interface ThemeProviderProps {
   children: React.ReactNode
+  /**
+   * Explicit theme id override. When omitted, the theme id from the
+   * store applies (settable via setThemeId, defaults to the light theme).
+   */
   id?: string
 }
 
-export const ThemeProvider = ({ children, id = 'studio-default-light' }: ThemeProviderProps): React.JSX.Element => {
+export const ThemeProvider = ({ children, id }: ThemeProviderProps): React.JSX.Element => {
+  const storeThemeId = useAppSelector(selectThemeId)
+
   return (
-    <DynamicThemeProvider id={ id }>
+    <DynamicThemeProvider id={ id ?? storeThemeId }>
       {children}
     </DynamicThemeProvider>
   )
