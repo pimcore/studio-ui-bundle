@@ -10,6 +10,7 @@
 
 import React, { useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import cn from 'classnames'
 import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
 import { Select } from '@Pimcore/components/select/select'
 import { Text } from '@Pimcore/components/text/text'
@@ -39,9 +40,10 @@ export interface IUsersRolesDropdownProps {
   initialSharedUsers: number[]
   onChange: (change: UsersRolesChange) => void
   placement?: 'top' | 'bottom'
+  renderAsPopup?: boolean
 }
 
-export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, initialSharedRoles, onChange, placement = 'bottom' }: IUsersRolesDropdownProps): React.JSX.Element => {
+export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, initialSharedRoles, onChange, placement = 'bottom', renderAsPopup = false }: IUsersRolesDropdownProps): React.JSX.Element => {
   const userData = useUser()
 
   const [sharedUsers, setSharedUsers] = useState<number[]>(initialSharedUsers ?? [])
@@ -162,7 +164,7 @@ export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, ini
     </>
   )
 
-  return (
+  const selectElement = (
     <Select
       dropdownRender={ dropdownRender }
       dropdownStyle={ { minWidth: 300 } }
@@ -179,5 +181,20 @@ export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, ini
       showSearch
       value={ selectValue }
     />
+  )
+
+  if (!renderAsPopup) {
+    return selectElement
+  }
+
+  return (
+    <div
+      className={ cn(styles.dropdown, {
+        [styles.dropdownBottom]: placement === 'bottom',
+        [styles.dropdownTop]: placement === 'top'
+      }) }
+    >
+      {selectElement}
+    </div>
   )
 }

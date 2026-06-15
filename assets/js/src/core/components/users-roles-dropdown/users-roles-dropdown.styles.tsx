@@ -12,6 +12,22 @@ import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
+    dropdown: css`
+      position: absolute;
+      width: 360px;
+      background-color: ${token.colorBgContainer};
+      box-shadow: ${token.boxShadowSecondary};
+      z-index: 1;
+    `,
+
+    dropdownBottom: css`
+      top: 35px;
+    `,
+
+    dropdownTop: css`
+      bottom: 35px;
+    `,
+
     popupHeader: css`
       position: sticky;
       top: 0;
