@@ -1142,6 +1142,12 @@ element.lock: Sperren
 element.lock-and-propagate-to-children: Sperren und auf Kinder übertragen
 element.unlock: Entsperren
 element.unlock-and-propagate-to-children: Entsperren und auf Kinder übertragen
+element.edit-lock.title: 'Das gewünschte Element wird derzeit von einer anderen Person bearbeitet:'
+element.edit-lock.question: 'Möchten Sie die Bearbeitung fortsetzen?'
+element.edit-lock.user: 'Benutzer'
+element.edit-lock.since: 'Seit'
+element.edit-lock.continue: 'Bearbeitung fortsetzen'
+element.edit-lock.cancel: 'Abbrechen'
 element.tree.sorting: Kinder sortieren nach
 element.tree.sorting.keyed-ascending: A bis Z (Schlüssel)
 element.tree.sorting.keyed-descending: Z bis A (Schlüssel)

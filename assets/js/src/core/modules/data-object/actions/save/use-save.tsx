@@ -35,6 +35,7 @@ import {
 import { eventBus } from '@Pimcore/lib/event-bus'
 import { eventTypes } from '@Pimcore/lib/event-bus/event-types'
 import { type PostUpdateEvent } from '../../events/post-update-event'
+import { awaitEditLockPersistAllowed } from '@Pimcore/modules/element/services/edit-lock-gate'
 
 export enum SaveTaskType {
   Version = 'version',
@@ -75,6 +76,11 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
 
   const save = async (editableData: Record<string, any>, task?: SaveTaskType, onFinish?: () => void): Promise<void> => {
     if (dataObject?.changes === undefined) return
+
+    // Hold autosaves until the edit-lock check resolves in the user's favour.
+    if (task === SaveTaskType.AutoSave && !(await awaitEditLockPersistAllowed('data-object', id))) {
+      return
+    }
 
     if (!isNil(runningTaskRef?.current)) {
       if (task === SaveTaskType.AutoSave) {

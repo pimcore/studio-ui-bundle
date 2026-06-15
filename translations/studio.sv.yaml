@@ -1142,6 +1142,12 @@ element.lock: Lås
 element.lock-and-propagate-to-children: Lås och sprid till barn
 element.unlock: Lås upp
 element.unlock-and-propagate-to-children: Lås upp och sprid till barn
+element.edit-lock.title: 'Det önskade elementet redigeras för närvarande av en annan person:'
+element.edit-lock.question: 'Vill du fortsätta redigera?'
+element.edit-lock.user: 'Användare'
+element.edit-lock.since: 'Sedan'
+element.edit-lock.continue: 'Fortsätt redigera'
+element.edit-lock.cancel: 'Avbryt'
 element.tree.sorting: Sortera barn efter
 element.tree.sorting.keyed-ascending: A till Ö (Nyckel)
 element.tree.sorting.keyed-descending: Ö till A (Nyckel)

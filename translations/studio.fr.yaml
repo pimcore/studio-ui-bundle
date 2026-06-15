@@ -1142,6 +1142,12 @@ element.lock: Verrouiller
 element.lock-and-propagate-to-children: Verrouiller et propager aux enfants
 element.unlock: Déverrouiller
 element.unlock-and-propagate-to-children: Déverrouiller et propager aux enfants
+element.edit-lock.title: 'L''élément souhaité est actuellement en cours de modification par une autre personne :'
+element.edit-lock.question: 'Souhaitez-vous continuer la modification ?'
+element.edit-lock.user: 'Utilisateur'
+element.edit-lock.since: 'Depuis'
+element.edit-lock.continue: 'Continuer la modification'
+element.edit-lock.cancel: 'Annuler'
 element.tree.sorting: Trier les enfants par
 element.tree.sorting.keyed-ascending: A à Z (Clé)
 element.tree.sorting.keyed-descending: Z à A (Clé)

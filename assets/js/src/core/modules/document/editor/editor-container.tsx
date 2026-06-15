@@ -21,6 +21,7 @@ import { Alert } from '@Pimcore/components/alert/alert'
 import { Toolbar } from './toolbar/toolbar'
 import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
 import { getBaseDocumentContextIdentifiers } from '@Pimcore/utils/global-context-identifiers'
+import { useEditLock } from '@Pimcore/modules/element/hooks/use-edit-lock'
 
 export interface EditorContainerProps {
   id: number
@@ -31,6 +32,8 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   const { isLoading, isError, document, editorType } = useDocumentDraft(id)
   const isWidgetActive = useIsActiveMainWidget()
   const { setContext, removeContext } = useGlobalDocumentContext()
+
+  useEditLock({ id, elementType: 'document', modified: document?.modified ?? false })
 
   useEffect(() => {
     return () => {
