@@ -18,6 +18,7 @@ export const useStyles = createStyles(({ token, css }) => {
       background-color: ${token.colorBgContainer};
       box-shadow: ${token.boxShadowSecondary};
       z-index: 1;
+      border-radius: ${token.borderRadius}px;
     `,
 
     dropdownBottom: css`
@@ -58,21 +59,13 @@ export const useStyles = createStyles(({ token, css }) => {
     clearOption: css`
       display: flex;
       align-items: center;
-      gap: ${token.marginXS}px;
+      justify-content: flex-start;
+      padding: 0 ${token.paddingSM}px;
+      margin-top: ${token.paddingXXS}px;
+      margin-bottom: ${token.paddingXXS}px;
       width: 100%;
-      min-height: ${token.controlHeight}px;
-      padding: ${(token.controlHeight - token.fontSize * token.lineHeight) / 2}px ${token.controlPaddingHorizontal}px;
-      font-size: ${token.fontSize}px;
-      line-height: ${token.lineHeight};
       color: ${token.colorTextSecondary};
       cursor: pointer;
-      border: none;
-      background: none;
-      transition: background ${token.motionDurationSlow} ease;
-
-      &:hover {
-        background-color: ${token.controlItemBgHover};
-      }
     `
   }
 })

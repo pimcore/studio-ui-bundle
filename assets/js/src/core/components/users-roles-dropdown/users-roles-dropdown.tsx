@@ -20,6 +20,7 @@ import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import type { RoleGetCollectionApiResponse } from '@Pimcore/modules/user/roles/roles-api-slice.gen'
 import type { UserGetCollectionApiResponse } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { useStyles } from './users-roles-dropdown.styles'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 
 type EntityType = 'users' | 'roles'
 
@@ -151,14 +152,14 @@ export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, ini
           items={ tabItems }
           onChange={ (key) => { setActiveTab(key as EntityType) } }
         />
-        <button
+        <IconTextButton
           className={ styles.clearOption }
+          icon={ { value: 'trash' } }
           onClick={ handleClear }
-          type="button"
+          type="text"
         >
-          <Icon value="trash" />
-          <span>{t('common.clear')}</span>
-        </button>
+          {t('common.clear')}
+        </IconTextButton>
       </div>
       {menu}
     </>
@@ -172,7 +173,6 @@ export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, ini
       minWidth={ 300 }
       mode="multiple"
       onChange={ handleSelectChange }
-      onDropdownVisibleChange={ (visible: boolean) => { setIsOpen(visible) } }
       open={ isOpen }
       optionFilterProp="searchValue"
       options={ options }
