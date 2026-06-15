@@ -2,6 +2,7 @@ common.owner: Eier
 common.modification-date: Endringsdato
 common.globally: Globalt
 common.apply-selection: Bruk utvalg
+common.clear: Fjern
 cache.clear-cache-success: Hurtigbufferen ble tømt
 cache.clear-full-page-cache-success: Fullsidebufferen ble tømt
 cache.clear-temporary-files-success: Midlertidige filer ble slettet
@@ -1365,6 +1366,7 @@ user-management.name: Navn
 user-management.password: Passord
 user-management.user.search: Søk etter en bruker
 user-management.role.search: Søk etter en rolle
+user-management.users-roles.search: Søk etter bruker eller rolle
 user-management.twoFactorAuthenticationEnabled: Tofaktorautentisering aktivert
 user-management.firstname: Fornavn
 user-management.lastname: Etternavn

@@ -2,6 +2,7 @@ common.owner: Ägare
 common.modification-date: Ändringsdatum
 common.globally: Globalt
 common.apply-selection: Tillämpa val
+common.clear: Rensa
 cache.clear-cache-success: Cachen har rensats
 cache.clear-full-page-cache-success: Helsidescachen har rensats
 cache.clear-temporary-files-success: Temporära filer har tagits bort
@@ -1365,6 +1366,7 @@ user-management.name: Namn
 user-management.password: Lösenord
 user-management.user.search: Sök efter användare
 user-management.role.search: Sök efter roll
+user-management.users-roles.search: Sök efter användare eller roll
 user-management.twoFactorAuthenticationEnabled: Tvåfaktorsautentisering aktiverad
 user-management.firstname: Förnamn
 user-management.lastname: Efternamn

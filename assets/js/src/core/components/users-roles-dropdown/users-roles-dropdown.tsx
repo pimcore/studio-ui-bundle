@@ -49,7 +49,7 @@ export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, ini
   const [sharedUsers, setSharedUsers] = useState<number[]>(initialSharedUsers ?? [])
   const [sharedRoles, setSharedRoles] = useState<number[]>(initialSharedRoles ?? [])
   const [activeTab, setActiveTab] = useState<EntityType>('users')
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(true)
 
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -157,7 +157,7 @@ export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, ini
           type="button"
         >
           <Icon value="trash" />
-          <span>{t('select.clear-selection')}</span>
+          <span>{t('common.clear')}</span>
         </button>
       </div>
       {menu}
@@ -176,7 +176,7 @@ export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, ini
       open={ isOpen }
       optionFilterProp="searchValue"
       options={ options }
-      placeholder={ t(activeTab === 'users' ? 'user-management.user.search' : 'user-management.role.search') }
+      placeholder={ t('user-management.users-roles.search') }
       placement={ placement === 'top' ? 'topLeft' : 'bottomLeft' }
       showSearch
       value={ selectValue }

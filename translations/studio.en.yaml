@@ -2,6 +2,7 @@ common.owner: Owner
 common.modification-date: Modification date
 common.globally: Globally
 common.apply-selection: Apply selection
+common.clear: Clear
 cache.clear-cache-success: Cache successfully cleared
 cache.clear-full-page-cache-success: Full page cache successfully cleared
 cache.clear-temporary-files-success: Temporary files successfully cleared
@@ -1372,6 +1373,7 @@ user-management.name: Name
 user-management.password: Password
 user-management.user.search: Search for a user
 user-management.role.search: Search for a role
+user-management.users-roles.search: Search for user or role
 user-management.twoFactorAuthenticationEnabled: Two Factor Authentication Enabled
 user-management.firstname: First name
 user-management.lastname: Last name
