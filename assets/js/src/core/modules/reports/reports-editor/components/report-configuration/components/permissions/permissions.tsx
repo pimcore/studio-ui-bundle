@@ -35,8 +35,6 @@ export const Permissions = ({ currentData, updateFormData }: IReportConfiguratio
   const [isSharedGlobally, setIsSharedGlobally] = useState(currentData.sharedGlobally)
   const [isOpenDropdown, setIsOpenDropdown] = useState(false)
 
-  const handleClose = (): void => { setIsOpenDropdown(false) }
-
   const initialUserList = useMemo(() => {
     return currentData.sharedUserNames
       .map(item => userList?.items?.find(user => user.username === item)?.id)
@@ -49,7 +47,7 @@ export const Permissions = ({ currentData, updateFormData }: IReportConfiguratio
       .filter(id => !isUndefined(id))
   }, [currentData.sharedRoleNames])
 
-  const handleApplyChanges = ({ sharedUsers, sharedRoles }: { sharedUsers: number[], sharedRoles: number[] }): void => {
+  const handleUsersRolesChange = ({ sharedUsers, sharedRoles }: { sharedUsers: number[], sharedRoles: number[] }): void => {
     const updatedSharedUsers = sharedUsers
       .map(id => userList?.items?.find(user => user.id === id)?.username)
       .filter(name => !isUndefined(name))
@@ -62,8 +60,6 @@ export const Permissions = ({ currentData, updateFormData }: IReportConfiguratio
       sharedUserNames: updatedSharedUsers,
       sharedRoleNames: updatedSharedRoles
     })
-
-    handleClose()
   }
 
   const renderIcon = (iconName: string, size?: number): React.JSX.Element => (
@@ -124,10 +120,9 @@ export const Permissions = ({ currentData, updateFormData }: IReportConfiguratio
         </Flex>
         {isOpenDropdown && (
           <UsersRolesDropdown
-            handleApplyChanges={ handleApplyChanges }
-            handleClose={ handleClose }
             initialSharedRoles={ initialRoleList }
             initialSharedUsers={ initialUserList }
+            onChange={ handleUsersRolesChange }
             placement="top"
             roleList={ roleList }
             userList={ userList }
