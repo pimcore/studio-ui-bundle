@@ -39,7 +39,7 @@ const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Eleme
   const isWidgetActive = useIsActiveMainWidget()
   const { setContext, removeContext } = useGlobalDataObjectContext()
 
-  useEditLock({ id, elementType: 'data-object', modified: dataObject?.modified ?? false })
+  useEditLock({ id, elementType: 'data-object', modified: dataObject?.modified ?? false, path: dataObject?.fullPath })
 
   useEffect(() => {
     return () => {

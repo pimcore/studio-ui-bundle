@@ -1142,10 +1142,12 @@ element.lock: Lås
 element.lock-and-propagate-to-children: Lås og propager til underelementer
 element.unlock: Lås opp
 element.unlock-and-propagate-to-children: Lås opp og propager til underelementer
-element.edit-lock.title: 'Det ønskede elementet redigeres for øyeblikket av en annen person:'
-element.edit-lock.question: 'Vil du fortsette redigeringen?'
+element.edit-lock.title: 'Redigeres av en annen bruker'
+element.edit-lock.path: 'Sti'
+element.edit-lock.type: 'Type'
 element.edit-lock.user: 'Bruker'
-element.edit-lock.since: 'Siden'
+element.edit-lock.editing-since: 'Redigeres siden'
+element.edit-lock.warning: 'Hvis du fortsetter redigeringen, lagres din versjon separat fra den andre brukerens versjon.'
 element.edit-lock.continue: 'Fortsett redigering'
 element.edit-lock.cancel: 'Avbryt'
 element.tree.sorting: Sorter underelementer etter

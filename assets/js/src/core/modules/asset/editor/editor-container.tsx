@@ -34,7 +34,7 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   const isWidgetActive = useIsActiveMainWidget()
   const { setContext, removeContext } = useGlobalAssetContext()
 
-  useEditLock({ id, elementType: 'asset', modified: asset?.modified ?? false })
+  useEditLock({ id, elementType: 'asset', modified: asset?.modified ?? false, path: asset?.fullPath })
 
   useEffect(() => {
     return () => {

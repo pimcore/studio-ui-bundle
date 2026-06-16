@@ -33,7 +33,7 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   const isWidgetActive = useIsActiveMainWidget()
   const { setContext, removeContext } = useGlobalDocumentContext()
 
-  useEditLock({ id, elementType: 'document', modified: document?.modified ?? false })
+  useEditLock({ id, elementType: 'document', modified: document?.modified ?? false, path: document?.fullPath })
 
   useEffect(() => {
     return () => {

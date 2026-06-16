@@ -14,23 +14,39 @@ import { isNil } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { formatDateTime } from '@Pimcore/utils/date-time'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { useStyles } from './edit-lock-warning.styles'
+
+const typeLabelKey: Record<ElementType, string> = {
+  asset: 'data-type.asset',
+  document: 'data-type.document',
+  'data-object': 'data-type.object'
+}
 
 export interface EditLockWarningProps {
-  /** Name of the user currently holding the lock. */
+  elementType: ElementType
+  /** Full path of the element. */
+  path?: string
+  /** Name of the user holding the lock. */
   userName?: string | null
-  /** Unix timestamp (in seconds) of when the lock was acquired. */
+  /** Unix timestamp (seconds) when the lock was acquired. */
   date?: number | null
 }
 
-export const EditLockWarning = ({ userName, date }: EditLockWarningProps): React.JSX.Element => {
+export const EditLockWarning = ({ elementType, path, userName, date }: EditLockWarningProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyles()
 
   return (
     <Flex
       gap="small"
       vertical
     >
-      <Text>{t('element.edit-lock.question')}</Text>
+      {!isNil(path) && path !== '' && (
+        <Text>{`${t('element.edit-lock.path')}: ${path}`}</Text>
+      )}
+
+      <Text>{`${t('element.edit-lock.type')}: ${t(typeLabelKey[elementType])}`}</Text>
 
       {!isNil(userName) && userName !== '' && (
         <Text>{`${t('element.edit-lock.user')}: ${userName}`}</Text>
@@ -38,9 +54,16 @@ export const EditLockWarning = ({ userName, date }: EditLockWarningProps): React
 
       {!isNil(date) && (
         <Text>
-          {`${t('element.edit-lock.since')}: ${formatDateTime({ timestamp: date, dateStyle: 'medium', timeStyle: 'short' })}`}
+          {`${t('element.edit-lock.editing-since')}: ${formatDateTime({ timestamp: date, dateStyle: 'medium', timeStyle: 'short' })}`}
         </Text>
       )}
+
+      <Text
+        className={ styles.warning }
+        strong
+      >
+        {t('element.edit-lock.warning')}
+      </Text>
     </Flex>
   )
 }
