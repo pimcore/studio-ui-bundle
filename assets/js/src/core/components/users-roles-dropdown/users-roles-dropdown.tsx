@@ -50,6 +50,7 @@ export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, ini
   const [sharedUsers, setSharedUsers] = useState<number[]>(initialSharedUsers ?? [])
   const [sharedRoles, setSharedRoles] = useState<number[]>(initialSharedRoles ?? [])
   const [activeTab, setActiveTab] = useState<EntityType>('users')
+  const [isOpen, setIsOpen] = useState(renderAsPopup)
 
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -166,7 +167,7 @@ export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, ini
 
   const selectElement = (
     <Select
-      customArrowIcon={ renderAsPopup ? 'chevron-up' : undefined }
+      customArrowIcon={ isOpen ? 'chevron-up' : 'chevron-down' }
       dropdownRender={ dropdownRender }
       dropdownStyle={ { minWidth: 300 } }
       getPopupContainer={ (triggerNode) => triggerNode.parentElement ?? document.body }
@@ -174,7 +175,8 @@ export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, ini
       minWidth={ 300 }
       mode="multiple"
       onChange={ handleSelectChange }
-      open={ renderAsPopup ? true : undefined }
+      onDropdownVisibleChange={ (visible: boolean) => { setIsOpen(visible) } }
+      open={ isOpen }
       optionFilterProp="searchValue"
       options={ options }
       placeholder={ t('user-management.users-roles.search') }

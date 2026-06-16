@@ -116,6 +116,7 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
             initialSharedRoles={ initialSharedRoles }
             initialSharedUsers={ initialSharedUsers }
             onChange={ handleUsersRolesChange }
+            renderAsPopup
             roleList={ props?.roleList }
             userList={ props?.userList }
           />
