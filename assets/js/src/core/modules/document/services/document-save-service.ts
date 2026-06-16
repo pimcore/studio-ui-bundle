@@ -9,6 +9,7 @@
  */
 
 import { DocumentSaveTaskManager, SaveTaskType } from './document-save-task-manager'
+import { awaitEditLockPersistAllowed } from '@Pimcore/modules/element/services/edit-lock-gate'
 
 export interface DocumentSaveService {
   saveDocument: (documentId: number, task?: SaveTaskType) => Promise<void>
@@ -16,6 +17,11 @@ export interface DocumentSaveService {
 
 class DocumentSaveServiceImpl implements DocumentSaveService {
   async saveDocument (documentId: number, task: SaveTaskType = SaveTaskType.AutoSave): Promise<void> {
+    // Hold autosaves until the edit-lock check resolves in the user's favour.
+    if (task === SaveTaskType.AutoSave && !(await awaitEditLockPersistAllowed('document', documentId))) {
+      return
+    }
+
     const taskManager = DocumentSaveTaskManager.getInstance(documentId)
     await taskManager.executeSave(task)
   }
