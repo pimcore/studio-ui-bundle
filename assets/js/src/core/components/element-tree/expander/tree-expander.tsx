@@ -66,13 +66,13 @@ export const TreeExpander = ({ node, state }: TreeExpanderProps): React.JSX.Elem
                 ? (
                   <Icon
                     options={ { width: 16, height: 16 } }
-                    value="chevron-up"
+                    value="chevron-down"
                   />
                   )
                 : (
                   <Icon
                     options={ { width: 16, height: 16 } }
-                    value="chevron-down"
+                    value="chevron-right"
                   />
                   )
               }
