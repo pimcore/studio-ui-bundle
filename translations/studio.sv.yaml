@@ -1142,10 +1142,12 @@ element.lock: Lås
 element.lock-and-propagate-to-children: Lås och sprid till barn
 element.unlock: Lås upp
 element.unlock-and-propagate-to-children: Lås upp och sprid till barn
-element.edit-lock.title: 'Det önskade elementet redigeras för närvarande av en annan person:'
-element.edit-lock.question: 'Vill du fortsätta redigera?'
+element.edit-lock.title: 'Redigeras av en annan användare'
+element.edit-lock.path: 'Sökväg'
+element.edit-lock.type: 'Typ'
 element.edit-lock.user: 'Användare'
-element.edit-lock.since: 'Sedan'
+element.edit-lock.editing-since: 'Redigeras sedan'
+element.edit-lock.warning: 'Om du fortsätter redigera sparas din version separat från den andra användarens version.'
 element.edit-lock.continue: 'Fortsätt redigera'
 element.edit-lock.cancel: 'Avbryt'
 element.tree.sorting: Sortera barn efter

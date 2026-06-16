@@ -1142,10 +1142,12 @@ element.lock: Bloquear
 element.lock-and-propagate-to-children: Bloquear y propagar a los hijos
 element.unlock: Desbloquear
 element.unlock-and-propagate-to-children: Desbloquear y propagar a los hijos
-element.edit-lock.title: 'El elemento deseado está siendo editado actualmente por otra persona:'
-element.edit-lock.question: '¿Desea continuar editando?'
+element.edit-lock.title: 'Siendo editado por otro usuario'
+element.edit-lock.path: 'Ruta'
+element.edit-lock.type: 'Tipo'
 element.edit-lock.user: 'Usuario'
-element.edit-lock.since: 'Desde'
+element.edit-lock.editing-since: 'Editando desde'
+element.edit-lock.warning: 'Si continúa editando, su versión se guardará por separado de la versión del otro usuario.'
 element.edit-lock.continue: 'Continuar editando'
 element.edit-lock.cancel: 'Cancelar'
 element.tree.sorting: Ordenar hijos por

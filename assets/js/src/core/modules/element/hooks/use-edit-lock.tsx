@@ -40,13 +40,15 @@ export interface UseEditLockProps {
   elementType: ElementType
   /** Editor dirty flag; the lock is acquired on the first clean → dirty transition. */
   modified: boolean
+  /** Full path of the element, shown in the conflict modal. */
+  path?: string
 }
 
 /**
  * Concurrent-editing edit lock (#2318), mirroring classic UI (admin-ui-classic-bundle #724):
  * acquire on first edit (not on open), warn when another session holds it, release on close/unload.
  */
-export const useEditLock = ({ id, elementType, modified }: UseEditLockProps): void => {
+export const useEditLock = ({ id, elementType, modified, path }: UseEditLockProps): void => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const modal = useFormModal()
@@ -121,6 +123,8 @@ export const useEditLock = ({ id, elementType, modified }: UseEditLockProps): vo
           content: (
             <EditLockWarning
               date={ status.date }
+              elementType={ elementType }
+              path={ path }
               userName={ status.user?.name }
             />
           ),
@@ -147,7 +151,7 @@ export const useEditLock = ({ id, elementType, modified }: UseEditLockProps): vo
         trackError(new ApiError(error))
       }
     }
-  }, [id, elementType, triggerGetEditlock, modal, t, acquire, takeOver, closeAndReopen])
+  }, [id, elementType, path, triggerGetEditlock, modal, t, acquire, takeOver, closeAndReopen])
 
   // Arm the gate on mount — some editors flip `modified` and autosave in the same tick.
   useEffect(() => {
