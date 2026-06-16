@@ -186,6 +186,7 @@ export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, ini
       dropdownStyle={ { minWidth: 300 } }
       getPopupContainer={ (triggerNode) => triggerNode.parentElement ?? document.body }
       labelInValue
+      listHeight={ 150 }
       minWidth={ 300 }
       mode="multiple"
       onChange={ handleSelectChange }
