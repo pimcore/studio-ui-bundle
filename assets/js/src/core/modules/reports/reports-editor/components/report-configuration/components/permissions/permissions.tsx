@@ -47,6 +47,8 @@ export const Permissions = ({ currentData, updateFormData }: IReportConfiguratio
       .filter(id => !isUndefined(id))
   }, [currentData.sharedRoleNames])
 
+  const handleClose = (): void => { setIsOpenDropdown(false) }
+
   const handleUsersRolesChange = ({ sharedUsers, sharedRoles }: { sharedUsers: number[], sharedRoles: number[] }): void => {
     const updatedSharedUsers = sharedUsers
       .map(id => userList?.items?.find(user => user.id === id)?.username)
@@ -123,6 +125,7 @@ export const Permissions = ({ currentData, updateFormData }: IReportConfiguratio
             initialSharedRoles={ initialRoleList }
             initialSharedUsers={ initialUserList }
             onChange={ handleUsersRolesChange }
+            onClose={ handleClose }
             placement="top"
             renderAsPopup
             roleList={ roleList }

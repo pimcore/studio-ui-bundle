@@ -71,6 +71,8 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
     }
   }
 
+  const handleClose = (): void => { setIsOpenDropdown(false) }
+
   const handleUsersRolesChange = ({ sharedUsers, sharedRoles }: { sharedUsers: number[], sharedRoles: number[] }): void => {
     if (!isEmpty(gridConfig)) {
       setGridConfig({
@@ -116,6 +118,7 @@ export const SaveForm = (props: SaveFormProps): React.JSX.Element => {
             initialSharedRoles={ initialSharedRoles }
             initialSharedUsers={ initialSharedUsers }
             onChange={ handleUsersRolesChange }
+            onClose={ handleClose }
             renderAsPopup
             roleList={ props?.roleList }
             userList={ props?.userList }

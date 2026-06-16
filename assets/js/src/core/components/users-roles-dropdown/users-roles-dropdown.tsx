@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo, useState, type ReactNode } from 'react'
+import React, { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
 import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
@@ -42,9 +42,10 @@ export interface IUsersRolesDropdownProps {
   onChange: (change: UsersRolesChange) => void
   placement?: 'top' | 'bottom'
   renderAsPopup?: boolean
+  onClose?: () => void
 }
 
-export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, initialSharedRoles, onChange, placement = 'bottom', renderAsPopup = false }: IUsersRolesDropdownProps): React.JSX.Element => {
+export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, initialSharedRoles, onChange, placement = 'bottom', renderAsPopup = false, onClose }: IUsersRolesDropdownProps): React.JSX.Element => {
   const userData = useUser()
 
   const [sharedUsers, setSharedUsers] = useState<number[]>(initialSharedUsers ?? [])
@@ -52,8 +53,27 @@ export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, ini
   const [activeTab, setActiveTab] = useState<EntityType>('users')
   const [isOpen, setIsOpen] = useState(renderAsPopup)
 
+  const popupRef = useRef<HTMLDivElement>(null)
+
   const { t } = useTranslation()
   const { styles } = useStyles()
+
+  useEffect(() => {
+    if (!renderAsPopup) {
+      return
+    }
+
+    const handleClickOutside = (event: MouseEvent): void => {
+      if (popupRef.current !== null && !popupRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
+        onClose?.()
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+
+    return () => { document.removeEventListener('mousedown', handleClickOutside) }
+  }, [renderAsPopup, onClose])
 
   const userItems = useMemo(
     () => userList?.items?.filter(item => item.id !== userData?.id) ?? [],
@@ -117,13 +137,7 @@ export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, ini
     applyChanges(users, roles)
   }
 
-  const handleClear = (): void => {
-    if (activeTab === 'users') {
-      applyChanges([], sharedRoles)
-    } else {
-      applyChanges(sharedUsers, [])
-    }
-  }
+  const handleClear = (): void => { applyChanges([], []) }
 
   const tabItems: ITabsProps['items'] = [
     {
@@ -196,6 +210,7 @@ export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, ini
         [styles.dropdownBottom]: placement === 'bottom',
         [styles.dropdownTop]: placement === 'top'
       }) }
+      ref={ popupRef }
     >
       {selectElement}
     </div>
