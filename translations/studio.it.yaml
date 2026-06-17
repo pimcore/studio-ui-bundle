@@ -2,6 +2,7 @@ common.owner: Proprietario
 common.modification-date: Data di modifica
 common.globally: Globalmente
 common.apply-selection: Applica selezione
+common.clear: Cancella
 cache.clear-cache-success: Cache svuotata con successo
 cache.clear-full-page-cache-success: Cache delle pagine complete svuotata con successo
 cache.clear-temporary-files-success: File temporanei eliminati con successo
@@ -1142,6 +1143,14 @@ element.lock: Blocca
 element.lock-and-propagate-to-children: Blocca e propaga ai figli
 element.unlock: Sblocca
 element.unlock-and-propagate-to-children: Sblocca e propaga ai figli
+element.edit-lock.title: 'In modifica da un altro utente'
+element.edit-lock.path: 'Percorso'
+element.edit-lock.type: 'Tipo'
+element.edit-lock.user: 'Utente'
+element.edit-lock.editing-since: 'In modifica da'
+element.edit-lock.warning: 'Se continui a modificare, la tua versione verrà salvata separatamente da quella dell''altro utente.'
+element.edit-lock.continue: 'Continua la modifica'
+element.edit-lock.cancel: 'Annulla'
 element.tree.sorting: Ordina figli per
 element.tree.sorting.keyed-ascending: A - Z (Chiave)
 element.tree.sorting.keyed-descending: Z - A (Chiave)
@@ -1179,6 +1188,7 @@ element.unpublish: Annulla pubblicazione
 element.publish: Pubblica
 element.locate-in-tree: Individua nell'albero
 element.sidebar.filter.only-direct-children: solo figli diretti
+element.sidebar.filter.only-unreferenced: solo non referenziati
 element.sidebar.field-filters: Filtri campo
 element.full-information: Informazioni complete
 system-information.id: ID
@@ -1246,6 +1256,7 @@ processing: Elaborazione
 upload: Carica
 close: Chiudi
 paste: Incolla
+cut: Taglia
 upload.assets-items-failed-message: Caricamento completato con errori.
 quantity-value.converted-units: Unità convertite
 table.empty.confirm: Cancellare tutti i dati?
@@ -1364,6 +1375,7 @@ user-management.name: Nome
 user-management.password: Password
 user-management.user.search: Cerca un utente
 user-management.role.search: Cerca un ruolo
+user-management.users-roles.search: Cerca un utente o ruolo
 user-management.twoFactorAuthenticationEnabled: Autenticazione a due fattori abilitata
 user-management.firstname: Nome
 user-management.lastname: Cognome
@@ -1842,6 +1854,7 @@ empty-image: Immagine vuota
 image.dnd-target: Rilascia un'immagine qui
 image.add.and.dnd: Aggiungi o rilascia un'immagine direttamente qui
 image.upload.add.and.dnd: Carica, aggiungi o rilascia un'immagine direttamente qui
+image.too-small: L'immagine selezionata è troppo piccola. Si prega di usare un'immagine più grande.
 fallback: Fallback
 url-slug.add-site: Aggiungi sito
 url-slug.invalid: Inserire un URL slug valido (che inizi con '/')
@@ -1860,6 +1873,7 @@ video.settings: Impostazioni video
 video.poster: Immagine poster
 video.path: Percorso
 video.dnd-target: Rilascia un video qui
+video.add-target: Aggiungi un video qui
 pdf-editable.dnd-target: Rilascia un asset documento qui
 many-to-one-relation.drop-placeholder: Rilascia un elemento qui
 many-to-one-relation.drop-placeholder-text-input: Rilascia un elemento qui o inserisci un valore

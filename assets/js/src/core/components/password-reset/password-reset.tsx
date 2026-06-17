@@ -28,8 +28,8 @@ export const PasswordReset = (): React.JSX.Element => {
       void loginWithToken(
         token,
         async () => {
-          navigate(routes.root, { state: { resetPassword: true } })
           dispatch(setAuthState(true))
+          navigate(routes.root, { state: { resetPassword: true } })
         },
         () => {
           navigate(routes.login)

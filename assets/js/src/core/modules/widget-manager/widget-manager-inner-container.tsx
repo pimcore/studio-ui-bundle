@@ -16,6 +16,7 @@ import { useAppDispatch, useAppSelector } from '@sdk/app'
 import { selectInnerModel, updateInnerModel, updateMainWidgetContext } from './widget-manager-slice'
 import { TabTitleOuterContainer } from './title/tab-title-outer-container'
 import { createContextMenuItems } from '@Pimcore/modules/widget-manager/context-menu/context-menu'
+import { isEqual } from 'lodash'
 
 const WidgetManagerInnerContainer = (): React.JSX.Element => {
   const modelJson = useAppSelector(selectInnerModel)
@@ -25,16 +26,19 @@ const WidgetManagerInnerContainer = (): React.JSX.Element => {
   // changes the JSON (e.g. openMainWidget, closeWidget).
   const modelRef = useRef<Model>(Model.fromJson(modelJson))
   const prevModelJsonRef = useRef<IJsonModel>(modelJson)
-  const skipModelSyncRef = useRef(false)
+  const lastSelfDispatchedJsonRef = useRef<IJsonModel | null>(null)
 
   if (modelJson !== prevModelJsonRef.current) {
     prevModelJsonRef.current = modelJson
 
-    if (!skipModelSyncRef.current) {
+    // keep the model instance only when the incoming JSON is the echo of this
+    // component's own onModelChange dispatch — a foreign action (e.g. openMainWidget)
+    // can land in the same render batch as that echo and must recreate the model
+    if (!isEqual(lastSelfDispatchedJsonRef.current, modelJson)) {
       modelRef.current = Model.fromJson(modelJson)
     }
 
-    skipModelSyncRef.current = false
+    lastSelfDispatchedJsonRef.current = null
   }
 
   const model = modelRef.current
@@ -69,8 +73,9 @@ const WidgetManagerInnerContainer = (): React.JSX.Element => {
       dispatch(updateMainWidgetContext(null))
     }
 
-    skipModelSyncRef.current = true
-    dispatch(updateInnerModel(updatedModel.toJson()))
+    const updatedModelJson = updatedModel.toJson()
+    lastSelfDispatchedJsonRef.current = updatedModelJson
+    dispatch(updateInnerModel(updatedModelJson))
   }, [dispatch])
 
   const onRenderTab = useCallback((node: TabNode, renderValues: ITabRenderValues): void => {

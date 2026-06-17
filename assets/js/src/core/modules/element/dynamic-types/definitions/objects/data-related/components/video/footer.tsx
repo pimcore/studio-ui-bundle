@@ -26,6 +26,7 @@ interface VideoFooterProps {
   value?: VideoValue | null
   onSave?: (value: VideoValue) => void
   allowedVideoTypes?: VideoType[]
+  onUpload?: () => void
 }
 
 export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
@@ -72,6 +73,20 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
         />
       </Tooltip>
     ))
+
+    if (props.onUpload !== undefined) {
+      buttons.push((
+        <Tooltip
+          key="upload"
+          title={ t('upload') }
+        >
+          <IconButton
+            icon={ { value: 'upload-cloud' } }
+            onClick={ props.onUpload }
+          />
+        </Tooltip>
+      ))
+    }
   }
 
   if (props.disabled === true) {

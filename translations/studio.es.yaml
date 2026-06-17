@@ -2,6 +2,7 @@ common.owner: Propietario
 common.modification-date: Fecha de modificación
 common.globally: Globalmente
 common.apply-selection: Aplicar selección
+common.clear: Borrar
 cache.clear-cache-success: Caché limpiada con éxito
 cache.clear-full-page-cache-success: Caché de página completa limpiada con éxito
 cache.clear-temporary-files-success: Archivos temporales eliminados con éxito
@@ -1142,6 +1143,14 @@ element.lock: Bloquear
 element.lock-and-propagate-to-children: Bloquear y propagar a los hijos
 element.unlock: Desbloquear
 element.unlock-and-propagate-to-children: Desbloquear y propagar a los hijos
+element.edit-lock.title: 'Siendo editado por otro usuario'
+element.edit-lock.path: 'Ruta'
+element.edit-lock.type: 'Tipo'
+element.edit-lock.user: 'Usuario'
+element.edit-lock.editing-since: 'Editando desde'
+element.edit-lock.warning: 'Si continúa editando, su versión se guardará por separado de la versión del otro usuario.'
+element.edit-lock.continue: 'Continuar editando'
+element.edit-lock.cancel: 'Cancelar'
 element.tree.sorting: Ordenar hijos por
 element.tree.sorting.keyed-ascending: A a Z (Clave)
 element.tree.sorting.keyed-descending: Z a A (Clave)
@@ -1179,6 +1188,7 @@ element.unpublish: Despublicar
 element.publish: Publicar
 element.locate-in-tree: Localizar en el árbol
 element.sidebar.filter.only-direct-children: solo hijos directos
+element.sidebar.filter.only-unreferenced: solo sin referencias
 element.sidebar.field-filters: Filtros de campo
 element.full-information: Información completa
 system-information.id: ID
@@ -1246,6 +1256,7 @@ processing: Procesando
 upload: Subir
 close: Cerrar
 paste: Pegar
+cut: Cortar
 upload.assets-items-failed-message: La subida finalizó con errores.
 quantity-value.converted-units: Unidades convertidas
 table.empty.confirm: ¿Está seguro de que desea borrar todos los datos?
@@ -1364,6 +1375,7 @@ user-management.name: Nombre
 user-management.password: Contraseña
 user-management.user.search: Buscar un usuario
 user-management.role.search: Buscar un rol
+user-management.users-roles.search: Buscar un usuario o rol
 user-management.twoFactorAuthenticationEnabled: Autenticación de dos factores habilitada
 user-management.firstname: Nombre
 user-management.lastname: Apellido
@@ -1842,6 +1854,7 @@ empty-image: Imagen vacía
 image.dnd-target: Suelte una imagen aquí
 image.add.and.dnd: Añada o suelte una imagen directamente aquí
 image.upload.add.and.dnd: Suba, añada o suelte una imagen directamente aquí
+image.too-small: La imagen seleccionada es demasiado pequeña. Por favor, use una imagen más grande.
 fallback: Respaldo
 url-slug.add-site: Añadir sitio
 url-slug.invalid: Introduzca un URL slug válido (que comience con '/')
@@ -1860,6 +1873,7 @@ video.settings: Configuración de vídeo
 video.poster: Imagen de póster
 video.path: Ruta
 video.dnd-target: Suelte un vídeo aquí
+video.add-target: Añada un vídeo aquí
 pdf-editable.dnd-target: Suelte un asset de documento aquí
 many-to-one-relation.drop-placeholder: Suelte un elemento aquí
 many-to-one-relation.drop-placeholder-text-input: Suelte un elemento aquí o introduzca un valor

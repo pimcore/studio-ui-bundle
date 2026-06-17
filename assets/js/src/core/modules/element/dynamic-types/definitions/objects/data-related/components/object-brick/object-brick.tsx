@@ -87,7 +87,13 @@ export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
 
     const newValue = isEmpty(filteredValue) ? [] : filteredValue
 
-    if (!isEqual(newValue, valueRef.current)) {
+    // newValue encodes inherited fields as null, while the incoming value carries the
+    // resolved inherited values — the comparison must use the same encoding, otherwise
+    // an unchanged brick is always reported as changed on objects with inheritance
+    const currentFilteredValue = filterInheritedFields(mergedValue, isInherited)
+    const currentValue = isEmpty(currentFilteredValue) ? [] : currentFilteredValue
+
+    if (!isEqual(newValue, currentValue) && !isEqual(newValue, valueRef.current)) {
       props.onChange(newValue)
       valueRef.current = newValue
     }

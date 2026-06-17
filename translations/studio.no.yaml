@@ -2,6 +2,7 @@ common.owner: Eier
 common.modification-date: Endringsdato
 common.globally: Globalt
 common.apply-selection: Bruk utvalg
+common.clear: Fjern
 cache.clear-cache-success: Hurtigbufferen ble tømt
 cache.clear-full-page-cache-success: Fullsidebufferen ble tømt
 cache.clear-temporary-files-success: Midlertidige filer ble slettet
@@ -1142,6 +1143,14 @@ element.lock: Lås
 element.lock-and-propagate-to-children: Lås og propager til underelementer
 element.unlock: Lås opp
 element.unlock-and-propagate-to-children: Lås opp og propager til underelementer
+element.edit-lock.title: 'Redigeres av en annen bruker'
+element.edit-lock.path: 'Sti'
+element.edit-lock.type: 'Type'
+element.edit-lock.user: 'Bruker'
+element.edit-lock.editing-since: 'Redigeres siden'
+element.edit-lock.warning: 'Hvis du fortsetter redigeringen, lagres din versjon separat fra den andre brukerens versjon.'
+element.edit-lock.continue: 'Fortsett redigering'
+element.edit-lock.cancel: 'Avbryt'
 element.tree.sorting: Sorter underelementer etter
 element.tree.sorting.keyed-ascending: A til Å (nøkkel)
 element.tree.sorting.keyed-descending: Å til A (nøkkel)
@@ -1179,6 +1188,7 @@ element.unpublish: Avpubliser
 element.publish: Publiser
 element.locate-in-tree: Finn i treet
 element.sidebar.filter.only-direct-children: kun direkte underelementer
+element.sidebar.filter.only-unreferenced: kun elementer uten referanser
 element.sidebar.field-filters: Feltfiltre
 element.full-information: Full informasjon
 system-information.id: ID
@@ -1246,6 +1256,7 @@ processing: Behandler
 upload: Last opp
 close: Lukk
 paste: Lim inn
+cut: Klipp ut
 upload.assets-items-failed-message: Opplasting fullført med feil.
 quantity-value.converted-units: Konverterte enheter
 table.empty.confirm: Er du sikker på at du vil fjerne alle data?
@@ -1364,6 +1375,7 @@ user-management.name: Navn
 user-management.password: Passord
 user-management.user.search: Søk etter en bruker
 user-management.role.search: Søk etter en rolle
+user-management.users-roles.search: Søk etter bruker eller rolle
 user-management.twoFactorAuthenticationEnabled: Tofaktorautentisering aktivert
 user-management.firstname: Fornavn
 user-management.lastname: Etternavn
@@ -1842,6 +1854,7 @@ empty-image: Tomt bilde
 image.dnd-target: Slipp et bilde her
 image.add.and.dnd: Legg til eller slipp et bilde direkte her
 image.upload.add.and.dnd: Last opp, legg til eller slipp et bilde direkte her
+image.too-small: Det valgte bildet er for lite. Vennligst bruk et større bilde.
 fallback: Fallback
 url-slug.add-site: Legg til nettsted
 url-slug.invalid: Vennligst oppgi en gyldig URL-slug (starter med '/')
@@ -1860,6 +1873,7 @@ video.settings: Videoinnstillinger
 video.poster: Plakatbilde
 video.path: Sti
 video.dnd-target: Slipp en video her
+video.add-target: Legg til en video her
 pdf-editable.dnd-target: Slipp en dokumentressurs her
 many-to-one-relation.drop-placeholder: Slipp et element her
 many-to-one-relation.drop-placeholder-text-input: Slipp et element her eller oppgi en verdi

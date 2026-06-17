@@ -73,7 +73,7 @@ export const ObjectTabpanel = ({ children, noteditable, ...props }: ObjectTabpan
       children: (
         <ObjectComponent
           { ...childProps }
-          noteditable={ noteditable }
+          noteditable={ noteditable === true || childProps.noteditable }
         />
       )
     }

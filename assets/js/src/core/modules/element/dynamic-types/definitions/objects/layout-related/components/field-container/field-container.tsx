@@ -43,7 +43,7 @@ export const FieldContainer = ({ children, collapsible, collapsed, noteditable, 
             >
               <ObjectComponent
                 { ...child }
-                noteditable={ noteditable }
+                noteditable={ noteditable === true || child.noteditable }
               />
             </Flex>
           )

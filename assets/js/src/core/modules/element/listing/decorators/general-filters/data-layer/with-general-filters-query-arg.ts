@@ -12,6 +12,7 @@ import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/de
 import { useSearchTermFilter } from '../context-layer/provider/search-term-filter/use-search-term-filter'
 import { searchTermFilterType } from '../context-layer/provider/search-term-filter/search-term-filter-provider'
 import { useDirectChildrenFilter } from '../context-layer/provider/direct-children-filter/use-direct-children-filter'
+import { useUnreferencedFilter } from '../context-layer/provider/unreferenced-filter/use-unreferenced-filter'
 import { pqlFilterType } from '../context-layer/provider/pql-filter/pql-filter-provider'
 import { usePqlFilter } from '../context-layer/provider/pql-filter/use-pql-filter'
 import { useFieldFilters } from '../context-layer/provider/field-filters/use-field-filters'
@@ -21,12 +22,15 @@ import { DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
 import { type FieldFilter } from '../context-layer/provider/field-filters/field-filters-provider'
 
+export const unreferencedFilterType = 'system.unreferenced'
+
 export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['useDataQueryHelper']): AbstractDecoratorProps['useDataQueryHelper'] => {
   const useDataQueryHelperGeneralFiltersExtension: AbstractDecoratorProps['useDataQueryHelper'] = () => {
     const { getArgs: baseGetArgs, ...baseMethods } = useBaseHook()
     const { getDataQueryFilterArg: getSearchTermFilterArg } = useSearchTermFilter()
     const { getDataQueryFilterArg: getPqlFilterArg } = usePqlFilter()
     const { onlyDirectChildren } = useDirectChildrenFilter()
+    const { onlyUnreferenced } = useUnreferencedFilter()
     const { fieldFilters } = useFieldFilters()
     const { availableColumns } = useAvailableColumns()
     const { getType } = useDynamicTypeResolver()
@@ -90,7 +94,7 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
       const pqlFilter = getPqlFilterArg()
 
       const columnsToFilterOut = availableColumns.map((column) => column.key)
-      columnsToFilterOut.push(pqlFilterType, searchTermFilterType)
+      columnsToFilterOut.push(pqlFilterType, searchTermFilterType, unreferencedFilterType)
 
       const currentColumnFilters = baseArgs.body.filters.columnFilters ?? []
       const newColumnFilters = [
@@ -103,6 +107,14 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
 
       if (pqlFilter !== undefined) {
         newColumnFilters.push(pqlFilter)
+      }
+
+      if (onlyUnreferenced) {
+        newColumnFilters.push({
+          key: 'unreferenced',
+          type: unreferencedFilterType,
+          filterValue: true
+        })
       }
 
       if (fieldFilters.length > 0) {
