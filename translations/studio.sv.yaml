@@ -1246,6 +1246,7 @@ processing: Bearbetar
 upload: Ladda upp
 close: Stäng
 paste: Klistra in
+cut: Klipp ut
 upload.assets-items-failed-message: Uppladdningen slutfördes med fel.
 quantity-value.converted-units: Konverterade enheter
 table.empty.confirm: Är du säker på att du vill rensa all data?

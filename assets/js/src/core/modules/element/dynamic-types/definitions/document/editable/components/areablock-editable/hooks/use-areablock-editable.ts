@@ -44,6 +44,7 @@ export interface UseAreablockEditableReturn {
   moveAreaDown: (element: HTMLElement) => void
   moveArea: (fromIndex: number, toIndex: number) => void
   copyArea: (element: HTMLElement) => void
+  cutArea: (element: HTMLElement) => void
   pasteArea: (element: HTMLElement | null) => void
 }
 
@@ -336,6 +337,13 @@ export const useAreablockEditable = ({
     })
   }, [areablockManager])
 
+  const cutArea = useCallback((element: HTMLElement) => {
+    if (disabled) return
+
+    copyArea(element)
+    removeArea(element)
+  }, [disabled, copyArea, removeArea])
+
   const pasteArea = useCallback((element: HTMLElement | null) => {
     if (disabled) return
 
@@ -395,6 +403,7 @@ export const useAreablockEditable = ({
     moveAreaDown,
     moveArea,
     copyArea,
+    cutArea,
     pasteArea
   }
 }

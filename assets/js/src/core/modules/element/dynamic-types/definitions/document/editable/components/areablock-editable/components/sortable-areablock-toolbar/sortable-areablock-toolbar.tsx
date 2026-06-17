@@ -40,6 +40,7 @@ export interface SortableAreablockToolbarProps {
   onMoveAreaUp: (element: HTMLElement) => void
   onMoveAreaDown: (element: HTMLElement) => void
   onCopyArea: (element: HTMLElement) => void
+  onCutArea: (element: HTMLElement) => void
   onPasteArea: (element: HTMLElement | null) => void
   onOpenDialog?: (areaKey: string) => void
   onToggleHidden?: (element: HTMLElement) => void
@@ -71,6 +72,7 @@ const SortableAreablockToolbarInnerComponent = ({
   onMoveAreaUp,
   onMoveAreaDown,
   onCopyArea,
+  onCutArea,
   onPasteArea,
   onOpenDialog,
   onToggleHidden,
@@ -159,6 +161,16 @@ const SortableAreablockToolbarInnerComponent = ({
       onClick={ () => { onPasteArea(element) } }
       size="small"
       title={ t('paste') }
+    />
+  )
+
+  buttons.push(
+    <IconButton
+      icon={ { value: 'scissors-cut-01' } }
+      key="cut"
+      onClick={ () => { onCutArea(element) } }
+      size="small"
+      title={ t('cut') }
     />
   )
 

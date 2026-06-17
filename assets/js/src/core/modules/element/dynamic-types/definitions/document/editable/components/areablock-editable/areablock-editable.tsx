@@ -113,6 +113,7 @@ export const AreablockEditable = ({
     moveAreaDown,
     moveArea,
     copyArea,
+    cutArea,
     pasteArea
   } = useAreablockEditable({
     areablockManager,
@@ -133,6 +134,7 @@ export const AreablockEditable = ({
     onMoveAreaDown: moveAreaDown,
     onMoveArea: moveArea,
     onCopyArea: copyArea,
+    onCutArea: cutArea,
     onPasteArea: pasteArea,
     onOpenDialog: handleOpenDialog,
     onToggleHidden: handleToggleHidden,
