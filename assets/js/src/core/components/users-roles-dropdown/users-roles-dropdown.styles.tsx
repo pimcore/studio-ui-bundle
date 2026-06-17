@@ -43,8 +43,13 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       .ant-tabs-nav-list {
-        justify-content: space-around;
         width: 100%;
+      }
+
+      .ant-tabs-tab {
+        flex: 1;
+        justify-content: center;
+        margin: 0 !important;
       }
 
       .ant-tabs-ink-bar {
