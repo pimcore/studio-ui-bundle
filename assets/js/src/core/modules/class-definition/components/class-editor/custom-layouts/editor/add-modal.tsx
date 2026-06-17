@@ -50,7 +50,7 @@ export const CustomLayoutAddModal = (): React.JSX.Element => {
 
     // Creating a new layout activates it and remounts the detail view,
     // discarding edits of the currently open layout — guard before creating.
-    guard(() => { createLayout(values) }, 'switch')
+    guard(() => { createLayout(values) })
   }
 
   const createLayout = (values: any): void => {

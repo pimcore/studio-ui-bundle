@@ -32,7 +32,7 @@ export const CustomLayoutModal = (): React.JSX.Element => {
     <>
       { open && (
         <ModalTemplate
-          onCancel={ () => { guard(closeModal, 'close') } }
+          onCancel={ () => { guard(closeModal) } }
           title={ t('field-definitions.custom-layouts') }
         >
           {settings.customLayouts?.ModalContent}

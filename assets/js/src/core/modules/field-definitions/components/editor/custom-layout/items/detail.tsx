@@ -127,7 +127,7 @@ export const ItemDetail = (): React.JSX.Element => {
                   <Flex gap={ 'mini' }>
                     <IconButton
                       icon={ { value: 'refresh' } }
-                      onClick={ () => { guard(() => { void refreshLayout() }, 'switch') } }
+                      onClick={ () => { guard(() => { void refreshLayout() }) } }
                     />
 
                     {customLayouts?.ModalContent !== undefined && <CustomLayout />}

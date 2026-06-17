@@ -12,8 +12,6 @@ import { useFormModal } from '@sdk/components'
 import React, { createContext, useCallback, useContext, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export type GuardMode = 'close' | 'switch'
-
 export interface UnsavedChangesHandler {
   isDirty: () => boolean
   /** Resolves to false when saving was not possible (e.g. validation failed). */
@@ -28,10 +26,11 @@ export interface IUnsavedChangesContext {
   register: (handler: UnsavedChangesHandler) => () => void
   /**
    * Runs onProceed immediately when there are no unsaved changes; otherwise
-   * asks the user first. 'close' offers discard/cancel, 'switch' offers
-   * save-and-continue/discard-and-continue.
+   * warns the user first, offering to save and continue (runs onProceed after
+   * a successful save) or cancel (aborts, onProceed never runs). Used both when
+   * switching custom layouts and when closing the custom layout modal.
    */
-  guard: (onProceed: () => void, mode: GuardMode) => void
+  guard: (onProceed: () => void) => void
 }
 
 const UnsavedChangesContext = createContext<IUnsavedChangesContext | undefined>(undefined)
@@ -55,35 +54,24 @@ export const UnsavedChangesProvider = (props: UnsavedChangesProviderProps): Reac
     }
   }, [])
 
-  const guard = useCallback((onProceed: () => void, mode: GuardMode): void => {
+  const guard = useCallback((onProceed: () => void): void => {
     if (handlerRef.current?.isDirty() !== true) {
       onProceed()
       return
     }
 
-    if (mode === 'close') {
-      modal.confirm({
-        title: t('unsaved-changes.title'),
-        content: t('unsaved-changes.close-message'),
-        okText: t('discard-changes'),
-        cancelText: t('cancel'),
-        onOk: onProceed
-      })
-      return
-    }
-
     modal.confirm({
+      type: 'warning',
       title: t('unsaved-changes.title'),
       content: t('unsaved-changes.message'),
       okText: t('save-and-continue'),
-      cancelText: t('discard-and-continue'),
+      cancelText: t('cancel'),
       keyboard: false,
       onOk: async () => {
         if ((await handlerRef.current?.save()) ?? true) {
           onProceed()
         }
-      },
-      onCancel: onProceed
+      }
     })
   }, [modal, t])
 

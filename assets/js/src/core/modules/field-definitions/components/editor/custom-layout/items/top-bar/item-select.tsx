@@ -30,7 +30,7 @@ export const TopBarItemSelect = (): React.JSX.Element => {
       return
     }
 
-    guard(() => { setActiveConfiguration(configuration) }, 'switch')
+    guard(() => { setActiveConfiguration(configuration) })
   }, [setActiveConfiguration, activeConfiguration?.id, guard])
 
   const dropdownItems: DropdownMenuProps['items'] = React.useMemo(() => {
