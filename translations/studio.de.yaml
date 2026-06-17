@@ -1255,6 +1255,7 @@ processing: Verarbeitung
 upload: Hochladen
 close: Schließen
 paste: Einfügen
+cut: Ausschneiden
 upload.assets-items-failed-message: Upload mit Fehlern abgeschlossen.
 quantity-value.converted-units: Umgerechnete Einheiten
 table.empty.confirm: Sind Sie sicher, dass Sie alle Daten löschen möchten?

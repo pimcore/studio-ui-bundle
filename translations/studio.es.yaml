@@ -1255,6 +1255,7 @@ processing: Procesando
 upload: Subir
 close: Cerrar
 paste: Pegar
+cut: Cortar
 upload.assets-items-failed-message: La subida finalizó con errores.
 quantity-value.converted-units: Unidades convertidas
 table.empty.confirm: ¿Está seguro de que desea borrar todos los datos?

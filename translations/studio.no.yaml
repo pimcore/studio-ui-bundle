@@ -1255,6 +1255,7 @@ processing: Behandler
 upload: Last opp
 close: Lukk
 paste: Lim inn
+cut: Klipp ut
 upload.assets-items-failed-message: Opplasting fullført med feil.
 quantity-value.converted-units: Konverterte enheter
 table.empty.confirm: Er du sikker på at du vil fjerne alle data?

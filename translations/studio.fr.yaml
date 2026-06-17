@@ -1255,6 +1255,7 @@ processing: Traitement
 upload: Téléverser
 close: Fermer
 paste: Coller
+cut: Couper
 upload.assets-items-failed-message: Le téléversement s'est terminé avec des erreurs.
 quantity-value.converted-units: Unités converties
 table.empty.confirm: Êtes-vous sûr de vouloir effacer toutes les données ?

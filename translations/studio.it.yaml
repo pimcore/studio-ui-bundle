@@ -1255,6 +1255,7 @@ processing: Elaborazione
 upload: Carica
 close: Chiudi
 paste: Incolla
+cut: Taglia
 upload.assets-items-failed-message: Caricamento completato con errori.
 quantity-value.converted-units: Unità convertite
 table.empty.confirm: Cancellare tutti i dati?
