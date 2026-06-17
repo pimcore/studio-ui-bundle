@@ -127,7 +127,7 @@ save-and-continue: Guardar y continuar
 discard-and-continue: Descartar y continuar
 discard-changes: Descartar cambios
 unsaved-changes.title: Cambios sin guardar
-unsaved-changes.message: Tiene cambios sin guardar. ¿Qué desea hacer?
+unsaved-changes.message: Tiene cambios sin guardar. Si continúa sin guardar, estos cambios se perderán.
 unsaved-changes.close-message: Tiene cambios sin guardar. ¿Está seguro de que desea cerrar sin guardar?
 convert-to: Convertir a
 convert-document: Convertir documento

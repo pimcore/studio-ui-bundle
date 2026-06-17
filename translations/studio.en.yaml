@@ -127,7 +127,7 @@ save-and-continue: Save and Continue
 discard-and-continue: Discard and Continue
 discard-changes: Discard Changes
 unsaved-changes.title: Unsaved Changes
-unsaved-changes.message: You have unsaved changes. What would you like to do?
+unsaved-changes.message: You have unsaved changes. If you continue without saving, these changes will be lost.
 unsaved-changes.close-message: You have unsaved changes. Are you sure you want to close without saving?
 convert-to: Convert to
 convert-document: Convert Document

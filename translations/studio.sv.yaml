@@ -127,7 +127,7 @@ save-and-continue: Spara och fortsätt
 discard-and-continue: Kassera och fortsätt
 discard-changes: Kassera ändringar
 unsaved-changes.title: Osparade ändringar
-unsaved-changes.message: Du har osparade ändringar. Vad vill du göra?
+unsaved-changes.message: Du har osparade ändringar. Om du fortsätter utan att spara går dessa ändringar förlorade.
 unsaved-changes.close-message: Du har osparade ändringar. Är du säker på att du vill stänga utan att spara?
 convert-to: Konvertera till
 convert-document: Konvertera dokument

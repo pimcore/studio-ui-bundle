@@ -127,7 +127,7 @@ save-and-continue: Speichern und fortfahren
 discard-and-continue: Verwerfen und fortfahren
 discard-changes: Änderungen verwerfen
 unsaved-changes.title: Ungespeicherte Änderungen
-unsaved-changes.message: Sie haben ungespeicherte Änderungen. Was möchten Sie tun?
+unsaved-changes.message: Sie haben ungespeicherte Änderungen. Wenn Sie fortfahren, ohne zu speichern, gehen diese Änderungen verloren.
 unsaved-changes.close-message: Sie haben ungespeicherte Änderungen. Sind Sie sicher, dass Sie ohne Speichern schließen möchten?
 convert-to: Konvertieren zu
 convert-document: Dokument konvertieren
