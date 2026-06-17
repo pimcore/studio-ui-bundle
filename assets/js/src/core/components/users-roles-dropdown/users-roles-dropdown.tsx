@@ -36,9 +36,9 @@ export interface UsersRolesChange {
 
 export interface IUsersRolesDropdownProps {
   roleList?: RoleGetCollectionApiResponse
-  initialSharedRoles: number[]
+  initialSharedRoles?: number[]
   userList?: UserGetCollectionApiResponse
-  initialSharedUsers: number[]
+  initialSharedUsers?: number[]
   onChange: (change: UsersRolesChange) => void
   placement?: 'top' | 'bottom'
   renderAsPopup?: boolean
