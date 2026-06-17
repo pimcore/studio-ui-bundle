@@ -2,6 +2,7 @@ common.owner: Owner
 common.modification-date: Modification date
 common.globally: Globally
 common.apply-selection: Apply selection
+common.clear: Clear
 cache.clear-cache-success: Cache successfully cleared
 cache.clear-full-page-cache-success: Full page cache successfully cleared
 cache.clear-temporary-files-success: Temporary files successfully cleared
@@ -1148,6 +1149,14 @@ element.lock: Lock
 element.lock-and-propagate-to-children: Lock and propagate to children
 element.unlock: Unlock
 element.unlock-and-propagate-to-children: Unlock and propagate to children
+element.edit-lock.title: 'Being edited by another user'
+element.edit-lock.path: 'Path'
+element.edit-lock.type: 'Type'
+element.edit-lock.user: 'User'
+element.edit-lock.editing-since: 'Editing since'
+element.edit-lock.warning: 'If you continue editing, your version will be saved separately from the version of the other user.'
+element.edit-lock.continue: 'Continue editing'
+element.edit-lock.cancel: 'Cancel'
 element.tree.sorting: Sort Children By
 element.tree.sorting.keyed-ascending: A to Z (Key)
 element.tree.sorting.keyed-descending: Z to A (Key)
@@ -1254,6 +1263,7 @@ processing: Processing
 upload: Upload
 close: Close
 paste: Paste
+cut: Cut
 upload.assets-items-failed-message: Upload finished with errors.
 quantity-value.converted-units: Converted Units
 table.empty.confirm: Are you sure you want to clear all data?
@@ -1372,6 +1382,7 @@ user-management.name: Name
 user-management.password: Password
 user-management.user.search: Search for a user
 user-management.role.search: Search for a role
+user-management.users-roles.search: Search for user or role
 user-management.twoFactorAuthenticationEnabled: Two Factor Authentication Enabled
 user-management.firstname: First name
 user-management.lastname: Last name

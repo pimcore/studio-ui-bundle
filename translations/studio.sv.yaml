@@ -2,6 +2,7 @@ common.owner: Ägare
 common.modification-date: Ändringsdatum
 common.globally: Globalt
 common.apply-selection: Tillämpa val
+common.clear: Rensa
 cache.clear-cache-success: Cachen har rensats
 cache.clear-full-page-cache-success: Helsidescachen har rensats
 cache.clear-temporary-files-success: Temporära filer har tagits bort
@@ -1142,6 +1143,14 @@ element.lock: Lås
 element.lock-and-propagate-to-children: Lås och sprid till barn
 element.unlock: Lås upp
 element.unlock-and-propagate-to-children: Lås upp och sprid till barn
+element.edit-lock.title: 'Redigeras av en annan användare'
+element.edit-lock.path: 'Sökväg'
+element.edit-lock.type: 'Typ'
+element.edit-lock.user: 'Användare'
+element.edit-lock.editing-since: 'Redigeras sedan'
+element.edit-lock.warning: 'Om du fortsätter redigera sparas din version separat från den andra användarens version.'
+element.edit-lock.continue: 'Fortsätt redigera'
+element.edit-lock.cancel: 'Avbryt'
 element.tree.sorting: Sortera barn efter
 element.tree.sorting.keyed-ascending: A till Ö (Nyckel)
 element.tree.sorting.keyed-descending: Ö till A (Nyckel)
@@ -1247,6 +1256,7 @@ processing: Bearbetar
 upload: Ladda upp
 close: Stäng
 paste: Klistra in
+cut: Klipp ut
 upload.assets-items-failed-message: Uppladdningen slutfördes med fel.
 quantity-value.converted-units: Konverterade enheter
 table.empty.confirm: Är du säker på att du vill rensa all data?
@@ -1365,6 +1375,7 @@ user-management.name: Namn
 user-management.password: Lösenord
 user-management.user.search: Sök efter användare
 user-management.role.search: Sök efter roll
+user-management.users-roles.search: Sök efter användare eller roll
 user-management.twoFactorAuthenticationEnabled: Tvåfaktorsautentisering aktiverad
 user-management.firstname: Förnamn
 user-management.lastname: Efternamn

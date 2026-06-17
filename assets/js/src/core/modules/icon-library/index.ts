@@ -324,6 +324,7 @@ import robot from '@Pimcore/assets/icons/robot.inline.svg?react'
 import run from '@Pimcore/assets/icons/run.inline.svg?react'
 import save from '@Pimcore/assets/icons/save.inline.svg?react'
 import schedule from '@Pimcore/assets/icons/schedule.inline.svg?react'
+import scissorsCut01 from '@Pimcore/assets/icons/scissors-cut-01.inline.svg?react'
 import search from '@Pimcore/assets/icons/search.inline.svg?react'
 import segmentTagging from '@Pimcore/assets/icons/segment-tagging.inline.svg?react'
 import selectType from '@Pimcore/assets/icons/select-type.inline.svg?react'
@@ -1635,6 +1636,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'schedule',
       component: schedule
+    })
+    iconLibrary.register({
+      name: 'scissors-cut-01',
+      component: scissorsCut01
     })
     iconLibrary.register({
       name: 'search',

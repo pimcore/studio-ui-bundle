@@ -2,6 +2,7 @@ common.owner: Propriétaire
 common.modification-date: Date de modification
 common.globally: Globalement
 common.apply-selection: Appliquer la sélection
+common.clear: Effacer
 cache.clear-cache-success: Cache vidé avec succès
 cache.clear-full-page-cache-success: Cache des pages complètes vidé avec succès
 cache.clear-temporary-files-success: Fichiers temporaires supprimés avec succès
@@ -1142,6 +1143,14 @@ element.lock: Verrouiller
 element.lock-and-propagate-to-children: Verrouiller et propager aux enfants
 element.unlock: Déverrouiller
 element.unlock-and-propagate-to-children: Déverrouiller et propager aux enfants
+element.edit-lock.title: 'En cours de modification par un autre utilisateur'
+element.edit-lock.path: 'Chemin'
+element.edit-lock.type: 'Type'
+element.edit-lock.user: 'Utilisateur'
+element.edit-lock.editing-since: 'En modification depuis'
+element.edit-lock.warning: 'Si vous continuez la modification, votre version sera enregistrée séparément de celle de l''autre utilisateur.'
+element.edit-lock.continue: 'Continuer la modification'
+element.edit-lock.cancel: 'Annuler'
 element.tree.sorting: Trier les enfants par
 element.tree.sorting.keyed-ascending: A à Z (Clé)
 element.tree.sorting.keyed-descending: Z à A (Clé)
@@ -1247,6 +1256,7 @@ processing: Traitement
 upload: Téléverser
 close: Fermer
 paste: Coller
+cut: Couper
 upload.assets-items-failed-message: Le téléversement s'est terminé avec des erreurs.
 quantity-value.converted-units: Unités converties
 table.empty.confirm: Êtes-vous sûr de vouloir effacer toutes les données ?
@@ -1365,6 +1375,7 @@ user-management.name: Nom
 user-management.password: Mot de passe
 user-management.user.search: Rechercher un utilisateur
 user-management.role.search: Rechercher un rôle
+user-management.users-roles.search: Rechercher un utilisateur ou un rôle
 user-management.twoFactorAuthenticationEnabled: Authentification à deux facteurs activée
 user-management.firstname: Prénom
 user-management.lastname: Nom

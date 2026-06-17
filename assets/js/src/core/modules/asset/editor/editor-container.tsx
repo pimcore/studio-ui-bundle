@@ -22,6 +22,7 @@ import { Alert } from '@Pimcore/components/alert/alert'
 import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
 import { getBaseAssetContextIdentifiers } from '@Pimcore/utils/global-context-identifiers'
 import { TAB_LISTING } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/listing/listing-container'
+import { useEditLock } from '@Pimcore/modules/element/hooks/use-edit-lock'
 
 export interface EditorContainerProps {
   id: number
@@ -32,6 +33,8 @@ const EditorContainer = (props: EditorContainerProps): React.JSX.Element => {
   const { isLoading, isError, asset, editorType, activeTab } = useAssetDraft(id)
   const isWidgetActive = useIsActiveMainWidget()
   const { setContext, removeContext } = useGlobalAssetContext()
+
+  useEditLock({ id, elementType: 'asset', modified: asset?.modified ?? false, path: asset?.fullPath })
 
   useEffect(() => {
     return () => {

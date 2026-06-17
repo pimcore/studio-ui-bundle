@@ -2,6 +2,7 @@ common.owner: Eigentümer
 common.modification-date: Änderungsdatum
 common.globally: Global
 common.apply-selection: Auswahl übernehmen
+common.clear: Löschen
 cache.clear-cache-success: Cache wurde erfolgreich geleert
 cache.clear-full-page-cache-success: Ganzseitiger Cache wurde erfolgreich geleert
 cache.clear-temporary-files-success: Temporäre Dateien wurden erfolgreich gelöscht
@@ -1142,6 +1143,14 @@ element.lock: Sperren
 element.lock-and-propagate-to-children: Sperren und auf Kinder übertragen
 element.unlock: Entsperren
 element.unlock-and-propagate-to-children: Entsperren und auf Kinder übertragen
+element.edit-lock.title: 'Wird von einem anderen Benutzer bearbeitet'
+element.edit-lock.path: 'Pfad'
+element.edit-lock.type: 'Typ'
+element.edit-lock.user: 'Benutzer'
+element.edit-lock.editing-since: 'Bearbeitet seit'
+element.edit-lock.warning: 'Wenn Sie die Bearbeitung fortsetzen, wird Ihre Version getrennt von der Version des anderen Benutzers gespeichert.'
+element.edit-lock.continue: 'Bearbeitung fortsetzen'
+element.edit-lock.cancel: 'Abbrechen'
 element.tree.sorting: Kinder sortieren nach
 element.tree.sorting.keyed-ascending: A bis Z (Schlüssel)
 element.tree.sorting.keyed-descending: Z bis A (Schlüssel)
@@ -1247,6 +1256,7 @@ processing: Verarbeitung
 upload: Hochladen
 close: Schließen
 paste: Einfügen
+cut: Ausschneiden
 upload.assets-items-failed-message: Upload mit Fehlern abgeschlossen.
 quantity-value.converted-units: Umgerechnete Einheiten
 table.empty.confirm: Sind Sie sicher, dass Sie alle Daten löschen möchten?
@@ -1365,6 +1375,7 @@ user-management.name: Name
 user-management.password: Passwort
 user-management.user.search: Nach einem Benutzer suchen
 user-management.role.search: Nach einer Rolle suchen
+user-management.users-roles.search: Nach Benutzer oder Rolle suchen
 user-management.twoFactorAuthenticationEnabled: Zwei-Faktor-Authentifizierung aktiviert
 user-management.firstname: Vorname
 user-management.lastname: Nachname
