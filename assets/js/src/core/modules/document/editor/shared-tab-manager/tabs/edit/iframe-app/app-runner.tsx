@@ -12,9 +12,9 @@ import React from 'react'
 import { createRoot, type Root } from 'react-dom/client'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { DocumentEditorIframeAppView } from './iframe-app-view'
-import { isDev } from '@Pimcore/utils/environment'
+import { isDev, REACT_SCAN_ENABLED } from '@Pimcore/utils/environment'
 
-if (isDev()) {
+if (isDev() && REACT_SCAN_ENABLED) {
   void import('react-scan').then(({ scan }) => {
     scan({ enabled: true, log: true })
   })

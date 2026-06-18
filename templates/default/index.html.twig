@@ -12,7 +12,8 @@
         <meta charset="utf-8">
         <title>{{ hostname }} :: Pimcore Studio</title>
 
-        {% if app.environment == 'dev' %}
+        {% set reactScanEnabled = false %}
+        {% if app.environment == 'dev' and reactScanEnabled %}
             <script {{ pimcore_studio_csp.getNonceHtmlAttribute()|raw }} crossorigin="anonymous" src="//unpkg.com/react-scan/dist/auto.global.js"></script>
         {% endif %}
         
