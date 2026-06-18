@@ -74,8 +74,7 @@ export const AppearanceForm = (): React.JSX.Element => {
         justify="space-between"
         vertical
       >
-        <Headline
-        >
+        <Headline >
           <Title>{t('appearance-branding.title')}</Title>
         </Headline>
 

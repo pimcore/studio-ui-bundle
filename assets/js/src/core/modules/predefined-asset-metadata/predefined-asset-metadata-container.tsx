@@ -16,7 +16,7 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Table } from './table/table'
-import { Box, IconTextButton, SearchInput, type InputRef, Headline} from '@sdk/components'
+import { Box, IconTextButton, SearchInput, type InputRef, Headline } from '@sdk/components'
 import { useLazyMetadataGetCollectionQuery } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice-enhanced'
 import trackError, { ApiError, ErrorKeyTypes } from '@Pimcore/modules/app/error-handler'
 import { uuid } from '@sdk/utils'
@@ -127,8 +127,7 @@ export const PredefinedAssetMetadataContainer = (): React.JSX.Element => {
         </Toolbar>
       ) }
       renderTopBar={
-        <Headline
-        >
+        <Headline >
           <Title>{t('widget.predefined-asset-metadata')}</Title>
           <SearchInput
             loading={ isDataLoading }

@@ -284,8 +284,7 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
               </Toolbar>
             }
             renderTopBar={
-              <Headline
-              >
+              <Headline >
                 <Flex gap='extra-small'>
                   <Title>{t('classification-store.tabs.collections')}</Title>
                   <IconTextButton
@@ -363,8 +362,7 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
           : (
             <ContentLayout
               renderTopBar={
-                <Headline
-                >
+                <Headline >
                   <Title>{activeCollection.name}</Title>
                 </Headline>
               }

@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { Content } from '@Pimcore/components/content/content'
 import { Box } from '@Pimcore/components/box/box'
 import { NotificationList } from './notification-list'
-import { IconTextButton, Headline} from '@sdk/components'
+import { IconTextButton, Headline } from '@sdk/components'
 import { type NotificationGetCollectionApiResponse } from './notifications-slice.gen'
 
 interface NotificationsViewProps {

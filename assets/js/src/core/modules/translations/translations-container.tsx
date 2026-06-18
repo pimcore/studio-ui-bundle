@@ -18,7 +18,7 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
-import { Box, Form, IconTextButton, Input, SearchInput, useModal, Select, Pagination, Headline} from '@sdk/components'
+import { Box, Form, IconTextButton, Input, SearchInput, useModal, Select, Pagination, Headline } from '@sdk/components'
 import { Divider } from 'antd'
 import trackError, { ApiError } from '../app/error-handler'
 import { useTranslationGetListQuery, useTranslationGetDomainsQuery, api } from '../app/translations/translations-api-slice-enhanced'
@@ -231,8 +231,7 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
           </Flex>
         </Toolbar> }
       renderTopBar={
-        <Headline
-        >
+        <Headline >
           <Flex
             align="center"
             gap='extra-small'

@@ -11,7 +11,7 @@
 import React from 'react'
 import { Title } from '@Pimcore/components/title/title'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { IconTextButton, SearchInput, Headline} from '@sdk/components'
+import { IconTextButton, SearchInput, Headline } from '@sdk/components'
 import { useTranslation } from 'react-i18next'
 
 interface RedirectsTopBarProps {
@@ -33,8 +33,7 @@ export const RedirectsTopBar = ({
 }: RedirectsTopBarProps): React.JSX.Element => {
   const { t } = useTranslation()
   return (
-    <Headline
-    >
+    <Headline >
       <Flex gap='extra-small'>
         <Title>{t('widget.redirects')}</Title>
         <IconTextButton

@@ -169,8 +169,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
           />
         </Toolbar> }
       renderTopBar={
-        <Headline
-        >
+        <Headline >
           <Flex gap='extra-small'>
             <Title>{t('widget.tag-configuration')}</Title>
             <IconTextButton

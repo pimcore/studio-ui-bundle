@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { IconButton, IconTextButton, Toolbar, Content, Flex, Box, Headline} from '@sdk/components'
+import { IconButton, IconTextButton, Toolbar, Content, Flex, Box, Headline } from '@sdk/components'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Title } from '@Pimcore/components/title/title'
 import { t } from 'i18next'
@@ -93,8 +93,7 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
         </Toolbar>
       }
       renderTopBar={
-        <Headline
-        >
+        <Headline >
           <Title>{t('translations.merger.title', { domain })}</Title>
         </Headline>
       }

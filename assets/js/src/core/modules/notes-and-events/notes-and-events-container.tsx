@@ -70,8 +70,7 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
         </Toolbar>
       }
       renderTopBar={
-        <Headline
-        >
+        <Headline >
           <Title>{t('notes-and-events.label')}</Title>
           <SearchInput
             loading={ isFetching }
