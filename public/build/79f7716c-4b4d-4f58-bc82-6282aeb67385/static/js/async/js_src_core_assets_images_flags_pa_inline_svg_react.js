@@ -1,0 +1,120 @@
+/*!
+ * 
+ *             /**
+ *              * This source file is available under the terms of the
+ *              * Pimcore Open Core License (POCL)
+ *              * Full copyright and license information is available in
+ *              * LICENSE.md which is distributed with this source code.
+ *              *
+ *              *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *              *  @license    Pimcore Open Core License (POCL)
+ *              * /
+ *
+ */
+"use strict";
+(self["chunk_pimcore_studio_ui_bundle "] = self["chunk_pimcore_studio_ui_bundle "] || []).push([["js_src_core_assets_images_flags_pa_inline_svg_react"], {
+"./js/src/core/assets/images/flags/pa.inline.svg?react"(__unused_rspack_module, __webpack_exports__, __webpack_require__) {
+__webpack_require__.r(__webpack_exports__);
+__webpack_require__.d(__webpack_exports__, {
+  "default": () => (__rspack_default_export)
+});
+/* import */ var react_jsx_dev_runtime__rspack_import_0 = __webpack_require__("./node_modules/react/jsx-dev-runtime.js");
+/* import */ var react__rspack_import_1 = __webpack_require__("webpack/sharing/consume/default/react/react");
+/* import */ var react__rspack_import_1_default = /*#__PURE__*/__webpack_require__.n(react__rspack_import_1);
+
+
+const SvgPainline = (props)=>/*#__PURE__*/ (0,react_jsx_dev_runtime__rspack_import_0.jsxDEV)("svg", {
+        xmlns: "http://www.w3.org/2000/svg",
+        width: "1em",
+        height: "1em",
+        viewBox: "0 0 640 480",
+        ...props,
+        children: [
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__rspack_import_0.jsxDEV)("defs", {
+                children: /*#__PURE__*/ (0,react_jsx_dev_runtime__rspack_import_0.jsxDEV)("clipPath", {
+                    id: "pa_inline_svg__a",
+                    clipPathUnits: "userSpaceOnUse",
+                    children: /*#__PURE__*/ (0,react_jsx_dev_runtime__rspack_import_0.jsxDEV)("path", {
+                        fillOpacity: 0.67,
+                        d: "M0 0h640v480H0z"
+                    }, void 0, false, {
+                        fileName: "/var/www/2025.x/dev-bundles/pimcore/studio-ui-bundle/assets/js/src/core/assets/images/flags/pa.inline.svg",
+                        lineNumber: 3,
+                        columnNumber: 224
+                    }, undefined)
+                }, void 0, false, {
+                    fileName: "/var/www/2025.x/dev-bundles/pimcore/studio-ui-bundle/assets/js/src/core/assets/images/flags/pa.inline.svg",
+                    lineNumber: 3,
+                    columnNumber: 161
+                }, undefined)
+            }, void 0, false, {
+                fileName: "/var/www/2025.x/dev-bundles/pimcore/studio-ui-bundle/assets/js/src/core/assets/images/flags/pa.inline.svg",
+                lineNumber: 3,
+                columnNumber: 155
+            }, undefined),
+            /*#__PURE__*/ (0,react_jsx_dev_runtime__rspack_import_0.jsxDEV)("g", {
+                clipPath: "url(#pa_inline_svg__a)",
+                children: [
+                    /*#__PURE__*/ (0,react_jsx_dev_runtime__rspack_import_0.jsxDEV)("path", {
+                        fill: "#fff",
+                        d: "M0 0h640v480H0z"
+                    }, void 0, false, {
+                        fileName: "/var/www/2025.x/dev-bundles/pimcore/studio-ui-bundle/assets/js/src/core/assets/images/flags/pa.inline.svg",
+                        lineNumber: 3,
+                        columnNumber: 326
+                    }, undefined),
+                    /*#__PURE__*/ (0,react_jsx_dev_runtime__rspack_import_0.jsxDEV)("path", {
+                        fill: "#fff",
+                        fillRule: "evenodd",
+                        d: "M92.462 0h477.19v480H92.462z"
+                    }, void 0, false, {
+                        fileName: "/var/www/2025.x/dev-bundles/pimcore/studio-ui-bundle/assets/js/src/core/assets/images/flags/pa.inline.svg",
+                        lineNumber: 3,
+                        columnNumber: 366
+                    }, undefined),
+                    /*#__PURE__*/ (0,react_jsx_dev_runtime__rspack_import_0.jsxDEV)("path", {
+                        fill: "#db0000",
+                        fillRule: "evenodd",
+                        d: "M323.07 3.655h358v221.68h-358z"
+                    }, void 0, false, {
+                        fileName: "/var/www/2025.x/dev-bundles/pimcore/studio-ui-bundle/assets/js/src/core/assets/images/flags/pa.inline.svg",
+                        lineNumber: 3,
+                        columnNumber: 438
+                    }, undefined),
+                    /*#__PURE__*/ (0,react_jsx_dev_runtime__rspack_import_0.jsxDEV)("path", {
+                        fill: "#0000ab",
+                        fillRule: "evenodd",
+                        d: "M3.227 225.33h319.87v254.66H3.227zM214.8 177.65l-41.959-29.326-41.754 29.614 15.529-48.124-41.677-29.716 51.562-.414 15.993-47.978 16.335 47.867 51.562.063-41.463 29.996 15.872 48.017z"
+                    }, void 0, false, {
+                        fileName: "/var/www/2025.x/dev-bundles/pimcore/studio-ui-bundle/assets/js/src/core/assets/images/flags/pa.inline.svg",
+                        lineNumber: 3,
+                        columnNumber: 515
+                    }, undefined),
+                    /*#__PURE__*/ (0,react_jsx_dev_runtime__rspack_import_0.jsxDEV)("path", {
+                        fill: "#d80000",
+                        fillRule: "evenodd",
+                        d: "m516.85 413.89-42.354-27.744-42.146 28.017 15.675-45.529-42.069-28.114 52.047-.392 16.143-45.391 16.489 45.286 52.047.06-41.853 28.379z"
+                    }, void 0, false, {
+                        fileName: "/var/www/2025.x/dev-bundles/pimcore/studio-ui-bundle/assets/js/src/core/assets/images/flags/pa.inline.svg",
+                        lineNumber: 3,
+                        columnNumber: 746
+                    }, undefined)
+                ]
+            }, void 0, true, {
+                fileName: "/var/www/2025.x/dev-bundles/pimcore/studio-ui-bundle/assets/js/src/core/assets/images/flags/pa.inline.svg",
+                lineNumber: 3,
+                columnNumber: 289
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "/var/www/2025.x/dev-bundles/pimcore/studio-ui-bundle/assets/js/src/core/assets/images/flags/pa.inline.svg",
+        lineNumber: 3,
+        columnNumber: 57
+    }, undefined);
+/* export default */ const __rspack_default_export = (SvgPainline);
+
+
+},
+
+}]);
+//# sourceMappingURL=js_src_core_assets_images_flags_pa_inline_svg_react.js.map

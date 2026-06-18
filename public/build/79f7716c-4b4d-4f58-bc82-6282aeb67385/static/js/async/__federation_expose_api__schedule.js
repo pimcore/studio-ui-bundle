@@ -1,0 +1,187 @@
+/*!
+ * 
+ *             /**
+ *              * This source file is available under the terms of the
+ *              * Pimcore Open Core License (POCL)
+ *              * Full copyright and license information is available in
+ *              * LICENSE.md which is distributed with this source code.
+ *              *
+ *              *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *              *  @license    Pimcore Open Core License (POCL)
+ *              * /
+ *
+ */
+"use strict";
+(self["chunk_pimcore_studio_ui_bundle "] = self["chunk_pimcore_studio_ui_bundle "] || []).push([["__federation_expose_api__schedule"], {
+"./js/src/core/modules/element/editor/shared-tab-manager/tabs/schedule/schedule-api-slice-enhanced.ts"(module, __webpack_exports__, __webpack_require__) {
+__webpack_require__.r(__webpack_exports__);
+__webpack_require__.d(__webpack_exports__, {
+  api: () => (api),
+  useScheduleCreateForElementByTypeAndIdMutation: () => (useScheduleCreateForElementByTypeAndIdMutation),
+  useScheduleDeleteByIdMutation: () => (useScheduleDeleteByIdMutation),
+  useScheduleGetCollectionForElementByTypeAndIdQuery: () => (useScheduleGetCollectionForElementByTypeAndIdQuery),
+  useScheduleListActionsForElementTypeQuery: () => (useScheduleListActionsForElementTypeQuery),
+  useScheduleUpdateForElementByTypeAndIdMutation: () => (useScheduleUpdateForElementByTypeAndIdMutation)
+});
+/* import */ var _Pimcore_app_api_pimcore_tags__rspack_import_0 = __webpack_require__("./js/src/core/app/api/pimcore/tags.ts");
+/* import */ var _schedule_api_slice_gen__rspack_import_1 = __webpack_require__("./js/src/core/modules/element/editor/shared-tab-manager/tabs/schedule/schedule-api-slice.gen.ts");
+/* provided dependency */ var $ReactRefreshRuntime$ = __webpack_require__("./node_modules/@rspack/plugin-react-refresh/client/reactRefresh.js");
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */ 
+
+const api = _schedule_api_slice_gen__rspack_import_1.api.enhanceEndpoints({
+    addTagTypes: [
+        _Pimcore_app_api_pimcore_tags__rspack_import_0.tagNames.ASSET_DETAIL,
+        _Pimcore_app_api_pimcore_tags__rspack_import_0.tagNames.DATA_OBJECT_DETAIL
+    ],
+    endpoints: {
+        scheduleGetCollectionForElementByTypeAndId: {
+            providesTags: (result, error, args)=>{
+                var _result_items;
+                const scheduleCollection = [];
+                result === null || result === void 0 ? void 0 : (_result_items = result.items) === null || _result_items === void 0 ? void 0 : _result_items.forEach((schedule)=>{
+                    scheduleCollection.push(..._Pimcore_app_api_pimcore_tags__rspack_import_0.providingTags.SCHEDULE_DETAIL(schedule.id));
+                });
+                return [
+                    ...scheduleCollection,
+                    ..._Pimcore_app_api_pimcore_tags__rspack_import_0.providingTags.ELEMENT_SCHEDULES(args.elementType, args.id)
+                ];
+            }
+        },
+        scheduleUpdateForElementByTypeAndId: {
+            invalidatesTags: (result, error, args)=>_Pimcore_app_api_pimcore_tags__rspack_import_0.invalidatingTags.ELEMENT_SCHEDULES(args.elementType, args.id)
+        },
+        scheduleCreateForElementByTypeAndId: {
+            invalidatesTags: (result, error, args)=>_Pimcore_app_api_pimcore_tags__rspack_import_0.invalidatingTags.ELEMENT_SCHEDULES(args.elementType, args.id)
+        },
+        scheduleDeleteById: {
+            invalidatesTags: (result, error, args)=>_Pimcore_app_api_pimcore_tags__rspack_import_0.invalidatingTags.SCHEDULE_DETAIL(args.id)
+        }
+    }
+});
+const { useScheduleDeleteByIdMutation, useScheduleGetCollectionForElementByTypeAndIdQuery, useScheduleUpdateForElementByTypeAndIdMutation, useScheduleCreateForElementByTypeAndIdMutation, useScheduleListActionsForElementTypeQuery } = api;
+
+function $RefreshSig$() { return $ReactRefreshRuntime$.createSignatureFunctionForTransform() }
+function $RefreshReg$(type, id) { $ReactRefreshRuntime$.register(type, module.id + "_" + id) }
+Promise.resolve().then(() => { $ReactRefreshRuntime$.refresh(module.id, module.hot) });
+
+
+},
+"./js/src/core/modules/element/editor/shared-tab-manager/tabs/schedule/schedule-api-slice.gen.ts"(module, __webpack_exports__, __webpack_require__) {
+__webpack_require__.r(__webpack_exports__);
+__webpack_require__.d(__webpack_exports__, {
+  addTagTypes: () => (addTagTypes),
+  api: () => (injectedRtkApi),
+  useScheduleCreateForElementByTypeAndIdMutation: () => (useScheduleCreateForElementByTypeAndIdMutation),
+  useScheduleDeleteByIdMutation: () => (useScheduleDeleteByIdMutation),
+  useScheduleGetCollectionForElementByTypeAndIdQuery: () => (useScheduleGetCollectionForElementByTypeAndIdQuery),
+  useScheduleListActionsForElementTypeQuery: () => (useScheduleListActionsForElementTypeQuery),
+  useScheduleUpdateForElementByTypeAndIdMutation: () => (useScheduleUpdateForElementByTypeAndIdMutation)
+});
+/* import */ var _sdk_api__rspack_import_0 = __webpack_require__("./js/src/sdk/api/index.ts");
+/* provided dependency */ var $ReactRefreshRuntime$ = __webpack_require__("./node_modules/@rspack/plugin-react-refresh/client/reactRefresh.js");
+
+const addTagTypes = [
+    "Schedule"
+];
+const injectedRtkApi = _sdk_api__rspack_import_0.api.enhanceEndpoints({
+    addTagTypes
+}).injectEndpoints({
+    endpoints: (build)=>({
+            scheduleDeleteById: build.mutation({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/schedules/${queryArg.id}`,
+                        method: "DELETE"
+                    }),
+                invalidatesTags: [
+                    "Schedule"
+                ]
+            }),
+            scheduleGetCollectionForElementByTypeAndId: build.query({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/schedules/${queryArg.elementType}/${queryArg.id}`
+                    }),
+                providesTags: [
+                    "Schedule"
+                ]
+            }),
+            scheduleUpdateForElementByTypeAndId: build.mutation({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/schedules/${queryArg.elementType}/${queryArg.id}`,
+                        method: "PUT",
+                        body: queryArg.body
+                    }),
+                invalidatesTags: [
+                    "Schedule"
+                ]
+            }),
+            scheduleCreateForElementByTypeAndId: build.mutation({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/schedules/${queryArg.elementType}/${queryArg.id}`,
+                        method: "POST"
+                    }),
+                invalidatesTags: [
+                    "Schedule"
+                ]
+            }),
+            scheduleListActionsForElementType: build.query({
+                query: (queryArg)=>({
+                        url: `/pimcore-studio/api/schedules/actions/${queryArg.elementType}`
+                    }),
+                providesTags: [
+                    "Schedule"
+                ]
+            })
+        }),
+    overrideExisting: false
+});
+
+const { useScheduleDeleteByIdMutation, useScheduleGetCollectionForElementByTypeAndIdQuery, useScheduleUpdateForElementByTypeAndIdMutation, useScheduleCreateForElementByTypeAndIdMutation, useScheduleListActionsForElementTypeQuery } = injectedRtkApi;
+
+function $RefreshSig$() { return $ReactRefreshRuntime$.createSignatureFunctionForTransform() }
+function $RefreshReg$(type, id) { $ReactRefreshRuntime$.register(type, module.id + "_" + id) }
+Promise.resolve().then(() => { $ReactRefreshRuntime$.refresh(module.id, module.hot) });
+
+
+},
+"./js/src/sdk/api/schedule/index.ts"(module, __webpack_exports__, __webpack_require__) {
+__webpack_require__.r(__webpack_exports__);
+__webpack_require__.d(__webpack_exports__, {
+  api: () => (/* reexport safe */ _Pimcore_modules_element_editor_shared_tab_manager_tabs_schedule_schedule_api_slice_enhanced__rspack_import_0.api),
+  useScheduleCreateForElementByTypeAndIdMutation: () => (/* reexport safe */ _Pimcore_modules_element_editor_shared_tab_manager_tabs_schedule_schedule_api_slice_enhanced__rspack_import_0.useScheduleCreateForElementByTypeAndIdMutation),
+  useScheduleDeleteByIdMutation: () => (/* reexport safe */ _Pimcore_modules_element_editor_shared_tab_manager_tabs_schedule_schedule_api_slice_enhanced__rspack_import_0.useScheduleDeleteByIdMutation),
+  useScheduleGetCollectionForElementByTypeAndIdQuery: () => (/* reexport safe */ _Pimcore_modules_element_editor_shared_tab_manager_tabs_schedule_schedule_api_slice_enhanced__rspack_import_0.useScheduleGetCollectionForElementByTypeAndIdQuery),
+  useScheduleListActionsForElementTypeQuery: () => (/* reexport safe */ _Pimcore_modules_element_editor_shared_tab_manager_tabs_schedule_schedule_api_slice_enhanced__rspack_import_0.useScheduleListActionsForElementTypeQuery),
+  useScheduleUpdateForElementByTypeAndIdMutation: () => (/* reexport safe */ _Pimcore_modules_element_editor_shared_tab_manager_tabs_schedule_schedule_api_slice_enhanced__rspack_import_0.useScheduleUpdateForElementByTypeAndIdMutation)
+});
+/* import */ var _Pimcore_modules_element_editor_shared_tab_manager_tabs_schedule_schedule_api_slice_enhanced__rspack_import_0 = __webpack_require__("./js/src/core/modules/element/editor/shared-tab-manager/tabs/schedule/schedule-api-slice-enhanced.ts");
+/* provided dependency */ var $ReactRefreshRuntime$ = __webpack_require__("./node_modules/@rspack/plugin-react-refresh/client/reactRefresh.js");
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */ if (true) {
+    module.hot.accept();
+}
+
+
+function $RefreshSig$() { return $ReactRefreshRuntime$.createSignatureFunctionForTransform() }
+function $RefreshReg$(type, id) { $ReactRefreshRuntime$.register(type, module.id + "_" + id) }
+Promise.resolve().then(() => { $ReactRefreshRuntime$.refresh(module.id, module.hot) });
+
+
+},
+
+}]);
+//# sourceMappingURL=__federation_expose_api__schedule.js.map

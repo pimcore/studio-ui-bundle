@@ -1,0 +1,23 @@
+{
+  "entrypoints": {
+    "index": {
+      "js": [
+        "/bundles/pimcorestudioui/build/79f7716c-4b4d-4f58-bc82-6282aeb67385/static/js/vendors-node_modules_ant-design_colors_es_index_js-node_modules_antd_es_index_js-node_modules-3129fa.js",
+        "/bundles/pimcorestudioui/build/79f7716c-4b4d-4f58-bc82-6282aeb67385/static/js/index.js"
+      ],
+      "css": []
+    },
+    "pimcore_studio_ui_bundle": {
+      "js": [
+        "/bundles/pimcorestudioui/build/79f7716c-4b4d-4f58-bc82-6282aeb67385/static/js/remoteEntry.js"
+      ],
+      "css": []
+    },
+    "exposeRemote": {
+      "js": [
+        "/bundles/pimcorestudioui/build/79f7716c-4b4d-4f58-bc82-6282aeb67385/exposeRemote.js"
+      ],
+      "css": []
+    }
+  }
+}
