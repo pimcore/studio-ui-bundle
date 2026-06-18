@@ -88,7 +88,7 @@ export const create = (props?: CreateProps): ModalFactoryItem => {
     return (
       <ModalComponent
         { ...finalModalProps }
-        onCancel={ closeModal }
+        onCancel={ finalModalProps.onCancel ?? closeModal }
       />
     )
   }
