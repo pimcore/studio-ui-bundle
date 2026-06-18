@@ -96,6 +96,16 @@ document.document-tree.title: Dokumentträd
 document.document-tree.search: Sök i {{folderName}}
 document.editable.inheritance.overwrite: Skriv över
 document.editable.inheritance.tooltip: Ärvt från content-main-dokument. Klicka för att skriva över.
+areablock.move-above: Flytta upp
+areablock.move-below: Flytta ner
+areablock.show: Visa
+areablock.hide: Dölj
+areablock.new: Ny
+areablock.copy: Kopiera
+areablock.paste: Klistra in
+areablock.cut: Klipp ut
+areablock.settings: Inställningar
+areablock.delete: Ta bort
 document.link.target: Länkmål
 document.hardlink.source: Källdokument
 document.hardlink.properties-from-source: Använd egenskaper från källdokument

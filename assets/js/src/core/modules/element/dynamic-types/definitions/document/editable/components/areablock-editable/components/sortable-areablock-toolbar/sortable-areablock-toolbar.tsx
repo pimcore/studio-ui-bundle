@@ -104,6 +104,7 @@ const SortableAreablockToolbarInnerComponent = ({
             onAddArea(element, areaTypes[0].type)
           } }
           size="small"
+          tooltip={ { title: t('areablock.new') } }
         />
       )
     } else {
@@ -117,6 +118,7 @@ const SortableAreablockToolbarInnerComponent = ({
           <IconButton
             icon={ { value: 'new' } }
             size="small"
+            tooltip={ { title: t('areablock.new') } }
           />
         </Dropdown>
       )
@@ -130,6 +132,7 @@ const SortableAreablockToolbarInnerComponent = ({
       key="up"
       onClick={ () => { onMoveAreaUp(element) } }
       size="small"
+      tooltip={ { title: t('areablock.move-above') } }
     />
   )
 
@@ -140,6 +143,7 @@ const SortableAreablockToolbarInnerComponent = ({
       key="down"
       onClick={ () => { onMoveAreaDown(element) } }
       size="small"
+      tooltip={ { title: t('areablock.move-below') } }
     />
   )
 
@@ -149,7 +153,7 @@ const SortableAreablockToolbarInnerComponent = ({
       key="copy"
       onClick={ () => { onCopyArea(element) } }
       size="small"
-      title={ t('copy') }
+      tooltip={ { title: t('areablock.copy') } }
     />
   )
 
@@ -160,7 +164,7 @@ const SortableAreablockToolbarInnerComponent = ({
       key="paste"
       onClick={ () => { onPasteArea(element) } }
       size="small"
-      title={ t('paste') }
+      tooltip={ { title: t('areablock.paste') } }
     />
   )
 
@@ -170,7 +174,7 @@ const SortableAreablockToolbarInnerComponent = ({
       key="cut"
       onClick={ () => { onCutArea(element) } }
       size="small"
-      title={ t('cut') }
+      tooltip={ { title: t('areablock.cut') } }
     />
   )
 
@@ -181,6 +185,7 @@ const SortableAreablockToolbarInnerComponent = ({
         key="dialog"
         onClick={ () => { onOpenDialog?.(id) } }
         size="small"
+        tooltip={ { title: t('areablock.settings') } }
       />
     )
   }
@@ -191,7 +196,7 @@ const SortableAreablockToolbarInnerComponent = ({
       key="visibility"
       onClick={ () => { onToggleHidden?.(element) } }
       size="small"
-      title={ t(isHidden ? 'areablock.show' : 'areablock.hide') }
+      tooltip={ { title: t(isHidden ? 'areablock.show' : 'areablock.hide') } }
     />
   )
 
@@ -201,6 +206,7 @@ const SortableAreablockToolbarInnerComponent = ({
       key="minus"
       onClick={ () => { onRemoveArea(element) } }
       size="small"
+      tooltip={ { title: t('areablock.delete') } }
     />
   )
 

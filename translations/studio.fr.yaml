@@ -96,6 +96,16 @@ document.document-tree.title: Arborescence des documents
 document.document-tree.search: Rechercher dans {{folderName}}
 document.editable.inheritance.overwrite: Remplacer
 document.editable.inheritance.tooltip: Hérité du document content-main. Cliquez pour remplacer.
+areablock.move-above: Monter
+areablock.move-below: Descendre
+areablock.show: Afficher
+areablock.hide: Masquer
+areablock.new: Nouveau
+areablock.copy: Copier
+areablock.paste: Coller
+areablock.cut: Couper
+areablock.settings: Paramètres
+areablock.delete: Supprimer
 document.link.target: Cible du lien
 document.hardlink.source: Document source
 document.hardlink.properties-from-source: Utiliser les propriétés du document source

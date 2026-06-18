@@ -96,6 +96,16 @@ document.document-tree.title: Dokumenttre
 document.document-tree.search: Søk i {{folderName}}
 document.editable.inheritance.overwrite: Overskriv
 document.editable.inheritance.tooltip: Arvet fra innholdshoveddokument. Klikk for å overskrive.
+areablock.move-above: Flytt opp
+areablock.move-below: Flytt ned
+areablock.show: Vis
+areablock.hide: Skjul
+areablock.new: Ny
+areablock.copy: Kopier
+areablock.paste: Lim inn
+areablock.cut: Klipp ut
+areablock.settings: Innstillinger
+areablock.delete: Slett
 document.link.target: Lenke-mål
 document.hardlink.source: Kildedokument
 document.hardlink.properties-from-source: Bruk egenskaper fra kildedokument

@@ -96,6 +96,16 @@ document.document-tree.title: Albero documenti
 document.document-tree.search: Cerca in {{folderName}}
 document.editable.inheritance.overwrite: Sovrascrivi
 document.editable.inheritance.tooltip: Ereditato dal documento content-main. Cliccare per sovrascrivere.
+areablock.move-above: Sposta su
+areablock.move-below: Sposta giù
+areablock.show: Mostra
+areablock.hide: Nascondi
+areablock.new: Nuovo
+areablock.copy: Copia
+areablock.paste: Incolla
+areablock.cut: Taglia
+areablock.settings: Impostazioni
+areablock.delete: Elimina
 document.link.target: Destinazione link
 document.hardlink.source: Documento sorgente
 document.hardlink.properties-from-source: Usa proprietà dal documento sorgente
