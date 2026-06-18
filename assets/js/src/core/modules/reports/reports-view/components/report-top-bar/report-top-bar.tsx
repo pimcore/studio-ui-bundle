@@ -11,7 +11,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { type DefaultOptionType } from 'antd/es/select'
-import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { Headline } from '@Pimcore/components/toolbar/headline'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Select } from '@Pimcore/components/select/select'
@@ -40,9 +40,8 @@ export const ReportTopBar = ({ currentReport, setCurrentReport, reportsTreeOptio
   }
 
   return (
-    <Toolbar
+    <Headline
       position='top'
-      size='headline'
     >
       <Flex
         align="center"
@@ -59,6 +58,6 @@ export const ReportTopBar = ({ currentReport, setCurrentReport, reportsTreeOptio
           value={ currentReport }
         />
       </Flex>
-    </Toolbar>
+    </Headline>
   )
 }

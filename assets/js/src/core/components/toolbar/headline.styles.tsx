@@ -12,56 +12,43 @@ import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    toolbar: css`
+    headline: css`
       width: 100%;
-      height: 48px;
-      padding: ${token.paddingXS}px;
+      height: auto;
+      /* paddingXXS (4px) outer + 2px inner buffer = 6px, giving 44px with standard 32px content */
+      padding-top: 6px;
+      padding-bottom: 6px;
+      padding-left: ${token.paddingSM}px;
+      padding-right: ${token.paddingXS}px;
       display: flex;
       align-items: center;
+      background-color: ${token.colorBgBase};
 
       > * {
         flex: 1;
         min-width: 0;
       }
 
-      &.toolbar--theme-primary {
-        // @todo: use token
-        background-color: #F5F3FA;
-      }
-
-      &.toolbar--theme-secondary {
-        background-color: ${token.colorBgBase};
-      }
-
-      &.toolbar--position-top {
+      &.headline--position-top {
         border-bottom: 1px solid ${token.colorBorderTertiary};
       }
 
-      &.toolbar--position-bottom {
+      &.headline--position-bottom {
         border-top: 1px solid ${token.colorBorderTertiary};
       }
 
-      &.toolbar--position-content {
+      &.headline--position-content {
         border-top: 1px solid ${token.colorBorderTertiary};
         border-bottom: 1px solid ${token.colorBorderTertiary};
       }
 
-      &.toolbar--border-default {
+      &.headline--border-default {
         border-color: ${token.colorBorderTertiary};
       }
 
-      &.toolbar--border-primary {
+      &.headline--border-primary {
         border-color: ${token.colorPrimaryBorder};
       }
-
-      &.toolbar--size-small {
-        height: 40px;
-      }
-
-      &.toolbar--size-auto {
-        height: 100%;
-      }
-
     `
   }
 })

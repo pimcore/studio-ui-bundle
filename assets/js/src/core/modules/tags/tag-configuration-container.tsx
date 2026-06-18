@@ -20,6 +20,7 @@ import { t } from 'i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { Headline } from '@Pimcore/components/toolbar/headline'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -168,8 +169,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
           />
         </Toolbar> }
       renderTopBar={
-        <Toolbar
-          size='headline'
+        <Headline
         >
           <Flex gap='extra-small'>
             <Title>{t('widget.tag-configuration')}</Title>
@@ -190,7 +190,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
             withPrefix={ false }
             withoutAddon={ false }
           />
-        </Toolbar>
+        </Headline>
         }
     >
       <Content

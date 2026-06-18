@@ -16,10 +16,6 @@ import { Button } from '@Pimcore/components/button/button'
 import React from 'react'
 import { Breadcrumb } from '../breadcrumb/breadcrumb'
 import { _default as breadcrumbStory } from '../breadcrumb/breadcrumb.stories'
-import { Flex } from '@Pimcore/components/flex/flex'
-import { Title } from '@Pimcore/components/title/title'
-import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import { SearchInput } from '@Pimcore/components/search-input/search-input'
 
 const config: Meta = {
   title: 'Components/Layout/Toolbar',
@@ -56,24 +52,6 @@ const demoData = {
           type='primary'
         >Save</Button>
       ] }
-      />
-    </>
-  )
-}
-
-const demoSearchData = {
-  children: (
-    <>
-      <Flex gap='extra-small'>
-        <Title>Tag Configuration</Title>
-        <IconTextButton
-          icon={ { value: 'new' } }
-        >{'New'}</IconTextButton>
-      </Flex>
-      <SearchInput
-        placeholder="Search"
-        withPrefix={ false }
-        withoutAddon={ false }
       />
     </>
   )
@@ -125,20 +103,6 @@ export const PositionTop: Story = {
   }
 }
 
-export const Headline: Story = {
-  args: {
-    ...demoSearchData,
-    size: 'headline'
-  }
-}
-
-export const HeadlineWithBorder: Story = {
-  args: {
-    ...demoSearchData,
-    position: 'top',
-    size: 'headline'
-  }
-}
 export const RightAligned: Story = {
   args: {
     ...demoData,

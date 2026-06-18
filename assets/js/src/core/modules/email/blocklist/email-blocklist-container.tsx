@@ -18,7 +18,7 @@ import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { api } from '@Pimcore/modules/email/emails-api-slice-enhanced'
 import { invalidatingTags } from '@sdk/api'
-import { Icon, Pagination } from '@sdk/components'
+import { Icon, Pagination, Headline} from '@sdk/components'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useEmailBlocklistGetCollectionQuery } from '../emails-api-slice.gen'
@@ -80,9 +80,8 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
         </Toolbar>
       }
       renderTopBar={
-        <Toolbar
+        <Headline
           position='top'
-          size='headline'
         >
           <Flex gap='extra-small'>
             <Title
@@ -100,7 +99,7 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
               } }
             >{t('email-blocklist.new')}</IconTextButton>
           </Flex>
-        </Toolbar>
+        </Headline>
       }
     >
       <Content

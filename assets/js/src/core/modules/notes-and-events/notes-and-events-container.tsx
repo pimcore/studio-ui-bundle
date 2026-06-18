@@ -11,6 +11,7 @@
 import React from 'react'
 import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { Headline } from '@Pimcore/components/toolbar/headline'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Table } from '@Pimcore/modules/notes-and-events/table/table'
@@ -69,8 +70,7 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
         </Toolbar>
       }
       renderTopBar={
-        <Toolbar
-          size='headline'
+        <Headline
         >
           <Title>{t('notes-and-events.label')}</Title>
           <SearchInput
@@ -82,7 +82,7 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
             withPrefix={ false }
             withoutAddon={ false }
           />
-        </Toolbar>
+        </Headline>
       }
     >
       <Content

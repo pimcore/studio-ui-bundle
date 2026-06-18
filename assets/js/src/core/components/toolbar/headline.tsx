@@ -8,46 +8,38 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useStyles } from '@Pimcore/components/toolbar/toolbar.styles'
+import { useStyles } from '@Pimcore/components/toolbar/headline.styles'
 import { Flex, type FlexProps } from 'antd'
 import React from 'react'
 import { HorizontalScroll } from '../horizontal-scroll/horizontal-scroll'
 import { Box, type BoxProps } from '@Pimcore/components/box/box'
 
-export interface ToolbarProps {
+export interface HeadlineProps {
   children: React.ReactNode
   justify?: FlexProps['justify']
   align?: FlexProps['align']
-  theme?: 'primary' | 'secondary'
-  borderStyle?: 'default' | 'primary'
   position?: 'top' | 'bottom' | 'content' | 'none'
-  size?: 'small' | 'auto' | 'default'
+  borderStyle?: 'default' | 'primary'
   padding?: BoxProps['padding']
   margin?: BoxProps['margin']
 }
 
-export const Toolbar = ({
+export const Headline = ({
   children,
-  size = 'default',
   justify = 'space-between',
   align,
-  theme,
-  position,
+  position = 'none',
   borderStyle = 'default',
   padding,
   margin,
   ...props
-}: ToolbarProps): React.JSX.Element => {
-  const resolvedTheme = theme ?? 'primary'
-  const resolvedPosition = position ?? 'bottom'
+}: HeadlineProps): React.JSX.Element => {
   const { styles } = useStyles()
   const classes = [
-    styles.toolbar,
-    'toolbar',
-    `toolbar--theme-${resolvedTheme}`,
-    `toolbar--position-${resolvedPosition}`,
-    `toolbar--size-${size}`,
-    `toolbar--border-${borderStyle}`
+    styles.headline,
+    'headline',
+    `headline--position-${position}`,
+    `headline--border-${borderStyle}`
   ].join(' ')
 
   return (

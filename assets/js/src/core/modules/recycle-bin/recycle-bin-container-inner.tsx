@@ -19,7 +19,7 @@ import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { useAppDispatch } from '@sdk/app'
-import { Divider, IconTextButton } from '@sdk/components'
+import { Divider, IconTextButton, Headline} from '@sdk/components'
 import { isUndefined } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -136,8 +136,7 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
           </Flex>
         </Toolbar> }
       renderTopBar={
-        <Toolbar
-          size='headline'
+        <Headline
         >
           <Title>{t('widget.recycle-bin')}</Title>
           <SearchInput
@@ -162,7 +161,7 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
             withPrefix={ false }
             withoutAddon={ false }
           />
-        </Toolbar>
+        </Headline>
       }
     >
       <Content

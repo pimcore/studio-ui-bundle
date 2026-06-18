@@ -17,7 +17,7 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { Table } from './table/table'
-import { Box, IconTextButton, SearchInput } from '@sdk/components'
+import { Box, IconTextButton, SearchInput, Headline} from '@sdk/components'
 import { type PropertyGetCollectionApiArg, usePropertyGetCollectionQuery } from '../element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
 import trackError, { ApiError, GeneralError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
@@ -86,8 +86,7 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
           />
         </Toolbar> }
       renderTopBar={
-        <Toolbar
-          size='headline'
+        <Headline
         >
           <Flex gap='extra-small'>
             <Title>{t('widget.predefined-properties')}</Title>
@@ -107,7 +106,7 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
             withPrefix={ false }
             withoutAddon={ false }
           />
-        </Toolbar>
+        </Headline>
         }
     >
       <Content
