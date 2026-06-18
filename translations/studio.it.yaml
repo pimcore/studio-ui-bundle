@@ -12,6 +12,7 @@ widget.missing-context.description: Nessun elemento correlato trovato
 widget.missing-tab-context.description: "Questa funzionalità non è supportata per l'elemento correlato"
 block: Blocco
 error.error_something_generic_went_wrong: Qualcosa è andato storto
+error.error_permission_denied: "Non disponi dell'autorizzazione per eseguire questa azione su questo elemento."
 error.syntax_error: Errore di sintassi
 error.error_element_exists: L'elemento esiste già
 error.error_folder_exists: La cartella esiste già

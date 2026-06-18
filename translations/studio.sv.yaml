@@ -12,6 +12,7 @@ widget.missing-context.description: Inget relaterat element hittades
 widget.missing-tab-context.description: Den här funktionen stöds inte för det relaterade elementet
 block: Block
 error.error_something_generic_went_wrong: Något gick fel
+error.error_permission_denied: Du har inte behörighet att utföra denna åtgärd på detta element.
 error.syntax_error: Syntaxfel
 error.error_element_exists: Elementet finns redan
 error.error_folder_exists: Mappen finns redan
