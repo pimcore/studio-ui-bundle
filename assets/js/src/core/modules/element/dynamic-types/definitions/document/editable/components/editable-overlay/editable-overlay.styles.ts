@@ -43,11 +43,9 @@ export const useStyles = createStyles((
       inset: 0;
       position: absolute;
       background: rgba(255, 230, 0, 0.2);
-      border: 1px dashed #ffd500;
+      border: 1px dashed ${token.colorBorder};
       ${shape !== 'angular' ? `border-radius: ${token.borderRadius}px;` : ''}
-      /* Must not intercept clicks so the wrapped editable stays interactive. */
       pointer-events: none;
-      /* Sits below the inheritance overlay (z-index 10) so its dropdown stays clickable. */
       z-index: 9;
     `,
 
