@@ -13,11 +13,20 @@ import { createRoot, type Root } from 'react-dom/client'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { DocumentEditorIframeAppView } from './iframe-app-view'
 import { isDev, REACT_SCAN_ENABLED } from '@Pimcore/utils/environment'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 
 if (isDev() && REACT_SCAN_ENABLED) {
-  void import('react-scan').then(({ scan }) => {
-    scan({ enabled: true, log: true })
-  })
+  const script = document.createElement('script')
+  script.src = '//unpkg.com/react-scan/dist/auto.global.js'
+  script.crossOrigin = 'anonymous'
+
+  const nonce = document.querySelector<HTMLScriptElement>('script[nonce]')?.nonce
+
+  if (!isEmptyValue(nonce)) {
+    script.nonce = nonce
+  }
+
+  document.head.appendChild(script)
 }
 
 export function runApp (): Root | undefined {

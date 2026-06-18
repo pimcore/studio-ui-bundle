@@ -54,21 +54,6 @@ export default defineConfig({
       chain.output.uniqueName('pimcore_studio_ui_bundle');
     },
     rspack: {
-      module: {
-        rules: [
-          {
-            // react-scan reads `version` from a package.json via a named
-            // import, which strict ESM forbids (JSON has only a default export)
-            // and fails the build. Allow it for react-scan files only, so this
-            // workaround never hides broken imports in the rest of the code.
-            test: /\.m?js$/,
-            include: /node_modules[\\/]react-scan[\\/]/,
-            parser: {
-              importExportsPresence: false,
-            },
-          },
-        ],
-      },
       plugins: [
         new rspack.BannerPlugin({
           banner: `
