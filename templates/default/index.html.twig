@@ -11,6 +11,10 @@
     <head>
         <meta charset="utf-8">
         <title>{{ hostname }} :: Pimcore Studio</title>
+
+        {% if app.environment == 'dev' %}
+            <script {{ pimcore_studio_csp.getNonceHtmlAttribute()|raw }} crossorigin="anonymous" src="//unpkg.com/react-scan/dist/auto.global.js"></script>
+        {% endif %}
         
         <!-- Dynamic favicon based on theme -->
         <link rel="icon" id="favicon" href="/bundles/pimcorestudioui/img/favicon.svg" type="image/svg+xml">
