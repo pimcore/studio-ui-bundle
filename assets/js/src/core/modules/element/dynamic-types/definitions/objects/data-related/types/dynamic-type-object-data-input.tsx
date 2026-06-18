@@ -39,7 +39,18 @@ export class DynamicTypeObjectDataInput extends DynamicTypeObjectDataAbstractInp
       rules: [
         {
           validator: async (rule, value: unknown) => {
-            if (typeof value === 'string' && value !== '' && typeof props.regex === 'string' && props.regex.length > 0 && !new RegExp(props.regex, props.regexFlags?.join('')).test(value)) {
+            if (typeof value !== 'string' || value === '' || typeof props.regex !== 'string' || props.regex.length === 0) {
+              return
+            }
+
+            let matches = false
+            try {
+              matches = new RegExp(props.regex, props.regexFlags?.join('')).test(value)
+            } catch {
+              // Fallback for invalid regex
+            }
+
+            if (!matches) {
               throw new Error(i18n.t('regex-validation-error-message'))
             }
           }
