@@ -141,7 +141,10 @@ const apiWithTags = baseApi.enhanceEndpoints({
       providesTags: (result, error, args) => providingTags.FIELD_COLLECTION_DETAIL(args.key)
     },
     classFieldCollectionUpdate: {
-      invalidatesTags: () => invalidatingTags.FIELD_COLLECTION_COLLECTION(),
+      invalidatesTags: (result, error, args) => [
+        ...invalidatingTags.FIELD_COLLECTION_COLLECTION(),
+        ...invalidatingTags.FIELD_COLLECTION_DETAIL(args.key)
+      ],
       async onQueryStarted (args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
