@@ -11,6 +11,7 @@
 import { type AbstractObjectDataDefinition } from '../dynamic-type-object-data-abstract'
 import { type FormItemProps } from 'antd/es/form/FormItem'
 import i18n from '@Pimcore/app/i18n'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 
 import {
   DynamicTypeObjectDataAbstractInput, type InputProps
@@ -39,7 +40,7 @@ export class DynamicTypeObjectDataInput extends DynamicTypeObjectDataAbstractInp
       rules: [
         {
           validator: async (rule, value: unknown) => {
-            if (typeof value !== 'string' || value === '' || typeof props.regex !== 'string' || props.regex.length === 0) {
+            if (!isNonEmptyString(value) || !isNonEmptyString(props.regex)) {
               return
             }
 
