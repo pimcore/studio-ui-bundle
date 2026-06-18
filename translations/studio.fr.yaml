@@ -12,6 +12,7 @@ widget.missing-context.description: Aucun élément associé trouvé
 widget.missing-tab-context.description: "Cette fonctionnalité n'est pas prise en charge pour l'élément associé"
 block: Bloc
 error.error_something_generic_went_wrong: Une erreur est survenue
+error.error_permission_denied: "Vous n'avez pas l'autorisation d'effectuer cette action sur cet élément."
 error.syntax_error: Erreur de syntaxe
 error.error_element_exists: L'élément existe déjà
 error.error_folder_exists: Le dossier existe déjà

@@ -12,6 +12,7 @@ widget.missing-context.description: No related element found
 widget.missing-tab-context.description: This feature is not supported for the related element
 block: Block
 error.error_something_generic_went_wrong: Something went wrong
+error.error_permission_denied: You do not have permission to perform this action on this element.
 error.error_element_exists: Element already exists
 error.error_folder_exists: Folder already exists
 error.error_invalid_argument: Invalid argument

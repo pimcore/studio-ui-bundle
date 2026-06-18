@@ -12,6 +12,7 @@ widget.missing-context.description: No se encontró ningún elemento relacionado
 widget.missing-tab-context.description: Esta función no es compatible con el elemento relacionado
 block: Bloque
 error.error_something_generic_went_wrong: Algo salió mal
+error.error_permission_denied: No tiene permiso para realizar esta acción en este elemento.
 error.syntax_error: Error de sintaxis
 error.error_element_exists: El elemento ya existe
 error.error_folder_exists: La carpeta ya existe
