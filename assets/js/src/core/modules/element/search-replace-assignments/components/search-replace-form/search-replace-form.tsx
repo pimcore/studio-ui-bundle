@@ -37,12 +37,7 @@ export const SearchReplaceForm = (): React.JSX.Element => {
   return (
     <>
       <Toolbar
-        justify="space-between"
-        padding={ {
-          left: 'small',
-          right: 'extra-small'
-        } }
-        theme="secondary"
+        size='headline'
       >
         <Title>{t('widget.search-replace-assignments')}</Title>
       </Toolbar>

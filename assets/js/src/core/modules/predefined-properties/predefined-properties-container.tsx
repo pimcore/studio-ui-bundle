@@ -87,14 +87,9 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
         </Toolbar> }
       renderTopBar={
         <Toolbar
-          justify='space-between'
-          padding={ {
-            left: 'small',
-            right: 'extra-small'
-          } }
-          theme='secondary'
+          size='headline'
         >
-          <Flex gap={ 'small' }>
+          <Flex gap='extra-small'>
             <Title>{t('widget.predefined-properties')}</Title>
             <IconTextButton
               disabled={ predefinedPropertiesLoading || createLoading }

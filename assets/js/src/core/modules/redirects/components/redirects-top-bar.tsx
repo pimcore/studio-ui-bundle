@@ -35,14 +35,9 @@ export const RedirectsTopBar = ({
   const { t } = useTranslation()
   return (
     <Toolbar
-      justify='space-between'
-      padding={ {
-        left: 'small',
-        right: 'extra-small'
-      } }
-      theme='secondary'
+      size='headline'
     >
-      <Flex gap={ 'small' }>
+      <Flex gap='extra-small'>
         <Title>{t('widget.redirects')}</Title>
         <IconTextButton
           disabled={ redirectsLoading || createLoading || redirectsFetching }

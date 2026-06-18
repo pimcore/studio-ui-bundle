@@ -128,12 +128,7 @@ export const PredefinedAssetMetadataContainer = (): React.JSX.Element => {
       ) }
       renderTopBar={
         <Toolbar
-          justify='space-between'
-          padding={ {
-            left: 'small',
-            right: 'extra-small'
-          } }
-          theme='secondary'
+          size='headline'
         >
           <Title>{t('widget.predefined-asset-metadata')}</Title>
           <SearchInput

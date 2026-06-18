@@ -16,6 +16,13 @@ export const useStyles = createStyles(({ token, css }) => {
       width: 100%;
       height: 48px;
       padding: ${token.paddingXS}px;
+      display: flex;
+      align-items: center;
+
+      > * {
+        flex: 1;
+        min-width: 0;
+      }
 
       &.toolbar--theme-primary {
         // @todo: use token
@@ -53,6 +60,15 @@ export const useStyles = createStyles(({ token, css }) => {
 
       &.toolbar--size-auto {
         height: 100%;
+      }
+
+      &.toolbar--size-headline {
+        height: auto;
+        /* paddingXXS (4px) outer + 2px inner buffer = 6px, giving 44px with standard 32px content */
+        padding-top: 6px;
+        padding-bottom: 6px;
+        padding-left: ${token.paddingSM}px;
+        padding-right: ${token.paddingXS}px;
       }
     `
   }

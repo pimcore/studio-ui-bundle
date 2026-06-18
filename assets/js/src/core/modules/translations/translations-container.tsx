@@ -232,16 +232,11 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
         </Toolbar> }
       renderTopBar={
         <Toolbar
-          justify='space-between'
-          padding={ {
-            left: 'small',
-            right: 'extra-small'
-          } }
-          theme='secondary'
+          size='headline'
         >
           <Flex
             align="center"
-            gap={ 'extra-small' }
+            gap='extra-small'
           >
             <Title>{t('translations.new-translation')}</Title>
             <Form
@@ -251,27 +246,31 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
                 void onCreateTranslation(translationKey)
               } }
             >
-              <Form.Item
-                name="translationKey"
-              >
-                <Input
-                  className="translations-key-input"
-                  data-testid={ `${TESTID_PREFIX}-key-input` }
-                  placeholder={ t('translations.add-translation.key') }
-                />
-              </Form.Item>
-              <Form.Item>
-                <IconTextButton
-                  data-testid={ `${TESTID_PREFIX}-add-button` }
-                  htmlType="submit"
-                  icon={ { value: 'new' } }
-                  loading={ createLoading }
+              <Flex gap='extra-small'>
+                <Form.Item
+                  name="translationKey"
+                  style={ { marginBottom: 0, marginInlineEnd: 0 } }
                 >
-                  {t('translations.new')}
-                </IconTextButton>
-              </Form.Item>            </Form>
+                  <Input
+                    className="translations-key-input"
+                    data-testid={ `${TESTID_PREFIX}-key-input` }
+                    placeholder={ t('translations.add-translation.key') }
+                  />
+                </Form.Item>
+                <Form.Item style={ { marginBottom: 0, marginInlineEnd: 0 } }>
+                  <IconTextButton
+                    data-testid={ `${TESTID_PREFIX}-add-button` }
+                    htmlType="submit"
+                    icon={ { value: 'new' } }
+                    loading={ createLoading }
+                  >
+                    {t('translations.new')}
+                  </IconTextButton>
+                </Form.Item>
+              </Flex>
+            </Form>
           </Flex>
-          <Flex gap="small">
+          <Flex gap='extra-small'>
             <Select
               className="translations-domain-select"
               data-testid={ `${TESTID_PREFIX}-domain-select` }

@@ -62,13 +62,8 @@ const NotificationsView = ({ notifications, isLoading, isFetching, deleteNotific
         : undefined }
       renderTopBar={
         <Toolbar
-          justify='space-between'
-          padding={ {
-            left: 'small',
-            right: 'extra-small'
-          }
-                    }
-          theme='secondary'
+          position='top'
+          size='headline'
         >
           <Title>{t('notifications.label')}</Title>
         </Toolbar>

@@ -171,13 +171,7 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
       }
       renderTopBar={
         <Toolbar
-          justify='space-between'
-          padding={ {
-            left: 'small',
-            right: 'extra-small'
-          }
-          }
-          theme='secondary'
+          size='headline'
         >
           <Title>{t('application-logger.label')}</Title>
         </Toolbar>

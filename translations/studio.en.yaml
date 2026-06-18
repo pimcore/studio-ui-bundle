@@ -2734,8 +2734,8 @@ translations.merger.column.state: State
 translations.merger.state.applied: Applied
 translations.merger.state.reverted: Reverted
 translations.merger.state.pending: Pending
-translations.merger.apply-all: Apply All
-translations.merger.revert-all: Revert All
+translations.merger.apply-all: Apply all
+translations.merger.revert-all: Revert all
 translations.merger.title: "Merge Translations (Domain: {{domain}})"
 translations.merger.column.language: Language
 translations.merger.items: items

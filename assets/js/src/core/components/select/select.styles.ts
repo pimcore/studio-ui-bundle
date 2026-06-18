@@ -165,7 +165,7 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
       &.ant-select-multiple {
         &.ant-select {
           .ant-select-selector {
-            padding: 2px ${token.controlPaddingHorizontal}px 2px ${token.paddingXXS}px !important;
+            padding: 1px ${token.controlPaddingHorizontal}px 1px ${token.paddingXXS}px !important;
           }
         }
 

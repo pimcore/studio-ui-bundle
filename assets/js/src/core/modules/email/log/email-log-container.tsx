@@ -79,14 +79,10 @@ export const EmailLogContainer = (): React.JSX.Element => {
       }
       renderTopBar={
         <Toolbar
-          justify='space-between'
-          padding={ {
-            left: 'small',
-            right: 'extra-small'
-          } }
-          theme='secondary'
+          position='top'
+          size='headline'
         >
-          <Flex gap={ 'small' }>
+          <Flex gap='extra-small'>
             <Title>
               {t('widget.email-log')}
             </Title>

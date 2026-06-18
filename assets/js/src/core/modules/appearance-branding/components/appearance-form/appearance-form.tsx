@@ -73,6 +73,12 @@ export const AppearanceForm = (): React.JSX.Element => {
         justify="space-between"
         vertical
       >
+        <Toolbar
+          size='headline'
+        >
+          <Title>{t('appearance-branding.title')}</Title>
+        </Toolbar>
+
         <Content
           padded
           padding={ {
@@ -80,10 +86,6 @@ export const AppearanceForm = (): React.JSX.Element => {
             y: 'extra-small'
           } }
         >
-          <Title level={ 2 }>
-            {t('appearance-branding.title')}
-          </Title>
-
           <Space
             direction="vertical"
             size="large"

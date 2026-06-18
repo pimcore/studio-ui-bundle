@@ -64,7 +64,7 @@ const demoData = {
 const demoSearchData = {
   children: (
     <>
-      <Flex gap={ 'small' }>
+      <Flex gap='extra-small'>
         <Title>Tag Configuration</Title>
         <IconTextButton
           icon={ { value: 'new' } }
@@ -72,6 +72,8 @@ const demoSearchData = {
       </Flex>
       <SearchInput
         placeholder="Search"
+        withPrefix={ false }
+        withoutAddon={ false }
       />
     </>
   )
@@ -92,7 +94,7 @@ export const Secondary: Story = {
   }
 }
 
-export const Size: Story = {
+export const Small: Story = {
   args: {
     children: (
       <>
@@ -107,7 +109,7 @@ export const Size: Story = {
   }
 }
 
-export const Position: Story = {
+export const PositionTop: Story = {
   args: {
     children: (
       <>
@@ -123,12 +125,18 @@ export const Position: Story = {
   }
 }
 
-export const SpaceBetweenSearch: Story = {
+export const Headline: Story = {
   args: {
     ...demoSearchData,
-    justify: 'space-between',
-    margin: { x: 'mini', y: 'none' },
-    theme: 'secondary'
+    size: 'headline'
+  }
+}
+
+export const HeadlineWithBorder: Story = {
+  args: {
+    ...demoSearchData,
+    position: 'top',
+    size: 'headline'
   }
 }
 export const RightAligned: Story = {

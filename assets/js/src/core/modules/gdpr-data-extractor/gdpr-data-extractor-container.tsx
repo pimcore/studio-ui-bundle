@@ -124,18 +124,12 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
       }
       renderTopBar={
         <Toolbar
-          justify='space-between'
-          padding={ {
-            left: 'small',
-            right: 'extra-small'
-          } }
-          theme='secondary'
+          position='top'
+          size='headline'
         >
-          <Flex gap={ 4 }>
-            <Title>
-              {t('gdpr-extractor.title')}
-            </Title>
-          </Flex>
+          <Title>
+            {t('gdpr-extractor.title')}
+          </Title>
         </Toolbar>
       }
     >

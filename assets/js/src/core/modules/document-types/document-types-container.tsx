@@ -88,14 +88,9 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
         </Toolbar> }
       renderTopBar={
         <Toolbar
-          justify='space-between'
-          padding={ {
-            left: 'small',
-            right: 'extra-small'
-          } }
-          theme='secondary'
+          size='headline'
         >
-          <Flex gap={ 'small' }>
+          <Flex gap='extra-small'>
             <Title>{t('widget.document-types')}</Title>
             <IconTextButton
               disabled={ documentTypesLoading ?? createLoading }

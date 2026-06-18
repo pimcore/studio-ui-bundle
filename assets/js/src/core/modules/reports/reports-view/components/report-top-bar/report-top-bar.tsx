@@ -15,7 +15,6 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Select } from '@Pimcore/components/select/select'
-import { Content } from '@Pimcore/components/content/content'
 import { useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
 import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
@@ -41,32 +40,25 @@ export const ReportTopBar = ({ currentReport, setCurrentReport, reportsTreeOptio
   }
 
   return (
-    <Content
-      padded
-      padding={ { top: 'extra-small', right: 'extra-small', bottom: 'extra-small', left: 'extra-small' } }
+    <Toolbar
+      position='top'
+      size='headline'
     >
-      <Toolbar
-        padding={ { top: 'extra-small', bottom: 'extra-small', left: 'none', right: 'none' } }
-        position='top'
-        size='auto'
-        theme='secondary'
+      <Flex
+        align="center"
+        gap="extra-small"
       >
-        <Flex
-          align="center"
-          gap="extra-small"
-        >
-          <Text className={ styles.selectReportLabel }>{t('reports.reports-title')}</Text>
-          <Select
-            className='min-w-200'
-            data-testid="reports-view-report-selector"
-            onChange={ handleReportChange }
-            options={ reportsTreeOptions }
-            placeholder={ t('reports.select-report') }
-            showSearch
-            value={ currentReport }
-          />
-        </Flex>
-      </Toolbar>
-    </Content>
+        <Text className={ styles.selectReportLabel }>{t('reports.reports-title')}</Text>
+        <Select
+          className='min-w-200'
+          data-testid="reports-view-report-selector"
+          onChange={ handleReportChange }
+          options={ reportsTreeOptions }
+          placeholder={ t('reports.select-report') }
+          showSearch
+          value={ currentReport }
+        />
+      </Flex>
+    </Toolbar>
   )
 }

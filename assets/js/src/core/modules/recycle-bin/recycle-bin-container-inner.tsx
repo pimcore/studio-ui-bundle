@@ -137,16 +137,9 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
         </Toolbar> }
       renderTopBar={
         <Toolbar
-          justify='space-between'
-          padding={ {
-            left: 'small',
-            right: 'extra-small'
-          } }
-          theme='secondary'
+          size='headline'
         >
-          <Flex gap={ 'small' }>
-            <Title>{t('widget.recycle-bin')}</Title>
-          </Flex>
+          <Title>{t('widget.recycle-bin')}</Title>
           <SearchInput
             loading={ isFetching || isLoading }
             onSearch={ (value) => {
