@@ -1,0 +1,82 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
+
+export const useStyles = createStyles((
+  { token, css },
+  { display, addIconSpacing, hideButtons, noPadding, shape }: { display?: string, addIconSpacing?: boolean, hideButtons?: boolean, noPadding?: boolean, shape?: 'round' | 'angular' }
+) => {
+  const iconSize = 16
+  const iconPadding = addIconSpacing === true ? iconSize + (2 * token.paddingXXS) + token.paddingMD : 0
+
+  return {
+    container: css`
+      position: relative;
+      display: ${display ?? 'inline-block'};
+      ${noPadding !== true ? `padding: ${token.paddingXXS}px;` : ''}
+      padding-right: ${iconPadding}px;
+
+      .ant-btn {
+        background-color: ${token.colorBgContainerDisabled} !important;
+        ${hideButtons === true ? 'display: none !important;' : ''}
+      }
+
+      .pimcore_editable_droppable_overlay {
+        display: none;
+      }
+    `,
+
+    highlightContainer: css`
+      position: relative;
+      display: ${display ?? 'inline-block'};
+    `,
+
+    highlightOverlay: css`
+      inset: 0;
+      position: absolute;
+      background: rgba(255, 230, 0, 0.2);
+      border: 1px dashed #ffd500;
+      ${shape !== 'angular' ? `border-radius: ${token.borderRadius}px;` : ''}
+      /* Must not intercept clicks so the wrapped editable stays interactive. */
+      pointer-events: none;
+      /* Sits below the inheritance overlay (z-index 10) so its dropdown stays clickable. */
+      z-index: 9;
+    `,
+
+    inheritanceBackground: css`
+      inset: 0;
+      position: absolute;
+      background: ${token.colorFillSecondary};
+      border: 1px dashed ${token.colorPrimaryBorder};
+      ${shape !== 'angular' ? `border-radius: ${token.borderRadius}px;` : ''}
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding: ${token.paddingXXS}px;
+      z-index: 10;
+      overflow: hidden;
+      &:hover {
+        border-color: ${token.colorPrimary};
+      }
+    `,
+
+    inheritanceIcon: css`
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: ${token.borderRadiusSM}px;
+      background: ${token.colorFillActive};
+      padding: ${token.paddingXXS}px;
+      color: ${token.colorPrimary};
+    `
+  }
+})

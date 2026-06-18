@@ -11,7 +11,7 @@
 import React from 'react'
 import { Checkbox, Flex, Text } from '@sdk/components'
 import { FieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label'
-import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+import { EditableOverlay } from '../editable-overlay/editable-overlay'
 import { isUndefined } from 'lodash'
 
 export interface CheckboxEditableValue {
@@ -79,13 +79,13 @@ export const CheckboxEditable = ({
   }
 
   return (
-    <InheritanceOverlay
+    <EditableOverlay
       addIconSpacing
       display="inline-block"
       isInherited={ Boolean(inherited) }
       onOverwrite={ handleOverwrite }
     >
       {renderCheckbox()}
-    </InheritanceOverlay>
+    </EditableOverlay>
   )
 }
