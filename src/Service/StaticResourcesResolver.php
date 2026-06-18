@@ -95,7 +95,8 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
         foreach ($entryPointProviders as $entryPointProvider) {
             $entryPointJsonContents = [];
 
-            foreach ($entryPointProvider->getEntryPointsJsonLocations() as $entryPointsJsonLocation) {
+            $locations = $this->selectLatestBuildLocations($entryPointProvider->getEntryPointsJsonLocations());
+            foreach ($locations as $entryPointsJsonLocation) {
                 $entryPointJsonContents[] = $this->getEntryPointsJsonContent($entryPointsJsonLocation);
             }
 
@@ -129,6 +130,50 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
         }
 
         return $files;
+    }
+
+    /**
+     * A single build emits multiple dirs (e.g. the SDK and app builds), all sharing one
+     * `.build-id`. If several builds are present (multiple `.build-id` groups), keep only
+     * the dirs of the most recently built group, so stale builds are never served. Falls
+     * back to all locations when no build ids are present (legacy builds).
+     *
+     * @param string[] $locations
+     *
+     * @return string[]
+     */
+    private function selectLatestBuildLocations(array $locations): array
+    {
+        $withId = [];
+        foreach ($locations as $location) {
+            $idFile = dirname($location) . '/.build-id';
+            if (!is_file($idFile)) {
+                continue;
+            }
+
+            $buildId = trim((string) @file_get_contents($idFile));
+            if ($buildId !== '') {
+                $withId[] = ['location' => $location, 'buildId' => $buildId, 'mtime' => @filemtime(dirname($location)) ?: 0];
+            }
+        }
+
+        if ($withId === []) {
+            return $locations;
+        }
+
+        $groupMtime = [];
+        foreach ($withId as $entry) {
+            $groupMtime[$entry['buildId']] = max($groupMtime[$entry['buildId']] ?? 0, $entry['mtime']);
+        }
+        arsort($groupMtime);
+        $latestBuildId = array_key_first($groupMtime);
+
+        return array_values(
+            array_map(
+                static fn (array $entry): string => $entry['location'],
+                array_filter($withId, static fn (array $entry): bool => $entry['buildId'] === $latestBuildId)
+            )
+        );
     }
 
     private function getEntryPoints(WebpackEntryPointProviderInterface $entryPointProvider): array

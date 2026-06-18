@@ -18,6 +18,7 @@
     "build": "rsbuild build",
     "build-sdk": "rsbuild build --config rsbuild.sdk.config.ts",
     "build-app": "npm run build-sdk && npm run build",
+    "package-build": "node ./bundler/package-build.cjs",
     "build-rsbuild-plugins": "rsbuild build --config rsbuild.plugins.config.ts",
     "build-storybook": "storybook build --output-dir ./storybook-static",
     "build-api-client": "npx @rtk-query/codegen-openapi ./build/api/openapi-config.ts",
@@ -52,6 +53,8 @@
   ],
   "license": "SEE LICENSE IN LICENSE.md",
   "devDependencies": {
+    "adm-zip": "^0.5.16",
+    "@types/adm-zip": "^0.5.7",
     "@eslint/eslintrc": "^3",
     "@eslint/js": "^9",
     "@module-federation/rsbuild-plugin": "^2.2.3",

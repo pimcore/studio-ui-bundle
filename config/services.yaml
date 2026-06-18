@@ -55,6 +55,16 @@ services:
         tags:
             - { name: 'pimcore_studio_ui.webpack_entry_point_provider.document_editor_iframe' }
 
+    # Reconstructs committed build archives (build-dist/build.zip) into public/build.
+    Pimcore\Bundle\StudioUiBundle\Build\BuildArchiveExtractor: ~
+
+    # Extracts every registered build archive at cache warmup, while vendor is still writable
+    # (autoconfigure adds the kernel.cache_warmer tag via CacheWarmerInterface).
+    Pimcore\Bundle\StudioUiBundle\Build\StudioBuildCacheWarmer:
+        arguments:
+            $entryPointProviders: !tagged_iterator pimcore_studio_ui.webpack_entry_point_provider
+            $extractor: '@Pimcore\Bundle\StudioUiBundle\Build\BuildArchiveExtractor'
+
     Pimcore\Bundle\StudioUiBundle\EventSubscriber\EditmodeSubscriber:
         tags: ['kernel.event_subscriber']
         arguments:
