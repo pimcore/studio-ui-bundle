@@ -13,35 +13,31 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 /**
- * Deterministic build id derived from the content of the frontend source.
- *
- * It is a content hash over the `js/` source tree plus the dependency manifests, using
- * relative paths so the same source yields the same id regardless of the checkout
- * location (CI vs. local). Identical source therefore produces the same output dirs and
- * an identical archive — no git churn when nothing actually changed. Both the SDK and app
- * builds of a single `build-app` run resolve the same group id, which is used as the
- * archive filename and the grouping key.
+ * Deterministic build id derived from the whole `assets/` source tree (excluding installed
+ * dependencies and generated output). It is a sha256 over every file's normalized relative
+ * path + content, so identical source — including configs (rsbuild, tsconfig, …), fonts and
+ * the API spec — yields the same id regardless of checkout location, and any change to them
+ * bumps it. Both the SDK and app builds of one `build-app` run resolve the same id (used as
+ * the archive filename and the grouping key).
  */
 
-const SOURCES = ['js'];
-const MANIFESTS = ['package-lock.json', 'package.json'];
+// Installed dependencies and generated output — not part of the source fingerprint.
+const EXCLUDED_DIRS = new Set(['node_modules', 'dist']);
 
 let cachedFingerprint: string | undefined;
 
-function hashTree(root: string, base: string, hash: Hash): void {
-  if (!fs.existsSync(root)) {
-    return;
-  }
-
+function hashTree(dir: string, base: string, hash: Hash): void {
   const entries = fs
-    .readdirSync(root, { withFileTypes: true })
+    .readdirSync(dir, { withFileTypes: true })
     .sort((a, b) => a.name.localeCompare(b.name));
 
   for (const entry of entries) {
-    const abs = path.join(root, entry.name);
     if (entry.isDirectory()) {
-      hashTree(abs, base, hash);
+      if (!EXCLUDED_DIRS.has(entry.name)) {
+        hashTree(path.join(dir, entry.name), base, hash);
+      }
     } else if (entry.isFile()) {
+      const abs = path.join(dir, entry.name);
       // relative + normalized path keeps the id stable across checkout locations / OSes
       hash.update(path.relative(base, abs).split(path.sep).join('/'));
       hash.update(fs.readFileSync(abs));
@@ -50,25 +46,12 @@ function hashTree(root: string, base: string, hash: Hash): void {
 }
 
 function sourceFingerprint(): string {
-  if (cachedFingerprint !== undefined) {
-    return cachedFingerprint;
+  if (cachedFingerprint === undefined) {
+    const assets = path.resolve(__dirname, '..');
+    const hash = createHash('sha256');
+    hashTree(assets, assets, hash);
+    cachedFingerprint = hash.digest('hex');
   }
-
-  const assets = path.resolve(__dirname, '..');
-  const hash = createHash('sha256');
-
-  for (const dir of SOURCES) {
-    hashTree(path.join(assets, dir), assets, hash);
-  }
-  for (const file of MANIFESTS) {
-    const p = path.join(assets, file);
-    if (fs.existsSync(p)) {
-      hash.update(file);
-      hash.update(fs.readFileSync(p));
-    }
-  }
-
-  cachedFingerprint = hash.digest('hex');
 
   return cachedFingerprint;
 }
@@ -76,7 +59,7 @@ function sourceFingerprint(): string {
 /**
  * Shared id for one build (the SDK + app pair). Used as the archive filename
  * (`build-<id>.zip`) and written into each output dir as `.build-id` so the dirs of a
- * single build can be grouped and the newest build selected at serve time.
+ * single build can be grouped and stale builds ignored at serve time.
  */
 export function getBuildGroupId(): string {
   return sourceFingerprint().slice(0, 12);

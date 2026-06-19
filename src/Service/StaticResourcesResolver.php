@@ -95,7 +95,7 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
         foreach ($entryPointProviders as $entryPointProvider) {
             $entryPointJsonContents = [];
 
-            $locations = $this->selectLatestBuildLocations($entryPointProvider->getEntryPointsJsonLocations());
+            $locations = $this->selectActiveBuildLocations($entryPointProvider->getEntryPointsJsonLocations());
             foreach ($locations as $entryPointsJsonLocation) {
                 $entryPointJsonContents[] = $this->getEntryPointsJsonContent($entryPointsJsonLocation);
             }
@@ -134,17 +134,19 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
 
     /**
      * A single build emits multiple dirs (e.g. the SDK and app builds), all sharing one
-     * `.build-id`. If several builds are present (multiple `.build-id` groups), keep only
-     * the dirs of the most recently built group, so stale builds are never served. Falls
-     * back to all locations when no build ids are present (legacy builds).
+     * `.build-id`. Normally exactly one build is present. If several are (a dev anomaly),
+     * serve the dirs of the build the extractor actually installed (per the
+     * `extracted-archive.json` marker); otherwise fall back to a deterministic choice — never
+     * file mtimes, which are not stable across checkouts/deploys. Falls back to all locations
+     * when no build ids are present (legacy builds).
      *
      * @param string[] $locations
      *
      * @return string[]
      */
-    private function selectLatestBuildLocations(array $locations): array
+    private function selectActiveBuildLocations(array $locations): array
     {
-        $withId = [];
+        $byBuildId = [];
         foreach ($locations as $location) {
             $idFile = dirname($location) . '/.build-id';
             if (!is_file($idFile)) {
@@ -153,31 +155,50 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
 
             $buildId = trim((string) @file_get_contents($idFile));
             if ($buildId !== '') {
-                $withId[] = [
-                    'location' => $location,
-                    'buildId' => $buildId,
-                    'mtime' => @filemtime(dirname($location)) ?: 0,
-                ];
+                $byBuildId[$buildId][] = $location;
             }
         }
 
-        if ($withId === []) {
+        if ($byBuildId === []) {
             return $locations;
         }
-
-        $groupMtime = [];
-        foreach ($withId as $entry) {
-            $groupMtime[$entry['buildId']] = max($groupMtime[$entry['buildId']] ?? 0, $entry['mtime']);
+        if (count($byBuildId) === 1) {
+            return reset($byBuildId);
         }
-        arsort($groupMtime);
-        $latestBuildId = array_key_first($groupMtime);
 
-        return array_values(
-            array_map(
-                static fn (array $entry): string => $entry['location'],
-                array_filter($withId, static fn (array $entry): bool => $entry['buildId'] === $latestBuildId)
-            )
-        );
+        $activeBuildId = $this->extractedBuildId($locations);
+        if ($activeBuildId !== null && isset($byBuildId[$activeBuildId])) {
+            return $byBuildId[$activeBuildId];
+        }
+
+        ksort($byBuildId);
+
+        return $byBuildId[array_key_last($byBuildId)];
+    }
+
+    /**
+     * Build id the extractor recorded as installed, read from public/build/extracted-archive.json
+     * (`build-<id>.zip` -> `<id>`), or null for a manually built / legacy tree.
+     *
+     * @param string[] $locations
+     */
+    private function extractedBuildId(array $locations): ?string
+    {
+        if ($locations === []) {
+            return null;
+        }
+
+        $marker = dirname($locations[0], 2) . '/extracted-archive.json';
+        if (!is_file($marker)) {
+            return null;
+        }
+
+        $data = json_decode((string) @file_get_contents($marker), true);
+        $archive = is_array($data) ? ($data['archive'] ?? null) : null;
+
+        return is_string($archive) && preg_match('/^build-(.+)\.zip$/', $archive, $matches) === 1
+            ? $matches[1]
+            : null;
     }
 
     private function getEntryPoints(WebpackEntryPointProviderInterface $entryPointProvider): array

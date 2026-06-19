@@ -22,19 +22,24 @@ use ZipArchive;
  *
  * Single source of truth for the extraction decision: both the cache warmer (deploy time,
  * while vendor is writable) and the entry point provider fallback (local dev / git pull)
- * call {@see ensureExtracted()}. It is idempotent, cheap on the hot path (a single stat()),
- * read-only-filesystem safe, and never overwrites a manual `npm run dev-app` build.
+ * call {@see ensureExtracted()}. It is idempotent, read-only-filesystem safe, and never
+ * overwrites a manual `npm run dev-app` build.
+ *
+ * The freshness decision is based on whether the expanded build is actually present and on
+ * the archive filename (the id is a content hash, so name match == content match) — never
+ * on file mtimes, which are not stable across checkouts/deploys.
  *
  * @internal
  */
 final class BuildArchiveExtractor
 {
     /**
-     * Marker written by — and only by — this extractor into the target directory. A manual
-     * `npm run dev-app` wipes the build directory and never recreates it, so its absence
-     * (next to an existing build) is what identifies a developer's manual build.
+     * State file recording which archive the expanded build was extracted from. Written by
+     * — and only by — this extractor, so its absence next to an existing build identifies a
+     * manual (`npm run dev-app`) build. It lives inside the build dir and is replaced
+     * atomically with the build, so it cannot become orphaned by a normal rebuild.
      */
-    private const MARKER = '.extracted.json';
+    private const MARKER = 'extracted-archive.json';
 
     /**
      * The logger is optional so the trait's dev/`git pull` fallback can instantiate the
@@ -47,78 +52,52 @@ final class BuildArchiveExtractor
 
     public function ensureExtracted(string $archiveGlob, string $targetDir): void
     {
-        // 1. No archive shipped -> rely on whatever build is present.
-        $archivePath = $this->latestArchive($archiveGlob);
+        $archivePath = $this->selectArchive($archiveGlob);
         if ($archivePath === null) {
-            return;
+            return; // no archive shipped -> rely on whatever build is present
         }
 
-        $signature = $this->archiveSignature($archivePath);
-        if ($signature === null) {
-            return;
+        $archiveName = basename($archivePath);
+
+        if ($this->hasExpandedBuild($targetDir)) {
+            $marker = $this->readMarker($targetDir);
+            if ($marker === null) {
+                return; // a manually built frontend (no marker) -> never clobber it
+            }
+            if ($marker === $archiveName) {
+                return; // already extracted from exactly this archive
+            }
+            // marker refers to a different archive -> stale extracted build, refresh it
         }
 
-        // 2. Already extracted from this exact archive -> nothing to do (hot path).
-        if ($this->markerMatches($targetDir, $signature)) {
-            return;
-        }
-
-        // 3. A build exists but was not produced by us (manual dev-app build) -> never clobber.
-        if (!is_file($targetDir . '/' . self::MARKER) && $this->hasExpandedBuild($targetDir)) {
-            return;
-        }
-
-        // 4. Empty, or extracted from a previous archive (new bundle state / composer update).
-        $this->extract($archivePath, $targetDir, $signature);
+        // No expanded build present (fresh, or a leftover marker only), or a stale build.
+        $this->extract($archivePath, $targetDir, $archiveName);
     }
 
     /**
-     * Resolve the newest archive matching the glob (so a leftover older archive never wins).
+     * The committed archive should be unique. If several match (a packaging or merge
+     * problem), pick deterministically by name and warn — content-hash names carry no
+     * chronology, so there is no reliable "newest" to choose anyway.
      */
-    private function latestArchive(string $archiveGlob): ?string
+    private function selectArchive(string $archiveGlob): ?string
     {
-        $candidates = array_filter(glob($archiveGlob) ?: [], 'is_file');
+        $candidates = array_values(array_filter(glob($archiveGlob) ?: [], 'is_file'));
         if ($candidates === []) {
             return null;
         }
-
-        usort($candidates, static function (string $a, string $b): int {
-            // newest mtime first; tie-break on name for stability
-            return (filemtime($b) <=> filemtime($a)) ?: strcmp($b, $a);
-        });
-
-        return $candidates[0];
-    }
-
-    /**
-     * @return array{mtime: int, size: int, name: string}|null
-     */
-    private function archiveSignature(string $archivePath): ?array
-    {
-        $stat = @stat($archivePath);
-        if ($stat === false) {
-            return null;
+        if (count($candidates) === 1) {
+            return $candidates[0];
         }
 
-        return ['mtime' => $stat['mtime'], 'size' => $stat['size'], 'name' => basename($archivePath)];
-    }
+        sort($candidates);
+        $chosen = $candidates[count($candidates) - 1];
+        $this->logger?->warning(
+            'Multiple Studio frontend build archives match "{glob}" ({count}); using "{chosen}". '
+            . 'Exactly one should be committed — check for a packaging or merge problem.',
+            ['glob' => $archiveGlob, 'count' => count($candidates), 'chosen' => basename($chosen)]
+        );
 
-    /**
-     * @param array{mtime: int, size: int, name: string} $signature
-     */
-    private function markerMatches(string $targetDir, array $signature): bool
-    {
-        $markerFile = $targetDir . '/' . self::MARKER;
-        if (!is_file($markerFile)) {
-            return false;
-        }
-
-        $marker = json_decode((string) @file_get_contents($markerFile), true);
-
-        return is_array($marker)
-            && ($marker['mtime'] ?? null) === $signature['mtime']
-            && ($marker['size'] ?? null) === $signature['size']
-            && ($marker['name'] ?? null) === $signature['name'];
+        return $chosen;
     }
 
     private function hasExpandedBuild(string $targetDir): bool
@@ -126,22 +105,34 @@ final class BuildArchiveExtractor
         return $targetDir !== '' && glob($targetDir . '/*/entrypoints.json') !== [];
     }
 
-    /**
-     * @param array{mtime: int, size: int, name: string} $signature
-     */
-    private function extract(string $archivePath, string $targetDir, array $signature): void
+    private function readMarker(string $targetDir): ?string
     {
+        $markerFile = $targetDir . '/' . self::MARKER;
+        if (!is_file($markerFile)) {
+            return null;
+        }
+
+        $data = json_decode((string) @file_get_contents($markerFile), true);
+
+        return is_array($data) && isset($data['archive']) && is_string($data['archive'])
+            ? $data['archive']
+            : null;
+    }
+
+    private function extract(string $archivePath, string $targetDir, string $archiveName): void
+    {
+        $startedAt = hrtime(true); // TEMP: measure extraction duration (remove before merge)
         $parent = dirname($targetDir);
 
         // Read-only filesystem (e.g. production runtime): the build was already provisioned
         // at deploy. We need the parent writable to create the temp dir and rename it in.
-        // Reaching here means extraction is actually needed (the marker did not match), so an
-        // unwritable target is worth surfacing — it can mean assets end up missing or stale.
+        // Reaching here means extraction is actually needed, so an unwritable target is worth
+        // surfacing — it can mean assets end up missing or stale.
         if (!is_dir($parent) || !is_writable($parent) || (is_dir($targetDir) && !is_writable($targetDir))) {
             $this->logger?->warning(
                 'Studio frontend build archive "{archive}" needs extraction but "{target}" is not writable; '
                 . 'serving the build already present, if any.',
-                ['archive' => basename($archivePath), 'target' => $targetDir]
+                ['archive' => $archiveName, 'target' => $targetDir]
             );
 
             return;
@@ -154,7 +145,7 @@ final class BuildArchiveExtractor
 
         try {
             // Another process may have extracted while we waited for the lock.
-            if ($this->markerMatches($targetDir, $signature)) {
+            if ($this->hasExpandedBuild($targetDir) && $this->readMarker($targetDir) === $archiveName) {
                 return;
             }
 
@@ -173,7 +164,7 @@ final class BuildArchiveExtractor
                 if (!$this->unzip($archivePath, $tmpDir)) {
                     $this->logger?->error(
                         'Failed to unpack Studio frontend build archive "{archive}".',
-                        ['archive' => basename($archivePath)]
+                        ['archive' => $archiveName]
                     );
 
                     return;
@@ -181,13 +172,18 @@ final class BuildArchiveExtractor
 
                 file_put_contents(
                     $tmpDir . '/' . self::MARKER,
-                    json_encode($signature, JSON_THROW_ON_ERROR)
+                    json_encode(['archive' => $archiveName], JSON_THROW_ON_ERROR)
                 );
 
                 if ($this->swapIntoPlace($tmpDir, $targetDir, $parent)) {
                     $this->logger?->info(
                         'Extracted Studio frontend build archive "{archive}" into "{target}".',
-                        ['archive' => basename($archivePath), 'target' => $targetDir]
+                        ['archive' => $archiveName, 'target' => $targetDir]
+                    );
+                    // TEMP: measure extraction duration (remove before merge)
+                    $this->logger?->notice(
+                        '[TEMP] Studio build extraction of "{archive}" took {ms} ms.',
+                        ['archive' => $archiveName, 'ms' => round((hrtime(true) - $startedAt) / 1e6, 1)]
                     );
                 } else {
                     $this->logger?->warning(
@@ -222,7 +218,7 @@ final class BuildArchiveExtractor
      * Replace $targetDir with the freshly extracted $tmpDir in one rename, so the new tree
      * and its marker appear together and any stale build dirs are gone in a single step.
      */
-    private function swapIntoPlace(string $tmpDir, string $targetDir, string $parent): void
+    private function swapIntoPlace(string $tmpDir, string $targetDir, string $parent): bool
     {
         $backup = null;
         if (is_dir($targetDir)) {
@@ -239,12 +235,14 @@ final class BuildArchiveExtractor
                 @rename($backup, $targetDir);
             }
 
-            return;
+            return false;
         }
 
         if ($backup !== null) {
             $this->removeDirectory($backup);
         }
+
+        return true;
     }
 
     /**
