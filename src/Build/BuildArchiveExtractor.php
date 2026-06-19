@@ -54,7 +54,7 @@ final class BuildArchiveExtractor
     {
         $archivePath = $this->selectArchive($archiveGlob);
         if ($archivePath === null) {
-            return; // no archive shipped -> rely on whatever build is present
+            return;
         }
 
         $archiveName = basename($archivePath);
@@ -65,12 +65,12 @@ final class BuildArchiveExtractor
                 return; // a manually built frontend (no marker) -> never clobber it
             }
             if ($marker === $archiveName) {
-                return; // already extracted from exactly this archive
+                return;
             }
-            // marker refers to a different archive -> stale extracted build, refresh it
+            // marker names a different archive: stale extracted build, fall through to refresh
         }
 
-        // No expanded build present (fresh, or a leftover marker only), or a stale build.
+        // No build present (fresh, or only a leftover marker), or a stale one -> (re)extract.
         $this->extract($archivePath, $targetDir, $archiveName);
     }
 
@@ -176,10 +176,8 @@ final class BuildArchiveExtractor
     {
         $parent = dirname($targetDir);
 
-        // Read-only filesystem (e.g. production runtime): the build was already provisioned
-        // at deploy. We need the parent writable to create the temp dir and rename it in.
-        // Reaching here means extraction is actually needed, so an unwritable target is worth
-        // surfacing — it can mean assets end up missing or stale.
+        // Extraction is needed but the target is read-only (e.g. production runtime, already
+        // provisioned at deploy): warn and keep whatever build is present.
         if (!is_dir($parent) || !is_writable($parent) || (is_dir($targetDir) && !is_writable($targetDir))) {
             $this->logger?->warning(
                 'Studio frontend build archive "{archive}" needs extraction but "{target}" is not writable; '

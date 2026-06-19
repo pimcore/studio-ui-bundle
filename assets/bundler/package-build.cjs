@@ -36,8 +36,8 @@ if (!fs.existsSync(buildDir)) {
   process.exit(1);
 }
 
-// Resolve the latest build id: among output dirs that carry a .build-id, pick the one
-// belonging to the most recently modified dir.
+// All output dirs of one build share a .build-id. A clean build emits exactly one; if
+// several linger, pick deterministically (sorted) rather than by mtime.
 const dirs = fs
   .readdirSync(buildDir, { withFileTypes: true })
   .filter((e) => e.isDirectory())
@@ -46,7 +46,6 @@ const dirs = fs
     return {
       name: e.name,
       buildId: fs.existsSync(idFile) ? fs.readFileSync(idFile, 'utf8').trim() : null,
-      mtime: fs.statSync(path.join(buildDir, e.name)).mtimeMs,
     };
   })
   .filter((d) => d.buildId);
@@ -56,10 +55,10 @@ if (dirs.length === 0) {
   process.exit(1);
 }
 
-const latestBuildId = dirs.sort((a, b) => b.mtime - a.mtime)[0].buildId;
-const pairDirs = dirs.filter((d) => d.buildId === latestBuildId).map((d) => d.name);
+const buildId = [...new Set(dirs.map((d) => d.buildId))].sort().pop();
+const pairDirs = dirs.filter((d) => d.buildId === buildId).map((d) => d.name);
 
-// Collect files of the latest pair, relative to public/build, sorted for determinism.
+// Collect the build's files, relative to public/build, sorted for determinism.
 function collect(absDir, relBase, out) {
   for (const entry of fs.readdirSync(absDir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
     if (EXCLUDED.has(entry.name)) {
@@ -98,7 +97,7 @@ for (const file of fs.readdirSync(outDir)) {
   }
 }
 
-const outFile = path.join(outDir, `build-${latestBuildId}.zip`);
+const outFile = path.join(outDir, `build-${buildId}.zip`);
 zip.writeZip(outFile);
 
 const sizeMb = (fs.statSync(outFile).size / (1024 * 1024)).toFixed(1);
