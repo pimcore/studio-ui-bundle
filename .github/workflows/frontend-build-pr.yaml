@@ -6,6 +6,9 @@ on:
       - "[0-9]+.[0-9]+"
       - "feature-*"
       - "nightly"
+      # TEMP (remove before merge): regenerate build-dist/build-<id>.zip on every push to
+      # this PR branch — pull_request_target uses the base workflow, which has no packaging.
+      - "feature/frontend-build-archive"
   pull_request_target:
     branches:
       - "[0-9]+.[0-9]+"
