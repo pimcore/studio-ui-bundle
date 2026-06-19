@@ -17,8 +17,8 @@
  *   is deterministic (content-derived), so identical source produces the same id, the same
  *   archive contents and — with the fixed entry order/timestamps below — the same bytes, so
  *   git sees no change when nothing actually changed.
- * - Only the dirs of the latest build (matching the newest `.build-id`) are packaged, so a
- *   dev tree containing several builds still yields a single-pair archive.
+ * - Only the dirs of one build (a single `.build-id`, chosen deterministically) are
+ *   packaged, so a dev tree containing several builds still yields a single-pair archive.
  * - Any previous build-*.zip is removed, so only the latest archive is ever tracked.
  */
 const path = require('node:path');

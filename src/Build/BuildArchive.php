@@ -17,8 +17,9 @@ namespace Pimcore\Bundle\StudioUiBundle\Build;
  * Describes the committed frontend build archive(s) and where their contents must be
  * reconstructed so they can be served at the URL baked into the build.
  *
- * `archiveGlob` matches one or more `build-<id>.zip` files; the newest one is used, so a
- * leftover older archive never wins.
+ * `archiveGlob` matches the committed `build-<id>.zip`; normally exactly one exists. If
+ * several happen to match, the extractor picks one deterministically (the id is a content
+ * hash, not a date, so there is no "newest" to choose).
  *
  * @internal
  */
