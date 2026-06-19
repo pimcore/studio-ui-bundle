@@ -13,18 +13,30 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\StudioUiBundle\Build;
 
+use Symfony\Contracts\Service\Attribute\Required;
+
 /**
  * Reusable implementation for entry point providers whose frontend ships as a committed
  * archive. Implements {@see BuildArchiveProviderInterface::getBuildArchive()} and the
  * {@see \Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProviderInterface::getEntryPointsJsonLocations()}
  * glob, extracting the archive on demand first (a no-op in read-only production).
  *
- * The using class only has to supply its own paths via {@see buildArchive()}.
+ * The using class only has to supply its own paths via {@see buildArchive()}. The extractor
+ * is injected via #[Required] setter autowiring, so the using provider must be an autowired
+ * service (the studio providers are).
  *
  * @internal
  */
 trait BuildArchiveExtractionTrait
 {
+    private BuildArchiveExtractor $buildArchiveExtractor;
+
+    #[Required]
+    public function setBuildArchiveExtractor(BuildArchiveExtractor $buildArchiveExtractor): void
+    {
+        $this->buildArchiveExtractor = $buildArchiveExtractor;
+    }
+
     abstract protected function buildArchive(): BuildArchive;
 
     public function getBuildArchive(): ?BuildArchive
@@ -36,7 +48,7 @@ trait BuildArchiveExtractionTrait
     {
         $archive = $this->buildArchive();
 
-        (new BuildArchiveExtractor())->ensureExtracted($archive->archiveGlob, $archive->targetDir);
+        $this->buildArchiveExtractor->ensureExtracted($archive->archiveGlob, $archive->targetDir);
 
         return glob($archive->targetDir . '/*/entrypoints.json') ?: [];
     }
