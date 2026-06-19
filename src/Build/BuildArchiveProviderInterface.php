@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\StudioUiBundle\Build;
 
+use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProviderInterface;
+
 /**
  * Opt-in contract for entry point providers that ship their compiled frontend as a
  * committed archive instead of an expanded build directory. The cache warmer discovers
  * these providers and extracts their archives while the filesystem is still writable.
  */
-interface BuildArchiveProviderInterface
+interface BuildArchiveProviderInterface extends WebpackEntryPointProviderInterface
 {
     public function getBuildArchive(): ?BuildArchive;
 }

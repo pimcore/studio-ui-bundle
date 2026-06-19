@@ -20,7 +20,7 @@ use Pimcore\Bundle\StudioUiBundle\Build\BuildArchiveProviderInterface;
 /**
  * @internal
  */
-final class WebpackEntryPointProvider implements WebpackEntryPointProviderInterface, BuildArchiveProviderInterface
+final class WebpackEntryPointProvider implements BuildArchiveProviderInterface
 {
     use BuildArchiveExtractionTrait;
 

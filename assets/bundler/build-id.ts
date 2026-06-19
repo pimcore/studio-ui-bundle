@@ -45,7 +45,7 @@ function sourceFingerprint(): string | null {
 
   // Fallback: hash the dependency + manifest files (still deterministic).
   try {
-    const hash = createHash('sha1');
+    const hash = createHash('sha256');
     for (const file of ['package-lock.json', 'package.json']) {
       const p = path.resolve(__dirname, '..', file);
       if (fs.existsSync(p)) {
@@ -61,7 +61,7 @@ function sourceFingerprint(): string | null {
 }
 
 function short(input: string): string {
-  return createHash('sha1').update(input).digest('hex').slice(0, 12);
+  return createHash('sha256').update(input).digest('hex').slice(0, 12);
 }
 
 /**
