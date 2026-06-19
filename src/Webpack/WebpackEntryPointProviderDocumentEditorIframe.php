@@ -20,9 +20,8 @@ use Pimcore\Bundle\StudioUiBundle\Build\BuildArchiveProviderInterface;
 /**
  * @internal
  */
-final class WebpackEntryPointProviderDocumentEditorIframe implements
-    WebpackEntryPointProviderInterface,
-    BuildArchiveProviderInterface
+final class WebpackEntryPointProviderDocumentEditorIframe
+    implements WebpackEntryPointProviderInterface, BuildArchiveProviderInterface
 {
     use BuildArchiveExtractionTrait;
 
