@@ -75,6 +75,50 @@ final class BuildArchiveExtractor
     }
 
     /**
+     * Entry point JSON locations of the build currently active in $targetDir.
+     *
+     * A build emits multiple dirs (SDK + app) sharing one `.build-id`; normally exactly one
+     * build is present. If several are (a dev anomaly), the build the extractor recorded as
+     * installed (extracted-archive.json) wins, otherwise a deterministic choice — never file
+     * mtimes, which are not stable across checkouts/deploys. Falls back to all locations when
+     * no build ids are present (legacy builds).
+     *
+     * @return string[]
+     */
+    public function entryPointLocations(string $targetDir): array
+    {
+        $locations = glob($targetDir . '/*/entrypoints.json') ?: [];
+        if ($locations === []) {
+            return [];
+        }
+
+        $byBuildId = [];
+        foreach ($locations as $location) {
+            $idFile = dirname($location) . '/.build-id';
+            $buildId = is_file($idFile) ? trim((string) @file_get_contents($idFile)) : '';
+            if ($buildId !== '') {
+                $byBuildId[$buildId][] = $location;
+            }
+        }
+
+        if ($byBuildId === []) {
+            return $locations;
+        }
+        if (count($byBuildId) === 1) {
+            return reset($byBuildId);
+        }
+
+        $activeBuildId = $this->markerBuildId($targetDir);
+        if ($activeBuildId !== null && isset($byBuildId[$activeBuildId])) {
+            return $byBuildId[$activeBuildId];
+        }
+
+        ksort($byBuildId);
+
+        return $byBuildId[array_key_last($byBuildId)];
+    }
+
+    /**
      * The committed archive should be unique. If several match (a packaging or merge
      * problem), pick deterministically by name and warn — content-hash names carry no
      * chronology, so there is no reliable "newest" to choose anyway.
@@ -116,6 +160,15 @@ final class BuildArchiveExtractor
 
         return is_array($data) && isset($data['archive']) && is_string($data['archive'])
             ? $data['archive']
+            : null;
+    }
+
+    private function markerBuildId(string $targetDir): ?string
+    {
+        $archive = $this->readMarker($targetDir);
+
+        return $archive !== null && preg_match('/^build-(.+)\.zip$/', $archive, $matches) === 1
+            ? $matches[1]
             : null;
     }
 

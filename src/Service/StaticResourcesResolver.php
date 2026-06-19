@@ -95,8 +95,7 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
         foreach ($entryPointProviders as $entryPointProvider) {
             $entryPointJsonContents = [];
 
-            $locations = $this->selectActiveBuildLocations($entryPointProvider->getEntryPointsJsonLocations());
-            foreach ($locations as $entryPointsJsonLocation) {
+            foreach ($entryPointProvider->getEntryPointsJsonLocations() as $entryPointsJsonLocation) {
                 $entryPointJsonContents[] = $this->getEntryPointsJsonContent($entryPointsJsonLocation);
             }
 
@@ -130,75 +129,6 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
         }
 
         return $files;
-    }
-
-    /**
-     * A single build emits multiple dirs (e.g. the SDK and app builds), all sharing one
-     * `.build-id`. Normally exactly one build is present. If several are (a dev anomaly),
-     * serve the dirs of the build the extractor actually installed (per the
-     * `extracted-archive.json` marker); otherwise fall back to a deterministic choice — never
-     * file mtimes, which are not stable across checkouts/deploys. Falls back to all locations
-     * when no build ids are present (legacy builds).
-     *
-     * @param string[] $locations
-     *
-     * @return string[]
-     */
-    private function selectActiveBuildLocations(array $locations): array
-    {
-        $byBuildId = [];
-        foreach ($locations as $location) {
-            $idFile = dirname($location) . '/.build-id';
-            if (!is_file($idFile)) {
-                continue;
-            }
-
-            $buildId = trim((string) @file_get_contents($idFile));
-            if ($buildId !== '') {
-                $byBuildId[$buildId][] = $location;
-            }
-        }
-
-        if ($byBuildId === []) {
-            return $locations;
-        }
-        if (count($byBuildId) === 1) {
-            return reset($byBuildId);
-        }
-
-        $activeBuildId = $this->extractedBuildId($locations);
-        if ($activeBuildId !== null && isset($byBuildId[$activeBuildId])) {
-            return $byBuildId[$activeBuildId];
-        }
-
-        ksort($byBuildId);
-
-        return $byBuildId[array_key_last($byBuildId)];
-    }
-
-    /**
-     * Build id the extractor recorded as installed, read from public/build/extracted-archive.json
-     * (`build-<id>.zip` -> `<id>`), or null for a manually built / legacy tree.
-     *
-     * @param string[] $locations
-     */
-    private function extractedBuildId(array $locations): ?string
-    {
-        if ($locations === []) {
-            return null;
-        }
-
-        $marker = dirname($locations[0], 2) . '/extracted-archive.json';
-        if (!is_file($marker)) {
-            return null;
-        }
-
-        $data = json_decode((string) @file_get_contents($marker), true);
-        $archive = is_array($data) ? ($data['archive'] ?? null) : null;
-
-        return is_string($archive) && preg_match('/^build-(.+)\.zip$/', $archive, $matches) === 1
-            ? $matches[1]
-            : null;
     }
 
     private function getEntryPoints(WebpackEntryPointProviderInterface $entryPointProvider): array

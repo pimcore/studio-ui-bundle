@@ -50,6 +50,6 @@ trait BuildArchiveExtractionTrait
 
         $this->buildArchiveExtractor->ensureExtracted($archive->archiveGlob, $archive->targetDir);
 
-        return glob($archive->targetDir . '/*/entrypoints.json') ?: [];
+        return $this->buildArchiveExtractor->entryPointLocations($archive->targetDir);
     }
 }
