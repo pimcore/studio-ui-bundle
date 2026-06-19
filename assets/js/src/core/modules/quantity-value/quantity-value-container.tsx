@@ -18,7 +18,7 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { Box, IconTextButton, Pagination, SearchInput, Split, Headline } from '@sdk/components'
+import { Box, IconTextButton, Pagination, SearchInput, Split, Header } from '@sdk/components'
 import { uuid } from '@sdk/utils'
 import { isNil, isUndefined } from 'lodash'
 import React, { useEffect, useMemo, useState } from 'react'
@@ -209,7 +209,7 @@ export const QuantityValueContainer = (): React.JSX.Element => {
               )}
         </Toolbar> }
       renderTopBar={
-        <Headline >
+        <Header >
           <Flex gap='extra-small'>
             <Title>{t('widget.quantity-values')}</Title>
             <IconTextButton
@@ -229,7 +229,7 @@ export const QuantityValueContainer = (): React.JSX.Element => {
             withPrefix={ false }
             withoutAddon={ false }
           />
-        </Headline>
+        </Header>
       }
     >
       <Content

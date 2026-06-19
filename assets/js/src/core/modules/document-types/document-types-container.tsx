@@ -19,7 +19,7 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Title } from '@Pimcore/components/title/title'
 import { Content } from '@Pimcore/components/content/content'
-import { Box, IconButton, IconTextButton, Headline } from '@sdk/components'
+import { Box, IconButton, IconTextButton, Header } from '@sdk/components'
 import { uuid } from '@sdk/utils'
 import { isUndefined } from 'lodash'
 import { Table } from './table/table'
@@ -87,7 +87,7 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
           ></IconButton>
         </Toolbar> }
       renderTopBar={
-        <Headline >
+        <Header >
           <Flex gap='extra-small'>
             <Title>{t('widget.document-types')}</Title>
             <IconTextButton
@@ -97,7 +97,7 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
               onClick={ onCreateDocumentType }
             >{t('document-types.new')}</IconTextButton>
           </Flex>
-        </Headline>
+        </Header>
         }
     >
       <Content

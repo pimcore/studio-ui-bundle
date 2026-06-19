@@ -16,7 +16,7 @@ import { FormKit } from '@Pimcore/components/form/form-kit'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { Space } from '@Pimcore/components/space/space'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { Headline } from '@Pimcore/components/toolbar/headline'
+import { Header } from '@Pimcore/components/header/header'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { Title } from '@Pimcore/components/title/title'
 import React from 'react'
@@ -74,9 +74,9 @@ export const AppearanceForm = (): React.JSX.Element => {
         justify="space-between"
         vertical
       >
-        <Headline >
+        <Header >
           <Title>{t('appearance-branding.title')}</Title>
-        </Headline>
+        </Header>
 
         <Content
           padded

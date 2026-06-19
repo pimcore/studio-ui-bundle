@@ -8,17 +8,18 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Headline } from '@Pimcore/components/toolbar/headline'
+import { Header } from '@Pimcore/components/header/header'
 import { type StoryObj, type Meta } from '@storybook/react'
 import React from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Title } from '@Pimcore/components/title/title'
+import { Icon } from '@Pimcore/components/icon/icon'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 
 const config: Meta = {
-  title: 'Components/Layout/Headline',
-  component: Headline,
+  title: 'Components/Layout/Header',
+  component: Header,
   parameters: {
     layout: 'fullscreen'
   },
@@ -27,9 +28,19 @@ const config: Meta = {
 
 export default config
 
-type Story = StoryObj<typeof Headline>
+type Story = StoryObj<typeof Header>
+
+// Toolbar row — no title prop, children fill the full width
 
 export const _default: Story = {
+  args: {
+    children: (
+      <Title>Tag Configuration</Title>
+    )
+  }
+}
+
+export const WithActions: Story = {
   args: {
     children: (
       <>
@@ -49,17 +60,24 @@ export const _default: Story = {
   }
 }
 
-export const Simple: Story = {
+export const WithActionsAndBorder: Story = {
   args: {
-    children: (
-      <Title>Tag Configuration</Title>
-    )
+    ...WithActions.args,
+    position: 'top'
   }
 }
 
-export const WithBorder: Story = {
+// Simple header — title prop, fixed 32px height
+
+export const OnlyTitle: Story = {
   args: {
-    ..._default.args,
-    position: 'top'
+    title: 'Asset Details'
+  }
+}
+
+export const OnlyTitleWithIcon: Story = {
+  args: {
+    title: 'Dependencies',
+    icon: <Icon value={ 'requires' } />
   }
 }

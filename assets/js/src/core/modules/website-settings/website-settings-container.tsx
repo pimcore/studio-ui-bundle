@@ -16,7 +16,7 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
-import { Box, Button, Form, IconTextButton, Input, ModalFooter, Pagination, SearchInput, Select, useModal, Headline } from '@sdk/components'
+import { Box, Button, Form, IconTextButton, Input, ModalFooter, Pagination, SearchInput, Select, useModal, Header } from '@sdk/components'
 import trackError, { ApiError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { isUndefined } from 'lodash'
@@ -210,7 +210,7 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
           />
         </Toolbar> }
       renderTopBar={
-        <Headline >
+        <Header >
           <Flex gap='extra-small'>
             <Title>{t('widget.website-settings')}</Title>
             <Form
@@ -259,7 +259,7 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
             withPrefix={ false }
             withoutAddon={ false }
           />
-        </Headline>
+        </Header>
         }
     >
       <Content

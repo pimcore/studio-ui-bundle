@@ -17,7 +17,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { Headline } from '@Pimcore/components/toolbar/headline'
+import { Header } from '@Pimcore/components/header/header'
 import { api } from '@Pimcore/modules/email/emails-api-slice-enhanced'
 import { isUndefined } from 'lodash'
 import React, { useEffect, useState } from 'react'
@@ -79,7 +79,7 @@ export const EmailLogContainer = (): React.JSX.Element => {
         </Toolbar>
       }
       renderTopBar={
-        <Headline
+        <Header
           position='top'
         >
           <Flex gap='extra-small'>
@@ -87,7 +87,7 @@ export const EmailLogContainer = (): React.JSX.Element => {
               {t('widget.email-log')}
             </Title>
           </Flex>
-        </Headline>
+        </Header>
       }
     >
       <Content

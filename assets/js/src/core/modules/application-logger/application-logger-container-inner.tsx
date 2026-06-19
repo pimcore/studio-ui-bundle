@@ -20,7 +20,7 @@ import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { api } from '@Pimcore/modules/application-logger/application-logger-api-slice-enhanced'
 import { useAppDispatch } from '@sdk/app'
-import { CreatableSelect, Headline } from '@sdk/components'
+import { CreatableSelect, Header } from '@sdk/components'
 import { type SortingState } from '@tanstack/react-table'
 import { isNil } from 'lodash'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -170,9 +170,9 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
         </Toolbar>
       }
       renderTopBar={
-        <Headline >
+        <Header >
           <Title>{t('application-logger.label')}</Title>
-        </Headline>
+        </Header>
       }
     >
       <Content

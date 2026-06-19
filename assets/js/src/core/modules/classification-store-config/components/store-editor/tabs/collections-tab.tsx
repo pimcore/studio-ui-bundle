@@ -27,7 +27,7 @@ import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { Headline } from '@Pimcore/components/toolbar/headline'
+import { Header } from '@Pimcore/components/header/header'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useDebouncedFormChange } from '@Pimcore/components/form/hooks/use-debounced-form-change'
@@ -284,7 +284,7 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
               </Toolbar>
             }
             renderTopBar={
-              <Headline >
+              <Header >
                 <Flex gap='extra-small'>
                   <Title>{t('classification-store.tabs.collections')}</Title>
                   <IconTextButton
@@ -304,7 +304,7 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
                   withPrefix={ false }
                   withoutAddon={ false }
                 />
-              </Headline>
+              </Header>
             }
           >
             <Flex
@@ -362,9 +362,9 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
           : (
             <ContentLayout
               renderTopBar={
-                <Headline >
+                <Header >
                   <Title>{activeCollection.name}</Title>
-                </Headline>
+                </Header>
               }
             >
               <Flex
