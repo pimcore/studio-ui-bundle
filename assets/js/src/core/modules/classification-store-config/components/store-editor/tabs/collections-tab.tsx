@@ -25,8 +25,9 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { type RowSelectionState, type SortingState } from '@tanstack/react-table'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
-import { Header } from '@Pimcore/components/header/header'
+import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { Header } from '@Pimcore/components/header/header'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useDebouncedFormChange } from '@Pimcore/components/form/hooks/use-debounced-form-change'
@@ -283,16 +284,9 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
               </Toolbar>
             }
             renderTopBar={
-              <Flex
-                align="center"
-                justify="space-between"
-                style={ { padding: '8px 16px' } }
-              >
-                <Flex
-                  align="center"
-                  gap="small"
-                >
-                  <Header title={ t('classification-store.tabs.collections') } />
+              <Header >
+                <Flex gap='extra-small'>
+                  <Title>{t('classification-store.tabs.collections')}</Title>
                   <IconTextButton
                     icon={ { value: 'new' } }
                     onClick={ handleAdd }
@@ -307,8 +301,10 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
                     setPage(1)
                   } }
                   placeholder={ t('search') }
+                  withPrefix={ false }
+                  withoutAddon={ false }
                 />
-              </Flex>
+              </Header>
             }
           >
             <Flex
@@ -366,12 +362,9 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
           : (
             <ContentLayout
               renderTopBar={
-                <Flex
-                  align="center"
-                  style={ { padding: '8px 16px' } }
-                >
-                  <Header title={ activeCollection.name } />
-                </Flex>
+                <Header >
+                  <Title>{activeCollection.name}</Title>
+                </Header>
               }
             >
               <Flex
