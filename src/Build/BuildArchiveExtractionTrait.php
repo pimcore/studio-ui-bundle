@@ -44,6 +44,10 @@ trait BuildArchiveExtractionTrait
         return $this->buildArchive();
     }
 
+    /**
+     * @throws \Pimcore\Bundle\StudioUiBundle\Exception\BuildArchiveNotWritableException
+     *     if the build must be extracted but the target is read-only and no build is present
+     */
     public function getEntryPointsJsonLocations(): array
     {
         $archive = $this->buildArchive();

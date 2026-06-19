@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\StudioUiBundle\Build;
 
+use Pimcore\Bundle\StudioUiBundle\Exception\BuildArchiveNotWritableException;
 use Psr\Log\LoggerInterface;
 use ZipArchive;
 
@@ -22,8 +23,9 @@ use ZipArchive;
  *
  * Single source of truth for the extraction decision: both the cache warmer (deploy time,
  * while vendor is writable) and the entry point provider fallback (local dev / git pull)
- * call {@see ensureExtracted()}. It is idempotent, read-only-filesystem safe, and never
- * overwrites a manual `npm run dev-app` build.
+ * call {@see ensureExtracted()}. It is idempotent and never overwrites a manual
+ * `npm run dev-app` build. On a read-only filesystem it keeps serving an already-present
+ * build, or throws {@see BuildArchiveNotWritableException} when there is none to serve.
  *
  * The freshness decision is based on whether the expanded build is actually present and on
  * the archive filename (the id is a content hash, so name match == content match) — never
@@ -176,12 +178,22 @@ final readonly class BuildArchiveExtractor
     {
         $parent = dirname($targetDir);
 
-        // Extraction is needed but the target is read-only (e.g. production runtime, already
-        // provisioned at deploy): warn and keep whatever build is present.
+        // Extraction is needed but the target is read-only (e.g. a deploy that went read-only
+        // before warming the cache). If a build is already present we keep serving it; if not,
+        // there is nothing to serve, so make the cause explicit instead of a vague error later.
         if (!is_dir($parent) || !is_writable($parent) || (is_dir($targetDir) && !is_writable($targetDir))) {
+            if (!$this->hasExpandedBuild($targetDir)) {
+                throw new BuildArchiveNotWritableException(sprintf(
+                    'Cannot extract the Studio frontend build archive "%s": "%s" is not writable and no build is '
+                    . 'present. Run "bin/console cache:warmup" while the filesystem is writable (e.g. during deploy).',
+                    $archiveName,
+                    $targetDir
+                ));
+            }
+
             $this->logger?->warning(
-                'Studio frontend build archive "{archive}" needs extraction but "{target}" is not writable; '
-                . 'serving the build already present, if any.',
+                'Studio frontend build archive "{archive}" needs refreshing but "{target}" is not writable; '
+                . 'serving the build already present.',
                 ['archive' => $archiveName, 'target' => $targetDir]
             );
 

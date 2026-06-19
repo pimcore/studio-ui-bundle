@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\StudioUiBundle\Build;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 use Throwable;
 
@@ -34,6 +35,7 @@ final readonly class StudioBuildCacheWarmer implements CacheWarmerInterface
     public function __construct(
         private iterable $entryPointProviders,
         private BuildArchiveExtractor $extractor,
+        private ?LoggerInterface $logger = null,
     ) {
     }
 
@@ -58,8 +60,11 @@ final readonly class StudioBuildCacheWarmer implements CacheWarmerInterface
 
             try {
                 $this->extractor->ensureExtracted($archive->archiveGlob, $archive->targetDir);
-            } catch (Throwable) {
-                // Extraction is best-effort during warmup; never break cache warmup over it.
+            } catch (Throwable $e) {
+                // Never fail cache warmup over extraction; log so a read-only deploy is visible.
+                $this->logger?->warning('Studio frontend build not extracted during warmup: {reason}', [
+                    'reason' => $e->getMessage(),
+                ]);
             }
         }
 
