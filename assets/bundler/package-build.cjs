@@ -55,7 +55,7 @@ if (dirs.length === 0) {
   process.exit(1);
 }
 
-const buildId = [...new Set(dirs.map((d) => d.buildId))].sort().pop();
+const buildId = [...new Set(dirs.map((d) => d.buildId))].sort((a, b) => a.localeCompare(b)).pop();
 const pairDirs = dirs.filter((d) => d.buildId === buildId).map((d) => d.name);
 
 // Collect the build's files, relative to public/build, sorted for determinism.
@@ -75,7 +75,7 @@ function collect(absDir, relBase, out) {
 }
 
 const files = [];
-for (const dir of pairDirs.sort()) {
+for (const dir of pairDirs) {
   collect(path.join(buildDir, dir), dir, files);
 }
 files.sort((a, b) => a.rel.localeCompare(b.rel));
