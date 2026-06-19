@@ -174,7 +174,6 @@ final class BuildArchiveExtractor
 
     private function extract(string $archivePath, string $targetDir, string $archiveName): void
     {
-        $startedAt = hrtime(true); // TEMP: measure extraction duration (remove before merge)
         $parent = dirname($targetDir);
 
         // Read-only filesystem (e.g. production runtime): the build was already provisioned
@@ -232,11 +231,6 @@ final class BuildArchiveExtractor
                     $this->logger?->info(
                         'Extracted Studio frontend build archive "{archive}" into "{target}".',
                         ['archive' => $archiveName, 'target' => $targetDir]
-                    );
-                    // TEMP: measure extraction duration (remove before merge)
-                    $this->logger?->notice(
-                        '[TEMP] Studio build extraction of "{archive}" took {ms} ms.',
-                        ['archive' => $archiveName, 'ms' => round((hrtime(true) - $startedAt) / 1e6, 1)]
                     );
                 } else {
                     $this->logger?->warning(
