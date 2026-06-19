@@ -31,7 +31,7 @@ use ZipArchive;
  *
  * @internal
  */
-final class BuildArchiveExtractor
+final readonly class BuildArchiveExtractor
 {
     /**
      * State file recording which archive the expanded build was extracted from. Written by
