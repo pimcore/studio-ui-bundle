@@ -39,7 +39,9 @@ final readonly class StudioBuildCacheWarmer implements CacheWarmerInterface
 
     public function isOptional(): bool
     {
-        return true;
+        // Not optional: extraction must run during warmup (the writable deploy phase) rather
+        // than be deferred to the read-only-unsafe lazy fallback in production.
+        return false;
     }
 
     public function warmUp(string $cacheDir, ?string $buildDir = null): array
