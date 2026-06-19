@@ -2757,3 +2757,7 @@ select.clear-selection: Fjern valg
 asset.folder.preview.image-display: Bildevisning
 asset.folder.preview.image-display.small: Liten
 asset.folder.preview.image-display.large: Stor
+saved-search.title: Lagre søk
+saved-search.save-as-new: Lagre som nytt søk
+saved-search.create-menu-shortcut: Opprett snarvei i menyen
+saved-search.save.success: Lagret søk opprettet

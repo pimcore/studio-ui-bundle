@@ -26,6 +26,7 @@ import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '@Pimcore/mo
 import { useDataQueryHelper } from './data-layer/use-data-query-helper'
 import { ClassDefinitionSelectionDecorator, type ClassDefinitionSelectionDecoratorConfig } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/class-definition-selection-decorator'
 import { ColumnConfigurationDecorator } from './decorator/column-configuration/column-configuration-decorator'
+import { SavedSearchDecorator } from '@Pimcore/modules/search/saved-search/saved-search-decorator'
 import { useDataObjectColumnMapper } from '@Pimcore/modules/data-object/listing/column-mapper/use-column-mapper'
 import { LanguageSelectionProvider } from '@Pimcore/components/language-selection/provider/language-selection-provider'
 
@@ -42,6 +43,7 @@ const defaultProps = {
 const listingProps = compose<AbstractDecoratorProps>(
   PagingDecorator,
   ColumnConfigurationDecorator,
+  SavedSearchDecorator,
   TagFilterDecorator,
   [GeneralFiltersDecorator, { handleSearchTermInSidebar: false } as GeneralFiltersDecoratorConfig],
   SortingDecorator,

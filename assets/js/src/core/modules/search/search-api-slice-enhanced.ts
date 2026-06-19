@@ -10,14 +10,23 @@
 
 import { api } from './search-api-slice.gen'
 
-api.enhanceEndpoints({
+const enhancedApi = api.enhanceEndpoints({
+  addTagTypes: ['SavedSearch'],
   endpoints: {
     simpleSearchGet: {
       keepUnusedDataFor: 5
+    },
+    savedSearchSaveConfiguration: {
+      invalidatesTags: ['SavedSearch']
+    },
+    savedSearchGetConfiguration: {
+      providesTags: ['SavedSearch']
     }
   }
 })
 
 export const {
-  useSimpleSearchGetQuery
-} = api
+  useSimpleSearchGetQuery,
+  useSavedSearchSaveConfigurationMutation,
+  useSavedSearchGetConfigurationQuery
+} = enhancedApi

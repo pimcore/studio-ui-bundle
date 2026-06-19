@@ -2757,3 +2757,7 @@ select.clear-selection: Borrar selección
 asset.folder.preview.image-display: Visualización de imágenes
 asset.folder.preview.image-display.small: Pequeño
 asset.folder.preview.image-display.large: Grande
+saved-search.title: Guardar búsqueda
+saved-search.save-as-new: Guardar como nueva búsqueda
+saved-search.create-menu-shortcut: Crear acceso directo en el menú
+saved-search.save.success: Búsqueda guardada creada
