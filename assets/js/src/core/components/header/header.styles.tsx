@@ -29,10 +29,46 @@ export const useStyles = createStyles(({ token, css }) => {
       .header__text {
         white-space: nowrap;
         margin: 0;
-        
+
         h1 {
           margin: 0;
         }
+      }
+
+      &.header--position-top {
+        border-bottom: 1px solid ${token.colorBorderTertiary};
+      }
+
+      &.header--position-bottom {
+        border-top: 1px solid ${token.colorBorderTertiary};
+      }
+
+      &.header--position-content {
+        border-top: 1px solid ${token.colorBorderTertiary};
+        border-bottom: 1px solid ${token.colorBorderTertiary};
+      }
+
+      &.header--border-default {
+        border-color: ${token.colorBorderTertiary};
+      }
+
+      &.header--border-primary {
+        border-color: ${token.colorPrimaryBorder};
+      }
+    `,
+    headlineMode: css`
+      height: auto;
+      min-height: unset;
+      /* paddingXXS (4px) outer + 2px inner buffer = 6px, giving 44px with standard 32px content */
+      padding-top: 6px;
+      padding-bottom: 6px;
+      padding-left: ${token.paddingSM}px;
+      padding-right: ${token.paddingXS}px;
+      background-color: ${token.colorBgBase};
+
+      > * {
+        flex: 1;
+        min-width: 0;
       }
     `
   }

@@ -11,6 +11,7 @@
 import { CurrentConfigurationProvider } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/current-configuration-provider'
 import { CustomLayoutModal, CustomLayoutModalProvider } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/custom-layout-modal'
 import { CustomLayoutModalTrigger } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/custom-layout-modal-trigger'
+import { UnsavedChangesProvider } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/unsaved-changes-provider'
 import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import React from 'react'
 
@@ -19,10 +20,12 @@ export const CustomLayout = (): React.JSX.Element => {
 
   return (
     <CurrentConfigurationProvider configuration={ activeConfiguration }>
-      <CustomLayoutModalProvider>
-        <CustomLayoutModal />
-        <CustomLayoutModalTrigger />
-      </CustomLayoutModalProvider>
+      <UnsavedChangesProvider>
+        <CustomLayoutModalProvider>
+          <CustomLayoutModal />
+          <CustomLayoutModalTrigger />
+        </CustomLayoutModalProvider>
+      </UnsavedChangesProvider>
     </CurrentConfigurationProvider>
   )
 }

@@ -17,6 +17,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { Header } from '@Pimcore/components/header/header'
 import { api } from '@Pimcore/modules/email/emails-api-slice-enhanced'
 import { isUndefined } from 'lodash'
 import React, { useEffect, useState } from 'react'
@@ -78,20 +79,15 @@ export const EmailLogContainer = (): React.JSX.Element => {
         </Toolbar>
       }
       renderTopBar={
-        <Toolbar
-          justify='space-between'
-          padding={ {
-            left: 'small',
-            right: 'extra-small'
-          } }
-          theme='secondary'
+        <Header
+          position='top'
         >
-          <Flex gap={ 'small' }>
+          <Flex gap='extra-small'>
             <Title>
               {t('widget.email-log')}
             </Title>
           </Flex>
-        </Toolbar>
+        </Header>
       }
     >
       <Content

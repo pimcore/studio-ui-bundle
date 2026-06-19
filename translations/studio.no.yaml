@@ -12,6 +12,7 @@ widget.missing-context.description: Ingen relatert element funnet
 widget.missing-tab-context.description: Denne funksjonen støttes ikke for det relaterte elementet
 block: Blokk
 error.error_something_generic_went_wrong: Noe gikk galt
+error.error_permission_denied: Du har ikke tillatelse til å utføre denne handlingen på dette elementet.
 error.syntax_error: Syntaksfeil
 error.error_element_exists: Elementet finnes allerede
 error.error_folder_exists: Mappen finnes allerede
@@ -95,6 +96,16 @@ document.document-tree.title: Dokumenttre
 document.document-tree.search: Søk i {{folderName}}
 document.editable.inheritance.overwrite: Overskriv
 document.editable.inheritance.tooltip: Arvet fra innholdshoveddokument. Klikk for å overskrive.
+areablock.move-above: Flytt opp
+areablock.move-below: Flytt ned
+areablock.show: Vis
+areablock.hide: Skjul
+areablock.new: Ny
+areablock.copy: Kopier
+areablock.paste: Lim inn
+areablock.cut: Klipp ut
+areablock.settings: Innstillinger
+areablock.delete: Slett
 document.link.target: Lenke-mål
 document.hardlink.source: Kildedokument
 document.hardlink.properties-from-source: Bruk egenskaper fra kildedokument
@@ -128,7 +139,7 @@ save-and-continue: Lagre og fortsett
 discard-and-continue: Forkast og fortsett
 discard-changes: Forkast endringer
 unsaved-changes.title: Ulagrede endringer
-unsaved-changes.message: Du har ulagrede endringer. Hva vil du gjøre?
+unsaved-changes.message: Du har ulagrede endringer. Hvis du fortsetter uten å lagre, går disse endringene tapt.
 unsaved-changes.close-message: Du har ulagrede endringer. Er du sikker på at du vil lukke uten å lagre?
 convert-to: Konverter til
 convert-document: Konverter dokument

@@ -12,6 +12,7 @@ widget.missing-context.description: Kein zugehöriges Element gefunden
 widget.missing-tab-context.description: Diese Funktion wird für das zugehörige Element nicht unterstützt
 block: Block
 error.error_something_generic_went_wrong: Etwas ist schiefgelaufen
+error.error_permission_denied: Sie haben keine Berechtigung, diese Aktion für dieses Element durchzuführen.
 error.syntax_error: Syntaxfehler
 error.error_element_exists: Element existiert bereits
 error.error_folder_exists: Ordner existiert bereits
@@ -95,6 +96,16 @@ document.document-tree.title: Dokument-Baum
 document.document-tree.search: Suche in {{folderName}}
 document.editable.inheritance.overwrite: Überschreiben
 document.editable.inheritance.tooltip: Geerbt vom Content-Main-Dokument. Klicken zum Überschreiben.
+areablock.move-above: Nach oben verschieben
+areablock.move-below: Nach unten verschieben
+areablock.show: Einblenden
+areablock.hide: Ausblenden
+areablock.new: Neu
+areablock.copy: Kopieren
+areablock.paste: Einfügen
+areablock.cut: Ausschneiden
+areablock.settings: Einstellungen
+areablock.delete: Löschen
 document.link.target: Link-Ziel
 document.hardlink.source: Quelldokument
 document.hardlink.properties-from-source: Eigenschaften vom Quelldokument verwenden
@@ -128,7 +139,7 @@ save-and-continue: Speichern und fortfahren
 discard-and-continue: Verwerfen und fortfahren
 discard-changes: Änderungen verwerfen
 unsaved-changes.title: Ungespeicherte Änderungen
-unsaved-changes.message: Sie haben ungespeicherte Änderungen. Was möchten Sie tun?
+unsaved-changes.message: Sie haben ungespeicherte Änderungen. Wenn Sie fortfahren, ohne zu speichern, gehen diese Änderungen verloren.
 unsaved-changes.close-message: Sie haben ungespeicherte Änderungen. Sind Sie sicher, dass Sie ohne Speichern schließen möchten?
 convert-to: Konvertieren zu
 convert-document: Dokument konvertieren
