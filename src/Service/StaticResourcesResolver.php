@@ -153,7 +153,11 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
 
             $buildId = trim((string) @file_get_contents($idFile));
             if ($buildId !== '') {
-                $withId[] = ['location' => $location, 'buildId' => $buildId, 'mtime' => @filemtime(dirname($location)) ?: 0];
+                $withId[] = [
+                    'location' => $location,
+                    'buildId' => $buildId,
+                    'mtime' => @filemtime(dirname($location)) ?: 0,
+                ];
             }
         }
 

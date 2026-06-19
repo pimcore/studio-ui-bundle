@@ -215,7 +215,7 @@ final class BuildArchiveExtractor
      */
     private function acquireLock(string $targetDir)
     {
-        $lockFile = sys_get_temp_dir() . '/studio-build-extract-' . md5($targetDir) . '.lock';
+        $lockFile = sys_get_temp_dir() . '/studio-build-extract-' . hash('sha256', $targetDir) . '.lock';
         $handle = @fopen($lockFile, 'c');
         if ($handle === false) {
             return null;

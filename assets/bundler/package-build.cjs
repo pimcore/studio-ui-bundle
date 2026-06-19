@@ -21,8 +21,8 @@
  *   dev tree containing several builds still yields a single-pair archive.
  * - Any previous build-*.zip is removed, so only the latest archive is ever tracked.
  */
-const path = require('path');
-const fs = require('fs');
+const path = require('node:path');
+const fs = require('node:fs');
 const AdmZip = require('adm-zip');
 
 const EXCLUDED = new Set(['studio-npm-package.tgz']);

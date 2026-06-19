@@ -8,10 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { execFileSync } from 'child_process';
-import { createHash } from 'crypto';
-import fs from 'fs';
-import path from 'path';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import fs from 'node:fs';
+import path from 'node:path';
 
 /**
  * Deterministic build id derived from the content of the `assets/` source tree.
