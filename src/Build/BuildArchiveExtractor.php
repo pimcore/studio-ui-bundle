@@ -13,11 +13,12 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\StudioUiBundle\Build;
 
+use Psr\Log\LoggerInterface;
 use ZipArchive;
 
 /**
- * Reconstructs a committed frontend build archive (build-dist/build.zip) into its expanded
- * build directory (public/build) on demand.
+ * Reconstructs a committed frontend build archive (build-dist/build-<id>.zip) into its
+ * expanded build directory (public/build) on demand.
  *
  * Single source of truth for the extraction decision: both the cache warmer (deploy time,
  * while vendor is writable) and the entry point provider fallback (local dev / git pull)
@@ -34,6 +35,15 @@ final class BuildArchiveExtractor
      * (next to an existing build) is what identifies a developer's manual build.
      */
     private const MARKER = '.extracted.json';
+
+    /**
+     * The logger is optional so the trait's dev/`git pull` fallback can instantiate the
+     * extractor directly (`new BuildArchiveExtractor()`); the cache warmer receives the
+     * autowired service with a logger injected.
+     */
+    public function __construct(private readonly ?LoggerInterface $logger = null)
+    {
+    }
 
     public function ensureExtracted(string $archiveGlob, string $targetDir): void
     {
@@ -125,10 +135,15 @@ final class BuildArchiveExtractor
 
         // Read-only filesystem (e.g. production runtime): the build was already provisioned
         // at deploy. We need the parent writable to create the temp dir and rename it in.
-        if (!is_dir($parent) || !is_writable($parent)) {
-            return;
-        }
-        if (is_dir($targetDir) && !is_writable($targetDir)) {
+        // Reaching here means extraction is actually needed (the marker did not match), so an
+        // unwritable target is worth surfacing — it can mean assets end up missing or stale.
+        if (!is_dir($parent) || !is_writable($parent) || (is_dir($targetDir) && !is_writable($targetDir))) {
+            $this->logger?->warning(
+                'Studio frontend build archive "{archive}" needs extraction but "{target}" is not writable; '
+                . 'serving the build already present, if any.',
+                ['archive' => basename($archivePath), 'target' => $targetDir]
+            );
+
             return;
         }
 
@@ -146,11 +161,21 @@ final class BuildArchiveExtractor
             $tmpDir = $parent . '/.' . basename($targetDir) . '.tmp-' . getmypid() . '-' . uniqid();
             $this->removeDirectory($tmpDir);
             if (!@mkdir($tmpDir, 0775, true) && !is_dir($tmpDir)) {
+                $this->logger?->warning(
+                    'Could not create a temporary directory to extract the Studio frontend build into "{target}".',
+                    ['target' => $targetDir]
+                );
+
                 return;
             }
 
             try {
                 if (!$this->unzip($archivePath, $tmpDir)) {
+                    $this->logger?->error(
+                        'Failed to unpack Studio frontend build archive "{archive}".',
+                        ['archive' => basename($archivePath)]
+                    );
+
                     return;
                 }
 
@@ -159,7 +184,17 @@ final class BuildArchiveExtractor
                     json_encode($signature, JSON_THROW_ON_ERROR)
                 );
 
-                $this->swapIntoPlace($tmpDir, $targetDir, $parent);
+                if ($this->swapIntoPlace($tmpDir, $targetDir, $parent)) {
+                    $this->logger?->info(
+                        'Extracted Studio frontend build archive "{archive}" into "{target}".',
+                        ['archive' => basename($archivePath), 'target' => $targetDir]
+                    );
+                } else {
+                    $this->logger?->warning(
+                        'Failed to move the extracted Studio frontend build into "{target}".',
+                        ['target' => $targetDir]
+                    );
+                }
             } finally {
                 $this->removeDirectory($tmpDir);
             }

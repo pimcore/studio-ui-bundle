@@ -3,7 +3,7 @@
 ## Frontend build now ships as an archive (extracted at cache warmup)
 
 The compiled frontend is no longer committed/shipped as an expanded `public/build/`
-directory. It now ships as a single archive (`build-dist/build.zip`) and is reconstructed
+directory. It now ships as a single archive (`build-dist/build-<id>.zip`) and is reconstructed
 into `public/build/` automatically by a cache warmer.
 
 ### What you need to know for deployments

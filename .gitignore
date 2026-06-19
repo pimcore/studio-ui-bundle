@@ -39,7 +39,7 @@ assets/CLAUDE.md
 !assets/dist/types
 !assets/dist/types/*
 
-# Expanded frontend build is generated from build-dist/build.zip, not committed
+# Expanded frontend build is generated from build-dist/build-<id>.zip, not committed
 /public/build/
 
 # code style fixer
