@@ -785,6 +785,8 @@ export type GridColumnRequest = {
     group?: string[] | null;
     /** Config */
     config?: (string | AdvancedColumnConfig)[];
+    /** Width of the Column */
+    width?: number | null;
 };
 export type Column = {
     /** Key of the Column */
@@ -793,6 +795,8 @@ export type Column = {
     locale: string | null;
     /** Define the group structure */
     group: object;
+    /** Width of the Column */
+    width?: number | null;
 };
 export type GridFilter = {
     /** Page */
@@ -890,6 +894,23 @@ export type SimplePhpCodeTransformer = {
     /** Label of the transformer */
     label: string;
 };
+export type PreviewConfigEntry = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Parameter name */
+    name: string;
+    /** Display label */
+    label: string;
+    /** Available values as key-value pairs */
+    values: {
+        key?: string;
+        value?: string;
+    }[];
+    /** Default selected value */
+    defaultValue: string;
+};
 export type Layout = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -931,6 +952,8 @@ export type Layout = {
     labelWidth: number;
     /** Border */
     border: boolean;
+    /** Preview configuration for locale/site selectors */
+    previewConfig?: PreviewConfigEntry[] | null;
 };
 export type ExportAllFilter = {
     /** Column Filter */

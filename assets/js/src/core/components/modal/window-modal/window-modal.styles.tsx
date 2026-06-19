@@ -16,11 +16,16 @@ export const useStyle = createStyles(({ token, css }, { zIndex }: { zIndex?: num
       pointer-events: none;
       ${zIndex !== undefined ? `z-index: ${zIndex} !important;` : ''}
     `,
+
     modal: css`
       .ant-modal-content {
-          outline: 1px solid ${token.colorBorderContainer};
-          box-shadow: ${token.boxShadowSecondary} !important;
+        outline: 1px solid ${token.colorBorderContainer};
+        box-shadow: ${token.boxShadowSecondary} !important;
       }
+    `,
+
+    draggableContainer: css`
+      pointer-events: auto;
     `
   }
 }, { hashPriority: 'low' })

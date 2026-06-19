@@ -2,6 +2,7 @@ common.owner: Propietario
 common.modification-date: Fecha de modificación
 common.globally: Globalmente
 common.apply-selection: Aplicar selección
+common.clear: Borrar
 cache.clear-cache-success: Caché limpiada con éxito
 cache.clear-full-page-cache-success: Caché de página completa limpiada con éxito
 cache.clear-temporary-files-success: Archivos temporales eliminados con éxito
@@ -11,6 +12,7 @@ widget.missing-context.description: No se encontró ningún elemento relacionado
 widget.missing-tab-context.description: Esta función no es compatible con el elemento relacionado
 block: Bloque
 error.error_something_generic_went_wrong: Algo salió mal
+error.error_permission_denied: No tiene permiso para realizar esta acción en este elemento.
 error.syntax_error: Error de sintaxis
 error.error_element_exists: El elemento ya existe
 error.error_folder_exists: La carpeta ya existe
@@ -94,6 +96,16 @@ document.document-tree.title: Árbol de documentos
 document.document-tree.search: Buscar en {{folderName}}
 document.editable.inheritance.overwrite: Sobrescribir
 document.editable.inheritance.tooltip: Heredado del documento content-main. Haga clic para sobrescribir.
+areablock.move-above: Mover arriba
+areablock.move-below: Mover abajo
+areablock.show: Mostrar
+areablock.hide: Ocultar
+areablock.new: Nuevo
+areablock.copy: Copiar
+areablock.paste: Pegar
+areablock.cut: Cortar
+areablock.settings: Configuración
+areablock.delete: Eliminar
 document.link.target: Destino del enlace
 document.hardlink.source: Documento de origen
 document.hardlink.properties-from-source: Usar propiedades del documento de origen
@@ -127,7 +139,7 @@ save-and-continue: Guardar y continuar
 discard-and-continue: Descartar y continuar
 discard-changes: Descartar cambios
 unsaved-changes.title: Cambios sin guardar
-unsaved-changes.message: Tiene cambios sin guardar. ¿Qué desea hacer?
+unsaved-changes.message: Tiene cambios sin guardar. Si continúa sin guardar, estos cambios se perderán.
 unsaved-changes.close-message: Tiene cambios sin guardar. ¿Está seguro de que desea cerrar sin guardar?
 convert-to: Convertir a
 convert-document: Convertir documento
@@ -1142,6 +1154,14 @@ element.lock: Bloquear
 element.lock-and-propagate-to-children: Bloquear y propagar a los hijos
 element.unlock: Desbloquear
 element.unlock-and-propagate-to-children: Desbloquear y propagar a los hijos
+element.edit-lock.title: 'Siendo editado por otro usuario'
+element.edit-lock.path: 'Ruta'
+element.edit-lock.type: 'Tipo'
+element.edit-lock.user: 'Usuario'
+element.edit-lock.editing-since: 'Editando desde'
+element.edit-lock.warning: 'Si continúa editando, su versión se guardará por separado de la versión del otro usuario.'
+element.edit-lock.continue: 'Continuar editando'
+element.edit-lock.cancel: 'Cancelar'
 element.tree.sorting: Ordenar hijos por
 element.tree.sorting.keyed-ascending: A a Z (Clave)
 element.tree.sorting.keyed-descending: Z a A (Clave)
@@ -1179,6 +1199,7 @@ element.unpublish: Despublicar
 element.publish: Publicar
 element.locate-in-tree: Localizar en el árbol
 element.sidebar.filter.only-direct-children: solo hijos directos
+element.sidebar.filter.only-unreferenced: solo sin referencias
 element.sidebar.field-filters: Filtros de campo
 element.full-information: Información completa
 system-information.id: ID
@@ -1238,12 +1259,15 @@ folder: Carpeta
 archive: Archivo
 audio: Audio
 image: Imagen
+image-gallery.clear-image-selection: Borrar selección de imagen
+image-gallery.delete-frame: Eliminar marco
 text: Texto
 video: Vídeo
 processing: Procesando
 upload: Subir
 close: Cerrar
 paste: Pegar
+cut: Cortar
 upload.assets-items-failed-message: La subida finalizó con errores.
 quantity-value.converted-units: Unidades convertidas
 table.empty.confirm: ¿Está seguro de que desea borrar todos los datos?
@@ -1362,6 +1386,7 @@ user-management.name: Nombre
 user-management.password: Contraseña
 user-management.user.search: Buscar un usuario
 user-management.role.search: Buscar un rol
+user-management.users-roles.search: Buscar un usuario o rol
 user-management.twoFactorAuthenticationEnabled: Autenticación de dos factores habilitada
 user-management.firstname: Nombre
 user-management.lastname: Apellido
@@ -1840,6 +1865,7 @@ empty-image: Imagen vacía
 image.dnd-target: Suelte una imagen aquí
 image.add.and.dnd: Añada o suelte una imagen directamente aquí
 image.upload.add.and.dnd: Suba, añada o suelte una imagen directamente aquí
+image.too-small: La imagen seleccionada es demasiado pequeña. Por favor, use una imagen más grande.
 fallback: Respaldo
 url-slug.add-site: Añadir sitio
 url-slug.invalid: Introduzca un URL slug válido (que comience con '/')
@@ -1858,6 +1884,7 @@ video.settings: Configuración de vídeo
 video.poster: Imagen de póster
 video.path: Ruta
 video.dnd-target: Suelte un vídeo aquí
+video.add-target: Añada un vídeo aquí
 pdf-editable.dnd-target: Suelte un asset de documento aquí
 many-to-one-relation.drop-placeholder: Suelte un elemento aquí
 many-to-one-relation.drop-placeholder-text-input: Suelte un elemento aquí o introduzca un valor
@@ -2727,3 +2754,6 @@ translations.merger.title: "Fusionar traducciones (Dominio: {{domain}})"
 translations.merger.column.language: Idioma
 translations.merger.items: elementos
 select.clear-selection: Borrar selección
+asset.folder.preview.image-display: Visualización de imágenes
+asset.folder.preview.image-display.small: Pequeño
+asset.folder.preview.image-display.large: Grande

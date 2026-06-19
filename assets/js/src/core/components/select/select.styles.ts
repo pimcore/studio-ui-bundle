@@ -136,6 +136,12 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
         padding: 0 ${token.controlPaddingHorizontal}px !important;
       }
 
+      // Honor the small size's horizontal padding (matches the small Input);
+      // without this the !important rule above forces the default 12px on small selects.
+      &.ant-select-sm .ant-select-selector {
+        padding: 0 ${token.controlPaddingHorizontalSM}px !important;
+      }
+
       .ant-select-arrow {
         color: ${token.colorIcon} !important;
       }

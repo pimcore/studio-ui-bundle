@@ -9,6 +9,7 @@
  */
 
 import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useClassDefinitionSelection } from '../../context-layer/provider/use-class-definition-selection'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -26,6 +27,7 @@ export interface ClassDefinitionSelectProps {
 }
 
 export const ClassDefinitionSelect = ({ nullable = false }: ClassDefinitionSelectProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const { selectedClassDefinition, setSelectedClassDefinition, availableClassDefinitions, config } = useClassDefinitionSelection()
   const typeSelectionContext = useTypeSelectOptional()
   const { useDataQueryHelper } = useSettings()
@@ -37,11 +39,12 @@ export const ClassDefinitionSelect = ({ nullable = false }: ClassDefinitionSelec
 
   const isNullable = config.classRestriction === undefined && nullable
 
-  const options: SelectProps['options'] = [...availableClassDefinitions]
-    .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }))
-    .map((classDefinition) => ({
+  const options: SelectProps['options'] = availableClassDefinitions
+    .map((classDefinition) => ({ classDefinition, translatedName: t(classDefinition.name) }))
+    .sort((a, b) => a.translatedName.localeCompare(b.translatedName, undefined, { sensitivity: 'base' }))
+    .map(({ classDefinition, translatedName }) => ({
       value: classDefinition.id,
-      name: classDefinition.name,
+      name: translatedName,
       label: (
         <Flex
           align="center"
@@ -51,7 +54,7 @@ export const ClassDefinitionSelect = ({ nullable = false }: ClassDefinitionSelec
             type={ classDefinition.icon.type }
             value={ classDefinition.icon.value }
           />
-          {classDefinition.name}
+          {translatedName}
         </Flex>
       )
     }))

@@ -51,7 +51,7 @@ export const Region = ({ children, noteditable, ...props }: RegionProps): React.
         <ObjectComponent
           { ...child }
           key={ child.name }
-          noteditable={ noteditable }
+          noteditable={ noteditable === true || child.noteditable }
         />
       )
     })

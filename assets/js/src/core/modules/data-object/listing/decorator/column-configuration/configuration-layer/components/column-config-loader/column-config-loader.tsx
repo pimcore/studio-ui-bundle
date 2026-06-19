@@ -12,7 +12,7 @@ import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import React, { useEffect } from 'react'
 import { useClassDefinitionSelection } from '../../../../class-definition-selection/context-layer/provider/use-class-definition-selection'
-import { useDataObjectGetAvailableGridColumnsQuery, useDataObjectGetGridConfigurationQuery } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { useDataObjectGetAvailableGridColumnsQuery, useDataObjectGetGridConfigurationQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { type SelectedColumnsContextProps } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
@@ -67,6 +67,7 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
           exportable: availableColumn.exportable,
           frontendType: availableColumn.frontendType,
           group: availableColumn.group,
+          width: column.width,
           originalApiDefinition: apiColumn
         })
       }

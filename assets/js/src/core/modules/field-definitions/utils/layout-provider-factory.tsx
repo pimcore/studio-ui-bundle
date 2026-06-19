@@ -15,6 +15,7 @@ import { globalFieldDefinitionClipboard } from '@Pimcore/modules/field-definitio
 import { reduce } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
 import { type Layout as LayoutType } from '@sdk/api/class-definition'
 import { uuid } from '@sdk/utils'
+import { cloneDeep, isEqual } from 'lodash'
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
 export type Layout = LayoutType
@@ -54,6 +55,8 @@ export interface ILayoutContext {
   isValidExternalChildFieldDefinition: (targetPath: string[], externalLayout: Layout) => boolean
   getLayout: (props?: GetLayoutProps) => Layout | undefined
   addExternalFieldDefinition: (structureNodeId: StructureNode['id'], layout: Layout, insertIndex?: number) => StructureNode
+  getIsDirty: () => boolean
+  markClean: () => void
 }
 
 export interface LayoutProviderProps {
@@ -163,6 +166,9 @@ export const create = (): LayoutProviderFactoryReturn => {
     const fieldDefinitionsRef = React.useRef(fieldDefinitions)
     const areaRef = React.useRef(area)
     const isInitializedRef = useRef(false)
+    // Baseline of the last saved state, used to detect unsaved changes.
+    // Cloned so later in-place mutations of live objects cannot alter it.
+    const baselineRef = useRef<{ structure: StructureNode, fieldDefinitions: Record<string, FieldDefinition> } | undefined>(undefined)
 
     React.useEffect(() => {
       structureRef.current = structure
@@ -174,6 +180,7 @@ export const create = (): LayoutProviderFactoryReturn => {
       if (props.layout === undefined) {
         // Reset: layout cleared or switching away
         isInitializedRef.current = false
+        baselineRef.current = undefined
         setStructure(undefined)
         setFieldDefinitions({})
         setInvalidFieldDefinitionIds([])
@@ -193,6 +200,7 @@ export const create = (): LayoutProviderFactoryReturn => {
       // First time we have a defined layout — initialize
       isInitializedRef.current = true
       const { structure: rootStructure, fieldDefinitions: initialFieldDefinitions } = reduce({ layout: props.layout })!
+      baselineRef.current = cloneDeep({ structure: rootStructure, fieldDefinitions: initialFieldDefinitions })
 
       setCurrentFieldDefinitionId(null)
       setCurrentFieldDefinitionIdPath(null)
@@ -737,6 +745,21 @@ export const create = (): LayoutProviderFactoryReturn => {
       return externalStructure
     }, [])
 
+    const getIsDirty = useCallback((): boolean => {
+      if (baselineRef.current === undefined || structureRef.current === undefined) {
+        return false
+      }
+
+      return !isEqual(
+        { structure: structureRef.current, fieldDefinitions: fieldDefinitionsRef.current },
+        baselineRef.current
+      )
+    }, [])
+
+    const markClean = useCallback((): void => {
+      baselineRef.current = cloneDeep({ structure: structureRef.current!, fieldDefinitions: fieldDefinitionsRef.current })
+    }, [])
+
     return useMemo(() => (
       <LayoutContext.Provider
         value={
@@ -761,7 +784,9 @@ export const create = (): LayoutProviderFactoryReturn => {
             moveFieldDefinition,
             isValidChildFieldDefinition,
             isValidExternalChildFieldDefinition,
-            getLayout
+            getLayout,
+            getIsDirty,
+            markClean
           }
         }
       >
@@ -786,6 +811,8 @@ export const create = (): LayoutProviderFactoryReturn => {
       isValidChildFieldDefinition,
       isValidExternalChildFieldDefinition,
       getLayout,
+      getIsDirty,
+      markClean,
       props.children
     ])
   }

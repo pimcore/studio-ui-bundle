@@ -10,6 +10,7 @@
 
 import { useAssetGetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import React, { useContext, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
@@ -19,11 +20,16 @@ import { Pagination } from './pagination/pagination'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { PreviewCardContainer } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/preview/card/preview-card-container'
 import { IconButton, Split } from '@sdk/components'
+import { Segmented } from '@Pimcore/components/segmented/segmented'
+import { SizeTypes } from '@Pimcore/components/preview-card/preview-card'
+import { Text } from '@Pimcore/components/text/text'
 
 const PreviewContainer = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const assetContext = useContext(AssetContext)
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
+  const [cardSize, setCardSize] = useState<SizeTypes>(SizeTypes.SMALL)
   const assetId = assetContext.id
   const { asset } = useAssetDraft(assetId)
 
@@ -45,10 +51,22 @@ const PreviewContainer = (): React.JSX.Element => {
   return useMemo(() => (
     <ContentLayout
       renderToolbar={
-        <Toolbar
-          justify={ 'flex-end' }
-          theme='secondary'
-        >
+        <Toolbar theme='secondary'>
+          <Flex
+            align='center'
+            gap='extra-small'
+            style={ { paddingBottom: 4 } }
+          >
+            <Text type='secondary'>{ t('asset.folder.preview.image-display') }</Text>
+            <Segmented
+              onChange={ (value) => { setCardSize(value as SizeTypes) } }
+              options={ [
+                { label: t('asset.folder.preview.image-display.small'), value: SizeTypes.SMALL },
+                { label: t('asset.folder.preview.image-display.large'), value: SizeTypes.LARGE }
+              ] }
+              value={ cardSize }
+            />
+          </Flex>
           <Split size='extra-small'>
             <IconButton
               icon={ { value: 'refresh' } }
@@ -78,13 +96,14 @@ const PreviewContainer = (): React.JSX.Element => {
               <PreviewCardContainer
                 asset={ asset }
                 key={ `${asset.id}-${index}` }
+                size={ cardSize }
               />
             ))}
           </Flex>
         )}
       </Content>
     </ContentLayout >
-  ), [currentPage, pageSize, data, isFetching])
+  ), [currentPage, pageSize, data, isFetching, cardSize])
 }
 
 export { PreviewContainer }

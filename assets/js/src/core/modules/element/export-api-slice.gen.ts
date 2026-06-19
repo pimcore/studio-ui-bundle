@@ -290,6 +290,8 @@ export type GridColumnRequest = {
     group?: string[] | null;
     /** Config */
     config?: (string | AdvancedColumnConfig)[];
+    /** Width of the Column */
+    width?: number | null;
 };
 export type ExportAllFilter = {
     /** Column Filter */

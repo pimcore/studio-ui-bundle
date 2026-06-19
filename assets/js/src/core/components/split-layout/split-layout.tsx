@@ -52,48 +52,48 @@ export const SplitLayout = ({
   const [internalLeftItemSizing, setInternalLeftItemSizing] = useState<ISplitLayoutItemSizing>(leftSizing)
   const [internalRightItemSizing, setInternalRightItemSizing] = useState<ISplitLayoutItemSizing>(rightSizing)
 
-  const onMouseResize = (event: MouseEvent): void => {
+  const resizeBy = (delta: number): void => {
     const leftRect = leftItemRef.current!.getBoundingClientRect()
     const rightRect = rightItemRef.current!.getBoundingClientRect()
     const elementRect = elementRef.current!.getBoundingClientRect()
 
+    // the right item always takes the remaining space, so the combined width
+    // stays constant even when one of the items is clamped by min/max size
+    const totalWidth = leftRect.width + rightRect.width
+
+    const minLeftWidth = Math.max(
+      internalLeftItemSizing.minSize ?? 0,
+      internalRightItemSizing.maxSize !== undefined ? totalWidth - internalRightItemSizing.maxSize : 0
+    )
+    const maxLeftWidth = Math.min(
+      internalLeftItemSizing.maxSize ?? totalWidth,
+      totalWidth - (internalRightItemSizing.minSize ?? 0)
+    )
+
+    const newLeftWidth = Math.min(Math.max(leftRect.width + delta, minLeftWidth), maxLeftWidth)
+
     setInternalLeftItemSizing({
       ...internalLeftItemSizing,
-      size: (leftRect.width + event.movementX) / elementRect.width * 100
+      size: newLeftWidth / elementRect.width * 100
     })
 
     setInternalRightItemSizing({
       ...internalRightItemSizing,
-      size: (rightRect.width - event.movementX) / elementRect.width * 100
+      size: (totalWidth - newLeftWidth) / elementRect.width * 100
     })
   }
 
+  const onMouseResize = (event: MouseEvent): void => {
+    resizeBy(event.movementX)
+  }
+
   const onKeyboardResize = (event: React.KeyboardEvent<HTMLDivElement>): void => {
-    const leftRect = leftItemRef.current!.getBoundingClientRect()
-    const rightRect = rightItemRef.current!.getBoundingClientRect()
-
     if (event.key === 'ArrowLeft') {
-      setInternalLeftItemSizing({
-        ...internalLeftItemSizing,
-        size: leftRect.width - RESIZE_INCREMENT
-      })
-
-      setInternalRightItemSizing({
-        ...internalRightItemSizing,
-        size: rightRect.width + RESIZE_INCREMENT
-      })
+      resizeBy(-RESIZE_INCREMENT)
     }
 
     if (event.key === 'ArrowRight') {
-      setInternalLeftItemSizing({
-        ...internalLeftItemSizing,
-        size: leftRect.width + RESIZE_INCREMENT
-      })
-
-      setInternalRightItemSizing({
-        ...internalRightItemSizing,
-        size: rightRect.width - RESIZE_INCREMENT
-      })
+      resizeBy(RESIZE_INCREMENT)
     }
   }
 

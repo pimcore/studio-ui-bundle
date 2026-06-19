@@ -15,6 +15,7 @@ import { withGeneralFiltersTab } from './view-layer/components/sidebar/hooks/wit
 
 export interface GeneralFiltersDecoratorConfig {
   handleSearchTermInSidebar: boolean
+  showOnlyUnreferencedFilter?: boolean
 }
 
 export const GeneralFiltersDecorator: AbstractDecorator<GeneralFiltersDecoratorConfig> = (props, config) => {

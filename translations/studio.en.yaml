@@ -2,6 +2,7 @@ common.owner: Owner
 common.modification-date: Modification date
 common.globally: Globally
 common.apply-selection: Apply selection
+common.clear: Clear
 cache.clear-cache-success: Cache successfully cleared
 cache.clear-full-page-cache-success: Full page cache successfully cleared
 cache.clear-temporary-files-success: Temporary files successfully cleared
@@ -11,6 +12,7 @@ widget.missing-context.description: No related element found
 widget.missing-tab-context.description: This feature is not supported for the related element
 block: Block
 error.error_something_generic_went_wrong: Something went wrong
+error.error_permission_denied: You do not have permission to perform this action on this element.
 error.error_element_exists: Element already exists
 error.error_folder_exists: Folder already exists
 error.error_invalid_argument: Invalid argument
@@ -94,6 +96,16 @@ document.document-tree.title: Document Tree
 document.document-tree.search: Search in {{folderName}}
 document.editable.inheritance.overwrite: Overwrite
 document.editable.inheritance.tooltip: Inherited from content-main document. Click to overwrite.
+areablock.move-above: Move above
+areablock.move-below: Move below
+areablock.show: Show
+areablock.hide: Hide
+areablock.new: New
+areablock.copy: Copy
+areablock.paste: Paste
+areablock.cut: Cut
+areablock.settings: Settings
+areablock.delete: Delete
 document.link.target: Link Target
 document.hardlink.source: Source Document
 document.hardlink.properties-from-source: Use properties from source document
@@ -127,7 +139,7 @@ save-and-continue: Save and Continue
 discard-and-continue: Discard and Continue
 discard-changes: Discard Changes
 unsaved-changes.title: Unsaved Changes
-unsaved-changes.message: You have unsaved changes. What would you like to do?
+unsaved-changes.message: You have unsaved changes. If you continue without saving, these changes will be lost.
 unsaved-changes.close-message: You have unsaved changes. Are you sure you want to close without saving?
 convert-to: Convert to
 convert-document: Convert Document
@@ -1148,6 +1160,14 @@ element.lock: Lock
 element.lock-and-propagate-to-children: Lock and propagate to children
 element.unlock: Unlock
 element.unlock-and-propagate-to-children: Unlock and propagate to children
+element.edit-lock.title: 'Being edited by another user'
+element.edit-lock.path: 'Path'
+element.edit-lock.type: 'Type'
+element.edit-lock.user: 'User'
+element.edit-lock.editing-since: 'Editing since'
+element.edit-lock.warning: 'If you continue editing, your version will be saved separately from the version of the other user.'
+element.edit-lock.continue: 'Continue editing'
+element.edit-lock.cancel: 'Cancel'
 element.tree.sorting: Sort Children By
 element.tree.sorting.keyed-ascending: A to Z (Key)
 element.tree.sorting.keyed-descending: Z to A (Key)
@@ -1186,6 +1206,7 @@ element.unpublish: Unpublish
 element.publish: Publish
 element.locate-in-tree: Locate in Tree
 element.sidebar.filter.only-direct-children: only direct children
+element.sidebar.filter.only-unreferenced: only unreferenced
 element.sidebar.field-filters: Field Filters
 element.full-information: Full information
 system-information.id: ID
@@ -1245,12 +1266,15 @@ folder: Folder
 archive: Archive
 audio: Audio
 image: Image
+image-gallery.clear-image-selection: Clear Image Selection
+image-gallery.delete-frame: Delete Frame
 text: Text
 video: Video
 processing: Processing
 upload: Upload
 close: Close
 paste: Paste
+cut: Cut
 upload.assets-items-failed-message: Upload finished with errors.
 quantity-value.converted-units: Converted Units
 table.empty.confirm: Are you sure you want to clear all data?
@@ -1369,6 +1393,7 @@ user-management.name: Name
 user-management.password: Password
 user-management.user.search: Search for a user
 user-management.role.search: Search for a role
+user-management.users-roles.search: Search for user or role
 user-management.twoFactorAuthenticationEnabled: Two Factor Authentication Enabled
 user-management.firstname: First name
 user-management.lastname: Last name
@@ -1847,6 +1872,7 @@ empty-image: Empty Image
 image.dnd-target: Drop an image here
 image.add.and.dnd: Add or drop an image directly here
 image.upload.add.and.dnd: Upload, add or drop an image directly here
+image.too-small: The selected image is too small to be used here. Please use a bigger image.
 fallback: Fallback
 url-slug.add-site: Add Site
 url-slug.invalid: Please enter a valid URL slug (starting with a '/')
@@ -1865,6 +1891,7 @@ video.settings: Video Settings
 video.poster: Poster-Image
 video.path: Path
 video.dnd-target: Drop a video here
+video.add-target: Add a video here
 pdf-editable.dnd-target: Drop a document asset here
 many-to-one-relation.drop-placeholder: Drop an item here
 many-to-one-relation.drop-placeholder-text-input: Drop an item here or enter a value
@@ -2740,3 +2767,6 @@ translations.merger.title: "Merge Translations (Domain: {{domain}})"
 translations.merger.column.language: Language
 translations.merger.items: items
 select.clear-selection: Clear selection
+asset.folder.preview.image-display: Image display
+asset.folder.preview.image-display.small: Small
+asset.folder.preview.image-display.large: Large

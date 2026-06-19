@@ -2,6 +2,7 @@ common.owner: Ägare
 common.modification-date: Ändringsdatum
 common.globally: Globalt
 common.apply-selection: Tillämpa val
+common.clear: Rensa
 cache.clear-cache-success: Cachen har rensats
 cache.clear-full-page-cache-success: Helsidescachen har rensats
 cache.clear-temporary-files-success: Temporära filer har tagits bort
@@ -11,6 +12,7 @@ widget.missing-context.description: Inget relaterat element hittades
 widget.missing-tab-context.description: Den här funktionen stöds inte för det relaterade elementet
 block: Block
 error.error_something_generic_went_wrong: Något gick fel
+error.error_permission_denied: Du har inte behörighet att utföra denna åtgärd på detta element.
 error.syntax_error: Syntaxfel
 error.error_element_exists: Elementet finns redan
 error.error_folder_exists: Mappen finns redan
@@ -94,6 +96,16 @@ document.document-tree.title: Dokumentträd
 document.document-tree.search: Sök i {{folderName}}
 document.editable.inheritance.overwrite: Skriv över
 document.editable.inheritance.tooltip: Ärvt från content-main-dokument. Klicka för att skriva över.
+areablock.move-above: Flytta upp
+areablock.move-below: Flytta ner
+areablock.show: Visa
+areablock.hide: Dölj
+areablock.new: Ny
+areablock.copy: Kopiera
+areablock.paste: Klistra in
+areablock.cut: Klipp ut
+areablock.settings: Inställningar
+areablock.delete: Ta bort
 document.link.target: Länkmål
 document.hardlink.source: Källdokument
 document.hardlink.properties-from-source: Använd egenskaper från källdokument
@@ -127,7 +139,7 @@ save-and-continue: Spara och fortsätt
 discard-and-continue: Kassera och fortsätt
 discard-changes: Kassera ändringar
 unsaved-changes.title: Osparade ändringar
-unsaved-changes.message: Du har osparade ändringar. Vad vill du göra?
+unsaved-changes.message: Du har osparade ändringar. Om du fortsätter utan att spara går dessa ändringar förlorade.
 unsaved-changes.close-message: Du har osparade ändringar. Är du säker på att du vill stänga utan att spara?
 convert-to: Konvertera till
 convert-document: Konvertera dokument
@@ -1142,6 +1154,14 @@ element.lock: Lås
 element.lock-and-propagate-to-children: Lås och sprid till barn
 element.unlock: Lås upp
 element.unlock-and-propagate-to-children: Lås upp och sprid till barn
+element.edit-lock.title: 'Redigeras av en annan användare'
+element.edit-lock.path: 'Sökväg'
+element.edit-lock.type: 'Typ'
+element.edit-lock.user: 'Användare'
+element.edit-lock.editing-since: 'Redigeras sedan'
+element.edit-lock.warning: 'Om du fortsätter redigera sparas din version separat från den andra användarens version.'
+element.edit-lock.continue: 'Fortsätt redigera'
+element.edit-lock.cancel: 'Avbryt'
 element.tree.sorting: Sortera barn efter
 element.tree.sorting.keyed-ascending: A till Ö (Nyckel)
 element.tree.sorting.keyed-descending: Ö till A (Nyckel)
@@ -1179,6 +1199,7 @@ element.unpublish: Avpublicera
 element.publish: Publicera
 element.locate-in-tree: Hitta i träd
 element.sidebar.filter.only-direct-children: bara direkta barn
+element.sidebar.filter.only-unreferenced: bara utan referenser
 element.sidebar.field-filters: Fältfilter
 element.full-information: Fullständig information
 system-information.id: ID
@@ -1238,12 +1259,15 @@ folder: Mapp
 archive: Arkiv
 audio: Ljud
 image: Bild
+image-gallery.clear-image-selection: Rensa bildval
+image-gallery.delete-frame: Ta bort ram
 text: Text
 video: Video
 processing: Bearbetar
 upload: Ladda upp
 close: Stäng
 paste: Klistra in
+cut: Klipp ut
 upload.assets-items-failed-message: Uppladdningen slutfördes med fel.
 quantity-value.converted-units: Konverterade enheter
 table.empty.confirm: Är du säker på att du vill rensa all data?
@@ -1362,6 +1386,7 @@ user-management.name: Namn
 user-management.password: Lösenord
 user-management.user.search: Sök efter användare
 user-management.role.search: Sök efter roll
+user-management.users-roles.search: Sök efter användare eller roll
 user-management.twoFactorAuthenticationEnabled: Tvåfaktorsautentisering aktiverad
 user-management.firstname: Förnamn
 user-management.lastname: Efternamn
@@ -1840,6 +1865,7 @@ empty-image: Tom bild
 image.dnd-target: Släpp en bild här
 image.add.and.dnd: Lägg till eller släpp en bild direkt här
 image.upload.add.and.dnd: Ladda upp, lägg till eller släpp en bild direkt här
+image.too-small: Den valda bilden är för liten. Använd en större bild.
 fallback: Reserv
 url-slug.add-site: Lägg till sajt
 url-slug.invalid: Ange en giltig URL slug (börjar med '/')
@@ -1858,6 +1884,7 @@ video.settings: Videoinställningar
 video.poster: Posterbild
 video.path: Sökväg
 video.dnd-target: Släpp en video här
+video.add-target: Lägg till en video här
 pdf-editable.dnd-target: Släpp en dokumentasset här
 many-to-one-relation.drop-placeholder: Släpp ett objekt här
 many-to-one-relation.drop-placeholder-text-input: Släpp ett objekt här eller ange ett värde
@@ -2727,3 +2754,6 @@ translations.merger.title: "Sammanfoga översättningar (Domän: {{domain}})"
 translations.merger.column.language: Språk
 translations.merger.items: objekt
 select.clear-selection: Rensa val
+asset.folder.preview.image-display: Bildvisning
+asset.folder.preview.image-display.small: Liten
+asset.folder.preview.image-display.large: Stor

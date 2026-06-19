@@ -2,6 +2,7 @@ common.owner: Eigentümer
 common.modification-date: Änderungsdatum
 common.globally: Global
 common.apply-selection: Auswahl übernehmen
+common.clear: Löschen
 cache.clear-cache-success: Cache wurde erfolgreich geleert
 cache.clear-full-page-cache-success: Ganzseitiger Cache wurde erfolgreich geleert
 cache.clear-temporary-files-success: Temporäre Dateien wurden erfolgreich gelöscht
@@ -11,6 +12,7 @@ widget.missing-context.description: Kein zugehöriges Element gefunden
 widget.missing-tab-context.description: Diese Funktion wird für das zugehörige Element nicht unterstützt
 block: Block
 error.error_something_generic_went_wrong: Etwas ist schiefgelaufen
+error.error_permission_denied: Sie haben keine Berechtigung, diese Aktion für dieses Element durchzuführen.
 error.syntax_error: Syntaxfehler
 error.error_element_exists: Element existiert bereits
 error.error_folder_exists: Ordner existiert bereits
@@ -94,6 +96,16 @@ document.document-tree.title: Dokument-Baum
 document.document-tree.search: Suche in {{folderName}}
 document.editable.inheritance.overwrite: Überschreiben
 document.editable.inheritance.tooltip: Geerbt vom Content-Main-Dokument. Klicken zum Überschreiben.
+areablock.move-above: Nach oben verschieben
+areablock.move-below: Nach unten verschieben
+areablock.show: Einblenden
+areablock.hide: Ausblenden
+areablock.new: Neu
+areablock.copy: Kopieren
+areablock.paste: Einfügen
+areablock.cut: Ausschneiden
+areablock.settings: Einstellungen
+areablock.delete: Löschen
 document.link.target: Link-Ziel
 document.hardlink.source: Quelldokument
 document.hardlink.properties-from-source: Eigenschaften vom Quelldokument verwenden
@@ -127,7 +139,7 @@ save-and-continue: Speichern und fortfahren
 discard-and-continue: Verwerfen und fortfahren
 discard-changes: Änderungen verwerfen
 unsaved-changes.title: Ungespeicherte Änderungen
-unsaved-changes.message: Sie haben ungespeicherte Änderungen. Was möchten Sie tun?
+unsaved-changes.message: Sie haben ungespeicherte Änderungen. Wenn Sie fortfahren, ohne zu speichern, gehen diese Änderungen verloren.
 unsaved-changes.close-message: Sie haben ungespeicherte Änderungen. Sind Sie sicher, dass Sie ohne Speichern schließen möchten?
 convert-to: Konvertieren zu
 convert-document: Dokument konvertieren
@@ -1142,6 +1154,14 @@ element.lock: Sperren
 element.lock-and-propagate-to-children: Sperren und auf Kinder übertragen
 element.unlock: Entsperren
 element.unlock-and-propagate-to-children: Entsperren und auf Kinder übertragen
+element.edit-lock.title: 'Wird von einem anderen Benutzer bearbeitet'
+element.edit-lock.path: 'Pfad'
+element.edit-lock.type: 'Typ'
+element.edit-lock.user: 'Benutzer'
+element.edit-lock.editing-since: 'Bearbeitet seit'
+element.edit-lock.warning: 'Wenn Sie die Bearbeitung fortsetzen, wird Ihre Version getrennt von der Version des anderen Benutzers gespeichert.'
+element.edit-lock.continue: 'Bearbeitung fortsetzen'
+element.edit-lock.cancel: 'Abbrechen'
 element.tree.sorting: Kinder sortieren nach
 element.tree.sorting.keyed-ascending: A bis Z (Schlüssel)
 element.tree.sorting.keyed-descending: Z bis A (Schlüssel)
@@ -1179,6 +1199,7 @@ element.unpublish: Veröffentlichung zurücknehmen
 element.publish: Veröffentlichen
 element.locate-in-tree: Im Baum anzeigen
 element.sidebar.filter.only-direct-children: Nur direkte Kinder
+element.sidebar.filter.only-unreferenced: Nur nicht referenzierte
 element.sidebar.field-filters: Feldfilter
 element.full-information: Vollständige Informationen
 system-information.id: ID
@@ -1238,12 +1259,15 @@ folder: Ordner
 archive: Archiv
 audio: Audio
 image: Bild
+image-gallery.clear-image-selection: Bildauswahl leeren
+image-gallery.delete-frame: Rahmen löschen
 text: Text
 video: Video
 processing: Verarbeitung
 upload: Hochladen
 close: Schließen
 paste: Einfügen
+cut: Ausschneiden
 upload.assets-items-failed-message: Upload mit Fehlern abgeschlossen.
 quantity-value.converted-units: Umgerechnete Einheiten
 table.empty.confirm: Sind Sie sicher, dass Sie alle Daten löschen möchten?
@@ -1362,6 +1386,7 @@ user-management.name: Name
 user-management.password: Passwort
 user-management.user.search: Nach einem Benutzer suchen
 user-management.role.search: Nach einer Rolle suchen
+user-management.users-roles.search: Nach Benutzer oder Rolle suchen
 user-management.twoFactorAuthenticationEnabled: Zwei-Faktor-Authentifizierung aktiviert
 user-management.firstname: Vorname
 user-management.lastname: Nachname
@@ -1840,6 +1865,7 @@ empty-image: Leeres Bild
 image.dnd-target: Bild hier ablegen
 image.add.and.dnd: Bild hinzufügen oder direkt hier ablegen
 image.upload.add.and.dnd: Hochladen, hinzufügen oder Bild direkt hier ablegen
+image.too-small: Das ausgewählte Bild ist zu klein. Bitte verwenden Sie ein größeres Bild.
 fallback: Fallback
 url-slug.add-site: Site hinzufügen
 url-slug.invalid: Bitte geben Sie einen gültigen URL-Slug ein (beginnend mit '/')
@@ -1858,6 +1884,7 @@ video.settings: Video-Einstellungen
 video.poster: Poster-Bild
 video.path: Pfad
 video.dnd-target: Video hier ablegen
+video.add-target: Video hier hinzufügen
 pdf-editable.dnd-target: Dokument-Asset hier ablegen
 many-to-one-relation.drop-placeholder: Element hier ablegen
 many-to-one-relation.drop-placeholder-text-input: Element hier ablegen oder Wert eingeben
@@ -2727,3 +2754,6 @@ translations.merger.title: "Übersetzungen zusammenführen (Domain: {{domain}})"
 translations.merger.column.language: Sprache
 translations.merger.items: Einträge
 select.clear-selection: Auswahl löschen
+asset.folder.preview.image-display: Bildanzeige
+asset.folder.preview.image-display.small: Klein
+asset.folder.preview.image-display.large: Groß

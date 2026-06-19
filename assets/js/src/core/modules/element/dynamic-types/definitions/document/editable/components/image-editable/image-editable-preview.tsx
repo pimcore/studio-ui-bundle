@@ -19,6 +19,8 @@ interface ImageEditablePreviewProps {
   assetId?: number
   width?: number | string
   height?: number | string
+  minWidth?: number
+  minHeight?: number
   containerWidth: number
   className?: string
   dropdownItems?: DropdownProps['menu']['items']
@@ -36,6 +38,8 @@ export const ImageEditablePreview = ({
   assetId,
   width,
   height,
+  minWidth,
+  minHeight,
   containerWidth,
   thumbnailSettings,
   thumbnailConfig,
@@ -91,6 +95,8 @@ export const ImageEditablePreview = ({
     <ResponsiveAssetPreview
       { ...props }
       assetId={ assetId }
+      minHeight={ minHeight }
+      minWidth={ minWidth }
       thumbnailUrl={ thumbnailUrl }
     />
   )
