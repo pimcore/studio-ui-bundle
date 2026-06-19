@@ -12,6 +12,7 @@ widget.missing-context.description: No related element found
 widget.missing-tab-context.description: This feature is not supported for the related element
 block: Block
 error.error_something_generic_went_wrong: Something went wrong
+error.error_permission_denied: You do not have permission to perform this action on this element.
 error.error_element_exists: Element already exists
 error.error_folder_exists: Folder already exists
 error.error_invalid_argument: Invalid argument
@@ -95,6 +96,16 @@ document.document-tree.title: Document Tree
 document.document-tree.search: Search in {{folderName}}
 document.editable.inheritance.overwrite: Overwrite
 document.editable.inheritance.tooltip: Inherited from content-main document. Click to overwrite.
+areablock.move-above: Move above
+areablock.move-below: Move below
+areablock.show: Show
+areablock.hide: Hide
+areablock.new: New
+areablock.copy: Copy
+areablock.paste: Paste
+areablock.cut: Cut
+areablock.settings: Settings
+areablock.delete: Delete
 document.link.target: Link Target
 document.hardlink.source: Source Document
 document.hardlink.properties-from-source: Use properties from source document
@@ -128,7 +139,7 @@ save-and-continue: Save and Continue
 discard-and-continue: Discard and Continue
 discard-changes: Discard Changes
 unsaved-changes.title: Unsaved Changes
-unsaved-changes.message: You have unsaved changes. What would you like to do?
+unsaved-changes.message: You have unsaved changes. If you continue without saving, these changes will be lost.
 unsaved-changes.close-message: You have unsaved changes. Are you sure you want to close without saving?
 convert-to: Convert to
 convert-document: Convert Document
@@ -2750,8 +2761,8 @@ translations.merger.column.state: State
 translations.merger.state.applied: Applied
 translations.merger.state.reverted: Reverted
 translations.merger.state.pending: Pending
-translations.merger.apply-all: Apply All
-translations.merger.revert-all: Revert All
+translations.merger.apply-all: Apply all
+translations.merger.revert-all: Revert all
 translations.merger.title: "Merge Translations (Domain: {{domain}})"
 translations.merger.column.language: Language
 translations.merger.items: items

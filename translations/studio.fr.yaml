@@ -12,6 +12,7 @@ widget.missing-context.description: Aucun élément associé trouvé
 widget.missing-tab-context.description: "Cette fonctionnalité n'est pas prise en charge pour l'élément associé"
 block: Bloc
 error.error_something_generic_went_wrong: Une erreur est survenue
+error.error_permission_denied: "Vous n'avez pas l'autorisation d'effectuer cette action sur cet élément."
 error.syntax_error: Erreur de syntaxe
 error.error_element_exists: L'élément existe déjà
 error.error_folder_exists: Le dossier existe déjà
@@ -95,6 +96,16 @@ document.document-tree.title: Arborescence des documents
 document.document-tree.search: Rechercher dans {{folderName}}
 document.editable.inheritance.overwrite: Remplacer
 document.editable.inheritance.tooltip: Hérité du document content-main. Cliquez pour remplacer.
+areablock.move-above: Monter
+areablock.move-below: Descendre
+areablock.show: Afficher
+areablock.hide: Masquer
+areablock.new: Nouveau
+areablock.copy: Copier
+areablock.paste: Coller
+areablock.cut: Couper
+areablock.settings: Paramètres
+areablock.delete: Supprimer
 document.link.target: Cible du lien
 document.hardlink.source: Document source
 document.hardlink.properties-from-source: Utiliser les propriétés du document source
@@ -128,7 +139,7 @@ save-and-continue: Enregistrer et continuer
 discard-and-continue: Abandonner et continuer
 discard-changes: Abandonner les modifications
 unsaved-changes.title: Modifications non enregistrées
-unsaved-changes.message: Vous avez des modifications non enregistrées. Que souhaitez-vous faire ?
+unsaved-changes.message: Vous avez des modifications non enregistrées. Si vous continuez sans enregistrer, ces modifications seront perdues.
 unsaved-changes.close-message: Vous avez des modifications non enregistrées. Êtes-vous sûr de vouloir fermer sans enregistrer ?
 convert-to: Convertir en
 convert-document: Convertir le document

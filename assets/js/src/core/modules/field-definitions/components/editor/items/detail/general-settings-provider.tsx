@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isEqual } from 'lodash'
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
 export type GeneralSettings = Record<string, unknown>
@@ -15,6 +16,7 @@ export type GeneralSettings = Record<string, unknown>
 export interface IGeneralSettingsContext {
   generalSettings: GeneralSettings | undefined
   setGeneralSettings: (settings: GeneralSettings | undefined) => void
+  getIsDirty: () => boolean
 }
 
 export const GeneralSettingsContext = createContext<IGeneralSettingsContext | undefined>(undefined)
@@ -41,11 +43,17 @@ export const GeneralSettingsProvider = (props: IGeneralSettingsProviderProps): R
     /* eslint-enable  @typescript-eslint/consistent-type-assertions */
   }
 
+  // The server data (props) is the clean baseline; after a save the query
+  // refetches and the sync effect above converges the state back to it.
+  const getIsDirty = (): boolean => {
+    return !isEqual(generalSettings ?? {}, props.generalSettings ?? {})
+  }
+
   return useMemo(() => (
-    <GeneralSettingsContext.Provider value={ { generalSettings, setGeneralSettings: updateGeneralSettings } }>
+    <GeneralSettingsContext.Provider value={ { generalSettings, setGeneralSettings: updateGeneralSettings, getIsDirty } }>
       {props.children}
     </GeneralSettingsContext.Provider>
-  ), [generalSettings, props.children])
+  ), [generalSettings, props.generalSettings, props.children])
 }
 
 export const useGeneralSettings = (): IGeneralSettingsContext => {
