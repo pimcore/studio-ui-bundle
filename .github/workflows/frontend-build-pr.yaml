@@ -6,7 +6,6 @@ on:
       - "[0-9]+.[0-9]+"
       - "feature-*"
       - "nightly"
-      - "feature/frontend-build-archive" # TEMP: run this PR's own workflow to generate the archive; revert before merge
   pull_request_target:
     branches:
       - "[0-9]+.[0-9]+"
