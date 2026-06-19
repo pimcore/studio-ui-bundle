@@ -20,6 +20,8 @@ namespace Pimcore\Bundle\StudioUiBundle\Build;
  * glob, extracting the archive on demand first (a no-op in read-only production).
  *
  * The using class only has to supply its own paths via {@see buildArchive()}.
+ *
+ * @internal
  */
 trait BuildArchiveExtractionTrait
 {

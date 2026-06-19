@@ -23,6 +23,8 @@ use ZipArchive;
  * while vendor is writable) and the entry point provider fallback (local dev / git pull)
  * call {@see ensureExtracted()}. It is idempotent, cheap on the hot path (a single stat()),
  * read-only-filesystem safe, and never overwrites a manual `npm run dev-app` build.
+ *
+ * @internal
  */
 final class BuildArchiveExtractor
 {

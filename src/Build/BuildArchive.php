@@ -19,6 +19,8 @@ namespace Pimcore\Bundle\StudioUiBundle\Build;
  *
  * `archiveGlob` matches one or more `build-<id>.zip` files; the newest one is used, so a
  * leftover older archive never wins.
+ *
+ * @internal
  */
 final readonly class BuildArchive
 {
