@@ -60,7 +60,7 @@ export const VideoEditable = ({
 }: VideoEditableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
-  const { triggerSaveAndReload } = useDocumentEditor()
+  const { reloadIframe } = useDocumentEditor()
   const [wrapperElement, setWrapperElement] = useState<HTMLDivElement | null>(null)
   const [emptyElement, setEmptyElement] = useState<HTMLDivElement | null>(null)
   const [progressElement, setProgressElement] = useState<HTMLDivElement | null>(null)
@@ -171,9 +171,9 @@ export const VideoEditable = ({
     }
     if (thumbnailStatus.status === 'finished' || thumbnailStatus.status === 'error') {
       reloadTriggeredRef.current = true
-      triggerSaveAndReload()
+      reloadIframe()
     }
-  }, [thumbnailStatus, triggerSaveAndReload])
+  }, [thumbnailStatus, reloadIframe])
 
   const showModal = (): void => {
     openModal(videoValue)

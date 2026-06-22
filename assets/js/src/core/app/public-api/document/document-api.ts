@@ -27,6 +27,7 @@ export interface DocumentApi {
   triggerValueChange: (documentId: number, key: string, value: any) => void
   triggerValueChangeWithReload: (documentId: number, key: string, value: any) => void
   triggerSaveAndReload: (documentId: number) => void
+  reloadIframe: (documentId: number) => void
   notifyIframeReady: (documentId: number) => void
   notifyAreablockTypes: (documentId: number, editableTypeId: string, areablockTypes: AreablockGroupedTypes) => void
   mergeAreablockTypes: (documentId: number, editableTypeId: string, areablockTypes: AreablockGroupedTypes) => void
@@ -97,6 +98,16 @@ class DocumentApiImpl implements DocumentApi {
 
   triggerSaveAndReload (documentId: number): void {
     void this.performAutoSaveAndReload(documentId)
+  }
+
+  // Reload the editor iframe without saving. Used when the rendered editable needs to
+  // refresh but the document state itself did not change (e.g. a video thumbnail finished
+  // converting) — avoids the autosave path (and its edit-lock gate / save-permission needs).
+  reloadIframe (documentId: number): void {
+    const iframeRef = iframeDocumentEditorRegistry.getIframeRef(documentId)
+    if (!isNil(iframeRef?.current)) {
+      iframeRef.current.reload()
+    }
   }
 
   notifyIframeReady (documentId: number): void {
