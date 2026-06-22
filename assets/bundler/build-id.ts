@@ -17,10 +17,8 @@ import path from 'node:path';
  * dependencies and generated output). It is a sha256 over every file's normalized relative
  * path + content, so identical source — including configs (rsbuild, tsconfig, …), fonts and
  * the API spec — yields the same id regardless of checkout location, and any change to them
- * bumps it. This includes the build tooling itself (these bundler scripts live under
- * `assets/`), so editing them also changes the id even though they are not bundled into the
- * app. Both the SDK and app builds of one `build-app` run resolve the same id (used as the
- * archive filename and the grouping key).
+ * bumps it. Both the SDK and app builds of one `build-app` run resolve the same id (used as
+ * the archive filename and the grouping key).
  */
 
 // Installed dependencies and generated output — not part of the source fingerprint.
