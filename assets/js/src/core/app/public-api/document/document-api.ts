@@ -100,10 +100,21 @@ class DocumentApiImpl implements DocumentApi {
     void this.performAutoSaveAndReload(documentId)
   }
 
-  // Reload the editor iframe without saving. Used when the rendered editable needs to
-  // refresh but the document state itself did not change (e.g. a video thumbnail finished
-  // converting) — avoids the autosave path (and its edit-lock gate / save-permission needs).
+  // Refresh the editor iframe when the rendered editable is stale but the document state did
+  // not change on its own (e.g. a video thumbnail finished converting).
+  // If there are unsaved changes, flush them first so the reload does not drop them — when the
+  // document is modified the edit-lock gate is already resolved, so that autosave won't hang.
+  // Otherwise reload directly, bypassing the autosave path (whose edit-lock gate holds autosaves
+  // until the first edit and would otherwise hang this poll-triggered refresh).
   reloadIframe (documentId: number): void {
+    const document = selectDocumentById(store.getState(), documentId)
+
+    if (document?.modified ?? false) {
+      void this.performAutoSaveAndReload(documentId)
+
+      return
+    }
+
     const iframeRef = iframeDocumentEditorRegistry.getIframeRef(documentId)
     if (!isNil(iframeRef?.current)) {
       iframeRef.current.reload()
