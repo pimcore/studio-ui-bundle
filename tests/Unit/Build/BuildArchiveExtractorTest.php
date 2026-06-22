@@ -18,6 +18,9 @@ use Pimcore\Bundle\StudioUiBundle\Build\BuildArchiveExtractor;
 use Pimcore\Bundle\StudioUiBundle\Exception\BuildArchiveNotWritableException;
 use ZipArchive;
 
+/**
+ * Unit coverage for the archive extraction decision logic in {@see BuildArchiveExtractor}.
+ */
 class BuildArchiveExtractorTest extends Unit
 {
     private const MARKER = 'extracted-archive.json';
