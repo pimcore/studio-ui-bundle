@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Button, Content, ContentLayout, Flex, Title, Toolbar } from '@sdk/components'
+import { Button, Content, ContentLayout, Title, Toolbar, Header } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSystemSettingsContext } from './context/hooks/use-system-settings-context'
@@ -39,16 +39,11 @@ export const SystemSettings = (): React.JSX.Element => {
         </Toolbar>
       }
       renderTopBar={
-        <Toolbar
-          borderStyle="default"
-          theme='secondary'
-        >
-          <Flex gap={ 'small' }>
-            <Title>
-              {t('widget.system-settings')}
-            </Title>
-          </Flex>
-        </Toolbar>
+        <Header >
+          <Title>
+            {t('widget.system-settings')}
+          </Title>
+        </Header>
       }
     >
       <Content

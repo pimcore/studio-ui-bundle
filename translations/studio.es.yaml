@@ -12,6 +12,7 @@ widget.missing-context.description: No se encontró ningún elemento relacionado
 widget.missing-tab-context.description: Esta función no es compatible con el elemento relacionado
 block: Bloque
 error.error_something_generic_went_wrong: Algo salió mal
+error.error_permission_denied: No tiene permiso para realizar esta acción en este elemento.
 error.syntax_error: Error de sintaxis
 error.error_element_exists: El elemento ya existe
 error.error_folder_exists: La carpeta ya existe
@@ -95,6 +96,16 @@ document.document-tree.title: Árbol de documentos
 document.document-tree.search: Buscar en {{folderName}}
 document.editable.inheritance.overwrite: Sobrescribir
 document.editable.inheritance.tooltip: Heredado del documento content-main. Haga clic para sobrescribir.
+areablock.move-above: Mover arriba
+areablock.move-below: Mover abajo
+areablock.show: Mostrar
+areablock.hide: Ocultar
+areablock.new: Nuevo
+areablock.copy: Copiar
+areablock.paste: Pegar
+areablock.cut: Cortar
+areablock.settings: Configuración
+areablock.delete: Eliminar
 document.link.target: Destino del enlace
 document.hardlink.source: Documento de origen
 document.hardlink.properties-from-source: Usar propiedades del documento de origen
@@ -128,7 +139,7 @@ save-and-continue: Guardar y continuar
 discard-and-continue: Descartar y continuar
 discard-changes: Descartar cambios
 unsaved-changes.title: Cambios sin guardar
-unsaved-changes.message: Tiene cambios sin guardar. ¿Qué desea hacer?
+unsaved-changes.message: Tiene cambios sin guardar. Si continúa sin guardar, estos cambios se perderán.
 unsaved-changes.close-message: Tiene cambios sin guardar. ¿Está seguro de que desea cerrar sin guardar?
 convert-to: Convertir a
 convert-document: Convertir documento

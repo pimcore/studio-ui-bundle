@@ -9,11 +9,12 @@
  */
 
 import React from 'react'
-import { IconButton, Toolbar, Content, Flex, IconTextButton, Box } from '@sdk/components'
+import { IconButton, IconTextButton, Toolbar, Content, Flex, Box, Header } from '@sdk/components'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Title } from '@Pimcore/components/title/title'
 import { t } from 'i18next'
-import { Table, Pagination, Divider } from 'antd'
+import { Table, Divider } from 'antd'
+import { Pagination } from '@Pimcore/components/pagination/pagination'
 import type { DeltaItem } from '../../../app/translations/translations-api-slice.gen'
 import { useStyle } from './translation-merger.styles'
 import { useMergerRows } from './hooks/use-merger-rows'
@@ -49,12 +50,30 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
   return (
     <ContentLayout
       renderToolbar={
-        <Toolbar theme="secondary">
-          <Flex
-            align="center"
-            justify="flex-end"
-            style={ { width: '100%' } }
-          >
+        <Toolbar
+          justify='space-between'
+          theme="secondary"
+        >
+          <Flex gap='extra-small'>
+            <IconTextButton
+              disabled={ applyableCount === 0 || loadingRows.size > 0 }
+              icon={ { value: 'arrow-square-right' } }
+              onClick={ () => { void applyAll() } }
+              type="link"
+            >
+              {t('translations.merger.apply-all')}
+            </IconTextButton>
+            <IconTextButton
+              danger
+              disabled={ revertableCount === 0 || loadingRows.size > 0 }
+              icon={ { value: 'corner-up-left' } }
+              onClick={ () => { void revertAll() } }
+              type="link"
+            >
+              {t('translations.merger.revert-all')}
+            </IconTextButton>
+          </Flex>
+          <Flex align="center">
             <IconButton
               icon={ { value: 'refresh' } }
               onClick={ resetRows }
@@ -66,7 +85,6 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
             <Pagination
               current={ currentPage }
               onChange={ (page, size) => { setCurrentPage(page); setPageSize(size) } }
-              pageSize={ pageSize }
               showSizeChanger
               showTotal={ (total) => `${total} ${t('translations.merger.items')}` }
               total={ totalRows }
@@ -75,34 +93,9 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
         </Toolbar>
       }
       renderTopBar={
-        <Toolbar
-          justify="space-between"
-          padding={ {
-            left: 'small',
-            right: 'extra-small'
-          } }
-          theme="secondary"
-        >
+        <Header >
           <Title>{t('translations.merger.title', { domain })}</Title>
-          <Flex gap="small">
-            <IconTextButton
-              disabled={ applyableCount === 0 || loadingRows.size > 0 }
-              icon={ { value: 'arrow-square-right' } }
-              onClick={ () => { void applyAll() } }
-            >
-              {t('translations.merger.apply-all')}
-            </IconTextButton>
-
-            <IconTextButton
-              danger
-              disabled={ revertableCount === 0 || loadingRows.size > 0 }
-              icon={ { value: 'corner-up-left' } }
-              onClick={ () => { void revertAll() } }
-            >
-              {t('translations.merger.revert-all')}
-            </IconTextButton>
-          </Flex>
-        </Toolbar>
+        </Header>
       }
     >
       <Content
