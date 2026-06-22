@@ -29,7 +29,6 @@ import { type TypeRegistryInterface } from '@Pimcore/modules/element/editor/serv
 import { EditorToolbarContextMenu } from './toolbar/context-menu/context-menu'
 import { EditorToolbarWorkflowMenu } from '@Pimcore/modules/element/editor/shared-components/workflow/menu/workflow-menu'
 import { EditorToolbarSaveButtons } from './toolbar/save-buttons/save-buttons'
-import { HighlightEditablesButton } from '@Pimcore/modules/document/actions/highlight-editables/highlight-editables-button'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -75,12 +74,6 @@ moduleSystem.registerModule({
       name: 'contextMenu',
       priority: 100,
       component: EditorToolbarContextMenu
-    })
-
-    componentRegistry.registerToSlot(componentConfig.document.editor.toolbar.slots.left.name, {
-      name: 'highlightEditables',
-      priority: 200,
-      component: HighlightEditablesButton
     })
 
     componentRegistry.registerToSlot(componentConfig.document.editor.toolbar.slots.right.name, {
