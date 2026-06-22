@@ -106,6 +106,7 @@ areablock.paste: Lim inn
 areablock.cut: Klipp ut
 areablock.settings: Innstillinger
 areablock.delete: Slett
+document.highlight-editables: Marker redigerbare elementer
 document.link.target: Lenke-mål
 document.hardlink.source: Kildedokument
 document.hardlink.properties-from-source: Bruk egenskaper fra kildedokument

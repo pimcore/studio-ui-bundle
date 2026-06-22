@@ -106,6 +106,7 @@ areablock.paste: Einfügen
 areablock.cut: Ausschneiden
 areablock.settings: Einstellungen
 areablock.delete: Löschen
+document.highlight-editables: Bearbeitbare Elemente hervorheben
 document.link.target: Link-Ziel
 document.hardlink.source: Quelldokument
 document.hardlink.properties-from-source: Eigenschaften vom Quelldokument verwenden
