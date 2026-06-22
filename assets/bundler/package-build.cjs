@@ -14,12 +14,15 @@
  * gitignored and reconstructed by BuildArchiveExtractor.
  *
  * - The build id is the shared `.build-id` written into each output dir at build time. It
- *   is deterministic (content-derived), so identical source produces the same id, the same
- *   archive contents and — with the fixed entry order/timestamps below — the same bytes, so
- *   git sees no change when nothing actually changed.
+ *   is content-derived, so identical source always yields the same id. The compiled output
+ *   itself is NOT byte-reproducible (e.g. Module Federation's mf-stats.json lists modules in
+ *   non-deterministic order), so the id — not the bytes — is the archive's identity: if an
+ *   archive for this id already exists it is kept untouched, avoiding a churned commit on
+ *   every build when the source did not actually change.
  * - Only the dirs of one build (a single `.build-id`, chosen deterministically) are
  *   packaged, so a dev tree containing several builds still yields a single-pair archive.
- * - Any previous build-*.zip is removed, so only the latest archive is ever tracked.
+ * - When the id is new (a real source change) any previous build-*.zip is removed, so only
+ *   one archive is ever tracked.
  */
 const path = require('node:path');
 const fs = require('node:fs');
@@ -58,6 +61,28 @@ if (dirs.length === 0) {
 const buildId = [...new Set(dirs.map((d) => d.buildId))].sort((a, b) => a.localeCompare(b)).pop();
 const pairDirs = dirs.filter((d) => d.buildId === buildId).map((d) => d.name);
 
+fs.mkdirSync(outDir, { recursive: true });
+const outFile = path.join(outDir, `build-${buildId}.zip`);
+
+// The id is the source-tree hash, so an existing archive with this id already represents
+// this exact source. Rewriting it would only churn the committed binary with non-reproducible
+// build noise (see header), so leave it untouched — but still sweep any stray archive from a
+// different id (e.g. dragged in by a merge) to preserve the one-archive invariant.
+if (fs.existsSync(outFile)) {
+  const strays = fs
+    .readdirSync(outDir)
+    .filter((file) => /^build.*\.zip$/.test(file) && file !== path.basename(outFile));
+  for (const file of strays) {
+    fs.rmSync(path.join(outDir, file), { force: true });
+  }
+  console.log(
+    strays.length > 0
+      ? `[package-build] kept ${path.basename(outFile)}; removed ${strays.length} stray archive(s)`
+      : `[package-build] ${path.basename(outFile)} already up to date for this source; nothing to do`
+  );
+  process.exit(0);
+}
+
 // Collect the build's files, relative to public/build, sorted for determinism.
 function collect(absDir, relBase, out) {
   for (const entry of fs.readdirSync(absDir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
@@ -89,15 +114,13 @@ for (const f of files) {
   }
 }
 
-fs.mkdirSync(outDir, { recursive: true });
-// Keep only the latest archive.
+// New id (a real source change): drop any previous archive before writing the new one.
 for (const file of fs.readdirSync(outDir)) {
   if (/^build.*\.zip$/.test(file)) {
     fs.rmSync(path.join(outDir, file), { force: true });
   }
 }
 
-const outFile = path.join(outDir, `build-${buildId}.zip`);
 zip.writeZip(outFile);
 
 const sizeMb = (fs.statSync(outFile).size / (1024 * 1024)).toFixed(1);
