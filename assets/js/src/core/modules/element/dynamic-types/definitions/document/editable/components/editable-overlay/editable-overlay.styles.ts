@@ -42,7 +42,7 @@ export const useStyles = createStyles((
     highlightOverlay: css`
       inset: 0;
       position: absolute;
-      background: rgba(255, 230, 0, 0.2);
+      background: rgba(124, 172, 160, 0.4);
       border: 1px dashed ${token.colorBorder};
       ${shape !== 'angular' ? `border-radius: ${token.borderRadius}px;` : ''}
       pointer-events: none;

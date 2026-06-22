@@ -56,10 +56,5 @@ export const SIDEBAR_DOCUMENT_CONFIGURATION: ISidebarEntry<IDocumentContext> = {
 export const SIDEBAR_HIGHLIGHT_EDITABLES: ISidebarButton = {
   key: 'highlight-editables',
   icon: <Icon value="highlight" />,
-  component: (
-    <HighlightEditablesButton
-      icon={ <Icon value="highlight" /> }
-      key="highlight-editables"
-    />
-  )
+  component: <HighlightEditablesButton />
 }
