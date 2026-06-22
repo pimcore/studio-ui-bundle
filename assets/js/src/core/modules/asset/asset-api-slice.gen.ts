@@ -6,6 +6,15 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            assetVideoThumbnailStatus: build.query<
+                AssetVideoThumbnailStatusApiResponse,
+                AssetVideoThumbnailStatusApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/video/thumbnail/${queryArg.thumbnailName}/status`,
+                }),
+                providesTags: ["Assets"],
+            }),
             assetGetTypes: build.query<AssetGetTypesApiResponse, AssetGetTypesApiArg>({
                 query: () => ({ url: `/pimcore-studio/api/assets/types` }),
                 providesTags: ["Assets"],
@@ -457,6 +466,14 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type AssetVideoThumbnailStatusApiResponse =
+    /** status 200 Conversion status of the video thumbnail */ VideoThumbnailStatus;
+export type AssetVideoThumbnailStatusApiArg = {
+    /** Id of the video */
+    id: number;
+    /** Find asset by matching thumbnail name. */
+    thumbnailName: string;
+};
 export type AssetGetTypesApiResponse = /** status 200 Successfully retrieved all available asset types */ {
     totalItems: number;
     items: AssetType[];
@@ -1004,13 +1021,13 @@ export type AssetCustomMetadataGetByIdApiArg = {
     /** Id of the asset */
     id: number;
 };
-export type AssetType = {
+export type VideoThumbnailStatus = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object;
     };
-    /** key */
-    key: string;
+    /** Conversion status of the requested video thumbnail. */
+    status: "finished" | "inprogress" | "error" | "not_started";
 };
 export type Error = {
     /** Message */
@@ -1021,6 +1038,14 @@ export type DevError = {
     message: string;
     /** Details */
     details: string;
+};
+export type AssetType = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** key */
+    key: string;
 };
 export type FixedCustomSettings = {
     /** embedded meta data of the asset - array of any key-value pairs */
@@ -1388,6 +1413,7 @@ export type CustomMetadata = {
     data: any | null;
 };
 export const {
+    useAssetVideoThumbnailStatusQuery,
     useAssetGetTypesQuery,
     useAssetBatchDeleteMutation,
     useAssetCloneMutation,

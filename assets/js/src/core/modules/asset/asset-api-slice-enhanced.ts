@@ -9,19 +9,7 @@
  */
 
 import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
-import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { api as baseApi } from './asset-api-slice.gen'
-
-export type AssetVideoThumbnailStatus = 'finished' | 'inprogress' | 'error' | 'not_started'
-
-export interface AssetVideoThumbnailStatusApiResponse {
-  status: AssetVideoThumbnailStatus
-}
-
-export interface AssetVideoThumbnailStatusApiArg {
-  id: number
-  thumbnailName: string
-}
 
 const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.ASSET, tagNames.ASSET_TREE, tagNames.ASSET_DETAIL],
@@ -111,15 +99,6 @@ const api = baseApi.enhanceEndpoints({
       providesTags: (result, error, args) => providingTags.ASSET_GRID_CONFIGURATION_LIST()
     }
   }
-}).injectEndpoints({
-  endpoints: (build) => ({
-    assetVideoThumbnailStatus: build.query<AssetVideoThumbnailStatusApiResponse, AssetVideoThumbnailStatusApiArg>({
-      query: (queryArg) => ({
-        url: `${getPrefix()}/assets/${queryArg.id}/video/thumbnail/${encodeURIComponent(queryArg.thumbnailName)}/status`
-      })
-    })
-  }),
-  overrideExisting: false
 })
 
 export type * from './asset-api-slice.gen'
