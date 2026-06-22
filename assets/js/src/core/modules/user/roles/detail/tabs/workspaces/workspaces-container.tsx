@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useTranslation } from 'react-i18next'
 import { Table } from '@Pimcore/modules/user/management/detail/tabs/workspaces/components/table/table'
@@ -20,6 +20,8 @@ import { Flex } from 'antd'
 import { useModal } from '@Pimcore/components/modal/useModal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { Button } from '@Pimcore/components/button/button'
+import { SpecialSettingsModal } from '@Pimcore/modules/user/management/detail/tabs/workspaces/components/special-settings-modal'
+import { WorkspaceType } from '@Pimcore/modules/user/management/detail/tabs/workspaces/workspace-type'
 
 const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -29,6 +31,9 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
   const [assetWorkspaces, setAssetWorkspaces] = React.useState<UserWorkspace[]>(role?.assetWorkspaces ?? [])
   const [documentWorkspaces, setDocumentWorkspaces] = React.useState<UserWorkspace[]>(role?.documentWorkspaces ?? [])
   const [objectWorkspaces, setObjectWorkspaces] = React.useState<UserWorkspace[]>(role?.dataObjectWorkspaces ?? [])
+
+  const [specialModalContext, setSpecialModalContext] = useState<number | null>(null)
+  const [isSpecialSettingsModalOpen, setIsSpecialSettingsModalOpen] = useState(false)
 
   const {
     showModal: showDuplicatePropertyModal,
@@ -60,16 +65,21 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
     }
 
     switch (type) {
-      case 'document':
+      case WorkspaceType.DOCUMENT:
         setDocumentWorkspaces([...workspaces, workspace])
         break
-      case 'asset':
+      case WorkspaceType.ASSET:
         setAssetWorkspaces([...workspaces, workspace])
         break
-      case 'object':
+      case WorkspaceType.OBJECT:
         setObjectWorkspaces([...workspaces, workspace])
         break
     }
+  }
+
+  const getSpecialModalValues = (type: string): string[] => {
+    const ws = role?.dataObjectWorkspaces.find(ws => ws.cid === specialModalContext) as Record<string, any> | undefined
+    return ws?.[type] ?? []
   }
 
   const documentsAccordion = [
@@ -87,7 +97,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
-        type={ 'document' }
+        type={ WorkspaceType.DOCUMENT }
                 />
     }
   ]
@@ -107,7 +117,7 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
-        type={ 'asset' }
+        type={ WorkspaceType.ASSET }
                 />
     }
   ]
@@ -123,11 +133,15 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       children: <Table
         data={ objectWorkspaces }
         isLoading={ isLoading }
+        onShowSpecialSettings={ (cid) => {
+          setSpecialModalContext(cid)
+          setIsSpecialSettingsModalOpen(true)
+        } }
         onUpdateData={ (data) => { changeRoleInState({ dataObjectWorkspaces: data }) } }
         showDuplicatePropertyModal={ () => {
           showDuplicatePropertyModal()
         } }
-        type={ 'object' }
+        type={ WorkspaceType.OBJECT }
                 />
     }
   ]
@@ -175,6 +189,24 @@ const WorkspacesContainer = ({ ...props }): React.JSX.Element => {
       >
         {t('properties.property-already-exist.error')}
       </DuplicatePropertyModal>
+
+      <SpecialSettingsModal
+        cpath={ role.dataObjectWorkspaces.find(ws => ws.cid === specialModalContext)?.cpath ?? '' }
+        initialValues={ {
+          layouts: getSpecialModalValues('layouts'),
+          localizedEdit: getSpecialModalValues('localizedEdit'),
+          localizedView: getSpecialModalValues('localizedView')
+        } }
+        key={ specialModalContext ?? 'none' }
+        onApply={ (changes) => {
+          changeRoleInState({
+            dataObjectWorkspaces: role.dataObjectWorkspaces.map(ws => ws.cid === specialModalContext ? { ...ws, ...changes } : ws)
+          })
+          setIsSpecialSettingsModalOpen(false)
+        } }
+        onCancel={ () => { setIsSpecialSettingsModalOpen(false) } }
+        open={ isSpecialSettingsModalOpen }
+      />
     </Flex>
   )
 }

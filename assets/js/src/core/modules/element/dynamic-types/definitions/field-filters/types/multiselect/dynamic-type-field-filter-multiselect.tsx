@@ -24,6 +24,15 @@ export class DynamicTypeFieldFilterMultiselect extends DynamicTypeFieldFilterAbs
   }
 
   transformFilterToApiRequest (filter: FieldFilter): FieldFilter {
+    // Dynamic options differ per object, so filter by free text (string filter) instead of the list.
+    if (filter.meta?.fieldDefinition?.dynamicOptions === true) {
+      return {
+        ...filter,
+        key: filter.meta?.filters?.key ?? filter.key,
+        type: FieldFilterFrontendType.String
+      }
+    }
+
     const transformedFilter = { ...filter }
     if (Array.isArray(filter.filterValue)) {
       transformedFilter.filterValue = filter.filterValue.map(String)

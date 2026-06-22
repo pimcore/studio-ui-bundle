@@ -11,6 +11,7 @@
 import { ToolStripBox } from '@Pimcore/components/toolstrip/box/tool-strip-box'
 import React, { useMemo } from 'react'
 import { BlockToolStrip } from './block-tool-strip'
+import { Flex } from '../flex/flex'
 
 export interface BlockItemProps {
   field: number
@@ -42,7 +43,12 @@ export const BlockItem = (props: BlockItemProps): React.JSX.Element => {
         )
       }
     >
-      {children}
+      <Flex 
+        gap={ 'extra-small' }
+        vertical
+      >
+        {children}
+      </Flex>
     </ToolStripBox>
   ), [field, noteditable, children, props.disallowAdd, props.disallowDelete, props.disallowReorder, props.itemValue, props.getItemTitle])
 }

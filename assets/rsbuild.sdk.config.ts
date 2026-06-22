@@ -39,6 +39,7 @@ export default defineConfig({
   },
   dev: {
     ...(!isDevServer ? {assetPrefix: '/bundles/pimcorestudioui/build/' + buildId} : {}),
+    lazyCompilation: false,
   },
   source: {
     entry: {

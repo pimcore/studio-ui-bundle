@@ -75,6 +75,7 @@ import chevronUp from '@Pimcore/assets/icons/chevron-up.inline.svg?react'
 import childrenGrid from '@Pimcore/assets/icons/children-grid.inline.svg?react'
 import classIcon from '@Pimcore/assets/icons/class.inline.svg?react'
 import classificationStore from '@Pimcore/assets/icons/classification-store.inline.svg?react'
+import clearErase from '@Pimcore/assets/icons/clear-erase.inline.svg?react'
 import closeFilled from '@Pimcore/assets/icons/close-filled.inline.svg?react'
 import close from '@Pimcore/assets/icons/close.inline.svg?react'
 import cms from '@Pimcore/assets/icons/cms.inline.svg?react'
@@ -272,6 +273,7 @@ import order from '@Pimcore/assets/icons/order.inline.svg?react'
 import otherOperators from '@Pimcore/assets/icons/other-operators.inline.svg?react'
 import other from '@Pimcore/assets/icons/other.inline.svg?react'
 import packageIcon from '@Pimcore/assets/icons/package.inline.svg?react'
+import pageStatic from '@Pimcore/assets/icons/page-static.inline.svg?react'
 import panel from '@Pimcore/assets/icons/panel.inline.svg?react'
 import password from '@Pimcore/assets/icons/password.inline.svg?react'
 import paste from '@Pimcore/assets/icons/paste.inline.svg?react'
@@ -322,6 +324,7 @@ import robot from '@Pimcore/assets/icons/robot.inline.svg?react'
 import run from '@Pimcore/assets/icons/run.inline.svg?react'
 import save from '@Pimcore/assets/icons/save.inline.svg?react'
 import schedule from '@Pimcore/assets/icons/schedule.inline.svg?react'
+import scissorsCut01 from '@Pimcore/assets/icons/scissors-cut-01.inline.svg?react'
 import search from '@Pimcore/assets/icons/search.inline.svg?react'
 import segmentTagging from '@Pimcore/assets/icons/segment-tagging.inline.svg?react'
 import selectType from '@Pimcore/assets/icons/select-type.inline.svg?react'
@@ -371,6 +374,7 @@ import txtDocs from '@Pimcore/assets/icons/txt-docs.inline.svg?react'
 import unknown from '@Pimcore/assets/icons/unknown.inline.svg?react'
 import unlinkDocument from '@Pimcore/assets/icons/unlink-document.inline.svg?react'
 import unlocked from '@Pimcore/assets/icons/unlocked.inline.svg?react'
+import updateBuild from '@Pimcore/assets/icons/update-build.inline.svg?react'
 import uploadCloud from '@Pimcore/assets/icons/upload-cloud.inline.svg?react'
 import uploadImport from '@Pimcore/assets/icons/upload-import.inline.svg?react'
 import uploadZip from '@Pimcore/assets/icons/upload-zip.inline.svg?react'
@@ -636,6 +640,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'classification-store',
       component: classificationStore
+    })
+    iconLibrary.register({
+      name: 'clear-erase',
+      component: clearErase
     })
     iconLibrary.register({
       name: 'close-filled',
@@ -1426,6 +1434,10 @@ moduleSystem.registerModule({
       component: packageIcon
     })
     iconLibrary.register({
+      name: 'page-static',
+      component: pageStatic
+    })
+    iconLibrary.register({
       name: 'panel',
       component: panel
     })
@@ -1626,6 +1638,10 @@ moduleSystem.registerModule({
       component: schedule
     })
     iconLibrary.register({
+      name: 'scissors-cut-01',
+      component: scissorsCut01
+    })
+    iconLibrary.register({
       name: 'search',
       component: search
     })
@@ -1820,6 +1836,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'unlocked',
       component: unlocked
+    })
+    iconLibrary.register({
+      name: 'update-build',
+      component: updateBuild
     })
     iconLibrary.register({
       name: 'upload-cloud',

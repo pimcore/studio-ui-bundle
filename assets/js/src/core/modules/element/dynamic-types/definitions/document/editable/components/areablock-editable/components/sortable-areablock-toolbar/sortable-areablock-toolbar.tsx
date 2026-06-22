@@ -9,71 +9,87 @@
  */
 
 import React from 'react'
+import { isNil } from 'lodash'
 import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Split } from '@Pimcore/components/split/split'
 import { Space, Dropdown } from '@sdk/components'
 import { useStyles } from '../../areablock-editable.styles'
-import { type AreablockManager } from '../../utils/areablock-manager'
 import { type AreaType, type AreablockEditableConfig } from '../../areablock-editable'
 import { useTranslation } from 'react-i18next'
 import { useSortableElement } from '../../../../helpers/editable-dropzone-sorting/hooks/use-sortable-element'
 import { useAreablockMenu } from '../../hooks/use-areablock-menu'
+import { useAreablockClipboard } from '../../hooks/use-areablock-clipboard'
+import { configUtils } from '../../utils/areablock-utils'
 import { InheritanceWrapper } from '../../../inheritance-wrapper/inheritance-wrapper'
 
 export interface SortableAreablockToolbarProps {
   id: string
-  buttonsContainer: HTMLElement
   element: HTMLElement
   limitReached: boolean
   areaTypes: AreaType[]
   config?: AreablockEditableConfig
-  areablockManager: AreablockManager
+  // Pre-computed in the parent (use-areablock-controls) so this component can be memoized.
+  isFirst: boolean
+  isLast: boolean
+  isHidden: boolean
+  toolbarTitle?: string
+  hasDialogBox: boolean
   onAddArea: (element: HTMLElement | null, areaType?: string) => void
   onRemoveArea: (element: HTMLElement) => void
   onMoveAreaUp: (element: HTMLElement) => void
   onMoveAreaDown: (element: HTMLElement) => void
+  onCopyArea: (element: HTMLElement) => void
+  onCutArea: (element: HTMLElement) => void
+  onPasteArea: (element: HTMLElement | null) => void
   onOpenDialog?: (areaKey: string) => void
   onToggleHidden?: (element: HTMLElement) => void
   isInherited?: boolean
   onOverwrite?: () => void
 }
 
-export const SortableAreablockToolbar = ({
+type DragListeners = ReturnType<typeof useSortableElement>['listeners']
+
+interface SortableAreablockToolbarInnerProps extends SortableAreablockToolbarProps {
+  dragListeners: DragListeners
+}
+
+// Inner toolbar — memoized, doesn't subscribe to dnd-kit. The outer wrapper
+// owns the subscription so re-renders on drag don't reach this body.
+const SortableAreablockToolbarInnerComponent = ({
   id,
-  buttonsContainer,
   element,
   limitReached,
   areaTypes,
   config,
-  areablockManager,
+  isFirst,
+  isLast,
+  isHidden,
+  toolbarTitle,
+  hasDialogBox,
   onAddArea,
   onRemoveArea,
   onMoveAreaUp,
   onMoveAreaDown,
+  onCopyArea,
+  onCutArea,
+  onPasteArea,
   onOpenDialog,
   onToggleHidden,
   isInherited = false,
-  onOverwrite
-}: SortableAreablockToolbarProps): React.JSX.Element => {
+  onOverwrite,
+  dragListeners
+}: SortableAreablockToolbarInnerProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
-  const { listeners } = useSortableElement({ id, element })
+
+  const clipboardItem = useAreablockClipboard()
+  const canPaste = !isNil(clipboardItem) && !limitReached && configUtils.isTypePasteable(config, clipboardItem.type)
 
   const { menuItems } = useAreablockMenu({
     config,
     onAddArea: (areaType: string) => { onAddArea(element, areaType) }
   })
-
-  const elements = areablockManager.queryElements()
-  const elementIndex = areablockManager.findElementIndex(element)
-  const isFirst = elementIndex === 0
-  const isLast = elementIndex === elements.length - 1
-  const isHidden = areablockManager.isElementHidden(element)
-
-  const elementType = areablockManager.getElementType(element)
-  const areaTypeConfig = areaTypes.find(areaType => areaType.type === elementType)
-  const toolbarTitle = (areaTypeConfig?.name != null) ? t(areaTypeConfig.name) : undefined
 
   const buttons: React.ReactNode[] = []
   let deleteButton: React.ReactNode = null
@@ -88,6 +104,7 @@ export const SortableAreablockToolbar = ({
             onAddArea(element, areaTypes[0].type)
           } }
           size="small"
+          tooltip={ { title: t('areablock.new') } }
         />
       )
     } else {
@@ -101,6 +118,7 @@ export const SortableAreablockToolbar = ({
           <IconButton
             icon={ { value: 'new' } }
             size="small"
+            tooltip={ { title: t('areablock.new') } }
           />
         </Dropdown>
       )
@@ -114,6 +132,7 @@ export const SortableAreablockToolbar = ({
       key="up"
       onClick={ () => { onMoveAreaUp(element) } }
       size="small"
+      tooltip={ { title: t('areablock.move-above') } }
     />
   )
 
@@ -124,16 +143,49 @@ export const SortableAreablockToolbar = ({
       key="down"
       onClick={ () => { onMoveAreaDown(element) } }
       size="small"
+      tooltip={ { title: t('areablock.move-below') } }
     />
   )
 
-  if (areaTypeConfig?.hasDialogBoxConfiguration === true) {
+  buttons.push(
+    <IconButton
+      icon={ { value: 'copy' } }
+      key="copy"
+      onClick={ () => { onCopyArea(element) } }
+      size="small"
+      tooltip={ { title: t('areablock.copy') } }
+    />
+  )
+
+  buttons.push(
+    <IconButton
+      disabled={ !canPaste }
+      icon={ { value: 'paste' } }
+      key="paste"
+      onClick={ () => { onPasteArea(element) } }
+      size="small"
+      tooltip={ { title: t('areablock.paste') } }
+    />
+  )
+
+  buttons.push(
+    <IconButton
+      icon={ { value: 'scissors-cut-01' } }
+      key="cut"
+      onClick={ () => { onCutArea(element) } }
+      size="small"
+      tooltip={ { title: t('areablock.cut') } }
+    />
+  )
+
+  if (hasDialogBox) {
     buttons.push(
       <IconButton
         icon={ { value: 'settings' } }
         key="dialog"
         onClick={ () => { onOpenDialog?.(id) } }
         size="small"
+        tooltip={ { title: t('areablock.settings') } }
       />
     )
   }
@@ -144,7 +196,7 @@ export const SortableAreablockToolbar = ({
       key="visibility"
       onClick={ () => { onToggleHidden?.(element) } }
       size="small"
-      title={ t(isHidden ? 'areablock.show' : 'areablock.hide') }
+      tooltip={ { title: t(isHidden ? 'areablock.show' : 'areablock.hide') } }
     />
   )
 
@@ -154,6 +206,7 @@ export const SortableAreablockToolbar = ({
       key="minus"
       onClick={ () => { onRemoveArea(element) } }
       size="small"
+      tooltip={ { title: t('areablock.delete') } }
     />
   )
 
@@ -163,7 +216,7 @@ export const SortableAreablockToolbar = ({
       additionalIcon={ isInherited ? 'inheritance-active' : undefined }
       className={ styles.areablockToolstrip }
       disabled={ isInherited }
-      dragger={ isInherited ? true : { listeners } }
+      dragger={ isInherited ? true : { listeners: dragListeners } }
       key={ `toolbar-${element.getAttribute('key')}` }
       theme="inverse"
       title={ toolbarTitle }
@@ -188,5 +241,18 @@ export const SortableAreablockToolbar = ({
     >
       {toolStripContent}
     </InheritanceWrapper>
+  )
+}
+
+const SortableAreablockToolbarInner = React.memo(SortableAreablockToolbarInnerComponent)
+
+// Outer wrapper isolates the dnd-kit subscription from the memoized inner.
+export const SortableAreablockToolbar = (props: SortableAreablockToolbarProps): React.JSX.Element => {
+  const { listeners } = useSortableElement({ id: props.id, element: props.element })
+  return (
+    <SortableAreablockToolbarInner
+      { ...props }
+      dragListeners={ listeners }
+    />
   )
 }

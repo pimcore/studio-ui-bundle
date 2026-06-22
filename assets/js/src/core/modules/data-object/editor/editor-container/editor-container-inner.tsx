@@ -26,6 +26,7 @@ import { Alert } from '@Pimcore/components/alert/alert'
 import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
 import { getBaseDataObjectContextIdentifiers } from '@Pimcore/utils/global-context-identifiers'
 import { TAB_LISTING } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/listing/listing-container'
+import { useEditLock } from '@Pimcore/modules/element/hooks/use-edit-lock'
 
 export interface EditorContainerInnerProps {
   id: number
@@ -37,6 +38,8 @@ const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Eleme
   const { isLoading, isError, dataObject, editorType, activeTab } = useDataObjectDraft(id)
   const isWidgetActive = useIsActiveMainWidget()
   const { setContext, removeContext } = useGlobalDataObjectContext()
+
+  useEditLock({ id, elementType: 'data-object', modified: dataObject?.modified ?? false, path: dataObject?.fullPath })
 
   useEffect(() => {
     return () => {

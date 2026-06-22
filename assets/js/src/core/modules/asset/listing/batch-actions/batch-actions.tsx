@@ -9,13 +9,13 @@
  */
 
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
-import {
-  useAssetGetByIdQuery
-} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
+import { useStyles } from './batch-actions.styles'
+import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
 import { useRowSelectionOptional } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection-optional'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
@@ -40,26 +40,19 @@ export const BatchActions = (): React.JSX.Element => {
 
   const { createZipDownload: createZipFolderDownload } = useZipDownload({ type: 'folder' })
   const { createZipDownload: createZipAssetListDownload } = useZipDownload({ type: 'asset-list' })
-  const { data } = useAssetGetByIdQuery({ id })
-
-  const [jobTitle, setJobTitle] = useState<string>('Asset')
   const [csvModalOpen, setCsvModalOpen] = useState<boolean>(false)
   const [xlsxModalOpen, setXlsxModalOpen] = useState<boolean>(false)
   const [batchEditModalOpen, setBatchEditModalOpen] = useState<boolean>(false)
 
   const { t } = useTranslation()
-
-  useEffect(() => {
-    if (data !== undefined) {
-      setJobTitle(`${data.filename}`)
-    }
-  }, [data])
+  const modal = useFormModal()
+  const { styles } = useStyles()
 
   if (rowSelection === undefined) {
     return <></>
   }
 
-  const { selectedRows, setSelectedRows } = rowSelection
+  const { selectedRows, setSelectedRows, selectedRowsData } = rowSelection
 
   const numberedSelectedRows = selectedRows !== undefined ? Object.keys(selectedRows).map(Number) : []
   const hasSelectedItems = selectedRows !== undefined ? Object.keys(selectedRows).length > 0 : false
@@ -67,7 +60,6 @@ export const BatchActions = (): React.JSX.Element => {
   const handleBatchDelete = async (): Promise<void> => {
     const job = new AssetBatchDeleteJob({
       itemIds: numberedSelectedRows,
-      title: t('batch-delete.job-title'),
       onFinish: async () => {
         await refreshGrid()
         setSelectedRows({})
@@ -75,6 +67,31 @@ export const BatchActions = (): React.JSX.Element => {
     })
 
     await executionEngine.runJob(job)
+  }
+
+  const handleBatchDeleteConfirm = (): void => {
+    const count = numberedSelectedRows.length
+    const paths = numberedSelectedRows.map(id => selectedRowsData?.[id]?.fullpath ?? String(id))
+    const pathList = (
+      <ul className={ styles.pathList }>
+        {paths.map((path) => <li key={ path }>{path}</li>)}
+      </ul>
+    )
+
+    modal.confirm({
+      title: t('element.delete.batch.title'),
+      width: 530,
+      content: <>
+        <p>{t('element.delete.batch.question', { count })}</p>
+        {count > 5
+          ? <Accordion items={ [{ key: 'paths', title: <span>{t('element.delete.batch.show-paths')}</span>, children: pathList }] } />
+          : pathList}
+        <p><span className={ styles.warningText }>{t('element.delete.batch.dependencies-warning')}</span></p>
+      </>,
+      cancelText: t('cancel'),
+      okText: t('element.delete.batch.ok'),
+      onOk: async () => { await handleBatchDelete() }
+    })
   }
 
   const menu: DropdownMenuProps = {
@@ -123,7 +140,7 @@ export const BatchActions = (): React.JSX.Element => {
         hidden: !hasSelectedItems,
         label: t('listing.actions.delete'),
         icon: <Icon value={ 'trash' } />,
-        onClick: handleBatchDelete
+        onClick: handleBatchDeleteConfirm
       }
     ]
   }
@@ -160,10 +177,9 @@ export const BatchActions = (): React.JSX.Element => {
 
   function createZip (): void {
     if (hasSelectedItems) {
-      createZipAssetListDownload({ jobTitle, requestData: { body: { assets: numberedSelectedRows } } })
+      createZipAssetListDownload({ requestData: { body: { assets: numberedSelectedRows, parentId: id } } })
     } else {
       createZipFolderDownload({
-        jobTitle,
         requestData: {
           body: {
             folders: [id],

@@ -18,6 +18,7 @@ import { PropertiesContainer } from './shared-tab-manager/tabs/properties/proper
 import { ScheduleTabContainer } from './shared-tab-manager/tabs/schedule/schedule-container'
 import { DependenciesTabContainer } from './shared-tab-manager/tabs/dependencies/dependencies-container'
 import { WorkflowTabContainer } from './shared-tab-manager/tabs/workflow/workflow-container'
+import { WorkflowModal } from './shared-components/workflow/modal/workflow-modal'
 import { NotesAndEventsTabContainer } from './shared-tab-manager/tabs/notes-and-events/notes-and-events-container'
 import { TagsTabContainer } from './shared-tab-manager/tabs/tags/tags-container'
 
@@ -49,6 +50,11 @@ moduleSystem.registerModule({
     componentRegistry.register({
       name: componentConfig.element.editor.tab.workflow.name,
       component: WorkflowTabContainer
+    })
+
+    componentRegistry.register({
+      name: componentConfig.element.editor.workflow.modal.component.name,
+      component: WorkflowModal
     })
 
     componentRegistry.register({

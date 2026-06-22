@@ -16,7 +16,7 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
-import { Box, Button, Form, IconTextButton, Input, ModalFooter, Pagination, SearchInput, Select, useModal } from '@sdk/components'
+import { Box, Button, Form, IconTextButton, Input, ModalFooter, Pagination, SearchInput, Select, useModal, Header } from '@sdk/components'
 import trackError, { ApiError } from '../app/error-handler'
 import { uuid } from '@sdk/utils'
 import { isUndefined } from 'lodash'
@@ -82,7 +82,13 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
               sortFilter: {
                 key: sorting[0].id === 'siteDomain' ? 'siteId' : sorting[0].id,
                 direction: sorting[0].desc ? 'DESC' : 'ASC'
-              }
+              },
+              additionalSortFilters: [
+                {
+                  key: 'id',
+                  direction: 'ASC'
+                }
+              ]
             }
           : {})
       }
@@ -204,18 +210,8 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
           />
         </Toolbar> }
       renderTopBar={
-        <Toolbar
-          justify='space-between'
-          margin={ {
-            x: 'mini',
-            y: 'none'
-          } }
-          padding={ {
-            x: 'small'
-          } }
-          theme='secondary'
-        >
-          <Flex gap={ 'small' }>
+        <Header >
+          <Flex gap='extra-small'>
             <Title>{t('widget.website-settings')}</Title>
             <Form
               form={ form }
@@ -224,14 +220,16 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
                 void onCreateProperty(name, type)
               } }
             >
-              <Flex>
+              <Flex gap='extra-small'>
                 <Form.Item
                   name="name"
+                  style={ { marginBottom: 0, marginInlineEnd: 0 } }
                 >
                   <Input placeholder={ t('properties.add-custom-property.key') } />
                 </Form.Item>
                 <Form.Item
                   name="type"
+                  style={ { marginBottom: 0, marginInlineEnd: 0 } }
                 >
                   <Select
                     className="min-w-100"
@@ -240,13 +238,13 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
                   />
                 </Form.Item>
 
-                <Form.Item>
+                <Form.Item style={ { marginBottom: 0, marginInlineEnd: 0 } }>
                   <IconTextButton
                     htmlType="submit"
                     icon={ { value: 'new' } }
                     loading={ createLoading }
                   >
-                    {t('website-settings.new')}
+                    {t('toolbar.new')}
                   </IconTextButton>
                 </Form.Item>
               </Flex>
@@ -261,7 +259,7 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
             withPrefix={ false }
             withoutAddon={ false }
           />
-        </Toolbar>
+        </Header>
         }
     >
       <Content

@@ -15,9 +15,11 @@ import { type GridColumnConfiguration as ObjectGridColumnConfig } from '@Pimcore
 import { useTranslation } from 'react-i18next'
 import { isEmpty, isNil } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
 // @todo: Create a union type for all the different element types
 export type AvailableColumn = (AssetGridColumnConfig | ObjectGridColumnConfig) & {
+  width?: number | null
   __meta?: {
     uniqueId?: string
     advancedColumnConfig?: Record<string, any>
@@ -126,7 +128,7 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
 
         // Convert the tree structure into Ant Design menu format
         const convertTreeToMenuItems = (tree: Record<string, any>, parentPath = ''): any[] => {
-          return Object.entries(tree).map(([groupName, groupData]) => {
+          return Object.entries(tree).flatMap(([groupName, groupData]) => {
             const currentPath = parentPath !== '' ? `${parentPath}.${groupName}` : groupName
             const menuItem: any = {
               key: `group-${menuIndex++}`,
@@ -142,7 +144,7 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
             const columnItems = groupData.items.map((column: AvailableColumn) => {
               let translationKey = `${column.key}`
 
-              if ('fieldDefinition' in column.config && !isNil(column.config)) {
+              if (hasFieldDefinition(column.config)) {
                 const fieldDefinition = column.config.fieldDefinition as Record<string, any>
                 translationKey = !isEmptyValue(fieldDefinition?.title) ? fieldDefinition?.title : column.key
               }
@@ -154,6 +156,7 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
                 mainType: column.type,
                 frontendType: column.frontendType,
                 editable: column.editable,
+                config: column.config,
                 onClick: () => {
                   onMenuItemClick(column)
                 }
@@ -162,6 +165,12 @@ export const AvailableColumnsProvider = ({ children }: AvailableColumnsProviderP
 
             // Combine sub-groups and column items as children
             const allChildren = [...subGroupItems, ...columnItems]
+
+            // Do not render a group level when it contains the Advanced column
+            if (allChildren.length === 1 && allChildren[0].key === 'advanced') {
+              return allChildren
+            }
+
             if (allChildren.length > 0) {
               menuItem.children = allChildren
             }

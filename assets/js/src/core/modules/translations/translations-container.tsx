@@ -18,7 +18,8 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
-import { Box, Form, IconTextButton, Input, SearchInput, useModal, Select, Pagination } from '@sdk/components'
+import { Box, Form, IconTextButton, Input, SearchInput, useModal, Select, Pagination, Header } from '@sdk/components'
+import { Divider } from 'antd'
 import trackError, { ApiError } from '../app/error-handler'
 import { useTranslationGetListQuery, useTranslationGetDomainsQuery, api } from '../app/translations/translations-api-slice-enhanced'
 import { useTranslation } from './hooks/use-translation'
@@ -35,6 +36,10 @@ import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useTranslationDomain } from './hooks/translation-domain-provider'
 import { type SortingState } from '@tanstack/react-table'
 import { TranslationErrorModals } from './components/translation-error-modals'
+import { ExportTranslationsButton } from './components/export-translations-button'
+import { ImportTranslationsButton } from './components/import-translations-button'
+import { CleanupTranslationsButton } from './components/cleanup-translations-button'
+import { useStyle } from './translations-container.styles'
 
 const TESTID_PREFIX = 'translations'
 
@@ -42,7 +47,12 @@ interface FormValues {
   translationKey: string
 }
 
-export const TranslationsContainer = (): React.JSX.Element => {
+export interface TranslationsContainerProps {
+  initialSearchTerm?: string
+}
+
+export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContainerProps): React.JSX.Element => {
+  const { styles } = useStyle()
   const [form] = Form.useForm<FormValues>()
   const dispatch = useAppDispatch()
   const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
@@ -52,7 +62,14 @@ export const TranslationsContainer = (): React.JSX.Element => {
   const { domain, setDomain } = useTranslationDomain()
   const [visibleLocales, setVisibleLocales] = useState<string[] | null>(null)
   const [translationRows, setTranslationRows] = useState<TranslationRow[]>([])
-  const [searchTerm, setSearchTerm] = useState<string>('')
+  const [searchTerm, setSearchTerm] = useState<string>(initialSearchTerm ?? '')
+
+  useEffect(() => {
+    if (initialSearchTerm !== undefined) {
+      setSearchTerm(initialSearchTerm)
+      setCurrentPage(1)
+    }
+  }, [initialSearchTerm])
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
   const [sorting, setSorting] = useState<SortingState>([{ id: 'key', desc: false }])
@@ -73,18 +90,18 @@ export const TranslationsContainer = (): React.JSX.Element => {
         page: currentPage,
         pageSize,
         columnFilters:
-          searchTerm.length >= 0
+          searchTerm.length > 0
             ? [{
                 type: 'search',
                 filterValue: searchTerm
               }]
-            : [],
+            : undefined,
         sortFilter: sorting.length > 0
           ? {
               key: sorting[0].id.startsWith('_') ? sorting[0].id.substring(1) : sorting[0].id,
               direction: sorting[0].desc ? 'DESC' : 'ASC'
             }
-          : []
+          : undefined
       }
     }
   }), [domain, currentPage, pageSize, searchTerm, sorting])
@@ -161,35 +178,64 @@ export const TranslationsContainer = (): React.JSX.Element => {
 
   return (
     <ContentLayout
+      className={ styles.translationsContainer }
       renderToolbar={
         <Toolbar theme="secondary">
-          <IconButton
-            data-testid={ `${TESTID_PREFIX}-refresh-button` }
-            disabled={ translationsLoading }
-            icon={ { value: 'refresh' } }
-            onClick={ reload }
-          />
-          <Pagination
-            current={ currentPage }
-            onChange={ (page, pageSize) => {
-              setCurrentPage(page)
-              setPageSize(pageSize)
-            } }
-            showSizeChanger
-            showTotal={ (total) => t('pagination.show-total', { total }) }
-            total={ data?.totalItems ?? 0 }
-          />
+          <Flex gap="extra-small">
+            <CleanupTranslationsButton
+              domain={ domain }
+              onSuccess={ reload }
+            />
+            <ExportTranslationsButton
+              domain={ domain }
+              filters={ {
+                columnFilters: searchTerm.length > 0
+                  ? [{ type: 'search', filterValue: searchTerm }]
+                  : [],
+                sortFilter: sorting.length > 0
+                  ? {
+                      key: sorting[0].id.startsWith('_') ? sorting[0].id.substring(1) : sorting[0].id,
+                      direction: sorting[0].desc ? 'DESC' : 'ASC'
+                    }
+                  : {}
+              } }
+            />
+            <ImportTranslationsButton
+              domain={ domain }
+              onSuccess={ reload }
+            />
+          </Flex>
+          <Flex
+            align="center"
+          >
+            <IconButton
+              data-testid={ `${TESTID_PREFIX}-refresh-button` }
+              disabled={ translationsLoading }
+              icon={ { value: 'refresh' } }
+              onClick={ reload }
+            />
+            <Divider
+              style={ { height: 24 } }
+              type="vertical"
+            />
+            <Pagination
+              current={ currentPage }
+              onChange={ (page, pageSize) => {
+                setCurrentPage(page)
+                setPageSize(pageSize)
+              } }
+              showSizeChanger
+              showTotal={ (total) => t('pagination.show-total', { total }) }
+              total={ data?.totalItems ?? 0 }
+            />
+          </Flex>
         </Toolbar> }
       renderTopBar={
-        <Toolbar
-          justify='space-between'
-          margin={ {
-            x: 'mini',
-            y: 'none'
-          } }
-          theme='secondary'
-        >
-          <Flex gap={ 'small' }>
+        <Header >
+          <Flex
+            align="center"
+            gap='extra-small'
+          >
             <Title>{t('translations.new-translation')}</Title>
             <Form
               form={ form }
@@ -198,16 +244,18 @@ export const TranslationsContainer = (): React.JSX.Element => {
                 void onCreateTranslation(translationKey)
               } }
             >
-              <Flex>
+              <Flex gap='extra-small'>
                 <Form.Item
                   name="translationKey"
+                  style={ { marginBottom: 0, marginInlineEnd: 0 } }
                 >
                   <Input
+                    className="translations-key-input"
                     data-testid={ `${TESTID_PREFIX}-key-input` }
                     placeholder={ t('translations.add-translation.key') }
                   />
                 </Form.Item>
-                <Form.Item>
+                <Form.Item style={ { marginBottom: 0, marginInlineEnd: 0 } }>
                   <IconTextButton
                     data-testid={ `${TESTID_PREFIX}-add-button` }
                     htmlType="submit"
@@ -219,7 +267,10 @@ export const TranslationsContainer = (): React.JSX.Element => {
                 </Form.Item>
               </Flex>
             </Form>
+          </Flex>
+          <Flex gap='extra-small'>
             <Select
+              className="translations-domain-select"
               data-testid={ `${TESTID_PREFIX}-domain-select` }
               loading={ domainsLoading }
               onChange={ (value: string) => {
@@ -228,16 +279,14 @@ export const TranslationsContainer = (): React.JSX.Element => {
               } }
               options={ availableDomains.map(domainInfo => ({
                 value: domainInfo.domain,
-                label: domainInfo.domain
+                label: t(`translations.domain.${domainInfo.domain}`, { defaultValue: domainInfo.domain })
               })) }
               placeholder={ t('translations.select-domain') }
-              style={ { minWidth: 120 } }
               value={ domain }
             />
-          </Flex>
-          <Flex gap="small">
             <Select
               allowClear
+              className="translations-locale-select"
               data-testid={ `${TESTID_PREFIX}-locale-select` }
               disabled={ viewableLanguages.length === 0 || languagesLoading }
               dropdownStyle={ { minWidth: 250 } }
@@ -257,10 +306,10 @@ export const TranslationsContainer = (): React.JSX.Element => {
               })) }
               placeholder={ t('translations.show-hide-locale') }
               showSearch
-              style={ { minWidth: 220 } }
               value={ visibleLocales ?? [] }
             />
             <SearchInput
+              className="translations-search-input"
               data-testid={ `${TESTID_PREFIX}-search-input` }
               loading={ translationsLoading }
               onSearch={ (value) => {
@@ -272,7 +321,7 @@ export const TranslationsContainer = (): React.JSX.Element => {
             />
 
           </Flex>
-        </Toolbar>
+        </Header>
         }
     >
       <Content

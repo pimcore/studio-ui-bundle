@@ -15,6 +15,7 @@ import cn from 'classnames'
 import { isString } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { Spin } from '@Pimcore/components/spin/spin'
 import { useStyles } from './select.styles'
 import { useTranslation } from 'react-i18next'
 import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
@@ -50,6 +51,10 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   theme = 'default',
   loadingSkeleton = false,
   dataTestId,
+  loading = false,
+  onDropdownVisibleChange,
+  onFocus,
+  onBlur,
   ...antdSelectProps
 }, ref): React.JSX.Element => {
   const { t } = useTranslation()
@@ -143,9 +148,27 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
     [styles.customIconError]: (isActive || isFocus) && isStatusError
   })
 
-  const handleClick = (): void => { setIsActive(!isActive) }
+  // Compose internal dropdown/focus state with optional consumer handlers (don't override them).
+  const handleDropdownVisibleChange = (open: boolean): void => {
+    setIsActive(open)
+    onDropdownVisibleChange?.(open)
+  }
+
+  const handleFocus = (event: React.FocusEvent<HTMLElement>): void => {
+    setIsFocus(true)
+    onFocus?.(event)
+  }
+
+  const handleBlur = (event: React.FocusEvent<HTMLElement>): void => {
+    setIsFocus(false)
+    onBlur?.(event)
+  }
 
   const getSuffixIcon = (): React.JSX.Element => {
+    if (loading) {
+      return <Spin type="classic" />
+    }
+
     const isShowCustomIcon = !isEmptyValue(customArrowIcon) && isString(customArrowIcon)
     const defaultIcon = isActive ? 'chevron-up' : 'chevron-down'
 
@@ -174,6 +197,32 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
     ...antdSelectProps.style
   }
 
+  const isClearable = allowClear !== undefined && allowClear !== false
+  const shouldShowClearOption = isClearable && !isEmptyValue(value)
+
+  const handleClearSelection = (): void => {
+    const clearedValue = mode === 'multiple' ? [] as string[] : undefined
+    antdSelectProps.onChange?.(clearedValue, [])
+    selectRef.current?.blur()
+  }
+
+  const dropdownRender = shouldShowClearOption
+    ? (menu: React.ReactElement): React.JSX.Element => (
+      <div className={ styles.clearOptionWrapper }>
+        <button
+          className={ styles.clearOption }
+          onClick={ handleClearSelection }
+          onMouseDown={ (e) => { e.preventDefault() } }
+          type="button"
+        >
+          <Icon value={ 'trash' } />
+          <span>{t('select.clear-selection')}</span>
+        </button>
+        {menu}
+      </div>
+      )
+    : antdSelectProps.dropdownRender
+
   return (
     <div
       className={ selectContainerClassNames }
@@ -185,8 +234,9 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
     />
     )}
       <AntdSelect
-        allowClear={ allowClear }
+        allowClear={ false }
         className={ selectClassNames }
+        dropdownRender={ dropdownRender }
         menuItemSelectedIcon={ getItemSelectedIcon() }
         mode={ mode }
         notFoundContent={ <Flex
@@ -197,9 +247,9 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
             className={ 'm-r-mini' }
             value={ 'warning-circle' }
           /> {t('no-data-available')}</Flex> }
-        onBlur={ () => { setIsFocus(false) } }
-        onDropdownVisibleChange={ handleClick }
-        onFocus={ () => { setIsFocus(true) } }
+        onBlur={ handleBlur }
+        onDropdownVisibleChange={ handleDropdownVisibleChange }
+        onFocus={ handleFocus }
         ref={ selectRef }
         status={ status }
         style={ computedStyle }

@@ -219,7 +219,7 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
-            dataObjectGetSelectOptions: build.mutation<
+            dataObjectGetSelectOptions: build.query<
                 DataObjectGetSelectOptionsApiResponse,
                 DataObjectGetSelectOptionsApiArg
             >({
@@ -228,7 +228,7 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Data Objects"],
+                providesTags: ["Data Objects"],
             }),
             dataObjectGetTree: build.query<DataObjectGetTreeApiResponse, DataObjectGetTreeApiArg>({
                 query: (queryArg) => ({
@@ -431,6 +431,8 @@ export type DataObjectGetGridApiArg = {
     classId: string;
     body: {
         folderId: number;
+        /** When true, empty localized values fall back to configured fallback languages */
+        applyFallbackLanguages?: boolean;
         columns?: GridColumnRequest[];
         filters?: GridFilter;
     };
@@ -702,6 +704,8 @@ export type DataObjectWithDetailData = DataObject & {
     allowInheritance: boolean;
     /** Has preview */
     hasPreview: boolean;
+    /** Show application logger tab */
+    showAppLoggerTab: boolean;
     /** Has workflow available */
     hasWorkflowAvailable: boolean;
     /** Detail object data */
@@ -781,6 +785,8 @@ export type GridColumnRequest = {
     group?: string[] | null;
     /** Config */
     config?: (string | AdvancedColumnConfig)[];
+    /** Width of the Column */
+    width?: number | null;
 };
 export type Column = {
     /** Key of the Column */
@@ -789,6 +795,8 @@ export type Column = {
     locale: string | null;
     /** Define the group structure */
     group: object;
+    /** Width of the Column */
+    width?: number | null;
 };
 export type GridFilter = {
     /** Page */
@@ -886,6 +894,23 @@ export type SimplePhpCodeTransformer = {
     /** Label of the transformer */
     label: string;
 };
+export type PreviewConfigEntry = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Parameter name */
+    name: string;
+    /** Display label */
+    label: string;
+    /** Available values as key-value pairs */
+    values: {
+        key?: string;
+        value?: string;
+    }[];
+    /** Default selected value */
+    defaultValue: string;
+};
 export type Layout = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -927,6 +952,8 @@ export type Layout = {
     labelWidth: number;
     /** Border */
     border: boolean;
+    /** Preview configuration for locale/site selectors */
+    previewConfig?: PreviewConfigEntry[] | null;
 };
 export type ExportAllFilter = {
     /** Column Filter */
@@ -978,6 +1005,6 @@ export const {
     useDataObjectFormatPathQuery,
     useDataObjectPreviewByIdQuery,
     useDataObjectReplaceContentMutation,
-    useDataObjectGetSelectOptionsMutation,
+    useDataObjectGetSelectOptionsQuery,
     useDataObjectGetTreeQuery,
 } = injectedRtkApi;

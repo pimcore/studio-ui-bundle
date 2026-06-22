@@ -2,12 +2,17 @@ common.owner: Propietario
 common.modification-date: Fecha de modificación
 common.globally: Globalmente
 common.apply-selection: Aplicar selección
+common.clear: Borrar
+cache.clear-cache-success: Caché limpiada con éxito
+cache.clear-full-page-cache-success: Caché de página completa limpiada con éxito
+cache.clear-temporary-files-success: Archivos temporales eliminados con éxito
 dont-ask-again: No volver a preguntar
 widget.missing-context.title: Contexto faltante
 widget.missing-context.description: No se encontró ningún elemento relacionado
 widget.missing-tab-context.description: Esta función no es compatible con el elemento relacionado
 block: Bloque
 error.error_something_generic_went_wrong: Algo salió mal
+error.error_permission_denied: No tiene permiso para realizar esta acción en este elemento.
 error.syntax_error: Error de sintaxis
 error.error_element_exists: El elemento ya existe
 error.error_folder_exists: La carpeta ya existe
@@ -17,7 +22,10 @@ error.error_widget_name_invalid: El nombre del widget no es válido (solo se per
 error.error_validation_failed: La validación falló
 error.error_validation.email_failed: Introduzca una dirección de correo electrónico válida
 error.error_element_not_found: Elemento no encontrado
+error.error_document_language_not_set: El documento no tiene ninguna propiedad de idioma establecida
 error.error_inconsistent_asset_type: Solo se permiten assets del mismo tipo aquí.
+error.error_recycle_bin_restore: No se puede restaurar el elemento de la papelera de reciclaje
+error.error_recycle_bin_restore_missing_parent: No se puede restaurar el elemento de la papelera de reciclaje, el elemento padre no existe
 sidebar.selected_elements: Elementos seleccionados
 sidebar.grid_config: Configuración de cuadrícula
 sidebar.tag_filters: Filtros de etiquetas
@@ -88,6 +96,16 @@ document.document-tree.title: Árbol de documentos
 document.document-tree.search: Buscar en {{folderName}}
 document.editable.inheritance.overwrite: Sobrescribir
 document.editable.inheritance.tooltip: Heredado del documento content-main. Haga clic para sobrescribir.
+areablock.move-above: Mover arriba
+areablock.move-below: Mover abajo
+areablock.show: Mostrar
+areablock.hide: Ocultar
+areablock.new: Nuevo
+areablock.copy: Copiar
+areablock.paste: Pegar
+areablock.cut: Cortar
+areablock.settings: Configuración
+areablock.delete: Eliminar
 document.link.target: Destino del enlace
 document.hardlink.source: Documento de origen
 document.hardlink.properties-from-source: Usar propiedades del documento de origen
@@ -121,7 +139,7 @@ save-and-continue: Guardar y continuar
 discard-and-continue: Descartar y continuar
 discard-changes: Descartar cambios
 unsaved-changes.title: Cambios sin guardar
-unsaved-changes.message: Tiene cambios sin guardar. ¿Qué desea hacer?
+unsaved-changes.message: Tiene cambios sin guardar. Si continúa sin guardar, estos cambios se perderán.
 unsaved-changes.close-message: Tiene cambios sin guardar. ¿Está seguro de que desea cerrar sin guardar?
 convert-to: Convertir a
 convert-document: Convertir documento
@@ -158,6 +176,10 @@ toolbar.switch-layout: Cambiar diseño personalizado
 import: Importar
 export: Exportar
 more-actions: Más acciones
+language-comparison-view.apply-changes: Aplicar cambios
+language-comparison-view.title: Comparación de idiomas
+language-comparison-view.no-localized-fields: Este objeto de datos no tiene campos localizados.
+language-comparison-view.no-permission: No tiene permiso para guardar este objeto.
 class-definition.import: Importar definición de clase
 class-definition.export: Exportar definición de clase
 class-definition.import-file-label: Seleccionar archivo JSON
@@ -201,6 +223,8 @@ class-definition.property-visibility.key-grid: Clave (Cuadrícula)
 class-definition.property-visibility.key-search: Clave (Búsqueda)
 class-definition.property-visibility.path-grid: Ruta (Cuadrícula)
 class-definition.property-visibility.path-search: Ruta (Búsqueda)
+class-definition.property-visibility.published-grid: Publicado (Cuadrícula)
+class-definition.property-visibility.published-search: Publicado (Búsqueda)
 class-definition.property-visibility.modification-date-grid: Fecha de modificación (Cuadrícula)
 class-definition.property-visibility.modification-date-search: Fecha de modificación (Búsqueda)
 class-definition.property-visibility.creation-date-grid: Fecha de creación (Cuadrícula)
@@ -277,9 +301,13 @@ select-option.tree.actions.select-option: Opción de selección
 custom-layout.import-success: Diseño personalizado importado con éxito
 custom-layout.delete.confirmation: ¿Está seguro de que desea eliminar este diseño personalizado?
 custom-layout.delete.success: Diseño personalizado eliminado con éxito
+custom-layout.add: Nuevo diseño
+custom-layout.empty-state.create-or-edit: Cree un nuevo diseño personalizado o edite uno existente
+custom-layout.empty-state.edit: Seleccione un diseño personalizado existente para empezar a editar
 example-prefix: Prefijo de ejemplo
 pagination.show-total: Total {{total}} elementos
 pagination.page: Página
+pagination.showing-x-of-y: Mostrando {{loaded}} de {{total}}
 preview-card.locate-in-tree: Localizar en el árbol
 preview-card.rename: Renombrar
 preview-card.download-zip: Descargar como ZIP
@@ -489,6 +517,8 @@ published: Publicado
 classname: Nombre de clase
 index: Índice
 listing.grid-config.title: Configuración de cuadrícula
+grid-config.discard-all-changes: Descartar todos los cambios
+grid-config.apply-changes: Aplicar cambios
 listing.add-column: Añadir una columna
 listing.actions: Aplicar a la selección
 listing.non-selected.actions: Aplicar a todos
@@ -577,7 +607,13 @@ translations.show-all-languages: Mostrar todos
 translations.show-minimal-languages: Mostrar mínimo
 translations.show-hide-locale: Mostrar/Ocultar idioma
 translations.new-translation: Nueva traducción
-translations.new: Añadir
+translations.new: Nuevo
+translations.domain.messages: Mensajes
+translations.domain.admin: Admin
+translations.domain.studio: Studio
+translations.domain.dataQualityManagement: Gestión de calidad de datos
+translations.domain.portal_engine_frontend: Portal Engine Frontend
+translations.domain.pimcore_copilot: Pimcore Copilot
 translations.type-options.custom: Formato ICU
 translations.type-options.simple: Texto simple
 translations.edit-modal.tab.plain-text: Texto plano
@@ -750,6 +786,7 @@ field-definitions.validation.empty-name: "Los siguientes tipos de campo no tiene
 field-definitions.validation.reserved-word: "Palabra reservada usada como nombre:"
 field-definitions.validation.invalid-format: "Formato de nombre no válido (debe coincidir con [A-Za-z][A-Za-z0-9_]*):"
 field-definitions.validation.duplicate-name: "Nombre duplicado dentro del espacio de nombres:"
+field-definitions.delete.content: ¿Realmente desea eliminar "{{name}}"?
 object-brick-key: Clave de Object Brick
 field-name: Nombre del campo
 field-definition.geopoint: Punto geográfico
@@ -963,6 +1000,7 @@ lazy-loading: Carga diferida
 disallow-add-remove: No permitir añadir/eliminar
 disallow-reorder: No permitir reordenar
 css-style: Estilo CSS
+css-style-tooltip: "CSS en línea aplicado al cuerpo, p. ej. \"float: left; margin: 10px;\". Las declaraciones no válidas se ignoran."
 collapsible: Plegable
 collapsed: Plegado inicialmente
 border: Borde
@@ -984,7 +1022,6 @@ hide-empty-data: Ocultar datos vacíos
 tab-position: Posición de pestaña
 maximum-tabs: Máximo de pestañas
 hide-labels-when-tabs-reached: Ocultar etiquetas de idioma cuando se alcancen las pestañas
-provide-split-view: Proporcionar vista dividida
 data: Datos
 domain-label-width: Ancho de etiqueta de dominio
 controller-action: Acción del controlador
@@ -1016,6 +1053,7 @@ asset.sidebar.office-format: Formato de oficina
 jobs.notification.title: Trabajos en ejecución
 jobs.notification.jobs_one: "{{count}} Acción"
 jobs.notification.jobs_other: "{{count}} Acciones"
+jobs.notification.hide-all-finished: Ocultar todos los completados
 jobs.job.in-progress: "{{title}} en progreso"
 jobs.job.queued: "{{title}} en cola"
 jobs.job.failed: "{{title}} falló"
@@ -1032,6 +1070,7 @@ jobs.job.step_hint_single: "Paso {{step}}"
 jobs.job.step.batch-edit.preparing: Preparando edición por lotes
 jobs.job.step.batch-edit.applying: Aplicando edición por lotes
 jobs.job.download-error: Error en la descarga
+jobs.job.download-not-available: La descarga ya no está disponible.
 jobs.job.button-show-errors: Mostrar errores
 jobs.job.error-modal.title: Errores del trabajo
 jobs.job.button-abort: Cancelar trabajo
@@ -1043,6 +1082,9 @@ batch-edit.job-title: Edición por lotes
 jobs.zip-upload-job.title: Subir ZIP
 jobs.zip-upload-job.step1.title: Extrayendo ZIP
 jobs.zip-upload-job.step2.title: Creando assets
+jobs.download-csv-job.title: CSV export
+jobs.download-xlsx-job.title: XLSX export
+jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Edición por lotes
 batch-edit.no-content: Aún no se han añadido columnas
 batch-edit.modal-footer.apply-changes: Aplicar cambios
@@ -1112,6 +1154,14 @@ element.lock: Bloquear
 element.lock-and-propagate-to-children: Bloquear y propagar a los hijos
 element.unlock: Desbloquear
 element.unlock-and-propagate-to-children: Desbloquear y propagar a los hijos
+element.edit-lock.title: 'Siendo editado por otro usuario'
+element.edit-lock.path: 'Ruta'
+element.edit-lock.type: 'Tipo'
+element.edit-lock.user: 'Usuario'
+element.edit-lock.editing-since: 'Editando desde'
+element.edit-lock.warning: 'Si continúa editando, su versión se guardará por separado de la versión del otro usuario.'
+element.edit-lock.continue: 'Continuar editando'
+element.edit-lock.cancel: 'Cancelar'
 element.tree.sorting: Ordenar hijos por
 element.tree.sorting.keyed-ascending: A a Z (Clave)
 element.tree.sorting.keyed-descending: Z a A (Clave)
@@ -1126,6 +1176,19 @@ element.delete: Eliminar
 element.delete.confirmation.title: Eliminar elemento
 element.delete.confirmation.text: ¿Realmente desea eliminar este elemento?
 element.delete.confirmation.ok: Eliminar permanentemente
+element.delete.folder.title: Eliminar carpeta
+element.delete.folder.question: ¿Realmente desea eliminar esta carpeta?
+element.delete.folder.small.note: 'Tenga en cuenta: Las dependencias serán eliminadas. Es posible que no pueda deshacer completamente esta operación.'
+element.delete.folder.large.note: 'Tenga en cuenta: La carpeta y su contenido se eliminarán de forma permanente y no podrán ser restaurados.'
+element.delete.folder.ok: Eliminar
+element.delete.folder.ok.permanent: Eliminar permanentemente
+element.delete.batch.title: Eliminar elementos
+element.delete.batch.note: 'Tenga en cuenta: Estos elementos se eliminarán permanentemente y no se podrán restaurar.'
+element.delete.batch.question_one: '¿Realmente desea eliminar este elemento?'
+element.delete.batch.question_other: '¿Realmente desea eliminar estos {{count}} elementos?'
+element.delete.batch.ok: Eliminar permanentemente
+element.delete.batch.show-paths: Mostrar elementos
+element.delete.batch.dependencies-warning: 'Puede haber dependencias, ¿eliminar de todas formas?'
 element.open: Abrir
 element.toolbar.copy-id: Copiar ID
 element.toolbar.copy-full-path-to-clipboard: Copiar ruta completa
@@ -1136,6 +1199,7 @@ element.unpublish: Despublicar
 element.publish: Publicar
 element.locate-in-tree: Localizar en el árbol
 element.sidebar.filter.only-direct-children: solo hijos directos
+element.sidebar.filter.only-unreferenced: solo sin referencias
 element.sidebar.field-filters: Filtros de campo
 element.full-information: Información completa
 system-information.id: ID
@@ -1195,12 +1259,15 @@ folder: Carpeta
 archive: Archivo
 audio: Audio
 image: Imagen
+image-gallery.clear-image-selection: Borrar selección de imagen
+image-gallery.delete-frame: Eliminar marco
 text: Texto
 video: Vídeo
 processing: Procesando
 upload: Subir
 close: Cerrar
 paste: Pegar
+cut: Cortar
 upload.assets-items-failed-message: La subida finalizó con errores.
 quantity-value.converted-units: Unidades convertidas
 table.empty.confirm: ¿Está seguro de que desea borrar todos los datos?
@@ -1309,7 +1376,7 @@ key-bindings.seo: SEO
 key-bindings.redirects: Redirecciones
 key-bindings.bundles: Bundles
 user-management.references.title: Referencias
-user-management.references.documents: Documentos
+user-management.references.object-dependencies: Dependencias de objetos
 user-management.references.columns.id: ID
 user-management.references.columns.cpath: Ruta
 user-management.references.columns.subtype: Subtipo
@@ -1319,6 +1386,7 @@ user-management.name: Nombre
 user-management.password: Contraseña
 user-management.user.search: Buscar un usuario
 user-management.role.search: Buscar un rol
+user-management.users-roles.search: Buscar un usuario o rol
 user-management.twoFactorAuthenticationEnabled: Autenticación de dos factores habilitada
 user-management.firstname: Nombre
 user-management.lastname: Apellido
@@ -1404,6 +1472,7 @@ roles.remove-folder.success: Carpeta eliminada con éxito
 roles.remove-item.success: Rol eliminado con éxito
 roles.add-item.success: Rol añadido con éxito
 roles.add-folder.success: Carpeta añadida con éxito
+roles.general: General
 roles.settings.title: Configuración
 roles.workspaces.title: Workspaces
 roles.add-folder: Añadir nueva carpeta
@@ -1433,6 +1502,10 @@ navigation.reporting: Informes
 navigation.system: Sistema
 navigation.website-settings: Configuración del sitio web
 navigation.document-types: Tipos de documento
+navigation.cache: Caché
+navigation.cache.clear-cache: Limpiar caché
+navigation.cache.clear-full-page-cache: Limpiar caché de página completa
+navigation.cache.clear-temporary-files: Eliminar archivos temporales
 navigation.clear-cache: Limpiar caché de página completa
 navigation.reports: Todos los informes
 navigation.custom-reports: Configuración de informes personalizados
@@ -1792,6 +1865,7 @@ empty-image: Imagen vacía
 image.dnd-target: Suelte una imagen aquí
 image.add.and.dnd: Añada o suelte una imagen directamente aquí
 image.upload.add.and.dnd: Suba, añada o suelte una imagen directamente aquí
+image.too-small: La imagen seleccionada es demasiado pequeña. Por favor, use una imagen más grande.
 fallback: Respaldo
 url-slug.add-site: Añadir sitio
 url-slug.invalid: Introduzca un URL slug válido (que comience con '/')
@@ -1810,6 +1884,7 @@ video.settings: Configuración de vídeo
 video.poster: Imagen de póster
 video.path: Ruta
 video.dnd-target: Suelte un vídeo aquí
+video.add-target: Añada un vídeo aquí
 pdf-editable.dnd-target: Suelte un asset de documento aquí
 many-to-one-relation.drop-placeholder: Suelte un elemento aquí
 many-to-one-relation.drop-placeholder-text-input: Suelte un elemento aquí o introduzca un valor
@@ -2351,6 +2426,7 @@ icon-selector.custom-icon-path-placeholder: Añada una ruta personalizada y env�
 icon-selector.Twemoji: Biblioteca Twemoji
 icon-selector.Pimcore: Biblioteca Pimcore
 language: Idioma
+no-languages-found: No se encontraron idiomas
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (sobrescribe la ruta de la estructura del árbol)
 content-main-document: Documento Content-Main
@@ -2637,3 +2713,48 @@ bulk-import.type.class: Clases
 bulk-import.type.customlayout: Custom Layouts
 bulk-import.type.fieldcollection: Field Collections
 bulk-import.type.objectbrick: Object Bricks
+translations.toolbar.export: Exportar CSV
+translations.toolbar.import: Importar
+translations.toolbar.cleanup: Limpiar
+translations.import.modal.title: Importar traducciones
+translations.import.modal.browse: Explorar archivos
+translations.import.modal.import: Importar
+translations.import.modal.drag-drop: Arrastre y suelte un archivo CSV aquí
+translations.import.modal.invalid-file: Por favor seleccione un archivo CSV válido
+translations.import.modal.csv-settings: Configuración CSV
+translations.import.modal.delimiter: Delimitador
+translations.import.modal.quotechar: Carácter de comillas
+translations.import.modal.escapechar: Carácter de escape
+translations.import.modal.lineterminator: Terminador de línea
+translations.import.modal.field-required: Este campo es obligatorio
+translations.cleanup.confirm.title: Limpiar traducciones
+translations.cleanup.confirm.content: Esto eliminará todas las claves de traducción no utilizadas. Esta acción no se puede deshacer.
+translations.cleanup.confirm.ok: Limpiar
+translations.import.delta.title: Resultados de la importación
+translations.import.delta.description: Las siguientes traducciones difieren de los valores importados. Seleccione las que desea sobrescribir con los valores importados.
+translations.import.delta.column.key: Clave
+translations.import.delta.column.locale: Idioma
+translations.import.delta.column.current: Traducción actual
+translations.import.delta.column.imported: Traducción importada
+translations.toolbar.import-merge: Importar y fusionar CSV
+translations.import.delta.skip: Omitir
+translations.import.delta.apply: Aplicar seleccionados ({{count}})
+widget.translation-merger: Fusionar traducciones
+translations.merger.column.locale: Idioma
+translations.merger.column.key: Clave
+translations.merger.column.csv-value: Valor CSV
+translations.merger.column.action: Acción
+translations.merger.column.current: Valor actual
+translations.merger.column.state: Estado
+translations.merger.state.applied: Aplicado
+translations.merger.state.reverted: Revertido
+translations.merger.state.pending: Pendiente
+translations.merger.apply-all: Aplicar todo
+translations.merger.revert-all: Revertir todo
+translations.merger.title: "Fusionar traducciones (Dominio: {{domain}})"
+translations.merger.column.language: Idioma
+translations.merger.items: elementos
+select.clear-selection: Borrar selección
+asset.folder.preview.image-display: Visualización de imágenes
+asset.folder.preview.image-display.small: Pequeño
+asset.folder.preview.image-display.large: Grande

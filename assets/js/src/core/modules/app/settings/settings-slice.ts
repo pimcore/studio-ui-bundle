@@ -24,7 +24,41 @@ interface SettingsState {
   thumbnails?: AdminSettingsThumbnailPath
 }
 
-const initialState: SettingsState = {}
+// ---------------------------------------------------------------------------
+// Synchronously read branding + logo from the Twig preloader's data- attributes
+// before React mounts so the very first render already has the correct values.
+// ---------------------------------------------------------------------------
+const readPreloaderState = (): Pick<SettingsState, 'adminSettings' | 'thumbnails'> => {
+  const el = document.getElementById('app-preloader')
+  if (el === null) return {}
+
+  const brandColor = el.dataset.brandColor ?? ''
+  const backgroundShade = el.dataset.brandBackgroundColor ?? ''
+  const logoUrl = el.dataset.logoUrl ?? ''
+
+  return {
+    adminSettings: (brandColor !== '' || backgroundShade !== '')
+      ? {
+          branding: {
+            brandColor,
+            backgroundShade,
+            loginScreenCustomBackgroundImage: null
+          },
+          assets: { hide_edit_image: false, disable_tree_preview: false },
+          writeable: false
+        }
+      : undefined,
+    thumbnails: logoUrl !== ''
+      ? {
+          customLogo: logoUrl,
+          customLogoSmall: logoUrl,
+          loginScreenCustomBackgroundImage: null
+        }
+      : undefined
+  }
+}
+
+const initialState: SettingsState = readPreloaderState()
 
 const slice = createSlice({
   name: 'settings',
@@ -32,9 +66,7 @@ const slice = createSlice({
   reducers: {
     setSettings: (
       state,
-      {
-        payload
-      }: PayloadAction<SystemSettingsGetApiResponse>
+      { payload }: PayloadAction<SystemSettingsGetApiResponse>
     ) => {
       state.settings = payload
     },
@@ -70,3 +102,4 @@ export const { setSettings, setAdminSettings, setThumbnails } = slice.actions
 export const getSettings = (state: RootState): SystemSettingsGetApiResponse => state.settings.settings
 export const getAdminSettings = (state: RootState): AdminSettings => state.settings.adminSettings
 export const getThumbnails = (state: RootState): AdminSettingsThumbnailPath => state.settings.thumbnails
+

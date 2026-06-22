@@ -13,9 +13,10 @@ import { useStyles } from '@Pimcore/modules/field-definitions/components/editor/
 import { AddModalProvider } from '@Pimcore/modules/field-definitions/components/editor/items/sidebar/add-modal'
 import { SidebarModalHolder } from '@Pimcore/modules/field-definitions/components/editor/items/sidebar/modal-holder'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
-import { Content, ContentLayout, Icon, IconButton, IconTextButton, type ITreeElementProps, SearchInput, Toolbar, type TreeDataItem, TreeElement } from '@sdk/components'
+import { Content, ContentLayout, Icon, IconButton, IconTextButton, type ITreeElementProps, SearchInput, Toolbar, type TreeDataItem, TreeElement, useFormModal } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
-import { useDebounce } from '@sdk/utils'
+import { normalizeIcon } from '@Pimcore/utils/normalize-icon'
+import { isEmptyValue, useDebounce } from '@sdk/utils'
 import { isNil } from 'lodash'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -26,6 +27,14 @@ const useNoOpDeleteMutation: AnyMutationHook = () => [
   (async () => { }) as any,
   {} as any
 ]
+
+const renderConfigurationIcon = (icon?: ConfigurationPartial['icon'] & { type?: 'name' | 'path' }): React.JSX.Element | undefined => {
+  if (icon === undefined || isEmptyValue(icon.value)) return undefined
+
+  const normalizedIcon = icon.type !== undefined ? icon : normalizeIcon(icon.value)
+
+  return normalizedIcon !== null ? <Icon { ...normalizedIcon } /> : undefined
+}
 
 export const ItemsSidebar = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -41,6 +50,8 @@ export const ItemsSidebar = (): React.JSX.Element => {
   const debouncedSearchTerm = useDebounce(searchTerm, 300)
   const [showNewModal, setShowNewModal] = useState<boolean>(false)
   const { setActiveConfiguration, activeConfiguration, closeConfiguration } = useItems()
+
+  const modal = useFormModal()
 
   const treeData: ITreeElementProps['treeData'] = useMemo(() => {
     if (data === undefined) {
@@ -59,17 +70,17 @@ export const ItemsSidebar = (): React.JSX.Element => {
       return (configuration.name as string).toLowerCase().includes(debouncedSearchTerm.toLowerCase()) || (configuration.id as string).toLowerCase().includes(debouncedSearchTerm.toLowerCase())
     })
 
-    filteredData.forEach((configuration) => {
+    filteredData.forEach((configuration: ConfigurationPartial) => {
       const groupName = configuration.group
       if (isNil(groupName) || groupName === '') {
         formattedTreeData.push({
           title: (configuration.name !== '' && configuration.name !== undefined && configuration.name !== configuration.id) ? `${configuration.name} (${configuration.id})` : `${configuration.id}`,
           key: `${configuration.id}`,
-          icon: configuration.icon !== undefined ? <Icon { ...configuration.icon } /> : undefined,
+          icon: renderConfigurationIcon(configuration.icon),
           meta: { configuration },
           actions: canDelete
             ? [
-                { key: 'delete', icon: 'delete' }
+                { key: 'delete', icon: 'trash' }
               ]
             : []
         })
@@ -89,17 +100,20 @@ export const ItemsSidebar = (): React.JSX.Element => {
       const treeDataItem: TreeDataItem = {
         title: (configuration.name !== '' && configuration.name !== undefined && configuration.name !== configuration.id) ? `${configuration.name} (${configuration.id})` : `${configuration.id}`,
         key: `${configuration.id}`,
-        icon: configuration.icon !== undefined ? <Icon { ...configuration.icon } /> : <Icon value='class' />,
+        icon: renderConfigurationIcon(configuration.icon) ?? <Icon value='class' />,
         meta: { configuration },
         actions: canDelete
           ? [
-              { key: 'delete', icon: 'delete' }
+              { key: 'delete', icon: 'trash' }
             ]
           : []
       }
 
       groupMap[groupName].children!.push(treeDataItem)
     })
+
+    const compareByTitle = (a: TreeDataItem, b: TreeDataItem): number =>
+      String(a.title).localeCompare(String(b.title), undefined, { sensitivity: 'base' })
 
     formattedTreeData.sort((a, b) => {
       if ((a.children?.length ?? 0) !== 0 && (b.children?.length ?? 0) === 0) {
@@ -110,7 +124,11 @@ export const ItemsSidebar = (): React.JSX.Element => {
         return 1
       }
 
-      return 0
+      return compareByTitle(a, b)
+    })
+
+    Object.values(groupMap).forEach((group) => {
+      group.children!.sort(compareByTitle)
     })
 
     return formattedTreeData
@@ -122,10 +140,20 @@ export const ItemsSidebar = (): React.JSX.Element => {
 
   const deleteConfiguration = (node: TreeDataItem): void => {
     const configuration = node.meta!.configuration! as ConfigurationPartial
+    const displayName = !isEmptyValue(configuration?.name) ? configuration.name : configuration.id
 
-    closeConfiguration(configuration)
-    deleteConfigurationMutation({ id: configuration.id }).catch((err: Error) => {
-      trackError(new ApiError(err))
+    modal.confirm({
+      title: t('delete'),
+      content: t('field-definitions.delete.content', { name: displayName }),
+      onOk: async () => {
+        closeConfiguration(configuration)
+
+        try {
+          await deleteConfigurationMutation({ id: configuration.id })
+        } catch (error) {
+          trackError(new ApiError(error as Error))
+        }
+      }
     })
   }
 

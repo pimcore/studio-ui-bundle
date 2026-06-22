@@ -8,29 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
     tree: css`
       .ant-tree-treenode {
         height: 24px;
-      }
-
-      .ant-tree-switcher {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 24px !important;
-        margin-right: 0 !important;
-      }
-
-      .ant-tree-switcher-noop {
-        width: 0 !important;
-      }
-
-      .ant-tree-node-content-wrapper {
-        padding-left: 0 !important;
       }
     `,
 

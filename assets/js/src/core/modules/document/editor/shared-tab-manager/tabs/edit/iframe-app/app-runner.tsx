@@ -9,11 +9,11 @@
  */
 
 import React from 'react'
-import { createRoot } from 'react-dom/client'
+import { createRoot, type Root } from 'react-dom/client'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { DocumentEditorIframeAppView } from './iframe-app-view'
 
-export function runApp (): void {
+export function runApp (): Root | undefined {
   const domElement = document.getElementById('pimcore-studio-app')
 
   if (domElement === null) {
@@ -24,4 +24,6 @@ export function runApp (): void {
 
   const root = createRoot(domElement)
   root.render(<DocumentEditorIframeAppView />)
+
+  return root
 }

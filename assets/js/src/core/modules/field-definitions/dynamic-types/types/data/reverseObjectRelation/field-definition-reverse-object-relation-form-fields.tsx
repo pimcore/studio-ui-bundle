@@ -139,11 +139,11 @@ export const FieldDefinitionReverseObjectRelationFormFields = (props: FieldDefin
           </Form.Item>
         </FormKit.Panel>
 
-        <Form.Item
-          name="optimizedAdminLoading"
-          tooltip={ t('enable-async-load-in-admin-tooltip') }
-        >
-          <Switch labelRight={ t('enable-async-load-in-admin') } />
+        <Form.Item name="optimizedAdminLoading">
+          <Switch
+            labelRight={ t('enable-async-load-in-admin') }
+            tooltip={ t('enable-async-load-in-admin-tooltip') }
+          />
         </Form.Item>
       </>
       )}

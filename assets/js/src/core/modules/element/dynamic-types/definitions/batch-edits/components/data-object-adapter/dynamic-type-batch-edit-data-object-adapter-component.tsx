@@ -18,6 +18,7 @@ import { type DynamicTypeObjectDataRegistry } from '../../../objects/data-relate
 import { type AbstractDateObjectDataDefinition } from '../../../objects/data-related/types/abstract/dynamic-type-object-data-abstract-date'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 import { BatchEditFormItem } from '../../helpers/data-object/batch-edit-form-item'
+import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
 export const DynamicTypeBatchEditDataObjectAdapterComponent = ({ batchEdit }: AbstractBatchEditDefinition): React.JSX.Element => {
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
@@ -31,7 +32,7 @@ export const DynamicTypeBatchEditDataObjectAdapterComponent = ({ batchEdit }: Ab
     return <>Type {frontendType} not supported</>
   }
 
-  if (!('fieldDefinition' in config)) {
+  if (!hasFieldDefinition(config)) {
     throw new Error('Field definition is missing in config')
   }
 

@@ -23,7 +23,7 @@ import {
   convertAllowedTypes,
   type IRelationAllowedTypesClassDefinition
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
-import { RelationList } from '../../grid-cell-preview/relation-list/relation-list'
+import { FormattedRelationList } from '../../grid-cell-preview/relation-list/formatted-relation-list'
 import { isNil } from 'lodash'
 import { type DynamicTypeFieldFilterAbstract } from '../../../field-filters/dynamic-type-field-filter-abstract'
 import { container } from '@Pimcore/app/depency-injection'
@@ -54,8 +54,20 @@ export class DynamicTypeObjectDataManyToOneRelation extends DynamicTypeObjectDat
 
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
     const value: ManyToOneRelationValue | null = props.cellProps.getValue()
+    const objectProps = props.objectProps as ManyToOneRelationObjectDataDefinition
+    const dataObjectId = props.cellProps.row.original.id as number | undefined
 
-    return isNil(value) ? <></> : <RelationList relations={ [value] } />
+    return isNil(value)
+      ? <></>
+      : (
+        <FormattedRelationList
+          columnId={ props.cellProps.column.id }
+          dataObjectId={ dataObjectId }
+          fieldNameFallback={ objectProps.combinedFieldName }
+          pathFormatterClass={ objectProps.pathFormatterClass }
+          relations={ [value] }
+        />
+        )
   }
 
   getDefaultGridColumnWidth (): number | undefined {

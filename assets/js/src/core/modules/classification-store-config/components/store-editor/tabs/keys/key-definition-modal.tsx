@@ -16,6 +16,8 @@ import { AreaProvider } from '@Pimcore/modules/field-definitions/components/edit
 import { SettingsProvider } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { LayoutProvider, useLayout } from '@Pimcore/modules/field-definitions/components/editor/items/detail/layout-provider'
 import { LayoutForm } from '@Pimcore/modules/field-definitions/components/editor/items/detail/content/layout-form'
+import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
+import { serviceIds, useInjection } from '@sdk/app'
 import {
   type ClassificationStoreConfigurationKeyDetail,
   useClassificationStoreConfigurationKeyUpdateMutation
@@ -91,6 +93,9 @@ export const KeyDefinitionModal = ({
 }: IKeyDefinitionModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [updateKey] = useClassificationStoreConfigurationKeyUpdateMutation()
+  const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(
+    serviceIds['DynamicTypes/FieldDefinitionRegistry']
+  )
 
   // Ref to the getLayout function — updated by KeyDefinitionFormBridge
   const getLayoutRef = useRef<(() => Layout | undefined) | null>(null)
@@ -154,20 +159,25 @@ export const KeyDefinitionModal = ({
       border: false
     }
 
-    if (keyDetail.definition !== null && keyDetail.definition !== undefined) {
-      // Merge stored definition over the defaults (stored values take priority),
-      // then restore fieldType/fieldtype from keyDetail.type so the correct field
-      // type is always used — even during the optimistic update window when the
-      // definition blob may still reference the previous type.
-      return {
-        ...base,
-        ...keyDetail.definition,
-        fieldType: keyDetail.type,
-        fieldtype: keyDetail.type
-      } as unknown as Layout
-    }
+    const defaultData = fieldDefinitionRegistry.hasDynamicType(keyDetail.type)
+      ? fieldDefinitionRegistry.getDynamicType(keyDetail.type).getDefaultData({
+          area: AREA,
+          path: [],
+          fieldDefinitions: {}
+        })
+      : {}
 
-    return base as unknown as Layout
+    // Merge stored definition over the defaults (stored values take priority),
+    // then restore fieldType/fieldtype from keyDetail.type so the correct field
+    // type is always used — even during the optimistic update window when the
+    // definition blob may still reference the previous type.
+    return {
+      ...base,
+      ...defaultData,
+      ...(keyDetail.definition ?? {}),
+      fieldType: keyDetail.type,
+      fieldtype: keyDetail.type
+    } as unknown as Layout
   }
 
   const layout = buildLayout()

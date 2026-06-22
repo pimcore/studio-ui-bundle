@@ -6,6 +6,7 @@ services:
         bind:
             $studioWysiwygConfiguration: '%pimcore_studio_ui.wysiwyg_configuration%'
             $studioUrlPath: '%pimcore_studio_ui.url_path%'
+            $studioApiPrefix: '%pimcore_studio_backend.url_prefix%'
 
     _instanceof:
         Pimcore\Bundle\StudioUiBundle\AppConfig\AppConfigProviderInterface:
@@ -60,6 +61,9 @@ services:
             $staticResourcesResolver: '@pimcore_studio.static_resources_resolver.document_editor_iframe'
         calls:
             - [ setLogger, [ '@logger' ] ]
+
+    Pimcore\Bundle\StudioUiBundle\Branding\BrandingProviderInterface:
+        class: Pimcore\Bundle\StudioUiBundle\Branding\BrandingProvider
 
     Pimcore\Bundle\StudioUiBundle\Security\Csp\ContentSecurityPolicyHandlerInterface:
         class: Pimcore\Bundle\StudioUiBundle\Security\Csp\ContentSecurityPolicyHandler

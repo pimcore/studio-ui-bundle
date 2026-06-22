@@ -32,6 +32,11 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
   const { getRoleCollection } = useRoleHelper()
   const { getPerspectiveConfigCollection } = usePerspectives()
 
+  const sortByLabel = (values: Array<string | number>, options: Array<{ value: string | number, label: string }>): Array<string | number> => {
+    const labelMap = new Map(options.map((o) => [o.value, o.label ?? '']))
+    return [...values].sort((a, b) => (labelMap.get(a) ?? '').localeCompare(labelMap.get(b) ?? ''))
+  }
+
   useEffect(() => {
     if (perspectiveOptions.length === 0) {
       getPerspectiveConfigCollection().then((data) => {
@@ -43,7 +48,7 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
           data.items.map((item) => ({
             value: item.id,
             label: item.name
-          }))
+          })).sort((a, b) => (a.label ?? '').localeCompare(b.label ?? ''))
         )
       }).catch((error) => {
         console.error('Error fetching perspective config collection:', error)
@@ -58,7 +63,7 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
         setRoleOptions(data.items.map((item) => ({
           value: item.id,
           label: item.name
-        })))
+        })).sort((a, b) => (a.label ?? '').localeCompare(b.label ?? '')))
       }).catch((error) => {
         console.error('Error fetching role collection:', error)
       })
@@ -69,7 +74,7 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
     ...Object.entries(validLocales as Record<string, string>).map(([key, value]) => ({
       value: key,
       label: value
-    }))]
+    })).sort((a, b) => a.label.localeCompare(b.label))]
 
   const content = [
     {
@@ -106,7 +111,7 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
             options={ availableAdminLanguages.map((language: string) => ({
               value: language,
               label: getDisplayName(language)
-            })) }
+            })).sort((a, b) => (a.label ?? 'UNKNOWN').localeCompare(b.label ?? 'UNKNOWN')) }
             placeholder={ t('user-management.language') }
             showSearch
           />
@@ -118,6 +123,7 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
               <Form.Item
                 label={ t('user-management.roles') }
                 name="roles"
+                normalize={ (values: Array<string | number>) => sortByLabel(values, roleOptions as Array<{ value: string | number, label: string }>) }
               >
                 <Select
                   mode="multiple"
@@ -129,6 +135,7 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
               <Form.Item
                 label={ t('user-management.perspectives') }
                 name="perspectives"
+                normalize={ (values: Array<string | number>) => sortByLabel(values, perspectiveOptions as Array<{ value: string | number, label: string }>) }
               >
                 <Select
                   mode="multiple"

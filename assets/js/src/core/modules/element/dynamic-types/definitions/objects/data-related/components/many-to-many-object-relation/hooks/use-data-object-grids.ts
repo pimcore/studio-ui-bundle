@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { useMemo } from 'react'
 import { map, filter, isEmpty } from 'lodash'
 import {
   type DataObjectGetGridApiResponse,
@@ -22,15 +23,17 @@ interface IUseDataObjectGridsProps {
   classIds?: string[]
   convertClassName: UseClassDefinitionsReturn['getByName']
   columns?: GridColumnRequest[]
+  applyFallbackLanguages?: boolean
   dataValue?: ManyToManyRelationValue | null
 }
 
 export interface IUseDataObjectGridsReturn {
   isLoading: boolean
   data: DataObjectGetGridApiResponse['items']
+  refetchAll: () => void
 }
 
-export const useDataObjectGrids = ({ classIds, convertClassName, columns, dataValue }: IUseDataObjectGridsProps): IUseDataObjectGridsReturn => {
+export const useDataObjectGrids = ({ classIds, convertClassName, columns, applyFallbackLanguages, dataValue }: IUseDataObjectGridsProps): IUseDataObjectGridsReturn => {
   const queries = (classIds ?? []).map((classId: string) => {
     const filterValue = map(
       filter(dataValue, { subtype: classId }),
@@ -42,6 +45,7 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, dataVa
         classId: convertClassName(classId)?.id ?? '',
         body: {
           folderId: 1,
+          applyFallbackLanguages,
           columns,
           filters: {
             page: 1,
@@ -56,12 +60,13 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, dataVa
           }
         }
       },
-      { skip: isEmpty(columns) || isEmptyValue(filterValue) }
+      { skip: isEmpty(columns) || isEmptyValue(filterValue), refetchOnMountOrArgChange: true }
     )
   })
 
   const isLoading = queries.some(q => q.isLoading || q.isFetching)
-  const data = queries.flatMap(q => q.data?.items ?? [])
+  const data = useMemo(() => queries.flatMap(q => q.data?.items ?? []), queries.map(q => q.data))
+  const refetchAll = (): void => { queries.forEach(q => { void q.refetch() }) }
 
-  return { isLoading, data }
+  return { isLoading, data, refetchAll }
 }

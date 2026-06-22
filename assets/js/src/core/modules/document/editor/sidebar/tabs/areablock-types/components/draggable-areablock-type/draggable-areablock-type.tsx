@@ -20,15 +20,13 @@ import { getAreablockTypeIcon } from '../../utils/icon-fallback'
 
 interface DraggableAreablockTypeProps {
   type: AreablockTypeEntry
-  globalIndex: number
 }
 
 export const DraggableAreablockType = ({
-  type,
-  globalIndex
+  type
 }: DraggableAreablockTypeProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const iconConfig = getAreablockTypeIcon(type.icon, globalIndex)
+  const iconConfig = getAreablockTypeIcon(type.icon)
 
   const dragInfo: DragAndDropInfo = {
     type: 'areablock-type',

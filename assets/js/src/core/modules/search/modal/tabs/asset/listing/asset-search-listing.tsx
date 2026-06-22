@@ -39,7 +39,7 @@ const listingProps = compose<AbstractDecoratorProps>(
   PagingDecorator,
   StaticColumnConfigurationDecorator,
   TagFilterDecorator,
-  [GeneralFiltersDecorator, { handleSearchTermInSidebar: false } as GeneralFiltersDecoratorConfig],
+  [GeneralFiltersDecorator, { handleSearchTermInSidebar: false, showOnlyUnreferencedFilter: true } as GeneralFiltersDecoratorConfig],
   [TypeFilterDecorator, { elementType: elementTypes.asset } as TypeFilterDecoratorConfig],
   SortingDecorator,
   [OpenElementDecorator, { elementType: elementTypes.asset } as OpenElementDecoratorConfig]

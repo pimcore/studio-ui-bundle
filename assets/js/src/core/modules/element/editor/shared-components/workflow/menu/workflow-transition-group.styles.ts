@@ -8,16 +8,20 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
     button: css`
-              min-width: 100%;
-              justify-items: flex-start;
+      &&& {
+        display: flex;
+        justify-content: flex-start;
+      }
     `,
     'not-first': css`
-              margin-top: ${token.marginXXS}px;
+      &&& {
+        margin-top: ${token.marginXXS}px;
+      }
     `
   }
-}, { hashPriority: 'low' })
+})

@@ -59,6 +59,13 @@ describe('mergeFormChanges', () => {
     })
   })
 
+  it('coerces a cleared (undefined) value to null', () => {
+    const registry = createMockRegistry()
+    const merged = mergeFormChanges({ selectStr: 'a' }, { selectStr: undefined }, registry, emptyMap)
+    expect(merged).toEqual({ selectStr: null })
+    expect(JSON.parse(JSON.stringify(merged))).toEqual({ selectStr: null })
+  })
+
   it('dispatches to mergeChangedValues when the dynamic type implements it', () => {
     const mergeChangedValues = jest.fn().mockReturnValue({
       name: { de: 'Hallo', en: 'Hello' }

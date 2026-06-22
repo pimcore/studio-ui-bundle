@@ -14,13 +14,15 @@ import { type AbstractObjectDataDefinition, DynamicTypeObjectDataAbstract, type 
 import { Select } from '@Pimcore/components/select/select'
 import type { FormInstance } from 'antd'
 import type { NamePath } from 'rc-field-form/es/interface'
-import _, { isNil } from 'lodash'
+import _ from 'lodash'
 import {
   type InputObjectDataDefinition
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/types/dynamic-type-object-data-input'
 import { toCssDimension } from '@Pimcore/utils/css'
-import i18n from '@Pimcore/app/i18n'
-import { renderSelectOptionLabel } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/utils/select-options'
+import { convertSelectOptions, normalizeSelectValue } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/utils/select-options'
+import { DynamicSelectField } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/dynamic-select-field/dynamic-select-field'
+import { useGridDynamicSelectOptions } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/hooks/use-dynamic-select-options'
+import { type SelectCellConfig } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/select/select-cell'
 
 export type SelectProps = AbstractObjectDataDefinition & {
   defaultValue?: string | number | string[] | null
@@ -29,12 +31,18 @@ export type SelectProps = AbstractObjectDataDefinition & {
   multiSelect?: boolean
   maxItems?: number | null
   width?: number | string | null
+  dynamicOptions?: boolean
 }
 
 export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObjectDataAbstract {
   gridCellEditMode: EditMode = 'column-meta'
 
   getObjectDataComponent (props: SelectProps): React.ReactElement<AbstractObjectDataDefinition> {
+    // Dynamic providers fetch options from the backend; static ones use the layout options.
+    if (props.dynamicOptions === true) {
+      return <DynamicSelectField { ...props } />
+    }
+
     const options = this.convertOptions(props.options)
     const hasHtmlLabels = options?.some(o => o.title !== undefined) ?? false
     return (
@@ -49,7 +57,7 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
         options={ options }
         showSearch
         style={ { maxWidth: toCssDimension(props.width, props.defaultFieldWidth.medium) } }
-        value={ props.value }
+        value={ this.normalizeValue(props.value) }
       />
     )
   }
@@ -64,28 +72,37 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
   }
 
   convertOptions (options: Array<{ key: string, value: string | number }> | null | undefined): Array<{ label: React.ReactNode, title?: string, value: string | number | null }> | undefined {
-    if (isNil(options)) {
-      return
-    }
-    return options.map(option => {
-      const translatedKey = i18n.t(option.key)
-      return {
-        ...renderSelectOptionLabel(translatedKey),
-        value: option.value
-      }
-    })
+    return convertSelectOptions(options)
+  }
+
+  normalizeValue (value: unknown): string | string[] | null | undefined {
+    return normalizeSelectValue(value)
   }
 
   getGridCellColumnMeta (props: GetGridCellDefinitionProps): GridCellColumnMeta {
+    return {
+      type: 'select',
+      editable: props.objectProps.noteditable !== true,
+      config: this.getGridCellSelectConfig(props)
+    }
+  }
+
+  // Grid-cell select config, shared by select and multi-select.
+  protected getGridCellSelectConfig (props: GetGridCellDefinitionProps): SelectCellConfig {
+    if (props.objectProps.dynamicOptions === true) {
+      // Seed the label from the layout options for display; fetch fresh options on edit.
+      return {
+        useOptionsHook: useGridDynamicSelectOptions,
+        fieldName: props.objectProps.combinedFieldName,
+        options: this.convertOptions(props.objectProps.options as Array<{ key: string, value: string | number }> | null) ?? []
+      }
+    }
+
     const isEditable = props.objectProps.noteditable !== true
     const hasOptions = props.objectProps.options !== undefined && Array.isArray(props.objectProps.options) && props.objectProps.options.length > 0
 
     return {
-      type: 'select',
-      editable: isEditable,
-      config: {
-        options: isEditable && hasOptions ? this.convertOptions(props.objectProps.options as Array<{ key: string, value: string | number }> | null) : []
-      }
+      options: isEditable && hasOptions ? this.convertOptions(props.objectProps.options as Array<{ key: string, value: string | number }> | null) ?? [] : []
     }
   }
 

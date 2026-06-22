@@ -2,12 +2,17 @@ common.owner: Ägare
 common.modification-date: Ändringsdatum
 common.globally: Globalt
 common.apply-selection: Tillämpa val
+common.clear: Rensa
+cache.clear-cache-success: Cachen har rensats
+cache.clear-full-page-cache-success: Helsidescachen har rensats
+cache.clear-temporary-files-success: Temporära filer har tagits bort
 dont-ask-again: Fråga inte igen
 widget.missing-context.title: Saknar kontext
 widget.missing-context.description: Inget relaterat element hittades
 widget.missing-tab-context.description: Den här funktionen stöds inte för det relaterade elementet
 block: Block
 error.error_something_generic_went_wrong: Något gick fel
+error.error_permission_denied: Du har inte behörighet att utföra denna åtgärd på detta element.
 error.syntax_error: Syntaxfel
 error.error_element_exists: Elementet finns redan
 error.error_folder_exists: Mappen finns redan
@@ -17,7 +22,10 @@ error.error_widget_name_invalid: Widgetnamnet är ogiltigt (bara alfanumeriska t
 error.error_validation_failed: Validering misslyckades
 error.error_validation.email_failed: Ange en giltig e-postadress
 error.error_element_not_found: Elementet hittades inte
+error.error_document_language_not_set: Dokumentet har ingen språkegenskap angiven
 error.error_inconsistent_asset_type: Bara assets av samma typ tillåts här.
+error.error_recycle_bin_restore: Kan inte återställa elementet från papperskorgen
+error.error_recycle_bin_restore_missing_parent: Kan inte återställa elementet från papperskorgen, överordnat element saknas
 sidebar.selected_elements: Valda element
 sidebar.grid_config: Rutnätskonfiguration
 sidebar.tag_filters: Taggfilter
@@ -88,6 +96,16 @@ document.document-tree.title: Dokumentträd
 document.document-tree.search: Sök i {{folderName}}
 document.editable.inheritance.overwrite: Skriv över
 document.editable.inheritance.tooltip: Ärvt från content-main-dokument. Klicka för att skriva över.
+areablock.move-above: Flytta upp
+areablock.move-below: Flytta ner
+areablock.show: Visa
+areablock.hide: Dölj
+areablock.new: Ny
+areablock.copy: Kopiera
+areablock.paste: Klistra in
+areablock.cut: Klipp ut
+areablock.settings: Inställningar
+areablock.delete: Ta bort
 document.link.target: Länkmål
 document.hardlink.source: Källdokument
 document.hardlink.properties-from-source: Använd egenskaper från källdokument
@@ -121,7 +139,7 @@ save-and-continue: Spara och fortsätt
 discard-and-continue: Kassera och fortsätt
 discard-changes: Kassera ändringar
 unsaved-changes.title: Osparade ändringar
-unsaved-changes.message: Du har osparade ändringar. Vad vill du göra?
+unsaved-changes.message: Du har osparade ändringar. Om du fortsätter utan att spara går dessa ändringar förlorade.
 unsaved-changes.close-message: Du har osparade ändringar. Är du säker på att du vill stänga utan att spara?
 convert-to: Konvertera till
 convert-document: Konvertera dokument
@@ -158,6 +176,10 @@ toolbar.switch-layout: Byt anpassad layout
 import: Import
 export: Export
 more-actions: Fler åtgärder
+language-comparison-view.apply-changes: Tillämpa ändringar
+language-comparison-view.title: Jämförelse av språk
+language-comparison-view.no-localized-fields: Det här dataobjektet har inga lokaliserade fält.
+language-comparison-view.no-permission: Du har inte behörighet att spara detta objekt.
 class-definition.import: Importera klassdefinition
 class-definition.export: Exportera klassdefinition
 class-definition.import-file-label: Välj JSON-fil
@@ -201,6 +223,8 @@ class-definition.property-visibility.key-grid: Nyckel (Rutnät)
 class-definition.property-visibility.key-search: Nyckel (Sök)
 class-definition.property-visibility.path-grid: Sökväg (Rutnät)
 class-definition.property-visibility.path-search: Sökväg (Sök)
+class-definition.property-visibility.published-grid: Publicerad (Rutnät)
+class-definition.property-visibility.published-search: Publicerad (Sök)
 class-definition.property-visibility.modification-date-grid: Ändringsdatum (Rutnät)
 class-definition.property-visibility.modification-date-search: Ändringsdatum (Sök)
 class-definition.property-visibility.creation-date-grid: Skapandedatum (Rutnät)
@@ -277,9 +301,13 @@ select-option.tree.actions.select-option: Valalternativ
 custom-layout.import-success: Anpassad layout har importerats
 custom-layout.delete.confirmation: Är du säker på att du vill ta bort den här anpassade layouten?
 custom-layout.delete.success: Anpassad layout har tagits bort
+custom-layout.add: Ny layout
+custom-layout.empty-state.create-or-edit: Skapa en ny anpassad layout eller redigera en befintlig
+custom-layout.empty-state.edit: Välj en befintlig anpassad layout för att börja redigera
 example-prefix: Exempelprefix
 pagination.show-total: Totalt {{total}} objekt
 pagination.page: Sida
+pagination.showing-x-of-y: Visar {{loaded}} av {{total}}
 preview-card.locate-in-tree: Hitta i träd
 preview-card.rename: Byt namn
 preview-card.download-zip: Ladda ner som ZIP
@@ -489,6 +517,8 @@ published: Publicerad
 classname: Klassnamn
 index: Index
 listing.grid-config.title: Rutnätskonfiguration
+grid-config.discard-all-changes: Förkasta alla ändringar
+grid-config.apply-changes: Tillämpa ändringar
 listing.add-column: Lägg till en kolumn
 listing.actions: Tillämpa på val
 listing.non-selected.actions: Tillämpa på alla
@@ -577,7 +607,13 @@ translations.show-all-languages: Visa alla
 translations.show-minimal-languages: Visa minimalt
 translations.show-hide-locale: Visa/dölj språk
 translations.new-translation: Ny översättning
-translations.new: Lägg till
+translations.new: Ny
+translations.domain.messages: Meddelanden
+translations.domain.admin: Admin
+translations.domain.studio: Studio
+translations.domain.dataQualityManagement: Datakvalitetshantering
+translations.domain.portal_engine_frontend: Portal Engine Frontend
+translations.domain.pimcore_copilot: Pimcore Copilot
 translations.type-options.custom: ICU-format
 translations.type-options.simple: Enkel text
 translations.edit-modal.tab.plain-text: Ren text
@@ -750,6 +786,7 @@ field-definitions.validation.empty-name: "Följande fälttyper saknar ett namn:"
 field-definitions.validation.reserved-word: "Reserverat ord använt som namn:"
 field-definitions.validation.invalid-format: "Ogiltigt namnformat (måste matcha [A-Za-z][A-Za-z0-9_]*):"
 field-definitions.validation.duplicate-name: "Duplikatnamn inom namnrymd:"
+field-definitions.delete.content: Vill du verkligen ta bort "{{name}}"?
 object-brick-key: Object Brick-nyckel
 field-name: Fältnamn
 field-definition.geopoint: Geografisk punkt
@@ -963,6 +1000,7 @@ lazy-loading: Lazy Loading
 disallow-add-remove: Tillåt inte lägg till / ta bort
 disallow-reorder: Tillåt inte omordning
 css-style: CSS-stil
+css-style-tooltip: "Inline-CSS som tillämpas på kroppen, t.ex. \"float: left; margin: 10px;\". Ogiltiga deklarationer ignoreras."
 collapsible: Ihopfällbar
 collapsed: Initialt ihopfälld
 border: Ram
@@ -984,7 +1022,6 @@ hide-empty-data: Dölj tom data
 tab-position: Flikposition
 maximum-tabs: Maximalt antal flikar
 hide-labels-when-tabs-reached: Dölj språketiketter när flikar nåtts
-provide-split-view: Tillhandahåll delad vy
 data: Data
 domain-label-width: Domänetikettbredd
 controller-action: Controller-åtgärd
@@ -1016,6 +1053,7 @@ asset.sidebar.office-format: Kontorsformat
 jobs.notification.title: Pågående jobb
 jobs.notification.jobs_one: "{{count}} åtgärd"
 jobs.notification.jobs_other: "{{count}} åtgärder"
+jobs.notification.hide-all-finished: Dölj alla avslutade
 jobs.job.in-progress: "{{title}} pågår"
 jobs.job.queued: "{{title}} köad"
 jobs.job.failed: "{{title}} misslyckades"
@@ -1032,6 +1070,7 @@ jobs.job.step_hint_single: "Steg {{step}}"
 jobs.job.step.batch-edit.preparing: Förbereder massredigering
 jobs.job.step.batch-edit.applying: Tillämpar massredigering
 jobs.job.download-error: Nedladdning misslyckades
+jobs.job.download-not-available: Nedladdningen är inte längre tillgänglig.
 jobs.job.button-show-errors: Visa fel
 jobs.job.error-modal.title: Jobbfel
 jobs.job.button-abort: Avbryt jobb
@@ -1043,6 +1082,9 @@ batch-edit.job-title: Massredigering
 jobs.zip-upload-job.title: Ladda upp ZIP
 jobs.zip-upload-job.step1.title: Extraherar ZIP
 jobs.zip-upload-job.step2.title: Skapar assets
+jobs.download-csv-job.title: CSV export
+jobs.download-xlsx-job.title: XLSX export
+jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Massredigering
 batch-edit.no-content: Det finns inga tillagda kolumner ännu
 batch-edit.modal-footer.apply-changes: Tillämpa ändringar
@@ -1112,6 +1154,14 @@ element.lock: Lås
 element.lock-and-propagate-to-children: Lås och sprid till barn
 element.unlock: Lås upp
 element.unlock-and-propagate-to-children: Lås upp och sprid till barn
+element.edit-lock.title: 'Redigeras av en annan användare'
+element.edit-lock.path: 'Sökväg'
+element.edit-lock.type: 'Typ'
+element.edit-lock.user: 'Användare'
+element.edit-lock.editing-since: 'Redigeras sedan'
+element.edit-lock.warning: 'Om du fortsätter redigera sparas din version separat från den andra användarens version.'
+element.edit-lock.continue: 'Fortsätt redigera'
+element.edit-lock.cancel: 'Avbryt'
 element.tree.sorting: Sortera barn efter
 element.tree.sorting.keyed-ascending: A till Ö (Nyckel)
 element.tree.sorting.keyed-descending: Ö till A (Nyckel)
@@ -1126,6 +1176,19 @@ element.delete: Ta bort
 element.delete.confirmation.title: Ta bort objekt
 element.delete.confirmation.text: Vill du verkligen ta bort det här objektet?
 element.delete.confirmation.ok: Ta bort permanent
+element.delete.folder.title: Ta bort mapp
+element.delete.folder.question: Vill du verkligen ta bort den här mappen?
+element.delete.folder.small.note: 'Observera: Beroendena kommer att tas bort. Det kanske inte går att ångra åtgärden helt.'
+element.delete.folder.large.note: 'Observera: Mappen och dess innehåll kommer att tas bort permanent och kan inte återställas.'
+element.delete.folder.ok: Ta bort
+element.delete.folder.ok.permanent: Ta bort permanent
+element.delete.batch.title: Ta bort element
+element.delete.batch.note: 'Obs: Dessa element kommer att tas bort permanent och kan inte återställas.'
+element.delete.batch.question_one: 'Vill du verkligen ta bort det här elementet?'
+element.delete.batch.question_other: 'Vill du verkligen ta bort dessa {{count}} element?'
+element.delete.batch.ok: Ta bort permanent
+element.delete.batch.show-paths: Visa element
+element.delete.batch.dependencies-warning: 'Det kan finnas beroenden, ta bort ändå?'
 element.open: Öppna
 element.toolbar.copy-id: Kopiera ID
 element.toolbar.copy-full-path-to-clipboard: Kopiera fullständig sökväg
@@ -1136,6 +1199,7 @@ element.unpublish: Avpublicera
 element.publish: Publicera
 element.locate-in-tree: Hitta i träd
 element.sidebar.filter.only-direct-children: bara direkta barn
+element.sidebar.filter.only-unreferenced: bara utan referenser
 element.sidebar.field-filters: Fältfilter
 element.full-information: Fullständig information
 system-information.id: ID
@@ -1195,12 +1259,15 @@ folder: Mapp
 archive: Arkiv
 audio: Ljud
 image: Bild
+image-gallery.clear-image-selection: Rensa bildval
+image-gallery.delete-frame: Ta bort ram
 text: Text
 video: Video
 processing: Bearbetar
 upload: Ladda upp
 close: Stäng
 paste: Klistra in
+cut: Klipp ut
 upload.assets-items-failed-message: Uppladdningen slutfördes med fel.
 quantity-value.converted-units: Konverterade enheter
 table.empty.confirm: Är du säker på att du vill rensa all data?
@@ -1309,7 +1376,7 @@ key-bindings.seo: SEO
 key-bindings.redirects: Omdirigeringar
 key-bindings.bundles: Paket
 user-management.references.title: Referenser
-user-management.references.documents: Dokument
+user-management.references.object-dependencies: Objektberoenden
 user-management.references.columns.id: ID
 user-management.references.columns.cpath: Sökväg
 user-management.references.columns.subtype: Undertyp
@@ -1319,6 +1386,7 @@ user-management.name: Namn
 user-management.password: Lösenord
 user-management.user.search: Sök efter användare
 user-management.role.search: Sök efter roll
+user-management.users-roles.search: Sök efter användare eller roll
 user-management.twoFactorAuthenticationEnabled: Tvåfaktorsautentisering aktiverad
 user-management.firstname: Förnamn
 user-management.lastname: Efternamn
@@ -1404,6 +1472,7 @@ roles.remove-folder.success: Mappen har tagits bort
 roles.remove-item.success: Rollen har tagits bort
 roles.add-item.success: Rollen har lagts till
 roles.add-folder.success: Mappen har lagts till
+roles.general: Allmänt
 roles.settings.title: Inställningar
 roles.workspaces.title: Workspaces
 roles.add-folder: Lägg till ny mapp
@@ -1433,6 +1502,10 @@ navigation.reporting: Rapportering
 navigation.system: System
 navigation.website-settings: Webbplatsinställningar
 navigation.document-types: Dokumenttyper
+navigation.cache: Cache
+navigation.cache.clear-cache: Rensa cache
+navigation.cache.clear-full-page-cache: Rensa helsidescache
+navigation.cache.clear-temporary-files: Ta bort temporära filer
 navigation.clear-cache: Rensa helsidescache
 navigation.reports: Alla rapporter
 navigation.custom-reports: Konfiguration av anpassade rapporter
@@ -1792,6 +1865,7 @@ empty-image: Tom bild
 image.dnd-target: Släpp en bild här
 image.add.and.dnd: Lägg till eller släpp en bild direkt här
 image.upload.add.and.dnd: Ladda upp, lägg till eller släpp en bild direkt här
+image.too-small: Den valda bilden är för liten. Använd en större bild.
 fallback: Reserv
 url-slug.add-site: Lägg till sajt
 url-slug.invalid: Ange en giltig URL slug (börjar med '/')
@@ -1810,6 +1884,7 @@ video.settings: Videoinställningar
 video.poster: Posterbild
 video.path: Sökväg
 video.dnd-target: Släpp en video här
+video.add-target: Lägg till en video här
 pdf-editable.dnd-target: Släpp en dokumentasset här
 many-to-one-relation.drop-placeholder: Släpp ett objekt här
 many-to-one-relation.drop-placeholder-text-input: Släpp ett objekt här eller ange ett värde
@@ -2351,6 +2426,7 @@ icon-selector.custom-icon-path-placeholder: Lägg till en anpassad sökväg och 
 icon-selector.Twemoji: Twemoji-bibliotek
 icon-selector.Pimcore: Pimcore-bibliotek
 language: Språk
+no-languages-found: Inga språk hittades
 pretty-url: Snygg URL / URL Slug
 pretty-url-override-notice: (åsidosätter sökväg från trädstruktur)
 content-main-document: Content-Main-dokument
@@ -2637,3 +2713,48 @@ bulk-import.type.class: Klasser
 bulk-import.type.customlayout: Custom Layouts
 bulk-import.type.fieldcollection: Field Collections
 bulk-import.type.objectbrick: Object Bricks
+translations.toolbar.export: CSV-export
+translations.toolbar.import: Importera
+translations.toolbar.cleanup: Städa upp
+translations.import.modal.title: Importera översättningar
+translations.import.modal.browse: Bläddra bland filer
+translations.import.modal.import: Importera
+translations.import.modal.drag-drop: Dra och släpp en CSV-fil här
+translations.import.modal.invalid-file: Vänligen välj en giltig CSV-fil
+translations.import.modal.csv-settings: CSV-inställningar
+translations.import.modal.delimiter: Avgränsare
+translations.import.modal.quotechar: Citattecken
+translations.import.modal.escapechar: Escape-tecken
+translations.import.modal.lineterminator: Radavslutare
+translations.import.modal.field-required: Detta fält är obligatoriskt
+translations.cleanup.confirm.title: Städa upp översättningar
+translations.cleanup.confirm.content: Detta tar bort alla oanvända översättningsnycklar. Denna åtgärd kan inte ångras.
+translations.cleanup.confirm.ok: Städa upp
+translations.import.delta.title: Importresultat
+translations.import.delta.description: Följande översättningar skiljer sig från de importerade värdena. Välj de du vill skriva över med de importerade värdena.
+translations.import.delta.column.key: Nyckel
+translations.import.delta.column.locale: Språk
+translations.import.delta.column.current: Nuvarande översättning
+translations.import.delta.column.imported: Importerad översättning
+translations.toolbar.import-merge: Importera och sammanfoga CSV
+translations.import.delta.skip: Hoppa över
+translations.import.delta.apply: Tillämpa valda ({{count}})
+widget.translation-merger: Sammanfoga översättningar
+translations.merger.column.locale: Språk
+translations.merger.column.key: Nyckel
+translations.merger.column.csv-value: CSV-värde
+translations.merger.column.action: Åtgärd
+translations.merger.column.current: Nuvarande värde
+translations.merger.column.state: Status
+translations.merger.state.applied: Tillämpad
+translations.merger.state.reverted: Återställd
+translations.merger.state.pending: Väntande
+translations.merger.apply-all: Tillämpa alla
+translations.merger.revert-all: Återställ alla
+translations.merger.title: "Sammanfoga översättningar (Domän: {{domain}})"
+translations.merger.column.language: Språk
+translations.merger.items: objekt
+select.clear-selection: Rensa val
+asset.folder.preview.image-display: Bildvisning
+asset.folder.preview.image-display.small: Liten
+asset.folder.preview.image-display.large: Stor

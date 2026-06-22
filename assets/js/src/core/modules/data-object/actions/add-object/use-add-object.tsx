@@ -16,17 +16,21 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import {
-  type ClassDefinitionListItem
+  type ClassDefinitionListItem,
+  useClassDefinitionCollectionCreatableQuery
 } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useTreePermission } from '@Pimcore/components/element-tree/provider/tree-permission-provider/use-tree-permission'
+import { useTreeFilter } from '@Pimcore/components/element-tree/provider/tree-filter-provider/use-tree-filter'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
+import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { isEmpty, isNil } from 'lodash'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { Spin } from '@Pimcore/components/spin/spin'
 import { useTranslation } from 'react-i18next'
 import { useDataObjectAddMutation } from '../../data-object-api-slice.gen'
 import { useDataObjectHelper } from '../../hooks/use-data-object-helper'
-import { useClassDefinitions } from '../../utils/provider/class-defintions/use-class-definitions'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 
 interface UseAddObjectHookReturn {
@@ -41,14 +45,43 @@ export const useAddObject = (): UseAddObjectHookReturn => {
   const dispatch = useAppDispatch()
   const { openDataObject } = useDataObjectHelper()
   const { isTreeActionAllowed } = useTreePermission()
-  const { getClassDefinitionsForCurrentUser } = useClassDefinitions()
+  const { classIds: allowedClassIds } = useTreeFilter()
+  // the creatable collection only contains the classes the current user may create
+  const { data: creatableClasses, isLoading, error } = useClassDefinitionCollectionCreatableQuery(undefined, {
+    skip: !isAllowed(UserPermission.Objects)
+  })
+
+  useEffect(() => {
+    if (!isNil(error)) {
+      trackError(new ApiError(error))
+    }
+  }, [error])
+
+  // element tree widgets can additionally restrict the creatable classes via their `classes` allowlist
+  const getAvailableClassDefinitions = (): ClassDefinitionListItem[] => {
+    const classDefinitions = creatableClasses?.items ?? []
+
+    if (allowedClassIds === undefined || allowedClassIds.length === 0) {
+      return classDefinitions
+    }
+
+    return classDefinitions.filter((classDefinition) => allowedClassIds.includes(classDefinition.id))
+  }
 
   const getClassEntries = (node: TreeNodeProps): ItemType[] => {
+    if (isLoading) {
+      return [{
+        key: 'add-object-loading',
+        type: 'custom',
+        component: (<Spin type="classic" />)
+      }]
+    }
+
     let classHierarchy: ItemType[] = []
-    const classDefinitions = getClassDefinitionsForCurrentUser()
+    const classDefinitions = getAvailableClassDefinitions()
 
     const structuredClassDefinitions = [...classDefinitions]
-      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => t(a.name).localeCompare(t(b.name), undefined, { sensitivity: 'base' }))
       .reduce<Record<string, ClassDefinitionListItem[]>>((acc, classDefinition) => {
         const groupName = isNil(classDefinition.group) || isEmpty(classDefinition.group)
           ? 'undefined'
@@ -68,7 +101,10 @@ export const useAddObject = (): UseAddObjectHookReturn => {
       classHierarchy = structuredClassDefinitions.undefined.map(classDefinition => getDataObjectEntry(classDefinition, node))
     }
 
-    for (const [group, classDefinitions] of Object.entries(structuredClassDefinitions)) {
+    const sortedGroups = Object.entries(structuredClassDefinitions)
+      .sort(([groupA], [groupB]) => t(groupA).localeCompare(t(groupB), undefined, { sensitivity: 'base' }))
+
+    for (const [group, classDefinitions] of sortedGroups) {
       if (group !== 'undefined') {
         classHierarchy.push({
           label: t(group),
@@ -169,7 +205,7 @@ export const useAddObject = (): UseAddObjectHookReturn => {
   const isAddObjectHidden = (node: TreeNodeProps): boolean => {
     return !isTreeActionAllowed(TreePermission.AddObject) ||
       !checkElementPermission(node.permissions, 'create') ||
-      isEmpty(getClassDefinitionsForCurrentUser())
+      (!isLoading && isEmpty(getAvailableClassDefinitions()))
   }
 
   const addObjectTreeContextMenuItem = (node: TreeNodeProps): ItemType => {

@@ -23,6 +23,7 @@ import { ImageTabManager } from '@Pimcore/modules/asset/editor/types/image/tab-m
 import { TextTabManager } from '@Pimcore/modules/asset/editor/types/text/tab-manager/text-tab-manager'
 import { UnknownTabManager } from '@Pimcore/modules/asset/editor/types/unknown/tab-manager/unknown-tab-manager'
 import { JobComponentRegistry } from '@Pimcore/modules/execution-engine/services/job-component-registry'
+import { JobRehydrationRegistry } from '@Pimcore/modules/execution-engine/services/job-rehydration-registry'
 import { ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
 import { VideoTabManager } from '@Pimcore/modules/asset/editor/types/video/tab-manager/video-tab-manager'
 import { ThumbnailService } from '@Pimcore/modules/asset/services/thumbnail-service'
@@ -261,6 +262,7 @@ import { DynamicTypeWidgetTypeElementTree } from '@Pimcore/modules/widget-editor
 import { DynamicTypeWidgetTypeRegistry } from '@Pimcore/modules/widget-editor/dynmic-types/registry/dynamic-type-widget-type-registry'
 import { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { WidgetRestorerRegistry } from '@Pimcore/modules/widget-manager/services/widget-restorer-registry'
+import { WidgetManagerActionService } from '@Pimcore/modules/widget-manager/services/widget-manager-action-service'
 import { ElementTreeWidgetPermissionRegistry } from '@Pimcore/modules/widget-editor/services/widget-context-menu-item-registry'
 import { DynamicTypeFieldFilterClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/classification-store/dynamic-type-field-filter-classification-store'
 import { DynamicTypeBatchEditClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/classification-store/dynamic-type-batch-edit-classification-store'
@@ -395,6 +397,7 @@ container.bind(serviceIds.mainNavRegistry).to(MainNavRegistry).inSingletonScope(
 
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
+container.bind(serviceIds.widgetManagerActionService).to(WidgetManagerActionService).inSingletonScope()
 container.bind(serviceIds.widgetRestorerRegistry).to(WidgetRestorerRegistry).inSingletonScope()
 container.bind(serviceIds.elementTreeWidgetPermissionRegistry).to(ElementTreeWidgetPermissionRegistry).inSingletonScope()
 container.bind(serviceIds['WidgetManager/ProcessorRegistry/PerspectiveProcessor']).to(PerspectiveProcessorRegistry).inSingletonScope()
@@ -711,6 +714,7 @@ container.bind(serviceIds['DynamicTypes/Grid/Transformers/PHPCode']).to(DynamicT
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()
+container.bind(serviceIds['ExecutionEngine/JobRehydrationRegistry']).to(JobRehydrationRegistry).inSingletonScope()
 container.bind(serviceIds.executionEngine).to(ExecutionEngine).inSingletonScope()
 
 // Background processor

@@ -554,13 +554,13 @@ export type AssetDocumentStreamCustomApiArg = {
     dpi?: number;
     cropPercent?: boolean;
     /** CropWidth of image thumbnail */
-    cropWidth?: any;
+    cropWidth?: number;
     /** CropHeight of image thumbnail */
-    cropHeight?: any;
+    cropHeight?: number;
     /** CropTop of image thumbnail */
-    cropTop?: any;
+    cropTop?: number;
     /** CropLeft of image thumbnail */
-    cropLeft?: any;
+    cropLeft?: number;
 };
 export type AssetDocumentStreamDynamicApiResponse =
     /** status 200 Document image stream based on dynamic thumbnail configuration */ Blob;
@@ -594,13 +594,13 @@ export type AssetDocumentStreamByThumbnailApiArg = {
     thumbnailName: string;
     cropPercent?: boolean;
     /** CropWidth of image thumbnail */
-    cropWidth?: any;
+    cropWidth?: number;
     /** CropHeight of image thumbnail */
-    cropHeight?: any;
+    cropHeight?: number;
     /** CropTop of image thumbnail */
-    cropTop?: any;
+    cropTop?: number;
     /** CropLeft of image thumbnail */
-    cropLeft?: any;
+    cropLeft?: number;
 };
 export type AssetDownloadZipApiResponse = /** status 200 ZIP archive as attachment */ Blob;
 export type AssetDownloadZipApiArg = {
@@ -624,7 +624,10 @@ export type AssetExportZipAssetApiResponse =
     };
 export type AssetExportZipAssetApiArg = {
     body: {
+        /** Asset IDs to include in the zip */
         assets?: number[];
+        /** ID of the parent folder. Defaults to root (1). */
+        parentId?: number;
     };
 };
 export type AssetExportZipFolderApiResponse =
@@ -811,13 +814,13 @@ export type AssetImageStreamCustomApiArg = {
     forceResize?: boolean;
     cropPercent?: boolean;
     /** CropWidth of image thumbnail */
-    cropWidth?: any;
+    cropWidth?: number;
     /** CropHeight of image thumbnail */
-    cropHeight?: any;
+    cropHeight?: number;
     /** CropTop of image thumbnail */
-    cropTop?: any;
+    cropTop?: number;
     /** CropLeft of image thumbnail */
-    cropLeft?: any;
+    cropLeft?: number;
 };
 export type AssetImageStreamDynamicApiResponse =
     /** status 200 Image asset stream based on dynamic thumbnail configuration */ Blob;
@@ -861,13 +864,13 @@ export type AssetImageStreamByThumbnailApiArg = {
     thumbnailName: string;
     cropPercent?: boolean;
     /** CropWidth of image thumbnail */
-    cropWidth?: any;
+    cropWidth?: number;
     /** CropHeight of image thumbnail */
-    cropHeight?: any;
+    cropHeight?: number;
     /** CropTop of image thumbnail */
-    cropTop?: any;
+    cropTop?: number;
     /** CropLeft of image thumbnail */
-    cropLeft?: any;
+    cropLeft?: number;
     /** Mime type of steamed image. */
     mimeType?: "JPEG" | "PNG" | "source" | "original" | "print";
 };
@@ -1229,6 +1232,8 @@ export type Column = {
     locale: string | null;
     /** Define the group structure */
     group: object;
+    /** Width of the Column */
+    width?: number | null;
 };
 export type RelationFieldConfig = {
     /** Relation Getter */
@@ -1271,6 +1276,8 @@ export type GridColumnRequest = {
     group?: string[] | null;
     /** Config */
     config?: (string | AdvancedColumnConfig)[];
+    /** Width of the Column */
+    width?: number | null;
 };
 export type GridFilter = {
     /** Page */

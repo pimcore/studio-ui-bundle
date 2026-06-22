@@ -15,10 +15,12 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { NoContent } from '@Pimcore/components/no-content/no-content'
 import { t } from 'i18next'
-import { LanguageSelection, transformLanguage } from '@Pimcore/components/language-selection/language-selection'
+import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
+import { transformLanguage } from '@Pimcore/components/language-selection/helpers'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { useBatchEdit } from './hooks/use-batch-edit'
 import { DefaultBatchEdit } from './default-batch-edit'
+import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
 export const BatchEditListContainer = (): React.JSX.Element => {
   const { batchEdits, removeBatchEdit } = useBatchEdit()
@@ -31,7 +33,7 @@ export const BatchEditListContainer = (): React.JSX.Element => {
     // @todo infer selected language from grid config when available
     const selectedLanguage = batchEdit.locale ?? settings.requiredLanguages[0]
 
-    const batchEditTitle = 'fieldDefinition' in batchEdit.config ? (batchEdit.config.fieldDefinition as { title: string }).title : batchEdit.key
+    const batchEditTitle = hasFieldDefinition(batchEdit.config) ? (batchEdit.config.fieldDefinition as { title: string }).title : batchEdit.key
     const key = batchEdit.type === 'dataobject.classificationstore' ? `${batchEdit.key}-${(batchEdit.config as { keyId: number }).keyId}-${(batchEdit.config as { groupId: number }).groupId}` : batchEdit.key
 
     return ({

@@ -28,7 +28,7 @@ export const PreviewItemSelection = (): React.JSX.Element => {
     },
     config: {
       objects: {
-        allowedTypes: [selectedClassDefinition?.name ?? '']
+        allowedClasses: selectedClassDefinition?.name !== undefined ? [selectedClassDefinition.name] : undefined
       }
     },
 

@@ -155,7 +155,7 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
         onTabClick={ onChange }
         tabBarExtraContent={ {
           left: (
-            <Box padding={ { left: 'extra-small', top: 'extra-small', bottom: 'extra-small' } }>
+            <Box padding={ { left: 'extra-small', top: 'mini', bottom: 'mini' } }>
               <ElementToolbar
                 editorTabsWidth={ editorTabsWidth }
                 elementType={ elementType }

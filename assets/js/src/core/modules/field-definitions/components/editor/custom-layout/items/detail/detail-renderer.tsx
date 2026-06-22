@@ -10,16 +10,23 @@
 
 import { ItemDetail } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/items/detail'
 import { useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
+import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { Content } from '@sdk/components'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const DetailRenderer = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const { activeConfiguration } = useItems()
+  const { AddModal } = useSettings()
+  const canCreate = AddModal !== undefined
 
   if (activeConfiguration === undefined) {
     return (
       <Content centered>
-        Create a new Custom Layout or edit an existing one
+        {canCreate
+          ? t('custom-layout.empty-state.create-or-edit')
+          : t('custom-layout.empty-state.edit')}
       </Content>
     )
   }

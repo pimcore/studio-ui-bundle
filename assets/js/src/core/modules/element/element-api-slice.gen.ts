@@ -89,6 +89,26 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Elements"],
             }),
+            elementGetEditlock: build.query<ElementGetEditlockApiResponse, ElementGetEditlockApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/elements/${queryArg.elementType}/editlock/${queryArg.id}`,
+                }),
+                providesTags: ["Elements"],
+            }),
+            elementLock: build.mutation<ElementLockApiResponse, ElementLockApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/elements/${queryArg.elementType}/editlock/${queryArg.id}`,
+                    method: "POST",
+                }),
+                invalidatesTags: ["Elements"],
+            }),
+            elementUnlock: build.mutation<ElementUnlockApiResponse, ElementUnlockApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/elements/${queryArg.elementType}/editlock/${queryArg.id}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Elements"],
+            }),
         }),
         overrideExisting: false,
     });
@@ -192,6 +212,27 @@ export type ElementResolveBySearchTermApiArg = {
     /** Search term to filter elements by. */
     searchTerm: string;
 };
+export type ElementGetEditlockApiResponse = /** status 200 Edit lock status of the element */ EditLock;
+export type ElementGetEditlockApiArg = {
+    /** Id of the element */
+    id: number;
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+};
+export type ElementLockApiResponse = unknown;
+export type ElementLockApiArg = {
+    /** Id of the element */
+    id: number;
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+};
+export type ElementUnlockApiResponse = unknown;
+export type ElementUnlockApiArg = {
+    /** Id of the element */
+    id: number;
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+};
 export type Error = {
     /** Message */
     message: string;
@@ -276,6 +317,24 @@ export type ElementUsage = {
     /** totalCount */
     totalCount?: number;
 };
+export type EditLockUser = {
+    /** Name of the user holding the lock */
+    name: string;
+};
+export type EditLock = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Whether the element is currently edit-locked */
+    isLocked: boolean;
+    /** ID of the user holding the lock */
+    userId?: number | null;
+    /** Timestamp when the lock was created */
+    date?: number | null;
+    /** User holding the lock */
+    user?: EditLockUser | null;
+};
 export const {
     useElementDeleteMutation,
     useElementGetDeleteInfoQuery,
@@ -287,4 +346,7 @@ export const {
     useElementGetUsageQuery,
     useElementUsageReplaceMutation,
     useElementResolveBySearchTermQuery,
+    useElementGetEditlockQuery,
+    useElementLockMutation,
+    useElementUnlockMutation,
 } = injectedRtkApi;

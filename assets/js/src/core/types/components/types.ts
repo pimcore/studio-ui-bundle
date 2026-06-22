@@ -37,10 +37,17 @@ export interface ListGridContextMenuProps {
 
 export type ListGridContextMenuComponents = ElementType<ListGridContextMenuProps>
 
+export interface ColumnResizeEndEvent {
+  columnId: string
+  width: number
+  columnSizing: Record<string, number>
+}
+
 export interface GridProps {
   data: any[]
   columns: Array<ColumnDef<any> | AccessorFnColumnDef<any>>
   resizable?: boolean
+  onColumnResizeEnd?: (event: ColumnResizeEndEvent) => void
   docked?: boolean
   onUpdateCellData?: (event: OnUpdateCellDataEvent) => void
   modifiedCells?: Array<{ rowIndex: number | string, columnId: string }>

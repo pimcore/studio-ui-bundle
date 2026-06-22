@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type AccessorFnColumnDef } from '@tanstack/react-table'
 import { Empty } from 'antd'
@@ -20,7 +20,6 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Tag } from '@Pimcore/components/tag/tag'
 import { Space } from '@Pimcore/components/space/space'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { uuid } from '@Pimcore/utils/uuid'
 import { StackList, type StackListProps } from '@Pimcore/components/stack-list/stack-list'
 import type { StackListItemProps } from '@Pimcore/components/stack-list/stack-list-item'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
@@ -50,35 +49,30 @@ export const ColumnsConfiguration = (): React.JSX.Element => {
   const { styles } = useStyles()
 
   const handleItemsChange = (items: ColumnStackListProps['items']): void => {
-    const newColumns = items.map((item) => item.meta)
-
-    setColumns(newColumns)
+    setColumns(items.map((item) => item.meta))
   }
 
-  const handleRemoveColumn = (uniqueId: string): void => {
-    const itemList = stackListItems.filter((item) => item.id !== uniqueId)
-    const newColumns = itemList.map((item) => item.meta)
-
-    setColumns(newColumns)
-  }
+  const handleRemoveColumn = useCallback((columnId: string): void => {
+    setColumns(columns.filter((column) => column.id !== columnId))
+  }, [columns, setColumns])
 
   useEffect(() => {
     const newAddColumnMenu = initialColumns
       ?.filter((initialColumn) => !columns.some((column) => initialColumn.id === column.id))
       ?.map((column) => ({
-        key: column.id ?? uuid(),
+        key: column.id ?? String(column.header),
         label: column.header as string,
         onClick: () => { addColumn(column) }
       }))
 
     setAddColumnMenu(newAddColumnMenu)
-  }, [columns])
+  }, [columns, initialColumns, addColumn])
 
-  const stackListItems: ColumnStackListProps['items'] = columns.map(column => {
-    const uniqueId = uuid()
+  const stackListItems: ColumnStackListProps['items'] = useMemo(() => columns.map((column, index) => {
+    const stableId = column.id ?? `col-${index}`
 
     return {
-      id: uniqueId,
+      id: stableId,
       sortable: true,
       meta: column,
 
@@ -92,13 +86,13 @@ export const ColumnsConfiguration = (): React.JSX.Element => {
         <Space size='mini'>
           <IconButton
             icon={ { value: 'trash' } }
-            onClick={ () => { handleRemoveColumn(uniqueId) } }
+            onClick={ () => { handleRemoveColumn(stableId) } }
             theme='secondary'
           />
         </Space>
       )
     }
-  })
+  }), [columns, handleRemoveColumn, styles.stackItem])
 
   return (
     <ContentLayout

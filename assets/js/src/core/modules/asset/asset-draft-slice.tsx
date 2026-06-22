@@ -62,6 +62,12 @@ export const slice = createSlice({
       }
     },
 
+    setModificationDate (state, action: PayloadAction<{ id: number, modificationDate: number | null }>): void {
+      if (state.entities[action.payload.id] !== undefined) {
+        state.entities[action.payload.id].modificationDate = action.payload.modificationDate
+      }
+    },
+
     ...useTrackableChangesReducers(assetsAdapter),
     ...usePropertiesReducers(assetsAdapter),
     ...useSchedulesReducers(assetsAdapter),
@@ -80,6 +86,7 @@ export const {
   removeAsset,
   resetAsset,
   updateFilename,
+  setModificationDate,
 
   resetChanges,
   setModifiedCells,

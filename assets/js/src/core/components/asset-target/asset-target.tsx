@@ -32,10 +32,13 @@ interface AssetTargetProps {
   className?: string
   width?: number | string
   height?: number | string
+  minWidth?: number | string
+  minHeight?: number | string
   dndIcon?: boolean
   uploadIcon?: boolean
   addIcon?: boolean
   dropClass?: string
+  removeLabel?: string
 }
 
 export const AssetTarget = ({
@@ -43,6 +46,8 @@ export const AssetTarget = ({
   className,
   width = 200,
   height = 200,
+  minWidth,
+  minHeight,
   dndIcon,
   uploadIcon,
   addIcon,
@@ -50,7 +55,8 @@ export const AssetTarget = ({
   onSearch,
   onUpload,
   onResize,
-  dropClass
+  dropClass,
+  removeLabel
 }: AssetTargetProps): React.JSX.Element => {
   const { getStateClasses } = useDroppable()
   const { styles } = useStyle()
@@ -70,7 +76,7 @@ export const AssetTarget = ({
     dropdownItems.push({
       icon: <Icon value="trash" />,
       key: 'remove',
-      label: t('remove'),
+      label: removeLabel ?? t('remove'),
       onClick: onRemove
     })
   }
@@ -105,7 +111,9 @@ export const AssetTarget = ({
         ref={ containerRef }
         style={ {
           height: toCssDimension(height),
-          width: toCssDimension(width)
+          width: toCssDimension(width),
+          ...(!isUndefined(minWidth) && { minWidth: toCssDimension(minWidth) }),
+          ...(!isUndefined(minHeight) && { minHeight: toCssDimension(minHeight) })
         } }
       >
         <Flex

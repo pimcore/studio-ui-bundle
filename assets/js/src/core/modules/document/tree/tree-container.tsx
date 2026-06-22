@@ -19,10 +19,11 @@ import { Box } from '@Pimcore/components/box/box'
 import { Skeleton } from '@Pimcore/components/element-tree/skeleton/skeleton'
 import { withDroppable } from './node/with-droppable/with-droppable'
 import { withActionStates } from './node/with-action-states'
-import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
+import { setNodeOpeningInAllTree, type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
 import { useElementTreeRootNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-root-node'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { useComponentRegistry } from '@Pimcore/modules/app/component-registry/use-component-registry'
+import { useAppDispatch } from '@sdk/app'
 import { withContextMenu } from './node/with-context-menu'
 
 export interface TreeContainerProps {
@@ -36,6 +37,7 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
   const { openDocument } = useDocumentHelper()
   const { rootNode, isLoading } = useElementTreeRootNode(id, showRoot)
   const componentRegistry = useComponentRegistry()
+  const dispatch = useAppDispatch()
   const contextMenu = componentRegistry.get(componentConfig.document.tree.contextMenu.name)
 
   if (showRoot && isLoading) {
@@ -47,11 +49,17 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
   }
 
   async function onSelect (node: TreeNode): Promise<void> {
-    void openDocument({
-      config: {
-        id: parseInt(node.id)
-      }
-    })
+    dispatch(setNodeOpeningInAllTree({ nodeId: node.id, elementType: 'document', opening: true }))
+
+    try {
+      await openDocument({
+        config: {
+          id: parseInt(node.id)
+        }
+      })
+    } finally {
+      dispatch(setNodeOpeningInAllTree({ nodeId: node.id, elementType: 'document', opening: false }))
+    }
   }
 
   return (

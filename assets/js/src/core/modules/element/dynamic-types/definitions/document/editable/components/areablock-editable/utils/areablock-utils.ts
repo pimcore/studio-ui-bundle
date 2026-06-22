@@ -112,6 +112,15 @@ export const configUtils = {
     return config.allowed.includes(type)
   },
 
+
+  isTypePasteable (config: AreablockEditableConfig | undefined, type: string): boolean {
+    if (!this.isTypeAllowed(config, type)) return false
+
+    const availableTypes: AreaType[] = this.getAvailableTypes(config)
+
+    return availableTypes.some(availableType => availableType.type === type)
+  },
+
   getGroupedAreaTypes (config?: AreablockEditableConfig): AreaType[] | Record<string, AreaType[]> {
     const availableTypes = config?.types ?? []
     const groupConfig = config?.group

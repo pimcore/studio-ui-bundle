@@ -20,8 +20,9 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { Input } from '@Pimcore/components/input/input'
+import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { createColumnHelper } from '@tanstack/react-table'
-import { type RowSelectionState } from '@tanstack/react-table'
+import { type RowSelectionState, type SortingState } from '@tanstack/react-table'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Header } from '@Pimcore/components/header/header'
@@ -55,16 +56,47 @@ export const GroupsTab = ({ storeId }: IGroupsTabProps): React.JSX.Element => {
   const [detailForm] = Form.useForm<IGroupDetailFormValues>()
 
   const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(20)
+  const [page, setPage] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(20)
+  const [searchTerm, setSearchTerm] = useState<string>('')
+  const [sorting, setSorting] = useState<SortingState>([])
 
-  const { data, isLoading, isFetching, refetch } = useClassificationStoreConfigurationGroupCollectionQuery({
+  const onSortingChange = useCallback((newSorting: SortingState) => {
+    setSorting(newSorting)
+    setPage(1)
+  }, [])
+
+  const queryArgs = useMemo(() => ({
     storeId,
-    body: { filters: { page, pageSize } }
-  })
+    body: {
+      filters: {
+        page,
+        pageSize,
+        columnFilters: searchTerm.length > 0
+          ? [{ type: 'search', filterValue: searchTerm }]
+          : [],
+        ...(sorting.length > 0
+          ? {
+              sortFilter: {
+                key: sorting[0].id,
+                direction: sorting[0].desc ? 'DESC' : 'ASC'
+              }
+            }
+          : {})
+      }
+    }
+  }), [storeId, page, pageSize, searchTerm, sorting])
+
+  const { data, isLoading, isFetching, refetch } = useClassificationStoreConfigurationGroupCollectionQuery(queryArgs)
 
   const groups = data?.items ?? []
   const total = data?.totalItems ?? 0
+
+  useEffect(() => {
+    if (data?.items.length === 0 && data.totalItems > 0 && page > 1) {
+      setPage(page - 1)
+    }
+  }, [data, page])
 
   const [createGroup] = useClassificationStoreConfigurationGroupCreateMutation()
   const [updateGroup] = useClassificationStoreConfigurationGroupUpdateMutation()
@@ -252,6 +284,7 @@ export const GroupsTab = ({ storeId }: IGroupsTabProps): React.JSX.Element => {
                     setPageSize(newPageSize)
                   } }
                   showSizeChanger
+                  showTotal={ (total) => t('pagination.show-total', { total }) }
                   total={ total }
                 />
               </Toolbar>
@@ -262,13 +295,26 @@ export const GroupsTab = ({ storeId }: IGroupsTabProps): React.JSX.Element => {
                 justify="space-between"
                 style={ { padding: '8px 16px' } }
               >
-                <Header title={ t('classification-store.tabs.groups') } />
-                <IconTextButton
-                  icon={ { value: 'new' } }
-                  onClick={ handleAdd }
+                <Flex
+                  align="center"
+                  gap="small"
                 >
-                  {t('classification-store.add-group')}
-                </IconTextButton>
+                  <Header title={ t('classification-store.tabs.groups') } />
+                  <IconTextButton
+                    icon={ { value: 'new' } }
+                    onClick={ handleAdd }
+                  >
+                    {t('classification-store.add-group')}
+                  </IconTextButton>
+                </Flex>
+                <SearchInput
+                  loading={ isFetching }
+                  onSearch={ (value) => {
+                    setSearchTerm(value)
+                    setPage(1)
+                  } }
+                  placeholder={ t('search') }
+                />
               </Flex>
             }
           >
@@ -280,8 +326,11 @@ export const GroupsTab = ({ storeId }: IGroupsTabProps): React.JSX.Element => {
                 columns={ columns }
                 data={ groups }
                 enableRowSelection
+                enableSorting
                 isLoading={ isLoading || isFetching }
+                manualSorting
                 onSelectedRowsChange={ (rows) => { setSelectedRows(rows) } }
+                onSortingChange={ onSortingChange }
                 onUpdateCellData={ ({ columnId, value, rowData }) => {
                   if (columnId === 'name') {
                     const newName = (value as string).trim()
@@ -301,6 +350,7 @@ export const GroupsTab = ({ storeId }: IGroupsTabProps): React.JSX.Element => {
                 } }
                 selectedRows={ selectedRows }
                 setRowId={ (row: ClassificationStoreConfigurationGroupDetail) => row.id !== undefined ? String(row.id) : undefined as unknown as string }
+                sorting={ sorting }
               />
             </Flex>
           </ContentLayout>

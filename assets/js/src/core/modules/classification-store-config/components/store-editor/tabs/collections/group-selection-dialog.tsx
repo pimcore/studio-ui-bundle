@@ -129,7 +129,7 @@ export const GroupSelectionDialog = ({
             isLoading={ isLoading }
             onSelectedRowsChange={ setSelectedRows }
             selectedRows={ selectedRows }
-            setRowId={ (row: ClassificationStoreConfigurationGroupDetail) => row.id !== undefined ? String(row.id) : '' }
+            setRowId={ (row: ClassificationStoreConfigurationGroupDetail) => row.id !== undefined ? String(row.id) : undefined as unknown as string }
           />
         </Content>
       </Flex>

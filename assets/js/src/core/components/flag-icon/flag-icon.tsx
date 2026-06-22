@@ -9,6 +9,7 @@
  */
 
 import React from 'react'
+import { uniqueId } from 'lodash'
 import UnknownFlag from '@Pimcore/assets/images/flags/_unknown.inline.svg?react'
 import { GeneralError, trackError } from '@sdk/modules/app'
 
@@ -199,6 +200,8 @@ const flagCache: Record<string, React.ReactElement | null> = {}
 export const FlagIcon = ({ value, width = 21, height = 15 }: IFlagIconProps): React.JSX.Element => {
   const [flag, setFlag] = React.useState<React.ReactElement | null>(null)
   const [loading, setLoading] = React.useState(true)
+  const [flagUniqueId] = React.useState(() => uniqueId('flag_'))
+  const containerRef = React.useRef<HTMLSpanElement>(null)
 
   React.useEffect(() => {
     if (value === null || value === '') {
@@ -234,15 +237,45 @@ export const FlagIcon = ({ value, width = 21, height = 15 }: IFlagIconProps): Re
     void loadFlag()
   }, [value])
 
+  React.useEffect(() => {
+    const container = containerRef.current
+    if (container === null) return
+
+    const svg = container.querySelector('svg')
+    if (svg === null) return
+
+    const prefix = flagUniqueId
+    const urlAttrs = ['clip-path', 'fill']
+
+    svg.querySelectorAll('[id]').forEach(el => {
+      const oldId = el.getAttribute('id')!
+      const newId = `${prefix}${oldId}`
+      el.setAttribute('id', newId)
+
+      for (const attr of urlAttrs) {
+        svg.querySelectorAll(`[${attr}="url(#${oldId})"]`).forEach(ref => {
+          ref.setAttribute(attr, `url(#${newId})`)
+        })
+      }
+    })
+  }, [flag, flagUniqueId])
+
   if (loading) return <div style={ { width, height, background: '#f0f0f0' } } />
 
   if (flag === null || !React.isValidElement(flag)) {
     return <UnknownFlag style={ { width, height } } />
   }
 
-  return React.cloneElement(flag as React.ReactElement<any>, {
-    style: { width, height },
-    width: width.toString(),
-    height: height.toString()
-  })
+  return (
+    <span
+      ref={ containerRef }
+      style={ { display: 'inline-flex', lineHeight: 0 } }
+    >
+      {React.cloneElement(flag as React.ReactElement<any>, {
+        style: { width, height },
+        width: width.toString(),
+        height: height.toString()
+      })}
+    </span>
+  )
 }

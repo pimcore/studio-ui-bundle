@@ -11,11 +11,9 @@
 import React, { createContext, useMemo, useState } from 'react'
 import { type ClassDefinitionSelectionDecoratorConfig } from '../../class-definition-selection-decorator'
 import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
+import { type ClassDefinitionListItem } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 
-export interface ClassDefinitionListItem {
-  id: string
-  name: string
-}
+export { type ClassDefinitionListItem }
 
 export interface ClassDefinitionSelectionData {
   config: ClassDefinitionSelectionDecoratorConfig

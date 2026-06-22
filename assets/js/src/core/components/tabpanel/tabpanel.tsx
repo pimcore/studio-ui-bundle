@@ -17,7 +17,7 @@ import { isNonEmptyString } from '@sdk/utils'
 
 export interface TabpanelItem {
   key?: string
-  label?: string
+  label?: React.ReactNode
   title?: string
   closable?: boolean
   children?: React.ReactNode
@@ -64,7 +64,12 @@ export const Tabpanel = ({
   const { t } = useTranslation()
   const tabItems: ITabsProps['items'] = items.map((item, index) => {
     const labelOrTitle = item.label ?? item.title
-    const label = isNonEmptyString(labelOrTitle) ? t(labelOrTitle) : `Tab ${index + 1}`
+    let label: React.ReactNode
+    if (typeof labelOrTitle === 'string') {
+      label = isNonEmptyString(labelOrTitle) ? t(labelOrTitle) : `Tab ${index + 1}`
+    } else {
+      label = labelOrTitle ?? `Tab ${index + 1}`
+    }
 
     return {
       ...item,

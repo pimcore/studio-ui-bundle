@@ -43,6 +43,7 @@ export interface TreeNode {
 export interface InternalNodeState {
   isExpanded: boolean
   isLoading?: boolean
+  isOpening?: boolean
   isSelected: boolean
   isScrollTo: boolean
   isFetchTriggered: boolean
@@ -219,6 +220,19 @@ const slice = createSlice({
           updateNodeState(state, treeId, payload.nodeId, node => ({
             ...node,
             isLoading: payload.loading
+          }))
+        }
+      })
+    },
+    setNodeOpeningInAllTree: (
+      state,
+      { payload }: PayloadAction<{ nodeId: string, elementType: string, opening: boolean }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === payload.elementType) {
+          updateNodeState(state, treeId, payload.nodeId, node => ({
+            ...node,
+            isOpening: payload.opening
           }))
         }
       })
@@ -764,6 +778,30 @@ const slice = createSlice({
           }))
         }
       })
+    },
+    setDocumentNodeStaticGeneratorEnabled: (
+      state,
+      { payload }: PayloadAction<{ nodeId: string, staticGeneratorEnabled: boolean }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        if (state[treeId].nodes[payload.nodeId]?.treeNodeProps?.elementType === elementTypes.document) {
+          updateNodeState(state, treeId, payload.nodeId, node => ({
+            ...node,
+            treeNodeProps: !isUndefined(node.treeNodeProps)
+              ? {
+                  ...node.treeNodeProps,
+                  metaData: {
+                    ...node.treeNodeProps.metaData,
+                    document: {
+                      ...node.treeNodeProps.metaData?.document,
+                      staticGeneratorEnabled: payload.staticGeneratorEnabled
+                    }
+                  }
+                }
+              : undefined
+          }))
+        }
+      })
     }
   }
 })
@@ -772,7 +810,7 @@ export const treeSliceName = slice.name
 
 injectSliceWithState(slice)
 
-export const { setNodeLoading, setNodeLoadingInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, setNodeFetchingInAllTrees, markNodeDeletingForTree, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, updateNodeData, updateNodeType, setNodePublished, setNodeAdditionalAttributes, setRootNode, setDocumentNodeSiteStatus, setNodeLocked, refreshTreeByElementType, setDocumentNodeNavigationExclude } = slice.actions
+export const { setNodeLoading, setNodeLoadingInAllTree, setNodeOpeningInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, setNodeFetchingInAllTrees, markNodeDeletingForTree, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, updateNodeData, updateNodeType, setNodePublished, setNodeAdditionalAttributes, setRootNode, setDocumentNodeSiteStatus, setNodeLocked, refreshTreeByElementType, setDocumentNodeNavigationExclude, setDocumentNodeStaticGeneratorEnabled } = slice.actions
 
 export const selectNodeState = createSelector(
   (state: RootState) => state.trees,

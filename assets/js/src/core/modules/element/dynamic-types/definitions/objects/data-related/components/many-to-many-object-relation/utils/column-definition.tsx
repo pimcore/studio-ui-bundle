@@ -21,17 +21,31 @@ interface IVisibleFieldsToColumnDefinitionsProps {
   disabled: boolean
   pathFormatterClass: string
   transformGridColumn: (column: VisibleFieldDefinition, disabled: boolean) => IdentifiedColumnDef<unknown, never>
+  userLanguage: string | null
 }
 
-export const visibleFieldsToColumnDefinitions = ({ visibleFieldDefinitions, disabled, pathFormatterClass, transformGridColumn }: IVisibleFieldsToColumnDefinitionsProps): Array<ColumnDef<any>> => {
+/**
+ * Encode a column id as JSON matching the format expected by decodeColumnIdentifier
+ * in use-column-mapper.tsx: { key, locale }
+ */
+export const encodeColumnId = (key: string, locale: string | null | undefined): string => {
+  return JSON.stringify({
+    key: key.replaceAll('.', '**'),
+    locale: locale ?? null
+  })
+}
+
+export const visibleFieldsToColumnDefinitions = ({ visibleFieldDefinitions, disabled, pathFormatterClass, transformGridColumn, userLanguage }: IVisibleFieldsToColumnDefinitionsProps): Array<ColumnDef<any>> => {
   const columnDefinition: Array<ColumnDef<any>> = []
   const columnHelper = createColumnHelper()
 
   for (const column of visibleFieldDefinitions ?? []) {
     const baseColumn = transformGridColumn(column, disabled)
+    const locale = column.localizable ? userLanguage : null
     columnDefinition.push(
       columnHelper.accessor(column.key, {
         ...baseColumn,
+        id: encodeColumnId(column.key, locale),
         ...(isNonEmptyString(pathFormatterClass) && baseColumn.meta?.columnKey === 'fullpath' ? { cell: renderFullPathCell } : {})
       })
     )
@@ -42,22 +56,23 @@ export const visibleFieldsToColumnDefinitions = ({ visibleFieldDefinitions, disa
 
 export const enrichRowData = (visibleFieldDefinitions: VisibleFieldDefinition[] | undefined, row: ManyToManyRelationValueItem, rowData: GridColumnData[]): ManyToManyRelationValueItem & Record<string, any> => {
   const additionalColumns = {}
+  const rowDataMap = new Map(rowData.map(item => [item.key, item.value]))
 
   for (const field of visibleFieldDefinitions ?? []) {
     const key = field.key
-    const value = rowData?.find(item => item.key === key)?.value
 
     if (key === 'fullpath') {
       additionalColumns[key] = row.fullPath
     } else if (key === 'classname') {
       additionalColumns[key] = row.subtype
     } else if (key !== 'id') {
-      additionalColumns[key] = value
+      additionalColumns[key] = rowDataMap.get(key)
     }
   }
 
   return {
     ...row,
-    ...additionalColumns
+    ...additionalColumns,
+    '__api-data': { columns: rowData }
   }
 }

@@ -22,6 +22,7 @@ import { AdvancedColumnForm } from './forms/advanced-column-form/advanced-column
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
 interface ColumnStackListItemProps extends StackListItemProps {
   meta: AvailableColumn
@@ -42,7 +43,7 @@ export const GridConfigList = (): React.JSX.Element => {
     // @todo translation
     const advancedColumnName = column?.__meta?.advancedColumnConfig?.title ?? 'Add a title'
 
-    if ('fieldDefinition' in column.config) {
+    if (hasFieldDefinition(column.config)) {
       const fieldDefinition = column.config.fieldDefinition as Record<string, any>
       translationKey = !isEmptyValue(fieldDefinition?.title) ? fieldDefinition?.title : column.key
     }
@@ -53,6 +54,7 @@ export const GridConfigList = (): React.JSX.Element => {
       meta: column,
 
       type: isAdvancedColumn ? 'collapse' : 'default',
+      defaultActive: isAdvancedColumn,
       children: (
         () => isAdvancedColumn
           ? <Tag color='purple'>{advancedColumnName}</Tag>

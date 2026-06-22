@@ -12,6 +12,7 @@ import React, { useCallback } from 'react'
 import { type AreablockManager } from '../utils/areablock-manager'
 import { type AreaType, type AreablockEditableConfig } from '../areablock-editable'
 import ReactDOM from 'react-dom'
+import { useTranslation } from 'react-i18next'
 import { SortableAreablockToolbar } from '../components/sortable-areablock-toolbar/sortable-areablock-toolbar'
 import { EmptyStateAreablockToolbar } from '../components/empty-state-areablock-toolbar/empty-state-areablock-toolbar'
 import { useAreablockDropzones } from './use-areablock-dropzones'
@@ -27,6 +28,9 @@ export interface UseAreablockControlsParams {
   onMoveAreaUp: (element: HTMLElement) => void
   onMoveAreaDown: (element: HTMLElement) => void
   onMoveArea: (fromIndex: number, toIndex: number) => void
+  onCopyArea: (element: HTMLElement) => void
+  onCutArea: (element: HTMLElement) => void
+  onPasteArea: (element: HTMLElement | null) => void
   onOpenDialog?: (areaKey: string) => void
   onToggleHidden?: (element: HTMLElement) => void
   isInherited?: boolean
@@ -46,11 +50,15 @@ export const useAreablockControls = ({
   onMoveAreaUp,
   onMoveAreaDown,
   onMoveArea,
+  onCopyArea,
+  onCutArea,
+  onPasteArea,
   onOpenDialog,
   onToggleHidden,
   isInherited = false,
   onOverwrite
 }: UseAreablockControlsParams): UseAreablockControlsReturn => {
+  const { t } = useTranslation()
   const {
     activeId,
     handleDragStart,
@@ -132,35 +140,49 @@ export const useAreablockControls = ({
       .map(entry => areablockManager.getElementKey(entry))
       .filter((key): key is string => Boolean(key))
 
-    currentAreaEntries.forEach(areaEntry => {
+    // Compute per-area flags here so SortableAreablockToolbar can be memoized
+    // (props are stable primitives, no DOM/manager queries inside the toolbar render).
+    const lastIndex = currentAreaEntries.length - 1
+    currentAreaEntries.forEach((areaEntry, index) => {
       const buttonsContainer = areaEntry.querySelector('.pimcore_area_buttons')
-      if (buttonsContainer !== null) {
-        const areaKey = areablockManager.getElementKey(areaEntry)
+      if (buttonsContainer === null) return
 
-        if (areaKey !== null) {
-          const sortableToolbar = (
-            <SortableAreablockToolbar
-              areaTypes={ areaTypes }
-              areablockManager={ areablockManager }
-              buttonsContainer={ buttonsContainer as HTMLElement }
-              config={ config }
-              element={ areaEntry }
-              id={ areaKey }
-              isInherited={ isInherited }
-              limitReached={ limitReached }
-              onAddArea={ handleAddArea }
-              onMoveAreaDown={ onMoveAreaDown }
-              onMoveAreaUp={ onMoveAreaUp }
-              onOpenDialog={ onOpenDialog }
-              onOverwrite={ onOverwrite }
-              onRemoveArea={ handleRemoveArea }
-              onToggleHidden={ onToggleHidden }
-            />
-          )
-          const portal = ReactDOM.createPortal(sortableToolbar, buttonsContainer)
-          portals.push(portal)
-        }
-      }
+      const areaKey = areablockManager.getElementKey(areaEntry)
+      if (areaKey === null) return
+
+      const elementType = areablockManager.getElementType(areaEntry)
+      const areaTypeConfig = areaTypes.find(areaType => areaType.type === elementType)
+      const toolbarTitle = (areaTypeConfig?.name != null) ? t(areaTypeConfig.name) : undefined
+      const hasDialogBox = areaTypeConfig?.hasDialogBoxConfiguration === true
+      const isHidden = areablockManager.isElementHidden(areaEntry)
+
+      const sortableToolbar = (
+        <SortableAreablockToolbar
+          areaTypes={ areaTypes }
+          config={ config }
+          element={ areaEntry }
+          hasDialogBox={ hasDialogBox }
+          id={ areaKey }
+          isFirst={ index === 0 }
+          isHidden={ isHidden }
+          isInherited={ isInherited }
+          isLast={ index === lastIndex }
+          limitReached={ limitReached }
+          onAddArea={ handleAddArea }
+          onCopyArea={ onCopyArea }
+          onCutArea={ onCutArea }
+          onMoveAreaDown={ onMoveAreaDown }
+          onMoveAreaUp={ onMoveAreaUp }
+          onOpenDialog={ onOpenDialog }
+          onOverwrite={ onOverwrite }
+          onPasteArea={ onPasteArea }
+          onRemoveArea={ handleRemoveArea }
+          onToggleHidden={ onToggleHidden }
+          toolbarTitle={ toolbarTitle }
+        />
+      )
+      const portal = ReactDOM.createPortal(sortableToolbar, buttonsContainer)
+      portals.push(portal)
     })
 
     return (
@@ -175,7 +197,7 @@ export const useAreablockControls = ({
         <>{portals}</>
       </EditableSortContext>
     )
-  }, [areablockManager, areaTypes, config, handleDragStart, handleDragOver, handleDragEnd, handleAddArea, handleRemoveArea, onMoveAreaUp, onMoveAreaDown, onToggleHidden, onOpenDialog, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal, isInherited, onOverwrite])
+  }, [areablockManager, areaTypes, config, handleDragStart, handleDragOver, handleDragEnd, handleAddArea, handleRemoveArea, onMoveAreaUp, onMoveAreaDown, onCopyArea, onCutArea, onPasteArea, onToggleHidden, onOpenDialog, activeId, dropzonePortals, dragOverlayTitle, createEmptyStatePortal, isInherited, onOverwrite])
 
   return {
     renderAreablockToolbar

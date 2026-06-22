@@ -12,7 +12,8 @@ import React, { type ReactNode } from 'react'
 import { StackList, type StackListProps } from '@Pimcore/components/stack-list/stack-list'
 import { Empty, Tag } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { LanguageSelection, transformLanguage } from '@Pimcore/components/language-selection/language-selection'
+import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
+import { transformLanguage } from '@Pimcore/components/language-selection/helpers'
 import { useGridConfig } from './hooks/use-grid-config'
 import { useTranslation } from 'react-i18next'
 import { Space } from '@Pimcore/components/space/space'
@@ -21,6 +22,7 @@ import { uuid } from '@Pimcore/utils/uuid'
 import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-list-item'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
 interface GridConfigListProps {
   columns: AvailableColumn[]
@@ -44,7 +46,7 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
 
     let translationKey = `${column.key}`
 
-    if ('fieldDefinition' in column.config) {
+    if (hasFieldDefinition(column.config)) {
       const fieldDefinition = column.config.fieldDefinition as Record<string, any>
       translationKey = !isEmptyValue(fieldDefinition?.title) ? fieldDefinition?.title : column.key
     }

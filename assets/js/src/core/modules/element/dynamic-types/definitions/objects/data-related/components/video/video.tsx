@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Card } from '@Pimcore/components/card/card'
 import {
   VideoFooter
@@ -23,6 +23,9 @@ import {
 import { toCssDimension } from '@Pimcore/utils/css'
 import cn from 'classnames'
 import { useStyles } from './video.styles'
+import { InlineUpload } from '@Pimcore/components/inline-upload'
+import { useUploadModal } from '@Pimcore/components/modal-upload/hooks/use-upload-modal'
+import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 
 export type VideoValue = AssetVideoValue | YoutubeVideoValue | VimeoVideoValue | DailymotionVideoValue
 
@@ -69,10 +72,12 @@ export interface VideoProps {
   onChange?: (value: VideoValue | null) => void
   allowedVideoTypes?: VideoType[]
   className?: string
+  uploadPath?: string
 }
 
 export const Video = (props: VideoProps): React.JSX.Element => {
   const videoValue = props.value ?? null
+  const { triggerUpload } = useUploadModal({})
 
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -83,6 +88,48 @@ export const Video = (props: VideoProps): React.JSX.Element => {
 
   const clearValue = (): void => {
     props?.onChange?.(null)
+  }
+
+  const handleUploadedAsset = (asset: Asset): void => {
+    handleChange({
+      type: 'asset',
+      data: {
+        type: 'asset',
+        id: asset.id,
+        fullPath: asset.fullPath,
+        subtype: asset.type
+      }
+    })
+  }
+
+  const handleUpload = useCallback(() => {
+    triggerUpload({
+      targetFolderPath: props.uploadPath ?? '',
+      accept: 'video/*',
+      multiple: false,
+      maxItems: 1,
+      onSuccess: async (assets: Asset[]) => {
+        if (assets.length > 0) {
+          handleUploadedAsset(assets[0])
+        }
+      }
+    })
+  }, [triggerUpload])
+
+  const handleFileSystemUpload = async (asset: Asset): Promise<void> => {
+    handleUploadedAsset(asset)
+  }
+
+  // uploading creates a video asset, so it is only offered when asset videos are allowed
+  const allowsAssetVideos = props.allowedVideoTypes === undefined || props.allowedVideoTypes.length === 0 || props.allowedVideoTypes.includes('asset')
+  const canUpload = props.disabled !== true && allowsAssetVideos
+
+  const getEmptyTargetTitleKey = (): string => {
+    if (props.disabled === true) {
+      return 'empty'
+    }
+
+    return allowsAssetVideos ? 'video.dnd-target' : 'video.add-target'
   }
 
   const width = toCssDimension(props.width, 300)
@@ -98,44 +145,54 @@ export const Video = (props: VideoProps): React.JSX.Element => {
           emptyValue={ clearValue }
           key="video-footer"
           onSave={ handleChange }
+          onUpload={ canUpload ? handleUpload : undefined }
           value={ videoValue }
         />)
      }
     >
-      <Droppable
-        isValidContext={ (info: DragAndDropInfo) => props.disabled !== true }
-        isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'video' }
-        onDrop={ (info: DragAndDropInfo) => {
-          handleChange({
-            type: 'asset',
-            data: {
-              type: 'asset',
-              id: info.data.id as number,
-              fullPath: `${info.data.path}${info.data.filename ?? info.data.key}`,
-              subtype: info.data.type
-            }
-          })
-        } }
-        variant="outline"
+      <InlineUpload
+        accept="video/*"
+        assetType="video"
+        disabled={ !canUpload }
+        onSuccess={ handleFileSystemUpload }
+        targetFolderPath={ props.uploadPath ?? '' }
       >
+        <Droppable
+          isValidContext={ (info: DragAndDropInfo) => props.disabled !== true }
+          isValidData={ (info: DragAndDropInfo) => info.type === 'asset' && info.data.type === 'video' }
+          onDrop={ (info: DragAndDropInfo) => {
+            handleChange({
+              type: 'asset',
+              data: {
+                type: 'asset',
+                id: info.data.id as number,
+                fullPath: `${info.data.path}${info.data.filename ?? info.data.key}`,
+                subtype: info.data.type
+              }
+            })
+          } }
+          variant="outline"
+        >
 
-        { videoValue !== null && videoValue?.data !== null
-          ? (
-            <VideoPreview
-              height={ height! }
-              value={ videoValue }
-              width={ width! }
-            />
-            )
-          : (
-            <AssetTarget
-              dndIcon={ props.disabled !== true }
-              height={ height }
-              title={ t(props.disabled !== true ? 'video.dnd-target' : 'empty') }
-              width={ width }
-            />
-            ) }
-      </Droppable>
+          { videoValue !== null && videoValue?.data !== null
+            ? (
+              <VideoPreview
+                height={ height! }
+                value={ videoValue }
+                width={ width! }
+              />
+              )
+            : (
+              <AssetTarget
+                dndIcon={ props.disabled !== true && allowsAssetVideos }
+                height={ height }
+                onUpload={ canUpload ? handleUpload : undefined }
+                title={ t(getEmptyTargetTitleKey()) }
+                width={ width }
+              />
+              ) }
+        </Droppable>
+      </InlineUpload>
     </Card>
   )
 }

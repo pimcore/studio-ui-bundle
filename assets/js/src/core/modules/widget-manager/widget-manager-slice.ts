@@ -29,6 +29,7 @@ export interface WidgetManagerState {
   outerModel: IJsonModel
   innerModel: IJsonModel
   mainWidgetContext: MainWidgetContext
+  restored: boolean
 }
 
 export interface WidgetManagerTabConfig extends Omit<IJsonTabNode, 'icon'> {
@@ -45,7 +46,8 @@ export interface WidgetManagerTabConfig extends Omit<IJsonTabNode, 'icon'> {
 export const initialState: WidgetManagerState = {
   outerModel: getInitialOuterModelJson(),
   innerModel: getInitialInnerModelJson(),
-  mainWidgetContext: null
+  mainWidgetContext: null,
+  restored: false
 }
 
 const getNextTabId = (node: Node): string | undefined => {
@@ -78,6 +80,10 @@ const slice = createSlice({
 
     updateInnerModel: (state, action: PayloadAction<IJsonModel>) => {
       state.innerModel = { ...action.payload }
+    },
+
+    setWidgetManagerRestored: (state, action: PayloadAction<boolean>) => {
+      state.restored = action.payload
     },
 
     updateMainWidgetContext: (state, action: PayloadAction<MainWidgetContext>) => {
@@ -270,6 +276,10 @@ const slice = createSlice({
 
     selectMainWidgetContext: (state) => {
       return state.mainWidgetContext
+    },
+
+    selectWidgetManagerRestored: (state) => {
+      return state.restored
     }
   }
 })
@@ -283,5 +293,5 @@ injectSliceWithState({
   reducer: persistedReducer
 })
 
-export const { updateOuterModel, updateMainWidgetContext, updateInnerModel, openMainWidget, updateWidget, openBottomWidget, openLeftWidget, openRightWidget, setActiveWidgetById, closeWidget } = slice.actions
-export const { selectInnerModel, selectOuterModel, selectMainWidgetContext } = slice.selectors
+export const { updateOuterModel, updateMainWidgetContext, updateInnerModel, setWidgetManagerRestored, openMainWidget, updateWidget, openBottomWidget, openLeftWidget, openRightWidget, setActiveWidgetById, closeWidget } = slice.actions
+export const { selectInnerModel, selectOuterModel, selectMainWidgetContext, selectWidgetManagerRestored } = slice.selectors

@@ -61,7 +61,7 @@ export const shouldIncludeColumnItem = (
 
   if (objectTypeRegistry.hasDynamicType(item?.frontendType as string)) {
     const objectType = objectTypeRegistry.getDynamicType(item?.frontendType as string)
-    isAllowedInBatchEdit = objectType.isAllowedInBatchEdit
+    isAllowedInBatchEdit = objectType.isAllowedInBatchEditForField(item?.config?.fieldDefinition as Record<string, any> | undefined)
   }
 
   return isEditable && hasDynamicType && !isAlreadyInBatchEditList && isAllowedInBatchEdit

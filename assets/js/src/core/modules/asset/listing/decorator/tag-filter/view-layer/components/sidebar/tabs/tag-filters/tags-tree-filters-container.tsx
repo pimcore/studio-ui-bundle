@@ -8,37 +8,69 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type Key } from 'react'
+import React, { type Key, useMemo, useState } from 'react'
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { TreeElement } from '@Pimcore/components/tree-element/tree-element'
+import { type TreeDataItem, TreeElement } from '@Pimcore/components/tree-element/tree-element'
+import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import {
   createTreeStructure
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/components/tags-tree/create-tree-structure'
 import {
   useTagGetCollectionQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
-export const TagsTreeFiltersContainer = ({ checkedKeys, setCheckedKeys }: { checkedKeys: any, setCheckedKeys: any }): React.JSX.Element => {
+import { isEmpty, isNull, isUndefined } from 'lodash'
+import { useTranslation } from 'react-i18next'
+
+interface TagsTreeFiltersContainerProps {
+  checkedKeys: Key[]
+  setCheckedKeys: (keys: Key[]) => void
+}
+
+const getAllTreeKeys = (nodes: TreeDataItem[]): string[] => {
+  const result: string[] = []
+  const traverse = (items: TreeDataItem[]): void => {
+    for (const item of items) {
+      if (item.key !== undefined) result.push(String(item.key))
+      if (!isNull(item.children)) traverse(item.children as TreeDataItem[])
+    }
+  }
+  traverse(nodes)
+  return result
+}
+
+export const TagsTreeFiltersContainer = ({ checkedKeys, setCheckedKeys }: TagsTreeFiltersContainerProps): React.JSX.Element => {
+  const { t } = useTranslation()
+  const [filter, setFilter] = useState<string>('')
+  const [expandedKeys, setExpandedKeys] = useState<Key[]>([0])
   const { data: tags, isLoading: tagsLoading } = useTagGetCollectionQuery({
     page: 1,
-    pageSize: 9999
+    pageSize: 9999,
+    filter
   })
+
+  const treeData = useMemo(
+    () => !isUndefined(tags?.items)
+      ? createTreeStructure({ tags: tags.items, loadingNodes: new Set<string>() })
+      : [],
+    [tags?.items]
+  )
+
+  const activeExpandedKeys = useMemo(
+    () => !isEmpty(filter) ? [0, ...getAllTreeKeys(treeData)] : expandedKeys,
+    [filter, treeData, expandedKeys]
+  )
 
   if (tagsLoading) {
     return <Content loading />
   }
 
-  if (tags?.items === undefined) {
+  if (isUndefined(tags?.items)) {
     return <div>Failed to load tags</div>
   }
 
-  const treeData = createTreeStructure({ tags: tags.items, loadingNodes: new Set<string>() })
-
   const handleCheck = (currentCheckedKeys: { checked: Key[], halfChecked: Key[] }): void => {
-    const checkedKeysList = currentCheckedKeys.checked
-
-    // Set state for visualization in the Tree
-    setCheckedKeys(checkedKeysList)
+    setCheckedKeys(currentCheckedKeys.checked)
   }
 
   return (
@@ -47,10 +79,18 @@ export const TagsTreeFiltersContainer = ({ checkedKeys, setCheckedKeys }: { chec
       gap={ 'small' }
       vertical
     >
+      <SearchInput
+        loading={ tagsLoading }
+        onSearch={ setFilter }
+        placeholder={ t('search') }
+      />
+
       <TreeElement
         checkStrictly
         checkedKeys={ { checked: checkedKeys, halfChecked: [] } }
+        defaultExpandedKeys={ activeExpandedKeys }
         onCheck={ handleCheck }
+        onExpand={ (keys) => { setExpandedKeys(keys) } }
         treeData={ treeData }
         withCustomSwitcherIcon
       />

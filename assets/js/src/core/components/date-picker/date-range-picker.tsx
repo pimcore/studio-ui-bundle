@@ -22,6 +22,7 @@ import { useStyles } from '@Pimcore/components/date-picker/date-picker.styles'
 import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
+import { formatDate, formatDateTime } from '@Pimcore/utils/date-time'
 
 export type DateRange = [start: Dayjs | null, end: Dayjs | null]
 export type DateRangeTargetValue = [start: DatePickerValueType, end: DatePickerValueType]
@@ -72,9 +73,17 @@ export const DateRangePicker = (props: DateRangePickerProps): React.JSX.Element 
     props.onChange?.(valueFromDayJs(dates, props.outputType, props.outputFormat))
   }
 
+  const formatDisplayValue = (date: Dayjs): string => {
+    const timestamp = date.unix()
+    return props.showTime !== undefined && props.showTime !== false
+      ? formatDateTime({ timestamp, dateStyle: 'short', timeStyle: 'short' })
+      : formatDate(timestamp)
+  }
+
   return (
     <OriginalDatePicker.RangePicker
       { ...props }
+      format={ props.format ?? formatDisplayValue }
       onChange={ handleChange }
       popupClassName={ styles.datePickerDropdown }
       rootClassName={ cn(styles.datePicker, props.className, { [styles.inherited]: props.inherited }) }

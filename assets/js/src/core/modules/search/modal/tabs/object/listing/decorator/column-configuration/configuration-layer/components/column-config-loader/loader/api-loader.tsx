@@ -44,12 +44,19 @@ export const ApiLoader = ({ Component }: ColumnConfigLoaderProps): React.JSX.Ele
     const availableColumns: AvailableColumn[] = data.columns!.map(column => column)
 
     for (const column of initialConfigurationData.columns) {
-      if (column.key === 'advanced' || column.key === 'filename') {
+      if (column.key === 'filename') {
         continue
       }
       const availableColumn = data.columns!.find(availableColumn => availableColumn.key === column.key)
 
       if (availableColumn !== undefined) {
+        const apiColumn = {
+          ...availableColumn,
+          __meta: {
+            advancedColumnConfig: ('config' in column ? column.config : undefined) ?? {}
+          }
+        }
+
         selectedColumns.push({
           key: column.key,
           locale: column.locale,
@@ -61,7 +68,7 @@ export const ApiLoader = ({ Component }: ColumnConfigLoaderProps): React.JSX.Ele
           exportable: availableColumn.exportable,
           frontendType: availableColumn.frontendType,
           group: availableColumn.group,
-          originalApiDefinition: availableColumn
+          originalApiDefinition: apiColumn
         })
       }
     }

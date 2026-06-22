@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
@@ -16,6 +16,13 @@ export const useStyles = createStyles(({ token, css }) => {
       width: 100%;
       height: 48px;
       padding: ${token.paddingXS}px;
+      display: flex;
+      align-items: center;
+
+      > * {
+        flex: 1;
+        min-width: 0;
+      }
 
       &.toolbar--theme-primary {
         // @todo: use token
@@ -54,6 +61,7 @@ export const useStyles = createStyles(({ token, css }) => {
       &.toolbar--size-auto {
         height: 100%;
       }
+
     `
   }
 })

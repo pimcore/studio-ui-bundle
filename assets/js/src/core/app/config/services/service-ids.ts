@@ -78,6 +78,7 @@ export const serviceIds = {
 
   // Widget manager
   widgetManager: 'WidgetManagerService',
+  widgetManagerActionService: 'WidgetManagerActionService',
   widgetRestorerRegistry: 'WidgetRestorerRegistry',
   elementTreeWidgetPermissionRegistry: 'ElementTreeWidgetPermissionRegistry',
 
@@ -379,6 +380,7 @@ export const serviceIds = {
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',
+  'ExecutionEngine/JobRehydrationRegistry': 'ExecutionEngine/JobRehydrationRegistry',
 
   // Execution Engine
   executionEngine: 'ExecutionEngine',

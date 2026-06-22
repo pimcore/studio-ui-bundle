@@ -199,6 +199,16 @@ const defaultComponentConfig = {
         workflow: { type: ComponentType.SINGLE, name: 'element.editor.tab.workflow' },
         notesAndEvents: { type: ComponentType.SINGLE, name: 'element.editor.tab.notesAndEvents' },
         tags: { type: ComponentType.SINGLE, name: 'element.editor.tab.tags' }
+      },
+      workflow: {
+        modal: {
+          component: { type: ComponentType.SINGLE, name: 'element.editor.workflow.modal' },
+          slots: {
+            top: { type: ComponentType.SLOT, name: 'element.editor.workflow.modal.slots.top' },
+            center: { type: ComponentType.SLOT, name: 'element.editor.workflow.modal.slots.center' },
+            bottom: { type: ComponentType.SLOT, name: 'element.editor.workflow.modal.slots.bottom' }
+          }
+        }
       }
     }
   },
@@ -230,6 +240,9 @@ const defaultComponentConfig = {
         name: 'rightSidebar.logo.subscriptionDetails'
       }
     }
+  },
+  app: {
+    background: { type: ComponentType.SINGLE, name: 'app.background' }
   },
   wysiwyg: {
     editor: { type: ComponentType.SINGLE, name: 'wysiwyg.editor' }

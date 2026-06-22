@@ -29,6 +29,9 @@ export const tagNames = {
   DATA_OBJECT_DETAIL: 'DATA_OBJECT_DETAIL',
   DATA_OBJECT_TREE: 'DATA_OBJECT_TREE',
   DATA_OBJECT_GRID: 'DATA_OBJECT_GRID',
+  DATA_OBJECT_GRID_CONFIGURATION: 'DATA_OBJECT_GRID_CONFIGURATION',
+  DATA_OBJECT_GRID_CONFIGURATION_LIST: 'DATA_OBJECT_GRID_CONFIGURATION_LIST',
+  DATA_OBJECT_GRID_CONFIGURATION_DETAIL: 'DATA_OBJECT_GRID_CONFIGURATION_DETAIL',
   DOCUMENT: 'DOCUMENT',
   DOCUMENT_DETAIL: 'DOCUMENT_DETAIL',
   DOCUMENT_TREE: 'DOCUMENT_TREE',
@@ -114,6 +117,9 @@ export const providingTags = {
   DATA_OBJECT_TREE: () => [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_TREE],
   DATA_OBJECT_TREE_ID: (id: number) => [tagNames.DATA_OBJECT, { type: tagNames.DATA_OBJECT_TREE, id }],
   DATA_OBJECT_GRID_ID: (id: number) => [tagNames.DATA_OBJECT, { type: tagNames.DATA_OBJECT_GRID, id }],
+  DATA_OBJECT_GRID_CONFIGURATION: () => [tagNames.DATA_OBJECT_GRID_CONFIGURATION],
+  DATA_OBJECT_GRID_CONFIGURATION_LIST: () => [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_GRID_CONFIGURATION, { type: tagNames.DATA_OBJECT_GRID_CONFIGURATION_LIST }],
+  DATA_OBJECT_GRID_CONFIGURATION_DETAIL: (configurationId?: number) => [tagNames.DATA_OBJECT, { type: tagNames.DATA_OBJECT_DETAIL }, tagNames.DATA_OBJECT_GRID_CONFIGURATION, { type: tagNames.DATA_OBJECT_GRID_CONFIGURATION_DETAIL, id: configurationId }],
   DOCUMENT_DETAIL: () => [tagNames.DOCUMENT, tagNames.DOCUMENT_DETAIL],
   DOCUMENT_DETAIL_ID: (id: number) => [tagNames.DOCUMENT, { type: tagNames.DOCUMENT_DETAIL, id }],
   DOCUMENT_TYPES: () => [tagNames.DOCUMENT_TYPES],
@@ -190,7 +196,7 @@ export const invalidatingTags = {
   ASSET_TREE: () => [tagNames.ASSET_TREE],
   ASSET_TREE_ID: (id: number) => [{ type: tagNames.ASSET_TREE, id }],
   ASSET_GRID_CONFIGURATION: () => [tagNames.ASSET_GRID_CONFIGURATION],
-  ASSET_GRID_CONFIGURATION_DETAIL: (configurationId?: number) => [{ type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: configurationId }, { type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: configurationId }],
+  ASSET_GRID_CONFIGURATION_DETAIL: (configurationId?: number) => [{ type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: configurationId }, tagNames.ASSET_GRID_CONFIGURATION],
   ASSET_GRID_CONFIGURATION_LIST: () => [{ type: tagNames.ASSET_GRID_CONFIGURATION_LIST }],
   ASSET_GRID_ID: (id: number) => [{ type: tagNames.ASSET_GRID, id }],
   DATA_OBJECT: () => [tagNames.DATA_OBJECT],
@@ -199,6 +205,9 @@ export const invalidatingTags = {
   DATA_OBJECT_TREE: () => [tagNames.DATA_OBJECT_TREE],
   DATA_OBJECT_TREE_ID: (id: number) => [{ type: tagNames.DATA_OBJECT_TREE, id }],
   DATA_OBJECT_GRID_ID: (id: number) => [{ type: tagNames.DATA_OBJECT_GRID, id }],
+  DATA_OBJECT_GRID_CONFIGURATION: () => [tagNames.DATA_OBJECT_GRID_CONFIGURATION],
+  DATA_OBJECT_GRID_CONFIGURATION_DETAIL: (configurationId?: number) => [{ type: tagNames.DATA_OBJECT_GRID_CONFIGURATION_DETAIL, id: configurationId }, tagNames.DATA_OBJECT_GRID_CONFIGURATION],
+  DATA_OBJECT_GRID_CONFIGURATION_LIST: () => [{ type: tagNames.DATA_OBJECT_GRID_CONFIGURATION_LIST }],
   DOCUMENT: () => [tagNames.DOCUMENT],
   DOCUMENT_DETAIL: () => [tagNames.DOCUMENT_DETAIL],
   DOCUMENT_DETAIL_ID: (id: number) => [{ type: tagNames.DOCUMENT_DETAIL, id }, elementUnspecificDataTag],
@@ -230,7 +239,7 @@ export const invalidatingTags = {
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.ELEMENT_TAGS, elementType, id)],
   ROLE: () => [tagNames.ROLE],
   PREDEFINED_ASSET_METADATA: () => [tagNames.PREDEFINED_ASSET_METADATA],
-  ELEMENT_DETAIL: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
+  ELEMENT_DETAIL: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementGridTag(elementType)],
   EMAIL_BLOCKLIST: () => [tagNames.EMAIL_BLOCKLIST],
   EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }],
   APPLICATION_LOGGER: () => [tagNames.APPLICATION_LOGGER],
@@ -276,5 +285,16 @@ const getElementDetailTag = (elementType: ElementType, id: number): Tag => {
       return { type: tagNames.DATA_OBJECT_DETAIL, id }
     case 'document':
       return { type: tagNames.DOCUMENT_DETAIL, id }
+  }
+}
+
+const getElementGridTag = (elementType: ElementType): Tag => {
+  switch (elementType) {
+    case 'asset':
+      return tagNames.ASSET_GRID
+    case 'data-object':
+      return tagNames.DATA_OBJECT_GRID
+    case 'document':
+      return tagNames.DOCUMENT
   }
 }

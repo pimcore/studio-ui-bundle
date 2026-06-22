@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
@@ -118,6 +118,7 @@ export const useStyles = createStyles(({ token, css }) => {
       
       &.ant-tabs-line > .ant-tabs-nav .ant-tabs-ink-bar {
         visibility: visible;
+        transition: left ${token.motionDurationMid} ease, right ${token.motionDurationMid} ease, width ${token.motionDurationMid} ease, transform ${token.motionDurationMid} ease;
       }
 
       &.tabs--full-height {

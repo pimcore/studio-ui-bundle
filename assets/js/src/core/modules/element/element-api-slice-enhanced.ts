@@ -17,10 +17,21 @@ import { invalidatingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { type DocumentPermissions } from '../document/document-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.DATA_OBJECT_DETAIL, tagNames.ASSET_DETAIL],
+  addTagTypes: [tagNames.DATA_OBJECT_DETAIL, tagNames.ASSET_DETAIL, tagNames.ASSET_GRID, tagNames.DATA_OBJECT_GRID],
   endpoints: {
     elementDelete: {
       invalidatesTags: (result, error, args) => invalidatingTags.ELEMENT_DETAIL(args.elementType, args.id)
+    },
+    // Edit-lock ops are transient: drop the shared "Elements" cache tag so lock/unlock don't refetch
+    // the status query (a redundant GET after POST/DELETE) or other element queries.
+    elementGetEditlock: {
+      providesTags: []
+    },
+    elementLock: {
+      invalidatesTags: []
+    },
+    elementUnlock: {
+      invalidatesTags: []
     }
   }
 })
@@ -38,5 +49,8 @@ export const {
   useLazyElementGetIdByPathQuery,
   useElementGetSubtypeQuery,
   useElementResolveBySearchTermQuery,
-  useLazyElementResolveBySearchTermQuery
+  useLazyElementResolveBySearchTermQuery,
+  useLazyElementGetEditlockQuery,
+  useElementLockMutation,
+  useElementUnlockMutation
 } = api
