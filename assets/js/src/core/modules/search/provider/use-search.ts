@@ -20,6 +20,8 @@ export interface UseSearchReturn {
   close: () => void
   pendingRestore: SavedSearchDetailedConfiguration | undefined
   setPendingRestore: (configuration: SavedSearchDetailedConfiguration | undefined) => void
+  loadedSavedSearch: SavedSearchDetailedConfiguration | undefined
+  setLoadedSavedSearch: (configuration: SavedSearchDetailedConfiguration | undefined) => void
 }
 
 export const useSearch = (): UseSearchReturn => {
@@ -47,6 +49,8 @@ export const useSearch = (): UseSearchReturn => {
     open,
     close,
     pendingRestore: context.pendingRestore,
-    setPendingRestore: context.setPendingRestore
+    setPendingRestore: context.setPendingRestore,
+    loadedSavedSearch: context.loadedSavedSearch,
+    setLoadedSavedSearch: context.setLoadedSavedSearch
   }
 }

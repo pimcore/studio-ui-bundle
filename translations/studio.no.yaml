@@ -2768,3 +2768,9 @@ saved-search.ownership.shared: Delt med meg
 saved-search.open: Åpne
 saved-search.delete.title: Slett lagret søk
 saved-search.delete.confirm: Er du sikker på at du vil slette dette lagrede søket?
+saved-search.update: Oppdater søk
+saved-search.clone: Klon søk
+saved-search.update.success: Lagret søk oppdatert
+saved-search.delete.success: Lagret søk slettet
+saved-search.shared-modified.info: Du har gjort endringer i den opprinnelige konfigurasjonen. Siden den eies av noen andre, kan du lagre den som et nytt søk.
+more: Mer

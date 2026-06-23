@@ -2768,3 +2768,9 @@ saved-search.ownership.shared: Partagée avec moi
 saved-search.open: Ouvrir
 saved-search.delete.title: Supprimer la recherche enregistrée
 saved-search.delete.confirm: Voulez-vous vraiment supprimer cette recherche enregistrée ?
+saved-search.update: Mettre à jour la recherche
+saved-search.clone: Cloner la recherche
+saved-search.update.success: Recherche enregistrée mise à jour
+saved-search.delete.success: Recherche enregistrée supprimée
+saved-search.shared-modified.info: "Vous avez modifié la configuration d’origine. Comme elle appartient à quelqu’un d’autre, vous pouvez l’enregistrer comme nouvelle recherche."
+more: Plus

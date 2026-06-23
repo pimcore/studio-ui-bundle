@@ -30,6 +30,7 @@ import { ToolbarRight } from '@Pimcore/modules/asset/listing/toolbar/toolbar-rig
 import { ToolbarLeft } from '@Pimcore/modules/asset/listing/toolbar/toolbar-left'
 import { ToolbarInner } from '@Pimcore/modules/asset/listing/toolbar/toolbar-inner'
 import { SavedSearchDecorator } from '@Pimcore/modules/search/saved-search/saved-search-decorator'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -84,7 +85,8 @@ moduleSystem.registerModule({
 
     listingBuilder.addDecorator({
       name: 'savedSearch',
-      decorator: SavedSearchDecorator
+      decorator: SavedSearchDecorator,
+      config: { elementType: elementTypes.asset }
     })
 
     const inlineEditDecoratorConfig: IInlineEditDecoratorConfig = {

@@ -19,6 +19,9 @@ export interface SearchContextData {
   /** A saved search whose state should be applied to the matching typed tab once it mounts. */
   pendingRestore: SavedSearchDetailedConfiguration | undefined
   setPendingRestore: (configuration: SavedSearchDetailedConfiguration | undefined) => void
+  /** The saved search currently loaded into a typed tab (drives the Save panel's update/clone state). */
+  loadedSavedSearch: SavedSearchDetailedConfiguration | undefined
+  setLoadedSavedSearch: (configuration: SavedSearchDetailedConfiguration | undefined) => void
 }
 
 export type SearchContextProps = SearchContextData | undefined
@@ -33,10 +36,11 @@ export const SearchProvider = (props: SearchProviderProps): React.JSX.Element =>
   const [open, setOpen] = useState(false)
   const [activeKey, setActiveKey] = useState('all')
   const [pendingRestore, setPendingRestore] = useState<SavedSearchDetailedConfiguration | undefined>(undefined)
+  const [loadedSavedSearch, setLoadedSavedSearch] = useState<SavedSearchDetailedConfiguration | undefined>(undefined)
 
   return useMemo(() => (
-    <SearchContext.Provider value={ { open, setOpen, activeKey, setActiveKey, pendingRestore, setPendingRestore } }>
+    <SearchContext.Provider value={ { open, setOpen, activeKey, setActiveKey, pendingRestore, setPendingRestore, loadedSavedSearch, setLoadedSavedSearch } }>
       { props.children }
     </SearchContext.Provider>
-  ), [open, activeKey, pendingRestore])
+  ), [open, activeKey, pendingRestore, loadedSavedSearch])
 }

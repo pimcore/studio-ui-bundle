@@ -38,7 +38,7 @@ import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 
 export const SavedSearchesTab = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { setActiveKey, setPendingRestore } = useSearch()
+  const { setActiveKey, setPendingRestore, setLoadedSavedSearch } = useSearch()
 
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
@@ -74,6 +74,7 @@ export const SavedSearchesTab = (): React.JSX.Element => {
           : elementTypes.asset
 
         setPendingRestore(configuration)
+        setLoadedSavedSearch(configuration)
         setActiveKey(targetTab)
       } else if ('error' in result && !isUndefined(result.error)) {
         trackError(new ApiError(result.error))

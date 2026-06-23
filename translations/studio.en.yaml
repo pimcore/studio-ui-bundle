@@ -2781,3 +2781,9 @@ saved-search.ownership.shared: Shared with me
 saved-search.open: Open
 saved-search.delete.title: Delete saved search
 saved-search.delete.confirm: Are you sure you want to delete this saved search?
+saved-search.update: Update search
+saved-search.clone: Clone search
+saved-search.update.success: Saved search updated
+saved-search.delete.success: Saved search deleted
+saved-search.shared-modified.info: You have made modifications to the original configuration. Since it is owned by someone else, you can save it as a new search.
+more: More

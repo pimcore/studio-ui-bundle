@@ -2768,3 +2768,9 @@ saved-search.ownership.shared: Delad med mig
 saved-search.open: Öppna
 saved-search.delete.title: Ta bort sparad sökning
 saved-search.delete.confirm: Är du säker på att du vill ta bort den här sparade sökningen?
+saved-search.update: Uppdatera sökning
+saved-search.clone: Klona sökning
+saved-search.update.success: Sparad sökning uppdaterad
+saved-search.delete.success: Sparad sökning borttagen
+saved-search.shared-modified.info: Du har gjort ändringar i den ursprungliga konfigurationen. Eftersom den ägs av någon annan kan du spara den som en ny sökning.
+more: Mer

@@ -40,6 +40,14 @@ export const useStyles = createStyles(({ css, token }) => {
       .ant-tag {
         background-color: ${token.Colors.Neutral.Fill.colorFillTertiary};
       }
+    `,
+
+    dirtyDot: css`
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: ${token.colorPrimary};
+      display: inline-block;
     `
   }
 })
