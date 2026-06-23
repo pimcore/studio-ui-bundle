@@ -16,11 +16,12 @@ import { Sidebar } from '@Pimcore/modules/element/listing/abstract/view-layer/co
 import { GridContainer } from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/grid-container'
 import { TopBar } from '../../top-bar/top-bar'
 import { Toolbar } from '../../toolbar/toolbar'
+import { AssetSavedSearchRestore } from '@Pimcore/modules/search/saved-search/restore/asset-saved-search-restore'
 
 export const DefaultView = (): React.JSX.Element => {
   const { dataQueryResult } = useData()
 
-  return useMemo(() => (
+  const content = useMemo(() => (
     <>
       { dataQueryResult === undefined && <Content loading /> }
       { dataQueryResult !== undefined && (
@@ -37,4 +38,11 @@ export const DefaultView = (): React.JSX.Element => {
       )}
     </>
   ), [dataQueryResult])
+
+  return (
+    <>
+      <AssetSavedSearchRestore />
+      {content}
+    </>
+  )
 }

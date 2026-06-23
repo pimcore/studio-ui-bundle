@@ -2761,3 +2761,8 @@ saved-search.title: Enregistrer la recherche
 saved-search.save-as-new: Enregistrer comme nouvelle recherche
 saved-search.create-menu-shortcut: Créer un raccourci dans le menu
 saved-search.save.success: Recherche enregistrée créée
+saved-search.saved-searches: Recherches enregistrées
+saved-search.ownership: Propriété
+saved-search.ownership.own: Personnelle
+saved-search.ownership.shared: Partagée avec moi
+saved-search.open: Ouvrir

@@ -21,6 +21,9 @@ const enhancedApi = api.enhanceEndpoints({
     },
     savedSearchGetConfiguration: {
       providesTags: ['SavedSearch']
+    },
+    savedSearchGetConfigurations: {
+      providesTags: ['SavedSearch']
     }
   }
 })
@@ -28,5 +31,7 @@ const enhancedApi = api.enhanceEndpoints({
 export const {
   useSimpleSearchGetQuery,
   useSavedSearchSaveConfigurationMutation,
-  useSavedSearchGetConfigurationQuery
+  useSavedSearchGetConfigurationQuery,
+  useSavedSearchGetConfigurationsQuery,
+  useLazySavedSearchGetConfigurationQuery
 } = enhancedApi

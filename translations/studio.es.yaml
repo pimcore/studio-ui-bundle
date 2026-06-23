@@ -2761,3 +2761,8 @@ saved-search.title: Guardar búsqueda
 saved-search.save-as-new: Guardar como nueva búsqueda
 saved-search.create-menu-shortcut: Crear acceso directo en el menú
 saved-search.save.success: Búsqueda guardada creada
+saved-search.saved-searches: Búsquedas guardadas
+saved-search.ownership: Propiedad
+saved-search.ownership.own: Propia
+saved-search.ownership.shared: Compartida conmigo
+saved-search.open: Abrir

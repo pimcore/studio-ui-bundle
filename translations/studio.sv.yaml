@@ -2761,3 +2761,8 @@ saved-search.title: Spara sökning
 saved-search.save-as-new: Spara som ny sökning
 saved-search.create-menu-shortcut: Skapa genväg i menyn
 saved-search.save.success: Sparad sökning skapad
+saved-search.saved-searches: Sparade sökningar
+saved-search.ownership: Ägarskap
+saved-search.ownership.own: Egen
+saved-search.ownership.shared: Delad med mig
+saved-search.open: Öppna

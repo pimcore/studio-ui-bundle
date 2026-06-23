@@ -2761,3 +2761,8 @@ saved-search.title: Lagre søk
 saved-search.save-as-new: Lagre som nytt søk
 saved-search.create-menu-shortcut: Opprett snarvei i menyen
 saved-search.save.success: Lagret søk opprettet
+saved-search.saved-searches: Lagrede søk
+saved-search.ownership: Eierskap
+saved-search.ownership.own: Egen
+saved-search.ownership.shared: Delt med meg
+saved-search.open: Åpne

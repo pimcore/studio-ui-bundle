@@ -2761,3 +2761,8 @@ saved-search.title: Salva ricerca
 saved-search.save-as-new: Salva come nuova ricerca
 saved-search.create-menu-shortcut: Crea scorciatoia nel menu
 saved-search.save.success: Ricerca salvata creata
+saved-search.saved-searches: Ricerche salvate
+saved-search.ownership: Proprietà
+saved-search.ownership.own: Propria
+saved-search.ownership.shared: Condivisa con me
+saved-search.open: Apri

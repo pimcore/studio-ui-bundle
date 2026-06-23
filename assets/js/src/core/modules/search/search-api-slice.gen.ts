@@ -87,6 +87,20 @@ const injectedRtkApi = api
                 query: (queryArg) => ({ url: `/pimcore-studio/api/search/saved/configuration/${queryArg.id}` }),
                 providesTags: ["Search"],
             }),
+            savedSearchGetConfigurations: build.query<
+                SavedSearchGetConfigurationsApiResponse,
+                SavedSearchGetConfigurationsApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/search/saved/configuration`,
+                    params: {
+                        page: queryArg.page,
+                        pageSize: queryArg.pageSize,
+                        searchTerm: queryArg.searchTerm,
+                    },
+                }),
+                providesTags: ["Search"],
+            }),
         }),
         overrideExisting: false,
     });
@@ -170,7 +184,7 @@ export type SimpleSearchGetApiArg = {
     searchTerm?: string;
 };
 export type SavedSearchSaveConfigurationApiResponse =
-    /** status 200 Saved search configuration */ SavedSearchConfiguration;
+    /** status 200 Saved search configuration created successfully */ SavedSearchConfiguration;
 export type SavedSearchSaveConfigurationApiArg = {
     body: {
         name: string;
@@ -178,16 +192,29 @@ export type SavedSearchSaveConfigurationApiArg = {
         classId?: string;
         shareGlobal?: boolean;
         createMenuShortcut?: boolean;
-        sharedUsers?: number[];
-        sharedRoles?: number[];
+        sharedUsers?: object;
+        sharedRoles?: object;
         columns: (Column | GridColumnRequest)[];
-        filters?: GridFilter;
+        filters?: GridFilter | null;
     };
 };
 export type SavedSearchGetConfigurationApiResponse =
-    /** status 200 Saved search detailed configuration */ SavedSearchDetailedConfiguration;
+    /** status 200 Saved search configuration */ SavedSearchDetailedConfiguration;
 export type SavedSearchGetConfigurationApiArg = {
+    /** Id of the saved search configuration */
     id: number;
+};
+export type SavedSearchGetConfigurationsApiResponse = /** status 200 List of saved search configurations */ {
+    totalItems: number;
+    items: SavedSearchConfigurationListItem[];
+};
+export type SavedSearchGetConfigurationsApiArg = {
+    /** Page number */
+    page: number;
+    /** Number of items per page */
+    pageSize: number;
+    /** Optional term to filter the saved search configurations by name. */
+    searchTerm?: string;
 };
 export type Column = {
     /** Key of the Column */
@@ -424,23 +451,65 @@ export type SimpleSearchResult = {
     icon: ElementIcon;
 };
 export type SavedSearchConfiguration = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID */
     id: number;
+    /** Name */
     name: string;
-    description?: string;
+    /** Description */
+    description?: string | null;
 };
 export type SavedSearchDetailedConfiguration = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID of the saved search configuration */
     id: number;
+    /** ID of the owner */
     ownerId: number;
+    /** Name */
     name: string;
-    description?: string;
+    /** Description */
+    description?: string | null;
+    /** shareGlobal */
     shareGlobal: boolean;
-    sharedUsers: number[];
-    sharedRoles: number[];
+    /** sharedUsers */
+    sharedUsers: object;
+    /** sharedRoles */
+    sharedRoles: object;
+    /** createMenuShortcut */
     createMenuShortcut: boolean;
+    /** Class ID for data object searches */
     classId?: string | null;
+    /** Grid display columns */
     columns: (Column | GridColumnRequest)[];
-    filter?: GridFilter[];
-    modificationDate?: number;
+    /** Filter data */
+    filter?: GridFilter[] | null;
+    /** Modification Date */
+    modificationDate?: number | null;
+    /** Creation Date */
+    creationDate?: number | null;
+};
+export type SavedSearchConfigurationListItem = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** ID */
+    id: number;
+    /** Name */
+    name: string;
+    /** Description */
+    description?: string | null;
+    /** Whether the configuration is owned by the current user (false if only shared) */
+    owner: boolean;
+    /** Modification Date */
+    modificationDate: number;
+    /** Creation Date */
     creationDate?: number;
 };
 export const {
@@ -453,4 +522,5 @@ export const {
     useSimpleSearchGetQuery,
     useSavedSearchSaveConfigurationMutation,
     useSavedSearchGetConfigurationQuery,
+    useSavedSearchGetConfigurationsQuery,
 } = injectedRtkApi;

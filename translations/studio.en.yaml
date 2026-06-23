@@ -2774,3 +2774,8 @@ saved-search.title: Save search
 saved-search.save-as-new: Save as new search
 saved-search.create-menu-shortcut: Create shortcut in menu
 saved-search.save.success: Saved search created
+saved-search.saved-searches: Saved searches
+saved-search.ownership: Ownership
+saved-search.ownership.own: Own
+saved-search.ownership.shared: Shared with me
+saved-search.open: Open
