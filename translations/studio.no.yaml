@@ -520,6 +520,11 @@ listing.grid-config.title: Rutenettskonfigurasjon
 grid-config.discard-all-changes: Forkast alle endringer
 grid-config.apply-changes: Bruk endringer
 listing.add-column: Legg til en kolonne
+listing.add-column.simple: Enkel
+listing.add-column.advanced: Avansert
+listing.column-picker.search: Søk
+listing.column-picker.no-results: Ingen kolonner funnet
+listing.column-picker.fields-to-add: Felter å legge til
 listing.actions: Bruk på utvalg
 listing.non-selected.actions: Bruk på alle
 listing.actions.zip-download: ZIP-nedlasting

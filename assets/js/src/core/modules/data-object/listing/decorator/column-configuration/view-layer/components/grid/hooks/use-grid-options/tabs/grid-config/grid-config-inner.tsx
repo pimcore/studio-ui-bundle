@@ -53,7 +53,7 @@ const prepareColumns = (columns: AvailableColumn[]): GridColumnRequest[] => {
 
 export const GridConfigInner = (): React.JSX.Element => {
   const { useElementId } = useSettings()
-  const { availableColumns, getAvailableColumnsDropdown } = useAvailableColumns()
+  const { availableColumns, getAvailableColumnsTree, getAdvancedColumnTemplate } = useAvailableColumns()
   const { selectedColumns, setSelectedColumns } = useSelectedColumns()
   const { columns, setColumns, addColumn, addColumns } = useTabGridConfig()
   const { getId } = useElementId()
@@ -171,7 +171,15 @@ export const GridConfigInner = (): React.JSX.Element => {
     }
   }
 
-  const availableColumnsDropdown = useMemo(() => getAvailableColumnsDropdown(onColumnClick), [getAvailableColumnsDropdown, columns])
+  const availableColumnsTree = useMemo(() => getAvailableColumnsTree(), [getAvailableColumnsTree, columns])
+
+  function onAddAdvancedColumn (): void {
+    const advancedColumn = getAdvancedColumnTemplate()
+
+    if (advancedColumn !== undefined) {
+      addColumn(advancedColumn)
+    }
+  }
 
   function onDeleteClick (): void {
     if (isSavedConfiguration) {
@@ -304,14 +312,16 @@ export const GridConfigInner = (): React.JSX.Element => {
     <>
       { view === ViewState.Edit && (
         <EditView
-          addColumnMenu={ availableColumnsDropdown.menu.items }
+          availableColumnsTree={ availableColumnsTree }
           columns={ columns }
           currentUserId={ userData?.id }
           gridConfig={ gridConfig }
           isLoading={ isLoading || isFetching }
           isUpdating={ isUpdating }
+          onAddAdvancedColumn={ onAddAdvancedColumn }
           onApplyClick={ onApplyClick }
           onCancelClick={ onCancelClick }
+          onColumnSelect={ onColumnClick }
           onEditConfigurationClick={ () => {
             openSaveView(ViewState.Update)
           } }

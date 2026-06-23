@@ -520,6 +520,11 @@ listing.grid-config.title: Configuración de cuadrícula
 grid-config.discard-all-changes: Descartar todos los cambios
 grid-config.apply-changes: Aplicar cambios
 listing.add-column: Añadir una columna
+listing.add-column.simple: Simple
+listing.add-column.advanced: Avanzado
+listing.column-picker.search: Buscar
+listing.column-picker.no-results: No se encontraron columnas
+listing.column-picker.fields-to-add: Campos para añadir
 listing.actions: Aplicar a la selección
 listing.non-selected.actions: Aplicar a todos
 listing.actions.zip-download: Descarga ZIP

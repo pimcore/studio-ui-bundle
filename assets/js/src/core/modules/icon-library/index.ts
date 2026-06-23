@@ -81,6 +81,7 @@ import close from '@Pimcore/assets/icons/close.inline.svg?react'
 import cms from '@Pimcore/assets/icons/cms.inline.svg?react'
 import code from '@Pimcore/assets/icons/code.inline.svg?react'
 import collapse from '@Pimcore/assets/icons/collapse.inline.svg?react'
+import collapseSidebar from '@Pimcore/assets/icons/collapse-sidebar.inline.svg?react'
 import collection from '@Pimcore/assets/icons/collection.inline.svg?react'
 import color from '@Pimcore/assets/icons/color.inline.svg?react'
 import columns from '@Pimcore/assets/icons/columns.inline.svg?react'
@@ -664,6 +665,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'collapse',
       component: collapse
+    })
+    iconLibrary.register({
+      name: 'collapse-sidebar',
+      component: collapseSidebar
     })
     iconLibrary.register({
       name: 'collection',
