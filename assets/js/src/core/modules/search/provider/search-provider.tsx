@@ -30,13 +30,16 @@ export const SearchContext = createContext<SearchContextProps>(undefined)
 
 export interface SearchProviderProps {
   children: React.ReactNode
+  /** Seed the restore/loaded state — used when hosting a search listing as a main-area widget. */
+  initialPendingRestore?: SavedSearchDetailedConfiguration
+  initialLoadedSavedSearch?: SavedSearchDetailedConfiguration
 }
 
 export const SearchProvider = (props: SearchProviderProps): React.JSX.Element => {
   const [open, setOpen] = useState(false)
   const [activeKey, setActiveKey] = useState('all')
-  const [pendingRestore, setPendingRestore] = useState<SavedSearchDetailedConfiguration | undefined>(undefined)
-  const [loadedSavedSearch, setLoadedSavedSearch] = useState<SavedSearchDetailedConfiguration | undefined>(undefined)
+  const [pendingRestore, setPendingRestore] = useState<SavedSearchDetailedConfiguration | undefined>(props.initialPendingRestore)
+  const [loadedSavedSearch, setLoadedSavedSearch] = useState<SavedSearchDetailedConfiguration | undefined>(props.initialLoadedSavedSearch)
 
   return useMemo(() => (
     <SearchContext.Provider value={ { open, setOpen, activeKey, setActiveKey, pendingRestore, setPendingRestore, loadedSavedSearch, setLoadedSavedSearch } }>

@@ -34,6 +34,8 @@ import {
 } from '@Pimcore/modules/search/search-api-slice-enhanced'
 import { type SavedSearchConfigurationListItem } from '@Pimcore/modules/search/search-api-slice.gen'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
+import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
+import { SAVED_SEARCH_RESULT_WIDGET } from '@Pimcore/modules/search/saved-search'
 
 // Row shape with the display values pre-formatted so the Grid's default cell renders them
 // (matching the name column) instead of custom cell components.
@@ -44,7 +46,8 @@ interface SavedSearchRow extends SavedSearchConfigurationListItem {
 
 export const SavedSearchesTab = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { setActiveKey, setPendingRestore, setLoadedSavedSearch } = useSearch()
+  const { close } = useSearch()
+  const widgetManager = useWidgetManager()
 
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
@@ -74,14 +77,25 @@ export const SavedSearchesTab = (): React.JSX.Element => {
     fetchConfiguration({ id }).then((result) => {
       if ('data' in result && !isUndefined(result.data)) {
         const configuration = result.data
-        // No explicit elementType yet — infer the tab from classId (objects carry one, assets don't).
-        const targetTab = isString(configuration.classId) && !isEmpty(configuration.classId)
+        // No explicit elementType yet — infer it from classId (objects carry one, assets don't).
+        const elementType = isString(configuration.classId) && !isEmpty(configuration.classId)
           ? elementTypes.dataObject
           : elementTypes.asset
 
-        setPendingRestore(configuration)
-        setLoadedSavedSearch(configuration)
-        setActiveKey(targetTab)
+        // Open the saved search as a tab in the main widget area, then close the Quick Search modal.
+        widgetManager.openMainWidget({
+          id: `saved-search-${id}`,
+          name: configuration.name,
+          component: SAVED_SEARCH_RESULT_WIDGET,
+          config: {
+            savedSearchId: id,
+            elementType,
+            label: configuration.name,
+            icon: { type: 'name', value: 'search' },
+            iconColorGroup: 'element'
+          }
+        })
+        close()
       } else if ('error' in result && !isUndefined(result.error)) {
         trackError(new ApiError(result.error))
       }
