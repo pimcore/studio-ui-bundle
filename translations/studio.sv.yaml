@@ -509,6 +509,11 @@ listing.grid-config.title: Rutnätskonfiguration
 grid-config.discard-all-changes: Förkasta alla ändringar
 grid-config.apply-changes: Tillämpa ändringar
 listing.add-column: Lägg till en kolumn
+listing.add-column.simple: Enkel
+listing.add-column.advanced: Avancerad
+listing.column-picker.search: Sök
+listing.column-picker.no-results: Inga kolumner hittades
+listing.column-picker.fields-to-add: Fält att lägga till
 listing.actions: Tillämpa på val
 listing.non-selected.actions: Tillämpa på alla
 listing.actions.zip-download: ZIP-nedladdning

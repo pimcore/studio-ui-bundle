@@ -23,6 +23,7 @@ import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
+import { useScrollIntoViewOnAppend } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/hooks/use-scroll-into-view-on-append'
 
 interface ColumnStackListItemProps extends StackListItemProps {
   meta: AvailableColumn
@@ -35,6 +36,7 @@ interface ColumnStackListProps extends Omit<StackListProps, 'items'> {
 export const GridConfigList = (): React.JSX.Element => {
   const { setColumns, columns } = useGridConfig()
   const { t } = useTranslation()
+  const scrollSentinelRef = useScrollIntoViewOnAppend(columns, (column) => column.key)
 
   const stackListItems: ColumnStackListProps['items'] = useMemo(() => columns.map((column) => {
     const uniqueId = column.__meta?.uniqueId ?? uuid()
@@ -95,6 +97,10 @@ export const GridConfigList = (): React.JSX.Element => {
           sortable
         />
       ) }
+      <div
+        aria-hidden
+        ref={ scrollSentinelRef }
+      />
     </>
   )
 

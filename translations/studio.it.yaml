@@ -509,6 +509,11 @@ listing.grid-config.title: Configurazione griglia
 grid-config.discard-all-changes: Annulla tutte le modifiche
 grid-config.apply-changes: Applica modifiche
 listing.add-column: Aggiungi una colonna
+listing.add-column.simple: Semplice
+listing.add-column.advanced: Avanzato
+listing.column-picker.search: Cerca
+listing.column-picker.no-results: Nessuna colonna trovata
+listing.column-picker.fields-to-add: Campi da aggiungere
 listing.actions: Applica alla selezione
 listing.non-selected.actions: Applica a tutti
 listing.actions.zip-download: Download ZIP

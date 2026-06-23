@@ -509,6 +509,11 @@ listing.grid-config.title: Grid-Konfiguration
 grid-config.discard-all-changes: Alle Änderungen verwerfen
 grid-config.apply-changes: Änderungen übernehmen
 listing.add-column: Spalte hinzufügen
+listing.add-column.simple: Einfach
+listing.add-column.advanced: Erweitert
+listing.column-picker.search: Suchen
+listing.column-picker.no-results: Keine Spalten gefunden
+listing.column-picker.fields-to-add: Hinzuzufügende Felder
 listing.actions: Auf Auswahl anwenden
 listing.non-selected.actions: Auf alle anwenden
 listing.actions.zip-download: ZIP-Download
