@@ -24,7 +24,6 @@ import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { Text } from '@Pimcore/components/text/text'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
@@ -35,6 +34,13 @@ import {
 } from '@Pimcore/modules/search/search-api-slice-enhanced'
 import { type SavedSearchConfigurationListItem } from '@Pimcore/modules/search/search-api-slice.gen'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
+
+// Row shape with the display values pre-formatted so the Grid's default cell renders them
+// (matching the name column) instead of custom cell components.
+interface SavedSearchRow extends SavedSearchConfigurationListItem {
+  ownership: string
+  modificationDateLabel: string
+}
 
 export const SavedSearchesTab = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -85,7 +91,14 @@ export const SavedSearchesTab = (): React.JSX.Element => {
       })
   }
 
-  const columnHelper = createColumnHelper<SavedSearchConfigurationListItem>()
+  const tableItems: SavedSearchRow[] = (data?.items ?? []).map((item) => ({
+    ...item,
+    description: item.description ?? '',
+    ownership: item.owner ? t('saved-search.ownership.own') : t('saved-search.ownership.shared'),
+    modificationDateLabel: formatDateTime({ timestamp: item.modificationDate, dateStyle: 'short', timeStyle: 'short' })
+  }))
+
+  const columnHelper = createColumnHelper<SavedSearchRow>()
   const columns = [
     columnHelper.accessor('name', {
       header: t('user-management.name'),
@@ -93,22 +106,15 @@ export const SavedSearchesTab = (): React.JSX.Element => {
     }),
     columnHelper.accessor('description', {
       header: t('description'),
-      cell: ({ row }) => <Text>{row.original.description ?? ''}</Text>,
-      meta: { autoWidth: true }
+      size: 280
     }),
-    columnHelper.accessor('owner', {
+    columnHelper.accessor('ownership', {
       header: t('saved-search.ownership'),
-      cell: ({ row }) => (
-        <Text>{row.original.owner ? t('saved-search.ownership.own') : t('saved-search.ownership.shared')}</Text>
-      ),
-      size: 160
+      size: 140
     }),
-    columnHelper.accessor('modificationDate', {
+    columnHelper.accessor('modificationDateLabel', {
       header: t('common.modification-date'),
-      cell: ({ row }) => (
-        <Text>{formatDateTime({ timestamp: row.original.modificationDate, dateStyle: 'short', timeStyle: 'short' })}</Text>
-      ),
-      size: 160
+      size: 170
     }),
     columnHelper.display({
       id: 'actions',
@@ -199,7 +205,7 @@ export const SavedSearchesTab = (): React.JSX.Element => {
           <Grid
             autoWidth
             columns={ columns }
-            data={ data?.items ?? [] }
+            data={ tableItems }
             resizable
             setRowId={ (row) => String(row.id) }
           />
