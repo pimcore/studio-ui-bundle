@@ -2766,3 +2766,5 @@ saved-search.ownership: Propiedad
 saved-search.ownership.own: Propia
 saved-search.ownership.shared: Compartida conmigo
 saved-search.open: Abrir
+saved-search.delete.title: Eliminar búsqueda guardada
+saved-search.delete.confirm: ¿Seguro que quieres eliminar esta búsqueda guardada?

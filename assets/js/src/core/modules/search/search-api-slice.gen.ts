@@ -101,6 +101,27 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Search"],
             }),
+            savedSearchUpdateConfiguration: build.mutation<
+                SavedSearchUpdateConfigurationApiResponse,
+                SavedSearchUpdateConfigurationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/search/saved/configuration/update/${queryArg.id}`,
+                    method: "PUT",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Search"],
+            }),
+            savedSearchDeleteConfiguration: build.mutation<
+                SavedSearchDeleteConfigurationApiResponse,
+                SavedSearchDeleteConfigurationApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/search/saved/configuration/delete/${queryArg.id}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Search"],
+            }),
         }),
         overrideExisting: false,
     });
@@ -215,6 +236,27 @@ export type SavedSearchGetConfigurationsApiArg = {
     pageSize: number;
     /** Optional term to filter the saved search configurations by name. */
     searchTerm?: string;
+};
+export type SavedSearchUpdateConfigurationApiResponse = unknown;
+export type SavedSearchUpdateConfigurationApiArg = {
+    /** Id of the saved search configuration */
+    id: number;
+    body: {
+        name: string;
+        description?: string;
+        classId?: string;
+        shareGlobal?: boolean;
+        createMenuShortcut?: boolean;
+        sharedUsers?: object;
+        sharedRoles?: object;
+        columns: (Column | GridColumnRequest)[];
+        filter?: GridFilter | null;
+    };
+};
+export type SavedSearchDeleteConfigurationApiResponse = unknown;
+export type SavedSearchDeleteConfigurationApiArg = {
+    /** Id of the saved search configuration */
+    id: number;
 };
 export type Column = {
     /** Key of the Column */
@@ -523,4 +565,6 @@ export const {
     useSavedSearchSaveConfigurationMutation,
     useSavedSearchGetConfigurationQuery,
     useSavedSearchGetConfigurationsQuery,
+    useSavedSearchUpdateConfigurationMutation,
+    useSavedSearchDeleteConfigurationMutation,
 } = injectedRtkApi;

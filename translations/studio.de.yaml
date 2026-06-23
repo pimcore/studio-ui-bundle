@@ -2766,3 +2766,5 @@ saved-search.ownership: Besitz
 saved-search.ownership.own: Eigene
 saved-search.ownership.shared: Mit mir geteilt
 saved-search.open: Öffnen
+saved-search.delete.title: Gespeicherte Suche löschen
+saved-search.delete.confirm: Möchten Sie diese gespeicherte Suche wirklich löschen?

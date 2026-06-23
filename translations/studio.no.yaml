@@ -2766,3 +2766,5 @@ saved-search.ownership: Eierskap
 saved-search.ownership.own: Egen
 saved-search.ownership.shared: Delt med meg
 saved-search.open: Åpne
+saved-search.delete.title: Slett lagret søk
+saved-search.delete.confirm: Er du sikker på at du vil slette dette lagrede søket?

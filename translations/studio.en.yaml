@@ -2779,3 +2779,5 @@ saved-search.ownership: Ownership
 saved-search.ownership.own: Own
 saved-search.ownership.shared: Shared with me
 saved-search.open: Open
+saved-search.delete.title: Delete saved search
+saved-search.delete.confirm: Are you sure you want to delete this saved search?

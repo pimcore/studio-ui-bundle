@@ -11,6 +11,7 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createColumnHelper } from '@tanstack/react-table'
+import { Popconfirm } from 'antd'
 import { isEmpty, isString, isUndefined } from 'lodash'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
@@ -29,7 +30,8 @@ import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import {
   useSavedSearchGetConfigurationsQuery,
-  useLazySavedSearchGetConfigurationQuery
+  useLazySavedSearchGetConfigurationQuery,
+  useSavedSearchDeleteConfigurationMutation
 } from '@Pimcore/modules/search/search-api-slice-enhanced'
 import { type SavedSearchConfigurationListItem } from '@Pimcore/modules/search/search-api-slice.gen'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
@@ -49,8 +51,17 @@ export const SavedSearchesTab = (): React.JSX.Element => {
     searchTerm: isEmpty(searchTerm) ? undefined : searchTerm
   })
   const [fetchConfiguration] = useLazySavedSearchGetConfigurationQuery()
+  const [deleteConfiguration, { isLoading: isDeleting }] = useSavedSearchDeleteConfigurationMutation()
 
   const total = data?.totalItems ?? 0
+
+  const onDelete = (id: number): void => {
+    deleteConfiguration({ id }).then((result) => {
+      if ('error' in result && !isUndefined(result.error)) {
+        trackError(new ApiError(result.error))
+      }
+    }).catch(() => { /* trigger never rejects; error handled via the result above */ })
+  }
 
   const onOpen = (id: number): void => {
     setOpeningId(id)
@@ -114,9 +125,26 @@ export const SavedSearchesTab = (): React.JSX.Element => {
             tooltip={ { title: t('saved-search.open') } }
             type='link'
           />
+          {row.original.owner && (
+            <Popconfirm
+              cancelText={ t('button.cancel') }
+              description={ t('saved-search.delete.confirm') }
+              okText={ t('delete') }
+              onConfirm={ () => { onDelete(row.original.id) } }
+              title={ t('saved-search.delete.title') }
+            >
+              <IconButton
+                data-testid='saved-search-delete-button'
+                icon={ { value: 'trash' } }
+                loading={ isDeleting }
+                tooltip={ { title: t('delete') } }
+                type='link'
+              />
+            </Popconfirm>
+          )}
         </Flex>
       ),
-      size: 80
+      size: 100
     })
   ]
 

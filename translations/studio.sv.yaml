@@ -2766,3 +2766,5 @@ saved-search.ownership: Ägarskap
 saved-search.ownership.own: Egen
 saved-search.ownership.shared: Delad med mig
 saved-search.open: Öppna
+saved-search.delete.title: Ta bort sparad sökning
+saved-search.delete.confirm: Är du säker på att du vill ta bort den här sparade sökningen?
