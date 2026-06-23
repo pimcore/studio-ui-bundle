@@ -8,26 +8,34 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useState } from 'react'
-import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
-import { Space } from 'antd'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import { isEmpty, isNil } from 'lodash'
-import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
+import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
-import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
-import { FieldFilters, type FieldFiltersProps } from '@Pimcore/components/field-filters/field-filters'
+import { type AvailableColumn, buildColumnPickerGroups } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
+import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column-picker.types'
+import { type FieldFiltersProps } from '@Pimcore/components/field-filters/field-filters'
 import { useFilter } from '../provider/filter-provider/use-filter'
 import { DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
 import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
 import { useClassDefinitionSelectionOptional } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
-export const FieldFiltersContainer = (): React.JSX.Element => {
+export interface UseFieldFilterEditorReturn {
+  filters: FieldFiltersProps['data']
+  onFilterChange: NonNullable<FieldFiltersProps['onChange']>
+  columnGroups: Array<ColumnPickerGroup<AvailableColumn>>
+  handleColumnClick: (column: AvailableColumn) => void
+}
+
+/**
+ * Encapsulates the field-filter editor state and the "add field filter" logic
+ * so the list (rendered in the panel content) and the add control (rendered in
+ * the bottom toolbar) can share a single source of truth.
+ */
+export const useFieldFilterEditor = (): UseFieldFilterEditorReturn => {
   const { t } = useTranslation()
   const { availableColumns } = useAvailableColumns()
   const { getType } = useDynamicTypeResolver()
@@ -63,7 +71,7 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
 
   const [filters, setFilters] = useState<FieldFiltersProps['data']>(initialFilters)
 
-  const onFilterChange: FieldFiltersProps['onChange'] = (data) => {
+  const onFilterChange: UseFieldFilterEditorReturn['onFilterChange'] = (data) => {
     setFilters(data)
     setFieldFilters(data.map((filter) => ({
       key: filter.id,
@@ -180,110 +188,10 @@ export const FieldFiltersContainer = (): React.JSX.Element => {
     return (dynamicType as DynamicTypeFieldFilterAbstract).isFilterAvailable(column.frontendType ?? null)
   }), [availableColumns, filters])
 
-  const getFilteredDropDownMenuItems = useMemo((): DropdownProps['menu']['items'] => {
-    // Helper function to create nested menu structure from group paths
-    const createNestedStructure = (columns: typeof availableFilterColumns): any[] => {
-      const groupTree: Record<string, any> = {}
-      let menuIndex = 0
-
-      // Build the tree structure by processing each column's group
-      columns.forEach((column) => {
-        // Handle the group - it's always a one-dimensional array representing a single group path
-        let groupParts: string[] = []
-
-        if (Array.isArray(column.group)) {
-          // Convert array elements to strings
-          groupParts = column.group.map(part => String(part))
-        } else {
-          return
-        }
-
-        let currentLevel = groupTree
-
-        // Navigate/create the nested tree structure
-        groupParts.forEach((part, index) => {
-          if (isNil(currentLevel[part])) {
-            currentLevel[part] = {
-              items: [], // Columns that belong directly to this group level
-              subGroups: {} // Nested sub-groups
-            }
-          }
-
-          // If this is the final part of the group path, add the column to this level
-          if (index === groupParts.length - 1) {
-            currentLevel[part].items.push(column)
-          } else {
-            // Move deeper into the tree structure
-            currentLevel = currentLevel[part].subGroups
-          }
-        })
-      })
-
-      // Convert the tree structure into Ant Design menu format
-      const convertTreeToMenuItems = (tree: Record<string, any>, parentPath = ''): any[] => {
-        return Object.entries(tree).map(([groupName, groupData]) => {
-          const currentPath = parentPath !== '' ? `${parentPath}.${groupName}` : groupName
-          const menuItem: any = {
-            key: `group-${menuIndex++}`,
-            label: t(groupName)
-          }
-
-          // Process sub-groups recursively
-          const subGroupItems = !isEmpty(Object.keys(groupData.subGroups as Record<string, any>))
-            ? convertTreeToMenuItems(groupData.subGroups as Record<string, any>, currentPath)
-            : []
-
-          // Create menu items for columns at this level
-          const columnItems = groupData.items.map((column: AvailableColumn) => {
-            let translationKey = `${column.key}`
-
-            if (hasFieldDefinition(column.config)) {
-              const fieldDefinition = column.config.fieldDefinition as Record<string, any>
-              translationKey = !isEmptyValue(fieldDefinition?.title) ? fieldDefinition?.title : column.key
-            }
-
-            return {
-              key: column.key,
-              label: t(translationKey),
-              onClick: () => { handleColumnClick(column) }
-            }
-          })
-
-          // Combine sub-groups and column items as children
-          const allChildren = [...subGroupItems, ...columnItems]
-          if (allChildren.length > 0) {
-            menuItem.children = allChildren
-          }
-
-          return menuItem
-        })
-      }
-
-      return convertTreeToMenuItems(groupTree)
-    }
-
-    return createNestedStructure(availableFilterColumns)
-  }, [availableFilterColumns, t])
-
-  return (
-    <Space
-      className='w-full'
-      direction='vertical'
-    >
-      <FieldFilters
-        data={ filters }
-        onChange={ onFilterChange }
-      />
-
-      <Dropdown menu={ { items: getFilteredDropDownMenuItems } }>
-        <IconTextButton
-          data-testid="listing-field-filter-add-button"
-          icon={ { value: 'new' } }
-          type='link'
-        >
-          {t('listing.add-column')}
-        </IconTextButton>
-      </Dropdown>
-    </Space>
+  const columnGroups = useMemo(
+    () => buildColumnPickerGroups(availableFilterColumns, t),
+    [availableFilterColumns, t]
   )
+
+  return { filters, onFilterChange, columnGroups, handleColumnClick }
 }
