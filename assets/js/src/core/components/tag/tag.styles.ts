@@ -33,6 +33,17 @@ export const useStyles = createStyles(({ css, token }) => {
       }
     `,
 
+    colorInverted: css`
+      &.ant-tag {
+        border: none;
+        height: auto;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        padding: 0 ${token.paddingXS}px;
+        margin: 0;
+      }
+    `,
+
     tooltip: css`
       .ant-tooltip-inner {
         color: ${token.colorTextLightSolid};

@@ -11,7 +11,7 @@
 import React, { useEffect } from 'react'
 import { TagList } from '@Pimcore/components/tag-list/tag-list'
 import type { TagProps } from '@Pimcore/components/tag/tag'
-import { Badge } from '@Pimcore/components/badge/badge'
+
 import { Dropdown, type DropdownMenuProps, type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { useTranslation } from 'react-i18next'
 import { WorkflowTransitionGroup } from '@Pimcore/modules/element/editor/shared-components/workflow/menu/workflow-transition-group'
@@ -53,18 +53,10 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
       const formattedStatuses = workflowDetailsData.items.reduce((result: Array<{ children: string }>, workflow) => {
         workflow.workflowStatus.forEach((status) => {
           if (status.visibleInDetail !== undefined && status.visibleInDetail) {
-            const style = status.colorInverted
-              ? { backgroundColor: `${status.color}33` }
-              : {}
-            const tag =
-              {
-                children: t(`${status.label}`),
-                icon: <Badge
-                  color={ status.color }
-                      />,
-                style
-              }
-            result.push(tag)
+            result.push({
+              children: t(`${status.label}`),
+              ...(status.colorInverted ? { colorInverted: status.color } : {})
+            })
           }
         })
         return result
