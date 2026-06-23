@@ -19,20 +19,13 @@ export interface FilterSectionProps<TValue, TContext> extends FilterControlProps
   context: TContext
 }
 
-/**
- * Declarative definition of a single filter.
- *
- * @typeParam TValue - the shape of this filter's value (e.g. string, boolean, FieldFilter[])
- * @typeParam TContribution - what this filter contributes to the host's query (host decides the shape)
- * @typeParam TContext - runtime context the host provides to descriptors (e.g. available columns)
- *
- */
 export interface FilterDescriptor<TValue = unknown, TContribution = unknown, TContext = unknown> {
   key: string
   defaultValue: TValue
   order?: number
-  mode?: string
+  section?: string
   isEnabled: (context: TContext) => boolean
+  isVisible?: (context: TContext) => boolean
   Control?: FC<FilterControlProps<TValue>>
   renderSection?: (props: FilterSectionProps<TValue, TContext>) => ReactNode
   toQuery?: (value: TValue, context: TContext) => TContribution | undefined

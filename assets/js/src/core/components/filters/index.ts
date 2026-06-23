@@ -26,3 +26,4 @@ export {
 export { useDraftSync } from './store/use-draft-sync'
 export { composeQuery } from './query/compose-query'
 export { FiltersRenderer, type FiltersRendererProps } from './view/filters-renderer'
+export { useFilterQuery, type FilterHostAdapter } from './adapter'

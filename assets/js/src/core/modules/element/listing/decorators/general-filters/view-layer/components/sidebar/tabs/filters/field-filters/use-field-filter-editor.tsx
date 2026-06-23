@@ -15,7 +15,7 @@ import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators
 import { type AvailableColumn, buildColumnPickerGroups } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column-picker.types'
 import { type FieldFiltersProps } from '@Pimcore/components/field-filters/field-filters'
-import { useFilter } from '../provider/filter-provider/use-filter'
+import { useDraftElementFilters } from '../../../../../../host'
 import { DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
 import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
 import { useClassDefinitionSelectionOptional } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
@@ -39,7 +39,7 @@ export const useFieldFilterEditor = (): UseFieldFilterEditorReturn => {
   const { t } = useTranslation()
   const { availableColumns } = useAvailableColumns()
   const { getType } = useDynamicTypeResolver()
-  const { fieldFilters, setFieldFilters } = useFilter()
+  const { fieldFilters, setFieldFilters } = useDraftElementFilters()
   const { openModal } = useClassificationStoreModal({ onUpdate: onAddClassificationStoreColumn })
   const classDefinitionContext = useClassDefinitionSelectionOptional()
 

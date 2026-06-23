@@ -32,6 +32,7 @@ export interface FiltersStoreProviderProps {
 export interface FiltersStoreInstance {
   FiltersStoreProvider: FC<FiltersStoreProviderProps>
   useFiltersStore: () => FiltersStore
+  useFiltersStoreOptional: () => FiltersStore | undefined
 }
 
 const buildDefaults = (descriptors: readonly FilterValueSeed[]): FilterValues => {
@@ -85,5 +86,7 @@ export const createFiltersStore = (): FiltersStoreInstance => {
     return context
   }
 
-  return { FiltersStoreProvider, useFiltersStore }
+  const useFiltersStoreOptional = (): FiltersStore | undefined => useContext(FiltersStoreContext)
+
+  return { FiltersStoreProvider, useFiltersStore, useFiltersStoreOptional }
 }

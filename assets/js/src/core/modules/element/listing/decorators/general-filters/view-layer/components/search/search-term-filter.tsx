@@ -9,26 +9,29 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { useSearchTermFilter } from '../../../context-layer/provider/search-term-filter/use-search-term-filter'
 import { useGeneralFiltersConfig } from '../../../context-layer/provider/general-filters-config/use-general-filters-config'
-import { useFilterOptional } from '../sidebar/tabs/filters/provider/filter-provider/use-filter-optional'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
+// Import specific host modules (not the host barrel) to avoid a host↔view import
+// cycle: the search-term descriptor renders this component.
+import { useAppliedFilters, useDraftFiltersOptional } from '../../../host/stores'
+import { readElementListingFilterValues } from '../../../host/use-element-listing-filters'
 
 export const SearchTermFilter = (): React.JSX.Element => {
-  const { searchTerm, setSearchTerm } = useSearchTermFilter()
-  const [currentSearchTerm, setCurrentSearchTerm] = useState<string>(searchTerm)
+  const { values, setValue: setAppliedValue } = useAppliedFilters()
+  const appliedSearchTerm = readElementListingFilterValues(values).searchTerm
+  const [currentSearchTerm, setCurrentSearchTerm] = useState<string>(appliedSearchTerm)
   const { handleSearchTermInSidebar } = useGeneralFiltersConfig()
-  const filterContext = useFilterOptional()
+  const draftStore = useDraftFiltersOptional()
 
   useEffect(() => {
-    setCurrentSearchTerm(searchTerm)
-  }, [searchTerm])
+    setCurrentSearchTerm(appliedSearchTerm)
+  }, [appliedSearchTerm])
 
   function onSearch (): void {
     if (!handleSearchTermInSidebar) {
-      setSearchTerm(currentSearchTerm)
+      setAppliedValue('searchTerm', currentSearchTerm)
     } else {
-      filterContext?.setSearchTerm(currentSearchTerm)
+      draftStore?.setValue('searchTerm', currentSearchTerm)
     }
   }
 
@@ -36,7 +39,7 @@ export const SearchTermFilter = (): React.JSX.Element => {
     setCurrentSearchTerm(event.target.value)
 
     if (handleSearchTermInSidebar) {
-      filterContext?.setSearchTerm(event.target.value)
+      draftStore?.setValue('searchTerm', event.target.value)
     }
   }
 

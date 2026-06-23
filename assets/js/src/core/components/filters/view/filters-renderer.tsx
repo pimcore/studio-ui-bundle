@@ -16,7 +16,7 @@ export interface FiltersRendererProps<TContext> {
   descriptors: ReadonlyArray<AnyFilterDescriptor<unknown, TContext>>
   context: TContext
   store: FiltersStore
-  mode?: string
+  section?: string
 }
 
 const renderFilterControl = <TContext,>(
@@ -46,10 +46,10 @@ const renderFilterControl = <TContext,>(
   return null
 }
 
-export function FiltersRenderer<TContext> ({ descriptors, context, store, mode }: FiltersRendererProps<TContext>): React.JSX.Element {
+export function FiltersRenderer<TContext> ({ descriptors, context, store, section }: FiltersRendererProps<TContext>): React.JSX.Element {
   const visibleDescriptors = descriptors
-    .filter((descriptor) => descriptor.isEnabled(context))
-    .filter((descriptor) => mode === undefined || descriptor.mode === undefined || descriptor.mode === mode)
+    .filter((descriptor) => descriptor.isVisible?.(context) ?? true)
+    .filter((descriptor) => section === undefined || descriptor.section === undefined || descriptor.section === section)
     .slice()
     .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
 
