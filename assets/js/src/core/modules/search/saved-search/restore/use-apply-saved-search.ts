@@ -20,6 +20,7 @@ import { useDirectChildrenFilter } from '@Pimcore/modules/element/listing/decora
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
+import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { type SavedSearchDetailedConfiguration, type GridFilter } from '@Pimcore/modules/search/search-api-slice.gen'
 
 const SEARCH_TERM_FILTER_TYPE = 'system.fulltext'
@@ -42,6 +43,32 @@ const getFilter = (configuration: SavedSearchDetailedConfiguration): GridFilter 
     return raw[0] as GridFilter | undefined
   }
   return (raw ?? undefined) as GridFilter | undefined
+}
+
+/** Merges the saved key/locale/width with the live available-column definition (same transform grid-config uses). */
+const buildSelectedColumns = (savedColumns: SavedColumn[], availableColumns: AvailableColumn[]): SelectedColumn[] => {
+  const selectedColumns: SelectedColumn[] = []
+  for (const savedColumn of savedColumns) {
+    const availableColumn = availableColumns.find((available) => available.key === savedColumn.key)
+    if (isNil(availableColumn)) {
+      continue
+    }
+    selectedColumns.push({
+      key: savedColumn.key,
+      locale: savedColumn.locale,
+      type: availableColumn.type,
+      config: availableColumn.config,
+      sortable: availableColumn.sortable,
+      editable: availableColumn.editable,
+      localizable: availableColumn.localizable,
+      exportable: availableColumn.exportable,
+      frontendType: availableColumn.frontendType,
+      group: availableColumn.group,
+      width: savedColumn.width,
+      originalApiDefinition: availableColumn
+    })
+  }
+  return selectedColumns
 }
 
 /**
@@ -99,32 +126,11 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
       setPageSize(filter.pageSize)
     }
 
-    // Columns — merge the saved key/locale/width with the live available-column definition
-    // (same transform grid-config uses in with-column-configuration.tsx). Skipped if available
-    // columns aren't loaded yet for this listing.
+    // Columns — merge the saved key/locale/width with the live available-column definition.
+    // Skipped if available columns aren't loaded yet for this listing.
     const savedColumns = (configuration.columns ?? []) as SavedColumn[]
     if (!isEmpty(savedColumns) && !isEmpty(availableColumns)) {
-      const selectedColumns: SelectedColumn[] = []
-      for (const savedColumn of savedColumns) {
-        const availableColumn = availableColumns.find((available) => available.key === savedColumn.key)
-        if (isNil(availableColumn)) {
-          continue
-        }
-        selectedColumns.push({
-          key: savedColumn.key,
-          locale: savedColumn.locale,
-          type: availableColumn.type,
-          config: availableColumn.config,
-          sortable: availableColumn.sortable,
-          editable: availableColumn.editable,
-          localizable: availableColumn.localizable,
-          exportable: availableColumn.exportable,
-          frontendType: availableColumn.frontendType,
-          group: availableColumn.group,
-          width: savedColumn.width,
-          originalApiDefinition: availableColumn
-        })
-      }
+      const selectedColumns = buildSelectedColumns(savedColumns, availableColumns)
       if (!isEmpty(selectedColumns)) {
         setSelectedColumns(selectedColumns)
       }
