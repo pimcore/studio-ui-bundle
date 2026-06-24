@@ -39,6 +39,12 @@ export interface DocumentApi {
 class DocumentApiImpl implements DocumentApi {
   private readonly autoSaveCallbacks = new Map<number, ReturnType<typeof debounce>>()
 
+  // Documents the user has edited since they were opened / last reloaded. Tracked here because it
+  // flips synchronously on the edit event, unlike the redux `modified` flag (set via a deferred
+  // startTransition) — so a poll-triggered reloadIframe can never race ahead of it and discard
+  // input that was just typed but not yet mirrored into `modified`.
+  private readonly editedDocuments = new Set<number>()
+
   markDraftAsModified (documentId: number): void {
     const currentState = store.getState()
     const document = selectDocumentById(currentState, documentId)
@@ -81,15 +87,18 @@ class DocumentApiImpl implements DocumentApi {
   unregisterIframe (documentId: number): void {
     iframeDocumentEditorRegistry.unregister(documentId)
     this.autoSaveCallbacks.delete(documentId)
+    this.editedDocuments.delete(documentId)
   }
 
   triggerValueChange (documentId: number, key: string, value: any): void {
+    this.editedDocuments.add(documentId)
     this.markDraftAsModified(documentId)
 
     void this.autoSaveCallbacks.get(documentId)?.()
   }
 
   triggerValueChangeWithReload (documentId: number, key: string, value: any): void {
+    this.editedDocuments.add(documentId)
     this.markDraftAsModified(documentId)
 
     // Perform immediate auto-save without debounce, then reload
@@ -102,14 +111,13 @@ class DocumentApiImpl implements DocumentApi {
 
   // Refresh the editor iframe when the rendered editable is stale but the document state did
   // not change on its own (e.g. a video thumbnail finished converting).
-  // If there are unsaved changes, flush them first so the reload does not drop them — when the
-  // document is modified the edit-lock gate is already resolved, so that autosave won't hang.
+  // If the user has edited this document, flush the current values first so the reload does not
+  // drop them — once edited, the edit-lock gate is (or is about to be) resolved, so that autosave
+  // resolves rather than hanging, and saveDocument reads the live editable values at save time.
   // Otherwise reload directly, bypassing the autosave path (whose edit-lock gate holds autosaves
   // until the first edit and would otherwise hang this poll-triggered refresh).
   reloadIframe (documentId: number): void {
-    const document = selectDocumentById(store.getState(), documentId)
-
-    if (document?.modified ?? false) {
+    if (this.editedDocuments.has(documentId)) {
       void this.performAutoSaveAndReload(documentId)
 
       return
@@ -166,6 +174,10 @@ class DocumentApiImpl implements DocumentApi {
       }
 
       await documentSaveService.saveDocument(documentId, SaveTaskType.AutoSave)
+
+      // Saved state is now the clean baseline; the reload re-arms the edit-lock gate, so a later
+      // untouched refresh must take the reload-only path rather than wait on that gate.
+      this.editedDocuments.delete(documentId)
 
       if (!isNil(iframeRef?.current)) {
         iframeRef.current.reload()
