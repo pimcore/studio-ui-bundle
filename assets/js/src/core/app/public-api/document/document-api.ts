@@ -193,8 +193,9 @@ class DocumentApiImpl implements DocumentApi {
 
       await documentSaveService.saveDocument(documentId, SaveTaskType.AutoSave)
 
-      // Saved state is now the clean baseline; the reload re-arms the edit-lock gate, so a later
-      // untouched refresh must take the reload-only path rather than wait on that gate.
+      // Saved state is now the clean baseline, so drop the edited flag: a later poll-triggered
+      // refresh of this freshly reloaded (untouched) document then takes the cheap reload-only
+      // path instead of a redundant save-and-reload.
       this.editedDocuments.delete(documentId)
 
       if (!isNil(iframeRef?.current)) {
