@@ -15,7 +15,7 @@ import React from 'react'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Space } from '@Pimcore/components/space/space'
 import { type FieldCollectionProps } from './field-collection'
-import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedListContext } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list-value'
 import { useFieldCollection } from './providers/use-field-collection'
 import { useTranslation } from 'react-i18next'
 
@@ -29,7 +29,7 @@ export interface FieldCollectionToolStripProps {
 }
 
 export const FieldCollectionToolStrip = ({ field, allowedTypes, disallowAdd, disallowDelete, disallowReorder, layoutDefinition }: FieldCollectionToolStripProps): React.JSX.Element => {
-  const { operations } = useNumberedList()
+  const { operations } = useNumberedListContext()
   const fieldCollection = useFieldCollection()
   const { t } = useTranslation()
 

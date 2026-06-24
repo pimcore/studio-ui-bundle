@@ -13,7 +13,7 @@ import { markDocumentEditablesAsModified, selectDocumentById } from '@Pimcore/mo
 import { iframeDocumentEditorRegistry } from './iframe-registry'
 import { documentSaveService, SaveTaskType } from '@Pimcore/modules/document/services'
 import { debounce, isNil } from 'lodash'
-import { type AreablockGroupedTypes, setDocumentAreablockTypes, mergeDocumentAreablockTypes, setDocumentTimeSliderVisible } from '@Pimcore/modules/document/document-editor-slice'
+import { type AreablockGroupedTypes, setDocumentAreablockTypes, mergeDocumentAreablockTypes, setDocumentTimeSliderVisible, setDocumentHighlightEditables, selectDocumentHighlightEditables } from '@Pimcore/modules/document/document-editor-slice'
 import { type PublicApiDocumentEditorIframe } from '../document-editor-iframe'
 import { type IframeRef } from '@Pimcore/components/iframe/iframe'
 
@@ -32,6 +32,8 @@ export interface DocumentApi {
   notifyAreablockTypes: (documentId: number, editableTypeId: string, areablockTypes: AreablockGroupedTypes) => void
   mergeAreablockTypes: (documentId: number, editableTypeId: string, areablockTypes: AreablockGroupedTypes) => void
   notifyTimeSliderVisible: (documentId: number, visible: boolean) => void
+  setHighlightEditables: (documentId: number, highlight: boolean) => void
+  getHighlightEditables: (documentId: number) => boolean
   isIframeReady: (documentId: number) => boolean
   onReady: (documentId: number, callback: () => void) => void
 }
@@ -148,6 +150,22 @@ class DocumentApiImpl implements DocumentApi {
 
   notifyTimeSliderVisible (documentId: number, visible: boolean): void {
     store.dispatch(setDocumentTimeSliderVisible({ documentId, visible }))
+  }
+
+  setHighlightEditables (documentId: number, highlight: boolean): void {
+    store.dispatch(setDocumentHighlightEditables({ documentId, highlight }))
+
+    if (iframeDocumentEditorRegistry.isIframeRegistered(documentId)) {
+      try {
+        this.getIframeApi(documentId).documentEditable.setHighlightEditables(highlight)
+      } catch (error) {
+        console.warn(`Could not push highlight-editables state to iframe for document ${documentId}:`, error)
+      }
+    }
+  }
+
+  getHighlightEditables (documentId: number): boolean {
+    return selectDocumentHighlightEditables(store.getState(), documentId)
   }
 
   isIframeReady (documentId: number): boolean {

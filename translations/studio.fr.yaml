@@ -106,6 +106,7 @@ areablock.paste: Coller
 areablock.cut: Couper
 areablock.settings: Paramètres
 areablock.delete: Supprimer
+document.highlight-editables: Mettre en évidence les modifiables
 document.link.target: Cible du lien
 document.hardlink.source: Document source
 document.hardlink.properties-from-source: Utiliser les propriétés du document source
@@ -384,6 +385,8 @@ grid.advanced-column.anonymizationRule: Règle d'anonymisation
 grid.advanced-column.translationPrefix: Préfixe de traduction
 grid.advanced-column.advancedColumns.simpleField: Champ simple
 grid.advanced-column.advancedColumns.relationField: Champ de relation
+grid.advanced-column.classification-store.no-selection: Aucune valeur sélectionnée
+grid.advanced-column.classification-store.edit: Modifier la valeur
 grid.advanced-column.advancedColumns.staticText: Texte statique
 grid.advanced-column.advancedColumns.booleanFormatter: Formateur booléen
 grid.advanced-column.advancedColumns.caseChange: Changement de casse
@@ -520,6 +523,11 @@ listing.grid-config.title: Configuration de la grille
 grid-config.discard-all-changes: Annuler toutes les modifications
 grid-config.apply-changes: Appliquer les modifications
 listing.add-column: Ajouter une colonne
+listing.add-column.simple: Simple
+listing.add-column.advanced: Avancé
+listing.column-picker.search: Rechercher
+listing.column-picker.no-results: Aucune colonne trouvée
+listing.column-picker.fields-to-add: Champs à ajouter
 listing.actions: Appliquer à la sélection
 listing.non-selected.actions: Appliquer à tous
 listing.actions.zip-download: Téléchargement ZIP

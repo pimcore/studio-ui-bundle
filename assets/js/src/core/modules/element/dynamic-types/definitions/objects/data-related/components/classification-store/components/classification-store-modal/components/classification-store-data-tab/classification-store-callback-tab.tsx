@@ -40,9 +40,10 @@ interface ClassificationStoreCallbackTabProps<T> {
   }
   queryArgs: any
   columns: any[]
+  singleSelection?: boolean
 }
 
-export const ClassificationStoreCallbackTab = <T,>({ tabId, queryHook, queryArgs, columns }: ClassificationStoreCallbackTabProps<T>): React.JSX.Element => {
+export const ClassificationStoreCallbackTab = <T,>({ tabId, queryHook, queryArgs, columns, singleSelection = false }: ClassificationStoreCallbackTabProps<T>): React.JSX.Element => {
   const { getSearchValue, setSearchValue, closeModal } = useClassificationStore()
   const { fireUpdateEvent } = useClassificationStoreModal({})
   const { t } = useTranslation()
@@ -166,7 +167,8 @@ export const ClassificationStoreCallbackTab = <T,>({ tabId, queryHook, queryArgs
           <Grid
             columns={ columns }
             data={ data?.items ?? [] }
-            enableMultipleRowSelection
+            enableMultipleRowSelection={ !singleSelection }
+            enableRowSelection={ singleSelection }
             isLoading={ isLoading }
             onSelectedRowsChange={ (row: RowSelectionState) => { setSelectedItems(row) } }
             selectedRows={ selectedItems }

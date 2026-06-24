@@ -14,7 +14,6 @@ import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { type ClassificationStoreProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/classification-store'
 import { useStyles } from './classification-store-modal.styles'
 import { CollectionTab } from './tabs/collection/collection-tab'
 import { GroupTab } from './tabs/group/group-tab'
@@ -22,11 +21,19 @@ import { GroupByKeyTab } from './tabs/group-by-key/group-by-key-tab'
 import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
 import { TabId } from '../../types'
 
-export interface ClassificationStoreModalProps extends ClassificationStoreProps {
+export interface ClassificationStoreModalProps {
+  storeId: number
   objectId?: number
   classId: string
   fieldName: string
+  /** Field definition name, kept so callers can derive {@link fieldName} from a spread field definition. */
+  name: string
   allowedTabs?: TabId[]
+  /**
+   * When true, the modal restricts the selection to a single classification store value.
+   * Used by the advanced column configuration where only one group/key may be picked.
+   */
+  singleSelection?: boolean
 }
 
 export const ClassificationStoreModal = (props: ClassificationStoreModalProps): React.JSX.Element => {
@@ -34,6 +41,7 @@ export const ClassificationStoreModal = (props: ClassificationStoreModalProps): 
     storeId,
     classId,
     fieldName,
+    singleSelection = false,
     allowedTabs = [
       TabId.Collection,
       TabId.Group,
@@ -88,7 +96,12 @@ export const ClassificationStoreModal = (props: ClassificationStoreModalProps): 
       ? [{
           label: renderTabLabel({ iconValue: 'key', titleKeyValue: 'group-by-key' }),
           key: 'group-by-key',
-          children: <GroupByKeyTab { ...tabProps } />
+          children: (
+            <GroupByKeyTab
+              { ...tabProps }
+              singleSelection={ singleSelection }
+            />
+          )
         }]
       : []
   ]

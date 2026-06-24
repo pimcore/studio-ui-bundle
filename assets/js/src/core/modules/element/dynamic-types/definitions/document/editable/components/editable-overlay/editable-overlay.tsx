@@ -10,13 +10,15 @@
 
 import React, { useRef } from 'react'
 import { Dropdown } from 'antd'
+import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { useStyles } from './inheritance-overlay.styles'
+import { useStyles } from './editable-overlay.styles'
 import { useInheritanceMenu } from '../../hooks/use-inheritance-menu'
+import { useHighlightEditables } from './use-highlight-editables'
 import { isNil } from 'lodash'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 
-export interface InheritanceOverlayProps {
+export interface EditableOverlayProps {
   isInherited: boolean
   onOverwrite: () => void
   className?: string
@@ -29,7 +31,7 @@ export interface InheritanceOverlayProps {
   style?: React.CSSProperties
 }
 
-export const InheritanceOverlay = ({
+export const EditableOverlay = ({
   children,
   isInherited,
   onOverwrite,
@@ -40,8 +42,10 @@ export const InheritanceOverlay = ({
   noPadding = false,
   shape = 'round',
   style
-}: InheritanceOverlayProps): React.JSX.Element | null => {
+}: EditableOverlayProps): React.JSX.Element | null => {
   const { styles } = useStyles({ display, addIconSpacing, hideButtons, noPadding, shape })
+
+  const highlightEditables = useHighlightEditables()
   const { inheritanceMenuItems, inheritanceTooltip } = useInheritanceMenu({ onOverwrite })
 
   const wasEverInheritedRef = useRef(isInherited)
@@ -53,15 +57,24 @@ export const InheritanceOverlay = ({
     return null
   }
 
-  if (!wasEverInheritedRef.current) {
+  if (!wasEverInheritedRef.current && !highlightEditables) {
     return <>{children}</>
   }
 
   return (
     <div
-      className={ isInherited ? `${styles.container} ${className ?? ''}` : '' }
-      style={ isInherited ? style : { display: 'contents' } }
+      className={ cn(
+        {
+          [styles.container]: isInherited,
+          [styles.highlightContainer]: !isInherited && highlightEditables
+        },
+        (isInherited || highlightEditables) ? className : undefined
+      ) }
+      style={ isInherited ? style : (highlightEditables ? undefined : { display: 'contents' }) }
     >
+      {highlightEditables && (
+        <div className={ styles.highlightOverlay } />
+      )}
       {isInherited && (
         <Dropdown
           menu={ { items: inheritanceMenuItems } }

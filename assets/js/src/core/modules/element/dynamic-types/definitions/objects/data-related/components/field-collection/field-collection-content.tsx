@@ -10,7 +10,7 @@
 
 import React, { useMemo } from 'react'
 import { BaseView } from '../../../layout-related/views/base-view'
-import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedListSelector } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list-value'
 import { type FieldCollectionProps } from './field-collection'
 import { FieldCollectionItem } from './field-collection-item'
 import { FieldCollectionAddButton } from './field-collection-add-button'
@@ -19,16 +19,19 @@ import { Space } from '@Pimcore/components/space/space'
 
 export interface FieldCollectionContentProps extends FieldCollectionProps {}
 
+// only the item count matters here; each item subscribes to its own value, so
+// editing a field no longer re-renders the whole collection
+const selectCount = (values: any[]): number => values?.length ?? 0
+
 export const FieldCollectionContent = (props: FieldCollectionContentProps): React.JSX.Element => {
-  const { values } = useNumberedList()
+  const count = useNumberedListSelector(selectCount)
 
   const maxItemsCount = props?.maxItems ?? 0
-  const valuesKeys = Object.keys(values)
   const isNoteditable = props.noteditable === true
   const isDisallowAddRemove = props.disallowAddRemove === true
 
-  const isItemLimitReached = maxItemsCount > 0 && valuesKeys.length === maxItemsCount
-  const isHideAddButton = isNoteditable || isItemLimitReached || valuesKeys.length > 0 || isDisallowAddRemove
+  const isItemLimitReached = maxItemsCount > 0 && count === maxItemsCount
+  const isHideAddButton = isNoteditable || isItemLimitReached || count > 0 || isDisallowAddRemove
 
   return useMemo(() => (
     <BaseView
@@ -47,7 +50,7 @@ export const FieldCollectionContent = (props: FieldCollectionContentProps): Reac
           direction='vertical'
           size='extra-small'
         >
-          {values.map((_value, index) => (
+          {Array.from({ length: count }).map((_value, index) => (
             <div key={ index }>
               <FieldCollectionItem
                 allowedTypes={ props.allowedTypes }
@@ -64,5 +67,5 @@ export const FieldCollectionContent = (props: FieldCollectionContentProps): Reac
         </Space>
       </Box>
     </BaseView>
-  ), [values])
+  ), [count, props, isNoteditable, isItemLimitReached])
 }

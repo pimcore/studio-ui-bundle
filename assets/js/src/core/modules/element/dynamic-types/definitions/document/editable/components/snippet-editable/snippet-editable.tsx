@@ -14,7 +14,7 @@ import { type DragAndDropInfo } from '@sdk/components'
 import { SnippetContent } from './snippet-content'
 import { isNil } from 'lodash'
 import { allElementTypes } from '@Pimcore/modules/element/utils/element-type'
-import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+import { EditableOverlay } from '../editable-overlay/editable-overlay'
 
 export interface SnippetValue {
   id?: number
@@ -65,7 +65,7 @@ export const SnippetEditable = ({
   }
 
   return (
-    <InheritanceOverlay
+    <EditableOverlay
       display={ isNil(config?.width) ? 'block' : undefined }
       isInherited={ inherited }
       noPadding
@@ -84,6 +84,6 @@ export const SnippetEditable = ({
           value={ value }
         />
       </Droppable>
-    </InheritanceOverlay>
+    </EditableOverlay>
   )
 }

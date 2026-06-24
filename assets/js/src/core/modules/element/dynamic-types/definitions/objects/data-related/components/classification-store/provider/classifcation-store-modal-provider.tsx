@@ -67,8 +67,10 @@ export const useClassificationStoreModal = (props: UseClassificationStoreModalPr
   const classificationStore = useClassificationStore()
 
   useEffect(() => {
-    if (context !== undefined) {
-      context.setDataChangeEvent(() => props?.onUpdate)
+    // Only register a real callback. Consumers that read the modal without supplying an `onUpdate`
+    // (e.g. the modal's own tabs) must not clobber the callback the opener registered.
+    if (context !== undefined && props?.onUpdate !== undefined) {
+      context.setDataChangeEvent(() => props.onUpdate)
     }
   }, [context, props?.onUpdate])
 
@@ -99,7 +101,9 @@ export const useClassificationStoreModalOptional = (props: UseClassificationStor
   const { onUpdate } = props
 
   useEffect(() => {
-    if (context !== undefined) {
+    // Only register a real callback. Consumers that read the modal without supplying an `onUpdate`
+    // (e.g. the modal's own tabs) must not clobber the callback the opener registered.
+    if (context !== undefined && onUpdate !== undefined) {
       context.setDataChangeEvent(() => onUpdate)
     }
   }, [context, onUpdate])

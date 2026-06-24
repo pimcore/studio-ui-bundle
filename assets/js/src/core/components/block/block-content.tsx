@@ -12,7 +12,7 @@ import React, { useMemo } from 'react'
 import { isFunction } from 'lodash'
 import { BaseView } from '@Pimcore/components/base-view/base-view'
 import { type BlockProps } from './block'
-import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedListSelector } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list-value'
 import { BlockAddButton } from './block-add-button'
 import { BlockItem } from './block-item'
 import { Box } from '@Pimcore/components/box/box'
@@ -20,16 +20,18 @@ import { Form } from '@Pimcore/components/form/form'
 
 export interface BlockContentProps extends BlockProps {}
 
+// only the item count matters here; each item subscribes to its own value (for its title)
+const selectCount = (values: any[]): number => values?.length ?? 0
+
 export const BlockContent = (props: BlockContentProps): React.JSX.Element => {
-  const { values } = useNumberedList()
+  const count = useNumberedListSelector(selectCount)
 
   const maxItemsCount = props?.maxItems ?? 0
-  const valuesKeys = Object.keys(values)
   const isNoteditable = props.noteditable === true
   const isDisallowAddRemove = props.disallowAddRemove === true
 
-  const isItemLimitReached = maxItemsCount > 0 && valuesKeys.length === maxItemsCount
-  const isHideAddButton = isNoteditable || isItemLimitReached || valuesKeys.length > 0 || isDisallowAddRemove
+  const isItemLimitReached = maxItemsCount > 0 && count === maxItemsCount
+  const isHideAddButton = isNoteditable || isItemLimitReached || count > 0 || isDisallowAddRemove
 
   return useMemo(() => (
     <BaseView
@@ -43,7 +45,7 @@ export const BlockContent = (props: BlockContentProps): React.JSX.Element => {
       title={ props.title }
     >
       <Box padding={ { top: 'extra-small' } }>
-        {values.map((value, index) => (
+        {Array.from({ length: count }).map((value, index) => (
           <div
             key={ `block-item-${index}` }
             style={ { marginBottom: '8px' } }
@@ -54,7 +56,6 @@ export const BlockContent = (props: BlockContentProps): React.JSX.Element => {
               disallowReorder={ props.disallowReorder === true || isNoteditable }
               field={ index }
               getItemTitle={ props.getItemTitle }
-              itemValue={ value }
             >
               <Form.Group name={ index }>
                 {isFunction(props.children)
@@ -66,5 +67,5 @@ export const BlockContent = (props: BlockContentProps): React.JSX.Element => {
         ))}
       </Box>
     </BaseView>
-  ), [values, props, isNoteditable, isDisallowAddRemove, isItemLimitReached, isHideAddButton])
+  ), [count, props, isNoteditable, isDisallowAddRemove, isItemLimitReached, isHideAddButton])
 }

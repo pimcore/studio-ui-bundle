@@ -19,7 +19,7 @@ import ReactDOM from 'react-dom'
 import cn from 'classnames'
 import { type VideoValue, type VideoType } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/video/video'
 import { useVideoModal } from '@Pimcore/modules/element/components/video-modal/hooks/use-video-modal'
-import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+import { EditableOverlay } from '../editable-overlay/editable-overlay'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { useDocumentEditor } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/hooks/use-document-editor'
 import { useAssetVideoThumbnailStatusQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
@@ -180,7 +180,7 @@ export const VideoEditable = ({
   }
 
   const renderEditButtonOverlay = (target: HTMLDivElement, message?: string | null): React.ReactPortal => ReactDOM.createPortal(
-    <InheritanceOverlay
+    <EditableOverlay
       display="block"
       hideButtons
       isInherited={ inherited }
@@ -205,7 +205,7 @@ export const VideoEditable = ({
       {!isNil(message) && !isEmpty(message) && (
         <span className={ styles.errorMessage }>{ message }</span>
       )}
-    </InheritanceOverlay>,
+    </EditableOverlay>,
     target
   )
 
@@ -224,7 +224,7 @@ export const VideoEditable = ({
       {!hasVideo
         ? (
             !isNull(emptyElement) && ReactDOM.createPortal(
-              <InheritanceOverlay
+              <EditableOverlay
                 display="block"
                 isInherited={ inherited }
                 noPadding
@@ -239,7 +239,7 @@ export const VideoEditable = ({
                   text={ t('video.placeholder') }
                   width={ width }
                 />
-              </InheritanceOverlay>,
+              </EditableOverlay>,
               emptyElement
             )
           )

@@ -12,10 +12,10 @@ import { type IconButtonProps } from '@Pimcore/components/icon-button/icon-butto
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedListContext } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list-value'
 
 export const BlockAddButton = (): React.JSX.Element => {
-  const { operations } = useNumberedList()
+  const { operations } = useNumberedListContext()
   const { t } = useTranslation()
 
   const onAddClick: IconButtonProps['onClick'] = (e): void => {

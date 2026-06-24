@@ -28,10 +28,25 @@ export const useStyles = createStyles((
         background-color: ${token.colorBgContainerDisabled} !important;
         ${hideButtons === true ? 'display: none !important;' : ''}
       }
-        
+
       .pimcore_editable_droppable_overlay {
         display: none;
       }
+    `,
+
+    highlightContainer: css`
+      position: relative;
+      display: ${display ?? 'inline-block'};
+    `,
+
+    highlightOverlay: css`
+      inset: 0;
+      position: absolute;
+      background: rgba(124, 172, 160, 0.4);
+      border: 1px dashed ${token.colorBorder};
+      ${shape !== 'angular' ? `border-radius: ${token.borderRadius}px;` : ''}
+      pointer-events: none;
+      z-index: 9;
     `,
 
     inheritanceBackground: css`
