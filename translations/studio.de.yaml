@@ -384,6 +384,8 @@ grid.advanced-column.anonymizationRule: Anonymisierungsregel
 grid.advanced-column.translationPrefix: Übersetzungspräfix
 grid.advanced-column.advancedColumns.simpleField: Einfaches Feld
 grid.advanced-column.advancedColumns.relationField: Relationsfeld
+grid.advanced-column.classification-store.no-selection: Kein Wert ausgewählt
+grid.advanced-column.classification-store.edit: Wert ändern
 grid.advanced-column.advancedColumns.staticText: Statischer Text
 grid.advanced-column.advancedColumns.booleanFormatter: Boolean-Formatierer
 grid.advanced-column.advancedColumns.caseChange: Groß-/Kleinschreibung ändern
