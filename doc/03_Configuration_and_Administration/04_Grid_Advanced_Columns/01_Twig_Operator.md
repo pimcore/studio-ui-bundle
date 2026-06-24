@@ -19,10 +19,6 @@ or apply conditional logic.
 4. Add a **Transformer** and pick **Twig Operator** (listed under the *Other* group).
 5. Write your template in the **Twig Template** code field. The default is `{{ value }}`.
 
-The Twig Operator is the *last* step in the pipeline: the data sources resolve the
-raw values, optional earlier transformers adjust them, and the Twig Operator turns
-the collected values into the final string shown in the cell.
-
 ## How the `value` variable is structured
 
 The template is rendered with exactly **one** variable, `value`. It is **always an
