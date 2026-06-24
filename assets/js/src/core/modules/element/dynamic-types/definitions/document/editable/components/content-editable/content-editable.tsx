@@ -12,7 +12,7 @@ import React, { useRef, useEffect } from 'react'
 import { isNil, isNull, isString } from 'lodash'
 import { escapeHtml, pasteHtmlAtCaret, stripTags } from '@Pimcore/utils/html'
 import { useStyles } from './content-editable.styles'
-import { InheritanceOverlay, type InheritanceOverlayProps } from '../inheritance-overlay/inheritance-overlay'
+import { EditableOverlay, type EditableOverlayProps } from '../editable-overlay/editable-overlay'
 import cn from 'classnames'
 
 export interface ContentEditableProps {
@@ -187,8 +187,8 @@ const ContentEditable = ({
 
   const computedStyles = getStyles()
 
-  const getDisplayType = (): InheritanceOverlayProps['display'] => {
-    return computedStyles.display as InheritanceOverlayProps['display'] ?? 'block'
+  const getDisplayType = (): EditableOverlayProps['display'] => {
+    return computedStyles.display as EditableOverlayProps['display'] ?? 'block'
   }
 
   const handleOverwrite = (): void => {
@@ -196,7 +196,7 @@ const ContentEditable = ({
   }
 
   return (
-    <InheritanceOverlay
+    <EditableOverlay
       display={ getDisplayType() }
       isInherited={ inherited }
       onOverwrite={ handleOverwrite }
@@ -213,7 +213,7 @@ const ContentEditable = ({
         role="none"
         style={ computedStyles }
       />
-    </InheritanceOverlay>
+    </EditableOverlay>
   )
 }
 

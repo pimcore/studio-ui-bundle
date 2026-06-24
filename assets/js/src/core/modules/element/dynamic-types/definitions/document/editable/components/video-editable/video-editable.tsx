@@ -18,7 +18,7 @@ import ReactDOM from 'react-dom'
 import cn from 'classnames'
 import { type VideoValue, type VideoType } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/video/video'
 import { useVideoModal } from '@Pimcore/modules/element/components/video-modal/hooks/use-video-modal'
-import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+import { EditableOverlay } from '../editable-overlay/editable-overlay'
 import { toCssDimension } from '@Pimcore/utils/css'
 
 export interface VideoEditableProps {
@@ -112,7 +112,7 @@ export const VideoEditable = ({
       {!hasVideo
         ? (
             !isNull(emptyElement) && ReactDOM.createPortal(
-              <InheritanceOverlay
+              <EditableOverlay
                 display="block"
                 isInherited={ inherited }
                 noPadding
@@ -127,13 +127,13 @@ export const VideoEditable = ({
                   text={ t('video.placeholder') }
                   width={ width }
                 />
-              </InheritanceOverlay>,
+              </EditableOverlay>,
               emptyElement
             )
           )
         : (
             !isNull(wrapperElement) && ReactDOM.createPortal(
-              <InheritanceOverlay
+              <EditableOverlay
                 display="block"
                 hideButtons
                 isInherited={ inherited }
@@ -155,7 +155,7 @@ export const VideoEditable = ({
                   title={ t('video.edit') }
                   type="default"
                 />
-              </InheritanceOverlay>,
+              </EditableOverlay>,
               wrapperElement
             )
           )}

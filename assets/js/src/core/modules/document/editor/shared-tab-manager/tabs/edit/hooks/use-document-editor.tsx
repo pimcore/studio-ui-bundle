@@ -25,6 +25,7 @@ export interface DocumentEditorContextProps {
   getInheritanceState: (key: string) => boolean
   setInheritanceState: (key: string, inherited: boolean) => void
   initializeInheritanceState: (inheritanceState: Record<string, boolean>) => void
+  initializeHighlightEditables: () => void
 }
 
 export const useDocumentEditor = (): DocumentEditorContextProps => {
@@ -89,6 +90,16 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
     getDocumentEditableApi().initializeInheritanceState(inheritanceState)
   }
 
+  const initializeHighlightEditables = (): void => {
+    try {
+      const { document: documentApi } = getPimcoreStudioApi()
+
+      getDocumentEditableApi().setHighlightEditables(documentApi.getHighlightEditables(id))
+    } catch (error) {
+      console.warn('Could not initialize highlight-editables state from parent:', error)
+    }
+  }
+
   const triggerSaveAndReload = useCallback((): void => {
     try {
       const { document: documentApi } = getPimcoreStudioApi()
@@ -121,6 +132,7 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
     notifyReady,
     getInheritanceState,
     setInheritanceState,
-    initializeInheritanceState
+    initializeInheritanceState,
+    initializeHighlightEditables
   }
 }

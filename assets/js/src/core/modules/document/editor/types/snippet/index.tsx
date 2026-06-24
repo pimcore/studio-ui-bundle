@@ -25,7 +25,8 @@ import { type DocumentSidebarManager } from '../../sidebar/document-sidebar-mana
 import {
   SIDEBAR_AREABLOCK_TYPES,
   SIDEBAR_CONTENT_SETTINGS,
-  SIDEBAR_DOCUMENT_CONFIGURATION
+  SIDEBAR_DOCUMENT_CONFIGURATION,
+  SIDEBAR_HIGHLIGHT_EDITABLES
 } from '../../shared-tab-manager/sidebar-definitions'
 
 moduleSystem.registerModule({
@@ -46,5 +47,7 @@ moduleSystem.registerModule({
     snippetSidebarManager.registerEntry(SIDEBAR_AREABLOCK_TYPES)
     snippetSidebarManager.registerEntry(SIDEBAR_CONTENT_SETTINGS)
     snippetSidebarManager.registerEntry(SIDEBAR_DOCUMENT_CONFIGURATION)
+
+    snippetSidebarManager.registerButton(SIDEBAR_HIGHLIGHT_EDITABLES)
   }
 })

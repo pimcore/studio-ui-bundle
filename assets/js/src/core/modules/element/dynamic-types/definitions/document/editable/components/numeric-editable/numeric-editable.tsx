@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { InputNumber } from '@sdk/components'
-import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+import { EditableOverlay } from '../editable-overlay/editable-overlay'
 import { toCssDimension } from '@sdk/utils'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
@@ -56,7 +56,7 @@ export const NumericEditable = ({
   }
 
   return (
-    <InheritanceOverlay
+    <EditableOverlay
       addIconSpacing
       display="inline-block"
       isInherited={ Boolean(inherited) }
@@ -72,6 +72,6 @@ export const NumericEditable = ({
         style={ containerStyle }
         value={ value }
       />
-    </InheritanceOverlay>
+    </EditableOverlay>
   )
 }
