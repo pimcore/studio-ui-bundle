@@ -11,7 +11,7 @@
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { useItem } from '@Pimcore/components/form/item/provider/item/use-item'
-import { useKeyedList } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list'
+import { useKeyedListContext } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value'
 import { usePipelineConfig } from '@Pimcore/components/pipeline/provider/pipeline-config/use-pipeline-config'
 import { type SelectProps } from '@Pimcore/components/select/select'
 import { usePrevious } from '@Pimcore/utils/hooks/use-previous'
@@ -23,7 +23,7 @@ export const DynamicTypePipelineGridSourceFieldsRelationFieldComponent = (): Rea
   const { config } = usePipelineConfig()
   const sourceFieldConfig = config?.relationField
   const { name } = useItem()
-  const { operations } = useKeyedList()
+  const { operations } = useKeyedListContext()
   const currentRelation = Form.useWatch([...name, 'relation'])
   const prevRelation = usePrevious(currentRelation)
   const { t } = useTranslation()
