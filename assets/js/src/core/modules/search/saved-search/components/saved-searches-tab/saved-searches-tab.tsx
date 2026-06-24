@@ -12,7 +12,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Popconfirm } from 'antd'
-import { isEmpty, isString, isUndefined } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
@@ -25,17 +25,15 @@ import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { formatDateTime } from '@Pimcore/utils/date-time'
-import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import {
   useSavedSearchGetConfigurationsQuery,
-  useLazySavedSearchGetConfigurationQuery,
   useSavedSearchDeleteConfigurationMutation
 } from '@Pimcore/modules/search/search-api-slice-enhanced'
 import { type SavedSearchConfigurationListItem } from '@Pimcore/modules/search/search-api-slice.gen'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
-import { SAVED_SEARCH_RESULT_WIDGET } from '@Pimcore/modules/search/saved-search'
+import { useOpenSavedSearch } from '@Pimcore/modules/search/saved-search/hooks/use-open-saved-search'
 
 // Row shape with the display values pre-formatted so the Grid's default cell renders them
 // (matching the name column) instead of custom cell components.
@@ -48,11 +46,11 @@ export const SavedSearchesTab = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { close } = useSearch()
   const widgetManager = useWidgetManager()
+  const { open: onOpen, openingId } = useOpenSavedSearch(close)
 
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
   const [searchTerm, setSearchTerm] = useState('')
-  const [openingId, setOpeningId] = useState<number | undefined>(undefined)
   const [deletingId, setDeletingId] = useState<number | undefined>(undefined)
 
   const { data, isLoading, isFetching } = useSavedSearchGetConfigurationsQuery({
@@ -60,7 +58,6 @@ export const SavedSearchesTab = (): React.JSX.Element => {
     pageSize,
     searchTerm: isEmpty(searchTerm) ? undefined : searchTerm
   })
-  const [fetchConfiguration] = useLazySavedSearchGetConfigurationQuery()
   const [deleteConfiguration] = useSavedSearchDeleteConfigurationMutation()
 
   const total = data?.totalItems ?? 0
@@ -79,38 +76,6 @@ export const SavedSearchesTab = (): React.JSX.Element => {
       }
     }).catch(() => { /* trigger never rejects; error handled via the result above */ })
       .finally(() => { setDeletingId(undefined) })
-  }
-
-  const onOpen = (id: number): void => {
-    setOpeningId(id)
-    fetchConfiguration({ id }).then((result) => {
-      if ('data' in result && !isUndefined(result.data)) {
-        const configuration = result.data
-        // No explicit elementType yet — infer it from classId (objects carry one, assets don't).
-        const elementType = isString(configuration.classId) && !isEmpty(configuration.classId)
-          ? elementTypes.dataObject
-          : elementTypes.asset
-
-        widgetManager.openMainWidget({
-          id: `saved-search-${id}`,
-          name: configuration.name,
-          component: SAVED_SEARCH_RESULT_WIDGET,
-          config: {
-            savedSearchId: id,
-            elementType,
-            label: configuration.name,
-            icon: { type: 'name', value: 'search' },
-            iconColorGroup: 'element'
-          }
-        })
-        close()
-      } else if ('error' in result && !isUndefined(result.error)) {
-        trackError(new ApiError(result.error))
-      }
-    }).catch(() => { /* trigger never rejects; error handled via the result above */ })
-      .finally(() => {
-        setOpeningId(undefined)
-      })
   }
 
   const tableItems: SavedSearchRow[] = (data?.items ?? []).map((item) => ({

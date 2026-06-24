@@ -28,6 +28,7 @@ export interface SavedSearchFormValues {
   name: string
   description?: string
   createMenuShortcut?: boolean
+  menuShortcutGroup?: string
   shareGlobally?: boolean
 }
 
@@ -35,6 +36,7 @@ export const defaultValues: SavedSearchFormValues = {
   name: '',
   description: '',
   createMenuShortcut: false,
+  menuShortcutGroup: '',
   shareGlobally: true
 }
 
@@ -60,6 +62,7 @@ export const SavedSearchForm = ({
   const { t } = useTranslation()
   const { styles } = useStyles()
   const [isOpenDropdown, setIsOpenDropdown] = useState(false)
+  const createMenuShortcut = Form.useWatch('createMenuShortcut', form)
 
   const { data: userList } = useUserGetShareCollectionQuery()
   const { data: roleList } = useRoleGetShareCollectionQuery()
@@ -174,6 +177,15 @@ export const SavedSearchForm = ({
       >
         <Switch labelRight={ <Text>{t('saved-search.create-menu-shortcut')}</Text> } />
       </Form.Item>
+
+      { createMenuShortcut === true && (
+        <Form.Item
+          label={ t('saved-search.menu-shortcut-group') }
+          name="menuShortcutGroup"
+        >
+          <Input data-testid='saved-search-menu-shortcut-group-input' />
+        </Form.Item>
+      )}
 
       <Flex
         align='center'

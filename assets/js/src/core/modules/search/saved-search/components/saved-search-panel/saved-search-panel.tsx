@@ -115,6 +115,7 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
     (formValues.name ?? '') !== (loaded.name ?? '') ||
     (formValues.description ?? '') !== (loaded.description ?? '') ||
     (formValues.createMenuShortcut ?? false) !== loaded.createMenuShortcut ||
+    (formValues.menuShortcutGroup ?? '') !== (loaded.menuShortcutGroup ?? '') ||
     isSharedGlobally !== loaded.shareGlobal ||
     !isEqual(sortedNumbers(liveUsers), sortedNumbers(loaded.shareGlobal ? [] : loaded.sharedUsers)) ||
     !isEqual(sortedNumbers(liveRoles), sortedNumbers(loaded.shareGlobal ? [] : loaded.sharedRoles))
@@ -133,6 +134,7 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
       name: loaded.name,
       description: loaded.description ?? '',
       createMenuShortcut: loaded.createMenuShortcut,
+      menuShortcutGroup: loaded.menuShortcutGroup ?? '',
       shareGlobally: loaded.shareGlobal
     }
     form.setFieldsValue(values)

@@ -9,7 +9,7 @@
  */
 
 import { useTranslation } from 'react-i18next'
-import { isNil, isUndefined } from 'lodash'
+import { isEmpty, isNil, isUndefined } from 'lodash'
 import { type formInstanceType } from '@Pimcore/components/form/use-form'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
@@ -60,6 +60,7 @@ export const useSavedSearchMutations = (params: UseSavedSearchMutationsParams): 
     name: values.name,
     description: values.description,
     createMenuShortcut: values.createMenuShortcut ?? false,
+    menuShortcutGroup: isEmpty(values.menuShortcutGroup) ? undefined : values.menuShortcutGroup,
     shareGlobal: isSharedGlobally,
     sharedUsers: isSharedGlobally ? [] : sharedUsers,
     sharedRoles: isSharedGlobally ? [] : sharedRoles,
@@ -99,6 +100,7 @@ export const useSavedSearchMutations = (params: UseSavedSearchMutationsParams): 
           name: values.name,
           description: values.description,
           createMenuShortcut: values.createMenuShortcut ?? false,
+          menuShortcutGroup: isEmpty(values.menuShortcutGroup) ? null : values.menuShortcutGroup,
           shareGlobal: isSharedGlobally,
           sharedUsers,
           sharedRoles,

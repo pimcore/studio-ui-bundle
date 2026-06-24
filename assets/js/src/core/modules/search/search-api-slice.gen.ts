@@ -122,6 +122,26 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Search"],
             }),
+            savedSearchGetMenuShortcutConfigurations: build.query<
+                SavedSearchGetMenuShortcutConfigurationsApiResponse,
+                SavedSearchGetMenuShortcutConfigurationsApiArg
+            >({
+                query: () => ({
+                    url: `/pimcore-studio/api/search/saved/configuration/menu-shortcuts`,
+                }),
+                providesTags: ["Search"],
+            }),
+            savedSearchUpdateMenuShortcut: build.mutation<
+                SavedSearchUpdateMenuShortcutApiResponse,
+                SavedSearchUpdateMenuShortcutApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/search/saved/configuration/update-menu-shortcut/${queryArg.id}`,
+                    method: "PUT",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Search"],
+            }),
         }),
         overrideExisting: false,
     });
@@ -217,6 +237,7 @@ export type SavedSearchSaveConfigurationApiArg = {
         sharedRoles?: object;
         columns: (Column | GridColumnRequest)[];
         filter?: GridFilter | null;
+        menuShortcutGroup?: string;
     };
 };
 export type SavedSearchGetConfigurationApiResponse =
@@ -252,12 +273,28 @@ export type SavedSearchUpdateConfigurationApiArg = {
         sharedRoles?: object;
         columns: (Column | GridColumnRequest)[];
         filter?: GridFilter | null;
+        menuShortcutGroup?: string;
     };
 };
 export type SavedSearchDeleteConfigurationApiResponse = unknown;
 export type SavedSearchDeleteConfigurationApiArg = {
     /** Id of the saved search configuration */
     id: number;
+};
+export type SavedSearchGetMenuShortcutConfigurationsApiResponse =
+    /** status 200 saved_search_get_menu_shortcut_configurations_success_response */ {
+        totalItems: number;
+        items: SavedSearchConfigurationListItem[];
+    };
+export type SavedSearchGetMenuShortcutConfigurationsApiArg = void;
+export type SavedSearchUpdateMenuShortcutApiResponse = unknown;
+export type SavedSearchUpdateMenuShortcutApiArg = {
+    /** Id of the saved search configuration */
+    id: number;
+    body: {
+        createMenuShortcut: boolean;
+        menuShortcutGroup?: string;
+    };
 };
 export type Column = {
     /** Key of the Column */
@@ -536,6 +573,8 @@ export type SavedSearchDetailedConfiguration = {
     modificationDate?: number | null;
     /** Creation Date */
     creationDate?: number | null;
+    /** Name of the group in the menu the shortcut belongs to */
+    menuShortcutGroup?: string | null;
 };
 export type SavedSearchConfigurationListItem = {
     /** AdditionalAttributes */
@@ -554,6 +593,8 @@ export type SavedSearchConfigurationListItem = {
     modificationDate: number;
     /** Creation Date */
     creationDate?: number;
+    /** Name of the group in the menu the shortcut belongs to */
+    menuShortcutGroup?: string | null;
 };
 export const {
     useAssetGetSearchConfigurationQuery,
@@ -568,4 +609,6 @@ export const {
     useSavedSearchGetConfigurationsQuery,
     useSavedSearchUpdateConfigurationMutation,
     useSavedSearchDeleteConfigurationMutation,
+    useSavedSearchGetMenuShortcutConfigurationsQuery,
+    useSavedSearchUpdateMenuShortcutMutation,
 } = injectedRtkApi;

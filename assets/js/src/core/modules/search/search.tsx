@@ -13,7 +13,7 @@ import { isAllowedInPerspective } from '@Pimcore/modules/perspectives/permission
 import React from 'react'
 import { SearchModal } from './modal/search-modal'
 import { SearchProvider } from './provider/search-provider'
-import { SearchButton } from './triggers/button/search-button'
+import { MenuShortcutFlyout } from './saved-search/components/menu-shortcut-flyout/menu-shortcut-flyout'
 
 export const Search = (): React.JSX.Element | null => {
   if (isAllowedInPerspective(NavPermission.SearchHidden)) {
@@ -22,7 +22,7 @@ export const Search = (): React.JSX.Element | null => {
 
   return (
     <SearchProvider>
-      <SearchButton />
+      <MenuShortcutFlyout />
       <SearchModal />
     </SearchProvider>
   )

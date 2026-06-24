@@ -30,6 +30,12 @@ const enhancedApi = api.enhanceEndpoints({
     },
     savedSearchDeleteConfiguration: {
       invalidatesTags: ['SavedSearch']
+    },
+    savedSearchGetMenuShortcutConfigurations: {
+      providesTags: ['SavedSearch']
+    },
+    savedSearchUpdateMenuShortcut: {
+      invalidatesTags: ['SavedSearch']
     }
   }
 })
@@ -41,5 +47,7 @@ export const {
   useSavedSearchGetConfigurationsQuery,
   useLazySavedSearchGetConfigurationQuery,
   useSavedSearchUpdateConfigurationMutation,
-  useSavedSearchDeleteConfigurationMutation
+  useSavedSearchDeleteConfigurationMutation,
+  useSavedSearchGetMenuShortcutConfigurationsQuery,
+  useSavedSearchUpdateMenuShortcutMutation
 } = enhancedApi

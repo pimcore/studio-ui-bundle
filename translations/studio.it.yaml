@@ -2773,4 +2773,8 @@ saved-search.clone: Clona ricerca
 saved-search.update.success: Ricerca salvata aggiornata
 saved-search.delete.success: Ricerca salvata eliminata
 saved-search.shared-modified.info: Hai apportato modifiche alla configurazione originale. Poiché appartiene a qualcun altro, puoi salvarla come nuova ricerca.
+saved-search.menu-shortcut-group: Gruppo di menu
+saved-search.menu-shortcuts: Scorciatoie del menu
+saved-search.menu-shortcut.remove: Rimuovi dal menu
+saved-search.menu-shortcut.removed: Rimosso dal menu
 more: Altro

@@ -2773,4 +2773,8 @@ saved-search.clone: Klona sökning
 saved-search.update.success: Sparad sökning uppdaterad
 saved-search.delete.success: Sparad sökning borttagen
 saved-search.shared-modified.info: Du har gjort ändringar i den ursprungliga konfigurationen. Eftersom den ägs av någon annan kan du spara den som en ny sökning.
+saved-search.menu-shortcut-group: Menygrupp
+saved-search.menu-shortcuts: Menygenvägar
+saved-search.menu-shortcut.remove: Ta bort från meny
+saved-search.menu-shortcut.removed: Borttagen från meny
 more: Mer
