@@ -168,7 +168,7 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
               data-testid='saved-search-more-button'
               icon={ { value: 'more' } }
               loading={ isDeleting }
-              type='default'
+              type='primary'
             />
           </Dropdown>
         </Compact>
