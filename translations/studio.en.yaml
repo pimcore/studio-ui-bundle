@@ -106,6 +106,7 @@ areablock.paste: Paste
 areablock.cut: Cut
 areablock.settings: Settings
 areablock.delete: Delete
+document.highlight-editables: Highlight editables
 document.link.target: Link Target
 document.hardlink.source: Source Document
 document.hardlink.properties-from-source: Use properties from source document
@@ -384,6 +385,8 @@ grid.advanced-column.anonymizationRule: Anonymization Rule
 grid.advanced-column.translationPrefix: Translation Prefix
 grid.advanced-column.advancedColumns.simpleField: Simple Field
 grid.advanced-column.advancedColumns.relationField: Relation Field
+grid.advanced-column.classification-store.no-selection: No value selected
+grid.advanced-column.classification-store.edit: Change value
 grid.advanced-column.advancedColumns.staticText: Static text
 grid.advanced-column.advancedColumns.booleanFormatter: Boolean Formatter
 grid.advanced-column.advancedColumns.caseChange: Change Case
@@ -2244,6 +2247,7 @@ component.search.pleaceholder: Search
 focal-point.set: Set Focal Point
 video.placeholder: No video selected - Click to add a video
 video.add-video: Add Video
+video.preview-in-progress: Video preview is being generated…
 image.alt-text-placeholder: Enter alt text
 area-settings: Area Settings
 unsupported_feature: Unsupported feature - please check system requirements!

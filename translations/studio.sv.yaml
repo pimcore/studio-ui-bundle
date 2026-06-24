@@ -106,6 +106,7 @@ areablock.paste: Klistra in
 areablock.cut: Klipp ut
 areablock.settings: Inställningar
 areablock.delete: Ta bort
+document.highlight-editables: Markera redigerbara
 document.link.target: Länkmål
 document.hardlink.source: Källdokument
 document.hardlink.properties-from-source: Använd egenskaper från källdokument
@@ -384,6 +385,8 @@ grid.advanced-column.anonymizationRule: Anonymiseringsregel
 grid.advanced-column.translationPrefix: Översättningsprefix
 grid.advanced-column.advancedColumns.simpleField: Enkelt fält
 grid.advanced-column.advancedColumns.relationField: Relationsfält
+grid.advanced-column.classification-store.no-selection: Inget värde valt
+grid.advanced-column.classification-store.edit: Ändra värde
 grid.advanced-column.advancedColumns.staticText: Statisk text
 grid.advanced-column.advancedColumns.booleanFormatter: Boolean-formaterare
 grid.advanced-column.advancedColumns.caseChange: Ändra skiftläge
@@ -2237,6 +2240,7 @@ component.search.pleaceholder: Sök
 focal-point.set: Ange fokuspunkt
 video.placeholder: Ingen video vald - Klicka för att lägga till en video
 video.add-video: Lägg till video
+video.preview-in-progress: Förhandsvisning av video genereras…
 image.alt-text-placeholder: Ange alt-text
 area-settings: Områdesinställningar
 unsupported_feature: Funktionen stöds inte - kontrollera systemkraven!

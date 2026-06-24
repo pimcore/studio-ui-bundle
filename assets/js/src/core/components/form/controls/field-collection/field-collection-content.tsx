@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { useNumberedList } from '../numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedListSelector } from '../numbered-list/provider/numbered-list/use-numbered-list-value'
 import { Form } from '../../form'
 import { FieldCollectionItem } from './field-collection-item'
 import { Space } from '../../../space/space'
@@ -19,13 +19,16 @@ import { useFieldCollection } from './field-collection-provider'
 import { Text } from '@Pimcore/components/text/text'
 import { Flex } from '@Pimcore/components/flex/flex'
 
+// only the item count matters here; each item subscribes to its own value
+const selectCount = (values: any[]): number => values?.length ?? 0
+
 export const FieldCollectionContent = (): React.JSX.Element => {
-  const { values } = useNumberedList()
+  const count = useNumberedListSelector(selectCount)
   const { title, collapsed, addLabel } = useFieldCollection()
 
   return (
     <>
-      {values.length === 0 && (
+      {count === 0 && (
         <>
           <Flex
             align="center"
@@ -44,7 +47,7 @@ export const FieldCollectionContent = (): React.JSX.Element => {
         </>
       )}
 
-      {values.length > 0 && (
+      {count > 0 && (
         <Panel
           border={ false }
           collapsed={ collapsed }
@@ -57,7 +60,7 @@ export const FieldCollectionContent = (): React.JSX.Element => {
             direction="vertical"
             size="small"
           >
-            {values.map((item, index) => (
+            {Array.from({ length: count }).map((item, index) => (
               <Form.Group
                 key={ index }
                 name={ index }

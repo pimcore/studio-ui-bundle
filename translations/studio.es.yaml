@@ -106,6 +106,7 @@ areablock.paste: Pegar
 areablock.cut: Cortar
 areablock.settings: Configuración
 areablock.delete: Eliminar
+document.highlight-editables: Resaltar editables
 document.link.target: Destino del enlace
 document.hardlink.source: Documento de origen
 document.hardlink.properties-from-source: Usar propiedades del documento de origen
@@ -384,6 +385,8 @@ grid.advanced-column.anonymizationRule: Regla de anonimización
 grid.advanced-column.translationPrefix: Prefijo de traducción
 grid.advanced-column.advancedColumns.simpleField: Campo simple
 grid.advanced-column.advancedColumns.relationField: Campo de relación
+grid.advanced-column.classification-store.no-selection: Ningún valor seleccionado
+grid.advanced-column.classification-store.edit: Cambiar valor
 grid.advanced-column.advancedColumns.staticText: Texto estático
 grid.advanced-column.advancedColumns.booleanFormatter: Formateador booleano
 grid.advanced-column.advancedColumns.caseChange: Cambiar mayúsculas/minúsculas
@@ -2237,6 +2240,7 @@ component.search.pleaceholder: Buscar
 focal-point.set: Establecer punto focal
 video.placeholder: No se ha seleccionado ningún vídeo - Haga clic para añadir un vídeo
 video.add-video: Añadir vídeo
+video.preview-in-progress: Se está generando la vista previa del vídeo…
 image.alt-text-placeholder: Introduzca texto alternativo
 area-settings: Configuración de área
 unsupported_feature: Función no soportada - ¡verifique los requisitos del sistema!

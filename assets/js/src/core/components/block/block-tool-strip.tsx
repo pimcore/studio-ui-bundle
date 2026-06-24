@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedListContext } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list-value'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Space } from '@Pimcore/components/space/space'
 import { Split } from '@Pimcore/components/split/split'
@@ -26,7 +26,7 @@ export interface BlockToolStripProps {
 }
 
 export const BlockToolStrip = ({ field, disallowAdd, disallowDelete, disallowReorder, itemValue, getItemTitle }: BlockToolStripProps): React.JSX.Element => {
-  const { operations } = useNumberedList()
+  const { operations } = useNumberedListContext()
 
   // Use Form.useWatch to get the real-time form values for this specific item
   const watchedValue = Form.useWatch([field])

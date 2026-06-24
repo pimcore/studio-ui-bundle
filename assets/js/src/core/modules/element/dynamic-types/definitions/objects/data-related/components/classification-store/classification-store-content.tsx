@@ -12,7 +12,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isObject, find, isEmpty, isArray } from 'lodash'
 import { type ClassificationStoreProps } from './classification-store'
-import { useKeyedList } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list'
+import { useKeyedListSelector } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
 import { BaseView } from '../../../layout-related/views/base-view'
@@ -26,13 +26,29 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
 import { type ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 
+// Project the keyed-list value to the bits this view actually depends on: the
+// group keys and the two bookkeeping maps. None of these change when a field
+// value is edited, so (combined with the content-equality cache in
+// useKeyedListSelector) typing in a field no longer re-renders the whole store.
+const selectStructure = (values: Record<string, any>): {
+  groupKeys: string[]
+  activeGroups: any
+  groupCollectionMapping: any
+} => {
+  const { activeGroups, groupCollectionMapping, ...groups } = values ?? {}
+  return {
+    groupKeys: Object.keys(isObject(groups) ? groups : {}),
+    activeGroups,
+    groupCollectionMapping
+  }
+}
+
 export const ClassificationStoreContent = (props: ClassificationStoreProps): React.JSX.Element => {
   const [localizationMode, setLocalizationMode] = useState<string>('default')
   const { t } = useTranslation()
 
   const { openModal, currentLayoutData, updateCurrentLayoutData } = useClassificationStore()
-  const { values } = useKeyedList()
-  const { activeGroups, groupCollectionMapping, ...groups } = values
+  const { groupKeys, activeGroups, groupCollectionMapping } = useKeyedListSelector(selectStructure)
   const { currentLanguage } = useLanguageSelection()
 
   let localizationGroup = 'default'
@@ -99,7 +115,7 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
         direction='vertical'
         size='small'
       >
-        {Object.keys(isObject(groups) ? groups : {}).map((key) => {
+        {groupKeys.map((key) => {
           return (
             <Form.Group
               key={ `${key}` }
@@ -135,5 +151,5 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
         />
       </Form.Item>
     </BaseView>
-  ), [values, localizationGroup, currentLayoutData])
+  ), [groupKeys, activeGroups, groupCollectionMapping, localizationGroup, currentLayoutData])
 }

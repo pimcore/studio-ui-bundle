@@ -28,12 +28,17 @@ export interface DocumentEditableApi {
   getEditableDefinitions: () => AbstractDocumentEditableDefinition[]
   registerDynamicEditables: (editables: AbstractDocumentEditableDefinition[]) => void
   unregisterDynamicEditables: (editableIds: string[]) => void
+  getHighlightEditables: () => boolean
+  setHighlightEditables: (highlight: boolean) => void
+  subscribeHighlightEditables: (listener: (highlight: boolean) => void) => () => void
 }
 
 class DocumentEditableApiImpl implements DocumentEditableApi {
   private values: Record<string, ValueType> = {}
   private inheritanceState: Record<string, boolean> = {}
   private dynamicEditables: Record<string, AbstractDocumentEditableDefinition> = {}
+  private highlightEditables = false
+  private readonly highlightListeners = new Set<(highlight: boolean) => void>()
 
   getValues (forApi: boolean = false): Record<string, ValueType> {
     if (!forApi) {
@@ -84,6 +89,33 @@ class DocumentEditableApiImpl implements DocumentEditableApi {
 
   initializeInheritanceState (inheritanceState: Record<string, boolean>): void {
     Object.assign(this.inheritanceState, inheritanceState)
+  }
+
+  getHighlightEditables (): boolean {
+    return this.highlightEditables
+  }
+
+  setHighlightEditables (highlight: boolean): void {
+    if (this.highlightEditables === highlight) {
+      return
+    }
+
+    this.highlightEditables = highlight
+    this.highlightListeners.forEach((listener) => {
+      try {
+        listener(highlight)
+      } catch (error) {
+        console.warn('Could not notify highlight-editables listener:', error)
+      }
+    })
+  }
+
+  subscribeHighlightEditables (listener: (highlight: boolean) => void): () => void {
+    this.highlightListeners.add(listener)
+
+    return () => {
+      this.highlightListeners.delete(listener)
+    }
   }
 
   registerDynamicEditables (editables: AbstractDocumentEditableDefinition[]): void {

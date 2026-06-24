@@ -10,20 +10,13 @@
 
 import React from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
+import { type ISidebarButton, type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 import { type IDocumentContext } from '@Pimcore/modules/document/document-provider'
-import {
-  ContentSettingsSidebar
-} from '../sidebar/tabs/content-settings/content-settings-sidebar'
-import {
-  AreablockTypesSidebar
-} from '../sidebar/tabs/areablock-types/areablock-types-sidebar'
-import {
-  NavigationSidebar
-} from '../sidebar/tabs/navigation/navigation-sidebar'
-import {
-  DocumentConfigurationSidebar
-} from '../sidebar/tabs/document-configuration/document-configuration-sidebar'
+import { HighlightEditablesButton } from '@Pimcore/modules/document/actions/highlight-editables/highlight-editables-button'
+import { ContentSettingsSidebar } from '../sidebar/tabs/content-settings/content-settings-sidebar'
+import { AreablockTypesSidebar } from '../sidebar/tabs/areablock-types/areablock-types-sidebar'
+import { NavigationSidebar } from '../sidebar/tabs/navigation/navigation-sidebar'
+import { DocumentConfigurationSidebar } from '../sidebar/tabs/document-configuration/document-configuration-sidebar'
 import { checkAreablockTypesVisibility } from '../sidebar/visibility/areablock-types-visibility'
 import { checkSettingsVisibility } from '../sidebar/visibility/content-settings-visibility'
 import { checkNavigationVisibility } from '../sidebar/visibility/navigation-visibility'
@@ -58,4 +51,10 @@ export const SIDEBAR_DOCUMENT_CONFIGURATION: ISidebarEntry<IDocumentContext> = {
   component: <DocumentConfigurationSidebar />,
   tooltip: 'document-configuration.sidebar-title',
   isVisible: checkSettingsVisibility
+}
+
+export const SIDEBAR_HIGHLIGHT_EDITABLES: ISidebarButton = {
+  key: 'highlight-editables',
+  icon: <Icon value="highlight" />,
+  component: <HighlightEditablesButton />
 }

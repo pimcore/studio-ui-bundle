@@ -130,7 +130,8 @@ export const {
   useAssetGetGridConfigurationByFolderIdQuery,
   useAssetGetAvailableGridColumnsQuery,
   useAssetPatchFolderByIdMutation,
-  useAssetUploadInfoQuery
+  useAssetUploadInfoQuery,
+  useAssetVideoThumbnailStatusQuery
 } = api
 
 export { api }

@@ -8,13 +8,20 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useContext } from 'react'
+import { useContext, useSyncExternalStore } from 'react'
+import { type NamePath } from 'antd/es/form/interface'
 import { KeyedListContext, type KeyedListData } from './keyed-list-provider'
 
-export interface UseKeyedListReturn extends KeyedListData {
+export interface UseKeyedListReturn {
+  values: KeyedListData['values']
+  operations: KeyedListData['operations']
+  getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
   getValueByKey: (key: string) => any
 }
 
+// Subscribes to the full keyed-list value. Use this for consumers that depend on
+// the list structure (group/brick keys, activeGroups, …). For a single field's
+// value, prefer useKeyedListValue so a change to one field does not re-render here.
 export const useKeyedList = (): UseKeyedListReturn => {
   const context = useContext(KeyedListContext)
 
@@ -22,12 +29,16 @@ export const useKeyedList = (): UseKeyedListReturn => {
     throw new Error('useKeyedList must be used within a KeyedListProvider')
   }
 
+  const values = useSyncExternalStore(context.store.subscribe, context.store.getSnapshot)
+
   const getValueByKey = (key: string): any => {
-    return context.values[key]
+    return values[key]
   }
 
   return {
-    ...context,
+    values,
+    operations: context.operations,
+    getAdditionalComponentProps: context.getAdditionalComponentProps,
     getValueByKey
   }
 }
