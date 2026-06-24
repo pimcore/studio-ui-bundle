@@ -102,6 +102,11 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
   const liveFilter = liveArgs.body?.filters as SavedSearchSaveConfigurationApiArg['body']['filter']
 
   // Dirty state compared against the persisted saved search (so it survives the sidebar collapsing).
+  // Scope intentionally matches what `useApplySavedSearch` restores on open — columns, the fulltext
+  // search term and the metadata. Field filters, sorting and the type filter are not restored yet,
+  // so they are deliberately excluded here: diffing them would make every opened search read as
+  // permanently dirty and an Update would then persist a state that was never actually restored.
+  // When restore is extended to cover them, extend this comparison in lockstep.
   const liveUsers = isSharedGlobally ? [] : sharedUsers
   const liveRoles = isSharedGlobally ? [] : sharedRoles
   const isDirty = !isNil(loaded) && (
