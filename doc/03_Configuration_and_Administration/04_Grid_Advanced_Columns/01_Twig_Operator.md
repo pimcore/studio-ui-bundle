@@ -151,5 +151,5 @@ Data sources: `simpleField: name`, `relationField relation: manufacturer, field:
 
 - **Grid architecture & all transformers** (backend reference, incl. the full sandbox
   policy and other transformers such as *Combine*, *Blur*, *Translate*, *PHP Code*):
-  [Grid](https://docs.pimcore.com/platform/Studio_Backend/Architecture_Overview/Grid/)
+  [Grid](https://github.com/pimcore/studio-backend-bundle/blob/2026.x/doc/01_Architecture_Overview/01_Grid.md)
   in the Studio Backend documentation.
