@@ -71,78 +71,18 @@ the field type a key may hold:
 ## Available tags, functions & filters
 
 Templates are rendered inside a [Twig sandbox](https://twig.symfony.com/doc/3.x/api.html#sandbox-extension).
-**Only** the tags, filters and functions listed below are allowed. Anything else –
-arbitrary method calls, property access, `include`/`source`, etc. – is rejected and
-the template fails to render. This prevents arbitrary code execution and information
+**Only** an explicit allow-list of tags, filters and functions is permitted. Anything
+else – arbitrary method calls, property access, `include`/`source`, etc. – is rejected
+and the template fails to render. This prevents arbitrary code execution and information
 disclosure through user-provided templates.
 
-The lists below are the **defaults** shipped by the Studio Backend bundle.
+Out of the box this covers the common formatting building blocks: the `if`, `for` and
+`set` tags; functions such as `date`, `max` and `min`; and filters such as `default`,
+`join`, `number_format`, `date`, `upper`/`lower` and `trim`.
 
-### Tags
-
-```
-if    for    set
-```
-
-### Functions
-
-```
-date    max    min    random    range
-```
-
-### Filters
-
-**Core (always available):**
-
-```
-abs           capitalize    date          date_modify   default
-escape        filter        find          first         format
-join          json_encode   keys          last          length
-lower         map           merge         nl2br         number_format
-raw           reduce        replace       reverse       round
-shuffle       slice         sort          split         striptags
-title         trim          upper         url_encode
-```
-
-**Localization** (require [`twig/intl-extra`](https://packagist.org/packages/twig/intl-extra)
-and the PHP `intl` extension):
-
-```
-country_name      currency_name     currency_symbol   format_currency
-format_date       format_datetime   format_number     format_time
-language_name     locale_name
-```
-
-**String** (require [`twig/string-extra`](https://packagist.org/packages/twig/string-extra)):
-
-```
-plural    singular
-```
-
-> The localization and string filters depend on the corresponding Twig *extra*
-> packages being installed and registered (they are auto-registered by
-> `twig/extra-bundle`).
-
-### Customising the allow-list
-
-The allow-list is **server-side configuration** of the Studio Backend bundle and can
-be tightened or extended per project:
-
-```yaml
-# config/packages/pimcore_studio_backend.yaml
-pimcore_studio_backend:
-    twig:
-        sandbox_security_policy:
-            tags:      [ 'if', 'for', 'set' ]
-            filters:   [ 'upper', 'lower', 'format_date' ]
-            functions: [ 'date', 'max', 'min' ]
-```
-
-> **Security.** Be careful when extending the allow-list:
-> - `raw` disables output escaping → potential **XSS** if the value is rendered as HTML.
-> - `range` combined with `for` can build very large outputs (resource abuse).
-> - Never add `constant`, `attribute`, `include` or `source` – they can expose
->   internal data or read files.
+For detailed information, see
+[Grid → TwigOperator Transformer](https://github.com/pimcore/studio-backend-bundle/blob/2026.x/doc/01_Architecture_Overview/01_Grid.md#twigoperator-transformer)
+in the Studio Backend bundle.
 
 ## Examples
 
