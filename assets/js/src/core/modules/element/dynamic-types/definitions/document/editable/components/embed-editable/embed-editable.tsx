@@ -18,7 +18,7 @@ import { useStyles } from './embed-editable.styles'
 import ReactDOM from 'react-dom'
 import cn from 'classnames'
 import { toCssDimension } from '@sdk/utils'
-import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+import { EditableOverlay } from '../editable-overlay/editable-overlay'
 
 export interface EmbedValue {
   url: string
@@ -103,12 +103,12 @@ export const EmbedEditable = ({
     })
   }
 
-  // Always wrap with InheritanceOverlay
+  // Always wrap with EditableOverlay
   return (
     <>
       {!hasUrl
         ? (
-          <InheritanceOverlay
+          <EditableOverlay
             display="block"
             isInherited={ inherited }
             noPadding
@@ -123,12 +123,12 @@ export const EmbedEditable = ({
               text={ t('embed.placeholder') }
               width={ width }
             />
-          </InheritanceOverlay>
+          </EditableOverlay>
           )
         : (
           <>
             {!isNull(wrapperElement) && ReactDOM.createPortal(
-              <InheritanceOverlay
+              <EditableOverlay
                 display="block"
                 hideButtons
                 isInherited={ inherited }
@@ -150,7 +150,7 @@ export const EmbedEditable = ({
                   title={ t('embed.edit-url') }
                   type="default"
                 />
-              </InheritanceOverlay>,
+              </EditableOverlay>,
               wrapperElement
             )}
           </>

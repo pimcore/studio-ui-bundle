@@ -26,7 +26,7 @@ export const EditablesLoader = ({ editableDefinitions }: EditablesLoaderProps): 
   const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
   const apiInitialized = useRef(false)
   const [isInitialized, setIsInitialized] = useState(false)
-  const { initializeData, notifyReady, initializeInheritanceState } = useDocumentEditor()
+  const { initializeData, notifyReady, initializeInheritanceState, initializeHighlightEditables } = useDocumentEditor()
   const { id: documentId } = useContext(DocumentContext)
 
   const getInitialData = (editableDefinitions: AbstractDocumentEditableDefinition[]): Record<string, { type: string, data: any }> => {
@@ -54,10 +54,12 @@ export const EditablesLoader = ({ editableDefinitions }: EditablesLoaderProps): 
     if (!apiInitialized.current) {
       initializeData(getInitialData(editableDefinitions))
       initializeInheritanceState(getInitialInheritanceState(editableDefinitions))
+      initializeHighlightEditables()
+
       apiInitialized.current = true
       setIsInitialized(true)
     }
-  }, [editableDefinitions, initializeData, initializeInheritanceState])
+  }, [editableDefinitions, initializeData, initializeInheritanceState, initializeHighlightEditables])
 
   useEffect(() => {
     if (apiInitialized.current) {

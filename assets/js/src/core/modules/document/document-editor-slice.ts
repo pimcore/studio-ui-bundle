@@ -25,11 +25,13 @@ export type AreablockGroupedTypes = Record<string, AreablockTypeEntry[]>
 export interface DocumentEditorState {
   documentAreablocks: Record<number, Record<string, AreablockGroupedTypes>>
   timeSliderVisible: Record<number, boolean>
+  highlightEditables: Record<number, boolean>
 }
 
 const initialState: DocumentEditorState = {
   documentAreablocks: {},
-  timeSliderVisible: {}
+  timeSliderVisible: {},
+  highlightEditables: {}
 }
 
 const documentEditorSlice = createSlice({
@@ -64,6 +66,9 @@ const documentEditorSlice = createSlice({
     setDocumentTimeSliderVisible: (state, action: PayloadAction<{ documentId: number, visible: boolean }>) => {
       state.timeSliderVisible[action.payload.documentId] = action.payload.visible
     },
+    setDocumentHighlightEditables: (state, action: PayloadAction<{ documentId: number, highlight: boolean }>) => {
+      state.highlightEditables[action.payload.documentId] = action.payload.highlight
+    },
     removeDocument: (state, action: PayloadAction<number>) => {
       const documentId = action.payload
       if (state.documentAreablocks[documentId] !== undefined) {
@@ -74,15 +79,20 @@ const documentEditorSlice = createSlice({
         const { [documentId]: removed, ...remainingTimeSliderVisible } = state.timeSliderVisible
         state.timeSliderVisible = remainingTimeSliderVisible
       }
+      if (state.highlightEditables[documentId] !== undefined) {
+        const { [documentId]: removed, ...remainingHighlightEditables } = state.highlightEditables
+        state.highlightEditables = remainingHighlightEditables
+      }
     },
     clearAllDocuments: (state) => {
       state.documentAreablocks = {}
       state.timeSliderVisible = {}
+      state.highlightEditables = {}
     }
   }
 })
 
-export const { setDocumentAreablockTypes, mergeDocumentAreablockTypes, setDocumentTimeSliderVisible, removeDocument, clearAllDocuments } = documentEditorSlice.actions
+export const { setDocumentAreablockTypes, mergeDocumentAreablockTypes, setDocumentTimeSliderVisible, setDocumentHighlightEditables, removeDocument, clearAllDocuments } = documentEditorSlice.actions
 
 export const selectDocumentEditorState = (state: any): DocumentEditorState => state['document-editor']
 
@@ -119,6 +129,13 @@ export const selectDocumentTimeSliderVisible = createSelector(
   [selectDocumentEditorState, (_state: any, documentId: number) => documentId],
   (documentEditorState, documentId) => {
     return documentEditorState.timeSliderVisible[documentId] ?? false
+  }
+)
+
+export const selectDocumentHighlightEditables = createSelector(
+  [selectDocumentEditorState, (_state: any, documentId: number) => documentId],
+  (documentEditorState, documentId) => {
+    return documentEditorState.highlightEditables[documentId] ?? false
   }
 )
 
