@@ -42,6 +42,7 @@ interface SavedSearchFormProps {
   form: formInstanceType
   isSharedGlobally: boolean
   onSharedGloballyChange: (value: boolean) => void
+  onValuesChange: (values: SavedSearchFormValues) => void
   sharedUsers: number[]
   sharedRoles: number[]
   onUsersRolesChange: (changes: { sharedUsers: number[], sharedRoles: number[] }) => void
@@ -51,6 +52,7 @@ export const SavedSearchForm = ({
   form,
   isSharedGlobally,
   onSharedGloballyChange,
+  onValuesChange,
   sharedUsers,
   sharedRoles,
   onUsersRolesChange
@@ -62,10 +64,11 @@ export const SavedSearchForm = ({
   const { data: userList } = useUserGetShareCollectionQuery()
   const { data: roleList } = useRoleGetShareCollectionQuery()
 
-  const handleFormValuesChange = (changedValues: Partial<SavedSearchFormValues>): void => {
+  const handleFormValuesChange = (changedValues: Partial<SavedSearchFormValues>, allValues: SavedSearchFormValues): void => {
     if (changedValues.shareGlobally !== undefined) {
       onSharedGloballyChange(changedValues.shareGlobally)
     }
+    onValuesChange(allValues)
   }
 
   const renderIcon = (iconName: string, size?: number): React.JSX.Element => (

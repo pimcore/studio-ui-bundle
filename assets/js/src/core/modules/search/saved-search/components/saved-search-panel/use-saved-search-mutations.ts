@@ -35,7 +35,6 @@ interface UseSavedSearchMutationsParams {
   sharedUsers: number[]
   sharedRoles: number[]
   onReset: () => void
-  onUpdated: () => void
 }
 
 interface UseSavedSearchMutationsReturn {
@@ -48,7 +47,7 @@ interface UseSavedSearchMutationsReturn {
 }
 
 export const useSavedSearchMutations = (params: UseSavedSearchMutationsParams): UseSavedSearchMutationsReturn => {
-  const { form, loaded, classId, columns, filter, isSharedGlobally, sharedUsers, sharedRoles, onReset, onUpdated } = params
+  const { form, loaded, classId, columns, filter, isSharedGlobally, sharedUsers, sharedRoles, onReset } = params
   const { t } = useTranslation()
   const message = useMessage()
   const { setLoadedSavedSearch } = useSearch()
@@ -94,7 +93,7 @@ export const useSavedSearchMutations = (params: UseSavedSearchMutationsParams): 
           return
         }
         message.success(t('saved-search.update.success'))
-        // Keep the loaded snapshot's metadata in sync and re-baseline the dirty state.
+        // Sync the loaded snapshot to the saved state so the dirty comparison resets.
         setLoadedSavedSearch({
           ...loaded,
           name: values.name,
@@ -102,9 +101,10 @@ export const useSavedSearchMutations = (params: UseSavedSearchMutationsParams): 
           createMenuShortcut: values.createMenuShortcut ?? false,
           shareGlobal: isSharedGlobally,
           sharedUsers,
-          sharedRoles
+          sharedRoles,
+          columns,
+          filter: [filter] as unknown as SavedSearchDetailedConfiguration['filter']
         })
-        onUpdated()
       }).catch(() => { /* trigger never rejects */ })
     }).catch(() => { /* validation errors shown inline */ })
   }
