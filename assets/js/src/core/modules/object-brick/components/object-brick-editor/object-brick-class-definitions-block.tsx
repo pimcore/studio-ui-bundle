@@ -12,7 +12,7 @@ import { Block } from '@Pimcore/components/block/block'
 import { Form } from '@Pimcore/components/form/form'
 import { Select } from '@Pimcore/components/select/select'
 import { FormKit } from '@sdk/components'
-import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedListContext } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list-value'
 import {
   useClassDefinitionGetBrickFieldsQuery,
   useClassObjectBrickClassesQuery
@@ -33,7 +33,7 @@ interface FieldnameSelectProps {
 // which does NOT contain values managed by NumberedList's own useState).
 const FieldnameSelect = ({ blockIndex, classIdByName, value, onChange }: FieldnameSelectProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { operations } = useNumberedList()
+  const { operations } = useNumberedListContext()
   const classname = operations.getValue(['classDefinitions', blockIndex, 'classname']) as string | undefined
   const prevClassnameRef = useRef(classname)
 

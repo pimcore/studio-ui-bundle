@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { useNumberedList } from '../numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedListValue } from '../numbered-list/provider/numbered-list/use-numbered-list-value'
 import { Form } from '../../form'
 import { useFieldCollection } from './field-collection-provider'
 import { FieldCollectionItemProvider } from './field-collection-item-provider'
@@ -23,8 +23,7 @@ export interface FieldCollectionItemProps {
 
 export const FieldCollectionItem = React.memo((props: FieldCollectionItemProps): React.JSX.Element => {
   const { field } = props
-  const { values } = useNumberedList()
-  const value = values[field]
+  const value = useNumberedListValue([field])
 
   const type = value?.type
   const { registry } = useFieldCollection()
