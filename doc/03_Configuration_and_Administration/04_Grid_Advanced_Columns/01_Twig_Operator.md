@@ -21,9 +21,10 @@ or apply conditional logic.
 
 ## How the `value` variable is structured
 
-The template is rendered with exactly **one** variable, `value`. It is **always an
-associative array**, never a single object – even when the advanced column has only
-one data source. The keys are the **field names** of the column's data sources.
+The template is rendered with exactly **one** variable, `value`. It is **always a
+keyed map** of field name → field value, with one entry per data source – even when
+the column has only a single data source. `value` is therefore never the bare value
+of a field; you always reach a field through its key.
 
 This matters: printing the bare variable
 
@@ -31,8 +32,8 @@ This matters: printing the bare variable
 {{ value }}
 ```
 
-does **not** print a field – `value` is an array, so this is almost never what you
-want. Always address a specific key, e.g. `{{ value.name }}`.
+does **not** print a field value – it tries to stringify the whole map, which is
+almost never what you want. Always address a specific key, e.g. `{{ value.name }}`.
 
 ### Direct fields (`simpleField`, `staticText`)
 
