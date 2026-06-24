@@ -384,6 +384,8 @@ grid.advanced-column.anonymizationRule: Anonymiseringsregel
 grid.advanced-column.translationPrefix: Oversettelsesprefiks
 grid.advanced-column.advancedColumns.simpleField: Enkelt felt
 grid.advanced-column.advancedColumns.relationField: Relasjonsfelt
+grid.advanced-column.classification-store.no-selection: Ingen verdi valgt
+grid.advanced-column.classification-store.edit: Endre verdi
 grid.advanced-column.advancedColumns.staticText: Statisk tekst
 grid.advanced-column.advancedColumns.booleanFormatter: Boolsk formatering
 grid.advanced-column.advancedColumns.caseChange: Endre store/små bokstaver
