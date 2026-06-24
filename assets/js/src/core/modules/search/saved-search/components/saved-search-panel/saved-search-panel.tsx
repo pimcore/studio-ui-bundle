@@ -159,7 +159,6 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
                   key: 'delete',
                   icon: <Icon value='trash' />,
                   label: t('delete'),
-                  danger: true,
                   onClick: onDelete
                 }
               ]

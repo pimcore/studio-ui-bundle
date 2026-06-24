@@ -60,7 +60,6 @@ export const SavedSearchForm = ({
   const { t } = useTranslation()
   const { styles } = useStyles()
   const [isOpenDropdown, setIsOpenDropdown] = useState(false)
-  const createMenuShortcut = Form.useWatch('createMenuShortcut', form)
 
   const { data: userList } = useUserGetShareCollectionQuery()
   const { data: roleList } = useRoleGetShareCollectionQuery()
@@ -168,44 +167,39 @@ export const SavedSearchForm = ({
         <Input.TextArea data-testid='saved-search-description-input' />
       </Form.Item>
 
-      <div className={ styles.options }>
+      <Form.Item
+        name="createMenuShortcut"
+        valuePropName='checked'
+      >
+        <Switch labelRight={ <Text>{t('saved-search.create-menu-shortcut')}</Text> } />
+      </Form.Item>
+
+      <Form.Conditional condition={ (values) => values.createMenuShortcut === true }>
         <Form.Item
-          name="createMenuShortcut"
-          noStyle
-          valuePropName='checked'
+          label={ t('saved-search.menu-shortcut-group') }
+          name="menuShortcutGroup"
         >
-          <Switch labelRight={ <Text>{t('saved-search.create-menu-shortcut')}</Text> } />
+          <Input data-testid='saved-search-menu-shortcut-group-input' />
         </Form.Item>
+      </Form.Conditional>
 
-        { createMenuShortcut === true && (
-          <Form.Item
-            className={ styles.shortcutGroupField }
-            label={ t('saved-search.menu-shortcut-group') }
-            name="menuShortcutGroup"
-          >
-            <Input data-testid='saved-search-menu-shortcut-group-input' />
-          </Form.Item>
-        )}
+      <Form.Item
+        name="shareGlobally"
+        valuePropName='checked'
+      >
+        <Switch
+          labelLeft={ <Text>{t('grid.configuration.shared')}</Text> }
+          labelRight={ renderRightLabelComponent() }
+        />
+      </Form.Item>
 
-        <Form.Item
-          name="shareGlobally"
-          noStyle
-          valuePropName='checked'
-        >
-          <Switch
-            labelLeft={ <Text>{t('grid.configuration.shared')}</Text> }
-            labelRight={ renderRightLabelComponent() }
-          />
-        </Form.Item>
-
-        { !isSharedGlobally && !isEmpty(getSharedUsersRolesList().flat()) && (
-          <TagList
-            itemGap="mini"
-            list={ getSharedUsersRolesList() }
-            tagListItemClassNames={ styles.tag }
-          />
-        )}
-      </div>
+      { !isSharedGlobally && !isEmpty(getSharedUsersRolesList().flat()) && (
+        <TagList
+          itemGap="mini"
+          list={ getSharedUsersRolesList() }
+          tagListItemClassNames={ styles.tag }
+        />
+      )}
     </Form>
   )
 }
