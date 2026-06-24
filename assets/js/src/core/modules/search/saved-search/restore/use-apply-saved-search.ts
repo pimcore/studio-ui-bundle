@@ -14,6 +14,9 @@ import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/co
 import { useSearchTermFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/search-term-filter/use-search-term-filter'
 import { useFieldFilters } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/use-field-filters'
 import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
+import { usePqlFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/pql-filter/use-pql-filter'
+import { useUnreferencedFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/unreferenced-filter/use-unreferenced-filter'
+import { useDirectChildrenFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/direct-children-filter/use-direct-children-filter'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
@@ -43,12 +46,15 @@ const getFilter = (configuration: SavedSearchDetailedConfiguration): GridFilter 
 
 /**
  * Applies the parts of a saved search that map back into the listing state: search term, field
- * filters, paging and the saved column layout, then triggers a reload. (Sorting and the type filter
- * are not restored yet — see PR notes.)
+ * filters, the system filters (PQL, unreferenced, direct-children), paging and the saved column
+ * layout, then triggers a reload. (Sorting and the type filter are not restored yet — see PR notes.)
  */
 export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfiguration) => void) => {
   const { setSearchTerm } = useSearchTermFilter()
   const { setFieldFilters } = useFieldFilters()
+  const { setPqlQuery } = usePqlFilter()
+  const { setOnlyUnreferenced } = useUnreferencedFilter()
+  const { setOnlyDirectChildren } = useDirectChildrenFilter()
   const { setPage, setPageSize } = usePaging()
   const { setSelectedColumns } = useSelectedColumns()
   const { availableColumns } = useAvailableColumns()
@@ -77,6 +83,14 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
         meta: { translationKey: entry.meta?.translationKey ?? '', ...entry.meta }
       }))
     setFieldFilters(fieldFilters)
+
+    // System filters with their own sidebar controls.
+    const entries = isArray(columnFilters) ? columnFilters : []
+    const pqlEntry = entries.find((entry) => entry.type === 'system.pql')
+    setPqlQuery(isString(pqlEntry?.filterValue) ? pqlEntry.filterValue : '')
+    setOnlyUnreferenced(entries.find((entry) => entry.type === 'system.unreferenced')?.filterValue === true)
+    // The query sends `includeDescendants` (the inverse of the "only direct children" toggle).
+    setOnlyDirectChildren(filter?.includeDescendants === false)
 
     if (isNumber(filter?.page)) {
       setPage(filter.page)
