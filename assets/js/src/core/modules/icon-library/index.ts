@@ -185,6 +185,7 @@ import headlessBrick from '@Pimcore/assets/icons/headless-brick.inline.svg?react
 import headlessDocument from '@Pimcore/assets/icons/headless-document.inline.svg?react'
 import headlessTemplate from '@Pimcore/assets/icons/headless-template.inline.svg?react'
 import helpCircle from '@Pimcore/assets/icons/help-circle.inline.svg?react'
+import highlight from '@Pimcore/assets/icons/highlight.inline.svg?react'
 import history from '@Pimcore/assets/icons/history.inline.svg?react'
 import homeRootFolder from '@Pimcore/assets/icons/home-root-folder.inline.svg?react'
 import imageAdvanced from '@Pimcore/assets/icons/image-advanced.inline.svg?react'
@@ -1081,6 +1082,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'help-circle',
       component: helpCircle
+    })
+    iconLibrary.register({
+      name: 'highlight',
+      component: highlight
     })
     iconLibrary.register({
       name: 'history',

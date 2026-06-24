@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+import { EditableOverlay } from '../editable-overlay/editable-overlay'
 import { Table, type TableProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/table/table'
 import { toCssDimension } from '@Pimcore/utils/css'
 
@@ -29,7 +29,7 @@ export const TableEditable = ({
   }
 
   return (
-    <InheritanceOverlay
+    <EditableOverlay
       display="block"
       hideButtons
       isInherited={ inherited }
@@ -43,6 +43,6 @@ export const TableEditable = ({
         width={ width }
         { ...tableProps }
       />
-    </InheritanceOverlay>
+    </EditableOverlay>
   )
 }

@@ -9,7 +9,7 @@
  */
 
 import React, { Children, isValidElement, useCallback, useEffect, useMemo } from 'react'
-import { useNumberedList } from '../provider/numbered-list/use-numbered-list'
+import { useNumberedListContext, useNumberedListValue } from '../provider/numbered-list/use-numbered-list-value'
 import { useItem } from '../../../item/provider/item/use-item'
 import { type FormItemProps } from 'antd'
 import { isEqual, isUndefined } from 'lodash'
@@ -26,11 +26,11 @@ export interface NumberedFormItemControlProps {
 export const NumberedFormItemControl = ({ children, onChange: baseOnChange, value: baseValue, ...props }: NumberedFormItemControlProps): React.JSX.Element => {
   const { getValueFromEvent } = props
 
-  const { operations, getAdditionalComponentProps } = useNumberedList()
+  const { operations, getAdditionalComponentProps } = useNumberedListContext()
   const { name, initialValue, validationState, onValidate, onUpdateCurrentValue } = useItem()
 
   const Child = useMemo(() => Children.only(children), [children])
-  const value = operations.getValue(name)
+  const value = useNumberedListValue(name)
   const previousValue = usePrevious(value)
 
   const cachedValue = useMemo(() => {

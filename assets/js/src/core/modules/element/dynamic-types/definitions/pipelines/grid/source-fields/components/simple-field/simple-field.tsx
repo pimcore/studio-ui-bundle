@@ -14,6 +14,8 @@ import { Select } from '@Pimcore/components/select/select'
 import React, { useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AvailableColumnsContext } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
+import { ClassificationStoreValueControl, useClassificationStoreFieldActions } from '../../classification-store/classification-store-value-control'
+import { type ClassificationStoreFieldOption, resolveClassificationStoreStoreId } from '../../classification-store/classification-store-field-utils'
 
 interface SimpleFieldOption {
   label: string
@@ -55,6 +57,14 @@ export const DynamicTypePipelineGridSourceFieldsSimpleFieldComponent = (): React
     throw new Error('Source field configuration is missing')
   }
 
+  const resolveField = (fieldKey: string): { storeId: number } | undefined => {
+    const storeId = resolveClassificationStoreStoreId(sourceFieldConfig as ClassificationStoreFieldOption[], fieldKey)
+
+    return storeId === undefined ? undefined : { storeId }
+  }
+
+  const { onFieldSelect } = useClassificationStoreFieldActions({ resolveField })
+
   const sourceFieldOptions = useMemo(() => {
     const groupByKey = new Map<string, string | undefined>()
     for (const column of availableColumnsContext?.availableColumns ?? []) {
@@ -90,15 +100,20 @@ export const DynamicTypePipelineGridSourceFieldsSimpleFieldComponent = (): React
   }, [sourceFieldConfig, availableColumnsContext?.availableColumns, t])
 
   return (
-    <Form.Item
-      initialValue={ sourceFieldConfig[0]?.key }
-      label={ t('field') }
-      name={ 'field' }
-    >
-      <Select
-        options={ sourceFieldOptions }
-        showSearch
-      />
-    </Form.Item>
+    <>
+      <Form.Item
+        initialValue={ sourceFieldConfig[0]?.key }
+        label={ t('field') }
+        name={ 'field' }
+      >
+        <Select
+          onSelect={ onFieldSelect }
+          options={ sourceFieldOptions }
+          showSearch
+        />
+      </Form.Item>
+
+      <ClassificationStoreValueControl resolveField={ resolveField } />
+    </>
   )
 }

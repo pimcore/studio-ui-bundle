@@ -22,7 +22,7 @@ import { Timeline } from './components/timeline/timeline'
 import dayjs, { type Dayjs } from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { setScheduledblockOperation } from '../../types/dynamic-type-document-editable-scheduledblock'
-import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+import { EditableOverlay } from '../editable-overlay/editable-overlay'
 
 export interface ScheduledblockEntry {
   key: string
@@ -219,7 +219,7 @@ export const ScheduledblockEditable = ({
   }, [containerRef])
 
   const scheduledblockContent = (
-    <InheritanceOverlay
+    <EditableOverlay
       display="block"
       hideButtons
       isInherited={ inherited }
@@ -269,7 +269,7 @@ export const ScheduledblockEditable = ({
           </div>
         </div>
       </div>
-    </InheritanceOverlay>
+    </EditableOverlay>
   )
 
   return (

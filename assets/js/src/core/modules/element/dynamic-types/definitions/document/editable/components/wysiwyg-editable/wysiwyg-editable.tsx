@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { Wysiwyg, WysiwygContext, type WysiwygProps } from '@sdk/modules/wysiwyg'
-import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+import { EditableOverlay } from '../editable-overlay/editable-overlay'
 import { toCssDimension } from '@Pimcore/utils/css'
 
 export interface WysiwygEditableProps extends WysiwygProps {
@@ -30,7 +30,7 @@ export const WysiwygEditable = ({
   }
 
   return (
-    <InheritanceOverlay
+    <EditableOverlay
       display="block"
       isInherited={ inherited }
       onOverwrite={ handleOverwrite }
@@ -44,6 +44,6 @@ export const WysiwygEditable = ({
         value={ value }
         width={ width }
       />
-    </InheritanceOverlay>
+    </EditableOverlay>
   )
 }

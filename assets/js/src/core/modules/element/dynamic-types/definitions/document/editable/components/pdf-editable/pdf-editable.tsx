@@ -26,7 +26,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { DEFAULT_HEIGHT, MIN_WIDTH } from '../../helpers/responsive-asset-preview/image-dimensions'
 import { locateElementInTree } from '@Pimcore/modules/element/utils/tree-utils'
 import { useAssetDimensions } from '../../helpers/responsive-asset-preview/hooks/use-asset-dimensions'
-import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+import { EditableOverlay } from '../editable-overlay/editable-overlay'
 
 export interface PdfEditableValue {
   id?: number
@@ -201,7 +201,7 @@ export const PdfEditable = (props: PdfEditableProps): React.JSX.Element => {
   }, [props.config?.uploadPath, disabled, handleFileSystemUpload, handleReplacePdf, pdfValue?.id])
 
   return (
-    <InheritanceOverlay
+    <EditableOverlay
       display={ !isNil(smartDimensions?.width ?? width) || hasPdf ? 'inline-block' : 'block' }
       hideButtons
       isInherited={ isInherited }
@@ -235,6 +235,6 @@ export const PdfEditable = (props: PdfEditableProps): React.JSX.Element => {
             />
             )
       )}
-    </InheritanceOverlay>
+    </EditableOverlay>
   )
 }

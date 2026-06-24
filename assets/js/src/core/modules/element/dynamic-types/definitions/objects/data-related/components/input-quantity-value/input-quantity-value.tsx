@@ -36,11 +36,18 @@ export interface InputQuantityValueValue {
 }
 
 export const InputQuantityValue = (props: InputQuantityValueProps): React.JSX.Element => {
-  const [value, setValue] = useState<InputQuantityValueValue>(props.value ?? { value: null, unitId: null })
+  const [value, setValueState] = useState<InputQuantityValueValue>(props.value ?? { value: null, unitId: null })
   const { getSelectOptions } = useQuantityValueUnits()
   const { t } = useTranslation()
   const { styles } = useStyles()
   const fieldWidth = useFieldWidth()
+
+  const setValue = (newValue: InputQuantityValueValue): void => {
+    if (!_.isEqual(newValue, value)) {
+      setValueState(newValue)
+      props.onChange?.(newValue.value === null && newValue.unitId === null ? null : newValue)
+    }
+  }
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = e.target.value
@@ -57,12 +64,6 @@ export const InputQuantityValue = (props: InputQuantityValueProps): React.JSX.El
       unitId: _.isEmpty(unitId) ? null : (unitId ?? null)
     })
   }
-
-  useEffect(() => {
-    if (props.onChange !== undefined) {
-      props.onChange(value.value === null && value.unitId === null ? null : value)
-    }
-  }, [value])
 
   useEffect(() => {
     const localValue = value.value === null && value.unitId === null ? null : value

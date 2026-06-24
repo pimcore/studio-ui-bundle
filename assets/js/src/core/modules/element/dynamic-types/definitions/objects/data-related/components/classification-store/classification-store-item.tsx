@@ -19,7 +19,7 @@ import { type ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-obje
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { useKeyedList } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list'
+import { useKeyedListContext } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { Panel } from '@Pimcore/components/panel/panel'
 
@@ -33,7 +33,7 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
   const { groupLayout, currentLayoutData, updateCurrentLayoutData } = props
 
   const { name } = useItem()
-  const { operations } = useKeyedList()
+  const { operations } = useKeyedListContext()
   const { id } = useElementContext()
 
   const modal = useFormModal()
