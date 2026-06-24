@@ -46,7 +46,7 @@ const renderFilterControl = <TContext,>(
   return null
 }
 
-export function FiltersRenderer<TContext> ({ descriptors, context, store, section }: FiltersRendererProps<TContext>): React.JSX.Element {
+export function FiltersRenderer<TContext> ({ descriptors, context, store, section }: Readonly<FiltersRendererProps<TContext>>): React.JSX.Element {
   const visibleDescriptors = descriptors
     .filter((descriptor) => descriptor.isVisible?.(context) ?? true)
     .filter((descriptor) => section === undefined || descriptor.section === undefined || descriptor.section === section)
