@@ -81,8 +81,8 @@ Out of the box this covers the common formatting building blocks: the `if`, `for
 `join`, `number_format`, `date`, `upper`/`lower` and `trim`.
 
 For detailed information, see
-[Grid → TwigOperator Transformer](https://github.com/pimcore/studio-backend-bundle/blob/2026.x/doc/01_Architecture_Overview/01_Grid.md#twigoperator-transformer)
-in the Studio Backend bundle.
+[Grid → TwigOperator Transformer](https://docs.pimcore.com/platform/Studio_Backend/Architecture_Overview/Grid/#twigoperator-transformer)
+in the Studio Backend documentation.
 
 ## Examples
 
@@ -151,7 +151,5 @@ Data sources: `simpleField: name`, `relationField relation: manufacturer, field:
 
 - **Grid architecture & all transformers** (backend reference, incl. the full sandbox
   policy and other transformers such as *Combine*, *Blur*, *Translate*, *PHP Code*):
-  [Grid](https://github.com/pimcore/studio-backend-bundle/blob/2026.x/doc/01_Architecture_Overview/01_Grid.md)
-  in the Studio Backend bundle.
-- **Adding your own grid column types:**
-  [How to Add a Custom Grid Column](../../04_Extending/02_Plugin_Development_Examples/18_Custom_Grid_Column.md).
+  [Grid](https://docs.pimcore.com/platform/Studio_Backend/Architecture_Overview/Grid/)
+  in the Studio Backend documentation.
