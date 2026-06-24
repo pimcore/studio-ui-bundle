@@ -23,6 +23,7 @@ import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-li
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
+import { useScrollIntoViewOnAppend } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/hooks/use-scroll-into-view-on-append'
 
 interface GridConfigListProps {
   columns: AvailableColumn[]
@@ -40,6 +41,7 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
   const { setColumns } = useGridConfig()
   const settings = useSettings()
   const { t } = useTranslation()
+  const scrollSentinelRef = useScrollIntoViewOnAppend(columns, (column) => column.key)
 
   const stackListItems: ColumnStackListProps['items'] = columns.map((column) => {
     const uniqueId = uuid()
@@ -81,6 +83,10 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
         sortable
       />
       ) }
+      <div
+        aria-hidden
+        ref={ scrollSentinelRef }
+      />
     </>
   )
 
