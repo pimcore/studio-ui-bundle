@@ -185,34 +185,6 @@ Data sources: `simpleField: name`, `relationField relation: manufacturer, field:
 {% endif %}
 ```
 
-### A small HTML summary (full column config)
-
-```json
-{
-  "key": "summary",
-  "locale": "en",
-  "type": "dataobject.advanced",
-  "config": {
-    "title": "Summary",
-    "advancedColumns": [
-      { "key": "simpleField", "config": { "field": "id" } },
-      { "key": "simpleField", "config": { "field": "name" } },
-      { "key": "simpleField", "config": { "field": "color" } },
-      { "key": "simpleField", "config": { "field": "fullpath" } },
-      { "key": "relationField", "config": { "relation": "manufacturer", "field": "name" } }
-    ],
-    "transformers": [
-      {
-        "key": "twigOperator",
-        "config": {
-          "template": "<strong>{{ value.name|trim }}</strong> – {{ value.manufacturer.name }}<br>ID: {{ value.id }}"
-        }
-      }
-    ]
-  }
-}
-```
-
 ## Tips & tricks
 
 - **Guard against missing values** with `default` and `is defined`:
