@@ -81,7 +81,7 @@ Out of the box this covers the common formatting building blocks: the `if`, `for
 `join`, `number_format`, `date`, `upper`/`lower` and `trim`.
 
 For detailed information, see
-[Grid → TwigOperator Transformer](https://docs.pimcore.com/platform/Studio_Backend/Architecture_Overview/Grid/#twigoperator-transformer)
+[Grid → TwigOperator Transformer](https://github.com/pimcore/studio-backend-bundle/blob/2026.x/doc/01_Architecture_Overview/01_Grid.md#twigoperator-transformer)
 in the Studio Backend documentation.
 
 ## Examples
