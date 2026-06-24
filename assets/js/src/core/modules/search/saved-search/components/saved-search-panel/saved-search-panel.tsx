@@ -26,6 +26,7 @@ import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { useUserGetByIdQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
@@ -70,6 +71,10 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
     ? loadedSavedSearch
     : undefined
   const isOwner = !isNil(loaded) && loaded.ownerId === user?.id
+
+  // Resolve the owner's name. For your own search it's the current user; otherwise look it up.
+  const { data: ownerData } = useUserGetByIdQuery({ id: loaded?.ownerId ?? 0 }, { skip: isNil(loaded) || isOwner })
+  const ownerName = isOwner ? user?.username : ownerData?.name
 
   // Capture the live grid state for the save/update body — the selected columns (with width, the
   // same data grid configs persist) and the assembled filter (search term + field filters). Update
@@ -218,7 +223,7 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
           { !isNil(loaded) && (
             <Row>
               <Col span={ 24 }>
-                <Text>{t('common.owner')}:</Text> <Text type='secondary'>{user?.username}</Text>
+                <Text>{t('common.owner')}:</Text> <Text type='secondary'>{ownerName}</Text>
               </Col>
               { !isNil(loaded.modificationDate) && (
                 <Col span={ 24 }>
