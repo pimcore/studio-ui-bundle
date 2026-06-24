@@ -126,9 +126,7 @@ const injectedRtkApi = api
                 SavedSearchGetMenuShortcutConfigurationsApiResponse,
                 SavedSearchGetMenuShortcutConfigurationsApiArg
             >({
-                query: () => ({
-                    url: `/pimcore-studio/api/search/saved/configuration/menu-shortcuts`,
-                }),
+                query: () => ({ url: `/pimcore-studio/api/search/saved/configuration/menu-shortcuts` }),
                 providesTags: ["Search"],
             }),
             savedSearchUpdateMenuShortcut: build.mutation<
