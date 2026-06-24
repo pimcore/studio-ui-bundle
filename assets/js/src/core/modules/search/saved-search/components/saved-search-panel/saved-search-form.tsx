@@ -44,7 +44,6 @@ interface SavedSearchFormProps {
   form: formInstanceType
   isSharedGlobally: boolean
   onSharedGloballyChange: (value: boolean) => void
-  onValuesChange: (values: SavedSearchFormValues) => void
   sharedUsers: number[]
   sharedRoles: number[]
   onUsersRolesChange: (changes: { sharedUsers: number[], sharedRoles: number[] }) => void
@@ -54,7 +53,6 @@ export const SavedSearchForm = ({
   form,
   isSharedGlobally,
   onSharedGloballyChange,
-  onValuesChange,
   sharedUsers,
   sharedRoles,
   onUsersRolesChange
@@ -67,11 +65,10 @@ export const SavedSearchForm = ({
   const { data: userList } = useUserGetShareCollectionQuery()
   const { data: roleList } = useRoleGetShareCollectionQuery()
 
-  const handleFormValuesChange = (changedValues: Partial<SavedSearchFormValues>, allValues: SavedSearchFormValues): void => {
+  const handleFormValuesChange = (changedValues: Partial<SavedSearchFormValues>): void => {
     if (changedValues.shareGlobally !== undefined) {
       onSharedGloballyChange(changedValues.shareGlobally)
     }
-    onValuesChange(allValues)
   }
 
   const renderIcon = (iconName: string, size?: number): React.JSX.Element => (
@@ -171,28 +168,28 @@ export const SavedSearchForm = ({
         <Input.TextArea data-testid='saved-search-description-input' />
       </Form.Item>
 
-      <Form.Item
-        name="createMenuShortcut"
-        valuePropName='checked'
-      >
-        <Switch labelRight={ <Text>{t('saved-search.create-menu-shortcut')}</Text> } />
-      </Form.Item>
-
-      { createMenuShortcut === true && (
+      <div className={ styles.options }>
         <Form.Item
-          label={ t('saved-search.menu-shortcut-group') }
-          name="menuShortcutGroup"
+          name="createMenuShortcut"
+          noStyle
+          valuePropName='checked'
         >
-          <Input data-testid='saved-search-menu-shortcut-group-input' />
+          <Switch labelRight={ <Text>{t('saved-search.create-menu-shortcut')}</Text> } />
         </Form.Item>
-      )}
 
-      <Flex
-        align='center'
-        gap='mini'
-      >
+        { createMenuShortcut === true && (
+          <Form.Item
+            className={ styles.shortcutGroupField }
+            label={ t('saved-search.menu-shortcut-group') }
+            name="menuShortcutGroup"
+          >
+            <Input data-testid='saved-search-menu-shortcut-group-input' />
+          </Form.Item>
+        )}
+
         <Form.Item
           name="shareGlobally"
+          noStyle
           valuePropName='checked'
         >
           <Switch
@@ -200,15 +197,15 @@ export const SavedSearchForm = ({
             labelRight={ renderRightLabelComponent() }
           />
         </Form.Item>
-      </Flex>
 
-      { !isSharedGlobally && !isEmpty(getSharedUsersRolesList().flat()) && (
-        <TagList
-          itemGap="mini"
-          list={ getSharedUsersRolesList() }
-          tagListItemClassNames={ styles.tag }
-        />
-      )}
+        { !isSharedGlobally && !isEmpty(getSharedUsersRolesList().flat()) && (
+          <TagList
+            itemGap="mini"
+            list={ getSharedUsersRolesList() }
+            tagListItemClassNames={ styles.tag }
+          />
+        )}
+      </div>
     </Form>
   )
 }

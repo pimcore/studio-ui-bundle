@@ -11,12 +11,13 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Col, Flex, Row } from 'antd'
-import { isArray, isEmpty, isEqual, isNil, isString } from 'lodash'
+import { isArray, isEmpty, isNil, isString } from 'lodash'
 import { Form } from '@Pimcore/components/form/form'
 import { Text } from '@Pimcore/components/text/text'
 import { Button } from '@Pimcore/components/button/button'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { Space } from '@Pimcore/components/space/space'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { Compact } from '@Pimcore/components/compact/compact'
 import { Header } from '@Pimcore/components/header/header'
 import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
@@ -32,7 +33,6 @@ import {
   type SavedSearchSaveConfigurationApiArg,
   type SavedSearchDetailedConfiguration
 } from '@Pimcore/modules/search/search-api-slice.gen'
-import { useStyles } from './saved-search-panel.styles'
 import { SavedSearchForm, type SavedSearchFormValues, defaultValues } from './saved-search-form'
 import { useSavedSearchMutations } from './use-saved-search-mutations'
 
@@ -44,34 +44,13 @@ interface SavedSearchPanelProps {
 interface LiveArgs { classId?: string, body?: { filters?: unknown } }
 type SaveColumns = SavedSearchSaveConfigurationApiArg['body']['columns']
 
-const SEARCH_TERM_FILTER_TYPE = 'system.fulltext'
-
 const elementTypeOf = (configuration: SavedSearchDetailedConfiguration): ElementType =>
   isString(configuration.classId) && !isEmpty(configuration.classId) ? elementTypes.dataObject : elementTypes.asset
 
 const toNumberArray = (value: unknown): number[] => (isArray(value) ? value as number[] : [])
 
-const sortedNumbers = (value: unknown): number[] => toNumberArray(value).slice().sort((a, b) => a - b)
-
-// Compare only the user-controllable column attributes (presence, order and width).
-const normaliseColumns = (columns: unknown): Array<{ key?: string, width: number | null }> =>
-  (isArray(columns) ? columns : []).map((column) => ({
-    key: (column as { key?: string })?.key,
-    width: (column as { width?: number | null })?.width ?? null
-  }))
-
-const getSearchTerm = (filter: unknown): string => {
-  const single = isArray(filter) ? filter[0] : filter
-  const entries = (single as { columnFilters?: unknown })?.columnFilters
-  const entry = isArray(entries)
-    ? (entries as Array<{ type?: string, filterValue?: unknown }>).find((item) => item.type === SEARCH_TERM_FILTER_TYPE)
-    : undefined
-  return isString(entry?.filterValue) ? entry.filterValue : ''
-}
-
 export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSearchPanelProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { styles } = useStyles()
   const user = useUser()
   const [form] = Form.useForm()
 
@@ -83,7 +62,6 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
   const [isSharedGlobally, setIsSharedGlobally] = useState(defaultValues.shareGlobally ?? true)
   const [sharedUsers, setSharedUsers] = useState<number[]>([])
   const [sharedRoles, setSharedRoles] = useState<number[]>([])
-  const [formValues, setFormValues] = useState<SavedSearchFormValues>(defaultValues)
 
   // The saved search loaded into this listing, if it belongs to this tab's element type.
   const loaded = supportsLoadedState && !isNil(loadedSavedSearch) && elementTypeOf(loadedSavedSearch) === elementType
@@ -91,7 +69,9 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
     : undefined
   const isOwner = !isNil(loaded) && loaded.ownerId === user?.id
 
-  // Persist the user's selected columns with their widths — the same data grid configs save.
+  // Capture the live grid state for the save/update body — the selected columns (with width, the
+  // same data grid configs persist) and the assembled filter (search term + field filters). Update
+  // always writes the current state, mirroring the grid-config sidebar (no dirty gating).
   const liveColumns = selectedColumns.map((column) => ({
     key: column.key,
     locale: column.locale ?? null,
@@ -101,30 +81,9 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
   const liveArgs = (getArgs() ?? {}) as LiveArgs
   const liveFilter = liveArgs.body?.filters as SavedSearchSaveConfigurationApiArg['body']['filter']
 
-  // Dirty state compared against the persisted saved search (so it survives the sidebar collapsing).
-  // Scope intentionally matches what `useApplySavedSearch` restores on open — columns, the fulltext
-  // search term and the metadata. Field filters, sorting and the type filter are not restored yet,
-  // so they are deliberately excluded here: diffing them would make every opened search read as
-  // permanently dirty and an Update would then persist a state that was never actually restored.
-  // When restore is extended to cover them, extend this comparison in lockstep.
-  const liveUsers = isSharedGlobally ? [] : sharedUsers
-  const liveRoles = isSharedGlobally ? [] : sharedRoles
-  const isDirty = !isNil(loaded) && (
-    !isEqual(normaliseColumns(liveColumns), normaliseColumns(loaded.columns)) ||
-    getSearchTerm(liveFilter) !== getSearchTerm(loaded.filter) ||
-    (formValues.name ?? '') !== (loaded.name ?? '') ||
-    (formValues.description ?? '') !== (loaded.description ?? '') ||
-    (formValues.createMenuShortcut ?? false) !== loaded.createMenuShortcut ||
-    (formValues.menuShortcutGroup ?? '') !== (loaded.menuShortcutGroup ?? '') ||
-    isSharedGlobally !== loaded.shareGlobal ||
-    !isEqual(sortedNumbers(liveUsers), sortedNumbers(loaded.shareGlobal ? [] : loaded.sharedUsers)) ||
-    !isEqual(sortedNumbers(liveRoles), sortedNumbers(loaded.shareGlobal ? [] : loaded.sharedRoles))
-  )
-
   useEffect(() => {
     if (isNil(loaded)) {
       form.setFieldsValue(defaultValues)
-      setFormValues(defaultValues)
       setIsSharedGlobally(defaultValues.shareGlobally ?? true)
       setSharedUsers([])
       setSharedRoles([])
@@ -138,7 +97,6 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
       shareGlobally: loaded.shareGlobal
     }
     form.setFieldsValue(values)
-    setFormValues(values)
     setIsSharedGlobally(loaded.shareGlobal)
     setSharedUsers(toNumberArray(loaded.sharedUsers))
     setSharedRoles(toNumberArray(loaded.sharedRoles))
@@ -146,7 +104,6 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
 
   const reset = (): void => {
     form.resetFields()
-    setFormValues(defaultValues)
     setIsSharedGlobally(defaultValues.shareGlobally ?? true)
     setSharedUsers([])
     setSharedRoles([])
@@ -180,10 +137,9 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
 
     if (isOwner) {
       return (
-        <Space size='mini'>
+        <Compact>
           <Button
             data-testid='saved-search-update-button'
-            disabled={ !isDirty }
             loading={ isUpdating }
             onClick={ onUpdate }
             type='primary'
@@ -193,8 +149,19 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
           <Dropdown
             menu={ {
               items: [
-                { key: 'save-as-new', label: t('saved-search.save-as-new'), onClick: onSaveAsNew },
-                { key: 'delete', label: t('delete'), danger: true, onClick: onDelete }
+                {
+                  key: 'save-as-new',
+                  icon: <Icon value='save' />,
+                  label: t('saved-search.save-as-new'),
+                  onClick: onSaveAsNew
+                },
+                {
+                  key: 'delete',
+                  icon: <Icon value='trash' />,
+                  label: t('delete'),
+                  danger: true,
+                  onClick: onDelete
+                }
               ]
             } }
           >
@@ -202,11 +169,10 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
               data-testid='saved-search-more-button'
               icon={ { value: 'more' } }
               loading={ isDeleting }
-              tooltip={ { title: t('more') } }
               type='default'
             />
           </Dropdown>
-        </Space>
+        </Compact>
       )
     }
 
@@ -236,13 +202,7 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
           gap='small'
           vertical
         >
-          <Flex
-            align='center'
-            gap='mini'
-          >
-            <Header title={ t('saved-search.title') } />
-            {isDirty && <span className={ styles.dirtyDot } />}
-          </Flex>
+          <Header title={ t('saved-search.title') } />
 
           { !isNil(loaded) && (
             <Row>
@@ -276,7 +236,6 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
               setSharedUsers(changes.sharedUsers)
               setSharedRoles(changes.sharedRoles)
             } }
-            onValuesChange={ setFormValues }
             sharedRoles={ sharedRoles }
             sharedUsers={ sharedUsers }
           />

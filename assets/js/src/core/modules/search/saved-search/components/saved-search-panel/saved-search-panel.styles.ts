@@ -42,12 +42,19 @@ export const useStyles = createStyles(({ css, token }) => {
       }
     `,
 
-    dirtyDot: css`
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background-color: ${token.colorPrimary};
-      display: inline-block;
+    // Switch rows (create-shortcut, shared) with even spacing — replaces the
+    // inconsistent default Form.Item margins so the toggles read as one block.
+    options: css`
+      display: flex;
+      flex-direction: column;
+      gap: ${token.margin}px;
+    `,
+
+    // The menu-group field is a sub-option of the shortcut switch: no extra
+    // bottom margin (the container gap handles it) and indented underneath it.
+    shortcutGroupField: css`
+      margin-bottom: 0;
+      padding-left: ${token.marginXL}px;
     `
   }
 })
