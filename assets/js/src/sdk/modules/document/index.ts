@@ -47,6 +47,14 @@ export * from '@Pimcore/modules/document/editor/widget'
 
 export * from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/components/editable-overlay/editable-overlay'
 
+/**
+ * @deprecated `InheritanceOverlay`/`InheritanceOverlayProps` have been renamed to
+ * `EditableOverlay`/`EditableOverlayProps`. These aliases are kept for backward
+ * compatibility and will be removed in a future version. Use `EditableOverlay`/`EditableOverlayProps` instead.
+ */
+export { EditableOverlay as InheritanceOverlay } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/components/editable-overlay/editable-overlay'
+export type { EditableOverlayProps as InheritanceOverlayProps } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/components/editable-overlay/editable-overlay'
+
 export * from '@Pimcore/modules/document/tree/utils/transform-api-data-to-node'
 
 export * from '@Pimcore/modules/document/document-provider'
