@@ -11,14 +11,16 @@
 import { useEffect } from 'react'
 import { isEmpty, isNil, isString } from 'lodash'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
+import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { useApplySavedSearch } from './use-apply-saved-search'
 
 /**
- * Logic-only component mounted inside the Asset search listing. When a saved search without a
- * `classId` (i.e. an asset search) is pending, it applies that search to this listing's state.
+ * Logic-only component mounted inside the Asset search listing. Applies a pending asset saved
+ * search (one without a classId) once the available columns have loaded.
  */
 export const AssetSavedSearchRestore = (): null => {
   const { pendingRestore, setPendingRestore } = useSearch()
+  const { availableColumns } = useAvailableColumns()
   const applySavedSearch = useApplySavedSearch()
 
   useEffect(() => {
@@ -29,10 +31,14 @@ export const AssetSavedSearchRestore = (): null => {
     if (isString(pendingRestore.classId) && !isEmpty(pendingRestore.classId)) {
       return
     }
+    // Wait for available columns before applying, otherwise the saved column layout is dropped.
+    if (!isEmpty(pendingRestore.columns) && isEmpty(availableColumns)) {
+      return
+    }
 
     applySavedSearch(pendingRestore)
     setPendingRestore(undefined)
-  }, [pendingRestore])
+  }, [pendingRestore, availableColumns])
 
   return null
 }

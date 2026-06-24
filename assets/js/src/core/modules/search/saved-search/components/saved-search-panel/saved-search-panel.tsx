@@ -11,7 +11,7 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Col, Flex, Row } from 'antd'
-import { isArray, isEmpty, isEqual, isNil, isString } from 'lodash'
+import { isArray, isEmpty, isNil, isString } from 'lodash'
 import { Form } from '@Pimcore/components/form/form'
 import { Text } from '@Pimcore/components/text/text'
 import { Button } from '@Pimcore/components/button/button'
@@ -25,6 +25,8 @@ import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
+import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
+import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
 import {
@@ -40,13 +42,23 @@ interface SavedSearchPanelProps {
   supportsLoadedState: boolean
 }
 
-interface LiveArgs { classId?: string, body: { columns: unknown, filters?: unknown } }
+interface LiveArgs { classId?: string, body?: { columns?: unknown, filters?: unknown } }
 
 const elementTypeOf = (configuration: SavedSearchDetailedConfiguration): ElementType =>
   isString(configuration.classId) && !isEmpty(configuration.classId) ? elementTypes.dataObject : elementTypes.asset
 
-const normaliseFilter = (filter: SavedSearchDetailedConfiguration['filter']): unknown =>
-  isArray(filter) ? (filter[0] ?? null) : (filter ?? null)
+const toNumberArray = (value: unknown): number[] => (isArray(value) ? value as number[] : [])
+
+const signatureOf = (columns: unknown, filter: unknown): string => JSON.stringify({ columns: columns ?? null, filter: filter ?? null })
+
+type SaveColumns = SavedSearchSaveConfigurationApiArg['body']['columns']
+
+// The search request column shape omits width, so merge it in from the selected columns (by key) —
+// the same data grid configs persist — so the saved search keeps the user's column widths.
+const withColumnWidths = (columns: SaveColumns, selectedColumns: Array<{ key?: string, width?: number | null }>): SaveColumns => {
+  const widthByKey = new Map(selectedColumns.map((column) => [column.key, column.width ?? null]))
+  return columns.map((column) => ({ ...column, width: widthByKey.get((column as { key?: string }).key) ?? null })) as SaveColumns
+}
 
 export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSearchPanelProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -56,11 +68,15 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
 
   const { useDataQueryHelper } = useSettings()
   const { getArgs } = useDataQueryHelper()
-  const { loadedSavedSearch } = useSearch()
+  const { dataLoadingState } = useData()
+  const { selectedColumns } = useSelectedColumns()
+  const { loadedSavedSearch, pendingRestore } = useSearch()
 
   const [isSharedGlobally, setIsSharedGlobally] = useState(defaultValues.shareGlobally ?? true)
   const [sharedUsers, setSharedUsers] = useState<number[]>([])
   const [sharedRoles, setSharedRoles] = useState<number[]>([])
+  // Baseline signature of the search captured once its restored data has loaded; drives the dirty state.
+  const [dirtyBaseline, setDirtyBaseline] = useState<string | undefined>(undefined)
 
   // The saved search loaded into this listing, if it belongs to this tab's element type.
   const loaded = supportsLoadedState && !isNil(loadedSavedSearch) && elementTypeOf(loadedSavedSearch) === elementType
@@ -68,8 +84,16 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
     : undefined
   const isOwner = !isNil(loaded) && loaded.ownerId === user?.id
 
-  // Pre-fill the form whenever the loaded saved search changes.
+  const liveArgs = (getArgs() ?? {}) as LiveArgs
+  const liveColumns = withColumnWidths((liveArgs.body?.columns ?? []) as SaveColumns, selectedColumns)
+  const liveFilter = liveArgs.body?.filters as SavedSearchSaveConfigurationApiArg['body']['filter']
+  const currentSignature = signatureOf(liveColumns, liveFilter)
+
+  // Live-vs-baseline comparison (both request-shaped). Treated as dirty until the baseline is captured.
+  const isDirty = !isNil(loaded) && (isNil(dirtyBaseline) || currentSignature !== dirtyBaseline)
+
   useEffect(() => {
+    setDirtyBaseline(undefined)
     if (isNil(loaded)) {
       form.setFieldsValue(defaultValues)
       setIsSharedGlobally(defaultValues.shareGlobally ?? true)
@@ -84,25 +108,24 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
       shareGlobally: loaded.shareGlobal
     })
     setIsSharedGlobally(loaded.shareGlobal)
-    setSharedUsers((loaded.sharedUsers as number[]) ?? [])
-    setSharedRoles((loaded.sharedRoles as number[]) ?? [])
+    setSharedUsers(toNumberArray(loaded.sharedUsers))
+    setSharedRoles(toNumberArray(loaded.sharedRoles))
   }, [loaded?.id])
 
-  const liveArgs = getArgs() as LiveArgs
-  const liveColumns = liveArgs.body.columns as SavedSearchSaveConfigurationApiArg['body']['columns']
-  const liveFilters = liveArgs.body.filters as SavedSearchSaveConfigurationApiArg['body']['filters']
-
-  // Dirty = the live search (columns + filters) differs from the loaded snapshot.
-  const isDirty = !isNil(loaded) && !isEqual(
-    { columns: liveArgs.body.columns, filter: liveArgs.body.filters ?? null },
-    { columns: loaded.columns, filter: normaliseFilter(loaded.filter) }
-  )
+  // Capture the baseline only after the restore has been applied (pendingRestore cleared) and the
+  // restored data has loaded — otherwise it would snapshot the pre-restore state.
+  useEffect(() => {
+    if (!isNil(loaded) && isNil(pendingRestore) && dataLoadingState === 'data-available') {
+      setDirtyBaseline((previous) => previous ?? currentSignature)
+    }
+  }, [loaded?.id, pendingRestore, dataLoadingState])
 
   const reset = (): void => {
     form.resetFields()
     setIsSharedGlobally(defaultValues.shareGlobally ?? true)
     setSharedUsers([])
     setSharedRoles([])
+    setDirtyBaseline(undefined)
   }
 
   const { onSaveAsNew, onUpdate, onDelete, isSaving, isUpdating, isDeleting } = useSavedSearchMutations({
@@ -110,11 +133,12 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
     loaded,
     classId: liveArgs.classId,
     columns: liveColumns,
-    filters: liveFilters,
+    filter: liveFilter,
     isSharedGlobally,
     sharedUsers,
     sharedRoles,
-    onReset: reset
+    onReset: reset,
+    onUpdated: () => { setDirtyBaseline(currentSignature) }
   })
 
   const renderActions = (): React.JSX.Element => {
@@ -163,7 +187,6 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
       )
     }
 
-    // Loaded a saved search owned by someone else — offer to clone it.
     return (
       <Button
         data-testid='saved-search-clone-button'

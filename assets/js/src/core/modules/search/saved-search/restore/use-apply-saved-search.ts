@@ -53,7 +53,6 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
       : undefined
     setSearchTerm(isString(searchTermEntry?.filterValue) ? searchTermEntry.filterValue : '')
 
-    // Paging.
     if (isNumber(filter?.page)) {
       setPage(filter.page)
     }

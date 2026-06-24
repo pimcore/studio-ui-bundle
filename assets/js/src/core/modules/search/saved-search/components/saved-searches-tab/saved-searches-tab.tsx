@@ -53,6 +53,7 @@ export const SavedSearchesTab = (): React.JSX.Element => {
   const [pageSize, setPageSize] = useState(20)
   const [searchTerm, setSearchTerm] = useState('')
   const [openingId, setOpeningId] = useState<number | undefined>(undefined)
+  const [deletingId, setDeletingId] = useState<number | undefined>(undefined)
 
   const { data, isLoading, isFetching } = useSavedSearchGetConfigurationsQuery({
     page: currentPage,
@@ -60,16 +61,24 @@ export const SavedSearchesTab = (): React.JSX.Element => {
     searchTerm: isEmpty(searchTerm) ? undefined : searchTerm
   })
   const [fetchConfiguration] = useLazySavedSearchGetConfigurationQuery()
-  const [deleteConfiguration, { isLoading: isDeleting }] = useSavedSearchDeleteConfigurationMutation()
+  const [deleteConfiguration] = useSavedSearchDeleteConfigurationMutation()
 
   const total = data?.totalItems ?? 0
 
   const onDelete = (id: number): void => {
+    setDeletingId(id)
     deleteConfiguration({ id }).then((result) => {
       if ('error' in result && !isUndefined(result.error)) {
         trackError(new ApiError(result.error))
+        return
+      }
+      // Close the search's tab if it's open, and step back a page if this emptied the current one.
+      widgetManager.closeWidget(`saved-search-${id}`)
+      if ((data?.items.length ?? 0) <= 1 && currentPage > 1) {
+        setCurrentPage(currentPage - 1)
       }
     }).catch(() => { /* trigger never rejects; error handled via the result above */ })
+      .finally(() => { setDeletingId(undefined) })
   }
 
   const onOpen = (id: number): void => {
@@ -82,7 +91,6 @@ export const SavedSearchesTab = (): React.JSX.Element => {
           ? elementTypes.dataObject
           : elementTypes.asset
 
-        // Open the saved search as a tab in the main widget area, then close the Quick Search modal.
         widgetManager.openMainWidget({
           id: `saved-search-${id}`,
           name: configuration.name,
@@ -157,7 +165,7 @@ export const SavedSearchesTab = (): React.JSX.Element => {
               <IconButton
                 data-testid='saved-search-delete-button'
                 icon={ { value: 'trash' } }
-                loading={ isDeleting }
+                loading={ deletingId === row.original.id }
                 tooltip={ { title: t('delete') } }
                 type='link'
               />

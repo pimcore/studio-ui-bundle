@@ -205,7 +205,7 @@ export type SimpleSearchGetApiArg = {
     searchTerm?: string;
 };
 export type SavedSearchSaveConfigurationApiResponse =
-    /** status 200 Saved search configuration created successfully */ SavedSearchConfiguration;
+    /** status 200 saved_search_save_configuration_success_response */ SavedSearchConfiguration;
 export type SavedSearchSaveConfigurationApiArg = {
     body: {
         name: string;
@@ -216,19 +216,20 @@ export type SavedSearchSaveConfigurationApiArg = {
         sharedUsers?: object;
         sharedRoles?: object;
         columns: (Column | GridColumnRequest)[];
-        filters?: GridFilter | null;
+        filter?: GridFilter | null;
     };
 };
 export type SavedSearchGetConfigurationApiResponse =
-    /** status 200 Saved search configuration */ SavedSearchDetailedConfiguration;
+    /** status 200 saved_search_get_configuration_success_response */ SavedSearchDetailedConfiguration;
 export type SavedSearchGetConfigurationApiArg = {
     /** Id of the saved search configuration */
     id: number;
 };
-export type SavedSearchGetConfigurationsApiResponse = /** status 200 List of saved search configurations */ {
-    totalItems: number;
-    items: SavedSearchConfigurationListItem[];
-};
+export type SavedSearchGetConfigurationsApiResponse =
+    /** status 200 saved_search_get_configurations_success_response */ {
+        totalItems: number;
+        items: SavedSearchConfigurationListItem[];
+    };
 export type SavedSearchGetConfigurationsApiArg = {
     /** Page number */
     page: number;

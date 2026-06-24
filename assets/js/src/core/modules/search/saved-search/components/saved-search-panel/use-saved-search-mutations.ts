@@ -21,7 +21,6 @@ import {
 } from '@Pimcore/modules/search/search-api-slice-enhanced'
 import {
   type SavedSearchSaveConfigurationApiArg,
-  type SavedSearchUpdateConfigurationApiArg,
   type SavedSearchDetailedConfiguration
 } from '@Pimcore/modules/search/search-api-slice.gen'
 import { type SavedSearchFormValues } from './saved-search-form'
@@ -31,11 +30,12 @@ interface UseSavedSearchMutationsParams {
   loaded: SavedSearchDetailedConfiguration | undefined
   classId?: string
   columns: SavedSearchSaveConfigurationApiArg['body']['columns']
-  filters: SavedSearchSaveConfigurationApiArg['body']['filters']
+  filter: SavedSearchSaveConfigurationApiArg['body']['filter']
   isSharedGlobally: boolean
   sharedUsers: number[]
   sharedRoles: number[]
   onReset: () => void
+  onUpdated: () => void
 }
 
 interface UseSavedSearchMutationsReturn {
@@ -48,7 +48,7 @@ interface UseSavedSearchMutationsReturn {
 }
 
 export const useSavedSearchMutations = (params: UseSavedSearchMutationsParams): UseSavedSearchMutationsReturn => {
-  const { form, loaded, classId, columns, filters, isSharedGlobally, sharedUsers, sharedRoles, onReset } = params
+  const { form, loaded, classId, columns, filter, isSharedGlobally, sharedUsers, sharedRoles, onReset, onUpdated } = params
   const { t } = useTranslation()
   const message = useMessage()
   const { setLoadedSavedSearch } = useSearch()
@@ -57,7 +57,7 @@ export const useSavedSearchMutations = (params: UseSavedSearchMutationsParams): 
   const [updateConfiguration, { isLoading: isUpdating }] = useSavedSearchUpdateConfigurationMutation()
   const [deleteConfiguration, { isLoading: isDeleting }] = useSavedSearchDeleteConfigurationMutation()
 
-  const buildBaseBody = (values: SavedSearchFormValues): Omit<SavedSearchSaveConfigurationApiArg['body'], 'filters'> => ({
+  const buildBody = (values: SavedSearchFormValues): SavedSearchSaveConfigurationApiArg['body'] => ({
     name: values.name,
     description: values.description,
     createMenuShortcut: values.createMenuShortcut ?? false,
@@ -65,12 +65,13 @@ export const useSavedSearchMutations = (params: UseSavedSearchMutationsParams): 
     sharedUsers: isSharedGlobally ? [] : sharedUsers,
     sharedRoles: isSharedGlobally ? [] : sharedRoles,
     classId,
-    columns
+    columns,
+    filter
   })
 
   const onSaveAsNew = (): void => {
     void form.validateFields().then((values: SavedSearchFormValues) => {
-      saveConfiguration({ body: { ...buildBaseBody(values), filters } }).then((result) => {
+      saveConfiguration({ body: buildBody(values) }).then((result) => {
         if ('data' in result && !isUndefined(result.data)) {
           message.success(t('saved-search.save.success'))
           setLoadedSavedSearch(undefined)
@@ -87,14 +88,13 @@ export const useSavedSearchMutations = (params: UseSavedSearchMutationsParams): 
       return
     }
     void form.validateFields().then((values: SavedSearchFormValues) => {
-      const body = { ...buildBaseBody(values), filter: filters } as unknown as SavedSearchUpdateConfigurationApiArg['body']
-      updateConfiguration({ id: loaded.id, body }).then((result) => {
+      updateConfiguration({ id: loaded.id, body: buildBody(values) }).then((result) => {
         if ('error' in result && !isUndefined(result.error)) {
           trackError(new ApiError(result.error))
           return
         }
         message.success(t('saved-search.update.success'))
-        // Refresh the loaded snapshot so the dirty state resets.
+        // Keep the loaded snapshot's metadata in sync and re-baseline the dirty state.
         setLoadedSavedSearch({
           ...loaded,
           name: values.name,
@@ -102,10 +102,9 @@ export const useSavedSearchMutations = (params: UseSavedSearchMutationsParams): 
           createMenuShortcut: values.createMenuShortcut ?? false,
           shareGlobal: isSharedGlobally,
           sharedUsers,
-          sharedRoles,
-          columns,
-          filter: [filters] as unknown as SavedSearchDetailedConfiguration['filter']
+          sharedRoles
         })
+        onUpdated()
       }).catch(() => { /* trigger never rejects */ })
     }).catch(() => { /* validation errors shown inline */ })
   }
