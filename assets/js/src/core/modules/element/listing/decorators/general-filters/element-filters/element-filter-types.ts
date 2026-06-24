@@ -13,7 +13,7 @@ import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorator
 import { type UseDynamicTypeResolverReturnType } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { type GeneralFiltersDecoratorConfig } from '../general-filters-decorator'
 
-export interface ElementListingFilterContext {
+export interface ElementFilterContext {
   config: GeneralFiltersDecoratorConfig
   availableColumns: AvailableColumn[]
   getType: UseDynamicTypeResolverReturnType['getType']
@@ -25,12 +25,6 @@ export interface ElementListingFilters {
   columnFilters?: ColumnFilter[]
 }
 
-/**
- * The element-listing grid request args this host folds filters into. Loosely
- * typed because several endpoints share the contract (data-object/asset grid and
- * search queries); `classId` presence marks a data-object query (drives the
- * localized-column fallback locale).
- */
 export interface ElementListingQueryArgs {
   classId?: unknown
   body: {
@@ -40,6 +34,6 @@ export interface ElementListingQueryArgs {
   [key: string]: unknown
 }
 
-export type ElementFilterContribution =
+export type ElementFilterQueryPart =
   | { kind: 'columnFilters', filters: ColumnFilter[] }
   | { kind: 'argsPatch', apply: (filters: ElementListingFilters) => ElementListingFilters }

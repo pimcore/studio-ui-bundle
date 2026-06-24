@@ -13,9 +13,8 @@ import { Checkbox } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { defineFilter, type FilterControlProps } from '@Pimcore/components/filters'
 import { type ColumnFilter } from '@Pimcore/modules/app/types/column-filter'
-import { type ElementFilterContribution, type ElementListingFilterContext } from '../element-listing-filter-context'
+import { type ElementFilterQueryPart, type ElementFilterContext } from '../element-filter-types'
 
-/** Filter type for the "only unreferenced elements" filter. */
 export const unreferencedFilterType = 'system.unreferenced'
 
 const UnreferencedControl = ({ value, onChange }: FilterControlProps<boolean>): React.JSX.Element => {
@@ -31,11 +30,7 @@ const UnreferencedControl = ({ value, onChange }: FilterControlProps<boolean>): 
   )
 }
 
-/**
- * "Only unreferenced" toggle. Both shown and applied only when the host enables
- * `showOnlyUnreferencedFilter`.
- */
-export const unreferencedFilterDescriptor = defineFilter<boolean, ElementFilterContribution, ElementListingFilterContext>({
+export const unreferencedFilterDescriptor = defineFilter<boolean, ElementFilterQueryPart, ElementFilterContext>({
   key: 'unreferenced',
   defaultValue: false,
   section: 'controls',

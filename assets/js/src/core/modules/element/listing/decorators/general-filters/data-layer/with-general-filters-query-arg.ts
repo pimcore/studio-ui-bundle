@@ -10,16 +10,16 @@
 
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { useFilterQuery } from '@Pimcore/components/filters'
-import { useAppliedFilters, elementListingFilterAdapter } from '../host'
-import { type ElementListingQueryArgs } from '../host/element-listing-filter-context'
+import { useAppliedFilters, elementFilterSetup } from '../element-filters'
+import { type ElementListingQueryArgs } from '../element-filters/element-filter-types'
 
-export { unreferencedFilterType } from '../host/descriptors/unreferenced-filter'
+export { unreferencedFilterType } from '../element-filters/definitions/unreferenced-filter'
 
 export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['useDataQueryHelper']): AbstractDecoratorProps['useDataQueryHelper'] => {
   const useDataQueryHelperGeneralFiltersExtension: AbstractDecoratorProps['useDataQueryHelper'] = () => {
     const { getArgs: baseGetArgs, ...baseMethods } = useBaseHook()
     const { values } = useAppliedFilters()
-    const applyFilters = useFilterQuery(elementListingFilterAdapter, values)
+    const applyFilters = useFilterQuery(elementFilterSetup, values)
 
     const getArgs: typeof baseGetArgs = () => {
       const baseArgs = baseGetArgs()

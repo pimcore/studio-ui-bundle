@@ -13,15 +13,15 @@ import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
 import { useGeneralFiltersConfig } from '../context-layer/provider/general-filters-config/use-general-filters-config'
-import { elementListingFilterDescriptors } from './descriptors'
-import { composeElementListingQuery } from './compose-element-listing-query'
+import { elementFilterDefinitions } from './definitions'
+import { buildElementFilterQuery } from './build-element-filter-query'
 import {
-  type ElementFilterContribution,
-  type ElementListingFilterContext,
+  type ElementFilterQueryPart,
+  type ElementFilterContext,
   type ElementListingQueryArgs
-} from './element-listing-filter-context'
+} from './element-filter-types'
 
-export const useElementListingFilterContext = (): ElementListingFilterContext => {
+export const useElementFilterContext = (): ElementFilterContext => {
   const config = useGeneralFiltersConfig()
   const { availableColumns } = useAvailableColumns()
   const { getType } = useDynamicTypeResolver()
@@ -30,12 +30,12 @@ export const useElementListingFilterContext = (): ElementListingFilterContext =>
   return { config, availableColumns, getType, currentLanguage }
 }
 
-export const elementListingFilterAdapter: FilterHostAdapter<
-  ElementFilterContribution,
-  ElementListingFilterContext,
+export const elementFilterSetup: FilterHostAdapter<
+  ElementFilterQueryPart,
+  ElementFilterContext,
   ElementListingQueryArgs
 > = {
-  descriptors: elementListingFilterDescriptors,
-  useBuildContext: useElementListingFilterContext,
-  composeIntoQuery: composeElementListingQuery
+  descriptors: elementFilterDefinitions,
+  useBuildContext: useElementFilterContext,
+  composeIntoQuery: buildElementFilterQuery
 }

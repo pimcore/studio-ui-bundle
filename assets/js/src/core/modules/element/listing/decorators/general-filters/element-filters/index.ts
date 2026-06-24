@@ -9,11 +9,11 @@
  */
 
 export {
-  type ElementListingFilterContext,
+  type ElementFilterContext,
   type ElementListingFilters,
   type ElementListingQueryArgs,
-  type ElementFilterContribution
-} from './element-listing-filter-context'
+  type ElementFilterQueryPart
+} from './element-filter-types'
 export {
   AppliedFiltersProvider,
   useAppliedFilters,
@@ -21,12 +21,12 @@ export {
   useDraftFilters,
   useDraftFiltersOptional
 } from './stores'
-export { elementListingFilterDescriptors } from './descriptors'
-export { composeElementListingQuery } from './compose-element-listing-query'
-export { elementListingFilterAdapter, useElementListingFilterContext } from './element-listing-filter-adapter'
+export { elementFilterDefinitions } from './definitions'
+export { buildElementFilterQuery } from './build-element-filter-query'
+export { elementFilterSetup, useElementFilterContext } from './element-filter-setup'
 export {
-  readElementListingFilterValues,
-  useDraftElementFilters,
-  type ElementListingFilterValues,
-  type UseDraftElementFiltersReturn
-} from './use-element-listing-filters'
+  readElementFilterValues,
+  useDraftFilterValues,
+  type ElementFilterValues,
+  type UseDraftFilterValuesReturn
+} from './use-element-filter-values'

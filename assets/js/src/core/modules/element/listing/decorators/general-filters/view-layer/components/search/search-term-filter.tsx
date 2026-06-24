@@ -11,14 +11,12 @@
 import React, { useEffect, useState } from 'react'
 import { useGeneralFiltersConfig } from '../../../context-layer/provider/general-filters-config/use-general-filters-config'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
-// Import specific host modules (not the host barrel) to avoid a host↔view import
-// cycle: the search-term descriptor renders this component.
-import { useAppliedFilters, useDraftFiltersOptional } from '../../../host/stores'
-import { readElementListingFilterValues } from '../../../host/use-element-listing-filters'
+import { useAppliedFilters, useDraftFiltersOptional } from '../../../element-filters/stores'
+import { readElementFilterValues } from '../../../element-filters/use-element-filter-values'
 
 export const SearchTermFilter = (): React.JSX.Element => {
   const { values, setValue: setAppliedValue } = useAppliedFilters()
-  const appliedSearchTerm = readElementListingFilterValues(values).searchTerm
+  const appliedSearchTerm = readElementFilterValues(values).searchTerm
   const [currentSearchTerm, setCurrentSearchTerm] = useState<string>(appliedSearchTerm)
   const { handleSearchTermInSidebar } = useGeneralFiltersConfig()
   const draftStore = useDraftFiltersOptional()

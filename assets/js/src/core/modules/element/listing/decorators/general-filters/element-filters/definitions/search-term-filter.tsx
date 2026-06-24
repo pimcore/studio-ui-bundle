@@ -12,10 +12,9 @@ import React from 'react'
 import { defineFilter } from '@Pimcore/components/filters'
 import { searchTermFilterType } from '../../context-layer/provider/search-term-filter/search-term-filter-provider'
 import { SearchTermFilter } from '../../view-layer/components/search/search-term-filter'
-import { type ElementFilterContribution, type ElementListingFilterContext } from '../element-listing-filter-context'
+import { type ElementFilterQueryPart, type ElementFilterContext } from '../element-filter-types'
 
-
-export const searchTermFilterDescriptor = defineFilter<string, ElementFilterContribution, ElementListingFilterContext>({
+export const searchTermFilterDescriptor = defineFilter<string, ElementFilterQueryPart, ElementFilterContext>({
   key: 'searchTerm',
   defaultValue: '',
   section: 'controls',

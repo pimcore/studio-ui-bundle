@@ -12,7 +12,7 @@ import { type FilterValues } from '@Pimcore/components/filters'
 import { type FieldFilter } from '../context-layer/provider/field-filters/field-filters-provider'
 import { useDraftFilters } from './stores'
 
-export interface ElementListingFilterValues {
+export interface ElementFilterValues {
   searchTerm: string
   directChildren: boolean
   unreferenced: boolean
@@ -20,7 +20,7 @@ export interface ElementListingFilterValues {
   fieldFilters: FieldFilter[]
 }
 
-export const readElementListingFilterValues = (values: FilterValues): ElementListingFilterValues => ({
+export const readElementFilterValues = (values: FilterValues): ElementFilterValues => ({
   searchTerm: (values.searchTerm ?? '') as string,
   directChildren: (values.directChildren ?? false) as boolean,
   unreferenced: (values.unreferenced ?? false) as boolean,
@@ -28,7 +28,7 @@ export const readElementListingFilterValues = (values: FilterValues): ElementLis
   fieldFilters: (values.fieldFilters ?? []) as FieldFilter[]
 })
 
-export interface UseDraftElementFiltersReturn extends ElementListingFilterValues {
+export interface UseDraftFilterValuesReturn extends ElementFilterValues {
   setSearchTerm: (value: string) => void
   setDirectChildren: (value: boolean) => void
   setUnreferenced: (value: boolean) => void
@@ -37,11 +37,11 @@ export interface UseDraftElementFiltersReturn extends ElementListingFilterValues
   reset: () => void
 }
 
-export const useDraftElementFilters = (): UseDraftElementFiltersReturn => {
+export const useDraftFilterValues = (): UseDraftFilterValuesReturn => {
   const { values, setValue, reset } = useDraftFilters()
 
   return {
-    ...readElementListingFilterValues(values),
+    ...readElementFilterValues(values),
     setSearchTerm: (value) => { setValue('searchTerm', value) },
     setDirectChildren: (value) => { setValue('directChildren', value) },
     setUnreferenced: (value) => { setValue('unreferenced', value) },

@@ -12,9 +12,9 @@ import { defineFilter } from '@Pimcore/components/filters'
 import { type ColumnFilter } from '@Pimcore/modules/app/types/column-filter'
 import { DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
 import { type FieldFilter } from '../../context-layer/provider/field-filters/field-filters-provider'
-import { type ElementFilterContribution, type ElementListingFilterContext } from '../element-listing-filter-context'
+import { type ElementFilterQueryPart, type ElementFilterContext } from '../element-filter-types'
 
-const prepareFieldFilters = (filters: FieldFilter[], context: ElementListingFilterContext): ColumnFilter[] => {
+const prepareFieldFilters = (filters: FieldFilter[], context: ElementFilterContext): ColumnFilter[] => {
   const { availableColumns, getType } = context
   const preparedFilters: ColumnFilter[] = []
 
@@ -49,7 +49,7 @@ const prepareFieldFilters = (filters: FieldFilter[], context: ElementListingFilt
   return preparedFilters
 }
 
-export const fieldFiltersFilterDescriptor = defineFilter<FieldFilter[], ElementFilterContribution, ElementListingFilterContext>({
+export const fieldFiltersFilterDescriptor = defineFilter<FieldFilter[], ElementFilterQueryPart, ElementFilterContext>({
   key: 'fieldFilters',
   defaultValue: [],
   section: 'fields',

@@ -11,32 +11,23 @@
 import { type ColumnFilter } from '@Pimcore/modules/app/types/column-filter'
 import { searchTermFilterType } from '../context-layer/provider/search-term-filter/search-term-filter-provider'
 import { pqlFilterType } from '../context-layer/provider/pql-filter/pql-filter-provider'
-import { unreferencedFilterType } from './descriptors/unreferenced-filter'
+import { unreferencedFilterType } from './definitions/unreferenced-filter'
 import {
-  type ElementFilterContribution,
-  type ElementListingFilterContext,
+  type ElementFilterQueryPart,
+  type ElementFilterContext,
   type ElementListingFilters,
   type ElementListingQueryArgs
-} from './element-listing-filter-context'
+} from './element-filter-types'
 
-/** Column filter as enriched with key/locale during transformation. */
 type LocalizableColumnFilter = ColumnFilter & { key?: string, locale?: string | null }
 
-/**
- * The element-listing adapter's `composeIntoQuery`: folds the descriptors'
- * contributions into the grid request, reproducing the previous query-arg logic:
- *  1. evict any stale filters for known columns / system filter types,
- *  2. collect column-filter contributions and apply non-column patches,
- *  3. run the localized-column locale pass over the final column filters.
- *
- * Receives already-composed contributions (the engine runs `composeQuery`); pure.
- */
-export const composeElementListingQuery = (
-  contributions: ElementFilterContribution[],
+export const buildElementFilterQuery = (
+  contributions: ElementFilterQueryPart[],
   baseArgs: ElementListingQueryArgs,
-  context: ElementListingFilterContext
+  context: ElementFilterContext
 ): ElementListingQueryArgs => {
   const { availableColumns, currentLanguage } = context
+
   const isDataObject = 'classId' in baseArgs
   const baseFilters = baseArgs.body.filters
 

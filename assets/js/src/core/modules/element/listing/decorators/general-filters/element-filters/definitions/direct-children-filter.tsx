@@ -12,7 +12,7 @@ import React from 'react'
 import { Checkbox } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { defineFilter, type FilterControlProps } from '@Pimcore/components/filters'
-import { type ElementFilterContribution, type ElementListingFilterContext } from '../element-listing-filter-context'
+import { type ElementFilterQueryPart, type ElementFilterContext } from '../element-filter-types'
 
 const DirectChildrenControl = ({ value, onChange }: FilterControlProps<boolean>): React.JSX.Element => {
   const { t } = useTranslation()
@@ -27,11 +27,7 @@ const DirectChildrenControl = ({ value, onChange }: FilterControlProps<boolean>)
   )
 }
 
-/**
- * "Only direct children" toggle. Always present; instead of a column filter it
- * patches `includeDescendants` (inverted).
- */
-export const directChildrenFilterDescriptor = defineFilter<boolean, ElementFilterContribution, ElementListingFilterContext>({
+export const directChildrenFilterDescriptor = defineFilter<boolean, ElementFilterQueryPart, ElementFilterContext>({
   key: 'directChildren',
   defaultValue: false,
   section: 'controls',

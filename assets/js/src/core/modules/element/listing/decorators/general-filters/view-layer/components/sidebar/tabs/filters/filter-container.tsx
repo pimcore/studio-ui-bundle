@@ -12,12 +12,7 @@ import React from 'react'
 import { useDraftSync } from '@Pimcore/components/filters'
 import { FilterContainerInner } from './filter-container-inner'
 import { ClassificationStoreModalProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
-import {
-  DraftFiltersProvider,
-  elementListingFilterDescriptors,
-  useAppliedFilters,
-  useDraftFilters
-} from '../../../../../host'
+import { DraftFiltersProvider, elementFilterDefinitions, useAppliedFilters, useDraftFilters } from '../../../../../element-filters'
 
 const DraftSync = ({ children }: { children: React.ReactNode }): React.JSX.Element => {
   const { values } = useAppliedFilters()
@@ -33,7 +28,7 @@ export const FilterContainer = (): React.JSX.Element => {
 
   return (
     <DraftFiltersProvider
-      descriptors={ elementListingFilterDescriptors }
+      descriptors={ elementFilterDefinitions }
       initialValues={ values }
     >
       <DraftSync>

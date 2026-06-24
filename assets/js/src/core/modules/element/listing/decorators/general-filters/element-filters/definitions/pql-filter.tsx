@@ -15,7 +15,7 @@ import { PQLQueryInput } from '@Pimcore/components/pql-query-input/pql-query-inp
 import { getErrorKey, ErrorKeyTypes } from '@Pimcore/modules/app/error-handler'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 import { pqlFilterType } from '../../context-layer/provider/pql-filter/pql-filter-provider'
-import { type ElementFilterContribution, type ElementListingFilterContext } from '../element-listing-filter-context'
+import { type ElementFilterQueryPart, type ElementFilterContext } from '../element-filter-types'
 
 const PqlFilterControl = ({ value, onChange }: FilterControlProps<string>): React.JSX.Element => {
   const [isShowPqlError, setIsShowPqlError] = useState<boolean>(false)
@@ -44,7 +44,7 @@ const PqlFilterControl = ({ value, onChange }: FilterControlProps<string>): Reac
   )
 }
 
-export const pqlFilterDescriptor = defineFilter<string, ElementFilterContribution, ElementListingFilterContext>({
+export const pqlFilterDescriptor = defineFilter<string, ElementFilterQueryPart, ElementFilterContext>({
   key: 'pql',
   defaultValue: '',
   section: 'advanced',

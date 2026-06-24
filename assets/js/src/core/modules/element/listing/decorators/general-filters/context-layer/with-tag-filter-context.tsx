@@ -12,13 +12,13 @@ import React from 'react'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { type GeneralFiltersDecoratorConfig } from '../general-filters-decorator'
 import { GeneralFiltersConfigProvider } from './provider/general-filters-config/general-filters-config-provider'
-import { AppliedFiltersProvider, elementListingFilterDescriptors } from '../host'
+import { AppliedFiltersProvider, elementFilterDefinitions } from '../element-filters'
 
 export const withGeneralFiltersContext = (Component: AbstractDecoratorProps['ContextComponent'], config?: GeneralFiltersDecoratorConfig): AbstractDecoratorProps['ContextComponent'] => {
   const GeneralFiltersContextComponent = (): React.JSX.Element => {
     return (
       <GeneralFiltersConfigProvider config={ config }>
-        <AppliedFiltersProvider descriptors={ elementListingFilterDescriptors }>
+        <AppliedFiltersProvider descriptors={ elementFilterDefinitions }>
           <Component />
         </AppliedFiltersProvider>
       </GeneralFiltersConfigProvider>

@@ -31,13 +31,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
 import { useGeneralFiltersConfig } from '../../../../../context-layer/provider/general-filters-config/use-general-filters-config'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
-import {
-  useAppliedFilters,
-  useDraftElementFilters,
-  useDraftFilters,
-  useElementListingFilterContext,
-  elementListingFilterDescriptors
-} from '../../../../../host'
+import { useAppliedFilters, useDraftFilterValues, useDraftFilters, useElementFilterContext, elementFilterDefinitions } from '../../../../../element-filters'
 
 export const FilterContainerInner = (): React.JSX.Element => {
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
@@ -47,9 +41,9 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const { handleSearchTermInSidebar, showOnlyUnreferencedFilter } = useGeneralFiltersConfig()
   const { setDataLoadingState } = useData()
 
-  const { searchTerm, directChildren, unreferenced, pql, fieldFilters, reset } = useDraftElementFilters()
+  const { searchTerm, directChildren, unreferenced, pql, fieldFilters, reset } = useDraftFilterValues()
   const draftStore = useDraftFilters()
-  const filterContext = useElementListingFilterContext()
+  const filterContext = useElementFilterContext()
 
   const { t } = useTranslation()
   const { filters, onFilterChange, columnGroups, handleColumnClick } = useFieldFilterEditor()
@@ -145,7 +139,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
           ? (
             <FiltersRenderer
               context={ filterContext }
-              descriptors={ elementListingFilterDescriptors }
+              descriptors={ elementFilterDefinitions }
               section='advanced'
               store={ draftStore }
             />
@@ -159,7 +153,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
                 >
                   <FiltersRenderer
                     context={ filterContext }
-                    descriptors={ elementListingFilterDescriptors }
+                    descriptors={ elementFilterDefinitions }
                     section='controls'
                     store={ draftStore }
                   />

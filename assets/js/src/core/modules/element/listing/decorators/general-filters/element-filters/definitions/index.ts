@@ -9,15 +9,15 @@
  */
 
 import { type AnyFilterDescriptor } from '@Pimcore/components/filters'
-import { type ElementFilterContribution, type ElementListingFilterContext } from '../element-listing-filter-context'
+import { type ElementFilterQueryPart, type ElementFilterContext } from '../element-filter-types'
 import { searchTermFilterDescriptor } from './search-term-filter'
 import { directChildrenFilterDescriptor } from './direct-children-filter'
 import { unreferencedFilterDescriptor } from './unreferenced-filter'
 import { pqlFilterDescriptor } from './pql-filter'
 import { fieldFiltersFilterDescriptor } from './field-filters-filter'
 
-export const elementListingFilterDescriptors: ReadonlyArray<
-  AnyFilterDescriptor<ElementFilterContribution, ElementListingFilterContext>
+export const elementFilterDefinitions: ReadonlyArray<
+  AnyFilterDescriptor<ElementFilterQueryPart, ElementFilterContext>
 > = [
   searchTermFilterDescriptor,
   directChildrenFilterDescriptor,
