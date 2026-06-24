@@ -23,6 +23,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
+import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
@@ -52,6 +53,7 @@ const toNumberArray = (value: unknown): number[] => (isArray(value) ? value as n
 export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSearchPanelProps): React.JSX.Element => {
   const { t } = useTranslation()
   const user = useUser()
+  const { modal } = useStudioModal()
   const [form] = Form.useForm()
 
   const { useDataQueryHelper } = useSettings()
@@ -121,6 +123,16 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
     onReset: reset
   })
 
+  const confirmDelete = (): void => {
+    modal.confirm({
+      title: t('saved-search.delete.title'),
+      content: t('saved-search.delete.confirm'),
+      okText: t('delete'),
+      cancelText: t('button.cancel'),
+      onOk: onDelete
+    })
+  }
+
   const renderActions = (): React.JSX.Element => {
     if (isNil(loaded)) {
       return (
@@ -142,7 +154,7 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
             data-testid='saved-search-update-button'
             loading={ isUpdating }
             onClick={ onUpdate }
-            type='primary'
+            type='default'
           >
             { t('saved-search.update') }
           </Button>
@@ -158,8 +170,8 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
                 {
                   key: 'delete',
                   icon: <Icon value='trash' />,
-                  label: t('delete'),
-                  onClick: onDelete
+                  label: t('saved-search.delete-search'),
+                  onClick: confirmDelete
                 }
               ]
             } }
@@ -168,7 +180,7 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
               data-testid='saved-search-more-button'
               icon={ { value: 'more' } }
               loading={ isDeleting }
-              type='primary'
+              type='default'
             />
           </Dropdown>
         </Compact>
@@ -201,7 +213,7 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
           gap='small'
           vertical
         >
-          <Header title={ t('saved-search.title') } />
+          <Header title={ !isNil(loaded) && !isOwner ? t('saved-search.title-shared') : t('saved-search.title') } />
 
           { !isNil(loaded) && (
             <Row>
@@ -237,6 +249,7 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
             } }
             sharedRoles={ sharedRoles }
             sharedUsers={ sharedUsers }
+            showSharing={ isNil(loaded) || isOwner }
           />
         </Flex>
       </Content>

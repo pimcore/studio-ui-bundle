@@ -15,7 +15,6 @@ import { isEmpty, isNil, isUndefined } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Button } from '@Pimcore/components/button/button'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { Text } from '@Pimcore/components/text/text'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
@@ -94,7 +93,6 @@ export const MenuShortcutFlyout = (): React.JSX.Element => {
               <Button
                 className='saved-search-shortcut-open'
                 data-testid='saved-search-shortcut-open'
-                icon={ <Icon value='search' /> }
                 loading={ openingId === item.id }
                 onClick={ () => { open(item.id) } }
                 type='text'
@@ -123,7 +121,7 @@ export const MenuShortcutFlyout = (): React.JSX.Element => {
       content={ content }
       mouseEnterDelay={ 0.4 }
       placement='right'
-      title={ t('saved-search.menu-shortcuts') }
+      title={ t('saved-search.saved-searches') }
       trigger='hover'
     >
       <span>

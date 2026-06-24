@@ -18,8 +18,6 @@ import { Content } from '@Pimcore/components/content/content'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Box } from '@Pimcore/components/box/box'
-import { Title } from '@Pimcore/components/title/title'
-import { Divider } from '@Pimcore/components/divider/divider'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { Grid } from '@Pimcore/components/grid/grid'
@@ -88,35 +86,32 @@ export const SavedSearchesTab = (): React.JSX.Element => {
 
   const columnHelper = createColumnHelper<SavedSearchRow>()
   const columns = [
-    columnHelper.display({
-      id: 'elementType',
-      header: t('type'),
+    columnHelper.accessor('name', {
+      header: t('user-management.name'),
+      meta: { autoWidth: true },
       cell: ({ row }) => {
         // The list item carries the classId — data object searches have one, asset searches don't.
         const isDataObject = !isEmpty(row.original.classId)
         return (
-          <Tooltip title={ t(isDataObject ? 'data-object' : 'asset') }>
-            <Icon value={ isDataObject ? 'data-object' : 'asset' } />
-          </Tooltip>
+          <Flex
+            align='center'
+            gap='mini'
+          >
+            <Tooltip title={ t(isDataObject ? 'data-object' : 'asset') }>
+              <Icon value={ isDataObject ? 'data-object' : 'asset' } />
+            </Tooltip>
+            {row.original.name}
+          </Flex>
         )
-      },
-      size: 60
-    }),
-    columnHelper.accessor('name', {
-      header: t('user-management.name'),
-      meta: { autoWidth: true }
-    }),
-    columnHelper.accessor('description', {
-      header: t('description'),
-      size: 280
+      }
     }),
     columnHelper.accessor('ownership', {
       header: t('saved-search.ownership'),
-      size: 140
+      size: 160
     }),
     columnHelper.accessor('modificationDateLabel', {
       header: t('common.modification-date'),
-      size: 170
+      size: 180
     }),
     columnHelper.display({
       id: 'actions',
@@ -159,42 +154,37 @@ export const SavedSearchesTab = (): React.JSX.Element => {
 
   return (
     <ContentLayout
+      renderToolbar={ total > 0
+        ? (
+          <Toolbar theme='secondary'>
+            <Pagination
+              current={ currentPage }
+              defaultPageSize={ pageSize }
+              onChange={ (page, size) => {
+                setCurrentPage(page)
+                setPageSize(size)
+              } }
+              showSizeChanger
+              showTotal={ (totalItems) => t('pagination.show-total', { total: totalItems }) }
+              total={ total }
+            />
+          </Toolbar>
+          )
+        : undefined }
       renderTopBar={
         <Toolbar
-          justify='space-between'
-          padding={ { left: 'small', right: 'extra-small' } }
+          padding={ { left: 'small', right: 'small' } }
           theme='secondary'
         >
-          <Title>{t('saved-search.saved-searches')}</Title>
-          <Flex align='center'>
-            <SearchInput
-              loading={ isFetching }
-              onSearch={ (value) => {
-                setCurrentPage(1)
-                setSearchTerm(value)
-              } }
-              placeholder={ t('component.search.pleaceholder') }
-            />
-            {total > 0 && (
-              <>
-                <Divider
-                  size='small'
-                  type='vertical'
-                />
-                <Pagination
-                  current={ currentPage }
-                  defaultPageSize={ pageSize }
-                  onChange={ (page, size) => {
-                    setCurrentPage(page)
-                    setPageSize(size)
-                  } }
-                  showSizeChanger
-                  showTotal={ (totalItems) => t('pagination.show-total', { total: totalItems }) }
-                  total={ total }
-                />
-              </>
-            )}
-          </Flex>
+          <SearchInput
+            loading={ isFetching }
+            maxWidth='100%'
+            onSearch={ (value) => {
+              setCurrentPage(1)
+              setSearchTerm(value)
+            } }
+            placeholder={ t('component.search.pleaceholder') }
+          />
         </Toolbar>
       }
     >

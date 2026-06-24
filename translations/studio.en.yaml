@@ -2771,6 +2771,8 @@ asset.folder.preview.image-display: Image display
 asset.folder.preview.image-display.small: Small
 asset.folder.preview.image-display.large: Large
 saved-search.title: Save search
+saved-search.title-shared: Saved search
+saved-search.delete-search: Delete search
 saved-search.save-as-new: Save as new search
 saved-search.create-menu-shortcut: Create shortcut in menu
 saved-search.save.success: Saved search created

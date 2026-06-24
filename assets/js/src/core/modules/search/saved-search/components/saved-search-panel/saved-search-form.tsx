@@ -47,6 +47,8 @@ interface SavedSearchFormProps {
   sharedUsers: number[]
   sharedRoles: number[]
   onUsersRolesChange: (changes: { sharedUsers: number[], sharedRoles: number[] }) => void
+  /** Whether to show the sharing controls — hidden when viewing someone else's search (clone). */
+  showSharing: boolean
 }
 
 export const SavedSearchForm = ({
@@ -55,7 +57,8 @@ export const SavedSearchForm = ({
   onSharedGloballyChange,
   sharedUsers,
   sharedRoles,
-  onUsersRolesChange
+  onUsersRolesChange,
+  showSharing
 }: SavedSearchFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -183,17 +186,19 @@ export const SavedSearchForm = ({
         </Form.Item>
       </Form.Conditional>
 
-      <Form.Item
-        name="shareGlobally"
-        valuePropName='checked'
-      >
-        <Switch
-          labelLeft={ <Text>{t('grid.configuration.shared')}</Text> }
-          labelRight={ renderRightLabelComponent() }
-        />
-      </Form.Item>
+      { showSharing && (
+        <Form.Item
+          name="shareGlobally"
+          valuePropName='checked'
+        >
+          <Switch
+            labelLeft={ <Text>{t('grid.configuration.shared')}</Text> }
+            labelRight={ renderRightLabelComponent() }
+          />
+        </Form.Item>
+      )}
 
-      { !isSharedGlobally && !isEmpty(getSharedUsersRolesList().flat()) && (
+      { showSharing && !isSharedGlobally && !isEmpty(getSharedUsersRolesList().flat()) && (
         <TagList
           itemGap="mini"
           list={ getSharedUsersRolesList() }
