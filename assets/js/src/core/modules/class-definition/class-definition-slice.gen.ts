@@ -67,7 +67,12 @@ const injectedRtkApi = api
                 ClassDefinitionCollectionCreatableApiResponse,
                 ClassDefinitionCollectionCreatableApiArg
             >({
-                query: () => ({ url: `/pimcore-studio/api/class/collection/creatable` }),
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/collection/creatable`,
+                    params: {
+                        widgetId: queryArg.widgetId,
+                    },
+                }),
                 providesTags: ["Class Definition"],
             }),
             classCustomLayoutCollection: build.query<
@@ -602,7 +607,10 @@ export type ClassDefinitionCollectionCreatableApiResponse =
         totalItems: number;
         items: ClassDefinitionListItem[];
     };
-export type ClassDefinitionCollectionCreatableApiArg = void;
+export type ClassDefinitionCollectionCreatableApiArg = {
+    /** Optional element tree widget ID to filter classes by the widget's allowed classes configuration */
+    widgetId?: string;
+};
 export type ClassCustomLayoutCollectionApiResponse =
     /** status 200 List of custom layouts for the given data object class in a simple and compact format for listings.
      */ {
