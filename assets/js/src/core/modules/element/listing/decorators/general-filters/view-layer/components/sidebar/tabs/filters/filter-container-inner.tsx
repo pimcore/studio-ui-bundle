@@ -14,14 +14,17 @@ import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { getErrorKey, ErrorKeyTypes } from '@Pimcore/modules/app/error-handler'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
-import { Checkbox, Space } from 'antd'
+import { Checkbox, Empty, Space } from 'antd'
 import { Form } from '@Pimcore/components/form/form'
 import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { PQLQueryInput } from '@Pimcore/components/pql-query-input/pql-query-input'
-import { FieldFiltersContainer } from './field-filters/field-filters-container'
+import { FieldFilters } from '@Pimcore/components/field-filters/field-filters'
+import { ColumnPickerPopover } from '@Pimcore/components/column-picker/column-picker-popover'
+import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
+import { useFieldFilterEditor } from './field-filters/use-field-filter-editor'
 import {
   ContentLayout
 } from '@Pimcore/components/content-layout/content-layout'
@@ -70,6 +73,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
   } = useFilter()
 
   const { t } = useTranslation()
+  const { filters, onFilterChange, columnGroups, handleColumnClick } = useFieldFilterEditor()
 
   useEffect(() => {
     const error = dataQueryResult?.error
@@ -111,22 +115,43 @@ export const FilterContainerInner = (): React.JSX.Element => {
     <ContentLayout
       renderToolbar={
         <Toolbar theme='secondary'>
-          <IconTextButton
-            data-testid="listing-filter-clear-button"
-            icon={ { value: 'close' } }
-            onClick={ handleResetAllFiltersClick }
-            type='link'
-          >
-            {t('sidebar.clear-all-filters')}
-          </IconTextButton>
+          {!isAdvancedMode
+            ? (
+              <ColumnPickerPopover<AvailableColumn>
+                data-testid="listing-field-filter-add"
+                groups={ columnGroups }
+                onSelect={ (item) => { handleColumnClick(item.meta!) } }
+                placement="leftBottom"
+              >
+                <IconTextButton
+                  data-testid="listing-field-filter-add-button"
+                  icon={ { value: 'new' } }
+                  type='default'
+                >
+                  {t('listing.add-column')}
+                </IconTextButton>
+              </ColumnPickerPopover>
+              )
+            : <div />}
 
-          <Button
-            data-testid="listing-filter-apply-button"
-            onClick={ handleApplyClick }
-            type='primary'
-          >
-            {t('button.apply')}
-          </Button>
+          <Flex gap='extra-small'>
+            <IconTextButton
+              data-testid="listing-filter-clear-button"
+              icon={ { value: 'close' } }
+              onClick={ handleResetAllFiltersClick }
+              type='link'
+            >
+              {t('sidebar.clear-all-filters')}
+            </IconTextButton>
+
+            <Button
+              data-testid="listing-filter-apply-button"
+              onClick={ handleApplyClick }
+              type='primary'
+            >
+              {t('button.apply')}
+            </Button>
+          </Flex>
         </Toolbar>
       }
     >
@@ -194,7 +219,14 @@ export const FilterContainerInner = (): React.JSX.Element => {
                 {t('element.sidebar.field-filters')}
               </Title>
 
-              <FieldFiltersContainer />
+              { filters.length === 0
+                ? <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } />
+                : (
+                  <FieldFilters
+                    data={ filters }
+                    onChange={ onFilterChange }
+                  />
+                  ) }
             </>
             )}
       </Content>

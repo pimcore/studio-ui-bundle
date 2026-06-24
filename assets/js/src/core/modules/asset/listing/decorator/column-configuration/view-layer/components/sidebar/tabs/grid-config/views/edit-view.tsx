@@ -18,7 +18,6 @@ import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/d
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tooltip } from 'antd'
-import { isEmpty } from 'lodash'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { GridConfigList } from '../grid-config-list'
 import { Compact } from '@Pimcore/components/compact/compact'
@@ -26,6 +25,9 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type GridConfigData } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/grid-config-provider'
 import { useSettings } from '../povider/settings/use-settings'
+import { AddColumnControls } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/components/add-column-controls/add-column-controls'
+import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
+import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column-picker.types'
 
 export interface EditViewProps {
   onCancelClick: () => void
@@ -33,8 +35,10 @@ export interface EditViewProps {
   onUpdateConfigurationClick: () => void
   onEditConfigurationClick: () => void
   onApplyClick: () => void
+  onColumnSelect: (column: AvailableColumn) => void
+  onAddAdvancedColumn?: () => void
   savedGridConfigurations: DropdownMenuProps['items']
-  addColumnMenu: DropdownMenuProps['items']
+  availableColumnsTree: Array<ColumnPickerGroup<AvailableColumn>>
   isLoading: boolean
   isUpdating: boolean
   columns: any[]
@@ -44,12 +48,13 @@ export interface EditViewProps {
 
 export const EditView = (props: EditViewProps): React.JSX.Element => {
   const {
-    onCancelClick,
     onApplyClick,
     onEditConfigurationClick,
     onUpdateConfigurationClick,
     onSaveConfigurationClick,
-    addColumnMenu,
+    onColumnSelect,
+    onAddAdvancedColumn,
+    availableColumnsTree,
     gridConfig,
     savedGridConfigurations,
     isUpdating,
@@ -68,13 +73,12 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
     <ContentLayout
       renderToolbar={
         <Toolbar theme='secondary'>
-          <Button
-            data-testid='listing-grid-config-cancel-button'
-            onClick={ onCancelClick }
-            type='default'
-          >
-            { t('button.cancel') }
-          </Button>
+          <AddColumnControls
+            groups={ availableColumnsTree }
+            onAddAdvancedColumn={ onAddAdvancedColumn }
+            onColumnSelect={ onColumnSelect }
+            placement="leftBottom"
+          />
 
           <Space size="extra-small">
             { renderSaveButton() }
@@ -127,18 +131,6 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
           style={ { width: '100%' } }
         >
           <GridConfigList columns={ columns } />
-
-          {!isEmpty(addColumnMenu) && (
-            <Dropdown menu={ { items: addColumnMenu } }>
-              <IconTextButton
-                data-testid='listing-grid-config-add-column-button'
-                icon={ { value: 'new' } }
-                type='link'
-              >
-                { t('listing.add-column') }
-              </IconTextButton>
-            </Dropdown>
-          )}
         </Space>
       </Content>
     </ContentLayout>

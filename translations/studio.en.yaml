@@ -522,6 +522,11 @@ listing.grid-config.title: Grid config
 grid-config.discard-all-changes: Discard all changes
 grid-config.apply-changes: Apply changes
 listing.add-column: Add a column
+listing.add-column.simple: Simple
+listing.add-column.advanced: Advanced
+listing.column-picker.search: Search
+listing.column-picker.no-results: No columns found
+listing.column-picker.fields-to-add: Fields to add
 listing.actions: Apply to selection
 listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download
