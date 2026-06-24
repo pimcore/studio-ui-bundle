@@ -11,7 +11,7 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createColumnHelper } from '@tanstack/react-table'
-import { Popconfirm } from 'antd'
+import { Popconfirm, Tooltip } from 'antd'
 import { isEmpty, isUndefined } from 'lodash'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
@@ -24,6 +24,7 @@ import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Icon } from '@Pimcore/components/icon/icon'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import {
@@ -87,6 +88,20 @@ export const SavedSearchesTab = (): React.JSX.Element => {
 
   const columnHelper = createColumnHelper<SavedSearchRow>()
   const columns = [
+    columnHelper.display({
+      id: 'elementType',
+      header: t('type'),
+      cell: ({ row }) => {
+        // The list item carries the classId — data object searches have one, asset searches don't.
+        const isDataObject = !isEmpty(row.original.classId)
+        return (
+          <Tooltip title={ t(isDataObject ? 'data-object' : 'asset') }>
+            <Icon value={ isDataObject ? 'data-object' : 'asset' } />
+          </Tooltip>
+        )
+      },
+      size: 60
+    }),
     columnHelper.accessor('name', {
       header: t('user-management.name'),
       meta: { autoWidth: true }

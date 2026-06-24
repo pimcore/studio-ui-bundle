@@ -31,10 +31,11 @@ export const withSavedSearchSidebarEntry = (
     const getProps: typeof baseGetProps = () => {
       const baseProps = baseGetProps()
 
+      // Prepend so the Save Search tab is the first icon in the sidebar (the decorator is composed
+      // last in the listing so this prepend wins over the filter/tag entries that also prepend).
       return {
         ...baseProps,
         entries: [
-          ...baseProps.entries,
           {
             component: (
               <SavedSearchPanel
@@ -45,7 +46,8 @@ export const withSavedSearchSidebarEntry = (
             key: 'saved-search',
             icon: <Icon value="save" />,
             tooltip: t('saved-search.title')
-          }
+          },
+          ...baseProps.entries
         ]
       }
     }

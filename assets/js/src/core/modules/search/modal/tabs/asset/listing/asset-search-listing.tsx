@@ -39,12 +39,13 @@ const defaultProps = {
 const listingProps = compose<AbstractDecoratorProps>(
   PagingDecorator,
   StaticColumnConfigurationDecorator,
-  [SavedSearchDecorator, { elementType: elementTypes.asset, supportsLoadedState: true } as SavedSearchDecoratorConfig],
   TagFilterDecorator,
   [GeneralFiltersDecorator, { handleSearchTermInSidebar: false, showOnlyUnreferencedFilter: true } as GeneralFiltersDecoratorConfig],
   [TypeFilterDecorator, { elementType: elementTypes.asset } as TypeFilterDecoratorConfig],
   SortingDecorator,
-  [OpenElementDecorator, { elementType: elementTypes.asset } as OpenElementDecoratorConfig]
+  [OpenElementDecorator, { elementType: elementTypes.asset } as OpenElementDecoratorConfig],
+  // Composed last so its sidebar entry prepends ahead of the filter/tag entries (first icon).
+  [SavedSearchDecorator, { elementType: elementTypes.asset, supportsLoadedState: true } as SavedSearchDecoratorConfig]
 )(defaultProps)
 /* eslint-enable @typescript-eslint/consistent-type-assertions */
 

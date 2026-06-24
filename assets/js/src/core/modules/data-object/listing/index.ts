@@ -20,8 +20,6 @@ import { GlobalContextDecorator } from '@Pimcore/modules/element/listing/decorat
 import { ToolbarLeft } from '@Pimcore/modules/data-object/listing/toolbar/toolbar-left'
 import { ToolbarRight } from '@Pimcore/modules/data-object/listing/toolbar/toolbar-right'
 import { ToolbarInner } from '@Pimcore/modules/data-object/listing/toolbar/toolbar-inner'
-import { SavedSearchDecorator } from '@Pimcore/modules/search/saved-search/saved-search-decorator'
-import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -77,12 +75,6 @@ moduleSystem.registerModule({
     listingBuilder.addDecorator({
       name: 'columnConfiguration',
       decorator: ColumnConfigurationDecorator
-    })
-
-    listingBuilder.addDecorator({
-      name: 'savedSearch',
-      decorator: SavedSearchDecorator,
-      config: { elementType: elementTypes.dataObject }
     })
 
     const inlineEditDecoratorConfig: IInlineEditDecoratorConfig = {
