@@ -28,6 +28,22 @@ export interface KeyedListProps {
 const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps }: KeyedListProps): React.JSX.Element => {
   const initialValue = useMemo(() => isArray(baseValue) ? {} : baseValue ?? {}, [baseValue])
   const [value, setValue] = useState(cloneDeep(initialValue))
+  // Mirror of the current value, kept in sync during render so the (referentially
+  // stable) operations and the store can read the latest value without depending
+  // on it — that is what keeps the provider context from changing on every keystroke.
+  const valueRef = useRef(value)
+  valueRef.current = value
+  const listenersRef = useRef<Set<() => void>>(new Set())
+  // Parents (e.g. ClassificationStore) recreate these callbacks on every render.
+  // Routing them through refs keeps `operations` and the provider context
+  // referentially stable, so a re-render of the parent no longer re-renders every
+  // field consuming the context.
+  const baseOnChangeRef = useRef(baseOnChange)
+  baseOnChangeRef.current = baseOnChange
+  const onFieldChangeRef = useRef(onFieldChange)
+  onFieldChangeRef.current = onFieldChange
+  const getAdditionalComponentPropsRef = useRef(getAdditionalComponentProps)
+  getAdditionalComponentPropsRef.current = getAdditionalComponentProps
   // the initial value enriched with the values the child fields register on mount,
   // so that those registrations are not reported as changes
   const baselineValue = useRef(cloneDeep(initialValue))
@@ -38,11 +54,11 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   const bufferedValue = useDebounce(value, 10)
 
   const onChange: KeyedListData['onChange'] = useCallback((newValue: KeyedListData['values']) => {
-    if (baseOnChange !== undefined) {
+    if (baseOnChangeRef.current !== undefined) {
       setValue(() => newValue)
-      baseOnChange(newValue)
+      baseOnChangeRef.current(newValue)
     }
-  }, [baseOnChange])
+  }, [])
 
   useEffect(() => {
     // only react to actual content changes of the incoming value — this effect runs
@@ -94,7 +110,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     }
 
     if (!isInitialValue) {
-      onFieldChange?.(currentSubFieldname, newSubValue)
+      onFieldChangeRef.current?.(currentSubFieldname, newSubValue)
     }
 
     const setAsObject = (obj): object => {
@@ -112,11 +128,19 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     }
 
     setValue((currentValue) => {
+      // bail out when the content is unchanged: cloning would otherwise hand back a
+      // new reference on every call, which keeps the provider context (and the whole
+      // editor) re-rendering even though nothing actually changed.
+      const existing = nameDifference.length === 0 ? currentValue : get(currentValue, nameDifference)
+      if (isEqual(existing, newSubValue)) {
+        return currentValue
+      }
+
       const newValue = cloneDeep(currentValue)
       setWith(newValue, nameDifference, newSubValue, setAsObject)
       return newValue
     })
-  }, [itemName, onFieldChange])
+  }, [itemName])
 
   // Trigger onChange when value changes, but outside of setState
   useEffect(() => {
@@ -135,16 +159,41 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
       }
     }
 
-    return get(value, nameDifference)
-  }, [itemName, value])
+    return get(valueRef.current, nameDifference)
+  }, [itemName])
 
   const operations = useMemo(() => ({ add, remove, update, getValue }), [add, remove, update, getValue])
 
+  // stable wrapper so the context identity is unaffected by the parent passing a
+  // new getAdditionalComponentProps function on every render
+  const stableGetAdditionalComponentProps = useCallback(
+    (componentName: NamePath): Record<string, any> => getAdditionalComponentPropsRef.current?.(componentName) ?? {},
+    []
+  )
+
+  // Stable external store: subscribers (per-field via useKeyedListValue) read the
+  // current value through getSnapshot and are notified whenever it changes.
+  const store = useMemo(() => ({
+    subscribe: (listener: () => void): (() => void) => {
+      listenersRef.current.add(listener)
+      return () => {
+        listenersRef.current.delete(listener)
+      }
+    },
+    // must return a stable reference when nothing changed (useSyncExternalStore
+    // invariant); `value` is always an object, so valueRef.current is stable.
+    getSnapshot: () => valueRef.current
+  }), [])
+
+  useEffect(() => {
+    listenersRef.current.forEach((listener) => { listener() })
+  }, [value])
+
   return (
     <KeyedListProvider
-      getAdditionalComponentProps={ getAdditionalComponentProps }
+      getAdditionalComponentProps={ stableGetAdditionalComponentProps }
       operations={ operations }
-      values={ value ?? {} }
+      store={ store }
     >
       <Form.Group name={ name }>
         {children}
