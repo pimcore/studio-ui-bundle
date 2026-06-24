@@ -2765,3 +2765,24 @@ select.clear-selection: Rensa val
 asset.folder.preview.image-display: Bildvisning
 asset.folder.preview.image-display.small: Liten
 asset.folder.preview.image-display.large: Stor
+ownership-management.title: Ägarskapshantering
+ownership-management.show-deleted-owners: Visa objekt från borttagna användare
+ownership-management.owner-deleted: Den här användaren har tagits bort
+ownership-management.deleted-user: Borttagen användare
+ownership-management.columns.id: ID
+ownership-management.columns.name: Namn
+ownership-management.columns.modification-date: Ändringsdatum
+ownership-management.columns.owner: Ägare
+ownership-management.columns.actions: Åtgärder
+ownership-management.actions.reassign-owner: Tilldela om ägare
+ownership-management.actions.reassign-owner.title: Tilldelar om ägare av konfigurationer
+ownership-management.actions.delete: Ta bort
+ownership-management.actions.delete.title: Tar bort konfigurationer
+ownership-management.actions.batch-assign: Batchtilldelning
+ownership-management.actions.batch-delete: Batchborttagning
+ownership-management.reassign-owner.title: "Tilldela om ägare för {{count}} konfiguration(er)"
+ownership-management.reassign-owner.confirm: Tilldela om
+ownership-management.reassign-owner.placeholder: Sök efter en användare med namn
+ownership-management.delete.title: Ta bort konfigurationer
+ownership-management.delete.content: "Är du säker på att du vill ta bort {{count}} konfiguration(er)?"
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Ägarskapshantering

@@ -2243,6 +2243,26 @@ recycle-bin.actions.delete: Delete
 recycle-bin.actions.delete.title: Deleting Recycle Bin Items
 recycle-bin.actions.restore: Restore
 recycle-bin.actions.restore.title: Restoring Recycle Bin Items
+ownership-management.title: Ownership Management
+ownership-management.show-deleted-owners: Show items from deleted users
+ownership-management.owner-deleted: This user has been deleted
+ownership-management.deleted-user: Deleted user
+ownership-management.columns.id: ID
+ownership-management.columns.name: Name
+ownership-management.columns.modification-date: Modification Date
+ownership-management.columns.owner: Owner
+ownership-management.columns.actions: Actions
+ownership-management.actions.reassign-owner: Reassign owner
+ownership-management.actions.reassign-owner.title: Reassigning owner of configurations
+ownership-management.actions.delete: Delete
+ownership-management.actions.delete.title: Deleting configurations
+ownership-management.actions.batch-assign: Batch Assign
+ownership-management.actions.batch-delete: Batch Delete
+ownership-management.reassign-owner.title: "Reassign owner of {{count}} configuration(s)"
+ownership-management.reassign-owner.confirm: Reassign
+ownership-management.reassign-owner.placeholder: Search for a user by name
+ownership-management.delete.title: Delete configurations
+ownership-management.delete.content: "Are you sure you want to delete {{count}} configuration(s)?"
 component.search.pleaceholder: Search
 focal-point.set: Set Focal Point
 video.placeholder: No video selected - Click to add a video
@@ -2350,6 +2370,7 @@ perspective-editor.form.main-nav-permission.system.cache_clearSymfony: Cache > C
 perspective-editor.form.main-nav-permission.system.cache_clearTemp: Cache > Clear temporary files
 perspective-editor.form.main-nav-permission.system.cache_hidden: Hide Cache Menu
 perspective-editor.form.main-nav-permission.system.systemSettings: System Settings
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Ownership Management
 perspective-editor.form.main-nav-permission.system.about: About
 perspective-editor.form.main-nav-permission.category.reporting: Reporting
 perspective-editor.form.main-nav-permission.reporting.hidden: Hide Reporting Menu
