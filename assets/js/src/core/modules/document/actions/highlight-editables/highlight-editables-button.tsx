@@ -10,17 +10,21 @@
 
 import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
+import cn from 'classnames'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 import { useAppSelector } from '@Pimcore/app/store'
 import { selectDocumentHighlightEditables } from '@Pimcore/modules/document/document-editor-slice'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
+import { useStyles } from './highlight-editables-button.styles'
 
 const TYPES_WITH_EDITABLES = ['page', 'snippet', 'email']
 
 export const HighlightEditablesButton = (): React.JSX.Element | null => {
   const { t } = useTranslation()
+  const { styles } = useStyles()
+
   const { id } = useContext(DocumentContext)
   const { document } = useDocumentDraft(id)
   const isHighlighted = useAppSelector((state) => selectDocumentHighlightEditables(state, id))
@@ -40,7 +44,8 @@ export const HighlightEditablesButton = (): React.JSX.Element | null => {
 
   return (
     <IconButton
-      icon={ { value: 'highlight', colorToken: isHighlighted ? 'colorPrimary' : undefined } }
+      className={ cn(styles.highlightEditablesButton, { [styles.highlightEditablesButtonActive]: isHighlighted }) }
+      icon={ { value: 'highlight', colorToken: 'colorPrimary' } }
       onClick={ toggleHighlight }
       tooltip={ { title: t('document.highlight-editables'), placement: 'left' } }
       type="link"
