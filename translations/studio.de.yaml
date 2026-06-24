@@ -2240,6 +2240,7 @@ component.search.pleaceholder: Suche
 focal-point.set: Fokuspunkt setzen
 video.placeholder: Kein Video ausgewählt - Klicken, um ein Video hinzuzufügen
 video.add-video: Video hinzufügen
+video.preview-in-progress: Videovorschau wird erstellt…
 image.alt-text-placeholder: Alternativtext eingeben
 area-settings: Bereichseinstellungen
 unsupported_feature: Nicht unterstützte Funktion - bitte überprüfen Sie die Systemvoraussetzungen!

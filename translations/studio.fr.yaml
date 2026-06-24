@@ -2240,6 +2240,7 @@ component.search.pleaceholder: Rechercher
 focal-point.set: Définir le point focal
 video.placeholder: Aucune vidéo sélectionnée - Cliquez pour ajouter une vidéo
 video.add-video: Ajouter une vidéo
+video.preview-in-progress: L'aperçu vidéo est en cours de génération…
 image.alt-text-placeholder: Entrez le texte alternatif
 area-settings: Paramètres de zone
 unsupported_feature: Fonctionnalité non prise en charge - veuillez vérifier la configuration requise !
