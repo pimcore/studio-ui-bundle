@@ -199,7 +199,7 @@ export const VideoEditable = ({
         onClick={ showModal }
         size="small"
         style={ { pointerEvents: 'auto' } }
-        title={ t('video.edit') }
+        title={ t('edit') }
         type="default"
       />
       {!isNil(message) && !isEmpty(message) && (
