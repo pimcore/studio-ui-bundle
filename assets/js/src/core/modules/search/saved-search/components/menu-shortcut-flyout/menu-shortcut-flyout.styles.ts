@@ -10,31 +10,18 @@
 
 import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
-export const useStyles = createStyles(({ css, token }) => {
+export const useStyles = createStyles(({ css }) => {
   return {
     flyout: css`
       min-width: 220px;
       max-width: 320px;
-      max-height: 60vh;
-      overflow-y: auto;
     `,
 
-    groupLabel: css`
-      display: block;
-      padding: ${token.paddingXXS}px ${token.paddingXS}px;
-      color: ${token.colorTextLabel};
-    `,
-
-    row: css`
-      display: flex;
-      align-items: center;
-      gap: ${token.marginXXS}px;
-
-      .saved-search-shortcut-open {
-        flex: 1 1 auto;
-        justify-content: flex-start;
-        overflow: hidden;
-      }
+    shortcutName: css`
+      flex: 1 1 auto;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     `
   }
 })
