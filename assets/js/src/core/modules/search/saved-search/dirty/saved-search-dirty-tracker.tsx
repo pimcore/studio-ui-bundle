@@ -13,6 +13,7 @@ import { isArray, isNil } from 'lodash'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
+import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { resolveSavedSearchElementType } from '@Pimcore/modules/search/saved-search/utils/resolve-element-type'
@@ -54,10 +55,14 @@ export const SavedSearchDirtyTracker = ({ elementType }: SavedSearchDirtyTracker
   const { useDataQueryHelper } = useSettings()
   const { getArgs } = useDataQueryHelper()
   const { selectedColumns } = useSelectedColumns()
+  const { dataQueryResult } = useData()
   const dispatch = useAppDispatch()
 
   const id = loadedSavedSearch?.id
-  const active = !isNil(loadedSavedSearch) && isNil(pendingRestore) &&
+  // Active only once the restore is applied (no pendingRestore) AND the listing has loaded its data.
+  // Without the data-loaded gate, the comparison runs against the still-settling state during the
+  // initial load and briefly reports dirty (a "*" flash) before correcting.
+  const active = !isNil(loadedSavedSearch) && isNil(pendingRestore) && !isNil(dataQueryResult) &&
     resolveSavedSearchElementType(loadedSavedSearch) === elementType
 
   let dirty = false
