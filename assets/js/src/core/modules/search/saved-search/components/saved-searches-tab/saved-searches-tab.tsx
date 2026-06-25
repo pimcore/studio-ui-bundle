@@ -96,7 +96,6 @@ export const SavedSearchesTab = (): React.JSX.Element => {
 
   const tableItems: SavedSearchRow[] = (data?.items ?? []).map((item) => ({
     ...item,
-    description: item.description ?? '',
     ownership: item.owner ? t('saved-search.ownership.own') : t('saved-search.ownership.shared'),
     modificationDateLabel: formatDateTime({ timestamp: item.modificationDate, dateStyle: 'short', timeStyle: 'short' })
   }))
