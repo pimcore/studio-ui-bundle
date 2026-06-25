@@ -12,7 +12,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
-import { Empty, Space } from 'antd'
+import { Empty } from 'antd'
 import { Form } from '@Pimcore/components/form/form'
 import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -147,9 +147,10 @@ export const FilterContainerInner = (): React.JSX.Element => {
           : (
             <>
               <Form>
-                <Space
-                  direction='vertical'
+                <Flex
+                  gap='small'
                   style={ { width: '100%' } }
+                  vertical
                 >
                   <FiltersRenderer
                     context={ filterContext }
@@ -157,7 +158,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
                     section='controls'
                     store={ draftStore }
                   />
-                </Space>
+                </Flex>
               </Form>
 
               <Title>
