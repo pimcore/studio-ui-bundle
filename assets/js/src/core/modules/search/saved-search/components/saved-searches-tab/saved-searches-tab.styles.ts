@@ -13,10 +13,11 @@ import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 export const useStyles = createStyles(({ css, token }) => {
   return {
     // Align the footer toolbar's top border with the grid's borders (the Toolbar default uses the
-    // fainter colorBorderTertiary, which doesn't match the grid rows in the design).
+    // fainter colorBorderTertiary). !important is needed to win over the Toolbar's own
+    // `border-top: 1px solid <tertiary>` shorthand (same specificity, later in source order).
     footer: css`
       .toolbar {
-        border-top-color: ${token.Table.colorBorderSecondary};
+        border-top: 1px solid ${token.Table.colorBorderSecondary} !important;
       }
     `
   }
