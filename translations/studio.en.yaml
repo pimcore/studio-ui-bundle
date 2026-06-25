@@ -2245,7 +2245,6 @@ recycle-bin.actions.restore: Restore
 recycle-bin.actions.restore.title: Restoring Recycle Bin Items
 ownership-management.title: Ownership Management
 ownership-management.show-deleted-owners: Show items from deleted users
-ownership-management.owner-deleted: This user has been deleted
 ownership-management.deleted-user: Deleted user
 ownership-management.columns.id: ID
 ownership-management.columns.name: Name

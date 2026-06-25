@@ -2768,7 +2768,6 @@ asset.folder.preview.image-display.small: Pequeño
 asset.folder.preview.image-display.large: Grande
 ownership-management.title: Gestión de propiedad
 ownership-management.show-deleted-owners: Mostrar elementos de usuarios eliminados
-ownership-management.owner-deleted: Este usuario ha sido eliminado
 ownership-management.deleted-user: Usuario eliminado
 ownership-management.columns.id: ID
 ownership-management.columns.name: Nombre

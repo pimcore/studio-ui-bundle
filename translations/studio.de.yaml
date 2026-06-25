@@ -2768,7 +2768,6 @@ asset.folder.preview.image-display.small: Klein
 asset.folder.preview.image-display.large: Groß
 ownership-management.title: Eigentümerverwaltung
 ownership-management.show-deleted-owners: Elemente von gelöschten Benutzern anzeigen
-ownership-management.owner-deleted: Dieser Benutzer wurde gelöscht
 ownership-management.deleted-user: Gelöschter Benutzer
 ownership-management.columns.id: ID
 ownership-management.columns.name: Name

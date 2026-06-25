@@ -22,7 +22,7 @@ export const useStyles = createStyles(({ token, css }) => {
       padding: 0 ${token.paddingXS}px;
     `,
     deletedOwner: css`
-      color: ${token.colorTextDeleted};
+      color: ${token.colorWarningText};
     `
   }
 })

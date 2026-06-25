@@ -2768,7 +2768,6 @@ asset.folder.preview.image-display.small: Liten
 asset.folder.preview.image-display.large: Stor
 ownership-management.title: Ägarskapshantering
 ownership-management.show-deleted-owners: Visa objekt från borttagna användare
-ownership-management.owner-deleted: Den här användaren har tagits bort
 ownership-management.deleted-user: Borttagen användare
 ownership-management.columns.id: ID
 ownership-management.columns.name: Namn

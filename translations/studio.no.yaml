@@ -2768,7 +2768,6 @@ asset.folder.preview.image-display.small: Liten
 asset.folder.preview.image-display.large: Stor
 ownership-management.title: Eierskapsadministrasjon
 ownership-management.show-deleted-owners: Vis elementer fra slettede brukere
-ownership-management.owner-deleted: Denne brukeren er slettet
 ownership-management.deleted-user: Slettet bruker
 ownership-management.columns.id: ID
 ownership-management.columns.name: Navn

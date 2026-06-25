@@ -50,7 +50,6 @@ export const studioDefaultLightThemeConfig = {
     colorLogo: '#5520a6',
     colorBorderTertiary: '#eae8ed',
     colorTextTreeElement: '#404655',
-    colorTextDeleted: '#874d00',
     colorIconTree: '#404655',
     colorIconTreeUnpublished: 'rgba(64, 70, 85, 0.4)',
     colorInfoBorderHover: '#b37feb',
