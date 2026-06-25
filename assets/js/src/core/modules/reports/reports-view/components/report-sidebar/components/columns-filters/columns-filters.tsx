@@ -8,38 +8,43 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Button } from '@Pimcore/components/button/button'
-import { FieldFilters } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/components/field-filters/field-filters'
+import { FiltersRenderer, useFilterQuery } from '@Pimcore/components/filters'
 import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
-import { useColumnsFiltersContext } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/context/columns-filters-context'
+import { useReportsDraftFilters } from '@Pimcore/modules/reports/reports-view/filters/reports-filter-store'
+import { reportsFilterDescriptors } from '@Pimcore/modules/reports/reports-view/filters/descriptors'
+import { reportsFilterAdapter, useReportsFilterContext } from '@Pimcore/modules/reports/reports-view/filters/reports-filter-adapter'
 import { PAGE_INITIAL, useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 
 export const ColumnsFilters = (): React.JSX.Element => {
   const { filters, setFilters } = useGridFilterContext()
-  const { columnsFilters, setColumnsFilters, setFieldFilters } = useColumnsFiltersContext()
-  const { setPage } = useReportDataContext()
+  const draftStore = useReportsDraftFilters()
+  const filterContext = useReportsFilterContext()
+  const buildQuery = useFilterQuery(reportsFilterAdapter, draftStore.values)
+  const { reportDetailData, setPage } = useReportDataContext()
 
   const { t } = useTranslation()
   const { styles } = useStyles()
 
+  useEffect(() => {
+    draftStore.reset()
+  }, [reportDetailData, draftStore.reset])
+
   const handleApplyFilters = (): void => {
     setPage(PAGE_INITIAL)
 
-    setFilters({
-      ...filters,
-      columnFilters: columnsFilters
-    })
+    setFilters(buildQuery(filters))
   }
 
   const handleClearFilters = (): void => {
-    setColumnsFilters([])
-    setFieldFilters([])
+    draftStore.reset()
+
     setFilters({
       ...filters,
       columnFilters: []
@@ -70,7 +75,11 @@ export const ColumnsFilters = (): React.JSX.Element => {
       }
     >
       <Content padded>
-        <FieldFilters />
+        <FiltersRenderer
+          context={ filterContext }
+          descriptors={ reportsFilterDescriptors }
+          store={ draftStore }
+        />
       </Content>
     </ContentLayout>
   )
