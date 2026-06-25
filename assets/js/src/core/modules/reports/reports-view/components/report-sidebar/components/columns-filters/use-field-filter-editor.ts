@@ -8,10 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type Key, useMemo } from 'react'
+import { useMemo } from 'react'
 import { isEmpty, isNull, reject, uniq } from 'lodash'
-import { type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { type IDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/dynamic-filter-provider'
+import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column-picker.types'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
@@ -26,7 +26,8 @@ const getLabelValue = (column: BundleCustomReportsColumnConfiguration): string =
 export interface UseFieldFilterEditorReturn {
   fieldFilters: IDynamicFilter[]
   onFilterChange: (data: IDynamicFilter[]) => void
-  addColumnMenu: DropdownMenuProps['items']
+  columnGroups: Array<ColumnPickerGroup<BundleCustomReportsColumnConfiguration>>
+  handleColumnClick: (column: BundleCustomReportsColumnConfiguration) => void
 }
 
 export const useFieldFilterEditor = (): UseFieldFilterEditorReturn => {
@@ -69,23 +70,29 @@ export const useFieldFilterEditor = (): UseFieldFilterEditorReturn => {
     ])
   }
 
-  const addColumnMenu = useMemo<DropdownMenuProps['items']>(() => {
+  const columnGroups = useMemo<Array<ColumnPickerGroup<BundleCustomReportsColumnConfiguration>>>(() => {
     if (isEmpty(fullChartDetailData)) {
       return []
     }
 
-    const filterableColumnConfigurationsList = reportDetailData?.columnConfigurations.filter((item) => {
-      return item.display && !isEmptyValue(item.filterType)
-    })
+    const availableColumns = (reportDetailData?.columnConfigurations ?? [])
+      .filter((item) => item.display && !isEmptyValue(item.filterType))
+      .filter((initialColumn) => !fieldFilters.some((column) => initialColumn.name === column.name))
 
-    return filterableColumnConfigurationsList
-      ?.filter((initialColumn) => !fieldFilters.some((column) => initialColumn.name === column.name))
-      ?.map((column) => ({
-        key: column.id as Key,
+    if (availableColumns.length === 0) {
+      return []
+    }
+
+    return [{
+      key: 'report-columns',
+      label: '',
+      items: availableColumns.map((column) => ({
+        key: String(column.id),
         label: getLabelValue(column),
-        onClick: () => { handleColumnClick(column) }
+        meta: column
       }))
+    }]
   }, [fullChartDetailData, reportDetailData, fieldFilters])
 
-  return { fieldFilters, onFilterChange, addColumnMenu }
+  return { fieldFilters, onFilterChange, columnGroups, handleColumnClick }
 }

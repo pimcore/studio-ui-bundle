@@ -11,7 +11,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Empty } from 'antd'
-import { isEmpty } from 'lodash'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
@@ -19,16 +18,16 @@ import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Title } from '@Pimcore/components/title/title'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
+import { ColumnPickerPopover } from '@Pimcore/components/column-picker/column-picker-popover'
 import { FieldFilters } from '@Pimcore/components/field-filters/field-filters'
 import { useFilterQuery } from '@Pimcore/components/filters'
+import { type BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
 import {
   reportsFilterAdapter,
   useReportsDraftFilters
 } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/filters/reports-filters'
 import { PAGE_INITIAL, useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
-import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 import { useFieldFilterEditor } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/use-field-filter-editor'
 
 export const ColumnsFilters = (): React.JSX.Element => {
@@ -36,10 +35,9 @@ export const ColumnsFilters = (): React.JSX.Element => {
   const draftStore = useReportsDraftFilters()
   const buildQuery = useFilterQuery(reportsFilterAdapter, draftStore.values)
   const { setPage } = useReportDataContext()
-  const { fieldFilters, onFilterChange, addColumnMenu } = useFieldFilterEditor()
+  const { fieldFilters, onFilterChange, columnGroups, handleColumnClick } = useFieldFilterEditor()
 
   const { t } = useTranslation()
-  const { styles } = useStyles()
 
   const handleApplyFilters = (): void => {
     setPage(PAGE_INITIAL)
@@ -60,26 +58,31 @@ export const ColumnsFilters = (): React.JSX.Element => {
     <ContentLayout
       renderToolbar={
         <Toolbar theme='secondary'>
-          <Dropdown menu={ { items: addColumnMenu } }>
+          <ColumnPickerPopover<BundleCustomReportsColumnConfiguration>
+            data-testid="report-filters-add"
+            flat
+            groups={ columnGroups }
+            onSelect={ (item) => { handleColumnClick(item.meta!) } }
+            placement="leftBottom"
+          >
             <IconTextButton
               data-testid="report-filters-add-column-button"
-              disabled={ isEmpty(addColumnMenu) }
               icon={ { value: 'new' } }
-              type='link'
+              type='default'
             >
               { t('reports.grid-config.add-column') }
             </IconTextButton>
-          </Dropdown>
+          </ColumnPickerPopover>
 
           <Flex gap='extra-small'>
-            <Button
-              className={ styles.btnLink }
+            <IconTextButton
               data-testid="report-filters-clear-button"
+              icon={ { value: 'close' } }
               onClick={ handleClearFilters }
               type='link'
             >
               {t('sidebar.clear-all-filters')}
-            </Button>
+            </IconTextButton>
 
             <Button
               data-testid="report-filters-apply-button"
