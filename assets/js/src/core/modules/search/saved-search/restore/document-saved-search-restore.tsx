@@ -17,10 +17,11 @@ import { resolveSavedSearchElementType } from '@Pimcore/modules/search/saved-sea
 import { useApplySavedSearch } from './use-apply-saved-search'
 
 /**
- * Logic-only component mounted inside the Asset search listing. Applies a pending asset saved
- * search once the available columns have loaded; data-object searches are left to that applier.
+ * Logic-only component mounted inside the Document search listing. Applies a pending document saved
+ * search once the available columns have loaded; asset / data-object searches are left to their own
+ * appliers.
  */
-export const AssetSavedSearchRestore = (): null => {
+export const DocumentSavedSearchRestore = (): null => {
   const { pendingRestore, setPendingRestore } = useSearch()
   const { availableColumns } = useAvailableColumns()
   const applySavedSearch = useApplySavedSearch()
@@ -29,8 +30,7 @@ export const AssetSavedSearchRestore = (): null => {
     if (isNil(pendingRestore)) {
       return
     }
-    // A data-object / document search belongs to its own listing — let that applier handle it.
-    if (resolveSavedSearchElementType(pendingRestore) !== elementTypes.asset) {
+    if (resolveSavedSearchElementType(pendingRestore) !== elementTypes.document) {
       return
     }
     // Wait for available columns before applying, otherwise the saved column layout is dropped.

@@ -15,6 +15,7 @@ import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/ele
 import { SearchProvider } from '@Pimcore/modules/search/provider/search-provider'
 import { AssetSearchListing } from '@Pimcore/modules/search/modal/tabs/asset/listing/asset-search-listing'
 import { ObjectSearchListing } from '@Pimcore/modules/search/modal/tabs/object/listing/object-search-listing'
+import { DocumentSearchListing } from '@Pimcore/modules/search/modal/tabs/document/listing/document-search-listing'
 import { useSavedSearchGetConfigurationQuery } from '@Pimcore/modules/search/search-api-slice-enhanced'
 
 export interface SavedSearchResultWidgetProps {
@@ -34,12 +35,22 @@ export const SavedSearchResultWidget = ({ savedSearchId, elementType }: SavedSea
     return <Content loading />
   }
 
+  const renderListing = (): React.JSX.Element => {
+    if (elementType === elementTypes.dataObject) {
+      return <ObjectSearchListing />
+    }
+    if (elementType === elementTypes.document) {
+      return <DocumentSearchListing />
+    }
+    return <AssetSearchListing />
+  }
+
   return (
     <SearchProvider
       initialLoadedSavedSearch={ configuration }
       initialPendingRestore={ configuration }
     >
-      { elementType === elementTypes.dataObject ? <ObjectSearchListing /> : <AssetSearchListing /> }
+      { renderListing() }
     </SearchProvider>
   )
 }

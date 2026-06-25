@@ -15,5 +15,12 @@ import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/ele
  * data-object search has no classId, so the stored elementType is the only reliable signal.
  * Defaults to asset when absent.
  */
-export const resolveSavedSearchElementType = (config: { elementType?: string | null }): ElementType =>
-  config.elementType === elementTypes.dataObject ? elementTypes.dataObject : elementTypes.asset
+export const resolveSavedSearchElementType = (config: { elementType?: string | null }): ElementType => {
+  if (config.elementType === elementTypes.dataObject) {
+    return elementTypes.dataObject
+  }
+  if (config.elementType === elementTypes.document) {
+    return elementTypes.document
+  }
+  return elementTypes.asset
+}
