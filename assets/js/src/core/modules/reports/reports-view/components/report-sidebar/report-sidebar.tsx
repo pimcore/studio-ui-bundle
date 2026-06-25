@@ -19,7 +19,7 @@ import {
   ReportsDraftFiltersReset,
   reportsFilterDescriptors
 } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/filters/reports-filters'
-import { SearchFilters } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/search-filters/search-filters'
+import { ColumnsFilters } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/columns-filters'
 import { useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
@@ -45,10 +45,10 @@ export const ReportSidebar = (): React.JSX.Element => {
 
     if (!isEmpty(filterableColumnConfigurations)) {
       entries.push({
-        component: <SearchFilters />,
-        key: 'reports-search-filters',
+        component: <ColumnsFilters />,
+        key: 'reports-field-filters',
         icon: <Icon value="filter" />,
-        tooltip: t('sidebar.search_filter')
+        tooltip: t('reports.field-filters')
       })
     }
 

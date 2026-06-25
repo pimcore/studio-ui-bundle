@@ -20,8 +20,7 @@ import {
   useDynamicTypeResolver,
   type UseDynamicTypeResolverReturnType
 } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
-import { columnsFilterDescriptor } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/columns-filter'
-import { searchTermFilterDescriptor } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/search-filters/search-term-filter'
+import { columnsFilterDescriptor } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/columns-filter-descriptor'
 
 export type ReportColumnFilter = NonNullable<IGridFilter['columnFilters']>[number]
 
@@ -37,7 +36,6 @@ export const {
 } = createFiltersStore()
 
 export const reportsFilterDescriptors: ReadonlyArray<AnyFilterDescriptor<ReportFilterContribution, ReportFilterContext>> = [
-  searchTermFilterDescriptor,
   columnsFilterDescriptor
 ]
 
