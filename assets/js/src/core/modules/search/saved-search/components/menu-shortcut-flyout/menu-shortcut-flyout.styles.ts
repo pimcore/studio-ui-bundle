@@ -10,11 +10,17 @@
 
 import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
-export const useStyles = createStyles(({ css }) => {
+export const useStyles = createStyles(({ css, token }) => {
   return {
+    header: css`
+      padding: ${token.paddingXS}px ${token.paddingSM}px;
+      color: ${token.colorText};
+      font-weight: 600;
+      cursor: default;
+    `,
+
     shortcutName: css`
-      flex: 1 1 auto;
-      min-width: 0;
+      display: block;
       max-width: 240px;
       overflow: hidden;
       text-overflow: ellipsis;
