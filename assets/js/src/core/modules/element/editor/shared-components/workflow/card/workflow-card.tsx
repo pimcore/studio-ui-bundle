@@ -9,6 +9,7 @@
  */
 
 import React from 'react'
+import { Badge } from '@Pimcore/components/badge/badge'
 import { Tag } from '@Pimcore/components/tag/tag'
 import { Card } from '@Pimcore/components/card/card'
 import { useStyles } from './workflow-card.styles'
@@ -30,6 +31,7 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
             workflow.workflowStatus.map((status, index) => (
               <Tag
                 colorInverted={ status.colorInverted ? status.color : undefined }
+                icon={ !status.colorInverted ? <Badge color={ status.color } /> : undefined }
                 key={ `${index}-${status.title}` }
                 title={ status.title }
               >

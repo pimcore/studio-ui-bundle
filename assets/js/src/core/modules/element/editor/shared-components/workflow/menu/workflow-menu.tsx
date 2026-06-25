@@ -10,6 +10,7 @@
 
 import React, { useEffect } from 'react'
 import { TagList } from '@Pimcore/components/tag-list/tag-list'
+import { Badge } from '@Pimcore/components/badge/badge'
 import type { TagProps } from '@Pimcore/components/tag/tag'
 
 import { Dropdown, type DropdownMenuProps, type ItemType } from '@Pimcore/components/dropdown/dropdown'
@@ -50,12 +51,13 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
 
   const getVisibleWorkflowStatus = (): TagProps[][] => {
     if (workflowDetailsData?.items !== undefined && workflowDetailsData.items.length > 0) {
-      const formattedStatuses = workflowDetailsData.items.reduce((result: Array<{ children: string }>, workflow) => {
+      const formattedStatuses = workflowDetailsData.items.reduce((result: TagProps[], workflow) => {
         workflow.workflowStatus.forEach((status) => {
           if (status.visibleInDetail !== undefined && status.visibleInDetail) {
             result.push({
               children: t(`${status.label}`),
-              ...(status.colorInverted ? { colorInverted: status.color } : {})
+              colorInverted: status.colorInverted ? status.color : undefined,
+              icon: !status.colorInverted ? <Badge color={ status.color } /> : undefined
             })
           }
         })
