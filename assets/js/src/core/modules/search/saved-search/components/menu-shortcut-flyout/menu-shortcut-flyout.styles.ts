@@ -12,13 +12,10 @@ import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ css }) => {
   return {
-    flyout: css`
-      min-width: 220px;
-      max-width: 320px;
-    `,
-
     shortcutName: css`
       flex: 1 1 auto;
+      min-width: 0;
+      max-width: 240px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

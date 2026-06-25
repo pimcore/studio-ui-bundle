@@ -10,11 +10,11 @@
 
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Popover, type MenuProps } from 'antd'
+import { type MenuProps } from 'antd'
 import { isEmpty, isNil, isUndefined } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { Menu, type ItemType } from '@Pimcore/components/menu/menu'
+import { Dropdown, type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import {
@@ -79,6 +79,7 @@ export const MenuShortcutFlyout = (): React.JSX.Element => {
   const renderItemLabel = (item: SavedSearchConfigurationListItem): React.JSX.Element => (
     <Flex
       align='center'
+      className='w-full'
       gap='small'
       justify='space-between'
     >
@@ -86,7 +87,7 @@ export const MenuShortcutFlyout = (): React.JSX.Element => {
         className={ styles.shortcutName }
         data-testid='saved-search-shortcut-open'
       >{item.name}</span>
-      {item.owner && (
+      {item.owner === true && (
         <IconButton
           data-testid='saved-search-shortcut-remove'
           icon={ { value: 'trash' } }
@@ -108,16 +109,12 @@ export const MenuShortcutFlyout = (): React.JSX.Element => {
     isLoading: openingId === item.id
   })
 
-  // Grouped shortcuts become submenus; ungrouped ones stay at the top level.
-  const grouped = groupItems(items)
-  const menuItems: ItemType[] = grouped.flatMap(([group, groupEntries]): ItemType[] =>
+  // Grouped shortcuts fly out as cascading submenus; ungrouped ones stay at the top level.
+  const menuItems: ItemType[] = groupItems(items).flatMap(([group, groupEntries]): ItemType[] =>
     group === UNGROUPED
       ? groupEntries.map(toMenuItem)
       : [{ key: `group:${group}`, label: group, children: groupEntries.map(toMenuItem) }]
   )
-  // Inline submenus (expanded by default) so they stay inside the hover flyout — a popup submenu
-  // would render outside the Popover and dismiss it when the pointer moves onto it.
-  const openGroupKeys = grouped.filter(([group]) => group !== UNGROUPED).map(([group]) => `group:${group}`)
 
   const onMenuClick: MenuProps['onClick'] = ({ key }) => {
     if (!key.startsWith('group:')) {
@@ -125,29 +122,16 @@ export const MenuShortcutFlyout = (): React.JSX.Element => {
     }
   }
 
-  const content = (
-    <div className={ styles.flyout }>
-      <Menu
-        defaultOpenKeys={ openGroupKeys }
-        items={ menuItems }
-        mode='inline'
-        onClick={ onMenuClick }
-        selectable={ false }
-      />
-    </div>
-  )
-
   return (
-    <Popover
-      content={ content }
-      mouseEnterDelay={ 0.4 }
-      placement='right'
-      title={ t('saved-search.saved-searches') }
-      trigger='hover'
+    <Dropdown
+      // Open to the right of the left-sidebar icon (Dropdown has no 'right' placement).
+      align={ { points: ['tl', 'tr'], offset: [8, 0] } }
+      menu={ { items: menuItems, onClick: onMenuClick, selectable: false } }
+      trigger={ ['hover'] }
     >
       <span>
         <SearchButton />
       </span>
-    </Popover>
+    </Dropdown>
   )
 }
