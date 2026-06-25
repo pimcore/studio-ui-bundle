@@ -25,7 +25,6 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { formatDateTime } from '@Pimcore/utils/date-time'
-import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { resolveSavedSearchElementType } from '@Pimcore/modules/search/saved-search/utils/resolve-element-type'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import {
@@ -36,6 +35,7 @@ import { type SavedSearchConfigurationListItem } from '@Pimcore/modules/search/s
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { useOpenSavedSearch } from '@Pimcore/modules/search/saved-search/hooks/use-open-saved-search'
+import { useStyles } from './saved-searches-tab.styles'
 
 // Row shape with the display values pre-formatted so the Grid's default cell renders them
 // (matching the name column) instead of custom cell components.
@@ -46,6 +46,7 @@ interface SavedSearchRow extends SavedSearchConfigurationListItem {
 
 export const SavedSearchesTab = (): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyles()
   const { close } = useSearch()
   const widgetManager = useWidgetManager()
   const { open: onOpen, openingId } = useOpenSavedSearch(close)
@@ -55,7 +56,7 @@ export const SavedSearchesTab = (): React.JSX.Element => {
   const [searchTerm, setSearchTerm] = useState('')
   const [deletingId, setDeletingId] = useState<number | undefined>(undefined)
 
-  const { data, isLoading, isFetching, refetch } = useSavedSearchGetConfigurationsQuery({
+  const { data, isFetching, refetch } = useSavedSearchGetConfigurationsQuery({
     page: currentPage,
     pageSize,
     searchTerm: isEmpty(searchTerm) ? undefined : searchTerm
@@ -93,15 +94,15 @@ export const SavedSearchesTab = (): React.JSX.Element => {
       header: t('user-management.name'),
       meta: { autoWidth: true },
       cell: ({ row }) => {
-        const isDataObject = resolveSavedSearchElementType(row.original) === elementTypes.dataObject
+        const elementType = resolveSavedSearchElementType(row.original)
         return (
           <Flex
             align='center'
             gap='small'
             style={ { paddingLeft: 8 } }
           >
-            <Tooltip title={ t(isDataObject ? 'data-object' : 'asset') }>
-              <Icon value={ isDataObject ? 'data-object' : 'asset' } />
+            <Tooltip title={ t(elementType) }>
+              <Icon value={ elementType } />
             </Tooltip>
             {row.original.name}
           </Flex>
@@ -120,10 +121,7 @@ export const SavedSearchesTab = (): React.JSX.Element => {
       id: 'actions',
       header: t('actions'),
       cell: ({ row }) => (
-        <Flex
-          align='center'
-          justify='center'
-        >
+        <Flex align='center'>
           <IconButton
             data-testid='saved-search-open-button'
             icon={ { value: 'folder' } }
@@ -196,9 +194,12 @@ export const SavedSearchesTab = (): React.JSX.Element => {
         </Toolbar>
       }
       renderTopBar={
-        <Box padding={ { x: 'small', y: 'extra-small' } }>
+        <Box
+          className={ styles.topBar }
+          margin={ { bottom: 'small' } }
+          padding={ { x: 'small', y: 'extra-small' } }
+        >
           <SearchInput
-            loading={ isFetching }
             maxWidth='100%'
             onSearch={ (value) => {
               setCurrentPage(1)
@@ -211,14 +212,14 @@ export const SavedSearchesTab = (): React.JSX.Element => {
     >
       <Content
         margin={ { x: 'extra-small', y: 'none' } }
-        none={ !isLoading && isEmpty(data?.items) }
+        none={ !isFetching && isEmpty(data?.items) }
       >
         <Box margin={ { x: 'extra-small', y: 'none' } }>
           <Grid
             autoWidth
             columns={ columns }
             data={ tableItems }
-            isLoading={ isLoading }
+            isLoading={ isFetching }
             resizable
             // During loading the Grid renders placeholder rows without an id; return undefined for
             // those so it falls back to unique index ids (a constant id collides → phantom skeleton
