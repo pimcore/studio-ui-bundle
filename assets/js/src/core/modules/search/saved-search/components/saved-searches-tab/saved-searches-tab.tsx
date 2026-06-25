@@ -61,7 +61,7 @@ export const SavedSearchesTab = (): React.JSX.Element => {
   const sortFieldByColumn: Record<string, string> = { name: 'name', modificationDateLabel: 'modificationDate' }
   const activeSort = sorting[0]
   const sortBy = isUndefined(activeSort) ? undefined : sortFieldByColumn[activeSort.id]
-  const sortOrder = isUndefined(sortBy) ? undefined : (activeSort?.desc === true ? 'DESC' : 'ASC')
+  const sortOrder = isUndefined(sortBy) ? undefined : (activeSort?.desc ? 'DESC' : 'ASC')
 
   const { data, isFetching, refetch } = useSavedSearchGetConfigurationsQuery({
     page: currentPage,
