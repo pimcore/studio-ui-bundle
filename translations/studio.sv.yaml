@@ -2757,8 +2757,7 @@ select.clear-selection: Rensa val
 asset.folder.preview.image-display: Bildvisning
 asset.folder.preview.image-display.small: Liten
 asset.folder.preview.image-display.large: Stor
-saved-search.title: Spara sökning
-saved-search.title-shared: Sparad sökning
+saved-search.title: Sparad sökning
 saved-search.delete-search: Ta bort sökning
 saved-search.save-as-new: Spara som ny sökning
 saved-search.create-menu-shortcut: Skapa genväg i menyn

@@ -79,7 +79,7 @@ export const SavedSearchDirtyTracker = ({ elementType }: SavedSearchDirtyTracker
     if (isNil(id) || !active) {
       return
     }
-    dispatch(setSavedSearchDirty({ id, dirty }))
+    dispatch(setSavedSearchDirty({ id, source: 'grid', dirty }))
   }, [id, dirty, active])
 
   useEffect(() => {
