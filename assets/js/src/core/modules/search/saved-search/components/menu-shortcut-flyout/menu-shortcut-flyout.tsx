@@ -87,7 +87,7 @@ export const MenuShortcutFlyout = (): React.JSX.Element => {
         className={ styles.shortcutName }
         data-testid='saved-search-shortcut-open'
       >{item.name}</span>
-      {item.owner === true && (
+      {item.owner && (
         <IconButton
           data-testid='saved-search-shortcut-remove'
           icon={ { value: 'trash' } }
