@@ -8,11 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { Flex } from '@Pimcore/components/flex/flex'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ClassDefinitionSelect } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/components/class-definition-select/class-definition-select'
 import { ProvidedTypeSelect } from '@Pimcore/modules/element/components/type-select/provided-type-select'
 import { SearchTermFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/search/search-term-filter'
-import { Flex } from 'antd'
 import React from 'react'
 
 export const TopBar = (): React.JSX.Element => {

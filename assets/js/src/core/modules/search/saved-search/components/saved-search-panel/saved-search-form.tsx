@@ -10,11 +10,12 @@
 
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Input } from 'antd'
 import { isEmpty } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { type formInstanceType } from '@Pimcore/components/form/use-form'
+import { Input } from '@Pimcore/components/input/input'
+import { TextArea } from '@Pimcore/components/textarea/textarea'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { Text } from '@Pimcore/components/text/text'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -171,7 +172,7 @@ export const SavedSearchForm = ({
         label={ t('description') }
         name="description"
       >
-        <Input.TextArea data-testid='saved-search-description-input' />
+        <TextArea data-testid='saved-search-description-input' />
       </Form.Item>
 
       <Form.Item
