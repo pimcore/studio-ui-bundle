@@ -150,7 +150,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
         assetWorkspaces: item.assetWorkspaces,
         dataObjectWorkspaces: item.dataObjectWorkspaces,
         documentWorkspaces: item.documentWorkspaces,
-        perspectives: item.perspectives
+        perspectives: item.perspectives.map((perspective) => perspective.id)
       }
     }))
     await handleNotification(t('roles.save-item.success'), error)
@@ -164,7 +164,10 @@ export const useRoleHelper = (): IUseRoleReturn => {
     const { id, parentId } = props
 
     const role = await fetchRoleById({ id })
-    const { data, error }: any = await dispatch(api.endpoints.roleUpdateById.initiate({ id, updateRole: { ...role, parentId } }))
+    const { data, error }: any = await dispatch(api.endpoints.roleUpdateById.initiate({
+      id,
+      updateRole: { ...role, parentId, perspectives: role.perspectives.map((perspective) => perspective.id) }
+    }))
 
     await handleNotification(t('roles.save-item.success'), error)
     return data
