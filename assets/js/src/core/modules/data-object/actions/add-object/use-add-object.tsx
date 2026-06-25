@@ -47,7 +47,7 @@ export const useAddObject = (): UseAddObjectHookReturn => {
   const { isTreeActionAllowed } = useTreePermission()
   const { classIds: allowedClassIds } = useTreeFilter()
   // the creatable collection only contains the classes the current user may create
-  const { data: creatableClasses, isLoading, error } = useClassDefinitionCollectionCreatableQuery(undefined, {
+  const { data: creatableClasses, isLoading, error } = useClassDefinitionCollectionCreatableQuery({}, {
     skip: !isAllowed(UserPermission.Objects)
   })
 

@@ -2766,3 +2766,23 @@ select.clear-selection: Borrar selección
 asset.folder.preview.image-display: Visualización de imágenes
 asset.folder.preview.image-display.small: Pequeño
 asset.folder.preview.image-display.large: Grande
+ownership-management.title: Gestión de propiedad
+ownership-management.show-deleted-owners: Mostrar elementos de usuarios eliminados
+ownership-management.deleted-user: Usuario eliminado
+ownership-management.columns.id: ID
+ownership-management.columns.name: Nombre
+ownership-management.columns.modification-date: Fecha de modificación
+ownership-management.columns.owner: Propietario
+ownership-management.columns.actions: Acciones
+ownership-management.actions.reassign-owner: Reasignar propietario
+ownership-management.actions.reassign-owner.title: Reasignando el propietario de las configuraciones
+ownership-management.actions.delete: Eliminar
+ownership-management.actions.delete.title: Eliminando configuraciones
+ownership-management.actions.batch-assign: Asignación por lotes
+ownership-management.actions.batch-delete: Eliminación por lotes
+ownership-management.reassign-owner.title: "Reasignar el propietario de {{count}} configuración(es)"
+ownership-management.reassign-owner.confirm: Reasignar
+ownership-management.reassign-owner.placeholder: Buscar un usuario por nombre
+ownership-management.delete.title: Eliminar configuraciones
+ownership-management.delete.content: "¿Seguro que desea eliminar {{count}} configuración(es)?"
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Gestión de propiedad

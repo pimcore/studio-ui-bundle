@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 export type Tag = string | {
@@ -63,6 +65,7 @@ export const tagNames = {
   EMAIL_LOG_DETAIL: 'EMAIL_LOG_DETAIL',
   RECYCLE_BIN: 'RECYCLE_BIN',
   RECYCLE_BIN_DETAIL: 'RECYCLE_BIN_DETAIL',
+  OWNERSHIP_MANAGEMENT: 'OWNERSHIP_MANAGEMENT',
   PERSPECTIVES: 'PERSPECTIVES',
   PERSPECTIVE_DETAIL: 'PERSPECTIVE_DETAIL',
   WIDGETS: 'WIDGETS',
@@ -157,6 +160,7 @@ export const providingTags = {
   EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }],
   RECYCLING_BIN: () => [tagNames.RECYCLE_BIN],
   RECYCLING_BIN_DETAIL: (id: number) => [{ type: tagNames.RECYCLE_BIN_DETAIL, id }],
+  OWNERSHIP_MANAGEMENT: () => [tagNames.OWNERSHIP_MANAGEMENT],
   APPLICATION_LOGGER: () => [tagNames.APPLICATION_LOGGER],
   APPLICATION_LOGGER_DETAIL: (id: number) => [{ type: tagNames.APPLICATION_LOGGER_DETAIL, id }],
   PERSPECTIVES: () => [tagNames.PERSPECTIVES],
@@ -247,6 +251,7 @@ export const invalidatingTags = {
   EMAIL_LOG: () => [tagNames.EMAIL_LOG],
   EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }],
   RECYCLING_BIN: () => [tagNames.RECYCLE_BIN],
+  OWNERSHIP_MANAGEMENT: () => [tagNames.OWNERSHIP_MANAGEMENT],
   PERSPECTIVES: () => [tagNames.PERSPECTIVES],
   WIDGETS: () => [tagNames.WIDGETS],
   USERS: () => [tagNames.USERS],

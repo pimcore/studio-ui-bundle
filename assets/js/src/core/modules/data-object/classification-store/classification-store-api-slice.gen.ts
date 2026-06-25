@@ -362,6 +362,7 @@ export type ClassificationStoreConfigurationCollectionCollectionApiArg = {
             pageSize?: number;
             columnFilters?: object;
             sortFilter?: object;
+            additionalSortFilters?: object;
         };
     };
 };
@@ -396,6 +397,7 @@ export type ClassificationStoreConfigurationCollectionRelationCollectionApiArg =
             pageSize?: number;
             columnFilters?: object;
             sortFilter?: object;
+            additionalSortFilters?: object;
         };
     };
 };
@@ -422,6 +424,7 @@ export type ClassificationStoreConfigurationGroupCollectionApiArg = {
             pageSize?: number;
             columnFilters?: object;
             sortFilter?: object;
+            additionalSortFilters?: object;
         };
     };
 };
@@ -456,6 +459,7 @@ export type ClassificationStoreConfigurationKeyCollectionApiArg = {
             pageSize?: number;
             columnFilters?: object;
             sortFilter?: object;
+            additionalSortFilters?: object;
         };
     };
 };
@@ -490,6 +494,7 @@ export type ClassificationStoreConfigurationKeyGroupRelationCollectionApiArg = {
             pageSize?: number;
             columnFilters?: object;
             sortFilter?: object;
+            additionalSortFilters?: object;
         };
     };
 };
