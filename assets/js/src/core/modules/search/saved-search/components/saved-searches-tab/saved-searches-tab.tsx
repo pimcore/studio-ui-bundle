@@ -222,7 +222,10 @@ export const SavedSearchesTab = (): React.JSX.Element => {
             data={ tableItems }
             isLoading={ isLoading }
             resizable
-            setRowId={ (row) => String(row.id) }
+            // During loading the Grid renders placeholder rows without an id; return undefined for
+            // those so it falls back to unique index ids (a constant id collides → phantom skeleton
+            // rows linger after the data loads).
+            setRowId={ (row) => row.id !== undefined ? String(row.id) : (undefined as unknown as string) }
           />
         </Box>
       </Content>

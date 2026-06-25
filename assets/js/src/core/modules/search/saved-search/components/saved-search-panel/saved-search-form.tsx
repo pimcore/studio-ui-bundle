@@ -66,6 +66,9 @@ export const SavedSearchForm = ({
 
   const { data: userList } = useUserGetShareCollectionQuery()
   const { data: roleList } = useRoleGetShareCollectionQuery()
+  // When the shortcut is enabled, tighten the gap to the menu-group field below so they read as one
+  // group (kept at the normal spacing otherwise, so the toggle isn't cramped against the next field).
+  const createMenuShortcutEnabled = Form.useWatch('createMenuShortcut', form) === true
 
   const handleFormValuesChange = (changedValues: Partial<SavedSearchFormValues>): void => {
     if (changedValues.shareGlobally !== undefined) {
@@ -172,6 +175,7 @@ export const SavedSearchForm = ({
 
       <Form.Item
         name="createMenuShortcut"
+        style={ createMenuShortcutEnabled ? { marginBottom: 8 } : undefined }
         valuePropName='checked'
       >
         <Switch labelRight={ <Text>{t('saved-search.create-menu-shortcut')}</Text> } />
