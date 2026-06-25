@@ -229,7 +229,6 @@ export type SavedSearchSaveConfigurationApiArg = {
         name: string;
         description?: string;
         classId?: string;
-        elementType?: string;
         shareGlobal?: boolean;
         createMenuShortcut?: boolean;
         sharedUsers?: object;
@@ -237,6 +236,7 @@ export type SavedSearchSaveConfigurationApiArg = {
         columns: (Column | GridColumnRequest)[];
         filter?: GridFilter | null;
         menuShortcutGroup?: string;
+        elementType?: string;
     };
 };
 export type SavedSearchGetConfigurationApiResponse =
@@ -266,7 +266,6 @@ export type SavedSearchUpdateConfigurationApiArg = {
         name: string;
         description?: string;
         classId?: string;
-        elementType?: string;
         shareGlobal?: boolean;
         createMenuShortcut?: boolean;
         sharedUsers?: object;
@@ -274,6 +273,7 @@ export type SavedSearchUpdateConfigurationApiArg = {
         columns: (Column | GridColumnRequest)[];
         filter?: GridFilter | null;
         menuShortcutGroup?: string;
+        elementType?: string;
     };
 };
 export type SavedSearchDeleteConfigurationApiResponse = unknown;
@@ -565,8 +565,6 @@ export type SavedSearchDetailedConfiguration = {
     createMenuShortcut: boolean;
     /** Class ID for data object searches */
     classId?: string | null;
-    /** Element type the search targets (asset or data-object) */
-    elementType?: string | null;
     /** Grid display columns */
     columns: (Column | GridColumnRequest)[];
     /** Filter data */
@@ -577,6 +575,8 @@ export type SavedSearchDetailedConfiguration = {
     creationDate?: number | null;
     /** Name of the group in the menu the shortcut belongs to */
     menuShortcutGroup?: string | null;
+    /** Element type the search targets (asset or data-object) */
+    elementType?: string | null;
 };
 export type SavedSearchConfigurationListItem = {
     /** AdditionalAttributes */
