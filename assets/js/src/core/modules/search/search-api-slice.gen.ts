@@ -229,6 +229,7 @@ export type SavedSearchSaveConfigurationApiArg = {
         name: string;
         description?: string;
         classId?: string;
+        elementType?: string;
         shareGlobal?: boolean;
         createMenuShortcut?: boolean;
         sharedUsers?: object;
@@ -265,6 +266,7 @@ export type SavedSearchUpdateConfigurationApiArg = {
         name: string;
         description?: string;
         classId?: string;
+        elementType?: string;
         shareGlobal?: boolean;
         createMenuShortcut?: boolean;
         sharedUsers?: object;
@@ -563,6 +565,8 @@ export type SavedSearchDetailedConfiguration = {
     createMenuShortcut: boolean;
     /** Class ID for data object searches */
     classId?: string | null;
+    /** Element type the search targets (asset or data-object) */
+    elementType?: string | null;
     /** Grid display columns */
     columns: (Column | GridColumnRequest)[];
     /** Filter data */
@@ -595,6 +599,8 @@ export type SavedSearchConfigurationListItem = {
     menuShortcutGroup?: string | null;
     /** Class ID for data object searches (null for asset searches) */
     classId?: string | null;
+    /** Element type the search targets (asset or data-object) */
+    elementType?: string | null;
 };
 export const {
     useAssetGetSearchConfigurationQuery,

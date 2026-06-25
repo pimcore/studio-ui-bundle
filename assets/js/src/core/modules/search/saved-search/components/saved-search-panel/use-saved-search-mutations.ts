@@ -29,6 +29,7 @@ interface UseSavedSearchMutationsParams {
   form: formInstanceType
   loaded: SavedSearchDetailedConfiguration | undefined
   classId?: string
+  elementType?: string
   columns: SavedSearchSaveConfigurationApiArg['body']['columns']
   filter: SavedSearchSaveConfigurationApiArg['body']['filter']
   isSharedGlobally: boolean
@@ -47,7 +48,7 @@ interface UseSavedSearchMutationsReturn {
 }
 
 export const useSavedSearchMutations = (params: UseSavedSearchMutationsParams): UseSavedSearchMutationsReturn => {
-  const { form, loaded, classId, columns, filter, isSharedGlobally, sharedUsers, sharedRoles, onReset } = params
+  const { form, loaded, classId, elementType, columns, filter, isSharedGlobally, sharedUsers, sharedRoles, onReset } = params
   const { t } = useTranslation()
   const message = useMessage()
   const { setLoadedSavedSearch } = useSearch()
@@ -65,6 +66,7 @@ export const useSavedSearchMutations = (params: UseSavedSearchMutationsParams): 
     sharedUsers: isSharedGlobally ? [] : sharedUsers,
     sharedRoles: isSharedGlobally ? [] : sharedRoles,
     classId,
+    elementType,
     columns,
     filter
   })

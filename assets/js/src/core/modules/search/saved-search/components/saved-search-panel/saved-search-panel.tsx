@@ -11,7 +11,7 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Col, Flex, Row } from 'antd'
-import { isArray, isEmpty, isNil, isString } from 'lodash'
+import { isArray, isNil } from 'lodash'
 import { Form } from '@Pimcore/components/form/form'
 import { Text } from '@Pimcore/components/text/text'
 import { Button } from '@Pimcore/components/button/button'
@@ -30,11 +30,12 @@ import { useUserGetByIdQuery } from '@Pimcore/modules/user/user-api-slice-enhanc
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
-import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import {
   type SavedSearchSaveConfigurationApiArg,
   type SavedSearchDetailedConfiguration
 } from '@Pimcore/modules/search/search-api-slice.gen'
+import { resolveSavedSearchElementType } from '@Pimcore/modules/search/saved-search/utils/resolve-element-type'
 import { SavedSearchForm, type SavedSearchFormValues, defaultValues } from './saved-search-form'
 import { useSavedSearchMutations } from './use-saved-search-mutations'
 
@@ -45,9 +46,6 @@ interface SavedSearchPanelProps {
 
 interface LiveArgs { classId?: string, body?: { filters?: unknown } }
 type SaveColumns = SavedSearchSaveConfigurationApiArg['body']['columns']
-
-const elementTypeOf = (configuration: SavedSearchDetailedConfiguration): ElementType =>
-  isString(configuration.classId) && !isEmpty(configuration.classId) ? elementTypes.dataObject : elementTypes.asset
 
 const toNumberArray = (value: unknown): number[] => (isArray(value) ? value as number[] : [])
 
@@ -67,7 +65,7 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
   const [sharedRoles, setSharedRoles] = useState<number[]>([])
 
   // The saved search loaded into this listing, if it belongs to this tab's element type.
-  const loaded = supportsLoadedState && !isNil(loadedSavedSearch) && elementTypeOf(loadedSavedSearch) === elementType
+  const loaded = supportsLoadedState && !isNil(loadedSavedSearch) && resolveSavedSearchElementType(loadedSavedSearch) === elementType
     ? loadedSavedSearch
     : undefined
   const isOwner = !isNil(loaded) && loaded.ownerId === user?.id
@@ -120,6 +118,7 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
     form,
     loaded,
     classId: liveArgs.classId,
+    elementType,
     columns: liveColumns,
     filter: liveFilter,
     isSharedGlobally,

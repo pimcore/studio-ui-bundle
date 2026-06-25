@@ -9,12 +9,12 @@
  */
 
 import { useState } from 'react'
-import { isEmpty, isString, isUndefined } from 'lodash'
-import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { isUndefined } from 'lodash'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useLazySavedSearchGetConfigurationQuery } from '@Pimcore/modules/search/search-api-slice-enhanced'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { SAVED_SEARCH_RESULT_WIDGET } from '@Pimcore/modules/search/saved-search'
+import { resolveSavedSearchElementType } from '@Pimcore/modules/search/saved-search/utils/resolve-element-type'
 
 interface UseOpenSavedSearchReturn {
   /** Loads the saved search and opens it as a tab in the main widget area. */
@@ -38,9 +38,7 @@ export const useOpenSavedSearch = (onOpened?: () => void): UseOpenSavedSearchRet
     fetchConfiguration({ id }).then((result) => {
       if ('data' in result && !isUndefined(result.data)) {
         const configuration = result.data
-        const elementType = isString(configuration.classId) && !isEmpty(configuration.classId)
-          ? elementTypes.dataObject
-          : elementTypes.asset
+        const elementType = resolveSavedSearchElementType(configuration)
 
         widgetManager.openMainWidget({
           id: `saved-search-${id}`,

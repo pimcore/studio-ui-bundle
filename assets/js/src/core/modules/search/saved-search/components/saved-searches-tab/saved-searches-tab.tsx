@@ -24,6 +24,8 @@ import { Grid } from '@Pimcore/components/grid/grid'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { formatDateTime } from '@Pimcore/utils/date-time'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { resolveSavedSearchElementType } from '@Pimcore/modules/search/saved-search/utils/resolve-element-type'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import {
   useSavedSearchGetConfigurationsQuery,
@@ -90,8 +92,7 @@ export const SavedSearchesTab = (): React.JSX.Element => {
       header: t('user-management.name'),
       meta: { autoWidth: true },
       cell: ({ row }) => {
-        // The list item carries the classId — data object searches have one, asset searches don't.
-        const isDataObject = !isEmpty(row.original.classId)
+        const isDataObject = resolveSavedSearchElementType(row.original) === elementTypes.dataObject
         return (
           <Flex
             align='center'
