@@ -17,6 +17,8 @@ import { GridContainer } from '@Pimcore/modules/element/listing/abstract/view-la
 import { TopBar } from '../../top-bar/top-bar'
 import { Toolbar } from '../../toolbar/toolbar'
 import { AssetSavedSearchRestore } from '@Pimcore/modules/search/saved-search/restore/asset-saved-search-restore'
+import { SavedSearchDirtyTracker } from '@Pimcore/modules/search/saved-search/dirty/saved-search-dirty-tracker'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 export const DefaultView = (): React.JSX.Element => {
   const { dataQueryResult } = useData()
@@ -42,6 +44,7 @@ export const DefaultView = (): React.JSX.Element => {
   return (
     <>
       <AssetSavedSearchRestore />
+      <SavedSearchDirtyTracker elementType={ elementTypes.asset } />
       {content}
     </>
   )

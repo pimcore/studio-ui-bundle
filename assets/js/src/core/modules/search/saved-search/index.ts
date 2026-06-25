@@ -12,7 +12,10 @@ import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/wi
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
+import { store } from '@Pimcore/app/store'
 import { SavedSearchResultWidget } from './widget/saved-search-result-widget'
+import { SavedSearchTitle } from './widget/saved-search-title'
+import { selectSavedSearchDirty } from './dirty/saved-search-dirty-slice'
 
 export const SAVED_SEARCH_RESULT_WIDGET = 'saved-search-result'
 
@@ -22,7 +25,9 @@ moduleSystem.registerModule({
 
     widgetRegistryService.registerWidget({
       name: SAVED_SEARCH_RESULT_WIDGET,
-      component: SavedSearchResultWidget
+      component: SavedSearchResultWidget,
+      titleComponent: SavedSearchTitle,
+      isModified: (tabNode) => selectSavedSearchDirty(store.getState(), Number(tabNode.getConfig().savedSearchId))
     })
   }
 })
