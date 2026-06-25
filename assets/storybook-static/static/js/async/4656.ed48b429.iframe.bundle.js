@@ -1,0 +1,2 @@
+/*! For license information please see 4656.ed48b429.iframe.bundle.js.LICENSE.txt */
+"use strict";(self.webpackChunkpimcore_studio_ui_bundle_core=self.webpackChunkpimcore_studio_ui_bundle_core||[]).push([["4656"],{"./node_modules/storybook/core/components/index.js"(o,e,s){s.d(e,{createCopyToClipboardFunction:()=>n.zH});var n=s("./node_modules/@storybook/core/dist/components/index.js")}}]);
