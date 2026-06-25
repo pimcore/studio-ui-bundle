@@ -36,6 +36,7 @@ import { type SavedSearchConfigurationListItem } from '@Pimcore/modules/search/s
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { useOpenSavedSearch } from '@Pimcore/modules/search/saved-search/hooks/use-open-saved-search'
+import { useStyles } from './saved-searches-tab.styles'
 
 // Row shape with the display values pre-formatted so the Grid's default cell renders them
 // (matching the name column) instead of custom cell components.
@@ -46,6 +47,7 @@ interface SavedSearchRow extends SavedSearchConfigurationListItem {
 
 export const SavedSearchesTab = (): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyles()
   const { close } = useSearch()
   const widgetManager = useWidgetManager()
   const { open: onOpen, openingId } = useOpenSavedSearch(close)
@@ -158,37 +160,42 @@ export const SavedSearchesTab = (): React.JSX.Element => {
   return (
     <ContentLayout
       renderToolbar={
-        <Toolbar theme='secondary'>
-          <Flex align='center'>
-            <IconButton
-              data-testid='saved-search-refresh-button'
-              icon={ { value: 'refresh' } }
-              loading={ isFetching }
-              onClick={ () => { void refetch() } }
-              tooltip={ { title: t('refresh') } }
-              type='link'
-            />
-            {total > 0 && (
-              <>
-                <Divider
-                  size='small'
-                  type='vertical'
-                />
-                <Pagination
-                  current={ currentPage }
-                  defaultPageSize={ pageSize }
-                  onChange={ (page, size) => {
-                    setCurrentPage(page)
-                    setPageSize(size)
-                  } }
-                  showSizeChanger
-                  showTotal={ (totalItems) => t('pagination.show-total', { total: totalItems }) }
-                  total={ total }
-                />
-              </>
-            )}
-          </Flex>
-        </Toolbar>
+        <div className={ styles.footer }>
+          <Toolbar
+            padding={ { x: 'small', y: 'extra-small' } }
+            theme='secondary'
+          >
+            <Flex align='center'>
+              <IconButton
+                data-testid='saved-search-refresh-button'
+                icon={ { value: 'refresh' } }
+                loading={ isFetching }
+                onClick={ () => { void refetch() } }
+                tooltip={ { title: t('refresh') } }
+                type='link'
+              />
+              {total > 0 && (
+                <>
+                  <Divider
+                    size='small'
+                    type='vertical'
+                  />
+                  <Pagination
+                    current={ currentPage }
+                    defaultPageSize={ pageSize }
+                    onChange={ (page, size) => {
+                      setCurrentPage(page)
+                      setPageSize(size)
+                    } }
+                    showSizeChanger
+                    showTotal={ (totalItems) => t('pagination.show-total', { total: totalItems }) }
+                    total={ total }
+                  />
+                </>
+              )}
+            </Flex>
+          </Toolbar>
+        </div>
       }
       renderTopBar={
         <Box padding={ { x: 'small', y: 'extra-small' } }>
