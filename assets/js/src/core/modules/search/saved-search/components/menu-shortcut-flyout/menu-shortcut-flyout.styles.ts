@@ -15,7 +15,6 @@ export const useStyles = createStyles(({ css, token }) => {
     header: css`
       padding: ${token.paddingXS}px ${token.paddingSM}px;
       color: ${token.colorTextSecondary};
-      font-size: ${token.fontSizeSM}px;
       cursor: default;
     `,
 
