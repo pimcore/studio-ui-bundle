@@ -260,9 +260,9 @@ export type SavedSearchGetConfigurationsApiArg = {
     /** Optional term to filter the saved search configurations by name. */
     searchTerm?: string;
     /** Sort by field. */
-    sortBy?: string;
+    sortBy?: "name" | "modificationDate";
     /** Sort order (asc or desc). */
-    sortOrder?: string;
+    sortOrder?: "ASC" | "DESC";
 };
 export type SavedSearchUpdateConfigurationApiResponse = unknown;
 export type SavedSearchUpdateConfigurationApiArg = {
