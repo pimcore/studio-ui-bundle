@@ -25,21 +25,17 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { formatDateTime } from '@Pimcore/utils/date-time'
-import { useAppDispatch } from '@Pimcore/app/store'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { useUserGetByIdQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
-import {
-  type SavedSearchSaveConfigurationApiArg,
-  type SavedSearchDetailedConfiguration
-} from '@Pimcore/modules/search/search-api-slice.gen'
+import { type SavedSearchSaveConfigurationApiArg } from '@Pimcore/modules/search/search-api-slice.gen'
 import { resolveSavedSearchElementType } from '@Pimcore/modules/search/saved-search/utils/resolve-element-type'
-import { setSavedSearchDirty } from '@Pimcore/modules/search/saved-search/dirty/saved-search-dirty-slice'
 import { SavedSearchForm, type SavedSearchFormValues, defaultValues } from './saved-search-form'
 import { useSavedSearchMutations } from './use-saved-search-mutations'
+import { useSavedSearchMetaDirty } from './use-saved-search-meta-dirty'
 
 interface SavedSearchPanelProps {
   elementType?: ElementType
@@ -51,21 +47,10 @@ type SaveColumns = SavedSearchSaveConfigurationApiArg['body']['columns']
 
 const toNumberArray = (value: unknown): number[] => (isArray(value) ? value as number[] : [])
 
-// Order-independent comparison of two id lists (shared users / roles).
-const sameIdSet = (a: number[], b: number[]): boolean => {
-  if (a.length !== b.length) {
-    return false
-  }
-  const sortedA = [...a].sort((x, y) => x - y)
-  const sortedB = [...b].sort((x, y) => x - y)
-  return sortedA.every((value, index) => value === sortedB[index])
-}
-
 export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSearchPanelProps): React.JSX.Element => {
   const { t } = useTranslation()
   const user = useUser()
   const { modal } = useStudioModal()
-  const dispatch = useAppDispatch()
   const [form] = Form.useForm()
 
   const { useDataQueryHelper } = useSettings()
@@ -90,26 +75,8 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
   const { data: ownerData } = useUserGetByIdQuery({ id: loaded?.ownerId ?? 0 }, { skip: isNil(loaded) || isOwner })
   const ownerName = isOwner ? user?.username : ownerData?.name
 
-  // Live form values, watched so metadata edits in this panel re-render and re-evaluate dirtiness.
-  const watchedName = Form.useWatch('name', form)
-  const watchedDescription = Form.useWatch('description', form)
-  const watchedCreateMenuShortcut = Form.useWatch('createMenuShortcut', form)
-  const watchedMenuShortcutGroup = Form.useWatch('menuShortcutGroup', form)
-
-  // Whether the panel metadata (name/description/shortcut/sharing) differs from the loaded search.
-  // Only meaningful for your own loaded search (a shared search is cloned, not updated) and once the
-  // form has been prefilled for it (prefilledId gate avoids a "*" flash during the initial prefill).
-  const liveGroup = (watchedCreateMenuShortcut ?? false) ? (watchedMenuShortcutGroup ?? '') : ''
-  const loadedGroup = !isNil(loaded) && loaded.createMenuShortcut ? (loaded.menuShortcutGroup ?? '') : ''
-  const metaDirty = !isNil(loaded) && isOwner && prefilledId === loaded.id && (
-    (watchedName ?? '') !== loaded.name ||
-    (watchedDescription ?? '') !== (loaded.description ?? '') ||
-    (watchedCreateMenuShortcut ?? false) !== loaded.createMenuShortcut ||
-    liveGroup !== loadedGroup ||
-    isSharedGlobally !== loaded.shareGlobal ||
-    !sameIdSet(sharedUsers, toNumberArray(loaded.sharedUsers)) ||
-    !sameIdSet(sharedRoles, toNumberArray(loaded.sharedRoles))
-  )
+  // Feed the panel metadata (name/description/shortcut/sharing) into the tab "*" dirty indicator.
+  useSavedSearchMetaDirty({ form, loaded, isOwner, prefilledId, isSharedGlobally, sharedUsers, sharedRoles })
 
   // Capture the live grid state for the save/update body — the selected columns (with width, the
   // same data grid configs persist) and the assembled filter (search term + field filters). Update
@@ -144,25 +111,6 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
     setSharedUsers(toNumberArray(loaded.sharedUsers))
     setSharedRoles(toNumberArray(loaded.sharedRoles))
     setPrefilledId(loaded.id)
-  }, [loaded?.id])
-
-  // Report metadata dirtiness to the tab "*" indicator (combined with the grid tracker's flag).
-  useEffect(() => {
-    if (isNil(loaded) || !isOwner) {
-      return
-    }
-    dispatch(setSavedSearchDirty({ id: loaded.id, source: 'meta', dirty: metaDirty }))
-  }, [loaded?.id, isOwner, metaDirty])
-
-  // Clear the metadata flag when the panel unmounts or the loaded search changes — unsaved panel
-  // edits don't survive a panel close anyway, so the "*" should not linger from this source.
-  useEffect(() => {
-    const id = loaded?.id
-    return () => {
-      if (!isNil(id)) {
-        dispatch(setSavedSearchDirty({ id, source: 'meta', dirty: false }))
-      }
-    }
   }, [loaded?.id])
 
   const reset = (): void => {
