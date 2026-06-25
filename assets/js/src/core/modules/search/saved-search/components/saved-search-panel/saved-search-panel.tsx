@@ -259,7 +259,6 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
             } }
             sharedRoles={ sharedRoles }
             sharedUsers={ sharedUsers }
-            showName={ !isNil(loaded) }
             showSharing={ isNil(loaded) || isOwner }
           />
         </Flex>

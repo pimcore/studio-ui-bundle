@@ -49,9 +49,6 @@ interface SavedSearchFormProps {
   onUsersRolesChange: (changes: { sharedUsers: number[], sharedRoles: number[] }) => void
   /** Whether to show the sharing controls — hidden when viewing someone else's search (clone). */
   showSharing: boolean
-  /** Whether to show the inline name field — hidden for a brand-new search (the name is prompted on
-   *  save), shown for a loaded search where it edits the name (Update) / shows the source name. */
-  showName: boolean
 }
 
 export const SavedSearchForm = ({
@@ -61,8 +58,7 @@ export const SavedSearchForm = ({
   sharedUsers,
   sharedRoles,
   onUsersRolesChange,
-  showSharing,
-  showName
+  showSharing
 }: SavedSearchFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -159,15 +155,13 @@ export const SavedSearchForm = ({
       layout="vertical"
       onValuesChange={ handleFormValuesChange }
     >
-      { showName && (
-        <Form.Item
-          label={ t('user-management.name') }
-          name="name"
-          rules={ [{ required: true, message: t('form.validation.provide-name') }] }
-        >
-          <Input data-testid='saved-search-name-input' />
-        </Form.Item>
-      )}
+      <Form.Item
+        label={ t('user-management.name') }
+        name="name"
+        rules={ [{ required: true, message: t('form.validation.provide-name') }] }
+      >
+        <Input data-testid='saved-search-name-input' />
+      </Form.Item>
 
       <Form.Item
         label={ t('description') }

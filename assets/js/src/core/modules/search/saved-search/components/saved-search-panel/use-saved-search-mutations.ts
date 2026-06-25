@@ -12,7 +12,6 @@ import { useTranslation } from 'react-i18next'
 import { isEmpty, isNil, isUndefined } from 'lodash'
 import { type formInstanceType } from '@Pimcore/components/form/use-form'
 import { useMessage } from '@Pimcore/components/message/useMessage'
-import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { openSavedSearchResultWidget } from '@Pimcore/modules/search/saved-search/widget/saved-search-widget'
@@ -58,7 +57,6 @@ export const useSavedSearchMutations = (params: UseSavedSearchMutationsParams): 
   } = params
   const { t } = useTranslation()
   const message = useMessage()
-  const modal = useFormModal()
   const widgetManager = useWidgetManager()
   const { setLoadedSavedSearch, close } = useSearch()
 
@@ -93,29 +91,19 @@ export const useSavedSearchMutations = (params: UseSavedSearchMutationsParams): 
     onReset()
   }
 
-  // "Save as new"/"Clone" prompts for the new search's name (so a copy gets a distinct name), then
-  // creates it and switches to it. The name comes from the prompt; the remaining metadata
-  // (description / shortcut / sharing) is taken from the current panel state.
+  // "Save as new"/"Clone" creates a new search from the current panel state (name from the form) and
+  // switches to it so it becomes the base for subsequent updates.
   const onSaveAsNew = (): void => {
-    modal.input({
-      title: t('saved-search.save-as-new'),
-      label: t('user-management.name'),
-      initialValue: (form.getFieldValue('name') as string | undefined) ?? '',
-      rule: { required: true, message: t('form.validation.provide-name') },
-      okText: t('save'),
-      onOk: async (name: string) => {
-        const values = form.getFieldsValue() as SavedSearchFormValues
-        const result = await saveConfiguration({ body: buildBody({ ...values, name }) })
+    void form.validateFields().then((values: SavedSearchFormValues) => {
+      saveConfiguration({ body: buildBody(values) }).then((result) => {
         if ('data' in result && !isUndefined(result.data)) {
           message.success(t('saved-search.save.success'))
-          switchToSavedSearch(result.data.id, name)
+          switchToSavedSearch(result.data.id, values.name)
         } else if ('error' in result && !isUndefined(result.error)) {
           trackError(new ApiError(result.error))
-          // Reject so the prompt stays open for a retry.
-          throw new Error('saved-search-save-failed')
         }
-      }
-    })
+      }).catch(() => { /* trigger never rejects */ })
+    }).catch(() => { /* validation errors shown inline */ })
   }
 
   const onUpdate = (): void => {
