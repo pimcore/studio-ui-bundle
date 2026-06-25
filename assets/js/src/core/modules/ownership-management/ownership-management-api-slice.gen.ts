@@ -6,7 +6,7 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            ownershipManagementGetCollection: build.mutation<
+            ownershipManagementGetCollection: build.query<
                 OwnershipManagementGetCollectionApiResponse,
                 OwnershipManagementGetCollectionApiArg
             >({
@@ -15,7 +15,7 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Ownership Management"],
+                providesTags: ["Ownership Management"],
             }),
             ownershipManagementDeleteConfigurations: build.mutation<
                 OwnershipManagementDeleteConfigurationsApiResponse,
@@ -149,7 +149,7 @@ export type OwnershipConfigurationType = {
     icon: string;
 };
 export const {
-    useOwnershipManagementGetCollectionMutation,
+    useOwnershipManagementGetCollectionQuery,
     useOwnershipManagementDeleteConfigurationsMutation,
     useOwnershipManagementReassignOwnerMutation,
     useOwnershipManagementGetTypesQuery,

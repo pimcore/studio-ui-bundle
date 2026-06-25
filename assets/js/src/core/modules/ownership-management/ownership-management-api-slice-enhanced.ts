@@ -32,5 +32,5 @@ export const {
   useOwnershipManagementGetTypesQuery,
   useOwnershipManagementGetCollectionQuery,
   useOwnershipManagementReassignOwnerMutation,
-  useOwnershipManagementDeleteMutation
+  useOwnershipManagementDeleteConfigurationsMutation
 } = api

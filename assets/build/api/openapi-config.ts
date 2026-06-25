@@ -78,6 +78,10 @@ const config: ConfigFile = {
       type: 'query'
     },
     {
+      pattern: 'ownershipManagementGetCollection',
+      type: 'query'
+    },
+    {
       pattern: 'dataObjectGetGridPreview',
       type: 'query',
     },

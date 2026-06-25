@@ -66,9 +66,9 @@ export class OwnershipDeleteJob implements JobInterface {
 
   private async executeRequest (): Promise<number | null> {
     const response = await store.dispatch(
-      api.endpoints.ownershipManagementDelete.initiate({
+      api.endpoints.ownershipManagementDeleteConfigurations.initiate({
         type: this.configurationType,
-        body: {
+        ownershipDeleteParameter: {
           ids: this.ids
         }
       })

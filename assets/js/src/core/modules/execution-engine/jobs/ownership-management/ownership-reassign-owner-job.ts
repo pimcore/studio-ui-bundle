@@ -71,7 +71,7 @@ export class OwnershipReassignOwnerJob implements JobInterface {
     const response = await store.dispatch(
       api.endpoints.ownershipManagementReassignOwner.initiate({
         type: this.configurationType,
-        body: {
+        ownershipReassignOwnerParameter: {
           ids: this.ids,
           newOwnerId: this.newOwnerId
         }

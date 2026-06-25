@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 import { Box } from '@Pimcore/components/box/box'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
@@ -187,7 +189,10 @@ const OwnershipManagementView = (): React.JSX.Element => {
   const items = types.map((type) => ({
     key: type.type,
     label: (
-      <Flex align="center" gap="mini">
+      <Flex
+        align="center"
+        gap="mini"
+      >
         <Icon value={ type.icon } />
         {t(type.label)}
       </Flex>

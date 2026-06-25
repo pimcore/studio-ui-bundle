@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 export type Tag = string | {
