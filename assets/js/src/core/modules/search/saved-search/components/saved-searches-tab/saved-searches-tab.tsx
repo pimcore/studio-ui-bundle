@@ -168,8 +168,8 @@ export const SavedSearchesTab = (): React.JSX.Element => {
             <Flex align='center'>
               <IconButton
                 data-testid='saved-search-refresh-button'
+                disabled={ isFetching }
                 icon={ { value: 'refresh' } }
-                loading={ isFetching }
                 onClick={ () => { void refetch() } }
                 tooltip={ { title: t('refresh') } }
                 type='link'
@@ -212,15 +212,15 @@ export const SavedSearchesTab = (): React.JSX.Element => {
       }
     >
       <Content
-        loading={ isLoading }
         margin={ { x: 'extra-small', y: 'none' } }
-        none={ isUndefined(data?.items) || isEmpty(data?.items) }
+        none={ !isLoading && isEmpty(data?.items) }
       >
         <Box margin={ { x: 'extra-small', y: 'none' } }>
           <Grid
             autoWidth
             columns={ columns }
             data={ tableItems }
+            isLoading={ isLoading }
             resizable
             setRowId={ (row) => String(row.id) }
           />
