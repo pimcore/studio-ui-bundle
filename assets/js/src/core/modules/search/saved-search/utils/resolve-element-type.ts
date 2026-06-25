@@ -8,21 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isEmpty, isString } from 'lodash'
 import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
 
-interface TypedConfig { elementType?: string | null, classId?: string | null }
-
 /**
- * Resolves the element type a saved search targets. Prefers the stored `elementType`; falls back to
- * inferring from `classId` for legacy searches saved before `elementType` existed (classId present →
- * data object, otherwise asset). The fallback can't tell a classless data-object search from an
- * asset search — that's exactly why `elementType` is now stored.
+ * Resolves the element type a saved search targets from its stored `elementType`. A classless
+ * data-object search has no classId, so the stored elementType is the only reliable signal.
+ * Defaults to asset when absent.
  */
-export const resolveSavedSearchElementType = (config: TypedConfig): ElementType => {
-  if (config.elementType === elementTypes.asset || config.elementType === elementTypes.dataObject) {
-    return config.elementType
-  }
-
-  return isString(config.classId) && !isEmpty(config.classId) ? elementTypes.dataObject : elementTypes.asset
-}
+export const resolveSavedSearchElementType = (config: { elementType?: string | null }): ElementType =>
+  config.elementType === elementTypes.dataObject ? elementTypes.dataObject : elementTypes.asset

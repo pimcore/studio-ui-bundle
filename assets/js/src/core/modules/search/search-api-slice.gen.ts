@@ -597,8 +597,6 @@ export type SavedSearchConfigurationListItem = {
     creationDate?: number;
     /** Name of the group in the menu the shortcut belongs to */
     menuShortcutGroup?: string | null;
-    /** Class ID for data object searches (null for asset searches) */
-    classId?: string | null;
     /** Element type the search targets (asset or data-object) */
     elementType?: string | null;
 };

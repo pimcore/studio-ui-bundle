@@ -18,6 +18,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Box } from '@Pimcore/components/box/box'
+import { Divider } from '@Pimcore/components/divider/divider'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { Grid } from '@Pimcore/components/grid/grid'
@@ -54,7 +55,7 @@ export const SavedSearchesTab = (): React.JSX.Element => {
   const [searchTerm, setSearchTerm] = useState('')
   const [deletingId, setDeletingId] = useState<number | undefined>(undefined)
 
-  const { data, isLoading, isFetching } = useSavedSearchGetConfigurationsQuery({
+  const { data, isLoading, isFetching, refetch } = useSavedSearchGetConfigurationsQuery({
     page: currentPage,
     pageSize,
     searchTerm: isEmpty(searchTerm) ? undefined : searchTerm
@@ -96,7 +97,8 @@ export const SavedSearchesTab = (): React.JSX.Element => {
         return (
           <Flex
             align='center'
-            gap='mini'
+            gap='small'
+            style={ { paddingLeft: 8 } }
           >
             <Tooltip title={ t(isDataObject ? 'data-object' : 'asset') }>
               <Icon value={ isDataObject ? 'data-object' : 'asset' } />
@@ -155,28 +157,41 @@ export const SavedSearchesTab = (): React.JSX.Element => {
 
   return (
     <ContentLayout
-      renderToolbar={ total > 0
-        ? (
-          <Toolbar theme='secondary'>
-            <Pagination
-              current={ currentPage }
-              defaultPageSize={ pageSize }
-              onChange={ (page, size) => {
-                setCurrentPage(page)
-                setPageSize(size)
-              } }
-              showSizeChanger
-              showTotal={ (totalItems) => t('pagination.show-total', { total: totalItems }) }
-              total={ total }
+      renderToolbar={
+        <Toolbar theme='secondary'>
+          <Flex align='center'>
+            <IconButton
+              data-testid='saved-search-refresh-button'
+              icon={ { value: 'refresh' } }
+              loading={ isFetching }
+              onClick={ () => { void refetch() } }
+              tooltip={ { title: t('refresh') } }
+              type='link'
             />
-          </Toolbar>
-          )
-        : undefined }
+            {total > 0 && (
+              <>
+                <Divider
+                  size='small'
+                  type='vertical'
+                />
+                <Pagination
+                  current={ currentPage }
+                  defaultPageSize={ pageSize }
+                  onChange={ (page, size) => {
+                    setCurrentPage(page)
+                    setPageSize(size)
+                  } }
+                  showSizeChanger
+                  showTotal={ (totalItems) => t('pagination.show-total', { total: totalItems }) }
+                  total={ total }
+                />
+              </>
+            )}
+          </Flex>
+        </Toolbar>
+      }
       renderTopBar={
-        <Toolbar
-          padding={ { left: 'small', right: 'small' } }
-          theme='secondary'
-        >
+        <Box padding={ { x: 'small', y: 'extra-small' } }>
           <SearchInput
             loading={ isFetching }
             maxWidth='100%'
@@ -186,7 +201,7 @@ export const SavedSearchesTab = (): React.JSX.Element => {
             } }
             placeholder={ t('component.search.pleaceholder') }
           />
-        </Toolbar>
+        </Box>
       }
     >
       <Content

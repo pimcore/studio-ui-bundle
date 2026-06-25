@@ -9,14 +9,16 @@
  */
 
 import { useEffect } from 'react'
-import { isEmpty, isNil, isString } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { resolveSavedSearchElementType } from '@Pimcore/modules/search/saved-search/utils/resolve-element-type'
 import { useApplySavedSearch } from './use-apply-saved-search'
 
 /**
  * Logic-only component mounted inside the Asset search listing. Applies a pending asset saved
- * search (one without a classId) once the available columns have loaded.
+ * search once the available columns have loaded; data-object searches are left to that applier.
  */
 export const AssetSavedSearchRestore = (): null => {
   const { pendingRestore, setPendingRestore } = useSearch()
@@ -27,8 +29,8 @@ export const AssetSavedSearchRestore = (): null => {
     if (isNil(pendingRestore)) {
       return
     }
-    // A classId means this belongs to the Data Object tab — let that applier handle it.
-    if (isString(pendingRestore.classId) && !isEmpty(pendingRestore.classId)) {
+    // A data-object search belongs to the Data Object listing — let that applier handle it.
+    if (resolveSavedSearchElementType(pendingRestore) === elementTypes.dataObject) {
       return
     }
     // Wait for available columns before applying, otherwise the saved column layout is dropped.
