@@ -54,7 +54,7 @@ export const SavedSearchesTab = (): React.JSX.Element => {
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
   const [searchTerm, setSearchTerm] = useState('')
-  const [sorting, setSorting] = useState<SortingState>([])
+  const [sorting, setSorting] = useState<SortingState>([{ id: 'modificationDateLabel', desc: true }])
   const [deletingId, setDeletingId] = useState<number | undefined>(undefined)
 
   // Map the grid column id to the backend sort field (sorting is server-side / paginated).
