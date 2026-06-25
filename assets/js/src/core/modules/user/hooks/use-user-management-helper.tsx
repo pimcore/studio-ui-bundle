@@ -78,6 +78,12 @@ interface UseUserReturn extends
   getDefaultKeyBindings: () => Promise<UserDefaultKeyBindingsApiResponse>
 }
 
+// Perspectives can arrive either as full PerspectiveConfig objects (freshly fetched read data)
+// or as plain id strings (once the form's perspective Select has written its value). The update
+// endpoint expects an array of ids, so coerce either shape to string ids.
+const toPerspectiveIds = (perspectives: ReadonlyArray<string | { id: string }>): string[] =>
+  perspectives.map((perspective) => (typeof perspective === 'string' ? perspective : perspective.id))
+
 export const useUserManagementHelper = (): UseUserReturn => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
@@ -181,7 +187,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
       twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.required ?? false,
       parentId: user.parentId ?? 0,
       dateTimeLocale: user.dateTimeLocale ?? '',
-      perspectives: user.perspectives.map((perspective) => perspective.id)
+      perspectives: toPerspectiveIds(user.perspectives)
     }
 
     const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({
@@ -221,7 +227,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
     const { id, parentId } = props
 
     const user = await fetchUserById({ id })
-    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId, twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.required ?? false, dateTimeLocale: user.dateTimeLocale ?? '', perspectives: user.perspectives.map((perspective) => perspective.id) } }))
+    const { data, error }: any = await dispatch(api.endpoints.userUpdateById.initiate({ id, updateUser: { ...user, parentId, twoFactorAuthenticationRequired: user?.twoFactorAuthentication?.required ?? false, dateTimeLocale: user.dateTimeLocale ?? '', perspectives: toPerspectiveIds(user.perspectives) } }))
     await handleNotification(t('user-management.save-user.success'), error)
     return data
   }
