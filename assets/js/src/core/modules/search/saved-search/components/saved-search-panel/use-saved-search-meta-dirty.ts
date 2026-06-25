@@ -9,14 +9,13 @@
  */
 
 import { useEffect } from 'react'
-import { isArray, isNil } from 'lodash'
+import { isNil } from 'lodash'
 import { Form } from '@Pimcore/components/form/form'
 import { type formInstanceType } from '@Pimcore/components/form/use-form'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { type SavedSearchDetailedConfiguration } from '@Pimcore/modules/search/search-api-slice.gen'
 import { setSavedSearchDirty } from '@Pimcore/modules/search/saved-search/dirty/saved-search-dirty-slice'
-
-const toNumberArray = (value: unknown): number[] => (isArray(value) ? value as number[] : [])
+import { toNumberArray } from '@Pimcore/modules/search/saved-search/utils/to-number-array'
 
 // Order-independent comparison of two id lists (shared users / roles).
 const sameIdSet = (a: number[], b: number[]): boolean => {

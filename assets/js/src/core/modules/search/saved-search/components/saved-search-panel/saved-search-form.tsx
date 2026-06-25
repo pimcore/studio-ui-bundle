@@ -10,8 +10,9 @@
 
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Flex, Input } from 'antd'
+import { Input } from 'antd'
 import { isEmpty } from 'lodash'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { type formInstanceType } from '@Pimcore/components/form/use-form'
 import { Switch } from '@Pimcore/components/switch/switch'

@@ -11,9 +11,10 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createColumnHelper, type SortingState } from '@tanstack/react-table'
-import { Popconfirm, Tooltip } from 'antd'
+import { Popconfirm } from 'antd'
 import { isEmpty, isUndefined } from 'lodash'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { Content } from '@Pimcore/components/content/content'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -243,7 +244,7 @@ export const SavedSearchesTab = (): React.JSX.Element => {
             // During loading the Grid renders placeholder rows without an id; return undefined for
             // those so it falls back to unique index ids (a constant id collides → phantom skeleton
             // rows linger after the data loads).
-            setRowId={ (row) => row.id !== undefined ? String(row.id) : (undefined as unknown as string) }
+            setRowId={ (row) => isUndefined(row.id) ? (undefined as unknown as string) : String(row.id) }
             sorting={ sorting }
           />
         </Box>

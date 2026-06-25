@@ -25,8 +25,8 @@ interface UseOpenSavedSearchReturn {
 
 /**
  * Shared open-a-saved-search behaviour used by the Saved Searches tab and the menu-shortcut flyout.
- * The element type is inferred from the classId (objects carry one, assets don't) since the list
- * items don't expose it. `onOpened` runs after the widget is opened (e.g. to close the modal).
+ * The element type comes from the fetched configuration's stored elementType. `onOpened` runs after
+ * the widget is opened (e.g. to close the modal).
  */
 export const useOpenSavedSearch = (onOpened?: () => void): UseOpenSavedSearchReturn => {
   const widgetManager = useWidgetManager()

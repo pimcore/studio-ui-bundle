@@ -10,8 +10,10 @@
 
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert, Col, Flex, Row } from 'antd'
-import { isArray, isNil } from 'lodash'
+import { Col, Row } from 'antd'
+import { isNil } from 'lodash'
+import { Alert } from '@Pimcore/components/alert/alert'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { Text } from '@Pimcore/components/text/text'
 import { Button } from '@Pimcore/components/button/button'
@@ -33,6 +35,7 @@ import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { type SavedSearchSaveConfigurationApiArg } from '@Pimcore/modules/search/search-api-slice.gen'
 import { resolveSavedSearchElementType } from '@Pimcore/modules/search/saved-search/utils/resolve-element-type'
+import { toNumberArray } from '@Pimcore/modules/search/saved-search/utils/to-number-array'
 import { SavedSearchForm, type SavedSearchFormValues, defaultValues } from './saved-search-form'
 import { useSavedSearchMutations } from './use-saved-search-mutations'
 import { useSavedSearchMetaDirty } from './use-saved-search-meta-dirty'
@@ -44,8 +47,6 @@ interface SavedSearchPanelProps {
 
 interface LiveArgs { classId?: string, body?: { filters?: unknown } }
 type SaveColumns = SavedSearchSaveConfigurationApiArg['body']['columns']
-
-const toNumberArray = (value: unknown): number[] => (isArray(value) ? value as number[] : [])
 
 export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSearchPanelProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -75,7 +76,6 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
   const { data: ownerData } = useUserGetByIdQuery({ id: loaded?.ownerId ?? 0 }, { skip: isNil(loaded) || isOwner })
   const ownerName = isOwner ? user?.username : ownerData?.name
 
-  // Feed the panel metadata (name/description/shortcut/sharing) into the tab "*" dirty indicator.
   useSavedSearchMetaDirty({ form, loaded, isOwner, prefilledId, isSharedGlobally, sharedUsers, sharedRoles })
 
   // Capture the live grid state for the save/update body — the selected columns (with width, the

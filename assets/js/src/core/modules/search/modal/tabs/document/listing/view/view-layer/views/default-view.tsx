@@ -16,7 +16,7 @@ import { Sidebar } from '@Pimcore/modules/element/listing/abstract/view-layer/co
 import { GridContainer } from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/grid-container'
 import { TopBar } from '../../top-bar/top-bar'
 import { Toolbar } from '../../toolbar/toolbar'
-import { DocumentSavedSearchRestore } from '@Pimcore/modules/search/saved-search/restore/document-saved-search-restore'
+import { SavedSearchRestore } from '@Pimcore/modules/search/saved-search/restore/saved-search-restore'
 import { SavedSearchDirtyTracker } from '@Pimcore/modules/search/saved-search/dirty/saved-search-dirty-tracker'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
@@ -43,7 +43,7 @@ export const DefaultView = (): React.JSX.Element => {
 
   return (
     <>
-      <DocumentSavedSearchRestore />
+      <SavedSearchRestore elementType={ elementTypes.document } />
       <SavedSearchDirtyTracker elementType={ elementTypes.document } />
       {content}
     </>

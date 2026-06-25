@@ -18,8 +18,6 @@ import { SavedSearchTitle } from './widget/saved-search-title'
 import { selectSavedSearchDirty } from './dirty/saved-search-dirty-slice'
 import { SAVED_SEARCH_RESULT_WIDGET } from './widget/saved-search-widget'
 
-export { SAVED_SEARCH_RESULT_WIDGET }
-
 moduleSystem.registerModule({
   onInit: () => {
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
