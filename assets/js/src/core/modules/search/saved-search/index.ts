@@ -16,8 +16,9 @@ import { store } from '@Pimcore/app/store'
 import { SavedSearchResultWidget } from './widget/saved-search-result-widget'
 import { SavedSearchTitle } from './widget/saved-search-title'
 import { selectSavedSearchDirty } from './dirty/saved-search-dirty-slice'
+import { SAVED_SEARCH_RESULT_WIDGET } from './widget/saved-search-widget'
 
-export const SAVED_SEARCH_RESULT_WIDGET = 'saved-search-result'
+export { SAVED_SEARCH_RESULT_WIDGET }
 
 moduleSystem.registerModule({
   onInit: () => {

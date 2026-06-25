@@ -13,7 +13,7 @@ import { isUndefined } from 'lodash'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useLazySavedSearchGetConfigurationQuery } from '@Pimcore/modules/search/search-api-slice-enhanced'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
-import { SAVED_SEARCH_RESULT_WIDGET } from '@Pimcore/modules/search/saved-search'
+import { openSavedSearchResultWidget } from '@Pimcore/modules/search/saved-search/widget/saved-search-widget'
 import { resolveSavedSearchElementType } from '@Pimcore/modules/search/saved-search/utils/resolve-element-type'
 
 interface UseOpenSavedSearchReturn {
@@ -38,19 +38,10 @@ export const useOpenSavedSearch = (onOpened?: () => void): UseOpenSavedSearchRet
     fetchConfiguration({ id }).then((result) => {
       if ('data' in result && !isUndefined(result.data)) {
         const configuration = result.data
-        const elementType = resolveSavedSearchElementType(configuration)
-
-        widgetManager.openMainWidget({
-          id: `saved-search-${id}`,
+        openSavedSearchResultWidget(widgetManager, {
+          id,
           name: configuration.name,
-          component: SAVED_SEARCH_RESULT_WIDGET,
-          config: {
-            savedSearchId: id,
-            elementType,
-            label: configuration.name,
-            icon: { type: 'name', value: 'search' },
-            iconColorGroup: 'element'
-          }
+          elementType: resolveSavedSearchElementType(configuration)
         })
         onOpened?.()
       } else if ('error' in result && !isUndefined(result.error)) {
