@@ -26,8 +26,8 @@ export const SavedSearchTitle = (props: TabTitleContainerProps): React.JSX.Eleme
   const savedSearchId = Number(config.savedSearchId)
   const dirty = useAppSelector((state) => selectSavedSearchDirty(state, savedSearchId))
 
-  const baseTitle = typeof config.label === 'string' ? config.label : node.getName()
-  const elementType = typeof config.elementType === 'string' ? config.elementType : undefined
+  const baseTitle = typeof config.label === 'string' ? config.label as string : node.getName()
+  const elementType = typeof config.elementType === 'string' ? config.elementType as string : undefined
   const title = elementType !== undefined ? `${baseTitle} (${t(elementType)})` : undefined
 
   return (
