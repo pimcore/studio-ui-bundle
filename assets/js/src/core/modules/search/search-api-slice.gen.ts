@@ -97,6 +97,8 @@ const injectedRtkApi = api
                         page: queryArg.page,
                         pageSize: queryArg.pageSize,
                         searchTerm: queryArg.searchTerm,
+                        sortBy: queryArg.sortBy,
+                        sortOrder: queryArg.sortOrder,
                     },
                 }),
                 providesTags: ["Search"],
@@ -257,6 +259,10 @@ export type SavedSearchGetConfigurationsApiArg = {
     pageSize: number;
     /** Optional term to filter the saved search configurations by name. */
     searchTerm?: string;
+    /** Sort by field. */
+    sortBy?: string;
+    /** Sort order (asc or desc). */
+    sortOrder?: string;
 };
 export type SavedSearchUpdateConfigurationApiResponse = unknown;
 export type SavedSearchUpdateConfigurationApiArg = {

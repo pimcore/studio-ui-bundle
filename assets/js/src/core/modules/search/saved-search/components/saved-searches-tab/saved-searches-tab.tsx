@@ -10,7 +10,7 @@
 
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { createColumnHelper } from '@tanstack/react-table'
+import { createColumnHelper, type SortingState } from '@tanstack/react-table'
 import { Popconfirm, Tooltip } from 'antd'
 import { isEmpty, isUndefined } from 'lodash'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
@@ -54,12 +54,21 @@ export const SavedSearchesTab = (): React.JSX.Element => {
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
   const [searchTerm, setSearchTerm] = useState('')
+  const [sorting, setSorting] = useState<SortingState>([])
   const [deletingId, setDeletingId] = useState<number | undefined>(undefined)
+
+  // Map the grid column id to the backend sort field (sorting is server-side / paginated).
+  const sortFieldByColumn: Record<string, string> = { name: 'name', modificationDateLabel: 'modificationDate' }
+  const activeSort = sorting[0]
+  const sortBy = isUndefined(activeSort) ? undefined : sortFieldByColumn[activeSort.id]
+  const sortOrder = isUndefined(sortBy) ? undefined : (activeSort?.desc === true ? 'DESC' : 'ASC')
 
   const { data, isFetching, refetch } = useSavedSearchGetConfigurationsQuery({
     page: currentPage,
     pageSize,
-    searchTerm: isEmpty(searchTerm) ? undefined : searchTerm
+    searchTerm: isEmpty(searchTerm) ? undefined : searchTerm,
+    sortBy,
+    sortOrder
   })
   const [deleteConfiguration] = useSavedSearchDeleteConfigurationMutation()
 
@@ -111,6 +120,7 @@ export const SavedSearchesTab = (): React.JSX.Element => {
     }),
     columnHelper.accessor('ownership', {
       header: t('saved-search.ownership'),
+      enableSorting: false,
       size: 160
     }),
     columnHelper.accessor('modificationDateLabel', {
@@ -219,12 +229,19 @@ export const SavedSearchesTab = (): React.JSX.Element => {
             autoWidth
             columns={ columns }
             data={ tableItems }
+            enableSorting
             isLoading={ isFetching }
+            manualSorting
+            onSortingChange={ (nextSorting) => {
+              setSorting(nextSorting)
+              setCurrentPage(1)
+            } }
             resizable
             // During loading the Grid renders placeholder rows without an id; return undefined for
             // those so it falls back to unique index ids (a constant id collides → phantom skeleton
             // rows linger after the data loads).
             setRowId={ (row) => row.id !== undefined ? String(row.id) : (undefined as unknown as string) }
+            sorting={ sorting }
           />
         </Box>
       </Content>
