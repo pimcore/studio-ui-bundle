@@ -49,9 +49,10 @@ export const ObjectSavedSearchRestore = (): null => {
     if (isNil(pendingRestore) || !belongsToObject) {
       return
     }
-    // With a class, wait for its available columns before applying, otherwise the layout is dropped.
-    // A classless search has no class columns to wait for, so apply right away.
-    if (hasClass && !isEmpty(pendingRestore.columns) && isEmpty(availableColumns)) {
+    // Wait for the available columns before applying, otherwise the saved column layout (and widths)
+    // is dropped — useApplySavedSearch needs them to map the saved columns. This holds for classless
+    // searches too: their system columns (type/fullpath/classname) are still available columns.
+    if (!isEmpty(pendingRestore.columns) && isEmpty(availableColumns)) {
       return
     }
 
