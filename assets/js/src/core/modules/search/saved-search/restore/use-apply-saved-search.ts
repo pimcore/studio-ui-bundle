@@ -22,10 +22,13 @@ import { type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/c
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { type SavedSearchDetailedConfiguration, type GridFilter } from '@Pimcore/modules/search/search-api-slice.gen'
+import { useTagFilter } from '@Pimcore/modules/asset/listing/decorator/tag-filter/context-layer/provider/tag-filter/use-tag-filter'
+import { tagFilterType, type SelectedTags } from '@Pimcore/modules/asset/listing/decorator/tag-filter/context-layer/provider/tag-filter/tag-filter-provider'
 
 const SEARCH_TERM_FILTER_TYPE = 'system.fulltext'
-// Column-filter types that are not user field filters and must not be restored as such.
-const SYSTEM_FILTER_TYPES = new Set([SEARCH_TERM_FILTER_TYPE, 'system.pql', 'system.unreferenced'])
+// Column-filter types that are not user field filters and must not be restored as such — each is
+// restored through its own provider (search term, PQL, unreferenced, tags).
+const SYSTEM_FILTER_TYPES = new Set([SEARCH_TERM_FILTER_TYPE, 'system.pql', 'system.unreferenced', tagFilterType])
 
 interface ColumnFilterEntry {
   key?: string
@@ -73,8 +76,9 @@ const buildSelectedColumns = (savedColumns: SavedColumn[], availableColumns: Ava
 
 /**
  * Applies the parts of a saved search that map back into the listing state: search term, field
- * filters, the system filters (PQL, unreferenced, direct-children), paging and the saved column
- * layout, then triggers a reload. (Sorting and the type filter are not restored yet — see PR notes.)
+ * filters, tags, the system filters (PQL, unreferenced, direct-children), paging and the saved
+ * column layout, then triggers a reload. (Sorting and the type filter are not restored yet — see PR
+ * notes.)
  */
 export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfiguration) => void) => {
   const { setSearchTerm } = useSearchTermFilter()
@@ -85,6 +89,7 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
   const { setPage, setPageSize } = usePaging()
   const { setSelectedColumns } = useSelectedColumns()
   const { availableColumns } = useAvailableColumns()
+  const { setTags } = useTagFilter()
   const { setDataLoadingState } = useData()
 
   return (configuration: SavedSearchDetailedConfiguration): void => {
@@ -118,6 +123,12 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
     setOnlyUnreferenced(entries.find((entry) => entry.type === 'system.unreferenced')?.filterValue === true)
     // The query sends `includeDescendants` (the inverse of the "only direct children" toggle).
     setOnlyDirectChildren(filter?.includeDescendants === false)
+
+    // Tags — the `system.tag` column filter, applied via its own provider rather than as a field
+    // filter. Always set (empty when none) so opening a search clears tags left over from a previous one.
+    const tagEntry = entries.find((entry) => entry.type === tagFilterType)
+    const restoredTags = (tagEntry?.filterValue as { tags?: SelectedTags } | undefined)?.tags
+    setTags(isArray(restoredTags) ? restoredTags : [])
 
     if (isNumber(filter?.page)) {
       setPage(filter.page)
