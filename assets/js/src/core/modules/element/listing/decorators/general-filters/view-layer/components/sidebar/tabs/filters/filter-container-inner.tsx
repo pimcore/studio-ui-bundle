@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
@@ -47,6 +47,14 @@ export const FilterContainerInner = (): React.JSX.Element => {
 
   const { t } = useTranslation()
   const { filters, onFilterChange, columnGroups, handleColumnClick } = useFieldFilterEditor()
+
+  // Reflect a pre-applied PQL query (e.g. from a restored saved search) as advanced mode, so the
+  // query is shown and editable instead of silently active behind the regular filters.
+  useEffect(() => {
+    if (pql !== '') {
+      setIsAdvancedMode(true)
+    }
+  }, [pql])
 
   const handleApplyClick = (): void => {
     const valuesToApply: FilterValues = {
