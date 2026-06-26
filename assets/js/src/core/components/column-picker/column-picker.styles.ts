@@ -38,7 +38,7 @@ export const useStyles = createStyles(({ css, token }) => {
     `,
 
     groupTitle: css`
-      color: ${token.colorPrimary};
+      color: ${token.itemActiveColor};
     `,
 
     empty: css`

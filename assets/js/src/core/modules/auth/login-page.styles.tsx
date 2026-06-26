@@ -19,7 +19,7 @@ export const useStyle = createStyles(({ token, css }, { backgroundImageUrl }: St
     loginPage: css`
       display: flex;
       align-items: center;
-      background: url(${backgroundImageUrl}) lightgray 50% / cover no-repeat;
+      background: url("${backgroundImageUrl.replace(/(["\\])/g, '\\$1')}") lightgray 50% / cover no-repeat;
       position: absolute;
       inset: 0;
       overflow-y: auto;

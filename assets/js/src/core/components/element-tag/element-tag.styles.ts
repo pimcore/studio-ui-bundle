@@ -31,6 +31,11 @@ export const useStyles = createStyles(({ token, css }) => {
         margin-inline-start: 4px;
       }
     }
+
+    &.ant-tag-geekblue {
+      background-color: ${token.Colors.Base.Geekblue['2']} !important;
+      color: ${token.Colors.Base.Geekblue['6']} !important;
+    }
   `
 
   return {

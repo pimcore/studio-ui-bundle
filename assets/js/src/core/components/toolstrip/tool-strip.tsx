@@ -133,10 +133,18 @@ export const ToolStrip = ({
         }
       }
     } else {
-      const disabledColor = isActivated ? undefined : token.colorTextDisabled
+      // Active toolstrip → buttons/icons take itemActiveColor; inactive (hover-activated) dims to disabled.
+      const buttonColor = isActivated ? token.itemActiveColor : token.colorTextDisabled
+      const textColor = isActivated ? undefined : token.colorTextDisabled
 
       return {
-        components: createColorMapping(disabledColor, disabledColor)
+        components: createColorMapping(buttonColor, textColor),
+        // The nested provider re-derives its own (light) algorithm, which would turn dropdown ("select")
+        // item text dark (antd colors .ant-dropdown-menu-item with token.colorText). Re-inject the real
+        // theme's colorText so the dropdown text stays white in dark mode.
+        token: {
+          colorText: token.colorText
+        }
       }
     }
   }, [toolStripTheme, isActivated, token, disabled])

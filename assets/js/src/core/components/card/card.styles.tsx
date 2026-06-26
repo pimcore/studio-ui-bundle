@@ -83,7 +83,7 @@ export const useStyles = createStyles(({ token, css }) => {
 
       &.card--theme-card-with-highlight {
         .ant-card-head {
-          border-bottom: 1px solid ${token.colorPrimaryBorder};
+          border-bottom: 1px solid ${token.colorBorderPanelTitle};
         }
       }
 

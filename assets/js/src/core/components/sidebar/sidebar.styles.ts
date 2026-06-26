@@ -86,7 +86,7 @@ export const useStyle = createStyles(({ token, css }) => {
                     background: ${token.colorFillQuaternary};
                     border-radius: 2px;
                     outline: 8px solid ${token.colorFillQuaternary};
-                  color: ${token.colorPrimary};
+                  color: ${token.itemActiveColor};
                 }
               }
             }

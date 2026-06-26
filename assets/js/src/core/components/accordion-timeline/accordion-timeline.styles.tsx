@@ -15,7 +15,7 @@ export const useStyle = createStyles(({ token, css }) => {
     card: css`
       & .ant-collapse {
         width: 352px;
-        background-color: white;
+        background-color: ${token.colorBgContainer};
       }
 
       & span, & div, div.anticon, button {

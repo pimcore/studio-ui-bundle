@@ -229,7 +229,7 @@ export const useStyle = createStyles(({ css, token }, { phase, backgroundShade }
       width: 400px;
       height: 400px;
       border-radius: 50%;
-      background: rgba(253, 255, 255, 0.35);
+      background: ${token.colorBgLogoOrbit};
       filter: blur(75px);
       pointer-events: none;
 
@@ -250,7 +250,7 @@ export const useStyle = createStyles(({ css, token }, { phase, backgroundShade }
       width: 400px;
       height: 400px;
       border-radius: 50%;
-      background: rgba(253, 255, 255, 0.35);
+      background: ${token.colorBgLogoOrbit};
       filter: blur(75px);
       pointer-events: none;
 

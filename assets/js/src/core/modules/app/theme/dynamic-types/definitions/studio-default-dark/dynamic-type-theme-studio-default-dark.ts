@@ -36,6 +36,8 @@ export class DynamicTypeThemeStudioDefaultDark extends DynamicTypeThemeAbstract 
         colorBgLayout: 'rgba(20, 20, 20, 0.44)',
         // Outermost app/page background — wired to html, body via global.styles.ts
         colorBgCanvas: '#0D0C14',
+        // Soft glow bubble behind the logo on the background screen — dark tint (vs. the light theme's near-white)
+        colorBgLogoOrbit: 'rgba(26, 19, 37, 0.5)',
         // Subtle neutral panel for the main-nav first-level column (matches the light theme's neutral intent)
         colorBgMainNavColumn: 'rgba(255, 255, 255, 0.09)',
         // Fieldset (layout group) border + background
@@ -57,18 +59,23 @@ export class DynamicTypeThemeStudioDefaultDark extends DynamicTypeThemeAbstract 
         colorBorderActiveTab: '#13a8a8',
         colorLogo: '#ffffff',
         colorBorderTertiary: '#333039',
+        // Panel title separator: neutral border in dark (light keeps the purple highlight).
+        colorBorderPanelTitle: '#333039',
         colorTextTreeElement: 'rgba(255, 255, 255, 0.85)',
         colorIconTree: '#d4d4d4',
         colorIconTreeUnpublished: 'rgba(212, 212, 212, 0.75)',
         colorTextSidebarTitle: '#d7b7f5',
         colorBgToolbar: '#1c1b1f',
+        // Default toolstrip background — #FFF at 9% alpha (subtle overlay on dark surfaces)
+        colorBgToolstrip: 'rgba(255, 255, 255, 0.09)',
         colorFillActive: '#ffffff',
-        colorFillAdditional: '#ffffff',
+        // Subtle low-contrast fill/line surface (pipeline item bg, secondary divider). White read as glaring boxes/lines on dark.
+        colorFillAdditional: 'rgba(255, 255, 255, 0.09)',
         colorBgSidebarOptions: '#1e1e24',
         colorBgSelectedTab: '#1e1e24',
         itemActiveColor: '#d7b7f5',
         itemColor: 'rgba(255, 255, 255, 0.85)',
-        itemHoverColor: '#854ecaAA',
+        itemHoverColor: '#1a1325',
         itemUnselectedIconColor: '#9d8fbd',
         colorBorderContainer: '#1e1e24',
         colorFillAlter: 'rgba(255, 255, 255, 0.09)',
@@ -206,6 +213,8 @@ export class DynamicTypeThemeStudioDefaultDark extends DynamicTypeThemeAbstract 
           colorBgSelectedTab: '#1e1e24',
           itemColor: 'rgba(255, 255, 255, 0.65)',
           itemActiveColor: '#d7b7f5',
+          // Selected-tab text + icon color — mirrors itemActiveColor so it doesn't fall back to colorPrimary
+          itemSelectedColor: '#d7b7f5',
           inkBarColor: '#d7b7f5',
           itemHoverColor: '#854eca',
           itemUnselectedIconColor: '#9d8fbd',
@@ -250,6 +259,24 @@ export class DynamicTypeThemeStudioDefaultDark extends DynamicTypeThemeAbstract 
           colorWarningBorder: '#594214',
           defaultBg: 'rgba(255, 255, 255, 0.09)',
           defaultColor: 'rgba(255, 255, 255, 0.85)'
+        },
+        Colors: {
+          Neutral: {
+            Fill: {
+              colorFill: 'rgba(255, 255, 255, 0.15)',
+              colorFillTertiary: 'rgba(255, 255, 255, 0.09)'
+            },
+            Icon: {
+              colorIcon: 'rgba(255, 255, 255, 0.85)'
+            }
+          },
+          Base: {
+            Geekblue: {
+              2: '#1C2755',
+              3: '#2C3A6B',
+              6: '#A8C1F8'
+            }
+          }
         }
       },
       algorithm: theme.darkAlgorithm

@@ -95,9 +95,9 @@ export const useStyles = createStyles(({ css, token }) => {
           }
         }
 
-        &.collapse-item--theme-card-with-highlight {          
+        &.collapse-item--theme-card-with-highlight {
           &.collapse-item--separator .ant-collapse-content {
-            border-top: 1px solid ${themeToken.colorPrimaryBorder};
+            border-top: 1px solid ${themeToken.colorBorderPanelTitle};
           }
         }
 
@@ -139,7 +139,7 @@ export const useStyles = createStyles(({ css, token }) => {
           }
 
           .ant-collapse-content {
-            background-color: white;
+            background-color: ${themeToken.colorBgContainer};
           }
         }
 
