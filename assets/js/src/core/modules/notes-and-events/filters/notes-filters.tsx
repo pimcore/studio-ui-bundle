@@ -17,74 +17,20 @@ import {
   defineFilter
 } from '@Pimcore/components/filters'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
-import {
-  useDynamicTypeResolver,
-  type UseDynamicTypeResolverReturnType
-} from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
+import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
-import { DynamicTypeFieldFilterNumber } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/number/dynamic-type-field-filter-number'
 import { DynamicTypeFieldFilterDate } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/date/dynamic-type-field-filter-date'
-import { NumberFilterSettingValue, type NumberValue } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-number-component'
-import { DatePickerSettingValue, type DateValue } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-date-component'
+import { type DateValue } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-date-component'
 import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
+import {
+  type NotesFieldFilter,
+  type NotesFilterColumn,
+  type NotesFilterContext, type NotesFilterContribution, NotesFilterOperator, type NotesFilterQuery,
+  type OperatorValue
+} from '@Pimcore/modules/notes-and-events/filters/types'
+import { getDateOperatorValues } from '@Pimcore/modules/notes-and-events/filters/helpers'
 
-/** Operators accepted by the notes `fieldFilters` payload. */
-export enum NotesFilterOperator {
-  Equal = 'eq',
-  LessThan = 'lt',
-  GreaterThan = 'gt',
-  Like = 'like'
-}
-
-/** A single entry of the notes `fieldFilters` request payload. */
-export interface NotesFieldFilter {
-  operator: NotesFilterOperator
-  value: string
-  field: string
-  type: string
-}
-
-/**
- * Describes a note property that can be filtered. `frontendType` resolves a registered
- * `DynamicTypeFieldFilter` (e.g. 'string', 'number', 'date') so the control comes from the
- * dynamic-type registry; `type` is the value sent in the payload's `type` field.
- */
-export interface NotesFilterColumn {
-  /** Backend field name; becomes the payload's `field`. */
-  key: string
-  /** Translation key shown in the picker and the filter tag. */
-  translationKey: string
-  /** Payload `type` token ('string' | 'numeric' | 'date'). */
-  type: string
-  /** Registry id used to resolve the control / value handling. */
-  frontendType: string
-}
-
-/** Tagged-union contribution: search maps to `filter`, field filters to `fieldFilters`. */
-export type NotesFilterContribution =
-  | { kind: 'filter', value: string }
-  | { kind: 'fieldFilters', filters: NotesFieldFilter[] }
-
-export interface NotesFilterContext {
-  columns: NotesFilterColumn[]
-  getType: UseDynamicTypeResolverReturnType['getType']
-}
-
-/**
- * Filter slice of the notes collection request body (page/pageSize stay with the hook).
- * `fieldFilters` is a JSON string — the backend json_decodes it into an array.
- */
-export interface NotesFilterQuery {
-  filter?: string
-  fieldFilters?: string
-}
-
-/**
- * Notes have no backend column-config endpoint, so the field-filter picker offers this fixed
- * list. `cPath`/`data` for element/details are best-effort mappings to confirm with the backend.
- */
 export const NOTES_FILTERABLE_FIELDS: NotesFilterColumn[] = [
-  { key: 'id', translationKey: 'id', type: 'numeric', frontendType: 'number' },
   { key: 'type', translationKey: 'notes-and-events.columns.type', type: 'string', frontendType: 'string' },
   { key: 'title', translationKey: 'notes-and-events.columns.title', type: 'string', frontendType: 'string' },
   { key: 'description', translationKey: 'notes-and-events.columns.description', type: 'string', frontendType: 'string' },
@@ -108,56 +54,6 @@ export const useNotesFilterContext = (): NotesFilterContext => {
   return { columns: NOTES_FILTERABLE_FIELDS, getType }
 }
 
-interface OperatorValue {
-  operator: NotesFilterOperator
-  value: string
-}
-
-const toStringValue = (value: number | string | null): string => value == null ? '' : String(value)
-
-/** Maps a number filter (is / less / more / between) to operator+value pairs. */
-const getNumberOperatorValues = (value: NumberValue): OperatorValue[] => {
-  const { setting, is, from, to } = value
-
-  switch (setting) {
-    case NumberFilterSettingValue.LESS:
-      return [{ operator: NotesFilterOperator.LessThan, value: toStringValue(to) }]
-    case NumberFilterSettingValue.MORE:
-      return [{ operator: NotesFilterOperator.GreaterThan, value: toStringValue(from) }]
-    case NumberFilterSettingValue.BETWEEN:
-      return [
-        { operator: NotesFilterOperator.GreaterThan, value: toStringValue(from) },
-        { operator: NotesFilterOperator.LessThan, value: toStringValue(to) }
-      ]
-    default:
-      return [{ operator: NotesFilterOperator.Equal, value: toStringValue(is) }]
-  }
-}
-
-/** Maps a date filter (on / before / after / between) to operator+value pairs. */
-const getDateOperatorValues = (value: DateValue): OperatorValue[] => {
-  const { setting, on, from, to } = value
-
-  switch (setting) {
-    case DatePickerSettingValue.BEFORE:
-      return [{ operator: NotesFilterOperator.LessThan, value: toStringValue(to) }]
-    case DatePickerSettingValue.AFTER:
-      return [{ operator: NotesFilterOperator.GreaterThan, value: toStringValue(from) }]
-    case DatePickerSettingValue.BETWEEN:
-      return [
-        { operator: NotesFilterOperator.GreaterThan, value: toStringValue(from) },
-        { operator: NotesFilterOperator.LessThan, value: toStringValue(to) }
-      ]
-    default:
-      return [{ operator: NotesFilterOperator.Equal, value: toStringValue(on) }]
-  }
-}
-
-/**
- * Builds the `fieldFilters` payload. The control / value shape comes from the registered
- * `DynamicTypeFieldFilter` (resolved via the registry, like the general-filters host); the
- * value is then expanded into `{operator, value, field, type}` entries the notes API expects.
- */
 const prepareFieldFilters = (filters: FieldFilter[], context: NotesFilterContext): NotesFieldFilter[] => {
   const { columns, getType } = context
   const preparedFilters: NotesFieldFilter[] = []
@@ -191,9 +87,7 @@ const prepareFieldFilters = (filters: FieldFilter[], context: NotesFilterContext
 
     let operatorValues: OperatorValue[]
 
-    if (dynamicTypeFieldFilter instanceof DynamicTypeFieldFilterNumber) {
-      operatorValues = getNumberOperatorValues(filter.filterValue as NumberValue)
-    } else if (dynamicTypeFieldFilter instanceof DynamicTypeFieldFilterDate) {
+    if (dynamicTypeFieldFilter instanceof DynamicTypeFieldFilterDate) {
       operatorValues = getDateOperatorValues(filter.filterValue as DateValue)
     } else {
       operatorValues = [{ operator: NotesFilterOperator.Like, value: String(filter.filterValue) }]

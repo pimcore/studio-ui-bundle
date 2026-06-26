@@ -15,11 +15,8 @@ import { DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic
 import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 import { type FieldFiltersProps } from '@Pimcore/components/field-filters/field-filters'
 import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column-picker.types'
-import {
-  NOTES_FILTERABLE_FIELDS,
-  type NotesFilterColumn,
-  useNotesDraftFilters
-} from '@Pimcore/modules/notes-and-events/filters/notes-filters'
+import { NOTES_FILTERABLE_FIELDS, useNotesDraftFilters } from '@Pimcore/modules/notes-and-events/filters/notes-filters'
+import { type NotesFilterColumn } from '@Pimcore/modules/notes-and-events/filters/types'
 
 export interface UseNotesFieldFilterEditorReturn {
   filters: FieldFiltersProps['data']
@@ -28,15 +25,12 @@ export interface UseNotesFieldFilterEditorReturn {
   handleColumnClick: (column: NotesFilterColumn) => void
 }
 
-/**
- * Encapsulates the field-filter editor state and the "add field filter" logic so the list
- * (panel body) and the add control (bottom toolbar) share one source of truth. Modelled on
- * the element-listing general-filters `useFieldFilterEditor`.
- */
 export const useNotesFieldFilterEditor = (): UseNotesFieldFilterEditorReturn => {
   const { t } = useTranslation()
+
   const { getType } = useDynamicTypeResolver()
   const { values, setValue } = useNotesDraftFilters()
+
   const fieldFilters = (values.fieldFilters ?? []) as FieldFilter[]
 
   const initialFilters: FieldFiltersProps['data'] = useMemo(() => {
