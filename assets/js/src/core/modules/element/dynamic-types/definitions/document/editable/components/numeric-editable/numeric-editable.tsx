@@ -13,6 +13,7 @@ import { InputNumber } from '@sdk/components'
 import { EditableOverlay } from '../editable-overlay/editable-overlay'
 import { toCssDimension } from '@sdk/utils'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
+import { useTranslation } from 'react-i18next'
 
 export interface NumericEditableValue {
   value?: number | null
@@ -40,6 +41,7 @@ export const NumericEditable = ({
   onChange,
   inherited
 }: NumericEditableProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const defaultFieldWidth = useFieldWidth()
 
   const handleOverwrite = (): void => {
@@ -69,6 +71,7 @@ export const NumericEditable = ({
         max={ config?.maxValue }
         min={ config?.minValue }
         onChange={ handleChange }
+        placeholder={ t('numeric.placeholder') }
         style={ containerStyle }
         value={ value }
       />

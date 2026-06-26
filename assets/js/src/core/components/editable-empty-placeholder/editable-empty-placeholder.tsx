@@ -9,10 +9,9 @@
  */
 
 import React from 'react'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Icon, type IconProps } from '@Pimcore/components/icon/icon'
 import { Text } from '@Pimcore/components/text/text'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { type IconProps } from '@Pimcore/components/icon/icon'
 import { useStyles } from './editable-empty-placeholder.styles'
 import { toCssDimension } from '@sdk/utils'
 import cn from 'classnames'
@@ -58,16 +57,14 @@ export const EditableEmptyPlaceholder = ({
       style={ inlineStyle }
       vertical
     >
+      <Icon
+        colorToken="colorLink"
+        options={ { height: 20, width: 20 } }
+        value={ icon.value ?? 'edit' }
+      />
       <Text className={ styles.placeholderText }>
         {text}
       </Text>
-      <IconButton
-        disabled={ disabled }
-        icon={ icon }
-        type="default"
-      >
-        {buttonText}
-      </IconButton>
     </Flex>
   )
 }

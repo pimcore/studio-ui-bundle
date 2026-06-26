@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { type InputRef, type ModalFuncProps } from 'antd'
+import { Alert } from '@Pimcore/components/alert/alert'
 import { uuid as pimcoreUUid } from '@Pimcore/utils/uuid'
 import { type Rule } from 'antd/lib/form'
 import i18n from 'i18next'
@@ -46,6 +47,7 @@ export type InputFormModalProps = Omit<ModalFuncProps, 'content'> & {
   label?: string
   rule?: Rule
   initialValue?: string
+  warningMessage?: string
 }
 
 export type TextareaFormModalProps = Omit<ModalFuncProps, 'content'> & {
@@ -117,6 +119,7 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetMo
     label,
     rule,
     initialValue = '',
+    warningMessage,
     ...modalProps
   } = props
 
@@ -156,16 +159,39 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetMo
       }
       return node
     },
-    content: <InputForm
-      fieldName={ fieldName }
-      form={ currentForm }
-      initialValues={ { [fieldName]: initialValue } }
-      key={ 'input-form' }
-      label={ label }
-      onSubmitCapture={ async () => { await submit(fieldName) } }
-      ref={ inputRef }
-      rules={ formattedRule }
-             />
+    content: warningMessage !== undefined
+      ? (
+        <>
+          <Alert
+            message={ warningMessage }
+            showIcon
+            style={ { marginBottom: 8 } }
+            type='warning'
+          />
+          <InputForm
+            fieldName={ fieldName }
+            form={ currentForm }
+            initialValues={ { [fieldName]: initialValue } }
+            key={ 'input-form' }
+            label={ label }
+            onSubmitCapture={ async () => { await submit(fieldName) } }
+            ref={ inputRef }
+            rules={ formattedRule }
+          />
+        </>
+      )
+      : (
+        <InputForm
+          fieldName={ fieldName }
+          form={ currentForm }
+          initialValues={ { [fieldName]: initialValue } }
+          key={ 'input-form' }
+          label={ label }
+          onSubmitCapture={ async () => { await submit(fieldName) } }
+          ref={ inputRef }
+          rules={ formattedRule }
+        />
+      )
   }
 }
 

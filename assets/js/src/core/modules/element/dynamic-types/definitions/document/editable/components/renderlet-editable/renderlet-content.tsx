@@ -168,12 +168,6 @@ export const RenderletContent = ({
   if (hasContent) {
     contextMenuItems.push(
       {
-        key: 'empty',
-        label: t('empty'),
-        icon: <Icon value="trash" />,
-        onClick: handleEmpty
-      },
-      {
         key: 'open',
         label: t('open'),
         icon: <Icon value="open-folder" />,
@@ -194,6 +188,18 @@ export const RenderletContent = ({
     icon: <Icon value="search" />,
     onClick: handleSearch
   })
+
+  if (hasContent) {
+    contextMenuItems.push(
+      { type: 'divider', key: 'empty-divider' },
+      {
+        key: 'empty',
+        label: t('empty'),
+        icon: <Icon value="trash" />,
+        onClick: handleEmpty
+      }
+    )
+  }
 
   const getDropZoneText = (): string => {
     if (!isNil(config?.type)) {

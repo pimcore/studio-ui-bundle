@@ -78,6 +78,17 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
     )
   }
 
+  if (props.enableUpload) {
+    buttons.push(
+      <ModalUploadButton
+        maxItems={ props.uploadMaxItems }
+        onSuccess={ props.addAssets }
+        showMaxItemsError={ props.uploadShowMaxItemsError }
+        targetFolderPath={ props.assetUploadPath ?? undefined }
+      />
+    )
+  }
+
   if (props.allowClear) {
     buttons.push(
       <Tooltip title={ t('empty') }>
@@ -93,17 +104,6 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
           type="default"
         />
       </Tooltip>
-    )
-  }
-
-  if (props.enableUpload) {
-    buttons.push(
-      <ModalUploadButton
-        maxItems={ props.uploadMaxItems }
-        onSuccess={ props.addAssets }
-        showMaxItemsError={ props.uploadShowMaxItemsError }
-        targetFolderPath={ props.assetUploadPath ?? undefined }
-      />
     )
   }
 

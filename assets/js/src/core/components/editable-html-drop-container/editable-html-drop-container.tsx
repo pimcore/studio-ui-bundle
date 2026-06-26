@@ -128,10 +128,10 @@ export const EditableHtmlDropContainer = ({
         {!hasContent && !isLoading && isNil(error) && (
           <div className={ styles.dropZone }>
             <Icon
-              options={ { height: 30, width: 30 } }
+              options={ { height: 20, width: 21 } }
               value="drop-target"
             />
-            <Text>{dropZoneText}</Text>
+            <Text type='secondary'>{dropZoneText}</Text>
           </div>
         )}
       </div>
