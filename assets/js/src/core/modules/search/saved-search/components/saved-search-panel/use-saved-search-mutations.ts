@@ -78,9 +78,8 @@ export const useSavedSearchMutations = (params: UseSavedSearchMutationsParams): 
     filter
   })
 
-  // After a successful "save as new"/"clone": open the freshly created search as a main-area tab (it
-  // self-loads from its id), close the tab we saved from, and close the Quick Search modal — so the
-  // current tab "switches" to the new search.
+  // Switch to a freshly saved search: open it as a main-area tab (it self-loads from its id), close
+  // the tab we saved from, and close the Quick Search modal.
   const switchToSavedSearch = (id: number, name: string): void => {
     const previousId = loaded?.id
     openSavedSearchResultWidget(widgetManager, { id, name, elementType: elementType ?? elementTypes.asset })
@@ -91,8 +90,6 @@ export const useSavedSearchMutations = (params: UseSavedSearchMutationsParams): 
     onReset()
   }
 
-  // "Save as new"/"Clone" creates a new search from the current panel state (name from the form) and
-  // switches to it so it becomes the base for subsequent updates.
   const onSaveAsNew = (): void => {
     void form.validateFields().then((values: SavedSearchFormValues) => {
       saveConfiguration({ body: buildBody(values) }).then((result) => {
