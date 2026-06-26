@@ -18,8 +18,7 @@ export const useStyles = createStyles(({ token, css }) => {
       padding: ${token.paddingXS}px;
 
       &.toolbar--theme-primary {
-        // @todo: use token
-        background-color: #F5F3FA;
+        background-color: ${token.colorBgToolbar};
       }
 
       &.toolbar--theme-secondary {

@@ -70,7 +70,7 @@ const logoOrbitCCW = keyframes`
   to   { transform: translate(-50%, -50%) rotate(540deg) translateX(80px); }
 `
 
-export const useStyle = createStyles(({ css }, { phase, backgroundShade }: StyleProps) => {
+export const useStyle = createStyles(({ css, token }, { phase, backgroundShade }: StyleProps) => {
   const isLoading = phase === 'loading'
   const isOrbiting = phase === 'loading' || phase === 'outro'
   const resolvedBackgroundShade = backgroundShade !== '' ? backgroundShade : '#722ed1'
@@ -85,7 +85,7 @@ export const useStyle = createStyles(({ css }, { phase, backgroundShade }: Style
       position: absolute;
       inset: 0;
       pointer-events: none;
-      background: #FFF;
+      background: ${token.colorBgContainer};
       overflow: hidden;
       opacity: ${isLoading ? 1 : 0.3};
       transition: opacity 900ms ease;
@@ -137,7 +137,7 @@ export const useStyle = createStyles(({ css }, { phase, backgroundShade }: Style
         }
 
         &--bottom-left {
-          background: #FDFFFF;
+          background: ${token.colorBgContainer};
 
           ${isOrbiting
             ? css`

@@ -55,7 +55,7 @@ export const useStyles = createStyles(({ token, css }) => {
         content: "";
         position: absolute;
         inset: 0;
-        background: rgba(0, 0, 0, 0.07);
+        background: ${token.colorFillSecondary};
         pointer-events: none;
       }
     `

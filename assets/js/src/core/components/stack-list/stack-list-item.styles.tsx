@@ -15,7 +15,7 @@ export const useStyles = createStyles(({ token, css }) => {
     stackListItem: css`
       border-radius: 4px;
       border: 1px solid ${token.colorBorder};
-      background-color: #fff;
+      background-color: ${token.colorBgContainer};
 
       .stack-list-item__title {
         display: flex;

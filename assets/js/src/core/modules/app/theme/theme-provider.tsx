@@ -16,7 +16,7 @@ interface ThemeProviderProps {
   id?: string
 }
 
-export const ThemeProvider = ({ children, id = 'studio-default-light' }: ThemeProviderProps): React.JSX.Element => {
+export const ThemeProvider = ({ children, id = 'studio-default-dark' }: ThemeProviderProps): React.JSX.Element => {
   return (
     <DynamicThemeProvider id={ id }>
       {children}

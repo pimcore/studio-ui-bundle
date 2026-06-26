@@ -39,7 +39,7 @@ export const useStyle = createStyles(({ token, css }) => {
       }
 
       &.pimcore-title.ant-typography.title--theme-primary {
-       color: ${token.colorPrimary};
+       color: ${token.itemActiveColor};
       }
 
       &.pimcore-title.ant-typography.title--theme-secondary {

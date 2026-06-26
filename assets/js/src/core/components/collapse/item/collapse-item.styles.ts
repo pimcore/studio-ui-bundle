@@ -12,10 +12,10 @@ import { createStyles } from 'antd-style'
 
 export const useStyles = createStyles(({ css, token }) => {
   const themeToken = {
-    highlightBackgroundColor: '#F6FFED',
-    highlightBorderColor: '#B7EB8F',
-    highlightColor: '#52C41A',
-    headerBgColor: 'rgba(0, 0, 0, 0.04)',
+    highlightBackgroundColor: token.colorSuccessBg,
+    highlightBorderColor: token.colorSuccessBorder,
+    highlightColor: token.colorSuccessText,
+    headerBgColor: token.colorFillTertiary,
     ...token
   }
 
@@ -144,9 +144,8 @@ export const useStyles = createStyles(({ css, token }) => {
         }
 
         &.collapse-item--theme-fieldset {
-          // @todo check for tokens
-          background-color: rgba(242, 240, 244, 0.52);
-          border-left: 3px solid #D5CFDA;
+          background-color: ${token.colorBgFieldset};
+          border-left: 3px solid ${token.colorBorderFieldset};
         }
       }
     `

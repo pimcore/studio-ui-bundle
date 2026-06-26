@@ -25,7 +25,7 @@ export const useStyles = createStyles(({ token, css }) => {
         bottom: 0;
         width: 100%;
         height: 20px;
-        background-color: #fff;
+        background-color: ${token.colorBgContainer};
         z-index: -1;
       }
     `,

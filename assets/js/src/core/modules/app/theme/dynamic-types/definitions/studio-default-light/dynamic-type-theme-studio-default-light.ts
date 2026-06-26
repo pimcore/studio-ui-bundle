@@ -38,7 +38,14 @@ export const studioDefaultLightThemeConfig = {
     colorTextTertiary: 'rgba(0, 0, 0, 0.6)',
     colorFill: 'rgba(215, 199, 236, 0.6)',
     colorFillQuaternary: 'rgba(215, 199, 236, 0.4)',
-    colorBgLayout: '#fcfcfc',
+    colorBgLayout: 'rgba(255, 255, 255, 0.7)',
+    // Outermost app/page background — wired to html, body via global.styles.ts
+    colorBgCanvas: '#ffffff',
+    // Subtle neutral panel for the main-nav first-level column (kept neutral, not brand-purple like the fill tokens)
+    colorBgMainNavColumn: 'rgba(0, 0, 0, 0.03)',
+    // Fieldset (layout group) border + background
+    colorBorderFieldset: '#D5CFDA',
+    colorBgFieldset: '#F8F7F9',
     colorBgSpotlight: '#060606',
     colorPrimary: '#722ed1',
     fontSize: 12,
@@ -210,6 +217,7 @@ export const studioDefaultLightThemeConfig = {
       colorBgSelectedTab: '#ffffff',
       itemColor: 'rgba(0, 0, 0, 0.65)',
       itemActiveColor: '#531dab',
+      inkBarColor: '#531dab',
       itemHoverColor: 'rgba(215, 199, 236, 0.6)',
       itemUnselectedIconColor: '#4d4169',
       colorBorderActiveTab: '#00bab3',

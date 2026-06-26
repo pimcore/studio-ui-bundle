@@ -17,7 +17,7 @@ export const useStyles = createStyles(({ token, css }) => {
       padding: ${token.paddingXS}px ${token.paddingSM}px;
       gap: 8px;
       align-items: center;
-      color: ${token.Tree.colorPrimaryHeading};
+      color: ${token.itemActiveColor};
       font-weight: 600;
     `,
     CloseButton: css`
