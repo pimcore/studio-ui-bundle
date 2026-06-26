@@ -18,7 +18,7 @@ export const TopBar = (): React.JSX.Element => {
   return (
     <Toolbar
       borderStyle='default'
-      padding={ { left: 'small', right: 'small' } }
+      padding={ { left: 'none', right: 'none' } }
       position='top'
       theme='secondary'
     >
@@ -27,9 +27,7 @@ export const TopBar = (): React.JSX.Element => {
         gap={ 'small' }
       >
         <ProvidedTypeSelect />
-        <div style={ { flex: '1 1 auto', maxWidth: 480 } }>
-          <SearchTermFilter />
-        </div>
+        <SearchTermFilter />
       </Flex>
     </Toolbar>
   )
