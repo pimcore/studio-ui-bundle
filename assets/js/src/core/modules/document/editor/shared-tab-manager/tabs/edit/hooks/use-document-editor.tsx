@@ -17,6 +17,7 @@ export interface DocumentEditorContextProps {
   updateValue: (key: string, value: ValueType) => void
   updateValueWithReload: (key: string, value: ValueType) => void
   triggerSaveAndReload: () => void
+  reloadIframe: () => void
   getValues: () => Record<string, ValueType>
   getValue: (key: string) => ValueType
   initializeData: (data: Record<string, ValueType>) => void
@@ -109,6 +110,15 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
     }
   }, [id])
 
+  const reloadIframe = useCallback((): void => {
+    try {
+      const { document: documentApi } = getPimcoreStudioApi()
+      documentApi.reloadIframe(id)
+    } catch (error) {
+      console.warn('Could not reload document iframe:', error)
+    }
+  }, [id])
+
   const notifyReady = useCallback((): void => {
     if (!readyNotified.current) {
       try {
@@ -125,6 +135,7 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
     updateValue,
     updateValueWithReload,
     triggerSaveAndReload,
+    reloadIframe,
     getValues,
     getValue,
     initializeData,

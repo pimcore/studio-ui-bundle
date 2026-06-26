@@ -2240,6 +2240,7 @@ component.search.pleaceholder: Rechercher
 focal-point.set: Définir le point focal
 video.placeholder: Aucune vidéo sélectionnée - Cliquez pour ajouter une vidéo
 video.add-video: Ajouter une vidéo
+video.preview-in-progress: L'aperçu vidéo est en cours de génération…
 image.alt-text-placeholder: Entrez le texte alternatif
 area-settings: Paramètres de zone
 unsupported_feature: Fonctionnalité non prise en charge - veuillez vérifier la configuration requise !
@@ -2765,3 +2766,23 @@ select.clear-selection: Effacer la sélection
 asset.folder.preview.image-display: Affichage des images
 asset.folder.preview.image-display.small: Petit
 asset.folder.preview.image-display.large: Grand
+ownership-management.title: Gestion de la propriété
+ownership-management.show-deleted-owners: Afficher les éléments des utilisateurs supprimés
+ownership-management.deleted-user: Utilisateur supprimé
+ownership-management.columns.id: ID
+ownership-management.columns.name: Nom
+ownership-management.columns.modification-date: Date de modification
+ownership-management.columns.owner: Propriétaire
+ownership-management.columns.actions: Actions
+ownership-management.actions.reassign-owner: Réattribuer le propriétaire
+ownership-management.actions.reassign-owner.title: Réattribution du propriétaire des configurations
+ownership-management.actions.delete: Supprimer
+ownership-management.actions.delete.title: Suppression des configurations
+ownership-management.actions.batch-assign: Attribution par lot
+ownership-management.actions.batch-delete: Suppression par lot
+ownership-management.reassign-owner.title: "Réattribuer le propriétaire de {{count}} configuration(s)"
+ownership-management.reassign-owner.confirm: Réattribuer
+ownership-management.reassign-owner.placeholder: Rechercher un utilisateur par nom
+ownership-management.delete.title: Supprimer les configurations
+ownership-management.delete.content: "Voulez-vous vraiment supprimer {{count}} configuration(s) ?"
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Gestion de la propriété

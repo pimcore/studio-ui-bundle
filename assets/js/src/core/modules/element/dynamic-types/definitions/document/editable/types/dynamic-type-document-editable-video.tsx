@@ -27,6 +27,7 @@ export type VideoEditableDefinition = Omit<AbstractDocumentEditableDefinition, '
     poster?: string
     title?: string
     description?: string
+    thumbnail?: string
   }
 }
 
@@ -53,6 +54,7 @@ export class DynamicTypeDocumentEditableVideo extends DynamicTypeDocumentEditabl
         height={ props.config?.height }
         inherited={ props.inherited }
         onChange={ (newValue) => props.onChange?.(newValue) }
+        thumbnailName={ props.config?.thumbnail }
         value={ props.value }
         width={ props.config?.width }
       />

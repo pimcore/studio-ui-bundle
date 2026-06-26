@@ -9,7 +9,8 @@
  */
 
 import React from 'react'
-import { Badge, Tag } from 'antd'
+import { Badge } from '@Pimcore/components/badge/badge'
+import { Tag } from '@Pimcore/components/tag/tag'
 import { Card } from '@Pimcore/components/card/card'
 import { useStyles } from './workflow-card.styles'
 import { DropdownButton } from './components/dropdown-button/dropdown-button'
@@ -29,21 +30,9 @@ export const WorkflowCard = ({ workflow }: IWorkflowCardProps): React.JSX.Elemen
           {workflow.workflowStatus !== undefined && workflow.workflowStatus?.length > 0 && (
             workflow.workflowStatus.map((status, index) => (
               <Tag
-                className={ status.colorInverted ? 'color-inverted' : '' }
-                icon={
-                  <Badge
-                    color={ status.color }
-                    styles={ status.colorInverted
-                      ? { indicator: { outline: `1px solid ${status.color}4D` } }
-                      : {}
-                                        }
-                  />
-                                }
+                colorInverted={ status.colorInverted ? status.color : undefined }
+                icon={ !status.colorInverted ? <Badge color={ status.color } /> : undefined }
                 key={ `${index}-${status.title}` }
-                style={ status.colorInverted
-                  ? { backgroundColor: `${status.color}33` }
-                  : {}
-                                }
                 title={ status.title }
               >
                 {status.label}
