@@ -25,8 +25,8 @@ import { noop } from 'lodash'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { Flex } from '@sdk/components'
 import { createModalButtonTestId } from '@Pimcore/utils/test-id-generator'
-import type { ConfigUpdate, InputFormModalProps, TextareaFormModalProps, ConfirmFormModalProps, UseFormModalHookResponse, UploadFormModalProps } from './form-modal-types'
-export type { ConfigUpdate, InputFormModalProps, TextareaFormModalProps, ConfirmFormModalProps, UseFormModalHookResponse }
+import type { InputFormModalProps, TextareaFormModalProps, ConfirmFormModalProps, UseFormModalHookResponse, UploadFormModalProps } from './form-modal-types'
+export type { ConfigUpdate, InputFormModalProps, TextareaFormModalProps, ConfirmFormModalProps, UseFormModalHookResponse } from './form-modal-types'
 
 let form: formInstanceType | null = null
 

@@ -202,19 +202,16 @@ export const RenderletContent = ({
   }
 
   const getDropZoneText = (): string => {
-    if (!isNil(config?.type)) {
-      switch (config.type) {
-        case 'document':
-          return t('drop-document-here')
-        case 'asset':
-          return t('drop-asset-here')
-        case 'object':
-          return t('drop-object-here')
-        default:
-          return t('drop-element-here')
-      }
+    switch (config?.type) {
+      case 'document':
+        return t('drop-document-here')
+      case 'asset':
+        return t('drop-asset-here')
+      case 'object':
+        return t('drop-object-here')
+      default:
+        return t('drop-element-here')
     }
-    return t('drop-element-here')
   }
 
   const errorContent = !isNil(actualError) || isFetchError
