@@ -2766,3 +2766,41 @@ select.clear-selection: Effacer la sélection
 asset.folder.preview.image-display: Affichage des images
 asset.folder.preview.image-display.small: Petit
 asset.folder.preview.image-display.large: Grand
+saved-search.title: Recherche enregistrée
+saved-search.delete-search: Supprimer la recherche
+saved-search.save-as-new: Enregistrer comme nouvelle recherche
+saved-search.create-menu-shortcut: Créer un raccourci dans le menu
+saved-search.save.success: Recherche enregistrée créée
+saved-search.saved-searches: Recherches enregistrées
+saved-search.ownership: Propriété
+saved-search.ownership.own: Personnelle
+saved-search.ownership.shared: Partagée avec moi
+saved-search.open: Ouvrir
+saved-search.delete.title: Supprimer la recherche enregistrée
+saved-search.delete.confirm: Voulez-vous vraiment supprimer cette recherche enregistrée ?
+saved-search.update: Mettre à jour la recherche
+saved-search.clone: Cloner la recherche
+saved-search.update.success: Recherche enregistrée mise à jour
+saved-search.delete.success: Recherche enregistrée supprimée
+saved-search.shared-modified.info: "Vous avez modifié la configuration d’origine. Comme elle appartient à quelqu’un d’autre, vous pouvez l’enregistrer comme nouvelle recherche."
+saved-search.menu-shortcut-group: Groupe de menu
+ownership-management.title: Gestion de la propriété
+ownership-management.show-deleted-owners: Afficher les éléments des utilisateurs supprimés
+ownership-management.deleted-user: Utilisateur supprimé
+ownership-management.columns.id: ID
+ownership-management.columns.name: Nom
+ownership-management.columns.modification-date: Date de modification
+ownership-management.columns.owner: Propriétaire
+ownership-management.columns.actions: Actions
+ownership-management.actions.reassign-owner: Réattribuer le propriétaire
+ownership-management.actions.reassign-owner.title: Réattribution du propriétaire des configurations
+ownership-management.actions.delete: Supprimer
+ownership-management.actions.delete.title: Suppression des configurations
+ownership-management.actions.batch-assign: Attribution par lot
+ownership-management.actions.batch-delete: Suppression par lot
+ownership-management.reassign-owner.title: "Réattribuer le propriétaire de {{count}} configuration(s)"
+ownership-management.reassign-owner.confirm: Réattribuer
+ownership-management.reassign-owner.placeholder: Rechercher un utilisateur par nom
+ownership-management.delete.title: Supprimer les configurations
+ownership-management.delete.content: "Voulez-vous vraiment supprimer {{count}} configuration(s) ?"
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Gestion de la propriété

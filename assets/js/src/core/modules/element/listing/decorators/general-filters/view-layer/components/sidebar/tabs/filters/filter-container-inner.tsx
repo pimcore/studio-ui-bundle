@@ -48,6 +48,14 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { filters, onFilterChange, columnGroups, handleColumnClick } = useFieldFilterEditor()
 
+  // Reflect a pre-applied PQL query (e.g. from a restored saved search) as advanced mode, so the
+  // query is shown and editable instead of silently active behind the regular filters.
+  useEffect(() => {
+    if (pql !== '') {
+      setIsAdvancedMode(true)
+    }
+  }, [pql])
+
   const handleApplyClick = (): void => {
     const valuesToApply: FilterValues = {
       fieldFilters,

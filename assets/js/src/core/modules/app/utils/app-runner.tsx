@@ -14,6 +14,7 @@ import { AppView } from '../app-view'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { store } from '@Pimcore/app/store'
 import { settingsApi } from '@Pimcore/app/public-api/settings/settings-api'
+import { getThemeIdFromUrl } from '@Pimcore/modules/app/theme/utils/theme-from-url'
 
 export function runApp (): void {
   settingsApi.initialize(store)
@@ -27,5 +28,5 @@ export function runApp (): void {
   }
 
   const root = createRoot(domElement)
-  root.render(<AppView />)
+  root.render(<AppView themeId={ getThemeIdFromUrl() } />)
 }

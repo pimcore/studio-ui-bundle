@@ -13,7 +13,7 @@ import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 export const useStyles = createStyles(({ css, token }) => {
   return {
     'tool-strip': css`
-      background: #f5f5f5;
+      background: ${token.colorBgToolstrip};
       border-top-left-radius: ${token.borderRadius}px;
       border-top-right-radius: ${token.borderRadius}px;
       line-height: 0;
