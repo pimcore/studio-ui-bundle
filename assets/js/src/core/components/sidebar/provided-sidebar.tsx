@@ -14,7 +14,7 @@ import { useSidebar } from './use-sidebar'
 
 /**
  * A sidebar component that automatically consumes state from the SidebarProvider.
- * This component eliminates the need to manually pass props to the Sidebar component
+ * This component eliminates the need to manually pass props to the NotesAndEventsSidebar component
  * when using the provider pattern.
  *
  * Must be used within a SidebarProvider.

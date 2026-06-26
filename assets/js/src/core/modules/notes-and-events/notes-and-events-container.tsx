@@ -13,7 +13,7 @@ import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Header } from '@Pimcore/components/header/header'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
-import { Table } from '@Pimcore/modules/notes-and-events/table/table'
+import { Table } from '@Pimcore/modules/notes-and-events/notes-and-events-view/components/table/table'
 import { useNotesAndEvents } from '@Pimcore/modules/notes-and-events/hooks/use-global-notes-and-events'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { useTranslation } from 'react-i18next'
@@ -24,8 +24,8 @@ import { useAppDispatch } from '@sdk/app'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { api } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
 import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
-import { NotesAppliedFiltersProvider, notesFilterDescriptors } from '@Pimcore/modules/notes-and-events/filters/notes-filters'
-import { NotesSidebar } from '@Pimcore/modules/notes-and-events/components/notes-sidebar'
+import { NotesAppliedFiltersProvider, notesFilterDescriptors } from '@Pimcore/modules/notes-and-events/filters/filters'
+import { NotesAndEventsSidebar } from '@Pimcore/modules/notes-and-events/notes-and-events-sidebar/notes-and-events-sidebar'
 
 const NotesAndEventsView = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -42,7 +42,7 @@ const NotesAndEventsView = (): React.JSX.Element => {
 
   return (
     <ContentLayout
-      renderSidebar={ <NotesSidebar /> }
+      renderSidebar={ <NotesAndEventsSidebar /> }
       renderToolbar={
         <Toolbar theme="secondary">
           <IconButton

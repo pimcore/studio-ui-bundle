@@ -21,14 +21,9 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { ColumnPickerPopover } from '@Pimcore/components/column-picker/column-picker-popover'
 import { FieldFilters } from '@Pimcore/components/field-filters/field-filters'
 import { FiltersRenderer } from '@Pimcore/components/filters'
-import {
-  notesFilterDescriptors,
-  useNotesAppliedFilters,
-  useNotesDraftFilters,
-  useNotesFilterContext,
-  type NotesFilterColumn
-} from '@Pimcore/modules/notes-and-events/filters/notes-filters'
-import { useNotesFieldFilterEditor } from '@Pimcore/modules/notes-and-events/filters/use-notes-field-filter-editor'
+import { notesFilterDescriptors, useNotesAppliedFilters, useNotesDraftFilters, useNotesFilterContext } from '@Pimcore/modules/notes-and-events/filters/filters'
+import { useNotesFieldFilterEditor } from '@Pimcore/modules/notes-and-events/filters/hooks/use-notes-field-filter-editor'
+import { type NotesFilterColumn } from '@Pimcore/modules/notes-and-events/filters/types'
 
 export const SearchFiltersTab = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -84,6 +79,7 @@ export const SearchFiltersTab = (): React.JSX.Element => {
       }
     >
       <Content padded>
+        <Title>{t('sidebar.search_filter')}</Title>
         <Flex
           gap='small'
           style={ { width: '100%' } }

@@ -11,7 +11,7 @@
 import { useEffect, useState } from 'react'
 import { type Note, useNoteGetCollectionQuery } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
 import { useFilterQuery } from '@Pimcore/components/filters'
-import { notesFilterAdapter, useNotesAppliedFilters } from '@Pimcore/modules/notes-and-events/filters/notes-filters'
+import { notesFilterAdapter, useNotesAppliedFilters } from '@Pimcore/modules/notes-and-events/filters/filters'
 
 export type DataNote = Note & {
   rowId: string

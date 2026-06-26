@@ -126,7 +126,7 @@ export const serviceIds = {
   'Document/Editor/LinkTabManager': 'Document/Editor/LinkTabManager',
   'Document/Editor/SnippetTabManager': 'Document/Editor/SnippetTabManager',
 
-  // Document Sidebar Managers
+  // Document NotesAndEventsSidebar Managers
   'Document/Editor/Sidebar/PageSidebarManager': 'Document/Editor/Sidebar/PageSidebarManager',
   'Document/Editor/Sidebar/SnippetSidebarManager': 'Document/Editor/Sidebar/SnippetSidebarManager',
   'Document/Editor/Sidebar/EmailSidebarManager': 'Document/Editor/Sidebar/EmailSidebarManager',

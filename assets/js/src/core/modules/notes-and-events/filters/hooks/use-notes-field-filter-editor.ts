@@ -15,7 +15,7 @@ import { DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic
 import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 import { type FieldFiltersProps } from '@Pimcore/components/field-filters/field-filters'
 import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column-picker.types'
-import { NOTES_FILTERABLE_FIELDS, useNotesDraftFilters } from '@Pimcore/modules/notes-and-events/filters/notes-filters'
+import { NOTES_FILTERABLE_FIELDS, useNotesDraftFilters } from '@Pimcore/modules/notes-and-events/filters/filters'
 import { type NotesFilterColumn } from '@Pimcore/modules/notes-and-events/filters/types'
 
 export interface UseNotesFieldFilterEditorReturn {

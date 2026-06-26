@@ -1,8 +1,8 @@
 ---
-title: How to Add an Entry to the Left Sidebar
+title: How to Add an Entry to the Left NotesAndEventsSidebar
 ---
 
-# How to Add an Entry to the Left Sidebar
+# How to Add an Entry to the Left NotesAndEventsSidebar
 
 ## Overview
 Add a heart icon to the left sidebar of Pimcore Studio.

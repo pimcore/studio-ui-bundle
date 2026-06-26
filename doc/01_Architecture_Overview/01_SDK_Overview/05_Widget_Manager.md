@@ -181,7 +181,7 @@ widgetRegistry.registerWidget({
 | Component | Import from | Purpose |
 |-----------|-------------|---------|
 | `TabTitleContainer` | `@pimcore/studio-ui-bundle/modules/widget-manager` | Full-featured with auto-detection, close buttons, modified state |
-| `BorderTitleView` | `@pimcore/studio-ui-bundle/modules/widget-manager` | Sidebar button style only |
+| `BorderTitleView` | `@pimcore/studio-ui-bundle/modules/widget-manager` | NotesAndEventsSidebar button style only |
 | `TabTitleView` | `@pimcore/studio-ui-bundle/modules/widget-manager` | Tab style only |
 | `WidgetContentTitleView` | `@pimcore/studio-ui-bundle/modules/widget-manager` | Content header without translation |
 

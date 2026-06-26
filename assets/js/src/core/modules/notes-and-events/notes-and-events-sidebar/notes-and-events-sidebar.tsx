@@ -13,10 +13,10 @@ import { useTranslation } from 'react-i18next'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
-import { NotesDraftFiltersProvider, notesFilterDescriptors, useNotesAppliedFilters } from '@Pimcore/modules/notes-and-events/filters/notes-filters'
-import { SearchFiltersTab } from '@Pimcore/modules/notes-and-events/components/search-filters-tab'
+import { NotesDraftFiltersProvider, notesFilterDescriptors, useNotesAppliedFilters } from '@Pimcore/modules/notes-and-events/filters/filters'
+import { SearchFiltersTab } from '@Pimcore/modules/notes-and-events/notes-and-events-sidebar/components/search-filter-tab/search-filters-tab'
 
-export const NotesSidebar = (): React.JSX.Element => {
+export const NotesAndEventsSidebar = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { values: appliedValues } = useNotesAppliedFilters()
 
