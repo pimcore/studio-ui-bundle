@@ -32,10 +32,12 @@ import { useUserGetByIdQuery } from '@Pimcore/modules/user/user-api-slice-enhanc
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
+import { useAppSelector } from '@Pimcore/app/store'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { type SavedSearchSaveConfigurationApiArg } from '@Pimcore/modules/search/search-api-slice.gen'
 import { resolveSavedSearchElementType } from '@Pimcore/modules/search/saved-search/utils/resolve-element-type'
 import { toNumberArray } from '@Pimcore/modules/search/saved-search/utils/to-number-array'
+import { selectSavedSearchDirty } from '@Pimcore/modules/search/saved-search/dirty/saved-search-dirty-slice'
 import { SavedSearchForm, type SavedSearchFormValues, defaultValues } from './saved-search-form'
 import { useSavedSearchMutations } from './use-saved-search-mutations'
 import { useSavedSearchMetaDirty } from './use-saved-search-meta-dirty'
@@ -77,6 +79,9 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
   const ownerName = isOwner ? user?.username : ownerData?.name
 
   useSavedSearchMetaDirty({ form, loaded, isOwner, prefilledId, isSharedGlobally, sharedUsers, sharedRoles })
+
+  // Whether the loaded search has unsaved changes (drives the "save as new" hint for shared searches).
+  const isModified = useAppSelector((state) => !isNil(loaded) ? selectSavedSearchDirty(state, loaded.id) : false)
 
   // Capture the live grid state for the save/update body — the selected columns (with width, the
   // same data grid configs persist) and the assembled filter (search term + field filters). Update
@@ -241,7 +246,7 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSear
             </Row>
           )}
 
-          { !isNil(loaded) && !isOwner && (
+          { !isNil(loaded) && !isOwner && isModified && (
             <Alert
               description={ t('saved-search.shared-modified.info') }
               showIcon
