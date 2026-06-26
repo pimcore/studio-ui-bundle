@@ -2200,9 +2200,10 @@ application-logger.filter.priority-level.8: Débogage
 embed.url-modal.title: Modifier l'URL d'intégration
 embed.url-modal.label: URL (ex. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Veuillez entrer une URL valide
-embed.url-modal.ok-text: OK
+embed.url-modal.ok-text: Enregistrer
 embed.url-modal.cancel-text: Annuler
-embed.placeholder: Aucune URL définie - Cliquez pour ajouter une URL d'intégration
+embed.url-modal.warning: "Les URL invalides n'afficheront pas d'aperçu, veuillez vérifier et mettre à jour votre URL."
+embed.placeholder: Cliquez pour ajouter une URL d'intégration
 embed.add-url: Ajouter une URL
 embed.edit-url: Modifier l'URL
 embed.clear: Effacer
@@ -2238,9 +2239,13 @@ recycle-bin.actions.restore: Restaurer
 recycle-bin.actions.restore.title: Restauration des éléments de la corbeille
 component.search.pleaceholder: Rechercher
 focal-point.set: Définir le point focal
-video.placeholder: Aucune vidéo sélectionnée - Cliquez pour ajouter une vidéo
+video.placeholder: Cliquez pour ajouter une vidéo
 video.add-video: Ajouter une vidéo
 video.preview-in-progress: L'aperçu vidéo est en cours de génération…
+date.placeholder: Sélectionner une date
+numeric.placeholder: Entrer un nombre
+select.placeholder: Sélectionner une option
+multiselect.placeholder: Sélectionner des options
 image.alt-text-placeholder: Entrez le texte alternatif
 area-settings: Paramètres de zone
 unsupported_feature: Fonctionnalité non prise en charge - veuillez vérifier la configuration requise !
