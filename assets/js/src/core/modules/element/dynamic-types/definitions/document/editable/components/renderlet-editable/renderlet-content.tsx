@@ -165,6 +165,13 @@ export const RenderletContent = ({
 
   const contextMenuItems: MenuProps['items'] = []
 
+  contextMenuItems.push({
+    key: 'search',
+    label: t('search'),
+    icon: <Icon value="search" />,
+    onClick: handleSearch
+  })
+
   if (hasContent) {
     contextMenuItems.push(
       {
@@ -178,19 +185,7 @@ export const RenderletContent = ({
         label: t('element.locate-in-tree'),
         icon: <Icon value="target" />,
         onClick: handleLocateInTree
-      }
-    )
-  }
-
-  contextMenuItems.push({
-    key: 'search',
-    label: t('search'),
-    icon: <Icon value="search" />,
-    onClick: handleSearch
-  })
-
-  if (hasContent) {
-    contextMenuItems.push(
+      },
       { type: 'divider', key: 'empty-divider' },
       {
         key: 'empty',
