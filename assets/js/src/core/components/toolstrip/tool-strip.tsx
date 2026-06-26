@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 import React from 'react'
 import { useStyles } from './tool-strip.styles'
 import cn from 'classnames'
