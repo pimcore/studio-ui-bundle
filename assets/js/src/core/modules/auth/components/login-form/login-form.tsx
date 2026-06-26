@@ -13,13 +13,15 @@ import { useMessage } from '@Pimcore/components/message/useMessage'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
-import { setAuthState } from '@Pimcore/modules/auth/auth-slice'
 import { type Credentials, useLoginMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
 import { useStyle } from '@Pimcore/modules/auth/components/login-form/login-form-style'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { sendStatistics } from '@Pimcore/modules/auth/services/statisticsService'
+import { routes } from '@Pimcore/app/router/router'
 import { Checkbox, Input } from 'antd'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 import { Icon } from '../../../../components/icon/icon'
 
 interface ILoginFormProps {
@@ -27,7 +29,8 @@ interface ILoginFormProps {
 }
 
 export const LoginForm = ({ onPasswordForgotten }: ILoginFormProps): React.JSX.Element => {
-  const dispatch = useDispatch()
+  const location = useLocation()
+  const user = useUser()
   const { styles } = useStyle()
   const messageApi = useMessage()
   const { t } = useTranslation()
@@ -61,7 +64,16 @@ export const LoginForm = ({ onPasswordForgotten }: ILoginFormProps): React.JSX.E
       }
 
       if (response.error === undefined) {
-        dispatch(setAuthState(true))
+        // Keep the login screen visible until the reload: do NOT flip the auth
+        // state (that would start the app's intro/fade animation). Auth is
+        // re-established from the session cookie on the fresh boot. The submit
+        // button stays in its loading state because we return before clearing it.
+        const redirectPath: string = (location.state as { from?: { pathname?: string } } | null)?.from?.pathname ?? routes.root
+
+        await sendStatistics(user.isAdmin)
+
+        window.location.href = redirectPath
+        return
       }
 
       setIsLoginLoading(false)

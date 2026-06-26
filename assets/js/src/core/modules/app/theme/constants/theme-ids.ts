@@ -12,6 +12,5 @@
  * Standard theme IDs for Pimcore Studio
  */
 export const studioThemeIds = {
-  light: 'studio-default-light',
-  dark: 'studio-default-dark'
+  light: 'studio-default-light'
 } as const

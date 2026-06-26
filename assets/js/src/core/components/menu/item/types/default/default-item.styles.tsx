@@ -25,7 +25,7 @@ export const useStyles = createStyles(({ token, css }) => {
         background-color: ${token.colorBgContainer} !important;
 
         &:hover {
-          background-color: rgba(0, 0, 0, 0.04) !important;
+          background-color: ${token.colorFillTertiary} !important;
         }
       }
 

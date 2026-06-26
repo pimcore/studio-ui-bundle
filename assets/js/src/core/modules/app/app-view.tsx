@@ -20,11 +20,15 @@ import { ModalsProvider } from './modals-provider'
 import { ApiGateway } from '@Pimcore/app/public-api/api-gateway'
 import { TreeCopyPasteProvider } from '../element/actions/copy-paste/tree-copy-paste-context'
 
-export const AppView = (): React.JSX.Element => {
+export interface AppViewProps {
+  themeId?: string
+}
+
+export const AppView = ({ themeId }: AppViewProps = {}): React.JSX.Element => {
   return (
     <StrictMode>
       <ErrorBoundary>
-        <GlobalProvider>
+        <GlobalProvider themeId={ themeId }>
           <AntApp notification={ { stack: false } }>
             <TreeCopyPasteProvider>
               <ModalsProvider>

@@ -24,8 +24,8 @@ export const useStyles = createStyles(({ token, css }) => {
                     color: ${token.itemColor};
 
                     &.ant-segmented-item-selected {
-                        background: ${token.controlItemBgActive};
-                        border-color: ${token.controlItemBgActive};
+                        background: ${token.colorFill};
+                        border-color: ${token.colorFill};
                         color: ${token.itemSelectedColor};
                     }
                 }

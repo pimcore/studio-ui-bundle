@@ -17,6 +17,11 @@ export const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
   }
 
+  html,
+  body {
+    background-color: ${props => props.theme.colorBgCanvas};
+  }
+
   /** MESSAGE **/
   .ant-message {
     position: absolute;
