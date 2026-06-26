@@ -2766,6 +2766,24 @@ select.clear-selection: Auswahl löschen
 asset.folder.preview.image-display: Bildanzeige
 asset.folder.preview.image-display.small: Klein
 asset.folder.preview.image-display.large: Groß
+saved-search.title: Gespeicherte Suche
+saved-search.delete-search: Suche löschen
+saved-search.save-as-new: Als neue Suche speichern
+saved-search.create-menu-shortcut: Verknüpfung im Menü erstellen
+saved-search.save.success: Gespeicherte Suche erstellt
+saved-search.saved-searches: Gespeicherte Suchen
+saved-search.ownership: Besitz
+saved-search.ownership.own: Eigene
+saved-search.ownership.shared: Mit mir geteilt
+saved-search.open: Öffnen
+saved-search.delete.title: Gespeicherte Suche löschen
+saved-search.delete.confirm: Möchten Sie diese gespeicherte Suche wirklich löschen?
+saved-search.update: Suche aktualisieren
+saved-search.clone: Suche klonen
+saved-search.update.success: Gespeicherte Suche aktualisiert
+saved-search.delete.success: Gespeicherte Suche gelöscht
+saved-search.shared-modified.info: Sie haben die ursprüngliche Konfiguration geändert. Da sie jemand anderem gehört, können Sie sie als neue Suche speichern.
+saved-search.menu-shortcut-group: Menügruppe
 ownership-management.title: Eigentümerverwaltung
 ownership-management.show-deleted-owners: Elemente von gelöschten Benutzern anzeigen
 ownership-management.deleted-user: Gelöschter Benutzer

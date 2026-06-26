@@ -10,13 +10,14 @@
 
 import React from 'react'
 import { DynamicThemeProvider } from './dynamic-theme-provider'
+import { studioThemeIds } from './constants/theme-ids'
 
 interface ThemeProviderProps {
   children: React.ReactNode
   id?: string
 }
 
-export const ThemeProvider = ({ children, id = 'studio-default-light' }: ThemeProviderProps): React.JSX.Element => {
+export const ThemeProvider = ({ children, id = studioThemeIds.light }: ThemeProviderProps): React.JSX.Element => {
   return (
     <DynamicThemeProvider id={ id }>
       {children}

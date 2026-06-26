@@ -2799,3 +2799,21 @@ select.clear-selection: Clear selection
 asset.folder.preview.image-display: Image display
 asset.folder.preview.image-display.small: Small
 asset.folder.preview.image-display.large: Large
+saved-search.title: Saved search
+saved-search.delete-search: Delete search
+saved-search.save-as-new: Save as new search
+saved-search.create-menu-shortcut: Create shortcut in menu
+saved-search.save.success: Saved search created
+saved-search.saved-searches: Saved searches
+saved-search.ownership: Ownership
+saved-search.ownership.own: Own
+saved-search.ownership.shared: Shared with me
+saved-search.open: Open
+saved-search.delete.title: Delete saved search
+saved-search.delete.confirm: Are you sure you want to delete this saved search?
+saved-search.update: Update search
+saved-search.clone: Clone search
+saved-search.update.success: Saved search updated
+saved-search.delete.success: Saved search deleted
+saved-search.shared-modified.info: You have made modifications to the original configuration. Since it is owned by someone else, you can save it as a new search.
+saved-search.menu-shortcut-group: Menu group
