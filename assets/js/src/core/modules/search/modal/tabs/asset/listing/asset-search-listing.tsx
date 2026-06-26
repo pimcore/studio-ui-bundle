@@ -21,6 +21,7 @@ import { useAssetGetSearchQuery } from '@Pimcore/modules/search/search-api-slice
 import { compose } from '@Pimcore/utils/compose'
 import React from 'react'
 import { StaticColumnConfigurationDecorator } from './decorator/static-column-configuration/static-column-configuration-decorator'
+import { SavedSearchDecorator, type SavedSearchDecoratorConfig } from '@Pimcore/modules/search/saved-search/saved-search-decorator'
 import { DefaultView } from './view/view-layer/views/default-view'
 import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '../../../../../element/listing/decorators/type-filter/type-filter-decorator'
 import { OpenElementDecorator, type OpenElementDecoratorConfig } from './decorator/open-element/open-element-decorator'
@@ -42,7 +43,9 @@ const listingProps = compose<AbstractDecoratorProps>(
   [GeneralFiltersDecorator, { handleSearchTermInSidebar: false, showOnlyUnreferencedFilter: true } as GeneralFiltersDecoratorConfig],
   [TypeFilterDecorator, { elementType: elementTypes.asset } as TypeFilterDecoratorConfig],
   SortingDecorator,
-  [OpenElementDecorator, { elementType: elementTypes.asset } as OpenElementDecoratorConfig]
+  [OpenElementDecorator, { elementType: elementTypes.asset } as OpenElementDecoratorConfig],
+  // Composed last so its sidebar entry prepends ahead of the filter/tag entries (first icon).
+  [SavedSearchDecorator, { elementType: elementTypes.asset, supportsLoadedState: true } as SavedSearchDecoratorConfig]
 )(defaultProps)
 /* eslint-enable @typescript-eslint/consistent-type-assertions */
 

@@ -2766,6 +2766,24 @@ select.clear-selection: Cancella selezione
 asset.folder.preview.image-display: Visualizzazione immagini
 asset.folder.preview.image-display.small: Piccolo
 asset.folder.preview.image-display.large: Grande
+saved-search.title: Ricerca salvata
+saved-search.delete-search: Elimina ricerca
+saved-search.save-as-new: Salva come nuova ricerca
+saved-search.create-menu-shortcut: Crea scorciatoia nel menu
+saved-search.save.success: Ricerca salvata creata
+saved-search.saved-searches: Ricerche salvate
+saved-search.ownership: Proprietà
+saved-search.ownership.own: Propria
+saved-search.ownership.shared: Condivisa con me
+saved-search.open: Apri
+saved-search.delete.title: Elimina ricerca salvata
+saved-search.delete.confirm: Vuoi davvero eliminare questa ricerca salvata?
+saved-search.update: Aggiorna ricerca
+saved-search.clone: Clona ricerca
+saved-search.update.success: Ricerca salvata aggiornata
+saved-search.delete.success: Ricerca salvata eliminata
+saved-search.shared-modified.info: Hai apportato modifiche alla configurazione originale. Poiché appartiene a qualcun altro, puoi salvarla come nuova ricerca.
+saved-search.menu-shortcut-group: Gruppo di menu
 ownership-management.title: Gestione della proprietà
 ownership-management.show-deleted-owners: Mostra elementi di utenti eliminati
 ownership-management.deleted-user: Utente eliminato

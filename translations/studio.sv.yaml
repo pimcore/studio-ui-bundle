@@ -2766,6 +2766,24 @@ select.clear-selection: Rensa val
 asset.folder.preview.image-display: Bildvisning
 asset.folder.preview.image-display.small: Liten
 asset.folder.preview.image-display.large: Stor
+saved-search.title: Sparad sökning
+saved-search.delete-search: Ta bort sökning
+saved-search.save-as-new: Spara som ny sökning
+saved-search.create-menu-shortcut: Skapa genväg i menyn
+saved-search.save.success: Sparad sökning skapad
+saved-search.saved-searches: Sparade sökningar
+saved-search.ownership: Ägarskap
+saved-search.ownership.own: Egen
+saved-search.ownership.shared: Delad med mig
+saved-search.open: Öppna
+saved-search.delete.title: Ta bort sparad sökning
+saved-search.delete.confirm: Är du säker på att du vill ta bort den här sparade sökningen?
+saved-search.update: Uppdatera sökning
+saved-search.clone: Klona sökning
+saved-search.update.success: Sparad sökning uppdaterad
+saved-search.delete.success: Sparad sökning borttagen
+saved-search.shared-modified.info: Du har gjort ändringar i den ursprungliga konfigurationen. Eftersom den ägs av någon annan kan du spara den som en ny sökning.
+saved-search.menu-shortcut-group: Menygrupp
 ownership-management.title: Ägarskapshantering
 ownership-management.show-deleted-owners: Visa objekt från borttagna användare
 ownership-management.deleted-user: Borttagen användare

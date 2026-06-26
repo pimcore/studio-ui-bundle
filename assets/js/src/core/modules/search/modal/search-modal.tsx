@@ -17,9 +17,12 @@ import { useSearch } from '../provider/use-search'
 import { AssetTab } from './tabs/asset/asset-tab'
 import { ObjectTab } from './tabs/object/object-tab'
 import { DocumentTab } from './tabs/document/document-tab'
+import { SavedSearchesTab } from '../saved-search/components/saved-searches-tab/saved-searches-tab'
+import { useTranslation } from 'react-i18next'
 
 export const SearchModal = (): React.JSX.Element => {
   const { isOpen, setActiveKey, close, activeKey } = useSearch()
+  const { t } = useTranslation()
 
   const tabItems: ITabsProps['items'] = [
     {
@@ -41,6 +44,11 @@ export const SearchModal = (): React.JSX.Element => {
       label: 'Data Objects',
       key: elementTypes.dataObject,
       children: <ObjectTab />
+    },
+    {
+      label: t('saved-search.saved-searches'),
+      key: 'saved-searches',
+      children: <SavedSearchesTab />
     }
   ]
 
