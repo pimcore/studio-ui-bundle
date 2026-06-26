@@ -274,6 +274,7 @@ import operatorConcatenator from '@Pimcore/assets/icons/operator-concatenator.in
 import order from '@Pimcore/assets/icons/order.inline.svg?react'
 import otherOperators from '@Pimcore/assets/icons/other-operators.inline.svg?react'
 import other from '@Pimcore/assets/icons/other.inline.svg?react'
+import ownership from '@Pimcore/assets/icons/ownership.inline.svg?react'
 import packageIcon from '@Pimcore/assets/icons/package.inline.svg?react'
 import pageStatic from '@Pimcore/assets/icons/page-static.inline.svg?react'
 import panel from '@Pimcore/assets/icons/panel.inline.svg?react'
@@ -1438,6 +1439,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'other',
       component: other
+    })
+    iconLibrary.register({
+      name: 'ownership',
+      component: ownership
     })
     iconLibrary.register({
       name: 'package',

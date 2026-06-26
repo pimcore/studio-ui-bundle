@@ -511,7 +511,7 @@ export type DataObjectPreviewByIdApiResponse = unknown;
 export type DataObjectPreviewByIdApiArg = {
     /** Id of the data object */
     id: number;
-    /** Site ID */
+    /** Site ID for multi-site setups */
     site?: number;
 };
 export type DataObjectReplaceContentApiResponse = unknown;
@@ -749,10 +749,18 @@ export type RelationFieldConfig = {
     relation: string;
     /** Field getter */
     field: string;
+    /** Classification store group id */
+    groupId?: number | null;
+    /** Classification store key id */
+    keyId?: number | null;
 };
 export type SimpleFieldConfig = {
     /** Field getter */
     field: string;
+    /** Classification store group id */
+    groupId?: number | null;
+    /** Classification store key id */
+    keyId?: number | null;
 };
 export type StaticTextConfig = {
     /** Static Text */
@@ -809,6 +817,8 @@ export type GridFilter = {
     columnFilters?: object;
     /** Sort Filter */
     sortFilter?: object;
+    /** Additional Sort Filters for multi-column sorting */
+    additionalSortFilters?: object[];
 };
 export type GridDetailedConfiguration = {
     /** AdditionalAttributes */
@@ -960,6 +970,8 @@ export type ExportAllFilter = {
     columnFilters: object;
     /** Sort Filter */
     sortFilter: object;
+    /** Additional Sort Filters for multi-column sorting */
+    additionalSortFilters?: object[];
 };
 export type SelectOption = {
     /** AdditionalAttributes */

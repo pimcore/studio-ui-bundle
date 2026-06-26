@@ -433,6 +433,15 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
+            assetVideoThumbnailStatus: build.query<
+                AssetVideoThumbnailStatusApiResponse,
+                AssetVideoThumbnailStatusApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/video/thumbnail/${queryArg.thumbnailName}/status`,
+                }),
+                providesTags: ["Assets"],
+            }),
             assetVideoStreamByThumbnail: build.query<
                 AssetVideoStreamByThumbnailApiResponse,
                 AssetVideoStreamByThumbnailApiArg
@@ -988,6 +997,14 @@ export type AssetVideoDownloadByThumbnailApiArg = {
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
 };
+export type AssetVideoThumbnailStatusApiResponse =
+    /** status 200 Conversion status of the video thumbnail */ VideoThumbnailStatus;
+export type AssetVideoThumbnailStatusApiArg = {
+    /** Id of the video */
+    id: number;
+    /** Find asset by matching thumbnail name. */
+    thumbnailName: string;
+};
 export type AssetVideoStreamByThumbnailApiResponse = /** status 200 Video stream based on thumbnail name */ Blob;
 export type AssetVideoStreamByThumbnailApiArg = {
     /** Id of the video */
@@ -1046,6 +1063,8 @@ export type ExportAllFilter = {
     columnFilters: object;
     /** Sort Filter */
     sortFilter: object;
+    /** Additional Sort Filters for multi-column sorting */
+    additionalSortFilters?: object[];
 };
 export type ElementIcon = {
     /** Icon type */
@@ -1215,10 +1234,18 @@ export type RelationFieldConfig = {
     relation: string;
     /** Field getter */
     field: string;
+    /** Classification store group id */
+    groupId?: number | null;
+    /** Classification store key id */
+    keyId?: number | null;
 };
 export type SimpleFieldConfig = {
     /** Field getter */
     field: string;
+    /** Classification store group id */
+    groupId?: number | null;
+    /** Classification store key id */
+    keyId?: number | null;
 };
 export type StaticTextConfig = {
     /** Static Text */
@@ -1265,6 +1292,8 @@ export type GridFilter = {
     columnFilters?: object;
     /** Sort Filter */
     sortFilter?: object;
+    /** Additional Sort Filters for multi-column sorting */
+    additionalSortFilters?: object[];
 };
 export type GridDetailedConfiguration = {
     /** AdditionalAttributes */
@@ -1372,6 +1401,14 @@ export type AssetUploadInfo = {
     /** Id of existing asset */
     assetId: number | null;
 };
+export type VideoThumbnailStatus = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Conversion status of the requested video thumbnail. */
+    status: "finished" | "inprogress" | "error" | "not_started";
+};
 export type VideoType = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -1440,6 +1477,7 @@ export const {
     useAssetUploadZipMutation,
     useAssetVideoImageThumbnailStreamQuery,
     useAssetVideoDownloadByThumbnailQuery,
+    useAssetVideoThumbnailStatusQuery,
     useAssetVideoStreamByThumbnailQuery,
     useAssetGetVideoTypesQuery,
     useAssetCustomMetadataGetByIdQuery,

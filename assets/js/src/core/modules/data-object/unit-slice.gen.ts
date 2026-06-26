@@ -111,6 +111,7 @@ export type UnitQuantityValueUnitsCollectionApiArg = {
             pageSize?: number;
             columnFilters?: object;
             sortFilter?: object;
+            additionalSortFilters?: object;
         };
     };
 };

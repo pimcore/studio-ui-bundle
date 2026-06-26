@@ -2240,6 +2240,7 @@ component.search.pleaceholder: Cerca
 focal-point.set: Imposta punto focale
 video.placeholder: Nessun video selezionato - Cliccare per aggiungere un video
 video.add-video: Aggiungi video
+video.preview-in-progress: L'anteprima del video è in fase di generazione…
 image.alt-text-placeholder: Inserire testo alternativo
 area-settings: Impostazioni area
 unsupported_feature: Funzionalità non supportata - verificare i requisiti di sistema!
@@ -2765,3 +2766,23 @@ select.clear-selection: Cancella selezione
 asset.folder.preview.image-display: Visualizzazione immagini
 asset.folder.preview.image-display.small: Piccolo
 asset.folder.preview.image-display.large: Grande
+ownership-management.title: Gestione della proprietà
+ownership-management.show-deleted-owners: Mostra elementi di utenti eliminati
+ownership-management.deleted-user: Utente eliminato
+ownership-management.columns.id: ID
+ownership-management.columns.name: Nome
+ownership-management.columns.modification-date: Data di modifica
+ownership-management.columns.owner: Proprietario
+ownership-management.columns.actions: Azioni
+ownership-management.actions.reassign-owner: Riassegna proprietario
+ownership-management.actions.reassign-owner.title: Riassegnazione del proprietario delle configurazioni
+ownership-management.actions.delete: Elimina
+ownership-management.actions.delete.title: Eliminazione delle configurazioni
+ownership-management.actions.batch-assign: Assegnazione in blocco
+ownership-management.actions.batch-delete: Eliminazione in blocco
+ownership-management.reassign-owner.title: "Riassegna il proprietario di {{count}} configurazione/i"
+ownership-management.reassign-owner.confirm: Riassegna
+ownership-management.reassign-owner.placeholder: Cerca un utente per nome
+ownership-management.delete.title: Elimina configurazioni
+ownership-management.delete.content: "Vuoi davvero eliminare {{count}} configurazione/i?"
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Gestione della proprietà
