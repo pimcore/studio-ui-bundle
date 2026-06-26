@@ -2766,3 +2766,41 @@ select.clear-selection: Auswahl löschen
 asset.folder.preview.image-display: Bildanzeige
 asset.folder.preview.image-display.small: Klein
 asset.folder.preview.image-display.large: Groß
+saved-search.title: Gespeicherte Suche
+saved-search.delete-search: Suche löschen
+saved-search.save-as-new: Als neue Suche speichern
+saved-search.create-menu-shortcut: Verknüpfung im Menü erstellen
+saved-search.save.success: Gespeicherte Suche erstellt
+saved-search.saved-searches: Gespeicherte Suchen
+saved-search.ownership: Besitz
+saved-search.ownership.own: Eigene
+saved-search.ownership.shared: Mit mir geteilt
+saved-search.open: Öffnen
+saved-search.delete.title: Gespeicherte Suche löschen
+saved-search.delete.confirm: Möchten Sie diese gespeicherte Suche wirklich löschen?
+saved-search.update: Suche aktualisieren
+saved-search.clone: Suche klonen
+saved-search.update.success: Gespeicherte Suche aktualisiert
+saved-search.delete.success: Gespeicherte Suche gelöscht
+saved-search.shared-modified.info: Sie haben die ursprüngliche Konfiguration geändert. Da sie jemand anderem gehört, können Sie sie als neue Suche speichern.
+saved-search.menu-shortcut-group: Menügruppe
+ownership-management.title: Eigentümerverwaltung
+ownership-management.show-deleted-owners: Elemente von gelöschten Benutzern anzeigen
+ownership-management.deleted-user: Gelöschter Benutzer
+ownership-management.columns.id: ID
+ownership-management.columns.name: Name
+ownership-management.columns.modification-date: Änderungsdatum
+ownership-management.columns.owner: Eigentümer
+ownership-management.columns.actions: Aktionen
+ownership-management.actions.reassign-owner: Eigentümer neu zuweisen
+ownership-management.actions.reassign-owner.title: Eigentümer der Konfigurationen wird neu zugewiesen
+ownership-management.actions.delete: Löschen
+ownership-management.actions.delete.title: Konfigurationen werden gelöscht
+ownership-management.actions.batch-assign: Stapelzuweisung
+ownership-management.actions.batch-delete: Stapellöschung
+ownership-management.reassign-owner.title: "Eigentümer von {{count}} Konfiguration(en) neu zuweisen"
+ownership-management.reassign-owner.confirm: Neu zuweisen
+ownership-management.reassign-owner.placeholder: Benutzer nach Namen suchen
+ownership-management.delete.title: Konfigurationen löschen
+ownership-management.delete.content: "Möchten Sie {{count}} Konfiguration(en) wirklich löschen?"
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Eigentümerverwaltung

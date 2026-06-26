@@ -49,6 +49,7 @@ export type RecycleBinGetCollectionApiArg = {
             pageSize?: number;
             columnFilters?: object;
             sortFilter?: object;
+            additionalSortFilters?: object;
         };
     };
 };

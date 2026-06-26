@@ -6,15 +6,6 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
-            assetVideoThumbnailStatus: build.query<
-                AssetVideoThumbnailStatusApiResponse,
-                AssetVideoThumbnailStatusApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/assets/${queryArg.id}/video/thumbnail/${queryArg.thumbnailName}/status`,
-                }),
-                providesTags: ["Assets"],
-            }),
             assetGetTypes: build.query<AssetGetTypesApiResponse, AssetGetTypesApiArg>({
                 query: () => ({ url: `/pimcore-studio/api/assets/types` }),
                 providesTags: ["Assets"],
@@ -442,6 +433,15 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
+            assetVideoThumbnailStatus: build.query<
+                AssetVideoThumbnailStatusApiResponse,
+                AssetVideoThumbnailStatusApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/${queryArg.id}/video/thumbnail/${queryArg.thumbnailName}/status`,
+                }),
+                providesTags: ["Assets"],
+            }),
             assetVideoStreamByThumbnail: build.query<
                 AssetVideoStreamByThumbnailApiResponse,
                 AssetVideoStreamByThumbnailApiArg
@@ -466,14 +466,6 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type AssetVideoThumbnailStatusApiResponse =
-    /** status 200 Conversion status of the video thumbnail */ VideoThumbnailStatus;
-export type AssetVideoThumbnailStatusApiArg = {
-    /** Id of the video */
-    id: number;
-    /** Find asset by matching thumbnail name. */
-    thumbnailName: string;
-};
 export type AssetGetTypesApiResponse = /** status 200 Successfully retrieved all available asset types */ {
     totalItems: number;
     items: AssetType[];
@@ -1005,6 +997,14 @@ export type AssetVideoDownloadByThumbnailApiArg = {
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
 };
+export type AssetVideoThumbnailStatusApiResponse =
+    /** status 200 Conversion status of the video thumbnail */ VideoThumbnailStatus;
+export type AssetVideoThumbnailStatusApiArg = {
+    /** Id of the video */
+    id: number;
+    /** Find asset by matching thumbnail name. */
+    thumbnailName: string;
+};
 export type AssetVideoStreamByThumbnailApiResponse = /** status 200 Video stream based on thumbnail name */ Blob;
 export type AssetVideoStreamByThumbnailApiArg = {
     /** Id of the video */
@@ -1024,13 +1024,13 @@ export type AssetCustomMetadataGetByIdApiArg = {
     /** Id of the asset */
     id: number;
 };
-export type VideoThumbnailStatus = {
+export type AssetType = {
     /** AdditionalAttributes */
     additionalAttributes?: {
         [key: string]: string | number | boolean | object;
     };
-    /** Conversion status of the requested video thumbnail. */
-    status: "finished" | "inprogress" | "error" | "not_started";
+    /** key */
+    key: string;
 };
 export type Error = {
     /** Message */
@@ -1041,14 +1041,6 @@ export type DevError = {
     message: string;
     /** Details */
     details: string;
-};
-export type AssetType = {
-    /** AdditionalAttributes */
-    additionalAttributes?: {
-        [key: string]: string | number | boolean | object;
-    };
-    /** key */
-    key: string;
 };
 export type FixedCustomSettings = {
     /** embedded meta data of the asset - array of any key-value pairs */
@@ -1071,6 +1063,8 @@ export type ExportAllFilter = {
     columnFilters: object;
     /** Sort Filter */
     sortFilter: object;
+    /** Additional Sort Filters for multi-column sorting */
+    additionalSortFilters?: object[];
 };
 export type ElementIcon = {
     /** Icon type */
@@ -1240,10 +1234,18 @@ export type RelationFieldConfig = {
     relation: string;
     /** Field getter */
     field: string;
+    /** Classification store group id */
+    groupId?: number | null;
+    /** Classification store key id */
+    keyId?: number | null;
 };
 export type SimpleFieldConfig = {
     /** Field getter */
     field: string;
+    /** Classification store group id */
+    groupId?: number | null;
+    /** Classification store key id */
+    keyId?: number | null;
 };
 export type StaticTextConfig = {
     /** Static Text */
@@ -1290,6 +1292,8 @@ export type GridFilter = {
     columnFilters?: object;
     /** Sort Filter */
     sortFilter?: object;
+    /** Additional Sort Filters for multi-column sorting */
+    additionalSortFilters?: object[];
 };
 export type GridDetailedConfiguration = {
     /** AdditionalAttributes */
@@ -1397,6 +1401,14 @@ export type AssetUploadInfo = {
     /** Id of existing asset */
     assetId: number | null;
 };
+export type VideoThumbnailStatus = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Conversion status of the requested video thumbnail. */
+    status: "finished" | "inprogress" | "error" | "not_started";
+};
 export type VideoType = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -1420,7 +1432,6 @@ export type CustomMetadata = {
     data: any | null;
 };
 export const {
-    useAssetVideoThumbnailStatusQuery,
     useAssetGetTypesQuery,
     useAssetBatchDeleteMutation,
     useAssetCloneMutation,
@@ -1466,6 +1477,7 @@ export const {
     useAssetUploadZipMutation,
     useAssetVideoImageThumbnailStreamQuery,
     useAssetVideoDownloadByThumbnailQuery,
+    useAssetVideoThumbnailStatusQuery,
     useAssetVideoStreamByThumbnailQuery,
     useAssetGetVideoTypesQuery,
     useAssetCustomMetadataGetByIdQuery,

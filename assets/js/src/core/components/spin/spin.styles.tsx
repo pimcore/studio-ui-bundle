@@ -69,7 +69,14 @@ export const useStyles = createStyles(({ token, css }) => {
       align-items: center;
       height: 100px;
       width: 100px;
-      color: ${token.colorPrimary};
+      color: ${token.itemActiveColor};
+
+      /* Ant's <Spin> colors its .ant-spin-dot wrapper with colorPrimary, which the
+         currentColor dots would otherwise inherit. Set the color on the icon itself
+         (closest ancestor of the SVG) so the dots follow itemActiveColor too. */
+      .pimcore-icon {
+        color: ${token.itemActiveColor};
+      }
     `
   }
 })

@@ -94,7 +94,6 @@ export const serviceIds = {
 
   // Dynamic Type Theme instances
   'DynamicTypes/Theme/StudioDefaultLight': 'DynamicTypes/Theme/StudioDefaultLight',
-  'DynamicTypes/Theme/StudioDefaultDark': 'DynamicTypes/Theme/StudioDefaultDark',
 
   // Assets
   'Asset/Editor/TypeRegistry': 'Asset/Editor/TypeRegistry',

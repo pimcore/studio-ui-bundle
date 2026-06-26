@@ -48,6 +48,12 @@ interface IUseRoleReturn {
   getAllIds: number[]
 }
 
+// Perspectives can arrive either as full PerspectiveConfig objects (freshly fetched read data)
+// or as plain id strings (once the form's perspective Select has written its value). The update
+// endpoint expects an array of ids, so coerce either shape to string ids.
+const toPerspectiveIds = (perspectives: ReadonlyArray<string | { id: string }>): string[] =>
+  perspectives.map((perspective) => (typeof perspective === 'string' ? perspective : perspective.id))
+
 export const useRoleHelper = (): IUseRoleReturn => {
   const { t } = useTranslation()
   const messageApi = useMessage()
@@ -150,7 +156,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
         assetWorkspaces: item.assetWorkspaces,
         dataObjectWorkspaces: item.dataObjectWorkspaces,
         documentWorkspaces: item.documentWorkspaces,
-        perspectives: item.perspectives
+        perspectives: toPerspectiveIds(item.perspectives)
       }
     }))
     await handleNotification(t('roles.save-item.success'), error)
@@ -164,7 +170,10 @@ export const useRoleHelper = (): IUseRoleReturn => {
     const { id, parentId } = props
 
     const role = await fetchRoleById({ id })
-    const { data, error }: any = await dispatch(api.endpoints.roleUpdateById.initiate({ id, updateRole: { ...role, parentId } }))
+    const { data, error }: any = await dispatch(api.endpoints.roleUpdateById.initiate({
+      id,
+      updateRole: { ...role, parentId, perspectives: toPerspectiveIds(role.perspectives) }
+    }))
 
     await handleNotification(t('roles.save-item.success'), error)
     return data
