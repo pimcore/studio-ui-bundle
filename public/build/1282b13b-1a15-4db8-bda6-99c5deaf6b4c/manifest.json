@@ -688,10 +688,10 @@
     "http://localhost:3030/static/js/async/js_src_sdk_modules_asset_index_ts.js.map",
     "http://localhost:3030/static/js/async/js_src_core_modules_gdpr-data-extractor_dynamic-types_definitions_dynamic-type-abstract-gdpr--d29d74.js.map",
     "http://localhost:3030/static/js/async/node_modules_react-dom_client_js-js_src_core_app_plugin-system_plugin-system_ts-js_src_core_b-85f061.js.map",
-    "http://localhost:3030/index.244a3f0784758984.hot-update.js.map",
     "http://localhost:3030/static/js/index.js.map",
+    "http://localhost:3030/index.e43d7da5f0cd1859.hot-update.js.map",
     "http://localhost:3030/static/js/remoteEntry.js.map",
-    "http://localhost:3030/pimcore_studio_ui_bundle.244a3f0784758984.hot-update.js.map",
+    "http://localhost:3030/pimcore_studio_ui_bundle.e43d7da5f0cd1859.hot-update.js.map",
     "http://localhost:3030/static/js/async/vendors-node_modules_codemirror_lang-css_dist_index_js.js.map",
     "http://localhost:3030/static/js/async/vendors-node_modules_codemirror_lang-javascript_dist_index_js.js.map",
     "http://localhost:3030/static/js/async/node_modules_codemirror_lang-json_dist_index_js-_bc1b0.js.map",
@@ -707,7 +707,7 @@
     "http://localhost:3030/static/js/async/__federation_expose__internal___mf_bootstrap.js.map",
     "http://localhost:3030/static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_app.js.map",
-    "http://localhost:3030/__federation_expose_app.244a3f0784758984.hot-update.js.map",
+    "http://localhost:3030/__federation_expose_app.e43d7da5f0cd1859.hot-update.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_api.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_api__asset.js.map",
     "http://localhost:3030/static/js/async/__federation_expose_api__class_definition.js.map",
@@ -765,8 +765,8 @@
         "static/js/async/node_modules_codemirror_lang-json_dist_index_js-_bc1b0.js.map",
         "static/js/async/vendors-node_modules_codemirror_lang-javascript_dist_index_js.js.map",
         "static/js/async/vendors-node_modules_codemirror_lang-css_dist_index_js.js.map",
-        "index.244a3f0784758984.hot-update.js.map",
         "static/js/index.js.map",
+        "index.e43d7da5f0cd1859.hot-update.js.map",
         "static/js/vendors-node_modules_ant-design_colors_es_index_js-node_modules_antd_es_index_js-node_modules-805070.js.map",
         "static/js/async/vendors-node_modules_codemirror_lang-html_dist_index_js.js.map",
         "static/js/async/vendors-node_modules_lezer_lr_dist_index_js.js.map",
@@ -801,7 +801,7 @@
         "js": [
           "http://localhost:3030/static/js/vendors-node_modules_ant-design_colors_es_index_js-node_modules_antd_es_index_js-node_modules-805070.js",
           "http://localhost:3030/static/js/index.js",
-          "http://localhost:3030/index.244a3f0784758984.hot-update.js"
+          "http://localhost:3030/index.e43d7da5f0cd1859.hot-update.js"
         ]
       },
       "async": {
@@ -890,7 +890,7 @@
         "static/js/async/__federation_expose_api__asset.js.map",
         "static/js/async/__federation_expose_api.js.map",
         "static/js/async/__federation_expose_app.js.map",
-        "__federation_expose_app.244a3f0784758984.hot-update.js.map",
+        "__federation_expose_app.e43d7da5f0cd1859.hot-update.js.map",
         "static/js/async/__federation_expose__internal___mf_bootstrap_document_editor_iframe.js.map",
         "static/js/async/__federation_expose__internal___mf_bootstrap.js.map",
         "static/js/async/__federation_expose_default_export.js.map",
@@ -906,7 +906,7 @@
         "static/js/async/vendors-node_modules_codemirror_lang-javascript_dist_index_js.js.map",
         "static/js/async/vendors-node_modules_codemirror_lang-css_dist_index_js.js.map",
         "static/js/remoteEntry.js.map",
-        "pimcore_studio_ui_bundle.244a3f0784758984.hot-update.js.map",
+        "pimcore_studio_ui_bundle.e43d7da5f0cd1859.hot-update.js.map",
         "static/js/async/node_modules_react-dom_client_js-js_src_core_app_plugin-system_plugin-system_ts-js_src_core_b-85f061.js.map",
         "static/font/Lato-Light.bec6f0ae.ttf",
         "static/font/Lato-Bold.2c00c297.ttf",
@@ -1223,7 +1223,7 @@
       ],
       "initial": {
         "js": [
-          "http://localhost:3030/pimcore_studio_ui_bundle.244a3f0784758984.hot-update.js",
+          "http://localhost:3030/pimcore_studio_ui_bundle.e43d7da5f0cd1859.hot-update.js",
           "http://localhost:3030/static/js/remoteEntry.js"
         ]
       },
