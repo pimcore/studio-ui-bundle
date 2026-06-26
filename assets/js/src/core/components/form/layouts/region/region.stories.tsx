@@ -350,7 +350,7 @@ export const ThreeSectionForm: Story = {
   render: () => <ThreeSectionFormComponent />
 }
 
-// NotesAndEventsSidebar Layout
+// Sidebar Layout
 const SidebarFormComponent = (): React.JSX.Element => {
   const [form] = Form.useForm()
 

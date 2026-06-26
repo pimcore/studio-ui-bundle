@@ -23,9 +23,9 @@ Adding a custom document type requires both a PHP backend and a Pimcore Studio f
 - A `TabManager` subclass that defines the editor type
 - Registration in the `TypeRegistry` with the document type name and tab manager service ID
 - A `DocumentSidebarManager` bound with the convention-based service ID
-  `Document/Editor/NotesAndEventsSidebar/${CapitalizedType}SidebarManager`
+  `Document/Editor/Sidebar/${CapitalizedType}SidebarManager`
 - Tab registration (Edit, Preview, Properties, Versions, etc.)
-- NotesAndEventsSidebar registration (areablock types, content settings, document configuration)
+- Sidebar registration (areablock types, content settings, document configuration)
 - A context menu entry using `useAddDocument` for the document tree right-click menu
 
 The example registers the `book` type with the same editor capabilities as a standard

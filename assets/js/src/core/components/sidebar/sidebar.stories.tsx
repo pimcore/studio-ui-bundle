@@ -20,7 +20,7 @@ import { InlineHelpContent } from '@Pimcore/components/sidebar/inline-help/inlin
 import { useInlineHelpHelper } from '@Pimcore/components/sidebar/inline-help/use-inline-help-helper'
 
 const config: Meta = {
-  title: 'Components/Layout/NotesAndEventsSidebar',
+  title: 'Components/Layout/Sidebar',
   component: (args) => {
     return (
       <div style={ { display: 'flex', height: '50vh' } }>
@@ -69,7 +69,7 @@ It can be used in two ways:
     sizing: {
       control: { type: 'select' },
       options: ['default', 'large'],
-      description: 'NotesAndEventsSidebar width: default (250px) or large (432px)'
+      description: 'Sidebar width: default (250px) or large (432px)'
     },
     highlights: {
       description: 'Array of entry keys to highlight'
@@ -278,7 +278,7 @@ export const HighlightedEntries = {
   parameters: {
     docs: {
       description: {
-        story: 'NotesAndEventsSidebar with highlighted entry. The details tab shows a highlight outline.'
+        story: 'Sidebar with highlighted entry. The details tab shows a highlight outline.'
       }
     }
   }
@@ -292,7 +292,7 @@ export const LargeSizing = {
   parameters: {
     docs: {
       description: {
-        story: 'NotesAndEventsSidebar with large sizing (432px width vs default 250px).'
+        story: 'Sidebar with large sizing (432px width vs default 250px).'
       }
     }
   }
@@ -326,7 +326,7 @@ export const MultipleEntries = {
   parameters: {
     docs: {
       description: {
-        story: 'NotesAndEventsSidebar with multiple tabs showing different content types.'
+        story: 'Sidebar with multiple tabs showing different content types.'
       }
     }
   }

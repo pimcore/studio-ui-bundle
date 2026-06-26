@@ -449,7 +449,7 @@ container.bind(serviceIds['Document/ProcessorRegistry/SaveDataProcessor']).to(Do
 // Element Processor Registries
 container.bind(serviceIds['Element/ProcessorRegistry/IconProcessor']).to(ElementIconProcessorRegistry).inSingletonScope()
 
-// Document NotesAndEventsSidebar Managers
+// Document Sidebar Managers
 container.bind(serviceIds['Document/Editor/Sidebar/PageSidebarManager']).to(DocumentSidebarManager).inSingletonScope()
 container.bind(serviceIds['Document/Editor/Sidebar/SnippetSidebarManager']).to(DocumentSidebarManager).inSingletonScope()
 container.bind(serviceIds['Document/Editor/Sidebar/EmailSidebarManager']).to(DocumentSidebarManager).inSingletonScope()

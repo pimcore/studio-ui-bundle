@@ -8,7 +8,7 @@ Examples for extending Pimcore Studio with plugins.
 Each example covers a specific feature or integration pattern:
 
 - [Add a Main Navigation Entry](./01_Add_a_Main_Navigation_Entry.md)
-- [Add an Entry to the Left NotesAndEventsSidebar](./02_Add_an_Entry_to_the_Left_Sidebar.md)
+- [Add an Entry to the Left Sidebar](./02_Add_an_Entry_to_the_Left_Sidebar.md)
 - [Add an Additional Button to the Asset Editor Toolbar](./03_Add_Additional_Asset_Editor_Toolbar_Button.md)
 - [Use the Tab Manager](./04_Use_the_Tab_Manager.md)
 - [Use the Widget Manager](./05_Use_the_Widget_Manager.md)
