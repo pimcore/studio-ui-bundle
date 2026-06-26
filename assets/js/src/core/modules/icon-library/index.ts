@@ -81,6 +81,7 @@ import close from '@Pimcore/assets/icons/close.inline.svg?react'
 import cms from '@Pimcore/assets/icons/cms.inline.svg?react'
 import code from '@Pimcore/assets/icons/code.inline.svg?react'
 import collapse from '@Pimcore/assets/icons/collapse.inline.svg?react'
+import collapseSidebar from '@Pimcore/assets/icons/collapse-sidebar.inline.svg?react'
 import collection from '@Pimcore/assets/icons/collection.inline.svg?react'
 import color from '@Pimcore/assets/icons/color.inline.svg?react'
 import columns from '@Pimcore/assets/icons/columns.inline.svg?react'
@@ -184,6 +185,7 @@ import headlessBrick from '@Pimcore/assets/icons/headless-brick.inline.svg?react
 import headlessDocument from '@Pimcore/assets/icons/headless-document.inline.svg?react'
 import headlessTemplate from '@Pimcore/assets/icons/headless-template.inline.svg?react'
 import helpCircle from '@Pimcore/assets/icons/help-circle.inline.svg?react'
+import highlight from '@Pimcore/assets/icons/highlight.inline.svg?react'
 import history from '@Pimcore/assets/icons/history.inline.svg?react'
 import homeRootFolder from '@Pimcore/assets/icons/home-root-folder.inline.svg?react'
 import imageAdvanced from '@Pimcore/assets/icons/image-advanced.inline.svg?react'
@@ -272,6 +274,7 @@ import operatorConcatenator from '@Pimcore/assets/icons/operator-concatenator.in
 import order from '@Pimcore/assets/icons/order.inline.svg?react'
 import otherOperators from '@Pimcore/assets/icons/other-operators.inline.svg?react'
 import other from '@Pimcore/assets/icons/other.inline.svg?react'
+import ownership from '@Pimcore/assets/icons/ownership.inline.svg?react'
 import packageIcon from '@Pimcore/assets/icons/package.inline.svg?react'
 import pageStatic from '@Pimcore/assets/icons/page-static.inline.svg?react'
 import panel from '@Pimcore/assets/icons/panel.inline.svg?react'
@@ -664,6 +667,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'collapse',
       component: collapse
+    })
+    iconLibrary.register({
+      name: 'collapse-sidebar',
+      component: collapseSidebar
     })
     iconLibrary.register({
       name: 'collection',
@@ -1078,6 +1085,10 @@ moduleSystem.registerModule({
       component: helpCircle
     })
     iconLibrary.register({
+      name: 'highlight',
+      component: highlight
+    })
+    iconLibrary.register({
       name: 'history',
       component: history
     })
@@ -1428,6 +1439,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'other',
       component: other
+    })
+    iconLibrary.register({
+      name: 'ownership',
+      component: ownership
     })
     iconLibrary.register({
       name: 'package',

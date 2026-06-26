@@ -12,6 +12,7 @@ import React, { type ReactNode } from 'react'
 import { Tag as AntTag, type TagProps as AntTagPropsProps } from 'antd'
 import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { Badge } from '@Pimcore/components/badge/badge'
 import { useStyles } from './tag.styles'
 
 export interface TagProps extends AntTagPropsProps, React.RefAttributes<HTMLSpanElement> {
@@ -19,17 +20,19 @@ export interface TagProps extends AntTagPropsProps, React.RefAttributes<HTMLSpan
   iconName?: string
   className?: string
   theme?: TagTheme
+  colorInverted?: string
 }
 
 export type TagTheme = 'transparent'
 
-export const Tag = React.forwardRef<HTMLSpanElement, TagProps>(({ children, icon, iconName, theme, className, ...props }, ref): React.JSX.Element => {
+export const Tag = React.forwardRef<HTMLSpanElement, TagProps>(({ children, icon, iconName, theme, className, colorInverted, style, ...props }, ref): React.JSX.Element => {
   const { styles } = useStyles()
 
   const tagClassNames = cn(
     styles.tag,
     className,
-    { [`theme-${theme}`]: theme }
+    { [`theme-${theme}`]: theme },
+    { [styles.colorInverted]: colorInverted !== undefined }
   )
 
   const renderIcon = (name: string): React.JSX.Element => (
@@ -41,6 +44,10 @@ export const Tag = React.forwardRef<HTMLSpanElement, TagProps>(({ children, icon
   )
 
   const getIcon = (): React.ReactNode => {
+    if (colorInverted !== undefined) {
+      return <Badge color={ colorInverted } />
+    }
+
     if (iconName !== undefined) {
       return renderIcon(iconName)
     }
@@ -48,11 +55,16 @@ export const Tag = React.forwardRef<HTMLSpanElement, TagProps>(({ children, icon
     return icon ?? null
   }
 
+  const resolvedStyle = colorInverted !== undefined
+    ? { backgroundColor: `${colorInverted}33`, ...style }
+    : style
+
   return (
     <AntTag
       className={ tagClassNames }
       icon={ getIcon() }
       ref={ ref }
+      style={ resolvedStyle }
       { ...props }
     >
       {children}

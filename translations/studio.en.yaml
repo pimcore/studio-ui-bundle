@@ -106,6 +106,7 @@ areablock.paste: Paste
 areablock.cut: Cut
 areablock.settings: Settings
 areablock.delete: Delete
+document.highlight-editables: Highlight editables
 document.link.target: Link Target
 document.hardlink.source: Source Document
 document.hardlink.properties-from-source: Use properties from source document
@@ -384,6 +385,8 @@ grid.advanced-column.anonymizationRule: Anonymization Rule
 grid.advanced-column.translationPrefix: Translation Prefix
 grid.advanced-column.advancedColumns.simpleField: Simple Field
 grid.advanced-column.advancedColumns.relationField: Relation Field
+grid.advanced-column.classification-store.no-selection: No value selected
+grid.advanced-column.classification-store.edit: Change value
 grid.advanced-column.advancedColumns.staticText: Static text
 grid.advanced-column.advancedColumns.booleanFormatter: Boolean Formatter
 grid.advanced-column.advancedColumns.caseChange: Change Case
@@ -522,6 +525,11 @@ listing.grid-config.title: Grid config
 grid-config.discard-all-changes: Discard all changes
 grid-config.apply-changes: Apply changes
 listing.add-column: Add a column
+listing.add-column.simple: Simple
+listing.add-column.advanced: Advanced
+listing.column-picker.search: Search
+listing.column-picker.no-results: No columns found
+listing.column-picker.fields-to-add: Fields to add
 listing.actions: Apply to selection
 listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download
@@ -2235,10 +2243,30 @@ recycle-bin.actions.delete: Delete
 recycle-bin.actions.delete.title: Deleting Recycle Bin Items
 recycle-bin.actions.restore: Restore
 recycle-bin.actions.restore.title: Restoring Recycle Bin Items
+ownership-management.title: Ownership Management
+ownership-management.show-deleted-owners: Show items from deleted users
+ownership-management.deleted-user: Deleted user
+ownership-management.columns.id: ID
+ownership-management.columns.name: Name
+ownership-management.columns.modification-date: Modification Date
+ownership-management.columns.owner: Owner
+ownership-management.columns.actions: Actions
+ownership-management.actions.reassign-owner: Reassign owner
+ownership-management.actions.reassign-owner.title: Reassigning owner of configurations
+ownership-management.actions.delete: Delete
+ownership-management.actions.delete.title: Deleting configurations
+ownership-management.actions.batch-assign: Batch Assign
+ownership-management.actions.batch-delete: Batch Delete
+ownership-management.reassign-owner.title: "Reassign owner of {{count}} configuration(s)"
+ownership-management.reassign-owner.confirm: Reassign
+ownership-management.reassign-owner.placeholder: Search for a user by name
+ownership-management.delete.title: Delete configurations
+ownership-management.delete.content: "Are you sure you want to delete {{count}} configuration(s)?"
 component.search.pleaceholder: Search
 focal-point.set: Set Focal Point
 video.placeholder: No video selected - Click to add a video
 video.add-video: Add Video
+video.preview-in-progress: Video preview is being generated…
 image.alt-text-placeholder: Enter alt text
 area-settings: Area Settings
 unsupported_feature: Unsupported feature - please check system requirements!
@@ -2342,6 +2370,7 @@ perspective-editor.form.main-nav-permission.system.cache_clearSymfony: Cache > C
 perspective-editor.form.main-nav-permission.system.cache_clearTemp: Cache > Clear temporary files
 perspective-editor.form.main-nav-permission.system.cache_hidden: Hide Cache Menu
 perspective-editor.form.main-nav-permission.system.systemSettings: System Settings
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Ownership Management
 perspective-editor.form.main-nav-permission.system.about: About
 perspective-editor.form.main-nav-permission.category.reporting: Reporting
 perspective-editor.form.main-nav-permission.reporting.hidden: Hide Reporting Menu
@@ -2761,8 +2790,8 @@ translations.merger.column.state: State
 translations.merger.state.applied: Applied
 translations.merger.state.reverted: Reverted
 translations.merger.state.pending: Pending
-translations.merger.apply-all: Apply All
-translations.merger.revert-all: Revert All
+translations.merger.apply-all: Apply all
+translations.merger.revert-all: Revert all
 translations.merger.title: "Merge Translations (Domain: {{domain}})"
 translations.merger.column.language: Language
 translations.merger.items: items
@@ -2788,4 +2817,3 @@ saved-search.update.success: Saved search updated
 saved-search.delete.success: Saved search deleted
 saved-search.shared-modified.info: You have made modifications to the original configuration. Since it is owned by someone else, you can save it as a new search.
 saved-search.menu-shortcut-group: Menu group
-more: More

@@ -13,7 +13,7 @@ import { markDocumentEditablesAsModified, selectDocumentById } from '@Pimcore/mo
 import { iframeDocumentEditorRegistry } from './iframe-registry'
 import { documentSaveService, SaveTaskType } from '@Pimcore/modules/document/services'
 import { debounce, isNil } from 'lodash'
-import { type AreablockGroupedTypes, setDocumentAreablockTypes, mergeDocumentAreablockTypes, setDocumentTimeSliderVisible } from '@Pimcore/modules/document/document-editor-slice'
+import { type AreablockGroupedTypes, setDocumentAreablockTypes, mergeDocumentAreablockTypes, setDocumentTimeSliderVisible, setDocumentHighlightEditables, selectDocumentHighlightEditables } from '@Pimcore/modules/document/document-editor-slice'
 import { type PublicApiDocumentEditorIframe } from '../document-editor-iframe'
 import { type IframeRef } from '@Pimcore/components/iframe/iframe'
 
@@ -27,16 +27,25 @@ export interface DocumentApi {
   triggerValueChange: (documentId: number, key: string, value: any) => void
   triggerValueChangeWithReload: (documentId: number, key: string, value: any) => void
   triggerSaveAndReload: (documentId: number) => void
+  reloadIframe: (documentId: number) => void
   notifyIframeReady: (documentId: number) => void
   notifyAreablockTypes: (documentId: number, editableTypeId: string, areablockTypes: AreablockGroupedTypes) => void
   mergeAreablockTypes: (documentId: number, editableTypeId: string, areablockTypes: AreablockGroupedTypes) => void
   notifyTimeSliderVisible: (documentId: number, visible: boolean) => void
+  setHighlightEditables: (documentId: number, highlight: boolean) => void
+  getHighlightEditables: (documentId: number) => boolean
   isIframeReady: (documentId: number) => boolean
   onReady: (documentId: number, callback: () => void) => void
 }
 
 class DocumentApiImpl implements DocumentApi {
   private readonly autoSaveCallbacks = new Map<number, ReturnType<typeof debounce>>()
+
+  // Documents the user has edited since they were opened / last reloaded. Tracked here because it
+  // flips synchronously on the edit event, unlike the redux `modified` flag (set via a deferred
+  // startTransition) — so a poll-triggered reloadIframe can never race ahead of it and discard
+  // input that was just typed but not yet mirrored into `modified`.
+  private readonly editedDocuments = new Set<number>()
 
   markDraftAsModified (documentId: number): void {
     const currentState = store.getState()
@@ -80,15 +89,18 @@ class DocumentApiImpl implements DocumentApi {
   unregisterIframe (documentId: number): void {
     iframeDocumentEditorRegistry.unregister(documentId)
     this.autoSaveCallbacks.delete(documentId)
+    this.editedDocuments.delete(documentId)
   }
 
   triggerValueChange (documentId: number, key: string, value: any): void {
+    this.editedDocuments.add(documentId)
     this.markDraftAsModified(documentId)
 
     void this.autoSaveCallbacks.get(documentId)?.()
   }
 
   triggerValueChangeWithReload (documentId: number, key: string, value: any): void {
+    this.editedDocuments.add(documentId)
     this.markDraftAsModified(documentId)
 
     // Perform immediate auto-save without debounce, then reload
@@ -97,6 +109,26 @@ class DocumentApiImpl implements DocumentApi {
 
   triggerSaveAndReload (documentId: number): void {
     void this.performAutoSaveAndReload(documentId)
+  }
+
+  // Refresh the editor iframe when the rendered editable is stale but the document state did
+  // not change on its own (e.g. a video thumbnail finished converting).
+  // If the user has edited this document, flush the current values first so the reload does not
+  // drop them — once edited, the edit-lock gate is (or is about to be) resolved, so that autosave
+  // resolves rather than hanging, and saveDocument reads the live editable values at save time.
+  // Otherwise reload directly, bypassing the autosave path (whose edit-lock gate holds autosaves
+  // until the first edit and would otherwise hang this poll-triggered refresh).
+  reloadIframe (documentId: number): void {
+    if (this.editedDocuments.has(documentId)) {
+      void this.performAutoSaveAndReload(documentId)
+
+      return
+    }
+
+    const iframeRef = iframeDocumentEditorRegistry.getIframeRef(documentId)
+    if (!isNil(iframeRef?.current)) {
+      iframeRef.current.reload()
+    }
   }
 
   notifyIframeReady (documentId: number): void {
@@ -118,6 +150,22 @@ class DocumentApiImpl implements DocumentApi {
 
   notifyTimeSliderVisible (documentId: number, visible: boolean): void {
     store.dispatch(setDocumentTimeSliderVisible({ documentId, visible }))
+  }
+
+  setHighlightEditables (documentId: number, highlight: boolean): void {
+    store.dispatch(setDocumentHighlightEditables({ documentId, highlight }))
+
+    if (iframeDocumentEditorRegistry.isIframeRegistered(documentId)) {
+      try {
+        this.getIframeApi(documentId).documentEditable.setHighlightEditables(highlight)
+      } catch (error) {
+        console.warn(`Could not push highlight-editables state to iframe for document ${documentId}:`, error)
+      }
+    }
+  }
+
+  getHighlightEditables (documentId: number): boolean {
+    return selectDocumentHighlightEditables(store.getState(), documentId)
   }
 
   isIframeReady (documentId: number): boolean {
@@ -144,6 +192,11 @@ class DocumentApiImpl implements DocumentApi {
       }
 
       await documentSaveService.saveDocument(documentId, SaveTaskType.AutoSave)
+
+      // Saved state is now the clean baseline, so drop the edited flag: a later poll-triggered
+      // refresh of this freshly reloaded (untouched) document then takes the cheap reload-only
+      // path instead of a redundant save-and-reload.
+      this.editedDocuments.delete(documentId)
 
       if (!isNil(iframeRef?.current)) {
         iframeRef.current.reload()

@@ -106,6 +106,7 @@ areablock.paste: Coller
 areablock.cut: Couper
 areablock.settings: Paramètres
 areablock.delete: Supprimer
+document.highlight-editables: Mettre en évidence les modifiables
 document.link.target: Cible du lien
 document.hardlink.source: Document source
 document.hardlink.properties-from-source: Utiliser les propriétés du document source
@@ -384,6 +385,8 @@ grid.advanced-column.anonymizationRule: Règle d'anonymisation
 grid.advanced-column.translationPrefix: Préfixe de traduction
 grid.advanced-column.advancedColumns.simpleField: Champ simple
 grid.advanced-column.advancedColumns.relationField: Champ de relation
+grid.advanced-column.classification-store.no-selection: Aucune valeur sélectionnée
+grid.advanced-column.classification-store.edit: Modifier la valeur
 grid.advanced-column.advancedColumns.staticText: Texte statique
 grid.advanced-column.advancedColumns.booleanFormatter: Formateur booléen
 grid.advanced-column.advancedColumns.caseChange: Changement de casse
@@ -520,6 +523,11 @@ listing.grid-config.title: Configuration de la grille
 grid-config.discard-all-changes: Annuler toutes les modifications
 grid-config.apply-changes: Appliquer les modifications
 listing.add-column: Ajouter une colonne
+listing.add-column.simple: Simple
+listing.add-column.advanced: Avancé
+listing.column-picker.search: Rechercher
+listing.column-picker.no-results: Aucune colonne trouvée
+listing.column-picker.fields-to-add: Champs à ajouter
 listing.actions: Appliquer à la sélection
 listing.non-selected.actions: Appliquer à tous
 listing.actions.zip-download: Téléchargement ZIP
@@ -2232,6 +2240,7 @@ component.search.pleaceholder: Rechercher
 focal-point.set: Définir le point focal
 video.placeholder: Aucune vidéo sélectionnée - Cliquez pour ajouter une vidéo
 video.add-video: Ajouter une vidéo
+video.preview-in-progress: L'aperçu vidéo est en cours de génération…
 image.alt-text-placeholder: Entrez le texte alternatif
 area-settings: Paramètres de zone
 unsupported_feature: Fonctionnalité non prise en charge - veuillez vérifier la configuration requise !
@@ -2775,4 +2784,23 @@ saved-search.update.success: Recherche enregistrée mise à jour
 saved-search.delete.success: Recherche enregistrée supprimée
 saved-search.shared-modified.info: "Vous avez modifié la configuration d’origine. Comme elle appartient à quelqu’un d’autre, vous pouvez l’enregistrer comme nouvelle recherche."
 saved-search.menu-shortcut-group: Groupe de menu
-more: Plus
+ownership-management.title: Gestion de la propriété
+ownership-management.show-deleted-owners: Afficher les éléments des utilisateurs supprimés
+ownership-management.deleted-user: Utilisateur supprimé
+ownership-management.columns.id: ID
+ownership-management.columns.name: Nom
+ownership-management.columns.modification-date: Date de modification
+ownership-management.columns.owner: Propriétaire
+ownership-management.columns.actions: Actions
+ownership-management.actions.reassign-owner: Réattribuer le propriétaire
+ownership-management.actions.reassign-owner.title: Réattribution du propriétaire des configurations
+ownership-management.actions.delete: Supprimer
+ownership-management.actions.delete.title: Suppression des configurations
+ownership-management.actions.batch-assign: Attribution par lot
+ownership-management.actions.batch-delete: Suppression par lot
+ownership-management.reassign-owner.title: "Réattribuer le propriétaire de {{count}} configuration(s)"
+ownership-management.reassign-owner.confirm: Réattribuer
+ownership-management.reassign-owner.placeholder: Rechercher un utilisateur par nom
+ownership-management.delete.title: Supprimer les configurations
+ownership-management.delete.content: "Voulez-vous vraiment supprimer {{count}} configuration(s) ?"
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Gestion de la propriété

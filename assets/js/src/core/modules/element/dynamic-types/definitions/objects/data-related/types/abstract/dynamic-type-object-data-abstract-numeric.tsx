@@ -92,7 +92,13 @@ export abstract class DynamicTypeObjectDataAbstractNumeric extends DynamicTypeOb
     if (!_.isNumber(props.defaultValue)) {
       return
     }
-    if (!_.isNumber(form.getFieldValue(fieldName))) {
+    // Only seed the default when the field is genuinely empty. Checking _.isNumber
+    // here is wrong for contexts that deliver numeric values as strings (e.g. the
+    // classification store, where a stored "20" is not a JS number) — it treated an
+    // existing value as empty and clobbered it with the default. Guard on
+    // null/undefined/'' instead, so a real value (including 0 or "0") is preserved.
+    const currentValue = form.getFieldValue(fieldName)
+    if (_.isNil(currentValue) || currentValue === '') {
       form.setFieldValue(fieldName, props.defaultValue)
     }
   }

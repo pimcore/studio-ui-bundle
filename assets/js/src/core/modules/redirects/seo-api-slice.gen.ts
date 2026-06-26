@@ -123,6 +123,7 @@ export type BundleSeoRedirectsGetCollectionApiArg = {
             pageSize?: number;
             columnFilters?: object;
             sortFilter?: object;
+            additionalSortFilters?: object;
         };
     };
 };

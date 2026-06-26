@@ -20,7 +20,7 @@ export interface ToolbarProps {
   align?: FlexProps['align']
   theme?: 'primary' | 'secondary'
   borderStyle?: 'default' | 'primary'
-  position?: 'top' | 'bottom' | 'content'
+  position?: 'top' | 'bottom' | 'content' | 'none'
   size?: 'small' | 'auto' | 'default'
   padding?: BoxProps['padding']
   margin?: BoxProps['margin']
@@ -31,21 +31,23 @@ export const Toolbar = ({
   size = 'default',
   justify = 'space-between',
   align,
-  theme = 'primary',
-  position = 'bottom',
+  theme,
+  position,
   borderStyle = 'default',
   padding,
   margin,
   ...props
 }: ToolbarProps): React.JSX.Element => {
+  const resolvedTheme = theme ?? 'primary'
+  const resolvedPosition = position ?? 'bottom'
   const { styles } = useStyles()
   const classes = [
     styles.toolbar,
     'toolbar',
-        `toolbar--theme-${theme}`,
-        `toolbar--position-${position}`,
-        `toolbar--size-${size}`,
-        `toolbar--border-${borderStyle}`
+    `toolbar--theme-${resolvedTheme}`,
+    `toolbar--position-${resolvedPosition}`,
+    `toolbar--size-${size}`,
+    `toolbar--border-${borderStyle}`
   ].join(' ')
 
   return (

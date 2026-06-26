@@ -14,7 +14,7 @@ import { type AbstractObjectDataDefinition } from '../../dynamic-type-object-dat
 import { useFieldCollection } from './providers/use-field-collection'
 import { isEmpty } from 'lodash'
 import { Content } from '@Pimcore/components/content/content'
-import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedListContext } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list-value'
 import { type FieldCollectionProps } from './field-collection'
 import { Form } from '@Pimcore/components/form/form'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
@@ -37,7 +37,7 @@ export const FieldCollectionItem = (props: FieldCollectionItemProps): React.JSX.
   const { field, noteditable } = props
 
   const fieldCollection = useFieldCollection()
-  const { operations } = useNumberedList()
+  const { operations } = useNumberedListContext()
   const type = operations.getValue([field, 'type'])
 
   if (isEmpty(type) || isEmpty(fieldCollection)) {

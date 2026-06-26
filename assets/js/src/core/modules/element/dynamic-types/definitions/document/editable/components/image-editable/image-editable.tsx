@@ -30,7 +30,7 @@ import { type IHotspot } from '@Pimcore/components/hotspot-image/hotspot-image'
 import { DEFAULT_HEIGHT, MIN_WIDTH, MIN_HEIGHT } from '../../helpers/responsive-asset-preview/image-dimensions'
 import { locateElementInTree } from '@Pimcore/modules/element/utils/tree-utils'
 import { useAssetDimensions } from '../../helpers/responsive-asset-preview/hooks/use-asset-dimensions'
-import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+import { EditableOverlay } from '../editable-overlay/editable-overlay'
 import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
 import { type ImageEditableConfig, type ImageEditableValue } from '../../types/image-editable-types'
 export { type ImageEditableConfig, type ImageEditableValue } from '../../types/image-editable-types'
@@ -238,7 +238,7 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
   }
 
   return (
-    <InheritanceOverlay
+    <EditableOverlay
       display={ !isNil(smartDimensions?.width ?? width) || hasImage ? 'inline-block' : 'block' }
       hideButtons
       isInherited={ isInherited }
@@ -295,6 +295,6 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
             />
             )
       )}
-    </InheritanceOverlay>
+    </EditableOverlay>
   )
 }

@@ -11,7 +11,7 @@
 import React, { useMemo, useRef } from 'react'
 import { BaseView } from '../../../layout-related/views/base-view'
 import { type ObjectBlockProps } from './object-block'
-import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedListSelector } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list-value'
 import { BlockAddButton } from '@Pimcore/components/block/block-add-button'
 import { ObjectBlockItem } from './object-block-item'
 import { Space } from '@Pimcore/components/space/space'
@@ -19,22 +19,24 @@ import { Box } from '@Pimcore/components/box/box'
 
 export interface ObjectBlockContentProps extends ObjectBlockProps {}
 
+// only the item count matters here; each item's fields subscribe to their own value
+const selectCount = (values: any[]): number => values?.length ?? 0
+
 export const ObjectBlockContent = (props: ObjectBlockContentProps): React.JSX.Element => {
-  const { values } = useNumberedList()
+  const count = useNumberedListSelector(selectCount)
   const keyCounterRef = useRef(0)
 
   const maxItemsCount = props?.maxItems ?? 0
-  const valuesKeys = Object.keys(values)
   const isNoteditable = props.noteditable === true
   const isDisallowAddRemove = props.disallowAddRemove === true
 
-  const isItemLimitReached = maxItemsCount > 0 && valuesKeys.length === maxItemsCount
-  const isHideAddButton = isNoteditable || isItemLimitReached || valuesKeys.length > 0 || isDisallowAddRemove
+  const isItemLimitReached = maxItemsCount > 0 && count === maxItemsCount
+  const isHideAddButton = isNoteditable || isItemLimitReached || count > 0 || isDisallowAddRemove
 
   // Generate stable keys for items to fix deletion issue
   const stableKeys = useMemo(() => {
-    return values.map(() => `object-block-item-${++keyCounterRef.current}`)
-  }, [values.length])
+    return Array.from({ length: count }).map(() => `object-block-item-${++keyCounterRef.current}`)
+  }, [count])
 
   return useMemo(() => (
     <BaseView
@@ -53,7 +55,7 @@ export const ObjectBlockContent = (props: ObjectBlockContentProps): React.JSX.El
           direction='vertical'
           size='extra-small'
         >
-          {values.map((_value, index) => (
+          {Array.from({ length: count }).map((_value, index) => (
             <div key={ stableKeys[index] ?? `object-block-item-${index}` }>
               <ObjectBlockItem
                 disallowAdd={ isDisallowAddRemove || isItemLimitReached || isNoteditable }
@@ -70,5 +72,5 @@ export const ObjectBlockContent = (props: ObjectBlockContentProps): React.JSX.El
         </Space>
       </Box>
     </BaseView>
-  ), [values, props, isNoteditable, isDisallowAddRemove, isItemLimitReached, isHideAddButton])
+  ), [count, stableKeys, props, isNoteditable, isDisallowAddRemove, isItemLimitReached, isHideAddButton])
 }

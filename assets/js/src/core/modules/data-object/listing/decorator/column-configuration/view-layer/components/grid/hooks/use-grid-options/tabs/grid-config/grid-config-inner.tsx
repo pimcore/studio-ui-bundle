@@ -10,7 +10,7 @@
 
 /* eslint-disable max-lines */
 
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { isEmpty } from 'lodash'
 import { useGridConfig as useTabGridConfig } from './hooks/use-grid-config'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
@@ -25,6 +25,7 @@ import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/use-grid-config'
+import { type GridConfigData } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/grid-config-provider'
 import { useSelectedGridConfigId } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/selected-grid-config-id/use-selected-grid-config-id'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { type GridColumnRequest, useDataObjectDeleteGridConfigurationByConfigurationIdMutation, useDataObjectGetGridConfigurationQuery, useDataObjectListSavedGridConfigurationsQuery, useDataObjectSaveGridConfigurationMutation, useDataObjectUpdateGridConfigurationMutation } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
@@ -52,7 +53,7 @@ const prepareColumns = (columns: AvailableColumn[]): GridColumnRequest[] => {
 
 export const GridConfigInner = (): React.JSX.Element => {
   const { useElementId } = useSettings()
-  const { availableColumns, getAvailableColumnsDropdown } = useAvailableColumns()
+  const { availableColumns, getAvailableColumnsTree, getAdvancedColumnTemplate } = useAvailableColumns()
   const { selectedColumns, setSelectedColumns } = useSelectedColumns()
   const { columns, setColumns, addColumn, addColumns } = useTabGridConfig()
   const { getId } = useElementId()
@@ -79,6 +80,20 @@ export const GridConfigInner = (): React.JSX.Element => {
 
   const [view, setView] = useState<ViewState>(ViewState.Edit)
   const [form] = Form.useForm()
+
+  const gridConfigSnapshot = useRef<GridConfigData['gridConfig']>(undefined)
+
+  const openSaveView = (nextView: ViewState): void => {
+    gridConfigSnapshot.current = gridConfig
+    setView(nextView)
+  }
+
+  const onSaveViewCancelClick = (): void => {
+    if (gridConfigSnapshot.current !== undefined) {
+      setGridConfig(gridConfigSnapshot.current)
+    }
+    setView(ViewState.Edit)
+  }
 
   const isSavedConfiguration = gridConfig?.name !== 'Predefined' && gridConfig !== undefined
 
@@ -156,7 +171,15 @@ export const GridConfigInner = (): React.JSX.Element => {
     }
   }
 
-  const availableColumnsDropdown = useMemo(() => getAvailableColumnsDropdown(onColumnClick), [getAvailableColumnsDropdown, columns])
+  const availableColumnsTree = useMemo(() => getAvailableColumnsTree(), [getAvailableColumnsTree, columns])
+
+  function onAddAdvancedColumn (): void {
+    const advancedColumn = getAdvancedColumnTemplate()
+
+    if (advancedColumn !== undefined) {
+      addColumn(advancedColumn)
+    }
+  }
 
   function onDeleteClick (): void {
     if (isSavedConfiguration) {
@@ -289,18 +312,20 @@ export const GridConfigInner = (): React.JSX.Element => {
     <>
       { view === ViewState.Edit && (
         <EditView
-          addColumnMenu={ availableColumnsDropdown.menu.items }
+          availableColumnsTree={ availableColumnsTree }
           columns={ columns }
           currentUserId={ userData?.id }
           gridConfig={ gridConfig }
           isLoading={ isLoading || isFetching }
           isUpdating={ isUpdating }
+          onAddAdvancedColumn={ onAddAdvancedColumn }
           onApplyClick={ onApplyClick }
           onCancelClick={ onCancelClick }
+          onColumnSelect={ onColumnClick }
           onEditConfigurationClick={ () => {
-            setView(ViewState.Update)
+            openSaveView(ViewState.Update)
           } }
-          onSaveConfigurationClick={ () => { setView(ViewState.Save) } }
+          onSaveConfigurationClick={ () => { openSaveView(ViewState.Save) } }
           onUpdateConfigurationClick={ onUpdatedConfigurationClick }
           savedGridConfigurations={ savedGridConfigurations }
         />
@@ -326,7 +351,7 @@ export const GridConfigInner = (): React.JSX.Element => {
           isDeleting={ isDeleting }
           isLoading={ isSaveLoading || isUpdating }
           modificationDate={ gridConfig?.modificationDate }
-          onCancelClick={ () => { setView(ViewState.Edit) } }
+          onCancelClick={ onSaveViewCancelClick }
           onDeleteClick={ isSavedConfiguration ? onDeleteClick : undefined }
           roleList={ roleList }
           saveAsNewConfiguration={ view === ViewState.Save }
