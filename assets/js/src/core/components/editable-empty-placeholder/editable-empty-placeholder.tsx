@@ -18,7 +18,7 @@ import cn from 'classnames'
 
 export interface EditableEmptyPlaceholderProps {
   text: string
-  buttonText: string
+  buttonText?: string
   onClick: () => void
   disabled?: boolean
   icon?: IconProps
