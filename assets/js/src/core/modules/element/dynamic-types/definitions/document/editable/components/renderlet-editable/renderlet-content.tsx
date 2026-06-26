@@ -31,6 +31,11 @@ export interface RenderletContentProps {
   className?: string
 }
 
+function getElementType (type: string | undefined): ElementType | undefined {
+  if (isNil(type)) return undefined
+  return type === 'object' ? 'data-object' : type as ElementType
+}
+
 export const RenderletContent = ({
   value,
   config,
@@ -67,11 +72,6 @@ export const RenderletContent = ({
   const hasContent = !isLoading && shouldFetchRenderlet
 
   const { openElement } = useElementHelper()
-
-  const getElementType = (): ElementType | undefined => {
-    if (isNil(value?.type)) return undefined
-    return value.type === 'object' ? 'data-object' : value.type as ElementType
-  }
 
   const isFetchError = !isNil(error) && 'status' in error
   const actualError = isFetchError && error.status !== 'PARSING_ERROR' ? error : undefined
@@ -144,7 +144,7 @@ export const RenderletContent = ({
 
   const handleOpen = (): void => {
     if (!isNil(value?.id) && !isNil(value?.type)) {
-      const elementType = getElementType()
+      const elementType = getElementType(value?.type)
       if (!isNil(elementType)) {
         void openElement({
           id: value.id,
@@ -159,7 +159,7 @@ export const RenderletContent = ({
   }
 
   const handleLocateInTree = (): void => {
-    const elementType = getElementType()
+    const elementType = getElementType(value?.type)
     locateElementInTree(elementType, value?.id)
   }
 
