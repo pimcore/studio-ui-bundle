@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useRef } from 'react'
+import React from 'react'
 import { Dropdown } from 'antd'
 import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -48,17 +48,8 @@ export const EditableOverlay = ({
   const highlightEditables = useHighlightEditables()
   const { inheritanceMenuItems, inheritanceTooltip } = useInheritanceMenu({ onOverwrite })
 
-  const wasEverInheritedRef = useRef(isInherited)
-  if (isInherited && !wasEverInheritedRef.current) {
-    wasEverInheritedRef.current = true
-  }
-
   if (isNil(children)) {
     return null
-  }
-
-  if (!wasEverInheritedRef.current && !highlightEditables) {
-    return <>{children}</>
   }
 
   return (
