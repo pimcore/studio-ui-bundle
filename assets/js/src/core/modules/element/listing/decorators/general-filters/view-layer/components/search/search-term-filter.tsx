@@ -9,26 +9,27 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { useSearchTermFilter } from '../../../context-layer/provider/search-term-filter/use-search-term-filter'
 import { useGeneralFiltersConfig } from '../../../context-layer/provider/general-filters-config/use-general-filters-config'
-import { useFilterOptional } from '../sidebar/tabs/filters/provider/filter-provider/use-filter-optional'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
+import { useAppliedFilters, useDraftFiltersOptional } from '../../../element-filters/stores'
+import { readElementFilterValues } from '../../../element-filters/use-element-filter-values'
 
 export const SearchTermFilter = (): React.JSX.Element => {
-  const { searchTerm, setSearchTerm } = useSearchTermFilter()
-  const [currentSearchTerm, setCurrentSearchTerm] = useState<string>(searchTerm)
+  const { values, setValue: setAppliedValue } = useAppliedFilters()
+  const appliedSearchTerm = readElementFilterValues(values).searchTerm
+  const [currentSearchTerm, setCurrentSearchTerm] = useState<string>(appliedSearchTerm)
   const { handleSearchTermInSidebar } = useGeneralFiltersConfig()
-  const filterContext = useFilterOptional()
+  const draftStore = useDraftFiltersOptional()
 
   useEffect(() => {
-    setCurrentSearchTerm(searchTerm)
-  }, [searchTerm])
+    setCurrentSearchTerm(appliedSearchTerm)
+  }, [appliedSearchTerm])
 
   function onSearch (): void {
     if (!handleSearchTermInSidebar) {
-      setSearchTerm(currentSearchTerm)
+      setAppliedValue('searchTerm', currentSearchTerm)
     } else {
-      filterContext?.setSearchTerm(currentSearchTerm)
+      draftStore?.setValue('searchTerm', currentSearchTerm)
     }
   }
 
@@ -36,7 +37,7 @@ export const SearchTermFilter = (): React.JSX.Element => {
     setCurrentSearchTerm(event.target.value)
 
     if (handleSearchTermInSidebar) {
-      filterContext?.setSearchTerm(event.target.value)
+      draftStore?.setValue('searchTerm', event.target.value)
     }
   }
 

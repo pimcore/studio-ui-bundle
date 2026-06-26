@@ -14,8 +14,12 @@ import { isEmpty } from 'lodash'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { ColumnsConfiguration } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-configuration/columns-configuration'
+import {
+  ReportsDraftFiltersProvider,
+  ReportsDraftFiltersReset,
+  reportsFilterDescriptors
+} from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/filters/reports-filters'
 import { ColumnsFilters } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/columns-filters'
-import { ColumnsFiltersProvider } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/context/columns-filters-context'
 import { useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
@@ -41,11 +45,7 @@ export const ReportSidebar = (): React.JSX.Element => {
 
     if (!isEmpty(filterableColumnConfigurations)) {
       entries.push({
-        component: (
-          <ColumnsFiltersProvider>
-            <ColumnsFilters />
-          </ColumnsFiltersProvider>
-        ),
+        component: <ColumnsFilters />,
         key: 'reports-field-filters',
         icon: <Icon value="filter" />,
         tooltip: t('reports.field-filters')
@@ -56,9 +56,13 @@ export const ReportSidebar = (): React.JSX.Element => {
   }, [filterableColumnConfigurations, t])
 
   return (
-    <Sidebar
-      sizing='medium'
-      { ...sidebarProps }
-    />
+    <ReportsDraftFiltersProvider descriptors={ reportsFilterDescriptors }>
+      <ReportsDraftFiltersReset>
+        <Sidebar
+          sizing='large'
+          { ...sidebarProps }
+        />
+      </ReportsDraftFiltersReset>
+    </ReportsDraftFiltersProvider>
   )
 }
