@@ -25,19 +25,22 @@ export const SearchTermFilter = (): React.JSX.Element => {
     setCurrentSearchTerm(appliedSearchTerm)
   }, [appliedSearchTerm])
 
+  const draftSearchTerm = draftStore !== undefined
+    ? readElementFilterValues(draftStore.values).searchTerm
+    : ''
+  const value = handleSearchTermInSidebar ? draftSearchTerm : currentSearchTerm
+
   function onSearch (): void {
     if (!handleSearchTermInSidebar) {
       setAppliedValue('searchTerm', currentSearchTerm)
-    } else {
-      draftStore?.setValue('searchTerm', currentSearchTerm)
     }
   }
 
   function onChange (event: React.ChangeEvent<HTMLInputElement>): void {
-    setCurrentSearchTerm(event.target.value)
-
     if (handleSearchTermInSidebar) {
       draftStore?.setValue('searchTerm', event.target.value)
+    } else {
+      setCurrentSearchTerm(event.target.value)
     }
   }
 
@@ -49,7 +52,7 @@ export const SearchTermFilter = (): React.JSX.Element => {
       onChange={ onChange }
       onSearch={ onSearch }
       placeholder='Search'
-      value={ currentSearchTerm }
+      value={ value }
     />
   )
 }
