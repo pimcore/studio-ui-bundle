@@ -92,6 +92,9 @@ export const useStyles = createStyles(({ token, css }) => {
         
           &:hover {
             background: ${token.Tabs.colorBgHoverUnselectedTab};
+            // Override flexlayout-react's default hover color (--color-tab-selected → black);
+            // keep the tab's resting text color so only the background changes on hover.
+            color: ${tabToken.itemColor};
           }
   
           &_trailing {

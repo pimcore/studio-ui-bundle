@@ -25,6 +25,7 @@ import { DatePicker } from '@Pimcore/components/date-picker/date-picker'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { selectDocumentTimeSliderVisible } from '@Pimcore/modules/document/document-editor-slice'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
+import { useTheme } from 'antd-style'
 
 interface DocumentPreviewProps {
   id: number
@@ -32,6 +33,7 @@ interface DocumentPreviewProps {
 
 export const DocumentPreview = ({ id }: DocumentPreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const token = useTheme()
   const [refreshKey, setRefreshKey] = useState<number>(Date.now())
   const { document } = useDocumentDraft(id)
   const iframeRef = useRef<IframeRef>(null)
@@ -83,7 +85,7 @@ export const DocumentPreview = ({ id }: DocumentPreviewProps): React.JSX.Element
     : {
         width: mode.width,
         height: mode.height,
-        border: '1px solid #eae8ed',
+        border: `1px solid ${token.colorBorderTertiary}`,
         margin: 'auto',
         position: 'relative'
       }

@@ -13,8 +13,7 @@ import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Header } from '@Pimcore/components/header/header'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
-import { SearchInput } from '@Pimcore/components/search-input/search-input'
-import { Table } from '@Pimcore/modules/notes-and-events/table/table'
+import { Table } from '@Pimcore/modules/notes-and-events/notes-and-events-view/components/table/table'
 import { useNotesAndEvents } from '@Pimcore/modules/notes-and-events/hooks/use-global-notes-and-events'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { useTranslation } from 'react-i18next'
@@ -24,8 +23,11 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useAppDispatch } from '@sdk/app'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { api } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
+import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
+import { NotesAppliedFiltersProvider, notesFilterDescriptors } from '@Pimcore/modules/notes-and-events/filters/filters'
+import { NotesAndEventsSidebar } from '@Pimcore/modules/notes-and-events/notes-and-events-sidebar/notes-and-events-sidebar'
 
-const NotesAndEventsContainer = (): React.JSX.Element => {
+const NotesAndEventsView = (): React.JSX.Element => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const {
@@ -35,12 +37,12 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
     isFetching,
     page,
     setPage,
-    setPageSize,
-    setFilter
+    setPageSize
   } = useNotesAndEvents()
 
   return (
     <ContentLayout
+      renderSidebar={ <NotesAndEventsSidebar /> }
       renderToolbar={
         <Toolbar theme="secondary">
           <IconButton
@@ -72,15 +74,6 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
       renderTopBar={
         <Header >
           <Title>{t('notes-and-events.label')}</Title>
-          <SearchInput
-            loading={ isFetching }
-            onSearch={ (value) => {
-              setFilter(value)
-            } }
-            placeholder="Search"
-            withPrefix={ false }
-            withoutAddon={ false }
-          />
         </Header>
       }
     >
@@ -103,5 +96,13 @@ const NotesAndEventsContainer = (): React.JSX.Element => {
     </ContentLayout>
   )
 }
+
+const NotesAndEventsContainer = (): React.JSX.Element => (
+  <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/FieldFilterRegistry'] }>
+    <NotesAppliedFiltersProvider descriptors={ notesFilterDescriptors }>
+      <NotesAndEventsView />
+    </NotesAppliedFiltersProvider>
+  </DynamicTypeRegistryProvider>
+)
 
 export { NotesAndEventsContainer }

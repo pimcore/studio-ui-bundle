@@ -38,7 +38,30 @@ export const useStyles = createStyles(({ css, token }) => {
     `,
 
     groupTitle: css`
-      color: ${token.colorPrimary};
+      color: ${token.itemActiveColor};
+    `,
+
+    item: css`
+      display: block;
+      width: 100%;
+      padding: ${token.paddingXXS}px ${token.paddingXS}px;
+      border: none;
+      border-radius: ${token.borderRadiusSM}px;
+      background: transparent;
+      color: ${token.colorText};
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+
+      &:hover {
+        background: ${token.controlItemBgHover};
+      }
+
+      &:disabled {
+        color: ${token.colorTextDisabled};
+        background: transparent;
+        cursor: not-allowed;
+      }
     `,
 
     empty: css`

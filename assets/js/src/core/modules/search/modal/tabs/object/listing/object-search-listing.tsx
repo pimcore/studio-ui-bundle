@@ -26,6 +26,7 @@ import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '@Pimcore/mo
 import { useDataQueryHelper } from './data-layer/use-data-query-helper'
 import { ClassDefinitionSelectionDecorator, type ClassDefinitionSelectionDecoratorConfig } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/class-definition-selection-decorator'
 import { ColumnConfigurationDecorator } from './decorator/column-configuration/column-configuration-decorator'
+import { SavedSearchDecorator, type SavedSearchDecoratorConfig } from '@Pimcore/modules/search/saved-search/saved-search-decorator'
 import { useDataObjectColumnMapper } from '@Pimcore/modules/data-object/listing/column-mapper/use-column-mapper'
 import { LanguageSelectionProvider } from '@Pimcore/components/language-selection/provider/language-selection-provider'
 
@@ -47,7 +48,9 @@ const listingProps = compose<AbstractDecoratorProps>(
   SortingDecorator,
   [ClassDefinitionSelectionDecorator, { showConfigLayer: false } as ClassDefinitionSelectionDecoratorConfig],
   [OpenElementDecorator, { elementType: elementTypes.dataObject } as OpenElementDecoratorConfig],
-  [TypeFilterDecorator, { elementType: elementTypes.dataObject } as TypeFilterDecoratorConfig]
+  [TypeFilterDecorator, { elementType: elementTypes.dataObject } as TypeFilterDecoratorConfig],
+  // Composed last so its sidebar entry prepends ahead of the filter/tag entries (first icon).
+  [SavedSearchDecorator, { elementType: elementTypes.dataObject, supportsLoadedState: true } as SavedSearchDecoratorConfig]
 )(defaultProps)
 /* eslint-enable @typescript-eslint/consistent-type-assertions */
 

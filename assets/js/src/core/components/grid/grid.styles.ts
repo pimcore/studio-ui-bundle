@@ -267,7 +267,7 @@ export const useStyles = createStyles(({ token, css }, { size = 'normal', enable
       }
 
       .ant-table-row-selected td {
-        background-color: ${token.controlItemBgActive};
+        background-color: ${token.itemHoverColor};
       }
     `,
 

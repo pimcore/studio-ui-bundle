@@ -9,34 +9,38 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { useSearchTermFilter } from '../../../context-layer/provider/search-term-filter/use-search-term-filter'
 import { useGeneralFiltersConfig } from '../../../context-layer/provider/general-filters-config/use-general-filters-config'
-import { useFilterOptional } from '../sidebar/tabs/filters/provider/filter-provider/use-filter-optional'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
+import { useAppliedFilters, useDraftFiltersOptional } from '../../../element-filters/stores'
+import { readElementFilterValues } from '../../../element-filters/use-element-filter-values'
 
 export const SearchTermFilter = (): React.JSX.Element => {
-  const { searchTerm, setSearchTerm } = useSearchTermFilter()
-  const [currentSearchTerm, setCurrentSearchTerm] = useState<string>(searchTerm)
+  const { values, setValue: setAppliedValue } = useAppliedFilters()
+  const appliedSearchTerm = readElementFilterValues(values).searchTerm
+  const [currentSearchTerm, setCurrentSearchTerm] = useState<string>(appliedSearchTerm)
   const { handleSearchTermInSidebar } = useGeneralFiltersConfig()
-  const filterContext = useFilterOptional()
+  const draftStore = useDraftFiltersOptional()
 
   useEffect(() => {
-    setCurrentSearchTerm(searchTerm)
-  }, [searchTerm])
+    setCurrentSearchTerm(appliedSearchTerm)
+  }, [appliedSearchTerm])
+
+  const draftSearchTerm = draftStore !== undefined
+    ? readElementFilterValues(draftStore.values).searchTerm
+    : ''
+  const value = handleSearchTermInSidebar ? draftSearchTerm : currentSearchTerm
 
   function onSearch (): void {
     if (!handleSearchTermInSidebar) {
-      setSearchTerm(currentSearchTerm)
-    } else {
-      filterContext?.setSearchTerm(currentSearchTerm)
+      setAppliedValue('searchTerm', currentSearchTerm)
     }
   }
 
   function onChange (event: React.ChangeEvent<HTMLInputElement>): void {
-    setCurrentSearchTerm(event.target.value)
-
     if (handleSearchTermInSidebar) {
-      filterContext?.setSearchTerm(event.target.value)
+      draftStore?.setValue('searchTerm', event.target.value)
+    } else {
+      setCurrentSearchTerm(event.target.value)
     }
   }
 
@@ -48,7 +52,7 @@ export const SearchTermFilter = (): React.JSX.Element => {
       onChange={ onChange }
       onSearch={ onSearch }
       placeholder='Search'
-      value={ currentSearchTerm }
+      value={ value }
     />
   )
 }
