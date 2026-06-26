@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { isNull, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import {
@@ -23,7 +23,7 @@ import { type ReportFormData, useReportFormState } from '@Pimcore/modules/report
 import { Portal } from '@Pimcore/components/portal/portal'
 import { Button } from '@Pimcore/components/button/button'
 import { useReportActions } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-actions'
-import { REFETCH_BTN_PORTAL_ID, SAVE_BTN_PORTAL_ID } from '@Pimcore/modules/reports/reports-editor/reports-editor'
+import { REFETCH_BTN_PORTAL_ID, SAVE_BTN_PORTAL_ID, ActiveReportTabContext } from '@Pimcore/modules/reports/reports-editor/reports-editor'
 import { GeneralSettings } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/general-settings/general-settings'
 import { SourceDefinition } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/source-definition/source-definition'
 import { ColumnConfiguration } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/column-configuration/column-configuration'
@@ -40,7 +40,6 @@ import { loadReportsMenuItems } from '@Pimcore/modules/reports/utils/reports-loa
 
 interface IReportConfigurationProps {
   report: BundleCustomReportsConfigurationTreeNode
-  isActive: boolean
   modifiedReports: string[]
   setModifiedReports: (modifiedReports: string[]) => void
 }
@@ -50,7 +49,10 @@ interface IDataSourceConfig {
   [key: string]: any
 }
 
-export const ReportConfiguration = ({ report, isActive, modifiedReports, setModifiedReports }: IReportConfigurationProps): React.JSX.Element => {
+export const ReportConfiguration = ({ report, modifiedReports, setModifiedReports }: IReportConfigurationProps): React.JSX.Element => {
+  const activeTabKey = useContext(ActiveReportTabContext)
+  const isActive = activeTabKey === report.id
+
   const { isLoading, data, isFetching, refetch } = useCustomReportsReportQuery({ name: report.id })
 
   const { initializeForm, currentData, isDirty, updateFormData, markFormSaved } = useReportFormState()

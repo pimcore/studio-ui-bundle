@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ css, token }) => ({
   dividerContainer: css`
@@ -33,7 +33,8 @@ export const useStyles = createStyles(({ css, token }) => ({
   iconContainer: css`
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
+    left: 50%;
+    transform: translate(-50%, -50%);
     cursor: col-resize;
   `,
 

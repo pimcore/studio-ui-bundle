@@ -15,11 +15,14 @@ import { Select } from '@Pimcore/components/select/select'
 import { useStyles } from './select-cell.styles'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { Spin } from '@Pimcore/components/spin/spin'
-import { resolveOptions, type SelectOptionType } from '../../utils/select-options'
+import { resolveOptions, type SelectOptionsHookContext, type SelectOptionType, stringifyOptionValue } from '../../utils/select-options'
 
 export interface SelectCellConfig {
   options?: string[] | SelectOptionType[]
-  useOptionsHook?: (fieldName: string) => { isLoading: boolean, options: SelectOptionType[] } | undefined
+  useOptionsHook?: (
+    fieldName: string,
+    context?: SelectOptionsHookContext
+  ) => { isLoading: boolean, options: SelectOptionType[] } | undefined
   fieldName?: string
   allowClear?: boolean
 }
@@ -43,7 +46,11 @@ export const SelectCell = (props: DefaultCellProps): React.JSX.Element => {
     return getValue()
   }
 
-  const optionsResult = resolveOptions(config, config.fieldName ?? String(props.column.columnDef.meta?.columnKey))
+  const optionsResult = resolveOptions(
+    config,
+    config.fieldName ?? String(props.column.columnDef.meta?.columnKey),
+    { objectId: props.row.original?.id, enabled: isInEditMode }
+  )
   if (optionsResult.isLoading) {
     return (
       <div className={ [styles['select-cell'], 'default-cell__content'].join(' ') }>
@@ -53,7 +60,8 @@ export const SelectCell = (props: DefaultCellProps): React.JSX.Element => {
   }
   const options = optionsResult.options
 
-  const displayOption = options.find((option: SelectOptionType) => option.value === getValue())
+  const currentValue = stringifyOptionValue(getValue())
+  const displayOption = options.find((option: SelectOptionType) => stringifyOptionValue(option.value) === currentValue)
   const displayValue = displayOption?.displayValue ?? displayOption?.label ?? getValue()
 
   if (!isInEditMode) {
@@ -74,7 +82,7 @@ export const SelectCell = (props: DefaultCellProps): React.JSX.Element => {
         options={ options }
         popupMatchSelectWidth={ false }
         ref={ element }
-        value={ getValue() }
+        value={ currentValue }
       />
     </div>
   )

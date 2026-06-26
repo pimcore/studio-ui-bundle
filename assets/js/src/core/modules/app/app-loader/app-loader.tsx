@@ -129,13 +129,21 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
           loadUser()
         ])
 
+        // The Mercure auth cookie MUST be set before the GlobalMessageBus opens
+        // its EventSource. EventSource authorization is fixed at connect time, so
+        // if the subscription starts first the hub treats it as anonymous and
+        // silently drops every PRIVATE update on the per-user topic
+        // (studio-backend-default/user/{id}) for the whole session — until the
+        // next reload, where the cookie already exists. Fetch the cookie first,
+        // then start the subscription.
+        await fetchMercureCookie()
+
         const user = selectCurrentUser(store.getState())
         if (!isNil(user?.id)) {
           initGlobalMessageBus(user.id)
         }
 
         await Promise.all([
-          fetchMercureCookie(),
           loadTranslations(),
           loadSettings(),
           loadAdminSettings(),

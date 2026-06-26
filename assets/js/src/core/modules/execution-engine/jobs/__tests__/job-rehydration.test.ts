@@ -13,6 +13,7 @@ import { MessageBusJobHandler } from '@Pimcore/modules/execution-engine/message-
 import { ChildJobStepTracker } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/step-tracker/child-job-step-tracker'
 import { DefaultStepTracker } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/step-tracker/default-step-tracker'
 import { ProgressFieldCalculator } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/progress-calculator/progress-field-calculator'
+import { BatchedStepProgressCalculator } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/progress-calculator/batched-step-progress-calculator'
 import { ZipDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/zip-download-job'
 import { CsvDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/csv-download-job'
 import { XlsxDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/xlsx-download-job'
@@ -243,10 +244,10 @@ describe('AbstractBatchEditJob.rehydrate()', () => {
     expect(opts.stepTracker).toBeUndefined()
   })
 
-  it('does not pass progressCalculator (uses handler default)', () => {
+  it('uses BatchedStepProgressCalculator', () => {
     AbstractBatchEditJob.rehydrate([jobRun(42, 'studio_ee_job_patch_elements')])
     const opts = HandlerMock.mock.calls.at(-1)![0]
-    expect(opts.progressCalculator).toBeUndefined()
+    expect(opts.progressCalculator).toBeInstanceOf(BatchedStepProgressCalculator)
   })
 })
 
@@ -477,7 +478,7 @@ describe('ZipUploadJob: run() matches rehydrate() structurally', () => {
 })
 
 describe('AbstractBatchEditJob: run() matches rehydrate() structurally', () => {
-  it('produces identical title, stepTracker (none) and progressCalculator (none)', async () => {
+  it('produces identical title, stepTracker (none) and BatchedStepProgressCalculator', async () => {
     const job = new TestableBatchEditJob({ assetContextId: 1, refreshGrid: async () => {} })
     await job.run({ messageBus: mockBus as any })
     const runSnapshot = structuralSnapshot(HandlerMock.mock.calls.at(-1)![0])

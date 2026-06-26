@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { CreatableSelect } from '@sdk/components'
-import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+import { EditableOverlay } from '../editable-overlay/editable-overlay'
 import { toCssDimension } from '@sdk/utils'
 import { type SelectOptionType } from '@sdk/modules/element'
 import { renderSanitizedLabel } from '../../utils/select-options'
@@ -47,7 +47,7 @@ export const SelectEditable = ({
   }
 
   return (
-    <InheritanceOverlay
+    <EditableOverlay
       addIconSpacing
       display="inline-block"
       isInherited={ Boolean(inherited) }
@@ -71,6 +71,6 @@ export const SelectEditable = ({
         style={ containerStyle }
         value={ value }
       />
-    </InheritanceOverlay>
+    </EditableOverlay>
   )
 }

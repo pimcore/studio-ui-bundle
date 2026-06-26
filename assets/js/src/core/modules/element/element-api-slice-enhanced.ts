@@ -21,6 +21,17 @@ const api = baseApi.enhanceEndpoints({
   endpoints: {
     elementDelete: {
       invalidatesTags: (result, error, args) => invalidatingTags.ELEMENT_DETAIL(args.elementType, args.id)
+    },
+    // Edit-lock ops are transient: drop the shared "Elements" cache tag so lock/unlock don't refetch
+    // the status query (a redundant GET after POST/DELETE) or other element queries.
+    elementGetEditlock: {
+      providesTags: []
+    },
+    elementLock: {
+      invalidatesTags: []
+    },
+    elementUnlock: {
+      invalidatesTags: []
     }
   }
 })
@@ -38,5 +49,8 @@ export const {
   useLazyElementGetIdByPathQuery,
   useElementGetSubtypeQuery,
   useElementResolveBySearchTermQuery,
-  useLazyElementResolveBySearchTermQuery
+  useLazyElementResolveBySearchTermQuery,
+  useLazyElementGetEditlockQuery,
+  useElementLockMutation,
+  useElementUnlockMutation
 } = api

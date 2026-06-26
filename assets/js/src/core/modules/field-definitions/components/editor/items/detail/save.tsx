@@ -9,6 +9,7 @@
  */
 
 import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
+import { useOptionalUnsavedChanges } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/unsaved-changes-provider'
 import { useGeneralSettings } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { isReservedWord } from '@Pimcore/modules/field-definitions/dynamic-types/utils/reserved-words'
@@ -17,31 +18,32 @@ import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { Button, type ButtonProps, useMessage } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 const NAME_FORMAT_REGEX = /^[A-Za-z][A-Za-z0-9_]*$/
 
+interface Violation { id: string, label: string }
+
 export const DetailSave = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { useDetailUpdateMutation, useLayout } = useSettings()
-  const { fieldDefinitions, setInvalidFieldDefinitionIds, structure } = useLayout()
-  const { generalSettings } = useGeneralSettings()
+  const { fieldDefinitions, setInvalidFieldDefinitionIds, structure, markClean, getIsDirty: isLayoutDirty } = useLayout()
+  const { generalSettings, getIsDirty: areGeneralSettingsDirty } = useGeneralSettings()
   const [updateDetailMutation, result] = useDetailUpdateMutation()
   const { isLoading } = result
   const messageApi = useMessage()
   const alertModal = useAlertModal()
   const fieldDefinitionRegistry = useSettings().fieldDefinitionRegistry
   const { area } = useArea()
+  const unsavedChanges = useOptionalUnsavedChanges()
 
-  const onClick: ButtonProps['onClick'] = () => {
-    if (generalSettings === undefined) {
-      return
-    }
-
-    const invalidDefinitions: string[] = []
-
-    interface Violation { id: string, label: string }
+  // Validate all field definitions before saving. Extracted from performSave
+  // to satisfy the cognitive-complexity limit; the checks are unchanged, only
+  // the duplicated `includes` dedup became a Set and the data-type name
+  // checks moved into a helper.
+  const collectViolations = (): { invalidDefinitions: string[], emptyNameViolations: Violation[], reservedWordViolations: Violation[], formatViolations: Violation[], duplicateViolations: Violation[] } => {
+    const invalidIds = new Set<string>()
     const emptyNameViolations: Violation[] = []
     const reservedWordViolations: Violation[] = []
     const formatViolations: Violation[] = []
@@ -49,20 +51,37 @@ export const DetailSave = (): React.JSX.Element => {
 
     const pathMap = structure !== undefined ? buildPathMap(structure) : {}
 
-    // Validate all field definitions before saving
+    // Data types only, skip localizedfields
+    const checkDataTypeName = (key: string, name: string): void => {
+      if (isReservedWord(name)) {
+        reservedWordViolations.push({ id: key, label: name })
+        invalidIds.add(key)
+      }
+
+      if (!NAME_FORMAT_REGEX.test(name)) {
+        formatViolations.push({ id: key, label: name })
+        invalidIds.add(key)
+      }
+
+      if (structure !== undefined) {
+        const namesInNamespace = getNamesInNamespace(structure, fieldDefinitions, key, pathMap)
+        const occurrences = namesInNamespace.filter(n => n === name).length
+        if (occurrences > 1) {
+          duplicateViolations.push({ id: key, label: name })
+          invalidIds.add(key)
+        }
+      }
+    }
+
     for (const [key, definition] of Object.entries(fieldDefinitions)) {
       // Skip the root layout node — its name is structural, not user-editable,
       // and it is stripped from the payload before saving anyway
-      // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-      if (structure !== undefined && key === structure.id) continue
-      if (fieldDefinitionRegistry.hasDynamicType(definition.fieldtype)) {
-        const dynamicType = fieldDefinitionRegistry.getDynamicType(definition.fieldtype)
-        // @todo check if we can handle the path here
-        const isValid = dynamicType.isValid(definition, { area, fieldDefinitions, path: [] })
+      if (key === structure?.id) continue
 
-        if (!isValid) {
-          invalidDefinitions.push(key)
-        }
+      // @todo check if we can handle the path here
+      if (fieldDefinitionRegistry.hasDynamicType(definition.fieldtype) &&
+        !fieldDefinitionRegistry.getDynamicType(definition.fieldtype).isValid(definition, { area, fieldDefinitions, path: [] })) {
+        invalidIds.add(key)
       }
 
       const name: string = typeof definition.name === 'string' ? definition.name : ''
@@ -70,31 +89,23 @@ export const DetailSave = (): React.JSX.Element => {
       // All types: check for empty name
       if (name.trim() === '') {
         emptyNameViolations.push({ id: key, label: definition.fieldtype })
-        if (!invalidDefinitions.includes(key)) invalidDefinitions.push(key)
+        invalidIds.add(key)
       }
 
-      // Data types only, skip localizedfields
       if (definition.datatype === 'data' && definition.fieldtype !== 'localizedfields') {
-        if (isReservedWord(name)) {
-          reservedWordViolations.push({ id: key, label: name })
-          if (!invalidDefinitions.includes(key)) invalidDefinitions.push(key)
-        }
-
-        if (!NAME_FORMAT_REGEX.test(name)) {
-          formatViolations.push({ id: key, label: name })
-          if (!invalidDefinitions.includes(key)) invalidDefinitions.push(key)
-        }
-
-        if (structure !== undefined) {
-          const namesInNamespace = getNamesInNamespace(structure, fieldDefinitions, key, pathMap)
-          const occurrences = namesInNamespace.filter(n => n === name).length
-          if (occurrences > 1) {
-            duplicateViolations.push({ id: key, label: name })
-            if (!invalidDefinitions.includes(key)) invalidDefinitions.push(key)
-          }
-        }
+        checkDataTypeName(key, name)
       }
     }
+
+    return { invalidDefinitions: [...invalidIds], emptyNameViolations, reservedWordViolations, formatViolations, duplicateViolations }
+  }
+
+  const performSave = async (): Promise<boolean> => {
+    if (generalSettings === undefined) {
+      return false
+    }
+
+    const { invalidDefinitions, emptyNameViolations, reservedWordViolations, formatViolations, duplicateViolations } = collectViolations()
 
     setInvalidFieldDefinitionIds(invalidDefinitions)
 
@@ -137,16 +148,33 @@ export const DetailSave = (): React.JSX.Element => {
       )
 
       alertModal.error({ content })
-      return
+      return false
     }
 
-    updateDetailMutation({}).unwrap()
-      .then(() => {
-        messageApi.success(t('field-definitions.saved-successfully'))
-      })
-      .catch((e) => {
-        trackError(new ApiError(e as FetchBaseQueryError))
-      })
+    try {
+      await updateDetailMutation({}).unwrap()
+    } catch (e) {
+      trackError(new ApiError(e as FetchBaseQueryError))
+      return false
+    }
+
+    // The saved state is the new clean baseline for unsaved-changes checks
+    markClean()
+    messageApi.success(t('field-definitions.saved-successfully'))
+    return true
+  }
+
+  // When rendered inside the custom layout modal, this detail view is the
+  // modal's unsaved-changes handler. Registered without a dependency array
+  // so the guard always sees the latest closures; outside the modal this
+  // is a no-op.
+  useEffect(() => unsavedChanges?.register({
+    isDirty: () => isLayoutDirty() || areGeneralSettingsDirty(),
+    save: performSave
+  }))
+
+  const onClick: ButtonProps['onClick'] = () => {
+    void performSave()
   }
 
   return (

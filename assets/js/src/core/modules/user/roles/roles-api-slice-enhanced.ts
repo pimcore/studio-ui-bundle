@@ -9,13 +9,21 @@
  */
 
 import { providingTags, tagNames } from '@Pimcore/app/api/pimcore/tags'
-import { api as baseApi } from './roles-api-slice.gen'
+import { api as baseApi, type DetailedUserRole } from './roles-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.ROLE],
   endpoints: {
     roleGetCollection: {
       providesTags: () => providingTags.ROLE()
+    },
+    roleGetById: {
+      transformResponse: (raw: DetailedUserRole): any => ({
+        ...raw,
+        perspectives: (raw.perspectives ?? [])
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map(p => p.id)
+      })
     }
   }
 })

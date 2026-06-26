@@ -66,14 +66,14 @@ const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, vir
     props?.measureElement?.(internalNodeRef.current)
   }, [isDragging, props.measureElement])
 
-  const style: CSSProperties = {
+  const style = useMemo<CSSProperties>(() => ({
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.8 : 1,
     zIndex: isDragging ? 1 : 0,
     position: 'relative',
     ...rowStyle
-  }
+  }), [transform, transition, isDragging, rowStyle])
 
   const memoModifiedCells = useMemo(() => { return JSON.parse(modifiedCells) }, [modifiedCells])
 

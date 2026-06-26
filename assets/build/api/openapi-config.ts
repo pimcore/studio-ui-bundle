@@ -38,6 +38,10 @@ const config: ConfigFile = {
       type: 'query',
     },
     {
+      pattern: 'dataObjectGetSelectOptions',
+      type: 'query',
+    },
+    {
       pattern: 'noteGetCollection',
       type: 'query'
     },
@@ -71,6 +75,10 @@ const config: ConfigFile = {
     },
     {
       pattern: 'recycleBinGetCollection',
+      type: 'query'
+    },
+    {
+      pattern: 'ownershipManagementGetCollection',
       type: 'query'
     },
     {
@@ -230,6 +238,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/recycle-bin/recycle-bin-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/recycle-bin\/?/i)
+    },
+    '../../js/src/core/modules/ownership-management/ownership-management-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/ownership-management\/?/i)
     },
     '../../js/src/core/modules/execution-engine/execution-engine-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/execution-engine\/?/i)

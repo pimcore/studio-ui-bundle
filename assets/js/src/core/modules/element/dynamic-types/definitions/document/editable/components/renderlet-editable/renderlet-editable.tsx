@@ -14,7 +14,7 @@ import { type DragAndDropInfo } from '@sdk/components'
 import { RenderletContent } from './renderlet-content'
 import { isNil } from 'lodash'
 import { allElementTypes } from '@Pimcore/modules/element/utils/element-type'
-import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+import { EditableOverlay } from '../editable-overlay/editable-overlay'
 
 export interface RenderletValue {
   id?: number
@@ -100,7 +100,7 @@ export const RenderletEditable = ({
   }
 
   return (
-    <InheritanceOverlay
+    <EditableOverlay
       display={ isNil(config?.width) ? 'block' : undefined }
       isInherited={ inherited }
       noPadding
@@ -119,6 +119,6 @@ export const RenderletEditable = ({
           value={ value }
         />
       </Droppable>
-    </InheritanceOverlay>
+    </EditableOverlay>
   )
 }

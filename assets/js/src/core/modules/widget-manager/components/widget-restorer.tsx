@@ -10,7 +10,7 @@
 
 import React, { useEffect, type PropsWithChildren } from 'react'
 import { loadReduxState } from '../../../utils/redux-state-persistence'
-import { type WidgetManagerTabConfig, updateInnerModel, closeWidget } from '../widget-manager-slice'
+import { type WidgetManagerTabConfig, updateInnerModel, closeWidget, setWidgetManagerRestored } from '../widget-manager-slice'
 import { getWidgetManagerStorageKey } from '../widget-manager-persistence'
 import { type WidgetRestorerRegistry } from '../services/widget-restorer-registry'
 import { useAppDispatch } from '@sdk/app'
@@ -54,6 +54,8 @@ export const WidgetRestorer = ({ children }: PropsWithChildren): React.JSX.Eleme
           console.warn('Failed to restore widget layout', e)
         }
       }
+
+      dispatch(setWidgetManagerRestored(true))
     }
 
     void restore()

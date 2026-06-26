@@ -257,6 +257,7 @@ export const studioDefaultLightThemeConfig = {
         },
         Warning: {
           colorWarning: '#faad14',
+          colorWarningText: '#874d00',
           colorWarningBg: '#fffbe6',
           colorWarningBorder: '#ffe58f'
         },

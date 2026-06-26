@@ -26,6 +26,7 @@ import {
   SIDEBAR_AREABLOCK_TYPES,
   SIDEBAR_CONTENT_SETTINGS,
   SIDEBAR_DOCUMENT_CONFIGURATION,
+  SIDEBAR_HIGHLIGHT_EDITABLES,
   SIDEBAR_NAVIGATION
 } from '../../shared-tab-manager/sidebar-definitions'
 
@@ -49,5 +50,7 @@ moduleSystem.registerModule({
     pageSidebarManager.registerEntry(SIDEBAR_CONTENT_SETTINGS)
     pageSidebarManager.registerEntry(SIDEBAR_DOCUMENT_CONFIGURATION)
     pageSidebarManager.registerEntry(SIDEBAR_NAVIGATION)
+
+    pageSidebarManager.registerButton(SIDEBAR_HIGHLIGHT_EDITABLES)
   }
 })

@@ -8,9 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState, type Key, useEffect } from 'react'
-import { Tree, type TreeDataNode, type TreeProps } from 'antd'
+import React, { useState, type Key, useEffect, useRef } from 'react'
+import { Dropdown, type MenuProps, Tree, type TreeDataNode, type TreeProps } from 'antd'
 import cn from 'classnames'
+import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { TreeElementItem } from './tree-element-item'
 import { useStyles } from './tree-element.styles'
@@ -80,10 +81,50 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
     titleRender
   } = props
 
+  const { t } = useTranslation()
   const { styles } = useStyles({ isHideRootChecker, hasRoot, hideExpanders })
 
   const [selectedKeys, setSelectedKeys] = useState<Key[]>([])
   const [expandedKeys, setExpandedKeys] = useState<Key[]>(defaultExpandedKeys ?? [0])
+  const [contextMenuNode, setContextMenuNode] = useState<TreeDataItem | null>(null)
+  const [contextMenuOpen, setContextMenuOpen] = useState<boolean>(false)
+  const contextMenuNodeRef = useRef<TreeDataItem | null>(null)
+
+  // handle nested actions
+  const buildMenuItems = (node: TreeDataItem, actionsList: TreeAction[]): MenuProps['items'] => {
+    return actionsList.map((action) => {
+      const translationKey = action.translationKey ?? `tree.actions.${action.key}`
+      const reactKey = action.menuKey ?? action.key
+
+      if (action.actions !== undefined && action.actions.length > 0) {
+        return {
+          key: reactKey,
+          label: t(translationKey),
+          icon: <Icon
+            iconColorGroup={ action.iconColorGroup }
+            value={ action.icon }
+                />,
+          children: buildMenuItems(node, action.actions)
+        }
+      }
+
+      return {
+        key: reactKey,
+        label: t(translationKey),
+        icon: <Icon
+          iconColorGroup={ action.iconColorGroup }
+          value={ action.icon }
+              />,
+        onClick: () => {
+          onActionsClick?.(node.key.toString(), action.key, node)
+        }
+      }
+    })
+  }
+
+  const contextMenuItems: MenuProps['items'] = contextMenuNode?.actions !== undefined
+    ? buildMenuItems(contextMenuNode, contextMenuNode.actions)
+    : []
 
   useEffect(() => {
     if (propSelectedKeys !== undefined) {
@@ -119,67 +160,81 @@ const TreeElement = (props: ITreeElementProps): React.JSX.Element => {
   return (
     <>
       {treeData.length > 0 && (
-        <Tree
-          { ...optionalProps }
-          allowDrop={ ({ dropNode, dropPosition, dragNode }): boolean => {
-            if (typeof dropNode.allowDrop === 'boolean') {
-              return dropNode.allowDrop && dropPosition === 0
-            }
+        <Dropdown
+          menu={ { items: contextMenuItems } }
+          onOpenChange={ (open) => {
+            setContextMenuOpen(open && (contextMenuNodeRef.current?.actions?.length ?? 0) > 0)
+          } }
+          open={ contextMenuOpen }
+          trigger={ ['contextMenu'] }
+        >
+          <div>
+            <Tree
+              { ...optionalProps }
+              allowDrop={ ({ dropNode, dropPosition, dragNode }): boolean => {
+                if (typeof dropNode.allowDrop === 'boolean') {
+                  return dropNode.allowDrop && dropPosition === 0
+                }
 
-            return dropNode.allowDrop !== undefined ? dropNode.allowDrop({ dropNode, dropPosition, dragNode }) : false
-          } }
-          blockNode
-          checkStrictly={ checkStrictly }
-          checkable={ onCheck !== undefined }
-          checkedKeys={ checkedKeys }
-          className={ cn(styles.treeContainer, className) }
-          defaultExpandAll={ defaultExpandAll }
-          draggable={ draggable }
-          loadData={ onLoadData !== null ? onLoadData : undefined }
-          onCheck={ (checkedKeys, event): void => onCheck?.(checkedKeys, event) }
-          onDragStart={ (evt): void => {
-            if (typeof evt.node.allowDrag === 'function') {
-              if (!evt.node.allowDrag({ node: evt.node as TreeDataItem })) {
-                evt.event.preventDefault()
-              }
-            }
+                return dropNode.allowDrop !== undefined ? dropNode.allowDrop({ dropNode, dropPosition, dragNode }) : false
+              } }
+              blockNode
+              checkStrictly={ checkStrictly }
+              checkable={ onCheck !== undefined }
+              checkedKeys={ checkedKeys }
+              className={ cn(styles.treeContainer, className) }
+              defaultExpandAll={ defaultExpandAll }
+              draggable={ draggable }
+              loadData={ onLoadData !== null ? onLoadData : undefined }
+              onCheck={ (checkedKeys, event): void => onCheck?.(checkedKeys, event) }
+              onDragStart={ (evt): void => {
+                if (typeof evt.node.allowDrag === 'function') {
+                  if (!evt.node.allowDrag({ node: evt.node as TreeDataItem })) {
+                    evt.event.preventDefault()
+                  }
+                }
 
-            if (evt.node.allowDrag === false) {
-              evt.event.preventDefault()
-            }
-          } }
-          onDrop={ (evt): void => {
-            onDragAndDrop?.({
-              node: evt.node as TreeDataItem,
-              dragNode: evt.dragNode as TreeDataItem,
-              dropPosition: evt.dropPosition,
-              dropToGap: evt.dropToGap
-            })
-          } }
-          onExpand={ (keys): void => { onExpand !== null && onExpand !== undefined ? onExpand(keys) : setExpandedKeys(keys) } }
-          selectable={ onSelected !== undefined }
-          selectedKeys={ selectedKeys }
-          showIcon
-          switcherIcon={ handleCustomSwitcherIcon }
-          titleRender={ (node) => {
-            const component = (
-              <TreeElementItem
-                actions={ node.actions }
-                onActionsClick={ (action) => onActionsClick?.(node.key.toString(), action, node) }
-                onSelected={ () => {
-                  setSelectedKeys([node.key])
-                  onSelected?.(node.key, node)
-                } }
-                title={ node.title as string }
-              />
-            )
+                if (evt.node.allowDrag === false) {
+                  evt.event.preventDefault()
+                }
+              } }
+              onDrop={ (evt): void => {
+                onDragAndDrop?.({
+                  node: evt.node as TreeDataItem,
+                  dragNode: evt.dragNode as TreeDataItem,
+                  dropPosition: evt.dropPosition,
+                  dropToGap: evt.dropToGap
+                })
+              } }
+              onExpand={ (keys): void => { onExpand !== null && onExpand !== undefined ? onExpand(keys) : setExpandedKeys(keys) } }
+              onRightClick={ ({ node }): void => {
+                const treeDataItem = node as TreeDataItem
+                contextMenuNodeRef.current = treeDataItem
+                setContextMenuNode(treeDataItem)
+              } }
+              selectable={ onSelected !== undefined }
+              selectedKeys={ selectedKeys }
+              showIcon
+              switcherIcon={ handleCustomSwitcherIcon }
+              titleRender={ (node) => {
+                const component = (
+                  <TreeElementItem
+                    onSelected={ () => {
+                      setSelectedKeys([node.key])
+                      onSelected?.(node.key, node)
+                    } }
+                    title={ node.title as string }
+                  />
+                )
 
-            return (
-              <>{titleRender !== undefined ? titleRender(node, component) : component}</>
-            )
-          } }
-          treeData={ treeData }
-        />
+                return (
+                  <>{titleRender !== undefined ? titleRender(node, component) : component}</>
+                )
+              } }
+              treeData={ treeData }
+            />
+          </div>
+        </Dropdown>
       )}
     </>
   )

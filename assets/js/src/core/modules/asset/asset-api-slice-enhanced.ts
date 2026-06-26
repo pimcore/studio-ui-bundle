@@ -80,11 +80,15 @@ const api = baseApi.enhanceEndpoints({
     },
 
     assetSaveGridConfiguration: {
-      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_GRID_CONFIGURATION_LIST()
+      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_GRID_CONFIGURATION()
     },
 
     assetSetGridConfigurationAsFavorite: {
-      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_GRID_CONFIGURATION_LIST()
+      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_GRID_CONFIGURATION()
+    },
+
+    assetRemoveGridConfigurationAsFavorite: {
+      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_GRID_CONFIGURATION()
     },
 
     assetUpdateGridConfiguration: {
@@ -126,7 +130,8 @@ export const {
   useAssetGetGridConfigurationByFolderIdQuery,
   useAssetGetAvailableGridColumnsQuery,
   useAssetPatchFolderByIdMutation,
-  useAssetUploadInfoQuery
+  useAssetUploadInfoQuery,
+  useAssetVideoThumbnailStatusQuery
 } = api
 
 export { api }

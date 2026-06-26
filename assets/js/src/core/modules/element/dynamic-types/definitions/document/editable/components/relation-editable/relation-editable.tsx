@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { ManyToOneRelation, type ManyToOneRelationProps } from '@sdk/modules/element'
-import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+import { EditableOverlay } from '../editable-overlay/editable-overlay'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 import { toCssDimension } from '@sdk/utils'
 
@@ -35,7 +35,7 @@ export const RelationEditable = ({
   }
 
   return (
-    <InheritanceOverlay
+    <EditableOverlay
       addIconSpacing
       display="block"
       isInherited={ Boolean(inherited) }
@@ -47,6 +47,6 @@ export const RelationEditable = ({
         disabled={ otherProps.disabled === true || inherited === true }
         width={ width }
       />
-    </InheritanceOverlay>
+    </EditableOverlay>
   )
 }

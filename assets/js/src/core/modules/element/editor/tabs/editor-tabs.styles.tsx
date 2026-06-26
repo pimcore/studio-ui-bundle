@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
@@ -53,11 +53,11 @@ export const useStyle = createStyles(({ token, css }) => {
           
         .ant-tabs-nav-wrap {
           display: flex;
-          justify-content: flex-end;
-            
+
           .ant-tabs-nav-list {
             display: flex;
             align-items: center;
+            margin-inline-start: auto;
           }
         }
       }

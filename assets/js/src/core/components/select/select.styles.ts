@@ -9,7 +9,7 @@
  */
 
 /* eslint-disable max-lines */
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type SelectTheme } from './select'
 import { toCssDimension } from '@sdk/utils'
@@ -136,6 +136,12 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
         padding: 0 ${token.controlPaddingHorizontal}px !important;
       }
 
+      // Honor the small size's horizontal padding (matches the small Input);
+      // without this the !important rule above forces the default 12px on small selects.
+      &.ant-select-sm .ant-select-selector {
+        padding: 0 ${token.controlPaddingHorizontalSM}px !important;
+      }
+
       .ant-select-arrow {
         color: ${token.colorIcon} !important;
       }
@@ -165,7 +171,7 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
       &.ant-select-multiple {
         &.ant-select {
           .ant-select-selector {
-            padding: 2px ${token.controlPaddingHorizontal}px 2px ${token.paddingXXS}px !important;
+            padding: 1px ${token.controlPaddingHorizontal}px 1px ${token.paddingXXS}px !important;
           }
         }
 
@@ -296,6 +302,33 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
         max-width: ${toCssDimension(props.skeletonMaxWidth, '100%')} !important;
         min-width: ${toCssDimension(props.skeletonMinWidth, 'auto')} !important;
         display: block;
+      }
+    `,
+
+    clearOptionWrapper: css`
+      &:has(> button:first-child:hover) .ant-select-item-option-active {
+        background-color: transparent !important;
+      }
+    `,
+
+    clearOption: css`
+      display: flex;
+      align-items: center;
+      gap: ${token.marginXS}px;
+      width: 100%;
+      min-height: ${token.controlHeight}px;
+      padding: ${(token.controlHeight - token.fontSize * token.lineHeight) / 2}px ${token.controlPaddingHorizontal}px;
+      font-size: ${token.fontSize}px;
+      line-height: ${token.lineHeight};
+      color: ${token.colorTextSecondary};
+      cursor: pointer;
+      border: none;
+      border-radius: ${token.borderRadiusSM}px;
+      background: none;
+      transition: background ${token.motionDurationSlow} ease;
+
+      &:hover {
+        background-color: ${token.controlItemBgHover};
       }
     `
   }

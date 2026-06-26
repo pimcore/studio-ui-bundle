@@ -16,6 +16,7 @@ import { Pagination } from '@Pimcore/components/pagination/pagination'
 import { Split } from '@Pimcore/components/split/split'
 import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { Header } from '@Pimcore/components/header/header'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { debounce, isEmpty, isUndefined } from 'lodash'
@@ -123,20 +124,13 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
         </Toolbar>
       }
       renderTopBar={
-        <Toolbar
-          justify='space-between'
-          padding={ {
-            left: 'small',
-            right: 'extra-small'
-          } }
-          theme='secondary'
+        <Header
+          position='top'
         >
-          <Flex gap={ 4 }>
-            <Title>
-              {t('gdpr-extractor.title')}
-            </Title>
-          </Flex>
-        </Toolbar>
+          <Title>
+            {t('gdpr-extractor.title')}
+          </Title>
+        </Header>
       }
     >
       <Content

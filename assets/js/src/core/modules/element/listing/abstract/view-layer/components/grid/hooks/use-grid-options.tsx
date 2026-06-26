@@ -15,6 +15,7 @@ import { DEFAULT_COLUMN_WIDTH } from '@Pimcore/modules/element/dynamic-types/uti
 import { type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
 import { type GridProps as BaseGridProps } from '@Pimcore/types/components/types'
 import { type AccessorColumnDef, type IdentifiedColumnDef } from '@tanstack/react-table'
+import { isNumber } from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -41,7 +42,7 @@ export const useGridOptions = (): UseGridOptionsReturn => {
         type: isMainTypeIncluded ? column.type : column.frontendType,
         columnKey: column.key
       },
-      size: getDefaultSystemColumnSize(column) // change if its a system colum
+      size: getPersistedColumnWidth(column) ?? getDefaultSystemColumnSize(column) // change if its a system colum
     }
 
     if (!isTypeIncluded) {
@@ -76,6 +77,12 @@ export const useGridOptions = (): UseGridOptionsReturn => {
 
   const getGridProps = (): GridProps => {
     return {}
+  }
+
+  const getPersistedColumnWidth = (column: SelectedColumn): number | undefined => {
+    if (isNumber(column.width) && column.width > 0) {
+      return column.width
+    }
   }
 
   const getDefaultSystemColumnSize = (column: SelectedColumn): number | undefined => {
