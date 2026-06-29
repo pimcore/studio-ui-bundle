@@ -17,6 +17,7 @@ import { type TabNode } from 'flexlayout-react'
 import { type GlobalContext } from '@Pimcore/modules/app/global-context/global-context-slice'
 import { type WidgetManagerTabConfig } from '../widget-manager-slice'
 import { type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface Widget {
   name: string
@@ -46,13 +47,25 @@ export class WidgetRegistry {
 
   /**
    * Replaces an already registered widget, e.g. to let a bundle take over
-   * a core view. Throws when no widget with the given name is registered.
+   * a core view. When no widget with the given name is registered, the
+   * registry stays untouched (the core widget keeps working), the problem
+   * is reported via the central error handler and `false` is returned —
+   * a stale override must never break the app boot.
+   *
+   * @returns whether the widget was overridden
    */
-  overrideWidget (widget: Widget): void {
+  overrideWidget (widget: Widget): boolean {
     const index = this.widgets.findIndex((registeredWidget) => registeredWidget.name === widget.name)
 
     if (index === -1) {
-      throw new Error(`Widget with name "${widget.name}" not found`)
+      try {
+        trackError(new GeneralError(`Widget with name "${widget.name}" not found`))
+      } catch {
+        // trackError re-throws GeneralError by design; swallow it here so a
+        // stale override registered during module init cannot kill the boot.
+      }
+
+      return false
     }
 
     this.widgets[index] = {
@@ -60,6 +73,8 @@ export class WidgetRegistry {
       component: memo(widget.component),
       defaultGlobalContext: widget.defaultGlobalContext ?? true
     }
+
+    return true
   }
 
   getWidget (name: string): Widget | undefined {

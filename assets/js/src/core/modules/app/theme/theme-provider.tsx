@@ -13,7 +13,7 @@ import { useAppSelector } from '@Pimcore/app/store'
 import { DynamicThemeProvider } from './dynamic-theme-provider'
 import { selectThemeId } from './theme-slice'
 
-interface ThemeProviderProps {
+export interface ThemeProviderProps {
   children: React.ReactNode
   /**
    * Explicit theme id override. When omitted, the theme id from the
@@ -22,6 +22,13 @@ interface ThemeProviderProps {
   id?: string
 }
 
+/**
+ * Applies the currently active studio theme.
+ *
+ * Note: this component unconditionally reads the theme id from the redux
+ * store (useAppSelector) and therefore requires a react-redux Provider
+ * ancestor (e.g. the studio GlobalProvider) to be rendered.
+ */
 export const ThemeProvider = ({ children, id }: ThemeProviderProps): React.JSX.Element => {
   const storeThemeId = useAppSelector(selectThemeId)
 
