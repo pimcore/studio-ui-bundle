@@ -11,12 +11,8 @@
 import { isArray, isEmpty, isNil, isNumber, isString } from 'lodash'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
-import { useSearchTermFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/search-term-filter/use-search-term-filter'
-import { useFieldFilters } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/use-field-filters'
+import { useAppliedFilters } from '@Pimcore/modules/element/listing/decorators/general-filters/element-filters'
 import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
-import { usePqlFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/pql-filter/use-pql-filter'
-import { useUnreferencedFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/unreferenced-filter/use-unreferenced-filter'
-import { useDirectChildrenFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/direct-children-filter/use-direct-children-filter'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
@@ -81,11 +77,7 @@ const buildSelectedColumns = (savedColumns: SavedColumn[], availableColumns: Ava
  * notes.)
  */
 export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfiguration) => void) => {
-  const { setSearchTerm } = useSearchTermFilter()
-  const { setFieldFilters } = useFieldFilters()
-  const { setPqlQuery } = usePqlFilter()
-  const { setOnlyUnreferenced } = useUnreferencedFilter()
-  const { setOnlyDirectChildren } = useDirectChildrenFilter()
+  const { setValues: setAppliedFilters } = useAppliedFilters()
   const { setPage, setPageSize } = usePaging()
   const { setSelectedColumns } = useSelectedColumns()
   const { availableColumns } = useAvailableColumns()
@@ -94,18 +86,16 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
 
   return (configuration: SavedSearchDetailedConfiguration): void => {
     const filter = getFilter(configuration)
+    const entries = (isArray(filter?.columnFilters) ? filter.columnFilters : []) as ColumnFilterEntry[]
 
     // Search term — the `system.fulltext` column filter.
-    const columnFilters = (filter?.columnFilters ?? []) as ColumnFilterEntry[]
-    const searchTermEntry = isArray(columnFilters)
-      ? columnFilters.find((entry) => entry.type === SEARCH_TERM_FILTER_TYPE)
-      : undefined
-    setSearchTerm(isString(searchTermEntry?.filterValue) ? searchTermEntry.filterValue : '')
+    const searchTermEntry = entries.find((entry) => entry.type === SEARCH_TERM_FILTER_TYPE)
+    const searchTerm = isString(searchTermEntry?.filterValue) ? searchTermEntry.filterValue : ''
 
     // Field filters — every non-system column filter. The saved entries keep `meta`, so they can be
-    // re-hydrated into the field-filters provider (which re-keys them to columns by `key`). Always
-    // set (empty when none) so opening a search replaces any filters from a previous one.
-    const fieldFilters: FieldFilter[] = (isArray(columnFilters) ? columnFilters : [])
+    // re-hydrated into the field-filters state (which re-keys them to columns by `key`). Always set
+    // (empty when none) so opening a search replaces any filters from a previous one.
+    const fieldFilters: FieldFilter[] = entries
       .filter((entry) => isString(entry.type) && !SYSTEM_FILTER_TYPES.has(entry.type))
       .map((entry) => ({
         key: entry.key ?? '',
@@ -114,15 +104,17 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
         locale: entry.locale,
         meta: { translationKey: entry.meta?.translationKey ?? '', ...entry.meta }
       }))
-    setFieldFilters(fieldFilters)
 
     // System filters with their own sidebar controls.
-    const entries = isArray(columnFilters) ? columnFilters : []
     const pqlEntry = entries.find((entry) => entry.type === 'system.pql')
-    setPqlQuery(isString(pqlEntry?.filterValue) ? pqlEntry.filterValue : '')
-    setOnlyUnreferenced(entries.find((entry) => entry.type === 'system.unreferenced')?.filterValue === true)
+    const pql = isString(pqlEntry?.filterValue) ? pqlEntry.filterValue : ''
+    const unreferenced = entries.find((entry) => entry.type === 'system.unreferenced')?.filterValue === true
     // The query sends `includeDescendants` (the inverse of the "only direct children" toggle).
-    setOnlyDirectChildren(filter?.includeDescendants === false)
+    const directChildren = filter?.includeDescendants === false
+
+    // Apply every general filter in one write to the applied-filters store. Always set each key (even
+    // when empty/false) so opening a search replaces the state left over from a previous one.
+    setAppliedFilters({ searchTerm, fieldFilters, pql, unreferenced, directChildren })
 
     // Tags — the `system.tag` column filter, applied via its own provider rather than as a field
     // filter. Always set (empty when none) so opening a search clears tags left over from a previous one.
