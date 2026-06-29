@@ -182,19 +182,21 @@ export const LanguageSelectionExample = {
   }
 }
 
+const ImageZoomWrapper = (): React.JSX.Element => {
+  const [zoom, setZoom] = useState<number>(100)
+  return (
+    <ButtonGroup
+      items={ [
+        <ImageZoom
+          key="zoom"
+          setZoom={ setZoom }
+          zoom={ zoom }
+        />
+      ] }
+    />
+  )
+}
+
 export const ImageZoomExample = {
-  render: () => {
-    const [zoom, setZoom] = useState<number>(100)
-    return (
-      <ButtonGroup
-        items={ [
-          <ImageZoom
-            key="zoom"
-            setZoom={ setZoom }
-            zoom={ zoom }
-          />
-        ] }
-      />
-    )
-  }
+  render: () => <ImageZoomWrapper />
 }

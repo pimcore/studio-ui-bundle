@@ -37,10 +37,12 @@ const FormModalComponent = (args: any): React.JSX.Element => {
         modal.confirm({
           title: args.title,
           content: args.content,
-          icon: <Icon
-            options={ { width: 22, height: 22 } }
-            value='alert'
-                />,
+          icon: (
+            <Icon
+              options={ { width: 22, height: 22 } }
+              value='alert'
+            />
+          ),
           okText: args.okText,
           cancelText: args.cancelText,
           onOk: () => {
