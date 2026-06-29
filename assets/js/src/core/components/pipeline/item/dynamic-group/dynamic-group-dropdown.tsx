@@ -14,7 +14,7 @@ import { type MenuProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
-import { useNumberedList } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedListContext } from '@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list-value'
 import { type DynamicTypePipelineRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-registry'
 import { usePipelineConfig } from '../../provider/pipeline-config/use-pipeline-config'
 import { type DynamicTypePipelineAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-abstract'
@@ -31,7 +31,7 @@ interface IGroupedTree {
 
 export const DynamicGroupDropdown = ({ children, dynamicTypeRegistryId }: DynamicGroupDropdownProps): React.JSX.Element => {
   const registry = useInjection<DynamicTypePipelineRegistry>(dynamicTypeRegistryId)
-  const { operations } = useNumberedList()
+  const { operations } = useNumberedListContext()
   const { config } = usePipelineConfig()
   const { t } = useTranslation()
 

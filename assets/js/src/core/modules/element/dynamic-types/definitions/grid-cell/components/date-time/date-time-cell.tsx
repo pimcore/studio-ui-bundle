@@ -1,0 +1,79 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React, { useEffect, useRef, useState } from 'react'
+import type { PickerRef } from 'rc-picker'
+import { DatePicker } from 'antd'
+import type { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
+import { FormattedDateTime } from '@Pimcore/components/formatted-date-time/formatted-date-time'
+import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
+import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
+
+export const DateTimeCell = (props: DefaultCellProps): React.JSX.Element => {
+  const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
+  const [open, setOpen] = useState<boolean>(false)
+  const datePickerRef = useRef<PickerRef>(null)
+
+  useEffect(() => {
+    if (isInEditMode) {
+      setOpen(true)
+      datePickerRef.current?.focus()
+    }
+  }, [isInEditMode])
+
+  function saveValue (value: number): void {
+    fireOnUpdateCellDataEvent(value)
+    disableEditMode()
+  }
+
+  const value = Number(props.getValue()) !== 0 ? dayjs.unix(Number(props.getValue())) : null
+
+  function getCellContent (): React.JSX.Element {
+    if (!isInEditMode) {
+      if (value === null || isNaN(Number(props.getValue()))) {
+        return <></>
+      }
+      return (
+        <FormattedDateTime
+          timeStyle="medium"
+          timestamp={ value.unix() }
+        />
+      )
+    }
+
+    function onKeyDown (e: React.KeyboardEvent<HTMLInputElement>): void {
+      if (e.key === 'Escape' || e.key === 'Enter') {
+        disableEditMode()
+      }
+    }
+
+    return (
+      <DatePicker
+        needConfirm
+        onChange={ (date: Dayjs) => {
+          saveValue(date === null ? 0 : date.unix())
+        } }
+        onKeyDown={ onKeyDown }
+        onOk={ disableEditMode }
+        open={ open }
+        ref={ datePickerRef }
+        showTime={ { format: 'HH:mm:ss' } }
+        value={ value }
+      />
+    )
+  }
+
+  return (
+    <div className="default-cell__content default-cell__content--padded">
+      {getCellContent()}
+    </div>
+  )
+}

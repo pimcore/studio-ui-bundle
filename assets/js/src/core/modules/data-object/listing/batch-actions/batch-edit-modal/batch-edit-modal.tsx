@@ -8,10 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo } from 'react'
-import { isUndefined } from 'lodash'
+import React, { useEffect, useMemo, useState } from 'react'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
-import { Dropdown, type ItemType, type MenuItemType } from '@Pimcore/components/dropdown/dropdown'
+import { FieldsToAddPanel } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/components/fields-to-add-panel/fields-to-add-panel'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Button } from '@Pimcore/components/button/button'
 import { t } from 'i18next'
@@ -23,7 +22,7 @@ import { useBatchEdit } from './hooks/use-batch-edit'
 import { BatchEditListContainer } from './batch-edit-list-container'
 import { Form } from '@Pimcore/components/form/form'
 import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
-import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
+import { type AvailableColumn, buildColumnPickerGroups } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
 import { api, useDataObjectPatchByIdMutation, useDataObjectPatchFolderByIdMutation } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
@@ -33,7 +32,7 @@ import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useAppDispatch } from '@sdk/app'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
-import { filterDropdownItems, hasSelectableItems } from './utils/dropdown-filter'
+import { shouldIncludeColumnItem } from './utils/dropdown-filter'
 import { FieldCollectionProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/field-collection/providers/field-collection-provider'
 import { useClassDefinitionSelection } from '../../decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
@@ -52,7 +51,6 @@ export interface BatchEditModalProps {
 }
 
 export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: BatchEditModalProps): React.JSX.Element => {
-  const { getAvailableColumnsDropdown } = useAvailableColumns()
   const { batchEdits, addOrUpdateBatchEdit, addOrUpdateBatchEdits, resetBatchEdits } = useBatchEdit()
   const [form] = Form.useForm()
   const { selectedRows } = useRowSelection()
@@ -71,6 +69,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const selectedClassDefinition = classDefinitionSelection.selectedClassDefinition
   const { openModal } = useClassificationStoreModal({ onUpdate: onClassificationStoreUpdate })
   const { availableColumns } = useAvailableColumns()
+  const [fieldsToAddOpen, setFieldsToAddOpen] = useState<boolean>(true)
 
   const resetModal = (): void => {
     resetBatchEdits()
@@ -203,20 +202,13 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
     setBatchEditModalOpen(false)
   }
 
-  const availableDropdownList = getAvailableColumnsDropdown(onColumnClick).menu.items
-
-  const getFilteredAvailableDropdownList = useMemo(() => (): Array<ItemType<MenuItemType>> => {
-    if (isUndefined(availableDropdownList)) return []
-
-    return filterDropdownItems(
-      availableDropdownList as Array<ItemType<MenuItemType>>,
-      batchEdits,
-      hasType,
-      getType
+  const columnGroups = useMemo(() => {
+    const includableColumns = availableColumns.filter((column) =>
+      shouldIncludeColumnItem({ ...column, mainType: column.type }, batchEdits, hasType, getType)
     )
-  }, [availableDropdownList, batchEdits, hasType, getType])
 
-  const isEmptyDropdownList = !hasSelectableItems(getFilteredAvailableDropdownList())
+    return buildColumnPickerGroups(includableColumns, t)
+  }, [availableColumns, batchEdits, hasType, getType])
 
   return (
     <FieldCollectionProvider>
@@ -228,15 +220,14 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
           divider
           justify={ 'space-between' }
                  >
-          <Dropdown menu={ { items: getFilteredAvailableDropdownList() } }>
-            <IconTextButton
-              disabled={ isEmptyDropdownList }
-              icon={ { value: 'new' } }
-              type='default'
-            >
-              {t('listing.add-column')}
-            </IconTextButton>
-          </Dropdown>
+          <IconTextButton
+            data-testid="batch-edit-add-column"
+            icon={ { value: 'new' } }
+            onClick={ () => { setFieldsToAddOpen((isOpen) => !isOpen) } }
+            type='default'
+          >
+            {t('listing.add-column')}
+          </IconTextButton>
           {batchEdits.length > 0 &&
               (
               <Flex
@@ -275,12 +266,28 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
             small: 9999
           } }
         >
-          <Form
-            form={ form }
-            onFinish={ onFormFinish }
+          <Flex
+            className='w-full'
+            gap='small'
           >
-            <BatchEditListContainer />
-          </Form>
+            { fieldsToAddOpen && (
+              <FieldsToAddPanel
+                data-testid="batch-edit-fields-to-add"
+                groups={ columnGroups }
+                onClose={ () => { setFieldsToAddOpen(false) } }
+                onColumnSelect={ onColumnClick }
+              />
+            ) }
+
+            <div style={ { flex: 1, minWidth: 0 } }>
+              <Form
+                form={ form }
+                onFinish={ onFormFinish }
+              >
+                <BatchEditListContainer />
+              </Form>
+            </div>
+          </Flex>
         </FieldWidthProvider>
       </WindowModal>
     </FieldCollectionProvider>

@@ -12,7 +12,7 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { HighlightedEntries as sidebarArgs } from '@Pimcore/components/sidebar/sidebar.stories'
 import { Toolbar, type ToolbarProps } from '@Pimcore/components/toolbar/toolbar'
-import { Position, Secondary } from '@Pimcore/components/toolbar/toolbar.stories'
+import { PositionTop, Secondary } from '@Pimcore/components/toolbar/toolbar.stories'
 import { type Meta } from '@storybook/react'
 import React from 'react'
 import { Content } from '../content/content'
@@ -34,7 +34,7 @@ export default config
 
 const demoData = {
   children: <Content none />,
-  renderTopBar: <Toolbar { ...Position.args as ToolbarProps } />,
+  renderTopBar: <Toolbar { ...PositionTop.args as ToolbarProps } />,
   renderToolbar: <Toolbar { ...Secondary.args as ToolbarProps } />,
   renderSidebar: <Sidebar { ...sidebarArgs.args } />
 }

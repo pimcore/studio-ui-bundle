@@ -67,7 +67,12 @@ const injectedRtkApi = api
                 ClassDefinitionCollectionCreatableApiResponse,
                 ClassDefinitionCollectionCreatableApiArg
             >({
-                query: () => ({ url: `/pimcore-studio/api/class/collection/creatable` }),
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/collection/creatable`,
+                    params: {
+                        widgetId: queryArg.widgetId,
+                    },
+                }),
                 providesTags: ["Class Definition"],
             }),
             classCustomLayoutCollection: build.query<
@@ -602,7 +607,10 @@ export type ClassDefinitionCollectionCreatableApiResponse =
         totalItems: number;
         items: ClassDefinitionListItem[];
     };
-export type ClassDefinitionCollectionCreatableApiArg = void;
+export type ClassDefinitionCollectionCreatableApiArg = {
+    /** Optional element tree widget ID to filter classes by the widget's allowed classes configuration */
+    widgetId?: string;
+};
 export type ClassCustomLayoutCollectionApiResponse =
     /** status 200 List of custom layouts for the given data object class in a simple and compact format for listings.
      */ {
@@ -1118,6 +1126,23 @@ export type ClassLayoutDataInCompactFormatToBeUsedForEGListingInWorkspaces = {
     /** Whether it is the default layout */
     type: string;
 };
+export type PreviewConfigEntry = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Parameter name */
+    name: string;
+    /** Display label */
+    label: string;
+    /** Available values as key-value pairs */
+    values: {
+        key?: string;
+        value?: string;
+    }[];
+    /** Default selected value */
+    defaultValue: string;
+};
 export type Layout = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -1159,6 +1184,8 @@ export type Layout = {
     labelWidth: number;
     /** Border */
     border: boolean;
+    /** Preview configuration for locale/site selectors */
+    previewConfig?: PreviewConfigEntry[] | null;
 };
 export type CustomLayouts = {
     /** AdditionalAttributes */

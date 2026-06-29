@@ -19,6 +19,26 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Elements"],
             }),
+            elementGetEditlock: build.query<ElementGetEditlockApiResponse, ElementGetEditlockApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/elements/${queryArg.elementType}/editlock/${queryArg.id}`,
+                }),
+                providesTags: ["Elements"],
+            }),
+            elementLock: build.mutation<ElementLockApiResponse, ElementLockApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/elements/${queryArg.elementType}/editlock/${queryArg.id}`,
+                    method: "POST",
+                }),
+                invalidatesTags: ["Elements"],
+            }),
+            elementUnlock: build.mutation<ElementUnlockApiResponse, ElementUnlockApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/elements/${queryArg.elementType}/editlock/${queryArg.id}`,
+                    method: "DELETE",
+                }),
+                invalidatesTags: ["Elements"],
+            }),
             elementFolderCreate: build.mutation<ElementFolderCreateApiResponse, ElementFolderCreateApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/elements/${queryArg.elementType}/folder/${queryArg.parentId}`,
@@ -106,6 +126,27 @@ export type ElementDeleteApiArg = {
 };
 export type ElementGetDeleteInfoApiResponse = /** status 200 Get delete info for an element */ DeleteInfo;
 export type ElementGetDeleteInfoApiArg = {
+    /** Id of the element */
+    id: number;
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+};
+export type ElementGetEditlockApiResponse = /** status 200 Edit lock status of the element */ EditLock;
+export type ElementGetEditlockApiArg = {
+    /** Id of the element */
+    id: number;
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+};
+export type ElementLockApiResponse = unknown;
+export type ElementLockApiArg = {
+    /** Id of the element */
+    id: number;
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+};
+export type ElementUnlockApiResponse = unknown;
+export type ElementUnlockApiArg = {
     /** Id of the element */
     id: number;
     /** Filter elements by matching element type. */
@@ -212,6 +253,24 @@ export type DeleteInfo = {
     /** canUseRecycleBin */
     canUseRecycleBin: boolean;
 };
+export type EditLockUser = {
+    /** Name of the user holding the lock */
+    name: string;
+};
+export type EditLock = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Whether the element is currently edit-locked */
+    isLocked: boolean;
+    /** ID of the user holding the lock */
+    userId?: number | null;
+    /** Timestamp when the lock was created */
+    date?: number | null;
+    /** User holding the lock */
+    user?: EditLockUser | null;
+};
 export type FolderData = {
     /** Folder Name */
     folderName: string;
@@ -279,6 +338,9 @@ export type ElementUsage = {
 export const {
     useElementDeleteMutation,
     useElementGetDeleteInfoQuery,
+    useElementGetEditlockQuery,
+    useElementLockMutation,
+    useElementUnlockMutation,
     useElementFolderCreateMutation,
     useElementGetContextPermissionsQuery,
     useElementGetTreeLocationQuery,

@@ -61,6 +61,7 @@ export type ExecutionEngineListJobsApiArg = {
             pageSize?: number;
             columnFilters?: object;
             sortFilter?: object;
+            additionalSortFilters?: object;
         };
     };
 };

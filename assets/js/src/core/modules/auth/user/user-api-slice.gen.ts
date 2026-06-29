@@ -591,7 +591,7 @@ export type User2 = {
     /** Document Workspace */
     documentWorkspaces: UserWorkspace[];
     /** Allowed studio perspectives */
-    perspectives: object;
+    perspectives: string[];
 };
 export type UserPermission = {
     /** AdditionalAttributes */
@@ -633,7 +633,7 @@ export type UserProfile = {
     /** Language of the User */
     language: string;
     /** Date Time Locale for the User */
-    dateTimeLocale: string;
+    dateTimeLocale: string | null;
     /** Show Welcome Screen */
     welcomeScreen: boolean;
     /** Memorize Tabs */

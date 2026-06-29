@@ -1,0 +1,273 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Col, Row } from 'antd'
+import { isNil } from 'lodash'
+import { Alert } from '@Pimcore/components/alert/alert'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Form } from '@Pimcore/components/form/form'
+import { Text } from '@Pimcore/components/text/text'
+import { Button } from '@Pimcore/components/button/button'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { Compact } from '@Pimcore/components/compact/compact'
+import { Title } from '@Pimcore/components/title/title'
+import { Content } from '@Pimcore/components/content/content'
+import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
+import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
+import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
+import { formatDateTime } from '@Pimcore/utils/date-time'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { useUserGetByIdQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
+import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
+import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
+import { useSearch } from '@Pimcore/modules/search/provider/use-search'
+import { useAppSelector } from '@Pimcore/app/store'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { type SavedSearchSaveConfigurationApiArg } from '@Pimcore/modules/search/search-api-slice.gen'
+import { resolveSavedSearchElementType } from '@Pimcore/modules/search/saved-search/utils/resolve-element-type'
+import { toNumberArray } from '@Pimcore/modules/search/saved-search/utils/to-number-array'
+import { selectSavedSearchDirty } from '@Pimcore/modules/search/saved-search/dirty/saved-search-dirty-slice'
+import { SavedSearchForm, type SavedSearchFormValues, defaultValues } from './saved-search-form'
+import { useSavedSearchMutations } from './use-saved-search-mutations'
+import { useSavedSearchMetaDirty } from './use-saved-search-meta-dirty'
+
+interface SavedSearchPanelProps {
+  elementType?: ElementType
+  supportsLoadedState: boolean
+}
+
+interface LiveArgs { classId?: string, body?: { filters?: unknown } }
+type SaveColumns = SavedSearchSaveConfigurationApiArg['body']['columns']
+
+export const SavedSearchPanel = ({ elementType, supportsLoadedState }: SavedSearchPanelProps): React.JSX.Element => {
+  const { t } = useTranslation()
+  const user = useUser()
+  const { modal } = useStudioModal()
+  const [form] = Form.useForm()
+
+  const { useDataQueryHelper } = useSettings()
+  const { getArgs } = useDataQueryHelper()
+  const { selectedColumns } = useSelectedColumns()
+  const { loadedSavedSearch } = useSearch()
+
+  const [isSharedGlobally, setIsSharedGlobally] = useState(defaultValues.shareGlobally ?? true)
+  const [sharedUsers, setSharedUsers] = useState<number[]>([])
+  const [sharedRoles, setSharedRoles] = useState<number[]>([])
+  // The saved-search id the form has been prefilled for; gates the metadata dirty comparison so it
+  // doesn't fire against the still-default form during the initial prefill (avoids a "*" flash).
+  const [prefilledId, setPrefilledId] = useState<number | undefined>(undefined)
+
+  // The saved search loaded into this listing, if it belongs to this tab's element type.
+  const loaded = supportsLoadedState && !isNil(loadedSavedSearch) && resolveSavedSearchElementType(loadedSavedSearch) === elementType
+    ? loadedSavedSearch
+    : undefined
+  const isOwner = !isNil(loaded) && loaded.ownerId === user?.id
+
+  // Resolve the owner's name. For your own search it's the current user; otherwise look it up.
+  const { data: ownerData } = useUserGetByIdQuery({ id: loaded?.ownerId ?? 0 }, { skip: isNil(loaded) || isOwner })
+  const ownerName = isOwner ? user?.username : ownerData?.name
+
+  useSavedSearchMetaDirty({ form, loaded, isOwner, prefilledId, isSharedGlobally, sharedUsers, sharedRoles })
+
+  // Whether the loaded search has unsaved changes (drives the "save as new" hint for shared searches).
+  const isModified = useAppSelector((state) => !isNil(loaded) ? selectSavedSearchDirty(state, loaded.id) : false)
+
+  // Capture the live grid state for the save/update body — the selected columns (with width, the
+  // same data grid configs persist) and the assembled filter (search term + field filters). Update
+  // always writes the current state, mirroring the grid-config sidebar (no dirty gating).
+  const liveColumns = selectedColumns.map((column) => ({
+    key: column.key,
+    locale: column.locale ?? null,
+    group: (column.group ?? []) as string[],
+    width: column.width ?? null
+  })) as SaveColumns
+  const liveArgs = (getArgs() ?? {}) as LiveArgs
+  const liveFilter = liveArgs.body?.filters as SavedSearchSaveConfigurationApiArg['body']['filter']
+
+  useEffect(() => {
+    if (isNil(loaded)) {
+      form.setFieldsValue(defaultValues)
+      setIsSharedGlobally(defaultValues.shareGlobally ?? true)
+      setSharedUsers([])
+      setSharedRoles([])
+      setPrefilledId(undefined)
+      return
+    }
+    const values: SavedSearchFormValues = {
+      name: loaded.name,
+      description: loaded.description ?? '',
+      createMenuShortcut: loaded.createMenuShortcut,
+      menuShortcutGroup: loaded.menuShortcutGroup ?? '',
+      shareGlobally: loaded.shareGlobal
+    }
+    form.setFieldsValue(values)
+    setIsSharedGlobally(loaded.shareGlobal)
+    setSharedUsers(toNumberArray(loaded.sharedUsers))
+    setSharedRoles(toNumberArray(loaded.sharedRoles))
+    setPrefilledId(loaded.id)
+  }, [loaded?.id])
+
+  const reset = (): void => {
+    form.resetFields()
+    setIsSharedGlobally(defaultValues.shareGlobally ?? true)
+    setSharedUsers([])
+    setSharedRoles([])
+  }
+
+  const { onSaveAsNew, onUpdate, onDelete, isSaving, isUpdating, isDeleting } = useSavedSearchMutations({
+    form,
+    loaded,
+    classId: liveArgs.classId,
+    elementType,
+    columns: liveColumns,
+    filter: liveFilter,
+    isSharedGlobally,
+    sharedUsers,
+    sharedRoles,
+    onReset: reset
+  })
+
+  const confirmDelete = (): void => {
+    modal.confirm({
+      title: t('saved-search.delete.title'),
+      content: t('saved-search.delete.confirm'),
+      okText: t('delete'),
+      cancelText: t('button.cancel'),
+      onOk: onDelete
+    })
+  }
+
+  const renderActions = (): React.JSX.Element => {
+    if (isNil(loaded)) {
+      return (
+        <Button
+          data-testid='saved-search-save-button'
+          loading={ isSaving }
+          onClick={ onSaveAsNew }
+          type='primary'
+        >
+          { t('saved-search.save-as-new') }
+        </Button>
+      )
+    }
+
+    if (isOwner) {
+      return (
+        <Compact>
+          <Button
+            data-testid='saved-search-update-button'
+            loading={ isUpdating }
+            onClick={ onUpdate }
+            type='default'
+          >
+            { t('saved-search.update') }
+          </Button>
+          <Dropdown
+            menu={ {
+              items: [
+                {
+                  key: 'save-as-new',
+                  icon: <Icon value='save' />,
+                  label: t('saved-search.save-as-new'),
+                  onClick: onSaveAsNew
+                },
+                {
+                  key: 'delete',
+                  icon: <Icon value='trash' />,
+                  label: t('saved-search.delete-search'),
+                  onClick: confirmDelete
+                }
+              ]
+            } }
+          >
+            <IconButton
+              data-testid='saved-search-more-button'
+              icon={ { value: 'more' } }
+              loading={ isDeleting }
+              type='default'
+            />
+          </Dropdown>
+        </Compact>
+      )
+    }
+
+    return (
+      <Button
+        data-testid='saved-search-clone-button'
+        loading={ isSaving }
+        onClick={ onSaveAsNew }
+        type='primary'
+      >
+        { t('saved-search.clone') }
+      </Button>
+    )
+  }
+
+  return (
+    <ContentLayout
+      renderToolbar={
+        <Toolbar theme='secondary'>
+          <div />
+          {renderActions()}
+        </Toolbar>
+      }
+    >
+      <Content padded>
+        <Flex
+          gap='small'
+          vertical
+        >
+          <Title>{ t('saved-search.title') }</Title>
+
+          { !isNil(loaded) && (
+            <Row>
+              <Col span={ 24 }>
+                <Text>{t('common.owner')}:</Text> <Text type='secondary'>{ownerName}</Text>
+              </Col>
+              { !isNil(loaded.modificationDate) && (
+                <Col span={ 24 }>
+                  <Text>{t('common.modification-date')}: </Text>
+                  <Text type='secondary'>
+                    {formatDateTime({ timestamp: loaded.modificationDate, dateStyle: 'short', timeStyle: 'short' })}
+                  </Text>
+                </Col>
+              )}
+            </Row>
+          )}
+
+          { !isNil(loaded) && !isOwner && isModified && (
+            <Alert
+              description={ t('saved-search.shared-modified.info') }
+              showIcon
+              type='info'
+            />
+          )}
+
+          <SavedSearchForm
+            form={ form }
+            isSharedGlobally={ isSharedGlobally }
+            onSharedGloballyChange={ setIsSharedGlobally }
+            onUsersRolesChange={ (changes) => {
+              setSharedUsers(changes.sharedUsers)
+              setSharedRoles(changes.sharedRoles)
+            } }
+            sharedRoles={ sharedRoles }
+            sharedUsers={ sharedUsers }
+            showSharing={ isNil(loaded) || isOwner }
+          />
+        </Flex>
+      </Content>
+    </ContentLayout>
+  )
+}

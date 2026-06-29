@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { DatePicker } from '@sdk/components'
-import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+import { EditableOverlay } from '../editable-overlay/editable-overlay'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 
 export interface DateEditableValue {
@@ -50,7 +50,7 @@ export const DateEditable = ({
   }
 
   return (
-    <InheritanceOverlay
+    <EditableOverlay
       addIconSpacing
       display="inline-block"
       isInherited={ Boolean(inherited) }
@@ -66,6 +66,6 @@ export const DateEditable = ({
         style={ containerStyle }
         value={ value }
       />
-    </InheritanceOverlay>
+    </EditableOverlay>
   )
 }

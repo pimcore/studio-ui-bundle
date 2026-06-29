@@ -13,12 +13,15 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { type WidgetConfig } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 import { isNil } from 'lodash'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface WidgetConfigurationCardItemProps {
   widget?: WidgetConfig
 }
 
 export const WidgetConfigurationCardItem = ({ widget }: WidgetConfigurationCardItemProps): React.JSX.Element => {
+  const { t } = useTranslation()
+
   if (isNil(widget)) {
     return <></>
   }
@@ -29,7 +32,7 @@ export const WidgetConfigurationCardItem = ({ widget }: WidgetConfigurationCardI
       gap={ 8 }
     >
       <Icon { ...widget.icon } />
-      <span>{widget.name}</span>
+      <span>{t(widget.name)}</span>
     </Flex>
   )
 }

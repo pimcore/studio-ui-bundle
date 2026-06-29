@@ -12,9 +12,9 @@ import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   const themeToken = {
-    highlightBackgroundColor: '#F6FFED',
-    highlightBorderColor: '#B7EB8F',
-    highlightColor: '#52C41A',
+    highlightBackgroundColor: token.colorSuccessBg,
+    highlightBorderColor: token.colorSuccessBorder,
+    highlightColor: token.colorSuccessText,
     signalBackgroundColor: '#E6F4FF',
     signalBorderColor: '#91CAFF',
     signalColor: '#1677FF',

@@ -34,6 +34,7 @@ import { useHotspotMarkersModal } from '@Pimcore/modules/element/components/hots
 import { type DataTemplates } from '@Pimcore/modules/element/components/hotspot-markers-modal/hotspot-markers-modal'
 import { InlineUpload } from '@Pimcore/components/inline-upload'
 import { useUploadModal } from '@Pimcore/components/modal-upload/hooks/use-upload-modal'
+import { useTheme } from 'antd-style'
 
 interface ImageGalleryImagePreviewProps {
   item: ImageGalleryValueItem
@@ -52,6 +53,7 @@ interface ImageGalleryImagePreviewProps {
 
 export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue, setValue, disabled, width, height, ratioX, ratioY, predefinedDataTemplates, uploadPath }: ImageGalleryImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const token = useTheme()
   const { openAsset } = useAssetHelper()
   const messageApi = useMessage()
   const { confirm } = useFormModal()
@@ -219,17 +221,6 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
               }
             },
             {
-              hidden: disabled,
-              key: 'delete',
-              label: t('delete'),
-              icon: <Icon value={ 'trash' } />,
-              onClick: () => {
-                const newValue = [...value]
-                newValue.splice(index, 1)
-                setValue(newValue)
-              }
-            },
-            {
               label: t('crop'),
               key: 'crop',
               icon: <Icon value={ 'crop' } />,
@@ -278,17 +269,28 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
             },
             {
               hidden: disabled,
-              label: t('empty'),
+              label: t('image-gallery.clear-image-selection'),
               key: 'empty',
-              icon: <Icon value={ 'trash' } />,
+              icon: <Icon value={ 'clear-erase' } />,
               onClick: async () => {
                 setValue(value.map((v, i) => i === index ? { image: null, hotspots: [], marker: [], crop: {} } : v))
+              }
+            },
+            {
+              hidden: disabled,
+              key: 'delete',
+              label: t('image-gallery.delete-frame'),
+              icon: <Icon value={ 'trash' } />,
+              onClick: () => {
+                const newValue = [...value]
+                newValue.splice(index, 1)
+                setValue(newValue)
               }
             }
           ] }
           height={ height }
           onHotspotsDataButtonClick={ hasHotspotData(index) ? handleOpenHotspotMarkersModal : undefined }
-          style={ { backgroundColor: '#fff' } }
+          style={ { backgroundColor: token.colorBgContainer } }
           thumbnailSettings={ item.crop }
           width={ width }
         />

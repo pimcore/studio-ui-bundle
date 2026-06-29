@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { createContext, useContext, type ReactNode, useState, useMemo } from 'react'
+import React, { createContext, useCallback, useContext, type ReactNode, useState, useMemo } from 'react'
 import { isUndefined } from 'lodash'
 import { useReportData, type IUseReportDataReturn } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
 import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
@@ -49,11 +49,11 @@ export const ReportDataProvider = ({
 
   const { filters } = useGridFilterContext()
 
-  const resetData = (): void => {
+  const resetData = useCallback((): void => {
     setPage(PAGE_INITIAL)
     setPageSize(PAGE_SIZE_INITIAL)
     setSorting(SORTING_INITIAL)
-  }
+  }, [setPage, setPageSize, setSorting])
 
   const reportDataValue = useReportData({ name, filters, page, pageSize, sorting })
 
@@ -66,7 +66,7 @@ export const ReportDataProvider = ({
     sorting,
     setSorting,
     resetData
-  }), [reportDataValue, page, setPage, pageSize, setPageSize, sorting, setSorting])
+  }), [reportDataValue, page, setPage, pageSize, setPageSize, sorting, setSorting, resetData])
 
   return (
     <ReportDataContext.Provider value={ contextValue }>

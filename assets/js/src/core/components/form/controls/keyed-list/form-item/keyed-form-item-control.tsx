@@ -9,7 +9,7 @@
  */
 
 import React, { Children, isValidElement, useCallback, useEffect, useMemo } from 'react'
-import { useKeyedList } from '../provider/keyed-list/use-keyed-list'
+import { useKeyedListContext, useKeyedListValue } from '../provider/keyed-list/use-keyed-list-value'
 import { useItem } from '../../../item/provider/item/use-item'
 import { type FormItemProps } from 'antd'
 import { isEqual, isUndefined } from 'lodash'
@@ -26,11 +26,11 @@ export interface KeyedFormItemControlProps {
 export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: baseValue, ...props }: KeyedFormItemControlProps): React.JSX.Element => {
   const { getValueFromEvent } = props
 
-  const { operations, getAdditionalComponentProps } = useKeyedList()
+  const { operations, getAdditionalComponentProps } = useKeyedListContext()
   const { name, initialValue, validationState, onValidate, onUpdateCurrentValue } = useItem()
 
   const Child = useMemo(() => Children.only(children), [children])
-  const value = operations.getValue(name)
+  const value = useKeyedListValue(name)
   const previousValue = usePrevious(value)
 
   const cachedValue = useMemo(() => {

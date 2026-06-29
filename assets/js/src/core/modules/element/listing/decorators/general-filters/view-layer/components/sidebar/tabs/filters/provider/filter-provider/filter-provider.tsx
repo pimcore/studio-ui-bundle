@@ -10,6 +10,8 @@
 
 import { type DirectChildrenFilterData } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/direct-children-filter/direct-children-filter-provider'
 import { useDirectChildrenFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/direct-children-filter/use-direct-children-filter'
+import { type UnreferencedFilterData } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/unreferenced-filter/unreferenced-filter-provider'
+import { useUnreferencedFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/unreferenced-filter/use-unreferenced-filter'
 import { type FieldFiltersData } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 import { useFieldFilters } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/use-field-filters'
 import { type PqlFilterData } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/pql-filter/pql-filter-provider'
@@ -23,6 +25,8 @@ export interface FilterProviderData {
   setSearchTerm: SearchTermFilterData['setSearchTerm']
   onlyDirectChildren: DirectChildrenFilterData['onlyDirectChildren']
   setOnlyDirectChildren: DirectChildrenFilterData['setOnlyDirectChildren']
+  onlyUnreferenced: UnreferencedFilterData['onlyUnreferenced']
+  setOnlyUnreferenced: UnreferencedFilterData['setOnlyUnreferenced']
   fieldFilters: FieldFiltersData['fieldFilters']
   setFieldFilters: FieldFiltersData['setFieldFilters']
   pqlQuery: PqlFilterData['pqlQuery']
@@ -40,11 +44,13 @@ export interface FilterProviderProps {
 export const FilterProvider = (props: FilterProviderProps): React.JSX.Element => {
   const { searchTerm: listingSearchTerm } = useSearchTermFilter()
   const { onlyDirectChildren: listingOnlyDirectChildren } = useDirectChildrenFilter()
+  const { onlyUnreferenced: listingOnlyUnreferenced } = useUnreferencedFilter()
   const { fieldFilters: listingFieldFilters } = useFieldFilters()
   const { pqlQuery: listingPqlQuery } = usePqlFilter()
 
   const [searchTerm, setSearchTerm] = useState<FilterProviderData['searchTerm']>(listingSearchTerm)
   const [onlyDirectChildren, setOnlyDirectChildren] = useState<FilterProviderData['onlyDirectChildren']>(listingOnlyDirectChildren)
+  const [onlyUnreferenced, setOnlyUnreferenced] = useState<FilterProviderData['onlyUnreferenced']>(listingOnlyUnreferenced)
   const [fieldFilters, setFieldFilters] = useState<FilterProviderData['fieldFilters']>(listingFieldFilters)
   const [pqlQuery, setPqlQuery] = useState<FilterProviderData['pqlQuery']>(listingPqlQuery)
 
@@ -55,6 +61,10 @@ export const FilterProvider = (props: FilterProviderProps): React.JSX.Element =>
   useEffect(() => {
     setOnlyDirectChildren(listingOnlyDirectChildren)
   }, [listingOnlyDirectChildren])
+
+  useEffect(() => {
+    setOnlyUnreferenced(listingOnlyUnreferenced)
+  }, [listingOnlyUnreferenced])
 
   useEffect(() => {
     setFieldFilters(listingFieldFilters)
@@ -70,6 +80,8 @@ export const FilterProvider = (props: FilterProviderProps): React.JSX.Element =>
       setSearchTerm,
       onlyDirectChildren,
       setOnlyDirectChildren,
+      onlyUnreferenced,
+      setOnlyUnreferenced,
       fieldFilters,
       setFieldFilters,
       pqlQuery,
@@ -78,5 +90,5 @@ export const FilterProvider = (props: FilterProviderProps): React.JSX.Element =>
     >
       {props.children}
     </FilterProviderContext.Provider>
-  ), [searchTerm, onlyDirectChildren, fieldFilters, pqlQuery])
+  ), [searchTerm, onlyDirectChildren, onlyUnreferenced, fieldFilters, pqlQuery])
 }

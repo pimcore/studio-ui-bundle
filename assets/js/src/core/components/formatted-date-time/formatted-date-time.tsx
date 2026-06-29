@@ -13,12 +13,13 @@ import { formatDateTime } from '@Pimcore/utils/date-time'
 
 interface FormattedDateProps {
   timestamp: number
+  timeStyle?: 'short' | 'medium' | 'long' | 'full'
 }
 
 const FormattedDateTime = (props: FormattedDateProps): React.JSX.Element => {
   return (
     <>
-      {formatDateTime({ timestamp: props.timestamp, dateStyle: 'short', timeStyle: 'short' })}
+      {formatDateTime({ timestamp: props.timestamp, dateStyle: 'short', timeStyle: props.timeStyle ?? 'short' })}
     </>
   )
 }

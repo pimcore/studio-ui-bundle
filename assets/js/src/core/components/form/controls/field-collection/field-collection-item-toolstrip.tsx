@@ -11,7 +11,7 @@
 import React, { useCallback } from 'react'
 import { ToolStrip } from '../../../toolstrip/tool-strip'
 import { useFieldCollection } from './field-collection-provider'
-import { useNumberedList } from '../numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedListContext, useNumberedListSelector, useNumberedListValue } from '../numbered-list/provider/numbered-list/use-numbered-list-value'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '../../../icon-button/icon-button'
 import { Space } from '../../../space/space'
@@ -21,15 +21,18 @@ export interface FieldCollectionItemToolStripProps {
   field: number
 }
 
+const selectCount = (values: any[]): number => values?.length ?? 0
+
 export const FieldCollectionItemToolStrip = React.memo((props: FieldCollectionItemToolStripProps): React.JSX.Element => {
   const { field } = props
-  const { values, getValueByKey, operations } = useNumberedList()
-  const value = getValueByKey(field.toString())
+  const { operations } = useNumberedListContext()
+  const value = useNumberedListValue([field])
+  const count = useNumberedListSelector(selectCount)
   const type = value?.type
   const { registry, maxItems, disallowAddRemove, disallowReorder, addLabel } = useFieldCollection()
   const registryItem = registry.getItemByType(type as string)
   const { t } = useTranslation()
-  const hasMaxItems = maxItems !== undefined && values.length >= maxItems
+  const hasMaxItems = maxItems !== undefined && count >= maxItems
 
   const handleMoveDown = useCallback(() => { operations.move(field, field + 1) }, [operations, field])
   const handleMoveUp = useCallback(() => { operations.move(field, field - 1) }, [operations, field])

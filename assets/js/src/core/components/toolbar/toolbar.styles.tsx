@@ -16,10 +16,16 @@ export const useStyles = createStyles(({ token, css }) => {
       width: 100%;
       height: 48px;
       padding: ${token.paddingXS}px;
+      display: flex;
+      align-items: center;
+
+      > * {
+        flex: 1;
+        min-width: 0;
+      }
 
       &.toolbar--theme-primary {
-        // @todo: use token
-        background-color: #F5F3FA;
+        background-color: ${token.colorBgToolbar};
       }
 
       &.toolbar--theme-secondary {
@@ -54,6 +60,7 @@ export const useStyles = createStyles(({ token, css }) => {
       &.toolbar--size-auto {
         height: 100%;
       }
+
     `
   }
 })

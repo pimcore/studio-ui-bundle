@@ -2,6 +2,7 @@ common.owner: Eier
 common.modification-date: Endringsdato
 common.globally: Globalt
 common.apply-selection: Bruk utvalg
+common.clear: Fjern
 cache.clear-cache-success: Hurtigbufferen ble tømt
 cache.clear-full-page-cache-success: Fullsidebufferen ble tømt
 cache.clear-temporary-files-success: Midlertidige filer ble slettet
@@ -11,6 +12,7 @@ widget.missing-context.description: Ingen relatert element funnet
 widget.missing-tab-context.description: Denne funksjonen støttes ikke for det relaterte elementet
 block: Blokk
 error.error_something_generic_went_wrong: Noe gikk galt
+error.error_permission_denied: Du har ikke tillatelse til å utføre denne handlingen på dette elementet.
 error.syntax_error: Syntaksfeil
 error.error_element_exists: Elementet finnes allerede
 error.error_folder_exists: Mappen finnes allerede
@@ -94,6 +96,17 @@ document.document-tree.title: Dokumenttre
 document.document-tree.search: Søk i {{folderName}}
 document.editable.inheritance.overwrite: Overskriv
 document.editable.inheritance.tooltip: Arvet fra innholdshoveddokument. Klikk for å overskrive.
+areablock.move-above: Flytt opp
+areablock.move-below: Flytt ned
+areablock.show: Vis
+areablock.hide: Skjul
+areablock.new: Ny
+areablock.copy: Kopier
+areablock.paste: Lim inn
+areablock.cut: Klipp ut
+areablock.settings: Innstillinger
+areablock.delete: Slett
+document.highlight-editables: Marker redigerbare
 document.link.target: Lenke-mål
 document.hardlink.source: Kildedokument
 document.hardlink.properties-from-source: Bruk egenskaper fra kildedokument
@@ -127,7 +140,7 @@ save-and-continue: Lagre og fortsett
 discard-and-continue: Forkast og fortsett
 discard-changes: Forkast endringer
 unsaved-changes.title: Ulagrede endringer
-unsaved-changes.message: Du har ulagrede endringer. Hva vil du gjøre?
+unsaved-changes.message: Du har ulagrede endringer. Hvis du fortsetter uten å lagre, går disse endringene tapt.
 unsaved-changes.close-message: Du har ulagrede endringer. Er du sikker på at du vil lukke uten å lagre?
 convert-to: Konverter til
 convert-document: Konverter dokument
@@ -289,6 +302,9 @@ select-option.tree.actions.select-option: Select Option
 custom-layout.import-success: Custom Layout importert
 custom-layout.delete.confirmation: Er du sikker på at du vil slette denne Custom Layout?
 custom-layout.delete.success: Custom Layout slettet
+custom-layout.add: Ny layout
+custom-layout.empty-state.create-or-edit: Opprett en ny custom layout eller rediger en eksisterende
+custom-layout.empty-state.edit: Velg en eksisterende custom layout for å begynne å redigere
 example-prefix: Eksempel-prefiks
 pagination.show-total: Totalt {{total}} elementer
 pagination.page: Side
@@ -369,6 +385,8 @@ grid.advanced-column.anonymizationRule: Anonymiseringsregel
 grid.advanced-column.translationPrefix: Oversettelsesprefiks
 grid.advanced-column.advancedColumns.simpleField: Enkelt felt
 grid.advanced-column.advancedColumns.relationField: Relasjonsfelt
+grid.advanced-column.classification-store.no-selection: Ingen verdi valgt
+grid.advanced-column.classification-store.edit: Endre verdi
 grid.advanced-column.advancedColumns.staticText: Statisk tekst
 grid.advanced-column.advancedColumns.booleanFormatter: Boolsk formatering
 grid.advanced-column.advancedColumns.caseChange: Endre store/små bokstaver
@@ -505,6 +523,11 @@ listing.grid-config.title: Rutenettskonfigurasjon
 grid-config.discard-all-changes: Forkast alle endringer
 grid-config.apply-changes: Bruk endringer
 listing.add-column: Legg til en kolonne
+listing.add-column.simple: Enkel
+listing.add-column.advanced: Avansert
+listing.column-picker.search: Søk
+listing.column-picker.no-results: Ingen kolonner funnet
+listing.column-picker.fields-to-add: Felter å legge til
 listing.actions: Bruk på utvalg
 listing.non-selected.actions: Bruk på alle
 listing.actions.zip-download: ZIP-nedlasting
@@ -1139,6 +1162,14 @@ element.lock: Lås
 element.lock-and-propagate-to-children: Lås og propager til underelementer
 element.unlock: Lås opp
 element.unlock-and-propagate-to-children: Lås opp og propager til underelementer
+element.edit-lock.title: 'Redigeres av en annen bruker'
+element.edit-lock.path: 'Sti'
+element.edit-lock.type: 'Type'
+element.edit-lock.user: 'Bruker'
+element.edit-lock.editing-since: 'Redigeres siden'
+element.edit-lock.warning: 'Hvis du fortsetter redigeringen, lagres din versjon separat fra den andre brukerens versjon.'
+element.edit-lock.continue: 'Fortsett redigering'
+element.edit-lock.cancel: 'Avbryt'
 element.tree.sorting: Sorter underelementer etter
 element.tree.sorting.keyed-ascending: A til Å (nøkkel)
 element.tree.sorting.keyed-descending: Å til A (nøkkel)
@@ -1161,9 +1192,11 @@ element.delete.folder.ok: Slett
 element.delete.folder.ok.permanent: Slett permanent
 element.delete.batch.title: Slett elementer
 element.delete.batch.note: 'Merk: Disse elementene vil bli slettet permanent og kan ikke gjenopprettes.'
-element.delete.batch.question: 'Vil du virkelig slette {{count}} elementer?'
+element.delete.batch.question_one: 'Vil du virkelig slette dette elementet?'
+element.delete.batch.question_other: 'Vil du virkelig slette disse {{count}} elementene?'
 element.delete.batch.ok: Slett permanent
-element.delete.batch.show-paths: 'Vis alle {{count}} elementer'
+element.delete.batch.show-paths: Vis elementer
+element.delete.batch.dependencies-warning: 'Det kan finnes avhengigheter, slett likevel?'
 element.open: Åpne
 element.toolbar.copy-id: Kopier ID
 element.toolbar.copy-full-path-to-clipboard: Kopier full sti
@@ -1174,6 +1207,7 @@ element.unpublish: Avpubliser
 element.publish: Publiser
 element.locate-in-tree: Finn i treet
 element.sidebar.filter.only-direct-children: kun direkte underelementer
+element.sidebar.filter.only-unreferenced: kun elementer uten referanser
 element.sidebar.field-filters: Feltfiltre
 element.full-information: Full informasjon
 system-information.id: ID
@@ -1233,12 +1267,15 @@ folder: Mappe
 archive: Arkiv
 audio: Lyd
 image: Bilde
+image-gallery.clear-image-selection: Fjern bildevalg
+image-gallery.delete-frame: Slett ramme
 text: Tekst
 video: Video
 processing: Behandler
 upload: Last opp
 close: Lukk
 paste: Lim inn
+cut: Klipp ut
 upload.assets-items-failed-message: Opplasting fullført med feil.
 quantity-value.converted-units: Konverterte enheter
 table.empty.confirm: Er du sikker på at du vil fjerne alle data?
@@ -1357,6 +1394,7 @@ user-management.name: Navn
 user-management.password: Passord
 user-management.user.search: Søk etter en bruker
 user-management.role.search: Søk etter en rolle
+user-management.users-roles.search: Søk etter bruker eller rolle
 user-management.twoFactorAuthenticationEnabled: Tofaktorautentisering aktivert
 user-management.firstname: Fornavn
 user-management.lastname: Etternavn
@@ -1442,6 +1480,7 @@ roles.remove-folder.success: Mappe fjernet
 roles.remove-item.success: Rolle fjernet
 roles.add-item.success: Rolle lagt til
 roles.add-folder.success: Mappe lagt til
+roles.general: Generelt
 roles.settings.title: Innstillinger
 roles.workspaces.title: Workspaces
 roles.add-folder: Legg til ny mappe
@@ -1834,6 +1873,7 @@ empty-image: Tomt bilde
 image.dnd-target: Slipp et bilde her
 image.add.and.dnd: Legg til eller slipp et bilde direkte her
 image.upload.add.and.dnd: Last opp, legg til eller slipp et bilde direkte her
+image.too-small: Det valgte bildet er for lite. Vennligst bruk et større bilde.
 fallback: Fallback
 url-slug.add-site: Legg til nettsted
 url-slug.invalid: Vennligst oppgi en gyldig URL-slug (starter med '/')
@@ -1852,6 +1892,7 @@ video.settings: Videoinnstillinger
 video.poster: Plakatbilde
 video.path: Sti
 video.dnd-target: Slipp en video her
+video.add-target: Legg til en video her
 pdf-editable.dnd-target: Slipp en dokumentressurs her
 many-to-one-relation.drop-placeholder: Slipp et element her
 many-to-one-relation.drop-placeholder-text-input: Slipp et element her eller oppgi en verdi
@@ -2199,6 +2240,7 @@ component.search.pleaceholder: Søk
 focal-point.set: Sett fokuspunkt
 video.placeholder: Ingen video valgt – Klikk for å legge til en video
 video.add-video: Legg til video
+video.preview-in-progress: Forhåndsvisning av video genereres…
 image.alt-text-placeholder: Skriv inn alt-tekst
 area-settings: Områdeinnstillinger
 unsupported_feature: Funksjonen støttes ikke – sjekk systemkravene!
@@ -2721,3 +2763,44 @@ translations.merger.title: "Slå sammen oversettelser (Domene: {{domain}})"
 translations.merger.column.language: Språk
 translations.merger.items: elementer
 select.clear-selection: Fjern valg
+asset.folder.preview.image-display: Bildevisning
+asset.folder.preview.image-display.small: Liten
+asset.folder.preview.image-display.large: Stor
+saved-search.title: Lagret søk
+saved-search.delete-search: Slett søk
+saved-search.save-as-new: Lagre som nytt søk
+saved-search.create-menu-shortcut: Opprett snarvei i menyen
+saved-search.save.success: Lagret søk opprettet
+saved-search.saved-searches: Lagrede søk
+saved-search.ownership: Eierskap
+saved-search.ownership.own: Egen
+saved-search.ownership.shared: Delt med meg
+saved-search.open: Åpne
+saved-search.delete.title: Slett lagret søk
+saved-search.delete.confirm: Er du sikker på at du vil slette dette lagrede søket?
+saved-search.update: Oppdater søk
+saved-search.clone: Klon søk
+saved-search.update.success: Lagret søk oppdatert
+saved-search.delete.success: Lagret søk slettet
+saved-search.shared-modified.info: Du har gjort endringer i den opprinnelige konfigurasjonen. Siden den eies av noen andre, kan du lagre den som et nytt søk.
+saved-search.menu-shortcut-group: Menygruppe
+ownership-management.title: Eierskapsadministrasjon
+ownership-management.show-deleted-owners: Vis elementer fra slettede brukere
+ownership-management.deleted-user: Slettet bruker
+ownership-management.columns.id: ID
+ownership-management.columns.name: Navn
+ownership-management.columns.modification-date: Endringsdato
+ownership-management.columns.owner: Eier
+ownership-management.columns.actions: Handlinger
+ownership-management.actions.reassign-owner: Tilordne eier på nytt
+ownership-management.actions.reassign-owner.title: Tilordner eier av konfigurasjoner på nytt
+ownership-management.actions.delete: Slett
+ownership-management.actions.delete.title: Sletter konfigurasjoner
+ownership-management.actions.batch-assign: Massetilordning
+ownership-management.actions.batch-delete: Massesletting
+ownership-management.reassign-owner.title: "Tilordne eier av {{count}} konfigurasjon(er) på nytt"
+ownership-management.reassign-owner.confirm: Tilordne på nytt
+ownership-management.reassign-owner.placeholder: Søk etter en bruker ved navn
+ownership-management.delete.title: Slett konfigurasjoner
+ownership-management.delete.content: "Er du sikker på at du vil slette {{count}} konfigurasjon(er)?"
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Eierskapsadministrasjon

@@ -79,7 +79,9 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
     setInternalValue(prev => {
       const newValue = addKeys(props.value)
 
-      if (!isEqual(removeKeys(prev), removeKeys(newValue))) {
+      // empty frames are not part of the persisted value, so they must be
+      // ignored when checking whether the incoming value is an external change
+      if (!isEqual(removeKeys(prev.filter(item => item.image !== null)), removeKeys(newValue))) {
         return newValue
       }
 

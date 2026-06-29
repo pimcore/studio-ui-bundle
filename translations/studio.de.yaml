@@ -2,6 +2,7 @@ common.owner: Eigentümer
 common.modification-date: Änderungsdatum
 common.globally: Global
 common.apply-selection: Auswahl übernehmen
+common.clear: Löschen
 cache.clear-cache-success: Cache wurde erfolgreich geleert
 cache.clear-full-page-cache-success: Ganzseitiger Cache wurde erfolgreich geleert
 cache.clear-temporary-files-success: Temporäre Dateien wurden erfolgreich gelöscht
@@ -11,6 +12,7 @@ widget.missing-context.description: Kein zugehöriges Element gefunden
 widget.missing-tab-context.description: Diese Funktion wird für das zugehörige Element nicht unterstützt
 block: Block
 error.error_something_generic_went_wrong: Etwas ist schiefgelaufen
+error.error_permission_denied: Sie haben keine Berechtigung, diese Aktion für dieses Element durchzuführen.
 error.syntax_error: Syntaxfehler
 error.error_element_exists: Element existiert bereits
 error.error_folder_exists: Ordner existiert bereits
@@ -94,6 +96,17 @@ document.document-tree.title: Dokument-Baum
 document.document-tree.search: Suche in {{folderName}}
 document.editable.inheritance.overwrite: Überschreiben
 document.editable.inheritance.tooltip: Geerbt vom Content-Main-Dokument. Klicken zum Überschreiben.
+areablock.move-above: Nach oben verschieben
+areablock.move-below: Nach unten verschieben
+areablock.show: Einblenden
+areablock.hide: Ausblenden
+areablock.new: Neu
+areablock.copy: Kopieren
+areablock.paste: Einfügen
+areablock.cut: Ausschneiden
+areablock.settings: Einstellungen
+areablock.delete: Löschen
+document.highlight-editables: Bearbeitbare hervorheben
 document.link.target: Link-Ziel
 document.hardlink.source: Quelldokument
 document.hardlink.properties-from-source: Eigenschaften vom Quelldokument verwenden
@@ -127,7 +140,7 @@ save-and-continue: Speichern und fortfahren
 discard-and-continue: Verwerfen und fortfahren
 discard-changes: Änderungen verwerfen
 unsaved-changes.title: Ungespeicherte Änderungen
-unsaved-changes.message: Sie haben ungespeicherte Änderungen. Was möchten Sie tun?
+unsaved-changes.message: Sie haben ungespeicherte Änderungen. Wenn Sie fortfahren, ohne zu speichern, gehen diese Änderungen verloren.
 unsaved-changes.close-message: Sie haben ungespeicherte Änderungen. Sind Sie sicher, dass Sie ohne Speichern schließen möchten?
 convert-to: Konvertieren zu
 convert-document: Dokument konvertieren
@@ -289,6 +302,9 @@ select-option.tree.actions.select-option: Auswahloption
 custom-layout.import-success: Benutzerdefiniertes Layout erfolgreich importiert
 custom-layout.delete.confirmation: Sind Sie sicher, dass Sie dieses benutzerdefinierte Layout löschen möchten?
 custom-layout.delete.success: Benutzerdefiniertes Layout erfolgreich gelöscht
+custom-layout.add: Neues Layout
+custom-layout.empty-state.create-or-edit: Erstellen Sie ein neues benutzerdefiniertes Layout oder bearbeiten Sie ein bestehendes
+custom-layout.empty-state.edit: Wählen Sie ein bestehendes benutzerdefiniertes Layout aus, um mit der Bearbeitung zu beginnen
 example-prefix: Beispiel-Präfix
 pagination.show-total: Insgesamt {{total}} Einträge
 pagination.page: Seite
@@ -369,6 +385,8 @@ grid.advanced-column.anonymizationRule: Anonymisierungsregel
 grid.advanced-column.translationPrefix: Übersetzungspräfix
 grid.advanced-column.advancedColumns.simpleField: Einfaches Feld
 grid.advanced-column.advancedColumns.relationField: Relationsfeld
+grid.advanced-column.classification-store.no-selection: Kein Wert ausgewählt
+grid.advanced-column.classification-store.edit: Wert ändern
 grid.advanced-column.advancedColumns.staticText: Statischer Text
 grid.advanced-column.advancedColumns.booleanFormatter: Boolean-Formatierer
 grid.advanced-column.advancedColumns.caseChange: Groß-/Kleinschreibung ändern
@@ -505,6 +523,11 @@ listing.grid-config.title: Grid-Konfiguration
 grid-config.discard-all-changes: Alle Änderungen verwerfen
 grid-config.apply-changes: Änderungen übernehmen
 listing.add-column: Spalte hinzufügen
+listing.add-column.simple: Einfach
+listing.add-column.advanced: Erweitert
+listing.column-picker.search: Suchen
+listing.column-picker.no-results: Keine Spalten gefunden
+listing.column-picker.fields-to-add: Hinzuzufügende Felder
 listing.actions: Auf Auswahl anwenden
 listing.non-selected.actions: Auf alle anwenden
 listing.actions.zip-download: ZIP-Download
@@ -1139,6 +1162,14 @@ element.lock: Sperren
 element.lock-and-propagate-to-children: Sperren und auf Kinder übertragen
 element.unlock: Entsperren
 element.unlock-and-propagate-to-children: Entsperren und auf Kinder übertragen
+element.edit-lock.title: 'Wird von einem anderen Benutzer bearbeitet'
+element.edit-lock.path: 'Pfad'
+element.edit-lock.type: 'Typ'
+element.edit-lock.user: 'Benutzer'
+element.edit-lock.editing-since: 'Bearbeitet seit'
+element.edit-lock.warning: 'Wenn Sie die Bearbeitung fortsetzen, wird Ihre Version getrennt von der Version des anderen Benutzers gespeichert.'
+element.edit-lock.continue: 'Bearbeitung fortsetzen'
+element.edit-lock.cancel: 'Abbrechen'
 element.tree.sorting: Kinder sortieren nach
 element.tree.sorting.keyed-ascending: A bis Z (Schlüssel)
 element.tree.sorting.keyed-descending: Z bis A (Schlüssel)
@@ -1161,9 +1192,11 @@ element.delete.folder.ok: Löschen
 element.delete.folder.ok.permanent: Endgültig löschen
 element.delete.batch.title: Elemente löschen
 element.delete.batch.note: 'Bitte beachten: Diese Elemente werden dauerhaft gelöscht und können nicht wiederhergestellt werden.'
-element.delete.batch.question: 'Möchten Sie wirklich {{count}} Elemente löschen?'
+element.delete.batch.question_one: 'Möchten Sie dieses Element wirklich löschen?'
+element.delete.batch.question_other: 'Möchten Sie wirklich diese {{count}} Elemente löschen?'
 element.delete.batch.ok: Endgültig löschen
-element.delete.batch.show-paths: 'Alle {{count}} Elemente anzeigen'
+element.delete.batch.show-paths: Elemente anzeigen
+element.delete.batch.dependencies-warning: 'Es könnte Abhängigkeiten geben, trotzdem löschen?'
 element.open: Öffnen
 element.toolbar.copy-id: ID kopieren
 element.toolbar.copy-full-path-to-clipboard: Vollständigen Pfad kopieren
@@ -1174,6 +1207,7 @@ element.unpublish: Veröffentlichung zurücknehmen
 element.publish: Veröffentlichen
 element.locate-in-tree: Im Baum anzeigen
 element.sidebar.filter.only-direct-children: Nur direkte Kinder
+element.sidebar.filter.only-unreferenced: Nur nicht referenzierte
 element.sidebar.field-filters: Feldfilter
 element.full-information: Vollständige Informationen
 system-information.id: ID
@@ -1233,12 +1267,15 @@ folder: Ordner
 archive: Archiv
 audio: Audio
 image: Bild
+image-gallery.clear-image-selection: Bildauswahl leeren
+image-gallery.delete-frame: Rahmen löschen
 text: Text
 video: Video
 processing: Verarbeitung
 upload: Hochladen
 close: Schließen
 paste: Einfügen
+cut: Ausschneiden
 upload.assets-items-failed-message: Upload mit Fehlern abgeschlossen.
 quantity-value.converted-units: Umgerechnete Einheiten
 table.empty.confirm: Sind Sie sicher, dass Sie alle Daten löschen möchten?
@@ -1357,6 +1394,7 @@ user-management.name: Name
 user-management.password: Passwort
 user-management.user.search: Nach einem Benutzer suchen
 user-management.role.search: Nach einer Rolle suchen
+user-management.users-roles.search: Nach Benutzer oder Rolle suchen
 user-management.twoFactorAuthenticationEnabled: Zwei-Faktor-Authentifizierung aktiviert
 user-management.firstname: Vorname
 user-management.lastname: Nachname
@@ -1442,6 +1480,7 @@ roles.remove-folder.success: Ordner erfolgreich entfernt
 roles.remove-item.success: Rolle erfolgreich entfernt
 roles.add-item.success: Rolle erfolgreich hinzugefügt
 roles.add-folder.success: Ordner erfolgreich hinzugefügt
+roles.general: Allgemein
 roles.settings.title: Einstellungen
 roles.workspaces.title: Workspaces
 roles.add-folder: Neuen Ordner hinzufügen
@@ -1834,6 +1873,7 @@ empty-image: Leeres Bild
 image.dnd-target: Bild hier ablegen
 image.add.and.dnd: Bild hinzufügen oder direkt hier ablegen
 image.upload.add.and.dnd: Hochladen, hinzufügen oder Bild direkt hier ablegen
+image.too-small: Das ausgewählte Bild ist zu klein. Bitte verwenden Sie ein größeres Bild.
 fallback: Fallback
 url-slug.add-site: Site hinzufügen
 url-slug.invalid: Bitte geben Sie einen gültigen URL-Slug ein (beginnend mit '/')
@@ -1852,6 +1892,7 @@ video.settings: Video-Einstellungen
 video.poster: Poster-Bild
 video.path: Pfad
 video.dnd-target: Video hier ablegen
+video.add-target: Video hier hinzufügen
 pdf-editable.dnd-target: Dokument-Asset hier ablegen
 many-to-one-relation.drop-placeholder: Element hier ablegen
 many-to-one-relation.drop-placeholder-text-input: Element hier ablegen oder Wert eingeben
@@ -2199,6 +2240,7 @@ component.search.pleaceholder: Suche
 focal-point.set: Fokuspunkt setzen
 video.placeholder: Kein Video ausgewählt - Klicken, um ein Video hinzuzufügen
 video.add-video: Video hinzufügen
+video.preview-in-progress: Videovorschau wird erstellt…
 image.alt-text-placeholder: Alternativtext eingeben
 area-settings: Bereichseinstellungen
 unsupported_feature: Nicht unterstützte Funktion - bitte überprüfen Sie die Systemvoraussetzungen!
@@ -2721,3 +2763,44 @@ translations.merger.title: "Übersetzungen zusammenführen (Domain: {{domain}})"
 translations.merger.column.language: Sprache
 translations.merger.items: Einträge
 select.clear-selection: Auswahl löschen
+asset.folder.preview.image-display: Bildanzeige
+asset.folder.preview.image-display.small: Klein
+asset.folder.preview.image-display.large: Groß
+saved-search.title: Gespeicherte Suche
+saved-search.delete-search: Suche löschen
+saved-search.save-as-new: Als neue Suche speichern
+saved-search.create-menu-shortcut: Verknüpfung im Menü erstellen
+saved-search.save.success: Gespeicherte Suche erstellt
+saved-search.saved-searches: Gespeicherte Suchen
+saved-search.ownership: Besitz
+saved-search.ownership.own: Eigene
+saved-search.ownership.shared: Mit mir geteilt
+saved-search.open: Öffnen
+saved-search.delete.title: Gespeicherte Suche löschen
+saved-search.delete.confirm: Möchten Sie diese gespeicherte Suche wirklich löschen?
+saved-search.update: Suche aktualisieren
+saved-search.clone: Suche klonen
+saved-search.update.success: Gespeicherte Suche aktualisiert
+saved-search.delete.success: Gespeicherte Suche gelöscht
+saved-search.shared-modified.info: Sie haben die ursprüngliche Konfiguration geändert. Da sie jemand anderem gehört, können Sie sie als neue Suche speichern.
+saved-search.menu-shortcut-group: Menügruppe
+ownership-management.title: Eigentümerverwaltung
+ownership-management.show-deleted-owners: Elemente von gelöschten Benutzern anzeigen
+ownership-management.deleted-user: Gelöschter Benutzer
+ownership-management.columns.id: ID
+ownership-management.columns.name: Name
+ownership-management.columns.modification-date: Änderungsdatum
+ownership-management.columns.owner: Eigentümer
+ownership-management.columns.actions: Aktionen
+ownership-management.actions.reassign-owner: Eigentümer neu zuweisen
+ownership-management.actions.reassign-owner.title: Eigentümer der Konfigurationen wird neu zugewiesen
+ownership-management.actions.delete: Löschen
+ownership-management.actions.delete.title: Konfigurationen werden gelöscht
+ownership-management.actions.batch-assign: Stapelzuweisung
+ownership-management.actions.batch-delete: Stapellöschung
+ownership-management.reassign-owner.title: "Eigentümer von {{count}} Konfiguration(en) neu zuweisen"
+ownership-management.reassign-owner.confirm: Neu zuweisen
+ownership-management.reassign-owner.placeholder: Benutzer nach Namen suchen
+ownership-management.delete.title: Konfigurationen löschen
+ownership-management.delete.content: "Möchten Sie {{count}} Konfiguration(en) wirklich löschen?"
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Eigentümerverwaltung

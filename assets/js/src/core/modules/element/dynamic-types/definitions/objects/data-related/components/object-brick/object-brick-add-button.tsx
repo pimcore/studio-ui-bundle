@@ -12,7 +12,7 @@ import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/d
 import React, { useMemo } from 'react'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { useTranslation } from 'react-i18next'
-import { useKeyedList } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list'
+import { useKeyedListContext } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value'
 
 export interface ObjectBrickAddButtonProps {
   allowedTypes: string[]
@@ -22,7 +22,7 @@ export interface ObjectBrickAddButtonProps {
 export const ObjectBrickAddButton = (props: ObjectBrickAddButtonProps): React.JSX.Element => {
   const { allowedTypes, objectBrick } = props
   const { t } = useTranslation()
-  const { operations } = useKeyedList()
+  const { operations } = useKeyedListContext()
 
   const dropdownItems: DropdownMenuProps['items'] = useMemo(() => {
     return allowedTypes.map((type) => {

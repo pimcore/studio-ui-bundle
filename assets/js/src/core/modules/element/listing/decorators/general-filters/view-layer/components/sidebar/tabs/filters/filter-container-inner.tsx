@@ -8,114 +8,120 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
-import { getErrorKey, ErrorKeyTypes } from '@Pimcore/modules/app/error-handler'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
-import { Checkbox, Space } from 'antd'
+import { Empty } from 'antd'
 import { Form } from '@Pimcore/components/form/form'
 import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
-import { PQLQueryInput } from '@Pimcore/components/pql-query-input/pql-query-input'
-import { FieldFiltersContainer } from './field-filters/field-filters-container'
+import { FieldFilters } from '@Pimcore/components/field-filters/field-filters'
+import { ColumnPickerPopover } from '@Pimcore/components/column-picker/column-picker-popover'
+import { FiltersRenderer, type FilterValues } from '@Pimcore/components/filters'
+import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
+import { useFieldFilterEditor } from './field-filters/use-field-filter-editor'
 import {
   ContentLayout
 } from '@Pimcore/components/content-layout/content-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Content } from '@Pimcore/components/content/content'
 import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
-import { useFilter } from './provider/filter-provider/use-filter'
-import { usePqlFilter } from '../../../../../context-layer/provider/pql-filter/use-pql-filter'
-import { useFieldFilters } from '../../../../../context-layer/provider/field-filters/use-field-filters'
-import {
-  useDirectChildrenFilter
-} from '../../../../../context-layer/provider/direct-children-filter/use-direct-children-filter'
-import { useSearchTermFilter } from '../../../../../context-layer/provider/search-term-filter/use-search-term-filter'
 import { useGeneralFiltersConfig } from '../../../../../context-layer/provider/general-filters-config/use-general-filters-config'
-import { SearchTermFilter } from '../../../search/search-term-filter'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
+import { useAppliedFilters, useDraftFilterValues, useDraftFilters, useElementFilterContext, elementFilterDefinitions } from '../../../../../element-filters'
 
 export const FilterContainerInner = (): React.JSX.Element => {
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
-  const [isShowPqlError, setIsShowPqlError] = useState<boolean>(false)
-  const [pqlError, setPqlError] = useState<FetchBaseQueryError | undefined>(undefined)
 
   const { setPage } = usePaging()
-  const { setFieldFilters: setListingFieldFilters } = useFieldFilters()
-  const { setOnlyDirectChildren: setListingOnlyDirectChildren } = useDirectChildrenFilter()
-  const { setPqlQuery: setListingPqlQuery } = usePqlFilter()
-  const { setSearchTerm: setListingSearchTerm } = useSearchTermFilter()
-  const { handleSearchTermInSidebar } = useGeneralFiltersConfig()
-  const { setDataLoadingState, dataQueryResult } = useData()
+  const { setValues: setAppliedValues } = useAppliedFilters()
+  const { handleSearchTermInSidebar, showOnlyUnreferencedFilter } = useGeneralFiltersConfig()
+  const { setDataLoadingState } = useData()
 
-  const {
-    fieldFilters,
-    onlyDirectChildren,
-    pqlQuery,
-    searchTerm,
-    setFieldFilters,
-    setOnlyDirectChildren,
-    setPqlQuery,
-    setSearchTerm
-  } = useFilter()
+  const { searchTerm, directChildren, unreferenced, pql, fieldFilters, reset } = useDraftFilterValues()
+  const draftStore = useDraftFilters()
+  const filterContext = useElementFilterContext()
 
   const { t } = useTranslation()
+  const { filters, onFilterChange, columnGroups, handleColumnClick } = useFieldFilterEditor()
 
+  // Reflect a pre-applied PQL query (e.g. from a restored saved search) as advanced mode, so the
+  // query is shown and editable instead of silently active behind the regular filters.
   useEffect(() => {
-    const error = dataQueryResult?.error
-    if (dataQueryResult?.isError === true && getErrorKey(error) === ErrorKeyTypes.GDI_PARSING_EXCEPTION) {
-      setIsShowPqlError(true)
-      setPqlError(error as FetchBaseQueryError)
+    if (pql !== '') {
+      setIsAdvancedMode(true)
     }
-  }, [dataQueryResult?.error])
+  }, [pql])
 
   const handleApplyClick = (): void => {
-    setListingFieldFilters(fieldFilters)
-    setListingOnlyDirectChildren(onlyDirectChildren)
-    setListingPqlQuery(isAdvancedMode ? pqlQuery : '')
+    const valuesToApply: FilterValues = {
+      fieldFilters,
+      directChildren,
+      pql: isAdvancedMode ? pql : ''
+    }
+
+    if (showOnlyUnreferencedFilter === true) {
+      valuesToApply.unreferenced = unreferenced
+    }
 
     if (handleSearchTermInSidebar) {
-      setListingSearchTerm(searchTerm)
+      valuesToApply.searchTerm = searchTerm
     }
+
+    setAppliedValues(valuesToApply)
 
     setPage(1)
     setDataLoadingState('filters-applied')
   }
 
   const handleResetAllFiltersClick = (): void => {
-    setFieldFilters([])
-    setOnlyDirectChildren(false)
-    setPqlQuery('')
-
-    if (handleSearchTermInSidebar) {
-      setSearchTerm('')
-    }
+    reset()
   }
 
   return (
     <ContentLayout
       renderToolbar={
         <Toolbar theme='secondary'>
-          <IconTextButton
-            data-testid="listing-filter-clear-button"
-            icon={ { value: 'close' } }
-            onClick={ handleResetAllFiltersClick }
-            type='link'
-          >
-            {t('sidebar.clear-all-filters')}
-          </IconTextButton>
+          {!isAdvancedMode
+            ? (
+              <ColumnPickerPopover<AvailableColumn>
+                data-testid="listing-field-filter-add"
+                groups={ columnGroups }
+                onSelect={ (item) => { handleColumnClick(item.meta!) } }
+                placement="leftBottom"
+              >
+                <IconTextButton
+                  data-testid="listing-field-filter-add-button"
+                  icon={ { value: 'new' } }
+                  type='default'
+                >
+                  {t('listing.add-column')}
+                </IconTextButton>
+              </ColumnPickerPopover>
+              )
+            : <div />}
 
-          <Button
-            data-testid="listing-filter-apply-button"
-            onClick={ handleApplyClick }
-            type='primary'
-          >
-            {t('button.apply')}
-          </Button>
+          <Flex gap='extra-small'>
+            <IconTextButton
+              data-testid="listing-filter-clear-button"
+              icon={ { value: 'close' } }
+              onClick={ handleResetAllFiltersClick }
+              type='link'
+            >
+              {t('sidebar.clear-all-filters')}
+            </IconTextButton>
+
+            <Button
+              data-testid="listing-filter-apply-button"
+              onClick={ handleApplyClick }
+              type='primary'
+            >
+              {t('button.apply')}
+            </Button>
+          </Flex>
         </Toolbar>
       }
     >
@@ -139,49 +145,42 @@ export const FilterContainerInner = (): React.JSX.Element => {
 
         {isAdvancedMode
           ? (
-            <PQLQueryInput
-              errorData={ pqlError }
-              handleChange={ (val) => {
-                setPqlQuery(val)
-                setIsShowPqlError(false)
-                setPqlError(undefined)
-              } }
-              isShowError={ isShowPqlError }
-              value={ pqlQuery }
+            <FiltersRenderer
+              context={ filterContext }
+              descriptors={ elementFilterDefinitions }
+              section='advanced'
+              store={ draftStore }
             />
             )
           : (
             <>
               <Form>
-                <Space
-                  direction='vertical'
+                <Flex
+                  gap='small'
                   style={ { width: '100%' } }
+                  vertical
                 >
-                  {handleSearchTermInSidebar && (
-                    <SearchTermFilter />
-                  )}
-
-                  <Checkbox
-                    checked={ onlyDirectChildren }
-                    onChange={ (e) => { setOnlyDirectChildren(e.target.checked) } }
-                  >
-                    {t('element.sidebar.filter.only-direct-children')}
-                  </Checkbox>
-
-                  {/* <Checkbox */}
-                  {/*  checked={ false } */}
-                  {/*  value={ 'referenced' } */}
-                  {/* > */}
-                  {/*  only unreferenced */}
-                  {/* </Checkbox> */}
-                </Space>
+                  <FiltersRenderer
+                    context={ filterContext }
+                    descriptors={ elementFilterDefinitions }
+                    section='controls'
+                    store={ draftStore }
+                  />
+                </Flex>
               </Form>
 
               <Title>
                 {t('element.sidebar.field-filters')}
               </Title>
 
-              <FieldFiltersContainer />
+              { filters.length === 0
+                ? <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } />
+                : (
+                  <FieldFilters
+                    data={ filters }
+                    onChange={ onFilterChange }
+                  />
+                  ) }
             </>
             )}
       </Content>

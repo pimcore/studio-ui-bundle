@@ -11,7 +11,7 @@
 import React from 'react'
 import { Form } from 'antd'
 import { ManyToManyRelation, type ManyToManyRelationProps } from '@Pimcore/components/many-to-many-relation'
-import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+import { EditableOverlay } from '../editable-overlay/editable-overlay'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 import { toCssDimension } from '@sdk/utils'
 import { ManyToManyRelationLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/components/label/label'
@@ -46,7 +46,7 @@ export const RelationsEditable = ({
 
   return (
 
-    <InheritanceOverlay
+    <EditableOverlay
       display="block"
       isInherited={ Boolean(inherited) }
       onOverwrite={ handleOverwrite }
@@ -71,6 +71,6 @@ export const RelationsEditable = ({
         />
 
       </Form.Item>
-    </InheritanceOverlay>
+    </EditableOverlay>
   )
 }

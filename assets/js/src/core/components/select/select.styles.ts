@@ -28,10 +28,10 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
   return {
     selectContainer: css`
       position: relative;
-      
+
       &:hover {
         .custom-select-icon {
-          color: ${token.colorPrimary};
+          color: ${token.itemActiveColor};
         }
       }
     `,
@@ -136,6 +136,12 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
         padding: 0 ${token.controlPaddingHorizontal}px !important;
       }
 
+      // Honor the small size's horizontal padding (matches the small Input);
+      // without this the !important rule above forces the default 12px on small selects.
+      &.ant-select-sm .ant-select-selector {
+        padding: 0 ${token.controlPaddingHorizontalSM}px !important;
+      }
+
       .ant-select-arrow {
         color: ${token.colorIcon} !important;
       }
@@ -153,11 +159,11 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
 
       &:hover {
         .ant-select-selection-item:not(:has(.pimcore-workflow-place-indicator)) {
-          color: ${token.colorPrimary};
+          color: ${token.itemActiveColor};
         }
 
         .ant-select-arrow {
-          color: ${token.colorPrimary} !important;
+          color: ${token.itemActiveColor} !important;
         }
       }
 
@@ -165,7 +171,7 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
       &.ant-select-multiple {
         &.ant-select {
           .ant-select-selector {
-            padding: 2px ${token.controlPaddingHorizontal}px 2px ${token.paddingXXS}px !important;
+            padding: 1px ${token.controlPaddingHorizontal}px 1px ${token.paddingXXS}px !important;
           }
         }
 
@@ -183,7 +189,12 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
           width: 100% !important;
         }
 
-        &:hover {
+        // Tags are pills with their own background — keep their label readable
+        // (colorText) instead of inheriting the brand-purple the general hover /
+        // open / focused rules apply to a single select's selection value.
+        &:hover,
+        &.ant-select-open,
+        &.ant-select-focused {
           .ant-select-selection-item {
             .ant-select-selection-item-content {
               color: ${token.colorText} !important;

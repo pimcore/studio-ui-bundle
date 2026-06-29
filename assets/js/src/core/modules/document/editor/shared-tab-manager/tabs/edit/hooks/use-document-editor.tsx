@@ -17,6 +17,7 @@ export interface DocumentEditorContextProps {
   updateValue: (key: string, value: ValueType) => void
   updateValueWithReload: (key: string, value: ValueType) => void
   triggerSaveAndReload: () => void
+  reloadIframe: () => void
   getValues: () => Record<string, ValueType>
   getValue: (key: string) => ValueType
   initializeData: (data: Record<string, ValueType>) => void
@@ -25,6 +26,7 @@ export interface DocumentEditorContextProps {
   getInheritanceState: (key: string) => boolean
   setInheritanceState: (key: string, inherited: boolean) => void
   initializeInheritanceState: (inheritanceState: Record<string, boolean>) => void
+  initializeHighlightEditables: () => void
 }
 
 export const useDocumentEditor = (): DocumentEditorContextProps => {
@@ -89,12 +91,31 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
     getDocumentEditableApi().initializeInheritanceState(inheritanceState)
   }
 
+  const initializeHighlightEditables = (): void => {
+    try {
+      const { document: documentApi } = getPimcoreStudioApi()
+
+      getDocumentEditableApi().setHighlightEditables(documentApi.getHighlightEditables(id))
+    } catch (error) {
+      console.warn('Could not initialize highlight-editables state from parent:', error)
+    }
+  }
+
   const triggerSaveAndReload = useCallback((): void => {
     try {
       const { document: documentApi } = getPimcoreStudioApi()
       documentApi.triggerSaveAndReload(id)
     } catch (error) {
       console.warn('Could not trigger save and reload:', error)
+    }
+  }, [id])
+
+  const reloadIframe = useCallback((): void => {
+    try {
+      const { document: documentApi } = getPimcoreStudioApi()
+      documentApi.reloadIframe(id)
+    } catch (error) {
+      console.warn('Could not reload document iframe:', error)
     }
   }, [id])
 
@@ -114,6 +135,7 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
     updateValue,
     updateValueWithReload,
     triggerSaveAndReload,
+    reloadIframe,
     getValues,
     getValue,
     initializeData,
@@ -121,6 +143,7 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
     notifyReady,
     getInheritanceState,
     setInheritanceState,
-    initializeInheritanceState
+    initializeInheritanceState,
+    initializeHighlightEditables
   }
 }
