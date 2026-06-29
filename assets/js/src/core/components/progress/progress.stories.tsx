@@ -41,7 +41,13 @@ export const CircularSuccess = {
   args: {
     percent: 100,
     type: 'circle',
-    format: () => <Icon colorToken='colorSuccess' options={ { width: 38, height: 38 } } value='check' />
+    format: () => (
+      <Icon
+        colorToken='colorSuccess'
+        options={ { width: 38, height: 38 } }
+        value='check'
+      />
+    )
   }
 }
 
@@ -49,7 +55,13 @@ export const CircularReject = {
   args: {
     type: 'circle',
     status: 'exception',
-    format: () => <Icon colorToken='colorError' options={ { width: 38, height: 38 } } value='close' />
+    format: () => (
+      <Icon
+        colorToken='colorError'
+        options={ { width: 38, height: 38 } }
+        value='close'
+      />
+    )
   }
 }
 
