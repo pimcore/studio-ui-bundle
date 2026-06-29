@@ -19,6 +19,7 @@ import { Box } from '@Pimcore/components/box/box'
 import { NotificationList } from './notification-list'
 import { IconTextButton, Header } from '@sdk/components'
 import { type NotificationGetCollectionApiResponse } from './notifications-slice.gen'
+import { NotificationsSidebar } from './notifications-sidebar/notifications-sidebar'
 
 interface NotificationsViewProps {
   notifications: NotificationGetCollectionApiResponse | undefined
@@ -37,6 +38,7 @@ const NotificationsView = ({ notifications, isLoading, isFetching, deleteNotific
 
   return (
     <ContentLayout
+      renderSidebar={ <NotificationsSidebar /> }
       renderToolbar={ notifications?.totalItems !== 0
         ? (
           <Toolbar
