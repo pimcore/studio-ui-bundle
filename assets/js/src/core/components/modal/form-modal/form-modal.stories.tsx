@@ -62,7 +62,7 @@ const FormModalComponent = (args: any): React.JSX.Element => {
 }
 
 const config: Meta = {
-  title: 'Components/Data Entry/Input Modal',
+  title: 'Components/Feedback/InputModal',
   component: FormModalComponent,
   argTypes: {
     type: {

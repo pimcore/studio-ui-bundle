@@ -1233,6 +1233,7 @@ unknown: Ukjent
 warning: Advarsel
 error: Feil
 info: Info
+success: Suksess
 no-value-set: Ingen verdi satt
 set-to-null: Tom (sett til null)
 remove: Fjern
@@ -2200,6 +2201,7 @@ application-logger.filter.priority-level.8: Feilsøking
 embed.url-modal.title: Rediger Embed-URL
 embed.url-modal.label: URL (f.eks. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Vennligst oppgi en gyldig URL
+alert-modal.ok-text: OK
 embed.url-modal.ok-text: OK
 embed.url-modal.cancel-text: Avbryt
 embed.placeholder: Ingen URL satt – Klikk for å legge til en embed-URL

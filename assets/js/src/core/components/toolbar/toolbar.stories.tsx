@@ -103,16 +103,3 @@ export const PositionTop: Story = {
   }
 }
 
-export const RightAligned: Story = {
-  args: {
-    ...demoData,
-    justify: 'flex-end'
-  }
-}
-
-export const LeftAligned: Story = {
-  args: {
-    ...demoData,
-    justify: 'flex-start'
-  }
-}

@@ -1233,6 +1233,7 @@ unknown: Sconosciuto
 warning: Avviso
 error: Errore
 info: Info
+success: Successo
 no-value-set: Nessun valore impostato
 set-to-null: Vuoto (imposta a null)
 remove: Rimuovi
@@ -2200,6 +2201,7 @@ application-logger.filter.priority-level.8: Debug
 embed.url-modal.title: Modifica URL embed
 embed.url-modal.label: URL (es. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Inserire un URL valido
+alert-modal.ok-text: OK
 embed.url-modal.ok-text: OK
 embed.url-modal.cancel-text: Annulla
 embed.placeholder: Nessun URL impostato - Cliccare per aggiungere un URL embed
