@@ -64,6 +64,7 @@ const NotificationsView = ({ notifications, isLoading, isFetching, deleteNotific
         : undefined }
       renderTopBar={
         <Header
+          margin={ { bottom: 'extra-small' } }
           position='top'
         >
           <Title>{t('notifications.label')}</Title>
