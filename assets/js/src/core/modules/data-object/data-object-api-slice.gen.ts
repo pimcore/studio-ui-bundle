@@ -78,6 +78,9 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/data-object/grid/configurations/${queryArg.classId}`,
+                    params: {
+                        onlyGlobal: queryArg.onlyGlobal,
+                    },
                 }),
                 providesTags: ["Data Object Grid"],
             }),
@@ -345,6 +348,8 @@ export type DataObjectListSavedGridConfigurationsApiResponse =
 export type DataObjectListSavedGridConfigurationsApiArg = {
     /** Class Id of the data object */
     classId: string;
+    /** Return only globally-shared grid configurations */
+    onlyGlobal?: boolean;
 };
 export type DataObjectRemoveGridConfigurationAsFavoriteApiResponse = unknown;
 export type DataObjectRemoveGridConfigurationAsFavoriteApiArg = {
