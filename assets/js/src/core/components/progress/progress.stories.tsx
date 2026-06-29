@@ -41,7 +41,7 @@ export const CircularSuccess = {
   args: {
     percent: 100,
     type: 'circle',
-    format: () => <Icon value='check' />
+    format: () => <Icon colorToken='colorSuccess' options={ { width: 38, height: 38 } } value='check' />
   }
 }
 
@@ -49,7 +49,7 @@ export const CircularReject = {
   args: {
     type: 'circle',
     status: 'exception',
-    format: () => <Icon value='close' />
+    format: () => <Icon colorToken='colorError' options={ { width: 38, height: 38 } } value='close' />
   }
 }
 
@@ -60,10 +60,10 @@ export const WithTextProgress = {
 }
 
 const scores = [
-  { mark: 'A', percent: 92, backgroundColor: '#52c41a', fontColor: '#fff' },
-  { mark: 'B', percent: 74, backgroundColor: '#95de64', fontColor: '#fff' },
-  { mark: 'C', percent: 51, backgroundColor: '#faad14', fontColor: '#fff' },
-  { mark: 'D', percent: 17, backgroundColor: '#ff4d4f', fontColor: '#fff' }
+  { mark: 'A', percent: 92, backgroundColor: '#DAECB8', fontColor: '#104400' },
+  { mark: 'B', percent: 74, backgroundColor: '#FFE6A0', fontColor: '#4D3C00' },
+  { mark: 'C', percent: 51, backgroundColor: '#FFC786', fontColor: '#5D1C00' },
+  { mark: 'D', percent: 17, backgroundColor: '#E2B3B3', fontColor: '#57000D' }
 ]
 
 export const Scores = {
@@ -72,17 +72,16 @@ export const Scores = {
       {scores.map(({ mark, percent, backgroundColor, fontColor }) => (
         <div key={ mark }>
           <div style={ { display: 'flex', alignItems: 'center', gap: '10px' } }>
-            <span style={ { fontSize: '20px', fontWeight: 900, color: backgroundColor, minWidth: '16px' } }>
+            <span style={ { fontSize: '20px', fontWeight: 900, color: fontColor, minWidth: '16px' } }>
               {mark}
             </span>
             <div style={ { flex: 1 } }>
               <Progress
-                format={ () => `${percent}% completed` }
+                format={ () => <span style={ { color: fontColor, fontWeight: 700 } }>{percent}% completed</span> }
                 percent={ percent }
                 percentPosition={ { align: 'start', type: 'inner' } }
                 size={ ['100%', 28] }
                 strokeColor={ backgroundColor }
-                style={ { '--font-color': fontColor } as React.CSSProperties }
               />
             </div>
           </div>
