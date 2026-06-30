@@ -33,6 +33,7 @@ export interface ColumnPickerProps<TMeta = unknown> {
    * when embedding the picker as a panel rather than in a popover.
    */
   fillHeight?: boolean
+  flat?: boolean
   'data-testid'?: string
 }
 
@@ -50,6 +51,7 @@ export const ColumnPicker = <TMeta, >({
   searchPlaceholder,
   emptyText,
   fillHeight = false,
+  flat = false,
   'data-testid': dataTestId
 }: ColumnPickerProps<TMeta>): React.JSX.Element => {
   const { styles } = useStyles()
@@ -69,7 +71,12 @@ export const ColumnPicker = <TMeta, >({
     [filteredGroups]
   )
 
-  const hasResults = treeData.length > 0
+  const flatItems = useMemo(
+    () => (flat ? flattenItems(filteredGroups) : []),
+    [flat, filteredGroups]
+  )
+
+  const hasResults = flat ? flatItems.length > 0 : treeData.length > 0
 
   const handleSelected = (_key: unknown, node: TreeDataItem): void => {
     const item = node.meta?.item as ColumnPickerItem<TMeta> | undefined
@@ -103,7 +110,19 @@ export const ColumnPicker = <TMeta, >({
           </Text>
         ) }
 
-        { hasResults && (
+        { hasResults && flat && flatItems.map((item) => (
+          <button
+            className={ styles.item }
+            disabled={ item.disabled }
+            key={ item.key }
+            onClick={ () => { onSelect(item) } }
+            type="button"
+          >
+            { item.label }
+          </button>
+        )) }
+
+        { hasResults && !flat && (
           <TreeElement
             defaultExpandedKeys={ expandedKeys }
             hideExpanders={ false }
@@ -157,6 +176,12 @@ function groupsToTreeData<TMeta> (
     })
 
   return { treeData: convert(groups), expandedKeys }
+}
+
+function flattenItems<TMeta> (
+  groups: Array<ColumnPickerGroup<TMeta>>
+): Array<ColumnPickerItem<TMeta>> {
+  return groups.flatMap((group) => [...group.items, ...flattenItems(group.children ?? [])])
 }
 
 /**

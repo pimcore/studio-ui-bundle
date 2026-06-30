@@ -630,7 +630,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
             </div>
             <div style={ { position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)' } }>
               <Icon
-                colorToken='colorPrimary'
+                colorToken='itemActiveColor'
                 value='edit'
               />
             </div>

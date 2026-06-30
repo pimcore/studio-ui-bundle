@@ -85,6 +85,8 @@ const injectedRtkApi = api
                         page: queryArg.page,
                         pageSize: queryArg.pageSize,
                         searchTerm: queryArg.searchTerm,
+                        sortBy: queryArg.sortBy,
+                        sortOrder: queryArg.sortOrder,
                     },
                 }),
                 providesTags: ["Search"],
@@ -232,6 +234,10 @@ export type SavedSearchGetConfigurationsApiArg = {
     pageSize: number;
     /** Optional term to filter the saved search configurations by name. */
     searchTerm?: string;
+    /** Sort by field. */
+    sortBy?: "name" | "modificationDate";
+    /** Sort order (asc or desc). */
+    sortOrder?: "ASC" | "DESC";
 };
 export type SavedSearchGetMenuShortcutConfigurationsApiResponse =
     /** status 200 List of saved search menu shortcut configurations */ {
@@ -246,6 +252,7 @@ export type SavedSearchSaveConfigurationApiArg = {
         name: string;
         description?: string;
         classId?: string;
+        elementType?: string;
         shareGlobal?: boolean;
         createMenuShortcut?: boolean;
         menuShortcutGroup?: string;
@@ -263,6 +270,7 @@ export type SavedSearchUpdateConfigurationApiArg = {
         name: string;
         description?: string;
         classId?: string;
+        elementType?: string;
         shareGlobal?: boolean;
         createMenuShortcut?: boolean;
         menuShortcutGroup?: string;
@@ -526,6 +534,8 @@ export type SavedSearchDetailedConfiguration = {
     menuShortcutGroup?: string | null;
     /** Class ID for data object searches */
     classId?: string | null;
+    /** Element type the search targets (asset or data-object) */
+    elementType?: string | null;
     /** Grid display columns */
     columns: (Column | GridColumnRequest)[];
     /** Filter data */
@@ -554,6 +564,8 @@ export type SavedSearchConfigurationListItem = {
     creationDate?: number;
     /** Name of the group in the menu the shortcut belongs to */
     menuShortcutGroup?: string | null;
+    /** Element type the search targets (asset or data-object) */
+    elementType?: string | null;
 };
 export type SavedSearchConfiguration = {
     /** AdditionalAttributes */

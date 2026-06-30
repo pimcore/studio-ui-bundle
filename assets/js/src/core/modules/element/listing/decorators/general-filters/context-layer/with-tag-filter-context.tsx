@@ -10,29 +10,17 @@
 
 import React from 'react'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
-import { DirectChildrenFilterProvider } from './provider/direct-children-filter/direct-children-filter-provider'
-import { UnreferencedFilterProvider } from './provider/unreferenced-filter/unreferenced-filter-provider'
-import { FieldFiltersProvider } from './provider/field-filters/field-filters-provider'
-import { PqlFilterProvider } from './provider/pql-filter/pql-filter-provider'
-import { SearchTermFilterProvider } from './provider/search-term-filter/search-term-filter-provider'
 import { type GeneralFiltersDecoratorConfig } from '../general-filters-decorator'
 import { GeneralFiltersConfigProvider } from './provider/general-filters-config/general-filters-config-provider'
+import { AppliedFiltersProvider, elementFilterDefinitions } from '../element-filters'
 
 export const withGeneralFiltersContext = (Component: AbstractDecoratorProps['ContextComponent'], config?: GeneralFiltersDecoratorConfig): AbstractDecoratorProps['ContextComponent'] => {
   const GeneralFiltersContextComponent = (): React.JSX.Element => {
     return (
       <GeneralFiltersConfigProvider config={ config }>
-        <DirectChildrenFilterProvider>
-          <UnreferencedFilterProvider>
-            <SearchTermFilterProvider>
-              <PqlFilterProvider>
-                <FieldFiltersProvider>
-                  <Component />
-                </FieldFiltersProvider>
-              </PqlFilterProvider>
-            </SearchTermFilterProvider>
-          </UnreferencedFilterProvider>
-        </DirectChildrenFilterProvider>
+        <AppliedFiltersProvider descriptors={ elementFilterDefinitions }>
+          <Component />
+        </AppliedFiltersProvider>
       </GeneralFiltersConfigProvider>
     )
   }

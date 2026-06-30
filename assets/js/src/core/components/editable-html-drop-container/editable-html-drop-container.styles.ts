@@ -79,7 +79,7 @@ export const useStyles = createStyles(({ token, css }) => {
       background: ${token.colorFillInverse};
       border-radius: ${token.borderRadiusSM}px;
       padding: ${token.paddingXXS}px ${token.paddingXS}px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      box-shadow: 0 1px 4px ${token.colorFillTertiary};
     `,
 
     dropZone: css`

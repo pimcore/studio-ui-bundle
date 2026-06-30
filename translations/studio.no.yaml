@@ -669,6 +669,8 @@ component.no-content.no-content-available: Ingen innhold tilgjengelig
 notifications.label: Varsler
 notifications.remove-all: Fjern alle
 notifications.new-notification: Nytt varsel
+notifications.columns.title: Tittel
+notifications.columns.date: Dato
 notifications.from: Fra
 notifications.hide: Skjul
 notifications.new-notifications.show: Vis
@@ -2766,6 +2768,24 @@ select.clear-selection: Fjern valg
 asset.folder.preview.image-display: Bildevisning
 asset.folder.preview.image-display.small: Liten
 asset.folder.preview.image-display.large: Stor
+saved-search.title: Lagret søk
+saved-search.delete-search: Slett søk
+saved-search.save-as-new: Lagre som nytt søk
+saved-search.create-menu-shortcut: Opprett snarvei i menyen
+saved-search.save.success: Lagret søk opprettet
+saved-search.saved-searches: Lagrede søk
+saved-search.ownership: Eierskap
+saved-search.ownership.own: Egen
+saved-search.ownership.shared: Delt med meg
+saved-search.open: Åpne
+saved-search.delete.title: Slett lagret søk
+saved-search.delete.confirm: Er du sikker på at du vil slette dette lagrede søket?
+saved-search.update: Oppdater søk
+saved-search.clone: Klon søk
+saved-search.update.success: Lagret søk oppdatert
+saved-search.delete.success: Lagret søk slettet
+saved-search.shared-modified.info: Du har gjort endringer i den opprinnelige konfigurasjonen. Siden den eies av noen andre, kan du lagre den som et nytt søk.
+saved-search.menu-shortcut-group: Menygruppe
 ownership-management.title: Eierskapsadministrasjon
 ownership-management.show-deleted-owners: Vis elementer fra slettede brukere
 ownership-management.deleted-user: Slettet bruker

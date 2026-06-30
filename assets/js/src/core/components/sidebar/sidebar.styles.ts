@@ -24,7 +24,7 @@ export const useStyle = createStyles(({ token, css }) => {
           align-items: center;
           flex-shrink: 0;
           align-self: stretch;
-          border-left: 1px solid rgba(0, 0, 0, 0.08);
+          border-left: 1px solid ${token.colorFillSecondary};
           justify-content: space-between;
           color: ${token.colorIconSidebar};
           background: ${token.colorBgToolbar};
@@ -70,10 +70,10 @@ export const useStyle = createStyles(({ token, css }) => {
 
                   &.sidebar--active {
                       background: ${token.colorFillQuaternary};
-                      border-right: 2px solid ${token.colorPrimaryActive};
+                      border-right: 2px solid ${token.itemActiveColor};
 
                       .pimcore-icon {
-                          color: ${token.colorPrimaryActive}
+                          color: ${token.itemActiveColor}
                       }
                   }
               }
@@ -86,7 +86,7 @@ export const useStyle = createStyles(({ token, css }) => {
                     background: ${token.colorFillQuaternary};
                     border-radius: 2px;
                     outline: 8px solid ${token.colorFillQuaternary};
-                  color: ${token.colorPrimary};
+                  color: ${token.itemActiveColor};
                 }
               }
             }
