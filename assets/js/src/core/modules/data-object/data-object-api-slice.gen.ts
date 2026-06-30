@@ -72,15 +72,21 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Data Object Grid"],
             }),
+            dataObjectListGlobalGridConfigurations: build.query<
+                DataObjectListGlobalGridConfigurationsApiResponse,
+                DataObjectListGlobalGridConfigurationsApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/configurations-global/${queryArg.classId}`,
+                }),
+                providesTags: ["Data Object Grid"],
+            }),
             dataObjectListSavedGridConfigurations: build.query<
                 DataObjectListSavedGridConfigurationsApiResponse,
                 DataObjectListSavedGridConfigurationsApiArg
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/data-object/grid/configurations/${queryArg.classId}`,
-                    params: {
-                        onlyGlobal: queryArg.onlyGlobal,
-                    },
                 }),
                 providesTags: ["Data Object Grid"],
             }),
@@ -340,6 +346,15 @@ export type DataObjectGetGridConfigurationApiArg = {
     /** Configuration ID */
     configurationId?: number;
 };
+export type DataObjectListGlobalGridConfigurationsApiResponse =
+    /** status 200 List of globally-shared grid configurations for data objects */ {
+        totalItems: number;
+        items: GridConfiguration[];
+    };
+export type DataObjectListGlobalGridConfigurationsApiArg = {
+    /** Class Id of the data object */
+    classId: string;
+};
 export type DataObjectListSavedGridConfigurationsApiResponse =
     /** status 200 List of saved grid configurations for data objects */ {
         totalItems: number;
@@ -348,8 +363,6 @@ export type DataObjectListSavedGridConfigurationsApiResponse =
 export type DataObjectListSavedGridConfigurationsApiArg = {
     /** Class Id of the data object */
     classId: string;
-    /** Return only globally-shared grid configurations */
-    onlyGlobal?: boolean;
 };
 export type DataObjectRemoveGridConfigurationAsFavoriteApiResponse = unknown;
 export type DataObjectRemoveGridConfigurationAsFavoriteApiArg = {
@@ -1007,6 +1020,7 @@ export const {
     useDataObjectGetGridPreviewQuery,
     useDataObjectDeleteGridConfigurationByConfigurationIdMutation,
     useDataObjectGetGridConfigurationQuery,
+    useDataObjectListGlobalGridConfigurationsQuery,
     useDataObjectListSavedGridConfigurationsQuery,
     useDataObjectRemoveGridConfigurationAsFavoriteMutation,
     useDataObjectSaveGridConfigurationMutation,
