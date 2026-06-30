@@ -27,9 +27,8 @@ const iconSetWith = (values: string[]): { getIcons: () => Array<{ value: string 
   getIcons: () => values.map((value) => ({ value }))
 })
 
-// The name/path/skip classification is covered by icon-path.test.ts (resolveIconString).
-// These tests focus on toElementIcon's own concerns: empty handling, ElementIcon
-// passthrough, and wiring the icon-set registry lookup into the shared resolver.
+// Classification is covered by the resolveIconString tests in normalize-icon.test.ts; this
+// checks toElementIcon's own bits: empty handling, ElementIcon passthrough, registry lookup.
 describe('toElementIcon', () => {
   let warnSpy: jest.SpyInstance
 

@@ -87,9 +87,8 @@ describe('resolveIconString', () => {
   })
 })
 
-// normalizeIcon's own concerns: empty handling, ElementIcon passthrough, and wiring
-// the icon-library lookup into the shared resolver (classification itself is covered
-// by the resolveIconString tests above).
+// Classification is covered by the resolveIconString tests above; this checks normalizeIcon's
+// own bits: empty handling, ElementIcon passthrough, and the icon-library lookup.
 describe('normalizeIcon', () => {
   let warnSpy: jest.SpyInstance
 
