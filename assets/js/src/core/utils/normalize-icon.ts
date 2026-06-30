@@ -12,21 +12,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
 import { type ElementIcon } from '@Pimcore/components/icon/icon'
-
-const ICON_PATH_SCHEME_PATTERN = /^[a-z][\w+.-]*:/i
-const ICON_PATH_EXTENSION_PATTERN = /\.(svg|png|jpe?g|gif|webp|avif|ico|bmp)$/i
-
-/**
- * Heuristic that decides whether an unregistered icon string should be rendered
- * as an image (`type: 'path'`) rather than discarded. Real icon paths contain a
- * slash (absolute/relative paths, URLs), a URL scheme (`data:`, `blob:`, `https:`)
- * or an image file extension. Bare tokens such as legacy `pimcore_icon_*` CSS
- * classes match none of these and must not be turned into an `<img src>`.
- */
-const looksLikeIconPath = (value: string): boolean =>
-  value.includes('/') ||
-  ICON_PATH_SCHEME_PATTERN.test(value) ||
-  ICON_PATH_EXTENSION_PATTERN.test(value)
+import { looksLikeIconPath } from '@Pimcore/utils/icon-path'
 
 export const normalizeIcon = (
   value: ElementIcon | string | null | undefined
