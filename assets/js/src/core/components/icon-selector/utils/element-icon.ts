@@ -12,7 +12,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type DynamicTypeIconSetRegistry } from '@Pimcore/components/icon-selector/dynamic-types/registry/dynamic-type-icon-set-registry'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
-import { resolveIconString } from '@Pimcore/utils/icon-path'
+import { resolveIconString } from '@Pimcore/utils/normalize-icon'
 
 const isElementIcon = (value: unknown): value is ElementIcon => {
   return (
