@@ -8,20 +8,32 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useState } from 'react'
-import { type NotificationGetCollectionApiArg, useNotificationDeleteAllMutation, useNotificationGetCollectionQuery } from './notifications-slice-enhanced'
+import React, { useEffect, useState } from 'react'
+import { useNotificationDeleteAllMutation, useNotificationGetCollectionQuery } from './notifications-slice-enhanced'
 import { ApiError, trackError } from '@sdk/modules/app'
+import { useFilterQuery } from '@Pimcore/components/filters'
+import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
+import { NotificationsAppliedFiltersProvider, notificationsFilterAdapter, notificationsFilterDescriptors, useNotificationsAppliedFilters } from '@Pimcore/modules/notifications/filters/filters'
 import { NotificationsView } from './notifications-view'
 
 interface NotificationsContainerProps {
   activeNotification?: number
 }
 
-const NotificationsContainer = ({ activeNotification }: NotificationsContainerProps): React.JSX.Element => {
+const NotificationsContent = ({ activeNotification }: NotificationsContainerProps): React.JSX.Element => {
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState(20)
 
-  const queryArgs: NotificationGetCollectionApiArg = useMemo(() => ({
+  const { values: appliedValues } = useNotificationsAppliedFilters()
+  const buildFilterQuery = useFilterQuery(notificationsFilterAdapter, appliedValues)
+
+  useEffect(() => {
+    setPage(1)
+  }, [appliedValues])
+
+  const { columnFilters } = buildFilterQuery({})
+
+  const queryArgs = {
     body: {
       filters: {
         page,
@@ -30,10 +42,11 @@ const NotificationsContainer = ({ activeNotification }: NotificationsContainerPr
         sortFilter: {
           key: 'creationDate',
           direction: 'DESC'
-        }
+        },
+        columnFilters
       }
     }
-  }), [page, pageSize])
+  }
 
   const { data: notifications, isLoading, isFetching, isError, error } = useNotificationGetCollectionQuery(queryArgs, {
     refetchOnMountOrArgChange: true
@@ -67,5 +80,13 @@ const NotificationsContainer = ({ activeNotification }: NotificationsContainerPr
     />
   )
 }
+
+const NotificationsContainer = ({ activeNotification }: NotificationsContainerProps): React.JSX.Element => (
+  <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/FieldFilterRegistry'] }>
+    <NotificationsAppliedFiltersProvider descriptors={ notificationsFilterDescriptors }>
+      <NotificationsContent activeNotification={ activeNotification } />
+    </NotificationsAppliedFiltersProvider>
+  </DynamicTypeRegistryProvider>
+)
 
 export { NotificationsContainer }

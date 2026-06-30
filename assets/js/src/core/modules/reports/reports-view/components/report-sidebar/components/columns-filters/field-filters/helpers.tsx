@@ -12,7 +12,8 @@ import { isNull } from 'lodash'
 import { FieldFilterFrontendType } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/frontendTypes'
 import { NumberFilterSettingValue, type NumberValue } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-number-component'
 import { FieldFilterOperators, type IFieldFilterTypeData } from '@Pimcore/modules/reports/reports-view/components/report-sidebar/components/columns-filters/field-filters/types'
-import { DatePickerSettingValue, type DateValue } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-date-component'
+import { type DateValue } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-date-component'
+import { DateFilterOperator, transformDateFilter } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/utils/date-filter-transform'
 
 export const FIELD_TYPE_MAP = {
   string: {
@@ -73,35 +74,11 @@ export const getNumberFieldFilterData = (data: NumberValue): IFieldFilterTypeDat
   return operatorMap[setting] ?? operatorMap[NumberFilterSettingValue.IS]
 }
 
-export const getDateFieldFilterData = (data: DateValue): IFieldFilterTypeData[] => {
-  const { setting, from, to, on } = data
-
-  const getValue = (value: string | null): string => value ?? ''
-
-  const operatorMap: Record<DatePickerSettingValue, IFieldFilterTypeData[]> = {
-    [DatePickerSettingValue.ON]: [{
-      operator: FieldFilterOperators.EQUAL,
-      value: getValue(on)
-    }],
-    [DatePickerSettingValue.BEFORE]: [{
-      operator: FieldFilterOperators.LESS_THAN,
-      value: getValue(to)
-    }],
-    [DatePickerSettingValue.AFTER]: [{
-      operator: FieldFilterOperators.GREATER_THAN,
-      value: getValue(from)
-    }],
-    [DatePickerSettingValue.BETWEEN]: [
-      {
-        operator: FieldFilterOperators.GREATER_THAN,
-        value: getValue(from)
-      },
-      {
-        operator: FieldFilterOperators.LESS_THAN,
-        value: getValue(to)
-      }
-    ]
-  }
-
-  return operatorMap[setting] ?? operatorMap[DatePickerSettingValue.ON]
+const OPERATOR_MAP: Record<DateFilterOperator, FieldFilterOperators> = {
+  [DateFilterOperator.On]: FieldFilterOperators.EQUAL,
+  [DateFilterOperator.From]: FieldFilterOperators.GREATER_THAN,
+  [DateFilterOperator.To]: FieldFilterOperators.LESS_THAN
 }
+
+export const getDateFieldFilterData = (data: DateValue): IFieldFilterTypeData[] =>
+  transformDateFilter(data).map(({ operator, value }) => ({ operator: OPERATOR_MAP[operator], value }))
