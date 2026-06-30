@@ -41,6 +41,7 @@ export const ReportTopBar = ({ currentReport, setCurrentReport, reportsTreeOptio
 
   return (
     <Header
+      margin={ { bottom: 'extra-small' } }
       position='top'
     >
       <Flex
