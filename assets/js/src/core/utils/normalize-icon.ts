@@ -12,7 +12,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type IconLibrary } from '@Pimcore/modules/icon-library/services/icon-library'
 import { type ElementIcon } from '@Pimcore/components/icon/icon'
-import { looksLikeIconPath } from '@Pimcore/utils/icon-path'
+import { resolveIconString } from '@Pimcore/utils/icon-path'
 
 export const normalizeIcon = (
   value: ElementIcon | string | null | undefined
@@ -27,22 +27,7 @@ export const normalizeIcon = (
 
   const iconLibrary = container.get<IconLibrary>(serviceIds.iconLibrary)
 
-  if (iconLibrary.get(value) !== undefined) {
-    return { type: 'name', value }
-  }
-
-  if (looksLikeIconPath(value)) {
-    return { type: 'path', value }
-  }
-
-  // The value is neither a registered library icon nor a usable image path
-  // (e.g. a legacy "pimcore_icon_*" CSS class coming from stored config). Rendering
-  // it as `<img src>` would resolve to a wrong relative URL and trigger a 404, so
-  // skip it instead of fetching a broken resource.
-  console.warn(
-    `[normalizeIcon] Icon "${value}" was not found in the icon library and is not a valid image path; skipping it to avoid a broken request.`
-  )
-  return null
+  return resolveIconString(value, (name) => iconLibrary.get(name) !== undefined, 'normalizeIcon')
 }
 
 export const denormalizeIcon = (

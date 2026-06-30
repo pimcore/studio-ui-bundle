@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { looksLikeIconPath } from './icon-path'
+import { looksLikeIconPath, resolveIconString } from './icon-path'
 
 describe('looksLikeIconPath', () => {
   it.each([
@@ -34,5 +34,42 @@ describe('looksLikeIconPath', () => {
     'some_unknown_icon'
   ])('returns false for a bare token %p', (value) => {
     expect(looksLikeIconPath(value)).toBe(false)
+  })
+})
+
+describe('resolveIconString', () => {
+  const isKnown = (name: string): boolean => name === 'workflow' || name === 'pie-chart'
+  let warnSpy: jest.SpyInstance
+
+  beforeEach(() => {
+    warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    warnSpy.mockRestore()
+  })
+
+  it('resolves a registered icon name to type "name"', () => {
+    expect(resolveIconString('workflow', isKnown, 'test')).toEqual({ type: 'name', value: 'workflow' })
+    expect(warnSpy).not.toHaveBeenCalled()
+  })
+
+  it.each([
+    '/bundles/foo/icon.svg',
+    'https://example.com/icon.svg',
+    'icon.png'
+  ])('resolves a path-like value %p to type "path"', (value) => {
+    expect(resolveIconString(value, isKnown, 'test')).toEqual({ type: 'path', value })
+    expect(warnSpy).not.toHaveBeenCalled()
+  })
+
+  it.each([
+    'pimcore_icon_workflow_action',
+    'some_unknown_icon'
+  ])('returns null and warns for an unknown bare token %p (no 404 fetch)', (value) => {
+    expect(resolveIconString(value, isKnown, 'mySource')).toBeNull()
+    expect(warnSpy).toHaveBeenCalledTimes(1)
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining(value))
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('mySource'))
   })
 })

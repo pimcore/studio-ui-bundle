@@ -23,12 +23,14 @@ jest.mock('@Pimcore/app/config/services/service-ids', () => ({
 // eslint-disable-next-line import/first
 import { normalizeIcon } from './normalize-icon'
 
+// The name/path/skip classification is covered by icon-path.test.ts (resolveIconString).
+// These tests focus on normalizeIcon's own concerns: empty handling, ElementIcon
+// passthrough, and wiring the icon-library lookup into the shared resolver.
 describe('normalizeIcon', () => {
   let warnSpy: jest.SpyInstance
 
   beforeEach(() => {
     mockIconLibraryGet.mockReset()
-    // Default: nothing is registered in the icon library.
     mockIconLibraryGet.mockReturnValue(undefined)
     warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
   })
@@ -42,36 +44,20 @@ describe('normalizeIcon', () => {
     expect(warnSpy).not.toHaveBeenCalled()
   })
 
-  it('returns an already-normalized ElementIcon unchanged', () => {
+  it('returns an already-normalized ElementIcon unchanged without a library lookup', () => {
     const icon = { type: 'path', value: '/bundles/foo/icon.svg' } as const
     expect(normalizeIcon(icon)).toBe(icon)
     expect(mockIconLibraryGet).not.toHaveBeenCalled()
   })
 
   it('resolves a registered library icon to type "name"', () => {
-    mockIconLibraryGet.mockReturnValue(() => null) // pretend a component is registered
+    mockIconLibraryGet.mockReturnValue(() => null) // a component is registered for this name
     expect(normalizeIcon('workflow')).toEqual({ type: 'name', value: 'workflow' })
     expect(warnSpy).not.toHaveBeenCalled()
   })
 
-  it.each([
-    '/bundles/pimcorestudioui/img/icons/twemoji/1f600.svg',
-    './relative/icon.png',
-    'https://example.com/icon.svg',
-    'data:image/svg+xml;base64,PHN2Zz48L3N2Zz4=',
-    'icon.webp'
-  ])('treats a real path/url %p as type "path"', (value) => {
-    expect(normalizeIcon(value)).toEqual({ type: 'path', value })
-    expect(warnSpy).not.toHaveBeenCalled()
-  })
-
-  it.each([
-    'pimcore_icon_workflow_action',
-    'pimcore_icon_asset',
-    'some_unknown_icon'
-  ])('returns null and warns for an unknown bare token %p (no 404 fetch)', (value) => {
-    expect(normalizeIcon(value)).toBeNull()
-    expect(warnSpy).toHaveBeenCalledTimes(1)
-    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining(value))
+  it('returns null and warns for an unknown bare token (delegates to the shared resolver)', () => {
+    expect(normalizeIcon('pimcore_icon_workflow_action')).toBeNull()
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('pimcore_icon_workflow_action'))
   })
 })

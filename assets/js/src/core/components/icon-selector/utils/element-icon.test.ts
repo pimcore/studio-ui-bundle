@@ -27,6 +27,9 @@ const iconSetWith = (values: string[]): { getIcons: () => Array<{ value: string 
   getIcons: () => values.map((value) => ({ value }))
 })
 
+// The name/path/skip classification is covered by icon-path.test.ts (resolveIconString).
+// These tests focus on toElementIcon's own concerns: empty handling, ElementIcon
+// passthrough, and wiring the icon-set registry lookup into the shared resolver.
 describe('toElementIcon', () => {
   let warnSpy: jest.SpyInstance
 
@@ -55,21 +58,8 @@ describe('toElementIcon', () => {
     expect(warnSpy).not.toHaveBeenCalled()
   })
 
-  it.each([
-    '/bundles/pimcorestudioui/img/icons/twemoji/1f600.svg',
-    'https://example.com/icon.svg',
-    'icon.png'
-  ])('treats a real path/url %p as type "path"', (value) => {
-    expect(toElementIcon(value)).toEqual({ type: 'path', value })
-    expect(warnSpy).not.toHaveBeenCalled()
-  })
-
-  it.each([
-    'pimcore_icon_workflow_action',
-    'some_unknown_icon'
-  ])('returns undefined and warns for an unknown bare token %p (no 404 fetch)', (value) => {
-    expect(toElementIcon(value)).toBeUndefined()
-    expect(warnSpy).toHaveBeenCalledTimes(1)
-    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining(value))
+  it('returns undefined and warns for an unknown bare token (delegates to the shared resolver)', () => {
+    expect(toElementIcon('pimcore_icon_workflow_action')).toBeUndefined()
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('pimcore_icon_workflow_action'))
   })
 })
