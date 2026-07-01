@@ -521,7 +521,7 @@ key: Key
 published: Published
 classname: Classname
 index: Index
-listing.grid-config.title: Grid config
+listing.grid-config.title: Grid Config
 grid-config.discard-all-changes: Discard all changes
 grid-config.apply-changes: Apply changes
 listing.add-column: Add a column

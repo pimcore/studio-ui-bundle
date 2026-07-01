@@ -65,7 +65,7 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
               size="XL"
               title={ (
                 <ModalTitle iconName="settings">
-                  Grid Config
+                  { t('listing.grid-config.title') }
                 </ModalTitle>
             ) }
             >
