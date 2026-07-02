@@ -244,6 +244,16 @@ const defaultComponentConfig = {
   app: {
     background: { type: ComponentType.SINGLE, name: 'app.background' }
   },
+  user: {
+    // Extension slot for the "Appearance & Branding" area shown after the user
+    // avatar in both the self-service profile and the admin user-management
+    // settings forms. Bundles (e.g. the theme manager) contribute per-user
+    // appearance fields here.
+    appearanceBranding: {
+      type: ComponentType.SLOT,
+      name: 'user.appearanceBranding'
+    }
+  },
   wysiwyg: {
     editor: { type: ComponentType.SINGLE, name: 'wysiwyg.editor' }
   },

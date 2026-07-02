@@ -13,6 +13,8 @@ if (module.hot !== undefined) {
 }
 
 export * from '@Pimcore/modules/app/component-registry/component-registry'
+export { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+export { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 export * from '@Pimcore/modules/app/context-menu-registry'
 export * from '@Pimcore/modules/app/context-menu-registry/context-types'
 
