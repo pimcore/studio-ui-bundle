@@ -18,7 +18,6 @@ import { type PanelTheme } from '@Pimcore/components/accordion/accordion'
 import { type TimeLineAccordionItemType } from '@Pimcore/components/accordion-timeline/accordion-timeline'
 import { type Version } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/version-api-slice.gen'
 import { Tag } from '@Pimcore/components/tag/tag'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { Box } from '@Pimcore/components/box/box'
 import { VersionItem } from '../components/version-item/version-item'
 import { type VersionIdentifiers } from '../types/types'
@@ -94,46 +93,51 @@ export const createVersionAccordionItem = ({
 
   const Subtitle = (): React.JSX.Element => {
     const { t } = useTranslation()
+    const isCoauthored = !isNil(version.coauthor) && version.coauthor !== ''
 
     return (
       <div>
-        <span className={ 'sub-title' }>{`${t('by')} ${version.user?.name ?? ''}`}</span>
-        {isNil(version.autosave) && version.autosave && <Icon value="auto-save" />}
+        <div>
+          <span className={ 'sub-title' }>{`${t('by')} ${version.user?.name ?? ''}`}</span>
+          {isNil(version.autosave) && version.autosave && <Icon value="auto-save" />}
+        </div>
+        {isCoauthored && (
+          <div>
+            <span className={ 'sub-title' }>
+              {t('version.coauthored-by', { type: version.coauthorType ?? '', name: version.coauthor })}
+            </span>
+          </div>
+        )}
       </div>
     )
   }
 
   const Extra = (): React.JSX.Element => {
     const { t } = useTranslation()
-    const isCoauthored = !isNil(version.coauthor) && version.coauthor !== ''
 
-    return (
-      <>
-        {isCoauthored && (
-          <Tooltip title={ version.coauthorType ?? '' }>
-            <Tag iconName={ 'user' }>
-              {`${t('version.coauthored-by')} ${version.coauthor}`}
-            </Tag>
-          </Tooltip>
-        )}
-        {published && (
-          <Tag
-            color={ 'success' }
-            iconName={ 'published' }
-          >
-            {t('version.published')}
-          </Tag>
-        )}
-        {!published && autosaved && (
-          <Tag
-            color={ 'geekblue' }
-            iconName={ 'auto-save' }
-          >
-            {t('version.autosaved')}
-          </Tag>
-        )}
-      </>
-    )
+    if (published) {
+      return (
+        <Tag
+          color={ 'success' }
+          iconName={ 'published' }
+        >
+          {t('version.published')}
+        </Tag>
+      )
+    }
+
+    if (autosaved) {
+      return (
+        <Tag
+          color={ 'geekblue' }
+          iconName={ 'auto-save' }
+        >
+          {t('version.autosaved')}
+        </Tag>
+      )
+    }
+
+    return <></>
   }
 
   return {

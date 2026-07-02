@@ -439,7 +439,7 @@ version.label: Versionen
 version.versions: Versionen
 version.version: Version
 version.publish: Veröffentlichen
-version.coauthored-by: 'Mitverfasst von'
+version.coauthored-by: 'Mitverfasst von {{type}} {{name}}'
 version.published: Veröffentlicht
 version.autosaved: Automatisch gespeichert
 version.schedule-for: Geplant für
