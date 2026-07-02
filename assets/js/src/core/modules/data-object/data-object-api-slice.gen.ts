@@ -72,6 +72,15 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Data Object Grid"],
             }),
+            dataObjectListGlobalGridConfigurations: build.query<
+                DataObjectListGlobalGridConfigurationsApiResponse,
+                DataObjectListGlobalGridConfigurationsApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/configurations-global/${queryArg.classId}`,
+                }),
+                providesTags: ["Data Object Grid"],
+            }),
             dataObjectListSavedGridConfigurations: build.query<
                 DataObjectListSavedGridConfigurationsApiResponse,
                 DataObjectListSavedGridConfigurationsApiArg
@@ -336,6 +345,15 @@ export type DataObjectGetGridConfigurationApiArg = {
     classId: string;
     /** Configuration ID */
     configurationId?: number;
+};
+export type DataObjectListGlobalGridConfigurationsApiResponse =
+    /** status 200 List of globally-shared grid configurations for data objects */ {
+        totalItems: number;
+        items: GridConfiguration[];
+    };
+export type DataObjectListGlobalGridConfigurationsApiArg = {
+    /** Class Id of the data object */
+    classId: string;
 };
 export type DataObjectListSavedGridConfigurationsApiResponse =
     /** status 200 List of saved grid configurations for data objects */ {
@@ -1002,6 +1020,7 @@ export const {
     useDataObjectGetGridPreviewQuery,
     useDataObjectDeleteGridConfigurationByConfigurationIdMutation,
     useDataObjectGetGridConfigurationQuery,
+    useDataObjectListGlobalGridConfigurationsQuery,
     useDataObjectListSavedGridConfigurationsQuery,
     useDataObjectRemoveGridConfigurationAsFavoriteMutation,
     useDataObjectSaveGridConfigurationMutation,
