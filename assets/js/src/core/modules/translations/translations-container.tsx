@@ -10,7 +10,7 @@
 
 /* eslint-disable max-lines */
 
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Title } from '@Pimcore/components/title/title'
 import { t } from 'i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -18,8 +18,10 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
-import { Box, Form, IconTextButton, Input, SearchInput, useModal, Select, Pagination, Header } from '@sdk/components'
+import { Box, Form, IconTextButton, Input, useModal, Select, Pagination, Header } from '@sdk/components'
 import { Divider } from 'antd'
+import { useFilterQuery } from '@Pimcore/components/filters'
+import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 import trackError, { ApiError } from '../app/error-handler'
 import { useTranslationGetListQuery, useTranslationGetDomainsQuery, api } from '../app/translations/translations-api-slice-enhanced'
 import { useTranslation } from './hooks/use-translation'
@@ -39,9 +41,11 @@ import { TranslationErrorModals } from './components/translation-error-modals'
 import { ExportTranslationsButton } from './components/export-translations-button'
 import { ImportTranslationsButton } from './components/import-translations-button'
 import { CleanupTranslationsButton } from './components/cleanup-translations-button'
+import { TranslationsAppliedFiltersProvider, translationsFilterAdapter, translationsFilterDescriptors, useTranslationsAppliedFilters } from './filters/filters'
+import { TranslationsSidebar } from './translations-sidebar/translations-sidebar'
 import { useStyle } from './translations-container.styles'
 
-const TESTID_PREFIX = 'translations'
+const TEST_ID_PREFIX = 'translations'
 
 interface FormValues {
   translationKey: string
@@ -51,8 +55,9 @@ export interface TranslationsContainerProps {
   initialSearchTerm?: string
 }
 
-export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContainerProps): React.JSX.Element => {
+const TranslationsContent = ({ initialSearchTerm }: TranslationsContainerProps): React.JSX.Element => {
   const { styles } = useStyle()
+
   const [form] = Form.useForm<FormValues>()
   const dispatch = useAppDispatch()
   const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
@@ -62,14 +67,7 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
   const { domain, setDomain } = useTranslationDomain()
   const [visibleLocales, setVisibleLocales] = useState<string[] | null>(null)
   const [translationRows, setTranslationRows] = useState<TranslationRow[]>([])
-  const [searchTerm, setSearchTerm] = useState<string>(initialSearchTerm ?? '')
 
-  useEffect(() => {
-    if (initialSearchTerm !== undefined) {
-      setSearchTerm(initialSearchTerm)
-      setCurrentPage(1)
-    }
-  }, [initialSearchTerm])
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
   const [sorting, setSorting] = useState<SortingState>([{ id: 'key', desc: false }])
@@ -83,37 +81,47 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
   const adminLanguages = useAdminTranslationLanguages()
   const { languages: domainLanguages, isLoading: languagesLoading } = isFrontendDomain ? websiteLanguages : adminLanguages
 
-  const queryArgs = useMemo(() => ({
+  const appliedStore = useTranslationsAppliedFilters()
+  const { values: appliedValues } = appliedStore
+  const buildFilterQuery = useFilterQuery(translationsFilterAdapter, appliedValues)
+  const { columnFilters } = buildFilterQuery({})
+
+  const sortFilter = useMemo(() => (sorting.length > 0
+    ? {
+        key: sorting[0].id.startsWith('_') ? sorting[0].id.substring(1) : sorting[0].id,
+        direction: sorting[0].desc ? 'DESC' : 'ASC'
+      }
+    : undefined), [sorting])
+
+  const queryArgs = {
     domain,
     body: {
       filters: {
         page: currentPage,
         pageSize,
-        columnFilters:
-          searchTerm.length > 0
-            ? [{
-                type: 'search',
-                filterValue: searchTerm
-              }]
-            : undefined,
-        sortFilter: sorting.length > 0
-          ? {
-              key: sorting[0].id.startsWith('_') ? sorting[0].id.substring(1) : sorting[0].id,
-              direction: sorting[0].desc ? 'DESC' : 'ASC'
-            }
-          : undefined
+        columnFilters,
+        sortFilter
       }
     }
-  }), [domain, currentPage, pageSize, searchTerm, sorting])
+  }
 
-  const {
-    data,
-    isLoading: translationsLoading,
-    isFetching: translationsFetching,
-    error: translationListError
-  } = useTranslationGetListQuery(queryArgs, {
+  const { data, isLoading: translationsLoading, isFetching: translationsFetching, error: translationListError } = useTranslationGetListQuery(queryArgs, {
     refetchOnMountOrArgChange: true
   })
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [appliedValues])
+
+  const isFirstRender = useRef(true)
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
+
+    appliedStore.setValues({ searchTerm: initialSearchTerm ?? '' })
+  }, [initialSearchTerm])
 
   useEffect(() => {
     if (availableDomains.length > 0 && !availableDomains.some(d => d.domain === domain)) {
@@ -166,19 +174,22 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
     }
   }
 
-  const handleSearch = (value: string): void => {
-    setSearchTerm(value)
-    setCurrentPage(1)
-  }
-
   const handleSortingChange = (newSorting: SortingState): void => {
     setSorting(newSorting)
     setCurrentPage(1)
   }
 
+  const handleDomainChange = (value: string): void => {
+    setDomain(value)
+    setCurrentPage(1)
+
+    appliedStore.setValues({ fieldFilters: [] })
+  }
+
   return (
     <ContentLayout
       className={ styles.translationsContainer }
+      renderSidebar={ <TranslationsSidebar /> }
       renderToolbar={
         <Toolbar theme="secondary">
           <Flex gap="extra-small">
@@ -189,15 +200,8 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
             <ExportTranslationsButton
               domain={ domain }
               filters={ {
-                columnFilters: searchTerm.length > 0
-                  ? [{ type: 'search', filterValue: searchTerm }]
-                  : [],
-                sortFilter: sorting.length > 0
-                  ? {
-                      key: sorting[0].id.startsWith('_') ? sorting[0].id.substring(1) : sorting[0].id,
-                      direction: sorting[0].desc ? 'DESC' : 'ASC'
-                    }
-                  : {}
+                columnFilters: columnFilters ?? [],
+                sortFilter: sortFilter ?? {}
               } }
             />
             <ImportTranslationsButton
@@ -205,11 +209,9 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
               onSuccess={ reload }
             />
           </Flex>
-          <Flex
-            align="center"
-          >
+          <Flex align="center">
             <IconButton
-              data-testid={ `${TESTID_PREFIX}-refresh-button` }
+              data-testid={ `${TEST_ID_PREFIX}-refresh-button` }
               disabled={ translationsLoading }
               icon={ { value: 'refresh' } }
               onClick={ reload }
@@ -251,13 +253,13 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
                 >
                   <Input
                     className="translations-key-input"
-                    data-testid={ `${TESTID_PREFIX}-key-input` }
+                    data-testid={ `${TEST_ID_PREFIX}-key-input` }
                     placeholder={ t('translations.add-translation.key') }
                   />
                 </Form.Item>
                 <Form.Item style={ { marginBottom: 0, marginInlineEnd: 0 } }>
                   <IconTextButton
-                    data-testid={ `${TESTID_PREFIX}-add-button` }
+                    data-testid={ `${TEST_ID_PREFIX}-add-button` }
                     htmlType="submit"
                     icon={ { value: 'new' } }
                     loading={ createLoading }
@@ -271,12 +273,9 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
           <Flex gap='extra-small'>
             <Select
               className="translations-domain-select"
-              data-testid={ `${TESTID_PREFIX}-domain-select` }
+              data-testid={ `${TEST_ID_PREFIX}-domain-select` }
               loading={ domainsLoading }
-              onChange={ (value: string) => {
-                setDomain(value)
-                setCurrentPage(1)
-              } }
+              onChange={ handleDomainChange }
               options={ availableDomains.map(domainInfo => ({
                 value: domainInfo.domain,
                 label: t(`translations.domain.${domainInfo.domain}`, { defaultValue: domainInfo.domain })
@@ -287,7 +286,7 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
             <Select
               allowClear
               className="translations-locale-select"
-              data-testid={ `${TESTID_PREFIX}-locale-select` }
+              data-testid={ `${TEST_ID_PREFIX}-locale-select` }
               disabled={ viewableLanguages.length === 0 || languagesLoading }
               dropdownStyle={ { minWidth: 250 } }
               filterOption={ (input, option) => {
@@ -308,18 +307,6 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
               showSearch
               value={ visibleLocales ?? [] }
             />
-            <SearchInput
-              className="translations-search-input"
-              data-testid={ `${TESTID_PREFIX}-search-input` }
-              loading={ translationsLoading }
-              onSearch={ (value) => {
-                handleSearch(value)
-              } }
-              placeholder="Search"
-              withPrefix={ false }
-              withoutAddon={ false }
-            />
-
           </Flex>
         </Header>
         }
@@ -354,5 +341,24 @@ export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContain
         </Box>
       </Content>
     </ContentLayout>
+  )
+}
+
+export const TranslationsContainer = ({ initialSearchTerm }: TranslationsContainerProps): React.JSX.Element => {
+  const initialAppliedValues = useMemo(() => (
+    initialSearchTerm !== undefined && initialSearchTerm !== ''
+      ? { searchTerm: initialSearchTerm }
+      : undefined
+  ), [initialSearchTerm])
+
+  return (
+    <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/FieldFilterRegistry'] }>
+      <TranslationsAppliedFiltersProvider
+        descriptors={ translationsFilterDescriptors }
+        initialValues={ initialAppliedValues }
+      >
+        <TranslationsContent initialSearchTerm={ initialSearchTerm } />
+      </TranslationsAppliedFiltersProvider>
+    </DynamicTypeRegistryProvider>
   )
 }

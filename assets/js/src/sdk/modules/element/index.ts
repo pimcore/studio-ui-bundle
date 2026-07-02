@@ -289,6 +289,7 @@ export * from '@Pimcore/modules/element/listing/decorators/row-selection/context
 export * from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection-optional'
 export * from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 export * from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
+export * from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/selected-grid-config-id/use-selected-grid-config-id'
 export * from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/grid-container'
 export * from '@Pimcore/modules/element/listing/abstract/view-layer/components/sidebar/sidebar'
 export * from '@Pimcore/modules/element/listing/abstract/view-layer/components/sidebar/hooks/use-sidebar-options'
