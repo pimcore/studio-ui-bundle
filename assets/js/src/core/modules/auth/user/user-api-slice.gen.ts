@@ -402,8 +402,6 @@ export type UserInformation = {
     memorizeTabs: boolean;
     /** Allow Dirty Close */
     allowDirtyClose: boolean;
-    /** Theme of the User */
-    theme: string;
     /** Has Image */
     hasImage: boolean;
     /** List of available content Language already sorted. */
@@ -532,8 +530,6 @@ export type User = {
     websiteTranslationLanguagesView: object;
     /** Show Welcome Screen */
     welcomeScreen: boolean;
-    /** Theme of the User */
-    theme?: string;
     /** Asset Workspace */
     assetWorkspaces: UserWorkspace[];
     /** Data Object Workspace */
@@ -588,8 +584,6 @@ export type User2 = {
     websiteTranslationLanguagesView: object;
     /** Show welcome Screen */
     welcomeScreen: boolean;
-    /** Theme of the User */
-    theme?: string;
     /** Asset Workspace */
     assetWorkspaces: UserWorkspace[];
     /** Data Object Workspace */
@@ -648,8 +642,6 @@ export type UserProfile = {
     contentLanguages: object;
     /** Key Bindings */
     keyBindings: KeyBindingForAUser[];
-    /** Theme of the User */
-    theme?: string;
 };
 export const {
     useUserCloneByIdMutation,
