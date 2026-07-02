@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { type AbstractDecoratorWithRequiredConfig } from '../abstract-decorator'
 import { withRowSelectionContext } from './context-layer/with-row-selection-context'
 import { WithRowSelection } from './view-layer/components/grid/hooks/use-grid-options/with-row-selection'
@@ -15,6 +16,7 @@ import { withSelectionOverviewTab } from './view-layer/components/sidebar/hooks/
 
 export interface IRowSelectionDecoratorConfig {
   rowSelectionMode: 'single' | 'multiple'
+  elementType?: ElementType
 }
 
 export type IRowSelectionDecorator = AbstractDecoratorWithRequiredConfig<IRowSelectionDecoratorConfig>
