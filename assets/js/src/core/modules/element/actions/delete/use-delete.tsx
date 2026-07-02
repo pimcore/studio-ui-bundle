@@ -9,6 +9,7 @@
  */
 
 import { useAppDispatch } from '@Pimcore/app/store'
+import { eventBus, eventTypes } from '@Pimcore/lib/event-bus'
 import { type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
@@ -30,7 +31,7 @@ import { useStyles } from './use-delete.styles'
 import { useTranslation } from 'react-i18next'
 import { ContextMenuActionName } from '..'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
-import { useTreePermission } from '../../../../components/element-tree/provider/tree-permission-provider/use-tree-permission'
+import { useTreePermission } from '@Pimcore/components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { useRecycleBin } from '@Pimcore/modules/recycle-bin/hooks/use-recycle-bin'
 import { useTreeId } from '@Pimcore/components/element-tree/provider/tree-id-provider/use-tree-id'
 
@@ -68,6 +69,12 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
       })
 
       await executionEngine.runJob(job)
+
+      // Notify listeners (e.g. grid row selection) that this element no longer exists
+      eventBus.publish({
+        identifier: { type: eventTypes['element:item:deleted'] },
+        payload: { id, elementType }
+      })
 
       // Handle widget closing and recycle bin refresh here since job can't use hooks
       const widgetId = getWidgetId(elementType, id)

@@ -92,7 +92,8 @@ moduleSystem.registerModule({
     })
 
     const rowSelectionDecoratorConfig: IRowSelectionDecoratorConfig = {
-      rowSelectionMode: 'multiple'
+      rowSelectionMode: 'multiple',
+      elementType: 'asset'
     }
 
     listingBuilder.addDecorator({
