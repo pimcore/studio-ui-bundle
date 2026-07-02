@@ -1011,6 +1011,7 @@ export type SelectOption2 = {
     /** Value */
     value: string;
 };
+
 export const {
     useDataObjectAddMutation,
     useDataObjectBatchDeleteMutation,
