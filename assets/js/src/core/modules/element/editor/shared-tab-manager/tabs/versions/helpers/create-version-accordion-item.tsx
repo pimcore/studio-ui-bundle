@@ -94,6 +94,10 @@ export const createVersionAccordionItem = ({
   const Subtitle = (): React.JSX.Element => {
     const { t } = useTranslation()
     const isCoauthored = !isNil(version.coauthor) && version.coauthor !== ''
+    const coauthorType = version.coauthorType ?? ''
+    const coauthorTypeLabel = coauthorType !== ''
+      ? t(`version.coauthor-type.${coauthorType}`, { defaultValue: coauthorType })
+      : ''
 
     return (
       <div>
@@ -104,7 +108,7 @@ export const createVersionAccordionItem = ({
         {isCoauthored && (
           <div>
             <span className={ 'sub-title' }>
-              {t('version.coauthored-by', { type: version.coauthorType ?? '', name: version.coauthor })}
+              {t('version.coauthored-by', { type: coauthorTypeLabel, name: version.coauthor })}
             </span>
           </div>
         )}
