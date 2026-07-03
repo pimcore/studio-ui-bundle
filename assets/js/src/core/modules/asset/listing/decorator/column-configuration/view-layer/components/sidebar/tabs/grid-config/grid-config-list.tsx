@@ -24,6 +24,15 @@ import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorator
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
+function findScrollableParent (element: HTMLElement | null): HTMLElement | null {
+  if (element === null || element === document.documentElement) return null
+  const { overflow, overflowY } = window.getComputedStyle(element)
+  if (/(auto|scroll)/.test(overflow + overflowY) && element.scrollHeight > element.clientHeight) {
+    return element
+  }
+  return findScrollableParent(element.parentElement as HTMLElement | null)
+}
+
 interface GridConfigListProps {
   columns: AvailableColumn[]
 }
@@ -58,9 +67,24 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
       prevKeys.every((key, i) => key === currentKeys[i])
 
     if (isAppend) {
-      const items = containerRef.current?.querySelectorAll('.stack-list__item')
-      const lastItem = items?.[items.length - 1]
-      lastItem?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      requestAnimationFrame(() => {
+        const items = containerRef.current?.querySelectorAll<HTMLElement>('.stack-list__item')
+        const lastItem = items?.[items.length - 1]
+        if (lastItem === undefined) return
+
+        const scrollParent = findScrollableParent(lastItem)
+        if (scrollParent === null) return
+
+        const itemRect = lastItem.getBoundingClientRect()
+        const parentRect = scrollParent.getBoundingClientRect()
+        const overflow = itemRect.bottom - parentRect.bottom
+        if (overflow > 0) {
+          scrollParent.scrollTo({
+            top: scrollParent.scrollTop + overflow + 8,
+            behavior: 'smooth'
+          })
+        }
+      })
     }
 
     prevColumnKeysRef.current = currentKeys
