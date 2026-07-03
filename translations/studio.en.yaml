@@ -1629,6 +1629,7 @@ predefined-asset-metadata.columns.actions: Actions
 predefined-asset-metadata.duplicate-entry.title: Predefined Metadata already exists
 predefined-asset-metadata.duplicate-entry.error: An entry with this name and language combination already exists. Please change one of the following values.
 appearance-branding.title: Appearance & Branding
+user-management.appearance-branding: Appearance & Branding
 image-thumbnails.title: Image Thumbnails
 image-thumbnails.description: Manage and configure image thumbnail settings for your assets.
 image-thumbnails.search.placeholder: Search thumbnails...

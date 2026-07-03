@@ -1622,6 +1622,7 @@ predefined-asset-metadata.columns.actions: Azioni
 predefined-asset-metadata.duplicate-entry.title: Metadato predefinito già esistente
 predefined-asset-metadata.duplicate-entry.error: Una voce con questa combinazione di nome e lingua esiste già. Modificare uno dei seguenti valori.
 appearance-branding.title: Aspetto e branding
+user-management.appearance-branding: Aspetto e branding
 image-thumbnails.title: Anteprime immagini
 image-thumbnails.description: Gestisci e configura le impostazioni delle anteprime immagini per i tuoi asset.
 image-thumbnails.search.placeholder: Cerca anteprime...
