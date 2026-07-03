@@ -2202,9 +2202,10 @@ application-logger.filter.priority-level.8: Feilsøking
 embed.url-modal.title: Rediger Embed-URL
 embed.url-modal.label: URL (f.eks. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Vennligst oppgi en gyldig URL
-embed.url-modal.ok-text: OK
+embed.url-modal.ok-text: Lagre
 embed.url-modal.cancel-text: Avbryt
-embed.placeholder: Ingen URL satt – Klikk for å legge til en embed-URL
+embed.url-modal.warning: "Ugyldige URL-er vil ikke vise en forhåndsvisning, vennligst gjennomgå og oppdater URL-en din."
+embed.placeholder: Klikk for å legge til en embed-URL
 embed.add-url: Legg til URL
 embed.edit-url: Rediger URL
 embed.clear: Tøm
@@ -2240,9 +2241,13 @@ recycle-bin.actions.restore: Gjenopprett
 recycle-bin.actions.restore.title: Gjenoppretter papirkurvelementer
 component.search.pleaceholder: Søk
 focal-point.set: Sett fokuspunkt
-video.placeholder: Ingen video valgt – Klikk for å legge til en video
+video.placeholder: Klikk for å legge til en video
 video.add-video: Legg til video
 video.preview-in-progress: Forhåndsvisning av video genereres…
+date.placeholder: Velg en dato
+numeric.placeholder: Skriv inn et tall
+select.placeholder: Velg et alternativ
+multiselect.placeholder: Velg alternativer
 image.alt-text-placeholder: Skriv inn alt-tekst
 area-settings: Områdeinnstillinger
 unsupported_feature: Funksjonen støttes ikke – sjekk systemkravene!

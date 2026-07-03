@@ -2202,9 +2202,10 @@ application-logger.filter.priority-level.8: Debug
 embed.url-modal.title: Modifica URL embed
 embed.url-modal.label: URL (es. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Inserire un URL valido
-embed.url-modal.ok-text: OK
+embed.url-modal.ok-text: Salva
 embed.url-modal.cancel-text: Annulla
-embed.placeholder: Nessun URL impostato - Cliccare per aggiungere un URL embed
+embed.url-modal.warning: "Gli URL non validi non mostreranno un'anteprima, si prega di rivedere e aggiornare il proprio URL."
+embed.placeholder: Cliccare per aggiungere un URL embed
 embed.add-url: Aggiungi URL
 embed.edit-url: Modifica URL
 embed.clear: Cancella
@@ -2240,9 +2241,13 @@ recycle-bin.actions.restore: Ripristina
 recycle-bin.actions.restore.title: Ripristino elementi cestino
 component.search.pleaceholder: Cerca
 focal-point.set: Imposta punto focale
-video.placeholder: Nessun video selezionato - Cliccare per aggiungere un video
+video.placeholder: Cliccare per aggiungere un video
 video.add-video: Aggiungi video
 video.preview-in-progress: L'anteprima del video è in fase di generazione…
+date.placeholder: Selezionare una data
+numeric.placeholder: Inserire un numero
+select.placeholder: Selezionare un'opzione
+multiselect.placeholder: Selezionare le opzioni
 image.alt-text-placeholder: Inserire testo alternativo
 area-settings: Impostazioni area
 unsupported_feature: Funzionalità non supportata - verificare i requisiti di sistema!

@@ -25,9 +25,9 @@ export const useStyles = createStyles(({ token, css }) => {
     // Base container
     editableHtmlDropContent: css`
       position: relative;
-      border: 1px solid ${token.colorBorder};
-      border-radius: ${token.borderRadius}px;
-      background: ${token.colorBgContainer};
+      outline: 1px dashed ${token.colorBorder};
+      border-radius: ${token.borderRadiusLG}px;
+      background: ${token.controlItemBgHover};
       padding: ${token.paddingSM}px;
       min-height: 40px;
       color: ${token.colorTextTertiary};

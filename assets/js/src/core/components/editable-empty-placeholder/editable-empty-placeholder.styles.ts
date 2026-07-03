@@ -14,9 +14,9 @@ export const useStyles = createStyles(({ css, token }) => {
   return {
     placeholder: css`
       width: 100%;
-      border: 2px dashed ${token.colorBorder};
-      border-radius: ${token.borderRadius}px;
-      background-color: ${token.colorBgContainer};
+      outline: 1px dashed ${token.colorBorder};
+      border-radius: ${token.borderRadiusLG}px;
+      background-color: ${token.controlItemBgHover};
       padding: ${token.paddingLG}px;
       text-align: center;
     `,
@@ -26,7 +26,7 @@ export const useStyles = createStyles(({ css, token }) => {
     `,
 
     placeholderText: css`
-      color: ${token.colorTextDescription};
+      color: ${token.colorTextSecondary};
     `
   }
 })

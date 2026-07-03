@@ -147,13 +147,6 @@ export const DocumentHotspotImagePreview = ({
         onClick: () => { setMarkerModalOpen() }
       },
       {
-        key: 'empty',
-        icon: <Icon value="trash" />,
-        label: t('empty'),
-        disabled: disabled === true || isNil(assetId),
-        onClick: emptyValue
-      },
-      {
         key: 'open',
         icon: <Icon value="open-folder" />,
         label: t('open'),
@@ -185,6 +178,17 @@ export const DocumentHotspotImagePreview = ({
         onClick: handleUpload
       })
     }
+
+    items.push(
+      { type: 'divider', key: 'empty-divider' },
+      {
+        key: 'empty',
+        icon: <Icon value="trash" />,
+        label: t('empty'),
+        disabled: disabled === true || isNil(assetId),
+        onClick: emptyValue
+      }
+    )
 
     return items
   }, [disabled, assetId, focalPointContextMenuItem, disableInlineUpload, handleSetFocalPoint, setCropModalOpen, setMarkerModalOpen, handleUpload, emptyValue, handleOpen, handleLocateInTree, handleSearch, t])
