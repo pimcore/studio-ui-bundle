@@ -18,6 +18,7 @@ import { Select } from '@Pimcore/components/select/select'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { generatePassword } from '@Pimcore/modules/user/management/detail/tabs/settings/settings-helper'
 import { UserAvatar } from '@Pimcore/modules/user/management/detail/tabs/settings/components/user-avatar'
+import { AppearanceBrandingAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/appearance-branding-accordion'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import {
   EditorSettingsAccordion
@@ -66,6 +67,7 @@ const ProfileDetail = ({ id, resetPassword = false }: IProfileDetail): React.JSX
         welcomeScreen: user?.welcomeScreen,
         keyBindings: user?.keyBindings,
         contentLanguages: user?.contentLanguages,
+        theme: user?.theme,
         password: '',
         passwordConfirmation: '',
         oldPassword: ''
@@ -191,6 +193,7 @@ const ProfileDetail = ({ id, resetPassword = false }: IProfileDetail): React.JSX
             onUserImageChanged={ updateUserImageInState }
             user={ user }
           />
+          <AppearanceBrandingAccordion user={ user } />
         </Col>
         <Col span={ 14 }>
           <Accordion

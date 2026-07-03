@@ -1624,6 +1624,7 @@ predefined-asset-metadata.columns.actions: Acciones
 predefined-asset-metadata.duplicate-entry.title: El metadato predefinido ya existe
 predefined-asset-metadata.duplicate-entry.error: Ya existe una entrada con esta combinación de nombre e idioma. Cambie uno de los siguientes valores.
 appearance-branding.title: Apariencia y marca
+user-management.appearance-branding: Apariencia y marca
 image-thumbnails.title: Miniaturas de imagen
 image-thumbnails.description: Gestione y configure los ajustes de miniaturas de imagen para sus assets.
 image-thumbnails.search.placeholder: Buscar miniaturas...

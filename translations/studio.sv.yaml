@@ -1624,6 +1624,7 @@ predefined-asset-metadata.columns.actions: Åtgärder
 predefined-asset-metadata.duplicate-entry.title: Fördefinierad metadata finns redan
 predefined-asset-metadata.duplicate-entry.error: En post med denna kombination av namn och språk finns redan. Ändra ett av följande värden.
 appearance-branding.title: Utseende & Varumärke
+user-management.appearance-branding: Utseende & Varumärke
 image-thumbnails.title: Bildminiatyrbilder
 image-thumbnails.description: Hantera och konfigurera inställningar för bildminiatyrbilder för dina assets.
 image-thumbnails.search.placeholder: Sök miniatyrbilder...

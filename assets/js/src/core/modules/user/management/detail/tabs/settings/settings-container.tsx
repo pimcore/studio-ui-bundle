@@ -25,6 +25,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { AdminAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/admin-accordion'
 import { CustomisationAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/customisation-accordion'
+import { AppearanceBrandingAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/appearance-branding-accordion'
 import { PermissionsAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/permissions-accordion'
 import { TypesAndClassesAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/types-classes-accordion'
 import { EditorSettingsAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/editor-settings-accordion'
@@ -59,6 +60,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
     email: openedUser?.email,
     language: openedUser?.language,
     dateTimeLocale: openedUser?.dateTimeLocale ?? '',
+    theme: openedUser?.theme,
     welcomeScreen: openedUser?.welcomeScreen,
     memorizeTabs: openedUser?.memorizeTabs,
     allowDirtyClose: openedUser?.allowDirtyClose,
@@ -182,6 +184,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
             onUserImageChanged={ (imageUrl: string) => { updateUserImageInState(imageUrl) } }
             user={ openedUser }
           />
+          <AppearanceBrandingAccordion user={ openedUser } />
         </Col>
         <Col span={ 16 }>
           <CustomisationAccordion isAdmin={ openedUser?.admin } />
