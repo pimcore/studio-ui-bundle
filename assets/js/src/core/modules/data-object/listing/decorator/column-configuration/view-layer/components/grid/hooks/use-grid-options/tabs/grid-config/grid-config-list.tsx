@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo, type ReactNode } from 'react'
+import React, { useEffect, useMemo, useRef, type ReactNode } from 'react'
 import { StackList, type StackListProps } from '@Pimcore/components/stack-list/stack-list'
 import { Empty, Tag } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -23,7 +23,6 @@ import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
-import { useScrollIntoViewOnAppend } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/hooks/use-scroll-into-view-on-append'
 
 interface ColumnStackListItemProps extends StackListItemProps {
   meta: AvailableColumn
@@ -36,7 +35,32 @@ interface ColumnStackListProps extends Omit<StackListProps, 'items'> {
 export const GridConfigList = (): React.JSX.Element => {
   const { setColumns, columns } = useGridConfig()
   const { t } = useTranslation()
-  const scrollSentinelRef = useScrollIntoViewOnAppend(columns, (column) => column.key)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const prevColumnKeysRef = useRef<string[]>([])
+  const hasMountedRef = useRef(false)
+
+  useEffect(() => {
+    const currentKeys = columns.map((col) => col.__meta?.uniqueId ?? col.key)
+
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true
+      prevColumnKeysRef.current = currentKeys
+      return
+    }
+
+    const prevKeys = prevColumnKeysRef.current
+    const isAppend = currentKeys.length > prevKeys.length &&
+      prevKeys.every((key, i) => key === currentKeys[i])
+
+    if (isAppend) {
+      const items = containerRef.current?.querySelectorAll('.stack-list__item')
+      const lastItem = items?.[items.length - 1]
+      const isAdvanced = columns[columns.length - 1]?.key === 'advanced'
+      lastItem?.scrollIntoView({ behavior: 'smooth', block: isAdvanced ? 'start' : 'nearest' })
+    }
+
+    prevColumnKeysRef.current = currentKeys
+  }, [columns])
 
   const stackListItems: ColumnStackListProps['items'] = useMemo(() => columns.map((column) => {
     const uniqueId = column.__meta?.uniqueId ?? uuid()
@@ -91,16 +115,14 @@ export const GridConfigList = (): React.JSX.Element => {
     <>
       { stackListItems.length === 0 && <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } /> }
       { stackListItems.length > 0 && (
-        <StackList
-          items={ stackListItems }
-          onItemsChange={ onItemsChange }
-          sortable
-        />
+        <div ref={ containerRef }>
+          <StackList
+            items={ stackListItems }
+            onItemsChange={ onItemsChange }
+            sortable
+          />
+        </div>
       ) }
-      <div
-        aria-hidden
-        ref={ scrollSentinelRef }
-      />
     </>
   )
 
