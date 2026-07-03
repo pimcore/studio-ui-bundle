@@ -1624,6 +1624,7 @@ predefined-asset-metadata.columns.actions: Handlinger
 predefined-asset-metadata.duplicate-entry.title: Forhåndsdefinerte metadata finnes allerede
 predefined-asset-metadata.duplicate-entry.error: En oppføring med denne kombinasjonen av navn og språk finnes allerede. Vennligst endre en av følgende verdier.
 appearance-branding.title: Utseende og merkevare
+user-management.appearance-branding: Utseende og merkevare
 image-thumbnails.title: Bildeminiatyrbilder
 image-thumbnails.description: Administrer og konfigurer innstillinger for bildeminiatyrbilder for ressursene dine.
 image-thumbnails.search.placeholder: Søk i miniatyrbilder...

@@ -9,7 +9,8 @@
  */
 
 /**
- * Standard theme IDs for Pimcore Studio
+ * Standard theme IDs for Pimcore Studio.
+ * The dark theme ships with the Backend Power Tools bundle.
  */
 export const studioThemeIds = {
   light: 'studio-default-light'

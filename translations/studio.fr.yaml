@@ -1624,6 +1624,7 @@ predefined-asset-metadata.columns.actions: Actions
 predefined-asset-metadata.duplicate-entry.title: La métadonnée prédéfinie existe déjà
 predefined-asset-metadata.duplicate-entry.error: Une entrée avec cette combinaison de nom et de langue existe déjà. Veuillez modifier l'une des valeurs suivantes.
 appearance-branding.title: Apparence et identité visuelle
+user-management.appearance-branding: Apparence et identité visuelle
 image-thumbnails.title: "Miniatures d'images"
 image-thumbnails.description: "Gérer et configurer les paramètres de miniatures d'images pour vos assets."
 image-thumbnails.search.placeholder: Rechercher des miniatures...
