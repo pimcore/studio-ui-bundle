@@ -669,6 +669,8 @@ component.no-content.no-content-available: Inget innehåll tillgängligt
 notifications.label: Aviseringar
 notifications.remove-all: Ta bort alla
 notifications.new-notification: Ny avisering
+notifications.columns.title: Titel
+notifications.columns.date: Datum
 notifications.from: Från
 notifications.hide: Dölj
 notifications.new-notifications.show: Visa

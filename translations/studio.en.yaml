@@ -671,6 +671,8 @@ component.no-content.no-content-available: No content available
 notifications.label: Notifications
 notifications.remove-all: Remove all
 notifications.new-notification: New Notification
+notifications.columns.title: Title
+notifications.columns.date: Date
 notifications.from: From
 notifications.hide: Hide
 notifications.new-notifications.show: View

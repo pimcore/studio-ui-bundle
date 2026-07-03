@@ -669,6 +669,8 @@ component.no-content.no-content-available: Ingen innhold tilgjengelig
 notifications.label: Varsler
 notifications.remove-all: Fjern alle
 notifications.new-notification: Nytt varsel
+notifications.columns.title: Tittel
+notifications.columns.date: Dato
 notifications.from: Fra
 notifications.hide: Skjul
 notifications.new-notifications.show: Vis
