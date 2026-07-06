@@ -2203,9 +2203,10 @@ application-logger.filter.priority-level.8: Depuración
 embed.url-modal.title: Editar URL de incrustación
 embed.url-modal.label: URL (ej. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Introduzca una URL válida
-embed.url-modal.ok-text: OK
+embed.url-modal.ok-text: Guardar
 embed.url-modal.cancel-text: Cancelar
-embed.placeholder: No se ha establecido ninguna URL - Haga clic para añadir una URL de incrustación
+embed.url-modal.warning: "Las URL no válidas no mostrarán una vista previa, por favor revise y actualice su URL."
+embed.placeholder: Haga clic para añadir una URL de incrustación
 embed.add-url: Añadir URL
 embed.edit-url: Editar URL
 embed.clear: Limpiar
@@ -2241,9 +2242,13 @@ recycle-bin.actions.restore: Restaurar
 recycle-bin.actions.restore.title: Restaurando elementos de la papelera de reciclaje
 component.search.pleaceholder: Buscar
 focal-point.set: Establecer punto focal
-video.placeholder: No se ha seleccionado ningún vídeo - Haga clic para añadir un vídeo
+video.placeholder: Haga clic para añadir un vídeo
 video.add-video: Añadir vídeo
 video.preview-in-progress: Se está generando la vista previa del vídeo…
+date.placeholder: Seleccionar una fecha
+numeric.placeholder: Introducir un número
+select.placeholder: Seleccionar una opción
+multiselect.placeholder: Seleccionar opciones
 image.alt-text-placeholder: Introduzca texto alternativo
 area-settings: Configuración de área
 unsupported_feature: Función no soportada - ¡verifique los requisitos del sistema!

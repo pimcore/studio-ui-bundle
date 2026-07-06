@@ -26,6 +26,7 @@ const FormModalComponent = (args: any): React.JSX.Element => {
           label: args.label,
           rule: args.rule,
           initialValue: args.initialValue,
+          warningMessage: args.warningMessage,
           onOk: (value: string) => {
             setValue(value ?? 'n/a')
           }
@@ -69,6 +70,10 @@ const config: Meta = {
       table: {
         disable: true
       }
+    },
+    warningMessage: {
+      control: 'text',
+      description: 'Optional warning shown above the input field inside the modal'
     }
   },
   parameters: {
@@ -97,6 +102,15 @@ export const InputWithInitialValue = {
     title: 'Rename',
     label: 'Please enter the new name',
     initialValue: 'initial value'
+  }
+}
+
+export const InputWithWarning = {
+  args: {
+    type: 'input',
+    title: 'Edit URL',
+    label: 'URL',
+    warningMessage: "Invalid URLs won't display a preview, please review and update your URL."
   }
 }
 
