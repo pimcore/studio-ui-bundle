@@ -94,31 +94,33 @@ export const AdvancedColumnForm = ({ column, onChange, showPreview = true }: Adv
                   id: 'fields',
                   component: <Pipeline.CustomItem padded={ false }>
                     {pipelineLayout === 'default' && (
-                    <Tabs className='tabs--equal-width tabs--no-tab-bar-margin' items={ [
-                      {
-                        key: 'advancedColumns',
-                        label: t('grid.advanced-column.advancedColumns'),
-                        forceRender: true,
-                        children: (
-                          <Pipeline.DynamicGroupItem
-                            dynamicTypeRegistryId={ serviceIds['DynamicTypes/Grid/SourceFieldsRegistry'] }
-                            id='advancedColumns'
-                          />
-                        )
-                      },
+                    <Tabs
+                      className='tabs--equal-width tabs--no-tab-bar-margin'
+                      items={ [
+                        {
+                          key: 'advancedColumns',
+                          label: t('grid.advanced-column.advancedColumns'),
+                          forceRender: true,
+                          children: (
+                            <Pipeline.DynamicGroupItem
+                              dynamicTypeRegistryId={ serviceIds['DynamicTypes/Grid/SourceFieldsRegistry'] }
+                              id='advancedColumns'
+                            />
+                          )
+                        },
 
-                      {
-                        key: 'transformers',
-                        label: t('grid.advanced-column.transformers'),
-                        forceRender: true,
-                        children: (
-                          <Pipeline.DynamicGroupItem
-                            dynamicTypeRegistryId={ serviceIds['DynamicTypes/Grid/TransformersRegistry'] }
-                            id='transformers'
-                          />
-                        )
-                      }
-                    ] }
+                        {
+                          key: 'transformers',
+                          label: t('grid.advanced-column.transformers'),
+                          forceRender: true,
+                          children: (
+                            <Pipeline.DynamicGroupItem
+                              dynamicTypeRegistryId={ serviceIds['DynamicTypes/Grid/TransformersRegistry'] }
+                              id='transformers'
+                            />
+                          )
+                        }
+                      ] }
                     />
                     )}
 

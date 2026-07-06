@@ -19,7 +19,7 @@ import { Text } from '@Pimcore/components/text/text'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useTranslation } from 'react-i18next'
 
-type PreviewItemData = {
+interface PreviewItemData {
   id?: string | number
   fullpath?: string
 }

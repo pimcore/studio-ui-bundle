@@ -9,15 +9,6 @@
  */
 
 import React, { useEffect, useRef, type ReactNode } from 'react'
-
-function findScrollableParent (element: HTMLElement | null): HTMLElement | null {
-  if (element === null || element === document.documentElement) return null
-  const { overflow, overflowY } = window.getComputedStyle(element)
-  if (/(auto|scroll)/.test(overflow + overflowY) && element.scrollHeight > element.clientHeight) {
-    return element
-  }
-  return findScrollableParent(element.parentElement as HTMLElement | null)
-}
 import { StackList, type StackListProps } from '@Pimcore/components/stack-list/stack-list'
 import { Empty, Tag } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -32,6 +23,15 @@ import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-li
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
+
+function findScrollableParent (element: HTMLElement | null): HTMLElement | null {
+  if (element === null || element === document.documentElement) return null
+  const { overflow, overflowY } = window.getComputedStyle(element)
+  if (/(auto|scroll)/.test(overflow + overflowY) && element.scrollHeight > element.clientHeight) {
+    return element
+  }
+  return findScrollableParent(element.parentElement)
+}
 
 
 interface GridConfigListProps {
@@ -72,7 +72,7 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
         requestAnimationFrame(() => {
           const container = containerRef.current
           if (container === null) return
-          const scrollParent = findScrollableParent(container.parentElement as HTMLElement | null)
+          const scrollParent = findScrollableParent(container.parentElement)
           if (scrollParent === null) return
           scrollParent.scrollTo({ top: scrollParent.scrollHeight - scrollParent.clientHeight, behavior: 'smooth' })
         })
