@@ -19,6 +19,11 @@ import { Text } from '@Pimcore/components/text/text'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useTranslation } from 'react-i18next'
 
+type PreviewItemData = {
+  id?: string | number
+  fullpath?: string
+}
+
 function truncatePath (fullpath: string): string {
   const parts = fullpath.split('/').filter(Boolean)
   if (parts.length <= 2) {
@@ -50,8 +55,9 @@ export const PreviewItemSelection = (): React.JSX.Element => {
     }
   })
 
-  const fullpath = typeof item?.data?.fullpath === 'string' ? item.data.fullpath : null
-  const id = item?.data?.id
+  const data = item?.data as PreviewItemData | undefined
+  const fullpath = typeof data?.fullpath === 'string' ? data.fullpath : null
+  const id = data?.id
 
   return (
     <Flex
