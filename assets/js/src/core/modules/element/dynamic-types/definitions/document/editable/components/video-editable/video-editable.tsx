@@ -197,7 +197,6 @@ export const VideoEditable = ({
         disabled={ disabled }
         icon={ { value: 'edit' } }
         onClick={ showModal }
-        size="small"
         style={ { pointerEvents: 'auto' } }
         title={ t('edit') }
         type="default"

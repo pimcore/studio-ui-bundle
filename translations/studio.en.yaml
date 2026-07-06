@@ -2209,9 +2209,10 @@ application-logger.filter.priority-level.8: Debug
 embed.url-modal.title: Edit Embed URL
 embed.url-modal.label: URL (eg. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Please enter a valid URL
-embed.url-modal.ok-text: OK
+embed.url-modal.ok-text: Save
 embed.url-modal.cancel-text: Cancel
-embed.placeholder: No URL set - Click to add an embed URL
+embed.url-modal.warning: "Invalid URLs won't display a preview, please review and update your URL."
+embed.placeholder: Click to add an embed URL
 embed.add-url: Add URL
 embed.edit-url: Edit URL
 embed.clear: Clear
@@ -2266,9 +2267,13 @@ ownership-management.delete.title: Delete configurations
 ownership-management.delete.content: "Are you sure you want to delete {{count}} configuration(s)?"
 component.search.pleaceholder: Search
 focal-point.set: Set Focal Point
-video.placeholder: No video selected - Click to add a video
+video.placeholder: Click to add a video
 video.add-video: Add Video
 video.preview-in-progress: Video preview is being generated…
+date.placeholder: Select a date
+numeric.placeholder: Enter a number
+select.placeholder: Select an option
+multiselect.placeholder: Select options
 image.alt-text-placeholder: Enter alt text
 area-settings: Area Settings
 unsupported_feature: Unsupported feature - please check system requirements!

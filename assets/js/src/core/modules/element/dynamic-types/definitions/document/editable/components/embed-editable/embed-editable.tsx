@@ -49,6 +49,7 @@ export const EmbedEditable = ({
   const { input } = useFormModal()
   const { styles } = useStyles()
   const [wrapperElement, setWrapperElement] = useState<HTMLDivElement | null>(null)
+  const [embedUnsupported, setEmbedUnsupported] = useState(false)
 
   const currentUrl = value?.url ?? ''
   const hasUrl = !isEmpty(currentUrl)
@@ -59,29 +60,27 @@ export const EmbedEditable = ({
   }
 
   useEffect(() => {
-    if (!isNull(containerRef?.current)) {
+    if (!isNull(containerRef?.current) && isNull(wrapperElement) && hasUrl) {
       const iframeElement = containerRef.current.querySelector('iframe')
 
-      if (!isNull(iframeElement) && isNull(wrapperElement)) {
+      const wrapper = document.createElement('div')
+      wrapper.className = cn(styles.wrapper, className)
+      wrapper.style.position = 'relative'
+
+      if (!isNull(iframeElement)) {
         const iframeWidth = iframeElement.width ?? iframeElement.getAttribute('width')
         const iframeHeight = iframeElement.height ?? iframeElement.getAttribute('height')
-
-        const cssWidth = toCssDimension(iframeWidth) ?? '300px'
-        const cssHeight = toCssDimension(iframeHeight) ?? '200px'
-
-        const wrapper = document.createElement('div')
-        wrapper.className = cn(styles.wrapper, className)
-        wrapper.style.width = cssWidth
-        wrapper.style.height = cssHeight
-        wrapper.style.position = 'relative' // Ensure positioning context for absolute overlay
-
-        containerRef.current.parentNode?.insertBefore(wrapper, containerRef.current)
-        wrapper.appendChild(containerRef.current)
-
-        setWrapperElement(wrapper)
+        wrapper.style.width = toCssDimension(iframeWidth) ?? '300px'
+        wrapper.style.height = toCssDimension(iframeHeight) ?? '200px'
+      } else {
+        setEmbedUnsupported(true)
       }
+
+      containerRef.current.parentNode?.insertBefore(wrapper, containerRef.current)
+      wrapper.appendChild(containerRef.current)
+      setWrapperElement(wrapper)
     }
-  }, [containerRef, className, wrapperElement])
+  }, [containerRef, className, wrapperElement, hasUrl])
 
   const handleEditUrl = (): void => {
     if (isDisabled) return
@@ -92,6 +91,7 @@ export const EmbedEditable = ({
       initialValue: currentUrl,
       okText: t('embed.url-modal.ok-text'),
       cancelText: t('embed.url-modal.cancel-text'),
+      warningMessage: embedUnsupported ? t('embed.url-modal.warning') : undefined,
       onOk: (url: string) => {
         const trimmedUrl = url.trim()
         if (isEmpty(trimmedUrl)) {
@@ -145,7 +145,6 @@ export const EmbedEditable = ({
                   disabled={ isDisabled }
                   icon={ { value: 'edit' } }
                   onClick={ handleEditUrl }
-                  size="small"
                   style={ { pointerEvents: 'auto' } }
                   title={ t('embed.edit-url') }
                   type="default"
