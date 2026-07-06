@@ -123,9 +123,26 @@ export const useStyles = createStyles(({ token, css }) => {
 
       &.tabs--full-height {
         height: 100%;
-          
+
         .ant-tabs-content {
           height: 100%;
+        }
+      }
+
+      &.tabs--equal-width {
+        .ant-tabs-nav-list {
+          width: 100%;
+          padding-left: 0;
+          padding-right: 0;
+
+          .ant-tabs-tab {
+            flex: 1;
+            justify-content: center;
+
+            + .ant-tabs-tab {
+              margin-left: 0;
+            }
+          }
         }
       }
     `,
