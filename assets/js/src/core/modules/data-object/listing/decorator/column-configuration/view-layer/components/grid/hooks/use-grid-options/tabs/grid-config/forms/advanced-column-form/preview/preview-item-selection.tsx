@@ -50,6 +50,9 @@ export const PreviewItemSelection = (): React.JSX.Element => {
     }
   })
 
+  const fullpath = typeof item?.data?.fullpath === 'string' ? item.data.fullpath : null
+  const id = item?.data?.id
+
   return (
     <Flex
       align="center"
@@ -59,10 +62,10 @@ export const PreviewItemSelection = (): React.JSX.Element => {
         {t('grid.advanced-column.preview-item')}
       </Button>
 
-      {item !== null && item !== undefined && (
-        <Tooltip title={ item.data.fullpath }>
+      {fullpath !== null && (
+        <Tooltip title={ fullpath }>
           <Text type="secondary">
-            ID: {item.data.id} {'│'} {truncatePath(item.data.fullpath)}
+            ID: {id} {'│'} {truncatePath(fullpath)}
           </Text>
         </Tooltip>
       )}
