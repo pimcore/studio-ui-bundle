@@ -133,12 +133,6 @@ export const SnippetContent = ({
   if (hasContent) {
     contextMenuItems.push(
       {
-        key: 'empty',
-        label: t('empty'),
-        icon: <Icon value="trash" />,
-        onClick: handleEmpty
-      },
-      {
         key: 'open',
         label: t('open'),
         icon: <Icon value="open-folder" />,
@@ -159,6 +153,18 @@ export const SnippetContent = ({
     icon: <Icon value="search" />,
     onClick: handleSearch
   })
+
+  if (hasContent) {
+    contextMenuItems.push(
+      { type: 'divider', key: 'empty-divider' },
+      {
+        key: 'empty',
+        label: t('empty'),
+        icon: <Icon value="trash" />,
+        onClick: handleEmpty
+      }
+    )
+  }
 
   return (
     <EditableHtmlDropContainer

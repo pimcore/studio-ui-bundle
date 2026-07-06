@@ -16,9 +16,6 @@ export const useStyle = createStyles(({ token, css }) => {
       position: absolute !important;
       top: ${token.paddingXXS}px;
       right: ${token.paddingXXS}px;
-      .ant-btn-icon {
-        display: flex;
-      }
     `
   }
 })

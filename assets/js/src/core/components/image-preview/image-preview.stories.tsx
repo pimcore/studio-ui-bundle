@@ -8,8 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import React from 'react'
 import { type Meta } from '@storybook/react'
 import { ImagePreview } from './image-preview'
+import { Icon } from '@Pimcore/components/icon/icon'
 
 const config: Meta = {
   title: 'Components/Data Display/ImagePreview',
@@ -32,6 +34,41 @@ export const _default = {
     height: 300,
     style: {
       border: '1px dashed #d9d9d9'
+    }
+  }
+}
+
+export const WithDropdownItems = {
+  args: {
+    width: 300,
+    height: 300,
+    style: {
+      border: '1px dashed #d9d9d9'
+    },
+    dropdownItems: [
+      {
+        key: 'open',
+        label: 'Open',
+        icon: <Icon value="open-folder" />
+      },
+      {
+        key: 'search',
+        label: 'Search',
+        icon: <Icon value="search" />
+      },
+      { type: 'divider', key: 'empty-divider' },
+      {
+        key: 'empty',
+        label: 'Empty',
+        icon: <Icon value="trash" />
+      }
+    ]
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'ImagePreview with dropdown items. The three-dots button (top-right) opens the context menu. Destructive actions appear last, separated by a divider.'
+      }
     }
   }
 }
