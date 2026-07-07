@@ -70,6 +70,7 @@ export const SearchModal = (): React.JSX.Element => {
               data-testid="search-modal-tabs"
               fullHeight
               items={ tabItems }
+              noPadding
               noTabBarMargin
               onChange={ (key) => {
                 setActiveKey(key)
