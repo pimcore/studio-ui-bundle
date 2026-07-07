@@ -15,10 +15,14 @@ export const useStyles = createStyles(({ css, token }) => {
     panel: css`
       display: flex;
       flex-direction: column;
-      gap: ${token.marginXS}px;
+      gap: ${token.paddingXXS}px;
       width: 280px;
       padding-right: ${token.paddingSM}px;
       border-right: 1px solid ${token.colorBorderSecondary};
+    `,
+
+    panelHeader: css`
+      padding-left: ${token.paddingXXS}px;
     `,
 
     panelFill: css`
