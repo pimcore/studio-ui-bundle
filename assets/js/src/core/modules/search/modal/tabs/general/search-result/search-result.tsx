@@ -130,7 +130,10 @@ export const SearchResult = (): React.JSX.Element => {
           withDivider
         />
 
-        <Toolbar theme='secondary'>
+        <Toolbar
+          padding={ { left: 'none', right: 'none' } }
+          theme='secondary'
+        >
           <Pagination
             onChange={ onChange }
             pageSizeOptions={ [10, 20, 50, 100] }

@@ -33,8 +33,8 @@ export const useStyles = createStyles(({ token, css }) => {
     }
 
     &.ant-tag-geekblue {
-      background-color: ${token.Colors.Base.Geekblue['2']} !important;
-      color: ${token.Colors.Base.Geekblue['6']} !important;
+      background-color: ${token.Colors.Base.Geekblue['1']} !important;
+      color: ${token.Colors.Base.Geekblue['7']} !important;
     }
   `
 

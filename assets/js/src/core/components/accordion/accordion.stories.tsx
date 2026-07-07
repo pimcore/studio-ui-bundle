@@ -112,6 +112,34 @@ export const Bordered = {
   }
 }
 
+export const BorderedWithTable = {
+  args: {
+    bordered: true,
+    table: true,
+    activeKey: '1',
+    size: 'small',
+    items: [{
+      key: '1',
+      title: <>Table inside accordion</>,
+      children: (
+        <table style={ { width: '100%', borderCollapse: 'collapse' } }>
+          <thead>
+            <tr>
+              <th style={ { padding: '4px 8px', textAlign: 'left' } }>Language</th>
+              <th style={ { padding: '4px 8px', textAlign: 'left' } }>Abbreviation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style={ { padding: '4px 8px' } }>English</td><td style={ { padding: '4px 8px' } }>en</td></tr>
+            <tr><td style={ { padding: '4px 8px' } }>German</td><td style={ { padding: '4px 8px' } }>de</td></tr>
+            <tr><td style={ { padding: '4px 8px' } }>French</td><td style={ { padding: '4px 8px' } }>fr</td></tr>
+          </tbody>
+        </table>
+      )
+    }]
+  }
+}
+
 export const Ghost = {
   args: {
     items,

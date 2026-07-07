@@ -1310,8 +1310,8 @@ tree.actions.copy: Copy
 tree.actions.paste: Paste
 tree.actions.delete: Delete
 tree.actions.add-user: Add User
-tree.actions.clone-user: Clone User
-tree.actions.remove-user: Remove User
+tree.actions.clone-user: Clone user
+tree.actions.remove-user: Delete user
 tree.actions.folder: Folder
 tree.actions.user: User
 tree.actions.add-folder: New Folder
@@ -1320,8 +1320,8 @@ tree.actions.delete-tag: Delete
 tree.actions.rename-tag: Rename
 tree.actions.role: Role
 tree.actions.add-role: Add Role
-tree.actions.clone-role: Clone Role
-tree.actions.remove-role: Remove Role
+tree.actions.clone-role: Clone role
+tree.actions.remove-role: Delete role
 tree.actions.remove-folder: Remove Folder
 tag-configuration.new: New
 tag-configuration.new-tag: New Tag
@@ -2815,7 +2815,7 @@ saved-search.delete-search: Delete search
 saved-search.save-as-new: Save as new search
 saved-search.create-menu-shortcut: Create shortcut in menu
 saved-search.save.success: Saved search created
-saved-search.saved-searches: Saved searches
+saved-search.saved-searches: Saved Searches
 saved-search.ownership: Ownership
 saved-search.ownership.own: Own
 saved-search.ownership.shared: Shared with me
