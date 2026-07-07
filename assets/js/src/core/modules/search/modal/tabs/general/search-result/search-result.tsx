@@ -70,9 +70,8 @@ export const SearchResult = (): React.JSX.Element => {
     }
 
     return (
-      <>
-        <div />
-
+      <div style={ { display: 'flex', flexDirection: 'column', height: '100%' } }>
+        <div style={ { flex: 1, overflow: 'hidden', minHeight: 0 } }>
         <SplitLayout
           leftItem={
             {
@@ -82,7 +81,7 @@ export const SearchResult = (): React.JSX.Element => {
                   overflow={ { x: 'hidden', y: 'auto' } }
                   padded
                   padding={ { left: 'none', right: 'none', y: 'none' } }
-                  style={ { height: 400 } }
+                  style={ { height: '100%' } }
                 >
                   <Flex
                     className='w-full h-full'
@@ -129,6 +128,7 @@ export const SearchResult = (): React.JSX.Element => {
 
           withDivider
         />
+        </div>
 
         <Toolbar
           padding={ { left: 'none', right: 'none' } }
@@ -142,7 +142,7 @@ export const SearchResult = (): React.JSX.Element => {
             total={ data?.totalItems ?? 0 }
           />
         </Toolbar>
-      </>
+      </div>
     )
   }, [data, selectedItem, isLoading])
 }
