@@ -143,11 +143,6 @@ export const useStyles = createStyles(({ token, css }) => {
           height: 100%;
           overflow: hidden;
         }
-
-        .ant-tabs-tabpane > * {
-          position: absolute;
-          inset: 0;
-        }
       }
 
       &.tabs--equal-width {
