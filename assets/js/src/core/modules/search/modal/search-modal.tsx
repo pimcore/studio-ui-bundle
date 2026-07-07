@@ -62,6 +62,7 @@ export const SearchModal = (): React.JSX.Element => {
           onCancel={ () => { close() } }
           open={ isOpen }
           size={ 'XL' }
+          title={ t('search-modal.title') }
         >
           <div style={ { display: 'flex', flexDirection: 'column', height: 500 } }>
             <Tabs

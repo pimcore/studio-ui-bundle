@@ -1371,6 +1371,7 @@ key-bindings.searchAsset: Search Asset
 key-bindings.searchObject: Search Object
 key-bindings.searchAndReplaceAssignments: Search and Replace Assignments
 key-bindings.quickSearch: Quick Search
+search-modal.title: Quick Search
 key-bindings.system: System
 key-bindings.showMetaInfo: Show Meta Info
 key-bindings.showElementHistory: Show Element History
