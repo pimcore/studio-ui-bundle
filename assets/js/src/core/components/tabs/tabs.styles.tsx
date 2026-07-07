@@ -139,10 +139,14 @@ export const useStyles = createStyles(({ token, css }) => {
         }
 
         .ant-tabs-tabpane {
-          display: flex;
-          flex-direction: column;
+          position: relative;
           height: 100%;
           overflow: hidden;
+        }
+
+        .ant-tabs-tabpane > * {
+          position: absolute;
+          inset: 0;
         }
       }
 
