@@ -1283,6 +1283,9 @@ image-gallery.clear-image-selection: Clear Image Selection
 image-gallery.delete-frame: Delete Frame
 text: Text
 video: Video
+newsletter: Newsletter
+object: Object
+variant: Variant
 processing: Processing
 upload: Upload
 close: Close
