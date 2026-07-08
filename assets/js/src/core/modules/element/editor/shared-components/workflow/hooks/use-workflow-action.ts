@@ -10,7 +10,7 @@
 
 import { type WorkflowAction } from '../types/workflow-types'
 import { useSubmitWorkflow } from './use-submit-workflow'
-import { useWorkflow } from './use-workflow'
+import { useWorkflowModalState } from './use-workflow-modal-state'
 
 interface UseWorkflowActionReturn {
   triggerAction: (action: WorkflowAction) => void
@@ -18,7 +18,7 @@ interface UseWorkflowActionReturn {
 }
 
 export const useWorkflowAction = (): UseWorkflowActionReturn => {
-  const { openModal, setTriggeredWorkflowAction } = useWorkflow()
+  const { openModal, setTriggeredWorkflowAction } = useWorkflowModalState()
   const { submitWorkflowAction, submissionLoading } = useSubmitWorkflow()
 
   const triggerAction = (action: WorkflowAction): void => {
