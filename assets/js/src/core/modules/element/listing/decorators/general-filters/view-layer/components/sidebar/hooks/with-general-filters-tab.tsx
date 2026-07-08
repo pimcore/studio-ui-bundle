@@ -31,8 +31,8 @@ export const withGeneralFiltersTab = (useBaseHook: AbstractDecoratorProps['useSi
       const filterValues = readElementFilterValues(values)
       const hasActiveFilters =
         filterValues.searchTerm !== '' ||
-        filterValues.directChildren === true ||
-        filterValues.unreferenced === true ||
+        filterValues.directChildren ||
+        filterValues.unreferenced ||
         filterValues.pql !== '' ||
         filterValues.fieldFilters.length > 0
 
