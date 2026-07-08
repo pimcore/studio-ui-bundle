@@ -141,7 +141,7 @@ export const AddColumnControls = ({
     })
     observer.observe(el)
     return () => { observer.disconnect() }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [])
 
   // ─── Shared button definitions ────────────────────────────────────────────
 
