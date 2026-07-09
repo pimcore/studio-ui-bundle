@@ -40,7 +40,8 @@ assets/CLAUDE.md
 !assets/dist/types/*
 
 # Expanded frontend build is generated from build-dist/build-<id>.zip, not committed
-/public/build/
+/public/build/*
+!/public/build/.gitkeep
 
 # code style fixer
 .php_cs
