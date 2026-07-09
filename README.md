@@ -25,3 +25,4 @@ Access Pimcore Studio at: `{your-domain}/pimcore-studio`
 - [Configuration and Administration](./doc/03_Configuration_and_Administration/README.md) - Configuration, users, perspectives
 - [Extending](./doc/04_Extending/README.md) - Plugin development guide and examples
 - [Development Details](./doc/05_Development_Details/README.md) - Core development setup
+- [Upgrade Information](./doc/06_Upgrade.md) - Version-specific upgrade steps
