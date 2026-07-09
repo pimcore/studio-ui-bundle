@@ -13,35 +13,23 @@ import React, { useState } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
-import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
-import { useStyles } from './batch-actions.styles'
-import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useRowSelectionOptional } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection-optional'
 import { BatchEditProvider } from './batch-edit-modal/batch-edit-provider'
 import { BatchEditModal } from './batch-edit-modal/batch-edit-modal'
 import { CsvModal } from '@Pimcore/modules/element/listing/batch-actions/csv-modal/csv-modal'
 import { XlsxModal } from '@Pimcore/modules/element/listing/batch-actions/xlsx-modal/xlsx-modal'
-import { DataObjectBatchDeleteJob } from '@Pimcore/modules/execution-engine/jobs/batch-delete/data-object-batch-delete-job'
-import { container } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
-import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
+import { useBatchDelete } from '@Pimcore/modules/data-object/actions/batch-delete/use-batch-delete'
 import { ClassificationStoreModalProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
-import { elementTypes } from '@sdk/modules/data-object'
 
 export const BatchActions = (): React.JSX.Element => {
   const rowSelection = useRowSelectionOptional()
-  const elementType = elementTypes.dataObject
-  const { refreshGrid } = useRefreshGrid(elementType)
-  const executionEngine = container.get<ExecutionEngine>(serviceIds.executionEngine)
+  const { confirmBatchDelete } = useBatchDelete()
 
   const [batchEditModalOpen, setBatchEditModalOpen] = useState<boolean>(false)
   const [csvModalOpen, setCsvModalOpen] = useState<boolean>(false)
   const [xlsxModalOpen, setXlsxModalOpen] = useState<boolean>(false)
 
   const { t } = useTranslation()
-  const modal = useFormModal()
-  const { styles } = useStyles()
 
   if (rowSelection === undefined) {
     return <></>
@@ -52,41 +40,8 @@ export const BatchActions = (): React.JSX.Element => {
   const numberedSelectedRows = selectedRows !== undefined ? Object.keys(selectedRows).map(Number) : []
   const hasSelectedItems = selectedRows !== undefined ? Object.keys(selectedRows).length > 0 : false
 
-  const handleBatchDelete = async (): Promise<void> => {
-    const job = new DataObjectBatchDeleteJob({
-      itemIds: numberedSelectedRows,
-      onFinish: async () => {
-        await refreshGrid()
-        setSelectedRows({})
-      }
-    })
-
-    await executionEngine.runJob(job)
-  }
-
   const handleBatchDeleteConfirm = (): void => {
-    const count = numberedSelectedRows.length
-    const paths = numberedSelectedRows.map(id => selectedRowsData?.[id]?.fullpath ?? String(id))
-    const pathList = (
-      <ul className={ styles.pathList }>
-        {paths.map((path) => <li key={ path }>{path}</li>)}
-      </ul>
-    )
-
-    modal.confirm({
-      title: t('element.delete.batch.title'),
-      width: 530,
-      content: <>
-        <p>{t('element.delete.batch.question', { count })}</p>
-        {count > 5
-          ? <Accordion items={ [{ key: 'paths', title: <span>{t('element.delete.batch.show-paths')}</span>, children: pathList }] } />
-          : pathList}
-        <p><span className={ styles.warningText }>{t('element.delete.batch.dependencies-warning')}</span></p>
-      </>,
-      cancelText: t('cancel'),
-      okText: t('element.delete.batch.ok'),
-      onOk: async () => { await handleBatchDelete() }
-    })
+    void confirmBatchDelete(numberedSelectedRows, selectedRowsData, () => { setSelectedRows({}) })
   }
 
   const menu: DropdownMenuProps = {
