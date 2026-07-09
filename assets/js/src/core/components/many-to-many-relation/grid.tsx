@@ -41,6 +41,7 @@ export interface ManyToManyRelationGridProps {
   handleOrderChange: (data: ManyToManyRelationValue) => void
   pathFormatterConfig?: { name: string | undefined, class: string | undefined }
   enableRowVirtualizer: boolean
+  hideOpenButton?: boolean
 }
 
 export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid (props: ManyToManyRelationGridProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
