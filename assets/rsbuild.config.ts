@@ -6,10 +6,11 @@ import { pluginGenerateEntrypoints } from './bundler/plugins/entrypoints-generat
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
 import path from 'path'
 import fs from 'fs';
-import { v4 } from 'uuid';
+import { getBuildGroupId } from './bundler/build-id';
 import packages from './package.json'
 
-const buildId = v4();
+const buildGroupId = getBuildGroupId();
+const buildId = `${buildGroupId}-app`;
 const buildPath = path.resolve(__dirname, '..', 'public', 'build', buildId);
 
 if (!fs.existsSync(buildPath)) {
@@ -74,6 +75,14 @@ export default defineConfig({
     }
   },
   plugins: [
+    {
+      name: 'studio-write-build-id',
+      setup(api) {
+        api.onAfterBuild(() => {
+          fs.writeFileSync(path.join(buildPath, '.build-id'), buildGroupId);
+        });
+      },
+    },
     pluginGenerateEntrypoints(),
     pluginReact(),
     pluginBabel({
