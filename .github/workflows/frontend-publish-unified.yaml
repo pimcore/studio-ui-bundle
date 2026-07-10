@@ -31,7 +31,7 @@ jobs:
       generated_version: ${{ steps.gen.outputs.version }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Generate Canary Version
         id: gen
@@ -68,7 +68,7 @@ jobs:
       npm_tag: ${{ steps.extract_npm.outputs.npm_tag }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Extract version from tag
         id: extract_version
