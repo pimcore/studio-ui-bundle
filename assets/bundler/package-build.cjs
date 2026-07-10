@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * This source file is available under the terms of the
  * Pimcore Open Core License (POCL)
@@ -12,6 +13,11 @@
  * Packages the latest frontend build into a single committed archive
  * (build-dist/build-<id>.zip). Only this archive is tracked in git; the expanded build is
  * gitignored and reconstructed by BuildArchiveExtractor.
+ *
+ * Shared across bundles: paths default to studio-ui-bundle's layout (public/build,
+ * build-dist relative to __dirname/../..) but can be overridden via --build-dir / --out-dir
+ * so consumers installed via npm (e.g. collab-bundle's `studio-package-build --build-dir
+ * ../../public/studio/build --out-dir ../../build-dist`) can point at their own layout.
  *
  * - The build id is the shared `.build-id` written into each output dir at build time. It
  *   is content-derived, so identical source always yields the same id. The compiled output
@@ -31,8 +37,20 @@ const AdmZip = require('adm-zip');
 const EXCLUDED = new Set(['studio-npm-package.tgz']);
 const FIXED_TIME = new Date(Date.UTC(2001, 0, 1)); // stable zip entry timestamp
 
-const buildDir = path.resolve(__dirname, '..', '..', 'public', 'build');
-const outDir = path.resolve(__dirname, '..', '..', 'build-dist');
+function parseArg(name) {
+  const flag = `--${name}`;
+  const idx = process.argv.indexOf(flag);
+  if (idx >= 0 && idx + 1 < process.argv.length) {
+    return process.argv[idx + 1];
+  }
+  const prefix = `${flag}=`;
+  const eq = process.argv.find((a) => a.startsWith(prefix));
+
+  return eq ? eq.slice(prefix.length) : undefined;
+}
+
+const buildDir = path.resolve(parseArg('build-dir') ?? path.resolve(__dirname, '..', '..', 'public', 'build'));
+const outDir = path.resolve(parseArg('out-dir') ?? path.resolve(__dirname, '..', '..', 'build-dist'));
 
 if (!fs.existsSync(buildDir)) {
   console.error(`[package-build] nothing to package: ${buildDir} is missing`);
@@ -83,7 +101,7 @@ if (fs.existsSync(outFile)) {
   process.exit(0);
 }
 
-// Collect the build's files, relative to public/build, sorted for determinism.
+// Collect the build's files, relative to the build dir, sorted for determinism.
 function collect(absDir, relBase, out) {
   for (const entry of fs.readdirSync(absDir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
     if (EXCLUDED.has(entry.name)) {
@@ -124,4 +142,4 @@ for (const file of fs.readdirSync(outDir)) {
 zip.writeZip(outFile);
 
 const sizeMb = (fs.statSync(outFile).size / (1024 * 1024)).toFixed(1);
-console.log(`[package-build] wrote ${path.relative(path.resolve(__dirname, '..', '..'), outFile)} (${sizeMb} MB) from ${pairDirs.length} dir(s)`);
+console.log(`[package-build] wrote ${path.relative(process.cwd(), outFile)} (${sizeMb} MB) from ${pairDirs.length} dir(s)`);
