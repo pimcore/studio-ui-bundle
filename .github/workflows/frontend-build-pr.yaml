@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - "[0-9]+.[0-9]+"
+      - "[0-9]+.x"
       - "feature-*"
       - "nightly"
       # TEMP (remove before merge): regenerate build-dist/build-<id>.zip on every push to
