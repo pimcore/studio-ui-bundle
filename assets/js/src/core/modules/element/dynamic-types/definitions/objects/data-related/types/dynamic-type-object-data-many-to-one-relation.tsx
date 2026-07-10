@@ -52,6 +52,10 @@ export class DynamicTypeObjectDataManyToOneRelation extends DynamicTypeObjectDat
     )
   }
 
+  getVersionObjectDataComponent (props: ManyToOneRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+    return this.getObjectDataComponent({ ...props, noteditable: true, hideOpenButton: true })
+  }
+
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
     const value: ManyToOneRelationValue | null = props.cellProps.getValue()
     const objectProps = props.objectProps as ManyToOneRelationObjectDataDefinition

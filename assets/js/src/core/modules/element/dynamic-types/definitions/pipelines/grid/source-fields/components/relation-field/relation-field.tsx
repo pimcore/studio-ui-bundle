@@ -13,9 +13,8 @@ import { Form } from '@Pimcore/components/form/form'
 import { useItem } from '@Pimcore/components/form/item/provider/item/use-item'
 import { useKeyedListContext } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value'
 import { usePipelineConfig } from '@Pimcore/components/pipeline/provider/pipeline-config/use-pipeline-config'
-import { type SelectProps } from '@Pimcore/components/select/select'
+import { Select, type SelectProps } from '@Pimcore/components/select/select'
 import { usePrevious } from '@Pimcore/utils/hooks/use-previous'
-import { Select } from 'antd'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ClassificationStoreValueControl, useClassificationStoreFieldActions, type ResolvedClassificationStoreField } from '../../classification-store/classification-store-value-control'
@@ -80,7 +79,7 @@ export const DynamicTypePipelineGridSourceFieldsRelationFieldComponent = (): Rea
     <>
       <Flex
         className="w-full"
-        gap="small"
+        gap="extra-small"
       >
         <Form.Item
           className="w-full"

@@ -122,7 +122,7 @@ export const DynamicGroupContent = ({ dynamicTypeRegistryId, id, showTitle = fal
   ), [memoizedValues, items, onDragEnd, sensors, dynamicTypeRegistryId])
 
   return (
-    <Box padding={ { bottom: 'mini' } }>
+    <Box padding={ { x: 'mini', y: 'extra-small' } }>
       <Space
         className="w-full"
         direction="vertical"
