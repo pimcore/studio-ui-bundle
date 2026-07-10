@@ -29,7 +29,7 @@ export const DetachedTab = ({ tabKey }: IDetachedTabProps): React.JSX.Element =>
   return (
     <DetachedTabContent
       context={ context }
-      key={ context.type } // the key fixes the hook chain for different element types - TLDR; don't delete it!
+      key={ `${context.type}-${context.config.id}` }
       tabKey={ tabKey }
     />
   )
