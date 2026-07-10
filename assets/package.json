@@ -36,6 +36,10 @@
     ".": {
       "types": "./dist/build/types/src/sdk/main.d.ts"
     },
+    "./bundler/build-id": {
+      "types": "./bundler/build-id.ts",
+      "default": "./bundler/build-id.ts"
+    },
     "./*": {
       "types": "./dist/build/types/src/sdk/*/index.d.ts"
     },
@@ -48,12 +52,16 @@
       "types": "./dist/types/utils.d.ts"
     }
   },
+  "bin": {
+    "studio-package-build": "./bundler/package-build.cjs"
+  },
   "files": [
-    "dist"
+    "dist",
+    "bundler/build-id.ts",
+    "bundler/package-build.cjs"
   ],
   "license": "SEE LICENSE IN LICENSE.md",
   "devDependencies": {
-    "adm-zip": "^0.5.16",
     "@types/adm-zip": "^0.5.7",
     "@eslint/eslintrc": "^3",
     "@eslint/js": "^9",
@@ -109,6 +117,7 @@
     "whatwg-fetch": "^3.6.20"
   },
   "dependencies": {
+    "adm-zip": "^0.5.16",
     "@ant-design/charts": "^2.4.0",
     "@ant-design/colors": "^7.2.1",
     "@codemirror/lang-css": "^6.3.0",
