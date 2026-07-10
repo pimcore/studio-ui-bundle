@@ -104,7 +104,7 @@ export type DataObjectAddApiArg = {
     dataObjectAddParameters: DataObjectAdd;
 };
 export type DataObjectCloneApiResponse =
-    /** status 200 Successfully copied data object */ void | /** status 201 Successfully copied parent data object and created <strong>jobRun</strong> for copying child objects */ {
+    /** status 201 Successfully copied parent data object and created <strong>jobRun</strong> for copying child objects */ {
         /** ID of created jobRun */
         jobRunId: number;
     };
@@ -172,7 +172,7 @@ export type DataObjectGetLayoutByIdApiArg = {
     id: number;
 };
 export type DataObjectPatchByIdApiResponse =
-    /** status 200 Successfully patched data object */ void | /** status 201 Successfully created jobRun for patching multiple data objects */ {
+    /** status 201 Successfully created jobRun for patching multiple data objects */ {
         /** ID of created jobRun */
         jobRunId: number;
     };
@@ -191,7 +191,7 @@ export type DataObjectPatchByIdApiArg = {
         }[];
     };
 };
-export type DataObjectReplaceContentApiResponse = /** status 200 Successfully replaced content of data object */ void;
+export type DataObjectReplaceContentApiResponse = unknown;
 export type DataObjectReplaceContentApiArg = {
     /** SourceId of the data-object */
     sourceId: number;
@@ -323,26 +323,26 @@ export type DataObject = Element & {
     additionalAttributes?: {
         [key: string]: string | number | boolean | object | any[];
     };
-    customAttributes?: CustomAttributes;
+    customAttributes: CustomAttributes;
     /** Has workflow available */
     hasWorkflowAvailable?: boolean;
     /** Key */
-    key?: string;
+    key: string;
     /** Class name */
-    className?: string;
+    className: string;
     /** Type */
-    type?: string;
+    type: string;
     /** Published */
-    published?: boolean;
+    published: boolean;
     /** Has children */
-    hasChildren?: boolean;
+    hasChildren: boolean;
     /** Workflow permissions */
-    hasWorkflowWithPermissions?: boolean;
+    hasWorkflowWithPermissions: boolean;
     /** Full path */
-    fullPath?: string;
-    permissions?: DataObjectPermissions;
+    fullPath: string;
+    permissions: DataObjectPermissions;
     /** Custom index */
-    index?: number;
+    index: number;
 };
 export type DataObjectFolder = DataObject;
 export type UpdateDataProperty = {

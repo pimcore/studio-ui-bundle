@@ -76,7 +76,7 @@ export type NoteGetCollectionApiArg = {
                 [{"operator":"like","value":"John","field":"name","type":"string"}] */
     fieldFilters?: any;
 };
-export type NoteDeleteByIdApiResponse = /** status 200 note_delete_by_id_success_description */ void;
+export type NoteDeleteByIdApiResponse = unknown;
 export type NoteDeleteByIdApiArg = {
     /** Id of the element */
     id: number;

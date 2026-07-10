@@ -74,7 +74,9 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/user/search`,
-                    params: { searchQuery: queryArg.searchQuery },
+                    params: {
+                        searchQuery: queryArg.searchQuery,
+                    },
                 }),
                 providesTags: ["User Management"],
             }),
@@ -89,7 +91,9 @@ const injectedRtkApi = api
             userGetTree: build.query<UserGetTreeApiResponse, UserGetTreeApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/users/tree`,
-                    params: { parentId: queryArg.parentId },
+                    params: {
+                        parentId: queryArg.parentId,
+                    },
                 }),
                 providesTags: ["User Management"],
             }),
@@ -132,12 +136,12 @@ export type UserUpdateByIdApiArg = {
     id: number;
     updateUser: User2;
 };
-export type UserDeleteByIdApiResponse = /** status 200 Success */ void;
+export type UserDeleteByIdApiResponse = unknown;
 export type UserDeleteByIdApiArg = {
     /** Id of the user */
     id: number;
 };
-export type UserFolderDeleteByIdApiResponse = /** status 200 Success */ void;
+export type UserFolderDeleteByIdApiResponse = unknown;
 export type UserFolderDeleteByIdApiArg = {
     /** Id of the user-folder */
     id: number;
@@ -152,7 +156,7 @@ export type UserGetCollectionApiResponse = /** status 200 List of users */ {
     items: SimpleUser[];
 };
 export type UserGetCollectionApiArg = void;
-export type UserResetPasswordApiResponse = /** status 200 Success */ void;
+export type UserResetPasswordApiResponse = unknown;
 export type UserResetPasswordApiArg = {
     resetPassword: ResetPassword;
 };
@@ -164,7 +168,7 @@ export type PimcoreStudioApiUserSearchApiArg = {
     /** Query to search for an user. This can be a part of username, firstname, lastname, email or id. */
     searchQuery?: string;
 };
-export type UserUpdatePasswordByIdApiResponse = /** status 200 Success */ void;
+export type UserUpdatePasswordByIdApiResponse = unknown;
 export type UserUpdatePasswordByIdApiArg = {
     /** Id of the User */
     id: number;
