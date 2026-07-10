@@ -131,7 +131,9 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/assets/grid/configuration/${queryArg.folderId}`,
-                    params: { configurationId: queryArg.configurationId },
+                    params: {
+                        configurationId: queryArg.configurationId,
+                    },
                 }),
                 providesTags: ["Asset Grid"],
             }),
@@ -253,7 +255,9 @@ const injectedRtkApi = api
             assetUploadInfo: build.query<AssetUploadInfoApiResponse, AssetUploadInfoApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/assets/exists/${queryArg.parentId}`,
-                    params: { fileName: queryArg.fileName },
+                    params: {
+                        fileName: queryArg.fileName,
+                    },
                 }),
                 providesTags: ["Assets"],
             }),
@@ -316,7 +320,7 @@ const injectedRtkApi = api
     });
 export { injectedRtkApi as api };
 export type AssetCloneApiResponse =
-    /** status 200 Successfully copied asset */ void | /** status 201 Successfully copied parent asset and created <strong>jobRun</strong> for copying child assets */ {
+    /** status 201 Successfully copied parent asset and created <strong>jobRun</strong> for copying child assets */ {
         /** ID of created jobRun */
         jobRunId: number;
     };
@@ -358,7 +362,7 @@ export type AssetDownloadCsvApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
 };
-export type AssetDeleteCsvApiResponse = /** status 200 Success */ void;
+export type AssetDeleteCsvApiResponse = unknown;
 export type AssetDeleteCsvApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
@@ -368,7 +372,7 @@ export type AssetDownloadZipApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
 };
-export type AssetDeleteZipApiResponse = /** status 200 Success */ void;
+export type AssetDeleteZipApiResponse = unknown;
 export type AssetDeleteZipApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
@@ -541,16 +545,14 @@ export type AssetSaveGridConfigurationApiArg = {
         filter?: GridFilter | null;
     };
 };
-export type AssetSetGridConfigurationAsFavoriteApiResponse =
-    /** status 200 asset_set_grid_configuration_as_favorite_response */ void;
+export type AssetSetGridConfigurationAsFavoriteApiResponse = unknown;
 export type AssetSetGridConfigurationAsFavoriteApiArg = {
     /** ConfigurationId of the configurationId */
     configurationId: number;
     /** FolderId of the folderId */
     folderId: number;
 };
-export type AssetUpdateGridConfigurationApiResponse =
-    /** status 200 Asset grid configuration updated successfully */ void;
+export type AssetUpdateGridConfigurationApiResponse = unknown;
 export type AssetUpdateGridConfigurationApiArg = {
     /** ConfigurationId of the configurationId */
     configurationId: number;
@@ -617,11 +619,10 @@ export type AssetImageDownloadByThumbnailApiArg = {
     /** Find asset by matching thumbnail name. */
     thumbnailName: string;
 };
-export type AssetPatchByIdApiResponse =
-    /** status 200 Successfully patched asset */ void | /** status 201 Successfully created jobRun for patching multiple assets */ {
-        /** ID of created jobRun */
-        jobRunId: number;
-    };
+export type AssetPatchByIdApiResponse = /** status 201 Successfully created jobRun for patching multiple assets */ {
+    /** ID of created jobRun */
+    jobRunId: number;
+};
 export type AssetPatchByIdApiArg = {
     body: {
         data: {
@@ -697,7 +698,7 @@ export type AssetUploadInfoApiArg = {
     /** Name of the file to upload */
     fileName: string;
 };
-export type AssetReplaceApiResponse = /** status 200 Successfully replaced asset binary */ void;
+export type AssetReplaceApiResponse = unknown;
 export type AssetReplaceApiArg = {
     /** Id of the asset */
     id: number;
@@ -881,44 +882,44 @@ export type Asset = Element & {
     additionalAttributes?: {
         [key: string]: string | number | boolean | object | any[];
     };
-    customAttributes?: CustomAttributes;
+    customAttributes: CustomAttributes;
     /** Has workflow available */
-    hasWorkflowAvailable?: boolean;
+    hasWorkflowAvailable: boolean;
     /** Has children */
-    hasChildren?: boolean;
+    hasChildren: boolean;
     /** Type */
-    type?: string;
+    type: string;
     /** Filename */
-    filename?: string;
+    filename: string;
     /** Mimetype */
-    mimeType?: string | null;
+    mimeType: string | null;
     /** Has metadata */
-    hasMetadata?: boolean;
+    hasMetadata: boolean;
     /** Workflow permissions */
-    hasWorkflowWithPermissions?: boolean;
+    hasWorkflowWithPermissions: boolean;
     /** Full path */
-    fullPath?: string;
-    permissions?: AssetPermissions;
+    fullPath: string;
+    permissions: AssetPermissions;
 };
 export type Image = Asset & {
     /** Format */
-    format?: string;
+    format: string;
     /** width */
-    width?: number;
+    width: number;
     /** height */
-    height?: number;
+    height: number;
     /** is vector graphic */
-    isVectorGraphic?: boolean;
+    isVectorGraphic: boolean;
     /** is animated */
-    isAnimated?: boolean;
+    isAnimated: boolean;
     /** path to thumbnail */
-    imageThumbnailPath?: string;
+    imageThumbnailPath: string;
 };
 export type AssetDocument = Asset & {
     /** Page count */
-    pageCount?: number | null;
+    pageCount: number | null;
     /** Path to image thumbnail */
-    imageThumbnailPath?: string | null;
+    imageThumbnailPath: string | null;
 };
 export type Audio = Asset;
 export type Video = Asset & {

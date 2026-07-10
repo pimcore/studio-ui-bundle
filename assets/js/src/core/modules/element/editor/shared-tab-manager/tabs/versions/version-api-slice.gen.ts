@@ -44,7 +44,10 @@ const injectedRtkApi = api
             >({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/versions/${queryArg.elementType}/${queryArg.id}`,
-                    params: { page: queryArg.page, pageSize: queryArg.pageSize },
+                    params: {
+                        page: queryArg.page,
+                        pageSize: queryArg.pageSize,
+                    },
                 }),
                 providesTags: ["Versions"],
             }),
@@ -85,7 +88,7 @@ export type VersionGetByIdApiArg = {
     /** Id of the version */
     id: number;
 };
-export type VersionUpdateByIdApiResponse = /** status 200 Successfully updated version */ void;
+export type VersionUpdateByIdApiResponse = unknown;
 export type VersionUpdateByIdApiArg = {
     /** Id of the version */
     id: number;
@@ -99,7 +102,7 @@ export type VersionPublishByIdApiArg = {
     /** Id of the version */
     id: number;
 };
-export type VersionDeleteByIdApiResponse = /** status 200 Successfully deleted version */ void;
+export type VersionDeleteByIdApiResponse = unknown;
 export type VersionDeleteByIdApiArg = {
     /** Id of the version */
     id: number;

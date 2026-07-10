@@ -9,7 +9,10 @@ const injectedRtkApi = api
             propertyGetCollection: build.query<PropertyGetCollectionApiResponse, PropertyGetCollectionApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/properties`,
-                    params: { elementType: queryArg.elementType, filter: queryArg.filter },
+                    params: {
+                        elementType: queryArg.elementType,
+                        filter: queryArg.filter,
+                    },
                 }),
                 providesTags: ["Properties"],
             }),
@@ -52,7 +55,7 @@ export type PropertyUpdateApiArg = {
     id: string;
     updatePredefinedProperty: UpdatePredefinedProperty;
 };
-export type PropertyDeleteApiResponse = /** status 200 Successfully deleted property with given id */ void;
+export type PropertyDeleteApiResponse = unknown;
 export type PropertyDeleteApiArg = {
     /** Id of the property */
     id: string;

@@ -42,7 +42,7 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
-export type ScheduleDeleteByIdApiResponse = /** status 200 Successfully deleted schedule */ void;
+export type ScheduleDeleteByIdApiResponse = unknown;
 export type ScheduleDeleteByIdApiArg = {
     /** Id of the schedule */
     id: number;

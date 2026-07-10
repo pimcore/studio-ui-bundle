@@ -9,7 +9,10 @@ const injectedRtkApi = api
             workflowGetDetails: build.query<WorkflowGetDetailsApiResponse, WorkflowGetDetailsApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/workflows/details`,
-                    params: { elementId: queryArg.elementId, elementType: queryArg.elementType },
+                    params: {
+                        elementId: queryArg.elementId,
+                        elementType: queryArg.elementType,
+                    },
                 }),
                 providesTags: ["Workflows"],
             }),
