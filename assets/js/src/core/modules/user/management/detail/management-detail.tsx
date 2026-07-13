@@ -83,7 +83,9 @@ const ManagementDetail = ({ onCloneUser, onRemoveItem, ...props }: IManagementDe
   const handleRemoveUser = (): void => {
     modal.confirm({
       title: t('user-management.remove-user'),
-      content: t('user-management.remove-user.text'),
+      content: t('user-management.remove-user.text', { name: openedUser?.name ?? '' }),
+      okText: t('element.delete.confirmation.ok'),
+      cancelText: t('button.cancel'),
       onOk: async () => {
         triggerConfirm(activeId)
         await removeUser({ id: activeId })

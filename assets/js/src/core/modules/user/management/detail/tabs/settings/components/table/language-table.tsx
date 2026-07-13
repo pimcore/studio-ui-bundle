@@ -84,13 +84,12 @@ export const LanguageTable = ({
   }
 
   const columnHelper = createColumnHelper()
+  // The 'order' column below is intentionally hidden — the drag handle is
+  // already provided by the Grid's built-in enableRowDrag feature.
+  // const orderColumn = onChangeOrder !== null && onChangeOrder !== undefined
+  //   ? [columnHelper.accessor('order', { header: '', size: 40 })]
+  //   : []
   const tableColumns = [
-    ...onChangeOrder !== null && onChangeOrder !== undefined
-      ? [columnHelper.accessor('order', {
-          header: '',
-          size: 40
-        })]
-      : [],
     columnHelper.accessor('name', {
       header: t('user-management.settings.language.name'),
       meta: {
@@ -109,28 +108,7 @@ export const LanguageTable = ({
     })
   ]
 
-  if (onChangeOrder !== null && onChangeOrder !== undefined) {
-    tableColumns.push(columnHelper.accessor('actions', {
-      header: '',
-      size: 60,
-      cell: (context) => {
-        return (
-          <div>
-            <IconButton
-              disabled={ context.row.index === 0 }
-              icon={ { value: 'chevron-up' } }
-              onClick={ () => { handleOrder(context.row.index, context.row.index - 1) } }
-            />
-            <IconButton
-              disabled={ context.row.index === tableColumns.length - 1 }
-              icon={ { value: 'chevron-down' } }
-              onClick={ () => { handleOrder(context.row.index, context.row.index + 1) } }
-            />
-          </div>
-        )
-      }
-    }))
-  }
+  // Chevron reorder column removed — drag-and-drop handles reordering instead.
 
   if (onChange !== null && onChange !== undefined) {
     tableColumns.push(columnHelper.accessor('view', {
