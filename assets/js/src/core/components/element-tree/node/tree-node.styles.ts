@@ -17,7 +17,6 @@ export const useStyles = createStyles(({ token, css }) => {
 
       &.tree-node--is-root {
         .tree-node__content {
-          padding-left: ${token.paddingSM}px;
         }
       }
 

@@ -52,6 +52,12 @@ export const useStyles = createStyles(({ token, css }) => {
         }
       }
 
+      .tree-node > .tree-list,
+      .tree-node > .tree-list__search,
+      .tree-node > .tree-list__pager {
+        padding-left: ${token.paddingMD}px;
+      }
+
       .dnd--hotspot-drop-middle-valid .tree-node__content-wrapper-outer {
         background: ${token.colorBgContainerDisabled};
         border-radius: ${token.borderRadius}px;

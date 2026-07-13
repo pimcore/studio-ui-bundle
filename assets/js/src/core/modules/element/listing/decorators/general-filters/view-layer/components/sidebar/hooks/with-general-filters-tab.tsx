@@ -13,6 +13,8 @@ import { useTranslation } from 'react-i18next'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { FilterContainer } from '../tabs/filters/filter-container'
+import { useAppliedFilters } from '../../../../element-filters/stores'
+import { readElementFilterValues } from '../../../../element-filters/use-element-filter-values'
 
 export const generalFiltersTabKey = 'general-filters'
 
@@ -20,10 +22,27 @@ export const withGeneralFiltersTab = (useBaseHook: AbstractDecoratorProps['useSi
   const useSidebarGeneralFiltersExtension: typeof useBaseHook = () => {
     const { getProps: baseGetProps } = useBaseHook()
     const { t } = useTranslation()
+    const { values } = useAppliedFilters()
 
     const getProps: typeof baseGetProps = () => {
       const baseProps = baseGetProps()
-      const sidebarHighlights: typeof baseProps['highlights'] = baseProps.highlights ?? []
+      let sidebarHighlights: typeof baseProps['highlights'] = baseProps.highlights ?? []
+
+      const filterValues = readElementFilterValues(values)
+      const hasActiveFilters =
+        filterValues.searchTerm !== '' ||
+        filterValues.directChildren === true ||
+        filterValues.unreferenced === true ||
+        filterValues.pql !== '' ||
+        filterValues.fieldFilters.length > 0
+
+      if (hasActiveFilters) {
+        if (!sidebarHighlights.includes(generalFiltersTabKey)) {
+          sidebarHighlights = [...sidebarHighlights, generalFiltersTabKey]
+        }
+      } else {
+        sidebarHighlights = sidebarHighlights.filter((highlight) => highlight !== generalFiltersTabKey)
+      }
 
       return {
         ...baseProps,

@@ -156,7 +156,7 @@ export const Accordion = ({
     <Collapse
       accordion={ accordion }
       activeKey={ expandedIds }
-      bordered={ !spaced }
+      bordered={ !spaced && !bordered }
       className={ allClassNames.join(' ') }
       items={ itemsWithCardClassName }
       onChange={ (keys) => {
