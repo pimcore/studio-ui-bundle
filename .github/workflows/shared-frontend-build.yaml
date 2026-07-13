@@ -174,9 +174,13 @@ jobs:
         working-directory: ./assets
         run: npm run build-rsbuild-plugins
 
+      - name: Package frontend build into archive
+        working-directory: ./assets
+        run: npm run package-build
+
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          file_pattern: './public/'
+          file_pattern: './build-dist/'
           commit_message: Automatic frontend build
 
   test:
