@@ -13,12 +13,15 @@ import { useTranslation } from 'react-i18next'
 import { type ItemType } from '@Pimcore/components/menu/menu'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { FlagIcon } from '@Pimcore/components/flag-icon/flag-icon'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Spin } from '@Pimcore/components/spin/spin'
+import { Text } from '@Pimcore/components/text/text'
 import { useLazyDocumentGetTranslationsQuery, useDocumentDeleteTranslationMutation, useDocumentAddTranslationMutation, useDocumentAddMutation, useDocumentDocTypeTypeListQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 
 import { useDocumentHelper } from '@Pimcore/modules/document/hooks/use-document-helper'
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
-import { isNil, isEmpty, isNull, isUndefined } from 'lodash'
+import { isEmpty, isNull, isUndefined } from 'lodash'
 import React, { useState, useEffect, useMemo } from 'react'
 import { useModalHolder } from '@Pimcore/modules/app/modal-holder/use-modal-holder'
 import { uuid } from '@Pimcore/utils/uuid'
@@ -52,7 +55,7 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
   const LINK_MODAL_ID = useMemo(() => `link-translation-modal-${uuid()}`, [])
   const NEW_MODAL_ID = useMemo(() => `new-translation-modal-${uuid()}`, [])
 
-  const [fetchTranslations, { data: translations }] = useLazyDocumentGetTranslationsQuery()
+  const [fetchTranslations, { data: translations, isLoading: isLoadingTranslations }] = useLazyDocumentGetTranslationsQuery()
 
   const { data: docTypeTypes } = useDocumentDocTypeTypeListQuery()
 
@@ -96,12 +99,27 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
       key: 'link-existing-document',
       icon: <Icon value="link-document" />,
       onClick: () => {
-        void fetchTranslations({ id: document.id })
         setCurrentDocument(document)
         setCurrentOnFinish(() => onFinish)
         setIsLinkModalOpen(true)
       }
     })
+
+    if (isLoadingTranslations) {
+      translationItems.push({
+        label: (
+          <Flex
+            align="center"
+            gap="small"
+          >
+            <Spin type="classic" />
+            <Text type="secondary">{t('loading')}</Text>
+          </Flex>
+        ),
+        key: 'translation-loading',
+        disabled: true
+      })
+    }
 
     if (hasLinkedTranslations) {
       const openTranslationItems: ItemType[] = []
@@ -173,7 +191,6 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
           hidden: !isTranslatableInheritance,
           icon: <Icon value="inheritance-active" />,
           onClick: () => {
-            void fetchTranslations({ id: document.id })
             setCurrentDocument(document)
             setCurrentOnFinish(() => onFinish)
             setUseInheritance(true)
@@ -185,7 +202,6 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
           key: 'new-document-blank',
           icon: <Icon value="blank" />,
           onClick: () => {
-            void fetchTranslations({ id: document.id })
             setCurrentDocument(document)
             setCurrentOnFinish(() => onFinish)
             setUseInheritance(false)
@@ -200,6 +216,13 @@ export const useTranslations = (document: Element): UseTranslationsHookReturn =>
       key: 'translation',
       icon: <Icon value="translate" />,
       hidden: false,
+      // Load the translations when the user opens the "Translation" submenu, so all
+      // applicable items (e.g. "Open translation", "Unlink existing document") are shown.
+      // This intentionally does not fetch on document open (see #3461) - the request only
+      // fires once the user actually navigates into this submenu.
+      onTitleMouseEnter: () => {
+        void fetchTranslations({ id: document.id })
+      },
       children: translationItems
     }
   }
