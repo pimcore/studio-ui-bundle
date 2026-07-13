@@ -280,9 +280,11 @@ export const studioDefaultLightThemeConfig = {
       },
       Base: {
         Geekblue: {
+          1: '#f0f5ff',
           2: '#d6e4ff',
           3: '#adc6ff',
-          6: '#2f54eb'
+          6: '#2f54eb',
+          7: '#1d39c4'
         }
       }
     },
