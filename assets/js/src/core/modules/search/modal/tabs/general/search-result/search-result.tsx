@@ -72,8 +72,8 @@ export const SearchResult = (): React.JSX.Element => {
     return (
       <div style={ { display: 'flex', flexDirection: 'column', height: '100%' } }>
         <div style={ { flex: 1, overflow: 'hidden', minHeight: 0 } }>
-        <SplitLayout
-          leftItem={
+          <SplitLayout
+            leftItem={
             {
               size: 750,
               children: (
@@ -115,7 +115,7 @@ export const SearchResult = (): React.JSX.Element => {
             }
           }
 
-          rightItem={
+            rightItem={
             {
               size: 250,
               minSize: 250,
@@ -126,8 +126,8 @@ export const SearchResult = (): React.JSX.Element => {
             }
           }
 
-          withDivider
-        />
+            withDivider
+          />
         </div>
 
         <Toolbar

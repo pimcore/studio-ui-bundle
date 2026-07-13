@@ -202,26 +202,26 @@ export const SavedSearchesTab = (): React.JSX.Element => {
 
   return (
     <div style={ { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 } }>
-    <ContentLayout
-      renderToolbar={
-        <Toolbar
-          padding={ { left: 'none', right: 'none' } }
-          position={ total > 0 ? 'none' : 'bottom' }
-          theme='secondary'
-        >
-          <Flex
-            align='center'
-            gap='extra-small'
+      <ContentLayout
+        renderToolbar={
+          <Toolbar
+            padding={ { left: 'none', right: 'none' } }
+            position={ total > 0 ? 'none' : 'bottom' }
+            theme='secondary'
           >
-            <IconButton
-              data-testid='saved-search-refresh-button'
-              disabled={ isFetching }
-              icon={ { value: 'refresh' } }
-              onClick={ () => { void refetch() } }
-              tooltip={ { title: t('refresh') } }
-              type='link'
-            />
-            {total > 0 && (
+            <Flex
+              align='center'
+              gap='extra-small'
+            >
+              <IconButton
+                data-testid='saved-search-refresh-button'
+                disabled={ isFetching }
+                icon={ { value: 'refresh' } }
+                onClick={ () => { void refetch() } }
+                tooltip={ { title: t('refresh') } }
+                type='link'
+              />
+              {total > 0 && (
               <>
                 <Divider
                   size='small'
@@ -239,53 +239,53 @@ export const SavedSearchesTab = (): React.JSX.Element => {
                   total={ total }
                 />
               </>
-            )}
-          </Flex>
-        </Toolbar>
+              )}
+            </Flex>
+          </Toolbar>
       }
-      renderTopBar={
-        <Box
-          className={ (data?.totalItems ?? 0) === 0 ? styles.topBar : undefined }
-          margin={ { bottom: 'small' } }
-          padding={ { y: 'extra-small' } }
-        >
-          <SearchInput
-            maxWidth='100%'
-            onSearch={ (value) => {
-              setCurrentPage(1)
-              setSearchTerm(value)
-            } }
-            placeholder={ t('component.search.pleaceholder') }
-          />
-        </Box>
+        renderTopBar={
+          <Box
+            className={ (data?.totalItems ?? 0) === 0 ? styles.topBar : undefined }
+            margin={ { bottom: 'small' } }
+            padding={ { y: 'extra-small' } }
+          >
+            <SearchInput
+              maxWidth='100%'
+              onSearch={ (value) => {
+                setCurrentPage(1)
+                setSearchTerm(value)
+              } }
+              placeholder={ t('component.search.pleaceholder') }
+            />
+          </Box>
       }
-    >
-      <Content
-        margin={ { x: 'extra-small', y: 'none' } }
-        none={ !isFetching && isEmpty(data?.items) }
       >
-        <Box margin={ { x: 'extra-small', y: 'none' } }>
-          <Grid
-            autoWidth
-            columns={ columns }
-            data={ tableItems }
-            enableSorting
-            isLoading={ isFetching }
-            manualSorting
-            onSortingChange={ (nextSorting) => {
-              setSorting(nextSorting)
-              setCurrentPage(1)
-            } }
-            resizable
+        <Content
+          margin={ { x: 'extra-small', y: 'none' } }
+          none={ !isFetching && isEmpty(data?.items) }
+        >
+          <Box margin={ { x: 'extra-small', y: 'none' } }>
+            <Grid
+              autoWidth
+              columns={ columns }
+              data={ tableItems }
+              enableSorting
+              isLoading={ isFetching }
+              manualSorting
+              onSortingChange={ (nextSorting) => {
+                setSorting(nextSorting)
+                setCurrentPage(1)
+              } }
+              resizable
             // During loading the Grid renders placeholder rows without an id; return undefined for
             // those so it falls back to unique index ids (a constant id collides → phantom skeleton
             // rows linger after the data loads).
-            setRowId={ (row) => isUndefined(row.id) ? (undefined as unknown as string) : String(row.id) }
-            sorting={ sorting }
-          />
-        </Box>
-      </Content>
-    </ContentLayout>
+              setRowId={ (row) => isUndefined(row.id) ? (undefined as unknown as string) : String(row.id) }
+              sorting={ sorting }
+            />
+          </Box>
+        </Content>
+      </ContentLayout>
     </div>
   )
 }
