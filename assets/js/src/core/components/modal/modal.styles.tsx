@@ -42,7 +42,7 @@ export const useStyle = createStyles(({ token, css }) => {
             display: inline-flex;
             flex-direction: column;
             align-items: start;
-            gap: ${token.marginSM}px;
+            gap: 4px;
 
             .ant-modal-header {
                 margin-bottom: 0;
