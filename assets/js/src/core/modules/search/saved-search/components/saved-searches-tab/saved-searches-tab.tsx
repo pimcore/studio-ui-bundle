@@ -76,7 +76,7 @@ export const SavedSearchesTab = (): React.JSX.Element => {
   })
   const [deleteConfiguration] = useSavedSearchDeleteConfigurationMutation()
 
-  const total = data?.totalItems ?? 0
+  const total = (data?.totalItems ?? 0) + 3 // +3 for mock styling-preview items
 
   const onDelete = (id: number): void => {
     setDeletingId(id)
@@ -94,11 +94,45 @@ export const SavedSearchesTab = (): React.JSX.Element => {
       .finally(() => { setDeletingId(undefined) })
   }
 
-  const tableItems: SavedSearchRow[] = (data?.items ?? []).map((item) => ({
-    ...item,
-    ownership: item.owner ? t('saved-search.ownership.own') : t('saved-search.ownership.shared'),
-    modificationDateLabel: formatDateTime({ timestamp: item.modificationDate, dateStyle: 'short', timeStyle: 'short' })
-  }))
+  // TODO: Remove mock data after styling review
+  const mockItems: SavedSearchRow[] = [
+    {
+      id: -1,
+      name: 'Product Images',
+      owner: true,
+      modificationDate: 1751500000,
+      elementType: 'asset',
+      ownership: t('saved-search.ownership.own'),
+      modificationDateLabel: formatDateTime({ timestamp: 1751500000, dateStyle: 'short', timeStyle: 'short' })
+    },
+    {
+      id: -2,
+      name: 'Active Products',
+      owner: false,
+      modificationDate: 1751400000,
+      elementType: 'data-object',
+      ownership: t('saved-search.ownership.shared'),
+      modificationDateLabel: formatDateTime({ timestamp: 1751400000, dateStyle: 'short', timeStyle: 'short' })
+    },
+    {
+      id: -3,
+      name: 'Landing Pages',
+      owner: true,
+      modificationDate: 1751300000,
+      elementType: 'document',
+      ownership: t('saved-search.ownership.own'),
+      modificationDateLabel: formatDateTime({ timestamp: 1751300000, dateStyle: 'short', timeStyle: 'short' })
+    }
+  ]
+
+  const tableItems: SavedSearchRow[] = [
+    ...mockItems,
+    ...(data?.items ?? []).map((item) => ({
+      ...item,
+      ownership: item.owner ? t('saved-search.ownership.own') : t('saved-search.ownership.shared'),
+      modificationDateLabel: formatDateTime({ timestamp: item.modificationDate, dateStyle: 'short', timeStyle: 'short' })
+    }))
+  ]
 
   const columnHelper = createColumnHelper<SavedSearchRow>()
   const columns = [
@@ -137,7 +171,7 @@ export const SavedSearchesTab = (): React.JSX.Element => {
         <Flex align='center'>
           <IconButton
             data-testid='saved-search-open-button'
-            icon={ { value: 'folder' } }
+            icon={ { value: 'open-folder' } }
             loading={ openingId === row.original.id }
             onClick={ () => { onOpen(row.original.id) } }
             tooltip={ { title: t('saved-search.open') } }
@@ -167,15 +201,18 @@ export const SavedSearchesTab = (): React.JSX.Element => {
   ]
 
   return (
+    <div style={ { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 } }>
     <ContentLayout
       renderToolbar={
         <Toolbar
-          borderStyle='primary'
-          margin={ { top: 'small' } }
-          padding={ { x: 'small', y: 'extra-small' } }
+          padding={ { left: 'none', right: 'none' } }
+          position={ total > 0 ? 'none' : 'bottom' }
           theme='secondary'
         >
-          <Flex align='center'>
+          <Flex
+            align='center'
+            gap='extra-small'
+          >
             <IconButton
               data-testid='saved-search-refresh-button'
               disabled={ isFetching }
@@ -208,9 +245,9 @@ export const SavedSearchesTab = (): React.JSX.Element => {
       }
       renderTopBar={
         <Box
-          className={ styles.topBar }
+          className={ (data?.totalItems ?? 0) === 0 ? styles.topBar : undefined }
           margin={ { bottom: 'small' } }
-          padding={ { x: 'small', y: 'extra-small' } }
+          padding={ { y: 'extra-small' } }
         >
           <SearchInput
             maxWidth='100%'
@@ -249,5 +286,6 @@ export const SavedSearchesTab = (): React.JSX.Element => {
         </Box>
       </Content>
     </ContentLayout>
+    </div>
   )
 }

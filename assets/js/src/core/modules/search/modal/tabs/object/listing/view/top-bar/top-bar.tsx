@@ -12,20 +12,19 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ClassDefinitionSelect } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/components/class-definition-select/class-definition-select'
 import { ProvidedTypeSelect } from '@Pimcore/modules/element/components/type-select/provided-type-select'
 import { SearchTermFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/search/search-term-filter'
-import { Flex } from 'antd'
+import { Flex } from '@Pimcore/components/flex/flex'
 import React from 'react'
 
 export const TopBar = (): React.JSX.Element => {
   return (
     <Toolbar
-      borderStyle='default'
       padding={ { left: 'none', right: 'none' } }
-      position='top'
+      position='none'
       theme='secondary'
     >
       <Flex
         className='w-full'
-        gap={ 'small' }
+        gap={ 'extra-small' }
       >
         <ProvidedTypeSelect />
         <ClassDefinitionSelect nullable />
