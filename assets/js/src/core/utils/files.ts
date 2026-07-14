@@ -37,3 +37,32 @@ export async function downloadFromUrl (url: string, filename?: string): Promise<
   saveFileLocal(url, filename)
   return true
 }
+
+/**
+ * CDN-safe download: performs a GET availability check against a dedicated
+ * endpoint (never the download URL itself) before triggering the browser
+ * download. Avoids the HEAD-probe that Fastly turns into an origin GET,
+ * which would consume single-use export files before the real download.
+ * Returns false when the server reports the file is unavailable.
+ * On a network error contacting the check endpoint the download is attempted anyway.
+ */
+export async function downloadFromUrlWithCheck (
+  downloadUrl: string,
+  checkUrl: string,
+  filename?: string
+): Promise<boolean> {
+  try {
+    const response = await fetch(checkUrl, { headers: { Accept: 'application/json' } })
+    if (!response.ok) {
+      return false
+    }
+    const data = await response.json() as { available?: boolean }
+    if (data.available !== true) {
+      return false
+    }
+  } catch {
+    // Network error on the availability probe — attempt download anyway
+  }
+  saveFileLocal(downloadUrl, filename)
+  return true
+}
