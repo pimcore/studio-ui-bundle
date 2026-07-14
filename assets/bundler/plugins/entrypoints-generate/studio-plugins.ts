@@ -162,3 +162,7 @@ export const pluginGenerateEntrypoints = (options?: PluginOptions): RsbuildPlugi
     })
   }
 });
+
+// Re-export the write-build-id plugin so external consumers can import it
+// alongside pluginGenerateEntrypoints from '@pimcore/studio-ui-bundle/rsbuild/plugins'.
+export { pluginWriteBuildId } from '../write-build-id';
