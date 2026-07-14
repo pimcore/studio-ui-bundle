@@ -3,6 +3,7 @@ import { pluginReact } from '@rsbuild/plugin-react'
 import { pluginBabel } from '@rsbuild/plugin-babel';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { pluginGenerateEntrypoints } from './bundler/plugins/entrypoints-generate';
+import { pluginWriteBuildId } from './bundler/plugins/write-build-id';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
 import path from 'path'
 import fs from 'fs';
@@ -75,14 +76,7 @@ export default defineConfig({
     }
   },
   plugins: [
-    {
-      name: 'studio-write-build-id',
-      setup(api) {
-        api.onAfterBuild(() => {
-          fs.writeFileSync(path.join(buildPath, '.build-id'), buildGroupId);
-        });
-      },
-    },
+    pluginWriteBuildId({ buildId: buildGroupId }),
     pluginGenerateEntrypoints(),
     pluginReact(),
     pluginBabel({
