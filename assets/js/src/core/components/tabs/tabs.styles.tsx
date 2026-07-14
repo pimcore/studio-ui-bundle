@@ -79,6 +79,10 @@ export const useStyles = createStyles(({ token, css }) => {
         padding-right: 0;
       }
 
+      &.tabs--no-padding .ant-tabs-nav .ant-tabs-tab + .ant-tabs-tab {
+        margin-left: ${token.marginSM}px;
+      }
+
       &.tabs--no-tab-bar-margin.ant-tabs-top>.ant-tabs-nav+.ant-tabs-content-holder {
         padding-top: 0;
       }
@@ -122,10 +126,26 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       &.tabs--full-height {
+        display: flex;
+        flex-direction: column;
         height: 100%;
 
+        .ant-tabs-content-holder {
+          flex: 1;
+          min-height: 0;
+          position: relative;
+          overflow: hidden;
+        }
+
         .ant-tabs-content {
+          position: absolute;
+          inset: 0;
+        }
+
+        .ant-tabs-tabpane {
+          position: relative;
           height: 100%;
+          overflow: hidden;
         }
       }
 
