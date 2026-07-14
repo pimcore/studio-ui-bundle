@@ -84,11 +84,6 @@ export const LanguageTable = ({
   }
 
   const columnHelper = createColumnHelper()
-  // The 'order' column below is intentionally hidden — the drag handle is
-  // already provided by the Grid's built-in enableRowDrag feature.
-  // const orderColumn = onChangeOrder !== null && onChangeOrder !== undefined
-  //   ? [columnHelper.accessor('order', { header: '', size: 40 })]
-  //   : []
   const tableColumns = [
     columnHelper.accessor('name', {
       header: t('user-management.settings.language.name'),
@@ -107,8 +102,6 @@ export const LanguageTable = ({
       size: 270
     })
   ]
-
-  // Chevron reorder column removed — drag-and-drop handles reordering instead.
 
   if (onChange !== null && onChange !== undefined) {
     tableColumns.push(columnHelper.accessor('view', {
