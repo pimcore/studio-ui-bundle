@@ -14,12 +14,6 @@ const buildGroupId = getBuildGroupId();
 const buildId = `${buildGroupId}-sdk`;
 const buildPath = path.resolve(__dirname, '..', 'public', 'build', buildId);
 
-// Sibling directories are pruned by pluginWriteBuildId in onAfterBuild (see the plugin
-// docstring for the two-mode contract). The previous top-level `readdirSync` sweep was
-// aggressive (wiping the extractor-installed marker + any user files without a
-// `.build-id` marker) and ran at config-load time; the plugin-driven variant only
-// touches directories that clearly look like build outputs.
-
 if (!fs.existsSync(buildPath)) {
   fs.mkdirSync(buildPath, { recursive: true });
 }
