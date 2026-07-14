@@ -37,6 +37,7 @@ export interface AdvancedManyToManyObjectRelationClassDefinitionProps {
   allowedClassId: string | null
   columns?: RelationColumnDefinition[] | null
   name: string[]
+  hideOpenButton?: boolean
 }
 
 export interface RelationColumnDefinition {
