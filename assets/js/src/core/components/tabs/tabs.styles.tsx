@@ -80,7 +80,7 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       &.tabs--no-padding .ant-tabs-nav .ant-tabs-tab + .ant-tabs-tab {
-        margin-left: 12px;
+        margin-left: ${token.marginSM}px;
       }
 
       &.tabs--no-tab-bar-margin.ant-tabs-top>.ant-tabs-nav+.ant-tabs-content-holder {
