@@ -1206,7 +1206,8 @@ element.delete.batch.title: Delete items
 element.delete.batch.note: 'Please note: These items will be permanently deleted and can not be restored.'
 element.delete.batch.question_one: 'Do you really want to delete this item?'
 element.delete.batch.question_other: 'Do you really want to delete these {{count}} items?'
-element.delete.batch.ok: Delete permanently
+element.delete.batch.ok: Delete
+element.delete.batch.ok.permanent: Delete permanently
 element.delete.batch.show-paths: Show items
 element.delete.batch.dependencies-warning: 'There may be dependencies, delete anyway?'
 element.open: Open
