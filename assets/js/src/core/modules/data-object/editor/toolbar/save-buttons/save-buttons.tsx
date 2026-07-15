@@ -112,7 +112,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
         )
       }
 
-      if (dataObject?.published === false) {
+      if (dataObject?.published === false && checkElementPermission(dataObject?.permissions, 'save')) {
         secondaryButtons.push(
           <Button
             disabled={ isLoading || isSchedulesLoading || isDraftLoading }
