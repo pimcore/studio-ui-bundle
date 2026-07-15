@@ -27,7 +27,7 @@ export const useStyles = createStyles(({ token, css }) => {
         width: inherit;
         height: inherit;
         color: ${token['gold-7']};
-        background: '${token['gold-3']};'
+        background: '${token['gold-3']}';
         border-radius: ${token.borderRadiusLG}px;
       }
 
