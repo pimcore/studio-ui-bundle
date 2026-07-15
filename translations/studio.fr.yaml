@@ -1273,6 +1273,8 @@ image-gallery.clear-image-selection: Effacer la sélection d'image
 image-gallery.delete-frame: Supprimer le cadre
 text: Texte
 video: Vidéo
+object: Objet
+variant: Variante
 processing: Traitement
 upload: Téléverser
 close: Fermer

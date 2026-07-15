@@ -1273,6 +1273,8 @@ image-gallery.clear-image-selection: Rensa bildval
 image-gallery.delete-frame: Ta bort ram
 text: Text
 video: Video
+object: Objekt
+variant: Variant
 processing: Bearbetar
 upload: Ladda upp
 close: Stäng
