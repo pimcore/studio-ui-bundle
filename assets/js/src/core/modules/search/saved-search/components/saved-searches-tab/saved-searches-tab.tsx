@@ -76,7 +76,7 @@ export const SavedSearchesTab = (): React.JSX.Element => {
   })
   const [deleteConfiguration] = useSavedSearchDeleteConfigurationMutation()
 
-  const total = (data?.totalItems ?? 0) + 3 // +3 for mock styling-preview items
+  const total = data?.totalItems ?? 0
 
   const onDelete = (id: number): void => {
     setDeletingId(id)
@@ -94,39 +94,7 @@ export const SavedSearchesTab = (): React.JSX.Element => {
       .finally(() => { setDeletingId(undefined) })
   }
 
-  // TODO: Remove mock data after styling review
-  const mockItems: SavedSearchRow[] = [
-    {
-      id: -1,
-      name: 'Product Images',
-      owner: true,
-      modificationDate: 1751500000,
-      elementType: 'asset',
-      ownership: t('saved-search.ownership.own'),
-      modificationDateLabel: formatDateTime({ timestamp: 1751500000, dateStyle: 'short', timeStyle: 'short' })
-    },
-    {
-      id: -2,
-      name: 'Active Products',
-      owner: false,
-      modificationDate: 1751400000,
-      elementType: 'data-object',
-      ownership: t('saved-search.ownership.shared'),
-      modificationDateLabel: formatDateTime({ timestamp: 1751400000, dateStyle: 'short', timeStyle: 'short' })
-    },
-    {
-      id: -3,
-      name: 'Landing Pages',
-      owner: true,
-      modificationDate: 1751300000,
-      elementType: 'document',
-      ownership: t('saved-search.ownership.own'),
-      modificationDateLabel: formatDateTime({ timestamp: 1751300000, dateStyle: 'short', timeStyle: 'short' })
-    }
-  ]
-
   const tableItems: SavedSearchRow[] = [
-    ...mockItems,
     ...(data?.items ?? []).map((item) => ({
       ...item,
       ownership: item.owner ? t('saved-search.ownership.own') : t('saved-search.ownership.shared'),
