@@ -1196,7 +1196,8 @@ element.delete.batch.title: Elemente löschen
 element.delete.batch.note: 'Bitte beachten: Diese Elemente werden dauerhaft gelöscht und können nicht wiederhergestellt werden.'
 element.delete.batch.question_one: 'Möchten Sie dieses Element wirklich löschen?'
 element.delete.batch.question_other: 'Möchten Sie wirklich diese {{count}} Elemente löschen?'
-element.delete.batch.ok: Endgültig löschen
+element.delete.batch.ok: Löschen
+element.delete.batch.ok.permanent: Endgültig löschen
 element.delete.batch.show-paths: Elemente anzeigen
 element.delete.batch.dependencies-warning: 'Es könnte Abhängigkeiten geben, trotzdem löschen?'
 element.open: Öffnen
