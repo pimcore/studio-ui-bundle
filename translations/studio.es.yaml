@@ -1196,7 +1196,8 @@ element.delete.batch.title: Eliminar elementos
 element.delete.batch.note: 'Tenga en cuenta: Estos elementos se eliminarán permanentemente y no se podrán restaurar.'
 element.delete.batch.question_one: '¿Realmente desea eliminar este elemento?'
 element.delete.batch.question_other: '¿Realmente desea eliminar estos {{count}} elementos?'
-element.delete.batch.ok: Eliminar permanentemente
+element.delete.batch.ok: Eliminar
+element.delete.batch.ok.permanent: Eliminar permanentemente
 element.delete.batch.show-paths: Mostrar elementos
 element.delete.batch.dependencies-warning: 'Puede haber dependencias, ¿eliminar de todas formas?'
 element.open: Abrir
