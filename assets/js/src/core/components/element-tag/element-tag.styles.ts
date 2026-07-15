@@ -33,8 +33,8 @@ export const useStyles = createStyles(({ token, css }) => {
     }
 
     &.ant-tag-geekblue {
-      background-color: ${token['geekblue-1']} !important;
-      color: ${token['geekblue-7']} !important;
+      background-color: ${token.geekblue1} !important;
+      color: ${token.geekblue7} !important;
     }
   `
 

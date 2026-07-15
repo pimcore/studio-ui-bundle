@@ -96,6 +96,12 @@ export const studioDefaultLightThemeConfig = {
     colorDividerInverse: 'rgba(217, 217, 217, 0.34)',
     colorInactiveInverse: 'rgba(255, 255, 255, 0.5)',
 
+    geekblue1: '#f0f5ff',
+    geekblue2: '#d6e4ff',
+    geekblue3: '#adc6ff',
+    geekblue6: '#2f54eb',
+    geekblue7: '#1d39c4',
+
     // custom color tokens (e.g. for icon colors)
     colorCodingRed1: '#b73933',
     colorCodingRed2: '#cc4a46',

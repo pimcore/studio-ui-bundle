@@ -121,6 +121,7 @@ export const GridContainer = (): React.JSX.Element => {
 
   return useMemo(() => (
     <Grid
+      autoWidth
       columns={ gridColumnDefinition }
       data={ gridData }
       isLoading={ isLoading || isFetching || dataLoadingState !== 'data-available' }
