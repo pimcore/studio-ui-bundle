@@ -9,7 +9,11 @@
  */
 
 import { useAssetGetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import React, { useContext, useMemo, useState } from 'react'
+import {
+  useAssetGetFolderPreviewSettingQuery,
+  useAssetUpdateFolderPreviewSettingMutation
+} from './folder-preview-setting-api-slice'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
@@ -32,6 +36,15 @@ const PreviewContainer = (): React.JSX.Element => {
   const [cardSize, setCardSize] = useState<SizeTypes>(SizeTypes.SMALL)
   const assetId = assetContext.id
   const { asset } = useAssetDraft(assetId)
+
+  const { data: previewSetting } = useAssetGetFolderPreviewSettingQuery({ folderId: assetId })
+  const [updateFolderPreviewSetting] = useAssetUpdateFolderPreviewSettingMutation()
+
+  useEffect(() => {
+    if (previewSetting?.imageSize !== undefined) {
+      setCardSize(previewSetting.imageSize as SizeTypes)
+    }
+  }, [previewSetting?.imageSize])
 
   const { data, isFetching, refetch } = useAssetGetTreeQuery({
     pathIncludeDescendants: true,
@@ -59,7 +72,11 @@ const PreviewContainer = (): React.JSX.Element => {
           >
             <Text type='secondary'>{ t('asset.folder.preview.image-display') }</Text>
             <Segmented
-              onChange={ (value) => { setCardSize(value as SizeTypes) } }
+              onChange={ (value) => {
+                const size = value as SizeTypes
+                setCardSize(size)
+                void updateFolderPreviewSetting({ folderId: assetId, body: { imageSize: size } })
+              } }
               options={ [
                 { label: t('asset.folder.preview.image-display.small'), value: SizeTypes.SMALL },
                 { label: t('asset.folder.preview.image-display.large'), value: SizeTypes.LARGE }
