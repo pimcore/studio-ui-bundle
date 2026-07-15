@@ -277,13 +277,6 @@ export const studioDefaultLightThemeConfig = {
         Primary: {
           colorPrimaryText: '#22075e'
         }
-      },
-      Base: {
-        Geekblue: {
-          2: '#d6e4ff',
-          3: '#adc6ff',
-          6: '#2f54eb'
-        }
       }
     },
 
