@@ -13,6 +13,8 @@ import { Accordion, type AccordionItemType } from './accordion'
 import { type CollapseProps } from 'antd'
 import React from 'react'
 import { Button } from '@Pimcore/components/button/button'
+import { Grid } from '@Pimcore/components/grid/grid'
+import { createColumnHelper } from '@tanstack/react-table'
 
 const config: Meta = {
   title: 'Components/Layout/[Deprecated] Accordion',
@@ -112,6 +114,24 @@ export const Bordered = {
   }
 }
 
+interface Language {
+  language: string
+  abbreviation: string
+}
+
+const languageColumnHelper = createColumnHelper<Language>()
+
+const languageColumns = [
+  languageColumnHelper.accessor('language', {}),
+  languageColumnHelper.accessor('abbreviation', {})
+]
+
+const languageData: Language[] = [
+  { language: 'English', abbreviation: 'en' },
+  { language: 'German', abbreviation: 'de' },
+  { language: 'French', abbreviation: 'fr' }
+]
+
 export const BorderedWithTable = {
   args: {
     bordered: true,
@@ -122,19 +142,10 @@ export const BorderedWithTable = {
       key: '1',
       title: <>Table inside accordion</>,
       children: (
-        <table style={ { width: '100%', borderCollapse: 'collapse' } }>
-          <thead>
-            <tr>
-              <th style={ { padding: '4px 8px', textAlign: 'left' } }>Language</th>
-              <th style={ { padding: '4px 8px', textAlign: 'left' } }>Abbreviation</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td style={ { padding: '4px 8px' } }>English</td><td style={ { padding: '4px 8px' } }>en</td></tr>
-            <tr><td style={ { padding: '4px 8px' } }>German</td><td style={ { padding: '4px 8px' } }>de</td></tr>
-            <tr><td style={ { padding: '4px 8px' } }>French</td><td style={ { padding: '4px 8px' } }>fr</td></tr>
-          </tbody>
-        </table>
+        <Grid
+          columns={ languageColumns }
+          data={ languageData }
+        />
       )
     }]
   }

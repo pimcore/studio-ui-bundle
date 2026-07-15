@@ -152,11 +152,13 @@ export const Accordion = ({
     allClassNames.push(styles.table)
   }
 
+  const isNativeBorder = !spaced && !bordered
+
   return (
     <Collapse
       accordion={ accordion }
       activeKey={ expandedIds }
-      bordered={ !spaced && !bordered }
+      bordered={ isNativeBorder }
       className={ allClassNames.join(' ') }
       items={ itemsWithCardClassName }
       onChange={ (keys) => {

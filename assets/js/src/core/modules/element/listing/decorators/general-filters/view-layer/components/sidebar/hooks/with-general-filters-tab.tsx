@@ -29,6 +29,7 @@ export const withGeneralFiltersTab = (useBaseHook: AbstractDecoratorProps['useSi
       let sidebarHighlights: typeof baseProps['highlights'] = baseProps.highlights ?? []
 
       const filterValues = readElementFilterValues(values)
+      // TODO: extract this check into a reusable util in the future.
       const hasActiveFilters =
         filterValues.searchTerm !== '' ||
         filterValues.directChildren ||
