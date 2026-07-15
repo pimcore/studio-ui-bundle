@@ -3,6 +3,7 @@ import { pluginReact } from '@rsbuild/plugin-react'
 import { pluginBabel } from '@rsbuild/plugin-babel'
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { pluginGenerateEntrypoints } from './bundler/plugins/entrypoints-generate';
+import { pluginWriteBuildId } from './bundler/plugins/write-build-id';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
 import path from 'path'
 import fs from 'fs';
@@ -12,14 +13,6 @@ import packages from './package.json'
 const buildGroupId = getBuildGroupId();
 const buildId = `${buildGroupId}-sdk`;
 const buildPath = path.resolve(__dirname, '..', 'public', 'build', buildId);
-
-if (fs.existsSync( path.resolve(__dirname, '..', 'public', 'build'))) {
-  fs.readdirSync(path.resolve(__dirname, '..', 'public', 'build')).forEach((file) => {
-    if (file !== 'studio-npm-package.tgz') {
-      fs.rmSync(path.resolve(__dirname, '..', 'public', 'build', file), { recursive: true });
-    }
-  })
-}
 
 if (!fs.existsSync(buildPath)) {
   fs.mkdirSync(buildPath, { recursive: true });
@@ -80,14 +73,7 @@ export default defineConfig({
     },
   },
   plugins: [
-    {
-      name: 'studio-write-build-id',
-      setup(api) {
-        api.onAfterBuild(() => {
-          fs.writeFileSync(path.join(buildPath, '.build-id'), buildGroupId);
-        });
-      },
-    },
+    pluginWriteBuildId({ buildId: buildGroupId }),
     pluginGenerateEntrypoints(),
     pluginReact(),
     pluginBabel({

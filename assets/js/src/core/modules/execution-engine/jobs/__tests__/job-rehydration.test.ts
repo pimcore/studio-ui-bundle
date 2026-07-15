@@ -28,7 +28,10 @@ jest.mock('@Pimcore/modules/execution-engine/message-handlers/message-bus-job/me
 }))
 jest.mock('i18next', () => ({ t: (key: string) => key }))
 jest.mock('@Pimcore/app/api/pimcore/route', () => ({ getPrefix: () => '' }))
-jest.mock('@Pimcore/utils/files', () => ({ downloadFromUrl: jest.fn() }))
+jest.mock('@Pimcore/utils/files', () => ({
+  downloadFromUrl: jest.fn(),
+  downloadFromUrlWithCheck: jest.fn()
+}))
 jest.mock('@Pimcore/modules/app/error-handler', () => ({
   default: jest.fn(),
   GeneralError: class {} // eslint-disable-line @typescript-eslint/no-extraneous-class
