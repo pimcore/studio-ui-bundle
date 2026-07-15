@@ -46,10 +46,11 @@ export const useStyles = createStyles(({ token, css }) => {
         align-items: center;
       }
 
-      .ant-tag-geekblue {
-        background-color: ${token.Colors.Base.Geekblue['2']} !important;
-        color: ${token.Colors.Base.Geekblue['6']} !important;
-        border-color: ${token.Colors.Base.Geekblue['3']} !important;
+      .ant-tag.ant-tag-geekblue {
+        background-color: ${token['geekblue-2']} !important;
+        color: ${token['geekblue-6']} !important;
+        border-color: ${token['geekblue-3']} !important;
+        cursor: pointer;
       }
     `,
 
