@@ -20,7 +20,7 @@ export const useStyle = createStyles(({ token, css }) => {
         
       .ant-empty-description {
         padding: 5px ${token.controlPaddingHorizontal}px;
-        font-size: 14px;
+        font-size: 12px;
         color: ${token.Empty.colorTextDisabled};
         line-height: 20px;
       }

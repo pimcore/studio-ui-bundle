@@ -54,7 +54,8 @@ export const useStyle = createStyles(({ token, css }) => {
                       .pimcore-icon {
                           background: ${token.colorFillQuaternary};
                           border-radius: 2px;
-                          outline: 8px solid ${token.colorFillQuaternary};
+                          outline: 5px solid ${token.colorFillQuaternary};
+                          color: ${token.itemActiveColor};
                       }
                   }
 
@@ -85,7 +86,7 @@ export const useStyle = createStyles(({ token, css }) => {
                 .pimcore-icon {
                     background: ${token.colorFillQuaternary};
                     border-radius: 2px;
-                    outline: 8px solid ${token.colorFillQuaternary};
+                    outline: 5px solid ${token.colorFillQuaternary};
                   color: ${token.itemActiveColor};
                 }
               }
