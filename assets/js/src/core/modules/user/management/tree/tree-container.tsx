@@ -123,7 +123,7 @@ const TreeContainer = ({ expandedKeys, treeData, onLoadTreeData, onReloadTree, o
                 modal.confirm({
                   title: t('user-management.remove-user'),
                   content: t('user-management.remove-user.text', { name: getUserNameByKey(treeData, key) }),
-                  okText: t('button.confirm'),
+                  okText: t('element.delete.confirmation.ok'),
                   cancelText: t('button.cancel'),
                   onOk: async () => {
                     await removeUser({ id: Number(key) })
