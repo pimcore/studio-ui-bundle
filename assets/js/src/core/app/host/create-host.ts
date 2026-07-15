@@ -1,0 +1,49 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { Container } from 'inversify'
+import { createStore } from '@Pimcore/app/store'
+import { ContainerProvider } from '@Pimcore/app/depency-injection'
+
+export interface PortalHost {
+  container: Container
+  store: ReturnType<typeof createStore>['store']
+  injectSliceWithState: ReturnType<typeof createStore>['injectSliceWithState']
+  ContainerProvider: typeof ContainerProvider
+}
+
+export interface CreateHostOptions {
+  /**
+   * Install services into this host's container. A standalone app passes a
+   * curated installer that binds ONLY what it needs. Omit it (e.g. a shell) to
+   * install nothing — deliberately NOT the full admin service graph, so a local
+   * build stays slim. For the full admin set, import `installCoreServices` from
+   * `@pimcore/studio-kit/services` and pass it here.
+   */
+  installServices?: (container: Container) => void
+}
+
+/**
+ * WS3 — spin up an ISOLATED host: its own DI container + its own Redux store,
+ * independent of the admin globals. Services are opt-in via `installServices`
+ * (nothing by default) to keep standalone bundles slim.
+ */
+export function createHost (options: CreateHostOptions = {}): PortalHost {
+  const container = new Container()
+  options.installServices?.(container)
+  const { store, injectSliceWithState } = createStore()
+
+  return {
+    container,
+    store,
+    injectSliceWithState,
+    ContainerProvider
+  }
+}

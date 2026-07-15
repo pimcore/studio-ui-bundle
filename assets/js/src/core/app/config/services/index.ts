@@ -11,6 +11,7 @@
 /* eslint-disable max-lines */
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { container } from '@Pimcore/app/depency-injection'
+import { Container } from 'inversify'
 import { MainNavRegistry } from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry'
 import { ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { ContextMenuRegistry } from '@Pimcore/modules/app/context-menu-registry/context-menu-registry'
@@ -386,6 +387,7 @@ import { ColorChannelMixerVideoTransformationType } from '@Pimcore/modules/video
 import { MuteVideoTransformationType } from '@Pimcore/modules/video-thumbnails/dynamic-types/mute/mute-transformation-type'
 
 // Component registry
+export function installCoreServices (container: Container): void {
 container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
 
 // Context menu registry
@@ -858,3 +860,6 @@ container.bind(serviceIds['DynamicTypes/GDPRProvider/DataObjects']).to(DynamicTy
 container.bind(serviceIds['DynamicTypes/GDPRProvider/Assets']).to(DynamicTypeAssetsGDPRProvider).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GDPRProvider/Users']).to(DynamicTypeUsersGDPRProvider).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GDPRProvider/Emails']).to(DynamicTypeEmailsGDPRProvider).inSingletonScope()
+}
+
+installCoreServices(container)
