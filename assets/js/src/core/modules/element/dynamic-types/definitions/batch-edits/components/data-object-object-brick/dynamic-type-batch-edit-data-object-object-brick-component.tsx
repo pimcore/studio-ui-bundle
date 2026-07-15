@@ -54,7 +54,7 @@ export const DynamicTypeBatchEditDataObjectObjectBrickComponent = ({ batchEdit }
   return (
     <BatchEditFormItem
       component={ component }
-      name={ formItemKey }
+      items={ [{ key: 'default', locale: column.locale, name: formItemKey, hidden: false, applyInitialValue: true }] }
       supportsBatchAppendModes={ dynType.supportsBatchAppendModes }
     />
   )
