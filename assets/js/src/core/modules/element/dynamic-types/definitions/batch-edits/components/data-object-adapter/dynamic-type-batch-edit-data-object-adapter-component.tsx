@@ -18,13 +18,15 @@ import { type DynamicTypeObjectDataRegistry } from '../../../objects/data-relate
 import { type AbstractDateObjectDataDefinition } from '../../../objects/data-related/types/abstract/dynamic-type-object-data-abstract-date'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 import { BatchEditFormItem } from '../../helpers/data-object/batch-edit-form-item'
+import { useBatchEditLocales } from '../../helpers/data-object/use-batch-edit-locales'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
 export const DynamicTypeBatchEditDataObjectAdapterComponent = ({ batchEdit }: AbstractBatchEditDefinition): React.JSX.Element => {
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const { value, ...column } = batchEdit
   const fieldWidth = useFieldWidth()
-  const { frontendType, config, key } = column
+  const localeItems = useBatchEditLocales(batchEdit)
+  const { frontendType, config } = column
 
   const hasType = objectDataRegistry.hasDynamicType(frontendType!)
 
@@ -42,16 +44,10 @@ export const DynamicTypeBatchEditDataObjectAdapterComponent = ({ batchEdit }: Ab
     defaultFieldWidth: fieldWidth
   })
 
-  let formItemKey = [key]
-
-  if (column.localizable) {
-    formItemKey = ['localizedfields', key, column.locale!]
-  }
-
   return (
     <BatchEditFormItem
       component={ component }
-      name={ formItemKey }
+      items={ localeItems }
       supportsBatchAppendModes={ dynType.supportsBatchAppendModes }
     />
   )
