@@ -47,10 +47,9 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       .ant-tag.ant-tag-geekblue {
-        background-color: ${token['geekblue-2']} !important;
-        color: ${token['geekblue-6']} !important;
-        border-color: ${token['geekblue-3']} !important;
-        cursor: pointer;
+        background-color: ${token.geekblue2} !important;
+        color: ${token.geekblue6} !important;
+        border-color: ${token.geekblue3} !important;
       }
     `,
 
