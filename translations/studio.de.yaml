@@ -1302,7 +1302,7 @@ tree.actions.paste: Einfügen
 tree.actions.delete: Löschen
 tree.actions.add-user: Benutzer hinzufügen
 tree.actions.clone-user: Benutzer klonen
-tree.actions.remove-user: Benutzer entfernen
+tree.actions.remove-user: Benutzer löschen
 tree.actions.folder: Ordner
 tree.actions.user: Benutzer
 tree.actions.add-folder: Neuer Ordner
@@ -1312,7 +1312,7 @@ tree.actions.rename-tag: Umbenennen
 tree.actions.role: Rolle
 tree.actions.add-role: Rolle hinzufügen
 tree.actions.clone-role: Rolle klonen
-tree.actions.remove-role: Rolle entfernen
+tree.actions.remove-role: Rolle löschen
 tree.actions.remove-folder: Ordner entfernen
 tag-configuration.new: Neu
 tag-configuration.new-tag: Neuer Tag
