@@ -36,7 +36,13 @@ export interface CreateHostOptions {
  * (nothing by default) to keep standalone bundles slim.
  */
 export function createHost (options: CreateHostOptions = {}): PortalHost {
-  const container = new Container()
+  // One host per page: the host container IS the global window.Pimcore.container,
+  // so studio dynamic-type registration/adapters (which read the global directly)
+  // and context-based useInjection all resolve to the SAME container.
+  const w = globalThis as unknown as { Pimcore?: { container?: Container } }
+  w.Pimcore = w.Pimcore ?? {}
+  const container = w.Pimcore.container ?? new Container()
+  w.Pimcore.container = container
   options.installServices?.(container)
   const { store, injectSliceWithState } = createStore()
 
