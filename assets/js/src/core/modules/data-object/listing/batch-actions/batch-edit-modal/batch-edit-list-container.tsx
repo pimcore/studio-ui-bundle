@@ -24,8 +24,7 @@ import { DefaultBatchEdit } from './default-batch-edit'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
 export const BatchEditListContainer = (): React.JSX.Element => {
-  const { batchEdits, removeBatchEdit } = useBatchEdit()
-  const { updateLocale } = useBatchEdit()
+  const { batchEdits, removeBatchEdit, updateLocale } = useBatchEdit()
   const form = Form.useFormInstance()
 
   // Localized values are stored in the form under ['localizedfields', key, locale] and the
