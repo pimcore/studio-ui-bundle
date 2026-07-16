@@ -43,11 +43,11 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
   const addOrUpdateBatchEdit = (column: AvailableColumn): void => {
     // Each click on a localizable field adds a row for the next unused locale (null first).
     if (column.localizable) {
-      const usedLocales = batchEdits
-        .filter(edit => edit.key === column.key)
-        .map(edit => edit.locale ?? null)
+      const usedLocales = new Set(
+        batchEdits.filter(edit => edit.key === column.key).map(edit => edit.locale ?? null)
+      )
       const candidateLocales: Array<string | null> = [null, ...contentLanguages]
-      const nextLocale = candidateLocales.find(locale => !usedLocales.includes(locale))
+      const nextLocale = candidateLocales.find(locale => !usedLocales.has(locale))
 
       if (nextLocale === undefined) {
         return

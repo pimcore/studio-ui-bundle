@@ -26,11 +26,9 @@ export const BatchEditListContainer = (): React.JSX.Element => {
   const { updateLocale } = useBatchEdit()
 
   const items: StackListProps['items'] = batchEdits.map((batchEdit) => {
-    // Locales already used by the field's other rows; the "no language" option is offered only
-    // when no sibling uses it.
     const siblingLocales = batchEdit.localizable
       ? batchEdits
-          .filter(edit => edit.key === batchEdit.key && !((edit.locale ?? null) === (batchEdit.locale ?? null)))
+          .filter(edit => edit.key === batchEdit.key && (edit.locale ?? null) !== (batchEdit.locale ?? null))
           .map(edit => edit.locale ?? null)
       : []
     const usedByOtherRows = siblingLocales.filter((locale): locale is string => locale !== null)
