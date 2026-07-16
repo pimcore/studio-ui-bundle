@@ -26,8 +26,8 @@ export const BatchEditListContainer = (): React.JSX.Element => {
   const { updateLocale } = useBatchEdit()
 
   const items: StackListProps['items'] = batchEdits.map((batchEdit) => {
-    // A localizable field can have one row per locale. Exclude locales already used by the
-    // field's other rows; only offer the "no language" option if no sibling already uses it.
+    // Locales already used by the field's other rows; the "no language" option is offered only
+    // when no sibling uses it.
     const siblingLocales = batchEdit.localizable
       ? batchEdits
           .filter(edit => edit.key === batchEdit.key && !((edit.locale ?? null) === (batchEdit.locale ?? null)))
@@ -36,9 +36,8 @@ export const BatchEditListContainer = (): React.JSX.Element => {
     const usedByOtherRows = siblingLocales.filter((locale): locale is string => locale !== null)
     const isNullUsedByOtherRows = siblingLocales.includes(null)
 
-    // Per-locale rows share a field key, so both the row identity and the form namespace must
-    // include the locale. Localizable rows render under a Form.Group keyed by locale so their
-    // fields don't collide on the flat metadata name. See issue #2492.
+    // Namespace each localizable row's fields under a Form.Group keyed by locale so rows sharing
+    // a field key don't collide on the flat metadata name.
     const localeFormKey = batchEdit.locale ?? NO_LOCALE_FORM_KEY
     const rowKey = batchEdit.localizable ? `${batchEdit.key}-${localeFormKey}` : batchEdit.key
 

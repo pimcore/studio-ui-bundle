@@ -20,17 +20,13 @@ interface UseBatchEditHookReturn extends BatchContext {
   removeBatchEdit: (batchEdit: BatchEdit) => void
 }
 
-// A localizable metadata field can have one row per locale, so entries are identified by
-// (key + locale). Asset metadata also allows a language-neutral value (locale === null), which
-// is a valid, distinct row. Non-localizable fields are a single entry with locale null.
+// Entries are identified by (key + locale); a language-neutral value (locale null) is a valid row.
 const isSameEntry = (a: BatchEdit, b: BatchEdit): boolean =>
   a.key === b.key && (a.locale ?? null) === (b.locale ?? null)
 
 export const useBatchEdit = (): UseBatchEditHookReturn => {
   const { batchEdits, setBatchEdits } = useContext(BatchEditContext)
   const user = useUser()
-  // Locale universe for localizable fields — the user's content languages, matching the grid
-  // language switcher / column config. A language-neutral (null) row is offered in addition.
   const contentLanguages = (user.contentLanguages ?? []) as string[]
 
   const resetBatchEdits = (): void => {
@@ -38,7 +34,6 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
   }
 
   const updateLocale = (batchEdit: BatchEdit, locale: string | null): void => {
-    // Move only the targeted row to the new locale; the picker excludes locales used by siblings.
     const updatedEdits = batchEdits.map(edit =>
       isSameEntry(edit, batchEdit) ? { ...edit, locale } : edit
     )
@@ -46,9 +41,7 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
   }
 
   const addOrUpdateBatchEdit = (column: AvailableColumn): void => {
-    // Localizable fields add one row per locale: each click adds the next unused locale.
-    // The default first row is the language-neutral one (null), matching current asset behavior,
-    // followed by each content language.
+    // Each click on a localizable field adds a row for the next unused locale (null first).
     if (column.localizable) {
       const usedLocales = batchEdits
         .filter(edit => edit.key === column.key)

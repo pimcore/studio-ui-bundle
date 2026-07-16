@@ -90,7 +90,6 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   }, [isError, isFolderPatchSuccess])
 
   const onColumnClick = (column: AvailableColumn): void => {
-    // The hook assigns the next unused locale for localizable fields (one row per locale).
     addOrUpdateBatchEdit(column)
   }
 
@@ -102,8 +101,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
   const onFormFinish = async (values: any): Promise<void> => {
     const patches = batchEdits.map((batchEdit) => {
-      // Localizable rows are namespaced under a Form.Group keyed by locale (null → sentinel),
-      // so read the value from that group; non-localizable fields stay flat.
+      // Localizable rows are namespaced under a Form.Group keyed by locale; non-localizable stay flat.
       const data = batchEdit.localizable
         ? values[batchEdit.locale ?? NO_LOCALE_FORM_KEY]?.[batchEdit.key]
         : values[batchEdit.key]

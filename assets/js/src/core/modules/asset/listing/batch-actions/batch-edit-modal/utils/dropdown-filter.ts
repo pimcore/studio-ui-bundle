@@ -46,9 +46,7 @@ export const shouldIncludeColumnItem = (
   const existingEntries = batchEdits.filter(batchItem =>
     item.key === batchItem.key && areGroupsEqual(item.group, batchItem.group)
   )
-  // A localizable field stays available until every locale has a row — one per content
-  // language plus one language-neutral (null) row; other fields are removed once a single
-  // entry exists. See issue #2492.
+  // Localizable fields stay available until every locale has a row (content languages + null row).
   const isAlreadyInBatchEditList = item.localizable === true
     ? existingEntries.length >= contentLanguages.length + 1
     : existingEntries.length > 0
