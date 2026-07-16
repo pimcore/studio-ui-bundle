@@ -59,8 +59,6 @@ const WidgetManagerInnerContainer = (): React.JSX.Element => {
       dispatch(updateMainWidgetContext({
         nodeId: selectedNode.getId()
       }))
-    } else {
-      dispatch(updateMainWidgetContext(null))
     }
   }, [model, dispatch])
 
@@ -69,8 +67,6 @@ const WidgetManagerInnerContainer = (): React.JSX.Element => {
 
     if (selectedNode !== undefined) {
       dispatch(updateMainWidgetContext({ nodeId: selectedNode.getId() }))
-    } else {
-      dispatch(updateMainWidgetContext(null))
     }
 
     const updatedModelJson = updatedModel.toJson()

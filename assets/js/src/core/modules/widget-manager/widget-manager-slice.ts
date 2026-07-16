@@ -15,6 +15,7 @@ import { type IJsonModel, type IJsonTabNode, Model, Actions, DockLocation, type 
 import { getInitialModelJson as getInitialOuterModelJson } from './utils/widget-manager-outer-model'
 import { getInitialModelJson as getInitialInnerModelJson } from './utils/widget-manager-inner-model'
 import { createWidgetManagerPersistedReducer } from './widget-manager-persistence'
+import { resolveMainWidgetContext } from './utils/resolve-main-widget-context'
 import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
 import { type ElementIcon } from '@sdk/components'
 import { type UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
@@ -116,6 +117,7 @@ const slice = createSlice({
         state.outerModel = { ...model.toJson() }
       } else {
         state.innerModel = { ...model.toJson() }
+        state.mainWidgetContext = resolveMainWidgetContext(model)
       }
     },
 
@@ -142,6 +144,7 @@ const slice = createSlice({
       }
 
       state.innerModel = { ...model.toJson() }
+      state.mainWidgetContext = resolveMainWidgetContext(model)
     },
 
     updateWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
@@ -261,6 +264,7 @@ const slice = createSlice({
         state.outerModel = { ...model.toJson() }
       } else {
         state.innerModel = { ...model.toJson() }
+        state.mainWidgetContext = resolveMainWidgetContext(model)
       }
     }
   },
