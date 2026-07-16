@@ -18,9 +18,8 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { useBatchEdit } from './hooks/use-batch-edit'
-import { NO_LOCALE_FORM_KEY } from './batch-edit-provider'
 import { BatchEditListContainer } from './batch-edit-list-container'
-import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { usePermittedContentLanguages } from '@Pimcore/modules/element/components/language-selection/use-permitted-content-languages'
 import { Form } from '@Pimcore/components/form/form'
 import { type AvailableColumn, buildColumnPickerGroups } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useTranslation } from 'react-i18next'
@@ -60,7 +59,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const { getArgs } = useDataQueryHelper()
   const { hasType } = useDynamicTypeResolver()
   const { refreshGrid } = useRefreshGrid(elementType)
-  const contentLanguages = (useUser().contentLanguages ?? []) as string[]
+  const contentLanguages = usePermittedContentLanguages()
   const [fieldsToAddOpen, setFieldsToAddOpen] = useState<boolean>(true)
 
   const resetModal = (): void => {
@@ -101,10 +100,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
   const onFormFinish = async (values: any): Promise<void> => {
     const patches = batchEdits.map((batchEdit) => {
-      // Localizable rows are namespaced under a Form.Group keyed by locale; non-localizable stay flat.
-      const data = batchEdit.localizable
-        ? values[batchEdit.locale ?? NO_LOCALE_FORM_KEY]?.[batchEdit.key]
-        : values[batchEdit.key]
+      const data = values[batchEdit.rowId]?.[batchEdit.key]
 
       return {
         name: batchEdit.key,

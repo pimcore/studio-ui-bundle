@@ -18,7 +18,6 @@ import { t } from 'i18next'
 import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
 import { Form } from '@Pimcore/components/form/form'
 import { useBatchEdit } from './hooks/use-batch-edit'
-import { NO_LOCALE_FORM_KEY } from './batch-edit-provider'
 import { DefaultBatchEdit } from './default-batch-edit'
 
 export const BatchEditListContainer = (): React.JSX.Element => {
@@ -34,22 +33,15 @@ export const BatchEditListContainer = (): React.JSX.Element => {
     const usedByOtherRows = siblingLocales.filter((locale): locale is string => locale !== null)
     const isNullUsedByOtherRows = siblingLocales.includes(null)
 
-    // Namespace each localizable row's fields under a Form.Group keyed by locale so rows sharing
-    // a field key don't collide on the flat metadata name.
-    const localeFormKey = batchEdit.locale ?? NO_LOCALE_FORM_KEY
-    const rowKey = batchEdit.localizable ? `${batchEdit.key}-${localeFormKey}` : batchEdit.key
-
-    const body = batchEdit.localizable
-      ? (
-        <Form.Group name={ [localeFormKey] }>
-          <DefaultBatchEdit batchEdit={ batchEdit } />
-        </Form.Group>
-        )
-      : <DefaultBatchEdit batchEdit={ batchEdit } />
+    const body = (
+      <Form.Group name={ [batchEdit.rowId] }>
+        <DefaultBatchEdit batchEdit={ batchEdit } />
+      </Form.Group>
+    )
 
     return ({
-      id: rowKey,
-      key: rowKey,
+      id: batchEdit.rowId,
+      key: batchEdit.rowId,
       children: <Tag>{t(`${batchEdit.key}`)}</Tag>,
       renderRightToolbar: <ButtonGroup items={
         [...(batchEdit.localizable

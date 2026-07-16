@@ -10,30 +10,11 @@
 
 import { LanguageSelection as BaseLanguageSelection } from '@Pimcore/components/language-selection/language-selection'
 import React from 'react'
-import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { type PermissionBasedLanguageSelectionControlProps } from '../permission-based-language-selection-control'
-import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { usePermittedContentLanguages } from '../use-permitted-content-languages'
 
 export const WithElementContext = (props: PermissionBasedLanguageSelectionControlProps): React.JSX.Element => {
-  const user = useUser()
-  const elementContext = useElementContext()
-  const elementDraft = useElementDraft(elementContext.id, elementContext.elementType)
-  const availableLanguages: string[] = []
-
-  if ('permissions' in elementDraft) {
-    const permissions: Record<string, any> = elementDraft.permissions as Record<string, any>
-    const viewableLanguages: string[] = permissions?.localizedView?.split(',') ?? []
-    let currentAvailableLanguages = (user.contentLanguages as string[])?.filter(lang => viewableLanguages.includes(lang)) ?? []
-
-    if ((viewableLanguages.length === 1 && viewableLanguages[0] === 'default') || (viewableLanguages.length === 0)) {
-      currentAvailableLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
-    }
-
-    availableLanguages.push(...currentAvailableLanguages)
-  } else {
-    availableLanguages.push(...(Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []))
-  }
+  const availableLanguages: string[] = [...usePermittedContentLanguages()]
 
   if (props.customKeys !== undefined && props.customKeys.length > 0) {
     availableLanguages.unshift(...props.customKeys)

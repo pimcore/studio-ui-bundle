@@ -13,10 +13,8 @@ import React, { useState, createContext, useMemo } from 'react'
 
 export type BatchEdit = AvailableColumn & {
   locale?: string | null
+  rowId: string
 }
-
-// Form-namespace key for the "no language" (null locale) row; mapped back to language: null on submit.
-export const NO_LOCALE_FORM_KEY = '__none__'
 
 export interface BatchContext {
   batchEdits: BatchEdit[]

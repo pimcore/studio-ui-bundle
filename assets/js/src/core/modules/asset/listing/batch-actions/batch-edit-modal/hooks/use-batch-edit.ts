@@ -11,7 +11,7 @@
 import { useContext } from 'react'
 import { type BatchContext, type BatchEdit, BatchEditContext } from '../batch-edit-provider'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
-import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { usePermittedContentLanguages } from '@Pimcore/modules/element/components/language-selection/use-permitted-content-languages'
 
 interface UseBatchEditHookReturn extends BatchContext {
   addOrUpdateBatchEdit: (column: AvailableColumn) => void
@@ -20,14 +20,11 @@ interface UseBatchEditHookReturn extends BatchContext {
   removeBatchEdit: (batchEdit: BatchEdit) => void
 }
 
-// Entries are identified by (key + locale); a language-neutral value (locale null) is a valid row.
-const isSameEntry = (a: BatchEdit, b: BatchEdit): boolean =>
-  a.key === b.key && (a.locale ?? null) === (b.locale ?? null)
+const isSameEntry = (a: BatchEdit, b: BatchEdit): boolean => a.rowId === b.rowId
 
 export const useBatchEdit = (): UseBatchEditHookReturn => {
   const { batchEdits, setBatchEdits } = useContext(BatchEditContext)
-  const user = useUser()
-  const contentLanguages = (user.contentLanguages ?? []) as string[]
+  const contentLanguages = usePermittedContentLanguages()
 
   const resetBatchEdits = (): void => {
     setBatchEdits([])
@@ -53,18 +50,17 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
         return
       }
 
-      setBatchEdits([...batchEdits, { ...column, locale: nextLocale }])
+      setBatchEdits([...batchEdits, { ...column, rowId: crypto.randomUUID(), locale: nextLocale }])
       return
     }
 
-    const newEdit: BatchEdit = { ...column, locale: null }
     const updatedEdits: BatchEdit[] = [...batchEdits]
-    const existingIndex = batchEdits.findIndex(edit => edit.key === newEdit.key)
+    const existingIndex = batchEdits.findIndex(edit => edit.key === column.key)
 
     if (existingIndex !== -1) {
-      updatedEdits[existingIndex] = newEdit
+      updatedEdits[existingIndex] = { ...column, rowId: batchEdits[existingIndex].rowId, locale: null }
     } else {
-      updatedEdits.push(newEdit)
+      updatedEdits.push({ ...column, rowId: crypto.randomUUID(), locale: null })
     }
 
     setBatchEdits(updatedEdits)
