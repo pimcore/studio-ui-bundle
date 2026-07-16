@@ -15,9 +15,7 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { NoContent } from '@Pimcore/components/no-content/no-content'
 import { t } from 'i18next'
-import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
-import { transformLanguage } from '@Pimcore/components/language-selection/helpers'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
 import { useBatchEdit } from './hooks/use-batch-edit'
 import { DefaultBatchEdit } from './default-batch-edit'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
@@ -25,31 +23,36 @@ import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/
 export const BatchEditListContainer = (): React.JSX.Element => {
   const { batchEdits, removeBatchEdit } = useBatchEdit()
   const { updateLocale } = useBatchEdit()
-  const settings = useSettings()
-
-  const languages = settings.requiredLanguages
 
   const items: StackListProps['items'] = batchEdits.map((batchEdit) => {
-    // @todo infer selected language from grid config when available
-    const selectedLanguage = batchEdit.locale ?? settings.requiredLanguages[0]
+    // A localizable field can have one row per locale. Exclude locales already used by the
+    // field's other rows so the same locale can't be picked twice.
+    const usedByOtherRows = batchEdit.type === 'dataobject.classificationstore'
+      ? []
+      : batchEdits
+          .filter(edit => edit.key === batchEdit.key && edit.locale !== batchEdit.locale)
+          .map(edit => edit.locale)
+          .filter((locale): locale is string => locale !== null)
 
     const batchEditTitle = hasFieldDefinition(batchEdit.config) ? (batchEdit.config.fieldDefinition as { title: string }).title : batchEdit.key
-    const key = batchEdit.type === 'dataobject.classificationstore' ? `${batchEdit.key}-${(batchEdit.config as { keyId: number }).keyId}-${(batchEdit.config as { groupId: number }).groupId}` : batchEdit.key
+    const baseKey = batchEdit.type === 'dataobject.classificationstore' ? `${batchEdit.key}-${(batchEdit.config as { keyId: number }).keyId}-${(batchEdit.config as { groupId: number }).groupId}` : batchEdit.key
+    const key = batchEdit.localizable ? `${baseKey}-${batchEdit.locale ?? ''}` : baseKey
 
     return ({
-      id: `${batchEdit.key}`,
+      id: key,
       key,
       children: <Tag>{t(`${batchEditTitle}`)}</Tag>,
       renderRightToolbar: <ButtonGroup items={
         [...(batchEdit.localizable
           ? [
-            <LanguageSelection
+            <PermissionBasedLanguageSelectionControl
+              customKeys={ batchEdit.type === 'dataobject.classificationstore' ? ['default'] : [] }
+              excludeLocales={ usedByOtherRows }
               key="language-selection"
-              languages={ languages }
-              onSelectLanguage={ (language) => {
-                updateLocale(batchEdit, transformLanguage(language))
+              onChange={ (language) => {
+                updateLocale(batchEdit, language)
               } }
-              selectedLanguage={ selectedLanguage }
+              value={ batchEdit.locale }
             />
             ]
           : []),

@@ -11,7 +11,7 @@
 import { useContext } from 'react'
 import { type BatchContext, type BatchEdit, BatchEditContext } from '../batch-edit-provider'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 
 interface UseBatchEditHookReturn extends BatchContext {
   addOrUpdateBatchEdit: (column: AvailableColumn, value: BatchEdit['value']) => void
@@ -21,40 +21,55 @@ interface UseBatchEditHookReturn extends BatchContext {
   removeBatchEdit: (batchEdit: BatchEdit) => void
 }
 
+const isSameEntry = (a: BatchEdit, b: BatchEdit): boolean => {
+  if (a.key !== b.key || a.locale !== b.locale) {
+    return false
+  }
+
+  if (a.type === 'dataobject.classificationstore' || b.type === 'dataobject.classificationstore') {
+    const aConfig = a.config as { keyId?: unknown, groupId?: unknown }
+    const bConfig = b.config as { keyId?: unknown, groupId?: unknown }
+
+    return aConfig.keyId === bConfig.keyId && aConfig.groupId === bConfig.groupId
+  }
+
+  return true
+}
+
 export const useBatchEdit = (): UseBatchEditHookReturn => {
   const { batchEdits, setBatchEdits } = useContext(BatchEditContext)
-  const settings = useSettings()
+  const user = useUser()
+  const contentLanguages = (user.contentLanguages ?? []) as string[]
 
   const resetBatchEdits = (): void => {
     setBatchEdits([])
   }
 
   const updateLocale = (batchEdit: BatchEdit, locale: string | null): void => {
-    const columnKey = batchEdit.key
-
-    const updatedEdits = batchEdits.map(edit => {
-      if (edit.key === columnKey) {
-        return {
-          ...edit,
-          locale
-        }
-      }
-
-      return edit
-    })
+    const updatedEdits = batchEdits.map(edit =>
+      isSameEntry(edit, batchEdit) ? { ...edit, locale } : edit
+    )
     setBatchEdits(updatedEdits)
   }
 
   const addOrUpdateBatchEdit = (column: AvailableColumn, value: BatchEdit['value']): void => {
-    const newEdit: BatchEdit = {
-      ...column,
-      // @todo infer selected language from grid config when available
-      locale: column.localizable ? column.locale ?? settings.requiredLanguages[0] : null,
-      value
+    if (column.localizable) {
+      const usedLocales = batchEdits
+        .filter(edit => edit.key === column.key)
+        .map(edit => edit.locale)
+      const nextLocale = contentLanguages.find(language => !usedLocales.includes(language))
+
+      if (nextLocale === undefined) {
+        return
+      }
+
+      setBatchEdits([...batchEdits, { ...column, locale: nextLocale, value }])
+      return
     }
 
-    const updatedEdits: BatchEdit[] = [...batchEdits]
+    const newEdit: BatchEdit = { ...column, locale: null, value }
 
+    const updatedEdits: BatchEdit[] = [...batchEdits]
     const existingIndex = batchEdits.findIndex(edit => edit.key === newEdit.key)
 
     if (existingIndex !== -1) {
@@ -72,8 +87,7 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
     columns.forEach(column => {
       const newEdit: BatchEdit = {
         ...column,
-        // @todo infer selected language from grid config when available
-        locale: column.localizable ? column.locale ?? settings.requiredLanguages[0] : null,
+        locale: column.localizable ? column.locale ?? contentLanguages[0] : null,
         value: undefined
       }
 
@@ -90,17 +104,7 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
   }
 
   const removeBatchEdit = (batchEdit: BatchEdit): void => {
-    const updatedEdits = batchEdits.filter(edit => {
-      if (batchEdit.type === 'dataobject.classificationstore') {
-        if (!('keyId' in edit.config) || !('groupId' in edit.config) || !('keyId' in batchEdit.config) || !('groupId' in batchEdit.config)) {
-          throw new Error('keyId or groupId is missing in config')
-        }
-
-        return !(edit.key === batchEdit.key && edit.config.keyId === batchEdit.config.keyId && edit.config.groupId === batchEdit.config.groupId)
-      }
-
-      return edit.key !== batchEdit.key
-    })
+    const updatedEdits = batchEdits.filter(edit => !isSameEntry(edit, batchEdit))
     setBatchEdits(updatedEdits)
   }
 

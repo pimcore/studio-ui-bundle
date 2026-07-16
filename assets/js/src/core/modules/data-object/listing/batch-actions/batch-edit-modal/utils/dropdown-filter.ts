@@ -44,11 +44,18 @@ export const shouldIncludeColumnItem = (
   item: any,
   batchEdits: BatchEdit[],
   hasType: (props: { target: string, dynamicTypeIds: string[] }) => boolean,
-  getType: UseDynamicTypeResolverReturnType['getType']
+  getType: UseDynamicTypeResolverReturnType['getType'],
+  contentLanguages: string[] = []
 ): boolean => {
   const isEditable: boolean = item.editable === true
-  const isAlreadyInBatchEditList = batchEdits.some(batchItem =>
-    item.key === batchItem.key && areGroupsEqual(item.group, batchItem.group) && item.mainType !== 'dataobject.classificationstore'
+  const existingEntries = batchEdits.filter(batchItem =>
+    item.key === batchItem.key && areGroupsEqual(item.group, batchItem.group)
+  )
+  
+  const isAlreadyInBatchEditList = item.mainType !== 'dataobject.classificationstore' && (
+    item.localizable === true
+      ? contentLanguages.length > 0 && existingEntries.length >= contentLanguages.length
+      : existingEntries.length > 0
   )
 
   const hasDynamicType = hasType({

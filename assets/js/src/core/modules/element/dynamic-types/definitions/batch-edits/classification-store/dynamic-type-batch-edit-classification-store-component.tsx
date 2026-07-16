@@ -53,7 +53,7 @@ export const DynamicTypeBatchEditClassificationStoreComponent = ({ batchEdit }: 
   return (
     <BatchEditFormItem
       component={ component }
-      items={ [{ key: 'default', locale: column.locale, name: formItemKey, hidden: false, applyInitialValue: true }] }
+      name={ formItemKey }
       supportsBatchAppendModes={ dynType.supportsBatchAppendModes }
     />
   )
