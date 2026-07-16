@@ -40,7 +40,7 @@ const isSameEntry = (a: BatchEdit, b: BatchEdit): boolean => {
 export const useBatchEdit = (): UseBatchEditHookReturn => {
   const { batchEdits, setBatchEdits } = useContext(BatchEditContext)
   const user = useUser()
-  const contentLanguages = (user.contentLanguages ?? []) as string[]
+  const contentLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
 
   const resetBatchEdits = (): void => {
     setBatchEdits([])
