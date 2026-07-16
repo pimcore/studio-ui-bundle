@@ -106,38 +106,29 @@ export const useStyles = createStyles(({ token, css }) => {
             color: ${tabToken.itemColor};
             background: ${token.colorFillAlter};
             border-top: 2px solid transparent;
-  
-            .widget-manager__tab-title-close-button {
-              display: block;
-            }
-  
+
             .widget-manager-tab-title {
               margin-top: -2px;
             }
-         
+          
             &:hover {
               background: ${token.Tabs.colorBgHoverUnselectedTab};
               color: ${tabToken.itemColor};
             }
             
-            &:has(.widget-manager-tab-title--active-main) {
+            &:has(.widget-manager-tab-title--active-main),
+            &:has(.widget-manager-tab-title--detached) {
               font-weight: ${token.fontWeightStrong};
               color: ${tabToken.itemActiveColor};
               background: ${token.colorBgContainer};
               border-top: 2px solid ${token.Tabs.colorBorderActiveTab};
-              
+
+              .widget-manager__tab-title-close-button {
+                display: block;
+              }
+
               &:hover {
                 color: ${tabToken.itemActiveColor};
-              }
-            }
-            
-            &:has(.widget-manager-tab-title--detached) {
-              color: ${token.colorText};
-              background: ${token.colorBgContainer};
-              border-top: 2px solid ${token.colorBorder};
-              
-              &:hover {
-                color: ${token.colorText};
               }
             }
           }
