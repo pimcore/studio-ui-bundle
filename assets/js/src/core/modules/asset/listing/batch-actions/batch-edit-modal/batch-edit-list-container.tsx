@@ -18,6 +18,7 @@ import { t } from 'i18next'
 import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
 import { Form } from '@Pimcore/components/form/form'
 import { useBatchEdit } from './hooks/use-batch-edit'
+import { areGroupsEqual } from './utils/dropdown-filter'
 import { DefaultBatchEdit } from './default-batch-edit'
 
 export const BatchEditListContainer = (): React.JSX.Element => {
@@ -27,7 +28,7 @@ export const BatchEditListContainer = (): React.JSX.Element => {
   const items: StackListProps['items'] = batchEdits.map((batchEdit) => {
     const siblingLocales = batchEdit.localizable
       ? batchEdits
-          .filter(edit => edit.key === batchEdit.key && (edit.locale ?? null) !== (batchEdit.locale ?? null))
+          .filter(edit => edit.rowId !== batchEdit.rowId && edit.key === batchEdit.key && areGroupsEqual(edit.group, batchEdit.group))
           .map(edit => edit.locale ?? null)
       : []
     const usedByOtherRows = siblingLocales.filter((locale): locale is string => locale !== null)

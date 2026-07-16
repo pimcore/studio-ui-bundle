@@ -19,7 +19,7 @@ import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { useBatchEdit } from './hooks/use-batch-edit'
 import { BatchEditListContainer } from './batch-edit-list-container'
-import { usePermittedContentLanguages } from '@Pimcore/modules/element/components/language-selection/use-permitted-content-languages'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { Form } from '@Pimcore/components/form/form'
 import { type AvailableColumn, buildColumnPickerGroups } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useTranslation } from 'react-i18next'
@@ -59,7 +59,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const { getArgs } = useDataQueryHelper()
   const { hasType } = useDynamicTypeResolver()
   const { refreshGrid } = useRefreshGrid(elementType)
-  const contentLanguages = usePermittedContentLanguages()
+  const contentLanguages = (useUser().contentLanguages ?? []) as string[]
   const [fieldsToAddOpen, setFieldsToAddOpen] = useState<boolean>(true)
 
   const resetModal = (): void => {

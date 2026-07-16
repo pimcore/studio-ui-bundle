@@ -11,7 +11,8 @@
 import { useContext } from 'react'
 import { type BatchContext, type BatchEdit, BatchEditContext } from '../batch-edit-provider'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
-import { usePermittedContentLanguages } from '@Pimcore/modules/element/components/language-selection/use-permitted-content-languages'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { areGroupsEqual } from '../utils/dropdown-filter'
 
 interface UseBatchEditHookReturn extends BatchContext {
   addOrUpdateBatchEdit: (column: AvailableColumn) => void
@@ -24,7 +25,7 @@ const isSameEntry = (a: BatchEdit, b: BatchEdit): boolean => a.rowId === b.rowId
 
 export const useBatchEdit = (): UseBatchEditHookReturn => {
   const { batchEdits, setBatchEdits } = useContext(BatchEditContext)
-  const contentLanguages = usePermittedContentLanguages()
+  const contentLanguages = (useUser().contentLanguages ?? []) as string[]
 
   const resetBatchEdits = (): void => {
     setBatchEdits([])
@@ -41,7 +42,9 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
     // Each click on a localizable field adds a row for the next unused locale (null first).
     if (column.localizable) {
       const usedLocales = new Set(
-        batchEdits.filter(edit => edit.key === column.key).map(edit => edit.locale ?? null)
+        batchEdits
+          .filter(edit => edit.key === column.key && areGroupsEqual(edit.group, column.group))
+          .map(edit => edit.locale ?? null)
       )
       const candidateLocales: Array<string | null> = [null, ...contentLanguages]
       const nextLocale = candidateLocales.find(locale => !usedLocales.has(locale))
@@ -55,7 +58,7 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
     }
 
     const updatedEdits: BatchEdit[] = [...batchEdits]
-    const existingIndex = batchEdits.findIndex(edit => edit.key === column.key)
+    const existingIndex = batchEdits.findIndex(edit => edit.key === column.key && areGroupsEqual(edit.group, column.group))
 
     if (existingIndex !== -1) {
       updatedEdits[existingIndex] = { ...column, rowId: batchEdits[existingIndex].rowId, locale: null }
