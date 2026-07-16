@@ -15,38 +15,56 @@ import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { NoContent } from '@Pimcore/components/no-content/no-content'
 import { t } from 'i18next'
-import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
-import { transformLanguage } from '@Pimcore/components/language-selection/helpers'
-import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
+import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
+import { Form } from '@Pimcore/components/form/form'
 import { useBatchEdit } from './hooks/use-batch-edit'
+import { NO_LOCALE_FORM_KEY } from './batch-edit-provider'
 import { DefaultBatchEdit } from './default-batch-edit'
 
 export const BatchEditListContainer = (): React.JSX.Element => {
   const { batchEdits, removeBatchEdit } = useBatchEdit()
   const { updateLocale } = useBatchEdit()
-  const settings = useSettings()
-
-  const languages = [
-    '-',
-    ...settings.requiredLanguages
-  ]
 
   const items: StackListProps['items'] = batchEdits.map((batchEdit) => {
-    const selectedLanguage = batchEdit.locale ?? '-'
+    // A localizable field can have one row per locale. Exclude locales already used by the
+    // field's other rows; only offer the "no language" option if no sibling already uses it.
+    const siblingLocales = batchEdit.localizable
+      ? batchEdits
+          .filter(edit => edit.key === batchEdit.key && !((edit.locale ?? null) === (batchEdit.locale ?? null)))
+          .map(edit => edit.locale ?? null)
+      : []
+    const usedByOtherRows = siblingLocales.filter((locale): locale is string => locale !== null)
+    const isNullUsedByOtherRows = siblingLocales.includes(null)
+
+    // Per-locale rows share a field key, so both the row identity and the form namespace must
+    // include the locale. Localizable rows render under a Form.Group keyed by locale so their
+    // fields don't collide on the flat metadata name. See issue #2492.
+    const localeFormKey = batchEdit.locale ?? NO_LOCALE_FORM_KEY
+    const rowKey = batchEdit.localizable ? `${batchEdit.key}-${localeFormKey}` : batchEdit.key
+
+    const body = batchEdit.localizable
+      ? (
+        <Form.Group name={ [localeFormKey] }>
+          <DefaultBatchEdit batchEdit={ batchEdit } />
+        </Form.Group>
+        )
+      : <DefaultBatchEdit batchEdit={ batchEdit } />
 
     return ({
-      id: batchEdit.key,
+      id: rowKey,
+      key: rowKey,
       children: <Tag>{t(`${batchEdit.key}`)}</Tag>,
       renderRightToolbar: <ButtonGroup items={
         [...(batchEdit.localizable
           ? [
-            <LanguageSelection
+            <PermissionBasedLanguageSelectionControl
+              excludeLocales={ usedByOtherRows }
+              isNullable={ !isNullUsedByOtherRows }
               key="language-selection"
-              languages={ languages }
-              onSelectLanguage={ (language) => {
-                updateLocale(batchEdit.key, transformLanguage(language))
+              onChange={ (language) => {
+                updateLocale(batchEdit, language)
               } }
-              selectedLanguage={ selectedLanguage }
+              value={ batchEdit.locale ?? null }
             />
             ]
           : []),
@@ -54,13 +72,13 @@ export const BatchEditListContainer = (): React.JSX.Element => {
             icon={ { value: 'close' } }
             key={ 'remove' }
             onClick={ () => {
-              removeBatchEdit(batchEdit.key)
+              removeBatchEdit(batchEdit)
             } }
           />
         ]
       }
                           />,
-      body: <DefaultBatchEdit batchEdit={ batchEdit } />
+      body
     })
   })
 

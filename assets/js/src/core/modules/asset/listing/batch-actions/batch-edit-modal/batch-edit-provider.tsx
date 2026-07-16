@@ -15,6 +15,14 @@ export type BatchEdit = AvailableColumn & {
   locale?: string | null
 }
 
+/**
+ * Form-namespace key used for the "no language" (null locale) row of a localizable field.
+ * Localizable rows render their fields under a Form.Group keyed by locale so multiple locale
+ * rows of the same field don't collide on the flat metadata name; null uses this sentinel.
+ * It never leaves the form — onFinish maps it back to language: null. See issue #2492.
+ */
+export const NO_LOCALE_FORM_KEY = '__none__'
+
 export interface BatchContext {
   batchEdits: BatchEdit[]
   setBatchEdits: React.Dispatch<React.SetStateAction<BatchEdit[]>>
