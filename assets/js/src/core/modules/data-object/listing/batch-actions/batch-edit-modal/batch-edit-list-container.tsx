@@ -16,13 +16,36 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { NoContent } from '@Pimcore/components/no-content/no-content'
 import { t } from 'i18next'
 import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
+import { Form } from '@Pimcore/components/form/form'
 import { useBatchEdit } from './hooks/use-batch-edit'
+import { type BatchEdit } from './batch-edit-provider'
+import { areGroupsEqual } from './utils/dropdown-filter'
 import { DefaultBatchEdit } from './default-batch-edit'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
 export const BatchEditListContainer = (): React.JSX.Element => {
   const { batchEdits, removeBatchEdit } = useBatchEdit()
   const { updateLocale } = useBatchEdit()
+  const form = Form.useFormInstance()
+
+  // Localized values are stored in the form under ['localizedfields', key, locale] and the
+  // whole form tree is submitted. Changing a row's locale remounts the field at a new path, so
+  // carry the value over to the new locale (and clear the old one). Only regular localizable
+  // fields use this path; classification-store / object-brick build their own name paths.
+  const migrateLocaleValue = (batchEdit: BatchEdit, nextLocale: string | null): void => {
+    const isRegularLocalizable = batchEdit.localizable &&
+      batchEdit.type !== 'dataobject.classificationstore' &&
+      batchEdit.type !== 'dataobject.objectbrick'
+
+    if (!isRegularLocalizable || batchEdit.locale == null || nextLocale == null || nextLocale === batchEdit.locale) {
+      return
+    }
+
+    const oldPath = ['localizedfields', batchEdit.key, batchEdit.locale]
+    const newPath = ['localizedfields', batchEdit.key, nextLocale]
+    form.setFieldValue(newPath, form.getFieldValue(oldPath))
+    form.setFieldValue(oldPath, undefined)
+  }
 
   const items: StackListProps['items'] = batchEdits.map((batchEdit) => {
     // A localizable field can have one row per locale. Exclude locales already used by the
@@ -30,7 +53,7 @@ export const BatchEditListContainer = (): React.JSX.Element => {
     const usedByOtherRows = batchEdit.type === 'dataobject.classificationstore'
       ? []
       : batchEdits
-          .filter(edit => edit.key === batchEdit.key && edit.locale !== batchEdit.locale)
+          .filter(edit => edit.key === batchEdit.key && areGroupsEqual(edit.group, batchEdit.group) && edit.locale !== batchEdit.locale)
           .map(edit => edit.locale)
           .filter((locale): locale is string => locale !== null)
 
@@ -50,6 +73,7 @@ export const BatchEditListContainer = (): React.JSX.Element => {
               excludeLocales={ usedByOtherRows }
               key="language-selection"
               onChange={ (language) => {
+                migrateLocaleValue(batchEdit, language)
                 updateLocale(batchEdit, language)
               } }
               value={ batchEdit.locale }

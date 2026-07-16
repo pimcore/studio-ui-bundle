@@ -12,6 +12,7 @@ import { useContext } from 'react'
 import { type BatchContext, type BatchEdit, BatchEditContext } from '../batch-edit-provider'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { areGroupsEqual } from '../utils/dropdown-filter'
 
 interface UseBatchEditHookReturn extends BatchContext {
   addOrUpdateBatchEdit: (column: AvailableColumn, value: BatchEdit['value']) => void
@@ -22,7 +23,7 @@ interface UseBatchEditHookReturn extends BatchContext {
 }
 
 const isSameEntry = (a: BatchEdit, b: BatchEdit): boolean => {
-  if (a.key !== b.key || a.locale !== b.locale) {
+  if (a.key !== b.key || (a.locale ?? null) !== (b.locale ?? null) || !areGroupsEqual(a.group, b.group)) {
     return false
   }
 
@@ -54,10 +55,12 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
 
   const addOrUpdateBatchEdit = (column: AvailableColumn, value: BatchEdit['value']): void => {
     if (column.localizable) {
-      const usedLocales = batchEdits
-        .filter(edit => edit.key === column.key)
-        .map(edit => edit.locale)
-      const nextLocale = contentLanguages.find(language => !usedLocales.includes(language))
+      const usedLocales = new Set(
+        batchEdits
+          .filter(edit => edit.key === column.key && areGroupsEqual(edit.group, column.group))
+          .map(edit => edit.locale)
+      )
+      const nextLocale = contentLanguages.find(language => !usedLocales.has(language))
 
       if (nextLocale === undefined) {
         return
@@ -70,7 +73,7 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
     const newEdit: BatchEdit = { ...column, locale: null, value }
 
     const updatedEdits: BatchEdit[] = [...batchEdits]
-    const existingIndex = batchEdits.findIndex(edit => edit.key === newEdit.key)
+    const existingIndex = batchEdits.findIndex(edit => edit.key === newEdit.key && areGroupsEqual(edit.group, newEdit.group))
 
     if (existingIndex !== -1) {
       updatedEdits[existingIndex] = newEdit
