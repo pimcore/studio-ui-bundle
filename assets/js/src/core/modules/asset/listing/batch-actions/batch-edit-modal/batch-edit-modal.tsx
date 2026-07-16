@@ -59,7 +59,8 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const { getArgs } = useDataQueryHelper()
   const { hasType } = useDynamicTypeResolver()
   const { refreshGrid } = useRefreshGrid(elementType)
-  const contentLanguages = (useUser().contentLanguages ?? []) as string[]
+  const user = useUser()
+  const contentLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
   const [fieldsToAddOpen, setFieldsToAddOpen] = useState<boolean>(true)
 
   const resetModal = (): void => {
@@ -86,7 +87,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
     if (isFolderPatchError) {
       trackError(new ApiError(folderPatchError))
     }
-  }, [isError, isFolderPatchSuccess])
+  }, [isError, error, isFolderPatchError, folderPatchError])
 
   const onColumnClick = (column: AvailableColumn): void => {
     addOrUpdateBatchEdit(column)
