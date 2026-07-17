@@ -13,7 +13,7 @@ import { WidgetManagerView } from './widget-manager-view'
 import { widgetManagerFactory } from './utils/widget-manager-factory'
 import { Actions, type IJsonModel, type ITabRenderValues, Model, type TabNode } from 'flexlayout-react'
 import { useAppDispatch, useAppSelector } from '@sdk/app'
-import { selectInnerModel, updateInnerModel, updateMainWidgetContext } from './widget-manager-slice'
+import { selectInnerModel, selectMainWidgetContext, updateInnerModel, updateMainWidgetContext } from './widget-manager-slice'
 import { resolveMainWidgetContext } from './utils/resolve-main-widget-context'
 import { TabTitleOuterContainer } from './title/tab-title-outer-container'
 import { createContextMenuItems } from '@Pimcore/modules/widget-manager/context-menu/context-menu'
@@ -21,6 +21,7 @@ import { isEqual } from 'lodash'
 
 const WidgetManagerInnerContainer = (): React.JSX.Element => {
   const modelJson = useAppSelector(selectInnerModel)
+  const mainWidgetContext = useAppSelector(selectMainWidgetContext)
   const dispatch = useAppDispatch()
 
   // keep a stable model instance: only recreate when the redux action
@@ -54,12 +55,16 @@ const WidgetManagerInnerContainer = (): React.JSX.Element => {
   }, [])
 
   useEffect(() => {
+    if (mainWidgetContext !== null) {
+      return
+    }
+
     const context = resolveMainWidgetContext(model)
 
     if (context !== null) {
       dispatch(updateMainWidgetContext(context))
     }
-  }, [model, dispatch])
+  }, [model, mainWidgetContext, dispatch])
 
   const onModelChange = useCallback((updatedModel: Model): void => {
     const selectedNode = updatedModel.getActiveTabset()?.getSelectedNode()
