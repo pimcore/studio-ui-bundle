@@ -14,6 +14,7 @@ import { widgetManagerFactory } from './utils/widget-manager-factory'
 import { Actions, type IJsonModel, type ITabRenderValues, Model, type TabNode } from 'flexlayout-react'
 import { useAppDispatch, useAppSelector } from '@sdk/app'
 import { selectInnerModel, updateInnerModel, updateMainWidgetContext } from './widget-manager-slice'
+import { resolveMainWidgetContext } from './utils/resolve-main-widget-context'
 import { TabTitleOuterContainer } from './title/tab-title-outer-container'
 import { createContextMenuItems } from '@Pimcore/modules/widget-manager/context-menu/context-menu'
 import { isEqual } from 'lodash'
@@ -53,12 +54,10 @@ const WidgetManagerInnerContainer = (): React.JSX.Element => {
   }, [])
 
   useEffect(() => {
-    const selectedNode: TabNode | undefined = model.getActiveTabset()?.getSelectedNode() as TabNode | undefined
+    const context = resolveMainWidgetContext(model)
 
-    if (selectedNode !== undefined) {
-      dispatch(updateMainWidgetContext({
-        nodeId: selectedNode.getId()
-      }))
+    if (context !== null) {
+      dispatch(updateMainWidgetContext(context))
     }
   }, [model, dispatch])
 
