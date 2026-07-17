@@ -16,22 +16,17 @@ export interface ActiveMainWidgetContext {
 }
 
 /**
- * Resolve which main widget is active from an in-memory model. Prefers flexlayout's active
- * tabset, but falls back to the first tabset's selected tab: after deleting the active pane's
- * last tab, flexlayout leaves the (now removed) tabset as "active", so getActiveTabset()
- * returns undefined and the surviving pane must be picked explicitly.
+ * Resolve which main widget is active from an in-memory model.
  */
 export const resolveMainWidgetContext = (model: Model): ActiveMainWidgetContext | null => {
   let activeNode = model.getActiveTabset()?.getSelectedNode()
 
   if (isUndefined(activeNode)) {
-    let firstTabset: TabSetNode | undefined
     model.visitNodes((node) => {
-      if (isUndefined(firstTabset) && node instanceof TabSetNode) {
-        firstTabset = node
+      if (isUndefined(activeNode) && node instanceof TabSetNode) {
+        activeNode = node.getSelectedNode()
       }
     })
-    activeNode = firstTabset?.getSelectedNode()
   }
 
   return isUndefined(activeNode) ? null : { nodeId: activeNode.getId() }
