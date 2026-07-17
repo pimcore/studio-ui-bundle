@@ -16,6 +16,7 @@ import { getInitialModelJson as getInitialOuterModelJson } from './utils/widget-
 import { getInitialModelJson as getInitialInnerModelJson } from './utils/widget-manager-inner-model'
 import { createWidgetManagerPersistedReducer } from './widget-manager-persistence'
 import { resolveMainWidgetContext } from './utils/resolve-main-widget-context'
+import { getNextTabId } from './utils/get-next-tab-id'
 import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
 import { type ElementIcon } from '@sdk/components'
 import { type UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
@@ -49,24 +50,6 @@ export const initialState: WidgetManagerState = {
   innerModel: getInitialInnerModelJson(),
   mainWidgetContext: null,
   restored: false
-}
-
-const getNextTabId = (node: Node): string | undefined => {
-  const parent = node.getParent()
-
-  if (isUndefined(parent)) {
-    return undefined
-  }
-
-  const siblings = parent.getChildren()
-  const closedIndex = siblings.findIndex((child) => child.getId() === node.getId())
-
-  if (siblings.length <= 1) {
-    return undefined
-  }
-
-  const nextIndex = closedIndex < siblings.length - 1 ? closedIndex + 1 : closedIndex - 1
-  return siblings[nextIndex].getId()
 }
 
 const slice = createSlice({

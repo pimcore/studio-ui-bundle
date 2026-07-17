@@ -20,6 +20,7 @@ import {
   updateWidget as updateWidgetAction,
   selectInnerModel,
   selectOuterModel,
+  selectMainWidgetContext,
   setActiveWidgetById,
   type widgetManagerSliceName,
   type WidgetManagerState,
@@ -95,7 +96,18 @@ export class WidgetManagerActionService {
   }
 
   getOpenedMainWidget = (): TabNode | undefined => {
-    return this.getInnerModel().getActiveTabset()?.getSelectedNode() as TabNode | undefined
+    const innerModel = this.getInnerModel()
+    const selectedNode = innerModel.getActiveTabset()?.getSelectedNode() as TabNode | undefined
+
+    if (selectedNode !== undefined) {
+      return selectedNode
+    }
+
+    // Model.fromJson does not restore the active tabset (e.g. after closing the active pane
+    // of a split), so fall back to the authoritative main-widget context.
+    const context = selectMainWidgetContext(store.getState() as { [widgetManagerSliceName]: WidgetManagerState })
+
+    return context !== null ? innerModel.getNodeById(context.nodeId) as TabNode | undefined : undefined
   }
 
   private getInnerWidgetData (id: string): CloseMainWidgetEventPayload | null {
