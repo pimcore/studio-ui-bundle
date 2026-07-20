@@ -85,4 +85,7 @@ jobs:
 
       - name: Publish package to npm with OIDC
         working-directory: ./assets
-        run: npx npm@latest publish --tag ${{ inputs.tag }} --access public
+        # Pin to npm 11: npm@12 (currently `npm@latest`) fails at publish time with
+        # "Cannot find module 'sigstore'" (broken sigstore dep in libnpmpublish/provenance).
+        # Revisit once npm upstream resolves the sigstore packaging issue.
+        run: npx npm@11 publish --tag ${{ inputs.tag }} --access public

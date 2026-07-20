@@ -669,6 +669,8 @@ component.no-content.no-content-available: No hay contenido disponible
 notifications.label: Notificaciones
 notifications.remove-all: Eliminar todas
 notifications.new-notification: Nueva notificación
+notifications.columns.title: Título
+notifications.columns.date: Fecha
 notifications.from: De
 notifications.hide: Ocultar
 notifications.new-notifications.show: Ver
@@ -1194,7 +1196,8 @@ element.delete.batch.title: Eliminar elementos
 element.delete.batch.note: 'Tenga en cuenta: Estos elementos se eliminarán permanentemente y no se podrán restaurar.'
 element.delete.batch.question_one: '¿Realmente desea eliminar este elemento?'
 element.delete.batch.question_other: '¿Realmente desea eliminar estos {{count}} elementos?'
-element.delete.batch.ok: Eliminar permanentemente
+element.delete.batch.ok: Eliminar
+element.delete.batch.ok.permanent: Eliminar permanentemente
 element.delete.batch.show-paths: Mostrar elementos
 element.delete.batch.dependencies-warning: 'Puede haber dependencias, ¿eliminar de todas formas?'
 element.open: Abrir
@@ -1623,6 +1626,7 @@ predefined-asset-metadata.columns.actions: Acciones
 predefined-asset-metadata.duplicate-entry.title: El metadato predefinido ya existe
 predefined-asset-metadata.duplicate-entry.error: Ya existe una entrada con esta combinación de nombre e idioma. Cambie uno de los siguientes valores.
 appearance-branding.title: Apariencia y marca
+user-management.appearance-branding: Apariencia y marca
 image-thumbnails.title: Miniaturas de imagen
 image-thumbnails.description: Gestione y configure los ajustes de miniaturas de imagen para sus assets.
 image-thumbnails.search.placeholder: Buscar miniaturas...
@@ -2202,9 +2206,10 @@ embed.url-modal.title: Editar URL de incrustación
 embed.url-modal.label: URL (ej. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Introduzca una URL válida
 alert-modal.ok-text: OK
-embed.url-modal.ok-text: OK
+embed.url-modal.ok-text: Guardar
 embed.url-modal.cancel-text: Cancelar
-embed.placeholder: No se ha establecido ninguna URL - Haga clic para añadir una URL de incrustación
+embed.url-modal.warning: "Las URL no válidas no mostrarán una vista previa, por favor revise y actualice su URL."
+embed.placeholder: Haga clic para añadir una URL de incrustación
 embed.add-url: Añadir URL
 embed.edit-url: Editar URL
 embed.clear: Limpiar
@@ -2240,9 +2245,13 @@ recycle-bin.actions.restore: Restaurar
 recycle-bin.actions.restore.title: Restaurando elementos de la papelera de reciclaje
 component.search.pleaceholder: Buscar
 focal-point.set: Establecer punto focal
-video.placeholder: No se ha seleccionado ningún vídeo - Haga clic para añadir un vídeo
+video.placeholder: Haga clic para añadir un vídeo
 video.add-video: Añadir vídeo
 video.preview-in-progress: Se está generando la vista previa del vídeo…
+date.placeholder: Seleccionar una fecha
+numeric.placeholder: Introducir un número
+select.placeholder: Seleccionar una opción
+multiselect.placeholder: Seleccionar opciones
 image.alt-text-placeholder: Introduzca texto alternativo
 area-settings: Configuración de área
 unsupported_feature: Función no soportada - ¡verifique los requisitos del sistema!

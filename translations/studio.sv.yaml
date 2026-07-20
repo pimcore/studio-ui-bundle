@@ -669,6 +669,8 @@ component.no-content.no-content-available: Inget innehåll tillgängligt
 notifications.label: Aviseringar
 notifications.remove-all: Ta bort alla
 notifications.new-notification: Ny avisering
+notifications.columns.title: Titel
+notifications.columns.date: Datum
 notifications.from: Från
 notifications.hide: Dölj
 notifications.new-notifications.show: Visa
@@ -1194,7 +1196,8 @@ element.delete.batch.title: Ta bort element
 element.delete.batch.note: 'Obs: Dessa element kommer att tas bort permanent och kan inte återställas.'
 element.delete.batch.question_one: 'Vill du verkligen ta bort det här elementet?'
 element.delete.batch.question_other: 'Vill du verkligen ta bort dessa {{count}} element?'
-element.delete.batch.ok: Ta bort permanent
+element.delete.batch.ok: Ta bort
+element.delete.batch.ok.permanent: Ta bort permanent
 element.delete.batch.show-paths: Visa element
 element.delete.batch.dependencies-warning: 'Det kan finnas beroenden, ta bort ändå?'
 element.open: Öppna
@@ -1623,6 +1626,7 @@ predefined-asset-metadata.columns.actions: Åtgärder
 predefined-asset-metadata.duplicate-entry.title: Fördefinierad metadata finns redan
 predefined-asset-metadata.duplicate-entry.error: En post med denna kombination av namn och språk finns redan. Ändra ett av följande värden.
 appearance-branding.title: Utseende & Varumärke
+user-management.appearance-branding: Utseende & Varumärke
 image-thumbnails.title: Bildminiatyrbilder
 image-thumbnails.description: Hantera och konfigurera inställningar för bildminiatyrbilder för dina assets.
 image-thumbnails.search.placeholder: Sök miniatyrbilder...
@@ -2202,9 +2206,10 @@ embed.url-modal.title: Redigera inbäddnings-URL
 embed.url-modal.label: URL (t.ex. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Ange en giltig URL
 alert-modal.ok-text: OK
-embed.url-modal.ok-text: OK
+embed.url-modal.ok-text: Spara
 embed.url-modal.cancel-text: Avbryt
-embed.placeholder: Ingen URL angiven - Klicka för att lägga till en inbäddnings-URL
+embed.url-modal.warning: "Ogiltiga URL:er visar ingen förhandsgranskning, vänligen granska och uppdatera din URL."
+embed.placeholder: Klicka för att lägga till en inbäddnings-URL
 embed.add-url: Lägg till URL
 embed.edit-url: Redigera URL
 embed.clear: Rensa
@@ -2240,9 +2245,13 @@ recycle-bin.actions.restore: Återställ
 recycle-bin.actions.restore.title: Återställer papperskorgens objekt
 component.search.pleaceholder: Sök
 focal-point.set: Ange fokuspunkt
-video.placeholder: Ingen video vald - Klicka för att lägga till en video
+video.placeholder: Klicka för att lägga till en video
 video.add-video: Lägg till video
 video.preview-in-progress: Förhandsvisning av video genereras…
+date.placeholder: Välj ett datum
+numeric.placeholder: Ange ett nummer
+select.placeholder: Välj ett alternativ
+multiselect.placeholder: Välj alternativ
 image.alt-text-placeholder: Ange alt-text
 area-settings: Områdesinställningar
 unsupported_feature: Funktionen stöds inte - kontrollera systemkraven!

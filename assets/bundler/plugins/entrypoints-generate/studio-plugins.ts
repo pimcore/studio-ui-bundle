@@ -162,3 +162,5 @@ export const pluginGenerateEntrypoints = (options?: PluginOptions): RsbuildPlugi
     })
   }
 });
+
+export { pluginWriteBuildId } from '../write-build-id';

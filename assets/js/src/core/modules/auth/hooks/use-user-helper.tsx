@@ -67,7 +67,8 @@ export const useUserHelper = (): UseUserReturn => {
         welcomeScreen: user.welcomeScreen,
         memorizeTabs: user.memorizeTabs,
         contentLanguages: user.contentLanguages,
-        keyBindings: user.keyBindings
+        keyBindings: user.keyBindings,
+        theme: user.theme
       }
     }))
 

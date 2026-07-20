@@ -88,7 +88,8 @@ moduleSystem.registerModule({
     })
 
     const rowSelectionDecoratorConfig: IRowSelectionDecoratorConfig = {
-      rowSelectionMode: 'multiple'
+      rowSelectionMode: 'multiple',
+      elementType: 'data-object'
     }
 
     listingBuilder.addDecorator({

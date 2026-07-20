@@ -21,7 +21,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'A reusable empty state placeholder component for document editables like video, embed, and other content types. Provides consistent styling and interaction patterns across all editable types.'
+        component: 'A reusable empty state placeholder component for document editables like video, embed, and other content types. The entire placeholder area is clickable — there is no separate button. Provides consistent styling and interaction patterns across all editable types.'
       }
     }
   },
@@ -30,10 +30,6 @@ const meta = {
     text: {
       control: 'text',
       description: 'The descriptive text shown in the placeholder'
-    },
-    buttonText: {
-      control: 'text',
-      description: 'The text displayed on the action button'
     },
     onClick: {
       description: 'Callback function triggered when the placeholder is clicked'
@@ -44,7 +40,7 @@ const meta = {
     },
     icon: {
       control: 'object',
-      description: 'Icon props object with value property for the button icon'
+      description: 'Icon props object with value property for the placeholder icon'
     },
     fullHeight: {
       control: 'boolean',
@@ -62,8 +58,7 @@ type Story = StoryObj<typeof meta>
 // Default story showing basic usage
 export const Default: Story = {
   args: {
-    text: 'No content available - Click to add content',
-    buttonText: 'Add Content'
+    text: 'No content available - Click to add content'
   } satisfies Partial<EditableEmptyPlaceholderProps>
 }
 
@@ -71,7 +66,6 @@ export const Default: Story = {
 export const Disabled: Story = {
   args: {
     text: 'Content is inherited - Cannot modify',
-    buttonText: 'Inherited',
     disabled: true,
     icon: { value: 'lock' }
   } satisfies Partial<EditableEmptyPlaceholderProps>,
@@ -88,14 +82,13 @@ export const Disabled: Story = {
 export const FullHeight: Story = {
   args: {
     text: 'No video content available - Click to add a video',
-    buttonText: 'Add Video',
     icon: { value: 'video' },
     fullHeight: true
   } satisfies Partial<EditableEmptyPlaceholderProps>,
   parameters: {
     docs: {
       description: {
-        story: 'Full height placeholder that expands to fill its container, used by video editables and other content areas that need to match their container dimensions. The dashed blue border represents the wrapper container.'
+        story: 'Full height placeholder that expands to fill its container, used by video editables and other content areas that need to match their container dimensions.'
       }
     }
   },
@@ -137,28 +130,24 @@ export const FullHeight: Story = {
 export const IconVariations: Story = {
   args: {
     text: 'Icon variations',
-    buttonText: 'Click me',
     onClick: fn(action('icon-variation-clicked'))
   } satisfies Partial<EditableEmptyPlaceholderProps>,
   render: () => (
     <div style={ { display: 'flex', gap: '16px', flexWrap: 'wrap' } }>
       <EditableEmptyPlaceholder
-        buttonText="Add Document"
         icon={ { value: 'document' } }
         onClick={ action('document-clicked') }
-        text="Document placeholder"
+        text="Click to add a document"
       />
       <EditableEmptyPlaceholder
-        buttonText="Add Asset"
         icon={ { value: 'asset' } }
         onClick={ action('asset-clicked') }
-        text="Asset placeholder"
+        text="Click to add an asset"
       />
       <EditableEmptyPlaceholder
-        buttonText="Add Audio"
         icon={ { value: 'audio' } }
         onClick={ action('audio-clicked') }
-        text="Audio placeholder"
+        text="Click to add audio"
       />
     </div>
   ),
@@ -175,7 +164,6 @@ export const IconVariations: Story = {
 export const LongText: Story = {
   args: {
     text: 'This is a very long placeholder text that demonstrates how the component handles longer descriptive content that might wrap to multiple lines',
-    buttonText: 'Add Complex Content',
     icon: { value: 'add-something' }
   } satisfies Partial<EditableEmptyPlaceholderProps>,
   decorators: [
@@ -198,7 +186,6 @@ export const LongText: Story = {
 export const Interactive: Story = {
   args: {
     text: 'Click me to see the interaction!',
-    buttonText: 'Click Here',
     icon: { value: 'checkmark' },
     onClick: fn(() => {
       alert('Placeholder was clicked! This demonstrates the onClick interaction.')

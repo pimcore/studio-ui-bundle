@@ -8,17 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
-export const useStyles = createStyles(({ token }) => ({
-  warningText: {
-    color: token.Colors.Brand.Warning.colorWarningText
-  },
-  pathList: {
-    maxHeight: 200,
-    overflowY: 'auto',
-    marginTop: token.marginXS,
-    paddingLeft: 0,
-    listStyle: 'none'
+export const useStyles = createStyles(({ token, css }) => {
+  return {
+    descriptionText: css`
+      color: ${token.colorTextDescription};
+    `
   }
-}))
+})

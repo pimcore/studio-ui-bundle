@@ -13,6 +13,7 @@ import React, { useState, createContext, useMemo } from 'react'
 
 export type BatchEdit = AvailableColumn & {
   locale?: string | null
+  rowId: string
 }
 
 export interface BatchContext {

@@ -31,6 +31,7 @@ export interface ManyToManyRelationClassDefinitionProps {
   height: number | string | null
   assetInlineDownloadAllowed?: boolean | null
   onUpdateCellData?: (event: OnUpdateCellDataEvent) => void
+  hideOpenButton?: boolean
 }
 
 export interface ManyToManyRelationProps extends IRelationAllowedTypesDataComponent, ManyToManyRelationClassDefinitionProps {
@@ -114,6 +115,7 @@ export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToMan
           enrichRowData={ props.enrichRowData }
           handleOrderChange={ onOrderChange }
           height={ props.height }
+          hideOpenButton={ props.hideOpenButton }
           hint={ props.hint }
           inherited={ props.inherited }
           onUpdateCellData={ handleUpdateCellData }

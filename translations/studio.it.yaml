@@ -669,6 +669,8 @@ component.no-content.no-content-available: Nessun contenuto disponibile
 notifications.label: Notifiche
 notifications.remove-all: Rimuovi tutte
 notifications.new-notification: Nuova notifica
+notifications.columns.title: Titolo
+notifications.columns.date: Data
 notifications.from: Da
 notifications.hide: Nascondi
 notifications.new-notifications.show: Visualizza
@@ -1194,7 +1196,8 @@ element.delete.batch.title: Elimina elementi
 element.delete.batch.note: 'Nota: Questi elementi verranno eliminati definitivamente e non potranno essere ripristinati.'
 element.delete.batch.question_one: 'Vuoi davvero eliminare questo elemento?'
 element.delete.batch.question_other: 'Vuoi davvero eliminare questi {{count}} elementi?'
-element.delete.batch.ok: Elimina definitivamente
+element.delete.batch.ok: Elimina
+element.delete.batch.ok.permanent: Elimina definitivamente
 element.delete.batch.show-paths: Mostra elementi
 element.delete.batch.dependencies-warning: 'Potrebbero esserci dipendenze, eliminare comunque?'
 element.open: Apri
@@ -1623,6 +1626,7 @@ predefined-asset-metadata.columns.actions: Azioni
 predefined-asset-metadata.duplicate-entry.title: Metadato predefinito già esistente
 predefined-asset-metadata.duplicate-entry.error: Una voce con questa combinazione di nome e lingua esiste già. Modificare uno dei seguenti valori.
 appearance-branding.title: Aspetto e branding
+user-management.appearance-branding: Aspetto e branding
 image-thumbnails.title: Anteprime immagini
 image-thumbnails.description: Gestisci e configura le impostazioni delle anteprime immagini per i tuoi asset.
 image-thumbnails.search.placeholder: Cerca anteprime...
@@ -2202,9 +2206,10 @@ embed.url-modal.title: Modifica URL embed
 embed.url-modal.label: URL (es. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Inserire un URL valido
 alert-modal.ok-text: OK
-embed.url-modal.ok-text: OK
+embed.url-modal.ok-text: Salva
 embed.url-modal.cancel-text: Annulla
-embed.placeholder: Nessun URL impostato - Cliccare per aggiungere un URL embed
+embed.url-modal.warning: "Gli URL non validi non mostreranno un'anteprima, si prega di rivedere e aggiornare il proprio URL."
+embed.placeholder: Cliccare per aggiungere un URL embed
 embed.add-url: Aggiungi URL
 embed.edit-url: Modifica URL
 embed.clear: Cancella
@@ -2240,9 +2245,13 @@ recycle-bin.actions.restore: Ripristina
 recycle-bin.actions.restore.title: Ripristino elementi cestino
 component.search.pleaceholder: Cerca
 focal-point.set: Imposta punto focale
-video.placeholder: Nessun video selezionato - Cliccare per aggiungere un video
+video.placeholder: Cliccare per aggiungere un video
 video.add-video: Aggiungi video
 video.preview-in-progress: L'anteprima del video è in fase di generazione…
+date.placeholder: Selezionare una data
+numeric.placeholder: Inserire un numero
+select.placeholder: Selezionare un'opzione
+multiselect.placeholder: Selezionare le opzioni
 image.alt-text-placeholder: Inserire testo alternativo
 area-settings: Impostazioni area
 unsupported_feature: Funzionalità non supportata - verificare i requisiti di sistema!

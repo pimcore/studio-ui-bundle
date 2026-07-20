@@ -669,6 +669,8 @@ component.no-content.no-content-available: Kein Inhalt verfügbar
 notifications.label: Benachrichtigungen
 notifications.remove-all: Alle entfernen
 notifications.new-notification: Neue Benachrichtigung
+notifications.columns.title: Titel
+notifications.columns.date: Datum
 notifications.from: Von
 notifications.hide: Ausblenden
 notifications.new-notifications.show: Anzeigen
@@ -1194,7 +1196,8 @@ element.delete.batch.title: Elemente löschen
 element.delete.batch.note: 'Bitte beachten: Diese Elemente werden dauerhaft gelöscht und können nicht wiederhergestellt werden.'
 element.delete.batch.question_one: 'Möchten Sie dieses Element wirklich löschen?'
 element.delete.batch.question_other: 'Möchten Sie wirklich diese {{count}} Elemente löschen?'
-element.delete.batch.ok: Endgültig löschen
+element.delete.batch.ok: Löschen
+element.delete.batch.ok.permanent: Endgültig löschen
 element.delete.batch.show-paths: Elemente anzeigen
 element.delete.batch.dependencies-warning: 'Es könnte Abhängigkeiten geben, trotzdem löschen?'
 element.open: Öffnen
@@ -1623,6 +1626,7 @@ predefined-asset-metadata.columns.actions: Aktionen
 predefined-asset-metadata.duplicate-entry.title: Vordefinierte Metadaten existieren bereits
 predefined-asset-metadata.duplicate-entry.error: Ein Eintrag mit dieser Kombination aus Name und Sprache existiert bereits. Bitte ändern Sie einen der folgenden Werte.
 appearance-branding.title: Erscheinungsbild & Branding
+user-management.appearance-branding: Erscheinungsbild & Branding
 image-thumbnails.title: Bilder Thumbnails
 image-thumbnails.description: Verwalten und konfigurieren Sie die Vorschaubild-Einstellungen für Ihre Assets.
 image-thumbnails.search.placeholder: Vorschaubilder suchen...
@@ -2202,9 +2206,10 @@ embed.url-modal.title: Embed-URL bearbeiten
 embed.url-modal.label: URL (z.B. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Bitte geben Sie eine gültige URL ein
 alert-modal.ok-text: OK
-embed.url-modal.ok-text: OK
+embed.url-modal.ok-text: Speichern
 embed.url-modal.cancel-text: Abbrechen
-embed.placeholder: Keine URL gesetzt - Klicken, um eine Embed-URL hinzuzufügen
+embed.url-modal.warning: "Ungültige URLs zeigen keine Vorschau an, bitte überprüfen und aktualisieren Sie Ihre URL."
+embed.placeholder: Klicken, um eine Embed-URL hinzuzufügen
 embed.add-url: URL hinzufügen
 embed.edit-url: URL bearbeiten
 embed.clear: Leeren
@@ -2240,9 +2245,13 @@ recycle-bin.actions.restore: Wiederherstellen
 recycle-bin.actions.restore.title: Papierkorb-Einträge wiederherstellen
 component.search.pleaceholder: Suche
 focal-point.set: Fokuspunkt setzen
-video.placeholder: Kein Video ausgewählt - Klicken, um ein Video hinzuzufügen
+video.placeholder: Klicken, um ein Video hinzuzufügen
 video.add-video: Video hinzufügen
 video.preview-in-progress: Videovorschau wird erstellt…
+date.placeholder: Datum auswählen
+numeric.placeholder: Zahl eingeben
+select.placeholder: Option auswählen
+multiselect.placeholder: Optionen auswählen
 image.alt-text-placeholder: Alternativtext eingeben
 area-settings: Bereichseinstellungen
 unsupported_feature: Nicht unterstützte Funktion - bitte überprüfen Sie die Systemvoraussetzungen!

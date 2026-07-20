@@ -28,13 +28,16 @@ import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '@Pimcore/mo
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { useDataObjectGetSearchQuery } from '@Pimcore/modules/search/search-api-slice.gen'
 import { useDataQueryHelper } from '@Pimcore/modules/search/modal/tabs/object/listing/data-layer/use-data-query-helper'
+import { useDataObjectColumnMapper } from '@Pimcore/modules/data-object/listing/column-mapper/use-column-mapper'
+import { LanguageSelectionProvider } from '@Pimcore/components/language-selection/provider/language-selection-provider'
 
 const defaultProps = {
   ...listingDefaultProps,
   ViewComponent: DefaultView,
   useDataQuery: useDataObjectGetSearchQuery,
   useDataQueryHelper,
-  useElementId: useRootElementId
+  useElementId: useRootElementId,
+  useColumnMapper: useDataObjectColumnMapper
 }
 
 export const DataObjectSelectorListing = (): React.JSX.Element => {
@@ -74,16 +77,18 @@ export const DataObjectSelectorListing = (): React.JSX.Element => {
   /* eslint-enable @typescript-eslint/consistent-type-assertions */
 
   return useMemo(() => (
-    <DynamicTypeRegistryProvider serviceIds={ [
-      'DynamicTypes/GridCellRegistry',
-      'DynamicTypes/ListingRegistry',
-      'DynamicTypes/ObjectDataRegistry',
-      'DynamicTypes/FieldFilterRegistry'
-    ] }
-    >
-      <ListingContainer
-        { ...listingProps }
-      />
-    </DynamicTypeRegistryProvider>
+    <LanguageSelectionProvider>
+      <DynamicTypeRegistryProvider serviceIds={ [
+        'DynamicTypes/GridCellRegistry',
+        'DynamicTypes/ListingRegistry',
+        'DynamicTypes/ObjectDataRegistry',
+        'DynamicTypes/FieldFilterRegistry'
+      ] }
+      >
+        <ListingContainer
+          { ...listingProps }
+        />
+      </DynamicTypeRegistryProvider>
+    </LanguageSelectionProvider>
   ), [listingProps])
 }

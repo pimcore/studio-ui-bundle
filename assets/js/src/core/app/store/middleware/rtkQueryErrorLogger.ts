@@ -37,6 +37,7 @@ const initialState: UserInformation = {
   dateTimeLocale: '',
   welcomeScreen: false,
   memorizeTabs: false,
+  theme: 'default',
   hasImage: false,
   contentLanguages: [],
   keyBindings: [],

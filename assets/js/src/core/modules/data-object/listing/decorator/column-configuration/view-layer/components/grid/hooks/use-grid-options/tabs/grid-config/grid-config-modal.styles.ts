@@ -23,6 +23,7 @@ export const useStyles = createStyles(({ css, token }) => {
       min-width: 0;
       height: 100%;
       overflow-y: auto;
+      padding-right: ${token.paddingXS}px;
     `
   }
 })

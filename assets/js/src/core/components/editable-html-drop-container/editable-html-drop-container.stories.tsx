@@ -151,12 +151,6 @@ export const WithContent: Story = {
     ),
     contextMenuItems: [
       {
-        key: 'empty',
-        label: 'Empty',
-        icon: <Icon value="trash" />,
-        onClick: fn(action('empty-clicked'))
-      },
-      {
         key: 'open',
         label: 'Open',
         icon: <Icon value="open-folder" />,
@@ -167,6 +161,13 @@ export const WithContent: Story = {
         label: 'Search',
         icon: <Icon value="search" />,
         onClick: fn(action('search-clicked'))
+      },
+      { type: 'divider', key: 'empty-divider' },
+      {
+        key: 'empty',
+        label: 'Empty',
+        icon: <Icon value="trash" />,
+        onClick: fn(action('empty-clicked'))
       }
     ],
     width: 400

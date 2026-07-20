@@ -19,7 +19,7 @@ import { toCssDimension } from '@Pimcore/utils/css'
 import { useStyles } from './image-picker.styles'
 import { ImageFooter, type ImageValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image/footer'
 import { useTranslation } from '@sdk/app'
-import { isUndefined } from 'lodash'
+import { isNull, isUndefined } from 'lodash'
 
 export interface ImagePickerValue {
   type: 'asset'
@@ -52,7 +52,7 @@ export const ImagePicker = (props: ImagePickerProps): React.JSX.Element => {
   }
 
   const handleFooterChange = (value: ImageValue | null): void => {
-    if (value === null) {
+    if (isNull(value)) {
       props.onChange?.(null)
     } else {
       props.onChange?.({
@@ -63,7 +63,7 @@ export const ImagePicker = (props: ImagePickerProps): React.JSX.Element => {
     }
   }
 
-  const footerValue = imageValue !== null
+  const footerValue = !isNull(imageValue)
     ? {
         type: imageValue.type,
         id: imageValue.id,
@@ -71,8 +71,8 @@ export const ImagePicker = (props: ImagePickerProps): React.JSX.Element => {
       }
     : null
 
-  const width = toCssDimension(props.width, 300)
-  const height = toCssDimension(props.height, 150)
+  const width = toCssDimension(props.width, 300) ?? '300px'
+  const height = toCssDimension(props.height, 150) ?? '150px'
 
   return (
     <Flex
@@ -116,12 +116,12 @@ export const ImagePicker = (props: ImagePickerProps): React.JSX.Element => {
           } }
           variant="outline"
         >
-          {imageValue !== null
+          {!isNull(imageValue)
             ? (
               <ImagePreview
-                assetId={ imageValue?.id }
-                height={ height! }
-                width={ width! }
+                assetId={ imageValue.id }
+                height={ height }
+                width={ width }
               />
               )
             : (

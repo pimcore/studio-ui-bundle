@@ -13,6 +13,8 @@ import { Accordion, type AccordionItemType } from './accordion'
 import { type CollapseProps } from 'antd'
 import React from 'react'
 import { Button } from '@Pimcore/components/button/button'
+import { Grid } from '@Pimcore/components/grid/grid'
+import { createColumnHelper } from '@tanstack/react-table'
 
 const config: Meta = {
   title: 'Components/Layout/[Deprecated] Accordion',
@@ -108,6 +110,43 @@ export const Bordered = {
       title: <>Lorem ipsum</>,
       info: 'ID: 3',
       children: <p>aasdf</p>
+    }]
+  }
+}
+
+interface Language {
+  language: string
+  abbreviation: string
+}
+
+const languageColumnHelper = createColumnHelper<Language>()
+
+const languageColumns = [
+  languageColumnHelper.accessor('language', {}),
+  languageColumnHelper.accessor('abbreviation', {})
+]
+
+const languageData: Language[] = [
+  { language: 'English', abbreviation: 'en' },
+  { language: 'German', abbreviation: 'de' },
+  { language: 'French', abbreviation: 'fr' }
+]
+
+export const BorderedWithTable = {
+  args: {
+    bordered: true,
+    table: true,
+    activeKey: '1',
+    size: 'small',
+    items: [{
+      key: '1',
+      title: <>Table inside accordion</>,
+      children: (
+        <Grid
+          columns={ languageColumns }
+          data={ languageData }
+        />
+      )
     }]
   }
 }

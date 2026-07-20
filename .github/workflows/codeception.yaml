@@ -27,8 +27,8 @@ jobs:
         strategy:
             matrix:
                 include:
-                    - { php-version: 8.3, dependencies: highest, pimcore_version: "", experimental: false }
                     - { php-version: 8.4, dependencies: highest, pimcore_version: "", experimental: false }
+                    - { php-version: 8.5, dependencies: highest, pimcore_version: "", experimental: false }
 
         steps:
             -   name: "Checkout code"

@@ -14,11 +14,9 @@ import {
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { t } from 'i18next'
 import { type WorkflowAction, type WorkflowOptions } from '../types/workflow-types'
-import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useAlertModal } from '@sdk/components'
-import { useWorkflow } from './use-workflow'
-import { useElementRefresh } from '@sdk/modules/element'
-import { useLayoutSelection } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/use-layout-selection'
+import { useWorkflowModalState } from './use-workflow-modal-state'
+import { useWorkflowActionSubject } from '../provider/workflow-provider'
 
 interface UseSubmitWorkflowReturn {
   submitWorkflowAction: (workflowAction: WorkflowAction, workflowOptions?: WorkflowOptions) => void
@@ -27,13 +25,17 @@ interface UseSubmitWorkflowReturn {
   submissionError: boolean
 }
 
+/**
+ * Fires a workflow transition/global action against the element supplied by the
+ * WorkflowActionSubjectContext (the editor bridge in an editor, or an explicit `subject` elsewhere).
+ * The success side-effect — refreshing the element, resetting a data-object layout — is owned by that
+ * subject's `onApplied`, so this hook is not bound to the element editor.
+ */
 export const useSubmitWorkflow = (): UseSubmitWorkflowReturn => {
-  const { id: elementId, elementType } = useElementContext()
-  const { refreshElement } = useElementRefresh(elementType)
-  const { closeModal } = useWorkflow()
+  const subject = useWorkflowActionSubject()
+  const { closeModal } = useWorkflowModalState()
   const alertModal = useAlertModal()
   const messageApi = useMessage()
-  const { setCurrentLayout } = useLayoutSelection()
   const [fetchSubmitWorkflowActionMutation, {
     isLoading: submissionLoading,
     isSuccess: submissionSuccess,
@@ -45,8 +47,8 @@ export const useSubmitWorkflow = (): UseSubmitWorkflowReturn => {
     return ({
       submitAction: {
         actionType: workflowAction.actionType,
-        elementId,
-        elementType,
+        elementId: subject?.elementId ?? 0,
+        elementType: subject?.elementType ?? '',
         workflowId: workflowAction.workflowId,
         transitionId: workflowAction.transitionId,
         workflowOptions: workflowOptions ?? {}
@@ -55,16 +57,17 @@ export const useSubmitWorkflow = (): UseSubmitWorkflowReturn => {
   }
 
   const submitWorkflowAction = (workflowAction: WorkflowAction, workflowOptions?: WorkflowOptions): void => {
+    if (subject === null) {
+      return
+    }
+
     fetchSubmitWorkflowActionMutation(workFlowTransition(workflowAction, workflowOptions)).unwrap().then(() => {
       void messageApi.success({
         content: t('action-applied-successfully') + ': ' + t(workflowAction.label),
         type: 'success',
         duration: 3
       })
-      if (elementType === 'data-object') {
-        setCurrentLayout(null)
-      }
-      refreshElement(elementId)
+      subject.onApplied?.(workflowAction)
       closeModal()
     }).catch((error) => {
       void alertModal.error({

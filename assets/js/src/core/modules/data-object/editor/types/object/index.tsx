@@ -31,6 +31,7 @@ moduleSystem.registerModule({
 
     childrenTab.hidden = elementApi => elementApi?.hasChildren === false
     childrenTab.label = 'object.object-editor-tabs.children-listing'
+    childrenTab.isDetachable = true
 
     objectEditorTabManager.register(TAB_EDIT)
     objectEditorTabManager.register(TAB_PREVIEW)

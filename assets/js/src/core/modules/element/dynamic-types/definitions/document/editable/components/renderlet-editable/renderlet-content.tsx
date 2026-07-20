@@ -31,6 +31,11 @@ export interface RenderletContentProps {
   className?: string
 }
 
+function getElementType (type: string | undefined): ElementType | undefined {
+  if (isNil(type)) return undefined
+  return type === 'object' ? 'data-object' : type as ElementType
+}
+
 export const RenderletContent = ({
   value,
   config,
@@ -67,11 +72,6 @@ export const RenderletContent = ({
   const hasContent = !isLoading && shouldFetchRenderlet
 
   const { openElement } = useElementHelper()
-
-  const getElementType = (): ElementType | undefined => {
-    if (isNil(value?.type)) return undefined
-    return value.type === 'object' ? 'data-object' : value.type as ElementType
-  }
 
   const isFetchError = !isNil(error) && 'status' in error
   const actualError = isFetchError && error.status !== 'PARSING_ERROR' ? error : undefined
@@ -144,7 +144,7 @@ export const RenderletContent = ({
 
   const handleOpen = (): void => {
     if (!isNil(value?.id) && !isNil(value?.type)) {
-      const elementType = getElementType()
+      const elementType = getElementType(value?.type)
       if (!isNil(elementType)) {
         void openElement({
           id: value.id,
@@ -159,20 +159,21 @@ export const RenderletContent = ({
   }
 
   const handleLocateInTree = (): void => {
-    const elementType = getElementType()
+    const elementType = getElementType(value?.type)
     locateElementInTree(elementType, value?.id)
   }
 
   const contextMenuItems: MenuProps['items'] = []
 
+  contextMenuItems.push({
+    key: 'search',
+    label: t('search'),
+    icon: <Icon value="search" />,
+    onClick: handleSearch
+  })
+
   if (hasContent) {
     contextMenuItems.push(
-      {
-        key: 'empty',
-        label: t('empty'),
-        icon: <Icon value="trash" />,
-        onClick: handleEmpty
-      },
       {
         key: 'open',
         label: t('open'),
@@ -184,31 +185,28 @@ export const RenderletContent = ({
         label: t('element.locate-in-tree'),
         icon: <Icon value="target" />,
         onClick: handleLocateInTree
+      },
+      { type: 'divider', key: 'empty-divider' },
+      {
+        key: 'empty',
+        label: t('empty'),
+        icon: <Icon value="trash" />,
+        onClick: handleEmpty
       }
     )
   }
 
-  contextMenuItems.push({
-    key: 'search',
-    label: t('search'),
-    icon: <Icon value="search" />,
-    onClick: handleSearch
-  })
-
   const getDropZoneText = (): string => {
-    if (!isNil(config?.type)) {
-      switch (config.type) {
-        case 'document':
-          return t('drop-document-here')
-        case 'asset':
-          return t('drop-asset-here')
-        case 'object':
-          return t('drop-object-here')
-        default:
-          return t('drop-element-here')
-      }
+    switch (config?.type) {
+      case 'document':
+        return t('drop-document-here')
+      case 'asset':
+        return t('drop-asset-here')
+      case 'object':
+        return t('drop-object-here')
+      default:
+        return t('drop-element-here')
     }
-    return t('drop-element-here')
   }
 
   const errorContent = !isNil(actualError) || isFetchError
