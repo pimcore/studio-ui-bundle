@@ -38,7 +38,10 @@ export const NotificationPopup = (): React.JSX.Element => {
       next.push({
         id: notificationData.id,
         title: notificationData.title,
-        sender: notificationData.sender
+        sender: notificationData.sender,
+        // Carried through so a type specific renderer can be resolved for the toast.
+        type: notificationData.type,
+        payload: notificationData.payload
       })
 
       return next

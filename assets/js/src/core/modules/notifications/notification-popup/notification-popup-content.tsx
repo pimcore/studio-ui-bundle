@@ -17,6 +17,9 @@ export interface OpenNotification {
   id: number
   title: string
   sender: string | null
+  /** Resolves a type specific renderer; absent for notifications written without a type. */
+  type?: string
+  payload?: string | Record<string, unknown> | null
 }
 
 interface NotificationPopupCollapseProps {

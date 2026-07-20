@@ -26,6 +26,14 @@ interface NotificationMessagePayload {
     creationDate: number
     recipient: number
     sender: string | null
+    /**
+     * Whether the recipient wants this notification to interrupt them, resolved from their
+     * preferences by the backend. Optional so a backend that predates the setting keeps
+     * working — see the default applied below.
+     */
+    popup?: boolean
+    /** Type specific data as a JSON string, for renderers registered per notification type. */
+    payload?: string | null
   }
 }
 
@@ -50,7 +58,15 @@ export class NotificationMessageHandler extends AbstractMessageHandler {
       return
     }
 
-    this.onMessage(message)
+    // Only the toast is suppressed. The notification still reaches the bell and still bumps
+    // the unread count below — turning pop-ups off means "do not interrupt me", never "hide
+    // this from me".
+    //
+    // Compared strictly against false so that a missing field (an older backend) keeps the
+    // previous behaviour of always showing the toast.
+    if (payload.notification.popup !== false) {
+      this.onMessage(message)
+    }
 
     store.dispatch(
       api.util.invalidateTags(invalidatingTags.NOTIFICATIONS())

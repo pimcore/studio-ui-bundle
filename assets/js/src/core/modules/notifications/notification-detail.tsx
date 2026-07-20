@@ -23,6 +23,10 @@ import { useNotificationDetail } from './hooks/use-notification-detail'
 import { NotificationAttachment } from './notification-attachment'
 import { type NotificationListItem } from './notifications-slice.gen'
 import { useStyles } from './notifications.styles'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type DynamicTypeNotificationRegistry } from './dynamic-types/registry/dynamic-type-notification-registry'
+import { parseNotificationPayload } from './utils/notification-payload'
 
 export interface NotificationDetailProps {
   notification: NotificationListItem
@@ -75,22 +79,57 @@ export const NotificationDetail = ({ notification, activeNotification }: Notific
     )
   }
 
+  /**
+   * Content contributed by the notification's type, if any. Types without a definition — and
+   * definitions that only render a toast — return null and leave the plain rendering below in
+   * place, so this never has to be exhaustive.
+   */
+  const customDetailContent = (): React.JSX.Element | null => {
+    const type = notification.type
+
+    if (isNil(type) || type === '') {
+      return null
+    }
+
+    const registry = container.get<DynamicTypeNotificationRegistry>(
+      serviceIds['DynamicTypes/NotificationRegistry']
+    )
+
+    if (!registry.hasDynamicType(type)) {
+      return null
+    }
+
+    return registry.getDynamicType(type).getDetailContent({
+      type,
+      title: notification.title,
+      sender: notification.sender ?? null,
+      message: notificationDetail?.message,
+      payload: parseNotificationPayload(notificationDetail?.payload)
+    })
+  }
+
   const children = (): React.JSX.Element => {
+    const custom = customDetailContent()
+
     return (
       <Content
         loading={ detailLoading }
-        none={ notificationDetail === undefined || notificationDetail.message?.length === 0 }
+        none={ custom === null && (notificationDetail === undefined || notificationDetail.message?.length === 0) }
       >
         <Flex
           gap={ 0 }
           vertical
         >
-          {notificationDetail !== undefined && typeof notificationDetail.message === 'string' && (<Paragraph>{respectLineBreak(notificationDetail.message)}</Paragraph>)}
-          {!isNil(notificationDetail?.attachmentId) && (
-            <NotificationAttachment
-              { ...notificationDetail }
-              attachmentId={ notificationDetail.attachmentId }
-            />
+          {custom ?? (
+            <>
+              {notificationDetail !== undefined && typeof notificationDetail.message === 'string' && (<Paragraph>{respectLineBreak(notificationDetail.message)}</Paragraph>)}
+              {!isNil(notificationDetail?.attachmentId) && (
+                <NotificationAttachment
+                  { ...notificationDetail }
+                  attachmentId={ notificationDetail.attachmentId }
+                />
+              )}
+            </>
           )}
         </Flex>
       </Content>

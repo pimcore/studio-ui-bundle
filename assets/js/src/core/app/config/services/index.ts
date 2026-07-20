@@ -346,6 +346,9 @@ import { DynamicTypeFieldDefinitionObjectbricks } from '@Pimcore/modules/field-d
 import { DynamicTypeFieldDefinitionClassificationstore } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/classificationstore/dynamic-type-field-definition-classificationstore'
 import { DynamicTypeFieldDefinitionLocalizedfields } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/localizedfields/dynamic-type-field-definition-localizedfields'
 import { DynamicTypeGDPRProviderRegistry } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/registry/dynamic-type-gdpr-provider-registry'
+import { DynamicTypeNotificationRegistry } from '@Pimcore/modules/notifications/dynamic-types/registry/dynamic-type-notification-registry'
+import { DynamicTypeNotificationChannelRegistry } from '@Pimcore/modules/notifications/dynamic-types/registry/dynamic-type-notification-channel-registry'
+import { DynamicTypeNotificationChannelEmail, DynamicTypeNotificationChannelPopup } from '@Pimcore/modules/notifications/dynamic-types/definitions/notification-channels'
 import { DynamicTypeDataObjectGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-data-object-gdpr-provider'
 import { DynamicTypeAssetsGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-assets-gdpr-provider'
 import { DynamicTypeUsersGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-users-gdpr-provider'
@@ -851,6 +854,12 @@ container.bind(serviceIds['DynamicTypes/VideoTransformation/Cut']).to(CutVideoTr
 container.bind(serviceIds['DynamicTypes/VideoTransformation/SetFramerate']).to(SetFramerateVideoTransformationType).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/VideoTransformation/ColorChannelMixer']).to(ColorChannelMixerVideoTransformationType).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/VideoTransformation/Mute']).to(MuteVideoTransformationType).inSingletonScope()
+
+// Notifications
+container.bind(serviceIds['DynamicTypes/NotificationRegistry']).to(DynamicTypeNotificationRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/NotificationChannelRegistry']).to(DynamicTypeNotificationChannelRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/NotificationChannel/Popup']).to(DynamicTypeNotificationChannelPopup).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/NotificationChannel/Email']).to(DynamicTypeNotificationChannelEmail).inSingletonScope()
 
 // GDPR Provider
 container.bind(serviceIds['DynamicTypes/GDPRProviderRegistry']).to(DynamicTypeGDPRProviderRegistry).inSingletonScope()

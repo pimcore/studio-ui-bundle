@@ -20,6 +20,8 @@ import { staticWidgetRestorer } from '../widget-manager/services/static-widget-r
 import { type ComponentRegistry } from '../app/component-registry/component-registry'
 import { NotificationPopup } from './notification-popup/notification-popup'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
+import { type DynamicTypeNotificationChannelRegistry } from './dynamic-types/registry/dynamic-type-notification-channel-registry'
+import { type DynamicTypeAbstractNotificationChannel } from './dynamic-types/definitions/dynamic-type-abstract-notification-channel'
 
 export const NOTIFICATIONS: WidgetManagerTabConfig = {
   component: 'notifications',
@@ -54,5 +56,18 @@ moduleSystem.registerModule({
 
     const BackgroundProcessor = container.get<BackgroundProcessor>(serviceIds.backgroundProcessor)
     BackgroundProcessor.registerProcess(new DemoProcess())
+
+    // Presentation for the channels shipped here. A bundle contributing its own channel
+    // registers it the same way; one that does not still gets a column, with a generic icon.
+    const channelRegistry = container.get<DynamicTypeNotificationChannelRegistry>(
+      serviceIds['DynamicTypes/NotificationChannelRegistry']
+    )
+
+    channelRegistry.registerDynamicType(
+      container.get<DynamicTypeAbstractNotificationChannel>(serviceIds['DynamicTypes/NotificationChannel/Popup'])
+    )
+    channelRegistry.registerDynamicType(
+      container.get<DynamicTypeAbstractNotificationChannel>(serviceIds['DynamicTypes/NotificationChannel/Email'])
+    )
   }
 })
