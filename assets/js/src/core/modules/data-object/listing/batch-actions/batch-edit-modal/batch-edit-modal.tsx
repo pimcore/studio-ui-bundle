@@ -27,6 +27,7 @@ import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row
 import { api, useDataObjectPatchByIdMutation, useDataObjectPatchFolderByIdMutation } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { isArray } from 'lodash'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
@@ -59,7 +60,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const [patchObjectsByIds, { error: idPatchError, isError: isIdPatchError, isSuccess: isIdPatchSuccess }] = useDataObjectPatchByIdMutation()
   const { useDataQueryHelper } = useSettings()
   const user = useUser()
-  const contentLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
+  const contentLanguages = isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
   const { getArgs } = useDataQueryHelper()
   const { id, elementType } = useElementContext()
   const dispatch = useAppDispatch()

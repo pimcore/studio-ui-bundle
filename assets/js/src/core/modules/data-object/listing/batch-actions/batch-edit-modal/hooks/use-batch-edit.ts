@@ -13,6 +13,7 @@ import { type BatchContext, type BatchEdit, BatchEditContext } from '../batch-ed
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { areGroupsEqual } from '../utils/dropdown-filter'
+import { isArray } from 'lodash'
 
 interface UseBatchEditHookReturn extends BatchContext {
   addOrUpdateBatchEdit: (column: AvailableColumn, value: BatchEdit['value']) => void
@@ -40,7 +41,7 @@ const isSameEntry = (a: BatchEdit, b: BatchEdit): boolean => {
 export const useBatchEdit = (): UseBatchEditHookReturn => {
   const { batchEdits, setBatchEdits } = useContext(BatchEditContext)
   const user = useUser()
-  const contentLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
+  const contentLanguages = isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
 
   const resetBatchEdits = (): void => {
     setBatchEdits([])
