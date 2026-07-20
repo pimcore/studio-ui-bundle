@@ -88,17 +88,25 @@ jobs:
           PKG_NAME="$(node -p "require('./assets/package.json').name" 2>/dev/null || true)"
           LINE_LATEST="$([ -n "${PKG_NAME}" ] && npm view "${PKG_NAME}@${BRANCH}" version --json 2>/dev/null | node -p '(v=>{if(Array.isArray(v))v=v[v.length-1];return typeof v==="string"?v:""})(JSON.parse(require("fs").readFileSync(0,"utf8")))' 2>/dev/null || true)"
           if [[ "${LINE_LATEST}" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
+            # Line already has published releases: base the canary on the next one.
             if [[ "${BRANCH}" == *.x ]]; then
               TARGET="${BASH_REMATCH[1]}.$(( BASH_REMATCH[2] + 1 )).0"
             else
               TARGET="${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.$(( BASH_REMATCH[3] + 1 ))"
             fi
-            echo "Canary target release for ${BRANCH}: ${TARGET}"
-            echo "target-release=${TARGET}" >> "$GITHUB_OUTPUT"
+          elif [[ "${BRANCH}" =~ ^([0-9]+)\.x$ ]]; then
+            # No release published on this line yet: seed from the branch name so
+            # a brand-new version branch still publishes canaries (e.g. 2027.x -> 2027.0.0).
+            TARGET="${BASH_REMATCH[1]}.0.0"
+          elif [[ "${BRANCH}" =~ ^([0-9]+)\.([0-9]+)$ ]]; then
+            TARGET="${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.0"
           else
             echo "::warning::Could not derive canary release line for ${BRANCH} (pkg=${PKG_NAME}); skipping canary publish."
             echo "target-release=" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
+          echo "Canary target release for ${BRANCH}: ${TARGET}"
+          echo "target-release=${TARGET}" >> "$GITHUB_OUTPUT"
 
   publish:
     needs: gate

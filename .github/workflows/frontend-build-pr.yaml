@@ -7,9 +7,6 @@ on:
       - "[0-9]+.x"
       - "feature-*"
       - "nightly"
-      # TEMP (remove before merge): regenerate build-dist/build-<id>.zip on every push to
-      # this PR branch — pull_request_target uses the base workflow, which has no packaging.
-      - "feature/frontend-build-archive"
   pull_request_target:
     branches:
       - "[0-9]+.[0-9]+"
@@ -18,9 +15,6 @@ on:
       - "feature-*"
       - "nightly"
   workflow_dispatch:
-  
-env:
- BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
 
 # The push and pull_request_target triggers both fire for pushes to a feature
 # branch with an open PR, producing two concurrent runs that race to push
