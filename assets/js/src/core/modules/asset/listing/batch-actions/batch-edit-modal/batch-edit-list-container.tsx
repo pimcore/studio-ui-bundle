@@ -26,7 +26,7 @@ export const BatchEditListContainer = (): React.JSX.Element => {
   const { updateLocale } = useBatchEdit()
 
   const items: StackListProps['items'] = batchEdits.map((batchEdit) => {
-    const siblingLocales = batchEdit.localizable
+    const siblingLocales = batchEdit.localizable === true
       ? batchEdits
           .filter(edit => edit.rowId !== batchEdit.rowId && edit.key === batchEdit.key && areGroupsEqual(edit.group, batchEdit.group))
           .map(edit => edit.locale ?? null)
