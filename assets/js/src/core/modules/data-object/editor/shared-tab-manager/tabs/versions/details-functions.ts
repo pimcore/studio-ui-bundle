@@ -16,6 +16,8 @@ import { type IObjectVersionField } from '@Pimcore/modules/element/editor/shared
 import { DATATYPE_LIST, type IFormattedDataStructureData, type IGetFormattedDataStructureProps, type IFieldCollectionValue } from './types'
 import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/constants/typesList'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
+import { ELEMENT_REFERENCE_PROPERTY_TYPES, PropertyType } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/constants/property-types'
 
 export const getBreadcrumbTitle = (value1: string, value2: string): string => {
   return [value1, value2].filter(Boolean).join('/')
@@ -93,8 +95,30 @@ export const getFormattedDataStructure = async ({ objectId, layout, versionData,
 
   const layoutData = await processLayoutData({ data: layout })
   const generalSystemData = getGeneralSystemData()
+  const propertiesData = getPropertiesData({ properties: versionData.properties, versionId, versionCount })
 
-  return [...generalSystemData, ...layoutData]
+  return [...generalSystemData, ...propertiesData, ...layoutData]
+}
+
+export const getPropertiesData = ({ properties, versionId, versionCount }: { properties: DataObjectVersion['properties'], versionId: number, versionCount: number }): IFormattedDataStructureData[] => {
+  return (properties ?? []).map((property): IFormattedDataStructureData => {
+    let fieldtype = 'input'
+
+    if (property.type === PropertyType.BOOL) {
+      fieldtype = 'checkbox'
+    } else if (ELEMENT_REFERENCE_PROPERTY_TYPES.includes(property.type)) {
+      fieldtype = property.type
+    }
+
+    return {
+      fieldBreadcrumbTitle: VersionCategoryName.PROPERTIES,
+      fieldData: { title: property.key, name: property.key, fieldtype, config: property.config } as any,
+      fieldValue: property.data,
+      versionId,
+      versionCount,
+      fieldPath: ''
+    }
+  })
 }
 
 const getUniqFieldKey = (item: any): string => {

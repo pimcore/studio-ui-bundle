@@ -16,6 +16,8 @@ import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { DataComponent } from '../data-component/data-component'
+import { PropertyElementLink } from '../property-element-link/property-element-link'
+import { ELEMENT_REFERENCE_PROPERTY_TYPES } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/constants/property-types'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
 import { type CategoriesList, type IObjectVersionsFieldsList, type VersionKeysList } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
 import { useStyles } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/styles/common-versions-fields-view.styles'
@@ -29,7 +31,7 @@ interface IObjectVersionsFieldsViewProps {
   isExpandedUnmodifiedFields: boolean
 }
 
-const SECTIONS_WITH_TRANSLATION: string[] = [VersionCategoryName.SYSTEM_DATA]
+const SECTIONS_WITH_TRANSLATION: string[] = [VersionCategoryName.SYSTEM_DATA, VersionCategoryName.PROPERTIES]
 const SECTIONS_WITH_COMPLEX_TYPES: string[] = [DynamicTypesList.BLOCK, DynamicTypesList.FIELD_COLLECTIONS]
 
 export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, versionKeysList, isExpandedUnmodifiedFields }: IObjectVersionsFieldsViewProps): React.JSX.Element => {
@@ -61,10 +63,11 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
     )
   }
 
-  const renderFieldTitle = ({ key, locale, isCommonSection }: { key: string, locale: string, isCommonSection: boolean }): React.JSX.Element => {
+  const renderFieldTitle = ({ key, locale, breadcrumbKey }: { key: string, locale: string, breadcrumbKey: string }): React.JSX.Element => {
     if (isEmptyValue(key)) return <></>
 
-    const textValue = isCommonSection ? t(`version.${key}`) : t(key)
+    const isSystemDataField = breadcrumbKey === VersionCategoryName.SYSTEM_DATA
+    const textValue = isSystemDataField ? t(`version.${key}`) : t(key)
 
     return (
       <Text className={ styles.fieldTitle }>
@@ -76,7 +79,7 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
   return (
     <>
       {breadcrumbsList?.map((breadcrumb, index) => {
-        const isCommonSection = breadcrumb.key === VersionCategoryName.SYSTEM_DATA
+        const isCommonSection = breadcrumb.key === VersionCategoryName.SYSTEM_DATA || breadcrumb.key === VersionCategoryName.PROPERTIES
 
         return (
           <div key={ `${index}-${breadcrumb.key}` }>
@@ -97,7 +100,7 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                       key={ `${fieldIndex}-${fieldItem.Field.name}` }
                     >
                       <div>
-                        {renderFieldTitle({ key: fieldItem.Field.title, locale: fieldItem.Field?.locale, isCommonSection })}
+                        {renderFieldTitle({ key: fieldItem.Field.title, locale: fieldItem.Field?.locale, breadcrumbKey: breadcrumb.key })}
                         <Flex gap="mini">
                           {versionKeysList.map((key, index) => {
                             const isModifiedField = fieldItem?.isModifiedValue === true
@@ -106,6 +109,7 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
 
                             const isComplexType = SECTIONS_WITH_COMPLEX_TYPES.includes(fieldItem?.Field.fieldtype as string)
                             const isEmptyModifiedStateForComplexTypes = isModifiedField && isComplexType && isEmptyValue(fieldItem[key])
+                            const isElementReferenceProperty = ELEMENT_REFERENCE_PROPERTY_TYPES.includes(fieldItem.Field.fieldtype as string)
 
                             return (
                               <div
@@ -124,20 +128,34 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                                     {t('empty')}
                                   </Flex>
                                 )}
-                                <DataComponent
-                                  className={ cn(styles.objectSectionFieldItem, 'versionFieldItem', {
-                                    [styles.objectSectionFieldItemHighlight]: isModifiedField && isCompareVersion,
-                                    versionFieldItemHighlight: isModifiedField && isCompareVersion
-                                  }) }
-                                  datatype={ 'data' }
-                                  fieldCollectionModifiedList={ fieldItem?.fieldCollectionModifiedList }
-                                  fieldType={ fieldItem.Field.fieldtype }
-                                  isExpandedUnmodifiedFields={ isExpandedUnmodifiedFields }
-                                  key={ `${index}-${key}` }
-                                  name={ fieldItem.Field.name }
-                                  value={ fieldItem[key] }
-                                  { ...fieldItem.Field }
-                                />
+                                {isElementReferenceProperty
+                                  ? (
+                                    <PropertyElementLink
+                                      className={ cn(styles.objectSectionFieldItem, 'versionFieldItem', {
+                                        [styles.objectSectionFieldItemHighlight]: isModifiedField && isCompareVersion,
+                                        versionFieldItemHighlight: isModifiedField && isCompareVersion
+                                      }) }
+                                      key={ `${index}-${key}` }
+                                      propertyType={ fieldItem.Field.fieldtype }
+                                      value={ fieldItem[key] }
+                                    />
+                                    )
+                                  : (
+                                    <DataComponent
+                                      className={ cn(styles.objectSectionFieldItem, 'versionFieldItem', {
+                                        [styles.objectSectionFieldItemHighlight]: isModifiedField && isCompareVersion,
+                                        versionFieldItemHighlight: isModifiedField && isCompareVersion
+                                      }) }
+                                      datatype={ 'data' }
+                                      fieldCollectionModifiedList={ fieldItem?.fieldCollectionModifiedList }
+                                      fieldType={ fieldItem.Field.fieldtype }
+                                      isExpandedUnmodifiedFields={ isExpandedUnmodifiedFields }
+                                      key={ `${index}-${key}` }
+                                      name={ fieldItem.Field.name }
+                                      value={ fieldItem[key] }
+                                      { ...fieldItem.Field }
+                                    />
+                                    )}
                               </div>
                             )
                           })}
