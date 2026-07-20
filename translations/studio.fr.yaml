@@ -466,6 +466,7 @@ version.no-difference: Il n'y a aucune différence entre les versions sélection
 version.category.title.systemData: Données système
 version.category.title.baseData: Données de base
 version.category.title.meta: Métadonnées
+version.category.title.properties: Propriétés
 aria.version.delete: Supprimer la version
 aria.version.expand: Développer la version
 clear-all: Tout effacer
