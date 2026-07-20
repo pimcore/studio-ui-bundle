@@ -20,6 +20,7 @@ import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators
 import { useBatchEdit } from './hooks/use-batch-edit'
 import { BatchEditListContainer } from './batch-edit-list-container'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { isArray } from 'lodash'
 import { Form } from '@Pimcore/components/form/form'
 import { type AvailableColumn, buildColumnPickerGroups } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useTranslation } from 'react-i18next'
@@ -60,7 +61,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const { hasType } = useDynamicTypeResolver()
   const { refreshGrid } = useRefreshGrid(elementType)
   const user = useUser()
-  const contentLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
+  const contentLanguages = isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
   const [fieldsToAddOpen, setFieldsToAddOpen] = useState<boolean>(true)
 
   const resetModal = (): void => {
