@@ -135,22 +135,18 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
         )
       }
 
-      const saveDisabled = isLoading || isSchedulesLoading || isDraftLoading
-
       if (document?.published === false && checkElementPermission(document?.permissions, 'save')) {
         secondaryButtons.push(
           <Button
-            disabled={ saveDisabled }
+            disabled={ isLoading || isSchedulesLoading || isDraftLoading }
             key="save-draft"
-            loading={ runningTask === SaveTaskType.Publish && (isLoading || isSchedulesLoading) }
+            loading={ (runningTask === SaveTaskType.Save) && (isLoading || isSchedulesLoading) }
             onClick={ async () => {
-              await handleSaveClick(SaveTaskType.Publish, () => {
-                publishDraft()
-              })
+              await handleSaveClick(SaveTaskType.Save)
             } }
             type="default"
           >
-            {t('toolbar.save-and-publish')}
+            {t('toolbar.save-draft')}
           </Button>
         )
       }
@@ -206,32 +202,22 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
       return primaryButtons
     }
 
-    if (document?.published === true && checkElementPermission(document?.permissions, 'publish')) {
+    // Save & Publish is always on the RIGHT with primary styling
+    if (checkElementPermission(document?.permissions, 'publish')) {
       primaryButtons.push(
         <Button
           disabled={ saveDisabled }
           loading={ (runningTask === SaveTaskType.Publish) && (isLoading || isSchedulesLoading) }
           onClick={ async () => {
-            await handleSaveClick(SaveTaskType.Publish)
+            await handleSaveClick(SaveTaskType.Publish, () => {
+              if (document?.published === false) {
+                publishDraft()
+              }
+            })
           } }
           type="primary"
         >
           {t('toolbar.save-and-publish')}
-        </Button>
-      )
-    }
-
-    if (document?.published === false && checkElementPermission(document?.permissions, 'save')) {
-      primaryButtons.push(
-        <Button
-          disabled={ saveDisabled }
-          loading={ (runningTask === SaveTaskType.Save) && (isLoading || isSchedulesLoading) }
-          onClick={ async () => {
-            await handleSaveClick(SaveTaskType.Save)
-          } }
-          type="primary"
-        >
-          {t('toolbar.save-draft')}
         </Button>
       )
     }
