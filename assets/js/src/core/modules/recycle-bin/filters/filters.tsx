@@ -34,9 +34,8 @@ import {
 
 export const RECYCLE_BIN_FILTERABLE_FIELDS: RecycleBinFilterColumn[] = [
   { key: 'path', translationKey: 'recycle-bin.columns.path', type: 'like', frontendType: 'string' },
-  { key: 'deletedby', translationKey: 'recycle-bin.columns.deleted-by', type: 'like', frontendType: 'string' }
-  // TODO: should be available as soon as this bug (https://github.com/pimcore/studio-backend-bundle/issues/1937) is fixed
-  // { key: 'date', translationKey: 'recycle-bin.columns.date', type: 'date', frontendType: 'date' }
+  { key: 'deletedby', translationKey: 'recycle-bin.columns.deleted-by', type: 'like', frontendType: 'string' },
+  { key: 'date', translationKey: 'recycle-bin.columns.date', type: 'date', frontendType: 'date' }
 ]
 
 export const {
