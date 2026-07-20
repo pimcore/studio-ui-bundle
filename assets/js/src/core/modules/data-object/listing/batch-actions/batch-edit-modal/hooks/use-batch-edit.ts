@@ -43,6 +43,44 @@ const isSameEntry = (a: BatchEdit, b: BatchEdit): boolean => {
 const supportsMultipleLocales = (column: AvailableColumn, contentLanguages: string[]): boolean =>
   column.localizable && column.type !== 'dataobject.objectbrick' && contentLanguages.length > 0
 
+const toEntry = (column: AvailableColumn, contentLanguages: string[], value: BatchEdit['value']): BatchEdit => ({
+  ...column,
+  locale: column.localizable ? column.locale ?? contentLanguages[0] ?? null : null,
+  value
+})
+
+// Replace the matching entry (by full identity) or append it.
+const upsertEntry = (edits: BatchEdit[], newEdit: BatchEdit): BatchEdit[] => {
+  const existingIndex = edits.findIndex(edit => isSameEntry(edit, newEdit))
+
+  if (existingIndex === -1) {
+    return [...edits, newEdit]
+  }
+
+  const updated = [...edits]
+  updated[existingIndex] = newEdit
+  return updated
+}
+
+const upsertMany = (edits: BatchEdit[], columns: AvailableColumn[], contentLanguages: string[]): BatchEdit[] =>
+  columns.reduce((acc, column) => upsertEntry(acc, toEntry(column, contentLanguages, undefined)), [...edits])
+
+// Append a new row for the next unused content language of the given field.
+const appendNextLocale = (edits: BatchEdit[], column: AvailableColumn, contentLanguages: string[], value: BatchEdit['value']): BatchEdit[] => {
+  const usedLocales = new Set(
+    edits
+      .filter(edit => edit.key === column.key && areGroupsEqual(edit.group, column.group))
+      .map(edit => edit.locale)
+  )
+  const nextLocale = contentLanguages.find(language => !usedLocales.has(language))
+
+  if (nextLocale === undefined) {
+    return edits
+  }
+
+  return [...edits, { ...column, locale: nextLocale, value }]
+}
+
 export const useBatchEdit = (): UseBatchEditHookReturn => {
   const { batchEdits, setBatchEdits } = useContext(BatchEditContext)
   const user = useUser()
@@ -58,62 +96,15 @@ export const useBatchEdit = (): UseBatchEditHookReturn => {
 
   const addOrUpdateBatchEdit = (column: AvailableColumn, value: BatchEdit['value']): void => {
     if (supportsMultipleLocales(column, contentLanguages)) {
-      setBatchEdits(prev => {
-        const usedLocales = new Set(
-          prev
-            .filter(edit => edit.key === column.key && areGroupsEqual(edit.group, column.group))
-            .map(edit => edit.locale)
-        )
-        const nextLocale = contentLanguages.find(language => !usedLocales.has(language))
-
-        if (nextLocale === undefined) {
-          return prev
-        }
-
-        return [...prev, { ...column, locale: nextLocale, value }]
-      })
+      setBatchEdits(prev => appendNextLocale(prev, column, contentLanguages, value))
       return
     }
 
-    // Single entry: non-localizable, object-brick, or when the user has no content languages.
-    const locale = column.localizable ? column.locale ?? contentLanguages[0] ?? null : null
-    const newEdit: BatchEdit = { ...column, locale, value }
-
-    setBatchEdits(prev => {
-      const existingIndex = prev.findIndex(edit => edit.key === newEdit.key && areGroupsEqual(edit.group, newEdit.group))
-
-      if (existingIndex === -1) {
-        return [...prev, newEdit]
-      }
-
-      const updated = [...prev]
-      updated[existingIndex] = newEdit
-      return updated
-    })
+    setBatchEdits(prev => upsertEntry(prev, toEntry(column, contentLanguages, value)))
   }
 
   const addOrUpdateBatchEdits = (columns: AvailableColumn[]): void => {
-    setBatchEdits(prev => {
-      const updatedEdits: BatchEdit[] = [...prev]
-
-      columns.forEach(column => {
-        const newEdit: BatchEdit = {
-          ...column,
-          locale: column.localizable ? column.locale ?? contentLanguages[0] ?? null : null,
-          value: undefined
-        }
-
-        const existingIndex = updatedEdits.findIndex(edit => isSameEntry(edit, newEdit))
-
-        if (existingIndex !== -1) {
-          updatedEdits[existingIndex] = newEdit
-        } else {
-          updatedEdits.push(newEdit)
-        }
-      })
-
-      return updatedEdits
-    })
+    setBatchEdits(prev => upsertMany(prev, columns, contentLanguages))
   }
 
   const removeBatchEdit = (batchEdit: BatchEdit): void => {
