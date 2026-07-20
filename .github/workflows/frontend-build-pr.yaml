@@ -37,4 +37,11 @@ jobs:
   build:
     permissions:
       contents: write
-    uses: ./.github/workflows/shared-frontend-build.yaml
+    uses: pimcore/workflows-collection-public/.github/workflows/reusable-studio-frontend-build.yaml@main
+    with:
+      working-directory: ./assets
+      node-version: "24"
+      build-script: ci-build
+      build-output-path: ./build-dist/
+      api-client: true
+      test: true
