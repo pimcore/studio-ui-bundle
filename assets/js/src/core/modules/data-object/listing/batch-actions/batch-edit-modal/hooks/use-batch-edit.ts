@@ -13,7 +13,6 @@ import { type BatchContext, type BatchEdit, BatchEditContext } from '../batch-ed
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { areGroupsEqual } from '../utils/dropdown-filter'
-import { isArray } from 'lodash'
 
 interface UseBatchEditHookReturn extends BatchContext {
   addOrUpdateBatchEdit: (column: AvailableColumn, value: BatchEdit['value']) => void
@@ -23,6 +22,7 @@ interface UseBatchEditHookReturn extends BatchContext {
   removeBatchEdit: (batchEdit: BatchEdit) => void
 }
 
+// Entries are identified by key + locale + group, plus keyId/groupId for classification store.
 const isSameEntry = (a: BatchEdit, b: BatchEdit): boolean => {
   if (a.key !== b.key || (a.locale ?? null) !== (b.locale ?? null) || !areGroupsEqual(a.group, b.group)) {
     return false
@@ -38,78 +38,86 @@ const isSameEntry = (a: BatchEdit, b: BatchEdit): boolean => {
   return true
 }
 
+// Only adapter fields get one row per locale; object-brick stays single-entry, and with no
+// content languages we fall back to a single entry too.
+const supportsMultipleLocales = (column: AvailableColumn, contentLanguages: string[]): boolean =>
+  column.localizable && column.type !== 'dataobject.objectbrick' && contentLanguages.length > 0
+
 export const useBatchEdit = (): UseBatchEditHookReturn => {
   const { batchEdits, setBatchEdits } = useContext(BatchEditContext)
   const user = useUser()
-  const contentLanguages = isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
+  const contentLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
 
   const resetBatchEdits = (): void => {
     setBatchEdits([])
   }
 
   const updateLocale = (batchEdit: BatchEdit, locale: string | null): void => {
-    const updatedEdits = batchEdits.map(edit =>
-      isSameEntry(edit, batchEdit) ? { ...edit, locale } : edit
-    )
-    setBatchEdits(updatedEdits)
+    setBatchEdits(prev => prev.map(edit => (isSameEntry(edit, batchEdit) ? { ...edit, locale } : edit)))
   }
 
   const addOrUpdateBatchEdit = (column: AvailableColumn, value: BatchEdit['value']): void => {
-    if (column.localizable) {
-      const usedLocales = new Set(
-        batchEdits
-          .filter(edit => edit.key === column.key && areGroupsEqual(edit.group, column.group))
-          .map(edit => edit.locale)
-      )
-      const nextLocale = contentLanguages.find(language => !usedLocales.has(language))
+    if (supportsMultipleLocales(column, contentLanguages)) {
+      setBatchEdits(prev => {
+        const usedLocales = new Set(
+          prev
+            .filter(edit => edit.key === column.key && areGroupsEqual(edit.group, column.group))
+            .map(edit => edit.locale)
+        )
+        const nextLocale = contentLanguages.find(language => !usedLocales.has(language))
 
-      if (nextLocale === undefined) {
-        return
-      }
+        if (nextLocale === undefined) {
+          return prev
+        }
 
-      setBatchEdits([...batchEdits, { ...column, locale: nextLocale, value }])
+        return [...prev, { ...column, locale: nextLocale, value }]
+      })
       return
     }
 
-    const newEdit: BatchEdit = { ...column, locale: null, value }
+    // Single entry: non-localizable, object-brick, or when the user has no content languages.
+    const locale = column.localizable ? column.locale ?? contentLanguages[0] ?? null : null
+    const newEdit: BatchEdit = { ...column, locale, value }
 
-    const updatedEdits: BatchEdit[] = [...batchEdits]
-    const existingIndex = batchEdits.findIndex(edit => edit.key === newEdit.key && areGroupsEqual(edit.group, newEdit.group))
+    setBatchEdits(prev => {
+      const existingIndex = prev.findIndex(edit => edit.key === newEdit.key && areGroupsEqual(edit.group, newEdit.group))
 
-    if (existingIndex !== -1) {
-      updatedEdits[existingIndex] = newEdit
-    } else {
-      updatedEdits.push(newEdit)
-    }
+      if (existingIndex === -1) {
+        return [...prev, newEdit]
+      }
 
-    setBatchEdits(updatedEdits)
+      const updated = [...prev]
+      updated[existingIndex] = newEdit
+      return updated
+    })
   }
 
   const addOrUpdateBatchEdits = (columns: AvailableColumn[]): void => {
-    const updatedEdits: BatchEdit[] = [...batchEdits]
+    setBatchEdits(prev => {
+      const updatedEdits: BatchEdit[] = [...prev]
 
-    columns.forEach(column => {
-      const newEdit: BatchEdit = {
-        ...column,
-        locale: column.localizable ? column.locale ?? contentLanguages[0] : null,
-        value: undefined
-      }
+      columns.forEach(column => {
+        const newEdit: BatchEdit = {
+          ...column,
+          locale: column.localizable ? column.locale ?? contentLanguages[0] ?? null : null,
+          value: undefined
+        }
 
-      const existingIndex = batchEdits.findIndex(edit => edit.key === newEdit.key)
+        const existingIndex = updatedEdits.findIndex(edit => isSameEntry(edit, newEdit))
 
-      if (existingIndex !== -1) {
-        updatedEdits[existingIndex] = newEdit
-      } else {
-        updatedEdits.push(newEdit)
-      }
+        if (existingIndex !== -1) {
+          updatedEdits[existingIndex] = newEdit
+        } else {
+          updatedEdits.push(newEdit)
+        }
+      })
+
+      return updatedEdits
     })
-
-    setBatchEdits(updatedEdits)
   }
 
   const removeBatchEdit = (batchEdit: BatchEdit): void => {
-    const updatedEdits = batchEdits.filter(edit => !isSameEntry(edit, batchEdit))
-    setBatchEdits(updatedEdits)
+    setBatchEdits(prev => prev.filter(edit => !isSameEntry(edit, batchEdit)))
   }
 
   return {

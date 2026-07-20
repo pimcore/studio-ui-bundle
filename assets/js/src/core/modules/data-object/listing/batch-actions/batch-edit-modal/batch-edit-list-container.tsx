@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { Tag } from 'antd'
+import { type NamePath } from 'antd/es/form/interface'
 import { StackList, type StackListProps } from '@Pimcore/components/stack-list/stack-list'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -23,27 +24,53 @@ import { areGroupsEqual } from './utils/dropdown-filter'
 import { DefaultBatchEdit } from './default-batch-edit'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
+// The form path a row's value is stored under, matching each renderer's Form.Item name.
+// Object-brick builds a non-trivial path and is skipped (null) — its value isn't migrated/cleared.
+const getFormPath = (batchEdit: BatchEdit, locale: string | null): NamePath | null => {
+  if (batchEdit.type === 'dataobject.objectbrick') {
+    return null
+  }
+
+  if (batchEdit.type === 'dataobject.classificationstore') {
+    const config = batchEdit.config as { keyId?: number, groupId?: number }
+    return [batchEdit.key, `${config.groupId}`, locale ?? 'default', `${config.keyId}`]
+  }
+
+  return batchEdit.localizable ? ['localizedfields', batchEdit.key, locale ?? ''] : [batchEdit.key]
+}
+
 export const BatchEditListContainer = (): React.JSX.Element => {
   const { batchEdits, removeBatchEdit, updateLocale } = useBatchEdit()
   const form = Form.useFormInstance()
 
-  // Localized values are stored in the form under ['localizedfields', key, locale] and the
-  // whole form tree is submitted. Changing a row's locale remounts the field at a new path, so
-  // carry the value over to the new locale (and clear the old one). Only regular localizable
-  // fields use this path; classification-store / object-brick build their own name paths.
+  // Changing a row's locale remounts its field at a new path; carry the value over (and clear the
+  // old path) so the whole-form submit doesn't drop it. Object-brick is skipped (see getFormPath).
   const migrateLocaleValue = (batchEdit: BatchEdit, nextLocale: string | null): void => {
-    const isRegularLocalizable = batchEdit.localizable &&
-      batchEdit.type !== 'dataobject.classificationstore' &&
-      batchEdit.type !== 'dataobject.objectbrick'
-
-    if (!isRegularLocalizable || batchEdit.locale == null || nextLocale == null || nextLocale === batchEdit.locale) {
+    if (!batchEdit.localizable || (batchEdit.locale ?? null) === (nextLocale ?? null)) {
       return
     }
 
-    const oldPath = ['localizedfields', batchEdit.key, batchEdit.locale]
-    const newPath = ['localizedfields', batchEdit.key, nextLocale]
+    const oldPath = getFormPath(batchEdit, batchEdit.locale ?? null)
+    const newPath = getFormPath(batchEdit, nextLocale)
+
+    if (oldPath == null || newPath == null) {
+      return
+    }
+
     form.setFieldValue(newPath, form.getFieldValue(oldPath))
     form.setFieldValue(oldPath, undefined)
+  }
+
+  // Ant Form preserves unmounted values, so clear the removed row's path before dropping it,
+  // otherwise a re-added locale would show the stale value.
+  const handleRemove = (batchEdit: BatchEdit): void => {
+    const path = getFormPath(batchEdit, batchEdit.locale ?? null)
+
+    if (path != null) {
+      form.setFieldValue(path, undefined)
+    }
+
+    removeBatchEdit(batchEdit)
   }
 
   const items: StackListProps['items'] = batchEdits.map((batchEdit) => {
@@ -58,7 +85,8 @@ export const BatchEditListContainer = (): React.JSX.Element => {
 
     const batchEditTitle = hasFieldDefinition(batchEdit.config) ? (batchEdit.config.fieldDefinition as { title: string }).title : batchEdit.key
     const baseKey = batchEdit.type === 'dataobject.classificationstore' ? `${batchEdit.key}-${(batchEdit.config as { keyId: number }).keyId}-${(batchEdit.config as { groupId: number }).groupId}` : batchEdit.key
-    const key = batchEdit.localizable ? `${baseKey}-${batchEdit.locale ?? ''}` : baseKey
+    // Include the group so two columns with the same key/locale in different groups stay distinct.
+    const key = JSON.stringify({ group: batchEdit.group, baseKey, locale: batchEdit.localizable ? batchEdit.locale ?? null : null })
 
     return ({
       id: key,
@@ -83,7 +111,7 @@ export const BatchEditListContainer = (): React.JSX.Element => {
             icon={ { value: 'close' } }
             key={ 'remove' }
             onClick={ () => {
-              removeBatchEdit(batchEdit)
+              handleRemove(batchEdit)
             } }
           />
         ]
