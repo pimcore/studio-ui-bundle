@@ -11,13 +11,13 @@
 import { NotificationMessageHandler } from './notification-message-handler'
 import { type AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
 
-const dispatch = jest.fn()
-const invalidateTags = jest.fn(() => ({ type: 'invalidateTags' }))
-const updateQueryData = jest.fn(() => ({ type: 'updateQueryData' }))
+const dispatch = jest.fn((..._args: unknown[]) => undefined)
+const invalidateTags = jest.fn((..._args: unknown[]) => ({ type: 'invalidateTags' }))
+const updateQueryData = jest.fn((..._args: unknown[]) => ({ type: 'updateQueryData' }))
 
 jest.mock('@Pimcore/app/store', () => ({
   store: {
-    dispatch: (...args: unknown[]) => dispatch(...args),
+    dispatch: (...args: unknown[]) => { dispatch(...args) },
     getState: () => ({})
   }
 }))

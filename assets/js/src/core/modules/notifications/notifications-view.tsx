@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
@@ -20,6 +20,9 @@ import { NotificationList } from './notification-list'
 import { IconTextButton, Header } from '@sdk/components'
 import { type NotificationGetCollectionApiResponse } from './notifications-slice.gen'
 import { NotificationsSidebar } from './notifications-sidebar/notifications-sidebar'
+import { SendNotificationModal } from './send-notification/send-notification-modal'
+import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 
 interface NotificationsViewProps {
   notifications: NotificationGetCollectionApiResponse | undefined
@@ -35,6 +38,7 @@ interface NotificationsViewProps {
 
 const NotificationsView = ({ notifications, isLoading, isFetching, deleteNotificationsForUser, deleteLoading, page, setPage, setPageSize, activeNotification }: NotificationsViewProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const [sendModal, setSendModal] = useState<boolean>(false)
 
   return (
     <ContentLayout
@@ -68,6 +72,12 @@ const NotificationsView = ({ notifications, isLoading, isFetching, deleteNotific
           position='top'
         >
           <Title>{t('notifications.label')}</Title>
+          {isAllowed(UserPermission.SendNotifications) && (
+            <IconTextButton
+              icon={ { value: 'send-03' } }
+              onClick={ () => { setSendModal(true) } }
+            >{t('user-menu.notification.send')}</IconTextButton>
+          )}
         </Header>
             }
     >
@@ -89,6 +99,11 @@ const NotificationsView = ({ notifications, isLoading, isFetching, deleteNotific
           )}
         </Box>
       </Content>
+
+      <SendNotificationModal
+        onClose={ () => { setSendModal(false) } }
+        open={ sendModal }
+      />
     </ContentLayout>
   )
 }
