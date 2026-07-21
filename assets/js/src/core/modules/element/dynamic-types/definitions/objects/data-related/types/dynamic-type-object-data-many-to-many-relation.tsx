@@ -54,10 +54,6 @@ export class DynamicTypeObjectDataManyToManyRelation extends DynamicTypeObjectDa
     )
   }
 
-  getVersionObjectDataComponent (props: ManyToManyRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
-    return this.getObjectDataComponent({ ...props, noteditable: true, hideOpenButton: true })
-  }
-
   getObjectDataFormItemProps (props: ManyToManyRelationObjectDataDefinition): FormItemProps {
     return {
       ...super.getObjectDataFormItemProps(props),

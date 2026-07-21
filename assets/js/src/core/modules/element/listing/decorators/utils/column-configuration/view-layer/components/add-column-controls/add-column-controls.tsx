@@ -61,7 +61,7 @@ export const AddColumnControls = ({
   )
 
   return (
-    <Flex gap="extra-small">
+    <Flex gap="mini">
       { onToggleSimple !== undefined
         ? simpleButton
         : (

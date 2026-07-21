@@ -40,7 +40,6 @@ export interface ManyToManyObjectRelationClassDefinitionProps {
   width: number | string | null
   height: number | string | null
   visibleFieldDefinitions?: Record<string, VisibleFieldDefinition> | null
-  hideOpenButton?: boolean
 }
 
 export interface VisibleFieldDefinition {

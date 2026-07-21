@@ -20,7 +20,6 @@ import { isEqual } from 'lodash'
 export interface PipelineItem {
   id: string
   component: ReactNode
-  noDivider?: boolean
 }
 
 export interface PipelineProps {
@@ -70,7 +69,7 @@ const Pipeline = ({ items, value: baseValue, onChange }: PipelineProps): React.J
             <div key={ item.id }>
               {item.component}
 
-              {!isLastItem && item.noDivider !== true && (
+              {!isLastItem && (
               <Divider
                 style={ { margin: 0 } }
                 theme='secondary'

@@ -16,7 +16,6 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@Pimcore/components/button/button'
 import { Space } from '@Pimcore/components/space/space'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
 import { GridConfigList } from './grid-config-list'
 import { AddColumnControls } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/components/add-column-controls/add-column-controls'
@@ -66,7 +65,7 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
               size="XL"
               title={ (
                 <ModalTitle iconName="settings">
-                  { t('listing.grid-config.title') }
+                  Grid Config
                 </ModalTitle>
             ) }
             >
@@ -98,7 +97,7 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
                 </Content>
 
                 <Toolbar
-                  padding={ { x: 'none' } }
+                  padding={ { x: 'none', y: 'small' } }
                   theme="secondary"
                 >
                   <AddColumnControls
@@ -109,12 +108,6 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
                   />
 
                   <Space size="extra-small">
-                    <IconButton
-                      icon={ { value: 'refresh' } }
-                      onClick={ onCancelClick }
-                      tooltip={ { title: t('grid-config.reload') } }
-                    />
-
                     <Button
                       onClick={ () => { onCancelClick(); onOpenChange?.(false) } }
                       type='default'
