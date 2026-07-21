@@ -14,6 +14,8 @@ import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-h
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useOptimisticUpdate } from './use-optimistic-update'
 import { isNil } from 'lodash'
+import { useAppSelector } from '@Pimcore/app/store'
+import { selectExpandRequest } from '../notifications-ui-slice'
 
 export interface UseNotificationDetailProps {
   id: number
@@ -31,6 +33,18 @@ interface UseNotificationsReturn {
 
 export const useNotificationDetail = ({ id, activeNotification }: UseNotificationDetailProps): UseNotificationsReturn => {
   const [isExpanded, setIsExpanded] = useState<boolean>(id === activeNotification)
+  const expandRequest = useAppSelector(selectExpandRequest)
+
+  // The initial state above only covers a freshly mounted list — opening the widget from the
+  // toast on a closed bell. When the bell is already open, "View" cannot reach a mounted row
+  // through the widget config, so it publishes an expand request that every row watches. The
+  // token in the request makes even a repeated view of the same row re-expand it. It only ever
+  // expands; a row the user opened by hand is left alone when a different one is viewed.
+  useEffect(() => {
+    if (expandRequest?.id === id) {
+      setIsExpanded(true)
+    }
+  }, [expandRequest, id])
   const { updateNotificationReadStateById, removeNotificationFromCollectionById } = useOptimisticUpdate()
   const [deleteNotificationMutation, { isLoading: deleteLoading }] = useNotificationDeleteByIdMutation()
 

@@ -16,9 +16,12 @@ import { useLogoutMutation } from '@Pimcore/modules/auth/authorization-api-slice
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { NOTIFICATIONS, NOTIFICATION_SETTINGS } from '@Pimcore/modules/notifications'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Button } from '@Pimcore/components/button/button'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { SendNotificationModal } from '@Pimcore/modules/notifications/send-notification/send-notification-modal'
 import { useWidgetManager } from '@sdk/modules/widget-manager'
 import { theme } from 'antd'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStyle } from './user-menu.styles'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
@@ -37,6 +40,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   const { token } = theme.useToken()
   const [logout] = useLogoutMutation()
   const { openMainWidget } = useWidgetManager()
+  const [sendModal, setSendModal] = useState<boolean>(false)
   const user = useUser()
   const { getUserImageById, updateUserImageInState } = useUserHelper()
   const { data } = useNotificationGetUnreadCountQuery(undefined, {
@@ -109,11 +113,24 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       </div>,
       onClick: () => { openMainWidget(NOTIFICATIONS) },
       hidden: !isAllowed(UserPermission.Notifications),
-      // Opens the preferences rather than the bell, so the click must not bubble to the row.
-      extra: isAllowed(UserPermission.Notifications)
-        ? (
+      // Both actions sit on the row and open something other than the bell, so each stops the
+      // click from bubbling up and triggering the row's own onClick.
+      extra: (
+        <Flex
+          align={ 'center' }
+          gap={ 'mini' }
+        >
+          {isAllowed(UserPermission.SendNotifications) && (
+            <Button
+              className={ 'user-menu__item-extra' }
+              onClick={ (e) => {
+                e.stopPropagation()
+                setSendModal(true)
+              } }
+              size={ 'small' }
+            >{t('user-menu.notification.send')}</Button>
+          )}
           <IconButton
-            className={ 'user-menu__item-extra' }
             icon={ { value: 'settings' } }
             onClick={ (e) => {
               e.stopPropagation()
@@ -122,8 +139,8 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
             title={ t('notifications.settings.label') }
             type={ 'text' }
           />
-          )
-        : null
+        </Flex>
+      )
     },
     {
       key: 'myprofile',
@@ -168,6 +185,11 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
           />
         </Badge>
       </Dropdown>
+
+      <SendNotificationModal
+        onClose={ () => { setSendModal(false) } }
+        open={ sendModal }
+      />
     </>
   )
 }

@@ -13,6 +13,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { NotificationPopupItem } from './notification-popup-item'
 import { openMainWidget } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { useAppDispatch } from '@sdk/app'
+import { requestExpandNotification } from '../notifications-ui-slice'
 export interface OpenNotification {
   id: number
   title: string
@@ -45,6 +46,12 @@ export const NotificationPopupContent: React.FC<NotificationPopupCollapseProps> 
             onView={ () => {
               onView(notification.id)
 
+              // Opens the widget, or just focuses its tab when it is already open. In that
+              // already-open case the mounted widget keeps its original config — the widget
+              // container memoises the rendered component — so a config update would never
+              // reach the list. The expand request below is a live signal the rows subscribe
+              // to directly, which is what makes "View" expand the item whether the widget was
+              // already open or not.
               dispatch(openMainWidget({
                 component: 'notifications',
                 name: 'Notifications',
@@ -58,6 +65,7 @@ export const NotificationPopupContent: React.FC<NotificationPopupCollapseProps> 
                   activeNotification: notification.id
                 }
               }))
+              dispatch(requestExpandNotification(notification.id))
             } }
           />
         </motion.div>
