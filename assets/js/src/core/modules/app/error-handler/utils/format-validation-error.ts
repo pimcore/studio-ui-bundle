@@ -32,5 +32,7 @@ export const formatValidationErrorHtml = (message: string): string => {
     return items[0] ?? ''
   }
 
-  return `<ul>${items.map((item) => `<li>${item}</li>`).join('')}</ul>`
+  const listItems = items.map((item) => `<li>${item}</li>`).join('')
+
+  return `<ul>${listItems}</ul>`
 }
