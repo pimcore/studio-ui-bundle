@@ -42,15 +42,22 @@ export const useStyles = createStyles(({ token, css }) => {
             border-bottom: none;
         }
     `,
+    /*
+     * The column header and the group headings are two different kinds of row and must read that
+     * way. The header is the table's own header, so it carries the fill and bold weight; the group
+     * headings are section labels within the body, so they sit flat with a divider and an uppercase
+     * label. Two filled bands one shade apart read as the same kind of row repeated — flat
+     * typographic labels give a clearer two-level hierarchy than a second fill would.
+     */
     head: css`
-        background: ${token.colorFillQuaternary};
+        background: ${token.colorFillSecondary};
+        font-weight: ${token.fontWeightStrong};
     `,
     groupRow: css`
-        padding: ${token.paddingXS}px ${token.padding}px;
-        background: ${token.colorFillQuaternary};
+        padding: ${token.padding}px ${token.padding}px ${token.paddingXS}px;
         border-bottom: 1px solid ${token.colorBorderSecondary};
         text-transform: uppercase;
-        letter-spacing: 0.06em;
+        letter-spacing: 0.08em;
         font-size: ${token.fontSizeSM}px;
     `,
     typeColumn: css`
