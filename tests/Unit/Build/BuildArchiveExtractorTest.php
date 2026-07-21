@@ -218,6 +218,55 @@ class BuildArchiveExtractorTest extends Unit
         }
     }
 
+    public function testEntryPointLocationsPrefersACompletePairOverAnOrphanAppDirectory(): void
+    {
+        // A complete build plus a leftover orphan -app (an interrupted/renamed build), none
+        // tagged. The orphan sorts last, but returning it would drop the sdk (exposeRemote /
+        // window.StudioUIBundleRemoteUrl) and break the app, so the complete pair must win.
+        $this->writeBuildDir('aaaapair-app', null);
+        $this->writeBuildDir('aaaapair-sdk', null);
+        $this->writeBuildDir('zzorphan-app', null);
+
+        $locations = $this->extractor()->entryPointLocations($this->targetDir);
+
+        $this->assertCount(2, $locations);
+        foreach ($locations as $location) {
+            $this->assertStringContainsString('aaaapair-', $location);
+        }
+    }
+
+    public function testEntryPointLocationsPrefersACompletePairOverAnOrphanSdkDirectory(): void
+    {
+        // Same as above, but the orphan is an -sdk. Returning it would omit the required main
+        // entry point, so the complete pair must win.
+        $this->writeBuildDir('aaaapair-app', null);
+        $this->writeBuildDir('aaaapair-sdk', null);
+        $this->writeBuildDir('zzorphan-sdk', null);
+
+        $locations = $this->extractor()->entryPointLocations($this->targetDir);
+
+        $this->assertCount(2, $locations);
+        foreach ($locations as $location) {
+            $this->assertStringContainsString('aaaapair-', $location);
+        }
+    }
+
+    public function testEntryPointLocationsPrefersACompleteUntaggedBuildOverAnOrphanTaggedDirectory(): void
+    {
+        // Completeness beats the .build-id tag: an orphan can never serve the UI, so a complete
+        // untagged pair wins over a tagged-but-orphaned directory.
+        $this->writeBuildDir('xxorphan-app', 'xxorphan');
+        $this->writeBuildDir('yycomplete-app', null);
+        $this->writeBuildDir('yycomplete-sdk', null);
+
+        $locations = $this->extractor()->entryPointLocations($this->targetDir);
+
+        $this->assertCount(2, $locations);
+        foreach ($locations as $location) {
+            $this->assertStringContainsString('yycomplete-', $location);
+        }
+    }
+
     private function extractor(): BuildArchiveExtractor
     {
         return new BuildArchiveExtractor();
