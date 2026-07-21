@@ -82,8 +82,13 @@ final readonly class BuildArchiveExtractor
      * A build emits multiple dirs (SDK + app) sharing one `.build-id`; normally exactly one
      * build is present. If several are (a dev anomaly), the build the extractor recorded as
      * installed (extracted-archive.json) wins, otherwise a deterministic choice — never file
-     * mtimes, which are not stable across checkouts/deploys. Falls back to all locations when
-     * no build ids are present (legacy builds).
+     * mtimes, which are not stable across checkouts/deploys.
+     *
+     * Exactly one build's locations are ever returned. Serving two builds at once would load
+     * two copies of the app and register every DI service twice ("Ambiguous match found for
+     * serviceIdentifier"), so builds are always grouped and one is chosen — even when the
+     * `.build-id` marker files are missing, in which case the "<id>-app" / "<id>-sdk"
+     * directory name is used so an app and its sdk still pair up and two builds stay apart.
      *
      * @return string[]
      */
@@ -104,8 +109,11 @@ final readonly class BuildArchiveExtractor
         }
 
         if ($byBuildId === []) {
-            return $locations;
+            foreach ($locations as $location) {
+                $byBuildId[$this->buildIdFromDirName($location)][] = $location;
+            }
         }
+
         if (count($byBuildId) === 1) {
             return reset($byBuildId);
         }
@@ -118,6 +126,17 @@ final readonly class BuildArchiveExtractor
         ksort($byBuildId);
 
         return $byBuildId[array_key_last($byBuildId)];
+    }
+
+    /**
+     * The build a directory belongs to, derived from its "<id>-app" / "<id>-sdk" name by
+     * stripping the suffix. Keeps an app and its sdk together — and two different builds apart —
+     * when no `.build-id` marker file is available. Legacy single-dir builds using neither
+     * suffix keep their full name as the key.
+     */
+    private function buildIdFromDirName(string $location): string
+    {
+        return (string) preg_replace('/-(?:app|sdk)$/', '', basename(dirname($location)));
     }
 
     /**

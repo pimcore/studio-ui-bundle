@@ -175,6 +175,49 @@ class BuildArchiveExtractorTest extends Unit
         $this->assertStringContainsString('id2bbbb-', $locations[0]);
     }
 
+    public function testEntryPointLocationsCollapsesToOneBuildWhenBuildIdFilesAreMissing(): void
+    {
+        // Two full builds (each an app + sdk pair) are present, but none carries a .build-id
+        // file — e.g. a dev-server build (writes entrypoints.json but no .build-id) accumulated
+        // across source edits. The serving path must still pick exactly one build: returning
+        // both would load two copies of the app and register every DI service twice ("Ambiguous
+        // match found for serviceIdentifier"). The dirs group by their "<id>-app" / "<id>-sdk"
+        // name so an app and its sdk still pair up.
+        $this->writeBuildDir('id1aaaa-app', null);
+        $this->writeBuildDir('id1aaaa-sdk', null);
+        $this->writeBuildDir('id2bbbb-app', null);
+        $this->writeBuildDir('id2bbbb-sdk', null);
+
+        $locations = $this->extractor()->entryPointLocations($this->targetDir);
+
+        // Exactly the app + sdk of a single build, never a mix of two builds.
+        $this->assertCount(2, $locations);
+        $prefixes = array_unique(array_map(
+            static fn (string $location): string => explode('-', basename(dirname($location)))[0],
+            $locations
+        ));
+        $this->assertCount(1, $prefixes);
+    }
+
+    public function testEntryPointLocationsPrefersTheBuildIdTaggedBuildOverUntaggedStrays(): void
+    {
+        // The current build carries a .build-id; an interrupted/older build left behind next to
+        // it does not. The tagged build must win and the strays must be ignored (not
+        // double-loaded) — even though "zzstray0" sorts after "current1", so the choice is
+        // driven by the .build-id marker, not by name order.
+        $this->writeBuildDir('current1-app', 'current1');
+        $this->writeBuildDir('current1-sdk', 'current1');
+        $this->writeBuildDir('zzstray0-app', null);
+        $this->writeBuildDir('zzstray0-sdk', null);
+
+        $locations = $this->extractor()->entryPointLocations($this->targetDir);
+
+        $this->assertCount(2, $locations);
+        foreach ($locations as $location) {
+            $this->assertStringContainsString('current1-', $location);
+        }
+    }
+
     private function extractor(): BuildArchiveExtractor
     {
         return new BuildArchiveExtractor();
