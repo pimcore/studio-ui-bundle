@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { Flex, Icon, Text } from '@sdk/components'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { NotificationSettingsCell } from './notification-settings-cell'
+import { NotificationSettingsRow } from './notification-settings-row'
 import { type DynamicTypeNotificationChannelRegistry } from '../dynamic-types/registry/dynamic-type-notification-channel-registry'
 import { useStyles } from './notification-settings.styles'
 import type {
@@ -124,49 +124,14 @@ export const NotificationSettingsView = ({
             }
 
             return (
-              <div
-                className={ styles.row }
-                data-testid={ `notification-settings-row-${item.typeId}` }
+              <NotificationSettingsRow
+                availableChannels={ availableChannels }
+                entry={ entry }
+                item={ item }
                 key={ item.typeId }
-              >
-                <div className={ styles.typeColumn }>
-                  <Text strong>{t(item.translationKey)}</Text>
-                  <div className={ styles.typeDescription }>
-                    <Text type={ 'secondary' }>{t(item.descriptionKey)}</Text>
-                  </div>
-                </div>
-
-                <div className={ styles.cellColumn }>
-                  <NotificationSettingsCell
-                    ariaLabel={ `${t('notifications.settings.column.subscribed')} ${t(item.translationKey)}` }
-                    checked={ entry.subscribed }
-                    // A locked type still renders a switch, shown on and disabled: unlike an
-                    // unsupported channel this *is* a live setting, it simply cannot be off.
-                    disabled={ item.subscriptionLocked }
-                    onChange={ (checked) => { onSubscribedChange(item.typeId, checked) } }
-                    supported
-                  />
-                </div>
-
-                {availableChannels.map((channel) => {
-                  const supported = item.channels.find((entry) => entry.id === channel.id)?.supported ?? false
-
-                  return (
-                    <div
-                      className={ styles.cellColumn }
-                      key={ channel.id }
-                    >
-                      <NotificationSettingsCell
-                        ariaLabel={ `${t(channel.translationKey)} ${t(item.translationKey)}` }
-                        checked={ entry.channels.has(channel.id) }
-                        disabled={ !entry.subscribed }
-                        onChange={ (checked) => { onChannelChange(item.typeId, channel.id, checked) } }
-                        supported={ supported }
-                      />
-                    </div>
-                  )
-                })}
-              </div>
+                onChannelChange={ onChannelChange }
+                onSubscribedChange={ onSubscribedChange }
+              />
             )
           })}
         </React.Fragment>
