@@ -467,6 +467,7 @@ version.category.title.systemData: Données système
 version.category.title.baseData: Données de base
 version.category.title.meta: Métadonnées
 version.category.title.properties: Propriétés
+version.changed-attributes: "Attributs modifiés : {{attributes}}"
 aria.version.delete: Supprimer la version
 aria.version.expand: Développer la version
 clear-all: Tout effacer

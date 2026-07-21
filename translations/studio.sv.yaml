@@ -467,6 +467,7 @@ version.category.title.systemData: Systemdata
 version.category.title.baseData: Basdata
 version.category.title.meta: Metadata
 version.category.title.properties: Egenskaper
+version.changed-attributes: "Ändrade attribut: {{attributes}}"
 aria.version.delete: Ta bort version
 aria.version.expand: Expandera version
 clear-all: Rensa allt

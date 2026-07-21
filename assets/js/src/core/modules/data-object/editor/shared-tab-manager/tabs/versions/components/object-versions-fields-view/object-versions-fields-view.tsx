@@ -15,6 +15,7 @@ import { isEmpty } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
+import { TooltipIcon } from '@Pimcore/components/tooltip-icon/tooltip-icon'
 import { DataComponent } from '../data-component/data-component'
 import { PropertyElementLink } from '../property-element-link/property-element-link'
 import { ELEMENT_REFERENCE_PROPERTY_TYPES } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/constants/property-types'
@@ -63,7 +64,7 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
     )
   }
 
-  const renderFieldTitle = ({ key, locale, breadcrumbKey }: { key: string, locale: string, breadcrumbKey: string }): React.JSX.Element => {
+  const renderFieldTitle = ({ key, locale, breadcrumbKey, modifiedAttributes }: { key: string, locale: string, breadcrumbKey: string, modifiedAttributes?: string[] }): React.JSX.Element => {
     if (isEmptyValue(key)) return <></>
 
     const isSystemDataField = breadcrumbKey === VersionCategoryName.SYSTEM_DATA
@@ -72,6 +73,11 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
     return (
       <Text className={ styles.fieldTitle }>
         {textValue} {!isEmpty(locale) && <Text type="secondary">| {locale.toUpperCase()}</Text>}
+        {!isEmpty(modifiedAttributes) && (
+          <TooltipIcon
+            tooltip={ t('version.changed-attributes', { attributes: modifiedAttributes!.join(', ') }) }
+          />
+        )}
       </Text>
     )
   }
@@ -100,7 +106,7 @@ export const ObjectVersionsFieldsView = ({ breadcrumbsList, versionViewData, ver
                       key={ `${fieldIndex}-${fieldItem.Field.name}` }
                     >
                       <div>
-                        {renderFieldTitle({ key: fieldItem.Field.title, locale: fieldItem.Field?.locale, breadcrumbKey: breadcrumb.key })}
+                        {renderFieldTitle({ key: fieldItem.Field.title, locale: fieldItem.Field?.locale, breadcrumbKey: breadcrumb.key, modifiedAttributes: fieldItem?.modifiedAttributes })}
                         <Flex gap="mini">
                           {versionKeysList.map((key, index) => {
                             const isModifiedField = fieldItem?.isModifiedValue === true

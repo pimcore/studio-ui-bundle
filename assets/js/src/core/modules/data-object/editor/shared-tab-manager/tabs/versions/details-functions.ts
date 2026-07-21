@@ -25,6 +25,8 @@ export const getBreadcrumbTitle = (value1: string, value2: string): string => {
 
 const fieldTypesRequiringChildren = [DynamicTypesList.BLOCK]
 
+const COMPARISON_VALUE_KEY = 'data'
+
 export const getFormattedDataStructure = async ({ objectId, layout, versionData, versionId, versionCount, objectDataRegistry, layoutsList, setLayoutsList }: IGetFormattedDataStructureProps): Promise<IFormattedDataStructureData[]> => {
   const formattedSystemData = {
     fullPath: versionData.fullPath,
@@ -117,6 +119,7 @@ export const getPropertiesData = ({ properties, versionId, versionCount }: { pro
       comparisonValue: {
         data: property.data,
         type: property.type,
+        predefinedName: property.predefinedName,
         inheritable: property.inheritable,
         inherited: property.inherited,
         config: property.config,
@@ -180,6 +183,24 @@ export const versionsDataToTableData = ({ data }: { data: IFormattedDataStructur
 
     if (isComparisonMode) {
       field.isModifiedValue = !isEqual(mainComparisonValue, compareComparisonValue)
+
+      const hasComparisonAttributes = !isUndefined(mainVersionItem?.comparisonValue) || !isUndefined(compareVersionItem?.comparisonValue)
+
+      if (field.isModifiedValue && hasComparisonAttributes) {
+        const attributeKeys = new Set([
+          ...Object.keys(mainVersionItem?.comparisonValue ?? {}),
+          ...Object.keys(compareVersionItem?.comparisonValue ?? {})
+        ])
+        attributeKeys.delete(COMPARISON_VALUE_KEY)
+
+        const modifiedAttributes = [...attributeKeys].filter(
+          attr => !isEqual(mainVersionItem?.comparisonValue?.[attr], compareVersionItem?.comparisonValue?.[attr])
+        )
+
+        if (!isEmpty(modifiedAttributes)) {
+          field.modifiedAttributes = modifiedAttributes
+        }
+      }
     }
 
     if (field.isModifiedValue === true) {
