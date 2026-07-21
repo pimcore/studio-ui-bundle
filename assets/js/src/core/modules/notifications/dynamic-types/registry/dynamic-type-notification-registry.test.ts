@@ -73,7 +73,8 @@ describe('DynamicTypeNotificationRegistry', () => {
     const props = { type: 'collab.mention', title: 'Title', sender: null, payload: null }
 
     expect(definition.getPopupContent(props)).toBeNull()
-    expect(definition.getDetailContent(props)).toBeNull()
+    expect(definition.getDetailContent(props, { attachment: null })).toBeNull()
+    expect(definition.appendsAttachment()).toBe(true)
   })
 })
 

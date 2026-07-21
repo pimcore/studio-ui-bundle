@@ -26,6 +26,14 @@ export interface NotificationDetailRenderProps extends NotificationRenderProps {
   message?: string | null
 }
 
+export interface NotificationDetailSlots {
+  /**
+   * The notification's rendered attachment, or null when it has none. Place it inside your template
+   * to position it yourself, or ignore it and let the host append it below (see appendsAttachment).
+   */
+  attachment: React.JSX.Element | null
+}
+
 /**
  * Renders a specific notification type.
  *
@@ -47,8 +55,20 @@ export abstract class DynamicTypeAbstractNotification extends DynamicTypeAbstrac
     return null
   }
 
-  /** Content for the expanded row in the notification list. */
-  getDetailContent (props: NotificationDetailRenderProps): React.JSX.Element | null {
+  /**
+   * Content for the expanded row in the notification list. `slots.attachment` is the notification's
+   * rendered attachment (or null) — place it where you like, or leave it to the host.
+   */
+  getDetailContent (props: NotificationDetailRenderProps, slots: NotificationDetailSlots): React.JSX.Element | null {
     return null
+  }
+
+  /**
+   * When getDetailContent returns custom content, whether the host still renders the attachment
+   * below it. Default true, so a definition that ignores attachments never drops one; return false
+   * to place `slots.attachment` yourself, or to hide the attachment entirely.
+   */
+  appendsAttachment (): boolean {
+    return true
   }
 }

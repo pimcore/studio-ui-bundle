@@ -79,12 +79,26 @@ export const NotificationDetail = ({ notification, activeNotification }: Notific
     )
   }
 
+  /** The notification's rendered attachment, or null when it has none. */
+  const attachmentElement = (): React.JSX.Element | null =>
+    isNil(notificationDetail?.attachmentId)
+      ? null
+      : (
+        <NotificationAttachment
+          { ...notificationDetail }
+          attachmentId={ notificationDetail.attachmentId }
+        />
+        )
+
   /**
-   * Content contributed by the notification's type, if any. Types without a definition — and
-   * definitions that only render a toast — return null and leave the plain rendering below in
-   * place, so this never has to be exhaustive.
+   * Content contributed by the notification's type, if any, plus whether the host should still
+   * append the attachment below it. Types without a definition — and definitions that only render a
+   * toast — return null and leave the plain rendering below in place, so this never has to be
+   * exhaustive. The attachment is handed to the definition so it can place it itself.
    */
-  const customDetailContent = (): React.JSX.Element | null => {
+  const customDetail = (
+    attachment: React.JSX.Element | null
+  ): { content: React.JSX.Element, appendAttachment: boolean } | null => {
     const type = notification.type
 
     if (isNil(type) || type === '') {
@@ -99,17 +113,24 @@ export const NotificationDetail = ({ notification, activeNotification }: Notific
       return null
     }
 
-    return registry.getDynamicType(type).getDetailContent({
-      type,
-      title: notification.title,
-      sender: notification.sender ?? null,
-      message: notificationDetail?.message,
-      payload: parseNotificationPayload(notificationDetail?.payload)
-    })
+    const definition = registry.getDynamicType(type)
+    const content = definition.getDetailContent(
+      {
+        type,
+        title: notification.title,
+        sender: notification.sender ?? null,
+        message: notificationDetail?.message,
+        payload: parseNotificationPayload(notificationDetail?.payload)
+      },
+      { attachment }
+    )
+
+    return content === null ? null : { content, appendAttachment: definition.appendsAttachment() }
   }
 
   const children = (): React.JSX.Element => {
-    const custom = customDetailContent()
+    const attachment = attachmentElement()
+    const custom = customDetail(attachment)
 
     return (
       <Content
@@ -120,17 +141,19 @@ export const NotificationDetail = ({ notification, activeNotification }: Notific
           gap={ 0 }
           vertical
         >
-          {custom ?? (
-            <>
-              {notificationDetail !== undefined && typeof notificationDetail.message === 'string' && (<Paragraph>{respectLineBreak(notificationDetail.message)}</Paragraph>)}
-              {!isNil(notificationDetail?.attachmentId) && (
-                <NotificationAttachment
-                  { ...notificationDetail }
-                  attachmentId={ notificationDetail.attachmentId }
-                />
+          {custom !== null
+            ? (
+              <>
+                {custom.content}
+                {custom.appendAttachment && attachment}
+              </>
+              )
+            : (
+              <>
+                {notificationDetail !== undefined && typeof notificationDetail.message === 'string' && (<Paragraph>{respectLineBreak(notificationDetail.message)}</Paragraph>)}
+                {attachment}
+              </>
               )}
-            </>
-          )}
         </Flex>
       </Content>
     )
