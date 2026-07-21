@@ -9,11 +9,11 @@
  */
 
 import { type ModalFuncProps } from 'antd'
-import type React from 'react'
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isUndefined } from 'lodash'
 import { useStudioModal } from '@sdk/components'
+import { Icon } from '@Pimcore/components/icon/icon'
 
 type ConfigUpdate = ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncProps)
 
@@ -35,33 +35,39 @@ export const useAlertModal = (): UseAlertModalResponse => {
 
   return useMemo<UseAlertModalResponse>(
     () => ({
-      info: ({ title, content, ...rest }) => (
+      info: ({ title, content, icon, ...rest }) => (
         modal.info({
           title: !isUndefined(title) ? t(title) : t('info'),
           content,
+          icon: icon ?? <Icon value='info' />,
+          okText: t('alert-modal.ok-text'),
           ...rest
         })
       ),
-      error: ({ title, content, ...rest }) => {
-        return (
-          modal.error({
-            title: !isUndefined(title) ? t(title) : t('error'),
-            content,
-            ...rest
-          })
-        )
-      },
-      warn: ({ title, content, ...rest }) => (
+      error: ({ title, content, icon, ...rest }) => (
+        modal.error({
+          title: !isUndefined(title) ? t(title) : t('error'),
+          content,
+          icon: icon ?? <Icon value='close-filled' />,
+          okText: t('alert-modal.ok-text'),
+          ...rest
+        })
+      ),
+      warn: ({ title, content, icon, ...rest }) => (
         modal.warning({
           title: !isUndefined(title) ? t(title) : t('warning'),
           content,
+          icon: icon ?? <Icon value='alert' />,
+          okText: t('alert-modal.ok-text'),
           ...rest
         })
       ),
-      success: ({ title, content, ...rest }) => (
+      success: ({ title, content, icon, ...rest }) => (
         modal.success({
           title: !isUndefined(title) ? t(title) : t('success'),
           content,
+          icon: icon ?? <Icon value='checkmark' />,
+          okText: t('alert-modal.ok-text'),
           ...rest
         })
       )
