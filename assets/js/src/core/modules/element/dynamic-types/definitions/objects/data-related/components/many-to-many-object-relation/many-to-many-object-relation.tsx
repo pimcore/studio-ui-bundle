@@ -216,10 +216,15 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
 
   const visibleFieldsValue = useMemo(() => {
     return mergedGridFullData.map(item => {
-      return item?.columns?.reduce<Record<string, any>>((acc, col) => {
+      const columns = item?.columns?.reduce<Record<string, any>>((acc, col) => {
         acc[col.key!] = col.value
         return acc
       }, {})
+
+      // applySearchFilter joins a grid row to its visible-field values by id: it
+      // builds a Map keyed by field.id and drops entries with a nil id. Without
+      // the id here the lookup misses and search silently falls back to fullPath.
+      return columns === undefined ? undefined : { ...columns, id: item.id }
     })
   }, [mergedGridFullData])
 
