@@ -36,7 +36,6 @@ export interface ReverseObjectRelationClassDefinitionProps {
   visibleFieldDefinitions?: Record<string, VisibleFieldDefinition> | null
   ownerClassName: string | null
   ownerFieldName: string | null
-  hideOpenButton?: boolean
 }
 
 export interface ReverseObjectRelationProps extends IRelationAllowedTypesDataComponent, ReverseObjectRelationClassDefinitionProps {

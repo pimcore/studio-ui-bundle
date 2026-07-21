@@ -42,7 +42,6 @@ export interface AdvancedManyToManyRelationClassDefinitionProps {
   height: number | string | null
   columns?: RelationColumnDefinition[] | null
   name: string[]
-  hideOpenButton?: boolean
 }
 
 export interface RelationColumnDefinition {

@@ -75,18 +75,15 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
     ? [...props.columnDefinition]
     : defaultColumns
 
-  const showActionsColumn = props.hideOpenButton !== true || props.assetInlineDownloadAllowed || props.disabled !== true
+  columns.push(
+    columnHelper.accessor('actions', {
+      header: t('actions'),
+      size: 110,
+      cell: (info) => {
+        const rowIndex = info.row.index
+        const rowValue = info.row.original as DisplayManyToManyRelationValueItem
 
-  const actionsColumn = columnHelper.accessor('actions', {
-    header: t('actions'),
-    size: 110,
-    cell: (info) => {
-      const rowIndex = info.row.index
-      const rowValue = info.row.original as DisplayManyToManyRelationValueItem
-
-      const buttons: ReactElement[] = []
-
-      if (props.hideOpenButton !== true) {
+        const buttons: ReactElement[] = []
         buttons.push(
           <Tooltip
             key="open"
@@ -106,69 +103,65 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
             />
           </Tooltip>
         )
-      }
 
-      if (props.assetInlineDownloadAllowed && rowValue.type === 'asset') {
-        buttons.push(
-          <Tooltip
-            key="download"
-            title={ t('download') }
-          >
-            <IconButton
-              aria-label={ t('aria.asset.image-sidebar.tab.details.download-thumbnail') }
-              icon={ { value: 'download' } }
-              onClick={ () => {
-                download(
-                  rowValue.id.toString()
-                )
-              } }
-              type="link"
+        if (props.assetInlineDownloadAllowed && rowValue.type === 'asset') {
+          buttons.push(
+            <Tooltip
+              key="download"
+              title={ t('download') }
+            >
+              <IconButton
+                aria-label={ t('aria.asset.image-sidebar.tab.details.download-thumbnail') }
+                icon={ { value: 'download' } }
+                onClick={ () => {
+                  download(
+                    rowValue.id.toString()
+                  )
+                } }
+                type="link"
+              />
+            </Tooltip>
+          )
+        }
+
+        if (props.disabled !== true) {
+          buttons.push(
+            <Tooltip
+              key="remove"
+              title={ t('remove') }
+            >
+              <IconButton
+                icon={ { value: 'trash' } }
+                onClick={ () => {
+                  confirm({
+                    title: t('remove'),
+                    content: t('delete-confirmation-advanced', {
+                      type: t('relation'),
+                      value: rowValue.originalPath ?? rowValue.fullPath,
+                      interpolation: { escapeValue: false }
+                    }),
+                    onOk: () => {
+                      props.deleteItem(rowIndex)
+                    }
+                  })
+                } }
+                type="link"
+              />
+            </Tooltip>
+          )
+        }
+
+        return (
+          <Box padding="mini">
+            <ButtonGroup
+              items={ buttons }
+              noSpacing
             />
-          </Tooltip>
+          </Box>
         )
       }
-
-      if (props.disabled !== true) {
-        buttons.push(
-          <Tooltip
-            key="remove"
-            title={ t('remove') }
-          >
-            <IconButton
-              icon={ { value: 'trash' } }
-              onClick={ () => {
-                confirm({
-                  title: t('remove'),
-                  content: t('delete-confirmation-advanced', {
-                    type: t('relation'),
-                    value: rowValue.originalPath ?? rowValue.fullPath,
-                    interpolation: { escapeValue: false }
-                  }),
-                  onOk: () => {
-                    props.deleteItem(rowIndex)
-                  }
-                })
-              } }
-              type="link"
-            />
-          </Tooltip>
-        )
-      }
-
-      return (
-        <Box padding="mini">
-          <ButtonGroup
-            items={ buttons }
-            noSpacing
-          />
-        </Box>
-      )
-    }
-  })
-
-  if (showActionsColumn) {
-    columns.push(actionsColumn)
-  }
+    })
+  )
 
   return {
     columns

@@ -40,18 +40,6 @@ export interface WorkflowActionData {
   workflowOptions?: WorkflowOptions
 }
 
-/**
- * The element a workflow action is applied to, plus an optional success side-effect. Supplied via the
- * WorkflowActionSubjectContext so the submit/modal flow is not bound to the element editor: the editor
- * provides it from its element context (with refresh + layout reset as onApplied); other hosts (e.g. the
- * Collab task detail) provide their own element and refetch.
- */
-export interface WorkflowActionSubject {
-  elementId: number
-  elementType: string
-  onApplied?: (action: WorkflowAction) => void
-}
-
 export interface WorkflowOptions {
   notes?: string
   additional?: Record<string, any>

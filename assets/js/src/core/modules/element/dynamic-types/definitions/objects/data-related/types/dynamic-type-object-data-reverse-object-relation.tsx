@@ -51,10 +51,6 @@ export class DynamicTypeObjectDataReverseObjectRelation extends DynamicTypeObjec
     )
   }
 
-  getVersionObjectDataComponent (props: ReverseObjectRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
-    return this.getObjectDataComponent({ ...props, noteditable: true, hideOpenButton: true })
-  }
-
   getObjectDataFormItemProps (props: ReverseObjectRelationObjectDataDefinition): FormItemProps {
     return {
       ...super.getObjectDataFormItemProps(props),
