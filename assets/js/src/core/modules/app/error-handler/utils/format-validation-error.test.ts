@@ -33,4 +33,18 @@ describe('formatValidationErrorHtml', () => {
   it('returns an empty string for an empty message', () => {
     expect(formatValidationErrorHtml('')).toBe('')
   })
+
+  it('escapes HTML-like text in a single violation so it renders literally', () => {
+    expect(formatValidationErrorHtml('<img src=x onerror=alert(1)>'))
+      .toBe('&lt;img src=x onerror=alert(1)&gt;')
+  })
+
+  it('escapes each violation so injected markup cannot add list items', () => {
+    const message = 'First <b>x</b>\n</li><li>Injected'
+    // Only the two wrapper <li> elements are real markup; the injected
+    // </li><li> is escaped, so it cannot forge a third list item.
+    expect(formatValidationErrorHtml(message)).toBe(
+      '<ul><li>First &lt;b&gt;x&lt;/b&gt;</li><li>&lt;/li&gt;&lt;li&gt;Injected</li></ul>'
+    )
+  })
 })
