@@ -224,7 +224,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
       // applySearchFilter joins a grid row to its visible-field values by id: it
       // builds a Map keyed by field.id and drops entries with a nil id. Without
       // the id here the lookup misses and search silently falls back to fullPath.
-      return columns === undefined ? undefined : { ...columns, id: item.id }
+      return isUndefined(columns) ? undefined : { ...columns, id: item.id }
     })
   }, [mergedGridFullData])
 
