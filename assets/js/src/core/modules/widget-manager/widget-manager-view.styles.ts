@@ -124,7 +124,10 @@ export const useStyles = createStyles(({ token, css }) => {
               border-top: 2px solid ${token.Tabs.colorBorderActiveTab};
 
               .widget-manager__tab-title-close-button {
-                display: block;
+                display: flex;
+                align-items: center;
+                height: auto;
+                line-height: 0;
               }
 
               &:hover {
@@ -278,11 +281,6 @@ export const useStyles = createStyles(({ token, css }) => {
 
         .widget-manager__tab-title-close-button {
           display: none;
-          width: 12px;
-          height: 12px;
-          padding: 4px;
-          line-height: 0;
-          margin-top: -8px;
           color: ${token.colorIcon};
         }
       `

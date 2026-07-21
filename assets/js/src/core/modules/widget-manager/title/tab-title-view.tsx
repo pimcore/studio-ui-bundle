@@ -12,7 +12,7 @@ import { type ElementIcon, Icon } from '@Pimcore/components/icon/icon'
 import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
 import cn from 'classnames'
 import { Popconfirm } from 'antd'
-import { Button } from '@Pimcore/components/button/button'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import React, { memo, useCallback, useState, type MouseEvent } from 'react'
 import { useStyles } from './tab-title-view.styles'
 import { useTranslation } from 'react-i18next'
@@ -103,17 +103,13 @@ const TabTitleViewInner = ({ icon, title, onClose, onConfirm, dataTestId, iconCo
 
   function renderCloseButton (): React.JSX.Element {
     return (
-      <Button
+      <IconButton
         className='widget-manager__tab-title-close-button'
+        icon={ { value: 'close', options: { width: 14, height: 14 } } }
         onClick={ triggerClose }
         onMouseDown={ (event: MouseEvent) => { event.stopPropagation() } }
-        type={ 'link' }
-      >
-        <Icon
-          options={ { width: 14, height: 14 } }
-          value='close'
-        />
-      </Button>
+        variant='minimal'
+      />
     )
   }
 }
