@@ -112,8 +112,16 @@ export const getPropertiesData = ({ properties, versionId, versionCount }: { pro
 
     return {
       fieldBreadcrumbTitle: VersionCategoryName.PROPERTIES,
-      fieldData: { title: property.key, name: property.key, fieldtype, config: property.config } as any,
+      fieldData: { title: property.key, name: property.key, fieldtype, config: property.config, inherited: property.inherited } as any,
       fieldValue: property.data,
+      comparisonValue: {
+        data: property.data,
+        type: property.type,
+        inheritable: property.inheritable,
+        inherited: property.inherited,
+        config: property.config,
+        description: property.description
+      },
       versionId,
       versionCount,
       fieldPath: ''
@@ -125,8 +133,9 @@ const getUniqFieldKey = (item: any): string => {
   const path = item.fieldBreadcrumbTitle ?? ''
   const name = item.fieldData?.name ?? ''
   const locale = item.fieldData?.locale ?? 'default'
+  const ownership = isUndefined(item.fieldData?.inherited) ? 'default' : (item.fieldData.inherited === true ? 'inherited' : 'own')
 
-  return `${path}-${name}-${locale}`
+  return `${path}-${name}-${locale}-${ownership}`
 }
 
 export const versionsDataToTableData = ({ data }: { data: IFormattedDataStructureData[][] }): IObjectVersionField[] => {
@@ -166,9 +175,14 @@ export const versionsDataToTableData = ({ data }: { data: IFormattedDataStructur
       field[`Version ${compareVersionItem.versionCount}`] = compareVersionItem.fieldValue ?? null
     }
 
-    if (isComparisonMode && !isEqual(mainVersionItem?.fieldValue ?? null, compareVersionItem?.fieldValue ?? null)) {
-      field.isModifiedValue = true
+    const mainComparisonValue = mainVersionItem?.comparisonValue ?? mainVersionItem?.fieldValue ?? null
+    const compareComparisonValue = compareVersionItem?.comparisonValue ?? compareVersionItem?.fieldValue ?? null
 
+    if (isComparisonMode) {
+      field.isModifiedValue = !isEqual(mainComparisonValue, compareComparisonValue)
+    }
+
+    if (field.isModifiedValue === true) {
       if (mainVersionItem?.fieldData?.fieldtype === DynamicTypesList.FIELD_COLLECTIONS) {
         const mainVersionLength = mainVersionItem?.fieldValue?.length
         const compareVersionLength = compareVersionItem?.fieldValue?.length

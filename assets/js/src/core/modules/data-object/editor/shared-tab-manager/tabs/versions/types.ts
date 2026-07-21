@@ -37,6 +37,7 @@ export interface IFormattedDataStructureData {
   fieldBreadcrumbTitle: string
   fieldData: Layout
   fieldValue: any
+  comparisonValue?: any
   fieldPath: string
   versionCount: number
   versionId: number
