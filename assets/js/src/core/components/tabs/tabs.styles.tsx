@@ -130,26 +130,22 @@ export const useStyles = createStyles(({ token, css }) => {
         flex-direction: column;
         height: 100%;
 
-        /* Scope to this tabs' OWN panes via direct-child combinators. Plain
-           descendant selectors here leak into any nested <Tabs> (e.g. an editor
-           whose body is itself tabbed), turning their content into a 0-height
-           position:absolute box and hiding the fields. */
-        > .ant-tabs-content-holder {
+        .ant-tabs-content-holder {
           flex: 1;
           min-height: 0;
           position: relative;
           overflow: hidden;
+        }
 
-          > .ant-tabs-content {
-            position: absolute;
-            inset: 0;
+        .ant-tabs-content {
+          position: absolute;
+          inset: 0;
+        }
 
-            > .ant-tabs-tabpane {
-              position: relative;
-              height: 100%;
-              overflow: hidden;
-            }
-          }
+        .ant-tabs-tabpane {
+          position: relative;
+          height: 100%;
+          overflow: hidden;
         }
       }
 
