@@ -1236,6 +1236,7 @@ unknown: Inconnu
 warning: Avertissement
 error: Erreur
 info: Info
+success: Succès
 no-value-set: Aucune valeur définie
 set-to-null: Vide (défini à null)
 remove: Supprimer
@@ -2204,6 +2205,7 @@ application-logger.filter.priority-level.8: Débogage
 embed.url-modal.title: Modifier l'URL d'intégration
 embed.url-modal.label: URL (ex. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Veuillez entrer une URL valide
+alert-modal.ok-text: OK
 embed.url-modal.ok-text: Enregistrer
 embed.url-modal.cancel-text: Annuler
 embed.url-modal.warning: "Les URL invalides n'afficheront pas d'aperçu, veuillez vérifier et mettre à jour votre URL."

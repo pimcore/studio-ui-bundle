@@ -1236,6 +1236,7 @@ unknown: Okänt
 warning: Varning
 error: Fel
 info: Info
+success: Framgång
 no-value-set: Inget värde angivet
 set-to-null: Tom (sätt till null)
 remove: Ta bort
@@ -2204,6 +2205,7 @@ application-logger.filter.priority-level.8: Debug
 embed.url-modal.title: Redigera inbäddnings-URL
 embed.url-modal.label: URL (t.ex. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Ange en giltig URL
+alert-modal.ok-text: OK
 embed.url-modal.ok-text: Spara
 embed.url-modal.cancel-text: Avbryt
 embed.url-modal.warning: "Ogiltiga URL:er visar ingen förhandsgranskning, vänligen granska och uppdatera din URL."
