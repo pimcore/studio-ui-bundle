@@ -18,6 +18,12 @@ export const useStyles = createStyles(({ token, css }) => {
      */
     table: css`
         width: 100%;
+        /*
+         * Capped so the toggles sit next to the type they belong to instead of drifting to
+         * the far edge of a wide editor. Comfortably holds the type column plus several
+         * channel columns; on a narrow editor width: 100% still wins and it shrinks.
+         */
+        max-width: 900px;
         border: 1px solid ${token.colorBorderSecondary};
         border-radius: ${token.borderRadiusLG}px;
         overflow: hidden;
@@ -52,6 +58,10 @@ export const useStyles = createStyles(({ token, css }) => {
         flex-direction: column;
         gap: 2px;
         padding-right: ${token.padding}px;
+    `,
+    typeDescription: css`
+        /* A readable measure rather than one long line across the whole column. */
+        max-width: 52ch;
     `,
     cellColumn: css`
         display: flex;

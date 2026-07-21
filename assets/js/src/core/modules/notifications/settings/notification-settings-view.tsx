@@ -131,7 +131,9 @@ export const NotificationSettingsView = ({
               >
                 <div className={ styles.typeColumn }>
                   <Text strong>{t(item.translationKey)}</Text>
-                  <Text type={ 'secondary' }>{t(item.descriptionKey)}</Text>
+                  <div className={ styles.typeDescription }>
+                    <Text type={ 'secondary' }>{t(item.descriptionKey)}</Text>
+                  </div>
                 </div>
 
                 <div className={ styles.cellColumn }>
