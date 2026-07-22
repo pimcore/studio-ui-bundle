@@ -82,7 +82,7 @@ export const useStyles = createStyles(({ token, css }) => {
   
         .flexlayout__tab_button {
           margin: 0;
-          padding: ${token.paddingSM}px ${token.paddingSM}px;
+          padding: ${token.paddingSM}px ${token.paddingXS}px ${token.paddingSM}px ${token.paddingSM}px;
           background: ${token.colorFillAlter};
           transition: all ${token.motionDurationSlow} ${token.motionEaseInOut};
           font-size: ${token.fontSize}px;

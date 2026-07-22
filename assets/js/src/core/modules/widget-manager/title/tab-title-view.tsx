@@ -105,7 +105,7 @@ const TabTitleViewInner = ({ icon, title, onClose, onConfirm, dataTestId, iconCo
     return (
       <IconButton
         className='widget-manager__tab-title-close-button'
-        icon={ { value: 'close', options: { width: 14, height: 14 } } }
+        icon={ { value: 'close', options: { width: 12, height: 12 } } }
         onClick={ triggerClose }
         onMouseDown={ (event: MouseEvent) => { event.stopPropagation() } }
         variant='minimal'
