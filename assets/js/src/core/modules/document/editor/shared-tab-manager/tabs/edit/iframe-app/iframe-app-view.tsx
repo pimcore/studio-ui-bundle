@@ -21,6 +21,7 @@ import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 import { useIframeI18nSetup } from '@Pimcore/app/i18n/hooks/use-iframe-i18n-setup'
 import { ModalsProvider } from '@Pimcore/modules/app/modals-provider'
 import { DocumentEditorIframeGlobalStyles } from './styles/global.styles'
+import { useForwardKeyBindings } from './use-forward-key-bindings'
 
 export interface DocumentEditorIframeWindow extends Window {
   editableDefinitions?: AbstractDocumentEditableDefinition[]
@@ -30,6 +31,10 @@ export interface DocumentEditorIframeWindow extends Window {
 export const DocumentEditorIframeAppView = (): React.JSX.Element => {
   const editableDefinitions: AbstractDocumentEditableDefinition[] = (window as DocumentEditorIframeWindow).editableDefinitions ?? []
   const { isInitialized } = useIframeI18nSetup()
+
+  // Forward shortcuts pressed inside the iframe to the top-level document so
+  // global key bindings (Publish, Refresh, …) keep working when focus is here.
+  useForwardKeyBindings()
 
   // Extract document ID from URL parameters
   const urlParams = new URLSearchParams(window.location.search)
