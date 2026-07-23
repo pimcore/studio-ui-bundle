@@ -82,17 +82,8 @@ final readonly class BuildArchiveExtractor
      * A build emits multiple dirs (SDK + app) sharing one `.build-id`; normally exactly one
      * build is present. If several are (a dev anomaly), the build the extractor recorded as
      * installed (extracted-archive.json) wins, otherwise a deterministic choice — never file
-     * mtimes, which are not stable across checkouts/deploys.
-     *
-     * Exactly one build's locations are ever returned. Serving two builds at once would load
-     * two copies of the app and register every DI service twice ("Ambiguous match found for
-     * serviceIdentifier"). The choice is, in order: a complete build (ships both the app and the
-     * sdk dir) over an incomplete one — an orphan `-app` or `-sdk` can never serve the UI (main
-     * lives in `-app`, the real exposeRemote that sets `window.StudioUIBundleRemoteUrl` lives in
-     * `-sdk`); then the build the extractor recorded as installed (extracted-archive.json); then
-     * a `.build-id`-tagged (finished, tooling-written) build over an untagged one; then a
-     * deterministic pick by build id — never file mtimes, which are not stable across
-     * checkouts/deploys.
+     * mtimes, which are not stable across checkouts/deploys. Falls back to all locations when
+     * no build ids are present (legacy builds).
      *
      * @return string[]
      */
@@ -104,25 +95,17 @@ final readonly class BuildArchiveExtractor
         }
 
         $byBuildId = [];
-        $tagged = [];
-
         foreach ($locations as $location) {
-            $fromFile = $this->buildIdFromFile($location);
-            $buildId = $fromFile ?? $this->buildIdFromDirName($location);
-            $byBuildId[$buildId][] = $location;
-
-            if ($fromFile !== null) {
-                $tagged[$buildId] = true;
+            $idFile = dirname($location) . '/.build-id';
+            $buildId = is_file($idFile) ? trim((string) @file_get_contents($idFile)) : '';
+            if ($buildId !== '') {
+                $byBuildId[$buildId][] = $location;
             }
         }
 
-        // Prefer complete builds; only fall back to the incomplete ones when none is complete,
-        // so an orphan directory can never win the deterministic choice below.
-        $complete = array_filter($byBuildId, fn (array $group) => $this->isCompleteBuild($group));
-        if ($complete !== []) {
-            $byBuildId = $complete;
+        if ($byBuildId === []) {
+            return $locations;
         }
-
         if (count($byBuildId) === 1) {
             return reset($byBuildId);
         }
@@ -132,69 +115,9 @@ final readonly class BuildArchiveExtractor
             return $byBuildId[$activeBuildId];
         }
 
-        // Among the remaining candidates, a tagged build wins over untagged strays.
-        $taggedCandidates = array_intersect_key($byBuildId, $tagged);
-        if ($taggedCandidates !== []) {
-            $byBuildId = $taggedCandidates;
-        }
-
         ksort($byBuildId);
 
         return $byBuildId[array_key_last($byBuildId)];
-    }
-
-    /**
-     * The build id recorded in a directory's committed `.build-id` file, or null when the file
-     * is absent or empty (e.g. a dev-server build, which writes entrypoints.json but no
-     * `.build-id`, or an interrupted build).
-     */
-    private function buildIdFromFile(string $location): ?string
-    {
-        $idFile = dirname($location) . '/.build-id';
-        if (!is_file($idFile)) {
-            return null;
-        }
-
-        $id = trim((string) @file_get_contents($idFile));
-
-        return $id !== '' ? $id : null;
-    }
-
-    /**
-     * The build a directory belongs to, derived from its "<id>-app" / "<id>-sdk" name by
-     * stripping the suffix. Keeps an app and its sdk together — and two different builds apart —
-     * when no `.build-id` marker file is available. Legacy single-dir builds using neither
-     * suffix keep their full name as the key.
-     */
-    private function buildIdFromDirName(string $location): string
-    {
-        return (string) preg_replace('/-(?:app|sdk)$/', '', basename(dirname($location)));
-    }
-
-    /**
-     * A build can only serve the UI when it ships both the app dir (its main entry) and the sdk
-     * dir (the real exposeRemote that sets window.StudioUIBundleRemoteUrl). A single legacy dir
-     * that uses neither suffix is self-contained and counts as complete.
-     *
-     * @param string[] $locations
-     */
-    private function isCompleteBuild(array $locations): bool
-    {
-        $hasApp = false;
-        $hasSdk = false;
-        $hasSuffixed = false;
-        foreach ($locations as $location) {
-            $name = basename(dirname($location));
-            if (str_ends_with($name, '-app')) {
-                $hasApp = true;
-                $hasSuffixed = true;
-            } elseif (str_ends_with($name, '-sdk')) {
-                $hasSdk = true;
-                $hasSuffixed = true;
-            }
-        }
-
-        return $hasSuffixed ? ($hasApp && $hasSdk) : true;
     }
 
     /**
