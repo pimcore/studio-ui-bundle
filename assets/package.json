@@ -18,6 +18,8 @@
     "build": "rsbuild build",
     "build-sdk": "rsbuild build --config rsbuild.sdk.config.ts",
     "build-app": "npm run build-sdk && npm run build",
+    "ci-build": "npm run build-app && npm run build-rsbuild-plugins && npm run package-build",
+    "ci-prepublish": "npm run generate-types && npm run build-rsbuild-plugins",
     "package-build": "node ./bundler/package-build.cjs",
     "build-rsbuild-plugins": "rsbuild build --config rsbuild.plugins.config.ts",
     "build-storybook": "storybook build --output-dir ./storybook-static",
