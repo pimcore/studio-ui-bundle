@@ -48,7 +48,8 @@ const config: StorybookConfig = {
   rsbuildFinal: (config) => {
     const pluginsToFilterOut = [
       'entrypoints-generate',
-      'rsbuild:module-federation-enhanced'
+      'rsbuild:module-federation-enhanced',
+      'write-build-id'
     ]
 
     const plugins = config.plugins!.filter((plugin) => {
