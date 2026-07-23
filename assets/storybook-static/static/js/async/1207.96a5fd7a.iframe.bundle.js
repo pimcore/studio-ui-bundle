@@ -1,2 +1,0 @@
-/*! For license information please see 1207.96a5fd7a.iframe.bundle.js.LICENSE.txt */
-"use strict";(self.webpackChunkpimcore_studio_ui_bundle_core=self.webpackChunkpimcore_studio_ui_bundle_core||[]).push([["1207"],{"./node_modules/react-dom/client.js"(e,o,t){var d=t("./node_modules/react-dom/index.js");o.createRoot=d.createRoot,o.hydrateRoot=d.hydrateRoot}}]);
