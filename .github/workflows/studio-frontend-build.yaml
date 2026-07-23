@@ -1,7 +1,14 @@
 name: "Studio Frontend Build"
 
 on:
+  # Push builds run only on version branches (which have no PR). Feature/PR
+  # branches are covered by the pull_request trigger below — this avoids a
+  # push run and a pull_request run landing in the same concurrency group and
+  # cancelling each other (which surfaced as confusing cancelled "(push)" checks).
   push:
+    branches:
+      - "[0-9]+.x"
+      - "[0-9]+.[0-9]+"
     paths:
       - "assets/**"
   pull_request:
