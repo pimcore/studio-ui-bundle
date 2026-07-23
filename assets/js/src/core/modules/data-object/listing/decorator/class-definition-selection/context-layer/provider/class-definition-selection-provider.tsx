@@ -32,21 +32,22 @@ export interface ClassDefinitionSelectionProviderProps {
 }
 
 export const ClassDefinitionSelectionProvider = ({ children, config }: ClassDefinitionSelectionProviderProps): React.JSX.Element => {
-  const { data } = useClassDefinitions()
+  const { scopedData, data } = useClassDefinitions()
+  const availableSource = scopedData ?? data
   const [selectedClassDefinition, setSelectedClassDefinition] = useState<ClassDefinitionSelectionData['selectedClassDefinition']>(undefined)
 
   const availableClassDefinitions = useMemo(() => {
     if (config.classRestriction !== undefined) {
       const restrictedClasses: string[] = config.classRestriction.map((classDefinition) => classDefinition.classes)
-      return data?.items.filter((classDefinition) => restrictedClasses.includes(classDefinition.name)) ?? []
+      return availableSource?.items.filter((classDefinition) => restrictedClasses.includes(classDefinition.name)) ?? []
     }
 
-    if (data !== undefined) {
-      return data.items
+    if (availableSource !== undefined) {
+      return availableSource.items
     }
 
     return []
-  }, [data])
+  }, [availableSource])
 
   let computedSelectedClassDefinition = selectedClassDefinition
 
@@ -58,5 +59,5 @@ export const ClassDefinitionSelectionProvider = ({ children, config }: ClassDefi
     <ClassDefinitionSelectionContext.Provider value={ { config, availableClassDefinitions, selectedClassDefinition: computedSelectedClassDefinition, setSelectedClassDefinition } }>
       {children}
     </ClassDefinitionSelectionContext.Provider>
-  ), [config, availableClassDefinitions, selectedClassDefinition, data])
+  ), [config, availableClassDefinitions, selectedClassDefinition, availableSource])
 }

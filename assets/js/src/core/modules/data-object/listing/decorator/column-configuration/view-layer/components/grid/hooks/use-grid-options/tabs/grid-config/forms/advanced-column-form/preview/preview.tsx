@@ -17,7 +17,6 @@ import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/pr
 import { PreviewLoader } from './preview-loader'
 import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
 import { useTranslation } from 'react-i18next'
-import { useStyles } from './preview.styles'
 
 export interface PreviewProps {
   column: AvailableColumn
@@ -28,22 +27,21 @@ export const Preview = (props: PreviewProps): React.JSX.Element => {
   const hasFirstItem = gridData?.items.length > 0 && gridData?.items?.[0] !== undefined
   const bufferedColumn = useDebounce(props.column, 300)
   const { t } = useTranslation()
-  const { styles } = useStyles()
 
   return useMemo(() => (
-    <Box padding={ { y: 'small', x: 'small' } } >
+    <Box padding={ { top: 'small', bottom: 'none', x: 'small' } } >
       <Flex
         align="center"
         gap={ 'small' }
       >
-        <Text style={ { wordBreak: 'keep-all' } }>{t('grid.advanced-column.preview')}</Text>
+        <Text style={ { wordBreak: 'keep-all' } }>{t('grid.advanced-column.preview')}:</Text>
 
         {hasFirstItem
           ? (
             <PreviewLoader column={ props.column } />
             )
           : (
-            <Text className={ styles.noPreviewText }>{t('grid.advanced-column.no-preview')}</Text>
+            <Text type="secondary">{t('grid.advanced-column.no-preview')}</Text>
             )}
       </Flex>
     </Box>

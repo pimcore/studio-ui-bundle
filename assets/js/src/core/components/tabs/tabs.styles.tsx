@@ -79,10 +79,6 @@ export const useStyles = createStyles(({ token, css }) => {
         padding-right: 0;
       }
 
-      &.tabs--no-padding .ant-tabs-nav .ant-tabs-tab + .ant-tabs-tab {
-        margin-left: ${token.marginSM}px;
-      }
-
       &.tabs--no-tab-bar-margin.ant-tabs-top>.ant-tabs-nav+.ant-tabs-content-holder {
         padding-top: 0;
       }
@@ -126,47 +122,10 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       &.tabs--full-height {
-        display: flex;
-        flex-direction: column;
         height: 100%;
-
-        /* Scope to this tabs' OWN panes via direct-child combinators. Plain
-           descendant selectors here leak into any nested <Tabs> (e.g. an editor
-           whose body is itself tabbed), turning their content into a 0-height
-           position:absolute box and hiding the fields. */
-        > .ant-tabs-content-holder {
-          flex: 1;
-          min-height: 0;
-          position: relative;
-          overflow: hidden;
-
-          > .ant-tabs-content {
-            position: absolute;
-            inset: 0;
-
-            > .ant-tabs-tabpane {
-              position: relative;
-              height: 100%;
-              overflow: hidden;
-            }
-          }
-        }
-      }
-
-      &.tabs--equal-width {
-        .ant-tabs-nav-list {
-          width: 100%;
-          padding-left: 0;
-          padding-right: 0;
-
-          .ant-tabs-tab {
-            flex: 1;
-            justify-content: center;
-
-            + .ant-tabs-tab {
-              margin-left: 0;
-            }
-          }
+          
+        .ant-tabs-content {
+          height: 100%;
         }
       }
     `,

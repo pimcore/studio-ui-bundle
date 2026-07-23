@@ -107,11 +107,11 @@ export const StackListItem = (props: StackListItemProps): React.JSX.Element => {
           style={ style }
         >
           <CollapseItem
+            className={ styles.stackListItem }
             contentPadding={ 'none' }
             defaultActive={ defaultActive }
             extra={ renderRightToolbar }
             extraPosition='end'
-            hasContentSeparator={ false }
             label={ <>{leftSidebarContent}</> }
             size='small'
           >

@@ -10,7 +10,6 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useStyles } from './preview-loader.styles'
 import { isUndefined } from 'lodash'
 import { type AdvancedColumnConfig } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useDataObjectGetGridPreviewQuery } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
@@ -36,7 +35,6 @@ export const PreviewLoader = (props: PreviewProps): React.JSX.Element => {
   const advancedColumnConfig = (column?.__meta?.advancedColumnConfig ?? column.config) as unknown as AdvancedColumnConfig[] | undefined
 
   const { t } = useTranslation()
-  const { styles } = useStyles()
 
   const { data, error } = useDataObjectGetGridPreviewQuery({
     body: {
@@ -55,12 +53,9 @@ export const PreviewLoader = (props: PreviewProps): React.JSX.Element => {
   return (
     <>
       {!isUndefined(error) && (
-        <>
-          <Text type="danger">{t('grid.advanced-column.error-preview-data')} </Text>
-          {'error' in error && (
-            <Text className={ styles.descriptionText }>{error.error}</Text>
-          )}
-        </>
+        <Text type="danger">
+          {t('grid.advanced-column.error-preview-data')}: {'error' in error ? error?.error : <></>}
+        </Text>
       )}
 
       {isUndefined(error)
@@ -71,7 +66,7 @@ export const PreviewLoader = (props: PreviewProps): React.JSX.Element => {
                 <PreviewValue value={ data?.value } />
                 )
               : (
-                <Text className={ styles.descriptionText }>{t('grid.advanced-column.no-preview-data')}</Text>
+                <div>{t('grid.advanced-column.no-preview-data')}</div>
                 )}
           </>
           )

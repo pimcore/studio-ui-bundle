@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useRef, type ReactNode } from 'react'
+import React, { useMemo, type ReactNode } from 'react'
 import { StackList, type StackListProps } from '@Pimcore/components/stack-list/stack-list'
 import { Empty, Tag } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -23,16 +23,7 @@ import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
-
-function findScrollableParent (element: HTMLElement | null): HTMLElement | null {
-  if (element === null || element === document.documentElement) return null
-  const { overflow, overflowY } = window.getComputedStyle(element)
-  if (/(auto|scroll)/.test(overflow + overflowY) && element.scrollHeight > element.clientHeight) {
-    return element
-  }
-  return findScrollableParent(element.parentElement)
-}
-
+import { useScrollIntoViewOnAppend } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/hooks/use-scroll-into-view-on-append'
 
 interface ColumnStackListItemProps extends StackListItemProps {
   meta: AvailableColumn
@@ -45,49 +36,7 @@ interface ColumnStackListProps extends Omit<StackListProps, 'items'> {
 export const GridConfigList = (): React.JSX.Element => {
   const { setColumns, columns } = useGridConfig()
   const { t } = useTranslation()
-  const containerRef = useRef<HTMLDivElement>(null)
-  const prevColumnKeysRef = useRef<string[]>([])
-  const hasMountedRef = useRef(false)
-
-  useEffect(() => {
-    const currentKeys = columns.map((col) => col.__meta?.uniqueId ?? col.key)
-
-    if (!hasMountedRef.current) {
-      hasMountedRef.current = true
-      prevColumnKeysRef.current = currentKeys
-      return
-    }
-
-    const prevKeys = prevColumnKeysRef.current
-    const isAppend = currentKeys.length > prevKeys.length &&
-      prevKeys.every((key, i) => key === currentKeys[i])
-
-    if (isAppend) {
-      const isAdvanced = columns[columns.length - 1]?.key === 'advanced'
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          const container = containerRef.current
-          if (container === null) return
-
-          const scrollParent = findScrollableParent(container.parentElement)
-          if (scrollParent === null) return
-
-          if (isAdvanced) {
-            const items = container.querySelectorAll<HTMLElement>('.stack-list__item')
-            const lastItem = items[items.length - 1]
-            if (lastItem === undefined) return
-            const itemTop = lastItem.getBoundingClientRect().top - scrollParent.getBoundingClientRect().top + scrollParent.scrollTop
-            scrollParent.scrollTo({ top: itemTop - 8, behavior: 'smooth' })
-          } else {
-            scrollParent.scrollTo({ top: scrollParent.scrollHeight - scrollParent.clientHeight, behavior: 'smooth' })
-          }
-        })
-      })
-    }
-
-    prevColumnKeysRef.current = currentKeys
-  }, [columns])
+  const scrollSentinelRef = useScrollIntoViewOnAppend(columns, (column) => column.key)
 
   const stackListItems: ColumnStackListProps['items'] = useMemo(() => columns.map((column) => {
     const uniqueId = column.__meta?.uniqueId ?? uuid()
@@ -131,7 +80,6 @@ export const GridConfigList = (): React.JSX.Element => {
           <IconButton
             icon={ { value: 'trash' } }
             onClick={ () => { onRemoveColumn(uniqueId) } }
-            size='small'
             theme='secondary'
           />
         </Space>
@@ -143,14 +91,16 @@ export const GridConfigList = (): React.JSX.Element => {
     <>
       { stackListItems.length === 0 && <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } /> }
       { stackListItems.length > 0 && (
-        <div ref={ containerRef }>
-          <StackList
-            items={ stackListItems }
-            onItemsChange={ onItemsChange }
-            sortable
-          />
-        </div>
+        <StackList
+          items={ stackListItems }
+          onItemsChange={ onItemsChange }
+          sortable
+        />
       ) }
+      <div
+        aria-hidden
+        ref={ scrollSentinelRef }
+      />
     </>
   )
 

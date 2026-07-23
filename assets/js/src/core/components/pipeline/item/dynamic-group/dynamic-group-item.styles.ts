@@ -15,14 +15,6 @@ export const useStyles = createStyles(({ css, token }) => {
     dynamicGroupItem: css`
       background-color: ${token.colorFillAdditional};
       border-radius: ${token.borderRadius}px;
-
-      .ant-form-item {
-        margin-bottom: 0;
-      }
-
-      .ant-form-item + .ant-form-item {
-        margin-top: ${token.marginXS}px;
-      }
     `
   }
 })

@@ -52,7 +52,6 @@ export const FieldsToAddPanel = ({
       data-testid={ dataTestId }
     >
       <Header
-        className={ styles.panelHeader }
         fullWidth
         title={ t('listing.column-picker.fields-to-add') }
       >
@@ -64,8 +63,6 @@ export const FieldsToAddPanel = ({
             data-testid={ dataTestId !== undefined ? `${dataTestId}-close` : undefined }
             icon={ { value: 'collapse-sidebar', colorToken: 'colorPrimary' } }
             onClick={ onClose }
-            tooltip={ { title: t('listing.fields-to-add.collapse-simple-fields') } }
-            type='text'
           />
         </Flex>
       </Header>
