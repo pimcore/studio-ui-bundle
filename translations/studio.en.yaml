@@ -27,7 +27,7 @@ error.error_recycle_bin_restore: Cannot restore element from recycle bin
 error.error_recycle_bin_restore_missing_parent: Cannot restore element from recycle bin, parent element is missing
 error.syntax_error: Syntax error
 sidebar.selected_elements: Selected Elements
-sidebar.grid_config: Grid config
+sidebar.grid_config: Grid Config
 sidebar.tag_filters: Tag Filters
 sidebar.search_filter: Search & Filter
 sidebar.clear-all-filters: Clear all filters
@@ -362,14 +362,15 @@ grid.advanced-column.advancedColumns.group.date: Date
 grid.advanced-column.advancedColumns.group.string: String
 grid.advanced-column.advancedColumns.group.other: Other
 grid.advanced-column.title.placeholder: Add a title
-grid.advanced-column.advancedColumns: Source field
-grid.advanced-column.advancedColumns.add: Add a Source field
+grid.advanced-column.advancedColumns: Source Field
+grid.advanced-column.advancedColumns.add: Add a source
 grid.advanced-column.transformers: Transformers
-grid.advanced-column.transformers.add: Add a Transformer
+grid.advanced-column.transformers.add: Add a transformer
 grid.advanced-column.preview: Preview
 grid.advanced-column.no-preview: No preview item available
 grid.advanced-column.no-preview-data: No preview data available
 grid.advanced-column.error-preview-data: Error loading preview
+grid.advanced-column.preview-item: Preview Item
 grid.advanced-column.trim: Trim
 grid.advanced-column.find: Find
 grid.advanced-column.replace: Replace
@@ -383,25 +384,25 @@ grid.advanced-column.twigTemplate: Twig Template
 grid.advanced-column.blurringRule: Blurring Rule
 grid.advanced-column.anonymizationRule: Anonymization Rule
 grid.advanced-column.translationPrefix: Translation Prefix
-grid.advanced-column.advancedColumns.simpleField: Simple Field
-grid.advanced-column.advancedColumns.relationField: Relation Field
+grid.advanced-column.advancedColumns.simpleField: Simple field
+grid.advanced-column.advancedColumns.relationField: Relation field
 grid.advanced-column.classification-store.no-selection: No value selected
 grid.advanced-column.classification-store.edit: Change value
 grid.advanced-column.advancedColumns.staticText: Static text
-grid.advanced-column.advancedColumns.booleanFormatter: Boolean Formatter
-grid.advanced-column.advancedColumns.caseChange: Change Case
-grid.advanced-column.advancedColumns.combine: Combine Values
-grid.advanced-column.advancedColumns.dateFormatter: Date Formatter
-grid.advanced-column.advancedColumns.elementCounter: Element Counter
+grid.advanced-column.advancedColumns.booleanFormatter: Boolean formatter
+grid.advanced-column.advancedColumns.caseChange: Change case
+grid.advanced-column.advancedColumns.combine: Combine values
+grid.advanced-column.advancedColumns.dateFormatter: Date formatter
+grid.advanced-column.advancedColumns.elementCounter: Element counter
 grid.advanced-column.advancedColumns.explode: Explode
-grid.advanced-column.advancedColumns.stringReplace: String Replace
-grid.advanced-column.advancedColumns.substring: SubString
+grid.advanced-column.advancedColumns.stringReplace: String replace
+grid.advanced-column.advancedColumns.substring: Substring
 grid.advanced-column.advancedColumns.trim: Trim
-grid.advanced-column.advancedColumns.twigOperator: Twig Operator
+grid.advanced-column.advancedColumns.twigOperator: Twig operator
 grid.advanced-column.advancedColumns.anonymizer: Anonymizer
 grid.advanced-column.advancedColumns.blur: Blur
 grid.advanced-column.advancedColumns.translate: Translate
-grid.advanced-column.advancedColumns.phpCode: PHP Code
+grid.advanced-column.advancedColumns.phpCode: PHP code
 grid.advanced-column.advancedColumns.phpCodeKey: PHP Transformer Key
 grid.advanced-column.advancedColumns.arguments: Arguments
 component.workflow-card.action-btn: Workflow Actions
@@ -521,15 +522,17 @@ key: Key
 published: Published
 classname: Classname
 index: Index
-listing.grid-config.title: Grid config
+listing.grid-config.title: Grid Config
 grid-config.discard-all-changes: Discard all changes
 grid-config.apply-changes: Apply changes
+grid-config.reload: Reload
 listing.add-column: Add a column
 listing.add-column.simple: Simple
 listing.add-column.advanced: Advanced
 listing.column-picker.search: Search
 listing.column-picker.no-results: No columns found
 listing.column-picker.fields-to-add: Fields to add
+listing.fields-to-add.collapse-simple-fields: Collapse simple fields
 listing.actions: Apply to selection
 listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download
@@ -1268,7 +1271,7 @@ relations.subtype: Subtype
 relations.classname: Class
 relations.fullpath: Full Path
 relations.remove-all.confirm: Do you really want to delete all relations?
-relation: relation
+relation: Relation
 items-limit-reached: The maximum number of items ({{maxItems}}) has been reached.
 actions: Actions
 asset: Asset

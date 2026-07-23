@@ -10,20 +10,10 @@
 
 import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
-export const useStyles = createStyles(({ css, token }) => {
+export const useStyles = createStyles(({ token, css }) => {
   return {
-    body: css`
-      display: flex;
-      gap: ${token.marginSM}px;
-      height: 100%;
-    `,
-
-    list: css`
-      flex: 1;
-      min-width: 0;
-      height: 100%;
-      overflow-y: auto;
-      padding-right: ${token.paddingXS}px;
+    noPreviewText: css`
+      color: ${token.colorTextDescription};
     `
   }
 })
