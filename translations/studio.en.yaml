@@ -1285,6 +1285,8 @@ image-gallery.clear-image-selection: Clear Image Selection
 image-gallery.delete-frame: Delete Frame
 text: Text
 video: Video
+object: Object
+variant: Variant
 processing: Processing
 upload: Upload
 close: Close
@@ -1373,6 +1375,7 @@ key-bindings.searchAsset: Search Asset
 key-bindings.searchObject: Search Object
 key-bindings.searchAndReplaceAssignments: Search and Replace Assignments
 key-bindings.quickSearch: Quick Search
+search-modal.title: Quick Search
 key-bindings.system: System
 key-bindings.showMetaInfo: Show Meta Info
 key-bindings.showElementHistory: Show Element History
@@ -2818,7 +2821,7 @@ saved-search.delete-search: Delete search
 saved-search.save-as-new: Save as new search
 saved-search.create-menu-shortcut: Create shortcut in menu
 saved-search.save.success: Saved search created
-saved-search.saved-searches: Saved searches
+saved-search.saved-searches: Saved Searches
 saved-search.ownership: Ownership
 saved-search.ownership.own: Own
 saved-search.ownership.shared: Shared with me

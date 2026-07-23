@@ -12,9 +12,8 @@ import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
-    // Purple line under the search bar, mirroring the paging toolbar's top border.
     topBar: css`
-      border-bottom: 1px solid ${token.colorPrimaryBorder};
+      border-bottom: 1px solid ${token.colorBorderTertiary};
     `
   }
 })

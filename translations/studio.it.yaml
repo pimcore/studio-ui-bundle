@@ -1275,6 +1275,8 @@ image-gallery.clear-image-selection: Cancella selezione immagine
 image-gallery.delete-frame: Elimina cornice
 text: Testo
 video: Video
+object: Oggetto
+variant: Variante
 processing: Elaborazione
 upload: Carica
 close: Chiudi

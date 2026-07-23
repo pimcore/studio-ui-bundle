@@ -1275,6 +1275,8 @@ image-gallery.clear-image-selection: Bildauswahl leeren
 image-gallery.delete-frame: Rahmen löschen
 text: Text
 video: Video
+object: Objekt
+variant: Variante
 processing: Verarbeitung
 upload: Hochladen
 close: Schließen
