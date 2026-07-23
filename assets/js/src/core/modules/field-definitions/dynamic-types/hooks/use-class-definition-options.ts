@@ -10,7 +10,7 @@
 
 import { useMemo } from 'react'
 import { useClassDefinitionGetTreeQuery, type ClassDefinitionTreeNodeItem, type ClassDefinitionTreeNodeFolder } from '@sdk/api/class-definition'
-import { flatMap, isArray, isEmpty, isUndefined } from 'lodash'
+import { flatMap, isArray, isUndefined } from 'lodash'
 
 export interface SelectOption {
   label: string
@@ -25,19 +25,20 @@ export interface UseClassDefinitionOptionsReturn {
 
 type TreeNode = ClassDefinitionTreeNodeItem | ClassDefinitionTreeNodeFolder
 
-const hasChildren = (node: TreeNode): node is ClassDefinitionTreeNodeFolder => {
-  return 'children' in node && isArray(node.children) && !isEmpty(node.children)
+const isFolderNode = (node: TreeNode): node is ClassDefinitionTreeNodeFolder => {
+  return 'children' in node && isArray(node.children)
 }
 
 const flattenTreeNodes = (nodes: TreeNode[]): SelectOption[] => {
   return flatMap(nodes, (node) => {
-    const currentNode: SelectOption = { label: node.name, value: node.name }
-
-    if (hasChildren(node)) {
-      return [currentNode, ...flattenTreeNodes(node.children)]
+    // Folder nodes are grouping containers, not selectable class definitions.
+    // Including them would produce options that duplicate class names (a group
+    // is often named after an existing class) or reference non-existent classes.
+    if (isFolderNode(node)) {
+      return flattenTreeNodes(node.children)
     }
 
-    return [currentNode]
+    return [{ label: node.name, value: node.name }]
   })
 }
 
