@@ -22,7 +22,10 @@ export class AreablockManager extends AbstractBlockManager {
   }
 
   protected getElementSelector (): string {
-    return `.pimcore_area_entry[data-name="${this.editableName}"]`
+    // entries without a key attribute are not managed by the areablock and must be
+    // ignored — assigning them new keys would disconnect the already saved child
+    // editables (named `<name>:<key>.<child>`) from their area entry
+    return `.pimcore_area_entry[data-name="${this.editableName}"][key]`
   }
 
   getElementType (element: HTMLElement): string | null {
@@ -34,7 +37,7 @@ export class AreablockManager extends AbstractBlockManager {
   }
 
   getAreablockValue (): AreablockValue {
-    const elements = this.ensureAllElementKeys()
+    const elements = this.queryElements()
     return elements.map(element => {
       const key = this.getElementKey(element)
       const type = this.getElementType(element)

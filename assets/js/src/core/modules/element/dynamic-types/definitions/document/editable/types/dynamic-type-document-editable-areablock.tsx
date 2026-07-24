@@ -9,6 +9,7 @@
  */
 
 import React from 'react'
+import { isArray } from 'lodash'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import { type AreablockEditableProps, type AreablockEditableConfig, type AreablockValue } from '../components/areablock-editable/areablock-editable'
 import { WithAreablockRenderQuery } from '../components/areablock-editable/with-areablock-render-query'
@@ -46,6 +47,14 @@ export class DynamicTypeDocumentEditableAreablock extends DynamicTypeDocumentEdi
   }
 
   transformValue (value: any, props: AreablockEditableDefinition): AreablockValue {
+    // the indices provided by the backend are the source of truth — deriving them
+    // from the rendered markup breaks documents whose area entries carry no key
+    // attribute (e.g. custom areabrick wrappers) and would renumber their keys,
+    // disconnecting the already saved child editables (named `<name>:<key>.<child>`)
+    if (isArray(value)) {
+      return value as AreablockValue
+    }
+
     const containerElement = document.getElementById(props.id) as HTMLDivElement | null
     const fallbackContainerRef: React.RefObject<HTMLDivElement> = { current: containerElement }
     const containerRef = props.containerRef ?? fallbackContainerRef
