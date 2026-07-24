@@ -12,7 +12,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { App } from 'antd'
+import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { FormKit } from '@Pimcore/components/form/form-kit'
@@ -52,7 +52,7 @@ interface ICollectionDetailFormValues {
 
 export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { modal } = App.useApp()
+  const { localModal: modal } = useStudioModal()
   const [collectionForm] = Form.useForm<{ name: string, description: string }>()
   const [detailForm] = Form.useForm<ICollectionDetailFormValues>()
 

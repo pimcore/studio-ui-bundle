@@ -9,7 +9,8 @@
  */
 
 import React, { useRef } from 'react'
-import { App, Button, Switch } from 'antd'
+import { Button, Switch } from 'antd'
+import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useAppDispatch } from '@sdk/app'
 import { isNil } from 'lodash'
@@ -27,7 +28,7 @@ export interface UploadConflictModalResult {
 export const useUploadConflictModal = (): UploadConflictModalResult => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
-  const { modal } = App.useApp()
+  const { localModal: modal } = useStudioModal()
 
   const applyToAllRef = useRef<{ action: UploadConflictAction | null }>({ action: null })
 

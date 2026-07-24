@@ -12,7 +12,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { App } from 'antd'
+import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { kebabCase } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
@@ -46,7 +46,7 @@ type KeyRow = ClassificationStoreConfigurationKeyDetail & { title: string | unde
 
 export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { modal } = App.useApp()
+  const { localModal: modal } = useStudioModal()
   const [keyForm] = Form.useForm<{ name: string, description: string }>()
 
   const fieldDefinitionRegistry = useInjection<DynamicTypeFieldDefinitionRegistry>(serviceIds['DynamicTypes/FieldDefinitionRegistry'])
