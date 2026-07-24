@@ -34,6 +34,13 @@ export const useVersionData = (data: IVersionsFieldsList['data'], elementType: E
   const versionKeysList = Object.keys(data[0]).filter(key => key.startsWith('Version'))
 
   const comparisonModifiedData = data.filter((item) => {
+    // Prefer the modification flag computed upstream when it is set (object fields), so
+    // attribute-only changes still show. Assets don't set it and fall back to comparing
+    // the rendered version values.
+    if (typeof item.isModifiedValue === 'boolean') {
+      return item.isModifiedValue
+    }
+
     return !isEqual(item[versionKeysList[0]] ?? null, item[versionKeysList[1]] ?? null)
   })
 

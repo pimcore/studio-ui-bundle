@@ -8,8 +8,16 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-export enum VersionCategoryName {
-  SYSTEM_DATA = 'systemData',
-  META = 'meta',
-  PROPERTIES = 'properties'
+export enum PropertyType {
+  TEXT = 'text',
+  DOCUMENT = 'document',
+  ASSET = 'asset',
+  OBJECT = 'object',
+  BOOL = 'bool'
 }
+
+export const ELEMENT_REFERENCE_PROPERTY_TYPES: string[] = [
+  PropertyType.ASSET,
+  PropertyType.DOCUMENT,
+  PropertyType.OBJECT
+]
