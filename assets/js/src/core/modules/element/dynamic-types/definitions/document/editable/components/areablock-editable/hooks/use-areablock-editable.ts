@@ -62,6 +62,7 @@ function mergeAreablockTypesFromDefinitions (documentId: number, editableDefinit
 
 export const useAreablockEditable = ({
   areablockManager,
+  value,
   onChange,
   config,
   disabled = false,
@@ -70,8 +71,38 @@ export const useAreablockEditable = ({
   const { initializeData, getValues, removeValues, triggerSaveAndReload } = useDocumentEditor()
   const { id: documentId } = useContext(DocumentContext)
   const [dynamicEditables, setDynamicEditables] = useState<AbstractDocumentEditableDefinition[]>([])
-  const reloadModeElementsRef = useRef<HTMLElement[]>(areablockManager.queryElements())
   const { styles } = useStyles()
+
+  const valueRef = useRef<AreablockValue | undefined>(value)
+  valueRef.current = value
+
+  // the value provided by the document editor store is the authoritative state of the
+  // areablock (it originates from the backend indices) — the rendered DOM is only used
+  // as a fallback and for element lookup, so that markup without key attributes (e.g.
+  // custom areabrick wrappers) can never corrupt the stored indices
+  const getCurrentValue = useCallback((): AreablockValue => {
+    const currentValue = valueRef.current
+    if (isArray(currentValue)) {
+      return currentValue
+    }
+
+    return areablockManager.getAreablockValue()
+  }, [areablockManager])
+
+  const getNextKey = useCallback((): number => {
+    const domKeys = areablockManager.queryElements().map(element => areablockManager.getElementKey(element))
+    return areablockValueUtils.calculateNextKey(getCurrentValue(), domKeys)
+  }, [areablockManager, getCurrentValue])
+
+  const getInsertIndex = useCallback((element: HTMLElement | null): number => {
+    if (isNil(element)) return 0
+
+    const elementKey = areablockManager.getElementKey(element)
+    if (isNil(elementKey)) return 0
+
+    const entryIndex = areablockValueUtils.getEntryIndexByKey(getCurrentValue(), elementKey)
+    return entryIndex === -1 ? 0 : entryIndex + 1
+  }, [areablockManager, getCurrentValue])
 
   const applyStylesToAreaEntries = useCallback(() => {
     areablockManager.applyStylestoAreaEntries(styles.areaEntry)
@@ -98,57 +129,34 @@ export const useAreablockEditable = ({
     return areablockValueUtils.filterEditableNames(Object.keys(currentValues), areablockManager.getEditableName(), elementKey)
   }
 
-  const handleReloadMode = useCallback((elementsUpdater: (elements: HTMLElement[]) => HTMLElement[]) => {
-    const currentElements = reloadModeElementsRef.current
-    const newElements = elementsUpdater([...currentElements])
-    reloadModeElementsRef.current = newElements
-    const newValue = areablockValueUtils.elementsToAreablockValue(newElements)
-    onChange?.(newValue)
-  }, [onChange])
-
-  const handlePostOperation = useCallback(() => {
-    areablockManager.ensureAllElementKeys()
-    const newValue = areablockManager.getAreablockValue()
-    onChange?.(newValue)
-  }, [onChange, areablockManager])
-
   const addArea = useCallback(async (element: HTMLElement | null, areaType?: string) => {
     if (disabled) return
 
     const limit = configUtils.getEffectiveLimit(config)
-    const currentElements = configUtils.isReloadMode(config) ? reloadModeElementsRef.current : areablockManager.queryElements()
-    if (configUtils.isLimitReached(currentElements.length, limit)) return
+    const currentValue = getCurrentValue()
+    if (configUtils.isLimitReached(currentValue.length, limit)) return
 
     const availableTypes = configUtils.getAvailableTypes(config)
     const typeToUse = areaType ?? (!isEmpty(availableTypes) ? availableTypes[0].type : 'default')
 
     if (!configUtils.isTypeAllowed(config, typeToUse)) return
-    const index = !isNil(element) ? areablockManager.findElementIndex(element) + 1 : 0
-    const nextKey = areablockManager.calculateNextKey()
+
+    const index = getInsertIndex(element)
+    const newEntry = {
+      key: getNextKey().toString(),
+      type: typeToUse,
+      hidden: false
+    }
+    const saveData = areablockValueUtils.insertEntry(currentValue, index, newEntry)
 
     if (configUtils.isReloadMode(config)) {
-      handleReloadMode((elements) => {
-        const placeholderElement = document.createElement('div')
-        areablockManager.setElementKey(placeholderElement, nextKey.toString())
-        areablockManager.setElementType(placeholderElement, typeToUse)
-        placeholderElement.setAttribute('data-hidden', 'false')
-        const newElements = [...elements]
-        newElements.splice(index, 0, placeholderElement)
-        return newElements
-      })
+      onChange?.(saveData)
       return
     }
 
     try {
       const container = areablockManager.getContainer()
       if (isNil(container)) return
-
-      const saveData = areablockManager.getAreablockValue()
-      saveData.splice(index, 0, {
-        key: nextKey,
-        type: typeToUse,
-        hidden: false
-      })
 
       const { error, data } = await renderTrigger({
         id: documentId,
@@ -183,10 +191,10 @@ export const useAreablockEditable = ({
             container.appendChild(newAreaElement)
             const initialDropzoneContainer = createDropzoneContainer(areablockManager.getEditableName(), true)
             newAreaElement.parentNode?.insertBefore(initialDropzoneContainer, newAreaElement)
-          } else if (!isNil(existingElements[index - 1])) {
-            existingElements[index - 1].insertAdjacentElement('afterend', newAreaElement)
-          } else if (!isNil(existingElements[index])) {
-            existingElements[index].insertAdjacentElement('beforebegin', newAreaElement)
+          } else if (!isNil(element)) {
+            element.insertAdjacentElement('afterend', newAreaElement)
+          } else {
+            existingElements[0].insertAdjacentElement('beforebegin', newAreaElement)
           }
 
           const dropzoneContainer = createDropzoneContainer(areablockManager.getEditableName())
@@ -205,66 +213,71 @@ export const useAreablockEditable = ({
         revealPendingElements()
       }
 
-      handlePostOperation()
+      onChange?.(saveData)
     } catch (error) {
       trackError(new GeneralError('Failed to add area'))
       console.error('Failed to add area:', error)
-      handlePostOperation()
     }
-  }, [disabled, config, handleReloadMode, handlePostOperation, areablockManager, documentId])
+  }, [disabled, config, onChange, areablockManager, documentId, getCurrentValue, getNextKey, getInsertIndex])
+
   const removeArea = useCallback((element: HTMLElement) => {
     if (disabled) return
 
+    const elementKey = areablockManager.getElementKey(element)
+    if (isNil(elementKey)) return
+
+    const newValue = areablockValueUtils.removeEntryByKey(getCurrentValue(), elementKey)
+
     if (configUtils.isReloadMode(config)) {
-      const index = areablockManager.findElementIndex(element)
-      handleReloadMode((elements) => {
-        const newElements = [...elements]
-        newElements.splice(index, 1)
-        return newElements
-      })
+      onChange?.(newValue)
       return
     }
 
     const editableNamesToRemove = getAreaEditableNames(element)
-    const elementKey = areablockManager.getElementKey(element)
+    const editableName = areablockManager.getEditableName()
+    const namePattern = `${editableName}:${elementKey}.`
 
-    if (!isNil(elementKey)) {
-      const editableName = areablockManager.getEditableName()
-      const namePattern = `${editableName}:${elementKey}.`
-
-      setDynamicEditables(prev =>
-        prev.filter(editable => !editable.name.startsWith(namePattern))
-      )
-    }
+    setDynamicEditables(prev =>
+      prev.filter(editable => !editable.name.startsWith(namePattern))
+    )
 
     element.remove()
     if (!isEmpty(editableNamesToRemove)) {
       removeValues(editableNamesToRemove)
     }
-    handlePostOperation()
-  }, [disabled, config, handleReloadMode, removeValues, handlePostOperation, areablockManager])
+    onChange?.(newValue)
+  }, [disabled, config, onChange, removeValues, areablockManager, getCurrentValue])
 
   const moveAreaByDirection = (element: HTMLElement, direction: 'up' | 'down'): void => {
     if (disabled) return
 
-    const index = areablockManager.findElementIndex(element)
-    const currentElements = configUtils.isReloadMode(config) ? reloadModeElementsRef.current : areablockManager.queryElements()
+    const elementKey = areablockManager.getElementKey(element)
+    if (isNil(elementKey)) return
 
-    if (direction === 'up' && !configUtils.canMoveUp(index)) return
-    if (direction === 'down' && !configUtils.canMoveDown(index, currentElements.length)) return
+    const currentValue = getCurrentValue()
+    const fromIndex = areablockValueUtils.getEntryIndexByKey(currentValue, elementKey)
+    if (fromIndex === -1) return
+
+    if (direction === 'up' && !configUtils.canMoveUp(fromIndex)) return
+    if (direction === 'down' && !configUtils.canMoveDown(fromIndex, currentValue.length)) return
+
+    const toIndex = direction === 'up' ? fromIndex - 1 : fromIndex + 1
+    const newValue = areablockValueUtils.moveEntry(currentValue, fromIndex, toIndex)
 
     if (configUtils.isReloadMode(config)) {
-      const targetIndex = direction === 'up' ? index - 1 : index + 1
-      handleReloadMode((elements) => areablockValueUtils.swapElements(elements, index, targetIndex))
+      onChange?.(newValue)
       return
     }
 
-    const targetElement = direction === 'up' ? currentElements[index - 1] : currentElements[index + 1]
+    const currentElements = areablockManager.queryElements()
+    const domIndex = currentElements.indexOf(element)
+    const targetElement = direction === 'up' ? currentElements[domIndex - 1] : currentElements[domIndex + 1]
     if (!isNil(targetElement)) {
       const insertTarget = direction === 'up' ? targetElement : targetElement.nextSibling
       targetElement.parentNode?.insertBefore(element, insertTarget)
-      handlePostOperation()
     }
+
+    onChange?.(newValue)
   }
 
   const moveAreaUp = (element: HTMLElement): void => { moveAreaByDirection(element, 'up') }
@@ -273,42 +286,45 @@ export const useAreablockEditable = ({
   const moveArea = useCallback((fromIndex: number, toIndex: number): void => {
     if (disabled) return
 
-    const currentElements = configUtils.isReloadMode(config) ? reloadModeElementsRef.current : areablockManager.queryElements()
+    const currentElements = areablockManager.queryElements()
 
     if (fromIndex < 0 || fromIndex >= currentElements.length || toIndex < 0 || toIndex >= currentElements.length) {
       return
     }
 
+    const fromElement = currentElements[fromIndex]
+    const toElement = currentElements[toIndex]
+    const fromKey = areablockManager.getElementKey(fromElement)
+    const toKey = areablockManager.getElementKey(toElement)
+    if (isNil(fromKey) || isNil(toKey)) return
+
+    const currentValue = getCurrentValue()
+    const valueFromIndex = areablockValueUtils.getEntryIndexByKey(currentValue, fromKey)
+    const valueToIndex = areablockValueUtils.getEntryIndexByKey(currentValue, toKey)
+    if (valueFromIndex === -1 || valueToIndex === -1) return
+
+    const newValue = areablockValueUtils.moveEntry(currentValue, valueFromIndex, valueToIndex)
+
     if (configUtils.isReloadMode(config)) {
-      handleReloadMode((elements) => {
-        const newElements = [...elements]
-        const [movedElement] = newElements.splice(fromIndex, 1)
-        newElements.splice(toIndex, 0, movedElement)
-        return newElements
-      })
+      onChange?.(newValue)
       return
     }
 
     const scrollX = window.scrollX
     const scrollY = window.scrollY
 
-    const fromElement = currentElements[fromIndex]
-    const toElement = currentElements[toIndex]
+    const insertTarget = toIndex > fromIndex
+      ? toElement.nextSibling
+      : toElement
 
-    if (!isNil(fromElement) && !isNil(toElement)) {
-      const insertTarget = toIndex > fromIndex
-        ? toElement.nextSibling
-        : toElement
+    toElement.parentNode?.insertBefore(fromElement, insertTarget)
 
-      toElement.parentNode?.insertBefore(fromElement, insertTarget)
+    requestAnimationFrame(() => {
+      window.scrollTo(scrollX, scrollY)
+    })
 
-      requestAnimationFrame(() => {
-        window.scrollTo(scrollX, scrollY)
-      })
-
-      handlePostOperation()
-    }
-  }, [disabled, config, handleReloadMode, handlePostOperation, areablockManager])
+    onChange?.(newValue)
+  }, [disabled, config, onChange, areablockManager, getCurrentValue])
 
   const copyArea = useCallback((element: HTMLElement) => {
     const elementKey = areablockManager.getElementKey(element)
@@ -354,12 +370,12 @@ export const useAreablockEditable = ({
     if (!configUtils.isTypePasteable(config, clipboardItem.type)) return
 
     const limit = configUtils.getEffectiveLimit(config)
-    const currentElements = configUtils.isReloadMode(config) ? reloadModeElementsRef.current : areablockManager.queryElements()
+    const currentValue = getCurrentValue()
 
-    if (configUtils.isLimitReached(currentElements.length, limit)) return
+    if (configUtils.isLimitReached(currentValue.length, limit)) return
 
-    const index = !isNil(element) ? areablockManager.findElementIndex(element) + 1 : 0
-    const nextKey = areablockManager.calculateNextKey()
+    const index = getInsertIndex(element)
+    const nextKey = getNextKey()
     const editableName = areablockManager.getEditableName()
 
     const pastedValues: Record<string, ValueType> = {}
@@ -370,30 +386,18 @@ export const useAreablockEditable = ({
 
     initializeData(pastedValues)
 
-    if (configUtils.isReloadMode(config)) {
-      handleReloadMode((elements) => {
-        const placeholderElement = document.createElement('div')
-
-        areablockManager.setElementKey(placeholderElement, nextKey.toString())
-        areablockManager.setElementType(placeholderElement, clipboardItem.type)
-        placeholderElement.setAttribute('data-hidden', 'false')
-
-        const newElements = [...elements]
-        newElements.splice(index, 0, placeholderElement)
-
-        return newElements
-      })
-      return
-    }
-
-    const newValue = areablockManager.getAreablockValue()
-
-    newValue.splice(index, 0, { key: nextKey.toString(), type: clipboardItem.type, hidden: false })
+    const newValue = areablockValueUtils.insertEntry(currentValue, index, {
+      key: nextKey.toString(),
+      type: clipboardItem.type,
+      hidden: false
+    })
 
     onChange?.(newValue)
 
-    triggerSaveAndReload()
-  }, [disabled, config, handleReloadMode, onChange, areablockManager, triggerSaveAndReload])
+    if (!configUtils.isReloadMode(config)) {
+      triggerSaveAndReload()
+    }
+  }, [disabled, config, onChange, areablockManager, triggerSaveAndReload, getCurrentValue, getNextKey, getInsertIndex])
 
   return {
     dynamicEditables,

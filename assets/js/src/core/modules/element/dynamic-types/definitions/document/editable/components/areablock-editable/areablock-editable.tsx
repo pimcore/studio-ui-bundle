@@ -14,7 +14,7 @@ import { DynamicEditablesRenderer } from '@Pimcore/modules/document/editor/share
 import { useAreablockEditable } from './hooks/use-areablock-editable'
 import { useAreablockControls } from './hooks/use-areablock-controls'
 import { AreablockManager } from './utils/areablock-manager'
-import { configUtils } from './utils/areablock-utils'
+import { areablockValueUtils, configUtils } from './utils/areablock-utils'
 import { AreablockDialog } from './components/areablock-dialog/areablock-dialog'
 import { type useLazyDocumentPageSnippetAreaBlockRenderQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 
@@ -64,7 +64,7 @@ export interface AreablockEditableProps {
 }
 
 export const AreablockEditable = ({
-  value = [],
+  value,
   onChange,
   config,
   className,
@@ -75,17 +75,21 @@ export const AreablockEditable = ({
   isInherited = false,
   renderTrigger
 }: AreablockEditableProps): React.JSX.Element => {
-  const currentValue = isArray(value) ? value : []
-
   const areablockManager = useMemo(() => new AreablockManager(editableName, containerRef, editableType), [editableName, containerRef, editableType])
 
   const areaTypes = useMemo(() => configUtils.getAvailableTypes(config), [config])
 
   const [openDialogs, setOpenDialogs] = useState<Set<string>>(new Set())
 
+  // the store value is authoritative; the rendered DOM is only a fallback for
+  // markup where no value has been initialized yet
+  const getCurrentValue = useCallback((): AreablockValue => {
+    return isArray(value) ? value : areablockManager.getAreablockValue()
+  }, [value, areablockManager])
+
   const handleOverwrite = useCallback(() => {
-    onChange?.(areablockManager.getAreablockValue())
-  }, [areablockManager, onChange])
+    onChange?.(getCurrentValue())
+  }, [getCurrentValue, onChange])
 
   const handleOpenDialog = useCallback((areaKey: string) => {
     setOpenDialogs(prev => new Set(prev).add(areaKey))
@@ -100,10 +104,12 @@ export const AreablockEditable = ({
   }, [])
 
   const handleToggleHidden = useCallback((element: HTMLElement) => {
-    areablockManager.toggleElementHidden(element)
-    const newValue = areablockManager.getAreablockValue()
-    onChange?.(newValue)
-  }, [areablockManager, onChange])
+    const hidden = areablockManager.toggleElementHidden(element)
+    const elementKey = areablockManager.getElementKey(element)
+    if (isNil(elementKey)) return
+
+    onChange?.(areablockValueUtils.setEntryHidden(getCurrentValue(), elementKey, hidden))
+  }, [areablockManager, getCurrentValue, onChange])
 
   const {
     dynamicEditables,
@@ -117,7 +123,7 @@ export const AreablockEditable = ({
     pasteArea
   } = useAreablockEditable({
     areablockManager,
-    value: currentValue,
+    value,
     onChange,
     config,
     disabled,

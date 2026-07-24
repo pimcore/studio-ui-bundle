@@ -9,7 +9,7 @@
  */
 
 import { isNil, isUndefined, isArray } from 'lodash'
-import { type AreablockEditableConfig, type AreablockValue, type AreaType } from '../areablock-editable'
+import { type AreablockEditableConfig, type AreablockEntry, type AreablockValue, type AreaType } from '../areablock-editable'
 import { type AreablockGroupedTypes, type AreablockTypeEntry } from '@Pimcore/modules/document/document-editor-slice'
 import { type AbstractDocumentEditableDefinition } from '../../../dynamic-type-document-editable-abstract'
 
@@ -62,22 +62,38 @@ export const areablockValueUtils = {
     return allEditableNames.filter(name => name.startsWith(prefix))
   },
 
-  elementsToAreablockValue (elements: HTMLElement[]): AreablockValue {
-    return elements.map(element => {
-      const key = element.getAttribute('key') ?? ''
-      const type = element.getAttribute('type') ?? ''
-      const hidden = element.getAttribute('data-hidden') === 'true'
-
-      return { key, type, hidden }
-    })
+  getEntryIndexByKey (value: AreablockValue, key: string | number): number {
+    return value.findIndex(entry => String(entry.key) === String(key))
   },
 
-  swapElements<T> (array: T[], index1: number, index2: number): T[] {
-    const newArray = [...array]
-    const temp = newArray[index1]
-    newArray[index1] = newArray[index2]
-    newArray[index2] = temp
-    return newArray
+  insertEntry (value: AreablockValue, index: number, entry: AreablockEntry): AreablockValue {
+    const newValue = [...value]
+    newValue.splice(index, 0, entry)
+    return newValue
+  },
+
+  removeEntryByKey (value: AreablockValue, key: string | number): AreablockValue {
+    return value.filter(entry => String(entry.key) !== String(key))
+  },
+
+  moveEntry (value: AreablockValue, fromIndex: number, toIndex: number): AreablockValue {
+    const newValue = [...value]
+    const [movedEntry] = newValue.splice(fromIndex, 1)
+    newValue.splice(toIndex, 0, movedEntry)
+    return newValue
+  },
+
+  setEntryHidden (value: AreablockValue, key: string | number, hidden: boolean): AreablockValue {
+    return value.map(entry => String(entry.key) === String(key) ? { ...entry, hidden } : entry)
+  },
+
+  calculateNextKey (value: AreablockValue, domKeys: Array<string | null> = []): number {
+    const numericKeys = [
+      ...value.map(entry => parseInt(String(entry.key), 10)),
+      ...domKeys.map(key => parseInt(key ?? '', 10))
+    ].filter(key => !Number.isNaN(key))
+
+    return (numericKeys.length > 0 ? Math.max(...numericKeys) : 0) + 1
   }
 }
 
