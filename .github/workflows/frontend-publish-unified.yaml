@@ -19,7 +19,7 @@ permissions:
 env:
   # Canary base used when a version line has no published release yet
   # (matches the reference implementation, data-hub#1119).
-  FALLBACK_TARGET_RELEASE: "2026.3.0"
+  FALLBACK_TARGET_RELEASE: "2025.4.0"
 
 jobs:
   gate:
