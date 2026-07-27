@@ -46,6 +46,15 @@ const debouncedSendTranslations = debounce(async (listenerApi) => {
 
   const translations = selectMissingTranslations(state)
 
+  // Auto-creation of missing translation keys can be disabled via the backend
+  // config `pimcore_studio_backend.translations.auto_create_missing_keys`.
+  // When disabled, discard the collected keys without persisting them. Manual
+  // creation through the Translations UI is unaffected. Defaults to enabled.
+  if (state.settings?.settings?.auto_create_translations === false) {
+    listenerApi.dispatch(removeMissingTranslations(translations))
+    return
+  }
+
   listenerApi.dispatch(removeMissingTranslations(translations))
   void addNewTranslations(translations)
 }, 3000) // Wait for 3 seconds of inactivity before sending
