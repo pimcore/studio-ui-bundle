@@ -18,6 +18,8 @@ import { SidebarContext } from './sidebar-provider'
 import { useTranslation } from 'react-i18next'
 import { isNil } from 'lodash'
 import { ContentConfigProvider } from '../content/content-config-provider'
+import { Divider } from '../split-layout/components/divider/divider'
+import { useSidebarResize } from './use-sidebar-resize'
 
 export interface SidebarProps {
   entries: ISidebarEntry[]
@@ -53,6 +55,17 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
   const activeTab = sidebarContext?.activeTab ?? localActiveTab
   const setActiveTab = sidebarContext?.toggleTab ?? setLocalActiveTab
 
+  const isExpanded = activeTab !== ''
+  const {
+    sidebarRef,
+    contentRef,
+    contentWidth,
+    isResizing,
+    startResizing,
+    onMouseResize,
+    onKeyboardResize
+  } = useSidebarResize(sizing)
+
   function handleSidebarClick (key: string): void {
     if (sidebarContext !== null && sidebarContext !== undefined) {
       // When using context, use the toggleTab method
@@ -69,7 +82,26 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
 
   return (
     <ContentConfigProvider gap="extra-small">
-      <div className={ styles.sidebar }>
+      <div
+        className={ styles.sidebar }
+        ref={ sidebarRef }
+      >
+        {isExpanded && (
+          // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+          <div
+            className={ 'sidebar__resizer' + (isResizing ? ' sidebar__resizer--active' : '') }
+            onMouseDown={ startResizing }
+          >
+            <Divider
+              className={ 'sidebar__resizer-divider' }
+              onKeyboardResize={ onKeyboardResize }
+              onMouseResize={ onMouseResize }
+            />
+          </div>
+        )}
+
+        {isResizing && <div className={ 'sidebar__resize-overlay' } />}
+
         <div className={ 'sidebar__navigation' }>
           <div
             className={ 'sidebar__navigation__tabs' }
@@ -131,7 +163,11 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
           </div>
         </div>
 
-        <div className={ `sidebar__content sidebar__content--sizing-${sizing} ` + (activeTab !== '' ? 'expanded' : '') }>
+        <div
+          className={ `sidebar__content sidebar__content--sizing-${sizing} ` + (isExpanded ? 'expanded' : '') }
+          ref={ contentRef }
+          style={ isNil(contentWidth) ? undefined : { width: contentWidth } }
+        >
           {preparedEntries.map((entry, index) => (
             <LazyTabPanel
               entry={ entry }
