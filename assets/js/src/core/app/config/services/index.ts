@@ -239,6 +239,7 @@ import { DynamicTypeGridCellSystemString } from '@Pimcore/modules/element/dynami
 import { DynamicTypeGridCellSystemBoolean } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-boolean/dynamic-type-grid-cell-system-boolean'
 import { DynamicTypeGridCellSystemDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-datetime/dynamic-type-grid-cell-system-datetime'
 import { DynamicTypeGridCellSystemInteger } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-integer/dynamic-type-grid-cell-system-integer'
+import { DynamicTypeGridCellSystemUser } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-user/dynamic-type-grid-cell-system-user'
 import { DynamicTypeFieldFilterNone } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/none/dynamic-type-field-filter-none'
 import { DynamicTypeDocumentPage } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-page'
 import { DynamicTypeDocumentRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/dynamic-type-document-registry'
@@ -540,6 +541,7 @@ container.bind(serviceIds['DynamicTypes/GridCell/SystemString']).to(DynamicTypeG
 container.bind(serviceIds['DynamicTypes/GridCell/SystemBoolean']).to(DynamicTypeGridCellSystemBoolean).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/SystemDatetime']).to(DynamicTypeGridCellSystemDatetime).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/SystemInteger']).to(DynamicTypeGridCellSystemInteger).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/SystemUser']).to(DynamicTypeGridCellSystemUser).inSingletonScope()
 
 // Advanced grid cell registry
 container.bind(serviceIds['DynamicTypes/AdvancedGridCellRegistry']).to(DynamicTypeGridCellRegistry).inSingletonScope()
