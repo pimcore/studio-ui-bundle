@@ -9,11 +9,7 @@
  */
 
 import { useAssetGetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
-import {
-  useAssetGetFolderPreviewSettingQuery,
-  useAssetUpdateFolderPreviewSettingMutation
-} from './folder-preview-setting-api-slice'
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
@@ -27,24 +23,16 @@ import { IconButton, Split } from '@sdk/components'
 import { Segmented } from '@Pimcore/components/segmented/segmented'
 import { SizeTypes } from '@Pimcore/components/preview-card/preview-card'
 import { Text } from '@Pimcore/components/text/text'
+import { useFolderPreviewImageSize } from './hooks/use-folder-preview-image-size'
 
 const PreviewContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const assetContext = useContext(AssetContext)
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
-  const [cardSize, setCardSize] = useState<SizeTypes>(SizeTypes.SMALL)
   const assetId = assetContext.id
   const { asset } = useAssetDraft(assetId)
-
-  const { data: previewSetting } = useAssetGetFolderPreviewSettingQuery({ folderId: assetId })
-  const [updateFolderPreviewSetting] = useAssetUpdateFolderPreviewSettingMutation()
-
-  useEffect(() => {
-    if (previewSetting?.imageSize !== undefined) {
-      setCardSize(previewSetting.imageSize as SizeTypes)
-    }
-  }, [previewSetting?.imageSize])
+  const { imageSize: cardSize, setImageSize: setCardSize } = useFolderPreviewImageSize(assetId)
 
   const { data, isFetching, refetch } = useAssetGetTreeQuery({
     pathIncludeDescendants: true,
@@ -72,11 +60,7 @@ const PreviewContainer = (): React.JSX.Element => {
           >
             <Text type='secondary'>{ t('asset.folder.preview.image-display') }</Text>
             <Segmented
-              onChange={ (value) => {
-                const size = value as SizeTypes
-                setCardSize(size)
-                void updateFolderPreviewSetting({ folderId: assetId, body: { imageSize: size } })
-              } }
+              onChange={ (value) => { setCardSize(value as SizeTypes) } }
               options={ [
                 { label: t('asset.folder.preview.image-display.small'), value: SizeTypes.SMALL },
                 { label: t('asset.folder.preview.image-display.large'), value: SizeTypes.LARGE }
@@ -120,7 +104,7 @@ const PreviewContainer = (): React.JSX.Element => {
         )}
       </Content>
     </ContentLayout >
-  ), [currentPage, pageSize, data, isFetching, cardSize])
+  ), [currentPage, pageSize, data, isFetching, cardSize, setCardSize])
 }
 
 export { PreviewContainer }
