@@ -314,6 +314,7 @@ preview-card.rename: Umbenennen
 preview-card.download-zip: Als ZIP herunterladen
 preview-card.delete: Löschen
 grid.aria.column-resize: Spaltengröße ändern
+sidebar.aria.resize: Seitenleistengröße ändern
 tree.aria.expand-and-collapse: Baumelement auf- oder zuklappen
 image-sidebar.tab.details.custom-download: Benutzerdefinierter Download
 aria.asset.image-sidebar.tab.details.custom-thumbnail-mode: Auswahl des benutzerdefinierten Vorschaubild-Modus
@@ -466,6 +467,8 @@ version.no-difference: Es gibt keinen Unterschied zwischen den ausgewählten Ver
 version.category.title.systemData: Systemdaten
 version.category.title.baseData: Basisdaten
 version.category.title.meta: Metadaten
+version.category.title.properties: Eigenschaften
+version.changed-attributes: "Geänderte Attribute: {{attributes}}"
 aria.version.delete: Version löschen
 aria.version.expand: Version aufklappen
 clear-all: Alle löschen
@@ -1238,6 +1241,7 @@ unknown: Unbekannt
 warning: Warnung
 error: Fehler
 info: Info
+success: Erfolg
 no-value-set: Kein Wert gesetzt
 set-to-null: Leer (auf null setzen)
 remove: Entfernen
@@ -1276,6 +1280,8 @@ image-gallery.clear-image-selection: Bildauswahl leeren
 image-gallery.delete-frame: Rahmen löschen
 text: Text
 video: Video
+object: Objekt
+variant: Variante
 processing: Verarbeitung
 upload: Hochladen
 close: Schließen
@@ -2206,6 +2212,7 @@ application-logger.filter.priority-level.8: Debug
 embed.url-modal.title: Embed-URL bearbeiten
 embed.url-modal.label: URL (z.B. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Bitte geben Sie eine gültige URL ein
+alert-modal.ok-text: OK
 embed.url-modal.ok-text: Speichern
 embed.url-modal.cancel-text: Abbrechen
 embed.url-modal.warning: "Ungültige URLs zeigen keine Vorschau an, bitte überprüfen und aktualisieren Sie Ihre URL."

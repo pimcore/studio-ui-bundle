@@ -14,7 +14,7 @@ import { Button } from '@Pimcore/components/button/button'
 import { Modal } from '@Pimcore/components/modal/modal'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
-import { useWorkflow } from '@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-workflow'
+import { useWorkflowModalState } from '@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-workflow-modal-state'
 import { Form } from '@Pimcore/components/form/form'
 import { Input } from 'antd'
 import { t } from 'i18next'
@@ -27,7 +27,7 @@ import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-rende
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 
 export const WorkflowModal = (): React.JSX.Element => {
-  const { isModalOpen, closeModal, triggeredWorkflowAction } = useWorkflow()
+  const { isModalOpen, closeModal, triggeredWorkflowAction } = useWorkflowModalState()
   const { renderFields } = useWorkflowFieldRenderer()
   const { convertToTimestamp } = useDateConverter()
   const [form] = Form.useForm<FormValues>()

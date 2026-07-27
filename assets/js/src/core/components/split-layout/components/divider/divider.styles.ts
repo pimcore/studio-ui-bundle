@@ -13,8 +13,10 @@ import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 export const useStyles = createStyles(({ css, token }) => ({
   dividerContainer: css`
     position: relative;
-    min-width: 24px;
+    min-width: 16px;
     outline: none;
+    padding-top: ${token.paddingXXS}px;
+    padding-bottom: ${token.paddingXXS}px;
   `,
 
   resizable: css`
@@ -24,8 +26,9 @@ export const useStyles = createStyles(({ css, token }) => ({
   divider: css`
     position: absolute;
     left: 50%;
+    top: ${token.paddingXXS}px;
     width: 1px;
-    height: 100%;
+    height: calc(100% - ${token.paddingXXS * 2}px);
     overflow: hidden;
     background-color: ${token.Divider.colorSplit};
   `,

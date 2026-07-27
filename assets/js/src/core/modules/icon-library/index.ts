@@ -65,6 +65,7 @@ import cdp from '@Pimcore/assets/icons/cdp.inline.svg?react'
 import channels from '@Pimcore/assets/icons/channels.inline.svg?react'
 import chartScatter from '@Pimcore/assets/icons/chart-scatter.inline.svg?react'
 import checkCircle from '@Pimcore/assets/icons/check-circle.inline.svg?react'
+import check from '@Pimcore/assets/icons/check.inline.svg?react'
 import checkbox from '@Pimcore/assets/icons/checkbox.inline.svg?react'
 import checkmark from '@Pimcore/assets/icons/checkmark.inline.svg?react'
 import chevronDown from '@Pimcore/assets/icons/chevron-down.inline.svg?react'
@@ -77,6 +78,7 @@ import classIcon from '@Pimcore/assets/icons/class.inline.svg?react'
 import classificationStore from '@Pimcore/assets/icons/classification-store.inline.svg?react'
 import clearErase from '@Pimcore/assets/icons/clear-erase.inline.svg?react'
 import closeFilled from '@Pimcore/assets/icons/close-filled.inline.svg?react'
+import closeOutline from '@Pimcore/assets/icons/close-outline.inline.svg?react'
 import close from '@Pimcore/assets/icons/close.inline.svg?react'
 import cms from '@Pimcore/assets/icons/cms.inline.svg?react'
 import code from '@Pimcore/assets/icons/code.inline.svg?react'
@@ -198,6 +200,7 @@ import importCsv from '@Pimcore/assets/icons/import-csv.inline.svg?react'
 import importIcon from '@Pimcore/assets/icons/import.inline.svg?react'
 import indexField from '@Pimcore/assets/icons/index-field.inline.svg?react'
 import infoCircle from '@Pimcore/assets/icons/info-circle.inline.svg?react'
+import infoOutline from '@Pimcore/assets/icons/info-outline.inline.svg?react'
 import info from '@Pimcore/assets/icons/info.inline.svg?react'
 import inheritanceActive from '@Pimcore/assets/icons/inheritance-active.inline.svg?react'
 import inheritanceBroken from '@Pimcore/assets/icons/inheritance-broken.inline.svg?react'
@@ -306,6 +309,7 @@ import properties from '@Pimcore/assets/icons/properties.inline.svg?react'
 import published from '@Pimcore/assets/icons/published.inline.svg?react'
 import quantityValueRange from '@Pimcore/assets/icons/quantity-value-range.inline.svg?react'
 import quantityValue from '@Pimcore/assets/icons/quantity-value.inline.svg?react'
+import questionMarkOutline from '@Pimcore/assets/icons/question-mark-outline.inline.svg?react'
 import questionmark from '@Pimcore/assets/icons/questionmark.inline.svg?react'
 import quickAccess from '@Pimcore/assets/icons/quick-access.inline.svg?react'
 import redirect from '@Pimcore/assets/icons/redirect.inline.svg?react'
@@ -605,6 +609,10 @@ moduleSystem.registerModule({
       component: checkCircle
     })
     iconLibrary.register({
+      name: 'check',
+      component: check
+    })
+    iconLibrary.register({
       name: 'checkbox',
       component: checkbox
     })
@@ -651,6 +659,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'close-filled',
       component: closeFilled
+    })
+    iconLibrary.register({
+      name: 'close-outline',
+      component: closeOutline
     })
     iconLibrary.register({
       name: 'close',
@@ -1137,6 +1149,10 @@ moduleSystem.registerModule({
       component: infoCircle
     })
     iconLibrary.register({
+      name: 'info-outline',
+      component: infoOutline
+    })
+    iconLibrary.register({
       name: 'info',
       component: info
     })
@@ -1567,6 +1583,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'quantity-value',
       component: quantityValue
+    })
+    iconLibrary.register({
+      name: 'question-mark-outline',
+      component: questionMarkOutline
     })
     iconLibrary.register({
       name: 'questionmark',

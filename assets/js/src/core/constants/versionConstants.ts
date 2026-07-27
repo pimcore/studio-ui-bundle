@@ -10,5 +10,6 @@
 
 export enum VersionCategoryName {
   SYSTEM_DATA = 'systemData',
-  META = 'meta'
+  META = 'meta',
+  PROPERTIES = 'properties'
 }
