@@ -18,9 +18,10 @@ interface DividerProps {
   onKeyboardResize?: (event: React.KeyboardEvent<HTMLDivElement>) => void
   withToolbar?: boolean
   className?: string
+  ariaLabel?: string
 }
 
-export const Divider = ({ onMouseResize, onKeyboardResize, withToolbar = false, className }: DividerProps): React.JSX.Element => {
+export const Divider = ({ onMouseResize, onKeyboardResize, withToolbar = false, className, ariaLabel }: DividerProps): React.JSX.Element => {
   const dividerRef = useRef<HTMLDivElement>(null)
   const enableResize = useRef(false)
 
@@ -85,6 +86,7 @@ export const Divider = ({ onMouseResize, onKeyboardResize, withToolbar = false, 
       ref={ dividerRef }
     >
       <div
+        aria-label={ ariaLabel }
         className={ styles.divider }
         onBlur={ handleBlur }
         onFocus={ handleFocus }

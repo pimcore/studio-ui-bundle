@@ -314,6 +314,7 @@ preview-card.rename: Byt namn
 preview-card.download-zip: Ladda ner som ZIP
 preview-card.delete: Ta bort
 grid.aria.column-resize: Ändra kolumnstorlek
+sidebar.aria.resize: Ändra storlek på sidopanelen
 tree.aria.expand-and-collapse: Expandera eller fäll ihop trädelement
 image-sidebar.tab.details.custom-download: Anpassad nedladdning
 aria.asset.image-sidebar.tab.details.custom-thumbnail-mode: Val av anpassat miniatyrbildsläge

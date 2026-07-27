@@ -314,6 +314,7 @@ preview-card.rename: Rinomina
 preview-card.download-zip: Scarica come ZIP
 preview-card.delete: Elimina
 grid.aria.column-resize: Ridimensiona colonna
+sidebar.aria.resize: Ridimensiona barra laterale
 tree.aria.expand-and-collapse: Espandi o comprimi elemento dell'albero
 image-sidebar.tab.details.custom-download: Download personalizzato
 aria.asset.image-sidebar.tab.details.custom-thumbnail-mode: Selezione modalità anteprima personalizzata

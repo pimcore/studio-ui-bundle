@@ -93,6 +93,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
             onMouseDown={ startResizing }
           >
             <Divider
+              ariaLabel={ t('sidebar.aria.resize') }
               className={ 'sidebar__resizer-divider' }
               onKeyboardResize={ onKeyboardResize }
               onMouseResize={ onMouseResize }
