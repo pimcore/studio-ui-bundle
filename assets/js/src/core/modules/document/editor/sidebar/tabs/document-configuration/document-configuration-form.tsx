@@ -24,6 +24,7 @@ import { FormattedDateTime } from '@Pimcore/components/formatted-date-time/forma
 import { useDebouncedFormChange } from '@Pimcore/components/form/hooks/use-debounced-form-change'
 import { createDocumentDebounceTag } from '@Pimcore/modules/document/utils/document-debounce-tag'
 import { setDocumentNodeStaticGeneratorEnabled } from '@Pimcore/components/element-tree/element-tree-slice'
+import { useStyles } from './document-configuration-form.styles'
 
 interface DocumentConfigurationFormValues {
   predefinedDocumentType: string
@@ -59,6 +60,7 @@ export const DocumentConfigurationForm = ({
   hasSavePermission = true
 }: DocumentConfigurationFormProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyles()
   const { updateSettingsData, document } = useDocumentDraft(documentId)
   const { debouncedAutoSave } = useSave()
   const dispatch = useAppDispatch()
@@ -182,10 +184,10 @@ export const DocumentConfigurationForm = ({
       >
         <Select
           allowClear
+          className={ styles.fullWidthSelect }
           disabled={ !canEdit }
           loadingSkeleton={ isLoadingControllers }
           options={ controllerOptions }
-          popupMatchSelectWidth={ false }
           showSearch
         />
       </Form.Item>
@@ -196,10 +198,10 @@ export const DocumentConfigurationForm = ({
       >
         <Select
           allowClear
+          className={ styles.fullWidthSelect }
           disabled={ !canEdit }
           loadingSkeleton={ isLoadingTemplates }
           options={ templateOptions }
-          popupMatchSelectWidth={ false }
           showSearch
         />
       </Form.Item>
