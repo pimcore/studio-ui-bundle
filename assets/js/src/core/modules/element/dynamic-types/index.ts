@@ -310,6 +310,7 @@ moduleSystem.registerModule({
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellClassificationStore>(serviceIds['DynamicTypes/GridCell/ClassificationStore']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectAdvanced>(serviceIds['DynamicTypes/GridCell/DataObjectAdvanced']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectObjectBrick>(serviceIds['DynamicTypes/GridCell/DataObjectObjectBrick']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellSystemUser>(serviceIds['DynamicTypes/GridCell/SystemUser']))
 
     const advancedGridCellRegistry = container.get<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/AdvancedGridCellRegistry'])
 

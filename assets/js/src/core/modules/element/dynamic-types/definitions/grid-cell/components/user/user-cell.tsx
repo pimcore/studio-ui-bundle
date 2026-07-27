@@ -12,13 +12,13 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { isNil } from 'lodash'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
+import { useUserCollection } from '@Pimcore/modules/user/user-collection/user-collection-provider'
 
 export interface UserCellProps extends DefaultCellProps {}
 
 export const UserCell = (props: UserCellProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { data: userList } = useUserGetCollectionQuery()
+  const { isFetched, getUsernameById } = useUserCollection()
 
   const getLabel = (): string => {
     const userId = props.getValue() as number | null | undefined
@@ -31,9 +31,12 @@ export const UserCell = (props: UserCellProps): React.JSX.Element => {
       return t('system-information.system')
     }
 
-    const user = userList?.items.find((item) => item.id === userId)
+    // While the collection is still loading, stay blank rather than claiming the user is unknown.
+    if (!isFetched) {
+      return ''
+    }
 
-    return user?.username ?? t('system-information.user-unknown')
+    return getUsernameById(userId) ?? t('system-information.user-unknown')
   }
 
   return (

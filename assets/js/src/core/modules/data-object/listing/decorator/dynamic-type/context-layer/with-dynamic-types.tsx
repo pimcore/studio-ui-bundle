@@ -9,6 +9,7 @@
  */
 
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
+import { UserCollectionProvider } from '@Pimcore/modules/user/user-collection/user-collection-provider'
 import { DynamicTypeRegistryProvider } from '@sdk/modules/element'
 import React from 'react'
 
@@ -24,7 +25,9 @@ export const withDynamicTypes = (Component: AbstractDecoratorProps['ContextCompo
           'DynamicTypes/FieldFilterRegistry'
         ] }
       >
-        <Component />
+        <UserCollectionProvider>
+          <Component />
+        </UserCollectionProvider>
       </DynamicTypeRegistryProvider>
     )
   }
