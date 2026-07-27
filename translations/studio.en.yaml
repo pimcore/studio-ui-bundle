@@ -314,6 +314,7 @@ preview-card.rename: Rename
 preview-card.download-zip: Download as ZIP
 preview-card.delete: Delete
 grid.aria.column-resize: Resize column
+sidebar.aria.resize: Resize sidebar
 tree.aria.expand-and-collapse: Expand tree item or collapse it
 image-sidebar.tab.details.custom-download: Custom Download
 aria.asset.image-sidebar.tab.details.custom-thumbnail-mode: Custom thumbnail mode select
@@ -467,6 +468,8 @@ version.no-difference: There is no difference between the selected versions.
 version.category.title.systemData: System Data
 version.category.title.baseData: Base Data
 version.category.title.meta: Meta Data
+version.category.title.properties: Properties
+version.changed-attributes: "Changed attributes: {{attributes}}"
 aria.version.delete: Delete version
 aria.version.expand: Expand version
 clear-all: Clear all
@@ -1246,6 +1249,7 @@ unknown: Unknown
 warning: Warning
 error: Error
 info: Info
+success: Success
 no-value-set: No value set
 set-to-null: Empty (set to null)
 remove: Remove
@@ -1284,6 +1288,8 @@ image-gallery.clear-image-selection: Clear Image Selection
 image-gallery.delete-frame: Delete Frame
 text: Text
 video: Video
+object: Object
+variant: Variant
 processing: Processing
 upload: Upload
 close: Close
@@ -1372,6 +1378,7 @@ key-bindings.searchAsset: Search Asset
 key-bindings.searchObject: Search Object
 key-bindings.searchAndReplaceAssignments: Search and Replace Assignments
 key-bindings.quickSearch: Quick Search
+search-modal.title: Quick Search
 key-bindings.system: System
 key-bindings.showMetaInfo: Show Meta Info
 key-bindings.showElementHistory: Show Element History
@@ -2214,6 +2221,7 @@ application-logger.filter.priority-level.8: Debug
 embed.url-modal.title: Edit Embed URL
 embed.url-modal.label: URL (eg. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Please enter a valid URL
+alert-modal.ok-text: OK
 embed.url-modal.ok-text: Save
 embed.url-modal.cancel-text: Cancel
 embed.url-modal.warning: "Invalid URLs won't display a preview, please review and update your URL."
@@ -2816,7 +2824,7 @@ saved-search.delete-search: Delete search
 saved-search.save-as-new: Save as new search
 saved-search.create-menu-shortcut: Create shortcut in menu
 saved-search.save.success: Saved search created
-saved-search.saved-searches: Saved searches
+saved-search.saved-searches: Saved Searches
 saved-search.ownership: Ownership
 saved-search.ownership.own: Own
 saved-search.ownership.shared: Shared with me

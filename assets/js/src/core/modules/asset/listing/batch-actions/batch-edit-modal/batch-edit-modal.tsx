@@ -19,6 +19,7 @@ import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { useBatchEdit } from './hooks/use-batch-edit'
 import { BatchEditListContainer } from './batch-edit-list-container'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { Form } from '@Pimcore/components/form/form'
 import { type AvailableColumn, buildColumnPickerGroups } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useTranslation } from 'react-i18next'
@@ -58,6 +59,8 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const { getArgs } = useDataQueryHelper()
   const { hasType } = useDynamicTypeResolver()
   const { refreshGrid } = useRefreshGrid(elementType)
+  const user = useUser()
+  const contentLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
   const [fieldsToAddOpen, setFieldsToAddOpen] = useState<boolean>(true)
 
   const resetModal = (): void => {
@@ -84,11 +87,10 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
     if (isFolderPatchError) {
       trackError(new ApiError(folderPatchError))
     }
-  }, [isError, isFolderPatchSuccess])
+  }, [isError, error, isFolderPatchError, folderPatchError])
 
   const onColumnClick = (column: AvailableColumn): void => {
-    const locale = column.locale ?? null
-    addOrUpdateBatchEdit({ ...column, locale })
+    addOrUpdateBatchEdit(column)
   }
 
   const handleApplyChanges = (): void => {
@@ -99,10 +101,12 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
   const onFormFinish = async (values: any): Promise<void> => {
     const patches = batchEdits.map((batchEdit) => {
+      const data = values[batchEdit.rowId]?.[batchEdit.key]
+
       return {
         name: batchEdit.key,
         language: batchEdit.locale ?? null,
-        data: values[batchEdit.key],
+        data,
         type: batchEdit.type
       }
     })
@@ -146,11 +150,11 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
   const columnGroups = useMemo(() => {
     const includableColumns = availableColumns.filter((column) =>
-      shouldIncludeColumnItem({ ...column, mainType: column.type }, batchEdits, hasType)
+      shouldIncludeColumnItem({ ...column, mainType: column.type }, batchEdits, hasType, contentLanguages)
     )
 
     return buildColumnPickerGroups(includableColumns, t)
-  }, [availableColumns, batchEdits, hasType])
+  }, [availableColumns, batchEdits, hasType, contentLanguages])
 
   return (
     <WindowModal

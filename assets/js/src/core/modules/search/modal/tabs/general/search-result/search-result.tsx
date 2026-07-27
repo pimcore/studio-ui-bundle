@@ -70,11 +70,10 @@ export const SearchResult = (): React.JSX.Element => {
     }
 
     return (
-      <>
-        <div />
-
-        <SplitLayout
-          leftItem={
+      <div style={ { display: 'flex', flexDirection: 'column', height: '100%' } }>
+        <div style={ { flex: 1, overflow: 'hidden', minHeight: 0 } }>
+          <SplitLayout
+            leftItem={
             {
               size: 750,
               children: (
@@ -82,7 +81,7 @@ export const SearchResult = (): React.JSX.Element => {
                   overflow={ { x: 'hidden', y: 'auto' } }
                   padded
                   padding={ { left: 'none', right: 'none', y: 'none' } }
-                  style={ { height: 400 } }
+                  style={ { height: '100%' } }
                 >
                   <Flex
                     className='w-full h-full'
@@ -116,7 +115,7 @@ export const SearchResult = (): React.JSX.Element => {
             }
           }
 
-          rightItem={
+            rightItem={
             {
               size: 250,
               minSize: 250,
@@ -127,10 +126,14 @@ export const SearchResult = (): React.JSX.Element => {
             }
           }
 
-          withDivider
-        />
+            withDivider
+          />
+        </div>
 
-        <Toolbar theme='secondary'>
+        <Toolbar
+          padding={ { left: 'none', right: 'none' } }
+          theme='secondary'
+        >
           <Pagination
             onChange={ onChange }
             pageSizeOptions={ [10, 20, 50, 100] }
@@ -139,7 +142,7 @@ export const SearchResult = (): React.JSX.Element => {
             total={ data?.totalItems ?? 0 }
           />
         </Toolbar>
-      </>
+      </div>
     )
   }, [data, selectedItem, isLoading])
 }

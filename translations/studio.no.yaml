@@ -314,6 +314,7 @@ preview-card.rename: Gi nytt navn
 preview-card.download-zip: Last ned som ZIP
 preview-card.delete: Slett
 grid.aria.column-resize: Endre kolonnestørrelse
+sidebar.aria.resize: Endre størrelse på sidepanelet
 tree.aria.expand-and-collapse: Utvid eller skjul treelement
 image-sidebar.tab.details.custom-download: Egendefinert nedlasting
 aria.asset.image-sidebar.tab.details.custom-thumbnail-mode: Velg tilpasset miniatyrbildemodus
@@ -466,6 +467,8 @@ version.no-difference: Det er ingen forskjell mellom de valgte versjonene.
 version.category.title.systemData: Systemdata
 version.category.title.baseData: Grunndata
 version.category.title.meta: Metadata
+version.category.title.properties: Egenskaper
+version.changed-attributes: "Endrede attributter: {{attributes}}"
 aria.version.delete: Slett versjon
 aria.version.expand: Utvid versjon
 clear-all: Fjern alle
@@ -1236,6 +1239,7 @@ unknown: Ukjent
 warning: Advarsel
 error: Feil
 info: Info
+success: Suksess
 no-value-set: Ingen verdi satt
 set-to-null: Tom (sett til null)
 remove: Fjern
@@ -1274,6 +1278,8 @@ image-gallery.clear-image-selection: Fjern bildevalg
 image-gallery.delete-frame: Slett ramme
 text: Tekst
 video: Video
+object: Objekt
+variant: Variant
 processing: Behandler
 upload: Last opp
 close: Lukk
@@ -2204,6 +2210,7 @@ application-logger.filter.priority-level.8: Feilsøking
 embed.url-modal.title: Rediger Embed-URL
 embed.url-modal.label: URL (f.eks. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Vennligst oppgi en gyldig URL
+alert-modal.ok-text: OK
 embed.url-modal.ok-text: Lagre
 embed.url-modal.cancel-text: Avbryt
 embed.url-modal.warning: "Ugyldige URL-er vil ikke vise en forhåndsvisning, vennligst gjennomgå og oppdater URL-en din."

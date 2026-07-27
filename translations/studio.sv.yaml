@@ -314,6 +314,7 @@ preview-card.rename: Byt namn
 preview-card.download-zip: Ladda ner som ZIP
 preview-card.delete: Ta bort
 grid.aria.column-resize: Ändra kolumnstorlek
+sidebar.aria.resize: Ändra storlek på sidopanelen
 tree.aria.expand-and-collapse: Expandera eller fäll ihop trädelement
 image-sidebar.tab.details.custom-download: Anpassad nedladdning
 aria.asset.image-sidebar.tab.details.custom-thumbnail-mode: Val av anpassat miniatyrbildsläge
@@ -466,6 +467,8 @@ version.no-difference: Det finns ingen skillnad mellan de valda versionerna.
 version.category.title.systemData: Systemdata
 version.category.title.baseData: Basdata
 version.category.title.meta: Metadata
+version.category.title.properties: Egenskaper
+version.changed-attributes: "Ändrade attribut: {{attributes}}"
 aria.version.delete: Ta bort version
 aria.version.expand: Expandera version
 clear-all: Rensa allt
@@ -1236,6 +1239,7 @@ unknown: Okänt
 warning: Varning
 error: Fel
 info: Info
+success: Framgång
 no-value-set: Inget värde angivet
 set-to-null: Tom (sätt till null)
 remove: Ta bort
@@ -1274,6 +1278,8 @@ image-gallery.clear-image-selection: Rensa bildval
 image-gallery.delete-frame: Ta bort ram
 text: Text
 video: Video
+object: Objekt
+variant: Variant
 processing: Bearbetar
 upload: Ladda upp
 close: Stäng
@@ -2204,6 +2210,7 @@ application-logger.filter.priority-level.8: Debug
 embed.url-modal.title: Redigera inbäddnings-URL
 embed.url-modal.label: URL (t.ex. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Ange en giltig URL
+alert-modal.ok-text: OK
 embed.url-modal.ok-text: Spara
 embed.url-modal.cancel-text: Avbryt
 embed.url-modal.warning: "Ogiltiga URL:er visar ingen förhandsgranskning, vänligen granska och uppdatera din URL."

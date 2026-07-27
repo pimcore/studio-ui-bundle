@@ -10,8 +10,9 @@
 
 import { type ElementIcon, Icon } from '@Pimcore/components/icon/icon'
 import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
+import cn from 'classnames'
 import { Popconfirm } from 'antd'
-import { Button } from '@Pimcore/components/button/button'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import React, { memo, useCallback, useState, type MouseEvent } from 'react'
 import { useStyles } from './tab-title-view.styles'
 import { useTranslation } from 'react-i18next'
@@ -26,9 +27,11 @@ interface TabTitleViewProps {
   onConfirm?: () => void
   dataTestId?: string
   iconColorGroup?: IconColorGroup
+  active?: boolean
+  detached?: boolean
 }
 
-const TabTitleViewInner = ({ icon, title, onClose, onConfirm, dataTestId, iconColorGroup }: TabTitleViewProps): React.JSX.Element => {
+const TabTitleViewInner = ({ icon, title, onClose, onConfirm, dataTestId, iconColorGroup, active = false, detached = false }: TabTitleViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
   const { user } = useUserDraft()
@@ -63,7 +66,10 @@ const TabTitleViewInner = ({ icon, title, onClose, onConfirm, dataTestId, iconCo
 
   return (
     <Space
-      className={ ['widget-manager-tab-title', styles.title].join(' ') }
+      className={ cn('widget-manager-tab-title', {
+        'widget-manager-tab-title--active-main': active,
+        'widget-manager-tab-title--detached': detached
+      }, styles.title) }
       data-testid={ dataTestId }
       onMouseDown={ handleSpaceMouseDown }
       size='mini'
@@ -97,17 +103,14 @@ const TabTitleViewInner = ({ icon, title, onClose, onConfirm, dataTestId, iconCo
 
   function renderCloseButton (): React.JSX.Element {
     return (
-      <Button
+      <IconButton
+        aria-label={ t('close') }
         className='widget-manager__tab-title-close-button'
+        icon={ { value: 'close', options: { width: 12, height: 12 } } }
         onClick={ triggerClose }
         onMouseDown={ (event: MouseEvent) => { event.stopPropagation() } }
-        type={ 'link' }
-      >
-        <Icon
-          options={ { width: 14, height: 14 } }
-          value='close'
-        />
-      </Button>
+        variant='minimal'
+      />
     )
   }
 }

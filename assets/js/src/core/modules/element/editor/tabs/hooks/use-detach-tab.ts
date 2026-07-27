@@ -38,6 +38,7 @@ export const useDetachTab = (): IUseDetachTabReturn => {
       component: 'detachable-tab',
       config: {
         ...config,
+        detached: true,
         icon: tab.icon.props,
         tabKey
       }

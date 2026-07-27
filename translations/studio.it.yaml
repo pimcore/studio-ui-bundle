@@ -314,6 +314,7 @@ preview-card.rename: Rinomina
 preview-card.download-zip: Scarica come ZIP
 preview-card.delete: Elimina
 grid.aria.column-resize: Ridimensiona colonna
+sidebar.aria.resize: Ridimensiona barra laterale
 tree.aria.expand-and-collapse: Espandi o comprimi elemento dell'albero
 image-sidebar.tab.details.custom-download: Download personalizzato
 aria.asset.image-sidebar.tab.details.custom-thumbnail-mode: Selezione modalità anteprima personalizzata
@@ -466,6 +467,8 @@ version.no-difference: Non ci sono differenze tra le versioni selezionate.
 version.category.title.systemData: Dati di sistema
 version.category.title.baseData: Dati di base
 version.category.title.meta: Metadati
+version.category.title.properties: Proprietà
+version.changed-attributes: "Attributi modificati: {{attributes}}"
 aria.version.delete: Elimina versione
 aria.version.expand: Espandi versione
 clear-all: Cancella tutto
@@ -1236,6 +1239,7 @@ unknown: Sconosciuto
 warning: Avviso
 error: Errore
 info: Info
+success: Successo
 no-value-set: Nessun valore impostato
 set-to-null: Vuoto (imposta a null)
 remove: Rimuovi
@@ -1274,6 +1278,8 @@ image-gallery.clear-image-selection: Cancella selezione immagine
 image-gallery.delete-frame: Elimina cornice
 text: Testo
 video: Video
+object: Oggetto
+variant: Variante
 processing: Elaborazione
 upload: Carica
 close: Chiudi
@@ -2204,6 +2210,7 @@ application-logger.filter.priority-level.8: Debug
 embed.url-modal.title: Modifica URL embed
 embed.url-modal.label: URL (es. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Inserire un URL valido
+alert-modal.ok-text: OK
 embed.url-modal.ok-text: Salva
 embed.url-modal.cancel-text: Annulla
 embed.url-modal.warning: "Gli URL non validi non mostreranno un'anteprima, si prega di rivedere e aggiornare il proprio URL."

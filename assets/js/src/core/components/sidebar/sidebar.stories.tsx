@@ -49,6 +49,9 @@ It can be used in two ways:
 - Highlight states for tabs
 - Custom buttons at the bottom
 - Two sizes: default (250px) and large (432px)
+- Manually resizable width: a resize handle appears when hovering the left edge of the
+  expanded sidebar — drag it (or focus it and use the arrow keys); the width of the
+  current size acts as the minimum
 - Provider pattern for dynamic state management
         `
       }
@@ -327,6 +330,41 @@ export const MultipleEntries = {
     docs: {
       description: {
         story: 'Sidebar with multiple tabs showing different content types.'
+      }
+    }
+  }
+}
+
+export const ResizableWidth = {
+  args: {
+    entries: [
+      {
+        key: 'document-configuration',
+        icon: (
+          <Icon
+            options={ { width: '16px', height: '16px' } }
+            value="settings"
+          />
+        ),
+        component: (
+          <div style={ { padding: '16px', minWidth: 0 } }>
+            <h4>Document Configuration</h4>
+            <p>Description</p>
+          </div>
+        ),
+        tooltip: 'Document Configuration'
+      }
+    ]
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: `
+Open the tab, then hover the left edge of the sidebar: a resize handle appears. Drag it
+to widen the panel — useful for long values such as controller names. The handle also
+supports the keyboard: focus it and press ArrowLeft/ArrowRight. The width of the
+configured sizing is the minimum.
+        `
       }
     }
   }

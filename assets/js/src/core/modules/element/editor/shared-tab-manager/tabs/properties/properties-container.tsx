@@ -30,6 +30,7 @@ import { Select } from '@Pimcore/components/select/select'
 import { uuid } from '@Pimcore/utils/uuid'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { isDisallowedPropertyKey } from './constants/disallowed-keys'
+import { PropertyType } from './constants/property-types'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -144,11 +145,11 @@ export const PropertiesContainer = (): React.JSX.Element => {
                 className='min-w-100'
                 onSelect={ onTypeSelect }
                 options={ [
-                  { value: 'text', label: t('data-type.text') },
-                  { value: 'document', label: t('data-type.document') },
-                  { value: 'asset', label: t('data-type.asset') },
-                  { value: 'object', label: t('data-type.object') },
-                  { value: 'bool', label: t('data-type.checkbox') }
+                  { value: PropertyType.TEXT, label: t('data-type.text') },
+                  { value: PropertyType.DOCUMENT, label: t('data-type.document') },
+                  { value: PropertyType.ASSET, label: t('data-type.asset') },
+                  { value: PropertyType.OBJECT, label: t('data-type.object') },
+                  { value: PropertyType.BOOL, label: t('data-type.checkbox') }
                 ] }
                 placeholder={ t('properties.add-custom-property.type') }
               />
