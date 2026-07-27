@@ -522,6 +522,8 @@ key: Nyckel
 published: Publicerad
 classname: Klassnamn
 index: Index
+userModification: Ändrad av
+userOwner: Ägare
 listing.grid-config.title: Rutnätskonfiguration
 grid-config.discard-all-changes: Förkasta alla ändringar
 grid-config.apply-changes: Tillämpa ändringar

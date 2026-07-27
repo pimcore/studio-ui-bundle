@@ -522,6 +522,8 @@ key: Clé
 published: Publié
 classname: Nom de classe
 index: Index
+userModification: Utilisateur de modification
+userOwner: Propriétaire
 listing.grid-config.title: Configuration de la grille
 grid-config.discard-all-changes: Annuler toutes les modifications
 grid-config.apply-changes: Appliquer les modifications

@@ -525,6 +525,8 @@ key: Key
 published: Published
 classname: Classname
 index: Index
+userModification: User modification
+userOwner: User owner
 listing.grid-config.title: Grid Config
 grid-config.discard-all-changes: Discard all changes
 grid-config.apply-changes: Apply changes
