@@ -8,17 +8,24 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isNil } from 'lodash'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import { useUserCollection } from '@Pimcore/modules/user/user-collection/user-collection-provider'
+import { useUserGetCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 export interface UserCellProps extends DefaultCellProps {}
 
 export const UserCell = (props: UserCellProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { isFetched, getUsernameById } = useUserCollection()
+  const { data, isError, error, isSuccess } = useUserGetCollectionQuery()
+
+  useEffect(() => {
+    if (isError) {
+      trackError(new ApiError(error))
+    }
+  }, [isError, error])
 
   const getLabel = (): string => {
     const userId = props.getValue() as number | null | undefined
@@ -31,12 +38,14 @@ export const UserCell = (props: UserCellProps): React.JSX.Element => {
       return t('system-information.system')
     }
 
-    // While the collection is still loading, stay blank rather than claiming the user is unknown.
-    if (!isFetched) {
+    // Until the collection has loaded, stay blank rather than claiming the user is unknown.
+    if (!isSuccess) {
       return ''
     }
 
-    return getUsernameById(userId) ?? t('system-information.user-unknown')
+    const user = data.items.find((item) => item.id === userId)
+
+    return user?.username ?? t('system-information.user-unknown')
   }
 
   return (
