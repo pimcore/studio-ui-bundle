@@ -35,7 +35,7 @@ export const useStyle = createStyles(({ token, css }) => {
 
         .ant-modal-body {
           .ant-btn {
-            color: ${token['purple-4']};
+            color: ${token.purple4} !important;
           }
 
           .video-container {

@@ -11,6 +11,7 @@
 import React, { useState } from 'react'
 import type { Meta } from '@storybook/react'
 import { Button } from '@Pimcore/components/button/button'
+import { Icon } from '@Pimcore/components/icon/icon'
 import { useFormModal } from './hooks/use-form-modal'
 
 const FormModalComponent = (args: any): React.JSX.Element => {
@@ -26,6 +27,8 @@ const FormModalComponent = (args: any): React.JSX.Element => {
           label: args.label,
           rule: args.rule,
           initialValue: args.initialValue,
+          okText: args.okText,
+          warningMessage: args.warningMessage,
           onOk: (value: string) => {
             setValue(value ?? 'n/a')
           }
@@ -35,6 +38,14 @@ const FormModalComponent = (args: any): React.JSX.Element => {
         modal.confirm({
           title: args.title,
           content: args.content,
+          icon: (
+            <Icon
+              options={ { width: 22, height: 22 } }
+              value='alert'
+            />
+          ),
+          okText: args.okText,
+          cancelText: args.cancelText,
           onOk: () => {
             setConfirmed(true)
           },
@@ -62,13 +73,17 @@ const FormModalComponent = (args: any): React.JSX.Element => {
 }
 
 const config: Meta = {
-  title: 'Components/Data Entry/Input Modal',
+  title: 'Components/Feedback/InputModal',
   component: FormModalComponent,
   argTypes: {
     type: {
       table: {
         disable: true
       }
+    },
+    warningMessage: {
+      control: 'text',
+      description: 'Optional warning shown above the input field inside the modal'
     }
   },
   parameters: {
@@ -87,7 +102,8 @@ export const Input = {
       message: 'Please enter a value'
     },
     title: 'Rename',
-    label: 'Please enter the new name'
+    label: 'Please enter the new name',
+    okText: 'Confirm'
   }
 }
 
@@ -96,15 +112,26 @@ export const InputWithInitialValue = {
     type: 'input',
     title: 'Rename',
     label: 'Please enter the new name',
-    initialValue: 'initial value'
+    initialValue: 'initial value',
+    okText: 'Confirm'
+  }
+}
+
+export const InputWithWarning = {
+  args: {
+    type: 'input',
+    title: 'Edit URL',
+    label: 'URL',
+    warningMessage: "Invalid URLs won't display a preview, please review and update your URL."
   }
 }
 
 export const Confirmation = {
   args: {
     type: 'confirmation',
-    icon: 'warning-circle',
     title: 'Confirmation',
-    content: 'Are you sure that you are sure?'
+    content: 'Are you sure that you are sure?',
+    okText: 'Confirm',
+    cancelText: 'Discard'
   }
 }

@@ -314,6 +314,7 @@ preview-card.rename: Renommer
 preview-card.download-zip: Télécharger en ZIP
 preview-card.delete: Supprimer
 grid.aria.column-resize: Redimensionner la colonne
+sidebar.aria.resize: Redimensionner la barre latérale
 tree.aria.expand-and-collapse: Développer ou réduire l'élément de l'arborescence
 image-sidebar.tab.details.custom-download: Téléchargement personnalisé
 aria.asset.image-sidebar.tab.details.custom-thumbnail-mode: Sélection du mode de miniature personnalisé
@@ -466,6 +467,8 @@ version.no-difference: Il n'y a aucune différence entre les versions sélection
 version.category.title.systemData: Données système
 version.category.title.baseData: Données de base
 version.category.title.meta: Métadonnées
+version.category.title.properties: Propriétés
+version.changed-attributes: "Attributs modifiés : {{attributes}}"
 aria.version.delete: Supprimer la version
 aria.version.expand: Développer la version
 clear-all: Tout effacer
@@ -519,6 +522,8 @@ key: Clé
 published: Publié
 classname: Nom de classe
 index: Index
+userModification: Utilisateur de modification
+userOwner: Propriétaire
 listing.grid-config.title: Configuration de la grille
 grid-config.discard-all-changes: Annuler toutes les modifications
 grid-config.apply-changes: Appliquer les modifications
@@ -1196,7 +1201,8 @@ element.delete.batch.title: Supprimer des éléments
 element.delete.batch.note: 'Remarque : Ces éléments seront supprimés définitivement et ne pourront pas être restaurés.'
 element.delete.batch.question_one: 'Voulez-vous vraiment supprimer cet élément ?'
 element.delete.batch.question_other: 'Voulez-vous vraiment supprimer ces {{count}} éléments ?'
-element.delete.batch.ok: Supprimer définitivement
+element.delete.batch.ok: Supprimer
+element.delete.batch.ok.permanent: Supprimer définitivement
 element.delete.batch.show-paths: Afficher les éléments
 element.delete.batch.dependencies-warning: 'Il peut exister des dépendances, supprimer quand même ?'
 element.open: Ouvrir
@@ -1235,6 +1241,7 @@ unknown: Inconnu
 warning: Avertissement
 error: Erreur
 info: Info
+success: Succès
 no-value-set: Aucune valeur définie
 set-to-null: Vide (défini à null)
 remove: Supprimer
@@ -1273,6 +1280,8 @@ image-gallery.clear-image-selection: Effacer la sélection d'image
 image-gallery.delete-frame: Supprimer le cadre
 text: Texte
 video: Vidéo
+object: Objet
+variant: Variante
 processing: Traitement
 upload: Téléverser
 close: Fermer
@@ -1624,6 +1633,7 @@ predefined-asset-metadata.columns.actions: Actions
 predefined-asset-metadata.duplicate-entry.title: La métadonnée prédéfinie existe déjà
 predefined-asset-metadata.duplicate-entry.error: Une entrée avec cette combinaison de nom et de langue existe déjà. Veuillez modifier l'une des valeurs suivantes.
 appearance-branding.title: Apparence et identité visuelle
+user-management.appearance-branding: Apparence et identité visuelle
 image-thumbnails.title: "Miniatures d'images"
 image-thumbnails.description: "Gérer et configurer les paramètres de miniatures d'images pour vos assets."
 image-thumbnails.search.placeholder: Rechercher des miniatures...
@@ -2202,9 +2212,11 @@ application-logger.filter.priority-level.8: Débogage
 embed.url-modal.title: Modifier l'URL d'intégration
 embed.url-modal.label: URL (ex. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Veuillez entrer une URL valide
-embed.url-modal.ok-text: OK
+alert-modal.ok-text: OK
+embed.url-modal.ok-text: Enregistrer
 embed.url-modal.cancel-text: Annuler
-embed.placeholder: Aucune URL définie - Cliquez pour ajouter une URL d'intégration
+embed.url-modal.warning: "Les URL invalides n'afficheront pas d'aperçu, veuillez vérifier et mettre à jour votre URL."
+embed.placeholder: Cliquez pour ajouter une URL d'intégration
 embed.add-url: Ajouter une URL
 embed.edit-url: Modifier l'URL
 embed.clear: Effacer
@@ -2240,9 +2252,13 @@ recycle-bin.actions.restore: Restaurer
 recycle-bin.actions.restore.title: Restauration des éléments de la corbeille
 component.search.pleaceholder: Rechercher
 focal-point.set: Définir le point focal
-video.placeholder: Aucune vidéo sélectionnée - Cliquez pour ajouter une vidéo
+video.placeholder: Cliquez pour ajouter une vidéo
 video.add-video: Ajouter une vidéo
 video.preview-in-progress: L'aperçu vidéo est en cours de génération…
+date.placeholder: Sélectionner une date
+numeric.placeholder: Entrer un nombre
+select.placeholder: Sélectionner une option
+multiselect.placeholder: Sélectionner des options
 image.alt-text-placeholder: Entrez le texte alternatif
 area-settings: Paramètres de zone
 unsupported_feature: Fonctionnalité non prise en charge - veuillez vérifier la configuration requise !

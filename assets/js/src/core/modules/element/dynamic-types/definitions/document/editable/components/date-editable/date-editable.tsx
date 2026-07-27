@@ -12,6 +12,7 @@ import React from 'react'
 import { DatePicker } from '@sdk/components'
 import { EditableOverlay } from '../editable-overlay/editable-overlay'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
+import { useTranslation } from 'react-i18next'
 
 export interface DateEditableValue {
   value?: string | null
@@ -34,6 +35,7 @@ export const DateEditable = ({
   onChange,
   inherited
 }: DateEditableProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const fieldWidths = useFieldWidth()
 
   const handleOverwrite = (): void => {
@@ -63,6 +65,7 @@ export const DateEditable = ({
         disabled={ inherited }
         onChange={ handleChange }
         outputType="dateString"
+        placeholder={ t('date.placeholder') }
         style={ containerStyle }
         value={ value }
       />

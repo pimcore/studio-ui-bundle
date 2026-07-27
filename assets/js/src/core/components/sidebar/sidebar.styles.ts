@@ -10,15 +10,24 @@
 
 import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
+export const SIDEBAR_NAV_WIDTH = 45
+export const SIDEBAR_CONTENT_WIDTHS = {
+  default: 250,
+  medium: 272,
+  large: 432
+} as const
+export const MIN_REMAINING_LAYOUT_WIDTH = 200
+
 export const useStyle = createStyles(({ token, css }) => {
   return {
     sidebar: css`
+      position: relative;
       display: flex;
-        height: 100%;
-      
+      height: 100%;
+
       .sidebar__navigation {
           display: flex;
-          width: 45px;
+          width: ${SIDEBAR_NAV_WIDTH}px;
           padding: 4px 8px ${token.paddingSM}px 8px;
           flex-direction: column;
           align-items: center;
@@ -54,7 +63,8 @@ export const useStyle = createStyles(({ token, css }) => {
                       .pimcore-icon {
                           background: ${token.colorFillQuaternary};
                           border-radius: 2px;
-                          outline: 8px solid ${token.colorFillQuaternary};
+                          outline: 5px solid ${token.colorFillQuaternary};
+                          color: ${token.itemActiveColor};
                       }
                   }
 
@@ -85,7 +95,7 @@ export const useStyle = createStyles(({ token, css }) => {
                 .pimcore-icon {
                     background: ${token.colorFillQuaternary};
                     border-radius: 2px;
-                    outline: 8px solid ${token.colorFillQuaternary};
+                    outline: 5px solid ${token.colorFillQuaternary};
                   color: ${token.itemActiveColor};
                 }
               }
@@ -95,7 +105,7 @@ export const useStyle = createStyles(({ token, css }) => {
       .sidebar__content {
         position: relative;
         overflow: auto;
-        width: 250px;
+        width: ${SIDEBAR_CONTENT_WIDTHS.default}px;
 
         .tab {
           display: none;
@@ -112,12 +122,43 @@ export const useStyle = createStyles(({ token, css }) => {
         }
 
         &--sizing-medium {
-          width: 272px;
+          width: ${SIDEBAR_CONTENT_WIDTHS.medium}px;
         }
 
         &--sizing-large {
-          width: 432px;
+          width: ${SIDEBAR_CONTENT_WIDTHS.large}px;
         }
+      }
+
+      .sidebar__resizer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        display: flex;
+        transform: translateX(-50%);
+        z-index: 1;
+
+        .sidebar__resizer-divider {
+          min-width: 8px;
+          opacity: 0;
+          transition: opacity 0.2s;
+        }
+
+        /* only reveal the handle while hovering the boundary strip, focusing it
+           via keyboard or dragging (hover is lost under the drag overlay) */
+        &:hover .sidebar__resizer-divider,
+        &:focus-within .sidebar__resizer-divider,
+        &.sidebar__resizer--active .sidebar__resizer-divider {
+          opacity: 1;
+        }
+      }
+
+      .sidebar__resize-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: ${token.zIndexPopupBase};
+        cursor: col-resize;
       }
     `
   }

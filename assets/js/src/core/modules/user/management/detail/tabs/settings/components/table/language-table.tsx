@@ -85,12 +85,6 @@ export const LanguageTable = ({
 
   const columnHelper = createColumnHelper()
   const tableColumns = [
-    ...onChangeOrder !== null && onChangeOrder !== undefined
-      ? [columnHelper.accessor('order', {
-          header: '',
-          size: 40
-        })]
-      : [],
     columnHelper.accessor('name', {
       header: t('user-management.settings.language.name'),
       meta: {
@@ -108,29 +102,6 @@ export const LanguageTable = ({
       size: 270
     })
   ]
-
-  if (onChangeOrder !== null && onChangeOrder !== undefined) {
-    tableColumns.push(columnHelper.accessor('actions', {
-      header: '',
-      size: 60,
-      cell: (context) => {
-        return (
-          <div>
-            <IconButton
-              disabled={ context.row.index === 0 }
-              icon={ { value: 'chevron-up' } }
-              onClick={ () => { handleOrder(context.row.index, context.row.index - 1) } }
-            />
-            <IconButton
-              disabled={ context.row.index === tableColumns.length - 1 }
-              icon={ { value: 'chevron-down' } }
-              onClick={ () => { handleOrder(context.row.index, context.row.index + 1) } }
-            />
-          </div>
-        )
-      }
-    }))
-  }
 
   if (onChange !== null && onChange !== undefined) {
     tableColumns.push(columnHelper.accessor('view', {

@@ -27,7 +27,7 @@ error.error_recycle_bin_restore: Cannot restore element from recycle bin
 error.error_recycle_bin_restore_missing_parent: Cannot restore element from recycle bin, parent element is missing
 error.syntax_error: Syntax error
 sidebar.selected_elements: Selected Elements
-sidebar.grid_config: Grid config
+sidebar.grid_config: Grid Config
 sidebar.tag_filters: Tag Filters
 sidebar.search_filter: Search & Filter
 sidebar.clear-all-filters: Clear all filters
@@ -314,6 +314,7 @@ preview-card.rename: Rename
 preview-card.download-zip: Download as ZIP
 preview-card.delete: Delete
 grid.aria.column-resize: Resize column
+sidebar.aria.resize: Resize sidebar
 tree.aria.expand-and-collapse: Expand tree item or collapse it
 image-sidebar.tab.details.custom-download: Custom Download
 aria.asset.image-sidebar.tab.details.custom-thumbnail-mode: Custom thumbnail mode select
@@ -362,14 +363,15 @@ grid.advanced-column.advancedColumns.group.date: Date
 grid.advanced-column.advancedColumns.group.string: String
 grid.advanced-column.advancedColumns.group.other: Other
 grid.advanced-column.title.placeholder: Add a title
-grid.advanced-column.advancedColumns: Source field
-grid.advanced-column.advancedColumns.add: Add a Source field
+grid.advanced-column.advancedColumns: Source Field
+grid.advanced-column.advancedColumns.add: Add a source
 grid.advanced-column.transformers: Transformers
-grid.advanced-column.transformers.add: Add a Transformer
+grid.advanced-column.transformers.add: Add a transformer
 grid.advanced-column.preview: Preview
 grid.advanced-column.no-preview: No preview item available
 grid.advanced-column.no-preview-data: No preview data available
 grid.advanced-column.error-preview-data: Error loading preview
+grid.advanced-column.preview-item: Preview Item
 grid.advanced-column.trim: Trim
 grid.advanced-column.find: Find
 grid.advanced-column.replace: Replace
@@ -383,25 +385,25 @@ grid.advanced-column.twigTemplate: Twig Template
 grid.advanced-column.blurringRule: Blurring Rule
 grid.advanced-column.anonymizationRule: Anonymization Rule
 grid.advanced-column.translationPrefix: Translation Prefix
-grid.advanced-column.advancedColumns.simpleField: Simple Field
-grid.advanced-column.advancedColumns.relationField: Relation Field
+grid.advanced-column.advancedColumns.simpleField: Simple field
+grid.advanced-column.advancedColumns.relationField: Relation field
 grid.advanced-column.classification-store.no-selection: No value selected
 grid.advanced-column.classification-store.edit: Change value
 grid.advanced-column.advancedColumns.staticText: Static text
-grid.advanced-column.advancedColumns.booleanFormatter: Boolean Formatter
-grid.advanced-column.advancedColumns.caseChange: Change Case
-grid.advanced-column.advancedColumns.combine: Combine Values
-grid.advanced-column.advancedColumns.dateFormatter: Date Formatter
-grid.advanced-column.advancedColumns.elementCounter: Element Counter
+grid.advanced-column.advancedColumns.booleanFormatter: Boolean formatter
+grid.advanced-column.advancedColumns.caseChange: Change case
+grid.advanced-column.advancedColumns.combine: Combine values
+grid.advanced-column.advancedColumns.dateFormatter: Date formatter
+grid.advanced-column.advancedColumns.elementCounter: Element counter
 grid.advanced-column.advancedColumns.explode: Explode
-grid.advanced-column.advancedColumns.stringReplace: String Replace
-grid.advanced-column.advancedColumns.substring: SubString
+grid.advanced-column.advancedColumns.stringReplace: String replace
+grid.advanced-column.advancedColumns.substring: Substring
 grid.advanced-column.advancedColumns.trim: Trim
-grid.advanced-column.advancedColumns.twigOperator: Twig Operator
+grid.advanced-column.advancedColumns.twigOperator: Twig operator
 grid.advanced-column.advancedColumns.anonymizer: Anonymizer
 grid.advanced-column.advancedColumns.blur: Blur
 grid.advanced-column.advancedColumns.translate: Translate
-grid.advanced-column.advancedColumns.phpCode: PHP Code
+grid.advanced-column.advancedColumns.phpCode: PHP code
 grid.advanced-column.advancedColumns.phpCodeKey: PHP Transformer Key
 grid.advanced-column.advancedColumns.arguments: Arguments
 component.workflow-card.action-btn: Workflow Actions
@@ -467,6 +469,8 @@ version.no-difference: There is no difference between the selected versions.
 version.category.title.systemData: System Data
 version.category.title.baseData: Base Data
 version.category.title.meta: Meta Data
+version.category.title.properties: Properties
+version.changed-attributes: "Changed attributes: {{attributes}}"
 aria.version.delete: Delete version
 aria.version.expand: Expand version
 clear-all: Clear all
@@ -522,15 +526,19 @@ key: Key
 published: Published
 classname: Classname
 index: Index
-listing.grid-config.title: Grid config
+userModification: User modification
+userOwner: User owner
+listing.grid-config.title: Grid Config
 grid-config.discard-all-changes: Discard all changes
 grid-config.apply-changes: Apply changes
+grid-config.reload: Reload
 listing.add-column: Add a column
 listing.add-column.simple: Simple
 listing.add-column.advanced: Advanced
 listing.column-picker.search: Search
 listing.column-picker.no-results: No columns found
 listing.column-picker.fields-to-add: Fields to add
+listing.fields-to-add.collapse-simple-fields: Collapse simple fields
 listing.actions: Apply to selection
 listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download
@@ -1204,7 +1212,8 @@ element.delete.batch.title: Delete items
 element.delete.batch.note: 'Please note: These items will be permanently deleted and can not be restored.'
 element.delete.batch.question_one: 'Do you really want to delete this item?'
 element.delete.batch.question_other: 'Do you really want to delete these {{count}} items?'
-element.delete.batch.ok: Delete permanently
+element.delete.batch.ok: Delete
+element.delete.batch.ok.permanent: Delete permanently
 element.delete.batch.show-paths: Show items
 element.delete.batch.dependencies-warning: 'There may be dependencies, delete anyway?'
 element.open: Open
@@ -1243,6 +1252,7 @@ unknown: Unknown
 warning: Warning
 error: Error
 info: Info
+success: Success
 no-value-set: No value set
 set-to-null: Empty (set to null)
 remove: Remove
@@ -1267,7 +1277,7 @@ relations.subtype: Subtype
 relations.classname: Class
 relations.fullpath: Full Path
 relations.remove-all.confirm: Do you really want to delete all relations?
-relation: relation
+relation: Relation
 items-limit-reached: The maximum number of items ({{maxItems}}) has been reached.
 actions: Actions
 asset: Asset
@@ -1281,6 +1291,8 @@ image-gallery.clear-image-selection: Clear Image Selection
 image-gallery.delete-frame: Delete Frame
 text: Text
 video: Video
+object: Object
+variant: Variant
 processing: Processing
 upload: Upload
 close: Close
@@ -1369,6 +1381,7 @@ key-bindings.searchAsset: Search Asset
 key-bindings.searchObject: Search Object
 key-bindings.searchAndReplaceAssignments: Search and Replace Assignments
 key-bindings.quickSearch: Quick Search
+search-modal.title: Quick Search
 key-bindings.system: System
 key-bindings.showMetaInfo: Show Meta Info
 key-bindings.showElementHistory: Show Element History
@@ -1632,6 +1645,7 @@ predefined-asset-metadata.columns.actions: Actions
 predefined-asset-metadata.duplicate-entry.title: Predefined Metadata already exists
 predefined-asset-metadata.duplicate-entry.error: An entry with this name and language combination already exists. Please change one of the following values.
 appearance-branding.title: Appearance & Branding
+user-management.appearance-branding: Appearance & Branding
 image-thumbnails.title: Image Thumbnails
 image-thumbnails.description: Manage and configure image thumbnail settings for your assets.
 image-thumbnails.search.placeholder: Search thumbnails...
@@ -2210,9 +2224,11 @@ application-logger.filter.priority-level.8: Debug
 embed.url-modal.title: Edit Embed URL
 embed.url-modal.label: URL (eg. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Please enter a valid URL
-embed.url-modal.ok-text: OK
+alert-modal.ok-text: OK
+embed.url-modal.ok-text: Save
 embed.url-modal.cancel-text: Cancel
-embed.placeholder: No URL set - Click to add an embed URL
+embed.url-modal.warning: "Invalid URLs won't display a preview, please review and update your URL."
+embed.placeholder: Click to add an embed URL
 embed.add-url: Add URL
 embed.edit-url: Edit URL
 embed.clear: Clear
@@ -2267,9 +2283,13 @@ ownership-management.delete.title: Delete configurations
 ownership-management.delete.content: "Are you sure you want to delete {{count}} configuration(s)?"
 component.search.pleaceholder: Search
 focal-point.set: Set Focal Point
-video.placeholder: No video selected - Click to add a video
+video.placeholder: Click to add a video
 video.add-video: Add Video
 video.preview-in-progress: Video preview is being generated…
+date.placeholder: Select a date
+numeric.placeholder: Enter a number
+select.placeholder: Select an option
+multiselect.placeholder: Select options
 image.alt-text-placeholder: Enter alt text
 area-settings: Area Settings
 unsupported_feature: Unsupported feature - please check system requirements!
@@ -2807,7 +2827,7 @@ saved-search.delete-search: Delete search
 saved-search.save-as-new: Save as new search
 saved-search.create-menu-shortcut: Create shortcut in menu
 saved-search.save.success: Saved search created
-saved-search.saved-searches: Saved searches
+saved-search.saved-searches: Saved Searches
 saved-search.ownership: Ownership
 saved-search.ownership.own: Own
 saved-search.ownership.shared: Shared with me

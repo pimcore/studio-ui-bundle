@@ -17,14 +17,13 @@ import React from 'react'
 export const TopBar = (): React.JSX.Element => {
   return (
     <Toolbar
-      borderStyle='default'
       padding={ { left: 'none', right: 'none' } }
-      position='top'
+      position='none'
       theme='secondary'
     >
       <Flex
         className='w-full'
-        gap={ 'small' }
+        gap={ 'extra-small' }
       >
         <ProvidedTypeSelect />
         <SearchTermFilter />

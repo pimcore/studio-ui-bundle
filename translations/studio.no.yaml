@@ -314,6 +314,7 @@ preview-card.rename: Gi nytt navn
 preview-card.download-zip: Last ned som ZIP
 preview-card.delete: Slett
 grid.aria.column-resize: Endre kolonnestørrelse
+sidebar.aria.resize: Endre størrelse på sidepanelet
 tree.aria.expand-and-collapse: Utvid eller skjul treelement
 image-sidebar.tab.details.custom-download: Egendefinert nedlasting
 aria.asset.image-sidebar.tab.details.custom-thumbnail-mode: Velg tilpasset miniatyrbildemodus
@@ -466,6 +467,8 @@ version.no-difference: Det er ingen forskjell mellom de valgte versjonene.
 version.category.title.systemData: Systemdata
 version.category.title.baseData: Grunndata
 version.category.title.meta: Metadata
+version.category.title.properties: Egenskaper
+version.changed-attributes: "Endrede attributter: {{attributes}}"
 aria.version.delete: Slett versjon
 aria.version.expand: Utvid versjon
 clear-all: Fjern alle
@@ -519,6 +522,8 @@ key: Nøkkel
 published: Publisert
 classname: Klassenavn
 index: Indeks
+userModification: Endret av (bruker)
+userOwner: Eier (bruker)
 listing.grid-config.title: Rutenettskonfigurasjon
 grid-config.discard-all-changes: Forkast alle endringer
 grid-config.apply-changes: Bruk endringer
@@ -1196,7 +1201,8 @@ element.delete.batch.title: Slett elementer
 element.delete.batch.note: 'Merk: Disse elementene vil bli slettet permanent og kan ikke gjenopprettes.'
 element.delete.batch.question_one: 'Vil du virkelig slette dette elementet?'
 element.delete.batch.question_other: 'Vil du virkelig slette disse {{count}} elementene?'
-element.delete.batch.ok: Slett permanent
+element.delete.batch.ok: Slett
+element.delete.batch.ok.permanent: Slett permanent
 element.delete.batch.show-paths: Vis elementer
 element.delete.batch.dependencies-warning: 'Det kan finnes avhengigheter, slett likevel?'
 element.open: Åpne
@@ -1235,6 +1241,7 @@ unknown: Ukjent
 warning: Advarsel
 error: Feil
 info: Info
+success: Suksess
 no-value-set: Ingen verdi satt
 set-to-null: Tom (sett til null)
 remove: Fjern
@@ -1273,6 +1280,8 @@ image-gallery.clear-image-selection: Fjern bildevalg
 image-gallery.delete-frame: Slett ramme
 text: Tekst
 video: Video
+object: Objekt
+variant: Variant
 processing: Behandler
 upload: Last opp
 close: Lukk
@@ -1624,6 +1633,7 @@ predefined-asset-metadata.columns.actions: Handlinger
 predefined-asset-metadata.duplicate-entry.title: Forhåndsdefinerte metadata finnes allerede
 predefined-asset-metadata.duplicate-entry.error: En oppføring med denne kombinasjonen av navn og språk finnes allerede. Vennligst endre en av følgende verdier.
 appearance-branding.title: Utseende og merkevare
+user-management.appearance-branding: Utseende og merkevare
 image-thumbnails.title: Bildeminiatyrbilder
 image-thumbnails.description: Administrer og konfigurer innstillinger for bildeminiatyrbilder for ressursene dine.
 image-thumbnails.search.placeholder: Søk i miniatyrbilder...
@@ -2202,9 +2212,11 @@ application-logger.filter.priority-level.8: Feilsøking
 embed.url-modal.title: Rediger Embed-URL
 embed.url-modal.label: URL (f.eks. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Vennligst oppgi en gyldig URL
-embed.url-modal.ok-text: OK
+alert-modal.ok-text: OK
+embed.url-modal.ok-text: Lagre
 embed.url-modal.cancel-text: Avbryt
-embed.placeholder: Ingen URL satt – Klikk for å legge til en embed-URL
+embed.url-modal.warning: "Ugyldige URL-er vil ikke vise en forhåndsvisning, vennligst gjennomgå og oppdater URL-en din."
+embed.placeholder: Klikk for å legge til en embed-URL
 embed.add-url: Legg til URL
 embed.edit-url: Rediger URL
 embed.clear: Tøm
@@ -2240,9 +2252,13 @@ recycle-bin.actions.restore: Gjenopprett
 recycle-bin.actions.restore.title: Gjenoppretter papirkurvelementer
 component.search.pleaceholder: Søk
 focal-point.set: Sett fokuspunkt
-video.placeholder: Ingen video valgt – Klikk for å legge til en video
+video.placeholder: Klikk for å legge til en video
 video.add-video: Legg til video
 video.preview-in-progress: Forhåndsvisning av video genereres…
+date.placeholder: Velg en dato
+numeric.placeholder: Skriv inn et tall
+select.placeholder: Velg et alternativ
+multiselect.placeholder: Velg alternativer
 image.alt-text-placeholder: Skriv inn alt-tekst
 area-settings: Områdeinnstillinger
 unsupported_feature: Funksjonen støttes ikke – sjekk systemkravene!

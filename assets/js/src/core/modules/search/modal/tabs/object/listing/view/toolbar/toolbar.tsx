@@ -20,7 +20,6 @@ import { LanguageSelectionWithProvider } from '@Pimcore/components/language-sele
 export const Toolbar = (): React.JSX.Element => {
   return (
     <BaseToolbar
-      borderStyle='default'
       padding={ { right: 'none', left: 'none' } }
       theme='secondary'
     >

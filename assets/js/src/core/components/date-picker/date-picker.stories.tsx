@@ -54,3 +54,10 @@ export const _default: Story = {
   },
   render: (props: DatePickerProps) => <ExampleForm { ...props } />
 }
+
+export const WithPlaceholder: Story = {
+  args: {
+    placeholder: 'Select a date'
+  },
+  render: (props: DatePickerProps) => <ExampleForm { ...props } />
+}

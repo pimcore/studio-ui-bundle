@@ -182,6 +182,7 @@ export const serviceIds = {
   'DynamicTypes/GridCell/SystemBoolean': 'DynamicTypes/GridCell/SystemBoolean',
   'DynamicTypes/GridCell/SystemDatetime': 'DynamicTypes/GridCell/SystemDatetime',
   'DynamicTypes/GridCell/SystemInteger': 'DynamicTypes/GridCell/SystemInteger',
+  'DynamicTypes/GridCell/SystemUser': 'DynamicTypes/GridCell/SystemUser',
   'DynamicTypes/GridCell/Textarea': 'DynamicTypes/GridCell/Textarea',
   'DynamicTypes/GridCell/Number': 'DynamicTypes/GridCell/Number',
   'DynamicTypes/GridCell/Select': 'DynamicTypes/GridCell/Select',

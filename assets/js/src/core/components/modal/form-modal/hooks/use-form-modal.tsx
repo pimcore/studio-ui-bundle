@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { type InputRef, type ModalFuncProps } from 'antd'
+import { Alert } from '@Pimcore/components/alert/alert'
 import { uuid as pimcoreUUid } from '@Pimcore/utils/uuid'
 import { type Rule } from 'antd/lib/form'
 import i18n from 'i18next'
@@ -24,6 +25,8 @@ import { noop } from 'lodash'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { Flex } from '@sdk/components'
 import { createModalButtonTestId } from '@Pimcore/utils/test-id-generator'
+import type { InputFormModalProps, TextareaFormModalProps, ConfirmFormModalProps, UseFormModalHookResponse, UploadFormModalProps } from './form-modal-types'
+export type { ConfigUpdate, InputFormModalProps, TextareaFormModalProps, ConfirmFormModalProps, UseFormModalHookResponse } from './form-modal-types'
 
 let form: formInstanceType | null = null
 
@@ -38,35 +41,6 @@ function getFormModalButtonProps (props: ModalFuncProps): Pick<ModalFuncProps, '
       ...props.cancelButtonProps
     }
   }
-}
-
-export type ConfigUpdate = ModalFuncProps | ((prevConfig: ModalFuncProps) => ModalFuncProps)
-
-export type InputFormModalProps = Omit<ModalFuncProps, 'content'> & {
-  label?: string
-  rule?: Rule
-  initialValue?: string
-}
-
-export type TextareaFormModalProps = Omit<ModalFuncProps, 'content'> & {
-  label?: string
-  initialValue?: string
-  placeholder?: string
-}
-
-interface UploadFormModalProps extends Omit<InputFormModalProps, 'initialValues'> {
-  accept?: string
-}
-
-export type ConfirmFormModalProps = ModalFuncProps & {
-  dontAskAgainKey?: string
-}
-
-export interface UseFormModalHookResponse {
-  input: (props: InputFormModalProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
-  textarea: (props: TextareaFormModalProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
-  confirm: (props: ConfirmFormModalProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
-  upload: (props: UploadFormModalProps) => { destroy: () => void, update: (configUpdate: ConfigUpdate) => void }
 }
 
 export function useFormModal (): UseFormModalHookResponse {
@@ -117,6 +91,7 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetMo
     label,
     rule,
     initialValue = '',
+    warningMessage,
     ...modalProps
   } = props
 
@@ -156,16 +131,39 @@ export function withInput (props: InputFormModalProps, onKeyBoardSubmit, onSetMo
       }
       return node
     },
-    content: <InputForm
-      fieldName={ fieldName }
-      form={ currentForm }
-      initialValues={ { [fieldName]: initialValue } }
-      key={ 'input-form' }
-      label={ label }
-      onSubmitCapture={ async () => { await submit(fieldName) } }
-      ref={ inputRef }
-      rules={ formattedRule }
-             />
+    content: warningMessage !== undefined
+      ? (
+        <>
+          <Alert
+            message={ warningMessage }
+            showIcon
+            style={ { marginBottom: 8 } }
+            type='warning'
+          />
+          <InputForm
+            fieldName={ fieldName }
+            form={ currentForm }
+            initialValues={ { [fieldName]: initialValue } }
+            key={ 'input-form' }
+            label={ label }
+            onSubmitCapture={ async () => { await submit(fieldName) } }
+            ref={ inputRef }
+            rules={ formattedRule }
+          />
+        </>
+        )
+      : (
+        <InputForm
+          fieldName={ fieldName }
+          form={ currentForm }
+          initialValues={ { [fieldName]: initialValue } }
+          key={ 'input-form' }
+          label={ label }
+          onSubmitCapture={ async () => { await submit(fieldName) } }
+          ref={ inputRef }
+          rules={ formattedRule }
+        />
+        )
   }
 }
 

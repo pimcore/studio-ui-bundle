@@ -26,6 +26,7 @@ import { type AvailableColumn, buildColumnPickerGroups } from '@Pimcore/modules/
 import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
 import { api, useDataObjectPatchByIdMutation, useDataObjectPatchFolderByIdMutation } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
@@ -57,6 +58,8 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const [patchObjectsInFolder, { error: folderPatchError, isError: isFolderPatchError, isSuccess: isFolderPatchSuccess }] = useDataObjectPatchFolderByIdMutation()
   const [patchObjectsByIds, { error: idPatchError, isError: isIdPatchError, isSuccess: isIdPatchSuccess }] = useDataObjectPatchByIdMutation()
   const { useDataQueryHelper } = useSettings()
+  const user = useUser()
+  const contentLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
   const { getArgs } = useDataQueryHelper()
   const { id, elementType } = useElementContext()
   const dispatch = useAppDispatch()
@@ -204,11 +207,11 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
   const columnGroups = useMemo(() => {
     const includableColumns = availableColumns.filter((column) =>
-      shouldIncludeColumnItem({ ...column, mainType: column.type }, batchEdits, hasType, getType)
+      shouldIncludeColumnItem({ ...column, mainType: column.type }, batchEdits, hasType, getType, contentLanguages)
     )
 
     return buildColumnPickerGroups(includableColumns, t)
-  }, [availableColumns, batchEdits, hasType, getType])
+  }, [availableColumns, batchEdits, hasType, getType, contentLanguages])
 
   return (
     <FieldCollectionProvider>

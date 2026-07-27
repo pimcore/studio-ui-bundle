@@ -30,5 +30,6 @@ export const TAB_VARIANTS: IEditorTab = {
   label: 'data-object.object-editor-tabs.variants',
   icon: <Icon value="data-object-variant" />,
   children: <ComponentRenderer component={ componentConfig.dataObject.editor.tab.variants.name } />,
+  isDetachable: true,
   hidden: (elementApi) => !('allowVariants' in elementApi && elementApi?.allowVariants === true)
 }

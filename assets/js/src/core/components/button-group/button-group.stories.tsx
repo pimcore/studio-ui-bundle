@@ -9,12 +9,13 @@
  */
 
 import { type Meta } from '@storybook/react'
-import React from 'react'
+import React, { useState } from 'react'
 import { ButtonGroup } from './button-group'
 import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
 import { Button } from '../button/button'
 import { IconButton } from '../icon-button/icon-button'
 import { IconTextButton } from '../icon-text-button/icon-text-button'
+import { ImageZoom } from '@Pimcore/components/image-zoom/image-zoom'
 
 const config: Meta = {
   title: 'Components/Controls/Buttons/ButtonGroup',
@@ -179,4 +180,23 @@ export const LanguageSelectionExample = {
       />
     ]
   }
+}
+
+const ImageZoomWrapper = (): React.JSX.Element => {
+  const [zoom, setZoom] = useState<number>(100)
+  return (
+    <ButtonGroup
+      items={ [
+        <ImageZoom
+          key="zoom"
+          setZoom={ setZoom }
+          zoom={ zoom }
+        />
+      ] }
+    />
+  )
+}
+
+export const ImageZoomExample = {
+  render: () => <ImageZoomWrapper />
 }

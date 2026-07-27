@@ -82,7 +82,7 @@ export const useStyles = createStyles(({ token, css }) => {
   
         .flexlayout__tab_button {
           margin: 0;
-          padding: ${token.paddingSM}px ${token.paddingSM}px;
+          padding: ${token.paddingSM}px ${token.paddingXS}px ${token.paddingSM}px ${token.paddingSM}px;
           background: ${token.colorFillAlter};
           transition: all ${token.motionDurationSlow} ${token.motionEaseInOut};
           font-size: ${token.fontSize}px;
@@ -102,21 +102,37 @@ export const useStyles = createStyles(({ token, css }) => {
           }
   
           &--selected {
-            font-weight: ${token.fontWeightStrong};
-            color: ${tabToken.itemActiveColor};
-            background: ${token.colorBgContainer};
-            border-top: 2px solid ${token.Tabs.colorBorderActiveTab};
+            font-weight: normal;
+            color: ${tabToken.itemColor};
+            background: ${token.colorFillAlter};
+            border-top: 2px solid transparent;
 
-            .widget-manager__tab-title-close-button {
-              display: block;
-            }
-  
             .widget-manager-tab-title {
               margin-top: -2px;
             }
-  
+          
             &:hover {
+              background: ${token.Tabs.colorBgHoverUnselectedTab};
+              color: ${tabToken.itemColor};
+            }
+            
+            &:has(.widget-manager-tab-title--active-main),
+            &:has(.widget-manager-tab-title--detached) {
+              font-weight: ${token.fontWeightStrong};
+              color: ${tabToken.itemActiveColor};
               background: ${token.colorBgContainer};
+              border-top: 2px solid ${token.Tabs.colorBorderActiveTab};
+
+              .widget-manager__tab-title-close-button {
+                display: flex;
+                align-items: center;
+                height: auto;
+                line-height: 0;
+              }
+
+              &:hover {
+                color: ${tabToken.itemActiveColor};
+              }
             }
           }
 
@@ -226,13 +242,8 @@ export const useStyles = createStyles(({ token, css }) => {
   
         @media (hover: hover) {
           .flexlayout__border_button--unselected:hover {
-            color: ${token.colorTextSecondary}; 
+            color: ${token.colorTextSecondary};
             background: ${token.controlItemBgActiveHover};
-          }
-          
-          .flexlayout__tab_button--selected:hover {
-            color: ${tabToken.itemActiveColor};
-            background: ${token.colorBgContainer};
           }
         }
   
@@ -270,11 +281,6 @@ export const useStyles = createStyles(({ token, css }) => {
 
         .widget-manager__tab-title-close-button {
           display: none;
-          width: 12px;
-          height: 12px;
-          padding: 4px;
-          line-height: 0;
-          margin-top: -8px;
           color: ${token.colorIcon};
         }
       `

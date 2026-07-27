@@ -35,6 +35,7 @@ const initialState: IUserInformationExtended = {
   dateTimeLocale: '',
   welcomeScreen: false,
   memorizeTabs: false,
+  theme: 'default',
   hasImage: false,
   image: undefined,
   contentLanguages: [],

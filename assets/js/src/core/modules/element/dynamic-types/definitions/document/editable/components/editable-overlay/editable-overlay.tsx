@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useRef } from 'react'
+import React, { useContext, useRef } from 'react'
 import { Dropdown } from 'antd'
 import cn from 'classnames'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -17,6 +17,8 @@ import { useInheritanceMenu } from '../../hooks/use-inheritance-menu'
 import { useHighlightEditables } from './use-highlight-editables'
 import { isNil } from 'lodash'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { DocumentContext } from '@Pimcore/modules/document/document-provider'
+import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 
 export interface EditableOverlayProps {
   isInherited: boolean
@@ -48,9 +50,23 @@ export const EditableOverlay = ({
   const highlightEditables = useHighlightEditables()
   const { inheritanceMenuItems, inheritanceTooltip } = useInheritanceMenu({ onOverwrite })
 
+  const { id: documentId } = useContext(DocumentContext)
+
   const wasEverInheritedRef = useRef(isInherited)
   if (isInherited && !wasEverInheritedRef.current) {
     wasEverInheritedRef.current = true
+  }
+
+  const disableHighlightEditable = (): void => {
+    if (!highlightEditables) {
+      return
+    }
+
+    try {
+      getPimcoreStudioApi().document.setHighlightEditables(documentId, false)
+    } catch (error) {
+      console.warn('Could not disable highlight-editables state on editable interaction:', error)
+    }
   }
 
   if (isNil(children)) {
@@ -62,6 +78,7 @@ export const EditableOverlay = ({
   }
 
   return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
     <div
       className={ cn(
         {
@@ -70,6 +87,7 @@ export const EditableOverlay = ({
         },
         (isInherited || highlightEditables) ? className : undefined
       ) }
+      onClick={ disableHighlightEditable }
       style={ isInherited ? style : (highlightEditables ? undefined : { display: 'contents' }) }
     >
       {highlightEditables && (

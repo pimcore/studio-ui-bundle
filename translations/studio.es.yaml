@@ -314,6 +314,7 @@ preview-card.rename: Renombrar
 preview-card.download-zip: Descargar como ZIP
 preview-card.delete: Eliminar
 grid.aria.column-resize: Redimensionar columna
+sidebar.aria.resize: Redimensionar barra lateral
 tree.aria.expand-and-collapse: Expandir o contraer elemento del árbol
 image-sidebar.tab.details.custom-download: Descarga personalizada
 aria.asset.image-sidebar.tab.details.custom-thumbnail-mode: Selección de modo de miniatura personalizada
@@ -466,6 +467,8 @@ version.no-difference: No hay diferencia entre las versiones seleccionadas.
 version.category.title.systemData: Datos del sistema
 version.category.title.baseData: Datos base
 version.category.title.meta: Metadatos
+version.category.title.properties: Propiedades
+version.changed-attributes: "Atributos modificados: {{attributes}}"
 aria.version.delete: Eliminar versión
 aria.version.expand: Expandir versión
 clear-all: Limpiar todo
@@ -519,6 +522,8 @@ key: Clave
 published: Publicado
 classname: Nombre de clase
 index: Índice
+userModification: Modificado por
+userOwner: Propietario
 listing.grid-config.title: Configuración de cuadrícula
 grid-config.discard-all-changes: Descartar todos los cambios
 grid-config.apply-changes: Aplicar cambios
@@ -1196,7 +1201,8 @@ element.delete.batch.title: Eliminar elementos
 element.delete.batch.note: 'Tenga en cuenta: Estos elementos se eliminarán permanentemente y no se podrán restaurar.'
 element.delete.batch.question_one: '¿Realmente desea eliminar este elemento?'
 element.delete.batch.question_other: '¿Realmente desea eliminar estos {{count}} elementos?'
-element.delete.batch.ok: Eliminar permanentemente
+element.delete.batch.ok: Eliminar
+element.delete.batch.ok.permanent: Eliminar permanentemente
 element.delete.batch.show-paths: Mostrar elementos
 element.delete.batch.dependencies-warning: 'Puede haber dependencias, ¿eliminar de todas formas?'
 element.open: Abrir
@@ -1235,6 +1241,7 @@ unknown: Desconocido
 warning: Advertencia
 error: Error
 info: Información
+success: Éxito
 no-value-set: No se ha establecido ningún valor
 set-to-null: Vacío (establecer como nulo)
 remove: Eliminar
@@ -1273,6 +1280,8 @@ image-gallery.clear-image-selection: Borrar selección de imagen
 image-gallery.delete-frame: Eliminar marco
 text: Texto
 video: Vídeo
+object: Objeto
+variant: Variante
 processing: Procesando
 upload: Subir
 close: Cerrar
@@ -1624,6 +1633,7 @@ predefined-asset-metadata.columns.actions: Acciones
 predefined-asset-metadata.duplicate-entry.title: El metadato predefinido ya existe
 predefined-asset-metadata.duplicate-entry.error: Ya existe una entrada con esta combinación de nombre e idioma. Cambie uno de los siguientes valores.
 appearance-branding.title: Apariencia y marca
+user-management.appearance-branding: Apariencia y marca
 image-thumbnails.title: Miniaturas de imagen
 image-thumbnails.description: Gestione y configure los ajustes de miniaturas de imagen para sus assets.
 image-thumbnails.search.placeholder: Buscar miniaturas...
@@ -2202,9 +2212,11 @@ application-logger.filter.priority-level.8: Depuración
 embed.url-modal.title: Editar URL de incrustación
 embed.url-modal.label: URL (ej. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Introduzca una URL válida
-embed.url-modal.ok-text: OK
+alert-modal.ok-text: OK
+embed.url-modal.ok-text: Guardar
 embed.url-modal.cancel-text: Cancelar
-embed.placeholder: No se ha establecido ninguna URL - Haga clic para añadir una URL de incrustación
+embed.url-modal.warning: "Las URL no válidas no mostrarán una vista previa, por favor revise y actualice su URL."
+embed.placeholder: Haga clic para añadir una URL de incrustación
 embed.add-url: Añadir URL
 embed.edit-url: Editar URL
 embed.clear: Limpiar
@@ -2240,9 +2252,13 @@ recycle-bin.actions.restore: Restaurar
 recycle-bin.actions.restore.title: Restaurando elementos de la papelera de reciclaje
 component.search.pleaceholder: Buscar
 focal-point.set: Establecer punto focal
-video.placeholder: No se ha seleccionado ningún vídeo - Haga clic para añadir un vídeo
+video.placeholder: Haga clic para añadir un vídeo
 video.add-video: Añadir vídeo
 video.preview-in-progress: Se está generando la vista previa del vídeo…
+date.placeholder: Seleccionar una fecha
+numeric.placeholder: Introducir un número
+select.placeholder: Seleccionar una opción
+multiselect.placeholder: Seleccionar opciones
 image.alt-text-placeholder: Introduzca texto alternativo
 area-settings: Configuración de área
 unsupported_feature: Función no soportada - ¡verifique los requisitos del sistema!
