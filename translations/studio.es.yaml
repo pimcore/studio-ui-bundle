@@ -519,6 +519,8 @@ key: Clave
 published: Publicado
 classname: Nombre de clase
 index: Índice
+userModification: Modificado por
+userOwner: Propietario
 listing.grid-config.title: Configuración de cuadrícula
 grid-config.discard-all-changes: Descartar todos los cambios
 grid-config.apply-changes: Aplicar cambios

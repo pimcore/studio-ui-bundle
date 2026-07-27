@@ -519,6 +519,8 @@ key: Schlüssel
 published: Veröffentlicht
 classname: Klassenname
 index: Index
+userModification: Benutzer Änderung
+userOwner: Eigentümer
 listing.grid-config.title: Grid-Konfiguration
 grid-config.discard-all-changes: Alle Änderungen verwerfen
 grid-config.apply-changes: Änderungen übernehmen
