@@ -43,6 +43,10 @@ export const useSidebarResize = (sizing: keyof typeof SIDEBAR_CONTENT_WIDTHS): U
   sizingRef.current = sizing
 
   useEffect(() => {
+    setContentWidth((width) => isNil(width) ? width : Math.max(width, SIDEBAR_CONTENT_WIDTHS[sizing]))
+  }, [sizing])
+
+  useEffect(() => {
     if (!isResizing) {
       return
     }
