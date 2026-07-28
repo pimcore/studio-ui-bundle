@@ -9,9 +9,8 @@
  */
 
 import React from 'react'
-import { Modal } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
+import { Modal } from '@Pimcore/components/modal/modal'
 import { AddNoteForm } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/form/add-note-form'
 import { useNoteElementCreateMutation } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
@@ -60,6 +59,7 @@ export const AddNoteModal = ({ ...props }: AddNoteModalProps): React.JSX.Element
 
   return (
     <Modal
+      iconName='new'
       okButtonProps={ { loading: isLoading } }
       okText={ t('save') }
       onCancel={ () => {
@@ -68,9 +68,7 @@ export const AddNoteModal = ({ ...props }: AddNoteModalProps): React.JSX.Element
       } }
       onOk={ () => { form.submit() } }
       open={ props.open }
-      title={ (
-        <ModalTitle iconName='new'>{ t('notes-and-events.new-note') }</ModalTitle>
-          ) }
+      title={ t('notes-and-events.new-note') }
     >
 
       <AddNoteForm

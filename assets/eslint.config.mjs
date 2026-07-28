@@ -447,7 +447,27 @@ export default tseslint.config(
       // -----------------------------------------------------------------------
       // Misc (from original .eslintrc.js)
       // -----------------------------------------------------------------------
-      'max-lines': ['error', { max: 300 }]
+      'max-lines': ['error', { max: 300 }],
+
+      // -----------------------------------------------------------------------
+      // Keep every modal draggable: route all modals through the shared
+      // component instead of antd's Modal (see components/modal/modal.tsx).
+      // -----------------------------------------------------------------------
+      'no-restricted-imports': ['error', {
+        paths: [{
+          name: 'antd',
+          importNames: ['Modal'],
+          message: "Import Modal from '@Pimcore/components/modal/modal' (or use WindowModal) instead of antd's Modal so it stays draggable. For imperative dialogs use useStudioModal()."
+        }]
+      }]
+    }
+  },
+
+  // 2b. The shared Modal component is the one place allowed to wrap antd's Modal.
+  {
+    files: ['**/core/components/modal/modal.tsx'],
+    rules: {
+      'no-restricted-imports': 'off'
     }
   },
 
