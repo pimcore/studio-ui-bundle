@@ -345,6 +345,9 @@ grid.filter.to: À
 grid.filter.is: Est
 grid.filter.less: Inférieur à
 grid.filter.more: Supérieur à
+grid.filter.file-size-unit.kb: KB
+grid.filter.file-size-unit.mb: MB
+grid.filter.file-size-unit.gb: GB
 grid.copy-notice: Copié dans le presse-papiers
 grid.configuration.no-saved-templates: Aucun modèle enregistré disponible
 grid.configuration.template: Modèle
