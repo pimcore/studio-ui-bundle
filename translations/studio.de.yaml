@@ -345,6 +345,9 @@ grid.filter.to: Bis
 grid.filter.is: Ist
 grid.filter.less: Kleiner als
 grid.filter.more: Größer als
+grid.filter.file-size-unit.kb: KB
+grid.filter.file-size-unit.mb: MB
+grid.filter.file-size-unit.gb: GB
 grid.copy-notice: In die Zwischenablage kopiert
 grid.configuration.no-saved-templates: Keine gespeicherten Vorlagen verfügbar
 grid.configuration.template: Vorlage

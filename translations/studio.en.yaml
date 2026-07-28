@@ -345,6 +345,9 @@ grid.filter.to: To
 grid.filter.is: Is
 grid.filter.less: Less than
 grid.filter.more: More than
+grid.filter.file-size-unit.kb: KB
+grid.filter.file-size-unit.mb: MB
+grid.filter.file-size-unit.gb: GB
 grid.copy-notice: Copied to clipboard
 grid.configuration.no-saved-templates: No saved templates available
 grid.configuration.template: Template

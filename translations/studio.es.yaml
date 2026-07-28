@@ -345,6 +345,9 @@ grid.filter.to: Hasta
 grid.filter.is: Es
 grid.filter.less: Menor que
 grid.filter.more: Mayor que
+grid.filter.file-size-unit.kb: KB
+grid.filter.file-size-unit.mb: MB
+grid.filter.file-size-unit.gb: GB
 grid.copy-notice: Copiado al portapapeles
 grid.configuration.no-saved-templates: No hay plantillas guardadas disponibles
 grid.configuration.template: Plantilla

@@ -19,6 +19,7 @@ import { type DynamicTypeFieldFilterString } from './definitions/field-filters/t
 import { type DynamicTypeFieldFilterNone } from './definitions/field-filters/types/none/dynamic-type-field-filter-none'
 import { type DynamicTypeFieldFilterId } from './definitions/field-filters/types/id/dynamic-type-field-filter-id'
 import { type DynamicTypeFieldFilterNumber } from './definitions/field-filters/types/number/dynamic-type-field-filter-number'
+import { type DynamicTypeFieldFilterFileSize } from './definitions/field-filters/types/file-size/dynamic-type-field-filter-file-size'
 import { type DynamicTypeFieldFilterMultiselect } from './definitions/field-filters/types/multiselect/dynamic-type-field-filter-multiselect'
 import { type DynamicTypeFieldFilterDate } from './definitions/field-filters/types/date/dynamic-type-field-filter-date'
 import { type DynamicTypeGridCellText } from './definitions/grid-cell/types/text/dynamic-type-grid-cell-text'
@@ -241,6 +242,7 @@ moduleSystem.registerModule({
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterNone>(serviceIds['DynamicTypes/FieldFilter/None']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterId>(serviceIds['DynamicTypes/FieldFilter/Id']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterNumber>(serviceIds['DynamicTypes/FieldFilter/Number']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterFileSize>(serviceIds['DynamicTypes/FieldFilter/FileSize']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterMultiselect>(serviceIds['DynamicTypes/FieldFilter/Multiselect']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterDate>(serviceIds['DynamicTypes/FieldFilter/Date']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterBoolean>(serviceIds['DynamicTypes/FieldFilter/Boolean']))

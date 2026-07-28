@@ -345,6 +345,9 @@ grid.filter.to: Til
 grid.filter.is: Er
 grid.filter.less: Mindre enn
 grid.filter.more: Mer enn
+grid.filter.file-size-unit.kb: KB
+grid.filter.file-size-unit.mb: MB
+grid.filter.file-size-unit.gb: GB
 grid.copy-notice: Kopiert til utklippstavlen
 grid.configuration.no-saved-templates: Ingen lagrede maler tilgjengelig
 grid.configuration.template: Mal

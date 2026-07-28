@@ -1,0 +1,180 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React from 'react'
+import { Select } from '@Pimcore/components/select/select'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { InputNumber } from '@Pimcore/components/input-number/input-number'
+import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
+import { t } from 'i18next'
+import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
+import { NumberFilterSettingValue } from './dynamic-type-field-filter-number-component'
+import { DEFAULT_FILE_SIZE_UNIT, FileSizeUnit } from '../types/file-size/file-size-units'
+
+/**
+ * Value held by the file-size filter. The numeric bounds (`from`/`to`/`is`) are the raw numbers the
+ * user typed, expressed in `unit`. Conversion to bytes happens in the dynamic type's
+ * transformFilterToApiRequest, so the UI stays lossless across remounts.
+ */
+export interface FileSizeValue {
+  setting: NumberFilterSettingValue
+  from: number | null
+  to: number | null
+  is: number | null
+  unit: FileSizeUnit
+}
+
+export interface DynamicTypeFieldFilterFileSizeProps extends AbstractFieldFilterDefinition {}
+
+export const DynamicTypeFieldFilterFileSizeComponent = (
+  props: DynamicTypeFieldFilterFileSizeProps
+): React.JSX.Element => {
+  const { data: rawData, setData } = useDynamicFilter()
+
+  const data: FileSizeValue = rawData ?? {
+    setting: NumberFilterSettingValue.IS,
+    from: null,
+    to: null,
+    is: null,
+    unit: DEFAULT_FILE_SIZE_UNIT
+  }
+
+  const SETTING_OPTIONS = [
+    { label: t('grid.filter.is'), value: NumberFilterSettingValue.IS },
+    { label: t('grid.filter.between'), value: NumberFilterSettingValue.BETWEEN },
+    { label: t('grid.filter.less'), value: NumberFilterSettingValue.LESS },
+    { label: t('grid.filter.more'), value: NumberFilterSettingValue.MORE }
+  ]
+
+  const UNIT_OPTIONS = [
+    { label: t('grid.filter.file-size-unit.kb'), value: FileSizeUnit.KB },
+    { label: t('grid.filter.file-size-unit.mb'), value: FileSizeUnit.MB },
+    { label: t('grid.filter.file-size-unit.gb'), value: FileSizeUnit.GB }
+  ]
+
+  const currentSetting = data?.setting ?? NumberFilterSettingValue.IS
+  const currentUnit = data?.unit ?? DEFAULT_FILE_SIZE_UNIT
+
+  const handleSettingChange = (newSetting: NumberFilterSettingValue): void => {
+    const prevData = data ?? {
+      from: null,
+      to: null,
+      is: null,
+      setting: NumberFilterSettingValue.IS,
+      unit: currentUnit
+    }
+
+    if (newSetting === NumberFilterSettingValue.LESS) {
+      setData({
+        setting: newSetting,
+        from: null,
+        to: prevData.to ?? prevData.is ?? prevData.from ?? null,
+        is: null,
+        unit: currentUnit
+      })
+    } else if (newSetting === NumberFilterSettingValue.MORE) {
+      setData({
+        setting: newSetting,
+        from: prevData.from ?? prevData.is ?? prevData.to ?? null,
+        to: null,
+        is: null,
+        unit: currentUnit
+      })
+    } else if (newSetting === NumberFilterSettingValue.IS) {
+      setData({
+        setting: newSetting,
+        from: null,
+        to: null,
+        is: prevData.from ?? prevData.to ?? null,
+        unit: currentUnit
+      })
+    } else if (newSetting === NumberFilterSettingValue.BETWEEN) {
+      setData({
+        setting: newSetting,
+        from: prevData.from ?? prevData.is ?? null,
+        to: prevData.to ?? null,
+        is: null,
+        unit: currentUnit
+      })
+    }
+  }
+
+  const handleUnitChange = (newUnit: FileSizeUnit): void => {
+    setData({ ...data, setting: currentSetting, unit: newUnit })
+  }
+
+  const handleNumberChange = (field: 'is' | 'from' | 'to', value: number | null): void => {
+    setData({ ...data, setting: currentSetting, unit: currentUnit, [field]: value })
+  }
+
+  const getNumberValue = (): number | null => {
+    if (currentSetting === NumberFilterSettingValue.IS) {
+      return data?.is ?? null
+    } else if (currentSetting === NumberFilterSettingValue.LESS) {
+      return data?.to ?? null
+    } else if (currentSetting === NumberFilterSettingValue.MORE) {
+      return data?.from ?? null
+    } else return null
+  }
+
+  return (
+    <Flex
+      align="center"
+      gap="extra-small"
+    >
+      <Select
+        defaultValue={ NumberFilterSettingValue.IS }
+        onChange={ (value: NumberFilterSettingValue) => { handleSettingChange(value) } }
+        options={ SETTING_OPTIONS }
+        width={ currentSetting === NumberFilterSettingValue.MORE ? 100 : 90 }
+      />
+
+      {currentSetting === NumberFilterSettingValue.BETWEEN && (
+        <>
+          <InputNumber
+            min={ 0 }
+            onChange={ (value: number | null) => { handleNumberChange('from', value) } }
+            placeholder={ t('grid.filter.from') }
+            value={ data?.from ?? null }
+          />
+          <InputNumber
+            min={ 0 }
+            onChange={ (value: number | null) => { handleNumberChange('to', value) } }
+            placeholder={ t('grid.filter.to') }
+            value={ data?.to ?? null }
+          />
+        </>
+      )}
+      {currentSetting !== NumberFilterSettingValue.BETWEEN && (
+        <InputNumber
+          min={ 0 }
+          onChange={ (value: number | null) => {
+            if (currentSetting === NumberFilterSettingValue.IS) {
+              handleNumberChange('is', value)
+            } else if (currentSetting === NumberFilterSettingValue.LESS) {
+              handleNumberChange('to', value)
+            } else if (currentSetting === NumberFilterSettingValue.MORE) {
+              handleNumberChange('from', value)
+            }
+          } }
+          value={ getNumberValue() }
+        />
+      )}
+
+      <Select
+        defaultValue={ DEFAULT_FILE_SIZE_UNIT }
+        onChange={ (value: FileSizeUnit) => { handleUnitChange(value) } }
+        options={ UNIT_OPTIONS }
+        value={ currentUnit }
+        width={ 80 }
+      />
+    </Flex>
+  )
+}

@@ -17,6 +17,7 @@ export enum FieldFilterFrontendType {
   Boolean = 'system.boolean',
   DateTime = 'system.datetime',
   Date = 'system.date',
+  FileSize = 'system.fileSize',
   InputQuantityValue = 'system.input_quantity_value',
   Number = 'system.number',
   QuantityValue = 'system.quantity_value',
