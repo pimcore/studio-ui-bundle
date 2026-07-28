@@ -12,7 +12,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
-import { type AvailableColumn, buildColumnPickerGroups } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
+import { type AvailableColumn, buildColumnPickerGroups, resolveColumnTranslationKey } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column-picker.types'
 import { type FieldFiltersProps } from '@Pimcore/components/field-filters/field-filters'
 import { useDraftFilterValues } from '../../../../../../element-filters'
@@ -150,7 +150,7 @@ export const useFieldFilterEditor = (): UseFieldFilterEditorReturn => {
       ...prevFilters,
       {
         data: undefined,
-        translationKey: column.key,
+        translationKey: t(resolveColumnTranslationKey(column)),
         id: column.key,
         type: column.type,
         frontendType: column.frontendType,
