@@ -1,0 +1,22 @@
+name: Reusable Translations
+
+on:
+  pull_request:
+    paths:
+      - "translations/**"
+
+concurrency:
+  group: translations-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  translations:
+    uses: pimcore/workflows-collection-public/.github/workflows/reusable-translations.yaml@main
+    with:
+      translations_dir: translations
+    secrets:
+      TRANSLATIONS_GITHUB_TOKEN: ${{ secrets.TRANSLATIONS_GITHUB_TOKEN }}
+      ANTHROPIC_TRANSLATIONS_API_KEY: ${{ secrets.ANTHROPIC_TRANSLATIONS_API_KEY }}
