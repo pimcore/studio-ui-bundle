@@ -9,6 +9,7 @@
  */
 
 import React, { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { type IDynamicFilter } from '../dynamic-filter/provider/dynamic-filter-provider'
 import { StackList, type StackListProps } from '../stack-list/stack-list'
 import { DynamicFilter } from '../dynamic-filter/dynamic-filter'
@@ -24,6 +25,7 @@ export interface FieldFiltersProps {
 }
 
 export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const [_data, _setData] = useState(data)
 
   const setData = (data: IDynamicFilter[]): void => {
@@ -85,7 +87,7 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
       key,
       title: filter.id,
       children: <Tooltip title={ filter.nameTooltip }>
-        <Tag>{filter.translationKey}</Tag>
+        <Tag>{t(filter.translationKey)}</Tag>
       </Tooltip>,
       body: (
         <DynamicFilter
