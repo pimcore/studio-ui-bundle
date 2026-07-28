@@ -46,6 +46,8 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
     )
   }
 
+  const translatedTitle = isNonEmptyString(props.title) ? t(props.title) : props.title
+
   return useMemo(() => {
     if (!isPaddedLayout) {
       return (
@@ -65,7 +67,7 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
           extra={ props.extra }
           style={ props.style }
           theme={ theme }
-          title={ wrapWithIcon(props.title) }
+          title={ wrapWithIcon(translatedTitle) }
         >{props.children}</AccordionView>
       )
     }
@@ -78,8 +80,8 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
         extraPosition={ props.extraPosition }
         style={ props.style }
         theme={ theme }
-        title={ wrapWithIcon(isNonEmptyString(props.title) ? t(props.title) : props.title) }
+        title={ wrapWithIcon(translatedTitle) }
       >{props.children}</CardView>
     )
-  }, [props, isPaddedLayout])
+  }, [props, isPaddedLayout, translatedTitle])
 }
