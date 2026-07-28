@@ -8,11 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Alert, Modal, Space } from 'antd'
+import { Alert, Space } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { CreateCSVForm, type CSVFormValues } from './create-csv-form/create-csv-form'
 import { CsvDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/csv-download-job'
-import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
+import { Modal } from '@Pimcore/components/modal/modal'
 import { useTranslation } from 'react-i18next'
 import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
@@ -82,12 +82,11 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
 
   return (
     <Modal
+      iconName='export'
       onCancel={ () => { props.setOpen(false) } }
       onOk={ () => { form.submit() } }
       open={ props.open }
-      title={ (
-        <ModalTitle iconName='export'>{ t('export-csv-form.modal-title') }</ModalTitle>
-      ) }
+      title={ t('export-csv-form.modal-title') }
     >
       <Space
         direction='vertical'

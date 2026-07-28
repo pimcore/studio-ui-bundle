@@ -10,7 +10,7 @@
 
 import React, { useCallback, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Modal } from 'antd'
+import { Modal } from '@Pimcore/components/modal/modal'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { AreaProvider } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
 import { SettingsProvider } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'

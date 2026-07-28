@@ -8,12 +8,35 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { App } from 'antd'
+import { App, type ModalFuncProps } from 'antd'
 import { useMemo } from 'react'
 import { isInIframe } from '@Pimcore/utils/iframe'
 import { isPimcoreStudioApiAvailable, getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
+import { withDraggableModalRender } from '@Pimcore/components/modal/hooks/draggable-modal-render'
 
 type ModalStaticFunctions = ReturnType<typeof App.useApp>['modal']
+
+/** Imperative modal methods whose dialogs should become draggable by their title. */
+const DRAGGABLE_METHODS = ['confirm', 'info', 'success', 'error', 'warning'] as const
+
+/**
+ * Wraps an imperative modal instance so its confirm/info/success/error/warning
+ * dialogs are draggable, composing with any `modalRender` the caller already
+ * provides (e.g. the form modals' autofocus render).
+ */
+function withDraggableModals (modal: ModalStaticFunctions): ModalStaticFunctions {
+  const wrapped = { ...modal }
+
+  DRAGGABLE_METHODS.forEach((method) => {
+    const original = modal[method]
+    wrapped[method] = (config: ModalFuncProps) => original({
+      ...config,
+      modalRender: withDraggableModalRender(config.modalRender)
+    })
+  })
+
+  return wrapped
+}
 
 export interface StudioModalResponse {
   modal: ModalStaticFunctions
@@ -43,8 +66,8 @@ export function useStudioModal (): StudioModalResponse {
     }
 
     return {
-      modal: studioModal,
-      localModal
+      modal: withDraggableModals(studioModal),
+      localModal: withDraggableModals(localModal)
     }
   }, [localModal])
 }

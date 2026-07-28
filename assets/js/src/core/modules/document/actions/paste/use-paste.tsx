@@ -22,7 +22,7 @@ import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { useTreeCopyPasteContext, type StoreNode } from '@Pimcore/modules/element/actions/copy-paste/tree-copy-paste-context'
 import { usePasteVisibility } from '@Pimcore/modules/element/actions/copy-paste/use-paste-visibility'
-import { App } from 'antd'
+import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { Select } from '@Pimcore/components/select/select'
 import { Form } from '@Pimcore/components/form/form'
 import { type DocumentCloneParameters, api } from '@Pimcore/modules/document/document-api-slice.gen'
@@ -53,7 +53,7 @@ export const usePaste = (): UsePasteHookReturn => {
   const settings = useSettings()
   const executionEngine = useExecutionEngine()
   const { getDisplayName } = useLanguageLookup()
-  const { modal } = App.useApp()
+  const { localModal: modal } = useStudioModal()
 
   const [languageForm] = Form.useForm()
 
