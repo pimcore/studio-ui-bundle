@@ -20,8 +20,8 @@ import { DEFAULT_FILE_SIZE_UNIT, FileSizeUnit } from '../types/file-size/file-si
 
 /**
  * Value held by the file-size filter. The numeric bounds (`from`/`to`/`is`) are the raw numbers the
- * user typed, expressed in `unit`. Conversion to bytes happens in the dynamic type's
- * transformFilterToApiRequest, so the UI stays lossless across remounts.
+ * user typed, expressed in `unit`. Conversion to bytes happens in the backend filter handler, so the
+ * UI keeps the raw value + unit and stays lossless across remounts.
  */
 export interface FileSizeValue {
   setting: NumberFilterSettingValue
@@ -130,9 +130,9 @@ export const DynamicTypeFieldFilterFileSizeComponent = (
       gap="extra-small"
     >
       <Select
-        defaultValue={ NumberFilterSettingValue.IS }
         onChange={ (value: NumberFilterSettingValue) => { handleSettingChange(value) } }
         options={ SETTING_OPTIONS }
+        value={ currentSetting }
         width={ currentSetting === NumberFilterSettingValue.MORE ? 100 : 90 }
       />
 

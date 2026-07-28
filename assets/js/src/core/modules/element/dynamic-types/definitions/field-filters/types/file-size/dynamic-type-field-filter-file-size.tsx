@@ -45,6 +45,23 @@ export class DynamicTypeFieldFilterFileSize extends DynamicTypeFieldFilterAbstra
       return false
     }
 
-    return (value.is != null || value.from != null || value.to != null) && !isNil(value.unit)
+    if (isNil(value.unit)) {
+      return false
+    }
+
+    // Only apply once the bound(s) the selected setting needs are filled, so an incomplete draft
+    // (e.g. "between" with only one bound) is never sent to the backend.
+    switch (value.setting) {
+      case 'is':
+        return !isNil(value.is)
+      case 'less':
+        return !isNil(value.to)
+      case 'more':
+        return !isNil(value.from)
+      case 'between':
+        return !isNil(value.from) && !isNil(value.to)
+      default:
+        return false
+    }
   }
 }
