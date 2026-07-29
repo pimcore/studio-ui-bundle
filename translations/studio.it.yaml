@@ -1324,7 +1324,7 @@ tree.actions.paste: Incolla
 tree.actions.delete: Elimina
 tree.actions.add-user: Aggiungi utente
 tree.actions.clone-user: Clona utente
-tree.actions.remove-user: Rimuovi utente
+tree.actions.remove-user: Elimina utente
 tree.actions.folder: Cartella
 tree.actions.user: Utente
 tree.actions.add-folder: Nuova cartella
@@ -1334,7 +1334,7 @@ tree.actions.rename-tag: Rinomina
 tree.actions.role: Ruolo
 tree.actions.add-role: Aggiungi ruolo
 tree.actions.clone-role: Clona ruolo
-tree.actions.remove-role: Rimuovi ruolo
+tree.actions.remove-role: Elimina ruolo
 tree.actions.remove-folder: Rimuovi cartella
 tag-configuration.new: Nuovo
 tag-configuration.new-tag: Nuovo tag

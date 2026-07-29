@@ -1324,7 +1324,7 @@ tree.actions.paste: Lim inn
 tree.actions.delete: Slett
 tree.actions.add-user: Legg til bruker
 tree.actions.clone-user: Klon bruker
-tree.actions.remove-user: Fjern bruker
+tree.actions.remove-user: Slett bruker
 tree.actions.folder: Mappe
 tree.actions.user: Bruker
 tree.actions.add-folder: Ny mappe
@@ -1334,7 +1334,7 @@ tree.actions.rename-tag: Gi nytt navn
 tree.actions.role: Rolle
 tree.actions.add-role: Legg til rolle
 tree.actions.clone-role: Klon rolle
-tree.actions.remove-role: Fjern rolle
+tree.actions.remove-role: Slett rolle
 tree.actions.remove-folder: Fjern mappe
 tag-configuration.new: Ny
 tag-configuration.new-tag: Ny tagg
