@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { uniqueId } from 'lodash'
+import { isUndefined, uniqueId } from 'lodash'
 import UnknownFlag from '@Pimcore/assets/images/flags/_unknown.inline.svg?react'
 import { GeneralError, trackError } from '@sdk/modules/app'
 
@@ -196,7 +196,7 @@ export const resolveLanguageFlag = async (
     return { flagCode: normalizedCode, isLanguageFlag: false }
   }
 
-  if (languageOnly !== normalizedCode && languageCountryMapping[languageOnly] !== undefined) {
+  if (languageOnly !== normalizedCode && !isUndefined(languageCountryMapping[languageOnly])) {
     return { flagCode: languageCountryMapping[languageOnly], isLanguageFlag: false }
   }
 
