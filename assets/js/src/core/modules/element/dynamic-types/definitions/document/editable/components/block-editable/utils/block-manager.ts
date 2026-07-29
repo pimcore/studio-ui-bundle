@@ -24,15 +24,18 @@ export class BlockManager extends AbstractBlockManager {
   }
 
   protected getElementSelector (): string {
-    return `.pimcore_block_entry[data-name="${this.editableName}"][key]`
+    // match on `data-key` (robust mirror of `key`, always emitted by the backend);
+    // `key` can be stripped downstream, which would make managed entries invisible
+    // and silently drop their child editables on save
+    return `.pimcore_block_entry[data-name="${this.editableName}"][data-key]`
   }
 
   findElementIndex (targetElement: HTMLElement): number {
     const elements = this.queryElements()
     if (elements.length === 0) return -1
 
-    const targetKey = targetElement.getAttribute('key')
-    return elements.findIndex(element => element.getAttribute('key') === targetKey)
+    const targetKey = this.getElementKey(targetElement)
+    return elements.findIndex(element => this.getElementKey(element) === targetKey)
   }
 
   ensureElementKey (element: HTMLElement): void {
