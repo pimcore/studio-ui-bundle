@@ -15,7 +15,8 @@ import { isNil } from 'lodash'
 const api = baseApi.enhanceEndpoints({
   addTagTypes: [
     tagNames.GDPR_DATA,
-    tagNames.GDPR_DATA_DETAIL
+    tagNames.GDPR_DATA_DETAIL,
+    tagNames.EMAIL_LOG
   ],
   endpoints: {
     gdprSearchData: {
@@ -36,7 +37,8 @@ const api = baseApi.enhanceEndpoints({
 
         return [
           ...elementTags,
-          ...providingTags.GDPR_DATA(args.provider!)
+          ...providingTags.GDPR_DATA(args.provider!),
+          ...(args.provider === 'sent_mails' ? providingTags.EMAIL_LOG() : [])
         ]
       }
     }
