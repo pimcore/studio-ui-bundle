@@ -319,6 +319,10 @@ export type Version = {
     user: VersionUser;
     /** scheduled */
     scheduled?: number | null;
+    /** coauthor type */
+    coauthorType?: string | null;
+    /** coauthor */
+    coauthor?: string | null;
 };
 export const {
     useVersionAssetDownloadByIdQuery,

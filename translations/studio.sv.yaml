@@ -13,7 +13,6 @@ widget.missing-tab-context.description: Den här funktionen stöds inte för det
 block: Block
 error.error_something_generic_went_wrong: Något gick fel
 error.error_permission_denied: Du har inte behörighet att utföra denna åtgärd på detta element.
-error.syntax_error: Syntaxfel
 error.error_element_exists: Elementet finns redan
 error.error_folder_exists: Mappen finns redan
 error.error_invalid_argument: Ogiltigt argument
@@ -26,6 +25,7 @@ error.error_document_language_not_set: Dokumentet har ingen språkegenskap angiv
 error.error_inconsistent_asset_type: Bara assets av samma typ tillåts här.
 error.error_recycle_bin_restore: Kan inte återställa elementet från papperskorgen
 error.error_recycle_bin_restore_missing_parent: Kan inte återställa elementet från papperskorgen, överordnat element saknas
+error.syntax_error: Syntaxfel
 sidebar.selected_elements: Valda element
 sidebar.grid_config: Rutnätskonfiguration
 sidebar.tag_filters: Taggfilter
@@ -374,6 +374,7 @@ grid.advanced-column.preview: Förhandsvisning
 grid.advanced-column.no-preview: Inget förhandsvisningsobjekt tillgängligt
 grid.advanced-column.no-preview-data: Ingen förhandsvisningsdata tillgänglig
 grid.advanced-column.error-preview-data: Fel vid laddning av förhandsvisning
+grid.advanced-column.preview-item: Förhandsvisningsobjekt
 grid.advanced-column.trim: Trimma
 grid.advanced-column.find: Sök
 grid.advanced-column.replace: Ersätt
@@ -409,8 +410,8 @@ grid.advanced-column.advancedColumns.phpCode: PHP-kod
 grid.advanced-column.advancedColumns.phpCodeKey: PHP Transformer-nyckel
 grid.advanced-column.advancedColumns.arguments: Argument
 component.workflow-card.action-btn: Workflowåtgärder
-component.pql.description: Pimcore Query Language (PQL) är ett enkelt men kraftfullt frågespråk som låter dig söka data med olika kriterier, inklusive filtrering av värden i relaterade element, för att möjliggöra precis och omfattande datahämtning. Se <anchorPQL>PQL-dokumentation</anchorPQL> för detaljer
 component.pql.placeholder: Skriv din fråga
+component.pql.description: Pimcore Query Language (PQL) är ett enkelt men kraftfullt frågespråk som låter dig söka data med olika kriterier, inklusive filtrering av värden i relaterade element, för att möjliggöra precis och omfattande datahämtning. Se <anchorPQL>PQL-dokumentation</anchorPQL> för detaljer
 asset.asset-editor-tabs.embedded-metadata.headline: Metainformation
 asset.asset-editor-tabs.embedded-metadata.columns.name: Namn
 asset.asset-editor-tabs.embedded-metadata.columns.value: Värde
@@ -443,6 +444,7 @@ version.label: Versioner
 version.versions: Versioner
 version.version: Version
 version.publish: Publicera
+version.coauthored-by: 'Medförfattad av {{type}} {{name}}'
 version.published: Publicerad
 version.autosaved: Automatiskt sparad
 version.schedule-for: Schemalagd för
@@ -496,8 +498,10 @@ schedule.all: Alla schemalagda (kommande & arkiv)
 schedule.toolbar.filters.active-switch: Bara aktiva
 schedule.toolbar.new: Ny
 schedule.toolbar.save-scheduled-tasks: Spara schemalagda uppgifter
-schedule.version.delete: Ta bort version
-schedule.version.publish: Publicera version
+schedule.action.delete: Ta bort
+schedule.action.publish: Publicera
+schedule.action.unpublish: Avpublicera
+schedule.action.publish-version: Publicera version
 schedule.select-an-action: Åtgärd
 schedule.select-a-version: Version
 schedule.archived: Arkiverade
@@ -530,12 +534,14 @@ userOwner: Ägare
 listing.grid-config.title: Rutnätskonfiguration
 grid-config.discard-all-changes: Förkasta alla ändringar
 grid-config.apply-changes: Tillämpa ändringar
+grid-config.reload: Läs om
 listing.add-column: Lägg till en kolumn
 listing.add-column.simple: Enkel
 listing.add-column.advanced: Avancerad
 listing.column-picker.search: Sök
 listing.column-picker.no-results: Inga kolumner hittades
 listing.column-picker.fields-to-add: Fält att lägga till
+listing.fields-to-add.collapse-simple-fields: Fäll ihop enkla fält
 listing.actions: Tillämpa på val
 listing.non-selected.actions: Tillämpa på alla
 listing.actions.zip-download: ZIP-nedladdning
@@ -836,6 +842,10 @@ field-definition.many-to-many-object-relation: Many-to-Many Object Relation
 field-definition.advanced-many-to-many-relation: Advanced Many-to-Many Relation
 field-definition.advanced-many-to-many-object-relation: Advanced Many-to-Many Object Relation
 field-definition.reverse-object-relation: Omvänd objektrelation
+field-definition.crm.gender.title: Kön
+field-definition.crm.firstname.title: Förnamn
+field-definition.crm.email.title: E-post
+field-definition.crm.lastname.title: Efternamn
 allowed-class: Tillåten klass
 allowed-classes: Tillåtna klasser
 allowed-asset-types: Tillåtna assettyper
@@ -1085,14 +1095,14 @@ jobs.job.button-download: ladda ner
 jobs.job.button-ignore-and-reload: ignorera och ladda om
 jobs.job.step_hint: "Steg {{step}}/{{total}}"
 jobs.job.step_hint_single: "Steg {{step}}"
-jobs.job.step.batch-edit.preparing: Förbereder massredigering
-jobs.job.step.batch-edit.applying: Tillämpar massredigering
 jobs.job.download-error: Nedladdning misslyckades
 jobs.job.download-not-available: Nedladdningen är inte längre tillgänglig.
 jobs.job.button-show-errors: Visa fel
 jobs.job.error-modal.title: Jobbfel
 jobs.job.button-abort: Avbryt jobb
 jobs.job.abort-confirm: Vill du verkligen avbryta det här jobbet?
+jobs.job.step.batch-edit.preparing: Förbereder massredigering
+jobs.job.step.batch-edit.applying: Tillämpar massredigering
 jobs.zip-job.title: "ZIP-nedladdning av {{title}}"
 jobs.csv-job.title: "CSV-nedladdning av {{title}}"
 jobs.xlsx-job.title: "XLSX-nedladdning av {{title}}"
@@ -1190,6 +1200,7 @@ element.new-folder.validation: Ange ett giltigt namn
 element.rename: Byt namn
 element.rename.label: Ange det nya namnet
 element.rename.validation: Ange ett giltigt namn
+element.share-via-notification: Dela via aviseringar
 element.delete: Ta bort
 element.delete.confirmation.title: Ta bort objekt
 element.delete.confirmation.text: Vill du verkligen ta bort det här objektet?
@@ -1373,6 +1384,7 @@ key-bindings.searchAsset: Sök Asset
 key-bindings.searchObject: Sök objekt
 key-bindings.searchAndReplaceAssignments: Sök och ersätt tilldelningar
 key-bindings.quickSearch: Snabbsökning
+search-modal.title: Snabbsökning
 key-bindings.system: System
 key-bindings.showMetaInfo: Visa metainformation
 key-bindings.showElementHistory: Visa elementhistorik
@@ -1591,14 +1603,14 @@ redirects.csv-import-results.errored: Felaktiga
 redirects.csv-import-results.close: Stäng
 redirects.csv-import-results.errors-details: Feldetaljer
 redirects.csv-import-results.line: Rad {{line}}
+robots-txt.save-success: robots.txt sparades
+robots-txt.on-file-system-warning: "Sparande inaktiverat: en fysisk robots.txt-fil finns i filsystemet."
 path: Sökväg
 entire_uri: Hela URI:n
 path_query: Sökväg och Query
 auto_create: Skapa automatiskt
 widget.redirects: Omdirigeringar
 navigation.redirects: Omdirigeringar
-robots-txt.save-success: robots.txt sparades
-robots-txt.on-file-system-warning: "Sparande inaktiverat: en fysisk robots.txt-fil finns i filsystemet."
 widget.robots-txt: robots.txt
 navigation.robots-txt: robots.txt
 perspective.default: Standard
@@ -2253,6 +2265,25 @@ recycle-bin.actions.delete: Ta bort
 recycle-bin.actions.delete.title: Tar bort papperskorgens objekt
 recycle-bin.actions.restore: Återställ
 recycle-bin.actions.restore.title: Återställer papperskorgens objekt
+ownership-management.title: Ägarskapshantering
+ownership-management.show-deleted-owners: Visa objekt från borttagna användare
+ownership-management.deleted-user: Borttagen användare
+ownership-management.columns.id: ID
+ownership-management.columns.name: Namn
+ownership-management.columns.modification-date: Ändringsdatum
+ownership-management.columns.owner: Ägare
+ownership-management.columns.actions: Åtgärder
+ownership-management.actions.reassign-owner: Tilldela om ägare
+ownership-management.actions.reassign-owner.title: Tilldelar om ägare av konfigurationer
+ownership-management.actions.delete: Ta bort
+ownership-management.actions.delete.title: Tar bort konfigurationer
+ownership-management.actions.batch-assign: Batchtilldelning
+ownership-management.actions.batch-delete: Batchborttagning
+ownership-management.reassign-owner.title: "Tilldela om ägare för {{count}} konfiguration(er)"
+ownership-management.reassign-owner.confirm: Tilldela om
+ownership-management.reassign-owner.placeholder: Sök efter en användare med namn
+ownership-management.delete.title: Ta bort konfigurationer
+ownership-management.delete.content: "Är du säker på att du vill ta bort {{count}} konfiguration(er)?"
 component.search.pleaceholder: Sök
 focal-point.set: Ange fokuspunkt
 video.placeholder: Klicka för att lägga till en video
@@ -2354,7 +2385,7 @@ perspective-editor.form.main-nav-permission.system.applicationLogger: Applicatio
 perspective-editor.form.main-nav-permission.system.users_hidden: Dölj Användare/Roller-menyn
 perspective-editor.form.main-nav-permission.system.users_roles: Roller
 perspective-editor.form.main-nav-permission.system.users_users: Användare
-perspective-editor.form.main-nav-permission.settings.appearanceBranding: Utseende & Varumärke
+perspective-editor.form.main-nav-permission.system.appearanceBranding: Utseende & Varumärke
 perspective-editor.form.main-nav-permission.system.perspectiveEditor: Perspektivredigerare
 perspective-editor.form.main-nav-permission.system.widgetEditor: Widgetredigerare
 perspective-editor.form.main-nav-permission.system.maintenanceMode: Underhållsläge
@@ -2454,6 +2485,10 @@ icon-selector.custom-icon-path: Anpassad sökväg
 icon-selector.custom-icon-path-placeholder: Lägg till en anpassad sökväg och bekräfta
 icon-selector.Twemoji: Twemoji-bibliotek
 icon-selector.Pimcore: Pimcore-bibliotek
+operational-grid.csv-import.title: Importera CSV
+operational-grid.csv-import.description: Ange CSV-data. Varje rad representerar en rad, kolumner separeras med kommatecken.
+operational-grid.csv-import.ok: Importera
+operational-grid.csv-import.cancel: Avbryt
 language: Språk
 no-languages-found: Inga språk hittades
 pretty-url: Snygg URL / URL Slug
@@ -2677,6 +2712,7 @@ display-mode-display: Visa sökvägssreferens
 display-mode-inline-search: Inline-sökning
 display-mode-grid-view: Rutnätsvy
 display-mode-tag-field: Taggfält
+language-comparison-modal.title: Språkjämförelse
 activate-column-configuration: Aktivera kolumnkonfiguration
 table-column-configuration: Tabellkolumnkonfiguration
 center: Mitten
@@ -2715,6 +2751,7 @@ quantity-values.create-modal.create: Skapa
 quantity-values.export: Exportera
 quantity-values.import: Importera
 quantity-values.import-modal.title: Importera kvantitetsvärdets enheter
+quantity-values.search: Sök
 owner: Ägare
 reverse-object-relation.tooltip: Icke-ägande objekt representerar relationer till ett annat objekt på samma sätt som objekt gör. Skillnaden är att ett icke-ägande objektfält inte äger relationsdata, utan det är bara en vy av data lagrad i andra objekt. Välj ägare och fältnamn där data ursprungligen lagras.
 disabled-fields: Inaktiverade fält
@@ -2805,23 +2842,4 @@ saved-search.update.success: Sparad sökning uppdaterad
 saved-search.delete.success: Sparad sökning borttagen
 saved-search.shared-modified.info: Du har gjort ändringar i den ursprungliga konfigurationen. Eftersom den ägs av någon annan kan du spara den som en ny sökning.
 saved-search.menu-shortcut-group: Menygrupp
-ownership-management.title: Ägarskapshantering
-ownership-management.show-deleted-owners: Visa objekt från borttagna användare
-ownership-management.deleted-user: Borttagen användare
-ownership-management.columns.id: ID
-ownership-management.columns.name: Namn
-ownership-management.columns.modification-date: Ändringsdatum
-ownership-management.columns.owner: Ägare
-ownership-management.columns.actions: Åtgärder
-ownership-management.actions.reassign-owner: Tilldela om ägare
-ownership-management.actions.reassign-owner.title: Tilldelar om ägare av konfigurationer
-ownership-management.actions.delete: Ta bort
-ownership-management.actions.delete.title: Tar bort konfigurationer
-ownership-management.actions.batch-assign: Batchtilldelning
-ownership-management.actions.batch-delete: Batchborttagning
-ownership-management.reassign-owner.title: "Tilldela om ägare för {{count}} konfiguration(er)"
-ownership-management.reassign-owner.confirm: Tilldela om
-ownership-management.reassign-owner.placeholder: Sök efter en användare med namn
-ownership-management.delete.title: Ta bort konfigurationer
-ownership-management.delete.content: "Är du säker på att du vill ta bort {{count}} konfiguration(er)?"
 perspective-editor.form.main-nav-permission.system.ownershipManagement: Ägarskapshantering

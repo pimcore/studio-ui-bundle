@@ -13,7 +13,6 @@ widget.missing-tab-context.description: Denne funksjonen støttes ikke for det r
 block: Blokk
 error.error_something_generic_went_wrong: Noe gikk galt
 error.error_permission_denied: Du har ikke tillatelse til å utføre denne handlingen på dette elementet.
-error.syntax_error: Syntaksfeil
 error.error_element_exists: Elementet finnes allerede
 error.error_folder_exists: Mappen finnes allerede
 error.error_invalid_argument: Ugyldig argument
@@ -26,6 +25,7 @@ error.error_document_language_not_set: Dokumentet har ingen språkegenskap angit
 error.error_inconsistent_asset_type: Kun ressurser av samme type er tillatt her.
 error.error_recycle_bin_restore: Kan ikke gjenopprette elementet fra papirkurven
 error.error_recycle_bin_restore_missing_parent: Kan ikke gjenopprette elementet fra papirkurven, overordnet element mangler
+error.syntax_error: Syntaksfeil
 sidebar.selected_elements: Valgte elementer
 sidebar.grid_config: Rutenettskonfigurasjon
 sidebar.tag_filters: Taggfiltre
@@ -374,6 +374,7 @@ grid.advanced-column.preview: Forhåndsvisning
 grid.advanced-column.no-preview: Ingen forhåndsvisningselement tilgjengelig
 grid.advanced-column.no-preview-data: Ingen forhåndsvisningsdata tilgjengelig
 grid.advanced-column.error-preview-data: Feil ved lasting av forhåndsvisning
+grid.advanced-column.preview-item: Forhåndsvisningselement
 grid.advanced-column.trim: Trim
 grid.advanced-column.find: Finn
 grid.advanced-column.replace: Erstatt
@@ -409,8 +410,8 @@ grid.advanced-column.advancedColumns.phpCode: PHP-kode
 grid.advanced-column.advancedColumns.phpCodeKey: PHP Transformer-nøkkel
 grid.advanced-column.advancedColumns.arguments: Argumenter
 component.workflow-card.action-btn: Arbeidsflythandlinger
-component.pql.description: Pimcore Query Language (PQL) er et enkelt, men kraftig spørrespråk som lar deg søke i data ved hjelp av ulike kriterier, inkludert filtrering av verdier i relaterte elementer, for å muliggjøre presis og omfattende datauthenting. For detaljer se <anchorPQL>PQL-dokumentasjon</anchorPQL>
 component.pql.placeholder: Skriv inn spørringen din
+component.pql.description: Pimcore Query Language (PQL) er et enkelt, men kraftig spørrespråk som lar deg søke i data ved hjelp av ulike kriterier, inkludert filtrering av verdier i relaterte elementer, for å muliggjøre presis og omfattende datauthenting. For detaljer se <anchorPQL>PQL-dokumentasjon</anchorPQL>
 asset.asset-editor-tabs.embedded-metadata.headline: Metainfo
 asset.asset-editor-tabs.embedded-metadata.columns.name: Navn
 asset.asset-editor-tabs.embedded-metadata.columns.value: Verdi
@@ -443,6 +444,7 @@ version.label: Versjoner
 version.versions: Versjoner
 version.version: Versjon
 version.publish: Publiser
+version.coauthored-by: 'Medforfattet av {{type}} {{name}}'
 version.published: Publisert
 version.autosaved: Automatisk lagret
 version.schedule-for: Planlagt for
@@ -496,8 +498,10 @@ schedule.all: Alle planlagte (kommende og arkiv)
 schedule.toolbar.filters.active-switch: Kun aktive
 schedule.toolbar.new: Ny
 schedule.toolbar.save-scheduled-tasks: Lagre planlagte oppgaver
-schedule.version.delete: Slett versjon
-schedule.version.publish: Publiser versjon
+schedule.action.delete: Slett
+schedule.action.publish: Publiser
+schedule.action.unpublish: Avpubliser
+schedule.action.publish-version: Publiser versjon
 schedule.select-an-action: Handling
 schedule.select-a-version: Versjon
 schedule.archived: Arkivert
@@ -530,12 +534,14 @@ userOwner: Eier (bruker)
 listing.grid-config.title: Rutenettskonfigurasjon
 grid-config.discard-all-changes: Forkast alle endringer
 grid-config.apply-changes: Bruk endringer
+grid-config.reload: Last på nytt
 listing.add-column: Legg til en kolonne
 listing.add-column.simple: Enkel
 listing.add-column.advanced: Avansert
 listing.column-picker.search: Søk
 listing.column-picker.no-results: Ingen kolonner funnet
 listing.column-picker.fields-to-add: Felter å legge til
+listing.fields-to-add.collapse-simple-fields: Skjul enkle felt
 listing.actions: Bruk på utvalg
 listing.non-selected.actions: Bruk på alle
 listing.actions.zip-download: ZIP-nedlasting
@@ -836,6 +842,10 @@ field-definition.many-to-many-object-relation: Many-to-Many Object Relation
 field-definition.advanced-many-to-many-relation: Advanced Many-to-Many Relation
 field-definition.advanced-many-to-many-object-relation: Advanced Many-to-Many Object Relation
 field-definition.reverse-object-relation: Omvendt objektrelasjon
+field-definition.crm.gender.title: Kjønn
+field-definition.crm.firstname.title: Fornavn
+field-definition.crm.email.title: E-post
+field-definition.crm.lastname.title: Etternavn
 allowed-class: Tillatt klasse
 allowed-classes: Tillatte klasser
 allowed-asset-types: Tillatte ressurstyper
@@ -1085,14 +1095,14 @@ jobs.job.button-download: last ned
 jobs.job.button-ignore-and-reload: ignorer og last på nytt
 jobs.job.step_hint: "Steg {{step}}/{{total}}"
 jobs.job.step_hint_single: "Steg {{step}}"
-jobs.job.step.batch-edit.preparing: Forbereder masseredigering
-jobs.job.step.batch-edit.applying: Bruker masseredigering
 jobs.job.download-error: Nedlasting mislyktes
 jobs.job.download-not-available: Nedlastingen er ikke lenger tilgjengelig.
 jobs.job.button-show-errors: Vis feil
 jobs.job.error-modal.title: Jobbfeil
 jobs.job.button-abort: Avbryt jobb
 jobs.job.abort-confirm: Vil du virkelig avbryte denne jobben?
+jobs.job.step.batch-edit.preparing: Forbereder masseredigering
+jobs.job.step.batch-edit.applying: Bruker masseredigering
 jobs.zip-job.title: "ZIP-nedlasting av {{title}}"
 jobs.csv-job.title: "CSV-nedlasting av {{title}}"
 jobs.xlsx-job.title: "XLSX-nedlasting av {{title}}"
@@ -1190,6 +1200,7 @@ element.new-folder.validation: Vennligst oppgi et gyldig navn
 element.rename: Gi nytt navn
 element.rename.label: Vennligst oppgi det nye navnet
 element.rename.validation: Vennligst oppgi et gyldig navn
+element.share-via-notification: Del via varsler
 element.delete: Slett
 element.delete.confirmation.title: Slett element
 element.delete.confirmation.text: Vil du virkelig slette dette elementet?
@@ -1373,6 +1384,7 @@ key-bindings.searchAsset: Søk ressurs
 key-bindings.searchObject: Søk objekt
 key-bindings.searchAndReplaceAssignments: Søk og erstatt tilordninger
 key-bindings.quickSearch: Hurtigsøk
+search-modal.title: Hurtigsøk
 key-bindings.system: System
 key-bindings.showMetaInfo: Vis metainfo
 key-bindings.showElementHistory: Vis elementhistorikk
@@ -1591,14 +1603,14 @@ redirects.csv-import-results.errored: Feilet
 redirects.csv-import-results.close: Lukk
 redirects.csv-import-results.errors-details: Feildetaljer
 redirects.csv-import-results.line: Linje {{line}}
+robots-txt.save-success: robots.txt ble lagret
+robots-txt.on-file-system-warning: "Lagring deaktivert: en fysisk robots.txt-fil finnes i filsystemet."
 path: Sti
 entire_uri: Hele URI
 path_query: Sti og spørring
 auto_create: Opprett automatisk
 widget.redirects: Omdirigeringer
 navigation.redirects: Omdirigeringer
-robots-txt.save-success: robots.txt ble lagret
-robots-txt.on-file-system-warning: "Lagring deaktivert: en fysisk robots.txt-fil finnes i filsystemet."
 widget.robots-txt: robots.txt
 navigation.robots-txt: robots.txt
 perspective.default: Standard
@@ -2253,6 +2265,25 @@ recycle-bin.actions.delete: Slett
 recycle-bin.actions.delete.title: Sletter papirkurvelementer
 recycle-bin.actions.restore: Gjenopprett
 recycle-bin.actions.restore.title: Gjenoppretter papirkurvelementer
+ownership-management.title: Eierskapsadministrasjon
+ownership-management.show-deleted-owners: Vis elementer fra slettede brukere
+ownership-management.deleted-user: Slettet bruker
+ownership-management.columns.id: ID
+ownership-management.columns.name: Navn
+ownership-management.columns.modification-date: Endringsdato
+ownership-management.columns.owner: Eier
+ownership-management.columns.actions: Handlinger
+ownership-management.actions.reassign-owner: Tilordne eier på nytt
+ownership-management.actions.reassign-owner.title: Tilordner eier av konfigurasjoner på nytt
+ownership-management.actions.delete: Slett
+ownership-management.actions.delete.title: Sletter konfigurasjoner
+ownership-management.actions.batch-assign: Massetilordning
+ownership-management.actions.batch-delete: Massesletting
+ownership-management.reassign-owner.title: "Tilordne eier av {{count}} konfigurasjon(er) på nytt"
+ownership-management.reassign-owner.confirm: Tilordne på nytt
+ownership-management.reassign-owner.placeholder: Søk etter en bruker ved navn
+ownership-management.delete.title: Slett konfigurasjoner
+ownership-management.delete.content: "Er du sikker på at du vil slette {{count}} konfigurasjon(er)?"
 component.search.pleaceholder: Søk
 focal-point.set: Sett fokuspunkt
 video.placeholder: Klikk for å legge til en video
@@ -2454,6 +2485,10 @@ icon-selector.custom-icon-path: Egendefinert sti
 icon-selector.custom-icon-path-placeholder: Legg til en egendefinert sti og bekreft
 icon-selector.Twemoji: Twemoji-bibliotek
 icon-selector.Pimcore: Pimcore-bibliotek
+operational-grid.csv-import.title: Importer CSV
+operational-grid.csv-import.description: Angi CSV-data. Hver linje representerer en rad, kolonner er separert med komma.
+operational-grid.csv-import.ok: Importer
+operational-grid.csv-import.cancel: Avbryt
 language: Språk
 no-languages-found: Ingen språk funnet
 pretty-url: Pretty URL / URL Slug
@@ -2677,6 +2712,7 @@ display-mode-display: Vis stireferanse
 display-mode-inline-search: Innebygd søk
 display-mode-grid-view: Rutenettvisning
 display-mode-tag-field: Taggfelt
+language-comparison-modal.title: Språksammenligning
 activate-column-configuration: Aktiver kolonnekonfigurasjon
 table-column-configuration: Tabellkolonnekonfigurasjon
 center: Senter
@@ -2715,6 +2751,7 @@ quantity-values.create-modal.create: Opprett
 quantity-values.export: Eksporter
 quantity-values.import: Importer
 quantity-values.import-modal.title: Importer mengdeverdi-enheter
+quantity-values.search: Søk
 owner: Eier
 reverse-object-relation.tooltip: Ikke-eierobjekter representerer relasjoner til et annet objekt på samme måte som objekter gjør. Forskjellen er at et ikke-eierobjektfelt ikke er eier av relasjonsdataene, det er kun en visning av data lagret i andre objekter. Vennligst velg eier og feltnavn der dataene opprinnelig er lagret.
 disabled-fields: Deaktiverte felt
@@ -2805,23 +2842,4 @@ saved-search.update.success: Lagret søk oppdatert
 saved-search.delete.success: Lagret søk slettet
 saved-search.shared-modified.info: Du har gjort endringer i den opprinnelige konfigurasjonen. Siden den eies av noen andre, kan du lagre den som et nytt søk.
 saved-search.menu-shortcut-group: Menygruppe
-ownership-management.title: Eierskapsadministrasjon
-ownership-management.show-deleted-owners: Vis elementer fra slettede brukere
-ownership-management.deleted-user: Slettet bruker
-ownership-management.columns.id: ID
-ownership-management.columns.name: Navn
-ownership-management.columns.modification-date: Endringsdato
-ownership-management.columns.owner: Eier
-ownership-management.columns.actions: Handlinger
-ownership-management.actions.reassign-owner: Tilordne eier på nytt
-ownership-management.actions.reassign-owner.title: Tilordner eier av konfigurasjoner på nytt
-ownership-management.actions.delete: Slett
-ownership-management.actions.delete.title: Sletter konfigurasjoner
-ownership-management.actions.batch-assign: Massetilordning
-ownership-management.actions.batch-delete: Massesletting
-ownership-management.reassign-owner.title: "Tilordne eier av {{count}} konfigurasjon(er) på nytt"
-ownership-management.reassign-owner.confirm: Tilordne på nytt
-ownership-management.reassign-owner.placeholder: Søk etter en bruker ved navn
-ownership-management.delete.title: Slett konfigurasjoner
-ownership-management.delete.content: "Er du sikker på at du vil slette {{count}} konfigurasjon(er)?"
 perspective-editor.form.main-nav-permission.system.ownershipManagement: Eierskapsadministrasjon
