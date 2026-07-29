@@ -13,7 +13,6 @@ widget.missing-tab-context.description: "Cette fonctionnalité n'est pas prise e
 block: Bloc
 error.error_something_generic_went_wrong: Une erreur est survenue
 error.error_permission_denied: "Vous n'avez pas l'autorisation d'effectuer cette action sur cet élément."
-error.syntax_error: Erreur de syntaxe
 error.error_element_exists: L'élément existe déjà
 error.error_folder_exists: Le dossier existe déjà
 error.error_invalid_argument: Argument invalide
@@ -26,6 +25,7 @@ error.error_document_language_not_set: Le document n'a pas de propriété de lan
 error.error_inconsistent_asset_type: Seuls les assets du même type sont autorisés ici.
 error.error_recycle_bin_restore: "Impossible de restaurer l'élément depuis la corbeille"
 error.error_recycle_bin_restore_missing_parent: "Impossible de restaurer l'élément depuis la corbeille, l'élément parent est manquant"
+error.syntax_error: Erreur de syntaxe
 sidebar.selected_elements: Éléments sélectionnés
 sidebar.grid_config: Configuration de la grille
 sidebar.tag_filters: Filtres par tags
@@ -371,6 +371,7 @@ grid.advanced-column.preview: Aperçu
 grid.advanced-column.no-preview: Aucun élément d'aperçu disponible
 grid.advanced-column.no-preview-data: Aucune donnée d'aperçu disponible
 grid.advanced-column.error-preview-data: Erreur lors du chargement de l'aperçu
+grid.advanced-column.preview-item: Élément d'aperçu
 grid.advanced-column.trim: Rogner
 grid.advanced-column.find: Rechercher
 grid.advanced-column.replace: Remplacer
@@ -406,8 +407,8 @@ grid.advanced-column.advancedColumns.phpCode: Code PHP
 grid.advanced-column.advancedColumns.phpCodeKey: Clé du transformateur PHP
 grid.advanced-column.advancedColumns.arguments: Arguments
 component.workflow-card.action-btn: Actions du workflow
-component.pql.description: Pimcore Query Language (PQL) est un langage de requête simple mais puissant qui vous permet de rechercher des données en utilisant divers critères, y compris le filtrage de valeurs dans des éléments liés, pour permettre une récupération de données précise et complète. Pour plus de détails, consultez la <anchorPQL>documentation PQL</anchorPQL>
 component.pql.placeholder: Saisir votre requête
+component.pql.description: Pimcore Query Language (PQL) est un langage de requête simple mais puissant qui vous permet de rechercher des données en utilisant divers critères, y compris le filtrage de valeurs dans des éléments liés, pour permettre une récupération de données précise et complète. Pour plus de détails, consultez la <anchorPQL>documentation PQL</anchorPQL>
 asset.asset-editor-tabs.embedded-metadata.headline: Méta-informations
 asset.asset-editor-tabs.embedded-metadata.columns.name: Nom
 asset.asset-editor-tabs.embedded-metadata.columns.value: Valeur
@@ -440,6 +441,7 @@ version.label: Versions
 version.versions: Versions
 version.version: Version
 version.publish: Publier
+version.coauthored-by: 'Co-rédigé par {{type}} {{name}}'
 version.published: Publié
 version.autosaved: Enregistré automatiquement
 version.schedule-for: Planifié pour
@@ -493,8 +495,10 @@ schedule.all: Tout planifié (à venir et archive)
 schedule.toolbar.filters.active-switch: Actifs uniquement
 schedule.toolbar.new: Nouveau
 schedule.toolbar.save-scheduled-tasks: Enregistrer les tâches planifiées
-schedule.version.delete: Supprimer la version
-schedule.version.publish: Publier la version
+schedule.action.delete: Supprimer
+schedule.action.publish: Publier
+schedule.action.unpublish: Dépublier
+schedule.action.publish-version: Publier la version
 schedule.select-an-action: Action
 schedule.select-a-version: Version
 schedule.archived: Archivé
@@ -527,12 +531,14 @@ userOwner: Propriétaire
 listing.grid-config.title: Configuration de la grille
 grid-config.discard-all-changes: Annuler toutes les modifications
 grid-config.apply-changes: Appliquer les modifications
+grid-config.reload: Recharger
 listing.add-column: Ajouter une colonne
 listing.add-column.simple: Simple
 listing.add-column.advanced: Avancé
 listing.column-picker.search: Rechercher
 listing.column-picker.no-results: Aucune colonne trouvée
 listing.column-picker.fields-to-add: Champs à ajouter
+listing.fields-to-add.collapse-simple-fields: Réduire les champs simples
 listing.actions: Appliquer à la sélection
 listing.non-selected.actions: Appliquer à tous
 listing.actions.zip-download: Téléchargement ZIP
@@ -833,6 +839,10 @@ field-definition.many-to-many-object-relation: Relation Many-to-Many objet
 field-definition.advanced-many-to-many-relation: Relation Many-to-Many avancée
 field-definition.advanced-many-to-many-object-relation: Relation Many-to-Many objet avancée
 field-definition.reverse-object-relation: Relation objet inversée
+field-definition.crm.gender.title: Genre
+field-definition.crm.firstname.title: Prénom
+field-definition.crm.email.title: E-mail
+field-definition.crm.lastname.title: Nom
 allowed-class: Classe autorisée
 allowed-classes: Classes autorisées
 allowed-asset-types: Types d'assets autorisés
@@ -1082,14 +1092,14 @@ jobs.job.button-download: télécharger
 jobs.job.button-ignore-and-reload: ignorer et recharger
 jobs.job.step_hint: "Étape {{step}}/{{total}}"
 jobs.job.step_hint_single: "Étape {{step}}"
-jobs.job.step.batch-edit.preparing: Préparation de l'édition par lot
-jobs.job.step.batch-edit.applying: Application de l'édition par lot
 jobs.job.download-error: Le téléchargement a échoué
 jobs.job.download-not-available: Le téléchargement n'est plus disponible.
 jobs.job.button-show-errors: Afficher les erreurs
 jobs.job.error-modal.title: Erreurs de la tâche
 jobs.job.button-abort: Abandonner la tâche
 jobs.job.abort-confirm: Voulez-vous vraiment abandonner cette tâche ?
+jobs.job.step.batch-edit.preparing: Préparation de l'édition par lot
+jobs.job.step.batch-edit.applying: Application de l'édition par lot
 jobs.zip-job.title: "Téléchargement ZIP de {{title}}"
 jobs.csv-job.title: "Téléchargement CSV de {{title}}"
 jobs.xlsx-job.title: "Téléchargement XLSX de {{title}}"
@@ -1187,6 +1197,7 @@ element.new-folder.validation: Veuillez entrer un nom valide
 element.rename: Renommer
 element.rename.label: Veuillez entrer le nouveau nom
 element.rename.validation: Veuillez entrer un nom valide
+element.share-via-notification: Partager via notifications
 element.delete: Supprimer
 element.delete.confirmation.title: Supprimer l'élément
 element.delete.confirmation.text: Voulez-vous vraiment supprimer cet élément ?
@@ -1370,6 +1381,7 @@ key-bindings.searchAsset: Rechercher un asset
 key-bindings.searchObject: Rechercher un objet
 key-bindings.searchAndReplaceAssignments: Rechercher et remplacer les assignations
 key-bindings.quickSearch: Recherche rapide
+search-modal.title: Recherche rapide
 key-bindings.system: Système
 key-bindings.showMetaInfo: Afficher les méta-informations
 key-bindings.showElementHistory: Afficher l'historique des éléments
@@ -1588,14 +1600,14 @@ redirects.csv-import-results.errored: En erreur
 redirects.csv-import-results.close: Fermer
 redirects.csv-import-results.errors-details: Détails des erreurs
 redirects.csv-import-results.line: Ligne {{line}}
+robots-txt.save-success: robots.txt enregistré avec succès
+robots-txt.on-file-system-warning: "Enregistrement désactivé : un fichier robots.txt physique existe sur le système de fichiers."
 path: Chemin
 entire_uri: URI complète
 path_query: Chemin et requête
 auto_create: Création automatique
 widget.redirects: Redirections
 navigation.redirects: Redirections
-robots-txt.save-success: robots.txt enregistré avec succès
-robots-txt.on-file-system-warning: "Enregistrement désactivé : un fichier robots.txt physique existe sur le système de fichiers."
 widget.robots-txt: robots.txt
 navigation.robots-txt: robots.txt
 perspective.default: Par défaut
@@ -2250,6 +2262,25 @@ recycle-bin.actions.delete: Supprimer
 recycle-bin.actions.delete.title: Suppression des éléments de la corbeille
 recycle-bin.actions.restore: Restaurer
 recycle-bin.actions.restore.title: Restauration des éléments de la corbeille
+ownership-management.title: Gestion de la propriété
+ownership-management.show-deleted-owners: Afficher les éléments des utilisateurs supprimés
+ownership-management.deleted-user: Utilisateur supprimé
+ownership-management.columns.id: ID
+ownership-management.columns.name: Nom
+ownership-management.columns.modification-date: Date de modification
+ownership-management.columns.owner: Propriétaire
+ownership-management.columns.actions: Actions
+ownership-management.actions.reassign-owner: Réattribuer le propriétaire
+ownership-management.actions.reassign-owner.title: Réattribution du propriétaire des configurations
+ownership-management.actions.delete: Supprimer
+ownership-management.actions.delete.title: Suppression des configurations
+ownership-management.actions.batch-assign: Attribution par lot
+ownership-management.actions.batch-delete: Suppression par lot
+ownership-management.reassign-owner.title: "Réattribuer le propriétaire de {{count}} configuration(s)"
+ownership-management.reassign-owner.confirm: Réattribuer
+ownership-management.reassign-owner.placeholder: Rechercher un utilisateur par nom
+ownership-management.delete.title: Supprimer les configurations
+ownership-management.delete.content: "Voulez-vous vraiment supprimer {{count}} configuration(s) ?"
 component.search.pleaceholder: Rechercher
 focal-point.set: Définir le point focal
 video.placeholder: Cliquez pour ajouter une vidéo
@@ -2451,6 +2482,10 @@ icon-selector.custom-icon-path: Chemin personnalisé
 icon-selector.custom-icon-path-placeholder: Ajoutez un chemin personnalisé et validez
 icon-selector.Twemoji: Bibliothèque Twemoji
 icon-selector.Pimcore: Bibliothèque Pimcore
+operational-grid.csv-import.title: Importer un CSV
+operational-grid.csv-import.description: Saisissez les données CSV. Chaque ligne représente une rangée, les colonnes sont séparées par des virgules.
+operational-grid.csv-import.ok: Importer
+operational-grid.csv-import.cancel: Annuler
 language: Langue
 no-languages-found: Aucune langue trouvée
 pretty-url: Pretty URL / URL Slug
@@ -2674,6 +2709,7 @@ display-mode-display: Afficher la référence du chemin
 display-mode-inline-search: Recherche en ligne
 display-mode-grid-view: Vue en grille
 display-mode-tag-field: Champ de tags
+language-comparison-modal.title: Comparaison des langues
 activate-column-configuration: Activer la configuration des colonnes
 table-column-configuration: Configuration des colonnes du tableau
 center: Centre
@@ -2712,6 +2748,7 @@ quantity-values.create-modal.create: Créer
 quantity-values.export: Exporter
 quantity-values.import: Importer
 quantity-values.import-modal.title: Importer des unités de valeur de quantité
+quantity-values.search: Rechercher
 owner: Propriétaire
 reverse-object-relation.tooltip: "Les objets non propriétaires représentent des relations vers un autre objet de la même manière que les objets. La différence est qu'un champ d'objet non propriétaire n'est pas le propriétaire des données de relation, il s'agit simplement d'une vue sur les données stockées dans d'autres objets. Veuillez choisir le propriétaire et le nom du champ où les données sont stockées à l'origine."
 disabled-fields: Champs désactivés
@@ -2802,23 +2839,4 @@ saved-search.update.success: Recherche enregistrée mise à jour
 saved-search.delete.success: Recherche enregistrée supprimée
 saved-search.shared-modified.info: "Vous avez modifié la configuration d’origine. Comme elle appartient à quelqu’un d’autre, vous pouvez l’enregistrer comme nouvelle recherche."
 saved-search.menu-shortcut-group: Groupe de menu
-ownership-management.title: Gestion de la propriété
-ownership-management.show-deleted-owners: Afficher les éléments des utilisateurs supprimés
-ownership-management.deleted-user: Utilisateur supprimé
-ownership-management.columns.id: ID
-ownership-management.columns.name: Nom
-ownership-management.columns.modification-date: Date de modification
-ownership-management.columns.owner: Propriétaire
-ownership-management.columns.actions: Actions
-ownership-management.actions.reassign-owner: Réattribuer le propriétaire
-ownership-management.actions.reassign-owner.title: Réattribution du propriétaire des configurations
-ownership-management.actions.delete: Supprimer
-ownership-management.actions.delete.title: Suppression des configurations
-ownership-management.actions.batch-assign: Attribution par lot
-ownership-management.actions.batch-delete: Suppression par lot
-ownership-management.reassign-owner.title: "Réattribuer le propriétaire de {{count}} configuration(s)"
-ownership-management.reassign-owner.confirm: Réattribuer
-ownership-management.reassign-owner.placeholder: Rechercher un utilisateur par nom
-ownership-management.delete.title: Supprimer les configurations
-ownership-management.delete.content: "Voulez-vous vraiment supprimer {{count}} configuration(s) ?"
 perspective-editor.form.main-nav-permission.system.ownershipManagement: Gestion de la propriété
