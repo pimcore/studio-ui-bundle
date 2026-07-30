@@ -20,7 +20,7 @@ import { CsvModal } from '@Pimcore/modules/element/listing/batch-actions/csv-mod
 import { XlsxModal } from '@Pimcore/modules/element/listing/batch-actions/xlsx-modal/xlsx-modal'
 import { useBatchDelete } from '@Pimcore/modules/data-object/actions/batch-delete/use-batch-delete'
 import { ClassificationStoreModalProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
-import { checkElementPermission, type ElementPermissionKeys } from '@Pimcore/modules/element/permissions/permission-helper'
+import { checkElementPermission, type ElementPermissionKeys, type ElementPermissions } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export const BatchActions = (): React.JSX.Element => {
   const rowSelection = useRowSelectionOptional()
@@ -46,7 +46,7 @@ export const BatchActions = (): React.JSX.Element => {
   // deselected rows) so stale entries are ignored and rows with missing metadata fail closed.
   const allSelectedRowsAllow = (permission: ElementPermissionKeys): boolean =>
     Object.keys(selectedRows ?? {}).every((id) => {
-      const row = selectedRowsData[Number(id)]
+      const row = selectedRowsData[Number(id)] as { permissions?: ElementPermissions, isLocked?: boolean } | undefined
       return checkElementPermission(row?.permissions, permission) && row?.isLocked !== true
     })
 
