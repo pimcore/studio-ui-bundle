@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isNil } from 'lodash'
 import { useState } from 'react'
 import { type IInlineEditDecoratorConfig, type IInlineEditDecoratorProps } from '../../../../../inline-edit-decorator'
 import { type GridProps } from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/hooks/use-grid-options'
@@ -59,8 +60,15 @@ export const WithInlineEdit = (useBaseHook: IInlineEditDecoratorProps['useGridOp
         meta: event.meta
       }
 
-      updateCache(update)
-      updateApiData(update).finally(() => {
+      const cacheUpdate = updateCache(update)
+
+      updateApiData(update).then((result) => {
+        if (!isNil(result?.error)) {
+          cacheUpdate?.undo()
+        }
+      }).catch(() => {
+        cacheUpdate?.undo()
+      }).finally(() => {
         setModifiedCells((modifiedCells) => {
           return modifiedCells?.filter((cell) => cell.rowIndex !== rowData.id || cell.columnId !== columnId) ?? []
         })

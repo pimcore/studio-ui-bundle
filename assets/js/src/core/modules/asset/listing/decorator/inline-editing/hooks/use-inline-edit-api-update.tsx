@@ -22,7 +22,7 @@ export const useInlineEditApiUpdate = (): UseInlineEditApiUpdateReturn => {
     const { update, getGetRequestArgs } = event
     const { id, column: columnToUpdate, value } = update
 
-    dispatch(api.util.updateQueryData('assetGetGrid', getGetRequestArgs as AssetGetGridApiArg, (oldData) => {
+    return dispatch(api.util.updateQueryData('assetGetGrid', getGetRequestArgs as AssetGetGridApiArg, (oldData) => {
       item_loop:
       for (const item of oldData.items) {
         if (item.id !== id) {
