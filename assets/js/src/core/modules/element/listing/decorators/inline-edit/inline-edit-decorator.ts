@@ -22,8 +22,12 @@ export interface UpdateEvent {
   meta?: Record<string, any>
 }
 
+export interface UpdateCacheResult {
+  undo: () => void
+}
+
 export interface UseInlineEditApiUpdateReturn {
-  updateCache: (event: UpdateEvent) => void
+  updateCache: (event: UpdateEvent) => UpdateCacheResult | undefined
   updateApiData: (event: UpdateEvent) => Promise<any>
 }
 
