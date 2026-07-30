@@ -20,6 +20,7 @@ import { CsvModal } from '@Pimcore/modules/element/listing/batch-actions/csv-mod
 import { XlsxModal } from '@Pimcore/modules/element/listing/batch-actions/xlsx-modal/xlsx-modal'
 import { useBatchDelete } from '@Pimcore/modules/data-object/actions/batch-delete/use-batch-delete'
 import { ClassificationStoreModalProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
+import { checkElementPermission, type ElementPermissionKeys } from '@Pimcore/modules/element/permissions/permission-helper'
 
 export const BatchActions = (): React.JSX.Element => {
   const rowSelection = useRowSelectionOptional()
@@ -40,6 +41,15 @@ export const BatchActions = (): React.JSX.Element => {
   const numberedSelectedRows = selectedRows !== undefined ? Object.keys(selectedRows).map(Number) : []
   const hasSelectedItems = selectedRows !== undefined ? Object.keys(selectedRows).length > 0 : false
 
+  // A batch action is only permitted when every selected row grants the required permission
+  const allSelectedRowsAllow = (permission: ElementPermissionKeys): boolean =>
+    Object.values(selectedRowsData).every(
+      (row) => checkElementPermission(row?.permissions, permission) && row?.isLocked !== true
+    )
+
+  const canBatchEdit = allSelectedRowsAllow('save')
+  const canBatchDelete = allSelectedRowsAllow('delete')
+
   const handleBatchDeleteConfirm = (): void => {
     void confirmBatchDelete(numberedSelectedRows, selectedRowsData, () => { setSelectedRows({}) })
   }
@@ -50,6 +60,7 @@ export const BatchActions = (): React.JSX.Element => {
         key: '1',
         label: t('listing.actions.batch-edit'),
         icon: <Icon value={ 'batch-selection' } />,
+        disabled: hasSelectedItems && !canBatchEdit,
         onClick: () => {
           setBatchEditModalOpen(true)
         }
@@ -80,6 +91,7 @@ export const BatchActions = (): React.JSX.Element => {
       {
         key: '3',
         hidden: !hasSelectedItems,
+        disabled: !canBatchDelete,
         label: t('listing.actions.delete'),
         icon: <Icon value={ 'trash' } />,
         onClick: handleBatchDeleteConfirm
