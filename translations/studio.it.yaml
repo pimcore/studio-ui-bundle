@@ -426,6 +426,22 @@ login-form.username: Nome utente
 login-form.password: Password
 aria.login-form-additional-logins.additional-login-provider: "Provider di accesso aggiuntivo:"
 aria.login-form-additional-logins.remember-me-checkbox: Casella ricordami
+oauth.consent.title: Autorizza l'accesso
+oauth.consent.subtitle: "{{client}} vuole accedere a Pimcore come te."
+oauth.consent.permissions-heading: "Questo consentirà di:"
+oauth.consent.no-scopes: Non sono state richieste autorizzazioni specifiche.
+oauth.consent.signed-in-as: "Accesso effettuato come {{username}}"
+oauth.consent.allow: Consenti
+oauth.consent.deny: Rifiuta
+oauth.consent.scope.mcp-read.label: Leggere i tuoi dati
+oauth.consent.scope.mcp-read.description: Leggere, elencare e cercare tra gli strumenti a tua disposizione.
+oauth.consent.scope.mcp-write.label: Modificare i tuoi dati
+oauth.consent.scope.mcp-write.description: Utilizzare strumenti che modificano i dati, sempre limitati alle tue autorizzazioni.
+oauth.consent.retry: Riprova
+oauth.consent.error.load-failed: Impossibile caricare questa richiesta di autorizzazione.
+oauth.consent.error.decision-failed: Impossibile inviare la tua decisione. Riprova.
+oauth.consent.expired.title: Questa richiesta di autorizzazione è scaduta
+oauth.consent.expired.description: Ricomincia dalla tua applicazione.
 unsaved-notice: Salvare per confermare le modifiche
 widget-manager.tab-title.close-confirmation: Sono presenti modifiche non salvate, chiudere questa scheda?
 action-applied-successfully: Azione applicata con successo

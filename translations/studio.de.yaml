@@ -426,6 +426,22 @@ login-form.username: Benutzername
 login-form.password: Passwort
 aria.login-form-additional-logins.additional-login-provider: "Zusätzlicher Login-Anbieter:"
 aria.login-form-additional-logins.remember-me-checkbox: Angemeldet-bleiben-Kontrollkästchen
+oauth.consent.title: Zugriff autorisieren
+oauth.consent.subtitle: "{{client}} möchte als Sie auf Pimcore zugreifen."
+oauth.consent.permissions-heading: "Dies ermöglicht Folgendes:"
+oauth.consent.no-scopes: Es wurden keine spezifischen Berechtigungen angefordert.
+oauth.consent.signed-in-as: "Angemeldet als {{username}}"
+oauth.consent.allow: Erlauben
+oauth.consent.deny: Ablehnen
+oauth.consent.scope.mcp-read.label: Ihre Daten lesen
+oauth.consent.scope.mcp-read.description: Lesen, Auflisten und Durchsuchen der Ihnen zur Verfügung stehenden Tools.
+oauth.consent.scope.mcp-write.label: Ihre Daten ändern
+oauth.consent.scope.mcp-write.description: Verwendung von Tools, die Daten ändern, weiterhin beschränkt auf Ihre eigenen Berechtigungen.
+oauth.consent.retry: Erneut versuchen
+oauth.consent.error.load-failed: Diese Autorisierungsanfrage konnte nicht geladen werden.
+oauth.consent.error.decision-failed: Ihre Entscheidung konnte nicht übermittelt werden. Bitte versuchen Sie es erneut.
+oauth.consent.expired.title: Diese Autorisierungsanfrage ist abgelaufen
+oauth.consent.expired.description: Bitte starten Sie erneut über Ihre Anwendung.
 unsaved-notice: Bitte speichern Sie, um Ihre Änderungen zu bestätigen
 widget-manager.tab-title.close-confirmation: Sie haben ungespeicherte Änderungen. Sind Sie sicher, dass Sie diesen Tab schließen möchten?
 action-applied-successfully: Aktion erfolgreich angewendet

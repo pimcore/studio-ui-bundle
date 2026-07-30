@@ -426,6 +426,22 @@ login-form.username: Användarnamn
 login-form.password: Lösenord
 aria.login-form-additional-logins.additional-login-provider: "Ytterligare inloggningsleverantör:"
 aria.login-form-additional-logins.remember-me-checkbox: Kom ihåg mig-kryssruta
+oauth.consent.title: Auktorisera åtkomst
+oauth.consent.subtitle: "{{client}} vill komma åt Pimcore som du."
+oauth.consent.permissions-heading: "Detta ger den möjlighet att:"
+oauth.consent.no-scopes: Inga specifika behörigheter begärdes.
+oauth.consent.signed-in-as: "Inloggad som {{username}}"
+oauth.consent.allow: Tillåt
+oauth.consent.deny: Neka
+oauth.consent.scope.mcp-read.label: Läsa din data
+oauth.consent.scope.mcp-read.description: Läsa, lista och söka bland de verktyg som är tillgängliga för dig.
+oauth.consent.scope.mcp-write.label: Ändra din data
+oauth.consent.scope.mcp-write.description: Använda verktyg som ändrar data, fortfarande begränsat till dina egna behörigheter.
+oauth.consent.retry: Försök igen
+oauth.consent.error.load-failed: Den här auktoriseringsförfrågan kunde inte läsas in.
+oauth.consent.error.decision-failed: Ditt beslut kunde inte skickas. Försök igen.
+oauth.consent.expired.title: Denna auktoriseringsförfrågan har gått ut
+oauth.consent.expired.description: Börja om från din applikation.
 unsaved-notice: Spara för att bekräfta dina ändringar
 widget-manager.tab-title.close-confirmation: Du har osparade ändringar, är du säker på att du vill stänga den här fliken?
 action-applied-successfully: Åtgärden har tillämpats
