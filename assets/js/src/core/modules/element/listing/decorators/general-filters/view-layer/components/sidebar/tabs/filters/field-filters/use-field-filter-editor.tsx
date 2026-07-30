@@ -150,7 +150,7 @@ export const useFieldFilterEditor = (): UseFieldFilterEditorReturn => {
       ...prevFilters,
       {
         data: undefined,
-        translationKey: resolveColumnTranslationKey(column),
+        translationKey: t(resolveColumnTranslationKey(column)),
         id: column.key,
         type: column.type,
         frontendType: column.frontendType,
