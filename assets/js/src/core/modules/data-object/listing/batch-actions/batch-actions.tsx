@@ -41,11 +41,14 @@ export const BatchActions = (): React.JSX.Element => {
   const numberedSelectedRows = selectedRows !== undefined ? Object.keys(selectedRows).map(Number) : []
   const hasSelectedItems = selectedRows !== undefined ? Object.keys(selectedRows).length > 0 : false
 
-  // A batch action is only permitted when every selected row grants the required permission
+  // A batch action is only permitted when every currently selected row grants the required permission.
+  // Iterate the current selection (not selectedRowsData, which is an accumulating cache and retains
+  // deselected rows) so stale entries are ignored and rows with missing metadata fail closed.
   const allSelectedRowsAllow = (permission: ElementPermissionKeys): boolean =>
-    Object.values(selectedRowsData).every(
-      (row) => checkElementPermission(row?.permissions, permission) && row?.isLocked !== true
-    )
+    Object.keys(selectedRows ?? {}).every((id) => {
+      const row = selectedRowsData[Number(id)]
+      return checkElementPermission(row?.permissions, permission) && row?.isLocked !== true
+    })
 
   const canBatchEdit = allSelectedRowsAllow('save')
   const canBatchDelete = allSelectedRowsAllow('delete')
