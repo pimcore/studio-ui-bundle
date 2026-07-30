@@ -33,11 +33,20 @@ const MARKERS: Record<string, string> = {
 export const TranslationValue = ({ value }: TranslationValueProps): React.JSX.Element => {
   const { styles } = useStyle()
 
-  const segments = useMemo(() => value.split(WHITESPACE_PATTERN), [value])
+  const segments = useMemo(() => {
+    let offset = 0
+
+    return value.split(WHITESPACE_PATTERN).map((segment) => {
+      const start = offset
+      offset += segment.length
+
+      return { segment, start }
+    })
+  }, [value])
 
   const inline = (
     <span>
-      {segments.map((segment, index) => {
+      {segments.map(({ segment, start }) => {
         const marker = MARKERS[segment]
 
         if (marker === undefined) {
@@ -47,7 +56,7 @@ export const TranslationValue = ({ value }: TranslationValueProps): React.JSX.El
         return (
           <span
             className={ styles.marker }
-            key={ index }
+            key={ `${start}-${segment.length}` }
           >
             {marker}
           </span>
