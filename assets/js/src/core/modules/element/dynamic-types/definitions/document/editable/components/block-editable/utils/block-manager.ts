@@ -24,15 +24,19 @@ export class BlockManager extends AbstractBlockManager {
   }
 
   protected getElementSelector (): string {
-    return `.pimcore_block_entry[data-name="${this.editableName}"][key]`
+    // Match entries carrying either `data-key` (robust mirror, preferred) or the legacy
+    // `key`. `getElementKey()` reads `data-key` first and falls back to `key` for BC, so
+    // the selector must be equally tolerant — requiring only `data-key` would drop entries
+    // rendered by a backend that still emits just `key`, silently saving the block empty.
+    return `.pimcore_block_entry[data-name="${this.editableName}"]:is([data-key], [key])`
   }
 
   findElementIndex (targetElement: HTMLElement): number {
     const elements = this.queryElements()
     if (elements.length === 0) return -1
 
-    const targetKey = targetElement.getAttribute('key')
-    return elements.findIndex(element => element.getAttribute('key') === targetKey)
+    const targetKey = this.getElementKey(targetElement)
+    return elements.findIndex(element => this.getElementKey(element) === targetKey)
   }
 
   ensureElementKey (element: HTMLElement): void {
