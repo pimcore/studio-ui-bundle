@@ -24,10 +24,11 @@ export class BlockManager extends AbstractBlockManager {
   }
 
   protected getElementSelector (): string {
-    // match on `data-key` (robust mirror of `key`, always emitted by the backend);
-    // `key` can be stripped downstream, which would make managed entries invisible
-    // and silently drop their child editables on save
-    return `.pimcore_block_entry[data-name="${this.editableName}"][data-key]`
+    // Match entries carrying either `data-key` (robust mirror, preferred) or the legacy
+    // `key`. `getElementKey()` reads `data-key` first and falls back to `key` for BC, so
+    // the selector must be equally tolerant — requiring only `data-key` would drop entries
+    // rendered by a backend that still emits just `key`, silently saving the block empty.
+    return `.pimcore_block_entry[data-name="${this.editableName}"]:is([data-key], [key])`
   }
 
   findElementIndex (targetElement: HTMLElement): number {
