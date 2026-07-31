@@ -20,7 +20,7 @@ export const scheduledblockValueUtils = {
    */
   elementsToScheduledblockValue: (elements: HTMLElement[]): ScheduledblockValue => {
     return elements.map(element => {
-      const key = element.getAttribute('data-key') ?? element.getAttribute('key')
+      const key = element.dataset.key ?? element.getAttribute('key')
       const dateStr = element.getAttribute('date')
       const date = dateStr !== null ? parseInt(dateStr, 10) : 0
 

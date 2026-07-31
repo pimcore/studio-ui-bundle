@@ -31,7 +31,7 @@ export const blockValueUtils = {
 
   elementsToBlockValue: (elements: HTMLElement[]): BlockValue => {
     return elements
-      .map(element => element.getAttribute('data-key') ?? element.getAttribute('key'))
+      .map(element => element.dataset.key ?? element.getAttribute('key'))
       .filter(key => key !== null)
       .map(key => parseInt(key, 10))
   }

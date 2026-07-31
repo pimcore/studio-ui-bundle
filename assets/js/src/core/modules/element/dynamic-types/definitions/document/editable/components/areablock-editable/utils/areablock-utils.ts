@@ -64,7 +64,7 @@ export const areablockValueUtils = {
 
   elementsToAreablockValue (elements: HTMLElement[]): AreablockValue {
     return elements.map(element => {
-      const key = element.getAttribute('data-key') ?? element.getAttribute('key') ?? ''
+      const key = element.dataset.key ?? element.getAttribute('key') ?? ''
       const type = element.getAttribute('type') ?? ''
       const hidden = element.getAttribute('data-hidden') === 'true'
 
