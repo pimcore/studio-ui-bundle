@@ -52,7 +52,7 @@ export const ClassificationStoreConfig = (): React.JSX.Element => {
         label: t('classification-store.store-tab-label', { name: store.name, id: store.id }),
         children: <StoreEditor storeId={ store.id } />
       }))
-  }, [storeList, openedStores])
+  }, [storeList, openedStores, t])
 
   const handleOpenStore = (store: ClassificationStoreConfigurationStoreTreeNode): void => {
     const isAlreadyOpened = openedStores.some((s) => s.id === store.id)
