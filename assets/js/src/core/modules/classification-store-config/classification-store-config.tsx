@@ -10,6 +10,7 @@
 
 import React, { useMemo, useState } from 'react'
 import { isUndefined } from 'lodash'
+import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { ConfigLayout } from '@Pimcore/components/predefined-layouts/config/config-layout'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
@@ -25,6 +26,7 @@ import { useStyles } from '@Pimcore/modules/classification-store-config/classifi
 
 export const ClassificationStoreConfig = (): React.JSX.Element => {
   const hasPermission = isAllowed(UserPermission.ClassificationStore)
+  const { t } = useTranslation()
 
   const { data: storeTree, isLoading, isFetching, refetch } = useClassificationStoreConfigurationStoreTreeQuery(
     undefined,
@@ -47,7 +49,7 @@ export const ClassificationStoreConfig = (): React.JSX.Element => {
       .map((store) => ({
         key: String(store.id),
         icon: <Icon value='classification-store' />,
-        label: store.name,
+        label: t('classification-store.store-tab-label', { name: store.name, id: store.id }),
         children: <StoreEditor storeId={ store.id } />
       }))
   }, [storeList, openedStores])
