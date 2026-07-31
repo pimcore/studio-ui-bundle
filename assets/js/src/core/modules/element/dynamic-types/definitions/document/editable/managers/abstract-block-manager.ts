@@ -88,10 +88,14 @@ export abstract class AbstractBlockManager implements BlockManagerInterface {
   }
 
   getElementKey (element: HTMLElement): string | null {
-    return element.getAttribute('key')
+    // `data-key` is the robust mirror of `key` emitted by the backend. `key` is a
+    // reserved React prop / non-standard attribute and can be stripped downstream,
+    // so `data-key` is authoritative and read first; fall back to `key` for BC.
+    return element.dataset.key ?? element.getAttribute('key')
   }
 
   setElementKey (element: HTMLElement, key: string): void {
+    element.dataset.key = key
     element.setAttribute('key', key)
   }
 
