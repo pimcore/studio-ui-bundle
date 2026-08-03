@@ -18,7 +18,6 @@ import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 
 export const GeneralTab = (): React.JSX.Element => {
   const { searchTerm: sharedSearchTerm, setSearchTerm: setSharedSearchTerm } = useSearch()
-  // Seeded from the shared term so a term typed on another tab is taken over here.
   const [searchTerm, setSearchTerm] = useState(sharedSearchTerm)
   const [searchQuery, setSearchQuery] = useState(sharedSearchTerm)
 
@@ -27,7 +26,6 @@ export const GeneralTab = (): React.JSX.Element => {
     return () => { clearTimeout(timerId) }
   }, [searchQuery])
 
-  // Take over a term typed on one of the typed tabs while this tab stays mounted.
   useEffect(() => {
     setSearchQuery(sharedSearchTerm)
   }, [sharedSearchTerm])
@@ -37,8 +35,7 @@ export const GeneralTab = (): React.JSX.Element => {
     setSharedSearchTerm(value)
   }
 
-  // Sharing on blur (instead of every keystroke) keeps the term available when switching tabs
-  // without re-rendering the whole modal per character.
+  // On blur instead of per keystroke — a context write per character re-renders the whole modal.
   const onBlur: React.FocusEventHandler<HTMLInputElement> = (event) => {
     setSharedSearchTerm(event.target.value)
   }

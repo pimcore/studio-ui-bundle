@@ -20,6 +20,8 @@ interface SearchTermTakeoverProps {
   elementType: ElementType
 }
 
+// Strictly one-directional (shared term -> listing): mirroring the applied term back into the
+// shared context from an effect ping-pongs against this one and floods the API with requests.
 export const SearchTermTakeover = ({ elementType }: SearchTermTakeoverProps): null => {
   const { searchTerm, pendingRestore, activeKey, isOpen } = useSearch()
   const { values, setValue } = useAppliedFilters()

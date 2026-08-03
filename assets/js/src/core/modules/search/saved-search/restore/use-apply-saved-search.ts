@@ -118,7 +118,6 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
     // when empty/false) so opening a search replaces the state left over from a previous one.
     setAppliedFilters({ searchTerm, fieldFilters, pql, unreferenced, directChildren })
 
-    // Keep the term shared across the search tabs in sync, so switching tabs takes it along.
     setSharedSearchTerm(searchTerm)
 
     // Tags — the `system.tag` column filter, applied via its own provider rather than as a field

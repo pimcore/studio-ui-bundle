@@ -16,8 +16,6 @@ import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 import React from 'react'
 
 export const TopBar = (): React.JSX.Element => {
-  // Term sharing across tabs only applies inside the Quick Search modal — in other hosts of
-  // this listing (e.g. the saved-search widget) isOpen is always false.
   const { isOpen, setSearchTerm } = useSearch()
 
   return (
