@@ -18,6 +18,8 @@ export interface UseSearchReturn {
   isOpen: boolean
   open: (key?: string) => void
   close: () => void
+  searchTerm: string
+  setSearchTerm: (term: string) => void
   pendingRestore: SavedSearchDetailedConfiguration | undefined
   setPendingRestore: (configuration: SavedSearchDetailedConfiguration | undefined) => void
   loadedSavedSearch: SavedSearchDetailedConfiguration | undefined
@@ -40,6 +42,7 @@ export const useSearch = (): UseSearchReturn => {
 
   const close: UseSearchReturn['close'] = () => {
     context.setOpen(false)
+    context.setSearchTerm('')
   }
 
   return {
@@ -48,6 +51,8 @@ export const useSearch = (): UseSearchReturn => {
     isOpen: context.open,
     open,
     close,
+    searchTerm: context.searchTerm,
+    setSearchTerm: context.setSearchTerm,
     pendingRestore: context.pendingRestore,
     setPendingRestore: context.setPendingRestore,
     loadedSavedSearch: context.loadedSavedSearch,
