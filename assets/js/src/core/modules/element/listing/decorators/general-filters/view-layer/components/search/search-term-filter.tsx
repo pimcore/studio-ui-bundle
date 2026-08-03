@@ -39,9 +39,9 @@ export const SearchTermFilter = ({ onCommit }: SearchTermFilterProps): React.JSX
     : ''
   const value = handleSearchTermInSidebar ? draftSearchTerm : currentSearchTerm
 
-  function onSearch (): void {
-    const searchTerm = handleSearchTermInSidebar ? draftSearchTerm : currentSearchTerm
-
+  // antd supplies the committed value directly — clearing fires onChange and onSearch in the
+  // same tick, so reading the term from state here would still yield the pre-clear value.
+  function onSearch (searchTerm: string): void {
     if (searchTerm === appliedSearchTerm) {
       return
     }
