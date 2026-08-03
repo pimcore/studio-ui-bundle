@@ -13,6 +13,8 @@ import { useGeneralFiltersConfig } from '../../../context-layer/provider/general
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { useAppliedFilters, useDraftFiltersOptional } from '../../../element-filters/stores'
 import { readElementFilterValues } from '../../../element-filters/use-element-filter-values'
+import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
+import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 
 export const SearchTermFilter = (): React.JSX.Element => {
   const { values, setValue: setAppliedValue } = useAppliedFilters()
@@ -20,6 +22,8 @@ export const SearchTermFilter = (): React.JSX.Element => {
   const [currentSearchTerm, setCurrentSearchTerm] = useState<string>(appliedSearchTerm)
   const { handleSearchTermInSidebar } = useGeneralFiltersConfig()
   const draftStore = useDraftFiltersOptional()
+  const { setPage } = usePaging()
+  const { setDataLoadingState } = useData()
 
   useEffect(() => {
     setCurrentSearchTerm(appliedSearchTerm)
@@ -31,9 +35,15 @@ export const SearchTermFilter = (): React.JSX.Element => {
   const value = handleSearchTermInSidebar ? draftSearchTerm : currentSearchTerm
 
   function onSearch (): void {
-    if (!handleSearchTermInSidebar) {
-      setAppliedValue('searchTerm', currentSearchTerm)
+    const searchTerm = handleSearchTermInSidebar ? draftSearchTerm : currentSearchTerm
+
+    if (searchTerm === appliedSearchTerm) {
+      return
     }
+
+    setAppliedValue('searchTerm', searchTerm)
+    setPage(1)
+    setDataLoadingState('filters-applied')
   }
 
   function onChange (event: React.ChangeEvent<HTMLInputElement>): void {
