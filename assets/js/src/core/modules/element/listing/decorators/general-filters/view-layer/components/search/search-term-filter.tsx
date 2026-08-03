@@ -16,7 +16,12 @@ import { readElementFilterValues } from '../../../element-filters/use-element-fi
 import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 
-export const SearchTermFilter = (): React.JSX.Element => {
+export interface SearchTermFilterProps {
+  /** Called with the term whenever the user commits a search (Enter, search icon, clear). */
+  onCommit?: (searchTerm: string) => void
+}
+
+export const SearchTermFilter = ({ onCommit }: SearchTermFilterProps): React.JSX.Element => {
   const { values, setValue: setAppliedValue } = useAppliedFilters()
   const appliedSearchTerm = readElementFilterValues(values).searchTerm
   const [currentSearchTerm, setCurrentSearchTerm] = useState<string>(appliedSearchTerm)
@@ -44,6 +49,7 @@ export const SearchTermFilter = (): React.JSX.Element => {
     setAppliedValue('searchTerm', searchTerm)
     setPage(1)
     setDataLoadingState('filters-applied')
+    onCommit?.(searchTerm)
   }
 
   function onChange (event: React.ChangeEvent<HTMLInputElement>): void {

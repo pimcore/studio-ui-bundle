@@ -13,9 +13,14 @@ import { ClassDefinitionSelect } from '@Pimcore/modules/data-object/listing/deco
 import { ProvidedTypeSelect } from '@Pimcore/modules/element/components/type-select/provided-type-select'
 import { SearchTermFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/search/search-term-filter'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 import React from 'react'
 
 export const TopBar = (): React.JSX.Element => {
+  // Term sharing across tabs only applies inside the Quick Search modal — in other hosts of
+  // this listing (e.g. the saved-search widget) isOpen is always false.
+  const { isOpen, setSearchTerm } = useSearch()
+
   return (
     <Toolbar
       padding={ { left: 'none', right: 'none' } }
@@ -28,7 +33,7 @@ export const TopBar = (): React.JSX.Element => {
       >
         <ProvidedTypeSelect />
         <ClassDefinitionSelect nullable />
-        <SearchTermFilter />
+        <SearchTermFilter onCommit={ isOpen ? setSearchTerm : undefined } />
       </Flex>
     </Toolbar>
   )
