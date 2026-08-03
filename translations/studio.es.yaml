@@ -1200,6 +1200,7 @@ element.delete.batch.ok: Eliminar
 element.delete.batch.ok.permanent: Eliminar permanentemente
 element.delete.batch.show-paths: Mostrar elementos
 element.delete.batch.dependencies-warning: 'Puede haber dependencias, ¿eliminar de todas formas?'
+element.delete.batch.dependencies-warning.confirmed: 'Estos elementos tienen objetos secundarios u otras dependencias, ¿eliminar de todas formas?'
 element.open: Abrir
 element.toolbar.copy-id: Copiar ID
 element.toolbar.copy-full-path-to-clipboard: Copiar ruta completa

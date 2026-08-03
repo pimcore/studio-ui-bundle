@@ -1207,6 +1207,7 @@ element.delete.batch.ok: Delete
 element.delete.batch.ok.permanent: Delete permanently
 element.delete.batch.show-paths: Show items
 element.delete.batch.dependencies-warning: 'There may be dependencies, delete anyway?'
+element.delete.batch.dependencies-warning.confirmed: 'These items have child objects or other dependencies, delete anyway?'
 element.open: Open
 element.toolbar.copy-id: Copy ID
 element.toolbar.copy-full-path-to-clipboard: Copy Full Path

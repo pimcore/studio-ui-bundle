@@ -1200,6 +1200,7 @@ element.delete.batch.ok: Slett
 element.delete.batch.ok.permanent: Slett permanent
 element.delete.batch.show-paths: Vis elementer
 element.delete.batch.dependencies-warning: 'Det kan finnes avhengigheter, slett likevel?'
+element.delete.batch.dependencies-warning.confirmed: 'Disse elementene har underordnede objekter eller andre avhengigheter, slett likevel?'
 element.open: Åpne
 element.toolbar.copy-id: Kopier ID
 element.toolbar.copy-full-path-to-clipboard: Kopier full sti
