@@ -21,12 +21,11 @@ import {
 
 import {
   convertAllowedTypes,
-  type IRelationAllowedTypesClassDefinition,
-  type IRelationAllowedTypesDataComponent
+  type IRelationAllowedTypesClassDefinition
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
 import {
   ManyToOneRelationComboField
-} from '@Pimcore/components/many-to-one-relation/components/combo-field/many-to-one-relation-combo-field'
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/components/combo-field/many-to-one-relation-combo-field'
 import { FormattedRelationList } from '../../grid-cell-preview/relation-list/formatted-relation-list'
 import { isNil } from 'lodash'
 import { type DynamicTypeFieldFilterAbstract } from '../../../field-filters/dynamic-type-field-filter-abstract'
@@ -49,13 +48,14 @@ export class DynamicTypeObjectDataManyToOneRelation extends DynamicTypeObjectDat
   getObjectDataComponent (props: ManyToOneRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     const allowedTypes = convertAllowedTypes(props)
 
-    if (this.usesInlineSearch(props, allowedTypes)) {
+    if (this.usesInlineSearch(props)) {
       return (
         <ManyToOneRelationComboField
           { ...props }
           { ...allowedTypes }
           className={ props.className }
           disabled={ props.noteditable === true }
+          inherited={ props.inherited }
         />
       )
     }
@@ -84,7 +84,7 @@ export class DynamicTypeObjectDataManyToOneRelation extends DynamicTypeObjectDat
     const objectProps = props.objectProps as ManyToOneRelationObjectDataDefinition
     const allowedTypes = convertAllowedTypes(objectProps)
 
-    if (!this.usesInlineSearch(objectProps, allowedTypes)) {
+    if (!this.usesInlineSearch(objectProps)) {
       return super.getGridCellEditComponent(props)
     }
 
@@ -100,16 +100,21 @@ export class DynamicTypeObjectDataManyToOneRelation extends DynamicTypeObjectDat
   }
 
   /**
-   * Inline search resolves its options by class, so it only applies to relations that
-   * allow objects of exactly one class. Everything else keeps the path reference input.
+   * Inline search offers its options through a search on a single data object class,
+   * so it can only represent a relation that is restricted to exactly that: objects of
+   * one class, and nothing else. Any additional target — assets, documents or object
+   * folders — would become unselectable, so those configurations keep the path
+   * reference input, which can address every element type.
    */
-  private usesInlineSearch (
-    props: ManyToOneRelationObjectDataDefinition,
-    allowedTypes: IRelationAllowedTypesDataComponent
-  ): boolean {
+  private usesInlineSearch (props: ManyToOneRelationObjectDataDefinition): boolean {
+    const classes = props.classes ?? []
+
     return props.displayMode === 'combo' &&
       props.objectsAllowed &&
-      allowedTypes.allowedClasses?.length === 1
+      !props.assetsAllowed &&
+      !props.documentsAllowed &&
+      classes.length === 1 &&
+      classes[0].classes !== 'folder'
   }
 
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {

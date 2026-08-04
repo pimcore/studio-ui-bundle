@@ -16,7 +16,7 @@ import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definition
 import { toCssDimension } from '@Pimcore/utils/css'
 import { useComboFieldData } from './hooks/use-combo-field-data'
 import { useRelationSourceObjectId } from './hooks/use-relation-source-object-id'
-import { type ManyToOneRelationProps } from '../../many-to-one-relation'
+import { type ManyToOneRelationProps } from '@Pimcore/components/many-to-one-relation'
 
 export interface ManyToOneRelationComboFieldProps extends ManyToOneRelationProps {
   /** Object the path formatter is resolved against; set by the grid cell edit modal. */
@@ -83,6 +83,7 @@ export const ManyToOneRelationComboField = (props: ManyToOneRelationComboFieldPr
       className={ props.className }
       disabled={ isDisabled }
       filterOption={ false }
+      inherited={ props.inherited }
       loading={ isFetching }
       onChange={ handleChange }
       onDropdownVisibleChange={ handleDropdownVisibleChange }

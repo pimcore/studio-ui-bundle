@@ -14,7 +14,7 @@ import { debounce, isNil } from 'lodash'
 import { useDataObjectGetSearchQuery } from '@Pimcore/modules/search/search-api-slice.gen'
 import { useClassDefinitionCollectionQuery } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { useFormatPath } from '@Pimcore/modules/data-object/hooks/use-format-path'
-import { type ManyToOneRelationValueType } from '../../../many-to-one-relation'
+import { type ManyToOneRelationValueType } from '@Pimcore/components/many-to-one-relation'
 
 export const COMBO_PAGE_SIZE = 200
 

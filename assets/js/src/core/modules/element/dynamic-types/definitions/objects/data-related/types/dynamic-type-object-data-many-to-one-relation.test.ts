@@ -31,7 +31,7 @@ jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-relat
   ManyToOneRelation
 }))
 
-jest.mock('@Pimcore/components/many-to-one-relation/components/combo-field/many-to-one-relation-combo-field', () => ({
+jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/components/combo-field/many-to-one-relation-combo-field', () => ({
   ManyToOneRelationComboField
 }))
 
@@ -100,6 +100,37 @@ describe('DynamicTypeObjectDataManyToOneRelation display mode', () => {
     }))
 
     expect(element.type).toBe(ManyToOneRelation)
+  })
+
+  // The combo searches a single data object class, so anything else the relation
+  // accepts would become unselectable. Those configurations must keep the path input.
+  describe('mixed target configurations', () => {
+    it('keeps the path reference input when assets are also allowed', () => {
+      const element = type.getObjectDataComponent(objectRelation({
+        displayMode: 'combo',
+        assetsAllowed: true
+      }))
+
+      expect(element.type).toBe(ManyToOneRelation)
+    })
+
+    it('keeps the path reference input when documents are also allowed', () => {
+      const element = type.getObjectDataComponent(objectRelation({
+        displayMode: 'combo',
+        documentsAllowed: true
+      }))
+
+      expect(element.type).toBe(ManyToOneRelation)
+    })
+
+    it('keeps the path reference input when object folders are also allowed', () => {
+      const element = type.getObjectDataComponent(objectRelation({
+        displayMode: 'combo',
+        classes: [{ classes: 'Supplier' }, { classes: 'folder' }]
+      }))
+
+      expect(element.type).toBe(ManyToOneRelation)
+    })
   })
 
   it('passes the edited row id to the inline search field in the grid', () => {

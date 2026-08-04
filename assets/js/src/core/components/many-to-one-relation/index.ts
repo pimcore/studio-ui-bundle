@@ -17,12 +17,6 @@ export type {
   ManyToOneRelationClassDefinitionProps
 } from './many-to-one-relation'
 export { ManyToOneRelationPath, ManyToOneRelationInput } from './components/many-to-one-relation'
-export {
-  ManyToOneRelationComboField
-} from './components/combo-field/many-to-one-relation-combo-field'
-export type {
-  ManyToOneRelationComboFieldProps
-} from './components/combo-field/many-to-one-relation-combo-field'
 export type { ManyToOneRelationPathProps } from './components/many-to-one-relation/many-to-one-relation-path'
 export { PathTarget } from './path-target'
 export type { PathTargetProps } from './path-target'
