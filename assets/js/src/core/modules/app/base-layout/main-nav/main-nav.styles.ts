@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStlyes = createStyles(({
   token,
@@ -19,10 +19,11 @@ export const useStlyes = createStyles(({
       position: absolute;
       left: 100%;
       top: 0;
-      background: #fff;
+      background: ${token.colorBgContainer};
       padding: ${token.paddingMD}px;
       box-shadow: ${token.boxShadowSecondary};
-      border-radius: ${token.borderRadius}px;
+      border: 1px solid ${token.colorBorderTertiary};
+      border-radius: ${token.borderRadiusLG}px;
       width: 920px;
       max-width: 90vw;
       min-width: 530px;
@@ -74,12 +75,12 @@ export const useStlyes = createStyles(({
       .main-nav__list--level-0 {
         width: 250px;
         padding: 0;
-        background: rgba(0, 0, 0, 0.02);
-        
+        background: ${token.colorBgMainNavColumn};
+
         > .main-nav__list-item.is-active > .main-nav__list-btn {
           border-left: 2px solid ${token.colorPrimary};
           background: ${token.controlItemBgActive};
-          color: ${token.colorPrimary};
+          color: ${token.itemActiveColor};
         }
       }
 
@@ -147,6 +148,7 @@ export const useStlyes = createStyles(({
       .main-nav__list-btn {
         background: none;
         border: 0;
+        color: ${token.colorText};
         width: 100%;
         padding: ${token.paddingSM}px;
         gap: 8px;
@@ -164,13 +166,13 @@ export const useStlyes = createStyles(({
 
         &:hover {
           background: ${token.controlItemBgActiveHover};
-          color: ${token.colorPrimary};
+          color: ${token.itemActiveColor};
         }
       }
 
       .is-active > .main-nav__list-btn {
         background: ${token.controlItemBgActive};
-        color: ${token.colorPrimary};
+        color: ${token.itemActiveColor};
         padding-left: 10px;
       }
       

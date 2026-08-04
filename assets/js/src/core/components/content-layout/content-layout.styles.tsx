@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
@@ -18,6 +18,8 @@ export const useStyles = createStyles(({ token, css }) => {
         display: grid;
         grid-template-columns: 1fr auto;
         grid-template-rows: auto 1fr auto;
+        flex: 1 1 auto;
+        min-height: 0;
         height: 100%;
         width: 100%;
         overflow: hidden;

@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   const baseTag = css`
@@ -30,6 +30,11 @@ export const useStyles = createStyles(({ token, css }) => {
         flex: 0 0 auto;
         margin-inline-start: 4px;
       }
+    }
+
+    &.ant-tag-geekblue {
+      background-color: ${token.geekblue1} !important;
+      color: ${token.geekblue7} !important;
     }
   `
 
@@ -55,7 +60,7 @@ export const useStyles = createStyles(({ token, css }) => {
         content: "";
         position: absolute;
         inset: 0;
-        background: rgba(0, 0, 0, 0.07);
+        background: ${token.colorFillSecondary};
         pointer-events: none;
       }
     `

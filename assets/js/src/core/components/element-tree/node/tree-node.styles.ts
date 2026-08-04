@@ -8,18 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
     treeNode: css`
       user-select: none;
-
-      &.tree-node--is-root {
-        .tree-node__content {
-          padding-left: ${token.paddingSM}px;
-        }
-      }
 
       &.tree-node--danger {
         .tree-node__content .tree-node__content-wrapper {

@@ -26,7 +26,8 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import {
   SIDEBAR_AREABLOCK_TYPES,
   SIDEBAR_CONTENT_SETTINGS,
-  SIDEBAR_DOCUMENT_CONFIGURATION
+  SIDEBAR_DOCUMENT_CONFIGURATION,
+  SIDEBAR_HIGHLIGHT_EDITABLES
 } from '../../shared-tab-manager/sidebar-definitions'
 import {
   EmailSettingsSidebar
@@ -58,5 +59,7 @@ moduleSystem.registerModule({
     })
     emailSidebarManager.registerEntry(SIDEBAR_CONTENT_SETTINGS)
     emailSidebarManager.registerEntry(SIDEBAR_DOCUMENT_CONFIGURATION)
+
+    emailSidebarManager.registerButton(SIDEBAR_HIGHLIGHT_EDITABLES)
   }
 })

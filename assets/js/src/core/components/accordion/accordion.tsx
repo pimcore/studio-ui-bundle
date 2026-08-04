@@ -55,6 +55,8 @@ export const Accordion = ({
       setExpandedIds(activeKey.map(String))
     } else if (activeKey != null) {
       setExpandedIds([String(activeKey)])
+    } else {
+      setExpandedIds([])
     }
   }, [activeKey])
 
@@ -150,11 +152,13 @@ export const Accordion = ({
     allClassNames.push(styles.table)
   }
 
+  const isNativeBorder = !spaced && !bordered
+
   return (
     <Collapse
       accordion={ accordion }
       activeKey={ expandedIds }
-      bordered={ !spaced }
+      bordered={ isNativeBorder }
       className={ allClassNames.join(' ') }
       items={ itemsWithCardClassName }
       onChange={ (keys) => {

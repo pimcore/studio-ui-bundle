@@ -8,11 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useMemo, useState } from 'react'
-import {
-  type Note,
-  useNoteGetCollectionQuery
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
+import { useEffect, useState } from 'react'
+import { type Note, useNoteGetCollectionQuery } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
+import { useFilterQuery } from '@Pimcore/components/filters'
+import { notesFilterAdapter, useNotesAppliedFilters } from '@Pimcore/modules/notes-and-events/filters/filters'
 
 export type DataNote = Note & {
   rowId: string
@@ -28,15 +27,29 @@ interface UseGlobalNotesAndEventsReturn {
   setPage: (page: number) => void
   pageSize: number
   setPageSize: (pageSize: number) => void
-  setFilter: (filter: string) => void
 }
 
 export const useNotesAndEvents = (): UseGlobalNotesAndEventsReturn => {
-  const [filter, setFilter] = useState<string>('')
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState(20)
 
-  const queryArgs = useMemo(() => ({ body: { page, pageSize, filter } }), [page, pageSize, filter])
+  const { values: appliedValues } = useNotesAppliedFilters()
+  const buildFilterQuery = useFilterQuery(notesFilterAdapter, appliedValues)
+
+  useEffect(() => {
+    setPage(1)
+  }, [appliedValues])
+
+  const { filter, fieldFilters } = buildFilterQuery({})
+
+  const queryArgs = {
+    body: {
+      page,
+      pageSize,
+      filter,
+      fieldFilters: fieldFilters as unknown as object
+    }
+  }
 
   const { data: notesAndEvents, isLoading, isFetching } = useNoteGetCollectionQuery(queryArgs)
 
@@ -48,7 +61,6 @@ export const useNotesAndEvents = (): UseGlobalNotesAndEventsReturn => {
     page,
     setPage,
     pageSize,
-    setPageSize,
-    setFilter
+    setPageSize
   }
 }

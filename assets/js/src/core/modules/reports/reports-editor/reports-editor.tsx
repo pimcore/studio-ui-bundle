@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo, useState } from 'react'
+import React, { createContext, useMemo, useState } from 'react'
 import { isUndefined } from 'lodash'
 import { ConfigLayout } from '@Pimcore/components/predefined-layouts/config/config-layout'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
@@ -21,16 +21,18 @@ import { type BundleCustomReportsConfigurationTreeNode, useCustomReportsConfigGe
 import { PortalSlot } from '@Pimcore/components/portal/portal-slot'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
+import { isFolder } from '@Pimcore/modules/reports/reports-editor/components/helpers'
 import { useStyles } from './reports-editor.styles'
 
 export const REFETCH_BTN_PORTAL_ID = 'reports-editor-toolbar-refetch-btn'
 export const SAVE_BTN_PORTAL_ID = 'reports-editor-toolbar-save-btn'
 
+export const ActiveReportTabContext = createContext<string | undefined>(undefined)
+
 export const ReportsEditor = (): React.JSX.Element => {
   const hasPermission = isAllowed(UserPermission.ReportsConfig)
 
-  const { data: reportsConfigTreeData, isLoading, isFetching, refetch } = useCustomReportsConfigGetTreeQuery(
-    { page: 1, pageSize: 9999 },
+  const { data: reportsConfigTreeData, isLoading, isFetching, refetch } = useCustomReportsConfigGetTreeQuery({ withGroup: true },
     { skip: !hasPermission }
   )
 
@@ -41,7 +43,11 @@ export const ReportsEditor = (): React.JSX.Element => {
   const { styles } = useStyles()
 
   const tabItems = useMemo(() => {
-    const existingReportIds = new Set(reportsConfigTreeData?.items?.map(report => report.id))
+    const existingReportIds = new Set(
+      reportsConfigTreeData?.items?.flatMap(item =>
+        isFolder(item) ? item?.children?.map(child => child.id) : [item.id]
+      )
+    )
 
     return openedReports
       .filter(report => existingReportIds.has(report.id))
@@ -50,14 +56,13 @@ export const ReportsEditor = (): React.JSX.Element => {
         label: `${report.text} ${modifiedReports.includes(report.id) ? '*' : ''}`,
         children: (
           <ReportConfiguration
-            isActive={ activeTabKey === report.id }
             modifiedReports={ modifiedReports }
             report={ report }
             setModifiedReports={ setModifiedReports }
           />
         )
       }))
-  }, [reportsConfigTreeData, openedReports, activeTabKey, modifiedReports])
+  }, [reportsConfigTreeData, openedReports, modifiedReports])
 
   const handleOpenReport = (report: BundleCustomReportsConfigurationTreeNode): void => {
     const isAlreadyOpened = openedReports.some(item => item.id === report.id)
@@ -106,15 +111,17 @@ export const ReportsEditor = (): React.JSX.Element => {
           </Toolbar>
         ) }
       >
-        <Tabs
-          activeKey={ activeTabKey }
-          className={ styles.tabs }
-          hasStickyHeader
-          items={ tabItems }
-          onChange={ handleChangeTab }
-          onClose={ handleCloseTab }
-          rootClassName={ styles.tabsContainer }
-        />
+        <ActiveReportTabContext.Provider value={ activeTabKey }>
+          <Tabs
+            activeKey={ activeTabKey }
+            className={ styles.tabs }
+            hasStickyHeader
+            items={ tabItems }
+            onChange={ handleChangeTab }
+            onClose={ handleCloseTab }
+            rootClassName={ styles.tabsContainer }
+          />
+        </ActiveReportTabContext.Provider>
       </ContentLayout>
     )
   }
@@ -122,6 +129,9 @@ export const ReportsEditor = (): React.JSX.Element => {
   return (
     <ConfigLayout
       leftItem={ {
+        minSize: 180,
+        maxSize: 300,
+        size: 180,
         children: (
           <ReportsSidebar
             handleCloseReport={ handleCloseTab }
@@ -133,6 +143,7 @@ export const ReportsEditor = (): React.JSX.Element => {
           />
         )
       } }
+      resizeAble
       rightItem={ { children: mainContent() } }
     />
   )

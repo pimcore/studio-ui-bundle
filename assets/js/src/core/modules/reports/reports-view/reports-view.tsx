@@ -12,6 +12,7 @@ import React, { useMemo, useState } from 'react'
 import { isEmpty, isUndefined } from 'lodash'
 import cn from 'classnames'
 import { type DefaultOptionType } from 'antd/es/select'
+import { type ElementIcon } from '@Pimcore/components/icon/icon'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { useCustomReportsGetTreeQuery } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { Content } from '@Pimcore/components/content/content'
@@ -22,6 +23,7 @@ import { ReportDataProvider } from '@Pimcore/modules/reports/reports-view/contex
 import { ReportViewContent } from '@Pimcore/modules/reports/reports-view/components/report-view-content/report-view-content'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
+import { normalizeIcon } from '@Pimcore/utils/normalize-icon'
 import { useStyles } from './reports-view.styles'
 
 interface IReportsViewProps {
@@ -33,22 +35,23 @@ export const ReportsView = ({ reportId }: IReportsViewProps): React.JSX.Element 
 
   const hasPermission = isAllowed(UserPermission.Reports)
 
-  const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery(
-    { page: 1, pageSize: 9999 },
-    { skip: !hasPermission }
-  )
+  const { isLoading: isReportsTreeLoading, data: reportsTreeData } = useCustomReportsGetTreeQuery(undefined, { skip: !hasPermission })
 
   const { styles } = useStyles()
 
-  const renderOptionLabel = (iconClass: string, value: any): React.JSX.Element => (
-    <Flex
-      align="center"
-      gap="mini"
-    >
-      {!isEmptyValue(iconClass) && <Icon value={ iconClass } />}
-      <SanitizeHtml html={ value } />
-    </Flex>
-  )
+  const renderOptionLabel = (iconClass: ElementIcon | string | null | undefined, value: any): React.JSX.Element => {
+    const icon = normalizeIcon(iconClass)
+
+    return (
+      <Flex
+        align="center"
+        gap="mini"
+      >
+        {!isUndefined(icon?.value) && <Icon { ...icon } />}
+        <SanitizeHtml html={ value } />
+      </Flex>
+    )
+  }
 
   const reportsTreeOptions: DefaultOptionType[] | undefined = useMemo(() => {
     if (!isUndefined(reportsTreeData?.items)) {

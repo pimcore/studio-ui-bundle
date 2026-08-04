@@ -8,13 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   const themeToken = {
-    highlightBackgroundColor: '#F6FFED',
-    highlightBorderColor: '#B7EB8F',
-    highlightColor: '#52C41A',
+    highlightBackgroundColor: token.colorSuccessBg,
+    highlightBorderColor: token.colorSuccessBorder,
+    highlightColor: token.colorSuccessText,
     ...token
   }
 
@@ -112,6 +112,10 @@ export const useStyles = createStyles(({ token, css }) => {
         padding: 0;
       }
 
+      &.accordion--bordered .ant-collapse-item {
+        overflow: hidden;
+      }
+
       .ant-table {
         table {
           border: 0;
@@ -127,6 +131,10 @@ export const useStyles = createStyles(({ token, css }) => {
             border-left: 0;
           }
 
+          th:last-child {
+            border-right: 0;
+          }
+
           tr:first-child th:first-child {
             border-top-left-radius: 0;
           }
@@ -139,6 +147,10 @@ export const useStyles = createStyles(({ token, css }) => {
         .ant-table-tbody {
           td:first-child {
             border-left: 0;
+          }
+
+          td:last-child {
+            border-right: 0;
           }
 
           .ant-table-row:last-of-type {
@@ -176,8 +188,12 @@ export const useStyles = createStyles(({ token, css }) => {
           color: ${token.colorTextSecondary};
         }
 
-        .ant-collapse-content {
-          border-color: ${token.colorBorderSecondary};
+        &:not(.accordion--table) .ant-collapse-content {
+          border-top: 1px solid ${token.colorBorderSecondary};
+        }
+
+        &:not(.accordion--table) .ant-collapse-item .ant-collapse-content > .ant-collapse-content-box {
+          padding: ${token.paddingSM}px;
         }
 
         &.ant-collapse-small {

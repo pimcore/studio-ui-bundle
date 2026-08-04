@@ -9,16 +9,15 @@
  */
 
 import React, { type ReactElement } from 'react'
-import { type AbstractGridCellDefinition, DynamicTypeGridCellAbstract } from '../../dynamic-type-grid-cell-abstract'
 import { injectable } from 'inversify'
-import { DateCell } from '../../components/date/date-cell'
+import { type AbstractGridCellDefinition, DynamicTypeGridCellAbstract } from '../../dynamic-type-grid-cell-abstract'
+import { DateTimeCell } from '../../components/date-time/date-time-cell'
 
 @injectable()
 export class DynamicTypeGridCellDateTime extends DynamicTypeGridCellAbstract {
-  readonly id = 'datetime'
+  readonly id: string = 'datetime'
 
   getGridCellComponent (props: AbstractGridCellDefinition): ReactElement<AbstractGridCellDefinition> {
-    // @todo create date time cell
-    return <DateCell { ...props } />
+    return <DateTimeCell { ...props } />
   }
 }

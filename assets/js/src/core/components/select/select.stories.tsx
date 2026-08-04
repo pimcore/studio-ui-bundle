@@ -83,4 +83,12 @@ export const ThemePrimary = {
   }
 }
 
+export const WithClearOption = {
+  args: {
+    placeholder: 'Choose an option...',
+    value: '1',
+    allowClear: true
+  }
+}
+
 export default config

@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+import { EditableOverlay } from '../editable-overlay/editable-overlay'
 import { type LinkValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/link'
 import { useLinkDataType } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/link/hooks/use-link-data-type'
 import { DocumentLinkPreview } from '../link-preview/document-link-preview'
@@ -62,7 +62,7 @@ export const LinkEditable = ({
   const positioningClass = actions.length === 1 ? styles.documentLinkActionsSingle : styles.documentLinkActions
 
   return (
-    <InheritanceOverlay
+    <EditableOverlay
       display="block"
       isInherited={ Boolean(inherited) }
       onOverwrite={ handleOverwrite }
@@ -77,6 +77,6 @@ export const LinkEditable = ({
           </div>
         )}
       </div>
-    </InheritanceOverlay>
+    </EditableOverlay>
   )
 }

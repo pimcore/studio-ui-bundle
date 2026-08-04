@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
@@ -24,8 +24,8 @@ export const useStyles = createStyles(({ token, css }) => {
                     color: ${token.itemColor};
 
                     &.ant-segmented-item-selected {
-                        background: ${token.controlItemBgActive};
-                        border-color: ${token.controlItemBgActive};
+                        background: ${token.colorFill};
+                        border-color: ${token.colorFill};
                         color: ${token.itemSelectedColor};
                     }
                 }

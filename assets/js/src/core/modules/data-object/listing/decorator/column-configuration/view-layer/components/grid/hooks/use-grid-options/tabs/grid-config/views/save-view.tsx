@@ -72,11 +72,10 @@ export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, i
             : (<div />)}
 
           <Space size='mini'>
-            <IconTextButton
-              icon={ { value: 'close' } }
+            <Button
               onClick={ onCancelClick }
               type='default'
-            >{ t('button.cancel') }</IconTextButton>
+            >{ t('button.cancel') }</Button>
 
             <Button
               data-testid="listing-grid-config-save-apply-button"

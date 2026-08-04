@@ -26,7 +26,7 @@ import { addDefaultWithToColumnDefinition, calculateColumnWithOfTableCells } fro
 import type { FormItemProps } from 'antd/es/form/FormItem'
 import { isNil } from 'lodash'
 import React from 'react'
-import { AdvancedManyToManyRelationList } from '../../grid-cell-preview/advanced-many-to-many-relation/advanced-many-to-many-relation'
+import { FormattedAdvancedManyToManyRelationList } from '../../grid-cell-preview/advanced-many-to-many-relation/advanced-many-to-many-relation'
 import { type AdvancedManyToManyRelationValue } from '../helpers/relations/types/advanced-many-to-many-relation'
 import { type DynamicTypeFieldFilterAbstract } from '../../../field-filters/dynamic-type-field-filter-abstract'
 import { container } from '@Pimcore/app/depency-injection'
@@ -59,6 +59,10 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
     )
   }
 
+  getVersionObjectDataComponent (props: AdvancedManyToManyObjectRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+    return this.getObjectDataComponent({ ...props, noteditable: true, hideOpenButton: true })
+  }
+
   getObjectDataFormItemProps (props: AdvancedManyToManyObjectRelationObjectDataDefinition): FormItemProps {
     return {
       ...super.getObjectDataFormItemProps(props),
@@ -74,6 +78,7 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
     const value: AdvancedManyToManyRelationValue | null = props.cellProps.getValue()
     const objectProps: AdvancedManyToManyObjectRelationObjectDataDefinition = props.objectProps as AdvancedManyToManyObjectRelationObjectDataDefinition
+    const dataObjectId = props.cellProps.row.original.id as number | undefined
     let columns: RelationColumnDefinition[] = []
 
     if (!isNil(objectProps.columns)) {
@@ -81,8 +86,12 @@ export class DynamicTypeObjectDataAdvancedManyToManyObjectRelation extends Dynam
     }
 
     return (
-      <AdvancedManyToManyRelationList
+      <FormattedAdvancedManyToManyRelationList
         columnDefinition={ columns }
+        columnId={ props.cellProps.column.id }
+        dataObjectId={ dataObjectId }
+        fieldNameFallback={ objectProps.combinedFieldName }
+        pathFormatterClass={ objectProps.pathFormatterClass }
         value={ value }
       />
     )

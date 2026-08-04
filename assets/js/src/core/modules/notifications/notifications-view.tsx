@@ -17,8 +17,9 @@ import { useTranslation } from 'react-i18next'
 import { Content } from '@Pimcore/components/content/content'
 import { Box } from '@Pimcore/components/box/box'
 import { NotificationList } from './notification-list'
-import { IconTextButton } from '@sdk/components'
+import { IconTextButton, Header } from '@sdk/components'
 import { type NotificationGetCollectionApiResponse } from './notifications-slice.gen'
+import { NotificationsSidebar } from './notifications-sidebar/notifications-sidebar'
 
 interface NotificationsViewProps {
   notifications: NotificationGetCollectionApiResponse | undefined
@@ -37,6 +38,7 @@ const NotificationsView = ({ notifications, isLoading, isFetching, deleteNotific
 
   return (
     <ContentLayout
+      renderSidebar={ <NotificationsSidebar /> }
       renderToolbar={ notifications?.totalItems !== 0
         ? (
           <Toolbar
@@ -61,17 +63,12 @@ const NotificationsView = ({ notifications, isLoading, isFetching, deleteNotific
           )
         : undefined }
       renderTopBar={
-        <Toolbar
-          justify='space-between'
-          margin={ {
-            x: 'mini',
-            y: 'none'
-          }
-                    }
-          theme='secondary'
+        <Header
+          margin={ { bottom: 'extra-small' } }
+          position='top'
         >
           <Title>{t('notifications.label')}</Title>
-        </Toolbar>
+        </Header>
             }
     >
       <Content

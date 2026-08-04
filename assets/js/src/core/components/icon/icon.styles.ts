@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
@@ -26,8 +26,8 @@ export const useStyles = createStyles(({ token, css }) => {
       & svg {
         width: inherit;
         height: inherit;
-        color: ${token['gold-7']};
-        background: '${token['gold-3']};'
+        color: ${token.gold7};
+        background: '${token.gold3}';
         border-radius: ${token.borderRadiusLG}px;
       }
 

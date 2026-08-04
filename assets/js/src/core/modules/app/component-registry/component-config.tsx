@@ -199,6 +199,16 @@ const defaultComponentConfig = {
         workflow: { type: ComponentType.SINGLE, name: 'element.editor.tab.workflow' },
         notesAndEvents: { type: ComponentType.SINGLE, name: 'element.editor.tab.notesAndEvents' },
         tags: { type: ComponentType.SINGLE, name: 'element.editor.tab.tags' }
+      },
+      workflow: {
+        modal: {
+          component: { type: ComponentType.SINGLE, name: 'element.editor.workflow.modal' },
+          slots: {
+            top: { type: ComponentType.SLOT, name: 'element.editor.workflow.modal.slots.top' },
+            center: { type: ComponentType.SLOT, name: 'element.editor.workflow.modal.slots.center' },
+            bottom: { type: ComponentType.SLOT, name: 'element.editor.workflow.modal.slots.bottom' }
+          }
+        }
       }
     }
   },
@@ -229,6 +239,19 @@ const defaultComponentConfig = {
         type: ComponentType.SINGLE,
         name: 'rightSidebar.logo.subscriptionDetails'
       }
+    }
+  },
+  app: {
+    background: { type: ComponentType.SINGLE, name: 'app.background' }
+  },
+  user: {
+    // Extension slot for the "Appearance & Branding" area shown after the user
+    // avatar in both the self-service profile and the admin user-management
+    // settings forms. Bundles (e.g. the theme manager) contribute per-user
+    // appearance fields here.
+    appearanceBranding: {
+      type: ComponentType.SLOT,
+      name: 'user.appearanceBranding'
     }
   },
   wysiwyg: {

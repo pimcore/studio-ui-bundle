@@ -13,6 +13,7 @@ import { type AbstractObjectLayoutDefinition } from '../../dynamic-type-object-l
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { BaseView } from '../../views/base-view'
 import { Collapse, type CollapseProps } from '@Pimcore/components/collapse/collapse'
+import { type ElementIcon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import { isNonEmptyString } from '@sdk/utils'
 
@@ -21,9 +22,10 @@ export interface AccordionProps extends AbstractObjectLayoutDefinition {
   border?: boolean
   collapsible?: boolean
   collapsed?: boolean
+  icon?: ElementIcon | null
 }
 
-export const Accordion = ({ children, title, border, collapsed, collapsible, noteditable }: AccordionProps): React.JSX.Element => {
+export const Accordion = ({ children, title, border, collapsed, collapsible, icon, noteditable }: AccordionProps): React.JSX.Element => {
   const { t } = useTranslation()
   const items: CollapseProps['items'] = children.map((child, index) => ({
     key: index,
@@ -32,7 +34,7 @@ export const Accordion = ({ children, title, border, collapsed, collapsible, not
     children: (
       <ObjectComponent
         { ...{ ...child, title: '' } }
-        noteditable={ noteditable }
+        noteditable={ noteditable === true || child.noteditable }
       />
     )
   }))
@@ -42,6 +44,7 @@ export const Accordion = ({ children, title, border, collapsed, collapsible, not
       border={ border }
       collapsed={ collapsed }
       collapsible={ collapsible }
+      icon={ icon }
       title={ title }
     >
       <Collapse

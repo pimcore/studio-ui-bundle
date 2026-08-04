@@ -8,14 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ css, token }) => {
   const themeToken = {
-    highlightBackgroundColor: '#F6FFED',
-    highlightBorderColor: '#B7EB8F',
-    highlightColor: '#52C41A',
-    headerBgColor: 'rgba(0, 0, 0, 0.04)',
+    highlightBackgroundColor: token.colorSuccessBg,
+    highlightBorderColor: token.colorSuccessBorder,
+    highlightColor: token.colorSuccessText,
+    headerBgColor: token.colorFillTertiary,
     ...token
   }
 
@@ -95,9 +95,9 @@ export const useStyles = createStyles(({ css, token }) => {
           }
         }
 
-        &.collapse-item--theme-card-with-highlight {          
+        &.collapse-item--theme-card-with-highlight {
           &.collapse-item--separator .ant-collapse-content {
-            border-top: 1px solid ${themeToken.colorPrimaryBorder};
+            border-top: 1px solid ${themeToken.colorBorderPanelTitle};
           }
         }
 
@@ -139,14 +139,13 @@ export const useStyles = createStyles(({ css, token }) => {
           }
 
           .ant-collapse-content {
-            background-color: white;
+            background-color: ${themeToken.colorBgContainer};
           }
         }
 
         &.collapse-item--theme-fieldset {
-          // @todo check for tokens
-          background-color: rgba(242, 240, 244, 0.52);
-          border-left: 3px solid #D5CFDA;
+          background-color: ${token.colorBgFieldset};
+          border-left: 3px solid ${token.colorBorderFieldset};
         }
       }
     `

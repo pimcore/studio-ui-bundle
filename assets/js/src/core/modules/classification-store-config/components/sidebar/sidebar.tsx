@@ -11,7 +11,7 @@
 import React, { useEffect, useState } from 'react'
 import { isNil } from 'lodash'
 import { useTranslation } from 'react-i18next'
-import { App } from 'antd'
+import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -54,7 +54,7 @@ export const Sidebar = ({
 
   const { styles } = useStyles()
   const { t } = useTranslation()
-  const { modal } = App.useApp()
+  const { localModal: modal } = useStudioModal()
   const [storeForm] = Form.useForm<{ name: string, description: string }>()
 
   const [createStore] = useClassificationStoreConfigurationStoreCreateMutation()

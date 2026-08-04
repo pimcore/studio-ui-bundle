@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 if (module.hot !== undefined) {
   module.hot.accept()
 }
@@ -254,6 +256,36 @@ export * from '@Pimcore/modules/element/editor/shared-tab-manager/hooks/use-tab-
 export * from '@Pimcore/modules/element/editor/tab-manager/tab-manager'
 export * from '@Pimcore/modules/element/editor/tab-manager/interface/IElementEditorTabManager'
 
+export * from '@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-workflow'
+
+// Reusable workflow-transition flow (modal, trigger, subject provider, field renderer). Lets any host —
+// not just the element editor — apply transitions with the standard notes/additional-fields modal by
+// wrapping its content in WorkFlowProvider (passing an explicit `subject`), rendering <WorkflowModal/>,
+// and calling useWorkflowAction().triggerAction(action). Named re-exports (not `export *`) to keep the
+// element barrel's surface explicit and collision-free.
+export {
+  WorkFlowProvider,
+  WorkflowContext,
+  WorkflowActionSubjectContext,
+  useWorkflowActionSubject
+} from '@Pimcore/modules/element/editor/shared-components/workflow/provider/workflow-provider'
+export type {
+  IWorkflowContext,
+  WorkFlowProviderProps
+} from '@Pimcore/modules/element/editor/shared-components/workflow/provider/workflow-provider'
+export { useWorkflowModalState } from '@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-workflow-modal-state'
+export { useWorkflowAction } from '@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-workflow-action'
+export { useWorkflowFieldRenderer } from '@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-workflow-field-renderer'
+export { WorkflowModal } from '@Pimcore/modules/element/editor/shared-components/workflow/modal/workflow-modal'
+export { getWorkflowActions } from '@Pimcore/modules/element/editor/shared-components/workflow/types/workflow-types'
+export type {
+  ActionType,
+  WorkflowAction,
+  WorkflowActionSubject,
+  WorkflowActionsList,
+  WorkflowOptions
+} from '@Pimcore/modules/element/editor/shared-components/workflow/types/workflow-types'
+
 export * from '@Pimcore/modules/element/element-helper'
 
 export * from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
@@ -280,16 +312,21 @@ export * from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-
 export * from '@Pimcore/modules/element/listing/abstract/builder/listing-builder'
 export * from '@Pimcore/modules/element/listing/abstract/builder/use-listing-builder'
 export * from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
+export * from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/row-selection-provider'
 export * from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
 export * from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection-optional'
 export * from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 export * from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
+export * from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/selected-grid-config-id/use-selected-grid-config-id'
 export * from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/grid-container'
 export * from '@Pimcore/modules/element/listing/abstract/view-layer/components/sidebar/sidebar'
+export * from '@Pimcore/modules/element/listing/abstract/view-layer/components/sidebar/hooks/use-sidebar-options'
 export * from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 
 export * from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/pql-filter/use-pql-filter'
 export * from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/pql-filter/pql-filter-provider'
+export * from '@Pimcore/modules/element/listing/decorators/row-selection/view-layer/components/sidebar/hooks/with-selection-overview-tab'
+export * from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/sidebar/hooks/with-general-filters-tab'
 
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/dynamic-type-object-layout-abstract'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/dynamic-type-object-layout-registry'

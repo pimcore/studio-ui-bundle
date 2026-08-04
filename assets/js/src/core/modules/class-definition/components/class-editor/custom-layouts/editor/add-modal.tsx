@@ -9,6 +9,7 @@
  */
 
 import { useCurrentConfiguration } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/current-configuration-provider'
+import { useUnsavedChanges } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/unsaved-changes-provider'
 import { type ConfigurationPartial, useItems } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { AddModal, useAddModal } from '@Pimcore/modules/field-definitions/components/editor/items/sidebar/add-modal'
 import { useClassCustomLayoutGetIdentifierDataQuery, useClassCustomLayoutCreateMutation } from '@sdk/api/class-definition'
@@ -28,6 +29,7 @@ export const CustomLayoutAddModal = (): React.JSX.Element => {
   const { data, isLoading, error } = useClassCustomLayoutGetIdentifierDataQuery({ classDefinitionId: configuration!.id })
   const [createCustomLayout] = useClassCustomLayoutCreateMutation()
   const { openConfiguration } = useItems()
+  const { guard } = useUnsavedChanges()
 
   useEffect(() => {
     if (error !== undefined) {
@@ -46,6 +48,12 @@ export const CustomLayoutAddModal = (): React.JSX.Element => {
       return
     }
 
+    // Creating a new layout activates it and remounts the detail view,
+    // discarding edits of the currently open layout — guard before creating.
+    guard(() => { createLayout(values) })
+  }
+
+  const createLayout = (values: any): void => {
     createCustomLayout({
       customLayoutId: values.uniqueIdentifier,
       customLayoutNew: {

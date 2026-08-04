@@ -20,7 +20,9 @@ import { Content } from '@Pimcore/components/content/content'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 
-export type ClassDefinitionsData = TypedUseQueryHookResult<ClassDefinitionCollectionApiResponse, ClassDefinitionCollectionApiArg, BaseQuery>
+export type ClassDefinitionsData = TypedUseQueryHookResult<ClassDefinitionCollectionApiResponse, ClassDefinitionCollectionApiArg, BaseQuery> & {
+  scopedData?: ClassDefinitionCollectionApiResponse
+}
 
 export type ClassDefinitionsContextProps = ClassDefinitionsData | undefined
 
@@ -29,6 +31,7 @@ export const ClassDefinitionContext = createContext<ClassDefinitionsContextProps
 export interface ClassDefinitionsProviderProps {
   children: React.ReactNode
   elementId?: number
+  showLoadingIndicator?: boolean
 }
 
 export interface FolderQueryState {
@@ -36,7 +39,7 @@ export interface FolderQueryState {
   data: ClassDefinitionFolderCollectionApiResponse | undefined
 }
 
-export const ClassDefinitionsProvider = ({ children, elementId }: ClassDefinitionsProviderProps): React.JSX.Element => {
+export const ClassDefinitionsProvider = ({ children, elementId, showLoadingIndicator = true }: ClassDefinitionsProviderProps): React.JSX.Element => {
   const hasObjectsPermission = isAllowed(UserPermission.Objects)
   const queryResultReturn = useClassDefinitionCollectionQuery(undefined, {
     skip: !hasObjectsPermission
@@ -67,7 +70,7 @@ export const ClassDefinitionsProvider = ({ children, elementId }: ClassDefinitio
     trackError(new ApiError(queryResultReturn.error))
   }
 
-  const transformedQueryResult = { ...queryResultReturn }
+  const transformedQueryResult: ClassDefinitionsData = { ...queryResultReturn }
 
   // If user doesn't have objects permission, provide empty data
   if (!hasObjectsPermission) {
@@ -82,8 +85,11 @@ export const ClassDefinitionsProvider = ({ children, elementId }: ClassDefinitio
     transformedQueryResult.isFetching = queryResultReturn.isFetching || folderQueryState.isLoading
   }
 
+  // When bound to a folder, expose the folder-scoped subset separately in `scopedData`
+  // instead of overwriting `data`. `data` must stay the full catalog so that identity
+  // lookups (e.g. resolving a relation's allowed class by name) work in listing contexts.
   if (elementId !== undefined && folderQueryState.data !== undefined && queryResultReturn.data !== undefined) {
-    transformedQueryResult.data = {
+    transformedQueryResult.scopedData = {
       ...queryResultReturn.data,
       items: folderQueryState.data.items.map((folderItem) => {
         const classDefinition = queryResultReturn.data?.items.find((item) => item.id === folderItem.id)
@@ -100,7 +106,7 @@ export const ClassDefinitionsProvider = ({ children, elementId }: ClassDefinitio
   }
 
   return useMemo(() => {
-    if (transformedQueryResult.isLoading) {
+    if (transformedQueryResult.isLoading && showLoadingIndicator) {
       return (
         <Content loading />
       )

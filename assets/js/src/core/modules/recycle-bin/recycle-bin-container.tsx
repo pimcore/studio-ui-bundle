@@ -9,13 +9,19 @@
  */
 
 import React from 'react'
+import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
+import { RecycleBinAppliedFiltersProvider, recycleBinFilterDescriptors } from '@Pimcore/modules/recycle-bin/filters/filters'
 import { SelectedRowsProvider } from './context/selected-items-context'
 import { RecycleBinContainerInner } from './recycle-bin-container-inner'
 
 export const RecycleBinContainer = (): React.JSX.Element => {
   return (
-    <SelectedRowsProvider initialValue={ {} }>
-      <RecycleBinContainerInner />
-    </SelectedRowsProvider>
+    <DynamicTypeRegistryProvider serviceIds={ ['DynamicTypes/FieldFilterRegistry'] }>
+      <RecycleBinAppliedFiltersProvider descriptors={ recycleBinFilterDescriptors }>
+        <SelectedRowsProvider>
+          <RecycleBinContainerInner />
+        </SelectedRowsProvider>
+      </RecycleBinAppliedFiltersProvider>
+    </DynamicTypeRegistryProvider>
   )
 }

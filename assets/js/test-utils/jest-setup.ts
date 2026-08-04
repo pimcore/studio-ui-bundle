@@ -9,6 +9,21 @@
  */
 
 import 'whatwg-fetch'
+import { TextDecoder, TextEncoder } from 'node:util'
+
+if (globalThis.TextEncoder === undefined) {
+  Object.defineProperty(globalThis, 'TextEncoder', {
+    writable: true,
+    value: TextEncoder
+  })
+}
+
+if (globalThis.TextDecoder === undefined) {
+  Object.defineProperty(globalThis, 'TextDecoder', {
+    writable: true,
+    value: TextDecoder
+  })
+}
 
 Object.defineProperty(globalThis, 'matchMedia', {
   writable: true,

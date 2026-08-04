@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
@@ -42,7 +42,7 @@ export const useStyle = createStyles(({ token, css }) => {
             display: inline-flex;
             flex-direction: column;
             align-items: start;
-            gap: ${token.marginSM}px;
+            gap: ${token.marginXXS}px;
 
             .ant-modal-header {
                 margin-bottom: 0;

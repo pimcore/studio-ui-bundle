@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 interface IStylesProps {
   isHideRootChecker?: boolean
@@ -195,7 +195,7 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
       .ant-tree-switcher_close {
         .ant-tree-switcher-icon {
           svg {
-            transform: rotate(0deg);
+            transform: rotate(-90deg);
           }
         }
       }
@@ -203,7 +203,7 @@ export const useStyles = createStyles(({ token, css }, props: IStylesProps) => {
       .ant-tree-switcher_open {
         .ant-tree-switcher-icon {
           svg {
-            transform: rotate(-180deg);
+            transform: rotate(0deg);
           }
         }
       }

@@ -36,7 +36,7 @@ import {
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { Checkbox, ConfigProvider, Skeleton } from 'antd'
 import cn from 'classnames'
-import { isEmpty, isNumber, isFunction, isNull } from 'lodash'
+import { isEmpty, isNumber, isFunction, isNull, isString, isUndefined } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
@@ -127,6 +127,19 @@ export const Grid = ({
   const autoColumnRef = useRef<HTMLTableCellElement>(null)
   const warnedUndefinedRowIdRef = useRef(false)
 
+  const rowStyleCache = useRef<Map<string, { style: React.CSSProperties, top: number }>>(new Map())
+
+  const getStableRowStyle = useCallback((rowId: string, top: number): React.CSSProperties => {
+    const existing = rowStyleCache.current.get(rowId)
+
+    if (existing?.top === top) return existing.style
+
+    const style: React.CSSProperties = { position: 'absolute', top: `${top}px`, left: 0, right: 0, display: 'flex' }
+    rowStyleCache.current.set(rowId, { style, top })
+
+    return style
+  }, [])
+
   const isRowSelectionEnabled = useMemo(() => enableMultipleRowSelection || enableRowSelection, [enableMultipleRowSelection, enableRowSelection])
   const [internalSorting, setInternalSorting] = useState<SortingState>(sorting ?? [])
   const memoModifiedCells = useMemo(() => { return modifiedCells ?? [] }, [JSON.stringify(modifiedCells)])
@@ -146,7 +159,7 @@ export const Grid = ({
 
   const data = useMemo(
     () => {
-      return props.isLoading === true ? Array(5).fill({}) : props.data
+      return props.isLoading === true ? Array(5).fill({}) : (props.data ?? [])
     },
     [props.isLoading, props.data]
   )
@@ -242,6 +255,7 @@ export const Grid = ({
   tableProps.onColumnSizingInfoChange = (updater) => {
     // Update your own state with the new column sizing info
     const newValue = functionalUpdate(updater, columnSizingInfo)
+    const previousResizingColumn = columnSizingInfo?.isResizingColumn
 
     if (tableAutoWidth && typeof newValue !== 'undefined' && typeof newValue?.isResizingColumn === 'string') {
       const column = table.getColumn(newValue.isResizingColumn)
@@ -267,6 +281,22 @@ export const Grid = ({
     }
 
     setColumnSizingInfo(updater)
+
+    if (
+      !isUndefined(props.onColumnResizeEnd) &&
+      isString(previousResizingColumn) &&
+      newValue?.isResizingColumn === false
+    ) {
+      const column = table.getColumn(previousResizingColumn)
+
+      if (!isUndefined(column)) {
+        props.onColumnResizeEnd({
+          columnId: previousResizingColumn,
+          width: column.getSize(),
+          columnSizing: table.getState().columnSizing
+        })
+      }
+    }
   }
 
   // validate if only one column has autoWidth set to true
@@ -374,7 +404,7 @@ export const Grid = ({
       ? virtualRows.map(vRow => ({
           row: rowsList[vRow.index],
           virtualIndex: vRow.index,
-          rowStyle: { position: 'absolute', top: `${vRow.start}px`, left: 0, right: 0, display: 'flex' },
+          rowStyle: getStableRowStyle(rowsList[vRow.index].id, vRow.start),
           measureElement: rowVirtualizer.measureElement
         }))
       : rowsList.map(row => ({
@@ -390,6 +420,7 @@ export const Grid = ({
         columns={ columns }
         contextMenu={ props.contextMenu }
         enableColumnVirtualizer={ isEnableColumnVirtualizer }
+        enableRowVirtualizer={ isEnableRowVirtualizer }
         isSelected={ row.getIsSelected() }
         key={ row.id }
         measureElement={ measureElement }
@@ -461,11 +492,13 @@ export const Grid = ({
                                 header.column.columnDef.meta?.autoWidth === true && !header.column.getIsResizing()
                                   ? {
                                       width: 'auto',
-                                      minWidth: header.column.getSize()
+                                      minWidth: header.column.getSize(),
+                                      ...(isEnableRowVirtualizer ? { flexShrink: 1, flexGrow: 1 } : {})
                                     }
                                   : {
                                       width: header.column.getSize(),
-                                      maxWidth: header.column.getSize()
+                                      maxWidth: header.column.getSize(),
+                                      ...(isEnableRowVirtualizer ? { flexShrink: 0 } : {})
                                     }
                               }
                             >

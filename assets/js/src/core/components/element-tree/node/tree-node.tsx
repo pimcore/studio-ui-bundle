@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Flex, theme } from 'antd'
+import { Flex } from 'antd'
 import React, { forwardRef, type KeyboardEvent, type MouseEvent, type MutableRefObject, useContext, useEffect } from 'react'
 import { useStyles } from './tree-node.styles'
 import { type INodeRef, TreeContext } from '../element-tree'
@@ -77,8 +77,6 @@ export const defaultProps: TreeNodeProps = {
   isRoot: false
 }
 
-const { useToken } = theme
-
 const TreeNode = forwardRef(function ForwardedTreeNode ({
   id = defaultProps.id,
   internalKey = defaultProps.internalKey,
@@ -91,7 +89,6 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   wrapNode = (children: React.ReactNode): React.ReactNode => children,
   ...props
 }: TreeNodeProps, forwardRef: MutableRefObject<HTMLDivElement>): React.JSX.Element {
-  const { token } = useToken()
   const { styles } = useStyles()
   const {
     renderNodeContent: RenderNodeContent,
@@ -226,12 +223,6 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
       onKeyDown={ onKeyDown }
       ref={ setRef }
       role='button'
-      style={
-          {
-            paddingLeft: token.paddingMD * level,
-            minWidth: `${20 * level + 200}px`
-          }
-        }
       tabIndex={ -1 }
     >
       <Flex

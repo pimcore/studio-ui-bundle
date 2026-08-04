@@ -6,6 +6,7 @@ services:
         bind:
             $studioWysiwygConfiguration: '%pimcore_studio_ui.wysiwyg_configuration%'
             $studioUrlPath: '%pimcore_studio_ui.url_path%'
+            $studioApiPrefix: '%pimcore_studio_backend.url_prefix%'
 
     _instanceof:
         Pimcore\Bundle\StudioUiBundle\AppConfig\AppConfigProviderInterface:
@@ -54,12 +55,24 @@ services:
         tags:
             - { name: 'pimcore_studio_ui.webpack_entry_point_provider.document_editor_iframe' }
 
+    # Reconstructs committed build archives (build-dist/build-<id>.zip) into public/build.
+    Pimcore\Bundle\StudioUiBundle\Build\BuildArchiveExtractor: ~
+
+    # Extracts every registered build archive at cache warmup, while vendor is still writable
+    # (autoconfigure adds the kernel.cache_warmer tag via CacheWarmerInterface).
+    Pimcore\Bundle\StudioUiBundle\Build\StudioBuildCacheWarmer:
+        arguments:
+            $entryPointProviders: !tagged_iterator pimcore_studio_ui.webpack_entry_point_provider
+
     Pimcore\Bundle\StudioUiBundle\EventSubscriber\EditmodeSubscriber:
         tags: ['kernel.event_subscriber']
         arguments:
             $staticResourcesResolver: '@pimcore_studio.static_resources_resolver.document_editor_iframe'
         calls:
             - [ setLogger, [ '@logger' ] ]
+
+    Pimcore\Bundle\StudioUiBundle\Branding\BrandingProviderInterface:
+        class: Pimcore\Bundle\StudioUiBundle\Branding\BrandingProvider
 
     Pimcore\Bundle\StudioUiBundle\Security\Csp\ContentSecurityPolicyHandlerInterface:
         class: Pimcore\Bundle\StudioUiBundle\Security\Csp\ContentSecurityPolicyHandler

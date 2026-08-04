@@ -12,7 +12,7 @@ import React, { useEffect } from 'react'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
-import { App } from 'antd'
+import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useDocumentDeleteSiteMutation, useDocumentUpdateSiteMutation, useLazyDocumentGetSiteQuery, type UpdateSite } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { TreePermission } from '@Pimcore/modules/perspectives/enums/tree-permission'
@@ -38,7 +38,7 @@ export const useSiteActions = (): UseSiteActionsHookReturn => {
   const [documentDeleteSite, { error: deleteError }] = useDocumentDeleteSiteMutation()
   const [documentUpdateSite, { error: updateError }] = useDocumentUpdateSiteMutation()
   const [fetchSiteData, { error: fetchError }] = useLazyDocumentGetSiteQuery()
-  const { modal } = App.useApp()
+  const { localModal: modal } = useStudioModal()
   const dispatch = useAppDispatch()
   const { isTreeActionAllowed } = useTreePermission()
   const { treeId } = useTreeId()

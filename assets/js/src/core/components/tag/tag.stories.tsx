@@ -93,3 +93,28 @@ export const TagWithBadge = {
           />
   }
 }
+
+export const ColorInverted = {
+  args: {
+    colorInverted: '#3572b0',
+    children: 'In Review'
+  }
+}
+
+export const ColorInvertedGreen = {
+  args: {
+    colorInverted: '#52c41a',
+    children: 'Published'
+  }
+}
+
+export const ColorInvertedMultiple = {
+  render: () => (
+    <div style={ { display: 'flex', gap: 8, flexWrap: 'wrap' } }>
+      <Tag colorInverted={ '#3572b0' }>In Review</Tag>
+      <Tag colorInverted={ '#52c41a' }>Approved</Tag>
+      <Tag colorInverted={ '#fa8c16' }>Pending</Tag>
+      <Tag colorInverted={ '#ff4d4f' }>Rejected</Tag>
+    </div>
+  )
+}

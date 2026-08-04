@@ -32,6 +32,7 @@ export interface GridRowProps {
   onFocusCell?: (cell: GridCellReference) => void
   contextMenu?: ListGridContextMenuComponents
   onRowDoubleClick?: GridProps['onRowDoubleClick']
+  enableRowVirtualizer: boolean
   enableColumnVirtualizer: boolean
   size?: GridProps['size']
   rowStyle?: CSSProperties
@@ -42,7 +43,7 @@ export interface GridRowProps {
   virtualPaddingRight?: number
 }
 
-const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, virtualPaddingLeft, virtualPaddingRight, enableColumnVirtualizer, ...props }: GridRowProps): React.JSX.Element => {
+const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, virtualPaddingLeft, virtualPaddingRight, enableColumnVirtualizer, enableRowVirtualizer, ...props }: GridRowProps): React.JSX.Element => {
   const { setNodeRef, transform, transition, isDragging, attributes, listeners } = useSortable({
     id: row.id
   })
@@ -65,14 +66,14 @@ const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, vir
     props?.measureElement?.(internalNodeRef.current)
   }, [isDragging, props.measureElement])
 
-  const style: CSSProperties = {
+  const style = useMemo<CSSProperties>(() => ({
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.8 : 1,
     zIndex: isDragging ? 1 : 0,
     position: 'relative',
     ...rowStyle
-  }
+  }), [transform, transition, isDragging, rowStyle])
 
   const memoModifiedCells = useMemo(() => { return JSON.parse(modifiedCells) }, [modifiedCells])
 
@@ -134,20 +135,26 @@ const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, vir
       }
     >
       {visibleCells?.map((cell) => {
+        const isAutoWidth = cell.column.columnDef.meta?.autoWidth === true
+        const columnSize = cell.column.getSize()
+
+        const tdStyle: CSSProperties = isAutoWidth
+          ? {
+              width: 'auto',
+              minWidth: columnSize,
+              ...(enableRowVirtualizer ? { flexShrink: 1, flexGrow: 1 } : {})
+            }
+          : {
+              width: columnSize,
+              maxWidth: columnSize,
+              ...(enableRowVirtualizer ? { flexShrink: 0 } : {})
+            }
+
         return (
           <td
             className='ant-table-cell'
             key={ cell.id }
-            style={ cell.column.columnDef.meta?.autoWidth === true
-              ? {
-                  width: 'auto',
-                  minWidth: cell.column.getSize()
-                }
-              : {
-                  width: cell.column.getSize(),
-                  maxWidth: cell.column.getSize()
-                }
-                      }
+            style={ tdStyle }
           >
             {cell.column.id === 'drag-handle'
               ? renderRowReorderButton()

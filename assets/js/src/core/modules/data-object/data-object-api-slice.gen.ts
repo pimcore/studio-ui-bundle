@@ -72,6 +72,15 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Data Object Grid"],
             }),
+            dataObjectListGlobalGridConfigurations: build.query<
+                DataObjectListGlobalGridConfigurationsApiResponse,
+                DataObjectListGlobalGridConfigurationsApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/data-object/grid/configurations-global/${queryArg.classId}`,
+                }),
+                providesTags: ["Data Object Grid"],
+            }),
             dataObjectListSavedGridConfigurations: build.query<
                 DataObjectListSavedGridConfigurationsApiResponse,
                 DataObjectListSavedGridConfigurationsApiArg
@@ -186,7 +195,7 @@ const injectedRtkApi = api
                 DataObjectPatchFolderByIdApiArg
             >({
                 query: (queryArg) => ({
-                    url: `/pimcore-studio/api/data-objects/folder`,
+                    url: `/pimcore-studio/api/data-objects/folder/${queryArg.id}`,
                     method: "PATCH",
                     body: queryArg.body,
                 }),
@@ -219,7 +228,7 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Data Objects"],
             }),
-            dataObjectGetSelectOptions: build.mutation<
+            dataObjectGetSelectOptions: build.query<
                 DataObjectGetSelectOptionsApiResponse,
                 DataObjectGetSelectOptionsApiArg
             >({
@@ -228,7 +237,7 @@ const injectedRtkApi = api
                     method: "POST",
                     body: queryArg.body,
                 }),
-                invalidatesTags: ["Data Objects"],
+                providesTags: ["Data Objects"],
             }),
             dataObjectGetTree: build.query<DataObjectGetTreeApiResponse, DataObjectGetTreeApiArg>({
                 query: (queryArg) => ({
@@ -337,6 +346,15 @@ export type DataObjectGetGridConfigurationApiArg = {
     /** Configuration ID */
     configurationId?: number;
 };
+export type DataObjectListGlobalGridConfigurationsApiResponse =
+    /** status 200 List of globally-shared grid configurations for data objects */ {
+        totalItems: number;
+        items: GridConfiguration[];
+    };
+export type DataObjectListGlobalGridConfigurationsApiArg = {
+    /** Class Id of the data object */
+    classId: string;
+};
 export type DataObjectListSavedGridConfigurationsApiResponse =
     /** status 200 List of saved grid configurations for data objects */ {
         totalItems: number;
@@ -431,6 +449,8 @@ export type DataObjectGetGridApiArg = {
     classId: string;
     body: {
         folderId: number;
+        /** When true, empty localized values fall back to configured fallback languages */
+        applyFallbackLanguages?: boolean;
         columns?: GridColumnRequest[];
         filters?: GridFilter;
     };
@@ -476,10 +496,10 @@ export type DataObjectPatchFolderByIdApiResponse =
         jobRunId: number;
     };
 export type DataObjectPatchFolderByIdApiArg = {
+    /** Id of the folder */
+    id: number;
     body: {
         data: {
-            /** Folder ID */
-            folderId: number;
             parentId?: number | null;
             index?: number | null;
             key?: string | null;
@@ -488,7 +508,7 @@ export type DataObjectPatchFolderByIdApiArg = {
             childrenSortOrder?: string | null;
             published?: boolean | null;
             editableData?: object | null;
-        }[];
+        };
         filters?: ExportAllFilter;
         classId: string;
     };
@@ -509,7 +529,7 @@ export type DataObjectPreviewByIdApiResponse = unknown;
 export type DataObjectPreviewByIdApiArg = {
     /** Id of the data object */
     id: number;
-    /** Site ID */
+    /** Site ID for multi-site setups */
     site?: number;
 };
 export type DataObjectReplaceContentApiResponse = unknown;
@@ -702,6 +722,8 @@ export type DataObjectWithDetailData = DataObject & {
     allowInheritance: boolean;
     /** Has preview */
     hasPreview: boolean;
+    /** Show application logger tab */
+    showAppLoggerTab: boolean;
     /** Has workflow available */
     hasWorkflowAvailable: boolean;
     /** Detail object data */
@@ -745,10 +767,18 @@ export type RelationFieldConfig = {
     relation: string;
     /** Field getter */
     field: string;
+    /** Classification store group id */
+    groupId?: number | null;
+    /** Classification store key id */
+    keyId?: number | null;
 };
 export type SimpleFieldConfig = {
     /** Field getter */
     field: string;
+    /** Classification store group id */
+    groupId?: number | null;
+    /** Classification store key id */
+    keyId?: number | null;
 };
 export type StaticTextConfig = {
     /** Static Text */
@@ -781,6 +811,8 @@ export type GridColumnRequest = {
     group?: string[] | null;
     /** Config */
     config?: (string | AdvancedColumnConfig)[];
+    /** Width of the Column */
+    width?: number | null;
 };
 export type Column = {
     /** Key of the Column */
@@ -789,6 +821,8 @@ export type Column = {
     locale: string | null;
     /** Define the group structure */
     group: object;
+    /** Width of the Column */
+    width?: number | null;
 };
 export type GridFilter = {
     /** Page */
@@ -801,6 +835,8 @@ export type GridFilter = {
     columnFilters?: object;
     /** Sort Filter */
     sortFilter?: object;
+    /** Additional Sort Filters for multi-column sorting */
+    additionalSortFilters?: object[];
 };
 export type GridDetailedConfiguration = {
     /** AdditionalAttributes */
@@ -886,6 +922,23 @@ export type SimplePhpCodeTransformer = {
     /** Label of the transformer */
     label: string;
 };
+export type PreviewConfigEntry = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Parameter name */
+    name: string;
+    /** Display label */
+    label: string;
+    /** Available values as key-value pairs */
+    values: {
+        key?: string;
+        value?: string;
+    }[];
+    /** Default selected value */
+    defaultValue: string;
+};
 export type Layout = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -927,12 +980,16 @@ export type Layout = {
     labelWidth: number;
     /** Border */
     border: boolean;
+    /** Preview configuration for locale/site selectors */
+    previewConfig?: PreviewConfigEntry[] | null;
 };
 export type ExportAllFilter = {
     /** Column Filter */
     columnFilters: object;
     /** Sort Filter */
     sortFilter: object;
+    /** Additional Sort Filters for multi-column sorting */
+    additionalSortFilters?: object[];
 };
 export type SelectOption = {
     /** AdditionalAttributes */
@@ -963,6 +1020,7 @@ export const {
     useDataObjectGetGridPreviewQuery,
     useDataObjectDeleteGridConfigurationByConfigurationIdMutation,
     useDataObjectGetGridConfigurationQuery,
+    useDataObjectListGlobalGridConfigurationsQuery,
     useDataObjectListSavedGridConfigurationsQuery,
     useDataObjectRemoveGridConfigurationAsFavoriteMutation,
     useDataObjectSaveGridConfigurationMutation,
@@ -978,6 +1036,6 @@ export const {
     useDataObjectFormatPathQuery,
     useDataObjectPreviewByIdQuery,
     useDataObjectReplaceContentMutation,
-    useDataObjectGetSelectOptionsMutation,
+    useDataObjectGetSelectOptionsQuery,
     useDataObjectGetTreeQuery,
 } = injectedRtkApi;

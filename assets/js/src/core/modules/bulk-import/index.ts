@@ -15,6 +15,8 @@ import { type MainNavRegistry } from '@Pimcore/modules/app/base-layout/main-nav/
 import { useBulkImportContext } from '@Pimcore/modules/bulk-import/components/bulk-import-modal/context/bulk-import-context'
 import { UserPermission } from '@sdk/modules/auth'
 import { NavPermission } from '@sdk/modules/perspectives'
+import { type JobRehydrationRegistry } from '@Pimcore/modules/execution-engine/services/job-rehydration-registry'
+import { BulkImportJob } from '@Pimcore/modules/bulk-import/jobs/bulk-import-job'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -41,5 +43,9 @@ moduleSystem.registerModule({
         }
       }
     })
+
+    const rehydrationRegistry = container.get<JobRehydrationRegistry>(serviceIds['ExecutionEngine/JobRehydrationRegistry'])
+
+    rehydrationRegistry.register(BulkImportJob)
   }
 })

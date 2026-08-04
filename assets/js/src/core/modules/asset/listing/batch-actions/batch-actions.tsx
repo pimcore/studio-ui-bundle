@@ -9,72 +9,46 @@
  */
 
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
-import {
-  useAssetGetByIdQuery
-} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
+import { useBatchDelete } from '@Pimcore/modules/asset/actions/batch-delete/use-batch-delete'
 import { useRowSelectionOptional } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection-optional'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { BatchEditProvider } from './batch-edit-modal/batch-edit-provider'
 import { BatchEditModal } from './batch-edit-modal/batch-edit-modal'
 import { CsvModal } from '@Pimcore/modules/element/listing/batch-actions/csv-modal/csv-modal'
 import { XlsxModal } from '@Pimcore/modules/element/listing/batch-actions/xlsx-modal/xlsx-modal'
-import { AssetBatchDeleteJob } from '@Pimcore/modules/execution-engine/jobs/batch-delete/asset-batch-delete-job'
-import { container } from '@Pimcore/app/depency-injection'
-import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { type ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
-import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 
 export const BatchActions = (): React.JSX.Element => {
   const rowSelection = useRowSelectionOptional()
-  const { id, elementType } = useElementContext()
+  const { id } = useElementContext()
   const { useDataQueryHelper } = useSettings()
   const { getArgs } = useDataQueryHelper()
-  const executionEngine = container.get<ExecutionEngine>(serviceIds.executionEngine)
-  const { refreshGrid } = useRefreshGrid(elementType)
+  const { confirmBatchDelete } = useBatchDelete()
 
   const { createZipDownload: createZipFolderDownload } = useZipDownload({ type: 'folder' })
   const { createZipDownload: createZipAssetListDownload } = useZipDownload({ type: 'asset-list' })
-  const { data } = useAssetGetByIdQuery({ id })
-
-  const [jobTitle, setJobTitle] = useState<string>('Asset')
   const [csvModalOpen, setCsvModalOpen] = useState<boolean>(false)
   const [xlsxModalOpen, setXlsxModalOpen] = useState<boolean>(false)
   const [batchEditModalOpen, setBatchEditModalOpen] = useState<boolean>(false)
 
   const { t } = useTranslation()
 
-  useEffect(() => {
-    if (data !== undefined) {
-      setJobTitle(`${data.filename}`)
-    }
-  }, [data])
-
   if (rowSelection === undefined) {
     return <></>
   }
 
-  const { selectedRows, setSelectedRows } = rowSelection
+  const { selectedRows, setSelectedRows, selectedRowsData } = rowSelection
 
   const numberedSelectedRows = selectedRows !== undefined ? Object.keys(selectedRows).map(Number) : []
   const hasSelectedItems = selectedRows !== undefined ? Object.keys(selectedRows).length > 0 : false
 
-  const handleBatchDelete = async (): Promise<void> => {
-    const job = new AssetBatchDeleteJob({
-      itemIds: numberedSelectedRows,
-      title: t('batch-delete.job-title'),
-      onFinish: async () => {
-        await refreshGrid()
-        setSelectedRows({})
-      }
-    })
-
-    await executionEngine.runJob(job)
+  const handleBatchDeleteConfirm = (): void => {
+    void confirmBatchDelete(numberedSelectedRows, selectedRowsData, () => { setSelectedRows({}) })
   }
 
   const menu: DropdownMenuProps = {
@@ -123,7 +97,7 @@ export const BatchActions = (): React.JSX.Element => {
         hidden: !hasSelectedItems,
         label: t('listing.actions.delete'),
         icon: <Icon value={ 'trash' } />,
-        onClick: handleBatchDelete
+        onClick: handleBatchDeleteConfirm
       }
     ]
   }
@@ -160,10 +134,9 @@ export const BatchActions = (): React.JSX.Element => {
 
   function createZip (): void {
     if (hasSelectedItems) {
-      createZipAssetListDownload({ jobTitle, requestData: { body: { assets: numberedSelectedRows } } })
+      createZipAssetListDownload({ requestData: { body: { assets: numberedSelectedRows, parentId: id } } })
     } else {
       createZipFolderDownload({
-        jobTitle,
         requestData: {
           body: {
             folders: [id],

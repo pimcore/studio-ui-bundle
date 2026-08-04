@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 import { FastColor } from '@ant-design/fast-color'
 
 export const useStyle = createStyles(({ token, css }) => {
@@ -35,7 +35,7 @@ export const useStyle = createStyles(({ token, css }) => {
 
         .ant-modal-body {
           .ant-btn {
-            color: ${token['purple-4']};
+            color: ${token.purple4} !important;
           }
 
           .video-container {

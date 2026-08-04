@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 export type Tag = string | {
@@ -29,6 +31,9 @@ export const tagNames = {
   DATA_OBJECT_DETAIL: 'DATA_OBJECT_DETAIL',
   DATA_OBJECT_TREE: 'DATA_OBJECT_TREE',
   DATA_OBJECT_GRID: 'DATA_OBJECT_GRID',
+  DATA_OBJECT_GRID_CONFIGURATION: 'DATA_OBJECT_GRID_CONFIGURATION',
+  DATA_OBJECT_GRID_CONFIGURATION_LIST: 'DATA_OBJECT_GRID_CONFIGURATION_LIST',
+  DATA_OBJECT_GRID_CONFIGURATION_DETAIL: 'DATA_OBJECT_GRID_CONFIGURATION_DETAIL',
   DOCUMENT: 'DOCUMENT',
   DOCUMENT_DETAIL: 'DOCUMENT_DETAIL',
   DOCUMENT_TREE: 'DOCUMENT_TREE',
@@ -45,6 +50,7 @@ export const tagNames = {
   SETTINGS_ADMIN: 'SETTINGS_ADMIN',
   WEBSITE_SETTINGS: 'WEBSITE_SETTINGS',
   REDIRECTS: 'REDIRECTS',
+  ROBOTS_TXT: 'ROBOTS_TXT',
   ELEMENT_TAGS: 'TAGS',
   ROLE: 'ROLE',
   DOMAIN_TRANSLATIONS: 'DOMAIN_TRANSLATIONS',
@@ -59,6 +65,7 @@ export const tagNames = {
   EMAIL_LOG_DETAIL: 'EMAIL_LOG_DETAIL',
   RECYCLE_BIN: 'RECYCLE_BIN',
   RECYCLE_BIN_DETAIL: 'RECYCLE_BIN_DETAIL',
+  OWNERSHIP_MANAGEMENT: 'OWNERSHIP_MANAGEMENT',
   PERSPECTIVES: 'PERSPECTIVES',
   PERSPECTIVE_DETAIL: 'PERSPECTIVE_DETAIL',
   WIDGETS: 'WIDGETS',
@@ -113,6 +120,9 @@ export const providingTags = {
   DATA_OBJECT_TREE: () => [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_TREE],
   DATA_OBJECT_TREE_ID: (id: number) => [tagNames.DATA_OBJECT, { type: tagNames.DATA_OBJECT_TREE, id }],
   DATA_OBJECT_GRID_ID: (id: number) => [tagNames.DATA_OBJECT, { type: tagNames.DATA_OBJECT_GRID, id }],
+  DATA_OBJECT_GRID_CONFIGURATION: () => [tagNames.DATA_OBJECT_GRID_CONFIGURATION],
+  DATA_OBJECT_GRID_CONFIGURATION_LIST: () => [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_GRID_CONFIGURATION, { type: tagNames.DATA_OBJECT_GRID_CONFIGURATION_LIST }],
+  DATA_OBJECT_GRID_CONFIGURATION_DETAIL: (configurationId?: number) => [tagNames.DATA_OBJECT, { type: tagNames.DATA_OBJECT_DETAIL }, tagNames.DATA_OBJECT_GRID_CONFIGURATION, { type: tagNames.DATA_OBJECT_GRID_CONFIGURATION_DETAIL, id: configurationId }],
   DOCUMENT_DETAIL: () => [tagNames.DOCUMENT, tagNames.DOCUMENT_DETAIL],
   DOCUMENT_DETAIL_ID: (id: number) => [tagNames.DOCUMENT, { type: tagNames.DOCUMENT_DETAIL, id }],
   DOCUMENT_TYPES: () => [tagNames.DOCUMENT_TYPES],
@@ -128,11 +138,13 @@ export const providingTags = {
   SETTINGS_ADMIN: () => [tagNames.SETTINGS_ADMIN],
   WEBSITE_SETTINGS: () => [tagNames.WEBSITE_SETTINGS],
   REDIRECTS: () => [tagNames.REDIRECTS],
+  ROBOTS_TXT: () => [tagNames.ROBOTS_TXT],
   ELEMENT_PROPERTIES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.PROPERTIES, elementType, id)],
   SCHEDULE_DETAIL: (id: number) => [{ type: tagNames.SCHEDULES, id }, tagNames.SCHEDULES],
   ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.SCHEDULES, elementType, id)],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],
   ELEMENT_VERSIONS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.VERSIONS, elementType, id)],
+  NOTES_AND_EVENTS: () => [tagNames.NOTES_AND_EVENTS],
   NOTES_AND_EVENTS_DETAIL: (id: number) => [{ type: tagNames.NOTES_AND_EVENTS, id }],
   ELEMENT_NOTES_AND_EVENTS: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementSpecificTag(tagNames.NOTES_AND_EVENTS, elementType, id)],
   NOTIFICATIONS: () => [tagNames.NOTIFICATIONS],
@@ -148,6 +160,7 @@ export const providingTags = {
   EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }],
   RECYCLING_BIN: () => [tagNames.RECYCLE_BIN],
   RECYCLING_BIN_DETAIL: (id: number) => [{ type: tagNames.RECYCLE_BIN_DETAIL, id }],
+  OWNERSHIP_MANAGEMENT: () => [tagNames.OWNERSHIP_MANAGEMENT],
   APPLICATION_LOGGER: () => [tagNames.APPLICATION_LOGGER],
   APPLICATION_LOGGER_DETAIL: (id: number) => [{ type: tagNames.APPLICATION_LOGGER_DETAIL, id }],
   PERSPECTIVES: () => [tagNames.PERSPECTIVES],
@@ -187,7 +200,7 @@ export const invalidatingTags = {
   ASSET_TREE: () => [tagNames.ASSET_TREE],
   ASSET_TREE_ID: (id: number) => [{ type: tagNames.ASSET_TREE, id }],
   ASSET_GRID_CONFIGURATION: () => [tagNames.ASSET_GRID_CONFIGURATION],
-  ASSET_GRID_CONFIGURATION_DETAIL: (configurationId?: number) => [{ type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: configurationId }, { type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: configurationId }],
+  ASSET_GRID_CONFIGURATION_DETAIL: (configurationId?: number) => [{ type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: configurationId }, tagNames.ASSET_GRID_CONFIGURATION],
   ASSET_GRID_CONFIGURATION_LIST: () => [{ type: tagNames.ASSET_GRID_CONFIGURATION_LIST }],
   ASSET_GRID_ID: (id: number) => [{ type: tagNames.ASSET_GRID, id }],
   DATA_OBJECT: () => [tagNames.DATA_OBJECT],
@@ -196,6 +209,9 @@ export const invalidatingTags = {
   DATA_OBJECT_TREE: () => [tagNames.DATA_OBJECT_TREE],
   DATA_OBJECT_TREE_ID: (id: number) => [{ type: tagNames.DATA_OBJECT_TREE, id }],
   DATA_OBJECT_GRID_ID: (id: number) => [{ type: tagNames.DATA_OBJECT_GRID, id }],
+  DATA_OBJECT_GRID_CONFIGURATION: () => [tagNames.DATA_OBJECT_GRID_CONFIGURATION],
+  DATA_OBJECT_GRID_CONFIGURATION_DETAIL: (configurationId?: number) => [{ type: tagNames.DATA_OBJECT_GRID_CONFIGURATION_DETAIL, id: configurationId }, tagNames.DATA_OBJECT_GRID_CONFIGURATION],
+  DATA_OBJECT_GRID_CONFIGURATION_LIST: () => [{ type: tagNames.DATA_OBJECT_GRID_CONFIGURATION_LIST }],
   DOCUMENT: () => [tagNames.DOCUMENT],
   DOCUMENT_DETAIL: () => [tagNames.DOCUMENT_DETAIL],
   DOCUMENT_DETAIL_ID: (id: number) => [{ type: tagNames.DOCUMENT_DETAIL, id }, elementUnspecificDataTag],
@@ -213,10 +229,12 @@ export const invalidatingTags = {
   SETTINGS_ADMIN: () => [tagNames.SETTINGS_ADMIN],
   WEBSITE_SETTINGS: () => [tagNames.WEBSITE_SETTINGS],
   REDIRECTS: () => [tagNames.REDIRECTS],
+  ROBOTS_TXT: () => [tagNames.ROBOTS_TXT],
   SCHEDULE_DETAIL: (id: number) => [{ type: tagNames.SCHEDULES, id }],
   ELEMENT_SCHEDULES: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.SCHEDULES, elementType, id)],
   VERSIONS_DETAIL: (id: number) => [{ type: tagNames.VERSIONS, id }],
   ELEMENT_VERSIONS: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.VERSIONS, elementType, id)],
+  NOTES_AND_EVENTS: () => [tagNames.NOTES_AND_EVENTS],
   NOTES_AND_EVENTS_DETAIL: (id: number) => [{ type: tagNames.NOTES_AND_EVENTS, id }],
   NOTIFICATION_DETAIL: (id: number) => [{ type: tagNames.NOTIFICATION_DETAILS, id }],
   NOTIFICATIONS: () => [tagNames.NOTIFICATIONS],
@@ -225,7 +243,7 @@ export const invalidatingTags = {
   ELEMENT_TAGS: (elementType: ElementType, id: number) => [getElementSpecificTag(tagNames.ELEMENT_TAGS, elementType, id)],
   ROLE: () => [tagNames.ROLE],
   PREDEFINED_ASSET_METADATA: () => [tagNames.PREDEFINED_ASSET_METADATA],
-  ELEMENT_DETAIL: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id)],
+  ELEMENT_DETAIL: (elementType: ElementType, id: number) => [getElementDetailTag(elementType, id), getElementGridTag(elementType)],
   EMAIL_BLOCKLIST: () => [tagNames.EMAIL_BLOCKLIST],
   EMAIL_BLOCKLIST_DETAIL: (id: string) => [{ type: tagNames.EMAIL_BLOCKLIST_DETAIL, id }],
   APPLICATION_LOGGER: () => [tagNames.APPLICATION_LOGGER],
@@ -233,6 +251,7 @@ export const invalidatingTags = {
   EMAIL_LOG: () => [tagNames.EMAIL_LOG],
   EMAIL_LOG_DETAIL: (id: number) => [{ type: tagNames.EMAIL_LOG_DETAIL, id }],
   RECYCLING_BIN: () => [tagNames.RECYCLE_BIN],
+  OWNERSHIP_MANAGEMENT: () => [tagNames.OWNERSHIP_MANAGEMENT],
   PERSPECTIVES: () => [tagNames.PERSPECTIVES],
   WIDGETS: () => [tagNames.WIDGETS],
   USERS: () => [tagNames.USERS],
@@ -271,5 +290,16 @@ const getElementDetailTag = (elementType: ElementType, id: number): Tag => {
       return { type: tagNames.DATA_OBJECT_DETAIL, id }
     case 'document':
       return { type: tagNames.DOCUMENT_DETAIL, id }
+  }
+}
+
+const getElementGridTag = (elementType: ElementType): Tag => {
+  switch (elementType) {
+    case 'asset':
+      return tagNames.ASSET_GRID
+    case 'data-object':
+      return tagNames.DATA_OBJECT_GRID
+    case 'document':
+      return tagNames.DOCUMENT
   }
 }

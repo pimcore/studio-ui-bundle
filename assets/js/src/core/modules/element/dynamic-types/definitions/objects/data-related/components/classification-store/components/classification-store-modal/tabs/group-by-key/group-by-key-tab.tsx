@@ -26,6 +26,7 @@ interface GroupByKeyTabProps {
   classId: ClassificationStoreGetKeyGroupRelationsApiArg['classId']
   objectId?: number
   fieldName: ClassificationStoreGetKeyGroupRelationsApiArg['fieldName']
+  singleSelection?: boolean
 }
 
 export const GroupByKeyTab = (props: GroupByKeyTabProps): React.JSX.Element => {
@@ -57,6 +58,7 @@ export const GroupByKeyTab = (props: GroupByKeyTabProps): React.JSX.Element => {
             fieldName: props.fieldName
           } }
           queryHook={ useClassificationStoreGetKeyGroupRelationsQuery }
+          singleSelection={ props.singleSelection }
           tabId={ TabId.GroupByKey }
         />
       )}

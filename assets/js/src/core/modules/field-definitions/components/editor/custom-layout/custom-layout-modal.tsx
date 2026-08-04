@@ -9,6 +9,7 @@
  */
 
 import { create } from '@Pimcore/components/modal/factory/modal-factory'
+import { useUnsavedChanges } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/unsaved-changes-provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -17,19 +18,23 @@ const {
   Modal: ModalTemplate,
   Provider: CustomLayoutModalProvider,
   useModal: useCustomLayoutModal
-} = create({ defaultProps: { children: <></>, size: 'XXL', footer: null } })
+} = create({ defaultProps: { children: <></>, size: 'XXL', footer: null, maskClosable: false } })
 
 export { CustomLayoutModalProvider, useCustomLayoutModal }
 
 export const CustomLayoutModal = (): React.JSX.Element => {
   const { t } = useTranslation()
   const settings = useSettings()
-  const { open } = useCustomLayoutModal()
+  const { open, closeModal } = useCustomLayoutModal()
+  const { guard } = useUnsavedChanges()
 
   return (
     <>
       { open && (
-        <ModalTemplate title={ t('field-definitions.custom-layouts') }>
+        <ModalTemplate
+          onCancel={ () => { guard(closeModal) } }
+          title={ t('field-definitions.custom-layouts') }
+        >
           {settings.customLayouts?.ModalContent}
         </ModalTemplate>
       )}

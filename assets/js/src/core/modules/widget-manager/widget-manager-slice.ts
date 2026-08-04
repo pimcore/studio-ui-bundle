@@ -8,12 +8,15 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isUndefined } from 'lodash'
 import { injectSliceWithState } from '@sdk/app'
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { type IJsonModel, type IJsonTabNode, Model, Actions, DockLocation, type Node, BorderNode } from 'flexlayout-react'
 import { getInitialModelJson as getInitialOuterModelJson } from './utils/widget-manager-outer-model'
 import { getInitialModelJson as getInitialInnerModelJson } from './utils/widget-manager-inner-model'
 import { createWidgetManagerPersistedReducer } from './widget-manager-persistence'
+import { resolveMainWidgetContext } from './utils/resolve-main-widget-context'
+import { getNextTabId } from './utils/get-next-tab-id'
 import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
 import { type ElementIcon } from '@sdk/components'
 import { type UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
@@ -28,6 +31,7 @@ export interface WidgetManagerState {
   outerModel: IJsonModel
   innerModel: IJsonModel
   mainWidgetContext: MainWidgetContext
+  restored: boolean
 }
 
 export interface WidgetManagerTabConfig extends Omit<IJsonTabNode, 'icon'> {
@@ -44,7 +48,8 @@ export interface WidgetManagerTabConfig extends Omit<IJsonTabNode, 'icon'> {
 export const initialState: WidgetManagerState = {
   outerModel: getInitialOuterModelJson(),
   innerModel: getInitialInnerModelJson(),
-  mainWidgetContext: null
+  mainWidgetContext: null,
+  restored: false
 }
 
 const slice = createSlice({
@@ -59,6 +64,10 @@ const slice = createSlice({
 
     updateInnerModel: (state, action: PayloadAction<IJsonModel>) => {
       state.innerModel = { ...action.payload }
+    },
+
+    setWidgetManagerRestored: (state, action: PayloadAction<boolean>) => {
+      state.restored = action.payload
     },
 
     updateMainWidgetContext: (state, action: PayloadAction<MainWidgetContext>) => {
@@ -91,6 +100,7 @@ const slice = createSlice({
         state.outerModel = { ...model.toJson() }
       } else {
         state.innerModel = { ...model.toJson() }
+        state.mainWidgetContext = resolveMainWidgetContext(model)
       }
     },
 
@@ -117,6 +127,7 @@ const slice = createSlice({
       }
 
       state.innerModel = { ...model.toJson() }
+      state.mainWidgetContext = resolveMainWidgetContext(model)
     },
 
     updateWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
@@ -223,46 +234,20 @@ const slice = createSlice({
       }
 
       if (node !== undefined) {
+        const nextTabId = isOuterModelNode ? undefined : getNextTabId(node)
+
         model.doAction(Actions.deleteTab(node.getId()))
+
+        if (!isUndefined(nextTabId) && !isUndefined(model.getNodeById(nextTabId))) {
+          model.doAction(Actions.selectTab(nextTabId))
+        }
       }
 
       if (isOuterModelNode) {
         state.outerModel = { ...model.toJson() }
       } else {
-        const currentTabset = model.getActiveTabset()
-        let hasValidNode = false
-
-        if (currentTabset !== undefined) {
-          const currentNode = currentTabset.getChildren()?.[0]
-
-          if (currentNode !== undefined) {
-            model.doAction(Actions.selectTab(currentNode.getId()))
-            hasValidNode = true
-          }
-        }
-
-        if (!hasValidNode) {
-          const firstTabset = model.getFirstTabSet()
-          const parent = firstTabset.getParent()
-
-          const tabsets = parent!.getChildren()
-          let validChildNode: Node | undefined
-
-          for (const tabset of tabsets) {
-            const childNodes = tabset.getChildren()
-
-            if (childNodes.length > 0) {
-              validChildNode = childNodes[0]
-              break
-            };
-          }
-
-          if (validChildNode !== undefined) {
-            model.doAction(Actions.selectTab(validChildNode.getId()))
-          }
-        }
-
         state.innerModel = { ...model.toJson() }
+        state.mainWidgetContext = resolveMainWidgetContext(model)
       }
     }
   },
@@ -278,6 +263,10 @@ const slice = createSlice({
 
     selectMainWidgetContext: (state) => {
       return state.mainWidgetContext
+    },
+
+    selectWidgetManagerRestored: (state) => {
+      return state.restored
     }
   }
 })
@@ -291,5 +280,5 @@ injectSliceWithState({
   reducer: persistedReducer
 })
 
-export const { updateOuterModel, updateMainWidgetContext, updateInnerModel, openMainWidget, updateWidget, openBottomWidget, openLeftWidget, openRightWidget, setActiveWidgetById, closeWidget } = slice.actions
-export const { selectInnerModel, selectOuterModel, selectMainWidgetContext } = slice.selectors
+export const { updateOuterModel, updateMainWidgetContext, updateInnerModel, setWidgetManagerRestored, openMainWidget, updateWidget, openBottomWidget, openLeftWidget, openRightWidget, setActiveWidgetById, closeWidget } = slice.actions
+export const { selectInnerModel, selectOuterModel, selectMainWidgetContext, selectWidgetManagerRestored } = slice.selectors

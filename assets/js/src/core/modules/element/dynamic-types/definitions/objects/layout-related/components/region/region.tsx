@@ -13,11 +13,13 @@ import { type AbstractObjectLayoutDefinition } from '../../dynamic-type-object-l
 import React, { type ReactNode } from 'react'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { BaseView } from '../../views/base-view'
+import { type ElementIcon } from '@Pimcore/components/icon/icon'
 
 export interface RegionProps extends AbstractObjectLayoutDefinition {
   collapsible?: boolean
   collapsed?: boolean
   title?: ReactNode
+  icon?: ElementIcon | null
 }
 
 export enum AvailableRegions {
@@ -49,7 +51,7 @@ export const Region = ({ children, noteditable, ...props }: RegionProps): React.
         <ObjectComponent
           { ...child }
           key={ child.name }
-          noteditable={ noteditable }
+          noteditable={ noteditable === true || child.noteditable }
         />
       )
     })
@@ -106,6 +108,7 @@ export const Region = ({ children, noteditable, ...props }: RegionProps): React.
     <BaseView
       collapsed={ props.collapsed }
       collapsible={ props.collapsible }
+      icon={ props.icon }
       title={ props.title }
     >
       <BaseRegion

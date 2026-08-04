@@ -8,18 +8,36 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import type { Meta } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react'
 import { Background } from './background'
 
-const config: Meta = {
+const config: Meta<typeof Background> = {
   title: 'Components/Visuals/Background',
   component: Background,
   parameters: {
-    layout: 'centered'
+    layout: 'fullscreen'
   },
   tags: ['autodocs']
 }
 
 export default config
 
-export const _default = {}
+type Story = StoryObj<typeof Background>
+
+export const _default: Story = {
+  args: {
+    phase: 'idle'
+  }
+}
+
+export const Loading: Story = {
+  args: {
+    phase: 'loading'
+  }
+}
+
+export const Outro: Story = {
+  args: {
+    phase: 'outro'
+  }
+}

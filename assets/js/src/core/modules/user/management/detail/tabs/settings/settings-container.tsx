@@ -9,7 +9,7 @@
  */
 
 import { debounce } from 'lodash'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback } from 'react'
 import { Input, Col, Row, Flex, Typography } from 'antd'
 import { Form } from '@Pimcore/components/form/form'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
@@ -18,7 +18,6 @@ import { useTranslation } from 'react-i18next'
 import { useUserManagementDraft } from '@Pimcore/modules/user/hooks/use-user-management-draft'
 import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-management-context'
 import { Content } from '@Pimcore/components/content/content'
-import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
 import { createTabContentTestId } from '@Pimcore/utils/test-id-generator'
 import { UserAvatar } from '@Pimcore/modules/user/management/detail/tabs/settings/components/user-avatar'
 import { generatePassword, getGroupedPermissions } from '@Pimcore/modules/user/management/detail/tabs/settings/settings-helper'
@@ -26,11 +25,14 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { AdminAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/admin-accordion'
 import { CustomisationAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/customisation-accordion'
+import { AppearanceBrandingAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/appearance-branding-accordion'
 import { PermissionsAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/permissions-accordion'
 import { TypesAndClassesAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/types-classes-accordion'
 import { EditorSettingsAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/editor-settings-accordion'
 import { SharedTranslationSettingsAccordion } from '@Pimcore/modules/user/management/detail/tabs/settings/components/form/shared-translation-settings-accordion'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { useUserGetAvailablePermissionsQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
+import { usePerspectiveGetConfigCollectionQuery } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 
 const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const { validLanguages } = useSettings()
@@ -40,35 +42,34 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
   const { id } = useUserManagementContext()
   const user = useUser()
   const { user: openedUser, isLoading, changeUserInState, updateUserImageInState } = useUserManagementDraft(id)
-  const { getAvailablePermissions } = useUserManagementHelper()
-  const permissions = getGroupedPermissions(getAvailablePermissions())
+  const { data: availablePermissionsData, isLoading: permissionsLoading } = useUserGetAvailablePermissionsQuery()
+  const { isLoading: perspectivesLoading } = usePerspectiveGetConfigCollectionQuery()
+  const permissions = getGroupedPermissions(availablePermissionsData?.items ?? [])
 
   const [passwordType, setPasswordType] = React.useState<'text' | 'password'>('password')
 
-  useEffect(() => {
-    if (!isLoading) {
-      form.setFieldsValue({
-        active: openedUser?.active,
-        admin: openedUser?.admin,
-        classes: openedUser?.classes,
-        docTypes: openedUser?.docTypes,
-        name: openedUser?.name,
-        twoFactorAuthenticationRequired: openedUser?.twoFactorAuthentication?.required ?? false,
-        firstname: openedUser?.firstname,
-        lastname: openedUser?.lastname,
-        email: openedUser?.email,
-        language: openedUser?.language,
-        dateTimeLocale: openedUser?.dateTimeLocale ?? '',
-        welcomeScreen: openedUser?.welcomeScreen,
-        memorizeTabs: openedUser?.memorizeTabs,
-        allowDirtyClose: openedUser?.allowDirtyClose,
-        closeWarning: openedUser?.closeWarning,
-        roles: openedUser?.roles ?? [],
-        permissionsDefault: Array.isArray(openedUser?.permissions) ? openedUser.permissions.filter((permission) => permissions.default.some((defaultPermission) => defaultPermission.key === permission)) : [],
-        permissionsBundles: Array.isArray(openedUser?.permissions) ? openedUser.permissions.filter((permission) => permissions.bundles.some((defaultPermission) => defaultPermission.key === permission)) : []
-      })
-    }
-  }, [openedUser, isLoading, permissions])
+  const buildFormValues = (): object => ({
+    active: openedUser?.active,
+    admin: openedUser?.admin,
+    classes: openedUser?.classes,
+    docTypes: openedUser?.docTypes,
+    name: openedUser?.name,
+    twoFactorAuthenticationRequired: openedUser?.twoFactorAuthentication?.required ?? false,
+    firstname: openedUser?.firstname,
+    lastname: openedUser?.lastname,
+    email: openedUser?.email,
+    language: openedUser?.language,
+    dateTimeLocale: openedUser?.dateTimeLocale ?? '',
+    theme: openedUser?.theme,
+    welcomeScreen: openedUser?.welcomeScreen,
+    memorizeTabs: openedUser?.memorizeTabs,
+    allowDirtyClose: openedUser?.allowDirtyClose,
+    closeWarning: openedUser?.closeWarning,
+    roles: openedUser?.roles ?? [],
+    perspectives: (openedUser?.perspectives as unknown as string[]) ?? [],
+    permissionsDefault: Array.isArray(openedUser?.permissions) ? openedUser.permissions.filter((permission) => permissions.default.some((defaultPermission) => defaultPermission.key === permission)).sort((a, b) => t(`user-management.permissions.${a}`).localeCompare(t(`user-management.permissions.${b}`))) : [],
+    permissionsBundles: Array.isArray(openedUser?.permissions) ? openedUser.permissions.filter((permission) => permissions.bundles.some((defaultPermission) => defaultPermission.key === permission)).sort((a, b) => t(`user-management.permissions.${a}`).localeCompare(t(`user-management.permissions.${b}`))) : []
+  })
 
   const onValuesChange = useCallback(
     debounce((changedValues, allValues) => {
@@ -88,13 +89,16 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
     return date.toLocaleString()
   }
 
-  if (isLoading) {
+  if (isLoading || permissionsLoading || perspectivesLoading) {
     return <Content loading></Content>
   }
+
   return (
     <Form
       data-testid={ createTabContentTestId(id.toString(), { prefix: 'user-detail-tab', tabKey: 'settings' }) }
       form={ form }
+      initialValues={ buildFormValues() }
+      key={ id }
       layout="vertical"
       onValuesChange={ onValuesChange }
     >
@@ -180,6 +184,7 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
             onUserImageChanged={ (imageUrl: string) => { updateUserImageInState(imageUrl) } }
             user={ openedUser }
           />
+          <AppearanceBrandingAccordion user={ openedUser } />
         </Col>
         <Col span={ 16 }>
           <CustomisationAccordion isAdmin={ openedUser?.admin } />

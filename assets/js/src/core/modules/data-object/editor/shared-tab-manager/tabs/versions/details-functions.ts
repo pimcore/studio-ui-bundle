@@ -16,12 +16,16 @@ import { type IObjectVersionField } from '@Pimcore/modules/element/editor/shared
 import { DATATYPE_LIST, type IFormattedDataStructureData, type IGetFormattedDataStructureProps, type IFieldCollectionValue } from './types'
 import { DynamicTypesList } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/constants/typesList'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
+import { ELEMENT_REFERENCE_PROPERTY_TYPES, PropertyType } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/constants/property-types'
 
 export const getBreadcrumbTitle = (value1: string, value2: string): string => {
   return [value1, value2].filter(Boolean).join('/')
 }
 
 const fieldTypesRequiringChildren = [DynamicTypesList.BLOCK]
+
+const COMPARISON_VALUE_KEY = 'data'
 
 export const getFormattedDataStructure = async ({ objectId, layout, versionData, versionId, versionCount, objectDataRegistry, layoutsList, setLayoutsList }: IGetFormattedDataStructureProps): Promise<IFormattedDataStructureData[]> => {
   const formattedSystemData = {
@@ -93,16 +97,48 @@ export const getFormattedDataStructure = async ({ objectId, layout, versionData,
 
   const layoutData = await processLayoutData({ data: layout })
   const generalSystemData = getGeneralSystemData()
+  const propertiesData = getPropertiesData({ properties: versionData.properties, versionId, versionCount })
 
-  return [...generalSystemData, ...layoutData]
+  return [...generalSystemData, ...propertiesData, ...layoutData]
+}
+
+export const getPropertiesData = ({ properties, versionId, versionCount }: { properties: DataObjectVersion['properties'], versionId: number, versionCount: number }): IFormattedDataStructureData[] => {
+  return (properties ?? []).map((property): IFormattedDataStructureData => {
+    let fieldtype = 'input'
+
+    if (property.type === PropertyType.BOOL) {
+      fieldtype = 'checkbox'
+    } else if (ELEMENT_REFERENCE_PROPERTY_TYPES.includes(property.type)) {
+      fieldtype = property.type
+    }
+
+    return {
+      fieldBreadcrumbTitle: VersionCategoryName.PROPERTIES,
+      fieldData: { title: property.key, name: property.key, fieldtype, config: property.config, inherited: property.inherited } as any,
+      fieldValue: property.data,
+      comparisonValue: {
+        data: property.data,
+        type: property.type,
+        predefinedName: property.predefinedName,
+        inheritable: property.inheritable,
+        inherited: property.inherited,
+        config: property.config,
+        description: property.description
+      },
+      versionId,
+      versionCount,
+      fieldPath: ''
+    }
+  })
 }
 
 const getUniqFieldKey = (item: any): string => {
   const path = item.fieldBreadcrumbTitle ?? ''
   const name = item.fieldData?.name ?? ''
   const locale = item.fieldData?.locale ?? 'default'
+  const ownership = isUndefined(item.fieldData?.inherited) ? 'default' : (item.fieldData.inherited === true ? 'inherited' : 'own')
 
-  return `${path}-${name}-${locale}`
+  return `${path}-${name}-${locale}-${ownership}`
 }
 
 export const versionsDataToTableData = ({ data }: { data: IFormattedDataStructureData[][] }): IObjectVersionField[] => {
@@ -142,9 +178,32 @@ export const versionsDataToTableData = ({ data }: { data: IFormattedDataStructur
       field[`Version ${compareVersionItem.versionCount}`] = compareVersionItem.fieldValue ?? null
     }
 
-    if (isComparisonMode && !isEqual(mainVersionItem?.fieldValue ?? null, compareVersionItem?.fieldValue ?? null)) {
-      field.isModifiedValue = true
+    const mainComparisonValue = mainVersionItem?.comparisonValue ?? mainVersionItem?.fieldValue ?? null
+    const compareComparisonValue = compareVersionItem?.comparisonValue ?? compareVersionItem?.fieldValue ?? null
 
+    if (isComparisonMode) {
+      field.isModifiedValue = !isEqual(mainComparisonValue, compareComparisonValue)
+
+      const hasComparisonAttributes = !isUndefined(mainVersionItem?.comparisonValue) || !isUndefined(compareVersionItem?.comparisonValue)
+
+      if (field.isModifiedValue && hasComparisonAttributes) {
+        const attributeKeys = new Set([
+          ...Object.keys(mainVersionItem?.comparisonValue ?? {}),
+          ...Object.keys(compareVersionItem?.comparisonValue ?? {})
+        ])
+        attributeKeys.delete(COMPARISON_VALUE_KEY)
+
+        const modifiedAttributes = [...attributeKeys].filter(
+          attr => !isEqual(mainVersionItem?.comparisonValue?.[attr], compareVersionItem?.comparisonValue?.[attr])
+        )
+
+        if (!isEmpty(modifiedAttributes)) {
+          field.modifiedAttributes = modifiedAttributes
+        }
+      }
+    }
+
+    if (field.isModifiedValue === true) {
       if (mainVersionItem?.fieldData?.fieldtype === DynamicTypesList.FIELD_COLLECTIONS) {
         const mainVersionLength = mainVersionItem?.fieldValue?.length
         const compareVersionLength = compareVersionItem?.fieldValue?.length

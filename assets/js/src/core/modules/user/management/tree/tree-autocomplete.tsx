@@ -10,9 +10,9 @@
 
 import React, { useState } from 'react'
 import { useUserManagementHelper } from '@Pimcore/modules/user/hooks/use-user-management-helper'
-import { AutoComplete, Avatar, Input, Row, Col, Typography } from 'antd'
+import { AutoComplete, Input, Row, Col, Typography } from 'antd'
+import { Avatar } from '@Pimcore/components/avatar/avatar'
 import { useTranslation } from 'react-i18next'
-import { UserOutlined } from '@ant-design/icons'
 import { useStyles } from '@Pimcore/components/search-input/search-input.styles'
 import { Icon } from '@Pimcore/components/icon/icon'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
@@ -32,7 +32,7 @@ const TreeAutocomplete = ({ loading = true, ...props }: ITreeAutocompleteProps):
   const onSearch = (value: string): void => {
     setSearchValue(value)
 
-    searchUserByText(searchValue).then(response => {
+    searchUserByText(value).then(response => {
       setSearchOptions(response.items.map((item) => ({
         value: item.id.toString(),
         label: (
@@ -42,7 +42,6 @@ const TreeAutocomplete = ({ loading = true, ...props }: ITreeAutocompleteProps):
           >
             <Col flex="none">
               <Avatar
-                icon={ <UserOutlined /> }
                 size={ 26 }
               />
             </Col>

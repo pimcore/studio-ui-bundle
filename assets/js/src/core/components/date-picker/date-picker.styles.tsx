@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
@@ -39,6 +39,19 @@ export const useStyles = createStyles(({ token, css }) => {
 
     datePickerDropdown: css`
       width: inherit !important;
+
+      .ant-picker-today-btn {
+        color: ${token.colorPrimary};
+      }
+
+      .ant-picker-cell-today .ant-picker-cell-inner::before {
+        border-color: ${token.colorPrimary} !important;
+      }
+
+      .ant-picker-header-view button:hover,
+      .ant-picker-header button:hover {
+        color: ${token.colorPrimary};
+      }
     `,
 
     inherited: css`

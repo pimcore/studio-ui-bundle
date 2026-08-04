@@ -11,12 +11,11 @@
 import React from 'react'
 import { Title } from '@Pimcore/components/title/title'
 import { t } from 'i18next'
-import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Button } from '@Pimcore/components/button/button'
 import { Form, Popconfirm } from 'antd'
-import { Box } from '@sdk/components'
+import { Box, Header } from '@sdk/components'
 import { ManyToOneRelationInput } from '@Pimcore/components/many-to-one-relation/many-to-one-relation-input'
 import { useSearchReplaceAssignments } from '../../providers/search-replace-assignments/search-replace-assignments-provider'
 import { Alert } from '@Pimcore/components/alert/alert'
@@ -36,16 +35,9 @@ export const SearchReplaceForm = (): React.JSX.Element => {
 
   return (
     <>
-      <Toolbar
-        justify="space-between"
-        margin={ {
-          x: 'mini',
-          y: 'none'
-        } }
-        theme="secondary"
-      >
+      <Header >
         <Title>{t('widget.search-replace-assignments')}</Title>
-      </Toolbar>
+      </Header>
       <Content>
         <Box margin={ { x: 'small', bottom: 'small' } }>
 

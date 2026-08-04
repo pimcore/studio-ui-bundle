@@ -26,7 +26,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { DEFAULT_HEIGHT, MIN_WIDTH } from '../../helpers/responsive-asset-preview/image-dimensions'
 import { locateElementInTree } from '@Pimcore/modules/element/utils/tree-utils'
 import { useAssetDimensions } from '../../helpers/responsive-asset-preview/hooks/use-asset-dimensions'
-import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+import { EditableOverlay } from '../editable-overlay/editable-overlay'
 
 export interface PdfEditableValue {
   id?: number
@@ -124,29 +124,20 @@ export const PdfEditable = (props: PdfEditableProps): React.JSX.Element => {
   const dropdownItems: DropdownProps['menu']['items'] = []
 
   if (!isNil(pdfValue?.id)) {
-    dropdownItems.push(
-      {
-        key: 'open',
-        icon: <Icon value="open-folder" />,
-        label: t('open'),
-        disabled: props.disabled,
-        onClick: () => {
-          if (!isNil(pdfValue?.id)) {
-            void openElement({
-              id: pdfValue.id,
-              type: 'asset'
-            })
-          }
+    dropdownItems.push({
+      key: 'open',
+      icon: <Icon value="open-folder" />,
+      label: t('open'),
+      disabled: props.disabled,
+      onClick: () => {
+        if (!isNil(pdfValue?.id)) {
+          void openElement({
+            id: pdfValue.id,
+            type: 'asset'
+          })
         }
-      },
-      {
-        key: 'empty',
-        icon: <Icon value="trash" />,
-        label: t('empty'),
-        disabled,
-        onClick: handleEmptyValue
       }
-    )
+    })
   }
 
   dropdownItems.push(
@@ -172,6 +163,19 @@ export const PdfEditable = (props: PdfEditableProps): React.JSX.Element => {
       onClick: handleUpload
     }
   )
+
+  if (!isNil(pdfValue?.id)) {
+    dropdownItems.push(
+      { type: 'divider', key: 'empty-divider' },
+      {
+        key: 'empty',
+        icon: <Icon value="trash" />,
+        label: t('empty'),
+        disabled,
+        onClick: handleEmptyValue
+      }
+    )
+  }
 
   const renderDroppableContent = useCallback((children: React.ReactNode) => {
     // Determine the shape based on whether a PDF is selected
@@ -201,7 +205,7 @@ export const PdfEditable = (props: PdfEditableProps): React.JSX.Element => {
   }, [props.config?.uploadPath, disabled, handleFileSystemUpload, handleReplacePdf, pdfValue?.id])
 
   return (
-    <InheritanceOverlay
+    <EditableOverlay
       display={ !isNil(smartDimensions?.width ?? width) || hasPdf ? 'inline-block' : 'block' }
       hideButtons
       isInherited={ isInherited }
@@ -235,6 +239,6 @@ export const PdfEditable = (props: PdfEditableProps): React.JSX.Element => {
             />
             )
       )}
-    </InheritanceOverlay>
+    </EditableOverlay>
   )
 }

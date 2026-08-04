@@ -18,8 +18,8 @@ const UNCATEGORIZED_AREABLOCK_GROUP = 'Uncategorized'
 
 export { DEFAULT_AREABLOCK_GROUP, UNCATEGORIZED_AREABLOCK_GROUP }
 
-export function buildGroupedTypes (editableDefinitions: AbstractDocumentEditableDefinition[]): AreablockGroupedTypes {
-  const areablockEditables = editableDefinitions.filter(e => e.type === 'areablock')
+export function buildGroupedTypes (editableDefinitions: AbstractDocumentEditableDefinition[], typeId: string = 'areablock'): AreablockGroupedTypes {
+  const areablockEditables = editableDefinitions.filter(e => e.type === typeId)
   if (areablockEditables.length === 0) return {}
 
   const allGroupedTypes: AreablockGroupedTypes = {}
@@ -64,7 +64,7 @@ export const areablockValueUtils = {
 
   elementsToAreablockValue (elements: HTMLElement[]): AreablockValue {
     return elements.map(element => {
-      const key = element.getAttribute('key') ?? ''
+      const key = element.dataset.key ?? element.getAttribute('key') ?? ''
       const type = element.getAttribute('type') ?? ''
       const hidden = element.getAttribute('data-hidden') === 'true'
 
@@ -110,6 +110,15 @@ export const configUtils = {
   isTypeAllowed (config: AreablockEditableConfig | undefined, type: string): boolean {
     if (isNil(config?.allowed) || config.allowed.length === 0) return true
     return config.allowed.includes(type)
+  },
+
+
+  isTypePasteable (config: AreablockEditableConfig | undefined, type: string): boolean {
+    if (!this.isTypeAllowed(config, type)) return false
+
+    const availableTypes: AreaType[] = this.getAvailableTypes(config)
+
+    return availableTypes.some(availableType => availableType.type === type)
   },
 
   getGroupedAreaTypes (config?: AreablockEditableConfig): AreaType[] | Record<string, AreaType[]> {

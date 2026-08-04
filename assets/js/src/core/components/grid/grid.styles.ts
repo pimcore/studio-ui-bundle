@@ -141,6 +141,7 @@ export const useStyles = createStyles(({ token, css }, { size = 'normal', enable
 
         &.ant-table-cell__no-data {
           padding: ${token.paddingXS}px 0px ${token.paddingXS}px ${token.paddingXS}px !important;
+          color: ${token.colorTextDescription};
         }
 
         &:last-of-type {
@@ -252,7 +253,8 @@ export const useStyles = createStyles(({ token, css }, { size = 'normal', enable
         .ant-skeleton {
           width: 100%;
           margin: 4px;
-            
+          align-items: center;
+
             .ant-skeleton-input {
               min-width: unset;
               width: 100%;
@@ -267,7 +269,7 @@ export const useStyles = createStyles(({ token, css }, { size = 'normal', enable
       }
 
       .ant-table-row-selected td {
-        background-color: ${token.controlItemBgActive};
+        background-color: ${token.itemHoverColor};
       }
     `,
 

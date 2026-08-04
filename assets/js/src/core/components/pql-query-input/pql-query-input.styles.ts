@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
@@ -31,6 +31,17 @@ export const useStyles = createStyles(({ css, token }) => {
     link: css`
       color: #d3adf7 !important;
       text-decoration: underline !important;
+    `,
+
+    editorError: css`
+      .cm-editor {
+        border-color: ${token.colorError} !important;
+
+        &.cm-focused {
+          border-color: ${token.colorError} !important;
+          box-shadow: 0 0 0 2px ${token.colorErrorBg} !important;
+        }
+      }
     `
   }
 })

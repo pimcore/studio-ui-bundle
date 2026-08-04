@@ -11,13 +11,14 @@
 import React from 'react'
 import { IconButton, Flex, Progress } from '@sdk/components'
 import { formatDataUnit } from '@Pimcore/utils/data-unit'
+import { type FileUploadStatus } from '../../hooks/use-file-upload'
 import { useStyle } from './selected-file-view.styles'
 
 interface SelectedFileViewProps {
   file: File
   loading: boolean
   isUploading: boolean
-  uploadStatus: 'normal' | 'active' | 'success' | 'exception'
+  uploadStatus: FileUploadStatus
   uploadProgress: number
   onRemove: () => void
 }

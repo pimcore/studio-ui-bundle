@@ -8,13 +8,21 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
     dynamicGroupItem: css`
       background-color: ${token.colorFillAdditional};
       border-radius: ${token.borderRadius}px;
+
+      .ant-form-item {
+        margin-bottom: 0;
+      }
+
+      .ant-form-item + .ant-form-item {
+        margin-top: ${token.marginXS}px;
+      }
     `
   }
 })

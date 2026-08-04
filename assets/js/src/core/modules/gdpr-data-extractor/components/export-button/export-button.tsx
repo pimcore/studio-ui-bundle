@@ -9,12 +9,11 @@
  */
 
 import { IconButton } from '@sdk/components'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useLazyGdprExportQuery } from '../../gdpr-data-extractor-slice-enhanced'
 import { downloadJsonFile } from '@Pimcore/modules/app/utils/download'
-import { isUndefined } from 'lodash'
 import trackError from '@Pimcore/modules/app/error-handler/error-handler'
-import ApiError from '@Pimcore/modules/app/error-handler/classes/api-error'
+import ApiError, { isApiErrorData } from '@Pimcore/modules/app/error-handler/classes/api-error'
 import { GeneralError } from '@sdk/modules/app'
 
 interface ExportButtonProps extends Omit<React.ComponentProps<typeof IconButton>, 'id' | 'icon'> {
@@ -23,7 +22,7 @@ interface ExportButtonProps extends Omit<React.ComponentProps<typeof IconButton>
 }
 
 export const ExportButton = ({ id, providerKey, onClick, loading, ...iconButtonProps }: ExportButtonProps): React.JSX.Element => {
-  const [trigger, { isLoading, error }] = useLazyGdprExportQuery()
+  const [trigger, { isLoading }] = useLazyGdprExportQuery()
 
   const handleExport = async (e: React.MouseEvent<HTMLElement, MouseEvent>): Promise<void> => {
     try {
@@ -37,15 +36,12 @@ export const ExportButton = ({ id, providerKey, onClick, loading, ...iconButtonP
       onClick?.(e)
     } catch (error: any) {
       console.error('Export failed:', error)
-      trackError(new GeneralError(error.message as string))
+
+      // Handle the failure in a single place. API errors carry an errorKey and are rendered via
+      // ApiError (translated message); anything else falls back to a GeneralError.
+      trackError(isApiErrorData(error) ? new ApiError(error) : new GeneralError(error?.message as string))
     }
   }
-
-  useEffect(() => {
-    if (!isUndefined(error)) {
-      trackError(new ApiError(error))
-    }
-  }, [error])
 
   return (
     <IconButton

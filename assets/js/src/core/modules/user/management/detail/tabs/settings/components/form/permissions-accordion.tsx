@@ -23,6 +23,17 @@ interface IPermissionsAccordionProps {
 const PermissionsAccordion = ({ permissions, ...props }: IPermissionsAccordionProps): React.JSX.Element => {
   const { t } = useTranslation()
 
+  const translatePermissionOptions = (permission: { key: string }): { value: string, label: string }  => ({
+    value: permission.key,
+    label: t(`user-management.permissions.${permission.key}`)
+  })
+
+  const sortByTranslatedLabel = (values: string[]): string[] => {
+    return [...values].sort((a, b) =>
+      t(`user-management.permissions.${a}`).localeCompare(t(`user-management.permissions.${b}`))
+    )
+  }
+
   const content = [
     {
       key: '1',
@@ -31,18 +42,12 @@ const PermissionsAccordion = ({ permissions, ...props }: IPermissionsAccordionPr
         <>
           <Form.Item
             name="permissionsDefault"
+            normalize={ sortByTranslatedLabel }
           >
             <Select
               dataTestId="permissions-select-default"
               mode="multiple"
-              options={ permissions.default.map(
-                (permission) => ({
-                  value: permission.key,
-                  label: t(
-                    `user-management.permissions.${permission.key}`
-                  )
-                })
-              ) }
+              options={ permissions.default.map(translatePermissionOptions).sort((a, b) => a.label.localeCompare(b.label)) }
               placeholder={
                 t('user-management.permissions.default')
               }
@@ -50,16 +55,12 @@ const PermissionsAccordion = ({ permissions, ...props }: IPermissionsAccordionPr
           </Form.Item>
           <Form.Item
             name="permissionsBundles"
+            normalize={ sortByTranslatedLabel }
           >
             <Select
               dataTestId="permissions-select-bundles"
               mode="multiple"
-              options={ permissions.bundles.map(
-                (permission) => ({
-                  value: permission.key,
-                  label: permission.key
-                })
-              ) }
+              options={ permissions.bundles.map(translatePermissionOptions).sort((a, b) => a.label.localeCompare(b.label)) }
               placeholder={
                 t('user-management.permissions.bundles')
               }

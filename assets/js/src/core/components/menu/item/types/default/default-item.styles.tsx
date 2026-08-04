@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
@@ -25,7 +25,7 @@ export const useStyles = createStyles(({ token, css }) => {
         background-color: ${token.colorBgContainer} !important;
 
         &:hover {
-          background-color: rgba(0, 0, 0, 0.04) !important;
+          background-color: ${token.colorFillTertiary} !important;
         }
       }
 

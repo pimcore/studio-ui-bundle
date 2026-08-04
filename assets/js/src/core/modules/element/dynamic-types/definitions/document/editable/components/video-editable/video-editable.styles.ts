@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
@@ -26,6 +26,37 @@ export const useStyles = createStyles(({ token, css }) => {
       border: 1px solid ${token.colorBorder};
       border-radius: ${token.borderRadius}px;
       box-shadow: ${token.boxShadow};
+    `,
+
+    progressOverlay: css`
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: ${token.marginSM}px;
+      background-color: ${token.colorBgContainer};
+      border: 2px dashed ${token.colorBorder};
+      border-radius: ${token.borderRadius}px;
+      pointer-events: none;
+    `,
+
+    progressLabel: css`
+      color: ${token.colorTextSecondary};
+      font-size: ${token.fontSizeSM}px;
+    `,
+
+    errorMessage: css`
+      position: absolute;
+      inset-inline: ${token.paddingXS}px;
+      bottom: ${token.paddingXS}px;
+      text-align: center;
+      color: ${token.colorTextSecondary};
+      font-size: ${token.fontSizeSM}px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     `
   }
 })

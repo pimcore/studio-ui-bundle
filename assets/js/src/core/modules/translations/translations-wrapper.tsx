@@ -12,10 +12,15 @@ import React from 'react'
 import { TranslationDomainProvider } from './hooks/translation-domain-provider'
 import { TranslationsContainer } from './translations-container'
 
-export const TranslationsWrapper = (): React.JSX.Element => {
+export interface TranslationsWrapperProps {
+  initialDomain?: string
+  initialSearchTerm?: string
+}
+
+export const TranslationsWrapper = ({ initialDomain, initialSearchTerm }: TranslationsWrapperProps): React.JSX.Element => {
   return (
-    <TranslationDomainProvider>
-      <TranslationsContainer />
+    <TranslationDomainProvider initialDomain={ initialDomain }>
+      <TranslationsContainer initialSearchTerm={ initialSearchTerm } />
     </TranslationDomainProvider>
   )
 }

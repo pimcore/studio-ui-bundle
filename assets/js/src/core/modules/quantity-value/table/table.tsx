@@ -10,7 +10,7 @@
 
 import React, { useMemo, useState } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { createColumnHelper } from '@tanstack/react-table'
+import { createColumnHelper, type SortingState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
 import { type QuantityValueUnit } from '@Pimcore/modules/data-object/unit-slice-enhanced'
 import { type QuantityValueUnitRow, useQuantityValueUnit } from '../hooks/use-quantity-value-unit'
@@ -23,9 +23,11 @@ type QuantityValueUnitWithActions = QuantityValueUnit & { actions: React.ReactNo
 interface TableProps {
   quantityValueUnitRows: QuantityValueUnitRow[]
   setQuantityValueUnitRows: React.Dispatch<React.SetStateAction<QuantityValueUnitRow[]>>
+  sorting?: SortingState
+  onSortingChange?: (sorting: SortingState) => void
 }
 
-export const Table = ({ quantityValueUnitRows, setQuantityValueUnitRows }: TableProps): React.JSX.Element => {
+export const Table = ({ quantityValueUnitRows, setQuantityValueUnitRows, sorting, onSortingChange }: TableProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { updateUnitById } = useQuantityValueUnit()
   const [modifiedCells, setModifiedCells] = useState<ModifiedCells>([])
@@ -68,11 +70,13 @@ export const Table = ({ quantityValueUnitRows, setQuantityValueUnitRows }: Table
     columnHelper.accessor('conversionOffset', {
       header: t('quantity-values.columns.conversion-offset'),
       meta: { type: 'number', editable: true },
+      enableSorting: false,
       size: 150
     }),
     columnHelper.accessor('converter', {
       header: t('quantity-values.columns.converter'),
       meta: { editable: true },
+      enableSorting: false,
       size: 150
     }),
     columnHelper.accessor('actions', {
@@ -127,10 +131,13 @@ export const Table = ({ quantityValueUnitRows, setQuantityValueUnitRows }: Table
       columns={ tableColumns }
       data={ quantityValueUnitRows }
       enableSorting
+      manualSorting
       modifiedCells={ modifiedCells }
+      onSortingChange={ onSortingChange }
       onUpdateCellData={ onUpdateCellData }
       resizable
       setRowId={ (row: QuantityValueUnitRow) => row.rowId }
+      sorting={ sorting }
     />
   )
 }

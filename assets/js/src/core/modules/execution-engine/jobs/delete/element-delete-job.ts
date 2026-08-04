@@ -15,21 +15,25 @@ import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-h
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { MessageBusJobHandler, type JobCompletionData } from '../../message-handlers/message-bus-job/message-bus-job-handler'
+import { BatchedStepProgressCalculator } from '../../message-handlers/message-bus-job/progress-calculator/batched-step-progress-calculator'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
+import { t } from 'i18next'
+import { type RehydratableJob, type JobRunList } from '../../services/job-rehydration-registry'
+
 
 export interface DeleteJobOptions {
   elementId: number
   elementType: ElementType
-  title: string
   treeId?: string
   nodeId?: string
   parentFolderId?: number
 }
 
 export class DeleteJob implements JobInterface {
+  static readonly jobNames = ['studio_ee_job_delete_assets', 'studio_ee_job_delete_data_objects', 'studio_ee_job_delete_documents'] as const
+
   private readonly elementId: number
   private readonly elementType: ElementType
-  private readonly title: string
   private readonly treeId?: string
   private readonly nodeId?: string
   private readonly parentFolderId?: number
@@ -37,7 +41,6 @@ export class DeleteJob implements JobInterface {
   constructor (options: DeleteJobOptions) {
     this.elementId = options.elementId
     this.elementType = options.elementType
-    this.title = options.title
     this.treeId = options.treeId
     this.nodeId = options.nodeId
     this.parentFolderId = options.parentFolderId
@@ -65,9 +68,8 @@ export class DeleteJob implements JobInterface {
         return
       }
 
-      const handler = new MessageBusJobHandler({
+      const handler = DeleteJob.buildHandler({
         jobRunId,
-        title: this.title,
         onJobCompletion: async (data: JobCompletionData) => {
           if (data.isFinished) {
             try {
@@ -139,4 +141,25 @@ export class DeleteJob implements JobInterface {
 
     console.error('Delete job failed:', error)
   }
+
+  static rehydrate (jobRuns: JobRunList): MessageBusJobHandler {
+    const [parent] = jobRuns
+    return this.buildHandler({ jobRunId: parent.id })
+  }
+
+  private static buildHandler (options: {
+    jobRunId: number
+    onJobCompletion?: (data: JobCompletionData) => Promise<void>
+    onRetry?: () => Promise<void>
+  }): MessageBusJobHandler {
+    return new MessageBusJobHandler({
+      jobRunId: options.jobRunId,
+      title: t('element.delete.deleting-folder'),
+      progressCalculator: new BatchedStepProgressCalculator(),
+      onJobCompletion: options.onJobCompletion,
+      onRetry: options.onRetry
+    })
+  }
 }
+
+void (DeleteJob satisfies RehydratableJob)

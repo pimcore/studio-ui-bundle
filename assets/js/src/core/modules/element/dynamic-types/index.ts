@@ -19,7 +19,9 @@ import { type DynamicTypeFieldFilterString } from './definitions/field-filters/t
 import { type DynamicTypeFieldFilterNone } from './definitions/field-filters/types/none/dynamic-type-field-filter-none'
 import { type DynamicTypeFieldFilterId } from './definitions/field-filters/types/id/dynamic-type-field-filter-id'
 import { type DynamicTypeFieldFilterNumber } from './definitions/field-filters/types/number/dynamic-type-field-filter-number'
+import { type DynamicTypeFieldFilterFileSize } from './definitions/field-filters/types/file-size/dynamic-type-field-filter-file-size'
 import { type DynamicTypeFieldFilterMultiselect } from './definitions/field-filters/types/multiselect/dynamic-type-field-filter-multiselect'
+import { type DynamicTypeFieldFilterUser } from './definitions/field-filters/types/user/dynamic-type-field-filter-user'
 import { type DynamicTypeFieldFilterDate } from './definitions/field-filters/types/date/dynamic-type-field-filter-date'
 import { type DynamicTypeGridCellText } from './definitions/grid-cell/types/text/dynamic-type-grid-cell-text'
 import { type DynamicTypeGridCellRegistry } from './definitions/grid-cell/dynamic-type-grid-cell-registry'
@@ -206,6 +208,12 @@ import { type DynamicTypeGridCellString } from './definitions/grid-cell/types/st
 import { type DynamicTypeGridCellInteger } from './definitions/grid-cell/types/integer/dynamic-type-grid-cell-integer'
 import { type DynamicTypeGridCellError } from './definitions/grid-cell/types/error/dynamic-type-grid-cell-error'
 import { type DynamicTypeGridCellArray } from './definitions/grid-cell/types/array/dynamic-type-grid-cell-array'
+import { type DynamicTypeGridCellSystemId } from './definitions/grid-cell/types/system-id/dynamic-type-grid-cell-system-id'
+import { type DynamicTypeGridCellSystemString } from './definitions/grid-cell/types/system-string/dynamic-type-grid-cell-system-string'
+import { type DynamicTypeGridCellSystemBoolean } from './definitions/grid-cell/types/system-boolean/dynamic-type-grid-cell-system-boolean'
+import { type DynamicTypeGridCellSystemDatetime } from './definitions/grid-cell/types/system-datetime/dynamic-type-grid-cell-system-datetime'
+import { type DynamicTypeGridCellSystemInteger } from './definitions/grid-cell/types/system-integer/dynamic-type-grid-cell-system-integer'
+import { type DynamicTypeGridCellSystemUser } from './definitions/grid-cell/types/system-user/dynamic-type-grid-cell-system-user'
 import { type DynamicTypeDocumentRegistry } from './definitions/document/dynamic-type-document-registry'
 import { type DynamicTypeDocumentEmail } from './definitions/document/types/dynamic-type-document-email'
 import { type DynamicTypeDocumentFolder } from './definitions/document/types/dynamic-type-document-folder'
@@ -235,7 +243,9 @@ moduleSystem.registerModule({
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterNone>(serviceIds['DynamicTypes/FieldFilter/None']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterId>(serviceIds['DynamicTypes/FieldFilter/Id']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterNumber>(serviceIds['DynamicTypes/FieldFilter/Number']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterFileSize>(serviceIds['DynamicTypes/FieldFilter/FileSize']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterMultiselect>(serviceIds['DynamicTypes/FieldFilter/Multiselect']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterUser>(serviceIds['DynamicTypes/FieldFilter/User']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterDate>(serviceIds['DynamicTypes/FieldFilter/Date']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterBoolean>(serviceIds['DynamicTypes/FieldFilter/Boolean']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterBoolean>(serviceIds['DynamicTypes/FieldFilter/BooleanSelect']))
@@ -304,6 +314,7 @@ moduleSystem.registerModule({
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellClassificationStore>(serviceIds['DynamicTypes/GridCell/ClassificationStore']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectAdvanced>(serviceIds['DynamicTypes/GridCell/DataObjectAdvanced']))
     GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellDataObjectObjectBrick>(serviceIds['DynamicTypes/GridCell/DataObjectObjectBrick']))
+    GridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellSystemUser>(serviceIds['DynamicTypes/GridCell/SystemUser']))
 
     const advancedGridCellRegistry = container.get<DynamicTypeGridCellRegistry>(serviceIds['DynamicTypes/AdvancedGridCellRegistry'])
 
@@ -311,6 +322,12 @@ moduleSystem.registerModule({
     advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellInteger>(serviceIds['DynamicTypes/GridCell/Integer']))
     advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellError>(serviceIds['DynamicTypes/GridCell/Error']))
     advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellArray>(serviceIds['DynamicTypes/GridCell/Array']))
+    advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellSystemId>(serviceIds['DynamicTypes/GridCell/SystemId']))
+    advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellSystemString>(serviceIds['DynamicTypes/GridCell/SystemString']))
+    advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellSystemBoolean>(serviceIds['DynamicTypes/GridCell/SystemBoolean']))
+    advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellSystemDatetime>(serviceIds['DynamicTypes/GridCell/SystemDatetime']))
+    advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellSystemInteger>(serviceIds['DynamicTypes/GridCell/SystemInteger']))
+    advancedGridCellRegistry.registerDynamicType(container.get<DynamicTypeGridCellSystemUser>(serviceIds['DynamicTypes/GridCell/SystemUser']))
 
     const metadataRegistry = container.get<DynamicTypeMetaDataRegistry>(serviceIds['DynamicTypes/MetadataRegistry'])
 

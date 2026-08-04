@@ -10,8 +10,9 @@
 
 import React, { useEffect } from 'react'
 import { TagList } from '@Pimcore/components/tag-list/tag-list'
-import type { TagProps } from '@Pimcore/components/tag/tag'
 import { Badge } from '@Pimcore/components/badge/badge'
+import type { TagProps } from '@Pimcore/components/tag/tag'
+
 import { Dropdown, type DropdownMenuProps, type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { useTranslation } from 'react-i18next'
 import { WorkflowTransitionGroup } from '@Pimcore/modules/element/editor/shared-components/workflow/menu/workflow-transition-group'
@@ -19,11 +20,13 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { useWorkflow } from '@Pimcore/modules/element/editor/shared-components/workflow/hooks/use-workflow'
+import { useStyles } from '@Pimcore/modules/element/editor/shared-components/workflow/menu/workflow-menu.styles'
 
 export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
   const { t } = useTranslation()
   const [items, setItems] = React.useState<DropdownMenuProps['items']>([])
   const { workflowDetailsData, isFetchingWorkflowDetails } = useWorkflow()
+  const { styles } = useStyles()
 
   useEffect(() => {
     if (workflowDetailsData?.items !== undefined && workflowDetailsData.items.length > 0) {
@@ -48,21 +51,14 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
 
   const getVisibleWorkflowStatus = (): TagProps[][] => {
     if (workflowDetailsData?.items !== undefined && workflowDetailsData.items.length > 0) {
-      const formattedStatuses = workflowDetailsData.items.reduce((result: Array<{ children: string }>, workflow) => {
+      const formattedStatuses = workflowDetailsData.items.reduce((result: TagProps[], workflow) => {
         workflow.workflowStatus.forEach((status) => {
           if (status.visibleInDetail !== undefined && status.visibleInDetail) {
-            const style = status.colorInverted
-              ? { backgroundColor: `${status.color}33` }
-              : {}
-            const tag =
-              {
-                children: t(`${status.label}`),
-                icon: <Badge
-                  color={ status.color }
-                      />,
-                style
-              }
-            result.push(tag)
+            result.push({
+              children: t(`${status.label}`),
+              colorInverted: status.colorInverted ? status.color : undefined,
+              icon: !status.colorInverted ? <Badge color={ status.color } /> : undefined
+            })
           }
         })
         return result
@@ -86,6 +82,7 @@ export const EditorToolbarWorkflowMenu = (): React.JSX.Element => {
       <Dropdown
         disabled={ isFetchingWorkflowDetails }
         menu={ { items } }
+        overlayClassName={ styles.dropdownOverlay }
       >
         <DropdownButton>
           <Icon

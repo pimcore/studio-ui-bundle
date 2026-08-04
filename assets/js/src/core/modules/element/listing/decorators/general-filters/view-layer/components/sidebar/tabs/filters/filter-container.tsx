@@ -9,21 +9,33 @@
  */
 
 import React from 'react'
-import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { useDraftSync } from '@Pimcore/components/filters'
 import { FilterContainerInner } from './filter-container-inner'
-import { FilterProvider } from './provider/filter-provider/filter-provider'
 import { ClassificationStoreModalProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
+import { DraftFiltersProvider, elementFilterDefinitions, useAppliedFilters, useDraftFilters } from '../../../../../element-filters'
 
-interface IFilterContainerProps {
-  errorData?: FetchBaseQueryError
+const DraftSync = ({ children }: { children: React.ReactNode }): React.JSX.Element => {
+  const { values } = useAppliedFilters()
+  const draftStore = useDraftFilters()
+
+  useDraftSync(values, draftStore)
+
+  return <>{children}</>
 }
 
-export const FilterContainer = ({ errorData }: IFilterContainerProps): React.JSX.Element => {
+export const FilterContainer = (): React.JSX.Element => {
+  const { values } = useAppliedFilters()
+
   return (
-    <FilterProvider>
-      <ClassificationStoreModalProvider>
-        <FilterContainerInner />
-      </ClassificationStoreModalProvider>
-    </FilterProvider>
+    <DraftFiltersProvider
+      descriptors={ elementFilterDefinitions }
+      initialValues={ values }
+    >
+      <DraftSync>
+        <ClassificationStoreModalProvider>
+          <FilterContainerInner />
+        </ClassificationStoreModalProvider>
+      </DraftSync>
+    </DraftFiltersProvider>
   )
 }

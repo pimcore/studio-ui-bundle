@@ -38,6 +38,10 @@ const config: ConfigFile = {
       type: 'query',
     },
     {
+      pattern: 'dataObjectGetSelectOptions',
+      type: 'query',
+    },
+    {
       pattern: 'noteGetCollection',
       type: 'query'
     },
@@ -71,6 +75,10 @@ const config: ConfigFile = {
     },
     {
       pattern: 'recycleBinGetCollection',
+      type: 'query'
+    },
+    {
+      pattern: 'ownershipManagementGetCollection',
       type: 'query'
     },
     {
@@ -193,7 +201,7 @@ const config: ConfigFile = {
       filterEndpoints: pathMatcher(/api\/thumbnails/i)
     },
     '../../js/src/core/modules/auth/authorization-api-slice.gen.ts': {
-      filterEndpoints: pathMatcher(/(login|logout)/i)
+      filterEndpoints: pathMatcher(/\/api\/(login|logout)/i)
     },
     '../../js/src/core/modules/class-definition/class-definition-slice.gen.ts': {
       filterEndpoints: pathMatcher(/api\/class\//i)
@@ -231,11 +239,17 @@ const config: ConfigFile = {
     '../../js/src/core/modules/recycle-bin/recycle-bin-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/recycle-bin\/?/i)
     },
+    '../../js/src/core/modules/ownership-management/ownership-management-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/ownership-management\/?/i)
+    },
     '../../js/src/core/modules/execution-engine/execution-engine-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/execution-engine\/?/i)
     },
     '../../js/src/core/modules/gdpr-data-extractor/gdpr-data-extractor-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/gdpr\/?/i)
+    },
+    '../../js/src/core/modules/cache/cache-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/cache\/?/i)
     }
   },
   exportName: 'api',

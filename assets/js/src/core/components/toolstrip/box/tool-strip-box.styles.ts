@@ -8,13 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
     'tool-strip-box': css`
       .tool-strip-box__content {
-        border: 2px solid rgba(0, 0, 0, 0.04);
+        border: 2px solid ${token.colorFillTertiary};
         border-radius: ${token.borderRadius}px;
       }
 

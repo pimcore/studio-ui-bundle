@@ -8,14 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyle = createStyles(({ token, css }) => {
   return {
     card: css`
       & .ant-collapse {
         width: 352px;
-        background-color: white;
+        background-color: ${token.colorBgContainer};
       }
 
       & span, & div, div.anticon, button {

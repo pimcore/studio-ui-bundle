@@ -10,7 +10,8 @@
 
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Modal, Input } from 'antd'
+import { Input } from 'antd'
+import { Modal } from '@Pimcore/components/modal/modal'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { Content } from '@Pimcore/components/content/content'
 import { createColumnHelper } from '@tanstack/react-table'
@@ -129,7 +130,7 @@ export const GroupSelectionDialog = ({
             isLoading={ isLoading }
             onSelectedRowsChange={ setSelectedRows }
             selectedRows={ selectedRows }
-            setRowId={ (row: ClassificationStoreConfigurationGroupDetail) => row.id !== undefined ? String(row.id) : '' }
+            setRowId={ (row: ClassificationStoreConfigurationGroupDetail) => row.id !== undefined ? String(row.id) : undefined as unknown as string }
           />
         </Content>
       </Flex>

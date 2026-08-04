@@ -8,13 +8,21 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useContext } from 'react'
+import { useContext, useSyncExternalStore } from 'react'
+import { type NamePath } from 'antd/es/form/interface'
 import { NumberedListContext, type NumberedListData } from './numbered-list-provider'
 
-export interface UseNumberedListReturn extends NumberedListData {
+export interface UseNumberedListReturn {
+  values: NumberedListData['values']
+  operations: NumberedListData['operations']
+  onChange?: (value: NumberedListData['values']) => void
+  getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
   getValueByKey: (key: string) => any
 }
 
+// Subscribes to the full numbered-list value. Use this for consumers that depend
+// on the list structure (item count/order). For a single item's value, prefer
+// useNumberedListValue so a change to one item does not re-render here.
 export const useNumberedList = (): UseNumberedListReturn => {
   const context = useContext(NumberedListContext)
 
@@ -22,12 +30,17 @@ export const useNumberedList = (): UseNumberedListReturn => {
     throw new Error('useNumberedList must be used within a NumberedListProvider')
   }
 
+  const values = useSyncExternalStore(context.store.subscribe, context.store.getSnapshot)
+
   const getValueByKey = (key: string): any => {
-    return context.values[key]
+    return values[key]
   }
 
   return {
-    ...context,
+    values,
+    operations: context.operations,
+    onChange: context.onChange,
+    getAdditionalComponentProps: context.getAdditionalComponentProps,
     getValueByKey
   }
 }

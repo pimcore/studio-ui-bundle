@@ -9,12 +9,22 @@
  */
 
 import React, { createContext, useMemo, useState } from 'react'
+import { type SavedSearchDetailedConfiguration } from '../search-api-slice.gen'
 
 export interface SearchContextData {
   activeKey: string
   setActiveKey: (key: string) => void
   open: boolean
   setOpen: (open: boolean) => void
+  /** The search term shared across all tabs, so switching tabs takes the typed term along. */
+  searchTerm: string
+  setSearchTerm: (term: string) => void
+  /** A saved search whose state should be applied to the matching typed tab once it mounts. */
+  pendingRestore: SavedSearchDetailedConfiguration | undefined
+  setPendingRestore: (configuration: SavedSearchDetailedConfiguration | undefined) => void
+  /** The saved search currently loaded into a typed tab (drives the Save panel's update/clone state). */
+  loadedSavedSearch: SavedSearchDetailedConfiguration | undefined
+  setLoadedSavedSearch: (configuration: SavedSearchDetailedConfiguration | undefined) => void
 }
 
 export type SearchContextProps = SearchContextData | undefined
@@ -23,15 +33,21 @@ export const SearchContext = createContext<SearchContextProps>(undefined)
 
 export interface SearchProviderProps {
   children: React.ReactNode
+  /** Seed the restore/loaded state — used when hosting a search listing as a main-area widget. */
+  initialPendingRestore?: SavedSearchDetailedConfiguration
+  initialLoadedSavedSearch?: SavedSearchDetailedConfiguration
 }
 
 export const SearchProvider = (props: SearchProviderProps): React.JSX.Element => {
   const [open, setOpen] = useState(false)
   const [activeKey, setActiveKey] = useState('all')
+  const [searchTerm, setSearchTerm] = useState('')
+  const [pendingRestore, setPendingRestore] = useState<SavedSearchDetailedConfiguration | undefined>(props.initialPendingRestore)
+  const [loadedSavedSearch, setLoadedSavedSearch] = useState<SavedSearchDetailedConfiguration | undefined>(props.initialLoadedSavedSearch)
 
   return useMemo(() => (
-    <SearchContext.Provider value={ { open, setOpen, activeKey, setActiveKey } }>
+    <SearchContext.Provider value={ { open, setOpen, activeKey, setActiveKey, searchTerm, setSearchTerm, pendingRestore, setPendingRestore, loadedSavedSearch, setLoadedSavedSearch } }>
       { props.children }
     </SearchContext.Provider>
-  ), [open, activeKey])
+  ), [open, activeKey, searchTerm, pendingRestore, loadedSavedSearch])
 }

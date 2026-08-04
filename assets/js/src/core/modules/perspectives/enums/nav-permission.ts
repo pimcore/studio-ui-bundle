@@ -38,6 +38,7 @@ export enum NavPermission {
   DocumentTypes = 'experienceEcommerce.documentTypes',
   WebsiteSettings = 'experienceEcommerce.websiteSettings',
   Redirects = 'experienceEcommerce.redirects',
+  RobotsTxt = 'experienceEcommerce.robotsTxt',
 
   TranslationsHidden = 'translations.hidden',
   Translations = 'translations.translations',
@@ -56,6 +57,7 @@ export enum NavPermission {
   ApplicationLogger = 'system.applicationLogger',
   About = 'system.about',
   SystemSettings = 'system.systemSettings',
+  OwnershipManagement = 'system.ownershipManagement',
 
   SearchHidden = 'search.hidden'
 }

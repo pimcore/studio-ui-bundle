@@ -38,7 +38,16 @@ export const studioDefaultLightThemeConfig = {
     colorTextTertiary: 'rgba(0, 0, 0, 0.6)',
     colorFill: 'rgba(215, 199, 236, 0.6)',
     colorFillQuaternary: 'rgba(215, 199, 236, 0.4)',
-    colorBgLayout: '#fcfcfc',
+    colorBgLayout: 'rgba(255, 255, 255, 0.7)',
+    // Outermost app/page background — wired to html, body via global.styles.ts
+    colorBgCanvas: '#ffffff',
+    // Soft glow bubble behind the logo on the background screen (blurred orbiting circles)
+    colorBgLogoOrbit: 'rgba(253, 255, 255, 0.35)',
+    // Subtle neutral panel for the main-nav first-level column (kept neutral, not brand-purple like the fill tokens)
+    colorBgMainNavColumn: 'rgba(0, 0, 0, 0.03)',
+    // Fieldset (layout group) border + background
+    colorBorderFieldset: '#D5CFDA',
+    colorBgFieldset: '#F8F7F9',
     colorBgSpotlight: '#060606',
     colorPrimary: '#722ed1',
     fontSize: 12,
@@ -49,6 +58,9 @@ export const studioDefaultLightThemeConfig = {
     colorBorderActive: '#00bab3',
     colorLogo: '#5520a6',
     colorBorderTertiary: '#eae8ed',
+    // Separator under the panel title (card-with-highlight). Light keeps the purple highlight
+    // (matches the derived colorPrimaryBorder); the dark theme overrides this to a neutral border.
+    colorBorderPanelTitle: '#d3adf7',
     colorTextTreeElement: '#404655',
     colorIconTree: '#404655',
     colorIconTreeUnpublished: 'rgba(64, 70, 85, 0.4)',
@@ -56,6 +68,8 @@ export const studioDefaultLightThemeConfig = {
     paddingTabs: 8,
     colorTextSidebarTitle: '#531dab',
     colorBgToolbar: '#f5f3fa',
+    // Default toolstrip background
+    colorBgToolstrip: '#f5f5f5',
     colorFillActive: '#d7c7ec',
     colorFillAdditional: '#f5f3fa',
     colorBgSidebarOptions: '#f5f3fa',
@@ -81,6 +95,12 @@ export const studioDefaultLightThemeConfig = {
     colorBorderInverse: '#424242',
     colorDividerInverse: 'rgba(217, 217, 217, 0.34)',
     colorInactiveInverse: 'rgba(255, 255, 255, 0.5)',
+
+    geekblue1: '#f0f5ff',
+    geekblue2: '#d6e4ff',
+    geekblue3: '#adc6ff',
+    geekblue6: '#2f54eb',
+    geekblue7: '#1d39c4',
 
     // custom color tokens (e.g. for icon colors)
     colorCodingRed1: '#b73933',
@@ -210,6 +230,9 @@ export const studioDefaultLightThemeConfig = {
       colorBgSelectedTab: '#ffffff',
       itemColor: 'rgba(0, 0, 0, 0.65)',
       itemActiveColor: '#531dab',
+      // Selected-tab text + icon color — mirrors itemActiveColor so it doesn't fall back to colorPrimary
+      itemSelectedColor: '#531dab',
+      inkBarColor: '#531dab',
       itemHoverColor: 'rgba(215, 199, 236, 0.6)',
       itemUnselectedIconColor: '#4d4169',
       colorBorderActiveTab: '#00bab3',
@@ -249,6 +272,7 @@ export const studioDefaultLightThemeConfig = {
         },
         Warning: {
           colorWarning: '#faad14',
+          colorWarningText: '#874d00',
           colorWarningBg: '#fffbe6',
           colorWarningBorder: '#ffe58f'
         },
@@ -258,13 +282,6 @@ export const studioDefaultLightThemeConfig = {
         },
         Primary: {
           colorPrimaryText: '#22075e'
-        }
-      },
-      Base: {
-        Geekblue: {
-          2: '#d6e4ff',
-          3: '#adc6ff',
-          6: '#2f54eb'
         }
       }
     },

@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 import { type SerializedStyles } from '@emotion/react'
 
 interface UseStylesProps {
@@ -53,6 +53,9 @@ export const useStyles = createStyles(({ token, css }, { isDragActive, isOver, i
   }
 
   return {
-    input: getDragStyle()
+    input: getDragStyle(),
+    dropTargetIcon: css`
+      color: ${token.colorIcon};
+    `
   }
 })

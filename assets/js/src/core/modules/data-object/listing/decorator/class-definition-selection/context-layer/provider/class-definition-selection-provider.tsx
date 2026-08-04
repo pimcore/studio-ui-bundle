@@ -11,11 +11,9 @@
 import React, { createContext, useMemo, useState } from 'react'
 import { type ClassDefinitionSelectionDecoratorConfig } from '../../class-definition-selection-decorator'
 import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
+import { type ClassDefinitionListItem } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 
-export interface ClassDefinitionListItem {
-  id: string
-  name: string
-}
+export { type ClassDefinitionListItem }
 
 export interface ClassDefinitionSelectionData {
   config: ClassDefinitionSelectionDecoratorConfig
@@ -34,21 +32,22 @@ export interface ClassDefinitionSelectionProviderProps {
 }
 
 export const ClassDefinitionSelectionProvider = ({ children, config }: ClassDefinitionSelectionProviderProps): React.JSX.Element => {
-  const { data } = useClassDefinitions()
+  const { scopedData, data } = useClassDefinitions()
+  const availableSource = scopedData ?? data
   const [selectedClassDefinition, setSelectedClassDefinition] = useState<ClassDefinitionSelectionData['selectedClassDefinition']>(undefined)
 
   const availableClassDefinitions = useMemo(() => {
     if (config.classRestriction !== undefined) {
       const restrictedClasses: string[] = config.classRestriction.map((classDefinition) => classDefinition.classes)
-      return data?.items.filter((classDefinition) => restrictedClasses.includes(classDefinition.name)) ?? []
+      return availableSource?.items.filter((classDefinition) => restrictedClasses.includes(classDefinition.name)) ?? []
     }
 
-    if (data !== undefined) {
-      return data.items
+    if (availableSource !== undefined) {
+      return availableSource.items
     }
 
     return []
-  }, [data])
+  }, [availableSource])
 
   let computedSelectedClassDefinition = selectedClassDefinition
 
@@ -60,5 +59,5 @@ export const ClassDefinitionSelectionProvider = ({ children, config }: ClassDefi
     <ClassDefinitionSelectionContext.Provider value={ { config, availableClassDefinitions, selectedClassDefinition: computedSelectedClassDefinition, setSelectedClassDefinition } }>
       {children}
     </ClassDefinitionSelectionContext.Provider>
-  ), [config, availableClassDefinitions, selectedClassDefinition, data])
+  ), [config, availableClassDefinitions, selectedClassDefinition, availableSource])
 }

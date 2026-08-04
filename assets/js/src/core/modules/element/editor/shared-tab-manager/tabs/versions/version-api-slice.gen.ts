@@ -243,6 +243,8 @@ export type DataObjectVersion = Element & {
     allowInheritance: boolean;
     /** Has preview */
     hasPreview: boolean;
+    /** Show application logger tab */
+    showAppLoggerTab?: boolean;
     /** Has workflow available */
     hasWorkflowAvailable: boolean;
     /** Key */
@@ -317,6 +319,10 @@ export type Version = {
     user: VersionUser;
     /** scheduled */
     scheduled?: number | null;
+    /** coauthor type */
+    coauthorType?: string | null;
+    /** coauthor */
+    coauthor?: string | null;
 };
 export const {
     useVersionAssetDownloadByIdQuery,

@@ -12,6 +12,7 @@ import { type DynamicTypeAbstract } from '@Pimcore/modules/element/dynamic-types
 import { type WidgetConfig } from '@sdk/api/perspectives'
 import { Icon, type ItemType } from '@sdk/components'
 import { injectable } from 'inversify'
+import { t } from 'i18next'
 import React from 'react'
 
 @injectable()
@@ -26,7 +27,7 @@ export abstract class DynamicTypeWidgetTypeAbstract implements DynamicTypeAbstra
   getSubMenuItems (configs: WidgetConfig[], onWidgetClick?: (config: WidgetConfig) => void): ItemType[] {
     return configs.map((config) => {
       return {
-        label: config.name,
+        label: t(config.name),
         key: config.id,
         icon: <Icon { ...config.icon } />,
         onClick: onWidgetClick === undefined ? undefined : () => { onWidgetClick(config) }

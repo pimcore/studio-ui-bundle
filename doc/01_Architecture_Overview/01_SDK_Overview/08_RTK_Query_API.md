@@ -25,7 +25,7 @@ and fewer runtime errors. These slices integrate with
 
 Import the generated API slices directly from the SDK.
 For an overview of available imports, see the
-[SDK API directory](https://github.com/pimcore/studio-ui-bundle/tree/1.x/assets/js/src/sdk/api).
+[SDK API directory](https://github.com/pimcore/studio-ui-bundle/tree/2026.x/assets/js/src/sdk/api).
 
 :::tip
 The structure of the API imports mirrors the folder structure of the linked SDK API directory.

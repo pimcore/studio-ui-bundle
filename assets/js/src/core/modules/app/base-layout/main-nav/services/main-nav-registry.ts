@@ -9,6 +9,7 @@
  */
 
 import { type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+import { type ElementIcon } from '@Pimcore/components/icon/icon'
 import { injectable } from 'inversify'
 import { isNil, isUndefined } from 'lodash'
 
@@ -16,8 +17,8 @@ export interface IMainNavItem {
   path: string
   order?: number
   id?: string
-  icon?: string
-  groupIcon?: string
+  icon?: string | ElementIcon
+  groupIcon?: string | ElementIcon
   label?: string
   group?: string
   dividerTop?: boolean

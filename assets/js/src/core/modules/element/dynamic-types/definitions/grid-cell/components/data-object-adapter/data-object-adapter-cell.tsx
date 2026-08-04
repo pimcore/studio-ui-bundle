@@ -23,6 +23,7 @@ import { InheritanceLayer } from './inheritance-layer'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useEditMode } from '@Pimcore/components/grid/grid'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
+import { useResolvedFieldName } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/utils/resolve-field-name'
 
 export interface DataObjectAdapterCellProps extends DefaultCellProps {}
 
@@ -33,6 +34,10 @@ export const DataObjectAdapterCell = (props: DataObjectAdapterCellProps): React.
   const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
   const { isInEditMode } = useEditMode(props)
   const currentLanguage = useLanguageSelection().currentLanguage
+  // Mirror DataComponent's role in the editor: derive the dot-notation
+  // combinedFieldName from the cell's column context and put it on objectProps
+  // so the field component receives it as a normal prop.
+  const combinedFieldName = useResolvedFieldName(props.column.id, undefined)
 
   if (config !== undefined && !isObject(config)) {
     throw new Error('Invalid data object config')
@@ -50,6 +55,7 @@ export const DataObjectAdapterCell = (props: DataObjectAdapterCellProps): React.
   }
 
   const fieldDefinition = config?.fieldDefinition ?? {}
+  const enrichedObjectProps = { ...fieldDefinition, combinedFieldName }
   const column = decodeColumnIdentifier(props.column.id)
   const apiColumns = props?.row?.original?.['__api-data']
 
@@ -74,7 +80,7 @@ export const DataObjectAdapterCell = (props: DataObjectAdapterCellProps): React.
   const dynType = objectDataRegistry.getDynamicType(type)
   const cellDefinition = dynType.getGridCellDefinition({
     cellProps: props,
-    objectProps: fieldDefinition as unknown as AbstractObjectDataDefinition
+    objectProps: enrichedObjectProps as AbstractObjectDataDefinition
   })
 
   if (cellDefinition.mode === 'default') {

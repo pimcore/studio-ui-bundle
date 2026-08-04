@@ -15,11 +15,11 @@ import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
-import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { useFilterQuery } from '@Pimcore/components/filters'
 import { useAppDispatch } from '@sdk/app'
-import { Divider, IconTextButton } from '@sdk/components'
+import { Divider, IconTextButton, Header } from '@sdk/components'
 import { isUndefined } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -27,27 +27,29 @@ import { BatchActions } from './components/batch-actions/batch-actions'
 import { RowSelectionTotal } from './components/row-selection-total/row-selection-total'
 import { Table } from './components/table/table'
 import { useSelectedRowsContext } from './context/selected-items-context'
+import { recycleBinFilterAdapter, useRecycleBinAppliedFilters } from './filters/filters'
 import { useRecycleBin } from './hooks/use-recycle-bin'
 import { api } from './recycle-bin-api-slice-enhanced'
 import { useRecycleBinGetCollectionQuery } from './recycle-bin-api-slice.gen'
-
-interface ColumnFilters {
-  path: {
-    key: string
-    type: string
-    filterValue: string
-  }
-}
+import { RecycleBinSidebar } from './recycle-bin-sidebar/recycle-bin-sidebar'
 
 export const RecycleBinContainerInner = (): React.JSX.Element => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const [columnFilters, setColumnFilters] = useState<ColumnFilters | undefined>(undefined)
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { flush } = useRecycleBin()
   const { selectedRows } = useSelectedRowsContext()
+
+  const { values: appliedValues } = useRecycleBinAppliedFilters()
+  const buildFilterQuery = useFilterQuery(recycleBinFilterAdapter, appliedValues)
+  const { columnFilters } = buildFilterQuery({})
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [appliedValues])
+
   const { data, isLoading: isRTKLoading, isFetching } = useRecycleBinGetCollectionQuery({
     body: {
       filters: {
@@ -72,13 +74,14 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
 
   return (
     <ContentLayout
+      renderSidebar={ <RecycleBinSidebar /> }
       renderToolbar={
         <Toolbar theme="secondary">
           {Object.keys(selectedRows).length > 0
             ? (
               <Flex>
                 <RowSelectionTotal />
-                <BatchActions items={ data?.items ?? [] } />
+                <BatchActions />
               </Flex>
               )
             : (
@@ -136,40 +139,9 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
           </Flex>
         </Toolbar> }
       renderTopBar={
-        <Toolbar
-          justify='space-between'
-          margin={ {
-            x: 'mini',
-            y: 'none'
-          } }
-          theme='secondary'
-        >
-          <Flex gap={ 'small' }>
-            <Title>{t('widget.recycle-bin')}</Title>
-          </Flex>
-          <SearchInput
-            loading={ isFetching || isLoading }
-            onSearch={ (value) => {
-              const pathFilter: ColumnFilters['path'] = {
-                key: 'path',
-                type: 'like',
-                filterValue: ''
-              }
-
-              if (value !== '') {
-                pathFilter.filterValue = value
-              }
-
-              setColumnFilters({
-                ...columnFilters,
-                path: pathFilter
-              })
-            } }
-            placeholder={ t('component.search.pleaceholder') }
-            withPrefix={ false }
-            withoutAddon={ false }
-          />
-        </Toolbar>
+        <Header >
+          <Title>{t('widget.recycle-bin')}</Title>
+        </Header>
       }
     >
       <Content

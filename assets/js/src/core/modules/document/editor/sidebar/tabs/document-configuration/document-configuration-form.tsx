@@ -10,6 +10,7 @@
 
 import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useAppDispatch } from '@sdk/app'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { Form } from '@Pimcore/components/form/form'
 import { Select } from '@Pimcore/components/select/select'
@@ -22,6 +23,8 @@ import { isNil } from 'lodash'
 import { FormattedDateTime } from '@Pimcore/components/formatted-date-time/formatted-date-time'
 import { useDebouncedFormChange } from '@Pimcore/components/form/hooks/use-debounced-form-change'
 import { createDocumentDebounceTag } from '@Pimcore/modules/document/utils/document-debounce-tag'
+import { setDocumentNodeStaticGeneratorEnabled } from '@Pimcore/components/element-tree/element-tree-slice'
+import { useStyles } from './document-configuration-form.styles'
 
 interface DocumentConfigurationFormValues {
   predefinedDocumentType: string
@@ -40,6 +43,9 @@ interface DocumentConfigurationFormProps {
     templates: Array<{ path: string }>
     predefinedDocTypes: Array<{ id: string, name?: string | null, controller?: string | null, template?: string | null }>
   }
+  isLoadingControllers?: boolean
+  isLoadingTemplates?: boolean
+  isLoadingDocTypes?: boolean
   hasSavePermission?: boolean
 }
 
@@ -48,11 +54,16 @@ export const DocumentConfigurationForm = ({
   documentType,
   initialValues,
   apiData,
+  isLoadingControllers = false,
+  isLoadingTemplates = false,
+  isLoadingDocTypes = false,
   hasSavePermission = true
 }: DocumentConfigurationFormProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyles()
   const { updateSettingsData, document } = useDocumentDraft(documentId)
   const { debouncedAutoSave } = useSave()
+  const dispatch = useAppDispatch()
   const [form] = Form.useForm<DocumentConfigurationFormValues>()
 
   const canEdit = hasSavePermission
@@ -114,7 +125,14 @@ export const DocumentConfigurationForm = ({
       updateSettingsData(settingsUpdates)
       debouncedAutoSave()
     }
-  }, [updateSettingsData, debouncedAutoSave, predefinedDocTypes, form, canEdit])
+
+    if ('staticGeneratorEnabled' in changedValues) {
+      dispatch(setDocumentNodeStaticGeneratorEnabled({
+        nodeId: String(documentId),
+        staticGeneratorEnabled: Boolean(changedValues.staticGeneratorEnabled)
+      }))
+    }
+  }, [updateSettingsData, debouncedAutoSave, predefinedDocTypes, form, canEdit, documentId])
 
   const { handleFormChange: handleFormChangeDebounced } = useDebouncedFormChange(handleFormChange, {
     delay: 500,
@@ -153,6 +171,7 @@ export const DocumentConfigurationForm = ({
         <Select
           allowClear
           disabled={ !canEdit }
+          loadingSkeleton={ isLoadingDocTypes }
           options={ predefinedDocTypeOptions }
           popupMatchSelectWidth={ false }
           showSearch
@@ -165,9 +184,10 @@ export const DocumentConfigurationForm = ({
       >
         <Select
           allowClear
+          className={ styles.fullWidthSelect }
           disabled={ !canEdit }
+          loadingSkeleton={ isLoadingControllers }
           options={ controllerOptions }
-          popupMatchSelectWidth={ false }
           showSearch
         />
       </Form.Item>
@@ -178,9 +198,10 @@ export const DocumentConfigurationForm = ({
       >
         <Select
           allowClear
+          className={ styles.fullWidthSelect }
           disabled={ !canEdit }
+          loadingSkeleton={ isLoadingTemplates }
           options={ templateOptions }
-          popupMatchSelectWidth={ false }
           showSearch
         />
       </Form.Item>

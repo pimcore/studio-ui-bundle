@@ -16,11 +16,15 @@ import { Sidebar } from '@Pimcore/modules/element/listing/abstract/view-layer/co
 import { GridContainer } from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/grid-container'
 import { TopBar } from '../../top-bar/top-bar'
 import { Toolbar } from '../../toolbar/toolbar'
+import { SavedSearchRestore } from '@Pimcore/modules/search/saved-search/restore/saved-search-restore'
+import { SavedSearchDirtyTracker } from '@Pimcore/modules/search/saved-search/dirty/saved-search-dirty-tracker'
+import { SearchTermTakeover } from '@Pimcore/modules/search/modal/tabs/shared/search-term-takeover'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 export const DefaultView = (): React.JSX.Element => {
   const { dataQueryResult } = useData()
 
-  return useMemo(() => (
+  const content = useMemo(() => (
     <>
       { dataQueryResult === undefined && <Content loading /> }
       { dataQueryResult !== undefined && (
@@ -37,4 +41,13 @@ export const DefaultView = (): React.JSX.Element => {
       )}
     </>
   ), [dataQueryResult])
+
+  return (
+    <>
+      <SavedSearchRestore elementType={ elementTypes.document } />
+      <SavedSearchDirtyTracker elementType={ elementTypes.document } />
+      <SearchTermTakeover elementType={ elementTypes.document } />
+      {content}
+    </>
+  )
 }

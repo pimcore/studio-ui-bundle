@@ -32,7 +32,10 @@ export const FieldDefinitionBlockFormFields = (props: FieldDefinitionAbstractFor
         </Form.Item>
 
         <Form.Item name="lazyLoading">
-          <Switch labelRight={ t('lazy-loading') } />
+          <Switch
+            labelRight={ t('lazy-loading') }
+            tooltip={ t('enable-async-load-in-admin-tooltip') }
+          />
         </Form.Item>
 
         <Form.Item name="disallowAddRemove">

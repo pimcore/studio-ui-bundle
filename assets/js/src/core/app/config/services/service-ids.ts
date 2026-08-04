@@ -78,6 +78,7 @@ export const serviceIds = {
 
   // Widget manager
   widgetManager: 'WidgetManagerService',
+  widgetManagerActionService: 'WidgetManagerActionService',
   widgetRestorerRegistry: 'WidgetRestorerRegistry',
   elementTreeWidgetPermissionRegistry: 'ElementTreeWidgetPermissionRegistry',
 
@@ -93,7 +94,6 @@ export const serviceIds = {
 
   // Dynamic Type Theme instances
   'DynamicTypes/Theme/StudioDefaultLight': 'DynamicTypes/Theme/StudioDefaultLight',
-  'DynamicTypes/Theme/StudioDefaultDark': 'DynamicTypes/Theme/StudioDefaultDark',
 
   // Assets
   'Asset/Editor/TypeRegistry': 'Asset/Editor/TypeRegistry',
@@ -149,7 +149,9 @@ export const serviceIds = {
   'DynamicTypes/FieldFilter/None': 'DynamicTypes/FieldFilter/None',
   'DynamicTypes/FieldFilter/Id': 'DynamicTypes/FieldFilter/Id',
   'DynamicTypes/FieldFilter/Number': 'DynamicTypes/FieldFilter/Number',
+  'DynamicTypes/FieldFilter/FileSize': 'DynamicTypes/FieldFilter/FileSize',
   'DynamicTypes/FieldFilter/Multiselect': 'DynamicTypes/FieldFilter/Multiselect',
+  'DynamicTypes/FieldFilter/User': 'DynamicTypes/FieldFilter/User',
   'DynamicTypes/FieldFilter/Date': 'DynamicTypes/FieldFilter/Date',
   'DynamicTypes/FieldFilter/Boolean': 'DynamicTypes/FieldFilter/Boolean',
   'DynamicTypes/FieldFilter/BooleanSelect': 'DynamicTypes/FieldFilter/BooleanSelect',
@@ -177,6 +179,12 @@ export const serviceIds = {
   'DynamicTypes/GridCell/Integer': 'DynamicTypes/GridCell/Integer',
   'DynamicTypes/GridCell/Error': 'DynamicTypes/GridCell/Error',
   'DynamicTypes/GridCell/Array': 'DynamicTypes/GridCell/Array',
+  'DynamicTypes/GridCell/SystemId': 'DynamicTypes/GridCell/SystemId',
+  'DynamicTypes/GridCell/SystemString': 'DynamicTypes/GridCell/SystemString',
+  'DynamicTypes/GridCell/SystemBoolean': 'DynamicTypes/GridCell/SystemBoolean',
+  'DynamicTypes/GridCell/SystemDatetime': 'DynamicTypes/GridCell/SystemDatetime',
+  'DynamicTypes/GridCell/SystemInteger': 'DynamicTypes/GridCell/SystemInteger',
+  'DynamicTypes/GridCell/SystemUser': 'DynamicTypes/GridCell/SystemUser',
   'DynamicTypes/GridCell/Textarea': 'DynamicTypes/GridCell/Textarea',
   'DynamicTypes/GridCell/Number': 'DynamicTypes/GridCell/Number',
   'DynamicTypes/GridCell/Select': 'DynamicTypes/GridCell/Select',
@@ -374,6 +382,7 @@ export const serviceIds = {
 
   // Execution engine
   'ExecutionEngine/JobComponentRegistry': 'ExecutionEngine/JobComponentRegistry',
+  'ExecutionEngine/JobRehydrationRegistry': 'ExecutionEngine/JobRehydrationRegistry',
 
   // Execution Engine
   executionEngine: 'ExecutionEngine',

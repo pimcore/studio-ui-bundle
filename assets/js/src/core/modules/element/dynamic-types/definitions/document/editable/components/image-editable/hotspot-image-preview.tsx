@@ -48,6 +48,8 @@ interface DocumentHotspotImagePreviewProps {
   dropClass?: string
   onResize?: (dimensions: { width: number, height: number }) => void
   lastImageDimensions?: { width: number, height: number } | null
+  minWidth?: number
+  minHeight?: number
   // Alt text overlay props
   altText?: string
   onAltTextChange?: (alt: string) => void
@@ -79,6 +81,8 @@ export const DocumentHotspotImagePreview = ({
   dropClass,
   onResize,
   lastImageDimensions,
+  minWidth,
+  minHeight,
   altText,
   onAltTextChange,
   hideAltTextInput,
@@ -143,13 +147,6 @@ export const DocumentHotspotImagePreview = ({
         onClick: () => { setMarkerModalOpen() }
       },
       {
-        key: 'empty',
-        icon: <Icon value="trash" />,
-        label: t('empty'),
-        disabled: disabled === true || isNil(assetId),
-        onClick: emptyValue
-      },
-      {
         key: 'open',
         icon: <Icon value="open-folder" />,
         label: t('open'),
@@ -182,6 +179,17 @@ export const DocumentHotspotImagePreview = ({
       })
     }
 
+    items.push(
+      { type: 'divider', key: 'empty-divider' },
+      {
+        key: 'empty',
+        icon: <Icon value="trash" />,
+        label: t('empty'),
+        disabled: disabled === true || isNil(assetId),
+        onClick: emptyValue
+      }
+    )
+
     return items
   }, [disabled, assetId, focalPointContextMenuItem, disableInlineUpload, handleSetFocalPoint, setCropModalOpen, setMarkerModalOpen, handleUpload, emptyValue, handleOpen, handleLocateInTree, handleSearch, t])
 
@@ -195,6 +203,8 @@ export const DocumentHotspotImagePreview = ({
         height={ height }
         imgAttributes={ imgAttributes }
         lastImageDimensions={ lastImageDimensions }
+        minHeight={ minHeight }
+        minWidth={ minWidth }
         onImageLoadedChange={ onImageLoadedChange }
         onResize={ onResize }
         thumbnailConfig={ thumbnailConfig }

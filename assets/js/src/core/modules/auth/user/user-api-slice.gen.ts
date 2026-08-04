@@ -418,6 +418,8 @@ export type UserInformation = {
     activePerspective: string | null;
     /** Allowed studio perspectives */
     perspectives: PerspectiveConfig[];
+    /** Theme of the User */
+    theme: string;
 };
 export type UserWorkspace = {
     /** ID of the element */
@@ -540,6 +542,8 @@ export type User = {
     objectDependencies: UserObjectDependencies;
     /** Allowed studio perspectives */
     perspectives: PerspectiveConfig[];
+    /** Theme of the User */
+    theme: string;
 };
 export type User2 = {
     /** Email of the User */
@@ -591,7 +595,9 @@ export type User2 = {
     /** Document Workspace */
     documentWorkspaces: UserWorkspace[];
     /** Allowed studio perspectives */
-    perspectives: object;
+    perspectives: string[];
+    /** Theme of the User */
+    theme?: string;
 };
 export type UserPermission = {
     /** AdditionalAttributes */
@@ -633,7 +639,7 @@ export type UserProfile = {
     /** Language of the User */
     language: string;
     /** Date Time Locale for the User */
-    dateTimeLocale: string;
+    dateTimeLocale: string | null;
     /** Show Welcome Screen */
     welcomeScreen: boolean;
     /** Memorize Tabs */
@@ -642,6 +648,8 @@ export type UserProfile = {
     contentLanguages: object;
     /** Key Bindings */
     keyBindings: KeyBindingForAUser[];
+    /** Theme of the User */
+    theme?: string;
 };
 export const {
     useUserCloneByIdMutation,

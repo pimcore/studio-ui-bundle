@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyle = createStyles(({ css, token }) => {
   return {
@@ -34,6 +34,7 @@ export const useStyle = createStyles(({ css, token }) => {
       margin-left: 4px;
       margin-top: 4px;
       margin-right: 2px;
+      color: ${token.colorIcon};
     `
   }
 })

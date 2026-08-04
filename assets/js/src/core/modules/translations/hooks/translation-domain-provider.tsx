@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState, createContext, useMemo, useContext } from 'react'
+import React, { useState, createContext, useMemo, useContext, useEffect } from 'react'
 
 export interface DomainContext {
   domain: string
@@ -22,10 +22,17 @@ export const TranslationDomainContext = createContext<DomainContext>({
 
 export interface TranslationDomainProviderProps {
   children: React.ReactNode
+  initialDomain?: string
 }
 
-export const TranslationDomainProvider = ({ children }: TranslationDomainProviderProps): React.JSX.Element => {
-  const [domain, setDomain] = useState<string>('messages')
+export const TranslationDomainProvider = ({ children, initialDomain }: TranslationDomainProviderProps): React.JSX.Element => {
+  const [domain, setDomain] = useState<string>(initialDomain ?? 'messages')
+
+  useEffect(() => {
+    if (initialDomain !== undefined) {
+      setDomain(initialDomain)
+    }
+  }, [initialDomain])
 
   return useMemo(() => (
     <TranslationDomainContext.Provider value={ { domain, setDomain } }>

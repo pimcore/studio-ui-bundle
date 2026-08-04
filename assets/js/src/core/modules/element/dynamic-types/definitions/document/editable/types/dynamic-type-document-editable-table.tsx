@@ -55,4 +55,14 @@ export class DynamicTypeDocumentEditableTable extends DynamicTypeDocumentEditabl
     }
     return value
   }
+
+  transformValueForApi (value: TableValue | null): TableValue {
+    // The backend Table editable expects an array, not null.
+    // Sending null causes a PHP TypeError since data is typed as array.
+    // Convert null/undefined to an empty array so empty tables can be saved.
+    if (isNil(value)) {
+      return []
+    }
+    return value
+  }
 }

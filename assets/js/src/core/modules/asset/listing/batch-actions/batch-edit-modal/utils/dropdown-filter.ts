@@ -39,12 +39,17 @@ export const areGroupsEqual = (group1: any, group2: any): boolean => {
 export const shouldIncludeColumnItem = (
   item: any,
   batchEdits: BatchEdit[],
-  hasType: (props: { target: string, dynamicTypeIds: string[] }) => boolean
+  hasType: (props: { target: string, dynamicTypeIds: string[] }) => boolean,
+  contentLanguages: string[] = []
 ): boolean => {
   const isEditable: boolean = item.editable === true
-  const isAlreadyInBatchEditList = batchEdits.some(batchItem =>
+  const existingEntries = batchEdits.filter(batchItem =>
     item.key === batchItem.key && areGroupsEqual(item.group, batchItem.group)
   )
+  // Localizable fields stay available until every locale has a row (content languages + null row).
+  const isAlreadyInBatchEditList = item.localizable === true
+    ? existingEntries.length >= contentLanguages.length + 1
+    : existingEntries.length > 0
   const hasDynamicType = hasType({
     target: 'BATCH_EDIT',
     dynamicTypeIds: [item?.frontendType as string]

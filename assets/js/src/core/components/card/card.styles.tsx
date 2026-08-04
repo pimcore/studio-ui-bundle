@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
@@ -83,7 +83,7 @@ export const useStyles = createStyles(({ token, css }) => {
 
       &.card--theme-card-with-highlight {
         .ant-card-head {
-          border-bottom: 1px solid ${token.colorPrimaryBorder};
+          border-bottom: 1px solid ${token.colorBorderPanelTitle};
         }
       }
 
@@ -94,11 +94,11 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       &.card--theme-fieldset {
-        border-left: 3px solid #D5CFDA;
-        background: rgba(242, 240, 244, 0.52);
+        border-left: 3px solid ${token.colorBorderFieldset};
+        background: ${token.colorBgFieldset};
 
         &, &.ant-card:not(.ant-card-bordered) {
-          border-left: 3px solid #D5CFDA;
+          border-left: 3px solid ${token.colorBorderFieldset};
         }
  
         .ant-card-head {

@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 interface StyleProps {
   backgroundImageUrl: string
@@ -19,7 +19,7 @@ export const useStyle = createStyles(({ token, css }, { backgroundImageUrl }: St
     loginPage: css`
       display: flex;
       align-items: center;
-      background: url(${backgroundImageUrl}) lightgray 50% / cover no-repeat;
+      background: url("${backgroundImageUrl.replace(/(["\\])/g, '\\$1')}") lightgray 50% / cover no-repeat;
       position: absolute;
       inset: 0;
       overflow-y: auto;
@@ -32,12 +32,12 @@ export const useStyle = createStyles(({ token, css }, { backgroundImageUrl }: St
       min-height: 608px;
       flex-shrink: 0;
       border-radius: 8px;
-      background: linear-gradient(335deg, rgba(255, 255, 255, 0.86) 1.72%, rgba(236, 232, 241, 0.86) 158.36%);
+      background: linear-gradient(325deg, ${token.colorBgLayout} -134.52%, ${token.colorBgBase} 106.7%);
       padding: 85px 100px 85px 100px;
       margin-left: 80px;
 
       /* Component/Button/primaryShadow */
-      box-shadow: 0px 2px 0px 0px rgba(114, 46, 209, 0.10);
+      box-shadow: 0px 2px 0px 0px ${token.controlOutline};
 
       img {
         max-height: 200px;

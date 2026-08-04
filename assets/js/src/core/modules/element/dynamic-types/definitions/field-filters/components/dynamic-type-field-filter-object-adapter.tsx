@@ -13,6 +13,7 @@ import { Alert } from 'antd'
 import { type DynamicTypeFieldFilterAbstract, type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { useDynamicTypeResolver } from '../../../resolver/hooks/use-dynamic-type-resolver'
+import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
 export interface DynamicTypeFieldFilterObjectAdapterProps extends AbstractFieldFilterDefinition {}
 
@@ -20,7 +21,7 @@ export const DynamicTypeFieldFilterObjectAdapterComponent = (): React.JSX.Elemen
   const { config } = useDynamicFilter()
   const { getType, hasType, getComponentRenderer } = useDynamicTypeResolver()
 
-  if (!('fieldDefinition' in config)) {
+  if (!hasFieldDefinition(config)) {
     throw new Error('Field definition is missing in config')
   }
 

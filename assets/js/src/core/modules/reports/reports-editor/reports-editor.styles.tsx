@@ -8,25 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
-    sidebarReportItem: css`
-      padding: 2px ${token.paddingXS}px;
-      
-      &:hover {
-        background-color: ${token.controlItemBgActiveHover};
-        cursor: pointer;
+    tree: css`
+      .ant-tree-treenode {
+        height: 24px;
       }
-    `,
-
-    sidebarReportItemIcon: css`
-      color: ${token.colorIconTree};
-    `,
-
-    sidebarReportItemTitle: css`
-      color: ${token.colorTextTreeElement};
     `,
 
     tabsContainer: css`

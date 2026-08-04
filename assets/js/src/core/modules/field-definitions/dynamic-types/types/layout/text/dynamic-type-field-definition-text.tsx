@@ -25,6 +25,14 @@ export class DynamicTypeFieldDefinitionText extends DynamicTypeFieldDefinitionLa
     return { type: 'name', value: 'text-field' }
   }
 
+  getAllowedChildTags (props: FieldDefinitionContext): string[] {
+    return []
+  }
+
+  getDropdownTags (props: FieldDefinitionContext): string[] {
+    return []
+  }
+
   getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = context.path.at(-1) ?? ''
     const fieldDefinition = context.fieldDefinitions[id]

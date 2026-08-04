@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token }) => ({
   root: {
@@ -52,7 +52,7 @@ export const useStyles = createStyles(({ token }) => ({
 
     '&:disabled': {
       backgroundColor: 'rgba(0, 0, 0, 0.3)',
-      color: 'rgba(255, 255, 255, 0.5)',
+      color: token.colorInactiveInverse,
       cursor: 'not-allowed'
     }
   }

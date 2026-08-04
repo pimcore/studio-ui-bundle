@@ -18,13 +18,14 @@ import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { NOTIFICATIONS } from '@Pimcore/modules/notifications'
 import { SendNotificationModal } from '@Pimcore/modules/notifications/send-notification/send-notification-modal'
 import { useWidgetManager } from '@sdk/modules/widget-manager'
+import { theme } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStyle } from './user-menu.styles'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { USERPROFILE } from '@Pimcore/modules/auth/profile/profile-container'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
-import { Avatar } from 'antd'
+import { Avatar } from '@Pimcore/components/avatar/avatar'
 import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
 import { useNotificationGetUnreadCountQuery } from '@Pimcore/modules/notifications/notifications-slice.gen'
 
@@ -34,6 +35,7 @@ interface IUserMenuProps {
 export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
+  const { token } = theme.useToken()
   const [sendModal, setSendModal] = useState<boolean>(false)
   const [logout] = useLogoutMutation()
   const { openMainWidget } = useWidgetManager()
@@ -65,12 +67,15 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
     })
   }
 
+  const notificationCount = data?.unreadNotificationsCount ?? 0
+
   const items: DropdownMenuProps['items'] = [
     {
       key: 'title',
       label: (
         <div className={ 'user-menu__title' }>
           {t('user-menu.title')}
+          {' '}
           <span className={ 'user-menu__title-username' }>
             ({user.username})
           </span>
@@ -83,8 +88,23 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       label: t('user-menu.notifications'),
       icon: <div className={ 'user-menu__item-icon' }>
         <Badge
-          count={ data?.unreadNotificationsCount ?? 0 }
+          count={ notificationCount }
           showZero
+          styles={ {
+            indicator: {
+              background: token.colorPrimary,
+              width: 20,
+              height: 20,
+              minWidth: 20,
+              lineHeight: '20px',
+              borderRadius: '50%',
+              fontSize: notificationCount > 99 ? 9 : 10,
+              fontWeight: 'normal',
+              padding: 0,
+              boxShadow: 'none'
+            },
+            root: { marginRight: 0 }
+          } }
         />
       </div>,
       onClick: () => { openMainWidget(NOTIFICATIONS) },
@@ -127,10 +147,9 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       >
         <Avatar
           data-testid="user-menu-avatar"
-          icon={ <Icon value='user' /> }
           size={ 26 }
           src={ user?.hasImage && user?.image != null ? user?.image : undefined }
-        ></Avatar>
+        />
       </Dropdown>
 
       <SendNotificationModal

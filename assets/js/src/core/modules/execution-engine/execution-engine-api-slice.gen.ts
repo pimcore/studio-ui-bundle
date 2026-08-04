@@ -61,6 +61,7 @@ export type ExecutionEngineListJobsApiArg = {
             pageSize?: number;
             columnFilters?: object;
             sortFilter?: object;
+            additionalSortFilters?: object;
         };
     };
 };
@@ -101,6 +102,8 @@ export type JobRun = {
     creationDate: number | null;
     /** Modification date */
     modificationDate: number | null;
+    /** The name of the job */
+    jobName: string;
 };
 export const {
     useExecutionEngineAbortJobRunByIdMutation,

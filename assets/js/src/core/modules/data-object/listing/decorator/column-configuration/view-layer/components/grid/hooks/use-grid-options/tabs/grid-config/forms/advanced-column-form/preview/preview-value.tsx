@@ -31,15 +31,16 @@ export const PreviewValue = (props: PreviewValueProps): React.JSX.Element => {
 
   const columns = value.map((item, index) => {
     const isAdvancedCellType = advancedGridCellRegistry.hasDynamicType(item.type)
+    const safeKey = `${item.type.replace(/\./g, '_')}-${index}`
 
-    return columnHelper.accessor(`${item.type}-${index}`, {
+    return columnHelper.accessor(safeKey, {
       header: item.type,
       meta: {
         editable: false,
         type: isAdvancedCellType ? item.type : 'dataobject.adapter',
         config: {
           ...(isAdvancedCellType
-            ? {}
+            ? { renderAsHtml: true }
             : {
                 dataObjectType: item.type,
                 dataObjectConfig: {}
@@ -54,7 +55,8 @@ export const PreviewValue = (props: PreviewValueProps): React.JSX.Element => {
 
   // Create a row with the values from the value array
   value.forEach((item, index) => {
-    row[`${item.type}-${index}`] = item.value
+    const safeKey = `${item.type.replace(/\./g, '_')}-${index}`
+    row[safeKey] = item.value
   })
 
   data.push(row)

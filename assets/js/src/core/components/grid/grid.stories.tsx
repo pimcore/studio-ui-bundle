@@ -132,3 +132,11 @@ export const SmallSize = {
     size: 'small'
   }
 }
+
+export const EmptyState = {
+  args: {
+    data: [],
+    columns,
+    isLoading: false
+  }
+}

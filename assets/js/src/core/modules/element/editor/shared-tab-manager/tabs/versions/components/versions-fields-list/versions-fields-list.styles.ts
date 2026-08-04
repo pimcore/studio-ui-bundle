@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
@@ -25,7 +25,7 @@ export const useStyles = createStyles(({ token, css }) => {
         bottom: 0;
         width: 100%;
         height: 20px;
-        background-color: #fff;
+        background-color: ${token.colorBgContainer};
         z-index: -1;
       }
     `,

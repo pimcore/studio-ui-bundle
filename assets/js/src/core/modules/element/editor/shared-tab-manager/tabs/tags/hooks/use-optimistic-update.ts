@@ -26,8 +26,13 @@ interface UpdateTagsForElementByTypeAndIdProps extends TagGetCollectionForElemen
   checkedTags: Key[]
 }
 
+interface RemoveTagFromElementProps extends TagGetCollectionForElementByTypeAndIdApiArg {
+  tagId: number
+}
+
 interface UseOptimisticUpdateReturn {
   updateTagsForElementByTypeAndId: (props: UpdateTagsForElementByTypeAndIdProps) => PatchCollection
+  removeTagFromElement: (props: RemoveTagFromElementProps) => PatchCollection
 }
 
 export const useOptimisticUpdate = (): UseOptimisticUpdateReturn => {
@@ -53,7 +58,25 @@ export const useOptimisticUpdate = (): UseOptimisticUpdateReturn => {
       )
     )
   }
+
+  const removeTagFromElement = (props: RemoveTagFromElementProps): PatchCollection => {
+    return dispatch(
+      api.util.updateQueryData(
+        'tagGetCollectionForElementByTypeAndId',
+        {
+          elementType: props.elementType,
+          id: props.id
+        },
+        (draft): void => {
+          draft.items = draft.items.filter((tag) => tag.id !== props.tagId)
+          draft.totalItems = draft.items.length
+        }
+      )
+    )
+  }
+
   return {
-    updateTagsForElementByTypeAndId
+    updateTagsForElementByTypeAndId,
+    removeTagFromElement
   }
 }

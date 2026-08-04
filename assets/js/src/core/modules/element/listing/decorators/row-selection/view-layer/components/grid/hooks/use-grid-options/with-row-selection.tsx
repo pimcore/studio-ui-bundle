@@ -15,6 +15,7 @@ import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/pr
 import { useEffect } from 'react'
 import { type RowSelectionData } from '../../../../../context-layer/provider/row-selection-provider'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
+import { eventBus, eventTypes } from '@Pimcore/lib/event-bus'
 
 export const WithRowSelection = (useBaseHook: IRowSelectionDecoratorProps['useGridOptions'], config: IRowSelectionDecoratorConfig): IRowSelectionDecoratorProps['useGridOptions'] => {
   const useRowSelectionExtension: AbstractDecoratorProps['useGridOptions'] = () => {
@@ -22,6 +23,50 @@ export const WithRowSelection = (useBaseHook: IRowSelectionDecoratorProps['useGr
     const { data } = useData()
     const { selectedRows, setSelectedRows, selectedRowsData, setSelectedRowsData } = useRowSelection()
     const { availableColumns } = useAvailableColumns()
+
+    useEffect(() => {
+      const subscriber = eventBus.subscribe(
+        { type: eventTypes['element:item:deleted'] },
+        (event) => {
+          const deletedId = event?.payload?.id
+
+          if (deletedId === undefined) {
+            return
+          }
+
+          if (config.elementType !== undefined && event.payload?.elementType !== config.elementType) {
+            return
+          }
+
+          const key = String(deletedId)
+          const currentSelectedRows = selectedRows ?? {}
+
+          if (!(key in currentSelectedRows) && !(deletedId in selectedRowsData)) {
+            return
+          }
+
+          const newSelectedRows: Record<string, boolean> = {}
+
+          for (const rowKey in currentSelectedRows) {
+            if (rowKey !== key) {
+              newSelectedRows[rowKey] = currentSelectedRows[rowKey]
+            }
+          }
+
+          const newSelectedRowsData: RowSelectionData['selectedRowsData'] = {}
+          for (const dataKey in selectedRowsData) {
+            if (Number.parseInt(dataKey) !== deletedId) {
+              newSelectedRowsData[Number.parseInt(dataKey)] = selectedRowsData[dataKey]
+            }
+          }
+
+          setSelectedRows(newSelectedRows)
+          setSelectedRowsData(newSelectedRowsData)
+        }
+      )
+
+      return () => { eventBus.unsubscribe(subscriber) }
+    }, [selectedRows, selectedRowsData, config.elementType])
 
     useEffect(() => {
       const newSelectedRowsData: RowSelectionData['selectedRowsData'] = {}

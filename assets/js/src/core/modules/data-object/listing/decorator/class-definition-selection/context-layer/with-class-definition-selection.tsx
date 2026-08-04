@@ -15,13 +15,21 @@ import { type ClassDefinitionSelectionDecoratorConfig } from '../class-definitio
 import { ClassDefinitionsProvider } from '@Pimcore/modules/data-object/utils/provider/class-defintions/class-definitions-provider'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 
+const resolveElementId = (config: ClassDefinitionSelectionDecoratorConfig, getId: () => number): number | undefined => {
+  if (config.classRestriction !== undefined) {
+    return undefined
+  }
+
+  return config.isResolvingClassDefinitionsBasedOnElementId === false ? 1 : getId()
+}
+
 export const withClassDefinitionSelectionContext = (Component: AbstractDecoratorProps['ContextComponent'], config: ClassDefinitionSelectionDecoratorConfig): AbstractDecoratorProps['ContextComponent'] => {
   const ClassDefinitionSelectionContextComponent = (): React.JSX.Element => {
     const { useElementId } = useSettings()
     const { getId } = useElementId()
 
     return (
-      <ClassDefinitionsProvider elementId={ config.isResolvingClassDefinitionsBasedOnElementId === false ? 1 : getId() }>
+      <ClassDefinitionsProvider elementId={ resolveElementId(config, getId) }>
         <ClassDefinitionSelectionProvider config={ config }>
           <Component />
         </ClassDefinitionSelectionProvider>

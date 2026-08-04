@@ -8,11 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ReactNode } from 'react'
+import React, { useEffect, useRef, type ReactNode } from 'react'
 import { StackList, type StackListProps } from '@Pimcore/components/stack-list/stack-list'
 import { Empty, Tag } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { LanguageSelection, transformLanguage } from '@Pimcore/components/language-selection/language-selection'
+import { LanguageSelection } from '@Pimcore/components/language-selection/language-selection'
+import { transformLanguage } from '@Pimcore/components/language-selection/helpers'
 import { useGridConfig } from './hooks/use-grid-config'
 import { useTranslation } from 'react-i18next'
 import { Space } from '@Pimcore/components/space/space'
@@ -21,6 +22,17 @@ import { uuid } from '@Pimcore/utils/uuid'
 import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-list-item'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
+
+function findScrollableParent (element: HTMLElement | null): HTMLElement | null {
+  if (element === null || element === document.documentElement) return null
+  const { overflow, overflowY } = window.getComputedStyle(element)
+  if (/(auto|scroll)/.test(overflow + overflowY) && element.scrollHeight > element.clientHeight) {
+    return element
+  }
+  return findScrollableParent(element.parentElement)
+}
+
 
 interface GridConfigListProps {
   columns: AvailableColumn[]
@@ -38,13 +50,44 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
   const { setColumns } = useGridConfig()
   const settings = useSettings()
   const { t } = useTranslation()
+  const containerRef = useRef<HTMLDivElement>(null)
+  const prevColumnKeysRef = useRef<string[]>([])
+  const hasMountedRef = useRef(false)
+
+  useEffect(() => {
+    const currentKeys = columns.map((col) => col.key)
+
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true
+      prevColumnKeysRef.current = currentKeys
+      return
+    }
+
+    const prevKeys = prevColumnKeysRef.current
+    const isAppend = currentKeys.length > prevKeys.length &&
+      prevKeys.every((key, i) => key === currentKeys[i])
+
+    if (isAppend) {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const container = containerRef.current
+          if (container === null) return
+          const scrollParent = findScrollableParent(container.parentElement)
+          if (scrollParent === null) return
+          scrollParent.scrollTo({ top: scrollParent.scrollHeight - scrollParent.clientHeight, behavior: 'smooth' })
+        })
+      })
+    }
+
+    prevColumnKeysRef.current = currentKeys
+  }, [columns])
 
   const stackListItems: ColumnStackListProps['items'] = columns.map((column) => {
     const uniqueId = uuid()
 
     let translationKey = `${column.key}`
 
-    if ('fieldDefinition' in column.config) {
+    if (hasFieldDefinition(column.config)) {
       const fieldDefinition = column.config.fieldDefinition as Record<string, any>
       translationKey = !isEmptyValue(fieldDefinition?.title) ? fieldDefinition?.title : column.key
     }
@@ -62,6 +105,7 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
           <IconButton
             icon={ { value: 'trash' } }
             onClick={ () => { onRemoveColumn(uniqueId) } }
+            size='small'
             theme='secondary'
           />
         </Space>
@@ -73,11 +117,13 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
     <>
       { stackListItems.length === 0 && <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } /> }
       { stackListItems.length > 0 && (
-      <StackList
-        items={ stackListItems }
-        onItemsChange={ onItemsChange }
-        sortable
-      />
+        <div ref={ containerRef }>
+          <StackList
+            items={ stackListItems }
+            onItemsChange={ onItemsChange }
+            sortable
+          />
+        </div>
       ) }
     </>
   )

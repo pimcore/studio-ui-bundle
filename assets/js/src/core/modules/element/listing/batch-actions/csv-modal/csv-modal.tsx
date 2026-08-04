@@ -8,11 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Alert, Modal, Space } from 'antd'
+import { Alert, Space } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { CreateCSVForm, type CSVFormValues } from './create-csv-form/create-csv-form'
-import { DownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/download-job'
-import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
+import { CsvDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/csv-download-job'
+import { Modal } from '@Pimcore/components/modal/modal'
 import { useTranslation } from 'react-i18next'
 import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
@@ -82,12 +82,11 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
 
   return (
     <Modal
+      iconName='export'
       onCancel={ () => { props.setOpen(false) } }
       onOk={ () => { form.submit() } }
       open={ props.open }
-      title={ (
-        <ModalTitle iconName='export'>{ t('export-csv-form.modal-title') }</ModalTitle>
-      ) }
+      title={ t('export-csv-form.modal-title') }
     >
       <Space
         direction='vertical'
@@ -110,11 +109,8 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
   )
 
   function onFinish (values: CSVFormValues): void {
-    const job = new DownloadJob({
-      title: t('jobs.csv-job.title', { title: jobTitle }),
-      downloadUrl: `${getPrefix()}/export/download/csv/{jobRunId}`,
-      action: async () => await getDownloadAction(values.delimiter, values.header)
-    })
+    const isFolderExport = numberedSelectedRows.length === 0
+    const job = new CsvDownloadJob({ action: async () => await getDownloadAction(values.delimiter, values.header), isFolderExport })
     void executionEngine.runJob(job)
 
     props.setOpen(false)
@@ -148,8 +144,8 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
       }
 
       const promise = fetchCreateFolderCsv({
+        id,
         body: {
-          folders: [id],
           elementType,
           columns: extractedColumnsFromColumnArg,
           config: {
@@ -175,7 +171,8 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
           config: {
             delimiter,
             header
-          }
+          },
+          ...(!isNil(selectedClassDefinition?.id) && { classId: selectedClassDefinition.id })
         }
       })
 

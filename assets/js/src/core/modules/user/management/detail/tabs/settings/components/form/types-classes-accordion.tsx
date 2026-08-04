@@ -23,6 +23,21 @@ const TypesAndClassesAccordion = (): React.JSX.Element => {
   const { data: classesData, isLoading: classesLoading } = useClassDefinitionCollectionQuery()
   const { data: documentTypesData, isLoading: documentTypesLoading } = useDocumentDocTypeListQuery({})
 
+  const sortByLabel = (values: string[], options: Array<{ value: string, label: string }>): string[] => {
+    const labelMap = new Map(options.map((o) => [o.value, o.label ?? '']))
+    return [...values].sort((a, b) => (labelMap.get(a) ?? '').localeCompare(labelMap.get(b) ?? ''))
+  }
+
+  const docTypeOptions: Array<{ label: string, value: string }> = documentTypesData?.items.map((item) => ({
+    label: item.name ?? '',
+    value: item.id
+  })).sort((a, b) => a.label.localeCompare(b.label)) ?? []
+
+  const classOptions: Array<{ label: string, value: string }> = classesData?.items.map((item) => ({
+    label: item.name ?? '',
+    value: item.id
+  })).sort((a, b) => a.label.localeCompare(b.label)) ?? []
+
   const content = [
     {
       key: '1',
@@ -31,27 +46,23 @@ const TypesAndClassesAccordion = (): React.JSX.Element => {
         <>
           <Form.Item
             name="docTypes"
+            normalize={ (values: string[]) => sortByLabel(values, docTypeOptions) }
           >
             <Select
               disabled={ documentTypesLoading }
               mode="multiple"
-              options={ documentTypesData?.items.map((item) => ({
-                label: item.name,
-                value: item.id
-              })) }
+              options={ docTypeOptions }
               placeholder={ t('user-management.doc-types') }
             ></Select>
           </Form.Item>
           <Form.Item
             name="classes"
+            normalize={ (values: string[]) => sortByLabel(values, classOptions) }
           >
             <Select
               disabled={ classesLoading }
               mode="multiple"
-              options={ classesData?.items.map((item) => ({
-                label: item.name,
-                value: item.id
-              })) }
+              options={ classOptions }
               placeholder={ t('user-management.classes') }
             ></Select>
           </Form.Item>

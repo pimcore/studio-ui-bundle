@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Grid, type GridCellReference } from '@Pimcore/components/grid/grid'
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { type TableValue } from '../../hooks/use-table-value'
@@ -26,77 +26,88 @@ interface TableGridProps {
 }
 
 export const TableGrid = (props: TableGridProps): React.JSX.Element => {
-  const columnHelper = createColumnHelper()
+  const { columnConfigActivated, columnConfig, disabled, cols, rows, value, onChange } = props
 
-  const columns: Array<ColumnDef<any>> = []
-  if (props.columnConfigActivated && props.columnConfig !== undefined) {
-    props.columnConfig.forEach((col, index) => {
-      columns.push(
-        columnHelper.accessor(String(col.key), {
-          header: col.label ?? col.key,
-          id: String(col.key),
-          size: 150,
-          meta: {
-            autoWidth: true,
-            type: 'text',
-            editable: props.disabled !== true
-          }
-        })
-      )
-    })
-  } else {
-    for (let i = 0; i < props.cols; i++) {
-      columns.push(
-        columnHelper.accessor('col-' + i, {
-          id: 'col-' + i,
-          size: 150,
-          meta: {
-            autoWidth: true,
-            type: 'text',
-            editable: props.disabled !== true
-          }
-        })
-      )
-    }
-  }
+  const columns: Array<ColumnDef<any>> = useMemo(() => {
+    const columnHelper = createColumnHelper()
+    const result: Array<ColumnDef<any>> = []
 
-  const dataRows: Array<Record<string, string>> = []
-  for (let i = 0; i < props.rows; i++) {
-    const rowValues: Record<string, string> = {}
-    if (props.columnConfigActivated && props.columnConfig !== undefined) {
-      props.columnConfig.forEach((col, index) => {
-        rowValues[col.key] = props.value?.[i]?.[col.key] ?? ''
+    if (columnConfigActivated && columnConfig !== undefined) {
+      columnConfig.forEach((col) => {
+        result.push(
+          columnHelper.accessor(String(col.key), {
+            header: col.label ?? col.key,
+            id: String(col.key),
+            size: 150,
+            meta: {
+              autoWidth: true,
+              type: 'text',
+              editable: disabled !== true
+            }
+          })
+        )
       })
     } else {
-      for (let j = 0; j < props.cols; j++) {
-        rowValues['col-' + j] = props.value?.[i]?.[j] ?? ''
+      for (let i = 0; i < cols; i++) {
+        result.push(
+          columnHelper.accessor('col-' + i, {
+            id: 'col-' + i,
+            size: 150,
+            meta: {
+              autoWidth: true,
+              type: 'text',
+              editable: disabled !== true
+            }
+          })
+        )
       }
     }
-    dataRows.push(rowValues)
-  }
+
+    return result
+  }, [columnConfigActivated, columnConfig, disabled, cols])
+
+  const dataRows: Array<Record<string, string>> = useMemo(() => {
+    const result: Array<Record<string, string>> = []
+    for (let i = 0; i < rows; i++) {
+      const rowValues: Record<string, string> = {}
+      if (columnConfigActivated && columnConfig !== undefined) {
+        columnConfig.forEach((col) => {
+          rowValues[col.key] = value?.[i]?.[col.key] ?? ''
+        })
+      } else {
+        for (let j = 0; j < cols; j++) {
+          rowValues['col-' + j] = value?.[i]?.[j] ?? ''
+        }
+      }
+      result.push(rowValues)
+    }
+    return result
+  }, [rows, cols, columnConfigActivated, columnConfig, value])
+
+  const onUpdateCellData = useCallback((data: { rowIndex: number, columnId: string, value: any }) => {
+    const newDataRows = [...dataRows]
+    newDataRows[data.rowIndex] = {
+      ...newDataRows[data.rowIndex],
+      [data.columnId]: data.value
+    }
+
+    const newValue = columnConfigActivated && columnConfig !== undefined
+      ? newDataRows
+      : newDataRows.map(row => Object.values(row))
+
+    onChange?.(newValue)
+  }, [dataRows, columnConfigActivated, columnConfig, onChange])
 
   return (
     <Grid
       className={ props.className }
       columns={ columns }
       data={ dataRows }
-      disabled={ props.disabled }
-      hideColumnHeaders={ !props.columnConfigActivated || props.columnConfig === undefined }
-      highlightActiveCell={ props.disabled !== true }
+      disabled={ disabled }
+      hideColumnHeaders={ !columnConfigActivated || columnConfig === undefined }
+      highlightActiveCell={ disabled !== true }
       onActiveCellChange={ props.onActiveCellChange }
-      onUpdateCellData={ (data) => {
-        const newDataRows = [...dataRows]
-        newDataRows[data.rowIndex] = {
-          ...newDataRows[data.rowIndex],
-          [data.columnId]: data.value
-        }
-
-        const newValue = props.columnConfigActivated && props.columnConfig !== undefined
-          ? newDataRows
-          : newDataRows.map(row => Object.values(row))
-
-        props.onChange?.(newValue)
-      } }
+      onUpdateCellData={ onUpdateCellData }
       resizable
     />
   )

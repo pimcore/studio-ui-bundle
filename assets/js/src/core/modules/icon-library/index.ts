@@ -65,6 +65,7 @@ import cdp from '@Pimcore/assets/icons/cdp.inline.svg?react'
 import channels from '@Pimcore/assets/icons/channels.inline.svg?react'
 import chartScatter from '@Pimcore/assets/icons/chart-scatter.inline.svg?react'
 import checkCircle from '@Pimcore/assets/icons/check-circle.inline.svg?react'
+import check from '@Pimcore/assets/icons/check.inline.svg?react'
 import checkbox from '@Pimcore/assets/icons/checkbox.inline.svg?react'
 import checkmark from '@Pimcore/assets/icons/checkmark.inline.svg?react'
 import chevronDown from '@Pimcore/assets/icons/chevron-down.inline.svg?react'
@@ -75,11 +76,14 @@ import chevronUp from '@Pimcore/assets/icons/chevron-up.inline.svg?react'
 import childrenGrid from '@Pimcore/assets/icons/children-grid.inline.svg?react'
 import classIcon from '@Pimcore/assets/icons/class.inline.svg?react'
 import classificationStore from '@Pimcore/assets/icons/classification-store.inline.svg?react'
+import clearErase from '@Pimcore/assets/icons/clear-erase.inline.svg?react'
 import closeFilled from '@Pimcore/assets/icons/close-filled.inline.svg?react'
+import closeOutline from '@Pimcore/assets/icons/close-outline.inline.svg?react'
 import close from '@Pimcore/assets/icons/close.inline.svg?react'
 import cms from '@Pimcore/assets/icons/cms.inline.svg?react'
 import code from '@Pimcore/assets/icons/code.inline.svg?react'
 import collapse from '@Pimcore/assets/icons/collapse.inline.svg?react'
+import collapseSidebar from '@Pimcore/assets/icons/collapse-sidebar.inline.svg?react'
 import collection from '@Pimcore/assets/icons/collection.inline.svg?react'
 import color from '@Pimcore/assets/icons/color.inline.svg?react'
 import columns from '@Pimcore/assets/icons/columns.inline.svg?react'
@@ -183,6 +187,7 @@ import headlessBrick from '@Pimcore/assets/icons/headless-brick.inline.svg?react
 import headlessDocument from '@Pimcore/assets/icons/headless-document.inline.svg?react'
 import headlessTemplate from '@Pimcore/assets/icons/headless-template.inline.svg?react'
 import helpCircle from '@Pimcore/assets/icons/help-circle.inline.svg?react'
+import highlight from '@Pimcore/assets/icons/highlight.inline.svg?react'
 import history from '@Pimcore/assets/icons/history.inline.svg?react'
 import homeRootFolder from '@Pimcore/assets/icons/home-root-folder.inline.svg?react'
 import imageAdvanced from '@Pimcore/assets/icons/image-advanced.inline.svg?react'
@@ -195,6 +200,7 @@ import importCsv from '@Pimcore/assets/icons/import-csv.inline.svg?react'
 import importIcon from '@Pimcore/assets/icons/import.inline.svg?react'
 import indexField from '@Pimcore/assets/icons/index-field.inline.svg?react'
 import infoCircle from '@Pimcore/assets/icons/info-circle.inline.svg?react'
+import infoOutline from '@Pimcore/assets/icons/info-outline.inline.svg?react'
 import info from '@Pimcore/assets/icons/info.inline.svg?react'
 import inheritanceActive from '@Pimcore/assets/icons/inheritance-active.inline.svg?react'
 import inheritanceBroken from '@Pimcore/assets/icons/inheritance-broken.inline.svg?react'
@@ -271,7 +277,9 @@ import operatorConcatenator from '@Pimcore/assets/icons/operator-concatenator.in
 import order from '@Pimcore/assets/icons/order.inline.svg?react'
 import otherOperators from '@Pimcore/assets/icons/other-operators.inline.svg?react'
 import other from '@Pimcore/assets/icons/other.inline.svg?react'
+import ownership from '@Pimcore/assets/icons/ownership.inline.svg?react'
 import packageIcon from '@Pimcore/assets/icons/package.inline.svg?react'
+import pageStatic from '@Pimcore/assets/icons/page-static.inline.svg?react'
 import panel from '@Pimcore/assets/icons/panel.inline.svg?react'
 import password from '@Pimcore/assets/icons/password.inline.svg?react'
 import paste from '@Pimcore/assets/icons/paste.inline.svg?react'
@@ -301,6 +309,7 @@ import properties from '@Pimcore/assets/icons/properties.inline.svg?react'
 import published from '@Pimcore/assets/icons/published.inline.svg?react'
 import quantityValueRange from '@Pimcore/assets/icons/quantity-value-range.inline.svg?react'
 import quantityValue from '@Pimcore/assets/icons/quantity-value.inline.svg?react'
+import questionMarkOutline from '@Pimcore/assets/icons/question-mark-outline.inline.svg?react'
 import questionmark from '@Pimcore/assets/icons/questionmark.inline.svg?react'
 import quickAccess from '@Pimcore/assets/icons/quick-access.inline.svg?react'
 import redirect from '@Pimcore/assets/icons/redirect.inline.svg?react'
@@ -318,9 +327,11 @@ import requires from '@Pimcore/assets/icons/requires.inline.svg?react'
 import restore from '@Pimcore/assets/icons/restore.inline.svg?react'
 import reverseObjectRelation from '@Pimcore/assets/icons/reverse-object-relation.inline.svg?react'
 import reverse from '@Pimcore/assets/icons/reverse.inline.svg?react'
+import robot from '@Pimcore/assets/icons/robot.inline.svg?react'
 import run from '@Pimcore/assets/icons/run.inline.svg?react'
 import save from '@Pimcore/assets/icons/save.inline.svg?react'
 import schedule from '@Pimcore/assets/icons/schedule.inline.svg?react'
+import scissorsCut01 from '@Pimcore/assets/icons/scissors-cut-01.inline.svg?react'
 import search from '@Pimcore/assets/icons/search.inline.svg?react'
 import segmentTagging from '@Pimcore/assets/icons/segment-tagging.inline.svg?react'
 import selectType from '@Pimcore/assets/icons/select-type.inline.svg?react'
@@ -370,6 +381,7 @@ import txtDocs from '@Pimcore/assets/icons/txt-docs.inline.svg?react'
 import unknown from '@Pimcore/assets/icons/unknown.inline.svg?react'
 import unlinkDocument from '@Pimcore/assets/icons/unlink-document.inline.svg?react'
 import unlocked from '@Pimcore/assets/icons/unlocked.inline.svg?react'
+import updateBuild from '@Pimcore/assets/icons/update-build.inline.svg?react'
 import uploadCloud from '@Pimcore/assets/icons/upload-cloud.inline.svg?react'
 import uploadImport from '@Pimcore/assets/icons/upload-import.inline.svg?react'
 import uploadZip from '@Pimcore/assets/icons/upload-zip.inline.svg?react'
@@ -597,6 +609,10 @@ moduleSystem.registerModule({
       component: checkCircle
     })
     iconLibrary.register({
+      name: 'check',
+      component: check
+    })
+    iconLibrary.register({
       name: 'checkbox',
       component: checkbox
     })
@@ -637,8 +653,16 @@ moduleSystem.registerModule({
       component: classificationStore
     })
     iconLibrary.register({
+      name: 'clear-erase',
+      component: clearErase
+    })
+    iconLibrary.register({
       name: 'close-filled',
       component: closeFilled
+    })
+    iconLibrary.register({
+      name: 'close-outline',
+      component: closeOutline
     })
     iconLibrary.register({
       name: 'close',
@@ -655,6 +679,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'collapse',
       component: collapse
+    })
+    iconLibrary.register({
+      name: 'collapse-sidebar',
+      component: collapseSidebar
     })
     iconLibrary.register({
       name: 'collection',
@@ -1069,6 +1097,10 @@ moduleSystem.registerModule({
       component: helpCircle
     })
     iconLibrary.register({
+      name: 'highlight',
+      component: highlight
+    })
+    iconLibrary.register({
       name: 'history',
       component: history
     })
@@ -1115,6 +1147,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'info-circle',
       component: infoCircle
+    })
+    iconLibrary.register({
+      name: 'info-outline',
+      component: infoOutline
     })
     iconLibrary.register({
       name: 'info',
@@ -1421,8 +1457,16 @@ moduleSystem.registerModule({
       component: other
     })
     iconLibrary.register({
+      name: 'ownership',
+      component: ownership
+    })
+    iconLibrary.register({
       name: 'package',
       component: packageIcon
+    })
+    iconLibrary.register({
+      name: 'page-static',
+      component: pageStatic
     })
     iconLibrary.register({
       name: 'panel',
@@ -1541,6 +1585,10 @@ moduleSystem.registerModule({
       component: quantityValue
     })
     iconLibrary.register({
+      name: 'question-mark-outline',
+      component: questionMarkOutline
+    })
+    iconLibrary.register({
       name: 'questionmark',
       component: questionmark
     })
@@ -1609,6 +1657,10 @@ moduleSystem.registerModule({
       component: reverse
     })
     iconLibrary.register({
+      name: 'robot',
+      component: robot
+    })
+    iconLibrary.register({
       name: 'run',
       component: run
     })
@@ -1619,6 +1671,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'schedule',
       component: schedule
+    })
+    iconLibrary.register({
+      name: 'scissors-cut-01',
+      component: scissorsCut01
     })
     iconLibrary.register({
       name: 'search',
@@ -1815,6 +1871,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'unlocked',
       component: unlocked
+    })
+    iconLibrary.register({
+      name: 'update-build',
+      component: updateBuild
     })
     iconLibrary.register({
       name: 'upload-cloud',

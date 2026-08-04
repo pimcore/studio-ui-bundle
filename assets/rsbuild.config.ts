@@ -3,13 +3,15 @@ import { pluginReact } from '@rsbuild/plugin-react'
 import { pluginBabel } from '@rsbuild/plugin-babel';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 import { pluginGenerateEntrypoints } from './bundler/plugins/entrypoints-generate';
+import { pluginWriteBuildId } from './bundler/plugins/write-build-id';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
 import path from 'path'
 import fs from 'fs';
-import { v4 } from 'uuid';
+import { getBuildGroupId } from './bundler/build-id';
 import packages from './package.json'
 
-const buildId = v4();
+const buildGroupId = getBuildGroupId();
+const buildId = `${buildGroupId}-app`;
 const buildPath = path.resolve(__dirname, '..', 'public', 'build', buildId);
 
 if (!fs.existsSync(buildPath)) {
@@ -33,6 +35,7 @@ export default defineConfig({
   dev: {
     ...(!isDevServer ? {assetPrefix: '/bundles/pimcorestudioui/build/' + buildId} : {}),
     writeToDisk: !isDevServer,
+    lazyCompilation: false,
   },
   source: {
     entry: {
@@ -73,6 +76,7 @@ export default defineConfig({
     }
   },
   plugins: [
+    pluginWriteBuildId({ buildId: buildGroupId }),
     pluginGenerateEntrypoints(),
     pluginReact(),
     pluginBabel({

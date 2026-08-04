@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
@@ -30,6 +30,14 @@ export const useStyles = createStyles(({ css, token }) => {
         .anticon + span {
           margin-inline-start: 4px;
         }
+      }
+    `,
+
+    colorInverted: css`
+      &.ant-tag {
+        border: none;
+        padding: 0 ${token.paddingXS}px;
+        margin: 0;
       }
     `,
 

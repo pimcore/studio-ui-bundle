@@ -30,9 +30,8 @@ import { addDefaultWithToColumnDefinition, calculateColumnWithOfTableCells } fro
 import type { FormItemProps } from 'antd/es/form/FormItem'
 import { isNil } from 'lodash'
 import React from 'react'
-import { AdvancedManyToManyRelationList } from '../../grid-cell-preview/advanced-many-to-many-relation/advanced-many-to-many-relation'
+import { FormattedAdvancedManyToManyRelationList } from '../../grid-cell-preview/advanced-many-to-many-relation/advanced-many-to-many-relation'
 import { type AdvancedManyToManyRelationValue } from '../helpers/relations/types/advanced-many-to-many-relation'
-import { type AdvancedManyToManyObjectRelationObjectDataDefinition } from './dynamic-type-object-data-advanced-many-to-many-object-relation'
 import { type DynamicTypeFieldFilterAbstract } from '../../../field-filters/dynamic-type-field-filter-abstract'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
@@ -65,6 +64,10 @@ export class DynamicTypeObjectDataAdvancedManyToManyRelation extends DynamicType
     )
   }
 
+  getVersionObjectDataComponent (props: AdvancedManyToManyRelationObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
+    return this.getObjectDataComponent({ ...props, noteditable: true, hideOpenButton: true })
+  }
+
   getObjectDataFormItemProps (props: AdvancedManyToManyRelationObjectDataDefinition): FormItemProps {
     return {
       ...super.getObjectDataFormItemProps(props),
@@ -79,11 +82,16 @@ export class DynamicTypeObjectDataAdvancedManyToManyRelation extends DynamicType
 
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {
     const value: AdvancedManyToManyRelationValue | null = props.cellProps.getValue()
-    const objectProps: AdvancedManyToManyObjectRelationObjectDataDefinition = props.objectProps as AdvancedManyToManyObjectRelationObjectDataDefinition
+    const objectProps = props.objectProps as AdvancedManyToManyRelationObjectDataDefinition
+    const dataObjectId = props.cellProps.row.original.id as number | undefined
 
     return (
-      <AdvancedManyToManyRelationList
+      <FormattedAdvancedManyToManyRelationList
         columnDefinition={ objectProps.columns ?? null }
+        columnId={ props.cellProps.column.id }
+        dataObjectId={ dataObjectId }
+        fieldNameFallback={ objectProps.combinedFieldName }
+        pathFormatterClass={ objectProps.pathFormatterClass }
         value={ value }
       />
     )

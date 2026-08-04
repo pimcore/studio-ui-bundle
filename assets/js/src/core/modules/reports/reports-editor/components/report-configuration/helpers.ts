@@ -12,8 +12,10 @@ import { castArray, isNull } from 'lodash'
 import { type ReportFormData } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
 import {
   type BundleCustomReportsColumnConfigurationUpdateData,
+  type BundleCustomReportUpdate,
   type CustomReportsConfigUpdateApiArg
 } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import { denormalizeIcon } from '@Pimcore/utils/normalize-icon'
 
 export const normalizeDataSourceConfig = (data: ReportFormData): {
   dataSourceConfig: CustomReportsConfigUpdateApiArg['bundleCustomReportUpdate']['dataSourceConfig']
@@ -56,5 +58,17 @@ export const normalizeColumnConfigurations = (data: ReportFormData): INormalizeC
 
   return {
     columnConfigurations: cleanedColumns
+  }
+}
+
+interface INormalizeIconFieldsReturn {
+  iconClass: BundleCustomReportUpdate['iconClass']
+  groupIconClass: BundleCustomReportUpdate['groupIconClass']
+}
+
+export const normalizeIconFields = (data: ReportFormData): INormalizeIconFieldsReturn => {
+  return {
+    iconClass: denormalizeIcon(data?.iconClass) ?? '',
+    groupIconClass: denormalizeIcon(data?.groupIconClass) ?? ''
   }
 }

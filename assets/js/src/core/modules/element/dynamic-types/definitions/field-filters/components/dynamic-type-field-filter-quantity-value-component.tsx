@@ -32,7 +32,7 @@ export interface QuantityValueValue {
   unitId: string | null
 }
 
-export interface DynamicTypeFieldFilterQuantityValueProps extends AbstractFieldFilterDefinition {}
+export interface DynamicTypeFieldFilterQuantityValueProps extends AbstractFieldFilterDefinition { }
 
 export const DynamicTypeFieldFilterQuantityValueComponent = (props: DynamicTypeFieldFilterQuantityValueProps): React.JSX.Element => {
   const { data: rawData, setData, config } = useDynamicFilter()
@@ -174,7 +174,7 @@ export const DynamicTypeFieldFilterQuantityValueComponent = (props: DynamicTypeF
             unitId
           })
         } }
-        options={ getSelectOptions(config?.validUnits as string[]) }
+        options={ getSelectOptions(config?.fieldDefinition?.validUnits as string[] ?? undefined) }
         placeholder={ '(' + t('empty') + ')' }
         value={ data?.unitId ?? undefined }
       />

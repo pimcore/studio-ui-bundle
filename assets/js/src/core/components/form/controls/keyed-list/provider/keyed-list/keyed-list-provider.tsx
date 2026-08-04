@@ -24,23 +24,41 @@ export interface KeyedListData {
   getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
 }
 
-export type KeyedListContextProps = KeyedListData | undefined
+// External store handle for the keyed-list value. Components subscribe to the
+// slice they care about (see useKeyedListValue) instead of receiving the whole
+// value object through context, so editing one field no longer re-renders every
+// other field in the list.
+export interface KeyedListStore {
+  subscribe: (listener: () => void) => () => void
+  getSnapshot: () => KeyedListData['values']
+}
+
+// The context value is intentionally referentially stable across value changes:
+// it carries only the (memoized) operations, the additional-props callback and
+// the store handle. The changing value is read reactively through the store.
+export interface KeyedListContextValue {
+  operations: KeyedListData['operations']
+  store: KeyedListStore
+  getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
+}
+
+export type KeyedListContextProps = KeyedListContextValue | undefined
 
 export const KeyedListContext = createContext<KeyedListContextProps>(undefined)
 
 export interface KeyedListProviderProps {
   children: React.ReactNode
-  values: KeyedListData['values']
+  store: KeyedListStore
   operations: KeyedListData['operations']
   getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
 }
 
-export const KeyedListProvider = ({ children, values, operations, getAdditionalComponentProps }: KeyedListProviderProps): React.JSX.Element => {
+export const KeyedListProvider = ({ children, store, operations, getAdditionalComponentProps }: KeyedListProviderProps): React.JSX.Element => {
   const contextValue = useMemo(() => ({
-    values,
     operations,
+    store,
     getAdditionalComponentProps
-  }), [values, operations, getAdditionalComponentProps])
+  }), [operations, store, getAdditionalComponentProps])
 
   return (
     <NumberedListContext.Provider value={ undefined }>

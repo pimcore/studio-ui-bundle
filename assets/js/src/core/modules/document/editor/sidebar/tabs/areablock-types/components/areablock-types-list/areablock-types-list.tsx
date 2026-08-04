@@ -34,9 +34,8 @@ export const AreablockTypesList = (): React.JSX.Element => {
         className={ styles.gridContainer }
         padding={ { x: 'extra-small', bottom: 'small' } }
       >
-        {types.map((type: AreablockTypeEntry, typeIndex) => (
+        {types.map((type: AreablockTypeEntry) => (
           <DraggableAreablockType
-            globalIndex={ typeIndex }
             key={ `${type.areablockName}-${type.type}` }
             type={ type }
           />
@@ -50,38 +49,25 @@ export const AreablockTypesList = (): React.JSX.Element => {
       className={ styles.collapsibleContainer }
       padding={ { x: 'extra-small' } }
     >
-      {groupEntries.map(([groupName, types], groupIndex) => {
-        let startIndex = 0
-        const entriesBeforeThis = groupEntries.slice(0, groupIndex)
-        entriesBeforeThis.forEach(([, prevTypes]) => {
-          startIndex += prevTypes.length
-        })
-
-        return (
-          <Panel
-            border={ false }
-            collapsed={ false }
-            contentPadding="extra-small"
-            key={ groupName }
-            theme="card-with-highlight"
-            title={ t(groupName) }
-          >
-            <Box className={ styles.gridContainer }>
-              {types.map((type: AreablockTypeEntry, typeIndex) => {
-                const globalIndex = startIndex + typeIndex
-
-                return (
-                  <DraggableAreablockType
-                    globalIndex={ globalIndex }
-                    key={ `${type.areablockName}-${type.type}` }
-                    type={ type }
-                  />
-                )
-              })}
-            </Box>
-          </Panel>
-        )
-      })}
+      {groupEntries.map(([groupName, types]) => (
+        <Panel
+          border={ false }
+          collapsed={ false }
+          contentPadding="extra-small"
+          key={ groupName }
+          theme="card-with-highlight"
+          title={ t(groupName) }
+        >
+          <Box className={ styles.gridContainer }>
+            {types.map((type: AreablockTypeEntry) => (
+              <DraggableAreablockType
+                key={ `${type.areablockName}-${type.type}` }
+                type={ type }
+              />
+            ))}
+          </Box>
+        </Panel>
+      ))}
     </Box>
   )
 }

@@ -16,6 +16,7 @@ import { useClassDefinitionOptions } from '@Pimcore/modules/field-definitions/dy
 import { useAssetTypeOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-asset-type-options'
 import { useDocumentTypeOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-document-type-options'
 import { relationSelectFormItemTransformation } from '@Pimcore/modules/field-definitions/dynamic-types/utils/relations-helper'
+import { ManyToOneRelationPath } from '@Pimcore/components/many-to-one-relation'
 
 export const FieldDefinitionManyToOneRelationFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -34,20 +35,15 @@ export const FieldDefinitionManyToOneRelationFormFields = (props: FieldDefinitio
 
   return (
     <>
-      <FormKit.Panel
-        border
-        theme="fieldset"
-        title={ t('layout') }
+      <Form.Item
+        label={ t('width') }
+        name="width"
+        tooltip={ t('width-tooltip') }
       >
-        <Form.Item
-          label={ t('width') }
-          name="width"
-          tooltip={ t('width-tooltip') }
-        >
-          <Input />
-        </Form.Item>
+        <Input />
+      </Form.Item>
 
-        {!isCustomLayout && (
+      {!isCustomLayout && (
         <>
           <Form.Item
             label={ t('path-formatter-service') }
@@ -59,13 +55,7 @@ export const FieldDefinitionManyToOneRelationFormFields = (props: FieldDefinitio
           <Form.Item name="allowToClearRelation">
             <Switch labelRight={ t('allow-to-clear-relation') } />
           </Form.Item>
-        </>
-        )}
 
-      </FormKit.Panel>
-
-      {!isCustomLayout && (
-        <>
           <FormKit.Panel
             border
             theme="fieldset"
@@ -122,7 +112,11 @@ export const FieldDefinitionManyToOneRelationFormFields = (props: FieldDefinitio
                   label={ t('upload-path') }
                   name="assetUploadPath"
                 >
-                  <Input />
+                  <ManyToOneRelationPath
+                    allowToClearRelation
+                    allowedAssetTypes={ ['folder'] }
+                    assetsAllowed
+                  />
                 </Form.Item>
               </>
             </Form.Conditional>

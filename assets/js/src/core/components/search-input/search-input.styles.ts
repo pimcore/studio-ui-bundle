@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
@@ -23,19 +23,19 @@ export const useStyles = createStyles(({ css, token }) => {
       }
   
       .ant-input-search-button:not(:hover):not(:active) {
-        border-color: ${token.Button.defaultGhostBorderColor}; 
-        color: ${token.colorPrimary};
+        border-color: ${token.colorBorder};
+        color: ${token.colorPrimaryText};
       }
-      
+
       .ant-input-search-button:hover {
-        border-color: ${token.colorPrimary}; 
-        color: ${token.colorPrimary} !important;
+        border-color: ${token.colorPrimaryHover};
+        color: ${token.colorPrimaryTextHover} !important;
         background: ${token.colorBgTextHover};
       }
-      
+
       .ant-input-search-button:active {
-        border-color: ${token.colorPrimary}; 
-        color: ${token.colorPrimary};
+        border-color: ${token.colorPrimaryActive};
+        color: ${token.colorPrimaryTextActive};
         background: ${token.colorBgTextActive};
       }
       

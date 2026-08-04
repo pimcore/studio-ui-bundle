@@ -23,6 +23,7 @@ import { ImageTabManager } from '@Pimcore/modules/asset/editor/types/image/tab-m
 import { TextTabManager } from '@Pimcore/modules/asset/editor/types/text/tab-manager/text-tab-manager'
 import { UnknownTabManager } from '@Pimcore/modules/asset/editor/types/unknown/tab-manager/unknown-tab-manager'
 import { JobComponentRegistry } from '@Pimcore/modules/execution-engine/services/job-component-registry'
+import { JobRehydrationRegistry } from '@Pimcore/modules/execution-engine/services/job-rehydration-registry'
 import { ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
 import { VideoTabManager } from '@Pimcore/modules/asset/editor/types/video/tab-manager/video-tab-manager'
 import { ThumbnailService } from '@Pimcore/modules/asset/services/thumbnail-service'
@@ -53,7 +54,9 @@ import { DynamicTypeFieldFilterDataObjectObjectBrick } from '@Pimcore/modules/el
 import { DynamicTypeFieldFilterDate } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/date/dynamic-type-field-filter-date'
 import { DynamicTypeFieldFilterId } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/id/dynamic-type-field-filter-id'
 import { DynamicTypeFieldFilterNumber } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/number/dynamic-type-field-filter-number'
+import { DynamicTypeFieldFilterFileSize } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/file-size/dynamic-type-field-filter-file-size'
 import { DynamicTypeFieldFilterMultiselect } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/multiselect/dynamic-type-field-filter-multiselect'
+import { DynamicTypeFieldFilterUser } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/user/dynamic-type-field-filter-user'
 import { DynamicTypeFieldFilterString } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/string/dynamic-type-field-filter-string'
 import { DynamicTypeGridCellRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/dynamic-type-grid-cell-registry'
 import { DynamicTypeGridCellDependencyTypeIcon } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/_dependencies/dynamic-type-grid-cell-dependency-type-icon'
@@ -225,7 +228,6 @@ import { GlobalMessageBusProcess } from '@Pimcore/modules/background-processor/p
 import { GlobalMessageBus } from '@Pimcore/modules/global-message-bus/services/global-message-bus'
 import { DynamicTypeThemeRegistry } from '@Pimcore/modules/app/theme/dynamic-types/registry/dynamic-type-theme-registry'
 import { DynamicTypeThemeStudioDefaultLight } from '@Pimcore/modules/app/theme/dynamic-types/definitions/studio-default-light/dynamic-type-theme-studio-default-light'
-import { DynamicTypeThemeStudioDefaultDark } from '@Pimcore/modules/app/theme/dynamic-types/definitions/studio-default-dark/dynamic-type-theme-studio-default-dark'
 import { DynamicTypeGridCellDataObjectAdvanced } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/data-object-advanced/dynamic-type-grid-cell-data-object-advanced'
 import { DynamicTypeEditableDialogLayoutRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/editable-dialog-layout/dynamic-type-editable-dialog-layout-registry'
 import { DynamicTypeEditableDialogLayoutTabpanel } from '@Pimcore/modules/element/dynamic-types/definitions/editable-dialog-layout/types/dynamic-type-editable-dialog-layout-tabpanel'
@@ -234,6 +236,12 @@ import { DynamicTypeGridCellString } from '@Pimcore/modules/element/dynamic-type
 import { DynamicTypeGridCellInteger } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/integer/dynamic-type-grid-cell-integer'
 import { DynamicTypeGridCellError } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/error/dynamic-type-grid-cell-error'
 import { DynamicTypeGridCellArray } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/array/dynamic-type-grid-cell-array'
+import { DynamicTypeGridCellSystemId } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-id/dynamic-type-grid-cell-system-id'
+import { DynamicTypeGridCellSystemString } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-string/dynamic-type-grid-cell-system-string'
+import { DynamicTypeGridCellSystemBoolean } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-boolean/dynamic-type-grid-cell-system-boolean'
+import { DynamicTypeGridCellSystemDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-datetime/dynamic-type-grid-cell-system-datetime'
+import { DynamicTypeGridCellSystemInteger } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-integer/dynamic-type-grid-cell-system-integer'
+import { DynamicTypeGridCellSystemUser } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-user/dynamic-type-grid-cell-system-user'
 import { DynamicTypeFieldFilterNone } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/none/dynamic-type-field-filter-none'
 import { DynamicTypeDocumentPage } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-page'
 import { DynamicTypeDocumentRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/dynamic-type-document-registry'
@@ -256,6 +264,7 @@ import { DynamicTypeWidgetTypeElementTree } from '@Pimcore/modules/widget-editor
 import { DynamicTypeWidgetTypeRegistry } from '@Pimcore/modules/widget-editor/dynmic-types/registry/dynamic-type-widget-type-registry'
 import { WidgetRegistry } from '@Pimcore/modules/widget-manager/services/widget-registry'
 import { WidgetRestorerRegistry } from '@Pimcore/modules/widget-manager/services/widget-restorer-registry'
+import { WidgetManagerActionService } from '@Pimcore/modules/widget-manager/services/widget-manager-action-service'
 import { ElementTreeWidgetPermissionRegistry } from '@Pimcore/modules/widget-editor/services/widget-context-menu-item-registry'
 import { DynamicTypeFieldFilterClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/classification-store/dynamic-type-field-filter-classification-store'
 import { DynamicTypeBatchEditClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/types/classification-store/dynamic-type-batch-edit-classification-store'
@@ -390,6 +399,7 @@ container.bind(serviceIds.mainNavRegistry).to(MainNavRegistry).inSingletonScope(
 
 // Widget manager
 container.bind(serviceIds.widgetManager).to(WidgetRegistry).inSingletonScope()
+container.bind(serviceIds.widgetManagerActionService).to(WidgetManagerActionService).inSingletonScope()
 container.bind(serviceIds.widgetRestorerRegistry).to(WidgetRestorerRegistry).inSingletonScope()
 container.bind(serviceIds.elementTreeWidgetPermissionRegistry).to(ElementTreeWidgetPermissionRegistry).inSingletonScope()
 container.bind(serviceIds['WidgetManager/ProcessorRegistry/PerspectiveProcessor']).to(PerspectiveProcessorRegistry).inSingletonScope()
@@ -461,7 +471,9 @@ container.bind(serviceIds['DynamicTypes/FieldFilter/String']).to(DynamicTypeFiel
 container.bind(serviceIds['DynamicTypes/FieldFilter/None']).to(DynamicTypeFieldFilterNone).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Id']).to(DynamicTypeFieldFilterId).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Number']).to(DynamicTypeFieldFilterNumber).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/FileSize']).to(DynamicTypeFieldFilterFileSize).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Multiselect']).to(DynamicTypeFieldFilterMultiselect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/User']).to(DynamicTypeFieldFilterUser).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Date']).to(DynamicTypeFieldFilterDate).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Boolean']).to(DynamicTypeFieldFilterBoolean).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/BooleanSelect']).to(DynamicTypeFieldFilterBooleanSelect).inSingletonScope()
@@ -528,6 +540,12 @@ container.bind(serviceIds['DynamicTypes/GridCell/String']).to(DynamicTypeGridCel
 container.bind(serviceIds['DynamicTypes/GridCell/Integer']).to(DynamicTypeGridCellInteger).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Error']).to(DynamicTypeGridCellError).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/GridCell/Array']).to(DynamicTypeGridCellArray).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/SystemId']).to(DynamicTypeGridCellSystemId).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/SystemString']).to(DynamicTypeGridCellSystemString).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/SystemBoolean']).to(DynamicTypeGridCellSystemBoolean).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/SystemDatetime']).to(DynamicTypeGridCellSystemDatetime).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/SystemInteger']).to(DynamicTypeGridCellSystemInteger).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/GridCell/SystemUser']).to(DynamicTypeGridCellSystemUser).inSingletonScope()
 
 // Advanced grid cell registry
 container.bind(serviceIds['DynamicTypes/AdvancedGridCellRegistry']).to(DynamicTypeGridCellRegistry).inSingletonScope()
@@ -701,6 +719,7 @@ container.bind(serviceIds['DynamicTypes/Grid/Transformers/PHPCode']).to(DynamicT
 
 // Execution engine
 container.bind(serviceIds['ExecutionEngine/JobComponentRegistry']).to(JobComponentRegistry).inSingletonScope()
+container.bind(serviceIds['ExecutionEngine/JobRehydrationRegistry']).to(JobRehydrationRegistry).inSingletonScope()
 container.bind(serviceIds.executionEngine).to(ExecutionEngine).inSingletonScope()
 
 // Background processor
@@ -716,7 +735,6 @@ container.bind(serviceIds['Asset/ThumbnailService']).to(ThumbnailService).inSing
 // Theme system
 container.bind(serviceIds['DynamicTypes/ThemeRegistry']).to(DynamicTypeThemeRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/Theme/StudioDefaultLight']).to(DynamicTypeThemeStudioDefaultLight).inSingletonScope()
-container.bind(serviceIds['DynamicTypes/Theme/StudioDefaultDark']).to(DynamicTypeThemeStudioDefaultDark).inSingletonScope()
 
 // Icon set
 container.bind(serviceIds['DynamicTypes/IconSetRegistry']).to(DynamicTypeIconSetRegistry).inSingletonScope()

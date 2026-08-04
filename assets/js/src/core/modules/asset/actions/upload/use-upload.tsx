@@ -48,7 +48,6 @@ export const useUpload = (): UseUploadHookReturn => {
 
   const zipUpload = (id: string): void => {
     void executionEngine.runJob(new ZipUploadJob({
-      title: t('jobs.zip-upload-job.title'),
       triggerUpload,
       parentFolder: id,
       onJobCompletion: async () => {

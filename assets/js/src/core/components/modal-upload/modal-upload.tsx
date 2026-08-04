@@ -67,6 +67,8 @@ export interface ModalUploadPropsBase {
    * time rather than at render time.
    */
   skipConflictCheck?: boolean | React.RefObject<boolean>
+  /** Set `current` to `false` inside `onSuccess` to suppress the upload success toast. */
+  showSuccessMessage?: React.MutableRefObject<boolean>
 }
 
 interface ModalUploadPropsWithAction extends ModalUploadPropsBase {
@@ -259,7 +261,9 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
 
         setShowProcessing(false)
         if (allFilesDone) {
-          void success(t('asset.upload.files.successfully-uploaded'))
+          if (props.showSuccessMessage?.current !== false) {
+            void success(t('asset.upload.files.successfully-uploaded'))
+          }
           closeModal()
         } else {
           const errorFile = updatedFileList.find(file => file.status === 'error')

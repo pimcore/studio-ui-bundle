@@ -10,6 +10,7 @@
 
 import { useContext } from 'react'
 import { SearchContext } from './search-provider'
+import { type SavedSearchDetailedConfiguration } from '../search-api-slice.gen'
 
 export interface UseSearchReturn {
   activeKey: string
@@ -17,6 +18,12 @@ export interface UseSearchReturn {
   isOpen: boolean
   open: (key?: string) => void
   close: () => void
+  searchTerm: string
+  setSearchTerm: (term: string) => void
+  pendingRestore: SavedSearchDetailedConfiguration | undefined
+  setPendingRestore: (configuration: SavedSearchDetailedConfiguration | undefined) => void
+  loadedSavedSearch: SavedSearchDetailedConfiguration | undefined
+  setLoadedSavedSearch: (configuration: SavedSearchDetailedConfiguration | undefined) => void
 }
 
 export const useSearch = (): UseSearchReturn => {
@@ -35,6 +42,7 @@ export const useSearch = (): UseSearchReturn => {
 
   const close: UseSearchReturn['close'] = () => {
     context.setOpen(false)
+    context.setSearchTerm('')
   }
 
   return {
@@ -42,6 +50,12 @@ export const useSearch = (): UseSearchReturn => {
     setActiveKey: context.setActiveKey,
     isOpen: context.open,
     open,
-    close
+    close,
+    searchTerm: context.searchTerm,
+    setSearchTerm: context.setSearchTerm,
+    pendingRestore: context.pendingRestore,
+    setPendingRestore: context.setPendingRestore,
+    loadedSavedSearch: context.loadedSavedSearch,
+    setLoadedSavedSearch: context.setLoadedSavedSearch
   }
 }

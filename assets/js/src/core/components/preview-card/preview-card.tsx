@@ -20,11 +20,10 @@ import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { Card } from '@Pimcore/components/card/card'
 import { Button } from '@Pimcore/components/button/button'
 import { useStyle } from './preview-card.styles'
+import { SizeTypes } from './preview-card.types'
 
-export enum SizeTypes {
-  SMALL = 'small',
-  MEDIUM = 'medium',
-}
+// SizeTypes lives in a leaf module so it can be consumed without pulling in this component
+export { SizeTypes }
 
 interface PreviewCardProps {
   name: string
@@ -46,12 +45,12 @@ export const PreviewCard = (props: PreviewCardProps): React.JSX.Element => {
       title={ props.name }
     >
       <Card
-        className={ cn(styles.card, { [styles.cardMedium]: size === SizeTypes.MEDIUM }) }
+        className={ cn(styles.card, { [styles.cardLarge]: size === SizeTypes.LARGE }) }
         cover={
-          <div className={ cn(styles.imgContainer, { [styles.imgContainerMedium]: size === SizeTypes.MEDIUM }) }>
+          <div className={ cn(styles.imgContainer, { [styles.imgContainerLarge]: size === SizeTypes.LARGE }) }>
             <IconOrImage
               alt={ props.name }
-              className={ cn(styles.img, { [styles.imgMedium]: size === SizeTypes.MEDIUM }) }
+              className={ cn(styles.img, { [styles.imgLarge]: size === SizeTypes.LARGE }) }
               value={ props.imgSrc! }
             />
           </div>

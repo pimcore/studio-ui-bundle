@@ -8,7 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+/* eslint-disable max-lines */
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { type SelectTheme } from './select'
 import { toCssDimension } from '@sdk/utils'
@@ -27,10 +28,10 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
   return {
     selectContainer: css`
       position: relative;
-      
+
       &:hover {
         .custom-select-icon {
-          color: ${token.colorPrimary};
+          color: ${token.itemActiveColor};
         }
       }
     `,
@@ -135,6 +136,12 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
         padding: 0 ${token.controlPaddingHorizontal}px !important;
       }
 
+      // Honor the small size's horizontal padding (matches the small Input);
+      // without this the !important rule above forces the default 12px on small selects.
+      &.ant-select-sm .ant-select-selector {
+        padding: 0 ${token.controlPaddingHorizontalSM}px !important;
+      }
+
       .ant-select-arrow {
         color: ${token.colorIcon} !important;
       }
@@ -152,11 +159,11 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
 
       &:hover {
         .ant-select-selection-item:not(:has(.pimcore-workflow-place-indicator)) {
-          color: ${token.colorPrimary};
+          color: ${token.itemActiveColor};
         }
 
         .ant-select-arrow {
-          color: ${token.colorPrimary} !important;
+          color: ${token.itemActiveColor} !important;
         }
       }
 
@@ -164,11 +171,30 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
       &.ant-select-multiple {
         &.ant-select {
           .ant-select-selector {
-            padding: 2px ${token.controlPaddingHorizontal}px 2px ${token.paddingXXS}px !important;
+            padding: 1px ${token.controlPaddingHorizontal}px 1px ${token.paddingXXS}px !important;
           }
         }
-        
-        &:hover {
+
+        // The !important padding above skews Ant Design's JS mirror width measurement,
+        // causing the search input to clip typed text. flex: 1 (= flex: 1 1 0%) overrides
+        // the JS-set width via flex-basis precedence and grows to fill the remaining row
+        // space without wrapping to a new line (unlike flex-basis: 100%).
+        .ant-select-selection-overflow-item-suffix {
+          flex: 1 !important;
+        }
+        .ant-select-selection-search {
+          width: 100% !important;
+        }
+        .ant-select-selection-search-input {
+          width: 100% !important;
+        }
+
+        // Tags are pills with their own background — keep their label readable
+        // (colorText) instead of inheriting the brand-purple the general hover /
+        // open / focused rules apply to a single select's selection value.
+        &:hover,
+        &.ant-select-open,
+        &.ant-select-focused {
           .ant-select-selection-item {
             .ant-select-selection-item-content {
               color: ${token.colorText} !important;
@@ -281,6 +307,33 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
         max-width: ${toCssDimension(props.skeletonMaxWidth, '100%')} !important;
         min-width: ${toCssDimension(props.skeletonMinWidth, 'auto')} !important;
         display: block;
+      }
+    `,
+
+    clearOptionWrapper: css`
+      &:has(> button:first-child:hover) .ant-select-item-option-active {
+        background-color: transparent !important;
+      }
+    `,
+
+    clearOption: css`
+      display: flex;
+      align-items: center;
+      gap: ${token.marginXS}px;
+      width: 100%;
+      min-height: ${token.controlHeight}px;
+      padding: ${(token.controlHeight - token.fontSize * token.lineHeight) / 2}px ${token.controlPaddingHorizontal}px;
+      font-size: ${token.fontSize}px;
+      line-height: ${token.lineHeight};
+      color: ${token.colorTextSecondary};
+      cursor: pointer;
+      border: none;
+      border-radius: ${token.borderRadiusSM}px;
+      background: none;
+      transition: background ${token.motionDurationSlow} ease;
+
+      &:hover {
+        background-color: ${token.controlItemBgHover};
       }
     `
   }

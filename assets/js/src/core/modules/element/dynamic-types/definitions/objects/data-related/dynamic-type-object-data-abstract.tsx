@@ -15,6 +15,7 @@ import {
   type IFormattedDataStructureData,
   type IProcessVersionFieldDataProps
 } from '@Pimcore/modules/data-object/editor/shared-tab-manager/tabs/versions/types'
+import { type IExtractLocalizedFieldsProps, type ILocalizedFieldDescriptor } from '@Pimcore/modules/data-object/editor/toolbar/language-comparison-view/helpers/process-layout-data'
 import { type DataComponentProps } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/data-component'
 import { FieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label'
 import { defaultFieldWidthValues, type IFieldWidthContext } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
@@ -88,6 +89,12 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
   supportsBatchAppendModes: boolean = false
   isAllowedInBatchEdit: boolean = true
 
+  // Batch-edit eligibility for a concrete field definition. Defaults to isAllowedInBatchEdit;
+  // overridden where it depends on the field config (e.g. select with a dynamic options provider).
+  isAllowedInBatchEditForField (_fieldDefinition?: Record<string, any>): boolean {
+    return this.isAllowedInBatchEdit
+  }
+
   gridCellEditMode: EditMode = 'default'
   gridCellEditModalSettings: EditModalSettings = {
     modalSize: 'M',
@@ -100,6 +107,11 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
     const { fieldBreadcrumbTitle, item, fieldValueByName, fieldPath, versionId, versionCount } = props
 
     return [{ fieldBreadcrumbTitle, fieldData: item, fieldValue: fieldValueByName, fieldPath, versionId, versionCount }]
+  }
+
+
+  async extractLocalizedFields (_props: IExtractLocalizedFieldsProps): Promise<ILocalizedFieldDescriptor[] | false> {
+    return false
   }
 
   getVersionObjectDataComponent (props: AbstractObjectDataDefinition): ReactElement<AbstractObjectDataDefinition> {
@@ -169,6 +181,24 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
   handleDefaultValue (props: AbstractObjectDataDefinition, form: FormInstance, fieldName: NamePath): void {
     // This method is intentionally left empty - can be implemented in subclasses
   }
+
+  /**
+   * Optional. When defined, controls how an incoming changedValue for this field
+   * type is merged into the already-accumulated modified-attributes map.
+   *
+   * If not implemented, the edit-form provider falls back to replacing the current
+   * value with the incoming one.
+   *
+   * This method is only invoked when the dynamic type's id matches the form key of
+   * the changed value. This is the case for field types that register themselves as
+   * a named form group (e.g. localizedfields uses Form.Group name="localizedfields",
+   * so its form key and type id are both "localizedfields").
+   *
+   * @param current  The value currently accumulated for this field's key.
+   * @param incoming The new partial value arriving from the form's onValuesChange event.
+   * @returns        The value that should be stored for this field's key.
+   */
+  mergeChangedValues?: (current: any, incoming: any) => any
 
   getDefaultGridColumnWidth (props?: AbstractObjectDataDefinition): number | undefined {
     return undefined

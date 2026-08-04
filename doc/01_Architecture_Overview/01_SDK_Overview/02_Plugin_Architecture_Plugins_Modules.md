@@ -40,7 +40,7 @@ onStartup: ({ moduleSystem }): void => {
 }
 ```
 
-For more details on plugins, refer to the [Plugin system source](https://github.com/pimcore/studio-ui-bundle/blob/1.x/assets/js/src/core/app/plugin-system/plugin-system.ts).
+For more details on plugins, refer to the [Plugin system source](https://github.com/pimcore/studio-ui-bundle/blob/2026.x/assets/js/src/core/app/plugin-system/plugin-system.ts).
 
 ---
 
@@ -66,4 +66,4 @@ export const ImageSliderModule: AbstractModule = {
 }
 ```
 
-For more details, refer to the [Module system source](https://github.com/pimcore/studio-ui-bundle/blob/1.x/assets/js/src/core/app/module-system/module-system.ts).
+For more details, refer to the [Module system source](https://github.com/pimcore/studio-ui-bundle/blob/2026.x/assets/js/src/core/app/module-system/module-system.ts).

@@ -18,16 +18,16 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
     // Base container
     editableHtmlDropContent: css`
       position: relative;
-      border: 1px solid ${token.colorBorder};
-      border-radius: ${token.borderRadius}px;
-      background: ${token.colorBgContainer};
+      outline: 1px dashed ${token.colorBorder};
+      border-radius: ${token.borderRadiusLG}px;
+      background: ${token.controlItemBgHover};
       padding: ${token.paddingSM}px;
       min-height: 40px;
       color: ${token.colorTextTertiary};
@@ -79,7 +79,7 @@ export const useStyles = createStyles(({ token, css }) => {
       background: ${token.colorFillInverse};
       border-radius: ${token.borderRadiusSM}px;
       padding: ${token.paddingXXS}px ${token.paddingXS}px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      box-shadow: 0 1px 4px ${token.colorFillTertiary};
     `,
 
     dropZone: css`

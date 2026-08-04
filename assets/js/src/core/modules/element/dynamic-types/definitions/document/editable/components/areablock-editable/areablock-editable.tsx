@@ -57,6 +57,7 @@ export interface AreablockEditableProps {
   className?: string
   editableName: string
   containerRef?: React.RefObject<HTMLDivElement>
+  editableType?: string
   disabled?: boolean
   isInherited?: boolean
   renderTrigger: AreablockRenderTrigger
@@ -69,13 +70,14 @@ export const AreablockEditable = ({
   className,
   editableName,
   containerRef,
+  editableType = 'areablock',
   disabled = false,
   isInherited = false,
   renderTrigger
 }: AreablockEditableProps): React.JSX.Element => {
   const currentValue = isArray(value) ? value : []
 
-  const areablockManager = useMemo(() => new AreablockManager(editableName, containerRef), [editableName, containerRef])
+  const areablockManager = useMemo(() => new AreablockManager(editableName, containerRef, editableType), [editableName, containerRef, editableType])
 
   const areaTypes = useMemo(() => configUtils.getAvailableTypes(config), [config])
 
@@ -109,7 +111,10 @@ export const AreablockEditable = ({
     removeArea,
     moveAreaUp,
     moveAreaDown,
-    moveArea
+    moveArea,
+    copyArea,
+    cutArea,
+    pasteArea
   } = useAreablockEditable({
     areablockManager,
     value: currentValue,
@@ -128,6 +133,9 @@ export const AreablockEditable = ({
     onMoveAreaUp: moveAreaUp,
     onMoveAreaDown: moveAreaDown,
     onMoveArea: moveArea,
+    onCopyArea: copyArea,
+    onCutArea: cutArea,
+    onPasteArea: pasteArea,
     onOpenDialog: handleOpenDialog,
     onToggleHidden: handleToggleHidden,
     isInherited,

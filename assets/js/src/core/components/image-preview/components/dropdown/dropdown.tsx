@@ -10,8 +10,7 @@
 
 import React from 'react'
 import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
-import { Icon } from '@Pimcore/components/icon/icon'
-import { Button } from '@Pimcore/components/button/button'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useStyle } from './dropdown.styles'
 
 export interface ImagePreviewDropdownProps {
@@ -33,17 +32,14 @@ export const ImagePreviewDropdown = (props: ImagePreviewDropdownProps): React.JS
       placement='bottomLeft'
       trigger={ ['click'] }
     >
-      <Button
+      <IconButton
         className={ styles.dotsButton }
-        icon={ <Icon
-          className='dropdown-menu__icon'
-          value="more"
-               /> }
+        icon={ { value: 'more' } }
         onClick={ (e) => {
           e.stopPropagation()
           e.preventDefault()
         } }
-        size="small"
+        type="default"
       />
     </Dropdown>
   )

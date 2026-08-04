@@ -18,6 +18,7 @@ export enum UserPermission {
   Assets = 'assets',
   Thumbnails = 'thumbnails',
   TagsConfiguration = 'tags_configuration',
+  TagsSearch = 'tags_search',
   PredefinedProperties = 'predefined_properties',
   WebsiteSettings = 'website_settings',
   Users = 'users',
@@ -28,6 +29,7 @@ export enum UserPermission {
   ReportsConfig = 'reports_config',
   RecycleBin = 'recyclebin',
   Redirects = 'redirects',
+  RobotsTxt = 'robots.txt',
   ApplicationLogger = 'application_logging',
   PerspectiveEditor = 'studio_perspective_editor',
   WidgetEditor = 'studio_perspective_widget_editor',
@@ -39,5 +41,6 @@ export enum UserPermission {
   ClassificationStore = 'classificationstore',
   SelectOptions = 'selectoptions',
   QuantityValues = 'quantityValueUnits',
-  AssetMetadata = 'asset_metadata'
+  AssetMetadata = 'asset_metadata',
+  ClearCache = 'clear_cache'
 }

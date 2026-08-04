@@ -8,13 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   const themeToken = {
-    highlightBackgroundColor: '#F6FFED',
-    highlightBorderColor: '#B7EB8F',
-    highlightColor: '#52C41A',
+    highlightBackgroundColor: token.colorSuccessBg,
+    highlightBorderColor: token.colorSuccessBorder,
+    highlightColor: token.colorSuccessText,
     signalBackgroundColor: '#E6F4FF',
     signalBorderColor: '#91CAFF',
     signalColor: '#1677FF',
@@ -46,10 +46,10 @@ export const useStyles = createStyles(({ token, css }) => {
         align-items: center;
       }
 
-      .ant-tag-geekblue {
-        background-color: ${token.Colors.Base.Geekblue['2']} !important;
-        color: ${token.Colors.Base.Geekblue['6']} !important;
-        border-color: ${token.Colors.Base.Geekblue['3']} !important;
+      .ant-tag.ant-tag-geekblue {
+        background-color: ${token.geekblue2} !important;
+        color: ${token.geekblue6} !important;
+        border-color: ${token.geekblue3} !important;
       }
     `,
 

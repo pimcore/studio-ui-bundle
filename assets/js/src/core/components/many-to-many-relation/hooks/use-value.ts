@@ -11,7 +11,7 @@
 /* eslint-disable max-lines */
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { find, isNil, isUndefined } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import type { DragAndDropInfo } from '@sdk/components'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
@@ -134,14 +134,21 @@ export const useValue = (
 
     const normalizedSearch = searchTerm.toLowerCase()
     const hasVisibleFields = !isNil(visibleFieldsValue)
+    const visibleFieldsMap = hasVisibleFields
+      ? new Map(
+          (visibleFieldsValue ?? [])
+            .filter((field): field is Record<string, any> => !isUndefined(field) && !isNil(field?.id))
+            .map(field => [field.id, field])
+        )
+      : null
 
     return items
       .map((item, originalIndex): DisplayManyToManyRelationValueItem => ({ ...item, originalIndex }))
       .filter((item: DisplayManyToManyRelationValueItem) => {
         let matched: boolean | undefined = false
 
-        if (hasVisibleFields) {
-          const visibleItem = find(visibleFieldsValue, (visibleField) => visibleField?.id === item.id)
+        if (hasVisibleFields && visibleFieldsMap !== null) {
+          const visibleItem = visibleFieldsMap.get(item.id)
 
           if (!isUndefined(visibleItem)) {
             matched = Object.values(visibleItem).some((val) =>

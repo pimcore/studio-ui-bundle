@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
@@ -16,6 +16,11 @@ export const useStyles = createStyles(({ token, css }) => {
       .ant-space-item {
         display: flex;
         align-items: center;
+        width: fit-content;
+      }
+
+      .ant-space-item:has(.widget-manager__tab-title-close-button) {
+        margin-inline-start: ${token.sizeXXS}px;
       }
     `
   }

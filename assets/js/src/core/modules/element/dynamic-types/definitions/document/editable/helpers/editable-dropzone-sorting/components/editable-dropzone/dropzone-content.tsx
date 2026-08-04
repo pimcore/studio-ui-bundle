@@ -19,7 +19,7 @@ export interface EditableDropzoneContentProps {
   setNodeRef?: (element: HTMLElement | null) => void
 }
 
-export const EditableDropzoneContent = ({ id, index, setNodeRef }: EditableDropzoneContentProps): React.JSX.Element => {
+const EditableDropzoneContentComponent = ({ id, index, setNodeRef }: EditableDropzoneContentProps): React.JSX.Element => {
   const { styles } = useEditableDropzoneStyles()
   const { isDragActive, isOver, isValid } = useDroppable()
 
@@ -40,3 +40,5 @@ export const EditableDropzoneContent = ({ id, index, setNodeRef }: EditableDropz
     />
   )
 }
+
+export const EditableDropzoneContent = React.memo(EditableDropzoneContentComponent)

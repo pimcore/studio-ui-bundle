@@ -35,11 +35,26 @@ const SpecialSettings = ({ localizedView, localizedEdit, layouts, onValuesChange
 
   const [form] = Form.useForm()
 
+  const languageOptions: Array<{ value: string, label: string }> = validLanguages.map((lang: string) => ({
+    value: lang,
+    label: getDisplayName(lang) ?? lang
+  })).sort((a, b) => a.label.localeCompare(b.label))
+
+  const layoutOptions: Array<{ value: string, label: string }> = data?.items.map((layout) => ({
+    value: layout.id,
+    label: layout.name ?? ''
+  })).sort((a, b) => a.label.localeCompare(b.label)) ?? []
+
+  const sortByLabel = (values: string[], options: Array<{ value: string, label: string }>): string[] => {
+    const labelMap = new Map(options.map((o) => [o.value, o.label ?? '']))
+    return [...values].sort((a, b) => (labelMap.get(a) ?? '').localeCompare(labelMap.get(b) ?? ''))
+  }
+
   useEffect(() => {
     form.setFieldsValue({
-      localizedView,
-      localizedEdit,
-      layouts
+      localizedView: sortByLabel(localizedView, languageOptions),
+      localizedEdit: sortByLabel(localizedEdit, languageOptions),
+      layouts: sortByLabel(layouts, layoutOptions)
     })
   }, [])
 
@@ -64,13 +79,11 @@ const SpecialSettings = ({ localizedView, localizedEdit, layouts, onValuesChange
                 <Form.Item
                   label={ t('user-management.workspaces.localized-fields.view') }
                   name="localizedView"
+                  normalize={ (values: string[]) => sortByLabel(values, languageOptions) }
                 >
                   <Select
                     mode="multiple"
-                    options={ validLanguages.map((lang: string) => ({
-                      value: lang,
-                      label: getDisplayName(lang)
-                    })) }
+                    options={ languageOptions }
                     placeholder={ t('user-management.workspaces.localized-fields.view') }
                   ></Select>
                 </Form.Item>
@@ -78,13 +91,11 @@ const SpecialSettings = ({ localizedView, localizedEdit, layouts, onValuesChange
                 <Form.Item
                   label={ t('user-management.workspaces.localized-fields.edit') }
                   name="localizedEdit"
+                  normalize={ (values: string[]) => sortByLabel(values, languageOptions) }
                 >
                   <Select
                     mode="multiple"
-                    options={ validLanguages.map((lang: string) => ({
-                      value: lang,
-                      label: getDisplayName(lang)
-                    })) }
+                    options={ languageOptions }
                     placeholder={ t('user-management.workspaces.localized-fields.edit') }
                   ></Select>
                 </Form.Item>
@@ -105,13 +116,11 @@ const SpecialSettings = ({ localizedView, localizedEdit, layouts, onValuesChange
               children: <Form.Item
                 label={ t('user-management.workspaces.custom-layouts.select') }
                 name="layouts"
+                normalize={ (values: string[]) => sortByLabel(values, layoutOptions) }
                         >
                 <Select
                   mode="multiple"
-                  options={ data?.items.map((layout) => ({
-                    value: layout.id,
-                    label: layout.name
-                  })) }
+                  options={ layoutOptions }
                   placeholder={ t('user-management.workspaces.custom-layouts.select') }
                 ></Select>
               </Form.Item>

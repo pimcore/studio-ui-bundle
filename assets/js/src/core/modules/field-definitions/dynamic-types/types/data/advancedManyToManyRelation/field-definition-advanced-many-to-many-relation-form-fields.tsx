@@ -17,6 +17,7 @@ import { useAssetTypeOptions } from '@Pimcore/modules/field-definitions/dynamic-
 import { useDocumentTypeOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-document-type-options'
 import { relationSelectFormItemTransformation } from '@Pimcore/modules/field-definitions/dynamic-types/utils/relations-helper'
 import { FieldDefinitionAllowedColumnsGrid } from '@Pimcore/modules/field-definitions/dynamic-types/components/field-definition-allowed-columns-grid/field-definition-allowed-columns-grid'
+import { ManyToOneRelationPath } from '@Pimcore/components/many-to-one-relation'
 
 export const FieldDefinitionAdvancedManyToManyRelationFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -118,7 +119,11 @@ export const FieldDefinitionAdvancedManyToManyRelationFormFields = (props: Field
                 label={ t('upload-path') }
                 name="assetUploadPath"
               >
-                <Input />
+                <ManyToOneRelationPath
+                  allowToClearRelation
+                  allowedAssetTypes={ ['folder'] }
+                  assetsAllowed
+                />
               </Form.Item>
             </>
           </Form.Conditional>
@@ -172,11 +177,11 @@ export const FieldDefinitionAdvancedManyToManyRelationFormFields = (props: Field
           <Switch labelRight={ t('allow-to-clear-relation') } />
         </Form.Item>
 
-        <Form.Item
-          name="optimizedAdminLoading"
-          tooltip={ t('enable-async-load-in-admin-tooltip') }
-        >
-          <Switch labelRight={ t('enable-async-load-in-admin') } />
+        <Form.Item name="optimizedAdminLoading">
+          <Switch
+            labelRight={ t('enable-async-load-in-admin') }
+            tooltip={ t('enable-async-load-in-admin-tooltip') }
+          />
         </Form.Item>
       </>
       )}

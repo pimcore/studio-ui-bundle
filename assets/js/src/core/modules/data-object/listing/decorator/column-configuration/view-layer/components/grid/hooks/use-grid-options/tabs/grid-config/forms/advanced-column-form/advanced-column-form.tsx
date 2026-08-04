@@ -22,6 +22,8 @@ import { Box } from '@Pimcore/components/box/box'
 import { usePipelineLayoutContext } from './pipeline-layout-provider'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { useTranslation } from 'react-i18next'
+import { ClassificationStoreFieldPickerProvider } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/classification-store/classification-store-field-picker-provider'
+import { useClassDefinitionSelectionOptional } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 
 export interface AdvancedColumnFormProps {
   column: AvailableColumn
@@ -33,6 +35,7 @@ export const AdvancedColumnForm = ({ column, onChange, showPreview = true }: Adv
   const [form] = Form.useForm()
   const { pipelineLayout } = usePipelineLayoutContext()
   const { t } = useTranslation()
+  const classDefinitionSelection = useClassDefinitionSelectionOptional()
 
   useEffect(() => {
     form.setFieldValue('value', column?.__meta?.advancedColumnConfig ?? {})
@@ -63,58 +66,65 @@ export const AdvancedColumnForm = ({ column, onChange, showPreview = true }: Adv
       layout='vertical'
       onValuesChange={ onValuesChange }
     >
-      <PipelineConfigProvider initialConfig={ column?.config }>
-        <Form.Item name="value">
-          <Pipeline
-            items={ [
-              {
-                id: 'title',
-                component: (
-                  <Pipeline.CustomItem>
-                    <Box padding={ { top: 'mini', bottom: 'mini', x: 'none' } } >
-                      <Form.Item
-                        name="title"
-                      >
-                        <Input placeholder={ t('grid.advanced-column.title.placeholder') } />
-                      </Form.Item>
-                    </Box>
-                  </Pipeline.CustomItem>
-                )
-              },
+      <ClassificationStoreFieldPickerProvider defaultClassId={ classDefinitionSelection?.selectedClassDefinition?.id }>
+        <PipelineConfigProvider initialConfig={ column?.config }>
+          <Form.Item
+            name="value"
+            style={ { marginBottom: 0 } }
+          >
+            <Pipeline
+              items={ [
+                {
+                  id: 'title',
+                  noDivider: true,
+                  component: (
+                    <Pipeline.CustomItem padded={ false }>
+                      <Box padding={ { top: 'mini', bottom: 'mini', x: 'none' } } >
+                        <Form.Item
+                          name="title"
+                        >
+                          <Input placeholder={ t('grid.advanced-column.title.placeholder') } />
+                        </Form.Item>
+                      </Box>
+                    </Pipeline.CustomItem>
+                  )
+                },
 
-              {
-                id: 'fields',
-                component: <Pipeline.CustomItem>
-                  {pipelineLayout === 'default' && (
-                    <Tabs items={ [
-                      {
-                        key: 'advancedColumns',
-                        label: t('grid.advanced-column.advancedColumns'),
-                        forceRender: true,
-                        children: (
-                          <Pipeline.DynamicGroupItem
-                            dynamicTypeRegistryId={ serviceIds['DynamicTypes/Grid/SourceFieldsRegistry'] }
-                            id='advancedColumns'
-                          />
-                        )
-                      },
+                {
+                  id: 'fields',
+                  component: <Pipeline.CustomItem padded={ false }>
+                    {pipelineLayout === 'default' && (
+                    <Tabs
+                      className='tabs--equal-width tabs--no-tab-bar-margin'
+                      items={ [
+                        {
+                          key: 'advancedColumns',
+                          label: t('grid.advanced-column.advancedColumns'),
+                          forceRender: true,
+                          children: (
+                            <Pipeline.DynamicGroupItem
+                              dynamicTypeRegistryId={ serviceIds['DynamicTypes/Grid/SourceFieldsRegistry'] }
+                              id='advancedColumns'
+                            />
+                          )
+                        },
 
-                      {
-                        key: 'transformers',
-                        label: t('grid.advanced-column.transformers'),
-                        forceRender: true,
-                        children: (
-                          <Pipeline.DynamicGroupItem
-                            dynamicTypeRegistryId={ serviceIds['DynamicTypes/Grid/TransformersRegistry'] }
-                            id='transformers'
-                          />
-                        )
-                      }
-                    ] }
+                        {
+                          key: 'transformers',
+                          label: t('grid.advanced-column.transformers'),
+                          forceRender: true,
+                          children: (
+                            <Pipeline.DynamicGroupItem
+                              dynamicTypeRegistryId={ serviceIds['DynamicTypes/Grid/TransformersRegistry'] }
+                              id='transformers'
+                            />
+                          )
+                        }
+                      ] }
                     />
-                  )}
+                    )}
 
-                  {pipelineLayout === 'verbose' && (
+                    {pipelineLayout === 'verbose' && (
                     <SplitLayout
                       leftItem={ {
                         children: (
@@ -140,17 +150,18 @@ export const AdvancedColumnForm = ({ column, onChange, showPreview = true }: Adv
 
                       withDivider
                     />
-                  )}
-                </Pipeline.CustomItem>
-              },
+                    )}
+                  </Pipeline.CustomItem>
+                },
 
-              ...(showPreview
-                ? [{ id: 'Preview', component: <Preview column={ column } /> }]
-                : [])
-            ] }
-          />
-        </Form.Item>
-      </PipelineConfigProvider>
+                ...(showPreview
+                  ? [{ id: 'Preview', component: <Preview column={ column } /> }]
+                  : [])
+              ] }
+            />
+          </Form.Item>
+        </PipelineConfigProvider>
+      </ClassificationStoreFieldPickerProvider>
     </Form>
   )
 }

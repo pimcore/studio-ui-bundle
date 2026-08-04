@@ -24,6 +24,7 @@ import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-co
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { useLocalizedFields } from '../../provider/localized-fields-provider/use-localized-fields'
 
 export interface KeyedFormItemControlProps {
   children: React.ReactNode
@@ -41,15 +42,21 @@ export const FormControlWithElementContext = ({ children, ...props }: KeyedFormI
   const element = useElementContext()
   const elementDraft = useElementDraft(element.id, element.elementType)
   const languageSelection = useLanguageSelection()
+  const localizedContext = useLocalizedFields()
+  const activeLanguage = localizedContext?.locales[0] ?? languageSelection.currentLanguage
 
   if ('permissions' in elementDraft) {
     const permissions: Record<string, any> = elementDraft.permissions as Record<string, any>
     let editableLanguages: string[] = permissions?.localizedEdit?.split(',') ?? []
-    if ((editableLanguages.length === 1 && editableLanguages[0] === 'default') || (editableLanguages.length === 0)) {
+
+    const isEmptyEditableLanguages = editableLanguages.length === 0
+
+    // empty array or 'default' means all languages are editable
+    if ((editableLanguages.length === 1 && editableLanguages[0] === 'default') || isEmptyEditableLanguages) {
       editableLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
     }
 
-    isDisabled = !editableLanguages.includes(languageSelection.currentLanguage)
+    isDisabled = !isEmptyEditableLanguages && !editableLanguages.includes(activeLanguage)
   }
 
   if (!isValidElement(Child)) {
@@ -62,7 +69,7 @@ export const FormControlWithElementContext = ({ children, ...props }: KeyedFormI
     <Component
       { ...Child.props }
       { ...props }
-      disabled={ props.disabled !== true ? isDisabled : false }
+      disabled={ Child.props.disabled === true || (props.disabled !== true ? isDisabled : false) }
     />
-  ), [Child, props])
+  ), [Child, isDisabled, props])
 }

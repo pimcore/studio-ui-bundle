@@ -11,7 +11,7 @@
 import { useTranslation } from 'react-i18next'
 import { Select, type SelectProps } from '../../../select/select'
 import { useFieldCollection } from './field-collection-provider'
-import { useNumberedList } from '../numbered-list/provider/numbered-list/use-numbered-list'
+import { useNumberedListContext } from '../numbered-list/provider/numbered-list/use-numbered-list-value'
 import React from 'react'
 
 export interface FieldCollectionAddControlProps {
@@ -24,7 +24,7 @@ export interface FieldCollectionAddControlProps {
 export const FieldCollectionAddControl = (props: FieldCollectionAddControlProps): React.JSX.Element => {
   const { size = 'small' } = props
   const { registry } = useFieldCollection()
-  const { operations } = useNumberedList()
+  const { operations } = useNumberedListContext()
   const { t } = useTranslation()
 
   const items = registry.getItems()

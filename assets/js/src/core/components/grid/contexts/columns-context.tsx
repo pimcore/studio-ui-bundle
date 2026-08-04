@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { createContext, useContext, useState, type ReactNode, useMemo } from 'react'
+import React, { createContext, useCallback, useContext, useState, type ReactNode, useMemo } from 'react'
 import { type AccessorFnColumnDef } from '@tanstack/react-table'
 import { isUndefined } from 'lodash'
 
@@ -31,13 +31,13 @@ export const ColumnsProvider = ({ children }: IColumnsProviderProps): React.JSX.
   const [columns, setColumns] = useState<Array<AccessorFnColumnDef<unknown, any>>>([])
   const [initialColumns, setInitialColumns] = useState<Array<AccessorFnColumnDef<unknown, any>>>([])
 
-  const resetColumnsToInitial = (): void => {
+  const resetColumnsToInitial = useCallback((): void => {
     setColumns(initialColumns)
-  }
+  }, [initialColumns, setColumns])
 
-  const addColumn = (column: AccessorFnColumnDef<unknown, any>): void => {
-    setColumns([...columns, column])
-  }
+  const addColumn = useCallback((column: AccessorFnColumnDef<unknown, any>): void => {
+    setColumns((prev) => [...prev, column])
+  }, [setColumns])
 
   const contextValue = useMemo(() => ({
     columns,
@@ -46,7 +46,7 @@ export const ColumnsProvider = ({ children }: IColumnsProviderProps): React.JSX.
     setInitialColumns,
     resetColumnsToInitial,
     addColumn
-  }), [columns, setColumns, initialColumns, setInitialColumns])
+  }), [columns, setColumns, initialColumns, setInitialColumns, resetColumnsToInitial, addColumn])
 
   return (
     <ColumnsContext.Provider value={ contextValue }>

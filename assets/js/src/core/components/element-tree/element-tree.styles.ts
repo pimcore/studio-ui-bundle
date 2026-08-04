@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
@@ -50,6 +50,12 @@ export const useStyles = createStyles(({ token, css }) => {
           height: 7px;
           background-color: ${token.colorPrimary};
         }
+      }
+
+      .tree-node > .tree-list,
+      .tree-node > .tree-list__search,
+      .tree-node > .tree-list__pager {
+        padding-left: ${token.paddingMD}px;
       }
 
       .dnd--hotspot-drop-middle-valid .tree-node__content-wrapper-outer {

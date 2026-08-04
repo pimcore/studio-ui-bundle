@@ -38,7 +38,7 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, widt
   const { triggerUpload } = useUploadModal({})
 
   const { open: openElementSelector } = useElementSelector({
-    selectionType: SelectionType.Single,
+    selectionType: SelectionType.Multiple,
     areas: {
       asset: true,
       object: false,
@@ -51,8 +51,11 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, widt
     },
     onFinish: (event) => {
       if (!isEmpty(event.items)) {
+        const newItems: ImageGalleryValueItem[] = event.items.map((item) => (
+          { image: { type: 'asset', id: item.data.id }, hotspots: [], marker: [], crop: {} }
+        ))
         const newValue = [...value]
-        newValue[index] = { image: { type: 'asset', id: event.items[0].data.id }, hotspots: [], marker: [], crop: {} }
+        newValue.splice(index, 1, ...newItems)
         setValue(newValue)
       }
     }
@@ -114,6 +117,7 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, widt
               } }
           onSearch={ openElementSelector }
           onUpload={ handleUpload }
+          removeLabel={ t('image-gallery.delete-frame') }
           title={ t(disabled === true ? 'empty' : 'image.add.and.dnd') }
           width={ width }
         />

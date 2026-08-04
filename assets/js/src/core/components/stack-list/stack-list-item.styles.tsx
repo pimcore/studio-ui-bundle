@@ -8,24 +8,23 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
     stackListItem: css`
       border-radius: 4px;
-      border: 1px solid ${token.colorBorder};
-      background-color: #fff;
+      border: 1px solid ${token.colorBorderSecondary};
+      background-color: ${token.colorBgContainer};
 
       .stack-list-item__title {
         display: flex;
         align-items: center;
-        gap: 2px;
-        padding: 4px;
+        padding: 4px ${token.paddingXS}px 4px 0;
       }
 
       .stack-list-item__body {
-        padding: 0 4px 4px 4px;
+        padding: 0 ${token.paddingXS}px;
         
         .ant-picker {
           width: 100%;
@@ -35,11 +34,15 @@ export const useStyles = createStyles(({ token, css }) => {
       .stack-list-item__content {
         flex: 1;
         min-width: 0; // allows the content to shrink and enables text ellipsis
+
+        .ant-tag {
+          margin-inline-end: 0;
+        }
       }
 
       &.stack-list-item {
         .ant-collapse.ant-collapse-small>.ant-collapse-item>.ant-collapse-header {
-          padding: 0;
+          padding: 0 ${token.paddingXS}px 0 0;
         }
 
         .ant-collapse.collapse-item--theme-card-with-highlight.collapse-item--bordered, .ant-collapse.collapse-item--theme-default.collapse-item--bordered {

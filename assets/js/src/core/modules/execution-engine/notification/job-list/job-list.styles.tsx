@@ -8,10 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createStyles } from 'antd-style'
+import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
+    container: css`
+      max-height: calc(100vh - 110px);
+      overflow-y: auto;
+    `,
     jobList: css`
       &.ant-collapse>.ant-collapse-item >.ant-collapse-header {
         padding: ${token.paddingXXS}px 0;

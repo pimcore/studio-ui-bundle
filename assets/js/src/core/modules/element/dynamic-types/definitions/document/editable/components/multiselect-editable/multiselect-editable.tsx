@@ -10,10 +10,12 @@
 
 import React from 'react'
 import { Select } from '@sdk/components'
-import { InheritanceOverlay } from '../inheritance-overlay/inheritance-overlay'
+import { EditableOverlay } from '../editable-overlay/editable-overlay'
 import { toCssDimension } from '@sdk/utils'
 import { type SelectOptionType } from '@sdk/modules/element'
+import { renderSanitizedLabel } from '../../utils/select-options'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
+import { useTranslation } from 'react-i18next'
 
 interface MultiSelectEditableProps {
   value?: string[] | null
@@ -32,6 +34,7 @@ export const MultiSelectEditable = ({
   onChange,
   inherited
 }: MultiSelectEditableProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const defaultFieldWidth = useFieldWidth()
 
   const handleOverwrite = (): void => {
@@ -44,7 +47,7 @@ export const MultiSelectEditable = ({
   }
 
   return (
-    <InheritanceOverlay
+    <EditableOverlay
       addIconSpacing
       display="block"
       isInherited={ Boolean(inherited) }
@@ -54,14 +57,17 @@ export const MultiSelectEditable = ({
       <Select
         className={ className }
         disabled={ inherited }
+        labelRender={ ({ label }) => renderSanitizedLabel(label) }
         mode="multiple"
         onChange={ onChange }
         optionFilterProp="label"
+        optionRender={ (option) => renderSanitizedLabel(option.label) }
         options={ options }
+        placeholder={ t('multiselect.placeholder') }
         popupMatchSelectWidth={ false }
         style={ containerStyle }
         value={ value }
       />
-    </InheritanceOverlay>
+    </EditableOverlay>
   )
 }

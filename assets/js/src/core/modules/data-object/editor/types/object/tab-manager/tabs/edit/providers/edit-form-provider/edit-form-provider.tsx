@@ -17,9 +17,14 @@ import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useTranslation } from 'react-i18next'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { Form, type formInstanceType } from '@sdk/components'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-registry'
+import { mergeFormChanges } from './utils/merge-form-changes'
 
 interface EditFormContextProps {
   form: formInstanceType
+  setFieldTypeMap: (fieldTypeMap: Map<string, string>) => void
   updateModifiedDataObjectAttributes: (changedValues: Record<string, any>) => void
   resetModifiedDataObjectAttributes: () => void
   updateDraft: () => Promise<void>
@@ -42,6 +47,7 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [form] = Form.useForm()
   const modifiedDataObjectAttributesRef = useRef<Record<string, any>>({})
   const modifiedRef = useRef<boolean>(false)
+  const fieldTypeMapRef = useRef<Map<string, string>>(new Map())
   const { id } = useElementContext()
   const { dataObject, markObjectDataAsModified } = useDataObjectDraft(id)
   const { save, isError } = useSave()
@@ -55,8 +61,13 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   }, [isError])
 
+  const setFieldTypeMap = (fieldTypeMap: Map<string, string>): void => {
+    fieldTypeMapRef.current = fieldTypeMap
+  }
+
   const updateModifiedDataObjectAttributes = (changedValues: Record<string, any>): void => {
-    modifiedDataObjectAttributesRef.current = { ...modifiedDataObjectAttributesRef.current, ...changedValues }
+    const objectDataRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+    modifiedDataObjectAttributesRef.current = mergeFormChanges(modifiedDataObjectAttributesRef.current, changedValues, objectDataRegistry, fieldTypeMapRef.current)
   }
 
   const resetModifiedDataObjectAttributes = (): void => {
@@ -111,6 +122,7 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const value = useMemo(() => ({
     form,
+    setFieldTypeMap,
     updateModifiedDataObjectAttributes,
     resetModifiedDataObjectAttributes,
     updateDraft,

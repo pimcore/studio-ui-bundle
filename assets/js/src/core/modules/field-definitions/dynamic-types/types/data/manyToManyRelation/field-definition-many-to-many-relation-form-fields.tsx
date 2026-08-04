@@ -16,6 +16,7 @@ import { useClassDefinitionOptions } from '@Pimcore/modules/field-definitions/dy
 import { useAssetTypeOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-asset-type-options'
 import { useDocumentTypeOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-document-type-options'
 import { relationSelectFormItemTransformation } from '@Pimcore/modules/field-definitions/dynamic-types/utils/relations-helper'
+import { ManyToOneRelationPath } from '@Pimcore/components/many-to-one-relation'
 
 export const FieldDefinitionManyToManyRelationFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -27,60 +28,49 @@ export const FieldDefinitionManyToManyRelationFormFields = (props: FieldDefiniti
   return (
     <>
 
-      <FormKit.Panel
-        border
-        theme="fieldset"
-        title={ t('layout') }
+      <Form.Item
+        label={ t('width') }
+        name="width"
+        tooltip={ t('width-tooltip') }
       >
-        <Form.Item
-          label={ t('width') }
-          name="width"
-          tooltip={ t('width-tooltip') }
-        >
-          <Input />
-        </Form.Item>
+        <Input />
+      </Form.Item>
 
-        <Form.Item
-          label={ t('height') }
-          name="height"
-          tooltip={ t('height-tooltip') }
-        >
-          <Input />
-        </Form.Item>
-
-        {!isCustomLayout && (
-        <>
-          <Form.Item
-            label={ t('maximum-items') }
-            name="maxItems"
-          >
-            <InputNumber
-              min={ 0 }
-              precision={ 0 }
-            />
-          </Form.Item>
-
-          <Form.Item
-            label={ t('path-formatter-service') }
-            name="pathFormatterClass"
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="allowToClearRelation">
-            <Switch labelRight={ t('allow-to-clear-relation') } />
-          </Form.Item>
-
-          <Form.Item name="enableTextSelection">
-            <Switch labelRight={ t('enable-text-selection') } />
-          </Form.Item>
-        </>
-        )}
-
-      </FormKit.Panel>
+      <Form.Item
+        label={ t('height') }
+        name="height"
+        tooltip={ t('height-tooltip') }
+      >
+        <Input />
+      </Form.Item>
 
       {!isCustomLayout && (
       <>
+        <Form.Item
+          label={ t('maximum-items') }
+          name="maxItems"
+        >
+          <InputNumber
+            min={ 0 }
+            precision={ 0 }
+          />
+        </Form.Item>
+
+        <Form.Item
+          label={ t('path-formatter-service') }
+          name="pathFormatterClass"
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item name="allowToClearRelation">
+          <Switch labelRight={ t('allow-to-clear-relation') } />
+        </Form.Item>
+
+        <Form.Item name="enableTextSelection">
+          <Switch labelRight={ t('enable-text-selection') } />
+        </Form.Item>
+
         <FormKit.Panel
           border
           theme="fieldset"
@@ -137,7 +127,11 @@ export const FieldDefinitionManyToManyRelationFormFields = (props: FieldDefiniti
                 label={ t('upload-path') }
                 name="assetUploadPath"
               >
-                <Input />
+                <ManyToOneRelationPath
+                  allowToClearRelation
+                  allowedAssetTypes={ ['folder'] }
+                  assetsAllowed
+                />
               </Form.Item>
             </>
           </Form.Conditional>

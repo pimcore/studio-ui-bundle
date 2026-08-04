@@ -8,21 +8,43 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo } from 'react'
-import { isEmpty } from 'lodash'
+import React, { type ReactNode, useMemo } from 'react'
+import { isEmpty, isNil } from 'lodash'
 import { AccordionView, type AccordionViewProps } from './accordion-view'
 import { CardView, type CardViewProps } from './card-view'
+import { Icon, type ElementIcon } from '@Pimcore/components/icon/icon'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { isNonEmptyString } from '@sdk/utils'
 import { useTranslation } from 'react-i18next'
 
 export type BaseViewProps = (CardViewProps | AccordionViewProps) & {
   border?: boolean
+  icon?: ElementIcon | null
   extra?: CardViewProps['extra'] | AccordionViewProps['extra']
 }
 
 export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewProps): React.JSX.Element => {
   const isPaddedLayout = props.border === true || props.collapsible === true || !isEmpty(props.title)
   const { t } = useTranslation()
+
+  const wrapWithIcon = (titleNode: ReactNode): ReactNode => {
+    if (isNil(props.icon) || isEmpty(titleNode)) {
+      return titleNode
+    }
+
+    return (
+      <Flex
+        align='center'
+        gap='extra-small'
+      >
+        <Icon
+          type={ props.icon.type }
+          value={ props.icon.value }
+        />
+        {titleNode}
+      </Flex>
+    )
+  }
 
   return useMemo(() => {
     if (!isPaddedLayout) {
@@ -43,7 +65,7 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
           extra={ props.extra }
           style={ props.style }
           theme={ theme }
-          title={ props.title }
+          title={ wrapWithIcon(props.title) }
         >{props.children}</AccordionView>
       )
     }
@@ -56,7 +78,7 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
         extraPosition={ props.extraPosition }
         style={ props.style }
         theme={ theme }
-        title={ isNonEmptyString(props.title) ? t(props.title) : props.title }
+        title={ wrapWithIcon(isNonEmptyString(props.title) ? t(props.title) : props.title) }
       >{props.children}</CardView>
     )
   }, [props, isPaddedLayout])

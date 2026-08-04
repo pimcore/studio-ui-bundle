@@ -21,6 +21,8 @@ import { ElementTreeTooltip } from '@Pimcore/components/element-tree/tooltip/ele
 import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { TreeNodeLockIcon } from '@Pimcore/components/element-tree/node/content/tree-node-lock-icon'
+import { type JobRehydrationRegistry } from '@Pimcore/modules/execution-engine/services/job-rehydration-registry'
+import { DataObjectBatchDeleteJob } from '@Pimcore/modules/execution-engine/jobs/batch-delete/data-object-batch-delete-job'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -42,5 +44,8 @@ moduleSystem.registerModule({
       component: TreeNodeLockIcon,
       priority: 100
     })
+
+    const rehydrationRegistry = container.get<JobRehydrationRegistry>(serviceIds['ExecutionEngine/JobRehydrationRegistry'])
+    rehydrationRegistry.register(DataObjectBatchDeleteJob)
   }
 })

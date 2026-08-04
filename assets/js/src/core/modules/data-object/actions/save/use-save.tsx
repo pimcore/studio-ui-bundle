@@ -24,6 +24,7 @@ import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { type SerializedError } from '@reduxjs/toolkit'
 import { useAppDispatch } from '@sdk/app'
 import { setNodePublished } from '@Pimcore/components/element-tree/element-tree-slice'
+import { setModificationDate } from '@Pimcore/modules/data-object/data-object-draft-slice'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import {
@@ -34,6 +35,7 @@ import {
 import { eventBus } from '@Pimcore/lib/event-bus'
 import { eventTypes } from '@Pimcore/lib/event-bus/event-types'
 import { type PostUpdateEvent } from '../../events/post-update-event'
+import { awaitEditLockPersistAllowed } from '@Pimcore/modules/element/services/edit-lock-gate'
 
 export enum SaveTaskType {
   Version = 'version',
@@ -74,6 +76,11 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
 
   const save = async (editableData: Record<string, any>, task?: SaveTaskType, onFinish?: () => void): Promise<void> => {
     if (dataObject?.changes === undefined) return
+
+    // Hold autosaves until the edit-lock check resolves in the user's favour.
+    if (task === SaveTaskType.AutoSave && !(await awaitEditLockPersistAllowed('data-object', id))) {
+      return
+    }
 
     if (!isNil(runningTaskRef?.current)) {
       if (task === SaveTaskType.AutoSave) {
@@ -139,6 +146,10 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
       if (response.error === undefined) {
         if ('draftData' in response.data) {
           setDraftData(response.data?.draftData ?? null)
+        }
+
+        if ('modificationDate' in response.data) {
+          dispatch(setModificationDate({ id, modificationDate: response.data?.modificationDate ?? null }))
         }
 
         if (task === SaveTaskType.Publish) {

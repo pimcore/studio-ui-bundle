@@ -8,10 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Modal, Upload } from 'antd'
+import { Upload } from 'antd'
 import type { UploadFile } from 'antd/es/upload/interface'
 import React from 'react'
-import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
+import { Modal } from '@Pimcore/components/modal/modal'
 import { useTranslation } from 'react-i18next'
 import UploadList from 'antd/es/upload/UploadList'
 import { Alert } from '@Pimcore/components/alert/alert'
@@ -51,10 +51,9 @@ export const UploadModal = (props: UploadModalProps): React.JSX.Element => {
       closable={ false }
       data-testid="upload-modal"
       footer={ null }
+      iconName='upload-cloud'
       open={ props.open }
-      title={ (
-        <ModalTitle iconName='upload-cloud'>{ t('upload') }</ModalTitle>
-            ) }
+      title={ t('upload') }
     >
 
       {/* Total Progress */}

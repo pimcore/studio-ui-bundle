@@ -8,10 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo } from 'react'
-import { isUndefined } from 'lodash'
+import React, { useEffect, useMemo, useState } from 'react'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
-import { Dropdown, type ItemType, type MenuItemType } from '@Pimcore/components/dropdown/dropdown'
+import { FieldsToAddPanel } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/components/fields-to-add-panel/fields-to-add-panel'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Button } from '@Pimcore/components/button/button'
 import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
@@ -20,8 +19,9 @@ import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { useBatchEdit } from './hooks/use-batch-edit'
 import { BatchEditListContainer } from './batch-edit-list-container'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { Form } from '@Pimcore/components/form/form'
-import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
+import { type AvailableColumn, buildColumnPickerGroups } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useTranslation } from 'react-i18next'
 import { api, useAssetPatchByIdMutation, useAssetPatchFolderByIdMutation } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
@@ -31,7 +31,7 @@ import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-co
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
-import { filterDropdownItems, hasSelectableItems } from './utils/dropdown-filter'
+import { shouldIncludeColumnItem } from './utils/dropdown-filter'
 import { AssetBatchEditJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/asset-batch-edit-job'
 import { AssetFolderBatchEditJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/asset-folder-batch-edit-job'
 import { container } from '@Pimcore/app/depency-injection'
@@ -44,7 +44,7 @@ export interface BatchEditModalProps {
 }
 
 export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: BatchEditModalProps): React.JSX.Element => {
-  const { getAvailableColumnsDropdown } = useAvailableColumns()
+  const { availableColumns } = useAvailableColumns()
   const { batchEdits, addOrUpdateBatchEdit, resetBatchEdits } = useBatchEdit()
   const [form] = Form.useForm()
   const { t } = useTranslation()
@@ -59,6 +59,9 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const { getArgs } = useDataQueryHelper()
   const { hasType } = useDynamicTypeResolver()
   const { refreshGrid } = useRefreshGrid(elementType)
+  const user = useUser()
+  const contentLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
+  const [fieldsToAddOpen, setFieldsToAddOpen] = useState<boolean>(true)
 
   const resetModal = (): void => {
     resetBatchEdits()
@@ -84,11 +87,10 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
     if (isFolderPatchError) {
       trackError(new ApiError(folderPatchError))
     }
-  }, [isError, isFolderPatchSuccess])
+  }, [isError, error, isFolderPatchError, folderPatchError])
 
   const onColumnClick = (column: AvailableColumn): void => {
-    const locale = column.locale ?? null
-    addOrUpdateBatchEdit({ ...column, locale })
+    addOrUpdateBatchEdit(column)
   }
 
   const handleApplyChanges = (): void => {
@@ -99,10 +101,12 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
   const onFormFinish = async (values: any): Promise<void> => {
     const patches = batchEdits.map((batchEdit) => {
+      const data = values[batchEdit.rowId]?.[batchEdit.key]
+
       return {
         name: batchEdit.key,
         language: batchEdit.locale ?? null,
-        data: values[batchEdit.key],
+        data,
         type: batchEdit.type
       }
     })
@@ -113,7 +117,6 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
     if (selectedRowsCount === 0) {
       const job = new AssetFolderBatchEditJob({
-        title: t('batch-edit.job-title'),
         patchAssetsInFolder,
         folderId: id,
         patches,
@@ -135,7 +138,6 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
       })
     } else {
       const job = new AssetBatchEditJob({
-        title: t('batch-edit.job-title'),
         patchAssets,
         selectedRowsIds,
         patches,
@@ -146,19 +148,13 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
     }
   }
 
-  const availableDropdownList = getAvailableColumnsDropdown(onColumnClick).menu.items
-
-  const getFilteredAvailableDropdownList = useMemo(() => (): Array<ItemType<MenuItemType>> => {
-    if (isUndefined(availableDropdownList)) return []
-
-    return filterDropdownItems(
-      availableDropdownList as Array<ItemType<MenuItemType>>,
-      batchEdits,
-      hasType
+  const columnGroups = useMemo(() => {
+    const includableColumns = availableColumns.filter((column) =>
+      shouldIncludeColumnItem({ ...column, mainType: column.type }, batchEdits, hasType, contentLanguages)
     )
-  }, [availableDropdownList, batchEdits, hasType])
 
-  const isEmptyDropdownList = !hasSelectableItems(getFilteredAvailableDropdownList())
+    return buildColumnPickerGroups(includableColumns, t)
+  }, [availableColumns, batchEdits, hasType, contentLanguages])
 
   return (
     <WindowModal
@@ -170,15 +166,14 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
           divider
           justify={ 'space-between' }
         >
-          <Dropdown menu={ { items: getFilteredAvailableDropdownList() } }>
-            <IconTextButton
-              disabled={ isEmptyDropdownList }
-              icon={ { value: 'new' } }
-              type='default'
-            >
-              {t('listing.add-column')}
-            </IconTextButton>
-          </Dropdown>
+          <IconTextButton
+            data-testid="batch-edit-add-column"
+            icon={ { value: 'new' } }
+            onClick={ () => { setFieldsToAddOpen((isOpen) => !isOpen) } }
+            type='default'
+          >
+            {t('listing.add-column')}
+          </IconTextButton>
           {batchEdits.length > 0 &&
             (
               <Flex
@@ -209,15 +204,31 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         resetModal()
       } }
       open={ batchEditModalOpen }
-      size="M"
+      size="XL"
       title={ <ModalTitle>{t('batch-edit.modal-title')}</ModalTitle> }
     >
-      <Form
-        form={ form }
-        onFinish={ onFormFinish }
+      <Flex
+        className='w-full'
+        gap='small'
       >
-        <BatchEditListContainer />
-      </Form>
+        { fieldsToAddOpen && (
+          <FieldsToAddPanel
+            data-testid="batch-edit-fields-to-add"
+            groups={ columnGroups }
+            onClose={ () => { setFieldsToAddOpen(false) } }
+            onColumnSelect={ onColumnClick }
+          />
+        ) }
+
+        <div style={ { flex: 1, minWidth: 0 } }>
+          <Form
+            form={ form }
+            onFinish={ onFormFinish }
+          >
+            <BatchEditListContainer />
+          </Form>
+        </div>
+      </Flex>
     </WindowModal>
   )
 }

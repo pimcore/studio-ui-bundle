@@ -67,7 +67,12 @@ const injectedRtkApi = api
                 ClassDefinitionCollectionCreatableApiResponse,
                 ClassDefinitionCollectionCreatableApiArg
             >({
-                query: () => ({ url: `/pimcore-studio/api/class/collection/creatable` }),
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/collection/creatable`,
+                    params: {
+                        widgetId: queryArg.widgetId,
+                    },
+                }),
                 providesTags: ["Class Definition"],
             }),
             classCustomLayoutCollection: build.query<
@@ -144,6 +149,15 @@ const injectedRtkApi = api
                     body: queryArg.body,
                 }),
                 invalidatesTags: ["Class Definition"],
+            }),
+            classDefinitionGetBrickFields: build.query<
+                ClassDefinitionGetBrickFieldsApiResponse,
+                ClassDefinitionGetBrickFieldsApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/class/definition/configuration-view/detail/${queryArg.id}/brick-fields`,
+                }),
+                providesTags: ["Class Definition"],
             }),
             classDefinitionGetBricksUsages: build.query<
                 ClassDefinitionGetBricksUsagesApiResponse,
@@ -593,7 +607,10 @@ export type ClassDefinitionCollectionCreatableApiResponse =
         totalItems: number;
         items: ClassDefinitionListItem[];
     };
-export type ClassDefinitionCollectionCreatableApiArg = void;
+export type ClassDefinitionCollectionCreatableApiArg = {
+    /** Optional element tree widget ID to filter classes by the widget's allowed classes configuration */
+    widgetId?: string;
+};
 export type ClassCustomLayoutCollectionApiResponse =
     /** status 200 List of custom layouts for the given data object class in a simple and compact format for listings.
      */ {
@@ -660,6 +677,13 @@ export type ClassCustomLayoutImportApiArg = {
         /** Import file to upload */
         file: Blob;
     };
+};
+export type ClassDefinitionGetBrickFieldsApiResponse = /** status 200 List of object brick field names */ {
+    items: ClassDefinitionObjectBrickField[];
+};
+export type ClassDefinitionGetBrickFieldsApiArg = {
+    /** Class definition unique identifier */
+    id: string;
 };
 export type ClassDefinitionGetBricksUsagesApiResponse = /** status 200 Object bricks usage data */ {
     items: ClassDefinitionObjectBrickData[];
@@ -1102,6 +1126,23 @@ export type ClassLayoutDataInCompactFormatToBeUsedForEGListingInWorkspaces = {
     /** Whether it is the default layout */
     type: string;
 };
+export type PreviewConfigEntry = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Parameter name */
+    name: string;
+    /** Display label */
+    label: string;
+    /** Available values as key-value pairs */
+    values: {
+        key?: string;
+        value?: string;
+    }[];
+    /** Default selected value */
+    defaultValue: string;
+};
 export type Layout = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -1143,6 +1184,8 @@ export type Layout = {
     labelWidth: number;
     /** Border */
     border: boolean;
+    /** Preview configuration for locale/site selectors */
+    previewConfig?: PreviewConfigEntry[] | null;
 };
 export type CustomLayouts = {
     /** AdditionalAttributes */
@@ -1160,7 +1203,7 @@ export type CustomLayouts = {
     /** Modification date timestamp */
     modificationDate: number;
     /** User id of owner */
-    userOwner: number;
+    userOwner: number | null;
     /** Class id */
     classId: string;
     /** Whether it is the default layout */
@@ -1191,6 +1234,14 @@ export type CustomLayoutIdentifierData = {
     existingIds: string[];
     /** Array of existing custom layout names */
     existingNames: string[];
+};
+export type ClassDefinitionObjectBrickField = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Name of the class definition field of type object brick */
+    fieldName: string;
 };
 export type ClassDefinitionObjectBrickData = {
     /** AdditionalAttributes */
@@ -1226,7 +1277,7 @@ export type ClassDefinition = {
     /** Modification date timestamp */
     modificationDate: number | null;
     /** User id of owner */
-    userOwner: number;
+    userOwner: number | null;
     /** Namespace of parent class */
     parentClass: string;
     /** Interface implementations */
@@ -1716,6 +1767,7 @@ export const {
     useClassCustomLayoutExportQuery,
     useClassCustomLayoutGetIdentifierDataQuery,
     useClassCustomLayoutImportMutation,
+    useClassDefinitionGetBrickFieldsQuery,
     useClassDefinitionGetBricksUsagesQuery,
     useClassDefinitionCreateMutation,
     useClassDefinitionGetByIdQuery,
