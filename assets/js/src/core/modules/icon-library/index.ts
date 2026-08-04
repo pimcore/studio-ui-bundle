@@ -371,6 +371,7 @@ import textInput from '@Pimcore/assets/icons/text-input.inline.svg?react'
 import thumbnailHtml from '@Pimcore/assets/icons/thumbnail-html.inline.svg?react'
 import time from '@Pimcore/assets/icons/time.inline.svg?react'
 import transfer from '@Pimcore/assets/icons/transfer.inline.svg?react'
+import transformation from '@Pimcore/assets/icons/transformation.inline.svg?react'
 import transformers from '@Pimcore/assets/icons/transformers.inline.svg?react'
 import translate from '@Pimcore/assets/icons/translate.inline.svg?react'
 import translations from '@Pimcore/assets/icons/translations.inline.svg?react'
@@ -1831,6 +1832,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'transfer',
       component: transfer
+    })
+    iconLibrary.register({
+      name: 'transformation',
+      component: transformation
     })
     iconLibrary.register({
       name: 'transformers',

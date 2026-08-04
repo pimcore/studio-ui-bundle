@@ -531,6 +531,7 @@ classname: Nombre de clase
 index: Índice
 userModification: Modificado por
 userOwner: Propietario
+listing.grid-config.convert-to-advanced: Convertir en columna avanzada
 listing.grid-config.title: Configuración de cuadrícula
 grid-config.discard-all-changes: Descartar todos los cambios
 grid-config.apply-changes: Aplicar cambios

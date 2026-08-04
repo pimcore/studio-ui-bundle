@@ -531,6 +531,7 @@ classname: Nome classe
 index: Indice
 userModification: Utente modifica
 userOwner: Utente proprietario
+listing.grid-config.convert-to-advanced: Converti in colonna avanzata
 listing.grid-config.title: Configurazione griglia
 grid-config.discard-all-changes: Annulla tutte le modifiche
 grid-config.apply-changes: Applica modifiche

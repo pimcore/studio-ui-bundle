@@ -531,6 +531,7 @@ classname: Klassenavn
 index: Indeks
 userModification: Endret av (bruker)
 userOwner: Eier (bruker)
+listing.grid-config.convert-to-advanced: Konverter til avansert kolonne
 listing.grid-config.title: Rutenettskonfigurasjon
 grid-config.discard-all-changes: Forkast alle endringer
 grid-config.apply-changes: Bruk endringer

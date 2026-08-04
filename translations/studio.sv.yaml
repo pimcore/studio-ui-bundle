@@ -531,6 +531,7 @@ classname: Klassnamn
 index: Index
 userModification: Ändrad av
 userOwner: Ägare
+listing.grid-config.convert-to-advanced: Konvertera till avancerad kolumn
 listing.grid-config.title: Rutnätskonfiguration
 grid-config.discard-all-changes: Förkasta alla ändringar
 grid-config.apply-changes: Tillämpa ändringar
