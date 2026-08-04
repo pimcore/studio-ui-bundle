@@ -2397,6 +2397,7 @@ perspective-editor.form.main-nav-permission.system.cache_clearSymfony: Cache > R
 perspective-editor.form.main-nav-permission.system.cache_clearTemp: Cache > Rensa temporära filer
 perspective-editor.form.main-nav-permission.system.cache_hidden: Dölj cachemenyn
 perspective-editor.form.main-nav-permission.system.systemSettings: Systeminställningar
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Ägarskapshantering
 perspective-editor.form.main-nav-permission.system.about: Om
 perspective-editor.form.main-nav-permission.category.reporting: Rapportering
 perspective-editor.form.main-nav-permission.reporting.hidden: Dölj rapporteringsmenyn
@@ -2843,4 +2844,3 @@ saved-search.update.success: Sparad sökning uppdaterad
 saved-search.delete.success: Sparad sökning borttagen
 saved-search.shared-modified.info: Du har gjort ändringar i den ursprungliga konfigurationen. Eftersom den ägs av någon annan kan du spara den som en ny sökning.
 saved-search.menu-shortcut-group: Menygrupp
-perspective-editor.form.main-nav-permission.system.ownershipManagement: Ägarskapshantering
