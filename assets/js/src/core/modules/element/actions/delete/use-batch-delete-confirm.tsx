@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { useAppDispatch } from '@Pimcore/app/store'
-import trackError, { ApiError, isApiErrorData } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useStyles } from './use-batch-delete-confirm.styles'
@@ -31,7 +31,7 @@ export interface UseBatchDeleteConfirmReturn {
 
 interface BatchDeleteInfo {
   isPermanent: boolean
-  hasDependencies: boolean | null
+  hasDependencies: boolean
 }
 
 export const useBatchDeleteConfirm = (): UseBatchDeleteConfirmReturn => {
@@ -46,20 +46,21 @@ export const useBatchDeleteConfirm = (): UseBatchDeleteConfirmReturn => {
   // aggregates it over all selected ids in a single request: canUseRecycleBin is false as
   // soon as one item would be deleted permanently, hasDependencies is true as soon as one
   // item has children or is referenced by other elements.
-  const fetchBatchDeleteInfo = async (elementType: ElementType, itemIds: number[]): Promise<BatchDeleteInfo> => {
+  const fetchBatchDeleteInfo = async (elementType: ElementType, itemIds: number[]): Promise<BatchDeleteInfo | null> => {
     const request = dispatch(elementApi.endpoints.elementBatchDeleteInfo.initiate({ elementType, body: { ids: itemIds } }))
 
     try {
-      const data = await request.unwrap()
+      const response = await request
+
+      if ('error' in response) {
+        trackError(new ApiError(response.error))
+        return null
+      }
+
       return {
-        isPermanent: !data.canUseRecycleBin,
-        hasDependencies: data.hasDependencies
+        isPermanent: !response.data.canUseRecycleBin,
+        hasDependencies: response.data.hasDependencies
       }
-    } catch (error) {
-      if (isApiErrorData(error)) {
-        trackError(new ApiError(error))
-      }
-      return { isPermanent: false, hasDependencies: null }
     } finally {
       request.reset()
     }
@@ -81,10 +82,8 @@ export const useBatchDeleteConfirm = (): UseBatchDeleteConfirmReturn => {
         parts.push(t('element.delete.batch.note'))
       }
 
-      if (info.hasDependencies === true) {
+      if (info.hasDependencies) {
         parts.push(t('element.delete.batch.dependencies-warning.confirmed'))
-      } else if (info.hasDependencies === null) {
-        parts.push(t('element.delete.batch.dependencies-warning'))
       }
 
       return parts.length === 0 ? null : parts.join(' ')
@@ -116,6 +115,11 @@ export const useBatchDeleteConfirm = (): UseBatchDeleteConfirmReturn => {
     })
 
     const info = await fetchBatchDeleteInfo(elementType, itemIds)
+
+    if (info === null) {
+      confirmModal.destroy()
+      return
+    }
 
     // antd's hook modal ignores the function form of ConfigUpdate - update with a plain object only
     confirmModal.update({
