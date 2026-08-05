@@ -14,13 +14,14 @@ import { FieldContainer, type FieldContainerProps } from './field-container'
 
 // The real Flex and Form barrels transitively import antd-style (untranspiled
 // ESM), which jest cannot load — same reason as keyed-list.test.tsx. Both are
-// replaced by plain elements that keep the props asserted on here: the outer
-// container is the one without a `flex` prop, the child wrappers carry flex={1}.
+// replaced by plain elements that keep the props asserted on here. Only
+// flex === 1 counts as a child wrapper, so changing the children's flex value
+// makes these tests fail instead of silently passing.
 jest.mock('@Pimcore/components/flex/flex', () => ({
   Flex: ({ children, className, flex, style, vertical }: any) => (
     <div
       className={ className }
-      data-testid={ flex === undefined ? 'container' : 'child' }
+      data-testid={ flex === 1 ? 'child' : 'container' }
       data-vertical={ vertical === true ? 'true' : 'false' }
       style={ style }
     >
@@ -110,6 +111,9 @@ describe('FieldContainer', () => {
     expect(container.classList.contains('w-full')).toBe(true)
   })
 
+  // The children keep flex: 1 — only the container itself gained a width, and
+  // the mock only counts flex === 1 as a child, so a changed flex value here
+  // leaves no element tagged as a child.
   it('still distributes its children evenly and honours the vbox layout', () => {
     renderContainer({ layout: 'vbox', width: 400 })
 

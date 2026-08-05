@@ -39,7 +39,7 @@ export const FieldContainer = ({ children, collapsible, collapsed, noteditable, 
   const content = (
     <SuppressEmptyFieldLabelProvider>
       <Flex
-        className={ cssWidth === undefined ? 'w-full' : undefined }
+        className={ isNonEmptyString(cssWidth) ? undefined : 'w-full' }
         gap={ { x: 'extra-small', y: 0 } }
         style={ { height: cssHeight, width: cssWidth } }
         vertical={ vertical }
