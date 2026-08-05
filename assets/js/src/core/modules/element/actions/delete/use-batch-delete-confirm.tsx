@@ -9,6 +9,7 @@
  */
 
 import React from 'react'
+import { isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
@@ -53,7 +54,9 @@ export const useBatchDeleteConfirm = (): UseBatchDeleteConfirmReturn => {
       const response = await request
 
       if ('error' in response) {
-        trackError(new ApiError(response.error))
+        if (!isUndefined(response.error)) {
+          trackError(new ApiError(response.error))
+        }
         return null
       }
 
