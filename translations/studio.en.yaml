@@ -1200,14 +1200,17 @@ element.delete.folder.large.note: 'Please note: The folder and its children will
 element.delete.folder.ok: Delete
 element.delete.folder.ok.permanent: Delete permanently
 element.delete.batch.title: Delete items
-element.delete.batch.note.permanent: 'Please note: These items will be deleted permanently. They can not be restored. Delete anyway?'
-element.delete.batch.note.permanent-dependencies: 'Please note: These items have dependencies and will be deleted permanently. They can not be restored. Delete anyway?'
+element.delete.batch.note_one: 'Please note: This item will be deleted permanently and can not be restored.'
+element.delete.batch.note_other: 'Please note: These items will be deleted permanently and can not be restored.'
+element.delete.batch.note.permanent-dependencies_one: "Please note: This item has dependencies and will be deleted permanently.\nIt can not be restored."
+element.delete.batch.note.permanent-dependencies_other: "Please note: These items have dependencies and will be deleted permanently.\nThey can not be restored."
 element.delete.batch.question_one: 'Do you really want to delete this item?'
 element.delete.batch.question_other: 'Do you really want to delete these {{count}} items?'
 element.delete.batch.ok: Delete
 element.delete.batch.ok.permanent: Delete permanently
 element.delete.batch.show-paths: Show items
-element.delete.batch.dependencies-warning.confirmed: 'These items have dependencies, delete anyway?'
+element.delete.batch.dependencies-warning.confirmed_one: 'Please note: This item has dependencies.'
+element.delete.batch.dependencies-warning.confirmed_other: 'Please note: These items have dependencies.'
 element.open: Open
 element.toolbar.copy-id: Copy ID
 element.toolbar.copy-full-path-to-clipboard: Copy Full Path

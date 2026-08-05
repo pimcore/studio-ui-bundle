@@ -1193,14 +1193,17 @@ element.delete.folder.large.note: 'Attenzione: La cartella e il suo contenuto ve
 element.delete.folder.ok: Elimina
 element.delete.folder.ok.permanent: Elimina definitivamente
 element.delete.batch.title: Elimina elementi
-element.delete.batch.note.permanent: 'Nota: Questi elementi verranno eliminati definitivamente. Non potranno essere ripristinati. Eliminare comunque?'
-element.delete.batch.note.permanent-dependencies: 'Nota: Questi elementi hanno dipendenze e verranno eliminati definitivamente. Non potranno essere ripristinati. Eliminare comunque?'
+element.delete.batch.note_one: 'Nota: Questo elemento verrà eliminato definitivamente e non potrà essere ripristinato.'
+element.delete.batch.note_other: 'Nota: Questi elementi verranno eliminati definitivamente e non potranno essere ripristinati.'
+element.delete.batch.note.permanent-dependencies_one: "Nota: Questo elemento ha dipendenze e verrà eliminato definitivamente.\nNon potrà essere ripristinato."
+element.delete.batch.note.permanent-dependencies_other: "Nota: Questi elementi hanno dipendenze e verranno eliminati definitivamente.\nNon potranno essere ripristinati."
 element.delete.batch.question_one: 'Vuoi davvero eliminare questo elemento?'
 element.delete.batch.question_other: 'Vuoi davvero eliminare questi {{count}} elementi?'
 element.delete.batch.ok: Elimina
 element.delete.batch.ok.permanent: Elimina definitivamente
 element.delete.batch.show-paths: Mostra elementi
-element.delete.batch.dependencies-warning.confirmed: 'Questi elementi hanno dipendenze, eliminare comunque?'
+element.delete.batch.dependencies-warning.confirmed_one: 'Nota: Questo elemento ha dipendenze.'
+element.delete.batch.dependencies-warning.confirmed_other: 'Nota: Questi elementi hanno dipendenze.'
 element.open: Apri
 element.toolbar.copy-id: Copia ID
 element.toolbar.copy-full-path-to-clipboard: Copia percorso completo

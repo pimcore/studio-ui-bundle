@@ -70,17 +70,17 @@ export const useBatchDeleteConfirm = (): UseBatchDeleteConfirmReturn => {
   }
 
   // One complete sentence per state - composing fragments does not translate cleanly
-  const getWarningText = (info: BatchDeleteInfo): string | null => {
+  const getWarningText = (info: BatchDeleteInfo, count: number): string | null => {
     if (info.isPermanent && info.hasDependencies) {
-      return t('element.delete.batch.note.permanent-dependencies')
+      return t('element.delete.batch.note.permanent-dependencies', { count })
     }
 
     if (info.isPermanent) {
-      return t('element.delete.batch.note.permanent')
+      return t('element.delete.batch.note', { count })
     }
 
     if (info.hasDependencies) {
-      return t('element.delete.batch.dependencies-warning.confirmed')
+      return t('element.delete.batch.dependencies-warning.confirmed', { count })
     }
 
     return null
@@ -100,7 +100,7 @@ export const useBatchDeleteConfirm = (): UseBatchDeleteConfirmReturn => {
         {paths.map((path) => <li key={ path }>{path}</li>)}
       </ul>
     )
-    const warningText = getWarningText(info)
+    const warningText = getWarningText(info, count)
 
     modal.confirm({
       title: t('element.delete.batch.title'),

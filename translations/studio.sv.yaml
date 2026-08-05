@@ -1193,14 +1193,17 @@ element.delete.folder.large.note: 'Observera: Mappen och dess innehåll kommer a
 element.delete.folder.ok: Ta bort
 element.delete.folder.ok.permanent: Ta bort permanent
 element.delete.batch.title: Ta bort element
-element.delete.batch.note.permanent: 'Obs: Dessa element kommer att tas bort permanent. De kan inte återställas. Ta bort ändå?'
-element.delete.batch.note.permanent-dependencies: 'Obs: Dessa element har beroenden och kommer att tas bort permanent. De kan inte återställas. Ta bort ändå?'
+element.delete.batch.note_one: 'Obs: Detta element kommer att tas bort permanent och kan inte återställas.'
+element.delete.batch.note_other: 'Obs: Dessa element kommer att tas bort permanent och kan inte återställas.'
+element.delete.batch.note.permanent-dependencies_one: "Obs: Detta element har beroenden och kommer att tas bort permanent.\nDet kan inte återställas."
+element.delete.batch.note.permanent-dependencies_other: "Obs: Dessa element har beroenden och kommer att tas bort permanent.\nDe kan inte återställas."
 element.delete.batch.question_one: 'Vill du verkligen ta bort det här elementet?'
 element.delete.batch.question_other: 'Vill du verkligen ta bort dessa {{count}} element?'
 element.delete.batch.ok: Ta bort
 element.delete.batch.ok.permanent: Ta bort permanent
 element.delete.batch.show-paths: Visa element
-element.delete.batch.dependencies-warning.confirmed: 'Dessa element har beroenden, ta bort ändå?'
+element.delete.batch.dependencies-warning.confirmed_one: 'Obs: Detta element har beroenden.'
+element.delete.batch.dependencies-warning.confirmed_other: 'Obs: Dessa element har beroenden.'
 element.open: Öppna
 element.toolbar.copy-id: Kopiera ID
 element.toolbar.copy-full-path-to-clipboard: Kopiera fullständig sökväg

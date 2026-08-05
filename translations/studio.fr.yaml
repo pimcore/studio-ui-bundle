@@ -1193,14 +1193,17 @@ element.delete.folder.large.note: 'Remarque : Le dossier et son contenu seront d
 element.delete.folder.ok: Supprimer
 element.delete.folder.ok.permanent: Supprimer définitivement
 element.delete.batch.title: Supprimer des éléments
-element.delete.batch.note.permanent: 'Remarque : Ces éléments seront supprimés définitivement. Ils ne pourront pas être restaurés. Supprimer quand même ?'
-element.delete.batch.note.permanent-dependencies: 'Remarque : Ces éléments ont des dépendances et seront supprimés définitivement. Ils ne pourront pas être restaurés. Supprimer quand même ?'
+element.delete.batch.note_one: 'Remarque : Cet élément sera supprimé définitivement et ne pourra pas être restauré.'
+element.delete.batch.note_other: 'Remarque : Ces éléments seront supprimés définitivement et ne pourront pas être restaurés.'
+element.delete.batch.note.permanent-dependencies_one: "Remarque : Cet élément a des dépendances et sera supprimé définitivement.\nIl ne pourra pas être restauré."
+element.delete.batch.note.permanent-dependencies_other: "Remarque : Ces éléments ont des dépendances et seront supprimés définitivement.\nIls ne pourront pas être restaurés."
 element.delete.batch.question_one: 'Voulez-vous vraiment supprimer cet élément ?'
 element.delete.batch.question_other: 'Voulez-vous vraiment supprimer ces {{count}} éléments ?'
 element.delete.batch.ok: Supprimer
 element.delete.batch.ok.permanent: Supprimer définitivement
 element.delete.batch.show-paths: Afficher les éléments
-element.delete.batch.dependencies-warning.confirmed: 'Ces éléments ont des dépendances, supprimer quand même ?'
+element.delete.batch.dependencies-warning.confirmed_one: 'Remarque : Cet élément a des dépendances.'
+element.delete.batch.dependencies-warning.confirmed_other: 'Remarque : Ces éléments ont des dépendances.'
 element.open: Ouvrir
 element.toolbar.copy-id: Copier l'ID
 element.toolbar.copy-full-path-to-clipboard: Copier le chemin complet

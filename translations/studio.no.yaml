@@ -1193,14 +1193,17 @@ element.delete.folder.large.note: 'Merk: Mappen og dens innhold vil bli permanen
 element.delete.folder.ok: Slett
 element.delete.folder.ok.permanent: Slett permanent
 element.delete.batch.title: Slett elementer
-element.delete.batch.note.permanent: 'Merk: Disse elementene vil bli slettet permanent. De kan ikke gjenopprettes. Slett likevel?'
-element.delete.batch.note.permanent-dependencies: 'Merk: Disse elementene har avhengigheter og vil bli slettet permanent. De kan ikke gjenopprettes. Slett likevel?'
+element.delete.batch.note_one: 'Merk: Dette elementet vil bli slettet permanent og kan ikke gjenopprettes.'
+element.delete.batch.note_other: 'Merk: Disse elementene vil bli slettet permanent og kan ikke gjenopprettes.'
+element.delete.batch.note.permanent-dependencies_one: "Merk: Dette elementet har avhengigheter og vil bli slettet permanent.\nDet kan ikke gjenopprettes."
+element.delete.batch.note.permanent-dependencies_other: "Merk: Disse elementene har avhengigheter og vil bli slettet permanent.\nDe kan ikke gjenopprettes."
 element.delete.batch.question_one: 'Vil du virkelig slette dette elementet?'
 element.delete.batch.question_other: 'Vil du virkelig slette disse {{count}} elementene?'
 element.delete.batch.ok: Slett
 element.delete.batch.ok.permanent: Slett permanent
 element.delete.batch.show-paths: Vis elementer
-element.delete.batch.dependencies-warning.confirmed: 'Disse elementene har avhengigheter, slett likevel?'
+element.delete.batch.dependencies-warning.confirmed_one: 'Merk: Dette elementet har avhengigheter.'
+element.delete.batch.dependencies-warning.confirmed_other: 'Merk: Disse elementene har avhengigheter.'
 element.open: Åpne
 element.toolbar.copy-id: Kopier ID
 element.toolbar.copy-full-path-to-clipboard: Kopier full sti
