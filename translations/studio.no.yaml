@@ -1193,7 +1193,8 @@ element.delete.folder.large.note: 'Merk: Mappen og dens innhold vil bli permanen
 element.delete.folder.ok: Slett
 element.delete.folder.ok.permanent: Slett permanent
 element.delete.batch.title: Slett elementer
-element.delete.batch.note: 'Merk: Disse elementene vil bli slettet permanent og kan ikke gjenopprettes.'
+element.delete.batch.note.permanent: 'Merk: Disse elementene vil bli slettet permanent. De kan ikke gjenopprettes. Slett likevel?'
+element.delete.batch.note.permanent-dependencies: 'Merk: Disse elementene har avhengigheter og vil bli slettet permanent. De kan ikke gjenopprettes. Slett likevel?'
 element.delete.batch.question_one: 'Vil du virkelig slette dette elementet?'
 element.delete.batch.question_other: 'Vil du virkelig slette disse {{count}} elementene?'
 element.delete.batch.ok: Slett

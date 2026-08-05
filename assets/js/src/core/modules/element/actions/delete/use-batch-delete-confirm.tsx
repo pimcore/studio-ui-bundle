@@ -69,18 +69,21 @@ export const useBatchDeleteConfirm = (): UseBatchDeleteConfirmReturn => {
     }
   }
 
+  // One complete sentence per state - composing fragments does not translate cleanly
   const getWarningText = (info: BatchDeleteInfo): string | null => {
-    const parts: string[] = []
+    if (info.isPermanent && info.hasDependencies) {
+      return t('element.delete.batch.note.permanent-dependencies')
+    }
 
     if (info.isPermanent) {
-      parts.push(t('element.delete.batch.note'))
+      return t('element.delete.batch.note.permanent')
     }
 
     if (info.hasDependencies) {
-      parts.push(t('element.delete.batch.dependencies-warning.confirmed'))
+      return t('element.delete.batch.dependencies-warning.confirmed')
     }
 
-    return parts.length === 0 ? null : parts.join(' ')
+    return null
   }
 
   const confirmBatchDelete = async ({ elementType, itemIds, selectedRowsData, onOk }: ConfirmBatchDeleteParams): Promise<void> => {

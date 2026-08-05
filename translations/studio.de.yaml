@@ -1193,7 +1193,8 @@ element.delete.folder.large.note: 'Bitte beachten: Der Ordner und seine Inhalte 
 element.delete.folder.ok: Löschen
 element.delete.folder.ok.permanent: Endgültig löschen
 element.delete.batch.title: Elemente löschen
-element.delete.batch.note: 'Bitte beachten: Diese Elemente werden dauerhaft gelöscht und können nicht wiederhergestellt werden.'
+element.delete.batch.note.permanent: 'Bitte beachten: Diese Elemente werden dauerhaft gelöscht. Sie können nicht wiederhergestellt werden. Trotzdem löschen?'
+element.delete.batch.note.permanent-dependencies: 'Bitte beachten: Diese Elemente haben Abhängigkeiten und werden dauerhaft gelöscht. Sie können nicht wiederhergestellt werden. Trotzdem löschen?'
 element.delete.batch.question_one: 'Möchten Sie dieses Element wirklich löschen?'
 element.delete.batch.question_other: 'Möchten Sie wirklich diese {{count}} Elemente löschen?'
 element.delete.batch.ok: Löschen

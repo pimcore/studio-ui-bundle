@@ -1193,7 +1193,8 @@ element.delete.folder.large.note: 'Attenzione: La cartella e il suo contenuto ve
 element.delete.folder.ok: Elimina
 element.delete.folder.ok.permanent: Elimina definitivamente
 element.delete.batch.title: Elimina elementi
-element.delete.batch.note: 'Nota: Questi elementi verranno eliminati definitivamente e non potranno essere ripristinati.'
+element.delete.batch.note.permanent: 'Nota: Questi elementi verranno eliminati definitivamente. Non potranno essere ripristinati. Eliminare comunque?'
+element.delete.batch.note.permanent-dependencies: 'Nota: Questi elementi hanno dipendenze e verranno eliminati definitivamente. Non potranno essere ripristinati. Eliminare comunque?'
 element.delete.batch.question_one: 'Vuoi davvero eliminare questo elemento?'
 element.delete.batch.question_other: 'Vuoi davvero eliminare questi {{count}} elementi?'
 element.delete.batch.ok: Elimina

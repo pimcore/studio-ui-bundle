@@ -1200,7 +1200,8 @@ element.delete.folder.large.note: 'Please note: The folder and its children will
 element.delete.folder.ok: Delete
 element.delete.folder.ok.permanent: Delete permanently
 element.delete.batch.title: Delete items
-element.delete.batch.note: 'Please note: These items will be permanently deleted and can not be restored.'
+element.delete.batch.note.permanent: 'Please note: These items will be deleted permanently. They can not be restored. Delete anyway?'
+element.delete.batch.note.permanent-dependencies: 'Please note: These items have dependencies and will be deleted permanently. They can not be restored. Delete anyway?'
 element.delete.batch.question_one: 'Do you really want to delete this item?'
 element.delete.batch.question_other: 'Do you really want to delete these {{count}} items?'
 element.delete.batch.ok: Delete

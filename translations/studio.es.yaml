@@ -1193,7 +1193,8 @@ element.delete.folder.large.note: 'Tenga en cuenta: La carpeta y su contenido se
 element.delete.folder.ok: Eliminar
 element.delete.folder.ok.permanent: Eliminar permanentemente
 element.delete.batch.title: Eliminar elementos
-element.delete.batch.note: 'Tenga en cuenta: Estos elementos se eliminarán permanentemente y no se podrán restaurar.'
+element.delete.batch.note.permanent: 'Tenga en cuenta: Estos elementos se eliminarán permanentemente. No se podrán restaurar. ¿Eliminar de todas formas?'
+element.delete.batch.note.permanent-dependencies: 'Tenga en cuenta: Estos elementos tienen dependencias y se eliminarán permanentemente. No se podrán restaurar. ¿Eliminar de todas formas?'
 element.delete.batch.question_one: '¿Realmente desea eliminar este elemento?'
 element.delete.batch.question_other: '¿Realmente desea eliminar estos {{count}} elementos?'
 element.delete.batch.ok: Eliminar
