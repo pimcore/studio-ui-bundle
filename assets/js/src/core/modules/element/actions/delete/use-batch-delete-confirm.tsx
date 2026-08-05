@@ -117,12 +117,12 @@ export const useBatchDeleteConfirm = (): UseBatchDeleteConfirmReturn => {
 
     const info = await fetchBatchDeleteInfo(elementType, itemIds)
 
-    confirmModal.update((prevConfig) => ({
-      ...prevConfig,
+    // antd's hook modal ignores the function form of ConfigUpdate - update with a plain object only
+    confirmModal.update({
       content: getContent(info),
       okText: info.isPermanent ? t('element.delete.batch.ok.permanent') : t('element.delete.batch.ok'),
-      okButtonProps: { ...prevConfig.okButtonProps, loading: false, disabled: false }
-    }))
+      okButtonProps: { loading: false, disabled: false }
+    })
   }
 
   return { confirmBatchDelete }
