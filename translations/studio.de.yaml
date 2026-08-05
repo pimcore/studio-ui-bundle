@@ -1199,7 +1199,7 @@ element.delete.batch.question_other: 'Möchten Sie wirklich diese {{count}} Elem
 element.delete.batch.ok: Löschen
 element.delete.batch.ok.permanent: Endgültig löschen
 element.delete.batch.show-paths: Elemente anzeigen
-element.delete.batch.dependencies-warning.confirmed: 'Diese Elemente haben untergeordnete Objekte oder andere Abhängigkeiten, trotzdem löschen?'
+element.delete.batch.dependencies-warning.confirmed: 'Diese Elemente haben Abhängigkeiten, trotzdem löschen?'
 element.open: Öffnen
 element.toolbar.copy-id: ID kopieren
 element.toolbar.copy-full-path-to-clipboard: Vollständigen Pfad kopieren

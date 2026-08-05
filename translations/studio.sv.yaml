@@ -1199,7 +1199,7 @@ element.delete.batch.question_other: 'Vill du verkligen ta bort dessa {{count}} 
 element.delete.batch.ok: Ta bort
 element.delete.batch.ok.permanent: Ta bort permanent
 element.delete.batch.show-paths: Visa element
-element.delete.batch.dependencies-warning.confirmed: 'Dessa element har underordnade objekt eller andra beroenden, ta bort ändå?'
+element.delete.batch.dependencies-warning.confirmed: 'Dessa element har beroenden, ta bort ändå?'
 element.open: Öppna
 element.toolbar.copy-id: Kopiera ID
 element.toolbar.copy-full-path-to-clipboard: Kopiera fullständig sökväg

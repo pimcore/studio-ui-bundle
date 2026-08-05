@@ -1199,7 +1199,7 @@ element.delete.batch.question_other: 'Vuoi davvero eliminare questi {{count}} el
 element.delete.batch.ok: Elimina
 element.delete.batch.ok.permanent: Elimina definitivamente
 element.delete.batch.show-paths: Mostra elementi
-element.delete.batch.dependencies-warning.confirmed: 'Questi elementi hanno oggetti figli o altre dipendenze, eliminare comunque?'
+element.delete.batch.dependencies-warning.confirmed: 'Questi elementi hanno dipendenze, eliminare comunque?'
 element.open: Apri
 element.toolbar.copy-id: Copia ID
 element.toolbar.copy-full-path-to-clipboard: Copia percorso completo
