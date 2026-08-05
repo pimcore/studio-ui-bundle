@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { useAppDispatch } from '@Pimcore/app/store'
+import trackError, { ApiError, isApiErrorData } from '@Pimcore/modules/app/error-handler'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useStyles } from './use-batch-delete-confirm.styles'
@@ -54,7 +55,10 @@ export const useBatchDeleteConfirm = (): UseBatchDeleteConfirmReturn => {
         isPermanent: !data.canUseRecycleBin,
         hasDependencies: data.hasDependencies
       }
-    } catch {
+    } catch (error) {
+      if (isApiErrorData(error)) {
+        trackError(new ApiError(error))
+      }
       return { isPermanent: false, hasDependencies: null }
     } finally {
       request.reset()
