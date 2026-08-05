@@ -14,7 +14,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Form } from '@Pimcore/components/form/form'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { SuppressEmptyFieldLabelProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/suppress-empty-field-label-provider'
-import { isNonEmptyString } from '@sdk/utils'
+import { isNonEmptyString, toCssDimension } from '@sdk/utils'
 import { useTranslation } from 'react-i18next'
 
 export interface FieldContainerProps extends AbstractObjectLayoutDefinition {
@@ -22,17 +22,26 @@ export interface FieldContainerProps extends AbstractObjectLayoutDefinition {
   collapsed?: boolean
   layout?: 'vbox' | 'hbox'
   fieldLabel?: string
+  width?: number | string | null
+  height?: number | string | null
 }
 
-export const FieldContainer = ({ children, collapsible, collapsed, noteditable, layout = 'hbox', fieldLabel }: FieldContainerProps): React.JSX.Element => {
+export const FieldContainer = ({ children, collapsible, collapsed, noteditable, layout = 'hbox', fieldLabel, width, height }: FieldContainerProps): React.JSX.Element => {
   const { t } = useTranslation()
   const vertical = layout === 'vbox'
+
+  // `Layout::$width` and `$height` default to 0 and toCssDimension() maps
+  // 0/''/null to undefined, so an unconfigured container keeps rendering full
+  // width as before.
+  const cssWidth = toCssDimension(width)
+  const cssHeight = toCssDimension(height)
 
   const content = (
     <SuppressEmptyFieldLabelProvider>
       <Flex
-        className='w-full'
+        className={ cssWidth === undefined ? 'w-full' : undefined }
         gap={ { x: 'extra-small', y: 0 } }
+        style={ { height: cssHeight, width: cssWidth } }
         vertical={ vertical }
       >
         {children.map((child, index) => {
