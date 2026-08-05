@@ -23,7 +23,7 @@ import { ClassificationStoreModalProvider } from '@Pimcore/modules/element/dynam
 
 export const BatchActions = (): React.JSX.Element => {
   const rowSelection = useRowSelectionOptional()
-  const { confirmBatchDelete } = useBatchDelete()
+  const { confirmBatchDelete, isLoading: isBatchDeleteLoading } = useBatchDelete()
 
   const [batchEditModalOpen, setBatchEditModalOpen] = useState<boolean>(false)
   const [csvModalOpen, setCsvModalOpen] = useState<boolean>(false)
@@ -82,6 +82,7 @@ export const BatchActions = (): React.JSX.Element => {
         hidden: !hasSelectedItems,
         label: t('listing.actions.delete'),
         icon: <Icon value={ 'trash' } />,
+        isLoading: isBatchDeleteLoading,
         onClick: handleBatchDeleteConfirm
       }
     ]

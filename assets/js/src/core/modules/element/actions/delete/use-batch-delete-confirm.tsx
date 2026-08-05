@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
@@ -28,6 +28,7 @@ export interface ConfirmBatchDeleteParams {
 
 export interface UseBatchDeleteConfirmReturn {
   confirmBatchDelete: (params: ConfirmBatchDeleteParams) => Promise<void>
+  isLoading: boolean
 }
 
 interface BatchDeleteInfo {
@@ -40,6 +41,7 @@ export const useBatchDeleteConfirm = (): UseBatchDeleteConfirmReturn => {
   const modal = useFormModal()
   const { styles } = useStyles()
   const dispatch = useAppDispatch()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   // The recycle bin threshold is evaluated per item on the backend (a plain item is always
   // recoverable, a folder-like item only if its descendant count is within the configured
@@ -69,7 +71,34 @@ export const useBatchDeleteConfirm = (): UseBatchDeleteConfirmReturn => {
     }
   }
 
+  const getWarningText = (info: BatchDeleteInfo): string | null => {
+    const parts: string[] = []
+
+    if (info.isPermanent) {
+      parts.push(t('element.delete.batch.note'))
+    }
+
+    if (info.hasDependencies) {
+      parts.push(t('element.delete.batch.dependencies-warning.confirmed'))
+    }
+
+    return parts.length === 0 ? null : parts.join(' ')
+  }
+
   const confirmBatchDelete = async ({ elementType, itemIds, selectedRowsData, onOk }: ConfirmBatchDeleteParams): Promise<void> => {
+    setIsLoading(true)
+    let info: BatchDeleteInfo | null = null
+
+    try {
+      info = await fetchBatchDeleteInfo(elementType, itemIds)
+    } finally {
+      setIsLoading(false)
+    }
+
+    if (info === null) {
+      return
+    }
+
     const count = itemIds.length
     const paths = itemIds.map(id => selectedRowsData?.[id]?.fullpath ?? String(id))
     const pathList = (
@@ -77,60 +106,23 @@ export const useBatchDeleteConfirm = (): UseBatchDeleteConfirmReturn => {
         {paths.map((path) => <li key={ path }>{path}</li>)}
       </ul>
     )
+    const warningText = getWarningText(info)
 
-    const getWarningText = (info: BatchDeleteInfo): string | null => {
-      const parts: string[] = []
-
-      if (info.isPermanent) {
-        parts.push(t('element.delete.batch.note'))
-      }
-
-      if (info.hasDependencies) {
-        parts.push(t('element.delete.batch.dependencies-warning.confirmed'))
-      }
-
-      return parts.length === 0 ? null : parts.join(' ')
-    }
-
-    const getContent = (info?: BatchDeleteInfo): React.JSX.Element => {
-      const warningText = info === undefined ? null : getWarningText(info)
-
-      return (
-        <>
-          <p>{t('element.delete.batch.question', { count })}</p>
-          {count > 5
-            ? <Accordion items={ [{ key: 'paths', title: <span>{t('element.delete.batch.show-paths')}</span>, children: pathList }] } />
-            : pathList}
-          {warningText !== null && <p><span className={ styles.warningText }>{warningText}</span></p>}
-        </>
-      )
-    }
-
-
-    const confirmModal = modal.confirm({
+    modal.confirm({
       title: t('element.delete.batch.title'),
       width: 530,
-      content: getContent(),
+      content: <>
+        <p>{t('element.delete.batch.question', { count })}</p>
+        {count > 5
+          ? <Accordion items={ [{ key: 'paths', title: <span>{t('element.delete.batch.show-paths')}</span>, children: pathList }] } />
+          : pathList}
+        {warningText !== null && <p><span className={ styles.warningText }>{warningText}</span></p>}
+      </>,
       cancelText: t('cancel'),
-      okText: t('element.delete.batch.ok'),
-      okButtonProps: { loading: true, disabled: true },
-      onOk
-    })
-
-    const info = await fetchBatchDeleteInfo(elementType, itemIds)
-
-    if (info === null) {
-      confirmModal.destroy()
-      return
-    }
-
-    // antd's hook modal ignores the function form of ConfigUpdate - update with a plain object only
-    confirmModal.update({
-      content: getContent(info),
       okText: info.isPermanent ? t('element.delete.batch.ok.permanent') : t('element.delete.batch.ok'),
-      okButtonProps: { loading: false, disabled: false }
+      onOk
     })
   }
 
-  return { confirmBatchDelete }
+  return { confirmBatchDelete, isLoading }
 }
