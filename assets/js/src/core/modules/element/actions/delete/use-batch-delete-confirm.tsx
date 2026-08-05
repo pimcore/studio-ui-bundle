@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React from 'react'
 import { isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
@@ -28,7 +28,6 @@ export interface ConfirmBatchDeleteParams {
 
 export interface UseBatchDeleteConfirmReturn {
   confirmBatchDelete: (params: ConfirmBatchDeleteParams) => Promise<void>
-  isLoading: boolean
 }
 
 interface BatchDeleteInfo {
@@ -41,7 +40,6 @@ export const useBatchDeleteConfirm = (): UseBatchDeleteConfirmReturn => {
   const modal = useFormModal()
   const { styles } = useStyles()
   const dispatch = useAppDispatch()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   // The recycle bin threshold is evaluated per item on the backend (a plain item is always
   // recoverable, a folder-like item only if its descendant count is within the configured
@@ -86,14 +84,7 @@ export const useBatchDeleteConfirm = (): UseBatchDeleteConfirmReturn => {
   }
 
   const confirmBatchDelete = async ({ elementType, itemIds, selectedRowsData, onOk }: ConfirmBatchDeleteParams): Promise<void> => {
-    setIsLoading(true)
-    let info: BatchDeleteInfo | null = null
-
-    try {
-      info = await fetchBatchDeleteInfo(elementType, itemIds)
-    } finally {
-      setIsLoading(false)
-    }
+    const info = await fetchBatchDeleteInfo(elementType, itemIds)
 
     if (info === null) {
       return
@@ -124,5 +115,5 @@ export const useBatchDeleteConfirm = (): UseBatchDeleteConfirmReturn => {
     })
   }
 
-  return { confirmBatchDelete, isLoading }
+  return { confirmBatchDelete }
 }

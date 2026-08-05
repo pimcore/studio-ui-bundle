@@ -18,13 +18,12 @@ import { elementTypes } from '@sdk/modules/data-object'
 
 export interface UseBatchDeleteReturn {
   confirmBatchDelete: (itemIds: number[], selectedRowsData?: Record<number, any>, onFinish?: () => void) => Promise<void>
-  isLoading: boolean
 }
 
 export const useBatchDelete = (): UseBatchDeleteReturn => {
   const executionEngine = container.get<ExecutionEngine>(serviceIds.executionEngine)
   const { refreshGrid } = useRefreshGrid(elementTypes.dataObject)
-  const { confirmBatchDelete: confirmDialog, isLoading } = useBatchDeleteConfirm()
+  const { confirmBatchDelete: confirmDialog } = useBatchDeleteConfirm()
 
   const confirmBatchDelete = async (itemIds: number[], selectedRowsData?: Record<number, any>, onFinish?: () => void): Promise<void> => {
     await confirmDialog({
@@ -45,5 +44,5 @@ export const useBatchDelete = (): UseBatchDeleteReturn => {
     })
   }
 
-  return { confirmBatchDelete, isLoading }
+  return { confirmBatchDelete }
 }

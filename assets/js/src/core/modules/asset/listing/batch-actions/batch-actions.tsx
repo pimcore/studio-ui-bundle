@@ -28,7 +28,7 @@ export const BatchActions = (): React.JSX.Element => {
   const { id } = useElementContext()
   const { useDataQueryHelper } = useSettings()
   const { getArgs } = useDataQueryHelper()
-  const { confirmBatchDelete, isLoading: isBatchDeleteLoading } = useBatchDelete()
+  const { confirmBatchDelete } = useBatchDelete()
 
   const { createZipDownload: createZipFolderDownload } = useZipDownload({ type: 'folder' })
   const { createZipDownload: createZipAssetListDownload } = useZipDownload({ type: 'asset-list' })
@@ -97,7 +97,6 @@ export const BatchActions = (): React.JSX.Element => {
         hidden: !hasSelectedItems,
         label: t('listing.actions.delete'),
         icon: <Icon value={ 'trash' } />,
-        isLoading: isBatchDeleteLoading,
         onClick: handleBatchDeleteConfirm
       }
     ]
