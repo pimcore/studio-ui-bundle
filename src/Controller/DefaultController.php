@@ -19,7 +19,7 @@ use Pimcore\Bundle\StudioUiBundle\Branding\BrandingProviderInterface;
 use Pimcore\Bundle\StudioUiBundle\Service\StaticResourcesResolverInterface;
 use Pimcore\Controller\FrontendController;
 use Pimcore\Tool;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -32,7 +32,7 @@ final class DefaultController extends FrontendController
         private StaticResourcesResolverInterface $staticResourcesResolver,
         private UrlServiceInterface $mercureUrlService,
         private BrandingProviderInterface $brandingProvider,
-        #[TaggedIterator('pimcore_studio_ui.app_config_provider')]
+        #[AutowireIterator('pimcore_studio_ui.app_config_provider')]
         private iterable $appConfigProviders,
     ) {
 
