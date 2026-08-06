@@ -60,6 +60,14 @@ const advancedColumnTemplate = {
           { name: 'Store', key: 'store', config: { classificationStore: true, storeId: 1 } },
           { name: 'Name', key: 'name' }
         ]
+      },
+      {
+        name: 'Insurer',
+        key: 'insurer',
+        classIds: ['5'],
+        fields: [
+          { name: 'Store', key: 'store', config: { classificationStore: true, storeId: 1 } }
+        ]
       }
     ],
     transformers: []
@@ -129,6 +137,22 @@ describe('findColumnConversion', () => {
 
   it('does not claim a relation whose allowed classes share no fields', () => {
     expect(findColumnConversion(column({ key: 'dealer' }), advancedColumnTemplate, sourceFieldTypes)).toBeUndefined()
+  })
+
+  // A classification store field without a group/key makes the backend throw while resolving, which
+  // fails the whole grid request – so it must never be seeded.
+  it('does not claim a relation whose only shared fields are classification store fields', () => {
+    expect(findColumnConversion(column({ key: 'insurer' }), advancedColumnTemplate, sourceFieldTypes)).toBeUndefined()
+  })
+
+  it('does not claim a classification store column that carries no group and key', () => {
+    const classificationStoreColumn = column({
+      key: 'store',
+      type: 'dataobject.classificationstore',
+      config: { fieldDefinition: { name: 'colorKey', title: 'Color' } }
+    })
+
+    expect(findColumnConversion(classificationStoreColumn, advancedColumnTemplate, sourceFieldTypes)).toBeUndefined()
   })
 
   it('does not claim columns that are not offered as a source field at all', () => {

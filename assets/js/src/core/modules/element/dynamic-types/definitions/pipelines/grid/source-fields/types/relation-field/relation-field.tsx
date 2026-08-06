@@ -50,8 +50,9 @@ export class DynamicTypePipelineGridSourceFieldsRelationField extends DynamicTyp
 
     const field = this.getDefaultField(relation)
 
-    // No resolvable field (e.g. the allowed classes share none): leave the column unconvertible
-    // rather than seed a config the backend would reject.
+    // Nothing we can resolve without further input – the allowed classes share no field, or the
+    // only ones they share are classification store fields. Leave the column unconvertible rather
+    // than seed a config that fails at resolve time.
     if (field === undefined) {
       return undefined
     }
@@ -63,15 +64,14 @@ export class DynamicTypePipelineGridSourceFieldsRelationField extends DynamicTyp
   }
 
   /**
-   * Field to start from. Classification store fields are skipped where possible, as they need a
-   * group/key the conversion cannot infer and would otherwise resolve to nothing.
+   * Field to start from. Classification store fields are never used: they resolve only with a
+   * group/key, which the conversion cannot infer, and the backend throws on a missing one – taking
+   * the whole grid request with it, not just the column.
    */
   private getDefaultField (
     relation: RelationSourceFieldOption
   ): NonNullable<RelationSourceFieldOption['fields']>[number] | undefined {
-    const fields = relation.fields ?? []
-
-    return fields.find((field) => field.config?.classificationStore !== true) ?? fields[0]
+    return (relation.fields ?? []).find((field) => field.config?.classificationStore !== true)
   }
 
   getComponent (): ReactElement {

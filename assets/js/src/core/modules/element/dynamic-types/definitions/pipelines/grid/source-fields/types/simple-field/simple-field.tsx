@@ -44,25 +44,35 @@ export class DynamicTypePipelineGridSourceFieldsSimpleField extends DynamicTypeP
       return undefined
     }
 
-    return {
-      field: key,
-      ...this.getClassificationStoreConfig(column)
+    if (column.type === 'dataobject.classificationstore') {
+      const classificationStoreConfig = this.getClassificationStoreConfig(column)
+
+      // A classification store field resolves only with a group/key. Without one the backend
+      // throws and takes the whole grid request with it, so do not offer the conversion at all.
+      if (classificationStoreConfig === undefined) {
+        return undefined
+      }
+
+      return { field: key, ...classificationStoreConfig }
     }
+
+    return { field: key }
   }
 
   /**
    * Carries the group/key a classification store column was configured with over to the source
-   * field, so the converted column resolves the same value it did before.
+   * field, so the converted column resolves the same value it did before. Returns `undefined` when
+   * the column carries no usable group/key.
    */
-  private getClassificationStoreConfig (column: AvailableColumn): Record<string, any> {
-    if (column.type !== 'dataobject.classificationstore' || !isObject(column.config)) {
-      return {}
+  private getClassificationStoreConfig (column: AvailableColumn): Record<string, any> | undefined {
+    if (!isObject(column.config)) {
+      return undefined
     }
 
     const { groupId, keyId } = column.config as { groupId?: unknown, keyId?: unknown }
 
     if (isEmptyValue(groupId) || isEmptyValue(keyId)) {
-      return {}
+      return undefined
     }
 
     const classificationStoreConfig: Record<string, any> = { groupId, keyId }
