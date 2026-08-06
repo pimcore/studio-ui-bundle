@@ -1178,6 +1178,10 @@ element.tree.paste-only-contents: Incolla solo il contenuto qui
 element.tree.cut: Taglia
 element.tree.cut-success-description: '{{elementType}} "{{name}}" è stato tagliato ed è pronto per incollare'
 element.tree.paste-cut: Incolla elemento tagliato
+element.tree.selection.count_one: '{{count}} elemento selezionato'
+element.tree.selection.count_other: '{{count}} elementi selezionati'
+element.tree.selection.clear: Cancella selezione
+element.tree.selection.limit-reached: 'Massimo di {{limit}} elementi raggiunto'
 element.lock: Blocca
 element.lock-and-propagate-to-children: Blocca e propaga ai figli
 element.unlock: Sblocca

@@ -1178,6 +1178,10 @@ element.tree.paste-only-contents: Nur Inhalte hier einfügen
 element.tree.cut: Ausschneiden
 element.tree.cut-success-description: '{{elementType}} "{{name}}" wurde ausgeschnitten und kann eingefügt werden'
 element.tree.paste-cut: Ausgeschnittenes Element einfügen
+element.tree.selection.count_one: '{{count}} Element ausgewählt'
+element.tree.selection.count_other: '{{count}} Elemente ausgewählt'
+element.tree.selection.clear: Auswahl aufheben
+element.tree.selection.limit-reached: 'Maximum von {{limit}} Elementen erreicht'
 element.lock: Sperren
 element.lock-and-propagate-to-children: Sperren und auf Kinder übertragen
 element.unlock: Entsperren

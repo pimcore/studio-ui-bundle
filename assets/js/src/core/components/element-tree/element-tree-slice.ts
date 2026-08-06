@@ -16,7 +16,7 @@ import { type TreeLevelData } from '@Pimcore/modules/element/element-api-slice.g
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@sdk/app'
-import { camelCase, isEqual, isUndefined, merge } from 'lodash'
+import { camelCase, isEqual, isUndefined, merge, uniq } from 'lodash'
 import { createSelector } from 'reselect'
 
 export interface TreeNode {
@@ -63,6 +63,26 @@ type TreeNodesState = Record<string, InternalNodeState>
 
 interface TreeState {
   nodes: TreeNodesState
+
+  /**
+   * Authoritative selection of the tree. Node ids are kept here even while the
+   * corresponding nodes are not loaded (collapsed parent, other page), so a
+   * selection survives everything but an explicit invalidation.
+   */
+  selectedNodeIds: string[]
+
+  /**
+   * The node the editor follows. Independent of the selection: modifier clicks
+   * change the selection without changing the active node.
+   */
+  activeNodeId?: string
+
+  /**
+   * Starting point of a range selection (last node selected without shift).
+   */
+  anchorNodeId?: string
+
+  isSelectionLimitReached: boolean
 }
 
 type TreesState = Record<string, TreeState>
@@ -78,15 +98,33 @@ export const initialNodeState: InternalNodeState = {
   childrenIds: []
 }
 
-const initialTreeState: TreeState = {
-  nodes: {}
-}
+/**
+ * Upper bound for a single tree selection. Keeps the render and the upcoming
+ * bulk operations within sane limits; the tree surfaces it once it is hit.
+ */
+export const treeSelectionLimit = 500
+
+const emptySelection: string[] = []
+
+const createInitialTreeState = (): TreeState => ({
+  nodes: {},
+  selectedNodeIds: [],
+  isSelectionLimitReached: false
+})
 
 const initialState: TreesState = {}
 
+const initializeTreeState = (state: TreesState, treeId: string): TreeState => {
+  if (isUndefined(state[treeId])) {
+    state[treeId] = createInitialTreeState()
+  }
+
+  return state[treeId]
+}
+
 const initializeNodeState = (state: TreesState, treeId: string, nodeId: string): InternalNodeState => {
   if (isUndefined(state[treeId])) {
-    state[treeId] = { ...initialTreeState }
+    state[treeId] = createInitialTreeState()
   }
   if (isUndefined(state[treeId].nodes[nodeId])) {
     state[treeId] = {
@@ -180,22 +218,91 @@ const removeDescendants = (nodes: TreeNodesState, parentId: string, keepBasicSta
   return result
 }
 
-const updateSelectedNodeIds = (state: TreesState, treeId: string, selectedNodeIds: string[]): void => {
-  if (isUndefined(state[treeId])) {
-    state[treeId] = { ...initialTreeState }
+interface SelectionUpdate {
+  anchorNodeId?: string
+  activeNodeId?: string
+}
+
+/**
+ * Single entry point for every selection change.
+ *
+ * Only nodes whose selected state actually changes are touched, so the cost
+ * scales with the size of the change instead of the size of the tree.
+ */
+const applySelection = (
+  state: TreesState,
+  treeId: string,
+  selectedNodeIds: string[],
+  update: SelectionUpdate = {}
+): void => {
+  const requestedIds = uniq(selectedNodeIds)
+  const nextIds = requestedIds.slice(0, treeSelectionLimit)
+  const previousIds = initializeTreeState(state, treeId).selectedNodeIds
+
+  const nextSet = new Set(nextIds)
+  const previousSet = new Set(previousIds)
+
+  const changedNodeIds = [
+    ...nextIds.filter(nodeId => !previousSet.has(nodeId)),
+    ...previousIds.filter(nodeId => !nextSet.has(nodeId))
+  ]
+
+  changedNodeIds.forEach(nodeId => {
+    // Nodes that are not loaded carry no flag to update; it is reconciled once
+    // they enter the state again. Creating a state for them here would both bloat
+    // the store and replace the tree object mid update.
+    if (isUndefined(state[treeId].nodes[nodeId])) {
+      return
+    }
+
+    updateNodeState(state, treeId, nodeId, node => ({
+      ...node,
+      isSelected: nextSet.has(nodeId)
+    }))
+  })
+
+  // Re-read the tree: updating nodes can replace the tree object.
+  const tree = state[treeId]
+
+  tree.selectedNodeIds = nextIds
+  tree.isSelectionLimitReached = requestedIds.length > nextIds.length
+
+  if (!isUndefined(update.anchorNodeId)) {
+    tree.anchorNodeId = update.anchorNodeId
   }
-  Object.keys(state[treeId].nodes).forEach(nodeId => {
-    updateNodeState(state, treeId, nodeId, node => ({
-      ...node,
-      isSelected: selectedNodeIds.includes(nodeId)
-    }))
-  })
-  selectedNodeIds.forEach(nodeId => {
-    updateNodeState(state, treeId, nodeId, node => ({
-      ...node,
-      isSelected: true
-    }))
-  })
+
+  if (!isUndefined(update.activeNodeId)) {
+    tree.activeNodeId = update.activeNodeId
+  }
+
+  if (nextIds.length === 0) {
+    tree.anchorNodeId = undefined
+  }
+}
+
+/**
+ * Keeps the per node `isSelected` flag in sync with the tree selection for nodes
+ * that (re)enter the state - a node that was selected before its parent got
+ * collapsed comes back selected.
+ */
+const reconcileSelectionFlag = (tree: TreeState, nodeId: string, node: InternalNodeState): InternalNodeState => {
+  const isSelected = tree.selectedNodeIds.includes(nodeId)
+
+  return node.isSelected === isSelected ? node : { ...node, isSelected }
+}
+
+const deselectNodeIds = (state: TreesState, treeId: string, nodeIds: string[]): void => {
+  const tree = state[treeId]
+
+  if (isUndefined(tree) || tree.selectedNodeIds.length === 0) {
+    return
+  }
+
+  const remainingIds = tree.selectedNodeIds.filter(nodeId => !nodeIds.includes(nodeId))
+
+  if (remainingIds.length !== tree.selectedNodeIds.length) {
+    applySelection(state, treeId, remainingIds)
+  }
 }
 
 const slice = createSlice({
@@ -297,6 +404,16 @@ const slice = createSlice({
       state,
       { payload }: PayloadAction<{ treeId: string, nodeId: string, searchTerm: string }>
     ) => {
+      const hasSearchTermChanged = !isUndefined(state[payload.treeId]) &&
+        !isUndefined(state[payload.treeId].nodes[payload.nodeId]) &&
+        state[payload.treeId].nodes[payload.nodeId].searchTerm !== payload.searchTerm
+
+      // Filtering a level changes which nodes exist, so the selection is dropped
+      // rather than silently pointing at nodes the user can no longer see.
+      if (hasSearchTermChanged) {
+        applySelection(state, payload.treeId, [])
+      }
+
       updateNodeState(state, payload.treeId, payload.nodeId, node => {
         const isFetchTriggered = node.searchTerm !== payload.searchTerm ? false : node.isFetchTriggered
         const isLoading = node.searchTerm !== payload.searchTerm ? undefined : node.isLoading
@@ -312,7 +429,50 @@ const slice = createSlice({
       state,
       { payload }: PayloadAction<{ treeId: string, selectedNodeIds: string[] }>
     ) => {
-      updateSelectedNodeIds(state, payload.treeId, payload.selectedNodeIds)
+      applySelection(state, payload.treeId, payload.selectedNodeIds, {
+        anchorNodeId: payload.selectedNodeIds[payload.selectedNodeIds.length - 1]
+      })
+    },
+    setActiveNodeId: (
+      state,
+      { payload }: PayloadAction<{ treeId: string, nodeId: string }>
+    ) => {
+      initializeTreeState(state, payload.treeId).activeNodeId = payload.nodeId
+    },
+    toggleNodeSelection: (
+      state,
+      { payload }: PayloadAction<{ treeId: string, nodeId: string }>
+    ) => {
+      const tree = initializeTreeState(state, payload.treeId)
+      const isSelected = tree.selectedNodeIds.includes(payload.nodeId)
+
+      const selectedNodeIds = isSelected
+        ? tree.selectedNodeIds.filter(nodeId => nodeId !== payload.nodeId)
+        : [...tree.selectedNodeIds, payload.nodeId]
+
+      applySelection(state, payload.treeId, selectedNodeIds, {
+        anchorNodeId: payload.nodeId
+      })
+    },
+    selectNodeRange: (
+      state,
+      { payload }: PayloadAction<{ treeId: string, nodeIds: string[], additive?: boolean }>
+    ) => {
+      const tree = initializeTreeState(state, payload.treeId)
+
+      // The anchor is kept so that repeated shift clicks keep growing and
+      // shrinking the same range instead of starting a new one every time.
+      const selectedNodeIds = payload.additive === true
+        ? [...tree.selectedNodeIds, ...payload.nodeIds]
+        : payload.nodeIds
+
+      applySelection(state, payload.treeId, selectedNodeIds)
+    },
+    clearSelection: (
+      state,
+      { payload }: PayloadAction<{ treeId: string }>
+    ) => {
+      applySelection(state, payload.treeId, [])
     },
     setNodeScrollTo: (
       state,
@@ -342,12 +502,12 @@ const slice = createSlice({
       payload.nodes.forEach(node => {
         const nodeId = String(node.id)
         updatedNodes[nodeId] = initializeNodeState(state, payload.treeId, nodeId)
-        updatedNodes[nodeId] = {
+        updatedNodes[nodeId] = reconcileSelectionFlag(state[payload.treeId], nodeId, {
           ...updatedNodes[nodeId],
           isDeleting: false,
           treeNodeProps: node,
           order: order++
-        }
+        })
       })
 
       state[payload.treeId].nodes = updatedNodes
@@ -356,9 +516,7 @@ const slice = createSlice({
       state,
       { payload }: PayloadAction<{ treeId: string, nodeId: string, treeLevelData: TreeLevelData[] }>
     ) => {
-      if (isUndefined(state[payload.treeId])) {
-        state[payload.treeId] = { ...initialTreeState }
-      }
+      initializeTreeState(state, payload.treeId)
 
       let hasParentChanged = false
       payload.treeLevelData.forEach(({ parentId, elementId, pageNumber }) => {
@@ -397,11 +555,15 @@ const slice = createSlice({
 
       updateNodeState(state, payload.treeId, payload.nodeId, node => ({
         ...node,
-        isSelected: true,
         isScrollTo: true
       }))
 
-      updateSelectedNodeIds(state, payload.treeId, [payload.nodeId])
+      // Locating an element is an explicit jump to a single element, so it
+      // replaces the selection and becomes the active node.
+      applySelection(state, payload.treeId, [payload.nodeId], {
+        anchorNodeId: payload.nodeId,
+        activeNodeId: payload.nodeId
+      })
     },
     setNodeFetching: (
       state,
@@ -433,6 +595,10 @@ const slice = createSlice({
         ...node,
         isDeleting: payload.isDeleting
       }))
+
+      if (payload.isDeleting) {
+        deselectNodeIds(state, payload.treeId, [payload.nodeId])
+      }
     },
     refreshNodeChildren: (
       state,
@@ -554,6 +720,9 @@ const slice = createSlice({
             payload.elementTypes.includes(firstNode.treeNodeProps.elementType)
           ) {
             state[treeId].nodes = {}
+
+            // The whole tree is thrown away, so the selection goes with it.
+            applySelection(state, treeId, [])
           }
         }
       })
@@ -568,6 +737,12 @@ const slice = createSlice({
             ...node,
             isDeleting: payload.isDeleting
           }))
+
+          // A node on its way out must not stay in the selection, otherwise the
+          // counter and any follow up action would work with a stale id.
+          if (payload.isDeleting) {
+            deselectNodeIds(state, treeId, [payload.nodeId])
+          }
         }
       })
     },
@@ -810,7 +985,7 @@ export const treeSliceName = slice.name
 
 injectSliceWithState(slice)
 
-export const { setNodeLoading, setNodeLoadingInAllTree, setNodeOpeningInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, setNodeFetchingInAllTrees, markNodeDeletingForTree, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, updateNodeData, updateNodeType, setNodePublished, setNodeAdditionalAttributes, setRootNode, setDocumentNodeSiteStatus, setNodeLocked, refreshTreeByElementType, setDocumentNodeNavigationExclude, setDocumentNodeStaticGeneratorEnabled } = slice.actions
+export const { setNodeLoading, setNodeLoadingInAllTree, setNodeOpeningInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setActiveNodeId, toggleNodeSelection, selectNodeRange, clearSelection, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, setNodeFetchingInAllTrees, markNodeDeletingForTree, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, updateNodeData, updateNodeType, setNodePublished, setNodeAdditionalAttributes, setRootNode, setDocumentNodeSiteStatus, setNodeLocked, refreshTreeByElementType, setDocumentNodeNavigationExclude, setDocumentNodeStaticGeneratorEnabled } = slice.actions
 
 export const selectNodeState = createSelector(
   (state: RootState) => state.trees,
@@ -818,3 +993,23 @@ export const selectNodeState = createSelector(
   (state: RootState, treeId: string, nodeId: string) => nodeId,
   (trees, treeId, nodeId) => trees[treeId]?.nodes[nodeId]
 )
+
+/**
+ * Selection selectors read stored references and primitives on purpose: a
+ * memoised selector would only cache the last tree it was called with, which
+ * thrashes as soon as more than one tree widget is open.
+ */
+export const selectSelectedNodeIds = (state: RootState, treeId: string): string[] =>
+  state.trees[treeId]?.selectedNodeIds ?? emptySelection
+
+export const selectSelectionCount = (state: RootState, treeId: string): number =>
+  state.trees[treeId]?.selectedNodeIds.length ?? 0
+
+export const selectActiveNodeId = (state: RootState, treeId: string): string | undefined =>
+  state.trees[treeId]?.activeNodeId
+
+export const selectAnchorNodeId = (state: RootState, treeId: string): string | undefined =>
+  state.trees[treeId]?.anchorNodeId
+
+export const selectIsSelectionLimitReached = (state: RootState, treeId: string): boolean =>
+  state.trees[treeId]?.isSelectionLimitReached ?? false

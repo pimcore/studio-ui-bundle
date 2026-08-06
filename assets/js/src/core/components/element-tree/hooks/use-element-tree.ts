@@ -9,7 +9,7 @@
  */
 
 import { store, useAppDispatch } from '@Pimcore/app/store'
-import { type InternalNodeState, selectNodeState, setNodeExpanded, setNodeLoading, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, setNodeFetching, setNodeHasChildren } from '../element-tree-slice'
+import { type InternalNodeState, selectActiveNodeId, selectAnchorNodeId, selectNodeState, selectSelectedNodeIds, setActiveNodeId, setNodeExpanded, setNodeLoading, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, setNodeFetching, setNodeHasChildren, toggleNodeSelection, selectNodeRange, clearSelection as clearSelectionAction } from '../element-tree-slice'
 import { isUndefined } from 'lodash'
 import { type DataTransformerReturnType, type DataTransformerSourceNode } from '../types/node-api-hook'
 import { useNodeApiHook } from '../provider/node-api-hook-provider/use-node-api-hook'
@@ -26,6 +26,21 @@ export interface UseElementTreeReturnType {
   setSelectedIds: (selectedNodeIds: string[]) => void
   setScrollTo: (nodeId: string, scrollTo: boolean) => void
   refreshChildren: (nodeId: string, forceLoading: boolean) => void
+
+  /** Adds the node to the selection or removes it, and makes it the range anchor. */
+  toggleSelection: (nodeId: string) => void
+  /** Replaces the selection with the given ids, or adds them when additive. */
+  selectRange: (nodeIds: string[], additive?: boolean) => void
+  clearSelection: () => void
+  setActiveId: (nodeId: string) => void
+
+  /**
+   * Imperative readers for event handlers. Reading through the store instead of
+   * a subscription keeps nodes from re-rendering whenever the selection changes.
+   */
+  getSelectedIds: () => string[]
+  getAnchorId: () => string | undefined
+  getActiveId: () => string | undefined
 }
 
 export const useElementTree = (): UseElementTreeReturnType => {
@@ -116,6 +131,28 @@ export const useElementTree = (): UseElementTreeReturnType => {
     dispatch(setSelectedNodeIds({ treeId, selectedNodeIds }))
   }
 
+  const toggleSelection = (nodeId: string): void => {
+    dispatch(toggleNodeSelection({ treeId, nodeId }))
+  }
+
+  const selectRange = (nodeIds: string[], additive: boolean = false): void => {
+    dispatch(selectNodeRange({ treeId, nodeIds, additive }))
+  }
+
+  const clearSelection = (): void => {
+    dispatch(clearSelectionAction({ treeId }))
+  }
+
+  const setActiveId = (nodeId: string): void => {
+    dispatch(setActiveNodeId({ treeId, nodeId }))
+  }
+
+  const getSelectedIds = (): string[] => selectSelectedNodeIds(store.getState(), treeId)
+
+  const getAnchorId = (): string | undefined => selectAnchorNodeId(store.getState(), treeId)
+
+  const getActiveId = (): string | undefined => selectActiveNodeId(store.getState(), treeId)
+
   const setScrollTo = (nodeId: string, scrollTo: boolean): void => {
     dispatch(setNodeScrollTo({ treeId, nodeId, scrollTo }))
   }
@@ -134,6 +171,13 @@ export const useElementTree = (): UseElementTreeReturnType => {
     setSearchTerm,
     setSelectedIds,
     setScrollTo,
-    refreshChildren
+    refreshChildren,
+    toggleSelection,
+    selectRange,
+    clearSelection,
+    setActiveId,
+    getSelectedIds,
+    getAnchorId,
+    getActiveId
   }
 }

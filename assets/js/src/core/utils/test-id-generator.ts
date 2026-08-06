@@ -125,6 +125,24 @@ export const createTreeTestId = (treeId: string): string => {
 }
 
 /**
+ * Creates a test ID for the selection bar of an element tree.
+ *
+ * @example
+ * createTreeSelectionBarTestId('data_object')
+ * // Returns: 'tree-selection-bar-data-object'
+ *
+ * createTreeSelectionBarTestId('')
+ * // Returns: 'tree-selection-bar'
+ */
+export const createTreeSelectionBarTestId = (treeId: string): string => {
+  if (treeId != null && treeId !== '') {
+    return buildTestId(['tree-selection-bar', treeId.replace(/_/g, '-')])
+  }
+
+  return 'tree-selection-bar'
+}
+
+/**
  * Creates a test ID for tab titles with element information when available.
  * Prioritizes element type and ID for specificity, falls back to title.
  *

@@ -75,6 +75,15 @@ export const useStyles = createStyles(({ token, css }) => {
         }
       }
 
+      /*
+       * The active node is the one the editor follows. With a single selection it
+       * is the only selected node, so the marker only becomes visible once more
+       * than one node is selected.
+       */
+      .tree-node__content--active {
+        box-shadow: inset 2px 0 0 0 ${token.colorPrimary};
+      }
+
       .tree-node-content__label {
         display: inline-block;
         text-overflow: ellipsis;

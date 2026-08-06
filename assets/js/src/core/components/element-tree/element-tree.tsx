@@ -13,6 +13,7 @@ import React, {
   type ElementType,
   type MutableRefObject,
   useCallback,
+  useEffect,
   useMemo,
   useRef
 } from 'react'
@@ -26,6 +27,8 @@ import { type TreeNode } from './element-tree-slice'
 import { TreeList } from './list/tree-list'
 import { useTreeId } from '@Pimcore/components/element-tree/provider/tree-id-provider/use-tree-id'
 import { createTreeTestId } from '@Pimcore/utils/test-id-generator'
+import { TreeSelectionBar } from './selection/tree-selection-bar'
+import { useElementTree } from './hooks/use-element-tree'
 
 export interface TreeSearchProps {
   node: TreeNodeProps
@@ -98,6 +101,18 @@ const ElementTree = (
   const preparedRootNode = rootNode
   const { getChildren, isLoading } = useElementTreeNode(String(nodeId))
 
+  const { clearSelection } = useElementTree()
+
+  // A different root means a different set of elements, so the selection is
+  // dropped instead of surviving into a tree it does not belong to.
+  const previousNodeId = useRef(nodeId)
+  useEffect(() => {
+    if (previousNodeId.current !== nodeId) {
+      previousNodeId.current = nodeId
+      clearSelection()
+    }
+  }, [nodeId, clearSelection])
+
   const nodesRefs = useRef<Record<string, INodeRef>>({})
   const nodeOrder = useCallback(() => {
     return Object.keys(nodesRefs.current).sort((a: string, b: string) => {
@@ -133,6 +148,8 @@ const ElementTree = (
       data-testid={ treeTestId }
     >
       <TreeContext.Provider value={ treeContextValue }>
+
+        <TreeSelectionBar />
 
         {hasRootNode && (
         <TreeNode

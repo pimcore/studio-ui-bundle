@@ -9,7 +9,7 @@
  */
 
 import { Flex } from 'antd'
-import React, { forwardRef, type KeyboardEvent, type MouseEvent, type MutableRefObject, useContext, useEffect } from 'react'
+import React, { forwardRef, type MutableRefObject, useContext, useEffect } from 'react'
 import { useStyles } from './tree-node.styles'
 import { type INodeRef, TreeContext } from '../element-tree'
 import { TreeList } from '../list/tree-list'
@@ -20,6 +20,7 @@ import { useElementTreeNode } from '../hooks/use-element-tree-node'
 import { isNil } from 'lodash'
 import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/utils/widget-content-scroll'
 import { createNodeTestId } from '@Pimcore/utils/test-id-generator'
+import { useTreeNodeInteraction } from './use-tree-node-interaction'
 import { ComponentRenderer } from '@Pimcore/modules/app/component-registry/component-renderer'
 import cn from 'classnames'
 
@@ -92,14 +93,13 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   const { styles } = useStyles()
   const {
     renderNodeContent: RenderNodeContent,
-    onSelect,
-    onRightClick,
     nodesRefs,
-    nodeOrder,
     tooltipSlotName
   } = useContext(TreeContext)
-  const { isExpanded, setExpanded, isSelected, isScrollTo, setScrollTo, setSelectedIds } = useElementTreeNode(id)
+  const nodeState = useElementTreeNode(id)
+  const { isExpanded, setExpanded, isSelected, isActive, isScrollTo, setScrollTo } = nodeState
   const treeNodeProps = { id, icon, label, internalKey, level, isLoading, isRoot, danger, ...props }
+  const { onClick, onContextMenu, onKeyDown } = useTreeNodeInteraction(treeNodeProps, nodeState)
 
   useEffect(() => {
     return () => {
@@ -133,74 +133,6 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     }
 
     return classes.join(' ')
-  }
-
-  function selectNode (): void {
-    setSelectedIds([id])
-
-    if (onSelect !== undefined) {
-      onSelect(treeNodeProps)
-    }
-  }
-
-  function onClick (event: MouseEvent): void {
-    selectNode()
-  }
-
-  function onContextMenu (event: MouseEvent): void {
-    if (onRightClick !== undefined) {
-      onRightClick(event, treeNodeProps)
-    }
-  }
-
-  function onKeyDown (event: React.KeyboardEvent): void {
-    if (event.key === 'Enter') {
-      selectNode()
-    }
-
-    if (event.key === 'ArrowRight') {
-      expandItem()
-    }
-
-    if (event.key === 'ArrowLeft') {
-      collapseItem()
-    }
-
-    if (event.key === 'ArrowDown') {
-      gotoNextNode(event)
-    }
-
-    if (event.key === 'ArrowUp') {
-      gotoPreviousNode(event)
-    }
-  }
-
-  function expandItem (): void {
-    setExpanded(true)
-  }
-
-  function collapseItem (): void {
-    setExpanded(false)
-  }
-
-  function gotoNextNode (event: KeyboardEvent): void {
-    event.preventDefault()
-
-    const index = nodeOrder!().indexOf(internalKey)
-
-    if (index < nodeOrder!().length - 1) {
-      nodesRefs!.current[nodeOrder!()[index + 1]].el.focus()
-    }
-  }
-
-  function gotoPreviousNode (event: KeyboardEvent): void {
-    event.preventDefault()
-
-    const index = nodeOrder!().indexOf(internalKey)
-
-    if (index > 0) {
-      nodesRefs!.current[nodeOrder!()[index - 1]].el.focus()
-    }
   }
 
   function setRef (el: HTMLElement): void {
@@ -256,7 +188,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
             props={ {
               node: treeNodeProps,
               children: (
-                <div className={ cn('tree-node__content', { 'tree-node__content--selected': isSelected }) }>
+                <div className={ cn('tree-node__content', { 'tree-node__content--selected': isSelected, 'tree-node__content--active': isActive }) }>
                   {wrapNode(nodeContent)}
                 </div>
               )
@@ -264,7 +196,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
           />
           )
         : (
-          <div className={ cn('tree-node__content', { 'tree-node__content--selected': isSelected }) }>
+          <div className={ cn('tree-node__content', { 'tree-node__content--selected': isSelected, 'tree-node__content--active': isActive }) }>
             {wrapNode(nodeContent)}
           </div>
           )}

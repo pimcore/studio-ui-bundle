@@ -1178,6 +1178,10 @@ element.tree.paste-only-contents: Klistra bara in innehåll här
 element.tree.cut: Klipp ut
 element.tree.cut-success-description: '{{elementType}} "{{name}}" har klippts ut och är redo att klistras in'
 element.tree.paste-cut: Klistra in utklippt element
+element.tree.selection.count_one: '{{count}} element valt'
+element.tree.selection.count_other: '{{count}} element valda'
+element.tree.selection.clear: Rensa markering
+element.tree.selection.limit-reached: 'Maximalt {{limit}} element uppnått'
 element.lock: Lås
 element.lock-and-propagate-to-children: Lås och sprid till barn
 element.unlock: Lås upp

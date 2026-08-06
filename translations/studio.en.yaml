@@ -1178,6 +1178,10 @@ element.tree.paste-only-contents: Paste only contents here
 element.tree.cut: Cut
 element.tree.cut-success-description: '{{elementType}} "{{name}}" has been cut and is ready to paste'
 element.tree.paste-cut: Paste cut-out element
+element.tree.selection.count_one: '{{count}} element selected'
+element.tree.selection.count_other: '{{count}} elements selected'
+element.tree.selection.clear: Clear selection
+element.tree.selection.limit-reached: 'Maximum of {{limit}} elements reached'
 element.lock: Lock
 element.lock-and-propagate-to-children: Lock and propagate to children
 element.unlock: Unlock

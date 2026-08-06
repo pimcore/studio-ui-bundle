@@ -1178,6 +1178,10 @@ element.tree.paste-only-contents: Lim inn kun innhold her
 element.tree.cut: Klipp ut
 element.tree.cut-success-description: '{{elementType}} "{{name}}" er klippet ut og klar til å limes inn'
 element.tree.paste-cut: Lim inn utklippet element
+element.tree.selection.count_one: '{{count}} element valgt'
+element.tree.selection.count_other: '{{count}} elementer valgt'
+element.tree.selection.clear: Fjern valg
+element.tree.selection.limit-reached: 'Maksimalt {{limit}} elementer nådd'
 element.lock: Lås
 element.lock-and-propagate-to-children: Lås og propager til underelementer
 element.unlock: Lås opp
