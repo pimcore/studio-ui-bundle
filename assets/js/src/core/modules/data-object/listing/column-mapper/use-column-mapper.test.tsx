@@ -30,7 +30,10 @@ function createAdvancedColumn (uniqueId: string, title?: string): SelectedColumn
     config: {},
     sortable: false,
     editable: false,
-    localizable: false,
+    // AdvancedColumnCollector::buildColumnConfigurations() always sets localizable: true
+    // for the 'dataobject.advanced' column definition, so this is what the real value
+    // is - not an assumption made for the sake of the test.
+    localizable: true,
     locale: null,
     originalApiDefinition: {
       key: 'advanced',
@@ -80,6 +83,24 @@ describe('useDataObjectColumnMapper - dataobject.advanced columns (#927)', () =>
     const column = { ...createAdvancedColumn('uniqueId-aaa'), locale: 'de' }
 
     expect(result.current.shouldMapDataToColumn({ key: 'uniqueId-aaa', locale: 'de' }, column)).toBe(true)
+    expect(result.current.shouldMapDataToColumn({ key: 'uniqueId-aaa', locale: 'en' }, column)).toBe(false)
+  })
+
+  it('resolves the "default" locale to null, mirroring use-data-query-helper.ts', () => {
+    const { result } = renderHook(() => useDataObjectColumnMapper())
+    const column = { ...createAdvancedColumn('uniqueId-aaa'), locale: 'default' }
+
+    expect(result.current.shouldMapDataToColumn({ key: 'uniqueId-aaa', locale: null }, column)).toBe(true)
+  })
+
+  it('does not resolve locale against the current UI language for a non-localizable advanced column (defensive: the current backend always sends localizable: true, but the mapper must not silently break if that changes)', () => {
+    const { result } = renderHook(() => useDataObjectColumnMapper())
+    const column = { ...createAdvancedColumn('uniqueId-aaa'), localizable: false, locale: null }
+
+    // use-data-query-helper.ts omits locale entirely for a non-localizable column,
+    // so the response is expected to carry the column's own (raw) locale, not the
+    // current UI language.
+    expect(result.current.shouldMapDataToColumn({ key: 'uniqueId-aaa', locale: null }, column)).toBe(true)
     expect(result.current.shouldMapDataToColumn({ key: 'uniqueId-aaa', locale: 'en' }, column)).toBe(false)
   })
 

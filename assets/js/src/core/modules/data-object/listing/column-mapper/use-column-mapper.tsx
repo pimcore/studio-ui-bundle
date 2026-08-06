@@ -29,10 +29,13 @@ export const useDataObjectColumnMapper = (): UseColumnMapperReturn => {
     // Match by the stable per-instance id instead.
     if (column.type === 'dataobject.advanced') {
       const uniqueId = column.originalApiDefinition?.__meta?.uniqueId
-      // Mirror use-data-query-helper.ts: a null/undefined locale is resolved to the
-      // current UI language before the request is sent, so the response echoes back
-      // that resolved locale rather than null.
-      const expectedLocale = column.locale ?? currentLanguage
+      // Mirror use-data-query-helper.ts exactly: only a localizable column has its
+      // locale resolved (null/undefined -> current UI language, 'default' -> null)
+      // before the request is sent; a non-localizable column's request omits locale
+      // entirely, so its response keeps whatever locale the column itself carries.
+      const expectedLocale = column.localizable
+        ? ((column.locale ?? currentLanguage) === 'default' ? null : (column.locale ?? currentLanguage))
+        : column.locale
       return data.key === uniqueId && data.locale === expectedLocale
     }
 
