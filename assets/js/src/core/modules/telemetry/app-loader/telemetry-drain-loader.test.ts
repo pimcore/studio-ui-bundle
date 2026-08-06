@@ -48,6 +48,8 @@ const batch = (nonce: string): Batch => ({
 /** Queue of outbox answers; `Error` means the request itself failed. */
 let outbox: Array<Batch | null | Error> = []
 let ackFails = false
+/** What the backend reports the ack removed; 0 means the nonce matched no row. */
+let ackRemoves = 1
 const acked: string[] = []
 
 const relayResponds = (init: { ok?: boolean, body?: unknown, throws?: boolean }): void => {
@@ -66,6 +68,7 @@ const relayResponds = (init: { ok?: boolean, body?: unknown, throws?: boolean })
 beforeEach(() => {
   outbox = []
   ackFails = false
+  ackRemoves = 1
   acked.length = 0
   global.fetch = jest.fn()
   relayResponds({})
@@ -92,7 +95,7 @@ beforeEach(() => {
         }
         acked.push(action.arg.telemetryOutboxAckParameters?.nonce ?? '')
 
-        return { acked: 1 }
+        return { acked: ackRemoves }
       }
     }
   })
@@ -222,6 +225,22 @@ describe('telemetryDrainLoader', () => {
     await drain()
 
     expect(acked).toEqual([])
+    expect(global.fetch).toHaveBeenCalledTimes(1) // did not go on to the second batch
+  })
+
+  /**
+   * The ack endpoint answers 200 with the number of rows it removed. Zero is not an error response,
+   * but it does mean the batch was NOT removed: the lease had expired, the row is pending again and
+   * a delivery attempt was burnt. Continuing would re-deliver the rest of the pool against a lease
+   * we no longer hold.
+   */
+  it('stops when the backend reports that the ack removed nothing', async () => {
+    outbox = [batch('n1'), batch('n2'), null]
+    ackRemoves = 0
+
+    await drain()
+
+    expect(acked).toEqual(['n1']) // asked once
     expect(global.fetch).toHaveBeenCalledTimes(1) // did not go on to the second batch
   })
 

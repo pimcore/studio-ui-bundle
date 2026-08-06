@@ -81,11 +81,19 @@ export async function drain (): Promise<void> {
     }
 
     try {
-      await store.dispatch(
+      const result = await store.dispatch(
         telemetryApi.endpoints.telemetryOutboxAck.initiate({
           telemetryOutboxAckParameters: { nonce: batch.nonce }
         })
       ).unwrap()
+
+      // acked: 0 is a successful request that removed nothing - the ack matched no row, so our
+      // lease expired mid-flight and the batch went back to pending with a delivery attempt burnt.
+      // Whoever holds it now owns it; carrying on would race them and re-deliver the rest of the
+      // pool for nothing. Stop and let the maintenance job, which holds its own lease, take over.
+      if (result.acked < 1) {
+        return
+      }
     } catch {
       return
     }
