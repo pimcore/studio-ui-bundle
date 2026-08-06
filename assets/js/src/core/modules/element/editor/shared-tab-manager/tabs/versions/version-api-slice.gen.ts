@@ -285,6 +285,10 @@ export type UpdateVersion = {
     public?: boolean | null;
     /** Note */
     note?: string | null;
+    /** Coauthor type, empty string clears it */
+    coauthorType?: string | null;
+    /** Coauthor, empty string clears it */
+    coauthor?: string | null;
 };
 export type VersionUser = {
     /** ID */

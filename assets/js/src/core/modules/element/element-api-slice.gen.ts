@@ -6,6 +6,14 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            elementBatchDeleteInfo: build.mutation<ElementBatchDeleteInfoApiResponse, ElementBatchDeleteInfoApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/elements/${queryArg.elementType}/batch-delete-info`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Elements"],
+            }),
             elementDelete: build.mutation<ElementDeleteApiResponse, ElementDeleteApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/elements/${queryArg.elementType}/delete/${queryArg.id}`,
@@ -113,6 +121,14 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type ElementBatchDeleteInfoApiResponse = /** status 200 Batch delete info for the given elements */ DeleteInfo;
+export type ElementBatchDeleteInfoApiArg = {
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+    body: {
+        ids?: number[];
+    };
+};
 export type ElementDeleteApiResponse =
     /** status 201 Successfully created jobRun for deleting element and its children */ {
         /** ID of created jobRun */
@@ -233,16 +249,6 @@ export type ElementResolveBySearchTermApiArg = {
     /** Search term to filter elements by. */
     searchTerm: string;
 };
-export type Error = {
-    /** Message */
-    message: string;
-};
-export type DevError = {
-    /** Message */
-    message: string;
-    /** Details */
-    details: string;
-};
 export type DeleteInfo = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -252,6 +258,16 @@ export type DeleteInfo = {
     hasDependencies: boolean;
     /** canUseRecycleBin */
     canUseRecycleBin: boolean;
+};
+export type Error = {
+    /** Message */
+    message: string;
+};
+export type DevError = {
+    /** Message */
+    message: string;
+    /** Details */
+    details: string;
 };
 export type EditLockUser = {
     /** Name of the user holding the lock */
@@ -336,6 +352,7 @@ export type ElementUsage = {
     totalCount?: number;
 };
 export const {
+    useElementBatchDeleteInfoMutation,
     useElementDeleteMutation,
     useElementGetDeleteInfoQuery,
     useElementGetEditlockQuery,
