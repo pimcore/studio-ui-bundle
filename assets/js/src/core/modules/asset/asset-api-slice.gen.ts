@@ -136,6 +136,15 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Assets"],
             }),
+            assetDownloadZipAvailable: build.query<
+                AssetDownloadZipAvailableApiResponse,
+                AssetDownloadZipAvailableApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/download/zip/${queryArg.jobRunId}/available`,
+                }),
+                providesTags: ["Assets"],
+            }),
             assetDownloadById: build.query<AssetDownloadByIdApiResponse, AssetDownloadByIdApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/download` }),
                 providesTags: ["Assets"],
@@ -604,6 +613,12 @@ export type AssetDeleteZipApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
 };
+export type AssetDownloadZipAvailableApiResponse =
+    /** status 200 Availability flag for the ZIP archive */ DownloadAvailability;
+export type AssetDownloadZipAvailableApiArg = {
+    /** JobRunId of the JobRun */
+    jobRunId: number;
+};
 export type AssetDownloadByIdApiResponse = /** status 200 Original asset binary file */ Blob;
 export type AssetDownloadByIdApiArg = {
     /** Id of the asset */
@@ -663,6 +678,10 @@ export type AssetUpdateByIdApiArg = {
             parentId?: number | null;
             key?: string | null;
             locked?: string | null;
+            /** Optional coauthor type stored on versions created by this save */
+            coauthorType?: string;
+            /** Optional coauthor identifier stored on versions created by this save */
+            coauthor?: string;
             data?: string | null;
             dataUri?: string | null;
             metadata?: UpdateCustomMetadata[] | null;
@@ -878,6 +897,10 @@ export type AssetPatchByIdApiArg = {
             parentId?: number | null;
             key?: string | null;
             locked?: string | null;
+            /** Optional coauthor type stored on versions created by this save */
+            coauthorType?: string;
+            /** Optional coauthor identifier stored on versions created by this save */
+            coauthor?: string;
             metadata?: PatchCustomMetadata[] | null;
         }[];
     };
@@ -1057,6 +1080,10 @@ export type CustomSettings = {
     fixedCustomSettings?: FixedCustomSettings | null;
     /** dynamic custom settings - can be any key-value pair */
     dynamicCustomSettings?: object[];
+};
+export type DownloadAvailability = {
+    /** Whether the exported file is still available for download */
+    available: boolean;
 };
 export type ExportAllFilter = {
     /** Column Filter */
@@ -1445,6 +1472,7 @@ export const {
     useAssetDocumentStreamByThumbnailQuery,
     useAssetDownloadZipQuery,
     useAssetDeleteZipMutation,
+    useAssetDownloadZipAvailableQuery,
     useAssetDownloadByIdQuery,
     useAssetExportZipAssetMutation,
     useAssetExportZipFolderMutation,

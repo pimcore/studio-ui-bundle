@@ -19,6 +19,10 @@ import { type DocumentPermissions } from '../document/document-api-slice.gen'
 const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.DATA_OBJECT_DETAIL, tagNames.ASSET_DETAIL, tagNames.ASSET_GRID, tagNames.DATA_OBJECT_GRID],
   endpoints: {
+    // Read-only pre-check (POST only to carry the id list): must not invalidate element caches
+    elementBatchDeleteInfo: {
+      invalidatesTags: []
+    },
     elementDelete: {
       invalidatesTags: (result, error, args) => invalidatingTags.ELEMENT_DETAIL(args.elementType, args.id)
     },
@@ -54,3 +58,5 @@ export const {
   useElementLockMutation,
   useElementUnlockMutation
 } = api
+
+export { api }

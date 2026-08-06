@@ -396,6 +396,8 @@ export type UserInformation = {
     language: string;
     /** Locale for dateTime */
     dateTimeLocale: string | null;
+    /** Theme of the User */
+    theme: string;
     /** Welcome Screen */
     welcomeScreen: boolean;
     /** Memorize Tabs */
@@ -418,8 +420,6 @@ export type UserInformation = {
     activePerspective: string | null;
     /** Allowed studio perspectives */
     perspectives: PerspectiveConfig[];
-    /** Theme of the User */
-    theme: string;
 };
 export type UserWorkspace = {
     /** ID of the element */
@@ -514,6 +514,8 @@ export type User = {
     language: string;
     /** Locale for dateTime */
     dateTimeLocale?: string | null;
+    /** Theme of the User */
+    theme: string;
     /** Timestamp of the last login */
     lastLogin?: number | null;
     /** Memorize Tabs */
@@ -542,8 +544,6 @@ export type User = {
     objectDependencies: UserObjectDependencies;
     /** Allowed studio perspectives */
     perspectives: PerspectiveConfig[];
-    /** Theme of the User */
-    theme: string;
 };
 export type User2 = {
     /** Email of the User */
