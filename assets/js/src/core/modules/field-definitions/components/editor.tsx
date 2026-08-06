@@ -21,8 +21,8 @@ export interface EditorProps {
   useItemsQuery: SettingsProviderProps['useItemsQuery']
   useItemsDeleteMutation?: SettingsProviderProps['useItemsDeleteMutation']
   useDetailGeneralSettingsQuery: SettingsProviderProps['useDetailGeneralSettingsQuery']
-  useDetailLayoutQuery?: Exclude<SettingsProviderProps['useDetailLayoutQuery'], undefined>
-  useDetailLayoutAccessor?: Exclude<SettingsProviderProps['useDetailLayoutAccessor'], undefined>
+  useDetailLayoutQuery?: SettingsProviderProps['useDetailLayoutQuery']
+  useDetailLayoutAccessor?: SettingsProviderProps['useDetailLayoutAccessor']
   useDetailUpdateMutation: SettingsProviderProps['useDetailUpdateMutation']
   GeneralSettingsFormFields: SettingsProviderProps['GeneralSettingsFormFields']
   LayoutProvider?: Exclude<SettingsProviderProps['LayoutProvider'], undefined>
