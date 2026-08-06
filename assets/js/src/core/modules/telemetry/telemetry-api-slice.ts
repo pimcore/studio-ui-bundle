@@ -29,7 +29,9 @@ export interface TelemetryAckResponse {
 
 export const telemetryApi = api.injectEndpoints({
   endpoints: (build) => ({
-    telemetryGetOutbox: build.query<TelemetryOutboxBatch | null, void>({
+    // `undefined` rather than `void` for the no-argument case: `void` outside a return position
+    // trips @typescript-eslint/no-invalid-void-type, and callers already pass `initiate(undefined)`.
+    telemetryGetOutbox: build.query<TelemetryOutboxBatch | null, undefined>({
       query: () => ({
         url: '/pimcore-studio/api/telemetry/outbox',
         // The endpoint answers 204 when the pool is empty; map that to null rather than let the
