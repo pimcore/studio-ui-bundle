@@ -32,7 +32,7 @@ export const useDataObjectColumnMapper = (): UseColumnMapperReturn => {
       // Mirror use-data-query-helper.ts: a null/undefined locale is resolved to the
       // current UI language before the request is sent, so the response echoes back
       // that resolved locale rather than null.
-      const expectedLocale = (column.locale === null || column.locale === undefined) ? currentLanguage : column.locale
+      const expectedLocale = column.locale ?? currentLanguage
       return data.key === uniqueId && data.locale === expectedLocale
     }
 
