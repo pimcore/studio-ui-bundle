@@ -20,7 +20,7 @@ export interface OperationalGridProps extends Omit<GridProps, 'data' | 'onUpdate
   onChange?: (value: GridProps['data']) => void
   onColumnsChange?: (columns: Array<ColumnDef<any>>) => void
   children: React.ReactNode
-  onUpdateCellData?: Exclude<GridProps['onUpdateCellData'], undefined>
+  onUpdateCellData?: GridProps['onUpdateCellData']
 }
 
 const OperationalGrid = (props: OperationalGridProps): React.JSX.Element => {
