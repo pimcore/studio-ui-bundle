@@ -45,7 +45,7 @@ export interface ElementSelectorConfig {
   }
   config?: {
     assets?: {
-      allowedTypes?: Exclude<IRelationAllowedTypesDataComponent['allowedAssetTypes'], undefined>
+      allowedTypes?: IRelationAllowedTypesDataComponent['allowedAssetTypes']
     }
 
     documents?: {
