@@ -53,8 +53,8 @@ export interface ElementSelectorConfig {
     }
 
     objects?: {
-      allowedTypes?: Exclude<IRelationAllowedTypesDataComponent['allowedDataObjectTypes'], undefined>
-      allowedClasses?: Exclude<IRelationAllowedTypesDataComponent['allowedClasses'], undefined>
+      allowedTypes?: IRelationAllowedTypesDataComponent['allowedDataObjectTypes']
+      allowedClasses?: IRelationAllowedTypesDataComponent['allowedClasses']
     }
   }
 }
