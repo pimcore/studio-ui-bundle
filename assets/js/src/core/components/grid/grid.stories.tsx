@@ -140,3 +140,111 @@ export const EmptyState = {
     isLoading: false
   }
 }
+
+export const RowSelection = {
+  render: (args: GridProps) => {
+    const ComponentWrapper = (): React.JSX.Element => {
+      const [selectedRows, setSelectedRows] = useState<GridProps['selectedRows']>({ 0: true })
+
+      return (
+        <Grid
+          { ...args }
+          onSelectedRowsChange={ setSelectedRows }
+          selectedRows={ selectedRows }
+        />
+      )
+    }
+
+    return <ComponentWrapper />
+  },
+
+  args: {
+    data,
+    columns,
+    enableMultipleRowSelection: true
+  }
+}
+
+export const RowClickMultiSelection = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Multi-select with the checkbox column still visible: a click anywhere on the row toggles it exactly like its checkbox (used by the element selector in multi-select mode). Keyboard: Tab focuses a row, Space (or Enter, since no `onRowDoubleClick` is set) toggles it.'
+      }
+    }
+  },
+
+  render: (args: GridProps) => {
+    const ComponentWrapper = (): React.JSX.Element => {
+      const [selectedRows, setSelectedRows] = useState<GridProps['selectedRows']>({})
+
+      return (
+        <Grid
+          { ...args }
+          onRowClick={ (row) => {
+            const newSelectedRows: NonNullable<GridProps['selectedRows']> = {}
+
+            for (const rowId in selectedRows) {
+              if (rowId !== row.id) {
+                newSelectedRows[rowId] = selectedRows[rowId]
+              }
+            }
+
+            if (selectedRows?.[row.id] !== true) {
+              newSelectedRows[row.id] = true
+            }
+
+            setSelectedRows(newSelectedRows)
+          } }
+          onSelectedRowsChange={ setSelectedRows }
+          selectedRows={ selectedRows }
+        />
+      )
+    }
+
+    return <ComponentWrapper />
+  },
+
+  args: {
+    data,
+    columns,
+    enableMultipleRowSelection: true
+  }
+}
+
+export const RowClickSelection = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Selection stays fully enabled while the checkbox column is suppressed via `rowSelectionColumn: \'none\'` — a click anywhere on the row toggles it instead, and `onRowDoubleClick` carries the confirm action (used by the element selector in single-select mode). Rows with click handlers are keyboard-accessible: Tab focuses a row, Space selects it, Enter triggers the double-click action.'
+      }
+    }
+  },
+
+  render: (args: GridProps) => {
+    const ComponentWrapper = (): React.JSX.Element => {
+      const [selectedRows, setSelectedRows] = useState<GridProps['selectedRows']>({})
+
+      return (
+        <Grid
+          { ...args }
+          onRowClick={ (row) => {
+            setSelectedRows(selectedRows?.[row.id] === true ? {} : { [row.id]: true })
+          } }
+          onRowDoubleClick={ (row) => { console.log('apply row', row.id) } }
+          onSelectedRowsChange={ setSelectedRows }
+          selectedRows={ selectedRows }
+        />
+      )
+    }
+
+    return <ComponentWrapper />
+  },
+
+  args: {
+    data,
+    columns,
+    enableRowSelection: true,
+    rowSelectionColumn: 'none'
+  }
+}
