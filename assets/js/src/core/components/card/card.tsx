@@ -26,7 +26,7 @@ export interface CardProps extends AntdCardProps {
   image?: { src: string, alt?: string } | null
   footer?: React.ReactNode
   theme?: 'default' | 'fieldset' | 'card-with-highlight' | 'border-highlight'
-  contentPadding?: Exclude<BoxProps['padding'], undefined>
+  contentPadding?: BoxProps['padding']
   extraPosition?: FlexProps['justify']
 }
 
