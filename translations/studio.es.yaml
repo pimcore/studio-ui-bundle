@@ -1193,13 +1193,17 @@ element.delete.folder.large.note: 'Tenga en cuenta: La carpeta y su contenido se
 element.delete.folder.ok: Eliminar
 element.delete.folder.ok.permanent: Eliminar permanentemente
 element.delete.batch.title: Eliminar elementos
-element.delete.batch.note: 'Tenga en cuenta: Estos elementos se eliminarán permanentemente y no se podrán restaurar.'
+element.delete.batch.note_one: 'Tenga en cuenta: Este elemento se eliminará permanentemente y no se podrá restaurar.'
+element.delete.batch.note_other: 'Tenga en cuenta: Estos elementos se eliminarán permanentemente y no se podrán restaurar.'
+element.delete.batch.note.permanent-dependencies_one: "Tenga en cuenta: Este elemento tiene dependencias y se eliminará permanentemente.\nNo se podrá restaurar."
+element.delete.batch.note.permanent-dependencies_other: "Tenga en cuenta: Estos elementos tienen dependencias y se eliminarán permanentemente.\nNo se podrán restaurar."
 element.delete.batch.question_one: '¿Realmente desea eliminar este elemento?'
 element.delete.batch.question_other: '¿Realmente desea eliminar estos {{count}} elementos?'
 element.delete.batch.ok: Eliminar
 element.delete.batch.ok.permanent: Eliminar permanentemente
 element.delete.batch.show-paths: Mostrar elementos
-element.delete.batch.dependencies-warning: 'Puede haber dependencias, ¿eliminar de todas formas?'
+element.delete.batch.dependencies-warning.confirmed_one: 'Tenga en cuenta: Este elemento tiene dependencias.'
+element.delete.batch.dependencies-warning.confirmed_other: 'Tenga en cuenta: Estos elementos tienen dependencias.'
 element.open: Abrir
 element.toolbar.copy-id: Copiar ID
 element.toolbar.copy-full-path-to-clipboard: Copiar ruta completa
