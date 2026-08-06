@@ -31,8 +31,8 @@ export interface GridRowProps {
   activeColumId?: string
   onFocusCell?: (cell: GridCellReference) => void
   contextMenu?: ListGridContextMenuComponents
-  onRowDoubleClick?: GridProps['onRowDoubleClick']
-  onRowClick?: GridProps['onRowClick']
+  onRowDoubleClick?: NonNullable<GridProps['onRowDoubleClick']>
+  onRowClick?: NonNullable<GridProps['onRowClick']>
   enableRowVirtualizer: boolean
   enableColumnVirtualizer: boolean
   size?: GridProps['size']
@@ -116,21 +116,45 @@ const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, vir
     }
   }
 
+  const hasRowInteraction = props.onRowClick !== undefined || props.onRowDoubleClick !== undefined
+
+  const onRowKeyDown = (event: React.KeyboardEvent<HTMLTableRowElement>): void => {
+    // only react when the row itself is focused, not when typing inside cell editors
+    if (event.target !== event.currentTarget) {
+      return
+    }
+
+    if (event.key === 'Enter') {
+      event.preventDefault()
+
+      if (props.onRowDoubleClick !== undefined) {
+        props.onRowDoubleClick(row)
+      } else {
+        props.onRowClick?.(row)
+      }
+    } else if (event.key === ' ') {
+      event.preventDefault()
+      props.onRowClick?.(row)
+    }
+  }
+
   const visibleCells = useMemo(() => {
     return enableColumnVirtualizer ? virtualColumns?.map((virtualColumn) => row.getVisibleCells()[virtualColumn.index]) : row.getVisibleCells()
   }, [enableColumnVirtualizer, virtualColumns, JSON.stringify(row)])
 
   return useMemo(() => renderWithContextMenu(
     <tr
+      aria-selected={ hasRowInteraction ? row.getIsSelected() : undefined }
       className={ [
         'ant-table-row',
         row.getIsSelected() ? 'ant-table-row-selected' : '',
-        props.onRowDoubleClick !== undefined || props.onRowClick !== undefined ? 'hover' : ''
+        hasRowInteraction ? 'hover' : ''
       ].join(' ') }
       data-index={ props?.virtualIndex } // needed for dynamic row height measurement
       data-testid={ createTableRowTestId(row.index) }
       onClick={ onRowClick }
       onDoubleClick={ onRowDoubleClick }
+      onKeyDown={ hasRowInteraction ? onRowKeyDown : undefined }
       ref={ combinedRef }
       style={
         enableColumnVirtualizer
@@ -141,6 +165,7 @@ const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, vir
             }
           : { ...style }
       }
+      tabIndex={ hasRowInteraction ? 0 : undefined }
     >
       {visibleCells?.map((cell) => {
         const isAutoWidth = cell.column.columnDef.meta?.autoWidth === true

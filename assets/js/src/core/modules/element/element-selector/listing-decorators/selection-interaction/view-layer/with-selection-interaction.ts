@@ -71,7 +71,7 @@ export const withSelectionInteraction = (useBaseHook: AbstractDecoratorProps['us
 
       const newGridProps: ReturnType<typeof baseGetGridProps> = {
         ...baseGridProps,
-        hideRowSelectionColumn: true,
+        rowSelectionColumn: 'none',
         onRowClick,
         onRowDoubleClick
       }

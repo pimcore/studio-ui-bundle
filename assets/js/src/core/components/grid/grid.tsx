@@ -105,7 +105,7 @@ export const Grid = ({
   docked = false,
   onActiveCellChange,
   enableRowSelection = false,
-  hideRowSelectionColumn = false,
+  rowSelectionColumn = 'checkbox',
   selectedRows = {},
   disabled = false,
   allowMultipleAutoWidthColumns = false,
@@ -204,7 +204,7 @@ export const Grid = ({
   useMemo(() => {
     updateRowDragColumn()
     updateRowSelectionColumn()
-  }, [columns, isRowSelectionEnabled, hideRowSelectionColumn, enableRowDrag, selectedRows])
+  }, [columns, isRowSelectionEnabled, rowSelectionColumn, enableRowDrag, selectedRows])
 
   const tableProps: TableOptions<any> = useMemo(() => ({
     data,
@@ -635,7 +635,7 @@ export const Grid = ({
   }
 
   function updateRowSelectionColumn (): void {
-    if (isRowSelectionEnabled && !hideRowSelectionColumn) {
+    if (isRowSelectionEnabled && rowSelectionColumn === 'checkbox') {
       addRowSelectionColumn()
     } else {
       removeRowSelectionColumn()
