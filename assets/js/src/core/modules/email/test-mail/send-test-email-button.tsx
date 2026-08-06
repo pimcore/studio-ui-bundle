@@ -20,6 +20,7 @@ export const SendTestEmailButton = (): React.JSX.Element => {
     <button
       className="main-nav__list-btn"
       onClick={ () => { setIsOpen(true) } }
+      type="button"
     >
       {t('navigation.test-email')}
     </button>

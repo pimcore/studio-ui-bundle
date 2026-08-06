@@ -21,7 +21,7 @@ export interface ObjectComponentProps {
   className?: string
   dataType?: string
   datatype?: string
-  noteditable?: AbstractObjectDataDefinition['noteditable']
+  noteditable?: Exclude<AbstractObjectDataDefinition['noteditable'], undefined>
   [p: string]: any
 }
 

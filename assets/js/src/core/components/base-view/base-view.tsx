@@ -25,7 +25,7 @@ export interface BaseViewProps {
   onChange?: CollapseProps['onChange']
   collapsible?: boolean
   theme?: 'fieldset' | 'card-with-highlight' | 'default' | 'border-highlight'
-  contentPadding?: BoxProps['padding']
+  contentPadding?: Exclude<BoxProps['padding'], undefined>
   extra?: React.ReactNode
   extraPosition?: 'start' | 'end'
 }

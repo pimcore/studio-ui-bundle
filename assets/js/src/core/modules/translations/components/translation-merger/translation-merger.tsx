@@ -34,7 +34,6 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
     revertableCount,
     paginatedRows,
     currentPage,
-    pageSize,
     totalRows,
     setCurrentPage,
     setPageSize,

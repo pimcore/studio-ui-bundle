@@ -35,7 +35,7 @@ export interface GridRowProps {
   onRowClick?: NonNullable<GridProps['onRowClick']>
   enableRowVirtualizer: boolean
   enableColumnVirtualizer: boolean
-  size?: GridProps['size']
+  size?: Exclude<GridProps['size'], undefined>
   rowStyle?: CSSProperties
   measureElement?: (node: HTMLElement | null) => void
   virtualIndex?: number
