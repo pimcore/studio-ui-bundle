@@ -14,7 +14,7 @@ import { type GridProps } from '@Pimcore/types/components/types'
 const BORDER_WIDTH = 1
 
 export interface UseStylesProps {
-  size?: GridProps['size']
+  size?: Exclude<GridProps['size'], undefined>
   enableRowVirtualizer: boolean
   enableColumnVirtualizer: boolean
 }

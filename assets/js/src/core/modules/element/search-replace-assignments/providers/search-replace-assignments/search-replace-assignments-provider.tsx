@@ -17,7 +17,6 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
 import { SearchReplaceAssignmentsJob } from '@Pimcore/modules/execution-engine/jobs/search-replace-assignments/search-replace-assignments-job'
-import { useTranslation } from 'react-i18next'
 
 interface SearchReplaceAssignmentsContextValue {
   // State
@@ -55,7 +54,6 @@ interface SearchReplaceAssignmentsProviderProps {
 }
 
 export const SearchReplaceAssignmentsProvider = ({ children }: SearchReplaceAssignmentsProviderProps): React.JSX.Element => {
-  const { t } = useTranslation()
   const defaultPageSize = 50
   const [searchFor, setSearchFor] = useState<ManyToOneRelationValue | null>(null)
   const [replaceWith, setReplaceWith] = useState<ManyToOneRelationValue | null>(null)

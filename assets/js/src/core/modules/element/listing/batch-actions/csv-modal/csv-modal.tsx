@@ -9,7 +9,7 @@
  */
 
 import { Alert, Modal, Space } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { CreateCSVForm, type CSVFormValues } from './create-csv-form/create-csv-form'
 import { CsvDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/csv-download-job'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
@@ -20,9 +20,7 @@ import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type ExportCsvApiResponse, type ExportCsvFolderApiResponse, useExportCsvFolderMutation, useExportCsvMutation } from '@Pimcore/modules/element/export-api-slice.gen'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
-import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { isNil } from 'lodash'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
 import { type GridColumnRequest } from '@sdk/api/asset'
@@ -37,8 +35,6 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
   const [form] = Form.useForm()
   const executionEngine = useExecutionEngine()
   const { id, elementType } = useElementContext()
-  const { element } = useElementDraft(id, elementType)
-  const [jobTitle, setJobTitle] = useState<string>('Element')
   const [fetchCreateCsv, { isError: isCreateCsvError, error: createCsvError }] = useExportCsvMutation()
   const [fetchCreateFolderCsv, { isError: isCreateFolderCsvError, error: createFolderCsvError }] = useExportCsvFolderMutation()
   const { selectedRows } = useRowSelection()
@@ -53,20 +49,6 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
     header: 'name'
   }
   const { t } = useTranslation()
-
-  useEffect(() => {
-    if (element === undefined) {
-      return
-    }
-
-    if ('filename' in element) {
-      setJobTitle(element.filename as string)
-    }
-
-    if ('key' in element) {
-      setJobTitle(element.key as string)
-    }
-  }, [element])
 
   useEffect(() => {
     if (isCreateCsvError) {
