@@ -24,8 +24,8 @@ export interface HeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   align?: FlexProps['align']
   position?: 'top' | 'bottom' | 'content' | 'none'
   borderStyle?: 'default' | 'primary'
-  padding?: Exclude<BoxProps['padding'], undefined>
-  margin?: Exclude<BoxProps['margin'], undefined>
+  padding?: BoxProps['padding']
+  margin?: BoxProps['margin']
 }
 
 export const Header = (props: HeaderProps): React.JSX.Element => {
