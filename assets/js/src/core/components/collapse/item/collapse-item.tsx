@@ -34,7 +34,7 @@ export interface CollapseItemProps extends Omit<AntdCollapsePropsItem, 'key' | '
   defaultActive?: boolean
   onChange?: CollapseProps['onChange']
   subLabel?: React.ReactNode
-  subLabelPosition?: Exclude<CollapseHeaderProps['subLabelPosition'], undefined>
+  subLabelPosition?: CollapseHeaderProps['subLabelPosition']
 }
 
 export const ExpandIcon = ({ isActive }: { isActive: boolean }): React.ReactElement => {

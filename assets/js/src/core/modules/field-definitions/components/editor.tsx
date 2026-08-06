@@ -25,12 +25,12 @@ export interface EditorProps {
   useDetailLayoutAccessor?: SettingsProviderProps['useDetailLayoutAccessor']
   useDetailUpdateMutation: SettingsProviderProps['useDetailUpdateMutation']
   GeneralSettingsFormFields: SettingsProviderProps['GeneralSettingsFormFields']
-  LayoutProvider?: Exclude<SettingsProviderProps['LayoutProvider'], undefined>
-  useLayout?: Exclude<SettingsProviderProps['useLayout'], undefined>
+  LayoutProvider?: SettingsProviderProps['LayoutProvider']
+  useLayout?: SettingsProviderProps['useLayout']
   fieldDefinitionRegistry?: DynamicTypeFieldDefinitionRegistry
-  customLayouts?: Exclude<SettingsProviderProps['customLayouts'], undefined>
-  importExportConfig?: Exclude<SettingsProviderProps['importExportConfig'], undefined>
-  hideTreeExpanders?: Exclude<SettingsProviderProps['hideTreeExpanders'], undefined>
+  customLayouts?: SettingsProviderProps['customLayouts']
+  importExportConfig?: SettingsProviderProps['importExportConfig']
+  hideTreeExpanders?: SettingsProviderProps['hideTreeExpanders']
   view?: React.JSX.Element
 }
 

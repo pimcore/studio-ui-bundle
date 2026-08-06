@@ -49,7 +49,7 @@ export interface ElementSelectorConfig {
     }
 
     documents?: {
-      allowedTypes?: Exclude<IRelationAllowedTypesDataComponent['allowedDocumentTypes'], undefined>
+      allowedTypes?: IRelationAllowedTypesDataComponent['allowedDocumentTypes']
     }
 
     objects?: {
