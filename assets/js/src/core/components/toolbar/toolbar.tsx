@@ -22,8 +22,8 @@ export interface ToolbarProps {
   borderStyle?: 'default' | 'primary'
   position?: 'top' | 'bottom' | 'content' | 'none'
   size?: 'small' | 'auto' | 'default'
-  padding?: Exclude<BoxProps['padding'], undefined>
-  margin?: Exclude<BoxProps['margin'], undefined>
+  padding?: BoxProps['padding']
+  margin?: BoxProps['margin']
 }
 
 export const Toolbar = ({
