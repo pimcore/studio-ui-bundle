@@ -25,7 +25,7 @@ export interface CollapseStyleProps {
   expandIconPosition?: CollapseProps['expandIconPosition']
   extraPosition?: 'start' | 'end'
   theme?: 'success' | 'error' | 'primary' | 'simple' | 'default' | 'card-with-highlight' | 'fieldset' | 'border-highlight'
-  contentPadding?: Exclude<BoxProps['padding'], undefined>
+  contentPadding?: BoxProps['padding']
   hasContentSeparator?: boolean
 }
 
