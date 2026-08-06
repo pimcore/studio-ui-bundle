@@ -62,6 +62,7 @@ export * from '@Pimcore/components/element-tree/hooks/use-element-tree-root-node
 export { type UseTreeSelectionReturnType, useTreeSelection } from '@Pimcore/components/element-tree/hooks/use-tree-selection'
 export { TreeSelectionBar } from '@Pimcore/components/element-tree/selection/tree-selection-bar'
 export { type OrderedNode, buildOrderedNodes, resolveNodeIdRange } from '@Pimcore/components/element-tree/utils/selection-range'
+export { buildVisibleNodeOrder } from '@Pimcore/components/element-tree/utils/visible-node-order'
 export * from '@Pimcore/components/element-tree/expander/tree-expander'
 export * from '@Pimcore/components/element-tree/list/tree-list'
 export { TreeNode, type TreeNodeProps, defaultProps as treeNodeDefaultProps } from '@Pimcore/components/element-tree/node/tree-node'

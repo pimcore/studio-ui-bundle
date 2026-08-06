@@ -29,6 +29,7 @@ import { useTreeId } from '@Pimcore/components/element-tree/provider/tree-id-pro
 import { createTreeTestId } from '@Pimcore/utils/test-id-generator'
 import { TreeSelectionBar } from './selection/tree-selection-bar'
 import { useElementTree } from './hooks/use-element-tree'
+import { buildVisibleNodeOrder } from './utils/visible-node-order'
 
 export interface TreeSearchProps {
   node: TreeNodeProps
@@ -114,22 +115,10 @@ const ElementTree = (
   }, [nodeId, clearSelection])
 
   const nodesRefs = useRef<Record<string, INodeRef>>({})
+  // Visible top to bottom order of the rendered nodes, used for keyboard
+  // navigation and range selection.
   const nodeOrder = useCallback(() => {
-    return Object.keys(nodesRefs.current).sort((a: string, b: string) => {
-      const nodeA = nodesRefs.current[a].node
-      const nodeB = nodesRefs.current[b].node
-
-      const indexesA = nodeA.internalKey.split('-')
-      const indexesB = nodeB.internalKey.split('-')
-
-      for (let index = 0; index < indexesA.length; index++) {
-        if (indexesA[index] !== indexesB[index]) {
-          return parseInt(indexesA[index]) - parseInt(indexesB[index])
-        }
-      }
-
-      return 0
-    })
+    return buildVisibleNodeOrder(nodesRefs.current)
   }, [nodesRefs.current])
 
   async function onRightClick (event: React.MouseEvent, node: TreeNodeProps): Promise<void> {
