@@ -531,6 +531,7 @@ classname: Nombre de clase
 index: Índice
 userModification: Modificado por
 userOwner: Propietario
+listing.grid-config.convert-to-advanced: Convertir en columna avanzada
 listing.grid-config.title: Configuración de cuadrícula
 grid-config.discard-all-changes: Descartar todos los cambios
 grid-config.apply-changes: Aplicar cambios
@@ -2400,6 +2401,7 @@ perspective-editor.form.main-nav-permission.system.cache_clearSymfony: Caché > 
 perspective-editor.form.main-nav-permission.system.cache_clearTemp: Caché > Limpiar archivos temporales
 perspective-editor.form.main-nav-permission.system.cache_hidden: Ocultar menú de caché
 perspective-editor.form.main-nav-permission.system.systemSettings: Configuración del sistema
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Gestión de propiedad
 perspective-editor.form.main-nav-permission.system.about: Acerca de
 perspective-editor.form.main-nav-permission.category.reporting: Informes
 perspective-editor.form.main-nav-permission.reporting.hidden: Ocultar menú de informes
@@ -2846,4 +2848,3 @@ saved-search.update.success: Búsqueda guardada actualizada
 saved-search.delete.success: Búsqueda guardada eliminada
 saved-search.shared-modified.info: Has realizado modificaciones en la configuración original. Como pertenece a otra persona, puedes guardarla como una nueva búsqueda.
 saved-search.menu-shortcut-group: Grupo de menú
-perspective-editor.form.main-nav-permission.system.ownershipManagement: Gestión de propiedad

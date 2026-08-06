@@ -531,6 +531,7 @@ classname: Klassenavn
 index: Indeks
 userModification: Endret av (bruker)
 userOwner: Eier (bruker)
+listing.grid-config.convert-to-advanced: Konverter til avansert kolonne
 listing.grid-config.title: Rutenettskonfigurasjon
 grid-config.discard-all-changes: Forkast alle endringer
 grid-config.apply-changes: Bruk endringer
@@ -2400,6 +2401,7 @@ perspective-editor.form.main-nav-permission.system.cache_clearSymfony: Buffer > 
 perspective-editor.form.main-nav-permission.system.cache_clearTemp: Buffer > Tøm midlertidige filer
 perspective-editor.form.main-nav-permission.system.cache_hidden: Skjul buffermeny
 perspective-editor.form.main-nav-permission.system.systemSettings: Systeminnstillinger
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Eierskapsadministrasjon
 perspective-editor.form.main-nav-permission.system.about: Om
 perspective-editor.form.main-nav-permission.category.reporting: Rapportering
 perspective-editor.form.main-nav-permission.reporting.hidden: Skjul rapporteringsmeny
@@ -2846,4 +2848,3 @@ saved-search.update.success: Lagret søk oppdatert
 saved-search.delete.success: Lagret søk slettet
 saved-search.shared-modified.info: Du har gjort endringer i den opprinnelige konfigurasjonen. Siden den eies av noen andre, kan du lagre den som et nytt søk.
 saved-search.menu-shortcut-group: Menygruppe
-perspective-editor.form.main-nav-permission.system.ownershipManagement: Eierskapsadministrasjon

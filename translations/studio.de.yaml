@@ -531,6 +531,7 @@ classname: Klassenname
 index: Index
 userModification: Benutzer Änderung
 userOwner: Eigentümer
+listing.grid-config.convert-to-advanced: In erweiterte Spalte umwandeln
 listing.grid-config.title: Grid-Konfiguration
 grid-config.discard-all-changes: Alle Änderungen verwerfen
 grid-config.apply-changes: Änderungen übernehmen
@@ -2400,6 +2401,7 @@ perspective-editor.form.main-nav-permission.system.cache_clearSymfony: Cache > S
 perspective-editor.form.main-nav-permission.system.cache_clearTemp: Cache > Temporäre Dateien löschen
 perspective-editor.form.main-nav-permission.system.cache_hidden: Cache Menü ausblenden
 perspective-editor.form.main-nav-permission.system.systemSettings: Systemeinstellungen
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Eigentümerverwaltung
 perspective-editor.form.main-nav-permission.system.about: Über
 perspective-editor.form.main-nav-permission.category.reporting: Berichte
 perspective-editor.form.main-nav-permission.reporting.hidden: Berichte Menü ausblenden
@@ -2846,4 +2848,3 @@ saved-search.update.success: Gespeicherte Suche aktualisiert
 saved-search.delete.success: Gespeicherte Suche gelöscht
 saved-search.shared-modified.info: Sie haben die ursprüngliche Konfiguration geändert. Da sie jemand anderem gehört, können Sie sie als neue Suche speichern.
 saved-search.menu-shortcut-group: Menügruppe
-perspective-editor.form.main-nav-permission.system.ownershipManagement: Eigentümerverwaltung

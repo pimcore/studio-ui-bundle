@@ -531,6 +531,7 @@ classname: Classname
 index: Index
 userModification: User modification
 userOwner: User owner
+listing.grid-config.convert-to-advanced: Convert to advanced column
 listing.grid-config.title: Grid Config
 grid-config.discard-all-changes: Discard all changes
 grid-config.apply-changes: Apply changes
