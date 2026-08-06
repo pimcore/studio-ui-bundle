@@ -22,6 +22,20 @@ export const useDataObjectColumnMapper = (): UseColumnMapperReturn => {
   const shouldMapDataToColumn: UseColumnMapperReturn['shouldMapDataToColumn'] = useCallback((data, column) => {
     const currentLanguage = currentLanguageRef.current
 
+    // Every "advanced" column instance is added from a shared template and its `key` is
+    // only ever set to the (optional, user-editable) title, so it is not guaranteed to be
+    // unique - two columns with a blank or identical title would otherwise collide onto
+    // the same row value here (https://github.com/pimcore/service-operations/issues/927).
+    // Match by the stable per-instance id instead.
+    if (column.type === 'dataobject.advanced') {
+      const uniqueId = column.originalApiDefinition?.__meta?.uniqueId
+      // Mirror use-data-query-helper.ts: a null/undefined locale is resolved to the
+      // current UI language before the request is sent, so the response echoes back
+      // that resolved locale rather than null.
+      const expectedLocale = (column.locale === null || column.locale === undefined) ? currentLanguage : column.locale
+      return data.key === uniqueId && data.locale === expectedLocale
+    }
+
     if (column.type === 'dataobject.classificationstore') {
       const dataKey = data.key.split('.')[0]
 
@@ -59,6 +73,15 @@ export const useDataObjectColumnMapper = (): UseColumnMapperReturn => {
       })
     }
 
+    if (column.type === 'dataobject.advanced') {
+      return JSON.stringify({
+        uuid: uuid(),
+        uniqueId: column.originalApiDefinition?.__meta?.uniqueId,
+        locale: column.locale ?? null,
+        type: column.type.replaceAll('.', '*||*')
+      })
+    }
+
     return baseEncodeColumnIdentifier(column)
   }, [baseEncodeColumnIdentifier])
 
@@ -74,6 +97,10 @@ export const useDataObjectColumnMapper = (): UseColumnMapperReturn => {
 
     if (type === 'dataobject.classificationstore') {
       return selectedColumns.find((column) => column.key === data.key && column.type === 'dataobject.classificationstore' && column.config?.keyId === data.keyId && column.config?.groupId === data.groupId && (column.locale ?? null) === data.locale)
+    }
+
+    if (type === 'dataobject.advanced') {
+      return selectedColumns.find((column) => column.type === 'dataobject.advanced' && column.originalApiDefinition?.__meta?.uniqueId === data.uniqueId && (column.locale ?? null) === data.locale)
     }
 
     return baseDecodeColumnIdentifier(columnIdentifier, selectedColumns)
