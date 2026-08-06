@@ -35,7 +35,7 @@ export interface TabpanelProps {
   extra?: React.ReactNode
   extraPosition?: 'start' | 'end'
   theme?: 'default' | 'fieldset' | 'card-with-highlight' | 'border-highlight'
-  contentPadding?: Exclude<BoxProps['padding'], undefined>
+  contentPadding?: BoxProps['padding']
   onClose?: (tabKey: string) => void
   size?: ITabsProps['size']
   defaultActiveKey?: ITabsProps['defaultActiveKey']
