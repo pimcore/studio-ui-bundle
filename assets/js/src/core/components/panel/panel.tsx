@@ -32,7 +32,7 @@ export interface PanelProps {
   name?: string
   extra?: ReactNode
   extraPosition?: 'start' | 'end'
-  contentPadding?: Exclude<BoxProps['padding'], undefined>
+  contentPadding?: BoxProps['padding']
 }
 
 export const Panel = ({
