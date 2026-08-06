@@ -2402,6 +2402,7 @@ perspective-editor.form.main-nav-permission.system.cache_clearSymfony: Cache > N
 perspective-editor.form.main-nav-permission.system.cache_clearTemp: Cache > Supprimer les fichiers temporaires
 perspective-editor.form.main-nav-permission.system.cache_hidden: Masquer le menu Cache
 perspective-editor.form.main-nav-permission.system.systemSettings: Paramètres système
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Gestion de la propriété
 perspective-editor.form.main-nav-permission.system.about: À propos
 perspective-editor.form.main-nav-permission.category.reporting: Rapports
 perspective-editor.form.main-nav-permission.reporting.hidden: Masquer le menu Rapports
@@ -2848,4 +2849,3 @@ saved-search.update.success: Recherche enregistrée mise à jour
 saved-search.delete.success: Recherche enregistrée supprimée
 saved-search.shared-modified.info: "Vous avez modifié la configuration d’origine. Comme elle appartient à quelqu’un d’autre, vous pouvez l’enregistrer comme nouvelle recherche."
 saved-search.menu-shortcut-group: Groupe de menu
-perspective-editor.form.main-nav-permission.system.ownershipManagement: Gestion de la propriété
