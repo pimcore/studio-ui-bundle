@@ -1162,6 +1162,8 @@ close-unmodified: Lukk uendrede
 close-all: Lukk alle
 asset.tree.context-menu.download: Last ned
 asset.tree.context-menu.download-as-zip: Last ned som ZIP
+element-selector.title.single: Velg element
+element-selector.title.multiple: Velg elementer
 element.tree.context-menu.new-assets: Ny(e) ressurs(er)
 element.tree.context-menu.add-assets.upload-files: Last opp filer
 element.tree.context-menu.add-assets.upload-zip: Last opp ZIP

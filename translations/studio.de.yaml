@@ -1162,6 +1162,8 @@ close-unmodified: Unveränderte schließen
 close-all: Alle schließen
 asset.tree.context-menu.download: Herunterladen
 asset.tree.context-menu.download-as-zip: Als ZIP herunterladen
+element-selector.title.single: Element auswählen
+element-selector.title.multiple: Elemente auswählen
 element.tree.context-menu.new-assets: Neue(s) Asset(s)
 element.tree.context-menu.add-assets.upload-files: Dateien hochladen
 element.tree.context-menu.add-assets.upload-zip: ZIP hochladen

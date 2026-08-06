@@ -1162,6 +1162,8 @@ close-unmodified: Stäng oförändrade
 close-all: Stäng alla
 asset.tree.context-menu.download: Ladda ner
 asset.tree.context-menu.download-as-zip: Ladda ner som ZIP
+element-selector.title.single: Välj ett element
+element-selector.title.multiple: Välj element
 element.tree.context-menu.new-assets: Ny(a) Asset(s)
 element.tree.context-menu.add-assets.upload-files: Ladda upp filer
 element.tree.context-menu.add-assets.upload-zip: Ladda upp Zip
