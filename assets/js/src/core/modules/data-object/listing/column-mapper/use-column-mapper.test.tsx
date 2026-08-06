@@ -12,6 +12,13 @@ import { renderHook } from '@testing-library/react'
 import { useDataObjectColumnMapper } from './use-column-mapper'
 import { type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
 
+// use-column-mapper.tsx only needs `currentLanguage` from this hook. Mocking it here
+// avoids pulling in its real import chain (icon.tsx -> antd-style), whose ESM build
+// Jest isn't configured to transform.
+jest.mock('@Pimcore/components/language-selection', () => ({
+  useLanguageSelection: () => ({ currentLanguage: 'en' })
+}))
+
 /**
  * Regression tests for https://github.com/pimcore/service-operations/issues/927
  * (PEES-1244): every "advanced" grid column is added from a shared template
