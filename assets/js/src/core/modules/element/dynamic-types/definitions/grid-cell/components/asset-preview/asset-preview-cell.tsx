@@ -19,12 +19,16 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/asset-preview/asset-preview-cell.styles'
 import { onKeyEnterExecuteClick } from '@Pimcore/utils/helpers'
 import { Button } from '@Pimcore/components/button/button'
+import {
+  useIsElementSelectorListing
+} from '@Pimcore/modules/element/element-selector/provider/is-element-selector-listing/use-is-element-selector-listing'
 
 type PreviewContainerProps = CellContext<Asset, string | undefined> | undefined
 
 const AssetPreviewCell = (props: PreviewContainerProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { openAsset } = useAssetHelper()
+  const { isElementSelector } = useIsElementSelectorListing()
 
   function openAssetWidget (): void {
     if (props !== undefined) {
@@ -42,18 +46,26 @@ const AssetPreviewCell = (props: PreviewContainerProps): React.JSX.Element => {
     if ('thumbnail' in props && props.thumbnail !== null) {
       return (
         <ImageView
-          onClick={ openAssetWidget }
+          onClick={ isElementSelector ? undefined : openAssetWidget }
           src={ props.thumbnail }
-          style={ { cursor: 'pointer' } }
+          style={ isElementSelector ? undefined : { cursor: 'pointer' } }
         />
       )
     } else if ('icon' in props) {
+      const icon = (
+        <Icon
+          { ...props.icon }
+          options={ { width: 50, height: 50 } }
+        />
+      )
+
+      if (isElementSelector) {
+        return icon
+      }
+
       return (
         <Button
-          icon={ <Icon
-            { ...props.icon }
-            options={ { width: 50, height: 50 } }
-                 /> }
+          icon={ icon }
           onClick={ openAssetWidget }
           onKeyDown={ onKeyEnterExecuteClick }
           type={ 'link' }

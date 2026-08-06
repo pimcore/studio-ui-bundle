@@ -72,6 +72,8 @@ export interface GridProps {
   className?: string
   dataTestId?: string
   onRowDoubleClick?: (row: any) => void
+  onRowClick?: (row: any) => void
+  hideRowSelectionColumn?: boolean
   enableRowDrag?: boolean
   handleDragEnd?: (event: DragEndEvent) => void
   enableRowVirtualizer?: boolean

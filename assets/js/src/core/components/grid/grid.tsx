@@ -105,6 +105,7 @@ export const Grid = ({
   docked = false,
   onActiveCellChange,
   enableRowSelection = false,
+  hideRowSelectionColumn = false,
   selectedRows = {},
   disabled = false,
   allowMultipleAutoWidthColumns = false,
@@ -203,7 +204,7 @@ export const Grid = ({
   useMemo(() => {
     updateRowDragColumn()
     updateRowSelectionColumn()
-  }, [columns, isRowSelectionEnabled, enableRowDrag, selectedRows])
+  }, [columns, isRowSelectionEnabled, hideRowSelectionColumn, enableRowDrag, selectedRows])
 
   const tableProps: TableOptions<any> = useMemo(() => ({
     data,
@@ -426,6 +427,7 @@ export const Grid = ({
         measureElement={ measureElement }
         modifiedCells={ JSON.stringify(getModifiedRow(`${row.id}`)) }
         onFocusCell={ onFocusCell }
+        onRowClick={ props.onRowClick }
         onRowDoubleClick={ props.onRowDoubleClick }
         row={ row }
         rowStyle={ rowStyle }
@@ -633,7 +635,7 @@ export const Grid = ({
   }
 
   function updateRowSelectionColumn (): void {
-    if (isRowSelectionEnabled) {
+    if (isRowSelectionEnabled && !hideRowSelectionColumn) {
       addRowSelectionColumn()
     } else {
       removeRowSelectionColumn()

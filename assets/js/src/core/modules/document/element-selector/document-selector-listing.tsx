@@ -19,6 +19,7 @@ import { GeneralFiltersDecorator, type GeneralFiltersDecoratorConfig } from '../
 import { useElementSelectorHelper } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector-helper'
 import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 import { GlobalRowSelectionDecorator, type IGlobalRowSelectionConfig } from '@Pimcore/modules/element/element-selector/listing-decorators/global-row-selection/global-row-selection-decorator'
+import { type ISelectionInteractionConfig, SelectionInteractionDecorator } from '@Pimcore/modules/element/element-selector/listing-decorators/selection-interaction/selection-interaction-decorator'
 import { DefaultView } from './view-layer/views/default-view'
 import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '@Pimcore/modules/element/listing/decorators/type-filter/type-filter-decorator'
 import { useDocumentGetSearchQuery } from '@Pimcore/modules/search/search-api-slice.gen'
@@ -50,6 +51,7 @@ export const DocumentSelectorListing = (): React.JSX.Element => {
     [GeneralFiltersDecorator, { handleSearchTermInSidebar: false } as GeneralFiltersDecoratorConfig],
     SortingDecorator,
     [GlobalRowSelectionDecorator, { rowSelectionMode: config?.selectionType, elementType: 'document' } as IGlobalRowSelectionConfig],
+    [SelectionInteractionDecorator, { elementType: elementTypes.document } as ISelectionInteractionConfig],
     [
       TypeFilterDecorator,
       {

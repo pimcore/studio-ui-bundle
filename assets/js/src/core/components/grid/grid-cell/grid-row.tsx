@@ -32,6 +32,7 @@ export interface GridRowProps {
   onFocusCell?: (cell: GridCellReference) => void
   contextMenu?: ListGridContextMenuComponents
   onRowDoubleClick?: GridProps['onRowDoubleClick']
+  onRowClick?: GridProps['onRowClick']
   enableRowVirtualizer: boolean
   enableColumnVirtualizer: boolean
   size?: GridProps['size']
@@ -109,6 +110,12 @@ const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, vir
     }
   }
 
+  const onRowClick = (): void => {
+    if (props.onRowClick !== undefined) {
+      props.onRowClick(row)
+    }
+  }
+
   const visibleCells = useMemo(() => {
     return enableColumnVirtualizer ? virtualColumns?.map((virtualColumn) => row.getVisibleCells()[virtualColumn.index]) : row.getVisibleCells()
   }, [enableColumnVirtualizer, virtualColumns, JSON.stringify(row)])
@@ -118,10 +125,11 @@ const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, vir
       className={ [
         'ant-table-row',
         row.getIsSelected() ? 'ant-table-row-selected' : '',
-        props.onRowDoubleClick !== undefined ? 'hover' : ''
+        props.onRowDoubleClick !== undefined || props.onRowClick !== undefined ? 'hover' : ''
       ].join(' ') }
       data-index={ props?.virtualIndex } // needed for dynamic row height measurement
       data-testid={ createTableRowTestId(row.index) }
+      onClick={ onRowClick }
       onDoubleClick={ onRowDoubleClick }
       ref={ combinedRef }
       style={
