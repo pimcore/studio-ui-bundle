@@ -21,16 +21,16 @@ export interface EditorProps {
   useItemsQuery: SettingsProviderProps['useItemsQuery']
   useItemsDeleteMutation?: SettingsProviderProps['useItemsDeleteMutation']
   useDetailGeneralSettingsQuery: SettingsProviderProps['useDetailGeneralSettingsQuery']
-  useDetailLayoutQuery?: SettingsProviderProps['useDetailLayoutQuery']
-  useDetailLayoutAccessor?: SettingsProviderProps['useDetailLayoutAccessor']
+  useDetailLayoutQuery?: Exclude<SettingsProviderProps['useDetailLayoutQuery'], undefined>
+  useDetailLayoutAccessor?: Exclude<SettingsProviderProps['useDetailLayoutAccessor'], undefined>
   useDetailUpdateMutation: SettingsProviderProps['useDetailUpdateMutation']
   GeneralSettingsFormFields: SettingsProviderProps['GeneralSettingsFormFields']
-  LayoutProvider?: SettingsProviderProps['LayoutProvider']
-  useLayout?: SettingsProviderProps['useLayout']
+  LayoutProvider?: Exclude<SettingsProviderProps['LayoutProvider'], undefined>
+  useLayout?: Exclude<SettingsProviderProps['useLayout'], undefined>
   fieldDefinitionRegistry?: DynamicTypeFieldDefinitionRegistry
-  customLayouts?: SettingsProviderProps['customLayouts']
-  importExportConfig?: SettingsProviderProps['importExportConfig']
-  hideTreeExpanders?: SettingsProviderProps['hideTreeExpanders']
+  customLayouts?: Exclude<SettingsProviderProps['customLayouts'], undefined>
+  importExportConfig?: Exclude<SettingsProviderProps['importExportConfig'], undefined>
+  hideTreeExpanders?: Exclude<SettingsProviderProps['hideTreeExpanders'], undefined>
   view?: React.JSX.Element
 }
 

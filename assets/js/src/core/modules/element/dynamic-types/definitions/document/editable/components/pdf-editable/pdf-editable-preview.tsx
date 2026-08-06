@@ -20,7 +20,7 @@ interface PdfEditablePreviewProps {
   height?: number | string
   containerWidth: number
   className?: string
-  dropdownItems?: DropdownProps['menu']['items']
+  dropdownItems?: Exclude<DropdownProps['menu']['items'], undefined>
   thumbnailSettings?: ImageThumbnailSettings
   thumbnailConfig?: string | object
   onImageLoad?: (event: React.SyntheticEvent<HTMLImageElement>) => void

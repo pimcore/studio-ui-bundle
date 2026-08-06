@@ -45,16 +45,16 @@ export interface ElementSelectorConfig {
   }
   config?: {
     assets?: {
-      allowedTypes?: IRelationAllowedTypesDataComponent['allowedAssetTypes']
+      allowedTypes?: Exclude<IRelationAllowedTypesDataComponent['allowedAssetTypes'], undefined>
     }
 
     documents?: {
-      allowedTypes?: IRelationAllowedTypesDataComponent['allowedDocumentTypes']
+      allowedTypes?: Exclude<IRelationAllowedTypesDataComponent['allowedDocumentTypes'], undefined>
     }
 
     objects?: {
-      allowedTypes?: IRelationAllowedTypesDataComponent['allowedDataObjectTypes']
-      allowedClasses?: IRelationAllowedTypesDataComponent['allowedClasses']
+      allowedTypes?: Exclude<IRelationAllowedTypesDataComponent['allowedDataObjectTypes'], undefined>
+      allowedClasses?: Exclude<IRelationAllowedTypesDataComponent['allowedClasses'], undefined>
     }
   }
 }

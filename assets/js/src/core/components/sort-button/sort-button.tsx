@@ -20,7 +20,7 @@ export enum SortDirections {
 export type SortDirection = SortDirections.ASC | SortDirections.DESC | undefined
 
 export interface SortButtonProps {
-  value?: SortDirection
+  value?: Exclude<SortDirection, undefined>
   allowUnsorted?: boolean
   onSortingChange?: (value: SortDirection) => void
 }

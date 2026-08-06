@@ -35,7 +35,7 @@ export interface CollectionProps {
   type?: 'list' | 'tabs'
   onTabClose?: (event: CollectionOnTabCloseEvent) => void
   extra?: BaseViewProps['extra']
-  extraPosition?: BaseViewProps['extraPosition']
+  extraPosition?: Exclude<BaseViewProps['extraPosition'], undefined>
   inherited?: boolean
 }
 

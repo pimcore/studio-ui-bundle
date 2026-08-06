@@ -25,7 +25,7 @@ export interface CollapseStyleProps {
   expandIconPosition?: CollapseProps['expandIconPosition']
   extraPosition?: 'start' | 'end'
   theme?: 'success' | 'error' | 'primary' | 'simple' | 'default' | 'card-with-highlight' | 'fieldset' | 'border-highlight'
-  contentPadding?: BoxProps['padding']
+  contentPadding?: Exclude<BoxProps['padding'], undefined>
   hasContentSeparator?: boolean
 }
 
@@ -34,7 +34,7 @@ export interface CollapseItemProps extends Omit<AntdCollapsePropsItem, 'key' | '
   defaultActive?: boolean
   onChange?: CollapseProps['onChange']
   subLabel?: React.ReactNode
-  subLabelPosition?: CollapseHeaderProps['subLabelPosition']
+  subLabelPosition?: Exclude<CollapseHeaderProps['subLabelPosition'], undefined>
 }
 
 export const ExpandIcon = ({ isActive }: { isActive: boolean }): React.ReactElement => {

@@ -36,7 +36,7 @@ interface ImagePreviewProps {
   height: number | string
   className?: string
   style?: React.CSSProperties
-  dropdownItems?: DropdownProps['menu']['items']
+  dropdownItems?: Exclude<DropdownProps['menu']['items'], undefined>
   bordered?: boolean
   onHotspotsDataButtonClick?: () => void
   thumbnailSettings?: ImageThumbnailSettings

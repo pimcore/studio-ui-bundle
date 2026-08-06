@@ -19,5 +19,5 @@ export interface SortableItem {
 }
 
 export interface SortableItemWithMenu extends SortableItem {
-  contextMenuItems?: DropdownProps['menu']['items']
+  contextMenuItems?: Exclude<DropdownProps['menu']['items'], undefined>
 }

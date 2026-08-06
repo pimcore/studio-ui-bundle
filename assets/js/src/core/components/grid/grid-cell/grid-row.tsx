@@ -31,10 +31,10 @@ export interface GridRowProps {
   activeColumId?: string
   onFocusCell?: (cell: GridCellReference) => void
   contextMenu?: ListGridContextMenuComponents
-  onRowDoubleClick?: GridProps['onRowDoubleClick']
+  onRowDoubleClick?: Exclude<GridProps['onRowDoubleClick'], undefined>
   enableRowVirtualizer: boolean
   enableColumnVirtualizer: boolean
-  size?: GridProps['size']
+  size?: Exclude<GridProps['size'], undefined>
   rowStyle?: CSSProperties
   measureElement?: (node: HTMLElement | null) => void
   virtualIndex?: number

@@ -22,7 +22,7 @@ import { isNil } from 'lodash'
 export interface SortableRuleItemProps {
   item: SortableItem
   isDragDisabled: boolean
-  contextMenuItems?: DropdownProps['menu']['items']
+  contextMenuItems?: Exclude<DropdownProps['menu']['items'], undefined>
   onClick?: (item: SortableItem) => void
   renderContent?: (item: SortableItem) => React.ReactNode
 }
