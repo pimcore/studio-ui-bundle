@@ -27,7 +27,7 @@ jest.mock('../telemetry-api-slice.gen', () => ({
 }))
 
 // eslint-disable-next-line import/first
-import { telemetryDrainLoader } from './telemetry-drain-loader'
+import { drain, telemetryDrainLoader } from './telemetry-drain-loader'
 
 interface Batch {
   nonce: string
@@ -98,11 +98,15 @@ beforeEach(() => {
   })
 })
 
+afterEach(() => {
+  jest.useRealTimers()
+})
+
 describe('telemetryDrainLoader', () => {
   it('does nothing when the outbox is empty', async () => {
     outbox = [null]
 
-    await telemetryDrainLoader.onLoad()
+    await drain()
 
     expect(global.fetch).not.toHaveBeenCalled()
     expect(acked).toEqual([])
@@ -111,7 +115,7 @@ describe('telemetryDrainLoader', () => {
   it('forwards the opaque batch to the relay and only then acks it', async () => {
     outbox = [batch('n1'), null]
 
-    await telemetryDrainLoader.onLoad()
+    await drain()
 
     expect(global.fetch).toHaveBeenCalledTimes(1)
     const [url, init] = (global.fetch as jest.Mock).mock.calls[0] as [string, { body: string }]
@@ -126,7 +130,7 @@ describe('telemetryDrainLoader', () => {
   it('drains repeatedly until the pool reports empty', async () => {
     outbox = [batch('n1'), batch('n2'), batch('n3'), null]
 
-    await telemetryDrainLoader.onLoad()
+    await drain()
 
     expect(acked).toEqual(['n1', 'n2', 'n3'])
   })
@@ -135,7 +139,7 @@ describe('telemetryDrainLoader', () => {
     outbox = [batch('n1'), batch('n2')]
     relayResponds({ ok: false })
 
-    await telemetryDrainLoader.onLoad()
+    await drain()
 
     expect(acked).toEqual([])
     expect(global.fetch).toHaveBeenCalledTimes(1) // stops on the first failure
@@ -149,7 +153,7 @@ describe('telemetryDrainLoader', () => {
     outbox = [batch('n1')]
     relayResponds({ ok: true, body: { status: 'something-else' } })
 
-    await telemetryDrainLoader.onLoad()
+    await drain()
 
     expect(acked).toEqual([])
   })
@@ -163,7 +167,7 @@ describe('telemetryDrainLoader', () => {
       }
     }))
 
-    await telemetryDrainLoader.onLoad()
+    await drain()
 
     expect(acked).toEqual([])
   })
@@ -172,15 +176,40 @@ describe('telemetryDrainLoader', () => {
     outbox = [batch('n1')]
     relayResponds({ throws: true })
 
-    await telemetryDrainLoader.onLoad()
+    await drain()
 
+    expect(acked).toEqual([])
+  })
+
+  /**
+   * A relay that accepts the connection and then goes silent - a black-holing proxy or firewall -
+   * is the worst case: without a timeout the request stays pending for the browser's own (minutes-
+   * long) limit. The request must be abandoned and the batch left in the pool.
+   */
+  it('abandons a relay that accepts the connection but never answers', async () => {
+    jest.useFakeTimers()
+    outbox = [batch('n1')]
+    // Settles ONLY on abort - optional chaining on purpose, so that a request sent without a signal
+    // hangs and fails this test rather than rejecting for the wrong reason.
+    ;(global.fetch as jest.Mock).mockImplementation(
+      async (_url: string, init: { signal?: AbortSignal }) =>
+        await new Promise((_resolve, reject) => {
+          init.signal?.addEventListener('abort', () => { reject(new Error('aborted')) })
+        })
+    )
+
+    const drained = drain()
+    // well past RELAY_TIMEOUT_MS; the assertion is that a timeout fires at all, not its exact value
+    await jest.advanceTimersByTimeAsync(60_000)
+
+    await expect(drained).resolves.toBeUndefined()
     expect(acked).toEqual([])
   })
 
   it('stops when the outbox request itself fails', async () => {
     outbox = [new Error('backend not ready')]
 
-    await telemetryDrainLoader.onLoad()
+    await drain()
 
     expect(global.fetch).not.toHaveBeenCalled()
     expect(acked).toEqual([])
@@ -190,7 +219,7 @@ describe('telemetryDrainLoader', () => {
     outbox = [batch('n1'), batch('n2'), null]
     ackFails = true
 
-    await telemetryDrainLoader.onLoad()
+    await drain()
 
     expect(acked).toEqual([])
     expect(global.fetch).toHaveBeenCalledTimes(1) // did not go on to the second batch
@@ -200,13 +229,27 @@ describe('telemetryDrainLoader', () => {
     // an outbox that never empties must not spin forever during login
     outbox = Array.from({ length: 200 }, (_, i) => batch(`n${i}`))
 
-    await telemetryDrainLoader.onLoad()
+    await drain()
 
     expect(acked).toHaveLength(50)
   })
 
-  it('never rejects, so it cannot block application loading', async () => {
+  it('never rejects', async () => {
     outbox = [new Error('everything is broken')]
+
+    await expect(drain()).resolves.toBeUndefined()
+  })
+
+  /**
+   * The guarantee that keeps telemetry off the critical path: AppLoaderRegistry awaits every
+   * loader before the UI is shown, so the loader must schedule the drain and return rather than
+   * wait for it. A request that never settles must therefore not delay onLoad() - if the loader
+   * awaited the drain, this test would hang.
+   */
+  it('returns immediately, so a never-settling request cannot block application loading', async () => {
+    mockDispatch.mockImplementation(() => ({
+      unwrap: async () => await new Promise(() => {}) // never settles
+    }))
 
     await expect(telemetryDrainLoader.onLoad()).resolves.toBeUndefined()
   })
