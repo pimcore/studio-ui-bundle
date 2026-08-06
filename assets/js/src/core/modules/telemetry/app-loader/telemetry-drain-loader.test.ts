@@ -15,11 +15,13 @@ jest.mock('@Pimcore/app/store', () => ({
 }))
 
 // Identify the two endpoints by a marker so the dispatch mock can answer each one independently.
-jest.mock('../telemetry-api-slice', () => ({
-  telemetryApi: {
+jest.mock('../telemetry-api-slice.gen', () => ({
+  api: {
     endpoints: {
-      telemetryGetOutbox: { initiate: (arg: unknown, options: unknown) => ({ endpoint: 'getOutbox', arg, options }) },
-      telemetryAckOutbox: { initiate: (arg: unknown) => ({ endpoint: 'ack', arg }) }
+      telemetryOutboxNextBatch: {
+        initiate: (arg: unknown, options: unknown) => ({ endpoint: 'getOutbox', arg, options })
+      },
+      telemetryOutboxAck: { initiate: (arg: unknown) => ({ endpoint: 'ack', arg }) }
     }
   }
 }))
@@ -68,7 +70,7 @@ beforeEach(() => {
   global.fetch = jest.fn()
   relayResponds({})
 
-  mockDispatch.mockImplementation((action: { endpoint: string, arg: { nonce?: string } }) => {
+  mockDispatch.mockImplementation((action: { endpoint: string, arg: { telemetryOutboxAckParameters?: { nonce: string } } }) => {
     if (action.endpoint === 'getOutbox') {
       const next = outbox.length > 0 ? outbox.shift() : null
 
@@ -88,7 +90,7 @@ beforeEach(() => {
         if (ackFails) {
           throw new Error('ack failed')
         }
-        acked.push(action.arg.nonce ?? '')
+        acked.push(action.arg.telemetryOutboxAckParameters?.nonce ?? '')
 
         return { acked: 1 }
       }

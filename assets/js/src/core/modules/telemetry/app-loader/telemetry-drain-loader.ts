@@ -10,7 +10,7 @@
 
 import { store } from '@Pimcore/app/store'
 import { type Loader } from '@Pimcore/modules/app/app-loader/services/app-loader-registry'
-import { telemetryApi, type TelemetryOutboxBatch } from '../telemetry-api-slice'
+import { api as telemetryApi, type TelemetryOutboxBatch } from '../telemetry-api-slice.gen'
 
 /**
  * Drains whatever telemetry is left in the instance's spool and forwards it to the first-party relay.
@@ -36,9 +36,12 @@ export const telemetryDrainLoader: Loader = {
       let batch: TelemetryOutboxBatch | null
 
       try {
+        // The endpoint answers 204 with an empty body when the pool is empty and RTK's JSON
+        // response handler turns that into null - which the generated type, describing only the
+        // 200 response, cannot express.
         batch = await store.dispatch(
-          telemetryApi.endpoints.telemetryGetOutbox.initiate(undefined, { forceRefetch: true, subscribe: false })
-        ).unwrap()
+          telemetryApi.endpoints.telemetryOutboxNextBatch.initiate(undefined, { forceRefetch: true, subscribe: false })
+        ).unwrap() as TelemetryOutboxBatch | null
       } catch {
         // backend not ready / not enabled - try again next session
         return
@@ -58,7 +61,9 @@ export const telemetryDrainLoader: Loader = {
 
       try {
         await store.dispatch(
-          telemetryApi.endpoints.telemetryAckOutbox.initiate({ nonce: batch.nonce })
+          telemetryApi.endpoints.telemetryOutboxAck.initiate({
+            telemetryOutboxAckParameters: { nonce: batch.nonce }
+          })
         ).unwrap()
       } catch {
         return
