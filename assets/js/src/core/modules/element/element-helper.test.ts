@@ -9,10 +9,25 @@
  */
 
 import { type Element, getElementKey } from './element-helper'
+import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { type Document } from '@Pimcore/modules/document/document-api-slice.gen'
 
 jest.mock('@Pimcore/app/router/router', () => ({ baseUrl: '' }))
+
+const buildAsset = (overrides: Partial<Asset>): Element => {
+  return {
+    filename: 'original-filename',
+    customAttributes: {
+      icon: null,
+      tooltip: null,
+      additionalIcons: [],
+      key: null,
+      additionalCssClasses: []
+    },
+    ...overrides
+  } as unknown as Element
+}
 
 const buildDataObject = (overrides: Partial<DataObject>): Element => {
   return {
@@ -36,6 +51,27 @@ const buildDocument = (overrides: Partial<Document>): Element => {
 }
 
 describe('getElementKey', () => {
+  it('returns the custom attribute key for an asset when it is set', () => {
+    const asset = buildAsset({
+      filename: 'original-filename',
+      customAttributes: {
+        icon: null,
+        tooltip: null,
+        additionalIcons: [],
+        key: 'custom-key',
+        additionalCssClasses: []
+      }
+    })
+
+    expect(getElementKey(asset, 'asset')).toBe('custom-key')
+  })
+
+  it('falls back to the filename for an asset when no custom attribute key is set', () => {
+    const asset = buildAsset({ filename: 'original-filename' })
+
+    expect(getElementKey(asset, 'asset')).toBe('original-filename')
+  })
+
   it('returns the custom attribute key for a data object when it is set', () => {
     const dataObject = buildDataObject({
       key: 'original-key',
