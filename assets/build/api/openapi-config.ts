@@ -250,6 +250,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/cache/cache-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/cache\/?/i)
+    },
+    '../../js/src/core/modules/telemetry/telemetry-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/telemetry\/?/i)
     }
   },
   exportName: 'api',
