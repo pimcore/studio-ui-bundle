@@ -8,11 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-jest.mock('@Pimcore/app/router/router', () => ({ baseUrl: '' }))
-
 import { type Element, getElementKey } from './element-helper'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { type Document } from '@Pimcore/modules/document/document-api-slice.gen'
+
+jest.mock('@Pimcore/app/router/router', () => ({ baseUrl: '' }))
 
 const buildDataObject = (overrides: Partial<DataObject>): Element => {
   return {
