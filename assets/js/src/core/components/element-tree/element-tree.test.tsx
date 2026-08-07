@@ -26,7 +26,9 @@ jest.mock('./hooks/use-element-tree-node', () => ({
 }))
 
 // eslint-disable-next-line import/first
-import React from 'react'
+import '@testing-library/jest-dom'
+// eslint-disable-next-line import/first
+import React, { forwardRef } from 'react'
 // eslint-disable-next-line import/first
 import { render, screen } from '@testing-library/react'
 // eslint-disable-next-line import/first
@@ -40,7 +42,9 @@ import { useElementTreeNode } from './hooks/use-element-tree-node'
 
 const mockUseElementTreeNode = useElementTreeNode as jest.MockedFunction<typeof useElementTreeNode>
 
-const StubTreeNode = (props: TreeNodeProps): React.JSX.Element => <div>{props.label}</div>
+const StubTreeNode = forwardRef<HTMLDivElement, TreeNodeProps>(function StubTreeNode (props, ref) {
+  return <div ref={ ref }>{props.label}</div>
+})
 const StubTreeNodeContent = (): React.JSX.Element => <></>
 
 const rootNodeFixture: TreeNode = {
@@ -71,11 +75,13 @@ const rootNodeFixture: TreeNode = {
 const nodeStateFixture = (childrenByNodeId: Record<string, string[]>) => (nodeId: string): ReturnType<typeof useElementTreeNode> => ({
   isLoading: false,
   isFetching: false,
+  isDeleting: false,
   isExpanded: false,
   isSelected: false,
   isScrollTo: false,
   isFetchTriggered: false,
   page: 1,
+  childrenIds: childrenByNodeId[nodeId] ?? [],
   total: childrenByNodeId[nodeId]?.length ?? 0,
   setLoading: jest.fn(),
   setFetching: jest.fn(),
