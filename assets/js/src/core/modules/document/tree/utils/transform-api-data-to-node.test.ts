@@ -8,15 +8,15 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { transformApiDataToNode } from './transform-api-data-to-node'
+import { type Document } from '../../document-api-slice.gen'
+
 jest.mock('@Pimcore/app/router/router', () => ({ baseUrl: '' }))
 
 jest.mock('@Pimcore/modules/element/element-helper', () => ({
   ...jest.requireActual('@Pimcore/modules/element/element-helper'),
   getElementIcon: jest.fn(() => ({ type: 'name', value: 'document' }))
 }))
-
-import { transformApiDataToNode } from './transform-api-data-to-node'
-import { type Document } from '../../document-api-slice.gen'
 
 const buildDocumentNode = (overrides: Partial<Document>): Document => {
   return {

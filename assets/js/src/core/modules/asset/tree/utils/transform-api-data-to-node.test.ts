@@ -8,15 +8,15 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { transformApiDataToNode } from './transform-api-data-to-node'
+import { type Unknown } from '../../asset-api-slice.gen'
+
 jest.mock('@Pimcore/app/router/router', () => ({ baseUrl: '' }))
 
 jest.mock('@Pimcore/modules/element/element-helper', () => ({
   ...jest.requireActual('@Pimcore/modules/element/element-helper'),
   getElementIcon: jest.fn(() => ({ type: 'name', value: 'unknown' }))
 }))
-
-import { transformApiDataToNode } from './transform-api-data-to-node'
-import { type Unknown } from '../../asset-api-slice.gen'
 
 const buildAssetNode = (overrides: Partial<Unknown>): Unknown => {
   return {
