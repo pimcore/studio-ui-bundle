@@ -12,7 +12,7 @@ import { store } from '@Pimcore/app/store'
 import { api } from '../document-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import { getElementIcon, type Element } from '@Pimcore/modules/element/element-helper'
+import { getElementIcon, getElementKey, type Element } from '@Pimcore/modules/element/element-helper'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 import { openMainWidget, setActiveWidgetById, type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { Model } from 'flexlayout-react'
@@ -82,7 +82,7 @@ export class DocumentOpeningService {
     const widgetId = getWidgetId('document', id)
 
     return {
-      name: data?.key,
+      name: getElementKey(data as Element, 'document'),
       id: widgetId,
       component: 'document-editor',
       config: {
