@@ -16,6 +16,7 @@ import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/ele
 import { usePrevious } from '@sdk/utils'
 import { InputNumber } from 'antd'
 import { isNil } from 'lodash'
+import { getDecimalSeparator } from '@Pimcore/utils/number'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ElementTypeSelect } from '../../../element-type-select/element-type-select'
@@ -25,7 +26,7 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ElementTreeWidgetPermissionRegistry } from '@Pimcore/modules/widget-editor/services/widget-context-menu-item-registry'
 
 export const SpecificPanel = (): React.JSX.Element => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { form } = useWidgetFormContext()
   const elementType = Form.useWatch('elementType', form)
   const previousElementType = usePrevious(elementType)
@@ -82,7 +83,7 @@ export const SpecificPanel = (): React.JSX.Element => {
         label={ t('widget-editor.widget-form.specific.page-size') }
         name="pageSize"
       >
-        <InputNumber />
+        <InputNumber decimalSeparator={ getDecimalSeparator(i18n?.language) } />
       </Form.Item>
     </FormKit.Panel>
   )
