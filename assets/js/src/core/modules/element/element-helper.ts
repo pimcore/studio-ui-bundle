@@ -61,6 +61,13 @@ const determineElementIcon = (element: Element, defaultIcon: ElementIcon): Eleme
 }
 
 export const getElementKey = (element: Element, elementType: ElementType): string => {
+  if (
+    element.customAttributes?.key !== undefined &&
+    element.customAttributes?.key !== null
+  ) {
+    return element.customAttributes.key
+  }
+
   if (elementType === 'asset') {
     return (element as Asset).filename ?? ''
   }
