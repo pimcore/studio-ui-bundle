@@ -19,6 +19,7 @@ import { ClassificationStoreDataTab } from '../../components/classification-stor
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 import { ClassificationStoreCallbackTab } from '../../components/classification-store-data-tab/classification-store-callback-tab'
 import { useClassificationStoreModalOptional } from '../../../../provider/classifcation-store-modal-provider'
+import { translateLabel } from '../../../../utils/translate-label'
 
 interface CollectionTabProps {
   storeId: ClassificationStoreGetCollectionsApiArg['storeId']
@@ -34,9 +35,14 @@ export const CollectionTab = (props: CollectionTabProps): React.JSX.Element => {
 
   const columns = useMemo(() => [
     columnHelper.accessor('id', { header: t('classification-store.column.id'), size: 80 }),
-    columnHelper.accessor('name', { header: t('classification-store.column.name'), size: 300 }),
+    columnHelper.accessor('name', {
+      header: t('classification-store.column.name'),
+      cell: (info) => translateLabel(t, info.getValue()),
+      size: 300
+    }),
     columnHelper.accessor('description', {
       header: t('classification-store.column.description'),
+      cell: (info) => translateLabel(t, info.getValue()),
       meta: { autoWidth: true },
       size: 300
     })

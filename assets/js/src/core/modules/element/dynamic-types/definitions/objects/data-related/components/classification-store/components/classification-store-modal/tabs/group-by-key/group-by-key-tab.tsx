@@ -20,6 +20,7 @@ import { ClassificationStoreDataTab } from '../../components/classification-stor
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 import { ClassificationStoreCallbackTab } from '../../components/classification-store-data-tab/classification-store-callback-tab'
 import { useClassificationStoreModalOptional } from '../../../../provider/classifcation-store-modal-provider'
+import { translateLabel } from '../../../../utils/translate-label'
 
 interface GroupByKeyTabProps {
   storeId: ClassificationStoreGetKeyGroupRelationsApiArg['storeId']
@@ -43,10 +44,19 @@ export const GroupByKeyTab = (props: GroupByKeyTabProps): React.JSX.Element => {
         size: 100
       }
     ),
-    columnHelper.accessor('groupName', { header: t('classification-store.column.group'), size: 200 }),
-    columnHelper.accessor('keyName', { header: t('classification-store.column.name'), size: 200 }),
+    columnHelper.accessor('groupName', {
+      header: t('classification-store.column.group'),
+      cell: (info) => translateLabel(t, info.getValue()),
+      size: 200
+    }),
+    columnHelper.accessor('keyName', {
+      header: t('classification-store.column.name'),
+      cell: (info) => translateLabel(t, info.getValue()),
+      size: 200
+    }),
     columnHelper.accessor('keyDescription', {
       header: t('classification-store.column.description'),
+      cell: (info) => translateLabel(t, info.getValue()),
       meta: { autoWidth: true },
       size: 250
     })
