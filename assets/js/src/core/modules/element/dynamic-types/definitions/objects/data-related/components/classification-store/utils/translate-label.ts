@@ -9,15 +9,19 @@
  */
 
 import { type TFunction } from 'i18next'
+import { isEmpty, isNil } from 'lodash'
 
 /**
  * Collection/group/key `name` and `description` values may be translation keys in the
  * `studio` domain rather than display-ready text (the same convention used for grid-value
  * translation, see the `Translate` grid transformer). Resolves them via i18next, falling
  * back to the raw value for empty/blank strings so `t()` is never called with an empty key.
+ * `nsSeparator: false` disables i18next's default `:` namespace parsing for this dynamic
+ * lookup — otherwise a plain-text value containing a colon (e.g. "Color: Blue") would be
+ * split into a namespace/key pair and silently fall back to the part after the colon.
  */
 export const translateLabel = (t: TFunction, value: unknown): string => {
-  const stringValue = value == null ? '' : String(value)
+  const stringValue = isNil(value) ? '' : String(value)
 
-  return stringValue === '' ? stringValue : t(stringValue)
+  return isEmpty(stringValue) ? stringValue : t(stringValue, { nsSeparator: false })
 }
