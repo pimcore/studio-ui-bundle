@@ -104,7 +104,7 @@ export const filterInheritedFields = (obj: any, isInherited: (name: string) => b
   }
 
   forEach(getFieldList(obj), fieldName => {
-    if (get(obj, fieldName) !== null) {
+    if (!isInherited(fieldName)) {
       setWith(result, fieldName, get(obj, fieldName), setAsObject)
     }
   })
@@ -113,22 +113,16 @@ export const filterInheritedFields = (obj: any, isInherited: (name: string) => b
   for (const [groupKey, groupValue] of Object.entries(groups as object)) {
     let isGroupEmpty = true
 
-    for (const [languageKey, languageGroup] of Object.entries(groupValue as object)) {
-      let isLanguageGroupEmpty = true
-
-      for (const fieldValue of Object.entries(languageGroup as object)) {
-        if (fieldValue[1] !== null) {
-          isLanguageGroupEmpty = false
-          isGroupEmpty = false
-          break
-        }
-      }
+    for (const languageKey of Object.keys(groupValue as object)) {
+      const isLanguageGroupEmpty = isEmpty(get(result, [groupKey, languageKey]))
 
       if (isLanguageGroupEmpty) {
         if (result[groupKey] !== undefined && result[groupKey][languageKey] !== undefined) {
           /* eslint-disable-next-line @typescript-eslint/no-dynamic-delete */
           delete result[groupKey][languageKey]
         }
+      } else {
+        isGroupEmpty = false
       }
     }
 
