@@ -19,6 +19,7 @@ import { type SelectedColumnsContextProps } from '@Pimcore/modules/element/listi
 import { useSelectedGridConfigId } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/selected-grid-config-id/use-selected-grid-config-id'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/use-grid-config'
+import { uuid } from '@Pimcore/utils/uuid'
 
 export interface ColumnConfigLoaderProps {
   Component: AbstractDecoratorProps['ConfigurationComponent']
@@ -52,6 +53,11 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
           ...availableColumn,
           config: availableColumn.type === 'dataobject.classificationstore' ? 'config' in column && column.config : availableColumn.config,
           __meta: {
+            // Advanced columns share the same reserved 'advanced' key (and often a
+            // blank/duplicate title) from a persisted config, which is not unique -
+            // assign each loaded instance its own id so it can be told apart from
+            // sibling advanced columns (https://github.com/pimcore/service-operations/issues/927).
+            uniqueId: uuid(),
             advancedColumnConfig: currentColumn.config ?? {}
           }
         }
