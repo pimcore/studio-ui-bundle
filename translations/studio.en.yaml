@@ -479,8 +479,8 @@ aria.version.expand: Expand version
 clear-all: Clear all
 empty: Empty
 none: None
-yes: Yes
-no: No
+'yes': 'Yes'
+'no': 'No'
 by: By
 field: Field
 no-data-available: No Data Available
@@ -2493,6 +2493,7 @@ icon-selector.custom-icon-path: Custom path
 icon-selector.custom-icon-path-placeholder: Add a custom path and submit
 icon-selector.Twemoji: Twemoji Library
 icon-selector.Pimcore: Pimcore Library
+icon-selector.AlternativeLibrary: Alternative Library
 operational-grid.csv-import.title: Import CSV
 operational-grid.csv-import.description: Enter CSV data. Each line represents a row, columns are separated by commas.
 operational-grid.csv-import.ok: Import
