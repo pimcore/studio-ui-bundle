@@ -239,7 +239,7 @@ import headlessDocument from '@Pimcore/assets/icons/headless-document.inline.svg
 import headlessTemplate from '@Pimcore/assets/icons/headless-template.inline.svg?react'
 import heart from '@Pimcore/assets/icons/heart.inline.svg?react'
 import helpCircle from '@Pimcore/assets/icons/help-circle.inline.svg?react'
-import hierachy from '@Pimcore/assets/icons/hierachy.inline.svg?react'
+import hierarchy from '@Pimcore/assets/icons/hierarchy.inline.svg?react'
 import highlight from '@Pimcore/assets/icons/highlight.inline.svg?react'
 import history from '@Pimcore/assets/icons/history.inline.svg?react'
 import homeRootFolder from '@Pimcore/assets/icons/home-root-folder.inline.svg?react'
@@ -1413,8 +1413,8 @@ moduleSystem.registerModule({
       component: helpCircle
     })
     iconLibrary.register({
-      name: 'hierachy',
-      component: hierachy
+      name: 'hierarchy',
+      component: hierarchy
     })
     iconLibrary.register({
       name: 'highlight',

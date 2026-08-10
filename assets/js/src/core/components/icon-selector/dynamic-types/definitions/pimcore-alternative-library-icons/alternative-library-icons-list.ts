@@ -63,7 +63,7 @@ export const ALTERNATIVE_LIBRARY_ICONS_LIST: string[] = [
   'genealogy',
   'group-alt',
   'heart',
-  'hierachy',
+  'hierarchy',
   'innovation',
   'integration',
   'integration-2',
