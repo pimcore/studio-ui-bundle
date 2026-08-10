@@ -114,7 +114,7 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
             columns={ columns }
             dataSource={ paginatedRows }
             pagination={ false }
-            rowClassName={ (record: MergerRow) => record.state === 'applied' ? 'row-applied' : 'row-conflict' }
+            rowClassName={ (record: MergerRow) => record.state === 'applied' ? '' : 'row-conflict' }
             size="small"
           />
         </Box>
