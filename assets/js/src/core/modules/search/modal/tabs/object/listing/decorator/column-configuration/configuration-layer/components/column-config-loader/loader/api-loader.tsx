@@ -19,6 +19,7 @@ import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorator
 import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/use-grid-config'
 import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useDataObjectGetSearchConfigurationQuery } from '@Pimcore/modules/search/search-api-slice.gen'
+import { uuid } from '@Pimcore/utils/uuid'
 
 export interface ColumnConfigLoaderProps {
   Component: AbstractDecoratorProps['ConfigurationComponent']
@@ -53,6 +54,11 @@ export const ApiLoader = ({ Component }: ColumnConfigLoaderProps): React.JSX.Ele
         const apiColumn = {
           ...availableColumn,
           __meta: {
+            // Advanced columns share the same reserved 'advanced' key (and often a
+            // blank/duplicate title) from a persisted config, which is not unique -
+            // assign each loaded instance its own id so it can be told apart from
+            // sibling advanced columns (https://github.com/pimcore/service-operations/issues/927).
+            uniqueId: uuid(),
             advancedColumnConfig: ('config' in column ? column.config : undefined) ?? {}
           }
         }
