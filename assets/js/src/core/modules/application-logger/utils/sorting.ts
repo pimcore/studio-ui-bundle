@@ -31,7 +31,7 @@ export const DEFAULT_APPLICATION_LOGGER_SORT_FILTER: SortFilter = {
   direction: 'DESC'
 }
 
-export function mapSortingToSortFilter (sorting: SortingState): SortFilter {
+export const mapSortingToSortFilter = (sorting: SortingState): SortFilter => {
   const column = sorting[0]
 
   if (isNil(column)) {
