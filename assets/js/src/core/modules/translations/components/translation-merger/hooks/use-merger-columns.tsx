@@ -87,7 +87,9 @@ export const useMergerColumns = ({ loadingRows, applyRow, revertRow }: UseMerger
       dataIndex: 'currentTranslation',
       key: 'currentTranslation',
       ellipsis: { showTitle: false },
-      render: (value: string) => <TranslationValue value={ value } />
+      render: (value: string, record: MergerRow) => (
+        <TranslationValue value={ record.state === 'applied' ? record.importTranslation : value } />
+      )
     }
   ], [loadingRows])
 }
