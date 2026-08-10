@@ -13,6 +13,7 @@ import { api } from '../data-object-api-slice-enhanced'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { getElementIcon, getElementKey, type Element } from '@Pimcore/modules/element/element-helper'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
 import { openMainWidget, setActiveWidgetById, type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { Model } from 'flexlayout-react'
@@ -85,7 +86,7 @@ export class DataObjectOpeningService {
     const widgetId = getWidgetId('data-object', id)
 
     return {
-      name: getElementKey(data as Element, 'data-object'),
+      name: getElementKey(data as Element, elementTypes.dataObject),
       id: widgetId,
       component: 'data-object-editor',
       config: {
