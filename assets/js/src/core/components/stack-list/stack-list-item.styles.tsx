@@ -21,11 +21,16 @@ export const useStyles = createStyles(({ token, css }) => {
         display: flex;
         align-items: center;
         gap: 2px;
-        padding: 4px;
+        padding: ${token.paddingXXS}px ${token.paddingXS}px;
+
+        /* the drag handle carries its own inset — keep it flush */
+        &:has(> .ant-btn:first-child) {
+          padding-left: 0;
+        }
       }
 
       .stack-list-item__body {
-        padding: 0 4px 4px 4px;
+        padding: 0 ${token.paddingXS}px ${token.paddingXS}px;
         
         .ant-picker {
           width: 100%;
