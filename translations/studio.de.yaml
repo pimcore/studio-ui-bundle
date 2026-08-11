@@ -2493,6 +2493,7 @@ icon-selector.custom-icon-path: Benutzerdefinierter Pfad
 icon-selector.custom-icon-path-placeholder: Benutzerdefinierten Pfad eingeben und absenden
 icon-selector.Twemoji: Twemoji-Bibliothek
 icon-selector.Pimcore: Pimcore-Bibliothek
+icon-selector.AlternativeLibrary: Alternative Bibliothek
 operational-grid.csv-import.title: CSV importieren
 operational-grid.csv-import.description: Geben Sie CSV-Daten ein. Jede Zeile stellt eine Zeile dar, Spalten werden durch Kommas getrennt.
 operational-grid.csv-import.ok: Importieren

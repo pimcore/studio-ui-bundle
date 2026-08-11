@@ -255,6 +255,7 @@ import { DynamicTypeFieldFilterBooleanSelect } from '@Pimcore/modules/element/dy
 import { VariantTabManager } from '@Pimcore/modules/data-object/editor/types/variant/tab-manager/object-tab-manager'
 import { DynamicTypeIconSetPimcoreDefault } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-default-icons/dynamic-type-icon-set-pimcore-default'
 import { DynamicTypeIconSetTwemoji } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-twemoji-icons/dynamic-type-icon-set-twemoji'
+import { DynamicTypeIconSetAlternativeLibrary } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-alternative-library-icons/dynamic-type-icon-set-alternative-library'
 import { DynamicTypeIconSetRegistry } from '@Pimcore/components/icon-selector/dynamic-types/registry/dynamic-type-icon-set-registry'
 import { DynamicTypeGridCellClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/classificationstore/dynamic-type-grid-cell-classificationstore'
 import { TypeRegistry } from '@Pimcore/modules/element/editor/services/type-registry'
@@ -740,6 +741,7 @@ container.bind(serviceIds['DynamicTypes/Theme/StudioDefaultLight']).to(DynamicTy
 container.bind(serviceIds['DynamicTypes/IconSetRegistry']).to(DynamicTypeIconSetRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/IconSet/PimcoreDefault']).to(DynamicTypeIconSetPimcoreDefault).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/IconSet/Twemoji']).to(DynamicTypeIconSetTwemoji).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/IconSet/AlternativeLibrary']).to(DynamicTypeIconSetAlternativeLibrary).inSingletonScope()
 
 // Perspective Ediotor & Widget Editor
 container.bind(serviceIds['DynamicTypes/WidgetEditor/WidgetTypeRegistry']).to(DynamicTypeWidgetTypeRegistry).inSingletonScope()

@@ -2493,6 +2493,7 @@ icon-selector.custom-icon-path: Anpassad sökväg
 icon-selector.custom-icon-path-placeholder: Lägg till en anpassad sökväg och bekräfta
 icon-selector.Twemoji: Twemoji-bibliotek
 icon-selector.Pimcore: Pimcore-bibliotek
+icon-selector.AlternativeLibrary: Alternativt bibliotek
 operational-grid.csv-import.title: Importera CSV
 operational-grid.csv-import.description: Ange CSV-data. Varje rad representerar en rad, kolumner separeras med kommatecken.
 operational-grid.csv-import.ok: Importera

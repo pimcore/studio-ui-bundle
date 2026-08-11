@@ -2493,6 +2493,7 @@ icon-selector.custom-icon-path: Egendefinert sti
 icon-selector.custom-icon-path-placeholder: Legg til en egendefinert sti og bekreft
 icon-selector.Twemoji: Twemoji-bibliotek
 icon-selector.Pimcore: Pimcore-bibliotek
+icon-selector.AlternativeLibrary: Alternativt bibliotek
 operational-grid.csv-import.title: Importer CSV
 operational-grid.csv-import.description: Angi CSV-data. Hver linje representerer en rad, kolonner er separert med komma.
 operational-grid.csv-import.ok: Importer

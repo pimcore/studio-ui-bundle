@@ -2493,6 +2493,7 @@ icon-selector.custom-icon-path: Chemin personnalisé
 icon-selector.custom-icon-path-placeholder: Ajoutez un chemin personnalisé et validez
 icon-selector.Twemoji: Bibliothèque Twemoji
 icon-selector.Pimcore: Bibliothèque Pimcore
+icon-selector.AlternativeLibrary: Bibliothèque alternative
 operational-grid.csv-import.title: Importer un CSV
 operational-grid.csv-import.description: Saisissez les données CSV. Chaque ligne représente une rangée, les colonnes sont séparées par des virgules.
 operational-grid.csv-import.ok: Importer
