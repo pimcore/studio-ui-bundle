@@ -35,7 +35,18 @@ export const useStyles = createStyles(({ css, token }) => {
         .tool-strip__children-container {
           transition: max-width 0.08s ease-in-out, opacity 0.05s ease-in-out;
         }
-        
+
+        // The strip head is the keyboard entry point that reveals the actions,
+        // so it needs a focus indicator of its own.
+        &:focus-visible {
+          outline: 2px solid ${token.colorPrimaryBorder};
+          outline-offset: 1px;
+        }
+
+        &.tool-strip--theme-inverse:focus-visible {
+          outline-color: ${token.colorButtonInverse};
+        }
+
         &:not(.tool-strip--activated) {
           .tool-strip__children-container {
             max-width: 0;
@@ -50,6 +61,10 @@ export const useStyles = createStyles(({ css, token }) => {
             transition: max-width 0.3s ease-in-out, opacity 0.2s ease-in-out 0.1s;
           }
 
+          // Once revealed, nothing needs clipping anymore (the collapse animation is
+          // clipped by the children container itself) — and clipping here would cut off
+          // the focus ring of the first and last action.
+          overflow: visible;
           position: relative;
           z-index: 10000;
           box-shadow: 2px 0 4px rgba(255, 255, 255, 0.15), 1px 0 0 rgba(255, 255, 255, 0.15);
