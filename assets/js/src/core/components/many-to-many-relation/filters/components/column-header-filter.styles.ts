@@ -40,7 +40,16 @@ export const useStyles = createStyles(({ css, token }) => {
     `,
 
     panel: css`
-      width: 260px;
+      width: 300px;
+      
+      .ant-select {
+        min-width: 90px;
+        max-width: none !important;
+      }
+      
+      .ant-flex {
+        flex-wrap: wrap;
+      }
     `
   }
 })
