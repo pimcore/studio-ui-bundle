@@ -10,7 +10,7 @@
 
 import React, { type ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
-import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
+import { type ColumnDef, createColumnHelper, flexRender, type HeaderContext } from '@tanstack/react-table'
 import { isUndefined } from 'lodash'
 import { Tooltip } from 'antd'
 import type { DisplayManyToManyRelationValueItem } from './use-value'
@@ -24,6 +24,8 @@ import { type ManyToManyRelationGridProps } from '../grid'
 import { getElementCellConfig } from '../utils/helpers'
 import { isValidPathFormatterConfig } from '../utils/path-formatter'
 import { renderFullPathCell } from '../utils/full-path-cell-renderer'
+import { ColumnHeaderFilter, useRelationFilterColumns } from '@Pimcore/components/many-to-many-relation'
+import { getColumnId } from '../filters/utils/filter-columns'
 
 interface UseColumnsReturn {
   columns: Array<ColumnDef<any>>
@@ -36,6 +38,7 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
   const { openElement, mapToElementType } = useElementHelper()
   const { t } = useTranslation()
   const { download } = useDownload()
+  const { getFilterColumn } = useRelationFilterColumns()
 
   const columnHelper = createColumnHelper()
 
@@ -170,7 +173,34 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
     columns.push(actionsColumn)
   }
 
+  /**
+   * Adds the filter dropdown to the header of every filterable column, keeping
+   * the header the column defined itself as the label.
+   */
+  const withHeaderFilter = (column: ColumnDef<any>): ColumnDef<any> => {
+    const columnId = getColumnId(column)
+    const filterColumn = isUndefined(columnId) ? undefined : getFilterColumn(columnId)
+
+    if (isUndefined(filterColumn)) {
+      return column
+    }
+
+    const header = column.header
+
+    const filterableColumn = {
+      ...column,
+      header: (context: HeaderContext<any, unknown>) => (
+        <ColumnHeaderFilter column={ filterColumn }>
+          { flexRender(header, context) }
+        </ColumnHeaderFilter>
+      )
+    }
+
+    // Spreading loses the accessor variant of the column definition union.
+    return filterableColumn as ColumnDef<any>
+  }
+
   return {
-    columns
+    columns: columns.map(withHeaderFilter)
   }
 }

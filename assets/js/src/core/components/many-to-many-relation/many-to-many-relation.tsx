@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { isEqual, isNil } from 'lodash'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
@@ -21,6 +21,9 @@ import { dndIsValidData, type IRelationAllowedTypesDataComponent } from '@Pimcor
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Content } from '@Pimcore/components/content/content'
 import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
+import { useFilterQuery } from '@Pimcore/components/filters'
+import { relationFilterAdapter, useRelationFilters } from './filters/filters'
+import { RelationFiltersProvider } from './filters/provider/relation-filters-provider'
 
 export interface ManyToManyRelationClassDefinitionProps {
   assetUploadPath?: string | null
@@ -50,14 +53,24 @@ export interface ManyToManyRelationProps extends IRelationAllowedTypesDataCompon
   disableInlineUpload?: boolean
   enableRowDrag?: boolean
   noteditable?: boolean | null
+  /** Renders a filter dropdown in the header of every filterable column. */
+  enableColumnFilters?: boolean
 }
 
-export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToManyRelationProps): React.JSX.Element => {
+interface ManyToManyRelationContentProps extends ManyToManyRelationProps {
+  enableRowDrag: boolean
+}
+
+const ManyToManyRelationContent = ({ enableRowDrag, ...props }: ManyToManyRelationContentProps): React.JSX.Element => {
   const [value, setValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
   const [displayedValue, setDisplayedValue] = useState<DisplayManyToManyRelationValue | null>(props.value ?? null)
 
+  const { values: appliedFilters } = useRelationFilters()
+  const buildFilterQuery = useFilterQuery(relationFilterAdapter, appliedFilters)
+  const { matchRow } = buildFilterQuery({})
+
   const { onDrop, deleteItem, onSearch, onOrderChange, addAssets, addItems, updateDisplayValue, maxRemainingItems, getOriginalIndex, hasActiveSearch } = useValue(
-    value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments, { name: props.combinedFieldName, class: props.pathFormatterClass ?? undefined }, props?.visibleFieldsValue
+    value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments, { name: props.combinedFieldName, class: props.pathFormatterClass ?? undefined }, props?.visibleFieldsValue, matchRow
   )
   const allowDragAndDrop = !isNil(displayedValue) && displayedValue?.length > 1 && !hasActiveSearch && !props?.noteditable
 
@@ -82,6 +95,17 @@ export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToMan
       updateDisplayValue(props.value ?? null)
     }
   }, [props.value])
+
+  const hasAppliedFiltersOnce = useRef<boolean>(false)
+
+  useEffect(() => {
+    if (!hasAppliedFiltersOnce.current) {
+      hasAppliedFiltersOnce.current = true
+      return
+    }
+
+    updateDisplayValue(value)
+  }, [appliedFilters])
 
   if (props.isLoading === true) {
     return (
@@ -147,5 +171,20 @@ export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToMan
         />
       </Content>
     </>
+  )
+}
+
+export const ManyToManyRelation = ({ enableRowDrag = true, enableColumnFilters = true, ...props }: ManyToManyRelationProps): React.JSX.Element => {
+  return (
+    <RelationFiltersProvider
+      columnDefinition={ props.columnDefinition }
+      enabled={ enableColumnFilters }
+      visibleFieldsValue={ props.visibleFieldsValue }
+    >
+      <ManyToManyRelationContent
+        { ...props }
+        enableRowDrag={ enableRowDrag }
+      />
+    </RelationFiltersProvider>
   )
 }

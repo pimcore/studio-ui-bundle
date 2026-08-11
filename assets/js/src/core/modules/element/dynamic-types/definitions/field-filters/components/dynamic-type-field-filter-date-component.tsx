@@ -18,13 +18,9 @@ import { t } from 'i18next'
 import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
 import { formatFilterDate, parseFilterDate } from '@Pimcore/components/date-picker/utils/date-picker-utils'
 import { isFieldRespectTimezone } from '../../objects/data-related/types/abstract/dynamic-type-object-data-abstract-date'
+import { DatePickerSettingValue } from '../utils/filter-setting-values'
 
-export enum DatePickerSettingValue {
-  ON = 'on',
-  BETWEEN = 'between',
-  BEFORE = 'before',
-  AFTER = 'after'
-}
+export { DatePickerSettingValue } from '../utils/filter-setting-values'
 
 export interface DateValue {
   setting: DatePickerSettingValue
