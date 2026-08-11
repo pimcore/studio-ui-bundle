@@ -9,7 +9,7 @@
  */
 
 import type React from 'react'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 export interface UseToolStripActivationProps {
   activateOnHover: boolean
@@ -48,11 +48,24 @@ export const useToolStripActivation = ({
   const [isFocusWithin, setIsFocusWithin] = useState(false)
   const [isCollapsedByEscape, setIsCollapsedByEscape] = useState(false)
 
+  const isActivationEnabled = activateOnHover && !disabled
+
   const isActivated = (() => {
     if (disabled) return false
     if (!activateOnHover) return true
     return isHovered || (isFocusWithin && !isCollapsedByEscape)
   })()
+
+  // Turning activation off detaches the leave and blur handlers, so a pointer or focus that
+  // leaves while it is off would leave the flags standing and the strip would come back
+  // expanded without being hovered or focused.
+  useEffect(() => {
+    if (isActivationEnabled) return
+
+    setIsHovered(false)
+    setIsFocusWithin(false)
+    setIsCollapsedByEscape(false)
+  }, [isActivationEnabled])
 
   const handleMouseEnter = useCallback(() => { setIsHovered(true) }, [])
 
@@ -97,7 +110,7 @@ export const useToolStripActivation = ({
   }, [])
 
   const containerProps = useMemo<React.HTMLAttributes<HTMLElement>>(() => {
-    if (!activateOnHover || disabled) return {}
+    if (!isActivationEnabled) return {}
 
     return {
       tabIndex: 0,
@@ -110,7 +123,7 @@ export const useToolStripActivation = ({
       onKeyDown: handleKeyDown,
       onClick: handleClick
     }
-  }, [activateOnHover, disabled, label, handleMouseEnter, handleMouseLeave, handleFocus, handleBlur, handleKeyDown, handleClick])
+  }, [isActivationEnabled, label, handleMouseEnter, handleMouseLeave, handleFocus, handleBlur, handleKeyDown, handleClick])
 
   return {
     isActivated,

@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
+
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import userEvent, { type UserEvent } from '@testing-library/user-event'
@@ -231,6 +233,67 @@ describe('useToolStripActivation', () => {
     await user.hover(strip())
     await user.click(screen.getByTestId('first-action'))
 
+    expect(isActivated()).toBe(false)
+  })
+
+  // Activation being turned off mid-life detaches the leave and blur handlers, so anything
+  // that leaves while it is off cannot clear its flag. Without a reset the strip would come
+  // back expanded while it is neither hovered nor focused.
+  it('does not come back expanded after being disabled while hovered', async () => {
+    const { rerender } = render(<ToolStripHarness />)
+
+    await user.hover(strip())
+    expect(isActivated()).toBe(true)
+
+    rerender(<ToolStripHarness disabled />)
+    expect(isActivated()).toBe(false)
+
+    // The pointer leaves while disabled — no onMouseLeave is attached to notice it.
+    await user.unhover(strip())
+
+    rerender(<ToolStripHarness />)
+    expect(isActivated()).toBe(false)
+  })
+
+  it('does not come back expanded after activateOnHover was toggled off while hovered', async () => {
+    const { rerender } = render(<ToolStripHarness />)
+
+    await user.hover(strip())
+    expect(isActivated()).toBe(true)
+
+    rerender(<ToolStripHarness activateOnHover={ false } />)
+    await user.unhover(strip())
+
+    rerender(<ToolStripHarness />)
+    expect(isActivated()).toBe(false)
+  })
+
+  it('does not come back expanded after being disabled while focused', async () => {
+    const { rerender } = render(
+      <>
+        <ToolStripHarness />
+        <button data-testid="outside">outside</button>
+      </>
+    )
+
+    await user.tab()
+    await user.tab()
+    expect(screen.getByTestId('first-action')).toHaveFocus()
+
+    rerender(
+      <>
+        <ToolStripHarness disabled />
+        <button data-testid="outside">outside</button>
+      </>
+    )
+    screen.getByTestId('outside').focus()
+
+    rerender(
+      <>
+        <ToolStripHarness />
+        <button data-testid="outside">outside</button>
+      </>
+    )
     expect(isActivated()).toBe(false)
   })
 
