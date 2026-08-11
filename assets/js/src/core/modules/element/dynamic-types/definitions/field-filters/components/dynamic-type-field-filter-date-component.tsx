@@ -129,9 +129,9 @@ export const DynamicTypeFieldFilterDateComponent = (props: DynamicTypeFieldFilte
       gap="extra-small"
     >
       <Select
-        defaultValue={ DatePickerSettingValue.ON }
         onChange={ (value: DatePickerSettingValue) => { handleSettingChange(value) } }
         options={ SETTING_OPTIONS }
+        value={ currentSetting }
         width={ 90 }
       />
 
