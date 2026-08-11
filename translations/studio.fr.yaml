@@ -479,8 +479,8 @@ aria.version.expand: Développer la version
 clear-all: Tout effacer
 empty: Vide
 none: Aucun
-'yes': Oui
-'no': Non
+yes: Oui
+no: Non
 by: Par
 field: Champ
 no-data-available: Aucune donnée disponible

@@ -479,8 +479,8 @@ aria.version.expand: Version aufklappen
 clear-all: Alle löschen
 empty: Leer
 none: Keine
-'yes': Ja
-'no': Nein
+yes: Ja
+no: Nein
 by: Von
 field: Feld
 no-data-available: Keine Daten verfügbar

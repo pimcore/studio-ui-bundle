@@ -479,8 +479,8 @@ aria.version.expand: Expandera version
 clear-all: Rensa allt
 empty: Tom
 none: Ingen
-'yes': Ja
-'no': Nej
+yes: Ja
+no: Nej
 by: Av
 field: Fält
 no-data-available: Ingen data tillgänglig

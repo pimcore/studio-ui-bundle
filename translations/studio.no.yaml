@@ -479,8 +479,8 @@ aria.version.expand: Utvid versjon
 clear-all: Fjern alle
 empty: Tom
 none: Ingen
-'yes': Ja
-'no': Nei
+yes: Ja
+no: Nei
 by: Av
 field: Felt
 no-data-available: Ingen data tilgjengelig

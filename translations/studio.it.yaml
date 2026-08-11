@@ -479,8 +479,8 @@ aria.version.expand: Espandi versione
 clear-all: Cancella tutto
 empty: Vuoto
 none: Nessuno
-'yes': Sì
-'no': 'No'
+yes: Sì
+no: No
 by: Di
 field: Campo
 no-data-available: Nessun dato disponibile
