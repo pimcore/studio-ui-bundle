@@ -8,12 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useRef } from 'react'
 import { Upload as AntUpload, type UploadProps as AntUploadProps } from 'antd'
 import { api as assetApi, type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import type { RcFile, UploadFile } from 'antd/es/upload/interface'
 import { useAppDispatch } from '@sdk/app'
-import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { isString, isNil } from 'lodash'
 import { type UploadChangeParam } from 'antd/lib/upload'
 import { type UploadRef } from 'antd/es/upload/Upload'
@@ -23,6 +22,9 @@ import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useUploadModalContext } from './provider/upload-modal-provider/use-upload-modal-context'
 import { useTargetFolderId } from '@Pimcore/components/hooks/use-target-folder-id'
 import { useUploadConflictHandler } from './hooks/use-upload-conflict-handler'
+import { resolveUploadAction } from './utils/resolve-upload-action'
+import { createUploadQueue, type UploadRequest } from './utils/create-upload-queue'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type ApiErrorData } from '@sdk/modules/app'
 
@@ -113,28 +115,25 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
     getCheckError
   } = useUploadConflictHandler({ targetFolderId })
 
+  // One queue per component instance, i.e. per browser tab. It wraps whichever
+  // transport applies, so a caller-provided `customRequest` stays in charge of
+  // how a file is sent and only gains the concurrency limit.
+  const uploadQueue = useRef(
+    createUploadQueue(appConfig.maxParallelUploads, props.customRequest as UploadRequest | undefined)
+  )
+
   const uploadProps: AntUploadProps = {
+    customRequest: uploadQueue.current,
     ...(!isNil(props.customRequest)
-      ? { customRequest: props.customRequest }
+      ? {}
       : {
-          action: (file): string => {
-            if (isString(props.action)) {
-              return props.action
-            }
-
-            // External replace ID (e.g. from folder-drop conflict resolution) takes
-            // priority, then fall back to the built-in conflict handler's result.
-            const replaceId = props.getExternalReplaceId?.(file) ?? getReplaceId(file)
-
-            if (!isNil(replaceId)) {
-              return `${getPrefix()}/assets/${replaceId}/replace`
-            }
-
-            const perFileFolderId = props.getTargetFolderIdForFile?.(file)
-            const effectiveFolderId = perFileFolderId ?? targetFolderId
-
-            return `${getPrefix()}/assets/add/${effectiveFolderId}`
-          }
+          action: (file): string => resolveUploadAction(file, {
+            action: props.action,
+            targetFolderId,
+            getExternalReplaceId: props.getExternalReplaceId,
+            getReplaceId,
+            getTargetFolderIdForFile: props.getTargetFolderIdForFile
+          })
         }),
     name: props.name ?? 'file',
     multiple: props.multiple ?? true,
