@@ -17,12 +17,19 @@ type UploadProviderProps = ModalUploadProps & {
   children: React.ReactNode
 }
 
+/** Progress of the duplicate-filename check that runs before any upload starts. */
+export interface UploadCheckProgress {
+  done: number
+  total: number
+}
+
 export interface UploadContextProps {
   triggerUpload: (props: ModalUploadProps) => void
   setIsModalOpen: (open: boolean) => void
   setShowUploadError: (showUploadError: boolean) => void
   setShowProcessing: (showProcessing: boolean) => void
   setFileList: (fileList: UploadFile[]) => void
+  setCheckProgress: (checkProgress: UploadCheckProgress | null) => void
   fileList: UploadFile[]
 
 }
@@ -39,6 +46,7 @@ export const UploadModalProvider: React.FC<UploadProviderProps> = ({ children, .
   const [showUploadError, setShowUploadError] = useState(false)
   const [showProcessing, setShowProcessing] = useState(false)
   const [fileList, setFileList] = useState<UploadFile[]>([])
+  const [checkProgress, setCheckProgress] = useState<UploadCheckProgress | null>(null)
 
   const triggerUpload = (props: ModalUploadProps): void => {
     setUploadState({ ...defaultUploadProps, ...props })
@@ -51,6 +59,7 @@ export const UploadModalProvider: React.FC<UploadProviderProps> = ({ children, .
     setShowUploadError,
     setShowProcessing,
     setFileList,
+    setCheckProgress,
     fileList
   }), [defaultUploadProps, fileList])
 
@@ -59,6 +68,7 @@ export const UploadModalProvider: React.FC<UploadProviderProps> = ({ children, .
     setFileList([])
     setShowUploadError(false)
     setShowProcessing(false)
+    setCheckProgress(null)
   }
 
   return (
@@ -73,6 +83,7 @@ export const UploadModalProvider: React.FC<UploadProviderProps> = ({ children, .
 
       { isModalOpen && (
         <UploadModal
+          checkProgress={ checkProgress }
           closeModal={ closeModal }
           fileList={ fileList }
           open

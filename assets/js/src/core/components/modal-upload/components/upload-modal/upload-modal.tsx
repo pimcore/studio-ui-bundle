@@ -23,6 +23,7 @@ import { Text } from '@Pimcore/components/text/text'
 import { Progress } from '@Pimcore/components/progress/progress'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { isNil, isString } from 'lodash'
+import type { UploadCheckProgress } from '../../provider/upload-modal-provider/upload-modal-provider'
 
 export interface UploadModalProps {
   open: boolean
@@ -30,6 +31,7 @@ export interface UploadModalProps {
   closeModal: () => void
   showProcessing: boolean
   showUploadError: boolean
+  checkProgress?: UploadCheckProgress | null
 }
 
 export const UploadModal = (props: UploadModalProps): React.JSX.Element => {
@@ -46,6 +48,11 @@ export const UploadModal = (props: UploadModalProps): React.JSX.Element => {
     return Math.round(totalPercent / props.fileList.length) // Average progress
   }, [props.fileList])
 
+  const checkProgress = props.checkProgress
+  const checkPercent = isNil(checkProgress) || checkProgress.total === 0
+    ? 0
+    : Math.round((checkProgress.done / checkProgress.total) * 100)
+
   return (
     <Modal
       closable={ false }
@@ -56,6 +63,35 @@ export const UploadModal = (props: UploadModalProps): React.JSX.Element => {
         <ModalTitle iconName='upload-cloud'>{ t('upload') }</ModalTitle>
             ) }
     >
+
+      {/* Duplicate-filename check, runs before the first upload request */}
+      { !isNil(checkProgress) && (
+        <Box margin={ { y: 'extra-small' } }>
+          <Alert
+            data-testid="upload-modal-checking"
+            message={ (
+              <Flex gap="small">
+                <Spin size="small" />
+                <Text type="secondary">
+                  { t('asset.upload.checking-duplicate-file-names', {
+                    done: checkProgress.done,
+                    total: checkProgress.total
+                  }) }
+                </Text>
+              </Flex>
+            ) }
+            type="info"
+          />
+
+          <Box margin={ { top: 'extra-small' } }>
+            <Progress
+              data-testid="upload-modal-check-progress"
+              percent={ checkPercent }
+              status="active"
+            />
+          </Box>
+        </Box>
+      )}
 
       {/* Total Progress */}
       {props.fileList.length > 1 && !props.showProcessing && !props.showUploadError && (

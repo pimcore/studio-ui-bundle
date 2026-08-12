@@ -83,6 +83,7 @@ asset.upload.overwrite: Remplacer
 asset.upload.keep-both: Conserver les deux
 asset.upload.skip: Ignorer
 asset.upload.apply-to-all: Appliquer à tous
+asset.upload.checking-duplicate-file-names: "Vérification des noms de fichiers en double ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Création des dossiers
 asset.upload.folder-drop.creating-folders-hint: Veuillez patienter pendant la création de la structure de dossiers…
 upload.error.file-too-large: Le fichier dépasse la limite de téléversement actuelle du serveur.

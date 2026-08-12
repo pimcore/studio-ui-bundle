@@ -23,8 +23,11 @@ interface UseUploadConflictHandlerProps {
   targetFolderId?: number
 }
 
+/** Reports how many files of the batch have been checked for name conflicts so far. */
+export type UploadCheckProgressCallback = (done: number, total: number) => void
+
 interface UseUploadConflictHandlerResult {
-  resolveConflicts: (files: RcFile[]) => Promise<void>
+  resolveConflicts: (files: RcFile[], onProgress?: UploadCheckProgressCallback) => Promise<void>
   shouldSkipFile: (file: RcFile) => boolean
   hasCheckError: (file: RcFile) => boolean
   getCheckError: (file: RcFile) => unknown
@@ -41,7 +44,7 @@ export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHa
   const skippedFilesRef = useRef<Set<string>>(new Set())
   const errorFilesRef = useRef<Map<string, unknown>>(new Map())
 
-  const resolveConflicts = async (files: RcFile[]): Promise<void> => {
+  const resolveConflicts = async (files: RcFile[], onProgress?: UploadCheckProgressCallback): Promise<void> => {
     if (isNil(targetFolderId)) {
       return
     }
@@ -52,11 +55,14 @@ export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHa
         const fileChunks = chunk(files, CONCURRENCY_LIMIT)
         const checkResults: Array<{ file: RcFile, exists: boolean, id?: number, error?: unknown }> = []
 
+        onProgress?.(0, files.length)
+
         for (const fileChunk of fileChunks) {
           const chunkResults = await Promise.all(
             fileChunk.map(async (f) => ({ file: f, ...await checkFileExists(f.name, targetFolderId) }))
           )
           checkResults.push(...chunkResults)
+          onProgress?.(checkResults.length, files.length)
         }
 
         checkResults.forEach(result => {
