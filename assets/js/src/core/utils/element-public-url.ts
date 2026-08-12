@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isNil } from 'lodash'
+
 interface IBuildElementPublicUrlProps {
   fullPath: string
   currentDomain: string
@@ -22,7 +24,7 @@ interface IBuildElementPublicUrlProps {
  * an already-absolute prefix passes through unchanged since the base is ignored.
  */
 export function buildElementPublicUrl ({ fullPath, currentDomain, assetFrontendPrefix }: IBuildElementPublicUrlProps): string {
-  if (assetFrontendPrefix != null) {
+  if (!isNil(assetFrontendPrefix)) {
     return new URL(`${assetFrontendPrefix}${fullPath}`, currentDomain).toString()
   }
 
