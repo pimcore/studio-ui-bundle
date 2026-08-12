@@ -20,6 +20,7 @@ import { Split } from '../split/split'
 import { Text } from '../text/text'
 import { Flex } from '@sdk/components'
 import { getToolStripIconColor } from './utils/get-icon-color'
+import { useToolStripActivation } from './hooks/use-tool-strip-activation'
 
 export interface DragHandleProps {
   listeners?: Record<string, any>
@@ -57,13 +58,12 @@ export const ToolStrip = ({
   additionalIconAutoColor = false
 }: ToolStripProps): React.JSX.Element => {
   const { styles, theme: token } = useStyles()
-  const [isHovered, setIsHovered] = React.useState(false)
 
-  const isActivated = (() => {
-    if (disabled) return false
-    if (activateOnHover) return isHovered
-    return true
-  })()
+  const { isActivated, containerProps } = useToolStripActivation({
+    activateOnHover,
+    disabled,
+    label: title
+  })
 
   const classNames = cn(
     'tool-strip',
@@ -226,18 +226,29 @@ export const ToolStrip = ({
       return (
         <Flex
           align="center"
-          className={ dragger !== false && !disabled ? styles['draggable-area'] : undefined }
           style={ { height: '100%' } }
-          { ...(dragger !== false && !disabled ? dragHandleProps.listeners : {}) }
         >
-          {renderDragger()}
-          {additionalIconPosition === 'before' && renderAdditionalIcon()}
-          {title !== undefined && (
-            <Box margin={ { right: 'mini' } }>
-              <Text className={ styles.title }>{title}</Text>
-            </Box>
-          )}
-          {additionalIconPosition === 'after' && renderAdditionalIcon()}
+          {/*
+            The drag listeners must stay off the actions: dnd-kit's KeyboardSensor
+            activates on Space/Enter and calls preventDefault(), which would swallow the
+            activation of any focused button underneath them (and a pointer drag would
+            swallow clicks that travel more than the sensor's activation distance).
+          */}
+          <Flex
+            align="center"
+            className={ dragger !== false && !disabled ? styles['draggable-area'] : undefined }
+            style={ { height: '100%' } }
+            { ...(dragger !== false && !disabled ? dragHandleProps.listeners : {}) }
+          >
+            {renderDragger()}
+            {additionalIconPosition === 'before' && renderAdditionalIcon()}
+            {title !== undefined && (
+              <Box margin={ { right: 'mini' } }>
+                <Text className={ styles.title }>{title}</Text>
+              </Box>
+            )}
+            {additionalIconPosition === 'after' && renderAdditionalIcon()}
+          </Flex>
           {children !== undefined && !disabled && (
             <div className="tool-strip__children-container">
               <Split
@@ -295,9 +306,8 @@ export const ToolStrip = ({
   return (
     <ThemeProvider theme={ themeConfig }>
       <Box
+        { ...containerProps }
         className={ classNames }
-        onMouseEnter={ activateOnHover && !disabled ? () => { setIsHovered(true) } : undefined }
-        onMouseLeave={ activateOnHover && !disabled ? () => { setIsHovered(false) } : undefined }
         padding={ title !== undefined && dragger === false ? { x: 'mini', y: 'mini', left: 'extra-small' } : 'mini' }
       >
         {renderContent()}
