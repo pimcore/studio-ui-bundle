@@ -392,6 +392,17 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
+            assetUploadBatchInfo: build.query<
+                AssetUploadBatchInfoApiResponse,
+                AssetUploadBatchInfoApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/exists/${queryArg.parentId}`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Assets"],
+            }),
             assetReplace: build.mutation<AssetReplaceApiResponse, AssetReplaceApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/assets/${queryArg.id}/replace`,
@@ -951,6 +962,17 @@ export type AssetUploadInfoApiArg = {
     /** Name of the file to upload */
     fileName: string;
 };
+export type AssetUploadBatchInfoApiResponse =
+    /** status 200 Returns one entry per requested file name, in the order they were sent, each with the existing asset ID if a file with that name already exists in the same path */ {
+        items: AssetUploadBatchInfo[];
+    };
+export type AssetUploadBatchInfoApiArg = {
+    /** ParentId of the asset */
+    parentId: number;
+    body: {
+        fileNames?: string[];
+    };
+};
 export type AssetReplaceApiResponse = /** status 200 File name of the successfully replaced asset */ {
     /** new file name of the asset */
     data: string;
@@ -1396,6 +1418,14 @@ export type PatchCustomMetadata = {
     data: string | null;
 };
 export type AssetUploadInfo = {
+    /** True if asset exists */
+    exists: boolean;
+    /** Id of existing asset */
+    assetId: number | null;
+};
+export type AssetUploadBatchInfo = {
+    /** Name of the checked file */
+    fileName: string;
     /** True if asset exists */
     exists: boolean;
     /** Id of existing asset */

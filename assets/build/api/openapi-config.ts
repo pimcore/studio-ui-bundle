@@ -30,6 +30,11 @@ const config: ConfigFile = {
       type: 'query',
     },
     {
+      // POST only because the file name list does not fit in a query string; it is a read.
+      pattern: 'assetUploadBatchInfo',
+      type: 'query',
+    },
+    {
       pattern: 'dataObjectGetGrid',
       type: 'query',
     },

@@ -19,6 +19,12 @@ export enum UploadConflictAction {
   SKIP = 'skip'
 }
 
+/**
+ * File names checked per request. The backend resolves each name individually
+ * and rejects more than 100 per call, so this stays well below that ceiling.
+ */
+const EXISTS_CHECK_BATCH_SIZE = 25
+
 interface UseUploadConflictHandlerProps {
   targetFolderId?: number
 }
@@ -37,7 +43,7 @@ interface UseUploadConflictHandlerResult {
 }
 
 export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHandlerProps): UseUploadConflictHandlerResult => {
-  const { checkFileExists, askUserOverwrite, resetApplyToAll } = useUploadConflictModal()
+  const { checkFilesExist, askUserOverwrite, resetApplyToAll } = useUploadConflictModal()
 
   const replaceFilesRef = useRef<Map<string, number>>(new Map())
   const batchCheckPromiseRef = useRef<Promise<void> | null>(null)
@@ -51,17 +57,20 @@ export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHa
 
     if (isNil(batchCheckPromiseRef.current)) {
       batchCheckPromiseRef.current = (async () => {
-        const CONCURRENCY_LIMIT = 5
-        const fileChunks = chunk(files, CONCURRENCY_LIMIT)
+        const fileChunks = chunk(files, EXISTS_CHECK_BATCH_SIZE)
         const checkResults: Array<{ file: RcFile, exists: boolean, id?: number, error?: unknown }> = []
 
         onProgress?.(0, files.length)
 
+        // One request per batch, issued one after another: the batches are the
+        // back-pressure, so they must not also run in parallel.
         for (const fileChunk of fileChunks) {
-          const chunkResults = await Promise.all(
-            fileChunk.map(async (f) => ({ file: f, ...await checkFileExists(f.name, targetFolderId) }))
-          )
-          checkResults.push(...chunkResults)
+          const chunkResults = await checkFilesExist(fileChunk.map((f) => f.name), targetFolderId)
+
+          fileChunk.forEach((f, index) => {
+            checkResults.push({ file: f, ...chunkResults[index] })
+          })
+
           onProgress?.(checkResults.length, files.length)
         }
 
