@@ -171,7 +171,7 @@ const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, vir
         )
       })}
     </tr>
-  ), [JSON.stringify(row), memoModifiedCells, isSelected, props.columns, style, visibleCells, props.columnSizingKey])
+  ), [JSON.stringify(row), memoModifiedCells, isSelected, props.columns, style, visibleCells, props.columnSizingKey, props.distributeWidth])
 
   function isModifiedCell (cellId: string): boolean {
     return memoModifiedCells.find((item) => item.columnId === cellId) !== undefined
