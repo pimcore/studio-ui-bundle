@@ -22,6 +22,7 @@ interface SettingsState {
   settings?: SystemSettingsGetApiResponse
   adminSettings?: AdminSettings
   thumbnails?: AdminSettingsThumbnailPath
+  activeBundles?: string[]
 }
 
 // ---------------------------------------------------------------------------
@@ -83,6 +84,13 @@ const slice = createSlice({
       { payload }: PayloadAction<AdminSettingsThumbnailPath>
     ) => {
       state.thumbnails = payload
+    },
+
+    setActiveBundles: (
+      state,
+      { payload }: PayloadAction<string[]>
+    ) => {
+      state.activeBundles = payload
     }
   },
   extraReducers: (builder) => {
@@ -97,9 +105,10 @@ const slice = createSlice({
 
 injectSliceWithState(slice)
 
-export const { setSettings, setAdminSettings, setThumbnails } = slice.actions
+export const { setSettings, setAdminSettings, setThumbnails, setActiveBundles } = slice.actions
 
 export const getSettings = (state: RootState): SystemSettingsGetApiResponse => state.settings.settings
 export const getAdminSettings = (state: RootState): AdminSettings => state.settings.adminSettings
 export const getThumbnails = (state: RootState): AdminSettingsThumbnailPath => state.settings.thumbnails
+export const getActiveBundles = (state: RootState): string[] | undefined => state.settings.activeBundles
 
