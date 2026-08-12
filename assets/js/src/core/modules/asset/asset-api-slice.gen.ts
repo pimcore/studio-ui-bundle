@@ -392,10 +392,7 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
-            assetUploadBatchInfo: build.query<
-                AssetUploadBatchInfoApiResponse,
-                AssetUploadBatchInfoApiArg
-            >({
+            assetUploadBatchInfo: build.query<AssetUploadBatchInfoApiResponse, AssetUploadBatchInfoApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/assets/exists/${queryArg.parentId}`,
                     method: "POST",
@@ -963,7 +960,7 @@ export type AssetUploadInfoApiArg = {
     fileName: string;
 };
 export type AssetUploadBatchInfoApiResponse =
-    /** status 200 Returns one entry per requested file name, in the order they were sent, each with the existing asset ID if a file with that name already exists in the same path */ {
+    /** status 200 Returns one entry per requested file name, in the order they were sent, each with the existing asset ID if a file with that name already exists in the same path. <br> Names that exist but are not viewable by the current user are reported as not existing with <strong>accessDenied</strong> set, so a single denied file does not fail the whole batch */ {
         items: AssetUploadBatchInfo[];
     };
 export type AssetUploadBatchInfoApiArg = {
@@ -1430,6 +1427,8 @@ export type AssetUploadBatchInfo = {
     exists: boolean;
     /** Id of existing asset */
     assetId: number | null;
+    /** True if an asset with that name exists but the current user may not view it. The name is therefore reported as not existing, since no ID can be handed out. */
+    accessDenied: boolean;
 };
 export type VideoThumbnailStatus = {
     /** AdditionalAttributes */
@@ -1503,6 +1502,7 @@ export const {
     useAssetGetTreeQuery,
     useAssetAddMutation,
     useAssetUploadInfoQuery,
+    useAssetUploadBatchInfoQuery,
     useAssetReplaceMutation,
     useAssetUploadZipMutation,
     useAssetVideoImageThumbnailStreamQuery,

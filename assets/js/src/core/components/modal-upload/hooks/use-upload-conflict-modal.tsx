@@ -61,6 +61,15 @@ export const useUploadConflictModal = (): UploadConflictModalResult => {
     return fileNames.map((_, index) => {
       const item = data?.items?.[index]
 
+      // The name is taken by an asset the user may not see, so it can neither be
+      // overwritten nor uploaded over — surface it as that file's own error.
+      if (item?.accessDenied === true) {
+        return {
+          exists: false,
+          error: { errorKey: 'error_permission_denied' }
+        }
+      }
+
       if (item?.exists === true && !isNil(item.assetId)) {
         return { exists: true, id: item.assetId }
       }
