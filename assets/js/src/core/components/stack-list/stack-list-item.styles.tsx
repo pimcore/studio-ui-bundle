@@ -35,6 +35,11 @@ export const useStyles = createStyles(({ token, css }) => {
         .ant-picker {
           width: 100%;
         }
+
+        > .ant-form-item:last-child,
+        > * > .ant-form-item:last-child {
+          margin-bottom: 0;
+        }
       }
 
       .stack-list-item__content {
