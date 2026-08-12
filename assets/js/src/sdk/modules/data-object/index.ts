@@ -55,3 +55,7 @@ export * from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-
 
 export * from '@Pimcore/modules/data-object/listing/decorator/column-configuration/view-layer/components/grid/hooks/use-grid-options/tabs/grid-config/forms/advanced-column-form/advanced-column-form'
 export * from '@Pimcore/modules/data-object/listing/decorator/column-configuration/view-layer/components/grid/hooks/use-grid-options/tabs/grid-config/forms/advanced-column-form/pipeline-layout-provider'
+
+// the toolbar renders inside these; a bundle replacing the save buttons needs the same state
+export * from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
+export * from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/use-save-context'
