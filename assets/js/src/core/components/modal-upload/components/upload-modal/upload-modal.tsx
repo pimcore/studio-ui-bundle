@@ -32,7 +32,7 @@ export interface UploadModalProps {
   showProcessing: boolean
   showUploadError: boolean
   checkProgress?: UploadCheckProgress | null
-  /** Set only while the duplicate-name check runs, never once files are uploading. */
+  /** Set while the duplicate-name check runs. */
   onCancelCheck?: () => void
 }
 

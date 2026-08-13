@@ -19,10 +19,7 @@ export enum UploadConflictAction {
   SKIP = 'skip'
 }
 
-/**
- * File names checked per request. The backend resolves each name individually
- * and rejects more than 100 per call, so this stays well below that ceiling.
- */
+/** Names per exists request; the endpoint rejects more than 100. */
 const EXISTS_CHECK_BATCH_SIZE = 25
 
 interface UseUploadConflictHandlerProps {
@@ -32,7 +29,6 @@ interface UseUploadConflictHandlerProps {
 /** Reports how many files of the batch have been checked for name conflicts so far. */
 export type UploadCheckProgressCallback = (done: number, total: number) => void
 
-/** Marks one run of the check, so a cancelled run stays cancelled for its own waiters. */
 interface CheckRun {
   cancelled: boolean
 }
@@ -40,7 +36,7 @@ interface CheckRun {
 interface UseUploadConflictHandlerResult {
   /** Resolves to `true` when the check was cancelled before it could finish. */
   resolveConflicts: (files: RcFile[], onProgress?: UploadCheckProgressCallback) => Promise<boolean>
-  /** Stops the running check. Safe at any point: nothing has been uploaded yet. */
+  /** Stops the running check and discards the results it had already gathered. */
   cancelCheck: () => void
   shouldSkipFile: (file: RcFile) => boolean
   hasCheckError: (file: RcFile) => boolean
@@ -76,8 +72,7 @@ export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHa
 
         onProgress?.(0, files.length)
 
-        // One request per batch, issued one after another: the batches are the
-        // back-pressure, so they must not also run in parallel.
+        // Sequential on purpose: the batching is the back-pressure.
         for (const fileChunk of fileChunks) {
           if (run.cancelled) {
             return true

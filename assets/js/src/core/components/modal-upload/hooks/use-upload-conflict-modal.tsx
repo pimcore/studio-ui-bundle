@@ -50,7 +50,7 @@ export const useUploadConflictModal = (): UploadConflictModalResult => {
     const { data, error } = await dispatch(
       assetApi.endpoints.assetUploadBatchInfo.initiate(
         { parentId: folderId, body: { fileNames } },
-        { forceRefetch: true }
+        { forceRefetch: true, subscribe: false }
       )
     )
 
@@ -58,10 +58,9 @@ export const useUploadConflictModal = (): UploadConflictModalResult => {
       return fileNames.map(() => ({ exists: false, error }))
     }
 
-    // Results are matched by position, so a batch of a different size means the
-    // response cannot be attributed to these files at all.
+    // A differently sized batch cannot be matched to these files at all.
     if (data?.items?.length !== fileNames.length) {
-      return fileNames.map(() => ({ exists: false, error: { errorKey: 'error_something_generic_went_wrong' } }))
+      return fileNames.map(() => ({ exists: false, error: { errorKey: 'error_validation_failed' } }))
     }
 
     return data.items.map((item) => {
@@ -89,7 +88,7 @@ export const useUploadConflictModal = (): UploadConflictModalResult => {
     const { data: uploadInfo, error } = await dispatch(
       assetApi.endpoints.assetUploadInfo.initiate(
         { parentId: folderId, fileName },
-        { forceRefetch: true }
+        { forceRefetch: true, subscribe: false }
       )
     )
 

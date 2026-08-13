@@ -177,7 +177,7 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
 
       const wasCancelled = await resolveConflicts(fileList, (done, total) => { setCheckProgress({ done, total }) })
 
-      // The modal is already gone; ignoring every file stops Ant uploading anyway.
+      // Cancelled — the provider already closed the modal, LIST_IGNORE stops the upload.
       if (wasCancelled) {
         return AntUpload.LIST_IGNORE
       }
@@ -185,7 +185,7 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
       // Ant's `onBatchStart` returns early when every file is `LIST_IGNORE`, so no
       // `onChange` follows to take the modal down. Close it here instead of leaving
       // it stuck on the checking state.
-      if (fileList.every(listedFile => shouldSkipFile(listedFile))) {
+      if (isBatchStart && fileList.every(listedFile => shouldSkipFile(listedFile))) {
         setCheckProgress(null)
         setIsModalOpen(false)
       }

@@ -76,7 +76,6 @@ export const UploadModalProvider: React.FC<UploadProviderProps> = ({ children, .
     setCheckProgress(null)
   }
 
-  // Offered during the check only: nothing has been uploaded yet to protect.
   const cancelCheck = (): void => {
     cancelCheckRef.current?.()
     cancelCheckRef.current = null
