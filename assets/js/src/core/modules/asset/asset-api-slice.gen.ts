@@ -967,7 +967,7 @@ export type AssetUploadBatchInfoApiArg = {
     /** ParentId of the asset */
     parentId: number;
     body: {
-        fileNames?: string[];
+        fileNames: string[];
     };
 };
 export type AssetReplaceApiResponse = /** status 200 File name of the successfully replaced asset */ {
