@@ -12,6 +12,7 @@ import React, { createContext, useRef, useMemo, useState } from 'react'
 import { ModalUpload, type ModalUploadProps } from '../../modal-upload'
 import { UploadModal } from '../../components/upload-modal/upload-modal'
 import { type UploadFile } from 'antd'
+import { isNil } from 'lodash'
 
 type UploadProviderProps = ModalUploadProps & {
   children: React.ReactNode
@@ -30,6 +31,11 @@ export interface UploadContextProps {
   setShowProcessing: (showProcessing: boolean) => void
   setFileList: (fileList: UploadFile[]) => void
   setCheckProgress: (checkProgress: UploadCheckProgress | null) => void
+  /**
+   * Published by `ModalUpload` when a duplicate-name check starts, so the modal
+   * can stop that check without reaching into the component that owns it.
+   */
+  cancelCheckRef: React.MutableRefObject<(() => void) | null>
   fileList: UploadFile[]
 
 }
@@ -47,6 +53,7 @@ export const UploadModalProvider: React.FC<UploadProviderProps> = ({ children, .
   const [showProcessing, setShowProcessing] = useState(false)
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const [checkProgress, setCheckProgress] = useState<UploadCheckProgress | null>(null)
+  const cancelCheckRef = useRef<(() => void) | null>(null)
 
   const triggerUpload = (props: ModalUploadProps): void => {
     setUploadState({ ...defaultUploadProps, ...props })
@@ -60,6 +67,7 @@ export const UploadModalProvider: React.FC<UploadProviderProps> = ({ children, .
     setShowProcessing,
     setFileList,
     setCheckProgress,
+    cancelCheckRef,
     fileList
   }), [defaultUploadProps, fileList])
 
@@ -69,6 +77,15 @@ export const UploadModalProvider: React.FC<UploadProviderProps> = ({ children, .
     setShowUploadError(false)
     setShowProcessing(false)
     setCheckProgress(null)
+  }
+
+  // Only offered while the duplicate-name check runs. Nothing has been sent to
+  // the server at that point, so there is no half-finished upload to protect —
+  // unlike once the files are on their way, where the modal stays sealed.
+  const cancelCheck = (): void => {
+    cancelCheckRef.current?.()
+    cancelCheckRef.current = null
+    closeModal()
   }
 
   return (
@@ -86,6 +103,7 @@ export const UploadModalProvider: React.FC<UploadProviderProps> = ({ children, .
           checkProgress={ checkProgress }
           closeModal={ closeModal }
           fileList={ fileList }
+          onCancelCheck={ isNil(checkProgress) ? undefined : cancelCheck }
           open
           showProcessing={ showProcessing }
           showUploadError={ showUploadError }

@@ -32,6 +32,12 @@ export interface UploadModalProps {
   showProcessing: boolean
   showUploadError: boolean
   checkProgress?: UploadCheckProgress | null
+  /**
+   * Set only while the duplicate-name check runs. The modal stays sealed once
+   * files are on their way, but during the check nothing has been sent yet, so
+   * backing out is free and must not need a page reload.
+   */
+  onCancelCheck?: () => void
 }
 
 export const UploadModal = (props: UploadModalProps): React.JSX.Element => {
@@ -57,7 +63,18 @@ export const UploadModal = (props: UploadModalProps): React.JSX.Element => {
     <Modal
       closable={ false }
       data-testid="upload-modal"
-      footer={ null }
+      footer={ isNil(props.onCancelCheck)
+        ? null
+        : (
+          <Flex justify="flex-end">
+            <Button
+              data-testid="upload-modal-cancel-check"
+              onClick={ props.onCancelCheck }
+            >
+              { t('cancel') }
+            </Button>
+          </Flex>
+          ) }
       open={ props.open }
       title={ (
         <ModalTitle iconName='upload-cloud'>{ t('upload') }</ModalTitle>

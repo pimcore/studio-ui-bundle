@@ -32,8 +32,16 @@ interface UseUploadConflictHandlerProps {
 /** Reports how many files of the batch have been checked for name conflicts so far. */
 export type UploadCheckProgressCallback = (done: number, total: number) => void
 
+/** Marks one run of the check, so a cancelled run stays cancelled for its own waiters. */
+interface CheckRun {
+  cancelled: boolean
+}
+
 interface UseUploadConflictHandlerResult {
-  resolveConflicts: (files: RcFile[], onProgress?: UploadCheckProgressCallback) => Promise<void>
+  /** Resolves to `true` when the check was cancelled before it could finish. */
+  resolveConflicts: (files: RcFile[], onProgress?: UploadCheckProgressCallback) => Promise<boolean>
+  /** Stops the running check. Safe at any point: nothing has been uploaded yet. */
+  cancelCheck: () => void
   shouldSkipFile: (file: RcFile) => boolean
   hasCheckError: (file: RcFile) => boolean
   getCheckError: (file: RcFile) => unknown
@@ -46,16 +54,23 @@ export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHa
   const { checkFilesExist, askUserOverwrite, resetApplyToAll } = useUploadConflictModal()
 
   const replaceFilesRef = useRef<Map<string, number>>(new Map())
-  const batchCheckPromiseRef = useRef<Promise<void> | null>(null)
+  const batchCheckPromiseRef = useRef<Promise<boolean> | null>(null)
+  const activeCheckRef = useRef<CheckRun | null>(null)
   const skippedFilesRef = useRef<Set<string>>(new Set())
   const errorFilesRef = useRef<Map<string, unknown>>(new Map())
 
-  const resolveConflicts = async (files: RcFile[], onProgress?: UploadCheckProgressCallback): Promise<void> => {
+  const resolveConflicts = async (files: RcFile[], onProgress?: UploadCheckProgressCallback): Promise<boolean> => {
     if (isNil(targetFolderId)) {
-      return
+      return false
     }
 
     if (isNil(batchCheckPromiseRef.current)) {
+      // Every waiter of this promise reads the verdict of the run it actually
+      // waited on, so a run cancelled while a request was still outstanding
+      // cannot hand its result to the batch that started after it.
+      const run: CheckRun = { cancelled: false }
+      activeCheckRef.current = run
+
       batchCheckPromiseRef.current = (async () => {
         const fileChunks = chunk(files, EXISTS_CHECK_BATCH_SIZE)
         const checkResults: Array<{ file: RcFile, exists: boolean, id?: number, error?: unknown }> = []
@@ -65,6 +80,10 @@ export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHa
         // One request per batch, issued one after another: the batches are the
         // back-pressure, so they must not also run in parallel.
         for (const fileChunk of fileChunks) {
+          if (run.cancelled) {
+            return true
+          }
+
           const chunkResults = await checkFilesExist(fileChunk.map((f) => f.name), targetFolderId)
 
           fileChunk.forEach((f, index) => {
@@ -72,6 +91,10 @@ export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHa
           })
 
           onProgress?.(checkResults.length, files.length)
+        }
+
+        if (run.cancelled) {
+          return true
         }
 
         checkResults.forEach(result => {
@@ -89,10 +112,18 @@ export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHa
             replaceFilesRef.current.set(`${f.name}-${f.size}`, id!)
           }
         }
+
+        return run.cancelled
       })()
     }
 
-    await batchCheckPromiseRef.current
+    return await batchCheckPromiseRef.current
+  }
+
+  const cancelCheck = (): void => {
+    if (!isNil(activeCheckRef.current)) {
+      activeCheckRef.current.cancelled = true
+    }
   }
 
   const shouldSkipFile = (file: RcFile): boolean => skippedFilesRef.current.has(file.uid)
@@ -108,6 +139,7 @@ export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHa
     replaceFilesRef.current.clear()
     resetApplyToAll()
     batchCheckPromiseRef.current = null
+    activeCheckRef.current = null
     skippedFilesRef.current.clear()
     errorFilesRef.current.clear()
   }
@@ -118,6 +150,7 @@ export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHa
 
   return {
     resolveConflicts,
+    cancelCheck,
     shouldSkipFile,
     hasCheckError,
     getCheckError,

@@ -91,7 +91,7 @@ interface ModalUploadPropsWithAssetCheck extends ModalUploadPropsBase {
 export type ModalUploadProps = ModalUploadPropsWithAction | ModalUploadPropsWithoutAssetCheck | ModalUploadPropsWithAssetCheck
 
 export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
-  const { setIsModalOpen, setShowProcessing, setShowUploadError, setFileList, setCheckProgress, fileList } = useUploadModalContext()
+  const { setIsModalOpen, setShowProcessing, setShowUploadError, setFileList, setCheckProgress, cancelCheckRef, fileList } = useUploadModalContext()
   const dispatch = useAppDispatch()
   const settings = useSettings()
   const { t } = useTranslation()
@@ -105,6 +105,7 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
 
   const {
     resolveConflicts,
+    cancelCheck,
     shouldSkipFile,
     hasCheckError,
     getReplaceId,
@@ -158,6 +159,7 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
 
         if (!shouldSkipCheck) {
           reset()
+          cancelCheckRef.current = cancelCheck
           setCheckProgress({ done: 0, total: fileList.length })
         }
       }
@@ -176,7 +178,13 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
         return true
       }
 
-      await resolveConflicts(fileList, (done, total) => { setCheckProgress({ done, total }) })
+      const wasCancelled = await resolveConflicts(fileList, (done, total) => { setCheckProgress({ done, total }) })
+
+      // The modal is already gone; ignoring every file keeps Ant from starting an
+      // upload the user just backed out of.
+      if (wasCancelled) {
+        return AntUpload.LIST_IGNORE
+      }
 
       // Ant's `onBatchStart` returns early when every file is `LIST_IGNORE`, so no
       // `onChange` follows to take the modal down. Close it here instead of leaving
