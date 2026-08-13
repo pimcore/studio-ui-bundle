@@ -19,12 +19,25 @@ export enum UploadConflictAction {
   SKIP = 'skip'
 }
 
+/** Names per exists request; the endpoint rejects more than 100. */
+const EXISTS_CHECK_BATCH_SIZE = 25
+
 interface UseUploadConflictHandlerProps {
   targetFolderId?: number
 }
 
+/** Reports how many files of the batch have been checked for name conflicts so far. */
+export type UploadCheckProgressCallback = (done: number, total: number) => void
+
+interface CheckRun {
+  cancelled: boolean
+}
+
 interface UseUploadConflictHandlerResult {
-  resolveConflicts: (files: RcFile[]) => Promise<void>
+  /** Resolves to `true` when the check was cancelled before it could finish. */
+  resolveConflicts: (files: RcFile[], onProgress?: UploadCheckProgressCallback) => Promise<boolean>
+  /** Stops the running check and discards the results it had already gathered. */
+  cancelCheck: () => void
   shouldSkipFile: (file: RcFile) => boolean
   hasCheckError: (file: RcFile) => boolean
   getCheckError: (file: RcFile) => unknown
@@ -34,29 +47,48 @@ interface UseUploadConflictHandlerResult {
 }
 
 export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHandlerProps): UseUploadConflictHandlerResult => {
-  const { checkFileExists, askUserOverwrite, resetApplyToAll } = useUploadConflictModal()
+  const { checkFilesExist, askUserOverwrite, resetApplyToAll } = useUploadConflictModal()
 
   const replaceFilesRef = useRef<Map<string, number>>(new Map())
-  const batchCheckPromiseRef = useRef<Promise<void> | null>(null)
+  const batchCheckPromiseRef = useRef<Promise<boolean> | null>(null)
+  const activeCheckRef = useRef<CheckRun | null>(null)
   const skippedFilesRef = useRef<Set<string>>(new Set())
   const errorFilesRef = useRef<Map<string, unknown>>(new Map())
 
-  const resolveConflicts = async (files: RcFile[]): Promise<void> => {
+  const resolveConflicts = async (files: RcFile[], onProgress?: UploadCheckProgressCallback): Promise<boolean> => {
     if (isNil(targetFolderId)) {
-      return
+      return false
     }
 
     if (isNil(batchCheckPromiseRef.current)) {
+      // Each waiter reads the verdict of the run it waited on, so a cancelled
+      // run cannot hand its result to the batch started after it.
+      const run: CheckRun = { cancelled: false }
+      activeCheckRef.current = run
+
       batchCheckPromiseRef.current = (async () => {
-        const CONCURRENCY_LIMIT = 5
-        const fileChunks = chunk(files, CONCURRENCY_LIMIT)
+        const fileChunks = chunk(files, EXISTS_CHECK_BATCH_SIZE)
         const checkResults: Array<{ file: RcFile, exists: boolean, id?: number, error?: unknown }> = []
 
+        onProgress?.(0, files.length)
+
+        // Sequential on purpose: the batching is the back-pressure.
         for (const fileChunk of fileChunks) {
-          const chunkResults = await Promise.all(
-            fileChunk.map(async (f) => ({ file: f, ...await checkFileExists(f.name, targetFolderId) }))
-          )
-          checkResults.push(...chunkResults)
+          if (run.cancelled) {
+            return true
+          }
+
+          const chunkResults = await checkFilesExist(fileChunk.map((f) => f.name), targetFolderId)
+
+          fileChunk.forEach((f, index) => {
+            checkResults.push({ file: f, ...chunkResults[index] })
+          })
+
+          onProgress?.(checkResults.length, files.length)
+        }
+
+        if (run.cancelled) {
+          return true
         }
 
         checkResults.forEach(result => {
@@ -74,10 +106,18 @@ export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHa
             replaceFilesRef.current.set(`${f.name}-${f.size}`, id!)
           }
         }
+
+        return run.cancelled
       })()
     }
 
-    await batchCheckPromiseRef.current
+    return await batchCheckPromiseRef.current
+  }
+
+  const cancelCheck = (): void => {
+    if (!isNil(activeCheckRef.current)) {
+      activeCheckRef.current.cancelled = true
+    }
   }
 
   const shouldSkipFile = (file: RcFile): boolean => skippedFilesRef.current.has(file.uid)
@@ -93,6 +133,7 @@ export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHa
     replaceFilesRef.current.clear()
     resetApplyToAll()
     batchCheckPromiseRef.current = null
+    activeCheckRef.current = null
     skippedFilesRef.current.clear()
     errorFilesRef.current.clear()
   }
@@ -103,6 +144,7 @@ export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHa
 
   return {
     resolveConflicts,
+    cancelCheck,
     shouldSkipFile,
     hasCheckError,
     getCheckError,
