@@ -8,8 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useRef } from 'react'
+import React from 'react'
 import { Upload as AntUpload, type UploadProps as AntUploadProps } from 'antd'
+import defaultRequest from 'rc-upload/es/request'
 import { api as assetApi, type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import type { RcFile, UploadFile } from 'antd/es/upload/interface'
 import { useAppDispatch } from '@sdk/app'
@@ -23,8 +24,8 @@ import { useUploadModalContext } from './provider/upload-modal-provider/use-uplo
 import { useTargetFolderId } from '@Pimcore/components/hooks/use-target-folder-id'
 import { useUploadConflictHandler } from './hooks/use-upload-conflict-handler'
 import { resolveUploadAction } from './utils/resolve-upload-action'
-import { createUploadQueue, type UploadRequest } from './utils/create-upload-queue'
-import { appConfig } from '@Pimcore/app/config/app-config'
+import { type UploadRequest } from './utils/create-upload-queue'
+import { uploadQueue } from './utils/upload-queue'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type ApiErrorData } from '@sdk/modules/app'
 
@@ -115,15 +116,15 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
     getCheckError
   } = useUploadConflictHandler({ targetFolderId })
 
-  // One queue per component instance, i.e. per browser tab. It wraps whichever
-  // transport applies, so a caller-provided `customRequest` stays in charge of
-  // how a file is sent and only gains the concurrency limit.
-  const uploadQueue = useRef(
-    createUploadQueue(appConfig.maxParallelUploads, props.customRequest as UploadRequest | undefined)
-  )
-
   const uploadProps: AntUploadProps = {
-    customRequest: uploadQueue.current,
+    // Queues the file instead of sending it straight away. The transport is
+    // resolved on every call rather than captured once: the global provider
+    // mounts this component long before a caller supplies `customRequest`
+    // through `triggerUpload`, so a captured one would always be the wrong one.
+    customRequest: (options) => uploadQueue.enqueue(
+      options,
+      (props.customRequest as UploadRequest | undefined) ?? defaultRequest
+    ),
     ...(!isNil(props.customRequest)
       ? {}
       : {

@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import defaultRequest from 'rc-upload/es/request'
 import type { UploadRequestOption } from 'rc-upload/es/interface'
 import { isNil } from 'lodash'
 
@@ -23,6 +22,15 @@ export interface UploadAbortHandle {
  */
 export type UploadRequest = (options: UploadRequestOption) => UploadAbortHandle
 
+export interface UploadQueue {
+  /**
+   * Hands one file to `request`, either right away or once a slot frees up.
+   * The transport is taken per call rather than captured when the queue is
+   * built, so a caller-supplied `customRequest` is read at upload time.
+   */
+  enqueue: (options: UploadRequestOption, request: UploadRequest) => UploadAbortHandle
+}
+
 /**
  * Limits how many uploads are in flight at the same time.
  *
@@ -36,10 +44,7 @@ export type UploadRequest = (options: UploadRequestOption) => UploadAbortHandle
  * only once a slot frees up, and the rest of the upload lifecycle is untouched
  * because progress and completion callbacks are passed straight through.
  */
-export const createUploadQueue = (
-  limit: number,
-  request: UploadRequest = defaultRequest
-): UploadRequest => {
+export const createUploadQueue = (limit: number): UploadQueue => {
   const pending: Array<() => void> = []
   let active = 0
 
@@ -51,44 +56,35 @@ export const createUploadQueue = (
     }
   }
 
-  return (options: UploadRequestOption) => {
-    let started = false
-    let settled = false
-    let aborted = false
+  const enqueue = (options: UploadRequestOption, request: UploadRequest): UploadAbortHandle => {
     let inFlight: UploadAbortHandle | undefined
 
-    // Releasing must happen exactly once per file. `abort()` on the underlying
-    // request only cancels the XHR — it fires neither onSuccess nor onError —
-    // so without settling here an aborted upload would hold its slot forever.
-    const settle = (): void => {
-      if (settled) {
+    // Set once this file has taken a slot, which is what tells a file cancelled
+    // while still queued — it never held one — apart from a file whose request
+    // has actually started. Releasing without it would lose a slot for good.
+    let holdsSlot = false
+
+    const release = (): void => {
+      if (!holdsSlot) {
         return
       }
 
-      settled = true
-
-      if (started) {
-        active--
-        runNext()
-      }
+      holdsSlot = false
+      active--
+      runNext()
     }
 
     const start = (): void => {
-      started = true
-
-      if (aborted) {
-        settle()
-        return
-      }
+      holdsSlot = true
 
       inFlight = request({
         ...options,
         onSuccess: (body, fileOrXhr) => {
-          settle()
+          release()
           options.onSuccess?.(body, fileOrXhr)
         },
         onError: (event, body) => {
-          settle()
+          release()
           options.onError?.(event, body)
         }
       })
@@ -99,14 +95,23 @@ export const createUploadQueue = (
 
     return {
       abort: () => {
-        aborted = true
+        // Still queued, so drop it rather than let a slot start a cancelled upload.
+        const queuedAt = pending.indexOf(start)
+
+        if (queuedAt !== -1) {
+          pending.splice(queuedAt, 1)
+        }
 
         if (!isNil(inFlight)) {
           inFlight.abort()
         }
 
-        settle()
+        // `abort()` on the underlying request only cancels the XHR — it fires
+        // neither onSuccess nor onError — so the slot is handed back here.
+        release()
       }
     }
   }
+
+  return { enqueue }
 }
