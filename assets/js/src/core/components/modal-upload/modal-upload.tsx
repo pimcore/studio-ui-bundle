@@ -14,7 +14,7 @@ import defaultRequest from 'rc-upload/es/request'
 import { api as assetApi, type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import type { RcFile, UploadFile } from 'antd/es/upload/interface'
 import { useAppDispatch } from '@sdk/app'
-import { isString, isNil } from 'lodash'
+import { isNil } from 'lodash'
 import { type UploadChangeParam } from 'antd/lib/upload'
 import { type UploadRef } from 'antd/es/upload/Upload'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
@@ -126,17 +126,15 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
   } = useUploadConflictHandler({ targetFolderId })
 
   const uploadProps: AntUploadProps = {
-    // Queues the file instead of sending it straight away. The transport is
-    // resolved on every call rather than captured once: the global provider
-    // mounts this component long before a caller supplies `customRequest`
-    // through `triggerUpload`, so a captured one would always be the wrong one.
+    // Queued rather than sent straight away. The transport is read on every call
+    // instead of captured, because the global provider mounts this long before a
+    // caller supplies `customRequest` through `triggerUpload`.
     customRequest: (options) => uploadQueue.enqueue(
       options,
       (props.customRequest as UploadRequest | undefined) ?? defaultRequest
     ),
-    ...(!isNil(props.customRequest)
-      ? {}
-      : {
+    ...(isNil(props.customRequest)
+      ? {
           action: (file): string => resolveUploadAction(file, {
             action: props.action,
             targetFolderId,
@@ -144,7 +142,8 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
             getReplaceId,
             getTargetFolderIdForFile: props.getTargetFolderIdForFile
           })
-        }),
+        }
+      : {}),
     name: props.name ?? 'file',
     multiple: props.multiple ?? true,
     accept: props.accept,

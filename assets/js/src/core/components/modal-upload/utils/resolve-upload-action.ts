@@ -42,8 +42,6 @@ export const resolveUploadAction = (
     return action
   }
 
-  // External replace ID (e.g. from folder-drop conflict resolution) takes
-  // priority, then fall back to the built-in conflict handler's result.
   const replaceId = getExternalReplaceId?.(file) ?? getReplaceId(file)
 
   if (!isNil(replaceId)) {

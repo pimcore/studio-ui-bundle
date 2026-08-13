@@ -8,15 +8,21 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import type { UploadRequestOption } from 'rc-upload/es/interface'
+import type { UploadProps as AntUploadProps } from 'antd'
 import { isNil } from 'lodash'
+
+/** What Ant hands to `customRequest`, taken from its own prop rather than rc-upload. */
+export type UploadRequestOption = Parameters<NonNullable<AntUploadProps['customRequest']>>[0]
 
 /** Handle Ant keeps per file so it can cancel an upload that is still running. */
 export interface UploadAbortHandle {
   abort: () => void
 }
 
-/** Narrower than Ant's `customRequest`, which may also return nothing. */
+/**
+ * Ant's `customRequest` is typed as returning nothing, so callers are asserted
+ * into this shape; `no-invalid-void-type` rules out saying `| void` here.
+ */
 export type UploadRequest = (options: UploadRequestOption) => UploadAbortHandle
 
 export interface UploadQueue {
@@ -25,12 +31,8 @@ export interface UploadQueue {
 }
 
 /**
- * Limits how many uploads are in flight at the same time.
- *
- * Ant starts every accepted file in the same tick. On HTTP/1.1 the browser's
- * six-connections-per-origin cap throttles that by accident; on HTTP/2 they are
- * multiplexed over one connection, so the batch arrives at once and can exhaust
- * the PHP-FPM pool.
+ * Limits how many uploads are in flight at the same time. See
+ * Configuration → Parallel Asset Uploads for why the limit exists.
  */
 export const createUploadQueue = (limit: number): UploadQueue => {
   const pending: Array<() => void> = []

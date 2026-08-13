@@ -43,8 +43,7 @@ class Configuration implements ConfigurationInterface
                     ->integerNode('max_parallel_uploads')
                         ->info(
                             'How many asset uploads a single browser tab sends at the same time. ' .
-                            'Without a limit the browser starts every upload at once, which on HTTP/2 ' .
-                            'arrives at the server as one burst and can exhaust the PHP-FPM pool.'
+                            'Lower this if bursts of uploads exhaust the PHP-FPM pool.'
                         )
                         ->min(1)
                         ->defaultValue(5)
