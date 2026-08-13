@@ -31,10 +31,7 @@ export interface UploadContextProps {
   setShowProcessing: (showProcessing: boolean) => void
   setFileList: (fileList: UploadFile[]) => void
   setCheckProgress: (checkProgress: UploadCheckProgress | null) => void
-  /**
-   * Published by `ModalUpload` when a duplicate-name check starts, so the modal
-   * can stop that check without reaching into the component that owns it.
-   */
+  /** Published by `ModalUpload` when a check starts, so the modal can stop it. */
   cancelCheckRef: React.MutableRefObject<(() => void) | null>
   fileList: UploadFile[]
 
@@ -79,9 +76,7 @@ export const UploadModalProvider: React.FC<UploadProviderProps> = ({ children, .
     setCheckProgress(null)
   }
 
-  // Only offered while the duplicate-name check runs. Nothing has been sent to
-  // the server at that point, so there is no half-finished upload to protect —
-  // unlike once the files are on their way, where the modal stays sealed.
+  // Offered during the check only: nothing has been uploaded yet to protect.
   const cancelCheck = (): void => {
     cancelCheckRef.current?.()
     cancelCheckRef.current = null

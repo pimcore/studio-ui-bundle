@@ -65,9 +65,8 @@ export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHa
     }
 
     if (isNil(batchCheckPromiseRef.current)) {
-      // Every waiter of this promise reads the verdict of the run it actually
-      // waited on, so a run cancelled while a request was still outstanding
-      // cannot hand its result to the batch that started after it.
+      // Each waiter reads the verdict of the run it waited on, so a cancelled
+      // run cannot hand its result to the batch started after it.
       const run: CheckRun = { cancelled: false }
       activeCheckRef.current = run
 

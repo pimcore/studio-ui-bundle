@@ -32,11 +32,7 @@ export interface UploadModalProps {
   showProcessing: boolean
   showUploadError: boolean
   checkProgress?: UploadCheckProgress | null
-  /**
-   * Set only while the duplicate-name check runs. The modal stays sealed once
-   * files are on their way, but during the check nothing has been sent yet, so
-   * backing out is free and must not need a page reload.
-   */
+  /** Set only while the duplicate-name check runs, never once files are uploading. */
   onCancelCheck?: () => void
 }
 

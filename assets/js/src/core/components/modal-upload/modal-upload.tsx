@@ -151,11 +151,9 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
         ? props.skipConflictCheck.current === true
         : props.skipConflictCheck === true
 
-      // Ant only fires `onChange` once the first POST starts, which is after every
-      // `beforeUpload` has resolved. Opening the modal here instead gives the user
-      // immediate feedback while the filenames are still being checked. Callers
-      // that skip the check have nothing to show yet, so they keep waiting for
-      // `onChange` rather than flashing an empty dialog.
+      // Ant fires `onChange` only once the first POST starts, so the modal is
+      // opened here to cover the check. Callers that skip it have nothing to show
+      // yet and keep waiting for `onChange`.
       if (isBatchStart && !shouldSkipCheck) {
         reset()
         cancelCheckRef.current = cancelCheck
@@ -179,8 +177,7 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
 
       const wasCancelled = await resolveConflicts(fileList, (done, total) => { setCheckProgress({ done, total }) })
 
-      // The modal is already gone; ignoring every file keeps Ant from starting an
-      // upload the user just backed out of.
+      // The modal is already gone; ignoring every file stops Ant uploading anyway.
       if (wasCancelled) {
         return AntUpload.LIST_IGNORE
       }
