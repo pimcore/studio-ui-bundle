@@ -33,13 +33,18 @@ export interface CellStyleOptions {
  *
  * Grids with an auto-width column already have a cell that absorbs the leftover width, so
  * there `distributeWidth` stays off and the remaining columns keep their fixed size.
+ *
+ * An auto-width cell states that width as its flex base as well. `width: auto` would leave the
+ * base up to the content, and the leftover width is shared out from those bases: the header row
+ * and every body row would start from the value they happen to hold and end up with column
+ * widths of their own. The fixed table layout ignores the content in the same way.
  */
 export const getCellStyle = ({ size, isAutoWidth, isFlexRow, distributeWidth }: CellStyleOptions): CSSProperties => {
   if (isAutoWidth) {
     return {
       width: 'auto',
       minWidth: size,
-      ...(isFlexRow ? { flexShrink: 1, flexGrow: 1 } : {})
+      ...(isFlexRow ? { flexBasis: size, flexShrink: 1, flexGrow: 1 } : {})
     }
   }
 

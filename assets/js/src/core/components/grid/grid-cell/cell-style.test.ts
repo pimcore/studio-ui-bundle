@@ -26,7 +26,16 @@ describe('getCellStyle', () => {
   describe('with row virtualization', () => {
     it('gives the auto-width column the leftover width', () => {
       expect(getCellStyle({ size: 200, isAutoWidth: true, isFlexRow: true, distributeWidth: false }))
-        .toEqual({ width: 'auto', minWidth: 200, flexShrink: 1, flexGrow: 1 })
+        .toEqual({ width: 'auto', minWidth: 200, flexBasis: 200, flexShrink: 1, flexGrow: 1 })
+    })
+
+    // Regression guard for the report view column alignment. A flex item with `width: auto`
+    // takes its flex base from its content, so an auto-width column was sized by the value that
+    // happened to be in it. The header row and every body row then split the leftover width
+    // from a different base and each ended up with its own column widths.
+    it('sizes an auto-width column from its width rather than from its content', () => {
+      expect(getCellStyle({ size: 200, isAutoWidth: true, isFlexRow: true, distributeWidth: false }))
+        .toHaveProperty('flexBasis', 200)
     })
 
     it('keeps fixed columns fixed while another column absorbs the leftover width', () => {
@@ -78,7 +87,7 @@ describe('getCellStyle', () => {
 
       it('still hands the whole leftover width to an auto-width column when there is one', () => {
         expect(getCellStyle({ size: 200, isAutoWidth: true, isFlexRow: true, distributeWidth: true }))
-          .toEqual({ width: 'auto', minWidth: 200, flexShrink: 1, flexGrow: 1 })
+          .toEqual({ width: 'auto', minWidth: 200, flexBasis: 200, flexShrink: 1, flexGrow: 1 })
       })
     })
   })
