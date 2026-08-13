@@ -8,15 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import type { UploadProps } from 'antd'
+import type { UploadRequestOption } from 'rc-upload/es/interface'
 import { isNil } from 'lodash'
-
-/**
- * What Ant hands a `customRequest`. Derived from Ant's own prop rather than
- * imported from `rc-upload`, which is a transitive dependency this bundle does
- * not declare and whose deep paths are not part of Ant's public API.
- */
-export type UploadRequestOption = Parameters<NonNullable<UploadProps['customRequest']>>[0]
 
 /** Handle Ant keeps per file so it can cancel an upload that is still running. */
 export interface UploadAbortHandle {

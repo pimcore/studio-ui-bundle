@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { Upload as AntUpload, type UploadProps as AntUploadProps } from 'antd'
-import { uploadRequest } from './utils/upload-request'
+import defaultRequest from 'rc-upload/es/request'
 import { api as assetApi, type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import type { RcFile, UploadFile } from 'antd/es/upload/interface'
 import { useAppDispatch } from '@sdk/app'
@@ -123,7 +123,7 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
     // through `triggerUpload`, so a captured one would always be the wrong one.
     customRequest: (options) => uploadQueue.enqueue(
       options,
-      (props.customRequest as UploadRequest | undefined) ?? uploadRequest
+      (props.customRequest as UploadRequest | undefined) ?? defaultRequest
     ),
     ...(!isNil(props.customRequest)
       ? {}

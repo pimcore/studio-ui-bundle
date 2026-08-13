@@ -8,7 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { createUploadQueue, type UploadRequest, type UploadRequestOption } from './create-upload-queue'
+import type { UploadRequestOption } from 'rc-upload/es/interface'
+import { createUploadQueue, type UploadRequest } from './create-upload-queue'
 
 interface RecordingTransport {
   /** Options every started upload was handed, in start order. */
