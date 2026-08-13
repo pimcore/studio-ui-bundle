@@ -16,18 +16,11 @@ export interface UploadAbortHandle {
   abort: () => void
 }
 
-/**
- * Ant's own `customRequest` may return nothing, so the wrapped transport is
- * narrowed at the call site rather than modelled with a `void` union.
- */
+/** Narrower than Ant's `customRequest`, which may also return nothing. */
 export type UploadRequest = (options: UploadRequestOption) => UploadAbortHandle
 
 export interface UploadQueue {
-  /**
-   * Hands one file to `request`, either right away or once a slot frees up.
-   * The transport is taken per call rather than captured when the queue is
-   * built, so a caller-supplied `customRequest` is read at upload time.
-   */
+  /** Runs `request` now or once a slot frees. Taken per call, never captured. */
   enqueue: (options: UploadRequestOption, request: UploadRequest) => UploadAbortHandle
 }
 
@@ -35,14 +28,9 @@ export interface UploadQueue {
  * Limits how many uploads are in flight at the same time.
  *
  * Ant starts every accepted file in the same tick. On HTTP/1.1 the browser's
- * six-connections-per-origin cap throttles that by accident; on HTTP/2 all of
- * them are multiplexed over one connection, so the whole batch reaches the
- * server at once and can exhaust the PHP-FPM pool.
- *
- * `customRequest` is the seam: Ant still calls it once per file immediately,
- * but nothing obliges it to start a request there and then. Queued files start
- * only once a slot frees up, and the rest of the upload lifecycle is untouched
- * because progress and completion callbacks are passed straight through.
+ * six-connections-per-origin cap throttles that by accident; on HTTP/2 they are
+ * multiplexed over one connection, so the batch arrives at once and can exhaust
+ * the PHP-FPM pool.
  */
 export const createUploadQueue = (limit: number): UploadQueue => {
   const pending: Array<() => void> = []
@@ -59,9 +47,8 @@ export const createUploadQueue = (limit: number): UploadQueue => {
   const enqueue = (options: UploadRequestOption, request: UploadRequest): UploadAbortHandle => {
     let inFlight: UploadAbortHandle | undefined
 
-    // Set once this file has taken a slot, which is what tells a file cancelled
-    // while still queued — it never held one — apart from a file whose request
-    // has actually started. Releasing without it would lose a slot for good.
+    // Only an entry that took a slot may give one back, otherwise cancelling a
+    // still-queued file would release a slot it never held.
     let holdsSlot = false
 
     const release = (): void => {
@@ -106,8 +93,7 @@ export const createUploadQueue = (limit: number): UploadQueue => {
           inFlight.abort()
         }
 
-        // `abort()` on the underlying request only cancels the XHR — it fires
-        // neither onSuccess nor onError — so the slot is handed back here.
+        // abort() cancels the XHR without firing onSuccess or onError.
         release()
       }
     }

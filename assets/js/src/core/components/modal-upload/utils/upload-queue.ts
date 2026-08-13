@@ -13,10 +13,7 @@ import { createUploadQueue } from './create-upload-queue'
 
 /**
  * One queue for the whole tab, which is the unit the limit is meant to bound.
- *
- * `ModalUpload` is mounted more than once: the global provider keeps a hidden
- * instance and every `ModalUploadDragger` renders its own, and those remount
- * as they scroll in and out of view. A queue owned by a component instance
- * would therefore neither bound the tab nor survive a remount.
+ * `ModalUpload` is mounted many times over — the global provider plus one per
+ * `ModalUploadDragger` — so a per-instance queue would bound none of it.
  */
 export const uploadQueue = createUploadQueue(appConfig.maxParallelUploads)
