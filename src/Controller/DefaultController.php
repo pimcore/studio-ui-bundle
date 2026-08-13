@@ -45,13 +45,15 @@ final class DefaultController extends FrontendController
     public function indexAction(
         string $studioUrlPath,
         array $studioWysiwygConfiguration,
-        string $studioApiPrefix
+        string $studioApiPrefix,
+        int $studioMaxParallelUploads
     ): Response {
         $appConfig = [
             'baseUrl' => $studioUrlPath . '/',
             'mercureUrl' => $this->mercureUrlService->getClientSideUrl(),
             'wysiwyg' => $studioWysiwygConfiguration,
             'apiPrefix' => $studioApiPrefix,
+            'maxParallelUploads' => $studioMaxParallelUploads,
         ];
 
         foreach ($this->appConfigProviders as $provider) {
