@@ -16,7 +16,12 @@ export interface AppConfig {
   mercureUrl: string
   wysiwyg: WysiwygAppConfigInterface
   apiPrefix: string
+  /** How many asset uploads a single tab sends at the same time. */
+  maxParallelUploads: number
 }
+
+/** Kept in sync with pimcore_studio_ui.asset_upload.max_parallel_uploads. */
+const DEFAULT_MAX_PARALLEL_UPLOADS = 5
 
 const appElement = getParentDocument().querySelector('#app')
 export const currentDomain = window.location.origin
@@ -42,5 +47,6 @@ export const appConfig: AppConfig = {
     }
   },
   apiPrefix: appConfigData?.apiPrefix ?? '/pimcore-studio/api',
+  maxParallelUploads: appConfigData?.maxParallelUploads ?? DEFAULT_MAX_PARALLEL_UPLOADS,
   ...(appConfigData ?? {})
 }
