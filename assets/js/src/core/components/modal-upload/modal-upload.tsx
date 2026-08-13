@@ -153,15 +153,14 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
 
       // Ant only fires `onChange` once the first POST starts, which is after every
       // `beforeUpload` has resolved. Opening the modal here instead gives the user
-      // immediate feedback while the filenames are still being checked.
-      if (isBatchStart) {
+      // immediate feedback while the filenames are still being checked. Callers
+      // that skip the check have nothing to show yet, so they keep waiting for
+      // `onChange` rather than flashing an empty dialog.
+      if (isBatchStart && !shouldSkipCheck) {
+        reset()
+        cancelCheckRef.current = cancelCheck
         setIsModalOpen(true)
-
-        if (!shouldSkipCheck) {
-          reset()
-          cancelCheckRef.current = cancelCheck
-          setCheckProgress({ done: 0, total: fileList.length })
-        }
+        setCheckProgress({ done: 0, total: fileList.length })
       }
 
       const isFileSizeValid = file.size < (settings.upload_max_filesize ?? 1024 * 1024 * 10)

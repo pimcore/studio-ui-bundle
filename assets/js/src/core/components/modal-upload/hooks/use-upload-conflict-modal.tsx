@@ -58,19 +58,23 @@ export const useUploadConflictModal = (): UploadConflictModalResult => {
       return fileNames.map(() => ({ exists: false, error }))
     }
 
-    return fileNames.map((_, index) => {
-      const item = data?.items?.[index]
+    // Results are matched by position, so a batch of a different size means the
+    // response cannot be attributed to these files at all.
+    if (data?.items?.length !== fileNames.length) {
+      return fileNames.map(() => ({ exists: false, error: { errorKey: 'error_something_generic_went_wrong' } }))
+    }
 
+    return data.items.map((item) => {
       // The name is taken by an asset the user may not see, so it can neither be
       // overwritten nor uploaded over — surface it as that file's own error.
-      if (item?.accessDenied === true) {
+      if (item.accessDenied) {
         return {
           exists: false,
           error: { errorKey: 'error_permission_denied' }
         }
       }
 
-      if (item?.exists === true && !isNil(item.assetId)) {
+      if (item.exists && !isNil(item.assetId)) {
         return { exists: true, id: item.assetId }
       }
 
