@@ -18,8 +18,15 @@ import { Box, Flex } from '@sdk/components'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { UploadConflictAction } from './use-upload-conflict-handler'
 
+export interface UploadConflictCheckResult {
+  exists: boolean
+  id?: number
+  error?: unknown
+}
+
 export interface UploadConflictModalResult {
-  checkFileExists: (fileName: string, folderId: number) => Promise<{ exists: boolean, id?: number, error?: unknown }>
+  checkFileExists: (fileName: string, folderId: number) => Promise<UploadConflictCheckResult>
+  checkFilesExist: (fileNames: string[], folderId: number) => Promise<UploadConflictCheckResult[]>
   askUserOverwrite: (fileName: string) => Promise<UploadConflictAction>
   resetApplyToAll: () => void
 }
@@ -31,14 +38,57 @@ export const useUploadConflictModal = (): UploadConflictModalResult => {
 
   const applyToAllRef = useRef<{ action: UploadConflictAction | null }>({ action: null })
 
+  /**
+   * Resolves one batch of file names against a single target folder. The result
+   * order mirrors `fileNames`, so callers can map results back positionally.
+   * A failed batch reports the error for every file it contained.
+   */
+  const checkFilesExist = async (
+    fileNames: string[],
+    folderId: number
+  ): Promise<UploadConflictCheckResult[]> => {
+    const { data, error } = await dispatch(
+      assetApi.endpoints.assetUploadBatchInfo.initiate(
+        { parentId: folderId, body: { fileNames } },
+        { forceRefetch: true, subscribe: false }
+      )
+    )
+
+    if (!isNil(error)) {
+      return fileNames.map(() => ({ exists: false, error }))
+    }
+
+    // A differently sized batch cannot be matched to these files at all.
+    if (data?.items?.length !== fileNames.length) {
+      return fileNames.map(() => ({ exists: false, error: { errorKey: 'error_validation_failed' } }))
+    }
+
+    return data.items.map((item) => {
+      // The name is taken by an asset the user may not see, so it can neither be
+      // overwritten nor uploaded over — surface it as that file's own error.
+      if (item.accessDenied) {
+        return {
+          exists: false,
+          error: { errorKey: 'error_permission_denied' }
+        }
+      }
+
+      if (item.exists && !isNil(item.assetId)) {
+        return { exists: true, id: item.assetId }
+      }
+
+      return { exists: false }
+    })
+  }
+
   const checkFileExists = async (
     fileName: string,
     folderId: number
-  ): Promise<{ exists: boolean, id?: number, error?: unknown }> => {
+  ): Promise<UploadConflictCheckResult> => {
     const { data: uploadInfo, error } = await dispatch(
       assetApi.endpoints.assetUploadInfo.initiate(
         { parentId: folderId, fileName },
-        { forceRefetch: true }
+        { forceRefetch: true, subscribe: false }
       )
     )
 
@@ -123,5 +173,5 @@ export const useUploadConflictModal = (): UploadConflictModalResult => {
     applyToAllRef.current.action = null
   }
 
-  return { checkFileExists, askUserOverwrite, resetApplyToAll }
+  return { checkFileExists, checkFilesExist, askUserOverwrite, resetApplyToAll }
 }

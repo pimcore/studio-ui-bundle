@@ -83,6 +83,7 @@ asset.upload.overwrite: Overskriv
 asset.upload.keep-both: Behold begge
 asset.upload.skip: Hopp over
 asset.upload.apply-to-all: Bruk på alle
+asset.upload.checking-duplicate-file-names: "Sjekker etter dupliserte filnavn ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Oppretter mapper
 asset.upload.folder-drop.creating-folders-hint: Vennligst vent mens mappestrukturen opprettes…
 upload.error.file-too-large: Filen er større enn serverens gjeldende opplastingsgrense.

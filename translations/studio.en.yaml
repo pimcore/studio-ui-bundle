@@ -83,6 +83,7 @@ asset.upload.overwrite: Overwrite
 asset.upload.keep-both: Keep both
 asset.upload.skip: Skip
 asset.upload.apply-to-all: Apply to all
+asset.upload.checking-duplicate-file-names: "Checking for duplicate file names ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Creating folders
 asset.upload.folder-drop.creating-folders-hint: Please wait while the folder structure is being created…
 upload.error.file-too-large: The file is bigger than the actual upload limit of the server.
