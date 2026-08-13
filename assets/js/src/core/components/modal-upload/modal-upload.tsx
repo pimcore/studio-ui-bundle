@@ -43,7 +43,15 @@ export interface ModalUploadPropsBase {
   uploadComponent?: React.ComponentType<AntUploadProps>
   uploadComponentClassName?: string
   openFileDialogOnClick?: AntUploadProps['openFileDialogOnClick']
-  /** Override Ant Design's default XHR transport. When provided, the `action` prop is ignored. */
+  /**
+   * Override Ant Design's default XHR transport. When provided, the `action` prop
+   * is ignored.
+   *
+   * The transport is wrapped by the tab-wide upload queue rather than replacing it,
+   * so it may be called later than the file was accepted, and it must report every
+   * file through `onSuccess` or `onError` — one that reports neither holds its slot
+   * for the life of the tab.
+   */
   customRequest?: AntUploadProps['customRequest']
   /**
    * When provided, overrides `targetFolderId` on a per-file basis for the

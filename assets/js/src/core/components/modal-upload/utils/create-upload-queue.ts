@@ -64,17 +64,26 @@ export const createUploadQueue = (limit: number): UploadQueue => {
     const start = (): void => {
       holdsSlot = true
 
-      inFlight = request({
-        ...options,
-        onSuccess: (body, fileOrXhr) => {
-          release()
-          options.onSuccess?.(body, fileOrXhr)
-        },
-        onError: (event, body) => {
-          release()
-          options.onError?.(event, body)
-        }
-      })
+      try {
+        inFlight = request({
+          ...options,
+          onSuccess: (body, fileOrXhr) => {
+            release()
+            options.onSuccess?.(body, fileOrXhr)
+          },
+          onError: (event, body) => {
+            release()
+            options.onError?.(event, body)
+          }
+        })
+      } catch (error) {
+        // A transport that throws reports no outcome, so it would hold its slot
+        // for the life of the tab. Ant also calls this from an uncaught `.then()`,
+        // where the throw is swallowed and takes the rest of the batch with it, so
+        // the failure is reported here rather than propagated.
+        release()
+        options.onError?.(error as Error)
+      }
     }
 
     pending.push(start)

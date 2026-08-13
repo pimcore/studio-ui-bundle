@@ -119,11 +119,29 @@ describe('createUploadQueue', () => {
     expect(started[1].action).toBe('b')
   })
 
+  it('releases the slot of a transport that throws instead of reporting', () => {
+    const queue = createUploadQueue(1)
+    const { started, transport } = recordingTransport()
+    const onError = jest.fn()
+    const failure = new Error('send failed')
+    const throwing: UploadRequest = () => {
+      throw failure
+    }
+
+    queue.enqueue(upload('a', { onError }), throwing)
+    queue.enqueue(upload('b'), transport)
+
+    expect(onError).toHaveBeenCalledWith(failure)
+    expect(started).toHaveLength(1)
+    expect(started[0].action).toBe('b')
+  })
+
   it('passes the original callbacks through', () => {
     const queue = createUploadQueue(1)
     const { started, transport } = recordingTransport()
     const onSuccess = jest.fn()
     const onProgress = jest.fn()
+    const onError = jest.fn()
 
     queue.enqueue(upload('a', { onSuccess, onProgress }), transport)
 
@@ -132,5 +150,12 @@ describe('createUploadQueue', () => {
 
     expect(onProgress).toHaveBeenCalledWith({ percent: 40 })
     expect(onSuccess).toHaveBeenCalledWith({ id: 7 }, undefined)
+
+    queue.enqueue(upload('b', { onError }), transport)
+
+    const failure = new Error('rejected')
+    started[1].onError?.(failure)
+
+    expect(onError).toHaveBeenCalledWith(failure, undefined)
   })
 })
