@@ -83,6 +83,7 @@ asset.upload.overwrite: Sovrascrivi
 asset.upload.keep-both: Mantieni entrambi
 asset.upload.skip: Salta
 asset.upload.apply-to-all: Applica a tutti
+asset.upload.checking-duplicate-file-names: "Controllo dei nomi file duplicati ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Creazione cartelle
 asset.upload.folder-drop.creating-folders-hint: Attendere mentre la struttura delle cartelle viene creata…
 upload.error.file-too-large: Il file è più grande del limite di caricamento attuale del server.
