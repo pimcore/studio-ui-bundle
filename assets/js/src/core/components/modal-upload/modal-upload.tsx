@@ -10,11 +10,11 @@
 
 import React from 'react'
 import { Upload as AntUpload, type UploadProps as AntUploadProps } from 'antd'
+import defaultRequest from 'rc-upload/es/request'
 import { api as assetApi, type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import type { RcFile, UploadFile } from 'antd/es/upload/interface'
 import { useAppDispatch } from '@sdk/app'
-import { getPrefix } from '@Pimcore/app/api/pimcore/route'
-import { isString, isNil } from 'lodash'
+import { isNil } from 'lodash'
 import { type UploadChangeParam } from 'antd/lib/upload'
 import { type UploadRef } from 'antd/es/upload/Upload'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
@@ -23,6 +23,9 @@ import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useUploadModalContext } from './provider/upload-modal-provider/use-upload-modal-context'
 import { useTargetFolderId } from '@Pimcore/components/hooks/use-target-folder-id'
 import { useUploadConflictHandler } from './hooks/use-upload-conflict-handler'
+import { resolveUploadAction } from './utils/resolve-upload-action'
+import { type UploadRequest } from './utils/create-upload-queue'
+import { uploadQueue } from './utils/upload-queue'
 import { mapUploadFileErrors } from './utils/map-upload-file-errors'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
@@ -40,7 +43,15 @@ export interface ModalUploadPropsBase {
   uploadComponent?: React.ComponentType<AntUploadProps>
   uploadComponentClassName?: string
   openFileDialogOnClick?: AntUploadProps['openFileDialogOnClick']
-  /** Override Ant Design's default XHR transport. When provided, the `action` prop is ignored. */
+  /**
+   * Override Ant Design's default XHR transport. When provided, the `action` prop
+   * is ignored.
+   *
+   * The transport is wrapped by the tab-wide upload queue rather than replacing it,
+   * so it may be called later than the file was accepted, and it must report every
+   * file through `onSuccess` or `onError` — one that reports neither holds its slot
+   * for the life of the tab.
+   */
   customRequest?: AntUploadProps['customRequest']
   /**
    * When provided, overrides `targetFolderId` on a per-file basis for the
@@ -115,28 +126,24 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
   } = useUploadConflictHandler({ targetFolderId })
 
   const uploadProps: AntUploadProps = {
-    ...(!isNil(props.customRequest)
-      ? { customRequest: props.customRequest }
-      : {
-          action: (file): string => {
-            if (isString(props.action)) {
-              return props.action
-            }
-
-            // External replace ID (e.g. from folder-drop conflict resolution) takes
-            // priority, then fall back to the built-in conflict handler's result.
-            const replaceId = props.getExternalReplaceId?.(file) ?? getReplaceId(file)
-
-            if (!isNil(replaceId)) {
-              return `${getPrefix()}/assets/${replaceId}/replace`
-            }
-
-            const perFileFolderId = props.getTargetFolderIdForFile?.(file)
-            const effectiveFolderId = perFileFolderId ?? targetFolderId
-
-            return `${getPrefix()}/assets/add/${effectiveFolderId}`
-          }
-        }),
+    // Queued rather than sent straight away. The transport is read on every call
+    // instead of captured, because the global provider mounts this long before a
+    // caller supplies `customRequest` through `triggerUpload`.
+    customRequest: (options) => uploadQueue.enqueue(
+      options,
+      (props.customRequest as UploadRequest | undefined) ?? defaultRequest
+    ),
+    ...(isNil(props.customRequest)
+      ? {
+          action: (file): string => resolveUploadAction(file, {
+            action: props.action,
+            targetFolderId,
+            getExternalReplaceId: props.getExternalReplaceId,
+            getReplaceId,
+            getTargetFolderIdForFile: props.getTargetFolderIdForFile
+          })
+        }
+      : {}),
     name: props.name ?? 'file',
     multiple: props.multiple ?? true,
     accept: props.accept,
