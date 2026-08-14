@@ -43,6 +43,7 @@ export interface ImageProps {
   onChange?: (value: ImageValue | null) => void
   className?: string
   uploadPath?: string
+  searchPath?: string
 }
 
 export const Image = (props: ImageProps): React.JSX.Element => {
@@ -65,7 +66,8 @@ export const Image = (props: ImageProps): React.JSX.Element => {
     },
     config: {
       assets: {
-        allowedTypes: ['image']
+        allowedTypes: ['image'],
+        searchPath: props.searchPath
       }
     },
     onFinish: (event) => {
@@ -115,6 +117,7 @@ export const Image = (props: ImageProps): React.JSX.Element => {
           key="image-footer"
           onSearch={ openElementSelector }
           onUpload={ handleUpload }
+          searchPath={ props.searchPath }
           setValue={ handleChange }
           value={ imageValue }
         />)

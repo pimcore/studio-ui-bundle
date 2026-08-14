@@ -37,6 +37,7 @@ interface HotspotImageFooterProps {
   replaceImage: (newImage: ImageValue) => void
   onSearch?: () => void
   onUpload?: () => void
+  searchPath?: string
 }
 
 export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.Element => {
@@ -82,7 +83,8 @@ export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.El
         },
         config: {
           assets: {
-            allowedTypes: ['image']
+            allowedTypes: ['image'],
+            searchPath: props.searchPath
           }
         },
         onFinish: (event) => {

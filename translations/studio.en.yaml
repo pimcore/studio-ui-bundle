@@ -1268,6 +1268,8 @@ jobs.data-object-clone-job.title: Cloning data objects
 latitude: Latitude
 longitude: Longitude
 search-address: Search address
+search-path: Search Path
+search-path-tooltip: Default asset folder for the search dialog of this field. It is applied as a pre-filled full path filter, which can be changed or removed in the search dialog.
 search: Search
 geocode.address-not-found: The entered address was not found
 geocode.possible-causes: Possible causes

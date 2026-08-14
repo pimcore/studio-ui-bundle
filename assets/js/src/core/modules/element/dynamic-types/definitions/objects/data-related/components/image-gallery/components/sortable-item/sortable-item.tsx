@@ -38,9 +38,10 @@ export interface ImageGallerySortableItemProps {
   ratioY?: number
   predefinedDataTemplates?: DataTemplates | string | null
   uploadPath?: string
+  searchPath?: string
 }
 
-export const ImageGallerySortableItem = ({ id, index, item, value, setValue, setInternalValue, disabled, width, height, ratioX, ratioY, predefinedDataTemplates, uploadPath }: ImageGallerySortableItemProps): React.JSX.Element => {
+export const ImageGallerySortableItem = ({ id, index, item, value, setValue, setInternalValue, disabled, width, height, ratioX, ratioY, predefinedDataTemplates, uploadPath, searchPath }: ImageGallerySortableItemProps): React.JSX.Element => {
   const sortable = useSortable({
     id,
     transition: {
@@ -75,6 +76,7 @@ export const ImageGallerySortableItem = ({ id, index, item, value, setValue, set
             predefinedDataTemplates={ predefinedDataTemplates }
             ratioX={ ratioX }
             ratioY={ ratioY }
+            searchPath={ searchPath }
             setInternalValue={ setInternalValue }
             setValue={ setValue }
             uploadPath={ uploadPath }
@@ -87,6 +89,7 @@ export const ImageGallerySortableItem = ({ id, index, item, value, setValue, set
             disabled={ disabled }
             height={ height }
             index={ index }
+            searchPath={ searchPath }
             setValue={ setValue }
             uploadPath={ uploadPath }
             value={ value }

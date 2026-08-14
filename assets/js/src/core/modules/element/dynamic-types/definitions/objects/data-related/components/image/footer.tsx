@@ -34,6 +34,7 @@ interface ImageFooterProps {
   value?: ImageValue | null
   onSearch?: () => void
   onUpload?: () => void
+  searchPath?: string
 }
 
 export const ImageFooter = (props: ImageFooterProps): React.JSX.Element => {
@@ -67,7 +68,8 @@ export const ImageFooter = (props: ImageFooterProps): React.JSX.Element => {
         },
         config: {
           assets: {
-            allowedTypes: ['image']
+            allowedTypes: ['image'],
+            searchPath: props.searchPath
           }
         },
         onFinish: (event) => {

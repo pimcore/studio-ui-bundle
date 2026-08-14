@@ -30,9 +30,10 @@ interface ImageGalleryImageTargetProps {
   width: string
   height: string
   uploadPath?: string
+  searchPath?: string
 }
 
-export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, width, height, uploadPath }: ImageGalleryImageTargetProps): React.JSX.Element => {
+export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, width, height, uploadPath, searchPath }: ImageGalleryImageTargetProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
   const { triggerUpload } = useUploadModal({})
@@ -46,7 +47,8 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, widt
     },
     config: {
       assets: {
-        allowedTypes: ['image']
+        allowedTypes: ['image'],
+        searchPath
       }
     },
     onFinish: (event) => {

@@ -48,6 +48,21 @@ export const FieldDefinitionImageFormFields = (props: FieldDefinitionAbstractFor
       )
         }
 
+      {!isCustomLayout && (
+      <Form.Item
+        label={ t('search-path') }
+        name="searchPath"
+        tooltip={ t('search-path-tooltip') }
+      >
+        <ManyToOneRelationPath
+          allowToClearRelation
+          allowedAssetTypes={ ['folder'] }
+          assetsAllowed
+        />
+      </Form.Item>
+      )
+        }
+
     </>
   )
 }

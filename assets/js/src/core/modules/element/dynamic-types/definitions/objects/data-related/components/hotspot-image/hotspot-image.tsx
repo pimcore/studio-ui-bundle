@@ -65,6 +65,7 @@ export interface HotspotImageProps {
   ratioX?: number
   ratioY?: number
   uploadPath?: string
+  searchPath?: string
 }
 
 export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
@@ -115,7 +116,8 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
     },
     config: {
       assets: {
-        allowedTypes: ['image']
+        allowedTypes: ['image'],
+        searchPath: props.searchPath
       }
     },
     onFinish: (event) => {
@@ -222,6 +224,7 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
           onSearch={ openElementSelector }
           onUpload={ handleUpload }
           replaceImage={ replaceImage }
+          searchPath={ props.searchPath }
           setCropModalOpen={ handleOpenCropModal }
           setMarkerModalOpen={ handleOpenHotspotMarkersModal }
           setValue={ handleChange }
