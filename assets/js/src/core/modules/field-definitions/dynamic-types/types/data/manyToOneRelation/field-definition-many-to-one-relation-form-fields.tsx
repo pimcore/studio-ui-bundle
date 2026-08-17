@@ -10,13 +10,16 @@
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
 import { Form, FormKit, Input, Select, Switch } from '@sdk/components'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useClassDefinitionOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-class-definition-options'
 import { useAssetTypeOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-asset-type-options'
 import { useDocumentTypeOptions } from '@Pimcore/modules/field-definitions/dynamic-types/hooks/use-document-type-options'
 import { relationSelectFormItemTransformation } from '@Pimcore/modules/field-definitions/dynamic-types/utils/relations-helper'
 import { ManyToOneRelationPath } from '@Pimcore/components/many-to-one-relation'
+import {
+  supportsInlineSearch
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/inline-search'
 
 export const FieldDefinitionManyToOneRelationFormFields = (props: FieldDefinitionAbstractFormFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -25,7 +28,19 @@ export const FieldDefinitionManyToOneRelationFormFields = (props: FieldDefinitio
   const documentTypeOptions = useDocumentTypeOptions()
   const form = Form.useFormInstance()
   const displayMode = Form.useWatch('displayMode')
+  const objectsAllowed = Form.useWatch<boolean | undefined>('objectsAllowed')
+  const assetsAllowed = Form.useWatch<boolean | undefined>('assetsAllowed')
+  const documentsAllowed = Form.useWatch<boolean | undefined>('documentsAllowed')
+  const classes = Form.useWatch<Array<{ classes: string }> | undefined>('classes')
   const isCustomLayout = props.context.area.includes('custom-layout')
+
+  // The data component only renders the inline search for a relation restricted to
+  // objects of a single class. Offering the display mode for anything else would
+  // store a setting that then does nothing.
+  const inlineSearchAvailable = useMemo(
+    () => supportsInlineSearch({ objectsAllowed, assetsAllowed, documentsAllowed, classes }),
+    [objectsAllowed, assetsAllowed, documentsAllowed, classes]
+  )
 
   useEffect(() => {
     if (displayMode === null) {
@@ -150,11 +165,18 @@ export const FieldDefinitionManyToOneRelationFormFields = (props: FieldDefinitio
           <Form.Item
             label={ t('display-mode') }
             name="displayMode"
+            tooltip={ inlineSearchAvailable ? undefined : t('display-mode-inline-search-unavailable-tooltip') }
           >
             <Select
               options={ [
                 { label: t('display-mode-display'), value: 'grid' },
-                { label: t('display-mode-inline-search'), value: 'combo' }
+                {
+                  label: t('display-mode-inline-search'),
+                  value: 'combo',
+                  // Kept in the list so a stored value still renders its label
+                  // rather than the raw 'combo'.
+                  disabled: !inlineSearchAvailable
+                }
               ] }
             />
           </Form.Item>

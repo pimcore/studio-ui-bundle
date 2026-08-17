@@ -24,6 +24,9 @@ import {
   type IRelationAllowedTypesClassDefinition
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
 import {
+  supportsInlineSearch
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/inline-search'
+import {
   ManyToOneRelationComboField
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-one-relation/components/combo-field/many-to-one-relation-combo-field'
 import { FormattedRelationList } from '../../grid-cell-preview/relation-list/formatted-relation-list'
@@ -99,22 +102,8 @@ export class DynamicTypeObjectDataManyToOneRelation extends DynamicTypeObjectDat
     )
   }
 
-  /**
-   * Inline search offers its options through a search on a single data object class,
-   * so it can only represent a relation that is restricted to exactly that: objects of
-   * one class, and nothing else. Any additional target — assets, documents or object
-   * folders — would become unselectable, so those configurations keep the path
-   * reference input, which can address every element type.
-   */
   private usesInlineSearch (props: ManyToOneRelationObjectDataDefinition): boolean {
-    const classes = props.classes ?? []
-
-    return props.displayMode === 'combo' &&
-      props.objectsAllowed &&
-      !props.assetsAllowed &&
-      !props.documentsAllowed &&
-      classes.length === 1 &&
-      classes[0].classes !== 'folder'
+    return props.displayMode === 'combo' && supportsInlineSearch(props)
   }
 
   getGridCellPreviewComponent (props: GetGridCellDefinitionProps): React.ReactElement {

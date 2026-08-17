@@ -2710,6 +2710,7 @@ object-restrictions: Restrictions d'objets
 display-mode: Mode d'affichage
 display-mode-display: Afficher la référence du chemin
 display-mode-inline-search: Recherche en ligne
+display-mode-inline-search-unavailable-tooltip: "La recherche en ligne n'est disponible que si la relation autorise des objets d'exactement une classe. Une relation qui autorise également des assets, des documents ou des dossiers d'objets utilise la référence de chemin à la place."
 display-mode-grid-view: Vue en grille
 display-mode-tag-field: Champ de tags
 language-comparison-modal.title: Comparaison des langues
