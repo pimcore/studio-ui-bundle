@@ -410,14 +410,6 @@ export const Grid = ({
     })
   }
 
-  // Body cells carry inline widths, and GridRow memoises them. Without this key the memoised
-  // rows keep their stale widths and resizing a column moves the header only (PEES-1355):
-  // while row virtualization is on the cells are flex items rather than table cells, so
-  // `table-layout: fixed` no longer propagates the header widths down to them, and the rows
-  // are handed stable props that would otherwise never change during a resize.
-  // Non-virtualized rows are re-rendered anyway - their row style is a new object on every
-  // render - so passing it unconditionally costs them nothing and keeps the rows from
-  // depending on that.
   const columnSizingKey = JSON.stringify(table.getState().columnSizing)
 
   const renderRows = (): React.JSX.Element[] => {
