@@ -123,10 +123,10 @@ export type NotificationSendApiArg = {
     sendNotificationParameters: SendEmailParameters;
 };
 export type NotificationGetSubscriptionsApiResponse =
-    /** status 200 notification_get_subscriptions_success_response */ NotificationSubscriptionCollection;
+    /** status 200 Notification preferences for the current user */ NotificationSubscriptionCollection;
 export type NotificationGetSubscriptionsApiArg = void;
 export type NotificationUpdateSubscriptionsApiResponse =
-    /** status 200 notification_update_subscriptions_success_response */ NotificationSubscriptionCollection;
+    /** status 200 The stored notification preferences for the current user */ NotificationSubscriptionCollection;
 export type NotificationUpdateSubscriptionsApiArg = {
     notificationUpdateSubscriptionsParameters: NotificationUpdateSubscriptionsParameters;
 };
