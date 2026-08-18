@@ -77,13 +77,14 @@ import childrenGrid from '@Pimcore/assets/icons/children-grid.inline.svg?react'
 import classIcon from '@Pimcore/assets/icons/class.inline.svg?react'
 import classificationStore from '@Pimcore/assets/icons/classification-store.inline.svg?react'
 import clearErase from '@Pimcore/assets/icons/clear-erase.inline.svg?react'
+import clearFilter from '@Pimcore/assets/icons/clear-filter.inline.svg?react'
 import closeFilled from '@Pimcore/assets/icons/close-filled.inline.svg?react'
 import closeOutline from '@Pimcore/assets/icons/close-outline.inline.svg?react'
 import close from '@Pimcore/assets/icons/close.inline.svg?react'
 import cms from '@Pimcore/assets/icons/cms.inline.svg?react'
 import code from '@Pimcore/assets/icons/code.inline.svg?react'
-import collapse from '@Pimcore/assets/icons/collapse.inline.svg?react'
 import collapseSidebar from '@Pimcore/assets/icons/collapse-sidebar.inline.svg?react'
+import collapse from '@Pimcore/assets/icons/collapse.inline.svg?react'
 import collection from '@Pimcore/assets/icons/collection.inline.svg?react'
 import color from '@Pimcore/assets/icons/color.inline.svg?react'
 import columns from '@Pimcore/assets/icons/columns.inline.svg?react'
@@ -658,6 +659,10 @@ moduleSystem.registerModule({
       component: clearErase
     })
     iconLibrary.register({
+      name: 'clear-filter',
+      component: clearFilter
+    })
+    iconLibrary.register({
       name: 'close-filled',
       component: closeFilled
     })
@@ -678,12 +683,12 @@ moduleSystem.registerModule({
       component: code
     })
     iconLibrary.register({
-      name: 'collapse',
-      component: collapse
-    })
-    iconLibrary.register({
       name: 'collapse-sidebar',
       component: collapseSidebar
+    })
+    iconLibrary.register({
+      name: 'collapse',
+      component: collapse
     })
     iconLibrary.register({
       name: 'collection',

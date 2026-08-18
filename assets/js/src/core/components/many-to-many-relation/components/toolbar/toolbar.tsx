@@ -119,7 +119,7 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
       <Tooltip title={ clearFiltersLabel }>
         <IconButton
           aria-label={ clearFiltersLabel }
-          icon={ { value: 'filter' } }
+          icon={ { value: 'clear-filter' } }
           onClick={ () => {
             filtersStore?.reset()
           } }
