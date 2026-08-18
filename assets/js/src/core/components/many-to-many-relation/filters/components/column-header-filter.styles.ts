@@ -31,11 +31,16 @@ export const useStyles = createStyles(({ css, token }) => {
       flex-shrink: 0;
     `,
 
+    /**
+     * An applied filter is highlighted the same way the object listing
+     * highlights its search and filter sidebar tab - see the sidebar styles.
+     */
     triggerActive: css`
-      color: ${token.colorPrimary};
-
-      svg {
-        color: ${token.colorPrimary};
+      .pimcore-icon {
+        background: ${token.colorFillQuaternary};
+        border-radius: 2px;
+        outline: 5px solid ${token.colorFillQuaternary};
+        color: ${token.itemActiveColor};
       }
     `,
 
