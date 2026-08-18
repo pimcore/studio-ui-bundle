@@ -9,7 +9,7 @@
  */
 
 import { type AssetGetTreeApiResponse, type AssetPermissions, type Image, type AssetDocument, type Audio, type Video, type Archive, type Text, type AssetFolder, type Unknown } from '../../asset-api-slice.gen'
-import { getElementIcon } from '@Pimcore/modules/element/element-helper'
+import { getElementIcon, getElementKey } from '@Pimcore/modules/element/element-helper'
 import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
 import { type DataTransformerSourceNode, type DataTransformerReturnType } from '@Pimcore/components/element-tree/types/node-api-hook'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
@@ -19,7 +19,7 @@ export const transformApiDataToNode = (assetNode: Image | AssetDocument | Audio 
     id: assetNode.id.toString(),
     elementType: elementTypes.asset,
     icon: getElementIcon(assetNode, { type: 'name', value: 'unknown' }),
-    label: assetNode.filename,
+    label: getElementKey(assetNode, elementTypes.asset),
     type: assetNode.type,
     parentId: String(assetNode.parentId),
     fullPath: assetNode.fullPath,

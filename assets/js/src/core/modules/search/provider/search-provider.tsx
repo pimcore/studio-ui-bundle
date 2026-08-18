@@ -16,6 +16,9 @@ export interface SearchContextData {
   setActiveKey: (key: string) => void
   open: boolean
   setOpen: (open: boolean) => void
+  /** The search term shared across all tabs, so switching tabs takes the typed term along. */
+  searchTerm: string
+  setSearchTerm: (term: string) => void
   /** A saved search whose state should be applied to the matching typed tab once it mounts. */
   pendingRestore: SavedSearchDetailedConfiguration | undefined
   setPendingRestore: (configuration: SavedSearchDetailedConfiguration | undefined) => void
@@ -38,12 +41,13 @@ export interface SearchProviderProps {
 export const SearchProvider = (props: SearchProviderProps): React.JSX.Element => {
   const [open, setOpen] = useState(false)
   const [activeKey, setActiveKey] = useState('all')
+  const [searchTerm, setSearchTerm] = useState('')
   const [pendingRestore, setPendingRestore] = useState<SavedSearchDetailedConfiguration | undefined>(props.initialPendingRestore)
   const [loadedSavedSearch, setLoadedSavedSearch] = useState<SavedSearchDetailedConfiguration | undefined>(props.initialLoadedSavedSearch)
 
   return useMemo(() => (
-    <SearchContext.Provider value={ { open, setOpen, activeKey, setActiveKey, pendingRestore, setPendingRestore, loadedSavedSearch, setLoadedSavedSearch } }>
+    <SearchContext.Provider value={ { open, setOpen, activeKey, setActiveKey, searchTerm, setSearchTerm, pendingRestore, setPendingRestore, loadedSavedSearch, setLoadedSavedSearch } }>
       { props.children }
     </SearchContext.Provider>
-  ), [open, activeKey, pendingRestore, loadedSavedSearch])
+  ), [open, activeKey, searchTerm, pendingRestore, loadedSavedSearch])
 }

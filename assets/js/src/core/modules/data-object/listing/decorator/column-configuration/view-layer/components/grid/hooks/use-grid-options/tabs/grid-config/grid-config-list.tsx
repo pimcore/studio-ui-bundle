@@ -23,6 +23,11 @@ import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
+import { useInjection } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type DynamicTypePipelineRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-registry'
+import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
+import { convertColumnToAdvanced, findColumnConversion } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/convert-column-to-advanced'
 
 function findScrollableParent (element: HTMLElement | null): HTMLElement | null {
   if (element === null || element === document.documentElement) return null
@@ -48,6 +53,11 @@ export const GridConfigList = (): React.JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null)
   const prevColumnKeysRef = useRef<string[]>([])
   const hasMountedRef = useRef(false)
+  const { getAdvancedColumnTemplate } = useAvailableColumns()
+  const sourceFieldsRegistry = useInjection<DynamicTypePipelineRegistry>(serviceIds['DynamicTypes/Grid/SourceFieldsRegistry'])
+
+  const advancedColumnTemplate = useMemo(() => getAdvancedColumnTemplate(), [getAdvancedColumnTemplate])
+  const sourceFieldTypes = useMemo(() => sourceFieldsRegistry.getDynamicTypes(), [sourceFieldsRegistry])
 
   useEffect(() => {
     const currentKeys = columns.map((col) => col.__meta?.uniqueId ?? col.key)
@@ -127,6 +137,15 @@ export const GridConfigList = (): React.JSX.Element => {
 
       renderRightToolbar: (
         <Space size='mini'>
+          { isConvertible(column) && (
+            <IconButton
+              icon={ { value: 'transformation' } }
+              onClick={ () => { onConvertColumn(uniqueId) } }
+              size='small'
+              theme='secondary'
+              tooltip={ { title: t('listing.grid-config.convert-to-advanced') } }
+            />
+          ) }
           { getLanguageSelection(uniqueId, column) }
           <IconButton
             icon={ { value: 'trash' } }
@@ -137,7 +156,7 @@ export const GridConfigList = (): React.JSX.Element => {
         </Space>
       )
     }
-  }), [columns])
+  }), [columns, advancedColumnTemplate, sourceFieldTypes])
 
   return (
     <>
@@ -195,6 +214,40 @@ export const GridConfigList = (): React.JSX.Element => {
   function onRemoveColumn (uniqueId: string): void {
     const itemList = stackListItems.filter((item) => item.id !== uniqueId)
     const newColumns = itemList.map((item) => item.meta)
+    setColumns(newColumns)
+  }
+
+  /**
+   * Whether the column can be turned into an advanced one. Decided by the pipeline source field
+   * types, so e.g. relation columns – which have no equivalent source field – are left out.
+   */
+  function isConvertible (column: AvailableColumn): boolean {
+    if (advancedColumnTemplate === undefined) {
+      return false
+    }
+
+    return findColumnConversion(column, advancedColumnTemplate, sourceFieldTypes) !== undefined
+  }
+
+  function onConvertColumn (uniqueId: string): void {
+    if (advancedColumnTemplate === undefined) {
+      return
+    }
+
+    const newColumns = stackListItems.map((item) => {
+      if (item.id !== uniqueId) {
+        return item.meta
+      }
+
+      return convertColumnToAdvanced({
+        column: item.meta,
+        advancedColumnTemplate,
+        sourceFieldTypes,
+        siblingColumns: columns.filter((column) => column.__meta?.uniqueId !== uniqueId),
+        translate: t
+      }) ?? item.meta
+    })
+
     setColumns(newColumns)
   }
 

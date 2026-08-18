@@ -19,7 +19,7 @@ import { isNumber } from 'lodash'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-export type GridProps = Pick<BaseGridProps, 'contextMenu' | 'enableMultipleRowSelection' | 'enableRowSelection' | 'enableSorting' | 'modifiedCells' | 'onSelectedRowsChange' | 'onSortingChange' | 'onUpdateCellData' | 'selectedRows' | 'sorting' | 'onRowDoubleClick' | 'manualSorting'>
+export type GridProps = Pick<BaseGridProps, 'contextMenu' | 'enableMultipleRowSelection' | 'enableRowSelection' | 'enableSorting' | 'modifiedCells' | 'onSelectedRowsChange' | 'onSortingChange' | 'onUpdateCellData' | 'selectedRows' | 'sorting' | 'onRowDoubleClick' | 'onRowClick' | 'rowSelectionColumn' | 'manualSorting'>
 
 export interface UseGridOptionsReturn {
   transformGridColumn: (column: SelectedColumn) => IdentifiedColumnDef<unknown, never>

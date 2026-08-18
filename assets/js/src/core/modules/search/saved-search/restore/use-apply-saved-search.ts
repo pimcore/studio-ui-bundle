@@ -20,6 +20,7 @@ import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorator
 import { type SavedSearchDetailedConfiguration, type GridFilter } from '@Pimcore/modules/search/search-api-slice.gen'
 import { useTagFilter } from '@Pimcore/modules/asset/listing/decorator/tag-filter/context-layer/provider/tag-filter/use-tag-filter'
 import { tagFilterType, type SelectedTags } from '@Pimcore/modules/asset/listing/decorator/tag-filter/context-layer/provider/tag-filter/tag-filter-provider'
+import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 
 const SEARCH_TERM_FILTER_TYPE = 'system.fulltext'
 // Column-filter types that are not user field filters and must not be restored as such — each is
@@ -83,6 +84,7 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
   const { availableColumns } = useAvailableColumns()
   const { setTags } = useTagFilter()
   const { setDataLoadingState } = useData()
+  const { setSearchTerm: setSharedSearchTerm } = useSearch()
 
   return (configuration: SavedSearchDetailedConfiguration): void => {
     const filter = getFilter(configuration)
@@ -115,6 +117,8 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
     // Apply every general filter in one write to the applied-filters store. Always set each key (even
     // when empty/false) so opening a search replaces the state left over from a previous one.
     setAppliedFilters({ searchTerm, fieldFilters, pql, unreferenced, directChildren })
+
+    setSharedSearchTerm(searchTerm)
 
     // Tags — the `system.tag` column filter, applied via its own provider rather than as a field
     // filter. Always set (empty when none) so opening a search clears tags left over from a previous one.

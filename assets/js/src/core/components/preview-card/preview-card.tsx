@@ -20,11 +20,10 @@ import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { Card } from '@Pimcore/components/card/card'
 import { Button } from '@Pimcore/components/button/button'
 import { useStyle } from './preview-card.styles'
+import { SizeTypes } from './preview-card.types'
 
-export enum SizeTypes {
-  SMALL = 'small',
-  LARGE = 'large',
-}
+// SizeTypes lives in a leaf module so it can be consumed without pulling in this component
+export { SizeTypes }
 
 interface PreviewCardProps {
   name: string

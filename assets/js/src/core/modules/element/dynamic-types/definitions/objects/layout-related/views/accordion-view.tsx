@@ -19,7 +19,7 @@ export interface AccordionViewProps {
   collapsed?: boolean
   collapsible: true
   theme?: 'fieldset' | 'card-with-highlight' | 'default' | 'border-highlight'
-  contentPadding?: BoxProps['padding']
+  contentPadding?: Exclude<BoxProps['padding'], undefined>
   extra?: ReactNode
   extraPosition?: 'start' | 'end'
   style?: React.CSSProperties

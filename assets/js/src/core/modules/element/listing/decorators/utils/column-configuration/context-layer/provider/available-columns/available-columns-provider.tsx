@@ -136,7 +136,7 @@ function buildGroupTree (columns: AvailableColumn[]): Record<string, GroupTreeNo
 }
 
 /** Resolve the human-readable label for a column, honouring field-definition titles. */
-function resolveColumnTranslationKey (column: AvailableColumn): string {
+export function resolveColumnTranslationKey (column: AvailableColumn): string {
   if (hasFieldDefinition(column.config)) {
     const fieldDefinition = column.config.fieldDefinition as Record<string, any>
     return !isEmptyValue(fieldDefinition?.title) ? fieldDefinition?.title : column.key

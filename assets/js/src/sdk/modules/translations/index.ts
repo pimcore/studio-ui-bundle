@@ -13,3 +13,4 @@ if (module.hot !== undefined) {
 }
 
 export * from '@Pimcore/modules/translations/hooks/use-language-lookup'
+export * from '@Pimcore/modules/translations/table/language-column-header'

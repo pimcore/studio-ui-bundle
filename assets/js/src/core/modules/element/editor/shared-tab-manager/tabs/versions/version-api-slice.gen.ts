@@ -285,6 +285,10 @@ export type UpdateVersion = {
     public?: boolean | null;
     /** Note */
     note?: string | null;
+    /** Coauthor type, empty string clears it */
+    coauthorType?: string | null;
+    /** Coauthor, empty string clears it */
+    coauthor?: string | null;
 };
 export type VersionUser = {
     /** ID */
@@ -319,6 +323,10 @@ export type Version = {
     user: VersionUser;
     /** scheduled */
     scheduled?: number | null;
+    /** coauthor type */
+    coauthorType?: string | null;
+    /** coauthor */
+    coauthor?: string | null;
 };
 export const {
     useVersionAssetDownloadByIdQuery,

@@ -129,6 +129,7 @@ export const MainNav = (): React.JSX.Element => {
                       customMainNavItem.onClick?.()
                       setIsOpen(false)
                     } }
+                    type="button"
                   >
                     {!isUndefined(item.icon) && renderMainNavIcon({ iconValue: item.icon, isExpanded: openKeys.includes(index) })}
 
@@ -152,6 +153,7 @@ export const MainNav = (): React.JSX.Element => {
                     setIsOpen(false)
                   }
                 } }
+                type="button"
               >
                 {!isUndefined(item.icon) && renderMainNavIcon({ iconValue: item.icon, isExpanded: openKeys.includes(index) })}
                 {!isUndefined(elementWithGroupIcon?.groupIcon) && isUndefined(item.icon) && (
@@ -260,9 +262,7 @@ export const MainNav = (): React.JSX.Element => {
       <IconButton
         data-testid="main-nav-trigger"
         icon={ { value: 'menu' } }
-        onClick={ () => {
-          setIsOpen(!isOpen)
-        } }
+        onClick={ () => { setIsOpen(!isOpen) } }
         type={ 'text' }
       />
 

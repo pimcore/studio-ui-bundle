@@ -14,7 +14,7 @@ import { type GridProps } from '@Pimcore/types/components/types'
 const BORDER_WIDTH = 1
 
 export interface UseStylesProps {
-  size?: GridProps['size']
+  size?: Exclude<GridProps['size'], undefined>
   enableRowVirtualizer: boolean
   enableColumnVirtualizer: boolean
 }
@@ -141,6 +141,7 @@ export const useStyles = createStyles(({ token, css }, { size = 'normal', enable
 
         &.ant-table-cell__no-data {
           padding: ${token.paddingXS}px 0px ${token.paddingXS}px ${token.paddingXS}px !important;
+          color: ${token.colorTextDescription};
         }
 
         &:last-of-type {
@@ -252,7 +253,8 @@ export const useStyles = createStyles(({ token, css }, { size = 'normal', enable
         .ant-skeleton {
           width: 100%;
           margin: 4px;
-            
+          align-items: center;
+
             .ant-skeleton-input {
               min-width: unset;
               width: 100%;

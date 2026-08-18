@@ -19,7 +19,6 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
 import { RecycleBinDeleteJob } from '@Pimcore/modules/execution-engine/jobs/recycle-bin/recycle-bin-delete-job'
 import { RecycleBinRestoreJob } from '@Pimcore/modules/execution-engine/jobs/recycle-bin/recycle-bin-restore-job'
-import { useTranslation } from 'react-i18next'
 import { api, type RecycleBin, useRecycleBinFlushMutation } from '../recycle-bin-api-slice-enhanced'
 
 interface UseRecycleBinHookReturn {
@@ -31,7 +30,6 @@ interface UseRecycleBinHookReturn {
 
 export const useRecycleBin = (): UseRecycleBinHookReturn => {
   const dispatch = useAppDispatch()
-  const { t } = useTranslation()
   const [recycleBinFlushMutation] = useRecycleBinFlushMutation()
   const executionEngine = container.get<ExecutionEngine>(serviceIds.executionEngine)
 

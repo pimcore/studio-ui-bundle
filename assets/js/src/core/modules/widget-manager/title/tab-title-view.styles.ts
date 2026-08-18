@@ -16,6 +16,11 @@ export const useStyles = createStyles(({ token, css }) => {
       .ant-space-item {
         display: flex;
         align-items: center;
+        width: fit-content;
+      }
+
+      .ant-space-item:has(.widget-manager__tab-title-close-button) {
+        margin-inline-start: ${token.sizeXXS}px;
       }
     `
   }

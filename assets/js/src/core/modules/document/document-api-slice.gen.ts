@@ -312,6 +312,10 @@ export type DocumentUpdateByIdApiArg = {
             index?: number | null;
             key?: string | null;
             task?: "autoSave" | "publish" | "save" | "unpublish" | "version";
+            /** Optional coauthor type stored on versions created by this save */
+            coauthorType?: string;
+            /** Optional coauthor identifier stored on versions created by this save */
+            coauthor?: string;
             locked?: string | null;
             published?: boolean | null;
             editableData?: object | null;

@@ -25,7 +25,7 @@ export interface GridCellProps {
   onFocusCell?: (cell: GridCellReference) => void
   tableElement: GridContextProviderProps['table']
   rowIndex?: number
-  size?: GridProps['size']
+  size?: Exclude<GridProps['size'], undefined>
 }
 
 export const GridCell = ({ cell, isModified, isActive, onFocusCell, tableElement, rowIndex, size = 'normal' }: GridCellProps): React.JSX.Element => {

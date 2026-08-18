@@ -14,7 +14,7 @@ import { ProgressFieldCalculator } from '../../message-handlers/message-bus-job/
 import { ChildJobStepTracker } from '../../message-handlers/message-bus-job/step-tracker/child-job-step-tracker'
 import { DefaultStepTracker } from '../../message-handlers/message-bus-job/step-tracker/default-step-tracker'
 import { type JobButtonCustomizationContext } from '../../message-handlers/message-bus-job/message-bus-job-notification'
-import { downloadFromUrl } from '@Pimcore/utils/files'
+import { downloadFromUrlWithCheck } from '@Pimcore/utils/files'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { t } from 'i18next'
 import { isNull } from 'lodash'
@@ -70,7 +70,7 @@ export abstract class AbstractDownloadJob implements JobInterface {
         label: t('jobs.job.button-download'),
         handler: async () => {
           const url = downloadUrl.replace('{jobRunId}', context.jobRunId.toString())
-          const available = await downloadFromUrl(url)
+          const available = await downloadFromUrlWithCheck(url, `${url}/available`)
           if (!available) {
             context.showWarning('jobs.job.download-error', t('jobs.job.download-not-available'))
           }

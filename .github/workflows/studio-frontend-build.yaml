@@ -1,0 +1,32 @@
+name: "Studio Frontend Build"
+
+on:
+  push:
+    paths:
+      - "assets/**"
+  pull_request:
+    paths:
+      - "assets/**"
+  workflow_dispatch:
+
+# Builds cancel superseded runs per branch; the reusable workflow serializes its
+# own write (commit) jobs.
+concurrency:
+  group: studio-frontend-build-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  studio-frontend-build:
+    permissions:
+      contents: write
+    uses: pimcore/workflows-collection-public/.github/workflows/reusable-studio-frontend-build.yaml@main
+    with:
+      working-directory: ./assets
+      node-version: "24"
+      build-script: ci-build
+      build-output-path: ./build-dist/
+      api-client: true
+      test: true

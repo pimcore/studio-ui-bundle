@@ -29,6 +29,12 @@ const config: ConfigFile = {
       pattern: 'assetGetGrid',
       type: 'query',
     },
+    // POST only because the file name list does not fit in a query string; it is a
+    // read, so it must not invalidate the Assets cache on every batch.
+    {
+      pattern: 'assetUploadBatchInfo',
+      type: 'query',
+    },
     {
       pattern: 'dataObjectGetGrid',
       type: 'query',
@@ -250,6 +256,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/cache/cache-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/cache\/?/i)
+    },
+    '../../js/src/core/modules/telemetry/telemetry-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/telemetry\/?/i)
     }
   },
   exportName: 'api',
