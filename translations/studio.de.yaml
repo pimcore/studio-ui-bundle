@@ -683,6 +683,20 @@ edit: Bearbeiten
 modify: Ändern
 component.no-content.no-content-available: Kein Inhalt verfügbar
 notifications.label: Benachrichtigungen
+notifications.settings.label: Benachrichtigungseinstellungen
+notifications.settings.description: Aktivieren Sie „Benachrichtigen“ für alles, was in Ihrer Benachrichtigungsglocke erscheinen soll, und fügen Sie für die wichtigsten Themen zusätzliche Kanäle hinzu.
+notifications.settings.description-popup-only: Wählen Sie, wie Sie Benachrichtigungen erhalten. Alles, worüber Sie benachrichtigt werden, erscheint immer in Ihrer Benachrichtigungsglocke.
+notifications.settings.column.type: Benachrichtigungstyp
+notifications.settings.column.subscribed: Benachrichtigen
+notifications.settings.not-available: Für diesen Typ nicht verfügbar
+notifications.settings.save: Speichern
+notifications.settings.discard: Verwerfen
+notifications.settings.discard.title: Nicht gespeicherte Änderungen verwerfen?
+notifications.settings.discard.confirm: Verwerfen
+notifications.settings.discard.keep-editing: Weiter bearbeiten
+notifications.settings.unsaved-changes_one: "{{count}} nicht gespeicherte Änderung"
+notifications.settings.unsaved-changes_other: "{{count}} nicht gespeicherte Änderungen"
+notifications.settings.group.general: Allgemein
 notifications.remove-all: Alle entfernen
 notifications.new-notification: Neue Benachrichtigung
 notifications.columns.title: Titel

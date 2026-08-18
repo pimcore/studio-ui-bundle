@@ -683,6 +683,20 @@ edit: Editar
 modify: Modificar
 component.no-content.no-content-available: No hay contenido disponible
 notifications.label: Notificaciones
+notifications.settings.label: Configuración de notificaciones
+notifications.settings.description: Active "Notificarme" para todo lo que desee que aparezca en su campana de notificaciones y, después, añada canales adicionales para lo que más le importe.
+notifications.settings.description-popup-only: Elija cómo desea recibir las notificaciones. Todo aquello de lo que se le notifica siempre aparece en su campana de notificaciones.
+notifications.settings.column.type: Tipo de notificación
+notifications.settings.column.subscribed: Notificarme
+notifications.settings.not-available: No disponible para este tipo
+notifications.settings.save: Guardar
+notifications.settings.discard: Descartar
+notifications.settings.discard.title: ¿Descartar los cambios no guardados?
+notifications.settings.discard.confirm: Descartar
+notifications.settings.discard.keep-editing: Seguir editando
+notifications.settings.unsaved-changes_one: "{{count}} cambio sin guardar"
+notifications.settings.unsaved-changes_other: "{{count}} cambios sin guardar"
+notifications.settings.group.general: General
 notifications.remove-all: Eliminar todas
 notifications.new-notification: Nueva notificación
 notifications.columns.title: Título

@@ -683,6 +683,20 @@ edit: Rediger
 modify: Endre
 component.no-content.no-content-available: Ingen innhold tilgjengelig
 notifications.label: Varsler
+notifications.settings.label: Varselinnstillinger
+notifications.settings.description: Slå på "Varsle meg" for alt du vil ha i varselklokken din, og legg deretter til flere kanaler for det som betyr mest.
+notifications.settings.description-popup-only: Velg hvordan varsler skal nå deg. Alt du varsles om, vises alltid i varselklokken din.
+notifications.settings.column.type: Varseltype
+notifications.settings.column.subscribed: Varsle meg
+notifications.settings.not-available: Ikke tilgjengelig for denne typen
+notifications.settings.save: Lagre
+notifications.settings.discard: Forkast
+notifications.settings.discard.title: Vil du forkaste dine ulagrede endringer?
+notifications.settings.discard.confirm: Forkast
+notifications.settings.discard.keep-editing: Fortsett å redigere
+notifications.settings.unsaved-changes_one: "{{count}} ulagret endring"
+notifications.settings.unsaved-changes_other: "{{count}} ulagrede endringer"
+notifications.settings.group.general: Generelt
 notifications.remove-all: Fjern alle
 notifications.new-notification: Nytt varsel
 notifications.columns.title: Tittel
