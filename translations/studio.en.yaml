@@ -686,12 +686,6 @@ notifications.settings.discard.keep-editing: Keep editing
 notifications.settings.unsaved-changes_one: '{{count}} unsaved change'
 notifications.settings.unsaved-changes_other: '{{count}} unsaved changes'
 notifications.settings.group.general: General
-notifications.channel.popup: Pop-up
-notifications.channel.email: Email
-notification.type.general.label: Everything else
-notification.type.general.description: Workflow steps, system messages, notifications from other bundles. These always reach your bell — choose whether they also pop up.
-notification.type.general.solo_label: All notifications
-notification.type.general.solo_description: Everything Pimcore sends you — workflow steps, system messages, notifications from other bundles. These always reach your bell; choose whether they also pop up on screen.
 notifications.remove-all: Remove all
 notifications.new-notification: New Notification
 notifications.columns.title: Title
