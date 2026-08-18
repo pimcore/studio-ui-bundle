@@ -14,7 +14,8 @@ export {
   relationFilterAdapter,
   relationFilterDescriptors,
   useRelationFilterContext,
-  useRelationFilters
+  useRelationFilters,
+  useRelationFiltersOptional
 } from './filters'
 export { RelationFiltersProvider, type RelationFiltersProviderProps } from './provider/relation-filters-provider'
 export {

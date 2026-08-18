@@ -33,7 +33,8 @@ export const RELATION_COLUMN_FILTERS_KEY = 'columnFilters'
  */
 export const {
   FiltersStoreProvider: RelationFiltersStoreProvider,
-  useFiltersStore: useRelationFilters
+  useFiltersStore: useRelationFilters,
+  useFiltersStoreOptional: useRelationFiltersOptional
 } = createFiltersStore()
 
 export const useRelationFilterContext = (): RelationFilterContext => {
