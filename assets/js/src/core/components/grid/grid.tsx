@@ -400,6 +400,10 @@ export const Grid = ({
     })
   }
 
+  // The rows are memoized on their props, so the column widths they render have
+  // to travel as one - otherwise a resize only moves the header cells.
+  const columnSizing = JSON.stringify(table.getState().columnSizing)
+
   const renderRows = (): React.JSX.Element[] => {
     const rowsData = isEnableRowVirtualizer
       ? virtualRows.map(vRow => ({
@@ -418,6 +422,7 @@ export const Grid = ({
     return rowsData.map(({ row, virtualIndex, rowStyle, measureElement }) => (
       <GridRow
         activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell?.columnId : undefined }
+        columnSizing={ columnSizing }
         columns={ columns }
         contextMenu={ props.contextMenu }
         enableColumnVirtualizer={ isEnableColumnVirtualizer }
@@ -570,7 +575,7 @@ export const Grid = ({
         </div>
       </div>
     </ConfigProvider>
-  ), [table, modifiedCells, table.getTotalSize(), data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined, size, virtualRows, rowVirtualizer.getTotalSize(), visibleRowIds, virtualColumns])
+  ), [table, modifiedCells, table.getTotalSize(), columnSizing, data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined, size, virtualRows, rowVirtualizer.getTotalSize(), visibleRowIds, virtualColumns])
 
   function getModifiedRow (rowIndex: string): GridProps['modifiedCells'] {
     return memoModifiedCells.filter(({ rowIndex: rIndex }) => String(rIndex) === String(rowIndex)) ?? []

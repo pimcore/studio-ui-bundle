@@ -35,6 +35,11 @@ export interface GridRowProps {
   onRowClick?: NonNullable<GridProps['onRowClick']>
   enableRowVirtualizer: boolean
   enableColumnVirtualizer: boolean
+  /**
+   * Serialized column sizing of the table. The row is memoized, so it needs the
+   * sizing as a prop to pick up a column resize.
+   */
+  columnSizing: string
   size?: Exclude<GridProps['size'], undefined>
   rowStyle?: CSSProperties
   measureElement?: (node: HTMLElement | null) => void
@@ -44,7 +49,7 @@ export interface GridRowProps {
   virtualPaddingRight?: number
 }
 
-const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, virtualPaddingLeft, virtualPaddingRight, enableColumnVirtualizer, enableRowVirtualizer, ...props }: GridRowProps): React.JSX.Element => {
+const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, virtualPaddingLeft, virtualPaddingRight, enableColumnVirtualizer, enableRowVirtualizer, columnSizing, ...props }: GridRowProps): React.JSX.Element => {
   const { setNodeRef, transform, transition, isDragging, attributes, listeners } = useSortable({
     id: row.id
   })
@@ -183,7 +188,7 @@ const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, vir
         )
       })}
     </tr>
-  ), [JSON.stringify(row), memoModifiedCells, isSelected, props.columns, style, visibleCells])
+  ), [JSON.stringify(row), memoModifiedCells, isSelected, props.columns, style, visibleCells, columnSizing])
 
   function isModifiedCell (cellId: string): boolean {
     return memoModifiedCells.find((item) => item.columnId === cellId) !== undefined
