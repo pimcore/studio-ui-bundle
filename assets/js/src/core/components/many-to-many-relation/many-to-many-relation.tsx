@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { isEqual, isNil } from 'lodash'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
@@ -23,6 +23,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
 import { useFilterQuery } from '@Pimcore/components/filters'
 import { relationFilterAdapter, useRelationFilters } from './filters/filters'
+import { useRelationFilterColumns } from '@Pimcore/components/many-to-many-relation/filters'
 import { RelationFiltersProvider } from './filters/provider/relation-filters-provider'
 
 export interface ManyToManyRelationClassDefinitionProps {
@@ -66,6 +67,7 @@ const ManyToManyRelationContent = ({ enableRowDrag, ...props }: ManyToManyRelati
   const [displayedValue, setDisplayedValue] = useState<DisplayManyToManyRelationValue | null>(props.value ?? null)
 
   const { values: appliedFilters } = useRelationFilters()
+  const { columns: filterableColumns } = useRelationFilterColumns()
   const buildFilterQuery = useFilterQuery(relationFilterAdapter, appliedFilters)
   const { matchRow } = buildFilterQuery({})
 
@@ -98,6 +100,23 @@ const ManyToManyRelationContent = ({ enableRowDrag, ...props }: ManyToManyRelati
 
   const hasAppliedFiltersOnce = useRef<boolean>(false)
 
+  /**
+   * What the rows are matched against is not only the applied filter values: a
+   * filterable column that is gone - or filtering that got disabled altogether -
+   * drops its matcher, and refreshed visible field data changes the values the
+   * matchers and the search read. All of them have to refresh the rows, or the
+   * grid keeps showing what the previous context matched.
+   *
+   * Serialized on purpose: the hosts build the column definition and the visible
+   * fields anew on every render, so depending on their identity would refresh the
+   * rows in a loop.
+   */
+  const filterContextKey = useMemo(() => JSON.stringify({
+    filters: appliedFilters,
+    columns: filterableColumns.map((column) => column.key),
+    visibleFields: props.visibleFieldsValue
+  }), [appliedFilters, filterableColumns, props.visibleFieldsValue])
+
   useEffect(() => {
     if (!hasAppliedFiltersOnce.current) {
       hasAppliedFiltersOnce.current = true
@@ -105,7 +124,7 @@ const ManyToManyRelationContent = ({ enableRowDrag, ...props }: ManyToManyRelati
     }
 
     updateDisplayValue(value)
-  }, [appliedFilters])
+  }, [filterContextKey])
 
   if (props.isLoading === true) {
     return (
