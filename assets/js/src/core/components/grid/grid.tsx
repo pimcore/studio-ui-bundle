@@ -441,8 +441,8 @@ export const Grid = ({
     return rowsData.map(({ row, virtualIndex, rowStyle, measureElement }) => (
       <GridRow
         activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell?.columnId : undefined }
-        columnSizingKey={ columnSizingKey }
         columnSizing={ columnSizing }
+        columnSizingKey={ columnSizingKey }
         columns={ columns }
         contextMenu={ props.contextMenu }
         distributeWidth={ distributeWidth }
