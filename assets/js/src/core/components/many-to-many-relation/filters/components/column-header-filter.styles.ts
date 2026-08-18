@@ -51,10 +51,6 @@ export const useStyles = createStyles(({ css, token }) => {
         min-width: 90px;
         max-width: none !important;
       }
-      
-      .ant-flex {
-        flex-wrap: wrap;
-      }
     `
   }
 })
