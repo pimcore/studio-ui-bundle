@@ -51,12 +51,15 @@ const SearchReplaceAssignmentsContext = createContext<SearchReplaceAssignmentsCo
 
 interface SearchReplaceAssignmentsProviderProps {
   children: ReactNode
+  initialSearchFor?: ManyToOneRelationValue | null
+  initialReplaceWith?: ManyToOneRelationValue | null
+  onApplied?: () => void
 }
 
-export const SearchReplaceAssignmentsProvider = ({ children }: SearchReplaceAssignmentsProviderProps): React.JSX.Element => {
+export const SearchReplaceAssignmentsProvider = ({ children, initialSearchFor = null, initialReplaceWith = null, onApplied }: SearchReplaceAssignmentsProviderProps): React.JSX.Element => {
   const defaultPageSize = 50
-  const [searchFor, setSearchFor] = useState<ManyToOneRelationValue | null>(null)
-  const [replaceWith, setReplaceWith] = useState<ManyToOneRelationValue | null>(null)
+  const [searchFor, setSearchFor] = useState<ManyToOneRelationValue | null>(initialSearchFor)
+  const [replaceWith, setReplaceWith] = useState<ManyToOneRelationValue | null>(initialReplaceWith)
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(defaultPageSize)
   const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
@@ -123,6 +126,7 @@ export const SearchReplaceAssignmentsProvider = ({ children }: SearchReplaceAssi
         onFinish: () => {
           handleRefresh()
           setSelectedRows({})
+          onApplied?.()
         }
       })
 
@@ -156,6 +160,7 @@ export const SearchReplaceAssignmentsProvider = ({ children }: SearchReplaceAssi
         onFinish: () => {
           handleRefresh()
           setSelectedRows({})
+          onApplied?.()
         }
       })
 
