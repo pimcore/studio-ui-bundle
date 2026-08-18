@@ -9,6 +9,7 @@
  */
 
 import React, { useMemo } from 'react'
+import { Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { Flex, Icon, Text } from '@sdk/components'
 import { container } from '@Pimcore/app/depency-injection'
@@ -103,6 +104,21 @@ export const NotificationSettingsView = ({
             >
               <Icon value={ channelIcon(channel.id) } />
               <Text type={ 'secondary' }>{t(channel.translationKey)}</Text>
+              {/*
+                * The switches below still store — the preference is real and starts working the
+                * moment the account can be reached — so the column is explained rather than
+                * disabled or hidden.
+                */}
+              {channel.unavailableReasonKey !== null && channel.unavailableReasonKey !== undefined && (
+                <Tooltip title={ t(channel.unavailableReasonKey) }>
+                  <span
+                    aria-label={ t(channel.unavailableReasonKey) }
+                    data-testid={ `notification-settings-channel-warning-${channel.id}` }
+                  >
+                    <Icon value={ 'warning-circle' } />
+                  </span>
+                </Tooltip>
+              )}
             </Flex>
           </div>
         ))}

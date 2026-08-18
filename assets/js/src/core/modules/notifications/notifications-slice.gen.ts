@@ -203,6 +203,8 @@ export type NotificationAvailableChannel = {
     id: string;
     /** translation key for the column label */
     translationKey: string;
+    /** translation key explaining why this channel cannot reach the caller, null when it can */
+    unavailableReasonKey?: string | null;
 };
 export type NotificationSubscriptionChannel = {
     /** channel id */
