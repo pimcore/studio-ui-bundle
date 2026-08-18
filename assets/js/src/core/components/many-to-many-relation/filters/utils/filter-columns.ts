@@ -64,6 +64,25 @@ const getColumnTitle = (column: ColumnDef<any>, fallback: string): string => {
 }
 
 /**
+ * A row value is looked up by the plain field key, and the values the API returns
+ * per row carry no group either. A key that more than one configured column
+ * claims - the same field key of two groups, e.g. of an object brick - can
+ * therefore not be resolved to one value, so such a column offers no filter at
+ * all instead of filtering against the value of its namesake.
+ */
+const hasAmbiguousValueKey = (selectedColumn: SelectedColumn, selectedColumns?: SelectedColumn[]): boolean => {
+  if (isUndefined(selectedColumns)) {
+    return false
+  }
+
+  const claimingColumns = selectedColumns.filter((candidate) =>
+    candidate.key === selectedColumn.key && (candidate.locale ?? null) === (selectedColumn.locale ?? null)
+  )
+
+  return claimingColumns.length > 1
+}
+
+/**
  * Candidates for a filter: every rendered column paired with its column
  * configuration. Whether a candidate can actually be filtered is decided by the
  * field filter its type resolves to - see `useFilterableColumns`.
@@ -71,7 +90,8 @@ const getColumnTitle = (column: ColumnDef<any>, fallback: string): string => {
 export const getFilterColumnCandidates = (
   columnDefinition: Array<ColumnDef<any>> | undefined,
   t: TFunction,
-  decodeColumn?: (columnId: string) => SelectedColumn | undefined
+  decodeColumn?: (columnId: string) => SelectedColumn | undefined,
+  selectedColumns?: SelectedColumn[]
 ): RelationFilterColumn[] => {
   if (isUndefined(columnDefinition)) {
     return getDefaultRelationFilterColumns(t)
@@ -90,6 +110,10 @@ export const getFilterColumnCandidates = (
     const selectedColumn = decodeColumn?.(key)
 
     if (!isUndefined(selectedColumn) && !isUndefined(selectedColumn?.key)) {
+      if (hasAmbiguousValueKey(selectedColumn, selectedColumns)) {
+        continue
+      }
+
       candidates.push({
         key,
         valueKey: selectedColumn.key,

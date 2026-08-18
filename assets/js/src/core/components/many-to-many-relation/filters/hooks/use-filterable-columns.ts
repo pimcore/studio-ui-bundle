@@ -38,7 +38,7 @@ export const useFilterableColumns = ({ enabled, columnDefinition }: UseFilterabl
       return []
     }
 
-    const candidates = getFilterColumnCandidates(columnDefinition, t, (columnId) => decodeColumnIdentifier(columnId))
+    const candidates = getFilterColumnCandidates(columnDefinition, t, (columnId) => decodeColumnIdentifier(columnId), selectedColumns)
 
     return candidates.filter((column) => {
       const dynamicTypeFieldFilter = resolveFieldFilterType(getType, column)

@@ -65,6 +65,24 @@ describe('getFilterColumnCandidates', () => {
 
     expect(getFilterColumnCandidates(columnDefinition, t, decodeColumn)).toEqual([])
   })
+
+  it('skips a column whose field key is claimed by more than one configured column', () => {
+    const columnDefinition: Array<ColumnDef<any>> = [
+      { id: '{"key":"name"}', header: 'Name' },
+      { id: '{"key":"created"}', header: 'Created' }
+    ]
+
+    // The row values are looked up by the plain field key, so the value of a key
+    // two columns claim - here the same key of another group - is ambiguous.
+    const ambiguousColumns: SelectedColumn[] = [
+      { key: 'name', type: 'dataobject.adapter', config: {}, sortable: false, editable: false, localizable: false },
+      { key: 'name', type: 'dataobject.adapter', config: {}, sortable: false, editable: false, localizable: false },
+      { key: 'created', type: 'dataobject.adapter', config: {}, sortable: false, editable: false, localizable: false }
+    ]
+
+    expect(getFilterColumnCandidates(columnDefinition, t, decodeColumn, ambiguousColumns).map((column) => column.valueKey))
+      .toEqual(['created'])
+  })
 })
 
 describe('resolveRowValue', () => {
