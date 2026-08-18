@@ -90,12 +90,12 @@ const data = Array.from({ length: ROW_COUNT }, (_, index) => ({
   path: `/items/item-${index + 1}`
 }))
 
-const renderGrid = (): void => {
+const renderGrid = ({ virtualized = true }: { virtualized?: boolean } = {}): void => {
   render(
     <Grid
       columns={ columns }
       data={ data }
-      enableRowVirtualizer
+      enableRowVirtualizer={ virtualized }
       resizable
       setRowId={ (originalRow) => String(originalRow.id) }
     />
@@ -129,6 +129,17 @@ describe('Grid column resizing with the row virtualizer enabled', () => {
 
   it('resizes the body cells together with the header cell', () => {
     renderGrid()
+
+    resizeFirstColumn()
+
+    expect(getWidth(getFirstHeaderCell())).toBe(`${COLUMN_SIZE + 5}px`)
+    expect(getWidth(getFirstBodyCell())).toBe(`${COLUMN_SIZE + 5}px`)
+  })
+})
+
+describe('Grid column resizing without the row virtualizer', () => {
+  it('resizes the body cells together with the header cell', () => {
+    renderGrid({ virtualized: false })
 
     resizeFirstColumn()
 

@@ -38,15 +38,10 @@ export interface GridRowProps {
   enableColumnVirtualizer: boolean
   // Whether the columns have to share the width the table has left over — see getCellStyle.
   distributeWidth?: boolean
-  /**
-   * Serialized column sizing of the table. The row is memoized, so it needs the
-   * sizing as a prop to pick up a column resize.
-   */
-  columnSizing: string
   size?: Exclude<GridProps['size'], undefined>
   // Serialized column sizing, used to invalidate the memoised row when a column is resized.
-  // Only set while row virtualization is on — see the note in Grid.renderRows.
-  columnSizingKey?: string
+  // See the note in Grid.
+  columnSizingKey: string
   rowStyle?: CSSProperties
   measureElement?: (node: HTMLElement | null) => void
   virtualIndex?: number
@@ -55,7 +50,7 @@ export interface GridRowProps {
   virtualPaddingRight?: number
 }
 
-const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, virtualPaddingLeft, virtualPaddingRight, enableColumnVirtualizer, enableRowVirtualizer, columnSizing, ...props }: GridRowProps): React.JSX.Element => {
+const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, virtualPaddingLeft, virtualPaddingRight, enableColumnVirtualizer, enableRowVirtualizer, ...props }: GridRowProps): React.JSX.Element => {
   const { setNodeRef, transform, transition, isDragging, attributes, listeners } = useSortable({
     id: row.id
   })
@@ -186,7 +181,7 @@ const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, vir
         )
       })}
     </tr>
-  ), [JSON.stringify(row), memoModifiedCells, isSelected, props.columns, style, visibleCells, props.columnSizingKey, props.distributeWidth, columnSizing])
+  ), [JSON.stringify(row), memoModifiedCells, isSelected, props.columns, style, visibleCells, props.columnSizingKey, props.distributeWidth])
 
   function isModifiedCell (cellId: string): boolean {
     return memoModifiedCells.find((item) => item.columnId === cellId) !== undefined
