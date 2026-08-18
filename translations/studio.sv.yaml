@@ -2720,6 +2720,7 @@ object-restrictions: Objektrestriktioner
 display-mode: Visningsläge
 display-mode-display: Visa sökvägssreferens
 display-mode-inline-search: Inline-sökning
+display-mode-inline-search-unavailable-tooltip: "Inline-sökning är endast tillgänglig när relationen tillåter objekt av exakt en klass. En relation som även tillåter tillgångar, dokument eller objektmappar använder sökvägsreferensen i stället."
 display-mode-grid-view: Rutnätsvy
 display-mode-tag-field: Taggfält
 language-comparison-modal.title: Språkjämförelse

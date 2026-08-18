@@ -2720,6 +2720,7 @@ object-restrictions: Restrizioni oggetto
 display-mode: Modalità visualizzazione
 display-mode-display: Visualizza riferimento percorso
 display-mode-inline-search: Ricerca in linea
+display-mode-inline-search-unavailable-tooltip: "La ricerca in linea è disponibile solo quando la relazione consente oggetti di esattamente una classe. Una relazione che consente anche asset, documenti o cartelle di oggetti utilizza invece il riferimento al percorso."
 display-mode-grid-view: Vista griglia
 display-mode-tag-field: Campo tag
 language-comparison-modal.title: Confronto lingue

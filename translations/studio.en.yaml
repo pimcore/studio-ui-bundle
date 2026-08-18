@@ -2720,6 +2720,7 @@ object-restrictions: Object restrictions
 display-mode: Display mode
 display-mode-display: Display path reference
 display-mode-inline-search: Inline search
+display-mode-inline-search-unavailable-tooltip: "Inline search is only available when the relation allows objects of exactly one class. A relation that also allows assets, documents or object folders uses the path reference instead."
 display-mode-grid-view: Grid view
 display-mode-tag-field: Tag field
 language-comparison-modal.title: Language comparison

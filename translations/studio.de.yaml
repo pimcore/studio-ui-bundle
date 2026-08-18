@@ -2720,6 +2720,7 @@ object-restrictions: Objektbeschränkungen
 display-mode: Anzeigemodus
 display-mode-display: Pfadreferenz anzeigen
 display-mode-inline-search: Inline-Suche
+display-mode-inline-search-unavailable-tooltip: "Die Inline-Suche ist nur verfügbar, wenn die Relation Objekte genau einer Klasse zulässt. Eine Relation, die auch Assets, Dokumente oder Objektordner zulässt, verwendet stattdessen die Pfadreferenz."
 display-mode-grid-view: Grid-Ansicht
 display-mode-tag-field: Tag-Feld
 language-comparison-modal.title: Sprachvergleich

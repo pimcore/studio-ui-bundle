@@ -2720,6 +2720,7 @@ object-restrictions: Objektbegrensninger
 display-mode: Visningsmodus
 display-mode-display: Vis stireferanse
 display-mode-inline-search: Innebygd søk
+display-mode-inline-search-unavailable-tooltip: "Innebygd søk er bare tilgjengelig når relasjonen tillater objekter fra nøyaktig én klasse. En relasjon som også tillater ressurser, dokumenter eller objektmapper, bruker banereferansen i stedet."
 display-mode-grid-view: Rutenettvisning
 display-mode-tag-field: Taggfelt
 language-comparison-modal.title: Språksammenligning
