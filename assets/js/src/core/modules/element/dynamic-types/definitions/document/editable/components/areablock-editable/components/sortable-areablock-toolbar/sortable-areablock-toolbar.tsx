@@ -98,6 +98,7 @@ const SortableAreablockToolbarInnerComponent = ({
     if (areaTypes.length === 1) {
       buttons.push(
         <IconButton
+          aria-label={ t('areablock.new') }
           icon={ { value: 'new' } }
           key="plus"
           onClick={ () => {
@@ -116,6 +117,7 @@ const SortableAreablockToolbarInnerComponent = ({
           trigger={ ['click'] }
         >
           <IconButton
+            aria-label={ t('areablock.new') }
             icon={ { value: 'new' } }
             size="small"
             tooltip={ { title: t('areablock.new') } }
@@ -127,6 +129,7 @@ const SortableAreablockToolbarInnerComponent = ({
 
   buttons.push(
     <IconButton
+      aria-label={ t('areablock.move-above') }
       disabled={ isFirst }
       icon={ { value: 'chevron-up' } }
       key="up"
@@ -138,6 +141,7 @@ const SortableAreablockToolbarInnerComponent = ({
 
   buttons.push(
     <IconButton
+      aria-label={ t('areablock.move-below') }
       disabled={ isLast }
       icon={ { value: 'chevron-down' } }
       key="down"
@@ -149,6 +153,7 @@ const SortableAreablockToolbarInnerComponent = ({
 
   buttons.push(
     <IconButton
+      aria-label={ t('areablock.copy') }
       icon={ { value: 'copy' } }
       key="copy"
       onClick={ () => { onCopyArea(element) } }
@@ -159,6 +164,7 @@ const SortableAreablockToolbarInnerComponent = ({
 
   buttons.push(
     <IconButton
+      aria-label={ t('areablock.paste') }
       disabled={ !canPaste }
       icon={ { value: 'paste' } }
       key="paste"
@@ -170,6 +176,7 @@ const SortableAreablockToolbarInnerComponent = ({
 
   buttons.push(
     <IconButton
+      aria-label={ t('areablock.cut') }
       icon={ { value: 'scissors-cut-01' } }
       key="cut"
       onClick={ () => { onCutArea(element) } }
@@ -181,6 +188,7 @@ const SortableAreablockToolbarInnerComponent = ({
   if (hasDialogBox) {
     buttons.push(
       <IconButton
+        aria-label={ t('areablock.settings') }
         icon={ { value: 'settings' } }
         key="dialog"
         onClick={ () => { onOpenDialog?.(id) } }
@@ -192,6 +200,7 @@ const SortableAreablockToolbarInnerComponent = ({
 
   buttons.push(
     <IconButton
+      aria-label={ t(isHidden ? 'areablock.show' : 'areablock.hide') }
       icon={ { value: isHidden ? 'eye-off' : 'eye' } }
       key="visibility"
       onClick={ () => { onToggleHidden?.(element) } }
@@ -202,6 +211,7 @@ const SortableAreablockToolbarInnerComponent = ({
 
   deleteButton = (
     <IconButton
+      aria-label={ t('areablock.delete') }
       icon={ { value: 'trash' } }
       key="minus"
       onClick={ () => { onRemoveArea(element) } }

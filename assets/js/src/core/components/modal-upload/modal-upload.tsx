@@ -10,11 +10,11 @@
 
 import React from 'react'
 import { Upload as AntUpload, type UploadProps as AntUploadProps } from 'antd'
+import defaultRequest from 'rc-upload/es/request'
 import { api as assetApi, type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import type { RcFile, UploadFile } from 'antd/es/upload/interface'
 import { useAppDispatch } from '@sdk/app'
-import { getPrefix } from '@Pimcore/app/api/pimcore/route'
-import { isString, isNil } from 'lodash'
+import { isNil } from 'lodash'
 import { type UploadChangeParam } from 'antd/lib/upload'
 import { type UploadRef } from 'antd/es/upload/Upload'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
@@ -23,8 +23,11 @@ import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useUploadModalContext } from './provider/upload-modal-provider/use-upload-modal-context'
 import { useTargetFolderId } from '@Pimcore/components/hooks/use-target-folder-id'
 import { useUploadConflictHandler } from './hooks/use-upload-conflict-handler'
+import { resolveUploadAction } from './utils/resolve-upload-action'
+import { type UploadRequest } from './utils/create-upload-queue'
+import { uploadQueue } from './utils/upload-queue'
+import { mapUploadFileErrors } from './utils/map-upload-file-errors'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { type ApiErrorData } from '@sdk/modules/app'
 
 export interface ModalUploadPropsBase {
   accept?: AntUploadProps['accept']
@@ -40,7 +43,15 @@ export interface ModalUploadPropsBase {
   uploadComponent?: React.ComponentType<AntUploadProps>
   uploadComponentClassName?: string
   openFileDialogOnClick?: AntUploadProps['openFileDialogOnClick']
-  /** Override Ant Design's default XHR transport. When provided, the `action` prop is ignored. */
+  /**
+   * Override Ant Design's default XHR transport. When provided, the `action` prop
+   * is ignored.
+   *
+   * The transport is wrapped by the tab-wide upload queue rather than replacing it,
+   * so it may be called later than the file was accepted, and it must report every
+   * file through `onSuccess` or `onError` — one that reports neither holds its slot
+   * for the life of the tab.
+   */
   customRequest?: AntUploadProps['customRequest']
   /**
    * When provided, overrides `targetFolderId` on a per-file basis for the
@@ -91,7 +102,7 @@ interface ModalUploadPropsWithAssetCheck extends ModalUploadPropsBase {
 export type ModalUploadProps = ModalUploadPropsWithAction | ModalUploadPropsWithoutAssetCheck | ModalUploadPropsWithAssetCheck
 
 export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
-  const { setIsModalOpen, setShowProcessing, setShowUploadError, setFileList, fileList } = useUploadModalContext()
+  const { setIsModalOpen, setShowProcessing, setShowUploadError, setFileList, setCheckProgress, cancelCheckRef, fileList } = useUploadModalContext()
   const dispatch = useAppDispatch()
   const settings = useSettings()
   const { t } = useTranslation()
@@ -105,6 +116,7 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
 
   const {
     resolveConflicts,
+    cancelCheck,
     shouldSkipFile,
     hasCheckError,
     getReplaceId,
@@ -114,28 +126,24 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
   } = useUploadConflictHandler({ targetFolderId })
 
   const uploadProps: AntUploadProps = {
-    ...(!isNil(props.customRequest)
-      ? { customRequest: props.customRequest }
-      : {
-          action: (file): string => {
-            if (isString(props.action)) {
-              return props.action
-            }
-
-            // External replace ID (e.g. from folder-drop conflict resolution) takes
-            // priority, then fall back to the built-in conflict handler's result.
-            const replaceId = props.getExternalReplaceId?.(file) ?? getReplaceId(file)
-
-            if (!isNil(replaceId)) {
-              return `${getPrefix()}/assets/${replaceId}/replace`
-            }
-
-            const perFileFolderId = props.getTargetFolderIdForFile?.(file)
-            const effectiveFolderId = perFileFolderId ?? targetFolderId
-
-            return `${getPrefix()}/assets/add/${effectiveFolderId}`
-          }
-        }),
+    // Queued rather than sent straight away. The transport is read on every call
+    // instead of captured, because the global provider mounts this long before a
+    // caller supplies `customRequest` through `triggerUpload`.
+    customRequest: (options) => uploadQueue.enqueue(
+      options,
+      (props.customRequest as UploadRequest | undefined) ?? defaultRequest
+    ),
+    ...(isNil(props.customRequest)
+      ? {
+          action: (file): string => resolveUploadAction(file, {
+            action: props.action,
+            targetFolderId,
+            getExternalReplaceId: props.getExternalReplaceId,
+            getReplaceId,
+            getTargetFolderIdForFile: props.getTargetFolderIdForFile
+          })
+        }
+      : {}),
     name: props.name ?? 'file',
     multiple: props.multiple ?? true,
     accept: props.accept,
@@ -144,6 +152,22 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
     openFileDialogOnClick: props.openFileDialogOnClick,
     fileList,
     beforeUpload: async (file: RcFile, fileList) => {
+      const isBatchStart = file.uid === fileList[0].uid
+
+      const shouldSkipCheck = typeof props.skipConflictCheck === 'object' && !isNil(props.skipConflictCheck)
+        ? props.skipConflictCheck.current === true
+        : props.skipConflictCheck === true
+
+      // Ant fires `onChange` only once the first POST starts, so the modal is
+      // opened here to cover the check. Callers that skip it have nothing to show
+      // yet and keep waiting for `onChange`.
+      if (isBatchStart && !shouldSkipCheck) {
+        reset()
+        cancelCheckRef.current = cancelCheck
+        setIsModalOpen(true)
+        setCheckProgress({ done: 0, total: fileList.length })
+      }
+
       const isFileSizeValid = file.size < (settings.upload_max_filesize ?? 1024 * 1024 * 10)
       if (!isFileSizeValid) {
         const uploadFile = file as RcFile & UploadFile
@@ -154,19 +178,24 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
 
       await props.beforeUpload?.(file, fileList)
 
-      const shouldSkipCheck = typeof props.skipConflictCheck === 'object' && !isNil(props.skipConflictCheck)
-        ? props.skipConflictCheck.current === true
-        : props.skipConflictCheck === true
-
       if (shouldSkipCheck) {
         return true
       }
 
-      if (file.uid === fileList[0].uid) {
-        reset()
+      const wasCancelled = await resolveConflicts(fileList, (done, total) => { setCheckProgress({ done, total }) })
+
+      // Cancelled — the provider already closed the modal, LIST_IGNORE stops the upload.
+      if (wasCancelled) {
+        return AntUpload.LIST_IGNORE
       }
 
-      await resolveConflicts(fileList)
+      // Ant's `onBatchStart` returns early when every file is `LIST_IGNORE`, so no
+      // `onChange` follows to take the modal down. Close it here instead of leaving
+      // it stuck on the checking state.
+      if (isBatchStart && fileList.every(listedFile => shouldSkipFile(listedFile))) {
+        setCheckProgress(null)
+        setIsModalOpen(false)
+      }
 
       if (hasCheckError(file)) {
         return false
@@ -179,49 +208,9 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
       return true
     },
     onChange: async (info) => {
-      const formatErrorMessage = (errorData: unknown): string => {
-        const apiError = new ApiError({ data: errorData } as unknown as ApiErrorData)
-        const content = apiError.getContent()
+      setCheckProgress(null)
 
-        if (isNil(content)) {
-          return t('error.error_something_generic_went_wrong')
-        }
-
-        if (isString(content)) {
-          return content
-        }
-
-        return t(`error.${content.errorKey}`)
-      }
-
-      const updatedFileList = info.fileList.map(file => {
-        if (hasCheckError(file as RcFile)) {
-          const checkError = getCheckError(file as RcFile)
-          const errorFile: UploadFile = {
-            ...file,
-            status: 'error' as const,
-            response: formatErrorMessage(checkError),
-            error: checkError
-          }
-          return errorFile
-        }
-
-        if (file.status === 'error') {
-          const responseData = file.response ?? file.error
-
-          if (!isNil(responseData) && typeof responseData === 'object') {
-            const errorFile: UploadFile = {
-              ...file,
-              status: 'error' as const,
-              response: formatErrorMessage(responseData),
-              error: responseData
-            }
-            return errorFile
-          }
-        }
-
-        return file
-      })
+      const updatedFileList = mapUploadFileErrors(info.fileList, { t, hasCheckError, getCheckError })
 
       setFileList(updatedFileList)
       setIsModalOpen(true)
@@ -283,6 +272,7 @@ export const ModalUpload = (props: ModalUploadProps): React.JSX.Element => {
     setFileList([])
     setShowUploadError(false)
     setShowProcessing(false)
+    setCheckProgress(null)
     reset()
   }
 

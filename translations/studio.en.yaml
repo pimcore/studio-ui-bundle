@@ -83,6 +83,7 @@ asset.upload.overwrite: Overwrite
 asset.upload.keep-both: Keep both
 asset.upload.skip: Skip
 asset.upload.apply-to-all: Apply to all
+asset.upload.checking-duplicate-file-names: "Checking for duplicate file names ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Creating folders
 asset.upload.folder-drop.creating-folders-hint: Please wait while the folder structure is being created…
 upload.error.file-too-large: The file is bigger than the actual upload limit of the server.
@@ -2494,6 +2495,7 @@ icon-selector.custom-icon-path: Custom path
 icon-selector.custom-icon-path-placeholder: Add a custom path and submit
 icon-selector.Twemoji: Twemoji Library
 icon-selector.Pimcore: Pimcore Library
+icon-selector.AlternativeLibrary: Alternative Library
 operational-grid.csv-import.title: Import CSV
 operational-grid.csv-import.description: Enter CSV data. Each line represents a row, columns are separated by commas.
 operational-grid.csv-import.ok: Import

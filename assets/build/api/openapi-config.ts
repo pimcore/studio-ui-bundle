@@ -29,6 +29,12 @@ const config: ConfigFile = {
       pattern: 'assetGetGrid',
       type: 'query',
     },
+    // POST only because the file name list does not fit in a query string; it is a
+    // read, so it must not invalidate the Assets cache on every batch.
+    {
+      pattern: 'assetUploadBatchInfo',
+      type: 'query',
+    },
     {
       pattern: 'dataObjectGetGrid',
       type: 'query',

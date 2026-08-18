@@ -44,6 +44,11 @@ class PimcoreStudioUiExtension extends Extension implements PrependExtensionInte
 
         $container->setParameter('pimcore_studio_ui.url_path', rtrim($config['url_path'], '/'));
 
+        $container->setParameter(
+            'pimcore_studio_ui.asset_upload.max_parallel_uploads',
+            $config['asset_upload']['max_parallel_uploads']
+        );
+
         $container->getDefinition('pimcore_studio.static_resources_resolver.default')
             ->setArgument('$additionalCssFiles', array_unique($config['static_resources']['css']))
             ->setArgument('$additionalJsFiles', array_unique($config['static_resources']['js']));

@@ -83,6 +83,7 @@ asset.upload.overwrite: Overskriv
 asset.upload.keep-both: Behold begge
 asset.upload.skip: Hopp over
 asset.upload.apply-to-all: Bruk på alle
+asset.upload.checking-duplicate-file-names: "Sjekker etter dupliserte filnavn ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Oppretter mapper
 asset.upload.folder-drop.creating-folders-hint: Vennligst vent mens mappestrukturen opprettes…
 upload.error.file-too-large: Filen er større enn serverens gjeldende opplastingsgrense.
@@ -2494,6 +2495,7 @@ icon-selector.custom-icon-path: Egendefinert sti
 icon-selector.custom-icon-path-placeholder: Legg til en egendefinert sti og bekreft
 icon-selector.Twemoji: Twemoji-bibliotek
 icon-selector.Pimcore: Pimcore-bibliotek
+icon-selector.AlternativeLibrary: Alternativt bibliotek
 operational-grid.csv-import.title: Importer CSV
 operational-grid.csv-import.description: Angi CSV-data. Hver linje representerer en rad, kolonner er separert med komma.
 operational-grid.csv-import.ok: Importer

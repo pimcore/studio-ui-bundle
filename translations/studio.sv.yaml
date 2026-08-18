@@ -83,6 +83,7 @@ asset.upload.overwrite: Skriv över
 asset.upload.keep-both: Behåll båda
 asset.upload.skip: Hoppa över
 asset.upload.apply-to-all: Tillämpa på alla
+asset.upload.checking-duplicate-file-names: "Kontrollerar dubbletter av filnamn ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Skapar mappar
 asset.upload.folder-drop.creating-folders-hint: Vänta medan mappstrukturen skapas…
 upload.error.file-too-large: Filen är större än serverns nuvarande uppladdningsgräns.
@@ -2494,6 +2495,7 @@ icon-selector.custom-icon-path: Anpassad sökväg
 icon-selector.custom-icon-path-placeholder: Lägg till en anpassad sökväg och bekräfta
 icon-selector.Twemoji: Twemoji-bibliotek
 icon-selector.Pimcore: Pimcore-bibliotek
+icon-selector.AlternativeLibrary: Alternativt bibliotek
 operational-grid.csv-import.title: Importera CSV
 operational-grid.csv-import.description: Ange CSV-data. Varje rad representerar en rad, kolumner separeras med kommatecken.
 operational-grid.csv-import.ok: Importera
