@@ -105,6 +105,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
           disabled={ props.disabled === true || props.inherited === true }
           enableRowDrag={ props.enableRowDrag }
           enableRowVirtualizer={ props?.enableRowVirtualizer }
+          enableSorting
           handleDragEnd={ handleDragEnd }
           onUpdateCellData={ props.onUpdateCellData }
           resizable

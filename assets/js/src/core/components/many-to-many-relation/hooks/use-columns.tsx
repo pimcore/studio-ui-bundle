@@ -82,6 +82,7 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
 
   const actionsColumn = columnHelper.accessor('actions', {
     header: t('actions'),
+    enableSorting: false,
     size: 110,
     cell: (info) => {
       const rowIndex = info.row.index
