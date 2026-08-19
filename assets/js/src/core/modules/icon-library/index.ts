@@ -98,6 +98,7 @@ import childrenGrid from '@Pimcore/assets/icons/children-grid.inline.svg?react'
 import classIcon from '@Pimcore/assets/icons/class.inline.svg?react'
 import classificationStore from '@Pimcore/assets/icons/classification-store.inline.svg?react'
 import clearErase from '@Pimcore/assets/icons/clear-erase.inline.svg?react'
+import clearFilter from '@Pimcore/assets/icons/clear-filter.inline.svg?react'
 import closeFilled from '@Pimcore/assets/icons/close-filled.inline.svg?react'
 import closeOutline from '@Pimcore/assets/icons/close-outline.inline.svg?react'
 import close from '@Pimcore/assets/icons/close.inline.svg?react'
@@ -847,6 +848,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'clear-erase',
       component: clearErase
+    })
+    iconLibrary.register({
+      name: 'clear-filter',
+      component: clearFilter
     })
     iconLibrary.register({
       name: 'close-filled',

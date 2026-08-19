@@ -40,8 +40,7 @@ export interface GridRowProps {
   distributeWidth?: boolean
   size?: Exclude<GridProps['size'], undefined>
   // Serialized column sizing, used to invalidate the memoised row when a column is resized.
-  // Only set while row virtualization is on — see the note in Grid.renderRows.
-  columnSizingKey?: string
+  columnSizingKey: string
   rowStyle?: CSSProperties
   measureElement?: (node: HTMLElement | null) => void
   virtualIndex?: number

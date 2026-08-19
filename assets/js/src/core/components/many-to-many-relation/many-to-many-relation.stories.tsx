@@ -82,6 +82,41 @@ export const Disabled: Story = {
   }
 }
 
+/**
+ * Every filterable column offers a filter dropdown in its header. The filters
+ * of all columns are combined and applied to the rows in the grid.
+ */
+export const WithColumnFilters: Story = {
+  args: {
+    ...Default.args,
+    width: 600,
+    value: [
+      ...(Default.args?.value ?? []),
+      {
+        id: 3,
+        type: 'object',
+        subtype: 'Category',
+        fullPath: '/Categories/Furniture',
+        isPublished: true
+      },
+      {
+        id: 4,
+        type: 'document',
+        subtype: 'page',
+        fullPath: '/Home/Furniture',
+        isPublished: true
+      }
+    ]
+  }
+}
+
+export const WithoutColumnFilters: Story = {
+  args: {
+    ...Default.args,
+    enableColumnFilters: false
+  }
+}
+
 export const WithMaxItems: Story = {
   args: {
     ...Default.args,

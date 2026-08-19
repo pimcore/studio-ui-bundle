@@ -410,16 +410,9 @@ export const Grid = ({
     })
   }
 
-  const renderRows = (): React.JSX.Element[] => {
-    // Body cells carry inline widths. While row virtualization is on they are flex items
-    // rather than table cells, so `table-layout: fixed` no longer propagates the header
-    // widths down to them. Without this key the memoised rows keep their stale widths and
-    // resizing a column moves the header only (PEES-1355). Only passed while virtualizing so
-    // that non-virtualized grids are not re-rendered on every tick of a resize drag.
-    const columnSizingKey = isEnableRowVirtualizer
-      ? JSON.stringify(table.getState().columnSizing)
-      : undefined
+  const columnSizingKey = JSON.stringify(table.getState().columnSizing)
 
+  const renderRows = (): React.JSX.Element[] => {
     const rowsData = isEnableRowVirtualizer
       ? virtualRows.map(vRow => ({
           row: rowsList[vRow.index],
@@ -584,7 +577,7 @@ export const Grid = ({
         </div>
       </div>
     </ConfigProvider>
-  ), [table, modifiedCells, table.getTotalSize(), data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined, size, virtualRows, rowVirtualizer.getTotalSize(), visibleRowIds, virtualColumns])
+  ), [table, modifiedCells, table.getTotalSize(), columnSizingKey, data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined, size, virtualRows, rowVirtualizer.getTotalSize(), visibleRowIds, virtualColumns])
 
   function getModifiedRow (rowIndex: string): GridProps['modifiedCells'] {
     return memoModifiedCells.filter(({ rowIndex: rIndex }) => String(rIndex) === String(rowIndex)) ?? []

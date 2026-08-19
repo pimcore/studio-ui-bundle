@@ -346,6 +346,7 @@ grid.filter.to: Bis
 grid.filter.is: Ist
 grid.filter.less: Kleiner als
 grid.filter.more: Größer als
+grid.filter.column: '{{column}} filtern'
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
 grid.filter.file-size-unit.gb: GB
