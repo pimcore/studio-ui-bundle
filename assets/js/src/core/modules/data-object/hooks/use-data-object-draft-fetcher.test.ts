@@ -11,7 +11,7 @@
 const INITIATE_ACTION = { type: 'dataObjectGetById/initiate' }
 const mockDataObjectData = { id: 42, key: 'my-object' }
 
-const mockDispatch = jest.fn((action: any) => {
+const mockDispatch = jest.fn((action: unknown) => {
   if (action === INITIATE_ACTION) {
     return Promise.resolve({ data: mockDataObjectData, error: undefined })
   }
