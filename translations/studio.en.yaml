@@ -1020,6 +1020,8 @@ regex-flags-tooltip: "RegExp without delimiters, has to work in JS (Delimiter: #
 test-string: Test string
 regex-validation-error-message: The string does not match the required format.
 calculator-class: Calculator Class
+calculator-data: Calculator Data
+calculator-data-tooltip: Optional free-form data passed to the calculator, e.g. a plain value, a comma-separated list or a JSON encoded structure.
 calculator-expression: Calculator Expression
 calculator-type: Calculator Type
 calculator-type-tooltip: See the official documentation to learn more about defining expressions or classes.

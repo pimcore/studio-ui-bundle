@@ -1020,6 +1020,8 @@ regex-flags-tooltip: "RegExp uten skilletegn, må fungere i JS (Skilletegn: #)"
 test-string: Teststreng
 regex-validation-error-message: Strengen samsvarer ikke med det påkrevde formatet.
 calculator-class: Kalkulatorklasse
+calculator-data: Kalkulatordata
+calculator-data-tooltip: Valgfrie fritekstdata som sendes til kalkulatoren, f.eks. en enkel verdi, en kommaseparert liste eller en JSON-kodet struktur.
 calculator-expression: Kalkulatoruttrykk
 calculator-type: Kalkulatortype
 calculator-type-tooltip: Se den offisielle dokumentasjonen for å lære mer om å definere uttrykk eller klasser.

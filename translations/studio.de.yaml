@@ -1020,6 +1020,8 @@ regex-flags-tooltip: "RegExp ohne Begrenzer, muss in JS funktionieren (Begrenzer
 test-string: Testzeichenkette
 regex-validation-error-message: Die Zeichenkette entspricht nicht dem erforderlichen Format.
 calculator-class: Berechnungsklasse
+calculator-data: Berechnungsdaten
+calculator-data-tooltip: Optionale Freitext-Daten, die an die Berechnung übergeben werden, z. B. ein einfacher Wert, eine kommagetrennte Liste oder eine JSON-kodierte Struktur.
 calculator-expression: Berechnungsausdruck
 calculator-type: Berechnungstyp
 calculator-type-tooltip: Lesen Sie die offizielle Dokumentation, um mehr über das Definieren von Ausdrücken oder Klassen zu erfahren.

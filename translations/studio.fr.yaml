@@ -1020,6 +1020,8 @@ regex-flags-tooltip: "RegExp sans délimiteurs, doit fonctionner en JS (Délimit
 test-string: Chaîne de test
 regex-validation-error-message: La chaîne ne correspond pas au format requis.
 calculator-class: Classe du calculateur
+calculator-data: Données du calculateur
+calculator-data-tooltip: Données libres facultatives transmises au calculateur, p. ex. une valeur simple, une liste séparée par des virgules ou une structure encodée en JSON.
 calculator-expression: Expression du calculateur
 calculator-type: Type de calculateur
 calculator-type-tooltip: Consultez la documentation officielle pour en savoir plus sur la définition des expressions ou des classes.

@@ -1020,6 +1020,8 @@ regex-flags-tooltip: "RegExp utan avgränsare, måste fungera i JS (Avgränsare:
 test-string: Teststräng
 regex-validation-error-message: Strängen matchar inte det obligatoriska formatet.
 calculator-class: Kalkylatorklass
+calculator-data: Kalkylatordata
+calculator-data-tooltip: Valfria fritextdata som skickas till kalkylatorn, t.ex. ett enkelt värde, en kommaseparerad lista eller en JSON-kodad struktur.
 calculator-expression: Kalkylatoruttryck
 calculator-type: Kalkylatortyp
 calculator-type-tooltip: Se den officiella dokumentationen för att lära dig mer om att definiera uttryck eller klasser.

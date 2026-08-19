@@ -1020,6 +1020,8 @@ regex-flags-tooltip: "RegExp sin delimitadores, debe funcionar en JS (Delimitado
 test-string: Cadena de prueba
 regex-validation-error-message: La cadena no coincide con el formato requerido.
 calculator-class: Clase de calculadora
+calculator-data: Datos de calculadora
+calculator-data-tooltip: Datos opcionales de formato libre que se pasan a la calculadora, p. ej. un valor simple, una lista separada por comas o una estructura codificada en JSON.
 calculator-expression: Expresión de calculadora
 calculator-type: Tipo de calculadora
 calculator-type-tooltip: Consulte la documentación oficial para obtener más información sobre cómo definir expresiones o clases.
