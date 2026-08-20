@@ -1206,6 +1206,10 @@ element.rename: Gi nytt navn
 element.rename.label: Vennligst oppgi det nye navnet
 element.rename.validation: Vennligst oppgi et gyldig navn
 element.share-via-notification: Del via varsler
+element.move.folder.title: Flytt mappe
+element.move.folder.note: 'Merk: Alle elementene i denne mappen får en ny bane. Referanser til dem oppdateres, noe som kan ta litt tid for store mapper.'
+element.move.folder.question: Vil du virkelig flytte denne mappen?
+element.move.folder.ok: Flytt
 element.delete: Slett
 element.delete.confirmation.title: Slett element
 element.delete.confirmation.text: Vil du virkelig slette dette elementet?

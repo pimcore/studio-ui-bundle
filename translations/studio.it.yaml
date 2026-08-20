@@ -1206,6 +1206,10 @@ element.rename: Rinomina
 element.rename.label: Inserire il nuovo nome
 element.rename.validation: Inserire un nome valido
 element.share-via-notification: Condividi tramite notifiche
+element.move.folder.title: Sposta cartella
+element.move.folder.note: 'Attenzione: Tutti gli elementi in questa cartella riceveranno un nuovo percorso. I riferimenti a essi verranno aggiornati e per cartelle di grandi dimensioni l''operazione può richiedere tempo.'
+element.move.folder.question: Spostare questa cartella?
+element.move.folder.ok: Sposta
 element.delete: Elimina
 element.delete.confirmation.title: Elimina elemento
 element.delete.confirmation.text: Eliminare questo elemento?

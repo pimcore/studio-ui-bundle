@@ -1206,6 +1206,10 @@ element.rename: Byt namn
 element.rename.label: Ange det nya namnet
 element.rename.validation: Ange ett giltigt namn
 element.share-via-notification: Dela via aviseringar
+element.move.folder.title: Flytta mapp
+element.move.folder.note: 'Observera: Alla element i den här mappen får en ny sökväg. Referenser till dem uppdateras, vilket kan ta en stund för stora mappar.'
+element.move.folder.question: Vill du verkligen flytta den här mappen?
+element.move.folder.ok: Flytta
 element.delete: Ta bort
 element.delete.confirmation.title: Ta bort objekt
 element.delete.confirmation.text: Vill du verkligen ta bort det här objektet?

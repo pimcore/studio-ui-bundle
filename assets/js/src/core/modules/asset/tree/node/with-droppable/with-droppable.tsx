@@ -16,11 +16,13 @@ import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-co
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { isUndefined } from 'lodash'
 import { useDndAllowed } from '@Pimcore/modules/element/tree/node/with-droppable/use-dnd-allowed'
+import { useConfirmFolderMove } from '@Pimcore/modules/element/actions/move/use-confirm-folder-move'
 
 export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
   const DroppableNodeContent = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
     const { move } = useCopyPaste('asset')
     const { isSourceAllowed, isTargetAllowed } = useDndAllowed()
+    const { confirmFolderMove } = useConfirmFolderMove()
 
     if (props.metaData?.asset === undefined) {
       return (
@@ -46,11 +48,19 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
       if (!isSourceAllowed(sourceAsset) || !isAssetTargetAllowed(targetAsset)) {
         return
       }
-      move({
-        currentElement: { id: sourceAsset.id, parentId: sourceAsset.parentId },
-        targetElement: { id: targetAsset.id, parentId: targetAsset.parentId }
-      }).catch(() => {
-        trackError(new GeneralError('Item could not be moved'))
+
+      confirmFolderMove({
+        isFolderMove: sourceAsset.type === 'folder' && sourceAsset.parentId !== targetAsset.id,
+        sourceLabel: sourceAsset.fullPath,
+        targetLabel: targetAsset.fullPath,
+        onConfirm: () => {
+          move({
+            currentElement: { id: sourceAsset.id, parentId: sourceAsset.parentId },
+            targetElement: { id: targetAsset.id, parentId: targetAsset.parentId }
+          }).catch(() => {
+            trackError(new GeneralError('Item could not be moved'))
+          })
+        }
       })
     }
 

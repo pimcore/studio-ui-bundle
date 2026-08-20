@@ -1206,6 +1206,10 @@ element.rename: Rename
 element.rename.label: Please enter the new name
 element.rename.validation: Please enter a valid name
 element.share-via-notification: Share via Notifications
+element.move.folder.title: Move folder
+element.move.folder.note: 'Please note: All elements inside this folder get a new path. References to them are updated, which can take a while for large folders.'
+element.move.folder.question: Do you really want to move this folder?
+element.move.folder.ok: Move
 element.delete: Delete
 element.delete.confirmation.title: Delete item
 element.delete.confirmation.text: Do you really want to delete this item?

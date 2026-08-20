@@ -19,6 +19,7 @@ import { useDndAllowed } from '@Pimcore/modules/element/tree/node/with-droppable
 import { HotspotDroppable, type HotspotDroppableProps } from '@Pimcore/components/drag-and-drop/hotspot-droppable'
 import { useSorting } from '@Pimcore/modules/element/actions/sorting/use-sorting'
 import { useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
+import { useConfirmFolderMove } from '@Pimcore/modules/element/actions/move/use-confirm-folder-move'
 
 interface OnSortingDropProps {
   info: DragAndDropInfo
@@ -30,6 +31,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
     const { move } = useCopyPaste('data-object')
     const { move: moveByIndex } = useSorting('data-object')
     const { isSourceAllowed, isTargetAllowed } = useDndAllowed()
+    const { confirmFolderMove } = useConfirmFolderMove()
     const parentNode = useElementTreeNode(props.parentId ?? '-1')
     const hasParent = parentNode !== undefined
     let sortingMode = 'keyed'
@@ -59,11 +61,18 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
         return
       }
 
-      move({
-        currentElement: { id: sourceObject.id, parentId: sourceObject.parentId },
-        targetElement: { id: targetObject.id, parentId: targetObject.parentId }
-      }).catch(() => {
-        trackError(new GeneralError('Item could not be moved'))
+      confirmFolderMove({
+        isFolderMove: sourceObject.type === 'folder' && sourceObject.parentId !== targetObject.id,
+        sourceLabel: sourceObject.fullPath,
+        targetLabel: targetObject.fullPath,
+        onConfirm: () => {
+          move({
+            currentElement: { id: sourceObject.id, parentId: sourceObject.parentId },
+            targetElement: { id: targetObject.id, parentId: targetObject.parentId }
+          }).catch(() => {
+            trackError(new GeneralError('Item could not be moved'))
+          })
+        }
       })
     }
 
@@ -75,12 +84,19 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
         return
       }
 
-      moveByIndex({
-        currentElement: { id: sourceObject.id, parentId: sourceObject.parentId },
-        targetElement: { id: targetObject.id, parentId: targetObject.parentId },
-        newIndex: position === 'top' ? targetObject.index : targetObject.index + 1
-      }).catch(() => {
-        trackError(new GeneralError('Item could not be moved'))
+      confirmFolderMove({
+        isFolderMove: sourceObject.type === 'folder' && sourceObject.parentId !== targetObject.parentId,
+        sourceLabel: sourceObject.fullPath,
+        targetLabel: targetObject.fullPath,
+        onConfirm: () => {
+          moveByIndex({
+            currentElement: { id: sourceObject.id, parentId: sourceObject.parentId },
+            targetElement: { id: targetObject.id, parentId: targetObject.parentId },
+            newIndex: position === 'top' ? targetObject.index : targetObject.index + 1
+          }).catch(() => {
+            trackError(new GeneralError('Item could not be moved'))
+          })
+        }
       })
     }
 

@@ -18,6 +18,7 @@ import { isUndefined } from 'lodash'
 import { useDndAllowed } from '@Pimcore/modules/element/tree/node/with-droppable/use-dnd-allowed'
 import { HotspotDroppable, type HotspotDroppableProps } from '@Pimcore/components/drag-and-drop/hotspot-droppable'
 import { useSorting } from '@Pimcore/modules/element/actions/sorting/use-sorting'
+import { useConfirmFolderMove } from '@Pimcore/modules/element/actions/move/use-confirm-folder-move'
 
 interface OnSortingDropProps {
   info: DragAndDropInfo
@@ -29,6 +30,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
     const { move } = useCopyPaste('document')
     const { move: moveByIndex } = useSorting('document')
     const { isSourceAllowed, isTargetAllowed } = useDndAllowed()
+    const { confirmFolderMove } = useConfirmFolderMove()
 
     if (props.metaData?.document === undefined) {
       return (
@@ -51,11 +53,18 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
         return
       }
 
-      move({
-        currentElement: { id: sourceDocument.id, parentId: sourceDocument.parentId },
-        targetElement: { id: targetDocument.id, parentId: targetDocument.parentId }
-      }).catch(() => {
-        trackError(new GeneralError('Item could not be moved'))
+      confirmFolderMove({
+        isFolderMove: sourceDocument.type === 'folder' && sourceDocument.parentId !== targetDocument.id,
+        sourceLabel: sourceDocument.fullPath,
+        targetLabel: targetDocument.fullPath,
+        onConfirm: () => {
+          move({
+            currentElement: { id: sourceDocument.id, parentId: sourceDocument.parentId },
+            targetElement: { id: targetDocument.id, parentId: targetDocument.parentId }
+          }).catch(() => {
+            trackError(new GeneralError('Item could not be moved'))
+          })
+        }
       })
     }
 
@@ -76,12 +85,19 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
         return
       }
 
-      moveByIndex({
-        currentElement: { id: sourceDocument.id, parentId: sourceDocument.parentId },
-        targetElement: { id: targetDocument.id, parentId: targetDocument.parentId },
-        newIndex: position === 'top' ? targetDocument.index : targetDocument.index + 1
-      }).catch(() => {
-        trackError(new GeneralError('Item could not be moved'))
+      confirmFolderMove({
+        isFolderMove: sourceDocument.type === 'folder' && sourceDocument.parentId !== targetDocument.parentId,
+        sourceLabel: sourceDocument.fullPath,
+        targetLabel: targetDocument.fullPath,
+        onConfirm: () => {
+          moveByIndex({
+            currentElement: { id: sourceDocument.id, parentId: sourceDocument.parentId },
+            targetElement: { id: targetDocument.id, parentId: targetDocument.parentId },
+            newIndex: position === 'top' ? targetDocument.index : targetDocument.index + 1
+          }).catch(() => {
+            trackError(new GeneralError('Item could not be moved'))
+          })
+        }
       })
     }
 

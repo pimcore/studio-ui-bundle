@@ -1206,6 +1206,10 @@ element.rename: Umbenennen
 element.rename.label: Bitte geben Sie den neuen Namen ein
 element.rename.validation: Bitte geben Sie einen gültigen Namen ein
 element.share-via-notification: Über Benachrichtigungen teilen
+element.move.folder.title: Ordner verschieben
+element.move.folder.note: 'Bitte beachten: Alle Elemente in diesem Ordner erhalten einen neuen Pfad. Verweise darauf werden aktualisiert, was bei großen Ordnern eine Weile dauern kann.'
+element.move.folder.question: Möchten Sie diesen Ordner wirklich verschieben?
+element.move.folder.ok: Verschieben
 element.delete: Löschen
 element.delete.confirmation.title: Element löschen
 element.delete.confirmation.text: Möchten Sie dieses Element wirklich löschen?

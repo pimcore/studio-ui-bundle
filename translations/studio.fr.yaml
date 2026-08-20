@@ -1206,6 +1206,10 @@ element.rename: Renommer
 element.rename.label: Veuillez entrer le nouveau nom
 element.rename.validation: Veuillez entrer un nom valide
 element.share-via-notification: Partager via notifications
+element.move.folder.title: Déplacer le dossier
+element.move.folder.note: 'Remarque : Tous les éléments de ce dossier reçoivent un nouveau chemin. Les références vers ceux-ci sont mises à jour, ce qui peut prendre du temps pour les dossiers volumineux.'
+element.move.folder.question: Voulez-vous vraiment déplacer ce dossier ?
+element.move.folder.ok: Déplacer
 element.delete: Supprimer
 element.delete.confirmation.title: Supprimer l'élément
 element.delete.confirmation.text: Voulez-vous vraiment supprimer cet élément ?

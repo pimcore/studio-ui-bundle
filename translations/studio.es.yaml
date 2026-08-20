@@ -1206,6 +1206,10 @@ element.rename: Renombrar
 element.rename.label: Introduzca el nuevo nombre
 element.rename.validation: Introduzca un nombre válido
 element.share-via-notification: Compartir mediante notificaciones
+element.move.folder.title: Mover carpeta
+element.move.folder.note: 'Tenga en cuenta: Todos los elementos de esta carpeta obtendrán una nueva ruta. Las referencias a ellos se actualizarán, lo que puede tardar un rato en carpetas grandes.'
+element.move.folder.question: ¿Realmente desea mover esta carpeta?
+element.move.folder.ok: Mover
 element.delete: Eliminar
 element.delete.confirmation.title: Eliminar elemento
 element.delete.confirmation.text: ¿Realmente desea eliminar este elemento?
