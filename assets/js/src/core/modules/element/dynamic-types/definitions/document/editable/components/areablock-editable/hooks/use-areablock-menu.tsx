@@ -21,6 +21,14 @@ export interface UseAreablockMenuOptions {
   onAddArea: (areaType: string) => void
 }
 
+// The areablock toolbar (ToolStrip) raises itself to z-index 10000 while activated
+// (see tool-strip.styles.ts), which sits above antd's default popup z-index range.
+// The first entry in this menu is rendered directly beneath that toolbar, so its
+// tooltip (opening upward by default) would otherwise be painted behind it. Elements
+// that must render above the activated toolbar use 10001 elsewhere in the app
+// (e.g. editable-dialog.tsx, job-view.tsx) — match that convention here.
+const areablockMenuTooltipZIndex = 10001
+
 export interface UseAreablockMenuReturn {
   menuItems: MenuProps['items']
 }
@@ -35,7 +43,10 @@ export const useAreablockMenu = ({ config, onAddArea }: UseAreablockMenuOptions)
       return groupedTypes.map(areaType => ({
         key: areaType.type,
         label: (
-          <Tooltip title={ isUndefined(areaType.description) ? undefined : t(areaType.description) }>
+          <Tooltip
+            title={ isUndefined(areaType.description) ? undefined : t(areaType.description) }
+            zIndex={ areablockMenuTooltipZIndex }
+          >
             <span>{t(areaType.name)}</span>
           </Tooltip>
         ),
@@ -49,7 +60,10 @@ export const useAreablockMenu = ({ config, onAddArea }: UseAreablockMenuOptions)
       const children = areaTypes.map(areaType => ({
         key: areaType.type,
         label: (
-          <Tooltip title={ isUndefined(areaType.description) ? undefined : t(areaType.description) }>
+          <Tooltip
+            title={ isUndefined(areaType.description) ? undefined : t(areaType.description) }
+            zIndex={ areablockMenuTooltipZIndex }
+          >
             <span>{t(areaType.name)}</span>
           </Tooltip>
         ),
