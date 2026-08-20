@@ -26,7 +26,7 @@ export interface UseAreablockMenuOptions {
 // The first entry in this menu is rendered directly beneath that toolbar, so its
 // tooltip (opening upward by default) would otherwise be painted behind it. Elements
 // that must render above the activated toolbar use 10001 elsewhere in the app
-// (e.g. editable-dialog.tsx, job-view.tsx) — match that convention here.
+// (see editable-dialog.tsx) — match that convention here.
 const areablockMenuTooltipZIndex = 10001
 
 export interface UseAreablockMenuReturn {
