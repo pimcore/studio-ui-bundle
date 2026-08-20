@@ -29,6 +29,7 @@ import {
   SelectionType
 } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { isEmpty } from 'lodash'
+import { imageUploadAccept } from '@Pimcore/modules/asset/utils/upload-accept'
 
 export interface ImageValue {
   type: 'asset'
@@ -78,7 +79,7 @@ export const Image = (props: ImageProps): React.JSX.Element => {
   const handleUpload = useCallback(() => {
     triggerUpload({
       targetFolderPath: props.uploadPath ?? '',
-      accept: 'image/*',
+      accept: imageUploadAccept,
       multiple: false,
       maxItems: 1,
       onSuccess: async (assets) => {
@@ -121,7 +122,7 @@ export const Image = (props: ImageProps): React.JSX.Element => {
       }
     >
       <InlineUpload
-        accept="image/*"
+        accept={ imageUploadAccept }
         assetType="image"
         disabled={ props.disabled }
         onSuccess={ handleFileSystemUpload }

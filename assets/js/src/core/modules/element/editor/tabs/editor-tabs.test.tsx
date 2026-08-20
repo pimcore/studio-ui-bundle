@@ -8,6 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+// EditorTabs is shared by the Asset, Document, and Data Object editors; its tab-selection
+// logic never branches on element type, so `elementType: 'data-object'` below is incidental
+// and this coverage applies equally to all three.
 const mockSetActiveTab = jest.fn()
 const mockElementDraftState: { activeTab: string | null, element: Partial<IElementDraft> } = {
   activeTab: null,
