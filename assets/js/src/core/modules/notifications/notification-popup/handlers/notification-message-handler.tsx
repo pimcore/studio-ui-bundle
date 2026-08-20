@@ -16,7 +16,7 @@ import { store } from '@Pimcore/app/store'
 import { selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 
-interface NotificationMessagePayload {
+export interface NotificationMessagePayload {
   unreadNotificationsCount: number
   notification: {
     id: number
@@ -46,7 +46,8 @@ export class NotificationMessageHandler extends AbstractMessageHandler {
 
   shouldHandle (message: AbstractMercureMessage): boolean {
     const user = selectCurrentUser(store.getState())
-    const payload = message.payload as any
+    // shouldHandle runs on every Mercure message, so the shape is asserted loosely and guarded below.
+    const payload = message.payload as Partial<NotificationMessagePayload>
 
     return payload?.notification?.recipient === user.id && !isNil(payload?.notification) && !isNil(payload?.unreadNotificationsCount)
   }

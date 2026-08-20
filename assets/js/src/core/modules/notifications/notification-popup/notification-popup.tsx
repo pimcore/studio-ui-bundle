@@ -11,7 +11,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useGlobalMessageBus } from '@Pimcore/modules/global-message-bus/hooks/use-global-message-bus'
 import { useNotification } from '@Pimcore/components/notification/useNotification'
-import { NotificationMessageHandler } from './handlers/notification-message-handler'
+import { NotificationMessageHandler, type NotificationMessagePayload } from './handlers/notification-message-handler'
 import { NotificationPopupContent, type OpenNotification } from './notification-popup-content'
 import { type AbstractMercureMessage } from '@Pimcore/modules/background-processor/process/abstract-mercure-process'
 import { useTranslation } from 'react-i18next'
@@ -26,7 +26,8 @@ export const NotificationPopup = (): React.JSX.Element => {
   const POPUP_KEY = 'notification-popup-group'
 
   const handleMessage = useCallback((message: AbstractMercureMessage) => {
-    const payload = message.payload as any
+    // Only reached after the handler's shouldHandle confirmed the shape.
+    const payload = message.payload as NotificationMessagePayload
     const notificationData = payload.notification
 
     setOpenNotifications((prev) => {

@@ -95,7 +95,10 @@ export const useOptimisticUpdate = (): UseOptimisticUpdateProps => {
                 }
               )
             )
-          } catch { }
+          } catch (error) {
+            // Best-effort cache update; a failure must not break the click, but shouldn't be silent.
+            console.error('Optimistic notification cache update failed', error)
+          }
         }
       }
 
@@ -136,7 +139,10 @@ export const useOptimisticUpdate = (): UseOptimisticUpdateProps => {
                 }
               )
             )
-          } catch { }
+          } catch (error) {
+            // Best-effort cache update; a failure must not break the click, but shouldn't be silent.
+            console.error('Optimistic notification cache update failed', error)
+          }
         }
       }
 
