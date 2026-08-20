@@ -11,9 +11,11 @@
 import { Form } from '@Pimcore/components/form/form'
 import { usePipelineConfig } from '@Pimcore/components/pipeline/provider/pipeline-config/use-pipeline-config'
 import { Select } from '@Pimcore/components/select/select'
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AvailableColumnsContext } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
+import { useItem } from '@Pimcore/components/form/item/provider/item/use-item'
+import { useKeyedList } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list'
 import { ClassificationStoreValueControl, useClassificationStoreFieldActions } from '../../classification-store/classification-store-value-control'
 import { type ClassificationStoreFieldOption, resolveClassificationStoreStoreId } from '../../classification-store/classification-store-field-utils'
 
@@ -51,11 +53,28 @@ export const DynamicTypePipelineGridSourceFieldsSimpleFieldComponent = (): React
   const { config } = usePipelineConfig()
   const { t } = useTranslation()
   const availableColumnsContext = useContext(AvailableColumnsContext)
+  const { name } = useItem()
+  const { operations, getValueByKey } = useKeyedList()
 
   const sourceFieldConfig = config?.simpleField
   if (sourceFieldConfig === undefined) {
     throw new Error('Source field configuration is missing')
   }
+
+  const namePath = useMemo(() => (Array.isArray(name) ? name : [name]), [name])
+
+  // Form.Item's `initialValue` is only ever applied to the antd/keyed-list value store
+  // when the field actually fires `onChange` — a pre-selected option the user never
+  // touches never gets committed, so it silently disappears from the saved config (see
+  // pimcore/platform-version#296). Force-commit the pre-selected first option once, the
+  // same way the classification-store field actions persist a value without an onChange
+  // event (see useClassificationStoreFieldActions#clearValue): via a real (non-initial)
+  // `operations.update` call, so it survives a save even when left unchanged.
+  useEffect(() => {
+    if (getValueByKey('field') === undefined && sourceFieldConfig[0]?.key !== undefined) {
+      operations.update([...namePath, 'field'], sourceFieldConfig[0].key, false)
+    }
+  }, [])
 
   const resolveField = (fieldKey: string): { storeId: number } | undefined => {
     const storeId = resolveClassificationStoreStoreId(sourceFieldConfig as ClassificationStoreFieldOption[], fieldKey)
@@ -102,7 +121,6 @@ export const DynamicTypePipelineGridSourceFieldsSimpleFieldComponent = (): React
   return (
     <>
       <Form.Item
-        initialValue={ sourceFieldConfig[0]?.key }
         label={ t('field') }
         name={ 'field' }
       >
