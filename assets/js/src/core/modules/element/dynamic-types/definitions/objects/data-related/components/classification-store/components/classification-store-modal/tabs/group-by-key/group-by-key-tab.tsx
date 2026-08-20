@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createColumnHelper } from '@tanstack/react-table'
 import {
@@ -34,18 +34,23 @@ export const GroupByKeyTab = (props: GroupByKeyTabProps): React.JSX.Element => {
   const hasModalContext = useClassificationStoreModalOptional({}) !== undefined
   const { t } = useTranslation()
 
-  const columns = [
+  const columns = useMemo(() => [
     columnHelper.accessor(
       row => `${row.groupId}-${row.keyId}`,
       {
         id: 'groupId-keyId',
-        header: t('classification-store.column.id')
+        header: t('classification-store.column.id'),
+        size: 100
       }
     ),
-    columnHelper.accessor('groupName', { header: t('classification-store.column.group') }),
-    columnHelper.accessor('keyName', { header: t('classification-store.column.name') }),
-    columnHelper.accessor('keyDescription', { header: t('classification-store.column.description') })
-  ]
+    columnHelper.accessor('groupName', { header: t('classification-store.column.group'), size: 200 }),
+    columnHelper.accessor('keyName', { header: t('classification-store.column.name'), size: 200 }),
+    columnHelper.accessor('keyDescription', {
+      header: t('classification-store.column.description'),
+      meta: { autoWidth: true },
+      size: 250
+    })
+  ], [t])
 
   return (
     <>
