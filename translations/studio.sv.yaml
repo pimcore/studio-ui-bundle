@@ -690,6 +690,7 @@ notifications.settings.column.type: Aviseringstyp
 notifications.settings.column.subscribed: Meddela mig
 notifications.settings.not-available: Inte tillgängligt för denna typ
 notifications.settings.save: Spara
+notifications.settings.saved: Aviseringsinställningar sparade
 notifications.settings.discard: Kassera
 notifications.settings.discard.title: Vill du kassera dina osparade ändringar?
 notifications.settings.discard.confirm: Kassera

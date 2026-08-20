@@ -690,6 +690,7 @@ notifications.settings.column.type: Benachrichtigungstyp
 notifications.settings.column.subscribed: Benachrichtigen
 notifications.settings.not-available: Für diesen Typ nicht verfügbar
 notifications.settings.save: Speichern
+notifications.settings.saved: Benachrichtigungseinstellungen gespeichert
 notifications.settings.discard: Verwerfen
 notifications.settings.discard.title: Nicht gespeicherte Änderungen verwerfen?
 notifications.settings.discard.confirm: Verwerfen

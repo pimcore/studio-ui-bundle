@@ -690,6 +690,7 @@ notifications.settings.column.type: Type de notification
 notifications.settings.column.subscribed: Me notifier
 notifications.settings.not-available: Non disponible pour ce type
 notifications.settings.save: Enregistrer
+notifications.settings.saved: Paramètres de notification enregistrés
 notifications.settings.discard: Abandonner
 notifications.settings.discard.title: Abandonner vos modifications non enregistrées ?
 notifications.settings.discard.confirm: Abandonner

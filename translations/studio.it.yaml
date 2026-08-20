@@ -690,6 +690,7 @@ notifications.settings.column.type: Tipo di notifica
 notifications.settings.column.subscribed: Notificami
 notifications.settings.not-available: Non disponibile per questo tipo
 notifications.settings.save: Salva
+notifications.settings.saved: Impostazioni notifiche salvate
 notifications.settings.discard: Scarta
 notifications.settings.discard.title: Scartare le modifiche non salvate?
 notifications.settings.discard.confirm: Scarta
