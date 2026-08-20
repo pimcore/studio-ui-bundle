@@ -317,7 +317,7 @@ export type UserGetShareCollectionApiResponse = /** status 200 List of users for
 };
 export type UserGetShareCollectionApiArg = void;
 export type UserGetObjectDependenciesApiResponse =
-    /** status 200 Paginated object dependencies with total count as header param. */ {
+    /** status 200 Paginated object dependencies with total count returned both as a header param and as `totalItems` in the response body. */ {
         totalItems: number;
         items: DependencyToAnObject[];
     };
