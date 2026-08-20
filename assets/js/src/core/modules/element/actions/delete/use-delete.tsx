@@ -42,7 +42,7 @@ export interface UseDeleteHookReturn {
    * Deletes without the built-in confirmation modal, for callers that supply their own confirmation
    * (e.g. a bundle's popconfirm). Runs the same delete job and side effects as `deleteElement`.
    */
-  deleteElementById: (id: number, parentId?: number, onFinish?: () => void) => void
+  deleteElementWithoutConfirmation: (id: number, parentId?: number, onFinish?: () => void) => void
   deleteTreeContextMenuItem: (node: TreeNodeProps, onFinish?: () => void) => ItemType
   deleteContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
   deleteGridContextMenuItem: (row: any) => ItemType | undefined
@@ -202,13 +202,13 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
     )
   }
 
-  const deleteElementById = (id: number, parentId?: number, onFinish?: () => void): void => {
+  const deleteElementWithoutConfirmation = (id: number, parentId?: number, onFinish?: () => void): void => {
     void runDeleteJob(id, parentId, onFinish)
   }
 
   return {
     deleteElement,
-    deleteElementById,
+    deleteElementWithoutConfirmation,
     deleteTreeContextMenuItem,
     deleteContextMenuItem,
     deleteGridContextMenuItem,
