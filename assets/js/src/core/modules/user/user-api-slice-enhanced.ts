@@ -79,6 +79,9 @@ const api = baseApi.enhanceEndpoints({
           ...providingTags.USERS()
         ]
       }
+    },
+    userGetObjectDependencies: {
+      providesTags: (result, error, args) => providingTags.USER_DETAIL(args.id)
     }
   }
 })
@@ -105,7 +108,8 @@ export const {
   useUserGetTreeQuery,
   useUserTokenLinkGetQuery,
   useLazyUserTokenLinkGetQuery,
-  useUserGetShareCollectionQuery
+  useUserGetShareCollectionQuery,
+  useUserGetObjectDependenciesQuery
 } = api
 
 export { api }

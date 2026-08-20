@@ -157,6 +157,19 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/users-share-list` }),
                 providesTags: ["User Management"],
             }),
+            userGetObjectDependencies: build.query<
+                UserGetObjectDependenciesApiResponse,
+                UserGetObjectDependenciesApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/user/${queryArg.id}/object-dependencies`,
+                    params: {
+                        page: queryArg.page,
+                        pageSize: queryArg.pageSize,
+                    },
+                }),
+                providesTags: ["User Management"],
+            }),
         }),
         overrideExisting: false,
     });
@@ -303,6 +316,19 @@ export type UserGetShareCollectionApiResponse = /** status 200 List of users for
     items: SimpleUser[];
 };
 export type UserGetShareCollectionApiArg = void;
+export type UserGetObjectDependenciesApiResponse =
+    /** status 200 Paginated object dependencies with total count as header param. */ {
+        totalItems: number;
+        items: DependencyToAnObject[];
+    };
+export type UserGetObjectDependenciesApiArg = {
+    /** Id of the user */
+    id: number;
+    /** Page number */
+    page: number;
+    /** Number of items per page */
+    pageSize: number;
+};
 export type TreeNode = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -461,20 +487,6 @@ export type UserDocumentWorkspace2 = UserWorkspace & {
     /** Unpublish */
     unpublish: boolean;
 };
-export type DependencyToAnObject = {
-    /** ID of the object */
-    id: number;
-    /** Path to the object */
-    path: string;
-    /** Subtype of the object */
-    subtype: string;
-};
-export type UserObjectDependencies = {
-    /** Dependencies to objects */
-    dependencies: DependencyToAnObject[];
-    /** If is has hidden dependencies */
-    hasHidden: boolean;
-};
 export type User = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -536,8 +548,6 @@ export type User = {
     dataObjectWorkspaces: UserDocumentWorkspace[];
     /** Document Workspace */
     documentWorkspaces: UserDocumentWorkspace2[];
-    /** Object Dependencies */
-    objectDependencies: UserObjectDependencies;
     /** Allowed studio perspectives */
     perspectives: PerspectiveConfig[];
 };
@@ -643,6 +653,14 @@ export type UserProfile = {
     /** Key Bindings */
     keyBindings: KeyBindingForAUser[];
 };
+export type DependencyToAnObject = {
+    /** ID of the object */
+    id: number;
+    /** Path to the object */
+    path: string;
+    /** Subtype of the object */
+    subtype: string;
+};
 export const {
     useUserCloneByIdMutation,
     useUserCreateMutation,
@@ -667,4 +685,5 @@ export const {
     useUserUploadImageMutation,
     useUserGetTreeQuery,
     useUserGetShareCollectionQuery,
+    useUserGetObjectDependenciesQuery,
 } = injectedRtkApi;
