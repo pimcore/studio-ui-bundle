@@ -24,7 +24,12 @@ export interface OperationalGridProps extends Omit<GridProps, 'data' | 'onUpdate
 }
 
 const OperationalGrid = (props: OperationalGridProps): React.JSX.Element => {
-  const { value = [], onChange, onColumnsChange, children, onUpdateCellData, columns = [], ...gridProps } = props
+  const { value: valueProp, onChange, onColumnsChange, children, onUpdateCellData, columns = [], ...gridProps } = props
+  // a default parameter only kicks in for `undefined`, not for an explicit `null` (e.g. a
+  // class definition field whose options were never configured serializes as `null`) - guard
+  // it explicitly so every consumer of this grid (add/delete/reorder row, csv import, ...)
+  // always operates on an array
+  const value = valueProp ?? []
 
   const defaultOnUpdateCellData: GridProps['onUpdateCellData'] = (event) => {
     const { columnId, rowIndex, value: newCellValue } = event
