@@ -12,7 +12,7 @@ import React, { type ReactElement, type Ref, type ComponentProps, forwardRef } f
 import { Draggable } from '@Pimcore/components/drag-and-drop/draggable'
 import { type Asset } from '../../asset-api-slice-enhanced'
 import { type TreeNode } from '@Pimcore/components/element-tree/node/tree-node'
-import { isString } from 'lodash'
+import { isString, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
 export const withDraggable = (Component: typeof TreeNode): typeof TreeNode => {
@@ -32,14 +32,17 @@ export const withDraggable = (Component: typeof TreeNode): typeof TreeNode => {
     const title = isString(metaData?.filename) && metaData?.filename !== '' ? metaData?.filename : t('home')
 
     return (
-      <Draggable
-        info={ { icon: props.icon, title, type: 'asset', data: { ...metaData } } }
-      >
-        <Component
-          { ...props }
-          ref={ ref }
-        />
-      </Draggable>
+      <Component
+        { ...props }
+        ref={ ref }
+        wrapNode={ (children) => (
+          <Draggable
+            info={ { icon: props.icon, title, type: 'asset', data: { ...metaData } } }
+          >
+            {!isUndefined(props.wrapNode) ? props.wrapNode(children) : children}
+          </Draggable>
+        ) }
+      />
     )
   }
 
