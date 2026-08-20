@@ -22,7 +22,7 @@ export interface SelectOption {
 }
 
 export interface FieldDefinitionSelectOptionsGridProps {
-  value?: SelectOption[]
+  value?: SelectOption[] | null
   onChange?: (value: SelectOption[]) => void
   className?: string
   autoWidth?: boolean

@@ -16,7 +16,7 @@ import { useOperations } from './hooks/use-operations'
 import { type ColumnDef } from '@tanstack/react-table'
 
 export interface OperationalGridProps extends Omit<GridProps, 'data' | 'onUpdateCellData'> {
-  value?: GridProps['data']
+  value?: GridProps['data'] | null
   onChange?: (value: GridProps['data']) => void
   onColumnsChange?: (columns: Array<ColumnDef<any>>) => void
   children: React.ReactNode

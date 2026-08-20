@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { render } from '@testing-library/react'
-import { OperationalGrid } from './operational-grid'
+import { OperationalGrid, type OperationalGridProps } from './operational-grid'
 import { type UseOperationsReturn } from './hooks/use-operations'
 
 // OperationalGrid.Grid pulls in the full data grid (tanstack table/virtualizer, DI, antd, ...)
@@ -22,12 +22,13 @@ jest.mock('../grid/grid', () => ({
 
 let operations: UseOperationsReturn
 
-const renderOperationalGrid = (value: any, onChange?: (value: any[]) => void): ReturnType<typeof render> => (
+const renderOperationalGrid = (value: OperationalGridProps['value'], onChange?: (value: any[]) => void, extraProps?: Partial<OperationalGridProps>): ReturnType<typeof render> => (
   render(
     <OperationalGrid
       columns={ [] }
       onChange={ onChange }
       value={ value }
+      { ...extraProps }
     >
       <OperationalGrid.Operations>
         {(ops) => {
@@ -63,10 +64,15 @@ describe('OperationalGrid (regression platform-version#260)', () => {
     expect(onChange).toHaveBeenCalledWith([{ key: '', value: '' }])
   })
 
-  it('deleteSelectedRows and getSelectedRowsData do not throw when value is null', () => {
-    renderOperationalGrid(null, jest.fn())
+  it('deleteSelectedRows and getSelectedRowsData operate on the normalized empty array when value is null and rows are selected', () => {
+    const onChange = jest.fn()
+
+    // without a non-empty row selection both operations return early and never touch `value`,
+    // so the selection is what makes this test actually reach `value.filter` on the null value
+    renderOperationalGrid(null, onChange, { selectedRows: { 0: true } })
 
     expect(() => { operations.deleteSelectedRows() }).not.toThrow()
+    expect(onChange).toHaveBeenCalledWith([])
     expect(operations.getSelectedRowsData()).toEqual([])
   })
 
