@@ -11,15 +11,19 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tooltip } from 'antd'
-import { isEmpty, isNull, isUndefined } from 'lodash'
+import { isEmpty, isNil, isNull, isUndefined } from 'lodash'
 import cn from 'classnames'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { ModalUploadButton } from '@Pimcore/components/modal-upload/components/modal-upload-button/modal-upload-button'
+import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
+import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 import {
   createElementSelectorAreas,
   createElementSelectorConfig,
+  isAllowedSubType,
   type IRelationAllowedTypesDataComponent
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
 import { mapToLegacyElementType } from '@Pimcore/modules/element/utils/element-type'
@@ -49,6 +53,14 @@ export interface PathTextInputValue {
 
 export interface ManyToOneRelationClassDefinitionProps {
   assetInlineDownloadAllowed?: boolean
+  /**
+   * Renders an upload button that creates a new asset and assigns it as the
+   * relation. Opt-in, because most hosts of this component are pickers for
+   * existing elements rather than asset fields.
+   */
+  assetInlineUploadAllowed?: boolean
+  /** Folder the inline upload puts the new asset into. Defaults to the asset root. */
+  assetUploadPath?: string | null
   allowToClearRelation?: boolean
   allowPathTextInput?: boolean
   showOpenForTextInput?: boolean
@@ -79,6 +91,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
   const { openElement, mapToElementType } = useElementHelper()
   const { download } = useDownload()
   const fieldWidth = useFieldWidth()
+  const alertModal = useAlertModal()
 
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -99,6 +112,31 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
   }
 
   const isEnabled = props.disabled !== true && props.readOnly !== true
+
+  const inlineUploadEnabled = props.assetInlineUploadAllowed === true && props.assetsAllowed === true && isEnabled
+
+  const handleUploadSuccess = async (assets: Asset[]): Promise<void> => {
+    const asset = assets[0]
+
+    if (isNil(asset)) {
+      return
+    }
+
+    // The asset already exists at this point - the server created it and decided its
+    // type. Assigning it anyway would put a value into the relation that neither the
+    // element selector nor drag and drop would have accepted.
+    if (!isAllowedSubType('asset', asset.type ?? '', props)) {
+      alertModal.warn({ content: t('many-to-one-relation.upload.subtype-not-allowed') })
+      return
+    }
+
+    handleValueChange({
+      type: 'asset',
+      id: asset.id,
+      subtype: asset.type ?? undefined,
+      fullPath: asset.fullPath ?? ''
+    })
+  }
 
   const { hideOpenButton, ...inputProps } = props
 
@@ -185,6 +223,16 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
               }
             } }
             type="default"
+          />
+        )}
+
+        {inlineUploadEnabled && (
+          <ModalUploadButton
+            key="upload"
+            maxItems={ 1 }
+            multiple={ false }
+            onSuccess={ handleUploadSuccess }
+            targetFolderPath={ props.assetUploadPath ?? undefined }
           />
         )}
 

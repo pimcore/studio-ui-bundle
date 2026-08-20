@@ -1289,6 +1289,7 @@ relations.subtype: Subtipo
 relations.classname: Clase
 relations.fullpath: Ruta completa
 relations.remove-all.confirm: ¿Realmente desea eliminar todas las relaciones?
+relations.upload.subtype-not-allowed: Los assets subidos cuyo tipo no está permitido en esta relación no se asignaron.
 relation: relación
 items-limit-reached: Se ha alcanzado el número máximo de elementos ({{maxItems}}).
 actions: Acciones
@@ -1932,6 +1933,7 @@ video.add-target: Añada un vídeo aquí
 pdf-editable.dnd-target: Suelte un asset de documento aquí
 many-to-one-relation.drop-placeholder: Suelte un elemento aquí
 many-to-one-relation.drop-placeholder-text-input: Suelte un elemento aquí o introduzca un valor
+many-to-one-relation.upload.subtype-not-allowed: El asset se subió pero no se asignó, porque esta relación no permite su tipo.
 reverse-object-relation.owner-hint: El objeto actual no es el propietario de estas relaciones, realizar cambios aquí puede hacer que el guardado del objeto sea lento.
 reverse-object-relation.owner-class: Clase propietaria
 reverse-object-relation.owner-field: Campo propietario

@@ -1289,6 +1289,7 @@ relations.subtype: Subtype
 relations.classname: Class
 relations.fullpath: Full Path
 relations.remove-all.confirm: Do you really want to delete all relations?
+relations.upload.subtype-not-allowed: Uploaded assets whose type this relation does not allow were not assigned.
 relation: Relation
 items-limit-reached: The maximum number of items ({{maxItems}}) has been reached.
 actions: Actions
@@ -1932,6 +1933,7 @@ video.add-target: Add a video here
 pdf-editable.dnd-target: Drop a document asset here
 many-to-one-relation.drop-placeholder: Drop an item here
 many-to-one-relation.drop-placeholder-text-input: Drop an item here or enter a value
+many-to-one-relation.upload.subtype-not-allowed: The asset was uploaded but not assigned, because this relation does not allow its type.
 reverse-object-relation.owner-hint: The current object is not the owner of these relations, making changes here might make saving the object slow.
 reverse-object-relation.owner-class: Owner class
 reverse-object-relation.owner-field: Owner field

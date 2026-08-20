@@ -24,8 +24,20 @@ jest.mock('@Pimcore/components/modal/form-modal/hooks/use-form-modal', () => ({
   useFormModal: () => ({ confirm: jest.fn() })
 }))
 
+// Records the props so the upload guard can be driven through the real `onSuccess`.
+let mockUploadButtonProps: Record<string, any> | null = null
+
 jest.mock('@Pimcore/components/modal-upload/components/modal-upload-button/modal-upload-button', () => ({
-  ModalUploadButton: () => null
+  ModalUploadButton: (props: Record<string, any>) => {
+    mockUploadButtonProps = props
+    return null
+  }
+}))
+
+const mockAlertWarn = jest.fn()
+
+jest.mock('@Pimcore/components/modal/alert-modal/hooks/use-alert-modal', () => ({
+  useAlertModal: () => ({ warn: mockAlertWarn })
 }))
 
 jest.mock('@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button', () => ({
@@ -63,7 +75,13 @@ const appliedFilter = {
   locale: null
 }
 
-const renderToolbar = (initialValues?: Record<string, unknown>): void => {
+const renderToolbar = (
+  initialValues?: Record<string, unknown>,
+  overrides: Partial<ManyToManyRelationToolbarProps> = {}
+): void => {
+  mockUploadButtonProps = null
+  mockAlertWarn.mockClear()
+
   const props: ManyToManyRelationToolbarProps = {
     addAssets: async () => {},
     addItems: () => {},
@@ -71,7 +89,8 @@ const renderToolbar = (initialValues?: Record<string, unknown>): void => {
     empty: () => {},
     enableUpload: false,
     onSearch: () => {},
-    disabled: true
+    disabled: true,
+    ...overrides
   }
 
   render(
@@ -103,5 +122,53 @@ describe('ManyToManyRelationToolbar clear filters button', () => {
     fireEvent.click(screen.getByLabelText(CLEAR_FILTERS_LABEL))
 
     expect(screen.queryByLabelText(CLEAR_FILTERS_LABEL)).not.toBeInTheDocument()
+  })
+})
+
+describe('ManyToManyRelationToolbar inline upload guard', () => {
+  const image = { id: 1, type: 'image', fullPath: '/examples/image.jpg' }
+  const pdf = { id: 2, type: 'document', fullPath: '/examples/spec.pdf' }
+
+  const renderUploadToolbar = (
+    overrides: Partial<ManyToManyRelationToolbarProps> = {}
+  ): jest.Mock => {
+    const addAssets = jest.fn(async () => {})
+
+    renderToolbar(undefined, {
+      addAssets,
+      disabled: false,
+      enableUpload: true,
+      assetsAllowed: true,
+      ...overrides
+    })
+
+    return addAssets
+  }
+
+  it('assigns every uploaded asset when the relation restricts no subtype', async () => {
+    const addAssets = renderUploadToolbar()
+
+    await mockUploadButtonProps?.onSuccess([image, pdf])
+
+    expect(addAssets).toHaveBeenCalledWith([image, pdf])
+    expect(mockAlertWarn).not.toHaveBeenCalled()
+  })
+
+  it('drops the uploaded assets whose type the relation disallows', async () => {
+    const addAssets = renderUploadToolbar({ allowedAssetTypes: ['image'] })
+
+    await mockUploadButtonProps?.onSuccess([image, pdf])
+
+    expect(addAssets).toHaveBeenCalledWith([image])
+    expect(mockAlertWarn).toHaveBeenCalledWith({ content: 'relations.upload.subtype-not-allowed' })
+  })
+
+  it('does not touch the value when every uploaded asset is disallowed', async () => {
+    const addAssets = renderUploadToolbar({ allowedAssetTypes: ['image'] })
+
+    await mockUploadButtonProps?.onSuccess([pdf])
+
+    expect(addAssets).not.toHaveBeenCalled()
+    expect(mockAlertWarn).toHaveBeenCalledWith({ content: 'relations.upload.subtype-not-allowed' })
   })
 })
