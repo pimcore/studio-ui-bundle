@@ -487,6 +487,20 @@ export type UserDocumentWorkspace2 = UserWorkspace & {
     /** Unpublish */
     unpublish: boolean;
 };
+export type DependencyToAnObject = {
+    /** ID of the object */
+    id: number;
+    /** Path to the object */
+    path: string;
+    /** Subtype of the object */
+    subtype: string;
+};
+export type UserObjectDependenciesPreview = {
+    /** Total number of objects referencing this user */
+    totalItems: number;
+    /** Preview of dependencies to objects */
+    dependencies: DependencyToAnObject[];
+};
 export type User = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -548,6 +562,8 @@ export type User = {
     dataObjectWorkspaces: UserDocumentWorkspace[];
     /** Document Workspace */
     documentWorkspaces: UserDocumentWorkspace2[];
+    /** Object Dependencies Preview */
+    objectDependencies: UserObjectDependenciesPreview;
     /** Allowed studio perspectives */
     perspectives: PerspectiveConfig[];
 };
@@ -652,14 +668,6 @@ export type UserProfile = {
     contentLanguages: object;
     /** Key Bindings */
     keyBindings: KeyBindingForAUser[];
-};
-export type DependencyToAnObject = {
-    /** ID of the object */
-    id: number;
-    /** Path to the object */
-    path: string;
-    /** Subtype of the object */
-    subtype: string;
 };
 export const {
     useUserCloneByIdMutation,
