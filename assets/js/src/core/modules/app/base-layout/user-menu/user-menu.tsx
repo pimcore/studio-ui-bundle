@@ -94,8 +94,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
           showZero
           styles={ {
             indicator: {
-              // Inside the menu the count always shows, but a zero is not news — it goes grey
-              // rather than wearing the accent colour.
+              // Always shown here, but a zero goes grey rather than wearing the accent colour.
               background: notificationCount > 0 ? token.colorPrimary : token.colorTextQuaternary,
               width: 20,
               height: 20,
@@ -113,8 +112,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       </div>,
       onClick: () => { openMainWidget(NOTIFICATIONS) },
       hidden: !isAllowed(UserPermission.Notifications),
-      // Both actions sit on the row and open something other than the bell, so each stops the
-      // click from bubbling up and triggering the row's own onClick.
+      // Both actions open something other than the bell, so each stops the row's own onClick.
       extra: (
         <Flex
           align={ 'center' }
@@ -165,14 +163,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
         overlayStyle={ { minWidth: 275 } }
         trigger={ ['click'] }
       >
-        {/*
-          * Surfaces unread notifications at the top level of the rail. The count comes from the
-          * query already feeding the menu item, which the Mercure handler keeps current, so
-          * this stays live without any extra fetching or subscription.
-          *
-          * No showZero: this sits permanently on screen and must go quiet when there is
-          * nothing to report.
-          */}
+        {/* No showZero: permanently on screen, so it must go quiet at nothing to report. */}
         <Badge
           count={ notificationCount }
           data-testid="user-menu-avatar-badge"

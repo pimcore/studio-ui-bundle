@@ -9,8 +9,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-// Type-only: importing the generated slice for its runtime value would drag the whole API
-// setup into anything that consumes this hook, tests included.
+// Type-only: a runtime import would drag the whole API setup into every consumer, tests included.
 import type {
   NotificationSubscribableType,
   NotificationUpdateSubscriptionItem
@@ -31,6 +30,7 @@ export interface UseNotificationSettingsDraftResult {
   setChannel: (typeId: string, channelId: string, enabled: boolean) => void
   reset: () => void
   toUpdateItems: () => NotificationUpdateSubscriptionItem[]
+  applyServerState: (items: NotificationSubscribableType[]) => void
 }
 
 const toDraft = (items: NotificationSubscribableType[]): NotificationDraft => {
@@ -46,11 +46,8 @@ const toDraft = (items: NotificationSubscribableType[]): NotificationDraft => {
   return draft
 }
 
-/**
- * Channel order carries no meaning, so comparing serialised arrays directly would report a
- * change whenever the server happened to return them in a different order — leaving Save
- * permanently enabled.
- */
+// Order-insensitive: the server may return channels in any order, and a serialised compare
+// would report a phantom change and leave Save permanently enabled.
 const sameChannels = (a: Set<string>, b: Set<string>): boolean => {
   if (a.size !== b.size) {
     return false
@@ -62,23 +59,23 @@ const sameChannels = (a: Set<string>, b: Set<string>): boolean => {
 const sameEntry = (a: NotificationDraftEntry, b: NotificationDraftEntry): boolean =>
   a.subscribed === b.subscribed && sameChannels(a.channels, b.channels)
 
-/**
- * Local editing state for the notification preferences.
- *
- * Re-seeds whenever the server data changes, which covers both the initial load and the
- * response to a save — the server normalises what it stores, so its answer is authoritative
- * rather than the optimistic local view.
- */
+/** Local editing state for the notification preferences; the server's answer is authoritative. */
 export const useNotificationSettingsDraft = (
   items: NotificationSubscribableType[] | undefined
 ): UseNotificationSettingsDraftResult => {
   const [draft, setDraft] = useState<NotificationDraft>({})
   const [baseline, setBaseline] = useState<NotificationDraft>({})
 
-  // Keyed on content rather than array identity. A caller that rebuilds the array on every
-  // render — which a parent re-render is enough to cause — would otherwise re-seed endlessly,
-  // wiping the user's edits mid-interaction.
-  const seededSignature = useRef<string | null>(null)
+  // Signature of the last `items` observed, keyed on content rather than array identity: a caller
+  // rebuilding the array on every render would otherwise re-seed endlessly and wipe edits.
+  const observedItems = useRef<string | null>(null)
+
+  // Applied straight from a save response. Deliberately leaves observedItems alone: the query
+  // still holds the pre-save value for a moment, and re-seeding from it would undo this.
+  const applyServerState = useCallback((next: NotificationSubscribableType[]): void => {
+    setDraft(toDraft(next))
+    setBaseline(toDraft(next))
+  }, [])
 
   useEffect(() => {
     if (items === undefined) {
@@ -87,11 +84,11 @@ export const useNotificationSettingsDraft = (
 
     const signature = JSON.stringify(items)
 
-    if (seededSignature.current === signature) {
+    if (observedItems.current === signature) {
       return
     }
 
-    seededSignature.current = signature
+    observedItems.current = signature
     setDraft(toDraft(items))
     setBaseline(toDraft(items))
   }, [items])
@@ -108,8 +105,7 @@ export const useNotificationSettingsDraft = (
         ...previous,
         [typeId]: {
           subscribed,
-          // Mirrors the server, which clears channels when a type is switched off. Without
-          // this the UI would briefly show a state the server is about to overwrite.
+          // Mirrors the server, which clears channels when a type is switched off.
           channels: subscribed ? entry.channels : new Set<string>()
         }
       }
@@ -132,8 +128,7 @@ export const useNotificationSettingsDraft = (
   }, [])
 
   const reset = useCallback((): void => {
-    // Sets are not structured-clone friendly across every environment we run in, and a shallow
-    // copy would let a later edit mutate the baseline we compare against.
+    // Deep-copies the Sets; a shallow copy would let a later edit mutate the baseline.
     const restored: NotificationDraft = {}
     Object.entries(baseline).forEach(([typeId, entry]) => {
       restored[typeId] = { subscribed: entry.subscribed, channels: new Set(entry.channels) }
@@ -156,9 +151,8 @@ export const useNotificationSettingsDraft = (
     (): NotificationUpdateSubscriptionItem[] => Object.entries(draft).map(([typeId, entry]) => ({
       typeId,
       subscribed: entry.subscribed,
-      // Only ids this client knows about are sent. The server preserves anything it holds for
-      // channels the client could not see — a bundle may be temporarily disabled — so both
-      // sides trying to preserve them would duplicate the effort.
+      // Only ids this client knows about; the server preserves what it holds for channels the
+      // client could not see.
       channels: [...entry.channels]
     })),
     [draft]
@@ -171,6 +165,7 @@ export const useNotificationSettingsDraft = (
     setSubscribed,
     setChannel,
     reset,
-    toUpdateItems
+    toUpdateItems,
+    applyServerState
   }
 }

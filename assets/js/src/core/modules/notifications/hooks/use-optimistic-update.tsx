@@ -17,12 +17,8 @@ interface UseOptimisticUpdateProps {
   removeNotificationFromCollectionById: (id: number) => void
 }
 
-/**
- * Keeps the unread badge on the avatar and the count pill in the profile menu in step with the
- * bell list. Both read off the separate notificationGetUnreadCount query, which the collection
- * cache updates below do not touch — so without this the number would only ever go up (from
- * Mercure) and never down.
- */
+// Both unread bubbles read notificationGetUnreadCount, which the collection cache updates below
+// never touch — without this the number would only ever go up.
 const adjustUnreadCount = (dispatch: AppDispatch, delta: number): void => {
   dispatch(
     api.util.updateQueryData('notificationGetUnreadCount', undefined, (draft) => {
@@ -32,19 +28,19 @@ const adjustUnreadCount = (dispatch: AppDispatch, delta: number): void => {
   )
 }
 
-/**
- * Whether the notification is currently unread in any cached collection. Reading it before the
- * state is flipped is what makes the count decrement fire exactly once: re-opening an
- * already-read notification finds nothing unread and leaves the count alone.
- *
- * Exported for testing — this guard is the whole reason the count moves by exactly one.
- */
+// Read before the flag is flipped, which is what makes the decrement fire exactly once.
+// Exported for testing.
 export const isUnreadInCache = (
   queries: Record<string, unknown>,
   id: number
 ): boolean => {
-  for (const queryState of Object.values(queries)) {
-    if (isNil(queryState) || typeof queryState !== 'object' || !('data' in queryState)) {
+  for (const [queryKey, queryState] of Object.entries(queries)) {
+    if (
+      !queryKey.startsWith('notificationGetCollection(') ||
+      isNil(queryState) ||
+      typeof queryState !== 'object' ||
+      !('data' in queryState)
+    ) {
       continue
     }
 

@@ -18,6 +18,7 @@ import { Title } from '@Pimcore/components/title/title'
 import { Text } from '@Pimcore/components/text/text'
 import { Flex } from '@Pimcore/components/flex/flex'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { useMessage } from '@Pimcore/components/message/useMessage'
 import {
   useNotificationGetSubscriptionsQuery,
   useNotificationUpdateSubscriptionsMutation
@@ -28,6 +29,7 @@ import { NotificationSettingsToolbar } from './notification-settings-toolbar'
 
 export const NotificationSettingsContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
+  const { success } = useMessage()
   const { data, isLoading } = useNotificationGetSubscriptionsQuery()
   const [updateSubscriptions, { isLoading: isSaving }] = useNotificationUpdateSubscriptionsMutation()
 
@@ -38,17 +40,22 @@ export const NotificationSettingsContainer = (): React.JSX.Element => {
     setSubscribed,
     setChannel,
     reset,
-    toUpdateItems
+    toUpdateItems,
+    applyServerState
   } = useNotificationSettingsDraft(data?.items)
 
   const onSave = (): void => {
     updateSubscriptions({ notificationUpdateSubscriptionsParameters: { items: toUpdateItems() } })
       .unwrap()
+      .then((stored) => {
+        // Seeded from the response rather than waiting for the refetch, so a save the server
+        // normalises back to the current state still clears the dirty flag.
+        applyServerState(stored.items)
+        success(t('notifications.settings.saved'))
+      })
       .catch((error: Error) => {
         trackError(new ApiError(error))
       })
-    // The draft re-seeds from the response, so the server's normalisation wins over the
-    // optimistic local view rather than the two drifting apart.
   }
 
   return (
@@ -77,8 +84,7 @@ export const NotificationSettingsContainer = (): React.JSX.Element => {
             >
               <Title>{t('notifications.settings.label')}</Title>
               <Text type={ 'secondary' }>
-                {/* Promises only what the screen delivers: with no channel beyond the pop-up
-                    there is nothing to "add on top", so the copy adapts. */}
+                {/* With no channel beyond the pop-up there is nothing to "add on top". */}
                 {(data?.availableChannels.length ?? 0) > 1
                   ? t('notifications.settings.description')
                   : t('notifications.settings.description-popup-only')}

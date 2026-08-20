@@ -23,10 +23,6 @@ describe('notifications-ui slice', () => {
     expect(state.expandRequest?.id).toBe(42)
   })
 
-  /**
-   * The token has to advance on every request, otherwise viewing the same notification twice
-   * would produce an identical value and the subscribing rows would not re-expand it.
-   */
   it('advances the token on each request, including a repeat of the same id', () => {
     const first = notificationsUiReducer(undefined, requestExpandNotification(42))
     const second = notificationsUiReducer(first, requestExpandNotification(42))

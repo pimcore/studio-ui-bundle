@@ -9,15 +9,11 @@
  */
 
 /**
- * Normalises a notification payload into an object renderers can read.
+ * Normalises `notification.payload` — a JSON string from the detail endpoint, already decoded
+ * over Mercure — into an object renderers can read. Malformed JSON degrades to null rather than
+ * throwing, since the payload is written by a producing bundle.
  *
- * The same data arrives in two shapes: the detail endpoint returns it as a JSON string, while
- * Mercure may deliver it already decoded. Note the name collision worth keeping straight — the
- * Mercure envelope also has a `payload`, which holds the notification itself; this function is
- * about `notification.payload`.
- *
- * A payload is written by a producing bundle and read here, so malformed JSON is treated as
- * "no payload" rather than being allowed to break the notification list.
+ * Not to be confused with the Mercure envelope's own `payload`, which holds the notification.
  */
 export const parseNotificationPayload = (
   raw: string | Record<string, unknown> | null | undefined

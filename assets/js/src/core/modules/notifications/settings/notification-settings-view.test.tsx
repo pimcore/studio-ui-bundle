@@ -137,10 +137,6 @@ describe('NotificationSettingsView', () => {
     jest.clearAllMocks()
   })
 
-  /**
-   * The column set comes from the API, which is what lets a bundle contributing a channel get
-   * a column without any change here.
-   */
   it('renders one column per available channel', () => {
     renderView([type('info', 'general', [['popup', true, true], ['email', false, true]])], [POPUP, EMAIL])
 
@@ -155,9 +151,6 @@ describe('NotificationSettingsView', () => {
     expect(screen.queryByText('notifications.channel.email')).not.toBeInTheDocument()
   })
 
-  /**
-   * A dash rather than a disabled switch: a switch would suggest somebody could turn it on.
-   */
   it('renders a dash for a channel the type cannot use', () => {
     renderView([type('info', 'general', [['popup', true, true], ['email', false, false]])], [POPUP, EMAIL])
 
@@ -201,9 +194,6 @@ describe('NotificationSettingsView', () => {
     ).toBeDisabled()
   })
 
-  /**
-   * A single group heading would only repeat the panel title.
-   */
   it('omits group headings when every type shares one group', () => {
     renderView([type('info', 'general', [['popup', true, true]])], [POPUP])
 
@@ -223,9 +213,6 @@ describe('NotificationSettingsView', () => {
     expect(screen.getByText('notifications.settings.group.general')).toBeInTheDocument()
   })
 
-  /**
-   * A channel from a bundle that ships no frontend presentation still has to render.
-   */
   it('falls back to a generic icon for a channel with no registered presentation', () => {
     hasDynamicType.mockImplementation((id: string) => id === 'popup')
 

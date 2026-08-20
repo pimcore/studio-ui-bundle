@@ -46,12 +46,8 @@ export const NotificationPopupContent: React.FC<NotificationPopupCollapseProps> 
             onView={ () => {
               onView(notification.id)
 
-              // Opens the widget, or just focuses its tab when it is already open. In that
-              // already-open case the mounted widget keeps its original config — the widget
-              // container memoises the rendered component — so a config update would never
-              // reach the list. The expand request below is a live signal the rows subscribe
-              // to directly, which is what makes "View" expand the item whether the widget was
-              // already open or not.
+              // An already-open widget keeps its original config, so the expand request
+              // dispatched afterwards is what reaches an already-mounted list.
               dispatch(openMainWidget({
                 component: 'notifications',
                 name: 'Notifications',

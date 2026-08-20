@@ -13,11 +13,7 @@ import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 export interface ExpandNotificationRequest {
   id: number
-  /**
-   * Bumped on every request so that viewing the same notification again — after collapsing it
-   * by hand — still registers as a change and re-expands it. Without it a repeat request would
-   * carry an identical value and the subscribing rows would see no change.
-   */
+  /** Bumped every request, so viewing the same notification twice still re-expands it. */
   token: number
 }
 
@@ -29,11 +25,8 @@ const initialState: NotificationsUiState = {
   expandRequest: null
 }
 
-/**
- * UI-only state for the notifications module. It exists because the widget container memoises
- * its rendered component, so an already-open notifications widget cannot be told which row to
- * expand through its config — the rows read this signal live instead.
- */
+// The widget container memoises its rendered component, so an already-open widget cannot be told
+// which row to expand through its config; the rows read this signal live instead.
 const notificationsUiSlice = createSlice({
   name: 'notifications-ui',
   initialState,

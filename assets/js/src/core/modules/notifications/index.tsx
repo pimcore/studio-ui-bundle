@@ -78,8 +78,7 @@ moduleSystem.registerModule({
     const BackgroundProcessor = container.get<BackgroundProcessor>(serviceIds.backgroundProcessor)
     BackgroundProcessor.registerProcess(new DemoProcess())
 
-    // Presentation for the channels shipped here. A bundle contributing its own channel
-    // registers it the same way; one that does not still gets a column, with a generic icon.
+    // Presentation for the channels shipped here; a bundle registers its own the same way.
     const channelRegistry = container.get<DynamicTypeNotificationChannelRegistry>(
       serviceIds['DynamicTypes/NotificationChannelRegistry']
     )

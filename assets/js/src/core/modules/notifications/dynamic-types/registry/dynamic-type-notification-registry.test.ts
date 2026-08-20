@@ -45,10 +45,6 @@ describe('DynamicTypeNotificationRegistry', () => {
     expect(registry.getDynamicType('collab.mention')).toBe(definition)
   })
 
-  /**
-   * Registering is optional: an unregistered type must be reportable without throwing, so the
-   * host can fall back to the plain rendering.
-   */
   it('reports an unregistered type as absent', () => {
     const registry = new DynamicTypeNotificationRegistry()
 
@@ -64,10 +60,6 @@ describe('DynamicTypeNotificationRegistry', () => {
     expect(trackError).toHaveBeenCalledTimes(1)
   })
 
-  /**
-   * The base class returns null from both render methods, which is what lets a definition
-   * enrich only the detail view and leave the toast to the host.
-   */
   it('renders nothing by default so partial definitions are viable', () => {
     const definition = new MentionNotification()
     const props = { type: 'collab.mention', title: 'Title', sender: null, payload: null }
@@ -88,10 +80,6 @@ describe('DynamicTypeNotificationChannelRegistry', () => {
     expect(registry.getDynamicType('email').icon).toBe('email')
   })
 
-  /**
-   * The column set comes from the API, so a channel from a bundle that ships no presentation
-   * still renders — this registry only supplies the icon.
-   */
   it('reports an unknown channel as absent rather than failing', () => {
     const registry = new DynamicTypeNotificationChannelRegistry()
 

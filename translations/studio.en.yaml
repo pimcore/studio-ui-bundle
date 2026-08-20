@@ -690,6 +690,7 @@ notifications.settings.column.type: Notification type
 notifications.settings.column.subscribed: Notify me
 notifications.settings.not-available: Not available for this type
 notifications.settings.save: Save
+notifications.settings.saved: Notification settings saved
 notifications.settings.discard: Discard
 notifications.settings.discard.title: Discard your unsaved changes?
 notifications.settings.discard.confirm: Discard

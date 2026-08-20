@@ -14,20 +14,14 @@ import { DynamicTypeAbstractNotificationChannel } from './dynamic-type-abstract-
 /** Channel id the backend reserves for the in-app toast preference. */
 export const POPUP_CHANNEL_ID = 'popup'
 
-/**
- * The in-app toast. Always present, since every notification type can pop up.
- */
 @injectable()
 export class DynamicTypeNotificationChannelPopup extends DynamicTypeAbstractNotificationChannel {
   readonly id = POPUP_CHANNEL_ID
   readonly icon = 'monitor'
 }
 
-/**
- * Registered here rather than by whichever bundle contributes an email channel: the icon is a
- * frontend asset, and email is common enough that every such bundle would otherwise repeat it.
- * The column only appears when a backend channel with this id is actually enabled.
- */
+// Registered here rather than per bundle: the icon is a frontend asset and email is common
+// enough that every contributing bundle would otherwise repeat it.
 @injectable()
 export class DynamicTypeNotificationChannelEmail extends DynamicTypeAbstractNotificationChannel {
   readonly id = 'email'

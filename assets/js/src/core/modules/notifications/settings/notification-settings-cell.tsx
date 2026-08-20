@@ -25,14 +25,8 @@ export interface NotificationSettingsCellProps {
 }
 
 /**
- * One preference cell.
- *
- * An unsupported channel renders as a dash rather than a disabled switch. The distinction is
- * deliberate: a switch — even a locked-looking one — suggests somebody could turn it on, which
- * invites a support request for something that is structurally unavailable for this type.
- *
- * There is no third "locked by administrator" state to render. A channel an administrator
- * disables is absent from the API's channel list entirely, so its column never appears.
+ * One preference cell. An unsupported channel renders as a dash, not a disabled switch — a
+ * switch implies someone could turn it on.
  */
 export const NotificationSettingsCell = ({
   checked,

@@ -9,7 +9,8 @@
  */
 
 import React, { useMemo } from 'react'
-import { Tooltip } from 'antd'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { isNil } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { Flex, Icon, Text } from '@sdk/components'
 import { container } from '@Pimcore/app/depency-injection'
@@ -36,9 +37,7 @@ interface TypeGroup {
   items: NotificationSubscribableType[]
 }
 
-/**
- * Groups arrive pre-ordered by the API's sortOrder, so first appearance is the intended order.
- */
+// Items arrive pre-ordered by the API's sortOrder, so first appearance is the intended order.
 const groupTypes = (items: NotificationSubscribableType[]): TypeGroup[] => {
   const groups: TypeGroup[] = []
 
@@ -73,10 +72,9 @@ export const NotificationSettingsView = ({
 
   const groups = useMemo(() => groupTypes(items), [items])
 
-  // A heading for a single group says nothing the panel title has not already said.
+  // A single heading would only repeat the panel title.
   const showGroupHeadings = groups.length > 1
 
-  /** Icon comes from the registry; an unregistered channel still gets a usable column. */
   const channelIcon = (channelId: string): string => (
     channelRegistry.hasDynamicType(channelId)
       ? channelRegistry.getDynamicType(channelId).icon
@@ -104,12 +102,9 @@ export const NotificationSettingsView = ({
             >
               <Icon value={ channelIcon(channel.id) } />
               <Text type={ 'secondary' }>{t(channel.translationKey)}</Text>
-              {/*
-                * The switches below still store — the preference is real and starts working the
-                * moment the account can be reached — so the column is explained rather than
-                * disabled or hidden.
-                */}
-              {channel.unavailableReasonKey !== null && channel.unavailableReasonKey !== undefined && (
+              {/* Explained rather than disabled: the preference stores and starts working the
+                  moment the account can be reached. */}
+              {!isNil(channel.unavailableReasonKey) && (
                 <Tooltip title={ t(channel.unavailableReasonKey) }>
                   <span
                     aria-label={ t(channel.unavailableReasonKey) }

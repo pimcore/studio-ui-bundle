@@ -34,9 +34,7 @@ export const NotificationPopupItem = ({ notification, onView }: INotificationPop
   const { styles } = useStyles()
   const { t } = useTranslation()
 
-  // A notification type may render its own content — thread context, an excerpt, a status.
-  // Types without a definition, and definitions that decline to render a toast, fall through
-  // to the plain title-and-sender treatment below.
+  // Null falls through to the plain title-and-sender treatment below.
   const customContent = useMemo(() => {
     const type = notification.type
 

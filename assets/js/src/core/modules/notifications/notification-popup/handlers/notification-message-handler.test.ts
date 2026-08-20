@@ -70,10 +70,6 @@ describe('NotificationMessageHandler', () => {
     expect(onMessage).toHaveBeenCalledTimes(1)
   })
 
-  /**
-   * Turning pop-ups off means "do not interrupt me", never "hide this from me": the bell list
-   * and the unread count must still update, or the notification would be lost.
-   */
   it('suppresses only the toast when the recipient has pop-ups off', async () => {
     const onMessage = jest.fn()
 
@@ -85,10 +81,6 @@ describe('NotificationMessageHandler', () => {
     expect(dispatch).toHaveBeenCalledTimes(2)
   })
 
-  /**
-   * A backend predating this field must keep behaving as before, so the check is strictly
-   * against false rather than falsy.
-   */
   it('raises the toast when the field is absent', async () => {
     const onMessage = jest.fn()
 

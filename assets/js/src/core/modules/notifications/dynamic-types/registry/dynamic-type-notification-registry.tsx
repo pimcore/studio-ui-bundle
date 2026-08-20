@@ -12,9 +12,6 @@ import { injectable } from 'inversify'
 import { DynamicTypeRegistryAbstract } from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
 import { type DynamicTypeAbstractNotification } from '../definitions/dynamic-type-abstract-notification'
 
-/**
- * Renderers keyed by notification type. Types without a registered definition fall back to the
- * plain title-and-sender rendering, so registering one is always optional.
- */
+/** Renderers keyed by notification type; unregistered types fall back to the plain rendering. */
 @injectable()
 export class DynamicTypeNotificationRegistry extends DynamicTypeRegistryAbstract<DynamicTypeAbstractNotification> {}

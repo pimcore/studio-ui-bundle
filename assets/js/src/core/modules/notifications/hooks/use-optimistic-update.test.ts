@@ -35,10 +35,6 @@ describe('isUnreadInCache', () => {
     expect(isUnreadInCache(queries, 1)).toBe(true)
   })
 
-  /**
-   * Reading the state before the flag is flipped is what makes the decrement idempotent:
-   * re-opening a notification that is already read must not move the count again.
-   */
   it('is false when the notification is already read', () => {
     const queries = {
       'notificationGetCollection({})': collectionQuery([{ id: 1, read: true }])
@@ -55,10 +51,6 @@ describe('isUnreadInCache', () => {
     expect(isUnreadInCache(queries, 1)).toBe(false)
   })
 
-  /**
-   * The same notification can sit in several paginated caches; one still-unread copy is enough
-   * to count it as unread.
-   */
   it('is true when any cached collection still has it unread', () => {
     const queries = {
       'notificationGetCollection({"page":1})': collectionQuery([{ id: 1, read: true }]),
@@ -72,6 +64,16 @@ describe('isUnreadInCache', () => {
     const queries = {
       'notificationGetCollection({})': { status: 'pending', originalArgs: {} },
       other: null
+    }
+
+    expect(isUnreadInCache(queries, 1)).toBe(false)
+  })
+
+  // Only notification collections may answer this; another endpoint caching an unrelated
+  // entity with the same id must not be mistaken for an unread notification.
+  it('ignores cache entries belonging to other endpoints', () => {
+    const queries = {
+      'someOtherCollection({})': collectionQuery([{ id: 1, read: false }])
     }
 
     expect(isUnreadInCache(queries, 1)).toBe(false)

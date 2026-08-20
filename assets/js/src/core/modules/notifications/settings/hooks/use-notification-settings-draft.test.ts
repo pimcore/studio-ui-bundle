@@ -57,10 +57,6 @@ describe('useNotificationSettingsDraft', () => {
     expect(result.current.isDirty).toBe(false)
   })
 
-  /**
-   * Channel order carries no meaning. Comparing serialised arrays would report a phantom
-   * change and leave Save enabled forever.
-   */
   it('compares channels without regard to order', () => {
     const { result } = renderHook(() => useNotificationSettingsDraft([
       type('collab.mention', true, [['popup', true, true], ['email', true, true]])
@@ -72,10 +68,6 @@ describe('useNotificationSettingsDraft', () => {
     expect(result.current.isDirty).toBe(false)
   })
 
-  /**
-   * The server clears channels when a type is switched off; mirroring that locally stops the
-   * UI showing a state the server is about to overwrite.
-   */
   it('clears channels when a type is unsubscribed', () => {
     const { result } = renderHook(() => useNotificationSettingsDraft([MENTION]))
 
@@ -122,11 +114,6 @@ describe('useNotificationSettingsDraft', () => {
     expect(result.current.changedCount).toBe(2)
   })
 
-  /**
-   * Regression: seeding was keyed on array identity, so a caller rebuilding the array on every
-   * render — a parent re-render is enough — re-seeded endlessly and discarded edits mid-
-   * interaction.
-   */
   it('keeps edits when re-rendered with an equal but newly built array', () => {
     const { result, rerender } = renderHook(
       ({ items }) => useNotificationSettingsDraft(items),
@@ -143,10 +130,6 @@ describe('useNotificationSettingsDraft', () => {
     expect([...result.current.draft['collab.mention'].channels].sort()).toEqual(['email', 'popup'])
   })
 
-  /**
-   * A save returns the stored state, and re-seeding from it is what makes the server's
-   * normalisation authoritative rather than the optimistic local view.
-   */
   it('re-seeds when the server data changes', () => {
     const { result, rerender } = renderHook(
       ({ items }) => useNotificationSettingsDraft(items),
@@ -159,6 +142,36 @@ describe('useNotificationSettingsDraft', () => {
     rerender({ items: [type('collab.mention', true, [['popup', true, true], ['email', true, true]])] })
 
     expect(result.current.isDirty).toBe(false)
+    expect([...result.current.draft['collab.mention'].channels].sort()).toEqual(['email', 'popup'])
+  })
+
+  // Regression: signature-keyed seeding alone never fires when the server normalises the edit
+  // away, which left Save enabled forever after an apparently successful save.
+  it('clears the dirty flag when the server responds with unchanged data', () => {
+    const { result } = renderHook(() => useNotificationSettingsDraft([MENTION]))
+
+    act(() => { result.current.setChannel('collab.mention', 'email', true) })
+    expect(result.current.isDirty).toBe(true)
+
+    act(() => { result.current.applyServerState([MENTION]) })
+
+    expect(result.current.isDirty).toBe(false)
+    expect([...result.current.draft['collab.mention'].channels]).toEqual(['popup'])
+  })
+
+  it('re-seeds from a server response that differs from the local edit', () => {
+    const { result } = renderHook(() => useNotificationSettingsDraft([MENTION]))
+
+    act(() => { result.current.setSubscribed('collab.mention', false) })
+
+    act(() => {
+      result.current.applyServerState([
+        type('collab.mention', true, [['popup', true, true], ['email', true, true]])
+      ])
+    })
+
+    expect(result.current.isDirty).toBe(false)
+    expect(result.current.draft['collab.mention'].subscribed).toBe(true)
     expect([...result.current.draft['collab.mention'].channels].sort()).toEqual(['email', 'popup'])
   })
 })

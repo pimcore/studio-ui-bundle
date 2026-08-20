@@ -26,11 +26,7 @@ export interface NotificationMessagePayload {
     creationDate: number
     recipient: number
     sender: string | null
-    /**
-     * Whether the recipient wants this notification to interrupt them, resolved from their
-     * preferences by the backend. Optional so a backend that predates the setting keeps
-     * working — see the default applied below.
-     */
+    /** Resolved from the recipient's preferences; optional so an older backend still works. */
     popup?: boolean
     /** Type specific data as a JSON string, for renderers registered per notification type. */
     payload?: string | null
@@ -46,7 +42,7 @@ export class NotificationMessageHandler extends AbstractMessageHandler {
 
   shouldHandle (message: AbstractMercureMessage): boolean {
     const user = selectCurrentUser(store.getState())
-    // shouldHandle runs on every Mercure message, so the shape is asserted loosely and guarded below.
+    // Runs on every Mercure message, so the shape is asserted loosely and guarded below.
     const payload = message.payload as Partial<NotificationMessagePayload>
 
     return payload?.notification?.recipient === user.id && !isNil(payload?.notification) && !isNil(payload?.unreadNotificationsCount)
@@ -59,12 +55,8 @@ export class NotificationMessageHandler extends AbstractMessageHandler {
       return
     }
 
-    // Only the toast is suppressed. The notification still reaches the bell and still bumps
-    // the unread count below — turning pop-ups off means "do not interrupt me", never "hide
-    // this from me".
-    //
-    // Compared strictly against false so that a missing field (an older backend) keeps the
-    // previous behaviour of always showing the toast.
+    // Only the toast is suppressed; the bell and the unread count below still update. Strict
+    // against false so a missing field (older backend) keeps the always-toast behaviour.
     if (payload.notification.popup !== false) {
       this.onMessage(message)
     }

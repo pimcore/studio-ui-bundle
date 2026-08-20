@@ -12,17 +12,9 @@ import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
-    /**
-     * The channel columns are data-driven, so the grid template is built at render time from
-     * however many the API reports rather than being fixed here.
-     */
     table: css`
         width: 100%;
-        /*
-         * Capped so the toggles sit next to the type they belong to instead of drifting to
-         * the far edge of a wide editor. Comfortably holds the type column plus several
-         * channel columns; on a narrow editor width: 100% still wins and it shrinks.
-         */
+        /* Capped so the toggles stay next to their type instead of drifting to the far edge. */
         max-width: 900px;
         border: 1px solid ${token.colorBorderSecondary};
         border-radius: ${token.borderRadiusLG}px;
@@ -42,13 +34,7 @@ export const useStyles = createStyles(({ token, css }) => {
             border-bottom: none;
         }
     `,
-    /*
-     * The column header and the group headings are two different kinds of row and must read that
-     * way. The header is the table's own header, so it carries the fill and bold weight; the group
-     * headings are section labels within the body, so they sit flat with a divider and an uppercase
-     * label. Two filled bands one shade apart read as the same kind of row repeated — flat
-     * typographic labels give a clearer two-level hierarchy than a second fill would.
-     */
+    // Filled and bold; group headings stay flat so the two read as different kinds of row.
     head: css`
         background: ${token.colorFillSecondary};
         font-weight: ${token.fontWeightStrong};

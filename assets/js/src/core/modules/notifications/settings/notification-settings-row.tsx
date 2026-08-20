@@ -25,10 +25,8 @@ export interface NotificationSettingsRowProps {
 }
 
 /**
- * One notification type: its label and description, the Notify-me switch, and a cell per
- * available channel. Kept as its own component so the channel loop does not nest inside the
- * view's group and type loops — beyond a certain depth that is both hard to read and a lint
- * failure.
+ * One notification type: label, description, the Notify-me switch and a cell per channel.
+ * Split out so the channel loop does not nest inside the view's group and type loops.
  */
 export const NotificationSettingsRow = ({
   item,
@@ -56,8 +54,7 @@ export const NotificationSettingsRow = ({
         <NotificationSettingsCell
           ariaLabel={ `${t('notifications.settings.column.subscribed')} ${t(item.translationKey)}` }
           checked={ entry.subscribed }
-          // A locked type still renders a switch, shown on and disabled: unlike an unsupported
-          // channel this *is* a live setting, it simply cannot be off.
+          // Locked renders a disabled switch, not a dash: it is a live setting that cannot be off.
           disabled={ item.subscriptionLocked }
           onChange={ (checked) => { onSubscribedChange(item.typeId, checked) } }
           supported
@@ -65,7 +62,7 @@ export const NotificationSettingsRow = ({
       </div>
 
       {availableChannels.map((channel) => {
-        const supported = item.channels.find((entry) => entry.id === channel.id)?.supported ?? false
+        const supported = item.channels.find((typeChannel) => typeChannel.id === channel.id)?.supported ?? false
 
         return (
           <div

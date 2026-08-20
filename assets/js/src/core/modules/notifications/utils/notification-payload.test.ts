@@ -28,10 +28,6 @@ describe('parseNotificationPayload', () => {
     expect(parseNotificationPayload(raw)).toBeNull()
   })
 
-  /**
-   * A payload is written by a producing bundle. Malformed JSON must degrade to "no payload"
-   * rather than throwing and taking the notification list down with it.
-   */
   it('returns null for malformed JSON instead of throwing', () => {
     expect(parseNotificationPayload('{not valid json')).toBeNull()
   })

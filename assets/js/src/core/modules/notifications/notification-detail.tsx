@@ -18,7 +18,7 @@ import { formatDateTime } from '@Pimcore/utils/date-time'
 import { respectLineBreak } from '@Pimcore/utils/helpers'
 import { Flex, Icon, Split } from '@sdk/components'
 import { isNil } from 'lodash'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useNotificationDetail } from './hooks/use-notification-detail'
 import { NotificationAttachment } from './notification-attachment'
 import { type NotificationListItem } from './notifications-slice.gen'
@@ -51,6 +51,10 @@ export const NotificationDetail = ({ notification, activeNotification }: Notific
     }
   }, [notificationDetail])
 
+  const notificationRegistry = useMemo(() => container.get<DynamicTypeNotificationRegistry>(
+    serviceIds['DynamicTypes/NotificationRegistry']
+  ), [])
+
   const extra = (): React.JSX.Element => {
     return (
       <Space
@@ -79,7 +83,6 @@ export const NotificationDetail = ({ notification, activeNotification }: Notific
     )
   }
 
-  /** The notification's rendered attachment, or null when it has none. */
   const attachmentElement = (): React.JSX.Element | null =>
     isNil(notificationDetail?.attachmentId)
       ? null
@@ -90,30 +93,18 @@ export const NotificationDetail = ({ notification, activeNotification }: Notific
         />
         )
 
-  /**
-   * Content contributed by the notification's type, if any, plus whether the host should still
-   * append the attachment below it. Types without a definition — and definitions that only render a
-   * toast — return null and leave the plain rendering below in place, so this never has to be
-   * exhaustive. The attachment is handed to the definition so it can place it itself.
-   */
+  // Null whenever the type has no definition, or its definition renders only a toast — the plain
+  // rendering below then stays in place.
   const customDetail = (
     attachment: React.JSX.Element | null
   ): { content: React.JSX.Element, appendAttachment: boolean } | null => {
     const type = notification.type
 
-    if (isNil(type) || type === '') {
+    if (isNil(type) || type === '' || !notificationRegistry.hasDynamicType(type)) {
       return null
     }
 
-    const registry = container.get<DynamicTypeNotificationRegistry>(
-      serviceIds['DynamicTypes/NotificationRegistry']
-    )
-
-    if (!registry.hasDynamicType(type)) {
-      return null
-    }
-
-    const definition = registry.getDynamicType(type)
+    const definition = notificationRegistry.getDynamicType(type)
     const content = definition.getDetailContent(
       {
         type,

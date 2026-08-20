@@ -12,14 +12,8 @@ import { injectable } from 'inversify'
 import { DynamicTypeAbstract } from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
 
 /**
- * Presentation for a delivery channel column in the notification preferences.
- *
- * The API can only tell the frontend a channel's id and translation key; it has no business
- * naming an icon from the frontend's icon library. A bundle contributing a channel therefore
- * registers this alongside its backend ChannelInterface.
- *
- * Registering is optional: an unknown channel still renders a usable column using a generic
- * icon and the label the API supplied.
+ * Presentation for a delivery channel column in the notification preferences. Optional — an
+ * unregistered channel still renders a column, with a generic icon and the API's label.
  */
 @injectable()
 export abstract class DynamicTypeAbstractNotificationChannel extends DynamicTypeAbstract {
@@ -29,9 +23,6 @@ export abstract class DynamicTypeAbstractNotificationChannel extends DynamicType
   /** Icon name from the icon library, shown in the column header. */
   abstract readonly icon: string
 
-  /**
-   * Overrides the API's translation key. Rarely needed — prefer shipping the key with the
-   * channel so both halves stay in one place.
-   */
+  /** Overrides the API's translation key. */
   readonly translationKey?: string
 }
