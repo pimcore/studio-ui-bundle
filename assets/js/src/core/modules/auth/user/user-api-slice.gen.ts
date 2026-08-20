@@ -495,11 +495,13 @@ export type DependencyToAnObject = {
     /** Subtype of the object */
     subtype: string;
 };
-export type UserObjectDependenciesPreview = {
+export type UserObjectDependencies = {
+    /** Dependencies to objects */
+    dependencies: DependencyToAnObject[];
+    /** If it has hidden dependencies */
+    hasHidden: boolean;
     /** Total number of objects referencing this user */
     totalItems: number;
-    /** Preview of dependencies to objects */
-    dependencies: DependencyToAnObject[];
 };
 export type User = {
     /** AdditionalAttributes */
@@ -562,8 +564,8 @@ export type User = {
     dataObjectWorkspaces: UserDocumentWorkspace[];
     /** Document Workspace */
     documentWorkspaces: UserDocumentWorkspace2[];
-    /** Object Dependencies Preview */
-    objectDependencies: UserObjectDependenciesPreview;
+    /** Object Dependencies */
+    objectDependencies: UserObjectDependencies;
     /** Allowed studio perspectives */
     perspectives: PerspectiveConfig[];
 };
