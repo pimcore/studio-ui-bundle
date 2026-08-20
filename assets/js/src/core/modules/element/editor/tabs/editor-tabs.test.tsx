@@ -9,7 +9,7 @@
  */
 
 const mockSetActiveTab = jest.fn()
-const mockElementDraftState: { activeTab: string | null, element: any } = {
+const mockElementDraftState: { activeTab: string | null, element: Partial<IElementDraft> } = {
   activeTab: null,
   element: {}
 }
@@ -68,6 +68,8 @@ import React from 'react'
 import { render } from '@testing-library/react'
 // eslint-disable-next-line import/first
 import { EditorTabs, type IAdvancedEditorTab } from './editor-tabs'
+// eslint-disable-next-line import/first
+import { type IElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 
 const EDIT_TAB: IAdvancedEditorTab = { key: 'edit', label: 'Edit', children: <></>, icon: <></> }
 const DEPENDENCIES_TAB: IAdvancedEditorTab = { key: 'dependencies', label: 'Dependencies', children: <></>, icon: <></> }
@@ -76,7 +78,7 @@ const WORKFLOW_TAB: IAdvancedEditorTab = {
   label: 'Workflow',
   children: <></>,
   icon: <></>,
-  hidden: (element: any) => element?.hasWorkflowAvailable !== true
+  hidden: (element: Partial<IElementDraft>) => element?.hasWorkflowAvailable !== true
 }
 
 describe('EditorTabs', () => {
