@@ -15,7 +15,8 @@ const api = baseApi.enhanceEndpoints({
   addTagTypes: [
     tagNames.USERS,
     tagNames.USER_DETAIL,
-    tagNames.USER_TREE
+    tagNames.USER_TREE,
+    tagNames.USER_OBJECT_DEPENDENCIES
   ],
   endpoints: {
     userUploadImage: (endpoint): void => {
@@ -81,7 +82,7 @@ const api = baseApi.enhanceEndpoints({
       }
     },
     userGetObjectDependencies: {
-      providesTags: (result, error, args) => providingTags.USER_DETAIL(args.id)
+      providesTags: (result, error, args) => providingTags.USER_OBJECT_DEPENDENCIES(args.id)
     }
   }
 })
