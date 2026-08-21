@@ -29,7 +29,7 @@ export const DynamicTypeFieldFilterTextComponent = (): React.JSX.Element => {
       maxWidth={ '100%' }
       onBlur={ onBlur }
       onChange={ (event) => { setValue(event.target.value) } }
-      onSearch={ () => { commit(_value) } }
+      onSearch={ (searchValue) => { setValue(searchValue); commit(searchValue) } }
       value={ _value }
     />
   )
