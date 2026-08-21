@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Table } from '@Pimcore/modules/user/management/detail/tabs/references/components/table/table'
 import { Pagination } from '@Pimcore/modules/user/management/detail/tabs/references/components/pagination/pagination'
@@ -18,6 +18,7 @@ import { useUserGetObjectDependenciesQuery } from '@Pimcore/modules/user/user-ap
 import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-management-context'
 import { createTabContentTestId } from '@Pimcore/utils/test-id-generator'
 import { DEFAULT_PAGE_SIZE } from '@Pimcore/modules/user/management/detail/tabs/references/constants'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 const ReferenceContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
@@ -25,7 +26,13 @@ const ReferenceContainer = ({ ...props }): React.JSX.Element => {
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(DEFAULT_PAGE_SIZE)
 
-  const { data, isLoading } = useUserGetObjectDependenciesQuery({ id, page, pageSize })
+  const { data, isLoading, isFetching, isError, error } = useUserGetObjectDependenciesQuery({ id, page, pageSize })
+
+  useEffect(() => {
+    if (isError) {
+      trackError(new ApiError(error))
+    }
+  }, [isError])
 
   function onPageChange (page: number, pageSize: number): void {
     setPage(page)
@@ -48,7 +55,7 @@ const ReferenceContainer = ({ ...props }): React.JSX.Element => {
 
         <Table
           data={ data?.items ?? [] }
-          isLoading={ isLoading }
+          isLoading={ isFetching }
         />
       </>
     }
