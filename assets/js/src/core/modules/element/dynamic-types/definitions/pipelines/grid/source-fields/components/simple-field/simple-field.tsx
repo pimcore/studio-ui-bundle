@@ -12,7 +12,7 @@ import { Form } from '@Pimcore/components/form/form'
 import { usePipelineConfig } from '@Pimcore/components/pipeline/provider/pipeline-config/use-pipeline-config'
 import { Select } from '@Pimcore/components/select/select'
 import React, { useContext, useEffect, useMemo } from 'react'
-import { isArray, isUndefined } from 'lodash'
+import { isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { AvailableColumnsContext } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useItem } from '@Pimcore/components/form/item/provider/item/use-item'
@@ -62,7 +62,7 @@ export const DynamicTypePipelineGridSourceFieldsSimpleFieldComponent = (): React
     throw new Error('Source field configuration is missing')
   }
 
-  const namePath = useMemo(() => (isArray(name) ? name : [name]), [name])
+  const namePath = useMemo(() => (Array.isArray(name) ? name : [name]), [name])
 
   // `Form.Item initialValue` IS registered in the keyed-list store on mount
   // (KeyedFormItemControl calls `operations.update(name, initialValue, true)`), but with
