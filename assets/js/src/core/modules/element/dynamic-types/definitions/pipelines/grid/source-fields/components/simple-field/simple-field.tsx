@@ -12,6 +12,7 @@ import { Form } from '@Pimcore/components/form/form'
 import { usePipelineConfig } from '@Pimcore/components/pipeline/provider/pipeline-config/use-pipeline-config'
 import { Select } from '@Pimcore/components/select/select'
 import React, { useContext, useEffect, useMemo } from 'react'
+import { isArray, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { AvailableColumnsContext } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useItem } from '@Pimcore/components/form/item/provider/item/use-item'
@@ -61,17 +62,19 @@ export const DynamicTypePipelineGridSourceFieldsSimpleFieldComponent = (): React
     throw new Error('Source field configuration is missing')
   }
 
-  const namePath = useMemo(() => (Array.isArray(name) ? name : [name]), [name])
+  const namePath = useMemo(() => (isArray(name) ? name : [name]), [name])
 
-  // Form.Item's `initialValue` is only ever applied to the antd/keyed-list value store
-  // when the field actually fires `onChange` — a pre-selected option the user never
-  // touches never gets committed, so it silently disappears from the saved config (see
-  // pimcore/platform-version#296). Force-commit the pre-selected first option once, the
-  // same way the classification-store field actions persist a value without an onChange
-  // event (see useClassificationStoreFieldActions#clearValue): via a real (non-initial)
-  // `operations.update` call, so it survives a save even when left unchanged.
+  // `Form.Item initialValue` IS registered in the keyed-list store on mount
+  // (KeyedFormItemControl calls `operations.update(name, initialValue, true)`), but with
+  // `isInitialValue: true` KeyedList also folds the value into its own baseline and skips
+  // the parent-form propagation — so an untouched pre-selected option never reaches the
+  // outer form store and silently disappears from the saved config (see
+  // pimcore/platform-version#296). Force-commit the pre-selected first option once via a
+  // real (non-initial) `operations.update` call — the same idiom
+  // useClassificationStoreFieldActions#clearValue uses to persist a value without an
+  // onChange event — so it survives a save even when left unchanged.
   useEffect(() => {
-    if (getValueByKey('field') === undefined && sourceFieldConfig[0]?.key !== undefined) {
+    if (isUndefined(getValueByKey('field')) && !isUndefined(sourceFieldConfig[0]?.key)) {
       operations.update([...namePath, 'field'], sourceFieldConfig[0].key, false)
     }
   }, [])

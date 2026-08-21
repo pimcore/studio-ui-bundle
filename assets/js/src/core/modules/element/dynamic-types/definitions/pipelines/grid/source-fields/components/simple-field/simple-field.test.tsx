@@ -106,7 +106,8 @@ describe('DynamicTypePipelineGridSourceFieldsSimpleFieldComponent', () => {
 
   // regression pimcore/platform-version#296: the pre-selected first source field option
   // was dropped from the saved advanced-column config unless the user actively re-picked
-  // it (antd only commits `initialValue` to form state on a real onChange).
+  // it (the keyed-list adapter registers `initialValue` on mount but folds it into its
+  // baseline, so it was never propagated to the parent form as a change).
   it('commits the pre-selected first source field even without the user touching the select', () => {
     const onChange = jest.fn()
 
