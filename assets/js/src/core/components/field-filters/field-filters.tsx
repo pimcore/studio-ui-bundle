@@ -21,9 +21,10 @@ import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/elemen
 export interface FieldFiltersProps {
   data: IDynamicFilter[]
   onChange?: (data: IDynamicFilter[]) => void
+  onCommit?: (data: IDynamicFilter[]) => void
 }
 
-export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.Element => {
+export const FieldFilters = ({ data, onChange, onCommit }: FieldFiltersProps): React.JSX.Element => {
   const [_data, _setData] = useState(data)
 
   const setData = (data: IDynamicFilter[]): void => {
@@ -48,6 +49,22 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
     const updatedData = [..._data]
     updatedData[index] = { ...updatedData[index], data }
     setData(updatedData)
+  }
+
+  const onFilterCommit = (filter: IDynamicFilter, data: any): void => {
+    let index = _data.findIndex((f) => f.id === filter.id)
+
+    if (filter.type === 'dataobject.classificationstore') {
+      index = _data.findIndex((f) => f.id === filter.id && f.config?.keyId === filter.config?.keyId && f.config?.groupId === filter.config?.groupId)
+    }
+
+    const updatedData = [..._data]
+    updatedData[index] = { ...updatedData[index], data }
+    setData(updatedData)
+
+    if (onCommit !== undefined) {
+      onCommit(updatedData)
+    }
   }
 
   const onLanguageSelectionChanged = (filter: IDynamicFilter, locale: string | null): void => {
@@ -91,6 +108,7 @@ export const FieldFilters = ({ data, onChange }: FieldFiltersProps): React.JSX.E
         <DynamicFilter
           { ...filter }
           onChange={ (data) => { onFilterChange(filter, data) } }
+          onCommit={ (data) => { onFilterCommit(filter, data) } }
         />
       ),
       renderRightToolbar: (

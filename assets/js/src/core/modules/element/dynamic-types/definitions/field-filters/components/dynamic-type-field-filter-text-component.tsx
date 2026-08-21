@@ -9,14 +9,14 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { Input } from 'antd'
+import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 
 export interface DynamicTypeFieldFilterTextProps extends AbstractFieldFilterDefinition {}
 
 export const DynamicTypeFieldFilterTextComponent = (): React.JSX.Element => {
-  const { data, setData } = useDynamicFilter()
+  const { data, setData, commit } = useDynamicFilter()
   const [_value, setValue] = useState(data)
 
   useEffect(() => {
@@ -24,10 +24,12 @@ export const DynamicTypeFieldFilterTextComponent = (): React.JSX.Element => {
   }, [data])
 
   return (
-    <Input
+    <SearchInput
+      className='w-full'
+      maxWidth={ '100%' }
       onBlur={ onBlur }
       onChange={ (event) => { setValue(event.target.value) } }
-      type='text'
+      onSearch={ () => { commit(_value) } }
       value={ _value }
     />
   )

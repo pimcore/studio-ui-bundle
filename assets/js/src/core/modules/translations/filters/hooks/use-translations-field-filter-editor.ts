@@ -14,13 +14,14 @@ import { DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic
 import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 import { type FieldFiltersProps } from '@Pimcore/components/field-filters/field-filters'
 import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column-picker.types'
-import { useTranslationsDraftFilters } from '@Pimcore/modules/translations/filters/filters'
+import { useTranslationsAppliedFilters, useTranslationsDraftFilters } from '@Pimcore/modules/translations/filters/filters'
 import { useTranslationFilterColumns } from '@Pimcore/modules/translations/filters/hooks/use-translation-filter-columns'
 import { type TranslationFilterColumn } from '@Pimcore/modules/translations/filters/types'
 
 export interface UseTranslationsFieldFilterEditorReturn {
   filters: FieldFiltersProps['data']
   onFilterChange: NonNullable<FieldFiltersProps['onChange']>
+  onFilterCommit: NonNullable<FieldFiltersProps['onCommit']>
   columnGroups: Array<ColumnPickerGroup<TranslationFilterColumn>>
   handleColumnClick: (column: TranslationFilterColumn) => void
 }
@@ -28,6 +29,7 @@ export interface UseTranslationsFieldFilterEditorReturn {
 export const useTranslationsFieldFilterEditor = (): UseTranslationsFieldFilterEditorReturn => {
   const { getType } = useDynamicTypeResolver()
   const { values, setValue } = useTranslationsDraftFilters()
+  const appliedStore = useTranslationsAppliedFilters()
   const columns = useTranslationFilterColumns()
 
   const fieldFilters = (values.fieldFilters ?? []) as FieldFilter[]
@@ -61,18 +63,27 @@ export const useTranslationsFieldFilterEditor = (): UseTranslationsFieldFilterEd
     setFilters(initialFilters)
   }, [initialFilters])
 
+  const toFieldFilters = (data: FieldFiltersProps['data']): FieldFilter[] => data.map((filter) => ({
+    key: filter.id,
+    filterValue: filter.data,
+    type: filter.type,
+    locale: filter.locale,
+    meta: {
+      translationKey: filter.translationKey,
+      ...filter.config ?? {}
+    }
+  }))
+
   const onFilterChange: UseTranslationsFieldFilterEditorReturn['onFilterChange'] = (data) => {
     setFilters(data)
-    setValue('fieldFilters', data.map((filter) => ({
-      key: filter.id,
-      filterValue: filter.data,
-      type: filter.type,
-      locale: filter.locale,
-      meta: {
-        translationKey: filter.translationKey,
-        ...filter.config ?? {}
-      }
-    })))
+    setValue('fieldFilters', toFieldFilters(data))
+  }
+
+  const onFilterCommit: UseTranslationsFieldFilterEditorReturn['onFilterCommit'] = (data) => {
+    setFilters(data)
+    const fieldFilters = toFieldFilters(data)
+    setValue('fieldFilters', fieldFilters)
+    appliedStore.setValue('fieldFilters', fieldFilters)
   }
 
   const handleColumnClick = (column: TranslationFilterColumn): void => {
@@ -127,5 +138,5 @@ export const useTranslationsFieldFilterEditor = (): UseTranslationsFieldFilterEd
     }]
   }, [availableColumns])
 
-  return { filters, onFilterChange, columnGroups, handleColumnClick }
+  return { filters, onFilterChange, onFilterCommit, columnGroups, handleColumnClick }
 }

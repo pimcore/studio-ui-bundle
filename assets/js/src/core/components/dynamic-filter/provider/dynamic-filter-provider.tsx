@@ -26,18 +26,20 @@ export interface IDynamicFilter {
 
 export interface DynamicFilterData extends IDynamicFilter {
   setData: (data: any) => void
+  commit: (data: any) => void
 }
 
 export type DynamicFilterContextProps = DynamicFilterData | undefined
 
 export const DynamicFilterContext = createContext<DynamicFilterContextProps>(undefined)
 
-export interface DynamicFilterProviderProps extends Omit<DynamicFilterData, 'setData'> {
+export interface DynamicFilterProviderProps extends Omit<DynamicFilterData, 'setData' | 'commit'> {
   onChange?: (data: any) => void
+  onCommit?: (data: any) => void
   children: React.ReactNode
 }
 
-export const DynamicFilterProvider = ({ children, id, type, translationKey, data, onChange, frontendType, config }: DynamicFilterProviderProps): React.JSX.Element => {
+export const DynamicFilterProvider = ({ children, id, type, translationKey, data, onChange, onCommit, frontendType, config }: DynamicFilterProviderProps): React.JSX.Element => {
   const [_data, _setData] = useState<DynamicFilterData['data']>(data)
 
   useEffect(() => {
@@ -51,8 +53,20 @@ export const DynamicFilterProvider = ({ children, id, type, translationKey, data
     }
   }
 
+  const commit = (data: any): void => {
+    _setData(data)
+
+    if (onChange !== undefined) {
+      onChange(data)
+    }
+
+    if (onCommit !== undefined) {
+      onCommit(data)
+    }
+  }
+
   return useMemo(() => (
-    <DynamicFilterContext.Provider value={ { id, translationKey, type, data: _data, setData, frontendType, config } }>
+    <DynamicFilterContext.Provider value={ { id, translationKey, type, data: _data, setData, commit, frontendType, config } }>
       {children}
     </DynamicFilterContext.Provider>
   ), [id, type, _data, frontendType, config, children])
