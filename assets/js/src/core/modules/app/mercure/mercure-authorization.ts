@@ -38,7 +38,12 @@ const FALLBACK_LIFETIME_MS = 3_600_000
 const RENEWAL_RATIO = 0.8
 
 let lifetimeMs = FALLBACK_LIFETIME_MS
+/** Wall clock at which the current cookie stops being accepted; 0 before the first renewal. */
+let authorizedUntil = 0
 let renewalTimeout: ReturnType<typeof setTimeout> | undefined
+let renewalScheduleActive = false
+/** De-duplicates concurrent renewals, e.g. a reconnect racing the background schedule. */
+let inFlight: Promise<void> | null = null
 
 /**
  * Read the cookie lifetime from the auth response.
@@ -63,23 +68,52 @@ const readLifetimeMs = (response: unknown): number | null => {
 export const getAuthorizationLifetimeMs = (): number => lifetimeMs
 
 /**
- * Request a fresh authorization cookie. Resolves once the cookie is set, so callers can connect
- * straight afterwards; rejects when the request failed, leaving the previous cookie in place.
+ * Whether the cookie we hold is still accepted by the hub. Connecting without it is what leaves a
+ * subscription silently anonymous, so a caller that cannot renew must not open a stream.
  */
-export const renewMercureAuthorization = async (): Promise<void> => {
+export const isAuthorizationValid = (): boolean => Date.now() < authorizedUntil
+
+/**
+ * Whether the cookie is valid AND young enough that a connect does not need to renew first. Uses
+ * the same threshold as the background schedule, so both agree on when a cookie is "due".
+ */
+export const isAuthorizationFresh = (): boolean =>
+  Date.now() < authorizedUntil - lifetimeMs * (1 - RENEWAL_RATIO)
+
+const requestAuthorization = async (): Promise<void> => {
   const response = await store.dispatch(api.endpoints.mercureCreateCookie.initiate()).unwrap()
 
   lifetimeMs = readLifetimeMs(response) ?? lifetimeMs
+  authorizedUntil = Date.now() + lifetimeMs
+}
+
+/**
+ * Request a fresh authorization cookie. Resolves once the cookie is set, so callers can connect
+ * straight afterwards; rejects when the request failed, leaving the previous cookie in place.
+ * Concurrent calls share one request.
+ */
+export const renewMercureAuthorization = async (): Promise<void> => {
+  inFlight ??= requestAuthorization().finally(() => {
+    inFlight = null
+  })
+
+  await inFlight
 }
 
 const scheduleRenewal = (): void => {
+  if (!renewalScheduleActive) {
+    return
+  }
+
   renewalTimeout = setTimeout(() => {
     void renewMercureAuthorization()
       .catch(() => {
         // A failed renewal is not fatal: the cookie we hold is still valid for the remaining
-        // fifth of its lifetime, and every reconnect renews as well. Keep the schedule alive.
+        // fifth of its lifetime, and every connect renews as well. Keep the schedule alive.
       })
       .finally(() => {
+        // Guarded by `renewalScheduleActive`, so stopping stays effective even when it happened
+        // while this request was in flight.
         scheduleRenewal()
       })
   }, Math.round(lifetimeMs * RENEWAL_RATIO))
@@ -90,15 +124,18 @@ const scheduleRenewal = (): void => {
  * second timer on top of the first.
  */
 export const startMercureAuthorizationRenewal = (): void => {
-  if (renewalTimeout !== undefined) {
+  if (renewalScheduleActive) {
     return
   }
 
+  renewalScheduleActive = true
   scheduleRenewal()
 }
 
-/** Stop the background renewal. */
+/** Stop the background renewal, including one that is currently in flight. */
 export const stopMercureAuthorizationRenewal = (): void => {
+  renewalScheduleActive = false
+
   if (renewalTimeout !== undefined) {
     clearTimeout(renewalTimeout)
     renewalTimeout = undefined

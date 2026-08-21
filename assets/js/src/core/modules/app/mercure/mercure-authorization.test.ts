@@ -134,4 +134,74 @@ describe('mercure authorization', () => {
 
     expect(initiate).not.toHaveBeenCalled()
   })
+
+  it('stops renewing when cancelled while a renewal is in flight', async () => {
+    const module = await loadModule()
+    let release = (): void => {}
+    dispatch.mockReturnValue({
+      unwrap: async () => await new Promise(resolve => { release = () => { resolve({}) } })
+    })
+
+    module.startMercureAuthorizationRenewal()
+    await jest.advanceTimersByTimeAsync(2_880_000)
+    expect(initiate).toHaveBeenCalledTimes(1)
+
+    // Cancelled while the request is still open: the schedule must not re-arm when it settles.
+    module.stopMercureAuthorizationRenewal()
+    release()
+    await jest.advanceTimersByTimeAsync(2_880_000 * 3)
+
+    expect(initiate).toHaveBeenCalledTimes(1)
+  })
+
+  it('shares one request between concurrent renewals', async () => {
+    const module = await loadModule()
+    let release = (): void => {}
+    dispatch.mockReturnValue({
+      unwrap: async () => await new Promise(resolve => { release = () => { resolve({ cookieLifetime: 3600 }) } })
+    })
+
+    const first = module.renewMercureAuthorization()
+    const second = module.renewMercureAuthorization()
+    release()
+    await Promise.all([first, second])
+
+    expect(initiate).toHaveBeenCalledTimes(1)
+  })
+
+  it('reports the cookie as invalid until the first renewal succeeded', async () => {
+    const module = await loadModule()
+
+    expect(module.isAuthorizationValid()).toBe(false)
+    expect(module.isAuthorizationFresh()).toBe(false)
+
+    await module.renewMercureAuthorization()
+
+    expect(module.isAuthorizationValid()).toBe(true)
+    expect(module.isAuthorizationFresh()).toBe(true)
+  })
+
+  it('reports the cookie as stale but still valid inside the last fifth of its lifetime', async () => {
+    const module = await loadModule()
+    respondWith({ cookieLifetime: 1000 })
+    await module.renewMercureAuthorization()
+
+    await jest.advanceTimersByTimeAsync(801_000)
+    expect(module.isAuthorizationFresh()).toBe(false)
+    expect(module.isAuthorizationValid()).toBe(true)
+
+    await jest.advanceTimersByTimeAsync(200_000)
+    expect(module.isAuthorizationValid()).toBe(false)
+  })
+
+  it('keeps the previous expiry when a renewal fails', async () => {
+    const module = await loadModule()
+    respondWith({ cookieLifetime: 1000 })
+    await module.renewMercureAuthorization()
+
+    rejectWith(new Error('offline'))
+    await expect(module.renewMercureAuthorization()).rejects.toThrow('offline')
+
+    expect(module.isAuthorizationValid()).toBe(true)
+  })
 })
