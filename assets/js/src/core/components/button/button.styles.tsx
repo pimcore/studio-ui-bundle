@@ -34,7 +34,7 @@ export const useStyles = createStyles(({ token, css }) => {
         }
       }
       
-      .button__loading-spinner + .studio-button__text {
+      .studio-button__loading-spinner + .studio-button__text {
         opacity: 0;
       }
 
