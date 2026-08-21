@@ -684,6 +684,21 @@ edit: Redigera
 modify: Ändra
 component.no-content.no-content-available: Inget innehåll tillgängligt
 notifications.label: Aviseringar
+notifications.settings.label: Aviseringsinställningar
+notifications.settings.description: Aktivera "Meddela mig" för allt du vill ha i din aviseringsklocka, och lägg sedan till fler kanaler för det som betyder mest.
+notifications.settings.description-popup-only: Välj hur aviseringar ska nå dig. Allt du meddelas om visas alltid i din aviseringsklocka.
+notifications.settings.column.type: Aviseringstyp
+notifications.settings.column.subscribed: Meddela mig
+notifications.settings.not-available: Inte tillgängligt för denna typ
+notifications.settings.save: Spara
+notifications.settings.saved: Aviseringsinställningar sparade
+notifications.settings.discard: Kassera
+notifications.settings.discard.title: Vill du kassera dina osparade ändringar?
+notifications.settings.discard.confirm: Kassera
+notifications.settings.discard.keep-editing: Fortsätt redigera
+notifications.settings.unsaved-changes_one: "{{count}} osparad ändring"
+notifications.settings.unsaved-changes_other: "{{count}} osparade ändringar"
+notifications.settings.group.general: Allmänt
 notifications.remove-all: Ta bort alla
 notifications.new-notification: Ny avisering
 notifications.columns.title: Titel

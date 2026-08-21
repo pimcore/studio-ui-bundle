@@ -55,6 +55,24 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Notifications"],
             }),
+            notificationGetSubscriptions: build.query<
+                NotificationGetSubscriptionsApiResponse,
+                NotificationGetSubscriptionsApiArg
+            >({
+                query: () => ({ url: `/pimcore-studio/api/notifications/subscriptions` }),
+                providesTags: ["Notifications"],
+            }),
+            notificationUpdateSubscriptions: build.mutation<
+                NotificationUpdateSubscriptionsApiResponse,
+                NotificationUpdateSubscriptionsApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/notifications/subscriptions`,
+                    method: "PUT",
+                    body: queryArg.notificationUpdateSubscriptionsParameters,
+                }),
+                invalidatesTags: ["Notifications"],
+            }),
         }),
         overrideExisting: false,
     });
@@ -103,6 +121,14 @@ export type NotificationGetRecipientsApiArg = void;
 export type NotificationSendApiResponse = unknown;
 export type NotificationSendApiArg = {
     sendNotificationParameters: SendEmailParameters;
+};
+export type NotificationGetSubscriptionsApiResponse =
+    /** status 200 Notification preferences for the current user */ NotificationSubscriptionCollection;
+export type NotificationGetSubscriptionsApiArg = void;
+export type NotificationUpdateSubscriptionsApiResponse =
+    /** status 200 The stored notification preferences for the current user */ NotificationSubscriptionCollection;
+export type NotificationUpdateSubscriptionsApiArg = {
+    notificationUpdateSubscriptionsParameters: NotificationUpdateSubscriptionsParameters;
 };
 export type NotificationListItem = {
     /** AdditionalAttributes */
@@ -172,6 +198,62 @@ export type SendEmailParameters = {
     /** ID of the attachment */
     attachmentId?: number | null;
 };
+export type NotificationAvailableChannel = {
+    /** channel id */
+    id: string;
+    /** translation key for the column label */
+    translationKey: string;
+    /** translation key explaining why this channel cannot reach the caller, null when it can */
+    unavailableReasonKey?: string | null;
+};
+export type NotificationSubscriptionChannel = {
+    /** channel id */
+    id: string;
+    /** whether the user has this channel enabled */
+    enabled: boolean;
+    /** whether this type can use this channel */
+    supported: boolean;
+};
+export type NotificationSubscribableType = {
+    /** notification type id */
+    typeId: string;
+    /** translation key for the row label */
+    translationKey: string;
+    /** translation key for the row description */
+    descriptionKey: string;
+    /** grouping key */
+    group: string;
+    /** explicit order; never rely on registration order */
+    sortOrder: number;
+    /** whether the user is subscribed */
+    subscribed: boolean;
+    /** whether the subscription cannot be turned off */
+    subscriptionLocked: boolean;
+    /** one entry per available channel */
+    channels: NotificationSubscriptionChannel[];
+};
+export type NotificationSubscriptionCollection = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** channels offerable anywhere in this installation */
+    availableChannels: NotificationAvailableChannel[];
+    /** subscribable types with the caller's effective preferences */
+    items: NotificationSubscribableType[];
+};
+export type NotificationUpdateSubscriptionItem = {
+    /** notification type id */
+    typeId: string;
+    /** whether the user wants this type at all */
+    subscribed: boolean;
+    /** enabled channel ids */
+    channels: string[];
+};
+export type NotificationUpdateSubscriptionsParameters = {
+    /** preferences to store, one entry per notification type */
+    items: NotificationUpdateSubscriptionItem[];
+};
 export const {
     useNotificationGetCollectionQuery,
     useNotificationDeleteAllMutation,
@@ -181,4 +263,6 @@ export const {
     useNotificationGetUnreadCountQuery,
     useNotificationGetRecipientsQuery,
     useNotificationSendMutation,
+    useNotificationGetSubscriptionsQuery,
+    useNotificationUpdateSubscriptionsMutation,
 } = injectedRtkApi;

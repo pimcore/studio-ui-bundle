@@ -684,6 +684,21 @@ edit: Edit
 modify: Modify
 component.no-content.no-content-available: No content available
 notifications.label: Notifications
+notifications.settings.label: Notification settings
+notifications.settings.description: Turn on Notify me for anything you want in your notification bell, then add extra channels on top for the ones that matter most.
+notifications.settings.description-popup-only: Choose how notifications reach you. Anything you are notified about always shows in your notification bell.
+notifications.settings.column.type: Notification type
+notifications.settings.column.subscribed: Notify me
+notifications.settings.not-available: Not available for this type
+notifications.settings.save: Save
+notifications.settings.saved: Notification settings saved
+notifications.settings.discard: Discard
+notifications.settings.discard.title: Discard your unsaved changes?
+notifications.settings.discard.confirm: Discard
+notifications.settings.discard.keep-editing: Keep editing
+notifications.settings.unsaved-changes_one: '{{count}} unsaved change'
+notifications.settings.unsaved-changes_other: '{{count}} unsaved changes'
+notifications.settings.group.general: General
 notifications.remove-all: Remove all
 notifications.new-notification: New Notification
 notifications.columns.title: Title

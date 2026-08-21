@@ -684,6 +684,21 @@ edit: Modifier
 modify: Modifier
 component.no-content.no-content-available: Aucun contenu disponible
 notifications.label: Notifications
+notifications.settings.label: Paramètres de notification
+notifications.settings.description: Activez « Me notifier » pour tout ce que vous souhaitez voir apparaître dans votre cloche de notification, puis ajoutez des canaux supplémentaires pour les éléments qui comptent le plus.
+notifications.settings.description-popup-only: Choisissez comment les notifications vous parviennent. Tout ce dont vous êtes notifié apparaît toujours dans votre cloche de notification.
+notifications.settings.column.type: Type de notification
+notifications.settings.column.subscribed: Me notifier
+notifications.settings.not-available: Non disponible pour ce type
+notifications.settings.save: Enregistrer
+notifications.settings.saved: Paramètres de notification enregistrés
+notifications.settings.discard: Abandonner
+notifications.settings.discard.title: Abandonner vos modifications non enregistrées ?
+notifications.settings.discard.confirm: Abandonner
+notifications.settings.discard.keep-editing: Continuer la modification
+notifications.settings.unsaved-changes_one: "{{count}} modification non enregistrée"
+notifications.settings.unsaved-changes_other: "{{count}} modifications non enregistrées"
+notifications.settings.group.general: Général
 notifications.remove-all: Tout supprimer
 notifications.new-notification: Nouvelle notification
 notifications.columns.title: Titre
