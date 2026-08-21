@@ -167,7 +167,22 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
         <Badge
           count={ notificationCount }
           data-testid="user-menu-avatar-badge"
+          overflowCount={ 99 }
           size={ 'small' }
+          styles={ {
+            indicator: {
+              // Fixed circle: the default indicator grows with each digit, which reads as a
+              // stretched pill against a 26px avatar. The font steps down instead.
+              width: 16,
+              height: 16,
+              minWidth: 16,
+              lineHeight: '16px',
+              borderRadius: '50%',
+              fontSize: notificationCount > 9 ? 9 : 10,
+              fontWeight: 'normal',
+              padding: 0
+            }
+          } }
         >
           <Avatar
             data-testid="user-menu-avatar"
