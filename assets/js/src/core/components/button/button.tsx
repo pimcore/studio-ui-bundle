@@ -29,9 +29,9 @@ const Component = ({ loading, children, className, type, color, ...props }: Butt
   useImperativeHandle(ref, () => buttonRef.current)
 
   const buttonClassNames = cn(
-    'button',
-    `button--type-${type}`,
-    `button--color-${color}`,
+    'studio-button',
+    `studio-button--type-${type}`,
+    `studio-button--color-${color}`,
     styles.button,
     {
       'ant-btn-loading': loading
@@ -78,7 +78,7 @@ const Component = ({ loading, children, className, type, color, ...props }: Butt
           <AnimatePresence>
             <motion.div
               animate={ { opacity: 1 } }
-              className='button__loading-spinner'
+              className='studio-button__loading-spinner'
               exit={ { opacity: 0 } }
               initial={ { opacity: 0 } }
               key={ 'loading' }
@@ -92,7 +92,7 @@ const Component = ({ loading, children, className, type, color, ...props }: Butt
           )
         : null }
 
-      <span className={ 'button__text' }>{children}</span>
+      <span className={ 'studio-button__text' }>{children}</span>
     </AntdButton>
   )
 }

@@ -17,7 +17,7 @@ export const useStyles = createStyles(({ token, css }) => {
         min-height: 38px;
         padding: ${token.paddingXXS}px ${token.paddingSM}px;
 
-        .button--type-action {
+        .studio-button--type-action {
           margin-bottom: -4px;
         }
       }

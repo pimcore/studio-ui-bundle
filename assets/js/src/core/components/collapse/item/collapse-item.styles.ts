@@ -41,7 +41,7 @@ export const useStyles = createStyles(({ css, token }) => {
         }
 
         &>.ant-collapse-item >.ant-collapse-header {
-          .button--type-action {
+          .studio-button--type-action {
             margin-bottom: -4px;
           }
         }

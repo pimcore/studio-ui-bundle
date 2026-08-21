@@ -15,7 +15,7 @@ export const useStyles = createStyles(({ token, css }) => {
     button: css`
       position: relative;
 
-      .button__loading-spinner,
+      .studio-button__loading-spinner,
       .ant-spin-dot {
         position: absolute;
         top: 50%;
@@ -26,7 +26,7 @@ export const useStyles = createStyles(({ token, css }) => {
         transform: translateY(-50%);
       }
       
-      .button__text {
+      .studio-button__text {
         transition: opacity 200ms ease-in-out;
         
         &:empty {
@@ -34,11 +34,11 @@ export const useStyles = createStyles(({ token, css }) => {
         }
       }
       
-      .button__loading-spinner + .button__text {
+      .button__loading-spinner + .studio-button__text {
         opacity: 0;
       }
 
-      &.button--type-action {
+      &.studio-button--type-action {
         background-color: ${token.colorBgToolbar};
         border: none;
         box-shadow: none;
@@ -49,12 +49,12 @@ export const useStyles = createStyles(({ token, css }) => {
         }
       }
 
-      &.button--color-secondary {
+      &.studio-button--color-secondary {
         border-color: ${token.colorBorderSecondary};
         box-shadow: none;
         color: ${token.colorText};
       }
-      &.button--color-secondary:hover {
+      &.studio-button--color-secondary:hover {
         border-color: ${token.colorBorderSecondary} !important;
         color: ${token.colorText} !important;
       }
