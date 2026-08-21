@@ -501,7 +501,7 @@ export type UserObjectDependencies = {
     /** If it has hidden dependencies */
     hasHidden: boolean;
     /** Total number of objects referencing this user */
-    totalItems: number;
+    totalItems?: number;
 };
 export type User = {
     /** AdditionalAttributes */
