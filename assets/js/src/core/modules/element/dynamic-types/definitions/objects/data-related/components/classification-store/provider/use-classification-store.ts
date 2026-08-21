@@ -20,6 +20,8 @@ export interface UseClassificationStoreReturn {
   getSearchValue: (tabId: string) => string
   currentLayoutData: ClassificationStoreGroupLayout2[]
   updateCurrentLayoutData: (layoutData: ClassificationStoreGroupLayout2[]) => void
+  markGroupsAsNew: (groupIds: string[]) => void
+  isNewGroup: (groupId: string) => boolean
 }
 
 const useClassificationStore = (): UseClassificationStoreReturn => {
@@ -36,7 +38,9 @@ const useClassificationStore = (): UseClassificationStoreReturn => {
     setSearchValue: context.setSearchValue,
     getSearchValue: context.getSearchValue,
     currentLayoutData: context.currentLayoutData,
-    updateCurrentLayoutData: context.setCurrentLayoutData
+    updateCurrentLayoutData: context.setCurrentLayoutData,
+    markGroupsAsNew: context.markGroupsAsNew,
+    isNewGroup: context.isNewGroup
   }
 }
 
