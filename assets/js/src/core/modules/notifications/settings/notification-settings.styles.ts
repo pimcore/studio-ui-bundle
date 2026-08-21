@@ -18,7 +18,8 @@ export const useStyles = createStyles(({ token, css }) => {
         max-width: 900px;
         border: 1px solid ${token.colorBorderSecondary};
         border-radius: ${token.borderRadiusLG}px;
-        overflow: hidden;
+        /* Scroll rather than clip: a data-driven set can report more channel columns than fit. */
+        overflow-x: auto;
     `,
     row: css`
         display: grid;

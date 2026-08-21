@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
@@ -30,7 +30,7 @@ import { NotificationSettingsToolbar } from './notification-settings-toolbar'
 export const NotificationSettingsContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { success } = useMessage()
-  const { data, isLoading } = useNotificationGetSubscriptionsQuery()
+  const { data, isLoading, isError, error } = useNotificationGetSubscriptionsQuery()
   const [updateSubscriptions, { isLoading: isSaving }] = useNotificationUpdateSubscriptionsMutation()
 
   const {
@@ -43,6 +43,13 @@ export const NotificationSettingsContainer = (): React.JSX.Element => {
     toUpdateItems,
     applyServerState
   } = useNotificationSettingsDraft(data?.items)
+
+  useEffect(() => {
+    // Match the notification list: a failed load surfaces an error toast, not a blank panel.
+    if (isError) {
+      trackError(new ApiError(error))
+    }
+  }, [isError])
 
   const onSave = (): void => {
     updateSubscriptions({ notificationUpdateSubscriptionsParameters: { items: toUpdateItems() } })
@@ -98,6 +105,7 @@ export const NotificationSettingsContainer = (): React.JSX.Element => {
                 items={ data.items }
                 onChannelChange={ setChannel }
                 onSubscribedChange={ setSubscribed }
+                saving={ isSaving }
               />
             )}
           </Flex>

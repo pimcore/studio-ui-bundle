@@ -30,6 +30,7 @@ export interface NotificationSettingsViewProps {
   draft: NotificationDraft
   onSubscribedChange: (typeId: string, subscribed: boolean) => void
   onChannelChange: (typeId: string, channelId: string, enabled: boolean) => void
+  saving?: boolean
 }
 
 interface TypeGroup {
@@ -61,7 +62,8 @@ export const NotificationSettingsView = ({
   availableChannels,
   draft,
   onSubscribedChange,
-  onChannelChange
+  onChannelChange,
+  saving = false
 }: NotificationSettingsViewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -79,6 +81,14 @@ export const NotificationSettingsView = ({
     channelRegistry.hasDynamicType(channelId)
       ? channelRegistry.getDynamicType(channelId).icon
       : 'notification-read'
+  )
+
+  // A registered channel definition may override the API's label (documented on the abstract);
+  // fall back to the API key when it doesn't, mirroring channelIcon.
+  const channelLabelKey = (channel: NotificationAvailableChannel): string => (
+    channelRegistry.hasDynamicType(channel.id)
+      ? channelRegistry.getDynamicType(channel.id).translationKey ?? channel.translationKey
+      : channel.translationKey
   )
 
   return (
@@ -101,7 +111,7 @@ export const NotificationSettingsView = ({
               justify={ 'center' }
             >
               <Icon value={ channelIcon(channel.id) } />
-              <Text type={ 'secondary' }>{t(channel.translationKey)}</Text>
+              <Text type={ 'secondary' }>{t(channelLabelKey(channel))}</Text>
               {/* Explained rather than disabled: the preference stores and starts working the
                   moment the account can be reached. */}
               {!isNil(channel.unavailableReasonKey) && (
@@ -142,6 +152,7 @@ export const NotificationSettingsView = ({
                 key={ item.typeId }
                 onChannelChange={ onChannelChange }
                 onSubscribedChange={ onSubscribedChange }
+                saving={ saving }
               />
             )
           })}

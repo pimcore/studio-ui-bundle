@@ -40,6 +40,11 @@ export const api = baseApi.enhanceEndpoints({
     },
     notificationDeleteAll: {
       invalidatesTags: (result, error, args) => invalidatingTags.NOTIFICATIONS()
+    },
+    notificationGetUnreadCount: {
+      // Share the list's NOTIFICATIONS tag so bulk changes (delete-all) refetch the badge count,
+      // not only the single-item read/delete the manual decrement covers.
+      providesTags: (result, error, args): Tag[] => providingTags.NOTIFICATIONS()
     }
   }
 })

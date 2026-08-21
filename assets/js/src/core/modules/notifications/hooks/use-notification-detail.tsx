@@ -14,8 +14,8 @@ import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-h
 import { skipToken } from '@reduxjs/toolkit/query'
 import { useOptimisticUpdate } from './use-optimistic-update'
 import { isNil } from 'lodash'
-import { useAppSelector } from '@Pimcore/app/store'
-import { selectExpandRequest } from '../notifications-ui-slice'
+import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
+import { clearExpandRequest, selectExpandRequest } from '../notifications-ui-slice'
 
 export interface UseNotificationDetailProps {
   id: number
@@ -33,6 +33,7 @@ interface UseNotificationsReturn {
 
 export const useNotificationDetail = ({ id, activeNotification }: UseNotificationDetailProps): UseNotificationsReturn => {
   const [isExpanded, setIsExpanded] = useState<boolean>(id === activeNotification)
+  const dispatch = useAppDispatch()
   const expandRequest = useAppSelector(selectExpandRequest)
 
   // The initial state above only covers a freshly mounted list; this covers "View" on an
@@ -40,8 +41,10 @@ export const useNotificationDetail = ({ id, activeNotification }: UseNotificatio
   useEffect(() => {
     if (expandRequest?.id === id) {
       setIsExpanded(true)
+      // Consume the one-shot request so reopening the bell does not re-expand this row.
+      dispatch(clearExpandRequest())
     }
-  }, [expandRequest, id])
+  }, [expandRequest, id, dispatch])
 
   const { updateNotificationReadStateById, removeNotificationFromCollectionById } = useOptimisticUpdate()
   const [deleteNotificationMutation, { isLoading: deleteLoading }] = useNotificationDeleteByIdMutation()

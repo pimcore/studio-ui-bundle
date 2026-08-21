@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { notificationsUiReducer, requestExpandNotification } from './notifications-ui-slice'
+import { clearExpandRequest, notificationsUiReducer, requestExpandNotification } from './notifications-ui-slice'
 
 // The slice self-registers with the app store on import; stub that side effect so the test
 // exercises just the reducer. jest hoists this above the import.
@@ -37,5 +37,12 @@ describe('notifications-ui slice', () => {
     const second = notificationsUiReducer(first, requestExpandNotification(2))
 
     expect(second.expandRequest).toEqual({ id: 2, token: 2 })
+  })
+
+  it('clears the request once consumed so a remount does not re-expand', () => {
+    const requested = notificationsUiReducer(undefined, requestExpandNotification(42))
+    const cleared = notificationsUiReducer(requested, clearExpandRequest())
+
+    expect(cleared.expandRequest).toBeNull()
   })
 })

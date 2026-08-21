@@ -38,9 +38,19 @@ export const NotificationSettingsCell = ({
   const { t } = useTranslation()
 
   if (!supported) {
+    const unavailable = t('notifications.settings.not-available')
+
     return (
-      <Tooltip title={ t('notifications.settings.not-available') }>
-        <Text type={ 'secondary' }>—</Text>
+      <Tooltip title={ unavailable }>
+        {/* Focusable span with a spelled-out name: AT users hear which channel/type is off,
+            and the tooltip is reachable by keyboard, not just hover. */}
+        <span
+          aria-label={ `${ariaLabel}: ${unavailable}` }
+          role={ 'img' }
+          tabIndex={ 0 }
+        >
+          <Text type={ 'secondary' }>—</Text>
+        </span>
       </Tooltip>
     )
   }

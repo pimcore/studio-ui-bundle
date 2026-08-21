@@ -36,6 +36,10 @@ const notificationsUiSlice = createSlice({
         id: action.payload,
         token: (state.expandRequest?.token ?? 0) + 1
       }
+    },
+    // Acknowledges a consumed request so a later remount of the same row does not re-expand it.
+    clearExpandRequest: (state) => {
+      state.expandRequest = null
     }
   },
   selectors: {
@@ -47,7 +51,7 @@ injectSliceWithState(notificationsUiSlice)
 
 /** Exported for testing the token progression. */
 export const notificationsUiReducer = notificationsUiSlice.reducer
-export const { requestExpandNotification } = notificationsUiSlice.actions
+export const { requestExpandNotification, clearExpandRequest } = notificationsUiSlice.actions
 export const { selectExpandRequest } = notificationsUiSlice.getSelectors(
   (state: RootState) => state['notifications-ui']
 )

@@ -22,6 +22,7 @@ export interface NotificationSettingsRowProps {
   availableChannels: NotificationAvailableChannel[]
   onSubscribedChange: (typeId: string, subscribed: boolean) => void
   onChannelChange: (typeId: string, channelId: string, enabled: boolean) => void
+  saving?: boolean
 }
 
 /**
@@ -33,7 +34,8 @@ export const NotificationSettingsRow = ({
   entry,
   availableChannels,
   onSubscribedChange,
-  onChannelChange
+  onChannelChange,
+  saving = false
 }: NotificationSettingsRowProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -55,7 +57,7 @@ export const NotificationSettingsRow = ({
           ariaLabel={ `${t('notifications.settings.column.subscribed')} ${t(item.translationKey)}` }
           checked={ entry.subscribed }
           // Locked renders a disabled switch, not a dash: it is a live setting that cannot be off.
-          disabled={ item.subscriptionLocked }
+          disabled={ item.subscriptionLocked || saving }
           onChange={ (checked) => { onSubscribedChange(item.typeId, checked) } }
           supported
         />
@@ -72,7 +74,7 @@ export const NotificationSettingsRow = ({
             <NotificationSettingsCell
               ariaLabel={ `${t(channel.translationKey)} ${t(item.translationKey)}` }
               checked={ entry.channels.has(channel.id) }
-              disabled={ !entry.subscribed }
+              disabled={ !entry.subscribed || saving }
               onChange={ (checked) => { onChannelChange(item.typeId, channel.id, checked) } }
               supported={ supported }
             />
