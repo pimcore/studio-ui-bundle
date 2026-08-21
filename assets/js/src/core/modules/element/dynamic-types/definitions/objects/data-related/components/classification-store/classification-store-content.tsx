@@ -122,6 +122,7 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
             {isHideEmptyDataEnabled
               ? (
                 <Switch
+                  aria-label={ t('hide-empty-data') }
                   checked={ hideEmptyData }
                   labelLeft={ <Text>{t('hide-empty-data')}</Text> }
                   onChange={ handleHideEmptyDataChange }
