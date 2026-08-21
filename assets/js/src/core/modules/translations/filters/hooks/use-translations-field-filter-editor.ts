@@ -83,7 +83,7 @@ export const useTranslationsFieldFilterEditor = (): UseTranslationsFieldFilterEd
     setFilters(data)
     const fieldFilters = toFieldFilters(data)
     setValue('fieldFilters', fieldFilters)
-    appliedStore.setValue('fieldFilters', fieldFilters)
+    appliedStore.setValues({ ...values, fieldFilters })
   }
 
   const handleColumnClick = (column: TranslationFilterColumn): void => {

@@ -84,10 +84,11 @@ const prepareFieldFilters = (filters: FieldFilter[], context: TranslationFilterC
 
 const SearchTermControl: FC<FilterControlProps<string>> = ({ value, onChange }) => {
   const appliedStore = useTranslationsAppliedFilters()
+  const draftStore = useTranslationsDraftFilters()
 
   const handleSearch = (searchValue: string): void => {
     onChange(searchValue)
-    appliedStore.setValue('searchTerm', searchValue)
+    appliedStore.setValues({ ...draftStore.values, searchTerm: searchValue })
   }
 
   return (
