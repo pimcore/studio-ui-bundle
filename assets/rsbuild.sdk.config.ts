@@ -144,6 +144,7 @@ export default defineConfig({
       './modules/notifications': './js/src/sdk/modules/notifications/index.ts',
       './modules/perspectives': './js/src/sdk/modules/perspectives/index.ts',
       './modules/global-message-bus': './js/src/sdk/modules/global-message-bus/index.ts',
+      './modules/execution-engine': './js/src/sdk/modules/execution-engine/index.ts',
       './modules/gdpr-data-extractor': './js/src/sdk/modules/gdpr-data-extractor/index.ts',
       './utils': './js/src/sdk/utils/index.ts',
       },
