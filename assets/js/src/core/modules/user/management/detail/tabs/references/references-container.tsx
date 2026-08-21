@@ -26,7 +26,7 @@ const ReferenceContainer = ({ ...props }): React.JSX.Element => {
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(DEFAULT_PAGE_SIZE)
 
-  const { data, isLoading, isFetching, isError, error } = useUserGetObjectDependenciesQuery({ id, page, pageSize })
+  const { data, currentData, isLoading, isFetching, isError, error } = useUserGetObjectDependenciesQuery({ id, page, pageSize })
 
   useEffect(() => {
     if (isError) {
@@ -54,7 +54,7 @@ const ReferenceContainer = ({ ...props }): React.JSX.Element => {
         </Toolbar>
 
         <Table
-          data={ data?.items ?? [] }
+          data={ currentData?.items ?? [] }
           isLoading={ isFetching }
         />
       </>
