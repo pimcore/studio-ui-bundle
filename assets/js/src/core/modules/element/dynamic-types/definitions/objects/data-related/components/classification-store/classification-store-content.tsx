@@ -21,6 +21,8 @@ import { useLanguageSelection } from '@Pimcore/components/language-selection/pro
 import { LocalizationSwitch } from './components/localization-switch/localization-switch'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Space } from '@Pimcore/components/space/space'
+import { Switch, type SwitchProps } from '@Pimcore/components/switch/switch'
+import { Text } from '@Pimcore/components/text/text'
 import { Button } from '@Pimcore/components/button/button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
@@ -47,6 +49,13 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
   const [localizationMode, setLocalizationMode] = useState<string>('default')
   const { t } = useTranslation()
 
+  const isHideEmptyDataEnabled = props.hideEmptyData === true
+  const [hideEmptyData, setHideEmptyData] = useState<boolean>(isHideEmptyDataEnabled)
+  // Bumped whenever hiding is switched back on, which is the only moment the groups
+  // re-evaluate which of their keys are empty. Without it, a value entered while the
+  // empty keys were visible would be hidden again right after.
+  const [hideEmptyDataRevision, setHideEmptyDataRevision] = useState<number>(0)
+
   const { openModal, currentLayoutData, updateCurrentLayoutData } = useClassificationStore()
   const { groupKeys, activeGroups, groupCollectionMapping } = useKeyedListSelector(selectStructure)
   const { currentLanguage } = useLanguageSelection()
@@ -66,6 +75,16 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
 
   const handleLocalizationChange = (value: string): void => {
     setLocalizationMode(value)
+  }
+
+  const handleHideEmptyDataChange: SwitchProps['onChange'] = (checked, event): void => {
+    event.stopPropagation()
+
+    setHideEmptyData(checked)
+
+    if (checked) {
+      setHideEmptyDataRevision((revision) => revision + 1)
+    }
   }
 
   if (localizationMode === 'current-language') {
@@ -96,14 +115,29 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
             {t('add')}
           </Button>
 
-          {isLocalizable
-            ? (
-              <LocalizationSwitch
-                initialValue={ localizationGroup }
-                onChange={ handleLocalizationChange }
-              />
-              )
-            : <></>}
+          <Flex
+            align='center'
+            gap='small'
+          >
+            {isHideEmptyDataEnabled
+              ? (
+                <Switch
+                  checked={ hideEmptyData }
+                  labelLeft={ <Text>{t('hide-empty-data')}</Text> }
+                  onChange={ handleHideEmptyDataChange }
+                />
+                )
+              : <></>}
+
+            {isLocalizable
+              ? (
+                <LocalizationSwitch
+                  initialValue={ localizationGroup }
+                  onChange={ handleLocalizationChange }
+                />
+                )
+              : <></>}
+          </Flex>
         </Flex>
       }
       extraPosition='start'
@@ -124,6 +158,9 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
               <ClassificationStoreItem
                 currentLayoutData={ currentLayoutData }
                 groupLayout={ find(currentLayoutData, { id: parseInt(key) }) }
+                hideEmptyData={ isHideEmptyDataEnabled && hideEmptyData }
+                hideEmptyDataRevision={ hideEmptyDataRevision }
+                localizationGroup={ localizationGroup }
                 updateCurrentLayoutData={ updateCurrentLayoutData }
               />
             </Form.Group>
@@ -151,5 +188,5 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
         />
       </Form.Item>
     </BaseView>
-  ), [groupKeys, activeGroups, groupCollectionMapping, localizationGroup, currentLayoutData])
+  ), [groupKeys, activeGroups, groupCollectionMapping, localizationGroup, currentLayoutData, hideEmptyData, hideEmptyDataRevision])
 }
