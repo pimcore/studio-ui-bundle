@@ -27,7 +27,12 @@ export interface DeleteJobOptions {
   treeId?: string
   nodeId?: string
   parentFolderId?: number
+  /** Runs once the element is really gone, not when the delete request was merely accepted. */
+  onSuccess?: () => void
 }
+
+/** The delete request was rejected. Its error has already been reported to the user. */
+class DeleteRequestRejectedError extends Error {}
 
 export class DeleteJob implements JobInterface {
   static readonly jobNames = ['studio_ee_job_delete_assets', 'studio_ee_job_delete_data_objects', 'studio_ee_job_delete_documents'] as const
@@ -37,6 +42,7 @@ export class DeleteJob implements JobInterface {
   private readonly treeId?: string
   private readonly nodeId?: string
   private readonly parentFolderId?: number
+  private readonly onSuccess?: () => void
 
   constructor (options: DeleteJobOptions) {
     this.elementId = options.elementId
@@ -44,6 +50,7 @@ export class DeleteJob implements JobInterface {
     this.treeId = options.treeId
     this.nodeId = options.nodeId
     this.parentFolderId = options.parentFolderId
+    this.onSuccess = options.onSuccess
   }
 
   async run (options: JobRunOptions): Promise<void> {
@@ -89,7 +96,10 @@ export class DeleteJob implements JobInterface {
       messageBus.registerHandler(handler)
     } catch (error: any) {
       await this.handleJobFailure(error)
-      trackError(new GeneralError(error.message as string))
+
+      if (!(error instanceof DeleteRequestRejectedError)) {
+        trackError(new GeneralError(error.message as string))
+      }
     }
   }
 
@@ -103,7 +113,7 @@ export class DeleteJob implements JobInterface {
 
     if (!isUndefined(response.error)) {
       trackError(new ApiError(response.error))
-      return null
+      throw new DeleteRequestRejectedError('Delete request rejected')
     }
 
     return response.data?.jobRunId ?? null
@@ -126,6 +136,8 @@ export class DeleteJob implements JobInterface {
         nodeId: this.parentFolderId.toString()
       }))
     }
+
+    this.onSuccess?.()
   }
 
   private async handleJobFailure (error: any): Promise<void> {
