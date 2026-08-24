@@ -14,8 +14,7 @@ import { AccordionView, type AccordionViewProps } from './accordion-view'
 import { CardView, type CardViewProps } from './card-view'
 import { Icon, type ElementIcon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { isNonEmptyString } from '@sdk/utils'
-import { useTranslation } from 'react-i18next'
+import { translateLabel } from '@Pimcore/utils/translate-label'
 
 export type BaseViewProps = (CardViewProps | AccordionViewProps) & {
   border?: boolean
@@ -25,7 +24,6 @@ export type BaseViewProps = (CardViewProps | AccordionViewProps) & {
 
 export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewProps): React.JSX.Element => {
   const isPaddedLayout = props.border === true || props.collapsible === true || !isEmpty(props.title)
-  const { t } = useTranslation()
 
   const wrapWithIcon = (titleNode: ReactNode): ReactNode => {
     if (isNil(props.icon) || isEmpty(titleNode)) {
@@ -46,7 +44,7 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
     )
   }
 
-  const translatedTitle = isNonEmptyString(props.title) ? t(props.title) : props.title
+  const translatedTitle = translateLabel(props.title)
 
   return useMemo(() => {
     if (!isPaddedLayout) {
