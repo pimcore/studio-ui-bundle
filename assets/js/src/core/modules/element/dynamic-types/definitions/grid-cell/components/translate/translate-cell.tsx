@@ -19,7 +19,7 @@ export const TranslateCell = (props: TextCellProps): React.JSX.Element => {
 
   return (
     <div className="default-cell__content default-cell__content--padded">
-      {  translateLabel(value)  }
+      { translateLabel(value) }
     </div>
   )
 }
