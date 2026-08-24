@@ -169,9 +169,15 @@ export const contextMenuConfig = {
     }
   },
 
-  // Renders between "My profile" and "Log out"; priority orders providers against each other only.
+  // Every row below the username header is a provider, logout included, so it can be reordered or
+  // hidden. Its 9999 clears the registry's `?? 999` default — anything lower loses to a provider
+  // that omits a priority.
   userMenu: {
     name: 'user-menu',
-    priority: {}
+    priority: {
+      notifications: 100,
+      myProfile: 200,
+      logout: 9999
+    }
   }
 }
