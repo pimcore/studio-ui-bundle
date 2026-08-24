@@ -15,6 +15,7 @@ import { Badge } from '@Pimcore/components/badge/badge'
 import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/context-menu-config'
 import { type ContextMenuItemProvider } from '@Pimcore/modules/app/context-menu-registry/context-menu-registry'
 import { useModalHolder } from '@Pimcore/modules/app/modal-holder/use-modal-holder'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
@@ -28,7 +29,7 @@ const SEND_MODAL_ID = 'user-menu-send-notification'
 
 export const notificationsUserMenuItemProvider: ContextMenuItemProvider = {
   name: 'notifications',
-  priority: 100,
+  priority: contextMenuConfig.userMenu.priority.notifications,
   useMenuItem: () => {
     const { t } = useTranslation()
     const { token } = theme.useToken()

@@ -11,13 +11,14 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/context-menu-config'
 import { type ContextMenuItemProvider } from '@Pimcore/modules/app/context-menu-registry/context-menu-registry'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { USERPROFILE } from './profile-container'
 
 export const profileUserMenuItemProvider: ContextMenuItemProvider = {
   name: 'myProfile',
-  priority: 200,
+  priority: contextMenuConfig.userMenu.priority.myProfile,
   useMenuItem: () => {
     const { t } = useTranslation()
     const { openMainWidget } = useWidgetManager()

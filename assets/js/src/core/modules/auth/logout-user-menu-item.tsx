@@ -12,13 +12,13 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '@Pimcore/components/icon/icon'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/context-menu-config'
 import { type ContextMenuItemProvider } from '@Pimcore/modules/app/context-menu-registry/context-menu-registry'
 import { useLogoutMutation } from './authorization-api-slice.gen'
 
-// 9999 clears the registry's `?? 999` default for providers without a priority.
 export const logoutUserMenuItemProvider: ContextMenuItemProvider = {
   name: 'logout',
-  priority: 9999,
+  priority: contextMenuConfig.userMenu.priority.logout,
   useMenuItem: () => {
     const { t } = useTranslation()
     const [logout] = useLogoutMutation()
