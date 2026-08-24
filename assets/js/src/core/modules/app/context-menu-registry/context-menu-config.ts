@@ -169,9 +169,7 @@ export const contextMenuConfig = {
     }
   },
 
-  // Every row below the username header is a provider, logout included, so it can be reordered or
-  // hidden. Its 9999 clears the registry's `?? 999` default — anything lower loses to a provider
-  // that omits a priority.
+  // Every row below the username header is a provider. Logout's 9999 clears the `?? 999` default.
   userMenu: {
     name: 'user-menu',
     priority: {

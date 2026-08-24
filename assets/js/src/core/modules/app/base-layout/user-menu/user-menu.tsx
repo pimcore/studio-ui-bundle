@@ -30,7 +30,6 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   const { styles } = useStyle()
   const user = useUser()
   const { getUserImageById, updateUserImageInState } = useUserHelper()
-  // Shared with the notifications provider; RTK Query dedupes the two subscriptions into one request.
   const { data } = useNotificationGetUnreadCountQuery(undefined, {
     skip: !isAllowed(UserPermission.Notifications)
   })
@@ -80,7 +79,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       overlayStyle={ { minWidth: 275 } }
       trigger={ ['click'] }
     >
-      {/* No showZero: permanently on screen, so it must go quiet at nothing to report. */}
+      {/* No showZero: permanently on screen, so it goes quiet at nothing to report. */}
       <Badge
         count={ notificationCount }
         data-testid="user-menu-avatar-badge"
@@ -88,8 +87,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
         size={ 'small' }
         styles={ {
           indicator: {
-            // Fixed circle: the default indicator grows with each digit, which reads as a
-            // stretched pill against a 26px avatar. The font steps down instead.
+            // Fixed circle; the font steps down instead of the badge growing per digit.
             width: 16,
             height: 16,
             minWidth: 16,

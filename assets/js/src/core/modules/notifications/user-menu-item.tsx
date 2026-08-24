@@ -52,7 +52,7 @@ export const notificationsUserMenuItemProvider: ContextMenuItemProvider = {
           showZero
           styles={ {
             indicator: {
-              // Always shown here, but a zero goes grey rather than wearing the accent colour.
+              // A zero goes grey rather than wearing the accent colour.
               background: count > 0 ? token.colorPrimary : token.colorTextQuaternary,
               width: 20,
               height: 20,
@@ -69,7 +69,7 @@ export const notificationsUserMenuItemProvider: ContextMenuItemProvider = {
         />
       ),
       onClick: () => { openMainWidget(NOTIFICATIONS) },
-      // Both actions open something other than the bell, so each stops the row's own onClick.
+      // Both open something other than the bell, so each stops the row's onClick.
       extra: (
         <Flex
           align={ 'center' }

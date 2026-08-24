@@ -15,7 +15,7 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type ContextMenuItemProvider } from '@Pimcore/modules/app/context-menu-registry/context-menu-registry'
 import { useLogoutMutation } from './authorization-api-slice.gen'
 
-// Priority must clear the registry's ?? 999 default, or a provider that omits one sorts after it.
+// 9999 clears the registry's `?? 999` default for providers without a priority.
 export const logoutUserMenuItemProvider: ContextMenuItemProvider = {
   name: 'logout',
   priority: 9999,

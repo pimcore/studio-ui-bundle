@@ -11,7 +11,7 @@
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { type WidgetManagerTabConfig } from '../widget-manager/widget-manager-slice'
 
-// Kept out of the module barrel so the user-menu provider can read them without an import cycle.
+// Out of the barrel to avoid a cycle with the user-menu provider.
 export const NOTIFICATIONS: WidgetManagerTabConfig = {
   component: 'notifications',
   name: 'Notifications',
