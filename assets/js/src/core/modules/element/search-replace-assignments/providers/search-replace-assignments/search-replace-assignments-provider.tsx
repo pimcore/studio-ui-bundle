@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { createContext, useContext, type ReactNode, useState, useEffect, useMemo } from 'react'
+import React, { createContext, useContext, type ReactNode, useState, useEffect, useMemo, useRef } from 'react'
 import { type ManyToOneRelationValue } from '@Pimcore/components/many-to-one-relation/many-to-one-relation'
 import { type RowSelectionState } from '@tanstack/react-table'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
@@ -63,6 +63,12 @@ export const SearchReplaceAssignmentsProvider = ({ children, initialSearchFor = 
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(defaultPageSize)
   const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
+
+  const onAppliedRef = useRef(onApplied)
+
+  useEffect(() => {
+    onAppliedRef.current = onApplied
+  }, [onApplied])
 
   const executionEngine = container.get<ExecutionEngine>(serviceIds.executionEngine)
   const [trigger, { data, isFetching, isLoading }] = api.useLazyElementGetUsageQuery()
@@ -126,7 +132,7 @@ export const SearchReplaceAssignmentsProvider = ({ children, initialSearchFor = 
         onFinish: () => {
           handleRefresh()
           setSelectedRows({})
-          onApplied?.()
+          onAppliedRef.current?.()
         }
       })
 
@@ -160,7 +166,7 @@ export const SearchReplaceAssignmentsProvider = ({ children, initialSearchFor = 
         onFinish: () => {
           handleRefresh()
           setSelectedRows({})
-          onApplied?.()
+          onAppliedRef.current?.()
         }
       })
 
