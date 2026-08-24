@@ -43,11 +43,19 @@ export const GroupByKeyTab = (props: GroupByKeyTabProps): React.JSX.Element => {
         size: 100
       }
     ),
-    columnHelper.accessor('groupName', { header: t('classification-store.column.group'), size: 200 }),
-    columnHelper.accessor('keyName', { header: t('classification-store.column.name'), size: 200 }),
+    columnHelper.accessor('groupName', {
+      header: t('classification-store.column.group'),
+      meta: { type: 'translate' },
+      size: 200
+    }),
+    columnHelper.accessor('keyName', {
+      header: t('classification-store.column.name'),
+      meta: { type: 'translate' },
+      size: 200
+    }),
     columnHelper.accessor('keyDescription', {
       header: t('classification-store.column.description'),
-      meta: { autoWidth: true },
+      meta: { type: 'translate', autoWidth: true },
       size: 250
     })
   ], [t])

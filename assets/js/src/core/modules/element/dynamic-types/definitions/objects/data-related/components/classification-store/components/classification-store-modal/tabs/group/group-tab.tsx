@@ -34,10 +34,14 @@ export const GroupTab = (props: GroupTabProps): React.JSX.Element => {
 
   const columns = useMemo(() => [
     columnHelper.accessor('id', { header: t('classification-store.column.id'), size: 80 }),
-    columnHelper.accessor('name', { header: t('classification-store.column.name'), size: 300 }),
+    columnHelper.accessor('name', {
+      header: t('classification-store.column.name'),
+      meta: { type: 'translate' },
+      size: 300
+    }),
     columnHelper.accessor('description', {
       header: t('classification-store.column.description'),
-      meta: { autoWidth: true },
+      meta: { type: 'translate', autoWidth: true },
       size: 300
     })
   ], [t])
