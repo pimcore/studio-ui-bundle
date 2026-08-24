@@ -25,6 +25,11 @@ Context menu items are organized into **slots** - specific locations where you r
 - **`asset.list-grid`** - Asset list view right-click menu
 - **`asset.preview-card`** - Asset folder preview card context menu
 
+### Application Menus
+- **`user-menu`** - The user menu behind the avatar in the left sidebar
+
+Every row is a provider, including `logout`, so one can be repositioned or overridden with a `useMenuItem` returning `null` to hide it. Register in a module's `onInit` — `useContextMenuSlot` calls each `useMenuItem()` in slot order, so a later registration changes React's hook order.
+
 ## Registering Context Menu Items
 
 Use the `registerToSlot` method to register custom menu items:
