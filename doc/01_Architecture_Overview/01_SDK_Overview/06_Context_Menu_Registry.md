@@ -28,19 +28,7 @@ Context menu items are organized into **slots** - specific locations where you r
 ### Application Menus
 - **`user-menu`** - The user menu behind the avatar in the left sidebar
 
-Unlike the slots above, `user-menu` takes no context — pass `{}`. Every row below the username header is a provider: `notifications` (100), `myProfile` (200) and `logout` (9999). Logout's priority is deliberately above the registry's `?? 999` fallback, so a provider registered without a priority still sorts before it.
-
-Providers must be registered in a module's `onInit`. `useContextMenuSlot` calls each `useMenuItem()` in slot order, so registering after first render changes React's hook order for the menu.
-
-To hide a built-in entry, override it with a provider that returns `null`:
-
-```typescript
-contextMenuRegistry.overrideSlotProvider(contextMenuConfig.userMenu.name, {
-  name: 'logout',
-  priority: contextMenuConfig.userMenu.priority.logout,
-  useMenuItem: () => null
-})
-```
+Every row is a provider, including `logout`, so one can be repositioned or overridden with a `useMenuItem` returning `null` to hide it. Register in a module's `onInit` — `useContextMenuSlot` calls each `useMenuItem()` in slot order, so a later registration changes React's hook order.
 
 ## Registering Context Menu Items
 
