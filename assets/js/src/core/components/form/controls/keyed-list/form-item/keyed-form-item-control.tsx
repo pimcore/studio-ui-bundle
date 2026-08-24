@@ -48,9 +48,9 @@ export const KeyedFormItemControl = ({ children, onChange: baseOnChange, value: 
   }, [value])
 
   const onChange: KeyedFormItemControlProps['onChange'] = useCallback((value: any) => {
-    const changedValue = !isUndefined(getValueFromEvent)
+    const changedValue = (!isUndefined(getValueFromEvent)
       ? getValueFromEvent(value)
-      : value?.target?.value ?? value
+      : value?.target?.value ?? value) ?? null
 
     operations.update(name, changedValue, false)
 
