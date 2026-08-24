@@ -40,11 +40,11 @@ export const SearchReplaceForm = ({ hideHeader = false }: SearchReplaceFormProps
 
   return (
     <>
-      {hideHeader === false && (
+      {!hideHeader && (
         <Header >
           <Title>{t('widget.search-replace-assignments')}</Title>
         </Header>
-      )
+      )}
       <Content>
         <Box margin={ { x: 'small', bottom: 'small' } }>
 
