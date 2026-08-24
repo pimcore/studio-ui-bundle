@@ -10,17 +10,16 @@
 
 import React from 'react'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import { useTranslation } from 'react-i18next'
+import { translateLabel } from '@Pimcore/utils/translate-label'
 
 export interface TextCellProps extends DefaultCellProps {}
 
 export const TranslateCell = (props: TextCellProps): React.JSX.Element => {
-  const { t } = useTranslation()
   const value = props.getValue()
 
   return (
     <div className="default-cell__content default-cell__content--padded">
-      { typeof value === 'string' ? t(value) : '' }
+      {  translateLabel(value)  }
     </div>
   )
 }
