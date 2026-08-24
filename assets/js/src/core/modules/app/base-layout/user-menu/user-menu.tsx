@@ -9,7 +9,7 @@
  */
 
 import { Badge } from '@Pimcore/components/badge/badge'
-import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import { Dropdown, type DropdownMenuProps, type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useLogoutMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
@@ -30,6 +30,8 @@ import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { Avatar } from '@Pimcore/components/avatar/avatar'
 import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
 import { useNotificationGetUnreadCountQuery } from '@Pimcore/modules/notifications/notifications-slice.gen'
+import { useContextMenuSlot } from '@Pimcore/modules/app/context-menu-registry/use-context-menu-slot'
+import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/context-menu-config'
 
 interface IUserMenuProps {
   className?: string
@@ -70,6 +72,13 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   }
 
   const notificationCount = data?.unreadNotificationsCount ?? 0
+
+  // Providers must register at module init: their useMenuItem() hooks run in slot order, so a late
+  // registration would shift the hook order of an already-rendered menu.
+  const extensionItems: ItemType[] = useContextMenuSlot(contextMenuConfig.userMenu.name, {})
+    .map((item) => (item !== null && 'icon' in item && item.icon !== undefined
+      ? { ...item, icon: <div className={ 'user-menu__item-icon' }>{item.icon}</div> }
+      : item))
 
   const items: DropdownMenuProps['items'] = [
     {
@@ -146,6 +155,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       icon: <div className={ 'user-menu__item-icon' }><Icon value={ 'user' } /></div>,
       onClick: () => { openMainWidget(USERPROFILE) }
     },
+    ...extensionItems,
     {
       key: 'logout',
       label: t('user-menu.log-out'),
