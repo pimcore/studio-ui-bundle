@@ -169,8 +169,7 @@ export const contextMenuConfig = {
     }
   },
 
-  // Profile dropdown. Providers render as one block between "My profile" and "Log out" — the
-  // built-in entries are not providers, so priority only orders providers among themselves.
+  // Renders between "My profile" and "Log out"; priority orders providers against each other only.
   userMenu: {
     name: 'user-menu',
     priority: {}

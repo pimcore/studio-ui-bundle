@@ -73,8 +73,7 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
 
   const notificationCount = data?.unreadNotificationsCount ?? 0
 
-  // Providers must register at module init: their useMenuItem() hooks run in slot order, so a late
-  // registration would shift the hook order of an already-rendered menu.
+  // Providers must register at module init — useMenuItem() hooks run in slot order.
   const extensionItems: ItemType[] = useContextMenuSlot(contextMenuConfig.userMenu.name, {})
     .map((item) => (item !== null && 'icon' in item && item.icon !== undefined
       ? { ...item, icon: <div className={ 'user-menu__item-icon' }>{item.icon}</div> }
