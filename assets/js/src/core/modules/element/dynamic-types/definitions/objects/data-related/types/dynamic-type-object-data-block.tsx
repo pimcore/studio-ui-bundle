@@ -33,6 +33,11 @@ export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
     formLayout: 'vertical'
   }
 
+  /** The block API takes a list of items, so clearing it cannot go through null. */
+  getEmptyValue (): unknown {
+    return []
+  }
+
   getObjectDataComponent (props: AbstractObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <Block
@@ -40,6 +45,7 @@ export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
         className={ props.className }
         title={
           <FieldLabel
+            emptyValue={ this.getEmptyValue() }
             label={ props.title }
             name={ props.name }
           />

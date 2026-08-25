@@ -2043,6 +2043,7 @@ preview.select_date_time: Datum & Uhrzeit auswählen
 preview.screen_size_too_small: Der verfügbare Platz ist zu klein, um den ausgewählten Vorschaumodus anzuzeigen.
 inheritance-active: "Daten geerbt von Objekt-ID {{id}}"
 inheritance-broken: Datenvererbung unterbrochen
+inheritance-restore: Wiederherstellen
 main: Haupt
 main_admin: Haupt (Admin-Modus)
 draft-alert: Die aktuelle Version ist ein Entwurf. Sie können den Entwurf löschen, um die vorherige Version wiederherzustellen.

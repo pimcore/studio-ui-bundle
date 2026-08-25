@@ -2043,6 +2043,7 @@ preview.select_date_time: Seleziona data e ora
 preview.screen_size_too_small: Lo spazio disponibile è troppo piccolo per visualizzare la modalità anteprima selezionata.
 inheritance-active: "Dati ereditati dall'oggetto ID {{id}}"
 inheritance-broken: Ereditarietà dati interrotta
+inheritance-restore: Ripristina
 main: Principale
 main_admin: Principale (Modalità admin)
 draft-alert: La versione corrente è una bozza. È possibile eliminare la bozza per ripristinare la versione precedente.

@@ -2043,6 +2043,7 @@ preview.select_date_time: Välj datum & tid
 preview.screen_size_too_small: Det tillgängliga utrymmet är för litet för att visa det valda förhandsvisningsläget.
 inheritance-active: "Data ärvt från objekt-ID {{id}}"
 inheritance-broken: Dataarv brutet
+inheritance-restore: Återställ
 main: Huvud
 main_admin: Huvud (Adminläge)
 draft-alert: Den aktuella versionen är ett utkast. Du kan ta bort utkastet för att återställa föregående version.

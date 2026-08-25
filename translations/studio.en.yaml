@@ -2043,6 +2043,7 @@ preview.select_date_time: Select date & time
 preview.screen_size_too_small: The available space is too small to display the selected preview mode.
 inheritance-active: "Data inherited from object ID {{id}}"
 inheritance-broken: Data inheritance broken
+inheritance-restore: Restore
 main: Main
 main_admin: Main (Admin Mode)
 draft-alert: The current version is a draft. You can delete the draft to restore the previous version.

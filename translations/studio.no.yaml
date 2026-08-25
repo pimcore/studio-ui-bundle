@@ -2043,6 +2043,7 @@ preview.select_date_time: Velg dato og tid
 preview.screen_size_too_small: Tilgjengelig plass er for liten til å vise valgt forhåndsvisningsmodus.
 inheritance-active: "Data arvet fra objekt-ID {{id}}"
 inheritance-broken: Dataarv brutt
+inheritance-restore: Gjenopprett
 main: Hoved
 main_admin: Hoved (administratormodus)
 draft-alert: Gjeldende versjon er et utkast. Du kan slette utkastet for å gjenopprette forrige versjon.

@@ -19,18 +19,24 @@ import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useTranslation } from 'react-i18next'
 import { useItemOptional } from '@Pimcore/components/form/item/provider/item/use-item'
 import { InheritanceButton } from '@Pimcore/modules/data-object/components/inheritance-button'
+import { RestoreInheritanceButton } from '@Pimcore/modules/data-object/components/restore-inheritance-button'
+import { useRestoreInheritance } from './hooks/use-restore-inheritance'
 import { isNonEmptyString } from '@sdk/utils'
 
 export interface FieldLabelProps {
   name: FormItemProps['name']
   label?: ReactNode | string
   additionalIcons?: ReactNode
+  /** Value that clears the field, see DynamicTypeObjectDataAbstract.getEmptyValue. */
+  emptyValue?: unknown
 }
 
 export const FieldLabel: React.FC<FieldLabelProps> = (props: FieldLabelProps): React.JSX.Element => {
   const itemContext = useItemOptional()
   const inheritanceStateContext = useInheritanceState()
-  const inheritanceState = inheritanceStateContext?.getInheritanceState(itemContext?.name ?? props.name)
+  const fieldName = itemContext?.name ?? props.name
+  const inheritanceState = inheritanceStateContext?.getInheritanceState(fieldName)
+  const { canRestore, restore } = useRestoreInheritance(fieldName, props.emptyValue)
   const { t } = useTranslation()
 
   return (
@@ -50,6 +56,9 @@ export const FieldLabel: React.FC<FieldLabelProps> = (props: FieldLabelProps): R
       ) }
       { props.additionalIcons }
       <span>{isNonEmptyString(props.label) ? t(props.label) : props.label}</span>
+      { canRestore && (
+        <RestoreInheritanceButton onRestore={ restore } />
+      ) }
     </Flex>
   )
 }
