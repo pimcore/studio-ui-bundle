@@ -8,12 +8,15 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
 import { type Reducer } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@sdk/app'
 import {
   clearSelection,
+  deselectNodes,
   locateInTree,
   markNodeDeleting,
+  markNodesDeleting,
   selectActiveNodeId,
   selectAnchorNodeId,
   selectIsSelectionLimitReached,
@@ -222,7 +225,7 @@ describe('element-tree-slice selection', () => {
     expect(unchanged[treeId].selectedNodeIds).toEqual(['2'])
   })
 
-  it('deselects a node that is being deleted', () => {
+  it('keeps the selection when a node is marked as deleting, so a move does not lose it', () => {
     const selected = slice.reducer(withLoadedNodes(['2', '3']), setSelectedNodeIds({
       treeId,
       selectedNodeIds: ['2', '3']
@@ -234,8 +237,43 @@ describe('element-tree-slice selection', () => {
       isDeleting: true
     }))
 
-    expect(state[treeId].selectedNodeIds).toEqual(['2'])
+    expect(state[treeId].selectedNodeIds).toEqual(['2', '3'])
     expect(state[treeId].nodes['3'].isDeleting).toBe(true)
+  })
+
+  it('marks a whole set as deleting in one action', () => {
+    const state = slice.reducer(withLoadedNodes(['2', '3', '4']), markNodesDeleting({
+      nodeIds: ['2', '4'],
+      elementType: 'asset',
+      isDeleting: true
+    }))
+
+    expect(state[treeId].nodes['2'].isDeleting).toBe(true)
+    expect(state[treeId].nodes['3'].isDeleting).toBe(false)
+    expect(state[treeId].nodes['4'].isDeleting).toBe(true)
+  })
+
+  it('deselectNodes takes the given elements out of the selection', () => {
+    const selected = slice.reducer(withLoadedNodes(['2', '3']), setSelectedNodeIds({
+      treeId,
+      selectedNodeIds: ['2', '3']
+    }))
+
+    const state = slice.reducer(selected, deselectNodes({ nodeIds: ['3'], elementType: 'asset' }))
+
+    expect(state[treeId].selectedNodeIds).toEqual(['2'])
+    expect(state[treeId].nodes['3'].isSelected).toBe(false)
+  })
+
+  it('deselectNodes ignores elements of a different type', () => {
+    const selected = slice.reducer(withLoadedNodes(['2', '3']), setSelectedNodeIds({
+      treeId,
+      selectedNodeIds: ['2', '3']
+    }))
+
+    const state = slice.reducer(selected, deselectNodes({ nodeIds: ['3'], elementType: 'document' }))
+
+    expect(state[treeId].selectedNodeIds).toEqual(['2', '3'])
   })
 
   it('locateInTree replaces the selection and sets the active node', () => {

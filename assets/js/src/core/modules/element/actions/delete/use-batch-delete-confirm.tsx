@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { useAppDispatch } from '@Pimcore/app/store'
-import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
+import { api as enhancedElementApi } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useStyles } from './use-batch-delete-confirm.styles'
 
@@ -39,18 +39,15 @@ export const useBatchDeleteConfirm = (): UseBatchDeleteConfirmReturn => {
   // limit) - so permanence can't be inferred from the selection size and has to be checked
   // per item via the same delete-info endpoint the single-item/folder delete flow uses.
   const isBatchDeletePermanent = async (elementType: ElementType, itemIds: number[]): Promise<boolean> => {
-    const canUseRecycleBinFlags = await Promise.all(
-      itemIds.map(async (id) => {
-        try {
-          const { data } = await dispatch(elementApi.endpoints.elementGetDeleteInfo.initiate({ elementType, id }))
-          return data?.canUseRecycleBin ?? true
-        } catch {
-          return true
-        }
-      })
-    )
+    try {
+      const { data } = await dispatch(
+        enhancedElementApi.endpoints.elementGetBatchDeleteInfo.initiate({ elementType, ids: itemIds })
+      )
 
-    return canUseRecycleBinFlags.some((canUseRecycleBin) => !canUseRecycleBin)
+      return !(data?.canUseRecycleBin ?? true)
+    } catch {
+      return false
+    }
   }
 
   const confirmBatchDelete = async ({ elementType, itemIds, selectedRowsData, onOk }: ConfirmBatchDeleteParams): Promise<void> => {

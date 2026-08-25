@@ -19,6 +19,7 @@ import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
+import { deselectNodes } from '@Pimcore/components/element-tree/element-tree-slice'
 import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
@@ -84,6 +85,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
         closeWidget(widgetId)
       }
       refreshRecycleBin()
+      dispatch(deselectNodes({ nodeIds: [String(id)], elementType }))
 
       onFinish?.()
     } catch (error: any) {

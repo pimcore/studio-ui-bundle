@@ -10,7 +10,7 @@
 
 import { isNil, isUndefined, uniq } from 'lodash'
 import { useAppDispatch } from '@sdk/app'
-import { markNodeDeleting, refreshSourceNode, refreshTargetNode } from '@Pimcore/components/element-tree/element-tree-slice'
+import { markNodesDeleting, refreshSourceNode, refreshTargetNode } from '@Pimcore/components/element-tree/element-tree-slice'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
 import { ElementMoveJob } from '@Pimcore/modules/execution-engine/jobs/move/element-move-job'
@@ -82,9 +82,11 @@ export const useMoveElements = (elementType: ElementType): UseMoveElementsReturn
         .map(parentId => String(parentId))
     )
 
-    elements.forEach(element => {
-      dispatch(markNodeDeleting({ nodeId: String(element.id), elementType, isDeleting: true }))
-    })
+    dispatch(markNodesDeleting({
+      nodeIds: elements.map(element => String(element.id)),
+      elementType,
+      isDeleting: true
+    }))
 
     const job = new ElementMoveJob({
       elementType,
@@ -124,9 +126,11 @@ export const useMoveElements = (elementType: ElementType): UseMoveElementsReturn
         .map(parentId => String(parentId))
     )
 
-    currentElements.forEach(element => {
-      dispatch(markNodeDeleting({ nodeId: String(element.id), elementType, isDeleting: true }))
-    })
+    dispatch(markNodesDeleting({
+      nodeIds: currentElements.map(element => String(element.id)),
+      elementType,
+      isDeleting: true
+    }))
 
     const job = new ElementMoveJob({
       elementType,

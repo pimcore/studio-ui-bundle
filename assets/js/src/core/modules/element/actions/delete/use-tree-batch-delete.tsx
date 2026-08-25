@@ -11,7 +11,7 @@
 import { isNil, uniq } from 'lodash'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { eventBus, eventTypes } from '@Pimcore/lib/event-bus'
-import { markNodeDeleting, refreshSourceNode } from '@Pimcore/components/element-tree/element-tree-slice'
+import { deselectNodes, markNodesDeleting, refreshSourceNode } from '@Pimcore/components/element-tree/element-tree-slice'
 import { useElementTreeOptional } from '@Pimcore/components/element-tree/hooks/use-element-tree-optional'
 import { resolveActionTargets } from '@Pimcore/components/element-tree/utils/selection-targets'
 import { toTopmostElements } from '@Pimcore/components/element-tree/utils/drop-target-validation'
@@ -96,9 +96,12 @@ export const useTreeBatchDelete = (elementType: ElementType): UseTreeBatchDelete
       itemIds,
       selectedRowsData,
       onOk: async () => {
-        itemIds.forEach(id => {
-          dispatch(markNodeDeleting({ nodeId: String(id), elementType, isDeleting: true }))
-        })
+        const nodeIds = itemIds.map(id => String(id))
+
+        dispatch(markNodesDeleting({ nodeIds, elementType, isDeleting: true }))
+
+        // Deleted ids never come back, so they leave the selection right away.
+        dispatch(deselectNodes({ nodeIds, elementType }))
 
         const onFinish = async (): Promise<void> => {
           // Refreshing the parents also clears the deleting marker of anything the

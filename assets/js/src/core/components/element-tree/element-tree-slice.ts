@@ -595,10 +595,6 @@ const slice = createSlice({
         ...node,
         isDeleting: payload.isDeleting
       }))
-
-      if (payload.isDeleting) {
-        deselectNodeIds(state, payload.treeId, [payload.nodeId])
-      }
     },
     refreshNodeChildren: (
       state,
@@ -737,12 +733,49 @@ const slice = createSlice({
             ...node,
             isDeleting: payload.isDeleting
           }))
-
-          // A node on its way out must not stay in the selection, otherwise the
-          // counter and any follow up action would work with a stale id.
-          if (payload.isDeleting) {
-            deselectNodeIds(state, treeId, [payload.nodeId])
+        }
+      })
+    },
+    /**
+     * Marks a whole set at once.
+     *
+     * A dispatch per element would notify every subscribed node once per element,
+     * which is a render storm on a large selection.
+     */
+    markNodesDeleting: (
+      state,
+      { payload }: PayloadAction<{ nodeIds: string[], elementType: string, isDeleting: boolean }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        payload.nodeIds.forEach(nodeId => {
+          if (state[treeId].nodes[nodeId]?.treeNodeProps?.elementType === payload.elementType) {
+            updateNodeState(state, treeId, nodeId, node => ({
+              ...node,
+              isDeleting: payload.isDeleting
+            }))
           }
+        })
+      })
+    },
+    /**
+     * Takes elements out of every selection that holds them.
+     *
+     * Deleting has to do this explicitly: a deleted node never comes back, so its
+     * id would linger in the selection and end up in the next bulk action. Moving
+     * deliberately does not, so a moved selection stays selected and lights up
+     * again under its new parent.
+     */
+    deselectNodes: (
+      state,
+      { payload }: PayloadAction<{ nodeIds: string[], elementType: string }>
+    ) => {
+      Object.keys(state).forEach(treeId => {
+        const affectedIds = payload.nodeIds.filter(
+          nodeId => state[treeId].nodes[nodeId]?.treeNodeProps?.elementType === payload.elementType
+        )
+
+        if (affectedIds.length > 0) {
+          deselectNodeIds(state, treeId, affectedIds)
         }
       })
     },
@@ -985,7 +1018,7 @@ export const treeSliceName = slice.name
 
 injectSliceWithState(slice)
 
-export const { setNodeLoading, setNodeLoadingInAllTree, setNodeOpeningInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setActiveNodeId, toggleNodeSelection, selectNodeRange, clearSelection, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, setNodeFetchingInAllTrees, markNodeDeletingForTree, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, updateNodeData, updateNodeType, setNodePublished, setNodeAdditionalAttributes, setRootNode, setDocumentNodeSiteStatus, setNodeLocked, refreshTreeByElementType, setDocumentNodeNavigationExclude, setDocumentNodeStaticGeneratorEnabled } = slice.actions
+export const { markNodesDeleting, deselectNodes, setNodeLoading, setNodeLoadingInAllTree, setNodeOpeningInAllTree, setNodeExpanded, setNodeHasChildren, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setActiveNodeId, toggleNodeSelection, selectNodeRange, clearSelection, setNodeScrollTo, updateNodesByParentId, locateInTree, setFetchTriggered, setRootFetchTriggered, setNodeFetching, setNodeFetchingInAllTrees, markNodeDeletingForTree, refreshNodeChildren, refreshTargetNode, refreshSourceNode, markNodeDeleting, renameNode, updateNodeData, updateNodeType, setNodePublished, setNodeAdditionalAttributes, setRootNode, setDocumentNodeSiteStatus, setNodeLocked, refreshTreeByElementType, setDocumentNodeNavigationExclude, setDocumentNodeStaticGeneratorEnabled } = slice.actions
 
 export const selectNodeState = createSelector(
   (state: RootState) => state.trees,
