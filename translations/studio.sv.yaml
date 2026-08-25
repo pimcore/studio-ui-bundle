@@ -603,8 +603,6 @@ website-settings.columns.language: Språk
 website-settings.columns.value: Värde
 website-settings.columns.site: Sajt
 website-settings.columns.actions: Åtgärder
-website-settings.website-settings-already-exist.title: Webbplatsinställningen finns redan
-website-settings.website-settings-already-exist.error: Namnet används redan, välj ett annat
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Obligatoriska fält saknas
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Namn och typ är obligatoriska fält och måste fyllas i.
 document-types.new: Ny

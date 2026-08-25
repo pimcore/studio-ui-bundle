@@ -603,8 +603,6 @@ website-settings.columns.language: Språk
 website-settings.columns.value: Verdi
 website-settings.columns.site: Nettsted
 website-settings.columns.actions: Handlinger
-website-settings.website-settings-already-exist.title: Nettstedsinnstillingen finnes allerede
-website-settings.website-settings-already-exist.error: Navnet er allerede i bruk, vennligst velg et annet
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Obligatoriske felt mangler
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Navn og type er obligatoriske felt og må fylles ut.
 document-types.new: Ny

@@ -603,8 +603,6 @@ website-settings.columns.language: Lingua
 website-settings.columns.value: Valore
 website-settings.columns.site: Sito
 website-settings.columns.actions: Azioni
-website-settings.website-settings-already-exist.title: Impostazione sito web già esistente
-website-settings.website-settings-already-exist.error: Il nome è già in uso, scegliere un nome diverso
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Campi obbligatori mancanti
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Nome e tipo sono campi obbligatori e devono essere compilati.
 document-types.new: Nuovo
