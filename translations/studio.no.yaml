@@ -1213,6 +1213,7 @@ element.rename.label: Vennligst oppgi det nye navnet
 element.rename.validation: Vennligst oppgi et gyldig navn
 element.share-via-notification: Del via varsler
 element.delete: Slett
+element.delete-multiple: 'Slett {{count}} elementer'
 element.delete.confirmation.title: Slett element
 element.delete.confirmation.text: Vil du virkelig slette dette elementet?
 element.delete.confirmation.ok: Slett permanent

@@ -1213,6 +1213,7 @@ element.rename.label: Please enter the new name
 element.rename.validation: Please enter a valid name
 element.share-via-notification: Share via Notifications
 element.delete: Delete
+element.delete-multiple: 'Delete {{count}} elements'
 element.delete.confirmation.title: Delete item
 element.delete.confirmation.text: Do you really want to delete this item?
 element.delete.confirmation.ok: Delete permanently

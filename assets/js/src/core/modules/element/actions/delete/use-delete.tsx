@@ -34,6 +34,7 @@ import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useTreePermission } from '@Pimcore/components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { useRecycleBin } from '@Pimcore/modules/recycle-bin/hooks/use-recycle-bin'
 import { useTreeId } from '@Pimcore/components/element-tree/provider/tree-id-provider/use-tree-id'
+import { useTreeBatchDelete } from './use-tree-batch-delete'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number, onFinish?: () => void) => void
@@ -56,6 +57,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   const { styles } = useStyles()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { treeId } = useTreeId(true)
+  const { isSupported: isBatchDeleteSupported, getDeletableNodes, confirmDeleteNodes } = useTreeBatchDelete(elementType)
 
   const runDeleteJob = async (id: number, parentId?: number, onFinish?: () => void): Promise<void> => {
     setIsLoading(true)
@@ -140,12 +142,25 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   }
 
   const deleteTreeContextMenuItem = (node: TreeNodeProps, onFinish?: () => void): ItemType => {
+    // Documents have no batch delete endpoint, so they stay on the single path
+    // even when several nodes are selected.
+    const deletableNodes = isBatchDeleteSupported ? getDeletableNodes(node) : [node]
+    const isBatchDelete = deletableNodes.length > 1
+
     return {
-      label: t('element.delete'),
+      label: isBatchDelete
+        ? t('element.delete-multiple', { count: deletableNodes.length })
+        : t('element.delete'),
       key: ContextMenuActionName.delete,
       icon: <Icon value={ 'trash' } />,
       hidden: !isTreeActionAllowed(TreePermission.Delete) || !checkElementPermission(node.permissions, 'delete') || node.isLocked,
       onClick: () => {
+        if (isBatchDelete) {
+          void confirmDeleteNodes(deletableNodes).then(() => { onFinish?.() })
+
+          return
+        }
+
         const id = parseInt(node.id)
         const parentId = node.parentId !== undefined ? parseInt(node.parentId) : undefined
         deleteElement(id, node.label, parentId, onFinish, node.type === 'folder')

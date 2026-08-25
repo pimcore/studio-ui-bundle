@@ -1213,6 +1213,7 @@ element.rename.label: Ange det nya namnet
 element.rename.validation: Ange ett giltigt namn
 element.share-via-notification: Dela via aviseringar
 element.delete: Ta bort
+element.delete-multiple: 'Ta bort {{count}} element'
 element.delete.confirmation.title: Ta bort objekt
 element.delete.confirmation.text: Vill du verkligen ta bort det här objektet?
 element.delete.confirmation.ok: Ta bort permanent
