@@ -51,6 +51,14 @@ const parseAlpha = (value: string): number =>
     ? Number(value.slice(0, -1)) / 100
     : Number(value)
 
+/**
+ * The luminance at which contrast against white equals contrast against black:
+ * `(1 + 0.05) / (L + 0.05) === (L + 0.05) / 0.05`. Above it, dark content reads better;
+ * below it, light content does. A naive 0.5 sits far into the light greys -- `#b0b0b0`
+ * would be called dark.
+ */
+const CONTRAST_CROSSOVER_LUMINANCE = 0.179
+
 const channelLuminance = (value: number): number => {
   const channel = value / 255
 
@@ -81,5 +89,5 @@ export const isDarkSurface = (color: string): boolean => {
     0.7152 * channelLuminance(green) +
     0.0722 * channelLuminance(blue)
 
-  return luminance < 0.5
+  return luminance < CONTRAST_CROSSOVER_LUMINANCE
 }
