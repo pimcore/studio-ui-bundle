@@ -20,6 +20,7 @@ import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-objec
 import { isValidPathFormatterConfig } from '../utils/path-formatter'
 import { flattenValues } from '@Pimcore/components/many-to-many-relation/utils/helpers'
 import { mapToLegacyElementType } from '@Pimcore/modules/element/utils/element-type'
+import { getDraggedElements, toElementType } from '@Pimcore/components/drag-and-drop/element-drag'
 
 export interface ManyToManyRelationValueItem {
   id: number
@@ -217,51 +218,81 @@ export const useValue = (
     addItems([item])
   }
 
+  const toValueItem = (elementType: string, element: any): ManyToManyRelationValueItem | undefined => {
+    if (elementType === 'data-object') {
+      return {
+        id: element.id,
+        type: mapToLegacyElementType(elementType),
+        subtype: element.className ?? element.type,
+        isPublished: element.published,
+        fullPath: element.fullPath
+      }
+    }
+
+    if (elementType === 'asset') {
+      return {
+        id: element.id,
+        type: elementType,
+        subtype: element.type,
+        isPublished: null,
+        fullPath: element.fullPath
+      }
+    }
+
+    if (elementType === 'document') {
+      return {
+        id: element.id,
+        type: elementType,
+        subtype: element.type,
+        isPublished: element.published,
+        fullPath: element.fullPath
+      }
+    }
+
+    return undefined
+  }
+
+  /**
+   * Accepts a single element drag as well as a list drag.
+   *
+   * Duplicates and the item limit are resolved once for the whole set and written
+   * in a single update: applying the elements one by one would compare each of
+   * them against a stale value and overshoot maxItems.
+   */
   const onDrop = (info: DragAndDropInfo): void => {
-    if (itemIsInValue(info.data.id as number, info.type)) {
+    const elementType = toElementType(info.type)
+
+    const droppedItems = getDraggedElements(info)
+      .map(element => toValueItem(elementType, element))
+      .filter((item): item is ManyToManyRelationValueItem => item !== undefined)
+
+    const newItems = allowMultipleAssignments !== true
+      ? droppedItems.filter(item => !itemIsInValue(item.id, item.type))
+      : droppedItems
+
+    if (newItems.length === 0) {
       return
     }
 
-    if (maxItems !== null && value !== null && value.length >= maxItems) {
+    const remainingItems = maxItems !== null
+      ? Math.max(0, maxItems - (value?.length ?? 0))
+      : newItems.length
+
+    if (remainingItems === 0) {
       modal.warn({
         content: t('items-limit-reached', { maxItems })
       })
+
       return
     }
 
-    let newValue: ManyToManyRelationValueItem | undefined
-
-    if (info.type === 'data-object') {
-      newValue = {
-        id: info.data.id,
-        type: mapToLegacyElementType(info.type),
-        subtype: info.data.className ?? info.data.type,
-        isPublished: info.data.published,
-        fullPath: info.data.fullPath
-      }
-    } else if (info.type === 'asset') {
-      newValue = {
-        id: info.data.id,
-        type: info.type,
-        subtype: info.data.type,
-        isPublished: null,
-        fullPath: info.data.fullPath
-      }
-    } else if (info.type === 'document') {
-      newValue = {
-        id: info.data.id,
-        type: info.type,
-        subtype: info.data.type,
-        isPublished: info.data.published,
-        fullPath: info.data.fullPath
-      }
+    if (newItems.length > remainingItems) {
+      modal.warn({
+        content: t('items-limit-reached', { maxItems })
+      })
     }
 
-    if (newValue === undefined) {
-      return
-    }
-
-    addItem(newValue)
+    addItems(newItems.slice(0, remainingItems))
   }
 
   const deleteItem = (rowIndex: number): void => {

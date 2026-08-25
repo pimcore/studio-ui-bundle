@@ -12,12 +12,13 @@ import React, { useEffect, useState } from 'react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { isEqual, isNil } from 'lodash'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
+import { toElementType } from '@Pimcore/components/drag-and-drop/element-drag'
 import { ManyToManyRelationGrid } from './grid'
 import { type ManyToManyRelationValue, type ManyToManyRelationValueItem, type DisplayManyToManyRelationValue, useValue } from './hooks/use-value'
 import type { DragAndDropInfo } from '@sdk/components'
 import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
 import { ManyToManyRelationToolbar } from './components/toolbar/toolbar'
-import { dndIsValidData, type IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
+import { dndValidRelationElements, type IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Content } from '@Pimcore/components/content/content'
 import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
@@ -99,8 +100,8 @@ export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToMan
     <>
       <Droppable
         disableDndActiveIndicator
-        isValidContext={ (info: DragAndDropInfo) => props.disabled !== true && isValidElementType(info.type) }
-        isValidData={ (info: DragAndDropInfo) => dndIsValidData(info, props) }
+        isValidContext={ (info: DragAndDropInfo) => props.disabled !== true && isValidElementType(toElementType(info.type)) }
+        isValidData={ (info: DragAndDropInfo) => dndValidRelationElements(info, props).length > 0 }
         onDrop={ onDrop }
         variant="outline"
       >
