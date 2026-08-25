@@ -27,8 +27,18 @@ export interface MoveMultipleProps {
   targetElement: MoveTarget
 }
 
+export interface SortMultipleProps {
+  /** Already in the order they should end up in. */
+  currentElements: MoveElementRef[]
+  /** The parent the elements are sorted into. */
+  targetElement: MoveTarget
+  /** Index of the first element; the rest follow consecutively. */
+  startIndex: number
+}
+
 export interface UseMoveElementsReturn {
   moveMultiple: (props: MoveMultipleProps) => Promise<void>
+  sortMultiple: (props: SortMultipleProps) => Promise<void>
 }
 
 export const useMoveElements = (elementType: ElementType): UseMoveElementsReturn => {
@@ -91,5 +101,51 @@ export const useMoveElements = (elementType: ElementType): UseMoveElementsReturn
     await executionEngine.runJob(job)
   }
 
-  return { moveMultiple }
+  /**
+   * Places several elements at consecutive positions among their new siblings, in
+   * one job.
+   *
+   * Indexes are plain values in Pimcore - nothing renumbers siblings on save - so
+   * the elements that were pushed aside keep their old positions and may end up
+   * sharing an index with a moved element. That matches how sorting by index has
+   * always behaved; only the dragged set is renumbered.
+   */
+  const sortMultiple = async (props: SortMultipleProps): Promise<void> => {
+    const { currentElements, targetElement, startIndex } = props
+
+    if (currentElements.length === 0) {
+      return
+    }
+
+    const sourceParentIds = uniq(
+      currentElements
+        .map(element => element.parentId)
+        .filter(parentId => !isNil(parentId))
+        .map(parentId => String(parentId))
+    )
+
+    currentElements.forEach(element => {
+      dispatch(markNodeDeleting({ nodeId: String(element.id), elementType, isDeleting: true }))
+    })
+
+    const job = new ElementMoveJob({
+      elementType,
+      items: currentElements.map((element, position) => ({
+        id: Number(element.id),
+        parentId: Number(targetElement.id),
+        index: startIndex + position
+      })),
+      onFinish: async () => {
+        sourceParentIds.forEach(parentId => {
+          dispatch(refreshSourceNode({ nodeId: parentId, elementType }))
+        })
+
+        dispatch(refreshTargetNode({ nodeId: String(targetElement.id), elementType }))
+      }
+    })
+
+    await executionEngine.runJob(job)
+  }
+
+  return { moveMultiple, sortMultiple }
 }

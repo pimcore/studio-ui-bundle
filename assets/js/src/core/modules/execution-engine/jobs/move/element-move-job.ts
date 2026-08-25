@@ -23,6 +23,8 @@ import { type JobRunList, type RehydratableJob } from '../../services/job-rehydr
 export interface ElementMoveJobItem {
   id: number
   parentId: number
+  /** Position among the new siblings; data objects only, and only when sorting. */
+  index?: number
 }
 
 export interface ElementMoveJobOptions {
@@ -87,7 +89,9 @@ export class ElementMoveJob implements JobInterface {
   }
 
   private async executeMoveRequest (): Promise<number | null> {
-    const data = this.items.map(item => ({ id: item.id, parentId: item.parentId }))
+    const data = this.items.map(item => isUndefined(item.index)
+      ? { id: item.id, parentId: item.parentId }
+      : { id: item.id, parentId: item.parentId, index: item.index })
 
     const response = this.elementType === elementTypes.asset
       ? await store.dispatch(assetApi.endpoints.assetPatchById.initiate({ body: { data } }))
