@@ -33,17 +33,31 @@ const parseOpaqueColor = (value: string): [number, number, number] | null => {
     ]
   }
 
-  const rgb = /^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)\s*(?:[,/]\s*([\d.]+%?)\s*)?\)$/iu.exec(trimmed)
+  // Matched loosely and then split, rather than with one expression describing every
+  // separator the syntax allows: that expression reached a complexity of 24, and this
+  // handles the comma and the space/slash forms in the same three lines.
+  const rgb = /^rgba?\(([^)]+)\)$/iu.exec(trimmed)
   if (rgb === null) {
     return null
   }
 
-  const alpha = rgb[4]
-  if (alpha !== undefined && parseAlpha(alpha) < 1) {
+  const parts = rgb[1].split(/[\s,/]+/u).filter((part) => part !== '')
+  if (parts.length < 3 || parts.length > 4) {
     return null
   }
 
-  return [Number(rgb[1]), Number(rgb[2]), Number(rgb[3])]
+  if (parts.length === 4 && parseAlpha(parts[3]) < 1) {
+    return null
+  }
+
+  const channels = parts.slice(0, 3).map(Number)
+  // `[^)]+` accepts anything up to the paren, so non-numeric channels have to be caught
+  // here; left unchecked, `rgb(a, b, c)` would read as black and therefore as dark.
+  if (channels.some(Number.isNaN)) {
+    return null
+  }
+
+  return [channels[0], channels[1], channels[2]]
 }
 
 const parseAlpha = (value: string): number =>
