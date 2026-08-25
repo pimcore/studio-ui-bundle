@@ -27,6 +27,8 @@ export interface ManyToManyRelationValueItem {
   subtype: string | null
   fullPath: string
   isPublished: boolean | null
+  // optional: items added client-side (drag & drop, search) carry no flag and are treated as viewable
+  hasViewAccess?: boolean
 }
 
 export interface DisplayManyToManyRelationValueItem extends ManyToManyRelationValueItem {

@@ -138,6 +138,7 @@ export const useConvertRelationEditableColumns = (
       subtype: value.element.subtype,
       isPublished: value.element.isPublished,
       fullPath: value.element.fullPath,
+      hasViewAccess: value.element.hasViewAccess,
       ...editableData
     }
   }
@@ -168,7 +169,9 @@ export const useConvertRelationEditableColumns = (
         type: value.type,
         subtype: value.subtype,
         isPublished: value.isPublished,
-        fullPath: value.fullPath
+        fullPath: value.fullPath,
+        // keep the flag through the edit roundtrip so the open button stays hidden after cell edits
+        hasViewAccess: value.hasViewAccess
       },
       data,
       fieldName,
