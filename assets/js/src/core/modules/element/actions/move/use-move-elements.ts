@@ -92,9 +92,13 @@ export const useMoveElements = (elementType: ElementType): UseMoveElementsReturn
       elementType,
       items: elements.map(element => ({ id: Number(element.id), parentId: Number(targetElement.id) })),
       onFinish: async () => {
-        sourceParentIds.forEach(parentId => {
-          dispatch(refreshSourceNode({ nodeId: parentId, elementType }))
-        })
+        // The target gets its own refresh, so refreshing it as a source as well
+        // would make the same node fetch its children twice.
+        sourceParentIds
+          .filter(parentId => parentId !== String(targetElement.id))
+          .forEach(parentId => {
+            dispatch(refreshSourceNode({ nodeId: parentId, elementType }))
+          })
 
         dispatch(refreshTargetNode({ nodeId: String(targetElement.id), elementType }))
       }
@@ -140,9 +144,13 @@ export const useMoveElements = (elementType: ElementType): UseMoveElementsReturn
         index: startIndex + position
       })),
       onFinish: async () => {
-        sourceParentIds.forEach(parentId => {
-          dispatch(refreshSourceNode({ nodeId: parentId, elementType }))
-        })
+        // The target gets its own refresh, so refreshing it as a source as well
+        // would make the same node fetch its children twice.
+        sourceParentIds
+          .filter(parentId => parentId !== String(targetElement.id))
+          .forEach(parentId => {
+            dispatch(refreshSourceNode({ nodeId: parentId, elementType }))
+          })
 
         dispatch(refreshTargetNode({ nodeId: String(targetElement.id), elementType }))
       }
