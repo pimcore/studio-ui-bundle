@@ -9,10 +9,9 @@
  */
 
 import React from 'react'
-import ReactCodeMirror, { type ReactCodeMirrorProps, EditorView, oneDarkHighlightStyle } from '@uiw/react-codemirror'
-import { syntaxHighlighting } from '@codemirror/language'
+import ReactCodeMirror, { type ReactCodeMirrorProps, EditorView } from '@uiw/react-codemirror'
 import { getPresetExtensions } from '@Pimcore/components/code-editor/helpers'
-import { isDarkSurface } from '@Pimcore/utils/color'
+import { useCodeMirrorThemeExtensions } from '@Pimcore/components/code-editor/use-code-mirror-theme'
 import { useStyles } from './code-editor.styles'
 
 export type CodeEditorPreset = 'text' | 'yaml' | 'html' | 'json'
@@ -25,43 +24,22 @@ export interface CodeEditorProps extends Omit<ReactCodeMirrorProps, 'extensions'
   lineWrapping?: boolean
 }
 
-/**
- * Colours for a dark surface, for the parts CSS cannot reach.
- *
- * Only the highlight style is taken from One Dark, not the whole `oneDark` bundle: that
- * also carries `oneDarkTheme`, whose hard-coded chrome would win over the tokens for
- * everything the stylesheet does not restate. `dark: true` is what makes CodeMirror's own
- * base themes -- search matches, tooltips, panels -- resolve their dark variants, which
- * they otherwise would not without a theme declaring itself dark.
- */
-const darkSurfaceExtensions = [
-  syntaxHighlighting(oneDarkHighlightStyle),
-  EditorView.theme({}, { dark: true })
-]
-
 export const CodeEditor = ({ preset, extensions, value, onChange, lineWrapping = false, theme, ...props }: CodeEditorProps): React.JSX.Element => {
-  // `useStyles` hands back the shared antd token; antd-style's own `useTheme()` is
-  // avoided on purpose, see the note in `modules/ant-design/styles/create-styles`.
-  const { styles, cx, theme: token } = useStyles()
+  const { styles } = useStyles()
+  const themeExtensions = useCodeMirrorThemeExtensions()
 
-  // CodeMirror defaults to its light colour set, which paints an opaque white surface
-  // while the text colour is inherited from the Studio theme -- on a dark theme that
-  // leaves the editor white on white. Opting out of that set and restating the chrome
-  // from the tokens is what fixes it, so the editor follows whichever theme is active.
-  //
-  // A caller that supplies its own `theme` keeps it, and keeps full control of the
-  // visuals: the token chrome is not applied on that path.
+  // A caller that supplies its own `theme` keeps it, and keeps control of the visuals:
+  // the theme built from the Studio tokens is not applied on that path.
   const isThemeDerived = theme === undefined
-  const isDarkSurfaceActive = isThemeDerived && isDarkSurface(token.colorBgContainer)
 
   const combinedExtensions = React.useMemo(() => {
     const presetExtensions = preset !== null && preset !== undefined ? getPresetExtensions(preset) : []
     const customExtensions = extensions ?? []
     const wrappingExtensions = lineWrapping ? [EditorView.lineWrapping] : []
-    const surfaceExtensions = isDarkSurfaceActive ? darkSurfaceExtensions : []
+    const studioTheme = isThemeDerived ? themeExtensions : []
 
-    return [...presetExtensions, ...customExtensions, ...wrappingExtensions, ...surfaceExtensions]
-  }, [preset, extensions, lineWrapping, isDarkSurfaceActive])
+    return [...studioTheme, ...presetExtensions, ...customExtensions, ...wrappingExtensions]
+  }, [preset, extensions, lineWrapping, isThemeDerived, themeExtensions])
 
   // Handle onChange to ensure it matches Ant Design Form expectations
   const handleChange = React.useCallback((val: string) => {
@@ -71,7 +49,7 @@ export const CodeEditor = ({ preset, extensions, value, onChange, lineWrapping =
   return (
     <ReactCodeMirror
       { ...props }
-      className={ cx(styles.editor, isThemeDerived && styles.themedChrome) }
+      className={ styles.editor }
       extensions={ combinedExtensions }
       onChange={ handleChange }
       theme={ theme ?? 'none' }

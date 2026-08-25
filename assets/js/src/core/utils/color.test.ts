@@ -32,6 +32,14 @@ describe('isDarkSurface', () => {
     expect(isDarkSurface('#0000ff')).toBe(true)
   })
 
+  it('switches where contrast against white equals contrast against black', () => {
+    // Mid greys are light surfaces: #777 already reads better with dark content.
+    expect(isDarkSurface('#767676')).toBe(false)
+    expect(isDarkSurface('#b0b0b0')).toBe(false)
+    // …and the crossover is not somewhere up in the light greys.
+    expect(isDarkSurface('#5a5a5a')).toBe(true)
+  })
+
   it('rejects translucent colours, whose appearance depends on the backdrop', () => {
     // Black at zero alpha renders as whatever is behind it, so it must not read as dark
     // merely because its channels are zero -- and must agree with `transparent`.
