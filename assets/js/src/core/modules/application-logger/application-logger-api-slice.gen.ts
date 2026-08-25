@@ -17,6 +17,18 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Bundle Application Logger"],
             }),
+            bundleApplicationLoggerGetFileObject: build.query<
+                BundleApplicationLoggerGetFileObjectApiResponse,
+                BundleApplicationLoggerGetFileObjectApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/bundle/application-logger/file-object`,
+                    params: {
+                        filePath: queryArg.filePath,
+                    },
+                }),
+                providesTags: ["Bundle Application Logger"],
+            }),
             bundleApplicationLoggerListComponents: build.query<
                 BundleApplicationLoggerListComponentsApiResponse,
                 BundleApplicationLoggerListComponentsApiArg
@@ -47,8 +59,14 @@ export type BundleApplicationLoggerGetCollectionApiArg = {
             pageSize?: number;
             columnFilters?: object;
             sortFilter?: object;
+            additionalSortFilters?: object;
         };
     };
+};
+export type BundleApplicationLoggerGetFileObjectApiResponse = /** status 200 File object content as plain text */ Blob;
+export type BundleApplicationLoggerGetFileObjectApiArg = {
+    /** Path to the file object in the application log storage */
+    filePath: string;
 };
 export type BundleApplicationLoggerListComponentsApiResponse = /** status 200 List of available components */ {
     /** Log components used in the ApplicationLogger. */
@@ -92,7 +110,7 @@ export type BundleApplicationLoggerLogEntry = {
     /** File object path */
     fileObject: string | null;
     /** Data of related element */
-    relatedElementData?: RelatedElementData | null;
+    relatedElementData: RelatedElementData | null;
     /** Component */
     component: string | null;
     /** Source */
@@ -110,6 +128,7 @@ export type DevError = {
 };
 export const {
     useBundleApplicationLoggerGetCollectionQuery,
+    useBundleApplicationLoggerGetFileObjectQuery,
     useBundleApplicationLoggerListComponentsQuery,
     useBundleApplicationLoggerListPrioritiesQuery,
 } = injectedRtkApi;
