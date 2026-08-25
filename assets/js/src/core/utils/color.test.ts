@@ -55,4 +55,11 @@ describe('isDarkSurface', () => {
     expect(isDarkSurface('var(--surface)')).toBe(false)
     expect(isDarkSurface('#12345')).toBe(false)
   })
+
+  it('does not read a malformed rgb() as black, which would report dark', () => {
+    expect(isDarkSurface('rgb(a, b, c)')).toBe(false)
+    expect(isDarkSurface('rgb(30, 30)')).toBe(false)
+    expect(isDarkSurface('rgb(1, 2, 3, 4, 5)')).toBe(false)
+    expect(isDarkSurface('rgb()')).toBe(false)
+  })
 })
