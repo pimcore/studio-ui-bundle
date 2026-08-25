@@ -13,7 +13,12 @@ import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 export const useStyles = createStyles(({ token, css }) => {
   return {
     editor: css`
+      /* The surface, caret and selection colours below override the ones the
+         CodeMirror theme injects at runtime, whose selectors are one class
+         shallower. Everything therefore stays nested under \`.cm-editor\`. */
       .cm-editor {
+        background-color: ${token.colorBgContainer};
+        color: ${token.colorText};
         border: 1px solid ${token.colorBorder};
         border-radius: ${token.borderRadius}px;
         outline: none;
@@ -30,10 +35,22 @@ export const useStyles = createStyles(({ token, css }) => {
         .cm-content {
           padding: ${token.paddingXS}px ${token.paddingSM}px;
           min-height: 120px;
+          caret-color: ${token.colorText};
+        }
+
+        /* CodeMirror's base theme hard-codes a black caret and a mid-grey placeholder. */
+        .cm-cursor,
+        .cm-dropCursor {
+          border-left-color: ${token.colorText};
+        }
+
+        .cm-placeholder {
+          color: ${token.colorTextPlaceholder};
         }
 
         .cm-gutters {
           background-color: ${token.colorFillQuaternary};
+          color: ${token.colorTextSecondary};
           border-right: 1px solid ${token.colorBorderSecondary};
         }
 
@@ -45,8 +62,23 @@ export const useStyles = createStyles(({ token, css }) => {
           background-color: ${token.colorFillTertiary};
         }
 
+        .cm-activeLineGutter {
+          background-color: ${token.colorFillTertiary};
+          color: ${token.colorText};
+        }
+
+        .cm-selectionBackground,
+        .cm-selectionLayer .cm-selectionBackground {
+          background-color: ${token.colorPrimaryBg};
+        }
+
         .cm-selectionMatch {
           background-color: ${token.colorPrimaryBg};
+        }
+
+        .cm-panels {
+          background-color: ${token.colorBgElevated};
+          color: ${token.colorText};
         }
 
         &:has(.cm-content[aria-readonly="true"]) {
