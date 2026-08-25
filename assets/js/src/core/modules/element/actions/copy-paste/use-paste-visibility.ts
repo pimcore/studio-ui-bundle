@@ -14,6 +14,8 @@ import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { checkElementPermission } from '../../../element/permissions/permission-helper'
 import { type Element } from '../../../element/element-helper'
 import { useTreeCopyPasteContext } from './tree-copy-paste-context'
+import { useElementTreeOptional } from '@Pimcore/components/element-tree/hooks/use-element-tree-optional'
+import { isTargetInsideDraggedSet } from '@Pimcore/components/element-tree/utils/drop-target-validation'
 import { useTreePermission } from '../../../../components/element-tree/provider/tree-permission-provider/use-tree-permission'
 
 export interface UsePasteVisibilityReturn {
@@ -21,21 +23,22 @@ export interface UsePasteVisibilityReturn {
 }
 
 export const usePasteVisibility = (elementType: ElementType): UsePasteVisibilityReturn => {
-  const { getStoredNode, getNodeTask } = useTreeCopyPasteContext(elementType)
+  const { getStoredNode, getStoredNodes, getNodeTask } = useTreeCopyPasteContext(elementType)
   const { isTreeActionAllowed } = useTreePermission()
+  const { getAncestorIds } = useElementTreeOptional()
 
   const isPasteHidden = (
     targetNode?: TreeNodeProps | Element,
     allowedTask?: 'copy' | 'cut'
   ): boolean => {
-    const storedNode = getStoredNode()
+    const storedNodes = getStoredNodes()
     const nodeTask = getNodeTask()
 
     if (!isTreeActionAllowed(TreePermission.Paste)) {
       return true
     }
 
-    if (storedNode === undefined || nodeTask === undefined) {
+    if (storedNodes.length === 0 || nodeTask === undefined) {
       return true
     }
 
@@ -51,7 +54,9 @@ export const usePasteVisibility = (elementType: ElementType): UsePasteVisibility
       return true
     }
 
-    if (nodeTask === 'cut' && targetNode !== undefined && String(targetNode.id) === String(storedNode.id)) {
+    // Pasting a cut into itself, or into something that was cut along with it,
+    // would move elements inside their own subtree.
+    if (nodeTask === 'cut' && targetNode !== undefined && isTargetInsideDraggedSet(targetNode.id, storedNodes, getAncestorIds)) {
       return true
     }
 

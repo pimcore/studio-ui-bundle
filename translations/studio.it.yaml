@@ -1179,6 +1179,9 @@ element.tree.paste-only-contents: Incolla solo il contenuto qui
 element.tree.cut: Taglia
 element.tree.cut-success-description: '{{elementType}} "{{name}}" è stato tagliato ed è pronto per incollare'
 element.tree.paste-cut: Incolla elemento tagliato
+element.tree.cut-multiple: 'Taglia {{count}} elementi'
+element.tree.cut-multiple-success-description: '{{count}} elementi sono stati tagliati e sono pronti per essere incollati'
+element.tree.paste-cut-multiple: 'Incolla {{count}} elementi tagliati'
 element.tree.selection.count_one: '{{count}} elemento selezionato'
 element.tree.selection.count_other: '{{count}} elementi selezionati'
 element.tree.selection.clear: Cancella selezione

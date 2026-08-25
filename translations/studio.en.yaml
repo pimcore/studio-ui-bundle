@@ -1179,6 +1179,9 @@ element.tree.paste-only-contents: Paste only contents here
 element.tree.cut: Cut
 element.tree.cut-success-description: '{{elementType}} "{{name}}" has been cut and is ready to paste'
 element.tree.paste-cut: Paste cut-out element
+element.tree.cut-multiple: 'Cut {{count}} elements'
+element.tree.cut-multiple-success-description: '{{count}} elements have been cut and are ready to paste'
+element.tree.paste-cut-multiple: 'Paste {{count}} cut elements'
 element.tree.selection.count_one: '{{count}} element selected'
 element.tree.selection.count_other: '{{count}} elements selected'
 element.tree.selection.clear: Clear selection

@@ -15,6 +15,10 @@ import { toElementListDragType } from '@Pimcore/components/drag-and-drop/element
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { type TreeNodeProps } from '../node/tree-node'
 import { useElementTree } from './use-element-tree'
+import { resolveActionTargets } from '../utils/selection-targets'
+
+/** What building a drag payload needs from a node. */
+type DraggableNode = Pick<TreeNodeProps, 'id' | 'metaData'>
 
 export interface UseElementDragInfoProps {
   /** Only what the payload is built from, so both node prop shapes fit. */
@@ -56,7 +60,8 @@ export const useElementDragInfo = ({ node, elementType, title }: UseElementDragI
       return singleElementInfo
     }
 
-    const elements = getSelectedNodes()
+    // Same rule the tree context menu actions follow.
+    const elements = resolveActionTargets<DraggableNode>(node, getSelectedNodes())
       .map(selectedNode => selectedNode.metaData?.[metaDataKey])
       .filter(element => !isNil(element))
 

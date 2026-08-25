@@ -1179,6 +1179,9 @@ element.tree.paste-only-contents: Pegar solo el contenido aquí
 element.tree.cut: Cortar
 element.tree.cut-success-description: '{{elementType}} "{{name}}" ha sido cortado y está listo para pegar'
 element.tree.paste-cut: Pegar elemento cortado
+element.tree.cut-multiple: 'Cortar {{count}} elementos'
+element.tree.cut-multiple-success-description: '{{count}} elementos se han cortado y están listos para pegar'
+element.tree.paste-cut-multiple: 'Pegar {{count}} elementos cortados'
 element.tree.selection.count_one: '{{count}} elemento seleccionado'
 element.tree.selection.count_other: '{{count}} elementos seleccionados'
 element.tree.selection.clear: Borrar selección

@@ -8,20 +8,23 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isNil, uniq } from 'lodash'
+import { isNil, isUndefined, uniq } from 'lodash'
 import { useAppDispatch } from '@sdk/app'
 import { markNodeDeleting, refreshSourceNode, refreshTargetNode } from '@Pimcore/components/element-tree/element-tree-slice'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
 import { ElementMoveJob } from '@Pimcore/modules/execution-engine/jobs/move/element-move-job'
-import { type Element } from '@Pimcore/modules/element/element-helper'
-import { useCopyPaste } from '../copy-paste/use-copy-paste'
+import { type MoveTarget, useMoveElement } from './use-move-element'
 
-type ElementPartial = Pick<Element, 'id' | 'parentId'>
+/** An element to move; the parent is only needed to refresh where it came from. */
+export interface MoveElementRef {
+  id: number | string
+  parentId?: number | string | null
+}
 
 export interface MoveMultipleProps {
-  currentElements: ElementPartial[]
-  targetElement: ElementPartial
+  currentElements: MoveElementRef[]
+  targetElement: MoveTarget
 }
 
 export interface UseMoveElementsReturn {
@@ -31,7 +34,7 @@ export interface UseMoveElementsReturn {
 export const useMoveElements = (elementType: ElementType): UseMoveElementsReturn => {
   const dispatch = useAppDispatch()
   const executionEngine = useExecutionEngine()
-  const { move } = useCopyPaste(elementType)
+  const { move } = useMoveElement(elementType)
 
   /**
    * Moves several elements into one target.
@@ -51,8 +54,13 @@ export const useMoveElements = (elementType: ElementType): UseMoveElementsReturn
 
     // A single element is patched synchronously and returns no job to follow, so
     // it keeps using the existing path.
-    if (elements.length === 1) {
-      await move({ currentElement: elements[0], targetElement })
+    const singleElement = elements.length === 1 ? elements[0] : undefined
+
+    if (!isUndefined(singleElement) && !isNil(singleElement.parentId)) {
+      await move({
+        currentElement: { id: Number(singleElement.id), parentId: Number(singleElement.parentId) },
+        targetElement
+      })
 
       return
     }

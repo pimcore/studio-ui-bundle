@@ -1179,6 +1179,9 @@ element.tree.paste-only-contents: Nur Inhalte hier einfügen
 element.tree.cut: Ausschneiden
 element.tree.cut-success-description: '{{elementType}} "{{name}}" wurde ausgeschnitten und kann eingefügt werden'
 element.tree.paste-cut: Ausgeschnittenes Element einfügen
+element.tree.cut-multiple: '{{count}} Elemente ausschneiden'
+element.tree.cut-multiple-success-description: '{{count}} Elemente wurden ausgeschnitten und können eingefügt werden'
+element.tree.paste-cut-multiple: '{{count}} ausgeschnittene Elemente einfügen'
 element.tree.selection.count_one: '{{count}} Element ausgewählt'
 element.tree.selection.count_other: '{{count}} Elemente ausgewählt'
 element.tree.selection.clear: Auswahl aufheben

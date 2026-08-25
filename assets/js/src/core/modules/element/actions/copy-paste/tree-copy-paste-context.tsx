@@ -17,14 +17,27 @@ import { useTranslation } from 'react-i18next'
 
 export type StoreNode = TreeNodeProps | Element | undefined
 
+/**
+ * What the clipboard needs from an element that was cut. Deliberately minimal, so
+ * a cut can carry tree node data as well as full elements.
+ */
+export interface ClipboardEntry {
+  id: string | number
+  parentId?: string | number | null
+}
+
 export interface TreeCopyPasteContextType {
+  /** The single node on the clipboard; undefined while a selection is cut. */
   getStoredNode: () => StoreNode
+  /** Authoritative list of what was cut or copied. */
+  getStoredNodes: () => ClipboardEntry[]
   getStoredElementType: () => ElementType | undefined
   getNodeTask: () => 'copy' | 'cut' | undefined
   setStoredNode: (node: StoreNode, elementType: ElementType) => void
   setNodeTask: (task: 'copy' | 'cut' | undefined) => void
   copyNode: (node: TreeNodeProps | Element, elementType: ElementType) => void
   cutNode: (node: TreeNodeProps | Element, elementType: ElementType) => void
+  cutNodes: (nodes: ClipboardEntry[], elementType: ElementType) => void
   clearCopyPaste: () => void
   isValidElementType: (targetElementType: ElementType) => boolean
 }
@@ -37,6 +50,7 @@ export interface TreeCopyPasteProviderProps {
 
 export const TreeCopyPasteProvider = ({ children }: TreeCopyPasteProviderProps): React.JSX.Element => {
   const storedNodeRef = useRef<StoreNode>(undefined)
+  const storedEntriesRef = useRef<ClipboardEntry[]>([])
   const storedElementTypeRef = useRef<ElementType | undefined>(undefined)
   const nodeTaskRef = useRef<'copy' | 'cut' | undefined>(undefined)
 
@@ -44,11 +58,13 @@ export const TreeCopyPasteProvider = ({ children }: TreeCopyPasteProviderProps):
   const { t } = useTranslation()
 
   const getStoredNode = useCallback((): StoreNode => storedNodeRef.current, [])
+  const getStoredNodes = useCallback((): ClipboardEntry[] => storedEntriesRef.current, [])
   const getStoredElementType = useCallback((): ElementType | undefined => storedElementTypeRef.current, [])
   const getNodeTask = useCallback((): 'copy' | 'cut' | undefined => nodeTaskRef.current, [])
 
   const setStoredNodeWithType = useCallback((node: StoreNode, elementType: ElementType): void => {
     storedNodeRef.current = node
+    storedEntriesRef.current = node === undefined ? [] : [node]
     storedElementTypeRef.current = elementType
   }, [])
 
@@ -68,6 +84,7 @@ export const TreeCopyPasteProvider = ({ children }: TreeCopyPasteProviderProps):
 
   const copyNode = useCallback((node: TreeNodeProps | Element, elementType: ElementType): void => {
     storedNodeRef.current = node
+    storedEntriesRef.current = [node]
     storedElementTypeRef.current = elementType
     nodeTaskRef.current = 'copy'
     void messageApi.success(t('element.tree.copy-success-description', {
@@ -77,8 +94,24 @@ export const TreeCopyPasteProvider = ({ children }: TreeCopyPasteProviderProps):
     }))
   }, [messageApi, t])
 
+  const cutNodes = useCallback((nodes: ClipboardEntry[], elementType: ElementType): void => {
+    if (nodes.length === 0) {
+      return
+    }
+
+    // Only a single cut keeps a full node around; a cut selection is identified by
+    // its entries alone, which is all pasting it needs.
+    storedNodeRef.current = undefined
+    storedEntriesRef.current = nodes
+    storedElementTypeRef.current = elementType
+    nodeTaskRef.current = 'cut'
+
+    void messageApi.success(t('element.tree.cut-multiple-success-description', { count: nodes.length }))
+  }, [messageApi, t])
+
   const cutNode = useCallback((node: TreeNodeProps | Element, elementType: ElementType): void => {
     storedNodeRef.current = node
+    storedEntriesRef.current = [node]
     storedElementTypeRef.current = elementType
     nodeTaskRef.current = 'cut'
 
@@ -90,6 +123,7 @@ export const TreeCopyPasteProvider = ({ children }: TreeCopyPasteProviderProps):
 
   const clearCopyPaste = useCallback((): void => {
     storedNodeRef.current = undefined
+    storedEntriesRef.current = []
     storedElementTypeRef.current = undefined
     nodeTaskRef.current = undefined
   }, [])
@@ -100,15 +134,17 @@ export const TreeCopyPasteProvider = ({ children }: TreeCopyPasteProviderProps):
 
   const value: TreeCopyPasteContextType = useMemo(() => ({
     getStoredNode,
+    getStoredNodes,
     getStoredElementType,
     getNodeTask,
     setStoredNode: setStoredNodeWithType,
     setNodeTask,
     copyNode,
     cutNode,
+    cutNodes,
     clearCopyPaste,
     isValidElementType
-  }), [getStoredNode, getStoredElementType, getNodeTask, setStoredNodeWithType, setNodeTask, copyNode, cutNode, clearCopyPaste, isValidElementType])
+  }), [getStoredNode, getStoredNodes, getStoredElementType, getNodeTask, setStoredNodeWithType, setNodeTask, copyNode, cutNode, cutNodes, clearCopyPaste, isValidElementType])
 
   return (
     <TreeCopyPasteContext.Provider value={ value }>
@@ -135,6 +171,7 @@ export const useTreeCopyPasteContext = (elementType?: ElementType): TreeCopyPast
   return {
     ...context,
     getStoredNode: () => elementTypeMatches() ? context.getStoredNode() : undefined,
+    getStoredNodes: () => elementTypeMatches() ? context.getStoredNodes() : [],
     getStoredElementType: () => elementTypeMatches() ? context.getStoredElementType() : undefined,
     getNodeTask: () => elementTypeMatches() ? context.getNodeTask() : undefined
   }

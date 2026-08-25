@@ -1179,6 +1179,9 @@ element.tree.paste-only-contents: Lim inn kun innhold her
 element.tree.cut: Klipp ut
 element.tree.cut-success-description: '{{elementType}} "{{name}}" er klippet ut og klar til å limes inn'
 element.tree.paste-cut: Lim inn utklippet element
+element.tree.cut-multiple: 'Klipp ut {{count}} elementer'
+element.tree.cut-multiple-success-description: '{{count}} elementer er klippet ut og kan limes inn'
+element.tree.paste-cut-multiple: 'Lim inn {{count}} utklippede elementer'
 element.tree.selection.count_one: '{{count}} element valgt'
 element.tree.selection.count_other: '{{count}} elementer valgt'
 element.tree.selection.clear: Fjern valg

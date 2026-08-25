@@ -14,7 +14,9 @@ import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { type CloneParameters, useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
+import { type CloneParameters } from '@Pimcore/modules/element/hooks/use-element-api'
+import { type MoveProps, useMoveElement } from '../move/use-move-element'
+import { useMoveElements } from '../move/use-move-elements'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import { useTreePermission } from '../../../../components/element-tree/provider/tree-permission-provider/use-tree-permission'
@@ -26,16 +28,22 @@ import {
 } from '@Pimcore/components/element-tree/element-tree-slice'
 import { useAppDispatch } from '@sdk/app'
 import { useTreeId } from '../../../../components/element-tree/provider/tree-id-provider/use-tree-id'
+import { useElementTreeOptional } from '@Pimcore/components/element-tree/hooks/use-element-tree-optional'
+import { resolveActionTargets } from '@Pimcore/components/element-tree/utils/selection-targets'
 import { ContextMenuActionName } from '..'
-import { useTreeCopyPasteContext } from './tree-copy-paste-context'
+import { type ClipboardEntry, useTreeCopyPasteContext } from './tree-copy-paste-context'
 import { useCloseContextMenu } from '@Pimcore/components/context-menu-wrapper/context-menu-wrapper'
 import { usePasteVisibility } from './use-paste-visibility'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
 import { AssetCloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/asset-clone-job'
 import { DataObjectCloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/data-object-clone-job'
 
-type ElementPartial = Pick<Element, 'id' | 'parentId'>
 type StoreNode = TreeNodeProps | Element | undefined
+
+export type { MoveProps }
+
+/** What deciding whether an element may be cut needs from it. */
+type CuttableNode = Pick<TreeNodeProps, 'id' | 'permissions' | 'isLocked'> & { parentId?: string | number | null }
 
 export interface UseCopyPasteHookReturn {
   getStoredNode: () => StoreNode
@@ -53,19 +61,16 @@ export interface UseCopyPasteHookReturn {
   pasteCutContextMenuItem: (targetNode: TreeNodeProps) => ItemType
 }
 
-export interface MoveProps {
-  currentElement: ElementPartial
-  targetElement: ElementPartial
-}
-
 export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn => {
-  const { getStoredNode, getNodeTask, copyNode, cutNode, clearCopyPaste } = useTreeCopyPasteContext(elementType)
-  const { elementPatch } = useElementApi(elementType)
+  const { getStoredNode, getStoredNodes, getNodeTask, copyNode, cutNode, cutNodes, clearCopyPaste } = useTreeCopyPasteContext(elementType)
+  const { move } = useMoveElement(elementType)
+  const { moveMultiple } = useMoveElements(elementType)
   const { t } = useTranslation()
   const { isTreeActionAllowed } = useTreePermission()
   const dispatch = useAppDispatch()
   const { treeId } = useTreeId(true)
   const closeContextMenu = useCloseContextMenu()
+  const { getSelectedNodes: getSelectedTreeNodes } = useElementTreeOptional()
   const { isPasteHidden: isPasteHiddenHook } = usePasteVisibility(elementType)
   const executionEngine = useExecutionEngine()
 
@@ -75,35 +80,6 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
 
   const cut = (node: TreeNodeProps | Element): void => {
     cutNode(node, elementType)
-  }
-
-  const move = async (props: MoveProps): Promise<void> => {
-    const { currentElement, targetElement } = props
-    if (currentElement.id === targetElement.id) {
-      return
-    }
-
-    try {
-      dispatch(markNodeDeleting({ nodeId: String(currentElement.id), elementType, isDeleting: true }))
-
-      const success = await elementPatch({
-        body: {
-          data: [{
-            id: currentElement.id,
-            parentId: targetElement.id
-          }]
-        }
-      })
-
-      if (success) {
-        dispatch(refreshSourceNode({ nodeId: String(currentElement.parentId), elementType }))
-        dispatch(refreshTargetNode({ nodeId: String(targetElement.id), elementType }))
-      } else {
-        dispatch(markNodeDeleting({ nodeId: String(currentElement.id), elementType, isDeleting: false }))
-      }
-    } catch (error) {
-      console.error('Error moving element', error)
-    }
   }
 
   const paste = async (
@@ -126,38 +102,19 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
     await executionEngine.runJob(job)
   }
 
+  /**
+   * Pastes everything that was cut into the target, as one move.
+   */
   const pasteCut = async (parentId: number): Promise<void> => {
-    const storedNode = getStoredNode()
-    if (storedNode === undefined) {
+    const storedNodes = getStoredNodes()
+
+    if (storedNodes.length === 0) {
       return
     }
 
-    const id = typeof storedNode.id === 'number'
-      ? storedNode.id
-      : parseInt(storedNode.id)
+    await moveMultiple({ currentElements: storedNodes, targetElement: { id: parentId } })
 
-    try {
-      dispatch(markNodeDeleting({ nodeId: String(id), elementType, isDeleting: true }))
-
-      const success = await elementPatch({
-        body: {
-          data: [{
-            id,
-            parentId
-          }]
-        }
-      })
-
-      if (success) {
-        dispatch(refreshSourceNode({ nodeId: String(storedNode.parentId), elementType }))
-        dispatch(refreshTargetNode({ nodeId: String(parentId), elementType }))
-        clearCopyPaste()
-      } else {
-        dispatch(markNodeDeleting({ nodeId: String(id), elementType, isDeleting: false }))
-      }
-    } catch (error) {
-      console.error('Error cloning element', error)
-    }
+    clearCopyPaste()
   }
 
   const copyTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
@@ -188,14 +145,37 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
     }
   }
 
+  /**
+   * Nodes a cut applies to: the selection when the node is part of it, reduced to
+   * the ones that may actually be cut. A locked or unrenamable node in the
+   * selection is skipped rather than failing later at paste time.
+   */
+  const getCuttableNodes = (node: TreeNodeProps): ClipboardEntry[] => {
+    const targets = resolveActionTargets<CuttableNode>(node, getSelectedTreeNodes())
+
+    return targets
+      .filter(target => checkElementPermission(target.permissions, 'rename') && !(target.isLocked ?? false))
+      .map(target => ({ id: target.id, parentId: target.parentId }))
+  }
+
   const cutTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
+    const cuttableNodes = getCuttableNodes(node)
+
     return {
-      label: t('element.tree.cut'),
+      label: cuttableNodes.length > 1
+        ? t('element.tree.cut-multiple', { count: cuttableNodes.length })
+        : t('element.tree.cut'),
       key: ContextMenuActionName.cut,
       icon: <Icon value={ 'cut' } />,
       hidden: !isTreeActionAllowed(TreePermission.Cut) || !checkElementPermission(node.permissions, 'rename') || node.isLocked,
       onClick: () => {
         closeContextMenu?.()
+
+        if (cuttableNodes.length > 1) {
+          cutNodes(cuttableNodes, elementType)
+          return
+        }
+
         cut(node)
       }
     }
@@ -227,8 +207,12 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
   }
 
   const pasteCutContextMenuItem = (targetNode: TreeNodeProps): ItemType => {
+    const storedCount = getStoredNodes().length
+
     return {
-      label: t('element.tree.paste-cut'),
+      label: storedCount > 1
+        ? t('element.tree.paste-cut-multiple', { count: storedCount })
+        : t('element.tree.paste-cut'),
       key: ContextMenuActionName.pasteCut,
       icon: <Icon value={ 'paste' } />,
       hidden: isPasteHiddenHook(targetNode, 'cut'),
