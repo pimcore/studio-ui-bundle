@@ -1122,6 +1122,7 @@ batch-edit.append-mode.replace: Stapel ersetzen
 batch-edit.append-mode.add: Stapel hinzufügen
 batch-edit.append-mode.remove: Stapel entfernen
 batch-delete.job-title: Löschen
+element-move.job-title: Verschieben
 export-csv-form.modal-title: CSV exportieren
 export-csv-form.export-notice: Bitte beachten Sie, dass der Export einige Felder nicht unterstützt (z.B. Vorschau, Größe). Klicken Sie auf OK, um mit dem Export fortzufahren.
 export-csv-form.form-field.delimiter: Trennzeichen

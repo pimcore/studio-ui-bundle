@@ -81,7 +81,8 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
           trackError(new ApiError(response.error))
         }
 
-        updateAssetFieldValue(args.body.data[0].id, 'filename', args.body.data[0].key)
+        // Every patched element needs its cache entry updated, not just the first.
+        args.body.data.forEach(item => { updateAssetFieldValue(item.id, 'filename', item.key) })
 
         return isUndefined(response.error)
       } else if (elementType === 'data-object') {
@@ -90,7 +91,8 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
           trackError(new ApiError(response.error))
         }
 
-        updateDataObjectFieldValue(args.body.data[0].id, 'key', args.body.data[0].key)
+        // Every patched element needs its cache entry updated, not just the first.
+        args.body.data.forEach(item => { updateDataObjectFieldValue(item.id, 'key', item.key) })
 
         return isUndefined(response.error)
       } else if (elementType === 'document') {

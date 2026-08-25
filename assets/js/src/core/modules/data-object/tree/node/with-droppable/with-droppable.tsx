@@ -12,10 +12,15 @@ import { type TreeNode, type TreeNodeProps } from '@Pimcore/components/element-t
 import React, { forwardRef, type ReactElement, type Ref } from 'react'
 import { type DragAndDropInfo, type DroppableProps } from '@Pimcore/components/drag-and-drop/droppable'
 import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
+import { useMoveElements } from '@Pimcore/modules/element/actions/move/use-move-elements'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { isUndefined } from 'lodash'
 import { useDndAllowed } from '@Pimcore/modules/element/tree/node/with-droppable/use-dnd-allowed'
+import { getDraggedElements, isElementDrag } from '@Pimcore/components/drag-and-drop/element-drag'
+import { toMovableElements } from '@Pimcore/components/element-tree/utils/drop-target-validation'
+import { useElementTree } from '@Pimcore/components/element-tree/hooks/use-element-tree'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { HotspotDroppable, type HotspotDroppableProps } from '@Pimcore/components/drag-and-drop/hotspot-droppable'
 import { useSorting } from '@Pimcore/modules/element/actions/sorting/use-sorting'
 import { useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
@@ -28,8 +33,10 @@ interface OnSortingDropProps {
 export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
   const DroppableNodeContent = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
     const { move } = useCopyPaste('data-object')
+    const { moveMultiple } = useMoveElements('data-object')
     const { move: moveByIndex } = useSorting('data-object')
     const { isSourceAllowed, isTargetAllowed } = useDndAllowed()
+    const { getAncestorIds } = useElementTree()
     const parentNode = useElementTreeNode(props.parentId ?? '-1')
     const hasParent = parentNode !== undefined
     let sortingMode = 'keyed'
@@ -52,18 +59,34 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
       )
     }
 
-    const onDrop: DroppableProps['onDrop'] = (info) => {
-      const sourceObject: DataObject = info.data
+    /**
+     * The dragged objects this node would accept as children: everything the user
+     * may move, without variants, reduced to the topmost elements, and nothing at
+     * all when the target is part of the drag.
+     */
+    const acceptableObjects = (info: DragAndDropInfo): DataObject[] => {
+      if (!isElementDrag(info, [elementTypes.dataObject]) || !isTargetAllowed(targetObject) || targetObject.type === 'variant') {
+        return []
+      }
 
-      if (!isSourceAllowed(sourceObject) || !isTargetAllowed(targetObject)) {
+      const objects = getDraggedElements<DataObject>(info)
+        .filter(object => object.type !== 'variant' && isSourceAllowed(object))
+
+      return toMovableElements(targetObject.id, objects, getAncestorIds)
+    }
+
+    const onDrop: DroppableProps['onDrop'] = (info) => {
+      const objects = acceptableObjects(info)
+
+      if (objects.length === 0) {
         return
       }
 
-      move({
-        currentElement: { id: sourceObject.id, parentId: sourceObject.parentId },
+      moveMultiple({
+        currentElements: objects.map(object => ({ id: object.id, parentId: object.parentId })),
         targetElement: { id: targetObject.id, parentId: targetObject.parentId }
       }).catch(() => {
-        trackError(new GeneralError('Item could not be moved'))
+        trackError(new GeneralError('Items could not be moved'))
       })
     }
 
@@ -84,6 +107,16 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
       })
     }
 
+    // Only moving into a node handles a set; sorting by index stays single element,
+    // so its hotspots keep the validators below and refuse a list drag.
+    const checkForValidMoveContext: DroppableProps['isValidContext'] = (info) => {
+      return isElementDrag(info, [elementTypes.dataObject])
+    }
+
+    const checkForValidMoveData: DroppableProps['isValidData'] = (info) => {
+      return acceptableObjects(info).length > 0
+    }
+
     const checkForValidContext: DroppableProps['isValidContext'] = (context) => {
       return context.type === 'data-object' && context.data.type !== 'variant'
     }
@@ -96,8 +129,8 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
     let hotspots: HotspotDroppableProps['hotspots'] = [
       {
         id: 'drop-middle',
-        isValidContext: checkForValidContext,
-        isValidData: checkForValidData,
+        isValidContext: checkForValidMoveContext,
+        isValidData: checkForValidMoveData,
         position: { x: '0', y: '0%', width: '100%', height: '100%' },
         onDrop
       }
@@ -115,8 +148,8 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
         },
         {
           id: 'drop-middle',
-          isValidContext: checkForValidContext,
-          isValidData: checkForValidData,
+          isValidContext: checkForValidMoveContext,
+          isValidData: checkForValidMoveData,
           position: { x: '0', y: '30%', width: '100%', height: '40%' },
           onDrop
         },

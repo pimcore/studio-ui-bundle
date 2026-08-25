@@ -1122,6 +1122,7 @@ batch-edit.append-mode.replace: Reemplazo por lotes
 batch-edit.append-mode.add: Añadir por lotes
 batch-edit.append-mode.remove: Eliminar por lotes
 batch-delete.job-title: Eliminar
+element-move.job-title: Mover
 export-csv-form.modal-title: Exportar CSV
 export-csv-form.export-notice: Tenga en cuenta que la exportación no soporta algunos campos (ej. vista previa, tamaño). Pulse OK para continuar con la exportación.
 export-csv-form.form-field.delimiter: Delimitador

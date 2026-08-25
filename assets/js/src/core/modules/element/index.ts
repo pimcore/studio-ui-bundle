@@ -25,6 +25,7 @@ import { type JobRehydrationRegistry } from '@Pimcore/modules/execution-engine/s
 import { DeleteJob } from '@Pimcore/modules/execution-engine/jobs/delete/element-delete-job'
 import { AssetCloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/asset-clone-job'
 import { DataObjectCloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/data-object-clone-job'
+import { ElementMoveJob } from '@Pimcore/modules/execution-engine/jobs/move/element-move-job'
 import { DocumentCloneJob } from '@Pimcore/modules/execution-engine/jobs/clone/document-clone-job'
 import { AbstractBatchEditJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/abstract-batch-edit-job'
 import { AbstractFolderBatchEditJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/abstract-folder-batch-edit-job'
@@ -68,6 +69,7 @@ moduleSystem.registerModule({
     rehydrationRegistry.register(DeleteJob)
     rehydrationRegistry.register(AssetCloneJob)
     rehydrationRegistry.register(DataObjectCloneJob)
+    rehydrationRegistry.register(ElementMoveJob)
     rehydrationRegistry.register(DocumentCloneJob)
     // Abstract classes registered directly: all concrete batch-edit subclasses share the same
     // backend job names and buildHandler, so one registration per abstract class covers them all.

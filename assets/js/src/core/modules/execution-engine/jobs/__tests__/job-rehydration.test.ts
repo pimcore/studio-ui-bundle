@@ -20,6 +20,7 @@ import { XlsxDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download
 import { AbstractBatchEditJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/abstract-batch-edit-job'
 import { AbstractFolderBatchEditJob } from '@Pimcore/modules/execution-engine/jobs/batch-edit/abstract-folder-batch-edit-job'
 import { ZipUploadJob } from '@Pimcore/modules/execution-engine/jobs/zip-upload/zip-upload-job'
+import { ElementMoveJob } from '@Pimcore/modules/execution-engine/jobs/move/element-move-job'
 import { type JobRun } from '@Pimcore/modules/execution-engine/execution-engine-api-slice.gen'
 import { type JobRunOptions } from '@Pimcore/modules/execution-engine/jobs/job-interface'
 
@@ -509,5 +510,23 @@ describe('AbstractFolderBatchEditJob: run() matches rehydrate() structurally', (
     expect(runSnapshot.title).toEqual(rehydrateSnapshot.title)
     expect(runSnapshot.stepTrackerType).toEqual(rehydrateSnapshot.stepTrackerType)
     expect(runSnapshot.progressCalculatorType).toEqual(rehydrateSnapshot.progressCalculatorType)
+  })
+})
+
+describe('ElementMoveJob.rehydrate()', () => {
+  it('uses parent.id as jobRunId', () => {
+    ElementMoveJob.rehydrate([jobRun(70, 'studio_ee_job_patch_elements')])
+
+    expect(HandlerMock.mock.calls.at(-1)![0].jobRunId).toBe(70)
+  })
+
+  it('reports progress per patched element', () => {
+    ElementMoveJob.rehydrate([jobRun(70, 'studio_ee_job_patch_elements')])
+
+    expect(HandlerMock.mock.calls.at(-1)![0].progressCalculator).toBeInstanceOf(BatchedStepProgressCalculator)
+  })
+
+  it('claims the job name the backend uses for element patching', () => {
+    expect(ElementMoveJob.jobNames).toEqual(['studio_ee_job_patch_elements'])
   })
 })

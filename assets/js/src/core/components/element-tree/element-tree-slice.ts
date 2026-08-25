@@ -1015,6 +1015,35 @@ export const selectIsSelectionLimitReached = (state: RootState, treeId: string):
   state.trees[treeId]?.isSelectionLimitReached ?? false
 
 /**
+ * Ids of every ancestor of a node, closest first.
+ *
+ * Walks the loaded parent chain, which is complete for any node the user can see:
+ * a visible node has its ancestors expanded. Used to keep a move from being
+ * dropped into its own subtree.
+ */
+export const selectAncestorNodeIds = (state: RootState, treeId: string, nodeId: string): string[] => {
+  const tree: TreeState | undefined = state.trees[treeId]
+
+  if (isUndefined(tree)) {
+    return []
+  }
+
+  const nodes: TreeNodesState = tree.nodes
+  const ancestorIds: string[] = []
+  const visitedIds = new Set<string>([nodeId])
+
+  let currentId: string | undefined = nodes[nodeId]?.treeNodeProps?.parentId
+
+  while (!isUndefined(currentId) && !visitedIds.has(currentId)) {
+    ancestorIds.push(currentId)
+    visitedIds.add(currentId)
+    currentId = nodes[currentId]?.treeNodeProps?.parentId
+  }
+
+  return ancestorIds
+}
+
+/**
  * Node data of the current selection, in selection order.
  *
  * Only nodes that are loaded can be returned: a selected node inside a collapsed

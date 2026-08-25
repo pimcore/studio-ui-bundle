@@ -1122,6 +1122,7 @@ batch-edit.append-mode.replace: Masseerstatt
 batch-edit.append-mode.add: Masselegg til
 batch-edit.append-mode.remove: Massefjerning
 batch-delete.job-title: Slett
+element-move.job-title: Flytt
 export-csv-form.modal-title: Eksporter CSV
 export-csv-form.export-notice: Vær oppmerksom på at eksporten ikke støtter noen felt (f.eks. forhåndsvisning, størrelse). Trykk OK for å fortsette med eksporten.
 export-csv-form.form-field.delimiter: Skilletegn
