@@ -8,8 +8,16 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-/** Parse the colour formats theme tokens are written in: `#rgb`, `#rrggbb`, `rgb()` and `rgba()`. */
-const parseColor = (value: string): [number, number, number] | null => {
+/**
+ * Parse the colour formats theme tokens are written in: `#rgb`, `#rrggbb`, `rgb()` and
+ * `rgba()`.
+ *
+ * A colour that is not fully opaque is rejected rather than parsed. Its rendered
+ * appearance depends on whatever it is composited over, which is not knowable from the
+ * value alone -- `rgba(255, 255, 255, 0.09)` is a light tint over an unknown ground, and
+ * reading it as near-white would be wrong exactly as often as it is right.
+ */
+const parseOpaqueColor = (value: string): [number, number, number] | null => {
   const trimmed = value.trim()
 
   const hex = /^#([0-9a-f]{3}|[0-9a-f]{6})$/iu.exec(trimmed)
@@ -25,13 +33,23 @@ const parseColor = (value: string): [number, number, number] | null => {
     ]
   }
 
-  const rgb = /^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)/iu.exec(trimmed)
-  if (rgb !== null) {
-    return [Number(rgb[1]), Number(rgb[2]), Number(rgb[3])]
+  const rgb = /^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)\s*(?:[,/]\s*([\d.]+%?)\s*)?\)$/iu.exec(trimmed)
+  if (rgb === null) {
+    return null
   }
 
-  return null
+  const alpha = rgb[4]
+  if (alpha !== undefined && parseAlpha(alpha) < 1) {
+    return null
+  }
+
+  return [Number(rgb[1]), Number(rgb[2]), Number(rgb[3])]
 }
+
+const parseAlpha = (value: string): number =>
+  value.endsWith('%')
+    ? Number(value.slice(0, -1)) / 100
+    : Number(value)
 
 const channelLuminance = (value: number): number => {
   const channel = value / 255
@@ -44,13 +62,15 @@ const channelLuminance = (value: number): number => {
 /**
  * Whether a surface colour is dark enough to need light-on-dark content.
  *
- * Derived from the colour itself rather than from a theme id or an appearance flag,
- * so a theme registered by a bundle is judged as correctly as a shipped one. An
- * unparseable colour is treated as light, which matches the antd default a theme
- * that overrides nothing falls back to.
+ * Derived from the colour itself rather than from a theme id or an appearance flag, so a
+ * theme registered by a bundle is judged as correctly as a shipped one.
+ *
+ * A colour that cannot be read as fully opaque returns `false`, which keeps the caller on
+ * the light-surface path -- the same one it took before any of this existed. A theme whose
+ * surfaces are translucent can still opt in explicitly wherever the caller allows it.
  */
 export const isDarkSurface = (color: string): boolean => {
-  const rgb = parseColor(color)
+  const rgb = parseOpaqueColor(color)
   if (rgb === null) {
     return false
   }

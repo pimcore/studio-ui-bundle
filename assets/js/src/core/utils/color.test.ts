@@ -17,11 +17,12 @@ describe('isDarkSurface', () => {
     expect(isDarkSurface('#ffffff')).toBe(false)
   })
 
-  it('accepts every colour format theme tokens are written in', () => {
+  it('accepts opaque colours in every format theme tokens use', () => {
     expect(isDarkSurface('#000')).toBe(true)
     expect(isDarkSurface('#FFF')).toBe(false)
     expect(isDarkSurface('rgb(30, 30, 36)')).toBe(true)
-    expect(isDarkSurface('rgba(255, 255, 255, 0.85)')).toBe(false)
+    expect(isDarkSurface('rgb(255 255 255)')).toBe(false)
+    expect(isDarkSurface('rgba(30, 30, 36, 1)')).toBe(true)
     expect(isDarkSurface('  #1E1E24  ')).toBe(true)
   })
 
@@ -31,9 +32,19 @@ describe('isDarkSurface', () => {
     expect(isDarkSurface('#0000ff')).toBe(true)
   })
 
+  it('rejects translucent colours, whose appearance depends on the backdrop', () => {
+    // Black at zero alpha renders as whatever is behind it, so it must not read as dark
+    // merely because its channels are zero -- and must agree with `transparent`.
+    expect(isDarkSurface('rgba(0, 0, 0, 0)')).toBe(false)
+    expect(isDarkSurface('rgba(0, 0, 0, 0.1)')).toBe(false)
+    expect(isDarkSurface('rgba(255, 255, 255, 0.09)')).toBe(false)
+    expect(isDarkSurface('rgb(0 0 0 / 50%)')).toBe(false)
+  })
+
   it('treats an unparseable colour as light, matching the antd default', () => {
     expect(isDarkSurface('')).toBe(false)
     expect(isDarkSurface('transparent')).toBe(false)
     expect(isDarkSurface('var(--surface)')).toBe(false)
+    expect(isDarkSurface('#12345')).toBe(false)
   })
 })
