@@ -23,7 +23,7 @@ jest.mock('i18next', () => ({
 // which jest cannot load — same reason as field-container.test.tsx. The stubs
 // keep the one prop asserted on here: the rendered title/label node.
 jest.mock('@Pimcore/components/collapse/item/collapse-item', () => ({
-  CollapseItem: ({ children, label }: any) => (
+  CollapseItem: ({ children, label }: { children?: ReactNode, label?: ReactNode }) => (
     <div>
       <span data-testid='accordion-title'>{label}</span>
       {children}
@@ -32,7 +32,7 @@ jest.mock('@Pimcore/components/collapse/item/collapse-item', () => ({
 }))
 
 jest.mock('@Pimcore/components/card/card', () => ({
-  Card: ({ children, title }: any) => (
+  Card: ({ children, title }: { children?: ReactNode, title?: ReactNode }) => (
     <div>
       <span data-testid='card-title'>{title}</span>
       {children}
@@ -45,11 +45,11 @@ jest.mock('@Pimcore/components/icon/icon', () => ({
 }))
 
 jest.mock('@Pimcore/components/flex/flex', () => ({
-  Flex: ({ children }: any) => <div>{children}</div>
+  Flex: ({ children }: { children?: ReactNode }) => <div>{children}</div>
 }))
 
 // eslint-disable-next-line import/first
-import React from 'react'
+import React, { type ReactNode } from 'react'
 // eslint-disable-next-line import/first
 import { render, screen } from '@testing-library/react'
 // eslint-disable-next-line import/first
