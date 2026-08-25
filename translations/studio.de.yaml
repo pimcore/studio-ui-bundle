@@ -1182,6 +1182,9 @@ element.tree.selection.count_one: '{{count}} Element ausgewählt'
 element.tree.selection.count_other: '{{count}} Elemente ausgewählt'
 element.tree.selection.clear: Auswahl aufheben
 element.tree.selection.limit-reached: 'Maximum von {{limit}} Elementen erreicht'
+element.tree.drag.elements_one: '{{count}} Element'
+element.tree.drag.elements_other: '{{count}} Elemente'
+element.tree.drag.elements-partial: '{{count}} von {{selected}} Elementen'
 element.lock: Sperren
 element.lock-and-propagate-to-children: Sperren und auf Kinder übertragen
 element.unlock: Entsperren

@@ -16,7 +16,16 @@ import { getIframeOffset } from '@sdk/utils'
 
 interface DraggableProps {
   children: React.ReactNode
-  info: DragAndDropInfo
+
+  /**
+   * Either the drag info itself, or a function resolving it when the drag starts.
+   *
+   * The lazy form exists for info that depends on state which changes often - a
+   * tree selection, for example: resolving at drag start keeps every draggable
+   * from having to subscribe to that state just to build a payload it may never
+   * send.
+   */
+  info: DragAndDropInfo | (() => DragAndDropInfo)
 }
 
 export class DragInfoChangeEvent extends CustomEvent<DragAndDropInfo | null> {
@@ -73,19 +82,21 @@ function Draggable ({ children, info }: DraggableProps): React.JSX.Element {
     e.stopPropagation()
     document.body.classList.add('dnd--dragging')
 
+    const dragInfo = typeof info === 'function' ? info() : info
+
     const ghost = getOrCreateGhostElement()
     e.dataTransfer.setDragImage(ghost, 0, 0)
 
     const overlay = getOrCreateOverlay()
-    overlay.innerHTML = ReactDOMServer.renderToString(<DragOverlay info={ info } />)
+    overlay.innerHTML = ReactDOMServer.renderToString(<DragOverlay info={ dragInfo } />)
 
     window.addEventListener('drag', updateOverlayPosition)
 
     e.dataTransfer.effectAllowed = 'move'
     e.dataTransfer.dropEffect = 'none'
-    e.dataTransfer.setData('application/json', JSON.stringify(info))
+    e.dataTransfer.setData('application/json', JSON.stringify(dragInfo))
 
-    setTimeout(() => { dispatchChangeDragInfoEvent(info) }, 50)
+    setTimeout(() => { dispatchChangeDragInfoEvent(dragInfo) }, 50)
   }
 
   const handleDragEnd = (e: React.DragEvent<HTMLDivElement>): void => {

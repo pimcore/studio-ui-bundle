@@ -1182,6 +1182,9 @@ element.tree.selection.count_one: '{{count}} element selected'
 element.tree.selection.count_other: '{{count}} elements selected'
 element.tree.selection.clear: Clear selection
 element.tree.selection.limit-reached: 'Maximum of {{limit}} elements reached'
+element.tree.drag.elements_one: '{{count}} element'
+element.tree.drag.elements_other: '{{count}} elements'
+element.tree.drag.elements-partial: '{{count}} of {{selected}} elements'
 element.lock: Lock
 element.lock-and-propagate-to-children: Lock and propagate to children
 element.unlock: Unlock

@@ -1013,3 +1013,24 @@ export const selectAnchorNodeId = (state: RootState, treeId: string): string | u
 
 export const selectIsSelectionLimitReached = (state: RootState, treeId: string): boolean =>
   state.trees[treeId]?.isSelectionLimitReached ?? false
+
+/**
+ * Node data of the current selection, in selection order.
+ *
+ * Only nodes that are loaded can be returned: a selected node inside a collapsed
+ * parent keeps its id but has no data attached, so callers that need the data
+ * (a drag payload, for example) have to cope with getting fewer nodes than
+ * `selectedNodeIds` holds. Returns a new array, so read it imperatively rather
+ * than through useSelector.
+ */
+export const selectSelectedNodes = (state: RootState, treeId: string): TreeNode[] => {
+  const tree = state.trees[treeId]
+
+  if (isUndefined(tree)) {
+    return []
+  }
+
+  return tree.selectedNodeIds
+    .map(nodeId => tree.nodes[nodeId]?.treeNodeProps)
+    .filter((node): node is TreeNode => !isUndefined(node))
+}

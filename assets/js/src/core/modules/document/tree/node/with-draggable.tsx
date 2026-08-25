@@ -13,12 +13,16 @@ import { Draggable } from '@Pimcore/components/drag-and-drop/draggable'
 import { type Document } from '../../document-api-slice-enhanced'
 import { type TreeNode, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { useTranslation } from 'react-i18next'
+import { useElementDragInfo } from '@Pimcore/components/element-tree/hooks/use-element-drag-info'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { isString } from 'lodash'
 
 export const withDraggable = (Component: typeof TreeNode): typeof TreeNode => {
   const DraggableNodeContent = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
     const metaData: Document | undefined = props.metaData.document
     const { t } = useTranslation()
+    const title = isString(metaData?.key) && metaData?.key !== '' ? metaData?.key : t('home')
+    const resolveDragInfo = useElementDragInfo({ node: props, elementType: elementTypes.document, title })
 
     if (props.metaData?.document === undefined) {
       return (
@@ -26,11 +30,9 @@ export const withDraggable = (Component: typeof TreeNode): typeof TreeNode => {
       )
     }
 
-    const title = isString(metaData?.key) && metaData?.key !== '' ? metaData?.key : t('home')
-
     return (
       <Draggable
-        info={ { icon: props.icon, title, type: 'document', data: { ...metaData } } }
+        info={ resolveDragInfo }
       >
         <Component
           { ...props }

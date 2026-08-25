@@ -9,7 +9,7 @@
  */
 
 import { store, useAppDispatch } from '@Pimcore/app/store'
-import { type InternalNodeState, selectActiveNodeId, selectAnchorNodeId, selectNodeState, selectSelectedNodeIds, setActiveNodeId, setNodeExpanded, setNodeLoading, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, setNodeFetching, setNodeHasChildren, toggleNodeSelection, selectNodeRange, clearSelection as clearSelectionAction } from '../element-tree-slice'
+import { type InternalNodeState, selectActiveNodeId, selectAnchorNodeId, selectNodeState, selectSelectedNodeIds, selectSelectedNodes, type TreeNode, setActiveNodeId, setNodeExpanded, setNodeLoading, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, setNodeFetching, setNodeHasChildren, toggleNodeSelection, selectNodeRange, clearSelection as clearSelectionAction } from '../element-tree-slice'
 import { isUndefined } from 'lodash'
 import { type DataTransformerReturnType, type DataTransformerSourceNode } from '../types/node-api-hook'
 import { useNodeApiHook } from '../provider/node-api-hook-provider/use-node-api-hook'
@@ -39,6 +39,8 @@ export interface UseElementTreeReturnType {
    * a subscription keeps nodes from re-rendering whenever the selection changes.
    */
   getSelectedIds: () => string[]
+  /** Node data of the selection; omits selected nodes that are not loaded. */
+  getSelectedNodes: () => TreeNode[]
   getAnchorId: () => string | undefined
   getActiveId: () => string | undefined
 }
@@ -149,6 +151,8 @@ export const useElementTree = (): UseElementTreeReturnType => {
 
   const getSelectedIds = (): string[] => selectSelectedNodeIds(store.getState(), treeId)
 
+  const getSelectedNodes = (): TreeNode[] => selectSelectedNodes(store.getState(), treeId)
+
   const getAnchorId = (): string | undefined => selectAnchorNodeId(store.getState(), treeId)
 
   const getActiveId = (): string | undefined => selectActiveNodeId(store.getState(), treeId)
@@ -177,6 +181,7 @@ export const useElementTree = (): UseElementTreeReturnType => {
     clearSelection,
     setActiveId,
     getSelectedIds,
+    getSelectedNodes,
     getAnchorId,
     getActiveId
   }
