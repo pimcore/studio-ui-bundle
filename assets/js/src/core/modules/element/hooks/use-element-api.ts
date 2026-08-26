@@ -137,7 +137,7 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
 
   const getElementById = async (id: number): Promise<AssetGetByIdApiResponse | DataObjectGetByIdApiResponse | undefined> => {
     if (elementType === 'asset') {
-      const { data } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
+      const { data } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }, { subscribe: false }))
 
       if (data !== undefined) {
         if ('error' in data) {
@@ -152,7 +152,7 @@ export const useElementApi = (elementType: ElementType, cacheKey?: string): UseE
     }
 
     if (elementType === 'data-object') {
-      const { data } = await dispatch(dataObjectApi.endpoints.dataObjectGetById.initiate({ id }))
+      const { data } = await dispatch(dataObjectApi.endpoints.dataObjectGetById.initiate({ id }, { subscribe: false }))
 
       if (data !== undefined) {
         if ('error' in data) {

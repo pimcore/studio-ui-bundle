@@ -34,7 +34,7 @@ export const useAssetDraftFetcher = (): UseAssetDraftFetcherReturn => {
   const dispatch = useAppDispatch()
 
   async function getAsset (id: number): Promise<AssetGetByIdApiResponse | undefined> {
-    const { data, isError: isGetAssetError, error: getAssetError } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }))
+    const { data, isError: isGetAssetError, error: getAssetError } = await dispatch(assetApi.endpoints.assetGetById.initiate({ id }, { subscribe: false }))
 
     if (isGetAssetError) {
       trackError(new ApiError(getAssetError))
@@ -46,7 +46,7 @@ export const useAssetDraftFetcher = (): UseAssetDraftFetcherReturn => {
 
   async function getCustomSettings (id: number): Promise<ImageData | undefined> {
     let objectToReturn: ImageData = {}
-    const { data, isSuccess, isError: isAssetCustomSettingsError, error: assetCustomSettingsError } = await dispatch(assetApi.endpoints.assetCustomSettingsGetById.initiate({ id }))
+    const { data, isSuccess, isError: isAssetCustomSettingsError, error: assetCustomSettingsError } = await dispatch(assetApi.endpoints.assetCustomSettingsGetById.initiate({ id }, { subscribe: false }))
 
     if (isAssetCustomSettingsError) {
       trackError(new ApiError(assetCustomSettingsError))

@@ -43,7 +43,7 @@ export class AssetOpeningService {
   }
 
   private async fetchAndStoreAssetDraft (id: number): Promise<void> {
-    const { data } = await store.dispatch(api.endpoints.assetGetById.initiate({ id }))
+    const { data } = await store.dispatch(api.endpoints.assetGetById.initiate({ id }, { subscribe: false }))
 
     if (!isNil(data)) {
       const mergedAssetData = {
@@ -65,7 +65,7 @@ export class AssetOpeningService {
   }
 
   async getWidgetConfig (id: number, silent: boolean = false): Promise<WidgetManagerTabConfig | undefined> {
-    const { data, isError, error } = await store.dispatch(api.endpoints.assetGetById.initiate({ id }))
+    const { data, isError, error } = await store.dispatch(api.endpoints.assetGetById.initiate({ id }, { subscribe: false }))
 
     if (isError && !silent) {
       trackError(new ApiError(error))

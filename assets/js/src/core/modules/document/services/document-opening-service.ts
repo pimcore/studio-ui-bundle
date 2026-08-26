@@ -46,7 +46,7 @@ export class DocumentOpeningService {
   }
 
   private async fetchAndStoreDocumentDraft (id: number): Promise<void> {
-    const { data } = await store.dispatch(api.endpoints.documentGetById.initiate({ id }))
+    const { data } = await store.dispatch(api.endpoints.documentGetById.initiate({ id }, { subscribe: false }))
 
     if (!isNil(data)) {
       const mergedDocumentData = {
@@ -65,7 +65,7 @@ export class DocumentOpeningService {
 
   async getWidgetConfig (id: number, silent: boolean = false): Promise<WidgetManagerTabConfig | undefined> {
     store.dispatch(api.util.invalidateTags(invalidatingTags.DOCUMENT_DETAIL_ID(id)))
-    const { data, isError, error } = await store.dispatch(api.endpoints.documentGetById.initiate({ id }))
+    const { data, isError, error } = await store.dispatch(api.endpoints.documentGetById.initiate({ id }, { subscribe: false }))
 
     if (isError && !silent) {
       trackError(new ApiError(error))

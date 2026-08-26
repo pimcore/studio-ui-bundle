@@ -42,7 +42,7 @@ export const useOpenInNewWindow = (): UseOpenInNewWindowHookReturn => {
   ): Promise<void> => {
     setIsLoading(true)
 
-    const { data, error } = await dispatch(api.endpoints.documentGetById.initiate({ id: documentId }))
+    const { data, error } = await dispatch(api.endpoints.documentGetById.initiate({ id: documentId }, { subscribe: false }))
 
     if (!isUndefined(error)) {
       trackError(new ApiError(error))

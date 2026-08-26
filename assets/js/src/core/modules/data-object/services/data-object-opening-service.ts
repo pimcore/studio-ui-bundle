@@ -46,7 +46,7 @@ export class DataObjectOpeningService {
   }
 
   private async fetchAndStoreDataObjectDraft (id: number): Promise<void> {
-    const { data } = await store.dispatch(api.endpoints.dataObjectGetById.initiate({ id }))
+    const { data } = await store.dispatch(api.endpoints.dataObjectGetById.initiate({ id }, { subscribe: false }))
 
     if (!isNil(data)) {
       const mergedDataObjectData = {
@@ -68,7 +68,7 @@ export class DataObjectOpeningService {
 
   async getWidgetConfig (id: number, silent: boolean = false): Promise<WidgetManagerTabConfig | undefined> {
     store.dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_DETAIL_ID(id)))
-    const { data, isError, error } = await store.dispatch(api.endpoints.dataObjectGetById.initiate({ id }))
+    const { data, isError, error } = await store.dispatch(api.endpoints.dataObjectGetById.initiate({ id }, { subscribe: false }))
 
     if (isError && !silent) {
       trackError(new ApiError(error))
