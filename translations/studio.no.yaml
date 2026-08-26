@@ -1327,8 +1327,12 @@ upload.assets-items-failed-message: Opplasting fullført med feil.
 quantity-value.converted-units: Konverterte enheter
 table.empty.confirm: Er du sikker på at du vil fjerne alle data?
 table.new-column: Ny kolonne
+table.insert-column-left: Sett inn kolonne til venstre
+table.insert-column-right: Sett inn kolonne til høyre
 table.delete-column: Slett kolonne
 table.new-row: Ny rad
+table.insert-row-above: Sett inn rad over
+table.insert-row-below: Sett inn rad under
 table.delete-row: Slett rad
 table.duplicate-row: Dupliser rad
 table.copy: Kopier

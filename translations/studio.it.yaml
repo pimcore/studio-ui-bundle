@@ -1327,8 +1327,12 @@ upload.assets-items-failed-message: Caricamento completato con errori.
 quantity-value.converted-units: Unità convertite
 table.empty.confirm: Cancellare tutti i dati?
 table.new-column: Nuova colonna
+table.insert-column-left: Inserisci colonna a sinistra
+table.insert-column-right: Inserisci colonna a destra
 table.delete-column: Elimina colonna
 table.new-row: Nuova riga
+table.insert-row-above: Inserisci riga sopra
+table.insert-row-below: Inserisci riga sotto
 table.delete-row: Elimina riga
 table.duplicate-row: Duplica riga
 table.copy: Copia

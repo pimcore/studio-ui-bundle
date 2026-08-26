@@ -1327,8 +1327,12 @@ upload.assets-items-failed-message: Uppladdningen slutfördes med fel.
 quantity-value.converted-units: Konverterade enheter
 table.empty.confirm: Är du säker på att du vill rensa all data?
 table.new-column: Ny kolumn
+table.insert-column-left: Infoga kolumn till vänster
+table.insert-column-right: Infoga kolumn till höger
 table.delete-column: Ta bort kolumn
 table.new-row: Ny rad
+table.insert-row-above: Infoga rad ovanför
+table.insert-row-below: Infoga rad nedanför
 table.delete-row: Ta bort rad
 table.duplicate-row: Duplicera rad
 table.copy: Kopiera
