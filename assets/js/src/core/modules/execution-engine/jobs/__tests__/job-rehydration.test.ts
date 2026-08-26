@@ -529,4 +529,10 @@ describe('ElementMoveJob.rehydrate()', () => {
   it('claims the job name the backend uses for element patching', () => {
     expect(ElementMoveJob.jobNames).toEqual(['studio_ee_job_patch_elements'])
   })
+
+  it('stays out of the notification list unless it reports errors', () => {
+    ElementMoveJob.rehydrate([jobRun(70, 'studio_ee_job_patch_elements')])
+
+    expect(HandlerMock.mock.calls.at(-1)![0].notifyOnErrorOnly).toBe(true)
+  })
 })

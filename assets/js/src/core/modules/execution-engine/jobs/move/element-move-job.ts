@@ -19,6 +19,7 @@ import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { MessageBusJobHandler, type JobCompletionData } from '../../message-handlers/message-bus-job/message-bus-job-handler'
 import { BatchedStepProgressCalculator } from '../../message-handlers/message-bus-job/progress-calculator/batched-step-progress-calculator'
 import { type JobRunList, type RehydratableJob } from '../../services/job-rehydration-registry'
+import { api as executionEngineApi } from '../../execution-engine-api-slice.gen'
 
 export interface ElementMoveJobItem {
   id: number
@@ -74,9 +75,22 @@ export class ElementMoveJob implements JobInterface {
           // refresh puts both sides of the move back in sync either way.
           await this.handleCompletion()
 
-          if (!data.isFinished) {
-            console.error(`Element move job ended with status: ${data.status}`)
+          // isFinished covers finished_with_errors as well, so success is the only
+          // case that may be cleaned up - a run that reported errors has to stay
+          // visible, including after a reload.
+          if (!data.isSuccessful) {
+            if (!data.isFinished) {
+              console.error(`Element move job ended with status: ${data.status}`)
+            }
+
+            return
           }
+
+          // Nobody was shown this job, so there is nothing to dismiss: its run is
+          // hidden instead of waiting in the job list until someone clears it.
+          await store.dispatch(
+            executionEngineApi.endpoints.executionEngineHideJobRuns.initiate({ body: { jobRunIds: [jobRunId] } })
+          )
         },
         onRetry: async () => {
           await this.run(options)
@@ -125,6 +139,9 @@ export class ElementMoveJob implements JobInterface {
     return new MessageBusJobHandler({
       jobRunId: options.jobRunId,
       title: t('element-move.job-title'),
+      // Moving is not something to report on: the tree updating is the feedback.
+      // The job only becomes visible when elements could not be moved.
+      notifyOnErrorOnly: true,
       progressCalculator: new BatchedStepProgressCalculator(),
       onJobCompletion: options.onJobCompletion,
       onRetry: options.onRetry

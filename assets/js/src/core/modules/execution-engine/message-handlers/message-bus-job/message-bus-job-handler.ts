@@ -42,6 +42,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
   private readonly progressCalculator: ProgressCalculator
   private lastProgressValue: number = -1
   private readonly title: string | ((job: MessageBusJob) => string)
+  private readonly notifyOnErrorOnly?: boolean
   private polling: JobRunPolling
   private initialStatus: JobStatus = JobStatus.QUEUED
 
@@ -57,6 +58,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     this.jobRunId = options.jobRunId
     this.ancestorJobRunIds = options.ancestorJobRunIds
     this.title = options.title
+    this.notifyOnErrorOnly = options.notifyOnErrorOnly
     this.stepDescriptions = options.stepDescriptions
     this.stepTracker = options.stepTracker ?? new DefaultStepTracker()
     this.progressCalculator = options.progressCalculator ?? new ProgressFieldCalculator()
@@ -156,7 +158,8 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       onRetry: this.onRetry,
       onCustomizeButtons: this.onCustomizeButtons,
       jobRunId: this.jobRunId,
-      ancestorJobRunIds: this.ancestorJobRunIds
+      ancestorJobRunIds: this.ancestorJobRunIds,
+      notifyOnErrorOnly: this.notifyOnErrorOnly
     }
 
     job.title = this.getTitle(job)
