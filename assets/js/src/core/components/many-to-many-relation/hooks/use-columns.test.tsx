@@ -35,6 +35,12 @@ jest.mock('../utils/helpers', () => ({
 jest.mock('../utils/full-path-cell-renderer', () => ({
   renderFullPathCell: (): null => null
 }))
+// The barrel pulls in .styles.ts files whose antd-style dependency is untranspiled ESM,
+// which jest cannot parse; a getFilterColumn without results keeps every column unchanged.
+jest.mock('@Pimcore/components/many-to-many-relation', () => ({
+  ColumnHeaderFilter: (): null => null,
+  useRelationFilterColumns: () => ({ getFilterColumn: () => undefined })
+}))
 
 // eslint-disable-next-line import/first
 import { type ReactElement } from 'react'
