@@ -206,7 +206,7 @@ class-definition.general-settings.icon: Icono
 class-definition.general-settings.parent-class: Clase padre
 class-definition.general-settings.implements-interfaces: Implementa interfaces
 class-definition.general-settings.listing-parent-class: Clase padre de listado
-class-definition.general-settings.use-traits: Usar Traits
+class-definition.general-settings.use-traits: Usar traits
 class-definition.general-settings.listing-use-traits: Traits de listado
 class-definition.general-settings.link-generator-reference: Referencia del generador de enlaces
 class-definition.general-settings.preview-generator-reference: Referencia del generador de vista previa
@@ -280,7 +280,7 @@ select-option.validation.enter-id: Introduzca un ID
 select-option.validation.id-format: El nombre debe comenzar con una letra mayúscula, seguida de caracteres alfanuméricos
 select-option.general-settings.title: General
 select-option.general-settings.enum-name: Nombre de enumeración
-select-option.general-settings.use-traits: Usar Traits
+select-option.general-settings.use-traits: Usar traits
 select-option.general-settings.implements-interfaces: Implementa interfaces
 select-option.general-settings.group: Grupo
 select-option.general-settings.admin-only: Solo administrador
@@ -2504,7 +2504,7 @@ no-languages-found: No se encontraron idiomas
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (sobrescribe la ruta de la estructura del árbol)
 content-main-document: Documento Content-Main
-content-main-document.apply: Aplicar documento Content-Main
+content-main-document.apply: Aplicar documento content-main
 content-main-document.apply-warning-title: ¿Está seguro?
 content-main-document.apply-warning-message: Se perderá todo el contenido
 never: nunca
