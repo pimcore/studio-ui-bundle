@@ -168,7 +168,7 @@ folder.folder-editor-tabs.preview: Förhandsvisning
 folder.folder-editor-tabs.view: Lista
 toolbar.reload.confirmation: Är du säker på att du vill ladda om den här fliken? Alla osparade ändringar kommer att förloras.
 toolbar.reload: Ladda om
-toolbar.save-and-publish: Spara & Publicera
+toolbar.save-and-publish: Spara & publicera
 toolbar.save: Spara
 toolbar.save-draft: Spara utkast
 toolbar.more: Mer
@@ -1236,8 +1236,8 @@ element.toolbar.copy-className: Klass {{className}} - Kopiera
 element.unpublish: Avpublicera
 element.publish: Publicera
 element.locate-in-tree: Hitta i träd
-element.sidebar.filter.only-direct-children: bara direkta barn
-element.sidebar.filter.only-unreferenced: bara utan referenser
+element.sidebar.filter.only-direct-children: Bara direkta barn
+element.sidebar.filter.only-unreferenced: Bara utan referenser
 element.sidebar.field-filters: Fältfilter
 element.full-information: Fullständig information
 system-information.id: ID

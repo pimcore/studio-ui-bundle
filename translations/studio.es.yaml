@@ -1236,8 +1236,8 @@ element.toolbar.copy-className: Clase {{className}} - Copiar
 element.unpublish: Despublicar
 element.publish: Publicar
 element.locate-in-tree: Localizar en el árbol
-element.sidebar.filter.only-direct-children: solo hijos directos
-element.sidebar.filter.only-unreferenced: solo sin referencias
+element.sidebar.filter.only-direct-children: Solo hijos directos
+element.sidebar.filter.only-unreferenced: Solo sin referencias
 element.sidebar.field-filters: Filtros de campo
 element.full-information: Información completa
 system-information.id: ID
