@@ -15,7 +15,7 @@ import { withTypeFilter } from './data-layer/with-type-filter'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 
 export interface TypeFilterDecoratorConfig {
-  restrictedOptions?: TypeSelectProps['restrictOptions']
+  restrictedOptions?: Exclude<TypeSelectProps['restrictOptions'], undefined>
   elementType: ElementType
 }
 

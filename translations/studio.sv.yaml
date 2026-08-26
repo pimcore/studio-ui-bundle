@@ -83,6 +83,7 @@ asset.upload.overwrite: Skriv över
 asset.upload.keep-both: Behåll båda
 asset.upload.skip: Hoppa över
 asset.upload.apply-to-all: Tillämpa på alla
+asset.upload.checking-duplicate-file-names: "Kontrollerar dubbletter av filnamn ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Skapar mappar
 asset.upload.folder-drop.creating-folders-hint: Vänta medan mappstrukturen skapas…
 upload.error.file-too-large: Filen är större än serverns nuvarande uppladdningsgräns.
@@ -586,8 +587,6 @@ website-settings.columns.language: Språk
 website-settings.columns.value: Värde
 website-settings.columns.site: Sajt
 website-settings.columns.actions: Åtgärder
-website-settings.website-settings-already-exist.title: Webbplatsinställningen finns redan
-website-settings.website-settings-already-exist.error: Namnet används redan, välj ett annat
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Obligatoriska fält saknas
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Namn och typ är obligatoriska fält och måste fyllas i.
 document-types.new: Ny
@@ -1193,13 +1192,17 @@ element.delete.folder.large.note: 'Observera: Mappen och dess innehåll kommer a
 element.delete.folder.ok: Ta bort
 element.delete.folder.ok.permanent: Ta bort permanent
 element.delete.batch.title: Ta bort element
-element.delete.batch.note: 'Obs: Dessa element kommer att tas bort permanent och kan inte återställas.'
+element.delete.batch.note_one: 'Obs: Detta element kommer att tas bort permanent och kan inte återställas.'
+element.delete.batch.note_other: 'Obs: Dessa element kommer att tas bort permanent och kan inte återställas.'
+element.delete.batch.note.permanent-dependencies_one: "Obs: Detta element har beroenden och kommer att tas bort permanent.\nDet kan inte återställas."
+element.delete.batch.note.permanent-dependencies_other: "Obs: Dessa element har beroenden och kommer att tas bort permanent.\nDe kan inte återställas."
 element.delete.batch.question_one: 'Vill du verkligen ta bort det här elementet?'
 element.delete.batch.question_other: 'Vill du verkligen ta bort dessa {{count}} element?'
 element.delete.batch.ok: Ta bort
 element.delete.batch.ok.permanent: Ta bort permanent
 element.delete.batch.show-paths: Visa element
-element.delete.batch.dependencies-warning: 'Det kan finnas beroenden, ta bort ändå?'
+element.delete.batch.dependencies-warning.confirmed_one: 'Obs: Detta element har beroenden.'
+element.delete.batch.dependencies-warning.confirmed_other: 'Obs: Dessa element har beroenden.'
 element.open: Öppna
 element.toolbar.copy-id: Kopiera ID
 element.toolbar.copy-full-path-to-clipboard: Kopiera fullständig sökväg

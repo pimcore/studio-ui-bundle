@@ -83,6 +83,7 @@ asset.upload.overwrite: Overskriv
 asset.upload.keep-both: Behold begge
 asset.upload.skip: Hopp over
 asset.upload.apply-to-all: Bruk på alle
+asset.upload.checking-duplicate-file-names: "Sjekker etter dupliserte filnavn ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Oppretter mapper
 asset.upload.folder-drop.creating-folders-hint: Vennligst vent mens mappestrukturen opprettes…
 upload.error.file-too-large: Filen er større enn serverens gjeldende opplastingsgrense.
@@ -586,8 +587,6 @@ website-settings.columns.language: Språk
 website-settings.columns.value: Verdi
 website-settings.columns.site: Nettsted
 website-settings.columns.actions: Handlinger
-website-settings.website-settings-already-exist.title: Nettstedsinnstillingen finnes allerede
-website-settings.website-settings-already-exist.error: Navnet er allerede i bruk, vennligst velg et annet
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Obligatoriske felt mangler
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Navn og type er obligatoriske felt og må fylles ut.
 document-types.new: Ny
@@ -1193,13 +1192,17 @@ element.delete.folder.large.note: 'Merk: Mappen og dens innhold vil bli permanen
 element.delete.folder.ok: Slett
 element.delete.folder.ok.permanent: Slett permanent
 element.delete.batch.title: Slett elementer
-element.delete.batch.note: 'Merk: Disse elementene vil bli slettet permanent og kan ikke gjenopprettes.'
+element.delete.batch.note_one: 'Merk: Dette elementet vil bli slettet permanent og kan ikke gjenopprettes.'
+element.delete.batch.note_other: 'Merk: Disse elementene vil bli slettet permanent og kan ikke gjenopprettes.'
+element.delete.batch.note.permanent-dependencies_one: "Merk: Dette elementet har avhengigheter og vil bli slettet permanent.\nDet kan ikke gjenopprettes."
+element.delete.batch.note.permanent-dependencies_other: "Merk: Disse elementene har avhengigheter og vil bli slettet permanent.\nDe kan ikke gjenopprettes."
 element.delete.batch.question_one: 'Vil du virkelig slette dette elementet?'
 element.delete.batch.question_other: 'Vil du virkelig slette disse {{count}} elementene?'
 element.delete.batch.ok: Slett
 element.delete.batch.ok.permanent: Slett permanent
 element.delete.batch.show-paths: Vis elementer
-element.delete.batch.dependencies-warning: 'Det kan finnes avhengigheter, slett likevel?'
+element.delete.batch.dependencies-warning.confirmed_one: 'Merk: Dette elementet har avhengigheter.'
+element.delete.batch.dependencies-warning.confirmed_other: 'Merk: Disse elementene har avhengigheter.'
 element.open: Åpne
 element.toolbar.copy-id: Kopier ID
 element.toolbar.copy-full-path-to-clipboard: Kopier full sti

@@ -119,33 +119,31 @@ const CustomisationAccordion = ({ isAdmin, ...props }: ICustomisationAccordion):
 
         {isAdmin === false
           ? (
-            <>
-              <Form.Item
-                label={ t('user-management.roles') }
-                name="roles"
-                normalize={ (values: Array<string | number>) => sortByLabel(values, roleOptions as Array<{ value: string | number, label: string }>) }
-              >
-                <Select
-                  mode="multiple"
-                  options={ roleOptions }
-                  placeholder={ t('user-management.roles') }
-                ></Select>
-              </Form.Item>
-
-              <Form.Item
-                label={ t('user-management.perspectives') }
-                name="perspectives"
-                normalize={ (values: Array<string | number>) => sortByLabel(values, perspectiveOptions as Array<{ value: string | number, label: string }>) }
-              >
-                <Select
-                  mode="multiple"
-                  options={ perspectiveOptions }
-                  placeholder={ t('user-management.perspectives') }
-                ></Select>
-              </Form.Item>
-            </>
+            <Form.Item
+              label={ t('user-management.roles') }
+              name="roles"
+              normalize={ (values: Array<string | number>) => sortByLabel(values, roleOptions as Array<{ value: string | number, label: string }>) }
+            >
+              <Select
+                mode="multiple"
+                options={ roleOptions }
+                placeholder={ t('user-management.roles') }
+              ></Select>
+            </Form.Item>
             )
           : null }
+
+        <Form.Item
+          label={ t('user-management.perspectives') }
+          name="perspectives"
+          normalize={ (values: Array<string | number>) => sortByLabel(values, perspectiveOptions as Array<{ value: string | number, label: string }>) }
+        >
+          <Select
+            mode="multiple"
+            options={ perspectiveOptions }
+            placeholder={ t('user-management.perspectives') }
+          ></Select>
+        </Form.Item>
 
         <Form.Item
           label={ t('user-management.dateTime') }

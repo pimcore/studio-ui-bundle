@@ -14,6 +14,7 @@ import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import type { InputNumberRef } from 'rc-input-number'
 import { toDisplayString } from '@Pimcore/utils/type-utils'
+import { getDecimalSeparator } from '@Pimcore/utils/number'
 import { isNumber } from 'lodash'
 
 export interface NumberCellProps extends DefaultCellProps {}
@@ -58,6 +59,7 @@ export const NumberCell = (props: NumberCellProps): React.JSX.Element => {
     return (
       <InputNumber
         className="w-full"
+        decimalSeparator={ getDecimalSeparator() }
         defaultValue={ isNumber(cellValue) ? cellValue : undefined }
         onBlur={ onBlur }
         onChange={ (val) => { setValue(val) } }

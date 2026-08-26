@@ -83,6 +83,7 @@ asset.upload.overwrite: Überschreiben
 asset.upload.keep-both: Beide behalten
 asset.upload.skip: Überspringen
 asset.upload.apply-to-all: Auf alle anwenden
+asset.upload.checking-duplicate-file-names: "Dateinamen werden auf Duplikate geprüft ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Ordner werden erstellt
 asset.upload.folder-drop.creating-folders-hint: Bitte warten Sie, während die Ordnerstruktur erstellt wird…
 upload.error.file-too-large: Die Datei ist größer als das aktuelle Upload-Limit des Servers.
@@ -586,8 +587,6 @@ website-settings.columns.language: Sprache
 website-settings.columns.value: Wert
 website-settings.columns.site: Site
 website-settings.columns.actions: Aktionen
-website-settings.website-settings-already-exist.title: Website Einstellung existiert bereits
-website-settings.website-settings-already-exist.error: Name wird bereits verwendet, bitte wählen Sie einen anderen
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Pflichtfelder fehlen
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Name und Typ sind Pflichtfelder und müssen ausgefüllt werden.
 document-types.new: Neu
@@ -1193,13 +1192,17 @@ element.delete.folder.large.note: 'Bitte beachten: Der Ordner und seine Inhalte 
 element.delete.folder.ok: Löschen
 element.delete.folder.ok.permanent: Endgültig löschen
 element.delete.batch.title: Elemente löschen
-element.delete.batch.note: 'Bitte beachten: Diese Elemente werden dauerhaft gelöscht und können nicht wiederhergestellt werden.'
+element.delete.batch.note_one: 'Bitte beachten: Dieses Element wird dauerhaft gelöscht und kann nicht wiederhergestellt werden.'
+element.delete.batch.note_other: 'Bitte beachten: Diese Elemente werden dauerhaft gelöscht und können nicht wiederhergestellt werden.'
+element.delete.batch.note.permanent-dependencies_one: "Bitte beachten: Dieses Element hat Abhängigkeiten und wird dauerhaft gelöscht.\nEs kann nicht wiederhergestellt werden."
+element.delete.batch.note.permanent-dependencies_other: "Bitte beachten: Diese Elemente haben Abhängigkeiten und werden dauerhaft gelöscht.\nSie können nicht wiederhergestellt werden."
 element.delete.batch.question_one: 'Möchten Sie dieses Element wirklich löschen?'
 element.delete.batch.question_other: 'Möchten Sie wirklich diese {{count}} Elemente löschen?'
 element.delete.batch.ok: Löschen
 element.delete.batch.ok.permanent: Endgültig löschen
 element.delete.batch.show-paths: Elemente anzeigen
-element.delete.batch.dependencies-warning: 'Es könnte Abhängigkeiten geben, trotzdem löschen?'
+element.delete.batch.dependencies-warning.confirmed_one: 'Bitte beachten: Dieses Element hat Abhängigkeiten.'
+element.delete.batch.dependencies-warning.confirmed_other: 'Bitte beachten: Diese Elemente haben Abhängigkeiten.'
 element.open: Öffnen
 element.toolbar.copy-id: ID kopieren
 element.toolbar.copy-full-path-to-clipboard: Vollständigen Pfad kopieren

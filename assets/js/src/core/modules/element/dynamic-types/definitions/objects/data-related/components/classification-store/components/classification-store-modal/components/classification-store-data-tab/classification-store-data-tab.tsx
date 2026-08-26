@@ -219,11 +219,13 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
       >
         <Box padding={ { top: 'small', bottom: 'small' } }>
           <Grid
+            autoWidth
             columns={ columns }
             data={ data?.items ?? [] }
             enableMultipleRowSelection
             isLoading={ isLoading }
             onSelectedRowsChange={ (row: RowSelectionState) => { setSelectedItems(row) } }
+            resizable
             selectedRows={ selectedItems }
             setRowId={ (row) => isGroupByKey && !isUndefined(row.groupId) ? `${row.groupId}-${row.keyId}` : row.id }
           />

@@ -21,6 +21,7 @@ import { useTranslationLoader } from './loader/translation/loader'
 import { useUserLoader } from './loader/user/loader'
 import { useMercureCreateCookieMutation } from '../mercure-api-slice.gen'
 import { useSettingsLoader } from './loader/settings/loader'
+import { useActiveBundlesLoader } from './loader/active-bundles/loader'
 import { useLanguageLoader } from './loader/language/loader'
 import { useBrandThumbnailUrlLoader } from './loader/brand-thumbnail-urls/loader'
 import { useAdminSettingsLoader } from './loader/admin-settings/loader'
@@ -92,6 +93,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   const { loadUser } = useUserLoader()
   const [fetchMercureCookie] = useMercureCreateCookieMutation()
   const { loadSettings } = useSettingsLoader()
+  const { loadActiveBundles } = useActiveBundlesLoader()
   const { loadAvailableLocales } = useLanguageLoader()
   const { loadBrandThumbnailUrls } = useBrandThumbnailUrlLoader()
   const { loadAdminSettings } = useAdminSettingsLoader()
@@ -146,6 +148,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
         await Promise.all([
           loadTranslations(),
           loadSettings(),
+          loadActiveBundles(),
           loadAdminSettings(),
           loadBrandThumbnailUrls(),
           loadAvailableLocales(),

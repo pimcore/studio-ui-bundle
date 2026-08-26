@@ -13,6 +13,7 @@ import { type Row } from '@tanstack/react-table'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { isNull } from 'lodash'
+import { getCellStyle } from './cell-style'
 import { GridCell } from './grid-cell'
 import { type GridContextProviderProps } from '../grid-context'
 import { type GridProps, type ListGridContextMenuComponents, type ListGridContextMenuProps } from '@Pimcore/types/components/types'
@@ -31,10 +32,15 @@ export interface GridRowProps {
   activeColumId?: string
   onFocusCell?: (cell: GridCellReference) => void
   contextMenu?: ListGridContextMenuComponents
-  onRowDoubleClick?: GridProps['onRowDoubleClick']
+  onRowDoubleClick?: Exclude<GridProps['onRowDoubleClick'], undefined>
   enableRowVirtualizer: boolean
   enableColumnVirtualizer: boolean
-  size?: GridProps['size']
+  // Whether the columns have to share the width the table has left over — see getCellStyle.
+  distributeWidth?: boolean
+  size?: Exclude<GridProps['size'], undefined>
+  // Serialized column sizing, used to invalidate the memoised row when a column is resized.
+  // Only set while row virtualization is on — see the note in Grid.renderRows.
+  columnSizingKey?: string
   rowStyle?: CSSProperties
   measureElement?: (node: HTMLElement | null) => void
   virtualIndex?: number
@@ -135,20 +141,12 @@ const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, vir
       }
     >
       {visibleCells?.map((cell) => {
-        const isAutoWidth = cell.column.columnDef.meta?.autoWidth === true
-        const columnSize = cell.column.getSize()
-
-        const tdStyle: CSSProperties = isAutoWidth
-          ? {
-              width: 'auto',
-              minWidth: columnSize,
-              ...(enableRowVirtualizer ? { flexShrink: 1, flexGrow: 1 } : {})
-            }
-          : {
-              width: columnSize,
-              maxWidth: columnSize,
-              ...(enableRowVirtualizer ? { flexShrink: 0 } : {})
-            }
+        const tdStyle: CSSProperties = getCellStyle({
+          size: cell.column.getSize(),
+          isAutoWidth: cell.column.columnDef.meta?.autoWidth === true,
+          isFlexRow: enableRowVirtualizer,
+          distributeWidth: props.distributeWidth === true
+        })
 
         return (
           <td
@@ -173,7 +171,7 @@ const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, vir
         )
       })}
     </tr>
-  ), [JSON.stringify(row), memoModifiedCells, isSelected, props.columns, style, visibleCells])
+  ), [JSON.stringify(row), memoModifiedCells, isSelected, props.columns, style, visibleCells, props.columnSizingKey, props.distributeWidth])
 
   function isModifiedCell (cellId: string): boolean {
     return memoModifiedCells.find((item) => item.columnId === cellId) !== undefined

@@ -83,6 +83,7 @@ asset.upload.overwrite: Remplacer
 asset.upload.keep-both: Conserver les deux
 asset.upload.skip: Ignorer
 asset.upload.apply-to-all: Appliquer à tous
+asset.upload.checking-duplicate-file-names: "Vérification des noms de fichiers en double ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Création des dossiers
 asset.upload.folder-drop.creating-folders-hint: Veuillez patienter pendant la création de la structure de dossiers…
 upload.error.file-too-large: Le fichier dépasse la limite de téléversement actuelle du serveur.
@@ -586,8 +587,6 @@ website-settings.columns.language: Langue
 website-settings.columns.value: Valeur
 website-settings.columns.site: Site
 website-settings.columns.actions: Actions
-website-settings.website-settings-already-exist.title: Le paramètre de site web existe déjà
-website-settings.website-settings-already-exist.error: Le nom est déjà utilisé, veuillez en choisir un autre
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Champs obligatoires manquants
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Le nom et le type sont des champs obligatoires et doivent être remplis.
 document-types.new: Nouveau
@@ -1193,13 +1192,17 @@ element.delete.folder.large.note: 'Remarque : Le dossier et son contenu seront d
 element.delete.folder.ok: Supprimer
 element.delete.folder.ok.permanent: Supprimer définitivement
 element.delete.batch.title: Supprimer des éléments
-element.delete.batch.note: 'Remarque : Ces éléments seront supprimés définitivement et ne pourront pas être restaurés.'
+element.delete.batch.note_one: 'Remarque : Cet élément sera supprimé définitivement et ne pourra pas être restauré.'
+element.delete.batch.note_other: 'Remarque : Ces éléments seront supprimés définitivement et ne pourront pas être restaurés.'
+element.delete.batch.note.permanent-dependencies_one: "Remarque : Cet élément a des dépendances et sera supprimé définitivement.\nIl ne pourra pas être restauré."
+element.delete.batch.note.permanent-dependencies_other: "Remarque : Ces éléments ont des dépendances et seront supprimés définitivement.\nIls ne pourront pas être restaurés."
 element.delete.batch.question_one: 'Voulez-vous vraiment supprimer cet élément ?'
 element.delete.batch.question_other: 'Voulez-vous vraiment supprimer ces {{count}} éléments ?'
 element.delete.batch.ok: Supprimer
 element.delete.batch.ok.permanent: Supprimer définitivement
 element.delete.batch.show-paths: Afficher les éléments
-element.delete.batch.dependencies-warning: 'Il peut exister des dépendances, supprimer quand même ?'
+element.delete.batch.dependencies-warning.confirmed_one: 'Remarque : Cet élément a des dépendances.'
+element.delete.batch.dependencies-warning.confirmed_other: 'Remarque : Ces éléments ont des dépendances.'
 element.open: Ouvrir
 element.toolbar.copy-id: Copier l'ID
 element.toolbar.copy-full-path-to-clipboard: Copier le chemin complet

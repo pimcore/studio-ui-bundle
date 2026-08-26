@@ -9,13 +9,12 @@
  */
 
 import React, { type ReactNode, useMemo } from 'react'
-import { isEmpty, isNil } from 'lodash'
+import { isEmpty, isNil, isString } from 'lodash'
 import { AccordionView, type AccordionViewProps } from './accordion-view'
 import { CardView, type CardViewProps } from './card-view'
 import { Icon, type ElementIcon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { isNonEmptyString } from '@sdk/utils'
-import { useTranslation } from 'react-i18next'
+import { translateLabel } from '@Pimcore/utils/translate-label'
 
 export type BaseViewProps = (CardViewProps | AccordionViewProps) & {
   border?: boolean
@@ -25,7 +24,6 @@ export type BaseViewProps = (CardViewProps | AccordionViewProps) & {
 
 export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewProps): React.JSX.Element => {
   const isPaddedLayout = props.border === true || props.collapsible === true || !isEmpty(props.title)
-  const { t } = useTranslation()
 
   const wrapWithIcon = (titleNode: ReactNode): ReactNode => {
     if (isNil(props.icon) || isEmpty(titleNode)) {
@@ -46,6 +44,10 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
     )
   }
 
+  // Titles can be ReactNodes (e.g. the block data type passes a <FieldLabel />);
+  // only strings are translation-key candidates, everything else renders as-is
+  const translatedTitle = isString(props.title) ? translateLabel(props.title) : props.title
+
   return useMemo(() => {
     if (!isPaddedLayout) {
       return (
@@ -65,7 +67,7 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
           extra={ props.extra }
           style={ props.style }
           theme={ theme }
-          title={ wrapWithIcon(props.title) }
+          title={ wrapWithIcon(translatedTitle) }
         >{props.children}</AccordionView>
       )
     }
@@ -78,8 +80,8 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
         extraPosition={ props.extraPosition }
         style={ props.style }
         theme={ theme }
-        title={ wrapWithIcon(isNonEmptyString(props.title) ? t(props.title) : props.title) }
+        title={ wrapWithIcon(translatedTitle) }
       >{props.children}</CardView>
     )
-  }, [props, isPaddedLayout])
+  }, [props, isPaddedLayout, translatedTitle])
 }
