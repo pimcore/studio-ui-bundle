@@ -13,11 +13,11 @@ import { type TreeContextMenuProps } from '@Pimcore/components/element-tree/elem
 import { defaultProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { Menu } from '@Pimcore/components/menu/menu'
 import { createContextMenuContainerTestId } from '@Pimcore/utils/test-id-generator'
-import { useContextMenuSlot } from '@Pimcore/modules/app/context-menu-registry/use-context-menu-slot'
+import { useTreeContextMenuItems } from '@Pimcore/modules/element/tree/context-menu/use-tree-context-menu-items'
 
 export const AssetTreeContextMenu = (props: TreeContextMenuProps): ReactElement => {
   const node = props.node ?? defaultProps
-  const items = useContextMenuSlot('asset.tree', { target: node, onComplete: () => {} })
+  const items = useTreeContextMenuItems('asset.tree', node)
 
   return (
     <Menu
