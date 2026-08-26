@@ -76,10 +76,11 @@ export const useComboFieldData = (props: ManyToManyObjectRelationProps) => {
   const itemMapRef = useRef<Map<number, ManyToManyRelationValueItem>>(new Map())
   const prevDataRef = useRef<DataObjectGetSearchApiResponse | undefined>(undefined)
 
-  // Drop labels cached in the previous content language, so the pre-selected
-  // labels are re-requested in the newly selected one.
+  // Drop labels cached or accumulated in the previous content language, so
+  // no stale label survives until the new-language responses arrive.
   useResetOnLanguageChange(userLanguage, () => {
     labelCache.size > 0 && setLabelCache(new Map())
+    accumulatedOptions.length > 0 && setAccumulatedOptions([])
   })
 
   useEffect(() => {

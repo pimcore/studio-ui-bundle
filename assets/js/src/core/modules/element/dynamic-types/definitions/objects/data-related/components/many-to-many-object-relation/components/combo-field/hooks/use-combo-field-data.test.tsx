@@ -79,9 +79,13 @@ interface SearchQueryArgs {
 // mirroring RTK Query's cache behavior.
 const searchResultCache = new Map<string, { data: object, isFetching: boolean }>()
 
+// When true, search requests stay pending instead of returning data,
+// mirroring the window between a language switch and its refetch response.
+let simulatePendingSearch = false
+
 const mockUseDataObjectGetSearchQuery = jest.fn((args: SearchQueryArgs, options?: { skip?: boolean }) => {
-  if (options?.skip === true) {
-    return { data: undefined, isFetching: false }
+  if (options?.skip === true || simulatePendingSearch) {
+    return { data: undefined, isFetching: simulatePendingSearch }
   }
 
   const cacheKey = JSON.stringify(args)
@@ -89,9 +93,11 @@ const mockUseDataObjectGetSearchQuery = jest.fn((args: SearchQueryArgs, options?
   if (!searchResultCache.has(cacheKey)) {
     const locale = args.body.columns.find(column => column.key === 'name')?.locale ?? 'none'
 
+    // totalItems above BACKGROUND_LOAD_THRESHOLD: not all items get loaded,
+    // so nothing but the language-change reset clears accumulated options.
     searchResultCache.set(cacheKey, {
       data: {
-        totalItems: 1,
+        totalItems: 1500,
         items: [
           {
             id: 5,
@@ -137,6 +143,8 @@ const lastRequestedLocale = (): string | null | undefined => {
 describe('useComboFieldData content language', () => {
   beforeEach(() => {
     mockUseDataObjectGetSearchQuery.mockClear()
+    searchResultCache.clear()
+    simulatePendingSearch = false
   })
 
   it('requests localized columns in the selected content language, not the profile language', () => {
@@ -157,5 +165,20 @@ describe('useComboFieldData content language', () => {
 
     expect(lastRequestedLocale()).toBe('fr')
     expect(result.current.options.find(option => option.value === 5)?.label).toBe('name-fr')
+  })
+
+  it('drops labels accumulated in the previous content language while the refetch is pending', () => {
+    currentLanguage = 'de'
+    const { result, rerender } = renderHook(() => useComboFieldData(props))
+
+    expect(result.current.options.find(option => option.value === 5)?.label).toBe('name-de')
+
+    simulatePendingSearch = true
+    currentLanguage = 'fr'
+    rerender()
+
+    // No stale 'name-de' label may survive; the selected item falls back to
+    // its full path until the new-language labels arrive.
+    expect(result.current.options.find(option => option.value === 5)?.label).toBe('/five')
   })
 })
