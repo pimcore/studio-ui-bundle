@@ -87,29 +87,29 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
       const rowIndex = info.row.index
       const rowValue = info.row.original as DisplayManyToManyRelationValueItem
 
-        const buttons: ReactElement[] = []
+      const buttons: ReactElement[] = []
 
-        if (rowValue.hasViewAccess !== false) {
-          buttons.push(
-            <Tooltip
-              key="open"
-              title={ t('open') }
-            >
-              <IconButton
-                icon={ { value: 'open-folder' } }
-                onClick={ async () => {
-                  const typeValue = mapToElementType(rowValue.type)
+      if (rowValue.hasViewAccess !== false) {
+        buttons.push(
+          <Tooltip
+            key="open"
+            title={ t('open') }
+          >
+            <IconButton
+              icon={ { value: 'open-folder' } }
+              onClick={ async () => {
+                const typeValue = mapToElementType(rowValue.type)
 
-                  !isUndefined(typeValue) && await openElement({
-                    type: typeValue,
-                    id: rowValue.id
-                  })
-                } }
-                type="link"
-              />
-            </Tooltip>
-          )
-        }
+                !isUndefined(typeValue) && await openElement({
+                  type: typeValue,
+                  id: rowValue.id
+                })
+              } }
+              type="link"
+            />
+          </Tooltip>
+        )
+      }
 
       if (props.assetInlineDownloadAllowed && rowValue.type === 'asset') {
         buttons.push(
