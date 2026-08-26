@@ -28,15 +28,16 @@ export interface UseAreablockMenuReturn {
 
 const getTooltipTitle = (areaType: AreaType, t: UseTranslationResponse<'translation', undefined>['t']): React.JSX.Element | string | undefined => {
   const description = isUndefined(areaType.description) ? undefined : t(areaType.description)
+  const previewHtml = areaType.previewHtml ?? ''
 
-  if (typeof areaType.previewHtml !== 'string' || isEmpty(areaType.previewHtml)) {
+  if (isEmpty(previewHtml)) {
     return description
   }
 
   return (
     <>
       { !isUndefined(description) && <div>{ description }</div> }
-      <SanitizeHtml html={ areaType.previewHtml } />
+      <SanitizeHtml html={ previewHtml } />
     </>
   )
 }
