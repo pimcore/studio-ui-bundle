@@ -36,6 +36,10 @@ export const studioDefaultLightThemeConfig = {
     itemSelectedColor: 'rgba(0, 0, 0, 0.88)',
     boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
     colorTextTertiary: 'rgba(0, 0, 0, 0.6)',
+    // Disabled and placeholder text: antd aliases both colorTextDisabled and
+    // colorTextPlaceholder to this token. The antd default of 25% only reaches 1.84:1
+    // on white; 55% gives 4.74:1 (WCAG AA).
+    colorTextQuaternary: 'rgba(0, 0, 0, 0.55)',
     colorFill: 'rgba(215, 199, 236, 0.6)',
     colorFillQuaternary: 'rgba(215, 199, 236, 0.4)',
     colorBgLayout: 'rgba(255, 255, 255, 0.7)',
@@ -207,7 +211,7 @@ export const studioDefaultLightThemeConfig = {
     },
     Menu: {
       darkItemColor: 'rgba(255, 255, 255, 0.65)',
-      darkItemDisabledColor: 'rgba(255, 255, 255, 0.25)',
+      darkItemDisabledColor: 'rgba(255, 255, 255, 0.52)',
       darkGroupTitleColor: 'rgba(255, 255, 255, 0.65)'
     },
     Collapse: {
@@ -215,7 +219,7 @@ export const studioDefaultLightThemeConfig = {
     },
     Image: {
       previewOperationColor: 'rgba(255, 255, 255, 0.65)',
-      previewOperationColorDisabled: 'rgba(255, 255, 255, 0.25)',
+      previewOperationColorDisabled: 'rgba(255, 255, 255, 0.52)',
       previewOperationHoverColor: 'rgba(255, 255, 255, 0.85)'
     },
     Table: {
@@ -252,7 +256,7 @@ export const studioDefaultLightThemeConfig = {
       colorInfoBorder: '#d3adf7'
     },
     Empty: {
-      colorTextDisabled: 'rgba(0, 0, 0, 0.25)'
+      colorTextDisabled: 'rgba(0, 0, 0, 0.55)'
     },
     Colors: {
       Neutral: {
