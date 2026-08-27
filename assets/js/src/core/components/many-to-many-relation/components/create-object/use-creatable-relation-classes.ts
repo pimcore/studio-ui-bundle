@@ -29,13 +29,15 @@ interface UseCreatableRelationClassesResult {
  * The collection is already restricted to what the current user may create, so a class the
  * relation allows but the user cannot create is filtered out here rather than failing later.
  *
+ * `skip` keeps relations that cannot create objects from firing the request at all.
+ *
  * `allowedClasses` is matched against both id and name: the plain object relation derives it
  * from the class-definition `classes` entries (names), while the advanced variant passes
  * `allowedClassId` straight through.
  */
-export const useCreatableRelationClasses = (allowedClasses?: string[]): UseCreatableRelationClassesResult => {
+export const useCreatableRelationClasses = (allowedClasses?: string[], skip = false): UseCreatableRelationClassesResult => {
   const { data, isLoading, error } = useClassDefinitionCollectionCreatableQuery({}, {
-    skip: !isAllowed(UserPermission.Objects)
+    skip: skip || !isAllowed(UserPermission.Objects)
   })
 
   useEffect(() => {

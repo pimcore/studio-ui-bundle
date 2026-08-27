@@ -25,10 +25,14 @@ interface CreatedObject {
  * path plus the key the user typed; if the backend sanitises that key the row shows the
  * pre-sanitised path until the editor is reloaded.
  */
-export const buildCreatedRelationItem = ({ id, key, className, parentPath }: CreatedObject): ManyToManyRelationValueItem => ({
-  id,
-  type: 'object',
-  subtype: className,
-  fullPath: `${parentPath.endsWith('/') ? parentPath : `${parentPath}/`}${key}`,
-  isPublished: false
-})
+export const buildCreatedRelationItem = ({ id, key, className, parentPath }: CreatedObject): ManyToManyRelationValueItem => {
+  const basePath = parentPath.endsWith('/') ? parentPath : `${parentPath}/`
+
+  return {
+    id,
+    type: 'object',
+    subtype: className,
+    fullPath: `${basePath}${key}`,
+    isPublished: false
+  }
+}

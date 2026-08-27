@@ -28,6 +28,8 @@ import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { debounce } from 'lodash'
 import { RELATION_COLUMN_FILTERS_KEY, useRelationFiltersOptional } from '../../filters/filters'
 import { CreateObjectModal } from '../create-object/create-object-modal'
+import { useCreatableRelationClasses } from '../create-object/use-creatable-relation-classes'
+import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 
 export interface ManyToManyRelationToolbarProps extends IRelationAllowedTypesDataComponent {
   empty: () => void
@@ -41,20 +43,35 @@ export interface ManyToManyRelationToolbarProps extends IRelationAllowedTypesDat
   uploadMaxItems?: number
   uploadShowMaxItemsError?: boolean
   allowToCreateNewObject?: boolean
+  /** No slots left under `maxItems`; creating another object would overflow the relation. */
+  itemLimitReached?: boolean
+  maxItems?: number | null
 }
 
 export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps): React.JSX.Element => {
   const { confirm } = useFormModal()
   const { t } = useTranslation()
+  const alertModal = useAlertModal()
 
   const filtersStore = useRelationFiltersOptional()
   const [createObjectOpen, setCreateObjectOpen] = useState(false)
 
-  // Gated on the class-definition flag, and on the relation actually accepting objects —
-  // the flag only exists on the object relation types, but the toolbar is shared by all of them.
-  const canCreateObject = props.allowToCreateNewObject === true &&
+  // Gated on the class-definition flag, and on the relation explicitly accepting objects —
+  // the flag only exists on the object relation types, but the toolbar is shared by all of
+  // them, and an omitted `dataObjectsAllowed` means "not allowed" everywhere else too.
+  const relationCanCreateObjects = props.allowToCreateNewObject === true &&
     props.disabled !== true &&
-    props.dataObjectsAllowed !== false
+    props.dataObjectsAllowed === true
+
+  // Skipped entirely for relations that cannot create objects, so asset/document relations
+  // do not fetch the class collection.
+  const { classes: creatableClasses, isLoading: isLoadingClasses } = useCreatableRelationClasses(
+    props.allowedClasses,
+    !relationCanCreateObjects
+  )
+
+  // Nothing creatable means no usable modal — the tree action hides itself the same way.
+  const canCreateObject = relationCanCreateObjects && (isLoadingClasses || creatableClasses.length > 0)
 
   const appliedColumnFilters = filtersStore?.values[RELATION_COLUMN_FILTERS_KEY]
   const hasAppliedFilters = Array.isArray(appliedColumnFilters) && appliedColumnFilters.length > 0
@@ -67,8 +84,18 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
       <Tooltip title={ t('relations.create-object.title') }>
         <IconButton
           aria-label={ t('relations.create-object.title') }
+          disabled={ isLoadingClasses }
           icon={ { value: 'new' } }
-          onClick={ () => { setCreateObjectOpen(true) } }
+          onClick={ () => {
+            // Creating first and rejecting afterwards would leave an orphaned object behind,
+            // so the limit is checked before the modal opens.
+            if (props.itemLimitReached === true) {
+              alertModal.warn({ content: t('items-limit-reached', { maxItems: props.maxItems ?? 0 }) })
+              return
+            }
+
+            setCreateObjectOpen(true)
+          } }
           type="default"
         />
       </Tooltip>
@@ -193,7 +220,8 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
 
       { canCreateObject && (
         <CreateObjectModal
-          allowedClasses={ props.allowedClasses }
+          classes={ creatableClasses }
+          isLoading={ isLoadingClasses }
           onCreated={ (item) => { props.addItems([item]) } }
           open={ createObjectOpen }
           setOpen={ setCreateObjectOpen }

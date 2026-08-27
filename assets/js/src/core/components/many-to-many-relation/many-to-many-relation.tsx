@@ -186,6 +186,7 @@ const ManyToManyRelationContent = ({ enableRowDrag, ...props }: ManyToManyRelati
             setValue(null)
           } }
           enableUpload={ props.assetsAllowed === true && props.disabled !== true && props.disableInlineUpload !== true }
+          itemLimitReached={ maxRemainingItems !== undefined && maxRemainingItems <= 0 }
           onSearch={ onSearch }
           uploadMaxItems={ maxRemainingItems !== undefined && maxRemainingItems > 0 ? maxRemainingItems : (props.maxItems ?? undefined) }
           uploadShowMaxItemsError={ maxRemainingItems !== undefined && maxRemainingItems <= 0 }
