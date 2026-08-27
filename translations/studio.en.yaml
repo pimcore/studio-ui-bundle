@@ -124,7 +124,7 @@ document.tree.context-menu.add-snippet: New Snippet
 document.tree.context-menu.add-email: New Email
 document.tree.context-menu.add-link: New Link
 document.tree.context-menu.add-hardlink: New Hardlink
-document.required-fields.validation-title: Required Fields Missing
+document.required-fields.validation-title: Required fields missing
 document.required-fields.validation-message: The following required fields must be filled before publishing
 document.site.remove-site: Remove site
 document.site.remove-site-confirmation: Are you sure you want to remove this site? This action cannot be undone.
@@ -755,13 +755,13 @@ maximum-items: Maximum Items
 enforce-validation: Enforce Validation
 options-source: Options Source
 options-source-configure: Configure
-options-source-select-options: Select options
+options-source-select-options: Select Options
 options-source-options-provider: Options Provider
 options-provider-class: Options Provider Class or Service Name
 options-provider-data: Options Provider Data
 switch-to-selection-mode: Switch to selection mode
 switch-to-drag-mode: Switch to drag mode
-select-options: Select options
+select-options: Select Options
 value: Value
 display-name: Display Name
 default-values-settings: Default value settings
@@ -1151,8 +1151,8 @@ form.validation.provide-description: Please provide a description
 form.label.new-item: Enter the name of the new item
 thumbnail: Thumbnail
 select-image-preview: Select image preview
-choose-media: Choose Media
-current-player-position: Current Player Position
+choose-media: Choose media
+current-player-position: Current player position
 drag-and-drop-asset: Drag and Drop Asset
 ok: OK
 apply: Apply
@@ -1330,7 +1330,7 @@ tree.actions.clone: Clone
 tree.actions.copy: Copy
 tree.actions.paste: Paste
 tree.actions.delete: Delete
-tree.actions.add-user: Add user
+tree.actions.add-user: Add User
 tree.actions.clone-user: Clone user
 tree.actions.remove-user: Delete user
 tree.actions.folder: Folder
@@ -1340,10 +1340,10 @@ tree.actions.add-tag: New Tag
 tree.actions.delete-tag: Delete
 tree.actions.rename-tag: Rename
 tree.actions.role: Role
-tree.actions.add-role: Add role
+tree.actions.add-role: Add Role
 tree.actions.clone-role: Clone role
 tree.actions.remove-role: Delete role
-tree.actions.remove-folder: Remove folder
+tree.actions.remove-folder: Remove Folder
 tag-configuration.new: New
 tag-configuration.new-tag: New Tag
 tag-configuration.name: Name
@@ -2325,7 +2325,7 @@ test-email.parameters.columns.key: Key
 test-email.parameters.columns.value: Value
 test-email.parameters.add: Add parameter
 test-email.send.error: An error occurred while sending the test email
-test-email.success.modal.title: Sent Test-Email
+test-email.success.modal.title: Sent test email
 test-email.success.modal.text: Your test-email has been sent. Would you like to keep this window open to send the email again?
 test-email.validation.documentPath.required: Please provide a document path
 test-email.validation.documentParameters.required: Please provide at least one parameter
