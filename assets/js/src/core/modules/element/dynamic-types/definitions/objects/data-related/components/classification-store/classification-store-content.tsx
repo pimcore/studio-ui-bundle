@@ -18,9 +18,7 @@ import { Input } from '@Pimcore/components/input/input'
 import { BaseView } from '../../../layout-related/views/base-view'
 import { ClassificationStoreItem } from './classification-store-item'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
-import { isLanguageIndependentValueAllowed } from '@Pimcore/components/language-selection/helpers'
-import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { useLanguageIndependentValuePermission } from './hooks/use-language-independent-value-permission'
 import { LocalizationSwitch } from './components/localization-switch/localization-switch'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Space } from '@Pimcore/components/space/space'
@@ -53,14 +51,12 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
   const { groupKeys, activeGroups, groupCollectionMapping } = useKeyedListSelector(selectStructure)
   const { currentLanguage } = useLanguageSelection()
 
-  const element = useElementContext()
-  const elementDraft = useElementDraft(element.id, element.elementType)
+  const isLanguageIndependentValuePermitted = useLanguageIndependentValuePermission()
 
   const isLocalizable = props.localized ?? false
-  const viewableLanguages = elementDraft.element?.permissions?.localizedView
   // A non localized store only ever has the language independent column, so no language
   // permission applies to it.
-  const allowLanguageIndependentValue = !isLocalizable || isLanguageIndependentValueAllowed(viewableLanguages)
+  const allowLanguageIndependentValue = !isLocalizable || isLanguageIndependentValuePermitted
 
   const [localizationMode, setLocalizationMode] = useState<string>(
     allowLanguageIndependentValue ? 'default' : 'current-language'
