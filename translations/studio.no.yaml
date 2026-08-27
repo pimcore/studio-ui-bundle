@@ -1302,6 +1302,12 @@ relations.subtype: Undertype
 relations.classname: Klasse
 relations.fullpath: Full sti
 relations.remove-all.confirm: Vil du virkelig slette alle relasjoner?
+relations.create-object.title: Nytt objekt
+relations.create-object.submit: Opprett
+relations.create-object.name: Navn
+relations.create-object.parent: Overordnet
+relations.create-object.parent.placeholder: Velg et overordnet element
+relations.create-object.class: Klasse
 relation: relasjon
 items-limit-reached: Maksimalt antall elementer ({{maxItems}}) er nådd.
 actions: Handlinger

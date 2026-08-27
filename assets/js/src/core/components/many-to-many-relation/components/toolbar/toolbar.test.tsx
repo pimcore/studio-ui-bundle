@@ -40,6 +40,11 @@ jest.mock('@Pimcore/components/search-input/search-input', () => ({
   SearchInput: () => null
 }))
 
+// The create-object modal reaches the app store through the shared Form component
+jest.mock('../create-object/create-object-modal', () => ({
+  CreateObjectModal: () => null
+}))
+
 // The icon component resolves its definition through the DI container
 jest.mock('@Pimcore/components/icon/icon', () => ({
   Icon: () => null

@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Tooltip } from 'antd'
@@ -27,6 +27,7 @@ import { type SelectedItem } from '@sdk/modules/element'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { debounce } from 'lodash'
 import { RELATION_COLUMN_FILTERS_KEY, useRelationFiltersOptional } from '../../filters/filters'
+import { CreateObjectModal } from '../create-object/create-object-modal'
 
 export interface ManyToManyRelationToolbarProps extends IRelationAllowedTypesDataComponent {
   empty: () => void
@@ -39,6 +40,7 @@ export interface ManyToManyRelationToolbarProps extends IRelationAllowedTypesDat
   disabled?: boolean
   uploadMaxItems?: number
   uploadShowMaxItemsError?: boolean
+  allowToCreateNewObject?: boolean
 }
 
 export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps): React.JSX.Element => {
@@ -46,12 +48,32 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
   const { t } = useTranslation()
 
   const filtersStore = useRelationFiltersOptional()
+  const [createObjectOpen, setCreateObjectOpen] = useState(false)
+
+  // Gated on the class-definition flag, and on the relation actually accepting objects —
+  // the flag only exists on the object relation types, but the toolbar is shared by all of them.
+  const canCreateObject = props.allowToCreateNewObject === true &&
+    props.disabled !== true &&
+    props.dataObjectsAllowed !== false
 
   const appliedColumnFilters = filtersStore?.values[RELATION_COLUMN_FILTERS_KEY]
   const hasAppliedFilters = Array.isArray(appliedColumnFilters) && appliedColumnFilters.length > 0
   const clearFiltersLabel = t('sidebar.clear-all-filters')
 
   const buttons: React.JSX.Element[] = []
+
+  if (canCreateObject) {
+    buttons.push(
+      <Tooltip title={ t('relations.create-object.title') }>
+        <IconButton
+          aria-label={ t('relations.create-object.title') }
+          icon={ { value: 'new' } }
+          onClick={ () => { setCreateObjectOpen(true) } }
+          type="default"
+        />
+      </Tooltip>
+    )
+  }
 
   if (props.disabled !== true) {
     buttons.push(
@@ -169,6 +191,14 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
         </div>
       </Flex>
 
+      { canCreateObject && (
+        <CreateObjectModal
+          allowedClasses={ props.allowedClasses }
+          onCreated={ (item) => { props.addItems([item]) } }
+          open={ createObjectOpen }
+          setOpen={ setCreateObjectOpen }
+        />
+      ) }
     </Box>
   )
 }

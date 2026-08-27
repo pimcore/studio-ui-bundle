@@ -1302,6 +1302,12 @@ relations.subtype: Sous-type
 relations.classname: Classe
 relations.fullpath: Chemin complet
 relations.remove-all.confirm: Voulez-vous vraiment supprimer toutes les relations ?
+relations.create-object.title: Nouvel objet
+relations.create-object.submit: Créer
+relations.create-object.name: Nom
+relations.create-object.parent: Parent
+relations.create-object.parent.placeholder: Sélectionner un parent
+relations.create-object.class: Classe
 relation: relation
 items-limit-reached: Le nombre maximum d'éléments ({{maxItems}}) a été atteint.
 actions: Actions

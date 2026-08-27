@@ -29,6 +29,8 @@ import { RelationFiltersProvider } from './filters/provider/relation-filters-pro
 export interface ManyToManyRelationClassDefinitionProps {
   assetUploadPath?: string | null
   allowToClearRelation: boolean
+  /** Object relations only: offers a toolbar action that creates a new object into the relation. */
+  allowToCreateNewObject?: boolean
   maxItems: number | null
   pathFormatterClass: string | null
   width: number | string | null
