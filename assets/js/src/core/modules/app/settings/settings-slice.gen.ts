@@ -170,6 +170,10 @@ export type Assets = {
     disable_tree_preview: boolean;
 };
 export type AdminSettings = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
     /** Branding configuration */
     branding: Branding;
     /** Assets configuration */
@@ -188,6 +192,10 @@ export type DevError = {
     details: string;
 };
 export type UpdateAdminSettings = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
     /** Branding configuration */
     branding: Branding;
     /** Assets configuration */
