@@ -30,6 +30,7 @@ import { useControlledState } from '@Pimcore/utils/hooks/use-controlled-state'
 import { ManyToOneRelationInput } from './many-to-one-relation-input'
 import { useStyles } from './many-to-one-relation.styles'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
+import { ModalUploadButton } from '@Pimcore/components/modal-upload/components/modal-upload-button/modal-upload-button'
 
 export type ManyToOneRelationValueType = ManyToOneRelationValue | PathTextInputValue | null
 
@@ -49,6 +50,7 @@ export interface PathTextInputValue {
 
 export interface ManyToOneRelationClassDefinitionProps {
   assetInlineDownloadAllowed?: boolean
+  assetUploadPath?: string | null
   allowToClearRelation?: boolean
   allowPathTextInput?: boolean
   showOpenForTextInput?: boolean
@@ -185,6 +187,24 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
               }
             } }
             type="default"
+          />
+        )}
+
+        {isEnabled && props.assetsAllowed === true && (
+          <ModalUploadButton
+            maxItems={ 1 }
+            multiple={ false }
+            onSuccess={ async (assets) => {
+              if (assets.length > 0) {
+                handleValueChange({
+                  type: 'asset',
+                  subtype: assets[0].type ?? undefined,
+                  id: assets[0].id,
+                  fullPath: assets[0].fullPath ?? undefined
+                })
+              }
+            } }
+            targetFolderPath={ props.assetUploadPath ?? undefined }
           />
         )}
 
