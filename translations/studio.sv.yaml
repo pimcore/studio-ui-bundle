@@ -1294,6 +1294,8 @@ relations.fullpath: Fullständig sökväg
 relations.remove-all.confirm: Vill du verkligen ta bort alla relationer?
 relation: relation
 items-limit-reached: Maximalt antal objekt ({{maxItems}}) har nåtts.
+relation.drop.not-allowed-elements-skipped_one: '1 element lades inte till: det här fältet tillåter inte dess typ.'
+relation.drop.not-allowed-elements-skipped_other: '{{count}} element lades inte till: det här fältet tillåter inte deras typer.'
 actions: Åtgärder
 asset: Asset
 data-object: Data Object

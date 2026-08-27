@@ -1294,6 +1294,8 @@ relations.fullpath: Full sti
 relations.remove-all.confirm: Vil du virkelig slette alle relasjoner?
 relation: relasjon
 items-limit-reached: Maksimalt antall elementer ({{maxItems}}) er nådd.
+relation.drop.not-allowed-elements-skipped_one: '1 element ble ikke lagt til: dette feltet tillater ikke typen.'
+relation.drop.not-allowed-elements-skipped_other: '{{count}} elementer ble ikke lagt til: dette feltet tillater ikke typene.'
 actions: Handlinger
 asset: Ressurs
 data-object: Data Object

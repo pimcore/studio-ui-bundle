@@ -1294,6 +1294,8 @@ relations.fullpath: Percorso completo
 relations.remove-all.confirm: Eliminare tutte le relazioni?
 relation: relazione
 items-limit-reached: Il numero massimo di elementi ({{maxItems}}) è stato raggiunto.
+relation.drop.not-allowed-elements-skipped_one: '1 elemento non è stato aggiunto: questo campo non consente il suo tipo.'
+relation.drop.not-allowed-elements-skipped_other: '{{count}} elementi non sono stati aggiunti: questo campo non consente i loro tipi.'
 actions: Azioni
 asset: Asset
 data-object: Data Object

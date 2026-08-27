@@ -40,7 +40,7 @@ export type ManyToManyRelationValue = ManyToManyRelationValueItem[]
 export type DisplayManyToManyRelationValue = DisplayManyToManyRelationValueItem[]
 
 interface UseValueReturn {
-  onDrop: (info: DragAndDropInfo) => void
+  addDroppedElements: (elements: any[], elementType: string, skippedCount?: number) => void
   deleteItem: (rowIndex: number) => void
   onSearch: (searchTerm: string) => void
   onOrderChange: (data: ManyToManyRelationValue) => void
@@ -253,16 +253,26 @@ export const useValue = (
   }
 
   /**
-   * Accepts a single element drag as well as a list drag.
+   * Adds dropped elements to the value.
+   *
+   * The caller passes the elements the field accepts - deciding that needs the
+   * allowed types and classes, which live in the component's props - so this must
+   * never be handed a raw drag payload.
    *
    * Duplicates and the item limit are resolved once for the whole set and written
    * in a single update: applying the elements one by one would compare each of
    * them against a stale value and overshoot maxItems.
    */
-  const onDrop = (info: DragAndDropInfo): void => {
-    const elementType = toElementType(info.type)
+  const addDroppedElements = (elements: any[], elementType: string, skippedCount: number = 0): void => {
+    // Dropping a selection that holds types this field does not accept would
+    // otherwise add a few of them and drop the rest without a word.
+    if (skippedCount > 0) {
+      modal.warn({
+        content: t('relation.drop.not-allowed-elements-skipped', { count: skippedCount })
+      })
+    }
 
-    const droppedItems = getDraggedElements(info)
+    const droppedItems = elements
       .map(element => toValueItem(elementType, element))
       .filter((item): item is ManyToManyRelationValueItem => item !== undefined)
 
@@ -332,7 +342,7 @@ export const useValue = (
   const maxRemainingItems = maxItems === null ? undefined : Math.max(maxItems - (value?.length ?? 0), 0)
 
   return {
-    onDrop,
+    addDroppedElements,
     deleteItem,
     onSearch,
     onOrderChange,

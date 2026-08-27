@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { isEqual, isNil } from 'lodash'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
-import { toElementType } from '@Pimcore/components/drag-and-drop/element-drag'
+import { getDraggedElements, toElementType } from '@Pimcore/components/drag-and-drop/element-drag'
 import { ManyToManyRelationGrid } from './grid'
 import { type ManyToManyRelationValue, type ManyToManyRelationValueItem, type DisplayManyToManyRelationValue, useValue } from './hooks/use-value'
 import type { DragAndDropInfo } from '@sdk/components'
@@ -57,7 +57,7 @@ export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToMan
   const [value, setValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
   const [displayedValue, setDisplayedValue] = useState<DisplayManyToManyRelationValue | null>(props.value ?? null)
 
-  const { onDrop, deleteItem, onSearch, onOrderChange, addAssets, addItems, updateDisplayValue, maxRemainingItems, getOriginalIndex, hasActiveSearch } = useValue(
+  const { addDroppedElements, deleteItem, onSearch, onOrderChange, addAssets, addItems, updateDisplayValue, maxRemainingItems, getOriginalIndex, hasActiveSearch } = useValue(
     value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments, { name: props.combinedFieldName, class: props.pathFormatterClass ?? undefined }, props?.visibleFieldsValue
   )
   const allowDragAndDrop = !isNil(displayedValue) && displayedValue?.length > 1 && !hasActiveSearch && !props?.noteditable
@@ -102,7 +102,19 @@ export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToMan
         disableDndActiveIndicator
         isValidContext={ (info: DragAndDropInfo) => props.disabled !== true && isValidElementType(toElementType(info.type)) }
         isValidData={ (info: DragAndDropInfo) => dndValidRelationElements(info, props).length > 0 }
-        onDrop={ onDrop }
+        onDrop={ (info: DragAndDropInfo) => {
+          // Exactly the elements the hover state was based on: a set may hold
+          // classes this field does not accept, and those must not slip in just
+          // because one element in it was allowed.
+          const droppedElements = getDraggedElements(info)
+          const allowedElements = dndValidRelationElements(info, props)
+
+          addDroppedElements(
+            allowedElements,
+            toElementType(info.type),
+            droppedElements.length - allowedElements.length
+          )
+        } }
         variant="outline"
       >
         <ManyToManyRelationGrid
