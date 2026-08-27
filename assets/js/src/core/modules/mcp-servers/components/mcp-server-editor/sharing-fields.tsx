@@ -17,10 +17,14 @@ import { Text } from '@Pimcore/components/text/text'
 import { Title } from '@Pimcore/components/title/title'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { Select } from '@Pimcore/components/select/select'
+import { Icon } from '@Pimcore/components/icon/icon'
+import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { OperationalGrid } from '@Pimcore/components/operational-grid/operational-grid'
+import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
 import { useUserGetShareCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
 import { useRoleGetShareCollectionQuery } from '@Pimcore/modules/user/roles/roles-api-slice-enhanced'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { type McpServerAccessGrant } from '../../mcp-servers-api-slice.gen'
 import { describeAccess } from '../../utils'
 
@@ -35,6 +39,8 @@ interface SharingGridProps {
   onChange: (value: McpServerAccessGrant[]) => void
   disabled: boolean
   addPlaceholder: string
+  // Extra id→name entries not present in the share collection (e.g. the current user).
+  extraNames?: Candidate[]
 }
 
 const SharingGrid = ({
@@ -42,41 +48,48 @@ const SharingGrid = ({
   value,
   onChange,
   disabled,
-  addPlaceholder
+  addPlaceholder,
+  extraNames = []
 }: SharingGridProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   const nameById = useMemo(() => {
     const map = new Map<number, string>()
     candidates.forEach((candidate) => { map.set(candidate.id, candidate.name) })
+    // Fallbacks (current user) fill gaps the share collection omits, without
+    // becoming selectable options below.
+    extraNames.forEach((entry) => {
+      if (!map.has(entry.id)) {
+        map.set(entry.id, entry.name)
+      }
+    })
     return map
-  }, [candidates])
+  }, [candidates, extraNames])
 
   const columns = useMemo(() => {
     const columnHelper = createColumnHelper<McpServerAccessGrant>()
 
     return [
-      columnHelper.display({
+      // Accessor (not a custom display cell) so the grid's default cell renderer
+      // applies the standard horizontal padding — matching agent-config permissions.
+      columnHelper.accessor((row) => nameById.get(row.id) ?? `#${row.id}`, {
         id: 'name',
         header: t('mcp-servers.sharing.name'),
         size: 240,
-        meta: { autoWidth: true },
-        cell: (info) => {
-          const grant = info.row.original
-          return <Text>{nameById.get(grant.id) ?? `#${grant.id}`}</Text>
-        }
+        meta: { editable: false, autoWidth: true }
       }),
-      columnHelper.accessor('permission', {
-        header: t('mcp-servers.sharing.level'),
-        size: 160,
+      // A single "Can edit" checkbox: checked = write, unchecked = read.
+      // Write implies read; read is the baseline for any grant.
+      columnHelper.accessor((row) => row.permission === 'write', {
+        id: 'canEdit',
+        header: t('mcp-servers.sharing.can-edit'),
+        size: 100,
         meta: {
-          type: 'select',
+          type: 'checkbox',
           editable: !disabled,
           config: {
-            options: [
-              { label: t('mcp-servers.sharing.read'), value: 'read' },
-              { label: t('mcp-servers.sharing.write'), value: 'write' }
-            ]
+            align: 'center',
+            disabled
           }
         }
       }),
@@ -107,6 +120,20 @@ const SharingGrid = ({
     ]
   }, [t, disabled, value, onChange, nameById])
 
+  // The checkbox writes a boolean under the synthetic `canEdit` column; translate
+  // it back to the grant's read/write permission.
+  const handleUpdateCellData = (event: OnUpdateCellDataEvent): void => {
+    if (event.columnId !== 'canEdit') {
+      return
+    }
+    const next = value.map((grant, index) =>
+      index === event.rowIndex
+        ? { ...grant, permission: event.value === true ? 'write' : 'read' } satisfies McpServerAccessGrant
+        : grant
+    )
+    onChange(next)
+  }
+
   const options = useMemo(() => {
     const takenIds = new Set(value.map((grant) => grant.id))
     return candidates
@@ -118,7 +145,13 @@ const SharingGrid = ({
     <OperationalGrid
       autoWidth
       columns={ columns }
+      // Remount when the resolvable-name set grows (the share-collection query
+      // resolves after first paint). The grid caches each cell's value by column
+      // id and only clears it when `value` changes, so without this the names
+      // would stay as `#id` until the user edited a row.
+      key={ `grid-${nameById.size}` }
       onChange={ (next) => { onChange(next as McpServerAccessGrant[]) } }
+      onUpdateCellData={ handleUpdateCellData }
       value={ value }
     >
       {!disabled && (
@@ -168,6 +201,7 @@ export const SharingFields = ({
 
   const { data: userList } = useUserGetShareCollectionQuery()
   const { data: roleList } = useRoleGetShareCollectionQuery()
+  const currentUser = useUser()
 
   const userCandidates = useMemo<Candidate[]>(
     () => (userList?.items ?? []).map((user) => ({ id: user.id, name: user.username })),
@@ -176,6 +210,13 @@ export const SharingFields = ({
   const roleCandidates = useMemo<Candidate[]>(
     () => (roleList?.items ?? []).map((role) => ({ id: role.id, name: role.name })),
     [roleList]
+  )
+
+  // The share collection excludes the current user, so a grant for them would
+  // otherwise render as `#<id>`. Resolve it from the authenticated user.
+  const currentUserName = useMemo<Candidate[]>(
+    () => (currentUser.id > 0 ? [{ id: currentUser.id, name: currentUser.username }] : []),
+    [currentUser]
   )
 
   const base = t('mcp-servers.access.admins-owner')
@@ -191,12 +232,20 @@ export const SharingFields = ({
       gap="small"
       vertical
     >
-      <Title level={ 5 }>{t('mcp-servers.sharing.title')}</Title>
-
       <Switch
         checked={ shareGlobal }
         disabled={ disabled }
-        labelRight={ <Text>{t('mcp-servers.sharing.share-globally')}</Text> }
+        labelRight={
+          <Flex
+            align="center"
+            gap="mini"
+          >
+            <Text>{t('mcp-servers.sharing.share-globally')}</Text>
+            <Tooltip title={ t('mcp-servers.sharing.share-globally-tooltip') }>
+              <Icon value="info-circle" />
+            </Tooltip>
+          </Flex>
+        }
         onChange={ onShareGlobalChange }
       />
 
@@ -207,6 +256,7 @@ export const SharingFields = ({
             addPlaceholder={ t('mcp-servers.sharing.add-user') }
             candidates={ userCandidates }
             disabled={ disabled }
+            extraNames={ currentUserName }
             onChange={ onSharedUsersChange }
             value={ sharedUsers }
           />

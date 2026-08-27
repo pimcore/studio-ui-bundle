@@ -12,12 +12,6 @@ import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
-    rail: css`
-      height: 100%;
-      overflow-y: auto;
-      padding: ${token.paddingSM}px;
-    `,
-
     item: css`
       width: 100%;
       text-align: left;
