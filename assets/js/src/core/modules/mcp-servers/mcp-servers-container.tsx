@@ -8,13 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isNil } from 'lodash'
-import { Empty } from '@Pimcore/components/empty/empty'
-import { Content } from '@Pimcore/components/content/content'
 import { ConfigLayout } from '@Pimcore/components/predefined-layouts/config/config-layout'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
+import { useMessage } from '@Pimcore/components/message/useMessage'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import {
   useMcpGetServersQuery,
@@ -25,18 +23,26 @@ import {
   type McpServer
 } from './mcp-servers-api-slice.gen'
 import { McpServersRail } from './components/mcp-servers-rail/mcp-servers-rail'
-import { McpServerEditor, type McpServerEditorBody } from './components/mcp-server-editor/mcp-server-editor'
+import { McpServerTabs } from './components/mcp-server-tabs/mcp-server-tabs'
+import { type McpServerEditorBody } from './components/mcp-server-editor/mcp-server-editor'
+import { useMcpServerTabManager, NEW_SERVER_KEY } from './hooks/use-mcp-server-tab-manager'
 import { useStyles } from './mcp-servers-container.styles'
 
 export const McpServersContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { modal } = useStudioModal()
+  const { success } = useMessage()
 
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [createMode, setCreateMode] = useState<boolean>(false)
+  const tabManager = useMcpServerTabManager()
 
-  const { data: serversData, isLoading: serversLoading, error: serversError } = useMcpGetServersQuery()
+  const {
+    data: serversData,
+    isLoading: serversLoading,
+    isFetching: serversFetching,
+    error: serversError,
+    refetch: refetchServers
+  } = useMcpGetServersQuery()
   const { data: toolsData, error: toolsError } = useMcpGetToolsQuery()
 
   const [createServer, { isLoading: creating, error: createError }] = useMcpCreateServerMutation()
@@ -46,43 +52,40 @@ export const McpServersContainer = (): React.JSX.Element => {
   const servers = serversData?.items ?? []
   const tools = toolsData?.items ?? []
 
-  const selectedServer = isNil(selectedId)
-    ? null
-    : servers.find((server) => server.id === selectedId) ?? null
-
   useEffect(() => {
     const error = serversError ?? toolsError ?? createError ?? updateError ?? deleteError
-    if (!isNil(error)) {
+    if (error !== undefined) {
       trackError(new ApiError(error))
     }
   }, [serversError, toolsError, createError, updateError, deleteError])
 
   const handleSelect = (server: McpServer): void => {
-    setCreateMode(false)
-    setSelectedId(server.id)
+    tabManager.openTab({ id: server.id, name: server.name, writeable: server.writeable })
   }
 
   const handleNew = (): void => {
-    setCreateMode(true)
-    setSelectedId(null)
+    tabManager.openTab({ id: NEW_SERVER_KEY, name: t('mcp-servers.tabs.new-server'), writeable: true })
   }
 
-  const handleSave = (body: McpServerEditorBody): void => {
-    const request = createMode
+  const handleSave = (tabId: string, body: McpServerEditorBody): void => {
+    const request = tabId === NEW_SERVER_KEY
       ? createServer({ body })
-      : !isNil(selectedServer)
-          ? updateServer({ id: selectedServer.id, body })
-          : null
-
-    if (isNil(request)) {
-      return
-    }
+      : updateServer({ id: tabId, body })
 
     void request.then((result) => {
       if (!('error' in result)) {
-        if (createMode) {
-          setCreateMode(false)
-          setSelectedId(result.data.id)
+        void success(t('mcp-servers.save-success'))
+        tabManager.markDirty(tabId, false)
+        if (tabId === NEW_SERVER_KEY) {
+          tabManager.closeTab(NEW_SERVER_KEY)
+          tabManager.openTab({
+            id: result.data.id,
+            name: result.data.name,
+            writeable: result.data.writeable
+          })
+        } else {
+          // Reflect a renamed server on its tab label.
+          tabManager.renameTab(tabId, result.data.name)
         }
       }
     })
@@ -97,36 +100,10 @@ export const McpServersContainer = (): React.JSX.Element => {
       onOk: async () => {
         const result = await deleteServer({ id: server.id })
         if (!('error' in result)) {
-          setSelectedId(null)
+          tabManager.closeTab(server.id)
         }
       }
     })
-  }
-
-  const renderRight = (): React.JSX.Element => {
-    if (serversLoading) {
-      return (
-        <Content
-          loading
-          padded
-        />
-      )
-    }
-
-    if (!createMode && isNil(selectedServer)) {
-      return <Empty description={ t('mcp-servers.placeholder') } />
-    }
-
-    return (
-      <McpServerEditor
-        key={ createMode ? 'new' : selectedId ?? 'new' }
-        onDelete={ handleDelete }
-        onSave={ handleSave }
-        saving={ creating || updating }
-        server={ createMode ? null : selectedServer }
-        tools={ tools }
-      />
-    )
   }
 
   return (
@@ -137,11 +114,13 @@ export const McpServersContainer = (): React.JSX.Element => {
           minSize: 200,
           children: (
             <McpServersRail
-              createMode={ createMode }
+              activeId={ tabManager.activeTabKey }
+              isFetching={ serversFetching }
               isLoading={ serversLoading }
+              onDelete={ handleDelete }
               onNew={ handleNew }
+              onRefresh={ refetchServers }
               onSelect={ handleSelect }
-              selectedId={ selectedId }
               servers={ servers }
             />
           )
@@ -149,7 +128,15 @@ export const McpServersContainer = (): React.JSX.Element => {
         resizeAble
         rightItem={ {
           size: 75,
-          children: renderRight()
+          children: (
+            <McpServerTabs
+              onSave={ handleSave }
+              saving={ creating || updating }
+              servers={ servers }
+              tabManager={ tabManager }
+              tools={ tools }
+            />
+          )
         } }
         withDivider
       />

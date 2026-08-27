@@ -625,7 +625,10 @@ website-settings.website-settings.add-entry-mandatory-fields-missing.title: Mand
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Name and type are mandatory fields and need to be filled out.
 mcp-servers.rail.new-server: New server
 mcp-servers.placeholder: Select a server to view or edit its configuration.
+mcp-servers.tabs.empty: Select a server to view or edit its configuration.
+mcp-servers.tabs.new-server: New server
 mcp-servers.read-only-notice: Server definitions are file-managed on this environment and cannot be edited here.
+mcp-servers.save-success: MCP server saved
 mcp-servers.access.global: Global
 mcp-servers.access.admin-only: Admin-only
 mcp-servers.access.user: user
@@ -639,6 +642,8 @@ mcp-servers.badge.read: Read
 mcp-servers.badge.write: Write
 mcp-servers.editor.create-title: New MCP server
 mcp-servers.editor.edit-title: Edit MCP server
+mcp-servers.editor.general: General
+mcp-servers.editor.permissions: Permissions
 mcp-servers.editor.identity: Identity
 mcp-servers.editor.name: Name
 mcp-servers.editor.name-required: Please provide a name.
@@ -646,7 +651,7 @@ mcp-servers.editor.url-slug: URL slug
 mcp-servers.editor.url-slug-required: Please provide a URL slug.
 mcp-servers.editor.url-slug-pattern: Only lowercase letters, numbers and hyphens are allowed.
 mcp-servers.editor.description: Description
-mcp-servers.editor.enabled: Enabled
+mcp-servers.editor.enabled: Active
 mcp-servers.editor.tools: Tools
 mcp-servers.editor.tools-placeholder: Select the tools this server exposes
 mcp-servers.editor.scopes: Advertised scopes
@@ -654,12 +659,14 @@ mcp-servers.editor.scopes-empty: No scopes — select tools to derive the requir
 mcp-servers.editor.url: Server URL
 mcp-servers.editor.connect-hint: Point your MCP client at this URL and authenticate with your Pimcore account.
 mcp-servers.sharing.title: Sharing
-mcp-servers.sharing.share-globally: Any authenticated user may read/use it
+mcp-servers.sharing.share-globally: Share globally
+mcp-servers.sharing.share-globally-tooltip: Any authenticated user may read/use it
 mcp-servers.sharing.users: Users
 mcp-servers.sharing.roles: Roles
 mcp-servers.sharing.add-user: Add a user…
 mcp-servers.sharing.add-role: Add a role…
 mcp-servers.sharing.name: Name
+mcp-servers.sharing.can-edit: Can edit
 mcp-servers.sharing.level: Access level
 mcp-servers.sharing.read: Read
 mcp-servers.sharing.write: Can edit

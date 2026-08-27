@@ -12,18 +12,26 @@ import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
-    urlRow: css`
-      padding: ${token.paddingXS}px;
-      background-color: ${token.colorFillTertiary};
-      border-radius: ${token.borderRadius}px;
+    tabsContainer: css`
+      height: 100%;
+
+      .ant-tabs-content,
+      .ant-tabs-tabpane {
+        height: 100%;
+      }
     `,
 
-    urlText: css`
-      word-break: break-all;
+    tabs: css`
+      .ant-tabs-tab {
+        padding: ${token.paddingSM}px ${token.paddingXXS}px !important;
+      }
     `,
 
-    hint: css`
-      color: ${token.colorTextSecondary};
+    emptyState: css`
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
     `
   }
 })

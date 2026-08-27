@@ -12,22 +12,18 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isNil } from 'lodash'
 import { Form } from '@Pimcore/components/form/form'
-import { Input } from '@Pimcore/components/input/input'
-import { TextArea } from '@Pimcore/components/textarea/textarea'
-import { Switch } from '@Pimcore/components/switch/switch'
 import { Text } from '@Pimcore/components/text/text'
-import { Title } from '@Pimcore/components/title/title'
-import { Tag } from '@Pimcore/components/tag/tag'
-import { Flex } from '@Pimcore/components/flex/flex'
 import { Button } from '@Pimcore/components/button/button'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { Content } from '@Pimcore/components/content/content'
+import { Tabs } from '@Pimcore/components/tabs/tabs'
+import { Portal } from '@Pimcore/components/portal/portal'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { copyToClipboardWithFeedback } from '@Pimcore/utils/clipboard'
 import { type McpServer, type McpServerAccessGrant, type McpTool } from '../../mcp-servers-api-slice.gen'
 import { deriveScopes, slugify } from '../../utils'
-import { ToolsField } from './tools-field'
+import { useMcpServerDirty } from '../../hooks/use-mcp-server-dirty'
+import { GeneralFields } from './general-fields'
 import { SharingFields } from './sharing-fields'
-import { useStyles } from './mcp-server-editor.styles'
 
 export interface McpServerEditorBody {
   name: string
@@ -49,30 +45,33 @@ interface McpServerFormValues {
 
 interface McpServerEditorProps {
   server: McpServer | null
+  isCreate: boolean
+  isActive: boolean
+  /** Id of the tabs-level portal slot the Save button renders into. */
+  portalSlotName: string
   tools: McpTool[]
   saving: boolean
   onSave: (body: McpServerEditorBody) => void
-  onDelete: (server: McpServer) => void
+  onDirtyChange: (dirty: boolean) => void
 }
-
-const SLUG_PATTERN = /^[a-z0-9-]+$/
 
 export const McpServerEditor = ({
   server,
+  isCreate,
+  isActive,
+  portalSlotName,
   tools,
   saving,
   onSave,
-  onDelete
+  onDirtyChange
 }: McpServerEditorProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { styles } = useStyles()
   const { success, error } = useMessage()
   const [form] = Form.useForm<McpServerFormValues>()
 
-  const isCreate = isNil(server)
   // Editing needs BOTH: the requesting user's write permission AND a writeable storage target.
-  const canWrite = isCreate ? true : server.currentUserPermissions.write
-  const storageWriteable = isCreate ? true : server.writeable
+  const canWrite = isCreate ? true : server?.currentUserPermissions.write ?? false
+  const storageWriteable = isCreate ? true : server?.writeable ?? false
   const editable = canWrite && storageWriteable
 
   const [selectedTools, setSelectedTools] = useState<string[]>(server?.tools ?? [])
@@ -81,14 +80,34 @@ export const McpServerEditor = ({
   const [sharedRoles, setSharedRoles] = useState<McpServerAccessGrant[]>(server?.sharedRoles ?? [])
   const slugEdited = useRef<boolean>(!isCreate)
 
-  // Live name — drives the slug default in create mode only.
+  // Defer the Save portal until after mount so the tabs-level slot exists in the DOM.
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+
+  // Live form values — drive both the slug default (create mode) and dirty tracking.
   const nameValue = Form.useWatch('name', form)
+  const urlSlugValue = Form.useWatch('urlSlug', form)
+  const descriptionValue = Form.useWatch('description', form)
+  const enabledValue = Form.useWatch('enabled', form)
 
   useEffect(() => {
     if (isCreate && !slugEdited.current) {
       form.setFieldValue('urlSlug', slugify(nameValue ?? ''))
     }
   }, [nameValue, isCreate, form])
+
+  useMcpServerDirty({
+    server,
+    name: nameValue ?? '',
+    urlSlug: urlSlugValue ?? '',
+    description: descriptionValue ?? '',
+    enabled: enabledValue ?? true,
+    tools: selectedTools,
+    shareGlobal,
+    sharedUsers,
+    sharedRoles,
+    onDirtyChange
+  })
 
   const derivedScopes = deriveScopes(selectedTools, tools)
 
@@ -120,38 +139,69 @@ export const McpServerEditor = ({
     )
   }
 
+  // A non-create tab whose server has not yet arrived (e.g. right after a create
+  // refetch) — show a loader rather than an empty editor.
+  if (!isCreate && isNil(server)) {
+    return (
+      <Content
+        loading
+        padded
+      />
+    )
+  }
+
+  const tabItems = [
+    {
+      key: 'general',
+      label: t('mcp-servers.editor.general'),
+      children: (
+        <GeneralFields
+          derivedScopes={ derivedScopes }
+          editable={ editable }
+          isCreate={ isCreate }
+          onCopyUrl={ copyUrl }
+          onSlugEdited={ () => { slugEdited.current = true } }
+          onToolsChange={ setSelectedTools }
+          selectedTools={ selectedTools }
+          server={ server }
+          tools={ tools }
+        />
+      )
+    },
+    {
+      key: 'permissions',
+      label: t('mcp-servers.editor.permissions'),
+      children: (
+        <SharingFields
+          disabled={ !editable }
+          onShareGlobalChange={ setShareGlobal }
+          onSharedRolesChange={ setSharedRoles }
+          onSharedUsersChange={ setSharedUsers }
+          shareGlobal={ shareGlobal }
+          sharedRoles={ sharedRoles }
+          sharedUsers={ sharedUsers }
+        />
+      )
+    }
+  ]
+
   return (
-    <Flex
-      className={ styles.mask }
-      gap="small"
-      vertical
+    <Content
+      padded
+      padding={ { top: 'small', right: 'small', bottom: 'small', left: 'small' } }
     >
-      <Flex
-        align="center"
-        justify="space-between"
-      >
-        <Title level={ 4 }>
-          {isCreate ? t('mcp-servers.editor.create-title') : t('mcp-servers.editor.edit-title')}
-        </Title>
-        {editable && (
-          <Flex gap="small">
-            {!isCreate && (
-              <Button
-                onClick={ () => { onDelete(server) } }
-              >
-                {t('delete')}
-              </Button>
-            )}
-            <Button
-              loading={ saving }
-              onClick={ handleSave }
-              type="primary"
-            >
-              {t('button.save')}
-            </Button>
-          </Flex>
-        )}
-      </Flex>
+      {/* Save lives in the tabs-level bottom toolbar; only the active editor fills the slot. */}
+      {isActive && mounted && editable && (
+        <Portal targetId={ portalSlotName }>
+          <Button
+            loading={ saving }
+            onClick={ handleSave }
+            type="primary"
+          >
+            {t('save')}
+          </Button>
+        </Portal>
+      )}
 
       {!storageWriteable && (
         <Text type="warning">{t('mcp-servers.read-only-notice')}</Text>
@@ -168,97 +218,8 @@ export const McpServerEditor = ({
         } }
         layout="vertical"
       >
-        <Title level={ 5 }>{t('mcp-servers.editor.identity')}</Title>
-
-        <Form.Item
-          label={ t('mcp-servers.editor.name') }
-          name="name"
-          rules={ [{ required: true, message: t('mcp-servers.editor.name-required') }] }
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label={ t('mcp-servers.editor.url-slug') }
-          name="urlSlug"
-          rules={ [
-            { required: true, message: t('mcp-servers.editor.url-slug-required') },
-            { pattern: SLUG_PATTERN, message: t('mcp-servers.editor.url-slug-pattern') }
-          ] }
-        >
-          <Input
-            disabled={ !isCreate }
-            onChange={ () => { slugEdited.current = true } }
-          />
-        </Form.Item>
-
-        <Form.Item
-          label={ t('mcp-servers.editor.description') }
-          name="description"
-        >
-          <TextArea />
-        </Form.Item>
-
-        <Form.Item
-          label={ t('mcp-servers.editor.enabled') }
-          name="enabled"
-          valuePropName="checked"
-        >
-          <Switch />
-        </Form.Item>
-
-        <Title level={ 5 }>{t('mcp-servers.editor.tools')}</Title>
-        <Form.Item label={ t('mcp-servers.editor.tools') }>
-          <ToolsField
-            disabled={ !editable }
-            onChange={ setSelectedTools }
-            tools={ tools }
-            value={ selectedTools }
-          />
-        </Form.Item>
+        <Tabs items={ tabItems } />
       </Form>
-
-      <SharingFields
-        disabled={ !editable }
-        onShareGlobalChange={ setShareGlobal }
-        onSharedRolesChange={ setSharedRoles }
-        onSharedUsersChange={ setSharedUsers }
-        shareGlobal={ shareGlobal }
-        sharedRoles={ sharedRoles }
-        sharedUsers={ sharedUsers }
-      />
-
-      <Title level={ 5 }>{t('mcp-servers.editor.scopes')}</Title>
-      <Flex
-        gap="mini"
-        wrap
-      >
-        {derivedScopes.length === 0
-          ? <Text type="secondary">{t('mcp-servers.editor.scopes-empty')}</Text>
-          : derivedScopes.map((scope) => (
-            <Tag key={ scope }>{scope}</Tag>
-            ))}
-      </Flex>
-
-      {!isCreate && (
-        <>
-          <Title level={ 5 }>{t('mcp-servers.editor.url')}</Title>
-          <Flex
-            align="center"
-            className={ styles.urlRow }
-            gap="small"
-            justify="space-between"
-          >
-            <Text className={ styles.urlText }>{server.url}</Text>
-            <IconButton
-              icon={ { value: 'copy' } }
-              onClick={ () => { copyUrl(server.url) } }
-              type="link"
-            />
-          </Flex>
-          <Text className={ styles.hint }>{t('mcp-servers.editor.connect-hint')}</Text>
-        </>
-      )}
-    </Flex>
+    </Content>
   )
 }
