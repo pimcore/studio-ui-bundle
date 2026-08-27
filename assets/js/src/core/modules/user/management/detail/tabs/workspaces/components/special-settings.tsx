@@ -19,6 +19,7 @@ import { Select } from '@Pimcore/components/select/select'
 import { Form } from 'antd'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-language-lookup'
+import { buildLanguagePermissionOptions } from './language-options'
 
 interface ISpecialSettings {
   localizedView: string[]
@@ -35,10 +36,8 @@ const SpecialSettings = ({ localizedView, localizedEdit, layouts, onValuesChange
 
   const [form] = Form.useForm()
 
-  const languageOptions: Array<{ value: string, label: string }> = validLanguages.map((lang: string) => ({
-    value: lang,
-    label: getDisplayName(lang) ?? lang
-  })).sort((a, b) => a.label.localeCompare(b.label))
+  const availableLanguages: string[] = Array.isArray(validLanguages) ? (validLanguages as string[]) : []
+  const languageOptions = buildLanguagePermissionOptions(availableLanguages, getDisplayName, t('default'))
 
   const layoutOptions: Array<{ value: string, label: string }> = data?.items.map((layout) => ({
     value: layout.id,

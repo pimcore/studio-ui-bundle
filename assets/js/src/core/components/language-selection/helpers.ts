@@ -8,6 +8,21 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+// The key the backend uses for the language independent ("default") value of a localized field.
+export const LANGUAGE_INDEPENDENT_KEY = 'default'
+
+/**
+ * Tells whether the language independent ("default") value of a localized field may be used for a
+ * given workspace language permission (`localizedView` / `localizedEdit`). It is available unless
+ * the configured language list explicitly leaves it out - an unset or empty permission means no
+ * restriction at all.
+ */
+export const isLanguageIndependentValueAllowed = (languagePermission?: string | null): boolean => {
+  const languages = languagePermission?.split(',').filter((language) => language !== '') ?? []
+
+  return languages.length === 0 || languages.includes(LANGUAGE_INDEPENDENT_KEY)
+}
+
 export const transformLanguage = (lang: string): string | null => lang === '-' ? null : lang
 
 // Transforms a locale of type "en-US" into "en_US", and "en" into "EN"
