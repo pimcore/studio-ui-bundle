@@ -54,6 +54,12 @@ jest.mock('@Pimcore/modules/asset/actions/download/use-download', () => ({
   useDownload: () => ({ download: jest.fn() })
 }))
 
+const alertModalWarn = jest.fn()
+
+jest.mock('@Pimcore/components/modal/alert-modal/hooks/use-alert-modal', () => ({
+  useAlertModal: () => ({ warn: alertModalWarn, info: jest.fn(), error: jest.fn(), success: jest.fn() })
+}))
+
 jest.mock('@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button', () => ({
   ElementSelectorButton: () => <button data-testid="element-selector-button">select</button>
 }))
@@ -77,6 +83,7 @@ jest.mock('@Pimcore/components/modal-upload/components/modal-upload-button/modal
 describe('ManyToOneRelation upload button', () => {
   beforeEach(() => {
     uploadSuccessHandlers.length = 0
+    alertModalWarn.mockClear()
   })
 
   it('renders an upload button with the configured upload path when assets are allowed', () => {
@@ -135,5 +142,24 @@ describe('ManyToOneRelation upload button', () => {
       id: 42,
       fullPath: '/images/uploads/photo.jpg'
     })
+  })
+
+  it('rejects an uploaded asset whose type is not in allowedAssetTypes', async () => {
+    const onChange = jest.fn()
+
+    render(
+      <ManyToOneRelation
+        allowedAssetTypes={ ['image'] }
+        assetsAllowed
+        onChange={ onChange }
+      />
+    )
+
+    await act(async () => {
+      await uploadSuccessHandlers[0]([{ id: 7, type: 'document', fullPath: '/documents/uploads/report.pdf' }])
+    })
+
+    expect(onChange).not.toHaveBeenCalled()
+    expect(alertModalWarn).toHaveBeenCalled()
   })
 })

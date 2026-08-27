@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tooltip } from 'antd'
 import { isEmpty, isNull, isUndefined } from 'lodash'
@@ -20,6 +20,7 @@ import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definition
 import {
   createElementSelectorAreas,
   createElementSelectorConfig,
+  isAllowedSubType,
   type IRelationAllowedTypesDataComponent
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
 import { mapToLegacyElementType } from '@Pimcore/modules/element/utils/element-type'
@@ -31,6 +32,8 @@ import { ManyToOneRelationInput } from './many-to-one-relation-input'
 import { useStyles } from './many-to-one-relation.styles'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { ModalUploadButton } from '@Pimcore/components/modal-upload/components/modal-upload-button/modal-upload-button'
+import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
+import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 export type ManyToOneRelationValueType = ManyToOneRelationValue | PathTextInputValue | null
 
@@ -81,9 +84,30 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
   const { openElement, mapToElementType } = useElementHelper()
   const { download } = useDownload()
   const fieldWidth = useFieldWidth()
+  const alertModal = useAlertModal()
 
   const { t } = useTranslation()
   const { styles } = useStyles()
+
+  const handleAssetUpload = useCallback(async (assets: Asset[]): Promise<void> => {
+    if (isEmpty(assets)) {
+      return
+    }
+
+    const [asset] = assets
+
+    if (!isAllowedSubType('asset', asset.type, props)) {
+      alertModal.warn({ content: t('asset-upload-type-not-allowed') })
+      return
+    }
+
+    handleValueChange({
+      type: 'asset',
+      subtype: asset.type ?? undefined,
+      id: asset.id,
+      fullPath: asset.fullPath ?? undefined
+    })
+  }, [props, handleValueChange, alertModal, t])
 
   const clickOpenElement = (): void => {
     if (value !== null) {
@@ -194,16 +218,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           <ModalUploadButton
             maxItems={ 1 }
             multiple={ false }
-            onSuccess={ async (assets) => {
-              if (assets.length > 0) {
-                handleValueChange({
-                  type: 'asset',
-                  subtype: assets[0].type ?? undefined,
-                  id: assets[0].id,
-                  fullPath: assets[0].fullPath ?? undefined
-                })
-              }
-            } }
+            onSuccess={ handleAssetUpload }
             targetFolderPath={ props.assetUploadPath ?? undefined }
           />
         )}
