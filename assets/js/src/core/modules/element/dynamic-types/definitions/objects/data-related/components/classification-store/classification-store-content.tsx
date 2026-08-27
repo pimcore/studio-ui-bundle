@@ -57,9 +57,7 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
   const elementDraft = useElementDraft(element.id, element.elementType)
 
   const isLocalizable = props.localized ?? false
-  const viewableLanguages = 'permissions' in elementDraft
-    ? (elementDraft.permissions as { localizedView?: string | null } | undefined)?.localizedView
-    : undefined
+  const viewableLanguages = elementDraft.element?.permissions?.localizedView
   // A non localized store only ever has the language independent column, so no language
   // permission applies to it.
   const allowLanguageIndependentValue = !isLocalizable || isLanguageIndependentValueAllowed(viewableLanguages)
