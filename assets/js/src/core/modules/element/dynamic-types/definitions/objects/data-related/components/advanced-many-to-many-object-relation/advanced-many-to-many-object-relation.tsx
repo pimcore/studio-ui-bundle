@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   ManyToManyObjectRelation,
   type VisibleFieldDefinition
@@ -25,6 +25,8 @@ import {
 import {
   useConvertRelationEditableColumns
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/hooks/use-convert-relation-editable-columns'
+import { type RowSelectionState } from '@tanstack/react-table'
+import { BatchEditAction } from '../advanced-many-to-many-relation/batch-edit/batch-edit-action'
 
 export interface AdvancedManyToManyObjectRelationClassDefinitionProps {
   allowToClearRelation: boolean
@@ -38,6 +40,7 @@ export interface AdvancedManyToManyObjectRelationClassDefinitionProps {
   columns?: RelationColumnDefinition[] | null
   name: string[]
   hideOpenButton?: boolean
+  enableBatchEdit?: boolean
 }
 
 export interface RelationColumnDefinition {
@@ -60,6 +63,9 @@ export interface AdvancedManyToManyObjectRelationProps extends AdvancedManyToMan
 export const AdvancedManyToManyObjectRelation = (props: AdvancedManyToManyObjectRelationProps): React.JSX.Element => {
   const fieldName = props.name[props.name.length - 1]
   const { columnDefinition, onUpdateCellData, convertToManyToManyRelationValue, convertToAdvancedManyToManyRelationValue } = useConvertRelationEditableColumns(props.columns ?? [], fieldName, props.value, props.onChange)
+  const isBatchEditEnabled = props.enableBatchEdit === true && props.disabled !== true
+
+  const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
 
   useEffect(() => {
   }, [props.value])
@@ -77,14 +83,74 @@ export const AdvancedManyToManyObjectRelation = (props: AdvancedManyToManyObject
     props.onChange?.(convertToAdvancedManyToManyRelationValue(value))
   }
 
+  const handleBatchApply = useCallback((columnKey: string, value: any): void => {
+    if (props.value === undefined || props.value === null) return
+
+    const selectedIndices = Object.keys(selectedRows).map(Number)
+    const applyToAll = selectedIndices.length === 0
+
+    const newValue: AdvancedManyToManyRelationValue = props.value.map((row, index) => {
+      if (applyToAll || selectedIndices.includes(index)) {
+        return {
+          ...row,
+          data: {
+            ...row.data,
+            [columnKey]: Array.isArray(value) ? value.join(',') : value
+          }
+        }
+      }
+      return row
+    })
+
+    props.onChange?.(newValue)
+    setSelectedRows({})
+  }, [props.value, props.onChange, selectedRows])
+
+  const handleBatchDelete = useCallback((): void => {
+    if (props.value === undefined || props.value === null) return
+
+    const selectedIndices = Object.keys(selectedRows).map(Number)
+    const applyToAll = selectedIndices.length === 0
+
+    if (applyToAll) {
+      props.onChange?.([])
+    } else {
+      const newValue = props.value.filter((_, index) => !selectedIndices.includes(index))
+      props.onChange?.(newValue)
+    }
+
+    setSelectedRows({})
+  }, [props.value, props.onChange, selectedRows])
+
+  const totalRowCount = props.value?.length ?? 0
+
+  const batchEditToolbarItem = isBatchEditEnabled
+    ? (
+      <BatchEditAction
+        columns={ props.columns ?? [] }
+        disabled={ props.disabled }
+        onApply={ handleBatchApply }
+        onDelete={ handleBatchDelete }
+        selectedRows={ selectedRows }
+        setSelectedRows={ setSelectedRows }
+        totalRowCount={ totalRowCount }
+      />
+      )
+    : undefined
+
   return (
     <ManyToManyObjectRelation
       { ...props }
+      allowToClearRelation={ isBatchEditEnabled ? false : props.allowToClearRelation }
       allowedClasses={ [String(props.allowedClassId)] }
       columnDefinition={ columnDefinition }
       dataObjectsAllowed
+      enableMultipleRowSelection={ isBatchEditEnabled }
+      extraToolbarItems={ batchEditToolbarItem }
       onChange={ onChange }
+      onSelectedRowsChange={ isBatchEditEnabled ? setSelectedRows : undefined }
       onUpdateCellData={ onUpdateCellData }
+      selectedRows={ isBatchEditEnabled ? selectedRows : undefined }
       value={ convertToManyToManyRelationValue(props.value) }
     />
   )
