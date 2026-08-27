@@ -1310,6 +1310,7 @@ relations.create-object.parent.placeholder: Velg et overordnet element
 relations.create-object.class: Klasse
 relation: relasjon
 items-limit-reached: Maksimalt antall elementer ({{maxItems}}) er nådd.
+asset-upload-type-not-allowed: Typen til den opplastede ressursen er ikke tillatt for dette feltet.
 actions: Handlinger
 asset: Ressurs
 data-object: Data Object

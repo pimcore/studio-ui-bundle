@@ -1310,6 +1310,7 @@ relations.create-object.parent.placeholder: Välj en överordnad
 relations.create-object.class: Klass
 relation: relation
 items-limit-reached: Maximalt antal objekt ({{maxItems}}) har nåtts.
+asset-upload-type-not-allowed: Den uppladdade assetens typ tillåts inte för det här fältet.
 actions: Åtgärder
 asset: Asset
 data-object: Data Object

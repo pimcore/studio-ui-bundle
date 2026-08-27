@@ -1310,6 +1310,7 @@ relations.create-object.parent.placeholder: Seleccionar un padre
 relations.create-object.class: Clase
 relation: relación
 items-limit-reached: Se ha alcanzado el número máximo de elementos ({{maxItems}}).
+asset-upload-type-not-allowed: El tipo del asset subido no está permitido para este campo.
 actions: Acciones
 asset: Asset
 data-object: Data Object
