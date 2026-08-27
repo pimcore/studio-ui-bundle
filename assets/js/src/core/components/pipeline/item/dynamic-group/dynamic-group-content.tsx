@@ -24,8 +24,8 @@ import { useTranslation } from 'react-i18next'
 export interface DynamicGroupContentProps {
   id: DynamicGroupProps['id']
   dynamicTypeRegistryId: DynamicGroupProps['dynamicTypeRegistryId']
-  showTitle?: DynamicGroupProps['showTitle']
-  translationKeyPrefix?: DynamicGroupProps['translationKeyPrefix']
+  showTitle?: Exclude<DynamicGroupProps['showTitle'], undefined>
+  translationKeyPrefix?: Exclude<DynamicGroupProps['translationKeyPrefix'], undefined>
 }
 
 export const DynamicGroupContent = ({ dynamicTypeRegistryId, id, showTitle = false, translationKeyPrefix = 'grid.advanced-column' }: DynamicGroupContentProps): React.JSX.Element => {

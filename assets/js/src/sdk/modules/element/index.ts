@@ -292,6 +292,17 @@ export * from '@Pimcore/modules/element/element-selector/components/triggers/but
 export * from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
 export * from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 
+// Search & replace assignments as embeddable pieces: the provider accepts initialSearchFor /
+// initialReplaceWith / onApplied so hosts can preseed both elements and react to a finished
+// replacement job. Named re-exports — Table/Toolbar are too generic for `export *`.
+export {
+  SearchReplaceAssignmentsProvider,
+  useSearchReplaceAssignments
+} from '@Pimcore/modules/element/search-replace-assignments/providers/search-replace-assignments/search-replace-assignments-provider'
+export { SearchReplaceForm as SearchReplaceAssignmentsForm } from '@Pimcore/modules/element/search-replace-assignments/components/search-replace-form/search-replace-form'
+export { Table as SearchReplaceAssignmentsTable } from '@Pimcore/modules/element/search-replace-assignments/components/table/table'
+export { Toolbar as SearchReplaceAssignmentsToolbar } from '@Pimcore/modules/element/search-replace-assignments/components/toolbar/toolbar'
+
 export * from '@Pimcore/modules/element/hooks/use-cache-update'
 export * from '@Pimcore/modules/element/hooks/use-element-api'
 export * from '@Pimcore/modules/element/hooks/use-element-context'

@@ -41,6 +41,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SortButton, type SortDirection, SortDirections } from '../sort-button/sort-button'
 import { DefaultCell } from './columns/default-cell'
+import { getCellStyle } from './grid-cell/cell-style'
 import { GridRow } from './grid-cell/grid-row'
 import { useStyles } from './grid.styles'
 import { Resizer } from './resizer/resizer'
@@ -105,6 +106,7 @@ export const Grid = ({
   docked = false,
   onActiveCellChange,
   enableRowSelection = false,
+  rowSelectionColumn = 'checkbox',
   selectedRows = {},
   disabled = false,
   allowMultipleAutoWidthColumns = false,
@@ -203,7 +205,7 @@ export const Grid = ({
   useMemo(() => {
     updateRowDragColumn()
     updateRowSelectionColumn()
-  }, [columns, isRowSelectionEnabled, enableRowDrag, selectedRows])
+  }, [columns, isRowSelectionEnabled, rowSelectionColumn, enableRowDrag, selectedRows])
 
   const tableProps: TableOptions<any> = useMemo(() => ({
     data,
@@ -320,8 +322,9 @@ export const Grid = ({
     setActiveCell(cell)
   }, [])
 
+  const hasAutoWidthColumn = columns.some(column => column.meta?.autoWidth === true)
+
   const calculateTableWidth = (): number | string => {
-    const hasAutoWidthColumn = columns.some(column => column.meta?.autoWidth === true)
     return hasAutoWidthColumn ? 'auto' : table.getCenterTotalSize()
   }
 
@@ -361,6 +364,14 @@ export const Grid = ({
 
     return enableColumnVirtualizer && columnsList?.length > DEFAULT_GRID_COLUMN_COUNT
   }, [enableColumnVirtualizer, columnsList, props.isLoading])
+  // Virtualized rows are flex containers, so nothing spreads the width the table has left over
+  // after its columns the way the fixed table layout does. Grids without an auto-width column
+  // have no cell that absorbs it, so their columns have to share it — see getCellStyle.
+  // Excluded while columns are virtualized as well: there only a window of the columns is
+  // rendered and the rest is stood in for by padding, so the rendered columns have to keep
+  // their own width for the horizontal scroll distance to stay right.
+  const distributeWidth = isEnableRowVirtualizer && !isEnableColumnVirtualizer && !hasAutoWidthColumn
+
   const columnVirtualizer = useVirtualizer({
     count: columnsList.length,
     getScrollElement: () => scrollElementRef.current,
@@ -399,6 +410,8 @@ export const Grid = ({
     })
   }
 
+  const columnSizingKey = JSON.stringify(table.getState().columnSizing)
+
   const renderRows = (): React.JSX.Element[] => {
     const rowsData = isEnableRowVirtualizer
       ? virtualRows.map(vRow => ({
@@ -417,8 +430,10 @@ export const Grid = ({
     return rowsData.map(({ row, virtualIndex, rowStyle, measureElement }) => (
       <GridRow
         activeColumId={ highlightActiveCell && row.index === activeCell?.rowIndex ? activeCell?.columnId : undefined }
+        columnSizingKey={ columnSizingKey }
         columns={ columns }
         contextMenu={ props.contextMenu }
+        distributeWidth={ distributeWidth }
         enableColumnVirtualizer={ isEnableColumnVirtualizer }
         enableRowVirtualizer={ isEnableRowVirtualizer }
         isSelected={ row.getIsSelected() }
@@ -426,6 +441,7 @@ export const Grid = ({
         measureElement={ measureElement }
         modifiedCells={ JSON.stringify(getModifiedRow(`${row.id}`)) }
         onFocusCell={ onFocusCell }
+        onRowClick={ props.onRowClick }
         onRowDoubleClick={ props.onRowDoubleClick }
         row={ row }
         rowStyle={ rowStyle }
@@ -488,19 +504,12 @@ export const Grid = ({
                               className='ant-table-cell'
                               key={ header.id }
                               ref={ header.column.columnDef.meta?.autoWidth === true ? autoColumnRef : null }
-                              style={
-                                header.column.columnDef.meta?.autoWidth === true && !header.column.getIsResizing()
-                                  ? {
-                                      width: 'auto',
-                                      minWidth: header.column.getSize(),
-                                      ...(isEnableRowVirtualizer ? { flexShrink: 1, flexGrow: 1 } : {})
-                                    }
-                                  : {
-                                      width: header.column.getSize(),
-                                      maxWidth: header.column.getSize(),
-                                      ...(isEnableRowVirtualizer ? { flexShrink: 0 } : {})
-                                    }
-                              }
+                              style={ getCellStyle({
+                                size: header.column.getSize(),
+                                isAutoWidth: header.column.columnDef.meta?.autoWidth === true && !header.column.getIsResizing(),
+                                isFlexRow: isEnableRowVirtualizer,
+                                distributeWidth
+                              }) }
                             >
                               <div className='grid__cell-content'>
                                 <span>
@@ -568,7 +577,7 @@ export const Grid = ({
         </div>
       </div>
     </ConfigProvider>
-  ), [table, modifiedCells, table.getTotalSize(), data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined, size, virtualRows, rowVirtualizer.getTotalSize(), visibleRowIds, virtualColumns])
+  ), [table, modifiedCells, table.getTotalSize(), columnSizingKey, data, columns, rowSelection, internalSorting, highlightActiveCell ? activeCell : undefined, size, virtualRows, rowVirtualizer.getTotalSize(), visibleRowIds, virtualColumns])
 
   function getModifiedRow (rowIndex: string): GridProps['modifiedCells'] {
     return memoModifiedCells.filter(({ rowIndex: rIndex }) => String(rIndex) === String(rowIndex)) ?? []
@@ -633,7 +642,7 @@ export const Grid = ({
   }
 
   function updateRowSelectionColumn (): void {
-    if (isRowSelectionEnabled) {
+    if (isRowSelectionEnabled && rowSelectionColumn === 'checkbox') {
       addRowSelectionColumn()
     } else {
       removeRowSelectionColumn()

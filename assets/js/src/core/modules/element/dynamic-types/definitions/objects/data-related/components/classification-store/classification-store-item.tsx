@@ -22,19 +22,35 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { useKeyedListContext } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { Panel } from '@Pimcore/components/panel/panel'
+import { useClassificationStore } from './provider'
+import { getHiddenKeyIds } from './utils/hide-empty-data'
 
 export interface ClassificationStoreItemProps {
   groupLayout?: ClassificationStoreGroupLayout2
   currentLayoutData: ClassificationStoreGroupLayout2[]
   updateCurrentLayoutData: (value: ClassificationStoreGroupLayout2[]) => void
+  /** Hide the keys of this group that carry no data. */
+  hideEmptyData?: boolean
+  /** Changes whenever hiding is switched back on, to re-evaluate the empty keys. */
+  hideEmptyDataRevision?: number
+  /** Localization the group is currently edited in ('default' or a language). */
+  localizationGroup?: string
 }
 
 export const ClassificationStoreItem = (props: ClassificationStoreItemProps): React.JSX.Element => {
-  const { groupLayout, currentLayoutData, updateCurrentLayoutData } = props
+  const {
+    groupLayout,
+    currentLayoutData,
+    updateCurrentLayoutData,
+    hideEmptyData = false,
+    hideEmptyDataRevision = 0,
+    localizationGroup = 'default'
+  } = props
 
   const { name } = useItem()
   const { operations } = useKeyedListContext()
   const { id } = useElementContext()
+  const { isNewGroup } = useClassificationStore()
 
   const modal = useFormModal()
   const { t } = useTranslation()
@@ -47,6 +63,26 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
 
     operations.remove(String(groupLayout?.id))
   }
+
+  // The group values are read through the keyed-list operations instead of a
+  // subscription on purpose: subscribing would re-render the whole group on every
+  // keystroke, and a field must not disappear while its value is being cleared.
+  // Re-evaluated only when the group, its localization or the hide revision changes.
+  const visibleKeys = useMemo(() => {
+    const keys = groupLayout?.keys ?? []
+    const groupId = groupLayout?.id
+
+    if (!hideEmptyData || groupId === undefined || isNewGroup(String(groupId))) {
+      return keys
+    }
+
+    const hiddenKeyIds = getHiddenKeyIds({
+      keys,
+      groupValue: operations.getValue([String(groupId), localizationGroup])
+    })
+
+    return keys.filter((key) => !hiddenKeyIds.has(key.id))
+  }, [groupLayout, hideEmptyData, hideEmptyDataRevision, localizationGroup, operations, isNewGroup])
 
   const handleClose: (e: React.MouseEvent<HTMLButtonElement>) => void = (e) => {
     e.stopPropagation()
@@ -82,7 +118,7 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
         title={ groupLayout?.name }
       >
         <Panel>
-          {(groupLayout?.keys)?.map((item) => (
+          {visibleKeys.map((item) => (
             <ObjectComponent
               key={ item.id }
               { ...item.definition }
@@ -92,5 +128,5 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
         </Panel>
       </BaseView>
     )
-  }, [groupLayout, id, fieldName, currentLayoutData])
+  }, [groupLayout, id, fieldName, currentLayoutData, visibleKeys])
 }

@@ -83,6 +83,7 @@ asset.upload.overwrite: Sovrascrivi
 asset.upload.keep-both: Mantieni entrambi
 asset.upload.skip: Salta
 asset.upload.apply-to-all: Applica a tutti
+asset.upload.checking-duplicate-file-names: "Controllo dei nomi file duplicati ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Creazione cartelle
 asset.upload.folder-drop.creating-folders-hint: Attendere mentre la struttura delle cartelle viene creata…
 upload.error.file-too-large: Il file è più grande del limite di caricamento attuale del server.
@@ -345,6 +346,7 @@ grid.filter.to: A
 grid.filter.is: È
 grid.filter.less: Minore di
 grid.filter.more: Maggiore di
+grid.filter.column: 'Filtra {{column}}'
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
 grid.filter.file-size-unit.gb: GB
@@ -531,6 +533,7 @@ classname: Nome classe
 index: Indice
 userModification: Utente modifica
 userOwner: Utente proprietario
+listing.grid-config.convert-to-advanced: Converti in colonna avanzata
 listing.grid-config.title: Configurazione griglia
 grid-config.discard-all-changes: Annulla tutte le modifiche
 grid-config.apply-changes: Applica modifiche
@@ -600,8 +603,6 @@ website-settings.columns.language: Lingua
 website-settings.columns.value: Valore
 website-settings.columns.site: Sito
 website-settings.columns.actions: Azioni
-website-settings.website-settings-already-exist.title: Impostazione sito web già esistente
-website-settings.website-settings-already-exist.error: Il nome è già in uso, scegliere un nome diverso
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Campi obbligatori mancanti
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Nome e tipo sono campi obbligatori e devono essere compilati.
 document-types.new: Nuovo
@@ -681,6 +682,21 @@ edit: Modifica
 modify: Modifica
 component.no-content.no-content-available: Nessun contenuto disponibile
 notifications.label: Notifiche
+notifications.settings.label: Impostazioni notifiche
+notifications.settings.description: Attiva "Notificami" per tutto ciò che desideri visualizzare nella campana delle notifiche, quindi aggiungi canali aggiuntivi per gli elementi più importanti.
+notifications.settings.description-popup-only: Scegli come ricevere le notifiche. Tutto ciò di cui vieni notificato viene sempre visualizzato nella campana delle notifiche.
+notifications.settings.column.type: Tipo di notifica
+notifications.settings.column.subscribed: Notificami
+notifications.settings.not-available: Non disponibile per questo tipo
+notifications.settings.save: Salva
+notifications.settings.saved: Impostazioni notifiche salvate
+notifications.settings.discard: Scarta
+notifications.settings.discard.title: Scartare le modifiche non salvate?
+notifications.settings.discard.confirm: Scarta
+notifications.settings.discard.keep-editing: Continua a modificare
+notifications.settings.unsaved-changes_one: "{{count}} modifica non salvata"
+notifications.settings.unsaved-changes_other: "{{count}} modifiche non salvate"
+notifications.settings.group.general: Generale
 notifications.remove-all: Rimuovi tutte
 notifications.new-notification: Nuova notifica
 notifications.columns.title: Titolo
@@ -1161,6 +1177,8 @@ close-unmodified: Chiudi non modificate
 close-all: Chiudi tutte
 asset.tree.context-menu.download: Download
 asset.tree.context-menu.download-as-zip: Scarica come ZIP
+element-selector.title.single: Seleziona elemento
+element-selector.title.multiple: Seleziona elementi
 element.tree.context-menu.new-assets: Nuovo/i asset
 element.tree.context-menu.add-assets.upload-files: Carica file
 element.tree.context-menu.add-assets.upload-zip: Carica ZIP
@@ -1212,13 +1230,17 @@ element.delete.folder.large.note: 'Attenzione: La cartella e il suo contenuto ve
 element.delete.folder.ok: Elimina
 element.delete.folder.ok.permanent: Elimina definitivamente
 element.delete.batch.title: Elimina elementi
-element.delete.batch.note: 'Nota: Questi elementi verranno eliminati definitivamente e non potranno essere ripristinati.'
+element.delete.batch.note_one: 'Nota: Questo elemento verrà eliminato definitivamente e non potrà essere ripristinato.'
+element.delete.batch.note_other: 'Nota: Questi elementi verranno eliminati definitivamente e non potranno essere ripristinati.'
+element.delete.batch.note.permanent-dependencies_one: "Nota: Questo elemento ha dipendenze e verrà eliminato definitivamente.\nNon potrà essere ripristinato."
+element.delete.batch.note.permanent-dependencies_other: "Nota: Questi elementi hanno dipendenze e verranno eliminati definitivamente.\nNon potranno essere ripristinati."
 element.delete.batch.question_one: 'Vuoi davvero eliminare questo elemento?'
 element.delete.batch.question_other: 'Vuoi davvero eliminare questi {{count}} elementi?'
 element.delete.batch.ok: Elimina
 element.delete.batch.ok.permanent: Elimina definitivamente
 element.delete.batch.show-paths: Mostra elementi
-element.delete.batch.dependencies-warning: 'Potrebbero esserci dipendenze, eliminare comunque?'
+element.delete.batch.dependencies-warning.confirmed_one: 'Nota: Questo elemento ha dipendenze.'
+element.delete.batch.dependencies-warning.confirmed_other: 'Nota: Questi elementi hanno dipendenze.'
 element.open: Apri
 element.toolbar.copy-id: Copia ID
 element.toolbar.copy-full-path-to-clipboard: Copia percorso completo
@@ -2396,6 +2418,7 @@ perspective-editor.form.main-nav-permission.system.cache_clearSymfony: Cache > P
 perspective-editor.form.main-nav-permission.system.cache_clearTemp: Cache > Cancella file temporanei
 perspective-editor.form.main-nav-permission.system.cache_hidden: Nascondi menu cache
 perspective-editor.form.main-nav-permission.system.systemSettings: Impostazioni di sistema
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Gestione della proprietà
 perspective-editor.form.main-nav-permission.system.about: Informazioni
 perspective-editor.form.main-nav-permission.category.reporting: Reportistica
 perspective-editor.form.main-nav-permission.reporting.hidden: Nascondi menu reportistica
@@ -2485,6 +2508,7 @@ icon-selector.custom-icon-path: Percorso personalizzato
 icon-selector.custom-icon-path-placeholder: Aggiungere un percorso personalizzato e inviare
 icon-selector.Twemoji: Libreria Twemoji
 icon-selector.Pimcore: Libreria Pimcore
+icon-selector.AlternativeLibrary: Libreria alternativa
 operational-grid.csv-import.title: Importa CSV
 operational-grid.csv-import.description: Inserisci i dati CSV. Ogni riga rappresenta una riga della tabella, le colonne sono separate da virgole.
 operational-grid.csv-import.ok: Importa
@@ -2710,6 +2734,7 @@ object-restrictions: Restrizioni oggetto
 display-mode: Modalità visualizzazione
 display-mode-display: Visualizza riferimento percorso
 display-mode-inline-search: Ricerca in linea
+display-mode-inline-search-unavailable-tooltip: "La ricerca in linea è disponibile solo quando la relazione consente oggetti di esattamente una classe. Una relazione che consente anche asset, documenti o cartelle di oggetti utilizza invece il riferimento al percorso."
 display-mode-grid-view: Vista griglia
 display-mode-tag-field: Campo tag
 language-comparison-modal.title: Confronto lingue
@@ -2842,4 +2867,3 @@ saved-search.update.success: Ricerca salvata aggiornata
 saved-search.delete.success: Ricerca salvata eliminata
 saved-search.shared-modified.info: Hai apportato modifiche alla configurazione originale. Poiché appartiene a qualcun altro, puoi salvarla come nuova ricerca.
 saved-search.menu-shortcut-group: Gruppo di menu
-perspective-editor.form.main-nav-permission.system.ownershipManagement: Gestione della proprietà

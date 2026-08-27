@@ -83,6 +83,7 @@ asset.upload.overwrite: Skriv över
 asset.upload.keep-both: Behåll båda
 asset.upload.skip: Hoppa över
 asset.upload.apply-to-all: Tillämpa på alla
+asset.upload.checking-duplicate-file-names: "Kontrollerar dubbletter av filnamn ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Skapar mappar
 asset.upload.folder-drop.creating-folders-hint: Vänta medan mappstrukturen skapas…
 upload.error.file-too-large: Filen är större än serverns nuvarande uppladdningsgräns.
@@ -345,6 +346,7 @@ grid.filter.to: Till
 grid.filter.is: Är
 grid.filter.less: Mindre än
 grid.filter.more: Mer än
+grid.filter.column: 'Filtrera {{column}}'
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
 grid.filter.file-size-unit.gb: GB
@@ -531,6 +533,7 @@ classname: Klassnamn
 index: Index
 userModification: Ändrad av
 userOwner: Ägare
+listing.grid-config.convert-to-advanced: Konvertera till avancerad kolumn
 listing.grid-config.title: Rutnätskonfiguration
 grid-config.discard-all-changes: Förkasta alla ändringar
 grid-config.apply-changes: Tillämpa ändringar
@@ -600,8 +603,6 @@ website-settings.columns.language: Språk
 website-settings.columns.value: Värde
 website-settings.columns.site: Sajt
 website-settings.columns.actions: Åtgärder
-website-settings.website-settings-already-exist.title: Webbplatsinställningen finns redan
-website-settings.website-settings-already-exist.error: Namnet används redan, välj ett annat
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Obligatoriska fält saknas
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Namn och typ är obligatoriska fält och måste fyllas i.
 document-types.new: Ny
@@ -681,6 +682,21 @@ edit: Redigera
 modify: Ändra
 component.no-content.no-content-available: Inget innehåll tillgängligt
 notifications.label: Aviseringar
+notifications.settings.label: Aviseringsinställningar
+notifications.settings.description: Aktivera "Meddela mig" för allt du vill ha i din aviseringsklocka, och lägg sedan till fler kanaler för det som betyder mest.
+notifications.settings.description-popup-only: Välj hur aviseringar ska nå dig. Allt du meddelas om visas alltid i din aviseringsklocka.
+notifications.settings.column.type: Aviseringstyp
+notifications.settings.column.subscribed: Meddela mig
+notifications.settings.not-available: Inte tillgängligt för denna typ
+notifications.settings.save: Spara
+notifications.settings.saved: Aviseringsinställningar sparade
+notifications.settings.discard: Kassera
+notifications.settings.discard.title: Vill du kassera dina osparade ändringar?
+notifications.settings.discard.confirm: Kassera
+notifications.settings.discard.keep-editing: Fortsätt redigera
+notifications.settings.unsaved-changes_one: "{{count}} osparad ändring"
+notifications.settings.unsaved-changes_other: "{{count}} osparade ändringar"
+notifications.settings.group.general: Allmänt
 notifications.remove-all: Ta bort alla
 notifications.new-notification: Ny avisering
 notifications.columns.title: Titel
@@ -1161,6 +1177,8 @@ close-unmodified: Stäng oförändrade
 close-all: Stäng alla
 asset.tree.context-menu.download: Ladda ner
 asset.tree.context-menu.download-as-zip: Ladda ner som ZIP
+element-selector.title.single: Välj ett element
+element-selector.title.multiple: Välj element
 element.tree.context-menu.new-assets: Ny(a) Asset(s)
 element.tree.context-menu.add-assets.upload-files: Ladda upp filer
 element.tree.context-menu.add-assets.upload-zip: Ladda upp Zip
@@ -1212,13 +1230,17 @@ element.delete.folder.large.note: 'Observera: Mappen och dess innehåll kommer a
 element.delete.folder.ok: Ta bort
 element.delete.folder.ok.permanent: Ta bort permanent
 element.delete.batch.title: Ta bort element
-element.delete.batch.note: 'Obs: Dessa element kommer att tas bort permanent och kan inte återställas.'
+element.delete.batch.note_one: 'Obs: Detta element kommer att tas bort permanent och kan inte återställas.'
+element.delete.batch.note_other: 'Obs: Dessa element kommer att tas bort permanent och kan inte återställas.'
+element.delete.batch.note.permanent-dependencies_one: "Obs: Detta element har beroenden och kommer att tas bort permanent.\nDet kan inte återställas."
+element.delete.batch.note.permanent-dependencies_other: "Obs: Dessa element har beroenden och kommer att tas bort permanent.\nDe kan inte återställas."
 element.delete.batch.question_one: 'Vill du verkligen ta bort det här elementet?'
 element.delete.batch.question_other: 'Vill du verkligen ta bort dessa {{count}} element?'
 element.delete.batch.ok: Ta bort
 element.delete.batch.ok.permanent: Ta bort permanent
 element.delete.batch.show-paths: Visa element
-element.delete.batch.dependencies-warning: 'Det kan finnas beroenden, ta bort ändå?'
+element.delete.batch.dependencies-warning.confirmed_one: 'Obs: Detta element har beroenden.'
+element.delete.batch.dependencies-warning.confirmed_other: 'Obs: Dessa element har beroenden.'
 element.open: Öppna
 element.toolbar.copy-id: Kopiera ID
 element.toolbar.copy-full-path-to-clipboard: Kopiera fullständig sökväg
@@ -2396,6 +2418,7 @@ perspective-editor.form.main-nav-permission.system.cache_clearSymfony: Cache > R
 perspective-editor.form.main-nav-permission.system.cache_clearTemp: Cache > Rensa temporära filer
 perspective-editor.form.main-nav-permission.system.cache_hidden: Dölj cachemenyn
 perspective-editor.form.main-nav-permission.system.systemSettings: Systeminställningar
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Ägarskapshantering
 perspective-editor.form.main-nav-permission.system.about: Om
 perspective-editor.form.main-nav-permission.category.reporting: Rapportering
 perspective-editor.form.main-nav-permission.reporting.hidden: Dölj rapporteringsmenyn
@@ -2485,6 +2508,7 @@ icon-selector.custom-icon-path: Anpassad sökväg
 icon-selector.custom-icon-path-placeholder: Lägg till en anpassad sökväg och bekräfta
 icon-selector.Twemoji: Twemoji-bibliotek
 icon-selector.Pimcore: Pimcore-bibliotek
+icon-selector.AlternativeLibrary: Alternativt bibliotek
 operational-grid.csv-import.title: Importera CSV
 operational-grid.csv-import.description: Ange CSV-data. Varje rad representerar en rad, kolumner separeras med kommatecken.
 operational-grid.csv-import.ok: Importera
@@ -2710,6 +2734,7 @@ object-restrictions: Objektrestriktioner
 display-mode: Visningsläge
 display-mode-display: Visa sökvägssreferens
 display-mode-inline-search: Inline-sökning
+display-mode-inline-search-unavailable-tooltip: "Inline-sökning är endast tillgänglig när relationen tillåter objekt av exakt en klass. En relation som även tillåter tillgångar, dokument eller objektmappar använder sökvägsreferensen i stället."
 display-mode-grid-view: Rutnätsvy
 display-mode-tag-field: Taggfält
 language-comparison-modal.title: Språkjämförelse
@@ -2842,4 +2867,3 @@ saved-search.update.success: Sparad sökning uppdaterad
 saved-search.delete.success: Sparad sökning borttagen
 saved-search.shared-modified.info: Du har gjort ändringar i den ursprungliga konfigurationen. Eftersom den ägs av någon annan kan du spara den som en ny sökning.
 saved-search.menu-shortcut-group: Menygrupp
-perspective-editor.form.main-nav-permission.system.ownershipManagement: Ägarskapshantering

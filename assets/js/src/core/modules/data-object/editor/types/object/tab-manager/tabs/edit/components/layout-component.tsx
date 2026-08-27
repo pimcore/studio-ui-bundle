@@ -21,7 +21,7 @@ export interface LayoutComponentProps extends ObjectComponentProps {
   datatype: 'layout'
   fieldType?: string
   fieldtype?: string
-  noteditable?: AbstractObjectDataDefinition['noteditable']
+  noteditable?: Exclude<AbstractObjectDataDefinition['noteditable'], undefined>
   [p: string]: any
 }
 

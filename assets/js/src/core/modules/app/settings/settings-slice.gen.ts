@@ -150,6 +150,8 @@ export type RelatedElementData = {
     fullPath: string;
     /** Is the element published */
     isPublished: boolean | null;
+    /** Whether the current user is allowed to view the element */
+    hasViewAccess: boolean;
 };
 export type Branding = {
     /** Background shade */
@@ -168,6 +170,10 @@ export type Assets = {
     disable_tree_preview: boolean;
 };
 export type AdminSettings = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
     /** Branding configuration */
     branding: Branding;
     /** Assets configuration */
@@ -186,6 +192,10 @@ export type DevError = {
     details: string;
 };
 export type UpdateAdminSettings = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
     /** Branding configuration */
     branding: Branding;
     /** Assets configuration */

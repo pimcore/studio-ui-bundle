@@ -15,7 +15,8 @@ import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-n
 import type { GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { isUndefined } from 'lodash'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
@@ -37,6 +38,11 @@ import { useTreeId } from '@Pimcore/components/element-tree/provider/tree-id-pro
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number, onFinish?: () => void) => void
+  /**
+   * Deletes without the built-in confirmation modal, for callers that supply their own confirmation
+   * (e.g. a bundle's popconfirm). Runs the same delete job and side effects as `deleteElement`.
+   */
+  deleteElementWithoutConfirmation: (id: number, parentId?: number, onFinish?: () => void) => void
   deleteTreeContextMenuItem: (node: TreeNodeProps, onFinish?: () => void) => ItemType
   deleteContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
   deleteGridContextMenuItem: (row: any) => ItemType | undefined
@@ -91,39 +97,38 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
     }
   }
 
+  const confirmFolderDelete = async (id: number, label: string, parentId?: number, onFinish?: () => void): Promise<void> => {
+    const request = dispatch(elementApi.endpoints.elementGetDeleteInfo.initiate({ elementType, id }))
+
+    try {
+      const { data, error } = await request
+
+      if (!isUndefined(error)) {
+        trackError(new ApiError(error))
+        return
+      }
+
+      const canUseRecycleBin = data?.canUseRecycleBin ?? true
+
+      modal.confirm({
+        title: t('element.delete.folder.title'),
+        content: <>
+          <p><span className={ styles.warningText }>{t(canUseRecycleBin ? 'element.delete.folder.small.note' : 'element.delete.folder.large.note')}</span></p>
+          <p>{t('element.delete.folder.question')}</p>
+          <b>/{label}</b>
+        </>,
+        cancelText: t('cancel'),
+        okText: t(canUseRecycleBin ? 'element.delete.folder.ok' : 'element.delete.folder.ok.permanent'),
+        onOk: async () => { await runDeleteJob(id, parentId, onFinish) }
+      })
+    } finally {
+      request.unsubscribe()
+    }
+  }
+
   const deleteElement = (id: number, label: string, parentId?: number, onFinish?: () => void, isFolder?: boolean): void => {
     if (isFolder === true) {
-      void dispatch(elementApi.endpoints.elementGetDeleteInfo.initiate({ elementType, id }))
-        .then(({ data }) => {
-          const canUseRecycleBin = data?.canUseRecycleBin ?? true
-
-          if (canUseRecycleBin) {
-            modal.confirm({
-              title: t('element.delete.folder.title'),
-              content: <>
-                <p><span className={ styles.warningText }>{t('element.delete.folder.small.note')}</span></p>
-                <p>{t('element.delete.folder.question')}</p>
-                <b>/{label}</b>
-              </>,
-              cancelText: t('cancel'),
-              okText: t('element.delete.folder.ok'),
-              onOk: async () => { await runDeleteJob(id, parentId, onFinish) }
-            })
-          } else {
-            modal.confirm({
-              title: t('element.delete.folder.title'),
-              content: <>
-                <p><span className={ styles.warningText }>{t('element.delete.folder.large.note')}</span></p>
-                <p>{t('element.delete.folder.question')}</p>
-                <b>/{label}</b>
-              </>,
-              cancelText: t('cancel'),
-              okText: t('element.delete.folder.ok.permanent'),
-
-              onOk: async () => { await runDeleteJob(id, parentId, onFinish) }
-            })
-          }
-        })
+      void confirmFolderDelete(id, label, parentId, onFinish)
     } else {
       modal.confirm({
         title: t('element.delete.confirmation.title'),
@@ -197,8 +202,13 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
     )
   }
 
+  const deleteElementWithoutConfirmation = (id: number, parentId?: number, onFinish?: () => void): void => {
+    void runDeleteJob(id, parentId, onFinish)
+  }
+
   return {
     deleteElement,
+    deleteElementWithoutConfirmation,
     deleteTreeContextMenuItem,
     deleteContextMenuItem,
     deleteGridContextMenuItem,

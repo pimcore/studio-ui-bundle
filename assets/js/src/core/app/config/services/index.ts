@@ -56,6 +56,7 @@ import { DynamicTypeFieldFilterId } from '@Pimcore/modules/element/dynamic-types
 import { DynamicTypeFieldFilterNumber } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/number/dynamic-type-field-filter-number'
 import { DynamicTypeFieldFilterFileSize } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/file-size/dynamic-type-field-filter-file-size'
 import { DynamicTypeFieldFilterMultiselect } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/multiselect/dynamic-type-field-filter-multiselect'
+import { DynamicTypeFieldFilterUser } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/user/dynamic-type-field-filter-user'
 import { DynamicTypeFieldFilterString } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/string/dynamic-type-field-filter-string'
 import { DynamicTypeGridCellRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/dynamic-type-grid-cell-registry'
 import { DynamicTypeGridCellDependencyTypeIcon } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/_dependencies/dynamic-type-grid-cell-dependency-type-icon'
@@ -254,6 +255,7 @@ import { DynamicTypeFieldFilterBooleanSelect } from '@Pimcore/modules/element/dy
 import { VariantTabManager } from '@Pimcore/modules/data-object/editor/types/variant/tab-manager/object-tab-manager'
 import { DynamicTypeIconSetPimcoreDefault } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-default-icons/dynamic-type-icon-set-pimcore-default'
 import { DynamicTypeIconSetTwemoji } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-twemoji-icons/dynamic-type-icon-set-twemoji'
+import { DynamicTypeIconSetAlternativeLibrary } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-alternative-library-icons/dynamic-type-icon-set-alternative-library'
 import { DynamicTypeIconSetRegistry } from '@Pimcore/components/icon-selector/dynamic-types/registry/dynamic-type-icon-set-registry'
 import { DynamicTypeGridCellClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/classificationstore/dynamic-type-grid-cell-classificationstore'
 import { TypeRegistry } from '@Pimcore/modules/element/editor/services/type-registry'
@@ -348,6 +350,9 @@ import { DynamicTypeFieldDefinitionObjectbricks } from '@Pimcore/modules/field-d
 import { DynamicTypeFieldDefinitionClassificationstore } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/classificationstore/dynamic-type-field-definition-classificationstore'
 import { DynamicTypeFieldDefinitionLocalizedfields } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/localizedfields/dynamic-type-field-definition-localizedfields'
 import { DynamicTypeGDPRProviderRegistry } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/registry/dynamic-type-gdpr-provider-registry'
+import { DynamicTypeNotificationRegistry } from '@Pimcore/modules/notifications/dynamic-types/registry/dynamic-type-notification-registry'
+import { DynamicTypeNotificationChannelRegistry } from '@Pimcore/modules/notifications/dynamic-types/registry/dynamic-type-notification-channel-registry'
+import { DynamicTypeNotificationChannelEmail, DynamicTypeNotificationChannelPopup } from '@Pimcore/modules/notifications/dynamic-types/definitions/notification-channels'
 import { DynamicTypeDataObjectGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-data-object-gdpr-provider'
 import { DynamicTypeAssetsGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-assets-gdpr-provider'
 import { DynamicTypeUsersGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-users-gdpr-provider'
@@ -472,6 +477,7 @@ container.bind(serviceIds['DynamicTypes/FieldFilter/Id']).to(DynamicTypeFieldFil
 container.bind(serviceIds['DynamicTypes/FieldFilter/Number']).to(DynamicTypeFieldFilterNumber).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/FileSize']).to(DynamicTypeFieldFilterFileSize).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Multiselect']).to(DynamicTypeFieldFilterMultiselect).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/FieldFilter/User']).to(DynamicTypeFieldFilterUser).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Date']).to(DynamicTypeFieldFilterDate).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/Boolean']).to(DynamicTypeFieldFilterBoolean).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/FieldFilter/BooleanSelect']).to(DynamicTypeFieldFilterBooleanSelect).inSingletonScope()
@@ -738,6 +744,7 @@ container.bind(serviceIds['DynamicTypes/Theme/StudioDefaultLight']).to(DynamicTy
 container.bind(serviceIds['DynamicTypes/IconSetRegistry']).to(DynamicTypeIconSetRegistry).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/IconSet/PimcoreDefault']).to(DynamicTypeIconSetPimcoreDefault).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/IconSet/Twemoji']).to(DynamicTypeIconSetTwemoji).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/IconSet/AlternativeLibrary']).to(DynamicTypeIconSetAlternativeLibrary).inSingletonScope()
 
 // Perspective Ediotor & Widget Editor
 container.bind(serviceIds['DynamicTypes/WidgetEditor/WidgetTypeRegistry']).to(DynamicTypeWidgetTypeRegistry).inSingletonScope()
@@ -855,6 +862,12 @@ container.bind(serviceIds['DynamicTypes/VideoTransformation/Cut']).to(CutVideoTr
 container.bind(serviceIds['DynamicTypes/VideoTransformation/SetFramerate']).to(SetFramerateVideoTransformationType).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/VideoTransformation/ColorChannelMixer']).to(ColorChannelMixerVideoTransformationType).inSingletonScope()
 container.bind(serviceIds['DynamicTypes/VideoTransformation/Mute']).to(MuteVideoTransformationType).inSingletonScope()
+
+// Notifications
+container.bind(serviceIds['DynamicTypes/NotificationRegistry']).to(DynamicTypeNotificationRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/NotificationChannelRegistry']).to(DynamicTypeNotificationChannelRegistry).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/NotificationChannel/Popup']).to(DynamicTypeNotificationChannelPopup).inSingletonScope()
+container.bind(serviceIds['DynamicTypes/NotificationChannel/Email']).to(DynamicTypeNotificationChannelEmail).inSingletonScope()
 
 // GDPR Provider
 container.bind(serviceIds['DynamicTypes/GDPRProviderRegistry']).to(DynamicTypeGDPRProviderRegistry).inSingletonScope()

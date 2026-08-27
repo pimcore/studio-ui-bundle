@@ -26,6 +26,7 @@ import { type ManyToManyRelationValueItem } from '../../hooks/use-value'
 import { type SelectedItem } from '@sdk/modules/element'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { debounce } from 'lodash'
+import { RELATION_COLUMN_FILTERS_KEY, useRelationFiltersOptional } from '../../filters/filters'
 
 export interface ManyToManyRelationToolbarProps extends IRelationAllowedTypesDataComponent {
   empty: () => void
@@ -43,6 +44,12 @@ export interface ManyToManyRelationToolbarProps extends IRelationAllowedTypesDat
 export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps): React.JSX.Element => {
   const { confirm } = useFormModal()
   const { t } = useTranslation()
+
+  const filtersStore = useRelationFiltersOptional()
+
+  const appliedColumnFilters = filtersStore?.values[RELATION_COLUMN_FILTERS_KEY]
+  const hasAppliedFilters = Array.isArray(appliedColumnFilters) && appliedColumnFilters.length > 0
+  const clearFiltersLabel = t('sidebar.clear-all-filters')
 
   const buttons: React.JSX.Element[] = []
 
@@ -100,6 +107,21 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
               content: t('relations.remove-all.confirm'),
               onOk: props.empty
             })
+          } }
+          type="default"
+        />
+      </Tooltip>
+    )
+  }
+
+  if (hasAppliedFilters) {
+    buttons.push(
+      <Tooltip title={ clearFiltersLabel }>
+        <IconButton
+          aria-label={ clearFiltersLabel }
+          icon={ { value: 'clear-filter' } }
+          onClick={ () => {
+            filtersStore?.reset()
           } }
           type="default"
         />

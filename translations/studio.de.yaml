@@ -83,6 +83,7 @@ asset.upload.overwrite: Überschreiben
 asset.upload.keep-both: Beide behalten
 asset.upload.skip: Überspringen
 asset.upload.apply-to-all: Auf alle anwenden
+asset.upload.checking-duplicate-file-names: "Dateinamen werden auf Duplikate geprüft ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Ordner werden erstellt
 asset.upload.folder-drop.creating-folders-hint: Bitte warten Sie, während die Ordnerstruktur erstellt wird…
 upload.error.file-too-large: Die Datei ist größer als das aktuelle Upload-Limit des Servers.
@@ -345,6 +346,7 @@ grid.filter.to: Bis
 grid.filter.is: Ist
 grid.filter.less: Kleiner als
 grid.filter.more: Größer als
+grid.filter.column: '{{column}} filtern'
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
 grid.filter.file-size-unit.gb: GB
@@ -531,6 +533,7 @@ classname: Klassenname
 index: Index
 userModification: Benutzer Änderung
 userOwner: Eigentümer
+listing.grid-config.convert-to-advanced: In erweiterte Spalte umwandeln
 listing.grid-config.title: Grid-Konfiguration
 grid-config.discard-all-changes: Alle Änderungen verwerfen
 grid-config.apply-changes: Änderungen übernehmen
@@ -600,8 +603,6 @@ website-settings.columns.language: Sprache
 website-settings.columns.value: Wert
 website-settings.columns.site: Site
 website-settings.columns.actions: Aktionen
-website-settings.website-settings-already-exist.title: Website Einstellung existiert bereits
-website-settings.website-settings-already-exist.error: Name wird bereits verwendet, bitte wählen Sie einen anderen
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Pflichtfelder fehlen
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Name und Typ sind Pflichtfelder und müssen ausgefüllt werden.
 document-types.new: Neu
@@ -681,6 +682,21 @@ edit: Bearbeiten
 modify: Ändern
 component.no-content.no-content-available: Kein Inhalt verfügbar
 notifications.label: Benachrichtigungen
+notifications.settings.label: Benachrichtigungseinstellungen
+notifications.settings.description: Aktivieren Sie „Benachrichtigen“ für alles, was in Ihrer Benachrichtigungsglocke erscheinen soll, und fügen Sie für die wichtigsten Themen zusätzliche Kanäle hinzu.
+notifications.settings.description-popup-only: Wählen Sie, wie Sie Benachrichtigungen erhalten. Alles, worüber Sie benachrichtigt werden, erscheint immer in Ihrer Benachrichtigungsglocke.
+notifications.settings.column.type: Benachrichtigungstyp
+notifications.settings.column.subscribed: Benachrichtigen
+notifications.settings.not-available: Für diesen Typ nicht verfügbar
+notifications.settings.save: Speichern
+notifications.settings.saved: Benachrichtigungseinstellungen gespeichert
+notifications.settings.discard: Verwerfen
+notifications.settings.discard.title: Nicht gespeicherte Änderungen verwerfen?
+notifications.settings.discard.confirm: Verwerfen
+notifications.settings.discard.keep-editing: Weiter bearbeiten
+notifications.settings.unsaved-changes_one: "{{count}} nicht gespeicherte Änderung"
+notifications.settings.unsaved-changes_other: "{{count}} nicht gespeicherte Änderungen"
+notifications.settings.group.general: Allgemein
 notifications.remove-all: Alle entfernen
 notifications.new-notification: Neue Benachrichtigung
 notifications.columns.title: Titel
@@ -1161,6 +1177,8 @@ close-unmodified: Unveränderte schließen
 close-all: Alle schließen
 asset.tree.context-menu.download: Herunterladen
 asset.tree.context-menu.download-as-zip: Als ZIP herunterladen
+element-selector.title.single: Element auswählen
+element-selector.title.multiple: Elemente auswählen
 element.tree.context-menu.new-assets: Neue(s) Asset(s)
 element.tree.context-menu.add-assets.upload-files: Dateien hochladen
 element.tree.context-menu.add-assets.upload-zip: ZIP hochladen
@@ -1212,13 +1230,17 @@ element.delete.folder.large.note: 'Bitte beachten: Der Ordner und seine Inhalte 
 element.delete.folder.ok: Löschen
 element.delete.folder.ok.permanent: Endgültig löschen
 element.delete.batch.title: Elemente löschen
-element.delete.batch.note: 'Bitte beachten: Diese Elemente werden dauerhaft gelöscht und können nicht wiederhergestellt werden.'
+element.delete.batch.note_one: 'Bitte beachten: Dieses Element wird dauerhaft gelöscht und kann nicht wiederhergestellt werden.'
+element.delete.batch.note_other: 'Bitte beachten: Diese Elemente werden dauerhaft gelöscht und können nicht wiederhergestellt werden.'
+element.delete.batch.note.permanent-dependencies_one: "Bitte beachten: Dieses Element hat Abhängigkeiten und wird dauerhaft gelöscht.\nEs kann nicht wiederhergestellt werden."
+element.delete.batch.note.permanent-dependencies_other: "Bitte beachten: Diese Elemente haben Abhängigkeiten und werden dauerhaft gelöscht.\nSie können nicht wiederhergestellt werden."
 element.delete.batch.question_one: 'Möchten Sie dieses Element wirklich löschen?'
 element.delete.batch.question_other: 'Möchten Sie wirklich diese {{count}} Elemente löschen?'
 element.delete.batch.ok: Löschen
 element.delete.batch.ok.permanent: Endgültig löschen
 element.delete.batch.show-paths: Elemente anzeigen
-element.delete.batch.dependencies-warning: 'Es könnte Abhängigkeiten geben, trotzdem löschen?'
+element.delete.batch.dependencies-warning.confirmed_one: 'Bitte beachten: Dieses Element hat Abhängigkeiten.'
+element.delete.batch.dependencies-warning.confirmed_other: 'Bitte beachten: Diese Elemente haben Abhängigkeiten.'
 element.open: Öffnen
 element.toolbar.copy-id: ID kopieren
 element.toolbar.copy-full-path-to-clipboard: Vollständigen Pfad kopieren
@@ -2396,6 +2418,7 @@ perspective-editor.form.main-nav-permission.system.cache_clearSymfony: Cache > S
 perspective-editor.form.main-nav-permission.system.cache_clearTemp: Cache > Temporäre Dateien löschen
 perspective-editor.form.main-nav-permission.system.cache_hidden: Cache Menü ausblenden
 perspective-editor.form.main-nav-permission.system.systemSettings: Systemeinstellungen
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Eigentümerverwaltung
 perspective-editor.form.main-nav-permission.system.about: Über
 perspective-editor.form.main-nav-permission.category.reporting: Berichte
 perspective-editor.form.main-nav-permission.reporting.hidden: Berichte Menü ausblenden
@@ -2485,6 +2508,7 @@ icon-selector.custom-icon-path: Benutzerdefinierter Pfad
 icon-selector.custom-icon-path-placeholder: Benutzerdefinierten Pfad eingeben und absenden
 icon-selector.Twemoji: Twemoji-Bibliothek
 icon-selector.Pimcore: Pimcore-Bibliothek
+icon-selector.AlternativeLibrary: Alternative Bibliothek
 operational-grid.csv-import.title: CSV importieren
 operational-grid.csv-import.description: Geben Sie CSV-Daten ein. Jede Zeile stellt eine Zeile dar, Spalten werden durch Kommas getrennt.
 operational-grid.csv-import.ok: Importieren
@@ -2710,6 +2734,7 @@ object-restrictions: Objektbeschränkungen
 display-mode: Anzeigemodus
 display-mode-display: Pfadreferenz anzeigen
 display-mode-inline-search: Inline-Suche
+display-mode-inline-search-unavailable-tooltip: "Die Inline-Suche ist nur verfügbar, wenn die Relation Objekte genau einer Klasse zulässt. Eine Relation, die auch Assets, Dokumente oder Objektordner zulässt, verwendet stattdessen die Pfadreferenz."
 display-mode-grid-view: Grid-Ansicht
 display-mode-tag-field: Tag-Feld
 language-comparison-modal.title: Sprachvergleich
@@ -2842,4 +2867,3 @@ saved-search.update.success: Gespeicherte Suche aktualisiert
 saved-search.delete.success: Gespeicherte Suche gelöscht
 saved-search.shared-modified.info: Sie haben die ursprüngliche Konfiguration geändert. Da sie jemand anderem gehört, können Sie sie als neue Suche speichern.
 saved-search.menu-shortcut-group: Menügruppe
-perspective-editor.form.main-nav-permission.system.ownershipManagement: Eigentümerverwaltung

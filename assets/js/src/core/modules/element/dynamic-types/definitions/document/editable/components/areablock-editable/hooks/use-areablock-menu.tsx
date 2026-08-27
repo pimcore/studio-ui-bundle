@@ -9,11 +9,12 @@
  */
 
 import React, { useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
-import { isUndefined } from 'lodash'
+import { useTranslation, type UseTranslationResponse } from 'react-i18next'
+import { isEmpty, isUndefined } from 'lodash'
 import { type MenuProps } from 'antd'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
-import { type AreablockEditableConfig } from '../areablock-editable'
+import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
+import { type AreablockEditableConfig, type AreaType } from '../areablock-editable'
 import { configUtils } from '../utils/areablock-utils'
 
 export interface UseAreablockMenuOptions {
@@ -21,8 +22,32 @@ export interface UseAreablockMenuOptions {
   onAddArea: (areaType: string) => void
 }
 
+// The areablock toolbar (ToolStrip) raises itself to z-index 10000 while activated
+// (see tool-strip.styles.ts), which sits above antd's default popup z-index range.
+// The first entry in this menu is rendered directly beneath that toolbar, so its
+// tooltip (opening upward by default) would otherwise be painted behind it. Elements
+// that must render above the activated toolbar use 10001 elsewhere in the app
+// (see editable-dialog.tsx) — match that convention here.
+const areablockMenuTooltipZIndex = 10001
+
 export interface UseAreablockMenuReturn {
   menuItems: MenuProps['items']
+}
+
+const getTooltipTitle = (areaType: AreaType, t: UseTranslationResponse<'translation', undefined>['t']): React.JSX.Element | string | undefined => {
+  const description = isUndefined(areaType.description) ? undefined : t(areaType.description)
+  const previewHtml = areaType.previewHtml ?? ''
+
+  if (isEmpty(previewHtml)) {
+    return description
+  }
+
+  return (
+    <>
+      { !isUndefined(description) && <div>{ description }</div> }
+      <SanitizeHtml html={ previewHtml } />
+    </>
+  )
 }
 
 export const useAreablockMenu = ({ config, onAddArea }: UseAreablockMenuOptions): UseAreablockMenuReturn => {
@@ -31,35 +56,30 @@ export const useAreablockMenu = ({ config, onAddArea }: UseAreablockMenuOptions)
   const menuItems = useMemo(() => {
     const groupedTypes = configUtils.getGroupedAreaTypes(config)
 
+    const toMenuItem = (areaType: AreaType): NonNullable<MenuProps['items']>[number] => ({
+      key: areaType.type,
+      label: (
+        <Tooltip
+          title={ getTooltipTitle(areaType, t) }
+          zIndex={ areablockMenuTooltipZIndex }
+        >
+          <span>{t(areaType.name)}</span>
+        </Tooltip>
+      ),
+      onClick: () => { onAddArea(areaType.type) }
+    })
+
     if (Array.isArray(groupedTypes)) {
-      return groupedTypes.map(areaType => ({
-        key: areaType.type,
-        label: (
-          <Tooltip title={ isUndefined(areaType.description) ? undefined : t(areaType.description) }>
-            <span>{t(areaType.name)}</span>
-          </Tooltip>
-        ),
-        onClick: () => { onAddArea(areaType.type) }
-      }))
+      return groupedTypes.map(toMenuItem)
     }
 
     const items: MenuProps['items'] = []
 
     Object.entries(groupedTypes).forEach(([groupName, areaTypes]) => {
-      const children = areaTypes.map(areaType => ({
-        key: areaType.type,
-        label: (
-          <Tooltip title={ isUndefined(areaType.description) ? undefined : t(areaType.description) }>
-            <span>{t(areaType.name)}</span>
-          </Tooltip>
-        ),
-        onClick: () => { onAddArea(areaType.type) }
-      }))
-
       items?.push({
         key: groupName,
         label: t(groupName),
-        children
+        children: areaTypes.map(toMenuItem)
       })
     })
 
