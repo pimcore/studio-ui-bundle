@@ -1272,6 +1272,7 @@ relations.fullpath: Full Path
 relations.remove-all.confirm: Do you really want to delete all relations?
 relation: relation
 items-limit-reached: The maximum number of items ({{maxItems}}) has been reached.
+asset-upload-type-not-allowed: The uploaded asset's type is not allowed for this field.
 actions: Actions
 asset: Asset
 data-object: Data Object
