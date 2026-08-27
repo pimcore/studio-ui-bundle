@@ -61,19 +61,6 @@ const injectedRtkApi = api
                 query: () => ({ url: `/pimcore-studio/api/users/default-key-bindings` }),
                 providesTags: ["User Management"],
             }),
-            userGetObjectDependencies: build.query<
-                UserGetObjectDependenciesApiResponse,
-                UserGetObjectDependenciesApiArg
-            >({
-                query: (queryArg) => ({
-                    url: `/pimcore-studio/api/user/${queryArg.id}/object-dependencies`,
-                    params: {
-                        page: queryArg.page,
-                        pageSize: queryArg.pageSize,
-                    },
-                }),
-                providesTags: ["User Management"],
-            }),
             userGetAvailablePermissions: build.query<
                 UserGetAvailablePermissionsApiResponse,
                 UserGetAvailablePermissionsApiArg
@@ -234,19 +221,6 @@ export type UserDefaultKeyBindingsApiResponse = /** status 200 List of default k
     items: KeyBindingForAUser[];
 };
 export type UserDefaultKeyBindingsApiArg = void;
-export type UserGetObjectDependenciesApiResponse =
-    /** status 200 Paginated object dependencies with total count returned both as a header param and as `totalItems` in the response body. */ {
-        totalItems: number;
-        items: DependencyToAnObject[];
-    };
-export type UserGetObjectDependenciesApiArg = {
-    /** Id of the user */
-    id: number;
-    /** Page number */
-    page: number;
-    /** Number of items per page */
-    pageSize: number;
-};
 export type UserGetAvailablePermissionsApiResponse = /** status 200 List of available user permissions. */ {
     totalItems: number;
     items: UserPermission[];
@@ -500,10 +474,8 @@ export type DependencyToAnObject = {
 export type UserObjectDependencies = {
     /** Dependencies to objects */
     dependencies: DependencyToAnObject[];
-    /** If it has hidden dependencies */
+    /** If is has hidden dependencies */
     hasHidden: boolean;
-    /** Total number of objects referencing this user, including ones the caller is not permitted to view - not the count of objects actually returned via dependencies or the paginated endpoint. */
-    totalItems?: number;
 };
 export type User = {
     /** AdditionalAttributes */
@@ -691,7 +663,6 @@ export const {
     useUserGetImageQuery,
     useUserImageDeleteByIdMutation,
     useUserDefaultKeyBindingsQuery,
-    useUserGetObjectDependenciesQuery,
     useUserGetAvailablePermissionsQuery,
     useUserGetCollectionQuery,
     useUserListWithPermissionQuery,
