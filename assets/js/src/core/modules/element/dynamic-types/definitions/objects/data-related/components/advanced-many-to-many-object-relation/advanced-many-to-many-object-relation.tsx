@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import {
   ManyToManyObjectRelation,
   type VisibleFieldDefinition
@@ -25,8 +25,8 @@ import {
 import {
   useConvertRelationEditableColumns
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/hooks/use-convert-relation-editable-columns'
-import { type RowSelectionState } from '@tanstack/react-table'
 import { BatchEditAction } from '../advanced-many-to-many-relation/batch-edit/batch-edit-action'
+import { useBatchEditActions } from '../advanced-many-to-many-relation/batch-edit/use-batch-edit-actions'
 
 export interface AdvancedManyToManyObjectRelationClassDefinitionProps {
   allowToClearRelation: boolean
@@ -54,6 +54,7 @@ export interface RelationColumnDefinition {
 
 export interface AdvancedManyToManyObjectRelationProps extends AdvancedManyToManyObjectRelationClassDefinitionProps {
   disabled?: boolean
+  inherited?: boolean
   value?: AdvancedManyToManyRelationValue | null
   onChange?: (value?: AdvancedManyToManyRelationValue | null) => void
   enrichRowData?: (row: ManyToManyRelationValueItem) => ManyToManyRelationValueItem & Record<string, any>
@@ -63,9 +64,12 @@ export interface AdvancedManyToManyObjectRelationProps extends AdvancedManyToMan
 export const AdvancedManyToManyObjectRelation = (props: AdvancedManyToManyObjectRelationProps): React.JSX.Element => {
   const fieldName = props.name[props.name.length - 1]
   const { columnDefinition, onUpdateCellData, convertToManyToManyRelationValue, convertToAdvancedManyToManyRelationValue } = useConvertRelationEditableColumns(props.columns ?? [], fieldName, props.value, props.onChange)
-  const isBatchEditEnabled = props.enableBatchEdit === true && props.disabled !== true
+  const isBatchEditEnabled = props.enableBatchEdit === true && props.disabled !== true && props.inherited !== true
 
-  const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
+  const { selectedRows, setSelectedRows, handleBatchApply, handleBatchDelete } = useBatchEditActions({
+    value: props.value,
+    onChange: props.onChange
+  })
 
   useEffect(() => {
   }, [props.value])
@@ -82,45 +86,6 @@ export const AdvancedManyToManyObjectRelation = (props: AdvancedManyToManyObject
   const onChange = (value?: ManyToManyRelationValue | null): void => {
     props.onChange?.(convertToAdvancedManyToManyRelationValue(value))
   }
-
-  const handleBatchApply = useCallback((columnKey: string, value: any): void => {
-    if (props.value === undefined || props.value === null) return
-
-    const selectedIndices = Object.keys(selectedRows).map(Number)
-    const applyToAll = selectedIndices.length === 0
-
-    const newValue: AdvancedManyToManyRelationValue = props.value.map((row, index) => {
-      if (applyToAll || selectedIndices.includes(index)) {
-        return {
-          ...row,
-          data: {
-            ...row.data,
-            [columnKey]: Array.isArray(value) ? value.join(',') : value
-          }
-        }
-      }
-      return row
-    })
-
-    props.onChange?.(newValue)
-    setSelectedRows({})
-  }, [props.value, props.onChange, selectedRows])
-
-  const handleBatchDelete = useCallback((): void => {
-    if (props.value === undefined || props.value === null) return
-
-    const selectedIndices = Object.keys(selectedRows).map(Number)
-    const applyToAll = selectedIndices.length === 0
-
-    if (applyToAll) {
-      props.onChange?.([])
-    } else {
-      const newValue = props.value.filter((_, index) => !selectedIndices.includes(index))
-      props.onChange?.(newValue)
-    }
-
-    setSelectedRows({})
-  }, [props.value, props.onChange, selectedRows])
 
   const totalRowCount = props.value?.length ?? 0
 

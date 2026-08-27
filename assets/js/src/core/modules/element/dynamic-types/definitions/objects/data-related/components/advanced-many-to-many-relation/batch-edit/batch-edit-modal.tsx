@@ -19,6 +19,7 @@ import { Select, Input, InputNumber, Checkbox as AntCheckbox, Empty } from 'antd
 import { StackList } from '@Pimcore/components/stack-list/stack-list'
 import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-list-item'
 import { type RelationColumnDefinition } from '../advanced-many-to-many-relation'
+import { type BatchEditApplyEntry } from './use-batch-edit-actions'
 
 interface BatchEditEntry {
   columnKey: string
@@ -29,7 +30,15 @@ export interface BatchEditModalProps {
   columns: RelationColumnDefinition[]
   open: boolean
   setOpen: (open: boolean) => void
-  onApply: (columnKey: string, value: any) => void
+  onApply: (entries: BatchEditApplyEntry[]) => void
+}
+
+const getDefaultValue = (type: string | undefined): any => {
+  const t = type ?? 'text'
+  if (t === 'bool' || t === 'columnbool') return false
+  if (t === 'number') return null
+  if (t === 'multiselect') return []
+  return ''
 }
 
 export const BatchEditModal = ({ columns, open, setOpen, onApply }: BatchEditModalProps): React.JSX.Element => {
@@ -45,7 +54,8 @@ export const BatchEditModal = ({ columns, open, setOpen, onApply }: BatchEditMod
   }
 
   const addColumn = (columnKey: string): void => {
-    setEntries(prev => [...prev, { columnKey, value: undefined }])
+    const columnDef = columns.find(c => c.key === columnKey)
+    setEntries(prev => [...prev, { columnKey, value: getDefaultValue(columnDef?.type) }])
   }
 
   const removeEntry = (columnKey: string): void => {
@@ -59,10 +69,9 @@ export const BatchEditModal = ({ columns, open, setOpen, onApply }: BatchEditMod
   }
 
   const handleApply = (): void => {
-    for (const entry of entries) {
-      if (entry.value !== undefined) {
-        onApply(entry.columnKey, entry.value)
-      }
+    const entriesToApply = entries.filter(e => e.value !== undefined)
+    if (entriesToApply.length > 0) {
+      onApply(entriesToApply.map(e => ({ columnKey: e.columnKey, value: e.value })))
     }
     resetModal()
     setOpen(false)
@@ -143,6 +152,7 @@ export const BatchEditModal = ({ columns, open, setOpen, onApply }: BatchEditMod
         <IconTextButton
           icon={ { value: 'trash' } }
           onClick={ () => { removeEntry(entry.columnKey) } }
+          title={ t('delete') }
           type="link"
         />
       ),
