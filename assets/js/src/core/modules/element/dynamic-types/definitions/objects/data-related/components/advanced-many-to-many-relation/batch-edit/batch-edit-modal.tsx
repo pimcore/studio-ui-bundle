@@ -8,16 +8,21 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Modal } from '@Pimcore/components/modal/modal'
+import { WindowModal } from '@Pimcore/components/modal/window-modal/window-modal'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
+import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Select, Input, InputNumber, Checkbox as AntCheckbox, Empty } from 'antd'
 import { StackList } from '@Pimcore/components/stack-list/stack-list'
 import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-list-item'
+import { Header } from '@Pimcore/components/header/header'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { ColumnPicker } from '@Pimcore/components/column-picker/column-picker'
+import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column-picker.types'
 import { type RelationColumnDefinition } from '../advanced-many-to-many-relation'
 import { type BatchEditApplyEntry } from './use-batch-edit-actions'
 
@@ -44,18 +49,30 @@ const getDefaultValue = (type: string | undefined): any => {
 export const BatchEditModal = ({ columns, open, setOpen, onApply }: BatchEditModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [entries, setEntries] = useState<BatchEditEntry[]>([])
+  const [fieldsToAddOpen, setFieldsToAddOpen] = useState(true)
 
   const availableColumns = columns.filter(
     col => !entries.some(e => e.columnKey === col.key)
   )
 
+  const columnGroups = useMemo((): Array<ColumnPickerGroup<RelationColumnDefinition>> => {
+    return [{
+      key: 'columns',
+      label: t('columns'),
+      items: availableColumns.map(col => ({
+        key: col.key,
+        label: col.label !== undefined ? t(col.label) : col.key,
+        meta: col
+      }))
+    }]
+  }, [availableColumns, t])
+
   const resetModal = (): void => {
     setEntries([])
   }
 
-  const addColumn = (columnKey: string): void => {
-    const columnDef = columns.find(c => c.key === columnKey)
-    setEntries(prev => [...prev, { columnKey, value: getDefaultValue(columnDef?.type) }])
+  const addColumn = (col: RelationColumnDefinition): void => {
+    setEntries(prev => [...prev, { columnKey: col.key, value: getDefaultValue(col.type) }])
   }
 
   const removeEntry = (columnKey: string): void => {
@@ -75,10 +92,6 @@ export const BatchEditModal = ({ columns, open, setOpen, onApply }: BatchEditMod
     }
     resetModal()
     setOpen(false)
-  }
-
-  const handleDiscard = (): void => {
-    resetModal()
   }
 
   const renderValueEditor = (entry: BatchEditEntry, columnDef: RelationColumnDefinition): React.JSX.Element => {
@@ -171,26 +184,20 @@ export const BatchEditModal = ({ columns, open, setOpen, onApply }: BatchEditMod
     }
   }).filter(Boolean) as StackListItemProps[]
 
-  const columnOptions = availableColumns.map(col => ({
-    label: col.label !== undefined ? t(col.label) : col.key,
-    value: col.key
-  }))
-
   return (
-    <Modal
-      closable
+    <WindowModal
+      afterClose={ resetModal }
       footer={ <ModalFooter
         divider
         justify="space-between"
                >
-        <Select
-          disabled={ availableColumns.length === 0 }
-          onChange={ addColumn }
-          options={ columnOptions }
-          placeholder={ t('batch-edit.modal-footer.add-a-column') }
-          style={ { minWidth: 200 } }
-          value={ undefined }
-        />
+        <IconTextButton
+          icon={ { value: 'new' } }
+          onClick={ () => { setFieldsToAddOpen((isOpen) => !isOpen) } }
+          type="default"
+        >
+          {t('listing.add-column')}
+        </IconTextButton>
 
         {entries.length > 0 && (
           <Flex
@@ -199,7 +206,7 @@ export const BatchEditModal = ({ columns, open, setOpen, onApply }: BatchEditMod
           >
             <IconTextButton
               icon={ { value: 'close' } }
-              onClick={ handleDiscard }
+              onClick={ resetModal }
               type="link"
             >
               {t('batch-edit.modal-footer.discard-all-changes')}
@@ -219,15 +226,51 @@ export const BatchEditModal = ({ columns, open, setOpen, onApply }: BatchEditMod
       } }
       open={ open }
       size="L"
-      title={ t('batch-edit.modal-title') }
+      title={ <ModalTitle>{t('batch-edit.modal-title')}</ModalTitle> }
     >
-      {entries.length === 0
-        ? (
-          <Empty description={ t('batch-edit.no-content') } />
-          )
-        : (
-          <StackList items={ stackListItems } />
-          )}
-    </Modal>
+      <Flex
+        className="w-full"
+        gap="small"
+      >
+        {fieldsToAddOpen && (
+          <div style={ { minWidth: 200 } }>
+            <Header
+              fullWidth
+              title={ t('listing.column-picker.fields-to-add') }
+            >
+              <Flex
+                className="w-full"
+                justify="flex-end"
+              >
+                <IconButton
+                  icon={ { value: 'collapse-sidebar', colorToken: 'colorPrimary' } }
+                  onClick={ () => { setFieldsToAddOpen(false) } }
+                  type="text"
+                />
+              </Flex>
+            </Header>
+
+            <ColumnPicker<RelationColumnDefinition>
+              groups={ columnGroups }
+              onSelect={ (item) => {
+                if (item.meta !== undefined) {
+                  addColumn(item.meta)
+                }
+              } }
+            />
+          </div>
+        )}
+
+        <div style={ { flex: 1, minWidth: 0 } }>
+          {entries.length === 0
+            ? (
+              <Empty description={ t('batch-edit.no-content') } />
+              )
+            : (
+              <StackList items={ stackListItems } />
+              )}
+        </div>
+      </Flex>
+    </WindowModal>
   )
 }
