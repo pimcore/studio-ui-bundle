@@ -168,7 +168,7 @@ folder.folder-editor-tabs.preview: Förhandsvisning
 folder.folder-editor-tabs.view: Lista
 toolbar.reload.confirmation: Är du säker på att du vill ladda om den här fliken? Alla osparade ändringar kommer att förloras.
 toolbar.reload: Ladda om
-toolbar.save-and-publish: Spara & Publicera
+toolbar.save-and-publish: Spara & publicera
 toolbar.save: Spara
 toolbar.save-draft: Spara utkast
 toolbar.more: Mer
@@ -206,8 +206,8 @@ class-definition.general-settings.icon: Ikon
 class-definition.general-settings.parent-class: Föräldraklass
 class-definition.general-settings.implements-interfaces: Implementerar gränssnitt
 class-definition.general-settings.listing-parent-class: Listföräldraklass
-class-definition.general-settings.use-traits: Använd Traits
-class-definition.general-settings.listing-use-traits: Listning Använd Traits
+class-definition.general-settings.use-traits: Använd traits
+class-definition.general-settings.listing-use-traits: Listning använd traits
 class-definition.general-settings.link-generator-reference: Länkgeneratorreferens
 class-definition.general-settings.preview-generator-reference: Förhandsvisningsgeneratorreferens
 class-definition.general-settings.allow-inherit: Tillåt arv
@@ -280,7 +280,7 @@ select-option.validation.enter-id: Ange ett ID
 select-option.validation.id-format: Namnet måste börja med en stor bokstav, följt av alfanumeriska tecken
 select-option.general-settings.title: Allmänt
 select-option.general-settings.enum-name: Enum-namn
-select-option.general-settings.use-traits: Använd Traits
+select-option.general-settings.use-traits: Använd traits
 select-option.general-settings.implements-interfaces: Implementerar gränssnitt
 select-option.general-settings.group: Grupp
 select-option.general-settings.admin-only: Bara admin
@@ -1250,8 +1250,8 @@ element.toolbar.copy-className: Klass {{className}} - Kopiera
 element.unpublish: Avpublicera
 element.publish: Publicera
 element.locate-in-tree: Hitta i träd
-element.sidebar.filter.only-direct-children: bara direkta barn
-element.sidebar.filter.only-unreferenced: bara utan referenser
+element.sidebar.filter.only-direct-children: Bara direkta barn
+element.sidebar.filter.only-unreferenced: Bara utan referenser
 element.sidebar.field-filters: Fältfilter
 element.full-information: Fullständig information
 system-information.id: ID
@@ -1786,13 +1786,13 @@ image-thumbnails.transformations.resize.width: Bredd
 image-thumbnails.transformations.resize.height: Höjd
 
 # Skala efter höjd-transformation
-image-thumbnails.transformations.scale-by-height.config-title: Konfigurera Skala efter höjd
+image-thumbnails.transformations.scale-by-height.config-title: Konfigurera skala efter höjd
 image-thumbnails.transformations.scale-by-height.height: Höjd
 image-thumbnails.transformations.scale-by-height.height-placeholder: Ange höjd i pixlar
 image-thumbnails.transformations.scale-by-height.force-resize: Tvinga storleksändring
 
 # Trimma-transformation
-image-thumbnails.transformations.trim.config-title: Konfigurera Trimma
+image-thumbnails.transformations.trim.config-title: Konfigurera trimma
 image-thumbnails.transformations.trim.trim-option: Trimma-alternativ
 image-thumbnails.transformations.trim.trim-option-placeholder: Välj trimma-alternativ
 image-thumbnails.transformations.trim.disabled: Inaktiverad
@@ -1860,29 +1860,29 @@ video-thumbnails.transformations.resize.height-placeholder: Ange höjd i pixlar
 video-thumbnails.transformations.resize.even-number-hint: Bredd och höjd måste vara jämna tal
 
 # Skala efter bredd-transformation
-video-thumbnails.transformations.scale-by-width.config-title: Konfigurera Skala efter bredd
+video-thumbnails.transformations.scale-by-width.config-title: Konfigurera skala efter bredd
 video-thumbnails.transformations.scale-by-width.width: Bredd
 video-thumbnails.transformations.scale-by-width.width-placeholder: Ange bredd i pixlar
 
 # Skala efter höjd-transformation
-video-thumbnails.transformations.scale-by-height.config-title: Konfigurera Skala efter höjd
+video-thumbnails.transformations.scale-by-height.config-title: Konfigurera skala efter höjd
 video-thumbnails.transformations.scale-by-height.height: Höjd
 video-thumbnails.transformations.scale-by-height.height-placeholder: Ange höjd i pixlar
 
 # Klipp-transformation
-video-thumbnails.transformations.cut.config-title: Konfigurera Klipp
+video-thumbnails.transformations.cut.config-title: Konfigurera klipp
 video-thumbnails.transformations.cut.start: Start
 video-thumbnails.transformations.cut.start-placeholder: "00:00:00.000"
 video-thumbnails.transformations.cut.duration: Längd
 video-thumbnails.transformations.cut.duration-placeholder: "00:00:10.000"
 
 # Ställ in bildfrekvens-transformation
-video-thumbnails.transformations.set-framerate.config-title: Konfigurera Bildfrekvens
+video-thumbnails.transformations.set-framerate.config-title: Konfigurera bildfrekvens
 video-thumbnails.transformations.set-framerate.fps: FPS
 video-thumbnails.transformations.set-framerate.fps-placeholder: "25"
 
 # Färgkanalmixer-transformation
-video-thumbnails.transformations.color-channel-mixer.config-title: Konfigurera Färgkanalmixer
+video-thumbnails.transformations.color-channel-mixer.config-title: Konfigurera färgkanalmixer
 video-thumbnails.transformations.color-channel-mixer.effect: Effekt
 video-thumbnails.transformations.color-channel-mixer.effect-placeholder: Välj en effekt
 video-thumbnails.transformations.color-channel-mixer.grayscale: Gråskala
@@ -2518,7 +2518,7 @@ no-languages-found: Inga språk hittades
 pretty-url: Snygg URL / URL Slug
 pretty-url-override-notice: (åsidosätter sökväg från trädstruktur)
 content-main-document: Content-Main-dokument
-content-main-document.apply: Tillämpa Content-Main-dokument
+content-main-document.apply: Tillämpa content-main-dokument
 content-main-document.apply-warning-title: Är du säker?
 content-main-document.apply-warning-message: Allt innehåll kommer att förloras
 never: aldrig
