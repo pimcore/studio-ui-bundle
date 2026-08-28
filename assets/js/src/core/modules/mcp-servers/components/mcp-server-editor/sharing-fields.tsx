@@ -24,47 +24,26 @@ import { OperationalGrid } from '@Pimcore/components/operational-grid/operationa
 import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
 import { useUserGetShareCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
 import { useRoleGetShareCollectionQuery } from '@Pimcore/modules/user/roles/roles-api-slice-enhanced'
-import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { type McpServerAccessGrant } from '../../mcp-servers-api-slice.gen'
 import { describeAccess } from '../../utils'
 
-interface Candidate {
-  id: number
-  name: string
-}
-
 interface SharingGridProps {
-  candidates: Candidate[]
+  /** Names available to add (users or roles), from the share collection. */
+  candidateNames: string[]
   value: McpServerAccessGrant[]
   onChange: (value: McpServerAccessGrant[]) => void
   disabled: boolean
   addPlaceholder: string
-  // Extra id→name entries not present in the share collection (e.g. the current user).
-  extraNames?: Candidate[]
 }
 
 const SharingGrid = ({
-  candidates,
+  candidateNames,
   value,
   onChange,
   disabled,
-  addPlaceholder,
-  extraNames = []
+  addPlaceholder
 }: SharingGridProps): React.JSX.Element => {
   const { t } = useTranslation()
-
-  const nameById = useMemo(() => {
-    const map = new Map<number, string>()
-    candidates.forEach((candidate) => { map.set(candidate.id, candidate.name) })
-    // Fallbacks (current user) fill gaps the share collection omits, without
-    // becoming selectable options below.
-    extraNames.forEach((entry) => {
-      if (!map.has(entry.id)) {
-        map.set(entry.id, entry.name)
-      }
-    })
-    return map
-  }, [candidates, extraNames])
 
   const columns = useMemo(() => {
     const columnHelper = createColumnHelper<McpServerAccessGrant>()
@@ -72,7 +51,7 @@ const SharingGrid = ({
     return [
       // Accessor (not a custom display cell) so the grid's default cell renderer
       // applies the standard horizontal padding — matching agent-config permissions.
-      columnHelper.accessor((row) => nameById.get(row.id) ?? `#${row.id}`, {
+      columnHelper.accessor((row) => row.name, {
         id: 'name',
         header: t('mcp-servers.sharing.name'),
         size: 240,
@@ -118,7 +97,7 @@ const SharingGrid = ({
         )
       })
     ]
-  }, [t, disabled, value, onChange, nameById])
+  }, [t, disabled, value, onChange])
 
   // The checkbox writes a boolean under the synthetic `canEdit` column; translate
   // it back to the grant's read/write permission.
@@ -135,21 +114,16 @@ const SharingGrid = ({
   }
 
   const options = useMemo(() => {
-    const takenIds = new Set(value.map((grant) => grant.id))
-    return candidates
-      .filter((candidate) => !takenIds.has(candidate.id))
-      .map((candidate) => ({ label: candidate.name, value: candidate.id }))
-  }, [candidates, value])
+    const taken = new Set(value.map((grant) => grant.name))
+    return candidateNames
+      .filter((name) => !taken.has(name))
+      .map((name) => ({ label: name, value: name }))
+  }, [candidateNames, value])
 
   return (
     <OperationalGrid
       autoWidth
       columns={ columns }
-      // Remount when the resolvable-name set grows (the share-collection query
-      // resolves after first paint). The grid caches each cell's value by column
-      // id and only clears it when `value` changes, so without this the names
-      // would stay as `#id` until the user edited a row.
-      key={ `grid-${nameById.size}` }
       onChange={ (next) => { onChange(next as McpServerAccessGrant[]) } }
       onUpdateCellData={ handleUpdateCellData }
       value={ value }
@@ -158,9 +132,9 @@ const SharingGrid = ({
         <OperationalGrid.Operations>
           {(operations) => (
             <Select
-              onChange={ (id: number) => {
-                if (!isNil(id)) {
-                  operations.addRow({ id, permission: 'read' })
+              onChange={ (name: string) => {
+                if (!isNil(name) && name !== '') {
+                  operations.addRow({ name, permission: 'read' })
                 }
               } }
               options={ options }
@@ -201,22 +175,14 @@ export const SharingFields = ({
 
   const { data: userList } = useUserGetShareCollectionQuery()
   const { data: roleList } = useRoleGetShareCollectionQuery()
-  const currentUser = useUser()
 
-  const userCandidates = useMemo<Candidate[]>(
-    () => (userList?.items ?? []).map((user) => ({ id: user.id, name: user.username })),
+  const userNames = useMemo<string[]>(
+    () => (userList?.items ?? []).map((user) => user.username),
     [userList]
   )
-  const roleCandidates = useMemo<Candidate[]>(
-    () => (roleList?.items ?? []).map((role) => ({ id: role.id, name: role.name })),
+  const roleNames = useMemo<string[]>(
+    () => (roleList?.items ?? []).map((role) => role.name),
     [roleList]
-  )
-
-  // The share collection excludes the current user, so a grant for them would
-  // otherwise render as `#<id>`. Resolve it from the authenticated user.
-  const currentUserName = useMemo<Candidate[]>(
-    () => (currentUser.id > 0 ? [{ id: currentUser.id, name: currentUser.username }] : []),
-    [currentUser]
   )
 
   const base = t('mcp-servers.access.admins-owner')
@@ -254,9 +220,8 @@ export const SharingFields = ({
           <Title level={ 5 }>{t('mcp-servers.sharing.users')}</Title>
           <SharingGrid
             addPlaceholder={ t('mcp-servers.sharing.add-user') }
-            candidates={ userCandidates }
+            candidateNames={ userNames }
             disabled={ disabled }
-            extraNames={ currentUserName }
             onChange={ onSharedUsersChange }
             value={ sharedUsers }
           />
@@ -264,7 +229,7 @@ export const SharingFields = ({
           <Title level={ 5 }>{t('mcp-servers.sharing.roles')}</Title>
           <SharingGrid
             addPlaceholder={ t('mcp-servers.sharing.add-role') }
-            candidates={ roleCandidates }
+            candidateNames={ roleNames }
             disabled={ disabled }
             onChange={ onSharedRolesChange }
             value={ sharedRoles }

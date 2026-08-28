@@ -87,8 +87,8 @@ export type McpGetToolsApiResponse = /** status 200 List of available MCP tools 
 };
 export type McpGetToolsApiArg = void;
 export type McpServerAccessGrant = {
-    /** User or role id */
-    id: number;
+    /** User or role name */
+    name: string;
     /** Granted access level */
     permission: "read" | "write";
 };
@@ -119,8 +119,8 @@ export type McpServer = {
     scopes: string[];
     /** Whether the server is enabled */
     enabled: boolean;
-    /** Owner user id. Null when the owner has been deleted. */
-    ownerId?: number | null;
+    /** Owner user name. Null when the owner has been deleted. */
+    owner?: string | null;
     /** Any authenticated user may read/use it */
     shareGlobal: boolean;
     /** Users shared with, each at a read/write level */
