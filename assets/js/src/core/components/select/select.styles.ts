@@ -335,6 +335,19 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
       &:hover {
         background-color: ${token.controlItemBgHover};
       }
+    `,
+
+    sortableTag: css`
+      cursor: grab;
+
+      &.ant-select-selection-item-disabled {
+        cursor: default;
+      }
+    `,
+
+    sortableTagDragging: css`
+      cursor: grabbing;
+      z-index: 2;
     `
   }
 })

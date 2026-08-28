@@ -19,6 +19,11 @@ import { Spin } from '@Pimcore/components/spin/spin'
 import { useStyles } from './select.styles'
 import { useTranslation } from 'react-i18next'
 import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
+import { closestCenter, DndContext } from '@dnd-kit/core'
+import { rectSortingStrategy, SortableContext } from '@dnd-kit/sortable'
+import type { CustomTagProps } from 'rc-select/lib/BaseSelect'
+import { SortableTag } from './components/sortable-tag/sortable-tag'
+import { useSortableTags } from './hooks/use-sortable-tags'
 
 export const sizeOptions = {
   normal: 150
@@ -35,6 +40,7 @@ export interface SelectProps extends AntdSelectProps {
   minWidth?: number | keyof typeof sizeOptions
   theme?: SelectTheme
   loadingSkeleton?: boolean
+  sortableTags?: boolean
 }
 
 export const Select = forwardRef<RefSelectProps, SelectProps>(({
@@ -55,11 +61,16 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   onDropdownVisibleChange,
   onFocus,
   onBlur,
+  sortableTags = false,
   ...antdSelectProps
 }, ref): React.JSX.Element => {
   const { t } = useTranslation()
   const selectRef = useRef<RefSelectProps>(null)
   const fieldWidths = useFieldWidthOptional()
+
+  const tagSorting = mode === 'multiple' && sortableTags
+  const { sensors, handleTagDragEnd } = useSortableTags(value, antdSelectProps.onChange)
+  const renderSortableTag = (tagProps: CustomTagProps): React.JSX.Element => <SortableTag { ...tagProps } />
 
   const [isActive, setIsActive] = useState(false)
   const [isFocus, setIsFocus] = useState(false)
@@ -223,6 +234,34 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
       )
     : antdSelectProps.dropdownRender
 
+  const antdSelectElement = (
+    <AntdSelect
+      allowClear={ false }
+      className={ selectClassNames }
+      dropdownRender={ dropdownRender }
+      menuItemSelectedIcon={ getItemSelectedIcon() }
+      mode={ mode }
+      notFoundContent={ <Flex
+        align={ 'center' }
+        justify={ 'center' }
+                        >
+        <Icon
+          className={ 'm-r-mini' }
+          value={ 'warning-circle' }
+        /> {t('no-data-available')}</Flex> }
+      onBlur={ handleBlur }
+      onDropdownVisibleChange={ handleDropdownVisibleChange }
+      onFocus={ handleFocus }
+      ref={ selectRef }
+      status={ status }
+      style={ computedStyle }
+      suffixIcon={ getSuffixIcon() }
+      value={ value }
+      { ...antdSelectProps }
+      tagRender={ tagSorting ? renderSortableTag : antdSelectProps.tagRender }
+    />
+  )
+
   return (
     <div
       className={ selectContainerClassNames }
@@ -233,30 +272,22 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
       value={ customIcon! }
     />
     )}
-      <AntdSelect
-        allowClear={ false }
-        className={ selectClassNames }
-        dropdownRender={ dropdownRender }
-        menuItemSelectedIcon={ getItemSelectedIcon() }
-        mode={ mode }
-        notFoundContent={ <Flex
-          align={ 'center' }
-          justify={ 'center' }
-                          >
-          <Icon
-            className={ 'm-r-mini' }
-            value={ 'warning-circle' }
-          /> {t('no-data-available')}</Flex> }
-        onBlur={ handleBlur }
-        onDropdownVisibleChange={ handleDropdownVisibleChange }
-        onFocus={ handleFocus }
-        ref={ selectRef }
-        status={ status }
-        style={ computedStyle }
-        suffixIcon={ getSuffixIcon() }
-        value={ value }
-        { ...antdSelectProps }
-      />
+      {tagSorting
+        ? (
+          <DndContext
+            collisionDetection={ closestCenter }
+            onDragEnd={ handleTagDragEnd }
+            sensors={ sensors }
+          >
+            <SortableContext
+              items={ Array.isArray(value) ? value.map((item) => String(item)) : [] }
+              strategy={ rectSortingStrategy }
+            >
+              {antdSelectElement}
+            </SortableContext>
+          </DndContext>
+          )
+        : antdSelectElement}
     </div>
   )
 })
