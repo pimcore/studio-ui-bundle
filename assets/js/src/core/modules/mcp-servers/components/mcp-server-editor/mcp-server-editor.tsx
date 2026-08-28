@@ -69,8 +69,8 @@ export const McpServerEditor = ({
   const { success, error } = useMessage()
   const [form] = Form.useForm<McpServerFormValues>()
 
-  // Editing needs BOTH: the requesting user's write permission AND a writeable storage target.
-  const canWrite = isCreate ? true : server?.currentUserPermissions.write ?? false
+  // Editing needs BOTH: the requesting user's edit permission AND a writeable storage target.
+  const canWrite = isCreate ? true : server?.currentUserPermissions.canEdit ?? false
   const storageWriteable = isCreate ? true : server?.writeable ?? false
   const editable = canWrite && storageWriteable
 

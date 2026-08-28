@@ -84,7 +84,7 @@ export const McpServersRail = ({
 
   const renderRow = (server: McpServer): React.JSX.Element => {
     const isSelected = !isNil(activeId) && activeId === server.id
-    const canDelete = server.currentUserPermissions.write && server.writeable
+    const canDelete = server.currentUserPermissions.canEdit && server.writeable
 
     const row = (
       <button
