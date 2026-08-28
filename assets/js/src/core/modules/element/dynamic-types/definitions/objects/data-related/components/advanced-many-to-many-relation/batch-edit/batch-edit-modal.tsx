@@ -38,11 +38,10 @@ export interface BatchEditModalProps {
   onApply: (entries: BatchEditApplyEntry[]) => void
 }
 
-const getDefaultValue = (type: string | undefined): any => {
-  const t = type ?? 'text'
-  if (t === 'bool' || t === 'columnbool') return false
-  if (t === 'number') return null
-  if (t === 'multiselect') return []
+const getDefaultValue = (type: string = 'text'): any => {
+  if (type === 'bool' || type === 'columnbool') return false
+  if (type === 'number') return null
+  if (type === 'multiselect') return []
   return ''
 }
 

@@ -32,27 +32,23 @@ export interface UseBatchEditActionsReturn {
 /**
  * Shared hook for batch edit/delete actions on advanced many-to-many relations.
  *
- * The Grid component keys rows by element ID (via setRowId), so selectedRows
- * contains element IDs as keys, not array indices. This hook resolves selected
- * element IDs to their positions in the value array to apply edits/deletes
- * to the correct rows.
+ * The relation grid keys rows by `originalIndex` — the row's position in the unfiltered
+ * value, stamped before search and column filters are applied. Element id cannot be used:
+ * with `allowMultipleAssignments` one element occupies several rows, so an id would select
+ * every occurrence of it rather than the row the user ticked.
  */
 export const useBatchEditActions = ({ value, onChange }: UseBatchEditActionsProps): UseBatchEditActionsReturn => {
   const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
 
+  // Selection keys are already positions in the unfiltered value, so they map straight across.
   const getSelectedIndices = useCallback((): Set<number> => {
     if (value === undefined || value === null) return new Set()
 
-    const selectedIds = new Set(Object.keys(selectedRows).map(Number))
-    const indices = new Set<number>()
-
-    value.forEach((row, index) => {
-      if (selectedIds.has(row.element.id)) {
-        indices.add(index)
-      }
-    })
-
-    return indices
+    return new Set(
+      Object.keys(selectedRows)
+        .map(Number)
+        .filter((index) => Number.isInteger(index) && index >= 0 && index < value.length)
+    )
   }, [value, selectedRows])
 
   const handleBatchApply = useCallback((entries: BatchEditApplyEntry[]): void => {

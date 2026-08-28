@@ -16,7 +16,7 @@ import { type DragEndEvent } from '@dnd-kit/core'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { type ColumnDef, type RowSelectionState } from '@tanstack/react-table'
-import { type ManyToManyRelationValue, type ManyToManyRelationValueItem } from './hooks/use-value'
+import { type DisplayManyToManyRelationValue, type ManyToManyRelationValue, type ManyToManyRelationValueItem } from './hooks/use-value'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Content } from '@Pimcore/components/content/content'
@@ -25,7 +25,7 @@ import { useColumns } from './hooks/use-columns'
 import { useStyles } from './grid.styles'
 
 export interface ManyToManyRelationGridProps {
-  value?: ManyToManyRelationValue | null
+  value?: DisplayManyToManyRelationValue | null
   deleteItem: (rowIndex: number) => void
   assetInlineDownloadAllowed: boolean
   disabled?: boolean
@@ -114,7 +114,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
           onUpdateCellData={ props.onUpdateCellData }
           resizable
           selectedRows={ props.selectedRows }
-          setRowId={ (originalRow) => originalRow.id }
+          setRowId={ (originalRow, index) => String(originalRow.originalIndex ?? index) }
         />
         {props.hint}
       </div>
