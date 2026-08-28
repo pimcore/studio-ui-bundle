@@ -37,7 +37,7 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
   return (
     <PimPagination
       current={ props.page }
-      defaultPageSize={ 20 }
+      defaultPageSize={ appConfig.defaultPageSize }
       onChange={ props.onChange }
       pageSizeOptions={ appConfig.pageSizeOptions }
       showSizeChanger
