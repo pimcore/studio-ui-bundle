@@ -348,6 +348,19 @@ export const useStyles = createStyles(({ css, token }, props: StylesProps) => {
     sortableTagDragging: css`
       cursor: grabbing;
       z-index: 2;
+    `,
+
+    tagRemoveButton: css`
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      margin: 0;
+      border: none;
+      background: none;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
     `
   }
 })

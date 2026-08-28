@@ -40,12 +40,6 @@ export const SortableTag = ({ label, value, disabled, onClose, closable, isMaxTa
     event.stopPropagation()
   }
 
-  const handleRemoveKeyDown = (event: React.KeyboardEvent): void => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      onClose(undefined)
-    }
-  }
-
   return (
     <span
       className={ cn('ant-select-selection-item', styles.sortableTag, {
@@ -60,17 +54,15 @@ export const SortableTag = ({ label, value, disabled, onClose, closable, isMaxTa
     >
       <span className="ant-select-selection-item-content">{label}</span>
       {closable && (
-        <span
+        <button
           aria-label="remove"
-          className="ant-select-selection-item-remove"
+          className={ cn('ant-select-selection-item-remove', styles.tagRemoveButton) }
           onClick={ onClose }
-          onKeyDown={ handleRemoveKeyDown }
           onMouseDown={ handleRemoveMouseDown }
-          role="button"
-          tabIndex={ 0 }
+          type="button"
         >
           <Icon value="close" />
-        </span>
+        </button>
       )}
     </span>
   )

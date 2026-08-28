@@ -19,11 +19,9 @@ import { Spin } from '@Pimcore/components/spin/spin'
 import { useStyles } from './select.styles'
 import { useTranslation } from 'react-i18next'
 import { useFieldWidthOptional } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
-import { closestCenter, DndContext } from '@dnd-kit/core'
-import { rectSortingStrategy, SortableContext } from '@dnd-kit/sortable'
 import type { CustomTagProps } from 'rc-select/lib/BaseSelect'
 import { SortableTag } from './components/sortable-tag/sortable-tag'
-import { useSortableTags } from './hooks/use-sortable-tags'
+import { SortableTags } from './components/sortable-tags/sortable-tags'
 
 export const sizeOptions = {
   normal: 150
@@ -69,7 +67,6 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
   const fieldWidths = useFieldWidthOptional()
 
   const tagSorting = mode === 'multiple' && sortableTags
-  const { sensors, handleTagDragEnd } = useSortableTags(value, antdSelectProps.onChange)
   const renderSortableTag = (tagProps: CustomTagProps): React.JSX.Element => <SortableTag { ...tagProps } />
 
   const [isActive, setIsActive] = useState(false)
@@ -272,22 +269,13 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
       value={ customIcon! }
     />
     )}
-      {tagSorting
-        ? (
-          <DndContext
-            collisionDetection={ closestCenter }
-            onDragEnd={ handleTagDragEnd }
-            sensors={ sensors }
-          >
-            <SortableContext
-              items={ Array.isArray(value) ? value.map((item) => String(item)) : [] }
-              strategy={ rectSortingStrategy }
-            >
-              {antdSelectElement}
-            </SortableContext>
-          </DndContext>
-          )
-        : antdSelectElement}
+      <SortableTags
+        enabled={ tagSorting }
+        onChange={ antdSelectProps.onChange }
+        value={ value }
+      >
+        {antdSelectElement}
+      </SortableTags>
     </div>
   )
 })
