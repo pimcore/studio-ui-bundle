@@ -16,7 +16,6 @@ import { useTranslation } from 'react-i18next'
 import { useStyles } from '@Pimcore/components/pagination/pagination.styles'
 import cn from 'classnames'
 import { appConfig } from '@Pimcore/app/config/app-config'
-import {DEFAULT_PAGE_SIZE} from "@Pimcore/modules/user/management/detail/tabs/references/constants";
 
 export interface PaginationProps extends Omit<BasePaginationProps, 'pageSize' | 'defaultCurrent' | 'onShowSizeChange' | 'responsive' | 'totalBoundaryShowSizeChanger'> {
 }
@@ -29,7 +28,7 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
 
   const defaultProps: Partial<PaginationProps> = {
     current: 1,
-    defaultPageSize: DEFAULT_PAGE_SIZE,
+    defaultPageSize: appConfig.defaultPageSize,
     pageSizeOptions: appConfig.pageSizeOptions,
     showSizeChanger: false,
     simple: true,
@@ -61,8 +60,14 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
   })) ?? []
 
   const onSelectChange: SelectProps['onChange'] = (value) => {
+    const parsedValue = Number(value)
+
+    if (!Number.isInteger(parsedValue)) {
+      return
+    }
+
     setCurrent(1)
-    setPageSize(Number(value))
+    setPageSize(parsedValue)
   }
 
   const itemRenderer: PaginationProps['itemRender'] = (page, type, originalElement) => {
@@ -112,7 +117,7 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
         <CreatableSelect
           disabled={ paginationProps.disabled }
           inputType="number"
-          numberInputProps={ { min: 1 } }
+          numberInputProps={ { min: 1, precision: 0 } }
           onChange={ onSelectChange }
           onCreateOption={ (value) => ({
             value,
@@ -120,7 +125,7 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
           }) }
           options={ selectOptions }
           popupMatchSelectWidth={ false }
-          validate={ (value) => !isNaN(parseInt(value)) && parseInt(value) > 0 }
+          validate={ (value) => /^\d+$/.test(value.trim()) && Number(value) > 0 }
           value={ String(pageSize) }
           width={ 112 }
         />

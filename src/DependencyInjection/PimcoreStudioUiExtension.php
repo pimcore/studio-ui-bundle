@@ -74,13 +74,36 @@ class PimcoreStudioUiExtension extends Extension implements PrependExtensionInte
 
         $container->setParameter(
             'pimcore_studio_ui.pagination.page_size_options',
-            array_map(static fn (string $option): int => (int) trim($option), explode(',', $config['pagination']['page_size_options']))
+            $this->parsePageSizeOptions($config['pagination']['page_size_options'])
         );
 
         $container->setParameter(
             'pimcore_studio_ui.pagination.default_page_size',
             $config['pagination']['default_page_size']
         );
+    }
+
+    /**
+     * Parses a comma-separated string of page size options into a list of integers.
+     * Non-numeric or malformed entries are silently discarded.
+     *
+     * @param string $pageSizeOptions comma-separated list of page sizes, e.g. "10, 25, 50"
+     *
+     * @return int[] the parsed page size options
+     */
+    private function parsePageSizeOptions(string $pageSizeOptions): array
+    {
+        $options = [];
+
+        foreach (explode(',', $pageSizeOptions) as $option) {
+            $option = trim($option);
+
+            if (ctype_digit($option)) {
+                $options[] = (int) $option;
+            }
+        }
+
+        return $options;
     }
 
     /**

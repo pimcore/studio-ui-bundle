@@ -19,8 +19,9 @@ pimcore_studio_ui:
 - `page_size_options` is a comma separated list of page sizes offered in the page-size changer. 
 - `default_page_size` is the page size a listing starts with before the user picks another option. The default value should be included in the `page_size_options`.
 
-> **Note:** Elasticsearch and OpenSearch limit how many results can be fetched in a single request
-> (by default 10,000, controlled by the `index.max_result_window` index setting). Make sure the
-> largest value in `page_size_options` does not exceed that limit, or listings using it will fail.
+> **Note:** Elasticsearch and OpenSearch limit each request's result window (`from + size`) to
+> `index.max_result_window` (10,000 by default). Keep every requested page offset plus page size
+> within that limit; limiting only the largest page-size option does not prevent deep-page failures.
 
-Both settings apply globally to all paginated listings in the UI.
+Both settings apply globally to the most paginated listings in the UI. 
+There are exceptions for reports, previews, and classification store listings which have an individual configuration.
