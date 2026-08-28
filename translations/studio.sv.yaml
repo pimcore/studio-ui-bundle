@@ -126,8 +126,8 @@ document.tree.context-menu.add-link: Ny länk
 document.tree.context-menu.add-hardlink: Ny Hardlink
 document.required-fields.validation-title: Obligatoriska fält saknas
 document.required-fields.validation-message: Följande obligatoriska fält måste fyllas i innan publicering
-document.site.remove-site: Ta bort webbplats
-document.site.remove-site-confirmation: Är du säker på att du vill ta bort den här webbplatsen permanent? Åtgärden kan inte ångras.
+document.site.remove-site: Ta bort sajt
+document.site.remove-site-confirmation: Är du säker på att du vill ta bort den här sajten permanent? Åtgärden kan inte ångras.
 document.site.use-as-site: Använd som sajt
 document.site.edit-site: Redigera sajt
 document.site.form.main-domain: Huvuddomän
