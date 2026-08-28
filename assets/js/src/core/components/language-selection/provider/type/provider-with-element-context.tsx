@@ -11,7 +11,7 @@
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
-import { resolveAllowedLanguages } from '@Pimcore/components/language-selection/helpers'
+import { getLanguagePermission, resolveAllowedLanguages } from '@Pimcore/components/language-selection/helpers'
 import React, { useMemo, useState } from 'react'
 import { LanguageSelectionContext, type LanguageSelectionProviderProps } from '../language-selection-provider'
 
@@ -25,7 +25,7 @@ export const ProviderWithElementContext = ({ children }: LanguageSelectionProvid
   // useElementDraft() - reading them from the wrapper root never matched, so the editor could
   // open on a language the user is not allowed to view.
   const initialLanguage = resolveAllowedLanguages(
-    elementDraft.element?.permissions?.localizedView,
+    getLanguagePermission(elementDraft.element?.permissions, 'localizedView'),
     contentLanguages
   )[0] ?? 'en'
 

@@ -14,7 +14,7 @@ import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { type PermissionBasedLanguageSelectionControlProps } from '../permission-based-language-selection-control'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
-import { resolveAllowedLanguages } from '@Pimcore/components/language-selection/helpers'
+import { getLanguagePermission, resolveAllowedLanguages } from '@Pimcore/components/language-selection/helpers'
 
 export const WithElementContext = (props: PermissionBasedLanguageSelectionControlProps): React.JSX.Element => {
   const user = useUser()
@@ -26,7 +26,7 @@ export const WithElementContext = (props: PermissionBasedLanguageSelectionContro
   // useElementDraft() - reading them from the wrapper root never matched, so the selection
   // offered every content language regardless of what localizedView allowed.
   const availableLanguages: string[] = [
-    ...resolveAllowedLanguages(elementDraft.element?.permissions?.localizedView, contentLanguages),
+    ...resolveAllowedLanguages(getLanguagePermission(elementDraft.element?.permissions, 'localizedView'), contentLanguages),
   ]
 
   if (props.customKeys !== undefined && props.customKeys.length > 0) {

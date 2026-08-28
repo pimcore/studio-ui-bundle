@@ -23,7 +23,7 @@ import { type FormItemProps } from 'antd'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
-import { isLanguageEditable } from '@Pimcore/components/language-selection/helpers'
+import { getLanguagePermission, isLanguageEditable } from '@Pimcore/components/language-selection/helpers'
 import { useLocalizedFields } from '../../provider/localized-fields-provider/use-localized-fields'
 
 export interface KeyedFormItemControlProps {
@@ -46,7 +46,7 @@ export const FormControlWithElementContext = ({ children, ...props }: KeyedFormI
   // The permissions live on the loaded element, not on the draft wrapper returned by
   // useElementDraft() - reading them from the wrapper root never matches, which left every
   // language editable no matter what localizedEdit allowed.
-  const isDisabled = !isLanguageEditable(elementDraft.element?.permissions?.localizedEdit, activeLanguage)
+  const isDisabled = !isLanguageEditable(getLanguagePermission(elementDraft.element?.permissions, 'localizedEdit'), activeLanguage)
 
   if (!isValidElement(Child)) {
     throw new Error('KeyedFormItemControl only accepts a single child')

@@ -8,8 +8,24 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { type DataObjectPermissions } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
+
 // The key the backend uses for the language independent ("default") value of a localized field.
 export const LANGUAGE_INDEPENDENT_KEY = 'default'
+
+/**
+ * Reads a workspace language permission off an element's permissions.
+ *
+ * Only data objects carry these, and ElementPermissions is a union over asset, data object and
+ * document permissions - so the key has to be narrowed rather than asserted. Returning undefined
+ * for the other element types is the right answer: no language restriction applies to them, and
+ * both consumers below read undefined as "unrestricted".
+ */
+export const getLanguagePermission = (
+  permissions: ElementPermissions | undefined,
+  type: 'localizedView' | 'localizedEdit'
+): string | null | undefined => (permissions as Partial<DataObjectPermissions> | undefined)?.[type]
 
 /**
  * Tells whether the language independent ("default") value of a localized field may be used for a
