@@ -23,6 +23,52 @@ export const isLanguageIndependentValueAllowed = (languagePermission?: string | 
   return languages.length === 0 || languages.includes(LANGUAGE_INDEPENDENT_KEY)
 }
 
+/**
+ * The concrete languages named by a workspace language permission, ignoring the language
+ * independent ("default") key - that one is not a content language and is handled by
+ * {@link isLanguageIndependentValueAllowed}.
+ */
+const concreteLanguagesOf = (languagePermission?: string | null): string[] =>
+  languagePermission?.split(',').filter(
+    (language) => language !== '' && language !== LANGUAGE_INDEPENDENT_KEY
+  ) ?? []
+
+/**
+ * Narrows the user's content languages to those a workspace language permission
+ * (`localizedView` / `localizedEdit`) allows.
+ *
+ * A permission that is unset, empty, or names only the language independent value is no
+ * restriction on concrete languages, so every content language stays available.
+ */
+export const resolveAllowedLanguages = (
+  languagePermission: string | null | undefined,
+  contentLanguages: string[]
+): string[] => {
+  const allowed = concreteLanguagesOf(languagePermission)
+
+  if (allowed.length === 0) {
+    return contentLanguages
+  }
+
+  return contentLanguages.filter((language) => allowed.includes(language))
+}
+
+/**
+ * Tells whether a single language may be edited under a workspace language permission.
+ *
+ * Kept separate from {@link resolveAllowedLanguages} because an unrestricted permission must
+ * leave the field editable regardless of whether the language is one of the user's content
+ * languages - the field is already open, and the permission is not what closes it.
+ */
+export const isLanguageEditable = (
+  languagePermission: string | null | undefined,
+  language: string
+): boolean => {
+  const editable = concreteLanguagesOf(languagePermission)
+
+  return editable.length === 0 || editable.includes(language)
+}
+
 export const transformLanguage = (lang: string): string | null => lang === '-' ? null : lang
 
 // Transforms a locale of type "en-US" into "en_US", and "en" into "EN"
