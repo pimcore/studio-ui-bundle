@@ -13,3 +13,4 @@ Pimcore Studio configuration options:
 - [Additional CSS or JS Files](./04_Additional_CSS_or_JS_Files.md)
 - [Auto Save](./05_Auto_Save.md)
 - [Parallel Asset Uploads](./06_Parallel_Asset_Uploads.md)
+- [Pagination](./07_Pagination.md)

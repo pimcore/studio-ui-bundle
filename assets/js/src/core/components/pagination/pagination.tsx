@@ -10,10 +10,13 @@
 
 import React, { useEffect, useState } from 'react'
 import { Pagination as BasePagination, type PaginationProps as BasePaginationProps, ConfigProvider } from 'antd'
-import { Flex, IconButton, Select, type SelectProps } from '@sdk/components'
+import { CreatableSelect, Flex, IconButton, type SelectProps } from '@sdk/components'
+import { type SelectOptionType } from '@sdk/modules/element'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from '@Pimcore/components/pagination/pagination.styles'
 import cn from 'classnames'
+import { appConfig } from '@Pimcore/app/config/app-config'
+import {DEFAULT_PAGE_SIZE} from "@Pimcore/modules/user/management/detail/tabs/references/constants";
 
 export interface PaginationProps extends Omit<BasePaginationProps, 'pageSize' | 'defaultCurrent' | 'onShowSizeChange' | 'responsive' | 'totalBoundaryShowSizeChanger'> {
 }
@@ -26,8 +29,8 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
 
   const defaultProps: Partial<PaginationProps> = {
     current: 1,
-    defaultPageSize: 20,
-    pageSizeOptions: ['10', '20', '50', '100'],
+    defaultPageSize: DEFAULT_PAGE_SIZE,
+    pageSizeOptions: appConfig.pageSizeOptions,
     showSizeChanger: false,
     simple: true,
     size: 'small'
@@ -52,9 +55,9 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
     setPageSize(size)
   }
 
-  const selectOptions: SelectProps['options'] = paginationProps.pageSizeOptions?.map(option => ({
+  const selectOptions: SelectOptionType[] = paginationProps.pageSizeOptions?.map(option => ({
     label: `${option} / ${t('pagination.page')}`,
-    value: option
+    value: String(option)
   })) ?? []
 
   const onSelectChange: SelectProps['onChange'] = (value) => {
@@ -106,11 +109,19 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
       />
 
       {showSizeChanger === true && (
-        <Select
+        <CreatableSelect
           disabled={ paginationProps.disabled }
+          inputType="number"
+          numberInputProps={ { min: 1 } }
           onChange={ onSelectChange }
+          onCreateOption={ (value) => ({
+            value,
+            label: `${value} / ${t('pagination.page')}`
+          }) }
           options={ selectOptions }
-          value={ `${pageSize} / ${t('pagination.page')}` }
+          popupMatchSelectWidth={ false }
+          validate={ (value) => !isNaN(parseInt(value)) && parseInt(value) > 0 }
+          value={ String(pageSize) }
           width={ 112 }
         />
       )}

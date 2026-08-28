@@ -16,6 +16,7 @@ import { useClassDefinitionSelection } from '../../decorator/class-definition-se
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
+import {DEFAULT_PAGE_SIZE} from "@Pimcore/modules/user/management/detail/tabs/references/constants";
 
 export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = () => {
   const { useElementId } = useSettings()
@@ -79,7 +80,7 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
         filters: {
           includeDescendants: true,
           page: 1,
-          pageSize: 20
+          pageSize: DEFAULT_PAGE_SIZE
         }
       }
     }

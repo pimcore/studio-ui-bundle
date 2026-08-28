@@ -8,6 +8,8 @@ services:
             $studioUrlPath: '%pimcore_studio_ui.url_path%'
             $studioApiPrefix: '%pimcore_studio_backend.url_prefix%'
             $studioMaxParallelUploads: '%pimcore_studio_ui.asset_upload.max_parallel_uploads%'
+            $studioPageSizeOptions: '%pimcore_studio_ui.pagination.page_size_options%'
+            $studioDefaultPageSize: '%pimcore_studio_ui.pagination.default_page_size%'
 
     _instanceof:
         Pimcore\Bundle\StudioUiBundle\AppConfig\AppConfigProviderInterface:

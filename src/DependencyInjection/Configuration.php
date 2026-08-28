@@ -127,6 +127,20 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+            ->end()
+            ->arrayNode('pagination')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->scalarNode('page_size_options')
+                        ->info('Comma separated list of page size options for paginated listings.')
+                        ->defaultValue('10,20,50,100')
+                    ->end()
+                    ->integerNode('default_page_size')
+                        ->info('Default page size for paginated listings.')
+                        ->min(1)
+                        ->defaultValue(20)
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;

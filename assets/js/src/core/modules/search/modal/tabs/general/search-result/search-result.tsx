@@ -21,6 +21,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { SearchResultDetail } from './detail/search-result-detail'
 import { type SimpleSearchResult } from '@Pimcore/modules/search/search-api-slice.gen'
+import { appConfig } from '@Pimcore/app/config/app-config'
 
 export const SearchResult = (): React.JSX.Element => {
   const { searchTerm } = useSearchTerm()
@@ -136,7 +137,7 @@ export const SearchResult = (): React.JSX.Element => {
         >
           <Pagination
             onChange={ onChange }
-            pageSizeOptions={ [10, 20, 50, 100] }
+            pageSizeOptions={ appConfig.pageSizeOptions }
             showSizeChanger
             showTotal={ (total) => `Total ${total} items` }
             total={ data?.totalItems ?? 0 }
