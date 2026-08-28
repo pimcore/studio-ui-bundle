@@ -8,4 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-export const DEFAULT_PAGE_SIZE = 20
+import { appConfig } from '@Pimcore/app/config/app-config'
+
+export const DEFAULT_PAGE_SIZE = appConfig.defaultPageSize
