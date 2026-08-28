@@ -26,7 +26,7 @@ export const WithElementContext = (props: PermissionBasedLanguageSelectionContro
   // useElementDraft() - reading them from the wrapper root never matched, so the selection
   // offered every content language regardless of what localizedView allowed.
   const availableLanguages: string[] = [
-    ...resolveAllowedLanguages(getLanguagePermission(elementDraft.element?.permissions, 'localizedView'), contentLanguages),
+    ...resolveAllowedLanguages(getLanguagePermission(elementDraft.element?.permissions, 'localizedView'), contentLanguages)
   ]
 
   if (props.customKeys !== undefined && props.customKeys.length > 0) {
