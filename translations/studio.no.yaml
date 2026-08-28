@@ -1304,6 +1304,7 @@ relations.fullpath: Full sti
 relations.remove-all.confirm: Vil du virkelig slette alle relasjoner?
 relation: relasjon
 items-limit-reached: Maksimalt antall elementer ({{maxItems}}) er nådd.
+asset-upload-type-not-allowed: Typen til den opplastede assetten er ikke tillatt for dette feltet.
 actions: Handlinger
 asset: Ressurs
 data-object: Data Object

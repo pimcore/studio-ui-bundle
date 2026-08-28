@@ -1304,6 +1304,7 @@ relations.fullpath: Fullständig sökväg
 relations.remove-all.confirm: Vill du verkligen ta bort alla relationer?
 relation: relation
 items-limit-reached: Maximalt antal objekt ({{maxItems}}) har nåtts.
+asset-upload-type-not-allowed: Den uppladdade assettypen är inte tillåten för det här fältet.
 actions: Åtgärder
 asset: Asset
 data-object: Data Object

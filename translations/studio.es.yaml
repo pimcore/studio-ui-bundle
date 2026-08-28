@@ -1304,6 +1304,7 @@ relations.fullpath: Ruta completa
 relations.remove-all.confirm: ¿Realmente desea eliminar todas las relaciones?
 relation: relación
 items-limit-reached: Se ha alcanzado el número máximo de elementos ({{maxItems}}).
+asset-upload-type-not-allowed: El tipo del asset subido no está permitido para este campo.
 actions: Acciones
 asset: Asset
 data-object: Data Object
