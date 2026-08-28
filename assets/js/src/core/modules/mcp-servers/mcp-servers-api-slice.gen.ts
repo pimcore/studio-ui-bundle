@@ -89,14 +89,18 @@ export type McpGetToolsApiArg = void;
 export type McpServerAccessGrant = {
     /** User or role name */
     name: string;
-    /** Granted access level */
-    permission: "read" | "write";
+    /** May connect a client to the server at runtime */
+    canAccess: boolean;
+    /** May edit the server configuration */
+    canEdit: boolean;
 };
 export type McpServerUserPermissions = {
-    /** The current user may view the server and copy its URL */
-    read: boolean;
+    /** The current user may view the server and its config */
+    canView: boolean;
+    /** The current user may connect a client to the server */
+    canAccess: boolean;
     /** The current user may edit, re-share or delete the server */
-    write: boolean;
+    canEdit: boolean;
 };
 export type McpServer = {
     /** AdditionalAttributes */
@@ -121,7 +125,7 @@ export type McpServer = {
     enabled: boolean;
     /** Owner user name. Null when the owner has been deleted. */
     owner?: string | null;
-    /** Any authenticated user may read/use it */
+    /** Public: any authenticated user may view and use it (not edit) */
     shareGlobal: boolean;
     /** Users shared with, each at a read/write level */
     sharedUsers: McpServerAccessGrant[];

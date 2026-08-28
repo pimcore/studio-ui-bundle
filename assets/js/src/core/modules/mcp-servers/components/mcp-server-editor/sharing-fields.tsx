@@ -21,7 +21,6 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { OperationalGrid } from '@Pimcore/components/operational-grid/operational-grid'
-import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
 import { useUserGetShareCollectionQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
 import { useRoleGetShareCollectionQuery } from '@Pimcore/modules/user/roles/roles-api-slice-enhanced'
 import { type McpServerAccessGrant } from '../../mcp-servers-api-slice.gen'
@@ -57,12 +56,25 @@ const SharingGrid = ({
         size: 240,
         meta: { editable: false, autoWidth: true }
       }),
-      // A single "Can edit" checkbox: checked = write, unchecked = read.
-      // Write implies read; read is the baseline for any grant.
-      columnHelper.accessor((row) => row.permission === 'write', {
-        id: 'canEdit',
+      // Two independent booleans mirroring the Agent bundle's run/update grid:
+      // "Can access" lets the grantee connect a client, "Can edit" lets them
+      // change the configuration. Both are real fields on the grant, so the
+      // grid writes them straight through onChange (no cell-data translation).
+      columnHelper.accessor('canAccess', {
+        header: t('mcp-servers.sharing.can-access'),
+        size: 120,
+        meta: {
+          type: 'checkbox',
+          editable: !disabled,
+          config: {
+            align: 'center',
+            disabled
+          }
+        }
+      }),
+      columnHelper.accessor('canEdit', {
         header: t('mcp-servers.sharing.can-edit'),
-        size: 100,
+        size: 120,
         meta: {
           type: 'checkbox',
           editable: !disabled,
@@ -99,20 +111,6 @@ const SharingGrid = ({
     ]
   }, [t, disabled, value, onChange])
 
-  // The checkbox writes a boolean under the synthetic `canEdit` column; translate
-  // it back to the grant's read/write permission.
-  const handleUpdateCellData = (event: OnUpdateCellDataEvent): void => {
-    if (event.columnId !== 'canEdit') {
-      return
-    }
-    const next = value.map((grant, index) =>
-      index === event.rowIndex
-        ? { ...grant, permission: event.value === true ? 'write' : 'read' } satisfies McpServerAccessGrant
-        : grant
-    )
-    onChange(next)
-  }
-
   const options = useMemo(() => {
     const taken = new Set(value.map((grant) => grant.name))
     return candidateNames
@@ -125,7 +123,6 @@ const SharingGrid = ({
       autoWidth
       columns={ columns }
       onChange={ (next) => { onChange(next as McpServerAccessGrant[]) } }
-      onUpdateCellData={ handleUpdateCellData }
       value={ value }
     >
       {!disabled && (
@@ -134,7 +131,7 @@ const SharingGrid = ({
             <Select
               onChange={ (name: string) => {
                 if (!isNil(name) && name !== '') {
-                  operations.addRow({ name, permission: 'read' })
+                  operations.addRow({ name, canAccess: true, canEdit: false })
                 }
               } }
               options={ options }

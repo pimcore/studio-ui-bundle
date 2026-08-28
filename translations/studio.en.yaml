@@ -666,6 +666,7 @@ mcp-servers.sharing.roles: Roles
 mcp-servers.sharing.add-user: Add a user…
 mcp-servers.sharing.add-role: Add a role…
 mcp-servers.sharing.name: Name
+mcp-servers.sharing.can-access: Can access
 mcp-servers.sharing.can-edit: Can edit
 mcp-servers.sharing.level: Access level
 mcp-servers.sharing.read: Read
