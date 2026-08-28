@@ -126,8 +126,8 @@ document.tree.context-menu.add-link: Ny lenke
 document.tree.context-menu.add-hardlink: Ny hardlink
 document.required-fields.validation-title: Påkrevde felt mangler
 document.required-fields.validation-message: Følgende påkrevde felt må fylles ut før publisering
-document.site.remove-site: Fjern nettsted
-document.site.remove-site-confirmation: Er du sikker på at du vil fjerne dette nettstedet? Denne handlingen kan ikke angres.
+document.site.remove-site: Slett nettsted
+document.site.remove-site-confirmation: Er du sikker på at du vil slette dette nettstedet permanent? Denne handlingen kan ikke angres.
 document.site.use-as-site: Bruk som nettsted
 document.site.edit-site: Rediger nettsted
 document.site.form.main-domain: Hoveddomene
@@ -157,8 +157,8 @@ data-object.select-class-to-display: Velg en klasse å vise
 data-object.tree.context-menu.add-object: Nytt objekt
 data-object.tree.context-menu.add-variant: Ny variant
 data-object.variant-listing.create-data-variant: Ny variant
-data-object.create-data-object: Legg til nytt objekt av type {{className}}
-data-object.create-variant: Legg til ny variant av type {{className}}
+data-object.create-data-object: Nytt objekt av type {{className}}
+data-object.create-variant: Ny variant av type {{className}}
 data-object.object-editor-tabs.variants: Varianter
 object.object-editor-tabs.children-listing: Underordnet rutenett
 workflow.label: Arbeidsflyt
@@ -188,7 +188,7 @@ class-definition.import-file-label: Velg JSON-fil
 class-definition.import-success: Klassedefinisjon importert
 class-definition.export-success: Klassedefinisjon eksportert
 class-definition.custom-layouts.default-layout: Standard Layout
-class-definition.create-new: Opprett ny klassedefinisjon
+class-definition.create-new: Ny klassedefinisjon
 class-definition.class-name: Klassenavn
 class-definition.unique-identifier: Unik identifikator
 class-definition.unique-identifier-warning: Vær forsiktig med den unike identifikatoren fordi tabellnavn kun kan inneholde opptil 64 tegn.
@@ -244,7 +244,7 @@ class-definition.composite-indices.type-localized-query: Lokalisert Query
 class-definition.composite-indices.type-store: Store
 class-definition.composite-indices.type-localized-store: Lokalisert Store
 class-definition.composite-indices.index-label: Indeks
-field-collection.create-new: Opprett ny Field Collection
+field-collection.create-new: Ny Field Collection
 field-collection.key: Nøkkel
 field-collection.validation.enter-key: Vennligst oppgi en nøkkel
 field-collection.validation.key-format: Nøkkelen må begynne med en bokstav og kan kun inneholde bokstaver, tall og understrek.
@@ -258,7 +258,7 @@ field-collection.general-settings.implements-interfaces: Implementerer grensesni
 field-collection.general-settings.usages.title: Bruk
 field-collection.general-settings.usages.class: Klasse
 field-collection.general-settings.usages.field: Felt
-object-brick.create-new: Opprett ny Object Brick
+object-brick.create-new: Ny Object Brick
 object-brick.key: Nøkkel
 object-brick.validation.enter-key: Vennligst oppgi en nøkkel
 object-brick.validation.key-format: Nøkkelen må begynne med en bokstav og kan kun inneholde bokstaver, tall og understrek.
@@ -273,7 +273,7 @@ object-brick.class-definitions-block.classname: Klasse
 object-brick.class-definitions-block.select-classname: Velg klasse
 object-brick.class-definitions-block.fieldname: Felt
 object-brick.class-definitions-block.select-fieldname: Velg felt
-select-option.create-new: Opprett ny Select Option
+select-option.create-new: Ny Select Option
 select-option.id: ID
 select-option.enter-name-new-item: Oppgi navnet på det nye elementet
 select-option.validation.enter-id: Vennligst oppgi en ID
@@ -697,7 +697,7 @@ notifications.settings.discard.keep-editing: Fortsett å redigere
 notifications.settings.unsaved-changes_one: "{{count}} ulagret endring"
 notifications.settings.unsaved-changes_other: "{{count}} ulagrede endringer"
 notifications.settings.group.general: Generelt
-notifications.remove-all: Fjern alle
+notifications.remove-all: Slett alle
 notifications.new-notification: Nytt varsel
 notifications.columns.title: Tittel
 notifications.columns.date: Dato
@@ -811,7 +811,7 @@ field-definitions.saved-successfully: Lagret.
 field-definitions.select-item-configuration: Velg elementkonfigurasjon
 field-definitions.custom-layout-title: Custom Layout
 field-definitions.custom-layouts: Custom Layouts
-field-definitions.create-new-class-definition: Opprett ny Custom Layout
+field-definitions.create-new-class-definition: Ny Custom Layout
 field-definitions.select-field-message: Velg et felt fra treet for å redigere egenskapene.
 field-definitions.loading-general-settings: Laster generelle innstillinger...
 field-definitions.type-not-supported: Type ikke støttet
@@ -1357,7 +1357,7 @@ tree.actions.role: Rolle
 tree.actions.add-role: Legg til rolle
 tree.actions.clone-role: Klon rolle
 tree.actions.remove-role: Slett rolle
-tree.actions.remove-folder: Fjern mappe
+tree.actions.remove-folder: Slett mappe
 tag-configuration.new: Ny
 tag-configuration.new-tag: Ny tagg
 tag-configuration.name: Navn
@@ -1496,7 +1496,9 @@ user-management.workspaces.localized-fields.edit: Redigeringstillatelser
 user-management.workspaces.custom-layouts: Custom Layouts
 user-management.workspaces.custom-layouts.select: Velg ett eller flere felt
 user-management.add-folder.success: Mappe lagt til
-user-management.remove-folder.success: Mappe fjernet
+user-management.remove-folder: Slett mappe
+user-management.remove-folder.text: 'Er du sikker på at du vil slette denne mappen permanent? Denne handlingen kan ikke angres.'
+user-management.remove-folder.success: Mappen ble slettet
 user-management.clone-user: Klon bruker
 user-management.clone-user.text: Oppgi navnet på den nye brukeren
 user-management.clone-user.success: Bruker klonet
@@ -1505,15 +1507,15 @@ user-management.save-user.password.success: Passord oppdatert
 user-management.add-user.success: Bruker lagt til
 user-management.remove-user: Slett bruker
 user-management.remove-user.text: 'Er du sikker på at du vil slette brukeren "{{name}}" permanent? Denne handlingen kan ikke angres.'
-user-management.remove-user.success: Bruker fjernet
+user-management.remove-user.success: Brukeren ble slettet
 user-management.perspectives: Perspektiver
 user-management.roles: Roller
 user-management.role: Rolle
 user-management.users: Brukere
 user-management.user: Bruker
-user-management.add-folder: Legg til ny mappe
+user-management.add-folder: Ny mappe
 user-management.add-folder.label: Oppgi navnet på den nye mappen
-user-management.add-user: Legg til ny bruker
+user-management.add-user: Ny bruker
 user-management.add-user.label: Oppgi navnet på den nye brukeren
 user-management.last-login: Siste innlogging
 user-management.search.id: ID
@@ -1524,16 +1526,18 @@ roles.clone-role: Klon rolle
 roles.clone-role.text: Oppgi navnet på den nye rollen
 roles.remove-role: Slett rolle
 roles.remove-role.text: 'Er du sikker på at du vil slette rollen "{{name}}" permanent? Denne handlingen kan ikke angres.'
-roles.remove-folder.success: Mappe fjernet
+roles.remove-folder: Slett mappe
+roles.remove-folder.text: 'Er du sikker på at du vil slette denne mappen permanent? Denne handlingen kan ikke angres.'
+roles.remove-folder.success: Mappen ble slettet
 roles.remove-item.success: Rolle fjernet
 roles.add-item.success: Rolle lagt til
 roles.add-folder.success: Mappe lagt til
 roles.general: Generelt
 roles.settings.title: Innstillinger
 roles.workspaces.title: Workspaces
-roles.add-folder: Legg til ny mappe
+roles.add-folder: Ny mappe
 roles.add-folder.label: Oppgi navnet på den nye mappen
-roles.add-role: Legg til ny rolle
+roles.add-role: Ny rolle
 roles.add-role.label: Oppgi navnet på den nye rollen
 roles.search.id: ID
 navigation.quick-access: Hurtigtilgang
@@ -1813,7 +1817,7 @@ image-thumbnails.transformations.effects.intensity: Intensitet
 image-thumbnails.transformations.add: Legg til transformasjon
 image-thumbnails.transformations.move-up: Flytt opp
 image-thumbnails.transformations.move-down: Flytt ned
-image-thumbnails.transformations.remove: Fjern
+image-thumbnails.transformations.remove: Slett
 
 # Ukjent/fallback-transformasjon
 image-thumbnails.transformations.unknown-type: "Ukjent transformasjonstype: {{type}}"
@@ -1849,7 +1853,7 @@ video-thumbnails.add.validation.message: Miniatyrbildenavnet er ugyldig
 # Videotransformasjonsverktøylinje
 video-thumbnails.transformations.move-up: Flytt opp
 video-thumbnails.transformations.move-down: Flytt ned
-video-thumbnails.transformations.remove: Fjern
+video-thumbnails.transformations.remove: Slett
 
 # Endre størrelse-transformasjon
 video-thumbnails.transformations.resize.config-title: Konfigurer endre størrelse

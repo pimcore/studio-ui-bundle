@@ -127,7 +127,7 @@ document.tree.context-menu.add-hardlink: Nuevo Hardlink
 document.required-fields.validation-title: Campos obligatorios faltantes
 document.required-fields.validation-message: Los siguientes campos obligatorios deben completarse antes de publicar
 document.site.remove-site: Eliminar sitio
-document.site.remove-site-confirmation: ¿Está seguro de que desea eliminar este sitio? Esta acción no se puede deshacer.
+document.site.remove-site-confirmation: ¿Seguro que quiere eliminar permanentemente este sitio? Esta acción no se puede deshacer.
 document.site.use-as-site: Usar como sitio
 document.site.edit-site: Editar sitio
 document.site.form.main-domain: Dominio principal
@@ -157,8 +157,8 @@ data-object.select-class-to-display: Seleccione una clase para mostrar
 data-object.tree.context-menu.add-object: Nuevo objeto
 data-object.tree.context-menu.add-variant: Nueva variante
 data-object.variant-listing.create-data-variant: Nueva variante
-data-object.create-data-object: Añadir nuevo objeto de tipo {{className}}
-data-object.create-variant: Añadir nueva variante de tipo {{className}}
+data-object.create-data-object: Nuevo objeto de tipo {{className}}
+data-object.create-variant: Nueva variante de tipo {{className}}
 data-object.object-editor-tabs.variants: Variantes
 object.object-editor-tabs.children-listing: Cuadrícula de hijos
 workflow.label: Workflow
@@ -188,7 +188,7 @@ class-definition.import-file-label: Seleccionar archivo JSON
 class-definition.import-success: Definición de clase importada con éxito
 class-definition.export-success: Definición de clase exportada con éxito
 class-definition.custom-layouts.default-layout: Diseño predeterminado
-class-definition.create-new: Crear nueva definición de clase
+class-definition.create-new: Nueva definición de clase
 class-definition.class-name: Nombre de clase
 class-definition.unique-identifier: Identificador único
 class-definition.unique-identifier-warning: Tenga cuidado con el identificador único porque los nombres de tabla solo pueden contener hasta 64 caracteres.
@@ -244,7 +244,7 @@ class-definition.composite-indices.type-localized-query: Query localizada
 class-definition.composite-indices.type-store: Store
 class-definition.composite-indices.type-localized-store: Store localizado
 class-definition.composite-indices.index-label: Índice
-field-collection.create-new: Crear nueva Field Collection
+field-collection.create-new: Nueva Field Collection
 field-collection.key: Clave
 field-collection.validation.enter-key: Introduzca una clave
 field-collection.validation.key-format: La clave debe comenzar con una letra y solo puede contener letras, números y guiones bajos.
@@ -258,7 +258,7 @@ field-collection.general-settings.implements-interfaces: Implementa interfaces
 field-collection.general-settings.usages.title: Usos
 field-collection.general-settings.usages.class: Clase
 field-collection.general-settings.usages.field: Campo
-object-brick.create-new: Crear nuevo Object Brick
+object-brick.create-new: Nuevo Object Brick
 object-brick.key: Clave
 object-brick.validation.enter-key: Introduzca una clave
 object-brick.validation.key-format: La clave debe comenzar con una letra y solo puede contener letras, números y guiones bajos.
@@ -273,7 +273,7 @@ object-brick.class-definitions-block.classname: Clase
 object-brick.class-definitions-block.select-classname: Seleccionar clase
 object-brick.class-definitions-block.fieldname: Campo
 object-brick.class-definitions-block.select-fieldname: Seleccionar campo
-select-option.create-new: Crear nueva opción de selección
+select-option.create-new: Nueva opción de selección
 select-option.id: ID
 select-option.enter-name-new-item: Introduzca el nombre del nuevo elemento
 select-option.validation.enter-id: Introduzca un ID
@@ -697,7 +697,7 @@ notifications.settings.discard.keep-editing: Seguir editando
 notifications.settings.unsaved-changes_one: "{{count}} cambio sin guardar"
 notifications.settings.unsaved-changes_other: "{{count}} cambios sin guardar"
 notifications.settings.group.general: General
-notifications.remove-all: Eliminar todas
+notifications.remove-all: Eliminar todo
 notifications.new-notification: Nueva notificación
 notifications.columns.title: Título
 notifications.columns.date: Fecha
@@ -811,7 +811,7 @@ field-definitions.saved-successfully: Guardado con éxito.
 field-definitions.select-item-configuration: Seleccionar configuración del elemento
 field-definitions.custom-layout-title: Custom Layout
 field-definitions.custom-layouts: Custom Layouts
-field-definitions.create-new-class-definition: Crear nuevo Custom Layout
+field-definitions.create-new-class-definition: Nuevo Custom Layout
 field-definitions.select-field-message: Seleccione un campo del árbol para editar sus propiedades.
 field-definitions.loading-general-settings: Cargando configuración general...
 field-definitions.type-not-supported: Tipo no soportado
@@ -1496,7 +1496,9 @@ user-management.workspaces.localized-fields.edit: Permisos de edición
 user-management.workspaces.custom-layouts: Custom Layouts
 user-management.workspaces.custom-layouts.select: Seleccione uno o más campos
 user-management.add-folder.success: Carpeta añadida con éxito
-user-management.remove-folder.success: Carpeta eliminada con éxito
+user-management.remove-folder: Eliminar carpeta
+user-management.remove-folder.text: '¿Seguro que quiere eliminar permanentemente esta carpeta? Esta acción no se puede deshacer.'
+user-management.remove-folder.success: Carpeta eliminada correctamente
 user-management.clone-user: Clonar usuario
 user-management.clone-user.text: Introduzca el nombre del nuevo usuario
 user-management.clone-user.success: Usuario clonado con éxito
@@ -1505,15 +1507,15 @@ user-management.save-user.password.success: Contraseña actualizada con éxito
 user-management.add-user.success: Usuario añadido con éxito
 user-management.remove-user: Eliminar usuario
 user-management.remove-user.text: '¿Está seguro de que desea eliminar permanentemente el usuario "{{name}}"? Esta acción no se puede deshacer.'
-user-management.remove-user.success: Usuario eliminado con éxito
+user-management.remove-user.success: Usuario eliminado correctamente
 user-management.perspectives: Perspectivas
 user-management.roles: Roles
 user-management.role: Rol
 user-management.users: Usuarios
 user-management.user: Usuario
-user-management.add-folder: Añadir nueva carpeta
+user-management.add-folder: Nueva carpeta
 user-management.add-folder.label: Introduzca el nombre de la nueva carpeta
-user-management.add-user: Añadir nuevo usuario
+user-management.add-user: Nuevo usuario
 user-management.add-user.label: Introduzca el nombre del nuevo usuario
 user-management.last-login: Último inicio de sesión
 user-management.search.id: ID
@@ -1524,16 +1526,18 @@ roles.clone-role: Clonar rol
 roles.clone-role.text: Introduzca el nombre del nuevo rol
 roles.remove-role: Eliminar rol
 roles.remove-role.text: '¿Está seguro de que desea eliminar permanentemente el rol "{{name}}"? Esta acción no se puede deshacer.'
-roles.remove-folder.success: Carpeta eliminada con éxito
+roles.remove-folder: Eliminar carpeta
+roles.remove-folder.text: '¿Seguro que quiere eliminar permanentemente esta carpeta? Esta acción no se puede deshacer.'
+roles.remove-folder.success: Carpeta eliminada correctamente
 roles.remove-item.success: Rol eliminado con éxito
 roles.add-item.success: Rol añadido con éxito
 roles.add-folder.success: Carpeta añadida con éxito
 roles.general: General
 roles.settings.title: Configuración
 roles.workspaces.title: Workspaces
-roles.add-folder: Añadir nueva carpeta
+roles.add-folder: Nueva carpeta
 roles.add-folder.label: Introduzca el nombre de la nueva carpeta
-roles.add-role: Añadir nuevo rol
+roles.add-role: Nuevo rol
 roles.add-role.label: Introduzca el nombre del nuevo rol
 roles.search.id: ID
 navigation.quick-access: Acceso rápido

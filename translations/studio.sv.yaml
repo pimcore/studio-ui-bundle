@@ -126,8 +126,8 @@ document.tree.context-menu.add-link: Ny länk
 document.tree.context-menu.add-hardlink: Ny Hardlink
 document.required-fields.validation-title: Obligatoriska fält saknas
 document.required-fields.validation-message: Följande obligatoriska fält måste fyllas i innan publicering
-document.site.remove-site: Ta bort sajt
-document.site.remove-site-confirmation: Är du säker på att du vill ta bort den här sajten? Åtgärden kan inte ångras.
+document.site.remove-site: Ta bort webbplats
+document.site.remove-site-confirmation: Är du säker på att du vill ta bort den här webbplatsen permanent? Åtgärden kan inte ångras.
 document.site.use-as-site: Använd som sajt
 document.site.edit-site: Redigera sajt
 document.site.form.main-domain: Huvuddomän
@@ -157,8 +157,8 @@ data-object.select-class-to-display: Välj en klass att visa
 data-object.tree.context-menu.add-object: Nytt objekt
 data-object.tree.context-menu.add-variant: Ny variant
 data-object.variant-listing.create-data-variant: Ny variant
-data-object.create-data-object: Lägg till nytt objekt av typen {{className}}
-data-object.create-variant: Lägg till ny variant av typen {{className}}
+data-object.create-data-object: Nytt objekt av typen {{className}}
+data-object.create-variant: Ny variant av typen {{className}}
 data-object.object-editor-tabs.variants: Varianter
 object.object-editor-tabs.children-listing: Barnrutnät
 workflow.label: Workflow
@@ -188,7 +188,7 @@ class-definition.import-file-label: Välj JSON-fil
 class-definition.import-success: Klassdefinitionen har importerats
 class-definition.export-success: Klassdefinitionen har exporterats
 class-definition.custom-layouts.default-layout: Standardlayout
-class-definition.create-new: Skapa ny klassdefinition
+class-definition.create-new: Ny klassdefinition
 class-definition.class-name: Klassnamn
 class-definition.unique-identifier: Unik identifierare
 class-definition.unique-identifier-warning: Var försiktig med den unika identifieraren eftersom tabellnamn kan innehålla max 64 tecken.
@@ -244,7 +244,7 @@ class-definition.composite-indices.type-localized-query: Lokaliserad Query
 class-definition.composite-indices.type-store: Store
 class-definition.composite-indices.type-localized-store: Lokaliserad Store
 class-definition.composite-indices.index-label: Index
-field-collection.create-new: Skapa ny Field Collection
+field-collection.create-new: Ny Field Collection
 field-collection.key: Nyckel
 field-collection.validation.enter-key: Ange en nyckel
 field-collection.validation.key-format: Nyckeln måste börja med en bokstav och kan bara innehålla bokstäver, siffror och understreck.
@@ -258,7 +258,7 @@ field-collection.general-settings.implements-interfaces: Implementerar gränssni
 field-collection.general-settings.usages.title: Användningar
 field-collection.general-settings.usages.class: Klass
 field-collection.general-settings.usages.field: Fält
-object-brick.create-new: Skapa ny Object Brick
+object-brick.create-new: Ny Object Brick
 object-brick.key: Nyckel
 object-brick.validation.enter-key: Ange en nyckel
 object-brick.validation.key-format: Nyckeln måste börja med en bokstav och kan bara innehålla bokstäver, siffror och understreck.
@@ -273,7 +273,7 @@ object-brick.class-definitions-block.classname: Klass
 object-brick.class-definitions-block.select-classname: Välj klass
 object-brick.class-definitions-block.fieldname: Fält
 object-brick.class-definitions-block.select-fieldname: Välj fält
-select-option.create-new: Skapa nytt valalternativ
+select-option.create-new: Nytt valalternativ
 select-option.id: ID
 select-option.enter-name-new-item: Ange namnet på det nya objektet
 select-option.validation.enter-id: Ange ett ID
@@ -811,7 +811,7 @@ field-definitions.saved-successfully: Sparades.
 field-definitions.select-item-configuration: Välj objektkonfiguration
 field-definitions.custom-layout-title: Custom Layout
 field-definitions.custom-layouts: Custom Layouts
-field-definitions.create-new-class-definition: Skapa ny anpassad layout
+field-definitions.create-new-class-definition: Ny anpassad layout
 field-definitions.select-field-message: Välj ett fält från trädet för att redigera dess egenskaper.
 field-definitions.loading-general-settings: Laddar allmänna inställningar...
 field-definitions.type-not-supported: Typen stöds inte
@@ -1496,6 +1496,8 @@ user-management.workspaces.localized-fields.edit: Redigeringsbehörigheter
 user-management.workspaces.custom-layouts: Custom Layouts
 user-management.workspaces.custom-layouts.select: Välj ett eller flera fält
 user-management.add-folder.success: Mappen har lagts till
+user-management.remove-folder: Ta bort mapp
+user-management.remove-folder.text: 'Är du säker på att du vill ta bort den här mappen permanent? Åtgärden kan inte ångras.'
 user-management.remove-folder.success: Mappen har tagits bort
 user-management.clone-user: Klona användare
 user-management.clone-user.text: Ange namnet på den nya användaren
@@ -1511,9 +1513,9 @@ user-management.roles: Roller
 user-management.role: Roll
 user-management.users: Användare
 user-management.user: Användare
-user-management.add-folder: Lägg till ny mapp
+user-management.add-folder: Ny mapp
 user-management.add-folder.label: Ange namnet på den nya mappen
-user-management.add-user: Lägg till ny användare
+user-management.add-user: Ny användare
 user-management.add-user.label: Ange namnet på den nya användaren
 user-management.last-login: Senaste inloggning
 user-management.search.id: ID
@@ -1524,6 +1526,8 @@ roles.clone-role: Klona roll
 roles.clone-role.text: Ange namnet på den nya rollen
 roles.remove-role: Ta bort roll
 roles.remove-role.text: 'Är du säker på att du vill permanent ta bort rollen "{{name}}"? Åtgärden kan inte ångras.'
+roles.remove-folder: Ta bort mapp
+roles.remove-folder.text: 'Är du säker på att du vill ta bort den här mappen permanent? Åtgärden kan inte ångras.'
 roles.remove-folder.success: Mappen har tagits bort
 roles.remove-item.success: Rollen har tagits bort
 roles.add-item.success: Rollen har lagts till
@@ -1531,9 +1535,9 @@ roles.add-folder.success: Mappen har lagts till
 roles.general: Allmänt
 roles.settings.title: Inställningar
 roles.workspaces.title: Workspaces
-roles.add-folder: Lägg till ny mapp
+roles.add-folder: Ny mapp
 roles.add-folder.label: Ange namnet på den nya mappen
-roles.add-role: Lägg till ny roll
+roles.add-role: Ny roll
 roles.add-role.label: Ange namnet på den nya rollen
 roles.search.id: ID
 navigation.quick-access: Snabbåtkomst

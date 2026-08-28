@@ -126,8 +126,8 @@ document.tree.context-menu.add-link: New Link
 document.tree.context-menu.add-hardlink: New Hardlink
 document.required-fields.validation-title: Required fields missing
 document.required-fields.validation-message: The following required fields must be filled before publishing
-document.site.remove-site: Remove site
-document.site.remove-site-confirmation: Are you sure you want to remove this site? This action cannot be undone.
+document.site.remove-site: Delete site
+document.site.remove-site-confirmation: Are you sure you want to permanently delete this site? This action cannot be undone.
 document.site.use-as-site: Use as site
 document.site.edit-site: Edit site
 document.site.form.main-domain: Main Domain
@@ -157,8 +157,8 @@ data-object.select-class-to-display: Select a class to display
 data-object.tree.context-menu.add-object: New Object
 data-object.tree.context-menu.add-variant: New Variant
 data-object.variant-listing.create-data-variant: New Variant
-data-object.create-data-object: Add new object of type {{className}}
-data-object.create-variant: Add new variant of type {{className}}
+data-object.create-data-object: New object of type {{className}}
+data-object.create-variant: New variant of type {{className}}
 data-object.object-editor-tabs.variants: Variants
 object.object-editor-tabs.children-listing: Children Grid
 workflow.label: Workflow
@@ -188,7 +188,7 @@ class-definition.import-file-label: Select JSON file
 class-definition.import-success: Class definition imported successfully
 class-definition.export-success: Class definition exported successfully
 class-definition.custom-layouts.default-layout: Default Layout
-class-definition.create-new: Create new class definition
+class-definition.create-new: New class definition
 class-definition.class-name: Class name
 class-definition.unique-identifier: Unique identifier
 class-definition.unique-identifier-warning: Be careful with the unique identifier because table names can contain only up to 64 characters.
@@ -244,7 +244,7 @@ class-definition.composite-indices.type-localized-query: Localized Query
 class-definition.composite-indices.type-store: Store
 class-definition.composite-indices.type-localized-store: Localized Store
 class-definition.composite-indices.index-label: Index
-field-collection.create-new: Create new field collection
+field-collection.create-new: New field collection
 field-collection.key: Key
 field-collection.validation.enter-key: Please enter a key
 field-collection.validation.key-format: The key must start with a letter and can contain only letters, numbers, and underscores.
@@ -258,7 +258,7 @@ field-collection.general-settings.implements-interfaces: Implements Interfaces
 field-collection.general-settings.usages.title: Usages
 field-collection.general-settings.usages.class: Class
 field-collection.general-settings.usages.field: Field
-object-brick.create-new: Create new object brick
+object-brick.create-new: New object brick
 object-brick.key: Key
 object-brick.validation.enter-key: Please enter a key
 object-brick.validation.key-format: The key must start with a letter and can contain only letters, numbers, and underscores.
@@ -273,7 +273,7 @@ object-brick.class-definitions-block.classname: Class
 object-brick.class-definitions-block.select-classname: Select class
 object-brick.class-definitions-block.fieldname: Field
 object-brick.class-definitions-block.select-fieldname: Select field
-select-option.create-new: Create new select option
+select-option.create-new: New select option
 select-option.id: ID
 select-option.enter-name-new-item: Enter the name of the new item
 select-option.validation.enter-id: Please enter an ID
@@ -697,7 +697,7 @@ notifications.settings.discard.keep-editing: Keep editing
 notifications.settings.unsaved-changes_one: '{{count}} unsaved change'
 notifications.settings.unsaved-changes_other: '{{count}} unsaved changes'
 notifications.settings.group.general: General
-notifications.remove-all: Remove all
+notifications.remove-all: Delete all
 notifications.new-notification: New Notification
 notifications.columns.title: Title
 notifications.columns.date: Date
@@ -811,7 +811,7 @@ field-definitions.saved-successfully: Saved successfully.
 field-definitions.select-item-configuration: Select item configuration
 field-definitions.custom-layout-title: Custom Layout
 field-definitions.custom-layouts: Custom Layouts
-field-definitions.create-new-class-definition: Create new custom layout
+field-definitions.create-new-class-definition: New custom layout
 field-definitions.select-field-message: Please select a field from the tree to edit its properties.
 field-definitions.loading-general-settings: Loading general settings...
 field-definitions.type-not-supported: Type not supported
@@ -1358,7 +1358,7 @@ tree.actions.role: Role
 tree.actions.add-role: Add Role
 tree.actions.clone-role: Clone role
 tree.actions.remove-role: Delete role
-tree.actions.remove-folder: Remove Folder
+tree.actions.remove-folder: Delete folder
 tag-configuration.new: New
 tag-configuration.new-tag: New Tag
 tag-configuration.name: Name
@@ -1497,7 +1497,9 @@ user-management.workspaces.localized-fields.edit: Edit permissions
 user-management.workspaces.custom-layouts: Custom Layouts
 user-management.workspaces.custom-layouts.select: Select one or more fields
 user-management.add-folder.success: Folder added successfully
-user-management.remove-folder.success: Folder removed successfully
+user-management.remove-folder: Delete folder
+user-management.remove-folder.text: 'Are you sure you want to permanently delete this folder? This action cannot be undone.'
+user-management.remove-folder.success: Folder deleted successfully
 user-management.clone-user: Clone user
 user-management.clone-user.text: Enter the name of the new user
 user-management.clone-user.success: User cloned successfully
@@ -1506,15 +1508,15 @@ user-management.save-user.password.success: Password updated successfully
 user-management.add-user.success: User added successfully
 user-management.remove-user: Delete user
 user-management.remove-user.text: 'Are you sure you want to permanently delete user "{{name}}"? This action cannot be undone.'
-user-management.remove-user.success: User removed successfully
+user-management.remove-user.success: User deleted successfully
 user-management.perspectives: Perspectives
 user-management.roles: Roles
 user-management.role: Role
 user-management.users: Users
 user-management.user: User
-user-management.add-folder: Add new folder
+user-management.add-folder: New folder
 user-management.add-folder.label: Enter the name of the new folder
-user-management.add-user: Add new user
+user-management.add-user: New user
 user-management.add-user.label: Enter the name of the new user
 user-management.last-login: Last Login
 user-management.search.id: ID
@@ -1525,16 +1527,18 @@ roles.clone-role: Clone role
 roles.clone-role.text: Enter the name of the new role
 roles.remove-role: Delete role
 roles.remove-role.text: 'Are you sure you want to permanently delete role "{{name}}"? This action cannot be undone.'
-roles.remove-folder.success: Folder removed successfully
+roles.remove-folder: Delete folder
+roles.remove-folder.text: 'Are you sure you want to permanently delete this folder? This action cannot be undone.'
+roles.remove-folder.success: Folder deleted successfully
 roles.remove-item.success: Role removed successfully
 roles.add-item.success: Role added successfully
 roles.add-folder.success: Folder added successfully
 roles.general: General
 roles.settings.title: Settings
 roles.workspaces.title: Workspaces
-roles.add-folder: Add new folder
+roles.add-folder: New folder
 roles.add-folder.label: Enter the name of the new folder
-roles.add-role: Add new role
+roles.add-role: New role
 roles.add-role.label: Enter the name of the new role
 roles.search.id: ID
 navigation.quick-access: Quick Access
@@ -1814,7 +1818,7 @@ image-thumbnails.transformations.effects.intensity: Intensity
 image-thumbnails.transformations.add: Add transformation
 image-thumbnails.transformations.move-up: Move up
 image-thumbnails.transformations.move-down: Move down
-image-thumbnails.transformations.remove: Remove
+image-thumbnails.transformations.remove: Delete
 
 # Unknown/Fallback Transformation
 image-thumbnails.transformations.unknown-type: "Unknown transformation type: {{type}}"
@@ -1850,7 +1854,7 @@ video-thumbnails.add.validation.message: The thumbnail name is invalid
 # Video Transformation tool strip
 video-thumbnails.transformations.move-up: Move up
 video-thumbnails.transformations.move-down: Move down
-video-thumbnails.transformations.remove: Remove
+video-thumbnails.transformations.remove: Delete
 
 # Resize Transformation
 video-thumbnails.transformations.resize.config-title: Configure resize
