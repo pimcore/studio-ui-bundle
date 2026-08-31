@@ -212,9 +212,12 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     nodesRefs!.current[internalKey] = nodeRef
   }
 
+  const isExpandable = props.hasChildren === true || (props.children !== undefined && props.children.length > 0)
+
   const nodeContent = (
     <Flex
       align="center"
+      aria-expanded={ isExpandable ? isExpanded : undefined }
       className={ cn('tree-node__content-inner') }
       gap="small"
       justify="center"
