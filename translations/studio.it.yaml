@@ -1302,8 +1302,15 @@ relations.subtype: Sottotipo
 relations.classname: Classe
 relations.fullpath: Percorso completo
 relations.remove-all.confirm: Eliminare tutte le relazioni?
+relations.create-object.title: Nuovo oggetto
+relations.create-object.submit: Crea
+relations.create-object.name: Nome
+relations.create-object.parent: Elemento padre
+relations.create-object.parent.placeholder: Seleziona un elemento padre
+relations.create-object.class: Classe
 relation: relazione
 items-limit-reached: Il numero massimo di elementi ({{maxItems}}) è stato raggiunto.
+asset-upload-type-not-allowed: Il tipo dell'asset caricato non è consentito per questo campo.
 actions: Azioni
 asset: Asset
 data-object: Data Object

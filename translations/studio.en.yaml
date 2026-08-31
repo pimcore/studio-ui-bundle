@@ -1302,6 +1302,12 @@ relations.subtype: Subtype
 relations.classname: Class
 relations.fullpath: Full Path
 relations.remove-all.confirm: Do you really want to delete all relations?
+relations.create-object.title: New object
+relations.create-object.submit: Create
+relations.create-object.name: Name
+relations.create-object.parent: Parent
+relations.create-object.parent.placeholder: Select a parent
+relations.create-object.class: Class
 relation: Relation
 items-limit-reached: The maximum number of items ({{maxItems}}) has been reached.
 asset-upload-type-not-allowed: The uploaded asset's type is not allowed for this field.
