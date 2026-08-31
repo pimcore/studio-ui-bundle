@@ -178,7 +178,9 @@ export const DefaultCell = ({ ...originalProps }: DefaultCellProps): React.JSX.E
     if (event.key === 'Escape' && isInEditMode) {
       event.stopPropagation()
       setIsInEditMode(false)
-      element.current?.focus()
+      // Defer focus so the editor unmounts before the cell receives focus,
+      // preventing the editor's onBlur from saving a stale draft value.
+      requestAnimationFrame(() => { element.current?.focus() })
     }
 
     if (element.current === document.activeElement) {
