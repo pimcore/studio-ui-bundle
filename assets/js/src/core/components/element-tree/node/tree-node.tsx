@@ -167,11 +167,19 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     }
 
     if (event.key === 'ArrowDown') {
-      gotoNextNode(event)
+      gotoNode(event, 1)
     }
 
     if (event.key === 'ArrowUp') {
-      gotoPreviousNode(event)
+      gotoNode(event, -1)
+    }
+
+    if (event.key === 'Home') {
+      gotoNode(event, 'first')
+    }
+
+    if (event.key === 'End') {
+      gotoNode(event, 'last')
     }
   }
 
@@ -183,23 +191,14 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     setExpanded(false)
   }
 
-  function gotoNextNode (event: KeyboardEvent): void {
+  function gotoNode (event: KeyboardEvent, offset: number | 'first' | 'last'): void {
     event.preventDefault()
-
-    const index = nodeOrder!().indexOf(internalKey)
-
-    if (index < nodeOrder!().length - 1) {
-      nodesRefs!.current[nodeOrder!()[index + 1]].el.focus()
-    }
-  }
-
-  function gotoPreviousNode (event: KeyboardEvent): void {
-    event.preventDefault()
-
-    const index = nodeOrder!().indexOf(internalKey)
-
-    if (index > 0) {
-      nodesRefs!.current[nodeOrder!()[index - 1]].el.focus()
+    const order = nodeOrder!()
+    if (order.length === 0) return
+    const current = order.indexOf(internalKey)
+    const target = offset === 'first' ? 0 : offset === 'last' ? order.length - 1 : current + offset
+    if (target >= 0 && target < order.length) {
+      nodesRefs!.current[order[target]].el.focus()
     }
   }
 
