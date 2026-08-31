@@ -175,6 +175,12 @@ export const DefaultCell = ({ ...originalProps }: DefaultCellProps): React.JSX.E
       enableEditMode()
     }
 
+    if (event.key === 'Escape' && isInEditMode) {
+      event.stopPropagation()
+      setIsInEditMode(false)
+      element.current?.focus()
+    }
+
     if (element.current === document.activeElement) {
       handleArrowNavigation(event)
     }
