@@ -223,7 +223,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
       onKeyDown={ onKeyDown }
       ref={ setRef }
       role='button'
-      tabIndex={ -1 }
+      tabIndex={ isSelected || (level === 0 && internalKey === '0') ? 0 : -1 }
     >
       <Flex
         align="center"
