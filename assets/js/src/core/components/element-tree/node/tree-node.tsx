@@ -17,7 +17,7 @@ import { TreeExpander } from '../expander/tree-expander'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useElementTreeNode } from '../hooks/use-element-tree-node'
-import { isNil } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/utils/widget-content-scroll'
 import { createNodeTestId } from '@Pimcore/utils/test-id-generator'
 import { ComponentRenderer } from '@Pimcore/modules/app/component-registry/component-renderer'
@@ -194,7 +194,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   function gotoNode (event: KeyboardEvent, offset: number | 'first' | 'last'): void {
     event.preventDefault()
     const order = nodeOrder!()
-    if (order.length === 0) return
+    if (isEmpty(order)) return
     const current = order.indexOf(internalKey)
     const target = offset === 'first' ? 0 : offset === 'last' ? order.length - 1 : current + offset
     if (target >= 0 && target < order.length) {
