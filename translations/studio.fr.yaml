@@ -127,7 +127,7 @@ document.tree.context-menu.add-hardlink: Nouveau hardlink
 document.required-fields.validation-title: Champs obligatoires manquants
 document.required-fields.validation-message: Les champs obligatoires suivants doivent être remplis avant la publication
 document.site.remove-site: Supprimer le site
-document.site.remove-site-confirmation: Êtes-vous sûr de vouloir supprimer ce site ? Cette action est irréversible.
+document.site.remove-site-confirmation: Voulez-vous vraiment supprimer définitivement ce site ? Cette action est irréversible.
 document.site.use-as-site: Utiliser comme site
 document.site.edit-site: Modifier le site
 document.site.form.main-domain: Domaine principal
@@ -157,8 +157,8 @@ data-object.select-class-to-display: Sélectionner une classe à afficher
 data-object.tree.context-menu.add-object: Nouvel objet
 data-object.tree.context-menu.add-variant: Nouvelle variante
 data-object.variant-listing.create-data-variant: Nouvelle variante
-data-object.create-data-object: Ajouter un nouvel objet de type {{className}}
-data-object.create-variant: Ajouter une nouvelle variante de type {{className}}
+data-object.create-data-object: Nouvel objet de type {{className}}
+data-object.create-variant: Nouvelle variante de type {{className}}
 data-object.object-editor-tabs.variants: Variantes
 object.object-editor-tabs.children-listing: Grille des enfants
 workflow.label: Workflow
@@ -188,7 +188,7 @@ class-definition.import-file-label: Sélectionner un fichier JSON
 class-definition.import-success: Définition de classe importée avec succès
 class-definition.export-success: Définition de classe exportée avec succès
 class-definition.custom-layouts.default-layout: Mise en page par défaut
-class-definition.create-new: Créer une nouvelle définition de classe
+class-definition.create-new: Nouvelle définition de classe
 class-definition.class-name: Nom de la classe
 class-definition.unique-identifier: Identifiant unique
 class-definition.unique-identifier-warning: Soyez prudent avec l'identifiant unique car les noms de tables ne peuvent contenir que 64 caractères maximum.
@@ -244,7 +244,7 @@ class-definition.composite-indices.type-localized-query: Query localisée
 class-definition.composite-indices.type-store: Store
 class-definition.composite-indices.type-localized-store: Store localisé
 class-definition.composite-indices.index-label: Index
-field-collection.create-new: Créer une nouvelle Field Collection
+field-collection.create-new: Nouvelle Field Collection
 field-collection.key: Clé
 field-collection.validation.enter-key: Veuillez entrer une clé
 field-collection.validation.key-format: La clé doit commencer par une lettre et ne peut contenir que des lettres, des chiffres et des underscores.
@@ -258,7 +258,7 @@ field-collection.general-settings.implements-interfaces: Implémente les interfa
 field-collection.general-settings.usages.title: Utilisations
 field-collection.general-settings.usages.class: Classe
 field-collection.general-settings.usages.field: Champ
-object-brick.create-new: Créer un nouvel Object Brick
+object-brick.create-new: Nouvel Object Brick
 object-brick.key: Clé
 object-brick.validation.enter-key: Veuillez entrer une clé
 object-brick.validation.key-format: La clé doit commencer par une lettre et ne peut contenir que des lettres, des chiffres et des underscores.
@@ -273,7 +273,7 @@ object-brick.class-definitions-block.classname: Classe
 object-brick.class-definitions-block.select-classname: Sélectionner une classe
 object-brick.class-definitions-block.fieldname: Champ
 object-brick.class-definitions-block.select-fieldname: Sélectionner un champ
-select-option.create-new: Créer une nouvelle option de sélection
+select-option.create-new: Nouvelle option de sélection
 select-option.id: ID
 select-option.enter-name-new-item: Entrez le nom du nouvel élément
 select-option.validation.enter-id: Veuillez entrer un ID
@@ -811,7 +811,7 @@ field-definitions.saved-successfully: Enregistré avec succès.
 field-definitions.select-item-configuration: Sélectionner la configuration de l'élément
 field-definitions.custom-layout-title: Custom Layout
 field-definitions.custom-layouts: Custom Layouts
-field-definitions.create-new-class-definition: Créer un nouveau Custom Layout
+field-definitions.create-new-class-definition: Nouveau Custom Layout
 field-definitions.select-field-message: Veuillez sélectionner un champ dans l'arborescence pour modifier ses propriétés.
 field-definitions.loading-general-settings: Chargement des paramètres généraux...
 field-definitions.type-not-supported: Type non pris en charge
@@ -1304,6 +1304,7 @@ relations.fullpath: Chemin complet
 relations.remove-all.confirm: Voulez-vous vraiment supprimer toutes les relations ?
 relation: relation
 items-limit-reached: Le nombre maximum d'éléments ({{maxItems}}) a été atteint.
+asset-upload-type-not-allowed: Le type de l'asset téléversé n'est pas autorisé pour ce champ.
 actions: Actions
 asset: Asset
 data-object: Data Object
@@ -1496,6 +1497,8 @@ user-management.workspaces.localized-fields.edit: Permissions d'édition
 user-management.workspaces.custom-layouts: Custom Layouts
 user-management.workspaces.custom-layouts.select: Sélectionner un ou plusieurs champs
 user-management.add-folder.success: Dossier ajouté avec succès
+user-management.remove-folder: Supprimer le dossier
+user-management.remove-folder.text: 'Voulez-vous vraiment supprimer définitivement ce dossier ? Cette action est irréversible.'
 user-management.remove-folder.success: Dossier supprimé avec succès
 user-management.clone-user: Cloner l'utilisateur
 user-management.clone-user.text: Entrez le nom du nouvel utilisateur
@@ -1511,9 +1514,9 @@ user-management.roles: Rôles
 user-management.role: Rôle
 user-management.users: Utilisateurs
 user-management.user: Utilisateur
-user-management.add-folder: Ajouter un nouveau dossier
+user-management.add-folder: Nouveau dossier
 user-management.add-folder.label: Entrez le nom du nouveau dossier
-user-management.add-user: Ajouter un nouvel utilisateur
+user-management.add-user: Nouvel utilisateur
 user-management.add-user.label: Entrez le nom du nouvel utilisateur
 user-management.last-login: Dernière connexion
 user-management.search.id: ID
@@ -1524,6 +1527,8 @@ roles.clone-role: Cloner le rôle
 roles.clone-role.text: Entrez le nom du nouveau rôle
 roles.remove-role: Supprimer le rôle
 roles.remove-role.text: 'Êtes-vous sûr de vouloir supprimer définitivement le rôle "{{name}}" ? Cette action est irréversible.'
+roles.remove-folder: Supprimer le dossier
+roles.remove-folder.text: 'Voulez-vous vraiment supprimer définitivement ce dossier ? Cette action est irréversible.'
 roles.remove-folder.success: Dossier supprimé avec succès
 roles.remove-item.success: Rôle supprimé avec succès
 roles.add-item.success: Rôle ajouté avec succès
@@ -1531,9 +1536,9 @@ roles.add-folder.success: Dossier ajouté avec succès
 roles.general: Général
 roles.settings.title: Paramètres
 roles.workspaces.title: Workspaces
-roles.add-folder: Ajouter un nouveau dossier
+roles.add-folder: Nouveau dossier
 roles.add-folder.label: Entrez le nom du nouveau dossier
-roles.add-role: Ajouter un nouveau rôle
+roles.add-role: Nouveau rôle
 roles.add-role.label: Entrez le nom du nouveau rôle
 roles.search.id: ID
 navigation.quick-access: Accès rapide

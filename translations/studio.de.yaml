@@ -126,8 +126,8 @@ document.tree.context-menu.add-link: Neuer Link
 document.tree.context-menu.add-hardlink: Neuer Hardlink
 document.required-fields.validation-title: Pflichtfelder fehlen
 document.required-fields.validation-message: Die folgenden Pflichtfelder müssen vor dem Veröffentlichen ausgefüllt werden
-document.site.remove-site: Site entfernen
-document.site.remove-site-confirmation: Sind Sie sicher, dass Sie diese Site entfernen möchten? Diese Aktion kann nicht rückgängig gemacht werden.
+document.site.remove-site: Site löschen
+document.site.remove-site-confirmation: Möchten Sie diese Site wirklich dauerhaft löschen? Diese Aktion kann nicht rückgängig gemacht werden.
 document.site.use-as-site: Als Site verwenden
 document.site.edit-site: Site bearbeiten
 document.site.form.main-domain: Hauptdomain
@@ -157,8 +157,8 @@ data-object.select-class-to-display: Wählen Sie eine Klasse zur Anzeige
 data-object.tree.context-menu.add-object: Neues Objekt
 data-object.tree.context-menu.add-variant: Neue Variante
 data-object.variant-listing.create-data-variant: Neue Variante
-data-object.create-data-object: Neues Objekt vom Typ {{className}} hinzufügen
-data-object.create-variant: Neue Variante vom Typ {{className}} hinzufügen
+data-object.create-data-object: Neues Objekt vom Typ {{className}}
+data-object.create-variant: Neue Variante vom Typ {{className}}
 data-object.object-editor-tabs.variants: Varianten
 object.object-editor-tabs.children-listing: Kinder-Grid
 workflow.label: Workflow
@@ -188,7 +188,7 @@ class-definition.import-file-label: JSON-Datei auswählen
 class-definition.import-success: Klassendefinition erfolgreich importiert
 class-definition.export-success: Klassendefinition erfolgreich exportiert
 class-definition.custom-layouts.default-layout: Standard-Layout
-class-definition.create-new: Neue Klassendefinition erstellen
+class-definition.create-new: Neue Klassendefinition
 class-definition.class-name: Klassenname
 class-definition.unique-identifier: Eindeutiger Bezeichner
 class-definition.unique-identifier-warning: Seien Sie vorsichtig mit dem eindeutigen Bezeichner, da Tabellennamen nur bis zu 64 Zeichen enthalten können.
@@ -244,7 +244,7 @@ class-definition.composite-indices.type-localized-query: Lokalisierte Query
 class-definition.composite-indices.type-store: Store
 class-definition.composite-indices.type-localized-store: Lokalisierter Store
 class-definition.composite-indices.index-label: Index
-field-collection.create-new: Neue Field Collection erstellen
+field-collection.create-new: Neue Field Collection
 field-collection.key: Schlüssel
 field-collection.validation.enter-key: Bitte geben Sie einen Schlüssel ein
 field-collection.validation.key-format: Der Schlüssel muss mit einem Buchstaben beginnen und darf nur Buchstaben, Zahlen und Unterstriche enthalten.
@@ -258,7 +258,7 @@ field-collection.general-settings.implements-interfaces: Implementiert Interface
 field-collection.general-settings.usages.title: Verwendungen
 field-collection.general-settings.usages.class: Klasse
 field-collection.general-settings.usages.field: Feld
-object-brick.create-new: Neuen Object Brick erstellen
+object-brick.create-new: Neuer Object Brick
 object-brick.key: Schlüssel
 object-brick.validation.enter-key: Bitte geben Sie einen Schlüssel ein
 object-brick.validation.key-format: Der Schlüssel muss mit einem Buchstaben beginnen und darf nur Buchstaben, Zahlen und Unterstriche enthalten.
@@ -273,7 +273,7 @@ object-brick.class-definitions-block.classname: Klasse
 object-brick.class-definitions-block.select-classname: Klasse auswählen
 object-brick.class-definitions-block.fieldname: Feld
 object-brick.class-definitions-block.select-fieldname: Feld auswählen
-select-option.create-new: Neue Auswahloption erstellen
+select-option.create-new: Neue Auswahloption
 select-option.id: ID
 select-option.enter-name-new-item: Geben Sie den Namen des neuen Eintrags ein
 select-option.validation.enter-id: Bitte geben Sie eine ID ein
@@ -697,7 +697,7 @@ notifications.settings.discard.keep-editing: Weiter bearbeiten
 notifications.settings.unsaved-changes_one: "{{count}} nicht gespeicherte Änderung"
 notifications.settings.unsaved-changes_other: "{{count}} nicht gespeicherte Änderungen"
 notifications.settings.group.general: Allgemein
-notifications.remove-all: Alle entfernen
+notifications.remove-all: Alle löschen
 notifications.new-notification: Neue Benachrichtigung
 notifications.columns.title: Titel
 notifications.columns.date: Datum
@@ -811,7 +811,7 @@ field-definitions.saved-successfully: Erfolgreich gespeichert.
 field-definitions.select-item-configuration: Elementkonfiguration auswählen
 field-definitions.custom-layout-title: Benutzerdefiniertes Layout
 field-definitions.custom-layouts: Benutzerdefinierte Layouts
-field-definitions.create-new-class-definition: Neues benutzerdefiniertes Layout erstellen
+field-definitions.create-new-class-definition: Neues benutzerdefiniertes Layout
 field-definitions.select-field-message: Bitte wählen Sie ein Feld aus dem Baum, um dessen Eigenschaften zu bearbeiten.
 field-definitions.loading-general-settings: Allgemeine Einstellungen werden geladen...
 field-definitions.type-not-supported: Typ nicht unterstützt
@@ -1304,6 +1304,7 @@ relations.fullpath: Vollständiger Pfad
 relations.remove-all.confirm: Möchten Sie wirklich alle Relationen löschen?
 relation: Relation
 items-limit-reached: Die maximale Anzahl von Einträgen ({{maxItems}}) wurde erreicht.
+asset-upload-type-not-allowed: Der Typ des hochgeladenen Assets ist für dieses Feld nicht zulässig.
 actions: Aktionen
 asset: Asset
 data-object: Data Object
@@ -1357,7 +1358,7 @@ tree.actions.role: Rolle
 tree.actions.add-role: Rolle hinzufügen
 tree.actions.clone-role: Rolle klonen
 tree.actions.remove-role: Rolle löschen
-tree.actions.remove-folder: Ordner entfernen
+tree.actions.remove-folder: Ordner löschen
 tag-configuration.new: Neu
 tag-configuration.new-tag: Neuer Tag
 tag-configuration.name: Name
@@ -1496,7 +1497,9 @@ user-management.workspaces.localized-fields.edit: Bearbeitungsberechtigungen
 user-management.workspaces.custom-layouts: Benutzerdefinierte Layouts
 user-management.workspaces.custom-layouts.select: Ein oder mehrere Felder auswählen
 user-management.add-folder.success: Ordner erfolgreich hinzugefügt
-user-management.remove-folder.success: Ordner erfolgreich entfernt
+user-management.remove-folder: Ordner löschen
+user-management.remove-folder.text: 'Möchten Sie diesen Ordner wirklich dauerhaft löschen? Diese Aktion kann nicht rückgängig gemacht werden.'
+user-management.remove-folder.success: Ordner erfolgreich gelöscht
 user-management.clone-user: Benutzer klonen
 user-management.clone-user.text: Geben Sie den Namen des neuen Benutzers ein
 user-management.clone-user.success: Benutzer erfolgreich geklont
@@ -1505,15 +1508,15 @@ user-management.save-user.password.success: Passwort erfolgreich aktualisiert
 user-management.add-user.success: Benutzer erfolgreich hinzugefügt
 user-management.remove-user: Benutzer löschen
 user-management.remove-user.text: 'Sind Sie sicher, dass Sie den Benutzer "{{name}}" endgültig löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.'
-user-management.remove-user.success: Benutzer erfolgreich entfernt
+user-management.remove-user.success: Benutzer erfolgreich gelöscht
 user-management.perspectives: Perspektiven
 user-management.roles: Rollen
 user-management.role: Rolle
 user-management.users: Benutzer
 user-management.user: Benutzer
-user-management.add-folder: Neuen Ordner hinzufügen
+user-management.add-folder: Neuer Ordner
 user-management.add-folder.label: Geben Sie den Namen des neuen Ordners ein
-user-management.add-user: Neuen Benutzer hinzufügen
+user-management.add-user: Neuer Benutzer
 user-management.add-user.label: Geben Sie den Namen des neuen Benutzers ein
 user-management.last-login: Letzte Anmeldung
 user-management.search.id: ID
@@ -1524,16 +1527,18 @@ roles.clone-role: Rolle klonen
 roles.clone-role.text: Geben Sie den Namen der neuen Rolle ein
 roles.remove-role: Rolle löschen
 roles.remove-role.text: 'Sind Sie sicher, dass Sie die Rolle "{{name}}" endgültig löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.'
-roles.remove-folder.success: Ordner erfolgreich entfernt
+roles.remove-folder: Ordner löschen
+roles.remove-folder.text: 'Möchten Sie diesen Ordner wirklich dauerhaft löschen? Diese Aktion kann nicht rückgängig gemacht werden.'
+roles.remove-folder.success: Ordner erfolgreich gelöscht
 roles.remove-item.success: Rolle erfolgreich entfernt
 roles.add-item.success: Rolle erfolgreich hinzugefügt
 roles.add-folder.success: Ordner erfolgreich hinzugefügt
 roles.general: Allgemein
 roles.settings.title: Einstellungen
 roles.workspaces.title: Workspaces
-roles.add-folder: Neuen Ordner hinzufügen
+roles.add-folder: Neuer Ordner
 roles.add-folder.label: Geben Sie den Namen des neuen Ordners ein
-roles.add-role: Neue Rolle hinzufügen
+roles.add-role: Neue Rolle
 roles.add-role.label: Geben Sie den Namen der neuen Rolle ein
 roles.search.id: ID
 navigation.quick-access: Schnellzugriff
@@ -1813,7 +1818,7 @@ image-thumbnails.transformations.effects.intensity: Intensität
 image-thumbnails.transformations.add: Transformation hinzufügen
 image-thumbnails.transformations.move-up: Nach oben
 image-thumbnails.transformations.move-down: Nach unten
-image-thumbnails.transformations.remove: Entfernen
+image-thumbnails.transformations.remove: Löschen
 
 # Unknown/Fallback Transformation
 image-thumbnails.transformations.unknown-type: "Unbekannter Transformationstyp: {{type}}"
@@ -1849,7 +1854,7 @@ video-thumbnails.add.validation.message: Der Vorschaubild-Name ist ungültig
 # Video Transformation tool strip
 video-thumbnails.transformations.move-up: Nach oben
 video-thumbnails.transformations.move-down: Nach unten
-video-thumbnails.transformations.remove: Entfernen
+video-thumbnails.transformations.remove: Löschen
 
 # Resize Transformation
 video-thumbnails.transformations.resize.config-title: Größenänderung konfigurieren
