@@ -212,7 +212,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     nodesRefs!.current[internalKey] = nodeRef
   }
 
-  const isExpandable = props.hasChildren === true || (props.children !== undefined && props.children.length > 0)
+  const isExpandable = props.hasChildren === true
 
   const nodeContent = (
     <Flex
