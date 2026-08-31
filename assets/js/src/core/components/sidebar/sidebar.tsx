@@ -127,8 +127,11 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
                       onClick={ () => {
                         handleSidebarClick(entry.key)
                       } }
-                      onKeyDown={ () => {
-                        handleSidebarClick(entry.key)
+                      onKeyDown={ (event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                          event.preventDefault()
+                          handleSidebarClick(entry.key)
+                        }
                       } }
                       role={ 'tab' }
                       tabIndex={ index }
