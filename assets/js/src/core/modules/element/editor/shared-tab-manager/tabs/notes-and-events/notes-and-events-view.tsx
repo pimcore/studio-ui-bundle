@@ -60,10 +60,17 @@ export const NotesAndEventsTabView = ({
 
   const NotesAndEvents: Array<{
     children: React.JSX.Element
+    expandable: boolean
     extra: React.JSX.Element
     label: React.JSX.Element
     key: string
   }> = notes.map((note) => {
+    // A note the user filled in with nothing but a type and a title has no body to reveal,
+    // so it must not offer an expand toggle at all. `data` is only ever populated for
+    // system-generated events, never through the add-note form.
+    const hasDescription = note.description.trim().length > 0
+    const hasDetails = note.data.length > 0
+
     const extra = (): React.JSX.Element => {
       const type = note.type ?? undefined
 
@@ -93,13 +100,11 @@ export const NotesAndEventsTabView = ({
     const children = (): React.JSX.Element => {
       return (
         <>
-          <Paragraph>{respectLineBreak(note.description)}</Paragraph>
-          {note.data.length > 0 && <NoteAndEventDetails note={ note } />}
+          {hasDescription && <Paragraph>{respectLineBreak(note.description)}</Paragraph>}
+          {hasDetails && <NoteAndEventDetails note={ note } />}
         </>
       )
     }
-
-    const collapseDisabled = { disabled: true }
 
     return ({
       key: note.id.toString(),
@@ -119,7 +124,7 @@ export const NotesAndEventsTabView = ({
       </Split>,
       extra: extra(),
       children: children(),
-      ...(note.description.length === 0 && collapseDisabled)
+      expandable: hasDescription || hasDetails
     })
   })
 
