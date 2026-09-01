@@ -1091,8 +1091,10 @@ batch-edit.job-title: Modifica in blocco
 jobs.zip-upload-job.title: Carica ZIP
 jobs.zip-upload-job.step1.title: Estrazione ZIP
 jobs.zip-upload-job.step2.title: Creazione asset
-jobs.download-csv-job.title: CSV export
-jobs.download-xlsx-job.title: XLSX export
+jobs.download-csv-job.title: Grid CSV export
+jobs.download-csv-job.title-with-grid: "{{grid}} grid CSV export"
+jobs.download-xlsx-job.title: Grid XLSX export
+jobs.download-xlsx-job.title-with-grid: "{{grid}} grid XLSX export"
 jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Modifica in blocco
 batch-edit.no-content: Non sono ancora state aggiunte colonne

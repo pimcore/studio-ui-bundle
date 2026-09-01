@@ -1091,8 +1091,10 @@ batch-edit.job-title: Stapelbearbeitung
 jobs.zip-upload-job.title: ZIP hochladen
 jobs.zip-upload-job.step1.title: ZIP wird entpackt
 jobs.zip-upload-job.step2.title: Assets werden erstellt
-jobs.download-csv-job.title: CSV export
-jobs.download-xlsx-job.title: XLSX export
+jobs.download-csv-job.title: Grid CSV export
+jobs.download-csv-job.title-with-grid: "{{grid}} grid CSV export"
+jobs.download-xlsx-job.title: Grid XLSX export
+jobs.download-xlsx-job.title-with-grid: "{{grid}} grid XLSX export"
 jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Stapelbearbeitung
 batch-edit.no-content: Es sind noch keine Spalten hinzugefügt

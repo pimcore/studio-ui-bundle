@@ -1091,8 +1091,10 @@ batch-edit.job-title: Édition par lot
 jobs.zip-upload-job.title: Téléverser un ZIP
 jobs.zip-upload-job.step1.title: Extraction du ZIP
 jobs.zip-upload-job.step2.title: Création des assets
-jobs.download-csv-job.title: CSV export
-jobs.download-xlsx-job.title: XLSX export
+jobs.download-csv-job.title: Grid CSV export
+jobs.download-csv-job.title-with-grid: "{{grid}} grid CSV export"
+jobs.download-xlsx-job.title: Grid XLSX export
+jobs.download-xlsx-job.title-with-grid: "{{grid}} grid XLSX export"
 jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Édition par lot
 batch-edit.no-content: Il n'y a pas encore de colonnes ajoutées

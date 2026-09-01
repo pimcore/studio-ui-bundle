@@ -1091,8 +1091,10 @@ batch-edit.job-title: Massredigering
 jobs.zip-upload-job.title: Ladda upp ZIP
 jobs.zip-upload-job.step1.title: Extraherar ZIP
 jobs.zip-upload-job.step2.title: Skapar assets
-jobs.download-csv-job.title: CSV export
-jobs.download-xlsx-job.title: XLSX export
+jobs.download-csv-job.title: Grid CSV export
+jobs.download-csv-job.title-with-grid: "{{grid}} grid CSV export"
+jobs.download-xlsx-job.title: Grid XLSX export
+jobs.download-xlsx-job.title-with-grid: "{{grid}} grid XLSX export"
 jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Massredigering
 batch-edit.no-content: Det finns inga tillagda kolumner ännu

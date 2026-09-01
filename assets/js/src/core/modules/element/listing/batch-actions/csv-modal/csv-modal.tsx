@@ -25,6 +25,7 @@ import { isNil } from 'lodash'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
 import { type GridColumnRequest } from '@sdk/api/asset'
 import { Form } from '@sdk/components'
+import { buildGridExportFileName } from '../export-file-name'
 
 export interface CsvModalProps {
   open: boolean
@@ -44,6 +45,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
   const { getArgs } = useDataQueryHelper()
   const classDefinitionSelection = useClassDefinitionSelection(true)
   const selectedClassDefinition = classDefinitionSelection?.selectedClassDefinition
+  const gridName = selectedClassDefinition?.name ?? elementType
   const initialFormValues: CSVFormValues = {
     delimiter: ';',
     header: 'name'
@@ -93,13 +95,18 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
 
   function onFinish (values: CSVFormValues): void {
     const isFolderExport = numberedSelectedRows.length === 0
-    const job = new CsvDownloadJob({ action: async () => await getDownloadAction(values.delimiter, values.header), isFolderExport })
+    const job = new CsvDownloadJob({
+      action: async () => await getDownloadAction(values.delimiter, values.header),
+      isFolderExport,
+      title: t('jobs.download-csv-job.title-with-grid', { grid: gridName })
+    })
     void executionEngine.runJob(job)
 
     props.setOpen(false)
   }
 
   async function getDownloadAction (delimiter: CSVFormValues['delimiter'], header: CSVFormValues['header']): Promise<number> {
+    const fileName = buildGridExportFileName(gridName, 'csv')
     const extractedColumnsFromColumnArg: GridColumnRequest[] = []
 
     const columns = getArgs()?.body?.columns ?? []
@@ -133,8 +140,9 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
           columns: extractedColumnsFromColumnArg,
           config: {
             delimiter,
-            header
-          },
+            header,
+            fileName
+          } as any,
           filters: {
             ...filters
           },
@@ -153,8 +161,9 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
           columns: extractedColumnsFromColumnArg,
           config: {
             delimiter,
-            header
-          },
+            header,
+            fileName
+          } as any,
           ...(!isNil(selectedClassDefinition?.id) && { classId: selectedClassDefinition.id })
         }
       })

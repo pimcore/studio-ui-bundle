@@ -21,6 +21,7 @@ import { isNull } from 'lodash'
 
 export interface AbstractDownloadJobOptions {
   action: () => Promise<number>
+  title?: string
 }
 
 interface BuildHandlerOptions {
@@ -29,6 +30,7 @@ interface BuildHandlerOptions {
   startAtStep?: number
   ancestorJobRunIds?: number[]
   onRetry?: () => Promise<void>
+  title?: string
 }
 
 export abstract class AbstractDownloadJob implements JobInterface {
@@ -44,7 +46,8 @@ export abstract class AbstractDownloadJob implements JobInterface {
       messageBus.registerHandler(this.createHandler({
         jobRunId,
         hasChildJob: this.usesChildJob(),
-        onRetry: async () => { await this.run(options) }
+        onRetry: async () => { await this.run(options) },
+        title: this.options.title
       }))
     }
   }
@@ -89,7 +92,7 @@ export abstract class AbstractDownloadJob implements JobInterface {
     return new MessageBusJobHandler({
       jobRunId: options.jobRunId,
       ancestorJobRunIds: options.ancestorJobRunIds,
-      title: this.getTitle(),
+      title: options.title ?? this.getTitle(),
       stepTracker: options.hasChildJob === true
         ? new ChildJobStepTracker({ totalSteps: 2, startAtStep: options.startAtStep })
         : new DefaultStepTracker(),
