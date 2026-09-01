@@ -2869,3 +2869,4 @@ saved-search.update.success: Lagret søk oppdatert
 saved-search.delete.success: Lagret søk slettet
 saved-search.shared-modified.info: Du har gjort endringer i den opprinnelige konfigurasjonen. Siden den eies av noen andre, kan du lagre den som et nytt søk.
 saved-search.menu-shortcut-group: Menygruppe
+skip-to-content: Hopp til innhold
