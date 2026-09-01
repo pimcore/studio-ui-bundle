@@ -163,38 +163,37 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   function onKeyDown (event: React.KeyboardEvent): void {
     const current = event.currentTarget as HTMLElement
 
-    if (event.key === 'Enter') { selectNode() }
-
-    if (event.key === 'ArrowDown') {
-      event.preventDefault()
-      moveFocus(current, 1)
-    }
-
-    if (event.key === 'ArrowUp') {
-      event.preventDefault()
-      moveFocus(current, -1)
-    }
-
-    if (event.key === 'ArrowRight') {
-      event.preventDefault()
-      if (isExpandable && !isExpanded) {
-        setExpanded(true)
-      } else {
+    switch (event.key) {
+      case 'Enter':
+        selectNode()
+        break
+      case 'ArrowDown':
+        event.preventDefault()
         moveFocus(current, 1)
-      }
+        break
+      case 'ArrowUp':
+        event.preventDefault()
+        moveFocus(current, -1)
+        break
+      case 'ArrowRight':
+        event.preventDefault()
+        isExpandable && !isExpanded ? setExpanded(true) : moveFocus(current, 1)
+        break
+      case 'ArrowLeft':
+        event.preventDefault()
+        isExpanded ? setExpanded(false) : moveFocusToParent(current)
+        break
+      case 'Home':
+        event.preventDefault()
+        moveFocus(current, 'first')
+        break
+      case 'End':
+        event.preventDefault()
+        moveFocus(current, 'last')
+        break
+      default:
+        break
     }
-
-    if (event.key === 'ArrowLeft') {
-      event.preventDefault()
-      if (isExpanded) {
-        setExpanded(false)
-      } else {
-        moveFocusToParent(current)
-      }
-    }
-
-    if (event.key === 'Home') { event.preventDefault(); moveFocus(current, 'first') }
-    if (event.key === 'End') { event.preventDefault(); moveFocus(current, 'last') }
   }
 
   function moveFocus (current: HTMLElement, offset: number | 'first' | 'last'): void {
