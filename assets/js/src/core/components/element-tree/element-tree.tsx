@@ -59,6 +59,7 @@ export interface TreeProps {
   onRightClick?: (event: React.MouseEvent, node: TreeNode) => void
 
   showRoot: boolean
+  ariaLabel?: string
 }
 
 export interface INodeRef {
@@ -132,6 +133,7 @@ const ElementTree = (
   const treeTestId = createTreeTestId(treeId)
   const treeContent = (
     <div
+      aria-label={ props.ariaLabel }
       className={ ['tree', styles.tree].join(' ') }
       data-testid={ treeTestId }
       role="tree"
