@@ -73,7 +73,9 @@ export abstract class AbstractDownloadJob implements JobInterface {
           const available = await downloadFromUrlWithCheck(url, `${url}/available`)
           if (!available) {
             context.showWarning('jobs.job.download-error', t('jobs.job.download-not-available'))
+            return
           }
+          await context.hideNotification()
         }
       })
     }
