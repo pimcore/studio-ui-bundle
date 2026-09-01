@@ -1091,10 +1091,10 @@ batch-edit.job-title: Edición por lotes
 jobs.zip-upload-job.title: Subir ZIP
 jobs.zip-upload-job.step1.title: Extrayendo ZIP
 jobs.zip-upload-job.step2.title: Creando assets
-jobs.download-csv-job.title: Grid CSV export
-jobs.download-csv-job.title-with-grid: "{{grid}} grid CSV export"
-jobs.download-xlsx-job.title: Grid XLSX export
-jobs.download-xlsx-job.title-with-grid: "{{grid}} grid XLSX export"
+jobs.download-csv-job.title: Exportación CSV de cuadrícula
+jobs.download-csv-job.title-with-grid: "Exportación CSV de la cuadrícula {{grid}}"
+jobs.download-xlsx-job.title: Exportación XLSX de cuadrícula
+jobs.download-xlsx-job.title-with-grid: "Exportación XLSX de la cuadrícula {{grid}}"
 jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Edición por lotes
 batch-edit.no-content: Aún no se han añadido columnas

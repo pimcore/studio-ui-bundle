@@ -142,7 +142,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
             delimiter,
             header,
             fileName
-          } as any,
+          },
           filters: {
             ...filters
           },
@@ -163,7 +163,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
             delimiter,
             header,
             fileName
-          } as any,
+          },
           ...(!isNil(selectedClassDefinition?.id) && { classId: selectedClassDefinition.id })
         }
       })

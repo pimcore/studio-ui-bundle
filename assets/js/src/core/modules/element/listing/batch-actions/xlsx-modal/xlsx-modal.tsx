@@ -139,7 +139,7 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
           config: {
             header,
             fileName
-          } as any,
+          },
           filters: {
             ...filters
           },
@@ -159,7 +159,7 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
           config: {
             header,
             fileName
-          } as any,
+          },
           ...(!isNil(selectedClassDefinition?.id) && { classId: selectedClassDefinition.id })
         }
       })
