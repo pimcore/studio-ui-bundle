@@ -1305,6 +1305,7 @@ relations.remove-all.confirm: Vill du verkligen ta bort alla relationer?
 relations.upload.subtype-not-allowed: Uppladdade assets vars typ den här relationen inte tillåter tilldelades inte.
 relation: relation
 items-limit-reached: Maximalt antal objekt ({{maxItems}}) har nåtts.
+asset-upload-type-not-allowed: Typen på det uppladdade assetet är inte tillåten för det här fältet.
 actions: Åtgärder
 asset: Asset
 data-object: Data Object

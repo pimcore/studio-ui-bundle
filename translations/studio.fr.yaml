@@ -1305,6 +1305,7 @@ relations.remove-all.confirm: Voulez-vous vraiment supprimer toutes les relation
 relations.upload.subtype-not-allowed: Les assets téléversés dont le type n'est pas autorisé par cette relation n'ont pas été affectés.
 relation: relation
 items-limit-reached: Le nombre maximum d'éléments ({{maxItems}}) a été atteint.
+asset-upload-type-not-allowed: Le type de l'asset téléversé n'est pas autorisé pour ce champ.
 actions: Actions
 asset: Asset
 data-object: Data Object
