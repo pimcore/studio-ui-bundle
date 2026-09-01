@@ -44,6 +44,14 @@ export const ContextMenuWrapper = ({ children, renderMenu, calculateAutoHeight =
     event.stopPropagation()
   }
 
+  const handleKeyDown = (event: React.KeyboardEvent): void => {
+    if (event.key === 'F10' && event.shiftKey) {
+      event.preventDefault()
+      event.stopPropagation()
+      setOpen(true)
+    }
+  }
+
   const contextValue: ContextMenuContextType = {
     closeMenu
   }
@@ -61,6 +69,7 @@ export const ContextMenuWrapper = ({ children, renderMenu, calculateAutoHeight =
     >
       <span
         onContextMenu={ handleContextMenu }
+        onKeyDown={ handleKeyDown }
         role="none"
       >{children}</span>
     </Dropdown>
