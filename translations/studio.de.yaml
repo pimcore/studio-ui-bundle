@@ -1095,6 +1095,7 @@ asset.sidebar.web-format: Web-Format
 asset.sidebar.print-format: Druck-Format
 asset.sidebar.office-format: Office-Format
 jobs.notification.title: Laufende Aufträge
+jobs.notification.tooltip: Laufende Aufträge öffnen
 jobs.notification.jobs_one: "{{count}} Aktion"
 jobs.notification.jobs_other: "{{count}} Aktionen"
 jobs.notification.hide-all-finished: Alle abgeschlossenen ausblenden
