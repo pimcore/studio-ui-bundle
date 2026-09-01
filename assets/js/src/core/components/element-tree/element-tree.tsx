@@ -134,6 +134,7 @@ const ElementTree = (
     <div
       className={ ['tree', styles.tree].join(' ') }
       data-testid={ treeTestId }
+      role="tree"
     >
       <TreeContext.Provider value={ treeContextValue }>
 
