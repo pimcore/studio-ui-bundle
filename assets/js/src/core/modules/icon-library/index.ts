@@ -182,6 +182,8 @@ import download from '@Pimcore/assets/icons/download.inline.svg?react'
 import draft from '@Pimcore/assets/icons/draft.inline.svg?react'
 import dragOption from '@Pimcore/assets/icons/drag-option.inline.svg?react'
 import dropTarget from '@Pimcore/assets/icons/drop-target.inline.svg?react'
+import duplicateAsset from '@Pimcore/assets/icons/duplicate-asset.inline.svg?react'
+import duplicateObject from '@Pimcore/assets/icons/duplicate-object.inline.svg?react'
 import dynamicPermission from '@Pimcore/assets/icons/dynamic-permission.inline.svg?react'
 import editAlt from '@Pimcore/assets/icons/edit-alt.inline.svg?react'
 import editPen from '@Pimcore/assets/icons/edit-pen.inline.svg?react'
@@ -1184,6 +1186,14 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'drop-target',
       component: dropTarget
+    })
+    iconLibrary.register({
+      name: 'duplicate-asset',
+      component: duplicateAsset
+    })
+    iconLibrary.register({
+      name: 'duplicate-object',
+      component: duplicateObject
     })
     iconLibrary.register({
       name: 'dynamic-permission',

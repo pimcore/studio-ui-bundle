@@ -1,0 +1,48 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React from 'react'
+import { type UserGetObjectDependenciesApiResponse } from '@Pimcore/modules/user/user-api-slice-enhanced'
+import { useTranslation } from 'react-i18next'
+import { Pagination as PimPagination } from '@Pimcore/components/pagination/pagination'
+import {
+  PaginationSkeleton
+} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies/components/pagination/skeleton'
+import { DEFAULT_PAGE_SIZE } from '@Pimcore/modules/user/management/detail/tabs/references/constants'
+
+type PaginationProps = Partial<UserGetObjectDependenciesApiResponse> & {
+  page: number
+  isLoading: boolean
+  onChange: (page: number, pageSize: number) => void
+}
+
+export const Pagination = (props: PaginationProps): React.JSX.Element => {
+  const { t } = useTranslation()
+
+  if (props.isLoading) {
+    return <PaginationSkeleton />
+  }
+
+  if (!props.isLoading && props.totalItems === 0) {
+    return <></>
+  }
+
+  return (
+    <PimPagination
+      current={ props.page }
+      defaultPageSize={ DEFAULT_PAGE_SIZE }
+      onChange={ props.onChange }
+      pageSizeOptions={ [10, 20, 50, 100] }
+      showSizeChanger
+      showTotal={ (total) => t('pagination.show-total', { total }) }
+      total={ props.totalItems ?? 0 }
+    />
+  )
+}

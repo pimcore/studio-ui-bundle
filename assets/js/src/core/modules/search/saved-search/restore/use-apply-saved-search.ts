@@ -21,11 +21,22 @@ import { type SavedSearchDetailedConfiguration, type GridFilter } from '@Pimcore
 import { useTagFilter } from '@Pimcore/modules/asset/listing/decorator/tag-filter/context-layer/provider/tag-filter/use-tag-filter'
 import { tagFilterType, type SelectedTags } from '@Pimcore/modules/asset/listing/decorator/tag-filter/context-layer/provider/tag-filter/tag-filter-provider'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
+import { useTypeSelect } from '@Pimcore/modules/element/components/type-select/provider/use-type-select'
 
 const SEARCH_TERM_FILTER_TYPE = 'system.fulltext'
 // Column-filter types that are not user field filters and must not be restored as such — each is
 // restored through its own provider (search term, PQL, unreferenced, tags).
 const SYSTEM_FILTER_TYPES = new Set([SEARCH_TERM_FILTER_TYPE, 'system.pql', 'system.unreferenced', tagFilterType])
+
+// The element-type select (withTypeFilter) persists its value as a plain `system.string` column
+// filter keyed 'type' rather than through its own system-filter type. It must be restored into the
+// type select (not left as a user field filter) — otherwise a saved class-scoped search reopens
+// classless: `classId` in the query is gated on the type select having a value (see
+// use-data-query-helper.ts), so class-attribute field filters silently stop matching too.
+const TYPE_FILTER_KEY = 'type'
+const TYPE_FILTER_VALUE_TYPE = 'system.string'
+const isTypeSelectEntry = (entry: ColumnFilterEntry): boolean =>
+  entry.key === TYPE_FILTER_KEY && entry.type === TYPE_FILTER_VALUE_TYPE
 
 interface ColumnFilterEntry {
   key?: string
@@ -73,9 +84,8 @@ const buildSelectedColumns = (savedColumns: SavedColumn[], availableColumns: Ava
 
 /**
  * Applies the parts of a saved search that map back into the listing state: search term, field
- * filters, tags, the system filters (PQL, unreferenced, direct-children), paging and the saved
- * column layout, then triggers a reload. (Sorting and the type filter are not restored yet — see PR
- * notes.)
+ * filters, tags, the system filters (PQL, unreferenced, direct-children), the type select, paging
+ * and the saved column layout, then triggers a reload. (Sorting is not restored yet — see PR notes.)
  */
 export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfiguration) => void) => {
   const { setValues: setAppliedFilters } = useAppliedFilters()
@@ -85,6 +95,7 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
   const { setTags } = useTagFilter()
   const { setDataLoadingState } = useData()
   const { setSearchTerm: setSharedSearchTerm } = useSearch()
+  const { setValue: setType } = useTypeSelect()
 
   return (configuration: SavedSearchDetailedConfiguration): void => {
     const filter = getFilter(configuration)
@@ -96,9 +107,10 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
 
     // Field filters — every non-system column filter. The saved entries keep `meta`, so they can be
     // re-hydrated into the field-filters state (which re-keys them to columns by `key`). Always set
-    // (empty when none) so opening a search replaces any filters from a previous one.
+    // (empty when none) so opening a search replaces any filters from a previous one. The type-select
+    // entry is excluded here — it is restored into the type select below instead.
     const fieldFilters: FieldFilter[] = entries
-      .filter((entry) => isString(entry.type) && !SYSTEM_FILTER_TYPES.has(entry.type))
+      .filter((entry) => isString(entry.type) && !SYSTEM_FILTER_TYPES.has(entry.type) && !isTypeSelectEntry(entry))
       .map((entry) => ({
         key: entry.key ?? '',
         type: entry.type ?? '',
@@ -125,6 +137,12 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
     const tagEntry = entries.find((entry) => entry.type === tagFilterType)
     const restoredTags = (tagEntry?.filterValue as { tags?: SelectedTags } | undefined)?.tags
     setTags(isArray(restoredTags) ? restoredTags : [])
+
+    // Type select — restored from the `type` column filter rather than as a field filter (see
+    // isTypeSelectEntry). Always set (including null) so opening a search replaces a type left over
+    // from a previous one.
+    const typeEntry = entries.find(isTypeSelectEntry)
+    setType(isString(typeEntry?.filterValue) ? typeEntry.filterValue : null)
 
     if (isNumber(filter?.page)) {
       setPage(filter.page)

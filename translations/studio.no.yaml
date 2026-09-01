@@ -206,8 +206,8 @@ class-definition.general-settings.icon: Ikon
 class-definition.general-settings.parent-class: Overordnet klasse
 class-definition.general-settings.implements-interfaces: Implementerer grensesnitt
 class-definition.general-settings.listing-parent-class: Overordnet klasse for oppføring
-class-definition.general-settings.use-traits: Bruk Traits
-class-definition.general-settings.listing-use-traits: Oppføring – Bruk Traits
+class-definition.general-settings.use-traits: Bruk traits
+class-definition.general-settings.listing-use-traits: Oppføring – bruk traits
 class-definition.general-settings.link-generator-reference: Link Generator-referanse
 class-definition.general-settings.preview-generator-reference: Preview Generator-referanse
 class-definition.general-settings.allow-inherit: Tillat arv
@@ -280,7 +280,7 @@ select-option.validation.enter-id: Vennligst oppgi en ID
 select-option.validation.id-format: Navnet må begynne med stor bokstav, etterfulgt av alfanumeriske tegn
 select-option.general-settings.title: Generelt
 select-option.general-settings.enum-name: Enum-navn
-select-option.general-settings.use-traits: Bruk Traits
+select-option.general-settings.use-traits: Bruk traits
 select-option.general-settings.implements-interfaces: Implementerer grensesnitt
 select-option.general-settings.group: Gruppe
 select-option.general-settings.admin-only: Kun administrator
@@ -603,8 +603,6 @@ website-settings.columns.language: Språk
 website-settings.columns.value: Verdi
 website-settings.columns.site: Nettsted
 website-settings.columns.actions: Handlinger
-website-settings.website-settings-already-exist.title: Nettstedsinnstillingen finnes allerede
-website-settings.website-settings-already-exist.error: Navnet er allerede i bruk, vennligst velg et annet
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Obligatoriske felt mangler
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Navn og type er obligatoriske felt og må fylles ut.
 document-types.new: Ny
@@ -684,6 +682,21 @@ edit: Rediger
 modify: Endre
 component.no-content.no-content-available: Ingen innhold tilgjengelig
 notifications.label: Varsler
+notifications.settings.label: Varselinnstillinger
+notifications.settings.description: Slå på "Varsle meg" for alt du vil ha i varselklokken din, og legg deretter til flere kanaler for det som betyr mest.
+notifications.settings.description-popup-only: Velg hvordan varsler skal nå deg. Alt du varsles om, vises alltid i varselklokken din.
+notifications.settings.column.type: Varseltype
+notifications.settings.column.subscribed: Varsle meg
+notifications.settings.not-available: Ikke tilgjengelig for denne typen
+notifications.settings.save: Lagre
+notifications.settings.saved: Varselinnstillinger lagret
+notifications.settings.discard: Forkast
+notifications.settings.discard.title: Vil du forkaste dine ulagrede endringer?
+notifications.settings.discard.confirm: Forkast
+notifications.settings.discard.keep-editing: Fortsett å redigere
+notifications.settings.unsaved-changes_one: "{{count}} ulagret endring"
+notifications.settings.unsaved-changes_other: "{{count}} ulagrede endringer"
+notifications.settings.group.general: Generelt
 notifications.remove-all: Fjern alle
 notifications.new-notification: Nytt varsel
 notifications.columns.title: Tittel
@@ -1237,8 +1250,8 @@ element.toolbar.copy-className: Klasse {{className}} – Kopier
 element.unpublish: Avpubliser
 element.publish: Publiser
 element.locate-in-tree: Finn i treet
-element.sidebar.filter.only-direct-children: kun direkte underelementer
-element.sidebar.filter.only-unreferenced: kun elementer uten referanser
+element.sidebar.filter.only-direct-children: Kun direkte underelementer
+element.sidebar.filter.only-unreferenced: Kun elementer uten referanser
 element.sidebar.field-filters: Feltfiltre
 element.full-information: Full informasjon
 system-information.id: ID
@@ -1780,7 +1793,7 @@ image-thumbnails.transformations.scale-by-height.height-placeholder: Oppgi høyd
 image-thumbnails.transformations.scale-by-height.force-resize: Tving endring av størrelse
 
 # Trim-transformasjon
-image-thumbnails.transformations.trim.config-title: Konfigurer Trim
+image-thumbnails.transformations.trim.config-title: Konfigurer trim
 image-thumbnails.transformations.trim.trim-option: Trim-alternativ
 image-thumbnails.transformations.trim.trim-option-placeholder: Velg trim-alternativ
 image-thumbnails.transformations.trim.disabled: Deaktivert

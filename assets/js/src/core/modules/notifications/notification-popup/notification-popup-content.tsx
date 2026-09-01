@@ -13,10 +13,14 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { NotificationPopupItem } from './notification-popup-item'
 import { openMainWidget } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { useAppDispatch } from '@sdk/app'
+import { requestExpandNotification } from '../notifications-ui-slice'
 export interface OpenNotification {
   id: number
   title: string
   sender: string | null
+  /** Resolves a type specific renderer; absent for notifications written without a type. */
+  type?: string
+  payload?: string | Record<string, unknown> | null
 }
 
 interface NotificationPopupCollapseProps {
@@ -42,6 +46,8 @@ export const NotificationPopupContent: React.FC<NotificationPopupCollapseProps> 
             onView={ () => {
               onView(notification.id)
 
+              // An already-open widget keeps its original config, so the expand request
+              // dispatched afterwards is what reaches an already-mounted list.
               dispatch(openMainWidget({
                 component: 'notifications',
                 name: 'Notifications',
@@ -55,6 +61,7 @@ export const NotificationPopupContent: React.FC<NotificationPopupCollapseProps> 
                   activeNotification: notification.id
                 }
               }))
+              dispatch(requestExpandNotification(notification.id))
             } }
           />
         </motion.div>

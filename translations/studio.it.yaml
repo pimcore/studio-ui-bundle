@@ -603,8 +603,6 @@ website-settings.columns.language: Lingua
 website-settings.columns.value: Valore
 website-settings.columns.site: Sito
 website-settings.columns.actions: Azioni
-website-settings.website-settings-already-exist.title: Impostazione sito web già esistente
-website-settings.website-settings-already-exist.error: Il nome è già in uso, scegliere un nome diverso
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Campi obbligatori mancanti
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Nome e tipo sono campi obbligatori e devono essere compilati.
 document-types.new: Nuovo
@@ -684,6 +682,21 @@ edit: Modifica
 modify: Modifica
 component.no-content.no-content-available: Nessun contenuto disponibile
 notifications.label: Notifiche
+notifications.settings.label: Impostazioni notifiche
+notifications.settings.description: Attiva "Notificami" per tutto ciò che desideri visualizzare nella campana delle notifiche, quindi aggiungi canali aggiuntivi per gli elementi più importanti.
+notifications.settings.description-popup-only: Scegli come ricevere le notifiche. Tutto ciò di cui vieni notificato viene sempre visualizzato nella campana delle notifiche.
+notifications.settings.column.type: Tipo di notifica
+notifications.settings.column.subscribed: Notificami
+notifications.settings.not-available: Non disponibile per questo tipo
+notifications.settings.save: Salva
+notifications.settings.saved: Impostazioni notifiche salvate
+notifications.settings.discard: Scarta
+notifications.settings.discard.title: Scartare le modifiche non salvate?
+notifications.settings.discard.confirm: Scarta
+notifications.settings.discard.keep-editing: Continua a modificare
+notifications.settings.unsaved-changes_one: "{{count}} modifica non salvata"
+notifications.settings.unsaved-changes_other: "{{count}} modifiche non salvate"
+notifications.settings.group.general: Generale
 notifications.remove-all: Rimuovi tutte
 notifications.new-notification: Nuova notifica
 notifications.columns.title: Titolo
@@ -1237,8 +1250,8 @@ element.toolbar.copy-className: Classe {{className}} - Copia
 element.unpublish: Annulla pubblicazione
 element.publish: Pubblica
 element.locate-in-tree: Individua nell'albero
-element.sidebar.filter.only-direct-children: solo figli diretti
-element.sidebar.filter.only-unreferenced: solo non referenziati
+element.sidebar.filter.only-direct-children: Solo figli diretti
+element.sidebar.filter.only-unreferenced: Solo non referenziati
 element.sidebar.field-filters: Filtri campo
 element.full-information: Informazioni complete
 system-information.id: ID

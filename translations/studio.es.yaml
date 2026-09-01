@@ -206,7 +206,7 @@ class-definition.general-settings.icon: Icono
 class-definition.general-settings.parent-class: Clase padre
 class-definition.general-settings.implements-interfaces: Implementa interfaces
 class-definition.general-settings.listing-parent-class: Clase padre de listado
-class-definition.general-settings.use-traits: Usar Traits
+class-definition.general-settings.use-traits: Usar traits
 class-definition.general-settings.listing-use-traits: Traits de listado
 class-definition.general-settings.link-generator-reference: Referencia del generador de enlaces
 class-definition.general-settings.preview-generator-reference: Referencia del generador de vista previa
@@ -280,7 +280,7 @@ select-option.validation.enter-id: Introduzca un ID
 select-option.validation.id-format: El nombre debe comenzar con una letra mayúscula, seguida de caracteres alfanuméricos
 select-option.general-settings.title: General
 select-option.general-settings.enum-name: Nombre de enumeración
-select-option.general-settings.use-traits: Usar Traits
+select-option.general-settings.use-traits: Usar traits
 select-option.general-settings.implements-interfaces: Implementa interfaces
 select-option.general-settings.group: Grupo
 select-option.general-settings.admin-only: Solo administrador
@@ -603,8 +603,6 @@ website-settings.columns.language: Idioma
 website-settings.columns.value: Valor
 website-settings.columns.site: Sitio
 website-settings.columns.actions: Acciones
-website-settings.website-settings-already-exist.title: La configuración del sitio web ya existe
-website-settings.website-settings-already-exist.error: El nombre ya está en uso, elija uno diferente
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Campos obligatorios faltantes
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: El nombre y el tipo son campos obligatorios y deben completarse.
 document-types.new: Nuevo
@@ -684,6 +682,21 @@ edit: Editar
 modify: Modificar
 component.no-content.no-content-available: No hay contenido disponible
 notifications.label: Notificaciones
+notifications.settings.label: Configuración de notificaciones
+notifications.settings.description: Active "Notificarme" para todo lo que desee que aparezca en su campana de notificaciones y, después, añada canales adicionales para lo que más le importe.
+notifications.settings.description-popup-only: Elija cómo desea recibir las notificaciones. Todo aquello de lo que se le notifica siempre aparece en su campana de notificaciones.
+notifications.settings.column.type: Tipo de notificación
+notifications.settings.column.subscribed: Notificarme
+notifications.settings.not-available: No disponible para este tipo
+notifications.settings.save: Guardar
+notifications.settings.saved: Configuración de notificaciones guardada
+notifications.settings.discard: Descartar
+notifications.settings.discard.title: ¿Descartar los cambios no guardados?
+notifications.settings.discard.confirm: Descartar
+notifications.settings.discard.keep-editing: Seguir editando
+notifications.settings.unsaved-changes_one: "{{count}} cambio sin guardar"
+notifications.settings.unsaved-changes_other: "{{count}} cambios sin guardar"
+notifications.settings.group.general: General
 notifications.remove-all: Eliminar todas
 notifications.new-notification: Nueva notificación
 notifications.columns.title: Título
@@ -1237,8 +1250,8 @@ element.toolbar.copy-className: Clase {{className}} - Copiar
 element.unpublish: Despublicar
 element.publish: Publicar
 element.locate-in-tree: Localizar en el árbol
-element.sidebar.filter.only-direct-children: solo hijos directos
-element.sidebar.filter.only-unreferenced: solo sin referencias
+element.sidebar.filter.only-direct-children: Solo hijos directos
+element.sidebar.filter.only-unreferenced: Solo sin referencias
 element.sidebar.field-filters: Filtros de campo
 element.full-information: Información completa
 system-information.id: ID
@@ -2507,7 +2520,7 @@ no-languages-found: No se encontraron idiomas
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (sobrescribe la ruta de la estructura del árbol)
 content-main-document: Documento Content-Main
-content-main-document.apply: Aplicar documento Content-Main
+content-main-document.apply: Aplicar documento content-main
 content-main-document.apply-warning-title: ¿Está seguro?
 content-main-document.apply-warning-message: Se perderá todo el contenido
 never: nunca

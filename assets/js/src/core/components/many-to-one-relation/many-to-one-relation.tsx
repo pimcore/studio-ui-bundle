@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tooltip } from 'antd'
 import { isEmpty, isNil, isNull, isUndefined } from 'lodash'
@@ -95,6 +95,26 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
 
   const { t } = useTranslation()
   const { styles } = useStyles()
+
+  const handleAssetUpload = useCallback(async (assets: Asset[]): Promise<void> => {
+    if (isEmpty(assets)) {
+      return
+    }
+
+    const [asset] = assets
+
+    if (!isAllowedSubType('asset', asset.type, props)) {
+      alertModal.warn({ content: t('asset-upload-type-not-allowed') })
+      return
+    }
+
+    handleValueChange({
+      type: 'asset',
+      subtype: asset.type ?? undefined,
+      id: asset.id,
+      fullPath: asset.fullPath ?? undefined
+    })
+  }, [props, handleValueChange, alertModal, t])
 
   const clickOpenElement = (): void => {
     if (value !== null) {

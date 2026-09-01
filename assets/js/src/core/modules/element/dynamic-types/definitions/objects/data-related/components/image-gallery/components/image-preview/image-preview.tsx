@@ -21,9 +21,7 @@ import {
   toIHotspots
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/utils/hotspot-converter'
 import { useMessage } from '@Pimcore/components/message/useMessage'
-import {
-  type ImageValue
-} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image/image'
+import { type ImageValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image/image'
 import { isEmpty, isNil } from 'lodash'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
@@ -35,6 +33,7 @@ import { type DataTemplates } from '@Pimcore/modules/element/components/hotspot-
 import { InlineUpload } from '@Pimcore/components/inline-upload'
 import { useUploadModal } from '@Pimcore/components/modal-upload/hooks/use-upload-modal'
 import { useTheme } from 'antd-style'
+import { imageUploadAccept } from '@Pimcore/modules/asset/utils/upload-accept'
 
 interface ImageGalleryImagePreviewProps {
   item: ImageGalleryValueItem
@@ -164,7 +163,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
   const handleUpload = useCallback(() => {
     triggerUpload({
       targetFolderPath: uploadPath ?? '',
-      accept: 'image/*',
+      accept: imageUploadAccept,
       multiple: false,
       maxItems: 1,
       onSuccess: async (assets) => {
@@ -177,7 +176,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
 
   return (
     <InlineUpload
-      accept="image/*"
+      accept={ imageUploadAccept }
       assetType="image"
       disabled={ disabled }
       onSuccess={ handleFileSystemUpload }
