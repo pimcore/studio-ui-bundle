@@ -48,7 +48,10 @@ export const BaseLayoutView = (): React.JSX.Element => {
 
       <LeftSidebarView />
 
-      <div id="main-content">
+      <div
+        id="main-content"
+        tabIndex={ -1 }
+      >
         <WidgetManagerContainer />
       </div>
       <ExecutionEngineNotification />
