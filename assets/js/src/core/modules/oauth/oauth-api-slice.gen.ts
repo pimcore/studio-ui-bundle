@@ -46,8 +46,12 @@ export type OauthAuthorizationApproveApiArg = {
 export type OAuthConsentClient = {
     /** Client identifier */
     identifier: string;
-    /** Client display name */
+    /** Client display name (self-chosen; not authoritative) */
     name: string;
+    /** Host (with port) of the redirect URI the authorization code will be sent to. The trustworthy signal of where access is granted. */
+    redirectHost?: string | null;
+    /** True if the client was pre-registered by an administrator; false for self-registered (DCR) or URL-identified (CIMD) clients, which should be shown as unverified. */
+    verified: boolean;
 };
 export type OAuthConsentUser = {
     /** Pimcore user id the token will act as */

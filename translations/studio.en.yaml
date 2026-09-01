@@ -428,6 +428,8 @@ aria.login-form-additional-logins.additional-login-provider: "Additional login p
 aria.login-form-additional-logins.remember-me-checkbox: Remember me checkbox
 oauth.consent.title: Authorize access
 oauth.consent.subtitle: "{{client}} wants to access Pimcore as you."
+oauth.consent.unverified: This application registered itself and is unverified. Only continue if you started this from the application you trust.
+oauth.consent.redirect-to: "After you allow, you will be sent to {{host}}"
 oauth.consent.permissions-heading: "This will allow it to:"
 oauth.consent.no-scopes: No specific permissions were requested.
 oauth.consent.signed-in-as: "Signed in as {{username}}"

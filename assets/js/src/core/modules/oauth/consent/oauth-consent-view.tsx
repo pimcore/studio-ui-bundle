@@ -30,6 +30,7 @@ export const OAuthConsentView = ({ consent, submitting, errorMessage, onDecision
   const describeScopes = useScopeDescriptions()
 
   const clientName = consent.client.name
+  const redirectHost = consent.client.redirectHost
   const scopes = describeScopes(consent.scopes)
 
   return (
@@ -52,6 +53,22 @@ export const OAuthConsentView = ({ consent, submitting, errorMessage, onDecision
         <Text>
           { t('oauth.consent.subtitle', { client: clientName }) }
         </Text>
+        { !consent.client.verified && (
+          <Text
+            data-testid="oauth-consent-unverified"
+            type="warning"
+          >
+            { t('oauth.consent.unverified') }
+          </Text>
+        ) }
+        { redirectHost != null && redirectHost !== '' && (
+          <Text
+            data-testid="oauth-consent-redirect-host"
+            type="secondary"
+          >
+            { t('oauth.consent.redirect-to', { host: redirectHost }) }
+          </Text>
+        ) }
       </Flex>
 
       <Flex
