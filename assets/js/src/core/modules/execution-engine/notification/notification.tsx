@@ -88,6 +88,12 @@ export const Notification = (): React.JSX.Element => {
     if (!hasJobs) {
       notificationApi.destroy('jobs-notification')
     }
+
+    // Ensure the popup doesn't outlive this component (e.g. session expiry redirecting to the login page),
+    // since it's rendered into a global notification context that sits above the router.
+    return () => {
+      notificationApi.destroy('jobs-notification')
+    }
   }, [jobs.length])
 
   return <></>
