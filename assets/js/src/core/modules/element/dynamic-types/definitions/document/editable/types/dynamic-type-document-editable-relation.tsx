@@ -43,8 +43,6 @@ export class DynamicTypeDocumentEditableRelation extends DynamicTypeDocumentEdit
   id: string = 'relation'
 
   getEditableDataComponent (props: RelationEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
-    const assetsAllowed = isTypeAllowed(props.config?.types, 'asset')
-
     return (
       <RelationEditable
         allowToClearRelation
@@ -52,11 +50,11 @@ export class DynamicTypeDocumentEditableRelation extends DynamicTypeDocumentEdit
         allowedClasses={ props.config?.classes }
         allowedDataObjectTypes={ props.config?.subtypes?.object }
         allowedDocumentTypes={ props.config?.subtypes?.document }
-        assetInlineUploadAllowed={ assetsAllowed && props.config?.disableInlineUpload !== true }
-        assetUploadPath={ props.config?.uploadPath }
-        assetsAllowed={ assetsAllowed }
+        assetUploadPath={ props.config?.uploadPath ?? undefined }
+        assetsAllowed={ isTypeAllowed(props.config?.types, 'asset') }
         className={ props.config?.class }
         dataObjectsAllowed={ isTypeAllowed(props.config?.types, 'object') }
+        disableInlineUpload={ props.config?.disableInlineUpload ?? undefined }
         documentsAllowed={ isTypeAllowed(props.config?.types, 'document') }
         inherited={ props.inherited }
         width={ props.config?.width }

@@ -1947,7 +1947,6 @@ video.add-target: Ajoutez une vidéo ici
 pdf-editable.dnd-target: Déposez un document asset ici
 many-to-one-relation.drop-placeholder: Déposez un élément ici
 many-to-one-relation.drop-placeholder-text-input: Déposez un élément ici ou entrez une valeur
-many-to-one-relation.upload.subtype-not-allowed: L'asset a été téléversé mais n'a pas été affecté, car cette relation n'autorise pas son type.
 reverse-object-relation.owner-hint: L'objet actuel n'est pas le propriétaire de ces relations, les modifications ici peuvent ralentir l'enregistrement de l'objet.
 reverse-object-relation.owner-class: Classe propriétaire
 reverse-object-relation.owner-field: Champ propriétaire

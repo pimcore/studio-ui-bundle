@@ -30,7 +30,7 @@ const config: Meta<typeof ManyToOneRelation> = {
 - **Element Selector**: Built-in element selector for browsing and selecting elements
 - **Path Text Input**: Optional mode for entering paths manually as text
 - **Asset Downloads**: Inline download functionality for asset elements
-- **Inline Upload**: Optional upload button that creates a new asset and assigns it as the relation
+- **Inline Upload**: Upload button that creates a new asset and assigns it as the relation (opt-out via \`disableInlineUpload\`)
 - **Type Validation**: Configurable allowed types for each element category
 - **Width Customization**: Flexible width configuration with field width provider integration
 
@@ -258,7 +258,6 @@ const ConfigurationsExample = (): React.JSX.Element => {
             <ManyToOneRelation
               allowToClearRelation
               allowedAssetTypes={ ['image', 'document', 'video'] }
-              assetInlineUploadAllowed
               assetUploadPath="/examples"
               assetsAllowed
               onChange={ (value) => { handleChange('withUpload', value) } }

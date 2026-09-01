@@ -1947,7 +1947,6 @@ video.add-target: Lägg till en video här
 pdf-editable.dnd-target: Släpp en dokumentasset här
 many-to-one-relation.drop-placeholder: Släpp ett objekt här
 many-to-one-relation.drop-placeholder-text-input: Släpp ett objekt här eller ange ett värde
-many-to-one-relation.upload.subtype-not-allowed: Assetet laddades upp men tilldelades inte, eftersom den här relationen inte tillåter dess typ.
 reverse-object-relation.owner-hint: Det aktuella objektet äger inte dessa relationer, ändringar här kan göra sparandet av objektet långsamt.
 reverse-object-relation.owner-class: Ägarklass
 reverse-object-relation.owner-field: Ägarfält

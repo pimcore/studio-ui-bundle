@@ -11,13 +11,10 @@
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tooltip } from 'antd'
-import { isEmpty, isNil, isNull, isUndefined } from 'lodash'
+import { isEmpty, isNull, isUndefined } from 'lodash'
 import cn from 'classnames'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { ModalUploadButton } from '@Pimcore/components/modal-upload/components/modal-upload-button/modal-upload-button'
-import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
-import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useDownload } from '@Pimcore/modules/asset/actions/download/use-download'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 import {
@@ -34,6 +31,9 @@ import { useControlledState } from '@Pimcore/utils/hooks/use-controlled-state'
 import { ManyToOneRelationInput } from './many-to-one-relation-input'
 import { useStyles } from './many-to-one-relation.styles'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
+import { ModalUploadButton } from '@Pimcore/components/modal-upload/components/modal-upload-button/modal-upload-button'
+import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
+import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
 
 export type ManyToOneRelationValueType = ManyToOneRelationValue | PathTextInputValue | null
 
@@ -53,12 +53,6 @@ export interface PathTextInputValue {
 
 export interface ManyToOneRelationClassDefinitionProps {
   assetInlineDownloadAllowed?: boolean
-  /**
-   * Renders an upload button that creates a new asset and assigns it as the
-   * relation. Opt-in, because most hosts of this component are pickers for
-   * existing elements rather than asset fields.
-   */
-  assetInlineUploadAllowed?: boolean
   /** Folder the inline upload puts the new asset into. Defaults to the asset root. */
   assetUploadPath?: string | null
   allowToClearRelation?: boolean
@@ -77,6 +71,8 @@ export interface ManyToOneRelationProps extends IRelationAllowedTypesDataCompone
   onChange?: (value: ManyToOneRelationValueType) => void
   onOpenElement?: () => void
   className?: string
+  /** Hides the upload button that is otherwise shown whenever assets are allowed. */
+  disableInlineUpload?: boolean
   combinedFieldName?: string
   pathFormatterClass?: string
   additionalButtons?: (value: ManyToOneRelationValueType) => React.ReactNode
@@ -132,31 +128,6 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
   }
 
   const isEnabled = props.disabled !== true && props.readOnly !== true
-
-  const inlineUploadEnabled = props.assetInlineUploadAllowed === true && props.assetsAllowed === true && isEnabled
-
-  const handleUploadSuccess = async (assets: Asset[]): Promise<void> => {
-    const asset = assets[0]
-
-    if (isNil(asset)) {
-      return
-    }
-
-    // The asset already exists at this point - the server created it and decided its
-    // type. Assigning it anyway would put a value into the relation that neither the
-    // element selector nor drag and drop would have accepted.
-    if (!isAllowedSubType('asset', asset.type ?? '', props)) {
-      alertModal.warn({ content: t('many-to-one-relation.upload.subtype-not-allowed') })
-      return
-    }
-
-    handleValueChange({
-      type: 'asset',
-      id: asset.id,
-      subtype: asset.type ?? undefined,
-      fullPath: asset.fullPath ?? ''
-    })
-  }
 
   const { hideOpenButton, ...inputProps } = props
 
@@ -246,12 +217,11 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           />
         )}
 
-        {inlineUploadEnabled && (
+        {isEnabled && props.assetsAllowed === true && props.disableInlineUpload !== true && (
           <ModalUploadButton
-            key="upload"
             maxItems={ 1 }
             multiple={ false }
-            onSuccess={ handleUploadSuccess }
+            onSuccess={ handleAssetUpload }
             targetFolderPath={ props.assetUploadPath ?? undefined }
           />
         )}

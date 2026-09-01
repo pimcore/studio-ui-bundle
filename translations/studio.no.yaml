@@ -1947,7 +1947,6 @@ video.add-target: Legg til en video her
 pdf-editable.dnd-target: Slipp en dokumentressurs her
 many-to-one-relation.drop-placeholder: Slipp et element her
 many-to-one-relation.drop-placeholder-text-input: Slipp et element her eller oppgi en verdi
-many-to-one-relation.upload.subtype-not-allowed: Assetet ble lastet opp, men ikke tilordnet, fordi denne relasjonen ikke tillater typen.
 reverse-object-relation.owner-hint: Det gjeldende objektet er ikke eier av disse relasjonene, endringer her kan gjøre lagring av objektet tregt.
 reverse-object-relation.owner-class: Eierklasse
 reverse-object-relation.owner-field: Eierfelt

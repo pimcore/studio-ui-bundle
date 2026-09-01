@@ -1947,7 +1947,6 @@ video.add-target: Video hier hinzufügen
 pdf-editable.dnd-target: Dokument-Asset hier ablegen
 many-to-one-relation.drop-placeholder: Element hier ablegen
 many-to-one-relation.drop-placeholder-text-input: Element hier ablegen oder Wert eingeben
-many-to-one-relation.upload.subtype-not-allowed: Das Asset wurde hochgeladen, aber nicht zugewiesen, da diese Relation dessen Typ nicht zulässt.
 reverse-object-relation.owner-hint: Das aktuelle Objekt ist nicht der Eigentümer dieser Relationen, Änderungen hier können das Speichern des Objekts verlangsamen.
 reverse-object-relation.owner-class: Eigentümerklasse
 reverse-object-relation.owner-field: Eigentümerfeld
