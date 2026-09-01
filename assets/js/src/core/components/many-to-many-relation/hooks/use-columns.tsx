@@ -89,7 +89,7 @@ export const useColumns = (props: UseColumnsProps): UseColumnsReturn => {
 
       const buttons: ReactElement[] = []
 
-      if (props.hideOpenButton !== true) {
+      if (rowValue.hasViewAccess !== false) {
         buttons.push(
           <Tooltip
             key="open"

@@ -1250,8 +1250,8 @@ element.toolbar.copy-className: Classe {{className}} - Copia
 element.unpublish: Annulla pubblicazione
 element.publish: Pubblica
 element.locate-in-tree: Individua nell'albero
-element.sidebar.filter.only-direct-children: solo figli diretti
-element.sidebar.filter.only-unreferenced: solo non referenziati
+element.sidebar.filter.only-direct-children: Solo figli diretti
+element.sidebar.filter.only-unreferenced: Solo non referenziati
 element.sidebar.field-filters: Filtri campo
 element.full-information: Informazioni complete
 system-information.id: ID
@@ -1302,8 +1302,10 @@ relations.subtype: Sottotipo
 relations.classname: Classe
 relations.fullpath: Percorso completo
 relations.remove-all.confirm: Eliminare tutte le relazioni?
+relations.upload.subtype-not-allowed: Gli asset caricati il cui tipo non è consentito da questa relazione non sono stati assegnati.
 relation: relazione
 items-limit-reached: Il numero massimo di elementi ({{maxItems}}) è stato raggiunto.
+asset-upload-type-not-allowed: Il tipo dell'asset caricato non è consentito per questo campo.
 actions: Azioni
 asset: Asset
 data-object: Data Object
