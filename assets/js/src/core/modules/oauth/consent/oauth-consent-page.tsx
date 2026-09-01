@@ -22,6 +22,7 @@ import { routes } from '@Pimcore/app/router/router'
 import { useOauthAuthorizationApproveMutation, useOauthAuthorizationDetailsQuery } from '../oauth-api-slice.gen'
 import { OAuthConsentView } from './oauth-consent-view'
 import { useStyle } from './oauth-consent-page.styles'
+import { sanitizeAuthorizationId } from './authorization-id'
 
 const QUERY_PARAM = 'authorization_id'
 
@@ -41,7 +42,7 @@ export const OAuthConsentPage = (): React.JSX.Element => {
   const location = useLocation()
   const [searchParams] = useSearchParams()
 
-  const authorizationId = searchParams.get(QUERY_PARAM)
+  const authorizationId = sanitizeAuthorizationId(searchParams.get(QUERY_PARAM))
 
   const {
     data: consent,
