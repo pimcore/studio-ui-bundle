@@ -216,7 +216,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     <Flex
       align="center"
       aria-expanded={ props.hasChildren === true ? isExpanded : undefined }
-      aria-level={ level + 1 }
+      aria-level={ Math.max(1, level + 1) }
       aria-selected={ isSelected }
       className={ cn('tree-node__content-inner') }
       gap="small"
