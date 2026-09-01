@@ -1302,8 +1302,10 @@ relations.subtype: Sottotipo
 relations.classname: Classe
 relations.fullpath: Percorso completo
 relations.remove-all.confirm: Eliminare tutte le relazioni?
+relations.upload.subtype-not-allowed: Gli asset caricati il cui tipo non è consentito da questa relazione non sono stati assegnati.
 relation: relazione
 items-limit-reached: Il numero massimo di elementi ({{maxItems}}) è stato raggiunto.
+asset-upload-type-not-allowed: Il tipo dell'asset caricato non è consentito per questo campo.
 actions: Azioni
 asset: Asset
 data-object: Data Object

@@ -1302,8 +1302,10 @@ relations.subtype: Undertype
 relations.classname: Klasse
 relations.fullpath: Full sti
 relations.remove-all.confirm: Vil du virkelig slette alle relasjoner?
+relations.upload.subtype-not-allowed: Opplastede assets med en type som denne relasjonen ikke tillater, ble ikke tilordnet.
 relation: relasjon
 items-limit-reached: Maksimalt antall elementer ({{maxItems}}) er nådd.
+asset-upload-type-not-allowed: Typen til det opplastede assetet er ikke tillatt for dette feltet.
 actions: Handlinger
 asset: Ressurs
 data-object: Data Object
