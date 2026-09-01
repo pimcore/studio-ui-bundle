@@ -28,6 +28,7 @@ import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-
 import { type GridColumnRequest } from '@sdk/api/asset'
 import { getExportColumns } from '../get-export-columns'
 import { Form } from '@sdk/components'
+import { buildGridExportFileName } from '../export-file-name'
 
 export interface CsvModalProps {
   open: boolean
@@ -48,6 +49,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
   const { getArgs } = useDataQueryHelper()
   const classDefinitionSelection = useClassDefinitionSelection(true)
   const selectedClassDefinition = classDefinitionSelection?.selectedClassDefinition
+  const gridName = selectedClassDefinition?.name ?? elementType
   const initialFormValues: CSVFormValues = {
     delimiter: ';',
     header: 'name'
@@ -103,6 +105,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
   }
 
   async function getDownloadAction (delimiter: CSVFormValues['delimiter'], header: CSVFormValues['header']): Promise<number> {
+    const fileName = buildGridExportFileName(gridName, 'csv')
     const requestColumns: GridColumnRequest[] = getArgs()?.body?.columns ?? []
     const extractedColumnsFromColumnArg = getExportColumns(requestColumns, selectedColumns)
 
@@ -121,8 +124,9 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
           columns: extractedColumnsFromColumnArg,
           config: {
             delimiter,
-            header
-          },
+            header,
+            fileName
+          } as any,
           filters: {
             ...filters
           },
@@ -141,8 +145,9 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
           columns: extractedColumnsFromColumnArg,
           config: {
             delimiter,
-            header
-          },
+            header,
+            fileName
+          } as any,
           ...(!isNil(selectedClassDefinition?.id) && { classId: selectedClassDefinition.id })
         }
       })

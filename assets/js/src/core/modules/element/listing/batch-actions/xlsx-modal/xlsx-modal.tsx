@@ -27,6 +27,7 @@ import { isNil } from 'lodash'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
 import { type GridColumnRequest } from '@sdk/api/data-object'
 import { Form } from '@sdk/components'
+import { buildGridExportFileName } from '../export-file-name'
 import { getExportColumns } from '../get-export-columns'
 
 export interface XlsxModalProps {
@@ -48,6 +49,7 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
   const { getArgs } = useDataQueryHelper()
   const classDefinitionSelection = useClassDefinitionSelection(true)
   const selectedClassDefinition = classDefinitionSelection?.selectedClassDefinition
+  const gridName = selectedClassDefinition?.name ?? elementType
   const initialFormValues: XLSXFormValues = {
     header: 'name'
   }
@@ -102,6 +104,7 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
   }
 
   async function getDownloadAction (header: XLSXFormValues['header']): Promise<number> {
+    const fileName = buildGridExportFileName(gridName, 'xlsx')
     const requestColumns: GridColumnRequest[] = getArgs()?.body?.columns ?? []
     const extractedColumnsFromColumnArg = getExportColumns(requestColumns, selectedColumns)
 
@@ -119,8 +122,9 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
           elementType,
           columns: extractedColumnsFromColumnArg,
           config: {
-            header
-          },
+            header,
+            fileName
+          } as any,
           filters: {
             ...filters
           },
@@ -138,8 +142,9 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
           elementType,
           columns: extractedColumnsFromColumnArg,
           config: {
-            header
-          },
+            header,
+            fileName
+          } as any,
           ...(!isNil(selectedClassDefinition?.id) && { classId: selectedClassDefinition.id })
         }
       })
