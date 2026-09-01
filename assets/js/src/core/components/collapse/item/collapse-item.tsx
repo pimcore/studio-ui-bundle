@@ -79,8 +79,7 @@ export const CollapseItem = ({
     `collapse-item--theme-${theme}`,
     {
       'collapse-item--bordered': bordered,
-      'collapse-item--separator': hasContentSeparator,
-      'collapse-item--not-expandable': !expandable
+      'collapse-item--separator': hasContentSeparator
     }
   )
 
@@ -114,10 +113,11 @@ export const CollapseItem = ({
   const item = {
     ...itemProps,
     showArrow: false,
-    // 'disabled' is what keeps the header un-togglable and out of the tab order. The
-    // colour and cursor it also brings would read as "unavailable", so
-    // collapse-item--not-expandable resets those.
-    collapsible: expandable ? itemProps.collapsible : 'disabled' as const,
+    // 'icon' rather than 'disabled': it attaches the toggle to the expand icon, which a
+    // non-expandable item does not render, so the header carries no role="button",
+    // aria-expanded, aria-disabled or tab stop — a plain content row, not a disabled
+    // disclosure control. 'disabled' would leave all four on the header.
+    collapsible: expandable ? itemProps.collapsible : 'icon' as const,
     label: (
       <CollapseHeader
         expandIcon={ expandable ? expandIcon({ isActive }) : undefined }

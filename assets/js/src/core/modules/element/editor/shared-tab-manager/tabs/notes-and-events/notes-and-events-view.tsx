@@ -32,6 +32,7 @@ import { Text } from '@Pimcore/components/text/text'
 import { Split } from '@Pimcore/components/split/split'
 import { Paragraph } from '@Pimcore/components/paragraph/paragraph'
 import { Collapse } from '@Pimcore/components/collapse/collapse'
+import { isEmpty } from 'lodash'
 import {
   NoteAndEventDetails
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/note-and-events-details'
@@ -68,8 +69,8 @@ export const NotesAndEventsTabView = ({
     // A note the user filled in with nothing but a type and a title has no body to reveal,
     // so it must not offer an expand toggle at all. `data` is only ever populated for
     // system-generated events, never through the add-note form.
-    const hasDescription = note.description.trim().length > 0
-    const hasDetails = note.data.length > 0
+    const hasDescription = !isEmpty(note.description.trim())
+    const hasDetails = !isEmpty(note.data)
 
     const extra = (): React.JSX.Element => {
       const type = note.type ?? undefined

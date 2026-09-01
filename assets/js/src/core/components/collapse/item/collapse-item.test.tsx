@@ -83,4 +83,25 @@ describe('CollapseItem', () => {
 
     expect(screen.queryByText('the body')).not.toBeInTheDocument()
   })
+
+  it('gives a non-expandable header no disclosure semantics', () => {
+    // Not merely cosmetic: a header left as a disabled disclosure control is announced to
+    // screen readers as a collapsed, unavailable button, which no CSS can correct.
+    const { container } = render(
+      <CollapseItem
+        expandable={ false }
+        label='a note'
+      >
+        the body
+      </CollapseItem>
+    )
+
+    const header = container.querySelector('.ant-collapse-header')
+
+    expect(header).not.toHaveAttribute('role')
+    expect(header).not.toHaveAttribute('aria-expanded')
+    expect(header).not.toHaveAttribute('aria-disabled')
+    expect(header).not.toHaveAttribute('tabindex')
+    expect(container.querySelector('.ant-collapse-item-disabled')).not.toBeInTheDocument()
+  })
 })
