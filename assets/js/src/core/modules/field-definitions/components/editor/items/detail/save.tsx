@@ -11,6 +11,7 @@
 import { useArea } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
 import { useOptionalUnsavedChanges } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/unsaved-changes-provider'
 import { useGeneralSettings } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
+import { useRefresh } from '@Pimcore/modules/field-definitions/components/editor/items/detail/refresh-provider'
 import { useSettings } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { isReservedWord } from '@Pimcore/modules/field-definitions/dynamic-types/utils/reserved-words'
 import { buildPathMap, getNamesInNamespace } from '@Pimcore/modules/field-definitions/utils/layout-helpers'
@@ -32,6 +33,7 @@ export const DetailSave = (): React.JSX.Element => {
   const { generalSettings, getIsDirty: areGeneralSettingsDirty } = useGeneralSettings()
   const [updateDetailMutation, result] = useDetailUpdateMutation()
   const { isLoading } = result
+  const { refreshLayout } = useRefresh()
   const messageApi = useMessage()
   const alertModal = useAlertModal()
   const fieldDefinitionRegistry = useSettings().fieldDefinitionRegistry
@@ -157,6 +159,11 @@ export const DetailSave = (): React.JSX.Element => {
       trackError(new ApiError(e as FetchBaseQueryError))
       return false
     }
+
+    // Re-fetch general settings/layout: the save response may not carry every
+    // server-side normalized/computed value, so the cache patch alone isn't
+    // always enough to show the true post-save state.
+    await refreshLayout()
 
     // The saved state is the new clean baseline for unsaved-changes checks
     markClean()
