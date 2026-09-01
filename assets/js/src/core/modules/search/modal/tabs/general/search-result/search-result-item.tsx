@@ -75,12 +75,13 @@ export const SearchResultItem = (props: ISearchResultItemProps): React.JSX.Eleme
   return (
     <Box
       { ...htmlProps }
+      aria-selected={ active === true }
       className={ className }
       onClick={ onClick }
       onKeyDown={ onKeyDown }
       padding={ 'mini' }
       role="option"
-      tabIndex={ (active === true || first === true) ? 0 : -1 }
+      tabIndex={ active === true || first === true ? 0 : -1 }
     >
       <Flex
         align="center"
