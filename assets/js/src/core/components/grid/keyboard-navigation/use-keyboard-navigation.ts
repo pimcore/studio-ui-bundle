@@ -22,13 +22,17 @@ export const useKeyboardNavigation = (props: DefaultCellProps): KeyboardNavigati
   function handleArrowNavigation (event: KeyboardEvent): void {
     let rowId = props.row.index
     let columnId = props.column.getIndex()
-    const isArrowKey = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(event.key)
 
-    if (!isArrowKey) {
+    const isArrowKey = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(event.key)
+    const isTab = event.key === 'Tab'
+
+    if (!isArrowKey && !isTab) {
       return
     }
 
-    event.preventDefault()
+    if (isArrowKey) {
+      event.preventDefault()
+    }
 
     if (event.key === 'ArrowDown') {
       rowId++
@@ -36,33 +40,52 @@ export const useKeyboardNavigation = (props: DefaultCellProps): KeyboardNavigati
       rowId--
     } else if (event.key === 'ArrowLeft') {
       const prevColumn = findPrevColumn(columnId)
-
       if (prevColumn !== undefined) {
         columnId = prevColumn
       }
     } else if (event.key === 'ArrowRight') {
       const nextColumn = findNextColumn(columnId)
-
       if (nextColumn !== undefined) {
         columnId = nextColumn
       }
-    }
-
-    if (tableElement?.current !== null) {
-      const cellElement = tableElement!.current.querySelector<HTMLDivElement>(`[data-grid-row="${rowId}"][data-grid-column="${columnId}"]`)
-
-      if (cellElement === null) {
-        return
+    } else if (isTab) {
+      const next = event.shiftKey ? findPrevCell(rowId, columnId) : findNextCell(rowId, columnId)
+      if (next === undefined) {
+        return // Let Tab exit the grid at boundaries
       }
-      cellElement.focus()
-      // Resposition selection ortherwise the copy event will not fire
-      const range = document.createRange()
-      const selection = window.getSelection()
-
-      range.setStart(cellElement, 0)
-      selection?.removeAllRanges()
-      selection?.addRange(range)
+      event.preventDefault()
+      rowId = next.row
+      columnId = next.column
     }
+
+    focusCell(rowId, columnId)
+  }
+
+  function focusCell (rowId: number, columnId: number): void {
+    if (tableElement?.current === null) return
+    const cellElement = tableElement!.current.querySelector<HTMLDivElement>(`[data-grid-row="${rowId}"][data-grid-column="${columnId}"]`)
+    if (cellElement === null) return
+    cellElement.focus()
+    const range = document.createRange()
+    const selection = window.getSelection()
+    range.setStart(cellElement, 0)
+    selection?.removeAllRanges()
+    selection?.addRange(range)
+  }
+
+  function findNextCell (row: number, col: number): { row: number, column: number } | undefined {
+    const nextCol = findNextColumn(col)
+    if (nextCol !== undefined) return { row, column: nextCol }
+    const totalRows = props.table.getRowCount()
+    if (row + 1 < totalRows) return { row: row + 1, column: 0 }
+    return undefined
+  }
+
+  function findPrevCell (row: number, col: number): { row: number, column: number } | undefined {
+    const prevCol = findPrevColumn(col)
+    if (prevCol !== undefined) return { row, column: prevCol }
+    if (row - 1 >= 0) return { row: row - 1, column: props.table.getAllColumns().length - 1 }
+    return undefined
   }
 
   function findNextColumn (columnId: number): number | undefined {
