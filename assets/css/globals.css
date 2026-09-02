@@ -30,3 +30,17 @@
   src: url(../fonts/Lato-Bold.ttf);
   font-weight: 700;
 }
+
+/*
+ * Global focus-visible indicator for keyboard accessibility (WCAG 2.4.7).
+ * Shows a consistent 2px outline on keyboard focus, hidden on mouse clicks.
+ * Uses the Ant Design primary border color variable for theme consistency.
+ */
+:focus-visible {
+  outline: 2px solid var(--ant-color-primary-border, #91caff);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
