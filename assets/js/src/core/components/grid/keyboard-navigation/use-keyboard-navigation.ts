@@ -20,45 +20,30 @@ export const useKeyboardNavigation = (props: DefaultCellProps): KeyboardNavigati
   const { tableElement } = useGrid()
 
   function handleArrowNavigation (event: KeyboardEvent): void {
-    let rowId = props.row.index
-    let columnId = props.column.getIndex()
+    const target = resolveTarget(event)
+    if (target === undefined) return
+    focusCell(target.row, target.column)
+  }
 
-    const isArrowKey = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(event.key)
-    const isTab = event.key === 'Tab'
+  function resolveTarget (event: KeyboardEvent): { row: number, column: number } | undefined {
+    const row = props.row.index
+    const col = props.column.getIndex()
 
-    if (!isArrowKey && !isTab) {
-      return
+    switch (event.key) {
+      case 'ArrowDown': event.preventDefault(); return { row: row + 1, column: col }
+      case 'ArrowUp': event.preventDefault(); return { row: row - 1, column: col }
+      case 'ArrowLeft': event.preventDefault(); return { row, column: findPrevColumn(col) ?? col }
+      case 'ArrowRight': event.preventDefault(); return { row, column: findNextColumn(col) ?? col }
+      case 'Tab': return resolveTabTarget(event, row, col)
+      default: return undefined
     }
+  }
 
-    if (isArrowKey) {
-      event.preventDefault()
-    }
-
-    if (event.key === 'ArrowDown') {
-      rowId++
-    } else if (event.key === 'ArrowUp') {
-      rowId--
-    } else if (event.key === 'ArrowLeft') {
-      const prevColumn = findPrevColumn(columnId)
-      if (prevColumn !== undefined) {
-        columnId = prevColumn
-      }
-    } else if (event.key === 'ArrowRight') {
-      const nextColumn = findNextColumn(columnId)
-      if (nextColumn !== undefined) {
-        columnId = nextColumn
-      }
-    } else if (isTab) {
-      const next = event.shiftKey ? findPrevCell(rowId, columnId) : findNextCell(rowId, columnId)
-      if (next === undefined) {
-        return // Let Tab exit the grid at boundaries
-      }
-      event.preventDefault()
-      rowId = next.row
-      columnId = next.column
-    }
-
-    focusCell(rowId, columnId)
+  function resolveTabTarget (event: KeyboardEvent, row: number, col: number): { row: number, column: number } | undefined {
+    const next = event.shiftKey ? findPrevCell(row, col) : findNextCell(row, col)
+    if (next === undefined) return undefined // Let Tab exit the grid at boundaries
+    event.preventDefault()
+    return next
   }
 
   function focusCell (rowId: number, columnId: number): void {
