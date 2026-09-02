@@ -61,7 +61,16 @@ export const ContextMenuWrapper = ({ children, renderMenu, calculateAutoHeight =
       event.preventDefault()
       event.stopPropagation()
       openedViaKeyboard.current = true
-      setOpen(true)
+
+      // Dispatch a synthetic contextmenu event at the focused element's position
+      // so Ant Design anchors the dropdown correctly instead of at (0,0).
+      const target = event.currentTarget as HTMLElement
+      const rect = target.getBoundingClientRect()
+      target.dispatchEvent(new MouseEvent('contextmenu', {
+        bubbles: true,
+        clientX: rect.left,
+        clientY: rect.bottom
+      }))
     }
   }
 
