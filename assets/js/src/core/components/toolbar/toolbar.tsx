@@ -10,7 +10,7 @@
 
 import { useStyles } from '@Pimcore/components/toolbar/toolbar.styles'
 import { Flex, type FlexProps } from 'antd'
-import React from 'react'
+import React, { useCallback, useRef } from 'react'
 import { HorizontalScroll } from '../horizontal-scroll/horizontal-scroll'
 import { Box, type BoxProps } from '@Pimcore/components/box/box'
 
@@ -41,6 +41,7 @@ export const Toolbar = ({
   const resolvedTheme = theme ?? 'primary'
   const resolvedPosition = position ?? 'bottom'
   const { styles } = useStyles()
+  const toolbarRef = useRef<HTMLDivElement>(null)
   const classes = [
     styles.toolbar,
     'toolbar',
@@ -49,6 +50,25 @@ export const Toolbar = ({
     `toolbar--size-${size}`,
     `toolbar--border-${borderStyle}`
   ].join(' ')
+
+  const handleKeyDown = useCallback((event: React.KeyboardEvent): void => {
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return
+    const container = toolbarRef.current
+    if (container === null) return
+
+    const focusable = Array.from(container.querySelectorAll<HTMLElement>(
+      'button, [tabindex="0"], a[href], input, select, [role="button"]'
+    )).filter(el => !el.hasAttribute('disabled'))
+
+    const idx = focusable.indexOf(event.target as HTMLElement)
+    if (idx === -1) return
+
+    event.preventDefault()
+    const next = event.key === 'ArrowRight'
+      ? (idx + 1) % focusable.length
+      : (idx - 1 + focusable.length) % focusable.length
+    focusable[next].focus()
+  }, [])
 
   return (
     <Box
@@ -62,7 +82,10 @@ export const Toolbar = ({
           className='w-full'
           gap={ 16 }
           justify={ justify }
+          ref={ toolbarRef }
+          role="toolbar"
           { ...props }
+          onKeyDown={ handleKeyDown }
         >
           {children}
         </Flex>
