@@ -12,10 +12,15 @@ import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
+    search: css`
+      margin-bottom: ${token.marginXS}px;
+    `,
+
     item: css`
       width: 100%;
       text-align: left;
-      padding: ${token.paddingXS}px ${token.paddingSM}px;
+      /* Tight vertical rhythm to match the Agent bundle's config tree rows. */
+      padding: ${token.paddingXXS}px ${token.paddingSM}px;
       border-radius: ${token.borderRadius}px;
       cursor: pointer;
       border: none;
