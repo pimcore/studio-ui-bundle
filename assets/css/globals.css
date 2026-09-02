@@ -34,13 +34,12 @@
 /*
  * Global focus-visible indicator for keyboard accessibility (WCAG 2.4.7).
  * Shows a consistent 2px outline on keyboard focus, hidden on mouse clicks.
- * Uses the Pimcore brand color (purple) with fallback chain:
- * 1. --ant-color-primary (theme-derived, e.g. #722ed1)
- * 2. --pimcore-brand-color (set by base-layout from admin branding)
- * 3. #722ed1 (hardcoded Pimcore purple as last resort)
+ * Uses --pimcore-brand-color (set by base-layout-view.tsx from admin branding
+ * settings) with the Pimcore default purple as fallback. Ant Design's CSS
+ * variable mode is not enabled, so --ant-color-primary is unavailable here.
  */
 :focus-visible {
-  outline: 2px solid var(--ant-color-primary, var(--pimcore-brand-color, #722ed1));
+  outline: 2px solid var(--pimcore-brand-color, #722ed1);
   outline-offset: 2px;
 }
 
