@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isNil } from 'lodash'
 import { Form } from '@Pimcore/components/form/form'
@@ -21,7 +21,7 @@ import { useMessage } from '@Pimcore/components/message/useMessage'
 import { copyToClipboardWithFeedback } from '@Pimcore/utils/clipboard'
 import { type McpServer, type McpServerAccessGrant, type McpTool } from '../../mcp-servers-api-slice.gen'
 import { deriveScopes, slugify } from '../../utils'
-import { useMcpServerDirty } from '../../hooks/use-mcp-server-dirty'
+import { useMcpServerDirty, type McpServerSnapshot } from '../../hooks/use-mcp-server-dirty'
 import { GeneralFields } from './general-fields'
 import { SharingFields } from './sharing-fields'
 
@@ -96,6 +96,22 @@ export const McpServerEditor = ({
     }
   }, [nameValue, isCreate, form])
 
+  // Push a persisted snapshot back into the fields. Called when the server the
+  // editor is bound to changes (initial load, or the refetch a save triggers), so
+  // the live fields and the dirty baseline are always seeded from the same object.
+  const applyServerSnapshot = useCallback((snapshot: McpServerSnapshot): void => {
+    form.setFieldsValue({
+      name: snapshot.name,
+      urlSlug: snapshot.urlSlug,
+      description: snapshot.description,
+      enabled: snapshot.enabled
+    })
+    setSelectedTools(snapshot.tools)
+    setShareGlobal(snapshot.shareGlobal)
+    setSharedUsers(snapshot.sharedUsers)
+    setSharedRoles(snapshot.sharedRoles)
+  }, [form])
+
   useMcpServerDirty({
     server,
     name: nameValue ?? '',
@@ -106,7 +122,8 @@ export const McpServerEditor = ({
     shareGlobal,
     sharedUsers,
     sharedRoles,
-    onDirtyChange
+    onDirtyChange,
+    onResync: applyServerSnapshot
   })
 
   const derivedScopes = deriveScopes(selectedTools, tools)

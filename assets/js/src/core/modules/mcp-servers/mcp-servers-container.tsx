@@ -83,10 +83,9 @@ export const McpServersContainer = (): React.JSX.Element => {
             name: result.data.name,
             writeable: result.data.writeable
           })
-        } else {
-          // Reflect a renamed server on its tab label.
-          tabManager.renameTab(tabId, result.data.name)
         }
+        // A rename shows up on the tab label via the refreshed server list
+        // (see McpServerTabs) — no in-place tab patching needed.
       }
     })
   }

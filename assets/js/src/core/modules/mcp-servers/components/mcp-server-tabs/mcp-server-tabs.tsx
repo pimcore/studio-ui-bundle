@@ -51,10 +51,13 @@ export const McpServerTabs = ({
     return tabs.map((tab) => {
       const isCreate = tab.id === NEW_SERVER_KEY
       const server = isCreate ? null : servers.find((entry) => entry.id === tab.id) ?? null
+      // Take the label from the refreshed server list, so a rename shows up when
+      // the list refetches — no need to patch the tab's stored name in place.
+      const label = server?.name ?? tab.name
 
       return {
         key: tab.id,
-        label: `${tab.name}${tab.isDirty ? ' *' : ''}`,
+        label: `${label}${tab.isDirty ? ' *' : ''}`,
         children: (
           <McpServerEditor
             isActive={ tab.id === activeTabKey }

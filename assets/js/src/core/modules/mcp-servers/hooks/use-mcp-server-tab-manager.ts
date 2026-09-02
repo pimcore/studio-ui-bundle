@@ -9,7 +9,7 @@
  */
 
 import { useState, useCallback } from 'react'
-import { isNil, isUndefined } from 'lodash'
+import { isUndefined } from 'lodash'
 
 /**
  * Sentinel key for the (single) create tab. A tab carrying this id opens the
@@ -32,7 +32,6 @@ export interface McpServerTabManager {
   closeTab: (key: string) => void
   setActiveTab: (key: string) => void
   markDirty: (key: string, dirty: boolean) => void
-  renameTab: (key: string, name: string) => void
 }
 
 export function useMcpServerTabManager (): McpServerTabManager {
@@ -68,18 +67,15 @@ export function useMcpServerTabManager (): McpServerTabManager {
   }, [])
 
   const markDirty = useCallback((key: string, dirty: boolean) => {
-    setTabs((prev) =>
-      prev.map((entry) => (entry.id === key ? { ...entry, isDirty: dirty } : entry))
-    )
-  }, [])
-
-  const renameTab = useCallback((key: string, name: string) => {
-    if (isNil(name)) {
-      return
-    }
-    setTabs((prev) =>
-      prev.map((entry) => (entry.id === key ? { ...entry, name } : entry))
-    )
+    setTabs((prev) => {
+      // No-op when the flag already holds, so a repeated report (the dirty effect
+      // re-runs whenever its onDirtyChange identity changes) cannot churn state.
+      const target = prev.find((entry) => entry.id === key)
+      if (isUndefined(target) || target.isDirty === dirty) {
+        return prev
+      }
+      return prev.map((entry) => (entry.id === key ? { ...entry, isDirty: dirty } : entry))
+    })
   }, [])
 
   return {
@@ -88,7 +84,6 @@ export function useMcpServerTabManager (): McpServerTabManager {
     openTab,
     closeTab,
     setActiveTab,
-    markDirty,
-    renameTab
+    markDirty
   }
 }
