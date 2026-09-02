@@ -27,10 +27,6 @@ export interface IGeneralSettingsProviderProps {
 
 export const GeneralSettingsProvider = (props: IGeneralSettingsProviderProps): React.JSX.Element => {
   const [generalSettings, setGeneralSettings] = useState<GeneralSettings | undefined>(undefined)
-  // Matches LayoutProvider's pattern (layout-provider-factory.tsx): initialize
-  // once from props, then ignore further prop changes (e.g. a post-save
-  // refetch) so they can't clobber an in-progress edit. The parent's keyed
-  // remount (layoutKey) is the only mechanism that re-syncs from the server.
   const isInitializedRef = useRef(false)
 
   useEffect(() => {
