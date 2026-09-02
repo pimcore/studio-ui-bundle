@@ -171,6 +171,11 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
             if (event.key === 'Escape' && isExpanded) {
               event.stopPropagation()
               setActiveTab('')
+              // Move focus to the tab that was active, so the user isn't left on a hidden element.
+              requestAnimationFrame(() => {
+                const tab = sidebarRef.current?.querySelector<HTMLElement>('[role="tab"][aria-selected="true"], [role="tab"]')
+                tab?.focus()
+              })
             }
           } }
           ref={ contentRef }
