@@ -13,6 +13,7 @@ import { type SelectOptionType } from '@sdk/modules/element'
 import { isNil } from 'lodash'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { getDecimalSeparator } from '@Pimcore/utils/number'
 
 export interface CreatableSelectProps extends Omit<SelectProps, 'options'> {
   options: SelectOptionType[]
@@ -38,11 +39,27 @@ const Component = ({
   numberInputProps = {},
   ...selectProps
 }: CreatableSelectProps): React.JSX.Element => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [customOptions, setCustomOptions] = useState<SelectOptionType[]>([])
   const [newOptionText, setNewOptionText] = useState('')
+  // `InputNumber` only reports parseable numbers through `onChange`, so the text the user actually
+  // sees is tracked separately via `onInput` — otherwise "12aaa" would silently be accepted as 12.
+  const [numberInputText, setNumberInputText] = useState('')
   const [pendingSelection, setPendingSelection] = useState<SelectOptionType | null>(null)
   const allOptions = [...options, ...customOptions]
+  const decimalSeparator = numberInputProps.decimalSeparator ?? getDecimalSeparator(i18n?.language)
+
+  // The text currently in the input, which for number inputs is not necessarily the committed value.
+  const currentInputText = inputType === 'number' ? numberInputText : newOptionText
+
+  const isInputTextValid = useCallback((): boolean => {
+    // Grouping separators are rejected on purpose — "1,000" cannot be read unambiguously across locales.
+    if (inputType === 'number' && !Number.isFinite(Number(numberInputText.trim().replace(decimalSeparator, '.')))) {
+      return false
+    }
+
+    return validate === undefined || validate(newOptionText.trim())
+  }, [inputType, numberInputText, decimalSeparator, newOptionText, validate])
 
   // Auto-add value or defaultValue if it's not in the options list
   useEffect(() => {
@@ -102,7 +119,7 @@ const Component = ({
     }
 
     // Validate the input value
-    if (validate !== undefined && !validate(trimmedValue)) {
+    if (!isInputTextValid()) {
       return
     }
 
@@ -111,10 +128,11 @@ const Component = ({
     // Add to custom options
     setCustomOptions(prev => [...prev, newOption])
     setNewOptionText('')
+    setNumberInputText('')
 
     // Set pending selection to trigger after state update
     setPendingSelection(newOption)
-  }, [newOptionText, allOptions, allowDuplicates, onCreateOption, validate])
+  }, [newOptionText, allOptions, allowDuplicates, onCreateOption, isInputTextValid])
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent): void => {
     if (e.key === 'Enter') {
@@ -123,18 +141,33 @@ const Component = ({
     }
   }, [handleAddOption])
 
+  const handleNumberKeyDown = useCallback((e: React.KeyboardEvent): void => {
+    // `InputNumber` flushes on Enter, which re-aligns the value into [min, max] and would silently
+    // turn a rejected input into the boundary value. Keep the flush from running at all — the value
+    // is already committed through `onChange` while typing.
+    if (e.key === 'Enter') {
+      e.stopPropagation()
+    }
+
+    handleKeyDown(e)
+  }, [handleKeyDown])
+
   const getInputDependantField = (): React.JSX.Element => {
     switch (inputType) {
       case 'number':
         return (
           <InputNumber
+            changeOnBlur={ false }
             { ...numberInputProps }
-            onChange={ (e) => {
-              if (!isNil(e)) {
-                setNewOptionText(e.toString())
-              }
+            onChange={ (value) => {
+              const committedText = isNil(value) ? '' : value.toString()
+
+              setNewOptionText(committedText)
+              // Keep the tracked text in sync for changes that bypass `onInput`, e.g. the steppers.
+              setNumberInputText(committedText)
             } }
-            onKeyDown={ handleKeyDown }
+            onInput={ (text) => { setNumberInputText(text) } }
+            onKeyDown={ handleNumberKeyDown }
             placeholder={ t(createOptionLabel ?? 'creatable-select.add-custom-option') }
             size="small"
             style={ { flex: 1 } }
@@ -171,7 +204,7 @@ const Component = ({
             <Flex gap="small">
               {getInputDependantField()}
               <Button
-                disabled={ newOptionText.trim() === '' || (validate !== undefined && !validate(newOptionText.trim())) || (!allowDuplicates && allOptions.some(opt => opt.value === newOptionText.trim())) }
+                disabled={ currentInputText.trim() === '' || !isInputTextValid() || (!allowDuplicates && allOptions.some(opt => opt.value === newOptionText.trim())) }
                 onClick={ handleAddOption }
                 size="small"
                 type="primary"
@@ -184,7 +217,7 @@ const Component = ({
                 {t('creatable-select.option-already-exists')}
               </Text>
             )}
-            {newOptionText.trim() !== '' && validate !== undefined && !validate(newOptionText.trim()) && (
+            {currentInputText.trim() !== '' && !isInputTextValid() && (
               <Text type="danger">
                 {t('creatable-select.invalid-option')}
               </Text>
