@@ -12,8 +12,8 @@ import React, { createContext, useContext, useMemo, useRef, type ReactNode } fro
 
 export interface ElementClickBehavior {
   /**
-   * Called once an element has been opened from within the provider's subtree, so the
-   * surrounding UI can react to the navigation — a search listing closes its modal, for example.
+   * Called when an element is clicked inside the provider's subtree, right before it is opened,
+   * so the surrounding UI can react to the navigation — a search listing closes its modal.
    */
   onElementClick: () => void
 }

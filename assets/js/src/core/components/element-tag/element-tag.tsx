@@ -45,12 +45,12 @@ export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, p
 
   const onClick = async (): Promise<void> => {
     if (isClickable) {
+      onElementClick()
+
       await openElement({
         type: elementType,
         id
       })
-
-      onElementClick()
     }
   }
 
