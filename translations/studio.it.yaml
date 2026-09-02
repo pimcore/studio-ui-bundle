@@ -2706,6 +2706,7 @@ quantity-values.create-modal.create: Crea
 quantity-values.export: Esporta
 quantity-values.import: Importa
 quantity-values.import-modal.title: Importa unità valori quantitativi
+quantity-values.delete-confirmation: L'eliminazione di questa unità influirà su tutti gli elementi correlati che vi fanno riferimento. Continuare?
 owner: Proprietario
 reverse-object-relation.tooltip: Gli oggetti non proprietari rappresentano le relazioni verso un altro oggetto nello stesso modo degli oggetti. La differenza è che un campo oggetto non proprietario non è il proprietario dei dati della relazione, è semplicemente una vista sui dati memorizzati in altri oggetti. Scegliere il proprietario e il nome del campo in cui i dati sono originariamente memorizzati.
 disabled-fields: Campi disabilitati

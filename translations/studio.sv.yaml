@@ -2706,6 +2706,7 @@ quantity-values.create-modal.create: Skapa
 quantity-values.export: Exportera
 quantity-values.import: Importera
 quantity-values.import-modal.title: Importera kvantitetsvärdets enheter
+quantity-values.delete-confirmation: Om du tar bort den här enheten påverkas alla relaterade objekt som refererar till den. Är du säker på att du vill fortsätta?
 owner: Ägare
 reverse-object-relation.tooltip: Icke-ägande objekt representerar relationer till ett annat objekt på samma sätt som objekt gör. Skillnaden är att ett icke-ägande objektfält inte äger relationsdata, utan det är bara en vy av data lagrad i andra objekt. Välj ägare och fältnamn där data ursprungligen lagras.
 disabled-fields: Inaktiverade fält
