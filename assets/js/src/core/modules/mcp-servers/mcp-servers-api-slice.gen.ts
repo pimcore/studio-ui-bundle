@@ -89,6 +89,8 @@ export type McpGetToolsApiArg = void;
 export type McpServerAccessGrant = {
     /** User or role name */
     name: string;
+    /** May see the server and its configuration (implied by canEdit) */
+    canRead: boolean;
     /** May connect a client to the server at runtime */
     canAccess: boolean;
     /** May edit the server configuration */
