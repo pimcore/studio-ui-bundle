@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { isNil } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
+import { Spin } from '@Pimcore/components/spin/spin'
 import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
@@ -144,20 +145,32 @@ export const McpServersRail = ({
         loading={ isLoading }
         padded
       >
-        {!isLoading && servers.length === 0
-          ? <Content none />
-          : (
+        {/* On any refetch, blank the list and rebuild it wholesale from the fresh
+            server data — the same "refresh the whole panel" behaviour the Agent
+            bundle's tree uses, rather than patching individual rows in place. */}
+        {isFetching
+          ? (
             <Flex
-              gap="mini"
-              vertical
+              align="center"
+              justify="center"
             >
-              {servers.map((server) => (
-                <React.Fragment key={ server.id }>
-                  {renderRow(server)}
-                </React.Fragment>
-              ))}
+              <Spin type="classic" />
             </Flex>
-            )}
+            )
+          : servers.length === 0
+            ? <Content none />
+            : (
+              <Flex
+                gap="mini"
+                vertical
+              >
+                {servers.map((server) => (
+                  <React.Fragment key={ server.id }>
+                    {renderRow(server)}
+                  </React.Fragment>
+                ))}
+              </Flex>
+              )}
       </Content>
     </ContentLayout>
   )
