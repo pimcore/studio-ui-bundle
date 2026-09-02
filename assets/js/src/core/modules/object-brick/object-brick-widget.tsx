@@ -29,12 +29,19 @@ import { useSettings } from '@Pimcore/modules/field-definitions/components/edito
 import { type LayoutProviderProps } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { type AnyMutationHook, type AnyQueryHook } from 'types/react-query'
 
-// Wrapper: accepts { id } (where id == key), maps to backend { key }, and injects id into result
+// Wrapper: accepts { id } (where id == key), maps to backend { key }, and injects id into result.
+// Memoized on `result` (RTK Query keeps that reference stable across unrelated rerenders) so the
+// returned `data` object doesn't churn identity every render — consumers resync state off that
+// reference (see general-settings-provider.tsx), which would otherwise fire on every rerender.
 const useObjectBrickGetByKeyQuery: AnyQueryHook = (args: { id: string | number }) => {
   const key = String(args.id)
   const result = useClassObjectBrickGetByKeyQuery({ key })
 
-  if (result.data !== undefined) {
+  return useMemo(() => {
+    if (result.data === undefined) {
+      return result
+    }
+
     return {
       ...result,
       data: {
@@ -43,9 +50,7 @@ const useObjectBrickGetByKeyQuery: AnyQueryHook = (args: { id: string | number }
         id: result.data.key
       }
     }
-  }
-
-  return result
+  }, [result])
 }
 
 // Wrapper: accepts { id } (where id == key), maps to backend { key }

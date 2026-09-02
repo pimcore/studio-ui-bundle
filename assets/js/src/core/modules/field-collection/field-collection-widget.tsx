@@ -24,12 +24,19 @@ import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { type ConfigurationPartial } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { type AnyMutationHook, type AnyQueryHook } from 'types/react-query'
 
-// Wrapper: accepts { id } (where id == key), maps to backend { key }, and injects id into result
+// Wrapper: accepts { id } (where id == key), maps to backend { key }, and injects id into result.
+// Memoized on `result` (RTK Query keeps that reference stable across unrelated rerenders) so the
+// returned `data` object doesn't churn identity every render — consumers resync state off that
+// reference (see general-settings-provider.tsx), which would otherwise fire on every rerender.
 const useFieldCollectionGetByKeyQuery: AnyQueryHook = (args: { id: string | number }) => {
   const key = String(args.id)
   const result = useClassFieldCollectionGetByKeyQuery({ key })
 
-  if (result.data !== undefined) {
+  return useMemo(() => {
+    if (result.data === undefined) {
+      return result
+    }
+
     return {
       ...result,
       data: {
@@ -38,9 +45,7 @@ const useFieldCollectionGetByKeyQuery: AnyQueryHook = (args: { id: string | numb
         id: result.data.key
       }
     }
-  }
-
-  return result
+  }, [result])
 }
 
 // Wrapper: accepts { id } (where id == key), maps to backend { key }

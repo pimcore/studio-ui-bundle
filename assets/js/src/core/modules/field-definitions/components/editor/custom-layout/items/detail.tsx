@@ -108,7 +108,10 @@ export const ItemDetail = (): React.JSX.Element => {
 
   return (
     <RefreshProvider refreshLayout={ refreshLayout }>
-      <GeneralSettingsProvider generalSettings={ detailData }>
+      <GeneralSettingsProvider
+        generalSettings={ detailData }
+        key={ layoutKey }
+      >
         <LayoutProvider
           key={ layoutKey }
           layout={ layout }
