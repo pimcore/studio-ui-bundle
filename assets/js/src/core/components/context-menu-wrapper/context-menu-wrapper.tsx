@@ -85,6 +85,7 @@ export const ContextMenuWrapper = ({ children, renderMenu, calculateAutoHeight =
           {renderMenu()}
         </ContextMenuContext.Provider>
       ) }
+      getPopupContainer={ () => document.body }
       onOpenChange={ setOpen }
       open={ open }
       trigger={ ['contextMenu'] }
