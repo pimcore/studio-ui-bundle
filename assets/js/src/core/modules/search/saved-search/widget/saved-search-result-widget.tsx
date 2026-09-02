@@ -17,6 +17,8 @@ import { AssetSearchListing } from '@Pimcore/modules/search/modal/tabs/asset/lis
 import { ObjectSearchListing } from '@Pimcore/modules/search/modal/tabs/object/listing/object-search-listing'
 import { DocumentSearchListing } from '@Pimcore/modules/search/modal/tabs/document/listing/document-search-listing'
 import { useSavedSearchGetConfigurationQuery } from '@Pimcore/modules/search/search-api-slice-enhanced'
+import { Header } from '@Pimcore/components/header/header'
+import { Title } from '@Pimcore/components/title/title'
 
 export interface SavedSearchResultWidgetProps {
   savedSearchId: number
@@ -50,7 +52,15 @@ export const SavedSearchResultWidget = ({ savedSearchId, elementType }: SavedSea
       initialLoadedSavedSearch={ configuration }
       initialPendingRestore={ configuration }
     >
-      { renderListing() }
+      <div style={ { display: 'flex', flexDirection: 'column', height: '100%' } }>
+        <Header position="top">
+          <Title>{configuration.name}</Title>
+        </Header>
+
+        <div style={ { flex: 1, minHeight: 0 } }>
+          { renderListing() }
+        </div>
+      </div>
     </SearchProvider>
   )
 }
