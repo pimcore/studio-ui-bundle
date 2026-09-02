@@ -2706,6 +2706,7 @@ quantity-values.create-modal.create: Opprett
 quantity-values.export: Eksporter
 quantity-values.import: Importer
 quantity-values.import-modal.title: Importer mengdeverdi-enheter
+quantity-values.delete-confirmation: Hvis du sletter denne enheten, påvirkes alle relaterte elementer som refererer til den. Er du sikker på at du vil fortsette?
 owner: Eier
 reverse-object-relation.tooltip: Ikke-eierobjekter representerer relasjoner til et annet objekt på samme måte som objekter gjør. Forskjellen er at et ikke-eierobjektfelt ikke er eier av relasjonsdataene, det er kun en visning av data lagret i andre objekter. Vennligst velg eier og feltnavn der dataene opprinnelig er lagret.
 disabled-fields: Deaktiverte felt

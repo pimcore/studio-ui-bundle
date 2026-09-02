@@ -10,7 +10,8 @@
 
 import React from 'react'
 import { type CellContext } from '@tanstack/react-table'
-import { Flex, IconButton } from '@sdk/components'
+import { useTranslation } from 'react-i18next'
+import { Flex, IconButton, useFormModal } from '@sdk/components'
 import { type QuantityValueUnit } from '@Pimcore/modules/data-object/unit-slice-enhanced'
 import { type QuantityValueUnitRow, useQuantityValueUnit } from '../hooks/use-quantity-value-unit'
 
@@ -23,15 +24,26 @@ interface ActionsCellProps {
 
 export const ActionsCell = ({ info, setQuantityValueUnitRows }: ActionsCellProps): JSX.Element => {
   const id = info.row.original.id
+  const { t } = useTranslation()
+  const modal = useFormModal()
   const { deleteUnitById, deleteLoading } = useQuantityValueUnit()
 
-  const handleDelete = async (): Promise<void> => {
+  const deleteUnit = async (unitId: string): Promise<void> => {
+    const { success } = await deleteUnitById(unitId)
+    if (success) {
+      setQuantityValueUnitRows(prev => prev.filter(row => row.id !== unitId))
+    }
+  }
+
+  const handleDelete = (): void => {
     if (id === null) return
 
-    const { success } = await deleteUnitById(id)
-    if (success) {
-      setQuantityValueUnitRows(prev => prev.filter(row => row.id !== id))
-    }
+    modal.confirm({
+      title: t('warning'),
+      content: t('quantity-values.delete-confirmation'),
+      okText: t('delete'),
+      onOk: async () => { await deleteUnit(id) }
+    })
   }
 
   return (
