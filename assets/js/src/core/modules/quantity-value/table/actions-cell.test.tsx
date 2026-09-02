@@ -10,7 +10,6 @@
 
 import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
-import { type CellContext } from '@tanstack/react-table'
 import { ActionsCell } from './actions-cell'
 import { type QuantityValueUnitRow } from '../hooks/use-quantity-value-unit'
 
@@ -71,7 +70,7 @@ describe('quantity value unit ActionsCell', () => {
 
     render(
       <ActionsCell
-        info={ getInfo(id) as CellContext<any, React.ReactNode> }
+        info={ getInfo(id) }
         setQuantityValueUnitRows={ setQuantityValueUnitRows }
       />
     )
