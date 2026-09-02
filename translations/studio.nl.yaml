@@ -1,0 +1,2871 @@
+common.owner: Eigenaar
+common.modification-date: Wijzigingsdatum
+common.globally: Globaal
+common.apply-selection: Selectie toepassen
+common.clear: Wissen
+cache.clear-cache-success: Cache succesvol gewist
+cache.clear-full-page-cache-success: Volledige paginacache succesvol gewist
+cache.clear-temporary-files-success: Tijdelijke bestanden succesvol gewist
+dont-ask-again: Niet meer vragen
+widget.missing-context.title: Ontbrekende context
+widget.missing-context.description: Geen gerelateerd element gevonden
+widget.missing-tab-context.description: Deze functie wordt niet ondersteund voor het gerelateerde element
+block: Blok
+error.error_something_generic_went_wrong: Er is iets misgegaan
+error.error_permission_denied: Je hebt geen toestemming om deze actie op dit element uit te voeren.
+error.error_element_exists: Element bestaat al
+error.error_folder_exists: Map bestaat al
+error.error_invalid_argument: Ongeldig argument
+error.error_widget_name_missing: Widgetnaam moet worden opgegeven
+error.error_widget_name_invalid: Widgetnaam is ongeldig (alleen alfanumerieke tekens, underscores en spaties zijn toegestaan, minimaal 3 en maximaal 80 tekens lang)
+error.error_validation_failed: Validatie mislukt
+error.error_validation.email_failed: Voer een geldig e-mailadres in
+error.error_element_not_found: Element niet gevonden
+error.error_document_language_not_set: Het document heeft geen taalinstelling
+error.error_inconsistent_asset_type: Hier zijn alleen assets van hetzelfde type toegestaan.
+error.error_recycle_bin_restore: Kan element niet herstellen uit de prullenbak
+error.error_recycle_bin_restore_missing_parent: Kan element niet herstellen uit de prullenbak, bovenliggend element ontbreekt
+error.syntax_error: Syntaxisfout
+sidebar.selected_elements: Geselecteerde elementen
+sidebar.grid_config: Rasterinstelling
+sidebar.tag_filters: Tagfilters
+sidebar.search_filter: Zoeken & filteren
+sidebar.clear-all-filters: Alle filters wissen
+add-areas: Gebieden toevoegen
+content-settings: Inhoudinstellingen
+site-domain.main_site: Hoofdsite
+relation-invalid-key-in-columns: Ongeldige waarde voor sleutelkolom. Vermijd speciale tekens en gereserveerde sleutelwoorden.
+import-modal.title: Importeren
+import-modal.upload: Uploaden
+import-modal.browse-files: Bestanden bladeren
+import-modal.drag-drop: Bestand hier slepen of klikken om te bladeren
+modal-search.field.mimeType: MIME-type
+modal-search.field.thumbnail: Miniatuur
+modal-search.field.id: ID
+modal-search.field.userOwner: Gebruikerseigenaar
+modal-search.field.userOwnerName: Naam gebruikerseigenaar
+modal-search.field.userModification: Gebruiker wijziging
+modal-search.field.userModificationName: Naam gebruiker wijziging
+modal-search.field.creationDate: Aanmaakdatum
+modal-search.field.modificationDate: Wijzigingsdatum
+modal-search.field.description: Beschrijving
+modal-search.field.name: Naam
+modal-search.field.previewImage: Voorbeeldafbeelding
+modal-search.field.title: Titel
+modal-search.field.class: Klasse
+modal-search.field.language: Taal
+asset.sidebar.details: Details
+asset.asset-tree.title: Asset-boom
+asset.asset-tree.search: "Zoeken in {{folderName}}"
+asset.asset-editor-tabs.view: Weergave
+asset.asset-editor-tabs.embedded-metadata: Ingebedde metadata
+asset.asset-editor-tabs.custom-metadata: Aangepaste metadata
+asset.asset-editor-tabs.versions: Versies
+asset.asset-editor-tabs.list.columns.preview: Voorbeeld
+asset.asset-editor-tabs.list.columns.id: ID
+asset.asset-editor-tabs.list.columns.type: Type
+asset.asset-editor-tabs.list.columns.fullPath: Volledig pad
+asset.asset-editor-tabs.list.columns.creationDate: Aanmaakdatum
+asset.asset-editor-tabs.list.columns.modificationDate: Wijzigingsdatum
+asset.tree.context-menu.upload-new-version: Nieuwe versie uploaden
+asset.copy-info: Kopiëren & info
+asset.upload: Uploaden
+asset.upload.label: Bestand selecteren
+asset.upload.files.uploading: "{{processedItems}}/{{totalItems}} bestanden worden geüpload ..."
+asset.upload.files.uploaded: "{{successItems}} bestanden zijn geüpload"
+asset.upload.files.completed: Voltooid!
+asset.upload.files.successfully-uploaded: Upload succesvol voltooid
+asset.upload.files.completed-actions: Voltooide acties
+asset.upload.validation: Voeg een bestand toe
+asset.upload.file-exists.title: Bestand bestaat al
+asset.upload.file-exists.message: 'Het bestand "{{fileName}}" bestaat al in deze map. Wil je het overschrijven?'
+asset.upload.overwrite: Overschrijven
+asset.upload.keep-both: Beide bewaren
+asset.upload.skip: Overslaan
+asset.upload.apply-to-all: Op alles toepassen
+asset.upload.checking-duplicate-file-names: "Controleren op dubbele bestandsnamen ... {{done}}/{{total}}"
+asset.upload.folder-drop.creating-folders: Mappen aanmaken
+asset.upload.folder-drop.creating-folders-hint: Even geduld terwijl de mappenstructuur wordt aangemaakt…
+upload.error.file-too-large: Het bestand is groter dan de uploadlimiet van de server.
+upload.error.max-file-size-exceeded: "Bestandsgrootte overschrijdt de maximaal toegestane grootte van {{maxSize}}"
+upload.error.generic: Het bestand kon niet worden geüpload.
+upload.error.upload-failed: Upload mislukt
+upload.error.failed-to-fetch-asset-details: Assetdetails ophalen mislukt
+upload.success: Bestand succesvol geüpload
+asset.select.type.nullable: Alle typen
+document.document-tree.title: Documentenboom
+document.document-tree.search: "Zoeken in {{folderName}}"
+document.editable.inheritance.overwrite: Overschrijven
+document.editable.inheritance.tooltip: Overgeërfd van het hoofd-inhoudsdocument. Klik om te overschrijven.
+areablock.move-above: Erboven verplaatsen
+areablock.move-below: Eronder verplaatsen
+areablock.show: Weergeven
+areablock.hide: Verbergen
+areablock.new: Nieuw
+areablock.copy: Kopiëren
+areablock.paste: Plakken
+areablock.cut: Knippen
+areablock.settings: Instellingen
+areablock.delete: Verwijderen
+document.highlight-editables: Bewerkbare velden markeren
+document.link.target: Linkdoel
+document.hardlink.source: Brondocument
+document.hardlink.properties-from-source: Eigenschappen van brondocument gebruiken
+document.hardlink.children-from-source: Onderliggende items van brondocument gebruiken
+document.paste-as-new-language-variant: Plakken als nieuwe taalvariant
+document.paste-as-new-language-variant-recursive: Plakken als nieuwe taalvariant (recursief)
+document.paste-language-recursive-updating-references: Taal plakken (recursief) en verwijzingen bijwerken
+document.select-language-for-new-document: Taal selecteren voor nieuw document
+document.language-required: Selecteer een taal
+document.paste-inheritance: Plakken (overerving)
+document.tree.copy-paste.replacing-content: Inhoud vervangen
+document.tree.context-menu.add-page: Nieuwe pagina
+document.tree.context-menu.add-snippet: Nieuw fragment
+document.tree.context-menu.add-email: Nieuwe e-mail
+document.tree.context-menu.add-link: Nieuwe link
+document.tree.context-menu.add-hardlink: Nieuwe harde link
+document.required-fields.validation-title: Verplichte velden ontbreken
+document.required-fields.validation-message: De volgende verplichte velden moeten worden ingevuld vóór publicatie
+document.site.remove-site: Site verwijderen
+document.site.remove-site-confirmation: Weet je zeker dat je deze site wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.
+document.site.use-as-site: Gebruiken als site
+document.site.edit-site: Site bewerken
+document.site.form.main-domain: Hoofddomein
+document.site.form.additional-domains: Extra domeinen
+document.site.form.additional-domains-tooltip: Voer extra domeinen in, één per regel. Jokertekens worden ondersteund (*voorbeeld.com)
+document.site.form.redirect-to-main-domain: Extra domeinen doorsturen naar hoofddomein
+document.site.form.error-documents: Foutdocumenten
+document.site.form.default-error-document: Standaard foutdocument
+document.site.form.error-document-language: "Foutdocument ({{language}})"
+save-and-continue: Opslaan en doorgaan
+discard-and-continue: Verwerpen en doorgaan
+discard-changes: Wijzigingen verwerpen
+unsaved-changes.title: Niet-opgeslagen wijzigingen
+unsaved-changes.message: Je hebt niet-opgeslagen wijzigingen. Wat wil je doen?
+unsaved-changes.close-message: Je hebt niet-opgeslagen wijzigingen. Weet je zeker dat je wilt sluiten zonder op te slaan?
+convert-to: Converteren naar
+convert-document: Document converteren
+convert-document-warning: Alle inhoud gaat verloren. Weet je zeker dat je dit document wilt converteren?
+page: Pagina
+email: E-mail
+link: Link
+hardlink: Harde link
+blank: Leeg
+data-object.data-object-tree.title: Gegevensobjectenboom
+data-object.data-object-tree.search: "Zoeken in {{folderName}}"
+data-object.select-class-to-display: Selecteer een klasse om weer te geven
+data-object.tree.context-menu.add-object: Nieuw object
+data-object.tree.context-menu.add-variant: Nieuwe variant
+data-object.variant-listing.create-data-variant: Nieuwe variant
+data-object.create-data-object: "Nieuw object van type {{className}} toevoegen"
+data-object.create-variant: "Nieuwe variant van type {{className}} toevoegen"
+data-object.object-editor-tabs.variants: Varianten
+object.object-editor-tabs.children-listing: Kindraster
+workflow.label: Workflow
+workflow.headline: Workflowdetails
+workflow.no-workflows-found: Geen workflows gevonden
+folder.folder-editor-tabs.preview: Voorbeeld
+folder.folder-editor-tabs.view: Lijst
+toolbar.reload.confirmation: Weet je zeker dat je dit tabblad wilt herladen? Alle niet-opgeslagen wijzigingen gaan verloren.
+toolbar.reload: Herladen
+toolbar.save-and-publish: Opslaan & publiceren
+toolbar.save: Opslaan
+toolbar.save-draft: Concept opslaan
+toolbar.more: Meer
+toolbar.workflow: Workflow
+toolbar.new: Nieuw
+toolbar.switch-layout: Custom Layout wisselen
+import: Importeren
+export: Exporteren
+more-actions: Meer acties
+language-comparison-view.apply-changes: Wijzigingen toepassen
+language-comparison-view.title: Taalvergelijking
+language-comparison-view.no-localized-fields: Dit gegevensobject heeft geen gelokaliseerde velden.
+language-comparison-view.no-permission: Je hebt geen toestemming om dit object op te slaan.
+class-definition.import: Klassedefinitie importeren
+class-definition.export: Klassedefinitie exporteren
+class-definition.import-file-label: JSON-bestand selecteren
+class-definition.import-success: Klassedefinitie succesvol geïmporteerd
+class-definition.export-success: Klassedefinitie succesvol geëxporteerd
+class-definition.custom-layouts.default-layout: Standaardlayout
+class-definition.create-new: Nieuwe klassedefinitie aanmaken
+class-definition.class-name: Klassenaam
+class-definition.unique-identifier: Unieke identificatie
+class-definition.unique-identifier-warning: Wees voorzichtig met de unieke identificatie, want tabelnamen mogen maximaal 64 tekens bevatten.
+class-definition.validation.enter-class-name: Voer een klassenaam in
+class-definition.validation.class-name-format: De klassenaam moet beginnen met een letter en mag alleen letters, cijfers en underscores bevatten.
+class-definition.validation.enter-unique-identifier: Voer een unieke identificatie in
+class-definition.validation.unique-identifier-in-use: Deze unieke identificatie is al in gebruik
+class-definition.validation.unique-identifier-format: De unieke identificatie moet beginnen met een letter en mag alleen letters, cijfers en underscores bevatten, met een maximale lengte van 64 tekens.
+class-definition.general-settings.title: Algemeen
+class-definition.general-settings.description: Beschrijving
+class-definition.general-settings.id: ID
+class-definition.general-settings.php-class-name: PHP-klassenaam
+class-definition.general-settings.group: Groep
+class-definition.general-settings.icon: Pictogram
+class-definition.general-settings.parent-class: Bovenliggende klasse
+class-definition.general-settings.implements-interfaces: Implementeert interfaces
+class-definition.general-settings.listing-parent-class: Bovenliggende lijstklasse
+class-definition.general-settings.use-traits: Traits gebruiken
+class-definition.general-settings.listing-use-traits: Listing traits gebruiken
+class-definition.general-settings.link-generator-reference: Linkgeneratorreferentie
+class-definition.general-settings.preview-generator-reference: Voorbeeldgeneratorreferentie
+class-definition.general-settings.allow-inherit: Overerving toestaan
+class-definition.general-settings.allow-variants: Varianten toestaan
+class-definition.general-settings.show-variants: Varianten weergeven
+class-definition.general-settings.show-app-logger-tab: App-loggertabblad weergeven
+class-definition.general-settings.show-field-lookup: Veldopzoekfunctie weergeven
+class-definition.general-settings.enable-grid-locking: Rastervergrendeling inschakelen
+class-definition.general-settings.encrypt-data: Gegevens versleutelen
+class-definition.general-settings.enter-name: Voer een naam in
+class-definition.property-visibility.title: Eigenschapszichtbaarheid
+class-definition.property-visibility.id-grid: ID (raster)
+class-definition.property-visibility.id-search: ID (zoeken)
+class-definition.property-visibility.key-grid: Sleutel (raster)
+class-definition.property-visibility.key-search: Sleutel (zoeken)
+class-definition.property-visibility.path-grid: Pad (raster)
+class-definition.property-visibility.path-search: Pad (zoeken)
+class-definition.property-visibility.published-grid: Gepubliceerd (raster)
+class-definition.property-visibility.published-search: Gepubliceerd (zoeken)
+class-definition.property-visibility.modification-date-grid: Wijzigingsdatum (raster)
+class-definition.property-visibility.modification-date-search: Wijzigingsdatum (zoeken)
+class-definition.property-visibility.creation-date-grid: Aanmaakdatum (raster)
+class-definition.property-visibility.creation-date-search: Aanmaakdatum (zoeken)
+class-definition.object-bricks.title: Object Bricks
+class-definition.composite-indices.title: Samengestelde indexen
+class-definition.composite-indices.index-name: Indexnaam
+class-definition.composite-indices.type: Type
+class-definition.composite-indices.columns: Kolommen
+class-definition.composite-indices.enter-index-name: Indexnaam invoeren
+class-definition.composite-indices.select-index-type: Indextype selecteren
+class-definition.composite-indices.select-column-names: Kolomnamen selecteren of invoeren
+class-definition.composite-indices.type-query: Query
+class-definition.composite-indices.type-localized-query: Gelokaliseerde query
+class-definition.composite-indices.type-store: Opslag
+class-definition.composite-indices.type-localized-store: Gelokaliseerde opslag
+class-definition.composite-indices.index-label: Index
+field-collection.create-new: Nieuwe Field Collection aanmaken
+field-collection.key: Sleutel
+field-collection.validation.enter-key: Voer een sleutel in
+field-collection.validation.key-format: De sleutel moet beginnen met een letter en mag alleen letters, cijfers en underscores bevatten.
+field-collection.general-settings.title: Algemeen
+field-collection.general-settings.key: Sleutel
+field-collection.general-settings.title-label: Titel
+field-collection.general-settings.enter-title: Voer een titel in
+field-collection.general-settings.group: Groep
+field-collection.general-settings.parent-class: Bovenliggende PHP-klasse
+field-collection.general-settings.implements-interfaces: Implementeert interfaces
+field-collection.general-settings.usages.title: Gebruik
+field-collection.general-settings.usages.class: Klasse
+field-collection.general-settings.usages.field: Veld
+object-brick.create-new: Nieuwe Object Brick aanmaken
+object-brick.key: Sleutel
+object-brick.validation.enter-key: Voer een sleutel in
+object-brick.validation.key-format: De sleutel moet beginnen met een letter en mag alleen letters, cijfers en underscores bevatten.
+object-brick.general-settings.title: Algemeen
+object-brick.general-settings.parent-class: Bovenliggende PHP-klasse
+object-brick.general-settings.implements-interfaces: Implementeert interfaces
+object-brick.general-settings.title-label: Titel
+object-brick.general-settings.group: Groep
+object-brick.class-definitions-block.title: Klassedefinities
+object-brick.class-definitions-block.new-entry: Nieuw item
+object-brick.class-definitions-block.classname: Klasse
+object-brick.class-definitions-block.select-classname: Klasse selecteren
+object-brick.class-definitions-block.fieldname: Veld
+object-brick.class-definitions-block.select-fieldname: Veld selecteren
+select-option.create-new: Nieuwe selectieoptie aanmaken
+select-option.id: ID
+select-option.enter-name-new-item: Naam van het nieuwe item invoeren
+select-option.validation.enter-id: Voer een ID in
+select-option.validation.id-format: De naam moet beginnen met een hoofdletter, gevolgd door alfanumerieke tekens
+select-option.general-settings.title: Algemeen
+select-option.general-settings.enum-name: Enum-naam
+select-option.general-settings.use-traits: Traits gebruiken
+select-option.general-settings.implements-interfaces: Implementeert interfaces
+select-option.general-settings.group: Groep
+select-option.general-settings.admin-only: Alleen beheerder
+select-option.entries.title: Opties
+select-option.entries.display-name: Weergavenaam
+select-option.entries.value: Waarde
+select-option.entries.name: Naam
+select-option.entries.action: Actie
+select-option.entries.move-up: Omhoog verplaatsen
+select-option.entries.move-down: Omlaag verplaatsen
+select-option.general-settings.usages.title: Gebruik
+select-option.general-settings.usages.class: Klasse
+select-option.general-settings.usages.field: Veld
+select-option.create.success: Selectieoptie succesvol aangemaakt
+select-option.update.success: Selectieoptie succesvol bijgewerkt
+select-option.delete.success: Selectieoptie succesvol verwijderd
+select-option.tree.all: Alle
+select-option.tree.search: Selectieopties zoeken
+select-option.tree.actions.select-option: Selectieoptie
+custom-layout.import-success: Custom Layout succesvol geïmporteerd
+custom-layout.delete.confirmation: Weet je zeker dat je deze Custom Layout wilt verwijderen?
+custom-layout.delete.success: Custom Layout succesvol verwijderd
+custom-layout.add: Nieuwe layout
+custom-layout.empty-state.create-or-edit: Maak een nieuwe Custom Layout aan of bewerk een bestaande
+custom-layout.empty-state.edit: Selecteer een bestaande Custom Layout om te bewerken
+example-prefix: Voorbeeldprefix
+pagination.show-total: "Totaal {{total}} items"
+pagination.page: Pagina
+pagination.showing-x-of-y: "{{loaded}} van {{total}} weergegeven"
+preview-card.locate-in-tree: In boom zoeken
+preview-card.rename: Hernoemen
+preview-card.download-zip: Downloaden als ZIP
+preview-card.delete: Verwijderen
+grid.aria.column-resize: Kolom vergroten of verkleinen
+sidebar.aria.resize: Zijbalk vergroten of verkleinen
+tree.aria.expand-and-collapse: Boomitem uitvouwen of samenvouwen
+image-sidebar.tab.details.custom-download: Aangepast downloaden
+aria.asset.image-sidebar.tab.details.custom-thumbnail-mode: Aangepaste miniatuureenheid selecteren
+aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Aangepast miniatuurformaat selecteren
+aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Aangepast miniatuur downloaden
+aria.asset.image-sidebar.tab.details.precreated-thumbnail: Voorgemaakte miniatuur selecteren om te downloaden
+aria.asset.image-sidebar.tab.details.download-thumbnail: Miniatuur downloaden
+notification.action-list.actions: Acties
+notification.action-list.cancel: Annuleren
+notification.action-list.cancel-all: Alles annuleren
+notification.action-list.completed-actions: Voltooide acties
+aria.notification.action-list.toggle-collapse: Actielijst in-/uitklappen
+aria.notification.action-list.cancel-all: Alle lopende acties annuleren
+aria.notification.action-list.cancel: Actie annuleren
+asset.image.editor.zoom.reset: Herstellen
+aria.asset.image.editor.zoom.reset: Zoom herstellen
+aria.asset.image.editor.zoom.zoom-in: Inzoomen
+aria.asset.image.editor.zoom.zoom-out: Uitzoomen
+aria.asset.image.editor.zoom.preconfigured-zoom-levels: Vooraf gedefinieerde zoomniveaus selecteren
+asset.preview.no-video-support: Je browser ondersteunt geen video.
+asset.preview.no-audio-support: Je browser ondersteunt geen audio.
+grid.filter.before: Voor
+grid.filter.after: Na
+grid.filter.between: Tussen
+grid.filter.on: Op
+grid.filter.from: Van
+grid.filter.to: Tot
+grid.filter.is: Is
+grid.filter.less: Minder dan
+grid.filter.more: Meer dan
+grid.filter.column: "Filter {{column}}"
+grid.filter.file-size-unit.kb: KB
+grid.filter.file-size-unit.mb: MB
+grid.filter.file-size-unit.gb: GB
+grid.copy-notice: Gekopieerd naar klembord
+grid.configuration.no-saved-templates: Geen opgeslagen sjablonen beschikbaar
+grid.configuration.template: Sjabloon
+grid.configuration.save-template: Opslaan als sjabloon
+grid.configuration.save-new-template: Opslaan als nieuw sjabloon
+grid.configuration.update-template: Sjabloon bijwerken
+grid.configuration.edit-template-details: Sjabloondetails bewerken
+grid.configuration.delete-template: Sjabloon verwijderen
+grid.configuration.delete-this-template: Dit sjabloon verwijderen
+grid.configuration.delete-template-confirmation: Weet je zeker dat je dit sjabloon wilt verwijderen?
+grid.configuration.save-template-configuration: Configuratie opslaan als sjabloon
+grid.configuration.set-default-template: Instellen als standaardsjabloon
+grid.configuration.shared: Gedeeld
+grid.advanced-column.advancedColumns.group.boolean: Booleaans
+grid.advanced-column.advancedColumns.group.date: Datum
+grid.advanced-column.advancedColumns.group.string: Tekst
+grid.advanced-column.advancedColumns.group.other: Overige
+grid.advanced-column.title.placeholder: Titel toevoegen
+grid.advanced-column.advancedColumns: Bronveld
+grid.advanced-column.advancedColumns.add: Bronveld toevoegen
+grid.advanced-column.transformers: Transformaties
+grid.advanced-column.transformers.add: Transformatie toevoegen
+grid.advanced-column.preview: Voorbeeld
+grid.advanced-column.no-preview: Geen voorbeelditem beschikbaar
+grid.advanced-column.no-preview-data: Geen voorbeeldgegevens beschikbaar
+grid.advanced-column.error-preview-data: Fout bij laden van voorbeeld
+grid.advanced-column.preview-item: Voorbeelditem
+grid.advanced-column.trim: Inkorten
+grid.advanced-column.find: Zoeken
+grid.advanced-column.replace: Vervangen
+grid.advanced-column.start: Begin
+grid.advanced-column.length: Lengte
+grid.advanced-column.trueLabel: Label voor waar
+grid.advanced-column.falseLabel: Label voor onwaar
+grid.advanced-column.format: Formaat
+grid.advanced-column.delimiter: Scheidingsteken
+grid.advanced-column.twigTemplate: Twig-sjabloon
+grid.advanced-column.blurringRule: Vervagingsregel
+grid.advanced-column.anonymizationRule: Anonimiseringsregel
+grid.advanced-column.translationPrefix: Vertaalprefix
+grid.advanced-column.advancedColumns.simpleField: Eenvoudig veld
+grid.advanced-column.advancedColumns.relationField: Relatieveld
+grid.advanced-column.classification-store.no-selection: Geen waarde geselecteerd
+grid.advanced-column.classification-store.edit: Waarde wijzigen
+grid.advanced-column.advancedColumns.staticText: Statische tekst
+grid.advanced-column.advancedColumns.booleanFormatter: Booleaanse opmaak
+grid.advanced-column.advancedColumns.caseChange: Hoofdletterwijziging
+grid.advanced-column.advancedColumns.combine: Waarden samenvoegen
+grid.advanced-column.advancedColumns.dateFormatter: Datumopmaak
+grid.advanced-column.advancedColumns.elementCounter: Elementteller
+grid.advanced-column.advancedColumns.explode: Splitsen
+grid.advanced-column.advancedColumns.stringReplace: Tekst vervangen
+grid.advanced-column.advancedColumns.substring: Deelreeks
+grid.advanced-column.advancedColumns.trim: Inkorten
+grid.advanced-column.advancedColumns.twigOperator: Twig-operator
+grid.advanced-column.advancedColumns.anonymizer: Anonimisering
+grid.advanced-column.advancedColumns.blur: Vervagen
+grid.advanced-column.advancedColumns.translate: Vertalen
+grid.advanced-column.advancedColumns.phpCode: PHP-code
+grid.advanced-column.advancedColumns.phpCodeKey: PHP-transformatiesleutel
+grid.advanced-column.advancedColumns.arguments: Argumenten
+component.workflow-card.action-btn: Workflowacties
+component.pql.placeholder: Typ je query
+component.pql.description: Pimcore Query Language (PQL) is een eenvoudige maar krachtige querytaal waarmee je gegevens kunt zoeken aan de hand van diverse criteria, inclusief het filteren van waarden in gerelateerde elementen, voor nauwkeurig en uitgebreid gegevensophalen. Zie <anchorPQL>PQL-documentatie</anchorPQL> voor details
+asset.asset-editor-tabs.embedded-metadata.headline: Meta-informatie
+asset.asset-editor-tabs.embedded-metadata.columns.name: Naam
+asset.asset-editor-tabs.embedded-metadata.columns.value: Waarde
+asset.asset-editor-tabs.preview.open-in-new-window: Openen in nieuw venster
+login-form.remember-me: Onthoud mij
+login-form.forgot-password: Wachtwoord vergeten
+login-form.login: Inloggen
+login-form-additional-logins.or: of
+login-form.username: Gebruikersnaam
+login-form.password: Wachtwoord
+aria.login-form-additional-logins.additional-login-provider: "Extra inlogprovider:"
+aria.login-form-additional-logins.remember-me-checkbox: Selectievakje onthoud mij
+unsaved-notice: Sla op om je wijzigingen te bevestigen
+widget-manager.tab-title.close-confirmation: Je hebt niet-opgeslagen wijzigingen. Weet je zeker dat je dit tabblad wilt sluiten?
+action-applied-successfully: Actie succesvol toegepast
+action-could-not-be-applied: Actie kon niet worden toegepast
+failed-to-assign-tag-to-element: Tag aan element toewijzen mislukt
+failed-to-un-assign-tag-to-element: Tag van element verwijderen mislukt
+workflow-modal.perform-action: Actie uitvoeren
+workflow-modal.cancel: Annuleren
+workflow-modal.notes: Notities
+workflow-modal.notes-required: Voer je notities in
+workflow-transitions.start-workflow: Workflow starten
+workflow-transitions.finish-review: Beoordeling afronden
+workflow-transitions.restart-review: Beoordeling herstarten
+save-success: Succesvol opgeslagen
+save-failed: Opslaan mislukt
+auto-save-failed: Automatisch opslaan mislukt
+version.label: Versies
+version.versions: Versies
+version.version: Versie
+version.publish: Publiceren
+version.coauthored-by: "Mede-bewerkt door {{type}} {{name}}"
+version.published: Gepubliceerd
+version.autosaved: Automatisch opgeslagen
+version.schedule-for: Gepland voor
+version.note: Notitie
+version.note.add: Notitie toevoegen
+version.own-draft: Eigen concept
+version.compare-versions: Versies vergelijken
+version.fileName: Naam
+version.dimensions: Afmetingen
+version.creationDate: Aanmaakdatum
+version.modificationDate: Wijzigingsdatum
+version.fileSize: Bestandsgrootte
+version.mimeType: MIME-type
+version.fullPath: Pad
+version.additionalAttributes: Extra attributen
+version.image: Afbeelding
+version.no-versions-to-show: Er zijn geen versies om weer te geven.
+version.no-preview-available: Geen voorbeeld beschikbaar voor dit bestand.
+version.clear-unpublished: Niet-gepubliceerde versies wissen
+version.clear-unpublished-versions: Niet-gepubliceerde versies wissen
+version.confirm-clear-unpublished: Weet je zeker dat je alle niet-gepubliceerde versies wilt wissen?
+version.preview-notification: Voorbeelddetails worden weergegeven zodra een versie is geselecteerd.
+version.expand-unmodified-fields: Alles uitvouwen
+version.no-difference: Er is geen verschil tussen de geselecteerde versies.
+version.category.title.systemData: Systeemgegevens
+version.category.title.baseData: Basisgegevens
+version.category.title.meta: Metadata
+version.category.title.properties: Eigenschappen
+version.changed-attributes: "Gewijzigde attributen: {{attributes}}"
+aria.version.delete: Versie verwijderen
+aria.version.expand: Versie uitvouwen
+clear-all: Alles wissen
+empty: Leeg
+none: Geen
+yes: Ja
+no: Nee
+by: Door
+field: Veld
+no-data-available: Geen gegevens beschikbaar
+no-data-available-yet: Nog geen gegevens beschikbaar.
+no-items: Geen items
+schedule.label: Planning
+schedule.headline: Planning
+schedule.columns.datetime: Datum & tijd
+schedule.columns.action: Actie
+schedule.columns.version: Versie
+schedule.columns.active: Actief
+schedule.columns.actions: Verwijderen
+schedule.upcoming: Aankomend
+schedule.all: Alles gepland (aankomend & archief)
+schedule.toolbar.filters.active-switch: Alleen actieve
+schedule.toolbar.new: Nieuw
+schedule.toolbar.save-scheduled-tasks: Geplande taken opslaan
+schedule.action.delete: Verwijderen
+schedule.action.publish: Publiceren
+schedule.action.unpublish: Publicatie ongedaan maken
+schedule.action.publish-version: Versie publiceren
+schedule.select-an-action: Actie
+schedule.select-a-version: Versie
+schedule.archived: Gearchiveerd
+schedule.archived.cleanup-all: Alles opschonen
+dependencies.label: Afhankelijkheden
+dependencies.requires: Vereist
+dependencies.required-by: Vereist door
+dependencies.columns.subtype: Subtype
+dependencies.columns.path: Pad
+dependencies.columns.open: Openen
+system: Systeem
+default_metadata: Standaard metadata
+predefined_metadata: Vooraf gedefinieerde metadata
+preview: Voorbeeld
+id: ID
+type: Type
+position: Positie
+filename: Bestandsnaam
+fullpath: Volledig pad
+modificationDate: Wijzigingsdatum
+creationDate: Aanmaakdatum
+fileSize: Bestandsgrootte
+mimetype: MIME-type
+key: Sleutel
+published: Gepubliceerd
+classname: Klassenaam
+index: Index
+userModification: Gebruiker wijziging
+userOwner: Gebruikerseigenaar
+listing.grid-config.convert-to-advanced: Converteren naar geavanceerde kolom
+listing.grid-config.title: Rasterinstelling
+grid-config.discard-all-changes: Alle wijzigingen verwerpen
+grid-config.apply-changes: Wijzigingen toepassen
+grid-config.reload: Herladen
+listing.add-column: Een kolom toevoegen
+listing.add-column.simple: Eenvoudig
+listing.add-column.advanced: Geavanceerd
+listing.column-picker.search: Zoeken
+listing.column-picker.no-results: Geen kolommen gevonden
+listing.column-picker.fields-to-add: Toe te voegen velden
+listing.fields-to-add.collapse-simple-fields: Eenvoudige velden samenvouwen
+listing.actions: Op selectie toepassen
+listing.non-selected.actions: Op alles toepassen
+listing.actions.zip-download: ZIP downloaden
+listing.actions.delete: Verwijderen
+listing.actions.export: Exporteren
+reports.csv-export-modal.title: CSV-exportopties
+reports.csv-export-modal.include-headers: Kolomkoppen opnemen
+reports.csv-export-modal.delimiter-label: Scheidingsteken
+reports.csv-export-modal.delimiter-placeholder: Scheidingsteken invoeren
+listing.actions.csv-export: CSV exporteren
+listing.actions.xlsx-export: Excel exporteren
+listing.actions.batch-edit: Batchbewerking
+listing.selection.total: "{{total}} geselecteerd"
+data-type.input: Invoer
+data-type.textarea: Tekstgebied
+data-type.html: HTML
+data-type.number: Getal
+data-type.boolean: Booleaans
+data-type.date: Datum
+data-type.text: Tekst
+data-type.document: Document
+data-type.asset: Asset
+data-type.object: Object
+data-type.checkbox: Selectievakje
+data-type.select: Selecteren
+open-data-object.button: Gegevensobject openen
+open-data-object-modal.title: Gegevensobject openen
+open-data-object-modal.label: Voer het ID of pad van het gegevensobject in
+open-data-object-modal.required-message: Voer een ID of pad in
+open-data-object-modal.ok-button: OK
+open-data-object-modal.cancel-button: Annuleren
+open-asset.button: Asset openen
+open-asset-modal.title: Asset openen
+open-asset-modal.label: Voer het ID of pad van de asset in
+open-asset-modal.ok-button: OK
+open-asset-modal.cancel-button: Annuleren
+open-asset-modal.required-message: Voer een ID of pad van de asset in
+open-document.button: Document openen
+open-document-modal.title: Document openen
+open-document-modal.label: Voer het ID of pad van het document in
+open-document-modal.ok-button: OK
+open-document-modal.cancel-button: Annuleren
+open-document-modal.required-message: Voer een ID, pad of URL in
+notes-and-events-modal.detail-information: Gedetailleerde informatie
+notes-and-events.columns.type: Type
+notes-and-events.columns.element: Element
+notes-and-events.columns.title: Titel
+notes-and-events.columns.description: Beschrijving
+notes-and-events.columns.details: Details
+notes-and-events.columns.user: Gebruiker
+notes-and-events.columns.date: Datum
+notes-and-events.columns.actions: Acties
+website-settings.columns.type: Type
+website-settings.columns.name: Naam
+website-settings.columns.language: Taal
+website-settings.columns.value: Waarde
+website-settings.columns.site: Site
+website-settings.columns.actions: Acties
+website-settings.website-settings.add-entry-mandatory-fields-missing.title: Verplichte velden ontbreken
+website-settings.website-settings.add-entry-mandatory-fields-missing.error: Naam en type zijn verplichte velden en moeten worden ingevuld.
+document-types.new: Nieuw
+document-types.columns.name: Naam
+document-types.columns.group: Groep
+document-types.columns.controller: Controller
+document-types.columns.template: Sjabloon
+document-types.columns.type: Type
+document-types.columns.static: Statisch
+document-types.columns.priority: Prioriteit
+document-types.columns.creation-date: Aanmaakdatum
+document-types.columns.modification-date: Wijzigingsdatum
+document-types.columns.actions: Acties
+properties.label: Eigenschappen
+properties.editable-properties: Bewerkbare eigenschappen
+properties.all-properties: Alle eigenschappen
+properties.predefined-properties: Vooraf gedefinieerde eigenschappen
+properties.new-custom-property: Nieuwe aangepaste eigenschap
+translations.columns.type: Type
+translations.columns.key: Sleutel
+translations.columns.actions: Acties
+translations.select-languages: Talen selecteren
+translations.select-domain: Domein selecteren
+translations.show-all-languages: Alles weergeven
+translations.show-minimal-languages: Minimaal weergeven
+translations.show-hide-locale: Locale weergeven/verbergen
+translations.new-translation: Nieuwe vertaling
+translations.new: Nieuw
+translations.domain.messages: Berichten
+translations.domain.admin: Beheerder
+translations.domain.studio: Studio
+translations.domain.dataQualityManagement: Gegevenskwaliteitsbeheer
+translations.domain.portal_engine_frontend: Portal Engine Frontend
+translations.domain.pimcore_copilot: Pimcore Copilot
+translations.type-options.custom: ICU-formaat
+translations.type-options.simple: Eenvoudige tekst
+translations.edit-modal.tab.plain-text: Platte tekst
+translations.edit-modal.tab.html: HTML
+translations.edit-modal.save: Opslaan
+translations.edit-modal.title: Vertaling bewerken
+translations.edit-modal.restore: Platte tekst herstellen
+properties.columns.type: Type
+properties.columns.key: Sleutel
+properties.columns.name: Naam
+properties.columns.description: Beschrijving
+properties.columns.data: Waarde
+properties.columns.configuration: Configuratie
+properties.columns.content-type: Inhoudstype
+properties.columns.inheritable: Overerfbaar
+properties.columns.actions: Acties
+properties.inherited.properties: Geërfde eigenschappen
+properties.add-custom-property.cancel: Annuleren
+properties.add-custom-property.key: Sleutel
+translations.add-translation.key: Sleutel
+properties.add-custom-property.create: Aanmaken
+properties.add-custom-property.type: Type
+properties.property-already-exist.title: Eigenschap bestaat al
+properties.property-already-exist.error: Naam is al in gebruik, kies een andere naam
+properties.add-property-mandatory-fields-missing.title: Verplichte velden ontbreken
+properties.add-property-mandatory-fields-missing.error: Sleutel en type zijn verplichte velden en moeten worden ingevuld.
+properties.property-key-disallowed.title: Eigenschapssleutel niet toegestaan
+properties.property-key-disallowed.error: Deze eigenschapssleutel is gereserveerd en kan niet worden gebruikt. Kies een andere sleutelnaam.
+translations.add-translation-mandatory-field-missing.title: Verplicht veld ontbreekt
+translations.add-translation-mandatory-field-missing.error: Sleutel is een verplicht veld en moet worden ingevuld.
+button.ok: Ok
+button.apply: Toepassen
+button.cancel: Annuleren
+button.save: Opslaan
+button.confirm: Bevestigen
+button.save-apply: Opslaan & toepassen
+button.add-edit: Toevoegen & bewerken
+button.cancel-edits: Bewerkingen annuleren
+toggle.advanced-mode: Geavanceerde modus
+actions.open: Openen
+open: Openen
+edit: Bewerken
+modify: Wijzigen
+component.no-content.no-content-available: Geen inhoud beschikbaar
+notifications.label: Meldingen
+notifications.settings.label: Meldingsinstellingen
+notifications.settings.description: Zet Melden aan voor alles wat je in je meldingenbel wilt ontvangen en voeg daarna extra kanalen toe voor de meldingen die er het meest toe doen.
+notifications.settings.description-popup-only: Kies hoe meldingen je bereiken. Alles waarover je een melding krijgt, verschijnt altijd in je meldingenbel.
+notifications.settings.column.type: Meldingstype
+notifications.settings.column.subscribed: Melden
+notifications.settings.not-available: Niet beschikbaar voor dit type
+notifications.settings.save: Opslaan
+notifications.settings.saved: Meldingsinstellingen opgeslagen
+notifications.settings.discard: Verwerpen
+notifications.settings.discard.title: Je niet-opgeslagen wijzigingen verwerpen?
+notifications.settings.discard.confirm: Verwerpen
+notifications.settings.discard.keep-editing: Verder bewerken
+notifications.settings.unsaved-changes_one: "{{count}} niet-opgeslagen wijziging"
+notifications.settings.unsaved-changes_other: "{{count}} niet-opgeslagen wijzigingen"
+notifications.settings.group.general: Algemeen
+notifications.remove-all: Alles verwijderen
+notifications.new-notification: Nieuwe melding
+notifications.columns.title: Titel
+notifications.columns.date: Datum
+notifications.from: Van
+notifications.hide: Verbergen
+notifications.new-notifications.show: Bekijken
+notifications.new-notifications.title.single: Je hebt een nieuwe melding!
+notifications.new-notifications.title: Je hebt nieuwe meldingen!
+notes-and-events.label: Notities & gebeurtenissen
+notes-and-events.notes-and-events: Notities & gebeurtenissen
+notes-and-events.details: Details
+notes-and-events.name: Naam
+notes-and-events.type: Type
+notes-and-events.value: Waarde
+notes-and-events.new-note: Nieuwe notitie
+notes-and-events.content: inhoud
+notes-and-events.seo: seo
+notes-and-events.warning: waarschuwing
+notes-and-events.notice: opmerking
+notes-and-events.status-update: statusupdate
+notes-and-events.erp_import: erp_import
+notes-and-events.no-notes-and-events-to-show: Er zijn geen notities of gebeurtenissen om weer te geven.
+tags.label: Tags
+tags.assigned-tags-text: Toegewezen tags
+tags.apply-tags-to-children: Tags toepassen op onderliggende items
+tags.remove-and-apply-tags-to-children: Tags verwijderen en toepassen op onderliggende items
+tags.columns.path: Pad
+tags.columns.actions: Verwijderen
+csv-separated-options: CSV-gescheiden opties
+csv-separated-options-info: De lijst met beschikbare opties kan worden opgegeven als kommagescheiden lijst, als enkelvoudige kolomwaarden of gemengd. Bij de enkelvoudige kolommanier wordt de sleutel ook als waarde gebruikt.
+add: Toevoegen
+new: Nieuw
+save: Opslaan
+title: Titel
+description: Beschrijving
+select: Selecteren
+asset.asset-editor-tabs.custom-metadata.text: Aangepaste metadata
+asset.asset-editor-tabs.custom-metadata.new-custom-metadata: Nieuwe aangepaste metadata
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.name: Naam
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.type: Type
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.language: Taal
+asset.asset-editor-tabs.custom-metadata.add-custom-metadata.cancel: Annuleren
+asset.asset-editor-tabs.custom-metadata.add-predefined-definition: Vooraf gedefinieerde definitie toevoegen
+asset.asset-editor-tabs.custom-metadata.columns.type: Type
+asset.asset-editor-tabs.custom-metadata.columns.name: Naam
+asset.asset-editor-tabs.custom-metadata.columns.language: Taal
+asset.asset-editor-tabs.custom-metadata.columns.value: Waarde
+asset.asset-editor-tabs.custom-metadata.columns.actions: Acties
+asset.asset-editor-tabs.custom-metadata.new-custom-metadata.create: Aanmaken
+asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.title: Aangepaste metadata bestaat al
+asset.asset-editor-tabs.custom-metadata.custom-metadata-already-exist.error: Naam is al in gebruik, kies een andere naam
+asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.title: Verplichte velden ontbreken
+asset.asset-editor-tabs.custom-metadata.add-entry-mandatory-fields-missing.error: Naam en type zijn verplichte velden en moeten worden ingevuld.
+width: Breedte
+height: Hoogte
+width-tooltip: De breedte van dit onderdeel. Een numerieke waarde wordt geïnterpreteerd als pixels; een tekenreekswaarde wordt behandeld als een CSS-waarde met eenheden.
+width-field: Breedteveld
+width-unit: Breedteeenheid
+height-tooltip: De hoogte van dit onderdeel. Een numerieke waarde wordt geïnterpreteerd als pixels; een tekenreekswaarde wordt behandeld als een CSS-waarde met eenheden.
+table-data-tooltip: "Voorbeeld van het toevoegen van gegevens: \n\n een|twee|drie \n vier|vijf|zes \n zeven|acht|negen"
+use-current-date: Huidige datum gebruiken
+respect-timezone: Tijdzone respecteren
+column-type: Kolomtype
+specific-settings: Specifieke instellingen
+restrict-selection-to: Selectie beperken tot
+only-configured-languages: Alleen in systeeminstellingen geconfigureerde talen weergeven
+multiselect-render-type: Weergavetype
+maximum-items: Maximum aantal items
+enforce-validation: Validatie afdwingen
+options-source: Optiebron
+options-source-configure: Configureren
+options-source-select-options: Selectieopties
+options-source-options-provider: Optiesprovider
+options-provider-class: Optiesprovider-klasse of servicenaam
+options-provider-data: Optiesprovider-gegevens
+switch-to-selection-mode: Naar selectiemodus schakelen
+switch-to-drag-mode: Naar sleepsmodus schakelen
+select-options: Selectieopties
+value: Waarde
+display-name: Weergavenaam
+default-values-settings: Standaardwaarde-instellingen
+default-values-tooltip: De standaardwaarde wordt gebruikt als overerving is uitgeschakeld of als de bovenliggende waarde leeg is.
+default-value: Standaardwaarde
+default-value-generator: Standaardwaardegenerator-service / klasse
+enforce-validation-tooltip: Indien ingeschakeld, worden ongeldige opties geblokkeerd bij opslaan. Standaard staat de API het opslaan van ongeldige opties toe
+show-char-count: Tekentelling weergeven
+column-length: Kolomlengte
+max-length: Maximale lengte
+exclude-from-search-index: Uitsluiten van zoekindex
+toolbar-config: Werkbalkinstelling
+min-length: Minimale lengte
+min-value: Minimumwaarde
+max-value: Maximumwaarde
+increment-step: Stap
+decimal-precision: Decimale precisie
+decimal-size: Decimale grootte
+decimal-settings: Decimale instellingen
+decimal-settings-tooltip: Als decimale grootte of precisie zijn opgegeven, wordt het MySQL-type DECIMAL(decimalSize, decimalPrecision) gebruikt. Standaardwaarden zijn 64 voor grootte en 0 voor precisie. Let op dat in MySQL-terminologie decimalSize precisie wordt genoemd en decimalPrecision schaal.
+integer: Geheel getal
+unsigned: Alleen positief
+auto-convert: Automatisch converteren
+default-unit: Standaardeenheid
+valid-units: Geldige eenheden
+slider-min: Minimale schuifregelaarwaarde
+slider-max: Maximale schuifregelaarwaarde
+slider-step: Stap schuifregelaar
+field-definitions.general-settings: Algemene instellingen
+field-definitions.base: Basis
+field-definitions.configuration-invalid: Configuratie bevat ongeldige velddefinities.
+field-definitions.saved-successfully: Succesvol opgeslagen.
+field-definitions.select-item-configuration: Itemconfiguratie selecteren
+field-definitions.custom-layout-title: Custom Layout
+field-definitions.custom-layouts: Custom Layouts
+field-definitions.create-new-class-definition: Nieuwe Custom Layout aanmaken
+field-definitions.select-field-message: Selecteer een veld in de boom om de eigenschappen te bewerken.
+field-definitions.loading-general-settings: Algemene instellingen laden...
+field-definitions.type-not-supported: Type wordt niet ondersteund
+field-definitions.validation.enter-class-name: Voer een klassenaam in
+field-definitions.validation.class-name-format: De klassenaam moet beginnen met een letter en mag alleen letters, cijfers en underscores bevatten.
+field-definitions.validation.unique-identifier: Unieke identificatie
+field-definitions.validation.enter-unique-identifier: Voer een unieke identificatie in
+field-definitions.validation.unique-identifier-in-use: Deze unieke identificatie is al in gebruik
+field-definitions.validation.unique-identifier-format: De unieke identificatie moet beginnen met een letter en mag alleen letters, cijfers en underscores bevatten, met een maximale lengte van 64 tekens.
+field-definitions.validation.errors-found: Velddefinities bevatten fouten
+field-definitions.validation.empty-name: "De volgende veldtypen missen een naam:"
+field-definitions.validation.reserved-word: "Gereserveerd woord gebruikt als naam:"
+field-definitions.validation.invalid-format: "Ongeldig naamformaat (moet overeenkomen met [A-Za-z][A-Za-z0-9_]*):"
+field-definitions.validation.duplicate-name: "Dubbele naam in naamruimte:"
+field-definitions.delete.content: 'Weet je echt zeker dat je "{{name}}" wilt verwijderen?'
+object-brick-key: Object Brick-sleutel
+field-name: Veldnaam
+field-definition.geopoint: Geografisch punt
+field-definition.geobounds: Geografische grenzen
+field-definition.geopolygon: Geografisch polygoon
+field-definition.geopolyline: Geografische polylijn
+field-definition.input: Invoer
+field-definition.textarea: Tekstgebied
+field-definition.wysiwyg: WYSIWYG
+field-definition.password: Wachtwoord
+field-definition.numeric: Getal
+field-definition.numeric-range: Getalsbereik
+field-definition.slider: Schuifregelaar
+field-definition.quantity-value: Hoeveelheidswaarde
+field-definition.quantity-value-range: Hoeveelheidswaardebereik
+field-definition.input-quantity-value: Invoerhoeveelheidswaarde
+field-definition.date: Datum
+field-definition.datetime: Datum en tijd
+field-definition.date-range: Datumbereik
+field-definition.time: Tijd
+field-definition.image: Afbeelding
+field-definition.external-image: Externe afbeelding
+field-definition.image-gallery: Afbeeldingengalerij
+field-definition.video: Video
+field-definition.hotspotimage: Afbeelding geavanceerd
+field-definition.many-to-one-relation: Veel-op-één-relatie
+field-definition.many-to-many-relation: Veel-op-veel-relatie
+field-definition.many-to-many-object-relation: Veel-op-veel-objectrelatie
+field-definition.advanced-many-to-many-relation: Geavanceerde veel-op-veel-relatie
+field-definition.advanced-many-to-many-object-relation: Geavanceerde veel-op-veel-objectrelatie
+field-definition.reverse-object-relation: Omgekeerde objectrelatie
+field-definition.crm.gender.title: Geslacht
+field-definition.crm.firstname.title: Voornaam
+field-definition.crm.email.title: E-mail
+field-definition.crm.lastname.title: Achternaam
+allowed-class: Toegestane klasse
+allowed-classes: Toegestane klassen
+allowed-asset-types: Toegestane assettypen
+allowed-document-types: Toegestane documenttypen
+visible-fields: Zichtbare velden
+enable-text-selection: Tekstselectie inschakelen
+allow-to-create-new-object: Toestaan een nieuw object te maken in het relatieveld
+enable-async-load-in-admin: Asynchroon laden inschakelen in beheerder
+enable-async-load-in-admin-tooltip: "WAARSCHUWING: Asynchroon laden is NIET mogelijk binnen gelokaliseerde velden en blokken."
+path-formatter-service: Opmaakservice / klasse
+allow-to-clear-relation: Toestaan relaties van dit veld te wissen
+allow-multiple-assignments: Meerdere toewijzingen toestaan
+number: Getal
+bool: Booleaans
+column-bool: Kolom booleaans
+multiselect: Meervoudige selectie
+layout: Layout
+layout-options: Layoutopties
+allow-documents: Documenten toestaan
+allow-assets: Assets toestaan
+asset-inline-download-allowed: Inline downloaden van asset toestaan
+allow-objects: Objecten toestaan
+path-restriction: Padbeperking
+result-limit: Resultaatlimiet
+remote-owner: Externe eigenaar
+columns: Kolommen
+enable-batch-edit: Batchbewerking inschakelen voor kolommen
+owner-class: Eigenaarklasse
+owner-field-name: Eigenaarsveldnaam
+crop-settings: Bijsnijdinstellingen
+ratio-x: Verhouding X
+ratio-y: Verhouding Y
+predefined-data-templates: Vooraf gedefinieerde gegevenssjablonen
+upload-path: Uploadpad
+preview-width: Voorbeeldbreedte
+preview-height: Voorbeeldhoogte
+url-width: URL-breedte
+allowed-video-types: Toegestane videotypen
+allowed-video-types-tooltip: Leeg = alles toestaan
+field-definition.select: Selecteren
+field-definition.multiselect: Meervoudige selectie
+field-definition.boolean-select: Booleaanse selectie
+field-definition.country: Land
+field-definition.countrymultiselect: Land meervoudige selectie
+field-definition.language: Taal
+field-definition.languagemultiselect: Taal meervoudige selectie
+field-definition.rgba-color: RGBA-kleur
+field-definition.encrypted-field: Versleuteld veld
+field-definition.url-slug: URL-slug
+field-definition.checkbox: Selectievakje
+field-definition.link: Link
+field-definition.calculated-value: Berekende waarde
+field-definition.user: Gebruiker
+field-definition.block: Blok
+field-definition.panel: Paneel
+field-definition.table: Tabel
+field-definition.structured-table: Gestructureerde tabel
+field-definition.fieldcollections: Field Collections
+field-definition.objectbricks: Object Bricks
+field-definition.classificationstore: Classificatieopslag
+field-definition.localizedfields: Gelokaliseerde velden
+field-definition.firstname: Voornaam
+field-definition.lastname: Achternaam
+field-definition.email: E-mail
+field-definition.gender: Geslacht
+field-definition.consent: Toestemming
+field-definition.accordion: Accordeon
+field-definition.fieldset: Veldset
+field-definition.fieldcontainer: Veldcontainer
+field-definition.iframe: Iframe
+field-definition.region: Regio
+field-definition.tabpanel: Tabpaneel
+field-definition.text: Tekst
+field-definition.groups.layout: Layoutonderdeel
+field-definition.groups.layout.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.groups.layout)"
+field-definition.groups.layout.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.groups.layout)"
+field-definition.groups.data: Gegevensonderdeel
+field-definition.groups.data.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.groups.data)"
+field-definition.groups.data.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.groups.data)"
+field-definition.groups.data.text: Tekst
+field-definition.groups.data.numeric: Numeriek
+field-definition.groups.data.date: Datum
+field-definition.groups.data.select: Selecteren
+field-definition.groups.data.media: Media
+field-definition.groups.data.relation: Relatie
+field-definition.groups.data.geographic: Geografisch
+field-definition.groups.data.crm: CRM
+field-definition.groups.data.structured: Gestructureerd
+field-definition.groups.data.other: Overige
+field-definition.geopoint.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geopoint)"
+field-definition.geopoint.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geopoint)"
+field-definition.geobounds.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geobounds)"
+field-definition.geobounds.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geobounds)"
+field-definition.geopolygon.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geopolygon)"
+field-definition.geopolygon.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geopolygon)"
+field-definition.geopolyline.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.geopolyline)"
+field-definition.geopolyline.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.geopolyline)"
+field-definition.input.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.input)"
+field-definition.input.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.input)"
+field-definition.textarea.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.textarea)"
+field-definition.textarea.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.textarea)"
+field-definition.wysiwyg.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.wysiwyg)"
+field-definition.wysiwyg.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.wysiwyg)"
+field-definition.password.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.password)"
+field-definition.password.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.password)"
+field-definition.numeric.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.numeric)"
+field-definition.numeric.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.numeric)"
+field-definition.numeric-range.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.numeric-range)"
+field-definition.numeric-range.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.numeric-range)"
+field-definition.slider.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.slider)"
+field-definition.slider.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.slider)"
+field-definition.quantity-value.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.quantity-value)"
+field-definition.quantity-value.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.quantity-value)"
+field-definition.quantity-value-range.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.quantity-value-range)"
+field-definition.quantity-value-range.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.quantity-value-range)"
+field-definition.input-quantity-value.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.input-quantity-value)"
+field-definition.input-quantity-value.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.input-quantity-value)"
+field-definition.date.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.date)"
+field-definition.date.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.date)"
+field-definition.datetime.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.datetime)"
+field-definition.datetime.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.datetime)"
+field-definition.date-range.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.date-range)"
+field-definition.date-range.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.date-range)"
+field-definition.time.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.time)"
+field-definition.time.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.time)"
+field-definition.image.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.image)"
+field-definition.image.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.image)"
+field-definition.external-image.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.external-image)"
+field-definition.external-image.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.external-image)"
+field-definition.image-gallery.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.image-gallery)"
+field-definition.image-gallery.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.image-gallery)"
+field-definition.video.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.video)"
+field-definition.video.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.video)"
+field-definition.hotspotimage.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.hotspotimage)"
+field-definition.hotspotimage.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.hotspotimage)"
+field-definition.select.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.select)"
+field-definition.select.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.select)"
+field-definition.multiselect.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.multiselect)"
+field-definition.multiselect.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.multiselect)"
+field-definition.boolean-select.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.boolean-select)"
+field-definition.boolean-select.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.boolean-select)"
+field-definition.country.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.country)"
+field-definition.country.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.country)"
+field-definition.countrymultiselect.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.countrymultiselect)"
+field-definition.countrymultiselect.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.countrymultiselect)"
+field-definition.language.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.language)"
+field-definition.language.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.language)"
+field-definition.languagemultiselect.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.languagemultiselect)"
+field-definition.languagemultiselect.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.languagemultiselect)"
+field-definition.user.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.user)"
+field-definition.user.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.user)"
+field-definition.block.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.block)"
+field-definition.block.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.block)"
+field-definition.panel.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.panel)"
+field-definition.panel.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.panel)"
+field-definition.accordion.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.accordion)"
+field-definition.accordion.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.accordion)"
+field-definition.firstname.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.firstname)"
+field-definition.firstname.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.firstname)"
+field-definition.lastname.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.lastname)"
+field-definition.lastname.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.lastname)"
+field-definition.email.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.email)"
+field-definition.email.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.email)"
+field-definition.gender.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.gender)"
+field-definition.gender.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.gender)"
+field-definition.consent.with-prefix.add: "$t(tree.actions.prefix.add)$t(field-definition.consent)"
+field-definition.consent.with-prefix.convert: "$t(tree.actions.prefix.convert)$t(field-definition.consent)"
+regex-validation: Reguliere expressievalidatie
+regex: RegEx
+regex-flags: RegEx-vlaggen
+regex-flags-tooltip: "RegExp zonder scheidingstekens, moet werken in JS (Scheidingsteken: #)"
+test-string: Testtekenreeks
+regex-validation-error-message: De tekenreeks voldoet niet aan het vereiste formaat.
+calculator-class: Berekeningsklasse
+calculator-expression: Berekeningsteken
+calculator-type: Berekeningstype
+calculator-type-tooltip: Zie de officiële documentatie voor meer informatie over het definiëren van uitdrukkingen of klassen.
+expression: Uitdrukking
+lazy-loading: Lui laden
+disallow-add-remove: Toevoegen / verwijderen niet toestaan
+disallow-reorder: Volgorde wijzigen niet toestaan
+css-style: CSS-stijl
+css-style-tooltip: 'Inline CSS toegepast op de body, bijv. "float: left; margin: 10px;". Ongeldige declaraties worden genegeerd.'
+collapsible: Inklapbaar
+collapsed: Aanvankelijk ingeklapt
+border: Rand
+rows: Rijen
+rows-fixed: Rijen vast
+cols: Kolommen
+cols-fixed: Kolommen vast
+length: Lengte
+label-width: Labelbreedte
+padding: Opvulling
+label-first-cell: Label eerste cel
+label-align: Labeluitlijning
+allowed-types: Toegestane typen
+localized: Gelokaliseerd
+allowed-group-ids: Toegestane groep-ID's (csv)
+store: Opslag
+label: Label
+hide-empty-data: Lege gegevens verbergen
+tab-position: Tabpositie
+maximum-tabs: Maximum aantal tabbladen
+hide-labels-when-tabs-reached: Localelabels verbergen als tabbladen bereikt zijn
+data: Gegevens
+domain-label-width: Domeinlabelbreedte
+controller-action: Controlleractie
+controller-action-tooltip: "Voer de controller & actie in het volgende formaat in: App\\Controller\\ProductController::slugAction"
+available-sites: Beschikbare sites
+empty-equals-allow-all-tooltip: Leeg = alles toestaan
+reset: Herstellen
+name: Naam
+tooltip: Knopinfo
+mandatory: Verplicht
+unique: Uniek
+not-editable: Niet bewerkbaar
+invisible: Onzichtbaar
+visible-in-gridview: Zichtbaar in rasterweergave
+visible-in-searchresult: Zichtbaar in zoekresultaat
+quality: Kwaliteit
+mode: Modus
+format: Formaat
+default: standaard
+resize: Formaat wijzigen
+scaleByWidth: Schalen op breedte
+scaleByHeight: Schalen op hoogte
+min-max-settings: Min-max tijden
+download: Downloaden
+asset.sidebar.original-file: Origineel bestand
+asset.sidebar.web-format: Webformaat
+asset.sidebar.print-format: Afdrukformaat
+asset.sidebar.office-format: Kantoorformaat
+jobs.notification.title: Lopende taken
+jobs.notification.jobs_one: "{{count}} actie"
+jobs.notification.jobs_other: "{{count}} acties"
+jobs.notification.hide-all-finished: Alle voltooide verbergen
+jobs.job.in-progress: "{{title}} wordt uitgevoerd"
+jobs.job.queued: "{{title}} in wachtrij"
+jobs.job.failed: "{{title}} mislukt"
+jobs.job.finished: "{{title}} voltooid"
+jobs.job.finished-with-errors: "{{title}} voltooid met fouten"
+jobs.job.progress: "{{progress}}% voltooid"
+jobs.job.button-retry: Opnieuw proberen
+jobs.job.button-reload: Herladen
+jobs.job.button-hide: Verbergen
+jobs.job.button-download: Downloaden
+jobs.job.button-ignore-and-reload: Negeren en herladen
+jobs.job.step_hint: "Stap {{step}}/{{total}}"
+jobs.job.step_hint_single: "Stap {{step}}"
+jobs.job.download-error: Downloaden mislukt
+jobs.job.download-not-available: De download is niet meer beschikbaar.
+jobs.job.button-show-errors: Fouten weergeven
+jobs.job.error-modal.title: Taakfouten
+jobs.job.button-abort: Taak afbreken
+jobs.job.abort-confirm: Weet je echt zeker dat je deze taak wilt afbreken?
+jobs.job.step.batch-edit.preparing: Batchbewerking voorbereiden
+jobs.job.step.batch-edit.applying: Batchbewerking toepassen
+jobs.zip-job.title: "ZIP-download van {{title}}"
+jobs.csv-job.title: "CSV-download van {{title}}"
+jobs.xlsx-job.title: "XLSX-download van {{title}}"
+batch-edit.job-title: Batchbewerking
+jobs.zip-upload-job.title: ZIP uploaden
+jobs.zip-upload-job.step1.title: ZIP uitpakken
+jobs.zip-upload-job.step2.title: Assets aanmaken
+jobs.download-csv-job.title: CSV exporteren
+jobs.download-xlsx-job.title: XLSX exporteren
+jobs.download-zip-job.title: ZIP downloaden
+batch-edit.modal-title: Batchbewerking
+batch-edit.no-content: Er zijn nog geen kolommen toegevoegd
+batch-edit.modal-footer.apply-changes: Wijzigingen toepassen
+batch-edit.modal-footer.discard-all-changes: Alle wijzigingen verwerpen
+batch-edit.modal-footer.add-a-column: Een kolom toevoegen
+batch-edit.append-mode.replace: Batch vervangen
+batch-edit.append-mode.add: Batch toevoegen
+batch-edit.append-mode.remove: Batch verwijderen
+batch-delete.job-title: Verwijderen
+export-csv-form.modal-title: CSV exporteren
+export-csv-form.export-notice: "Let op: de export ondersteunt sommige velden niet (bijv. voorbeeld, grootte). Druk op OK om door te gaan met de export."
+export-csv-form.form-field.delimiter: Scheidingsteken
+export-csv-form.form-field.header: Koptekst
+export-csv-form.form-field.header.option.name: Systeemsleutel
+export-csv-form.form-field.header.option.title: Label
+export-csv-form.form-field.header.option.no-header: Geen koptekst
+export-xlsx-form.modal-title: Excel exporteren
+export-xlsx-form.export-notice: "Let op: de export ondersteunt sommige velden niet (bijv. voorbeeld, grootte). Druk op OK om door te gaan met de export."
+export-xlsx-form.form-field.delimiter: Scheidingsteken
+export-xlsx-form.form-field.header: Koptekst
+export-xlsx-form.form-field.header.option.name: Systeemsleutel
+export-xlsx-form.form-field.header.option.title: Label
+export-xlsx-form.form-field.header.option.no-header: Geen koptekst
+form.validation.required: Dit veld is verplicht
+form.validation.max-length: "De maximale lengte voor dit veld is {{max}} tekens"
+form.validation.min: "De minimumwaarde is {{min}}"
+validation.required: Dit veld is verplicht
+validation.min: "De minimumwaarde is {{min}}"
+form.validation.numeric-range.first-value-missing: Eerste waarde ontbreekt
+form.validation.numeric-range.second-value-missing: Tweede waarde ontbreekt
+form.validation.numeric-range.second-value-greater: Tweede waarde mag niet kleiner zijn dan de eerste waarde
+form.validation.provide-name: Geef een naam op
+form.validation.provide-description: Geef een beschrijving op
+form.label.new-item: Voer de naam in van het nieuwe item
+thumbnail: Miniatuur
+select-image-preview: Afbeeldingsvoorbeeld selecteren
+choose-media: Media kiezen
+current-player-position: Huidige spelerpositie
+drag-and-drop-asset: Asset slepen en neerzetten
+ok: OK
+apply: Toepassen
+cancel: Annuleren
+close-tab: Tabblad sluiten
+close-others: Overige sluiten
+close-unmodified: Ongewijzigde sluiten
+close-all: Alles sluiten
+asset.tree.context-menu.download: Downloaden
+asset.tree.context-menu.download-as-zip: Downloaden als ZIP
+element-selector.title.single: Element selecteren
+element-selector.title.multiple: Elementen selecteren
+element.tree.context-menu.new-assets: Nieuwe asset(s)
+element.tree.context-menu.add-assets.upload-files: Bestanden uploaden
+element.tree.context-menu.add-assets.upload-zip: ZIP uploaden
+element.tree.context-menu.advanced: Geavanceerd
+element.tree.context-menu.search-and-move: Zoeken & verplaatsen
+element.tree.context-menu.expand-children: Onderliggende items uitvouwen
+asset.tree.context-menu.clear-thumbnails: Miniaturen wissen
+element.tree.copy: Kopiëren
+element.tree.copy-success-description: '{{elementType}} "{{name}}" is gekopieerd en klaar om te plakken'
+element.tree.paste: Plakken
+element.tree.paste-as-child: Plakken als onderliggend item
+element.tree.paste-as-child-recursive: Plakken als onderliggend item (recursief)
+element.tree.paste-recursive-updating-references: Recursief plakken en verwijzingen bijwerken
+element.tree.paste-only-contents: Alleen inhoud hier plakken
+element.tree.cut: Knippen
+element.tree.cut-success-description: '{{elementType}} "{{name}}" is geknipt en klaar om te plakken'
+element.tree.paste-cut: Geknipt element plakken
+element.lock: Vergrendelen
+element.lock-and-propagate-to-children: Vergrendelen en doorgeven aan onderliggende items
+element.unlock: Ontgrendelen
+element.unlock-and-propagate-to-children: Ontgrendelen en doorgeven aan onderliggende items
+element.edit-lock.title: Wordt bewerkt door een andere gebruiker
+element.edit-lock.path: Pad
+element.edit-lock.type: Type
+element.edit-lock.user: Gebruiker
+element.edit-lock.editing-since: In bewerking sinds
+element.edit-lock.warning: Als je doorgaat met bewerken, wordt jouw versie apart van de versie van de andere gebruiker opgeslagen.
+element.edit-lock.continue: Doorgaan met bewerken
+element.edit-lock.cancel: Annuleren
+element.tree.sorting: Onderliggende items sorteren op
+element.tree.sorting.keyed-ascending: A naar Z (sleutel)
+element.tree.sorting.keyed-descending: Z naar A (sleutel)
+element.tree.sorting.indexed: Index (handmatig)
+element.tree.refresh: Vernieuwen
+element.new-folder: Nieuwe map
+element.new-folder.validation: Voer een geldige naam in
+element.rename: Hernoemen
+element.rename.label: Voer de nieuwe naam in
+element.rename.validation: Voer een geldige naam in
+element.share-via-notification: Delen via meldingen
+element.delete: Verwijderen
+element.delete.confirmation.title: Item verwijderen
+element.delete.confirmation.text: Weet je echt zeker dat je dit item wilt verwijderen?
+element.delete.confirmation.ok: Definitief verwijderen
+element.delete.folder.title: Map verwijderen
+element.delete.folder.question: Weet je echt zeker dat je deze map wilt verwijderen?
+element.delete.folder.small.note: "Let op: de afhankelijkheden worden verwijderd. Deze bewerking kan mogelijk niet volledig ongedaan worden gemaakt."
+element.delete.folder.large.note: "Let op: de map en de onderliggende items worden definitief verwijderd en kunnen niet worden hersteld."
+element.delete.folder.ok: Verwijderen
+element.delete.folder.ok.permanent: Definitief verwijderen
+element.delete.batch.title: Items verwijderen
+element.delete.batch.note_one: "Let op: dit item wordt definitief verwijderd en kan niet worden hersteld."
+element.delete.batch.note_other: "Let op: deze items worden definitief verwijderd en kunnen niet worden hersteld."
+element.delete.batch.note.permanent-dependencies_one: "Let op: dit item heeft afhankelijkheden en wordt definitief verwijderd.\nHet kan niet worden hersteld."
+element.delete.batch.note.permanent-dependencies_other: "Let op: deze items hebben afhankelijkheden en worden definitief verwijderd.\nZe kunnen niet worden hersteld."
+element.delete.batch.question_one: Weet je echt zeker dat je dit item wilt verwijderen?
+element.delete.batch.question_other: "Weet je echt zeker dat je deze {{count}} items wilt verwijderen?"
+element.delete.batch.ok: Verwijderen
+element.delete.batch.ok.permanent: Definitief verwijderen
+element.delete.batch.show-paths: Items weergeven
+element.delete.batch.dependencies-warning.confirmed_one: "Let op: dit item heeft afhankelijkheden."
+element.delete.batch.dependencies-warning.confirmed_other: "Let op: deze items hebben afhankelijkheden."
+element.open: Openen
+element.toolbar.copy-id: ID kopiëren
+element.toolbar.copy-full-path-to-clipboard: Volledig pad kopiëren
+element.toolbar.copy-deep-link-to-clipboard: Diepe link kopiëren
+element.toolbar.show-full-info: Volledige informatie
+element.toolbar.copy-className: "Klasse {{className}} - Kopiëren"
+element.unpublish: Publicatie ongedaan maken
+element.publish: Publiceren
+element.locate-in-tree: In boom zoeken
+element.sidebar.filter.only-direct-children: alleen directe onderliggende items
+element.sidebar.filter.only-unreferenced: Alleen zonder verwijzingen
+element.sidebar.field-filters: Veldfilters
+element.full-information: Volledige informatie
+system-information.id: ID
+system-information.path: Pad
+system-information.public-url: Openbare URL
+system-information.parent-id: Bovenliggend ID
+system-information.type: Type
+system-information.class-id: Klasse-ID
+system-information.class: Klasse
+system-information.file-size: Bestandsgrootte
+system-information.modification-date: Wijzigingsdatum
+system-information.creation-date: Aanmaakdatum
+system-information.user-modification: Gebruiker wijziging
+system-information.owner: Eigenaar
+system-information.deeplink: Diepe link
+system-information.user-unknown: Gebruiker onbekend
+system-information.system: Systeem
+system-information.click-to-open: klikken om te openen
+male: Mannelijk
+female: Vrouwelijk
+other: Overig
+unknown: Onbekend
+warning: Waarschuwing
+error: Fout
+info: Info
+success: Succes
+no-value-set: Geen waarde ingesteld
+set-to-null: Leeg (instellen op null)
+remove: Verwijderen
+delete: Verwijderen
+clone: Klonen
+jobs.clone-job.step2.title: Verwijzingen bijwerken
+jobs.asset-clone-job.title: Assets klonen
+jobs.document-clone-job.title: Documenten klonen
+jobs.data-object-clone-job.title: Gegevensobjecten klonen
+latitude: Breedtegraad
+longitude: Lengtegraad
+search-address: Adres zoeken
+search: Zoeken
+geocode.address-not-found: Het ingevoerde adres is niet gevonden
+geocode.possible-causes: Mogelijke oorzaken
+geocode.postal-code-format-error: Postcode-formaat, bijv. gebruik "5020 Salzburg, Söllheimer Straße 16" in plaats van "A-5020 Salzburg, Söllheimer Straße 16"
+delete-confirmation-advanced: "Weet je echt zeker dat je {{type}} '{{value}}' wilt verwijderen?"
+relations.id: ID
+relations.reference: Verwijzing
+relations.type: Type
+relations.subtype: Subtype
+relations.classname: Klasse
+relations.fullpath: Volledig pad
+relations.remove-all.confirm: Weet je echt zeker dat je alle relaties wilt verwijderen?
+relations.upload.subtype-not-allowed: Geüploade assets met een type dat deze relatie niet toestaat, zijn niet toegewezen.
+relation: relatie
+items-limit-reached: "Het maximum aantal items ({{maxItems}}) is bereikt."
+asset-upload-type-not-allowed: Het type van de geüploade asset is niet toegestaan voor dit veld.
+actions: Acties
+asset: Asset
+data-object: Gegevensobject
+document: Document
+folder: Map
+archive: Archief
+audio: Audio
+image: Afbeelding
+image-gallery.clear-image-selection: Afbeeldingsselectie wissen
+image-gallery.delete-frame: Frame verwijderen
+text: Tekst
+video: Video
+object: Object
+variant: Variant
+processing: Verwerken
+upload: Uploaden
+close: Sluiten
+paste: Plakken
+cut: Knippen
+upload.assets-items-failed-message: Upload voltooid met fouten.
+quantity-value.converted-units: Geconverteerde eenheden
+table.empty.confirm: Weet je zeker dat je alle gegevens wilt wissen?
+table.new-column: Nieuwe kolom
+table.delete-column: Kolom verwijderen
+table.new-row: Nieuwe rij
+table.delete-row: Rij verwijderen
+table.duplicate-row: Rij dupliceren
+table.copy: Kopiëren
+table.paste: Plakken
+clipboard.copy.success: Succesvol gekopieerd naar klembord
+clipboard.copy.error: Kopiëren naar klembord mislukt
+table.empty: Leeg
+table.paste-placeholder: Plak hier je gegevens
+empty.confirm: Weet je zeker dat je alle gegevens wilt wissen?
+tree.actions.prefix.add: "Toevoegen "
+tree.actions.convert: "Converteren naar "
+tree.actions.clone: Klonen
+tree.actions.copy: Kopiëren
+tree.actions.paste: Plakken
+tree.actions.delete: Verwijderen
+tree.actions.add-user: Gebruiker toevoegen
+tree.actions.clone-user: Gebruiker klonen
+tree.actions.remove-user: Gebruiker verwijderen
+tree.actions.folder: Map
+tree.actions.user: Gebruiker
+tree.actions.add-folder: Nieuwe map
+tree.actions.add-tag: Nieuwe tag
+tree.actions.delete-tag: Verwijderen
+tree.actions.rename-tag: Hernoemen
+tree.actions.role: Rol
+tree.actions.add-role: Rol toevoegen
+tree.actions.clone-role: Rol klonen
+tree.actions.remove-role: Rol verwijderen
+tree.actions.remove-folder: Map verwijderen
+tag-configuration.new: Nieuw
+tag-configuration.new-tag: Nieuwe tag
+tag-configuration.name: Naam
+tag-configuration.parent-tag: Bovenliggende tag
+tag-configuration.create: Aanmaken
+tag-configuration.save: Opslaan
+tag-configuration.rename: Tag hernoemen
+tag-configuration.successful-add: Tag succesvol toegevoegd
+tag-configuration.successful-update: Tag succesvol bijgewerkt
+tag-configuration.successful-deletion: Tag succesvol verwijderd
+tag-configuration.warn-delete-tag-modal-title: Deze tag verwijderen
+tag-configuration.warn-delete-parent-tag-modal-title: Deze bovenliggende tag verwijderen
+tag-configuration.warn-delete-all-tags-title: Alle tags verwijderen
+tag-configuration.warn-delete-all-tags-modal-text: Weet je zeker dat je alle tags wilt verwijderen?
+tag-configuration.warn-delete-tag-modal-text: Weet je zeker dat je deze tag wilt verwijderen?
+tag-configuration.warn-delete-parent-tag-modal-text: Weet je zeker dat je deze bovenliggende tag wilt verwijderen? Alle bijbehorende tags worden ook verwijderd.
+tag-configuration.delete-tag: Verwijderen
+tag-configuration.delete-all: Alles verwijderen
+tag-configuration.delete-parent-tag: De bovenliggende tag en alle onderliggende tags verwijderen
+tag-configuration.cancel: Annuleren
+user-management.admin: Beheerder
+user-management.search: Zoeken
+user-management.doc-types: Documenttypen
+user-management.tree.all: Alle gebruikers
+user-management.settings.title: Instellingen
+user-management.workspaces.title: Workspaces
+user-management.key-bindings.title: Sneltoetsen
+key-bindings.info: Vergeet niet Pimcore te herladen na je wijziging!
+key-bindings.reset: Herstellen naar standaard
+key-bindings.general: Algemeen
+key-bindings.save: Opslaan
+key-bindings.publish: Publiceren
+key-bindings.unpublish: Publicatie ongedaan maken
+key-bindings.rename: Hernoemen
+key-bindings.refresh: Vernieuwen
+key-bindings.navigation: Navigatie
+key-bindings.openDocument: Document openen
+key-bindings.openAsset: Asset openen
+key-bindings.openObject: Object openen
+key-bindings.openClassEditor: Klasseredacteur openen
+key-bindings.openInTree: Openen in boom
+key-bindings.closeAllTabs: Alle tabbladen sluiten
+key-bindings.search: Zoeken
+key-bindings.searchDocument: Document zoeken
+key-bindings.searchAsset: Asset zoeken
+key-bindings.searchObject: Object zoeken
+key-bindings.searchAndReplaceAssignments: Toewijzingen zoeken en vervangen
+key-bindings.quickSearch: Snel zoeken
+search-modal.title: Snel zoeken
+key-bindings.system: Systeem
+key-bindings.showMetaInfo: Meta-informatie weergeven
+key-bindings.showElementHistory: Elementgeschiedenis weergeven
+key-bindings.sharedTranslations: Gedeelde vertalingen
+key-bindings.recycleBin: Prullenbak
+key-bindings.notesEvents: Notities & gebeurtenissen
+key-bindings.tagManager: Tagbeheer
+key-bindings.tagConfiguration: Tagconfiguratie
+key-bindings.user: Gebruiker
+key-bindings.users: Gebruikers
+key-bindings.role: Rol
+key-bindings.roles: Rollen
+key-bindings.clearAllCaches: Alle caches wissen
+key-bindings.clearDataCache: Gegevenscache wissen
+key-bindings.customReports: Aangepaste rapporten
+key-bindings.reports: Rapporten
+key-bindings.applicationLogger: Toepassingslogger
+key-bindings.glossary: Woordenlijst
+key-bindings.seoDocumentEditor: SEO-documentredacteur
+key-bindings.robots: Robots
+key-bindings.httpErrorLog: HTTP-foutenlog
+key-bindings.seo: SEO
+key-bindings.redirects: Doorverwijzingen
+key-bindings.bundles: Bundels
+user-management.references.title: Verwijzingen
+user-management.references.object-dependencies: Objectafhankelijkheden
+user-management.references.columns.id: ID
+user-management.references.columns.cpath: Pad
+user-management.references.columns.subtype: Subtype
+user-management.general: Algemeen
+user-management.active: Actief
+user-management.name: Naam
+user-management.password: Wachtwoord
+user-management.user.search: Naar een gebruiker zoeken
+user-management.role.search: Naar een rol zoeken
+user-management.users-roles.search: Naar een gebruiker of rol zoeken
+user-management.twoFactorAuthenticationEnabled: Tweefactorauthenticatie ingeschakeld
+user-management.firstname: Voornaam
+user-management.lastname: Achternaam
+user-management.email: E-mail
+user-management.language: Taal
+user-management.dateTime: Datum-tijdlocale
+user-management.welcomeScreen: Welkomstscherm tonen bij opstarten
+user-management.memorizeTabs: Open tabbladen onthouden
+user-management.allowDirtyClose: Waarschuwing voor niet-opgeslagen inhoud uitschakelen
+user-management.closeWarning: Sluitwaarschuwing weergeven
+user-management.admin.info: Beheerdergebruikers krijgen automatisch alle onderstaande rechten en mogen alle acties uitvoeren op documenten, assets en objecten zonder beperkingen.
+user-management.admin.login: Inloggen als deze gebruiker in een andere browser
+user-management.customisation: Aanpassing
+user-management.permissions.default: Rechten
+user-management.permissions.bundles: Rechtenbundels
+user-management.types-and-classes: Toegestane typen om aan te maken (standaard alles)
+user-management.editor-settings: Redacteurinstellingen
+user-management.shared-translation-settings: Gedeelde vertaalinstellingen
+user-management.document-types: Documenttypen
+user-management.classes: Klassen
+user-management.settings.avatar: Avatar
+user-management.settings.upload-avatar: Avatar kiezen
+user-management.settings.language.name: Taal
+user-management.settings.language.abbreviation: Afkorting
+user-management.settings.language.view: Weergave
+user-management.settings.language.edit: Bewerken
+user-management.two-factor-authentication: Tweefactorauthenticatie
+user-management.workspaces.documents: Documenten
+user-management.workspaces.assets: Assets
+user-management.workspaces.objects: Gegevensobjecten
+user-management.workspaces.add: Toevoegen
+user-management.workspaces.columns.cpath: Pad
+user-management.workspaces.columns.list: Lijst
+user-management.workspaces.columns.view: Weergave
+user-management.workspaces.columns.save: Opslaan
+user-management.workspaces.columns.publish: Publiceren
+user-management.workspaces.columns.unpublish: Publicatie ongedaan maken
+user-management.workspaces.columns.delete: Verwijderen
+user-management.workspaces.columns.rename: Hernoemen
+user-management.workspaces.columns.create: Aanmaken
+user-management.workspaces.columns.settings: Instellingen
+user-management.workspaces.columns.versions: Versies
+user-management.workspaces.columns.properties: Eigenschappen
+user-management.workspaces.columns.path: Pad
+user-management.workspaces.columns.id: ID
+user-management.workspaces.columns.subtype: Subtype
+user-management.workspaces.additional-settings: Extra instellingen / producten
+user-management.workspaces.localized-fields: Gelokaliseerde velden
+user-management.workspaces.localized-fields.view: Weergaverechten
+user-management.workspaces.localized-fields.edit: Bewerkrechten
+user-management.workspaces.custom-layouts: Custom Layouts
+user-management.workspaces.custom-layouts.select: Een of meer velden selecteren
+user-management.add-folder.success: Map succesvol toegevoegd
+user-management.remove-folder.success: Map succesvol verwijderd
+user-management.clone-user: Gebruiker klonen
+user-management.clone-user.text: Voer de naam in van de nieuwe gebruiker
+user-management.clone-user.success: Gebruiker succesvol gekloond
+user-management.save-user.success: Gebruiker succesvol opgeslagen
+user-management.save-user.password.success: Wachtwoord succesvol bijgewerkt
+user-management.add-user.success: Gebruiker succesvol toegevoegd
+user-management.remove-user: Gebruiker verwijderen
+user-management.remove-user.text: 'Weet je zeker dat je gebruiker "{{name}}" definitief wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.'
+user-management.remove-user.success: Gebruiker succesvol verwijderd
+user-management.perspectives: Perspectieven
+user-management.roles: Rollen
+user-management.role: Rol
+user-management.users: Gebruikers
+user-management.user: Gebruiker
+user-management.add-folder: Nieuwe map toevoegen
+user-management.add-folder.label: Voer de naam in van de nieuwe map
+user-management.add-user: Nieuwe gebruiker toevoegen
+user-management.add-user.label: Voer de naam in van de nieuwe gebruiker
+user-management.last-login: Laatste aanmelding
+user-management.search.id: ID
+roles.tree.all: Alle rollen
+roles.save-item.success: Rol succesvol opgeslagen
+roles.clone-item.success: Rol succesvol gekloond
+roles.clone-role: Rol klonen
+roles.clone-role.text: Voer de naam in van de nieuwe rol
+roles.remove-role: Rol verwijderen
+roles.remove-role.text: 'Weet je zeker dat je rol "{{name}}" definitief wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.'
+roles.remove-folder.success: Map succesvol verwijderd
+roles.remove-item.success: Rol succesvol verwijderd
+roles.add-item.success: Rol succesvol toegevoegd
+roles.add-folder.success: Map succesvol toegevoegd
+roles.general: Algemeen
+roles.settings.title: Instellingen
+roles.workspaces.title: Workspaces
+roles.add-folder: Nieuwe map toevoegen
+roles.add-folder.label: Voer de naam in van de nieuwe map
+roles.add-role: Nieuwe rol toevoegen
+roles.add-role.label: Voer de naam in van de nieuwe rol
+roles.search.id: ID
+navigation.quick-access: Snelle toegang
+navigation.data-management: Gegevensbeheer
+navigation.data-model-definitions: Gegevensmodeldefinities
+navigation.class-definitions: Klassen
+navigation.field-collections: Field Collections
+navigation.object-bricks: Object Bricks
+navigation.bulk-export: Bulkexport
+navigation.bulk-import: Bulkimport
+navigation.quantity-values: Hoeveelheidswaarden
+navigation.select-options: Selectieopties
+navigation.experience-ecommerce: Ervaring & e-commerce
+navigation.asset-management: Assetbeheer
+navigation.image-thumbnails: Afbeeldingsminiaturen
+navigation.video-thumbnails: Videominiaturen
+navigation.predefined-asset-metadata: Vooraf gedefinieerde assetmetadata
+navigation.automation-integration: Automatisering & integratie
+navigation.translations: Vertalingen
+navigation.appearance-branding: Uiterlijk & huisstijl
+navigation.reporting: Rapportage
+navigation.system: Systeem
+navigation.website-settings: Website-instellingen
+navigation.document-types: Documenttypen
+navigation.cache: Cache
+navigation.cache.clear-cache: Cache wissen
+navigation.cache.clear-full-page-cache: Volledige paginacache wissen
+navigation.cache.clear-temporary-files: Tijdelijke bestanden wissen
+navigation.clear-cache: Volledige paginacache wissen
+navigation.reports: Alle rapporten
+navigation.custom-reports: Aangepaste rapporten configureren
+navigation.perspectives: Perspectieven
+navigation.customise: Aanpassen
+navigation.tag-configuration: Tagconfiguratie
+navigation.predefined-properties: Vooraf gedefinieerde eigenschappen
+navigation.user-and-roles: Gebruikers & rollen
+navigation.users: Gebruikers
+navigation.power-shortcuts: Snelkoppelingen
+navigation.roles: Rollen
+navigation.open-asset: Asset openen
+navigation.open-document: Document openen
+navigation.open-data-object: Gegevensobject openen
+navigation.notes-and-events: Notities & gebeurtenissen
+navigation.search-replace-assignments: Toewijzingen zoeken & vervangen
+navigation.sidebar-title: Navigatie
+navigation.name: Naam
+navigation.exclude: Uitsluiten van navigatie
+navigation.advanced-settings: Geavanceerde instellingen
+predefined-properties.new: Nieuw
+website-settings.new: Toevoegen
+predefined-properties.type: Type
+predefined-properties.name: Naam
+redirects.beginner: Beginner
+redirects.expert: Expertmodus
+redirects.type: Type
+redirects.search: Zoeken
+redirects.source-site: Bronsite
+redirects.source: Bron
+redirects.target-site: Doelsite
+redirects.target: Doel
+redirects.status: Status
+redirects.priority: Prioriteit
+redirects.regex: RegEx
+redirects.pass-through: Doorsturen
+redirects.active: Actief
+redirects.actions: Acties
+redirects.expiry: Vervaldatum
+redirects.csv-import: CSV importeren
+redirects.csv-import-modal.redirects-import: Doorverwijzingen CSV importeren
+redirects.csv-export: CSV exporteren
+redirects.clean-up: Verlopen doorverwijzingen opschonen
+redirects.import-drag-drop: Blader je bestanden of zet hier een CSV neer
+redirects.browse-files: Bestanden bladeren
+redirects.upload: Uploaden
+redirects.beginner-modal.title: Nieuwe beginnerdoorverwijzing
+redirects.beginner-modal.type: Type
+redirects.beginner-modal.path: Pad
+redirects.beginner-modal.target: Doel
+redirects.beginner-modal.type.required: Voeg een type toe
+redirects.beginner-modal.path.required: Voeg een pad toe
+redirects.beginner-modal.target.required: Voeg een doel toe
+redirects.beginner-modal.create: Aanmaken
+redirects.beginner-modal.cancel: Annuleren
+redirects.csv-import-results.title: Resultaten CSV-import doorverwijzingen
+redirects.csv-import-results.total: Totaal
+redirects.csv-import-results.created: Aangemaakt
+redirects.csv-import-results.updated: Bijgewerkt
+redirects.csv-import-results.errored: Fout
+redirects.csv-import-results.close: Sluiten
+redirects.csv-import-results.errors-details: Foutdetails
+redirects.csv-import-results.line: "Regel {{line}}"
+robots-txt.save-success: robots.txt succesvol opgeslagen
+robots-txt.on-file-system-warning: "Opslaan uitgeschakeld: er bestaat een fysiek robots.txt-bestand op het bestandssysteem."
+path: Pad
+entire_uri: Volledige URI
+path_query: Pad en query
+auto_create: Automatisch aanmaken
+widget.redirects: Doorverwijzingen
+navigation.redirects: Doorverwijzingen
+widget.robots-txt: robots.txt
+navigation.robots-txt: robots.txt
+perspective.default: Standaard
+perspective.switching.title: Perspectief wisselen
+perspective.switching.description: Er wordt nu overgeschakeld naar het volgende perspectief
+widget.translations: Vertalingen
+widget.notes-and-events: Notities & gebeurtenissen
+widget.tag-configuration: Tagconfiguratie
+widget.predefined-properties: Vooraf gedefinieerde eigenschappen
+widget.search-replace-assignments: Toewijzingen zoeken & vervangen
+widget.document-types: Documenttypen
+widget.website-settings: Website-instellingen
+widget.role-management: Rollen
+widget.user-management: Gebruikers
+widget.class-definitions: Klassen
+widget.field-collections: Field Collections
+widget.object-bricks: Object Bricks
+widget.quantity-values: Hoeveelheidswaarden
+widget.select-options: Selectieopties
+widget.appearance-branding: Uiterlijk & huisstijl
+widget.image-thumbnails: Afbeeldingsminiaturen
+widget.video-thumbnails: Videominiaturen
+widget.predefined-asset-metadata: Vooraf gedefinieerde assetmetadata
+predefined-asset-metadata.new: Nieuw
+predefined-asset-metadata.columns.icon: " "
+predefined-asset-metadata.columns.name: Naam
+predefined-asset-metadata.columns.group: Groep
+predefined-asset-metadata.columns.description: Beschrijving
+predefined-asset-metadata.columns.type: Type
+predefined-asset-metadata.columns.value: Waarde
+predefined-asset-metadata.columns.config: Configuratie
+predefined-asset-metadata.columns.language: Taal
+predefined-asset-metadata.columns.target-type: Doeltype
+predefined-asset-metadata.columns.actions: Acties
+predefined-asset-metadata.duplicate-entry.title: Vooraf gedefinieerde metadata bestaat al
+predefined-asset-metadata.duplicate-entry.error: Er bestaat al een item met deze naam- en taalcombinatie. Wijzig een van de volgende waarden.
+appearance-branding.title: Uiterlijk & huisstijl
+user-management.appearance-branding: Uiterlijk & huisstijl
+image-thumbnails.title: Afbeeldingsminiaturen
+image-thumbnails.description: Beheer en configureer de miniatuurinstellingen voor je assets.
+image-thumbnails.search.placeholder: Miniaturen zoeken...
+image-thumbnails.tree.empty: Geen miniaturen gevonden
+image-thumbnails.configuration.title: Configuratie
+image-thumbnails.configuration.description: Miniatuurinstellingen configureren
+image-thumbnails.preview.title: Voorbeeld
+image-thumbnails.preview.description: Miniatuurconfiguratie bekijken
+image-thumbnails.editor.empty.title: Selecteer een miniatuur
+image-thumbnails.editor.empty.description: Selecteer een miniatuur uit de boom om de configuratie te bekijken of te bewerken
+image-thumbnails.editor.select-thumbnail: Selecteer een miniatuurconfiguratie om te bewerken
+image-thumbnails.editor.general-settings: Algemene instellingen
+image-thumbnails.editor.name: Naam
+image-thumbnails.editor.name-required: Naam is verplicht
+image-thumbnails.editor.description: Beschrijving
+image-thumbnails.editor.description-placeholder: Beschrijving van miniatuur invoeren...
+image-thumbnails.editor.group: Groep
+image-thumbnails.editor.group-required: Groep is verplicht
+image-thumbnails.editor.group-placeholder: Selecteer een groep...
+image-thumbnails.editor.no-group: Geen groep
+image-thumbnails.editor.format: Formaat
+image-thumbnails.editor.format-required: Formaat is verplicht
+image-thumbnails.editor.format-placeholder: Selecteer een formaat...
+image-thumbnails.editor.format-auto: Automatisch (webgeoptimaliseerd - aanbevolen)
+image-thumbnails.delete.confirm: Weet je echt zeker dat je het miniatuur wilt verwijderen
+image-thumbnails.add.content: Voer de naam in van het nieuwe miniatuur (a-zA-Z0-9_-)
+image-thumbnails.add.validation.message: De miniatuurnaam is ongeldig
+image-thumbnails.editor.advanced: Geavanceerd
+image-thumbnails.editor.quality: Kwaliteit
+image-thumbnails.editor.quality.tooltip: JPEG-kwaliteitsinstelling (1-100)
+image-thumbnails.editor.high-resolution: Hoge resolutie
+image-thumbnails.editor.high-resolution.tooltip: Factor voor hoge resolutie voor retina-schermen
+image-thumbnails.editor.preserve-color: Kleur bewaren
+image-thumbnails.editor.preserve-color.tooltip: "Kleur bewaren (profiel, ruimte) (Imagick, ORIGINEEL)\n('Metadata bewaren' en 'kleur bewaren' werken alleen voor overgangen zonder composities (kader, achtergrondkleur, ...) en kleurwijzigingen (grijswaarden, sepia, ...))"
+image-thumbnails.editor.force-process-icc: ICC-profielen verwerking forceren
+image-thumbnails.editor.force-process-icc.tooltip: ICC-profielen verwerking forceren (Imagick, ORIGINEEL)
+image-thumbnails.editor.preserve-metadata: Metadata bewaren
+image-thumbnails.editor.preserve-metadata.tooltip: "Metadata bewaren (niet verwijderen) (Imagick, ORIGINEEL)\n('Metadata bewaren' en 'kleur bewaren' werken alleen voor overgangen zonder composities (kader, achtergrondkleur, ...) en kleurwijzigingen (grijswaarden, sepia, ...))"
+image-thumbnails.editor.rasterize-svg: SVG's rasteren
+image-thumbnails.editor.rasterize-svg.tooltip: "SVG's rasteren (Imagick)\n(SVG's worden automatisch gerasterd als een andere transformatie dan formaat wijzigen of schalen op breedte/hoogte wordt gebruikt.)"
+image-thumbnails.editor.use-cropbox: Cropbox gebruiken
+image-thumbnails.editor.use-cropbox.tooltip: "Cropbox gebruiken (Ghostscript)\n(Stelt de paginagrootte in op de CropBox in plaats van de MediaBox, handig om marges en niet-inhoudsgebieden uit te sluiten.)"
+image-thumbnails.editor.downloadable: Downloadbaar
+image-thumbnails.editor.downloadable.tooltip: Weergeven als optie in downloadsectie in afbeeldingsdetailweergave
+image-thumbnails.editor.preserve-animation: Animatie bewaren
+image-thumbnails.editor.preserve-animation.tooltip: "Animaties bewaren voor GIF (Imagick)\n(Ondersteunde transformaties zijn: Frame, Cover, Contain, Resize, ScaleByWidth, ScaleByHeight)"
+image-thumbnails.editor.media-queries: Mediaquery's
+image-thumbnails.editor.media-queries.new: Nieuw
+image-thumbnails.editor.media-queries.default: Standaard
+image-thumbnails.editor.media-queries.empty: Geen mediaquery's gedefinieerd. Klik op 'Nieuw' om een CSS-mediaquery toe te voegen.
+image-thumbnails.editor.media-query.modal.title: Nieuwe mediaquery
+image-thumbnails.editor.media-query.modal.label: Voer een geldige CSS-mediaquery in
+image-thumbnails.editor.media-queries.add.title: Nieuwe mediaquery
+image-thumbnails.editor.media-queries.add.label: Voer een geldige CSS-mediaquery in
+image-thumbnails.editor.media-query.modal.placeholder: "(min-width: 576px)"
+image-thumbnails.editor.transformations: Transformaties
+image-thumbnails.editor.transformations.resize: Formaat wijzigen
+image-thumbnails.editor.transformations.scale-by-height: Schalen op hoogte
+image-thumbnails.editor.transformations.trim: Inkorten
+image-thumbnails.editor.transformations.effects: Effecten
+image-thumbnails.editor.transformations.effects.sepia: Sepia
+image-thumbnails.editor.transformations.effects.grayscale: Grijswaarden
+image-thumbnails.editor.transformations.effects.sharpen: Verscherpen
+image-thumbnails.editor.transformations.empty: Geen transformaties gedefinieerd. Gebruik de knop 'Transformaties' om afbeeldingstransformaties toe te voegen.
+image-thumbnails.editor.save-error: Miniatuurconfiguratie kon niet worden opgeslagen
+
+# Transformation Groups
+image-thumbnails.transformations.groups.main: Transformaties
+image-thumbnails.transformations.groups.effects: Effecten
+
+# Media Query Translations
+image-thumbnails.media-queries.add-transformation: Transformatie toevoegen
+
+# Cover Transformation
+image-thumbnails.transformations.cover.title: Cover configureren
+image-thumbnails.transformations.cover.width-height: Breedte, hoogte
+image-thumbnails.transformations.cover.width: Breedte
+image-thumbnails.transformations.cover.height: Hoogte
+image-thumbnails.transformations.cover.focal-point-info: De afbeelding wordt automatisch bijgesneden op basis van het focuspunt van de bronafbeelding. Als er geen focuspunt is, wordt de onderstaande standaardpositionering gebruikt.
+image-thumbnails.transformations.cover.positioning: Standaardpositionering
+image-thumbnails.transformations.cover.positioning-center: Midden
+image-thumbnails.transformations.cover.positioning-topleft: Linksboven
+image-thumbnails.transformations.cover.positioning-topright: Rechtsboven
+image-thumbnails.transformations.cover.positioning-bottomleft: Linksonder
+image-thumbnails.transformations.cover.positioning-bottomright: Rechtsonder
+image-thumbnails.transformations.cover.force-resize: Formaat forceren
+
+# Add Overlay Transformation
+image-thumbnails.transformations.add-overlay.overlay-image: Overlayafbeelding
+image-thumbnails.transformations.add-overlay.x: X-positie
+image-thumbnails.transformations.add-overlay.y: Y-positie
+image-thumbnails.transformations.add-overlay.origin: Oorsprong
+image-thumbnails.transformations.add-overlay.origin-top-left: Linksboven
+image-thumbnails.transformations.add-overlay.origin-top-right: Rechtsboven
+image-thumbnails.transformations.add-overlay.origin-center: Midden
+image-thumbnails.transformations.add-overlay.origin-bottom-left: Linksonder
+image-thumbnails.transformations.add-overlay.origin-bottom-right: Rechtsonder
+image-thumbnails.transformations.add-overlay.alpha: Dekking
+image-thumbnails.transformations.add-overlay.composite: Samenstelling
+
+# Gaussian Blur Transformation
+image-thumbnails.transformations.gaussian-blur.radius: Straal
+image-thumbnails.transformations.gaussian-blur.sigma: Sigma
+
+# Scale by Width Transformation
+image-thumbnails.transformations.scale-by-width.title: Schalen op breedte configureren
+image-thumbnails.transformations.scale-by-width.width: Breedte
+image-thumbnails.transformations.scale-by-width.force-resize: Formaat forceren
+
+# Resize Transformation
+image-thumbnails.transformations.resize.config-title: Formaat wijzigen configureren
+image-thumbnails.transformations.resize.width: Breedte
+image-thumbnails.transformations.resize.height: Hoogte
+
+# Scale by Height Transformation
+image-thumbnails.transformations.scale-by-height.config-title: Schalen op hoogte configureren
+image-thumbnails.transformations.scale-by-height.height: Hoogte
+image-thumbnails.transformations.scale-by-height.height-placeholder: Hoogte in pixels invoeren
+image-thumbnails.transformations.scale-by-height.force-resize: Formaat forceren
+
+# Trim Transformation
+image-thumbnails.transformations.trim.config-title: Inkorten configureren
+image-thumbnails.transformations.trim.trim-option: Inkortenoptie
+image-thumbnails.transformations.trim.trim-option-placeholder: Inkortenoptie selecteren
+image-thumbnails.transformations.trim.disabled: Uitgeschakeld
+image-thumbnails.transformations.trim.left: Links
+image-thumbnails.transformations.trim.right: Rechts
+image-thumbnails.transformations.trim.both: Beide
+
+# Effects Transformation
+image-thumbnails.transformations.effects.config-title: Effect configureren
+image-thumbnails.transformations.effects.effect-type: Effecttype
+image-thumbnails.transformations.effects.effect-type-placeholder: Effecttype selecteren
+image-thumbnails.transformations.effects.sepia: Sepia
+image-thumbnails.transformations.effects.grayscale: Grijswaarden
+image-thumbnails.transformations.effects.sharpen: Verscherpen
+image-thumbnails.transformations.effects.intensity: Intensiteit
+
+# Transformation tool strip
+image-thumbnails.transformations.add: Transformatie toevoegen
+image-thumbnails.transformations.move-up: Omhoog verplaatsen
+image-thumbnails.transformations.move-down: Omlaag verplaatsen
+image-thumbnails.transformations.remove: Verwijderen
+
+# Unknown/Fallback Transformation
+image-thumbnails.transformations.unknown-type: "Onbekend transformatietype: {{type}}"
+image-thumbnails.transformations.no-configuration-required: Geen configuratie vereist
+
+video-thumbnails.title: Videominiaturen
+video-thumbnails.description: Beheer en configureer de videominiaturinstellingen voor je assets.
+video-thumbnails.search.placeholder: Miniaturen zoeken...
+video-thumbnails.tree.empty: Geen miniaturen gevonden
+video-thumbnails.editor.select-thumbnail: Selecteer een videominiaturconfiguratie om te bewerken
+video-thumbnails.editor.name: Naam
+video-thumbnails.editor.name-required: Naam is verplicht
+video-thumbnails.editor.description: Beschrijving
+video-thumbnails.editor.group: Groep
+video-thumbnails.editor.no-group: Geen groep
+video-thumbnails.editor.presetting: Selecteer een voorinstelling
+video-thumbnails.editor.video-bitrate: Videobitsnelheid
+video-thumbnails.editor.audio-bitrate: Audiobitsnelheid
+video-thumbnails.editor.transformations: Transformaties
+video-thumbnails.editor.media-segments: Mediasegmenten
+video-thumbnails.editor.media-segments.new: Nieuw
+video-thumbnails.editor.media-segments.empty: Geen mediasegmenten gedefinieerd. Klik op 'Nieuw' om een segment toe te voegen (bijv. 500K).
+video-thumbnails.editor.media-segments.add.title: Nieuw mediasegment
+video-thumbnails.editor.media-segments.add.label: Voer een segmentnaam in (bijv. 500K)
+video-thumbnails.editor.media-segments.add.bitrate-hint: Voer een geldige bitsnelheid in (bijv. 400k, 1500k, 1M)
+video-thumbnails.editor.media-segments.add.ok: Aanmaken
+video-thumbnails.editor.media-segments.default: Standaard
+video-thumbnails.editor.transformations.empty: Geen transformaties geselecteerd
+video-thumbnails.delete.confirm: Weet je echt zeker dat je het miniatuur wilt verwijderen
+video-thumbnails.add.content: Voer de naam in van het nieuwe miniatuur (a-zA-Z0-9_-)
+video-thumbnails.add.validation.message: De miniatuurnaam is ongeldig
+
+# Video Transformation tool strip
+video-thumbnails.transformations.move-up: Omhoog verplaatsen
+video-thumbnails.transformations.move-down: Omlaag verplaatsen
+video-thumbnails.transformations.remove: Verwijderen
+
+# Resize Transformation
+video-thumbnails.transformations.resize.config-title: Formaat wijzigen configureren
+video-thumbnails.transformations.resize.width: Breedte
+video-thumbnails.transformations.resize.width-placeholder: Breedte in pixels invoeren
+video-thumbnails.transformations.resize.height: Hoogte
+video-thumbnails.transformations.resize.height-placeholder: Hoogte in pixels invoeren
+video-thumbnails.transformations.resize.even-number-hint: Breedte en hoogte moeten een even getal zijn
+
+# Scale by Width Transformation
+video-thumbnails.transformations.scale-by-width.config-title: Schalen op breedte configureren
+video-thumbnails.transformations.scale-by-width.width: Breedte
+video-thumbnails.transformations.scale-by-width.width-placeholder: Breedte in pixels invoeren
+
+# Scale by Height Transformation
+video-thumbnails.transformations.scale-by-height.config-title: Schalen op hoogte configureren
+video-thumbnails.transformations.scale-by-height.height: Hoogte
+video-thumbnails.transformations.scale-by-height.height-placeholder: Hoogte in pixels invoeren
+
+# Cut Transformation
+video-thumbnails.transformations.cut.config-title: Knippen configureren
+video-thumbnails.transformations.cut.start: Begin
+video-thumbnails.transformations.cut.start-placeholder: "00:00:00.000"
+video-thumbnails.transformations.cut.duration: Duur
+video-thumbnails.transformations.cut.duration-placeholder: "00:00:10.000"
+
+# Set Framerate Transformation
+video-thumbnails.transformations.set-framerate.config-title: Framesnelheid instellen configureren
+video-thumbnails.transformations.set-framerate.fps: FPS
+video-thumbnails.transformations.set-framerate.fps-placeholder: "25"
+
+# Color Channel Mixer Transformation
+video-thumbnails.transformations.color-channel-mixer.config-title: Kleurkanaalmixer configureren
+video-thumbnails.transformations.color-channel-mixer.effect: Effect
+video-thumbnails.transformations.color-channel-mixer.effect-placeholder: Selecteer een effect
+video-thumbnails.transformations.color-channel-mixer.grayscale: Grijswaarden
+video-thumbnails.transformations.color-channel-mixer.sepia: Sepia
+video-thumbnails.transformations.color-channel-mixer.cold: Koud
+
+# Mute Transformation
+video-thumbnails.transformations.mute.config-title: Dempen
+video-thumbnails.transformations.no-configuration-required: Geen configuratie vereist
+
+appearance-branding.color.title: Kleur
+appearance-branding.color.brand-color.label: Merkkleur
+appearance-branding.color.brand-color.description: Toegepast op de abonnementsstatusindicator en de standaard gebruikersavatar.
+appearance-branding.color.background-shade.label: Achtergrondtint
+appearance-branding.color.background-shade.description: Toegepast op de canvasachtergrond met verlaagde dekking voor een naadloze overgang.
+appearance-branding.custom-logo.title: Aangepast logo
+appearance-branding.custom-logo.description: Gebruikt bij het inloggen en in de canvasachtergrond
+appearance-branding.custom-login-background.title: Aangepaste inlogachtergrondafbeelding
+appearance-branding.custom-login-background.description: Gebruikt als achtergrondafbeelding op het inlogscherm
+appearance-branding.update.success: Uiterlijksinstellingen succesvol bijgewerkt
+search-replace-assignments.search-for: Zoeken naar
+search-replace-assignments.replace-with: Vervangen door
+search-replace-assignments.select-element: Doelelement selecteren
+search-replace-assignments.search: Gebruik zoeken
+search-replace-assignments.apply-to-all: Vervanging op alles toepassen
+search-replace-assignments.apply-to-selection: Vervanging op selectie toepassen
+search-replace-assignments.confirm.title: Vervanging bevestigen
+search-replace-assignments.confirm.description: Het herstellen van vervangen toewijzingen kan tijdrovend zijn. Weet je zeker dat je het op alles wilt toepassen?
+search-replace-assignments.columns.id: ID
+search-replace-assignments.columns.type: Type
+search-replace-assignments.columns.path: Pad
+search-replace-assignments.job.title-all: Alle toewijzingen vervangen
+search-replace-assignments.job.title-selection: "{{count}} toewijzing(en) vervangen"
+hidden-dependencies-warning: Er zijn aanvullende afhankelijkheden waarvoor je geen weergaverechten hebt.
+external-image.preview-placeholder: Voeg een externe afbeelding toe
+empty-image: Lege afbeelding
+image.dnd-target: Zet hier een afbeelding neer
+image.add.and.dnd: Voeg een afbeelding toe of zet deze hier direct neer
+image.upload.add.and.dnd: Upload, voeg toe of zet hier direct een afbeelding neer
+image.too-small: De geselecteerde afbeelding is te klein om hier te gebruiken. Gebruik een grotere afbeelding.
+fallback: Terugvaloptie
+url-slug.add-site: Site toevoegen
+url-slug.invalid: Voer een geldige URL-slug in (beginnend met een '/')
+site-id: Site-ID
+deleted: verwijderd
+collection.empty: Nog geen velden beschikbaar. Begin met het toevoegen van een veld.
+field-collection.add.default: Field Collection toevoegen
+video.type: Videotype
+video.type.asset: Asset
+video.type.youtube: YouTube
+video.type.vimeo: Vimeo
+video.type.dailymotion: Dailymotion
+video.id: Video-ID
+video.url: Video-URL
+video.settings: Video-instellingen
+video.poster: Posterafbeelding
+video.path: Pad
+video.dnd-target: Zet hier een video neer
+video.add-target: Voeg hier een video toe
+pdf-editable.dnd-target: Zet hier een documentasset neer
+many-to-one-relation.drop-placeholder: Zet hier een item neer
+many-to-one-relation.drop-placeholder-text-input: Zet hier een item neer of voer een waarde in
+reverse-object-relation.owner-hint: Het huidige object is niet de eigenaar van deze relaties; wijzigingen hier kunnen het opslaan van het object vertragen.
+reverse-object-relation.owner-class: Eigenaarklasse
+reverse-object-relation.owner-field: Eigenaarsveld
+link.not-set: niet ingesteld
+link.edit-title: Link bewerken
+link.tab.basic: Basis
+link.tab.advanced: Geavanceerd
+link.text: Tekst
+link.path: Pad
+link.properties: Eigenschappen
+link.target: Doel
+link.parameters: Parameters
+link.anchor: Anker
+link.title: Titel
+link.accesskey: Toegangstoets
+link.rel: Relatie
+link.tabindex: Tabindex
+link.class: Klasse
+link.attributes: Attributen
+crop: Bijsnijden
+crop.remove: Bijsnijden verwijderen
+hotspots-markers-modal.edit-button: Gegevens toevoegen & bewerken
+hotspots-markers-data-modal.title: Gegevens toevoegen & bewerken
+hotspots-markers-data-modal.new-data: Nieuw
+hotspots-markers-data-modal.apply: Toepassen
+hotspots-markers-data-modal.name: Naam
+hotspots-markers-data-modal.data: Gegevens
+hotspots-markers-data-modal.data-type.name: Naam
+hotspots-markers-data-modal.data-type.value: Waarde
+hotspots-markers-data-modal.data-type.text-field: Tekstveld
+hotspots-markers-data-modal.data-type.text-area: Tekstgebied
+hotspots-markers-data-modal.data-type.checkbox: Selectievakje
+hotspots-markers-data-modal.data-type.object: Object
+hotspots-markers-data-modal.data-type.document: Document
+hotspots-markers-data-modal.data-type.asset: Asset
+hotspots.edit: Markeringen en hotspots bewerken
+hotspots.show: Markeringen en hotspots weergeven
+hotspots.new-marker: Nieuwe markering
+hotspots.new-hotspot: Nieuwe hotspot
+hotspots.clear-data: Alle hotspots en markeringen wissen
+hotspots.clear-data.dnd-message: Deze afbeelding bevat extra gegevens zoals markeringen of hotspots. Wil je ze ook wissen?
+hotspots.data-cleared: Hotspot- en markeringsgegevens gewist
+hotspots.has-hotspots-or-marker: Hotspots of markeringen zijn toegevoegd aan dit item
+classification-store.collection: Collectie
+classification-store.group: Groep
+classification-store.group-by-key: Groeperen op sleutel
+classification-store.column.id: ID
+classification-store.column.group: Groep
+classification-store.column.name: Naam
+classification-store.column.description: Beschrijving
+navigation.classification-store: Classificatieopslag
+widget.classification-store-config: Classificatieopslag
+classification-store.tabs.collections: Collecties
+classification-store.tabs.groups: Groepen
+classification-store.tabs.keys: Sleutels
+classification-store.add-store: Opslag toevoegen
+classification-store.rename-store: Opslag hernoemen
+classification-store.delete-store: 'Opslag "{{storeName}}" verwijderen?'
+classification-store.add-group: Groep toevoegen
+classification-store.rename-group: Groep hernoemen
+classification-store.delete-group: 'Groep "{{groupName}}" verwijderen?'
+classification-store.add-collection: Collectie toevoegen
+classification-store.rename-collection: Collectie hernoemen
+classification-store.delete-collection: 'Collectie "{{collectionName}}" verwijderen?'
+classification-store.add-key: Sleutel toevoegen
+classification-store.rename-key: Sleutel hernoemen
+classification-store.delete-key: 'Sleutel "{{keyName}}" verwijderen?'
+classification-store.delete-key-relation: 'Sleutel "{{keyName}}" uit deze groep verwijderen?'
+classification-store.delete-group-relation: 'Groep "{{groupName}}" uit deze collectie verwijderen?'
+classification-store.edit-definition: Definitie bewerken
+classification-store.edit-key-definition: "Sleuteldefinitie bewerken: {{keyName}}"
+classification-store.columns.id: ID
+classification-store.columns.name: Naam
+classification-store.columns.title: Titel
+classification-store.columns.type: Type
+classification-store.columns.description: Beschrijving
+classification-store.columns.actions: Acties
+classification-store.columns.mandatory: Verplicht
+classification-store.columns.sorter: Sorteervolgorde
+classification-store.columns.enabled: Ingeschakeld
+classification-store.relations-title: "Sleutels in groep: {{name}}"
+classification-store.select-group-hint: Selecteer een groep om de sleutels te bekijken
+classification-store.collection-relations-title: "Groepen in collectie: {{name}}"
+classification-store.select-collection-hint: Selecteer een collectie om de groepen te bekijken
+classification-store.select-key: Sleutel selecteren
+classification-store.search-keys: Sleutels zoeken…
+classification-store.select-group: Groep selecteren
+classification-store.search-groups: Groepen zoeken…
+home: Startpagina
+preview.label: Voorbeeld
+preview.desktop: Bureaublad
+preview.tablet: Tablet
+preview.phone-vertical: Telefoon verticaal
+preview.phone-horizontal: Telefoon horizontaal
+preview.select_date_time: Datum & tijd selecteren
+preview.screen_size_too_small: De beschikbare ruimte is te klein om de geselecteerde voorbeeldmodus weer te geven.
+inheritance-active: "Gegevens overgeërfd van object-ID {{id}}"
+inheritance-broken: Gegevensovererving onderbroken
+main: Hoofd
+main_admin: Hoofd (beheerdermodus)
+draft-alert: De huidige versie is een concept. Je kunt het concept verwijderen om de vorige versie te herstellen.
+draft-alert-auto-save: De huidige versie is een automatisch opgeslagen concept. Je kunt het concept verwijderen om de vorige versie te herstellen.
+delete-draft: Concept verwijderen
+delete-draft-auto-save: Automatisch opgeslagen concept verwijderen
+delete-draft-confirmation: Weet je zeker dat je het concept wilt verwijderen?
+auto-save.tooltip: Deze versie is automatisch opgeslagen.
+auto-save.loading-tooltip: Automatisch opslaan wordt uitgevoerd
+detached-tab.draft-tooltip: De huidige versie is een concept.
+detached-tab.draft-tooltip-addon: Je kunt publiceren via het bijbehorende hoofd-/moedertabblad van het element/object.
+details: Details
+element: Element
+entries: items
+entry: item
+error_element_validation_failed: Validatie mislukt
+element.delete.deleting-folder: Map verwijderen
+component.pagination.showing-items: "{{total}} weergegeven"
+edit-modal.inline-edit: Inline bewerken
+edit-modal.apply-changes: Wijzigingen toepassen
+edit-modal.discard: Verwerpen
+preview-not-available: Voorbeeld niet beschikbaar
+user-menu.notifications: Meldingen
+user-menu.my-profile: Mijn profiel
+user-menu.log-out: Uitloggen
+user-menu.title: Profiel
+user-menu.notification.send: Versturen
+user-menu.notification.attachments: Bijlagen
+user-menu.notification.type-not-supported: Bijlagetype wordt niet ondersteund
+user-menu.notification.cancel: Annuleren
+user-menu.notification.modal.send-a-notification: Een melding versturen
+user-menu.notification.modal.success-notification-has-been-sent: Succes - Melding is verstuurd
+user-menu.notification.modal.to: Aan
+user-menu.notification.modal.select: Selecteren
+user-menu.notification.modal.title: Titel
+user-menu.notification.modal.message: Bericht
+user-menu.notification.modal.add-an-attachment: Een bijlage toevoegen
+user-menu.notification.modal.form.validation.provide-recipient: Geef een ontvanger op
+user-menu.notification.modal.form.validation.provide-title: Geef een titel op
+user-menu.notification.modal.form.validation.provide-message: Geef een bericht op
+reports.reports-title: Rapporten
+reports.select-report-name: Selecteer de naam van het rapport
+reports.select-report: Rapport selecteren
+reports.export: Exporteren
+reports.csv-export: CSV exporteren
+reports.csv-export-with-headers: CSV exporteren met kopteksten
+reports.show-all-labels: Alle labels weergeven
+reports.show-fewer-labels: Minder labels weergeven
+reports.grid-config.title-columns: Kolommen
+reports.grid-config.restore-to-default: Herstellen naar standaard
+reports.grid-config.add-column: Een kolom toevoegen
+reports.field-filters: Veldfilters
+reports.editor.delete.content: 'Weet je echt zeker dat je aangepast rapport "{{reportName}}" wilt verwijderen?'
+reports.editor.clone.content: Voer de naam in van het nieuwe item (a-zA-Z-_)
+reports.editor.add.content: Voer de naam in van het nieuwe item. De naam moet alfanumeriek zijn en minimaal 3 tekens lang (a-zA-Z0-9_-)
+reports.editor.content.validation.message: De naam van het aangepaste rapport is ongeldig
+reports.editor.general-settings.title: Algemene instellingen
+reports.editor.general-settings.name-label: Naam
+reports.editor.general-settings.display-name-label: Weergavenaam
+reports.editor.general-settings.icon-class-label: Pictogramklasse
+reports.editor.general-settings.group-label: Bestaande groep noemen of nieuwe groep aanmaken
+reports.editor.general-settings.group-tooltip: Je moet exact dezelfde naam gebruiken als het bestaande menulabel. Als de naam anders of nieuw is, wordt een nieuwe groep aangemaakt.
+reports.editor.general-settings.report-class-label: Rapportklasse
+reports.editor.general-settings.group-icon-class-label: Groepspictogramklasse
+reports.editor.general-settings.shortcut-menu-label: Snelkoppeling in menu aanmaken
+reports.editor.source-definition.title: Brondefinitie
+reports.editor.source-definition.no-content: Nog geen velden beschikbaar. Begin met het toevoegen van een veld.
+reports.editor.source-definition.select-source-definition: Selecteer een brondefinitie
+reports.editor.source-definition.sql-select-field: SELECT (bijv. a,b,c)*
+reports.editor.source-definition.sql-from-field: FROM (bijv. d INNER JOIN e ON c.a = e.b)*
+reports.editor.source-definition.sql-where-field: WHERE (bijv. c = 'some_value')
+reports.editor.source-definition.sql-group-by-field: GROUP BY (bijv. b, c)
+reports.editor.source-definition.sql-initial-field-order: Beginvolgorde op veld (bijv. b, c)
+reports.editor.source-definition.sql-initial-direction-order: Beginvolgorde op richting
+reports.editor.manage-column-configuration.title: Kolomconfiguratie beheren & delen
+reports.editor.manage-column-configuration.name: Naam
+reports.editor.manage-column-configuration.display: Weergave
+reports.editor.manage-column-configuration.export: Exporteren
+reports.editor.manage-column-configuration.order: Volgorde
+reports.editor.manage-column-configuration.filter-type: Filtertype
+reports.editor.manage-column-configuration.filter-type.empty: Leeg
+reports.editor.manage-column-configuration.filter-type.text: Tekst
+reports.editor.manage-column-configuration.filter-type.number: Getal
+reports.editor.manage-column-configuration.filter-type.date: Datum
+reports.editor.manage-column-configuration.filter-type.bool: Booleaans
+reports.editor.manage-column-configuration.display-type: Weergavetype
+reports.editor.manage-column-configuration.display-type.none: Geen
+reports.editor.manage-column-configuration.display-type.text: Tekst
+reports.editor.manage-column-configuration.display-type.date: Datum
+reports.editor.manage-column-configuration.display-type.hide: Verbergen
+reports.editor.manage-column-configuration.filter-drilldown: Filter drilldown
+reports.editor.manage-column-configuration.filter-drilldown.empty: Leeg
+reports.editor.manage-column-configuration.filter-drilldown.only-filter: Alleen filter
+reports.editor.manage-column-configuration.filter-drilldown.filter-and-show: Filteren en weergeven
+reports.editor.manage-column-configuration.width: Breedte
+reports.editor.manage-column-configuration.label: Label
+reports.editor.manage-column-configuration.action: Actie
+reports.editor.manage-column-configuration.action.none: Geen
+reports.editor.manage-column-configuration.action.open-document: Document openen
+reports.editor.manage-column-configuration.action.open-asset: Asset openen
+reports.editor.manage-column-configuration.action.open-object: Object openen
+reports.editor.manage-column-configuration.action.open-url: URL openen
+reports.editor.chart-settings.title: Grafiekinstellingen
+reports.editor.chart-settings.chart-type: Grafiektype
+reports.editor.chart-settings.chart-type.none: Geen
+reports.editor.chart-settings.chart-type.pie-chart: Taartdiagram
+reports.editor.chart-settings.chart-type.line-chart: Lijndiagram
+reports.editor.chart-settings.chart-type.bar-chart: Staafdiagram
+reports.editor.chart-settings.settings: Instellingen
+reports.editor.chart-settings.pie-label: Labelkolom
+reports.editor.chart-settings.pie-data: Gegevenskolom
+reports.editor.chart-settings.x-axis: X-as
+reports.editor.chart-settings.y-axis: Y-as
+reports.editor.permissions.title: Rechten
+loading: Laden...
+please-wait: Even geduld...
+navigation.email: E-mail
+navigation.email-blocklist: E-mailblokkeerlijst
+widget.email-blocklist: E-mailblokkeerlijst
+email-blocklist.new: Nieuw
+email-blocklist.add.validation: Voer een geldig e-mailadres in
+email-blocklist.add.label: E-mailadres toevoegen
+email-blocklist.add.email-address.label: E-mailadres
+email-blocklist.add.email.success: E-mailadres succesvol toegevoegd
+aria.email-blocklist.remove.email: E-mailadres verwijderen
+navigation.email-log: Verzonden e-mails
+widget.email-log: Verzonden e-mails
+widget.email-log.from: Van
+widget.email-log.to: Aan
+widget.email-log.cc: CC
+widget.email-log.bcc: BCC
+widget.email-log.tab.text: Tekst
+widget.email-log.tab.html: HTML
+widget.email-log.tab.parameters: Parameters
+widget.email-log.grid.name: Naam
+widget.email-log.grid.value: Waarde
+email-log.subject: Onderwerp
+email-log.tooltip.resend: E-mail opnieuw versturen
+email-log.tooltip.forward: E-mail doorsturen
+email-log.tooltip.delete: E-mail verwijderen
+email-log.resend.email.success: E-mail succesvol opnieuw verstuurd
+email-log.resend.confirmation.title: E-mail opnieuw versturen
+email-log.resend.confirmation.text: Bevestig dat je de e-mail opnieuw wilt versturen naar alle ontvangers.
+email-log.resend.confirmation.ok: E-mail opnieuw versturen
+email-log.forward.email.success: E-mail succesvol doorgestuurd
+email-log.forward.label: E-mail doorsturen
+email-log.send.label: Versturen
+email-log.forward.email-address.label: E-mailadres
+email-log.delete.email.success: E-mail succesvol verwijderd
+email-log.html.preview: HTML-voorbeeld
+aria.email-log.html.preview: HTML-voorbeeld
+user-profile.label: Mijn profiel
+user-profile.general: Algemene gegevens
+user-profile.change-password: Wachtwoord wijzigen
+user-profile.password-old: Oud wachtwoord
+user-profile.password-new: Nieuw wachtwoord
+user-profile.password-repeat: Wachtwoord herhalen
+user-profile.password-repeat-error: Wachtwoorden komen niet overeen
+creatable-select.add-custom-option: Aangepaste optie toevoegen
+creatable-select.add: Toevoegen
+creatable-select.option-already-exists: Optie bestaat al
+creatable-select.invalid-option: Ongeldige optie
+drag-snippet-here: Sleep hier een fragment
+drop-snippet-here: Zet hier een fragment neer
+drop-document-here: Zet hier een document neer
+drop-document-asset-here: Zet hier een documentasset neer
+drop-asset-here: Zet hier een asset neer
+drop-object-here: Zet hier een object neer
+drop-element-here: Zet hier een element neer
+error-loading-renderlet: Fout bij laden van renderlet
+snippet: Fragment
+navigation.application-logger: Toepassingslogger
+widget.application-logger: Toepassingslogger
+application-logger.label: Toepassingslogger
+application-logger.columns.timestamp: Tijdstempel
+application-logger.columns.pid: PID
+application-logger.columns.message: Bericht
+application-logger.columns.file-object: Bestandsobject
+application-logger.columns.related-object: Gerelateerd object
+application-logger.columns.component: Onderdeel
+application-logger.columns.source: Bron
+application-logger.columns.details: Details
+application-logger.columns.type: Type
+application-logger.sidebar.search-parameter: Zoekparameter
+application-logger.detail-modal.title: Gedetailleerde informatie
+application-logger.filter.date-from: Van
+application-logger.filter.date-to: Tot
+application-logger.filter.priority: Type
+application-logger.filter.component: Onderdeel
+application-logger.filter.related-object-id: Gerelateerd object-ID
+application-logger.filter.message: Bericht
+application-logger.filter.pid: PID
+application-logger.refresh-interval: Vernieuwingsinterval
+application-logger.refresh-interval.select: Vernieuwingsfrequentie selecteren
+application-logger.refresh-interval.seconds: "{{seconds}} seconden"
+application-logger.filter.priority-level.1: Noodgeval
+application-logger.filter.priority-level.2: Alarm
+application-logger.filter.priority-level.3: Kritiek
+application-logger.filter.priority-level.4: Fout
+application-logger.filter.priority-level.5: Waarschuwing
+application-logger.filter.priority-level.6: Opmerking
+application-logger.filter.priority-level.7: Info
+application-logger.filter.priority-level.8: Debug
+embed.url-modal.title: Insluiting-URL bewerken
+embed.url-modal.label: URL (bijv. https://www.youtube.com/watch?v=nPntDiARQYw)
+embed.url-modal.required-message: Voer een geldige URL in
+alert-modal.ok-text: OK
+embed.url-modal.ok-text: OK
+embed.url-modal.cancel-text: Annuleren
+embed.url-modal.warning: Ongeldige URL's tonen geen voorbeeld. Controleer en werk je URL bij.
+embed.placeholder: Geen URL ingesteld - Klik om een insluiting-URL toe te voegen
+embed.add-url: URL toevoegen
+embed.edit-url: URL bewerken
+embed.clear: Wissen
+embed.loading: Laden...
+embed.iframe-title: Ingesloten inhoud
+invalid-iframe: De ingevoerde iframe-URL is ongeldig
+document.open-in-new-window: Openen in nieuw venster
+document.open-preview-in-new-window: Voorbeeld openen in nieuw venster
+document.translation.title: Vertaling
+document.translation.open-translation: Vertaling openen
+document.translation.link-existing-document: Bestaand document koppelen
+document.translation.unlink-existing-document: Bestaand document ontkoppelen
+document.translation.all-translations: Alle vertalingen
+document.translation.new-document: Nieuw document
+document.translation.use-inheritance: Overerving gebruiken
+document.translation.new-document-with-inheritance.modal-title: Nieuw document (met overerving)
+document.translation.new-document-blank.modal-title: Nieuw document (leeg)
+document.translation.new-document-modal.label.parent: Bovenliggend
+document.translation.new-document-modal.label.language: Taal
+document.translation.new-document-modal.create: Aanmaken
+navigation.recycle-bin: Prullenbak
+widget.recycle-bin: Prullenbak
+recycle-bin.columns.type: Type
+recycle-bin.columns.path: Pad
+recycle-bin.columns.amount: Hoeveelheid
+recycle-bin.columns.deleted-by: Verwijderd door
+recycle-bin.columns.date: Datum
+recycle-bin.columns.actions: Acties
+recycle-bin.actions.cleanup: Opschonen
+recycle-bin.actions.delete: Verwijderen
+recycle-bin.actions.delete.title: Prullenbakitems verwijderen
+recycle-bin.actions.restore: Herstellen
+recycle-bin.actions.restore.title: Prullenbakitems herstellen
+ownership-management.title: Eigendomsbeheer
+ownership-management.show-deleted-owners: Items van verwijderde gebruikers weergeven
+ownership-management.deleted-user: Verwijderde gebruiker
+ownership-management.columns.id: ID
+ownership-management.columns.name: Naam
+ownership-management.columns.modification-date: Wijzigingsdatum
+ownership-management.columns.owner: Eigenaar
+ownership-management.columns.actions: Acties
+ownership-management.actions.reassign-owner: Eigenaar opnieuw toewijzen
+ownership-management.actions.reassign-owner.title: Eigenaar van configuraties opnieuw toewijzen
+ownership-management.actions.delete: Verwijderen
+ownership-management.actions.delete.title: Configuraties verwijderen
+ownership-management.actions.batch-assign: Batch toewijzen
+ownership-management.actions.batch-delete: Batch verwijderen
+ownership-management.reassign-owner.title: "Eigenaar van {{count}} configuratie(s) opnieuw toewijzen"
+ownership-management.reassign-owner.confirm: Opnieuw toewijzen
+ownership-management.reassign-owner.placeholder: Zoek een gebruiker op naam
+ownership-management.delete.title: Configuraties verwijderen
+ownership-management.delete.content: "Weet je zeker dat je {{count}} configuratie(s) wilt verwijderen?"
+component.search.pleaceholder: Zoeken
+focal-point.set: Focuspunt instellen
+video.placeholder: Geen video geselecteerd - Klik om een video toe te voegen
+video.add-video: Video toevoegen
+video.preview-in-progress: Videovoorbeeld wordt gegenereerd…
+date.placeholder: Selecteer een datum
+numeric.placeholder: Voer een getal in
+select.placeholder: Selecteer een optie
+multiselect.placeholder: Selecteer opties
+image.alt-text-placeholder: Alt-tekst invoeren
+area-settings: Gebiedsinstellingen
+unsupported_feature: Niet-ondersteunde functie - controleer de systeemvereisten!
+document.version.comparison.error.title: Versievergelijkingsfout
+document.version.comparison.unsupported.requirements: Chromium-binary en PHP-extensie Imagick zijn vereist.
+navigation.test-email: Test-e-mail versturen
+test-email.form.from: Van
+test-email.form.to: Aan
+test-email.form.subject: Onderwerp
+test-email.form.contentType: Type
+test-email.form.title: Titel
+test-email.form.message: Bericht
+test-email.form.document: Document
+test-email.form.parameters: Parameters
+test-email.form.parameters.add-parameter: Parameter toevoegen
+test-email-modal-title: Een test-e-mail versturen
+test-email-modal-send: Versturen
+test-email.contentType.document: Document
+test-email.contentType.html: HTML
+test-email.contentType.text: Tekst
+test-email.parameters.columns.key: Sleutel
+test-email.parameters.columns.value: Waarde
+test-email.parameters.add: Parameter toevoegen
+test-email.send.error: Er is een fout opgetreden bij het versturen van de test-e-mail
+test-email.success.modal.title: Test-e-mail verstuurd
+test-email.success.modal.text: Je test-e-mail is verstuurd. Wil je dit venster openhouden om de e-mail opnieuw te versturen?
+test-email.validation.documentPath.required: Geef een documentpad op
+test-email.validation.documentParameters.required: Geef minimaal één parameter op
+test-email.validation.content.required: Geef een bericht op
+test-email.validation.from.required: Geef een afzender-e-mailadres op
+test-email.validation.from.email.type: Geef een geldig afzender-e-mailadres op
+test-email.validation.to.required: Geef een ontvanger-e-mailadres op
+test-email.validation.to.email.type: Geef een geldig ontvanger-e-mailadres op
+test-email.validation.subject.required: Geef een onderwerp op
+navigation.widget-editor: Widget-editor
+widget.widget-editor.perspective-editor: Perspectieveditor
+navigation.widget-editor.perspective-editor: Perspectieveditor
+widget.widget-editor.widget-editor: Widget-editor
+navigation.widget-editor.widget-editor: Widget-editor
+refresh: Vernieuwen
+perspective-editor.add-modal.title: Nieuw perspectief toevoegen
+perspective-editor.add-modal.name.label: Voer de naam in van het nieuwe perspectief
+perspective-editor.add-modal.name.validation: Voer een geldige perspectiefnaam in
+perspective-editor.form.name.placeholder: Perspectiefnaam invoeren
+perspective-editor.form.general.title: Algemeen
+perspective-editor.form.general.name: Naam
+perspective-editor.form.general.icon: Pictogram
+perspective-editor.form.general.widget-configuration: Widgetgebieden
+perspective-editor.form.main-nav-permission.title: Toegestane hoofdnavigatie-acties
+perspective-editor.form.main-nav-permission.category.quickAccess: Snelle toegang
+perspective-editor.form.main-nav-permission.quickAccess.hidden: Menu snelle toegang verbergen
+perspective-editor.form.main-nav-permission.quickAccess.open_asset: Asset openen
+perspective-editor.form.main-nav-permission.quickAccess.open_document: Document openen
+perspective-editor.form.main-nav-permission.quickAccess.open_object: Object openen
+perspective-editor.form.main-nav-permission.quickAccess.recycle_bin: Prullenbak
+perspective-editor.form.main-nav-permission.category.dataManagement: Gegevensbeheer
+perspective-editor.form.main-nav-permission.dataManagement.hidden: Menu gegevensbeheer verbergen
+perspective-editor.form.main-nav-permission.dataManagement.notesEvents: Notities & gebeurtenissen
+perspective-editor.form.main-nav-permission.dataManagement.gdprDataExtractor: AVG-gegevensextractor
+perspective-editor.form.main-nav-permission.dataManagement.searchReplaceAssignments: Toewijzingen zoeken & vervangen
+perspective-editor.form.main-nav-permission.dataManagement.predefinedProperties: Vooraf gedefinieerde eigenschappen
+perspective-editor.form.main-nav-permission.dataManagement.tagConfiguration: Tagconfiguratie
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_bulkExport: Gegevensmodeldefinitie > Bulkexport
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_bulkImport: Gegevensmodeldefinitie > Bulkimport
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_classes: Gegevensmodeldefinitie > Klassen
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_classificationStore: Gegevensmodeldefinitie > Classificatieopslag
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_fieldCollections: Gegevensmodeldefinitie > Field Collections
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_hidden: Menu gegevensmodeldefinitie verbergen
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_objectBricks: Gegevensmodeldefinitie > Object Bricks
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_quantityValue: Gegevensmodeldefinitie > Hoeveelheidswaarden
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_selectOptions: Gegevensmodeldefinitie > Selectieopties
+perspective-editor.form.main-nav-permission.category.experienceEcommerce: Ervaring & e-commerce
+perspective-editor.form.main-nav-permission.experienceEcommerce.hidden: Menu ervaring & e-commerce verbergen
+perspective-editor.form.main-nav-permission.experienceEcommerce.emails: E-mails
+perspective-editor.form.main-nav-permission.experienceEcommerce.documentTypes: Documenttypen
+perspective-editor.form.main-nav-permission.experienceEcommerce.websiteSettings: Website-instellingen
+perspective-editor.form.main-nav-permission.experienceEcommerce.redirects: Doorverwijzingen
+perspective-editor.form.main-nav-permission.experienceEcommerce.robotsTxt: robots.txt
+perspective-editor.form.main-nav-permission.category.assetManagement: Assetbeheer
+perspective-editor.form.main-nav-permission.assetManagement.hidden: Menu assetbeheer verbergen
+perspective-editor.form.main-nav-permission.assetManagement.assetThumbnails: Afbeeldingsminiaturen
+perspective-editor.form.main-nav-permission.assetManagement.videoThumbnails: Videominiaturen
+perspective-editor.form.main-nav-permission.assetManagement.predefinedAssetMetadata: Vooraf gedefinieerde assetmetadata
+perspective-editor.form.main-nav-permission.category.translations: Vertalingen
+perspective-editor.form.main-nav-permission.translations.hidden: Menu vertalingen verbergen
+perspective-editor.form.main-nav-permission.translations.translations: Vertalingen
+perspective-editor.form.main-nav-permission.category.system: Systeem
+perspective-editor.form.main-nav-permission.system.hidden: Menu systeem verbergen
+perspective-editor.form.main-nav-permission.system.applicationLogger: Toepassingslogger
+perspective-editor.form.main-nav-permission.system.users_hidden: Menu gebruikers/rollen verbergen
+perspective-editor.form.main-nav-permission.system.users_roles: Rollen
+perspective-editor.form.main-nav-permission.system.users_users: Gebruikers
+perspective-editor.form.main-nav-permission.system.appearanceBranding: Uiterlijk & huisstijl
+perspective-editor.form.main-nav-permission.system.perspectiveEditor: Perspectieveditor
+perspective-editor.form.main-nav-permission.system.widgetEditor: Widget-editor
+perspective-editor.form.main-nav-permission.system.maintenanceMode: Onderhoudsmodus
+perspective-editor.form.main-nav-permission.system.cache_clearAll: Cache > Alles wissen
+perspective-editor.form.main-nav-permission.system.cache_clearData: Cache > Gegevenscache
+perspective-editor.form.main-nav-permission.system.cache_clearOutput: Cache > Volledige paginacache wissen
+perspective-editor.form.main-nav-permission.system.cache_clearSymfony: Cache > Symfony-cache wissen
+perspective-editor.form.main-nav-permission.system.cache_clearTemp: Cache > Tijdelijke bestanden wissen
+perspective-editor.form.main-nav-permission.system.cache_hidden: Menu cache verbergen
+perspective-editor.form.main-nav-permission.system.systemSettings: Systeeminstellingen
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Eigendomsbeheer
+perspective-editor.form.main-nav-permission.system.about: Over
+perspective-editor.form.main-nav-permission.category.reporting: Rapportage
+perspective-editor.form.main-nav-permission.reporting.hidden: Menu rapportage verbergen
+perspective-editor.form.main-nav-permission.reporting.reports: Rapporten
+perspective-editor.form.main-nav-permission.reporting.customReportsConfiguration: Aangepaste rapporten configureren
+perspective-editor.form.main-nav-permission.category.search: Zoeken
+perspective-editor.form.main-nav-permission.search.hidden: Menu zoeken verbergen
+perspective-editor.create.success: Perspectief succesvol aangemaakt
+perspective-editor.delete.success: Perspectief succesvol verwijderd
+perspective-editor.system-widgets.trees: Bomen
+perspective-editor.system-widgets.left: Linker widgets
+perspective-editor.system-widgets.bottom: Onderste widgets
+perspective-editor.system-widgets.right: Rechter widgets
+perspective-editor.update.success: Perspectief succesvol bijgewerkt
+widget-editor.create-modal.create: Widget aanmaken
+widget-editor.create-form.name: Naam
+widget-editor.create-form.name.required: Voer een geldige naam in
+widget-editor.create-form.widgetType: Widgettype
+widget-editor.create-form.widgetType.element_tree: Elementenboom
+widget-editor.create-form.widgetTypeGroup.system-widgets: Systeemwidgets
+widget-editor.form.name.placeholder: Widgetnaam invoeren
+widget-editor.create.success: Widget succesvol aangemaakt
+widget-editor.delete.success: Widget succesvol verwijderd
+widget-editor.update.success: Widget succesvol bijgewerkt
+widget-editor.widget-form.general.title: Algemeen
+widget-editor.widget-form.general.name: Naam
+widget-editor.widget-form.general.icon: Pictogram
+widget-editor.widget-form.general.icon.select: Pictogram selecteren
+widget-editor.widget-form.specific.title: Specifiek
+widget-editor.widget-form.specific.element-type: Elementtype
+widget-editor.widget-form.specific.root-folder: Hoofdmap
+widget-editor.widget-form.specific.show-root: Hoofd weergeven
+widget-editor.widget-form.specific.page-size: Paginagrootte
+widget-editor.widget-form.allowed-objects.title: Toegestane objecten (standaard alles toegestaan)
+widget-editor.widget-form.filters.title: Filters
+widget-editor.widget-form.filters.pql: PQL-instructie
+widget-editor.widget-form.allowed-context-menu.title: Toegestane contextmenu-acties
+widget-editor.widget-form.allowed-context-menu.addObject: Nieuw object
+widget-editor.widget-form.allowed-context-menu.addVariant: Nieuwe variant
+widget-editor.widget-form.allowed-context-menu.copy: Kopiëren
+widget-editor.widget-form.allowed-context-menu.lock: Vergrendelen
+widget-editor.widget-form.allowed-context-menu.publish: Publiceren
+widget-editor.widget-form.allowed-context-menu.searchAndMove: Zoeken & verplaatsen
+widget-editor.widget-form.allowed-context-menu.unpublish: Publicatie ongedaan maken
+widget-editor.widget-form.allowed-context-menu.addFolder: Nieuwe map
+widget-editor.widget-form.allowed-context-menu.cut: Knippen
+widget-editor.widget-form.allowed-context-menu.lockAndPropagate: Vergrendelen en doorgeven aan onderliggende items
+widget-editor.widget-form.allowed-context-menu.refresh: Vernieuwen
+widget-editor.widget-form.allowed-context-menu.unlock: Ontgrendelen
+widget-editor.widget-form.allowed-context-menu.changeChildrenSortBy: Sortering onderliggende items wijzigen
+widget-editor.widget-form.allowed-context-menu.delete: Verwijderen
+widget-editor.widget-form.allowed-context-menu.paste: Plakken
+widget-editor.widget-form.allowed-context-menu.rename: Hernoemen
+widget-editor.widget-form.allowed-context-menu.unlockAndPropagate: Ontgrendelen en doorgeven aan onderliggende items
+widget-editor.widget-form.allowed-context-menu.addUploadZip: Nieuwe asset(s) > ZIP uploaden
+widget-editor.widget-form.allowed-context-menu.addUpload: Nieuwe asset(s) > Bestanden uploaden
+widget-editor.widget-form.allowed-context-menu.download: Downloaden
+widget-editor.widget-form.allowed-context-menu.pasteCut: Geknipt plakken
+widget-editor.widget-form.allowed-context-menu.uploadNewVersion: Nieuwe versie uploaden
+widget-editor.widget-form.allowed-context-menu.downloadZip: Downloaden als ZIP
+widget-editor.widget-form.allowed-context-menu.convert: Converteren
+widget-editor.widget-form.allowed-context-menu.removeSite: Site verwijderen
+widget-editor.widget-form.allowed-context-menu.useAsSite: Gebruiken als site
+widget-editor.widget-form.allowed-context-menu.editSite: Site bewerken
+widget-editor.widget-form.allowed-context-menu.open: Openen
+widget-editor.widget-form.allowed-context-menu.addPage: Nieuwe pagina
+widget-editor.widget-form.allowed-context-menu.addSnippet: Nieuw fragment
+widget-editor.widget-form.allowed-context-menu.addLink: Nieuwe link
+widget-editor.widget-form.allowed-context-menu.addEmail: Nieuwe e-mail
+widget-editor.widget-form.allowed-context-menu.addHardlink: Nieuwe harde link
+edit.label: Bewerken
+scheduled-block.delete-all-in-past: Alle verleden tijdstempels verwijderen
+scheduled-block.delete-all: Alle tijdstempels verwijderen
+scheduled-block.delete-all-in-past-confirmation: Weet je zeker dat je alle verleden tijdstempels wilt verwijderen?
+scheduled-block.delete-all-confirmation: Weet je zeker dat je alle tijdstempels wilt verwijderen?
+scheduled-block.delete-confirmation: Weet je zeker dat je dit item wilt verwijderen?
+icon-selector.title: Pictogramselector
+icon-selector.all-icons: Alle pictogrammen
+icon-selector.pimcore-library: Pimcore-bibliotheek
+icon-selector.search-placeholder: Zoeken
+icon-selector.current-selection: Huidige selectie
+icon-selector.clear-selection: Selectie wissen
+icon-selector.no-selection: Geen pictogram geselecteerd
+icon-selector.save: Opslaan
+icon-selector.custom-icon: Aangepast pictogram
+icon-selector.custom-icon-path: Aangepast pad
+icon-selector.custom-icon-path-placeholder: Een aangepast pad invoeren en bevestigen
+icon-selector.Twemoji: Twemoji-bibliotheek
+icon-selector.Pimcore: Pimcore-bibliotheek
+icon-selector.AlternativeLibrary: Alternatieve bibliotheek
+operational-grid.csv-import.title: CSV importeren
+operational-grid.csv-import.description: Voer CSV-gegevens in. Elke regel staat voor een rij; kolommen worden gescheiden door komma's.
+operational-grid.csv-import.ok: Importeren
+operational-grid.csv-import.cancel: Annuleren
+language: Taal
+no-languages-found: Geen talen gevonden
+pretty-url: Mooie URL / URL-slug
+pretty-url-override-notice: (overschrijft pad van boomstructuur)
+content-main-document: Hoofd-inhoudsdocument
+content-main-document.apply: Hoofd-inhoudsdocument toepassen
+content-main-document.apply-warning-title: Weet je het zeker?
+content-main-document.apply-warning-message: Alle inhoud gaat verloren
+never: nooit
+document-configuration.sidebar-title: Documentconfiguratie
+document-configuration.predefined-document-type: Vooraf gedefinieerd documenttype
+document-configuration.controller: Controller
+document-configuration.template: Sjabloon
+document-configuration.static-page-generator: Statische paginagenerator
+document-configuration.enable-server-side-static-rendering: Server-side statische rendering inschakelen
+document-configuration.lifetime-for-static-page: Levensduur voor statische pagina (in minuten)
+document-configuration.last-generated: "Laatst gegenereerd: {{timestamp}}"
+email-settings.sidebar-title: E-mailinstellingen
+email-settings.subject: Onderwerp
+email-settings.from: Van
+email-settings.reply-to: Antwoorden aan
+email-settings.recipients: Ontvangers
+email-settings.to: Aan
+email-settings.cc: CC
+email-settings.bcc: BCC
+email-settings.multiple-recipients-hint: "Meerdere ontvangers kunnen worden opgegeven door de e-mailadressen te scheiden met een puntkomma. Voorbeeld: ontvanger@pimcore.org; ontvanger2@pimcore.org"
+email-settings.from-syntax-hint: "Je kunt de syntaxis gebruiken: Mijn naam <mijn-naam@voorbeeld.com>"
+add-document-form.label.title: Titel
+add-document-form.label.navigation: Navigatie
+add-document-form.label.key: Sleutel
+user-management.permissions.quantityValueUnits: Hoeveelheidswaarde-eenheden
+user-management.permissions.recyclebin: Prullenbak
+user-management.permissions.redirects: Doorverwijzingen
+user-management.permissions.seemode: Kijkmodus
+user-management.permissions.selectoptions: Selectieopties
+user-management.permissions.share_configurations: Configuraties delen
+user-management.permissions.objects: Objecten
+user-management.permissions.objectbricks: Object Bricks
+user-management.permissions.notifications_send: Meldingen versturen
+user-management.permissions.notifications: Meldingen
+user-management.permissions.predefined_properties: Vooraf gedefinieerde eigenschappen
+user-management.permissions.perspective_editor: Perspectieveditor
+user-management.permissions.perspective_editor_view_edit: Perspectieveditor weergeven & bewerken
+user-management.permissions.qr_codes: QR-codes
+user-management.permissions.plugins: Plugins
+user-management.permissions.notes_events: Notities & gebeurtenissen
+user-management.permissions.clear_cache: Cache wissen
+user-management.permissions.classificationstore: Classificatieopslag
+user-management.permissions.classes: Klassen
+user-management.permissions.workflow_details: Workflowdetails
+user-management.permissions.users: Gebruikers
+user-management.permissions.website_settings: Website-instellingen
+user-management.permissions.asset_metadata: Assetmetadata
+user-management.permissions.clear_fullpage_cache: Volledige paginacache wissen
+user-management.permissions.clear_temp_files: Tijdelijke bestanden wissen
+user-management.permissions.system_settings: Systeeminstellingen
+user-management.permissions.tags_assignment: Tags toewijzen
+user-management.permissions.tags_configuration: Tagconfiguratie
+user-management.permissions.tags_search: Tags zoeken
+user-management.permissions.thumbnails: Miniaturen
+user-management.permissions.translations: Vertalingen
+user-management.permissions.fieldcollections: Field Collections
+user-management.permissions.emails: E-mails
+user-management.permissions.document_types: Documenttypen
+user-management.permissions.documents: Documenten
+user-management.permissions.dashboards: Dashboards
+user-management.permissions.assets: Assets
+user-management.permissions.system_appearance_settings: Uiterlijk & huisstijl
+user-management.permissions.gdpr_data_extractor: AVG-gegevensextractor
+user-management.permissions.admin_translations: Beheerdervertalingen
+user-management.permissions.application_logging: Toepassingslogger
+user-management.permissions.reports_config: Rapportconfiguratie
+user-management.permissions.reports: Rapporten
+user-management.permissions.gee_job_run_permission: Taakuitvoeringsrecht
+user-management.permissions.gee_see_all_job_runs_permission: Alle taakuitvoeringen zien
+user-management.permissions.glossary: Woordenlijst
+user-management.permissions.google_marketing: Google Marketing
+user-management.permissions.newsletters: Nieuwsbrieven
+user-management.permissions.targeting: Targeting
+user-management.permissions.http_errors: HTTP-fouten
+user-management.permissions.seo_document_editor: SEO-documentredacteur
+user-management.permissions.robots.txt: robots.txt
+user-management.permissions.routes: Routes
+user-management.permissions.word_export: Word exporteren
+user-management.permissions.xliff_import_export: XLIFF importeren/exporteren
+user-management.permissions.bptb_aet_configuration_permission: Alternatieve elementenboomconfiguratie
+user-management.permissions.bptb_bookmark_list_permission: Bladwijzerlijsten
+user-management.permissions.bptb_bookmark_list_share_permission: Bladwijzerlijsten delen
+user-management.permissions.bundle_ecommerce_back-office_order: Back-office - Bestellingen
+user-management.permissions.bundle_ecommerce_pricing_rules: Prijsregels
+user-management.permissions.pcp_general_permission: Pimcore Copilot
+user-management.permissions.pcp_configuration_permission: Pimcore Copilot-configuratie
+user-management.permissions.pcp_job_run_permission: Taakuitvoeringoverzicht
+user-management.permissions.pcp_job_runs_see_all_permission: Alle taakuitvoeringen zien
+user-management.permissions.permission_workflow_designer: Workflow Designer activeren
+user-management.permissions.permission_workflow_designer_place_permissions: Plaatsrechtsconfiguratie toestaan
+user-management.permissions.permission_workflow_designer_trans_notifications: Overgangsmeldingenconfiguratie toestaan
+user-management.permissions.plugin_cmf_perm_activityview: CMF-activiteitsweergave
+user-management.permissions.plugin_cmf_perm_customer_automation_rules: CMF-klantautomatiseringsregels
+user-management.permissions.plugin_cmf_perm_customerview: CMF-klantweergave
+user-management.permissions.plugin_cmf_perm_customerview_admin: CMF-klantfilter-beheerder
+user-management.permissions.plugin_cmf_perm_newsletter_enqueue_all_customers: CMF-nieuwsbrief klanten in wachtrij
+user-management.permissions.plugin_datahub_adapter_dataImporterDataObject: Datahub-adapter - Gegevensobjectimport
+user-management.permissions.plugin_datahub_adapter_fileExport: Datahub-adapter - Bestandsexport
+user-management.permissions.plugin_datahub_adapter_graphql: Datahub-adapter - GraphQL
+user-management.permissions.plugin_datahub_adapter_headlessDocuments: Datahub-adapter - Headless documenten
+user-management.permissions.plugin_datahub_adapter_productsup: Datahub-adapter - Productsup
+user-management.permissions.plugin_datahub_adapter_simpleRest: Datahub-adapter - Simple REST
+user-management.permissions.plugin_datahub_adapter_webhooks: Datahub-adapter - Webhooks
+user-management.permissions.plugin_datahub_admin: Datahub-beheerder
+user-management.permissions.plugin_datahub_config: Datahub-configuratie
+user-management.permissions.plugin_datahub_permission_delete: Datahub verwijderen
+user-management.permissions.plugin_datahub_permission_read: Datahub lezen
+user-management.permissions.plugin_datahub_permission_update: Datahub bijwerken
+user-management.permissions.portal-engine_collection-access: Backend-collectietoegang
+user-management.permissions.portal-engine_index-management: Portaalindexbeheer
+user-management.permissions.portal-engine_wizard: Portaalinstallatiehulp
+user-management.permissions.studio_perspective_editor: Perspectieveditor
+user-management.permissions.studio_perspective_widget_editor: Perspectief-widget-editor
+user-management.permissions.wai_configuration_permission: Automatiserings-blauwdrukkenconfiguratie
+forgot-password-form.username: Voer je gebruikersnaam in en Pimcore stuurt een inloglink naar je e-mailadres
+forgot-password-form.username.placeholder: Gebruikersnaam
+forgot-password-form.reset-password: Wachtwoord herstellen
+forgot-password-form.success-message: Er is een tijdelijke inloglink verstuurd naar je e-mailadres. Controleer je postvak.
+forgot-password-form.back: Terug naar inloggen
+subscription-details.community-edition: Meer informatie over Pimcore-edities
+config_not_writeable: Niet schrijfbaar; dit kan meerdere oorzaken hebben. Zie de documentatie voor details.
+navigation.about: Over
+about.title: Over
+about.platform-version: "Platformversie: {{version}}"
+about.version: "Kernversie: {{version}}"
+about.copyright: © door Pimcore GmbH
+about.buttons.license: Licentie
+about.buttons.contact: Contact
+custom-language.default: Standaard
+login-token-modal.title: Inloggen als deze gebruiker in een andere browser
+login-token-modal.description: De volgende link is een tijdelijke link waarmee je als deze gebruiker in een andere browser kunt inloggen
+login-token-modal.close: Sluiten
+login-token-modal.copy-and-close: Kopiëren & sluiten
+navigation.gdpr-extractor: AVG-gegevensextractor
+widget.gdpr-extractor: AVG-gegevensextractor
+gdpr-extractor.title: AVG-gegevensextractor
+gdpr-extractor.search-form.field.id: ID
+gdpr-extractor.search-form.field.firstname: Voornaam
+gdpr-extractor.search-form.field.lastname: Achternaam
+gdpr-extractor.search-form.field.email: E-mailadres
+gdpr-extractor.search-form.submit: Zoeken
+gdpr-extractor.data-objects.table.field.type: Type
+gdpr-extractor.data-objects.table.field.id: ID
+gdpr-extractor.data-objects.table.field.fullPath: Pad
+gdpr-extractor.data-objects.table.field.className: Klasse
+gdpr-extractor.data-objects.table.actions.export: Gegevensobjectgegevens exporteren
+gdpr-extractor.data-objects.table.actions.open: Gegevensobject openen
+gdpr-extractor.data-objects.table.actions.delete: Gegevensobject verwijderen
+gdpr-extractor.assets.table.field.type: Type
+gdpr-extractor.assets.table.field.id: ID
+gdpr-extractor.assets.table.field.fullPath: Volledig pad
+gdpr-extractor.assets.table.field.subType: Type
+gdpr-extractor.assets.table.actions.export: Assetgegevens exporteren
+gdpr-extractor.assets.table.actions.open: Asset openen
+gdpr-extractor.assets.table.actions.delete: Asset verwijderen
+gdpr-extractor.users.table.field.id: ID
+gdpr-extractor.users.table.field.name: Gebruikersnaam
+gdpr-extractor.users.table.field.firstname: Voornaam
+gdpr-extractor.users.table.field.lastname: Achternaam
+gdpr-extractor.users.table.field.email: E-mail
+gdpr-extractor.users.table.actions.export: Gebruikersgegevens exporteren
+gdpr-extractor.users.table.actions.delete: Gebruiker verwijderen
+gdpr-extractor.table.field.actions: Acties
+gdpr-extractor.emails.table.field.sentDate: Verzenddatum
+gdpr-extractor.emails.table.field.from: Van
+gdpr-extractor.emails.table.field.to: Aan
+gdpr-extractor.emails.table.field.cc: CC
+gdpr-extractor.emails.table.field.bcc: BCC
+gdpr-extractor.emails.table.field.subject: Onderwerp
+gdpr-extractor.emails.table.actions.export: E-mailgegevens exporteren
+gdpr-extractor.emails.table.actions.parameters: Parameters uitvouwen
+gdpr-extractor.emails.table.actions.html: HTML bekijken
+navigation.systemSettings: Systeeminstellingen
+widget.system-settings: Systeeminstellingen
+system-settings.form.field.version-days: Versiegeschiedenis x dagen bewaren
+system-settings.form.field.version-count: Versiegeschiedenis x stappen bewaren
+system-settings.collapse.debug: Debug
+system-settings.form.debug.field.enable-debug: Debug-beheerdervertalingen (omringd door +)
+system-settings.form.debug.field.email-addresses: Debug-e-mailadressen
+system-settings.form.debug.field.email-addresses.placeholder: E-mail invoeren en op Enter drukken...
+system-settings.collapse.localization: Lokalisatie & internationalisatie (l10n/i18n)
+system-settings.form.localization.field.add-language: Taal toevoegen
+system-settings.form.localization.field.fallback-language: Terugvaltalen
+system-settings.form.localization.field.fallback-language-placeholder: Terugvaltalen toevoegen
+system-settings.form.localization.field.default-language: Standaardtaal
+system-settings.form.localization.field.mandatory: Verplichte taal
+system-settings.form.localization.field.delete-language: Taal verwijderen
+system-settings.collapse.website: Website
+system-settings.form.field.main-domain: Hoofddomein
+system-settings.form.field.redirect-to-maindomain: Onbekende domeinen (niet gebruikt voor een site en voor doorverwijzingen, ...) doorsturen naar het hoofddomein (hierboven)
+system-settings.form.field.default-error-page: Foutpagina (standaard)
+system-settings.update.success: Systeeminstellingen succesvol bijgewerkt
+rule-condition.operator.and: EN
+rule-condition.operator.or: OF
+rule-condition.operator.and-not: EN NIET
+rule-condition.add-condition: Voorwaarde toevoegen
+rule-condition.move-up: Omhoog verplaatsen
+rule-condition.move-down: Omlaag verplaatsen
+rule-condition.remove: Verwijderen
+rule-condition.bracket.toggle-left: Linker haakje aan/uit
+rule-condition.bracket.toggle-right: Rechter haakje aan/uit
+rule-condition.validation.brackets-closing-without-opening: Sluitend haakje ')' gevonden zonder bijbehorend openend haakje '('
+rule-condition.validation.brackets-missing-closing: Openend haakje '(' gevonden zonder bijbehorend sluitend haakje ')'
+rule-condition.validation.brackets-invalid: Haakjes zijn niet correct gebalanceerd
+rule-builder.add-action: Actie toevoegen
+rule-builder.add-trigger: Trigger toevoegen
+rule-builder.move-up: Omhoog verplaatsen
+rule-builder.move-down: Omlaag verplaatsen
+rule-builder.remove: Verwijderen
+document-restrictions: Documentbeperkingen
+asset-restrictions: Assetbeperkingen
+object-restrictions: Objectbeperkingen
+display-mode: Weergavemodus
+display-mode-display: Padverwijzing weergeven
+display-mode-inline-search: Inline zoeken
+display-mode-inline-search-unavailable-tooltip: Inline zoeken is alleen beschikbaar wanneer de relatie objecten van precies één klasse toestaat. Een relatie die ook assets, documenten of objectmappen toestaat, gebruikt in plaats daarvan de padverwijzing.
+display-mode-grid-view: Rasterweergave
+display-mode-tag-field: Tagveld
+language-comparison-modal.title: Taalvergelijking
+activate-column-configuration: Kolomconfiguratie activeren
+table-column-configuration: Tabelkolomconfiguratie
+center: Midden
+north: Noord
+south: Zuid
+east: Oost
+west: West
+top: Boven
+left: Links
+right: Rechts
+bottom: Onder
+region: Regio
+icon: Pictogram
+iframe-url: Iframe-URL
+rendering-class: Aangepaste renderklasse
+rendering-data: Gegevens doorgegeven aan renderer
+zoom-level: Zoomniveau
+class: Klasse
+layout.text.help: "Je kunt de volgende opmaak gebruiken (in de bronbewerkingsmodus) om aangepaste waarschuwingen te maken: <br> <pre>&lt;div class=&quot;alert alert-success&quot;&gt;Jouw bericht&lt;/div&gt;</pre>De volgende contextklassen zijn beschikbaar: <pre>alert-primary, alert-secondary, alert-success, alert-danger, alert-warning, alert-info</pre> <pre>Je kunt ook Twig-syntaxis gebruiken:</pre> <pre>Extra gegevens {{data}}</pre>"
+configuration: Configuratie
+drag-object-for-preview: Object slepen voor voorbeeld
+quantity-values.new: Nieuw
+quantity-values.columns.id: ID
+quantity-values.columns.abbreviation: Afkorting
+quantity-values.columns.long-name: Lange naam
+quantity-values.columns.base-unit: Basiseenheid
+quantity-values.columns.factor: Conversiefactor
+quantity-values.columns.conversion-offset: Conversieverrekening
+quantity-values.columns.converter: Converterservice
+quantity-values.columns.actions: Acties
+quantity-values.create-modal.title: Hoeveelheidswaarde-eenheid aanmaken
+quantity-values.create-modal.id-label: Unieke identificatie
+quantity-values.create-modal.id-placeholder: bijv. km, kg, ...
+quantity-values.create-modal.id-required: Unieke identificatie is verplicht
+quantity-values.create-modal.create: Aanmaken
+quantity-values.export: Exporteren
+quantity-values.import: Importeren
+quantity-values.import-modal.title: Hoeveelheidswaarde-eenheden importeren
+quantity-values.search: Zoeken
+owner: Eigenaar
+reverse-object-relation.tooltip: Niet-eigenaarobjecten stellen relaties met een ander object op dezelfde manier voor als eigenaarobjecten. Het verschil is dat een niet-eigenaarsobjectveld niet de eigenaar is van de relatiegegevens, maar slechts een weergave van gegevens die in andere objecten zijn opgeslagen. Kies de eigenaar en veldnaam waar de gegevens oorspronkelijk zijn opgeslagen.
+disabled-fields: Uitgeschakelde velden
+allowed-targets: Toegestane doelen
+bulk-export.title: Bulkexport
+bulk-export.select-all: Alles selecteren
+bulk-export.deselect-all: Alles deselecteren
+bulk-export.export: Exporteren
+bulk-export.cancel: Annuleren
+bulk-export.type.class: Klassen
+bulk-export.type.customlayout: Custom Layouts
+bulk-export.type.fieldcollection: Field Collections
+bulk-export.type.objectbrick: Object Bricks
+bulk-import.title: Bulkimport
+bulk-import.cancel: Annuleren
+bulk-import.next: Volgende
+bulk-import.back: Terug
+bulk-import.import: Importeren
+bulk-import.job-title: Bulkimport
+bulk-import.browse-files: Bestanden bladeren
+bulk-import.remove-file: Verwijderen
+bulk-import.select-all: Alles selecteren
+bulk-import.deselect-all: Alles deselecteren
+bulk-import.type.class: Klassen
+bulk-import.type.customlayout: Custom Layouts
+bulk-import.type.fieldcollection: Field Collections
+bulk-import.type.objectbrick: Object Bricks
+translations.toolbar.export: CSV exporteren
+translations.toolbar.import: Importeren
+translations.toolbar.cleanup: Opschonen
+translations.import.modal.title: Vertalingen importeren
+translations.import.modal.browse: Bestanden bladeren
+translations.import.modal.import: Importeren
+translations.import.modal.drag-drop: Sleep hier een CSV-bestand of zet het neer
+translations.import.modal.invalid-file: Selecteer een geldig CSV-bestand
+translations.import.modal.csv-settings: CSV-instellingen
+translations.import.modal.delimiter: Scheidingsteken
+translations.import.modal.quotechar: Aanhalingsteken
+translations.import.modal.escapechar: Escape-teken
+translations.import.modal.lineterminator: Regelafsluitingsteken
+translations.import.modal.field-required: Dit veld is verplicht
+translations.cleanup.confirm.title: Vertalingen opschonen
+translations.cleanup.confirm.content: Hiermee worden alle ongebruikte vertalingssleutels verwijderd. Deze actie kan niet ongedaan worden gemaakt.
+translations.cleanup.confirm.ok: Opschonen
+translations.import.delta.title: Importresultaten
+translations.import.delta.description: De volgende vertalingen wijken af van de geïmporteerde waarden. Selecteer de vertalingen die je wilt overschrijven met de geïmporteerde waarden.
+translations.import.delta.column.key: Sleutel
+translations.import.delta.column.locale: Locale
+translations.import.delta.column.current: Huidige vertaling
+translations.import.delta.column.imported: Geïmporteerde vertaling
+translations.toolbar.import-merge: Importeren & samenvoegen (CSV)
+translations.import.delta.skip: Overslaan
+translations.import.delta.apply: "Geselecteerde toepassen ({{count}})"
+widget.translation-merger: Vertalingen samenvoegen
+translations.merger.column.locale: Locale
+translations.merger.column.key: Sleutel
+translations.merger.column.csv-value: CSV-waarde
+translations.merger.column.action: Actie
+translations.merger.column.current: Huidige waarde
+translations.merger.column.state: Status
+translations.merger.state.applied: Toegepast
+translations.merger.state.reverted: Teruggezet
+translations.merger.state.pending: In behandeling
+translations.merger.apply-all: Alles toepassen
+translations.merger.revert-all: Alles terugzetten
+translations.merger.title: "Vertalingen samenvoegen (domein: {{domain}})"
+translations.merger.column.language: Taal
+translations.merger.items: items
+select.clear-selection: Selectie wissen
+asset.folder.preview.image-display: Afbeeldingsweergave
+asset.folder.preview.image-display.small: Klein
+asset.folder.preview.image-display.large: Groot
+saved-search.title: Opgeslagen zoekopdracht
+saved-search.delete-search: Zoekopdracht verwijderen
+saved-search.save-as-new: Opslaan als nieuwe zoekopdracht
+saved-search.create-menu-shortcut: Snelkoppeling in menu aanmaken
+saved-search.save.success: Opgeslagen zoekopdracht aangemaakt
+saved-search.saved-searches: Opgeslagen zoekopdrachten
+saved-search.ownership: Eigendom
+saved-search.ownership.own: Eigen
+saved-search.ownership.shared: Met mij gedeeld
+saved-search.open: Openen
+saved-search.delete.title: Opgeslagen zoekopdracht verwijderen
+saved-search.delete.confirm: Weet je zeker dat je deze opgeslagen zoekopdracht wilt verwijderen?
+saved-search.update: Zoekopdracht bijwerken
+saved-search.clone: Zoekopdracht klonen
+saved-search.update.success: Opgeslagen zoekopdracht bijgewerkt
+saved-search.delete.success: Opgeslagen zoekopdracht verwijderd
+saved-search.shared-modified.info: Je hebt wijzigingen aangebracht in de oorspronkelijke configuratie. Omdat deze van iemand anders is, kun je deze opslaan als nieuwe zoekopdracht.
+saved-search.menu-shortcut-group: Menugroep
