@@ -56,7 +56,6 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
       <ul
         className='tree-list'
         data-testid={ `tree-list-${node.id}` }
-        role="group"
         style={ { listStyle: 'none', margin: 0, padding: 0 } }
       >
         {childrenIds.map((childId) => (
