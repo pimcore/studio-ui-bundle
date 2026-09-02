@@ -19,7 +19,7 @@ import { Tooltip } from '../tooltip/tooltip'
 import useElementOverflow from '../../utils/use-element-overflow'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
-import { useSearchOptional } from '@Pimcore/modules/search/provider/use-search'
+import { useElementOpenBehavior } from '@Pimcore/modules/element/providers/element-open-behavior/element-open-behavior-provider'
 
 export interface ElementTagProps extends Omit<TagProps, 'id' | 'children'> {
   path: string
@@ -34,7 +34,7 @@ export interface ElementTagProps extends Omit<TagProps, 'id' | 'children'> {
 
 export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, published, disabled, onClose, inline = false, pathIsHtml = false, ...props }) => {
   const { openElement } = useElementHelper()
-  const search = useSearchOptional()
+  const { onElementOpen } = useElementOpenBehavior()
   const { styles } = useStyles()
   const textRef = useRef<HTMLSpanElement>(null)
   const isOverflow = useElementOverflow(textRef)
@@ -45,8 +45,8 @@ export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, p
 
   const onClick = async (): Promise<void> => {
     if (isClickable) {
-      // Close an enclosing search, if any, so the opened element does not end up behind its modal.
-      search?.close()
+      // Let the surrounding UI react to the navigation before the element is opened.
+      onElementOpen()
 
       await openElement({
         type: elementType,

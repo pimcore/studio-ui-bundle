@@ -26,6 +26,8 @@ import { DefaultView } from './view/view-layer/views/default-view'
 import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '@Pimcore/modules/element/listing/decorators/type-filter/type-filter-decorator'
 import { OpenElementDecorator, type OpenElementDecoratorConfig } from './decorator/open-element/open-element-decorator'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { ElementOpenBehaviorProvider } from '@Pimcore/modules/element/providers/element-open-behavior/element-open-behavior-provider'
+import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 
 const defaultProps = {
   ...listingDefaultProps,
@@ -50,16 +52,20 @@ const listingProps = compose<AbstractDecoratorProps>(
 /* eslint-enable @typescript-eslint/consistent-type-assertions */
 
 export const DocumentSearchListing = (): React.JSX.Element => {
+  const { close } = useSearch()
+
   return (
-    <DynamicTypeRegistryProvider serviceIds={ [
-      'DynamicTypes/GridCellRegistry',
-      'DynamicTypes/ListingRegistry',
-      'DynamicTypes/FieldFilterRegistry'
-    ] }
-    >
-      <ListingContainer
-        { ...listingProps }
-      />
-    </DynamicTypeRegistryProvider>
+    <ElementOpenBehaviorProvider onElementOpen={ close }>
+      <DynamicTypeRegistryProvider serviceIds={ [
+        'DynamicTypes/GridCellRegistry',
+        'DynamicTypes/ListingRegistry',
+        'DynamicTypes/FieldFilterRegistry'
+      ] }
+      >
+        <ListingContainer
+          { ...listingProps }
+        />
+      </DynamicTypeRegistryProvider>
+    </ElementOpenBehaviorProvider>
   )
 }

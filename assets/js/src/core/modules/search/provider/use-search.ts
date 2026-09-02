@@ -9,7 +9,7 @@
  */
 
 import { useContext } from 'react'
-import { SearchContext, type SearchContextData } from './search-provider'
+import { SearchContext } from './search-provider'
 import { type SavedSearchDetailedConfiguration } from '../search-api-slice.gen'
 
 export interface UseSearchReturn {
@@ -24,7 +24,13 @@ export interface UseSearchReturn {
   setLoadedSavedSearch: (configuration: SavedSearchDetailedConfiguration | undefined) => void
 }
 
-const createSearchApi = (context: SearchContextData): UseSearchReturn => {
+export const useSearch = (): UseSearchReturn => {
+  const context = useContext(SearchContext)
+
+  if (context === undefined) {
+    throw new Error('useSearch must be used within a SearchProvider')
+  }
+
   const open: UseSearchReturn['open'] = (key?: string) => {
     if (key !== undefined) {
       context.setActiveKey(key)
@@ -47,28 +53,4 @@ const createSearchApi = (context: SearchContextData): UseSearchReturn => {
     loadedSavedSearch: context.loadedSavedSearch,
     setLoadedSavedSearch: context.setLoadedSavedSearch
   }
-}
-
-export const useSearch = (): UseSearchReturn => {
-  const context = useContext(SearchContext)
-
-  if (context === undefined) {
-    throw new Error('useSearch must be used within a SearchProvider')
-  }
-
-  return createSearchApi(context)
-}
-
-/**
- * Same as useSearch, but returns undefined instead of throwing when there is no SearchProvider
- * above. Use it in generic components that may be rendered either inside or outside the search.
- */
-export const useSearchOptional = (): UseSearchReturn | undefined => {
-  const context = useContext(SearchContext)
-
-  if (context === undefined) {
-    return undefined
-  }
-
-  return createSearchApi(context)
 }
