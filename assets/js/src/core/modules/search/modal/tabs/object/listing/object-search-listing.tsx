@@ -29,7 +29,7 @@ import { ColumnConfigurationDecorator } from './decorator/column-configuration/c
 import { SavedSearchDecorator, type SavedSearchDecoratorConfig } from '@Pimcore/modules/search/saved-search/saved-search-decorator'
 import { useDataObjectColumnMapper } from '@Pimcore/modules/data-object/listing/column-mapper/use-column-mapper'
 import { LanguageSelectionProvider } from '@Pimcore/components/language-selection/provider/language-selection-provider'
-import { ElementOpenBehaviorProvider } from '@Pimcore/modules/element/providers/element-open-behavior/element-open-behavior-provider'
+import { ElementClickBehaviorProvider } from '@Pimcore/modules/element/providers/element-click-behavior/element-click-behavior-provider'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 
 const defaultProps = {
@@ -60,7 +60,7 @@ export const ObjectSearchListing = (): React.JSX.Element => {
   const { close } = useSearch()
 
   return (
-    <ElementOpenBehaviorProvider onElementOpen={ close }>
+    <ElementClickBehaviorProvider onElementClick={ close }>
       <LanguageSelectionProvider>
         <DynamicTypeRegistryProvider serviceIds={ [
           'DynamicTypes/GridCellRegistry',
@@ -74,6 +74,6 @@ export const ObjectSearchListing = (): React.JSX.Element => {
           />
         </DynamicTypeRegistryProvider>
       </LanguageSelectionProvider>
-    </ElementOpenBehaviorProvider>
+    </ElementClickBehaviorProvider>
   )
 }

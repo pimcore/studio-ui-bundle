@@ -19,7 +19,7 @@ import { Tooltip } from '../tooltip/tooltip'
 import useElementOverflow from '../../utils/use-element-overflow'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
-import { useElementOpenBehavior } from '@Pimcore/modules/element/providers/element-open-behavior/element-open-behavior-provider'
+import { useElementClickBehavior } from '@Pimcore/modules/element/providers/element-click-behavior/element-click-behavior-provider'
 
 export interface ElementTagProps extends Omit<TagProps, 'id' | 'children'> {
   path: string
@@ -34,7 +34,7 @@ export interface ElementTagProps extends Omit<TagProps, 'id' | 'children'> {
 
 export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, published, disabled, onClose, inline = false, pathIsHtml = false, ...props }) => {
   const { openElement } = useElementHelper()
-  const { onElementOpen } = useElementOpenBehavior()
+  const { onElementClick } = useElementClickBehavior()
   const { styles } = useStyles()
   const textRef = useRef<HTMLSpanElement>(null)
   const isOverflow = useElementOverflow(textRef)
@@ -45,13 +45,12 @@ export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, p
 
   const onClick = async (): Promise<void> => {
     if (isClickable) {
-      // Let the surrounding UI react to the navigation before the element is opened.
-      onElementOpen()
-
       await openElement({
         type: elementType,
         id
       })
+
+      onElementClick()
     }
   }
 

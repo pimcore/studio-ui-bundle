@@ -26,7 +26,7 @@ import { DefaultView } from './view/view-layer/views/default-view'
 import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '@Pimcore/modules/element/listing/decorators/type-filter/type-filter-decorator'
 import { OpenElementDecorator, type OpenElementDecoratorConfig } from './decorator/open-element/open-element-decorator'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
-import { ElementOpenBehaviorProvider } from '@Pimcore/modules/element/providers/element-open-behavior/element-open-behavior-provider'
+import { ElementClickBehaviorProvider } from '@Pimcore/modules/element/providers/element-click-behavior/element-click-behavior-provider'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 
 const defaultProps = {
@@ -55,7 +55,7 @@ export const DocumentSearchListing = (): React.JSX.Element => {
   const { close } = useSearch()
 
   return (
-    <ElementOpenBehaviorProvider onElementOpen={ close }>
+    <ElementClickBehaviorProvider onElementClick={ close }>
       <DynamicTypeRegistryProvider serviceIds={ [
         'DynamicTypes/GridCellRegistry',
         'DynamicTypes/ListingRegistry',
@@ -66,6 +66,6 @@ export const DocumentSearchListing = (): React.JSX.Element => {
           { ...listingProps }
         />
       </DynamicTypeRegistryProvider>
-    </ElementOpenBehaviorProvider>
+    </ElementClickBehaviorProvider>
   )
 }
