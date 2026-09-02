@@ -15,11 +15,15 @@ import { Split } from '@Pimcore/components/split/split'
 import { Refetch } from '@Pimcore/modules/element/listing/abstract/view-layer/components/refetch/refetch'
 import { Pagination } from '@Pimcore/modules/element/listing/decorators/paging/pagination/pagination'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 
 export const Toolbar = (): React.JSX.Element => {
+  const { loadedSavedSearch } = useSearch()
+  const isSavedSearchWidget = loadedSavedSearch !== undefined
+
   return (
     <BaseToolbar
-      padding={ { right: 'none', left: 'none' } }
+      padding={ isSavedSearchWidget ? undefined : { right: 'none', left: 'none' } }
       theme='secondary'
     >
       <Flex
@@ -29,6 +33,9 @@ export const Toolbar = (): React.JSX.Element => {
       >
         <Split size='extra-small'>
           <RowSelectionTotal />
+        </Split>
+
+        <Split size='extra-small'>
           <Refetch />
           <Pagination />
         </Split>

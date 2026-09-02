@@ -24,6 +24,7 @@ export const Toolbar = (): React.JSX.Element => {
 
   return (
     <BaseToolbar
+      padding={ isSavedSearchWidget ? undefined : { right: 'none', left: 'none' } }
       theme='secondary'
     >
       <Flex
