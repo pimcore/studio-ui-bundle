@@ -25,7 +25,7 @@ export interface CreateHostOptions {
    * curated installer that binds ONLY what it needs. Omit it (e.g. a shell) to
    * install nothing — deliberately NOT the full admin service graph, so a local
    * build stays slim. For the full admin set, import `installCoreServices` from
-   * `@pimcore/studio-kit/services` and pass it here.
+   * `@pimcore/portal-ui-kit/services` and pass it here.
    */
   installServices?: (container: Container) => void
 }
