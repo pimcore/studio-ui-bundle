@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ReactElement, useState, createContext, useContext } from 'react'
+import React, { type ReactElement, useState, useEffect, useRef, createContext, useContext } from 'react'
 import { Dropdown } from 'antd'
 import { DropdownHeightProvider } from '@Pimcore/components/dropdown/dropdown-height-provider'
 
@@ -35,10 +35,22 @@ export interface ContextMenuWrapperProps {
 
 export const ContextMenuWrapper = ({ children, renderMenu, calculateAutoHeight = true }: ContextMenuWrapperProps): React.JSX.Element => {
   const [open, setOpen] = useState(false)
+  const openedViaKeyboard = useRef(false)
 
   const closeMenu = (): void => {
     setOpen(false)
   }
+
+  // When opened via keyboard, focus the first menu item so arrow keys work.
+  useEffect(() => {
+    if (open && openedViaKeyboard.current) {
+      openedViaKeyboard.current = false
+      requestAnimationFrame(() => {
+        const menuItem = document.querySelector<HTMLElement>('.ant-dropdown:not(.ant-dropdown-hidden) .ant-dropdown-menu-item')
+        menuItem?.focus()
+      })
+    }
+  }, [open])
 
   const handleContextMenu = (event: React.MouseEvent): void => {
     event.stopPropagation()
@@ -48,6 +60,7 @@ export const ContextMenuWrapper = ({ children, renderMenu, calculateAutoHeight =
     if (event.key === 'F10' && event.shiftKey) {
       event.preventDefault()
       event.stopPropagation()
+      openedViaKeyboard.current = true
       setOpen(true)
     }
   }
