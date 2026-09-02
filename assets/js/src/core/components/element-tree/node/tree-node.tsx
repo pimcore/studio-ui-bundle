@@ -9,9 +9,9 @@
  */
 
 import { Flex } from 'antd'
-import React, { forwardRef, type KeyboardEvent, type MouseEvent, type MutableRefObject, useContext, useEffect } from 'react'
+import React, { forwardRef, type MouseEvent, type MutableRefObject, useContext, useEffect } from 'react'
 import { useStyles } from './tree-node.styles'
-import { type INodeRef, TreeContext } from '../element-tree'
+import { TreeContext } from '../element-tree'
 import { TreeList } from '../list/tree-list'
 import { TreeExpander } from '../expander/tree-expander'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
@@ -153,13 +153,6 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     }
   }
 
-  /** All focusable tree node elements in the tree container, in visual DOM order. */
-  function getVisibleNodes (from: HTMLElement): HTMLElement[] {
-    const tree = from.closest('.tree')
-    if (isNil(tree)) return []
-    return Array.from(tree.querySelectorAll<HTMLElement>('.tree-node__content-inner'))
-  }
-
   function onKeyDown (event: React.KeyboardEvent): void {
     const current = event.currentTarget as HTMLElement
 
@@ -196,22 +189,6 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     }
   }
 
-  function moveFocus (current: HTMLElement, offset: number | 'first' | 'last'): void {
-    const nodes = getVisibleNodes(current)
-    const idx = nodes.indexOf(current)
-    if (idx === -1) return
-    const target = offset === 'first' ? 0 : offset === 'last' ? nodes.length - 1 : idx + offset
-    if (target >= 0 && target < nodes.length) { nodes[target].focus() }
-  }
-
-  function moveFocusToParent (current: HTMLElement): void {
-    // DOM path: .tree-node__content-inner → … → .tree-node → .tree-list → .tree-node (parent)
-    // The parent .tree-node contains the .tree-list that holds our .tree-node.
-    const ownTreeNode = current.closest('.tree-node')
-    const parentTreeNode = ownTreeNode?.parentElement?.closest('.tree-node')
-    const parentInner = parentTreeNode?.querySelector<HTMLElement>('.tree-node__content-inner')
-    parentInner?.focus()
-  }
 
   function setRef (el: HTMLElement): void {
     nodesRefs!.current[internalKey] = { el, node: treeNodeProps }
@@ -286,3 +263,25 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
 })
 
 export { TreeNode }
+
+/** All focusable tree node elements in the tree container, in visual DOM order. */
+function getVisibleNodes (from: HTMLElement): HTMLElement[] {
+  const tree = from.closest('.tree')
+  if (isNil(tree)) return []
+  return Array.from(tree.querySelectorAll<HTMLElement>('.tree-node__content-inner'))
+}
+
+function moveFocus (current: HTMLElement, offset: number | 'first' | 'last'): void {
+  const nodes = getVisibleNodes(current)
+  const idx = nodes.indexOf(current)
+  if (idx === -1) return
+  const target = offset === 'first' ? 0 : offset === 'last' ? nodes.length - 1 : idx + offset
+  if (target >= 0 && target < nodes.length) { nodes[target].focus() }
+}
+
+function moveFocusToParent (current: HTMLElement): void {
+  const ownTreeNode = current.closest('.tree-node')
+  const parentTreeNode = ownTreeNode?.parentElement?.closest('.tree-node')
+  const parentInner = parentTreeNode?.querySelector<HTMLElement>('.tree-node__content-inner')
+  parentInner?.focus()
+}
