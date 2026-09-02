@@ -164,8 +164,15 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
           </div>
         </div>
 
+        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
         <div
           className={ `sidebar__content sidebar__content--sizing-${sizing} ` + (isExpanded ? 'expanded' : '') }
+          onKeyDown={ (event) => {
+            if (event.key === 'Escape' && isExpanded) {
+              event.stopPropagation()
+              setActiveTab('')
+            }
+          } }
           ref={ contentRef }
           style={ isNil(contentWidth) ? undefined : { width: contentWidth } }
         >
