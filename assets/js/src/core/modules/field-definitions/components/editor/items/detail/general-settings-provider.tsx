@@ -9,7 +9,7 @@
  */
 
 import { isEqual } from 'lodash'
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
 export type GeneralSettings = Record<string, unknown>
 
@@ -26,9 +26,25 @@ export interface IGeneralSettingsProviderProps {
 }
 
 export const GeneralSettingsProvider = (props: IGeneralSettingsProviderProps): React.JSX.Element => {
-  const [generalSettings, setGeneralSettings] = useState<GeneralSettings | undefined>(props.generalSettings)
+  const [generalSettings, setGeneralSettings] = useState<GeneralSettings | undefined>(undefined)
+  // Matches LayoutProvider's pattern (layout-provider-factory.tsx): initialize
+  // once from props, then ignore further prop changes (e.g. a post-save
+  // refetch) so they can't clobber an in-progress edit. The parent's keyed
+  // remount (layoutKey) is the only mechanism that re-syncs from the server.
+  const isInitializedRef = useRef(false)
 
   useEffect(() => {
+    if (props.generalSettings === undefined) {
+      isInitializedRef.current = false
+      setGeneralSettings(undefined)
+      return
+    }
+
+    if (isInitializedRef.current) {
+      return
+    }
+
+    isInitializedRef.current = true
     setGeneralSettings(props.generalSettings)
   }, [props.generalSettings])
 
@@ -43,8 +59,8 @@ export const GeneralSettingsProvider = (props: IGeneralSettingsProviderProps): R
     /* eslint-enable  @typescript-eslint/consistent-type-assertions */
   }
 
-  // The server data (props) is the clean baseline; after a save the query
-  // refetches and the sync effect above converges the state back to it.
+  // The server data (props) is the clean baseline; after a save the parent's
+  // keyed remount re-initializes state to it (see the effect above).
   const getIsDirty = (): boolean => {
     return !isEqual(generalSettings ?? {}, props.generalSettings ?? {})
   }
