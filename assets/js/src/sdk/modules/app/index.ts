@@ -29,6 +29,7 @@ export * from '@Pimcore/modules/app/hook/use-date-converter'
 export * from '@Pimcore/modules/app/modal-holder/use-modal-holder'
 
 export * from '@Pimcore/modules/app/settings/hooks/use-settings'
+export { isBundleActive } from '@Pimcore/modules/app/settings/active-bundles-helper'
 
 export * from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-registry'
 export * from '@Pimcore/modules/app/base-layout/main-nav/hooks/use-main-nav'
