@@ -194,6 +194,7 @@ export const McpServerEditor = ({
           onShareGlobalChange={ setShareGlobal }
           onSharedRolesChange={ setSharedRoles }
           onSharedUsersChange={ setSharedUsers }
+          ownerName={ server?.owner ?? null }
           shareGlobal={ shareGlobal }
           sharedRoles={ sharedRoles }
           sharedUsers={ sharedUsers }

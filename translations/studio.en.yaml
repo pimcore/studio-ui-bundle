@@ -660,14 +660,15 @@ mcp-servers.editor.url: Server URL
 mcp-servers.editor.connect-hint: Point your MCP client at this URL and authenticate with your Pimcore account.
 mcp-servers.sharing.title: Sharing
 mcp-servers.sharing.share-globally: Share globally
-mcp-servers.sharing.share-globally-tooltip: Any authenticated user may read/use it
+mcp-servers.sharing.share-globally-tooltip: Any authenticated user gets Config Read and MCP Server Access (not Config Edit)
 mcp-servers.sharing.users: Users
 mcp-servers.sharing.roles: Roles
 mcp-servers.sharing.add-user: Add a user…
 mcp-servers.sharing.add-role: Add a role…
 mcp-servers.sharing.name: Name
-mcp-servers.sharing.can-access: Can access
-mcp-servers.sharing.can-edit: Can edit
+mcp-servers.sharing.config-read: Config Read
+mcp-servers.sharing.config-edit: Config Edit
+mcp-servers.sharing.mcp-access: MCP Server Access
 mcp-servers.sharing.level: Access level
 mcp-servers.sharing.read: Read
 mcp-servers.sharing.write: Can edit

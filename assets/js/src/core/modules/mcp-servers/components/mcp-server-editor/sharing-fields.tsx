@@ -33,6 +33,8 @@ interface SharingGridProps {
   onChange: (value: McpServerAccessGrant[]) => void
   disabled: boolean
   addPlaceholder: string
+  /** Owner username (users grid only). The owner always has Config Read + Edit. */
+  ownerName?: string | null
 }
 
 const SharingGrid = ({
@@ -40,9 +42,16 @@ const SharingGrid = ({
   value,
   onChange,
   disabled,
-  addPlaceholder
+  addPlaceholder,
+  ownerName
 }: SharingGridProps): React.JSX.Element => {
   const { t } = useTranslation()
+
+  // The owner has implicit Config Read + Config Edit (the backend grants them
+  // regardless of the stored flags), so those two are shown locked-on and only
+  // MCP Server Access is meaningful to toggle for the owner's own row.
+  const isPrivileged = (grant: McpServerAccessGrant): boolean =>
+    !isNil(ownerName) && grant.name === ownerName
 
   const columns = useMemo(() => {
     const columnHelper = createColumnHelper<McpServerAccessGrant>()
@@ -56,32 +65,35 @@ const SharingGrid = ({
         size: 240,
         meta: { editable: false, autoWidth: true }
       }),
-      // Two independent booleans mirroring the Agent bundle's run/update grid:
-      // "Can access" lets the grantee connect a client, "Can edit" lets them
-      // change the configuration. Both are real fields on the grant, so the
-      // grid writes them straight through onChange (no cell-data translation).
-      columnHelper.accessor('canAccess', {
-        header: t('mcp-servers.sharing.can-access'),
-        size: 120,
+      // Three independent capabilities per grant (issue #1452), in the order the
+      // spec lists them. Each is a real boolean field, so the grid writes it
+      // straight through onChange. Config Read is forced on (and its box disabled)
+      // whenever Edit is set — you cannot edit a config you cannot read.
+      columnHelper.accessor('canRead', {
+        header: t('mcp-servers.sharing.config-read'),
+        size: 130,
         meta: {
           type: 'checkbox',
-          editable: !disabled,
-          config: {
-            align: 'center',
-            disabled
-          }
+          editable: (row: McpServerAccessGrant) => !disabled && !row.canEdit && !isPrivileged(row),
+          config: { align: 'center' }
         }
       }),
       columnHelper.accessor('canEdit', {
-        header: t('mcp-servers.sharing.can-edit'),
-        size: 120,
+        header: t('mcp-servers.sharing.config-edit'),
+        size: 130,
+        meta: {
+          type: 'checkbox',
+          editable: (row: McpServerAccessGrant) => !disabled && !isPrivileged(row),
+          config: { align: 'center' }
+        }
+      }),
+      columnHelper.accessor('canAccess', {
+        header: t('mcp-servers.sharing.mcp-access'),
+        size: 170,
         meta: {
           type: 'checkbox',
           editable: !disabled,
-          config: {
-            align: 'center',
-            disabled
-          }
+          config: { align: 'center' }
         }
       }),
       columnHelper.display({
@@ -109,7 +121,7 @@ const SharingGrid = ({
         )
       })
     ]
-  }, [t, disabled, value, onChange])
+  }, [t, disabled, value, onChange, ownerName])
 
   const options = useMemo(() => {
     const taken = new Set(value.map((grant) => grant.name))
@@ -118,12 +130,23 @@ const SharingGrid = ({
       .map((name) => ({ label: name, value: name }))
   }, [candidateNames, value])
 
+  // Keep every row self-consistent: the owner always has Config Read + Edit, and
+  // no one may have Edit without Read. Applied to both the rendered rows and every
+  // change, so the (disabled) boxes show ticked and never persist a nonsense state.
+  const normalize = (grants: McpServerAccessGrant[]): McpServerAccessGrant[] =>
+    grants.map((grant) => {
+      if (isPrivileged(grant)) {
+        return grant.canRead && grant.canEdit ? grant : { ...grant, canRead: true, canEdit: true }
+      }
+      return grant.canEdit && !grant.canRead ? { ...grant, canRead: true } : grant
+    })
+
   return (
     <OperationalGrid
       autoWidth
       columns={ columns }
-      onChange={ (next) => { onChange(next as McpServerAccessGrant[]) } }
-      value={ value }
+      onChange={ (next) => { onChange(normalize(next as McpServerAccessGrant[])) } }
+      value={ normalize(value) }
     >
       {!disabled && (
         <OperationalGrid.Operations>
@@ -131,7 +154,8 @@ const SharingGrid = ({
             <Select
               onChange={ (name: string) => {
                 if (!isNil(name) && name !== '') {
-                  operations.addRow({ name, canAccess: true, canEdit: false })
+                  // New grant starts read-only; Edit and Access are opt-in.
+                  operations.addRow({ name, canRead: true, canAccess: false, canEdit: false })
                 }
               } }
               options={ options }
@@ -157,6 +181,8 @@ interface SharingFieldsProps {
   sharedRoles: McpServerAccessGrant[]
   onSharedRolesChange: (value: McpServerAccessGrant[]) => void
   disabled: boolean
+  /** Owner username, so the owner's own user row shows Read/Edit locked-on. */
+  ownerName?: string | null
 }
 
 export const SharingFields = ({
@@ -166,7 +192,8 @@ export const SharingFields = ({
   onSharedUsersChange,
   sharedRoles,
   onSharedRolesChange,
-  disabled
+  disabled,
+  ownerName
 }: SharingFieldsProps): React.JSX.Element => {
   const { t } = useTranslation()
 
@@ -220,6 +247,7 @@ export const SharingFields = ({
             candidateNames={ userNames }
             disabled={ disabled }
             onChange={ onSharedUsersChange }
+            ownerName={ ownerName }
             value={ sharedUsers }
           />
 
