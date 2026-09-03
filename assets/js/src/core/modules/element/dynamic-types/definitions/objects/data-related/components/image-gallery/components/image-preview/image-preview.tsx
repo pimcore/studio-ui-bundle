@@ -48,9 +48,10 @@ interface ImageGalleryImagePreviewProps {
   ratioY?: number
   predefinedDataTemplates?: DataTemplates | string | null
   uploadPath?: string
+  searchPath?: string
 }
 
-export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue, setValue, disabled, width, height, ratioX, ratioY, predefinedDataTemplates, uploadPath }: ImageGalleryImagePreviewProps): React.JSX.Element => {
+export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue, setValue, disabled, width, height, ratioX, ratioY, predefinedDataTemplates, uploadPath, searchPath }: ImageGalleryImagePreviewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const token = useTheme()
   const { openAsset } = useAssetHelper()
@@ -89,7 +90,8 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
     },
     config: {
       assets: {
-        allowedTypes: ['image']
+        allowedTypes: ['image'],
+        searchPath
       }
     },
     onFinish: (event) => {
@@ -144,10 +146,7 @@ export const ImageGalleryImagePreview = ({ item, index, value, setInternalValue,
 
   const handleOpenCropModal = (): void => {
     if (!isNil(item.image?.id)) {
-      openCropModal(
-        item.image.id,
-        item.crop
-      )
+      openCropModal(item.image.id, item.crop)
     }
   }
   const handleOpenHotspotMarkersModal = (): void => {

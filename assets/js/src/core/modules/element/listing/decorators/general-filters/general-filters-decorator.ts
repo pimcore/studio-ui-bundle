@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { type FilterValues } from '@Pimcore/components/filters'
 import { type AbstractDecorator } from '../abstract-decorator'
 import { withGeneralFiltersContext } from './context-layer/with-tag-filter-context'
 import { withGeneralFiltersQueryArg } from './data-layer/with-general-filters-query-arg'
@@ -16,6 +17,7 @@ import { withGeneralFiltersTab } from './view-layer/components/sidebar/hooks/wit
 export interface GeneralFiltersDecoratorConfig {
   handleSearchTermInSidebar: boolean
   showOnlyUnreferencedFilter?: boolean
+  initialFilters?: FilterValues
 }
 
 export const GeneralFiltersDecorator: AbstractDecorator<GeneralFiltersDecoratorConfig> = (props, config) => {
