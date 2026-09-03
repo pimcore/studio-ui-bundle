@@ -47,7 +47,9 @@ const Component = ({
   const [numberInputText, setNumberInputText] = useState('')
   const [pendingSelection, setPendingSelection] = useState<SelectOptionType | null>(null)
   const allOptions = [...options, ...customOptions]
-  const decimalSeparator = numberInputProps.decimalSeparator ?? getDecimalSeparator(i18n?.language)
+  const decimalSeparator = inputType === 'number'
+    ? numberInputProps.decimalSeparator ?? getDecimalSeparator(i18n?.language)
+    : '.'
 
   // The text currently in the input, which for number inputs is not necessarily the committed value.
   const currentInputText = inputType === 'number' ? numberInputText : newOptionText
