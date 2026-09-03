@@ -19,7 +19,8 @@ import { readElementFilterValues } from '../../../element-filters/use-element-fi
 import { useSearchMode } from '../../../search-modes/use-search-mode'
 import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
-import { SearchModeSelect } from './search-mode-select'
+import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
+import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 
 export interface SearchTermFilterProps {
   /** Called with the term whenever the user commits a search (Enter, search icon, clear). */
@@ -66,24 +67,6 @@ export const SearchTermFilter = ({ onCommit }: SearchTermFilterProps): React.JSX
     onCommit?.(searchTerm)
   }
 
-  function onModeChange (modeId: string): void {
-    if (searchMode === undefined || modeId === searchMode.activeModeId) {
-      return
-    }
-
-    searchMode.setModeId(modeId)
-
-    const targetMode = searchMode.modes.find((mode) => mode.id === modeId)
-    const targetAvailability = targetMode?.getAvailability(searchMode.modeContext)
-    const targetBlocked = targetAvailability !== undefined &&
-      (targetAvailability.blocked || !targetAvailability.available)
-
-    if (!handleSearchTermInSidebar && appliedSearchTerm !== '' && !targetBlocked) {
-      setPage(1)
-      setDataLoadingState('filters-applied')
-    }
-  }
-
   function onChange (event: React.ChangeEvent<HTMLInputElement>): void {
     if (handleSearchTermInSidebar) {
       draftStore?.setValue('searchTerm', event.target.value)
@@ -104,22 +87,12 @@ export const SearchTermFilter = ({ onCommit }: SearchTermFilterProps): React.JSX
     />
   )
 
-  if (searchMode === undefined || searchMode.modes.length === 0) {
-    return searchInput
-  }
-
-  const warning = searchMode.availability?.warning
+  const warning = searchMode?.availability?.warning
 
   return (
     <div className='w-full'>
       <Compact className='w-full'>
-        <SearchModeSelect
-          fulltextLabel={ handleSearchTermInSidebar
-            ? t('listing.search-mode.full-text-short')
-            : t('listing.search-mode.default') }
-          onModeChange={ onModeChange }
-          searchMode={ searchMode }
-        />
+        <SlotRenderer slot={ componentConfig.element.listing.search.slots.prefix.name } />
         {searchInput}
       </Compact>
       {warning !== undefined && (

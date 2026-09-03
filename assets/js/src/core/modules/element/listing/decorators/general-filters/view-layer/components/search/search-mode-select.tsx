@@ -15,21 +15,60 @@ import { Button } from '@Pimcore/components/button/button'
 import { Dropdown, type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Text } from '@Pimcore/components/text/text'
+import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
+import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
+import { useGeneralFiltersConfig } from '../../../context-layer/provider/general-filters-config/use-general-filters-config'
+import { useAppliedFilters } from '../../../element-filters/stores'
+import { readElementFilterValues } from '../../../element-filters/use-element-filter-values'
 import { FULLTEXT_SEARCH_MODE_ID } from '../../../search-modes/constants'
-import { type UseSearchModeReturn } from '../../../search-modes/use-search-mode'
+import { useSearchMode } from '../../../search-modes/use-search-mode'
 import { useStyles } from './search-mode-select.styles'
 
-export interface SearchModeSelectProps {
-  searchMode: UseSearchModeReturn
-  /** Collapsed full-text label variant: the search modal shows "Default", the sidebar "Full text". */
-  fulltextLabel: string
-  onModeChange: (modeId: string) => void
-}
-
-export const SearchModeSelect = ({ searchMode, fulltextLabel, onModeChange }: SearchModeSelectProps): React.JSX.Element => {
+/**
+ * Default entry of the `element.listing.search.slots.prefix` component slot. Self-contained: it
+ * reads the listing context itself (no props), so any other component can occupy the same slot.
+ * Renders nothing when the host listing has no element type or no registered search modes.
+ */
+export const SearchModeSelect = (): React.JSX.Element | null => {
   const { t } = useTranslation()
   const { styles } = useStyles()
+  const { handleSearchTermInSidebar } = useGeneralFiltersConfig()
+  const searchMode = useSearchMode(handleSearchTermInSidebar ? 'draft' : 'applied')
+  const { values } = useAppliedFilters()
+  const { setPage } = usePaging()
+  const { setDataLoadingState } = useData()
+
+  if (searchMode === undefined || searchMode.modes.length === 0) {
+    return null
+  }
+
   const { modes, modeContext, activeModeId, activeMode } = searchMode
+  const appliedSearchTerm = readElementFilterValues(values).searchTerm
+
+  // Collapsed full-text label variant: the search modal shows "Default", the sidebar "Full text".
+  const fulltextLabel = handleSearchTermInSidebar
+    ? t('listing.search-mode.full-text-short')
+    : t('listing.search-mode.default')
+
+  function onModeChange (modeId: string): void {
+    if (searchMode === undefined || modeId === searchMode.activeModeId) {
+      return
+    }
+
+    searchMode.setModeId(modeId)
+
+    const targetMode = searchMode.modes.find((mode) => mode.id === modeId)
+    const targetAvailability = targetMode?.getAvailability(searchMode.modeContext)
+    const targetBlocked = targetAvailability !== undefined &&
+      (targetAvailability.blocked || !targetAvailability.available)
+
+    // Immediate-apply surfaces re-run the applied term under the new mode; blocked targets must
+    // not be submitted. Sidebar surfaces apply on the Apply button instead.
+    if (!handleSearchTermInSidebar && appliedSearchTerm !== '' && !targetBlocked) {
+      setPage(1)
+      setDataLoadingState('filters-applied')
+    }
+  }
 
   const items: ItemType[] = [
     {
