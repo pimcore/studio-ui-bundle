@@ -1302,8 +1302,10 @@ relations.subtype: Untertyp
 relations.classname: Klasse
 relations.fullpath: Vollständiger Pfad
 relations.remove-all.confirm: Möchten Sie wirklich alle Relationen löschen?
+relations.upload.subtype-not-allowed: Hochgeladene Assets, deren Typ diese Relation nicht zulässt, wurden nicht zugewiesen.
 relation: Relation
 items-limit-reached: Die maximale Anzahl von Einträgen ({{maxItems}}) wurde erreicht.
+asset-upload-type-not-allowed: Der Typ des hochgeladenen Assets ist für dieses Feld nicht zulässig.
 actions: Aktionen
 asset: Asset
 data-object: Data Object
@@ -2777,6 +2779,7 @@ quantity-values.export: Export
 quantity-values.import: Import
 quantity-values.import-modal.title: Mengenwert-Einheiten importieren
 quantity-values.search: Suchen
+quantity-values.delete-confirmation: Das Löschen dieser Einheit wirkt sich auf alle verknüpften Elemente aus, die darauf verweisen. Möchten Sie wirklich fortfahren?
 owner: Eigentümer
 reverse-object-relation.tooltip: Nicht-Eigentümer-Objekte stellen Relationen zu einem anderen Objekt auf die gleiche Weise dar wie Objekte. Der Unterschied ist, dass ein Nicht-Eigentümer-Objektfeld nicht der Eigentümer der Relationsdaten ist, sondern lediglich eine Ansicht auf Daten, die in anderen Objekten gespeichert sind. Bitte wählen Sie den Eigentümer und Feldnamen, wo die Daten ursprünglich gespeichert sind.
 disabled-fields: Deaktivierte Felder

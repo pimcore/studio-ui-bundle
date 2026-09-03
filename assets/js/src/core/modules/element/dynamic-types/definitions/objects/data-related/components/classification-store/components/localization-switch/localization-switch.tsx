@@ -15,9 +15,15 @@ import React, { useState } from 'react'
 export interface LocalizationSwitchProps {
   initialValue?: string
   onChange?: (value: string) => void
+  /**
+   * When the user's language permissions exclude the language independent ("default") column, the
+   * option must not be offered at all - otherwise it shows up empty and seemingly editable.
+   */
+  allowLanguageIndependentValue?: boolean
 }
 
 export const LocalizationSwitch = (props: LocalizationSwitchProps): React.JSX.Element => {
+  const { allowLanguageIndependentValue = true } = props
   const { currentLanguage } = useLanguageSelection()
   const [value, setValue] = useState<string>(props.initialValue ?? 'default')
 
@@ -26,19 +32,24 @@ export const LocalizationSwitch = (props: LocalizationSwitchProps): React.JSX.El
     props.onChange?.(value)
   }
 
+  const options = [
+    {
+      value: 'current-language',
+      label: `Current language (${currentLanguage.toUpperCase()})`
+    }
+  ]
+
+  if (allowLanguageIndependentValue) {
+    options.unshift({
+      value: 'default',
+      label: 'Default'
+    })
+  }
+
   return (
     <Segmented
       onChange={ onChange }
-      options={ [
-        {
-          value: 'default',
-          label: 'Default'
-        },
-        {
-          value: 'current-language',
-          label: `Current language (${currentLanguage.toUpperCase()})`
-        }
-      ] }
+      options={ options }
       value={ value }
     />
   )
