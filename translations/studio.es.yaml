@@ -428,6 +428,8 @@ aria.login-form-additional-logins.additional-login-provider: "Proveedor de inici
 aria.login-form-additional-logins.remember-me-checkbox: Casilla de recordarme
 oauth.consent.title: Autorizar acceso
 oauth.consent.subtitle: "{{client}} desea acceder a Pimcore en su nombre."
+oauth.consent.unverified: Esta aplicación se registró por sí misma y no está verificada. Continúe solo si inició esto desde la aplicación en la que confía.
+oauth.consent.redirect-to: "Después de permitirlo, será redirigido a {{host}}"
 oauth.consent.permissions-heading: "Esto le permitirá:"
 oauth.consent.no-scopes: No se solicitaron permisos específicos.
 oauth.consent.signed-in-as: "Sesión iniciada como {{username}}"

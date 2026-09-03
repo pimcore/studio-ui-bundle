@@ -428,6 +428,8 @@ aria.login-form-additional-logins.additional-login-provider: "Zusätzlicher Logi
 aria.login-form-additional-logins.remember-me-checkbox: Angemeldet-bleiben-Kontrollkästchen
 oauth.consent.title: Zugriff autorisieren
 oauth.consent.subtitle: "{{client}} möchte als Sie auf Pimcore zugreifen."
+oauth.consent.unverified: Diese Anwendung hat sich selbst registriert und ist nicht verifiziert. Fahren Sie nur fort, wenn Sie dies von der Anwendung aus gestartet haben, der Sie vertrauen.
+oauth.consent.redirect-to: "Nach Ihrer Zustimmung werden Sie zu {{host}} weitergeleitet"
 oauth.consent.permissions-heading: "Dies ermöglicht Folgendes:"
 oauth.consent.no-scopes: Es wurden keine spezifischen Berechtigungen angefordert.
 oauth.consent.signed-in-as: "Angemeldet als {{username}}"

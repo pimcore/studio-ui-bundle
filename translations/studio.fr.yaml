@@ -428,6 +428,8 @@ aria.login-form-additional-logins.additional-login-provider: "Fournisseur de con
 aria.login-form-additional-logins.remember-me-checkbox: Case à cocher Se souvenir de moi
 oauth.consent.title: Autoriser l'accès
 oauth.consent.subtitle: "{{client}} souhaite accéder à Pimcore en tant que vous."
+oauth.consent.unverified: Cette application s'est enregistrée elle-même et n'est pas vérifiée. Ne continuez que si vous avez démarré cette action depuis l'application à laquelle vous faites confiance.
+oauth.consent.redirect-to: "Après avoir autorisé, vous serez redirigé vers {{host}}"
 oauth.consent.permissions-heading: "Cela lui permettra de:"
 oauth.consent.no-scopes: Aucune autorisation spécifique n'a été demandée.
 oauth.consent.signed-in-as: "Connecté en tant que {{username}}"

@@ -428,6 +428,8 @@ aria.login-form-additional-logins.additional-login-provider: "Ytterligare inlogg
 aria.login-form-additional-logins.remember-me-checkbox: Kom ihåg mig-kryssruta
 oauth.consent.title: Auktorisera åtkomst
 oauth.consent.subtitle: "{{client}} vill komma åt Pimcore som du."
+oauth.consent.unverified: Den här applikationen registrerade sig själv och är overifierad. Fortsätt endast om du startade detta från applikationen du litar på.
+oauth.consent.redirect-to: "Efter att du tillåter detta skickas du till {{host}}"
 oauth.consent.permissions-heading: "Detta ger den möjlighet att:"
 oauth.consent.no-scopes: Inga specifika behörigheter begärdes.
 oauth.consent.signed-in-as: "Inloggad som {{username}}"

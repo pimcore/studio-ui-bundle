@@ -428,6 +428,8 @@ aria.login-form-additional-logins.additional-login-provider: "Ekstra innloggings
 aria.login-form-additional-logins.remember-me-checkbox: Husk meg-avkrysningsboks
 oauth.consent.title: Autoriser tilgang
 oauth.consent.subtitle: "{{client}} vil ha tilgang til Pimcore som deg."
+oauth.consent.unverified: Denne applikasjonen registrerte seg selv og er ikke verifisert. Fortsett bare hvis du startet dette fra applikasjonen du stoler på.
+oauth.consent.redirect-to: "Etter at du godkjenner, blir du sendt til {{host}}"
 oauth.consent.permissions-heading: "Dette vil gi den mulighet til å:"
 oauth.consent.no-scopes: Ingen spesifikke tillatelser ble forespurt.
 oauth.consent.signed-in-as: "Logget inn som {{username}}"
