@@ -10,9 +10,10 @@
 
 import { Box, Button, Divider, Flex, Input, InputNumber, Select, Text, type SelectProps } from '@sdk/components'
 import { type SelectOptionType } from '@sdk/modules/element'
-import { isNil } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { getDecimalSeparator } from '@Pimcore/utils/number'
 
 export interface CreatableSelectProps extends Omit<SelectProps, 'options'> {
   options: SelectOptionType[]
@@ -38,11 +39,37 @@ const Component = ({
   numberInputProps = {},
   ...selectProps
 }: CreatableSelectProps): React.JSX.Element => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [customOptions, setCustomOptions] = useState<SelectOptionType[]>([])
   const [newOptionText, setNewOptionText] = useState('')
+  // `onChange` only reports parseable numbers, so the displayed text is tracked via `onInput`.
+  const [numberInputText, setNumberInputText] = useState('')
   const [pendingSelection, setPendingSelection] = useState<SelectOptionType | null>(null)
   const allOptions = [...options, ...customOptions]
+  const decimalSeparator = inputType === 'number'
+    ? numberInputProps.decimalSeparator ?? getDecimalSeparator(i18n?.language)
+    : '.'
+
+  const currentInputText = inputType === 'number' ? numberInputText : newOptionText
+
+  const isInputTextValid = useCallback((): boolean => {
+    const committedText = newOptionText.trim()
+
+    if (inputType === 'number') {
+      const trimmedText = numberInputText.trim()
+      // `InputNumber` reads "." as a decimal point in every locale, so "1.000" commits 1 in de.
+      const hasForeignSeparator = trimmedText.includes(decimalSeparator === '.' ? ',' : '.')
+      const parsedNumber = !isUndefined(numberInputProps.parser)
+        ? Number(numberInputProps.parser(trimmedText))
+        : hasForeignSeparator ? Number.NaN : Number(trimmedText.replace(decimalSeparator, '.'))
+
+      if (committedText === '' || !Number.isFinite(parsedNumber) || parsedNumber !== Number(committedText)) {
+        return false
+      }
+    }
+
+    return isUndefined(validate) || validate(committedText)
+  }, [inputType, numberInputText, decimalSeparator, numberInputProps.parser, newOptionText, validate])
 
   // Auto-add value or defaultValue if it's not in the options list
   useEffect(() => {
@@ -94,15 +121,16 @@ const Component = ({
 
     if (trimmedValue === '') return
 
+    // Validate before the duplicate check, which would otherwise clear the invalid text
+    if (!isInputTextValid()) {
+      return
+    }
+
     // Check if option already exists in all options
     const optionExists = allOptions.some(opt => opt.value === trimmedValue)
     if (optionExists && !allowDuplicates) {
       setNewOptionText('')
-      return
-    }
-
-    // Validate the input value
-    if (validate !== undefined && !validate(trimmedValue)) {
+      setNumberInputText('')
       return
     }
 
@@ -111,28 +139,40 @@ const Component = ({
     // Add to custom options
     setCustomOptions(prev => [...prev, newOption])
     setNewOptionText('')
+    setNumberInputText('')
 
     // Set pending selection to trigger after state update
     setPendingSelection(newOption)
-  }, [newOptionText, allOptions, allowDuplicates, onCreateOption, validate])
+  }, [newOptionText, allOptions, allowDuplicates, onCreateOption, isInputTextValid])
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent): void => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      handleAddOption()
+    if (e.key !== 'Enter') return
+
+    if (inputType === 'number') {
+      // `InputNumber` flushes on Enter, re-aligning a rejected value into [min, max].
+      e.stopPropagation()
     }
-  }, [handleAddOption])
+
+    e.preventDefault()
+    handleAddOption()
+  }, [inputType, handleAddOption])
 
   const getInputDependantField = (): React.JSX.Element => {
     switch (inputType) {
       case 'number':
         return (
           <InputNumber
+            changeOnBlur={ false }
             { ...numberInputProps }
-            onChange={ (e) => {
-              if (!isNil(e)) {
-                setNewOptionText(e.toString())
-              }
+            onChange={ (value) => {
+              const committedText = isNil(value) ? '' : value.toString()
+
+              setNewOptionText(committedText)
+              setNumberInputText(committedText)
+            } }
+            onInput={ (text) => {
+              setNumberInputText(text)
+              numberInputProps.onInput?.(text)
             } }
             onKeyDown={ handleKeyDown }
             placeholder={ t(createOptionLabel ?? 'creatable-select.add-custom-option') }
@@ -171,7 +211,7 @@ const Component = ({
             <Flex gap="small">
               {getInputDependantField()}
               <Button
-                disabled={ newOptionText.trim() === '' || (validate !== undefined && !validate(newOptionText.trim())) || (!allowDuplicates && allOptions.some(opt => opt.value === newOptionText.trim())) }
+                disabled={ currentInputText.trim() === '' || !isInputTextValid() || (!allowDuplicates && allOptions.some(opt => opt.value === newOptionText.trim())) }
                 onClick={ handleAddOption }
                 size="small"
                 type="primary"
@@ -179,12 +219,12 @@ const Component = ({
                 {t('creatable-select.add')}
               </Button>
             </Flex>
-            {!allowDuplicates && newOptionText.trim() !== '' && allOptions.some(opt => opt.value === newOptionText.trim()) && (
+            {!allowDuplicates && currentInputText.trim() !== '' && isInputTextValid() && allOptions.some(opt => opt.value === newOptionText.trim()) && (
               <Text type="danger">
                 {t('creatable-select.option-already-exists')}
               </Text>
             )}
-            {newOptionText.trim() !== '' && validate !== undefined && !validate(newOptionText.trim()) && (
+            {currentInputText.trim() !== '' && !isInputTextValid() && (
               <Text type="danger">
                 {t('creatable-select.invalid-option')}
               </Text>
