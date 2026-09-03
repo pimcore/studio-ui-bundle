@@ -23,6 +23,9 @@ export const TopBar = (): React.JSX.Element => {
     <Toolbar
       padding={ { left: 'none', right: 'none' } }
       position='none'
+      // 'auto': a blocked search mode renders a warning line under the input — a fixed-height
+      // toolbar clips it.
+      size='auto'
       theme='secondary'
     >
       <Flex
