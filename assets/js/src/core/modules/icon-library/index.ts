@@ -438,7 +438,8 @@ import shield from '@Pimcore/assets/icons/shield.inline.svg?react'
 import showDetails from '@Pimcore/assets/icons/show-details.inline.svg?react'
 import simpleRestService from '@Pimcore/assets/icons/simple-rest-service.inline.svg?react'
 import slider from '@Pimcore/assets/icons/slider.inline.svg?react'
-import smartSearch from '@Pimcore/assets/icons/smart-search.inline.svg?react'
+import smartSearchText from '@Pimcore/assets/icons/smart-search-text.inline.svg?react'
+import smartSearchVisual from '@Pimcore/assets/icons/smart-search-visual.inline.svg?react'
 import snack from '@Pimcore/assets/icons/snack.inline.svg?react'
 import snippet from '@Pimcore/assets/icons/snippet.inline.svg?react'
 import spinner from '@Pimcore/assets/icons/spinner.inline.svg?react'
@@ -2214,8 +2215,12 @@ moduleSystem.registerModule({
       component: slider
     })
     iconLibrary.register({
-      name: 'smart-search',
-      component: smartSearch
+      name: 'smart-search-text',
+      component: smartSearchText
+    })
+    iconLibrary.register({
+      name: 'smart-search-visual',
+      component: smartSearchVisual
     })
     iconLibrary.register({
       name: 'snack',

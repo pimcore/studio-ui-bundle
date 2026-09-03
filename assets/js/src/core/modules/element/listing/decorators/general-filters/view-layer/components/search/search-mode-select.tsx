@@ -71,19 +71,27 @@ export const SearchModeSelect = (): React.JSX.Element | null => {
     }
   }
 
+  // A mode reporting available: false can never work on this surface (e.g. image search on data
+  // objects) and is hidden entirely; a blocked mode is merely waiting for a matching filter and
+  // stays selectable with its warning.
+  const availableModes = modes.filter((mode) => mode.getAvailability(modeContext).available)
+
+  if (availableModes.length === 0) {
+    return null
+  }
+
   const items: ItemType[] = [
     {
       key: FULLTEXT_SEARCH_MODE_ID,
       icon: <Icon value='full-text-search' />,
       label: t('listing.search-mode.full-text')
     },
-    ...modes.map((mode): ItemType => {
+    ...availableModes.map((mode): ItemType => {
       const availability = mode.getAvailability(modeContext)
 
       return {
         key: mode.id,
         icon: <Icon value={ mode.icon } />,
-        disabled: !availability.available,
         label: (
           <>
             {mode.getMenuLabel()}
