@@ -9,6 +9,8 @@
  */
 
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { Header } from '@Pimcore/components/header/header'
+import { Title } from '@Pimcore/components/title/title'
 import { ClassDefinitionSelect } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/components/class-definition-select/class-definition-select'
 import { ProvidedTypeSelect } from '@Pimcore/modules/element/components/type-select/provided-type-select'
 import { SearchTermFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/search/search-term-filter'
@@ -17,7 +19,28 @@ import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 import React from 'react'
 
 export const TopBar = (): React.JSX.Element => {
-  const { isOpen, setSearchTerm } = useSearch()
+  const { isOpen, setSearchTerm, loadedSavedSearch } = useSearch()
+  const isSavedSearchWidget = loadedSavedSearch !== undefined
+
+  const search = <SearchTermFilter onCommit={ isOpen ? setSearchTerm : undefined } />
+
+  if (isSavedSearchWidget) {
+    return (
+      <Header>
+        <Flex
+          align="center"
+          gap='extra-small'
+        >
+          <Title>{loadedSavedSearch.name}</Title>
+          <ProvidedTypeSelect />
+          <ClassDefinitionSelect nullable />
+        </Flex>
+        <div style={ { width: 320, flexShrink: 0 } }>
+          {search}
+        </div>
+      </Header>
+    )
+  }
 
   return (
     <Toolbar
@@ -31,7 +54,7 @@ export const TopBar = (): React.JSX.Element => {
       >
         <ProvidedTypeSelect />
         <ClassDefinitionSelect nullable />
-        <SearchTermFilter onCommit={ isOpen ? setSearchTerm : undefined } />
+        {search}
       </Flex>
     </Toolbar>
   )
