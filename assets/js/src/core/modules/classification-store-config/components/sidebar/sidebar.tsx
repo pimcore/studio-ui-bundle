@@ -11,6 +11,7 @@
 import React, { useEffect, useState } from 'react'
 import { isNil } from 'lodash'
 import { useTranslation } from 'react-i18next'
+import { Tooltip } from 'antd'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
@@ -214,23 +215,28 @@ export const Sidebar = ({
             } }
             trigger={ ['contextMenu'] }
           >
-            <Flex
-              align="center"
-              className={ [
-                styles.sidebarStoreItem,
-                isActive ? styles.sidebarStoreItemActive : ''
-              ].join(' ') }
-              gap="mini"
-              onClick={ () => { handleOpenStore(item) } }
+            <Tooltip
+              placement="right"
+              title={ t('classification-store.store-id', { id: item.id }) }
             >
-              <Icon
-                className={ styles.sidebarStoreItemIcon }
-                value="classification-store"
-              />
-              <Text className={ styles.sidebarStoreItemTitle }>
-                {item.name}
-              </Text>
-            </Flex>
+              <Flex
+                align="center"
+                className={ [
+                  styles.sidebarStoreItem,
+                  isActive ? styles.sidebarStoreItemActive : ''
+                ].join(' ') }
+                gap="mini"
+                onClick={ () => { handleOpenStore(item) } }
+              >
+                <Icon
+                  className={ styles.sidebarStoreItemIcon }
+                  value="classification-store"
+                />
+                <Text className={ styles.sidebarStoreItemTitle }>
+                  {item.name}
+                </Text>
+              </Flex>
+            </Tooltip>
           </Dropdown>
         )
       })}

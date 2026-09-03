@@ -2035,6 +2035,8 @@ classification-store.select-key: Select key
 classification-store.search-keys: Search keys…
 classification-store.select-group: Select group
 classification-store.search-groups: Search groups…
+classification-store.store-id: "ID: {{id}}"
+classification-store.store-tab-label: "{{name}} (ID: {{id}})"
 home: Home
 preview.label: Preview
 preview.desktop: Desktop
