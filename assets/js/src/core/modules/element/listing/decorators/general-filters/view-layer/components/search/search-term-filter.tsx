@@ -29,7 +29,7 @@ export interface SearchTermFilterProps {
 
 export const SearchTermFilter = ({ onCommit }: SearchTermFilterProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { values, setValue: setAppliedValue } = useAppliedFilters()
+  const { values, setValue: setAppliedValue, setValues: setAppliedValues } = useAppliedFilters()
   const appliedSearchTerm = readElementFilterValues(values).searchTerm
   const [currentSearchTerm, setCurrentSearchTerm] = useState<string>(appliedSearchTerm)
   const { handleSearchTermInSidebar } = useGeneralFiltersConfig()
@@ -54,11 +54,26 @@ export const SearchTermFilter = ({ onCommit }: SearchTermFilterProps): React.JSX
       return
     }
 
-    // Immediate-apply surfaces must not submit a blocked mode; the warning below the input
-    // explains what to select first. Sidebar surfaces gate the Apply button instead. Clearing
-    // (empty term) must stay allowed, or a blocked mode keeps the stale applied query active.
-    if (!handleSearchTermInSidebar && searchMode?.blocked === true && searchTerm !== '') {
+    // A blocked mode must not be submitted from any surface; the warning below the input explains
+    // what to select first. Clearing (empty term) stays allowed, or a blocked mode would keep the
+    // stale applied query active.
+    if (searchMode?.blocked === true && searchTerm !== '') {
       return
+    }
+
+    // The sidebar drafts mode and field filters until Apply — the search icon/Enter shortcut
+    // must commit them along with the term: a smart mode whose availability depends on drafted
+    // field filters would otherwise arrive blocked in the applied state and silently degrade to
+    // full text, and the draft would be re-seeded from the applied store, visibly reverting the
+    // selection. (pql is left untouched — the advanced editor applies through the Apply button.)
+    if (handleSearchTermInSidebar && draftStore !== undefined) {
+      const draftValues = readElementFilterValues(draftStore.values)
+      setAppliedValues({
+        searchMode: draftValues.searchMode,
+        fieldFilters: draftValues.fieldFilters,
+        directChildren: draftValues.directChildren,
+        unreferenced: draftValues.unreferenced
+      })
     }
 
     setAppliedValue('searchTerm', searchTerm)
