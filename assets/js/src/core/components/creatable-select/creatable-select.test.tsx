@@ -53,6 +53,7 @@ const getAddButton = (): HTMLElement => screen.getByRole('button', { name: 'crea
 const type = (value: string): void => { fireEvent.change(getInput(), { target: { value } }) }
 const isAddDisabled = (): boolean => getAddButton().hasAttribute('disabled')
 const isErrorShown = (): boolean => screen.queryByText('creatable-select.invalid-option') !== null
+const isDuplicateShown = (): boolean => screen.queryByText('creatable-select.option-already-exists') !== null
 
 const renderNumberSelect = (onChange?: jest.Mock): { container: HTMLElement } => render(
   <CreatableSelect
@@ -191,6 +192,79 @@ describe('CreatableSelect number input (#1954)', () => {
 
     expect(isAddDisabled()).toBe(false)
     expect(isErrorShown()).toBe(false)
+  })
+
+  it('does not submit a stale committed value after the text is replaced', () => {
+    const onChange = jest.fn()
+    renderNumberSelect(onChange)
+
+    type('12')
+    // `InputNumber` withholds `onChange` for the out-of-range 0, so the committed value stays 12.
+    type('0')
+
+    expect(getInput().value).toBe('0')
+    expect(isAddDisabled()).toBe(true)
+    expect(isErrorShown()).toBe(true)
+
+    fireEvent.keyDown(getInput(), { key: 'Enter' })
+
+    expect(onChange).not.toHaveBeenCalled()
+  })
+
+  it('reports invalid text rather than treating it as a duplicate', () => {
+    render(
+      <CreatableSelect
+        inputType='number'
+        numberInputProps={ { min: 1 } }
+        open
+        options={ [{ value: '12', label: '12' }] }
+        validate={ (value) => !isNaN(parseInt(value)) && parseInt(value) > 0 }
+      />
+    )
+
+    type('12')
+    type('12aaa')
+    fireEvent.keyDown(getInput(), { key: 'Enter' })
+
+    expect(getInput().value).toBe('12aaa')
+    expect(isErrorShown()).toBe(true)
+  })
+
+  it('forwards an onInput handler supplied through numberInputProps', () => {
+    const onInput = jest.fn()
+    render(
+      <CreatableSelect
+        inputType='number'
+        numberInputProps={ { min: 1, onInput } }
+        open
+        options={ [] }
+      />
+    )
+
+    type('12')
+
+    expect(onInput).toHaveBeenCalledWith('12')
+  })
+
+  it('replaces the duplicate message when the text becomes invalid', () => {
+    render(
+      <CreatableSelect
+        inputType='number'
+        numberInputProps={ { min: 1 } }
+        open
+        options={ [{ value: '12', label: '12' }] }
+        validate={ (value) => !isNaN(parseInt(value)) && parseInt(value) > 0 }
+      />
+    )
+
+    type('12')
+    expect(isDuplicateShown()).toBe(true)
+    expect(isErrorShown()).toBe(false)
+
+    // The duplicate message describes the committed 12, which is no longer what the field shows.
+    type('12a')
+    expect(isErrorShown()).toBe(true)
+    expect(isDuplicateShown()).toBe(false)
   })
 
   it('leaves the string input unchanged', () => {

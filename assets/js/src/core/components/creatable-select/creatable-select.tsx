@@ -55,16 +55,19 @@ const Component = ({
   const currentInputText = inputType === 'number' ? numberInputText : newOptionText
 
   const isInputTextValid = useCallback((): boolean => {
+    const committedText = newOptionText.trim()
+
     if (inputType === 'number') {
       const trimmedText = numberInputText.trim()
       const parsedText = numberInputProps.parser?.(trimmedText) ?? trimmedText.replace(decimalSeparator, '.')
+      const parsedNumber = Number(parsedText)
 
-      if (newOptionText.trim() === '' || !Number.isFinite(Number(parsedText))) {
+      if (committedText === '' || !Number.isFinite(parsedNumber) || parsedNumber !== Number(committedText)) {
         return false
       }
     }
 
-    return validate === undefined || validate(newOptionText.trim())
+    return validate === undefined || validate(committedText)
   }, [inputType, numberInputText, decimalSeparator, numberInputProps.parser, newOptionText, validate])
 
   // Auto-add value or defaultValue if it's not in the options list
@@ -116,6 +119,10 @@ const Component = ({
     const trimmedValue = newOptionText.trim()
 
     if (trimmedValue === '') return
+
+    if (inputType === 'number' && !isInputTextValid()) {
+      return
+    }
 
     // Check if option already exists in all options
     const optionExists = allOptions.some(opt => opt.value === trimmedValue)
@@ -170,7 +177,10 @@ const Component = ({
               // Keep the tracked text in sync for changes that bypass `onInput`, e.g. the steppers.
               setNumberInputText(committedText)
             } }
-            onInput={ (text) => { setNumberInputText(text) } }
+            onInput={ (text) => {
+              setNumberInputText(text)
+              numberInputProps.onInput?.(text)
+            } }
             onKeyDown={ handleNumberKeyDown }
             placeholder={ t(createOptionLabel ?? 'creatable-select.add-custom-option') }
             size="small"
@@ -216,7 +226,7 @@ const Component = ({
                 {t('creatable-select.add')}
               </Button>
             </Flex>
-            {!allowDuplicates && newOptionText.trim() !== '' && allOptions.some(opt => opt.value === newOptionText.trim()) && (
+            {!allowDuplicates && currentInputText.trim() !== '' && isInputTextValid() && allOptions.some(opt => opt.value === newOptionText.trim()) && (
               <Text type="danger">
                 {t('creatable-select.option-already-exists')}
               </Text>
