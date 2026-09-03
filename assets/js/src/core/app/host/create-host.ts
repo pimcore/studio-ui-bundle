@@ -25,7 +25,11 @@ export interface CreateHostOptions {
    * curated installer that binds ONLY what it needs. Omit it (e.g. a shell) to
    * install nothing — deliberately NOT the full admin service graph, so a local
    * build stays slim. For the full admin set, import `installCoreServices` from
-   * `@pimcore/portal-ui-kit/services` and pass it here.
+   * `@pimcore/portal-ui-kit/services` and pass it here — that entry re-exports the
+   * side-effect-free installer, so the graph is bound exactly once. Do NOT reach for
+   * `@Pimcore/app/config/services`: that is the admin bootstrap entry and installs the
+   * graph on import, which would double-bind every identifier when the installer runs
+   * again, leaving container.get() throwing "Ambiguous match found".
    */
   installServices?: (container: Container) => void
 }
