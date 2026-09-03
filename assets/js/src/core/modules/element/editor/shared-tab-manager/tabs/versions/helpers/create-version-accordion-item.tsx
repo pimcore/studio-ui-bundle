@@ -12,6 +12,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { isNil } from 'lodash'
 import { formatDateTime } from '@Pimcore/utils/date-time'
+import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { Checkbox } from 'antd'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { type PanelTheme } from '@Pimcore/components/accordion/accordion'
@@ -93,11 +94,25 @@ export const createVersionAccordionItem = ({
 
   const Subtitle = (): React.JSX.Element => {
     const { t } = useTranslation()
+    const isCoauthored = !isEmptyValue(version.coauthor)
+    const coauthorType = version.coauthorType ?? ''
+    const coauthorTypeLabel = coauthorType !== ''
+      ? t(`version.coauthor-type.${coauthorType}`, { defaultValue: coauthorType })
+      : ''
 
     return (
       <div>
-        <span className={ 'sub-title' }>{`${t('by')} ${version.user?.name ?? ''}`}</span>
-        {isNil(version.autosave) && version.autosave && <Icon value="auto-save" />}
+        <div>
+          <span className={ 'sub-title' }>{`${t('by')} ${version.user?.name ?? ''}`}</span>
+          {isNil(version.autosave) && version.autosave && <Icon value="auto-save" />}
+        </div>
+        {isCoauthored && (
+          <div>
+            <span className={ 'sub-title' }>
+              {t('version.coauthored-by', { type: coauthorTypeLabel, name: version.coauthor })}
+            </span>
+          </div>
+        )}
       </div>
     )
   }

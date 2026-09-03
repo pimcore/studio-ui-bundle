@@ -24,11 +24,3 @@ const config: Meta = {
 export default config
 
 export const _default = {}
-
-export const WithPreview = {
-  args: {
-    preview: {
-      src: ''
-    }
-  }
-}

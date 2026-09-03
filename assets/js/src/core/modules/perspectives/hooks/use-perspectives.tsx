@@ -24,7 +24,7 @@ import {
 } from '@Pimcore/modules/perspectives/perspectives-slice.enhanced'
 import trackError, { ApiError } from '../../app/error-handler'
 import { isNil, isPlainObject, isUndefined } from 'lodash'
-import { App } from 'antd'
+import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { useTranslation } from 'react-i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Spin } from '@Pimcore/components/spin/spin'
@@ -44,7 +44,7 @@ export const usePerspectives = (): UsePerspectiveSwitcherReturn => {
   const user = useUser()
   const [updateActivePerspective] = useUserUpdateActivePerspectiveMutation()
   const [isLoading, setIsLoading] = useState(false)
-  const { modal } = App.useApp()
+  const { localModal: modal } = useStudioModal()
   const { t } = useTranslation()
 
   const loadPerspective = async (perspectiveId: string, forceRefetch: boolean = false): Promise<{ data?: PerspectiveConfigDetail, error?: any, isSuccess: boolean, isError: boolean }> => {

@@ -13,6 +13,7 @@ import React from 'react'
 import { useStyle } from '@Pimcore/components/modal/modal.styles'
 import type useModal from 'antd/es/modal/useModal'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
+import { useDraggableModal } from '@Pimcore/components/modal/hooks/use-draggable-modal'
 
 export type ModalSize = 'M' | 'ML' | 'L' | 'XL' | 'XXL'
 
@@ -22,12 +23,27 @@ export interface IModalProps extends AntModalProps {
   size?: ModalSize
   limitContentHeight?: boolean
   className?: string
+  /**
+   * Allow the modal to be dragged by its header. Defaults to `true`.
+   * A caller-provided `modalRender` always takes precedence and disables the
+   * built-in drag behaviour.
+   */
+  draggable?: boolean
   useModal?: typeof useModal
   children: React.ReactNode
 }
 
-export const Modal = ({ iconName, size = 'M', limitContentHeight, className, title, children, styles: stylesProp, ...props }: IModalProps): React.JSX.Element => {
+export const Modal = ({ iconName, size = 'M', limitContentHeight, className, title, children, styles: stylesProp, draggable = true, modalRender: modalRenderProp, ...props }: IModalProps): React.JSX.Element => {
   const { styles } = useStyle()
+
+  // A caller-provided modalRender wins (e.g. WindowModal supplies its own),
+  // which also switches off the built-in drag wrapper.
+  const hasCustomRender = modalRenderProp !== undefined
+  const { modalRender: draggableRender } = useDraggableModal({
+    open: props.open,
+    disabled: !draggable || hasCustomRender
+  })
+  const modalRender = hasCustomRender ? modalRenderProp : (draggable ? draggableRender : undefined)
 
   const classes = [styles.modal, className].filter(Boolean)
 
@@ -49,6 +65,7 @@ export const Modal = ({ iconName, size = 'M', limitContentHeight, className, tit
   return (
     <AntModal
       className={ classes.join(' ') }
+      modalRender={ modalRender }
       styles={ mergedStyles }
       title={ (
         <ModalTitle iconName={ iconName }>{title}</ModalTitle>

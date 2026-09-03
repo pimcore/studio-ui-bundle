@@ -13,7 +13,6 @@ widget.missing-tab-context.description: Den här funktionen stöds inte för det
 block: Block
 error.error_something_generic_went_wrong: Något gick fel
 error.error_permission_denied: Du har inte behörighet att utföra denna åtgärd på detta element.
-error.syntax_error: Syntaxfel
 error.error_element_exists: Elementet finns redan
 error.error_folder_exists: Mappen finns redan
 error.error_invalid_argument: Ogiltigt argument
@@ -26,6 +25,7 @@ error.error_document_language_not_set: Dokumentet har ingen språkegenskap angiv
 error.error_inconsistent_asset_type: Bara assets av samma typ tillåts här.
 error.error_recycle_bin_restore: Kan inte återställa elementet från papperskorgen
 error.error_recycle_bin_restore_missing_parent: Kan inte återställa elementet från papperskorgen, överordnat element saknas
+error.syntax_error: Syntaxfel
 sidebar.selected_elements: Valda element
 sidebar.grid_config: Rutnätskonfiguration
 sidebar.tag_filters: Taggfilter
@@ -83,6 +83,7 @@ asset.upload.overwrite: Skriv över
 asset.upload.keep-both: Behåll båda
 asset.upload.skip: Hoppa över
 asset.upload.apply-to-all: Tillämpa på alla
+asset.upload.checking-duplicate-file-names: "Kontrollerar dubbletter av filnamn ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Skapar mappar
 asset.upload.folder-drop.creating-folders-hint: Vänta medan mappstrukturen skapas…
 upload.error.file-too-large: Filen är större än serverns nuvarande uppladdningsgräns.
@@ -167,7 +168,7 @@ folder.folder-editor-tabs.preview: Förhandsvisning
 folder.folder-editor-tabs.view: Lista
 toolbar.reload.confirmation: Är du säker på att du vill ladda om den här fliken? Alla osparade ändringar kommer att förloras.
 toolbar.reload: Ladda om
-toolbar.save-and-publish: Spara & Publicera
+toolbar.save-and-publish: Spara & publicera
 toolbar.save: Spara
 toolbar.save-draft: Spara utkast
 toolbar.more: Mer
@@ -205,8 +206,8 @@ class-definition.general-settings.icon: Ikon
 class-definition.general-settings.parent-class: Föräldraklass
 class-definition.general-settings.implements-interfaces: Implementerar gränssnitt
 class-definition.general-settings.listing-parent-class: Listföräldraklass
-class-definition.general-settings.use-traits: Använd Traits
-class-definition.general-settings.listing-use-traits: Listning Använd Traits
+class-definition.general-settings.use-traits: Använd traits
+class-definition.general-settings.listing-use-traits: Listning använd traits
 class-definition.general-settings.link-generator-reference: Länkgeneratorreferens
 class-definition.general-settings.preview-generator-reference: Förhandsvisningsgeneratorreferens
 class-definition.general-settings.allow-inherit: Tillåt arv
@@ -279,7 +280,7 @@ select-option.validation.enter-id: Ange ett ID
 select-option.validation.id-format: Namnet måste börja med en stor bokstav, följt av alfanumeriska tecken
 select-option.general-settings.title: Allmänt
 select-option.general-settings.enum-name: Enum-namn
-select-option.general-settings.use-traits: Använd Traits
+select-option.general-settings.use-traits: Använd traits
 select-option.general-settings.implements-interfaces: Implementerar gränssnitt
 select-option.general-settings.group: Grupp
 select-option.general-settings.admin-only: Bara admin
@@ -314,6 +315,7 @@ preview-card.rename: Byt namn
 preview-card.download-zip: Ladda ner som ZIP
 preview-card.delete: Ta bort
 grid.aria.column-resize: Ändra kolumnstorlek
+sidebar.aria.resize: Ändra storlek på sidopanelen
 tree.aria.expand-and-collapse: Expandera eller fäll ihop trädelement
 image-sidebar.tab.details.custom-download: Anpassad nedladdning
 aria.asset.image-sidebar.tab.details.custom-thumbnail-mode: Val av anpassat miniatyrbildsläge
@@ -344,6 +346,10 @@ grid.filter.to: Till
 grid.filter.is: Är
 grid.filter.less: Mindre än
 grid.filter.more: Mer än
+grid.filter.column: 'Filtrera {{column}}'
+grid.filter.file-size-unit.kb: KB
+grid.filter.file-size-unit.mb: MB
+grid.filter.file-size-unit.gb: GB
 grid.copy-notice: Kopierat till urklipp
 grid.configuration.no-saved-templates: Inga sparade mallar tillgängliga
 grid.configuration.template: Mall
@@ -370,6 +376,7 @@ grid.advanced-column.preview: Förhandsvisning
 grid.advanced-column.no-preview: Inget förhandsvisningsobjekt tillgängligt
 grid.advanced-column.no-preview-data: Ingen förhandsvisningsdata tillgänglig
 grid.advanced-column.error-preview-data: Fel vid laddning av förhandsvisning
+grid.advanced-column.preview-item: Förhandsvisningsobjekt
 grid.advanced-column.trim: Trimma
 grid.advanced-column.find: Sök
 grid.advanced-column.replace: Ersätt
@@ -405,8 +412,8 @@ grid.advanced-column.advancedColumns.phpCode: PHP-kod
 grid.advanced-column.advancedColumns.phpCodeKey: PHP Transformer-nyckel
 grid.advanced-column.advancedColumns.arguments: Argument
 component.workflow-card.action-btn: Workflowåtgärder
-component.pql.description: Pimcore Query Language (PQL) är ett enkelt men kraftfullt frågespråk som låter dig söka data med olika kriterier, inklusive filtrering av värden i relaterade element, för att möjliggöra precis och omfattande datahämtning. Se <anchorPQL>PQL-dokumentation</anchorPQL> för detaljer
 component.pql.placeholder: Skriv din fråga
+component.pql.description: Pimcore Query Language (PQL) är ett enkelt men kraftfullt frågespråk som låter dig söka data med olika kriterier, inklusive filtrering av värden i relaterade element, för att möjliggöra precis och omfattande datahämtning. Se <anchorPQL>PQL-dokumentation</anchorPQL> för detaljer
 asset.asset-editor-tabs.embedded-metadata.headline: Metainformation
 asset.asset-editor-tabs.embedded-metadata.columns.name: Namn
 asset.asset-editor-tabs.embedded-metadata.columns.value: Värde
@@ -439,6 +446,7 @@ version.label: Versioner
 version.versions: Versioner
 version.version: Version
 version.publish: Publicera
+version.coauthored-by: 'Medförfattad av {{type}} {{name}}'
 version.published: Publicerad
 version.autosaved: Automatiskt sparad
 version.schedule-for: Schemalagd för
@@ -466,6 +474,8 @@ version.no-difference: Det finns ingen skillnad mellan de valda versionerna.
 version.category.title.systemData: Systemdata
 version.category.title.baseData: Basdata
 version.category.title.meta: Metadata
+version.category.title.properties: Egenskaper
+version.changed-attributes: "Ändrade attribut: {{attributes}}"
 aria.version.delete: Ta bort version
 aria.version.expand: Expandera version
 clear-all: Rensa allt
@@ -490,8 +500,10 @@ schedule.all: Alla schemalagda (kommande & arkiv)
 schedule.toolbar.filters.active-switch: Bara aktiva
 schedule.toolbar.new: Ny
 schedule.toolbar.save-scheduled-tasks: Spara schemalagda uppgifter
-schedule.version.delete: Ta bort version
-schedule.version.publish: Publicera version
+schedule.action.delete: Ta bort
+schedule.action.publish: Publicera
+schedule.action.unpublish: Avpublicera
+schedule.action.publish-version: Publicera version
 schedule.select-an-action: Åtgärd
 schedule.select-a-version: Version
 schedule.archived: Arkiverade
@@ -519,15 +531,20 @@ key: Nyckel
 published: Publicerad
 classname: Klassnamn
 index: Index
+userModification: Ändrad av
+userOwner: Ägare
+listing.grid-config.convert-to-advanced: Konvertera till avancerad kolumn
 listing.grid-config.title: Rutnätskonfiguration
 grid-config.discard-all-changes: Förkasta alla ändringar
 grid-config.apply-changes: Tillämpa ändringar
+grid-config.reload: Läs om
 listing.add-column: Lägg till en kolumn
 listing.add-column.simple: Enkel
 listing.add-column.advanced: Avancerad
 listing.column-picker.search: Sök
 listing.column-picker.no-results: Inga kolumner hittades
 listing.column-picker.fields-to-add: Fält att lägga till
+listing.fields-to-add.collapse-simple-fields: Fäll ihop enkla fält
 listing.actions: Tillämpa på val
 listing.non-selected.actions: Tillämpa på alla
 listing.actions.zip-download: ZIP-nedladdning
@@ -586,8 +603,6 @@ website-settings.columns.language: Språk
 website-settings.columns.value: Värde
 website-settings.columns.site: Sajt
 website-settings.columns.actions: Åtgärder
-website-settings.website-settings-already-exist.title: Webbplatsinställningen finns redan
-website-settings.website-settings-already-exist.error: Namnet används redan, välj ett annat
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Obligatoriska fält saknas
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Namn och typ är obligatoriska fält och måste fyllas i.
 document-types.new: Ny
@@ -667,6 +682,21 @@ edit: Redigera
 modify: Ändra
 component.no-content.no-content-available: Inget innehåll tillgängligt
 notifications.label: Aviseringar
+notifications.settings.label: Aviseringsinställningar
+notifications.settings.description: Aktivera "Meddela mig" för allt du vill ha i din aviseringsklocka, och lägg sedan till fler kanaler för det som betyder mest.
+notifications.settings.description-popup-only: Välj hur aviseringar ska nå dig. Allt du meddelas om visas alltid i din aviseringsklocka.
+notifications.settings.column.type: Aviseringstyp
+notifications.settings.column.subscribed: Meddela mig
+notifications.settings.not-available: Inte tillgängligt för denna typ
+notifications.settings.save: Spara
+notifications.settings.saved: Aviseringsinställningar sparade
+notifications.settings.discard: Kassera
+notifications.settings.discard.title: Vill du kassera dina osparade ändringar?
+notifications.settings.discard.confirm: Kassera
+notifications.settings.discard.keep-editing: Fortsätt redigera
+notifications.settings.unsaved-changes_one: "{{count}} osparad ändring"
+notifications.settings.unsaved-changes_other: "{{count}} osparade ändringar"
+notifications.settings.group.general: Allmänt
 notifications.remove-all: Ta bort alla
 notifications.new-notification: Ny avisering
 notifications.columns.title: Titel
@@ -828,6 +858,10 @@ field-definition.many-to-many-object-relation: Many-to-Many Object Relation
 field-definition.advanced-many-to-many-relation: Advanced Many-to-Many Relation
 field-definition.advanced-many-to-many-object-relation: Advanced Many-to-Many Object Relation
 field-definition.reverse-object-relation: Omvänd objektrelation
+field-definition.crm.gender.title: Kön
+field-definition.crm.firstname.title: Förnamn
+field-definition.crm.email.title: E-post
+field-definition.crm.lastname.title: Efternamn
 allowed-class: Tillåten klass
 allowed-classes: Tillåtna klasser
 allowed-asset-types: Tillåtna assettyper
@@ -1077,14 +1111,14 @@ jobs.job.button-download: ladda ner
 jobs.job.button-ignore-and-reload: ignorera och ladda om
 jobs.job.step_hint: "Steg {{step}}/{{total}}"
 jobs.job.step_hint_single: "Steg {{step}}"
-jobs.job.step.batch-edit.preparing: Förbereder massredigering
-jobs.job.step.batch-edit.applying: Tillämpar massredigering
 jobs.job.download-error: Nedladdning misslyckades
 jobs.job.download-not-available: Nedladdningen är inte längre tillgänglig.
 jobs.job.button-show-errors: Visa fel
 jobs.job.error-modal.title: Jobbfel
 jobs.job.button-abort: Avbryt jobb
 jobs.job.abort-confirm: Vill du verkligen avbryta det här jobbet?
+jobs.job.step.batch-edit.preparing: Förbereder massredigering
+jobs.job.step.batch-edit.applying: Tillämpar massredigering
 jobs.zip-job.title: "ZIP-nedladdning av {{title}}"
 jobs.csv-job.title: "CSV-nedladdning av {{title}}"
 jobs.xlsx-job.title: "XLSX-nedladdning av {{title}}"
@@ -1143,6 +1177,8 @@ close-unmodified: Stäng oförändrade
 close-all: Stäng alla
 asset.tree.context-menu.download: Ladda ner
 asset.tree.context-menu.download-as-zip: Ladda ner som ZIP
+element-selector.title.single: Välj ett element
+element-selector.title.multiple: Välj element
 element.tree.context-menu.new-assets: Ny(a) Asset(s)
 element.tree.context-menu.add-assets.upload-files: Ladda upp filer
 element.tree.context-menu.add-assets.upload-zip: Ladda upp Zip
@@ -1182,6 +1218,7 @@ element.new-folder.validation: Ange ett giltigt namn
 element.rename: Byt namn
 element.rename.label: Ange det nya namnet
 element.rename.validation: Ange ett giltigt namn
+element.share-via-notification: Dela via aviseringar
 element.delete: Ta bort
 element.delete.confirmation.title: Ta bort objekt
 element.delete.confirmation.text: Vill du verkligen ta bort det här objektet?
@@ -1193,12 +1230,17 @@ element.delete.folder.large.note: 'Observera: Mappen och dess innehåll kommer a
 element.delete.folder.ok: Ta bort
 element.delete.folder.ok.permanent: Ta bort permanent
 element.delete.batch.title: Ta bort element
-element.delete.batch.note: 'Obs: Dessa element kommer att tas bort permanent och kan inte återställas.'
+element.delete.batch.note_one: 'Obs: Detta element kommer att tas bort permanent och kan inte återställas.'
+element.delete.batch.note_other: 'Obs: Dessa element kommer att tas bort permanent och kan inte återställas.'
+element.delete.batch.note.permanent-dependencies_one: "Obs: Detta element har beroenden och kommer att tas bort permanent.\nDet kan inte återställas."
+element.delete.batch.note.permanent-dependencies_other: "Obs: Dessa element har beroenden och kommer att tas bort permanent.\nDe kan inte återställas."
 element.delete.batch.question_one: 'Vill du verkligen ta bort det här elementet?'
 element.delete.batch.question_other: 'Vill du verkligen ta bort dessa {{count}} element?'
-element.delete.batch.ok: Ta bort permanent
+element.delete.batch.ok: Ta bort
+element.delete.batch.ok.permanent: Ta bort permanent
 element.delete.batch.show-paths: Visa element
-element.delete.batch.dependencies-warning: 'Det kan finnas beroenden, ta bort ändå?'
+element.delete.batch.dependencies-warning.confirmed_one: 'Obs: Detta element har beroenden.'
+element.delete.batch.dependencies-warning.confirmed_other: 'Obs: Dessa element har beroenden.'
 element.open: Öppna
 element.toolbar.copy-id: Kopiera ID
 element.toolbar.copy-full-path-to-clipboard: Kopiera fullständig sökväg
@@ -1208,8 +1250,8 @@ element.toolbar.copy-className: Klass {{className}} - Kopiera
 element.unpublish: Avpublicera
 element.publish: Publicera
 element.locate-in-tree: Hitta i träd
-element.sidebar.filter.only-direct-children: bara direkta barn
-element.sidebar.filter.only-unreferenced: bara utan referenser
+element.sidebar.filter.only-direct-children: Bara direkta barn
+element.sidebar.filter.only-unreferenced: Bara utan referenser
 element.sidebar.field-filters: Fältfilter
 element.full-information: Fullständig information
 system-information.id: ID
@@ -1235,6 +1277,7 @@ unknown: Okänt
 warning: Varning
 error: Fel
 info: Info
+success: Framgång
 no-value-set: Inget värde angivet
 set-to-null: Tom (sätt till null)
 remove: Ta bort
@@ -1259,8 +1302,10 @@ relations.subtype: Undertyp
 relations.classname: Klass
 relations.fullpath: Fullständig sökväg
 relations.remove-all.confirm: Vill du verkligen ta bort alla relationer?
+relations.upload.subtype-not-allowed: Uppladdade assets vars typ den här relationen inte tillåter tilldelades inte.
 relation: relation
 items-limit-reached: Maximalt antal objekt ({{maxItems}}) har nåtts.
+asset-upload-type-not-allowed: Typen på det uppladdade assetet är inte tillåten för det här fältet.
 actions: Åtgärder
 asset: Asset
 data-object: Data Object
@@ -1273,6 +1318,8 @@ image-gallery.clear-image-selection: Rensa bildval
 image-gallery.delete-frame: Ta bort ram
 text: Text
 video: Video
+object: Objekt
+variant: Variant
 processing: Bearbetar
 upload: Ladda upp
 close: Stäng
@@ -1361,6 +1408,7 @@ key-bindings.searchAsset: Sök Asset
 key-bindings.searchObject: Sök objekt
 key-bindings.searchAndReplaceAssignments: Sök och ersätt tilldelningar
 key-bindings.quickSearch: Snabbsökning
+search-modal.title: Snabbsökning
 key-bindings.system: System
 key-bindings.showMetaInfo: Visa metainformation
 key-bindings.showElementHistory: Visa elementhistorik
@@ -1579,14 +1627,14 @@ redirects.csv-import-results.errored: Felaktiga
 redirects.csv-import-results.close: Stäng
 redirects.csv-import-results.errors-details: Feldetaljer
 redirects.csv-import-results.line: Rad {{line}}
+robots-txt.save-success: robots.txt sparades
+robots-txt.on-file-system-warning: "Sparande inaktiverat: en fysisk robots.txt-fil finns i filsystemet."
 path: Sökväg
 entire_uri: Hela URI:n
 path_query: Sökväg och Query
 auto_create: Skapa automatiskt
 widget.redirects: Omdirigeringar
 navigation.redirects: Omdirigeringar
-robots-txt.save-success: robots.txt sparades
-robots-txt.on-file-system-warning: "Sparande inaktiverat: en fysisk robots.txt-fil finns i filsystemet."
 widget.robots-txt: robots.txt
 navigation.robots-txt: robots.txt
 perspective.default: Standard
@@ -1740,13 +1788,13 @@ image-thumbnails.transformations.resize.width: Bredd
 image-thumbnails.transformations.resize.height: Höjd
 
 # Skala efter höjd-transformation
-image-thumbnails.transformations.scale-by-height.config-title: Konfigurera Skala efter höjd
+image-thumbnails.transformations.scale-by-height.config-title: Konfigurera skala efter höjd
 image-thumbnails.transformations.scale-by-height.height: Höjd
 image-thumbnails.transformations.scale-by-height.height-placeholder: Ange höjd i pixlar
 image-thumbnails.transformations.scale-by-height.force-resize: Tvinga storleksändring
 
 # Trimma-transformation
-image-thumbnails.transformations.trim.config-title: Konfigurera Trimma
+image-thumbnails.transformations.trim.config-title: Konfigurera trimma
 image-thumbnails.transformations.trim.trim-option: Trimma-alternativ
 image-thumbnails.transformations.trim.trim-option-placeholder: Välj trimma-alternativ
 image-thumbnails.transformations.trim.disabled: Inaktiverad
@@ -1814,29 +1862,29 @@ video-thumbnails.transformations.resize.height-placeholder: Ange höjd i pixlar
 video-thumbnails.transformations.resize.even-number-hint: Bredd och höjd måste vara jämna tal
 
 # Skala efter bredd-transformation
-video-thumbnails.transformations.scale-by-width.config-title: Konfigurera Skala efter bredd
+video-thumbnails.transformations.scale-by-width.config-title: Konfigurera skala efter bredd
 video-thumbnails.transformations.scale-by-width.width: Bredd
 video-thumbnails.transformations.scale-by-width.width-placeholder: Ange bredd i pixlar
 
 # Skala efter höjd-transformation
-video-thumbnails.transformations.scale-by-height.config-title: Konfigurera Skala efter höjd
+video-thumbnails.transformations.scale-by-height.config-title: Konfigurera skala efter höjd
 video-thumbnails.transformations.scale-by-height.height: Höjd
 video-thumbnails.transformations.scale-by-height.height-placeholder: Ange höjd i pixlar
 
 # Klipp-transformation
-video-thumbnails.transformations.cut.config-title: Konfigurera Klipp
+video-thumbnails.transformations.cut.config-title: Konfigurera klipp
 video-thumbnails.transformations.cut.start: Start
 video-thumbnails.transformations.cut.start-placeholder: "00:00:00.000"
 video-thumbnails.transformations.cut.duration: Längd
 video-thumbnails.transformations.cut.duration-placeholder: "00:00:10.000"
 
 # Ställ in bildfrekvens-transformation
-video-thumbnails.transformations.set-framerate.config-title: Konfigurera Bildfrekvens
+video-thumbnails.transformations.set-framerate.config-title: Konfigurera bildfrekvens
 video-thumbnails.transformations.set-framerate.fps: FPS
 video-thumbnails.transformations.set-framerate.fps-placeholder: "25"
 
 # Färgkanalmixer-transformation
-video-thumbnails.transformations.color-channel-mixer.config-title: Konfigurera Färgkanalmixer
+video-thumbnails.transformations.color-channel-mixer.config-title: Konfigurera färgkanalmixer
 video-thumbnails.transformations.color-channel-mixer.effect: Effekt
 video-thumbnails.transformations.color-channel-mixer.effect-placeholder: Välj en effekt
 video-thumbnails.transformations.color-channel-mixer.grayscale: Gråskala
@@ -2203,6 +2251,7 @@ application-logger.filter.priority-level.8: Debug
 embed.url-modal.title: Redigera inbäddnings-URL
 embed.url-modal.label: URL (t.ex. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Ange en giltig URL
+alert-modal.ok-text: OK
 embed.url-modal.ok-text: Spara
 embed.url-modal.cancel-text: Avbryt
 embed.url-modal.warning: "Ogiltiga URL:er visar ingen förhandsgranskning, vänligen granska och uppdatera din URL."
@@ -2240,6 +2289,25 @@ recycle-bin.actions.delete: Ta bort
 recycle-bin.actions.delete.title: Tar bort papperskorgens objekt
 recycle-bin.actions.restore: Återställ
 recycle-bin.actions.restore.title: Återställer papperskorgens objekt
+ownership-management.title: Ägarskapshantering
+ownership-management.show-deleted-owners: Visa objekt från borttagna användare
+ownership-management.deleted-user: Borttagen användare
+ownership-management.columns.id: ID
+ownership-management.columns.name: Namn
+ownership-management.columns.modification-date: Ändringsdatum
+ownership-management.columns.owner: Ägare
+ownership-management.columns.actions: Åtgärder
+ownership-management.actions.reassign-owner: Tilldela om ägare
+ownership-management.actions.reassign-owner.title: Tilldelar om ägare av konfigurationer
+ownership-management.actions.delete: Ta bort
+ownership-management.actions.delete.title: Tar bort konfigurationer
+ownership-management.actions.batch-assign: Batchtilldelning
+ownership-management.actions.batch-delete: Batchborttagning
+ownership-management.reassign-owner.title: "Tilldela om ägare för {{count}} konfiguration(er)"
+ownership-management.reassign-owner.confirm: Tilldela om
+ownership-management.reassign-owner.placeholder: Sök efter en användare med namn
+ownership-management.delete.title: Ta bort konfigurationer
+ownership-management.delete.content: "Är du säker på att du vill ta bort {{count}} konfiguration(er)?"
 component.search.pleaceholder: Sök
 focal-point.set: Ange fokuspunkt
 video.placeholder: Klicka för att lägga till en video
@@ -2341,7 +2409,7 @@ perspective-editor.form.main-nav-permission.system.applicationLogger: Applicatio
 perspective-editor.form.main-nav-permission.system.users_hidden: Dölj Användare/Roller-menyn
 perspective-editor.form.main-nav-permission.system.users_roles: Roller
 perspective-editor.form.main-nav-permission.system.users_users: Användare
-perspective-editor.form.main-nav-permission.settings.appearanceBranding: Utseende & Varumärke
+perspective-editor.form.main-nav-permission.system.appearanceBranding: Utseende & Varumärke
 perspective-editor.form.main-nav-permission.system.perspectiveEditor: Perspektivredigerare
 perspective-editor.form.main-nav-permission.system.widgetEditor: Widgetredigerare
 perspective-editor.form.main-nav-permission.system.maintenanceMode: Underhållsläge
@@ -2352,6 +2420,7 @@ perspective-editor.form.main-nav-permission.system.cache_clearSymfony: Cache > R
 perspective-editor.form.main-nav-permission.system.cache_clearTemp: Cache > Rensa temporära filer
 perspective-editor.form.main-nav-permission.system.cache_hidden: Dölj cachemenyn
 perspective-editor.form.main-nav-permission.system.systemSettings: Systeminställningar
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Ägarskapshantering
 perspective-editor.form.main-nav-permission.system.about: Om
 perspective-editor.form.main-nav-permission.category.reporting: Rapportering
 perspective-editor.form.main-nav-permission.reporting.hidden: Dölj rapporteringsmenyn
@@ -2441,12 +2510,17 @@ icon-selector.custom-icon-path: Anpassad sökväg
 icon-selector.custom-icon-path-placeholder: Lägg till en anpassad sökväg och bekräfta
 icon-selector.Twemoji: Twemoji-bibliotek
 icon-selector.Pimcore: Pimcore-bibliotek
+icon-selector.AlternativeLibrary: Alternativt bibliotek
+operational-grid.csv-import.title: Importera CSV
+operational-grid.csv-import.description: Ange CSV-data. Varje rad representerar en rad, kolumner separeras med kommatecken.
+operational-grid.csv-import.ok: Importera
+operational-grid.csv-import.cancel: Avbryt
 language: Språk
 no-languages-found: Inga språk hittades
 pretty-url: Snygg URL / URL Slug
 pretty-url-override-notice: (åsidosätter sökväg från trädstruktur)
 content-main-document: Content-Main-dokument
-content-main-document.apply: Tillämpa Content-Main-dokument
+content-main-document.apply: Tillämpa content-main-dokument
 content-main-document.apply-warning-title: Är du säker?
 content-main-document.apply-warning-message: Allt innehåll kommer att förloras
 never: aldrig
@@ -2662,8 +2736,10 @@ object-restrictions: Objektrestriktioner
 display-mode: Visningsläge
 display-mode-display: Visa sökvägssreferens
 display-mode-inline-search: Inline-sökning
+display-mode-inline-search-unavailable-tooltip: "Inline-sökning är endast tillgänglig när relationen tillåter objekt av exakt en klass. En relation som även tillåter tillgångar, dokument eller objektmappar använder sökvägsreferensen i stället."
 display-mode-grid-view: Rutnätsvy
 display-mode-tag-field: Taggfält
+language-comparison-modal.title: Språkjämförelse
 activate-column-configuration: Aktivera kolumnkonfiguration
 table-column-configuration: Tabellkolumnkonfiguration
 center: Mitten
@@ -2702,6 +2778,8 @@ quantity-values.create-modal.create: Skapa
 quantity-values.export: Exportera
 quantity-values.import: Importera
 quantity-values.import-modal.title: Importera kvantitetsvärdets enheter
+quantity-values.search: Sök
+quantity-values.delete-confirmation: Om du tar bort den här enheten påverkas alla relaterade objekt som refererar till den. Är du säker på att du vill fortsätta?
 owner: Ägare
 reverse-object-relation.tooltip: Icke-ägande objekt representerar relationer till ett annat objekt på samma sätt som objekt gör. Skillnaden är att ett icke-ägande objektfält inte äger relationsdata, utan det är bara en vy av data lagrad i andra objekt. Välj ägare och fältnamn där data ursprungligen lagras.
 disabled-fields: Inaktiverade fält
@@ -2792,23 +2870,3 @@ saved-search.update.success: Sparad sökning uppdaterad
 saved-search.delete.success: Sparad sökning borttagen
 saved-search.shared-modified.info: Du har gjort ändringar i den ursprungliga konfigurationen. Eftersom den ägs av någon annan kan du spara den som en ny sökning.
 saved-search.menu-shortcut-group: Menygrupp
-ownership-management.title: Ägarskapshantering
-ownership-management.show-deleted-owners: Visa objekt från borttagna användare
-ownership-management.deleted-user: Borttagen användare
-ownership-management.columns.id: ID
-ownership-management.columns.name: Namn
-ownership-management.columns.modification-date: Ändringsdatum
-ownership-management.columns.owner: Ägare
-ownership-management.columns.actions: Åtgärder
-ownership-management.actions.reassign-owner: Tilldela om ägare
-ownership-management.actions.reassign-owner.title: Tilldelar om ägare av konfigurationer
-ownership-management.actions.delete: Ta bort
-ownership-management.actions.delete.title: Tar bort konfigurationer
-ownership-management.actions.batch-assign: Batchtilldelning
-ownership-management.actions.batch-delete: Batchborttagning
-ownership-management.reassign-owner.title: "Tilldela om ägare för {{count}} konfiguration(er)"
-ownership-management.reassign-owner.confirm: Tilldela om
-ownership-management.reassign-owner.placeholder: Sök efter en användare med namn
-ownership-management.delete.title: Ta bort konfigurationer
-ownership-management.delete.content: "Är du säker på att du vill ta bort {{count}} konfiguration(er)?"
-perspective-editor.form.main-nav-permission.system.ownershipManagement: Ägarskapshantering

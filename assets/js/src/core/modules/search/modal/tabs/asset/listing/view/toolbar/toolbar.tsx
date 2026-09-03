@@ -19,7 +19,6 @@ import { Flex } from '@Pimcore/components/flex/flex'
 export const Toolbar = (): React.JSX.Element => {
   return (
     <BaseToolbar
-      borderStyle='default'
       padding={ { right: 'none', left: 'none' } }
       theme='secondary'
     >

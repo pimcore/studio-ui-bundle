@@ -23,15 +23,16 @@ import { IconButton, Split } from '@sdk/components'
 import { Segmented } from '@Pimcore/components/segmented/segmented'
 import { SizeTypes } from '@Pimcore/components/preview-card/preview-card'
 import { Text } from '@Pimcore/components/text/text'
+import { useFolderPreviewImageSize } from './hooks/use-folder-preview-image-size'
 
 const PreviewContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const assetContext = useContext(AssetContext)
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
-  const [cardSize, setCardSize] = useState<SizeTypes>(SizeTypes.SMALL)
   const assetId = assetContext.id
   const { asset } = useAssetDraft(assetId)
+  const { imageSize: cardSize, setImageSize: setCardSize } = useFolderPreviewImageSize(assetId)
 
   const { data, isFetching, refetch } = useAssetGetTreeQuery({
     pathIncludeDescendants: true,
@@ -103,7 +104,7 @@ const PreviewContainer = (): React.JSX.Element => {
         )}
       </Content>
     </ContentLayout >
-  ), [currentPage, pageSize, data, isFetching, cardSize])
+  ), [currentPage, pageSize, data, isFetching, cardSize, setCardSize])
 }
 
 export { PreviewContainer }

@@ -13,7 +13,7 @@ import { type GridProps } from '@Pimcore/types/components/types'
 
 export interface IGridContext {
   table: RefObject<HTMLTableElement> | null
-  size?: GridProps['size']
+  size?: Exclude<GridProps['size'], undefined>
 }
 
 export const GridContext = createContext<IGridContext>({

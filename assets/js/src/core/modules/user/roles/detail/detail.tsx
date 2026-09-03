@@ -82,8 +82,10 @@ const Detail = ({ onCloneRole, onRemoveRole, ...props }: IDetailProps): React.JS
 
   const handleRemoveRole = (): void => {
     modal.confirm({
-      title: t('roles.remove-item'),
-      content: t('roles.remove-item.text'),
+      title: t('roles.remove-role'),
+      content: t('roles.remove-role.text', { name: role?.name ?? '' }),
+      okText: t('element.delete.confirmation.ok'),
+      cancelText: t('button.cancel'),
       onOk: async () => {
         triggerConfirm(activeId)
         await removeRole({ id: activeId })

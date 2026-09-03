@@ -23,7 +23,7 @@ import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { type DocType, useDocumentDocTypeListQuery, useDocumentAddMutation } from '../../document-api-slice.gen'
-import { App } from 'antd'
+import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { Form, type formInstanceType } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
 import { type InputRef } from 'antd'
@@ -59,7 +59,7 @@ export const useAddDocument = (config: AddDocumentConfig): UseAddDocumentHookRet
   const [addDocumentMutation] = useDocumentAddMutation()
   const dispatch = useAppDispatch()
   const { isTreeActionAllowed } = useTreePermission()
-  const { modal } = App.useApp()
+  const { localModal: modal } = useStudioModal()
   const formModal = useFormModal()
   const [form] = Form.useForm()
   const firstInputRef = useRef<InputRef>(null)

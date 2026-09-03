@@ -516,8 +516,8 @@ export type SavedSearchDetailedConfiguration = {
     };
     /** ID of the saved search configuration */
     id: number;
-    /** ID of the owner */
-    ownerId: number;
+    /** ID of the owner. Null when the owner has been deleted. */
+    ownerId: number | null;
     /** Name */
     name: string;
     /** Description */

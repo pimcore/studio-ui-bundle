@@ -28,6 +28,7 @@ import { useTranslation } from 'react-i18next'
 import { ApplicationLogger } from './application-logger'
 import { useBundleApplicationLoggerGetCollectionQuery } from './application-logger-api-slice.gen'
 import { useFilter } from './components/sidebar/tabs/filter/provider/filter-provider/use-filter'
+import { mapSortingToSortFilter } from './utils/sorting'
 
 export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -39,18 +40,7 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
   const [sorting, setSorting] = useState<SortingState>([])
   const { columnFilters, setIsLoading: setFilterLoading } = useFilter()
 
-  const sortKeyMap: Record<string, string> = {
-    date: 'timestamp',
-    message: 'message',
-    translatedPriority: 'priority',
-    fileObject: 'fileobject',
-    component: 'component',
-    source: 'source'
-  }
-
-  const sortFilter = sorting.length > 0
-    ? { key: sortKeyMap[sorting[0].id] ?? sorting[0].id, direction: sorting[0].desc ? 'DESC' : 'ASC' }
-    : { key: 'id', direction: 'DESC' }
+  const sortFilter = mapSortingToSortFilter(sorting)
 
   const { data, isFetching: isRTKFetching } = useBundleApplicationLoggerGetCollectionQuery({
     body: {
@@ -67,6 +57,11 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
   const onPagerChange = (page: number, pageSize: number): void => {
     setCurrentPage(page)
     setPageSize(pageSize)
+  }
+
+  const onSortingChange = (updatedSorting: SortingState): void => {
+    setSorting(updatedSorting)
+    setCurrentPage(1)
   }
 
   const refreshData = useCallback((): void => {
@@ -188,7 +183,7 @@ export const ApplicationLoggerContainerInner = (): React.JSX.Element => {
           <ApplicationLogger
             isLoading={ isRTKFetching }
             items={ data?.items ?? [] }
-            onSortingChange={ setSorting }
+            onSortingChange={ onSortingChange }
             sorting={ sorting }
           />
         </Box>

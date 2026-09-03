@@ -12,3 +12,4 @@ Pimcore Studio configuration options:
 - [Global Configuration](./03_Global_Configuration/README.md)
 - [Additional CSS or JS Files](./04_Additional_CSS_or_JS_Files.md)
 - [Auto Save](./05_Auto_Save.md)
+- [Parallel Asset Uploads](./06_Parallel_Asset_Uploads.md)

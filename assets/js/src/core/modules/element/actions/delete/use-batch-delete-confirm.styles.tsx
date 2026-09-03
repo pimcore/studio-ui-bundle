@@ -1,0 +1,26 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { createStyles } from 'antd-style'
+
+export const useStyles = createStyles(({ token }) => ({
+  warningText: {
+    color: token.Colors.Brand.Warning.colorWarningText,
+    // translations may carry line breaks (e.g. the restore note on its own line)
+    whiteSpace: 'pre-line'
+  },
+  pathList: {
+    maxHeight: 200,
+    overflowY: 'auto',
+    marginTop: token.marginXS,
+    paddingLeft: 0,
+    listStyle: 'none'
+  }
+}))

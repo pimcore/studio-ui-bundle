@@ -20,6 +20,7 @@ import { useDataObject } from '@Pimcore/modules/data-object/hooks/use-data-objec
 import { isValidPathFormatterConfig } from '../utils/path-formatter'
 import { flattenValues } from '@Pimcore/components/many-to-many-relation/utils/helpers'
 import { mapToLegacyElementType } from '@Pimcore/modules/element/utils/element-type'
+import type { RelationRowMatcher } from '../filters/types'
 
 export interface ManyToManyRelationValueItem {
   id: number
@@ -27,6 +28,8 @@ export interface ManyToManyRelationValueItem {
   subtype: string | null
   fullPath: string
   isPublished: boolean | null
+  // optional: items added client-side (drag & drop, search) carry no flag and are treated as viewable
+  hasViewAccess?: boolean
 }
 
 export interface DisplayManyToManyRelationValueItem extends ManyToManyRelationValueItem {
@@ -60,13 +63,18 @@ export const useValue = (
   maxItems: number | null,
   allowMultipleAssignments?: boolean,
   pathFormatterConfig?: { name: string | undefined, class: string | undefined },
-  visibleFieldsValue?: Array<Record<string, any> | undefined>
+  visibleFieldsValue?: Array<Record<string, any> | undefined>,
+  matchRow?: RelationRowMatcher
 ): UseValueReturn => {
   const { id: dataObjectId } = useDataObject()
   const { formatPath, hasUncachedItems } = useFormatPath()
   const modal = useAlertModal()
 
   const currentSearchTerm = useRef<string>('')
+  // Kept in a ref so the async display value updates always filter with the
+  // column filters that are applied right now.
+  const currentMatchRow = useRef<RelationRowMatcher | undefined>(matchRow)
+  currentMatchRow.current = matchRow
 
   const { t } = useTranslation()
 
@@ -130,7 +138,9 @@ export const useValue = (
   }
 
   function applySearchFilter (items: DisplayManyToManyRelationValue, searchTerm: string): DisplayManyToManyRelationValue {
-    if (searchTerm === '') return items
+    const matchesColumnFilters = currentMatchRow.current
+
+    if (searchTerm === '' && isUndefined(matchesColumnFilters)) return items
 
     const normalizedSearch = searchTerm.toLowerCase()
     const hasVisibleFields = !isNil(visibleFieldsValue)
@@ -142,31 +152,37 @@ export const useValue = (
         )
       : null
 
+    const matchesSearchTerm = (item: DisplayManyToManyRelationValueItem): boolean => {
+      if (searchTerm === '') return true
+
+      let matched: boolean | undefined = false
+
+      if (hasVisibleFields && visibleFieldsMap !== null) {
+        const visibleItem = visibleFieldsMap.get(item.id)
+
+        if (!isUndefined(visibleItem)) {
+          matched = Object.values(visibleItem).some((val) =>
+            flattenValues(val).some((str) => str.toLowerCase().includes(normalizedSearch))
+          )
+        }
+      }
+
+      if (!matched) {
+        matched =
+          item.fullPath.toLowerCase().includes(normalizedSearch) ||
+          item.id.toString().includes(searchTerm) ||
+          item.type.toLowerCase().includes(normalizedSearch) ||
+          item.subtype?.toLowerCase().includes(normalizedSearch)
+      }
+
+      return matched === true
+    }
+
     return items
       .map((item, originalIndex): DisplayManyToManyRelationValueItem => ({ ...item, originalIndex }))
-      .filter((item: DisplayManyToManyRelationValueItem) => {
-        let matched: boolean | undefined = false
-
-        if (hasVisibleFields && visibleFieldsMap !== null) {
-          const visibleItem = visibleFieldsMap.get(item.id)
-
-          if (!isUndefined(visibleItem)) {
-            matched = Object.values(visibleItem).some((val) =>
-              flattenValues(val).some((str) => str.toLowerCase().includes(normalizedSearch))
-            )
-          }
-        }
-
-        if (!matched) {
-          matched =
-            item.fullPath.toLowerCase().includes(normalizedSearch) ||
-            item.id.toString().includes(searchTerm) ||
-            item.type.toLowerCase().includes(normalizedSearch) ||
-            item.subtype?.toLowerCase().includes(normalizedSearch)
-        }
-
-        return matched
-      })
+      .filter((item: DisplayManyToManyRelationValueItem) =>
+        matchesSearchTerm(item) && (matchesColumnFilters?.(item) ?? true)
+      )
   }
 
   function applyFormattingWithLoadingState (

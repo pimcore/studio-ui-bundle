@@ -54,7 +54,9 @@ import { DynamicTypeFieldFilterDataObjectObjectBrick } from '@Pimcore/modules/el
 import { DynamicTypeFieldFilterDate } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/date/dynamic-type-field-filter-date'
 import { DynamicTypeFieldFilterId } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/id/dynamic-type-field-filter-id'
 import { DynamicTypeFieldFilterNumber } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/number/dynamic-type-field-filter-number'
+import { DynamicTypeFieldFilterFileSize } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/file-size/dynamic-type-field-filter-file-size'
 import { DynamicTypeFieldFilterMultiselect } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/multiselect/dynamic-type-field-filter-multiselect'
+import { DynamicTypeFieldFilterUser } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/user/dynamic-type-field-filter-user'
 import { DynamicTypeFieldFilterString } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/string/dynamic-type-field-filter-string'
 import { DynamicTypeGridCellRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/dynamic-type-grid-cell-registry'
 import { DynamicTypeGridCellDependencyTypeIcon } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/_dependencies/dynamic-type-grid-cell-dependency-type-icon'
@@ -239,6 +241,7 @@ import { DynamicTypeGridCellSystemString } from '@Pimcore/modules/element/dynami
 import { DynamicTypeGridCellSystemBoolean } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-boolean/dynamic-type-grid-cell-system-boolean'
 import { DynamicTypeGridCellSystemDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-datetime/dynamic-type-grid-cell-system-datetime'
 import { DynamicTypeGridCellSystemInteger } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-integer/dynamic-type-grid-cell-system-integer'
+import { DynamicTypeGridCellSystemUser } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-user/dynamic-type-grid-cell-system-user'
 import { DynamicTypeFieldFilterNone } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/none/dynamic-type-field-filter-none'
 import { DynamicTypeDocumentPage } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-page'
 import { DynamicTypeDocumentRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/dynamic-type-document-registry'
@@ -252,6 +255,7 @@ import { DynamicTypeFieldFilterBooleanSelect } from '@Pimcore/modules/element/dy
 import { VariantTabManager } from '@Pimcore/modules/data-object/editor/types/variant/tab-manager/object-tab-manager'
 import { DynamicTypeIconSetPimcoreDefault } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-default-icons/dynamic-type-icon-set-pimcore-default'
 import { DynamicTypeIconSetTwemoji } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-twemoji-icons/dynamic-type-icon-set-twemoji'
+import { DynamicTypeIconSetAlternativeLibrary } from '@Pimcore/components/icon-selector/dynamic-types/definitions/pimcore-alternative-library-icons/dynamic-type-icon-set-alternative-library'
 import { DynamicTypeIconSetRegistry } from '@Pimcore/components/icon-selector/dynamic-types/registry/dynamic-type-icon-set-registry'
 import { DynamicTypeGridCellClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/classificationstore/dynamic-type-grid-cell-classificationstore'
 import { TypeRegistry } from '@Pimcore/modules/element/editor/services/type-registry'
@@ -346,6 +350,9 @@ import { DynamicTypeFieldDefinitionObjectbricks } from '@Pimcore/modules/field-d
 import { DynamicTypeFieldDefinitionClassificationstore } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/classificationstore/dynamic-type-field-definition-classificationstore'
 import { DynamicTypeFieldDefinitionLocalizedfields } from '@Pimcore/modules/field-definitions/dynamic-types/types/data/localizedfields/dynamic-type-field-definition-localizedfields'
 import { DynamicTypeGDPRProviderRegistry } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/registry/dynamic-type-gdpr-provider-registry'
+import { DynamicTypeNotificationRegistry } from '@Pimcore/modules/notifications/dynamic-types/registry/dynamic-type-notification-registry'
+import { DynamicTypeNotificationChannelRegistry } from '@Pimcore/modules/notifications/dynamic-types/registry/dynamic-type-notification-channel-registry'
+import { DynamicTypeNotificationChannelEmail, DynamicTypeNotificationChannelPopup } from '@Pimcore/modules/notifications/dynamic-types/definitions/notification-channels'
 import { DynamicTypeDataObjectGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-data-object-gdpr-provider'
 import { DynamicTypeAssetsGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-assets-gdpr-provider'
 import { DynamicTypeUsersGDPRProvider } from '@Pimcore/modules/gdpr-data-extractor/dynamic-types/definitions/dynamic-type-users-gdpr-provider'
@@ -385,8 +392,8 @@ import { SetFramerateVideoTransformationType } from '@Pimcore/modules/video-thum
 import { ColorChannelMixerVideoTransformationType } from '@Pimcore/modules/video-thumbnails/dynamic-types/color-channel-mixer/color-channel-mixer-transformation-type'
 import { MuteVideoTransformationType } from '@Pimcore/modules/video-thumbnails/dynamic-types/mute/mute-transformation-type'
 
-// Component registry
 export function installCoreServices (container: Container): void {
+  // Component registry
   container.bind(serviceIds['App/ComponentRegistry/ComponentRegistry']).to(ComponentRegistry).inSingletonScope()
 
   // Context menu registry
@@ -469,7 +476,9 @@ export function installCoreServices (container: Container): void {
   container.bind(serviceIds['DynamicTypes/FieldFilter/None']).to(DynamicTypeFieldFilterNone).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldFilter/Id']).to(DynamicTypeFieldFilterId).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldFilter/Number']).to(DynamicTypeFieldFilterNumber).inSingletonScope()
+  container.bind(serviceIds['DynamicTypes/FieldFilter/FileSize']).to(DynamicTypeFieldFilterFileSize).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldFilter/Multiselect']).to(DynamicTypeFieldFilterMultiselect).inSingletonScope()
+  container.bind(serviceIds['DynamicTypes/FieldFilter/User']).to(DynamicTypeFieldFilterUser).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldFilter/Date']).to(DynamicTypeFieldFilterDate).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldFilter/Boolean']).to(DynamicTypeFieldFilterBoolean).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldFilter/BooleanSelect']).to(DynamicTypeFieldFilterBooleanSelect).inSingletonScope()
@@ -541,6 +550,7 @@ export function installCoreServices (container: Container): void {
   container.bind(serviceIds['DynamicTypes/GridCell/SystemBoolean']).to(DynamicTypeGridCellSystemBoolean).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/GridCell/SystemDatetime']).to(DynamicTypeGridCellSystemDatetime).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/GridCell/SystemInteger']).to(DynamicTypeGridCellSystemInteger).inSingletonScope()
+  container.bind(serviceIds['DynamicTypes/GridCell/SystemUser']).to(DynamicTypeGridCellSystemUser).inSingletonScope()
 
   // Advanced grid cell registry
   container.bind(serviceIds['DynamicTypes/AdvancedGridCellRegistry']).to(DynamicTypeGridCellRegistry).inSingletonScope()
@@ -735,6 +745,7 @@ export function installCoreServices (container: Container): void {
   container.bind(serviceIds['DynamicTypes/IconSetRegistry']).to(DynamicTypeIconSetRegistry).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/IconSet/PimcoreDefault']).to(DynamicTypeIconSetPimcoreDefault).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/IconSet/Twemoji']).to(DynamicTypeIconSetTwemoji).inSingletonScope()
+  container.bind(serviceIds['DynamicTypes/IconSet/AlternativeLibrary']).to(DynamicTypeIconSetAlternativeLibrary).inSingletonScope()
 
   // Perspective Ediotor & Widget Editor
   container.bind(serviceIds['DynamicTypes/WidgetEditor/WidgetTypeRegistry']).to(DynamicTypeWidgetTypeRegistry).inSingletonScope()
@@ -852,6 +863,12 @@ export function installCoreServices (container: Container): void {
   container.bind(serviceIds['DynamicTypes/VideoTransformation/SetFramerate']).to(SetFramerateVideoTransformationType).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/VideoTransformation/ColorChannelMixer']).to(ColorChannelMixerVideoTransformationType).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/VideoTransformation/Mute']).to(MuteVideoTransformationType).inSingletonScope()
+
+  // Notifications
+  container.bind(serviceIds['DynamicTypes/NotificationRegistry']).to(DynamicTypeNotificationRegistry).inSingletonScope()
+  container.bind(serviceIds['DynamicTypes/NotificationChannelRegistry']).to(DynamicTypeNotificationChannelRegistry).inSingletonScope()
+  container.bind(serviceIds['DynamicTypes/NotificationChannel/Popup']).to(DynamicTypeNotificationChannelPopup).inSingletonScope()
+  container.bind(serviceIds['DynamicTypes/NotificationChannel/Email']).to(DynamicTypeNotificationChannelEmail).inSingletonScope()
 
   // GDPR Provider
   container.bind(serviceIds['DynamicTypes/GDPRProviderRegistry']).to(DynamicTypeGDPRProviderRegistry).inSingletonScope()

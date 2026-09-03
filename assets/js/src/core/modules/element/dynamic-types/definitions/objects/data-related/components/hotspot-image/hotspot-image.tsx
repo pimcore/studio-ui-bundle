@@ -46,6 +46,7 @@ import { InlineUpload } from '@Pimcore/components/inline-upload'
 import { useUploadModal } from '@Pimcore/components/modal-upload/hooks/use-upload-modal'
 import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
+import { imageUploadAccept } from '@Pimcore/modules/asset/utils/upload-accept'
 
 export interface HotspotImageValue {
   image: ImageValue | null
@@ -129,7 +130,7 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
   const handleUpload = useCallback(() => {
     triggerUpload({
       targetFolderPath: props.uploadPath ?? '',
-      accept: 'image/*',
+      accept: imageUploadAccept,
       multiple: false,
       maxItems: 1,
       onSuccess: async (assets) => {
@@ -230,7 +231,7 @@ export const HotspotImage = (props: HotspotImageProps): React.JSX.Element => {
       }
     >
       <InlineUpload
-        accept="image/*"
+        accept={ imageUploadAccept }
         assetType="image"
         disabled={ props.disabled }
         onSuccess={ handleFileSystemUpload }

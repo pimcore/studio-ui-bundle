@@ -12,7 +12,7 @@ import { Form, type formInstanceType } from '@Pimcore/components/form/form'
 import React, { createContext, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type SiteFormValues } from '../site-form'
-import { App } from 'antd'
+import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { isNull } from 'lodash'
 import { SiteModal } from './site-modal'
 
@@ -45,7 +45,7 @@ export const SiteModalContext = createContext<SiteModalContextProps | undefined>
 
 export const SiteModalProvider = ({ children }: SiteModalProviderProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { modal } = App.useApp()
+  const { localModal: modal } = useStudioModal()
   const [currentModal, setCurrentModal] = useState<CurrentModal | null>(null)
   const [form] = Form.useForm<SiteFormValues>()
 

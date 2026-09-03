@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { App } from 'antd'
+import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import type { DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
@@ -36,7 +36,7 @@ interface IUseElementActionsMenuReturn {
 
 export const useElementActionsMenu = ({ element, elementType }: IUseElementActionsMenuProps): IUseElementActionsMenuReturn => {
   const { t } = useTranslation()
-  const { modal } = App.useApp()
+  const { localModal: modal } = useStudioModal()
 
   if (element === undefined) {
     return { actionMenuItems: [] }

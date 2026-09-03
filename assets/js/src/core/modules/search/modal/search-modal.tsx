@@ -62,11 +62,15 @@ export const SearchModal = (): React.JSX.Element => {
           onCancel={ () => { close() } }
           open={ isOpen }
           size={ 'XL' }
+          styles={ { body: { height: '65vh', display: 'flex', flexDirection: 'column' } } }
+          title={ t('search-modal.title') }
         >
           <Tabs
             activeKey={ activeKey }
             data-testid="search-modal-tabs"
+            fullHeight
             items={ tabItems }
+            noPadding
             noTabBarMargin
             onChange={ (key) => {
               setActiveKey(key)

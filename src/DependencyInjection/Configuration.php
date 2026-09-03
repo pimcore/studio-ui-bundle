@@ -37,6 +37,19 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('url_path')
                 ->defaultValue('/pimcore-studio')
             ->end()
+            ->arrayNode('asset_upload')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->integerNode('max_parallel_uploads')
+                        ->info(
+                            'How many asset uploads a single browser tab sends at the same time. ' .
+                            'Lower this if bursts of uploads exhaust the PHP-FPM pool.'
+                        )
+                        ->min(1)
+                        ->defaultValue(5)
+                    ->end()
+                ->end()
+            ->end()
             ->arrayNode('static_resources')
                 ->addDefaultsIfNotSet()
                 ->children()

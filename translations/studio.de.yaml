@@ -13,7 +13,6 @@ widget.missing-tab-context.description: Diese Funktion wird für das zugehörige
 block: Block
 error.error_something_generic_went_wrong: Etwas ist schiefgelaufen
 error.error_permission_denied: Sie haben keine Berechtigung, diese Aktion für dieses Element durchzuführen.
-error.syntax_error: Syntaxfehler
 error.error_element_exists: Element existiert bereits
 error.error_folder_exists: Ordner existiert bereits
 error.error_invalid_argument: Ungültiges Argument
@@ -26,6 +25,7 @@ error.error_document_language_not_set: Für das Dokument ist keine Sprache festg
 error.error_inconsistent_asset_type: Nur Assets desselben Typs sind hier erlaubt.
 error.error_recycle_bin_restore: Element kann nicht aus dem Papierkorb wiederhergestellt werden
 error.error_recycle_bin_restore_missing_parent: Element kann nicht aus dem Papierkorb wiederhergestellt werden, übergeordnetes Element fehlt
+error.syntax_error: Syntaxfehler
 sidebar.selected_elements: Ausgewählte Elemente
 sidebar.grid_config: Grid-Konfiguration
 sidebar.tag_filters: Tag-Filter
@@ -83,6 +83,7 @@ asset.upload.overwrite: Überschreiben
 asset.upload.keep-both: Beide behalten
 asset.upload.skip: Überspringen
 asset.upload.apply-to-all: Auf alle anwenden
+asset.upload.checking-duplicate-file-names: "Dateinamen werden auf Duplikate geprüft ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Ordner werden erstellt
 asset.upload.folder-drop.creating-folders-hint: Bitte warten Sie, während die Ordnerstruktur erstellt wird…
 upload.error.file-too-large: Die Datei ist größer als das aktuelle Upload-Limit des Servers.
@@ -314,6 +315,7 @@ preview-card.rename: Umbenennen
 preview-card.download-zip: Als ZIP herunterladen
 preview-card.delete: Löschen
 grid.aria.column-resize: Spaltengröße ändern
+sidebar.aria.resize: Seitenleistengröße ändern
 tree.aria.expand-and-collapse: Baumelement auf- oder zuklappen
 image-sidebar.tab.details.custom-download: Benutzerdefinierter Download
 aria.asset.image-sidebar.tab.details.custom-thumbnail-mode: Auswahl des benutzerdefinierten Vorschaubild-Modus
@@ -344,6 +346,10 @@ grid.filter.to: Bis
 grid.filter.is: Ist
 grid.filter.less: Kleiner als
 grid.filter.more: Größer als
+grid.filter.column: '{{column}} filtern'
+grid.filter.file-size-unit.kb: KB
+grid.filter.file-size-unit.mb: MB
+grid.filter.file-size-unit.gb: GB
 grid.copy-notice: In die Zwischenablage kopiert
 grid.configuration.no-saved-templates: Keine gespeicherten Vorlagen verfügbar
 grid.configuration.template: Vorlage
@@ -370,6 +376,7 @@ grid.advanced-column.preview: Vorschau
 grid.advanced-column.no-preview: Kein Vorschauelement verfügbar
 grid.advanced-column.no-preview-data: Keine Vorschaudaten verfügbar
 grid.advanced-column.error-preview-data: Fehler beim Laden der Vorschau
+grid.advanced-column.preview-item: Vorschauelement
 grid.advanced-column.trim: Kürzen
 grid.advanced-column.find: Suchen
 grid.advanced-column.replace: Ersetzen
@@ -405,8 +412,8 @@ grid.advanced-column.advancedColumns.phpCode: PHP-Code
 grid.advanced-column.advancedColumns.phpCodeKey: PHP-Transformator-Schlüssel
 grid.advanced-column.advancedColumns.arguments: Argumente
 component.workflow-card.action-btn: Workflow-Aktionen
-component.pql.description: Pimcore Query Language (PQL) ist eine einfache, aber leistungsstarke Abfragesprache, mit der Sie Daten anhand verschiedener Kriterien durchsuchen können, einschließlich der Filterung von Werten in verknüpften Elementen, um eine präzise und umfassende Datenabfrage zu ermöglichen. Weitere Informationen finden Sie in der <anchorPQL>PQL-Dokumentation</anchorPQL>
 component.pql.placeholder: Ihre Abfrage eingeben
+component.pql.description: Pimcore Query Language (PQL) ist eine einfache, aber leistungsstarke Abfragesprache, mit der Sie Daten anhand verschiedener Kriterien durchsuchen können, einschließlich der Filterung von Werten in verknüpften Elementen, um eine präzise und umfassende Datenabfrage zu ermöglichen. Weitere Informationen finden Sie in der <anchorPQL>PQL-Dokumentation</anchorPQL>
 asset.asset-editor-tabs.embedded-metadata.headline: Meta-Informationen
 asset.asset-editor-tabs.embedded-metadata.columns.name: Name
 asset.asset-editor-tabs.embedded-metadata.columns.value: Wert
@@ -439,6 +446,7 @@ version.label: Versionen
 version.versions: Versionen
 version.version: Version
 version.publish: Veröffentlichen
+version.coauthored-by: 'Mitverfasst von {{type}} {{name}}'
 version.published: Veröffentlicht
 version.autosaved: Automatisch gespeichert
 version.schedule-for: Geplant für
@@ -466,6 +474,8 @@ version.no-difference: Es gibt keinen Unterschied zwischen den ausgewählten Ver
 version.category.title.systemData: Systemdaten
 version.category.title.baseData: Basisdaten
 version.category.title.meta: Metadaten
+version.category.title.properties: Eigenschaften
+version.changed-attributes: "Geänderte Attribute: {{attributes}}"
 aria.version.delete: Version löschen
 aria.version.expand: Version aufklappen
 clear-all: Alle löschen
@@ -490,8 +500,10 @@ schedule.all: Alle geplant (bevorstehend & Archiv)
 schedule.toolbar.filters.active-switch: Nur aktive
 schedule.toolbar.new: Neu
 schedule.toolbar.save-scheduled-tasks: Geplante Aufgaben speichern
-schedule.version.delete: Version löschen
-schedule.version.publish: Version veröffentlichen
+schedule.action.delete: Löschen
+schedule.action.publish: Veröffentlichen
+schedule.action.unpublish: Veröffentlichung aufheben
+schedule.action.publish-version: Version veröffentlichen
 schedule.select-an-action: Aktion
 schedule.select-a-version: Version
 schedule.archived: Archiviert
@@ -519,15 +531,20 @@ key: Schlüssel
 published: Veröffentlicht
 classname: Klassenname
 index: Index
+userModification: Benutzer Änderung
+userOwner: Eigentümer
+listing.grid-config.convert-to-advanced: In erweiterte Spalte umwandeln
 listing.grid-config.title: Grid-Konfiguration
 grid-config.discard-all-changes: Alle Änderungen verwerfen
 grid-config.apply-changes: Änderungen übernehmen
+grid-config.reload: Neu laden
 listing.add-column: Spalte hinzufügen
 listing.add-column.simple: Einfach
 listing.add-column.advanced: Erweitert
 listing.column-picker.search: Suchen
 listing.column-picker.no-results: Keine Spalten gefunden
 listing.column-picker.fields-to-add: Hinzuzufügende Felder
+listing.fields-to-add.collapse-simple-fields: Einfache Felder einklappen
 listing.actions: Auf Auswahl anwenden
 listing.non-selected.actions: Auf alle anwenden
 listing.actions.zip-download: ZIP-Download
@@ -586,8 +603,6 @@ website-settings.columns.language: Sprache
 website-settings.columns.value: Wert
 website-settings.columns.site: Site
 website-settings.columns.actions: Aktionen
-website-settings.website-settings-already-exist.title: Website Einstellung existiert bereits
-website-settings.website-settings-already-exist.error: Name wird bereits verwendet, bitte wählen Sie einen anderen
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Pflichtfelder fehlen
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Name und Typ sind Pflichtfelder und müssen ausgefüllt werden.
 document-types.new: Neu
@@ -667,6 +682,21 @@ edit: Bearbeiten
 modify: Ändern
 component.no-content.no-content-available: Kein Inhalt verfügbar
 notifications.label: Benachrichtigungen
+notifications.settings.label: Benachrichtigungseinstellungen
+notifications.settings.description: Aktivieren Sie „Benachrichtigen“ für alles, was in Ihrer Benachrichtigungsglocke erscheinen soll, und fügen Sie für die wichtigsten Themen zusätzliche Kanäle hinzu.
+notifications.settings.description-popup-only: Wählen Sie, wie Sie Benachrichtigungen erhalten. Alles, worüber Sie benachrichtigt werden, erscheint immer in Ihrer Benachrichtigungsglocke.
+notifications.settings.column.type: Benachrichtigungstyp
+notifications.settings.column.subscribed: Benachrichtigen
+notifications.settings.not-available: Für diesen Typ nicht verfügbar
+notifications.settings.save: Speichern
+notifications.settings.saved: Benachrichtigungseinstellungen gespeichert
+notifications.settings.discard: Verwerfen
+notifications.settings.discard.title: Nicht gespeicherte Änderungen verwerfen?
+notifications.settings.discard.confirm: Verwerfen
+notifications.settings.discard.keep-editing: Weiter bearbeiten
+notifications.settings.unsaved-changes_one: "{{count}} nicht gespeicherte Änderung"
+notifications.settings.unsaved-changes_other: "{{count}} nicht gespeicherte Änderungen"
+notifications.settings.group.general: Allgemein
 notifications.remove-all: Alle entfernen
 notifications.new-notification: Neue Benachrichtigung
 notifications.columns.title: Titel
@@ -828,6 +858,10 @@ field-definition.many-to-many-object-relation: Many-to-Many Object Relation
 field-definition.advanced-many-to-many-relation: Erweiterte Many-to-Many Relation
 field-definition.advanced-many-to-many-object-relation: Erweiterte Many-to-Many Object Relation
 field-definition.reverse-object-relation: Umgekehrte Objektrelation
+field-definition.crm.gender.title: Geschlecht
+field-definition.crm.firstname.title: Vorname
+field-definition.crm.email.title: E-Mail
+field-definition.crm.lastname.title: Nachname
 allowed-class: Erlaubte Klasse
 allowed-classes: Erlaubte Klassen
 allowed-asset-types: Erlaubte Asset-Typen
@@ -1077,14 +1111,14 @@ jobs.job.button-download: Herunterladen
 jobs.job.button-ignore-and-reload: Ignorieren und neu laden
 jobs.job.step_hint: "Schritt {{step}}/{{total}}"
 jobs.job.step_hint_single: "Schritt {{step}}"
-jobs.job.step.batch-edit.preparing: Stapelbearbeitung wird vorbereitet
-jobs.job.step.batch-edit.applying: Stapelbearbeitung wird angewendet
 jobs.job.download-error: Download fehlgeschlagen
 jobs.job.download-not-available: Der Download ist nicht mehr verfügbar.
 jobs.job.button-show-errors: Fehler anzeigen
 jobs.job.error-modal.title: Auftragsfehler
 jobs.job.button-abort: Auftrag abbrechen
 jobs.job.abort-confirm: Möchten Sie diesen Auftrag wirklich abbrechen?
+jobs.job.step.batch-edit.preparing: Stapelbearbeitung wird vorbereitet
+jobs.job.step.batch-edit.applying: Stapelbearbeitung wird angewendet
 jobs.zip-job.title: "ZIP-Download von {{title}}"
 jobs.csv-job.title: "CSV-Download von {{title}}"
 jobs.xlsx-job.title: "XLSX-Download von {{title}}"
@@ -1143,6 +1177,8 @@ close-unmodified: Unveränderte schließen
 close-all: Alle schließen
 asset.tree.context-menu.download: Herunterladen
 asset.tree.context-menu.download-as-zip: Als ZIP herunterladen
+element-selector.title.single: Element auswählen
+element-selector.title.multiple: Elemente auswählen
 element.tree.context-menu.new-assets: Neue(s) Asset(s)
 element.tree.context-menu.add-assets.upload-files: Dateien hochladen
 element.tree.context-menu.add-assets.upload-zip: ZIP hochladen
@@ -1182,6 +1218,7 @@ element.new-folder.validation: Bitte geben Sie einen gültigen Namen ein
 element.rename: Umbenennen
 element.rename.label: Bitte geben Sie den neuen Namen ein
 element.rename.validation: Bitte geben Sie einen gültigen Namen ein
+element.share-via-notification: Über Benachrichtigungen teilen
 element.delete: Löschen
 element.delete.confirmation.title: Element löschen
 element.delete.confirmation.text: Möchten Sie dieses Element wirklich löschen?
@@ -1193,12 +1230,17 @@ element.delete.folder.large.note: 'Bitte beachten: Der Ordner und seine Inhalte 
 element.delete.folder.ok: Löschen
 element.delete.folder.ok.permanent: Endgültig löschen
 element.delete.batch.title: Elemente löschen
-element.delete.batch.note: 'Bitte beachten: Diese Elemente werden dauerhaft gelöscht und können nicht wiederhergestellt werden.'
+element.delete.batch.note_one: 'Bitte beachten: Dieses Element wird dauerhaft gelöscht und kann nicht wiederhergestellt werden.'
+element.delete.batch.note_other: 'Bitte beachten: Diese Elemente werden dauerhaft gelöscht und können nicht wiederhergestellt werden.'
+element.delete.batch.note.permanent-dependencies_one: "Bitte beachten: Dieses Element hat Abhängigkeiten und wird dauerhaft gelöscht.\nEs kann nicht wiederhergestellt werden."
+element.delete.batch.note.permanent-dependencies_other: "Bitte beachten: Diese Elemente haben Abhängigkeiten und werden dauerhaft gelöscht.\nSie können nicht wiederhergestellt werden."
 element.delete.batch.question_one: 'Möchten Sie dieses Element wirklich löschen?'
 element.delete.batch.question_other: 'Möchten Sie wirklich diese {{count}} Elemente löschen?'
-element.delete.batch.ok: Endgültig löschen
+element.delete.batch.ok: Löschen
+element.delete.batch.ok.permanent: Endgültig löschen
 element.delete.batch.show-paths: Elemente anzeigen
-element.delete.batch.dependencies-warning: 'Es könnte Abhängigkeiten geben, trotzdem löschen?'
+element.delete.batch.dependencies-warning.confirmed_one: 'Bitte beachten: Dieses Element hat Abhängigkeiten.'
+element.delete.batch.dependencies-warning.confirmed_other: 'Bitte beachten: Diese Elemente haben Abhängigkeiten.'
 element.open: Öffnen
 element.toolbar.copy-id: ID kopieren
 element.toolbar.copy-full-path-to-clipboard: Vollständigen Pfad kopieren
@@ -1235,6 +1277,7 @@ unknown: Unbekannt
 warning: Warnung
 error: Fehler
 info: Info
+success: Erfolg
 no-value-set: Kein Wert gesetzt
 set-to-null: Leer (auf null setzen)
 remove: Entfernen
@@ -1259,8 +1302,10 @@ relations.subtype: Untertyp
 relations.classname: Klasse
 relations.fullpath: Vollständiger Pfad
 relations.remove-all.confirm: Möchten Sie wirklich alle Relationen löschen?
+relations.upload.subtype-not-allowed: Hochgeladene Assets, deren Typ diese Relation nicht zulässt, wurden nicht zugewiesen.
 relation: Relation
 items-limit-reached: Die maximale Anzahl von Einträgen ({{maxItems}}) wurde erreicht.
+asset-upload-type-not-allowed: Der Typ des hochgeladenen Assets ist für dieses Feld nicht zulässig.
 actions: Aktionen
 asset: Asset
 data-object: Data Object
@@ -1273,6 +1318,8 @@ image-gallery.clear-image-selection: Bildauswahl leeren
 image-gallery.delete-frame: Rahmen löschen
 text: Text
 video: Video
+object: Objekt
+variant: Variante
 processing: Verarbeitung
 upload: Hochladen
 close: Schließen
@@ -1301,7 +1348,7 @@ tree.actions.paste: Einfügen
 tree.actions.delete: Löschen
 tree.actions.add-user: Benutzer hinzufügen
 tree.actions.clone-user: Benutzer klonen
-tree.actions.remove-user: Benutzer entfernen
+tree.actions.remove-user: Benutzer löschen
 tree.actions.folder: Ordner
 tree.actions.user: Benutzer
 tree.actions.add-folder: Neuer Ordner
@@ -1311,7 +1358,7 @@ tree.actions.rename-tag: Umbenennen
 tree.actions.role: Rolle
 tree.actions.add-role: Rolle hinzufügen
 tree.actions.clone-role: Rolle klonen
-tree.actions.remove-role: Rolle entfernen
+tree.actions.remove-role: Rolle löschen
 tree.actions.remove-folder: Ordner entfernen
 tag-configuration.new: Neu
 tag-configuration.new-tag: Neuer Tag
@@ -1361,6 +1408,7 @@ key-bindings.searchAsset: Asset suchen
 key-bindings.searchObject: Objekt suchen
 key-bindings.searchAndReplaceAssignments: Zuweisungen suchen und ersetzen
 key-bindings.quickSearch: Schnellsuche
+search-modal.title: Schnellsuche
 key-bindings.system: System
 key-bindings.showMetaInfo: Meta-Info anzeigen
 key-bindings.showElementHistory: Elementverlauf anzeigen
@@ -1579,14 +1627,14 @@ redirects.csv-import-results.errored: Fehlerhaft
 redirects.csv-import-results.close: Schließen
 redirects.csv-import-results.errors-details: Fehlerdetails
 redirects.csv-import-results.line: Zeile {{line}}
+robots-txt.save-success: robots.txt erfolgreich gespeichert
+robots-txt.on-file-system-warning: "Speichern deaktiviert: Eine physische robots.txt-Datei existiert im Dateisystem."
 path: Pfad
 entire_uri: Gesamte URI
 path_query: Pfad und Query
 auto_create: Automatisch erstellen
 widget.redirects: Weiterleitungen
 navigation.redirects: Weiterleitungen
-robots-txt.save-success: robots.txt erfolgreich gespeichert
-robots-txt.on-file-system-warning: "Speichern deaktiviert: Eine physische robots.txt-Datei existiert im Dateisystem."
 widget.robots-txt: robots.txt
 navigation.robots-txt: robots.txt
 perspective.default: Standard
@@ -2203,6 +2251,7 @@ application-logger.filter.priority-level.8: Debug
 embed.url-modal.title: Embed-URL bearbeiten
 embed.url-modal.label: URL (z.B. https://www.youtube.com/watch?v=nPntDiARQYw)
 embed.url-modal.required-message: Bitte geben Sie eine gültige URL ein
+alert-modal.ok-text: OK
 embed.url-modal.ok-text: Speichern
 embed.url-modal.cancel-text: Abbrechen
 embed.url-modal.warning: "Ungültige URLs zeigen keine Vorschau an, bitte überprüfen und aktualisieren Sie Ihre URL."
@@ -2240,6 +2289,25 @@ recycle-bin.actions.delete: Löschen
 recycle-bin.actions.delete.title: Papierkorb-Einträge löschen
 recycle-bin.actions.restore: Wiederherstellen
 recycle-bin.actions.restore.title: Papierkorb-Einträge wiederherstellen
+ownership-management.title: Eigentümerverwaltung
+ownership-management.show-deleted-owners: Elemente von gelöschten Benutzern anzeigen
+ownership-management.deleted-user: Gelöschter Benutzer
+ownership-management.columns.id: ID
+ownership-management.columns.name: Name
+ownership-management.columns.modification-date: Änderungsdatum
+ownership-management.columns.owner: Eigentümer
+ownership-management.columns.actions: Aktionen
+ownership-management.actions.reassign-owner: Eigentümer neu zuweisen
+ownership-management.actions.reassign-owner.title: Eigentümer der Konfigurationen wird neu zugewiesen
+ownership-management.actions.delete: Löschen
+ownership-management.actions.delete.title: Konfigurationen werden gelöscht
+ownership-management.actions.batch-assign: Stapelzuweisung
+ownership-management.actions.batch-delete: Stapellöschung
+ownership-management.reassign-owner.title: "Eigentümer von {{count}} Konfiguration(en) neu zuweisen"
+ownership-management.reassign-owner.confirm: Neu zuweisen
+ownership-management.reassign-owner.placeholder: Benutzer nach Namen suchen
+ownership-management.delete.title: Konfigurationen löschen
+ownership-management.delete.content: "Möchten Sie {{count}} Konfiguration(en) wirklich löschen?"
 component.search.pleaceholder: Suche
 focal-point.set: Fokuspunkt setzen
 video.placeholder: Klicken, um ein Video hinzuzufügen
@@ -2352,6 +2420,7 @@ perspective-editor.form.main-nav-permission.system.cache_clearSymfony: Cache > S
 perspective-editor.form.main-nav-permission.system.cache_clearTemp: Cache > Temporäre Dateien löschen
 perspective-editor.form.main-nav-permission.system.cache_hidden: Cache Menü ausblenden
 perspective-editor.form.main-nav-permission.system.systemSettings: Systemeinstellungen
+perspective-editor.form.main-nav-permission.system.ownershipManagement: Eigentümerverwaltung
 perspective-editor.form.main-nav-permission.system.about: Über
 perspective-editor.form.main-nav-permission.category.reporting: Berichte
 perspective-editor.form.main-nav-permission.reporting.hidden: Berichte Menü ausblenden
@@ -2441,6 +2510,11 @@ icon-selector.custom-icon-path: Benutzerdefinierter Pfad
 icon-selector.custom-icon-path-placeholder: Benutzerdefinierten Pfad eingeben und absenden
 icon-selector.Twemoji: Twemoji-Bibliothek
 icon-selector.Pimcore: Pimcore-Bibliothek
+icon-selector.AlternativeLibrary: Alternative Bibliothek
+operational-grid.csv-import.title: CSV importieren
+operational-grid.csv-import.description: Geben Sie CSV-Daten ein. Jede Zeile stellt eine Zeile dar, Spalten werden durch Kommas getrennt.
+operational-grid.csv-import.ok: Importieren
+operational-grid.csv-import.cancel: Abbrechen
 language: Sprache
 no-languages-found: Keine Sprachen gefunden
 pretty-url: Pretty URL / URL Slug
@@ -2662,8 +2736,10 @@ object-restrictions: Objektbeschränkungen
 display-mode: Anzeigemodus
 display-mode-display: Pfadreferenz anzeigen
 display-mode-inline-search: Inline-Suche
+display-mode-inline-search-unavailable-tooltip: "Die Inline-Suche ist nur verfügbar, wenn die Relation Objekte genau einer Klasse zulässt. Eine Relation, die auch Assets, Dokumente oder Objektordner zulässt, verwendet stattdessen die Pfadreferenz."
 display-mode-grid-view: Grid-Ansicht
 display-mode-tag-field: Tag-Feld
+language-comparison-modal.title: Sprachvergleich
 activate-column-configuration: Spaltenkonfiguration aktivieren
 table-column-configuration: Tabellen-Spaltenkonfiguration
 center: Mitte
@@ -2702,6 +2778,8 @@ quantity-values.create-modal.create: Erstellen
 quantity-values.export: Export
 quantity-values.import: Import
 quantity-values.import-modal.title: Mengenwert-Einheiten importieren
+quantity-values.search: Suchen
+quantity-values.delete-confirmation: Das Löschen dieser Einheit wirkt sich auf alle verknüpften Elemente aus, die darauf verweisen. Möchten Sie wirklich fortfahren?
 owner: Eigentümer
 reverse-object-relation.tooltip: Nicht-Eigentümer-Objekte stellen Relationen zu einem anderen Objekt auf die gleiche Weise dar wie Objekte. Der Unterschied ist, dass ein Nicht-Eigentümer-Objektfeld nicht der Eigentümer der Relationsdaten ist, sondern lediglich eine Ansicht auf Daten, die in anderen Objekten gespeichert sind. Bitte wählen Sie den Eigentümer und Feldnamen, wo die Daten ursprünglich gespeichert sind.
 disabled-fields: Deaktivierte Felder
@@ -2792,23 +2870,3 @@ saved-search.update.success: Gespeicherte Suche aktualisiert
 saved-search.delete.success: Gespeicherte Suche gelöscht
 saved-search.shared-modified.info: Sie haben die ursprüngliche Konfiguration geändert. Da sie jemand anderem gehört, können Sie sie als neue Suche speichern.
 saved-search.menu-shortcut-group: Menügruppe
-ownership-management.title: Eigentümerverwaltung
-ownership-management.show-deleted-owners: Elemente von gelöschten Benutzern anzeigen
-ownership-management.deleted-user: Gelöschter Benutzer
-ownership-management.columns.id: ID
-ownership-management.columns.name: Name
-ownership-management.columns.modification-date: Änderungsdatum
-ownership-management.columns.owner: Eigentümer
-ownership-management.columns.actions: Aktionen
-ownership-management.actions.reassign-owner: Eigentümer neu zuweisen
-ownership-management.actions.reassign-owner.title: Eigentümer der Konfigurationen wird neu zugewiesen
-ownership-management.actions.delete: Löschen
-ownership-management.actions.delete.title: Konfigurationen werden gelöscht
-ownership-management.actions.batch-assign: Stapelzuweisung
-ownership-management.actions.batch-delete: Stapellöschung
-ownership-management.reassign-owner.title: "Eigentümer von {{count}} Konfiguration(en) neu zuweisen"
-ownership-management.reassign-owner.confirm: Neu zuweisen
-ownership-management.reassign-owner.placeholder: Benutzer nach Namen suchen
-ownership-management.delete.title: Konfigurationen löschen
-ownership-management.delete.content: "Möchten Sie {{count}} Konfiguration(en) wirklich löschen?"
-perspective-editor.form.main-nav-permission.system.ownershipManagement: Eigentümerverwaltung

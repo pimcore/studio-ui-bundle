@@ -18,6 +18,8 @@ export const useStyles = createStyles(({ token, css }) => {
         display: grid;
         grid-template-columns: 1fr auto;
         grid-template-rows: auto 1fr auto;
+        flex: 1 1 auto;
+        min-height: 0;
         height: 100%;
         width: 100%;
         overflow: hidden;

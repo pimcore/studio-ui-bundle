@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type ItemType, type MenuItemType } from '@Pimcore/components/dropdown/dropdown'
 import { type BatchEdit } from '../batch-edit-provider'
 import { type UseDynamicTypeResolverReturnType } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { container } from '@Pimcore/app/depency-injection'
@@ -31,7 +30,6 @@ export const areGroupsEqual = (group1: any, group2: any): boolean => {
   const normalizedGroup1 = normalizeGroup(group1)
   const normalizedGroup2 = normalizeGroup(group2)
 
-  // Compare arrays by length and content
   if (normalizedGroup1.length !== normalizedGroup2.length) {
     return false
   }
@@ -44,11 +42,21 @@ export const shouldIncludeColumnItem = (
   item: any,
   batchEdits: BatchEdit[],
   hasType: (props: { target: string, dynamicTypeIds: string[] }) => boolean,
-  getType: UseDynamicTypeResolverReturnType['getType']
+  getType: UseDynamicTypeResolverReturnType['getType'],
+  contentLanguages: string[] = []
 ): boolean => {
   const isEditable: boolean = item.editable === true
-  const isAlreadyInBatchEditList = batchEdits.some(batchItem =>
-    item.key === batchItem.key && areGroupsEqual(item.group, batchItem.group) && item.mainType !== 'dataobject.classificationstore'
+  const existingEntries = batchEdits.filter(batchItem =>
+    item.key === batchItem.key && areGroupsEqual(item.group, batchItem.group)
+  )
+
+  // Only adapter fields get one row per content language; object-brick stays single-entry, and an
+  // empty content-language list degrades to single-entry too.
+  const supportsMultipleLocales = item.localizable === true && item.mainType !== 'dataobject.objectbrick'
+  const isAlreadyInBatchEditList = item.mainType !== 'dataobject.classificationstore' && (
+    supportsMultipleLocales
+      ? (contentLanguages.length === 0 ? existingEntries.length > 0 : existingEntries.length >= contentLanguages.length)
+      : existingEntries.length > 0
   )
 
   const hasDynamicType = hasType({
@@ -65,54 +73,4 @@ export const shouldIncludeColumnItem = (
   }
 
   return isEditable && hasDynamicType && !isAlreadyInBatchEditList && isAllowedInBatchEdit
-}
-
-// Recursively filter the dropdown menu while preserving the nested structure
-export const filterDropdownItems = (
-  items: Array<ItemType<MenuItemType>>,
-  batchEdits: BatchEdit[],
-  hasType: (props: { target: string, dynamicTypeIds: string[] }) => boolean,
-  getType: UseDynamicTypeResolverReturnType['getType']
-): Array<ItemType<MenuItemType>> => {
-  return items.map((item: ItemType<MenuItemType>) => {
-    // If this item has children, it's a group - process its children recursively
-    if (item !== null && 'children' in item && item.children !== undefined && Array.isArray(item.children)) {
-      const filteredChildren = filterDropdownItems(
-        item.children,
-        batchEdits,
-        hasType,
-        getType
-      )
-      return {
-        ...item,
-        children: filteredChildren
-      }
-    } else {
-      // This is a column item - check if it should be included
-      return shouldIncludeColumnItem(item, batchEdits, hasType, getType) ? item : null
-    }
-  }).filter((item): item is ItemType<MenuItemType> => {
-    // Remove null items and groups with no valid children
-    if (item === null) return false
-
-    // Check if item has children property and validate children length
-    if ('children' in item && item.children !== undefined && Array.isArray(item.children)) {
-      return item.children.length > 0
-    }
-
-    return true
-  })
-}
-
-// Check if the dropdown list has any selectable items (recursively)
-export const hasSelectableItems = (items: Array<ItemType<MenuItemType>>): boolean => {
-  return items.some((item: ItemType<MenuItemType>) => {
-    if (item !== null && 'children' in item && item.children !== undefined && Array.isArray(item.children)) {
-      // This is a group - check if it has selectable children
-      return hasSelectableItems(item.children)
-    } else {
-      // This is a column item - it's selectable
-      return true
-    }
-  })
 }

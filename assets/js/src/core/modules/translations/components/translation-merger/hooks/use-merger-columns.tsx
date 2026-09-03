@@ -11,6 +11,7 @@
 import React, { useMemo } from 'react'
 import { IconButton } from '@sdk/components'
 import { LanguageColumnHeader } from '../../../table/language-column-header'
+import { TranslationValue } from '../translation-value'
 import { t } from 'i18next'
 import type { ColumnsType } from 'antd/es/table'
 import type { MergerRow } from './use-merger-rows'
@@ -46,7 +47,8 @@ export const useMergerColumns = ({ loadingRows, applyRow, revertRow }: UseMerger
       title: t('translations.merger.column.csv-value'),
       dataIndex: 'importTranslation',
       key: 'importTranslation',
-      ellipsis: true
+      ellipsis: { showTitle: false },
+      render: (value: string) => <TranslationValue value={ value } />
     },
     {
       title: t('translations.merger.column.action'),
@@ -84,7 +86,10 @@ export const useMergerColumns = ({ loadingRows, applyRow, revertRow }: UseMerger
       title: t('translations.merger.column.current'),
       dataIndex: 'currentTranslation',
       key: 'currentTranslation',
-      ellipsis: true
+      ellipsis: { showTitle: false },
+      render: (value: string, record: MergerRow) => (
+        <TranslationValue value={ record.state === 'applied' ? record.importTranslation : value } />
+      )
     }
   ], [loadingRows])
 }

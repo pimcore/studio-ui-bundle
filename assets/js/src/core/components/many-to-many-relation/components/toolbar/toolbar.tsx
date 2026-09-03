@@ -20,12 +20,14 @@ import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
-import { createElementSelectorAreas, createElementSelectorConfig, type IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
+import { createElementSelectorAreas, createElementSelectorConfig, isAllowedSubType, type IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
+import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { mapToLegacyElementType } from '@Pimcore/modules/element/utils/element-type'
 import { type ManyToManyRelationValueItem } from '../../hooks/use-value'
 import { type SelectedItem } from '@sdk/modules/element'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { debounce } from 'lodash'
+import { RELATION_COLUMN_FILTERS_KEY, useRelationFiltersOptional } from '../../filters/filters'
 
 export interface ManyToManyRelationToolbarProps extends IRelationAllowedTypesDataComponent {
   empty: () => void
@@ -43,6 +45,32 @@ export interface ManyToManyRelationToolbarProps extends IRelationAllowedTypesDat
 export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps): React.JSX.Element => {
   const { confirm } = useFormModal()
   const { t } = useTranslation()
+  const alertModal = useAlertModal()
+
+  /**
+   * The assets already exist at this point - the server created them and decided their
+   * type. Assigning them anyway would put values into the relation that neither the
+   * element selector nor drag and drop would have accepted.
+   */
+  const handleUploadSuccess = async (assets: Asset[]): Promise<void> => {
+    const allowedAssets = assets.filter((asset) => isAllowedSubType('asset', asset.type ?? '', props))
+
+    if (allowedAssets.length < assets.length) {
+      alertModal.warn({ content: t('relations.upload.subtype-not-allowed') })
+    }
+
+    if (allowedAssets.length === 0) {
+      return
+    }
+
+    await props.addAssets(allowedAssets)
+  }
+
+  const filtersStore = useRelationFiltersOptional()
+
+  const appliedColumnFilters = filtersStore?.values[RELATION_COLUMN_FILTERS_KEY]
+  const hasAppliedFilters = Array.isArray(appliedColumnFilters) && appliedColumnFilters.length > 0
+  const clearFiltersLabel = t('sidebar.clear-all-filters')
 
   const buttons: React.JSX.Element[] = []
 
@@ -82,7 +110,7 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
     buttons.push(
       <ModalUploadButton
         maxItems={ props.uploadMaxItems }
-        onSuccess={ props.addAssets }
+        onSuccess={ handleUploadSuccess }
         showMaxItemsError={ props.uploadShowMaxItemsError }
         targetFolderPath={ props.assetUploadPath ?? undefined }
       />
@@ -100,6 +128,21 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
               content: t('relations.remove-all.confirm'),
               onOk: props.empty
             })
+          } }
+          type="default"
+        />
+      </Tooltip>
+    )
+  }
+
+  if (hasAppliedFilters) {
+    buttons.push(
+      <Tooltip title={ clearFiltersLabel }>
+        <IconButton
+          aria-label={ clearFiltersLabel }
+          icon={ { value: 'clear-filter' } }
+          onClick={ () => {
+            filtersStore?.reset()
           } }
           type="default"
         />

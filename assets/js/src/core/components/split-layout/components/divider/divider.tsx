@@ -17,9 +17,11 @@ interface DividerProps {
   onMouseResize?: (event: MouseEvent) => void
   onKeyboardResize?: (event: React.KeyboardEvent<HTMLDivElement>) => void
   withToolbar?: boolean
+  className?: string
+  ariaLabel?: string
 }
 
-export const Divider = ({ onMouseResize, onKeyboardResize, withToolbar = false }: DividerProps): React.JSX.Element => {
+export const Divider = ({ onMouseResize, onKeyboardResize, withToolbar = false, className, ariaLabel }: DividerProps): React.JSX.Element => {
   const dividerRef = useRef<HTMLDivElement>(null)
   const enableResize = useRef(false)
 
@@ -77,13 +79,14 @@ export const Divider = ({ onMouseResize, onKeyboardResize, withToolbar = false }
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
-      className={ cn(styles.dividerContainer, { [styles.resizable]: isResizable, [styles.withToolbar]: withToolbar }) }
+      className={ cn(styles.dividerContainer, className, { [styles.resizable]: isResizable, [styles.withToolbar]: withToolbar }) }
       onMouseDown={ handleMouseDown }
       onMouseEnter={ handleMouseEnter }
       onMouseLeave={ handleMouseLeave }
       ref={ dividerRef }
     >
       <div
+        aria-label={ ariaLabel }
         className={ styles.divider }
         onBlur={ handleBlur }
         onFocus={ handleFocus }

@@ -8,11 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Alert, Modal, Space } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { Alert, Space } from 'antd'
+import React, { useEffect } from 'react'
 import { CreateXLSXForm, type XLSXFormValues } from './create-xlsx-form/create-xlsx-form'
 import { XlsxDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/xlsx-download-job'
-import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
+import { Modal } from '@Pimcore/components/modal/modal'
 import { useTranslation } from 'react-i18next'
 import { useRowSelection } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
@@ -20,9 +20,7 @@ import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type ExportXlsxApiResponse, type ExportXlsxFolderApiResponse, useExportXlsxFolderMutation, useExportXlsxMutation } from '@Pimcore/modules/element/export-api-slice.gen'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
 import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
-import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { isNil } from 'lodash'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
 import { type GridColumnRequest } from '@sdk/api/data-object'
@@ -37,8 +35,6 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
   const [form] = Form.useForm()
   const executionEngine = useExecutionEngine()
   const { id, elementType } = useElementContext()
-  const { element } = useElementDraft(id, elementType)
-  const [jobTitle, setJobTitle] = useState<string>('Element')
   const [fetchCreateXlsx, { isError: isCreateXlsxError, error: createXlsxError }] = useExportXlsxMutation()
   const [fetchCreateFolderXlsx, { isError: isCreateFolderXlsxError, error: createFolderXlsxError }] = useExportXlsxFolderMutation()
   const { selectedRows } = useRowSelection()
@@ -54,20 +50,6 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   useEffect(() => {
-    if (element === undefined) {
-      return
-    }
-
-    if ('filename' in element) {
-      setJobTitle(element.filename as string)
-    }
-
-    if ('key' in element) {
-      setJobTitle(element.key as string)
-    }
-  }, [element])
-
-  useEffect(() => {
     if (isCreateXlsxError) {
       trackError(new ApiError(createXlsxError))
     }
@@ -81,12 +63,11 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
 
   return (
     <Modal
+      iconName='export'
       onCancel={ () => { props.setOpen(false) } }
       onOk={ () => { form.submit() } }
       open={ props.open }
-      title={ (
-        <ModalTitle iconName='export'>{ t('export-xlsx-form.modal-title') }</ModalTitle>
-      ) }
+      title={ t('export-xlsx-form.modal-title') }
     >
       <Space
         direction='vertical'

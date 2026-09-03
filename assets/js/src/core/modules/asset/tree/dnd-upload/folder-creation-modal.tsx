@@ -9,9 +9,8 @@
  */
 
 import React from 'react'
-import { Modal } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
+import { Modal } from '@Pimcore/components/modal/modal'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
@@ -27,12 +26,9 @@ export const FolderCreationModal = ({ open }: FolderCreationModalProps): React.J
     <Modal
       closable={ false }
       footer={ null }
+      iconName='folder'
       open={ open }
-      title={ (
-        <ModalTitle iconName='folder'>
-          {t('asset.upload.folder-drop.creating-folders')}
-        </ModalTitle>
-      ) }
+      title={ t('asset.upload.folder-drop.creating-folders') }
     >
       <Flex
         align="center"

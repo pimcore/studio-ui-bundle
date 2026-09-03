@@ -16,8 +16,12 @@ import { Refetch } from '@Pimcore/modules/element/listing/abstract/view-layer/co
 import { Pagination } from '@Pimcore/modules/element/listing/decorators/paging/pagination/pagination'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { ApplyButton } from '@Pimcore/modules/element/element-selector/components/apply-button/apply-button'
+import { useElementSelectorHelper } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector-helper'
+import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 
 export const Toolbar = (): React.JSX.Element => {
+  const { config } = useElementSelectorHelper()
+
   return (
     <BaseToolbar
       borderStyle='default'
@@ -30,7 +34,7 @@ export const Toolbar = (): React.JSX.Element => {
         justify='space-between'
       >
         <Split size='extra-small'>
-          <RowSelectionTotal />
+          { config.selectionType === SelectionType.Multiple && <RowSelectionTotal /> }
           <Refetch />
           <Pagination />
         </Split>

@@ -9,8 +9,9 @@
  */
 
 import { addAppMiddleware, injectSliceWithState, type RootState } from '@sdk/app'
-import { createListenerMiddleware, createSlice } from '@reduxjs/toolkit'
+import { createListenerMiddleware, createSlice, isAnyOf } from '@reduxjs/toolkit'
 import { debounce } from 'lodash'
+import { setSettings } from '@Pimcore/modules/app/settings/settings-slice'
 import { addNewTranslations } from '../helper/translation-helper'
 
 const initialState: string[] = []
@@ -46,13 +47,36 @@ const debouncedSendTranslations = debounce(async (listenerApi) => {
 
   const translations = selectMissingTranslations(state)
 
+  if (translations.length === 0) {
+    return
+  }
+
+  const settings = state.settings?.settings
+
+  // Settings not loaded yet — the system settings request is still in flight
+  // during app boot. Keep the collected keys queued instead of assuming a
+  // value; the `setSettings` trigger below re-runs this flush once they land.
+  if (settings === undefined) {
+    return
+  }
+
+  // Auto-creation of missing translation keys can be disabled via the backend
+  // config `pimcore_studio_backend.translations.auto_create_missing_keys`.
+  // When disabled, discard the collected keys without persisting them. Manual
+  // creation through the Translations UI is unaffected. Defaults to enabled:
+  // loaded settings without the key mean an older backend without the toggle.
+  if (settings.auto_create_translations === false) {
+    listenerApi.dispatch(removeMissingTranslations(translations))
+    return
+  }
+
   listenerApi.dispatch(removeMissingTranslations(translations))
   void addNewTranslations(translations)
 }, 3000) // Wait for 3 seconds of inactivity before sending
 
 const listenerMiddleware = createListenerMiddleware()
 listenerMiddleware.startListening({
-  actionCreator: addMissingTranslation,
+  matcher: isAnyOf(addMissingTranslation, setSettings),
   effect: async (action, listenerApi) => {
     debouncedSendTranslations.cancel()
     void debouncedSendTranslations(listenerApi)
