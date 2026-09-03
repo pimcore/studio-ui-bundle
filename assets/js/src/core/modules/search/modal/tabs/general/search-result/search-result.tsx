@@ -86,11 +86,13 @@ export const SearchResult = (): React.JSX.Element => {
                   <Flex
                     className='w-full h-full'
                     gap={ 0 }
+                    role="listbox"
                     vertical
                   >
-                    {data?.items.map((item) => (
+                    {data?.items.map((item, index) => (
                       <SearchResultItem
                         active={ detectItemActivity(item) }
+                        first={ index === 0 && selectedItem === undefined }
                         item={ item }
                         key={ `${item.id}-${item.elementType}` }
                         onMouseEnter={ () => { onMouseEnter(item) } }

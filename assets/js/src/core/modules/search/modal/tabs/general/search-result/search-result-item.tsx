@@ -21,10 +21,11 @@ import { Filename } from '@Pimcore/components/filename/filename'
 export interface ISearchResultItemProps extends Omit<BoxProps, 'children'> {
   item: SimpleSearchResult
   active?: boolean
+  first?: boolean
 }
 
 export const SearchResultItem = (props: ISearchResultItemProps): React.JSX.Element => {
-  const { item, active, ...htmlProps } = props
+  const { item, active, first, ...htmlProps } = props
   const { icon, path } = item
   const { openElement, mapToElementType } = useElementHelper()
   const { close } = useSearch()
@@ -52,12 +53,35 @@ export const SearchResultItem = (props: ISearchResultItemProps): React.JSX.Eleme
     close()
   }
 
+  const onKeyDown = (event: React.KeyboardEvent<HTMLOrSVGElement>): void => {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+      onClick()
+    }
+
+    if (event.key === 'ArrowDown') {
+      event.preventDefault()
+      const next = (event.currentTarget as HTMLElement).nextElementSibling as HTMLElement | null
+      next?.focus()
+    }
+
+    if (event.key === 'ArrowUp') {
+      event.preventDefault()
+      const prev = (event.currentTarget as HTMLElement).previousElementSibling as HTMLElement | null
+      prev?.focus()
+    }
+  }
+
   return (
     <Box
       { ...htmlProps }
+      aria-selected={ active === true }
       className={ className }
       onClick={ onClick }
+      onKeyDown={ onKeyDown }
       padding={ 'mini' }
+      role="option"
+      tabIndex={ active === true || first === true ? 0 : -1 }
     >
       <Flex
         align="center"
