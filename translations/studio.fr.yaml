@@ -2045,6 +2045,7 @@ preview.select_date_time: Sélectionner la date et l'heure
 preview.screen_size_too_small: L'espace disponible est trop petit pour afficher le mode d'aperçu sélectionné.
 inheritance-active: "Données héritées de l'objet ID {{id}}"
 inheritance-broken: Héritage des données interrompu
+inheritance-restore: Restaurer
 main: Principal
 main_admin: Principal (Mode Admin)
 draft-alert: La version actuelle est un brouillon. Vous pouvez supprimer le brouillon pour restaurer la version précédente.

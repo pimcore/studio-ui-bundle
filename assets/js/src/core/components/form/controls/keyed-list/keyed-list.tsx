@@ -23,9 +23,11 @@ export interface KeyedListProps {
   onChange?: (value: KeyedListData['values']) => void
   onFieldChange?: (field: NamePath, value: any) => void
   getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
+  /** Counterpart of onFieldChange: puts a field back to the value it was loaded with. */
+  onFieldRestore?: (field: NamePath) => void
 }
 
-const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps }: KeyedListProps): React.JSX.Element => {
+const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps, onFieldRestore }: KeyedListProps): React.JSX.Element => {
   const initialValue = useMemo(() => isArray(baseValue) ? {} : baseValue ?? {}, [baseValue])
   const [value, setValue] = useState(cloneDeep(initialValue))
   // Mirror of the current value, kept in sync during render so the (referentially
@@ -44,6 +46,9 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   onFieldChangeRef.current = onFieldChange
   const getAdditionalComponentPropsRef = useRef(getAdditionalComponentProps)
   getAdditionalComponentPropsRef.current = getAdditionalComponentProps
+  const onFieldRestoreRef = useRef(onFieldRestore)
+  onFieldRestoreRef.current = onFieldRestore
+  const supportsFieldRestore = onFieldRestore !== undefined
   // the initial value enriched with the values the child fields register on mount,
   // so that those registrations are not reported as changes
   const baselineValue = useRef(cloneDeep(initialValue))
@@ -171,6 +176,11 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     []
   )
 
+  const stableOnFieldRestore = useCallback(
+    (field: NamePath): void => { onFieldRestoreRef.current?.(field) },
+    []
+  )
+
   // Stable external store: subscribers (per-field via useKeyedListValue) read the
   // current value through getSnapshot and are notified whenever it changes.
   const store = useMemo(() => ({
@@ -192,6 +202,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   return (
     <KeyedListProvider
       getAdditionalComponentProps={ stableGetAdditionalComponentProps }
+      onFieldRestore={ supportsFieldRestore ? stableOnFieldRestore : undefined }
       operations={ operations }
       store={ store }
     >
