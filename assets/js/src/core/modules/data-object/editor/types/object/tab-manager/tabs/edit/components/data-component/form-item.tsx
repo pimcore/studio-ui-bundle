@@ -20,6 +20,7 @@ import { useInheritanceOverlayStyle } from '@Pimcore/components/inheritance-over
 import { AutoHideEmptyContent } from '@Pimcore/modules/app/utils/auto-hide-empty-content/auto-hide-empty-content'
 import { useSuppressEmptyFieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/suppress-empty-field-label-provider'
 import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
+import { RestoreInheritanceLabelExtraProvider } from '@Pimcore/modules/data-object/components/restore-inheritance-label-extra'
 import { isNonEmptyString } from '@sdk/utils'
 
 interface DataComponentFormItemProps {
@@ -50,13 +51,15 @@ const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDat
         contentSelector=".ant-form-item-control-input-content"
         parentSelector=".ant-space-item"
       >
-        <Form.Item
-          { ...effectiveFormItemProps }
-          className={ cn(effectiveFormItemProps.className, inheritanceOverlayStyle) }
-          name={ formFieldName }
-        >
-          { objectDataComponent }
-        </Form.Item>
+        <RestoreInheritanceLabelExtraProvider emptyValue={ objectDataType.getEmptyValue() }>
+          <Form.Item
+            { ...effectiveFormItemProps }
+            className={ cn(effectiveFormItemProps.className, inheritanceOverlayStyle) }
+            name={ formFieldName }
+          >
+            { objectDataComponent }
+          </Form.Item>
+        </RestoreInheritanceLabelExtraProvider>
       </AutoHideEmptyContent>
     </ErrorBoundary>
   ), [effectiveFormItemProps, inheritanceOverlayStyle, objectDataComponent])

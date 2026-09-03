@@ -120,8 +120,8 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
 
   /**
    * Value that makes the backend treat the field as empty, used to give an inherited
-   * field back to its origin object. Override it where the API of the type cannot
-   * take null.
+   * field back to its origin object (see RestoreInheritanceLabelExtraProvider).
+   * Override it where the API of the type cannot take null.
    */
   getEmptyValue (): unknown {
     return null
@@ -130,7 +130,7 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
   getObjectDataFormItemProps (props: AbstractObjectDataDefinition): FormItemProps {
     return {
       className: 'w-full',
-      label: React.createElement(FieldLabel, { label: props.title, name: props.name, emptyValue: this.getEmptyValue() }),
+      label: React.createElement(FieldLabel, { label: props.title, name: props.name }),
       required: props.mandatory === true,
       hidden: props.invisible === true,
       tooltip: isNonEmptyString(props.tooltip)
