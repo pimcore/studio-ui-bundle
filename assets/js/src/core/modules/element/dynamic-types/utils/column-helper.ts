@@ -9,7 +9,7 @@
  */
 
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { useInjection } from '@Pimcore/app/depency-injection'
+import { container } from '@Pimcore/app/depency-injection'
 import { isNumber } from 'lodash'
 import { type RelationColumnDefinition } from '../definitions/objects/data-related/components/advanced-many-to-many-object-relation/advanced-many-to-many-object-relation'
 import { type AbstractObjectDataDefinition } from '../definitions/objects/data-related/dynamic-type-object-data-abstract'
@@ -77,7 +77,7 @@ export const calculateColumnWithOfTableCells = (props?: AbstractObjectDataDefini
 }
 
 export const getDefaultGridColumnWidthFromDynamicObjectType = (columnType?: string, columnMeta?: AbstractObjectDataDefinition): number | undefined => {
-  const objectDataRegistry = useInjection<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+  const objectDataRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
 
   if (columnType !== undefined) {
     const dynType = objectDataRegistry.getDynamicType(columnType, false)
