@@ -61,7 +61,7 @@ const Component = ({
       const hasForeignSeparator = trimmedText.includes(decimalSeparator === '.' ? ',' : '.')
       const parsedNumber = numberInputProps.parser !== undefined
         ? Number(numberInputProps.parser(trimmedText))
-        : hasForeignSeparator ? NaN : Number(trimmedText.replace(decimalSeparator, '.'))
+        : hasForeignSeparator ? Number.NaN : Number(trimmedText.replace(decimalSeparator, '.'))
 
       if (committedText === '' || !Number.isFinite(parsedNumber) || parsedNumber !== Number(committedText)) {
         return false
