@@ -49,13 +49,13 @@ export class ProgressFieldCalculator implements ProgressCalculator {
         const subTotal = data.totalSteps as number
         const combined = ((subStep - 1) / subTotal) * 100 + progress / subTotal
         this.hadGradualProgress = true
-        return Math.max(0, Math.min(100, combined))
+        return this.roundProgress(Math.max(0, Math.min(100, combined)))
       }
     }
 
     if (progress < 100) {
       this.hadGradualProgress = true
-      return Math.max(0, Math.min(100, progress))
+      return this.roundProgress(Math.max(0, Math.min(100, progress)))
     }
 
     if (progress === 100 && this.hadGradualProgress) {
@@ -68,5 +68,9 @@ export class ProgressFieldCalculator implements ProgressCalculator {
 
   onStepChange (): void {
     this.hadGradualProgress = false
+  }
+
+  private roundProgress (progress: number): number {
+    return Math.round(progress * 100) / 100
   }
 }

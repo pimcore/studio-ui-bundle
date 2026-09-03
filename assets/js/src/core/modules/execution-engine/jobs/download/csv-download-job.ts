@@ -27,7 +27,7 @@ export class CsvDownloadJob extends AbstractDownloadJob {
   private readonly isFolderExport: boolean
 
   constructor (options: CsvDownloadJobOptions) {
-    super({ action: options.action })
+    super({ action: options.action, title: options.title })
     this.isFolderExport = options.isFolderExport ?? false
   }
 

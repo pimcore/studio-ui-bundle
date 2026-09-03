@@ -99,42 +99,9 @@ export type ExportCsvApiArg = {
         elements?: number[];
         columns?: GridColumnRequest[];
         config?: {
-            header?:
-                | "id"
-                | "custom_report_config"
-                | "custom_report_to_export"
-                | "element_class_id"
-                | "elements_to_export"
-                | "elements_to_rewrite_references"
-                | "elements_to_tag"
-                | "element_type"
-                | "element_type_to_tag"
-                | "element_type_to_rewrite_references"
-                | "export_format"
-                | "folder_to_export"
-                | "grid_export_data"
-                | "grid_export_data_info"
-                | "config"
-                | "columns"
-                | "filters"
-                | "delimiter"
-                | "header"
-                | "no_header"
-                | "title"
-                | "name"
-                | "\r\n"
-                | "array"
-                | "int"
-                | "string"
-                | "bool"
-                | "items_to_batch_delete"
-                | "items_to_delete"
-                | "element_type_to_batch_delete"
-                | "items_to_restore"
-                | "configuration_ids"
-                | "configuration_type"
-                | "new_owner_id";
+            header?: "no_header" | "title" | "name";
             delimiter?: string;
+            fileName?: string | null;
         };
         elementType?: "data-object" | "object" | "asset" | "document";
         classId?: string | null;
@@ -151,42 +118,9 @@ export type ExportCsvFolderApiArg = {
         columns?: GridColumnRequest[];
         filters?: ExportAllFilter;
         config?: {
-            header?:
-                | "id"
-                | "custom_report_config"
-                | "custom_report_to_export"
-                | "element_class_id"
-                | "elements_to_export"
-                | "elements_to_rewrite_references"
-                | "elements_to_tag"
-                | "element_type"
-                | "element_type_to_tag"
-                | "element_type_to_rewrite_references"
-                | "export_format"
-                | "folder_to_export"
-                | "grid_export_data"
-                | "grid_export_data_info"
-                | "config"
-                | "columns"
-                | "filters"
-                | "delimiter"
-                | "header"
-                | "no_header"
-                | "title"
-                | "name"
-                | "\r\n"
-                | "array"
-                | "int"
-                | "string"
-                | "bool"
-                | "items_to_batch_delete"
-                | "items_to_delete"
-                | "element_type_to_batch_delete"
-                | "items_to_restore"
-                | "configuration_ids"
-                | "configuration_type"
-                | "new_owner_id";
+            header?: "no_header" | "title" | "name";
             delimiter?: string;
+            fileName?: string | null;
         };
         elementType?: "data-object" | "object" | "asset" | "document";
         classId?: string | null;
@@ -217,41 +151,8 @@ export type ExportXlsxApiArg = {
         elements?: number[];
         columns?: GridColumnRequest[];
         config?: {
-            header?:
-                | "id"
-                | "custom_report_config"
-                | "custom_report_to_export"
-                | "element_class_id"
-                | "elements_to_export"
-                | "elements_to_rewrite_references"
-                | "elements_to_tag"
-                | "element_type"
-                | "element_type_to_tag"
-                | "element_type_to_rewrite_references"
-                | "export_format"
-                | "folder_to_export"
-                | "grid_export_data"
-                | "grid_export_data_info"
-                | "config"
-                | "columns"
-                | "filters"
-                | "delimiter"
-                | "header"
-                | "no_header"
-                | "title"
-                | "name"
-                | "\r\n"
-                | "array"
-                | "int"
-                | "string"
-                | "bool"
-                | "items_to_batch_delete"
-                | "items_to_delete"
-                | "element_type_to_batch_delete"
-                | "items_to_restore"
-                | "configuration_ids"
-                | "configuration_type"
-                | "new_owner_id";
+            header?: "no_header" | "title" | "name";
+            fileName?: string | null;
         };
         elementType?: "data-object" | "object" | "asset" | "document";
         classId?: string | null;
@@ -269,41 +170,8 @@ export type ExportXlsxFolderApiArg = {
         columns?: GridColumnRequest[];
         filters?: ExportAllFilter;
         config?: {
-            header?:
-                | "id"
-                | "custom_report_config"
-                | "custom_report_to_export"
-                | "element_class_id"
-                | "elements_to_export"
-                | "elements_to_rewrite_references"
-                | "elements_to_tag"
-                | "element_type"
-                | "element_type_to_tag"
-                | "element_type_to_rewrite_references"
-                | "export_format"
-                | "folder_to_export"
-                | "grid_export_data"
-                | "grid_export_data_info"
-                | "config"
-                | "columns"
-                | "filters"
-                | "delimiter"
-                | "header"
-                | "no_header"
-                | "title"
-                | "name"
-                | "\r\n"
-                | "array"
-                | "int"
-                | "string"
-                | "bool"
-                | "items_to_batch_delete"
-                | "items_to_delete"
-                | "element_type_to_batch_delete"
-                | "items_to_restore"
-                | "configuration_ids"
-                | "configuration_type"
-                | "new_owner_id";
+            header?: "no_header" | "title" | "name";
+            fileName?: string | null;
         };
         elementType?: "data-object" | "object" | "asset" | "document";
         classId?: string | null;

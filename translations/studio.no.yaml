@@ -1091,8 +1091,10 @@ batch-edit.job-title: Masseredigering
 jobs.zip-upload-job.title: Last opp ZIP
 jobs.zip-upload-job.step1.title: Pakker ut ZIP
 jobs.zip-upload-job.step2.title: Oppretter ressurser
-jobs.download-csv-job.title: CSV export
-jobs.download-xlsx-job.title: XLSX export
+jobs.download-csv-job.title: CSV-eksport av rutenett
+jobs.download-csv-job.title-with-grid: "CSV-eksport av rutenettet {{grid}}"
+jobs.download-xlsx-job.title: XLSX-eksport av rutenett
+jobs.download-xlsx-job.title-with-grid: "XLSX-eksport av rutenettet {{grid}}"
 jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Masseredigering
 batch-edit.no-content: Ingen kolonner lagt til ennå
