@@ -11,13 +11,23 @@
 import { type ColumnFilter } from '@Pimcore/modules/app/types/column-filter'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { type UseDynamicTypeResolverReturnType } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
+import { type SearchModeAbstract, type SearchModeContext } from '../search-modes/search-mode-abstract'
 import { type GeneralFiltersDecoratorConfig } from '../general-filters-decorator'
+
+export interface ElementFilterSearchModeContext {
+  /** Applied non-fulltext mode; undefined = full text. Never a blocked/unavailable mode. */
+  activeMode: SearchModeAbstract | undefined
+  modeContext: SearchModeContext
+  /** Column filter types of all visible modes — stripped from restored base filters. */
+  registeredFilterTypes: string[]
+}
 
 export interface ElementFilterContext {
   config: GeneralFiltersDecoratorConfig
   availableColumns: AvailableColumn[]
   getType: UseDynamicTypeResolverReturnType['getType']
   currentLanguage: string
+  searchMode?: ElementFilterSearchModeContext
 }
 
 export interface ElementListingFilters {

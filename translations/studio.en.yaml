@@ -545,6 +545,10 @@ listing.column-picker.search: Search
 listing.column-picker.no-results: No columns found
 listing.column-picker.fields-to-add: Fields to add
 listing.fields-to-add.collapse-simple-fields: Collapse simple fields
+listing.search-mode.full-text: Full text search
+listing.search-mode.full-text-short: Full text
+listing.search-mode.default: Default
+listing.search-mode.smart-placeholder: Search within similar or related results
 listing.actions: Apply to selection
 listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download

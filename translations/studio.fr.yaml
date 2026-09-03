@@ -545,6 +545,10 @@ listing.column-picker.search: Rechercher
 listing.column-picker.no-results: Aucune colonne trouvée
 listing.column-picker.fields-to-add: Champs à ajouter
 listing.fields-to-add.collapse-simple-fields: Réduire les champs simples
+listing.search-mode.full-text: Recherche en texte intégral
+listing.search-mode.full-text-short: Texte intégral
+listing.search-mode.default: Par défaut
+listing.search-mode.smart-placeholder: Rechercher dans les résultats similaires ou associés
 listing.actions: Appliquer à la sélection
 listing.non-selected.actions: Appliquer à tous
 listing.actions.zip-download: Téléchargement ZIP

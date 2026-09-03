@@ -32,6 +32,7 @@ import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/co
 import { useGeneralFiltersConfig } from '../../../../../context-layer/provider/general-filters-config/use-general-filters-config'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 import { useAppliedFilters, useDraftFilterValues, useDraftFilters, useElementFilterContext, elementFilterDefinitions } from '../../../../../element-filters'
+import { useSearchMode } from '../../../../../search-modes/use-search-mode'
 
 export const FilterContainerInner = (): React.JSX.Element => {
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
@@ -41,9 +42,10 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const { handleSearchTermInSidebar, showOnlyUnreferencedFilter } = useGeneralFiltersConfig()
   const { setDataLoadingState } = useData()
 
-  const { searchTerm, directChildren, unreferenced, pql, fieldFilters, reset } = useDraftFilterValues()
+  const { searchTerm, searchMode, directChildren, unreferenced, pql, fieldFilters, reset } = useDraftFilterValues()
   const draftStore = useDraftFilters()
   const filterContext = useElementFilterContext()
+  const draftSearchMode = useSearchMode('draft')
 
   const { t } = useTranslation()
   const { filters, onFilterChange, columnGroups, handleColumnClick } = useFieldFilterEditor()
@@ -69,6 +71,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
 
     if (handleSearchTermInSidebar) {
       valuesToApply.searchTerm = searchTerm
+      valuesToApply.searchMode = searchMode
     }
 
     setAppliedValues(valuesToApply)
@@ -116,6 +119,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
 
             <Button
               data-testid="listing-filter-apply-button"
+              disabled={ draftSearchMode?.blocked === true }
               onClick={ handleApplyClick }
               type='primary'
             >

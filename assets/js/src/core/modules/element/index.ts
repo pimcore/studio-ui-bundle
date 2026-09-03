@@ -32,9 +32,20 @@ import { CsvDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/
 import { XlsxDownloadJob } from '@Pimcore/modules/execution-engine/jobs/download/xlsx-download-job'
 import { TagAssignJob } from '@Pimcore/modules/execution-engine/jobs/tag-assign/tag-assign-job'
 import { SearchReplaceAssignmentsJob } from '@Pimcore/modules/execution-engine/jobs/search-replace-assignments/search-replace-assignments-job'
+import { type ComponentRegistry } from '@Pimcore/modules/app/component-registry/component-registry'
+import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+import { SearchModeSelect } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/search/search-mode-select'
 
 moduleSystem.registerModule({
   onInit: () => {
+    const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
+
+    componentRegistry.registerToSlot(componentConfig.element.listing.search.slots.prefix.name, {
+      name: 'searchModeSelect',
+      component: SearchModeSelect,
+      priority: 100
+    })
+
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
     const widgetRestorerRegistry = container.get<WidgetRestorerRegistry>(serviceIds.widgetRestorerRegistry)
 

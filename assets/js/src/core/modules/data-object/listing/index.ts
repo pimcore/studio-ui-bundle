@@ -14,6 +14,7 @@ import { componentConfig, type ComponentRegistry } from '@Pimcore/modules/app/co
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ListingBuilder } from '@Pimcore/modules/element/listing/abstract/builder/listing-builder'
 import { ActionColumnDecorator, ClassDefinitionSelectionDecorator, type ClassDefinitionSelectionDecoratorConfig, ColumnConfigurationDecorator, ContextMenuDecorator, GeneralFiltersDecorator, InlineEditDecorator, type IRowSelectionDecoratorConfig, PagingDecorator, RowSelectionDecorator, SortingDecorator, TagFilterDecorator, useInlineEditApiUpdate } from '@sdk/modules/data-object'
+import { generalFiltersDecoratorDefaultConfig } from '../../element/listing/decorators/general-filters/context-layer/provider/general-filters-config/general-filters-config-provider'
 import { type IInlineEditDecoratorConfig } from '@Pimcore/modules/element/listing/decorators/inline-edit/inline-edit-decorator'
 import { DynamicTypeDecorator } from '@Pimcore/modules/data-object/listing/decorator/dynamic-type/dynamic-type-decorator'
 import { GlobalContextDecorator } from '@Pimcore/modules/element/listing/decorators/global-context/global-context-decorator'
@@ -110,7 +111,11 @@ moduleSystem.registerModule({
 
     listingBuilder.addDecorator({
       name: 'generalFilters',
-      decorator: GeneralFiltersDecorator
+      decorator: GeneralFiltersDecorator,
+      config: {
+        ...generalFiltersDecoratorDefaultConfig,
+        elementType: 'data-object'
+      }
     })
 
     listingBuilder.addDecorator({

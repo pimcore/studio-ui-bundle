@@ -338,6 +338,9 @@ export * from '@Pimcore/modules/element/listing/decorators/general-filters/conte
 export * from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/pql-filter/pql-filter-provider'
 export * from '@Pimcore/modules/element/listing/decorators/row-selection/view-layer/components/sidebar/hooks/with-selection-overview-tab'
 export * from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/sidebar/hooks/with-general-filters-tab'
+export * from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/search-mode-abstract'
+export * from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/search-mode-registry'
+export * from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/constants'
 
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/dynamic-type-object-layout-abstract'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/dynamic-type-object-layout-registry'

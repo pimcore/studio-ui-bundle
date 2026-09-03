@@ -191,6 +191,22 @@ const defaultComponentConfig = {
     }
   },
   element: {
+    listing: {
+      search: {
+        slots: {
+          // Renders before the listing search input (asset/object grids, search-modal top bars,
+          // sidebar filters). The built-in search-mode select is the default entry; any bundle
+          // can register additional controls here via registerToSlot.
+          prefix: {
+            type: ComponentType.SLOT,
+            name: 'element.listing.search.slots.prefix',
+            defaultEntries: [
+              { name: 'searchModeSelect', priority: 100 }
+            ]
+          }
+        }
+      }
+    },
     editor: {
       tab: {
         properties: { type: ComponentType.SINGLE, name: 'element.editor.tab.properties' },

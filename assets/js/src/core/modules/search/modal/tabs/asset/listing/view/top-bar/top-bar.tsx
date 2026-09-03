@@ -8,7 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Flex } from '@Pimcore/components/flex/flex'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ProvidedTypeSelect } from '@Pimcore/modules/element/components/type-select/provided-type-select'
 import { SearchTermFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/search/search-term-filter'
@@ -22,15 +21,15 @@ export const TopBar = (): React.JSX.Element => {
     <Toolbar
       padding={ { left: 'none', right: 'none' } }
       position='none'
+      // 'auto': a blocked search mode renders a warning line under the input — a fixed-height
+      // toolbar clips it.
+      size='auto'
       theme='secondary'
     >
-      <Flex
-        className='w-full'
-        gap={ 'extra-small' }
-      >
-        <ProvidedTypeSelect />
-        <SearchTermFilter onCommit={ isOpen ? setSearchTerm : undefined } />
-      </Flex>
+      <SearchTermFilter
+        onCommit={ isOpen ? setSearchTerm : undefined }
+        prefixControls={ <ProvidedTypeSelect /> }
+      />
     </Toolbar>
   )
 }

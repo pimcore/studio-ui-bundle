@@ -22,6 +22,10 @@ import { useTagFilter } from '@Pimcore/modules/asset/listing/decorator/tag-filte
 import { tagFilterType, type SelectedTags } from '@Pimcore/modules/asset/listing/decorator/tag-filter/context-layer/provider/tag-filter/tag-filter-provider'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 import { useTypeSelect } from '@Pimcore/modules/element/components/type-select/provider/use-type-select'
+import { useInjection } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
+import { type SearchModeRegistry } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/search-mode-registry'
+import { FULLTEXT_SEARCH_MODE_ID } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/constants'
 
 const SEARCH_TERM_FILTER_TYPE = 'system.fulltext'
 // Column-filter types that are not user field filters and must not be restored as such — each is
@@ -96,6 +100,7 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
   const { setDataLoadingState } = useData()
   const { setSearchTerm: setSharedSearchTerm } = useSearch()
   const { setValue: setType } = useTypeSelect()
+  const searchModeRegistry = useInjection<SearchModeRegistry>(serviceIds['Element/Listing/SearchModeRegistry'])
 
   return (configuration: SavedSearchDetailedConfiguration): void => {
     const filter = getFilter(configuration)
@@ -108,9 +113,13 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
     // Field filters — every non-system column filter. The saved entries keep `meta`, so they can be
     // re-hydrated into the field-filters state (which re-keys them to columns by `key`). Always set
     // (empty when none) so opening a search replaces any filters from a previous one. The type-select
-    // entry is excluded here — it is restored into the type select below instead.
+    // entry is excluded here — it is restored into the type select below instead. Search-mode
+    // filters are excluded too: their queries are not restorable yet, so a saved smart search
+    // degrades to full text instead of leaking its filter into the field-filter state.
+    const searchModeFilterTypes = new Set(searchModeRegistry.getDynamicTypes().map((mode) => mode.columnFilterType))
     const fieldFilters: FieldFilter[] = entries
-      .filter((entry) => isString(entry.type) && !SYSTEM_FILTER_TYPES.has(entry.type) && !isTypeSelectEntry(entry))
+      .filter((entry) => isString(entry.type) && !SYSTEM_FILTER_TYPES.has(entry.type) &&
+        !searchModeFilterTypes.has(entry.type) && !isTypeSelectEntry(entry))
       .map((entry) => ({
         key: entry.key ?? '',
         type: entry.type ?? '',
@@ -127,8 +136,10 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
     const directChildren = filter?.includeDescendants === false
 
     // Apply every general filter in one write to the applied-filters store. Always set each key (even
-    // when empty/false) so opening a search replaces the state left over from a previous one.
-    setAppliedFilters({ searchTerm, fieldFilters, pql, unreferenced, directChildren })
+    // when empty/false) so opening a search replaces the state left over from a previous one. The
+    // search mode resets to full text: the restored term is a `system.fulltext` value, and a mode
+    // left over from before the restore would re-emit it through that mode's filter instead.
+    setAppliedFilters({ searchTerm, fieldFilters, pql, unreferenced, directChildren, searchMode: FULLTEXT_SEARCH_MODE_ID })
 
     setSharedSearchTerm(searchTerm)
 
