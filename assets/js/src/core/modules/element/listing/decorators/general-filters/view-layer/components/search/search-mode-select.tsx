@@ -8,10 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
-import { Button } from '@Pimcore/components/button/button'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Dropdown, type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Text } from '@Pimcore/components/text/text'
@@ -37,6 +37,7 @@ export const SearchModeSelect = (): React.JSX.Element | null => {
   const { values } = useAppliedFilters()
   const { setPage } = usePaging()
   const { setDataLoadingState } = useData()
+  const [open, setOpen] = useState(false)
 
   if (searchMode === undefined || searchMode.modes.length === 0) {
     return null
@@ -108,18 +109,18 @@ export const SearchModeSelect = (): React.JSX.Element | null => {
         selectedKeys: [activeModeId],
         onClick: ({ key }) => { onModeChange(key) }
       } }
+      onOpenChange={ setOpen }
       trigger={ ['click'] }
     >
-      <Button
+      <IconTextButton
         className={ styles.trigger }
         data-testid='search-mode-select'
-        type='text'
+        icon={ { value: open ? 'chevron-up' : 'chevron-down', options: { width: 12, height: 12 } } }
       >
-        <Icon value='chevron-down' />
         <span className={ cn({ [styles.activeTriggerLabel]: activeMode !== undefined }) }>
           {activeMode !== undefined ? activeMode.getCollapsedLabel() : fulltextLabel}
         </span>
-      </Button>
+      </IconTextButton>
     </Dropdown>
   )
 }

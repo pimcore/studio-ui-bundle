@@ -14,7 +14,14 @@ export const useStyles = createStyles(({ css, token }) => {
   return {
     trigger: css`
       flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
       padding-inline: ${token.paddingXS}px;
+
+      /* Match the search button on the other end of the input (see search-input.styles). */
+      &:not(:hover):not(:active) {
+        border-color: ${token.colorBorder};
+      }
     `,
 
     activeTriggerLabel: css`
