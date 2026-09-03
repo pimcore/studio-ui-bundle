@@ -21,14 +21,25 @@ import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/co
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { Icon } from '@Pimcore/components/icon/icon'
+import cn from 'classnames'
+import { useStyles } from './search-term-filter.styles'
 
 export interface SearchTermFilterProps {
   /** Called with the term whenever the user commits a search (Enter, search icon, clear). */
   onCommit?: (searchTerm: string) => void
+  /**
+   * Controls rendered in the same row, left of the search input (e.g. the search modal's type and
+   * class selects). Passing them here instead of wrapping the component keeps the blocked-mode
+   * warning line aligned with the full row.
+   */
+  prefixControls?: React.ReactNode
 }
 
-export const SearchTermFilter = ({ onCommit }: SearchTermFilterProps): React.JSX.Element => {
+export const SearchTermFilter = ({ onCommit, prefixControls }: SearchTermFilterProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyles()
   const { values, setValue: setAppliedValue, setValues: setAppliedValues } = useAppliedFilters()
   const appliedSearchTerm = readElementFilterValues(values).searchTerm
   const [currentSearchTerm, setCurrentSearchTerm] = useState<string>(appliedSearchTerm)
@@ -102,7 +113,7 @@ export const SearchTermFilter = ({ onCommit }: SearchTermFilterProps): React.JSX
       onChange={ onChange }
       onSearch={ onSearch }
       placeholder={ searchMode?.activeMode !== undefined ? t('listing.search-mode.smart-placeholder') : 'Search' }
-      status={ isBlocked ? (blockedAttempt ? 'error' : 'warning') : undefined }
+      status={ blockedAttempt ? 'error' : undefined }
       value={ value }
     />
   )
@@ -115,16 +126,33 @@ export const SearchTermFilter = ({ onCommit }: SearchTermFilterProps): React.JSX
   }, [isBlocked, blockedAttempt])
 
   const warning = searchMode?.availability?.warning
+  const searchBar = (
+    <Compact className='w-full'>
+      <SlotRenderer slot={ componentConfig.element.listing.search.slots.prefix.name } />
+      {searchInput}
+    </Compact>
+  )
 
   return (
     <div className='w-full'>
-      <Compact className='w-full'>
-        <SlotRenderer slot={ componentConfig.element.listing.search.slots.prefix.name } />
-        {searchInput}
-      </Compact>
+      {prefixControls === undefined
+        ? searchBar
+        : (
+          <Flex
+            className='w-full'
+            gap='extra-small'
+          >
+            {prefixControls}
+            {searchBar}
+          </Flex>
+          )}
       {warning !== undefined && (
-        <div>
-          <Text type={ blockedAttempt ? 'danger' : 'warning' }>{warning}</Text>
+        <div className={ cn(styles.warning, { [styles.warningAttempted]: blockedAttempt }) }>
+          <Icon
+            options={ { width: 12, height: 12 } }
+            value='warning-circle'
+          />
+          <Text>{warning}</Text>
         </div>
       )}
     </div>
