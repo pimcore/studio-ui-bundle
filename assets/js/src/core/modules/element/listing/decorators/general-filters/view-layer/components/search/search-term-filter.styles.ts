@@ -24,6 +24,11 @@ export const useStyles = createStyles(({ css, token }) => {
       .ant-typography {
         color: inherit;
       }
+
+      /* question-mark-outline hardcodes fill="black"; tie it to the row color. */
+      .pimcore-icon svg path {
+        fill: currentColor;
+      }
     `,
 
     warningAttempted: css`
