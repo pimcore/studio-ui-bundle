@@ -150,7 +150,7 @@ export const SearchTermFilter = ({ onCommit, prefixControls }: SearchTermFilterP
         <div className={ cn(styles.warning, { [styles.warningAttempted]: blockedAttempt }) }>
           <Icon
             options={ { width: 12, height: 12 } }
-            value='warning-circle'
+            value='question-mark-outline'
           />
           <Text>{warning}</Text>
         </div>
