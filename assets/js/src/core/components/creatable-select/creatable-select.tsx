@@ -10,7 +10,7 @@
 
 import { Box, Button, Divider, Flex, Input, InputNumber, Select, Text, type SelectProps } from '@sdk/components'
 import { type SelectOptionType } from '@sdk/modules/element'
-import { isNil } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getDecimalSeparator } from '@Pimcore/utils/number'
@@ -59,7 +59,7 @@ const Component = ({
       const trimmedText = numberInputText.trim()
       // `InputNumber` reads "." as a decimal point in every locale, so "1.000" commits 1 in de.
       const hasForeignSeparator = trimmedText.includes(decimalSeparator === '.' ? ',' : '.')
-      const parsedNumber = numberInputProps.parser !== undefined
+      const parsedNumber = !isUndefined(numberInputProps.parser)
         ? Number(numberInputProps.parser(trimmedText))
         : hasForeignSeparator ? Number.NaN : Number(trimmedText.replace(decimalSeparator, '.'))
 
@@ -68,7 +68,7 @@ const Component = ({
       }
     }
 
-    return validate === undefined || validate(committedText)
+    return isUndefined(validate) || validate(committedText)
   }, [inputType, numberInputText, decimalSeparator, numberInputProps.parser, newOptionText, validate])
 
   // Auto-add value or defaultValue if it's not in the options list

@@ -49,6 +49,8 @@ jest.mock('@sdk/components', () => {
 // eslint-disable-next-line import/first
 import React from 'react'
 // eslint-disable-next-line import/first
+import { isNull } from 'lodash'
+// eslint-disable-next-line import/first
 import { fireEvent, render, screen } from '@testing-library/react'
 // eslint-disable-next-line import/first
 import { CreatableSelect, type CreatableSelectProps } from './creatable-select'
@@ -58,8 +60,8 @@ const getAddButton = (): HTMLElement => screen.getByRole('button', { name: 'crea
 const type = (value: string): void => { fireEvent.change(getInput(), { target: { value } }) }
 const pressEnter = (): void => { fireEvent.keyDown(getInput(), { key: 'Enter' }) }
 const isAddDisabled = (): boolean => getAddButton().hasAttribute('disabled')
-const isErrorShown = (): boolean => screen.queryByText('creatable-select.invalid-option') !== null
-const isDuplicateShown = (): boolean => screen.queryByText('creatable-select.option-already-exists') !== null
+const isErrorShown = (): boolean => !isNull(screen.queryByText('creatable-select.invalid-option'))
+const isDuplicateShown = (): boolean => !isNull(screen.queryByText('creatable-select.option-already-exists'))
 
 const positiveNumber = (value: string): boolean => !isNaN(parseInt(value)) && parseInt(value) > 0
 
