@@ -10,10 +10,12 @@
 
 import { type FilterValues } from '@Pimcore/components/filters'
 import { type FieldFilter } from '../context-layer/provider/field-filters/field-filters-provider'
+import { FULLTEXT_SEARCH_MODE_ID } from '../search-modes/constants'
 import { useDraftFilters } from './stores'
 
 export interface ElementFilterValues {
   searchTerm: string
+  searchMode: string
   directChildren: boolean
   unreferenced: boolean
   pql: string
@@ -22,6 +24,7 @@ export interface ElementFilterValues {
 
 export const readElementFilterValues = (values: FilterValues): ElementFilterValues => ({
   searchTerm: (values.searchTerm ?? '') as string,
+  searchMode: (values.searchMode ?? FULLTEXT_SEARCH_MODE_ID) as string,
   directChildren: (values.directChildren ?? false) as boolean,
   unreferenced: (values.unreferenced ?? false) as boolean,
   pql: (values.pql ?? '') as string,
@@ -30,6 +33,7 @@ export const readElementFilterValues = (values: FilterValues): ElementFilterValu
 
 export interface UseDraftFilterValuesReturn extends ElementFilterValues {
   setSearchTerm: (value: string) => void
+  setSearchMode: (value: string) => void
   setDirectChildren: (value: boolean) => void
   setUnreferenced: (value: boolean) => void
   setPql: (value: string) => void
@@ -43,6 +47,7 @@ export const useDraftFilterValues = (): UseDraftFilterValuesReturn => {
   return {
     ...readElementFilterValues(values),
     setSearchTerm: (value) => { setValue('searchTerm', value) },
+    setSearchMode: (value) => { setValue('searchMode', value) },
     setDirectChildren: (value) => { setValue('directChildren', value) },
     setUnreferenced: (value) => { setValue('unreferenced', value) },
     setPql: (value) => { setValue('pql', value) },

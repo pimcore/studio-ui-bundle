@@ -545,6 +545,10 @@ listing.column-picker.search: Sök
 listing.column-picker.no-results: Inga kolumner hittades
 listing.column-picker.fields-to-add: Fält att lägga till
 listing.fields-to-add.collapse-simple-fields: Fäll ihop enkla fält
+listing.search-mode.full-text: Fritextsökning
+listing.search-mode.full-text-short: Fritext
+listing.search-mode.default: Standard
+listing.search-mode.smart-placeholder: Sök bland liknande eller relaterade resultat
 listing.actions: Tillämpa på val
 listing.non-selected.actions: Tillämpa på alla
 listing.actions.zip-download: ZIP-nedladdning

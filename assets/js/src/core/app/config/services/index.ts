@@ -275,6 +275,7 @@ import { DataObjectSaveDataProcessorRegistry } from '@Pimcore/modules/data-objec
 import { AssetSaveDataProcessorRegistry } from '@Pimcore/modules/asset/services/processors/asset-save-data-processor-registry'
 import { PerspectiveProcessorRegistry } from '@Pimcore/modules/widget-manager/services/processors/perspective-processor-registry'
 import { ElementIconProcessorRegistry } from '@Pimcore/modules/element/services/processors/element-icon-processor-registry'
+import { SearchModeRegistry } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/search-mode-registry'
 import { ObjectListingBuilder } from '@sdk/modules/data-object'
 import { AssetListingBuilder } from '@Pimcore/modules/asset/listing/builder/asset-listing-builder'
 import { DynamicTypeFieldFilterInputQuantityValue } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/input-quantity-value/dynamic-type-field-filter-input-quantity-value'
@@ -454,6 +455,9 @@ container.bind(serviceIds['Document/ProcessorRegistry/SaveDataProcessor']).to(Do
 
 // Element Processor Registries
 container.bind(serviceIds['Element/ProcessorRegistry/IconProcessor']).to(ElementIconProcessorRegistry).inSingletonScope()
+
+// Element listing search modes
+container.bind(serviceIds['Element/Listing/SearchModeRegistry']).to(SearchModeRegistry).inSingletonScope()
 
 // Document Sidebar Managers
 container.bind(serviceIds['Document/Editor/Sidebar/PageSidebarManager']).to(DocumentSidebarManager).inSingletonScope()

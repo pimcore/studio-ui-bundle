@@ -545,6 +545,10 @@ listing.column-picker.search: Søk
 listing.column-picker.no-results: Ingen kolonner funnet
 listing.column-picker.fields-to-add: Felter å legge til
 listing.fields-to-add.collapse-simple-fields: Skjul enkle felt
+listing.search-mode.full-text: Fritekstsøk
+listing.search-mode.full-text-short: Fritekst
+listing.search-mode.default: Standard
+listing.search-mode.smart-placeholder: Søk i lignende eller relaterte resultater
 listing.actions: Bruk på utvalg
 listing.non-selected.actions: Bruk på alle
 listing.actions.zip-download: ZIP-nedlasting

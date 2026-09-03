@@ -44,7 +44,7 @@ const listingProps = compose<AbstractDecoratorProps>(
   PagingDecorator,
   ColumnConfigurationDecorator,
   TagFilterDecorator,
-  [GeneralFiltersDecorator, { handleSearchTermInSidebar: false } as GeneralFiltersDecoratorConfig],
+  [GeneralFiltersDecorator, { handleSearchTermInSidebar: false, elementType: elementTypes.dataObject } as GeneralFiltersDecoratorConfig],
   SortingDecorator,
   [ClassDefinitionSelectionDecorator, { showConfigLayer: false } as ClassDefinitionSelectionDecoratorConfig],
   [OpenElementDecorator, { elementType: elementTypes.dataObject } as OpenElementDecoratorConfig],

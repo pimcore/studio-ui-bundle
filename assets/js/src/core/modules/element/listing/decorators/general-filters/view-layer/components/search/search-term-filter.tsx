@@ -9,12 +9,17 @@
  */
 
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useGeneralFiltersConfig } from '../../../context-layer/provider/general-filters-config/use-general-filters-config'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
+import { Compact } from '@Pimcore/components/compact/compact'
+import { Text } from '@Pimcore/components/text/text'
 import { useAppliedFilters, useDraftFiltersOptional } from '../../../element-filters/stores'
 import { readElementFilterValues } from '../../../element-filters/use-element-filter-values'
+import { useSearchMode } from '../../../search-modes/use-search-mode'
 import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
+import { SearchModeSelect } from './search-mode-select'
 
 export interface SearchTermFilterProps {
   /** Called with the term whenever the user commits a search (Enter, search icon, clear). */
@@ -22,6 +27,7 @@ export interface SearchTermFilterProps {
 }
 
 export const SearchTermFilter = ({ onCommit }: SearchTermFilterProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const { values, setValue: setAppliedValue } = useAppliedFilters()
   const appliedSearchTerm = readElementFilterValues(values).searchTerm
   const [currentSearchTerm, setCurrentSearchTerm] = useState<string>(appliedSearchTerm)
@@ -29,6 +35,7 @@ export const SearchTermFilter = ({ onCommit }: SearchTermFilterProps): React.JSX
   const draftStore = useDraftFiltersOptional()
   const { setPage } = usePaging()
   const { setDataLoadingState } = useData()
+  const searchMode = useSearchMode(handleSearchTermInSidebar ? 'draft' : 'applied')
 
   useEffect(() => {
     setCurrentSearchTerm(appliedSearchTerm)
@@ -46,10 +53,34 @@ export const SearchTermFilter = ({ onCommit }: SearchTermFilterProps): React.JSX
       return
     }
 
+    // Immediate-apply surfaces must not submit a blocked mode; the warning below the input
+    // explains what to select first. Sidebar surfaces gate the Apply button instead.
+    if (!handleSearchTermInSidebar && searchMode?.blocked === true) {
+      return
+    }
+
     setAppliedValue('searchTerm', searchTerm)
     setPage(1)
     setDataLoadingState('filters-applied')
     onCommit?.(searchTerm)
+  }
+
+  function onModeChange (modeId: string): void {
+    if (searchMode === undefined || modeId === searchMode.activeModeId) {
+      return
+    }
+
+    searchMode.setModeId(modeId)
+
+    const targetMode = searchMode.modes.find((mode) => mode.id === modeId)
+    const targetAvailability = targetMode?.getAvailability(searchMode.modeContext)
+    const targetBlocked = targetAvailability !== undefined &&
+      (targetAvailability.blocked || !targetAvailability.available)
+
+    if (!handleSearchTermInSidebar && appliedSearchTerm !== '' && !targetBlocked) {
+      setPage(1)
+      setDataLoadingState('filters-applied')
+    }
   }
 
   function onChange (event: React.ChangeEvent<HTMLInputElement>): void {
@@ -60,15 +91,39 @@ export const SearchTermFilter = ({ onCommit }: SearchTermFilterProps): React.JSX
     }
   }
 
-  return (
+  const searchInput = (
     <SearchInput
       className='w-full'
       data-testid="search-term-filter-input"
       maxWidth={ '100%' }
       onChange={ onChange }
       onSearch={ onSearch }
-      placeholder='Search'
+      placeholder={ searchMode?.activeMode !== undefined ? t('listing.search-mode.smart-placeholder') : 'Search' }
       value={ value }
     />
+  )
+
+  if (searchMode === undefined || searchMode.modes.length === 0) {
+    return searchInput
+  }
+
+  const warning = searchMode.availability?.warning
+
+  return (
+    <div className='w-full'>
+      <Compact className='w-full'>
+        <SearchModeSelect
+          fulltextLabel={ handleSearchTermInSidebar
+            ? t('listing.search-mode.full-text-short')
+            : t('listing.search-mode.default') }
+          onModeChange={ onModeChange }
+          searchMode={ searchMode }
+        />
+        {searchInput}
+      </Compact>
+      {warning !== undefined && (
+        <Text type='warning'>{warning}</Text>
+      )}
+    </div>
   )
 }

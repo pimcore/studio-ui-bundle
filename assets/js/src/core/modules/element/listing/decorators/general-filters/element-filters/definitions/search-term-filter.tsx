@@ -22,9 +22,14 @@ export const searchTermFilterDescriptor = defineFilter<string, ElementFilterQuer
   isEnabled: () => true,
   isVisible: (context) => context.config.handleSearchTermInSidebar,
   Control: () => <SearchTermFilter />,
-  toQuery: (value) => {
+  toQuery: (value, context) => {
     if (value === '') {
       return undefined
+    }
+
+    const activeMode = context.searchMode?.activeMode
+    if (activeMode !== undefined && context.searchMode !== undefined) {
+      return { kind: 'columnFilters', filters: [activeMode.buildColumnFilter(value, context.searchMode.modeContext)] }
     }
 
     return { kind: 'columnFilters', filters: [{ type: searchTermFilterType, filterValue: value }] }
