@@ -121,7 +121,8 @@ const Component = ({
 
     if (trimmedValue === '') return
 
-    if (inputType === 'number' && !isInputTextValid()) {
+    // Validate before the duplicate check, which would otherwise clear the invalid text
+    if (!isInputTextValid()) {
       return
     }
 
@@ -130,11 +131,6 @@ const Component = ({
     if (optionExists && !allowDuplicates) {
       setNewOptionText('')
       setNumberInputText('')
-      return
-    }
-
-    // Validate the input value
-    if (!isInputTextValid()) {
       return
     }
 

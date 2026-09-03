@@ -283,4 +283,15 @@ describe('CreatableSelect number input (#1954)', () => {
     expect((input as HTMLInputElement).value).toBe('anything')
     expect(isAddDisabled()).toBe(false)
   })
+
+  it('keeps invalid string input that matches an existing option', () => {
+    renderSelect({ inputType: 'string', options: [{ value: 'abc', label: 'abc' }], validate: () => false })
+
+    const input = screen.getByPlaceholderText('creatable-select.add-custom-option')
+    fireEvent.change(input, { target: { value: 'abc' } })
+    fireEvent.keyDown(input, { key: 'Enter' })
+
+    expect((input as HTMLInputElement).value).toBe('abc')
+    expect(isErrorShown()).toBe(true)
+  })
 })
