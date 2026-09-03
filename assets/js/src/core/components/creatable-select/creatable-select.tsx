@@ -42,8 +42,7 @@ const Component = ({
   const { t, i18n } = useTranslation()
   const [customOptions, setCustomOptions] = useState<SelectOptionType[]>([])
   const [newOptionText, setNewOptionText] = useState('')
-  // `InputNumber` only reports parseable numbers through `onChange`, so the text the user actually
-  // sees is tracked separately via `onInput` — otherwise "12aaa" would silently be accepted as 12.
+  // `onChange` only reports parseable numbers, so the displayed text is tracked via `onInput`.
   const [numberInputText, setNumberInputText] = useState('')
   const [pendingSelection, setPendingSelection] = useState<SelectOptionType | null>(null)
   const allOptions = [...options, ...customOptions]
@@ -51,7 +50,6 @@ const Component = ({
     ? numberInputProps.decimalSeparator ?? getDecimalSeparator(i18n?.language)
     : '.'
 
-  // The text currently in the input, which for number inputs is not necessarily the committed value.
   const currentInputText = inputType === 'number' ? numberInputText : newOptionText
 
   const isInputTextValid = useCallback((): boolean => {
@@ -59,8 +57,11 @@ const Component = ({
 
     if (inputType === 'number') {
       const trimmedText = numberInputText.trim()
-      const parsedText = numberInputProps.parser?.(trimmedText) ?? trimmedText.replace(decimalSeparator, '.')
-      const parsedNumber = Number(parsedText)
+      // `InputNumber` reads "." as a decimal point in every locale, so "1.000" commits 1 in de.
+      const hasForeignSeparator = trimmedText.includes(decimalSeparator === '.' ? ',' : '.')
+      const parsedNumber = numberInputProps.parser !== undefined
+        ? Number(numberInputProps.parser(trimmedText))
+        : hasForeignSeparator ? NaN : Number(trimmedText.replace(decimalSeparator, '.'))
 
       if (committedText === '' || !Number.isFinite(parsedNumber) || parsedNumber !== Number(committedText)) {
         return false
@@ -149,19 +150,16 @@ const Component = ({
   }, [newOptionText, allOptions, allowDuplicates, onCreateOption, isInputTextValid])
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent): void => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      handleAddOption()
-    }
-  }, [handleAddOption])
+    if (e.key !== 'Enter') return
 
-  const handleNumberKeyDown = useCallback((e: React.KeyboardEvent): void => {
-    if (e.key === 'Enter') {
+    if (inputType === 'number') {
+      // `InputNumber` flushes on Enter, re-aligning a rejected value into [min, max].
       e.stopPropagation()
     }
 
-    handleKeyDown(e)
-  }, [handleKeyDown])
+    e.preventDefault()
+    handleAddOption()
+  }, [inputType, handleAddOption])
 
   const getInputDependantField = (): React.JSX.Element => {
     switch (inputType) {
@@ -174,14 +172,13 @@ const Component = ({
               const committedText = isNil(value) ? '' : value.toString()
 
               setNewOptionText(committedText)
-              // Keep the tracked text in sync for changes that bypass `onInput`, e.g. the steppers.
               setNumberInputText(committedText)
             } }
             onInput={ (text) => {
               setNumberInputText(text)
               numberInputProps.onInput?.(text)
             } }
-            onKeyDown={ handleNumberKeyDown }
+            onKeyDown={ handleKeyDown }
             placeholder={ t(createOptionLabel ?? 'creatable-select.add-custom-option') }
             size="small"
             style={ { flex: 1 } }
