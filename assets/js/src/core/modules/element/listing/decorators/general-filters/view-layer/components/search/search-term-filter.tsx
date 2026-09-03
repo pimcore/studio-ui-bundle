@@ -32,6 +32,7 @@ export const SearchTermFilter = ({ onCommit }: SearchTermFilterProps): React.JSX
   const { values, setValue: setAppliedValue, setValues: setAppliedValues } = useAppliedFilters()
   const appliedSearchTerm = readElementFilterValues(values).searchTerm
   const [currentSearchTerm, setCurrentSearchTerm] = useState<string>(appliedSearchTerm)
+  const [blockedAttempt, setBlockedAttempt] = useState<boolean>(false)
   const { handleSearchTermInSidebar } = useGeneralFiltersConfig()
   const draftStore = useDraftFiltersOptional()
   const { setPage } = usePaging()
@@ -55,9 +56,11 @@ export const SearchTermFilter = ({ onCommit }: SearchTermFilterProps): React.JSX
     }
 
     // A blocked mode must not be submitted from any surface; the warning below the input explains
-    // what to select first. Clearing (empty term) stays allowed, or a blocked mode would keep the
-    // stale applied query active.
+    // what to select first, and the attempt flips the input into an error state so the refusal is
+    // unmissable. Clearing (empty term) stays allowed, or a blocked mode would keep the stale
+    // applied query active.
     if (searchMode?.blocked === true && searchTerm !== '') {
+      setBlockedAttempt(true)
       return
     }
 
@@ -90,6 +93,7 @@ export const SearchTermFilter = ({ onCommit }: SearchTermFilterProps): React.JSX
     }
   }
 
+  const isBlocked = searchMode?.blocked === true
   const searchInput = (
     <SearchInput
       className='w-full'
@@ -98,9 +102,17 @@ export const SearchTermFilter = ({ onCommit }: SearchTermFilterProps): React.JSX
       onChange={ onChange }
       onSearch={ onSearch }
       placeholder={ searchMode?.activeMode !== undefined ? t('listing.search-mode.smart-placeholder') : 'Search' }
+      status={ isBlocked ? (blockedAttempt ? 'error' : 'warning') : undefined }
       value={ value }
     />
   )
+
+  // A resolved block or a submitted search clears the attempted-while-blocked error state.
+  useEffect(() => {
+    if (!isBlocked && blockedAttempt) {
+      setBlockedAttempt(false)
+    }
+  }, [isBlocked, blockedAttempt])
 
   const warning = searchMode?.availability?.warning
 
@@ -111,7 +123,9 @@ export const SearchTermFilter = ({ onCommit }: SearchTermFilterProps): React.JSX
         {searchInput}
       </Compact>
       {warning !== undefined && (
-        <Text type='warning'>{warning}</Text>
+        <div>
+          <Text type={ blockedAttempt ? 'danger' : 'warning' }>{warning}</Text>
+        </div>
       )}
     </div>
   )
