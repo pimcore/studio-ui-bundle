@@ -29,12 +29,17 @@ import { useSettings } from '@Pimcore/modules/field-definitions/components/edito
 import { type LayoutProviderProps } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { type AnyMutationHook, type AnyQueryHook } from 'types/react-query'
 
-// Wrapper: accepts { id } (where id == key), maps to backend { key }, and injects id into result
+// Wrapper: accepts { id } (where id == key), maps to backend { key }, and injects id into result.
+// Memoized so `data` keeps the stable identity RTK Query gives it.
 const useObjectBrickGetByKeyQuery: AnyQueryHook = (args: { id: string | number }) => {
   const key = String(args.id)
   const result = useClassObjectBrickGetByKeyQuery({ key })
 
-  if (result.data !== undefined) {
+  return useMemo(() => {
+    if (result.data === undefined) {
+      return result
+    }
+
     return {
       ...result,
       data: {
@@ -43,9 +48,7 @@ const useObjectBrickGetByKeyQuery: AnyQueryHook = (args: { id: string | number }
         id: result.data.key
       }
     }
-  }
-
-  return result
+  }, [result])
 }
 
 // Wrapper: accepts { id } (where id == key), maps to backend { key }

@@ -9,7 +9,7 @@
  */
 
 import { isEqual } from 'lodash'
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import React, { createContext, useContext, useMemo, useState } from 'react'
 
 export type GeneralSettings = Record<string, unknown>
 
@@ -25,35 +25,46 @@ export interface IGeneralSettingsProviderProps {
   children: React.ReactNode
 }
 
-export const GeneralSettingsProvider = (props: IGeneralSettingsProviderProps): React.JSX.Element => {
-  const [generalSettings, setGeneralSettings] = useState<GeneralSettings | undefined>(props.generalSettings)
+interface State {
+  // The server data this state was seeded from, kept by reference so a
+  // completed fetch re-seeds even when it returns identical values.
+  baseline: GeneralSettings | undefined
+  current: GeneralSettings | undefined
+}
 
-  useEffect(() => {
-    setGeneralSettings(props.generalSettings)
-  }, [props.generalSettings])
+export const GeneralSettingsProvider = (props: IGeneralSettingsProviderProps): React.JSX.Element => {
+  const [state, setState] = useState<State>({
+    baseline: props.generalSettings,
+    current: props.generalSettings
+  })
+
+  // Re-seed while rendering, not from an effect: the post-save refetch remounts
+  // the form, and an effect would seed it one render late with the old data.
+  if (state.baseline !== props.generalSettings) {
+    setState({ baseline: props.generalSettings, current: props.generalSettings })
+  }
 
   const updateGeneralSettings = (settings: GeneralSettings | undefined): void => {
     /* eslint-disable  @typescript-eslint/consistent-type-assertions */
-    setGeneralSettings((oldSettings) => {
-      return {
-        ...oldSettings,
+    setState((old) => ({
+      baseline: old.baseline,
+      current: {
+        ...old.current,
         ...settings
       } as GeneralSettings
-    })
+    }))
     /* eslint-enable  @typescript-eslint/consistent-type-assertions */
   }
 
-  // The server data (props) is the clean baseline; after a save the query
-  // refetches and the sync effect above converges the state back to it.
   const getIsDirty = (): boolean => {
-    return !isEqual(generalSettings ?? {}, props.generalSettings ?? {})
+    return !isEqual(state.current ?? {}, state.baseline ?? {})
   }
 
   return useMemo(() => (
-    <GeneralSettingsContext.Provider value={ { generalSettings, setGeneralSettings: updateGeneralSettings, getIsDirty } }>
+    <GeneralSettingsContext.Provider value={ { generalSettings: state.current, setGeneralSettings: updateGeneralSettings, getIsDirty } }>
       {props.children}
     </GeneralSettingsContext.Provider>
-  ), [generalSettings, props.generalSettings, props.children])
+  ), [state, props.children])
 }
 
 export const useGeneralSettings = (): IGeneralSettingsContext => {

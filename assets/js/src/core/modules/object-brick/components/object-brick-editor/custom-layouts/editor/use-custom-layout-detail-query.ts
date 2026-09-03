@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { useMemo } from 'react'
 import { useCurrentConfiguration } from '@Pimcore/modules/field-definitions/components/editor/custom-layout/current-configuration-provider'
 import { useClassObjectBrickCustomLayoutGetQuery } from '@sdk/api/class-definition'
 import { type AnyQueryHook } from 'types/react-query'
@@ -28,11 +29,17 @@ export const useObjectBrickCustomLayoutDetailQuery: AnyQueryHook = (data) => {
   // detail.tsx creates a blank base panel node instead of surfacing an error.
   // We must include `id` in the synthetic response so that generalSettings.id
   // is available to the save mutation.
-  if (
-    result.error !== undefined &&
-    'status' in result.error &&
-    result.error.status === 404
-  ) {
+  // Memoized so the synthetic `data` keeps a stable identity; consumers re-seed
+  // their state whenever that reference changes.
+  return useMemo(() => {
+    if (
+      result.error === undefined ||
+      !('status' in result.error) ||
+      result.error.status !== 404
+    ) {
+      return result
+    }
+
     return {
       ...result,
       error: undefined,
@@ -49,7 +56,5 @@ export const useObjectBrickCustomLayoutDetailQuery: AnyQueryHook = (data) => {
         layoutDefinition: null
       }
     } as any
-  }
-
-  return result
+  }, [result, customLayoutId])
 }
