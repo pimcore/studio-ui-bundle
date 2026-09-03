@@ -40,10 +40,10 @@ jobs:
       private_repo: ${{ env.PRIVATE_REPO }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
 
       - name: Checkout reusable workflow repo
-        uses: actions/checkout@v7
+        uses: actions/checkout@v7.0.1
         with:
           repository: pimcore/workflows-collection-public
           ref: main
