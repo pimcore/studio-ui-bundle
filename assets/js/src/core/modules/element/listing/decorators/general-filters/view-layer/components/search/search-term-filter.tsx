@@ -54,8 +54,9 @@ export const SearchTermFilter = ({ onCommit }: SearchTermFilterProps): React.JSX
     }
 
     // Immediate-apply surfaces must not submit a blocked mode; the warning below the input
-    // explains what to select first. Sidebar surfaces gate the Apply button instead.
-    if (!handleSearchTermInSidebar && searchMode?.blocked === true) {
+    // explains what to select first. Sidebar surfaces gate the Apply button instead. Clearing
+    // (empty term) must stay allowed, or a blocked mode keeps the stale applied query active.
+    if (!handleSearchTermInSidebar && searchMode?.blocked === true && searchTerm !== '') {
       return
     }
 

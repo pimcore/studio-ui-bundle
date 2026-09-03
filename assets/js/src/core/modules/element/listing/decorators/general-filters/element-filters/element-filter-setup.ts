@@ -41,7 +41,9 @@ export const useElementFilterContext = (): ElementFilterContext => {
           // restored blocked state degrades to full text here as the last line of defense.
           activeMode: searchMode.blocked ? undefined : searchMode.activeMode,
           modeContext: searchMode.modeContext,
-          registeredFilterTypes: searchMode.modes.map((mode) => mode.columnFilterType)
+          // All registry entries, not the visible modes: a hidden mode's filter must still be
+          // cleaned from restored base filters, or it is sent while the UI shows full text.
+          registeredFilterTypes: searchMode.registeredFilterTypes
         }
   }
 }

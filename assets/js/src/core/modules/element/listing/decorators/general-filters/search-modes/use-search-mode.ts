@@ -32,6 +32,8 @@ export interface UseSearchModeReturn {
   availability: SearchModeAvailability | undefined
   /** True when the active mode must not be submitted (Apply/Enter disabled). */
   blocked: boolean
+  /** Filter types of ALL registered modes, hidden ones included — cleanup must cover them too. */
+  registeredFilterTypes: string[]
   setModeId: (id: string) => void
 }
 
@@ -74,7 +76,8 @@ export const useSearchMode = (source: 'draft' | 'applied'): UseSearchModeReturn 
     hasExplicitSorting
   }
 
-  const modes = registry.getDynamicTypes()
+  const registeredModes = registry.getDynamicTypes()
+  const modes = registeredModes
     .filter((mode) => mode.isVisible())
     .sort((a, b) => a.order - b.order)
 
@@ -91,6 +94,7 @@ export const useSearchMode = (source: 'draft' | 'applied'): UseSearchModeReturn 
     activeMode,
     availability,
     blocked: availability !== undefined && (availability.blocked || !availability.available),
+    registeredFilterTypes: registeredModes.map((mode) => mode.columnFilterType),
     setModeId: (id) => { store.setValue('searchMode', id) }
   }
 }
