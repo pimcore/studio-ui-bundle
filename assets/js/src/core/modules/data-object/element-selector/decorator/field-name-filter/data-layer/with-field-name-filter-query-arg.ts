@@ -8,21 +8,22 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import {type AbstractDecoratorProps} from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
-import {useElementSelectorHelper} from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector-helper'
+import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
+import { useElementSelectorHelper } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector-helper'
+import { isEmpty, isNil } from 'lodash'
 
 export const fieldNameFilterType = 'system.fieldName'
 
 export interface FieldNameFilter {
   type: typeof fieldNameFilterType
-  key:string
+  key: string
   filterValue: string
 }
 
 export const withFieldNameFilterQueryArg = (useBaseHook: AbstractDecoratorProps['useDataQueryHelper']): AbstractDecoratorProps['useDataQueryHelper'] => {
   return () => {
-    const {getArgs: baseGetArgs, ...baseMethods} = useBaseHook()
-    const {config} = useElementSelectorHelper()
+    const { getArgs: baseGetArgs, ...baseMethods } = useBaseHook()
+    const { config } = useElementSelectorHelper()
     const fieldName = config.config?.objects?.fieldName
 
     const getArgs: typeof baseGetArgs = () => {
@@ -33,7 +34,7 @@ export const withFieldNameFilterQueryArg = (useBaseHook: AbstractDecoratorProps[
         ...currentColumnFilters.filter((currentFilter) => currentFilter.type !== fieldNameFilterType)
       ]
 
-      if (fieldName !== undefined && fieldName !== null && fieldName !== '') {
+      if (!isNil(fieldName) && !isEmpty(fieldName)) {
         const fieldNameFilter: FieldNameFilter = {
           type: fieldNameFilterType,
           key: fieldNameFilterType,
