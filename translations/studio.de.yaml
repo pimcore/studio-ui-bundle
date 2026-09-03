@@ -1329,8 +1329,12 @@ upload.assets-items-failed-message: Upload mit Fehlern abgeschlossen.
 quantity-value.converted-units: Umgerechnete Einheiten
 table.empty.confirm: Sind Sie sicher, dass Sie alle Daten löschen möchten?
 table.new-column: Neue Spalte
+table.insert-column-left: Spalte links einfügen
+table.insert-column-right: Spalte rechts einfügen
 table.delete-column: Spalte löschen
 table.new-row: Neue Zeile
+table.insert-row-above: Zeile oberhalb einfügen
+table.insert-row-below: Zeile unterhalb einfügen
 table.delete-row: Zeile löschen
 table.duplicate-row: Zeile duplizieren
 table.copy: Kopieren

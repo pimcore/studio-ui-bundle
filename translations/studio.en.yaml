@@ -1329,8 +1329,12 @@ upload.assets-items-failed-message: Upload finished with errors.
 quantity-value.converted-units: Converted Units
 table.empty.confirm: Are you sure you want to clear all data?
 table.new-column: New column
+table.insert-column-left: Insert column left
+table.insert-column-right: Insert column right
 table.delete-column: Delete column
 table.new-row: New row
+table.insert-row-above: Insert row above
+table.insert-row-below: Insert row below
 table.delete-row: Delete row
 table.duplicate-row: Duplicate row
 table.copy: Copy
