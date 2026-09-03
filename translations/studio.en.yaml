@@ -2870,3 +2870,4 @@ saved-search.update.success: Saved search updated
 saved-search.delete.success: Saved search deleted
 saved-search.shared-modified.info: You have made modifications to the original configuration. Since it is owned by someone else, you can save it as a new search.
 saved-search.menu-shortcut-group: Menu group
+skip-to-content: Skip to content
