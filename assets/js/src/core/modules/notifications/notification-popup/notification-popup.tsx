@@ -75,6 +75,14 @@ export const NotificationPopup = (): React.JSX.Element => {
   }, [openNotifications])
 
   useEffect(() => {
+    // Ensure the popup doesn't outlive this component (e.g. session expiry redirecting to the login page),
+    // since it's rendered into a global notification context that sits above the router.
+    return () => {
+      notificationApi.destroy(POPUP_KEY)
+    }
+  }, [])
+
+  useEffect(() => {
     const handler = new NotificationMessageHandler(handleMessage)
 
     globalMessageBus.registerHandler(handler)
