@@ -53,13 +53,17 @@ const Component = ({
   const currentInputText = inputType === 'number' ? numberInputText : newOptionText
 
   const isInputTextValid = useCallback((): boolean => {
-    // Grouping separators are rejected on purpose — "1,000" cannot be read unambiguously across locales.
-    if (inputType === 'number' && !Number.isFinite(Number(numberInputText.trim().replace(decimalSeparator, '.')))) {
-      return false
+    if (inputType === 'number') {
+      const trimmedText = numberInputText.trim()
+      const parsedText = numberInputProps.parser?.(trimmedText) ?? trimmedText.replace(decimalSeparator, '.')
+
+      if (newOptionText.trim() === '' || !Number.isFinite(Number(parsedText))) {
+        return false
+      }
     }
 
     return validate === undefined || validate(newOptionText.trim())
-  }, [inputType, numberInputText, decimalSeparator, newOptionText, validate])
+  }, [inputType, numberInputText, decimalSeparator, numberInputProps.parser, newOptionText, validate])
 
   // Auto-add value or defaultValue if it's not in the options list
   useEffect(() => {
@@ -115,6 +119,7 @@ const Component = ({
     const optionExists = allOptions.some(opt => opt.value === trimmedValue)
     if (optionExists && !allowDuplicates) {
       setNewOptionText('')
+      setNumberInputText('')
       return
     }
 
@@ -142,9 +147,6 @@ const Component = ({
   }, [handleAddOption])
 
   const handleNumberKeyDown = useCallback((e: React.KeyboardEvent): void => {
-    // `InputNumber` flushes on Enter, which re-aligns the value into [min, max] and would silently
-    // turn a rejected input into the boundary value. Keep the flush from running at all — the value
-    // is already committed through `onChange` while typing.
     if (e.key === 'Enter') {
       e.stopPropagation()
     }
