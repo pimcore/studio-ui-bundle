@@ -10,7 +10,6 @@
 
 import React, { useEffect, useState } from 'react'
 import { Input } from 'antd'
-import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 
@@ -24,32 +23,31 @@ export const DynamicTypeFieldFilterTextComponent = (): React.JSX.Element => {
     setValue(data)
   }, [data])
 
-  // Hosts that apply filters immediately expose commit(); there a search icon and Enter
-  // are meaningful. Hosts that only collect a draft until their own "Apply" button keep
-  // the plain input, so no control promises an action it cannot perform.
-  if (commit === undefined) {
-    return (
-      <Input
-        onBlur={ onBlur }
-        onChange={ (event) => { setValue(event.target.value) } }
-        type='text'
-        value={ _value }
-      />
-    )
-  }
-
   return (
-    <SearchInput
-      className='w-full'
-      maxWidth={ '100%' }
+    <Input
       onBlur={ onBlur }
       onChange={ (event) => { setValue(event.target.value) } }
-      onSearch={ (searchValue) => { setValue(searchValue); commit(searchValue) } }
+      onPressEnter={ onPressEnter }
+      type='text'
       value={ _value }
     />
   )
 
   function onBlur (): void {
+    setData(_value)
+  }
+
+  /**
+   * Hosts that apply filters immediately expose commit(), so Enter applies the value
+   * right away. Hosts that only collect a draft until their own "Apply" button have no
+   * commit(), and Enter behaves like leaving the field.
+   */
+  function onPressEnter (): void {
+    if (commit !== undefined) {
+      commit(_value)
+      return
+    }
+
     setData(_value)
   }
 }
