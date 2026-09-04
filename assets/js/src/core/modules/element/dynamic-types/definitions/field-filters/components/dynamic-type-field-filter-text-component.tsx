@@ -9,6 +9,7 @@
  */
 
 import React, { useEffect, useState } from 'react'
+import { Input } from 'antd'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
@@ -22,6 +23,20 @@ export const DynamicTypeFieldFilterTextComponent = (): React.JSX.Element => {
   useEffect(() => {
     setValue(data)
   }, [data])
+
+  // Hosts that apply filters immediately expose commit(); there a search icon and Enter
+  // are meaningful. Hosts that only collect a draft until their own "Apply" button keep
+  // the plain input, so no control promises an action it cannot perform.
+  if (commit === undefined) {
+    return (
+      <Input
+        onBlur={ onBlur }
+        onChange={ (event) => { setValue(event.target.value) } }
+        type='text'
+        value={ _value }
+      />
+    )
+  }
 
   return (
     <SearchInput

@@ -108,7 +108,7 @@ export const FieldFilters = ({ data, onChange, onCommit }: FieldFiltersProps): R
         <DynamicFilter
           { ...filter }
           onChange={ (data) => { onFilterChange(filter, data) } }
-          onCommit={ (data) => { onFilterCommit(filter, data) } }
+          onCommit={ onCommit === undefined ? undefined : (data) => { onFilterCommit(filter, data) } }
         />
       ),
       renderRightToolbar: (

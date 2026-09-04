@@ -26,7 +26,12 @@ export interface IDynamicFilter {
 
 export interface DynamicFilterData extends IDynamicFilter {
   setData: (data: any) => void
-  commit: (data: any) => void
+  /**
+   * Only defined when the host passed an onCommit handler. Filter components use its
+   * presence to decide whether to offer an immediate-apply control (search icon / Enter);
+   * hosts that only collect draft values leave it undefined.
+   */
+  commit?: (data: any) => void
 }
 
 export type DynamicFilterContextProps = DynamicFilterData | undefined
@@ -53,21 +58,21 @@ export const DynamicFilterProvider = ({ children, id, type, translationKey, data
     }
   }
 
-  const commit = (data: any): void => {
+  const commit = onCommit === undefined ? undefined : (data: any): void => {
     _setData(data)
 
     if (onChange !== undefined) {
       onChange(data)
     }
 
-    if (onCommit !== undefined) {
-      onCommit(data)
-    }
+    onCommit(data)
   }
+
+  const canCommit = commit !== undefined
 
   return useMemo(() => (
     <DynamicFilterContext.Provider value={ { id, translationKey, type, data: _data, setData, commit, frontendType, config } }>
       {children}
     </DynamicFilterContext.Provider>
-  ), [id, type, _data, frontendType, config, children])
+  ), [id, type, _data, frontendType, config, children, canCommit])
 }
