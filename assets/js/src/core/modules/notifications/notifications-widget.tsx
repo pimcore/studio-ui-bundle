@@ -46,8 +46,9 @@ export const NotificationsWidget = ({ activeNotification }: NotificationsWidgetP
   const [sendModal, setSendModal] = useState<boolean>(false)
   const [activeSection, setActiveSection] = useState<NotificationsSection>('inbox')
 
-  // Deep link from elsewhere in the app (the user menu's gear). An already-open widget keeps its
-  // original config, so a section cannot be requested through it — this signal is read live.
+  // Section requested from elsewhere in the app (the user-menu row, the pop-up's "View"). An
+  // already-open widget keeps its original config, so a section cannot be carried in it — this
+  // signal is read live instead.
   useEffect(() => {
     if (sectionRequest !== null) {
       setActiveSection(sectionRequest.section)
