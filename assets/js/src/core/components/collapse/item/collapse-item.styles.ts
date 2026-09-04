@@ -147,18 +147,6 @@ export const useStyles = createStyles(({ css, token }) => {
           background-color: ${token.colorBgFieldset};
           border-left: 3px solid ${token.colorBorderFieldset};
         }
-
-        /* Non-expandable items borrow antd's "disabled" panel to stay un-togglable, but
-           they are not unavailable — keep the header looking like ordinary content. */
-        &.collapse-item--not-expandable {
-          >.ant-collapse-item.ant-collapse-item-disabled >.ant-collapse-header {
-            &,
-            >.arrow {
-              color: inherit;
-              cursor: default;
-            }
-          }
-        }
       }
     `
   }
