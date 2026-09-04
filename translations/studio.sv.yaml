@@ -682,6 +682,8 @@ edit: Redigera
 modify: Ändra
 component.no-content.no-content-available: Inget innehåll tillgängligt
 notifications.label: Aviseringar
+notifications.tab.inbox: Inkorg
+notifications.tab.settings: Inställningar
 notifications.settings.label: Aviseringsinställningar
 notifications.settings.description: Aktivera "Meddela mig" för allt du vill ha i din aviseringsklocka, och lägg sedan till fler kanaler för det som betyder mest.
 notifications.settings.description-popup-only: Välj hur aviseringar ska nå dig. Allt du meddelas om visas alltid i din aviseringsklocka.

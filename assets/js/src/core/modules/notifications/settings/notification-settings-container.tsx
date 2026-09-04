@@ -14,7 +14,6 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { Content } from '@Pimcore/components/content/content'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Box } from '@Pimcore/components/box/box'
-import { Title } from '@Pimcore/components/title/title'
 import { Text } from '@Pimcore/components/text/text'
 import { Flex } from '@Pimcore/components/flex/flex'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
@@ -85,18 +84,13 @@ export const NotificationSettingsContainer = (): React.JSX.Element => {
             gap={ 'small' }
             vertical
           >
-            <Flex
-              gap={ 'mini' }
-              vertical
-            >
-              <Title>{t('notifications.settings.label')}</Title>
-              <Text type={ 'secondary' }>
-                {/* With no channel beyond the pop-up there is nothing to "add on top". */}
-                {(data?.availableChannels.length ?? 0) > 1
-                  ? t('notifications.settings.description')
-                  : t('notifications.settings.description-popup-only')}
-              </Text>
-            </Flex>
+            {/* No heading: the section tab and the widget header already name this screen. */}
+            <Text type={ 'secondary' }>
+              {/* With no channel beyond the pop-up there is nothing to "add on top". */}
+              {(data?.availableChannels.length ?? 0) > 1
+                ? t('notifications.settings.description')
+                : t('notifications.settings.description-popup-only')}
+            </Text>
 
             {data !== undefined && (
               <NotificationSettingsView
