@@ -120,7 +120,7 @@ export const NotificationSettingsView = ({
                     aria-label={ t(channel.unavailableReasonKey) }
                     data-testid={ `notification-settings-channel-warning-${channel.id}` }
                   >
-                    <Icon value={ 'warning-circle' } />
+                    <Icon value={ 'alert-outline' } />
                   </span>
                 </Tooltip>
               )}

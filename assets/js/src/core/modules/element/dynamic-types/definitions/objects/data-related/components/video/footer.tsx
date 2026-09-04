@@ -96,7 +96,7 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
         title={ t('details') }
       >
         <IconButton
-          icon={ { value: 'info-circle' } }
+          icon={ { value: 'info-outline' } }
           onClick={ showModal }
         />
       </Tooltip>
