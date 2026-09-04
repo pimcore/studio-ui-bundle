@@ -27,9 +27,9 @@ export interface IDynamicFilter {
 export interface DynamicFilterData extends IDynamicFilter {
   setData: (data: any) => void
   /**
-   * Only defined when the host passed an onCommit handler. Filter components use its
-   * presence to decide whether to offer an immediate-apply control (search icon / Enter);
-   * hosts that only collect draft values leave it undefined.
+   * Only defined when the host applies filters immediately, i.e. it passed an onCommit
+   * handler. Filter components use its presence to decide whether an interaction can
+   * apply straight away; hosts that only collect draft values leave it undefined.
    */
   commit?: (data: any) => void
 }
@@ -58,12 +58,10 @@ export const DynamicFilterProvider = ({ children, id, type, translationKey, data
     }
   }
 
+  // Deliberately no onChange here: onCommit's consumer reports the change itself, so
+  // firing both would deliver the same value to the host twice.
   const commit = onCommit === undefined ? undefined : (data: any): void => {
     _setData(data)
-
-    if (onChange !== undefined) {
-      onChange(data)
-    }
 
     onCommit(data)
   }
