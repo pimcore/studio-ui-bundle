@@ -82,16 +82,27 @@ const prepareFieldFilters = (filters: FieldFilter[], context: TranslationFilterC
   return preparedFilters
 }
 
-const SearchTermControl: FC<FilterControlProps<string>> = ({ value, onChange }) => (
-  <SearchInput
-    className='w-full'
-    data-testid='translations-search-input'
-    maxWidth={ '100%' }
-    onChange={ (event) => { onChange(event.target.value) } }
-    placeholder='Search'
-    value={ value }
-  />
-)
+const SearchTermControl: FC<FilterControlProps<string>> = ({ value, onChange }) => {
+  const appliedStore = useTranslationsAppliedFilters()
+  const draftStore = useTranslationsDraftFilters()
+
+  const handleSearch = (searchValue: string): void => {
+    onChange(searchValue)
+    appliedStore.setValues({ ...draftStore.values, searchTerm: searchValue })
+  }
+
+  return (
+    <SearchInput
+      className='w-full'
+      data-testid='translations-search-input'
+      maxWidth={ '100%' }
+      onChange={ (event) => { onChange(event.target.value) } }
+      onSearch={ handleSearch }
+      placeholder='Search'
+      value={ value }
+    />
+  )
+}
 
 const searchTermDescriptor = defineFilter<string, TranslationFilterContribution, TranslationFilterContext>({
   key: 'searchTerm',
