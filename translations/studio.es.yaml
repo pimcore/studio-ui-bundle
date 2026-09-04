@@ -1095,6 +1095,7 @@ asset.sidebar.web-format: Formato web
 asset.sidebar.print-format: Formato de impresión
 asset.sidebar.office-format: Formato de oficina
 jobs.notification.title: Trabajos en ejecución
+jobs.notification.tooltip: Abrir trabajos en ejecución
 jobs.notification.jobs_one: "{{count}} Acción"
 jobs.notification.jobs_other: "{{count}} Acciones"
 jobs.notification.hide-all-finished: Ocultar todos los completados
