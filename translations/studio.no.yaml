@@ -682,6 +682,8 @@ edit: Rediger
 modify: Endre
 component.no-content.no-content-available: Ingen innhold tilgjengelig
 notifications.label: Varsler
+notifications.tab.inbox: Innboks
+notifications.tab.settings: Innstillinger
 notifications.settings.label: Varselinnstillinger
 notifications.settings.description: Slå på "Varsle meg" for alt du vil ha i varselklokken din, og legg deretter til flere kanaler for det som betyr mest.
 notifications.settings.description-popup-only: Velg hvordan varsler skal nå deg. Alt du varsles om, vises alltid i varselklokken din.

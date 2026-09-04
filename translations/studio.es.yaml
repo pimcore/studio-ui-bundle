@@ -682,6 +682,8 @@ edit: Editar
 modify: Modificar
 component.no-content.no-content-available: No hay contenido disponible
 notifications.label: Notificaciones
+notifications.tab.inbox: Bandeja de entrada
+notifications.tab.settings: Configuración
 notifications.settings.label: Configuración de notificaciones
 notifications.settings.description: Active "Notificarme" para todo lo que desee que aparezca en su campana de notificaciones y, después, añada canales adicionales para lo que más le importe.
 notifications.settings.description-popup-only: Elija cómo desea recibir las notificaciones. Todo aquello de lo que se le notifica siempre aparece en su campana de notificaciones.
