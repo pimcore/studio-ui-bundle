@@ -39,27 +39,34 @@ export const FieldFilters = ({ data, onChange, onCommit }: FieldFiltersProps): R
     _setData(data)
   }, [data])
 
-  const onFilterChange = (filter: IDynamicFilter, data: any): void => {
-    let index = _data.findIndex((f) => f.id === filter.id)
-
+  /**
+   * Classification store filters share one id across groups and keys, so they are only
+   * identified together with their config; every other type is unique by id alone.
+   */
+  const isSameFilter = (candidate: IDynamicFilter, filter: IDynamicFilter): boolean => {
     if (filter.type === 'dataobject.classificationstore') {
-      index = _data.findIndex((f) => f.id === filter.id && f.config?.keyId === filter.config?.keyId && f.config?.groupId === filter.config?.groupId)
+      return candidate.id === filter.id &&
+        candidate.config?.keyId === filter.config?.keyId &&
+        candidate.config?.groupId === filter.config?.groupId
     }
 
+    return candidate.id === filter.id
+  }
+
+  const withUpdatedFilter = (filter: IDynamicFilter, changes: Partial<IDynamicFilter>): IDynamicFilter[] => {
+    const index = _data.findIndex((f) => isSameFilter(f, filter))
     const updatedData = [..._data]
-    updatedData[index] = { ...updatedData[index], data }
-    setData(updatedData)
+    updatedData[index] = { ...updatedData[index], ...changes }
+
+    return updatedData
+  }
+
+  const onFilterChange = (filter: IDynamicFilter, data: any): void => {
+    setData(withUpdatedFilter(filter, { data }))
   }
 
   const onFilterCommit = (filter: IDynamicFilter, data: any): void => {
-    let index = _data.findIndex((f) => f.id === filter.id)
-
-    if (filter.type === 'dataobject.classificationstore') {
-      index = _data.findIndex((f) => f.id === filter.id && f.config?.keyId === filter.config?.keyId && f.config?.groupId === filter.config?.groupId)
-    }
-
-    const updatedData = [..._data]
-    updatedData[index] = { ...updatedData[index], data }
+    const updatedData = withUpdatedFilter(filter, { data })
     setData(updatedData)
 
     if (onCommit !== undefined) {
@@ -68,24 +75,11 @@ export const FieldFilters = ({ data, onChange, onCommit }: FieldFiltersProps): R
   }
 
   const onLanguageSelectionChanged = (filter: IDynamicFilter, locale: string | null): void => {
-    let index = _data.findIndex((f) => f.id === filter.id)
-
-    if (filter.type === 'dataobject.classificationstore') {
-      index = _data.findIndex((f) => f.id === filter.id && f.config?.keyId === filter.config?.keyId && f.config?.groupId === filter.config?.groupId)
-    }
-
-    const updatedData = [..._data]
-    updatedData[index] = { ...updatedData[index], locale }
-    setData(updatedData)
+    setData(withUpdatedFilter(filter, { locale }))
   }
 
   const onRemoveClick = (filter: IDynamicFilter): void => {
-    if (filter.type === 'dataobject.classificationstore') {
-      setData(_data.filter((f) => !(f.id === filter.id && f.config?.keyId === filter.config?.keyId && f.config?.groupId === filter.config?.groupId)))
-      return
-    }
-
-    setData(_data.filter((f) => f.id !== filter.id))
+    setData(_data.filter((f) => !isSameFilter(f, filter)))
   }
 
   const items: StackListProps['items'] = _data.map((filter) => {
