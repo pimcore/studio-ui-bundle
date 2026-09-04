@@ -426,6 +426,24 @@ login-form.username: Nom d'utilisateur
 login-form.password: Mot de passe
 aria.login-form-additional-logins.additional-login-provider: "Fournisseur de connexion supplémentaire :"
 aria.login-form-additional-logins.remember-me-checkbox: Case à cocher Se souvenir de moi
+oauth.consent.title: Autoriser l'accès
+oauth.consent.subtitle: "{{client}} souhaite accéder à Pimcore en tant que vous."
+oauth.consent.unverified: Cette application s'est enregistrée elle-même et n'est pas vérifiée. Ne continuez que si vous avez démarré cette action depuis l'application à laquelle vous faites confiance.
+oauth.consent.redirect-to: "Après avoir autorisé, vous serez redirigé vers {{host}}"
+oauth.consent.permissions-heading: "Cela lui permettra de:"
+oauth.consent.no-scopes: Aucune autorisation spécifique n'a été demandée.
+oauth.consent.signed-in-as: "Connecté en tant que {{username}}"
+oauth.consent.allow: Autoriser
+oauth.consent.deny: Refuser
+oauth.consent.scope.mcp-read.label: Lire vos données
+oauth.consent.scope.mcp-read.description: Lire, lister et effectuer des recherches parmi les outils qui vous sont accessibles.
+oauth.consent.scope.mcp-write.label: Modifier vos données
+oauth.consent.scope.mcp-write.description: Utiliser des outils qui modifient des données, toujours limités à vos propres autorisations.
+oauth.consent.retry: Réessayer
+oauth.consent.error.load-failed: Cette demande d'autorisation n'a pas pu être chargée.
+oauth.consent.error.decision-failed: Votre décision n'a pas pu être envoyée. Veuillez réessayer.
+oauth.consent.expired.title: Cette demande d'autorisation a expiré
+oauth.consent.expired.description: Veuillez recommencer depuis votre application.
 unsaved-notice: Veuillez enregistrer pour confirmer vos modifications
 widget-manager.tab-title.close-confirmation: Vous avez des modifications non enregistrées, êtes-vous sûr de vouloir fermer cet onglet ?
 action-applied-successfully: Action appliquée avec succès

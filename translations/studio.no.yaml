@@ -426,6 +426,24 @@ login-form.username: Brukernavn
 login-form.password: Passord
 aria.login-form-additional-logins.additional-login-provider: "Ekstra innloggingsleverandør:"
 aria.login-form-additional-logins.remember-me-checkbox: Husk meg-avkrysningsboks
+oauth.consent.title: Autoriser tilgang
+oauth.consent.subtitle: "{{client}} vil ha tilgang til Pimcore som deg."
+oauth.consent.unverified: Denne applikasjonen registrerte seg selv og er ikke verifisert. Fortsett bare hvis du startet dette fra applikasjonen du stoler på.
+oauth.consent.redirect-to: "Etter at du godkjenner, blir du sendt til {{host}}"
+oauth.consent.permissions-heading: "Dette vil gi den mulighet til å:"
+oauth.consent.no-scopes: Ingen spesifikke tillatelser ble forespurt.
+oauth.consent.signed-in-as: "Logget inn som {{username}}"
+oauth.consent.allow: Tillat
+oauth.consent.deny: Avslå
+oauth.consent.scope.mcp-read.label: Lese dine data
+oauth.consent.scope.mcp-read.description: Lese, liste opp og søke blant verktøyene som er tilgjengelige for deg.
+oauth.consent.scope.mcp-write.label: Endre dine data
+oauth.consent.scope.mcp-write.description: Bruke verktøy som endrer data, fortsatt begrenset til dine egne tillatelser.
+oauth.consent.retry: Prøv igjen
+oauth.consent.error.load-failed: Denne autorisasjonsforespørselen kunne ikke lastes.
+oauth.consent.error.decision-failed: Din beslutning kunne ikke sendes inn. Prøv igjen.
+oauth.consent.expired.title: Denne autorisasjonsforespørselen har utløpt
+oauth.consent.expired.description: Vennligst start på nytt fra applikasjonen din.
 unsaved-notice: Vennligst lagre for å bekrefte endringene
 widget-manager.tab-title.close-confirmation: Du har ulagrede endringer, er du sikker på at du vil lukke denne fanen?
 action-applied-successfully: Handling utført
