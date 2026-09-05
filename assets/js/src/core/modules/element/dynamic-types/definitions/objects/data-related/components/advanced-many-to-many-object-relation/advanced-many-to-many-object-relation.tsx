@@ -25,6 +25,8 @@ import {
 import {
   useConvertRelationEditableColumns
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/hooks/use-convert-relation-editable-columns'
+import { BatchEditAction } from '../advanced-many-to-many-relation/batch-edit/batch-edit-action'
+import { useBatchEditActions } from '../advanced-many-to-many-relation/batch-edit/use-batch-edit-actions'
 
 export interface AdvancedManyToManyObjectRelationClassDefinitionProps {
   allowToClearRelation: boolean
@@ -38,6 +40,7 @@ export interface AdvancedManyToManyObjectRelationClassDefinitionProps {
   columns?: RelationColumnDefinition[] | null
   name: string[]
   hideOpenButton?: boolean
+  enableBatchEdit?: boolean
 }
 
 export interface RelationColumnDefinition {
@@ -51,6 +54,7 @@ export interface RelationColumnDefinition {
 
 export interface AdvancedManyToManyObjectRelationProps extends AdvancedManyToManyObjectRelationClassDefinitionProps {
   disabled?: boolean
+  inherited?: boolean
   value?: AdvancedManyToManyRelationValue | null
   onChange?: (value?: AdvancedManyToManyRelationValue | null) => void
   enrichRowData?: (row: ManyToManyRelationValueItem) => ManyToManyRelationValueItem & Record<string, any>
@@ -60,6 +64,12 @@ export interface AdvancedManyToManyObjectRelationProps extends AdvancedManyToMan
 export const AdvancedManyToManyObjectRelation = (props: AdvancedManyToManyObjectRelationProps): React.JSX.Element => {
   const fieldName = props.name[props.name.length - 1]
   const { columnDefinition, onUpdateCellData, convertToManyToManyRelationValue, convertToAdvancedManyToManyRelationValue } = useConvertRelationEditableColumns(props.columns ?? [], fieldName, props.value, props.onChange)
+  const isBatchEditEnabled = props.enableBatchEdit === true && props.disabled !== true && props.inherited !== true
+
+  const { selectedRows, setSelectedRows, handleBatchApply, handleBatchDelete } = useBatchEditActions({
+    value: props.value,
+    onChange: props.onChange
+  })
 
   useEffect(() => {
   }, [props.value])
@@ -77,14 +87,35 @@ export const AdvancedManyToManyObjectRelation = (props: AdvancedManyToManyObject
     props.onChange?.(convertToAdvancedManyToManyRelationValue(value))
   }
 
+  const totalRowCount = props.value?.length ?? 0
+
+  const batchEditToolbarItem = isBatchEditEnabled
+    ? (
+      <BatchEditAction
+        columns={ props.columns ?? [] }
+        disabled={ props.disabled }
+        onApply={ handleBatchApply }
+        onDelete={ handleBatchDelete }
+        selectedRows={ selectedRows }
+        setSelectedRows={ setSelectedRows }
+        totalRowCount={ totalRowCount }
+      />
+      )
+    : undefined
+
   return (
     <ManyToManyObjectRelation
       { ...props }
+      allowToClearRelation={ isBatchEditEnabled ? false : props.allowToClearRelation }
       allowedClasses={ [String(props.allowedClassId)] }
       columnDefinition={ columnDefinition }
       dataObjectsAllowed
+      enableMultipleRowSelection={ isBatchEditEnabled }
+      extraToolbarItems={ batchEditToolbarItem }
       onChange={ onChange }
+      onSelectedRowsChange={ isBatchEditEnabled ? setSelectedRows : undefined }
       onUpdateCellData={ onUpdateCellData }
+      selectedRows={ isBatchEditEnabled ? selectedRows : undefined }
       value={ convertToManyToManyRelationValue(props.value) }
     />
   )

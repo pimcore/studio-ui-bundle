@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import type { ColumnDef } from '@tanstack/react-table'
+import type { ColumnDef, RowSelectionState } from '@tanstack/react-table'
 import { isEqual, isNil } from 'lodash'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import { ManyToManyRelationGrid } from './grid'
@@ -56,6 +56,10 @@ export interface ManyToManyRelationProps extends IRelationAllowedTypesDataCompon
   noteditable?: boolean | null
   /** Renders a filter dropdown in the header of every filterable column. */
   enableColumnFilters?: boolean
+  enableMultipleRowSelection?: boolean
+  selectedRows?: RowSelectionState
+  onSelectedRowsChange?: (selectedRows: RowSelectionState) => void
+  extraToolbarItems?: React.ReactNode
 }
 
 interface ManyToManyRelationContentProps extends ManyToManyRelationProps {
@@ -153,6 +157,7 @@ const ManyToManyRelationContent = ({ enableRowDrag, ...props }: ManyToManyRelati
           columnDefinition={ props.columnDefinition }
           deleteItem={ deleteItem }
           disabled={ props.disabled }
+          enableMultipleRowSelection={ props.enableMultipleRowSelection }
           enableRowDrag={ enableRowDrag && allowDragAndDrop }
           enableRowVirtualizer={ !props.noteditable }
           enrichRowData={ props.enrichRowData }
@@ -161,8 +166,10 @@ const ManyToManyRelationContent = ({ enableRowDrag, ...props }: ManyToManyRelati
           hideOpenButton={ props.hideOpenButton }
           hint={ props.hint }
           inherited={ props.inherited }
+          onSelectedRowsChange={ props.onSelectedRowsChange }
           onUpdateCellData={ handleUpdateCellData }
           pathFormatterConfig={ { name: props.combinedFieldName, class: props.pathFormatterClass ?? undefined } }
+          selectedRows={ props.selectedRows }
           value={ displayedValue }
           width={ props.width }
         />
