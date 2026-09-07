@@ -12,6 +12,9 @@ import { useEffect, useRef } from 'react'
 import { isEqual } from 'lodash'
 import { type McpServer, type McpServerAccessGrant } from '../mcp-servers-api-slice.gen'
 
+/** Stable empty default so it never becomes a changing effect dependency. */
+const NO_GRANTS: McpServerAccessGrant[] = []
+
 export interface McpServerSnapshot {
   name: string
   urlSlug: string
@@ -25,23 +28,30 @@ export interface McpServerSnapshot {
 
 /**
  * The editor's baseline for a server: its persisted values, or the create-mode
- * defaults when there is no server yet.
+ * defaults when there is no server yet. `fallbackSharedUsers` supplies the
+ * create-mode default user grants (the seeded owner row) so the baseline matches
+ * the fields the editor seeds — otherwise a fresh tab would open already dirty.
  */
-export function serverSnapshot (server: McpServer | null): McpServerSnapshot {
+export function serverSnapshot (
+  server: McpServer | null,
+  fallbackSharedUsers: McpServerAccessGrant[] = NO_GRANTS
+): McpServerSnapshot {
   return {
     name: server?.name ?? '',
     urlSlug: server?.urlSlug ?? '',
     description: server?.description ?? '',
     enabled: server?.enabled ?? true,
     tools: server?.tools ?? [],
-    shareGlobal: server?.shareGlobal ?? true,
-    sharedUsers: server?.sharedUsers ?? [],
+    shareGlobal: server?.shareGlobal ?? false,
+    sharedUsers: server?.sharedUsers ?? fallbackSharedUsers,
     sharedRoles: server?.sharedRoles ?? []
   }
 }
 
 interface UseMcpServerDirtyInput extends McpServerSnapshot {
   server: McpServer | null
+  /** Create-mode default user grants (owner row); baseline for a null server. */
+  fallbackSharedUsers?: McpServerAccessGrant[]
   onDirtyChange: (dirty: boolean) => void
   onResync: (snapshot: McpServerSnapshot) => void
 }
@@ -72,10 +82,11 @@ export function useMcpServerDirty ({
   shareGlobal,
   sharedUsers,
   sharedRoles,
+  fallbackSharedUsers = NO_GRANTS,
   onDirtyChange,
   onResync
 }: UseMcpServerDirtyInput): void {
-  const baselineRef = useRef<McpServerSnapshot>(serverSnapshot(server))
+  const baselineRef = useRef<McpServerSnapshot>(serverSnapshot(server, fallbackSharedUsers))
 
   // Hold the callbacks in refs so the effect below reacts to real data changes
   // only — never to a callback's identity changing on an unrelated re-render.
@@ -88,7 +99,7 @@ export function useMcpServerDirty ({
   onResyncRef.current = onResync
 
   useEffect(() => {
-    const persisted = serverSnapshot(server)
+    const persisted = serverSnapshot(server, fallbackSharedUsers)
 
     // The persisted server moved (initial load, or the post-save refetch):
     // re-baseline and push those values back into the editor. Return without the
@@ -122,6 +133,7 @@ export function useMcpServerDirty ({
     tools,
     shareGlobal,
     sharedUsers,
-    sharedRoles
+    sharedRoles,
+    fallbackSharedUsers
   ])
 }
