@@ -1189,6 +1189,8 @@ element.tree.selection.limit-reached: 'Massimo di {{limit}} elementi raggiunto'
 element.tree.drag.elements_one: '{{count}} elemento'
 element.tree.drag.elements_other: '{{count}} elementi'
 element.tree.drag.elements-partial: '{{count}} di {{selected}} elementi'
+element.tree.move.skipped-elements_one: '1 elemento non è stato spostato: è bloccato o non puoi modificarlo.'
+element.tree.move.skipped-elements_other: '{{count}} elementi non sono stati spostati: sono bloccati o non puoi modificarli.'
 element.lock: Blocca
 element.lock-and-propagate-to-children: Blocca e propaga ai figli
 element.unlock: Sblocca

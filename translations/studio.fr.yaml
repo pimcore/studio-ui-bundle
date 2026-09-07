@@ -1189,6 +1189,8 @@ element.tree.selection.limit-reached: 'Maximum de {{limit}} éléments atteint'
 element.tree.drag.elements_one: '{{count}} élément'
 element.tree.drag.elements_other: '{{count}} éléments'
 element.tree.drag.elements-partial: '{{count}} sur {{selected}} éléments'
+element.tree.move.skipped-elements_one: "1 élément n'a pas été déplacé : il est verrouillé ou vous ne pouvez pas le modifier."
+element.tree.move.skipped-elements_other: "{{count}} éléments n'ont pas été déplacés : ils sont verrouillés ou vous ne pouvez pas les modifier."
 element.lock: Verrouiller
 element.lock-and-propagate-to-children: Verrouiller et propager aux enfants
 element.unlock: Déverrouiller

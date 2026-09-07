@@ -20,11 +20,14 @@ import {
   convertAllowedTypes,
   createElementSelectorAreas,
   createElementSelectorConfig,
-  dndIsValidData,
+  dndValidRelationElements,
   type IRelationAllowedTypesClassDefinition
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
 import { mapToLegacyElementType, isValidElementType } from '@Pimcore/modules/element/utils/element-type'
 import { Droppable, type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/droppable'
+import { getDraggedElements, toElementType } from '@Pimcore/components/drag-and-drop/element-drag'
+import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
+import { useTranslation } from 'react-i18next'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { type SelectedItem } from '@sdk/modules/element'
 import { type ManyToManyRelationValueItem } from '@Pimcore/components/many-to-many-relation/hooks/use-value'
@@ -150,6 +153,8 @@ const RelationFilterInner = ({
 
 export const DynamicTypeFieldFilterRelationComponent = (): React.JSX.Element => {
   const { setData, config } = useDynamicFilter()
+  const { t } = useTranslation()
+  const modal = useAlertModal()
 
   const fieldDefinition = config?.fieldDefinition as IRelationAllowedTypesClassDefinition | undefined
   const convertedTypes = fieldDefinition !== undefined ? convertAllowedTypes(fieldDefinition) : undefined
@@ -183,18 +188,33 @@ export const DynamicTypeFieldFilterRelationComponent = (): React.JSX.Element => 
     updateItems(items.filter((item) => !(item.id === id && item.type === type)))
   }
 
+  const toFilterItem = (elementType: string, element: any): ManyToManyRelationValueItem => ({
+    id: element.id,
+    type: mapToLegacyElementType(elementType as 'asset' | 'document' | 'data-object'),
+    subtype: elementType === 'data-object'
+      ? (element.className ?? element.type)
+      : element.type,
+    fullPath: element.fullPath,
+    isPublished: element.published ?? null
+  })
+
+  /**
+   * Accepts a single element as well as a dragged selection. Only the elements the
+   * filter allows are taken, and the rest are reported rather than dropped in
+   * silence.
+   */
   const handleDrop = (info: DragAndDropInfo): void => {
-    const legacyType = mapToLegacyElementType(info.type as 'asset' | 'document' | 'data-object')
-    const newItem: ManyToManyRelationValueItem = {
-      id: info.data.id,
-      type: legacyType,
-      subtype: info.type === 'data-object'
-        ? (info.data.className ?? info.data.type)
-        : info.data.type,
-      fullPath: info.data.fullPath,
-      isPublished: info.data.published ?? null
+    const elementType = toElementType(info.type)
+    const allowedElements = dndValidRelationElements(info, allowedTypes)
+    const skippedCount = getDraggedElements(info).length - allowedElements.length
+
+    if (skippedCount > 0) {
+      modal.warn({
+        content: t('relation.drop.not-allowed-elements-skipped', { count: skippedCount })
+      })
     }
-    addItems([newItem])
+
+    addItems(allowedElements.map(element => toFilterItem(elementType, element)))
   }
 
   const selectorAreas = createElementSelectorAreas(allowedTypes)
@@ -214,8 +234,8 @@ export const DynamicTypeFieldFilterRelationComponent = (): React.JSX.Element => 
   return (
     <ElementSelectorProvider>
       <Droppable
-        isValidContext={ (info: DragAndDropInfo) => isValidElementType(info.type) }
-        isValidData={ (info: DragAndDropInfo) => dndIsValidData(info, allowedTypes) }
+        isValidContext={ (info: DragAndDropInfo) => isValidElementType(toElementType(info.type)) }
+        isValidData={ (info: DragAndDropInfo) => dndValidRelationElements(info, allowedTypes).length > 0 }
         onDrop={ handleDrop }
       >
         <RelationFilterInner

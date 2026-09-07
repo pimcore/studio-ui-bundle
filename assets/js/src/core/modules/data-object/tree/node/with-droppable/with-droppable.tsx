@@ -85,7 +85,8 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
 
       moveMultiple({
         currentElements: objects.map(object => ({ id: object.id, parentId: object.parentId })),
-        targetElement: { id: targetObject.id, parentId: targetObject.parentId }
+        targetElement: { id: targetObject.id, parentId: targetObject.parentId },
+        skippedCount: getDraggedElements(info).length - objects.length
       }).catch(() => {
         trackError(new GeneralError('Items could not be moved'))
       })
@@ -138,7 +139,8 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
       sortMultiple({
         currentElements: orderForSorting(objects).map(object => ({ id: object.id, parentId: object.parentId })),
         targetElement: { id: targetObject.parentId ?? targetObject.id },
-        startIndex: position === 'top' ? targetObject.index : targetObject.index + 1
+        startIndex: position === 'top' ? targetObject.index : targetObject.index + 1,
+        skippedCount: getDraggedElements(info).length - objects.length
       }).catch(() => {
         trackError(new GeneralError('Items could not be sorted'))
       })

@@ -70,7 +70,8 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
 
       moveMultiple({
         currentElements: assets.map(asset => ({ id: asset.id, parentId: asset.parentId })),
-        targetElement: { id: targetAsset.id, parentId: targetAsset.parentId }
+        targetElement: { id: targetAsset.id, parentId: targetAsset.parentId },
+        skippedCount: getDraggedElements(info).length - assets.length
       }).catch(() => {
         trackError(new GeneralError('Items could not be moved'))
       })

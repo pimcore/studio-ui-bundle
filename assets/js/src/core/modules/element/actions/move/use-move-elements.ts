@@ -9,6 +9,8 @@
  */
 
 import { isNil, isUndefined, uniq } from 'lodash'
+import { useTranslation } from 'react-i18next'
+import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { useAppDispatch } from '@sdk/app'
 import { markNodesDeleting, refreshSourceNode, refreshTargetNode } from '@Pimcore/components/element-tree/element-tree-slice'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
@@ -25,11 +27,15 @@ export interface MoveElementRef {
 export interface MoveMultipleProps {
   currentElements: MoveElementRef[]
   targetElement: MoveTarget
+  /** Dragged elements the target could not take, so the user is told about them. */
+  skippedCount?: number
 }
 
 export interface SortMultipleProps {
   /** Already in the order they should end up in. */
   currentElements: MoveElementRef[]
+  /** Dragged elements the target could not take, so the user is told about them. */
+  skippedCount?: number
   /** The parent the elements are sorted into. */
   targetElement: MoveTarget
   /** Index of the first element; the rest follow consecutively. */
@@ -43,8 +49,25 @@ export interface UseMoveElementsReturn {
 
 export const useMoveElements = (elementType: ElementType): UseMoveElementsReturn => {
   const dispatch = useAppDispatch()
+  const { t } = useTranslation()
+  const modal = useAlertModal()
   const executionEngine = useExecutionEngine()
   const { move } = useMoveElement(elementType)
+
+  /**
+   * A dragged selection can hold elements the drop filtered out - locked, or not
+   * editable by this user. Dropping fewer than were dragged is not obvious, so it
+   * is said out loud.
+   */
+  const reportSkipped = (skippedCount?: number): void => {
+    if (isUndefined(skippedCount) || skippedCount < 1) {
+      return
+    }
+
+    modal.warn({
+      content: t('element.tree.move.skipped-elements', { count: skippedCount })
+    })
+  }
 
   /**
    * Moves several elements into one target.
@@ -55,6 +78,8 @@ export const useMoveElements = (elementType: ElementType): UseMoveElementsReturn
    */
   const moveMultiple = async (props: MoveMultipleProps): Promise<void> => {
     const { currentElements, targetElement } = props
+
+    reportSkipped(props.skippedCount)
 
     const elements = currentElements.filter(element => element.id !== targetElement.id)
 
@@ -118,6 +143,8 @@ export const useMoveElements = (elementType: ElementType): UseMoveElementsReturn
    */
   const sortMultiple = async (props: SortMultipleProps): Promise<void> => {
     const { currentElements, targetElement, startIndex } = props
+
+    reportSkipped(props.skippedCount)
 
     if (currentElements.length === 0) {
       return

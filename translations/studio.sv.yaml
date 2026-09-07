@@ -1189,6 +1189,8 @@ element.tree.selection.limit-reached: 'Maximalt {{limit}} element uppnått'
 element.tree.drag.elements_one: '{{count}} element'
 element.tree.drag.elements_other: '{{count}} element'
 element.tree.drag.elements-partial: '{{count}} av {{selected}} element'
+element.tree.move.skipped-elements_one: '1 element flyttades inte: det är låst eller du kan inte redigera det.'
+element.tree.move.skipped-elements_other: '{{count}} element flyttades inte: de är låsta eller du kan inte redigera dem.'
 element.lock: Lås
 element.lock-and-propagate-to-children: Lås och sprid till barn
 element.unlock: Lås upp
