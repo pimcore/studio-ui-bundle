@@ -41,7 +41,8 @@ export const useStyles = createStyles(({ token, css }) => {
           }
         }
 
-        &:focus {
+        &:focus,
+        &:focus-within {
           outline: none;
           background-color: ${token.controlItemBgActiveHover};
         }
