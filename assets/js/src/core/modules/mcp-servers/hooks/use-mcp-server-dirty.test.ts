@@ -149,4 +149,29 @@ describe('useMcpServerDirty', () => {
     expect(onResync).not.toHaveBeenCalled()
     expect(onDirtyChange).toHaveBeenLastCalledWith(true)
   })
+
+  it('defaults a new config to private (share-global off)', () => {
+    expect(serverSnapshot(null).shareGlobal).toBe(false)
+  })
+
+  // A new config seeds the owner into the users table; the baseline must include
+  // that same seed (via fallbackSharedUsers) so the fresh tab is not dirty on open.
+  it('is not dirty on open when the owner row is seeded for a new config', () => {
+    const onDirtyChange = jest.fn()
+    const onResync = jest.fn()
+    const owner = [{ name: 'me', canRead: true, canEdit: true, canAccess: false }]
+
+    renderHook(() => {
+      useMcpServerDirty({
+        server: null,
+        ...serverSnapshot(null, owner),
+        fallbackSharedUsers: owner,
+        onDirtyChange,
+        onResync
+      })
+    })
+
+    expect(onDirtyChange).toHaveBeenLastCalledWith(false)
+    expect(onResync).not.toHaveBeenCalled()
+  })
 })

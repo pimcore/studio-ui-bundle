@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isNil } from 'lodash'
 import { Form } from '@Pimcore/components/form/form'
@@ -18,6 +18,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
 import { Portal } from '@Pimcore/components/portal/portal'
 import { useMessage } from '@Pimcore/components/message/useMessage'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { copyToClipboardWithFeedback } from '@Pimcore/utils/clipboard'
 import { type McpServer, type McpServerAccessGrant, type McpTool } from '../../mcp-servers-api-slice.gen'
 import { deriveScopes, slugify } from '../../utils'
@@ -74,9 +75,24 @@ export const McpServerEditor = ({
   const storageWriteable = isCreate ? true : server?.writeable ?? false
   const editable = canWrite && storageWriteable
 
+  const currentUser = useUser()
+  // On create the current user becomes the owner. Surface them in the users table
+  // with Config Read + Edit already granted — the backend grants the owner those
+  // implicitly, this is just the UI feedback for it — while MCP Server Access stays
+  // opt-in. In edit mode the owner comes from the persisted server.
+  const ownerName = isCreate ? (currentUser?.username ?? null) : (server?.owner ?? null)
+  const ownerSeed = useMemo<McpServerAccessGrant[]>(
+    () => (isCreate && !isNil(currentUser?.username) && currentUser.username !== '')
+      ? [{ name: currentUser.username, canRead: true, canEdit: true, canAccess: false }]
+      : [],
+    [isCreate, currentUser?.username]
+  )
+
   const [selectedTools, setSelectedTools] = useState<string[]>(server?.tools ?? [])
-  const [shareGlobal, setShareGlobal] = useState<boolean>(server?.shareGlobal ?? true)
-  const [sharedUsers, setSharedUsers] = useState<McpServerAccessGrant[]>(server?.sharedUsers ?? [])
+  // Share-globally is off by default (a new server is private); the users/roles
+  // tables are shown instead, pre-seeded with the owner row.
+  const [shareGlobal, setShareGlobal] = useState<boolean>(server?.shareGlobal ?? false)
+  const [sharedUsers, setSharedUsers] = useState<McpServerAccessGrant[]>(server?.sharedUsers ?? ownerSeed)
   const [sharedRoles, setSharedRoles] = useState<McpServerAccessGrant[]>(server?.sharedRoles ?? [])
   const slugEdited = useRef<boolean>(!isCreate)
 
@@ -122,6 +138,7 @@ export const McpServerEditor = ({
     shareGlobal,
     sharedUsers,
     sharedRoles,
+    fallbackSharedUsers: ownerSeed,
     onDirtyChange,
     onResync: applyServerSnapshot
   })
@@ -194,7 +211,7 @@ export const McpServerEditor = ({
           onShareGlobalChange={ setShareGlobal }
           onSharedRolesChange={ setSharedRoles }
           onSharedUsersChange={ setSharedUsers }
-          ownerName={ server?.owner ?? null }
+          ownerName={ ownerName }
           shareGlobal={ shareGlobal }
           sharedRoles={ sharedRoles }
           sharedUsers={ sharedUsers }
