@@ -9,7 +9,7 @@
  */
 
 import { type FormItemProps } from 'antd'
-import { isArray, isNil } from 'lodash'
+import { isNil } from 'lodash'
 import React, { createContext, useContext, useMemo } from 'react'
 
 export type FormItemAnnotationStatus = 'added' | 'changed' | 'removed' | 'moved'
@@ -50,7 +50,7 @@ export const formItemAnnotationKey = (name: FormItemProps['name']): string | und
     return undefined
   }
 
-  return isArray(name) ? name.map(String).join('.') : String(name)
+  return Array.isArray(name) ? name.map(String).join('.') : String(name)
 }
 
 export const useFormItemAnnotation = (name: FormItemProps['name']): FormItemAnnotation | undefined => {

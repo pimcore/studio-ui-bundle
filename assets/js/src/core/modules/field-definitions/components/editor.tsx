@@ -10,7 +10,7 @@
 
 import { AreaProvider, type AreaProviderProps } from '@Pimcore/modules/field-definitions/components/editor/area-provider'
 import { ItemsProvider } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
-import { SettingsProvider, type SettingsProviderProps } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
+import { SettingsProvider, type SettingsProviderProps, type TreeItemDecorator } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { EditorView } from '@Pimcore/modules/field-definitions/components/editor/view'
 import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 import React from 'react'
@@ -31,8 +31,8 @@ export interface EditorProps {
   customLayouts?: SettingsProviderProps['customLayouts']
   importExportConfig?: SettingsProviderProps['importExportConfig']
   hideTreeExpanders?: SettingsProviderProps['hideTreeExpanders']
-  readOnly?: SettingsProviderProps['readOnly']
-  decorateTreeItem?: SettingsProviderProps['decorateTreeItem']
+  readOnly?: boolean
+  decorateTreeItem?: TreeItemDecorator
   view?: React.JSX.Element
 }
 
