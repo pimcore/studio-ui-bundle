@@ -51352,6 +51352,401 @@
           }
         }
       }
+    },
+    "/pimcore-studio/api/mcp/servers": {
+      "get": {
+        "tags": [
+          "MCP"
+        ],
+        "summary": "Get all MCP servers",
+        "description": "Get all MCP server configurations the current user is allowed to see.\n",
+        "operationId": "mcp_get_servers",
+        "responses": {
+          "200": {
+            "description": "List of MCP server configurations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer",
+                      "example": 666
+                    },
+                    "items": {
+                      "title": "items",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/McpServer"
+                      }
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "MCP"
+        ],
+        "summary": "Create an MCP server",
+        "description": "Create a new MCP server configuration. The <strong>urlSlug</strong> is used as the identifier and\ndetermines the server's serving URL; it must be unique and contain only lowercase letters, digits and hyphens.\n",
+        "operationId": "mcp_create_server",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "name",
+                  "urlSlug"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "urlSlug": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "tools": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "enabled": {
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "shareGlobal": {
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "sharedUsers": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/McpServerAccessGrant"
+                    }
+                  },
+                  "sharedRoles": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/McpServerAccessGrant"
+                    }
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The created MCP server configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/McpServer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pimcore-studio/api/mcp/servers/{id}": {
+      "get": {
+        "tags": [
+          "MCP"
+        ],
+        "summary": "Get an MCP server",
+        "description": "Get a single MCP server configuration by its url slug.",
+        "operationId": "mcp_get_server",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the MCP server",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "product-read"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested MCP server configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/McpServer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "MCP"
+        ],
+        "summary": "Update an MCP server",
+        "description": "Update an existing MCP server configuration identified by its url slug. The url slug itself cannot be changed.\n",
+        "operationId": "mcp_update_server",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the MCP server",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "product-read"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "name",
+                  "urlSlug"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "urlSlug": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "tools": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "enabled": {
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "shareGlobal": {
+                    "type": "boolean",
+                    "example": true
+                  },
+                  "sharedUsers": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/McpServerAccessGrant"
+                    }
+                  },
+                  "sharedRoles": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/McpServerAccessGrant"
+                    }
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The updated MCP server configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/McpServer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "MCP"
+        ],
+        "summary": "Delete an MCP server",
+        "description": "Delete an MCP server configuration by its url slug.",
+        "operationId": "mcp_delete_server",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of the MCP server",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "product-read"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "MCP server configuration deleted successfully"
+          },
+          "default": {
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>403 - Forbidden<br>404 - Not Found<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pimcore-studio/api/mcp/tools": {
+      "get": {
+        "tags": [
+          "MCP"
+        ],
+        "summary": "Get the MCP tool catalogue",
+        "description": "Get the catalogue of MCP tools available for assignment to a server, contributed by the backend\nbundle and any other bundle that registers tools.\n",
+        "operationId": "mcp_get_tools",
+        "responses": {
+          "200": {
+            "description": "List of available MCP tools",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "totalItems",
+                    "items"
+                  ],
+                  "properties": {
+                    "totalItems": {
+                      "title": "totalItems",
+                      "type": "integer",
+                      "example": 666
+                    },
+                    "items": {
+                      "title": "items",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/McpToolItem"
+                      }
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "400 - Bad Request<br>401 - Unauthorized<br>405 - Method Not Allowed<br>415 - Unsupported Media Type<br>422 - Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DevError"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -82354,6 +82749,266 @@
             "description": "Absolute URL to redirect the browser to",
             "type": "string",
             "example": "https://host/callback?code=def502...&state=xyz&iss=https%3A%2F%2Fhost"
+          }
+        },
+        "type": "object"
+      },
+      "McpServer": {
+        "title": "MCP Server",
+        "required": [
+          "id",
+          "name",
+          "urlSlug",
+          "url",
+          "tools",
+          "scopes",
+          "enabled",
+          "shareGlobal",
+          "sharedUsers",
+          "sharedRoles",
+          "writeable",
+          "currentUserPermissions",
+          "toolCount"
+        ],
+        "properties": {
+          "additionalAttributes": {
+            "description": "AdditionalAttributes",
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            }
+          },
+          "id": {
+            "description": "Server id (also the url slug)",
+            "type": "string",
+            "example": "product-read"
+          },
+          "name": {
+            "description": "Display name",
+            "type": "string",
+            "example": "Product (read-only)"
+          },
+          "description": {
+            "description": "Description",
+            "type": [
+              "string",
+              "null"
+            ],
+            "example": "Read access to product data"
+          },
+          "urlSlug": {
+            "description": "URL segment under /pimcore-mcp/studio/",
+            "type": "string",
+            "example": "product-read"
+          },
+          "url": {
+            "description": "Endpoint an MCP client connects to",
+            "type": "string",
+            "example": "https://host/pimcore-mcp/studio/product-read"
+          },
+          "tools": {
+            "description": "Assigned tool ids",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "get_car_info"
+            ]
+          },
+          "scopes": {
+            "description": "Advertised OAuth scopes (derived from the tools)",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "mcp:read"
+            ]
+          },
+          "enabled": {
+            "description": "Whether the server is enabled",
+            "type": "boolean",
+            "example": true
+          },
+          "owner": {
+            "description": "Owner user name. Null when the owner has been deleted.",
+            "type": [
+              "string",
+              "null"
+            ],
+            "example": "john.doe"
+          },
+          "shareGlobal": {
+            "description": "Public: any authenticated user may view and use it (not edit)",
+            "type": "boolean",
+            "example": false
+          },
+          "sharedUsers": {
+            "description": "Users shared with, each at a read/write level",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/McpServerAccessGrant"
+            }
+          },
+          "sharedRoles": {
+            "description": "Roles shared with, each at a read/write level",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/McpServerAccessGrant"
+            }
+          },
+          "writeable": {
+            "description": "Whether the storage target allows editing at all",
+            "type": "boolean",
+            "example": true
+          },
+          "currentUserPermissions": {
+            "$ref": "#/components/schemas/McpServerUserPermissions",
+            "description": "The requesting user's resolved access to this server"
+          },
+          "toolCount": {
+            "description": "Number of assigned tools",
+            "type": "integer",
+            "example": 1
+          }
+        },
+        "type": "object"
+      },
+      "McpServerAccessGrant": {
+        "title": "MCP Server Access Grant",
+        "description": "One share entry as exposed by the API: a user or role name with three independent\ncapabilities — read (see the server + config), access (connect a client), and edit\n(change the config). Edit implies read. Used in both the server response and the\ncreate/update payload.",
+        "required": [
+          "name",
+          "canRead",
+          "canAccess",
+          "canEdit"
+        ],
+        "properties": {
+          "name": {
+            "description": "User or role name",
+            "type": "string",
+            "example": "john.doe"
+          },
+          "canRead": {
+            "description": "May see the server and its configuration (implied by canEdit)",
+            "type": "boolean",
+            "example": true
+          },
+          "canAccess": {
+            "description": "May connect a client to the server at runtime",
+            "type": "boolean",
+            "example": true
+          },
+          "canEdit": {
+            "description": "May edit the server configuration",
+            "type": "boolean",
+            "example": false
+          }
+        },
+        "type": "object"
+      },
+      "McpServerUserPermissions": {
+        "title": "MCP Server User Permissions",
+        "description": "The requesting user's resolved capabilities on a server, so the UI can decide\nwhat to render. Distinct from the server's `writeable` flag, which is about\nwhether the storage target itself is editable.",
+        "required": [
+          "canView",
+          "canAccess",
+          "canEdit"
+        ],
+        "properties": {
+          "canView": {
+            "description": "The current user may view the server and its config",
+            "type": "boolean",
+            "example": true
+          },
+          "canAccess": {
+            "description": "The current user may connect a client to the server",
+            "type": "boolean",
+            "example": false
+          },
+          "canEdit": {
+            "description": "The current user may edit, re-share or delete the server",
+            "type": "boolean",
+            "example": false
+          }
+        },
+        "type": "object"
+      },
+      "McpToolItem": {
+        "title": "MCP Tool",
+        "description": "An assignable MCP tool, as offered to the server editor.",
+        "required": [
+          "name",
+          "title",
+          "description",
+          "requiredScope",
+          "readOnly",
+          "destructive"
+        ],
+        "properties": {
+          "additionalAttributes": {
+            "description": "AdditionalAttributes",
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ]
+            }
+          },
+          "name": {
+            "description": "Tool id (used in a server's tool list)",
+            "type": "string",
+            "example": "get_car_info"
+          },
+          "title": {
+            "description": "Human-facing title",
+            "type": "string",
+            "example": "Get Car Info"
+          },
+          "description": {
+            "description": "Description",
+            "type": "string",
+            "example": "Returns short info about a data object"
+          },
+          "requiredScope": {
+            "description": "OAuth scope the tool requires",
+            "type": "string",
+            "example": "mcp:read"
+          },
+          "readOnly": {
+            "description": "Read-only hint",
+            "type": "boolean",
+            "example": true
+          },
+          "destructive": {
+            "description": "Destructive hint",
+            "type": "boolean",
+            "example": false
           }
         },
         "type": "object"
