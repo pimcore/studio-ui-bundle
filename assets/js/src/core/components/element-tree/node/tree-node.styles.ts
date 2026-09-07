@@ -24,9 +24,11 @@ export const useStyles = createStyles(({ token, css }) => {
 
       .tree-node__content {
         cursor: pointer;
-        width: 100%;
+        min-width: 100%;
         white-space: nowrap;
         align-items: center;
+        margin-left: -100vw;
+        padding-left: 100vw;
 
         .tree-node__content-wrapper {
           width: 100%;
@@ -46,17 +48,10 @@ export const useStyles = createStyles(({ token, css }) => {
       }
 
       .tree-node__content-inner {
-        padding: 0 ${token.paddingSM}px 0 0;
-
-        @media (hover: hover) {
-          &:hover {
-            background-color: ${token.controlItemBgActiveHover};
-          }
-        }
+        padding: 0 ${token.paddingXS}px 0 0;
 
         &:focus {
           outline: none;
-          background-color: ${token.controlItemBgActiveHover};
         }
       }
 
@@ -69,8 +64,7 @@ export const useStyles = createStyles(({ token, css }) => {
       .tree-node__content--selected {
         background-color: ${token.controlItemBgActive};
 
-        &:hover,
-        & .tree-node__content-inner {
+        &:hover {
           background-color: ${token.controlItemBgActive};
         }
       }
