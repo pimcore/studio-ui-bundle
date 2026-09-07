@@ -23,7 +23,7 @@ export interface EditorProps {
   useDetailGeneralSettingsQuery: SettingsProviderProps['useDetailGeneralSettingsQuery']
   useDetailLayoutQuery?: SettingsProviderProps['useDetailLayoutQuery']
   useDetailLayoutAccessor?: SettingsProviderProps['useDetailLayoutAccessor']
-  useDetailUpdateMutation: SettingsProviderProps['useDetailUpdateMutation']
+  useDetailUpdateMutation?: SettingsProviderProps['useDetailUpdateMutation']
   GeneralSettingsFormFields: SettingsProviderProps['GeneralSettingsFormFields']
   LayoutProvider?: SettingsProviderProps['LayoutProvider']
   useLayout?: SettingsProviderProps['useLayout']
@@ -31,6 +31,8 @@ export interface EditorProps {
   customLayouts?: SettingsProviderProps['customLayouts']
   importExportConfig?: SettingsProviderProps['importExportConfig']
   hideTreeExpanders?: SettingsProviderProps['hideTreeExpanders']
+  readOnly?: SettingsProviderProps['readOnly']
+  decorateTreeItem?: SettingsProviderProps['decorateTreeItem']
   view?: React.JSX.Element
 }
 

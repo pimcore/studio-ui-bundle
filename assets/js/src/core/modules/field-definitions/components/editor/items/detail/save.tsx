@@ -20,14 +20,21 @@ import { ApiError, trackError } from '@sdk/modules/app'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { type AnyMutationHook } from 'types/react-query'
 
 const NAME_FORMAT_REGEX = /^[A-Za-z][A-Za-z0-9_]*$/
+
+// a settings bundle without an update mutation never renders this button; the type still needs a hook
+const useNoOpUpdateMutation: AnyMutationHook = () => [
+  (async () => { }) as any,
+  {} as any
+]
 
 interface Violation { id: string, label: string }
 
 export const DetailSave = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { useDetailUpdateMutation, useLayout } = useSettings()
+  const { useDetailUpdateMutation = useNoOpUpdateMutation, useLayout } = useSettings()
   const { fieldDefinitions, setInvalidFieldDefinitionIds, structure, markClean, getIsDirty: isLayoutDirty } = useLayout()
   const { generalSettings, getIsDirty: areGeneralSettingsDirty } = useGeneralSettings()
   const [updateDetailMutation, result] = useDetailUpdateMutation()

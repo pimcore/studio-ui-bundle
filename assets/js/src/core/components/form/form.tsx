@@ -25,6 +25,7 @@ import { useStyles } from './form.styles'
 import { Conditional } from './conditional/conditional'
 import { FormInstanceProvider, type formInstanceType, useForm, useFormInstance } from '@Pimcore/components/form/use-form'
 import { createVirtualValidatorRegistry, VirtualValidatorRegistryContext } from './item/hooks/use-virtual-validator-registry'
+import { withAnnotation } from './item/with-annotation'
 
 export interface FormProps<Values = any> extends Omit<AntFormProps<Values>, 'children' | 'defaultValue' | 'form'> {
   children?: React.ReactNode
@@ -130,7 +131,8 @@ const newFormItem = compose(
   withLocalizedFieldsLocale,
   withKeyedItemContext,
   withNumberedItemContext,
-  withItemProvider
+  withItemProvider,
+  withAnnotation
 )(AntForm.Item)
 
 Form.Item = newFormItem
