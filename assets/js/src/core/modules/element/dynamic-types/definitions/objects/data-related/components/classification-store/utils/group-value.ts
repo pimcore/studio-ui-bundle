@@ -31,9 +31,26 @@ export const getMergedValue = (currentValue: any, originalValue: any, propsValue
   forEach(combinedFieldList, fieldName => {
     const splittedFieldName = fieldName.split('.')
     const fieldNameLevel = splittedFieldName.length - 1
-    const groupName = fieldName.split('.')[0]
+    const groupName = splittedFieldName[0]
 
     if (currentValue[groupName].action === DELETED) {
+      return
+    }
+
+    // A group that holds no own values any more is encoded as an empty list, which
+    // getFieldList reports as a field of its own. Writing it would overwrite the
+    // inherited values merged in for the keys of that group - which is what happens
+    // after the inheritance of the last own key was restored - so it only applies
+    // while nothing was merged in for the group.
+    const isEmptyGroup = fieldNameLevel === 0 &&
+      isArray(get(currentValue, fieldName)) &&
+      isEmpty(currentValue[groupName])
+
+    if (isEmptyGroup) {
+      if (isEmpty(get(mergedValue, fieldName))) {
+        setWith(mergedValue, fieldName, {}, setAsObject)
+      }
+
       return
     }
 
@@ -41,10 +58,6 @@ export const getMergedValue = (currentValue: any, originalValue: any, propsValue
       setWith(mergedValue, fieldName, get(originalValue, fieldName), setAsObject)
     } else {
       setWith(mergedValue, fieldName, get(currentValue, fieldName), setAsObject)
-    }
-
-    if (fieldNameLevel === 0 && isArray(get(currentValue, fieldName)) && isEmpty(currentValue[groupName])) {
-      setWith(mergedValue, fieldName, {}, setAsObject)
     }
   })
 

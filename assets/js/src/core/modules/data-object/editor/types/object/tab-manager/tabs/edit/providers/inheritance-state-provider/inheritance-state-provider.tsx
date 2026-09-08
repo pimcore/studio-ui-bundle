@@ -22,9 +22,12 @@ export interface InheritanceState {
 export interface IInheritanceStateContext {
   getInheritanceState: (name: NamePath) => InheritanceState | undefined
   breakInheritance: (name: NamePath) => void
+  restoreInheritance: (name: NamePath) => void
 }
 
 export const InheritanceStateContext = React.createContext<IInheritanceStateContext | undefined>(undefined)
+
+const getStateKey = (name: NamePath): string => Array.isArray(name) ? name.join('.') : name.toString()
 
 const getInitialInheritanceState = (dataObjectDraft?: DataObjectDraft): Record<string, InheritanceState> => {
   const inheritanceStates: Record<string, InheritanceState> = {}
@@ -71,19 +74,18 @@ const getInitialInheritanceState = (dataObjectDraft?: DataObjectDraft): Record<s
 export const InheritanceStateProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { id } = useContext(DataObjectContext)
   const { dataObject } = useDataObjectDraft(id)
-  const [inheritanceStates, setInheritanceStates] = useState<Record<string, InheritanceState>>(getInitialInheritanceState(dataObject))
+  const [initialInheritanceStates] = useState<Record<string, InheritanceState>>(() => getInitialInheritanceState(dataObject))
+  const [inheritanceStates, setInheritanceStates] = useState<Record<string, InheritanceState>>(initialInheritanceStates)
   const [, startTransition] = useTransition()
 
   const getInheritanceState = useCallback((name: NamePath): InheritanceState | undefined => {
-    const key = Array.isArray(name) ? name.join('.') : name.toString()
-    return inheritanceStates[key]
+    return inheritanceStates[getStateKey(name)]
   }, [inheritanceStates])
 
   const setInheritanceState = useCallback((name: NamePath, state: InheritanceState): void => {
-    const key = Array.isArray(name) ? name.join('.') : name.toString()
     setInheritanceStates(prevStates => ({
       ...prevStates,
-      [key]: state
+      [getStateKey(name)]: state
     }))
   }, [])
 
@@ -100,10 +102,32 @@ export const InheritanceStateProvider: React.FC<{ children: React.ReactNode }> =
     })
   }, [])
 
+  /**
+   * Puts a field that was broken during this editing session back to the state it
+   * was loaded with. Fields that already carried an own value when the editor was
+   * opened have no known inherited value, so they are left untouched.
+   */
+  const restoreInheritance = useCallback((name: NamePath): void => {
+    const key = getStateKey(name)
+    const initialState = initialInheritanceStates[key]
+
+    if (initialState?.inherited !== true) {
+      return
+    }
+
+    startTransition(() => {
+      setInheritanceStates(prevStates => ({
+        ...prevStates,
+        [key]: initialState
+      }))
+    })
+  }, [initialInheritanceStates])
+
   const value = useMemo(() => ({
     getInheritanceState,
-    breakInheritance
-  }), [getInheritanceState, breakInheritance])
+    breakInheritance,
+    restoreInheritance
+  }), [getInheritanceState, breakInheritance, restoreInheritance])
 
   return (
     <InheritanceStateContext.Provider value={ value }>

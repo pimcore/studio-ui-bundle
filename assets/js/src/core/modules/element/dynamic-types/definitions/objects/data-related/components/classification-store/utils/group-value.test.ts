@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { filterInheritedFields } from './group-value'
+import { filterInheritedFields, getMergedValue } from './group-value'
 
 const notInherited = (): boolean => false
 
@@ -80,5 +80,56 @@ describe('filterInheritedFields', () => {
     const result = filterInheritedFields(value, () => true)
 
     expect(result[2]).toEqual([])
+  })
+})
+
+describe('getMergedValue', () => {
+  // The value the object was loaded with, i.e. what the parent provides.
+  const originalValue = {
+    activeGroups: { 2: true },
+    groupCollectionMapping: { 2: 1 },
+    2: {
+      default: {
+        4: 'from the parent',
+        5: 'also from the parent'
+      }
+    }
+  }
+
+  const allInherited = (): boolean => true
+
+  it('shows the inherited values of a group that holds no own values any more', () => {
+    // What filterInheritedFields emits once every key of the group is inherited
+    // again, e.g. after the inheritance of the last own key was restored.
+    const currentValue = {
+      activeGroups: { 2: true },
+      groupCollectionMapping: { 2: 1 },
+      2: []
+    }
+
+    const result = getMergedValue(currentValue, originalValue, currentValue, allInherited)
+
+    expect(result[2].default[4]).toBe('from the parent')
+    expect(result[2].default[5]).toBe('also from the parent')
+  })
+
+  it('keeps the group structure of a group that has nothing to inherit either', () => {
+    const currentValue = { activeGroups: { 3: true }, groupCollectionMapping: {}, 3: [] }
+
+    const result = getMergedValue(currentValue, {}, currentValue, allInherited)
+
+    expect(result[3]).toEqual({})
+  })
+
+  it('takes the own value of a key that is not inherited', () => {
+    const currentValue = {
+      activeGroups: { 2: true },
+      groupCollectionMapping: { 2: 1 },
+      2: { default: { 4: 'own value', 5: null } }
+    }
+
+    const result = getMergedValue(currentValue, originalValue, currentValue, notInherited)
+
+    expect(result[2].default[4]).toBe('own value')
   })
 })
