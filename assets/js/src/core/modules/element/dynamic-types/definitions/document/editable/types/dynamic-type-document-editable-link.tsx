@@ -90,7 +90,7 @@ export class DynamicTypeDocumentEditableLink extends DynamicTypeDocumentEditable
 
     const internalId = value.internal ?? null
 
-    if (value.linktype === 'internal' && !isNil(internalId)) {
+    if (value.linktype === 'internal' && !isNil(internalId) && isNonEmptyString(value.internalType)) {
       return {
         ...value,
         path: value.fullPath ?? '',
