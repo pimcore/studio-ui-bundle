@@ -32,7 +32,7 @@ export interface DocumentLinkEditableValue {
   text: string
   linktype: 'direct' | 'internal'
   internal?: boolean | null
-  internalType?: string
+  internalType?: string | null
   internalId?: number | null
   fullPath: string
   target: string | null
@@ -88,24 +88,27 @@ export class DynamicTypeDocumentEditableLink extends DynamicTypeDocumentEditable
       return null
     }
 
-    if (value.linktype === 'internal') {
+    const internalId = value.internal ?? null
+
+    if (value.linktype === 'internal' && !isNil(internalId)) {
       return {
         ...value,
         path: value.fullPath ?? '',
         fullPath: value.fullPath ?? '',
-        internalId: value.internal ?? null,
+        internalId,
         internal: true,
-        internalType: value.internalType ?? undefined
+        internalType: value.internalType ?? null
       }
     }
 
     return {
       ...value,
-      path: value.direct ?? '',
+      path: value.direct ?? (value.linktype === 'internal' ? value.fullPath ?? '' : ''),
       fullPath: value.fullPath ?? '',
       internalId: null,
       internal: false,
-      internalType: value.internalType ?? undefined
+      internalType: value.internalType ?? null,
+      linktype: value.linktype === 'internal' ? 'direct' : value.linktype
     }
   }
 
