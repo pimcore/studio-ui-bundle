@@ -25,7 +25,7 @@ import { useTypeSelect } from '@Pimcore/modules/element/components/type-select/p
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type SearchModeRegistry } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/search-mode-registry'
-import { FULLTEXT_SEARCH_MODE_ID } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/constants'
+import { FULLTEXT_SEARCH_MODE_ID } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/search-mode-abstract'
 
 const SEARCH_TERM_FILTER_TYPE = 'system.fulltext'
 // Column-filter types that are not user field filters and must not be restored as such — each is

@@ -10,7 +10,7 @@
 
 import React, { createContext, useMemo, useState } from 'react'
 import { type SavedSearchDetailedConfiguration } from '../search-api-slice.gen'
-import { FULLTEXT_SEARCH_MODE_ID } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/constants'
+import { FULLTEXT_SEARCH_MODE_ID } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/search-mode-abstract'
 
 export interface SearchContextData {
   activeKey: string

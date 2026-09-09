@@ -19,9 +19,8 @@ import { type FieldFilter } from '../context-layer/provider/field-filters/field-
 import { useGeneralFiltersConfig } from '../context-layer/provider/general-filters-config/use-general-filters-config'
 import { useAppliedFiltersOptional, useDraftFiltersOptional } from '../element-filters/stores'
 import { readElementFilterValues } from '../element-filters/use-element-filter-values'
-import { type SearchModeAbstract, type SearchModeAvailability, type SearchModeContext } from './search-mode-abstract'
+import { FULLTEXT_SEARCH_MODE_ID, type SearchModeAbstract, type SearchModeAvailability, type SearchModeContext } from './search-mode-abstract'
 import { type SearchModeRegistry } from './search-mode-registry'
-import { FULLTEXT_SEARCH_MODE_ID } from './constants'
 
 export interface UseSearchModeReturn {
   /** Visible registered modes, sorted by order. */

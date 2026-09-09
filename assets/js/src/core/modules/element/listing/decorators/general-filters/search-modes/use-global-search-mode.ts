@@ -11,9 +11,8 @@
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
-import { type SearchModeAbstract, type SearchModeAvailability, type SearchModeContext } from './search-mode-abstract'
+import { FULLTEXT_SEARCH_MODE_ID, type SearchModeAbstract, type SearchModeAvailability, type SearchModeContext } from './search-mode-abstract'
 import { type SearchModeRegistry } from './search-mode-registry'
-import { FULLTEXT_SEARCH_MODE_ID } from './constants'
 
 export interface UseGlobalSearchModeReturn {
   /** Modes with a global adapter that are available on the All tab, sorted by order. */

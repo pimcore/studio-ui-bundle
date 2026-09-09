@@ -11,7 +11,7 @@
 import { useContext } from 'react'
 import { SearchContext } from './search-provider'
 import { type SavedSearchDetailedConfiguration } from '../search-api-slice.gen'
-import { FULLTEXT_SEARCH_MODE_ID } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/constants'
+import { FULLTEXT_SEARCH_MODE_ID } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/search-mode-abstract'
 
 export interface UseSearchReturn {
   activeKey: string

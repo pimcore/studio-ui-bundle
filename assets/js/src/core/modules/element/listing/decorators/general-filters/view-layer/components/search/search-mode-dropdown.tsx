@@ -15,8 +15,7 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { Dropdown, type ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Text } from '@Pimcore/components/text/text'
-import { FULLTEXT_SEARCH_MODE_ID } from '../../../search-modes/constants'
-import { type SearchModeAbstract, type SearchModeContext } from '../../../search-modes/search-mode-abstract'
+import { FULLTEXT_SEARCH_MODE_ID, type SearchModeAbstract, type SearchModeContext } from '../../../search-modes/search-mode-abstract'
 import { useStyles } from './search-mode-dropdown.styles'
 
 export interface SearchModeDropdownProps {

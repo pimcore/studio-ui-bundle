@@ -14,6 +14,9 @@ import { type ColumnFilter } from '@Pimcore/modules/app/types/column-filter'
 import { type SimpleSearchResult } from '@Pimcore/modules/search/search-api-slice.gen'
 import { DynamicTypeAbstract } from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
 
+/** The built-in full-text mode; not part of the SearchModeRegistry. */
+export const FULLTEXT_SEARCH_MODE_ID = 'fulltext'
+
 /** 'all' is the quick search's All tab: no listing, no filters, no type/class selects. */
 export type SearchModeSurfaceType = ElementType | 'all'
 

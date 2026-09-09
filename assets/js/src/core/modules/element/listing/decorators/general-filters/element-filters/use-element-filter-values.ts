@@ -10,7 +10,7 @@
 
 import { type FilterValues } from '@Pimcore/components/filters'
 import { type FieldFilter } from '../context-layer/provider/field-filters/field-filters-provider'
-import { FULLTEXT_SEARCH_MODE_ID } from '../search-modes/constants'
+import { FULLTEXT_SEARCH_MODE_ID } from '../search-modes/search-mode-abstract'
 import { useDraftFilters } from './stores'
 
 export interface ElementFilterValues {
