@@ -54,7 +54,14 @@ export const useStyles = createStyles(({ token, css }) => {
           }
         }
 
-        &:focus {
+        &:focus-visible {
+          outline: 2px solid ${token.colorPrimaryBorder};
+          outline-offset: -2px;
+          border-radius: ${token.borderRadiusSM}px;
+          background-color: ${token.controlItemBgActiveHover};
+        }
+
+        &:focus:not(:focus-visible) {
           outline: none;
           background-color: ${token.controlItemBgActiveHover};
         }

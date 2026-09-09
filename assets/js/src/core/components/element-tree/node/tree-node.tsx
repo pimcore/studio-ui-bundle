@@ -9,15 +9,15 @@
  */
 
 import { Flex } from 'antd'
-import React, { forwardRef, type KeyboardEvent, type MouseEvent, type MutableRefObject, useContext, useEffect } from 'react'
+import React, { forwardRef, type MouseEvent, type MutableRefObject, useContext, useEffect } from 'react'
 import { useStyles } from './tree-node.styles'
-import { type INodeRef, TreeContext } from '../element-tree'
+import { TreeContext } from '../element-tree'
 import { TreeList } from '../list/tree-list'
 import { TreeExpander } from '../expander/tree-expander'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useElementTreeNode } from '../hooks/use-element-tree-node'
-import { isNil } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/utils/widget-content-scroll'
 import { createNodeTestId } from '@Pimcore/utils/test-id-generator'
 import { ComponentRenderer } from '@Pimcore/modules/app/component-registry/component-renderer'
@@ -154,67 +154,53 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   }
 
   function onKeyDown (event: React.KeyboardEvent): void {
-    if (event.key === 'Enter') {
-      selectNode()
-    }
+    const current = event.currentTarget as HTMLElement
 
-    if (event.key === 'ArrowRight') {
-      expandItem()
-    }
-
-    if (event.key === 'ArrowLeft') {
-      collapseItem()
-    }
-
-    if (event.key === 'ArrowDown') {
-      gotoNextNode(event)
-    }
-
-    if (event.key === 'ArrowUp') {
-      gotoPreviousNode(event)
-    }
-  }
-
-  function expandItem (): void {
-    setExpanded(true)
-  }
-
-  function collapseItem (): void {
-    setExpanded(false)
-  }
-
-  function gotoNextNode (event: KeyboardEvent): void {
-    event.preventDefault()
-
-    const index = nodeOrder!().indexOf(internalKey)
-
-    if (index < nodeOrder!().length - 1) {
-      nodesRefs!.current[nodeOrder!()[index + 1]].el.focus()
+    switch (event.key) {
+      case 'Enter':
+        selectNode()
+        break
+      case 'ArrowDown':
+        event.preventDefault()
+        moveFocus(current, 1)
+        break
+      case 'ArrowUp':
+        event.preventDefault()
+        moveFocus(current, -1)
+        break
+      case 'ArrowRight':
+        event.preventDefault()
+        isExpandable && !isExpanded ? setExpanded(true) : moveFocus(current, 1)
+        break
+      case 'ArrowLeft':
+        event.preventDefault()
+        isExpanded ? setExpanded(false) : moveFocusToParent(current)
+        break
+      case 'Home':
+        event.preventDefault()
+        moveFocus(current, 'first')
+        break
+      case 'End':
+        event.preventDefault()
+        moveFocus(current, 'last')
+        break
+      default:
+        break
     }
   }
 
-  function gotoPreviousNode (event: KeyboardEvent): void {
-    event.preventDefault()
-
-    const index = nodeOrder!().indexOf(internalKey)
-
-    if (index > 0) {
-      nodesRefs!.current[nodeOrder!()[index - 1]].el.focus()
-    }
-  }
 
   function setRef (el: HTMLElement): void {
-    registerNode(el)
+    nodesRefs!.current[internalKey] = { el, node: treeNodeProps }
   }
 
-  function registerNode (el: HTMLElement): void {
-    const nodeRef: INodeRef = { el, node: treeNodeProps }
-    nodesRefs!.current[internalKey] = nodeRef
-  }
+  const isExpandable = props.hasChildren === true
+  const isFirstNode = !isEmpty(nodeOrder?.()) && nodeOrder!()[0] === internalKey
 
   const nodeContent = (
     <Flex
       align="center"
+      aria-expanded={ isExpandable ? isExpanded : undefined }
       className={ cn('tree-node__content-inner') }
       gap="small"
       justify="center"
@@ -223,7 +209,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
       onKeyDown={ onKeyDown }
       ref={ setRef }
       role='button'
-      tabIndex={ -1 }
+      tabIndex={ isSelected || isFirstNode ? 0 : -1 }
     >
       <Flex
         align="center"
@@ -277,3 +263,25 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
 })
 
 export { TreeNode }
+
+/** All focusable tree node elements in the tree container, in visual DOM order. */
+function getVisibleNodes (from: HTMLElement): HTMLElement[] {
+  const tree = from.closest('.tree')
+  if (isNil(tree)) return []
+  return Array.from(tree.querySelectorAll<HTMLElement>('.tree-node__content-inner'))
+}
+
+function moveFocus (current: HTMLElement, offset: number | 'first' | 'last'): void {
+  const nodes = getVisibleNodes(current)
+  const idx = nodes.indexOf(current)
+  if (idx === -1) return
+  const target = offset === 'first' ? 0 : offset === 'last' ? nodes.length - 1 : idx + offset
+  if (target >= 0 && target < nodes.length) { nodes[target].focus() }
+}
+
+function moveFocusToParent (current: HTMLElement): void {
+  const ownTreeNode = current.closest('.tree-node')
+  const parentTreeNode = ownTreeNode?.parentElement?.closest('.tree-node')
+  const parentInner = parentTreeNode?.querySelector<HTMLElement>('.tree-node__content-inner')
+  parentInner?.focus()
+}
