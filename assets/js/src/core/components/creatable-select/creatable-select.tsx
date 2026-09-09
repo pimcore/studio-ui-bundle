@@ -39,7 +39,7 @@ const Component = ({
   numberInputProps = {},
   ...selectProps
 }: CreatableSelectProps): React.JSX.Element => {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const [customOptions, setCustomOptions] = useState<SelectOptionType[]>([])
   const [newOptionText, setNewOptionText] = useState('')
   // `onChange` only reports parseable numbers, so the displayed text is tracked via `onInput`.
@@ -47,7 +47,7 @@ const Component = ({
   const [pendingSelection, setPendingSelection] = useState<SelectOptionType | null>(null)
   const allOptions = [...options, ...customOptions]
   const decimalSeparator = inputType === 'number'
-    ? numberInputProps.decimalSeparator ?? getDecimalSeparator(i18n?.language)
+    ? numberInputProps.decimalSeparator ?? getDecimalSeparator()
     : '.'
 
   const currentInputText = inputType === 'number' ? numberInputText : newOptionText

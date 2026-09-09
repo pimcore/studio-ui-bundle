@@ -17,6 +17,9 @@ jest.mock('react-i18next', () => ({
   })
 }))
 
+// `getDecimalSeparator` reads the i18next singleton, `InputNumber` the hook — keep both in sync.
+jest.mock('i18next', () => ({ __esModule: true, default: { get language () { return language } } }))
+
 // antd-style is untranspiled ESM — the InputNumber wrapper only needs class names from it.
 jest.mock('@Pimcore/components/input-number/input-number.styles', () => ({
   useStyles: () => ({ styles: { inputNumber: 'input-number', inherited: 'inherited' } })
@@ -46,13 +49,10 @@ jest.mock('@sdk/components', () => {
   }
 })
 
-// eslint-disable-next-line import/first
+/* eslint-disable import/first */
 import React from 'react'
-// eslint-disable-next-line import/first
 import { isNull } from 'lodash'
-// eslint-disable-next-line import/first
 import { fireEvent, render, screen } from '@testing-library/react'
-// eslint-disable-next-line import/first
 import { CreatableSelect, type CreatableSelectProps } from './creatable-select'
 
 const getInput = (): HTMLInputElement => screen.getByRole('spinbutton')
