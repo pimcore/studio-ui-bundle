@@ -549,6 +549,7 @@ listing.search-mode.full-text: Fritextsökning
 listing.search-mode.full-text-short: Fritext
 listing.search-mode.default: Standard
 listing.search-mode.smart-placeholder: Sök bland liknande eller relaterade resultat
+listing.search-mode.global-unavailable: Smart sökning är för närvarande inte tillgänglig.
 listing.actions: Tillämpa på val
 listing.non-selected.actions: Tillämpa på alla
 listing.actions.zip-download: ZIP-nedladdning

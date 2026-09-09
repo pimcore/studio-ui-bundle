@@ -11,13 +11,20 @@
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { SearchInput, type ISearchInputProps } from '@Pimcore/components/search-input/search-input'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { Compact } from '@Pimcore/components/compact/compact'
 import React, { useEffect, useState } from 'react'
-import { SearchResult } from './search-result/search-result'
+import { useTranslation } from 'react-i18next'
+import { SearchResultContainer } from './search-result/search-result-container'
 import { SearchTermProvider } from './provider/search-term-provider'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
+import { useGlobalSearchMode } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/use-global-search-mode'
+import { SearchModeDropdown } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/search/search-mode-dropdown'
+import { SearchModeWarning } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/search/search-mode-warning'
 
 export const GeneralTab = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const { searchTerm: sharedSearchTerm, setSearchTerm: setSharedSearchTerm } = useSearch()
+  const globalMode = useGlobalSearchMode()
   const [searchTerm, setSearchTerm] = useState(sharedSearchTerm)
   const [searchQuery, setSearchQuery] = useState(sharedSearchTerm)
 
@@ -46,21 +53,40 @@ export const GeneralTab = (): React.JSX.Element => {
         <Toolbar
           padding={ { left: 'none', right: 'none' } }
           position='top'
+          // 'auto': a smart mode renders its restriction line under the input.
+          size='auto'
           theme='secondary'
         >
-          <SearchInput
-            data-testid="search-modal-input"
-            maxWidth={ '100%' }
-            onBlur={ onBlur }
-            onChange={ (event) => { setSearchQuery(event.target.value) } }
-            onSearch={ onSearch }
-            value={ searchQuery }
-          />
+          <div className='w-full'>
+            <Compact className='w-full'>
+              {globalMode.modes.length > 0 && (
+                <SearchModeDropdown
+                  activeMode={ globalMode.activeMode }
+                  activeModeId={ globalMode.activeModeId }
+                  fulltextLabel={ t('listing.search-mode.default') }
+                  modeContext={ globalMode.modeContext }
+                  modes={ globalMode.modes }
+                  onModeChange={ globalMode.setModeId }
+                />
+              )}
+              <SearchInput
+                className='w-full'
+                data-testid="search-modal-input"
+                maxWidth={ '100%' }
+                onBlur={ onBlur }
+                onChange={ (event) => { setSearchQuery(event.target.value) } }
+                onSearch={ onSearch }
+                placeholder={ globalMode.activeMode !== undefined ? t('listing.search-mode.smart-placeholder') : 'Search' }
+                value={ searchQuery }
+              />
+            </Compact>
+            <SearchModeWarning warning={ globalMode.availability?.warning } />
+          </div>
         </Toolbar>
       }
     >
       <SearchTermProvider searchTerm={ searchTerm }>
-        <SearchResult />
+        <SearchResultContainer />
       </SearchTermProvider>
     </ContentLayout>
   )

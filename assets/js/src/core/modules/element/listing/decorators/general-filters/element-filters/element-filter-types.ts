@@ -15,7 +15,7 @@ import { type SearchModeAbstract, type SearchModeContext } from '../search-modes
 import { type GeneralFiltersDecoratorConfig } from '../general-filters-decorator'
 
 export interface ElementFilterSearchModeContext {
-  /** Applied non-fulltext mode; undefined = full text. Never a blocked/unavailable mode. */
+  /** Applied non-fulltext mode; undefined = full text. Never an unavailable mode. */
   activeMode: SearchModeAbstract | undefined
   modeContext: SearchModeContext
   /** Column filter types of all visible modes — stripped from restored base filters. */

@@ -16,7 +16,7 @@ import { useTypeSelectOptional } from '@Pimcore/modules/element/components/type-
 import { SortingContext } from '@Pimcore/modules/element/listing/decorators/sorting/context-layer/provider/sorting-provider/sorting-provider'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useGeneralFiltersConfig } from '../context-layer/provider/general-filters-config/use-general-filters-config'
-import { useAppliedFilters, useDraftFiltersOptional } from '../element-filters/stores'
+import { useAppliedFiltersOptional, useDraftFiltersOptional } from '../element-filters/stores'
 import { readElementFilterValues } from '../element-filters/use-element-filter-values'
 import { type SearchModeAbstract, type SearchModeAvailability, type SearchModeContext } from './search-mode-abstract'
 import { type SearchModeRegistry } from './search-mode-registry'
@@ -30,8 +30,8 @@ export interface UseSearchModeReturn {
   /** undefined = full text (or an unresolvable stored id, which degrades to full text). */
   activeMode: SearchModeAbstract | undefined
   availability: SearchModeAvailability | undefined
-  /** True when the active mode must not be submitted (Apply/Enter disabled). */
-  blocked: boolean
+  /** The stored mode cannot work on this surface (e.g. restored saved search) — requests degrade to full text. */
+  unavailable: boolean
   /** Filter types of ALL registered modes, hidden ones included — cleanup must cover them too. */
   registeredFilterTypes: string[]
   setModeId: (id: string) => void
@@ -40,7 +40,8 @@ export interface UseSearchModeReturn {
 /**
  * Search-mode state for one value source: 'draft' evaluates the sidebar's draft filters (Apply
  * gating), 'applied' the immediately-applied ones (search-modal top bars). Returns undefined
- * when the host listing declares no elementType — such listings keep the plain search bar.
+ * when the host listing declares no elementType or has no filter store — such surfaces keep the
+ * plain search bar.
  */
 export const useSearchMode = (source: 'draft' | 'applied'): UseSearchModeReturn | undefined => {
   const registry = useInjection<SearchModeRegistry>(serviceIds['Element/Listing/SearchModeRegistry'])
@@ -49,7 +50,7 @@ export const useSearchMode = (source: 'draft' | 'applied'): UseSearchModeReturn 
   const typeSelect = useTypeSelectOptional()
   const sortingContext = useContext(SortingContext)
   const { decodeColumnIdentifier } = useSelectedColumns()
-  const appliedStore = useAppliedFilters()
+  const appliedStore = useAppliedFiltersOptional()
   const draftStore = useDraftFiltersOptional()
 
   if (elementType === undefined) {
@@ -67,13 +68,21 @@ export const useSearchMode = (source: 'draft' | 'applied'): UseSearchModeReturn 
     (sort) => decodeColumnIdentifier(sort.id) !== undefined
   )
 
+  // The search-modal top bars narrow via the type select (null = all types); grids via a "type"
+  // field filter. Either counts as the user deliberately restricting the listing.
+  const explicitTypeSelection = typeSelect !== undefined
+    ? typeSelect.value !== null && typeSelect.value !== undefined
+    : values.fieldFilters.some((fieldFilter) => fieldFilter.key === 'type')
+
   const modeContext: SearchModeContext = {
     elementType,
     classId: classSelection?.selectedClassDefinition?.id,
     className: classSelection?.selectedClassDefinition?.name,
     fieldFilters: values.fieldFilters,
     selectedTypeFilter: typeSelect?.value,
-    hasExplicitSorting
+    hasExplicitSorting,
+    explicitTypeSelection,
+    explicitClassSelection: classSelection?.selectedClassDefinition !== undefined
   }
 
   const registeredModes = registry.getDynamicTypes()
@@ -93,7 +102,7 @@ export const useSearchMode = (source: 'draft' | 'applied'): UseSearchModeReturn 
     activeModeId: activeMode?.id ?? FULLTEXT_SEARCH_MODE_ID,
     activeMode,
     availability,
-    blocked: availability !== undefined && (availability.blocked || !availability.available),
+    unavailable: availability !== undefined && !availability.available,
     registeredFilterTypes: registeredModes.map((mode) => mode.columnFilterType),
     setModeId: (id) => { store.setValue('searchMode', id) }
   }

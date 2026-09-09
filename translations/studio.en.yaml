@@ -549,6 +549,7 @@ listing.search-mode.full-text: Full text search
 listing.search-mode.full-text-short: Full text
 listing.search-mode.default: Default
 listing.search-mode.smart-placeholder: Search within similar or related results
+listing.search-mode.global-unavailable: Smart search is currently unavailable.
 listing.actions: Apply to selection
 listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download

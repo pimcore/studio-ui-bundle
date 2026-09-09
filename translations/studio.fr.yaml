@@ -549,6 +549,7 @@ listing.search-mode.full-text: Recherche en texte intégral
 listing.search-mode.full-text-short: Texte intégral
 listing.search-mode.default: Par défaut
 listing.search-mode.smart-placeholder: Rechercher dans les résultats similaires ou associés
+listing.search-mode.global-unavailable: La recherche intelligente est momentanément indisponible.
 listing.actions: Appliquer à la sélection
 listing.non-selected.actions: Appliquer à tous
 listing.actions.zip-download: Téléchargement ZIP

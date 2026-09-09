@@ -12,6 +12,8 @@ import { useEffect } from 'react'
 import { isNil } from 'lodash'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 import { useAppliedFilters, readElementFilterValues } from '@Pimcore/modules/element/listing/decorators/general-filters/element-filters'
+import { useSearchMode } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/use-search-mode'
+import { FULLTEXT_SEARCH_MODE_ID } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/constants'
 import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
@@ -20,31 +22,40 @@ interface SearchTermTakeoverProps {
   elementType: ElementType
 }
 
-// Strictly one-directional (shared term -> listing): mirroring the applied term back into the
-// shared context from an effect ping-pongs against this one and floods the API with requests.
+// Strictly one-directional (shared term/mode -> listing): mirroring the applied values back into
+// the shared context from an effect ping-pongs against this one and floods the API with requests.
+// The typed tabs write the shared mode only through their mode dropdown.
 export const SearchTermTakeover = ({ elementType }: SearchTermTakeoverProps): null => {
-  const { searchTerm, pendingRestore, activeKey, isOpen } = useSearch()
-  const { values, setValue } = useAppliedFilters()
+  const { searchTerm, searchMode: sharedSearchMode, pendingRestore, activeKey, isOpen } = useSearch()
+  const { values, setValues } = useAppliedFilters()
   const { setPage } = usePaging()
   const { dataLoadingState, setDataLoadingState } = useData()
+  const modeState = useSearchMode('applied')
 
   const isActive = activeKey === elementType
-  const appliedSearchTerm = readElementFilterValues(values).searchTerm
+  const applied = readElementFilterValues(values)
+
+  // The shared mode applies only where it can work; elsewhere (no modes, unavailable) the tab
+  // falls back to full text.
+  const applicableMode = modeState?.modes.find(
+    (mode) => mode.id === sharedSearchMode && mode.getAvailability(modeState.modeContext).available
+  )
+  const targetMode = applicableMode?.id ?? FULLTEXT_SEARCH_MODE_ID
 
   useEffect(() => {
     if (!isOpen || !isActive || !isNil(pendingRestore)) {
       return
     }
 
-    if (searchTerm !== appliedSearchTerm) {
-      setValue('searchTerm', searchTerm)
+    if (searchTerm !== applied.searchTerm || targetMode !== applied.searchMode) {
+      setValues({ searchTerm, searchMode: targetMode })
 
       if (dataLoadingState !== 'initial') {
         setPage(1)
         setDataLoadingState('filters-applied')
       }
     }
-  }, [searchTerm, isActive])
+  }, [searchTerm, targetMode, isActive])
 
   return null
 }

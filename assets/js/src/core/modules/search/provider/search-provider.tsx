@@ -10,6 +10,7 @@
 
 import React, { createContext, useMemo, useState } from 'react'
 import { type SavedSearchDetailedConfiguration } from '../search-api-slice.gen'
+import { FULLTEXT_SEARCH_MODE_ID } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/constants'
 
 export interface SearchContextData {
   activeKey: string
@@ -19,6 +20,9 @@ export interface SearchContextData {
   /** The search term shared across all tabs, so switching tabs takes the typed term along. */
   searchTerm: string
   setSearchTerm: (term: string) => void
+  /** The search mode shared across tabs (id of a registered mode, or the full-text id). */
+  searchMode: string
+  setSearchMode: (mode: string) => void
   /** A saved search whose state should be applied to the matching typed tab once it mounts. */
   pendingRestore: SavedSearchDetailedConfiguration | undefined
   setPendingRestore: (configuration: SavedSearchDetailedConfiguration | undefined) => void
@@ -42,12 +46,13 @@ export const SearchProvider = (props: SearchProviderProps): React.JSX.Element =>
   const [open, setOpen] = useState(false)
   const [activeKey, setActiveKey] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
+  const [searchMode, setSearchMode] = useState<string>(FULLTEXT_SEARCH_MODE_ID)
   const [pendingRestore, setPendingRestore] = useState<SavedSearchDetailedConfiguration | undefined>(props.initialPendingRestore)
   const [loadedSavedSearch, setLoadedSavedSearch] = useState<SavedSearchDetailedConfiguration | undefined>(props.initialLoadedSavedSearch)
 
   return useMemo(() => (
-    <SearchContext.Provider value={ { open, setOpen, activeKey, setActiveKey, searchTerm, setSearchTerm, pendingRestore, setPendingRestore, loadedSavedSearch, setLoadedSavedSearch } }>
+    <SearchContext.Provider value={ { open, setOpen, activeKey, setActiveKey, searchTerm, setSearchTerm, searchMode, setSearchMode, pendingRestore, setPendingRestore, loadedSavedSearch, setLoadedSavedSearch } }>
       { props.children }
     </SearchContext.Provider>
-  ), [open, activeKey, searchTerm, pendingRestore, loadedSavedSearch])
+  ), [open, activeKey, searchTerm, searchMode, pendingRestore, loadedSavedSearch])
 }

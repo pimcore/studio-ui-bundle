@@ -37,9 +37,8 @@ export const useElementFilterContext = (): ElementFilterContext => {
     searchMode: searchMode === undefined
       ? undefined
       : {
-          // A blocked mode must not reach the request — the UI prevents applying it, and a
-          // restored blocked state degrades to full text here as the last line of defense.
-          activeMode: searchMode.blocked ? undefined : searchMode.activeMode,
+          // A restored mode that cannot work on this surface degrades to full text.
+          activeMode: searchMode.unavailable ? undefined : searchMode.activeMode,
           modeContext: searchMode.modeContext,
           // All registry entries, not the visible modes: a hidden mode's filter must still be
           // cleaned from restored base filters, or it is sent while the UI shows full text.
