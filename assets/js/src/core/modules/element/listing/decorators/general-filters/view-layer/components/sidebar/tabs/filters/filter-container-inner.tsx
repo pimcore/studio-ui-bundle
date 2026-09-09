@@ -41,7 +41,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const { handleSearchTermInSidebar, showOnlyUnreferencedFilter } = useGeneralFiltersConfig()
   const { setDataLoadingState } = useData()
 
-  const { searchTerm, directChildren, unreferenced, pql, fieldFilters, reset } = useDraftFilterValues()
+  const { searchTerm, searchMode, directChildren, unreferenced, pql, fieldFilters, reset } = useDraftFilterValues()
   const draftStore = useDraftFilters()
   const filterContext = useElementFilterContext()
 
@@ -69,6 +69,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
 
     if (handleSearchTermInSidebar) {
       valuesToApply.searchTerm = searchTerm
+      valuesToApply.searchMode = searchMode
     }
 
     setAppliedValues(valuesToApply)
