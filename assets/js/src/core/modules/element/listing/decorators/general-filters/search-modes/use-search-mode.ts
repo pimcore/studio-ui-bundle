@@ -11,11 +11,8 @@
 import { useContext } from 'react'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
-import { useClassDefinitionSelectionOptional } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
-import { useTypeSelectOptional } from '@Pimcore/modules/element/components/type-select/provider/use-type-select-optional'
 import { SortingContext } from '@Pimcore/modules/element/listing/decorators/sorting/context-layer/provider/sorting-provider/sorting-provider'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
-import { type FieldFilter } from '../context-layer/provider/field-filters/field-filters-provider'
 import { useGeneralFiltersConfig } from '../context-layer/provider/general-filters-config/use-general-filters-config'
 import { useAppliedFiltersOptional, useDraftFiltersOptional } from '../element-filters/stores'
 import { readElementFilterValues } from '../element-filters/use-element-filter-values'
@@ -37,34 +34,13 @@ export interface UseSearchModeReturn {
   setModeId: (id: string) => void
 }
 
-/** Search-modal top bars narrow via the type select (null = all types), grids via a "type" field filter. */
-const readSelectedTypes = (typeSelectValue: string | null | undefined, fieldFilters: FieldFilter[]): string[] => {
-  if (typeSelectValue !== undefined) {
-    return typeSelectValue === null ? [] : [typeSelectValue]
-  }
-
-  return fieldFilters
-    .filter((fieldFilter) => fieldFilter.key === 'type')
-    .flatMap((fieldFilter): string[] => {
-      const value: unknown = fieldFilter.filterValue
-
-      if (typeof value === 'string') {
-        return [value]
-      }
-
-      return Array.isArray(value) ? value.filter((entry): entry is string => typeof entry === 'string') : []
-    })
-}
-
 /**
- * Search-mode state read from the 'draft' (sidebar) or 'applied' (search-modal top bars) filter store.
- * Undefined when the listing declares no elementType or has no such store: plain search bar.
+ * The sidebar edits a draft copy of the filters until Apply, so its dropdown reads 'draft' while the
+ * query reads 'applied'; the search modal has no draft store. Undefined = no modes on this listing.
  */
 export const useSearchMode = (source: 'draft' | 'applied'): UseSearchModeReturn | undefined => {
   const registry = useInjection<SearchModeRegistry>(serviceIds['Element/Listing/SearchModeRegistry'])
   const { elementType } = useGeneralFiltersConfig()
-  const classSelection = useClassDefinitionSelectionOptional()
-  const typeSelect = useTypeSelectOptional()
   const sortingContext = useContext(SortingContext)
   const { decodeColumnIdentifier } = useSelectedColumns()
   const appliedStore = useAppliedFiltersOptional()
@@ -79,8 +55,6 @@ export const useSearchMode = (source: 'draft' | 'applied'): UseSearchModeReturn 
 
   const modeContext: SearchModeContext = {
     elementType,
-    className: classSelection?.selectedClassDefinition?.name,
-    selectedTypes: readSelectedTypes(typeSelect?.value, values.fieldFilters),
     hasExplicitSorting: (sortingContext?.sorting ?? []).some((sort) => decodeColumnIdentifier(sort.id) !== undefined)
   }
 

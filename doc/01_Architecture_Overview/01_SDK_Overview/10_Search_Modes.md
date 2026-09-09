@@ -44,11 +44,15 @@ export class SoundsLikeSearchMode extends SearchModeAbstract {
   }
 
   getAvailability (context: SearchModeContext): SearchModeAvailability {
-    return { available: context.elementType === 'data-object' }
+    return {
+      available: context.elementType === 'data-object',
+      hint: i18n.t('my-bundle.search-mode.hint'),
+      warning: i18n.t('my-bundle.search-mode.warning')
+    }
   }
 
   buildColumnFilter (query: string, context: SearchModeContext): ColumnFilter {
-    return { type: this.columnFilterType, filterValue: { query, className: context.className } }
+    return { type: this.columnFilterType, filterValue: { query, orderByRelevance: !context.hasExplicitSorting } }
   }
 }
 
@@ -72,7 +76,7 @@ Register the mode class in your bundle's service container like any other dynami
 | `icon` | Icon library name shown in the dropdown menu. |
 | `getMenuLabel()` / `getCollapsedLabel()` | Menu entry and trigger label, pre-translated. |
 | `isVisible()` | `false` hides the mode everywhere. Evaluated on every render, so permission and settings checks belong here. |
-| `getAvailability(context)` | Whether the mode works on this listing, plus an optional menu `hint` and a `warning` line under the input. `available: false` hides it on that surface. |
+| `getAvailability(context)` | Whether the mode works on this listing, plus an optional menu `hint` and a `warning` line under the input that names what the mode covers. `available: false` hides it on that surface. |
 | `buildColumnFilter(query, context)` | The column filter sent instead of `system.fulltext`. |
 | `getGlobalSearch()` | Optional. Returns an adapter for the Quick Search **All** tab, see below. |
 
@@ -81,11 +85,9 @@ Register the mode class in your bundle's service container like any other dynami
 | Field | Value |
 |---|---|
 | `elementType` | `'asset'`, `'data-object'`, `'document'` or `'all'` (the All tab). |
-| `className` | Class the data-object listing is pinned to; `undefined` for assets and "All classes". |
-| `selectedTypes` | Types the user narrowed the listing to via the type select or a `type` field filter; empty when none. |
 | `hasExplicitSorting` | `true` when the listing sends a column sort, so a mode can hand ordering to the user. |
 
-A mode is never blocking. A warning tells the user what the mode covers; a search that contradicts it simply returns no results.
+A mode is never blocking. The warning is shown whenever the mode is active and tells the user what it covers; a search outside that coverage simply returns no results.
 
 ## Quick Search All Tab
 

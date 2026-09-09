@@ -24,12 +24,7 @@ export interface UseGlobalSearchModeReturn {
   setModeId: (id: string) => void
 }
 
-const globalModeContext: SearchModeContext = {
-  elementType: 'all',
-  className: undefined,
-  selectedTypes: [],
-  hasExplicitSorting: false
-}
+const globalModeContext: SearchModeContext = { elementType: 'all', hasExplicitSorting: false }
 
 /** Search-mode state of the All tab. It has no filter store, so the mode lives in the shared search context. */
 export const useGlobalSearchMode = (): UseGlobalSearchModeReturn => {

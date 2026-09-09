@@ -22,10 +22,6 @@ export type SearchModeSurfaceType = ElementType | 'all'
 
 export interface SearchModeContext {
   elementType: SearchModeSurfaceType
-  /** Class the data-object listing is pinned to; undefined for assets and "All classes". */
-  className: string | undefined
-  /** Types the user narrowed the listing to (type select or "type" field filter); empty = none. */
-  selectedTypes: string[]
   /** True when the listing sends an explicit column sort. */
   hasExplicitSorting: boolean
 }
@@ -35,7 +31,7 @@ export interface SearchModeAvailability {
   available: boolean
   /** Subtitle in the mode menu, pre-translated. */
   hint?: string
-  /** Line under the search input, pre-translated. */
+  /** Line under the search input naming what the mode covers, pre-translated. */
   warning?: string
 }
 
