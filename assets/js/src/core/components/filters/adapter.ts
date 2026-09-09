@@ -28,8 +28,8 @@ export const useFilterQuery = <TContribution, TContext, TQuery>(
 ): ((baseQuery: TQuery, overrides?: FilterValues) => TQuery) => {
   const context = adapter.useBuildContext()
 
-  return (baseQuery, overrides) => adapter.composeIntoQuery(
-    composeQuery(adapter.descriptors, overrides === undefined ? appliedValues : { ...appliedValues, ...overrides }, context),
+  return (baseQuery, overrides = {}) => adapter.composeIntoQuery(
+    composeQuery(adapter.descriptors, { ...appliedValues, ...overrides }, context),
     baseQuery,
     context
   )
