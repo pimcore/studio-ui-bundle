@@ -682,6 +682,8 @@ edit: Edit
 modify: Modify
 component.no-content.no-content-available: No content available
 notifications.label: Notifications
+notifications.tab.inbox: Inbox
+notifications.tab.settings: Settings
 notifications.settings.label: Notification settings
 notifications.settings.description: Turn on Notify me for anything you want in your notification bell, then add extra channels on top for the ones that matter most.
 notifications.settings.description-popup-only: Choose how notifications reach you. Anything you are notified about always shows in your notification bell.

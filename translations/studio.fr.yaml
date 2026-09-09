@@ -682,6 +682,8 @@ edit: Modifier
 modify: Modifier
 component.no-content.no-content-available: Aucun contenu disponible
 notifications.label: Notifications
+notifications.tab.inbox: Boîte de réception
+notifications.tab.settings: Paramètres
 notifications.settings.label: Paramètres de notification
 notifications.settings.description: Activez « Me notifier » pour tout ce que vous souhaitez voir apparaître dans votre cloche de notification, puis ajoutez des canaux supplémentaires pour les éléments qui comptent le plus.
 notifications.settings.description-popup-only: Choisissez comment les notifications vous parviennent. Tout ce dont vous êtes notifié apparaît toujours dans votre cloche de notification.

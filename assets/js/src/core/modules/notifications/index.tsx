@@ -12,8 +12,7 @@ import { type WidgetRegistry } from '@Pimcore/modules/widget-manager/services/wi
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { NotificationsContainer } from './notifications-container'
-import { NotificationSettingsContainer } from './settings/notification-settings-container'
+import { NotificationsWidget } from './notifications-widget'
 import { type BackgroundProcessor } from '../background-processor/services/background-processor'
 import { DemoProcess } from './process/demo-process'
 import { staticWidgetRestorer } from '../widget-manager/services/static-widget-restorer'
@@ -25,26 +24,21 @@ import { NotificationPopup } from './notification-popup/notification-popup'
 import { type DynamicTypeNotificationChannelRegistry } from './dynamic-types/registry/dynamic-type-notification-channel-registry'
 import { type DynamicTypeAbstractNotificationChannel } from './dynamic-types/definitions/dynamic-type-abstract-notification-channel'
 
-import { NOTIFICATIONS, NOTIFICATION_SETTINGS } from './widget-configs'
+import { NOTIFICATIONS } from './widget-configs'
 
-export { NOTIFICATIONS, NOTIFICATION_SETTINGS } from './widget-configs'
+export { NOTIFICATIONS } from './widget-configs'
 
 moduleSystem.registerModule({
   onInit: () => {
     const widgetRegistryService = container.get<WidgetRegistry>(serviceIds.widgetManager)
 
+    // The inbox and the subscription preferences are sections of this one widget.
     widgetRegistryService.registerWidget({
       name: 'notifications',
-      component: NotificationsContainer
-    })
-
-    widgetRegistryService.registerWidget({
-      name: 'notification-settings',
-      component: NotificationSettingsContainer
+      component: NotificationsWidget
     })
 
     staticWidgetRestorer.registerStaticWidget(NOTIFICATIONS)
-    staticWidgetRestorer.registerStaticWidget(NOTIFICATION_SETTINGS)
 
     const componentRegistry = container.get<ComponentRegistry>(serviceIds['App/ComponentRegistry/ComponentRegistry'])
     componentRegistry.registerToSlot('global.feedback', {

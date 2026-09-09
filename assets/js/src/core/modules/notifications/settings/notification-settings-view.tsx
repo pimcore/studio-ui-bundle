@@ -118,9 +118,13 @@ export const NotificationSettingsView = ({
                 <Tooltip title={ t(channel.unavailableReasonKey) }>
                   <span
                     aria-label={ t(channel.unavailableReasonKey) }
+                    className={ styles.channelWarning }
                     data-testid={ `notification-settings-channel-warning-${channel.id}` }
                   >
-                    <Icon value={ 'warning-circle' } />
+                    <Icon
+                      colorToken={ 'colorWarning' }
+                      value={ 'warning-circle' }
+                    />
                   </span>
                 </Tooltip>
               )}
