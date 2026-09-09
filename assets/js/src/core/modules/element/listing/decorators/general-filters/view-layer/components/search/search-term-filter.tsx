@@ -11,6 +11,7 @@
 import React, { useEffect, useState } from 'react'
 import { useGeneralFiltersConfig } from '../../../context-layer/provider/general-filters-config/use-general-filters-config'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
+import { useFilterCommitOptional } from '@Pimcore/components/filters'
 import { useAppliedFilters, useDraftFiltersOptional } from '../../../element-filters/stores'
 import { readElementFilterValues } from '../../../element-filters/use-element-filter-values'
 
@@ -20,6 +21,7 @@ export const SearchTermFilter = (): React.JSX.Element => {
   const [currentSearchTerm, setCurrentSearchTerm] = useState<string>(appliedSearchTerm)
   const { handleSearchTermInSidebar } = useGeneralFiltersConfig()
   const draftStore = useDraftFiltersOptional()
+  const commit = useFilterCommitOptional()
 
   useEffect(() => {
     setCurrentSearchTerm(appliedSearchTerm)
@@ -30,10 +32,19 @@ export const SearchTermFilter = (): React.JSX.Element => {
     : ''
   const value = handleSearchTermInSidebar ? draftSearchTerm : currentSearchTerm
 
-  function onSearch (): void {
-    if (!handleSearchTermInSidebar) {
-      setAppliedValue('searchTerm', currentSearchTerm)
+  /**
+   * In the sidebar the term is only a draft value until the panel applies it, so Enter and the
+   * magnifier have to go through the panel's commit - it also resets paging and decides which
+   * of the draft values are published. Outside the sidebar this component owns the term and
+   * writes it straight into the applied store.
+   */
+  function onSearch (searchTerm: string): void {
+    if (handleSearchTermInSidebar) {
+      commit?.({ searchTerm })
+      return
     }
+
+    setAppliedValue('searchTerm', currentSearchTerm)
   }
 
   function onChange (event: React.ChangeEvent<HTMLInputElement>): void {

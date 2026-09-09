@@ -20,7 +20,12 @@ import { Title } from '@Pimcore/components/title/title'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { ColumnPickerPopover } from '@Pimcore/components/column-picker/column-picker-popover'
 import { FieldFilters } from '@Pimcore/components/field-filters/field-filters'
-import { FiltersRenderer } from '@Pimcore/components/filters'
+import {
+  FilterCommitProvider,
+  FiltersRenderer,
+  type FilterValues,
+  commitFilterValues
+} from '@Pimcore/components/filters'
 import { translationsFilterDescriptors, useTranslationsAppliedFilters, useTranslationsDraftFilters, useTranslationsFilterContext } from '@Pimcore/modules/translations/filters/filters'
 import { useTranslationsFieldFilterEditor } from '@Pimcore/modules/translations/filters/hooks/use-translations-field-filter-editor'
 import { type TranslationFilterColumn } from '@Pimcore/modules/translations/filters/types'
@@ -31,9 +36,21 @@ export const FilterTab = (): React.JSX.Element => {
   const draftStore = useTranslationsDraftFilters()
   const appliedStore = useTranslationsAppliedFilters()
   const filterContext = useTranslationsFilterContext()
-  const { filters, onFilterChange, onFilterCommit, columnGroups, handleColumnClick } = useTranslationsFieldFilterEditor()
 
-  const handleApplyFilters = (): void => { appliedStore.setValues(draftStore.values) }
+  /**
+   * Publishes the draft, i.e. what the "Apply" button does. `committed` carries the value of a
+   * filter that applies itself immediately (Enter in the search field or in a text field
+   * filter): its draft write happens in the same render, so it is not in the draft here yet.
+   */
+  const applyFilters = (committed?: FilterValues): void => {
+    commitFilterValues(appliedStore, draftStore.values, committed)
+  }
+
+  const { filters, onFilterChange, onFilterCommit, columnGroups, handleColumnClick } = useTranslationsFieldFilterEditor({
+    onCommit: (fieldFilters) => { applyFilters({ fieldFilters }) }
+  })
+
+  const handleApplyFilters = (): void => { applyFilters() }
 
   const handleClearFilters = (): void => { draftStore.reset() }
 
@@ -85,12 +102,15 @@ export const FilterTab = (): React.JSX.Element => {
           style={ { width: '100%' } }
           vertical
         >
-          <FiltersRenderer
-            context={ filterContext }
-            descriptors={ translationsFilterDescriptors }
-            section='search'
-            store={ draftStore }
-          />
+          { /* Lets a control apply on its own, e.g. Enter in the search field */ }
+          <FilterCommitProvider onCommit={ applyFilters }>
+            <FiltersRenderer
+              context={ filterContext }
+              descriptors={ translationsFilterDescriptors }
+              section='search'
+              store={ draftStore }
+            />
+          </FilterCommitProvider>
         </Flex>
 
         <Title>{t('element.sidebar.field-filters')}</Title>
