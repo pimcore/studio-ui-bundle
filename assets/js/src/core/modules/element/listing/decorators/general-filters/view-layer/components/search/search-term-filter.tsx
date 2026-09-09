@@ -8,38 +8,29 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import cn from 'classnames'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGeneralFiltersConfig } from '../../../context-layer/provider/general-filters-config/use-general-filters-config'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
-import { Compact } from '@Pimcore/components/compact/compact'
 import { useAppliedFilters, useDraftFiltersOptional } from '../../../element-filters/stores'
 import { readElementFilterValues } from '../../../element-filters/use-element-filter-values'
 import { useSearchMode } from '../../../search-modes/use-search-mode'
 import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
-import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
-import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
-import { Flex } from '@Pimcore/components/flex/flex'
-import { useStyles } from './search-term-filter.styles'
-import { SearchModeWarning } from './search-mode-warning'
+import { SearchContext } from '@Pimcore/modules/search/provider/search-provider'
+import { SearchBar } from './search-bar'
+import { SearchModeDropdown } from './search-mode-dropdown'
 
 export interface SearchTermFilterProps {
   /** Called with the term whenever the user commits a search (Enter, search icon, clear). */
   onCommit?: (searchTerm: string) => void
-  /**
-   * Controls rendered in the same row, left of the search input (e.g. the search modal's type and
-   * class selects). Passing them here instead of wrapping the component keeps the mode
-   * warning line aligned with the full row.
-   */
+  /** Same row, left of the search input (e.g. the search modal's type and class selects). */
   prefixControls?: React.ReactNode
 }
 
 export const SearchTermFilter = ({ onCommit, prefixControls }: SearchTermFilterProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { styles } = useStyles()
-  const { values, setValue: setAppliedValue, setValues: setAppliedValues } = useAppliedFilters()
+  const { values, setValues: setAppliedValues } = useAppliedFilters()
   const appliedSearchTerm = readElementFilterValues(values).searchTerm
   const [currentSearchTerm, setCurrentSearchTerm] = useState<string>(appliedSearchTerm)
   const { handleSearchTermInSidebar } = useGeneralFiltersConfig()
@@ -47,6 +38,8 @@ export const SearchTermFilter = ({ onCommit, prefixControls }: SearchTermFilterP
   const { setPage } = usePaging()
   const { setDataLoadingState } = useData()
   const searchMode = useSearchMode(handleSearchTermInSidebar ? 'draft' : 'applied')
+  // Present inside the quick search only; the typed tabs share their mode through it.
+  const searchContext = useContext(SearchContext)
 
   useEffect(() => {
     setCurrentSearchTerm(appliedSearchTerm)
@@ -64,21 +57,12 @@ export const SearchTermFilter = ({ onCommit, prefixControls }: SearchTermFilterP
       return
     }
 
-    // The sidebar drafts mode and field filters until Apply — the search icon/Enter shortcut
-    // must commit them along with the term, or the draft would be re-seeded from the applied
-    // store and visibly revert the selection. (pql is left untouched — the advanced editor
-    // applies through the Apply button.)
-    if (handleSearchTermInSidebar && draftStore !== undefined) {
-      const draftValues = readElementFilterValues(draftStore.values)
-      setAppliedValues({
-        searchMode: draftValues.searchMode,
-        fieldFilters: draftValues.fieldFilters,
-        directChildren: draftValues.directChildren,
-        unreferenced: draftValues.unreferenced
-      })
-    }
-
-    setAppliedValue('searchTerm', searchTerm)
+    // The sidebar drafts the mode until Apply; the term shortcut takes it along, or the draft
+    // re-syncs from the applied store and the selection reverts.
+    setAppliedValues(handleSearchTermInSidebar && searchMode !== undefined
+      ? { searchTerm, searchMode: searchMode.activeModeId }
+      : { searchTerm }
+    )
     setPage(1)
     setDataLoadingState('filters-applied')
     onCommit?.(searchTerm)
@@ -92,40 +76,57 @@ export const SearchTermFilter = ({ onCommit, prefixControls }: SearchTermFilterP
     }
   }
 
-  const searchInput = (
-    <SearchInput
-      className='w-full'
-      data-testid="search-term-filter-input"
-      maxWidth={ '100%' }
-      onChange={ onChange }
-      onSearch={ onSearch }
-      placeholder={ searchMode?.activeMode !== undefined ? t('listing.search-mode.smart-placeholder') : 'Search' }
-      value={ value }
-    />
-  )
+  function onModeChange (modeId: string): void {
+    if (searchMode === undefined || modeId === searchMode.activeModeId) {
+      return
+    }
 
-  const warning = searchMode?.availability?.warning
-  const searchBar = (
-    <Compact className={ cn('w-full', styles.searchBar) }>
-      <SlotRenderer slot={ componentConfig.element.listing.search.slots.prefix.name } />
-      {searchInput}
-    </Compact>
-  )
+    searchMode.setModeId(modeId)
+
+    // The sidebar applies on the Apply button; immediate-apply surfaces re-run the term now.
+    if (handleSearchTermInSidebar) {
+      return
+    }
+
+    searchContext?.setSearchMode(modeId)
+
+    if (appliedSearchTerm !== '') {
+      setPage(1)
+      setDataLoadingState('filters-applied')
+    }
+  }
+
+  // available: false = the mode can never work on this surface (e.g. image search on data objects).
+  const availableModes = searchMode?.modes.filter((mode) => mode.getAvailability(searchMode.modeContext).available) ?? []
+
+  const modeDropdown = searchMode !== undefined && availableModes.length > 0
+    ? (
+      <SearchModeDropdown
+        activeMode={ searchMode.activeMode }
+        activeModeId={ searchMode.activeModeId }
+        fulltextLabel={ handleSearchTermInSidebar ? t('listing.search-mode.full-text-short') : t('listing.search-mode.default') }
+        modeContext={ searchMode.modeContext }
+        modes={ availableModes }
+        onModeChange={ onModeChange }
+      />
+      )
+    : undefined
 
   return (
-    <div className='w-full'>
-      {prefixControls === undefined
-        ? searchBar
-        : (
-          <Flex
-            className='w-full'
-            gap='extra-small'
-          >
-            {prefixControls}
-            {searchBar}
-          </Flex>
-          )}
-      <SearchModeWarning warning={ warning } />
-    </div>
+    <SearchBar
+      modeDropdown={ modeDropdown }
+      prefixControls={ prefixControls }
+      warning={ searchMode?.availability?.warning }
+    >
+      <SearchInput
+        className='w-full'
+        data-testid="search-term-filter-input"
+        maxWidth={ '100%' }
+        onChange={ onChange }
+        onSearch={ onSearch }
+        placeholder={ searchMode?.activeMode !== undefined ? t('listing.search-mode.smart-placeholder') : 'Search' }
+        value={ value }
+      />
+    </SearchBar>
   )
 }

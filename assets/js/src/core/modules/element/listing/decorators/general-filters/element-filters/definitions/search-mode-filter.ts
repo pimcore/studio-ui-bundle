@@ -12,11 +12,7 @@ import { defineFilter } from '@Pimcore/components/filters'
 import { FULLTEXT_SEARCH_MODE_ID } from '../../search-modes/constants'
 import { type ElementFilterQueryPart, type ElementFilterContext } from '../element-filter-types'
 
-/**
- * Value-only descriptor: no control and no query contribution of its own. It exists so the filter
- * stores seed the selected search mode and Clear-all resets it back to full text; the
- * searchTerm descriptor reads the mode from context to decide what it emits.
- */
+/** Value only, no control and no query part: holds the selected mode so Clear-all resets it. */
 export const searchModeFilterDescriptor = defineFilter<string, ElementFilterQueryPart, ElementFilterContext>({
   key: 'searchMode',
   defaultValue: FULLTEXT_SEARCH_MODE_ID,

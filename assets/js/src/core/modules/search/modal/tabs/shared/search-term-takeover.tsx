@@ -24,7 +24,7 @@ interface SearchTermTakeoverProps {
 
 // Strictly one-directional (shared term/mode -> listing): mirroring the applied values back into
 // the shared context from an effect ping-pongs against this one and floods the API with requests.
-// The typed tabs write the shared mode only through their mode dropdown.
+// The typed tabs write the shared mode only from their mode dropdown.
 export const SearchTermTakeover = ({ elementType }: SearchTermTakeoverProps): null => {
   const { searchTerm, searchMode: sharedSearchMode, pendingRestore, activeKey, isOpen } = useSearch()
   const { values, setValues } = useAppliedFilters()
@@ -35,8 +35,7 @@ export const SearchTermTakeover = ({ elementType }: SearchTermTakeoverProps): nu
   const isActive = activeKey === elementType
   const applied = readElementFilterValues(values)
 
-  // The shared mode applies only where it can work; elsewhere (no modes, unavailable) the tab
-  // falls back to full text.
+  // A shared mode the tab cannot serve falls back to full text.
   const applicableMode = modeState?.modes.find(
     (mode) => mode.id === sharedSearchMode && mode.getAvailability(modeState.modeContext).available
   )

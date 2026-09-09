@@ -34,8 +34,7 @@ export const buildElementFilterQuery = (
   const columnsToFilterOut = new Set([
     ...availableColumns.map((column) => column.key),
     pqlFilterType, searchTermFilterType, unreferencedFilterType,
-    // Mode filter types must not survive from restored base filters (e.g. a saved search): the
-    // backend rejects duplicate simple column filters of these types with a 422.
+    // A restored mode filter would duplicate the one the mode emits (backend 422).
     ...(context.searchMode?.registeredFilterTypes ?? [])
   ])
 

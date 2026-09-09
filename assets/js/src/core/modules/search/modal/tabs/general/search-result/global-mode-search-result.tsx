@@ -18,10 +18,7 @@ export interface GlobalModeSearchResultProps {
   adapter: GlobalSearchAdapter
 }
 
-/**
- * Results of a registered search mode on the All tab. Rendered with a key per mode by the
- * container, so the adapter's hook is never swapped within one mounted instance.
- */
+/** All-tab results of a registered mode. Keyed per mode by the caller, so the adapter hook never changes while mounted. */
 export const GlobalModeSearchResult = ({ adapter }: GlobalModeSearchResultProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { searchTerm } = useSearchTerm()

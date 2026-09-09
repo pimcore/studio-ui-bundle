@@ -16,7 +16,7 @@ import { type SearchModeRegistry } from './search-mode-registry'
 import { FULLTEXT_SEARCH_MODE_ID } from './constants'
 
 export interface UseGlobalSearchModeReturn {
-  /** Modes that can serve the All tab (global adapter + available there), sorted by order. */
+  /** Modes with a global adapter that are available on the All tab, sorted by order. */
   modes: SearchModeAbstract[]
   modeContext: SearchModeContext
   activeModeId: string
@@ -27,19 +27,12 @@ export interface UseGlobalSearchModeReturn {
 
 const globalModeContext: SearchModeContext = {
   elementType: 'all',
-  classId: undefined,
   className: undefined,
-  fieldFilters: [],
-  selectedTypeFilter: undefined,
-  hasExplicitSorting: false,
-  explicitTypeSelection: false,
-  explicitClassSelection: false
+  selectedTypes: [],
+  hasExplicitSorting: false
 }
 
-/**
- * Search-mode state for the quick search's All tab, which has no listing and no filter stores:
- * the mode lives in the shared search context, so it also travels to the typed tabs.
- */
+/** Search-mode state of the All tab. It has no filter store, so the mode lives in the shared search context. */
 export const useGlobalSearchMode = (): UseGlobalSearchModeReturn => {
   const registry = useInjection<SearchModeRegistry>(serviceIds['Element/Listing/SearchModeRegistry'])
   const { searchMode, setSearchMode } = useSearch()

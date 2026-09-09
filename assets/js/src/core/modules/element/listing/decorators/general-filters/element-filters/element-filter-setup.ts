@@ -29,22 +29,7 @@ export const useElementFilterContext = (): ElementFilterContext => {
   const { currentLanguage } = useLanguageSelection()
   const searchMode = useSearchMode('applied')
 
-  return {
-    config,
-    availableColumns,
-    getType,
-    currentLanguage,
-    searchMode: searchMode === undefined
-      ? undefined
-      : {
-          // A restored mode that cannot work on this surface degrades to full text.
-          activeMode: searchMode.unavailable ? undefined : searchMode.activeMode,
-          modeContext: searchMode.modeContext,
-          // All registry entries, not the visible modes: a hidden mode's filter must still be
-          // cleaned from restored base filters, or it is sent while the UI shows full text.
-          registeredFilterTypes: searchMode.registeredFilterTypes
-        }
-  }
+  return { config, availableColumns, getType, currentLanguage, searchMode }
 }
 
 export const elementFilterSetup: FilterHostAdapter<

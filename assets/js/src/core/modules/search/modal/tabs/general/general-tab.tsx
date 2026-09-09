@@ -11,20 +11,21 @@
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { SearchInput, type ISearchInputProps } from '@Pimcore/components/search-input/search-input'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { Compact } from '@Pimcore/components/compact/compact'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { SearchResultContainer } from './search-result/search-result-container'
+import { SearchResult } from './search-result/search-result'
+import { GlobalModeSearchResult } from './search-result/global-mode-search-result'
 import { SearchTermProvider } from './provider/search-term-provider'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 import { useGlobalSearchMode } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/use-global-search-mode'
 import { SearchModeDropdown } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/search/search-mode-dropdown'
-import { SearchModeWarning } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/search/search-mode-warning'
+import { SearchBar } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/search/search-bar'
 
 export const GeneralTab = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { searchTerm: sharedSearchTerm, setSearchTerm: setSharedSearchTerm } = useSearch()
   const globalMode = useGlobalSearchMode()
+  const globalAdapter = globalMode.activeMode?.getGlobalSearch?.()
   const [searchTerm, setSearchTerm] = useState(sharedSearchTerm)
   const [searchQuery, setSearchQuery] = useState(sharedSearchTerm)
 
@@ -53,13 +54,13 @@ export const GeneralTab = (): React.JSX.Element => {
         <Toolbar
           padding={ { left: 'none', right: 'none' } }
           position='top'
-          // 'auto': a smart mode renders its restriction line under the input.
+          // The search-mode warning line needs a second row.
           size='auto'
           theme='secondary'
         >
-          <div className='w-full'>
-            <Compact className='w-full'>
-              {globalMode.modes.length > 0 && (
+          <SearchBar
+            modeDropdown={ globalMode.modes.length > 0
+              ? (
                 <SearchModeDropdown
                   activeMode={ globalMode.activeMode }
                   activeModeId={ globalMode.activeModeId }
@@ -68,25 +69,33 @@ export const GeneralTab = (): React.JSX.Element => {
                   modes={ globalMode.modes }
                   onModeChange={ globalMode.setModeId }
                 />
-              )}
-              <SearchInput
-                className='w-full'
-                data-testid="search-modal-input"
-                maxWidth={ '100%' }
-                onBlur={ onBlur }
-                onChange={ (event) => { setSearchQuery(event.target.value) } }
-                onSearch={ onSearch }
-                placeholder={ globalMode.activeMode !== undefined ? t('listing.search-mode.smart-placeholder') : 'Search' }
-                value={ searchQuery }
-              />
-            </Compact>
-            <SearchModeWarning warning={ globalMode.availability?.warning } />
-          </div>
+                )
+              : undefined }
+            warning={ globalMode.availability?.warning }
+          >
+            <SearchInput
+              className='w-full'
+              data-testid="search-modal-input"
+              maxWidth={ '100%' }
+              onBlur={ onBlur }
+              onChange={ (event) => { setSearchQuery(event.target.value) } }
+              onSearch={ onSearch }
+              placeholder={ globalMode.activeMode !== undefined ? t('listing.search-mode.smart-placeholder') : 'Search' }
+              value={ searchQuery }
+            />
+          </SearchBar>
         </Toolbar>
       }
     >
       <SearchTermProvider searchTerm={ searchTerm }>
-        <SearchResultContainer />
+        {globalMode.activeMode === undefined || globalAdapter === undefined
+          ? <SearchResult />
+          : (
+            <GlobalModeSearchResult
+              adapter={ globalAdapter }
+              key={ globalMode.activeMode.id }
+            />
+            )}
       </SearchTermProvider>
     </ContentLayout>
   )

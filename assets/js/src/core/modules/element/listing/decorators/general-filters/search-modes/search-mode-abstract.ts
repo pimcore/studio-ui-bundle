@@ -13,38 +13,29 @@ import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { type ColumnFilter } from '@Pimcore/modules/app/types/column-filter'
 import { type SimpleSearchResult } from '@Pimcore/modules/search/search-api-slice.gen'
 import { DynamicTypeAbstract } from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
-import { type FieldFilter } from '../context-layer/provider/field-filters/field-filters-provider'
 
-/** 'all' = the quick search's All tab: no listing, no filters, no type/class selects. */
+/** 'all' is the quick search's All tab: no listing, no filters, no type/class selects. */
 export type SearchModeSurfaceType = ElementType | 'all'
 
 export interface SearchModeContext {
   elementType: SearchModeSurfaceType
-  /** Selected class of the data-object listing; undefined on asset listings and "All classes". */
-  classId: string | undefined
+  /** Class the data-object listing is pinned to; undefined for assets and "All classes". */
   className: string | undefined
-  /** Field filters as currently drafted/applied in the host listing. */
-  fieldFilters: FieldFilter[]
-  /** Value of the element-type select in the search-modal top bar; undefined outside it. */
-  selectedTypeFilter: string | null | undefined
-  /** True when the listing will actually send a sortFilter (an explicit, resolvable column sort). */
+  /** Types the user narrowed the listing to (type select or "type" field filter); empty = none. */
+  selectedTypes: string[]
+  /** True when the listing sends an explicit column sort. */
   hasExplicitSorting: boolean
-  /** The user narrowed the listing to a sub-type (type select, or a "type" field filter). */
-  explicitTypeSelection: boolean
-  /** The listing is pinned to one class (a chosen class, or a grid that always has one). */
-  explicitClassSelection: boolean
 }
 
 export interface SearchModeAvailability {
-  /** Selectable in the mode dropdown; false = can never work on this surface (hidden). */
+  /** False hides the mode on this surface. */
   available: boolean
-  /** Menu-entry subtitle, pre-translated (e.g. "Types: image"). */
+  /** Subtitle in the mode menu, pre-translated. */
   hint?: string
-  /** Informational line under the search input, pre-translated. A search that contradicts it simply returns nothing. */
+  /** Line under the search input, pre-translated. */
   warning?: string
 }
 
-/** Same shape as the quick search's simple-search item, so the All tab renders both alike. */
 export type GlobalSearchResultItem = SimpleSearchResult
 
 export interface GlobalSearchResult {
@@ -65,34 +56,30 @@ export interface GlobalSearchState {
   error?: unknown
 }
 
-/**
- * Data source for the quick search's All tab. useSearch is a React hook: core calls it from a
- * component keyed per mode, so switching modes remounts and hook order stays stable.
- */
+/** Data source for the All tab. useSearch is a React hook; core mounts it in a component keyed per mode. */
 export interface GlobalSearchAdapter {
   useSearch: (args: GlobalSearchArgs) => GlobalSearchState
 }
 
 /**
- * A search mode changes what the listing search input emits: the built-in full-text mode sends the
- * system.fulltext column filter, registered modes contribute their own column filter instead.
- * Registered via SearchModeRegistry; labels and hints are returned pre-translated by the mode.
+ * A search mode decides which column filter the listing search input emits. Full text is built in;
+ * a registered mode replaces it with its own filter. Labels and hints come pre-translated.
  */
 @injectable()
 export abstract class SearchModeAbstract extends DynamicTypeAbstract {
-  /** Column filter type this mode emits — stripped from restored base filters to avoid duplicates. */
+  /** Column filter type this mode emits; stripped from restored base filters. */
   abstract readonly columnFilterType: string
 
   abstract readonly order: number
 
-  /** Icon name from the icon library, shown in the mode dropdown menu. */
+  /** Icon library name shown in the mode menu. */
   abstract readonly icon: string
 
   abstract getMenuLabel (): string
 
   abstract getCollapsedLabel (): string
 
-  /** Hidden entirely when false (feature gates, permissions). */
+  /** False hides the mode everywhere (feature gates, permissions). */
   isVisible (): boolean {
     return true
   }
@@ -101,6 +88,6 @@ export abstract class SearchModeAbstract extends DynamicTypeAbstract {
 
   abstract buildColumnFilter (query: string, context: SearchModeContext): ColumnFilter
 
-  /** Implemented by modes that can serve the quick search's All tab; undefined = not offered there. */
+  /** Modes that can serve the All tab return an adapter; undefined = not offered there. */
   getGlobalSearch? (): GlobalSearchAdapter
 }

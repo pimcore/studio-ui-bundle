@@ -114,8 +114,7 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
     // re-hydrated into the field-filters state (which re-keys them to columns by `key`). Always set
     // (empty when none) so opening a search replaces any filters from a previous one. The type-select
     // entry is excluded here — it is restored into the type select below instead. Search-mode
-    // filters are excluded too: their queries are not restorable yet, so a saved smart search
-    // degrades to full text instead of leaking its filter into the field-filter state.
+    // filters are not restorable yet and would otherwise land in the field filters.
     const searchModeFilterTypes = new Set(searchModeRegistry.getDynamicTypes().map((mode) => mode.columnFilterType))
     const fieldFilters: FieldFilter[] = entries
       .filter((entry) => isString(entry.type) && !SYSTEM_FILTER_TYPES.has(entry.type) &&
@@ -137,8 +136,7 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
 
     // Apply every general filter in one write to the applied-filters store. Always set each key (even
     // when empty/false) so opening a search replaces the state left over from a previous one. The
-    // search mode resets to full text: the restored term is a `system.fulltext` value, and a mode
-    // left over from before the restore would re-emit it through that mode's filter instead.
+    // mode resets to full text: the restored term is a system.fulltext value.
     setAppliedFilters({ searchTerm, fieldFilters, pql, unreferenced, directChildren, searchMode: FULLTEXT_SEARCH_MODE_ID })
 
     setSharedSearchTerm(searchTerm)

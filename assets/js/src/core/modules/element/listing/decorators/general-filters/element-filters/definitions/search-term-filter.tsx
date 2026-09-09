@@ -27,9 +27,10 @@ export const searchTermFilterDescriptor = defineFilter<string, ElementFilterQuer
       return undefined
     }
 
-    const activeMode = context.searchMode?.activeMode
-    if (activeMode !== undefined && context.searchMode !== undefined) {
-      return { kind: 'columnFilters', filters: [activeMode.buildColumnFilter(value, context.searchMode.modeContext)] }
+    const { searchMode } = context
+    // A restored mode that cannot work on this surface falls back to full text.
+    if (searchMode?.activeMode !== undefined && !searchMode.unavailable) {
+      return { kind: 'columnFilters', filters: [searchMode.activeMode.buildColumnFilter(value, searchMode.modeContext)] }
     }
 
     return { kind: 'columnFilters', filters: [{ type: searchTermFilterType, filterValue: value }] }

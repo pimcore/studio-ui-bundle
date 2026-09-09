@@ -17,20 +17,20 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Text } from '@Pimcore/components/text/text'
 import { FULLTEXT_SEARCH_MODE_ID } from '../../../search-modes/constants'
 import { type SearchModeAbstract, type SearchModeContext } from '../../../search-modes/search-mode-abstract'
-import { useStyles } from './search-mode-select.styles'
+import { useStyles } from './search-mode-dropdown.styles'
 
 export interface SearchModeDropdownProps {
-  /** Modes to list; the caller has already dropped structurally unavailable ones. */
+  /** Modes to list. */
   modes: SearchModeAbstract[]
   modeContext: SearchModeContext
   activeModeId: string
   activeMode: SearchModeAbstract | undefined
-  /** Collapsed label of the built-in full-text entry ("Full text" / "Default"). */
+  /** Collapsed label of the built-in full-text entry. */
   fulltextLabel: string
   onModeChange: (modeId: string) => void
 }
 
-/** The mode trigger + menu, free of any store or listing context. */
+/** Trigger button and menu; no store or listing context. */
 export const SearchModeDropdown = ({ modes, modeContext, activeModeId, activeMode, fulltextLabel, onModeChange }: SearchModeDropdownProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
