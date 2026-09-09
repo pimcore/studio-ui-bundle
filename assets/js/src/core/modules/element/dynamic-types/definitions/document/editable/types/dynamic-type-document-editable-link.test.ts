@@ -65,6 +65,21 @@ describe('DynamicTypeDocumentEditableLink.transformValueForApi', () => {
     expect(result.fullPath).toBe('/en/some-page')
   })
 
+  // The case reported in #459: the target document was deleted, so the value still
+  // claims linktype: 'internal' but has neither an id nor a type left behind it.
+  it('sends a link whose internal target was deleted as a direct link', () => {
+    const result = transform(linkValue({ internal: null, internalType: null }))
+
+    expect(result.linktype).toBe('direct')
+    expect(result.internal).toBe(false)
+    expect(result.internalId).toBeNull()
+    expect(result.internalType).toBeNull()
+    expect('internalType' in result).toBe(true)
+    // The path the link used to resolve to is kept as a plain direct link.
+    expect(result.path).toBe('/en/some-page')
+    expect(result.fullPath).toBe('/en/some-page')
+  })
+
   it('downgrades to a direct link when the internal type is missing', () => {
     const result = transform(linkValue({ internal: 42, internalType: null }))
 
