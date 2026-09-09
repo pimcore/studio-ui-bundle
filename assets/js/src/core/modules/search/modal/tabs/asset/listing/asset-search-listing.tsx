@@ -26,6 +26,8 @@ import { DefaultView } from './view/view-layer/views/default-view'
 import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '../../../../../element/listing/decorators/type-filter/type-filter-decorator'
 import { OpenElementDecorator, type OpenElementDecoratorConfig } from './decorator/open-element/open-element-decorator'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { ElementClickBehaviorProvider } from '@Pimcore/modules/element/providers/element-click-behavior/element-click-behavior-provider'
+import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 
 const defaultProps = {
   ...listingDefaultProps,
@@ -50,17 +52,21 @@ const listingProps = compose<AbstractDecoratorProps>(
 /* eslint-enable @typescript-eslint/consistent-type-assertions */
 
 export const AssetSearchListing = (): React.JSX.Element => {
+  const { close } = useSearch()
+
   return (
-    <DynamicTypeRegistryProvider serviceIds={ [
-      'DynamicTypes/GridCellRegistry',
-      'DynamicTypes/MetadataRegistry',
-      'DynamicTypes/ListingRegistry',
-      'DynamicTypes/FieldFilterRegistry'
-    ] }
-    >
-      <ListingContainer
-        { ...listingProps }
-      />
-    </DynamicTypeRegistryProvider>
+    <ElementClickBehaviorProvider onElementClick={ close }>
+      <DynamicTypeRegistryProvider serviceIds={ [
+        'DynamicTypes/GridCellRegistry',
+        'DynamicTypes/MetadataRegistry',
+        'DynamicTypes/ListingRegistry',
+        'DynamicTypes/FieldFilterRegistry'
+      ] }
+      >
+        <ListingContainer
+          { ...listingProps }
+        />
+      </DynamicTypeRegistryProvider>
+    </ElementClickBehaviorProvider>
   )
 }
