@@ -1095,6 +1095,7 @@ asset.sidebar.web-format: Webformat
 asset.sidebar.print-format: Utskriftsformat
 asset.sidebar.office-format: Kontorformat
 jobs.notification.title: Kjørende jobber
+jobs.notification.tooltip: Åpne kjørende jobber
 jobs.notification.jobs_one: "{{count}} handling"
 jobs.notification.jobs_other: "{{count}} handlinger"
 jobs.notification.hide-all-finished: Skjul alle fullførte

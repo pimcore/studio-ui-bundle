@@ -1095,6 +1095,7 @@ asset.sidebar.web-format: Format web
 asset.sidebar.print-format: Format impression
 asset.sidebar.office-format: Format bureautique
 jobs.notification.title: Tâches en cours
+jobs.notification.tooltip: Ouvrir les tâches en cours
 jobs.notification.jobs_one: "{{count}} action"
 jobs.notification.jobs_other: "{{count}} actions"
 jobs.notification.hide-all-finished: Masquer tous les terminés

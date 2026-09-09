@@ -1095,6 +1095,7 @@ asset.sidebar.web-format: Formato web
 asset.sidebar.print-format: Formato stampa
 asset.sidebar.office-format: Formato ufficio
 jobs.notification.title: Lavori in corso
+jobs.notification.tooltip: Apri lavori in corso
 jobs.notification.jobs_one: "{{count}} Azione"
 jobs.notification.jobs_other: "{{count}} Azioni"
 jobs.notification.hide-all-finished: Nascondi tutti i completati

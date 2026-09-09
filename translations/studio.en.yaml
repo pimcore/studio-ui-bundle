@@ -1095,6 +1095,7 @@ asset.sidebar.web-format: Web Format
 asset.sidebar.print-format: Print Format
 asset.sidebar.office-format: Office Format
 jobs.notification.title: Running jobs
+jobs.notification.tooltip: Open running jobs
 jobs.notification.jobs_one: "{{count}} Action"
 jobs.notification.jobs_other: "{{count}} Actions"
 jobs.notification.hide-all-finished: Hide all finished

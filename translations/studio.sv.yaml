@@ -1095,6 +1095,7 @@ asset.sidebar.web-format: Webbformat
 asset.sidebar.print-format: Utskriftsformat
 asset.sidebar.office-format: Kontorsformat
 jobs.notification.title: Pågående jobb
+jobs.notification.tooltip: Öppna pågående jobb
 jobs.notification.jobs_one: "{{count}} åtgärd"
 jobs.notification.jobs_other: "{{count}} åtgärder"
 jobs.notification.hide-all-finished: Dölj alla avslutade
