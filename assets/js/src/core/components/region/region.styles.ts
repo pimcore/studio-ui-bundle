@@ -42,7 +42,9 @@ export const useStyles = createStyles(({ token, css }, { layoutDefinition, items
     })
   })
 
-  const GAP_SIZE = 12
+  // Same 12px as before, now off the spacing scale rather than a literal. It feeds both the
+  // grid gap and the percentage width correction below, so the two cannot drift apart.
+  const GAP_SIZE = token.sizeSM
   const numGaps = maxWidthsPerColumn.length - 1
 
   const applyGapCorrection = (value: string): string => {

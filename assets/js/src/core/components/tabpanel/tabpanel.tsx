@@ -12,6 +12,7 @@ import React from 'react'
 import { type ITabsProps, Tabs } from '@Pimcore/components/tabs/tabs'
 import { BaseView } from '@Pimcore/components/base-view/base-view'
 import { Box, type BoxProps } from '../box/box'
+import { ItemSpacer } from '@Pimcore/components/form/layouts/item-spacer/item-spacer'
 import { useTranslation } from 'react-i18next'
 import { isNonEmptyString } from '@sdk/utils'
 
@@ -77,8 +78,13 @@ export const Tabpanel = ({
       label,
       forceRender: true,
       closable: item.closable,
+      // ItemSpacer mirrors Panel: FormKit zeroes antd's itemMarginBottom, so without a spacer
+      // fields placed straight into a tab render flush. A tab holding a single child (a Panel,
+      // an object component) is unaffected — gap only applies between siblings.
       children: <Box padding={ border === true ? 'small' : { x: 'none', y: 'small' } }>
-        {item.children}
+        <ItemSpacer>
+          {item.children}
+        </ItemSpacer>
       </Box>
     }
   })

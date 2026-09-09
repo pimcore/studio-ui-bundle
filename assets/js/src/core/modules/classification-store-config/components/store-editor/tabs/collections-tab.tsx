@@ -11,6 +11,7 @@
 /* eslint-disable max-lines */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { theme } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -52,6 +53,7 @@ interface ICollectionDetailFormValues {
 
 export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { token } = theme.useToken()
   const { localModal: modal } = useStudioModal()
   const [collectionForm] = Form.useForm<{ name: string, description: string }>()
   const [detailForm] = Form.useForm<ICollectionDetailFormValues>()
@@ -380,7 +382,7 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
                 >
                   <Flex
                     gap="small"
-                    style={ { padding: '8px 16px' } }
+                    style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
                     vertical
                   >
                     <Form.Item
