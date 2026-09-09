@@ -60,7 +60,7 @@ export const Toolbar = ({
         <Flex
           align={ align }
           className='w-full'
-          gap={ 16 }
+          gap={ 8 }
           justify={ justify }
           { ...props }
         >
