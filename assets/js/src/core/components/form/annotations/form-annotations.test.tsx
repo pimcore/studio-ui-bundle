@@ -17,8 +17,15 @@ import { formItemAnnotationKey, FormAnnotationsProvider } from './form-annotatio
 // antd-style ships untranspiled ESM; the class names are all the HOC needs from it
 jest.mock('../item/with-annotation.styles', () => ({
   useStyles: () => ({
-    styles: { annotated: 'annotated', added: 'added', changed: 'changed', removed: 'removed', moved: 'moved' }
+    styles: { tag: 'tag', tagOnControlRow: 'tag-on-control-row' }
   })
+}))
+
+jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
+
+// the Studio Tag reaches antd-style through Icon; the word it carries is what matters here
+jest.mock('@Pimcore/components/tag/tag', () => ({
+  Tag: ({ children, className }: any) => <span className={ className }>{children}</span>
 }))
 
 const Item = withAnnotation(AntForm.Item)
@@ -45,17 +52,37 @@ describe('withAnnotation', () => {
   it('leaves an item alone when nothing names it', () => {
     const item = renderItem({ other: { status: 'changed' } })
 
-    expect(item.className).not.toContain('annotated')
+    expect(screen.queryByText('form.annotation.changed')).not.toBeInTheDocument()
+    expect(item.className).not.toContain('pimcore-form-item-annotated')
     expect(screen.getByText('own extra')).toBeInTheDocument()
   })
 
-  it('tints an annotated item by status and shows the hint above the item\'s own extra', () => {
+  it('tags an annotated item\'s label and shows the hint above the item\'s own extra', () => {
     const item = renderItem({ 'settings.title': { status: 'changed', hint: 'was: Old title' } })
 
-    expect(item.className).toContain('annotated')
-    expect(item.className).toContain('changed')
+    expect(item.className).toContain('pimcore-form-item-annotated')
+    expect(item.className).toContain('pimcore-form-item-annotated--changed')
+    expect(screen.getByText('form.annotation.changed').closest('.ant-form-item-label')).not.toBeNull()
     expect(screen.getByText('was: Old title')).toBeInTheDocument()
     expect(screen.getByText('own extra')).toBeInTheDocument()
+  })
+
+  it('puts the tag in the extra slot when the item carries its text on the control', () => {
+    render(
+      <FormAnnotationsProvider annotations={ { toggled: { status: 'added' } } }>
+        <AntForm>
+          <Item name="toggled">
+            <input />
+          </Item>
+        </AntForm>
+      </FormAnnotationsProvider>
+    )
+
+    const tag = screen.getByText('form.annotation.added')
+
+    expect(tag.closest('.ant-form-item-extra')).not.toBeNull()
+    expect(tag.closest('.ant-form-item-label')).toBeNull()
+    expect(tag.closest('.ant-form-item')!.className).toContain('tag-on-control-row')
   })
 
   it('keys array names by their joined path', () => {

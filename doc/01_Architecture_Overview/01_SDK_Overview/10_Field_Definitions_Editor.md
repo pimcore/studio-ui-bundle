@@ -43,14 +43,18 @@ Pass `readOnly` to render a definition without a way to change it: the tree navi
 
 ## Annotating form items
 
-`FormAnnotationsProvider` marks form items from the outside: every `Form.Item` below it whose name is in the map renders with a status tint (`added`, `changed`, `removed` or `moved`) and an optional hint under the control. The form itself needs no change, so the editor's per-type settings forms can show what a proposal alters.
+`FormAnnotationsProvider` marks form items from the outside: every `Form.Item` below it whose name is in the map renders a status tag (`added`, `changed`, `removed` or `moved`) after its label, plus an optional hint under the control. Nothing else about the item changes — the control, its width and the surrounding layout stay exactly as the form drew them. The form itself needs no change, so the editor's per-type settings forms can show what a proposal alters.
 
 ```typescript
 import { FormAnnotationsProvider } from '@pimcore/studio-ui-bundle/components'
 
-<FormAnnotationsProvider annotations={ { title: { status: 'changed', hint: 'was: Product name' } } }>
+<FormAnnotationsProvider annotations={ { title: { status: 'changed', hint: 'Shown as the field title in the editor' } } }>
   <LayoutForm />
 </FormAnnotationsProvider>
 ```
 
 Items are keyed by their resolved name path joined with `.`; `formItemAnnotationKey(name)` builds the key the same way.
+
+An item that carries its text on the control instead of a label — a switch with a right label, say — gets the tag in its `extra` slot, on the control's own row.
+
+An annotated item also carries `pimcore-form-item-annotated` and `pimcore-form-item-annotated--<status>`, so a consumer can style the row further without another SDK change.
