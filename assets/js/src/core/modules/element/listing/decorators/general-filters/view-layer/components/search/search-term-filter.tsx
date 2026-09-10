@@ -12,6 +12,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGeneralFiltersConfig } from '../../../context-layer/provider/general-filters-config/use-general-filters-config'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
+import { useFilterCommitOptional } from '@Pimcore/components/filters'
 import { useAppliedFilters, useDraftFiltersOptional } from '../../../element-filters/stores'
 import { readElementFilterValues } from '../../../element-filters/use-element-filter-values'
 import { useSearchMode } from '../../../search-modes/use-search-mode'
@@ -40,6 +41,7 @@ export const SearchTermFilter = ({ onCommit, prefixControls }: SearchTermFilterP
   const searchMode = useSearchMode(handleSearchTermInSidebar ? 'draft' : 'applied')
   // Present inside the quick search only; the typed tabs share their mode through it.
   const searchContext = useContext(SearchContext)
+  const commit = useFilterCommitOptional()
 
   useEffect(() => {
     setCurrentSearchTerm(appliedSearchTerm)
@@ -50,19 +52,28 @@ export const SearchTermFilter = ({ onCommit, prefixControls }: SearchTermFilterP
     : ''
   const value = handleSearchTermInSidebar ? draftSearchTerm : currentSearchTerm
 
-  // antd supplies the committed value directly — clearing fires onChange and onSearch in the
-  // same tick, so reading the term from state here would still yield the pre-clear value.
+  /**
+   * In the sidebar the term is only a draft value until the panel applies it, so Enter and the
+   * magnifier have to go through the panel's commit - it also resets paging, takes the drafted
+   * search mode along and decides which of the draft values are published. Outside the sidebar
+   * this component owns the term and writes it straight into the applied store.
+   *
+   * antd supplies the committed value directly — clearing fires onChange and onSearch in the
+   * same tick, so reading the term from state here would still yield the pre-clear value.
+   */
   function onSearch (searchTerm: string): void {
+    // No early return on an unchanged term here: Enter in the sidebar has to do what Apply
+    // does, and the rest of the draft may well have changed.
+    if (handleSearchTermInSidebar) {
+      commit?.({ searchTerm })
+      return
+    }
+
     if (searchTerm === appliedSearchTerm) {
       return
     }
 
-    // The sidebar drafts the mode until Apply; the term shortcut takes it along, or the draft
-    // re-syncs from the applied store and the selection reverts.
-    setAppliedValues(handleSearchTermInSidebar && searchMode !== undefined
-      ? { searchTerm, searchMode: searchMode.activeModeId }
-      : { searchTerm }
-    )
+    setAppliedValues({ searchTerm })
     setPage(1)
     setDataLoadingState('filters-applied')
     onCommit?.(searchTerm)

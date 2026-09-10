@@ -20,7 +20,7 @@ import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { FieldFilters } from '@Pimcore/components/field-filters/field-filters'
 import { ColumnPickerPopover } from '@Pimcore/components/column-picker/column-picker-popover'
-import { FiltersRenderer, type FilterValues } from '@Pimcore/components/filters'
+import { FilterCommitProvider, FiltersRenderer, type FilterValues } from '@Pimcore/components/filters'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useFieldFilterEditor } from './field-filters/use-field-filter-editor'
 import {
@@ -31,6 +31,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
 import { useGeneralFiltersConfig } from '../../../../../context-layer/provider/general-filters-config/use-general-filters-config'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
+import { useSearchMode } from '../../../../../search-modes/use-search-mode'
 import { useAppliedFilters, useDraftFilterValues, useDraftFilters, useElementFilterContext, elementFilterDefinitions } from '../../../../../element-filters'
 
 export const FilterContainerInner = (): React.JSX.Element => {
@@ -41,22 +42,19 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const { handleSearchTermInSidebar, showOnlyUnreferencedFilter } = useGeneralFiltersConfig()
   const { setDataLoadingState } = useData()
 
-  const { searchTerm, searchMode, directChildren, unreferenced, pql, fieldFilters, reset } = useDraftFilterValues()
+  const { searchTerm, searchMode: draftSearchMode, directChildren, unreferenced, pql, fieldFilters, reset } = useDraftFilterValues()
+  const searchMode = useSearchMode('draft')
   const draftStore = useDraftFilters()
   const filterContext = useElementFilterContext()
 
   const { t } = useTranslation()
-  const { filters, onFilterChange, columnGroups, handleColumnClick } = useFieldFilterEditor()
 
-  // Reflect a pre-applied PQL query (e.g. from a restored saved search) as advanced mode, so the
-  // query is shown and editable instead of silently active behind the regular filters.
-  useEffect(() => {
-    if (pql !== '') {
-      setIsAdvancedMode(true)
-    }
-  }, [pql])
-
-  const handleApplyClick = (): void => {
+  /**
+   * Publishes the draft, i.e. what the "Apply" button does. `committed` carries the value of a
+   * filter that applies itself immediately (Enter in the search field or in a text field
+   * filter): its draft write happens in the same render, so it is not in the draft here yet.
+   */
+  const applyFilters = (committed?: FilterValues): void => {
     const valuesToApply: FilterValues = {
       fieldFilters,
       directChildren,
@@ -69,13 +67,33 @@ export const FilterContainerInner = (): React.JSX.Element => {
 
     if (handleSearchTermInSidebar) {
       valuesToApply.searchTerm = searchTerm
-      valuesToApply.searchMode = searchMode
+      // activeModeId, not the raw draft value: a stored id that no visible mode matches - a saved
+      // search from a mode that has since been hidden or removed - collapses to full text, which
+      // is what the query and the dropdown already fall back to. Publishing it here keeps the
+      // applied store from carrying an id nothing can honour, for Apply and for Enter alike.
+      valuesToApply.searchMode = searchMode?.activeModeId ?? draftSearchMode
     }
 
-    setAppliedValues(valuesToApply)
+    setAppliedValues({ ...valuesToApply, ...committed })
 
     setPage(1)
     setDataLoadingState('filters-applied')
+  }
+
+  const { filters, onFilterChange, onFilterCommit, columnGroups, handleColumnClick } = useFieldFilterEditor({
+    onCommit: (fieldFilters) => { applyFilters({ fieldFilters }) }
+  })
+
+  // Reflect a pre-applied PQL query (e.g. from a restored saved search) as advanced mode, so the
+  // query is shown and editable instead of silently active behind the regular filters.
+  useEffect(() => {
+    if (pql !== '') {
+      setIsAdvancedMode(true)
+    }
+  }, [pql])
+
+  const handleApplyClick = (): void => {
+    applyFilters()
   }
 
   const handleResetAllFiltersClick = (): void => {
@@ -161,12 +179,15 @@ export const FilterContainerInner = (): React.JSX.Element => {
                   style={ { width: '100%' } }
                   vertical
                 >
-                  <FiltersRenderer
-                    context={ filterContext }
-                    descriptors={ elementFilterDefinitions }
-                    section='controls'
-                    store={ draftStore }
-                  />
+                  { /* Lets a control apply on its own, e.g. Enter in the search field */ }
+                  <FilterCommitProvider onCommit={ applyFilters }>
+                    <FiltersRenderer
+                      context={ filterContext }
+                      descriptors={ elementFilterDefinitions }
+                      section='controls'
+                      store={ draftStore }
+                    />
+                  </FilterCommitProvider>
                 </Flex>
               </Form>
 
@@ -180,6 +201,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
                   <FieldFilters
                     data={ filters }
                     onChange={ onFilterChange }
+                    onCommit={ onFilterCommit }
                   />
                   ) }
             </>

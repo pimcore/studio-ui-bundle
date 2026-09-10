@@ -14,7 +14,8 @@ import {
   type FilterControlProps,
   type FilterHostAdapter,
   createFiltersStore,
-  defineFilter
+  defineFilter,
+  useFilterCommitOptional
 } from '@Pimcore/components/filters'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
@@ -83,12 +84,11 @@ const prepareFieldFilters = (filters: FieldFilter[], context: TranslationFilterC
 }
 
 const SearchTermControl: FC<FilterControlProps<string>> = ({ value, onChange }) => {
-  const appliedStore = useTranslationsAppliedFilters()
-  const draftStore = useTranslationsDraftFilters()
+  const commit = useFilterCommitOptional()
 
   const handleSearch = (searchValue: string): void => {
     onChange(searchValue)
-    appliedStore.setValues({ ...draftStore.values, searchTerm: searchValue })
+    commit?.({ searchTerm: searchValue })
   }
 
   return (

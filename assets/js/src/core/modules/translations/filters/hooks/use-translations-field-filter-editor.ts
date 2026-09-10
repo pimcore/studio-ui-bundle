@@ -14,9 +14,17 @@ import { DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic
 import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 import { type FieldFiltersProps } from '@Pimcore/components/field-filters/field-filters'
 import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column-picker.types'
-import { useTranslationsAppliedFilters, useTranslationsDraftFilters } from '@Pimcore/modules/translations/filters/filters'
+import { useTranslationsDraftFilters } from '@Pimcore/modules/translations/filters/filters'
 import { useTranslationFilterColumns } from '@Pimcore/modules/translations/filters/hooks/use-translation-filter-columns'
 import { type TranslationFilterColumn } from '@Pimcore/modules/translations/filters/types'
+
+export interface UseTranslationsFieldFilterEditorProps {
+  /**
+   * Applies the given field filters right away, i.e. what the "Apply" button does. Injected so
+   * every host expresses applying in exactly one place, next to its "Apply" handler.
+   */
+  onCommit: (fieldFilters: FieldFilter[]) => void
+}
 
 export interface UseTranslationsFieldFilterEditorReturn {
   filters: FieldFiltersProps['data']
@@ -26,10 +34,9 @@ export interface UseTranslationsFieldFilterEditorReturn {
   handleColumnClick: (column: TranslationFilterColumn) => void
 }
 
-export const useTranslationsFieldFilterEditor = (): UseTranslationsFieldFilterEditorReturn => {
+export const useTranslationsFieldFilterEditor = ({ onCommit }: UseTranslationsFieldFilterEditorProps): UseTranslationsFieldFilterEditorReturn => {
   const { getType } = useDynamicTypeResolver()
   const { values, setValue } = useTranslationsDraftFilters()
-  const appliedStore = useTranslationsAppliedFilters()
   const columns = useTranslationFilterColumns()
 
   const fieldFilters = (values.fieldFilters ?? []) as FieldFilter[]
@@ -83,7 +90,7 @@ export const useTranslationsFieldFilterEditor = (): UseTranslationsFieldFilterEd
     setFilters(data)
     const fieldFilters = toFieldFilters(data)
     setValue('fieldFilters', fieldFilters)
-    appliedStore.setValues({ ...values, fieldFilters })
+    onCommit(fieldFilters)
   }
 
   const handleColumnClick = (column: TranslationFilterColumn): void => {

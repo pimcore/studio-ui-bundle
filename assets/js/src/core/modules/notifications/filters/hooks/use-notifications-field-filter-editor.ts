@@ -18,14 +18,23 @@ import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column
 import { NOTIFICATION_FILTERABLE_FIELDS, useNotificationsDraftFilters } from '@Pimcore/modules/notifications/filters/filters'
 import { type NotificationFilterColumn } from '@Pimcore/modules/notifications/filters/types'
 
+export interface UseNotificationsFieldFilterEditorProps {
+  /**
+   * Applies the given field filters right away, i.e. what the "Apply" button does. Injected so
+   * every host expresses applying in exactly one place, next to its "Apply" handler.
+   */
+  onCommit: (fieldFilters: FieldFilter[]) => void
+}
+
 export interface UseNotificationsFieldFilterEditorReturn {
   filters: FieldFiltersProps['data']
   onFilterChange: NonNullable<FieldFiltersProps['onChange']>
+  onFilterCommit: NonNullable<FieldFiltersProps['onCommit']>
   columnGroups: Array<ColumnPickerGroup<NotificationFilterColumn>>
   handleColumnClick: (column: NotificationFilterColumn) => void
 }
 
-export const useNotificationsFieldFilterEditor = (): UseNotificationsFieldFilterEditorReturn => {
+export const useNotificationsFieldFilterEditor = ({ onCommit }: UseNotificationsFieldFilterEditorProps): UseNotificationsFieldFilterEditorReturn => {
   const { t } = useTranslation()
 
   const { getType } = useDynamicTypeResolver()
@@ -62,18 +71,27 @@ export const useNotificationsFieldFilterEditor = (): UseNotificationsFieldFilter
     setFilters(initialFilters)
   }, [initialFilters])
 
+  const toFieldFilters = (data: FieldFiltersProps['data']): FieldFilter[] => data.map((filter) => ({
+    key: filter.id,
+    filterValue: filter.data,
+    type: filter.type,
+    locale: filter.locale,
+    meta: {
+      translationKey: filter.translationKey,
+      ...filter.config ?? {}
+    }
+  }))
+
   const onFilterChange: UseNotificationsFieldFilterEditorReturn['onFilterChange'] = (data) => {
     setFilters(data)
-    setValue('fieldFilters', data.map((filter) => ({
-      key: filter.id,
-      filterValue: filter.data,
-      type: filter.type,
-      locale: filter.locale,
-      meta: {
-        translationKey: filter.translationKey,
-        ...filter.config ?? {}
-      }
-    })))
+    setValue('fieldFilters', toFieldFilters(data))
+  }
+
+  const onFilterCommit: UseNotificationsFieldFilterEditorReturn['onFilterCommit'] = (data) => {
+    setFilters(data)
+    const fieldFilters = toFieldFilters(data)
+    setValue('fieldFilters', fieldFilters)
+    onCommit(fieldFilters)
   }
 
   const handleColumnClick = (column: NotificationFilterColumn): void => {
@@ -128,5 +146,5 @@ export const useNotificationsFieldFilterEditor = (): UseNotificationsFieldFilter
     }]
   }, [availableColumns, t])
 
-  return { filters, onFilterChange, columnGroups, handleColumnClick }
+  return { filters, onFilterChange, onFilterCommit, columnGroups, handleColumnClick }
 }
