@@ -31,6 +31,7 @@ import { Content } from '@Pimcore/components/content/content'
 import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
 import { useGeneralFiltersConfig } from '../../../../../context-layer/provider/general-filters-config/use-general-filters-config'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
+import { useSearchMode } from '../../../../../search-modes/use-search-mode'
 import { useAppliedFilters, useDraftFilterValues, useDraftFilters, useElementFilterContext, elementFilterDefinitions } from '../../../../../element-filters'
 
 export const FilterContainerInner = (): React.JSX.Element => {
@@ -41,7 +42,8 @@ export const FilterContainerInner = (): React.JSX.Element => {
   const { handleSearchTermInSidebar, showOnlyUnreferencedFilter } = useGeneralFiltersConfig()
   const { setDataLoadingState } = useData()
 
-  const { searchTerm, searchMode, directChildren, unreferenced, pql, fieldFilters, reset } = useDraftFilterValues()
+  const { searchTerm, searchMode: draftSearchMode, directChildren, unreferenced, pql, fieldFilters, reset } = useDraftFilterValues()
+  const searchMode = useSearchMode('draft')
   const draftStore = useDraftFilters()
   const filterContext = useElementFilterContext()
 
@@ -65,7 +67,11 @@ export const FilterContainerInner = (): React.JSX.Element => {
 
     if (handleSearchTermInSidebar) {
       valuesToApply.searchTerm = searchTerm
-      valuesToApply.searchMode = searchMode
+      // activeModeId, not the raw draft value: a stored id that no visible mode matches - a saved
+      // search from a mode that has since been hidden or removed - collapses to full text, which
+      // is what the query and the dropdown already fall back to. Publishing it here keeps the
+      // applied store from carrying an id nothing can honour, for Apply and for Enter alike.
+      valuesToApply.searchMode = searchMode?.activeModeId ?? draftSearchMode
     }
 
     setAppliedValues({ ...valuesToApply, ...committed })
