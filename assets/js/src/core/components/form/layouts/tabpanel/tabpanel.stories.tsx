@@ -29,10 +29,12 @@ const meta: Meta<typeof FormKitTabpanel> = {
     docs: {
       description: {
         component: 'Use Tabpanel components to organize FormKit fields into tabbed sections. Supports collapsible behavior and different themes. ' +
-          'Each tab spaces its own children with `ItemSpacer` (8px), the same as `FormKit.Panel`, so fields can be ' +
-          'placed straight into a tab without becoming flush — FormKit sets antd\'s `itemMarginBottom` to 0, so the ' +
-          'gap has to come from a spacer. Wrapping a tab in a `Panel` is still fine: a single child has no siblings ' +
-          'to be spaced from, so nothing doubles up.'
+          '`FormKit.TabPanel` spaces each tab\'s children with `ItemSpacer` (8px), the same as `FormKit.Panel`, so ' +
+          'fields can be placed straight into a tab without becoming flush — FormKit sets antd\'s ' +
+          '`itemMarginBottom` to 0, so the gap has to come from a spacer. The shared `Tabpanel` component is ' +
+          'deliberately left unspaced: it is used outside FormKit too, where antd\'s own item margin still ' +
+          'applies. Wrapping a tab in a `Panel` is still fine either way — a single child has no siblings to be ' +
+          'spaced from, so nothing doubles up.'
       }
     }
   },
@@ -614,8 +616,9 @@ export const AllFormTabpanelThemes: Story = {
   }
 }
 
-// Fields placed straight into a tab, with no Panel of their own. The tab's own ItemSpacer keeps
-// them 8px apart; before it existed they rendered flush, because FormKit zeroes itemMarginBottom.
+// Fields placed straight into a tab, with no Panel of their own. FormKit.TabPanel's ItemSpacer
+// keeps them 8px apart; with the bare shared Tabpanel they render flush, because FormKit zeroes
+// itemMarginBottom.
 export const FieldsWithoutPanel: Story = {
   render: () => {
     const [form] = Form.useForm()
