@@ -10,24 +10,35 @@
 
 import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
-export const useStyles = createStyles(({ token, css }) => {
-  // the tint bleeds past the item's box by the shadow width, so the label is inside it too
-  const tint = (color: string): ReturnType<typeof css> => css`
-    background: ${color};
-    box-shadow: 0 0 0 ${token.paddingXXS}px ${color};
-  `
+export const useStyles = createStyles(({ token, css }) => ({
+  // the label chrome is the host's; the tag only claims the space right after it, sized to
+  // sit on the label's own baseline whether the host lays the label out inline or as flex
+  tag: css`
+    display: inline-flex;
+    align-items: center;
+    height: ${token.controlHeightXS}px;
+    margin-inline: ${token.marginXXS}px 0;
+    padding-inline: ${token.paddingXXS}px;
+    border-radius: ${token.borderRadiusSM}px;
+    font-size: ${token.fontSizeSM}px;
+    line-height: 1;
+  `,
+  // a tag with no label sits in the extra slot, which AntD stacks under the control. A compact
+  // control leaves room on its own row, so turn that column into a row and keep it there.
+  tagOnControlRow: css`
+    .ant-form-item-control:has(.ant-switch, .ant-checkbox, .ant-radio) {
+      flex-direction: row;
+      align-items: center;
+      gap: ${token.marginXXS}px;
 
-  return {
-    annotated: css`
-      border-radius: ${token.borderRadiusSM}px;
+      > .ant-form-item-control-input,
+      > .ant-form-item-additional {
+        flex: 0 0 auto;
+      }
 
       .ant-form-item-extra {
-        color: ${token.colorTextSecondary};
+        min-height: 0;
       }
-    `,
-    added: tint(token.colorSuccessBg),
-    changed: tint(token.colorWarningBg),
-    removed: tint(token.colorErrorBg),
-    moved: tint(token.colorFillQuaternary)
-  }
-})
+    }
+  `
+}))
