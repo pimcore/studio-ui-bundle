@@ -206,7 +206,7 @@ class-definition.general-settings.icon: Icono
 class-definition.general-settings.parent-class: Clase padre
 class-definition.general-settings.implements-interfaces: Implementa interfaces
 class-definition.general-settings.listing-parent-class: Clase padre de listado
-class-definition.general-settings.use-traits: Usar Traits
+class-definition.general-settings.use-traits: Usar traits
 class-definition.general-settings.listing-use-traits: Traits de listado
 class-definition.general-settings.link-generator-reference: Referencia del generador de enlaces
 class-definition.general-settings.preview-generator-reference: Referencia del generador de vista previa
@@ -280,7 +280,7 @@ select-option.validation.enter-id: Introduzca un ID
 select-option.validation.id-format: El nombre debe comenzar con una letra mayúscula, seguida de caracteres alfanuméricos
 select-option.general-settings.title: General
 select-option.general-settings.enum-name: Nombre de enumeración
-select-option.general-settings.use-traits: Usar Traits
+select-option.general-settings.use-traits: Usar traits
 select-option.general-settings.implements-interfaces: Implementa interfaces
 select-option.general-settings.group: Grupo
 select-option.general-settings.admin-only: Solo administrador
@@ -545,6 +545,11 @@ listing.column-picker.search: Buscar
 listing.column-picker.no-results: No se encontraron columnas
 listing.column-picker.fields-to-add: Campos para añadir
 listing.fields-to-add.collapse-simple-fields: Contraer campos simples
+listing.search-mode.full-text: Búsqueda de texto completo
+listing.search-mode.full-text-short: Texto completo
+listing.search-mode.default: Predeterminado
+listing.search-mode.smart-placeholder: Buscar en resultados similares o relacionados
+listing.search-mode.global-unavailable: La búsqueda inteligente no está disponible en este momento.
 listing.actions: Aplicar a la selección
 listing.non-selected.actions: Aplicar a todos
 listing.actions.zip-download: Descarga ZIP
@@ -682,6 +687,8 @@ edit: Editar
 modify: Modificar
 component.no-content.no-content-available: No hay contenido disponible
 notifications.label: Notificaciones
+notifications.tab.inbox: Bandeja de entrada
+notifications.tab.settings: Configuración
 notifications.settings.label: Configuración de notificaciones
 notifications.settings.description: Active "Notificarme" para todo lo que desee que aparezca en su campana de notificaciones y, después, añada canales adicionales para lo que más le importe.
 notifications.settings.description-popup-only: Elija cómo desea recibir las notificaciones. Todo aquello de lo que se le notifica siempre aparece en su campana de notificaciones.
@@ -1095,6 +1102,7 @@ asset.sidebar.web-format: Formato web
 asset.sidebar.print-format: Formato de impresión
 asset.sidebar.office-format: Formato de oficina
 jobs.notification.title: Trabajos en ejecución
+jobs.notification.tooltip: Abrir trabajos en ejecución
 jobs.notification.jobs_one: "{{count}} Acción"
 jobs.notification.jobs_other: "{{count}} Acciones"
 jobs.notification.hide-all-finished: Ocultar todos los completados
@@ -1250,8 +1258,8 @@ element.toolbar.copy-className: Clase {{className}} - Copiar
 element.unpublish: Despublicar
 element.publish: Publicar
 element.locate-in-tree: Localizar en el árbol
-element.sidebar.filter.only-direct-children: solo hijos directos
-element.sidebar.filter.only-unreferenced: solo sin referencias
+element.sidebar.filter.only-direct-children: Solo hijos directos
+element.sidebar.filter.only-unreferenced: Solo sin referencias
 element.sidebar.field-filters: Filtros de campo
 element.full-information: Información completa
 system-information.id: ID
@@ -1302,8 +1310,10 @@ relations.subtype: Subtipo
 relations.classname: Clase
 relations.fullpath: Ruta completa
 relations.remove-all.confirm: ¿Realmente desea eliminar todas las relaciones?
+relations.upload.subtype-not-allowed: Los assets subidos cuyo tipo no está permitido en esta relación no se asignaron.
 relation: relación
 items-limit-reached: Se ha alcanzado el número máximo de elementos ({{maxItems}}).
+asset-upload-type-not-allowed: El tipo del asset subido no está permitido para este campo.
 actions: Acciones
 asset: Asset
 data-object: Data Object
@@ -2518,7 +2528,7 @@ no-languages-found: No se encontraron idiomas
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (sobrescribe la ruta de la estructura del árbol)
 content-main-document: Documento Content-Main
-content-main-document.apply: Aplicar documento Content-Main
+content-main-document.apply: Aplicar documento content-main
 content-main-document.apply-warning-title: ¿Está seguro?
 content-main-document.apply-warning-message: Se perderá todo el contenido
 never: nunca
@@ -2777,6 +2787,7 @@ quantity-values.export: Exportar
 quantity-values.import: Importar
 quantity-values.import-modal.title: Importar unidades de valor de cantidad
 quantity-values.search: Buscar
+quantity-values.delete-confirmation: Eliminar esta unidad afectará a todos los elementos relacionados que hacen referencia a ella. ¿Está seguro de que desea continuar?
 owner: Propietario
 reverse-object-relation.tooltip: Los objetos no propietarios representan relaciones con otro objeto de la misma manera que los objetos. La diferencia es que un campo de objeto no propietario no es el dueño de los datos de la relación, es simplemente una vista de los datos almacenados en otros objetos. Seleccione el propietario y el nombre del campo donde se almacenan originalmente los datos.
 disabled-fields: Campos deshabilitados

@@ -26,18 +26,25 @@ export interface IDynamicFilter {
 
 export interface DynamicFilterData extends IDynamicFilter {
   setData: (data: any) => void
+  /**
+   * Only defined when the host applies filters immediately, i.e. it passed an onCommit
+   * handler. Filter components use its presence to decide whether an interaction can
+   * apply straight away; hosts that only collect draft values leave it undefined.
+   */
+  commit?: (data: any) => void
 }
 
 export type DynamicFilterContextProps = DynamicFilterData | undefined
 
 export const DynamicFilterContext = createContext<DynamicFilterContextProps>(undefined)
 
-export interface DynamicFilterProviderProps extends Omit<DynamicFilterData, 'setData'> {
+export interface DynamicFilterProviderProps extends Omit<DynamicFilterData, 'setData' | 'commit'> {
   onChange?: (data: any) => void
+  onCommit?: (data: any) => void
   children: React.ReactNode
 }
 
-export const DynamicFilterProvider = ({ children, id, type, translationKey, data, onChange, frontendType, config }: DynamicFilterProviderProps): React.JSX.Element => {
+export const DynamicFilterProvider = ({ children, id, type, translationKey, data, onChange, onCommit, frontendType, config }: DynamicFilterProviderProps): React.JSX.Element => {
   const [_data, _setData] = useState<DynamicFilterData['data']>(data)
 
   useEffect(() => {
@@ -51,9 +58,19 @@ export const DynamicFilterProvider = ({ children, id, type, translationKey, data
     }
   }
 
+  // Deliberately no onChange here: onCommit's consumer reports the change itself, so
+  // firing both would deliver the same value to the host twice.
+  const commit = onCommit === undefined ? undefined : (data: any): void => {
+    _setData(data)
+
+    onCommit(data)
+  }
+
+  const canCommit = commit !== undefined
+
   return useMemo(() => (
-    <DynamicFilterContext.Provider value={ { id, translationKey, type, data: _data, setData, frontendType, config } }>
+    <DynamicFilterContext.Provider value={ { id, translationKey, type, data: _data, setData, commit, frontendType, config } }>
       {children}
     </DynamicFilterContext.Provider>
-  ), [id, type, _data, frontendType, config, children])
+  ), [id, type, _data, frontendType, config, children, canCommit])
 }

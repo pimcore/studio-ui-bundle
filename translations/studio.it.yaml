@@ -545,6 +545,11 @@ listing.column-picker.search: Cerca
 listing.column-picker.no-results: Nessuna colonna trovata
 listing.column-picker.fields-to-add: Campi da aggiungere
 listing.fields-to-add.collapse-simple-fields: Comprimi campi semplici
+listing.search-mode.full-text: Ricerca a testo completo
+listing.search-mode.full-text-short: Testo completo
+listing.search-mode.default: Predefinito
+listing.search-mode.smart-placeholder: Cerca tra risultati simili o correlati
+listing.search-mode.global-unavailable: La ricerca smart non è al momento disponibile.
 listing.actions: Applica alla selezione
 listing.non-selected.actions: Applica a tutti
 listing.actions.zip-download: Download ZIP
@@ -682,6 +687,8 @@ edit: Modifica
 modify: Modifica
 component.no-content.no-content-available: Nessun contenuto disponibile
 notifications.label: Notifiche
+notifications.tab.inbox: Posta in arrivo
+notifications.tab.settings: Impostazioni
 notifications.settings.label: Impostazioni notifiche
 notifications.settings.description: Attiva "Notificami" per tutto ciò che desideri visualizzare nella campana delle notifiche, quindi aggiungi canali aggiuntivi per gli elementi più importanti.
 notifications.settings.description-popup-only: Scegli come ricevere le notifiche. Tutto ciò di cui vieni notificato viene sempre visualizzato nella campana delle notifiche.
@@ -1095,6 +1102,7 @@ asset.sidebar.web-format: Formato web
 asset.sidebar.print-format: Formato stampa
 asset.sidebar.office-format: Formato ufficio
 jobs.notification.title: Lavori in corso
+jobs.notification.tooltip: Apri lavori in corso
 jobs.notification.jobs_one: "{{count}} Azione"
 jobs.notification.jobs_other: "{{count}} Azioni"
 jobs.notification.hide-all-finished: Nascondi tutti i completati
@@ -1250,8 +1258,8 @@ element.toolbar.copy-className: Classe {{className}} - Copia
 element.unpublish: Annulla pubblicazione
 element.publish: Pubblica
 element.locate-in-tree: Individua nell'albero
-element.sidebar.filter.only-direct-children: solo figli diretti
-element.sidebar.filter.only-unreferenced: solo non referenziati
+element.sidebar.filter.only-direct-children: Solo figli diretti
+element.sidebar.filter.only-unreferenced: Solo non referenziati
 element.sidebar.field-filters: Filtri campo
 element.full-information: Informazioni complete
 system-information.id: ID
@@ -1302,8 +1310,10 @@ relations.subtype: Sottotipo
 relations.classname: Classe
 relations.fullpath: Percorso completo
 relations.remove-all.confirm: Eliminare tutte le relazioni?
+relations.upload.subtype-not-allowed: Gli asset caricati il cui tipo non è consentito da questa relazione non sono stati assegnati.
 relation: relazione
 items-limit-reached: Il numero massimo di elementi ({{maxItems}}) è stato raggiunto.
+asset-upload-type-not-allowed: Il tipo dell'asset caricato non è consentito per questo campo.
 actions: Azioni
 asset: Asset
 data-object: Data Object
@@ -2777,6 +2787,7 @@ quantity-values.export: Esporta
 quantity-values.import: Importa
 quantity-values.import-modal.title: Importa unità valori quantitativi
 quantity-values.search: Cerca
+quantity-values.delete-confirmation: L'eliminazione di questa unità influirà su tutti gli elementi correlati che vi fanno riferimento. Continuare?
 owner: Proprietario
 reverse-object-relation.tooltip: Gli oggetti non proprietari rappresentano le relazioni verso un altro oggetto nello stesso modo degli oggetti. La differenza è che un campo oggetto non proprietario non è il proprietario dei dati della relazione, è semplicemente una vista sui dati memorizzati in altri oggetti. Scegliere il proprietario e il nome del campo in cui i dati sono originariamente memorizzati.
 disabled-fields: Campi disabilitati

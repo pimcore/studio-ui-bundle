@@ -14,16 +14,17 @@ import { useTranslation } from 'react-i18next'
 import { Badge } from '@Pimcore/components/badge/badge'
 import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/context-menu-config'
 import { type ContextMenuItemProvider } from '@Pimcore/modules/app/context-menu-registry/context-menu-registry'
 import { useModalHolder } from '@Pimcore/modules/app/modal-holder/use-modal-holder'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
-import { NOTIFICATIONS, NOTIFICATION_SETTINGS } from './widget-configs'
+import { NOTIFICATIONS } from './widget-configs'
 import { useNotificationGetUnreadCountQuery } from './notifications-slice.gen'
 import { SendNotificationModal } from './send-notification/send-notification-modal'
+import { requestNotificationsSection } from './notifications-ui-slice'
+import { useAppDispatch } from '@Pimcore/app/store'
 
 const SEND_MODAL_ID = 'user-menu-send-notification'
 
@@ -35,6 +36,7 @@ export const notificationsUserMenuItemProvider: ContextMenuItemProvider = {
     const { token } = theme.useToken()
     const { openMainWidget } = useWidgetManager()
     const { addModal, removeModal } = useModalHolder()
+    const dispatch = useAppDispatch()
     const allowed = isAllowed(UserPermission.Notifications)
     const { data } = useNotificationGetUnreadCountQuery(undefined, { skip: !allowed })
 
@@ -69,8 +71,12 @@ export const notificationsUserMenuItemProvider: ContextMenuItemProvider = {
           } }
         />
       ),
-      onClick: () => { openMainWidget(NOTIFICATIONS) },
-      // Both open something other than the bell, so each stops the row's onClick.
+      onClick: () => {
+        openMainWidget(NOTIFICATIONS)
+        dispatch(requestNotificationsSection('inbox'))
+      },
+      // Opens a modal rather than the bell, so it stops the row's onClick. Notification settings
+      // are reached through the widget's own Settings section, not from here.
       extra: (
         <Flex
           align={ 'center' }
@@ -92,15 +98,6 @@ export const notificationsUserMenuItemProvider: ContextMenuItemProvider = {
               size={ 'small' }
             >{t('user-menu.notification.send')}</Button>
           )}
-          <IconButton
-            icon={ { value: 'settings' } }
-            onClick={ (e) => {
-              e.stopPropagation()
-              openMainWidget(NOTIFICATION_SETTINGS)
-            } }
-            title={ t('notifications.settings.label') }
-            type={ 'text' }
-          />
         </Flex>
       )
     }

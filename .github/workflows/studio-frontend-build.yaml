@@ -2,17 +2,22 @@ name: "Studio Frontend Build"
 
 on:
   push:
+    branches:
+      - "[0-9]+.[0-9]+"
+      - "[0-9]+.x"
     paths:
       - "assets/**"
+      - "build-dist/**"
   pull_request:
     paths:
       - "assets/**"
   workflow_dispatch:
 
-# Builds cancel superseded runs per branch; the reusable workflow serializes its
-# own write (commit) jobs.
+# PR runs and push runs are grouped separately; superseded runs are cancelled —
+# the newest run always builds the branch tip, so no committed output is lost.
+# build-dist/** on push (not pull_request) catches stale build output after merges.
 concurrency:
-  group: studio-frontend-build-${{ github.head_ref || github.ref_name }}
+  group: studio-frontend-build-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 permissions:

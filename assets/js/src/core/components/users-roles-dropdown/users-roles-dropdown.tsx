@@ -43,9 +43,28 @@ export interface IUsersRolesDropdownProps {
   placement?: 'top' | 'bottom'
   renderAsPopup?: boolean
   onClose?: () => void
+  /**
+   * Whether the signed-in user is offered as a selectable option.
+   *
+   * Defaults to false, because the original use case is sharing an entity with
+   * *other* people, where offering yourself is meaningless. Set it to true where the
+   * list is an access-control list rather than a share list: there, adding yourself
+   * is usually the very first thing someone wants to do.
+   */
+  includeCurrentUser?: boolean
 }
 
-export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, initialSharedRoles, onChange, placement = 'bottom', renderAsPopup = false, onClose }: IUsersRolesDropdownProps): React.JSX.Element => {
+export const UsersRolesDropdown = ({
+  userList,
+  initialSharedUsers,
+  roleList,
+  initialSharedRoles,
+  onChange,
+  placement = 'bottom',
+  renderAsPopup = false,
+  onClose,
+  includeCurrentUser = false
+}: IUsersRolesDropdownProps): React.JSX.Element => {
   const userData = useUser()
 
   const [sharedUsers, setSharedUsers] = useState<number[]>(initialSharedUsers ?? [])
@@ -76,8 +95,8 @@ export const UsersRolesDropdown = ({ userList, initialSharedUsers, roleList, ini
   }, [renderAsPopup, onClose])
 
   const userItems = useMemo(
-    () => userList?.items?.filter(item => item.id !== userData?.id) ?? [],
-    [userList, userData?.id]
+    () => userList?.items?.filter(item => includeCurrentUser || item.id !== userData?.id) ?? [],
+    [userList, userData?.id, includeCurrentUser]
   )
   const roleItems = useMemo(() => roleList?.items ?? [], [roleList])
 

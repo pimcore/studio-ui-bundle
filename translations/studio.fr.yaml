@@ -545,6 +545,11 @@ listing.column-picker.search: Rechercher
 listing.column-picker.no-results: Aucune colonne trouvée
 listing.column-picker.fields-to-add: Champs à ajouter
 listing.fields-to-add.collapse-simple-fields: Réduire les champs simples
+listing.search-mode.full-text: Recherche en texte intégral
+listing.search-mode.full-text-short: Texte intégral
+listing.search-mode.default: Par défaut
+listing.search-mode.smart-placeholder: Rechercher dans les résultats similaires ou associés
+listing.search-mode.global-unavailable: La recherche intelligente est momentanément indisponible.
 listing.actions: Appliquer à la sélection
 listing.non-selected.actions: Appliquer à tous
 listing.actions.zip-download: Téléchargement ZIP
@@ -682,6 +687,8 @@ edit: Modifier
 modify: Modifier
 component.no-content.no-content-available: Aucun contenu disponible
 notifications.label: Notifications
+notifications.tab.inbox: Boîte de réception
+notifications.tab.settings: Paramètres
 notifications.settings.label: Paramètres de notification
 notifications.settings.description: Activez « Me notifier » pour tout ce que vous souhaitez voir apparaître dans votre cloche de notification, puis ajoutez des canaux supplémentaires pour les éléments qui comptent le plus.
 notifications.settings.description-popup-only: Choisissez comment les notifications vous parviennent. Tout ce dont vous êtes notifié apparaît toujours dans votre cloche de notification.
@@ -1095,6 +1102,7 @@ asset.sidebar.web-format: Format web
 asset.sidebar.print-format: Format impression
 asset.sidebar.office-format: Format bureautique
 jobs.notification.title: Tâches en cours
+jobs.notification.tooltip: Ouvrir les tâches en cours
 jobs.notification.jobs_one: "{{count}} action"
 jobs.notification.jobs_other: "{{count}} actions"
 jobs.notification.hide-all-finished: Masquer tous les terminés
@@ -1250,8 +1258,8 @@ element.toolbar.copy-className: Classe {{className}} - Copier
 element.unpublish: Dépublier
 element.publish: Publier
 element.locate-in-tree: Localiser dans l'arborescence
-element.sidebar.filter.only-direct-children: uniquement les enfants directs
-element.sidebar.filter.only-unreferenced: uniquement les non référencés
+element.sidebar.filter.only-direct-children: Uniquement les enfants directs
+element.sidebar.filter.only-unreferenced: Uniquement les non référencés
 element.sidebar.field-filters: Filtres de champs
 element.full-information: Informations complètes
 system-information.id: ID
@@ -1302,8 +1310,10 @@ relations.subtype: Sous-type
 relations.classname: Classe
 relations.fullpath: Chemin complet
 relations.remove-all.confirm: Voulez-vous vraiment supprimer toutes les relations ?
+relations.upload.subtype-not-allowed: Les assets téléversés dont le type n'est pas autorisé par cette relation n'ont pas été affectés.
 relation: relation
 items-limit-reached: Le nombre maximum d'éléments ({{maxItems}}) a été atteint.
+asset-upload-type-not-allowed: Le type de l'asset téléversé n'est pas autorisé pour ce champ.
 actions: Actions
 asset: Asset
 data-object: Data Object
@@ -2777,6 +2787,7 @@ quantity-values.export: Exporter
 quantity-values.import: Importer
 quantity-values.import-modal.title: Importer des unités de valeur de quantité
 quantity-values.search: Rechercher
+quantity-values.delete-confirmation: La suppression de cette unité affectera tous les éléments associés qui y font référence. Voulez-vous vraiment continuer?
 owner: Propriétaire
 reverse-object-relation.tooltip: "Les objets non propriétaires représentent des relations vers un autre objet de la même manière que les objets. La différence est qu'un champ d'objet non propriétaire n'est pas le propriétaire des données de relation, il s'agit simplement d'une vue sur les données stockées dans d'autres objets. Veuillez choisir le propriétaire et le nom du champ où les données sont stockées à l'origine."
 disabled-fields: Champs désactivés

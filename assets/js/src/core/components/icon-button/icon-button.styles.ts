@@ -51,8 +51,8 @@ export const useStyles = createStyles(({ token, css }) => {
         }
 
         &:focus-visible {
-          outline: none !important;
-          outline-offset: 0 !important;
+          outline: 2px solid var(--pimcore-brand-color, #722ed1) !important;
+          outline-offset: 2px !important;
         }
       }
     `
