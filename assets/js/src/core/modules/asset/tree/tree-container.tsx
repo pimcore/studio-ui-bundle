@@ -27,6 +27,7 @@ import { componentConfig } from '@Pimcore/modules/app/component-registry/compone
 import { useAppDispatch } from '@sdk/app'
 import { withDndUpload } from './node/with-dnd-upload'
 import { withContextMenu } from './node/with-context-menu'
+import { useTranslation } from 'react-i18next'
 
 export interface TreeContainerProps {
   id: number
@@ -36,6 +37,7 @@ export interface TreeContainerProps {
 export const AssetTreeNode = withDroppableStyling(withDroppable((withDndUpload(withActionStates(withDraggable(withContextMenu(TreeNodeComponent)))))))
 
 const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const { rootNode, isLoading } = useElementTreeRootNode(id, showRoot)
   const componentRegistry = useComponentRegistry()
   const dispatch = useAppDispatch()
@@ -63,6 +65,7 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
 
   return (
     <ElementTree
+      ariaLabel={ t('asset.asset-tree.title') }
       contextMenu={ contextMenu as React.ElementType<TreeContextMenuProps> | undefined }
       nodeId={ id }
       onSelect={ onSelect }

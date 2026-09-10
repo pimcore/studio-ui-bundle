@@ -215,6 +215,9 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   const nodeContent = (
     <Flex
       align="center"
+      aria-expanded={ props.hasChildren === true ? isExpanded : undefined }
+      aria-level={ Math.max(1, level + 1) }
+      aria-selected={ isSelected }
       className={ cn('tree-node__content-inner') }
       gap="small"
       justify="center"
@@ -222,7 +225,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
       onContextMenu={ onContextMenu }
       onKeyDown={ onKeyDown }
       ref={ setRef }
-      role='button'
+      role='treeitem'
       tabIndex={ -1 }
     >
       <Flex
