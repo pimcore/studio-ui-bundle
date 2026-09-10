@@ -545,6 +545,11 @@ listing.column-picker.search: Suchen
 listing.column-picker.no-results: Keine Spalten gefunden
 listing.column-picker.fields-to-add: Hinzuzufügende Felder
 listing.fields-to-add.collapse-simple-fields: Einfache Felder einklappen
+listing.search-mode.full-text: Volltextsuche
+listing.search-mode.full-text-short: Volltext
+listing.search-mode.default: Standard
+listing.search-mode.smart-placeholder: In ähnlichen oder verwandten Ergebnissen suchen
+listing.search-mode.global-unavailable: Die Smart-Suche ist derzeit nicht verfügbar.
 listing.actions: Auf Auswahl anwenden
 listing.non-selected.actions: Auf alle anwenden
 listing.actions.zip-download: ZIP-Download
@@ -682,6 +687,8 @@ edit: Bearbeiten
 modify: Ändern
 component.no-content.no-content-available: Kein Inhalt verfügbar
 notifications.label: Benachrichtigungen
+notifications.tab.inbox: Posteingang
+notifications.tab.settings: Einstellungen
 notifications.settings.label: Benachrichtigungseinstellungen
 notifications.settings.description: Aktivieren Sie „Benachrichtigen“ für alles, was in Ihrer Benachrichtigungsglocke erscheinen soll, und fügen Sie für die wichtigsten Themen zusätzliche Kanäle hinzu.
 notifications.settings.description-popup-only: Wählen Sie, wie Sie Benachrichtigungen erhalten. Alles, worüber Sie benachrichtigt werden, erscheint immer in Ihrer Benachrichtigungsglocke.
@@ -1095,6 +1102,7 @@ asset.sidebar.web-format: Web-Format
 asset.sidebar.print-format: Druck-Format
 asset.sidebar.office-format: Office-Format
 jobs.notification.title: Laufende Aufträge
+jobs.notification.tooltip: Laufende Aufträge öffnen
 jobs.notification.jobs_one: "{{count}} Aktion"
 jobs.notification.jobs_other: "{{count}} Aktionen"
 jobs.notification.hide-all-finished: Alle abgeschlossenen ausblenden

@@ -545,6 +545,11 @@ listing.column-picker.search: Søk
 listing.column-picker.no-results: Ingen kolonner funnet
 listing.column-picker.fields-to-add: Felter å legge til
 listing.fields-to-add.collapse-simple-fields: Skjul enkle felt
+listing.search-mode.full-text: Fritekstsøk
+listing.search-mode.full-text-short: Fritekst
+listing.search-mode.default: Standard
+listing.search-mode.smart-placeholder: Søk i lignende eller relaterte resultater
+listing.search-mode.global-unavailable: Smart søk er for øyeblikket ikke tilgjengelig.
 listing.actions: Bruk på utvalg
 listing.non-selected.actions: Bruk på alle
 listing.actions.zip-download: ZIP-nedlasting
@@ -682,6 +687,8 @@ edit: Rediger
 modify: Endre
 component.no-content.no-content-available: Ingen innhold tilgjengelig
 notifications.label: Varsler
+notifications.tab.inbox: Innboks
+notifications.tab.settings: Innstillinger
 notifications.settings.label: Varselinnstillinger
 notifications.settings.description: Slå på "Varsle meg" for alt du vil ha i varselklokken din, og legg deretter til flere kanaler for det som betyr mest.
 notifications.settings.description-popup-only: Velg hvordan varsler skal nå deg. Alt du varsles om, vises alltid i varselklokken din.
@@ -1095,6 +1102,7 @@ asset.sidebar.web-format: Webformat
 asset.sidebar.print-format: Utskriftsformat
 asset.sidebar.office-format: Kontorformat
 jobs.notification.title: Kjørende jobber
+jobs.notification.tooltip: Åpne kjørende jobber
 jobs.notification.jobs_one: "{{count}} handling"
 jobs.notification.jobs_other: "{{count}} handlinger"
 jobs.notification.hide-all-finished: Skjul alle fullførte

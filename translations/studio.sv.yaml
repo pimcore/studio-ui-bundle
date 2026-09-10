@@ -545,6 +545,11 @@ listing.column-picker.search: Sök
 listing.column-picker.no-results: Inga kolumner hittades
 listing.column-picker.fields-to-add: Fält att lägga till
 listing.fields-to-add.collapse-simple-fields: Fäll ihop enkla fält
+listing.search-mode.full-text: Fritextsökning
+listing.search-mode.full-text-short: Fritext
+listing.search-mode.default: Standard
+listing.search-mode.smart-placeholder: Sök bland liknande eller relaterade resultat
+listing.search-mode.global-unavailable: Smart sökning är för närvarande inte tillgänglig.
 listing.actions: Tillämpa på val
 listing.non-selected.actions: Tillämpa på alla
 listing.actions.zip-download: ZIP-nedladdning
@@ -682,6 +687,8 @@ edit: Redigera
 modify: Ändra
 component.no-content.no-content-available: Inget innehåll tillgängligt
 notifications.label: Aviseringar
+notifications.tab.inbox: Inkorg
+notifications.tab.settings: Inställningar
 notifications.settings.label: Aviseringsinställningar
 notifications.settings.description: Aktivera "Meddela mig" för allt du vill ha i din aviseringsklocka, och lägg sedan till fler kanaler för det som betyder mest.
 notifications.settings.description-popup-only: Välj hur aviseringar ska nå dig. Allt du meddelas om visas alltid i din aviseringsklocka.
@@ -1095,6 +1102,7 @@ asset.sidebar.web-format: Webbformat
 asset.sidebar.print-format: Utskriftsformat
 asset.sidebar.office-format: Kontorsformat
 jobs.notification.title: Pågående jobb
+jobs.notification.tooltip: Öppna pågående jobb
 jobs.notification.jobs_one: "{{count}} åtgärd"
 jobs.notification.jobs_other: "{{count}} åtgärder"
 jobs.notification.hide-all-finished: Dölj alla avslutade

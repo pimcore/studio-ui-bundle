@@ -545,6 +545,11 @@ listing.column-picker.search: Cerca
 listing.column-picker.no-results: Nessuna colonna trovata
 listing.column-picker.fields-to-add: Campi da aggiungere
 listing.fields-to-add.collapse-simple-fields: Comprimi campi semplici
+listing.search-mode.full-text: Ricerca a testo completo
+listing.search-mode.full-text-short: Testo completo
+listing.search-mode.default: Predefinito
+listing.search-mode.smart-placeholder: Cerca tra risultati simili o correlati
+listing.search-mode.global-unavailable: La ricerca smart non è al momento disponibile.
 listing.actions: Applica alla selezione
 listing.non-selected.actions: Applica a tutti
 listing.actions.zip-download: Download ZIP
@@ -682,6 +687,8 @@ edit: Modifica
 modify: Modifica
 component.no-content.no-content-available: Nessun contenuto disponibile
 notifications.label: Notifiche
+notifications.tab.inbox: Posta in arrivo
+notifications.tab.settings: Impostazioni
 notifications.settings.label: Impostazioni notifiche
 notifications.settings.description: Attiva "Notificami" per tutto ciò che desideri visualizzare nella campana delle notifiche, quindi aggiungi canali aggiuntivi per gli elementi più importanti.
 notifications.settings.description-popup-only: Scegli come ricevere le notifiche. Tutto ciò di cui vieni notificato viene sempre visualizzato nella campana delle notifiche.
@@ -1095,6 +1102,7 @@ asset.sidebar.web-format: Formato web
 asset.sidebar.print-format: Formato stampa
 asset.sidebar.office-format: Formato ufficio
 jobs.notification.title: Lavori in corso
+jobs.notification.tooltip: Apri lavori in corso
 jobs.notification.jobs_one: "{{count}} Azione"
 jobs.notification.jobs_other: "{{count}} Azioni"
 jobs.notification.hide-all-finished: Nascondi tutti i completati

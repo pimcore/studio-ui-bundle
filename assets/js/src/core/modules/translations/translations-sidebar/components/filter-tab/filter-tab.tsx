@@ -31,7 +31,7 @@ export const FilterTab = (): React.JSX.Element => {
   const draftStore = useTranslationsDraftFilters()
   const appliedStore = useTranslationsAppliedFilters()
   const filterContext = useTranslationsFilterContext()
-  const { filters, onFilterChange, columnGroups, handleColumnClick } = useTranslationsFieldFilterEditor()
+  const { filters, onFilterChange, onFilterCommit, columnGroups, handleColumnClick } = useTranslationsFieldFilterEditor()
 
   const handleApplyFilters = (): void => { appliedStore.setValues(draftStore.values) }
 
@@ -101,6 +101,7 @@ export const FilterTab = (): React.JSX.Element => {
             <FieldFilters
               data={ filters }
               onChange={ onFilterChange }
+              onCommit={ onFilterCommit }
             />
             ) }
       </Content>

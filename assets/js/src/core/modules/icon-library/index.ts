@@ -224,6 +224,7 @@ import folder from '@Pimcore/assets/icons/folder.inline.svg?react'
 import footprint from '@Pimcore/assets/icons/footprint.inline.svg?react'
 import forkKnife from '@Pimcore/assets/icons/fork-knife.inline.svg?react'
 import formatters from '@Pimcore/assets/icons/formatters.inline.svg?react'
+import fullTextSearch from '@Pimcore/assets/icons/full-text-search.inline.svg?react'
 import gdprExtractor from '@Pimcore/assets/icons/gdpr-extractor.inline.svg?react'
 import gender from '@Pimcore/assets/icons/gender.inline.svg?react'
 import genealogy from '@Pimcore/assets/icons/genealogy.inline.svg?react'
@@ -437,6 +438,8 @@ import shield from '@Pimcore/assets/icons/shield.inline.svg?react'
 import showDetails from '@Pimcore/assets/icons/show-details.inline.svg?react'
 import simpleRestService from '@Pimcore/assets/icons/simple-rest-service.inline.svg?react'
 import slider from '@Pimcore/assets/icons/slider.inline.svg?react'
+import smartSearchText from '@Pimcore/assets/icons/smart-search-text.inline.svg?react'
+import smartSearchVisual from '@Pimcore/assets/icons/smart-search-visual.inline.svg?react'
 import snack from '@Pimcore/assets/icons/snack.inline.svg?react'
 import snippet from '@Pimcore/assets/icons/snippet.inline.svg?react'
 import spinner from '@Pimcore/assets/icons/spinner.inline.svg?react'
@@ -1356,6 +1359,10 @@ moduleSystem.registerModule({
       component: formatters
     })
     iconLibrary.register({
+      name: 'full-text-search',
+      component: fullTextSearch
+    })
+    iconLibrary.register({
       name: 'gdpr-extractor',
       component: gdprExtractor
     })
@@ -2206,6 +2213,14 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'slider',
       component: slider
+    })
+    iconLibrary.register({
+      name: 'smart-search-text',
+      component: smartSearchText
+    })
+    iconLibrary.register({
+      name: 'smart-search-visual',
+      component: smartSearchVisual
     })
     iconLibrary.register({
       name: 'snack',

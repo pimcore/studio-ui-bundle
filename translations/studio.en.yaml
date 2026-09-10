@@ -545,6 +545,11 @@ listing.column-picker.search: Search
 listing.column-picker.no-results: No columns found
 listing.column-picker.fields-to-add: Fields to add
 listing.fields-to-add.collapse-simple-fields: Collapse simple fields
+listing.search-mode.full-text: Full text search
+listing.search-mode.full-text-short: Full text
+listing.search-mode.default: Default
+listing.search-mode.smart-placeholder: Search within similar or related results
+listing.search-mode.global-unavailable: Smart search is currently unavailable.
 listing.actions: Apply to selection
 listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download
@@ -682,6 +687,8 @@ edit: Edit
 modify: Modify
 component.no-content.no-content-available: No content available
 notifications.label: Notifications
+notifications.tab.inbox: Inbox
+notifications.tab.settings: Settings
 notifications.settings.label: Notification settings
 notifications.settings.description: Turn on Notify me for anything you want in your notification bell, then add extra channels on top for the ones that matter most.
 notifications.settings.description-popup-only: Choose how notifications reach you. Anything you are notified about always shows in your notification bell.
@@ -1095,6 +1102,7 @@ asset.sidebar.web-format: Web Format
 asset.sidebar.print-format: Print Format
 asset.sidebar.office-format: Office Format
 jobs.notification.title: Running jobs
+jobs.notification.tooltip: Open running jobs
 jobs.notification.jobs_one: "{{count}} Action"
 jobs.notification.jobs_other: "{{count}} Actions"
 jobs.notification.hide-all-finished: Hide all finished

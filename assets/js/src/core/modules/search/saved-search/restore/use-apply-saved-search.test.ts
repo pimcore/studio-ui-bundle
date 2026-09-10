@@ -53,6 +53,11 @@ jest.mock('@Pimcore/modules/search/provider/use-search', () => ({
   useSearch: () => ({ setSearchTerm: setSharedSearchTerm })
 }))
 
+// One registered search mode emitting `system.semanticSearch` column filters.
+jest.mock('@Pimcore/app/depency-injection', () => ({
+  useInjection: () => ({ getDynamicTypes: () => [{ columnFilterType: 'system.semanticSearch' }] })
+}))
+
 const buildConfiguration = (columnFilters: unknown[]): SavedSearchDetailedConfiguration =>
   ({ filter: [{ columnFilters }] } as unknown as SavedSearchDetailedConfiguration)
 
@@ -94,5 +99,28 @@ describe('useApplySavedSearch', () => {
     result.current(configuration)
 
     expect(setType).toHaveBeenCalledWith(null)
+  })
+
+  it('excludes registered search-mode filters from the restored field filters', () => {
+    const configuration = buildConfiguration([
+      { filterValue: 'red car', type: 'system.semanticSearch' },
+      { key: 'name', filterValue: 'E-Type', type: 'system.string' }
+    ])
+
+    const { result } = renderHook(() => useApplySavedSearch())
+    result.current(configuration)
+
+    expect(setAppliedFilters).toHaveBeenCalledWith(expect.objectContaining({
+      fieldFilters: [expect.objectContaining({ key: 'name', filterValue: 'E-Type' })]
+    }))
+  })
+
+  it('resets the search mode to full text, so a mode left over from before the restore does not re-emit the restored term', () => {
+    const configuration = buildConfiguration([])
+
+    const { result } = renderHook(() => useApplySavedSearch())
+    result.current(configuration)
+
+    expect(setAppliedFilters).toHaveBeenCalledWith(expect.objectContaining({ searchMode: 'fulltext' }))
   })
 })
