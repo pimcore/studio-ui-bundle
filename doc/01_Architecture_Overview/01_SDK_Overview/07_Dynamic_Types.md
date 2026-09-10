@@ -58,28 +58,8 @@ mapping each data or asset metadata type to a suitable filter UI component.
 - [Field-filters](https://github.com/pimcore/studio-ui-bundle/tree/2026.x/assets/js/src/core/modules/element/dynamic-types/definitions/field-filters)
 
 ### Search Modes
-A search mode changes what the listing search input sends: the built-in full-text mode emits
-the `system.fulltext` column filter, a registered mode replaces it with its own (for example a
-semantic search). Core ships no modes; the dropdown appears once a registered mode is visible and
-available on a listing that opts in with `elementType` in its general-filters decorator config.
-
-A mode declares its `columnFilterType`, labels, icon, `isVisible()` (permissions, settings) and
-`getAvailability(context)` (per surface, with an optional menu hint and a coverage line under the
-input). Modes never block a search. The optional `getGlobalSearch()` serves the Quick Search
-All tab through a hook-based adapter.
-
-```typescript
-import { container, type AbstractModule } from '@pimcore/studio-ui-bundle'
-import { serviceIds } from '@pimcore/studio-ui-bundle/app'
-import { type SearchModeAbstract, type SearchModeRegistry } from '@pimcore/studio-ui-bundle/modules/element'
-
-export const SoundsLikeModule: AbstractModule = {
-  onInit: () => {
-    const registry = container.get<SearchModeRegistry>(serviceIds['Element/Listing/SearchModeRegistry'])
-    registry.registerDynamicType(container.get<SearchModeAbstract>('MyBundle/SearchModes/SoundsLike'))
-  }
-}
-```
+Search modes define what the listing search input sends to the backend. The built-in full-text
+search is the default; registered modes replace it with their own column filter, for example a semantic search.
 
 #### Source
 
