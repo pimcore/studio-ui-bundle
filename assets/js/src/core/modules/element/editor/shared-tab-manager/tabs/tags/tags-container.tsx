@@ -44,6 +44,7 @@ export const TagsTabContainer = (): React.JSX.Element => {
   const tagsAction = (): React.JSX.Element => data?.totalItems === 0
     ? (
       <Button
+        disabled={ element?.hasChildren !== true }
         onClick={ removeAndApplyTagsToChildren }
       >
         {t('tags.remove-and-apply-tags-to-children')}
