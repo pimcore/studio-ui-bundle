@@ -343,3 +343,26 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/dynamic-type-object-layout-registry'
 
 export type { AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
+
+/**
+ * Apply a stored saved-search configuration to the listing the caller is mounted in — the same
+ * path Studio takes when a user opens a saved search. Exported so a bundle can mount a listing
+ * and drive it from a configuration it holds rather than reimplementing the restore, which has
+ * to know which column filters belong to their own providers and which are user field filters.
+ */
+export * from '@Pimcore/modules/search/saved-search/restore/use-apply-saved-search'
+// applying one needs the live column set: a saved column layout is dropped when it is applied
+// before the listing's available columns have loaded
+export * from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
+/**
+ * The search listings themselves, and the provider that carries a saved search into one. A
+ * bundle that has a configuration to show mounts the listing and puts the configuration in
+ * `pendingRestore`; the listing's own restore applies it, so nothing outside Studio has to know
+ * which column filters belong to which provider.
+ */
+export * from '@Pimcore/modules/search/provider/search-provider'
+export * from '@Pimcore/modules/search/provider/use-search'
+export * from '@Pimcore/modules/search/modal/tabs/object/listing/object-search-listing'
+export * from '@Pimcore/modules/search/modal/tabs/asset/listing/asset-search-listing'
+export * from '@Pimcore/modules/search/modal/tabs/document/listing/document-search-listing'
+export type { SavedSearchDetailedConfiguration, GridFilter } from '@Pimcore/modules/search/search-api-slice.gen'
