@@ -19,7 +19,7 @@ import { Editor } from '@pimcore/studio-ui-bundle/modules/field-definitions'
 />
 ```
 
-The editor's parts — `EditorView`, `ItemsSidebar`, `ItemsTabs`, `ItemDetail`, `DetailSidebar`, `DetailContent`, `LayoutForm`, `GeneralSettingsForm` — are exported from the same module, so a bundle can pass its own composition as `view`.
+`view` replaces the editor's own body, and `ItemDetail` is exported from the same module, so a bundle can mount the detail pane alone.
 
 ## Review mode
 
