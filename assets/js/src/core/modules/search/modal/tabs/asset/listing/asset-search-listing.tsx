@@ -20,6 +20,7 @@ import { SortingDecorator } from '@Pimcore/modules/element/listing/decorators/so
 import { useAssetGetSearchQuery } from '@Pimcore/modules/search/search-api-slice.gen'
 import { compose } from '@Pimcore/utils/compose'
 import React from 'react'
+import { type SearchListingProps, withExtraSidebarEntries } from '@Pimcore/modules/search/modal/tabs/search-listing-props'
 import { StaticColumnConfigurationDecorator } from './decorator/static-column-configuration/static-column-configuration-decorator'
 import { SavedSearchDecorator, type SavedSearchDecoratorConfig } from '@Pimcore/modules/search/saved-search/saved-search-decorator'
 import { DefaultView } from './view/view-layer/views/default-view'
@@ -36,7 +37,7 @@ const defaultProps = {
 }
 
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
-const listingProps = compose<AbstractDecoratorProps>(
+const buildListingProps = (savedSearchReadOnly: boolean): AbstractDecoratorProps => compose<AbstractDecoratorProps>(
   PagingDecorator,
   StaticColumnConfigurationDecorator,
   TagFilterDecorator,
@@ -45,11 +46,15 @@ const listingProps = compose<AbstractDecoratorProps>(
   SortingDecorator,
   [OpenElementDecorator, { elementType: elementTypes.asset } as OpenElementDecoratorConfig],
   // Composed last so its sidebar entry prepends ahead of the filter/tag entries (first icon).
-  [SavedSearchDecorator, { elementType: elementTypes.asset, supportsLoadedState: true } as SavedSearchDecoratorConfig]
+  [SavedSearchDecorator, { elementType: elementTypes.asset, supportsLoadedState: true, readOnly: savedSearchReadOnly } as SavedSearchDecoratorConfig]
 )(defaultProps)
 /* eslint-enable @typescript-eslint/consistent-type-assertions */
 
-export const AssetSearchListing = (): React.JSX.Element => {
+
+
+
+export const AssetSearchListing = ({ savedSearchReadOnly = false, defaultSidebarTab, extraSidebarEntries }: SearchListingProps = {}): React.JSX.Element => {
+  const listingProps = withExtraSidebarEntries(buildListingProps(savedSearchReadOnly), extraSidebarEntries)
   return (
     <DynamicTypeRegistryProvider serviceIds={ [
       'DynamicTypes/GridCellRegistry',

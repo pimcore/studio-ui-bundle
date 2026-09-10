@@ -362,6 +362,7 @@ export * from '@Pimcore/modules/element/listing/decorators/utils/column-configur
  */
 export * from '@Pimcore/modules/search/provider/search-provider'
 export * from '@Pimcore/modules/search/provider/use-search'
+export * from '@Pimcore/modules/search/modal/tabs/search-listing-props'
 export * from '@Pimcore/modules/search/modal/tabs/object/listing/object-search-listing'
 export * from '@Pimcore/modules/search/modal/tabs/asset/listing/asset-search-listing'
 export * from '@Pimcore/modules/search/modal/tabs/document/listing/document-search-listing'

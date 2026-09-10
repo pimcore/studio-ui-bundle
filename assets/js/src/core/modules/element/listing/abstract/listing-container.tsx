@@ -48,7 +48,8 @@ export const ListingContainer = ({
   useDataQueryHelper,
   useDataQuery,
   useElementId,
-  toolbarSlotName
+  toolbarSlotName,
+  defaultSidebarTab
 }: ListingContainerProps): React.JSX.Element => {
   const settings = {
     ContextComponent,
@@ -61,7 +62,8 @@ export const ListingContainer = ({
     useDataQueryHelper,
     useDataQuery,
     useElementId,
-    toolbarSlotName
+    toolbarSlotName,
+    defaultSidebarTab
   }
 
   return (

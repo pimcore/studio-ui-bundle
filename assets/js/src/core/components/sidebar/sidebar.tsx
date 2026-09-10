@@ -9,7 +9,7 @@
  */
 
 import { useStyle } from './sidebar.styles'
-import React, { isValidElement, useState, useContext, useRef } from 'react'
+import React, { isValidElement, useState, useContext, useRef, useEffect } from 'react'
 import { type ISidebarButton, type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
@@ -25,11 +25,13 @@ export interface SidebarProps {
   entries: ISidebarEntry[]
   buttons?: ISidebarButton[]
   sizing?: 'large' | 'medium' | 'default'
+  /** the entry to open on mount; without it the sidebar starts collapsed */
+  defaultActiveTab?: string
   highlights?: Array<ISidebarEntry['key']>
   translateTooltips?: boolean
 }
 
-export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights = [], translateTooltips = false }: SidebarProps): React.JSX.Element => {
+export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights = [], translateTooltips = false, defaultActiveTab = '' }: SidebarProps): React.JSX.Element => {
   const { styles } = useStyle()
   const sidebarContext = useContext(SidebarContext)
   const { t } = useTranslation()
@@ -49,11 +51,20 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
     }
   })
 
-  const [localActiveTab, setLocalActiveTab] = useState<string>('')
+  const [localActiveTab, setLocalActiveTab] = useState<string>(defaultActiveTab)
 
   // Use context active tab if available, otherwise use local state
   const activeTab = sidebarContext?.activeTab ?? localActiveTab
   const setActiveTab = sidebarContext?.toggleTab ?? setLocalActiveTab
+
+  // Opening the default has to happen through whichever setter is live: with a SidebarContext in
+  // the tree its own (empty) activeTab wins over local state, so seeding local state is not enough.
+  const openedDefault = useRef(false)
+  useEffect(() => {
+    if (openedDefault.current || defaultActiveTab === '' || activeTab !== '') return
+    openedDefault.current = true
+    setActiveTab(defaultActiveTab)
+  }, [defaultActiveTab, activeTab])
 
   const isExpanded = activeTab !== ''
   const {

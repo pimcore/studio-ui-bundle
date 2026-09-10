@@ -27,6 +27,8 @@ export interface UseElementIdReturn {
 }
 
 export interface SettingsContextProps {
+  /** the sidebar entry to open on mount; without it the sidebar starts collapsed */
+  defaultSidebarTab?: string
   ContextComponent: ElementType
   ConfigurationComponent: ElementType
   DataComponent: ElementType

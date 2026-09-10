@@ -17,6 +17,7 @@ import { SortingDecorator } from '@Pimcore/modules/element/listing/decorators/so
 import { useDataObjectGetSearchQuery } from '@Pimcore/modules/search/search-api-slice.gen'
 import { compose } from '@Pimcore/utils/compose'
 import React from 'react'
+import { type SearchListingProps, withExtraSidebarEntries } from '@Pimcore/modules/search/modal/tabs/search-listing-props'
 import { DefaultView } from './view/view-layer/views/default-view'
 import { OpenElementDecorator, type OpenElementDecoratorConfig } from './decorator/open-element/open-element-decorator'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
@@ -40,7 +41,7 @@ const defaultProps = {
 }
 
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
-const listingProps = compose<AbstractDecoratorProps>(
+const buildListingProps = (savedSearchReadOnly: boolean): AbstractDecoratorProps => compose<AbstractDecoratorProps>(
   PagingDecorator,
   ColumnConfigurationDecorator,
   TagFilterDecorator,
@@ -50,11 +51,15 @@ const listingProps = compose<AbstractDecoratorProps>(
   [OpenElementDecorator, { elementType: elementTypes.dataObject } as OpenElementDecoratorConfig],
   [TypeFilterDecorator, { elementType: elementTypes.dataObject } as TypeFilterDecoratorConfig],
   // Composed last so its sidebar entry prepends ahead of the filter/tag entries (first icon).
-  [SavedSearchDecorator, { elementType: elementTypes.dataObject, supportsLoadedState: true } as SavedSearchDecoratorConfig]
+  [SavedSearchDecorator, { elementType: elementTypes.dataObject, supportsLoadedState: true, readOnly: savedSearchReadOnly } as SavedSearchDecoratorConfig]
 )(defaultProps)
 /* eslint-enable @typescript-eslint/consistent-type-assertions */
 
-export const ObjectSearchListing = (): React.JSX.Element => {
+
+
+
+export const ObjectSearchListing = ({ savedSearchReadOnly = false, defaultSidebarTab, extraSidebarEntries }: SearchListingProps = {}): React.JSX.Element => {
+  const listingProps = withExtraSidebarEntries(buildListingProps(savedSearchReadOnly), extraSidebarEntries)
   return (
     <LanguageSelectionProvider>
       <DynamicTypeRegistryProvider serviceIds={ [
@@ -66,6 +71,7 @@ export const ObjectSearchListing = (): React.JSX.Element => {
       >
         <ListingContainer
           { ...listingProps }
+          defaultSidebarTab={ defaultSidebarTab }
         />
       </DynamicTypeRegistryProvider>
     </LanguageSelectionProvider>
