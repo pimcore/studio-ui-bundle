@@ -9,7 +9,7 @@
  */
 
 import React, { useMemo } from 'react'
-import { ConfigProvider } from 'antd'
+import { ConfigProvider, theme } from 'antd'
 import cn from 'classnames'
 import { isEmpty, isNil, isUndefined } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
@@ -55,6 +55,7 @@ const groupIntoSections = (items: ILocalizedFieldDescriptor[]): ILocalizedSectio
 
 export const LanguageComparisonContent = ({ layoutData, locales, editableLanguages, isAllowedToEdit }: ILanguageComparisonColumnProps): React.JSX.Element => {
   const { styles } = useStyles()
+  const { token } = theme.useToken()
 
   const renderSectionTitle = ({ breadcrumbTitle, hideSectionTitle }: { breadcrumbTitle: string, hideSectionTitle: boolean }): React.JSX.Element | null => {
     if (isEmptyValue(breadcrumbTitle)) return null
@@ -182,7 +183,7 @@ export const LanguageComparisonContent = ({ layoutData, locales, editableLanguag
   }, [locales, sections])
 
   return (
-    <ConfigProvider theme={ { components: { Form: { itemMarginBottom: 8 } } } }>
+    <ConfigProvider theme={ { components: { Form: { itemMarginBottom: token.marginXS } } } }>
       <FieldWidthProvider>
         {renderedContent}
       </FieldWidthProvider>

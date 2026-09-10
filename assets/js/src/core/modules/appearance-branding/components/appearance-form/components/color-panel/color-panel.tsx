@@ -13,11 +13,13 @@ import { Form } from '@Pimcore/components/form/form'
 import { Panel } from '@Pimcore/components/panel/panel'
 import { Space } from '@Pimcore/components/space/space'
 import React from 'react'
+import { theme } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { isObject, has } from 'lodash'
 
 export const ColorPanel = (): React.JSX.Element => {
   const { t } = useTranslation()
+  const { token } = theme.useToken()
   const form = Form.useFormInstance()
 
   const formatColor = (color: any): string => {
@@ -61,7 +63,7 @@ export const ColorPanel = (): React.JSX.Element => {
               showText
             />
           </Form.Item>
-          <div style={ { marginTop: 8, fontSize: '12px', color: '#666' } }>
+          <div style={ { marginTop: token.marginXS, fontSize: token.fontSizeSM, color: token.colorTextSecondary } }>
             {t('appearance-branding.color.brand-color.description')}
           </div>
         </Form.Item>
@@ -82,7 +84,7 @@ export const ColorPanel = (): React.JSX.Element => {
               showText
             />
           </Form.Item>
-          <div style={ { marginTop: 8, fontSize: '12px', color: '#666' } }>
+          <div style={ { marginTop: token.marginXS, fontSize: token.fontSizeSM, color: token.colorTextSecondary } }>
             {t('appearance-branding.color.background-shade.description')}
           </div>
         </Form.Item>
