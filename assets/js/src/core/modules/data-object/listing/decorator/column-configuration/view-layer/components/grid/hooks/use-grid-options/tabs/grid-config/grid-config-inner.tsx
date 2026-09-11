@@ -28,7 +28,9 @@ import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils
 import { type GridConfigData } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/grid-config-provider'
 import { useSelectedGridConfigId } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/selected-grid-config-id/use-selected-grid-config-id'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
-import { type GridColumnRequest, useDataObjectDeleteGridConfigurationByConfigurationIdMutation, useDataObjectGetGridConfigurationQuery, useDataObjectListSavedGridConfigurationsQuery, useDataObjectSaveGridConfigurationMutation, useDataObjectUpdateGridConfigurationMutation } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { type GridColumnRequest, type GridFilter, useDataObjectDeleteGridConfigurationByConfigurationIdMutation, useDataObjectGetGridConfigurationQuery, useDataObjectListSavedGridConfigurationsQuery, useDataObjectSaveGridConfigurationMutation, useDataObjectUpdateGridConfigurationMutation } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { prepareFieldFilters, useAppliedFiltersOptional, useElementFilterContext } from '@Pimcore/modules/element/listing/decorators/general-filters/element-filters'
+import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
@@ -77,6 +79,27 @@ export const GridConfigInner = (): React.JSX.Element => {
   const [fetchSaveGridConfig, { isLoading: isSaveLoading }] = useDataObjectSaveGridConfigurationMutation()
   const [fetchUpdateGridConfig, { isLoading: isUpdating }] = useDataObjectUpdateGridConfigurationMutation()
   const [fetchDeleteGridConfig, { isLoading: isDeleting }] = useDataObjectDeleteGridConfigurationByConfigurationIdMutation()
+
+  const appliedFiltersStore = useAppliedFiltersOptional()
+  const elementFilterContext = useElementFilterContext()
+
+  /**
+   * Returns undefined when the generalFilters decorator isn't mounted, so callers can leave
+   * saveFilter at its previous, non-destructive false instead of overwriting a template's
+   * already-persisted filter with an empty one.
+   */
+  const buildFilterPayload = (): GridFilter | undefined => {
+    if (appliedFiltersStore === undefined) {
+      return undefined
+    }
+
+    return {
+      page: 1,
+      pageSize: 0,
+      includeDescendants: false,
+      columnFilters: prepareFieldFilters((appliedFiltersStore.values.fieldFilters ?? []) as FieldFilter[], elementFilterContext)
+    }
+  }
 
   const [view, setView] = useState<ViewState>(ViewState.Edit)
   const [form] = Form.useForm()
@@ -198,6 +221,8 @@ export const GridConfigInner = (): React.JSX.Element => {
       return
     }
 
+    const filterPayload = buildFilterPayload()
+
     fetchUpdateGridConfig({
       configurationId: gridConfig.id!,
       body: {
@@ -209,7 +234,8 @@ export const GridConfigInner = (): React.JSX.Element => {
         shareGlobal: gridConfig.shareGlobal,
         sharedRoles: gridConfig.sharedRoles,
         sharedUsers: gridConfig.sharedUsers,
-        saveFilter: false,
+        saveFilter: filterPayload !== undefined,
+        filter: filterPayload,
         pageSize: 0
       }
     }).catch((error) => {
@@ -232,6 +258,8 @@ export const GridConfigInner = (): React.JSX.Element => {
     }
 
     if (view === ViewState.Update && isSavedConfiguration) {
+      const filterPayload = buildFilterPayload()
+
       fetchUpdateGridConfig({
         configurationId: gridConfig.id!,
         body: {
@@ -243,7 +271,8 @@ export const GridConfigInner = (): React.JSX.Element => {
           shareGlobal: values.shareGlobally,
           sharedRoles: gridConfig.sharedRoles,
           sharedUsers: gridConfig.sharedUsers,
-          saveFilter: false,
+          saveFilter: filterPayload !== undefined,
+          filter: filterPayload,
           pageSize: 0
         }
       }).catch((error) => {
@@ -256,6 +285,8 @@ export const GridConfigInner = (): React.JSX.Element => {
     }
 
     if (view === ViewState.Save) {
+      const filterPayload = buildFilterPayload()
+
       fetchSaveGridConfig({
         classId: selectedClassDefinition!.id,
         body: {
@@ -267,7 +298,8 @@ export const GridConfigInner = (): React.JSX.Element => {
           shareGlobal: values.shareGlobally,
           sharedRoles: gridConfig?.sharedRoles,
           sharedUsers: gridConfig?.sharedUsers,
-          saveFilter: false,
+          saveFilter: filterPayload !== undefined,
+          filter: filterPayload,
           pageSize: 0
         }
       }).catch((error) => {

@@ -12,7 +12,8 @@ import { createFiltersStore } from '@Pimcore/components/filters'
 
 export const {
   FiltersStoreProvider: AppliedFiltersProvider,
-  useFiltersStore: useAppliedFilters
+  useFiltersStore: useAppliedFilters,
+  useFiltersStoreOptional: useAppliedFiltersOptional
 } = createFiltersStore()
 
 export const {
