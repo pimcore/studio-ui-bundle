@@ -16,7 +16,8 @@ const availableColumns = [
   { key: 'name', type: 'input' },
   { key: 'price', type: 'numeric' },
   { key: 'select-field', type: 'select', config: { filters: { key: 'apiKeyOverride' } } },
-  { key: 'unresolved-config-field', type: 'input', config: false }
+  { key: 'unresolved-config-field', type: 'input', config: false },
+  { key: 'cs-field', type: 'dataobject.classificationstore' }
 ] as unknown as AvailableColumn[]
 
 describe('restoreFieldFilters', () => {
@@ -82,6 +83,30 @@ describe('restoreFieldFilters', () => {
 
     expect(restoreFieldFilters(savedFilter, availableColumns)).toEqual([
       { key: 'unresolved-config-field', type: 'input', filterValue: 'foo', locale: null, meta: { translationKey: 'unresolved-config-field' } }
+    ])
+  })
+
+  it('unwraps a classification-store filter value back to the scalar the editor expects', () => {
+    const savedFilter: GridFilter = {
+      page: 1,
+      pageSize: 0,
+      includeDescendants: false,
+      columnFilters: [{
+        key: 'cs-field',
+        type: 'classificationstore.input',
+        filterValue: { value: 'foo', keyId: 12, groupId: 34 },
+        meta: { fieldDefinition: { fieldtype: 'input' }, keyId: 12, groupId: 34, translationKey: 'CS Field' }
+      }]
+    }
+
+    expect(restoreFieldFilters(savedFilter, availableColumns)).toEqual([
+      {
+        key: 'cs-field',
+        type: 'dataobject.classificationstore',
+        filterValue: 'foo',
+        locale: null,
+        meta: { fieldDefinition: { fieldtype: 'input' }, keyId: 12, groupId: 34, translationKey: 'CS Field' }
+      }
     ])
   })
 

@@ -83,12 +83,23 @@ export const GridConfigInner = (): React.JSX.Element => {
   const appliedFiltersStore = useAppliedFiltersOptional()
   const elementFilterContext = useElementFilterContext()
 
-  const buildFilterPayload = (): GridFilter => ({
-    page: 1,
-    pageSize: 0,
-    includeDescendants: false,
-    columnFilters: prepareFieldFilters((appliedFiltersStore?.values.fieldFilters ?? []) as FieldFilter[], elementFilterContext)
-  })
+  /**
+   * Returns undefined when the generalFilters decorator isn't mounted, so callers can leave
+   * saveFilter at its previous, non-destructive false instead of overwriting a template's
+   * already-persisted filter with an empty one.
+   */
+  const buildFilterPayload = (): GridFilter | undefined => {
+    if (appliedFiltersStore === undefined) {
+      return undefined
+    }
+
+    return {
+      page: 1,
+      pageSize: 0,
+      includeDescendants: false,
+      columnFilters: prepareFieldFilters((appliedFiltersStore.values.fieldFilters ?? []) as FieldFilter[], elementFilterContext)
+    }
+  }
 
   const [view, setView] = useState<ViewState>(ViewState.Edit)
   const [form] = Form.useForm()
@@ -210,6 +221,8 @@ export const GridConfigInner = (): React.JSX.Element => {
       return
     }
 
+    const filterPayload = buildFilterPayload()
+
     fetchUpdateGridConfig({
       configurationId: gridConfig.id!,
       body: {
@@ -221,8 +234,8 @@ export const GridConfigInner = (): React.JSX.Element => {
         shareGlobal: gridConfig.shareGlobal,
         sharedRoles: gridConfig.sharedRoles,
         sharedUsers: gridConfig.sharedUsers,
-        saveFilter: true,
-        filter: buildFilterPayload(),
+        saveFilter: filterPayload !== undefined,
+        filter: filterPayload,
         pageSize: 0
       }
     }).catch((error) => {
@@ -245,6 +258,8 @@ export const GridConfigInner = (): React.JSX.Element => {
     }
 
     if (view === ViewState.Update && isSavedConfiguration) {
+      const filterPayload = buildFilterPayload()
+
       fetchUpdateGridConfig({
         configurationId: gridConfig.id!,
         body: {
@@ -256,8 +271,8 @@ export const GridConfigInner = (): React.JSX.Element => {
           shareGlobal: values.shareGlobally,
           sharedRoles: gridConfig.sharedRoles,
           sharedUsers: gridConfig.sharedUsers,
-          saveFilter: true,
-          filter: buildFilterPayload(),
+          saveFilter: filterPayload !== undefined,
+          filter: filterPayload,
           pageSize: 0
         }
       }).catch((error) => {
@@ -270,6 +285,8 @@ export const GridConfigInner = (): React.JSX.Element => {
     }
 
     if (view === ViewState.Save) {
+      const filterPayload = buildFilterPayload()
+
       fetchSaveGridConfig({
         classId: selectedClassDefinition!.id,
         body: {
@@ -281,8 +298,8 @@ export const GridConfigInner = (): React.JSX.Element => {
           shareGlobal: values.shareGlobally,
           sharedRoles: gridConfig?.sharedRoles,
           sharedUsers: gridConfig?.sharedUsers,
-          saveFilter: true,
-          filter: buildFilterPayload(),
+          saveFilter: filterPayload !== undefined,
+          filter: filterPayload,
           pageSize: 0
         }
       }).catch((error) => {

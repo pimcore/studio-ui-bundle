@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isArray, isObject } from 'lodash'
+import { isArray, isObject, isUndefined } from 'lodash'
 import { type GridFilter } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
@@ -39,6 +39,21 @@ const getConfiguredFilterKey = (column: AvailableColumn): string | undefined => 
     : undefined
 }
 
+const CLASSIFICATION_STORE_COLUMN_TYPE = 'dataobject.classificationstore'
+
+/**
+ * DynamicTypeFieldFilterClassificationStore#transformFilterToApiRequest wraps the scalar
+ * value as `{ value, keyId, groupId }` for the API request, but the editor (and the rest of
+ * this restore path) expects the plain scalar in filterValue - the ids live in meta instead.
+ */
+const restoreFilterValue = (column: AvailableColumn, filterValue: unknown): unknown => {
+  if (column.type !== CLASSIFICATION_STORE_COLUMN_TYPE) {
+    return filterValue
+  }
+
+  return isObject(filterValue) && 'value' in filterValue ? (filterValue as { value: unknown }).value : filterValue
+}
+
 /**
  * The backend returns the saved grid-configuration filter as either the persisted
  * object or `[]` when the configuration never had one saved (saveFilter was false) -
@@ -50,14 +65,14 @@ export const restoreFieldFilters = (filter: GridFilter[] | GridFilter | undefine
   for (const columnFilter of readSavedColumnFilters(filter)) {
     const availableColumn = availableColumns.find((column) => (getConfiguredFilterKey(column) ?? column.key) === columnFilter.key)
 
-    if (availableColumn === undefined) {
+    if (isUndefined(availableColumn)) {
       continue
     }
 
     restored.push({
       key: availableColumn.key,
       type: availableColumn.type,
-      filterValue: columnFilter.filterValue,
+      filterValue: restoreFilterValue(availableColumn, columnFilter.filterValue),
       locale: columnFilter.locale ?? null,
       meta: columnFilter.meta ?? { translationKey: availableColumn.key }
     })
