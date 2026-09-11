@@ -156,12 +156,9 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
     const savedColumns = (configuration.columns ?? []) as SavedColumn[]
     if (!isEmpty(savedColumns) && !isEmpty(availableColumns)) {
       const selectedColumns = buildSelectedColumns(savedColumns, availableColumns)
-      console.log('[apply] columns', { saved: savedColumns.map(c => c.key), avail: availableColumns.map(c => c.key), mapped: selectedColumns.map(c => c.key) })
       if (!isEmpty(selectedColumns)) {
         setSelectedColumns(selectedColumns)
       }
-    } else {
-      console.log('[apply] columns skipped', { saved: savedColumns.length, avail: availableColumns.length })
     }
 
     setDataLoadingState('config-changed')
