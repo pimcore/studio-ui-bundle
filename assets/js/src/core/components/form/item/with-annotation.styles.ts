@@ -27,6 +27,8 @@ export const useStyles = createStyles(({ token, css }) => ({
   // control leaves room on its own row, so turn that column into a row and keep it there.
   tagOnControlRow: css`
     .ant-form-item-control:has(.ant-switch, .ant-checkbox, .ant-radio) {
+      /* AntD leaves this column a plain block, so the direction alone would be inert */
+      display: flex;
       flex-direction: row;
       align-items: center;
       gap: ${token.marginXXS}px;
