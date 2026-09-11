@@ -1152,6 +1152,10 @@ export-xlsx-form.form-field.header: Kopfzeile
 export-xlsx-form.form-field.header.option.name: Systemschlüssel
 export-xlsx-form.form-field.header.option.title: Bezeichnung
 export-xlsx-form.form-field.header.option.no-header: Keine Kopfzeile
+form.annotation.added: Hinzugefügt
+form.annotation.changed: Geändert
+form.annotation.removed: Entfernt
+form.annotation.moved: Verschoben
 form.validation.required: Dieses Feld ist erforderlich
 form.validation.max-length: Die maximale Länge für dieses Feld beträgt {{max}} Zeichen
 form.validation.min: Der Minimalwert ist {{min}}

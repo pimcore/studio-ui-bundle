@@ -1152,6 +1152,10 @@ export-xlsx-form.form-field.header: Encabezado
 export-xlsx-form.form-field.header.option.name: Clave del sistema
 export-xlsx-form.form-field.header.option.title: Etiqueta
 export-xlsx-form.form-field.header.option.no-header: Sin encabezado
+form.annotation.added: Añadido
+form.annotation.changed: Modificado
+form.annotation.removed: Eliminado
+form.annotation.moved: Movido
 form.validation.required: Este campo es obligatorio
 form.validation.max-length: La longitud máxima para este campo es de {{max}} caracteres
 form.validation.min: El valor mínimo es {{min}}

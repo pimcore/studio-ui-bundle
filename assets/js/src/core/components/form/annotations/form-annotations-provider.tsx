@@ -14,6 +14,7 @@ import React, { createContext, useContext, useMemo } from 'react'
 
 export type FormItemAnnotationStatus = 'added' | 'changed' | 'removed' | 'moved'
 
+/** an item rendered with `noStyle` shows nothing: AntD drops its className and extra slot */
 export interface FormItemAnnotation {
   status: FormItemAnnotationStatus
   /** rendered under the control, e.g. the value the field had before */
