@@ -156,11 +156,21 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
     const savedColumns = (configuration.columns ?? []) as SavedColumn[]
     if (!isEmpty(savedColumns) && !isEmpty(availableColumns)) {
       const selectedColumns = buildSelectedColumns(savedColumns, availableColumns)
+      console.log('[apply] columns', { saved: savedColumns.map(c => c.key), avail: availableColumns.map(c => c.key), mapped: selectedColumns.map(c => c.key) })
       if (!isEmpty(selectedColumns)) {
         setSelectedColumns(selectedColumns)
       }
+    } else {
+      console.log('[apply] columns skipped', { saved: savedColumns.length, avail: availableColumns.length })
     }
 
     setDataLoadingState('config-changed')
   }
 }
+
+/**
+ * The column keys a saved search resolves to against the live available columns — the set the
+ * restore is expected to leave in the grid. Empty when nothing the search names is available.
+ */
+export const restoredColumnKeys = (saved: SavedColumn[], available: AvailableColumn[]): string[] =>
+  buildSelectedColumns(saved, available).map((column) => column.key ?? '')
