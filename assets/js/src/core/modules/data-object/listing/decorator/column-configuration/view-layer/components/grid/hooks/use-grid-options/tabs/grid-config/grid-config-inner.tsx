@@ -29,7 +29,7 @@ import { type GridConfigData } from '@Pimcore/modules/element/listing/decorators
 import { useSelectedGridConfigId } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/selected-grid-config-id/use-selected-grid-config-id'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { type GridColumnRequest, type GridFilter, useDataObjectDeleteGridConfigurationByConfigurationIdMutation, useDataObjectGetGridConfigurationQuery, useDataObjectListSavedGridConfigurationsQuery, useDataObjectSaveGridConfigurationMutation, useDataObjectUpdateGridConfigurationMutation } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
-import { prepareFieldFilters, useAppliedFilters, useElementFilterContext } from '@Pimcore/modules/element/listing/decorators/general-filters/element-filters'
+import { prepareFieldFilters, useAppliedFiltersOptional, useElementFilterContext } from '@Pimcore/modules/element/listing/decorators/general-filters/element-filters'
 import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
@@ -80,14 +80,14 @@ export const GridConfigInner = (): React.JSX.Element => {
   const [fetchUpdateGridConfig, { isLoading: isUpdating }] = useDataObjectUpdateGridConfigurationMutation()
   const [fetchDeleteGridConfig, { isLoading: isDeleting }] = useDataObjectDeleteGridConfigurationByConfigurationIdMutation()
 
-  const { values: appliedFilterValues } = useAppliedFilters()
+  const appliedFiltersStore = useAppliedFiltersOptional()
   const elementFilterContext = useElementFilterContext()
 
   const buildFilterPayload = (): GridFilter => ({
     page: 1,
     pageSize: 0,
     includeDescendants: false,
-    columnFilters: prepareFieldFilters((appliedFilterValues.fieldFilters ?? []) as FieldFilter[], elementFilterContext)
+    columnFilters: prepareFieldFilters((appliedFiltersStore?.values.fieldFilters ?? []) as FieldFilter[], elementFilterContext)
   })
 
   const [view, setView] = useState<ViewState>(ViewState.Edit)

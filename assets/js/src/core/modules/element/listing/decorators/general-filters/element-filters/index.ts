@@ -17,6 +17,7 @@ export {
 export {
   AppliedFiltersProvider,
   useAppliedFilters,
+  useAppliedFiltersOptional,
   DraftFiltersProvider,
   useDraftFilters,
   useDraftFiltersOptional
