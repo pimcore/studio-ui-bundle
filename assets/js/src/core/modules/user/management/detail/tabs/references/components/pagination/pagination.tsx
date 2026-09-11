@@ -16,6 +16,7 @@ import {
   PaginationSkeleton
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies/components/pagination/skeleton'
 import { DEFAULT_PAGE_SIZE } from '@Pimcore/modules/user/management/detail/tabs/references/constants'
+import { appConfig } from '@Pimcore/app/config/app-config'
 
 type PaginationProps = Partial<UserGetObjectDependenciesApiResponse> & {
   page: number
@@ -39,7 +40,7 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
       current={ props.page }
       defaultPageSize={ DEFAULT_PAGE_SIZE }
       onChange={ props.onChange }
-      pageSizeOptions={ [10, 20, 50, 100] }
+      pageSizeOptions={ appConfig.pageSizeOptions }
       showSizeChanger
       showTotal={ (total) => t('pagination.show-total', { total }) }
       total={ props.totalItems ?? 0 }
