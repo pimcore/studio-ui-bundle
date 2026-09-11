@@ -1160,6 +1160,10 @@ export-xlsx-form.form-field.header: Rubrik
 export-xlsx-form.form-field.header.option.name: Systemnyckel
 export-xlsx-form.form-field.header.option.title: Etikett
 export-xlsx-form.form-field.header.option.no-header: Ingen rubrik
+form.annotation.added: Tillagd
+form.annotation.changed: Ändrad
+form.annotation.removed: Borttagen
+form.annotation.moved: Flyttad
 form.validation.required: Det här fältet är obligatoriskt
 form.validation.max-length: Maximal längd för det här fältet är {{max}} tecken
 form.validation.min: Minsta värde är {{min}}

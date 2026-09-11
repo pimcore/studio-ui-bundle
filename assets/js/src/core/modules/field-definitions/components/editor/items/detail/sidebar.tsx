@@ -27,6 +27,7 @@ import { useGlobalFieldDefinitionClipboard } from '@Pimcore/modules/field-defini
 import { type Layout, type FieldDefinition, type StructureNode } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { TreeElement, type ITreeElementProps, Content, HotspotDroppable, Icon, type DragAndDropInfo, Draggable, type TreeDataItem, Button, Space } from '@sdk/components'
 import { Divider, theme } from 'antd'
+import cn from 'classnames'
 import { isEqual, isUndefined } from 'lodash'
 import React, { useMemo, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -49,7 +50,7 @@ export interface FieldDefinitionDragDropInfo extends DragAndDropInfo {
 }
 
 export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
-  const { useLayout } = useSettings()
+  const { useLayout, readOnly = false, decorateTreeItem } = useSettings()
   const { detailView, setDetailView } = useItems()
   const { t } = useTranslation()
   const { token } = theme.useToken()
@@ -221,6 +222,12 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
 
   const titleRender: ITreeElementProps['titleRender'] = (node, initialComponent) => {
     const titleComponent = initialComponent
+
+    // review mode: the tree is navigated, never rearranged
+    if (readOnly) {
+      return titleComponent
+    }
+
     const currentFieldDefinition = fieldDefinitions[node.key as string]
 
     if (currentFieldDefinition === undefined) {
@@ -457,11 +464,14 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
         const actions: ITreeElementProps['treeData'][0]['actions'] = fieldDefinitionRegistry.getDropdownActions({ area, path: currentPath, fieldDefinitions })
         const isCustomLayout = area.includes('custom-layout')
 
-        return {
+        const item: TreeDataItem = {
           ...initialTreeItem,
           ...(initialTreeItem.key === structure?.id ? { title: t('field-definitions.base'), icon: <Icon value="folder" /> } : {}),
-          className: 'ant-tree-node--has-drag-and-drop ' + (invalidFieldDefinitionIds.includes(initialTreeItem.key as string) ? 'tree-element-item--danger' : undefined),
-          actions: [
+          className: cn({
+            'ant-tree-node--has-drag-and-drop': !readOnly,
+            'tree-element-item--danger': invalidFieldDefinitionIds.includes(initialTreeItem.key as string)
+          }),
+          actions: readOnly ? [] : [
             ...(actions ?? []),
 
             ...(initialTreeItem.key !== structure?.id && !isCustomLayout
@@ -497,11 +507,13 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
               : [])
           ]
         }
+
+        return decorateTreeItem?.(item, { fieldDefinition, path: currentPath as string[] }) ?? item
       }
     })
 
     return [treeItems]
-  }, [structure, fieldDefinitions, invalidFieldDefinitionIds, copiedPath, isValidChildFieldDefinition, globalCopiedLayout, isValidExternalChildFieldDefinition])
+  }, [structure, fieldDefinitions, invalidFieldDefinitionIds, copiedPath, isValidChildFieldDefinition, globalCopiedLayout, isValidExternalChildFieldDefinition, readOnly, decorateTreeItem])
 
   const onActionsClick: ITreeElementProps['onActionsClick'] = (nodeKey, actionKey, node) => {
     if (actionKey === 'clone') {

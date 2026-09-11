@@ -20,6 +20,7 @@ export * from '@Pimcore/modules/field-definitions/dynamic-types/types/data/manyT
 export * from '@Pimcore/modules/field-definitions/dynamic-types/types/data/manyToOneRelation/dynamic-type-field-definition-many-to-one'
 export * from '@Pimcore/modules/field-definitions/dynamic-types/types/data/manyToManyRelation/dynamic-type-field-definition-many-to-many'
 export * from '@Pimcore/modules/field-definitions/components/editor'
+export * from '@Pimcore/modules/field-definitions/components/editor/items/detail'
 export * from '@Pimcore/modules/field-definitions/components/editor/area-provider'
 export * from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 export * from '@Pimcore/modules/field-definitions/components/editor/items/provider'

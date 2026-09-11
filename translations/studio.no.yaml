@@ -1160,6 +1160,10 @@ export-xlsx-form.form-field.header: Overskrift
 export-xlsx-form.form-field.header.option.name: Systemnøkkel
 export-xlsx-form.form-field.header.option.title: Etikett
 export-xlsx-form.form-field.header.option.no-header: Ingen overskrift
+form.annotation.added: Lagt til
+form.annotation.changed: Endret
+form.annotation.removed: Fjernet
+form.annotation.moved: Flyttet
 form.validation.required: Dette feltet er obligatorisk
 form.validation.max-length: Maksimal lengde for dette feltet er {{max}} tegn
 form.validation.min: Minimumsverdien er {{min}}

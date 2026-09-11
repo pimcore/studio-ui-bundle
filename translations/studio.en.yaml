@@ -1160,6 +1160,10 @@ export-xlsx-form.form-field.header: Header
 export-xlsx-form.form-field.header.option.name: System key
 export-xlsx-form.form-field.header.option.title: Label
 export-xlsx-form.form-field.header.option.no-header: No header
+form.annotation.added: Added
+form.annotation.changed: Changed
+form.annotation.removed: Removed
+form.annotation.moved: Moved
 form.validation.required: This field is required
 form.validation.max-length: The maximum length for this field is {{max}} characters
 form.validation.min: The minimum value is {{min}}
