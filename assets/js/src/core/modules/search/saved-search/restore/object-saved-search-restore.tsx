@@ -64,7 +64,6 @@ export const ObjectSavedSearchRestore = (): null => {
     const expected = restoredColumnKeys(savedColumns, availableColumns)
     const applied = expected.length === 0 ||
       (selectedColumns.length === expected.length && expected.every((key, index) => selectedColumns[index]?.key === key))
-
     if (!applied) {
       applySavedSearch(pendingRestore)
       return
