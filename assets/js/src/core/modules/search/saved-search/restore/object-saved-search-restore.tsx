@@ -76,8 +76,14 @@ export const ObjectSavedSearchRestore = (): null => {
       return
     }
 
-    applySavedSearch(pendingRestore)
-    setPendingRestore(undefined)
+    // Consume only after the applied state has HELD briefly: on a cold open the column
+    // configuration loaders are still landing, and one of them can overwrite the applied
+    // columns right after a match — consuming on first sight would leave that uncorrected.
+    const timer = window.setTimeout(() => {
+      setPendingRestore(undefined)
+    }, 1200)
+
+    return () => { window.clearTimeout(timer) }
   }, [pendingRestore, availableColumns, selectedColumns, selectedClassDefinition])
 
   return null
