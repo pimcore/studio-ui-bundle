@@ -28,7 +28,7 @@ export const ObjectSavedSearchRestore = (): null => {
   const { pendingRestore, setPendingRestore } = useSearch()
   const { availableColumns } = useAvailableColumns()
   const { selectedColumns } = useSelectedColumns()
-  const { setSelectedClassDefinition } = useClassDefinitionSelection()
+  const { selectedClassDefinition, setSelectedClassDefinition } = useClassDefinitionSelection()
   const { getById } = useClassDefinitions()
   const applySavedSearch = useApplySavedSearch()
 
@@ -51,6 +51,13 @@ export const ObjectSavedSearchRestore = (): null => {
     if (isNil(pendingRestore) || !belongsToObject) {
       return
     }
+    // A class-scoped search restores against ITS class's columns. Until the class selection
+    // has taken effect, the available columns are the classless static set — the saved columns
+    // map to almost nothing against them, and a restore applied there "matches" that reduced
+    // set and consumes itself before the class columns ever arrive.
+    if (hasClass && selectedClassDefinition?.id !== classId) {
+      return
+    }
     // Wait for the available columns before applying, otherwise the saved column layout (and
     // widths) is dropped — useApplySavedSearch needs them to map the saved columns.
     const savedColumns = (pendingRestore.columns ?? []) as never[]
@@ -71,7 +78,7 @@ export const ObjectSavedSearchRestore = (): null => {
 
     applySavedSearch(pendingRestore)
     setPendingRestore(undefined)
-  }, [pendingRestore, availableColumns, selectedColumns])
+  }, [pendingRestore, availableColumns, selectedColumns, selectedClassDefinition])
 
   return null
 }
