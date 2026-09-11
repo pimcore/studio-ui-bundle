@@ -65,16 +65,6 @@ export const ObjectSavedSearchRestore = (): null => {
     if (hasClass && selectedClassDefinition?.id !== classId) {
       return
     }
-    // Selecting the class is not enough: its column set loads after it, and until it lands the
-    // available columns are still the classless system set — a search that saves class data
-    // columns applied there maps them away and consumes itself. Wait for a set that actually
-    // carries class columns; a saved column the class no longer has still just drops.
-    const savedKeys = ((pendingRestore.columns ?? []) as Array<{ key?: string }>).map((column) => column.key ?? '')
-    const savesClassColumns = savedKeys.some((key) => key !== '' && !SYSTEM_COLUMN_KEYS.has(key))
-    const classColumnsArrived = availableColumns.some((column) => !SYSTEM_COLUMN_KEYS.has(column.key))
-    if (hasClass && savesClassColumns && !classColumnsArrived) {
-      return
-    }
     // Wait for the available columns before applying, otherwise the saved column layout (and
     // widths) is dropped — useApplySavedSearch needs them to map the saved columns.
     const savedColumns = (pendingRestore.columns ?? []) as never[]
@@ -90,6 +80,17 @@ export const ObjectSavedSearchRestore = (): null => {
       (selectedColumns.length === expected.length && expected.every((key, index) => selectedColumns[index]?.key === key))
     if (!applied) {
       applySavedSearch(pendingRestore)
+      return
+    }
+
+    // The class column set loads after the class selection — and after the type select, which
+    // the apply itself restores. Until it lands, the available columns are still the classless
+    // system set and the match above only covers the saved system columns: applied, but not yet
+    // consumable. When the class columns arrive the expectation widens and the columns re-apply.
+    const savedKeys = (savedColumns as Array<{ key?: string }>).map((column) => column.key ?? '')
+    const savesClassColumns = hasClass && savedKeys.some((key) => key !== '' && !SYSTEM_COLUMN_KEYS.has(key))
+    const classColumnsArrived = availableColumns.some((column) => !SYSTEM_COLUMN_KEYS.has(column.key))
+    if (savesClassColumns && !classColumnsArrived) {
       return
     }
 
