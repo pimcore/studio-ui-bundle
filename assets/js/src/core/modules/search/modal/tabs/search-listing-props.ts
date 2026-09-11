@@ -13,6 +13,7 @@
  * modal — a review, for instance, where the panel shows what the search is but saving is a
  * decision made elsewhere.
  */
+import type React from 'react'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 
@@ -27,6 +28,11 @@ export interface SearchListingProps {
    * sidebar is where a listing says things.
    */
   extraSidebarEntries?: ISidebarEntry[]
+  /**
+   * Rendered inside the listing's view layer, within every provider the listing composes —
+   * an embedder's seam for a logic-only companion that reads the live listing state.
+   */
+  listingSlot?: React.ReactNode
 }
 
 /** prepends caller-supplied entries to whatever the composed decorators already contribute */
