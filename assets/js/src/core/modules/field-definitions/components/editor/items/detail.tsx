@@ -29,8 +29,6 @@ export interface ItemDetailProps {
 
 export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
   const { useDetailGeneralSettingsQuery, useDetailLayoutQuery, useDetailLayoutAccessor, customLayouts, LayoutProvider, useDetailUpdateMutation, readOnly = false } = useSettings()
-  // DetailSave's no-op fallback mutation is never invoked: without a real one there is no button
-  const canSave = !readOnly && useDetailUpdateMutation !== undefined
   const { setDetailView } = useItems()
   const layoutResult = useDetailLayoutQuery?.({
     id: props.configuration.id
@@ -128,7 +126,7 @@ export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
                   {!readOnly && customLayouts?.ModalContent !== undefined && <CustomLayout />}
                 </Flex>
 
-                {canSave && <DetailSave />}
+                {!readOnly && useDetailUpdateMutation !== undefined && <DetailSave useDetailUpdateMutation={ useDetailUpdateMutation } />}
               </Toolbar>
             }
           >

@@ -24,18 +24,16 @@ import { type AnyMutationHook } from 'types/react-query'
 
 const NAME_FORMAT_REGEX = /^[A-Za-z][A-Za-z0-9_]*$/
 
-// unreachable: ItemDetail's canSave hides the button when there is no update mutation. Kept
-// because the hook cannot be called conditionally — same shape as useNoOpDeleteMutation.
-const useNoOpUpdateMutation: AnyMutationHook = () => [
-  (async () => { }) as any,
-  {} as any
-]
-
 interface Violation { id: string, label: string }
 
-export const DetailSave = (): React.JSX.Element => {
+interface DetailSaveProps {
+  // a prop, not a setting: the caller has to narrow the optional hook to render the button at all
+  useDetailUpdateMutation: AnyMutationHook
+}
+
+export const DetailSave = ({ useDetailUpdateMutation }: DetailSaveProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { useDetailUpdateMutation = useNoOpUpdateMutation, useLayout } = useSettings()
+  const { useLayout } = useSettings()
   const { fieldDefinitions, setInvalidFieldDefinitionIds, structure, markClean, getIsDirty: isLayoutDirty } = useLayout()
   const { generalSettings, getIsDirty: areGeneralSettingsDirty } = useGeneralSettings()
   const [updateDetailMutation, result] = useDetailUpdateMutation()
