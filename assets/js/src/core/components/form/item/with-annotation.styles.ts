@@ -38,6 +38,11 @@ export const useStyles = createStyles(({ token, css }) => ({
         flex: 0 0 auto;
       }
 
+      /* AntD's gap below the extra; centring the margin box would sit the tag low */
+      > .ant-form-item-additional {
+        margin-top: 0;
+      }
+
       .ant-form-item-extra {
         min-height: 0;
       }
