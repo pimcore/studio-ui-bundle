@@ -24,7 +24,8 @@ import { type AnyMutationHook } from 'types/react-query'
 
 const NAME_FORMAT_REGEX = /^[A-Za-z][A-Za-z0-9_]*$/
 
-// a settings bundle without an update mutation never renders this button; the type still needs a hook
+// unreachable: ItemDetail's canSave hides the button when there is no update mutation. Kept
+// because the hook cannot be called conditionally — same shape as useNoOpDeleteMutation.
 const useNoOpUpdateMutation: AnyMutationHook = () => [
   (async () => { }) as any,
   {} as any
