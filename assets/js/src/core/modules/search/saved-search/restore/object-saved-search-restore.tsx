@@ -34,23 +34,25 @@ export const ObjectSavedSearchRestore = (): null => {
   const { availableColumns } = useAvailableColumns()
   const { selectedColumns } = useSelectedColumns()
   const { selectedClassDefinition, setSelectedClassDefinition } = useClassDefinitionSelection()
-  const { getById } = useClassDefinitions()
+  const { getById, data: classCatalog } = useClassDefinitions()
   const applySavedSearch = useApplySavedSearch()
 
   const classId = pendingRestore?.classId
   const hasClass = isString(classId) && !isEmpty(classId)
   const belongsToObject = !isNil(pendingRestore) && resolveSavedSearchElementType(pendingRestore) === elementTypes.dataObject
 
-  // Select the saved class up front so the listing loads that class's columns.
+  // Select the saved class up front so the listing loads that class's columns. Depends on the
+  // class catalog as well: mounted while it still loads, a one-shot lookup misses and the
+  // restore would hang at the class gate below forever.
   useEffect(() => {
     if (!belongsToObject || !hasClass) {
       return
     }
     const classDefinition = getById(classId)
-    if (!isNil(classDefinition)) {
+    if (!isNil(classDefinition) && selectedClassDefinition?.id !== classId) {
       setSelectedClassDefinition(classDefinition)
     }
-  }, [pendingRestore])
+  }, [pendingRestore, classCatalog])
 
   useEffect(() => {
     if (isNil(pendingRestore) || !belongsToObject) {
