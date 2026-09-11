@@ -11,6 +11,7 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { AppView } from '../app-view'
+import { AnnotationProbe } from '../annotation-probe' // TEMPORARY, see that file
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { store } from '@Pimcore/app/store'
 import { settingsApi } from '@Pimcore/app/public-api/settings/settings-api'
@@ -28,5 +29,13 @@ export function runApp (): void {
   }
 
   const root = createRoot(domElement)
+
+  // TEMPORARY annotation-layout probe; delete with annotation-probe.tsx
+  if (new URLSearchParams(window.location.search).has('annotationProbe')) {
+    root.render(<AnnotationProbe />)
+
+    return undefined
+  }
+
   root.render(<AppView themeId={ getThemeIdFromUrl() } />)
 }
