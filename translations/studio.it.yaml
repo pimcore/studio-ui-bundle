@@ -1152,6 +1152,10 @@ export-xlsx-form.form-field.header: Intestazione
 export-xlsx-form.form-field.header.option.name: Chiave di sistema
 export-xlsx-form.form-field.header.option.title: Etichetta
 export-xlsx-form.form-field.header.option.no-header: Nessuna intestazione
+form.annotation.added: Aggiunto
+form.annotation.changed: Modificato
+form.annotation.removed: Rimosso
+form.annotation.moved: Spostato
 form.validation.required: Questo campo è obbligatorio
 form.validation.max-length: La lunghezza massima per questo campo è di {{max}} caratteri
 form.validation.min: Il valore minimo è {{min}}
