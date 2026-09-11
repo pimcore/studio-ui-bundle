@@ -10,7 +10,7 @@
 
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useDataObjectGetAvailableGridColumnsQuery } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
@@ -35,11 +35,21 @@ export const ApiLoader = ({ Component }: ColumnConfigLoaderProps): React.JSX.Ele
   const { selectedColumns, setSelectedColumns } = useSelectedColumns()
   const { setAvailableColumns } = useAvailableColumns()
   const { setGridConfig } = useGridConfig()
+  const appliedFor = useRef<string | undefined>(undefined)
 
   useEffect(() => {
     if (data === undefined || initialConfigurationData === undefined) {
       return
     }
+
+    // apply once per class: the query objects change identity on refetch and under StrictMode's
+    // second pass, and re-applying the class defaults then silently overwrites a column set
+    // something else installed since — a restored saved search loses its columns
+    const configKey = String(selectedClassDefinition!.id)
+    if (appliedFor.current === configKey) {
+      return
+    }
+    appliedFor.current = configKey
 
     const selectedColumns: SelectedColumnsContextProps['selectedColumns'] = []
     const availableColumns: AvailableColumn[] = data.columns!.map(column => column)
