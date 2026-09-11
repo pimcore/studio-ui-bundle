@@ -14,12 +14,20 @@ import { SelectOptionEntriesGrid } from './select-option-entries-grid'
 
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
 jest.mock('./select-option-entries-grid.styles', () => ({ useStyles: () => ({ styles: { removed: 'removed' } }) }))
+// antd-style ships untranspiled ESM; the class names are all the cells need from these
+jest.mock('@Pimcore/components/grid/columns/default-cell.styles', () => ({ useStyle: () => ({ styles: { 'default-cell': 'default-cell' } }) }))
+jest.mock('@Pimcore/components/form/item/with-annotation.styles', () => ({ useStyles: () => ({ styles: { tag: 'tag' } }) }))
+jest.mock('@Pimcore/components/grid/grid-context', () => ({ GridContext: React.createContext({ size: 'normal' }) }))
 jest.mock('@Pimcore/components/form/item/with-annotation', () => ({
   AnnotationTag: ({ status }: { status: string }) => <span>{`form.annotation.${status}`}</span>
 }))
 jest.mock('@sdk/components', () => ({
   OperationalGrid: () => <div data-testid="operational-grid" />,
-  Box: () => null, ButtonGroup: () => null, CsvImportButton: () => null, IconButton: () => null, Space: () => null
+  Box: () => null,
+  ButtonGroup: () => null,
+  CsvImportButton: () => null,
+  IconButton: () => null,
+  Space: () => null
 }))
 
 // a table that runs the column definitions the way the real grid would, and nothing else
@@ -51,7 +59,10 @@ const rows = [
 
 describe('SelectOptionEntriesGrid read-only', () => {
   it('shows the rows without an action column and without operations', () => {
-    render(<SelectOptionEntriesGrid readOnly value={ rows } />)
+    render(<SelectOptionEntriesGrid
+      readOnly
+      value={ rows }
+           />)
 
     expect(screen.queryByTestId('operational-grid')).not.toBeInTheDocument()
     expect(screen.queryByText('select-option.entries.action')).not.toBeInTheDocument()
@@ -71,6 +82,8 @@ describe('SelectOptionEntriesGrid read-only', () => {
     expect(screen.getByText('form.annotation.changed')).toBeInTheDocument()
     expect(screen.getByText('Head').className).toBe('removed')
     expect(screen.getByText('Wilson').className).toBe('')
+    // drawn in the default cell's chrome, so it pads and centres like every other cell
+    expect(screen.getByText('Head').closest('.default-cell')).not.toBeNull()
   })
 
   it('stays the editing grid when nothing says otherwise', () => {

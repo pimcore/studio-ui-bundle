@@ -10,12 +10,15 @@
 
 import { Box, ButtonGroup, CsvImportButton, IconButton, OperationalGrid, Space } from '@sdk/components'
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
-import React, { useMemo } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { SelectOptionData } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { Grid } from '@Pimcore/components/grid/grid'
+import { GridContext } from '@Pimcore/components/grid/grid-context'
+import { useStyle as useDefaultCellStyle } from '@Pimcore/components/grid/columns/default-cell.styles'
 import { type FormItemAnnotation } from '@Pimcore/components/form/annotations/form-annotations-provider'
 import { AnnotationTag } from '@Pimcore/components/form/item/with-annotation'
+import { useStyles as useAnnotationStyles } from '@Pimcore/components/form/item/with-annotation.styles'
 import { useStyles } from './select-option-entries-grid.styles'
 
 export interface SelectOptionEntriesGridProps {
@@ -110,16 +113,31 @@ const useColumns = (value: SelectOptionData[], onChange?: (value: SelectOptionDa
   ], [value, onChange])
 }
 
+/** a custom cell drawn in the default cell's own chrome, so it pads and centres like every other */
+const ReadOnlyCell = ({ children }: { children: React.ReactNode }): React.JSX.Element => {
+  const { size } = useContext(GridContext)
+  const { styles } = useDefaultCellStyle({ size })
+
+  return (
+    <div className={ styles['default-cell'] }>
+      <div className="default-cell__content default-cell__content--padded">{ children }</div>
+    </div>
+  )
+}
+
 const useReadOnlyColumns = (annotations: Record<string, FormItemAnnotation> | undefined): Array<ColumnDef<SelectOptionData, any>> => {
   const { t } = useTranslation()
   const { styles } = useStyles()
+  const { styles: annotationStyles } = useAnnotationStyles()
 
   return useMemo(() => {
     // a removed row is still a row: struck through, so the reader sees what goes
     const text = (info: { getValue: () => unknown, row: { original: SelectOptionData } }): React.JSX.Element => (
-      <span className={ annotations?.[info.row.original.value]?.status === 'removed' ? styles.removed : undefined }>
-        { String(info.getValue() ?? '') }
-      </span>
+      <ReadOnlyCell>
+        <span className={ annotations?.[info.row.original.value]?.status === 'removed' ? styles.removed : undefined }>
+          { String(info.getValue() ?? '') }
+        </span>
+      </ReadOnlyCell>
     )
     const columns: Array<ColumnDef<SelectOptionData, any>> = [
       columnHelper.accessor('label', { header: t('select-option.entries.display-name'), cell: text }),
@@ -133,12 +151,23 @@ const useReadOnlyColumns = (annotations: Record<string, FormItemAnnotation> | un
         size: 110,
         cell: (info) => {
           const annotation = annotations[info.row.original.value]
-          return annotation === undefined ? null : <AnnotationTag status={ annotation.status } />
+          return (
+            <ReadOnlyCell>
+              { annotation === undefined
+                ? null
+                : (
+                  <AnnotationTag
+                    className={ annotationStyles.tag }
+                    status={ annotation.status }
+                  />
+                  ) }
+            </ReadOnlyCell>
+          )
         }
       }))
     }
     return columns
-  }, [annotations, styles])
+  }, [annotations, styles, annotationStyles])
 }
 
 const ReadOnlyEntriesGrid = ({ value, annotations }: { value: SelectOptionData[], annotations?: Record<string, FormItemAnnotation> }): React.JSX.Element => {
