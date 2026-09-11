@@ -16,7 +16,7 @@ import { PagingDecorator } from '@Pimcore/modules/element/listing/decorators/pag
 import { SortingDecorator } from '@Pimcore/modules/element/listing/decorators/sorting/sorting-decorator'
 import { useDataObjectGetSearchQuery } from '@Pimcore/modules/search/search-api-slice.gen'
 import { compose } from '@Pimcore/utils/compose'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { type SearchListingProps, withExtraSidebarEntries } from '@Pimcore/modules/search/modal/tabs/search-listing-props'
 import { DefaultView } from './view/view-layer/views/default-view'
 import { OpenElementDecorator, type OpenElementDecoratorConfig } from './decorator/open-element/open-element-decorator'
@@ -59,7 +59,12 @@ const buildListingProps = (savedSearchReadOnly: boolean): AbstractDecoratorProps
 
 
 export const ObjectSearchListing = ({ savedSearchReadOnly = false, defaultSidebarTab, extraSidebarEntries, listingSlot }: SearchListingProps = {}): React.JSX.Element => {
-  const listingProps = withExtraSidebarEntries(buildListingProps(savedSearchReadOnly), extraSidebarEntries)
+  // memoized: buildListingProps composes NEW component types per call, and passing fresh
+  // types into the settings remounts the whole listing tree on every re-render
+  const listingProps = useMemo(
+    () => withExtraSidebarEntries(buildListingProps(savedSearchReadOnly), extraSidebarEntries),
+    [savedSearchReadOnly, extraSidebarEntries]
+  )
   return (
     <LanguageSelectionProvider>
       <DynamicTypeRegistryProvider serviceIds={ [
