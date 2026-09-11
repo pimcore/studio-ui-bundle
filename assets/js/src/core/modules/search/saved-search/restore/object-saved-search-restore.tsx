@@ -24,6 +24,11 @@ import { restoredColumnKeys, useApplySavedSearch } from './use-apply-saved-searc
  * (so its columns load) when one is set, then applies the saved search. A data-object search can be
  * classless (search across all classes), so routing is by elementType, not by the presence of a classId.
  */
+/** the columns every object listing offers without a class — what the classless static set holds */
+const SYSTEM_COLUMN_KEYS = new Set([
+  'id', 'type', 'fullpath', 'key', 'published', 'classname', 'filename', 'creationDate', 'modificationDate', 'index'
+])
+
 export const ObjectSavedSearchRestore = (): null => {
   const { pendingRestore, setPendingRestore } = useSearch()
   const { availableColumns } = useAvailableColumns()
@@ -56,6 +61,16 @@ export const ObjectSavedSearchRestore = (): null => {
     // map to almost nothing against them, and a restore applied there "matches" that reduced
     // set and consumes itself before the class columns ever arrive.
     if (hasClass && selectedClassDefinition?.id !== classId) {
+      return
+    }
+    // Selecting the class is not enough: its column set loads after it, and until it lands the
+    // available columns are still the classless system set — a search that saves class data
+    // columns applied there maps them away and consumes itself. Wait for a set that actually
+    // carries class columns; a saved column the class no longer has still just drops.
+    const savedKeys = ((pendingRestore.columns ?? []) as Array<{ key?: string }>).map((column) => column.key ?? '')
+    const savesClassColumns = savedKeys.some((key) => key !== '' && !SYSTEM_COLUMN_KEYS.has(key))
+    const classColumnsArrived = availableColumns.some((column) => !SYSTEM_COLUMN_KEYS.has(column.key))
+    if (hasClass && savesClassColumns && !classColumnsArrived) {
       return
     }
     // Wait for the available columns before applying, otherwise the saved column layout (and
