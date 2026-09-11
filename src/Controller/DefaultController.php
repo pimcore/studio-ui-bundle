@@ -41,6 +41,7 @@ final class DefaultController extends FrontendController
     #[Route('')]
     #[Route('/login')]
     #[Route('/reset-password')]
+    #[Route('/oauth/consent')]
     #[Route('/{elementType}/{id}', requirements: ['elementType' => 'asset|data-object|document', 'id' => '\d+'])]
     public function indexAction(
         string $studioUrlPath,

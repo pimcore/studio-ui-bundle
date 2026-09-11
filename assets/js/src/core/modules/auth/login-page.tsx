@@ -38,9 +38,16 @@ export const LoginPage = (): React.JSX.Element => {
   useEffect(() => {
     if (isAuthenticated === true) {
       (async () => {
-        const redirectPath: string = location?.state?.from?.pathname
+        const from = location?.state?.from
+        const redirectPath: string | undefined = from?.pathname
 
-        navigate(redirectPath ?? routes.root)
+        // Preserve the original query string (e.g. the OAuth `authorization_id`)
+        // so deep links that carry state survive the login round-trip.
+        navigate(
+          redirectPath !== undefined
+            ? { pathname: redirectPath, search: from?.search ?? '' }
+            : routes.root
+        )
 
         await sendStatistics(user.isAdmin)
       })().catch(() => { })

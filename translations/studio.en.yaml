@@ -426,6 +426,24 @@ login-form.username: Username
 login-form.password: Password
 aria.login-form-additional-logins.additional-login-provider: "Additional login provider:"
 aria.login-form-additional-logins.remember-me-checkbox: Remember me checkbox
+oauth.consent.title: Authorize access
+oauth.consent.subtitle: "{{client}} wants to access Pimcore as you."
+oauth.consent.unverified: This application registered itself and is unverified. Only continue if you started this from the application you trust.
+oauth.consent.redirect-to: "After you allow, you will be sent to {{host}}"
+oauth.consent.permissions-heading: "This will allow it to:"
+oauth.consent.no-scopes: No specific permissions were requested.
+oauth.consent.signed-in-as: "Signed in as {{username}}"
+oauth.consent.allow: Allow
+oauth.consent.deny: Deny
+oauth.consent.scope.mcp-read.label: Read your data
+oauth.consent.scope.mcp-read.description: Read, list and search across the tools available to you.
+oauth.consent.scope.mcp-write.label: Modify your data
+oauth.consent.scope.mcp-write.description: Use tools that change data, still limited to your own permissions.
+oauth.consent.retry: Try again
+oauth.consent.error.load-failed: This authorization request could not be loaded.
+oauth.consent.error.decision-failed: Your decision could not be submitted. Please try again.
+oauth.consent.expired.title: This authorization request has expired
+oauth.consent.expired.description: Please start again from your application.
 unsaved-notice: Please save to confirm your changes
 widget-manager.tab-title.close-confirmation: You have unsaved changes, are you sure you want to close this tab?
 action-applied-successfully: Action applied successfully

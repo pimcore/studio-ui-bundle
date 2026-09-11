@@ -267,6 +267,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/telemetry/telemetry-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/telemetry\/?/i)
+    },
+    '../../js/src/core/modules/oauth/oauth-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/oauth\//i)
     }
   },
   exportName: 'api',

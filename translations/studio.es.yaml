@@ -426,6 +426,24 @@ login-form.username: Nombre de usuario
 login-form.password: Contraseña
 aria.login-form-additional-logins.additional-login-provider: "Proveedor de inicio de sesión adicional:"
 aria.login-form-additional-logins.remember-me-checkbox: Casilla de recordarme
+oauth.consent.title: Autorizar acceso
+oauth.consent.subtitle: "{{client}} desea acceder a Pimcore en su nombre."
+oauth.consent.unverified: Esta aplicación se registró por sí misma y no está verificada. Continúe solo si inició esto desde la aplicación en la que confía.
+oauth.consent.redirect-to: "Después de permitirlo, será redirigido a {{host}}"
+oauth.consent.permissions-heading: "Esto le permitirá:"
+oauth.consent.no-scopes: No se solicitaron permisos específicos.
+oauth.consent.signed-in-as: "Sesión iniciada como {{username}}"
+oauth.consent.allow: Permitir
+oauth.consent.deny: Denegar
+oauth.consent.scope.mcp-read.label: Leer sus datos
+oauth.consent.scope.mcp-read.description: Leer, listar y buscar en las herramientas disponibles para usted.
+oauth.consent.scope.mcp-write.label: Modificar sus datos
+oauth.consent.scope.mcp-write.description: Usar herramientas que modifican datos, siempre limitadas a sus propios permisos.
+oauth.consent.retry: Intentar de nuevo
+oauth.consent.error.load-failed: No se pudo cargar esta solicitud de autorización.
+oauth.consent.error.decision-failed: No se pudo enviar su decisión. Vuelva a intentarlo.
+oauth.consent.expired.title: Esta solicitud de autorización ha caducado
+oauth.consent.expired.description: Vuelva a empezar desde su aplicación.
 unsaved-notice: Guarde para confirmar sus cambios
 widget-manager.tab-title.close-confirmation: Tiene cambios sin guardar, ¿está seguro de que desea cerrar esta pestaña?
 action-applied-successfully: Acción aplicada con éxito
