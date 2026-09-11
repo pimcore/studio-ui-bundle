@@ -19,7 +19,7 @@ import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/e
 import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
 import { useTranslationLoader } from './loader/translation/loader'
 import { useUserLoader } from './loader/user/loader'
-import { useMercureCreateCookieMutation } from '../mercure-api-slice.gen'
+import { renewMercureAuthorization } from '@Pimcore/modules/app/mercure/mercure-authorization'
 import { useSettingsLoader } from './loader/settings/loader'
 import { useActiveBundlesLoader } from './loader/active-bundles/loader'
 import { useLanguageLoader } from './loader/language/loader'
@@ -91,7 +91,6 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
 
   const { loadPublicTranslations, loadTranslations } = useTranslationLoader()
   const { loadUser } = useUserLoader()
-  const [fetchMercureCookie] = useMercureCreateCookieMutation()
   const { loadSettings } = useSettingsLoader()
   const { loadActiveBundles } = useActiveBundlesLoader()
   const { loadAvailableLocales } = useLanguageLoader()
@@ -137,8 +136,12 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
         // silently drops every PRIVATE update on the per-user topic
         // (studio-backend-default/user/{id}) for the whole session — until the
         // next reload, where the cookie already exists. Fetch the cookie first,
-        // then start the subscription.
-        await fetchMercureCookie()
+        // then start the subscription. This also teaches the renewal how long the
+        // cookie lives; every later reconnect renews it on its own.
+        await renewMercureAuthorization().catch(() => {
+          // Studio still has to load. Live updates stay off until a reconnect
+          // manages to authorize again, which every reconnect attempts.
+        })
 
         const user = selectCurrentUser(store.getState())
         if (!isNil(user?.id)) {
