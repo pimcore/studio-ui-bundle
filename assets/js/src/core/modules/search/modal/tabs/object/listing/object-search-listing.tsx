@@ -58,7 +58,7 @@ const buildListingProps = (savedSearchReadOnly: boolean): AbstractDecoratorProps
 
 
 
-export const ObjectSearchListing = ({ savedSearchReadOnly = false, defaultSidebarTab, extraSidebarEntries }: SearchListingProps = {}): React.JSX.Element => {
+export const ObjectSearchListing = ({ savedSearchReadOnly = false, defaultSidebarTab, extraSidebarEntries, listingSlot }: SearchListingProps = {}): React.JSX.Element => {
   const listingProps = withExtraSidebarEntries(buildListingProps(savedSearchReadOnly), extraSidebarEntries)
   return (
     <LanguageSelectionProvider>
@@ -72,6 +72,7 @@ export const ObjectSearchListing = ({ savedSearchReadOnly = false, defaultSideba
         <ListingContainer
           { ...listingProps }
           defaultSidebarTab={ defaultSidebarTab }
+          listingSlot={ listingSlot }
         />
       </DynamicTypeRegistryProvider>
     </LanguageSelectionProvider>

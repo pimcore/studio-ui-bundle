@@ -53,7 +53,7 @@ const buildListingProps = (savedSearchReadOnly: boolean): AbstractDecoratorProps
 
 
 
-export const DocumentSearchListing = ({ savedSearchReadOnly = false, defaultSidebarTab, extraSidebarEntries }: SearchListingProps = {}): React.JSX.Element => {
+export const DocumentSearchListing = ({ savedSearchReadOnly = false, defaultSidebarTab, extraSidebarEntries, listingSlot }: SearchListingProps = {}): React.JSX.Element => {
   const listingProps = withExtraSidebarEntries(buildListingProps(savedSearchReadOnly), extraSidebarEntries)
   return (
     <DynamicTypeRegistryProvider serviceIds={ [
@@ -64,6 +64,8 @@ export const DocumentSearchListing = ({ savedSearchReadOnly = false, defaultSide
     >
       <ListingContainer
         { ...listingProps }
+        defaultSidebarTab={ defaultSidebarTab }
+        listingSlot={ listingSlot }
       />
     </DynamicTypeRegistryProvider>
   )
