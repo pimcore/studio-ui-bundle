@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 
 // the settings bundle under test; each case replaces it before rendering
 let settings: Record<string, unknown> = {}
@@ -84,7 +84,7 @@ jest.mock('@sdk/components', () => ({
   HotspotDroppable: ({ children }: any) => <div data-testid="droppable">{children}</div>,
   Icon: ({ value }: any) => <i>{value}</i>,
   Space: ({ children }: any) => <div>{children}</div>,
-  TreeElement: ({ treeData, titleRender }: any) => {
+  TreeElement: ({ treeData, titleRender, onActionsClick }: any) => {
     const renderItem = (item: any): React.JSX.Element => (
       <li
         data-actions={ JSON.stringify((item.actions ?? []).map((action: any) => action.key)) }
@@ -93,6 +93,15 @@ jest.mock('@sdk/components', () => ({
         key={ item.key }
       >
         {titleRender({ key: item.key, meta: item.meta }, <span>{item.title}</span>)}
+        {(item.actions ?? []).map((action: any) => (
+          <button
+            data-testid={ `action-${item.key}-${action.key}` }
+            key={ action.key }
+            onClick={ () => onActionsClick(item.key, action.key, item) }
+          >
+            {action.key}
+          </button>
+        ))}
         <ul>{(item.children ?? []).map(renderItem)}</ul>
       </li>
     )
@@ -126,6 +135,8 @@ const renderSidebar = (overrides: Record<string, unknown>): void => {
 }
 
 describe('DetailSidebar', () => {
+  beforeEach(() => { jest.clearAllMocks() })
+
   it('offers actions and drag handles when editing', () => {
     renderSidebar({})
 
@@ -144,6 +155,17 @@ describe('DetailSidebar', () => {
     expect(screen.queryByTestId('draggable')).toBeNull()
     expect(screen.queryByTestId('droppable')).toBeNull()
     expect(screen.getByText('title')).toBeInTheDocument()
+  })
+
+  it('ignores a mutating action a decorator put back in review mode', () => {
+    renderSidebar({
+      readOnly: true,
+      decorateTreeItem: (item: any) => ({ ...item, actions: [{ key: 'delete', icon: 'trash' }] })
+    })
+
+    fireEvent.click(screen.getByTestId('action-f1-delete'))
+
+    expect(layout.removeFieldDefinition).not.toHaveBeenCalled()
   })
 
   it('lets a decorator have the last word on every item', () => {
