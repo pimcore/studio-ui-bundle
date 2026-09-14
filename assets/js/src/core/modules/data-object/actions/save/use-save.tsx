@@ -57,12 +57,18 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
   const { id } = useContext(DataObjectContext)
   const { dataObject, properties, setDraftData } = useDataObjectDraft(id)
   const [saveDataObject, { isLoading, isSuccess, isError, error }] = useDataObjectUpdateByIdMutation()
-  const { setRunningTask, runningTask, runningTaskRef, queuedTask, setQueuedTask } = useSaveContext()
+  const { setRunningTask, runningTask, runningTaskRef, queuedTask, queuedTaskRef, setQueuedTask } = useSaveContext()
   const dispatch = useAppDispatch()
 
   const executeQueuedTask = async (): Promise<void> => {
-    if (!isNil(queuedTask)) {
-      const executeTask = { ...queuedTask }
+    // Read and claim the task through the ref, not the state: useSave is mounted in
+    // several places that share this context, so the state value can still be the
+    // queued task in another instance running the same effect in this tick, and the
+    // task would be sent twice. Clearing it through setQueuedTask updates the ref
+    // synchronously, so only the first instance gets it.
+    const executeTask = queuedTaskRef?.current
+
+    if (!isNil(executeTask)) {
       setQueuedTask(undefined)
       await save(executeTask.editableData, executeTask.task)
     }
@@ -84,6 +90,16 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
 
     if (!isNil(runningTaskRef?.current)) {
       if (task === SaveTaskType.AutoSave) {
+        const queuesBehindAutoSave = runningTaskRef?.current === SaveTaskType.AutoSave &&
+          (isNil(queuedTaskRef?.current) || queuedTaskRef.current.task === SaveTaskType.AutoSave)
+
+        if (queuesBehindAutoSave) {
+          setQueuedTask({
+            task,
+            editableData
+          })
+        }
+
         return
       }
 

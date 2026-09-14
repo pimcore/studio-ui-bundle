@@ -22,6 +22,7 @@ export interface ISaveContext {
   isAutoSaveLoading: boolean
   runningTaskRef: React.MutableRefObject<SaveTaskType | undefined>
   queuedTask?: QueuedDask
+  queuedTaskRef: React.MutableRefObject<QueuedDask | undefined>
   setQueuedTask: (task?: QueuedDask) => void
 }
 
@@ -49,6 +50,7 @@ export const SaveProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isAutoSaveLoading: runningTask === SaveTaskType.AutoSave,
     runningTaskRef,
     queuedTask,
+    queuedTaskRef,
     setQueuedTask
   }), [runningTask, queuedTask])
 

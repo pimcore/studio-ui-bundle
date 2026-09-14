@@ -20,7 +20,9 @@ import {
   type GetGridCellDefinitionProps
 } from '../dynamic-type-object-data-abstract'
 import { Block } from '../components/block/block'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { FieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label'
+import { RestoreInheritanceLabelExtra } from '@Pimcore/modules/data-object/components/restore-inheritance-label-extra'
 import { ItemsCount } from '../../grid-cell-preview/items-count/items-count'
 import { VersionBlock } from '@Pimcore/modules/element/dynamic-types/defintinitions/objects/data-related/components/block/versions/version-block'
 import { type FormItemProps } from 'antd'
@@ -33,16 +35,27 @@ export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
     formLayout: 'vertical'
   }
 
+  /** The block API takes a list of items, so clearing it cannot go through null. */
+  getEmptyValue (): unknown {
+    return []
+  }
+
   getObjectDataComponent (props: AbstractObjectDataDefinition): React.ReactElement<AbstractObjectDataDefinition> {
     return (
       <Block
         { ...props }
         className={ props.className }
         title={
-          <FieldLabel
-            label={ props.title }
-            name={ props.name }
-          />
+          // Restore sits on the block's own label: block inheritance is all-or-nothing,
+          // and the block form item carries no label the generic slot could render into.
+          // The flex row keeps the action beside the label in the accordion header.
+          <Flex align="center">
+            <FieldLabel
+              label={ props.title }
+              name={ props.name }
+            />
+            <RestoreInheritanceLabelExtra />
+          </Flex>
         }
       />
     )
