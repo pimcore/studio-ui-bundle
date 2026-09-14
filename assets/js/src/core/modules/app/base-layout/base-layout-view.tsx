@@ -17,9 +17,11 @@ import { Notification as ExecutionEngineNotification } from '@Pimcore/modules/ex
 import { useSelector } from 'react-redux'
 import { getAdminSettings } from '@Pimcore/modules/app/settings/settings-slice'
 import { isUndefined } from 'lodash'
+import { useTranslation } from 'react-i18next'
 
 export const BaseLayoutView = (): React.JSX.Element => {
   const { styles } = useStlyes()
+  const { t } = useTranslation()
   const adminSettings = useSelector(getAdminSettings)
 
   useEffect(() => {
@@ -37,9 +39,21 @@ export const BaseLayoutView = (): React.JSX.Element => {
     <div
       className={ ['base-layout', styles.baseLayout].join(' ') }
     >
+      <a
+        className={ styles.skipLink }
+        href="#main-content"
+      >
+        {t('skip-to-content')}
+      </a>
+
       <LeftSidebarView />
 
-      <WidgetManagerContainer />
+      <div
+        id="main-content"
+        tabIndex={ -1 }
+      >
+        <WidgetManagerContainer />
+      </div>
       <ExecutionEngineNotification />
 
       <RightSidebarView />
