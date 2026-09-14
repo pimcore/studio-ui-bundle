@@ -14,7 +14,7 @@ import { type DynamicTypeFieldDefinitionRegistry } from '@Pimcore/modules/field-
 import { type FieldDefinition, type Layout } from '@Pimcore/modules/field-definitions/utils/layout-provider-factory'
 import { serviceIds, useInjection } from '@sdk/app'
 import { type TreeDataItem } from '@sdk/components'
-import React, { type ComponentType, createContext, useContext, useMemo } from 'react'
+import React, { type ComponentType, createContext, type ReactNode, useContext, useMemo } from 'react'
 import { type AnyMutationHook, type AnyQueryHook } from 'types/react-query'
 
 export interface UseDetailLayoutAccessorReturn {
@@ -36,6 +36,9 @@ export type TreeItemDecorator = (
   context: { fieldDefinition: FieldDefinition | undefined, path: string[] }
 ) => TreeDataItem
 
+/** the same, for the general-settings row: a caller that knows the settings changed can say so */
+export type GeneralSettingsDecorator = (label: ReactNode) => ReactNode
+
 export interface ISettingsContext {
   AddModal?: ComponentType<OptionalModalProps>
   useItemsQuery: AnyQueryHook
@@ -53,6 +56,9 @@ export interface ISettingsContext {
   /** review mode: the editor renders, nothing writes — no save, no tree mutations, forms disabled */
   readOnly?: boolean
   decorateTreeItem?: TreeItemDecorator
+  decorateGeneralSettings?: GeneralSettingsDecorator
+  /** a line above the layout tree — a review says here when the tree holds nothing to look at */
+  treeNotice?: ReactNode
   customLayouts?: {
     ModalContent?: React.JSX.Element
 

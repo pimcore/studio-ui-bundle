@@ -50,7 +50,7 @@ export interface FieldDefinitionDragDropInfo extends DragAndDropInfo {
 }
 
 export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
-  const { useLayout, readOnly = false, decorateTreeItem } = useSettings()
+  const { useLayout, readOnly = false, decorateTreeItem, decorateGeneralSettings, treeNotice } = useSettings()
   const { detailView, setDetailView } = useItems()
   const { t } = useTranslation()
   const { token } = theme.useToken()
@@ -643,7 +643,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
             type='text'
           >
             <div style={ { paddingLeft: '16px' } }>
-              {t('field-definitions.general-settings')}
+              {decorateGeneralSettings?.(t('field-definitions.general-settings')) ?? t('field-definitions.general-settings')}
             </div>
             <div style={ { position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)' } }>
               <Icon
@@ -661,6 +661,7 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
         overflow={ { x: 'hidden', y: 'auto' } }
         style={ { minHeight: 0, flex: 1 } }
       >
+        {treeNotice}
         <TreeElement
           defaultExpandedKeys={ expandedKeys }
           onActionsClick={ onActionsClick }
