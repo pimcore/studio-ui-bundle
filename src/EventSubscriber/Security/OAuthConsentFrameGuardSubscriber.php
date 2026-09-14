@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\StudioUiBundle\EventSubscriber\Security;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -76,11 +77,26 @@ final class OAuthConsentFrameGuardSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if (rtrim($event->getRequest()->getPathInfo(), '/') !== $this->consentPath) {
+        if (!$this->isConsentRequest($event->getRequest())) {
             return;
         }
 
         $this->denyFraming($event->getResponse());
+    }
+
+    /**
+     * Request::getPathInfo() is still percent-encoded, while the router matches on the decoded
+     * path (CompiledUrlMatcherTrait::doMatch() calls rawurldecode() on it). Comparing the raw
+     * path would let "/oauth/%63onsent" reach the consent controller with this guard skipped.
+     *
+     * Decoded exactly once, like the router: decoding repeatedly would match paths the router
+     * never routes here, and would let "%2563onsent" pass a guard the router does not apply.
+     */
+    private function isConsentRequest(Request $request): bool
+    {
+        $path = rawurldecode($request->getPathInfo());
+
+        return rtrim($path, '/') === $this->consentPath;
     }
 
     private function denyFraming(Response $response): void

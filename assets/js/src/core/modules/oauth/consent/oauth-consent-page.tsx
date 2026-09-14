@@ -50,6 +50,10 @@ export const OAuthConsentPage = (): React.JSX.Element => {
   // set is ever widened.
   const requestId = isNull(authorizationId) ? '' : encodeURIComponent(authorizationId)
 
+  // Set once the decision has been accepted and the browser is leaving the SPA. Assigning
+  // window.location does not unmount synchronously, so the page keeps rendering for a moment.
+  const [isRedirecting, setIsRedirecting] = useState(false)
+
   const {
     // currentData (not data) so the view never renders a previously loaded
     // authorization while a different id is still in flight — the decision must
@@ -61,7 +65,10 @@ export const OAuthConsentPage = (): React.JSX.Element => {
     refetch
   } = useOauthAuthorizationDetailsQuery(
     { id: requestId },
-    { skip: isNull(authorizationId) }
+    // Skipped once the decision succeeded: approving invalidates the OAuth tag, which would
+    // otherwise refetch an authorization the backend has just consumed and answer 404 while the
+    // browser is still navigating away.
+    { skip: isNull(authorizationId) || isRedirecting }
   )
 
   const [approve, { isLoading: isSubmitting }] = useOauthAuthorizationApproveMutation()
@@ -79,6 +86,30 @@ export const OAuthConsentPage = (): React.JSX.Element => {
     }
   }, [isError, status])
 
+  const onDecisionFailed = (reason: unknown): void => {
+    const failureStatus = httpStatusOf(reason as FetchBaseQueryError | SerializedError | undefined)
+
+    if (failureStatus === 401) {
+      // The session died between loading the authorization and submitting the
+      // decision. Same round-trip as the query path, so the authorization_id
+      // survives the login; retrying here could only 401 again.
+      navigate(routes.login, { state: { from: location } })
+
+      return
+    }
+
+    if (failureStatus === 404) {
+      // The authorization expired between loading it and submitting the
+      // decision; retrying can never succeed, so show the expired state.
+      setDecisionExpired(true)
+
+      return
+    }
+
+    // The id is valid until it expires, so let the user retry the decision.
+    setDecisionError(t('oauth.consent.error.decision-failed'))
+  }
+
   const onDecision = (approved: boolean): void => {
     if (isNull(authorizationId)) {
       return
@@ -90,20 +121,10 @@ export const OAuthConsentPage = (): React.JSX.Element => {
       .unwrap()
       .then((result) => {
         // Leave the SPA for the client's redirect_uri (Allow -> code, Deny -> error).
+        setIsRedirecting(true)
         window.location.assign(result.location)
       })
-      .catch((reason) => {
-        if (httpStatusOf(reason as FetchBaseQueryError | SerializedError | undefined) === 404) {
-          // The authorization expired between loading it and submitting the
-          // decision; retrying can never succeed, so show the expired state.
-          setDecisionExpired(true)
-
-          return
-        }
-
-        // The id is valid until it expires, so let the user retry the decision.
-        setDecisionError(t('oauth.consent.error.decision-failed'))
-      })
+      .catch(onDecisionFailed)
   }
 
   const renderMessage = (title: string, description: string): React.JSX.Element => (
@@ -124,6 +145,11 @@ export const OAuthConsentPage = (): React.JSX.Element => {
 
   if (isNull(authorizationId)) {
     body = renderExpired()
+  } else if (isRedirecting) {
+    // The decision succeeded and the browser is navigating to the client's redirect_uri.
+    // Nothing the query does in the meantime may replace this with an error card: showing
+    // "expired" right after a successful authorization would be actively misleading.
+    body = <Spin type="classic" />
   } else if (status === 401) {
     // Redirect is in flight (see effect above); render nothing meaningful.
     body = <Spin type="classic" />

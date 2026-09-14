@@ -103,6 +103,48 @@ class OAuthConsentFrameGuardSubscriberTest extends Unit
         }
     }
 
+    /**
+     * The router matches on the decoded path, so a percent-encoded spelling of the consent path
+     * reaches the same controller and must not slip past the guard.
+     */
+    public function testGuardsPercentEncodedSpellingsOfTheConsentPath(): void
+    {
+        foreach ([
+            'single encoded character' => '/pimcore-studio/oauth/%63onsent',
+            'fully encoded segment' => '/pimcore-studio/oauth/%63%6f%6e%73%65%6e%74',
+            'encoded separator' => '/pimcore-studio/oauth%2Fconsent',
+            'encoded in both segments' => '/pimcore-studio/%6fauth/%63onsent',
+        ] as $label => $path) {
+            $response = $this->handle($path);
+
+            $this->assertSame('DENY', $response->headers->get('X-Frame-Options'), $label);
+            $this->assertSame(
+                [self::FRAME_ANCESTORS_NONE],
+                $response->headers->all(self::CSP_HEADER),
+                $label
+            );
+        }
+    }
+
+    /**
+     * The guard claims exactly what the router routes to the consent screen, no more. Decoding
+     * happens once: "%2563onsent" decodes to "%63onsent", which the router 404s. Route matching
+     * is also case sensitive, so an uppercase spelling is not the consent screen either.
+     */
+    public function testDoesNotClaimPathsTheRouterDoesNotRouteHere(): void
+    {
+        foreach ([
+            'double encoded' => '/pimcore-studio/oauth/%2563onsent',
+            'uppercase' => '/pimcore-studio/oauth/CONSENT',
+            'encoded uppercase' => '/pimcore-studio/oauth/%43ONSENT',
+        ] as $label => $path) {
+            $response = $this->handle($path);
+
+            $this->assertFalse($response->headers->has('X-Frame-Options'), $label);
+            $this->assertFalse($response->headers->has(self::CSP_HEADER), $label);
+        }
+    }
+
     public function testIgnoresSubRequests(): void
     {
         $response = $this->handle(self::CONSENT_PATH, null, self::STUDIO_URL_PATH, HttpKernelInterface::SUB_REQUEST);
