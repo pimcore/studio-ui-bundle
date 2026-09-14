@@ -516,6 +516,11 @@ export const DetailSidebar = (props: DetailSidebarProps): React.JSX.Element => {
   }, [structure, fieldDefinitions, invalidFieldDefinitionIds, copiedPath, isValidChildFieldDefinition, globalCopiedLayout, isValidExternalChildFieldDefinition, readOnly, decorateTreeItem])
 
   const onActionsClick: ITreeElementProps['onActionsClick'] = (nodeKey, actionKey, node) => {
+    // a decorator has the last word on an item and may put actions back; none of them may write
+    if (readOnly) {
+      return
+    }
+
     if (actionKey === 'clone') {
       const clonedNodeId = cloneFieldDefinition(nodeKey)
       pendingClonedNodeIdRef.current = clonedNodeId
