@@ -25,7 +25,7 @@ export interface WysiwygEditableConfig {
   class?: string
   required?: boolean
   /** Quill configuration options (e.g. the toolbar) passed through to the editor */
-  modules?: Record<string, any>
+  modules?: Record<string, unknown>
 }
 
 export type WysiwygEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
