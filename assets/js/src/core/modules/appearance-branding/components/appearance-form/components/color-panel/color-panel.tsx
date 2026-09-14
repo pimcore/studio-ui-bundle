@@ -63,7 +63,7 @@ export const ColorPanel = (): React.JSX.Element => {
               showText
             />
           </Form.Item>
-          <div style={ { marginTop: token.marginXS, fontSize: token.fontSizeSM, color: token.colorTextSecondary } }>
+          <div style={ { marginTop: token.marginXS, fontSize: token.fontSize, color: token.colorTextSecondary } }>
             {t('appearance-branding.color.brand-color.description')}
           </div>
         </Form.Item>
@@ -84,7 +84,7 @@ export const ColorPanel = (): React.JSX.Element => {
               showText
             />
           </Form.Item>
-          <div style={ { marginTop: token.marginXS, fontSize: token.fontSizeSM, color: token.colorTextSecondary } }>
+          <div style={ { marginTop: token.marginXS, fontSize: token.fontSize, color: token.colorTextSecondary } }>
             {t('appearance-branding.color.background-shade.description')}
           </div>
         </Form.Item>
