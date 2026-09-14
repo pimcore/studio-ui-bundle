@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { restoreFieldFilters } from './restore-field-filters'
+import { normalizeSavedGridFilter, restoreFieldFilters } from './restore-field-filters'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { type GridFilter } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 
@@ -118,5 +118,21 @@ describe('restoreFieldFilters', () => {
 
   it('returns an empty array when no filter was saved with the configuration', () => {
     expect(restoreFieldFilters(undefined, availableColumns)).toEqual([])
+  })
+})
+
+describe('normalizeSavedGridFilter', () => {
+  it('returns the filter object unchanged when a filter was saved', () => {
+    const savedFilter: GridFilter = { page: 1, pageSize: 0, includeDescendants: false, columnFilters: [] }
+
+    expect(normalizeSavedGridFilter(savedFilter)).toBe(savedFilter)
+  })
+
+  it('returns undefined for the empty-array response the backend sends when no filter was saved', () => {
+    expect(normalizeSavedGridFilter([])).toBeUndefined()
+  })
+
+  it('returns undefined when nothing was passed', () => {
+    expect(normalizeSavedGridFilter(undefined)).toBeUndefined()
   })
 })

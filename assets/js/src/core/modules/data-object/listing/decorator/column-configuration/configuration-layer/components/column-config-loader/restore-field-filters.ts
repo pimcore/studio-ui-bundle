@@ -8,14 +8,23 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isArray, isObject, isUndefined } from 'lodash'
+import { isArray, isObject, isString, isUndefined } from 'lodash'
 import { type GridFilter } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 
+/**
+ * GridDetailedConfiguration.filter is generated as GridFilter[], but the backend only ever
+ * sends a single Filter object (JSON-encoded as an object, since Filter::toArray() has string
+ * keys) or `[]` when the configuration never had one saved (saveFilter was false) - see
+ * DetailedConfigurationHydrator in the Studio backend. The array form never carries an item.
+ */
+export const normalizeSavedGridFilter = (filter: GridFilter[] | GridFilter | undefined): GridFilter | undefined => {
+  return isArray(filter) ? undefined : filter
+}
+
 const readSavedColumnFilters = (filter: GridFilter[] | GridFilter | undefined): FieldFilter[] => {
-  const savedFilter = isArray(filter) ? undefined : filter
-  const columnFilters = savedFilter?.columnFilters
+  const columnFilters = normalizeSavedGridFilter(filter)?.columnFilters
 
   return isArray(columnFilters) ? columnFilters as unknown as FieldFilter[] : []
 }
@@ -34,7 +43,7 @@ const getConfiguredFilterKey = (column: AvailableColumn): string | undefined => 
 
   const filters = (config as { filters?: unknown }).filters
 
-  return isObject(filters) && 'key' in filters && typeof (filters as { key?: unknown }).key === 'string'
+  return isObject(filters) && 'key' in filters && isString((filters as { key?: unknown }).key)
     ? (filters as { key: string }).key
     : undefined
 }
@@ -54,11 +63,6 @@ const restoreFilterValue = (column: AvailableColumn, filterValue: unknown): unkn
   return isObject(filterValue) && 'value' in filterValue ? (filterValue as { value: unknown }).value : filterValue
 }
 
-/**
- * The backend returns the saved grid-configuration filter as either the persisted
- * object or `[]` when the configuration never had one saved (saveFilter was false) -
- * see GridDetailedConfiguration.filter in the Studio backend.
- */
 export const restoreFieldFilters = (filter: GridFilter[] | GridFilter | undefined, availableColumns: AvailableColumn[]): FieldFilter[] => {
   const restored: FieldFilter[] = []
 
