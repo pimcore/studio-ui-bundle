@@ -1160,6 +1160,10 @@ export-xlsx-form.form-field.header: Overskrift
 export-xlsx-form.form-field.header.option.name: Systemnøkkel
 export-xlsx-form.form-field.header.option.title: Etikett
 export-xlsx-form.form-field.header.option.no-header: Ingen overskrift
+form.annotation.added: Lagt til
+form.annotation.changed: Endret
+form.annotation.removed: Fjernet
+form.annotation.moved: Flyttet
 form.validation.required: Dette feltet er obligatorisk
 form.validation.max-length: Maksimal lengde for dette feltet er {{max}} tegn
 form.validation.min: Minimumsverdien er {{min}}
@@ -2878,3 +2882,4 @@ saved-search.update.success: Lagret søk oppdatert
 saved-search.delete.success: Lagret søk slettet
 saved-search.shared-modified.info: Du har gjort endringer i den opprinnelige konfigurasjonen. Siden den eies av noen andre, kan du lagre den som et nytt søk.
 saved-search.menu-shortcut-group: Menygruppe
+skip-to-content: Hopp til innhold

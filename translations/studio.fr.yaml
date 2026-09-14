@@ -1160,6 +1160,10 @@ export-xlsx-form.form-field.header: En-tête
 export-xlsx-form.form-field.header.option.name: Clé système
 export-xlsx-form.form-field.header.option.title: Libellé
 export-xlsx-form.form-field.header.option.no-header: Sans en-tête
+form.annotation.added: Ajouté
+form.annotation.changed: Modifié
+form.annotation.removed: Supprimé
+form.annotation.moved: Déplacé
 form.validation.required: Ce champ est obligatoire
 form.validation.max-length: La longueur maximale pour ce champ est de {{max}} caractères
 form.validation.min: La valeur minimale est {{min}}
@@ -2878,3 +2882,4 @@ saved-search.update.success: Recherche enregistrée mise à jour
 saved-search.delete.success: Recherche enregistrée supprimée
 saved-search.shared-modified.info: "Vous avez modifié la configuration d’origine. Comme elle appartient à quelqu’un d’autre, vous pouvez l’enregistrer comme nouvelle recherche."
 saved-search.menu-shortcut-group: Groupe de menu
+skip-to-content: Passer au contenu

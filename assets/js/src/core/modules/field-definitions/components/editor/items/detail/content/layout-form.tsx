@@ -22,7 +22,7 @@ interface ILayoutFormProps {
 
 export const LayoutForm = ({ noPadding = false }: ILayoutFormProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { useLayout, fieldDefinitionRegistry } = useSettings()
+  const { useLayout, fieldDefinitionRegistry, readOnly = false } = useSettings()
   const { currentFieldDefinitionId, currentFieldDefinitionIdPath, fieldDefinitions, updateFieldDefinition } = useLayout()
   const fieldDefinition = fieldDefinitions[currentFieldDefinitionId!]
   const [values, setValues] = useState<FieldDefinitionType>(fieldDefinition)
@@ -40,7 +40,7 @@ export const LayoutForm = ({ noPadding = false }: ILayoutFormProps): React.JSX.E
   }, [fieldDefinition])
 
   useEffect(() => {
-    if (activeIdRef.current !== null && debouncedValues !== fieldDefinition) {
+    if (!readOnly && activeIdRef.current !== null && debouncedValues !== fieldDefinition) {
       updateFieldDefinition(activeIdRef.current, debouncedValues)
     }
   }, [debouncedValues])
@@ -64,6 +64,7 @@ export const LayoutForm = ({ noPadding = false }: ILayoutFormProps): React.JSX.E
             <FormKit
               formProps={ {
                 initialValues: { ...fieldDefinition },
+                disabled: readOnly,
                 onValuesChange: (_, changedValues) => {
                   activeIdRef.current = currentFieldDefinitionId
                   setValues(changedValues as FieldDefinitionType)
@@ -77,5 +78,5 @@ export const LayoutForm = ({ noPadding = false }: ILayoutFormProps): React.JSX.E
           )
         : null}
     </>
-  ), [fieldDefinition])
+  ), [fieldDefinition, readOnly])
 }

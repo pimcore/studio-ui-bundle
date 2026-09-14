@@ -15,7 +15,8 @@ import { t } from 'i18next'
 import Wysiwyg from '@Pimcore/modules/wysiwyg/wysiwyg'
 import { Card } from '@Pimcore/components/card/card'
 import { WysiwygContext } from '@Pimcore/modules/wysiwyg/interface/wysiwyg'
-import { Tabpanel, type TabpanelItem } from '@Pimcore/components/tabpanel/tabpanel'
+import { type TabpanelItem } from '@Pimcore/components/tabpanel/tabpanel'
+import { FormKitTabpanel } from '@Pimcore/components/form/layouts/tabpanel/form-kit-tabpanel'
 import { IframeContent } from '@Pimcore/components/iframe-content/iframe-content'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { useGeneralSettings } from '@Pimcore/modules/field-definitions/components/editor/items/detail/general-settings-provider'
@@ -154,7 +155,7 @@ export const FieldDefinitionTextFormFields = (props: FieldDefinitionAbstractForm
         <Input />
       </Form.Item>
 
-      <Tabpanel
+      <FormKitTabpanel
         items={ [configurationTab, previewTab] }
         onChange={ handleTabChange }
       />
