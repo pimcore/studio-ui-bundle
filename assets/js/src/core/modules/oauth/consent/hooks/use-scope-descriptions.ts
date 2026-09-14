@@ -19,10 +19,6 @@ export interface ScopeDescription {
   description?: string
 }
 
-// Scopes the frontend knows how to describe. Unknown scopes are still shown
-// (using their raw string) so nothing is ever silently granted.
-const KNOWN_SCOPES = new Set(['mcp:read', 'mcp:write'])
-
 /**
  * i18n keys must not contain ':' (i18next treats it as the namespace
  * separator), so scope strings are slugified for the key lookup:
@@ -30,18 +26,31 @@ const KNOWN_SCOPES = new Set(['mcp:read', 'mcp:write'])
  */
 const toKeySegment = (scope: string): string => scope.replaceAll(':', '-')
 
+/**
+ * Describes a scope from the translation catalogue, which is the only place a
+ * scope has to be registered: any bundle contributing scopes to the
+ * authorization server (ScopeProviderInterface) describes them by shipping
+ * `oauth.consent.scope.<slug>.label` / `.description` keys. A scope with no
+ * keys is still shown, using its raw identifier, so nothing is ever granted
+ * without appearing on the screen.
+ *
+ * `i18n.exists()` rather than `t()` with a default: the app runs i18next with
+ * `saveMissing`, so looking a key up that does not exist would report every
+ * third-party scope as a missing translation.
+ */
 export const useScopeDescriptions = (): ((scopes: string[]) => ScopeDescription[]) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   return (scopes: string[]): ScopeDescription[] =>
     scopes.map((scope) => {
-      const known = KNOWN_SCOPES.has(scope)
       const segment = toKeySegment(scope)
+      const labelKey = `oauth.consent.scope.${segment}.label`
+      const descriptionKey = `oauth.consent.scope.${segment}.description`
 
       return {
         scope,
-        label: known ? t(`oauth.consent.scope.${segment}.label`) : scope,
-        description: known ? t(`oauth.consent.scope.${segment}.description`) : undefined
+        label: i18n.exists(labelKey) ? t(labelKey) : scope,
+        description: i18n.exists(descriptionKey) ? t(descriptionKey) : undefined
       }
     })
 }
