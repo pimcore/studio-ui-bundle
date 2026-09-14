@@ -85,7 +85,13 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
     setSelectedColumns(selectedColumns)
     setAvailableColumns(availableColumns)
     setGridConfig(initialConfigurationData)
-    appliedFiltersStore?.setValue('fieldFilters', restoreFieldFilters(initialConfigurationData.filter, availableColumns))
+
+    // saveFilter: false means this configuration never managed filter state - leave the
+    // user's currently-applied filters alone rather than clearing them to [].
+    if (initialConfigurationData.saveFilter) {
+      appliedFiltersStore?.setValue('fieldFilters', restoreFieldFilters(initialConfigurationData.filter, availableColumns))
+    }
+
     setDataLoadingState('config-changed')
   }, [data, initialConfigurationData])
 

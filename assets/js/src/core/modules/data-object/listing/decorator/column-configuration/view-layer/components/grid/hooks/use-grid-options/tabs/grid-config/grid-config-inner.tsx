@@ -102,12 +102,13 @@ export const GridConfigInner = (): React.JSX.Element => {
   }
 
   /**
-   * The update API clears a template's saved filter whenever saveFilter is false - it's not a
-   * "leave unchanged" flag. So when generalFilters isn't mounted and buildFilterPayload can't
-   * compute the current filter state, resend the config's existing saveFilter/filter instead
-   * of erasing it.
+   * The save/update API clears a template's saved filter whenever saveFilter is false - it's
+   * not a "leave unchanged" flag. So when generalFilters isn't mounted and buildFilterPayload
+   * can't compute the current filter state, fall back to the source config's own
+   * saveFilter/filter (the template being updated, or the one being cloned via "save as new")
+   * instead of erasing it.
    */
-  const buildUpdateFilterFields = (config: GridConfigData['gridConfig']): { saveFilter: boolean, filter: GridFilter | undefined } => {
+  const buildFilterFields = (config: GridConfigData['gridConfig']): { saveFilter: boolean, filter: GridFilter | undefined } => {
     const filterPayload = buildFilterPayload()
 
     if (!isUndefined(filterPayload)) {
@@ -237,7 +238,7 @@ export const GridConfigInner = (): React.JSX.Element => {
       return
     }
 
-    const { saveFilter, filter } = buildUpdateFilterFields(gridConfig)
+    const { saveFilter, filter } = buildFilterFields(gridConfig)
 
     fetchUpdateGridConfig({
       configurationId: gridConfig.id!,
@@ -274,7 +275,7 @@ export const GridConfigInner = (): React.JSX.Element => {
     }
 
     if (view === ViewState.Update && isSavedConfiguration) {
-      const { saveFilter, filter } = buildUpdateFilterFields(gridConfig)
+      const { saveFilter, filter } = buildFilterFields(gridConfig)
 
       fetchUpdateGridConfig({
         configurationId: gridConfig.id!,
@@ -301,7 +302,7 @@ export const GridConfigInner = (): React.JSX.Element => {
     }
 
     if (view === ViewState.Save) {
-      const filterPayload = buildFilterPayload()
+      const { saveFilter, filter } = buildFilterFields(gridConfig)
 
       fetchSaveGridConfig({
         classId: selectedClassDefinition!.id,
@@ -314,8 +315,8 @@ export const GridConfigInner = (): React.JSX.Element => {
           shareGlobal: values.shareGlobally,
           sharedRoles: gridConfig?.sharedRoles,
           sharedUsers: gridConfig?.sharedUsers,
-          saveFilter: !isUndefined(filterPayload),
-          filter: filterPayload,
+          saveFilter,
+          filter,
           pageSize: 0
         }
       }).catch((error) => {
