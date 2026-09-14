@@ -10,8 +10,10 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { isEmpty, isNil, isUndefined } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
+import { Title } from '@Pimcore/components/title/title'
 import { Button } from '@Pimcore/components/button/button'
 import { type OAuthAuthorizationConsent } from '../oauth-api-slice.gen'
 import { useScopeDescriptions } from './hooks/use-scope-descriptions'
@@ -24,7 +26,12 @@ export interface OAuthConsentViewProps {
   onDecision: (approved: boolean) => void
 }
 
-export const OAuthConsentView = ({ consent, submitting, errorMessage, onDecision }: OAuthConsentViewProps): React.JSX.Element => {
+export const OAuthConsentView = ({
+  consent,
+  submitting,
+  errorMessage,
+  onDecision
+}: OAuthConsentViewProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
   const describeScopes = useScopeDescriptions()
@@ -44,12 +51,12 @@ export const OAuthConsentView = ({ consent, submitting, errorMessage, onDecision
         gap={ 8 }
         vertical
       >
-        <Text
-          strong
-          style={ { fontSize: 20 } }
+        <Title
+          level={ 1 }
+          titleClass={ styles.title }
         >
           { t('oauth.consent.title') }
-        </Text>
+        </Title>
         <Text>
           { t('oauth.consent.subtitle', { client: clientName }) }
         </Text>
@@ -61,7 +68,7 @@ export const OAuthConsentView = ({ consent, submitting, errorMessage, onDecision
             { t('oauth.consent.unverified') }
           </Text>
         ) }
-        { redirectHost != null && redirectHost !== '' && (
+        { !isNil(redirectHost) && !isEmpty(redirectHost) && (
           <Text
             data-testid="oauth-consent-redirect-host"
             type="secondary"
@@ -78,7 +85,7 @@ export const OAuthConsentView = ({ consent, submitting, errorMessage, onDecision
         <Text type="secondary">
           { t('oauth.consent.permissions-heading') }
         </Text>
-        { scopes.length === 0
+        { isEmpty(scopes)
           ? (
             <Text type="secondary">
               { t('oauth.consent.no-scopes') }
@@ -93,7 +100,7 @@ export const OAuthConsentView = ({ consent, submitting, errorMessage, onDecision
                     vertical
                   >
                     <Text strong>{ scope.label }</Text>
-                    { scope.description !== undefined && (
+                    { !isUndefined(scope.description) && (
                       <Text type="secondary">{ scope.description }</Text>
                     ) }
                   </Flex>
@@ -103,15 +110,16 @@ export const OAuthConsentView = ({ consent, submitting, errorMessage, onDecision
             ) }
       </Flex>
 
-      { consent.user != null && (
+      { !isNil(consent.user) && (
         <Text type="secondary">
           { t('oauth.consent.signed-in-as', { username: consent.user.username }) }
         </Text>
       ) }
 
-      { errorMessage !== undefined && (
+      { !isUndefined(errorMessage) && (
         <Text
           data-testid="oauth-consent-error"
+          role="alert"
           type="danger"
         >
           { errorMessage }

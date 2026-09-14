@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { type SerializedError } from '@reduxjs/toolkit'
+import { isNull, isNumber, isUndefined } from 'lodash'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
@@ -28,7 +29,7 @@ const QUERY_PARAM = 'authorization_id'
 
 /** Extract the numeric HTTP status from an RTK Query error, if any. */
 const httpStatusOf = (error: FetchBaseQueryError | SerializedError | undefined): number | undefined => {
-  if (error !== undefined && 'status' in error && typeof error.status === 'number') {
+  if (!isUndefined(error) && 'status' in error && isNumber(error.status)) {
     return error.status
   }
 
@@ -43,20 +44,29 @@ export const OAuthConsentPage = (): React.JSX.Element => {
   const [searchParams] = useSearchParams()
 
   const authorizationId = sanitizeAuthorizationId(searchParams.get(QUERY_PARAM))
+  // The id is opaque, so it is encoded before it reaches the generated client,
+  // which interpolates it into the request path verbatim. A no-op for the
+  // characters sanitizeAuthorizationId accepts, and a second barrier if that
+  // set is ever widened.
+  const requestId = isNull(authorizationId) ? '' : encodeURIComponent(authorizationId)
 
   const {
-    data: consent,
+    // currentData (not data) so the view never renders a previously loaded
+    // authorization while a different id is still in flight — the decision must
+    // always be taken against the authorization actually on screen.
+    currentData: consent,
     isLoading,
     isError,
     error,
     refetch
   } = useOauthAuthorizationDetailsQuery(
-    { id: authorizationId ?? '' },
-    { skip: authorizationId === null }
+    { id: requestId },
+    { skip: isNull(authorizationId) }
   )
 
   const [approve, { isLoading: isSubmitting }] = useOauthAuthorizationApproveMutation()
   const [decisionError, setDecisionError] = useState<string | undefined>(undefined)
+  const [decisionExpired, setDecisionExpired] = useState(false)
 
   const status = httpStatusOf(error)
 
@@ -70,19 +80,27 @@ export const OAuthConsentPage = (): React.JSX.Element => {
   }, [isError, status])
 
   const onDecision = (approved: boolean): void => {
-    if (authorizationId === null) {
+    if (isNull(authorizationId)) {
       return
     }
 
     setDecisionError(undefined)
 
-    approve({ id: authorizationId, body: { approved } })
+    approve({ id: requestId, body: { approved } })
       .unwrap()
       .then((result) => {
         // Leave the SPA for the client's redirect_uri (Allow -> code, Deny -> error).
         window.location.assign(result.location)
       })
-      .catch(() => {
+      .catch((reason) => {
+        if (httpStatusOf(reason as FetchBaseQueryError | SerializedError | undefined) === 404) {
+          // The authorization expired between loading it and submitting the
+          // decision; retrying can never succeed, so show the expired state.
+          setDecisionExpired(true)
+
+          return
+        }
+
         // The id is valid until it expires, so let the user retry the decision.
         setDecisionError(t('oauth.consent.error.decision-failed'))
       })
@@ -99,15 +117,18 @@ export const OAuthConsentPage = (): React.JSX.Element => {
     </Flex>
   )
 
+  const renderExpired = (): React.JSX.Element =>
+    renderMessage(t('oauth.consent.expired.title'), t('oauth.consent.expired.description'))
+
   let body: React.JSX.Element
 
-  if (authorizationId === null) {
-    body = renderMessage(t('oauth.consent.expired.title'), t('oauth.consent.expired.description'))
+  if (isNull(authorizationId)) {
+    body = renderExpired()
   } else if (status === 401) {
     // Redirect is in flight (see effect above); render nothing meaningful.
     body = <Spin type="classic" />
-  } else if (status === 404) {
-    body = renderMessage(t('oauth.consent.expired.title'), t('oauth.consent.expired.description'))
+  } else if (status === 404 || decisionExpired) {
+    body = renderExpired()
   } else if (isError) {
     body = (
       <Flex
@@ -125,7 +146,7 @@ export const OAuthConsentPage = (): React.JSX.Element => {
         </Button>
       </Flex>
     )
-  } else if (isLoading || consent === undefined) {
+  } else if (isLoading || isUndefined(consent)) {
     body = <Spin type="classic" />
   } else {
     body = (

@@ -14,8 +14,11 @@ export const useStyle = createStyles(({ token, css }) => {
   return {
     page: css`
       display: flex;
-      align-items: center;
-      justify-content: center;
+      /* "safe" keeps the card's top reachable: when it is taller than the
+         viewport the browser falls back to start alignment instead of pushing
+         the heading above the scroll origin. */
+      align-items: safe center;
+      justify-content: safe center;
       position: absolute;
       inset: 0;
       overflow-y: auto;
@@ -43,6 +46,13 @@ export const useStyle = createStyles(({ token, css }) => {
         border: 1px solid ${token.colorBorderSecondary};
         border-radius: ${token.borderRadius}px;
       }
+    `,
+    // Overrides the Title component's own 12px default, which is scoped as
+    // '.pimcore-title.ant-typography' — same pattern as sidebar-title.styles.ts.
+    title: css`
+      margin: 0 !important;
+      font-size: 20px !important;
+      line-height: 28px !important;
     `,
     actions: css`
       button {

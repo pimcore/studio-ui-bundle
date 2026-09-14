@@ -22,6 +22,7 @@ import { Checkbox, Input } from 'antd'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
+import { isUndefined } from 'lodash'
 import { Icon } from '../../../../components/icon/icon'
 
 interface ILoginFormProps {
@@ -73,7 +74,7 @@ export const LoginForm = ({ onPasswordForgotten }: ILoginFormProps): React.JSX.E
         // login round-trip. Restoring only the pathname would drop the id and
         // the consent screen would 404 ("expired").
         const from = (location.state as { from?: { pathname?: string, search?: string } } | null)?.from
-        const redirectPath: string = from?.pathname !== undefined
+        const redirectPath: string = !isUndefined(from?.pathname)
           ? `${from.pathname}${from.search ?? ''}`
           : routes.root
 

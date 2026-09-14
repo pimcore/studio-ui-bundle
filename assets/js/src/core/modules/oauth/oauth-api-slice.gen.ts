@@ -40,7 +40,7 @@ export type OauthAuthorizationApproveApiArg = {
     /** Opaque id of the pending authorization */
     id: string;
     body: {
-        approved?: boolean;
+        approved: boolean;
     };
 };
 export type OAuthConsentClient = {
