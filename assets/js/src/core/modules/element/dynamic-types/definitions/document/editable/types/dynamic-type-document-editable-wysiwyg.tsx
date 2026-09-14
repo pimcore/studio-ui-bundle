@@ -9,9 +9,10 @@
  */
 
 import React from 'react'
-import { isString } from 'lodash'
+import { isString, merge } from 'lodash'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { stripTags } from '@Pimcore/utils/html'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import { type AbstractDocumentEditableDefinition, DynamicTypeDocumentEditableAbstract } from '../dynamic-type-document-editable-abstract'
 import { WysiwygEditable } from '../components/wysiwyg-editable/wysiwyg-editable'
 import { WysiwygContext } from '@sdk/modules/wysiwyg'
@@ -23,6 +24,8 @@ export interface WysiwygEditableConfig {
   placeholder?: string
   class?: string
   required?: boolean
+  /** Quill configuration options (e.g. the toolbar) passed through to the editor */
+  modules?: Record<string, any>
 }
 
 export type WysiwygEditableDefinition = Omit<AbstractDocumentEditableDefinition, 'config'> & {
@@ -34,10 +37,16 @@ export class DynamicTypeDocumentEditableWysiwyg extends DynamicTypeDocumentEdita
   initializeInIframe: boolean = true
 
   getEditableDataComponent (props: WysiwygEditableDefinition): React.ReactElement<AbstractDocumentEditableDefinition> {
+    const editorConfig = merge(
+      {},
+      appConfig.wysiwyg.defaultEditorConfig.document,
+      props.config
+    )
+
     return (
       <WysiwygEditable
         context={ WysiwygContext.DOCUMENT }
-        editorConfig={ props.config }
+        editorConfig={ editorConfig }
         height={ props.config?.height }
         inherited={ props.inherited }
         maxCharacters={ props.config?.maxCharacters }
