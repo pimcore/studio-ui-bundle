@@ -70,7 +70,9 @@ const buildSelectedColumns = (savedColumns: SavedColumn[], availableColumns: Ava
     }
     selectedColumns.push({
       key: savedColumn.key,
-      locale: savedColumn.locale,
+      // normalized to null: the column mappers compare locale strictly, and the grid data
+      // carries null — a column saved without a locale (an agent's bare key) must still map
+      locale: savedColumn.locale ?? null,
       type: availableColumn.type,
       config: availableColumn.config,
       sortable: availableColumn.sortable,
@@ -173,3 +175,10 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
     setDataLoadingState('config-changed')
   }
 }
+
+/**
+ * The column keys a saved search resolves to against the live available columns — the set the
+ * restore is expected to leave in the grid. Empty when nothing the search names is available.
+ */
+export const restoredColumnKeys = (saved: SavedColumn[], available: AvailableColumn[]): string[] =>
+  buildSelectedColumns(saved, available).map((column) => column.key ?? '')

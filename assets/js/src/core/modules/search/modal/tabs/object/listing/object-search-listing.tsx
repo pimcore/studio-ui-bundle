@@ -16,7 +16,8 @@ import { PagingDecorator } from '@Pimcore/modules/element/listing/decorators/pag
 import { SortingDecorator } from '@Pimcore/modules/element/listing/decorators/sorting/sorting-decorator'
 import { useDataObjectGetSearchQuery } from '@Pimcore/modules/search/search-api-slice.gen'
 import { compose } from '@Pimcore/utils/compose'
-import React from 'react'
+import React, { useMemo } from 'react'
+import { type SearchListingProps, withExtraSidebarEntries } from '@Pimcore/modules/search/modal/tabs/search-listing-props'
 import { DefaultView } from './view/view-layer/views/default-view'
 import { OpenElementDecorator, type OpenElementDecoratorConfig } from './decorator/open-element/open-element-decorator'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
@@ -42,7 +43,7 @@ const defaultProps = {
 }
 
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
-const listingProps = compose<AbstractDecoratorProps>(
+const buildListingProps = (savedSearchReadOnly: boolean): AbstractDecoratorProps => compose<AbstractDecoratorProps>(
   PagingDecorator,
   ColumnConfigurationDecorator,
   TagFilterDecorator,
@@ -52,12 +53,18 @@ const listingProps = compose<AbstractDecoratorProps>(
   [OpenElementDecorator, { elementType: elementTypes.dataObject } as OpenElementDecoratorConfig],
   [TypeFilterDecorator, { elementType: elementTypes.dataObject } as TypeFilterDecoratorConfig],
   // Composed last so its sidebar entry prepends ahead of the filter/tag entries (first icon).
-  [SavedSearchDecorator, { elementType: elementTypes.dataObject, supportsLoadedState: true } as SavedSearchDecoratorConfig]
+  [SavedSearchDecorator, { elementType: elementTypes.dataObject, supportsLoadedState: true, readOnly: savedSearchReadOnly } as SavedSearchDecoratorConfig]
 )(defaultProps)
 /* eslint-enable @typescript-eslint/consistent-type-assertions */
 
-export const ObjectSearchListing = (): React.JSX.Element => {
+export const ObjectSearchListing = ({ savedSearchReadOnly = false, defaultSidebarTab, extraSidebarEntries, listingSlot }: SearchListingProps = {}): React.JSX.Element => {
   const { close } = useSearch()
+  // memoized: buildListingProps composes NEW component types per call, and passing fresh
+  // types into the settings remounts the whole listing tree on every re-render
+  const listingProps = useMemo(
+    () => withExtraSidebarEntries(buildListingProps(savedSearchReadOnly), extraSidebarEntries),
+    [savedSearchReadOnly, extraSidebarEntries]
+  )
 
   return (
     <ElementClickBehaviorProvider onElementClick={ close }>
@@ -71,6 +78,8 @@ export const ObjectSearchListing = (): React.JSX.Element => {
         >
           <ListingContainer
             { ...listingProps }
+            defaultSidebarTab={ defaultSidebarTab }
+            listingSlot={ listingSlot }
           />
         </DynamicTypeRegistryProvider>
       </LanguageSelectionProvider>
