@@ -21,6 +21,7 @@ const config: Meta<typeof FormAnnotationsProvider> = {
   component: FormAnnotationsProvider,
   parameters: {
     docs: {
+      story: { height: '320px' },
       description: {
         component: `Marks form items from the outside: every \`Form.Item\` below whose resolved name path is in the
 map renders with a status tag and an optional hint, so a form built for editing can be shown as a review without
@@ -36,7 +37,10 @@ export default config
 type Story = StoryObj<typeof FormAnnotationsProvider>
 
 const Fields = (): React.JSX.Element => (
-  <Form initialValues={ { title: 'Product name', layout: 'default', border: true, inherited: false } }>
+  <Form
+    initialValues={ { title: 'Product name', layout: 'default', border: true, inherited: false } }
+    layout="vertical"
+  >
     <Form.Item
       label="Title"
       name="title"
@@ -78,11 +82,10 @@ export const AllStatuses: Story = story({
   inherited: { status: 'removed' }
 })
 
-/** a hint renders under the control, above the item's own extra */
+/** a hint is free text under the control, for whatever the review wants to say about the item */
 export const WithHints: Story = story({
-  title: { status: 'changed', hint: 'was: Old product name' },
-  layout: { status: 'changed', hint: 'was: Fit' },
-  border: { status: 'added', hint: 'not present before' }
+  title: { status: 'changed', hint: 'Optional hint text' },
+  layout: { status: 'moved', hint: 'A second line of detail' }
 })
 
 /** only the named items are marked; the rest render exactly as they always do */
