@@ -29,6 +29,9 @@ export interface SearchContextData {
   /** The saved search currently loaded into a typed tab (drives the Save panel's update/clone state). */
   loadedSavedSearch: SavedSearchDetailedConfiguration | undefined
   setLoadedSavedSearch: (configuration: SavedSearchDetailedConfiguration | undefined) => void
+  /** The Save panel's live form values (name, description, shortcut, sharing) as the user edits them. */
+  panelDraft: Record<string, unknown> | undefined
+  setPanelDraft: (draft: Record<string, unknown> | undefined) => void
 }
 
 export type SearchContextProps = SearchContextData | undefined
@@ -49,10 +52,11 @@ export const SearchProvider = (props: SearchProviderProps): React.JSX.Element =>
   const [searchMode, setSearchMode] = useState<string>(FULLTEXT_SEARCH_MODE_ID)
   const [pendingRestore, setPendingRestore] = useState<SavedSearchDetailedConfiguration | undefined>(props.initialPendingRestore)
   const [loadedSavedSearch, setLoadedSavedSearch] = useState<SavedSearchDetailedConfiguration | undefined>(props.initialLoadedSavedSearch)
+  const [panelDraft, setPanelDraft] = useState<Record<string, unknown> | undefined>(undefined)
 
   return useMemo(() => (
-    <SearchContext.Provider value={ { open, setOpen, activeKey, setActiveKey, searchTerm, setSearchTerm, searchMode, setSearchMode, pendingRestore, setPendingRestore, loadedSavedSearch, setLoadedSavedSearch } }>
+    <SearchContext.Provider value={ { open, setOpen, activeKey, setActiveKey, searchTerm, setSearchTerm, searchMode, setSearchMode, pendingRestore, setPendingRestore, loadedSavedSearch, setLoadedSavedSearch, panelDraft, setPanelDraft } }>
       { props.children }
     </SearchContext.Provider>
-  ), [open, activeKey, searchTerm, searchMode, pendingRestore, loadedSavedSearch])
+  ), [open, activeKey, searchTerm, searchMode, pendingRestore, loadedSavedSearch, panelDraft])
 }

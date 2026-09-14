@@ -19,6 +19,12 @@ export interface SavedSearchDecoratorConfig {
    * for update/clone. In the regular editor grids it stays false — saving is always "save as new".
    */
   supportsLoadedState?: boolean
+  /**
+   * Show the panel without its write actions. A listing embedded in a review shows what the
+   * search is called and who it is shared with, but saving is the reviewer's decision to make
+   * elsewhere, not a second way out of the panel.
+   */
+  readOnly?: boolean
 }
 
 /**
@@ -31,7 +37,8 @@ export const SavedSearchDecorator: AbstractDecorator<SavedSearchDecoratorConfig>
     ...defaultProps,
     useSidebarOptions: withSavedSearchSidebarEntry(useSidebarOptions, {
       elementType: config?.elementType,
-      supportsLoadedState: config?.supportsLoadedState ?? false
+      supportsLoadedState: config?.supportsLoadedState ?? false,
+      readOnly: config?.readOnly ?? false
     })
   }
 
