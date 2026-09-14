@@ -1160,6 +1160,10 @@ export-xlsx-form.form-field.header: Header
 export-xlsx-form.form-field.header.option.name: System key
 export-xlsx-form.form-field.header.option.title: Label
 export-xlsx-form.form-field.header.option.no-header: No header
+form.annotation.added: Added
+form.annotation.changed: Changed
+form.annotation.removed: Removed
+form.annotation.moved: Moved
 form.validation.required: This field is required
 form.validation.max-length: The maximum length for this field is {{max}} characters
 form.validation.min: The minimum value is {{min}}
@@ -2878,3 +2882,4 @@ saved-search.update.success: Saved search updated
 saved-search.delete.success: Saved search deleted
 saved-search.shared-modified.info: You have made modifications to the original configuration. Since it is owned by someone else, you can save it as a new search.
 saved-search.menu-shortcut-group: Menu group
+skip-to-content: Skip to content

@@ -11,6 +11,7 @@
 /* eslint-disable max-lines */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { theme } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { kebabCase } from 'lodash'
@@ -46,6 +47,7 @@ type KeyRow = ClassificationStoreConfigurationKeyDetail & { title: string | unde
 
 export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { token } = theme.useToken()
   const { localModal: modal } = useStudioModal()
   const [keyForm] = Form.useForm<{ name: string, description: string }>()
 
@@ -355,7 +357,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
           <Flex
             align="center"
             justify="space-between"
-            style={ { padding: '8px 16px' } }
+            style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
           >
             <Flex
               align="center"
