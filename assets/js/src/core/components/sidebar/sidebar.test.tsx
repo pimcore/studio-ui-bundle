@@ -128,6 +128,29 @@ describe('Sidebar', () => {
 
       expect(isOpen('first')).toBe(true)
     })
+
+    it('falls back to a remaining entry when the active one is removed', () => {
+      const { rerender } = render(
+        <SidebarProvider initialActiveTab="second">
+          <Sidebar
+            collapsible={ false }
+            entries={ entries }
+          />
+        </SidebarProvider>
+      )
+      expect(isOpen('second')).toBe(true)
+
+      rerender(
+        <SidebarProvider initialActiveTab="second">
+          <Sidebar
+            collapsible={ false }
+            entries={ [entries[0]] }
+          />
+        </SidebarProvider>
+      )
+
+      expect(isOpen('first')).toBe(true)
+    })
   })
 
   describe('layoutEdge', () => {

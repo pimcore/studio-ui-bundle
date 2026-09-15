@@ -25,15 +25,14 @@ interface ContentToolbarViewProps {
 
 const Component = (props: ContentToolbarViewProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const classes = [
-    'content-toolbar-sidebar-layout',
-    `content-toolbar-sidebar-layout--sidebar-${props.sidebarEdge ?? 'right'}`,
-    styles.ContentLayout,
-    props.className ?? ''
-  ]
+  const classes = ['content-toolbar-sidebar-layout', styles.ContentLayout, props.className ?? '']
 
   if (props.renderToolbar !== undefined) {
     classes.push('content-toolbar-sidebar-layout--with-toolbar')
+  }
+
+  if (props.renderSidebar !== undefined) {
+    classes.push(`content-toolbar-sidebar-layout--sidebar-${props.sidebarEdge ?? 'right'}`)
   }
 
   return (

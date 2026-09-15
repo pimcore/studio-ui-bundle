@@ -73,13 +73,17 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
     onKeyboardResize
   } = useSidebarResize(sizing, layoutEdge)
 
-  // a non-collapsible sidebar must always show a tab, including before the caller has had
-  // a chance to pick one (entries can arrive after mount)
+  // a non-collapsible sidebar must always show a panel. The active tab can name no entry
+  // at all — before the caller has picked one, or after the entry it named was removed —
+  // and both leave the expanded panel blank, so fall back on the key rather than on
+  // whether anything is expanded.
+  const hasActivePanel = entries.some((entry) => entry.key === activeTab)
+
   useEffect(() => {
-    if (!collapsible && !isExpanded && entries.length > 0) {
+    if (!collapsible && !hasActivePanel && entries.length > 0) {
       setActiveTab(entries[0].key)
     }
-  }, [collapsible, isExpanded, entries])
+  }, [collapsible, hasActivePanel, entries])
 
   function handleSidebarClick (key: string): void {
     if (!collapsible && key === activeTab) {
