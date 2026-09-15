@@ -122,6 +122,18 @@ describe('ManyToOneRelation upload button', () => {
     expect(screen.queryByTestId('modal-upload-button')).toBeNull()
   })
 
+  it('does not render an upload button when inline upload is disabled', () => {
+    render(
+      <ManyToOneRelation
+        assetsAllowed
+        disableInlineUpload
+        onChange={ jest.fn() }
+      />
+    )
+
+    expect(screen.queryByTestId('modal-upload-button')).toBeNull()
+  })
+
   it('sets the field value to the uploaded asset on successful upload', async () => {
     const onChange = jest.fn()
 

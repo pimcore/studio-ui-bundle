@@ -18,6 +18,7 @@ import { Input } from '@Pimcore/components/input/input'
 import { BaseView } from '../../../layout-related/views/base-view'
 import { ClassificationStoreItem } from './classification-store-item'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
+import { useLanguageIndependentValuePermission } from './hooks/use-language-independent-value-permission'
 import { LocalizationSwitch } from './components/localization-switch/localization-switch'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Space } from '@Pimcore/components/space/space'
@@ -46,7 +47,6 @@ const selectStructure = (values: Record<string, any>): {
 }
 
 export const ClassificationStoreContent = (props: ClassificationStoreProps): React.JSX.Element => {
-  const [localizationMode, setLocalizationMode] = useState<string>('default')
   const { t } = useTranslation()
 
   const isHideEmptyDataEnabled = props.hideEmptyData === true
@@ -60,8 +60,18 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
   const { groupKeys, activeGroups, groupCollectionMapping } = useKeyedListSelector(selectStructure)
   const { currentLanguage } = useLanguageSelection()
 
-  let localizationGroup = 'default'
+  const isLanguageIndependentValuePermitted = useLanguageIndependentValuePermission()
+
   const isLocalizable = props.localized ?? false
+  // A non localized store only ever has the language independent column, so no language
+  // permission applies to it.
+  const allowLanguageIndependentValue = !isLocalizable || isLanguageIndependentValuePermitted
+
+  const [localizationMode, setLocalizationMode] = useState<string>(
+    allowLanguageIndependentValue ? 'default' : 'current-language'
+  )
+
+  let localizationGroup = 'default'
 
   useEffect(() => {
     const initialLayout = props.activeGroupDefinitions ?? []
@@ -133,7 +143,8 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
             {isLocalizable
               ? (
                 <LocalizationSwitch
-                  initialValue={ localizationGroup }
+                  allowLanguageIndependentValue={ allowLanguageIndependentValue }
+                  initialValue={ localizationMode }
                   onChange={ handleLocalizationChange }
                 />
                 )
@@ -189,5 +200,15 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
         />
       </Form.Item>
     </BaseView>
-  ), [groupKeys, activeGroups, groupCollectionMapping, localizationGroup, currentLayoutData, hideEmptyData, hideEmptyDataRevision])
+  ), [
+    groupKeys,
+    activeGroups,
+    groupCollectionMapping,
+    localizationGroup,
+    localizationMode,
+    allowLanguageIndependentValue,
+    currentLayoutData,
+    hideEmptyData,
+    hideEmptyDataRevision
+  ])
 }

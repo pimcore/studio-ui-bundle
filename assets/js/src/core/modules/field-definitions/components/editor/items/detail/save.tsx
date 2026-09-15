@@ -20,14 +20,20 @@ import { ApiError, trackError } from '@sdk/modules/app'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { type AnyMutationHook } from 'types/react-query'
 
 const NAME_FORMAT_REGEX = /^[A-Za-z][A-Za-z0-9_]*$/
 
 interface Violation { id: string, label: string }
 
-export const DetailSave = (): React.JSX.Element => {
+interface DetailSaveProps {
+  // a prop, not a setting: the caller has to narrow the optional hook to render the button at all
+  useDetailUpdateMutation: AnyMutationHook
+}
+
+export const DetailSave = ({ useDetailUpdateMutation }: DetailSaveProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { useDetailUpdateMutation, useLayout } = useSettings()
+  const { useLayout } = useSettings()
   const { fieldDefinitions, setInvalidFieldDefinitionIds, structure, markClean, getIsDirty: isLayoutDirty } = useLayout()
   const { generalSettings, getIsDirty: areGeneralSettingsDirty } = useGeneralSettings()
   const [updateDetailMutation, result] = useDetailUpdateMutation()
