@@ -73,6 +73,12 @@ Register the provider in your `services.yaml` with one or both of the following 
 | `pimcore_studio_ui.webpack_entry_point_provider` | The main Studio application. Every plugin bundle needs this tag. |
 | `pimcore_studio_ui.webpack_entry_point_provider.document_editor_iframe` | The document editor iframe, which has its own plugin bootstrap. Add this tag only if your plugin must also run inside the document editor, for example because it provides a [custom document editable](./02_Plugin_Development_Examples/14_Custom_Document_Editable.md). |
 
+> **Note:** `StudioBuildCacheWarmer` (used by Option 3 below) only discovers providers tagged
+> `pimcore_studio_ui.webpack_entry_point_provider`. If a `BuildArchiveProviderInterface` provider is registered
+> **only** with the `.document_editor_iframe` tag, cache warmup will not extract its archive. A provider using the
+> archive mechanism must always carry the main tag as well, even if it is only meant to run inside the document
+> editor.
+
 ```yaml
 services:
     App\Webpack\WebpackEntryPointProvider:
@@ -256,8 +262,11 @@ provider must be an autowired service (`autowire: true`, which is the default in
   extraction. To go back to the committed archive, delete `public/build/` and warm the cache again.
 - **Staleness:** the decision to extract is based on the archive file name (the content hash), never on file
   modification times, so it is stable across checkouts and deployments.
-- **Read-only without a build:** if the target is read-only and no build is present, a
-  `BuildArchiveNotWritableException` is thrown with instructions to run `cache:warmup` during deployment.
+- **Read-only without a build:** `cache:warmup` itself never fails over extraction; it catches any extraction error
+  and logs a warning instead, so a read-only deploy does not make the deploy step fail. If warmup could not extract
+  the archive and no build is present, the failure instead surfaces the first time Studio resolves entry points at
+  request time: `BuildArchiveNotWritableException` is thrown then, with instructions to run `cache:warmup` during
+  deployment. Watch for the warmup warning log rather than relying on `cache:warmup` exiting non-zero.
 
 ## Summary
 
