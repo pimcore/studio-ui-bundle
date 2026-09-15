@@ -64,11 +64,6 @@ jest.mock('../create-object/use-creatable-relation-classes', () => ({
   useCreatableRelationClasses: (allowedClasses?: string[], skip?: boolean) => creatableClasses(allowedClasses, skip)
 }))
 
-const alertWarn = jest.fn()
-jest.mock('@Pimcore/components/modal/alert-modal/hooks/use-alert-modal', () => ({
-  useAlertModal: () => ({ warn: alertWarn })
-}))
-
 // The icon component resolves its definition through the DI container
 jest.mock('@Pimcore/components/icon/icon', () => ({
   Icon: () => null
@@ -201,7 +196,6 @@ const creatableRelation = {
 
 describe('ManyToManyRelationToolbar create object action', () => {
   beforeEach(() => {
-    alertWarn.mockReset()
     creatableClasses.mockReturnValue({ classes: [{ id: 'CAR-ID', name: 'Car' }], isLoading: false })
   })
 
@@ -252,7 +246,7 @@ describe('ManyToManyRelationToolbar create object action', () => {
 
     fireEvent.click(screen.getByLabelText(CREATE_OBJECT_LABEL))
 
-    expect(alertWarn).toHaveBeenCalled()
+    expect(mockAlertWarn).toHaveBeenCalled()
     expect(screen.queryByTestId('create-object-modal')).not.toBeInTheDocument()
   })
 
