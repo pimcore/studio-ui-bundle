@@ -36,6 +36,14 @@ export const useStyle = createStyles(({ token, css }) => {
       box-shadow: 0px 2px 0px 0px ${token.controlOutline};
       padding: 40px;
     `,
+    // The permissions heading is a real h2 for assistive technology, styled to stay the
+    // quiet section label it reads as. Same !important pattern as `title` below, because
+    // the Title component scopes its own sizing as '.pimcore-title.ant-typography'.
+    sectionTitle: css`
+      margin: 0 !important;
+      font-size: ${token.fontSize}px !important;
+      line-height: ${token.lineHeight} !important;
+    `,
     scopeList: css`
       margin: 0;
       padding: 0;

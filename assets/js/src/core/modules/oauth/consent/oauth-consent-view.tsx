@@ -19,6 +19,9 @@ import { type OAuthAuthorizationConsent } from '../oauth-api-slice.gen'
 import { useScopeDescriptions } from './hooks/use-scope-descriptions'
 import { useStyle } from './oauth-consent-page.styles'
 
+/** Ties the permissions list to its heading for assistive technology. */
+const PERMISSIONS_HEADING_ID = 'oauth-consent-permissions-heading'
+
 export interface OAuthConsentViewProps {
   consent: OAuthAuthorizationConsent
   submitting: boolean
@@ -82,9 +85,15 @@ export const OAuthConsentView = ({
         gap={ 8 }
         vertical
       >
-        <Text type="secondary">
+        <Title
+          id={ PERMISSIONS_HEADING_ID }
+          level={ 2 }
+          theme="secondary"
+          titleClass={ styles.sectionTitle }
+          weight="normal"
+        >
           { t('oauth.consent.permissions-heading') }
-        </Text>
+        </Title>
         { isEmpty(scopes)
           ? (
             <Text type="secondary">
@@ -92,7 +101,15 @@ export const OAuthConsentView = ({
             </Text>
             )
           : (
-            <ul className={ styles.scopeList }>
+            // The implicit list role is redundant everywhere except WebKit, which drops it
+            // when list-style is none. "list, N items" is the announcement that matters most
+            // on this screen, so the redundancy is deliberate here.
+            // eslint-disable-next-line jsx-a11y/no-redundant-roles
+            <ul
+              aria-labelledby={ PERMISSIONS_HEADING_ID }
+              className={ styles.scopeList }
+              role="list"
+            >
               { scopes.map((scope) => (
                 <li key={ scope.scope }>
                   <Flex

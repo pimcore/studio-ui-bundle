@@ -19,6 +19,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Button } from '@Pimcore/components/button/button'
 import { NoContent } from '@Pimcore/components/no-content/no-content'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { routes } from '@Pimcore/app/router/router'
 import { useOauthAuthorizationApproveMutation, useOauthAuthorizationDetailsQuery } from '../oauth-api-slice.gen'
 import { OAuthConsentView } from './oauth-consent-view'
@@ -35,6 +36,13 @@ const httpStatusOf = (error: FetchBaseQueryError | SerializedError | undefined):
 
   return undefined
 }
+
+/**
+ * Statuses this screen resolves on its own: 401 sends the user through login and back,
+ * 404 renders the expired card. Both are expected outcomes of a consent link that was
+ * opened late, not faults to report.
+ */
+const isExpectedStatus = (status: number | undefined): boolean => status === 401 || status === 404
 
 export const OAuthConsentPage = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -86,8 +94,19 @@ export const OAuthConsentPage = (): React.JSX.Element => {
     }
   }, [isError, status])
 
+  // Report the failure as well as rendering the retry card. 401 and 404 are left out
+  // on purpose: both are expected outcomes this screen already resolves by itself, a
+  // 401 into the login round-trip and a 404 into the expired card, so a modal on top
+  // of either would be noise rather than signal.
+  useEffect(() => {
+    if (isError && !isExpectedStatus(status) && !isUndefined(error)) {
+      trackError(new ApiError(error))
+    }
+  }, [isError, status])
+
   const onDecisionFailed = (reason: unknown): void => {
-    const failureStatus = httpStatusOf(reason as FetchBaseQueryError | SerializedError | undefined)
+    const failure = reason as FetchBaseQueryError | SerializedError | undefined
+    const failureStatus = httpStatusOf(failure)
 
     if (failureStatus === 401) {
       // The session died between loading the authorization and submitting the
@@ -106,7 +125,12 @@ export const OAuthConsentPage = (): React.JSX.Element => {
       return
     }
 
-    // The id is valid until it expires, so let the user retry the decision.
+    // Anything else is unexpected: report it, and let the user retry the decision
+    // since the id stays valid until it expires.
+    if (!isUndefined(failure)) {
+      trackError(new ApiError(failure))
+    }
+
     setDecisionError(t('oauth.consent.error.decision-failed'))
   }
 
