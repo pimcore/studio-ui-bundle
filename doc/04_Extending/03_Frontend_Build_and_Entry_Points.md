@@ -21,9 +21,10 @@ The Rsbuild plugin `pluginGenerateEntrypoints` (from `@pimcore/studio-ui-bundle/
 `entrypoints.json` manifest into the build output directory. It lists the JS and CSS files for every entry of the build
 and adds a synthetic `exposeRemote` entry that registers the bundle's Module Federation remote with Studio.
 
-By convention the output directory is `public/build/<build-id>/` inside the bundle, so it is served by
-`bin/console assets:install` under `/bundles/<bundlename>/build/<build-id>/`. The `assetPrefix` in `rsbuild.config.ts`
-must point to that URL, see the
+By convention the output directory is `public/build/<build-id>/` inside the bundle (a bundle with multiple build
+targets, such as an SDK and an app build sharing one id, uses one suffixed directory per target instead, e.g.
+`<build-id>-app/` and `<build-id>-sdk/`), so it is served by `bin/console assets:install` under
+`/bundles/<bundlename>/build/<build-id>/`. The `assetPrefix` in `rsbuild.config.ts` must point to that URL, see the
 [example Rsbuild configuration](https://github.com/pimcore/studio-example-bundle/blob/main/assets/rsbuild.config.ts).
 
 ### `WebpackEntryPointProviderInterface`

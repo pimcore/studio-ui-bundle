@@ -27,8 +27,12 @@ namespace Pimcore\Bundle\StudioUiBundle\Build;
  *
  * `targetDir` is the directory the archive is expanded into. It must be the directory that
  * is publicly served at the asset prefix compiled into the build (e.g. `public/build`, served
- * via `assets:install` as `/bundles/<bundle>/build`). The archive contains one
- * `<build-id>/` directory per build target, each with its own `entrypoints.json`.
+ * via `assets:install` as `/bundles/<bundle>/build`). The archive contains one directory per
+ * build target, each with its own `entrypoints.json`; a bundle with a single build target
+ * typically names it after the build id (e.g. `<build-id>/`), while a bundle with several
+ * targets sharing one id (e.g. an SDK and an app build) suffixes each one instead
+ * (e.g. `<build-id>-app/`, `<build-id>-sdk/`) — the exact names are whatever the build output
+ * used, unchanged by packaging.
  */
 final readonly class BuildArchive
 {
