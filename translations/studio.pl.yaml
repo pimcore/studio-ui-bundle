@@ -123,7 +123,7 @@ document.tree.context-menu.add-page: Nowa strona
 document.tree.context-menu.add-snippet: Nowy fragment
 document.tree.context-menu.add-email: Nowy e-mail
 document.tree.context-menu.add-link: Nowy link
-document.tree.context-menu.add-hardlink: Nowy twardy link
+document.tree.context-menu.add-hardlink: Nowe łącze stałe
 document.required-fields.validation-title: Brakujące pola obowiązkowe
 document.required-fields.validation-message: Następujące pola obowiązkowe muszą zostać wypełnione przed publikacją
 document.site.remove-site: Usuń witrynę
@@ -149,7 +149,7 @@ convert-document-warning: Cała treść zostanie utracona. Czy na pewno chcesz p
 page: Strona
 email: E-mail
 link: Link
-hardlink: Twardy link
+hardlink: Łącze stałe
 blank: Pusty
 data-object.data-object-tree.title: Drzewo obiektów danych
 data-object.data-object-tree.search: "Szukaj w {{folderName}}"
@@ -556,7 +556,7 @@ reports.csv-export-modal.delimiter-label: Separator
 reports.csv-export-modal.delimiter-placeholder: Wprowadź separator
 listing.actions.csv-export: Eksportuj CSV
 listing.actions.xlsx-export: Eksportuj Excel
-listing.actions.batch-edit: Edycja wsadowa
+listing.actions.batch-edit: Edycja zbiorcza
 listing.selection.total: "Wybrano {{total}}"
 data-type.input: Pole tekstowe
 data-type.textarea: Obszar tekstowy
@@ -888,7 +888,7 @@ path-restriction: Ograniczenie ścieżki
 result-limit: Limit wyników
 remote-owner: Właściciel zdalny
 columns: Kolumny
-enable-batch-edit: Włącz edycję wsadową dla kolumn
+enable-batch-edit: Włącz edycję zbiorczą dla kolumn
 owner-class: Klasa właściciela
 owner-field-name: Nazwa pola właściciela
 crop-settings: Ustawienia kadrowania
@@ -1117,26 +1117,26 @@ jobs.job.button-show-errors: Pokaż błędy
 jobs.job.error-modal.title: Błędy zadania
 jobs.job.button-abort: Przerwij zadanie
 jobs.job.abort-confirm: Czy na pewno chcesz przerwać to zadanie?
-jobs.job.step.batch-edit.preparing: Przygotowywanie edycji wsadowej
-jobs.job.step.batch-edit.applying: Stosowanie edycji wsadowej
+jobs.job.step.batch-edit.preparing: Przygotowywanie edycji zbiorczej
+jobs.job.step.batch-edit.applying: Stosowanie edycji zbiorczej
 jobs.zip-job.title: "Pobieranie ZIP z {{title}}"
 jobs.csv-job.title: "Pobieranie CSV z {{title}}"
 jobs.xlsx-job.title: "Pobieranie XLSX z {{title}}"
-batch-edit.job-title: Edycja wsadowa
+batch-edit.job-title: Edycja zbiorcza
 jobs.zip-upload-job.title: Przesyłanie ZIP
 jobs.zip-upload-job.step1.title: Rozpakowywanie ZIP
 jobs.zip-upload-job.step2.title: Tworzenie assetów
 jobs.download-csv-job.title: Eksport CSV
 jobs.download-xlsx-job.title: Eksport XLSX
 jobs.download-zip-job.title: Pobieranie ZIP
-batch-edit.modal-title: Edycja wsadowa
+batch-edit.modal-title: Edycja zbiorcza
 batch-edit.no-content: Nie dodano jeszcze żadnych kolumn
 batch-edit.modal-footer.apply-changes: Zastosuj zmiany
 batch-edit.modal-footer.discard-all-changes: Odrzuć wszystkie zmiany
 batch-edit.modal-footer.add-a-column: Dodaj kolumnę
-batch-edit.append-mode.replace: Zamień wsadowo
-batch-edit.append-mode.add: Dodaj wsadowo
-batch-edit.append-mode.remove: Usuń wsadowo
+batch-edit.append-mode.replace: Zamień zbiorczo
+batch-edit.append-mode.add: Dodaj zbiorczo
+batch-edit.append-mode.remove: Usuń zbiorczo
 batch-delete.job-title: Usuń
 export-csv-form.modal-title: Eksport CSV
 export-csv-form.export-notice: "Uwaga: eksport nie obsługuje niektórych pól (np. podgląd, rozmiar). Naciśnij OK, aby kontynuować eksport."
@@ -1445,7 +1445,7 @@ user-management.password: Hasło
 user-management.user.search: Szukaj użytkownika
 user-management.role.search: Szukaj roli
 user-management.users-roles.search: Szukaj użytkownika lub roli
-user-management.twoFactorAuthenticationEnabled: Uwierzytelnianie dwuskładnikowe włączone
+user-management.twoFactorAuthenticationEnabled: Uwierzytelnianie dwuetapowe włączone
 user-management.firstname: Imię
 user-management.lastname: Nazwisko
 user-management.email: E-mail
@@ -1471,7 +1471,7 @@ user-management.settings.language.name: Język
 user-management.settings.language.abbreviation: Skrót
 user-management.settings.language.view: Widok
 user-management.settings.language.edit: Edytuj
-user-management.two-factor-authentication: Uwierzytelnianie dwuskładnikowe
+user-management.two-factor-authentication: Uwierzytelnianie dwuetapowe
 user-management.workspaces.documents: Dokumenty
 user-management.workspaces.assets: Assety
 user-management.workspaces.objects: Obiekty danych
@@ -2301,8 +2301,8 @@ ownership-management.actions.reassign-owner: Przypisz ponownie właściciela
 ownership-management.actions.reassign-owner.title: Ponowne przypisywanie właściciela konfiguracji
 ownership-management.actions.delete: Usuń
 ownership-management.actions.delete.title: Usuwanie konfiguracji
-ownership-management.actions.batch-assign: Przypisz wsadowo
-ownership-management.actions.batch-delete: Usuń wsadowo
+ownership-management.actions.batch-assign: Przypisz zbiorczo
+ownership-management.actions.batch-delete: Usuń zbiorczo
 ownership-management.reassign-owner.title: "Przypisz ponownie właściciela {{count}} konfiguracji"
 ownership-management.reassign-owner.confirm: Przypisz ponownie
 ownership-management.reassign-owner.placeholder: Szukaj użytkownika po nazwie
@@ -2490,7 +2490,7 @@ widget-editor.widget-form.allowed-context-menu.addPage: Nowa strona
 widget-editor.widget-form.allowed-context-menu.addSnippet: Nowy fragment
 widget-editor.widget-form.allowed-context-menu.addLink: Nowy link
 widget-editor.widget-form.allowed-context-menu.addEmail: Nowy e-mail
-widget-editor.widget-form.allowed-context-menu.addHardlink: Nowy twardy link
+widget-editor.widget-form.allowed-context-menu.addHardlink: Nowe łącze stałe
 edit.label: Edytuj
 scheduled-block.delete-all-in-past: Usuń wszystkie przeszłe znaczniki czasu
 scheduled-block.delete-all: Usuń wszystkie znaczniki czasu
