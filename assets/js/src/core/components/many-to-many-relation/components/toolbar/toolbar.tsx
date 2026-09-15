@@ -30,7 +30,6 @@ import { debounce } from 'lodash'
 import { RELATION_COLUMN_FILTERS_KEY, useRelationFiltersOptional } from '../../filters/filters'
 import { CreateObjectModal } from '../create-object/create-object-modal'
 import { useCreatableRelationClasses } from '../create-object/use-creatable-relation-classes'
-import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 
 export interface ManyToManyRelationToolbarProps extends IRelationAllowedTypesDataComponent {
   empty: () => void
