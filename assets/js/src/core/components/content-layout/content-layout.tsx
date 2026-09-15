@@ -11,6 +11,7 @@
 import React, { memo, type ReactNode } from 'react'
 import { useStyles } from './content-layout.styles'
 import { Content } from '../content/content'
+import { type SidebarDock } from '../sidebar'
 
 interface ContentToolbarViewProps {
   children: ReactNode
@@ -18,11 +19,18 @@ interface ContentToolbarViewProps {
   renderTopBar?: ReactNode
   renderSidebar?: ReactNode
   renderToolbar?: ReactNode
+  /** Layout edge the sidebar column occupies. Pass the same value to the Sidebar's `dock`. */
+  sidebarDock?: SidebarDock
 }
 
 const Component = (props: ContentToolbarViewProps): React.JSX.Element => {
   const { styles } = useStyles()
-  const classes = ['content-toolbar-sidebar-layout', styles.ContentLayout, props.className ?? '']
+  const classes = [
+    'content-toolbar-sidebar-layout',
+    `content-toolbar-sidebar-layout--sidebar-${props.sidebarDock ?? 'right'}`,
+    styles.ContentLayout,
+    props.className ?? ''
+  ]
 
   if (props.renderToolbar !== undefined) {
     classes.push('content-toolbar-sidebar-layout--with-toolbar')

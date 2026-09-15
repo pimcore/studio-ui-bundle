@@ -160,6 +160,20 @@ export const useStyle = createStyles(({ token, css }) => {
         z-index: ${token.zIndexPopupBase};
         cursor: col-resize;
       }
+
+      /* the handle straddles the edge the sidebar shares with the main content */
+      &.sidebar--dock-left {
+        .sidebar__navigation {
+          border-left: none;
+          border-right: 1px solid ${token.colorFillSecondary};
+        }
+
+        .sidebar__resizer {
+          left: auto;
+          right: 0;
+          transform: translateX(50%);
+        }
+      }
     `
   }
 }, { hashPriority: 'low' })

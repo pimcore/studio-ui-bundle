@@ -26,6 +26,8 @@ const config: Meta = {
       <div style={ { display: 'flex', height: '50vh' } }>
         <Sidebar
           buttons={ args.buttons }
+          collapsible={ args.collapsible }
+          dock={ args.dock }
           entries={ args.entries }
           highlights={ args.highlights }
           sizing={ args.sizing }
@@ -49,9 +51,12 @@ It can be used in two ways:
 - Highlight states for tabs
 - Custom buttons at the bottom
 - Two sizes: default (250px) and large (432px)
-- Manually resizable width: a resize handle appears when hovering the left edge of the
-  expanded sidebar — drag it (or focus it and use the arrow keys); the width of the
-  current size acts as the minimum
+- Dockable to either layout edge via \`dock\` (default \`right\`)
+- Pinned open with \`collapsible={false}\` — the active tab can be switched but not closed
+- Manually resizable width: a resize handle appears when hovering the edge the sidebar
+  shares with the main content — its left edge when docked right, its right edge when
+  docked left. Drag it (or focus it and use the arrow keys); the width of the current
+  size acts as the minimum
 - Provider pattern for dynamic state management
         `
       }
@@ -76,6 +81,15 @@ It can be used in two ways:
     },
     highlights: {
       description: 'Array of entry keys to highlight'
+    },
+    dock: {
+      control: { type: 'inline-radio' },
+      options: ['left', 'right'],
+      description: 'Layout edge the sidebar is attached to (default: right)'
+    },
+    collapsible: {
+      control: { type: 'boolean' },
+      description: 'When false the sidebar stays expanded and tabs can only be switched (default: true)'
     }
   }
 }
@@ -364,6 +378,51 @@ Open the tab, then hover the left edge of the sidebar: a resize handle appears. 
 to widen the panel — useful for long values such as controller names. The handle also
 supports the keyboard: focus it and press ArrowLeft/ArrowRight. The width of the
 configured sizing is the minimum.
+        `
+      }
+    }
+  }
+}
+
+export const DockedLeft = {
+  render: () => (
+    <div style={ { display: 'flex', height: '50vh', width: '700px' } }>
+      <Sidebar
+        collapsible={ false }
+        dock="left"
+        entries={ [
+          {
+            key: 'document-configuration',
+            icon: (
+              <Icon
+                options={ { width: '16px', height: '16px' } }
+                value="settings"
+              />
+            ),
+            component: (
+              <div style={ { padding: '16px', minWidth: 0 } }>
+                <h4>Document Configuration</h4>
+                <p>Description</p>
+              </div>
+            ),
+            tooltip: 'Document Configuration'
+          }
+        ] }
+      />
+
+      <div style={ { flex: 1, padding: '16px' } }>Main content</div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: `
+Docked to the left edge: the rail's divider and the resize handle move to the sidebar's
+right edge, and the rail tooltips open to the right. Dragging the handle right widens the
+panel, and ArrowRight does the same — the mirror of the default right-docked sidebar.
+
+This story also sets \`collapsible={false}\`: clicking the active rail icon and pressing
+Escape no longer close the panel, and the first entry opens on mount.
         `
       }
     }

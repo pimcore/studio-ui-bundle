@@ -14,6 +14,8 @@ import { MIN_REMAINING_LAYOUT_WIDTH, SIDEBAR_CONTENT_WIDTHS, SIDEBAR_NAV_WIDTH }
 
 const KEYBOARD_RESIZE_INCREMENT = 5
 
+export type SidebarDock = 'left' | 'right'
+
 export interface UseSidebarResizeReturn {
   sidebarRef: RefObject<HTMLDivElement>
   contentRef: RefObject<HTMLDivElement>
@@ -25,12 +27,16 @@ export interface UseSidebarResizeReturn {
 }
 
 /**
- * Width management for the sidebar content panel. The sidebar is docked to the right
- * edge of its layout, so dragging its left edge to the left widens the panel. The width
- * is clamped between the default width of the current sizing and the layout width minus
- * a reserve for the main content.
+ * Width management for the sidebar content panel. The resize handle sits on the edge the
+ * sidebar shares with the main content — its left edge when docked right, its right edge
+ * when docked left — so dragging that edge away from the sidebar always widens the panel.
+ * The width is clamped between the default width of the current sizing and the layout
+ * width minus a reserve for the main content.
  */
-export const useSidebarResize = (sizing: keyof typeof SIDEBAR_CONTENT_WIDTHS): UseSidebarResizeReturn => {
+export const useSidebarResize = (
+  sizing: keyof typeof SIDEBAR_CONTENT_WIDTHS,
+  dock: SidebarDock
+): UseSidebarResizeReturn => {
   const sidebarRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
 
@@ -41,6 +47,9 @@ export const useSidebarResize = (sizing: keyof typeof SIDEBAR_CONTENT_WIDTHS): U
   // resize callbacks must only rely on refs — never on render-scoped values like props
   const sizingRef = useRef(sizing)
   sizingRef.current = sizing
+
+  const dockRef = useRef(dock)
+  dockRef.current = dock
 
   useEffect(() => {
     setContentWidth((width) => isNil(width) ? width : Math.max(width, SIDEBAR_CONTENT_WIDTHS[sizing]))
@@ -65,11 +74,15 @@ export const useSidebarResize = (sizing: keyof typeof SIDEBAR_CONTENT_WIDTHS): U
       return
     }
 
-    // everything between the layout's left edge and the sidebar's right edge is
+    // everything between the sidebar's outer edge and the layout's opposite edge is
     // available; the offsetParent is the layout container (e.g. the ContentLayout)
     // since the sidebar itself is positioned
     const layoutElement = sidebarElement.offsetParent ?? document.body
-    const availableWidth = sidebarElement.getBoundingClientRect().right - layoutElement.getBoundingClientRect().left
+    const sidebarRect = sidebarElement.getBoundingClientRect()
+    const layoutRect = layoutElement.getBoundingClientRect()
+    const availableWidth = dockRef.current === 'left'
+      ? layoutRect.right - sidebarRect.left
+      : sidebarRect.right - layoutRect.left
 
     const minWidth = SIDEBAR_CONTENT_WIDTHS[sizingRef.current]
     const maxWidth = Math.max(minWidth, availableWidth - SIDEBAR_NAV_WIDTH - MIN_REMAINING_LAYOUT_WIDTH)
@@ -77,17 +90,22 @@ export const useSidebarResize = (sizing: keyof typeof SIDEBAR_CONTENT_WIDTHS): U
     setContentWidth(Math.min(Math.max(contentRect.width + delta, minWidth), maxWidth))
   }
 
+  // a drag away from the sidebar widens it: rightwards when docked left, leftwards otherwise
+  const resizeByPointerDelta = (movementX: number): void => {
+    resizeBy(dockRef.current === 'left' ? movementX : -movementX)
+  }
+
   const onMouseResize = (event: MouseEvent): void => {
-    resizeBy(-event.movementX)
+    resizeByPointerDelta(event.movementX)
   }
 
   const onKeyboardResize = (event: React.KeyboardEvent<HTMLDivElement>): void => {
     if (event.key === 'ArrowLeft') {
-      resizeBy(KEYBOARD_RESIZE_INCREMENT)
+      resizeByPointerDelta(-KEYBOARD_RESIZE_INCREMENT)
     }
 
     if (event.key === 'ArrowRight') {
-      resizeBy(-KEYBOARD_RESIZE_INCREMENT)
+      resizeByPointerDelta(KEYBOARD_RESIZE_INCREMENT)
     }
   }
 

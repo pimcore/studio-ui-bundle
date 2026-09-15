@@ -56,6 +56,20 @@ export const useStyles = createStyles(({ token, css }) => {
         grid-column: 2 / 3;
         grid-row: 1 / 4;
       }
+
+      &.content-toolbar-sidebar-layout--sidebar-left {
+        grid-template-columns: auto 1fr;
+
+        .content-toolbar-sidebar-layout__top-bar,
+        .content-toolbar-sidebar-layout__content,
+        .content-toolbar-sidebar-layout__toolbar {
+          grid-column: 2 / 3;
+        }
+
+        .content-toolbar-sidebar-layout__sidebar {
+          grid-column: 1 / 2;
+        }
+      }
     `
   }
 }, { hashPriority: 'low' })
