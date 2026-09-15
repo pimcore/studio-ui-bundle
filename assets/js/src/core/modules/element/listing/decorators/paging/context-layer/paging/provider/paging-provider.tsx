@@ -9,6 +9,7 @@
  */
 
 import React, { createContext, useMemo, useState } from 'react'
+import {appConfig} from "@Pimcore/app/config/app-config";
 
 export interface PagingData {
   page: number
@@ -23,7 +24,7 @@ export const PagingContext = createContext<PagingContextProps>(undefined)
 
 export const PagingProvider = ({ children }: { children: React.ReactNode }): React.JSX.Element => {
   const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(20)
+  const [pageSize, setPageSize] = useState(appConfig.defaultPageSize)
 
   return useMemo(() => (
     <PagingContext.Provider value={ { page, setPage, pageSize, setPageSize } }>
