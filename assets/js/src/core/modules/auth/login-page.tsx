@@ -16,7 +16,7 @@ import React, { useEffect } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useIsAuthenticated } from './hooks/use-is-authenticated'
 import { useStyle } from './login-page.styles'
-import { isNil } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import { useAuthentication } from './hooks/use-authentication'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { setAuthState } from './auth-slice'
@@ -38,9 +38,16 @@ export const LoginPage = (): React.JSX.Element => {
   useEffect(() => {
     if (isAuthenticated === true) {
       (async () => {
-        const redirectPath: string = location?.state?.from?.pathname
+        const from = location?.state?.from
+        const redirectPath: string | undefined = from?.pathname
 
-        navigate(redirectPath ?? routes.root)
+        // Preserve the original query string (e.g. the OAuth `authorization_id`)
+        // so deep links that carry state survive the login round-trip.
+        navigate(
+          !isUndefined(redirectPath)
+            ? { pathname: redirectPath, search: from?.search ?? '' }
+            : routes.root
+        )
 
         await sendStatistics(user.isAdmin)
       })().catch(() => { })

@@ -22,6 +22,7 @@ import { Checkbox, Input } from 'antd'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
+import { isUndefined } from 'lodash'
 import { Icon } from '../../../../components/icon/icon'
 
 interface ILoginFormProps {
@@ -68,7 +69,14 @@ export const LoginForm = ({ onPasswordForgotten }: ILoginFormProps): React.JSX.E
         // state (that would start the app's intro/fade animation). Auth is
         // re-established from the session cookie on the fresh boot. The submit
         // button stays in its loading state because we return before clearing it.
-        const redirectPath: string = (location.state as { from?: { pathname?: string } } | null)?.from?.pathname ?? routes.root
+        // Preserve the full return target (path AND query) so deep links that
+        // carry state — e.g. the OAuth `?authorization_id=…` — survive the
+        // login round-trip. Restoring only the pathname would drop the id and
+        // the consent screen would 404 ("expired").
+        const from = (location.state as { from?: { pathname?: string, search?: string } } | null)?.from
+        const redirectPath: string = !isUndefined(from?.pathname)
+          ? `${from.pathname}${from.search ?? ''}`
+          : routes.root
 
         await sendStatistics(user.isAdmin)
 

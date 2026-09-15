@@ -89,6 +89,10 @@ services:
         calls:
             - [setLogger, ['@logger']]
 
+    # Frame guard for the OAuth consent screen. Intentionally not tied to csp_header.enabled
+    # or csp_header.exclude_paths - that route must never be framed.
+    Pimcore\Bundle\StudioUiBundle\EventSubscriber\Security\OAuthConsentFrameGuardSubscriber: ~
+
     Pimcore\Bundle\StudioUiBundle\EventSubscriber\Csp\BuildRemoteEntryCspSubscriber:
         arguments:
             $webpackEntryPointManager: '@pimcore_studio.entry_point_manager.default'

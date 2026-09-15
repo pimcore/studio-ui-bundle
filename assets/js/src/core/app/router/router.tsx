@@ -16,6 +16,7 @@ import React from 'react'
 import { createBrowserRouter, Navigate, useLocation } from 'react-router-dom'
 import { appConfig } from '../config/app-config'
 import { PasswordReset } from '@Pimcore/components/password-reset/password-reset'
+import { OAuthConsentPage } from '@Pimcore/modules/oauth/consent/oauth-consent-page'
 
 export const baseUrl = appConfig.baseUrl.endsWith('/')
   ? appConfig.baseUrl.slice(0, -1) + '/'
@@ -24,12 +25,19 @@ export const baseUrl = appConfig.baseUrl.endsWith('/')
 export const LOGIN_URL = `${baseUrl}login/`
 export const DEEP_LINK_URL = `${baseUrl}:elementType/:id`
 export const PASSWORD_RESET_URL = `${baseUrl}reset-password/`
+// No trailing slash, unlike the constants above. This is the value the authorization server
+// redirects to, so it has to read exactly like the documented default of
+// `pimcore_studio_backend.oauth.consent_path`. Nothing breaks either way: React Router strips
+// trailing slashes from route patterns and accepts them in URLs, and Symfony answers the
+// trailing-slash form with a 301 to this one.
+export const OAUTH_CONSENT_URL = `${baseUrl}oauth/consent`
 
 export const routes = {
   root: baseUrl,
   login: LOGIN_URL,
   deeplinkAsset: DEEP_LINK_URL,
-  passwordReset: PASSWORD_RESET_URL
+  passwordReset: PASSWORD_RESET_URL,
+  oauthConsent: OAUTH_CONSENT_URL
 }
 
 const AuthenticatedRoute = ({ children }: { children: React.JSX.Element }): React.ReactElement => {
@@ -69,5 +77,11 @@ export const router = createBrowserRouter([
   {
     path: routes.passwordReset,
     element: <PasswordReset />
+  },
+  {
+    path: routes.oauthConsent,
+    element: <AuthenticatedRoute>
+      <OAuthConsentPage />
+    </AuthenticatedRoute>
   }
 ])
