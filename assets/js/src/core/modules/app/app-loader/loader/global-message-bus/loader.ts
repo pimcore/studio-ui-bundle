@@ -14,6 +14,7 @@ import { type GlobalMessageBus } from '@Pimcore/modules/global-message-bus/servi
 import { type GlobalMessageBusProcess } from '@Pimcore/modules/background-processor/process/global-message-bus-process'
 import { type BackgroundProcessor } from '@Pimcore/modules/background-processor/services/background-processor'
 import { topics } from '@Pimcore/modules/execution-engine/topics'
+import { startMercureAuthorizationRenewal } from '@Pimcore/modules/app/mercure/mercure-authorization'
 
 interface UseGlobalMessageBusLoaderReturn {
   initGlobalMessageBus: (userId: number) => void
@@ -38,6 +39,10 @@ export const useGlobalMessageBusLoader = (): UseGlobalMessageBusLoaderReturn => 
       ])
       backgroundProcessor.registerProcess(globalProcess)
       messageRegistry.startGlobalSubscription()
+
+      // Backstop for hubs that never close a stream: the subscription is re-authorised on every
+      // reconnect, but without a write timeout a single connection can outlive the cookie.
+      startMercureAuthorizationRenewal()
 
       // Reconnect when tab becomes visible again
       document.addEventListener('visibilitychange', () => {
