@@ -11,9 +11,12 @@
 import { Form } from '@Pimcore/components/form/form'
 import { usePipelineConfig } from '@Pimcore/components/pipeline/provider/pipeline-config/use-pipeline-config'
 import { Select } from '@Pimcore/components/select/select'
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useEffect, useMemo } from 'react'
+import { isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { AvailableColumnsContext } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
+import { useItem } from '@Pimcore/components/form/item/provider/item/use-item'
+import { useKeyedList } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list'
 import { ClassificationStoreValueControl, useClassificationStoreFieldActions } from '../../classification-store/classification-store-value-control'
 import { type ClassificationStoreFieldOption, resolveClassificationStoreStoreId } from '../../classification-store/classification-store-field-utils'
 
@@ -51,11 +54,30 @@ export const DynamicTypePipelineGridSourceFieldsSimpleFieldComponent = (): React
   const { config } = usePipelineConfig()
   const { t } = useTranslation()
   const availableColumnsContext = useContext(AvailableColumnsContext)
+  const { name } = useItem()
+  const { operations, getValueByKey } = useKeyedList()
 
   const sourceFieldConfig = config?.simpleField
   if (sourceFieldConfig === undefined) {
     throw new Error('Source field configuration is missing')
   }
+
+  const namePath = useMemo(() => (Array.isArray(name) ? name : [name]), [name])
+
+  // `Form.Item initialValue` IS registered in the keyed-list store on mount
+  // (KeyedFormItemControl calls `operations.update(name, initialValue, true)`), but with
+  // `isInitialValue: true` KeyedList also folds the value into its own baseline and skips
+  // the parent-form propagation — so an untouched pre-selected option never reaches the
+  // outer form store and silently disappears from the saved config (see
+  // pimcore/platform-version#296). Force-commit the pre-selected first option once via a
+  // real (non-initial) `operations.update` call — the same idiom
+  // useClassificationStoreFieldActions#clearValue uses to persist a value without an
+  // onChange event — so it survives a save even when left unchanged.
+  useEffect(() => {
+    if (isUndefined(getValueByKey('field')) && !isUndefined(sourceFieldConfig[0]?.key)) {
+      operations.update([...namePath, 'field'], sourceFieldConfig[0].key, false)
+    }
+  }, [])
 
   const resolveField = (fieldKey: string): { storeId: number } | undefined => {
     const storeId = resolveClassificationStoreStoreId(sourceFieldConfig as ClassificationStoreFieldOption[], fieldKey)
@@ -102,7 +124,6 @@ export const DynamicTypePipelineGridSourceFieldsSimpleFieldComponent = (): React
   return (
     <>
       <Form.Item
-        initialValue={ sourceFieldConfig[0]?.key }
         label={ t('field') }
         name={ 'field' }
       >

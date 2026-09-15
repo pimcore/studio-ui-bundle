@@ -47,6 +47,7 @@ export type ElementPermissionKeys = keyof (AssetPermissions & DataObjectPermissi
 export const {
   useElementDeleteMutation,
   useElementGetDeleteInfoQuery,
+  useElementGetUsageQuery,
   useElementFolderCreateMutation,
   useElementGetContextPermissionsQuery,
   useElementGetIdByPathQuery,

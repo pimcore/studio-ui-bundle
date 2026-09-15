@@ -126,41 +126,23 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
   }, [error])
 
   const {
-    showModal: showDuplicateEntryModal,
-    closeModal: closeDuplicateEntryModal,
-    renderModal: DuplicateEntryModal
+    showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal
   } = useModal({
-    type: 'error'
-  })
-  const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
     type: 'error'
   })
 
   const errorModals = (
-    <><DuplicateEntryModal
+    <MandatoryModal
       footer={ <ModalFooter>
         <Button
-          onClick={ closeDuplicateEntryModal }
+          onClick={ closeMandatoryModal }
           type='primary'
         >{t('button.ok')}</Button>
       </ModalFooter> }
-      title={ t('website-settings.website-settings-already-exist.title') }
-      >
-      {t('website-settings.website-settings-already-exist.error')}
-    </DuplicateEntryModal>
-
-      <MandatoryModal
-        footer={ <ModalFooter>
-          <Button
-            onClick={ closeMandatoryModal }
-            type='primary'
-          >{t('button.ok')}</Button>
-        </ModalFooter> }
-        title={ t('website-settings.website-settings.add-entry-mandatory-fields-missing.title') }
-      >
-        {t('website-settings.website-settings.add-entry-mandatory-fields-missing.error')}
-      </MandatoryModal>
-    </>
+      title={ t('website-settings.website-settings.add-entry-mandatory-fields-missing.title') }
+    >
+      {t('website-settings.website-settings.add-entry-mandatory-fields-missing.error')}
+    </MandatoryModal>
   )
 
   const onCreateProperty = async (name: string, type: string): Promise<void> => {
@@ -169,11 +151,6 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
 
     if (!isValidNameInput || !isValidTypeSelectValue) {
       showMandatoryModal()
-      return
-    }
-
-    if (websiteSettingRows?.find((setting) => setting.name === name) !== undefined) {
-      showDuplicateEntryModal()
       return
     }
 

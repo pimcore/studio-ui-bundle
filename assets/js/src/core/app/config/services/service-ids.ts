@@ -34,6 +34,10 @@ export const dynamicTypeRegistriesServiceIds = {
   'DynamicTypes/WidgetEditor/WidgetTypeRegistry': 'DynamicTypes/WidgetEditor/WidgetTypeRegistry',
   'DynamicTypes/FieldDefinitionRegistry': 'DynamicTypes/FieldDefinitionRegistry',
   'DynamicTypes/GDPRProviderRegistry': 'DynamicTypes/GDPRProviderRegistry',
+  'DynamicTypes/NotificationRegistry': 'DynamicTypes/NotificationRegistry',
+  'DynamicTypes/NotificationChannelRegistry': 'DynamicTypes/NotificationChannelRegistry',
+  'DynamicTypes/NotificationChannel/Popup': 'DynamicTypes/NotificationChannel/Popup',
+  'DynamicTypes/NotificationChannel/Email': 'DynamicTypes/NotificationChannel/Email',
   'DynamicTypes/TransformationDynamicTypeRegistry': 'image-thumbnails.transformation-dynamic-type-registry',
   'DynamicTypes/TransformationFieldCollectionRegistry': 'image-thumbnails.transformation-field-collection-registry',
   'DynamicTypes/Transformation/Cover': 'DynamicTypes/Transformation/Cover',
@@ -403,6 +407,7 @@ export const serviceIds = {
   'DataObject/ProcessorRegistry/SaveDataProcessor': 'DataObject/ProcessorRegistry/SaveDataProcessor',
   'Asset/ProcessorRegistry/SaveDataProcessor': 'Asset/ProcessorRegistry/SaveDataProcessor',
   'Element/ProcessorRegistry/IconProcessor': 'Element/ProcessorRegistry/IconProcessor',
+  'Element/Listing/SearchModeRegistry': 'Element/Listing/SearchModeRegistry',
   'WidgetManager/ProcessorRegistry/PerspectiveProcessor': 'WidgetManager/ProcessorRegistry/PerspectiveProcessor',
 
   // AppLoader Registry

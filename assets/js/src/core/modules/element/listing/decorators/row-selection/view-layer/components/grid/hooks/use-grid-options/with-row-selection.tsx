@@ -83,6 +83,12 @@ export const WithRowSelection = (useBaseHook: IRowSelectionDecoratorProps['useGr
             continue
           }
 
+          newSelectedRowsData[currentKey] = {
+            ...newSelectedRowsData[currentKey],
+            permissions: item.permissions,
+            isLocked: item.isLocked
+          }
+
           for (const column of item.columns) {
             if (systemColumnKeys.includes(column.key as string)) {
               newSelectedRowsData[currentKey] = {

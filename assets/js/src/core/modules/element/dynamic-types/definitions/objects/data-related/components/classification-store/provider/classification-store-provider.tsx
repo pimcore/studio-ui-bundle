@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { createContext, useCallback, useState, useMemo } from 'react'
+import React, { createContext, useCallback, useState, useMemo, useRef } from 'react'
 import type { ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 
 export interface ClassificationStoreContextData {
@@ -19,6 +19,8 @@ export interface ClassificationStoreContextData {
   getSearchValue: (tabId: string) => string
   currentLayoutData: ClassificationStoreGroupLayout2[]
   setCurrentLayoutData: (layoutData: ClassificationStoreGroupLayout2[]) => void
+  markGroupsAsNew: (groupIds: string[]) => void
+  isNewGroup: (groupId: string) => boolean
 }
 
 export const ClassificationStoreContext = createContext<ClassificationStoreContextData | undefined>(undefined)
@@ -31,6 +33,19 @@ const ClassificationStoreProvider = ({ children }: ClassificationStoreProviderPr
   const [isOpen, setIsOpen] = useState(false)
   const [searchValues, setSearchValues] = useState<Record<string, string>>({})
   const [currentLayoutData, setCurrentLayoutData] = useState<any>([])
+
+  // Groups added through the selection modal during this session. They have no data
+  // yet, so "hide empty data" must not hide their keys - the group would render
+  // without a single editable field.
+  const newGroupIdsRef = useRef<Set<string>>(new Set())
+
+  const markGroupsAsNew = useCallback((groupIds: string[]): void => {
+    groupIds.forEach((groupId) => newGroupIdsRef.current.add(groupId))
+  }, [])
+
+  const isNewGroup = useCallback((groupId: string): boolean => {
+    return newGroupIdsRef.current.has(groupId)
+  }, [])
 
   const getSearchValue = useCallback((tabId: string): string => {
     return searchValues[tabId] ?? ''
@@ -54,8 +69,10 @@ const ClassificationStoreProvider = ({ children }: ClassificationStoreProviderPr
     getSearchValue,
     setSearchValue,
     currentLayoutData,
-    setCurrentLayoutData
-  }), [getSearchValue, setSearchValue, isOpen, open, close, currentLayoutData, setCurrentLayoutData])
+    setCurrentLayoutData,
+    markGroupsAsNew,
+    isNewGroup
+  }), [getSearchValue, setSearchValue, isOpen, open, close, currentLayoutData, setCurrentLayoutData, markGroupsAsNew, isNewGroup])
 
   return (
     <ClassificationStoreContext.Provider value={ contextValue }>

@@ -292,6 +292,17 @@ export * from '@Pimcore/modules/element/element-selector/components/triggers/but
 export * from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
 export * from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 
+// Search & replace assignments as embeddable pieces: the provider accepts initialSearchFor /
+// initialReplaceWith / onApplied so hosts can preseed both elements and react to a finished
+// replacement job. Named re-exports — Table/Toolbar are too generic for `export *`.
+export {
+  SearchReplaceAssignmentsProvider,
+  useSearchReplaceAssignments
+} from '@Pimcore/modules/element/search-replace-assignments/providers/search-replace-assignments/search-replace-assignments-provider'
+export { SearchReplaceForm as SearchReplaceAssignmentsForm } from '@Pimcore/modules/element/search-replace-assignments/components/search-replace-form/search-replace-form'
+export { Table as SearchReplaceAssignmentsTable } from '@Pimcore/modules/element/search-replace-assignments/components/table/table'
+export { Toolbar as SearchReplaceAssignmentsToolbar } from '@Pimcore/modules/element/search-replace-assignments/components/toolbar/toolbar'
+
 export * from '@Pimcore/modules/element/hooks/use-cache-update'
 export * from '@Pimcore/modules/element/hooks/use-element-api'
 export * from '@Pimcore/modules/element/hooks/use-element-context'
@@ -327,6 +338,8 @@ export * from '@Pimcore/modules/element/listing/decorators/general-filters/conte
 export * from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/pql-filter/pql-filter-provider'
 export * from '@Pimcore/modules/element/listing/decorators/row-selection/view-layer/components/sidebar/hooks/with-selection-overview-tab'
 export * from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/sidebar/hooks/with-general-filters-tab'
+export * from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/search-mode-abstract'
+export * from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/search-mode-registry'
 
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/dynamic-type-object-layout-abstract'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/dynamic-type-object-layout-registry'

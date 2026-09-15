@@ -16,7 +16,7 @@ import { store } from '@Pimcore/app/store'
 import { selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 
-interface NotificationMessagePayload {
+export interface NotificationMessagePayload {
   unreadNotificationsCount: number
   notification: {
     id: number
@@ -26,6 +26,10 @@ interface NotificationMessagePayload {
     creationDate: number
     recipient: number
     sender: string | null
+    /** Resolved from the recipient's preferences; optional so an older backend still works. */
+    popup?: boolean
+    /** Type specific data as a JSON string, for renderers registered per notification type. */
+    payload?: string | null
   }
 }
 
@@ -38,7 +42,8 @@ export class NotificationMessageHandler extends AbstractMessageHandler {
 
   shouldHandle (message: AbstractMercureMessage): boolean {
     const user = selectCurrentUser(store.getState())
-    const payload = message.payload as any
+    // Runs on every Mercure message, so the shape is asserted loosely and guarded below.
+    const payload = message.payload as Partial<NotificationMessagePayload>
 
     return payload?.notification?.recipient === user.id && !isNil(payload?.notification) && !isNil(payload?.unreadNotificationsCount)
   }
@@ -50,7 +55,11 @@ export class NotificationMessageHandler extends AbstractMessageHandler {
       return
     }
 
-    this.onMessage(message)
+    // Only the toast is suppressed; the bell and the unread count below still update. Strict
+    // against false so a missing field (older backend) keeps the always-toast behaviour.
+    if (payload.notification.popup !== false) {
+      this.onMessage(message)
+    }
 
     store.dispatch(
       api.util.invalidateTags(invalidatingTags.NOTIFICATIONS())

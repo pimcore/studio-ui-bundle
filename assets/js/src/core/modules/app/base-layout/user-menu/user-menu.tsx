@@ -9,25 +9,18 @@
  */
 
 import { Badge } from '@Pimcore/components/badge/badge'
-import { Button } from '@Pimcore/components/button/button'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
-import { Icon } from '@Pimcore/components/icon/icon'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { useLogoutMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
-import { NOTIFICATIONS } from '@Pimcore/modules/notifications'
-import { SendNotificationModal } from '@Pimcore/modules/notifications/send-notification/send-notification-modal'
-import { useWidgetManager } from '@sdk/modules/widget-manager'
-import { theme } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStyle } from './user-menu.styles'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
-import { USERPROFILE } from '@Pimcore/modules/auth/profile/profile-container'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { Avatar } from '@Pimcore/components/avatar/avatar'
 import { useUserHelper } from '@Pimcore/modules/auth/hooks/use-user-helper'
 import { useNotificationGetUnreadCountQuery } from '@Pimcore/modules/notifications/notifications-slice.gen'
+import { useContextMenuSlot } from '@Pimcore/modules/app/context-menu-registry/use-context-menu-slot'
+import { contextMenuConfig } from '@Pimcore/modules/app/context-menu-registry/context-menu-config'
 
 interface IUserMenuProps {
   className?: string
@@ -35,10 +28,6 @@ interface IUserMenuProps {
 export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
-  const { token } = theme.useToken()
-  const [sendModal, setSendModal] = useState<boolean>(false)
-  const [logout] = useLogoutMutation()
-  const { openMainWidget } = useWidgetManager()
   const user = useUser()
   const { getUserImageById, updateUserImageInState } = useUserHelper()
   const { data } = useNotificationGetUnreadCountQuery(undefined, {
@@ -57,17 +46,13 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
     }
   }, [])
 
-  const handleLogout = (): void => {
-    const logoutTask = logout()
-
-    logoutTask.then(() => {
-      window.location.reload()
-    }).catch((error: Error) => {
-      trackError(new ApiError(error))
-    })
-  }
-
   const notificationCount = data?.unreadNotificationsCount ?? 0
+
+  // Providers must register at module init — useMenuItem() hooks run in slot order.
+  const entries = useContextMenuSlot(contextMenuConfig.userMenu.name, {})
+    .map((item) => (item !== null && 'icon' in item && item.icon !== undefined
+      ? { ...item, icon: <div className={ 'user-menu__item-icon' }>{item.icon}</div> }
+      : item))
 
   const items: DropdownMenuProps['items'] = [
     {
@@ -83,79 +68,43 @@ export const UserMenu = ({ className }: IUserMenuProps): React.JSX.Element => {
       ),
       type: 'group'
     },
-    {
-      key: 'notifications',
-      label: t('user-menu.notifications'),
-      icon: <div className={ 'user-menu__item-icon' }>
-        <Badge
-          count={ notificationCount }
-          showZero
-          styles={ {
-            indicator: {
-              background: token.colorPrimary,
-              width: 20,
-              height: 20,
-              minWidth: 20,
-              lineHeight: '20px',
-              borderRadius: '50%',
-              fontSize: notificationCount > 99 ? 9 : 10,
-              fontWeight: 'normal',
-              padding: 0,
-              boxShadow: 'none'
-            },
-            root: { marginRight: 0 }
-          } }
-        />
-      </div>,
-      onClick: () => { openMainWidget(NOTIFICATIONS) },
-      hidden: !isAllowed(UserPermission.Notifications),
-      extra: isAllowed(UserPermission.SendNotifications)
-        ? (
-          <Button
-            className={ 'user-menu__item-extra' }
-            onClick={ (e) => {
-              e.stopPropagation()
-              setSendModal(true)
-            } }
-            size={ 'small' }
-          >{t('user-menu.notification.send')}</Button>
-          )
-        : null
-    },
-    {
-      key: 'myprofile',
-      label: t('user-menu.my-profile'),
-      icon: <div className={ 'user-menu__item-icon' }><Icon value={ 'user' } /></div>,
-      onClick: () => { openMainWidget(USERPROFILE) }
-    },
-    {
-      key: 'logout',
-      label: t('user-menu.log-out'),
-      icon: <div className={ 'user-menu__item-icon' }><Icon value={ 'log-out' } /></div>,
-      onClick: handleLogout
-    }
+    ...entries
   ]
 
   return (
-    <>
-      <Dropdown
-        className={ className }
-        menu={ { items } }
-        overlayClassName={ [styles.userMenu].join(' ') }
-        overlayStyle={ { minWidth: 275 } }
-        trigger={ ['click'] }
+    <Dropdown
+      className={ className }
+      menu={ { items } }
+      overlayClassName={ [styles.userMenu].join(' ') }
+      overlayStyle={ { minWidth: 275 } }
+      trigger={ ['click'] }
+    >
+      {/* No showZero: permanently on screen, so it goes quiet at nothing to report. */}
+      <Badge
+        count={ notificationCount }
+        data-testid="user-menu-avatar-badge"
+        overflowCount={ 99 }
+        size={ 'small' }
+        styles={ {
+          indicator: {
+            // Fixed circle; the font steps down instead of the badge growing per digit.
+            width: 16,
+            height: 16,
+            minWidth: 16,
+            lineHeight: '16px',
+            borderRadius: '50%',
+            fontSize: notificationCount > 9 ? 9 : 10,
+            fontWeight: 'normal',
+            padding: 0
+          }
+        } }
       >
         <Avatar
           data-testid="user-menu-avatar"
           size={ 26 }
           src={ user?.hasImage && user?.image != null ? user?.image : undefined }
         />
-      </Dropdown>
-
-      <SendNotificationModal
-        onClose={ () => { setSendModal(false) } }
-        open={ sendModal }
-      />
-    </>
+      </Badge>
+    </Dropdown>
   )
 }

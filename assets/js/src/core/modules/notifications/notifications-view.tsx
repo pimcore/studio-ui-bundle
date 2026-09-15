@@ -9,7 +9,6 @@
  */
 
 import React from 'react'
-import { Title } from '@Pimcore/components/title/title'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
@@ -17,7 +16,7 @@ import { useTranslation } from 'react-i18next'
 import { Content } from '@Pimcore/components/content/content'
 import { Box } from '@Pimcore/components/box/box'
 import { NotificationList } from './notification-list'
-import { IconTextButton, Header } from '@sdk/components'
+import { IconTextButton } from '@sdk/components'
 import { type NotificationGetCollectionApiResponse } from './notifications-slice.gen'
 import { NotificationsSidebar } from './notifications-sidebar/notifications-sidebar'
 
@@ -33,6 +32,7 @@ interface NotificationsViewProps {
   activeNotification?: number
 }
 
+// The title and "send" sit on the widget shell around this view, shared with the settings section.
 const NotificationsView = ({ notifications, isLoading, isFetching, deleteNotificationsForUser, deleteLoading, page, setPage, setPageSize, activeNotification }: NotificationsViewProps): React.JSX.Element => {
   const { t } = useTranslation()
 
@@ -62,14 +62,6 @@ const NotificationsView = ({ notifications, isLoading, isFetching, deleteNotific
           </Toolbar>
           )
         : undefined }
-      renderTopBar={
-        <Header
-          margin={ { bottom: 'extra-small' } }
-          position='top'
-        >
-          <Title>{t('notifications.label')}</Title>
-        </Header>
-            }
     >
       <Content
         loading={ isLoading || isFetching || deleteLoading }
@@ -80,6 +72,8 @@ const NotificationsView = ({ notifications, isLoading, isFetching, deleteNotific
             x: 'extra-small',
             y: 'none'
           } }
+          // 'small' is paddingSM (12px) — breathing room between the section tabs and the first row.
+          padding={ { top: 'small' } }
         >
           {notifications !== undefined && (
           <NotificationList
