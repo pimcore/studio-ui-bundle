@@ -18,7 +18,6 @@ import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { Content } from '@Pimcore/components/content/content'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { Box } from '@Pimcore/components/box/box'
 import { Divider } from '@Pimcore/components/divider/divider'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Pagination } from '@Pimcore/components/pagination/pagination'
@@ -36,7 +35,6 @@ import { type SavedSearchConfigurationListItem } from '@Pimcore/modules/search/s
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { useOpenSavedSearch } from '@Pimcore/modules/search/saved-search/hooks/use-open-saved-search'
-import { useStyles } from './saved-searches-tab.styles'
 
 // Row shape with the display values pre-formatted so the Grid's default cell renders them
 // (matching the name column) instead of custom cell components.
@@ -47,7 +45,6 @@ interface SavedSearchRow extends SavedSearchConfigurationListItem {
 
 export const SavedSearchesTab = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { styles } = useStyles()
   const { close } = useSearch()
   const widgetManager = useWidgetManager()
   const { open: onOpen, openingId } = useOpenSavedSearch(close)
@@ -212,10 +209,10 @@ export const SavedSearchesTab = (): React.JSX.Element => {
           </Toolbar>
       }
         renderTopBar={
-          <Box
-            className={ (data?.totalItems ?? 0) === 0 ? styles.topBar : undefined }
-            margin={ { bottom: 'small' } }
-            padding={ { y: 'extra-small' } }
+          <Toolbar
+            padding={ { left: 'none', right: 'none' } }
+            position='none'
+            theme='secondary'
           >
             <SearchInput
               maxWidth='100%'
@@ -225,33 +222,30 @@ export const SavedSearchesTab = (): React.JSX.Element => {
               } }
               placeholder={ t('component.search.pleaceholder') }
             />
-          </Box>
+          </Toolbar>
       }
       >
         <Content
-          margin={ { x: 'extra-small', y: 'none' } }
           none={ !isFetching && isEmpty(data?.items) }
         >
-          <Box margin={ { x: 'extra-small', y: 'none' } }>
-            <Grid
-              autoWidth
-              columns={ columns }
-              data={ tableItems }
-              enableSorting
-              isLoading={ isFetching }
-              manualSorting
-              onSortingChange={ (nextSorting) => {
-                setSorting(nextSorting)
-                setCurrentPage(1)
-              } }
-              resizable
+          <Grid
+            autoWidth
+            columns={ columns }
+            data={ tableItems }
+            enableSorting
+            isLoading={ isFetching }
+            manualSorting
+            onSortingChange={ (nextSorting) => {
+              setSorting(nextSorting)
+              setCurrentPage(1)
+            } }
+            resizable
             // During loading the Grid renders placeholder rows without an id; return undefined for
             // those so it falls back to unique index ids (a constant id collides → phantom skeleton
             // rows linger after the data loads).
-              setRowId={ (row) => isUndefined(row.id) ? (undefined as unknown as string) : String(row.id) }
-              sorting={ sorting }
-            />
-          </Box>
+            setRowId={ (row) => isUndefined(row.id) ? (undefined as unknown as string) : String(row.id) }
+            sorting={ sorting }
+          />
         </Content>
       </ContentLayout>
     </div>
