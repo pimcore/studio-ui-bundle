@@ -9,7 +9,7 @@
  */
 
 import { useStyle } from './sidebar.styles'
-import React, { isValidElement, useState, useContext, useRef } from 'react'
+import React, { isValidElement, useState, useContext, useEffect, useRef } from 'react'
 import { type ISidebarButton, type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next'
 import { isNil } from 'lodash'
 import { ContentConfigProvider } from '../content/content-config-provider'
 import { Divider } from '../split-layout/components/divider/divider'
-import { useSidebarResize } from './use-sidebar-resize'
+import { type LayoutEdge, useSidebarResize } from './use-sidebar-resize'
 
 export interface SidebarProps {
   entries: ISidebarEntry[]
@@ -27,9 +27,15 @@ export interface SidebarProps {
   sizing?: 'large' | 'medium' | 'default'
   highlights?: Array<ISidebarEntry['key']>
   translateTooltips?: boolean
+  /** Layout edge the sidebar is attached to; drives the resize handle and tooltip side. */
+  layoutEdge?: LayoutEdge
+  /** When false the sidebar stays expanded: a tab can be switched but never closed. */
+  collapsible?: boolean
 }
 
-export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights = [], translateTooltips = false }: SidebarProps): React.JSX.Element => {
+export type { LayoutEdge }
+
+export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights = [], translateTooltips = false, layoutEdge = 'right', collapsible = true }: SidebarProps): React.JSX.Element => {
   const { styles } = useStyle()
   const sidebarContext = useContext(SidebarContext)
   const { t } = useTranslation()
@@ -56,6 +62,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
   const setActiveTab = sidebarContext?.toggleTab ?? setLocalActiveTab
 
   const isExpanded = activeTab !== ''
+  const tooltipPlacement = layoutEdge === 'left' ? 'right' : 'left'
   const {
     sidebarRef,
     contentRef,
@@ -64,9 +71,25 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
     startResizing,
     onMouseResize,
     onKeyboardResize
-  } = useSidebarResize(sizing)
+  } = useSidebarResize(sizing, layoutEdge)
+
+  // a non-collapsible sidebar must always show a panel. The active tab can name no entry
+  // at all — before the caller has picked one, or after the entry it named was removed —
+  // and both leave the expanded panel blank, so fall back on the key rather than on
+  // whether anything is expanded.
+  const hasActivePanel = entries.some((entry) => entry.key === activeTab)
+
+  useEffect(() => {
+    if (!collapsible && !hasActivePanel && entries.length > 0) {
+      setActiveTab(entries[0].key)
+    }
+  }, [collapsible, hasActivePanel, entries])
 
   function handleSidebarClick (key: string): void {
+    if (!collapsible && key === activeTab) {
+      return
+    }
+
     if (sidebarContext !== null && sidebarContext !== undefined) {
       // When using context, use the toggleTab method
       sidebarContext.toggleTab(key)
@@ -83,7 +106,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
   return (
     <ContentConfigProvider gap="extra-small">
       <div
-        className={ styles.sidebar }
+        className={ `${styles.sidebar} sidebar--edge-${layoutEdge}` }
         ref={ sidebarRef }
       >
         {isExpanded && (
@@ -113,7 +136,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
                 return (
                   <Tooltip
                     key={ entry.key }
-                    placement="left"
+                    placement={ tooltipPlacement }
                     title={ translateTooltips && !isNil(entry?.tooltip) ? t(entry.tooltip) : entry?.tooltip }
                   >
                     <div
@@ -168,7 +191,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
         <div
           className={ `sidebar__content sidebar__content--sizing-${sizing} ` + (isExpanded ? 'expanded' : '') }
           onKeyDown={ (event) => {
-            if (event.key === 'Escape' && isExpanded) {
+            if (event.key === 'Escape' && isExpanded && collapsible) {
               event.stopPropagation()
               setActiveTab('')
               // Move focus to the tab that was active, so the user isn't left on a hidden element.

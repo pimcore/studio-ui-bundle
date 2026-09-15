@@ -11,6 +11,7 @@
 import React, { memo, type ReactNode } from 'react'
 import { useStyles } from './content-layout.styles'
 import { Content } from '../content/content'
+import { type LayoutEdge } from '../sidebar'
 
 interface ContentToolbarViewProps {
   children: ReactNode
@@ -18,6 +19,8 @@ interface ContentToolbarViewProps {
   renderTopBar?: ReactNode
   renderSidebar?: ReactNode
   renderToolbar?: ReactNode
+  /** Layout edge the sidebar column occupies. Pass the same value to the Sidebar's `layoutEdge`. */
+  sidebarEdge?: LayoutEdge
 }
 
 const Component = (props: ContentToolbarViewProps): React.JSX.Element => {
@@ -26,6 +29,10 @@ const Component = (props: ContentToolbarViewProps): React.JSX.Element => {
 
   if (props.renderToolbar !== undefined) {
     classes.push('content-toolbar-sidebar-layout--with-toolbar')
+  }
+
+  if (props.renderSidebar !== undefined) {
+    classes.push(`content-toolbar-sidebar-layout--sidebar-${props.sidebarEdge ?? 'right'}`)
   }
 
   return (
