@@ -43,18 +43,23 @@ export const CreateObjectForm = ({ classes, isLoading, ...props }: CreateObjectF
       layout="vertical"
       { ...props }
     >
-      { classes.length > 1 && (
-        <Form.Item
-          label={ t('relations.create-object.class') }
-          name="classId"
-          rules={ [{ required: true, message: t('form.validation.required') }] }
-        >
-          <Select
-            options={ classes.map(({ id, name }) => ({ value: id, label: t(name) })) }
-            placeholder={ t('select') }
-          />
-        </Form.Item>
-      ) }
+      { /*
+        Kept mounted (just visually hidden) rather than omitted for a single class: an
+        omitted Form.Item is never registered, so the value CreateObjectModal pre-seeds
+        via setFieldValue would be dropped from antd's resolved submit values and the
+        form would submit without a classId.
+      */ }
+      <Form.Item
+        hidden={ classes.length <= 1 }
+        label={ t('relations.create-object.class') }
+        name="classId"
+        rules={ [{ required: true, message: t('form.validation.required') }] }
+      >
+        <Select
+          options={ classes.map(({ id, name }) => ({ value: id, label: t(name) })) }
+          placeholder={ t('select') }
+        />
+      </Form.Item>
 
       <Form.Item
         label={ t('relations.create-object.name') }
