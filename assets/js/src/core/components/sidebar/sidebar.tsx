@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next'
 import { isNil } from 'lodash'
 import { ContentConfigProvider } from '../content/content-config-provider'
 import { Divider } from '../split-layout/components/divider/divider'
-import { type SidebarDock, useSidebarResize } from './use-sidebar-resize'
+import { type LayoutEdge, useSidebarResize } from './use-sidebar-resize'
 
 export interface SidebarProps {
   entries: ISidebarEntry[]
@@ -28,14 +28,14 @@ export interface SidebarProps {
   highlights?: Array<ISidebarEntry['key']>
   translateTooltips?: boolean
   /** Layout edge the sidebar is attached to; drives the resize handle and tooltip side. */
-  dock?: SidebarDock
+  layoutEdge?: LayoutEdge
   /** When false the sidebar stays expanded: a tab can be switched but never closed. */
   collapsible?: boolean
 }
 
-export type { SidebarDock }
+export type { LayoutEdge }
 
-export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights = [], translateTooltips = false, dock = 'right', collapsible = true }: SidebarProps): React.JSX.Element => {
+export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights = [], translateTooltips = false, layoutEdge = 'right', collapsible = true }: SidebarProps): React.JSX.Element => {
   const { styles } = useStyle()
   const sidebarContext = useContext(SidebarContext)
   const { t } = useTranslation()
@@ -62,7 +62,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
   const setActiveTab = sidebarContext?.toggleTab ?? setLocalActiveTab
 
   const isExpanded = activeTab !== ''
-  const tooltipPlacement = dock === 'left' ? 'right' : 'left'
+  const tooltipPlacement = layoutEdge === 'left' ? 'right' : 'left'
   const {
     sidebarRef,
     contentRef,
@@ -71,7 +71,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
     startResizing,
     onMouseResize,
     onKeyboardResize
-  } = useSidebarResize(sizing, dock)
+  } = useSidebarResize(sizing, layoutEdge)
 
   // a non-collapsible sidebar must always show a tab, including before the caller has had
   // a chance to pick one (entries can arrive after mount)
@@ -102,7 +102,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
   return (
     <ContentConfigProvider gap="extra-small">
       <div
-        className={ `${styles.sidebar} sidebar--dock-${dock}` }
+        className={ `${styles.sidebar} sidebar--edge-${layoutEdge}` }
         ref={ sidebarRef }
       >
         {isExpanded && (

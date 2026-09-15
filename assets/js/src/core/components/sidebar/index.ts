@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-export { Sidebar, type SidebarProps, type SidebarDock } from './sidebar'
+export { Sidebar, type SidebarProps, type LayoutEdge } from './sidebar'
 export { SidebarProvider, SidebarContext, type SidebarProviderProps, type SidebarContextValue } from './sidebar-provider'
 export { useSidebar } from './use-sidebar'
 export { ProvidedSidebar } from './provided-sidebar'

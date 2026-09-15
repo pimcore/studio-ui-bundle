@@ -27,9 +27,9 @@ const config: Meta = {
         <Sidebar
           buttons={ args.buttons }
           collapsible={ args.collapsible }
-          dock={ args.dock }
           entries={ args.entries }
           highlights={ args.highlights }
+          layoutEdge={ args.layoutEdge }
           sizing={ args.sizing }
         />
       </div>
@@ -51,11 +51,11 @@ It can be used in two ways:
 - Highlight states for tabs
 - Custom buttons at the bottom
 - Two sizes: default (250px) and large (432px)
-- Dockable to either layout edge via \`dock\` (default \`right\`)
+- Attachable to either layout edge via \`layoutEdge\` (default \`right\`)
 - Pinned open with \`collapsible={false}\` — the active tab can be switched but not closed
 - Manually resizable width: a resize handle appears when hovering the edge the sidebar
-  shares with the main content — its left edge when docked right, its right edge when
-  docked left. Drag it (or focus it and use the arrow keys); the width of the current
+  shares with the main content — its left edge on a right-hand sidebar, its right edge on
+  a left-hand one. Drag it (or focus it and use the arrow keys); the width of the current
   size acts as the minimum
 - Provider pattern for dynamic state management
         `
@@ -82,7 +82,7 @@ It can be used in two ways:
     highlights: {
       description: 'Array of entry keys to highlight'
     },
-    dock: {
+    layoutEdge: {
       control: { type: 'inline-radio' },
       options: ['left', 'right'],
       description: 'Layout edge the sidebar is attached to (default: right)'
@@ -384,12 +384,11 @@ configured sizing is the minimum.
   }
 }
 
-export const DockedLeft = {
+export const LeftLayoutEdge = {
   render: () => (
     <div style={ { display: 'flex', height: '50vh', width: '700px' } }>
       <Sidebar
         collapsible={ false }
-        dock="left"
         entries={ [
           {
             key: 'document-configuration',
@@ -408,6 +407,7 @@ export const DockedLeft = {
             tooltip: 'Document Configuration'
           }
         ] }
+        layoutEdge="left"
       />
 
       <div style={ { flex: 1, padding: '16px' } }>Main content</div>
@@ -417,9 +417,10 @@ export const DockedLeft = {
     docs: {
       description: {
         story: `
-Docked to the left edge: the rail's divider and the resize handle move to the sidebar's
-right edge, and the rail tooltips open to the right. Dragging the handle right widens the
-panel, and ArrowRight does the same — the mirror of the default right-docked sidebar.
+Attached to the layout's left edge: the rail's divider and the resize handle move to the
+sidebar's right edge, and the rail tooltips open to the right. Dragging the handle right
+widens the panel, and ArrowRight does the same — the mirror of the default right-hand
+sidebar.
 
 This story also sets \`collapsible={false}\`: clicking the active rail icon and pressing
 Escape no longer close the panel, and the first entry opens on mount.

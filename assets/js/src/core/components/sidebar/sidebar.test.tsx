@@ -21,7 +21,7 @@ jest.mock('./sidebar.styles', () => ({
 }))
 
 // the tooltip wraps every rail icon; the real one pulls antd's portal + token machinery,
-// and the placement it is handed is exactly what the dock is expected to decide
+// and the placement it is handed is exactly what the layout edge is expected to decide
 jest.mock('@Pimcore/components/tooltip/tooltip', () => ({
   Tooltip: ({ children, placement }: any) => (
     <div data-placement={ placement }>{children}</div>
@@ -130,8 +130,8 @@ describe('Sidebar', () => {
     })
   })
 
-  describe('dock', () => {
-    it('places the rail tooltips left and no dock-left class by default', () => {
+  describe('layoutEdge', () => {
+    it('places the rail tooltips left and marks the root right by default', () => {
       const { container } = render(
         <SidebarProvider initialActiveTab="first">
           <Sidebar entries={ entries } />
@@ -140,22 +140,22 @@ describe('Sidebar', () => {
 
       expect(screen.getAllByText('first-icon')[0].closest('[data-placement]'))
         .toHaveAttribute('data-placement', 'left')
-      expect(container.querySelector('.sidebar--dock-right')).not.toBeNull()
+      expect(container.querySelector('.sidebar--edge-right')).not.toBeNull()
     })
 
-    it('flips the rail tooltips and marks the root when docked left', () => {
+    it('flips the rail tooltips and marks the root when attached left', () => {
       const { container } = render(
         <SidebarProvider initialActiveTab="first">
           <Sidebar
-            dock="left"
             entries={ entries }
+            layoutEdge="left"
           />
         </SidebarProvider>
       )
 
       expect(screen.getAllByText('first-icon')[0].closest('[data-placement]'))
         .toHaveAttribute('data-placement', 'right')
-      expect(container.querySelector('.sidebar--dock-left')).not.toBeNull()
+      expect(container.querySelector('.sidebar--edge-left')).not.toBeNull()
     })
   })
 })

@@ -162,7 +162,7 @@ export const useStyle = createStyles(({ token, css }) => {
       }
 
       /* the handle straddles the edge the sidebar shares with the main content */
-      &.sidebar--dock-left {
+      &.sidebar--edge-left {
         .sidebar__navigation {
           border-left: none;
           border-right: 1px solid ${token.colorFillSecondary};
