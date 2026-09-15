@@ -25,7 +25,9 @@ use Symfony\Contracts\Service\Attribute\Required;
  * is injected via #[Required] setter autowiring, so the using provider must be an autowired
  * service (the studio providers are).
  *
- * @internal
+ * This trait is part of the public contract for shipping a Studio frontend as a committed
+ * archive (see {@see BuildArchiveProviderInterface}). Bundles are expected to `use` it rather
+ * than talk to the extractor directly; the extractor and the cache warmer remain internal.
  */
 trait BuildArchiveExtractionTrait
 {

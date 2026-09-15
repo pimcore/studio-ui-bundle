@@ -17,11 +17,18 @@ namespace Pimcore\Bundle\StudioUiBundle\Build;
  * Describes the committed frontend build archive(s) and where their contents must be
  * reconstructed so they can be served at the URL baked into the build.
  *
+ * Returned by {@see BuildArchiveProviderInterface::getBuildArchive()}; together with that
+ * interface and {@see BuildArchiveExtractionTrait} it is the public contract for bundles that
+ * ship their Studio frontend as a committed archive.
+ *
  * `archiveGlob` matches the committed `build-<id>.zip`; normally exactly one exists. If
  * several happen to match, the extractor picks one deterministically (the id is a content
  * hash, not a date, so there is no "newest" to choose).
  *
- * @internal
+ * `targetDir` is the directory the archive is expanded into. It must be the directory that
+ * is publicly served at the asset prefix compiled into the build (e.g. `public/build`, served
+ * via `assets:install` as `/bundles/<bundle>/build`). The archive contains one
+ * `<build-id>/` directory per build target, each with its own `entrypoints.json`.
  */
 final readonly class BuildArchive
 {

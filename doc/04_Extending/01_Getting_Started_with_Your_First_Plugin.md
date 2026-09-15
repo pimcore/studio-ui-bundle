@@ -94,6 +94,10 @@ Register a `WebpackEntryPointProviderInterface` service in the Pimcore service c
 - [WebpackEntryPointProvider.php](https://github.com/pimcore/studio-example-bundle/blob/main/src/Webpack/WebpackEntryPointProvider.php)
 - [services.yaml](https://github.com/pimcore/studio-example-bundle/blob/5715004cf377e91adfd1fce68b054181046edbc0/config/services.yaml#L12-L14)
 
+The provider contract, the available service tags, and the options for distributing the compiled build with
+a bundle (committed directory, build at deploy time, or a single committed archive) are described in
+[Frontend Build Registration and Distribution](./03_Frontend_Build_and_Entry_Points.md).
+
 
 ### Check
 Finally, we should ensure that our plugin is working.
