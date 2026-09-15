@@ -921,7 +921,7 @@ field-definition.table: Tabel
 field-definition.structured-table: Gestructureerde tabel
 field-definition.fieldcollections: Field Collections
 field-definition.objectbricks: Object Bricks
-field-definition.classificationstore: Classificatieopslag
+field-definition.classificationstore: Classification Store
 field-definition.localizedfields: Gelokaliseerde velden
 field-definition.firstname: Voornaam
 field-definition.lastname: Achternaam
@@ -1997,8 +1997,8 @@ classification-store.column.id: ID
 classification-store.column.group: Groep
 classification-store.column.name: Naam
 classification-store.column.description: Beschrijving
-navigation.classification-store: Classificatieopslag
-widget.classification-store-config: Classificatieopslag
+navigation.classification-store: Classification Store
+widget.classification-store-config: Classification Store
 classification-store.tabs.collections: Collecties
 classification-store.tabs.groups: Groepen
 classification-store.tabs.keys: Sleutels
@@ -2382,7 +2382,7 @@ perspective-editor.form.main-nav-permission.dataManagement.tagConfiguration: Tag
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_bulkExport: Gegevensmodeldefinitie > Bulkexport
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_bulkImport: Gegevensmodeldefinitie > Bulkimport
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_classes: Gegevensmodeldefinitie > Klassen
-perspective-editor.form.main-nav-permission.dataManagement.dataModel_classificationStore: Gegevensmodeldefinitie > Classificatieopslag
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_classificationStore: Gegevensmodeldefinitie > Classification Store
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_fieldCollections: Gegevensmodeldefinitie > Field Collections
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_hidden: Menu gegevensmodeldefinitie verbergen
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_objectBricks: Gegevensmodeldefinitie > Object Bricks
@@ -2562,7 +2562,7 @@ user-management.permissions.qr_codes: QR-codes
 user-management.permissions.plugins: Plugins
 user-management.permissions.notes_events: Notities & gebeurtenissen
 user-management.permissions.clear_cache: Cache wissen
-user-management.permissions.classificationstore: Classificatieopslag
+user-management.permissions.classificationstore: Classification Store
 user-management.permissions.classes: Klassen
 user-management.permissions.workflow_details: Workflowdetails
 user-management.permissions.users: Gebruikers

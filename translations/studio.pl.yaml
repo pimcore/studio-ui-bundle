@@ -921,7 +921,7 @@ field-definition.table: Tabela
 field-definition.structured-table: Tabela strukturalna
 field-definition.fieldcollections: Field Collections
 field-definition.objectbricks: Object Bricks
-field-definition.classificationstore: Magazyn klasyfikacji
+field-definition.classificationstore: Classification Store
 field-definition.localizedfields: Pola zlokalizowane
 field-definition.firstname: Imię
 field-definition.lastname: Nazwisko
@@ -1997,8 +1997,8 @@ classification-store.column.id: ID
 classification-store.column.group: Grupa
 classification-store.column.name: Nazwa
 classification-store.column.description: Opis
-navigation.classification-store: Magazyn klasyfikacji
-widget.classification-store-config: Magazyn klasyfikacji
+navigation.classification-store: Classification Store
+widget.classification-store-config: Classification Store
 classification-store.tabs.collections: Kolekcje
 classification-store.tabs.groups: Grupy
 classification-store.tabs.keys: Klucze
@@ -2382,7 +2382,7 @@ perspective-editor.form.main-nav-permission.dataManagement.tagConfiguration: Kon
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_bulkExport: Definicja modelu danych > Eksport zbiorczy
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_bulkImport: Definicja modelu danych > Import zbiorczy
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_classes: Definicja modelu danych > Klasy
-perspective-editor.form.main-nav-permission.dataManagement.dataModel_classificationStore: Definicja modelu danych > Magazyn klasyfikacji
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_classificationStore: Definicja modelu danych > Classification Store
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_fieldCollections: Definicja modelu danych > Field Collections
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_hidden: Ukryj menu definicji modelu danych
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_objectBricks: Definicja modelu danych > Object Bricks
@@ -2562,7 +2562,7 @@ user-management.permissions.qr_codes: Kody QR
 user-management.permissions.plugins: Wtyczki
 user-management.permissions.notes_events: Notatki i zdarzenia
 user-management.permissions.clear_cache: Wyczyść pamięć podręczną
-user-management.permissions.classificationstore: Magazyn klasyfikacji
+user-management.permissions.classificationstore: Classification Store
 user-management.permissions.classes: Klasy
 user-management.permissions.workflow_details: Szczegóły workflow
 user-management.permissions.users: Użytkownicy
