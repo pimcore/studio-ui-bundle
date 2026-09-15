@@ -20,7 +20,7 @@ Pimcore Studio runs long operations through the Generic Execution Engine. The fr
 - Implement `JobInterface`. Declare `static readonly jobNames` with your backend job name(s) and `static rehydrate(jobRuns)`; both `run()` and `rehydrate()` build the same `MessageBusJobHandler`.
 - Register the class in your module's `onInit()` on the `JobRehydrationRegistry` service. `ExecutionEngine.runJob()` throws for a job whose names are not registered.
 - Run it with `useExecutionEngine().runJob(new MyJob(...))`. `runJob()` resolves once the request is dispatched and the handler registered, not when the job ends; put completion side effects in `onJobCompletion`.
-- Pick the progress calculator that matches what the backend publishes: `StepCompletionCalculator` when each step completes as a unit, `BatchedStepProgressCalculator` when equally weighted steps each stream 0–100, `ProgressFieldCalculator` when a single `progress` field streams 0–100. A custom calculator returns a number, `null` (indeterminate) or `PROGRESS_NO_UPDATE`.
+- Pass `StepCompletionCalculator` as `progressCalculator` when each backend step completes as a unit. For any other progress shape implement `ProgressCalculator`; `calculateProgress()` returns a number (0–100), `null` (indeterminate) or `PROGRESS_NO_UPDATE` (leave the bar as is).
 
 ```typescript
 import { t } from 'i18next'
