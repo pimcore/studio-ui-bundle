@@ -54,6 +54,19 @@ pimcore_studio_ui:
             - '~/pimcore-studio/api/.*~'  # Regex pattern
 ```
 
+### OAuth Consent Screen Exception
+
+Neither `enabled: false` nor `exclude_paths` removes the framing protection from the OAuth consent screen at
+`/pimcore-studio/oauth/consent`. That path always carries `Content-Security-Policy: frame-ancestors 'none'`
+and `X-Frame-Options: DENY`, in addition to whatever the CSP handler emits.
+
+This is deliberate. Approving an authorization request rests on the request being same-origin rather than on
+a CSRF token, so a framed consent screen with an overlay above the Allow button would produce a genuine
+approval. The protection therefore cannot depend on how CSP is configured. Every other Pimcore Studio path
+honours both settings as documented above.
+
+See [OAuth Consent Screen](./07_OAuth_Consent_Screen.md) for the screen itself.
+
 ## Using Nonce in Templates
 
 Add the nonce attribute to inline scripts to prevent CSP violations:

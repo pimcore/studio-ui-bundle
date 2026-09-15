@@ -28,8 +28,10 @@ const toKeySegment = (scope: string): string => scope.replaceAll(':', '-')
 
 /**
  * Describes a scope from the translation catalogue, which is the only place a
- * scope has to be registered: any bundle contributing scopes to the
- * authorization server (ScopeProviderInterface) describes them by shipping
+ * scope has to be registered for this screen. A bundle declares its scopes as
+ * the `scopesSupported` of a protected resource, contributed by a service
+ * implementing `ProtectedResourceProviderInterface` in the Studio Backend
+ * Bundle, and describes them here by shipping
  * `oauth.consent.scope.<slug>.label` / `.description` keys. A scope with no
  * keys is still shown, using its raw identifier, so nothing is ever granted
  * without appearing on the screen.
