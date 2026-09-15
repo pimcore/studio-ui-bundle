@@ -29,14 +29,20 @@ export type {
 } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/message-bus-job-handler-types'
 export type { JobButtonCustomizationContext } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/message-bus-job-notification'
 
-export type { ProgressCalculator } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/progress-calculator/progress-calculator.interface'
+export {
+  PROGRESS_NO_UPDATE,
+  type ProgressCalculator,
+  type ProgressCalculatorContext,
+  type ProgressResult
+} from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/progress-calculator/progress-calculator.interface'
 export { ProgressFieldCalculator } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/progress-calculator/progress-field-calculator'
 export { StepCompletionCalculator } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/progress-calculator/step-completion-calculator'
 export { BatchedStepProgressCalculator } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/progress-calculator/batched-step-progress-calculator'
-export type { StepTracker } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/step-tracker/step-tracker.interface'
+export type { StepTracker, StepTrackerState } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/step-tracker/step-tracker.interface'
 export { DefaultStepTracker } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/step-tracker/default-step-tracker'
 export { ChildJobStepTracker } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/step-tracker/child-job-step-tracker'
 
 export { JobRehydrationRegistry } from '@Pimcore/modules/execution-engine/services/job-rehydration-registry'
 export type { JobRunList, RehydratableJob } from '@Pimcore/modules/execution-engine/services/job-rehydration-registry'
+export { resolveChildJobRunOptions } from '@Pimcore/modules/execution-engine/jobs/rehydration-helpers'
 export type { JobRun } from '@Pimcore/modules/execution-engine/execution-engine-api-slice.gen'
