@@ -32,17 +32,17 @@ import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/co
 import { useGeneralFiltersConfig } from '../../../../../context-layer/provider/general-filters-config/use-general-filters-config'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 import { useSearchMode } from '../../../../../search-modes/use-search-mode'
-import { useAppliedFilters, useDraftFilterValues, useDraftFilters, useElementFilterContext, elementFilterDefinitions } from '../../../../../element-filters'
+import { useAppliedFilters, useDraftFilterValues, useDraftFilters, useElementFilterContext, elementFilterDefinitions, elementFilterDefaults } from '../../../../../element-filters'
 
 export const FilterContainerInner = (): React.JSX.Element => {
-  const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
+  const [isPqlFilterEnabled, setIsPqlFilterEnabled] = useState<boolean>(false)
 
   const { setPage } = usePaging()
   const { setValues: setAppliedValues } = useAppliedFilters()
   const { handleSearchTermInSidebar, showOnlyUnreferencedFilter } = useGeneralFiltersConfig()
   const { setDataLoadingState } = useData()
 
-  const { searchTerm, searchMode: draftSearchMode, directChildren, unreferenced, pql, fieldFilters, reset } = useDraftFilterValues()
+  const { searchTerm, searchMode: draftSearchMode, directChildren, unreferenced, pql, fieldFilters, setPql, reset } = useDraftFilterValues()
   const searchMode = useSearchMode('draft')
   const draftStore = useDraftFilters()
   const filterContext = useElementFilterContext()
@@ -51,14 +51,16 @@ export const FilterContainerInner = (): React.JSX.Element => {
 
   /**
    * Publishes the draft, i.e. what the "Apply" button does. `committed` carries the value of a
-   * filter that applies itself immediately (Enter in the search field or in a text field
-   * filter): its draft write happens in the same render, so it is not in the draft here yet.
+   * filter that applies itself immediately (Enter in the search field, the direct-children
+   * checkbox, a text field filter): its draft write happens in the same render, so it is not in
+   * the draft here yet.
    */
   const applyFilters = (committed?: FilterValues): void => {
     const valuesToApply: FilterValues = {
       fieldFilters,
       directChildren,
-      pql: isAdvancedMode ? pql : ''
+      // A disabled PQL filter must not influence the result, whatever the field still holds.
+      pql: isPqlFilterEnabled ? pql : ''
     }
 
     if (showOnlyUnreferencedFilter === true) {
@@ -84,11 +86,11 @@ export const FilterContainerInner = (): React.JSX.Element => {
     onCommit: (fieldFilters) => { applyFilters({ fieldFilters }) }
   })
 
-  // Reflect a pre-applied PQL query (e.g. from a restored saved search) as advanced mode, so the
-  // query is shown and editable instead of silently active behind the regular filters.
+  // Reflect a pre-applied PQL query (e.g. from a restored saved search) as an enabled PQL filter,
+  // so the query is shown and editable instead of silently active behind the regular filters.
   useEffect(() => {
     if (pql !== '') {
-      setIsAdvancedMode(true)
+      setIsPqlFilterEnabled(true)
     }
   }, [pql])
 
@@ -96,41 +98,61 @@ export const FilterContainerInner = (): React.JSX.Element => {
     applyFilters()
   }
 
-  const handleResetAllFiltersClick = (): void => {
+  /**
+   * Clears every filter, the search term included, and applies that straight away - the neutral
+   * state is published as a whole because `setValues` merges into what is applied.
+   */
+  const handleClearAllClick = (): void => {
     reset()
+    setIsPqlFilterEnabled(false)
+
+    setAppliedValues(elementFilterDefaults)
+    setPage(1)
+    setDataLoadingState('filters-applied')
+  }
+
+  /**
+   * Switching the PQL filter off drops the query and re-runs without it; switching it on only
+   * reveals an empty field, so there is nothing to apply yet.
+   */
+  const handlePqlFilterToggle = (enabled: boolean): void => {
+    setIsPqlFilterEnabled(enabled)
+
+    if (enabled) {
+      return
+    }
+
+    setPql('')
+    applyFilters({ pql: '' })
   }
 
   return (
     <ContentLayout
       renderToolbar={
         <Toolbar theme='secondary'>
-          {!isAdvancedMode
-            ? (
-              <ColumnPickerPopover<AvailableColumn>
-                data-testid="listing-field-filter-add"
-                groups={ columnGroups }
-                onSelect={ (item) => { handleColumnClick(item.meta!) } }
-                placement="leftBottom"
-              >
-                <IconTextButton
-                  data-testid="listing-field-filter-add-button"
-                  icon={ { value: 'new' } }
-                  type='default'
-                >
-                  {t('listing.add-column')}
-                </IconTextButton>
-              </ColumnPickerPopover>
-              )
-            : <div />}
+          <ColumnPickerPopover<AvailableColumn>
+            data-testid="listing-field-filter-add"
+            groups={ columnGroups }
+            onSelect={ (item) => { handleColumnClick(item.meta!) } }
+            placement="leftBottom"
+          >
+            <IconTextButton
+              data-testid="listing-field-filter-add-button"
+              icon={ { value: 'new' } }
+              type='default'
+            >
+              {t('listing.add-column')}
+            </IconTextButton>
+          </ColumnPickerPopover>
 
           <Flex gap='extra-small'>
             <IconTextButton
               data-testid="listing-filter-clear-button"
               icon={ { value: 'close' } }
-              onClick={ handleResetAllFiltersClick }
+              onClick={ handleClearAllClick }
               type='link'
             >
-              {t('sidebar.clear-all-filters')}
+              {t('clear-all')}
             </IconTextButton>
 
             <Button
@@ -150,62 +172,54 @@ export const FilterContainerInner = (): React.JSX.Element => {
           justify='space-between'
         >
           <Title>{t('sidebar.search_filter')}</Title>
-          <Flex gap='extra-small'>
-            <Text>{t('toggle.advanced-mode')}</Text>
-            <Switch
-              checked={ isAdvancedMode }
-              data-testid="listing-filter-advanced-toggle"
-              onChange={ () => {
-                setIsAdvancedMode(!isAdvancedMode)
-              } }
-            />
-          </Flex>
+          <Switch
+            checked={ isPqlFilterEnabled }
+            data-testid="listing-filter-advanced-toggle"
+            labelLeft={ <Text>{isPqlFilterEnabled ? t('toggle.pql-filter.disable') : t('toggle.pql-filter.enable')}</Text> }
+            onChange={ handlePqlFilterToggle }
+          />
         </Flex>
 
-        {isAdvancedMode
-          ? (
-            <FiltersRenderer
-              context={ filterContext }
-              descriptors={ elementFilterDefinitions }
-              section='advanced'
-              store={ draftStore }
-            />
-            )
+        <Form>
+          <Flex
+            gap='small'
+            style={ { width: '100%' } }
+            vertical
+          >
+            { /* Lets a control apply on its own, e.g. Enter in the search field */ }
+            <FilterCommitProvider onCommit={ applyFilters }>
+              <FiltersRenderer
+                context={ filterContext }
+                descriptors={ elementFilterDefinitions }
+                section='controls'
+                store={ draftStore }
+              />
+
+              {isPqlFilterEnabled && (
+                <FiltersRenderer
+                  context={ filterContext }
+                  descriptors={ elementFilterDefinitions }
+                  section='advanced'
+                  store={ draftStore }
+                />
+              )}
+            </FilterCommitProvider>
+          </Flex>
+        </Form>
+
+        <Title>
+          {t('element.sidebar.field-filters')}
+        </Title>
+
+        { filters.length === 0
+          ? <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } />
           : (
-            <>
-              <Form>
-                <Flex
-                  gap='small'
-                  style={ { width: '100%' } }
-                  vertical
-                >
-                  { /* Lets a control apply on its own, e.g. Enter in the search field */ }
-                  <FilterCommitProvider onCommit={ applyFilters }>
-                    <FiltersRenderer
-                      context={ filterContext }
-                      descriptors={ elementFilterDefinitions }
-                      section='controls'
-                      store={ draftStore }
-                    />
-                  </FilterCommitProvider>
-                </Flex>
-              </Form>
-
-              <Title>
-                {t('element.sidebar.field-filters')}
-              </Title>
-
-              { filters.length === 0
-                ? <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } />
-                : (
-                  <FieldFilters
-                    data={ filters }
-                    onChange={ onFilterChange }
-                    onCommit={ onFilterCommit }
-                  />
-                  ) }
-            </>
-            )}
+            <FieldFilters
+              data={ filters }
+              onChange={ onFilterChange }
+              onCommit={ onFilterCommit }
+            />
+            ) }
       </Content>
     </ContentLayout>
   )

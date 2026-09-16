@@ -680,7 +680,8 @@ button.confirm: Conferma
 button.save-apply: Salva e applica
 button.add-edit: Aggiungi e modifica
 button.cancel-edits: Annulla modifiche
-toggle.advanced-mode: Modalità avanzata
+toggle.pql-filter.enable: Attiva filtro PQL
+toggle.pql-filter.disable: Disattiva filtro PQL
 actions.open: Apri
 open: Apri
 edit: Modifica

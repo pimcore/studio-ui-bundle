@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type AnyFilterDescriptor } from '@Pimcore/components/filters'
+import { type AnyFilterDescriptor, type FilterValues } from '@Pimcore/components/filters'
 import { type ElementFilterQueryPart, type ElementFilterContext } from '../element-filter-types'
 import { searchTermFilterDescriptor } from './search-term-filter'
 import { searchModeFilterDescriptor } from './search-mode-filter'
@@ -27,6 +27,11 @@ export const elementFilterDefinitions: ReadonlyArray<
   pqlFilterDescriptor,
   fieldFiltersFilterDescriptor
 ]
+
+/** The neutral state of every filter, i.e. what "Clear all" publishes into the applied store. */
+export const elementFilterDefaults: FilterValues = Object.fromEntries(
+  elementFilterDefinitions.map(({ key, defaultValue }) => [key, defaultValue])
+)
 
 export {
   searchTermFilterDescriptor,
