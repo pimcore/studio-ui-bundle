@@ -72,7 +72,7 @@ Register the provider in your `services.yaml` with one or both of the following 
 | Tag | Loads the entries into |
 |-----|------------------------|
 | `pimcore_studio_ui.webpack_entry_point_provider` | The main Studio application. Every plugin bundle needs this tag. |
-| `pimcore_studio_ui.webpack_entry_point_provider.document_editor_iframe` | The document editor iframe, which has its own plugin bootstrap. Add this tag only if your plugin must also run inside the document editor, for example because it provides a [custom document editable](./02_Plugin_Development_Examples/14_Custom_Document_Editable.md). |
+| `pimcore_studio_ui.webpack_entry_point_provider.document_editor_iframe` | The document editor iframe, which has its own plugin bootstrap. See [Custom Document Editable](./02_Plugin_Development_Examples/14_Custom_Document_Editable.md) for when a plugin needs this tag. |
 
 > **Note:** `StudioBuildCacheWarmer` (used by Option 3 below) only discovers providers tagged
 > `pimcore_studio_ui.webpack_entry_point_provider`. If a `BuildArchiveProviderInterface` provider is registered
@@ -85,7 +85,7 @@ services:
     App\Webpack\WebpackEntryPointProvider:
         tags:
             - { name: pimcore_studio_ui.webpack_entry_point_provider }
-            # only when the plugin must also be available inside the document editor:
+            # only when required, see the table above:
             - { name: pimcore_studio_ui.webpack_entry_point_provider.document_editor_iframe }
 ```
 
