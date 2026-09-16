@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
@@ -20,111 +20,30 @@ import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { FieldFilters } from '@Pimcore/components/field-filters/field-filters'
 import { ColumnPickerPopover } from '@Pimcore/components/column-picker/column-picker-popover'
-import { FilterCommitProvider, FiltersRenderer, type FilterValues } from '@Pimcore/components/filters'
+import { FilterCommitProvider, FiltersRenderer } from '@Pimcore/components/filters'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
-import { useFieldFilterEditor } from './field-filters/use-field-filter-editor'
 import {
   ContentLayout
 } from '@Pimcore/components/content-layout/content-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Content } from '@Pimcore/components/content/content'
-import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
-import { useGeneralFiltersConfig } from '../../../../../context-layer/provider/general-filters-config/use-general-filters-config'
-import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
-import { useSearchMode } from '../../../../../search-modes/use-search-mode'
-import { useAppliedFilters, useDraftFilterValues, useDraftFilters, useElementFilterContext, elementFilterDefinitions, elementFilterDefaults } from '../../../../../element-filters'
+import { useDraftFilters, useElementFilterContext, elementFilterDefinitions } from '../../../../../element-filters'
+import { useFilterPanel } from './use-filter-panel'
 
 export const FilterContainerInner = (): React.JSX.Element => {
-  const [isPqlFilterEnabled, setIsPqlFilterEnabled] = useState<boolean>(false)
+  const { t } = useTranslation()
 
-  const { setPage } = usePaging()
-  const { setValues: setAppliedValues } = useAppliedFilters()
-  const { handleSearchTermInSidebar, showOnlyUnreferencedFilter } = useGeneralFiltersConfig()
-  const { setDataLoadingState } = useData()
-
-  const { searchTerm, searchMode: draftSearchMode, directChildren, unreferenced, pql, fieldFilters, setPql, reset } = useDraftFilterValues()
-  const searchMode = useSearchMode('draft')
   const draftStore = useDraftFilters()
   const filterContext = useElementFilterContext()
 
-  const { t } = useTranslation()
-
-  /**
-   * Publishes the draft, i.e. what the "Apply" button does. `committed` carries the value of a
-   * filter that applies itself immediately (Enter in the search field, the direct-children
-   * checkbox, a text field filter): its draft write happens in the same render, so it is not in
-   * the draft here yet.
-   */
-  const applyFilters = (committed?: FilterValues): void => {
-    const valuesToApply: FilterValues = {
-      fieldFilters,
-      directChildren,
-      // A disabled PQL filter must not influence the result, whatever the field still holds.
-      pql: isPqlFilterEnabled ? pql : ''
-    }
-
-    if (showOnlyUnreferencedFilter === true) {
-      valuesToApply.unreferenced = unreferenced
-    }
-
-    if (handleSearchTermInSidebar) {
-      valuesToApply.searchTerm = searchTerm
-      // activeModeId, not the raw draft value: a stored id that no visible mode matches - a saved
-      // search from a mode that has since been hidden or removed - collapses to full text, which
-      // is what the query and the dropdown already fall back to. Publishing it here keeps the
-      // applied store from carrying an id nothing can honour, for Apply and for Enter alike.
-      valuesToApply.searchMode = searchMode?.activeModeId ?? draftSearchMode
-    }
-
-    setAppliedValues({ ...valuesToApply, ...committed })
-
-    setPage(1)
-    setDataLoadingState('filters-applied')
-  }
-
-  const { filters, onFilterChange, onFilterCommit, columnGroups, handleColumnClick } = useFieldFilterEditor({
-    onCommit: (fieldFilters) => { applyFilters({ fieldFilters }) }
-  })
-
-  // Reflect a pre-applied PQL query (e.g. from a restored saved search) as an enabled PQL filter,
-  // so the query is shown and editable instead of silently active behind the regular filters.
-  useEffect(() => {
-    if (pql !== '') {
-      setIsPqlFilterEnabled(true)
-    }
-  }, [pql])
-
-  const handleApplyClick = (): void => {
-    applyFilters()
-  }
-
-  /**
-   * Clears every filter, the search term included, and applies that straight away - the neutral
-   * state is published as a whole because `setValues` merges into what is applied.
-   */
-  const handleClearAllClick = (): void => {
-    reset()
-    setIsPqlFilterEnabled(false)
-
-    setAppliedValues(elementFilterDefaults)
-    setPage(1)
-    setDataLoadingState('filters-applied')
-  }
-
-  /**
-   * Switching the PQL filter off drops the query and re-runs without it; switching it on only
-   * reveals an empty field, so there is nothing to apply yet.
-   */
-  const handlePqlFilterToggle = (enabled: boolean): void => {
-    setIsPqlFilterEnabled(enabled)
-
-    if (enabled) {
-      return
-    }
-
-    setPql('')
-    applyFilters({ pql: '' })
-  }
+  const {
+    isPqlFilterEnabled,
+    applyFilters,
+    onApplyClick,
+    onClearAllClick,
+    onPqlFilterToggle,
+    fieldFilterEditor: { filters, onFilterChange, onFilterCommit, columnGroups, handleColumnClick }
+  } = useFilterPanel()
 
   return (
     <ContentLayout
@@ -149,7 +68,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
             <IconTextButton
               data-testid="listing-filter-clear-button"
               icon={ { value: 'close' } }
-              onClick={ handleClearAllClick }
+              onClick={ onClearAllClick }
               type='link'
             >
               {t('clear-all')}
@@ -157,7 +76,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
 
             <Button
               data-testid="listing-filter-apply-button"
-              onClick={ handleApplyClick }
+              onClick={ onApplyClick }
               type='primary'
             >
               {t('button.apply')}
@@ -176,7 +95,7 @@ export const FilterContainerInner = (): React.JSX.Element => {
             checked={ isPqlFilterEnabled }
             data-testid="listing-filter-advanced-toggle"
             labelLeft={ <Text>{isPqlFilterEnabled ? t('toggle.pql-filter.disable') : t('toggle.pql-filter.enable')}</Text> }
-            onChange={ handlePqlFilterToggle }
+            onChange={ onPqlFilterToggle }
           />
         </Flex>
 
