@@ -4,39 +4,36 @@ title: Frontend Build Registration and Distribution
 
 # Frontend Build Registration and Distribution
 
-Every bundle that ships a Studio UI plugin has to solve two problems:
+A bundle that ships a Studio UI plugin has to solve two problems:
 
-1. **Registration** – tell Studio where the compiled frontend files are, so they can be loaded into the Studio app.
-   This is done with a `WebpackEntryPointProviderInterface` service.
-2. **Distribution** – get the compiled frontend onto the target installation when the bundle is installed via Composer.
-   There are three supported options; one of them (a committed archive) uses the opt-in `BuildArchiveProviderInterface`.
-
-This page describes both contracts and when to use which distribution option.
+1. **Registration** – tell Studio where the compiled frontend files are (`WebpackEntryPointProviderInterface`).
+2. **Distribution** – get the compiled frontend onto the target installation when the bundle is installed via
+   Composer. One of the three options below, a committed archive, uses the opt-in `BuildArchiveProviderInterface`.
 
 ## Registering the frontend build
 
 ### The `entrypoints.json` manifest
 
 The Rsbuild plugin `pluginGenerateEntrypoints` (from `@pimcore/studio-ui-bundle/rsbuild/plugins`) writes an
-`entrypoints.json` manifest into the build output directory. It lists the JS and CSS files for every entry of the build
-and adds a synthetic `exposeRemote` entry that registers the bundle's Module Federation remote with Studio.
+`entrypoints.json` manifest into the build output directory. It lists the JS and CSS files of every entry and adds a
+synthetic `exposeRemote` entry that registers the bundle's Module Federation remote with Studio.
 
-By convention the output directory is `public/build/<build-id>/` inside the bundle (a bundle with multiple build
-targets, such as an SDK and an app build sharing one id, uses one suffixed directory per target instead, e.g.
-`<build-id>-app/` and `<build-id>-sdk/`), so it is served by `bin/console assets:install` under
-`/bundles/<bundlename>/build/<build-id>/`. The `assetPrefix` in `rsbuild.config.ts` must point to that URL, see the
-[example Rsbuild configuration](https://github.com/pimcore/studio-example-bundle/blob/main/assets/rsbuild.config.ts).
+By convention the output directory is `public/build/<build-id>/` inside the bundle, served by `assets:install` under
+`/bundles/<bundlename>/build/<build-id>/`; the `assetPrefix` in `rsbuild.config.ts` must point to that URL (see the
+[example Rsbuild configuration](https://github.com/pimcore/studio-example-bundle/blob/main/assets/rsbuild.config.ts)).
+A bundle with several build targets sharing one id (such as Studio's own SDK and app builds) uses one suffixed
+directory per target, e.g. `<build-id>-app/` and `<build-id>-sdk/`.
 
 ### `WebpackEntryPointProviderInterface`
 
-Studio collects all services tagged as entry point providers and loads the entries they declare.
-Implement `Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProviderInterface`:
+Studio collects all tagged provider services and loads the entries they declare. Implement
+`Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointProviderInterface`:
 
 | Method | Purpose |
 |--------|---------|
-| `getEntryPointsJsonLocations()` | Absolute paths of the `entrypoints.json` files to read. Usually `glob(__DIR__ . '/../../public/build/*/entrypoints.json')`. |
-| `getEntryPoints()` | Names of the entries from the manifest that Studio should load. A plugin bundle returns `['exposeRemote']`; the actual plugin code is then loaded through Module Federation. |
-| `getOptionalEntryPoints()` | Entries that are allowed to be missing from the manifest (for example entries that only exist in a development build). Usually `[]`. |
+| `getEntryPointsJsonLocations()` | Absolute paths of the `entrypoints.json` files to read, usually `glob(__DIR__ . '/../../public/build/*/entrypoints.json')`. |
+| `getEntryPoints()` | Entries Studio must load. A plugin bundle returns `['exposeRemote']`; the plugin code itself is then loaded through Module Federation. |
+| `getOptionalEntryPoints()` | Entries that may be missing from the manifest (e.g. development-only entries). A missing entry that is not optional fails with `InvalidEntryPointsJsonException`. Usually `[]`. |
 
 ```php
 <?php
@@ -67,18 +64,16 @@ final class WebpackEntryPointProvider implements WebpackEntryPointProviderInterf
 
 ### Service tags
 
-Register the provider in your `services.yaml` with one or both of the following tags:
+Register the provider in `services.yaml` with one or both tags:
 
 | Tag | Loads the entries into |
 |-----|------------------------|
-| `pimcore_studio_ui.webpack_entry_point_provider` | The main Studio application. Every plugin bundle needs this tag. |
-| `pimcore_studio_ui.webpack_entry_point_provider.document_editor_iframe` | The document editor iframe, which has its own plugin bootstrap. See [Custom Document Editable](./02_Plugin_Development_Examples/14_Custom_Document_Editable.md) for when a plugin needs this tag. |
+| `pimcore_studio_ui.webpack_entry_point_provider` | The main Studio application. Every plugin that runs there needs this tag. |
+| `pimcore_studio_ui.webpack_entry_point_provider.document_editor_iframe` | The document editor iframe, which has its own plugin bootstrap. See [Custom Document Editable](./02_Plugin_Development_Examples/14_Custom_Document_Editable.md) for when a plugin needs it. |
 
-> **Note:** `StudioBuildCacheWarmer` (used by Option 3 below) only discovers providers tagged
-> `pimcore_studio_ui.webpack_entry_point_provider`. If a `BuildArchiveProviderInterface` provider is registered
-> **only** with the `.document_editor_iframe` tag, cache warmup will not extract its archive. A provider using the
-> archive mechanism must always carry the main tag as well, even if it is only meant to run inside the document
-> editor.
+> **Note:** cache warmup (Option 3 below) only discovers providers carrying the main tag. A
+> `BuildArchiveProviderInterface` provider registered only with the `.document_editor_iframe` tag is never extracted,
+> so archive providers must always carry the main tag as well.
 
 ```yaml
 services:
@@ -94,50 +89,42 @@ A complete working example is the
 
 ## Distributing the compiled frontend
 
-A bundle installed via Composer has to make sure the compiled files referenced by `entrypoints.json` exist in the target
-installation. Pick one of the following options.
+A bundle installed via Composer must make sure the files referenced by `entrypoints.json` exist on the target
+installation. There are three ways to do that.
 
 ### Option 1: Commit the expanded build directory
 
-Run `npm run build` and commit the resulting `public/build/` directory. This is what the Studio Example Bundle does and
-is the simplest option: no build step on the target system, and a plain `WebpackEntryPointProviderInterface` is all
-that is needed.
-
-The downside is that every build produces new hashed file names, so the repository grows with generated files and merges
-between branches frequently conflict on build output. For a small bundle with infrequent releases this is usually fine.
+Run `npm run build` and commit `public/build/`. This is what the Studio Example Bundle does and needs nothing beyond a
+plain `WebpackEntryPointProviderInterface`. The downside: every build changes the hashed file names, so generated files
+accumulate in the repository and merges between branches conflict on build output.
 
 ### Option 2: Build during deployment
 
-Do not commit build output at all. Run `npm ci && npm run build` for the bundle as part of your deployment pipeline,
-before `assets:install`. This also only needs a plain `WebpackEntryPointProviderInterface`, but requires Node.js on the
-build host and a build step for every bundle that ships a Studio plugin.
+Commit no build output and run `npm ci && npm run build` for the bundle in the deployment pipeline, before
+`assets:install`. Also needs only a plain provider, but requires Node.js on the build host and a build step per bundle.
 
 ### Option 3: Commit a single build archive (`BuildArchiveProviderInterface`)
 
-Instead of the expanded directory, commit one zip file `build-dist/build-<id>.zip` and let Studio extract it into
-`public/build/` on the target system. This is how the Studio UI Bundle itself and other Pimcore bundles ship their
-frontend. It avoids the churn of Option 1 and the deployment requirement of Option 2.
+Commit one zip file, `build-dist/build-<id>.zip`, and let Studio extract it into `public/build/` on the target system.
+This is how the Studio UI Bundle itself and other Pimcore bundles ship their frontend: no build-output churn in git and
+no build step at deploy time.
 
-This is an **opt-in** mechanism: bundles that do not implement `BuildArchiveProviderInterface` are not affected by it.
-The following classes in `Pimcore\Bundle\StudioUiBundle\Build` are public API and safe to use from your bundle:
+The mechanism is opt-in and available in Studio UI Bundle 2025.4.9+ and 2026.2.1+ (not in the 2026.1 line). These
+classes in `Pimcore\Bundle\StudioUiBundle\Build` are public API:
 
 | Class | Role |
 |-------|------|
-| `BuildArchiveProviderInterface` | Extends `WebpackEntryPointProviderInterface` with `getBuildArchive(): ?BuildArchive`. Studio's cache warmer extracts the archives of all tagged providers implementing this interface. |
-| `BuildArchive` | Value object returned by `getBuildArchive()`: the `archiveGlob` matching the committed zip and the `targetDir` it is extracted into. |
-| `BuildArchiveExtractionTrait` | Ready-made implementation of `getBuildArchive()` and `getEntryPointsJsonLocations()`. Your provider only implements `buildArchive()` to supply its paths. |
+| `BuildArchiveProviderInterface` | Extends `WebpackEntryPointProviderInterface` with `getBuildArchive(): ?BuildArchive`. |
+| `BuildArchive` | Value object: the `archiveGlob` matching the committed zip and the `targetDir` it is extracted into. |
+| `BuildArchiveExtractionTrait` | Implements `getBuildArchive()` and `getEntryPointsJsonLocations()`; your provider only implements `buildArchive()` to supply the paths. |
 
-`BuildArchiveExtractor` and `StudioBuildCacheWarmer` are internal; do not call or replace them directly.
-The mechanism is available in Studio UI Bundle 2025.4.9 and later.
+`BuildArchiveExtractor` and `StudioBuildCacheWarmer` are internal; do not call or replace them.
 
-#### Step 1: Produce a build with a content-derived build id
+#### Step 1: Build with a content-derived build id
 
-The archive is named after a **build id** that is derived from the source tree, not generated randomly. Identical
-source therefore always produces the same archive name, so re-running the build on unchanged source does not create a
-new commit. The build id must be written into the output directory as `.build-id`, which the packaging script uses to
-find the directories that belong to one build.
-
-Use `getBuildGroupId()` and `pluginWriteBuildId` from the Studio UI npm package in your `rsbuild.config.ts`:
+The archive is named after a build id derived from the source tree, so unchanged source yields the same archive name
+and no new commit. The id is also written into each output directory as `.build-id`, which the packaging script uses
+to find the directories of one build. Use `getBuildGroupId()` and `pluginWriteBuildId` in `rsbuild.config.ts`:
 
 ```ts
 import { defineConfig } from '@rsbuild/core';
@@ -146,14 +133,14 @@ import { getBuildGroupId } from '@pimcore/studio-ui-bundle/bundler/build-id';
 import fs from 'node:fs';
 import path from 'node:path';
 
-// Fingerprint of this assets directory (node_modules and dist are excluded).
-// Keep the build output outside of this directory, otherwise every build changes the id.
+// Hash of this assets directory (node_modules and dist excluded). Keep the build output
+// outside of it, otherwise every build changes the id.
 const buildId = getBuildGroupId(__dirname);
 const buildRoot = path.resolve(__dirname, '..', 'public', 'build');
 const buildPath = path.resolve(buildRoot, buildId);
 
-// A plugin bundle has a single build target, so remove other build directories. The packaging
-// script picks one build id deterministically, not "the newest", so stale directories must go.
+// Remove stale build directories: the packaging script picks a build id deterministically,
+// not "the newest".
 if (fs.existsSync(buildRoot)) {
   for (const entry of fs.readdirSync(buildRoot)) {
     if (entry !== buildId) {
@@ -166,9 +153,7 @@ export default defineConfig({
   output: {
     manifest: true,
     assetPrefix: '/bundles/<bundlename>/build/' + buildId,
-    distPath: {
-      root: buildPath,
-    },
+    distPath: { root: buildPath },
   },
   plugins: [
     pluginGenerateEntrypoints(),
@@ -180,9 +165,8 @@ export default defineConfig({
 
 #### Step 2: Package the build into the archive
 
-`@pimcore/studio-ui-bundle` ships the packaging script as the `studio-package-build` binary (the file
-`bundler/package-build.cjs` in the package). Point it at your build directory and the directory the archive should be
-written to. Both paths are resolved relative to the directory `npm run` is executed in:
+`@pimcore/studio-ui-bundle` ships the packaging script as the `studio-package-build` binary. Point it at the build
+directory and the archive directory; both paths are resolved relative to the package directory `npm run` executes in:
 
 ```json
 {
@@ -193,25 +177,21 @@ written to. Both paths are resolved relative to the directory `npm run` is execu
 }
 ```
 
-`npm run build && npm run package-build` then writes `build-dist/build-<id>.zip`. The script keeps an existing archive
-with the same id untouched and removes archives of other ids, so `build-dist/` always contains exactly one file.
-
-Ignore the expanded build and commit the archive:
+`npm run build && npm run package-build` writes `build-dist/build-<id>.zip`. An existing archive with the same id is
+left untouched and archives of other ids are removed, so `build-dist/` holds exactly one archive. Ignore the expanded
+build and commit the archive:
 
 ```gitignore
 # Expanded frontend build is generated from build-dist/build-<id>.zip, not committed
 /public/build/
 ```
 
-In CI, run the two npm scripts and commit `build-dist/` back to the branch. Because the id is a content hash, the commit
-only contains changes when the frontend source actually changed.
-
-You do **not** need `studio-package-build` for Option 1 or Option 2.
+In CI, run both scripts and commit `build-dist/` back to the branch; there is nothing to commit unless the frontend
+source changed. `studio-package-build` is not needed for Option 1 or 2.
 
 #### Step 3: Implement `BuildArchiveProviderInterface`
 
-Replace the plain provider with one that declares the archive. The trait provides `getEntryPointsJsonLocations()` and
-`getBuildArchive()`; you only supply the paths:
+Replace the plain provider with one that declares the archive; the trait provides the rest:
 
 ```php
 <?php
@@ -247,27 +227,26 @@ final class WebpackEntryPointProvider implements BuildArchiveProviderInterface
 }
 ```
 
-`targetDir` must be the directory that is served at the `assetPrefix` compiled into the build. The service registration
-and tags are the same as for a plain provider. The trait receives the extractor through setter autowiring, so the
-provider must be an autowired service (`autowire: true`, which is the default in most bundle `services.yaml` files).
+`targetDir` must be the directory served at the `assetPrefix` compiled into the build. Registration and tags are the
+same as for a plain provider. The trait receives the extractor through setter autowiring, so the provider must be an
+autowired service (`autowire: true`, the default in most bundle `services.yaml` files).
 
 #### How extraction works
 
-- **Deployment:** `bin/console cache:warmup` (also run by `cache:clear` and by Pimcore's Composer scripts) extracts the
-  archive of every registered `BuildArchiveProviderInterface` into its `targetDir`. This runs while `vendor/` is still
-  writable, so read-only production filesystems are supported as long as the cache is warmed during the deploy phase.
-  When `assets:install` runs in copy mode, run `cache:warmup` before it so the copied files include the build.
-- **Local development:** if the expanded build is missing when Studio is rendered (for example after `git pull` with a
-  new archive), the provider extracts it on the fly, provided the filesystem is writable.
-- **Manual builds win:** a build produced by `npm run build` or `npm run dev` in the bundle is never overwritten by
-  extraction. To go back to the committed archive, delete `public/build/` and warm the cache again.
-- **Staleness:** the decision to extract is based on the archive file name (the content hash), never on file
-  modification times, so it is stable across checkouts and deployments.
-- **Read-only without a build:** `cache:warmup` itself never fails over extraction; it catches any extraction error
-  and logs a warning instead, so a read-only deploy does not make the deploy step fail. If warmup could not extract
-  the archive and no build is present, the failure instead surfaces the first time Studio resolves entry points at
-  request time: `BuildArchiveNotWritableException` is thrown then, with instructions to run `cache:warmup` during
-  deployment. Watch for the warmup warning log rather than relying on `cache:warmup` exiting non-zero.
+- **Deployment:** `bin/console cache:warmup` (or `cache:clear` without `--no-warmup`) extracts the archive of every
+  registered `BuildArchiveProviderInterface` into its `targetDir`. Run it during the deploy phase while `vendor/` is
+  still writable; read-only production filesystems are then fully supported. Pimcore's Composer scripts run
+  `cache:clear --no-warmup` by default and therefore do not extract, so add an explicit `cache:warmup` to the
+  deployment. When `assets:install` runs in copy mode, warm the cache before it.
+- **Local development:** if the expanded build is missing when Studio resolves entry points (e.g. after `git pull`
+  with a new archive), the provider extracts it on the fly, provided the filesystem is writable.
+- **Manual builds win:** a build produced by `npm run build` or `npm run dev` (which `pluginWriteBuildId` marks as
+  developer-owned) is never overwritten by extraction. To return to the committed archive, delete `public/build/` and
+  warm the cache again.
+- **Staleness** is decided by the archive file name (a content hash), never by file modification times.
+- **Read-only without a build:** `cache:warmup` never fails over extraction; it logs a warning and continues. If no
+  build is present at request time and the target is not writable, `BuildArchiveNotWritableException` is thrown then,
+  telling you to run `cache:warmup` during deployment. Watch the warmup log rather than the command's exit code.
 
 ## Summary
 
