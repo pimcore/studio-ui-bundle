@@ -26,6 +26,8 @@ error.error_inconsistent_asset_type: Bara assets av samma typ tillåts här.
 error.error_recycle_bin_restore: Kan inte återställa elementet från papperskorgen
 error.error_recycle_bin_restore_missing_parent: Kan inte återställa elementet från papperskorgen, överordnat element saknas
 error.syntax_error: Syntaxfel
+error.error_login_token_as_admin_non_admin_user: Endast admin-användare kan generera en inloggningslänk för en admin-användare
+error.error_login_token_no_user_password: En inloggningslänk kan inte genereras för den här användaren eftersom inget lösenord är satt
 sidebar.selected_elements: Valda element
 sidebar.grid_config: Rutnätskonfiguration
 sidebar.tag_filters: Taggfilter

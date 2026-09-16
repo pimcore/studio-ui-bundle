@@ -26,6 +26,8 @@ error.error_inconsistent_asset_type: Seuls les assets du même type sont autoris
 error.error_recycle_bin_restore: "Impossible de restaurer l'élément depuis la corbeille"
 error.error_recycle_bin_restore_missing_parent: "Impossible de restaurer l'élément depuis la corbeille, l'élément parent est manquant"
 error.syntax_error: Erreur de syntaxe
+error.error_login_token_as_admin_non_admin_user: Seuls les utilisateurs administrateurs peuvent générer un lien de connexion pour un utilisateur administrateur
+error.error_login_token_no_user_password: "Impossible de générer un lien de connexion pour cet utilisateur car aucun mot de passe n'est défini"
 sidebar.selected_elements: Éléments sélectionnés
 sidebar.grid_config: Configuration de la grille
 sidebar.tag_filters: Filtres par tags
