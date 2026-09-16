@@ -426,6 +426,24 @@ login-form.username: Nazwa użytkownika
 login-form.password: Hasło
 aria.login-form-additional-logins.additional-login-provider: "Dodatkowy dostawca logowania:"
 aria.login-form-additional-logins.remember-me-checkbox: Pole wyboru zapamiętaj mnie
+oauth.consent.title: Autoryzuj dostęp
+oauth.consent.subtitle: "{{client}} chce uzyskać dostęp do Pimcore jako Ty."
+oauth.consent.unverified: Pimcore nie zweryfikował tej aplikacji. Kontynuuj tylko wtedy, gdy zostało to uruchomione z aplikacji, której ufasz.
+oauth.consent.redirect-to: "Po wyrażeniu zgody zostaniesz przekierowany do {{host}}"
+oauth.consent.permissions-heading: "Pozwoli to na:"
+oauth.consent.no-scopes-warning: Ta aplikacja nie zażądała konkretnych uprawnień, więc nie można ich wyświetlić. Zezwól tylko wtedy, gdy ufasz, że będzie działać w Twoim imieniu.
+oauth.consent.signed-in-as: "Zalogowano jako {{username}}"
+oauth.consent.allow: Zezwól
+oauth.consent.deny: Odmów
+oauth.consent.scope.mcp-read.label: Odczyt Twoich danych
+oauth.consent.scope.mcp-read.description: Odczytywanie, wyświetlanie i przeszukiwanie dostępnych dla Ciebie narzędzi.
+oauth.consent.scope.mcp-write.label: Modyfikacja Twoich danych
+oauth.consent.scope.mcp-write.description: Korzystanie z narzędzi zmieniających dane, nadal w granicach Twoich uprawnień.
+oauth.consent.retry: Spróbuj ponownie
+oauth.consent.error.load-failed: Nie można załadować tego żądania autoryzacji.
+oauth.consent.error.decision-failed: Nie można przesłać Twojej decyzji. Spróbuj ponownie.
+oauth.consent.expired.title: To żądanie autoryzacji wygasło
+oauth.consent.expired.description: Rozpocznij ponownie z poziomu swojej aplikacji.
 unsaved-notice: Zapisz, aby potwierdzić zmiany
 widget-manager.tab-title.close-confirmation: Masz niezapisane zmiany. Czy na pewno chcesz zamknąć tę kartę?
 action-applied-successfully: Akcja zastosowana pomyślnie

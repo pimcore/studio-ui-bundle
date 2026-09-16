@@ -25,9 +25,9 @@ error.error_document_language_not_set: Dokumentet har ingen språkegenskap angit
 error.error_inconsistent_asset_type: Kun ressurser av samme type er tillatt her.
 error.error_recycle_bin_restore: Kan ikke gjenopprette elementet fra papirkurven
 error.error_recycle_bin_restore_missing_parent: Kan ikke gjenopprette elementet fra papirkurven, overordnet element mangler
-error.syntax_error: Syntaksfeil
 error.error_login_token_as_admin_non_admin_user: Bare admin-brukere kan generere en påloggingslenke for en admin-bruker
 error.error_login_token_no_user_password: Det kan ikke genereres en påloggingslenke for denne brukeren fordi det ikke er angitt noe passord
+error.syntax_error: Syntaksfeil
 sidebar.selected_elements: Valgte elementer
 sidebar.grid_config: Rutenettskonfigurasjon
 sidebar.tag_filters: Taggfiltre
@@ -428,6 +428,24 @@ login-form.username: Brukernavn
 login-form.password: Passord
 aria.login-form-additional-logins.additional-login-provider: "Ekstra innloggingsleverandør:"
 aria.login-form-additional-logins.remember-me-checkbox: Husk meg-avkrysningsboks
+oauth.consent.title: Autoriser tilgang
+oauth.consent.subtitle: "{{client}} vil ha tilgang til Pimcore som deg."
+oauth.consent.unverified: Pimcore har ikke verifisert denne applikasjonen. Fortsett bare hvis du startet dette fra en applikasjon du stoler på.
+oauth.consent.redirect-to: "Etter at du godkjenner, blir du sendt til {{host}}"
+oauth.consent.permissions-heading: "Dette vil gi den mulighet til å:"
+oauth.consent.no-scopes-warning: Denne applikasjonen ba ikke om spesifikke tillatelser, så ingen kan vises. Tillat bare tilgang hvis du stoler på at den handler på dine vegne.
+oauth.consent.signed-in-as: "Logget inn som {{username}}"
+oauth.consent.allow: Tillat
+oauth.consent.deny: Avslå
+oauth.consent.scope.mcp-read.label: Lese dine data
+oauth.consent.scope.mcp-read.description: Lese, liste opp og søke blant verktøyene som er tilgjengelige for deg.
+oauth.consent.scope.mcp-write.label: Endre dine data
+oauth.consent.scope.mcp-write.description: Bruke verktøy som endrer data, fortsatt begrenset til dine egne tillatelser.
+oauth.consent.retry: Prøv igjen
+oauth.consent.error.load-failed: Denne autorisasjonsforespørselen kunne ikke lastes.
+oauth.consent.error.decision-failed: Din beslutning kunne ikke sendes inn. Prøv igjen.
+oauth.consent.expired.title: Denne autorisasjonsforespørselen har utløpt
+oauth.consent.expired.description: Vennligst start på nytt fra applikasjonen din.
 unsaved-notice: Vennligst lagre for å bekrefte endringene
 widget-manager.tab-title.close-confirmation: Du har ulagrede endringer, er du sikker på at du vil lukke denne fanen?
 action-applied-successfully: Handling utført
