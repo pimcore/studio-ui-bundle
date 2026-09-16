@@ -10,10 +10,10 @@
 
 import { DeepLink } from '@Pimcore/components/deep-link/deep-link'
 import { DefaultPage } from '@Pimcore/modules/app/default-page'
-import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
 import { LoginPage } from '@Pimcore/modules/auth/login-page'
+import { AuthenticatedRoute } from './authenticated-route'
 import React from 'react'
-import { createBrowserRouter, Navigate, useLocation } from 'react-router-dom'
+import { createBrowserRouter } from 'react-router-dom'
 import { appConfig } from '../config/app-config'
 import { PasswordReset } from '@Pimcore/components/password-reset/password-reset'
 import { OAuthConsentPage } from '@Pimcore/modules/oauth/consent/oauth-consent-page'
@@ -38,23 +38,6 @@ export const routes = {
   deeplinkAsset: DEEP_LINK_URL,
   passwordReset: PASSWORD_RESET_URL,
   oauthConsent: OAUTH_CONSENT_URL
-}
-
-const AuthenticatedRoute = ({ children }: { children: React.JSX.Element }): React.ReactElement => {
-  const { isAuthenticated } = useIsAuthenticated()
-  const location = useLocation()
-
-  return (
-    <>
-      {isAuthenticated === true && children}
-      {isAuthenticated === false && (
-        <Navigate
-          state={ { from: location } }
-          to={ routes.login }
-        />
-      )}
-    </>
-  )
 }
 
 export const router = createBrowserRouter([

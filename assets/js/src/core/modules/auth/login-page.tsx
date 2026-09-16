@@ -22,7 +22,17 @@ import { useAppDispatch } from '@Pimcore/app/store'
 import { setAuthState } from './auth-slice'
 import { useAdminThumbnails } from '@Pimcore/modules/app/branding/hooks/use-admin-thumbnails'
 
-export const LoginPage = (): React.JSX.Element => {
+export interface LoginPageProps {
+  /**
+   * Set when the route guard renders this screen at the guarded route's own URL instead
+   * of at `routes.login`. There is nowhere to send the user on success then - they are
+   * already on the page they asked for - and navigating away would take them off it. The
+   * form reloads the document instead, and the guard renders the route's own content.
+   */
+  inPlace?: boolean
+}
+
+export const LoginPage = ({ inPlace = false }: LoginPageProps): React.JSX.Element => {
   const navigate = useNavigate()
   const location = useLocation()
   const [searchParams] = useSearchParams()
@@ -36,6 +46,12 @@ export const LoginPage = (): React.JSX.Element => {
   const { styles } = useStyle({ backgroundImageUrl: loginScreenCustomBackgroundImage })
 
   useEffect(() => {
+    // Rendered by the guard: the URL is already the target, and the guard swaps to the
+    // route's own content as soon as the state flips, so there is nothing to navigate to.
+    if (inPlace) {
+      return
+    }
+
     if (isAuthenticated === true) {
       (async () => {
         const from = location?.state?.from
@@ -52,7 +68,7 @@ export const LoginPage = (): React.JSX.Element => {
         await sendStatistics(user.isAdmin)
       })().catch(() => { })
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated, inPlace])
 
   useEffect(() => {
     if (!isNil(token)) {
