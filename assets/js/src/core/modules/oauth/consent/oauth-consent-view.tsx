@@ -81,30 +81,37 @@ export const OAuthConsentView = ({
         ) }
       </Flex>
 
-      <Flex
-        gap={ 8 }
-        vertical
-      >
-        <Title
-          id={ PERMISSIONS_HEADING_ID }
-          level={ 2 }
-          theme="secondary"
-          titleClass={ styles.sectionTitle }
-          weight="normal"
-        >
-          { t('oauth.consent.permissions-heading') }
-        </Title>
-        { isEmpty(scopes)
-          ? (
-            <Text type="secondary">
-              { t('oauth.consent.no-scopes') }
-            </Text>
-            )
-          : (
-            // The implicit list role is redundant everywhere except WebKit, which drops it
-            // when list-style is none. "list, N items" is the announcement that matters most
-            // on this screen, so the redundancy is deliberate here.
-            // eslint-disable-next-line jsx-a11y/no-redundant-roles
+      { isEmpty(scopes)
+        ? (
+          // Without requested scopes there is nothing to list, and that is not the same as
+          // "nothing granted": the server issues a token without scopes, and a resource that
+          // does not check scopes accepts it with the user's own permissions. So the screen
+          // warns instead of reassuring, and does not claim what the token will be able to do.
+          <Text
+            data-testid="oauth-consent-no-scopes"
+            type="warning"
+          >
+            { t('oauth.consent.no-scopes-warning') }
+          </Text>
+          )
+        : (
+          <Flex
+            gap={ 8 }
+            vertical
+          >
+            <Title
+              id={ PERMISSIONS_HEADING_ID }
+              level={ 2 }
+              theme="secondary"
+              titleClass={ styles.sectionTitle }
+              weight="normal"
+            >
+              { t('oauth.consent.permissions-heading') }
+            </Title>
+            { /* The implicit list role is redundant everywhere except WebKit, which drops it
+                when list-style is none. "list, N items" is the announcement that matters most
+                on this screen, so the redundancy is deliberate here. */ }
+            { /* eslint-disable-next-line jsx-a11y/no-redundant-roles */ }
             <ul
               aria-labelledby={ PERMISSIONS_HEADING_ID }
               className={ styles.scopeList }
@@ -124,8 +131,8 @@ export const OAuthConsentView = ({
                 </li>
               )) }
             </ul>
-            ) }
-      </Flex>
+          </Flex>
+          ) }
 
       { !isNil(consent.user) && (
         <Text type="secondary">

@@ -431,7 +431,7 @@ oauth.consent.subtitle: "{{client}} souhaite accéder à Pimcore en tant que vou
 oauth.consent.unverified: Pimcore n'a pas vérifié cette application. Ne continuez que si vous avez démarré cette action depuis une application à laquelle vous faites confiance.
 oauth.consent.redirect-to: "Après avoir autorisé, vous serez redirigé vers {{host}}"
 oauth.consent.permissions-heading: "Cela lui permettra de:"
-oauth.consent.no-scopes: Aucune autorisation spécifique n'a été demandée.
+oauth.consent.no-scopes-warning: Cette application n'a demandé aucune autorisation spécifique, aucune ne peut donc être affichée. N'autorisez l'accès que si vous lui faites confiance pour agir en votre nom.
 oauth.consent.signed-in-as: "Connecté en tant que {{username}}"
 oauth.consent.allow: Autoriser
 oauth.consent.deny: Refuser
