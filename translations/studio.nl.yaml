@@ -426,6 +426,24 @@ login-form.username: Gebruikersnaam
 login-form.password: Wachtwoord
 aria.login-form-additional-logins.additional-login-provider: "Extra inlogprovider:"
 aria.login-form-additional-logins.remember-me-checkbox: Selectievakje onthoud mij
+oauth.consent.title: Toegang autoriseren
+oauth.consent.subtitle: "{{client}} wil namens jou toegang tot Pimcore."
+oauth.consent.unverified: Pimcore heeft deze applicatie niet geverifieerd. Ga alleen verder als je dit hebt gestart vanuit een applicatie die je vertrouwt.
+oauth.consent.redirect-to: "Na je toestemming word je doorgestuurd naar {{host}}"
+oauth.consent.permissions-heading: "Hiermee wordt het volgende toegestaan:"
+oauth.consent.no-scopes-warning: Deze applicatie heeft geen specifieke rechten aangevraagd, dus die kunnen niet worden weergegeven. Geef alleen toestemming als je erop vertrouwt dat de applicatie namens jou handelt.
+oauth.consent.signed-in-as: "Aangemeld als {{username}}"
+oauth.consent.allow: Toestaan
+oauth.consent.deny: Weigeren
+oauth.consent.scope.mcp-read.label: Je gegevens lezen
+oauth.consent.scope.mcp-read.description: Lezen, weergeven en zoeken in de tools die voor je beschikbaar zijn.
+oauth.consent.scope.mcp-write.label: Je gegevens wijzigen
+oauth.consent.scope.mcp-write.description: Tools gebruiken die gegevens wijzigen, nog steeds beperkt tot je eigen rechten.
+oauth.consent.retry: Opnieuw proberen
+oauth.consent.error.load-failed: Dit autorisatieverzoek kon niet worden geladen.
+oauth.consent.error.decision-failed: Je keuze kon niet worden verzonden. Probeer het opnieuw.
+oauth.consent.expired.title: Dit autorisatieverzoek is verlopen
+oauth.consent.expired.description: Start opnieuw vanuit je applicatie.
 unsaved-notice: Sla op om je wijzigingen te bevestigen
 widget-manager.tab-title.close-confirmation: Je hebt niet-opgeslagen wijzigingen. Weet je zeker dat je dit tabblad wilt sluiten?
 action-applied-successfully: Actie succesvol toegepast

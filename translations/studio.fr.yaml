@@ -25,6 +25,8 @@ error.error_document_language_not_set: Le document n'a pas de propriété de lan
 error.error_inconsistent_asset_type: Seuls les assets du même type sont autorisés ici.
 error.error_recycle_bin_restore: "Impossible de restaurer l'élément depuis la corbeille"
 error.error_recycle_bin_restore_missing_parent: "Impossible de restaurer l'élément depuis la corbeille, l'élément parent est manquant"
+error.error_login_token_as_admin_non_admin_user: Seuls les utilisateurs administrateurs peuvent générer un lien de connexion pour un utilisateur administrateur
+error.error_login_token_no_user_password: "Impossible de générer un lien de connexion pour cet utilisateur car aucun mot de passe n'est défini"
 error.syntax_error: Erreur de syntaxe
 sidebar.selected_elements: Éléments sélectionnés
 sidebar.grid_config: Configuration de la grille
@@ -426,6 +428,24 @@ login-form.username: Nom d'utilisateur
 login-form.password: Mot de passe
 aria.login-form-additional-logins.additional-login-provider: "Fournisseur de connexion supplémentaire :"
 aria.login-form-additional-logins.remember-me-checkbox: Case à cocher Se souvenir de moi
+oauth.consent.title: Autoriser l'accès
+oauth.consent.subtitle: "{{client}} souhaite accéder à Pimcore en tant que vous."
+oauth.consent.unverified: Pimcore n'a pas vérifié cette application. Ne continuez que si vous avez démarré cette action depuis une application à laquelle vous faites confiance.
+oauth.consent.redirect-to: "Après avoir autorisé, vous serez redirigé vers {{host}}"
+oauth.consent.permissions-heading: "Cela lui permettra de:"
+oauth.consent.no-scopes-warning: Cette application n'a demandé aucune autorisation spécifique, aucune ne peut donc être affichée. N'autorisez l'accès que si vous lui faites confiance pour agir en votre nom.
+oauth.consent.signed-in-as: "Connecté en tant que {{username}}"
+oauth.consent.allow: Autoriser
+oauth.consent.deny: Refuser
+oauth.consent.scope.mcp-read.label: Lire vos données
+oauth.consent.scope.mcp-read.description: Lire, lister et effectuer des recherches parmi les outils qui vous sont accessibles.
+oauth.consent.scope.mcp-write.label: Modifier vos données
+oauth.consent.scope.mcp-write.description: Utiliser des outils qui modifient des données, toujours limités à vos propres autorisations.
+oauth.consent.retry: Réessayer
+oauth.consent.error.load-failed: Cette demande d'autorisation n'a pas pu être chargée.
+oauth.consent.error.decision-failed: Votre décision n'a pas pu être envoyée. Veuillez réessayer.
+oauth.consent.expired.title: Cette demande d'autorisation a expiré
+oauth.consent.expired.description: Veuillez recommencer depuis votre application.
 unsaved-notice: Veuillez enregistrer pour confirmer vos modifications
 widget-manager.tab-title.close-confirmation: Vous avez des modifications non enregistrées, êtes-vous sûr de vouloir fermer cet onglet ?
 action-applied-successfully: Action appliquée avec succès
