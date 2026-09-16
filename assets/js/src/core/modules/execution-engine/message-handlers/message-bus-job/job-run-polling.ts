@@ -15,7 +15,7 @@ import { type JobRun } from '@Pimcore/modules/execution-engine/execution-engine-
 import { ExponentialBackoff } from '@Pimcore/utils/exponential-backoff'
 import { JobStatus } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
 
-const COMPLETION_STATES = ['finished', 'finished_with_errors', 'failed']
+const COMPLETION_STATES = ['finished', 'finished_with_errors', 'failed', 'cancelled']
 
 export interface JobRunPollingCallbacks {
   onStatusUpdate: (data: JobStatusUpdateData) => void | Promise<void>

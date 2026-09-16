@@ -116,7 +116,8 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       running: JobStatus.RUNNING,
       finished: JobStatus.SUCCESS,
       finished_with_errors: JobStatus.FINISHED_WITH_ERRORS,
-      failed: JobStatus.FAILED
+      failed: JobStatus.FAILED,
+      cancelled: JobStatus.FAILED
     }
     // 'queued' and any unrecognised state fall through to QUEUED intentionally
     this.initialStatus = stateMap[state] ?? JobStatus.QUEUED
@@ -225,20 +226,22 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       return true
     }
 
-    const isComplete = ['finished', 'finished_with_errors', 'failed'].includes(String(data.status))
+    // A cancelled run is terminal as well; the panel has no cancelled state, so it ends as failed.
+    const isComplete = ['finished', 'finished_with_errors', 'failed', 'cancelled'].includes(String(data.status))
 
     if (isComplete) {
       const statusMap: Record<string, JobStatus> = {
         finished: JobStatus.SUCCESS,
         finished_with_errors: JobStatus.FINISHED_WITH_ERRORS,
-        failed: JobStatus.FAILED
+        failed: JobStatus.FAILED,
+        cancelled: JobStatus.FAILED
       }
       const jobStatus = statusMap[data.status] ?? JobStatus.FAILED
 
       const completionData: JobCompletionData = {
         isSuccessful: String(data.status) === 'finished',
         isFinished: ['finished', 'finished_with_errors'].includes(String(data.status)),
-        isFailed: String(data.status) === 'failed',
+        isFailed: ['failed', 'cancelled'].includes(String(data.status)),
         status: jobStatus,
         payload: data
       }
