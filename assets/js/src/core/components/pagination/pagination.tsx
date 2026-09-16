@@ -60,7 +60,7 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
     setPageSize(size)
   }
 
-  // An endpoint cap can be stricter than the configured options, so sizes it would reject are hidden.
+  // Only bites when a pager passes a stricter endpoint cap; config validation already bounds the rest.
   const selectOptions: SelectOptionType[] = (paginationProps.pageSizeOptions ?? [])
     .map(Number)
     .filter(isValidPageSize)
