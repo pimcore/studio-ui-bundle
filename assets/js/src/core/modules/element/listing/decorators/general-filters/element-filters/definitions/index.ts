@@ -11,15 +11,17 @@
 import { type AnyFilterDescriptor } from '@Pimcore/components/filters'
 import { type ElementFilterQueryPart, type ElementFilterContext } from '../element-filter-types'
 import { searchTermFilterDescriptor } from './search-term-filter'
+import { searchModeFilterDescriptor } from './search-mode-filter'
 import { directChildrenFilterDescriptor } from './direct-children-filter'
 import { unreferencedFilterDescriptor } from './unreferenced-filter'
 import { pqlFilterDescriptor } from './pql-filter'
-import { fieldFiltersFilterDescriptor } from './field-filters-filter'
+import { fieldFiltersFilterDescriptor, prepareFieldFilters } from './field-filters-filter'
 
 export const elementFilterDefinitions: ReadonlyArray<
   AnyFilterDescriptor<ElementFilterQueryPart, ElementFilterContext>
 > = [
   searchTermFilterDescriptor,
+  searchModeFilterDescriptor,
   directChildrenFilterDescriptor,
   unreferencedFilterDescriptor,
   pqlFilterDescriptor,
@@ -28,8 +30,10 @@ export const elementFilterDefinitions: ReadonlyArray<
 
 export {
   searchTermFilterDescriptor,
+  searchModeFilterDescriptor,
   directChildrenFilterDescriptor,
   unreferencedFilterDescriptor,
   pqlFilterDescriptor,
-  fieldFiltersFilterDescriptor
+  fieldFiltersFilterDescriptor,
+  prepareFieldFilters
 }

@@ -21,7 +21,7 @@ const PADDING = { x: 'small', bottom: 'small', top: 'none' } as const
 export const GeneralSettingsForm = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { generalSettings, setGeneralSettings } = useGeneralSettings()
-  const { GeneralSettingsFormFields } = useSettings()
+  const { GeneralSettingsFormFields, readOnly = false } = useSettings()
   const [formValues, setFormValues] = useState(generalSettings)
   const debouncedValues = useDebounce(formValues, 300)
 
@@ -37,8 +37,9 @@ export const GeneralSettingsForm = (): React.JSX.Element => {
 
   const formProps = useMemo(() => ({
     initialValues: generalSettings,
+    disabled: readOnly,
     onValuesChange: handleValuesChange
-  }), [generalSettings])
+  }), [generalSettings, readOnly])
 
   return useMemo(() => {
     if (isNil(generalSettings)) {
@@ -62,5 +63,5 @@ export const GeneralSettingsForm = (): React.JSX.Element => {
         </FormKit>
       </Content>
     )
-  }, [generalSettings])
+  }, [generalSettings, formProps])
 }

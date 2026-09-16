@@ -25,6 +25,8 @@ error.error_document_language_not_set: The document has no language property set
 error.error_inconsistent_asset_type: Only assets of same type are allowed here.
 error.error_recycle_bin_restore: Cannot restore element from recycle bin
 error.error_recycle_bin_restore_missing_parent: Cannot restore element from recycle bin, parent element is missing
+error.error_login_token_as_admin_non_admin_user: Only admin users can generate a login link for an admin user
+error.error_login_token_no_user_password: A login link cannot be generated for this user because no password is set
 error.syntax_error: Syntax error
 sidebar.selected_elements: Selected Elements
 sidebar.grid_config: Grid Config
@@ -563,6 +565,11 @@ listing.column-picker.search: Search
 listing.column-picker.no-results: No columns found
 listing.column-picker.fields-to-add: Fields to add
 listing.fields-to-add.collapse-simple-fields: Collapse simple fields
+listing.search-mode.full-text: Full text search
+listing.search-mode.full-text-short: Full text
+listing.search-mode.default: Default
+listing.search-mode.smart-placeholder: Search within similar or related results
+listing.search-mode.global-unavailable: Smart search is currently unavailable.
 listing.actions: Apply to selection
 listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download
@@ -700,6 +707,8 @@ edit: Edit
 modify: Modify
 component.no-content.no-content-available: No content available
 notifications.label: Notifications
+notifications.tab.inbox: Inbox
+notifications.tab.settings: Settings
 notifications.settings.label: Notification settings
 notifications.settings.description: Turn on Notify me for anything you want in your notification bell, then add extra channels on top for the ones that matter most.
 notifications.settings.description-popup-only: Choose how notifications reach you. Anything you are notified about always shows in your notification bell.
@@ -1113,6 +1122,7 @@ asset.sidebar.web-format: Web Format
 asset.sidebar.print-format: Print Format
 asset.sidebar.office-format: Office Format
 jobs.notification.title: Running jobs
+jobs.notification.tooltip: Open running jobs
 jobs.notification.jobs_one: "{{count}} Action"
 jobs.notification.jobs_other: "{{count}} Actions"
 jobs.notification.hide-all-finished: Hide all finished
@@ -1170,6 +1180,10 @@ export-xlsx-form.form-field.header: Header
 export-xlsx-form.form-field.header.option.name: System key
 export-xlsx-form.form-field.header.option.title: Label
 export-xlsx-form.form-field.header.option.no-header: No header
+form.annotation.added: Added
+form.annotation.changed: Changed
+form.annotation.removed: Removed
+form.annotation.moved: Moved
 form.validation.required: This field is required
 form.validation.max-length: The maximum length for this field is {{max}} characters
 form.validation.min: The minimum value is {{min}}
@@ -1321,6 +1335,12 @@ relations.classname: Class
 relations.fullpath: Full Path
 relations.remove-all.confirm: Do you really want to delete all relations?
 relations.upload.subtype-not-allowed: Uploaded assets whose type this relation does not allow were not assigned.
+relations.create-object.title: New object
+relations.create-object.submit: Create
+relations.create-object.name: Name
+relations.create-object.parent: Parent
+relations.create-object.parent.placeholder: Select a parent
+relations.create-object.class: Class
 relation: Relation
 items-limit-reached: The maximum number of items ({{maxItems}}) has been reached.
 asset-upload-type-not-allowed: The uploaded asset's type is not allowed for this field.
@@ -1347,8 +1367,14 @@ upload.assets-items-failed-message: Upload finished with errors.
 quantity-value.converted-units: Converted Units
 table.empty.confirm: Are you sure you want to clear all data?
 table.new-column: New column
+table.insert-column-left: Insert column left
+table.insert-column-right: Insert column right
+table.column-insert-options: Column insert options
 table.delete-column: Delete column
 table.new-row: New row
+table.insert-row-above: Insert row above
+table.insert-row-below: Insert row below
+table.row-insert-options: Row insert options
 table.delete-row: Delete row
 table.duplicate-row: Duplicate row
 table.copy: Copy
@@ -2888,3 +2914,4 @@ saved-search.update.success: Saved search updated
 saved-search.delete.success: Saved search deleted
 saved-search.shared-modified.info: You have made modifications to the original configuration. Since it is owned by someone else, you can save it as a new search.
 saved-search.menu-shortcut-group: Menu group
+skip-to-content: Skip to content

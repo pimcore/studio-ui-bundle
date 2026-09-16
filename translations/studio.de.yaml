@@ -26,6 +26,8 @@ error.error_inconsistent_asset_type: Nur Assets desselben Typs sind hier erlaubt
 error.error_recycle_bin_restore: Element kann nicht aus dem Papierkorb wiederhergestellt werden
 error.error_recycle_bin_restore_missing_parent: Element kann nicht aus dem Papierkorb wiederhergestellt werden, übergeordnetes Element fehlt
 error.syntax_error: Syntaxfehler
+error.error_login_token_as_admin_non_admin_user: Nur Admin-Benutzer können einen Anmeldelink für einen Admin-Benutzer generieren
+error.error_login_token_no_user_password: Für diesen Benutzer kann kein Anmeldelink generiert werden, da kein Passwort gesetzt ist
 sidebar.selected_elements: Ausgewählte Elemente
 sidebar.grid_config: Grid-Konfiguration
 sidebar.tag_filters: Tag-Filter
@@ -563,6 +565,11 @@ listing.column-picker.search: Suchen
 listing.column-picker.no-results: Keine Spalten gefunden
 listing.column-picker.fields-to-add: Hinzuzufügende Felder
 listing.fields-to-add.collapse-simple-fields: Einfache Felder einklappen
+listing.search-mode.full-text: Volltextsuche
+listing.search-mode.full-text-short: Volltext
+listing.search-mode.default: Standard
+listing.search-mode.smart-placeholder: In ähnlichen oder verwandten Ergebnissen suchen
+listing.search-mode.global-unavailable: Die Smart-Suche ist derzeit nicht verfügbar.
 listing.actions: Auf Auswahl anwenden
 listing.non-selected.actions: Auf alle anwenden
 listing.actions.zip-download: ZIP-Download
@@ -700,6 +707,8 @@ edit: Bearbeiten
 modify: Ändern
 component.no-content.no-content-available: Kein Inhalt verfügbar
 notifications.label: Benachrichtigungen
+notifications.tab.inbox: Posteingang
+notifications.tab.settings: Einstellungen
 notifications.settings.label: Benachrichtigungseinstellungen
 notifications.settings.description: Aktivieren Sie „Benachrichtigen“ für alles, was in Ihrer Benachrichtigungsglocke erscheinen soll, und fügen Sie für die wichtigsten Themen zusätzliche Kanäle hinzu.
 notifications.settings.description-popup-only: Wählen Sie, wie Sie Benachrichtigungen erhalten. Alles, worüber Sie benachrichtigt werden, erscheint immer in Ihrer Benachrichtigungsglocke.
@@ -1113,6 +1122,7 @@ asset.sidebar.web-format: Web-Format
 asset.sidebar.print-format: Druck-Format
 asset.sidebar.office-format: Office-Format
 jobs.notification.title: Laufende Aufträge
+jobs.notification.tooltip: Laufende Aufträge öffnen
 jobs.notification.jobs_one: "{{count}} Aktion"
 jobs.notification.jobs_other: "{{count}} Aktionen"
 jobs.notification.hide-all-finished: Alle abgeschlossenen ausblenden
@@ -1170,6 +1180,10 @@ export-xlsx-form.form-field.header: Kopfzeile
 export-xlsx-form.form-field.header.option.name: Systemschlüssel
 export-xlsx-form.form-field.header.option.title: Bezeichnung
 export-xlsx-form.form-field.header.option.no-header: Keine Kopfzeile
+form.annotation.added: Hinzugefügt
+form.annotation.changed: Geändert
+form.annotation.removed: Entfernt
+form.annotation.moved: Verschoben
 form.validation.required: Dieses Feld ist erforderlich
 form.validation.max-length: Die maximale Länge für dieses Feld beträgt {{max}} Zeichen
 form.validation.min: Der Minimalwert ist {{min}}
@@ -1321,6 +1335,12 @@ relations.classname: Klasse
 relations.fullpath: Vollständiger Pfad
 relations.remove-all.confirm: Möchten Sie wirklich alle Relationen löschen?
 relations.upload.subtype-not-allowed: Hochgeladene Assets, deren Typ diese Relation nicht zulässt, wurden nicht zugewiesen.
+relations.create-object.title: Neues Objekt
+relations.create-object.submit: Erstellen
+relations.create-object.name: Name
+relations.create-object.parent: Übergeordnetes Element
+relations.create-object.parent.placeholder: Übergeordnetes Element wählen
+relations.create-object.class: Klasse
 relation: Relation
 items-limit-reached: Die maximale Anzahl von Einträgen ({{maxItems}}) wurde erreicht.
 asset-upload-type-not-allowed: Der Typ des hochgeladenen Assets ist für dieses Feld nicht zulässig.
@@ -1347,8 +1367,14 @@ upload.assets-items-failed-message: Upload mit Fehlern abgeschlossen.
 quantity-value.converted-units: Umgerechnete Einheiten
 table.empty.confirm: Sind Sie sicher, dass Sie alle Daten löschen möchten?
 table.new-column: Neue Spalte
+table.insert-column-left: Spalte links einfügen
+table.insert-column-right: Spalte rechts einfügen
+table.column-insert-options: Optionen zum Einfügen von Spalten
 table.delete-column: Spalte löschen
 table.new-row: Neue Zeile
+table.insert-row-above: Zeile oberhalb einfügen
+table.insert-row-below: Zeile unterhalb einfügen
+table.row-insert-options: Optionen zum Einfügen von Zeilen
 table.delete-row: Zeile löschen
 table.duplicate-row: Zeile duplizieren
 table.copy: Kopieren
@@ -2888,3 +2914,4 @@ saved-search.update.success: Gespeicherte Suche aktualisiert
 saved-search.delete.success: Gespeicherte Suche gelöscht
 saved-search.shared-modified.info: Sie haben die ursprüngliche Konfiguration geändert. Da sie jemand anderem gehört, können Sie sie als neue Suche speichern.
 saved-search.menu-shortcut-group: Menügruppe
+skip-to-content: Zum Inhalt springen

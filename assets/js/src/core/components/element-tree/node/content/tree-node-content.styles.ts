@@ -14,10 +14,15 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     container: css`
       width: 100%;
-      overflow: hidden;
+      min-width: 0;
     `,
     containerChild: css`
-      // minWidth is now set dynamically via inline styles
+      min-width: 0;
+      overflow: hidden;
+      flex-shrink: 1;
+    `,
+    metaIcons: css`
+      flex-shrink: 0;
     `,
     unpublishedIcon: css`
       .pimcore-icon__svg {
@@ -29,8 +34,8 @@ export const useStyles = createStyles(({ token, css }) => {
           opacity: 0.4
        }
     `,
-    indirectLockedIcon: css`
-      opacity: 0.5;
+    lockIcon: css`
+      color: ${token.colorTextTreeElement};
     `
   }
 })

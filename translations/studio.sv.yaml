@@ -26,6 +26,8 @@ error.error_inconsistent_asset_type: Bara assets av samma typ tillåts här.
 error.error_recycle_bin_restore: Kan inte återställa elementet från papperskorgen
 error.error_recycle_bin_restore_missing_parent: Kan inte återställa elementet från papperskorgen, överordnat element saknas
 error.syntax_error: Syntaxfel
+error.error_login_token_as_admin_non_admin_user: Endast admin-användare kan generera en inloggningslänk för en admin-användare
+error.error_login_token_no_user_password: En inloggningslänk kan inte genereras för den här användaren eftersom inget lösenord är satt
 sidebar.selected_elements: Valda element
 sidebar.grid_config: Rutnätskonfiguration
 sidebar.tag_filters: Taggfilter
@@ -563,6 +565,11 @@ listing.column-picker.search: Sök
 listing.column-picker.no-results: Inga kolumner hittades
 listing.column-picker.fields-to-add: Fält att lägga till
 listing.fields-to-add.collapse-simple-fields: Fäll ihop enkla fält
+listing.search-mode.full-text: Fritextsökning
+listing.search-mode.full-text-short: Fritext
+listing.search-mode.default: Standard
+listing.search-mode.smart-placeholder: Sök bland liknande eller relaterade resultat
+listing.search-mode.global-unavailable: Smart sökning är för närvarande inte tillgänglig.
 listing.actions: Tillämpa på val
 listing.non-selected.actions: Tillämpa på alla
 listing.actions.zip-download: ZIP-nedladdning
@@ -700,6 +707,8 @@ edit: Redigera
 modify: Ändra
 component.no-content.no-content-available: Inget innehåll tillgängligt
 notifications.label: Aviseringar
+notifications.tab.inbox: Inkorg
+notifications.tab.settings: Inställningar
 notifications.settings.label: Aviseringsinställningar
 notifications.settings.description: Aktivera "Meddela mig" för allt du vill ha i din aviseringsklocka, och lägg sedan till fler kanaler för det som betyder mest.
 notifications.settings.description-popup-only: Välj hur aviseringar ska nå dig. Allt du meddelas om visas alltid i din aviseringsklocka.
@@ -1113,6 +1122,7 @@ asset.sidebar.web-format: Webbformat
 asset.sidebar.print-format: Utskriftsformat
 asset.sidebar.office-format: Kontorsformat
 jobs.notification.title: Pågående jobb
+jobs.notification.tooltip: Öppna pågående jobb
 jobs.notification.jobs_one: "{{count}} åtgärd"
 jobs.notification.jobs_other: "{{count}} åtgärder"
 jobs.notification.hide-all-finished: Dölj alla avslutade
@@ -1170,6 +1180,10 @@ export-xlsx-form.form-field.header: Rubrik
 export-xlsx-form.form-field.header.option.name: Systemnyckel
 export-xlsx-form.form-field.header.option.title: Etikett
 export-xlsx-form.form-field.header.option.no-header: Ingen rubrik
+form.annotation.added: Tillagd
+form.annotation.changed: Ändrad
+form.annotation.removed: Borttagen
+form.annotation.moved: Flyttad
 form.validation.required: Det här fältet är obligatoriskt
 form.validation.max-length: Maximal längd för det här fältet är {{max}} tecken
 form.validation.min: Minsta värde är {{min}}
@@ -1321,9 +1335,15 @@ relations.classname: Klass
 relations.fullpath: Fullständig sökväg
 relations.remove-all.confirm: Vill du verkligen ta bort alla relationer?
 relations.upload.subtype-not-allowed: Uppladdade assets vars typ den här relationen inte tillåter tilldelades inte.
+relations.create-object.title: Nytt objekt
+relations.create-object.submit: Skapa
+relations.create-object.name: Namn
+relations.create-object.parent: Överordnad
+relations.create-object.parent.placeholder: Välj en överordnad
+relations.create-object.class: Klass
 relation: relation
 items-limit-reached: Maximalt antal objekt ({{maxItems}}) har nåtts.
-asset-upload-type-not-allowed: Typen på det uppladdade assetet är inte tillåten för det här fältet.
+asset-upload-type-not-allowed: Den uppladdade assetens typ tillåts inte för det här fältet.
 actions: Åtgärder
 asset: Asset
 data-object: Data Object
@@ -1347,8 +1367,14 @@ upload.assets-items-failed-message: Uppladdningen slutfördes med fel.
 quantity-value.converted-units: Konverterade enheter
 table.empty.confirm: Är du säker på att du vill rensa all data?
 table.new-column: Ny kolumn
+table.insert-column-left: Infoga kolumn till vänster
+table.insert-column-right: Infoga kolumn till höger
+table.column-insert-options: Alternativ för att infoga kolumn
 table.delete-column: Ta bort kolumn
 table.new-row: Ny rad
+table.insert-row-above: Infoga rad ovanför
+table.insert-row-below: Infoga rad nedanför
+table.row-insert-options: Alternativ för att infoga rad
 table.delete-row: Ta bort rad
 table.duplicate-row: Duplicera rad
 table.copy: Kopiera
@@ -2888,3 +2914,4 @@ saved-search.update.success: Sparad sökning uppdaterad
 saved-search.delete.success: Sparad sökning borttagen
 saved-search.shared-modified.info: Du har gjort ändringar i den ursprungliga konfigurationen. Eftersom den ägs av någon annan kan du spara den som en ny sökning.
 saved-search.menu-shortcut-group: Menygrupp
+skip-to-content: Hoppa till innehållet

@@ -26,6 +26,8 @@ error.error_inconsistent_asset_type: Solo se permiten assets del mismo tipo aqu�
 error.error_recycle_bin_restore: No se puede restaurar el elemento de la papelera de reciclaje
 error.error_recycle_bin_restore_missing_parent: No se puede restaurar el elemento de la papelera de reciclaje, el elemento padre no existe
 error.syntax_error: Error de sintaxis
+error.error_login_token_as_admin_non_admin_user: Solo los usuarios administradores pueden generar un enlace de inicio de sesión para un usuario administrador
+error.error_login_token_no_user_password: No se puede generar un enlace de inicio de sesión para este usuario porque no tiene contraseña establecida
 sidebar.selected_elements: Elementos seleccionados
 sidebar.grid_config: Configuración de cuadrícula
 sidebar.tag_filters: Filtros de etiquetas
@@ -500,7 +502,7 @@ clear-all: Limpiar todo
 empty: Vacío
 none: Ninguno
 'yes': Sí
-'no': 'No'
+'no': No
 by: Por
 field: Campo
 no-data-available: No hay datos disponibles
@@ -563,6 +565,11 @@ listing.column-picker.search: Buscar
 listing.column-picker.no-results: No se encontraron columnas
 listing.column-picker.fields-to-add: Campos para añadir
 listing.fields-to-add.collapse-simple-fields: Contraer campos simples
+listing.search-mode.full-text: Búsqueda de texto completo
+listing.search-mode.full-text-short: Texto completo
+listing.search-mode.default: Predeterminado
+listing.search-mode.smart-placeholder: Buscar en resultados similares o relacionados
+listing.search-mode.global-unavailable: La búsqueda inteligente no está disponible en este momento.
 listing.actions: Aplicar a la selección
 listing.non-selected.actions: Aplicar a todos
 listing.actions.zip-download: Descarga ZIP
@@ -700,6 +707,8 @@ edit: Editar
 modify: Modificar
 component.no-content.no-content-available: No hay contenido disponible
 notifications.label: Notificaciones
+notifications.tab.inbox: Bandeja de entrada
+notifications.tab.settings: Configuración
 notifications.settings.label: Configuración de notificaciones
 notifications.settings.description: Active "Notificarme" para todo lo que desee que aparezca en su campana de notificaciones y, después, añada canales adicionales para lo que más le importe.
 notifications.settings.description-popup-only: Elija cómo desea recibir las notificaciones. Todo aquello de lo que se le notifica siempre aparece en su campana de notificaciones.
@@ -1113,6 +1122,7 @@ asset.sidebar.web-format: Formato web
 asset.sidebar.print-format: Formato de impresión
 asset.sidebar.office-format: Formato de oficina
 jobs.notification.title: Trabajos en ejecución
+jobs.notification.tooltip: Abrir trabajos en ejecución
 jobs.notification.jobs_one: "{{count}} Acción"
 jobs.notification.jobs_other: "{{count}} Acciones"
 jobs.notification.hide-all-finished: Ocultar todos los completados
@@ -1170,6 +1180,10 @@ export-xlsx-form.form-field.header: Encabezado
 export-xlsx-form.form-field.header.option.name: Clave del sistema
 export-xlsx-form.form-field.header.option.title: Etiqueta
 export-xlsx-form.form-field.header.option.no-header: Sin encabezado
+form.annotation.added: Añadido
+form.annotation.changed: Modificado
+form.annotation.removed: Eliminado
+form.annotation.moved: Movido
 form.validation.required: Este campo es obligatorio
 form.validation.max-length: La longitud máxima para este campo es de {{max}} caracteres
 form.validation.min: El valor mínimo es {{min}}
@@ -1321,6 +1335,12 @@ relations.classname: Clase
 relations.fullpath: Ruta completa
 relations.remove-all.confirm: ¿Realmente desea eliminar todas las relaciones?
 relations.upload.subtype-not-allowed: Los assets subidos cuyo tipo no está permitido en esta relación no se asignaron.
+relations.create-object.title: Nuevo objeto
+relations.create-object.submit: Crear
+relations.create-object.name: Nombre
+relations.create-object.parent: Padre
+relations.create-object.parent.placeholder: Seleccionar un padre
+relations.create-object.class: Clase
 relation: relación
 items-limit-reached: Se ha alcanzado el número máximo de elementos ({{maxItems}}).
 asset-upload-type-not-allowed: El tipo del asset subido no está permitido para este campo.
@@ -1347,8 +1367,14 @@ upload.assets-items-failed-message: La subida finalizó con errores.
 quantity-value.converted-units: Unidades convertidas
 table.empty.confirm: ¿Está seguro de que desea borrar todos los datos?
 table.new-column: Nueva columna
+table.insert-column-left: Insertar columna a la izquierda
+table.insert-column-right: Insertar columna a la derecha
+table.column-insert-options: Opciones de inserción de columna
 table.delete-column: Eliminar columna
 table.new-row: Nueva fila
+table.insert-row-above: Insertar fila encima
+table.insert-row-below: Insertar fila debajo
+table.row-insert-options: Opciones de inserción de fila
 table.delete-row: Eliminar fila
 table.duplicate-row: Duplicar fila
 table.copy: Copiar
@@ -2888,3 +2914,4 @@ saved-search.update.success: Búsqueda guardada actualizada
 saved-search.delete.success: Búsqueda guardada eliminada
 saved-search.shared-modified.info: Has realizado modificaciones en la configuración original. Como pertenece a otra persona, puedes guardarla como una nueva búsqueda.
 saved-search.menu-shortcut-group: Grupo de menú
+skip-to-content: Saltar al contenido
