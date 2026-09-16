@@ -92,6 +92,17 @@ describe('Sidebar', () => {
       expect(isOpen('first')).toBe(false)
       expect(isOpen('second')).toBe(false)
     })
+
+    it('stays collapsed when the active tab names no entry', () => {
+      const { container } = render(
+        <SidebarProvider initialActiveTab="gone">
+          <Sidebar entries={ entries } />
+        </SidebarProvider>
+      )
+
+      // an expanded panel with nothing to show in it would paint blank
+      expect(container.querySelector('.sidebar__content')!.classList.contains('expanded')).toBe(false)
+    })
   })
 
   describe('collapsible={false}', () => {
@@ -170,7 +181,7 @@ describe('Sidebar', () => {
     it('renders its own resize handle by default', () => {
       renderSidebar({}, 'first')
 
-      expect(screen.queryByTestId('divider')).not.toBeNull()
+      expect(screen.getByTestId('divider')).toBeInTheDocument()
     })
 
     it('drops the handle and defers its width to the container when false', () => {
