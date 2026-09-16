@@ -15,6 +15,7 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useModalHolder } from '@Pimcore/modules/app/modal-holder/use-modal-holder'
 import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-management-context'
 import { useLazyUserTokenLinkGetQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
+import { isUndefined } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { generatePath } from 'react-router-dom'
@@ -48,7 +49,7 @@ export const LoginTokenModalContainer = ({ disabled }: LoginTokenModalContainerP
         }
       })
 
-      if (error !== undefined) {
+      if (!isUndefined(error)) {
         trackError(new ApiError(error))
         return
       }

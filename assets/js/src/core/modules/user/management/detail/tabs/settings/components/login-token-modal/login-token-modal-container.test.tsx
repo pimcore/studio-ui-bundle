@@ -63,7 +63,7 @@ jest.mock('react-i18next', () => ({
 
 // Button pulls in antd-style (untranspiled ESM) via its style hook
 jest.mock('@Pimcore/components/button/button', () => ({
-  Button: ({ children, onClick, disabled }: any) => (
+  Button: ({ children, onClick, disabled }: { children?: React.ReactNode, onClick?: React.MouseEventHandler<HTMLButtonElement>, disabled?: boolean }) => (
     <button
       disabled={ disabled }
       onClick={ onClick }
