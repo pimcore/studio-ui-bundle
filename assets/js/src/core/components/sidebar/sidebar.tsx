@@ -68,10 +68,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
   const activeTab = sidebarContext?.activeTab ?? localActiveTab
   const setActiveTab = sidebarContext?.toggleTab ?? setLocalActiveTab
 
-  // expanded means there is a panel to show. An active tab can name no entry — none
-  // picked yet, or the entry it named removed — and opening for one of those would paint
-  // a blank pane until the fallback below runs.
-  const isExpanded = entries.some((entry) => entry.key === activeTab)
+  const isExpanded = activeTab !== ''
   const {
     sidebarRef,
     contentRef,
@@ -82,12 +79,15 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
     onKeyboardResize
   } = useSidebarResize(sizing)
 
-  // a sidebar that cannot be collapsed has to settle on an entry itself
+  // a sidebar that cannot be collapsed has to settle on an entry itself: the active tab
+  // can name none, before the caller has picked one or after the entry it named was removed
+  const hasActivePanel = entries.some((entry) => entry.key === activeTab)
+
   useEffect(() => {
-    if (!collapsible && !isExpanded && entries.length > 0) {
+    if (!collapsible && !hasActivePanel && entries.length > 0) {
       setActiveTab(entries[0].key)
     }
-  }, [collapsible, isExpanded, entries])
+  }, [collapsible, hasActivePanel, entries])
 
   function handleSidebarClick (key: string): void {
     if (!collapsible && key === activeTab) {
