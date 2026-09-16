@@ -9,6 +9,7 @@
  */
 
 import React, { useCallback, useMemo, useState } from 'react'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import { theme } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
@@ -48,7 +49,7 @@ export const KeyGroupRelationsGrid = ({
 
   const [keyDialogOpen, setKeyDialogOpen] = useState(false)
   const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(20)
+  const [pageSize, setPageSize] = useState(appConfig.defaultPageSize)
 
   const { data, isLoading, isFetching, refetch } = useClassificationStoreConfigurationKeyGroupRelationCollectionQuery(
     { groupId: groupId!, body: { filters: { page, pageSize } } },

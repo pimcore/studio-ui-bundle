@@ -18,6 +18,8 @@ import cn from 'classnames'
 import { appConfig } from '@Pimcore/app/config/app-config'
 
 export interface PaginationProps extends Omit<BasePaginationProps, 'pageSize' | 'defaultCurrent' | 'onShowSizeChange' | 'responsive' | 'totalBoundaryShowSizeChanger'> {
+  /** Upper bound for custom page sizes; lower it for endpoints with a stricter server-side cap. */
+  maxPageSize?: number
 }
 
 export const Pagination = (props: PaginationProps): React.JSX.Element => {
@@ -30,12 +32,13 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
     current: 1,
     defaultPageSize: appConfig.defaultPageSize,
     pageSizeOptions: appConfig.pageSizeOptions,
+    maxPageSize: appConfig.maxPageSize,
     showSizeChanger: false,
     simple: true,
     size: 'small'
   }
 
-  const { showSizeChanger, className, hideOnSinglePage, defaultPageSize, current: baseCurrent, onChange, ...paginationProps } = { ...defaultProps, ...props }
+  const { showSizeChanger, className, hideOnSinglePage, defaultPageSize, maxPageSize, current: baseCurrent, onChange, ...paginationProps } = { ...defaultProps, ...props }
   const classNames = cn(styles.pagination, className)
 
   const [current, setCurrent] = useState(baseCurrent ?? 1)
@@ -59,10 +62,12 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
     value: String(option)
   })) ?? []
 
+  const isValidPageSize = (size: number): boolean => Number.isInteger(size) && size > 0 && size <= (maxPageSize ?? Number.MAX_SAFE_INTEGER)
+
   const onSelectChange: SelectProps['onChange'] = (value) => {
     const parsedValue = Number(value)
 
-    if (!Number.isInteger(parsedValue)) {
+    if (!isValidPageSize(parsedValue)) {
       return
     }
 
@@ -117,7 +122,7 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
         <CreatableSelect
           disabled={ paginationProps.disabled }
           inputType="number"
-          numberInputProps={ { min: 1, precision: 0 } }
+          numberInputProps={ { min: 1, max: maxPageSize, precision: 0 } }
           onChange={ onSelectChange }
           onCreateOption={ (value) => ({
             value,
@@ -125,7 +130,7 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
           }) }
           options={ selectOptions }
           popupMatchSelectWidth={ false }
-          validate={ (value) => /^\d+$/.test(value.trim()) && Number(value) > 0 }
+          validate={ (value) => /^\d+$/.test(value.trim()) && isValidPageSize(Number(value)) }
           value={ String(pageSize) }
           width={ 112 }
         />

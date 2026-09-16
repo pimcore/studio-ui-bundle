@@ -9,7 +9,7 @@
  */
 
 import React, { createContext, useMemo, useState } from 'react'
-import {appConfig} from "@Pimcore/app/config/app-config";
+import { appConfig } from '@Pimcore/app/config/app-config'
 
 export interface PagingData {
   page: number

@@ -18,8 +18,12 @@ export interface AppConfig {
   apiPrefix: string
   /** How many asset uploads a single tab sends at the same time. */
   maxParallelUploads: number
+  /** Page sizes offered in the page-size changer. */
   pageSizeOptions: number[]
+  /** Page size a listing starts with. */
   defaultPageSize: number
+  /** Upper bound for page sizes a user may enter in the page-size changer. */
+  maxPageSize: number
 }
 
 /** Kept in sync with pimcore_studio_ui.asset_upload.max_parallel_uploads. */
@@ -30,6 +34,9 @@ const DEFAULT_PAGE_SIZE_OPTIONS = [10, 20, 50, 100]
 
 /** Kept in sync with pimcore_studio_ui.pagination.default_page_size. */
 const DEFAULT_PAGE_SIZE = 20
+
+/** Kept in sync with pimcore_studio_ui.pagination.max_page_size. */
+const DEFAULT_MAX_PAGE_SIZE = 1000
 
 const appElement = getParentDocument().querySelector('#app')
 export const currentDomain = window.location.origin
@@ -58,5 +65,6 @@ export const appConfig: AppConfig = {
   maxParallelUploads: appConfigData?.maxParallelUploads ?? DEFAULT_MAX_PARALLEL_UPLOADS,
   pageSizeOptions: appConfigData?.pageSizeOptions ?? DEFAULT_PAGE_SIZE_OPTIONS,
   defaultPageSize: appConfigData?.defaultPageSize ?? DEFAULT_PAGE_SIZE,
+  maxPageSize: appConfigData?.maxPageSize ?? DEFAULT_MAX_PAGE_SIZE,
   ...(appConfigData ?? {})
 }

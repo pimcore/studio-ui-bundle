@@ -11,6 +11,7 @@
 /* eslint-disable max-lines */
 
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import { Title } from '@Pimcore/components/title/title'
 import { t } from 'i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -69,7 +70,7 @@ const TranslationsContent = ({ initialSearchTerm }: TranslationsContainerProps):
   const [translationRows, setTranslationRows] = useState<TranslationRow[]>([])
 
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(20)
+  const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
   const [sorting, setSorting] = useState<SortingState>([{ id: 'key', desc: false }])
   const { data: domainsData, isLoading: domainsLoading, error: domainError } = useTranslationGetDomainsQuery()
   const availableDomains = domainsData ?? []

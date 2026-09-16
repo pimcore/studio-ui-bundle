@@ -15,8 +15,10 @@ import { Pagination as PimPagination } from '@Pimcore/components/pagination/pagi
 import {
   PaginationSkeleton
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/dependencies/components/pagination/skeleton'
-import { DEFAULT_PAGE_SIZE } from '@Pimcore/modules/user/management/detail/tabs/references/constants'
 import { appConfig } from '@Pimcore/app/config/app-config'
+
+// Server-side cap of GET /users/{id}/object-dependencies (ObjectDependenciesServiceInterface::MAX_PAGE_SIZE)
+const MAX_PAGE_SIZE = 100
 
 type PaginationProps = Partial<UserGetObjectDependenciesApiResponse> & {
   page: number
@@ -38,7 +40,8 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
   return (
     <PimPagination
       current={ props.page }
-      defaultPageSize={ DEFAULT_PAGE_SIZE }
+      defaultPageSize={ appConfig.defaultPageSize }
+      maxPageSize={ MAX_PAGE_SIZE }
       onChange={ props.onChange }
       pageSizeOptions={ appConfig.pageSizeOptions }
       showSizeChanger

@@ -16,7 +16,7 @@ import { useClassDefinitionSelection } from '../../decorator/class-definition-se
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
-import {appConfig} from "@Pimcore/app/config/app-config";
+import { appConfig } from '@Pimcore/app/config/app-config'
 
 export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = () => {
   const { useElementId } = useSettings()

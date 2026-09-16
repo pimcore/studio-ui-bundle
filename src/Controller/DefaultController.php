@@ -48,7 +48,8 @@ final class DefaultController extends FrontendController
         string $studioApiPrefix,
         int $studioMaxParallelUploads,
         array $studioPageSizeOptions,
-        int $studioDefaultPageSize
+        int $studioDefaultPageSize,
+        int $studioMaxPageSize
     ): Response {
         $appConfig = [
             'baseUrl' => $studioUrlPath . '/',
@@ -58,6 +59,7 @@ final class DefaultController extends FrontendController
             'maxParallelUploads' => $studioMaxParallelUploads,
             'pageSizeOptions' => $studioPageSizeOptions,
             'defaultPageSize' => $studioDefaultPageSize,
+            'maxPageSize' => $studioMaxPageSize,
         ];
 
         foreach ($this->appConfigProviders as $provider) {
