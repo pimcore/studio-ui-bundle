@@ -57,16 +57,18 @@ export const useStyles = createStyles(({ token, css }) => {
         grid-row: 1 / 4;
       }
 
+      /* direct children only: a nested layout inside the sidebar keeps the default
+         column order, and would otherwise place its own content in this one's column */
       &.content-toolbar-sidebar-layout--sidebar-left {
-        grid-template-columns: auto 1fr;
+        grid-template-columns: auto minmax(0, 1fr);
 
-        .content-toolbar-sidebar-layout__top-bar,
-        .content-toolbar-sidebar-layout__content,
-        .content-toolbar-sidebar-layout__toolbar {
+        > .content-toolbar-sidebar-layout__top-bar,
+        > .content-toolbar-sidebar-layout__content,
+        > .content-toolbar-sidebar-layout__toolbar {
           grid-column: 2 / 3;
         }
 
-        .content-toolbar-sidebar-layout__sidebar {
+        > .content-toolbar-sidebar-layout__sidebar {
           grid-column: 1 / 2;
         }
       }
