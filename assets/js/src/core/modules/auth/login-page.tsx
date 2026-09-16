@@ -70,7 +70,19 @@ export const LoginPage = ({ inPlace = false }: LoginPageProps): React.JSX.Elemen
     }
   }, [isAuthenticated, inPlace])
 
+  // Only the login route acts on a `token` in the address. A login link is issued for that
+  // route, so honouring one anywhere else adds nothing a user can reach legitimately - and
+  // this screen now stands in for every guarded route, whose address the browser keeps. A
+  // link such as `/asset/1234?token=<attacker's>` would otherwise establish a session as
+  // whoever the token names, on a page the victim believed was their own deep link.
+  //
+  // Not a behaviour change: redirecting to the login route used to drop the query string, so
+  // a token never reached this screen from a guarded route in the first place.
   useEffect(() => {
+    if (inPlace) {
+      return
+    }
+
     if (!isNil(token)) {
       void loginWithToken(
         token,
@@ -83,7 +95,7 @@ export const LoginPage = ({ inPlace = false }: LoginPageProps): React.JSX.Elemen
         }
       )
     }
-  }, [token])
+  }, [token, inPlace])
 
   return (
     <div
