@@ -8,11 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { type FilterCommit, type FilterValues } from '@Pimcore/components/filters'
 import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
+import { SearchContext } from '@Pimcore/modules/search/provider/search-provider'
 import { useGeneralFiltersConfig } from '../../../../../context-layer/provider/general-filters-config/use-general-filters-config'
+import { FULLTEXT_SEARCH_MODE_ID } from '../../../../../search-modes/search-mode-abstract'
 import { useSearchMode } from '../../../../../search-modes/use-search-mode'
 import { elementFilterDefaults, readElementFilterValues, useAppliedFilters, useDraftFilterValues } from '../../../../../element-filters'
 import { useFieldFilterEditor, type UseFieldFilterEditorReturn } from './field-filters/use-field-filter-editor'
@@ -42,6 +44,8 @@ export const useFilterPanel = (): UseFilterPanelReturn => {
 
   const draft = useDraftFilterValues()
   const searchMode = useSearchMode('draft')
+  // Present inside the search modal only, where the term and mode are shared across its tabs.
+  const searchContext = useContext(SearchContext)
 
   /** Publishes values and sends the listing back to the first page. */
   const publish = (values: FilterValues): void => {
@@ -93,6 +97,13 @@ export const useFilterPanel = (): UseFilterPanelReturn => {
   const onClearAllClick = (): void => {
     draft.reset()
     setIsPqlFilterEnabled(false)
+
+    // The search modal holds the term and mode a third time, shared across its tabs, and takes
+    // that copy back over whenever a tab is activated (see SearchTermTakeover). Clearing only
+    // the applied store would leave it behind, and the next tab switch would restore the query.
+    searchContext?.setSearchTerm('')
+    searchContext?.setSearchMode(FULLTEXT_SEARCH_MODE_ID)
+
     publish(elementFilterDefaults)
   }
 
