@@ -9,7 +9,7 @@
  */
 
 import { useStyle } from './sidebar.styles'
-import React, { isValidElement, useState, useContext, useRef } from 'react'
+import React, { isValidElement, useState, useContext, useEffect, useRef } from 'react'
 import { type ISidebarButton, type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
@@ -27,9 +27,22 @@ export interface SidebarProps {
   sizing?: 'large' | 'medium' | 'default'
   highlights?: Array<ISidebarEntry['key']>
   translateTooltips?: boolean
+  /** When false the sidebar stays expanded: a tab can be switched but never closed. */
+  collapsible?: boolean
+  /**
+   * When false the sidebar does not manage its own width: it drops its resize handle and
+   * lets the panel fill whatever the container gives it. Use it inside a layout that
+   * already resizes its panes, such as SplitLayout.
+   */
+  resizable?: boolean
+  /**
+   * Side the rail tooltips open towards. Point them at the main content, away from the
+   * layout edge the sidebar sits on, so they do not run off it.
+   */
+  tooltipPlacement?: 'left' | 'right'
 }
 
-export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights = [], translateTooltips = false }: SidebarProps): React.JSX.Element => {
+export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights = [], translateTooltips = false, collapsible = true, resizable = true, tooltipPlacement = 'left' }: SidebarProps): React.JSX.Element => {
   const { styles } = useStyle()
   const sidebarContext = useContext(SidebarContext)
   const { t } = useTranslation()
@@ -66,7 +79,23 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
     onKeyboardResize
   } = useSidebarResize(sizing)
 
+  // a non-collapsible sidebar must always show a panel. The active tab can name no entry
+  // at all — before the caller has picked one, or after the entry it named was removed —
+  // and both leave the expanded panel blank, so fall back on the key rather than on
+  // whether anything is expanded.
+  const hasActivePanel = entries.some((entry) => entry.key === activeTab)
+
+  useEffect(() => {
+    if (!collapsible && !hasActivePanel && entries.length > 0) {
+      setActiveTab(entries[0].key)
+    }
+  }, [collapsible, hasActivePanel, entries])
+
   function handleSidebarClick (key: string): void {
+    if (!collapsible && key === activeTab) {
+      return
+    }
+
     if (sidebarContext !== null && sidebarContext !== undefined) {
       // When using context, use the toggleTab method
       sidebarContext.toggleTab(key)
@@ -83,10 +112,10 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
   return (
     <ContentConfigProvider gap="extra-small">
       <div
-        className={ styles.sidebar }
+        className={ [styles.sidebar, resizable ? '' : 'sidebar--container-sized'].join(' ') }
         ref={ sidebarRef }
       >
-        {isExpanded && (
+        {resizable && isExpanded && (
           // eslint-disable-next-line jsx-a11y/no-static-element-interactions
           <div
             className={ 'sidebar__resizer' + (isResizing ? ' sidebar__resizer--active' : '') }
@@ -113,7 +142,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
                 return (
                   <Tooltip
                     key={ entry.key }
-                    placement="left"
+                    placement={ tooltipPlacement }
                     title={ translateTooltips && !isNil(entry?.tooltip) ? t(entry.tooltip) : entry?.tooltip }
                   >
                     <div
@@ -168,7 +197,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
         <div
           className={ `sidebar__content sidebar__content--sizing-${sizing} ` + (isExpanded ? 'expanded' : '') }
           onKeyDown={ (event) => {
-            if (event.key === 'Escape' && isExpanded) {
+            if (event.key === 'Escape' && isExpanded && collapsible) {
               event.stopPropagation()
               setActiveTab('')
               // Move focus to the tab that was active, so the user isn't left on a hidden element.
