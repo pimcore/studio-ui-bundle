@@ -431,7 +431,7 @@ oauth.consent.subtitle: "{{client}} vil ha tilgang til Pimcore som deg."
 oauth.consent.unverified: Pimcore har ikke verifisert denne applikasjonen. Fortsett bare hvis du startet dette fra en applikasjon du stoler på.
 oauth.consent.redirect-to: "Etter at du godkjenner, blir du sendt til {{host}}"
 oauth.consent.permissions-heading: "Dette vil gi den mulighet til å:"
-oauth.consent.no-scopes: Ingen spesifikke tillatelser ble forespurt.
+oauth.consent.no-scopes-warning: Denne applikasjonen ba ikke om spesifikke tillatelser, så ingen kan vises. Tillat bare tilgang hvis du stoler på at den handler på dine vegne.
 oauth.consent.signed-in-as: "Logget inn som {{username}}"
 oauth.consent.allow: Tillat
 oauth.consent.deny: Avslå
