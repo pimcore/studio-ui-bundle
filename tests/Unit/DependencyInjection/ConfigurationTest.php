@@ -49,6 +49,47 @@ final class ConfigurationTest extends Unit
         $this->assertSame([10, 25, 50], $config['pagination']['page_size_options']);
     }
 
+    public function testPageSizeOptionsIgnoreEmptyEntriesInTheCommaSeparatedForm(): void
+    {
+        $config = $this->process(['pagination' => [
+            'page_size_options' => '10,20,',
+            'default_page_size' => 20,
+        ]]);
+
+        $this->assertSame([10, 20], $config['pagination']['page_size_options']);
+    }
+
+    public function testPageSizeOptionsDeduplicateIntegers(): void
+    {
+        $config = $this->process(['pagination' => [
+            'page_size_options' => [20, 20, '20'],
+            'default_page_size' => 20,
+        ]]);
+
+        $this->assertSame([20], $config['pagination']['page_size_options']);
+    }
+
+    public function testPageSizeOptionsRejectBooleanEntries(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        $this->process(['pagination' => ['page_size_options' => [1, true]]]);
+    }
+
+    public function testPageSizeOptionsRejectFloatEntries(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        $this->process(['pagination' => ['page_size_options' => [10, 1.5]]]);
+    }
+
+    public function testPageSizeOptionsRejectEmptyEntriesInAList(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        $this->process(['pagination' => ['page_size_options' => ['10', '', '20']]]);
+    }
+
     public function testPageSizeOptionsRejectNonIntegerEntries(): void
     {
         $this->expectException(InvalidConfigurationException::class);

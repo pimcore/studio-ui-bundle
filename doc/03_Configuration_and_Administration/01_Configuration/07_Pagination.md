@@ -20,12 +20,15 @@ pimcore_studio_ui:
 
 - `page_size_options` are the page sizes offered in the page-size changer. A list or a comma separated
   string (e.g. `'10,20,50,100'`) is accepted; every entry must be a positive integer and the list must
-  not be empty.
+  not be empty. Duplicates are removed. In the comma separated form, surrounding whitespace and empty
+  entries (a trailing comma, for instance) are ignored.
 - `default_page_size` is the page size a listing starts with before the user picks another option.
   It must be one of `page_size_options`.
 - `max_page_size` is the largest page size a user may enter as a custom option. No entry in
-  `page_size_options` may exceed it. Individual listings may enforce a lower limit where the
-  corresponding API endpoint caps the page size (for example the user references tab, capped at 100).
+  `page_size_options` may exceed it. Individual listings enforce a lower limit where the corresponding
+  API endpoint caps the page size (for example the user references tab, capped at 100). Such a listing
+  hides the configured options above its own cap and starts at a page size within it, so a global
+  configuration larger than an endpoint's cap never produces a rejected request.
 
 Invalid combinations are rejected when the container is built, so a misconfiguration surfaces as a
 `cache:clear` error rather than a broken listing.

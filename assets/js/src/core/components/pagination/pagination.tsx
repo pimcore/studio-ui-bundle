@@ -15,10 +15,10 @@ import { type SelectOptionType } from '@sdk/modules/element'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from '@Pimcore/components/pagination/pagination.styles'
 import cn from 'classnames'
-import { appConfig } from '@Pimcore/app/config/app-config'
+import { getDefaultPageSize, getMaxPageSize, getPageSizeOptions } from '@Pimcore/components/pagination/page-size'
 
 export interface PaginationProps extends Omit<BasePaginationProps, 'pageSize' | 'defaultCurrent' | 'onShowSizeChange' | 'responsive' | 'totalBoundaryShowSizeChanger'> {
-  /** Upper bound for custom page sizes; lower it for endpoints with a stricter server-side cap. */
+  /** Cap of the endpoint behind this pager, when it is stricter than the configured maximum. */
   maxPageSize?: number
 }
 
@@ -30,9 +30,8 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
 
   const defaultProps: Partial<PaginationProps> = {
     current: 1,
-    defaultPageSize: appConfig.defaultPageSize,
-    pageSizeOptions: appConfig.pageSizeOptions,
-    maxPageSize: appConfig.maxPageSize,
+    defaultPageSize: getDefaultPageSize(props.maxPageSize),
+    pageSizeOptions: getPageSizeOptions(props.maxPageSize),
     showSizeChanger: false,
     simple: true,
     size: 'small'
@@ -41,8 +40,12 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
   const { showSizeChanger, className, hideOnSinglePage, defaultPageSize, maxPageSize, current: baseCurrent, onChange, ...paginationProps } = { ...defaultProps, ...props }
   const classNames = cn(styles.pagination, className)
 
+  const maxPageSizeLimit = getMaxPageSize(maxPageSize)
+  const isValidPageSize = (size: number): boolean => Number.isInteger(size) && size > 0 && size <= maxPageSizeLimit
+  const initialPageSize = Math.min(defaultPageSize ?? getDefaultPageSize(maxPageSize), maxPageSizeLimit)
+
   const [current, setCurrent] = useState(baseCurrent ?? 1)
-  const [pageSize, setPageSize] = useState(defaultPageSize ?? 20)
+  const [pageSize, setPageSize] = useState(initialPageSize)
 
   useEffect(() => {
     setCurrent(baseCurrent ?? 1)
@@ -57,12 +60,14 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
     setPageSize(size)
   }
 
-  const selectOptions: SelectOptionType[] = paginationProps.pageSizeOptions?.map(option => ({
-    label: `${option} / ${t('pagination.page')}`,
-    value: String(option)
-  })) ?? []
-
-  const isValidPageSize = (size: number): boolean => Number.isInteger(size) && size > 0 && size <= (maxPageSize ?? Number.MAX_SAFE_INTEGER)
+  // An endpoint cap can be stricter than the configured options, so sizes it would reject are hidden.
+  const selectOptions: SelectOptionType[] = (paginationProps.pageSizeOptions ?? [])
+    .map(Number)
+    .filter(isValidPageSize)
+    .map(option => ({
+      label: `${option} / ${t('pagination.page')}`,
+      value: String(option)
+    }))
 
   const onSelectChange: SelectProps['onChange'] = (value) => {
     const parsedValue = Number(value)
@@ -122,7 +127,7 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
         <CreatableSelect
           disabled={ paginationProps.disabled }
           inputType="number"
-          numberInputProps={ { min: 1, max: maxPageSize, precision: 0 } }
+          numberInputProps={ { min: 1, max: maxPageSizeLimit, precision: 0 } }
           onChange={ onSelectChange }
           onCreateOption={ (value) => ({
             value,
