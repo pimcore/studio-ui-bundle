@@ -26,6 +26,8 @@ error.error_document_language_not_set: Il documento non ha una proprietà lingua
 error.error_inconsistent_asset_type: Qui sono consentiti solo asset dello stesso tipo.
 error.error_recycle_bin_restore: "Impossibile ripristinare l'elemento dal cestino"
 error.error_recycle_bin_restore_missing_parent: "Impossibile ripristinare l'elemento dal cestino, l'elemento padre è mancante"
+error.error_login_token_as_admin_non_admin_user: Solo gli utenti amministratori possono generare un link di accesso per un utente amministratore
+error.error_login_token_no_user_password: "Impossibile generare un link di accesso per questo utente perché non è impostata alcuna password"
 sidebar.selected_elements: Elementi selezionati
 sidebar.grid_config: Configurazione griglia
 sidebar.tag_filters: Filtri tag

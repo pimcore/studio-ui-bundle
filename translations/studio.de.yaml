@@ -26,6 +26,8 @@ error.error_document_language_not_set: Für das Dokument ist keine Sprache festg
 error.error_inconsistent_asset_type: Nur Assets desselben Typs sind hier erlaubt.
 error.error_recycle_bin_restore: Element kann nicht aus dem Papierkorb wiederhergestellt werden
 error.error_recycle_bin_restore_missing_parent: Element kann nicht aus dem Papierkorb wiederhergestellt werden, übergeordnetes Element fehlt
+error.error_login_token_as_admin_non_admin_user: Nur Admin-Benutzer können einen Anmeldelink für einen Admin-Benutzer generieren
+error.error_login_token_no_user_password: Für diesen Benutzer kann kein Anmeldelink generiert werden, da kein Passwort gesetzt ist
 sidebar.selected_elements: Ausgewählte Elemente
 sidebar.grid_config: Grid-Konfiguration
 sidebar.tag_filters: Tag-Filter

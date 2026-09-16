@@ -26,6 +26,8 @@ error.error_document_language_not_set: El documento no tiene ninguna propiedad d
 error.error_inconsistent_asset_type: Solo se permiten assets del mismo tipo aquí.
 error.error_recycle_bin_restore: No se puede restaurar el elemento de la papelera de reciclaje
 error.error_recycle_bin_restore_missing_parent: No se puede restaurar el elemento de la papelera de reciclaje, el elemento padre no existe
+error.error_login_token_as_admin_non_admin_user: Solo los usuarios administradores pueden generar un enlace de inicio de sesión para un usuario administrador
+error.error_login_token_no_user_password: No se puede generar un enlace de inicio de sesión para este usuario porque no tiene contraseña establecida
 sidebar.selected_elements: Elementos seleccionados
 sidebar.grid_config: Configuración de cuadrícula
 sidebar.tag_filters: Filtros de etiquetas

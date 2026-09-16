@@ -11,6 +11,7 @@
 import { currentDomain } from '@Pimcore/app/config/app-config'
 import { routes } from '@Pimcore/app/router/router'
 import { Button } from '@Pimcore/components/button/button'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useModalHolder } from '@Pimcore/modules/app/modal-holder/use-modal-holder'
 import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-management-context'
 import { useLazyUserTokenLinkGetQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
@@ -40,12 +41,18 @@ export const LoginTokenModalContainer = ({ disabled }: LoginTokenModalContainerP
 
   const openModal = async (): Promise<void> => {
     if (!isOpen) {
-      await trigger({
+      const { error } = await trigger({
         id,
         tokenLink: {
           tokenLoginUrl: `${currentDomain}${generatePath(routes.login)}`
         }
       })
+
+      if (error !== undefined) {
+        trackError(new ApiError(error))
+        return
+      }
+
       setIsOpen(true)
     }
   }
