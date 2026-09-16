@@ -10,7 +10,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { type SerializedError } from '@reduxjs/toolkit'
 import { isNull, isNumber, isUndefined } from 'lodash'
@@ -20,7 +20,8 @@ import { Text } from '@Pimcore/components/text/text'
 import { Button } from '@Pimcore/components/button/button'
 import { NoContent } from '@Pimcore/components/no-content/no-content'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { routes } from '@Pimcore/app/router/router'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { setAuthState } from '@Pimcore/modules/auth/auth-slice'
 import { useOauthAuthorizationApproveMutation, useOauthAuthorizationDetailsQuery } from '../oauth-api-slice.gen'
 import { OAuthConsentView } from './oauth-consent-view'
 import { useStyle } from './oauth-consent-page.styles'
@@ -47,8 +48,7 @@ const isExpectedStatus = (status: number | undefined): boolean => status === 401
 export const OAuthConsentPage = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyle()
-  const navigate = useNavigate()
-  const location = useLocation()
+  const dispatch = useAppDispatch()
   const [searchParams] = useSearchParams()
 
   const authorizationId = sanitizeAuthorizationId(searchParams.get(QUERY_PARAM))
@@ -85,12 +85,13 @@ export const OAuthConsentPage = (): React.JSX.Element => {
 
   const status = httpStatusOf(error)
 
-  // A 401 means there is no live session (the guard's cached auth state was
-  // stale). Send the user through login and return to this exact request so the
-  // authorization_id survives the round-trip.
+  // A 401 means there is no live session: the guard's cached auth state was stale.
+  // Correcting that state is enough - the guard renders the login screen over this
+  // route, at this URL, so the authorization_id is never in flight and there is
+  // nothing to carry back.
   useEffect(() => {
     if (isError && status === 401) {
-      navigate(routes.login, { state: { from: location } })
+      dispatch(setAuthState(false))
     }
   }, [isError, status])
 
@@ -110,9 +111,9 @@ export const OAuthConsentPage = (): React.JSX.Element => {
 
     if (failureStatus === 401) {
       // The session died between loading the authorization and submitting the
-      // decision. Same round-trip as the query path, so the authorization_id
-      // survives the login; retrying here could only 401 again.
-      navigate(routes.login, { state: { from: location } })
+      // decision. Same handling as the query path: correct the auth state and let
+      // the guard show the login screen here; retrying would only 401 again.
+      dispatch(setAuthState(false))
 
       return
     }

@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\StudioUiBundle\Tests\Unit\EventSubscriber\Security;
 
 use Codeception\Test\Unit;
-use Pimcore\Bundle\StudioUiBundle\EventSubscriber\Security\OAuthConsentFrameGuardSubscriber;
+use Pimcore\Bundle\StudioUiBundle\EventSubscriber\Security\OAuthConsentSecurityHeadersSubscriber;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class OAuthConsentFrameGuardSubscriberTest extends Unit
+class OAuthConsentSecurityHeadersSubscriberTest extends Unit
 {
     private const STUDIO_URL_PATH = '/pimcore-studio';
 
@@ -31,11 +31,13 @@ class OAuthConsentFrameGuardSubscriberTest extends Unit
 
     private const FRAME_ANCESTORS_NONE = "frame-ancestors 'none'";
 
+    private const REFERRER_POLICY_HEADER = 'Referrer-Policy';
+
     public function testRunsAfterEveryCspWritingListener(): void
     {
         // CspHeaderSubscriber (priority 0) and Symfony's web profiler (-128) both replace the CSP
         // header, so this guard has to run after them or its policy would be dropped.
-        $events = OAuthConsentFrameGuardSubscriber::getSubscribedEvents();
+        $events = OAuthConsentSecurityHeadersSubscriber::getSubscribedEvents();
 
         [$method, $priority] = $events[KernelEvents::RESPONSE];
 
@@ -51,6 +53,35 @@ class OAuthConsentFrameGuardSubscriberTest extends Unit
 
         $this->assertSame('DENY', $response->headers->get('X-Frame-Options'));
         $this->assertSame([self::FRAME_ANCESTORS_NONE], $response->headers->all(self::CSP_HEADER));
+    }
+
+    /**
+     * The consent address carries the authorization id, and this is the screen a logged out user
+     * signs in on, including through an external identity provider - a navigation to another
+     * origin. `same-origin` is what keeps that address out of the request to the provider.
+     *
+     * Not `no-referrer`: the OpenID Connect login returns the user here by reading the Referer of
+     * a same-origin request, which `same-origin` still sends in full.
+     */
+    public function testKeepsTheConsentAddressFromReachingAnotherOrigin(): void
+    {
+        $response = $this->handle(self::CONSENT_PATH);
+
+        $this->assertSame('same-origin', $response->headers->get(self::REFERRER_POLICY_HEADER));
+    }
+
+    /**
+     * A browser takes the last Referrer-Policy header it can parse rather than intersecting them,
+     * so appending would leave the effective policy dependent on listener order.
+     */
+    public function testReplacesAReferrerPolicyAlreadyOnTheResponse(): void
+    {
+        $existing = new Response();
+        $existing->headers->set(self::REFERRER_POLICY_HEADER, 'unsafe-url');
+
+        $response = $this->handle(self::CONSENT_PATH, $existing);
+
+        $this->assertSame(['same-origin'], $response->headers->all(self::REFERRER_POLICY_HEADER));
     }
 
     public function testTightensAnExistingCspPolicyInsteadOfReplacingIt(): void
@@ -100,6 +131,7 @@ class OAuthConsentFrameGuardSubscriberTest extends Unit
 
             $this->assertFalse($response->headers->has('X-Frame-Options'), $path);
             $this->assertFalse($response->headers->has(self::CSP_HEADER), $path);
+            $this->assertFalse($response->headers->has(self::REFERRER_POLICY_HEADER), $path);
         }
     }
 
@@ -167,7 +199,7 @@ class OAuthConsentFrameGuardSubscriberTest extends Unit
             $response
         );
 
-        (new OAuthConsentFrameGuardSubscriber($studioUrlPath))->onKernelResponse($event);
+        (new OAuthConsentSecurityHeadersSubscriber($studioUrlPath))->onKernelResponse($event);
 
         return $event->getResponse();
     }

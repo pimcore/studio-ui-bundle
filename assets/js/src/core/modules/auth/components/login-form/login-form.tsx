@@ -17,12 +17,9 @@ import { type Credentials, useLoginMutation } from '@Pimcore/modules/auth/author
 import { useStyle } from '@Pimcore/modules/auth/components/login-form/login-form-style'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { sendStatistics } from '@Pimcore/modules/auth/services/statisticsService'
-import { routes } from '@Pimcore/app/router/router'
 import { Checkbox, Input } from 'antd'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLocation } from 'react-router-dom'
-import { isUndefined } from 'lodash'
 import { Icon } from '../../../../components/icon/icon'
 
 interface ILoginFormProps {
@@ -30,7 +27,6 @@ interface ILoginFormProps {
 }
 
 export const LoginForm = ({ onPasswordForgotten }: ILoginFormProps): React.JSX.Element => {
-  const location = useLocation()
   const user = useUser()
   const { styles } = useStyle()
   const messageApi = useMessage()
@@ -69,18 +65,19 @@ export const LoginForm = ({ onPasswordForgotten }: ILoginFormProps): React.JSX.E
         // state (that would start the app's intro/fade animation). Auth is
         // re-established from the session cookie on the fresh boot. The submit
         // button stays in its loading state because we return before clearing it.
-        // Preserve the full return target (path AND query) so deep links that
-        // carry state — e.g. the OAuth `?authorization_id=…` — survive the
-        // login round-trip. Restoring only the pathname would drop the id and
-        // the consent screen would 404 ("expired").
-        const from = (location.state as { from?: { pathname?: string, search?: string } } | null)?.from
-        const redirectPath: string = !isUndefined(from?.pathname)
-          ? `${from.pathname}${from.search ?? ''}`
-          : routes.root
-
+        //
+        // Reload rather than navigate: the login screen is rendered at the URL the
+        // user asked for, so that URL is already the target, whatever it carries -
+        // an OAuth `?authorization_id=…`, an element deep link, or nothing. Booting
+        // the application again at the same address lets the route guard render the
+        // route's own content now that the session exists.
+        //
+        // No computed destination is assigned here on purpose. A post-login target
+        // read from anywhere other than the current address would be a redirect this
+        // form performs on someone else's say-so, and reloading cannot leave the origin.
         await sendStatistics(user.isAdmin)
 
-        window.location.href = redirectPath
+        globalThis.location.reload()
         return
       }
 

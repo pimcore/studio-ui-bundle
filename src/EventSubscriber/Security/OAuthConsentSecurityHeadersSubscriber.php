@@ -20,13 +20,22 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
- * Forbids framing of the OAuth consent screen.
+ * Response headers the OAuth consent screen needs regardless of how the application is
+ * configured: it must not be framed, and its address must not travel to another origin.
  *
- * The consent approval is a POST without a CSRF token: its safety rests on the request being
- * same-origin. A framed consent screen with an overlay over the Allow button therefore produces
- * a genuine approval, and the unguessable authorization id is no protection - an attacker mints
- * their own pending authorization through the public authorize endpoint and so knows the URL to
- * frame.
+ * Framing. The consent approval is a POST without a CSRF token: its safety rests on the request
+ * being same-origin. A framed consent screen with an overlay over the Allow button therefore
+ * produces a genuine approval, and the unguessable authorization id is no protection - an
+ * attacker mints their own pending authorization through the public authorize endpoint and so
+ * knows the URL to frame.
+ *
+ * Referrer. The consent address carries the authorization id, and this screen is where a logged
+ * out user signs in, including through an external identity provider - a navigation to another
+ * origin made from this page. `same-origin` keeps the full address on requests to this
+ * application, which is what the OpenID Connect login reads to return the user here, and sends
+ * nothing at all to anyone else. Browsers default to `strict-origin-when-cross-origin`, which
+ * already withholds the path and query from another origin; stating the policy means not
+ * depending on that default, and covers browsers that still default to sending it in full.
  *
  * The bundle's CSP already sends frame-ancestors, but only while csp_header.enabled is true and
  * only for paths outside csp_header.exclude_paths. This guard is deliberately independent of
@@ -34,7 +43,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
  *
  * @internal
  */
-final class OAuthConsentFrameGuardSubscriber implements EventSubscriberInterface
+final class OAuthConsentSecurityHeadersSubscriber implements EventSubscriberInterface
 {
     private const CONSENT_SUB_PATH = '/oauth/consent';
 
@@ -52,6 +61,15 @@ final class OAuthConsentFrameGuardSubscriber implements EventSubscriberInterface
      * rest.
      */
     private const FRAME_ANCESTORS_NONE = "frame-ancestors 'none'";
+
+    private const REFERRER_POLICY_HEADER = 'Referrer-Policy';
+
+    /**
+     * Not `no-referrer`: the OpenID Connect login returns the user to the page they came from,
+     * and reads that from the Referer of a same-origin request. Withholding it there would land
+     * a user who signed in through their provider on the start page instead of back here.
+     */
+    private const REFERRER_POLICY_SAME_ORIGIN = 'same-origin';
 
     private readonly string $consentPath;
 
@@ -81,7 +99,7 @@ final class OAuthConsentFrameGuardSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $this->denyFraming($event->getResponse());
+        $this->applyHeaders($event->getResponse());
     }
 
     /**
@@ -99,9 +117,14 @@ final class OAuthConsentFrameGuardSubscriber implements EventSubscriberInterface
         return rtrim($path, '/') === $this->consentPath;
     }
 
-    private function denyFraming(Response $response): void
+    private function applyHeaders(Response $response): void
     {
         $response->headers->set('X-Frame-Options', 'DENY');
+
+        // Replaces rather than appends: unlike CSP, a second Referrer-Policy header does not
+        // intersect with the first - a browser takes the last value it can parse - so appending
+        // would make the effective policy depend on listener order.
+        $response->headers->set(self::REFERRER_POLICY_HEADER, self::REFERRER_POLICY_SAME_ORIGIN);
 
         // Appended as a second policy instead of replacing the existing one. Multiple CSP headers
         // are each enforced, so the effective permission is their intersection: this can only
