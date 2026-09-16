@@ -17,37 +17,45 @@ import { useStyle } from './split-button.styles'
 
 export interface SplitButtonProps extends IconTextButtonProps {
   menu: DropdownProps['menu']
+  // The toggle is icon-only, so it needs its own translated accessible name.
+  menuAriaLabel: string
   menuDisabled?: boolean
   dropdownProps?: Omit<DropdownProps, 'menu' | 'children'>
 }
 
 export const SplitButton = ({
   menu,
+  menuAriaLabel,
   menuDisabled = false,
   dropdownProps,
   ...buttonProps
 }: SplitButtonProps): React.JSX.Element => {
   const { styles } = useStyle()
-  const isMenuDisabled = menuDisabled || buttonProps.disabled === true
+  const { color, danger, size, type = 'default' } = buttonProps
+  const isMenuDisabled = menuDisabled || buttonProps.disabled === true || dropdownProps?.disabled === true
 
   const items: ReactElement[] = [
     <IconTextButton
       key="action"
-      type="default"
       { ...buttonProps }
+      type={ type }
     />,
 
     <Dropdown
-      disabled={ isMenuDisabled }
       key="menu"
       menu={ menu }
       { ...dropdownProps }
+      disabled={ isMenuDisabled }
     >
       <IconButton
+        aria-label={ menuAriaLabel }
         className={ styles.toggle }
+        color={ color }
+        danger={ danger }
         disabled={ isMenuDisabled }
         icon={ { value: 'chevron-down' } }
-        type="default"
+        size={ size }
+        type={ type }
       />
     </Dropdown>
   ]

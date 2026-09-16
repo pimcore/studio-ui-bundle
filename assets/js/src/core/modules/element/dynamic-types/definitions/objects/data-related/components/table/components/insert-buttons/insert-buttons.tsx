@@ -29,6 +29,7 @@ interface PositionedInsertButtonProps extends InsertButtonProps {
   beforeLabel: string
   icon: string
   label: string
+  menuAriaLabel: string
 }
 
 const PositionedInsertButton = ({
@@ -40,6 +41,7 @@ const PositionedInsertButton = ({
   hasSelection,
   icon,
   label,
+  menuAriaLabel,
   onInsert
 }: PositionedInsertButtonProps): React.JSX.Element => {
   if (!allowInsertPosition) {
@@ -71,6 +73,7 @@ const PositionedInsertButton = ({
           }
         ]
       } }
+      menuAriaLabel={ menuAriaLabel }
       menuDisabled={ !hasSelection }
       onClick={ () => { onInsert('end') } }
       type="default"
@@ -92,6 +95,7 @@ export const NewRowButton = (props: InsertButtonProps): React.JSX.Element => {
       beforeLabel={ t('table.insert-row-above') }
       icon="new-row"
       label={ t('table.new-row') }
+      menuAriaLabel={ t('table.row-insert-options') }
     />
   )
 }
@@ -108,6 +112,7 @@ export const NewColumnButton = (props: InsertButtonProps): React.JSX.Element => 
       beforeLabel={ t('table.insert-column-left') }
       icon="new-column"
       label={ t('table.new-column') }
+      menuAriaLabel={ t('table.column-insert-options') }
     />
   )
 }

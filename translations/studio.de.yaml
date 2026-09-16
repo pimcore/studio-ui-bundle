@@ -1329,10 +1329,12 @@ table.empty.confirm: Sind Sie sicher, dass Sie alle Daten löschen möchten?
 table.new-column: Neue Spalte
 table.insert-column-left: Spalte links einfügen
 table.insert-column-right: Spalte rechts einfügen
+table.column-insert-options: Optionen zum Einfügen von Spalten
 table.delete-column: Spalte löschen
 table.new-row: Neue Zeile
 table.insert-row-above: Zeile oberhalb einfügen
 table.insert-row-below: Zeile unterhalb einfügen
+table.row-insert-options: Optionen zum Einfügen von Zeilen
 table.delete-row: Zeile löschen
 table.duplicate-row: Zeile duplizieren
 table.copy: Kopieren

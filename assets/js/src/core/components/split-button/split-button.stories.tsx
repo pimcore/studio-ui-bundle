@@ -26,6 +26,7 @@ export const _default = {
   args: {
     icon: { value: 'new-row' },
     children: 'New row',
+    menuAriaLabel: 'Row insert options',
     menu: {
       items: [
         { key: 'above', label: 'Insert row above' },
