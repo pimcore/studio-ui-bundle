@@ -11,6 +11,7 @@
 /* eslint-disable max-lines */
 
 import { Box } from '@Pimcore/components/box/box'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -63,7 +64,7 @@ const OwnershipManagementView = (): React.JSX.Element => {
   const { data: typesData, isLoading: isTypesLoading, error: typesError } = useOwnershipManagementGetTypesQuery()
   const [activeType, setActiveType] = useState<string | undefined>(undefined)
   const [page, setPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(20)
+  const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
   const [searchValue, setSearchValue] = useState<string>('')
   const [includeDeletedOwners, setIncludeDeletedOwners] = useState<boolean>(true)
   const [sorting, setSorting] = useState<SortingState>(DEFAULT_SORTING)

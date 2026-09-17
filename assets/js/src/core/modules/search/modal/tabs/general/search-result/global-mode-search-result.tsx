@@ -9,6 +9,7 @@
  */
 
 import React, { useEffect, useState } from 'react'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import { useTranslation } from 'react-i18next'
 import { useSearchTerm } from '../provider/use-search-term'
 import { type GlobalSearchAdapter } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/search-mode-abstract'
@@ -23,7 +24,7 @@ export const GlobalModeSearchResult = ({ adapter }: GlobalModeSearchResultProps)
   const { t } = useTranslation()
   const { searchTerm } = useSearchTerm()
   const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(20)
+  const [pageSize, setPageSize] = useState(appConfig.defaultPageSize)
   const { data, isLoading, isError } = adapter.useSearch({ query: searchTerm, page, pageSize })
 
   useEffect(() => {

@@ -14,3 +14,4 @@ Pimcore Studio configuration options:
 - [Auto Save](./05_Auto_Save.md)
 - [Parallel Asset Uploads](./06_Parallel_Asset_Uploads.md)
 - [OAuth Consent Screen](./07_OAuth_Consent_Screen.md)
+- [Pagination](./08_Pagination.md)

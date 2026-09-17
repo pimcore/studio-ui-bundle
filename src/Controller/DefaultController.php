@@ -47,7 +47,10 @@ final class DefaultController extends FrontendController
         string $studioUrlPath,
         array $studioWysiwygConfiguration,
         string $studioApiPrefix,
-        int $studioMaxParallelUploads
+        int $studioMaxParallelUploads,
+        array $studioPageSizeOptions,
+        int $studioDefaultPageSize,
+        int $studioMaxPageSize
     ): Response {
         $appConfig = [
             'baseUrl' => $studioUrlPath . '/',
@@ -55,6 +58,9 @@ final class DefaultController extends FrontendController
             'wysiwyg' => $studioWysiwygConfiguration,
             'apiPrefix' => $studioApiPrefix,
             'maxParallelUploads' => $studioMaxParallelUploads,
+            'pageSizeOptions' => $studioPageSizeOptions,
+            'defaultPageSize' => $studioDefaultPageSize,
+            'maxPageSize' => $studioMaxPageSize,
         ];
 
         foreach ($this->appConfigProviders as $provider) {

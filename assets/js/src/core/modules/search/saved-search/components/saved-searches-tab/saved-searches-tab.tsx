@@ -9,6 +9,7 @@
  */
 
 import React, { useState } from 'react'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import { useTranslation } from 'react-i18next'
 import { createColumnHelper, type SortingState } from '@tanstack/react-table'
 import { Popconfirm } from 'antd'
@@ -53,7 +54,7 @@ export const SavedSearchesTab = (): React.JSX.Element => {
   const { open: onOpen, openingId } = useOpenSavedSearch(close)
 
   const [currentPage, setCurrentPage] = useState(1)
-  const [pageSize, setPageSize] = useState(20)
+  const [pageSize, setPageSize] = useState(appConfig.defaultPageSize)
   const [searchTerm, setSearchTerm] = useState('')
   const [sorting, setSorting] = useState<SortingState>([{ id: 'modificationDateLabel', desc: true }])
   const [deletingId, setDeletingId] = useState<number | undefined>(undefined)
