@@ -155,7 +155,8 @@ const SelectionStory = (args: React.ComponentProps<typeof ManyToManyRelation>): 
   )
 }
 
-export const WithRowSelection: Story = {
+// Typed on the component props rather than on `meta`, so `render` receives the full prop set.
+export const WithRowSelection: StoryObj<React.ComponentProps<typeof ManyToManyRelation>> = {
   args: {
     ...Default.args
   },

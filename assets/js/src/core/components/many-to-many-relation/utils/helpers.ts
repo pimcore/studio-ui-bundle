@@ -11,7 +11,7 @@
 import { flatMap, isArray, isNil, isNumber, isObject, isString, values } from 'lodash'
 import type { ElementCellConfig, ElementInfo } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/element-cell/element-cell'
 import type { DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import type { ManyToManyRelationValueItem } from '../hooks/use-value'
+import type { DisplayManyToManyRelationValueItem, ManyToManyRelationValueItem } from '../hooks/use-value'
 import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 
 export const getElementCellConfig = (disabled?: boolean): ElementCellConfig => {
@@ -64,5 +64,5 @@ export const flattenValues = (value: unknown): string[] => {
  * against `row.id` compares a position against an element id and never hits, which silently
  * turns reordering into a no-op.
  */
-export const getRelationRowId = (row: { originalIndex?: number }, index: number): string =>
+export const getRelationRowId = (row: DisplayManyToManyRelationValueItem, index: number): string =>
   String(row.originalIndex ?? index)
