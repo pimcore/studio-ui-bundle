@@ -137,19 +137,17 @@ registered only with the `.document_editor_iframe` tag is never extracted.
 
 ## Deployment
 
-- `bin/console cache:warmup` (or `cache:clear` without `--no-warmup`) extracts the archive of every registered
-  `BuildArchiveProviderInterface` into its `targetDir`. Run it during the deploy phase while `vendor/` is still
-  writable; read-only production filesystems are then fully supported. When `assets:install` runs in copy mode, warm
-  the cache before it.
-- Pimcore's Composer scripts run `cache:clear --no-warmup` by default and therefore do not extract. Add an explicit
-  `cache:warmup` to the deployment.
-- Warmup never fails over extraction; it logs a warning and continues. If no build is present at request time and the
-  target is not writable, `BuildArchiveNotWritableException` is thrown then. Watch the warmup log rather than the
-  command's exit code.
-- In local development, a missing expanded build (e.g. after `git pull` with a new archive) is extracted on the fly
-  when Studio resolves entry points, provided the filesystem is writable.
-- A build produced by `npm run build` or `npm run dev` is never overwritten by extraction. To return to the committed
-  archive, delete `public/build/` and warm the cache again.
+Run `bin/console cache:warmup` during deployment, after `composer install` and before `assets:install`, while
+`vendor/` is still writable. Warmup extracts the archive of every registered `BuildArchiveProviderInterface` into its
+`targetDir`. Pimcore's Composer scripts only run `cache:clear --no-warmup`, which does not extract. Once the build is
+extracted, read-only production filesystems are supported.
+
+Extraction problems are logged as warnings and do not fail the warmup. If no build exists at request time and the
+target is not writable, `BuildArchiveNotWritableException` is thrown.
+
+In local development a missing build is extracted on the fly, e.g. after `git pull` with a new archive. A build
+produced by `npm run build` or `npm run dev` is never overwritten; delete `public/build/` and warm the cache to return
+to the committed archive.
 
 ## Public API
 
