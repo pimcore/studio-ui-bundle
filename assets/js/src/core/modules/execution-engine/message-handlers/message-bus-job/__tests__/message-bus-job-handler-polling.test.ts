@@ -289,6 +289,39 @@ describe('status=failed', () => {
   })
 })
 
+// A run cancelled outside the panel (another UI, the CLI) still has to end the entry: the panel has no
+// cancelled state, so it is reported as failed and the handler unregisters like for any terminal state.
+describe('status=cancelled', () => {
+  it('Mercure update dispatches jobUpdated with FAILED status', async () => {
+    const handler = makeHandler()
+    await sendMercureUpdate(handler, { status: 'cancelled' })
+    expect(mockJobUpdated).toHaveBeenCalledWith(expect.objectContaining({
+      changes: expect.objectContaining({ status: JobStatus.FAILED })
+    }))
+  })
+
+  it('polling update dispatches jobUpdated with FAILED status', async () => {
+    makeHandler()
+    await sendPollingUpdate({ status: 'cancelled', jobRun: jobRunFixture({ state: 'cancelled' }) })
+    expect(mockJobUpdated).toHaveBeenCalledWith(expect.objectContaining({
+      changes: expect.objectContaining({ status: JobStatus.FAILED })
+    }))
+  })
+
+  it('Mercure update calls onJobCompletion with isFailed=true and unregisters the handler', async () => {
+    const onJobCompletion = jest.fn()
+    const handler = makeHandler({ onJobCompletion })
+    await sendMercureUpdate(handler, { status: 'cancelled' })
+    expect(onJobCompletion).toHaveBeenCalledWith(expect.objectContaining({
+      isSuccessful: false,
+      isFinished: false,
+      isFailed: true,
+      status: JobStatus.FAILED
+    }))
+    expect(mockMessageBus.unregisterHandler).toHaveBeenCalledWith(1)
+  })
+})
+
 // ─── Child job transition ─────────────────────────────────────────────────────
 //
 // This is the critical path: a parent job finishes and spawns a child run.

@@ -15,7 +15,15 @@ import { type JobRun } from '@Pimcore/modules/execution-engine/execution-engine-
 import { ExponentialBackoff } from '@Pimcore/utils/exponential-backoff'
 import { JobStatus } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
 
-const COMPLETION_STATES = ['finished', 'finished_with_errors', 'failed']
+const COMPLETION_STATES = ['finished', 'finished_with_errors', 'failed', 'cancelled']
+
+/**
+ * A run that has not left its first step reads as queued, unless it already ended there: a terminal
+ * state must reach the handler as such, or the entry would stay queued after polling stopped.
+ */
+export const resolveEffectiveStatus = (jobRun: JobRun): string => (
+  jobRun.currentStep === 0 && !COMPLETION_STATES.includes(jobRun.state) ? JobStatus.QUEUED : jobRun.state
+)
 
 export interface JobRunPollingCallbacks {
   onStatusUpdate: (data: JobStatusUpdateData) => void | Promise<void>
@@ -161,7 +169,7 @@ export class JobRunPolling {
 
           this.lastJobSnapshot = currentSnapshot
 
-          const effectiveStatus = jobRun.currentStep === 0 ? JobStatus.QUEUED : jobRun.state
+          const effectiveStatus = resolveEffectiveStatus(jobRun)
 
           await this.callbacks.onStatusUpdate({
             status: effectiveStatus,
