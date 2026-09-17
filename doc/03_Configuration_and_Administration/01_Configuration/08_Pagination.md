@@ -22,6 +22,6 @@ comma separated string such as `'10,20,50,100'`.
 `default_page_size` must be one of `page_size_options`, and no option may exceed `max_page_size`. Both are
 checked while the container is built, so a misconfiguration fails `cache:clear` instead of breaking a listing.
 
-Listings whose endpoint caps the page size lower — the user references tab at 100, for instance — hide the
-options above their own cap. Reports start at 50 and the classification store picker at 10, ignoring
-`default_page_size`.
+A listing served by an endpoint with a smaller limit, such as the user references tab, only offers the sizes
+that endpoint accepts. Reports and the classification store picker start at a page size of their own rather
+than at `default_page_size`.
