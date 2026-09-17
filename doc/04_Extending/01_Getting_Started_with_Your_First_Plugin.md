@@ -94,9 +94,8 @@ Register a `WebpackEntryPointProviderInterface` service in the Pimcore service c
 - [WebpackEntryPointProvider.php](https://github.com/pimcore/studio-example-bundle/blob/main/src/Webpack/WebpackEntryPointProvider.php)
 - [services.yaml](https://github.com/pimcore/studio-example-bundle/blob/5715004cf377e91adfd1fce68b054181046edbc0/config/services.yaml#L12-L14)
 
-The provider contract, the available service tags, and the options for distributing the compiled build with
-a bundle (committed directory, build at deploy time, or a single committed archive) are described in
-[Frontend Build Registration and Distribution](./03_Frontend_Build_and_Entry_Points.md).
+The provider contract and the available service tags are described in
+[Registering the Frontend Build](./03_Registering_the_Frontend_Build.md).
 
 
 ### Check
@@ -107,6 +106,7 @@ Quickly recompile the app by using one of the npm commands listed above. On succ
 ### Further reading
 
 - [Plugin Development Examples](./02_Plugin_Development_Examples/README.md)
+- [Shipping the Frontend Build as an Archive](./04_Shipping_the_Frontend_Build_as_an_Archive.md)
 - [Studio UI Core Development](../05_Development_Details/01_Studio_UI_Core_Development.md)
 
 
