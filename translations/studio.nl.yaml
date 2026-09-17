@@ -25,6 +25,8 @@ error.error_document_language_not_set: Het document heeft geen taalinstelling
 error.error_inconsistent_asset_type: Hier zijn alleen assets van hetzelfde type toegestaan.
 error.error_recycle_bin_restore: Kan element niet herstellen uit de prullenbak
 error.error_recycle_bin_restore_missing_parent: Kan element niet herstellen uit de prullenbak, bovenliggend element ontbreekt
+error.error_login_token_as_admin_non_admin_user: Alleen administratieve gebruikers kunnen een inloglink voor een administratieve gebruiker genereren
+error.error_login_token_no_user_password: Er kan geen inloglink voor deze gebruiker worden gegenereerd omdat er geen wachtwoord is ingesteld
 error.syntax_error: Syntaxisfout
 sidebar.selected_elements: Geselecteerde elementen
 sidebar.grid_config: Rasterinstelling
@@ -563,6 +565,11 @@ listing.column-picker.search: Zoeken
 listing.column-picker.no-results: Geen kolommen gevonden
 listing.column-picker.fields-to-add: Toe te voegen velden
 listing.fields-to-add.collapse-simple-fields: Eenvoudige velden samenvouwen
+listing.search-mode.full-text: Volledige-tekstzoekopdracht
+listing.search-mode.full-text-short: Volledige tekst
+listing.search-mode.default: Standaard
+listing.search-mode.smart-placeholder: Zoeken binnen vergelijkbare of gerelateerde resultaten
+listing.search-mode.global-unavailable: Slim zoeken is momenteel niet beschikbaar.
 listing.actions: Op selectie toepassen
 listing.non-selected.actions: Op alles toepassen
 listing.actions.zip-download: ZIP downloaden
@@ -700,6 +707,8 @@ edit: Bewerken
 modify: Wijzigen
 component.no-content.no-content-available: Geen inhoud beschikbaar
 notifications.label: Meldingen
+notifications.tab.inbox: Postvak IN
+notifications.tab.settings: Instellingen
 notifications.settings.label: Meldingsinstellingen
 notifications.settings.description: Zet Melden aan voor alles wat je in je meldingenbel wilt ontvangen en voeg daarna extra kanalen toe voor de meldingen die er het meest toe doen.
 notifications.settings.description-popup-only: Kies hoe meldingen je bereiken. Alles waarover je een melding krijgt, verschijnt altijd in je meldingenbel.
@@ -939,7 +948,7 @@ field-definition.table: Tabel
 field-definition.structured-table: Gestructureerde tabel
 field-definition.fieldcollections: Field Collections
 field-definition.objectbricks: Object Bricks
-field-definition.classificationstore: Classificatieopslag
+field-definition.classificationstore: Classification Store
 field-definition.localizedfields: Gelokaliseerde velden
 field-definition.firstname: Voornaam
 field-definition.lastname: Achternaam
@@ -1113,6 +1122,7 @@ asset.sidebar.web-format: Webformaat
 asset.sidebar.print-format: Afdrukformaat
 asset.sidebar.office-format: Kantoorformaat
 jobs.notification.title: Lopende taken
+jobs.notification.tooltip: Lopende taken openen
 jobs.notification.jobs_one: "{{count}} actie"
 jobs.notification.jobs_other: "{{count}} acties"
 jobs.notification.hide-all-finished: Alle voltooide verbergen
@@ -1170,6 +1180,10 @@ export-xlsx-form.form-field.header: Koptekst
 export-xlsx-form.form-field.header.option.name: Systeemsleutel
 export-xlsx-form.form-field.header.option.title: Label
 export-xlsx-form.form-field.header.option.no-header: Geen koptekst
+form.annotation.added: Toegevoegd
+form.annotation.changed: Gewijzigd
+form.annotation.removed: Verwijderd
+form.annotation.moved: Verplaatst
 form.validation.required: Dit veld is verplicht
 form.validation.max-length: "De maximale lengte voor dit veld is {{max}} tekens"
 form.validation.min: "De minimumwaarde is {{min}}"
@@ -1311,7 +1325,7 @@ search-address: Adres zoeken
 search: Zoeken
 geocode.address-not-found: Het ingevoerde adres is niet gevonden
 geocode.possible-causes: Mogelijke oorzaken
-geocode.postal-code-format-error: Postcode-formaat, bijv. gebruik "5020 Salzburg, Söllheimer Straße 16" in plaats van "A-5020 Salzburg, Söllheimer Straße 16"
+geocode.postal-code-format-error: 'Postcode-formaat, bijv. gebruik "5020 Salzburg, Söllheimer Straße 16" in plaats van "A-5020 Salzburg, Söllheimer Straße 16"'
 delete-confirmation-advanced: "Weet je echt zeker dat je {{type}} '{{value}}' wilt verwijderen?"
 relations.id: ID
 relations.reference: Verwijzing
@@ -1321,6 +1335,12 @@ relations.classname: Klasse
 relations.fullpath: Volledig pad
 relations.remove-all.confirm: Weet je echt zeker dat je alle relaties wilt verwijderen?
 relations.upload.subtype-not-allowed: Geüploade assets met een type dat deze relatie niet toestaat, zijn niet toegewezen.
+relations.create-object.title: Nieuw object
+relations.create-object.submit: Aanmaken
+relations.create-object.name: Naam
+relations.create-object.parent: Bovenliggend
+relations.create-object.parent.placeholder: Selecteer een bovenliggend element
+relations.create-object.class: Klasse
 relation: relatie
 items-limit-reached: "Het maximum aantal items ({{maxItems}}) is bereikt."
 asset-upload-type-not-allowed: Het type van de geüploade asset is niet toegestaan voor dit veld.
@@ -1347,8 +1367,14 @@ upload.assets-items-failed-message: Upload voltooid met fouten.
 quantity-value.converted-units: Geconverteerde eenheden
 table.empty.confirm: Weet je zeker dat je alle gegevens wilt wissen?
 table.new-column: Nieuwe kolom
+table.insert-column-left: Kolom links invoegen
+table.insert-column-right: Kolom rechts invoegen
+table.column-insert-options: Opties voor kolom invoegen
 table.delete-column: Kolom verwijderen
 table.new-row: Nieuwe rij
+table.insert-row-above: Rij erboven invoegen
+table.insert-row-below: Rij eronder invoegen
+table.row-insert-options: Opties voor rij invoegen
 table.delete-row: Rij verwijderen
 table.duplicate-row: Rij dupliceren
 table.copy: Kopiëren
@@ -2015,8 +2041,8 @@ classification-store.column.id: ID
 classification-store.column.group: Groep
 classification-store.column.name: Naam
 classification-store.column.description: Beschrijving
-navigation.classification-store: Classificatieopslag
-widget.classification-store-config: Classificatieopslag
+navigation.classification-store: Classification Store
+widget.classification-store-config: Classification Store
 classification-store.tabs.collections: Collecties
 classification-store.tabs.groups: Groepen
 classification-store.tabs.keys: Sleutels
@@ -2400,7 +2426,7 @@ perspective-editor.form.main-nav-permission.dataManagement.tagConfiguration: Tag
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_bulkExport: Gegevensmodeldefinitie > Bulkexport
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_bulkImport: Gegevensmodeldefinitie > Bulkimport
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_classes: Gegevensmodeldefinitie > Klassen
-perspective-editor.form.main-nav-permission.dataManagement.dataModel_classificationStore: Gegevensmodeldefinitie > Classificatieopslag
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_classificationStore: Gegevensmodeldefinitie > Classification Store
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_fieldCollections: Gegevensmodeldefinitie > Field Collections
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_hidden: Menu gegevensmodeldefinitie verbergen
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_objectBricks: Gegevensmodeldefinitie > Object Bricks
@@ -2559,7 +2585,7 @@ email-settings.to: Aan
 email-settings.cc: CC
 email-settings.bcc: BCC
 email-settings.multiple-recipients-hint: "Meerdere ontvangers kunnen worden opgegeven door de e-mailadressen te scheiden met een puntkomma. Voorbeeld: ontvanger@pimcore.org; ontvanger2@pimcore.org"
-email-settings.from-syntax-hint: "Je kunt de syntaxis gebruiken: Mijn naam <mijn-naam@voorbeeld.com>"
+email-settings.from-syntax-hint: "Je kunt de syntaxis gebruiken: Mijn naam <mijn-naam@example.com>"
 add-document-form.label.title: Titel
 add-document-form.label.navigation: Navigatie
 add-document-form.label.key: Sleutel
@@ -2580,7 +2606,7 @@ user-management.permissions.qr_codes: QR-codes
 user-management.permissions.plugins: Plugins
 user-management.permissions.notes_events: Notities & gebeurtenissen
 user-management.permissions.clear_cache: Cache wissen
-user-management.permissions.classificationstore: Classificatieopslag
+user-management.permissions.classificationstore: Classification Store
 user-management.permissions.classes: Klassen
 user-management.permissions.workflow_details: Workflowdetails
 user-management.permissions.users: Gebruikers
@@ -2797,6 +2823,7 @@ quantity-values.export: Exporteren
 quantity-values.import: Importeren
 quantity-values.import-modal.title: Hoeveelheidswaarde-eenheden importeren
 quantity-values.search: Zoeken
+quantity-values.delete-confirmation: Het verwijderen van deze eenheid heeft gevolgen voor alle gerelateerde elementen die ernaar verwijzen. Weet je zeker dat je wilt doorgaan?
 owner: Eigenaar
 reverse-object-relation.tooltip: Niet-eigenaarobjecten stellen relaties met een ander object op dezelfde manier voor als eigenaarobjecten. Het verschil is dat een niet-eigenaarsobjectveld niet de eigenaar is van de relatiegegevens, maar slechts een weergave van gegevens die in andere objecten zijn opgeslagen. Kies de eigenaar en veldnaam waar de gegevens oorspronkelijk zijn opgeslagen.
 disabled-fields: Uitgeschakelde velden
@@ -2887,3 +2914,4 @@ saved-search.update.success: Opgeslagen zoekopdracht bijgewerkt
 saved-search.delete.success: Opgeslagen zoekopdracht verwijderd
 saved-search.shared-modified.info: Je hebt wijzigingen aangebracht in de oorspronkelijke configuratie. Omdat deze van iemand anders is, kun je deze opslaan als nieuwe zoekopdracht.
 saved-search.menu-shortcut-group: Menugroep
+skip-to-content: Naar de inhoud
