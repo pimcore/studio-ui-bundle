@@ -9,7 +9,7 @@
  */
 
 import { getElementCellConfig, getRelationRowId } from './helpers'
-import { type ManyToManyRelationValueItem } from '../hooks/use-value'
+import { type DisplayManyToManyRelationValueItem, type ManyToManyRelationValueItem } from '../hooks/use-value'
 
 const getElementInfoFor = (item: Partial<ManyToManyRelationValueItem>): ReturnType<NonNullable<ReturnType<typeof getElementCellConfig>['getElementInfo']>> => {
   const config = getElementCellConfig(false)
@@ -47,11 +47,16 @@ describe('getRelationRowId', () => {
    * agree: matching a drag id against the element id instead compares a position against an
    * element id, so reordering silently returns the data unchanged.
    */
-  const rows = [
-    { originalIndex: 0, id: 10 },
-    { originalIndex: 1, id: 20 },
-    { originalIndex: 2, id: 10 }
-  ]
+  const row = (id: number, originalIndex?: number): DisplayManyToManyRelationValueItem => ({
+    id,
+    type: 'object',
+    subtype: 'Product',
+    fullPath: `/path/to/${id}`,
+    isPublished: true,
+    ...(originalIndex === undefined ? {} : { originalIndex })
+  })
+
+  const rows = [row(10, 0), row(20, 1), row(10, 2)]
 
   it('identifies rows by position, so a repeated element does not collide', () => {
     const ids = rows.map(getRelationRowId)
@@ -61,7 +66,7 @@ describe('getRelationRowId', () => {
   })
 
   it('falls back to the current index when originalIndex is absent', () => {
-    expect(getRelationRowId({}, 3)).toBe('3')
+    expect(getRelationRowId(row(10), 3)).toBe('3')
   })
 
   it('resolves a drag id back to the row it came from', () => {
