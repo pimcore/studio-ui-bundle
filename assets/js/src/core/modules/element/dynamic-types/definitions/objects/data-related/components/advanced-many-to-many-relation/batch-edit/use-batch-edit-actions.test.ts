@@ -33,6 +33,19 @@ const setup = (value: AdvancedManyToManyRelationValue): Setup => {
   return { result, onChange }
 }
 
+/** Same as setup(), but keeps the rerender handle so the value can change under the hook. */
+const setupWithRerender = (
+  value: AdvancedManyToManyRelationValue
+): Setup & { rerender: (next: AdvancedManyToManyRelationValue) => void } => {
+  const onChange = jest.fn()
+  const { result, rerender } = renderHook(
+    ({ current }: { current: AdvancedManyToManyRelationValue }) => useBatchEditActions({ value: current, onChange }),
+    { initialProps: { current: value } }
+  )
+
+  return { result, onChange, rerender: (next) => { rerender({ current: next }) } }
+}
+
 const select = (setup: Setup, keys: string[]): void => {
   act(() => {
     setup.result.current.setSelectedRows(Object.fromEntries(keys.map((key) => [key, true])))
@@ -118,6 +131,37 @@ describe('useBatchEditActions', () => {
       act(() => { s.result.current.handleBatchApply([{ columnKey: 'note', value: 'x' }]) })
 
       expect(s.result.current.selectedRows).toEqual({})
+    })
+  })
+
+  describe('selection reconciliation', () => {
+    it('clears the selection when a row is removed', () => {
+      const s = setupWithRerender(withDuplicates())
+      select(s, ['2'])
+
+      // drop row 0; what used to be row 2 is now row 1
+      s.rerender([row(20, { note: 'b' }), row(10, { note: 'c' })] as AdvancedManyToManyRelationValue)
+
+      expect(s.result.current.selectedRows).toEqual({})
+    })
+
+    it('clears the selection when rows are reordered', () => {
+      const s = setupWithRerender(withDuplicates())
+      select(s, ['0'])
+
+      s.rerender([row(20, { note: 'b' }), row(10, { note: 'a' }), row(10, { note: 'c' })] as AdvancedManyToManyRelationValue)
+
+      expect(s.result.current.selectedRows).toEqual({})
+    })
+
+    it('keeps the selection when only cell data changes', () => {
+      const s = setupWithRerender(withDuplicates())
+      select(s, ['1'])
+
+      // same rows in the same order, one value edited elsewhere
+      s.rerender([row(10, { note: 'a' }), row(20, { note: 'edited' }), row(10, { note: 'c' })] as AdvancedManyToManyRelationValue)
+
+      expect(s.result.current.selectedRows).toEqual({ 1: true })
     })
   })
 

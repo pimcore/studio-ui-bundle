@@ -244,6 +244,7 @@ export const BatchEditModal = ({ columns, open, setOpen, onApply }: BatchEditMod
                 <IconButton
                   icon={ { value: 'collapse-sidebar', colorToken: 'colorPrimary' } }
                   onClick={ () => { setFieldsToAddOpen(false) } }
+                  tooltip={ { title: t('listing.fields-to-add.collapse-simple-fields') } }
                   type="text"
                 />
               </Flex>

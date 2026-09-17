@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { type RowSelectionState } from '@tanstack/react-table'
 import { type AdvancedManyToManyRelationValue } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/types/advanced-many-to-many-relation'
 
@@ -39,6 +39,24 @@ export interface UseBatchEditActionsReturn {
  */
 export const useBatchEditActions = ({ value, onChange }: UseBatchEditActionsProps): UseBatchEditActionsReturn => {
   const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
+
+  /**
+   * Selection keys are positions, so they stop meaning the same row as soon as rows are added,
+   * removed or reordered - a selected row 1 would silently become whichever row moved into that
+   * slot. The signature covers order and membership but not cell data, so a batch edit (which
+   * rewrites data in place) keeps the selection, while a delete or a reorder clears it.
+   */
+  const structureSignature = (value ?? [])
+    .map((row) => `${String(row.element?.type ?? '')}:${String(row.element?.id ?? '')}`)
+    .join('|')
+  const lastStructure = useRef(structureSignature)
+
+  useEffect(() => {
+    if (lastStructure.current !== structureSignature) {
+      lastStructure.current = structureSignature
+      setSelectedRows({})
+    }
+  }, [structureSignature])
 
   // Selection keys are already positions in the unfiltered value, so they map straight across.
   const getSelectedIndices = useCallback((): Set<number> => {

@@ -51,3 +51,18 @@ export const flattenValues = (value: unknown): string[] => {
 
   return []
 }
+
+/**
+ * Row identity for the relation grid.
+ *
+ * Positional rather than the element id: with `allowMultipleAssignments` one element occupies
+ * several rows, so element ids are not unique and selecting by id would hit every occurrence.
+ * `originalIndex` is the row's position in the unfiltered value when the caller stamps it,
+ * otherwise the current index is used.
+ *
+ * The grid's `setRowId` and its drag handler must both go through this: matching a drag id
+ * against `row.id` compares a position against an element id and never hits, which silently
+ * turns reordering into a no-op.
+ */
+export const getRelationRowId = (row: { originalIndex?: number }, index: number): string =>
+  String(row.originalIndex ?? index)

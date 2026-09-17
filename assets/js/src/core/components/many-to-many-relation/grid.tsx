@@ -19,6 +19,7 @@ import { type ColumnDef, type RowSelectionState } from '@tanstack/react-table'
 import { type DisplayManyToManyRelationValue, type ManyToManyRelationValue, type ManyToManyRelationValueItem } from './hooks/use-value'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { getRelationRowId } from './utils/helpers'
 import { Content } from '@Pimcore/components/content/content'
 import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
 import { useColumns } from './hooks/use-columns'
@@ -78,8 +79,8 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
 
     if (!isNil(active) && !isNil(over) && !isEqual(active.id, over.id)) {
       setData(prev => {
-        const oldIndex = prev.findIndex(row => row.id === active.id)
-        const newIndex = prev.findIndex(row => row.id === over.id)
+        const oldIndex = prev.findIndex((row, index) => getRelationRowId(row, index) === String(active.id))
+        const newIndex = prev.findIndex((row, index) => getRelationRowId(row, index) === String(over.id))
 
         if (oldIndex === -1 || newIndex === -1) return prev
 
@@ -114,7 +115,7 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
           onUpdateCellData={ props.onUpdateCellData }
           resizable
           selectedRows={ props.selectedRows }
-          setRowId={ (originalRow, index) => String(originalRow.originalIndex ?? index) }
+          setRowId={ getRelationRowId }
         />
         {props.hint}
       </div>
