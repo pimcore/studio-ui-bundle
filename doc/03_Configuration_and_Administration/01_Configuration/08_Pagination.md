@@ -23,9 +23,5 @@ comma separated string such as `'10,20,50,100'`.
 checked while the container is built, so a misconfiguration fails `cache:clear` instead of breaking a listing.
 
 Listings whose endpoint caps the page size lower — the user references tab at 100, for instance — hide the
-options above their own cap. Reports and the classification store listings start at a size of their own.
-
-> **Note — mind the search result window**
->
-> Elasticsearch and OpenSearch limit each request's result window (`from + size`) to
-> `index.max_result_window`, 10,000 by default. A large `max_page_size` on a deep page can exceed it.
+options above their own cap. Reports start at 50 and the classification store picker at 10, ignoring
+`default_page_size`.
