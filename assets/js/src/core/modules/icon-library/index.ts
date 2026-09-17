@@ -183,6 +183,8 @@ import draft from '@Pimcore/assets/icons/draft.inline.svg?react'
 import dragOption from '@Pimcore/assets/icons/drag-option.inline.svg?react'
 import dropTarget from '@Pimcore/assets/icons/drop-target.inline.svg?react'
 import duplicateAsset from '@Pimcore/assets/icons/duplicate-asset.inline.svg?react'
+import duplicatesConfiguration from '@Pimcore/assets/icons/duplicates-configuration.inline.svg?react'
+import embeddingConfiguration from '@Pimcore/assets/icons/embedding-configuration.inline.svg?react'
 import duplicateObject from '@Pimcore/assets/icons/duplicate-object.inline.svg?react'
 import dynamicPermission from '@Pimcore/assets/icons/dynamic-permission.inline.svg?react'
 import editAlt from '@Pimcore/assets/icons/edit-alt.inline.svg?react'
@@ -601,6 +603,14 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'alternative-element-tree',
       component: alternativeElementTree
+    })
+    iconLibrary.register({
+      name: 'embedding-configuration',
+      component: embeddingConfiguration
+    })
+    iconLibrary.register({
+      name: 'duplicates-configuration',
+      component: duplicatesConfiguration
     })
     iconLibrary.register({
       name: 'appearance-branding',
