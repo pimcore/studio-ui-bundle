@@ -49,6 +49,7 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
   const valueRef = useRef(value)
   const deletedGroupsRef = useRef(new Set<string>())
   const changedFieldsRef = useRef<Set<string>>(new Set())
+  const restoredFieldsRef = useRef<Set<string>>(new Set())
 
   const { id } = useElementContext()
   const { dataObject } = useDataObjectDraft(id)
@@ -83,11 +84,20 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
 
   const isInherited = (name: string): boolean => {
     const fullFieldNamePath = [...classificationStoreName, ...name.split('.')]
-    return !changedFieldsRef.current.has(fullFieldNamePath.join('.')) && inheritanceState?.getInheritanceState(fullFieldNamePath)?.inherited === true
+    const fieldName = fullFieldNamePath.join('.')
+
+    if (changedFieldsRef.current.has(fieldName)) {
+      return false
+    }
+
+    // A restore counts right away: restoreInheritance only schedules a state update,
+    // which the payload built below must not wait for.
+    return restoredFieldsRef.current.has(fieldName) ||
+      inheritanceState?.getInheritanceState(fullFieldNamePath)?.inherited === true
   }
 
-  const onChange = (changedValue: any): void => {
-    const filteredValue = filterInheritedFields(changedValue, isInherited)
+  const buildPayload = (rawValue: any): any => {
+    const filteredValue = filterInheritedFields(rawValue, isInherited)
     const allGroupNames = union([...keys(originalValue), ...keys(valueRef.current)])
 
     forEach(allGroupNames, key => {
@@ -102,12 +112,35 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
       filteredValue[key] = { action: DELETED }
     })
 
-    const newValue = isEmpty(filteredValue) ? [] : filteredValue
+    return isEmpty(filteredValue) ? [] : filteredValue
+  }
+
+  const emit = (newValue: any): void => {
+    props.onChange(newValue)
+    valueRef.current = newValue
+  }
+
+  const onChange = (changedValue: any): void => {
+    const newValue = buildPayload(changedValue)
 
     if (!isEqual(newValue, valueRef.current)) {
-      props.onChange(newValue)
-      valueRef.current = newValue
+      emit(newValue)
     }
+  }
+
+  /**
+   * Puts a key back to the value it was loaded with. The value itself needs no write:
+   * once the key counts as inherited again, getMergedValue reads it from the loaded
+   * data. The payload is emitted directly, because restoring writes no value and the
+   * change effect of the keyed list would therefore never report it.
+   */
+  const onFieldRestore = (field: NamePath): void => {
+    const fieldName = fieldNameToString(field)
+
+    changedFieldsRef.current.delete(fieldName)
+    restoredFieldsRef.current.add(fieldName)
+
+    emit(buildPayload(mergedValue))
   }
 
   const mergedValue = useMemo(
@@ -134,6 +167,7 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
         getAdditionalComponentProps={ getAdditionalComponentProps }
         onChange={ onChange }
         onFieldChange={ onFieldChange }
+        onFieldRestore={ onFieldRestore }
         value={ mergedValue }
       >
         <ClassificationStoreContent { ...props } />
