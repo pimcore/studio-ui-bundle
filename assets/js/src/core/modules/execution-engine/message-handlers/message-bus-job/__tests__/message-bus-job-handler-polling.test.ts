@@ -93,9 +93,18 @@ function jobRunFixture (overrides: Partial<JobRun> = {}): JobRun {
 }
 
 /** Create a handler and call onRegister(), then clear all mocks so tests start clean. */
-function makeHandler (opts: { jobRunId?: number, onJobCompletion?: (data: JobCompletionData) => Promise<void> } = {}): MessageBusJobHandler {
+function makeHandler (opts: {
+  jobRunId?: number
+  onJobCompletion?: (data: JobCompletionData) => Promise<void>
+  onAbort?: () => void | Promise<void>
+} = {}): MessageBusJobHandler {
   capturedOnStatusUpdate = undefined
-  const handler = new MessageBusJobHandler({ jobRunId: opts.jobRunId ?? 1, title: 'Test', onJobCompletion: opts.onJobCompletion })
+  const handler = new MessageBusJobHandler({
+    jobRunId: opts.jobRunId ?? 1,
+    title: 'Test',
+    onJobCompletion: opts.onJobCompletion,
+    onAbort: opts.onAbort
+  })
   handler.onRegister()
   // Clear dispatch calls from onRegister (jobReceived)
   jest.mocked(store.dispatch).mockClear()
@@ -567,5 +576,78 @@ describe('progress field absent from polling data', () => {
       return 'progress' in (payload?.changes ?? {})
     })
     expect(progressUpdates.length).toBeGreaterThan(0)
+  })
+})
+
+// ─── Abort reporting ──────────────────────────────────────────────────────────
+
+describe('onAbort', () => {
+  /** The real bus calls onUnregister() before dropping the handler; the default mock does not. */
+  function unregisterThrough (handler: MessageBusJobHandler): void {
+    mockMessageBus.unregisterHandler.mockImplementation(() => { handler.onUnregister() })
+  }
+
+  afterEach(() => {
+    mockMessageBus.unregisterHandler.mockReset()
+  })
+
+  it('is called once when the handler is unregistered without a terminal state', () => {
+    const onAbort = jest.fn()
+    const handler = makeHandler({ onAbort })
+
+    handler.onUnregister()
+    handler.onUnregister()
+
+    expect(onAbort).toHaveBeenCalledTimes(1)
+  })
+
+  it('is not called when the run reached a terminal state first', async () => {
+    const onAbort = jest.fn()
+    const handler = makeHandler({ onAbort })
+    unregisterThrough(handler)
+
+    await sendMercureUpdate(handler, { status: 'finished' })
+
+    expect(mockMessageBus.unregisterHandler).toHaveBeenCalledWith(1)
+    expect(onAbort).not.toHaveBeenCalled()
+  })
+
+  it('is not called when the handler hands itself over to a child run', async () => {
+    const onAbort = jest.fn()
+    const handler = makeHandler({ onAbort })
+    unregisterThrough(handler)
+
+    await sendMercureUpdate(handler, { status: 'finished', messages: { jobRunChildId: 2 } })
+
+    expect(mockMessageBus.unregisterHandler).toHaveBeenCalledWith(1)
+    expect(mockMessageBus.registerHandler).toHaveBeenCalledWith(handler)
+    expect(onAbort).not.toHaveBeenCalled()
+  })
+
+  it('still reports an abort after a child hand-over', async () => {
+    const onAbort = jest.fn()
+    const handler = makeHandler({ onAbort })
+    unregisterThrough(handler)
+
+    await sendMercureUpdate(handler, { status: 'finished', messages: { jobRunChildId: 2 } })
+    mockMessageBus.unregisterHandler.mockReset()
+    handler.onUnregister()
+
+    expect(onAbort).toHaveBeenCalledTimes(1)
+  })
+
+  it('contains a throwing abort handler so unregistration is not broken', () => {
+    const handler = makeHandler({
+      onAbort: () => { throw new Error('boom') }
+    })
+
+    expect(() => { handler.onUnregister() }).not.toThrow()
+  })
+
+  it('contains a rejected abort handler', async () => {
+    const handler = makeHandler({ onAbort: async () => { await Promise.reject(new Error('boom')) } })
+
+    expect(() => { handler.onUnregister() }).not.toThrow()
+    await Promise.resolve()
   })
 })
