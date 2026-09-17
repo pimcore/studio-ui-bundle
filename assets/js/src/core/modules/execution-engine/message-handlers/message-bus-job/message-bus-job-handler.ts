@@ -120,7 +120,26 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     // what the panel's Abort button does. Reported once, so a job settles exactly once either way.
     if (!this.settled && !this.handingOver) {
       this.settled = true
-      void this.onAbort?.()
+      this.reportAbort()
+    }
+  }
+
+  /**
+   * A job's abort handling must not break unregistration: `GlobalMessageBus.unregisterHandler()`
+   * deletes the handler only after `onUnregister()` returns, so a throw here would leave it
+   * registered and routing messages. Both a synchronous throw and a rejected promise are contained.
+   */
+  private reportAbort (): void {
+    if (isNil(this.onAbort)) {
+      return
+    }
+
+    try {
+      void Promise.resolve(this.onAbort()).catch((error) => {
+        console.error('Error in job abort handling: ', error)
+      })
+    } catch (error) {
+      console.error('Error in job abort handling: ', error)
     }
   }
 
