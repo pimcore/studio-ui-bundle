@@ -34,6 +34,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
   private ancestorJobRunIds: number[] | undefined
   private job: MessageBusJob | null = null
   private readonly onJobCompletion?: (data: JobCompletionData) => void | Promise<void>
+  private readonly onAbort?: () => void | Promise<void>
   private readonly onRetry?: () => void | Promise<void>
   private readonly onCustomizeButtons?: (context: JobButtonCustomizationContext) => void
 
@@ -44,6 +45,10 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
   private readonly title: string | ((job: MessageBusJob) => string)
   private polling: JobRunPolling
   private initialStatus: JobStatus = JobStatus.QUEUED
+  /** the run reported a terminal state, so unregistering is the normal end of its life */
+  private settled: boolean = false
+  /** the handler is moving itself to a child run and re-registers immediately */
+  private handingOver: boolean = false
 
   private readonly throttledProgressUpdate = throttle((progress: number | null, data: any) => {
     this.performProgressUpdate(progress, data)
@@ -62,6 +67,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     this.progressCalculator = options.progressCalculator ?? new ProgressFieldCalculator()
 
     this.onJobCompletion = options.onJobCompletion
+    this.onAbort = options.onAbort
     this.onRetry = options.onRetry
     this.onCustomizeButtons = options.onCustomizeButtons
 
@@ -109,6 +115,13 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
   public onUnregister (): void {
     this.throttledProgressUpdate.cancel()
     this.polling.destroy()
+
+    // Neither a terminal state nor a hand-over to a child run: the entry was abandoned, which is
+    // what the panel's Abort button does. Reported once, so a job settles exactly once either way.
+    if (!this.settled && !this.handingOver) {
+      this.settled = true
+      void this.onAbort?.()
+    }
   }
 
   public setInitialStatus (state: string): void {
@@ -191,6 +204,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     const newState = this.stepTracker.onChildJobTransition()
 
     const messageBus = container.get<GlobalMessageBus>(serviceIds.globalMessageBus)
+    this.handingOver = true
     messageBus.unregisterHandler(oldJobRunId) // → onUnregister() destroys this.polling
 
     // Assign child polling before registerHandler so onRegister() starts the correct instance
@@ -200,6 +214,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     })
 
     messageBus.registerHandler(this) // → onRegister() calls this.polling.start()
+    this.handingOver = false
 
     this.lastProgressValue = -1
     this.progressCalculator.onStepChange?.()
@@ -243,6 +258,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
         payload: data
       }
 
+      this.settled = true
       await this.handleJobCompletion(completionData)
 
       const messages = Array.isArray(data.messages) ? data.messages as string[] : undefined

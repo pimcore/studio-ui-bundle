@@ -42,6 +42,13 @@ export interface MessageBusJobHandlerOptions {
   stepTracker?: StepTracker
   progressCalculator?: ProgressCalculator
   onJobCompletion?: (data: JobCompletionData) => void | Promise<void>
+  /**
+   * The run was abandoned before it reported a terminal state — the jobs panel's Abort button
+   * unregisters the handler as soon as the abort request returns, so the run's own terminal
+   * message arrives with nobody listening and `onJobCompletion` never runs. Jobs with a side
+   * effect on completion use this to run it, or to undo what they set up when the job started.
+   */
+  onAbort?: () => void | Promise<void>
   onRetry?: () => void | Promise<void>
   onCustomizeButtons?: (context: JobButtonCustomizationContext) => void
 }
