@@ -18,14 +18,23 @@ import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column
 import { NOTES_FILTERABLE_FIELDS, useNotesDraftFilters } from '@Pimcore/modules/notes-and-events/filters/filters'
 import { type NotesFilterColumn } from '@Pimcore/modules/notes-and-events/filters/types'
 
+export interface UseNotesFieldFilterEditorProps {
+  /**
+   * Applies the given field filters right away, i.e. what the "Apply" button does. Injected so
+   * every host expresses applying in exactly one place, next to its "Apply" handler.
+   */
+  onCommit: (fieldFilters: FieldFilter[]) => void
+}
+
 export interface UseNotesFieldFilterEditorReturn {
   filters: FieldFiltersProps['data']
   onFilterChange: NonNullable<FieldFiltersProps['onChange']>
+  onFilterCommit: NonNullable<FieldFiltersProps['onCommit']>
   columnGroups: Array<ColumnPickerGroup<NotesFilterColumn>>
   handleColumnClick: (column: NotesFilterColumn) => void
 }
 
-export const useNotesFieldFilterEditor = (): UseNotesFieldFilterEditorReturn => {
+export const useNotesFieldFilterEditor = ({ onCommit }: UseNotesFieldFilterEditorProps): UseNotesFieldFilterEditorReturn => {
   const { t } = useTranslation()
 
   const { getType } = useDynamicTypeResolver()
@@ -62,18 +71,27 @@ export const useNotesFieldFilterEditor = (): UseNotesFieldFilterEditorReturn => 
     setFilters(initialFilters)
   }, [initialFilters])
 
+  const toFieldFilters = (data: FieldFiltersProps['data']): FieldFilter[] => data.map((filter) => ({
+    key: filter.id,
+    filterValue: filter.data,
+    type: filter.type,
+    locale: filter.locale,
+    meta: {
+      translationKey: filter.translationKey,
+      ...filter.config ?? {}
+    }
+  }))
+
   const onFilterChange: UseNotesFieldFilterEditorReturn['onFilterChange'] = (data) => {
     setFilters(data)
-    setValue('fieldFilters', data.map((filter) => ({
-      key: filter.id,
-      filterValue: filter.data,
-      type: filter.type,
-      locale: filter.locale,
-      meta: {
-        translationKey: filter.translationKey,
-        ...filter.config ?? {}
-      }
-    })))
+    setValue('fieldFilters', toFieldFilters(data))
+  }
+
+  const onFilterCommit: UseNotesFieldFilterEditorReturn['onFilterCommit'] = (data) => {
+    setFilters(data)
+    const fieldFilters = toFieldFilters(data)
+    setValue('fieldFilters', fieldFilters)
+    onCommit(fieldFilters)
   }
 
   const handleColumnClick = (column: NotesFilterColumn): void => {
@@ -128,5 +146,5 @@ export const useNotesFieldFilterEditor = (): UseNotesFieldFilterEditorReturn => 
     }]
   }, [availableColumns, t])
 
-  return { filters, onFilterChange, columnGroups, handleColumnClick }
+  return { filters, onFilterChange, onFilterCommit, columnGroups, handleColumnClick }
 }

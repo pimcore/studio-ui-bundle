@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Tooltip } from 'antd'
@@ -20,13 +20,16 @@ import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
-import { createElementSelectorAreas, createElementSelectorConfig, type IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
+import { createElementSelectorAreas, createElementSelectorConfig, isAllowedSubType, type IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
+import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { mapToLegacyElementType } from '@Pimcore/modules/element/utils/element-type'
 import { type ManyToManyRelationValueItem } from '../../hooks/use-value'
 import { type SelectedItem } from '@sdk/modules/element'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { debounce } from 'lodash'
 import { RELATION_COLUMN_FILTERS_KEY, useRelationFiltersOptional } from '../../filters/filters'
+import { CreateObjectModal } from '../create-object/create-object-modal'
+import { useCreatableRelationClasses } from '../create-object/use-creatable-relation-classes'
 
 export interface ManyToManyRelationToolbarProps extends IRelationAllowedTypesDataComponent {
   empty: () => void
@@ -39,20 +42,85 @@ export interface ManyToManyRelationToolbarProps extends IRelationAllowedTypesDat
   disabled?: boolean
   uploadMaxItems?: number
   uploadShowMaxItemsError?: boolean
+  allowToCreateNewObject?: boolean
+  /** No slots left under `maxItems`; creating another object would overflow the relation. */
+  itemLimitReached?: boolean
+  maxItems?: number | null
   extraToolbarItems?: React.ReactNode
 }
 
 export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps): React.JSX.Element => {
   const { confirm } = useFormModal()
   const { t } = useTranslation()
+  const alertModal = useAlertModal()
+
+  /**
+   * The assets already exist at this point - the server created them and decided their
+   * type. Assigning them anyway would put values into the relation that neither the
+   * element selector nor drag and drop would have accepted.
+   */
+  const handleUploadSuccess = async (assets: Asset[]): Promise<void> => {
+    const allowedAssets = assets.filter((asset) => isAllowedSubType('asset', asset.type ?? '', props))
+
+    if (allowedAssets.length < assets.length) {
+      alertModal.warn({ content: t('relations.upload.subtype-not-allowed') })
+    }
+
+    if (allowedAssets.length === 0) {
+      return
+    }
+
+    await props.addAssets(allowedAssets)
+  }
 
   const filtersStore = useRelationFiltersOptional()
+  const [createObjectOpen, setCreateObjectOpen] = useState(false)
+
+  // Gated on the class-definition flag, and on the relation explicitly accepting objects —
+  // the flag only exists on the object relation types, but the toolbar is shared by all of
+  // them, and an omitted `dataObjectsAllowed` means "not allowed" everywhere else too.
+  const relationCanCreateObjects = props.allowToCreateNewObject === true &&
+    props.disabled !== true &&
+    props.dataObjectsAllowed === true
+
+  // Skipped entirely for relations that cannot create objects, so asset/document relations
+  // do not fetch the class collection.
+  const { classes: creatableClasses, isLoading: isLoadingClasses } = useCreatableRelationClasses(
+    props.allowedClasses,
+    !relationCanCreateObjects
+  )
+
+  // Nothing creatable means no usable modal — the tree action hides itself the same way.
+  const canCreateObject = relationCanCreateObjects && (isLoadingClasses || creatableClasses.length > 0)
 
   const appliedColumnFilters = filtersStore?.values[RELATION_COLUMN_FILTERS_KEY]
   const hasAppliedFilters = Array.isArray(appliedColumnFilters) && appliedColumnFilters.length > 0
   const clearFiltersLabel = t('sidebar.clear-all-filters')
 
   const buttons: React.JSX.Element[] = []
+
+  if (canCreateObject) {
+    buttons.push(
+      <Tooltip title={ t('relations.create-object.title') }>
+        <IconButton
+          aria-label={ t('relations.create-object.title') }
+          disabled={ isLoadingClasses }
+          icon={ { value: 'new' } }
+          onClick={ () => {
+            // Creating first and rejecting afterwards would leave an orphaned object behind,
+            // so the limit is checked before the modal opens.
+            if (props.itemLimitReached === true) {
+              alertModal.warn({ content: t('items-limit-reached', { maxItems: props.maxItems ?? 0 }) })
+              return
+            }
+
+            setCreateObjectOpen(true)
+          } }
+          type="default"
+        />
+      </Tooltip>
+    )
+  }
 
   if (props.disabled !== true) {
     buttons.push(
@@ -90,7 +158,7 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
     buttons.push(
       <ModalUploadButton
         maxItems={ props.uploadMaxItems }
-        onSuccess={ props.addAssets }
+        onSuccess={ handleUploadSuccess }
         showMaxItemsError={ props.uploadShowMaxItemsError }
         targetFolderPath={ props.assetUploadPath ?? undefined }
       />
@@ -176,6 +244,15 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
         </div>
       </Flex>
 
+      { canCreateObject && (
+        <CreateObjectModal
+          classes={ creatableClasses }
+          isLoading={ isLoadingClasses }
+          onCreated={ (item) => { props.addItems([item]) } }
+          open={ createObjectOpen }
+          setOpen={ setCreateObjectOpen }
+        />
+      ) }
     </Box>
   )
 }

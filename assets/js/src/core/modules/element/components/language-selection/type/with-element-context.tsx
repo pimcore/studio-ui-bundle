@@ -14,26 +14,20 @@ import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { type PermissionBasedLanguageSelectionControlProps } from '../permission-based-language-selection-control'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { getLanguagePermission, resolveAllowedLanguages } from '@Pimcore/components/language-selection/helpers'
 
 export const WithElementContext = (props: PermissionBasedLanguageSelectionControlProps): React.JSX.Element => {
   const user = useUser()
   const elementContext = useElementContext()
   const elementDraft = useElementDraft(elementContext.id, elementContext.elementType)
-  const availableLanguages: string[] = []
+  const contentLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
 
-  if ('permissions' in elementDraft) {
-    const permissions: Record<string, any> = elementDraft.permissions as Record<string, any>
-    const viewableLanguages: string[] = permissions?.localizedView?.split(',') ?? []
-    let currentAvailableLanguages = (user.contentLanguages as string[])?.filter(lang => viewableLanguages.includes(lang)) ?? []
-
-    if ((viewableLanguages.length === 1 && viewableLanguages[0] === 'default') || (viewableLanguages.length === 0)) {
-      currentAvailableLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
-    }
-
-    availableLanguages.push(...currentAvailableLanguages)
-  } else {
-    availableLanguages.push(...(Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []))
-  }
+  // The permissions live on the loaded element, not on the draft wrapper returned by
+  // useElementDraft() - reading them from the wrapper root never matched, so the selection
+  // offered every content language regardless of what localizedView allowed.
+  const availableLanguages: string[] = [
+    ...resolveAllowedLanguages(getLanguagePermission(elementDraft.element?.permissions, 'localizedView'), contentLanguages)
+  ]
 
   if (props.customKeys !== undefined && props.customKeys.length > 0) {
     availableLanguages.unshift(...props.customKeys)

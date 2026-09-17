@@ -25,6 +25,8 @@ error.error_document_language_not_set: Il documento non ha una proprietà lingua
 error.error_inconsistent_asset_type: Qui sono consentiti solo asset dello stesso tipo.
 error.error_recycle_bin_restore: "Impossibile ripristinare l'elemento dal cestino"
 error.error_recycle_bin_restore_missing_parent: "Impossibile ripristinare l'elemento dal cestino, l'elemento padre è mancante"
+error.error_login_token_as_admin_non_admin_user: Solo gli utenti amministratori possono generare un link di accesso per un utente amministratore
+error.error_login_token_no_user_password: "Impossibile generare un link di accesso per questo utente perché non è impostata alcuna password"
 error.syntax_error: Errore di sintassi
 sidebar.selected_elements: Elementi selezionati
 sidebar.grid_config: Configurazione griglia
@@ -426,6 +428,24 @@ login-form.username: Nome utente
 login-form.password: Password
 aria.login-form-additional-logins.additional-login-provider: "Provider di accesso aggiuntivo:"
 aria.login-form-additional-logins.remember-me-checkbox: Casella ricordami
+oauth.consent.title: Autorizza l'accesso
+oauth.consent.subtitle: "{{client}} vuole accedere a Pimcore come te."
+oauth.consent.unverified: Pimcore non ha verificato questa applicazione. Continua solo se hai avviato questa procedura da un'applicazione di cui ti fidi.
+oauth.consent.redirect-to: "Dopo aver consentito l'accesso, verrai reindirizzato a {{host}}"
+oauth.consent.permissions-heading: "Questo consentirà di:"
+oauth.consent.no-scopes-warning: Questa applicazione non ha richiesto autorizzazioni specifiche, quindi non è possibile elencarne nessuna. Consenta l'accesso solo se si fida di questa applicazione per agire per Suo conto.
+oauth.consent.signed-in-as: "Accesso effettuato come {{username}}"
+oauth.consent.allow: Consenti
+oauth.consent.deny: Rifiuta
+oauth.consent.scope.mcp-read.label: Leggere i tuoi dati
+oauth.consent.scope.mcp-read.description: Leggere, elencare e cercare tra gli strumenti a tua disposizione.
+oauth.consent.scope.mcp-write.label: Modificare i tuoi dati
+oauth.consent.scope.mcp-write.description: Utilizzare strumenti che modificano i dati, sempre limitati alle tue autorizzazioni.
+oauth.consent.retry: Riprova
+oauth.consent.error.load-failed: Impossibile caricare questa richiesta di autorizzazione.
+oauth.consent.error.decision-failed: Impossibile inviare la tua decisione. Riprova.
+oauth.consent.expired.title: Questa richiesta di autorizzazione è scaduta
+oauth.consent.expired.description: Ricomincia dalla tua applicazione.
 unsaved-notice: Salvare per confermare le modifiche
 widget-manager.tab-title.close-confirmation: Sono presenti modifiche non salvate, chiudere questa scheda?
 action-applied-successfully: Azione applicata con successo
@@ -481,8 +501,8 @@ aria.version.expand: Espandi versione
 clear-all: Cancella tutto
 empty: Vuoto
 none: Nessuno
-yes: Sì
-no: No
+'yes': Sì
+'no': No
 by: Di
 field: Campo
 no-data-available: Nessun dato disponibile
@@ -545,6 +565,11 @@ listing.column-picker.search: Cerca
 listing.column-picker.no-results: Nessuna colonna trovata
 listing.column-picker.fields-to-add: Campi da aggiungere
 listing.fields-to-add.collapse-simple-fields: Comprimi campi semplici
+listing.search-mode.full-text: Ricerca a testo completo
+listing.search-mode.full-text-short: Testo completo
+listing.search-mode.default: Predefinito
+listing.search-mode.smart-placeholder: Cerca tra risultati simili o correlati
+listing.search-mode.global-unavailable: La ricerca smart non è al momento disponibile.
 listing.actions: Applica alla selezione
 listing.non-selected.actions: Applica a tutti
 listing.actions.zip-download: Download ZIP
@@ -682,6 +707,8 @@ edit: Modifica
 modify: Modifica
 component.no-content.no-content-available: Nessun contenuto disponibile
 notifications.label: Notifiche
+notifications.tab.inbox: Posta in arrivo
+notifications.tab.settings: Impostazioni
 notifications.settings.label: Impostazioni notifiche
 notifications.settings.description: Attiva "Notificami" per tutto ciò che desideri visualizzare nella campana delle notifiche, quindi aggiungi canali aggiuntivi per gli elementi più importanti.
 notifications.settings.description-popup-only: Scegli come ricevere le notifiche. Tutto ciò di cui vieni notificato viene sempre visualizzato nella campana delle notifiche.
@@ -1095,6 +1122,7 @@ asset.sidebar.web-format: Formato web
 asset.sidebar.print-format: Formato stampa
 asset.sidebar.office-format: Formato ufficio
 jobs.notification.title: Lavori in corso
+jobs.notification.tooltip: Apri lavori in corso
 jobs.notification.jobs_one: "{{count}} Azione"
 jobs.notification.jobs_other: "{{count}} Azioni"
 jobs.notification.hide-all-finished: Nascondi tutti i completati
@@ -1152,6 +1180,10 @@ export-xlsx-form.form-field.header: Intestazione
 export-xlsx-form.form-field.header.option.name: Chiave di sistema
 export-xlsx-form.form-field.header.option.title: Etichetta
 export-xlsx-form.form-field.header.option.no-header: Nessuna intestazione
+form.annotation.added: Aggiunto
+form.annotation.changed: Modificato
+form.annotation.removed: Rimosso
+form.annotation.moved: Spostato
 form.validation.required: Questo campo è obbligatorio
 form.validation.max-length: La lunghezza massima per questo campo è di {{max}} caratteri
 form.validation.min: Il valore minimo è {{min}}
@@ -1250,8 +1282,8 @@ element.toolbar.copy-className: Classe {{className}} - Copia
 element.unpublish: Annulla pubblicazione
 element.publish: Pubblica
 element.locate-in-tree: Individua nell'albero
-element.sidebar.filter.only-direct-children: solo figli diretti
-element.sidebar.filter.only-unreferenced: solo non referenziati
+element.sidebar.filter.only-direct-children: Solo figli diretti
+element.sidebar.filter.only-unreferenced: Solo non referenziati
 element.sidebar.field-filters: Filtri campo
 element.full-information: Informazioni complete
 system-information.id: ID
@@ -1302,8 +1334,16 @@ relations.subtype: Sottotipo
 relations.classname: Classe
 relations.fullpath: Percorso completo
 relations.remove-all.confirm: Eliminare tutte le relazioni?
+relations.upload.subtype-not-allowed: Gli asset caricati il cui tipo non è consentito da questa relazione non sono stati assegnati.
+relations.create-object.title: Nuovo oggetto
+relations.create-object.submit: Crea
+relations.create-object.name: Nome
+relations.create-object.parent: Elemento padre
+relations.create-object.parent.placeholder: Seleziona un elemento padre
+relations.create-object.class: Classe
 relation: relazione
 items-limit-reached: Il numero massimo di elementi ({{maxItems}}) è stato raggiunto.
+asset-upload-type-not-allowed: Il tipo dell'asset caricato non è consentito per questo campo.
 actions: Azioni
 asset: Asset
 data-object: Data Object
@@ -1327,8 +1367,14 @@ upload.assets-items-failed-message: Caricamento completato con errori.
 quantity-value.converted-units: Unità convertite
 table.empty.confirm: Cancellare tutti i dati?
 table.new-column: Nuova colonna
+table.insert-column-left: Inserisci colonna a sinistra
+table.insert-column-right: Inserisci colonna a destra
+table.column-insert-options: Opzioni di inserimento colonna
 table.delete-column: Elimina colonna
 table.new-row: Nuova riga
+table.insert-row-above: Inserisci riga sopra
+table.insert-row-below: Inserisci riga sotto
+table.row-insert-options: Opzioni di inserimento riga
 table.delete-row: Elimina riga
 table.duplicate-row: Duplica riga
 table.copy: Copia
@@ -2777,6 +2823,7 @@ quantity-values.export: Esporta
 quantity-values.import: Importa
 quantity-values.import-modal.title: Importa unità valori quantitativi
 quantity-values.search: Cerca
+quantity-values.delete-confirmation: L'eliminazione di questa unità influirà su tutti gli elementi correlati che vi fanno riferimento. Continuare?
 owner: Proprietario
 reverse-object-relation.tooltip: Gli oggetti non proprietari rappresentano le relazioni verso un altro oggetto nello stesso modo degli oggetti. La differenza è che un campo oggetto non proprietario non è il proprietario dei dati della relazione, è semplicemente una vista sui dati memorizzati in altri oggetti. Scegliere il proprietario e il nome del campo in cui i dati sono originariamente memorizzati.
 disabled-fields: Campi disabilitati
@@ -2867,3 +2914,4 @@ saved-search.update.success: Ricerca salvata aggiornata
 saved-search.delete.success: Ricerca salvata eliminata
 saved-search.shared-modified.info: Hai apportato modifiche alla configurazione originale. Poiché appartiene a qualcun altro, puoi salvarla come nuova ricerca.
 saved-search.menu-shortcut-group: Gruppo di menu
+skip-to-content: Vai al contenuto

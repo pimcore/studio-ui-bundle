@@ -25,6 +25,8 @@ error.error_document_language_not_set: Dokumentet har ingen språkegenskap angit
 error.error_inconsistent_asset_type: Kun ressurser av samme type er tillatt her.
 error.error_recycle_bin_restore: Kan ikke gjenopprette elementet fra papirkurven
 error.error_recycle_bin_restore_missing_parent: Kan ikke gjenopprette elementet fra papirkurven, overordnet element mangler
+error.error_login_token_as_admin_non_admin_user: Bare admin-brukere kan generere en påloggingslenke for en admin-bruker
+error.error_login_token_no_user_password: Det kan ikke genereres en påloggingslenke for denne brukeren fordi det ikke er angitt noe passord
 error.syntax_error: Syntaksfeil
 sidebar.selected_elements: Valgte elementer
 sidebar.grid_config: Rutenettskonfigurasjon
@@ -206,8 +208,8 @@ class-definition.general-settings.icon: Ikon
 class-definition.general-settings.parent-class: Overordnet klasse
 class-definition.general-settings.implements-interfaces: Implementerer grensesnitt
 class-definition.general-settings.listing-parent-class: Overordnet klasse for oppføring
-class-definition.general-settings.use-traits: Bruk Traits
-class-definition.general-settings.listing-use-traits: Oppføring – Bruk Traits
+class-definition.general-settings.use-traits: Bruk traits
+class-definition.general-settings.listing-use-traits: Oppføring – bruk traits
 class-definition.general-settings.link-generator-reference: Link Generator-referanse
 class-definition.general-settings.preview-generator-reference: Preview Generator-referanse
 class-definition.general-settings.allow-inherit: Tillat arv
@@ -280,7 +282,7 @@ select-option.validation.enter-id: Vennligst oppgi en ID
 select-option.validation.id-format: Navnet må begynne med stor bokstav, etterfulgt av alfanumeriske tegn
 select-option.general-settings.title: Generelt
 select-option.general-settings.enum-name: Enum-navn
-select-option.general-settings.use-traits: Bruk Traits
+select-option.general-settings.use-traits: Bruk traits
 select-option.general-settings.implements-interfaces: Implementerer grensesnitt
 select-option.general-settings.group: Gruppe
 select-option.general-settings.admin-only: Kun administrator
@@ -426,6 +428,24 @@ login-form.username: Brukernavn
 login-form.password: Passord
 aria.login-form-additional-logins.additional-login-provider: "Ekstra innloggingsleverandør:"
 aria.login-form-additional-logins.remember-me-checkbox: Husk meg-avkrysningsboks
+oauth.consent.title: Autoriser tilgang
+oauth.consent.subtitle: "{{client}} vil ha tilgang til Pimcore som deg."
+oauth.consent.unverified: Pimcore har ikke verifisert denne applikasjonen. Fortsett bare hvis du startet dette fra en applikasjon du stoler på.
+oauth.consent.redirect-to: "Etter at du godkjenner, blir du sendt til {{host}}"
+oauth.consent.permissions-heading: "Dette vil gi den mulighet til å:"
+oauth.consent.no-scopes-warning: Denne applikasjonen ba ikke om spesifikke tillatelser, så ingen kan vises. Tillat bare tilgang hvis du stoler på at den handler på dine vegne.
+oauth.consent.signed-in-as: "Logget inn som {{username}}"
+oauth.consent.allow: Tillat
+oauth.consent.deny: Avslå
+oauth.consent.scope.mcp-read.label: Lese dine data
+oauth.consent.scope.mcp-read.description: Lese, liste opp og søke blant verktøyene som er tilgjengelige for deg.
+oauth.consent.scope.mcp-write.label: Endre dine data
+oauth.consent.scope.mcp-write.description: Bruke verktøy som endrer data, fortsatt begrenset til dine egne tillatelser.
+oauth.consent.retry: Prøv igjen
+oauth.consent.error.load-failed: Denne autorisasjonsforespørselen kunne ikke lastes.
+oauth.consent.error.decision-failed: Din beslutning kunne ikke sendes inn. Prøv igjen.
+oauth.consent.expired.title: Denne autorisasjonsforespørselen har utløpt
+oauth.consent.expired.description: Vennligst start på nytt fra applikasjonen din.
 unsaved-notice: Vennligst lagre for å bekrefte endringene
 widget-manager.tab-title.close-confirmation: Du har ulagrede endringer, er du sikker på at du vil lukke denne fanen?
 action-applied-successfully: Handling utført
@@ -481,8 +501,8 @@ aria.version.expand: Utvid versjon
 clear-all: Fjern alle
 empty: Tom
 none: Ingen
-yes: Ja
-no: Nei
+'yes': Ja
+'no': Nei
 by: Av
 field: Felt
 no-data-available: Ingen data tilgjengelig
@@ -545,6 +565,11 @@ listing.column-picker.search: Søk
 listing.column-picker.no-results: Ingen kolonner funnet
 listing.column-picker.fields-to-add: Felter å legge til
 listing.fields-to-add.collapse-simple-fields: Skjul enkle felt
+listing.search-mode.full-text: Fritekstsøk
+listing.search-mode.full-text-short: Fritekst
+listing.search-mode.default: Standard
+listing.search-mode.smart-placeholder: Søk i lignende eller relaterte resultater
+listing.search-mode.global-unavailable: Smart søk er for øyeblikket ikke tilgjengelig.
 listing.actions: Bruk på utvalg
 listing.non-selected.actions: Bruk på alle
 listing.actions.zip-download: ZIP-nedlasting
@@ -682,6 +707,8 @@ edit: Rediger
 modify: Endre
 component.no-content.no-content-available: Ingen innhold tilgjengelig
 notifications.label: Varsler
+notifications.tab.inbox: Innboks
+notifications.tab.settings: Innstillinger
 notifications.settings.label: Varselinnstillinger
 notifications.settings.description: Slå på "Varsle meg" for alt du vil ha i varselklokken din, og legg deretter til flere kanaler for det som betyr mest.
 notifications.settings.description-popup-only: Velg hvordan varsler skal nå deg. Alt du varsles om, vises alltid i varselklokken din.
@@ -1095,6 +1122,7 @@ asset.sidebar.web-format: Webformat
 asset.sidebar.print-format: Utskriftsformat
 asset.sidebar.office-format: Kontorformat
 jobs.notification.title: Kjørende jobber
+jobs.notification.tooltip: Åpne kjørende jobber
 jobs.notification.jobs_one: "{{count}} handling"
 jobs.notification.jobs_other: "{{count}} handlinger"
 jobs.notification.hide-all-finished: Skjul alle fullførte
@@ -1152,6 +1180,10 @@ export-xlsx-form.form-field.header: Overskrift
 export-xlsx-form.form-field.header.option.name: Systemnøkkel
 export-xlsx-form.form-field.header.option.title: Etikett
 export-xlsx-form.form-field.header.option.no-header: Ingen overskrift
+form.annotation.added: Lagt til
+form.annotation.changed: Endret
+form.annotation.removed: Fjernet
+form.annotation.moved: Flyttet
 form.validation.required: Dette feltet er obligatorisk
 form.validation.max-length: Maksimal lengde for dette feltet er {{max}} tegn
 form.validation.min: Minimumsverdien er {{min}}
@@ -1250,8 +1282,8 @@ element.toolbar.copy-className: Klasse {{className}} – Kopier
 element.unpublish: Avpubliser
 element.publish: Publiser
 element.locate-in-tree: Finn i treet
-element.sidebar.filter.only-direct-children: kun direkte underelementer
-element.sidebar.filter.only-unreferenced: kun elementer uten referanser
+element.sidebar.filter.only-direct-children: Kun direkte underelementer
+element.sidebar.filter.only-unreferenced: Kun elementer uten referanser
 element.sidebar.field-filters: Feltfiltre
 element.full-information: Full informasjon
 system-information.id: ID
@@ -1302,8 +1334,16 @@ relations.subtype: Undertype
 relations.classname: Klasse
 relations.fullpath: Full sti
 relations.remove-all.confirm: Vil du virkelig slette alle relasjoner?
+relations.upload.subtype-not-allowed: Opplastede assets med en type som denne relasjonen ikke tillater, ble ikke tilordnet.
+relations.create-object.title: Nytt objekt
+relations.create-object.submit: Opprett
+relations.create-object.name: Navn
+relations.create-object.parent: Overordnet
+relations.create-object.parent.placeholder: Velg et overordnet element
+relations.create-object.class: Klasse
 relation: relasjon
 items-limit-reached: Maksimalt antall elementer ({{maxItems}}) er nådd.
+asset-upload-type-not-allowed: Typen til den opplastede ressursen er ikke tillatt for dette feltet.
 actions: Handlinger
 asset: Ressurs
 data-object: Data Object
@@ -1327,8 +1367,14 @@ upload.assets-items-failed-message: Opplasting fullført med feil.
 quantity-value.converted-units: Konverterte enheter
 table.empty.confirm: Er du sikker på at du vil fjerne alle data?
 table.new-column: Ny kolonne
+table.insert-column-left: Sett inn kolonne til venstre
+table.insert-column-right: Sett inn kolonne til høyre
+table.column-insert-options: Alternativer for å sette inn kolonne
 table.delete-column: Slett kolonne
 table.new-row: Ny rad
+table.insert-row-above: Sett inn rad over
+table.insert-row-below: Sett inn rad under
+table.row-insert-options: Alternativer for å sette inn rad
 table.delete-row: Slett rad
 table.duplicate-row: Dupliser rad
 table.copy: Kopier
@@ -1792,7 +1838,7 @@ image-thumbnails.transformations.scale-by-height.height-placeholder: Oppgi høyd
 image-thumbnails.transformations.scale-by-height.force-resize: Tving endring av størrelse
 
 # Trim-transformasjon
-image-thumbnails.transformations.trim.config-title: Konfigurer Trim
+image-thumbnails.transformations.trim.config-title: Konfigurer trim
 image-thumbnails.transformations.trim.trim-option: Trim-alternativ
 image-thumbnails.transformations.trim.trim-option-placeholder: Velg trim-alternativ
 image-thumbnails.transformations.trim.disabled: Deaktivert
@@ -2777,6 +2823,7 @@ quantity-values.export: Eksporter
 quantity-values.import: Importer
 quantity-values.import-modal.title: Importer mengdeverdi-enheter
 quantity-values.search: Søk
+quantity-values.delete-confirmation: Hvis du sletter denne enheten, påvirkes alle relaterte elementer som refererer til den. Er du sikker på at du vil fortsette?
 owner: Eier
 reverse-object-relation.tooltip: Ikke-eierobjekter representerer relasjoner til et annet objekt på samme måte som objekter gjør. Forskjellen er at et ikke-eierobjektfelt ikke er eier av relasjonsdataene, det er kun en visning av data lagret i andre objekter. Vennligst velg eier og feltnavn der dataene opprinnelig er lagret.
 disabled-fields: Deaktiverte felt
@@ -2867,3 +2914,4 @@ saved-search.update.success: Lagret søk oppdatert
 saved-search.delete.success: Lagret søk slettet
 saved-search.shared-modified.info: Du har gjort endringer i den opprinnelige konfigurasjonen. Siden den eies av noen andre, kan du lagre den som et nytt søk.
 saved-search.menu-shortcut-group: Menygruppe
+skip-to-content: Hopp til innhold

@@ -94,6 +94,9 @@ Register a `WebpackEntryPointProviderInterface` service in the Pimcore service c
 - [WebpackEntryPointProvider.php](https://github.com/pimcore/studio-example-bundle/blob/main/src/Webpack/WebpackEntryPointProvider.php)
 - [services.yaml](https://github.com/pimcore/studio-example-bundle/blob/5715004cf377e91adfd1fce68b054181046edbc0/config/services.yaml#L12-L14)
 
+The provider contract and the available service tags are described in
+[Registering the Frontend Build](./03_Registering_the_Frontend_Build.md).
+
 
 ### Check
 Finally, we should ensure that our plugin is working.
@@ -103,6 +106,7 @@ Quickly recompile the app by using one of the npm commands listed above. On succ
 ### Further reading
 
 - [Plugin Development Examples](./02_Plugin_Development_Examples/README.md)
+- [Shipping the Frontend Build as an Archive](./04_Shipping_the_Frontend_Build_as_an_Archive.md)
 - [Studio UI Core Development](../05_Development_Details/01_Studio_UI_Core_Development.md)
 
 

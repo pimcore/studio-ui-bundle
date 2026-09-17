@@ -25,6 +25,8 @@ error.error_document_language_not_set: El documento no tiene ninguna propiedad d
 error.error_inconsistent_asset_type: Solo se permiten assets del mismo tipo aquí.
 error.error_recycle_bin_restore: No se puede restaurar el elemento de la papelera de reciclaje
 error.error_recycle_bin_restore_missing_parent: No se puede restaurar el elemento de la papelera de reciclaje, el elemento padre no existe
+error.error_login_token_as_admin_non_admin_user: Solo los usuarios administradores pueden generar un enlace de inicio de sesión para un usuario administrador
+error.error_login_token_no_user_password: No se puede generar un enlace de inicio de sesión para este usuario porque no tiene contraseña establecida
 error.syntax_error: Error de sintaxis
 sidebar.selected_elements: Elementos seleccionados
 sidebar.grid_config: Configuración de cuadrícula
@@ -206,7 +208,7 @@ class-definition.general-settings.icon: Icono
 class-definition.general-settings.parent-class: Clase padre
 class-definition.general-settings.implements-interfaces: Implementa interfaces
 class-definition.general-settings.listing-parent-class: Clase padre de listado
-class-definition.general-settings.use-traits: Usar Traits
+class-definition.general-settings.use-traits: Usar traits
 class-definition.general-settings.listing-use-traits: Traits de listado
 class-definition.general-settings.link-generator-reference: Referencia del generador de enlaces
 class-definition.general-settings.preview-generator-reference: Referencia del generador de vista previa
@@ -280,7 +282,7 @@ select-option.validation.enter-id: Introduzca un ID
 select-option.validation.id-format: El nombre debe comenzar con una letra mayúscula, seguida de caracteres alfanuméricos
 select-option.general-settings.title: General
 select-option.general-settings.enum-name: Nombre de enumeración
-select-option.general-settings.use-traits: Usar Traits
+select-option.general-settings.use-traits: Usar traits
 select-option.general-settings.implements-interfaces: Implementa interfaces
 select-option.general-settings.group: Grupo
 select-option.general-settings.admin-only: Solo administrador
@@ -426,6 +428,24 @@ login-form.username: Nombre de usuario
 login-form.password: Contraseña
 aria.login-form-additional-logins.additional-login-provider: "Proveedor de inicio de sesión adicional:"
 aria.login-form-additional-logins.remember-me-checkbox: Casilla de recordarme
+oauth.consent.title: Autorizar acceso
+oauth.consent.subtitle: "{{client}} desea acceder a Pimcore en su nombre."
+oauth.consent.unverified: Pimcore no ha verificado esta aplicación. Continúe solo si inició esto desde una aplicación en la que confía.
+oauth.consent.redirect-to: "Después de permitirlo, será redirigido a {{host}}"
+oauth.consent.permissions-heading: "Esto le permitirá:"
+oauth.consent.no-scopes-warning: Esta aplicación no solicitó permisos específicos, por lo que no se puede mostrar ninguno. Permita el acceso solo si confía en que actúe en su nombre.
+oauth.consent.signed-in-as: "Sesión iniciada como {{username}}"
+oauth.consent.allow: Permitir
+oauth.consent.deny: Denegar
+oauth.consent.scope.mcp-read.label: Leer sus datos
+oauth.consent.scope.mcp-read.description: Leer, listar y buscar en las herramientas disponibles para usted.
+oauth.consent.scope.mcp-write.label: Modificar sus datos
+oauth.consent.scope.mcp-write.description: Usar herramientas que modifican datos, siempre limitadas a sus propios permisos.
+oauth.consent.retry: Intentar de nuevo
+oauth.consent.error.load-failed: No se pudo cargar esta solicitud de autorización.
+oauth.consent.error.decision-failed: No se pudo enviar su decisión. Vuelva a intentarlo.
+oauth.consent.expired.title: Esta solicitud de autorización ha caducado
+oauth.consent.expired.description: Vuelva a empezar desde su aplicación.
 unsaved-notice: Guarde para confirmar sus cambios
 widget-manager.tab-title.close-confirmation: Tiene cambios sin guardar, ¿está seguro de que desea cerrar esta pestaña?
 action-applied-successfully: Acción aplicada con éxito
@@ -481,8 +501,8 @@ aria.version.expand: Expandir versión
 clear-all: Limpiar todo
 empty: Vacío
 none: Ninguno
-yes: Sí
-no: No
+'yes': Sí
+'no': No
 by: Por
 field: Campo
 no-data-available: No hay datos disponibles
@@ -545,6 +565,11 @@ listing.column-picker.search: Buscar
 listing.column-picker.no-results: No se encontraron columnas
 listing.column-picker.fields-to-add: Campos para añadir
 listing.fields-to-add.collapse-simple-fields: Contraer campos simples
+listing.search-mode.full-text: Búsqueda de texto completo
+listing.search-mode.full-text-short: Texto completo
+listing.search-mode.default: Predeterminado
+listing.search-mode.smart-placeholder: Buscar en resultados similares o relacionados
+listing.search-mode.global-unavailable: La búsqueda inteligente no está disponible en este momento.
 listing.actions: Aplicar a la selección
 listing.non-selected.actions: Aplicar a todos
 listing.actions.zip-download: Descarga ZIP
@@ -682,6 +707,8 @@ edit: Editar
 modify: Modificar
 component.no-content.no-content-available: No hay contenido disponible
 notifications.label: Notificaciones
+notifications.tab.inbox: Bandeja de entrada
+notifications.tab.settings: Configuración
 notifications.settings.label: Configuración de notificaciones
 notifications.settings.description: Active "Notificarme" para todo lo que desee que aparezca en su campana de notificaciones y, después, añada canales adicionales para lo que más le importe.
 notifications.settings.description-popup-only: Elija cómo desea recibir las notificaciones. Todo aquello de lo que se le notifica siempre aparece en su campana de notificaciones.
@@ -1095,6 +1122,7 @@ asset.sidebar.web-format: Formato web
 asset.sidebar.print-format: Formato de impresión
 asset.sidebar.office-format: Formato de oficina
 jobs.notification.title: Trabajos en ejecución
+jobs.notification.tooltip: Abrir trabajos en ejecución
 jobs.notification.jobs_one: "{{count}} Acción"
 jobs.notification.jobs_other: "{{count}} Acciones"
 jobs.notification.hide-all-finished: Ocultar todos los completados
@@ -1152,6 +1180,10 @@ export-xlsx-form.form-field.header: Encabezado
 export-xlsx-form.form-field.header.option.name: Clave del sistema
 export-xlsx-form.form-field.header.option.title: Etiqueta
 export-xlsx-form.form-field.header.option.no-header: Sin encabezado
+form.annotation.added: Añadido
+form.annotation.changed: Modificado
+form.annotation.removed: Eliminado
+form.annotation.moved: Movido
 form.validation.required: Este campo es obligatorio
 form.validation.max-length: La longitud máxima para este campo es de {{max}} caracteres
 form.validation.min: El valor mínimo es {{min}}
@@ -1250,8 +1282,8 @@ element.toolbar.copy-className: Clase {{className}} - Copiar
 element.unpublish: Despublicar
 element.publish: Publicar
 element.locate-in-tree: Localizar en el árbol
-element.sidebar.filter.only-direct-children: solo hijos directos
-element.sidebar.filter.only-unreferenced: solo sin referencias
+element.sidebar.filter.only-direct-children: Solo hijos directos
+element.sidebar.filter.only-unreferenced: Solo sin referencias
 element.sidebar.field-filters: Filtros de campo
 element.full-information: Información completa
 system-information.id: ID
@@ -1302,8 +1334,16 @@ relations.subtype: Subtipo
 relations.classname: Clase
 relations.fullpath: Ruta completa
 relations.remove-all.confirm: ¿Realmente desea eliminar todas las relaciones?
+relations.upload.subtype-not-allowed: Los assets subidos cuyo tipo no está permitido en esta relación no se asignaron.
+relations.create-object.title: Nuevo objeto
+relations.create-object.submit: Crear
+relations.create-object.name: Nombre
+relations.create-object.parent: Padre
+relations.create-object.parent.placeholder: Seleccionar un padre
+relations.create-object.class: Clase
 relation: relación
 items-limit-reached: Se ha alcanzado el número máximo de elementos ({{maxItems}}).
+asset-upload-type-not-allowed: El tipo del asset subido no está permitido para este campo.
 actions: Acciones
 asset: Asset
 data-object: Data Object
@@ -1327,8 +1367,14 @@ upload.assets-items-failed-message: La subida finalizó con errores.
 quantity-value.converted-units: Unidades convertidas
 table.empty.confirm: ¿Está seguro de que desea borrar todos los datos?
 table.new-column: Nueva columna
+table.insert-column-left: Insertar columna a la izquierda
+table.insert-column-right: Insertar columna a la derecha
+table.column-insert-options: Opciones de inserción de columna
 table.delete-column: Eliminar columna
 table.new-row: Nueva fila
+table.insert-row-above: Insertar fila encima
+table.insert-row-below: Insertar fila debajo
+table.row-insert-options: Opciones de inserción de fila
 table.delete-row: Eliminar fila
 table.duplicate-row: Duplicar fila
 table.copy: Copiar
@@ -2518,7 +2564,7 @@ no-languages-found: No se encontraron idiomas
 pretty-url: Pretty URL / URL Slug
 pretty-url-override-notice: (sobrescribe la ruta de la estructura del árbol)
 content-main-document: Documento Content-Main
-content-main-document.apply: Aplicar documento Content-Main
+content-main-document.apply: Aplicar documento content-main
 content-main-document.apply-warning-title: ¿Está seguro?
 content-main-document.apply-warning-message: Se perderá todo el contenido
 never: nunca
@@ -2777,6 +2823,7 @@ quantity-values.export: Exportar
 quantity-values.import: Importar
 quantity-values.import-modal.title: Importar unidades de valor de cantidad
 quantity-values.search: Buscar
+quantity-values.delete-confirmation: Eliminar esta unidad afectará a todos los elementos relacionados que hacen referencia a ella. ¿Está seguro de que desea continuar?
 owner: Propietario
 reverse-object-relation.tooltip: Los objetos no propietarios representan relaciones con otro objeto de la misma manera que los objetos. La diferencia es que un campo de objeto no propietario no es el dueño de los datos de la relación, es simplemente una vista de los datos almacenados en otros objetos. Seleccione el propietario y el nombre del campo donde se almacenan originalmente los datos.
 disabled-fields: Campos deshabilitados
@@ -2867,3 +2914,4 @@ saved-search.update.success: Búsqueda guardada actualizada
 saved-search.delete.success: Búsqueda guardada eliminada
 saved-search.shared-modified.info: Has realizado modificaciones en la configuración original. Como pertenece a otra persona, puedes guardarla como una nueva búsqueda.
 saved-search.menu-shortcut-group: Grupo de menú
+skip-to-content: Saltar al contenido

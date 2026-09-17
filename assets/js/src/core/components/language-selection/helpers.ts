@@ -8,6 +8,83 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { type DataObjectPermissions } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
+
+// The key the backend uses for the language independent ("default") value of a localized field.
+export const LANGUAGE_INDEPENDENT_KEY = 'default'
+
+/**
+ * Reads a workspace language permission off an element's permissions.
+ *
+ * Only data objects carry these, and ElementPermissions is a union over asset, data object and
+ * document permissions - so the key has to be narrowed rather than asserted. Returning undefined
+ * for the other element types is the right answer: no language restriction applies to them, and
+ * both consumers below read undefined as "unrestricted".
+ */
+export const getLanguagePermission = (
+  permissions: ElementPermissions | undefined,
+  type: 'localizedView' | 'localizedEdit'
+): string | null | undefined => (permissions as Partial<DataObjectPermissions> | undefined)?.[type]
+
+/**
+ * Tells whether the language independent ("default") value of a localized field may be used for a
+ * given workspace language permission (`localizedView` / `localizedEdit`). It is available unless
+ * the configured language list explicitly leaves it out - an unset or empty permission means no
+ * restriction at all.
+ */
+export const isLanguageIndependentValueAllowed = (languagePermission?: string | null): boolean => {
+  const languages = languagePermission?.split(',').filter((language) => language !== '') ?? []
+
+  return languages.length === 0 || languages.includes(LANGUAGE_INDEPENDENT_KEY)
+}
+
+/**
+ * The concrete languages named by a workspace language permission, ignoring the language
+ * independent ("default") key - that one is not a content language and is handled by
+ * {@link isLanguageIndependentValueAllowed}.
+ */
+const concreteLanguagesOf = (languagePermission?: string | null): string[] =>
+  languagePermission?.split(',').filter(
+    (language) => language !== '' && language !== LANGUAGE_INDEPENDENT_KEY
+  ) ?? []
+
+/**
+ * Narrows the user's content languages to those a workspace language permission
+ * (`localizedView` / `localizedEdit`) allows.
+ *
+ * A permission that is unset, empty, or names only the language independent value is no
+ * restriction on concrete languages, so every content language stays available.
+ */
+export const resolveAllowedLanguages = (
+  languagePermission: string | null | undefined,
+  contentLanguages: string[]
+): string[] => {
+  const allowed = concreteLanguagesOf(languagePermission)
+
+  if (allowed.length === 0) {
+    return contentLanguages
+  }
+
+  return contentLanguages.filter((language) => allowed.includes(language))
+}
+
+/**
+ * Tells whether a single language may be edited under a workspace language permission.
+ *
+ * Kept separate from {@link resolveAllowedLanguages} because an unrestricted permission must
+ * leave the field editable regardless of whether the language is one of the user's content
+ * languages - the field is already open, and the permission is not what closes it.
+ */
+export const isLanguageEditable = (
+  languagePermission: string | null | undefined,
+  language: string
+): boolean => {
+  const editable = concreteLanguagesOf(languagePermission)
+
+  return editable.length === 0 || editable.includes(language)
+}
+
 export const transformLanguage = (lang: string): string | null => lang === '-' ? null : lang
 
 // Transforms a locale of type "en-US" into "en_US", and "en" into "EN"
