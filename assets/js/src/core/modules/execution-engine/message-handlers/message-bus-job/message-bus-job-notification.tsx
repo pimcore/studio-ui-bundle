@@ -28,6 +28,7 @@ export interface JobButtonCustomizationContext {
   addFinishedWithErrorsButton: (action: ButtonAction, position?: 'start' | 'end') => void
   addFailureButton: (action: ButtonAction, position?: 'start' | 'end') => void
   showWarning: (titleKey: string, content: string) => void
+  hideNotification: () => Promise<void>
 }
 
 export interface MessageBusJobProps extends MessageBusJob {
@@ -56,18 +57,20 @@ export const MessageBusJobNotification = (props: MessageBusJobProps): React.JSX.
     removeJob(props.id)
   }
 
+  const hideNotification = async (): Promise<void> => {
+    setIsHiding(true)
+    const idsToHide = [props.jobRunId, ...(props.ancestorJobRunIds ?? [])]
+    try {
+      await hideJobRuns({ body: { jobRunIds: idsToHide } })
+    } finally {
+      removeJob(props.id)
+    }
+  }
+
   const hideButtonAction: ButtonAction = {
     label: t('jobs.job.button-hide'),
     loading: isHiding,
-    handler: async () => {
-      setIsHiding(true)
-      const idsToHide = [props.jobRunId, ...(props.ancestorJobRunIds ?? [])]
-      try {
-        await hideJobRuns({ body: { jobRunIds: idsToHide } })
-      } finally {
-        removeJob(props.id)
-      }
-    }
+    handler: hideNotification
   }
 
   const successButtonActions: ButtonAction[] = [hideButtonAction]
@@ -88,7 +91,8 @@ export const MessageBusJobNotification = (props: MessageBusJobProps): React.JSX.
       addSuccessButton: (action, position) => { addButton(successButtonActions, action, position) },
       addFinishedWithErrorsButton: (action, position) => { addButton(finishedWithErrorsButtonActions, action, position) },
       addFailureButton: (action, position) => { addButton(failureButtonActions, action, position) },
-      showWarning: (titleKey, content) => { warn({ title: titleKey, content }) }
+      showWarning: (titleKey, content) => { warn({ title: titleKey, content }) },
+      hideNotification
     }
     props.onCustomizeButtons(context)
   }
