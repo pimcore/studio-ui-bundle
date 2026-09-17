@@ -171,7 +171,7 @@ class Configuration implements ConfigurationInterface
                         'Keep it well below the search index result window (index.max_result_window).'
                     )
                     ->min(1)
-                    ->defaultValue(1000)
+                    ->defaultValue(200)
                 ->end()
             ->end()
             ->validate()

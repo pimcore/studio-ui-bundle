@@ -36,7 +36,7 @@ const DEFAULT_PAGE_SIZE_OPTIONS = [10, 20, 50, 100]
 const DEFAULT_PAGE_SIZE = 20
 
 /** Kept in sync with pimcore_studio_ui.pagination.max_page_size. */
-const DEFAULT_MAX_PAGE_SIZE = 1000
+const DEFAULT_MAX_PAGE_SIZE = 200
 
 const appElement = getParentDocument().querySelector('#app')
 export const currentDomain = window.location.origin
