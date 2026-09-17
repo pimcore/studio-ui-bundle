@@ -25,6 +25,8 @@ error.error_document_language_not_set: Dokument nie ma ustawienia języka
 error.error_inconsistent_asset_type: Dozwolone są tutaj tylko assety tego samego typu.
 error.error_recycle_bin_restore: Nie można przywrócić elementu z kosza
 error.error_recycle_bin_restore_missing_parent: Nie można przywrócić elementu z kosza, brak elementu nadrzędnego
+error.error_login_token_as_admin_non_admin_user: Tylko administratorzy mogą wygenerować link logowania dla użytkownika administracyjnego
+error.error_login_token_no_user_password: Nie można wygenerować linku logowania dla tego użytkownika, ponieważ nie ustawiono hasła
 error.syntax_error: Błąd składni
 sidebar.selected_elements: Wybrane elementy
 sidebar.grid_config: Ustawienia siatki
@@ -563,6 +565,11 @@ listing.column-picker.search: Szukaj
 listing.column-picker.no-results: Nie znaleziono kolumn
 listing.column-picker.fields-to-add: Pola do dodania
 listing.fields-to-add.collapse-simple-fields: Zwiń proste pola
+listing.search-mode.full-text: Wyszukiwanie pełnotekstowe
+listing.search-mode.full-text-short: Pełny tekst
+listing.search-mode.default: Domyślne
+listing.search-mode.smart-placeholder: Szukaj wśród podobnych lub powiązanych wyników
+listing.search-mode.global-unavailable: Inteligentne wyszukiwanie jest obecnie niedostępne.
 listing.actions: Zastosuj do wyboru
 listing.non-selected.actions: Zastosuj do wszystkich
 listing.actions.zip-download: Pobierz ZIP
@@ -700,6 +707,8 @@ edit: Edytuj
 modify: Zmień
 component.no-content.no-content-available: Brak dostępnej treści
 notifications.label: Powiadomienia
+notifications.tab.inbox: Skrzynka odbiorcza
+notifications.tab.settings: Ustawienia
 notifications.settings.label: Ustawienia powiadomień
 notifications.settings.description: Włącz Powiadamiaj mnie dla wszystkiego, co chcesz widzieć w dzwonku powiadomień, a następnie dodaj dodatkowe kanały dla najważniejszych powiadomień.
 notifications.settings.description-popup-only: Wybierz, jak powiadomienia mają do Ciebie docierać. Wszystko, o czym otrzymujesz powiadomienia, zawsze pojawia się w dzwonku powiadomień.
@@ -939,7 +948,7 @@ field-definition.table: Tabela
 field-definition.structured-table: Tabela strukturalna
 field-definition.fieldcollections: Field Collections
 field-definition.objectbricks: Object Bricks
-field-definition.classificationstore: Magazyn klasyfikacji
+field-definition.classificationstore: Classification Store
 field-definition.localizedfields: Pola zlokalizowane
 field-definition.firstname: Imię
 field-definition.lastname: Nazwisko
@@ -1113,6 +1122,7 @@ asset.sidebar.web-format: Format webowy
 asset.sidebar.print-format: Format do druku
 asset.sidebar.office-format: Format biurowy
 jobs.notification.title: Trwające zadania
+jobs.notification.tooltip: Otwórz trwające zadania
 jobs.notification.jobs_one: "{{count}} akcja"
 jobs.notification.jobs_other: "{{count}} akcji"
 jobs.notification.hide-all-finished: Ukryj wszystkie zakończone
@@ -1170,6 +1180,10 @@ export-xlsx-form.form-field.header: Nagłówek
 export-xlsx-form.form-field.header.option.name: Klucz systemowy
 export-xlsx-form.form-field.header.option.title: Etykieta
 export-xlsx-form.form-field.header.option.no-header: Bez nagłówka
+form.annotation.added: Dodano
+form.annotation.changed: Zmieniono
+form.annotation.removed: Usunięto
+form.annotation.moved: Przeniesiono
 form.validation.required: To pole jest obowiązkowe
 form.validation.max-length: "Maksymalna długość tego pola to {{max}} znaków"
 form.validation.min: "Wartość minimalna to {{min}}"
@@ -1311,7 +1325,7 @@ search-address: Szukaj adresu
 search: Szukaj
 geocode.address-not-found: Nie znaleziono wprowadzonego adresu
 geocode.possible-causes: Możliwe przyczyny
-geocode.postal-code-format-error: Format kodu pocztowego, np. użyj "5020 Salzburg, Söllheimer Straße 16" zamiast "A-5020 Salzburg, Söllheimer Straße 16"
+geocode.postal-code-format-error: 'Format kodu pocztowego, np. użyj "5020 Salzburg, Söllheimer Straße 16" zamiast "A-5020 Salzburg, Söllheimer Straße 16"'
 delete-confirmation-advanced: "Czy na pewno chcesz usunąć {{type}} '{{value}}'?"
 relations.id: ID
 relations.reference: Odwołanie
@@ -1321,6 +1335,12 @@ relations.classname: Klasa
 relations.fullpath: Pełna ścieżka
 relations.remove-all.confirm: Czy na pewno chcesz usunąć wszystkie relacje?
 relations.upload.subtype-not-allowed: Przesłane assety, których typ nie jest dozwolony w tej relacji, nie zostały przypisane.
+relations.create-object.title: Nowy obiekt
+relations.create-object.submit: Utwórz
+relations.create-object.name: Nazwa
+relations.create-object.parent: Nadrzędny
+relations.create-object.parent.placeholder: Wybierz element nadrzędny
+relations.create-object.class: Klasa
 relation: relacja
 items-limit-reached: "Osiągnięto maksymalną liczbę elementów ({{maxItems}})."
 asset-upload-type-not-allowed: Typ przesłanego assetu nie jest dozwolony dla tego pola.
@@ -1347,8 +1367,14 @@ upload.assets-items-failed-message: Przesyłanie zakończone z błędami.
 quantity-value.converted-units: Przeliczone jednostki
 table.empty.confirm: Czy na pewno chcesz wyczyścić wszystkie dane?
 table.new-column: Nowa kolumna
+table.insert-column-left: Wstaw kolumnę po lewej
+table.insert-column-right: Wstaw kolumnę po prawej
+table.column-insert-options: Opcje wstawiania kolumn
 table.delete-column: Usuń kolumnę
 table.new-row: Nowy wiersz
+table.insert-row-above: Wstaw wiersz powyżej
+table.insert-row-below: Wstaw wiersz poniżej
+table.row-insert-options: Opcje wstawiania wierszy
 table.delete-row: Usuń wiersz
 table.duplicate-row: Duplikuj wiersz
 table.copy: Kopiuj
@@ -2015,8 +2041,8 @@ classification-store.column.id: ID
 classification-store.column.group: Grupa
 classification-store.column.name: Nazwa
 classification-store.column.description: Opis
-navigation.classification-store: Magazyn klasyfikacji
-widget.classification-store-config: Magazyn klasyfikacji
+navigation.classification-store: Classification Store
+widget.classification-store-config: Classification Store
 classification-store.tabs.collections: Kolekcje
 classification-store.tabs.groups: Grupy
 classification-store.tabs.keys: Klucze
@@ -2400,7 +2426,7 @@ perspective-editor.form.main-nav-permission.dataManagement.tagConfiguration: Kon
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_bulkExport: Definicja modelu danych > Eksport zbiorczy
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_bulkImport: Definicja modelu danych > Import zbiorczy
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_classes: Definicja modelu danych > Klasy
-perspective-editor.form.main-nav-permission.dataManagement.dataModel_classificationStore: Definicja modelu danych > Magazyn klasyfikacji
+perspective-editor.form.main-nav-permission.dataManagement.dataModel_classificationStore: Definicja modelu danych > Classification Store
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_fieldCollections: Definicja modelu danych > Field Collections
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_hidden: Ukryj menu definicji modelu danych
 perspective-editor.form.main-nav-permission.dataManagement.dataModel_objectBricks: Definicja modelu danych > Object Bricks
@@ -2559,7 +2585,7 @@ email-settings.to: Do
 email-settings.cc: CC
 email-settings.bcc: BCC
 email-settings.multiple-recipients-hint: "Wielu odbiorców można podać, oddzielając adresy e-mail średnikiem. Przykład: odbiorca@pimcore.org; odbiorca2@pimcore.org"
-email-settings.from-syntax-hint: "Możesz użyć składni: Moje imię <moje-imie@przyklad.com>"
+email-settings.from-syntax-hint: "Możesz użyć składni: Moje imię <moje-imie@example.com>"
 add-document-form.label.title: Tytuł
 add-document-form.label.navigation: Nawigacja
 add-document-form.label.key: Klucz
@@ -2580,7 +2606,7 @@ user-management.permissions.qr_codes: Kody QR
 user-management.permissions.plugins: Wtyczki
 user-management.permissions.notes_events: Notatki i zdarzenia
 user-management.permissions.clear_cache: Wyczyść pamięć podręczną
-user-management.permissions.classificationstore: Magazyn klasyfikacji
+user-management.permissions.classificationstore: Classification Store
 user-management.permissions.classes: Klasy
 user-management.permissions.workflow_details: Szczegóły workflow
 user-management.permissions.users: Użytkownicy
@@ -2659,7 +2685,7 @@ forgot-password-form.reset-password: Resetuj hasło
 forgot-password-form.success-message: Tymczasowy link logowania został wysłany na Twój adres e-mail. Sprawdź swoją skrzynkę odbiorczą.
 forgot-password-form.back: Powrót do logowania
 subscription-details.community-edition: Więcej informacji o edycjach Pimcore
-config_not_writeable: Brak możliwości zapisu; może to mieć wiele przyczyn. Szczegóły zob. dokumentacja.
+config_not_writeable: Brak możliwości zapisu; może to mieć wiele przyczyn. Szczegóły znajdziesz w dokumentacji.
 navigation.about: O programie
 about.title: O programie
 about.platform-version: "Wersja platformy: {{version}}"
@@ -2797,6 +2823,7 @@ quantity-values.export: Eksportuj
 quantity-values.import: Importuj
 quantity-values.import-modal.title: Importuj jednostki wartości ilościowej
 quantity-values.search: Szukaj
+quantity-values.delete-confirmation: Usunięcie tej jednostki wpłynie na wszystkie powiązane elementy, które się do niej odwołują. Czy na pewno chcesz kontynuować?
 owner: Właściciel
 reverse-object-relation.tooltip: Obiekty niebędące właścicielem reprezentują relacje z innym obiektem w taki sam sposób jak obiekty będące właścicielem. Różnica polega na tym, że pole obiektu niebędącego właścicielem nie jest właścicielem danych relacji, a jedynie reprezentacją danych przechowywanych w innych obiektach. Wybierz właściciela i nazwę pola, w którym dane zostały pierwotnie zapisane.
 disabled-fields: Wyłączone pola
@@ -2887,3 +2914,4 @@ saved-search.update.success: Zapisane wyszukiwanie zaktualizowane
 saved-search.delete.success: Zapisane wyszukiwanie usunięte
 saved-search.shared-modified.info: Wprowadzono zmiany w oryginalnej konfiguracji. Ponieważ jej właścicielem jest ktoś inny, możesz zapisać ją jako nowe wyszukiwanie.
 saved-search.menu-shortcut-group: Grupa menu
+skip-to-content: Przejdź do treści
