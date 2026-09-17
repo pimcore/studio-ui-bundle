@@ -56,7 +56,7 @@ export const useBatchEditActions = ({ value, onChange }: UseBatchEditActionsProp
   const rowSignature = (row: AdvancedManyToManyRelationValue[number]): string => {
     const data = row.data ?? {}
     const cells = Object.keys(data)
-      .sort()
+      .sort((a, b) => a.localeCompare(b))
       .map((key) => `${key}=${String(data[key])}`)
       .join(',')
 
