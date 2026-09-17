@@ -11,7 +11,6 @@
 import React from 'react'
 import { type InputRef, type ModalFuncProps } from 'antd'
 import { Alert } from '@Pimcore/components/alert/alert'
-import { Icon } from '@Pimcore/components/icon/icon'
 import { uuid as pimcoreUUid } from '@Pimcore/utils/uuid'
 import { type Rule } from 'antd/lib/form'
 import i18n from 'i18next'
@@ -30,6 +29,7 @@ import type { InputFormModalProps, TextareaFormModalProps, ConfirmFormModalProps
 export type { ConfigUpdate, InputFormModalProps, TextareaFormModalProps, ConfirmFormModalProps, UseFormModalHookResponse } from './form-modal-types'
 
 let form: formInstanceType | null = null
+
 function getFormModalButtonProps (props: ModalFuncProps): Pick<ModalFuncProps, 'okButtonProps' | 'cancelButtonProps'> {
   return {
     okButtonProps: {
@@ -45,8 +45,10 @@ function getFormModalButtonProps (props: ModalFuncProps): Pick<ModalFuncProps, '
 
 export function useFormModal (): UseFormModalHookResponse {
   const { modal, localModal } = useStudioModal()
+
   const [tmpForm] = Form.useForm()
   form = tmpForm
+
   const dontAskAgainRef = React.useRef<boolean>(false)
 
   return React.useMemo<UseFormModalHookResponse>(
@@ -209,12 +211,6 @@ export function withConfirm (props: ConfirmFormModalProps, dontAskAgainRef: Reac
 
   const baseModalConfig = {
     ...modalProps,
-    icon: props.icon ?? (
-      <Icon
-        options={ { width: 22, height: 22 } }
-        value='alert'
-      />
-    ),
     type: props.type ?? 'confirm',
     okText: props.okText ?? i18n.t('yes'),
     cancelText: props.cancelText ?? i18n.t('no'),
