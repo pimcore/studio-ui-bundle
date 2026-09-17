@@ -6,8 +6,8 @@ title: Registering the Frontend Build
 
 Studio loads a bundle's compiled frontend through the `entrypoints.json` manifest written by the build. The bundle
 registers that manifest with a `WebpackEntryPointProviderInterface` service. This page describes the provider contract
-and the service tags. Getting the compiled files onto a target installation is a separate concern, see
-[Shipping the Frontend Build as an Archive](./04_Shipping_the_Frontend_Build_as_an_Archive.md).
+and the service tags. If you prefer to keep the build in git as one zip archive instead of committing every generated
+file, see [Shipping the Frontend Build as an Archive](./04_Shipping_the_Frontend_Build_as_an_Archive.md).
 
 ## The `entrypoints.json` manifest
 
