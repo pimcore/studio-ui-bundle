@@ -26,7 +26,7 @@ final class ConfigurationTest extends Unit
 
         $this->assertSame([10, 20, 50, 100], $config['pagination']['page_size_options']);
         $this->assertSame(20, $config['pagination']['default_page_size']);
-        $this->assertSame(1000, $config['pagination']['max_page_size']);
+        $this->assertSame(200, $config['pagination']['max_page_size']);
     }
 
     public function testPageSizeOptionsAcceptAList(): void
@@ -125,8 +125,8 @@ final class ConfigurationTest extends Unit
         $this->expectExceptionMessage('max_page_size');
 
         $this->process(['pagination' => [
-            'page_size_options' => [10, 20, 5000],
-            'max_page_size' => 1000,
+            'page_size_options' => [10, 20, 500],
+            'max_page_size' => 200,
         ]]);
     }
 

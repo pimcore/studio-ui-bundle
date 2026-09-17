@@ -13,7 +13,7 @@ pimcore_studio_ui:
     pagination:
         page_size_options: [10, 20, 50, 100]
         default_page_size: 20
-        max_page_size: 1000
+        max_page_size: 200
 ```
 
 `max_page_size` caps what a user may enter; it is not offered as an option. `page_size_options` also accepts a
