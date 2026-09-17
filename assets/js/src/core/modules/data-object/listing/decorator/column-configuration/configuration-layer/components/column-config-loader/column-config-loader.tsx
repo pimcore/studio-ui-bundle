@@ -19,6 +19,8 @@ import { type SelectedColumnsContextProps } from '@Pimcore/modules/element/listi
 import { useSelectedGridConfigId } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/selected-grid-config-id/use-selected-grid-config-id'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/use-grid-config'
+import { useAppliedFiltersOptional } from '@Pimcore/modules/element/listing/decorators/general-filters/element-filters'
+import { restoreFieldFilters } from './restore-field-filters'
 
 export interface ColumnConfigLoaderProps {
   Component: AbstractDecoratorProps['ConfigurationComponent']
@@ -35,6 +37,7 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
   const { selectedColumns, setSelectedColumns } = useSelectedColumns()
   const { setAvailableColumns } = useAvailableColumns()
   const { setGridConfig } = useGridConfig()
+  const appliedFiltersStore = useAppliedFiltersOptional()
 
   useEffect(() => {
     if (data === undefined || initialConfigurationData === undefined) {
@@ -76,6 +79,13 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
     setSelectedColumns(selectedColumns)
     setAvailableColumns(availableColumns)
     setGridConfig(initialConfigurationData)
+
+    // saveFilter: false means this configuration never managed filter state - leave the
+    // user's currently-applied filters alone rather than clearing them to [].
+    if (initialConfigurationData.saveFilter) {
+      appliedFiltersStore?.setValue('fieldFilters', restoreFieldFilters(initialConfigurationData.filter, availableColumns))
+    }
+
     setDataLoadingState('config-changed')
   }, [data, initialConfigurationData])
 

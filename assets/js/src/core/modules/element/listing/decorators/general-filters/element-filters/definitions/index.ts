@@ -14,7 +14,7 @@ import { searchTermFilterDescriptor } from './search-term-filter'
 import { directChildrenFilterDescriptor } from './direct-children-filter'
 import { unreferencedFilterDescriptor } from './unreferenced-filter'
 import { pqlFilterDescriptor } from './pql-filter'
-import { fieldFiltersFilterDescriptor } from './field-filters-filter'
+import { fieldFiltersFilterDescriptor, prepareFieldFilters } from './field-filters-filter'
 
 export const elementFilterDefinitions: ReadonlyArray<
   AnyFilterDescriptor<ElementFilterQueryPart, ElementFilterContext>
@@ -31,5 +31,6 @@ export {
   directChildrenFilterDescriptor,
   unreferencedFilterDescriptor,
   pqlFilterDescriptor,
-  fieldFiltersFilterDescriptor
+  fieldFiltersFilterDescriptor,
+  prepareFieldFilters
 }
