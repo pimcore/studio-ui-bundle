@@ -154,12 +154,35 @@ describe('useBatchEditActions', () => {
       expect(s.result.current.selectedRows).toEqual({})
     })
 
-    it('keeps the selection when only cell data changes', () => {
+    /**
+     * The duplicate rows share an element id, so an identity-only signature cannot see this
+     * swap - but the row under the selection has changed, and the next batch action would hit
+     * the wrong occurrence.
+     */
+    it('clears the selection when two rows for the same element are swapped', () => {
+      const s = setupWithRerender(withDuplicates())
+      select(s, ['0'])
+
+      s.rerender([row(10, { note: 'c' }), row(20, { note: 'b' }), row(10, { note: 'a' })] as AdvancedManyToManyRelationValue)
+
+      expect(s.result.current.selectedRows).toEqual({})
+    })
+
+    it('clears the selection when cell data changes underneath it', () => {
       const s = setupWithRerender(withDuplicates())
       select(s, ['1'])
 
-      // same rows in the same order, one value edited elsewhere
       s.rerender([row(10, { note: 'a' }), row(20, { note: 'edited' }), row(10, { note: 'c' })] as AdvancedManyToManyRelationValue)
+
+      expect(s.result.current.selectedRows).toEqual({})
+    })
+
+    it('keeps the selection when the value is re-supplied unchanged', () => {
+      const s = setupWithRerender(withDuplicates())
+      select(s, ['1'])
+
+      // a new array instance with identical contents, as a parent re-render produces
+      s.rerender(withDuplicates())
 
       expect(s.result.current.selectedRows).toEqual({ 1: true })
     })

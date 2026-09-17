@@ -43,12 +43,27 @@ export const useBatchEditActions = ({ value, onChange }: UseBatchEditActionsProp
   /**
    * Selection keys are positions, so they stop meaning the same row as soon as rows are added,
    * removed or reordered - a selected row 1 would silently become whichever row moved into that
-   * slot. The signature covers order and membership but not cell data, so a batch edit (which
-   * rewrites data in place) keeps the selection, while a delete or a reorder clears it.
+   * slot, and the next batch action would edit or delete the wrong one.
+   *
+   * The signature therefore covers the cell data as well as the element, not element identity
+   * alone: with allowMultipleAssignments two rows can share a `type:id`, so swapping them is
+   * invisible to an identity-only signature while still moving the row under the selection.
+   * Keys are sorted so that rewriting `data` in a different key order does not read as a change.
+   *
+   * Two duplicate rows carrying identical data are indistinguishable, so leaving the selection
+   * on either of them is equivalent.
    */
-  const structureSignature = (value ?? [])
-    .map((row) => `${String(row.element?.type ?? '')}:${String(row.element?.id ?? '')}`)
-    .join('|')
+  const rowSignature = (row: AdvancedManyToManyRelationValue[number]): string => {
+    const data = row.data ?? {}
+    const cells = Object.keys(data)
+      .sort()
+      .map((key) => `${key}=${String(data[key])}`)
+      .join(',')
+
+    return `${String(row.element?.type ?? '')}:${String(row.element?.id ?? '')}:${cells}`
+  }
+
+  const structureSignature = (value ?? []).map(rowSignature).join('|')
   const lastStructure = useRef(structureSignature)
 
   useEffect(() => {

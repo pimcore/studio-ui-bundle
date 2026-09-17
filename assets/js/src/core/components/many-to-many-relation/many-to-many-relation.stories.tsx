@@ -9,6 +9,9 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react'
+import React, { useState } from 'react'
+import { type RowSelectionState } from '@tanstack/react-table'
+import { Button } from '@Pimcore/components/button/button'
 import { ManyToManyRelation } from './many-to-many-relation'
 
 const meta: Meta<typeof ManyToManyRelation> = {
@@ -122,4 +125,39 @@ export const WithMaxItems: Story = {
     ...Default.args,
     maxItems: 3
   }
+}
+
+/**
+ * Row selection and the toolbar slot are passthroughs: the grid owns neither, it just forwards
+ * them. This renders both without a feature consumer, so the shared behaviour can be checked on
+ * its own - the selection is controlled here, and extraToolbarItems reflects what is ticked.
+ */
+const SelectionStory = (args: React.ComponentProps<typeof ManyToManyRelation>): React.JSX.Element => {
+  const [selectedRows, setSelectedRows] = useState<RowSelectionState>({ 0: true })
+  const selectedCount = Object.keys(selectedRows).length
+
+  return (
+    <ManyToManyRelation
+      { ...args }
+      enableMultipleRowSelection
+      extraToolbarItems={
+        <Button
+          disabled={ selectedCount === 0 }
+          onClick={ () => { setSelectedRows({}) } }
+          type="link"
+        >
+          { selectedCount === 0 ? 'Apply to all' : `Apply to selection (${selectedCount})` }
+        </Button>
+      }
+      onSelectedRowsChange={ setSelectedRows }
+      selectedRows={ selectedRows }
+    />
+  )
+}
+
+export const WithRowSelection: Story = {
+  args: {
+    ...Default.args
+  },
+  render: (args) => <SelectionStory { ...args } />
 }
