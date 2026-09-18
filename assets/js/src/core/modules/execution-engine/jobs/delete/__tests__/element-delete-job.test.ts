@@ -65,7 +65,8 @@ function completion (status: JobStatus): JobCompletionData {
 
   return {
     isSuccessful,
-    isFinished: isSuccessful,
+    // MessageBusJobHandler treats both "finished" and "finished_with_errors" as finished.
+    isFinished: isSuccessful || status === JobStatus.FINISHED_WITH_ERRORS,
     isFailed: !isSuccessful,
     status,
     payload: null
@@ -146,6 +147,27 @@ describe('DeleteJob successful delete', () => {
     await capturedOnJobCompletion()(completion(JobStatus.SUCCESS))
 
     expect(onSuccess).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not report success when an asynchronous job run finishes with errors', async () => {
+    initiateMock.mockReturnValue(Promise.resolve({ data: { jobRunId: 7 } }))
+    const onSuccess = jest.fn()
+
+    await buildJob(onSuccess).run(runOptions)
+    await capturedOnJobCompletion()(completion(JobStatus.FINISHED_WITH_ERRORS))
+
+    expect(onSuccess).not.toHaveBeenCalled()
+  })
+
+  it('still clears the deleting flag when an asynchronous job run finishes with errors', async () => {
+    initiateMock.mockReturnValue(Promise.resolve({ data: { jobRunId: 7 } }))
+
+    await buildJob(jest.fn()).run(runOptions)
+    await capturedOnJobCompletion()(completion(JobStatus.FINISHED_WITH_ERRORS))
+
+    expect(markNodeDeleting).toHaveBeenLastCalledWith(
+      expect.objectContaining({ nodeId: '42', isDeleting: false })
+    )
   })
 
   it('does not report success when an asynchronous job run fails', async () => {

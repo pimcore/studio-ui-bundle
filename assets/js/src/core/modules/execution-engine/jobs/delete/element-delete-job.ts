@@ -71,7 +71,7 @@ export class DeleteJob implements JobInterface {
       const jobRunId = await this.executeDeleteRequest()
 
       if (isNil(jobRunId)) {
-        await this.handleCompletion()
+        await this.handleCompletion(true)
         return
       }
 
@@ -80,7 +80,10 @@ export class DeleteJob implements JobInterface {
         onJobCompletion: async (data: JobCompletionData) => {
           if (data.isFinished) {
             try {
-              await this.handleCompletion()
+              // A job that finished with errors is finished but not successful: the tree state has to
+              // be cleaned up either way, while the deletion side effects must not run, because some
+              // or all of the elements still exist.
+              await this.handleCompletion(data.isSuccessful)
             } catch (error) {
               await this.handleJobFailure(error)
             }
@@ -119,7 +122,7 @@ export class DeleteJob implements JobInterface {
     return response.data?.jobRunId ?? null
   }
 
-  private async handleCompletion (): Promise<void> {
+  private async handleCompletion (isSuccessful: boolean): Promise<void> {
     if (isString(this.treeId) && isString(this.nodeId)) {
       store.dispatch(setNodeFetching({ treeId: this.treeId, nodeId: this.nodeId, isFetching: false }))
     }
@@ -137,7 +140,9 @@ export class DeleteJob implements JobInterface {
       }))
     }
 
-    this.onSuccess?.()
+    if (isSuccessful) {
+      this.onSuccess?.()
+    }
   }
 
   private async handleJobFailure (error: any): Promise<void> {
