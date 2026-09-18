@@ -29,6 +29,8 @@ import { ColumnConfigurationDecorator } from './decorator/column-configuration/c
 import { SavedSearchDecorator, type SavedSearchDecoratorConfig } from '@Pimcore/modules/search/saved-search/saved-search-decorator'
 import { useDataObjectColumnMapper } from '@Pimcore/modules/data-object/listing/column-mapper/use-column-mapper'
 import { LanguageSelectionProvider } from '@Pimcore/components/language-selection/provider/language-selection-provider'
+import { ElementClickBehaviorProvider } from '@Pimcore/modules/element/providers/element-click-behavior/element-click-behavior-provider'
+import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 
 const defaultProps = {
   ...listingDefaultProps,
@@ -55,19 +57,23 @@ const listingProps = compose<AbstractDecoratorProps>(
 /* eslint-enable @typescript-eslint/consistent-type-assertions */
 
 export const ObjectSearchListing = (): React.JSX.Element => {
+  const { close } = useSearch()
+
   return (
-    <LanguageSelectionProvider>
-      <DynamicTypeRegistryProvider serviceIds={ [
-        'DynamicTypes/GridCellRegistry',
-        'DynamicTypes/ListingRegistry',
-        'DynamicTypes/ObjectDataRegistry',
-        'DynamicTypes/FieldFilterRegistry'
-      ] }
-      >
-        <ListingContainer
-          { ...listingProps }
-        />
-      </DynamicTypeRegistryProvider>
-    </LanguageSelectionProvider>
+    <ElementClickBehaviorProvider onElementClick={ close }>
+      <LanguageSelectionProvider>
+        <DynamicTypeRegistryProvider serviceIds={ [
+          'DynamicTypes/GridCellRegistry',
+          'DynamicTypes/ListingRegistry',
+          'DynamicTypes/ObjectDataRegistry',
+          'DynamicTypes/FieldFilterRegistry'
+        ] }
+        >
+          <ListingContainer
+            { ...listingProps }
+          />
+        </DynamicTypeRegistryProvider>
+      </LanguageSelectionProvider>
+    </ElementClickBehaviorProvider>
   )
 }

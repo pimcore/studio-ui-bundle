@@ -16,6 +16,7 @@ import { type AvailableColumn, buildColumnPickerGroups, resolveColumnTranslation
 import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column-picker.types'
 import { type FieldFiltersProps } from '@Pimcore/components/field-filters/field-filters'
 import { useDraftFilterValues } from '../../../../../../element-filters'
+import { type FieldFilter } from '../../../../../../context-layer/provider/field-filters/field-filters-provider'
 import { DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
 import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
 import { useClassDefinitionSelectionOptional } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
@@ -23,9 +24,19 @@ import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/object
 import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 
+export interface UseFieldFilterEditorProps {
+  /**
+   * Applies the given field filters right away, i.e. what the "Apply" button does. Injected
+   * because applying in the listing is more than a store write - it also resets paging and
+   * flags the data layer - and only the panel knows the rest of the values to apply.
+   */
+  onCommit: (fieldFilters: FieldFilter[]) => void
+}
+
 export interface UseFieldFilterEditorReturn {
   filters: FieldFiltersProps['data']
   onFilterChange: NonNullable<FieldFiltersProps['onChange']>
+  onFilterCommit: NonNullable<FieldFiltersProps['onCommit']>
   columnGroups: Array<ColumnPickerGroup<AvailableColumn>>
   handleColumnClick: (column: AvailableColumn) => void
 }
@@ -35,7 +46,7 @@ export interface UseFieldFilterEditorReturn {
  * so the list (rendered in the panel content) and the add control (rendered in
  * the bottom toolbar) can share a single source of truth.
  */
-export const useFieldFilterEditor = (): UseFieldFilterEditorReturn => {
+export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): UseFieldFilterEditorReturn => {
   const { t } = useTranslation()
   const { availableColumns } = useAvailableColumns()
   const { getType } = useDynamicTypeResolver()
@@ -71,18 +82,27 @@ export const useFieldFilterEditor = (): UseFieldFilterEditorReturn => {
 
   const [filters, setFilters] = useState<FieldFiltersProps['data']>(initialFilters)
 
+  const toFieldFilters = (data: FieldFiltersProps['data']): FieldFilter[] => data.map((filter) => ({
+    key: filter.id,
+    filterValue: filter.data,
+    type: filter.type,
+    locale: filter.locale,
+    meta: {
+      translationKey: filter.translationKey,
+      ...filter.config ?? {}
+    }
+  }))
+
   const onFilterChange: UseFieldFilterEditorReturn['onFilterChange'] = (data) => {
     setFilters(data)
-    setFieldFilters(data.map((filter) => ({
-      key: filter.id,
-      filterValue: filter.data,
-      type: filter.type,
-      locale: filter.locale,
-      meta: {
-        translationKey: filter.translationKey,
-        ...filter.config ?? {}
-      }
-    })))
+    setFieldFilters(toFieldFilters(data))
+  }
+
+  const onFilterCommit: UseFieldFilterEditorReturn['onFilterCommit'] = (data) => {
+    setFilters(data)
+    const fieldFilters = toFieldFilters(data)
+    setFieldFilters(fieldFilters)
+    onCommit(fieldFilters)
   }
 
   useEffect(() => {
@@ -193,5 +213,5 @@ export const useFieldFilterEditor = (): UseFieldFilterEditorReturn => {
     [availableFilterColumns, t]
   )
 
-  return { filters, onFilterChange, columnGroups, handleColumnClick }
+  return { filters, onFilterChange, onFilterCommit, columnGroups, handleColumnClick }
 }

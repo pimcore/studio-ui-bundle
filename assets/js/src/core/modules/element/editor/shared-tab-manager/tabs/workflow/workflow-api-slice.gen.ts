@@ -16,6 +16,31 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Workflows"],
             }),
+            workflowGetElements: build.query<WorkflowGetElementsApiResponse, WorkflowGetElementsApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/workflows/elements/${queryArg.elementType}`,
+                    params: {
+                        workflowName: queryArg.workflowName,
+                        stateName: queryArg.stateName,
+                        page: queryArg.page,
+                        pageSize: queryArg.pageSize,
+                    },
+                }),
+                providesTags: ["Workflows"],
+            }),
+            workflowGetNames: build.query<WorkflowGetNamesApiResponse, WorkflowGetNamesApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/workflows/names` }),
+                providesTags: ["Workflows"],
+            }),
+            workflowGetPlaces: build.query<WorkflowGetPlacesApiResponse, WorkflowGetPlacesApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/workflows/places`,
+                    params: {
+                        workflowName: queryArg.workflowName,
+                    },
+                }),
+                providesTags: ["Workflows"],
+            }),
             workflowActionSubmit: build.mutation<WorkflowActionSubmitApiResponse, WorkflowActionSubmitApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/workflows/action`,
@@ -37,6 +62,33 @@ export type WorkflowGetDetailsApiArg = {
     elementId: number;
     /** Filter elements by matching element type. */
     elementType: "asset" | "document" | "data-object";
+};
+export type WorkflowGetElementsApiResponse = /** status 200 Paginated list of elements in the given workflow state */ {
+    totalItems: number;
+    items: WorkflowElement[];
+};
+export type WorkflowGetElementsApiArg = {
+    /** Filter elements by matching element type. */
+    elementType: "asset" | "document" | "data-object";
+    /** Workflow name */
+    workflowName: string;
+    /** Workflow state / place name */
+    stateName?: string;
+    /** Page number */
+    page: number;
+    /** Number of items per page */
+    pageSize: number;
+};
+export type WorkflowGetNamesApiResponse = /** status 200 List of all configured workflow names */ {
+    items: string[];
+};
+export type WorkflowGetNamesApiArg = void;
+export type WorkflowGetPlacesApiResponse = /** status 200 List of all configured place names for the workflow */ {
+    items: string[];
+};
+export type WorkflowGetPlacesApiArg = {
+    /** Name of the workflow */
+    workflowName: string;
 };
 export type WorkflowActionSubmitApiResponse =
     /** status 200 Json encoded name of workflow, name and type of submitted action. */ {
@@ -117,6 +169,30 @@ export type DevError = {
     /** Details */
     details: string;
 };
+export type WorkflowElement = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Element ID */
+    elementId: number;
+    /** Element type */
+    elementType: string;
+    /** Full path */
+    path: string;
+    /** Element key */
+    objectKey: string;
+    /** Workflow name */
+    workflowName: string;
+    /** Current state name */
+    stateName: string;
+    /** Human-readable state label */
+    stateLabel: string;
+    /** State color */
+    stateColor: string;
+    /** Modification timestamp */
+    modificationDate: number;
+};
 export type SubmitAction = {
     /** type of the action */
     actionType: string;
@@ -131,4 +207,10 @@ export type SubmitAction = {
     /** workflowOptions */
     workflowOptions: object | null;
 };
-export const { useWorkflowGetDetailsQuery, useWorkflowActionSubmitMutation } = injectedRtkApi;
+export const {
+    useWorkflowGetDetailsQuery,
+    useWorkflowGetElementsQuery,
+    useWorkflowGetNamesQuery,
+    useWorkflowGetPlacesQuery,
+    useWorkflowActionSubmitMutation,
+} = injectedRtkApi;

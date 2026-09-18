@@ -23,14 +23,24 @@ const getLabelValue = (column: BundleCustomReportsColumnConfiguration): string =
   !isEmptyValue(column.label) ? column.label : column.name
 )
 
+export interface UseFieldFilterEditorProps {
+  /**
+   * Applies the given field filters right away, i.e. what the "Apply" button does. Injected
+   * because the report grid has no applied filter store - applying rebuilds the grid query and
+   * resets paging, which only the panel can do.
+   */
+  onCommit: (fieldFilters: IDynamicFilter[]) => void
+}
+
 export interface UseFieldFilterEditorReturn {
   fieldFilters: IDynamicFilter[]
   onFilterChange: (data: IDynamicFilter[]) => void
+  onFilterCommit: (data: IDynamicFilter[]) => void
   columnGroups: Array<ColumnPickerGroup<BundleCustomReportsColumnConfiguration>>
   handleColumnClick: (column: BundleCustomReportsColumnConfiguration) => void
 }
 
-export const useFieldFilterEditor = (): UseFieldFilterEditorReturn => {
+export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): UseFieldFilterEditorReturn => {
   const { values, setValue } = useReportsDraftFilters()
   const fieldFilters = (values.fieldFilters ?? []) as IDynamicFilter[]
 
@@ -39,6 +49,11 @@ export const useFieldFilterEditor = (): UseFieldFilterEditorReturn => {
 
   const onFilterChange = (data: IDynamicFilter[]): void => {
     setValue('fieldFilters', data)
+  }
+
+  const onFilterCommit = (data: IDynamicFilter[]): void => {
+    setValue('fieldFilters', data)
+    onCommit(data)
   }
 
   const handleColumnClick = (column: BundleCustomReportsColumnConfiguration): void => {
@@ -94,5 +109,5 @@ export const useFieldFilterEditor = (): UseFieldFilterEditorReturn => {
     }]
   }, [fullChartDetailData, reportDetailData, fieldFilters])
 
-  return { fieldFilters, onFilterChange, columnGroups, handleColumnClick }
+  return { fieldFilters, onFilterChange, onFilterCommit, columnGroups, handleColumnClick }
 }

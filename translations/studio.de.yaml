@@ -26,6 +26,8 @@ error.error_document_language_not_set: Für das Dokument ist keine Sprache festg
 error.error_inconsistent_asset_type: Nur Assets desselben Typs sind hier erlaubt.
 error.error_recycle_bin_restore: Element kann nicht aus dem Papierkorb wiederhergestellt werden
 error.error_recycle_bin_restore_missing_parent: Element kann nicht aus dem Papierkorb wiederhergestellt werden, übergeordnetes Element fehlt
+error.error_login_token_as_admin_non_admin_user: Nur Admin-Benutzer können einen Anmeldelink für einen Admin-Benutzer generieren
+error.error_login_token_no_user_password: Für diesen Benutzer kann kein Anmeldelink generiert werden, da kein Passwort gesetzt ist
 sidebar.selected_elements: Ausgewählte Elemente
 sidebar.grid_config: Grid-Konfiguration
 sidebar.tag_filters: Tag-Filter
@@ -587,8 +589,6 @@ website-settings.columns.language: Sprache
 website-settings.columns.value: Wert
 website-settings.columns.site: Site
 website-settings.columns.actions: Aktionen
-website-settings.website-settings-already-exist.title: Website Einstellung existiert bereits
-website-settings.website-settings-already-exist.error: Name wird bereits verwendet, bitte wählen Sie einen anderen
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Pflichtfelder fehlen
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Name und Typ sind Pflichtfelder und müssen ausgefüllt werden.
 document-types.new: Neu
@@ -2708,6 +2708,7 @@ quantity-values.create-modal.create: Erstellen
 quantity-values.export: Export
 quantity-values.import: Import
 quantity-values.import-modal.title: Mengenwert-Einheiten importieren
+quantity-values.delete-confirmation: Das Löschen dieser Einheit wirkt sich auf alle verknüpften Elemente aus, die darauf verweisen. Möchten Sie wirklich fortfahren?
 owner: Eigentümer
 reverse-object-relation.tooltip: Nicht-Eigentümer-Objekte stellen Relationen zu einem anderen Objekt auf die gleiche Weise dar wie Objekte. Der Unterschied ist, dass ein Nicht-Eigentümer-Objektfeld nicht der Eigentümer der Relationsdaten ist, sondern lediglich eine Ansicht auf Daten, die in anderen Objekten gespeichert sind. Bitte wählen Sie den Eigentümer und Feldnamen, wo die Daten ursprünglich gespeichert sind.
 disabled-fields: Deaktivierte Felder

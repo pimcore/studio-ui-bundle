@@ -143,7 +143,7 @@ export type TranslationDeleteByKeyApiArg = {
 export type TranslationGetDomainsApiResponse = /** status 200 List of available translation domains */ {
     /** The domain name. */
     domain: string;
-    /** If the domain is a frontend or admin domain. */
+    /** If the domain is a frontend or main domain. */
     isFrontendDomain: boolean;
 }[];
 export type TranslationGetDomainsApiArg = void;

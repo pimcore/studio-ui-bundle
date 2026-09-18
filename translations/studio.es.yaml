@@ -26,6 +26,8 @@ error.error_document_language_not_set: El documento no tiene ninguna propiedad d
 error.error_inconsistent_asset_type: Solo se permiten assets del mismo tipo aquí.
 error.error_recycle_bin_restore: No se puede restaurar el elemento de la papelera de reciclaje
 error.error_recycle_bin_restore_missing_parent: No se puede restaurar el elemento de la papelera de reciclaje, el elemento padre no existe
+error.error_login_token_as_admin_non_admin_user: Solo los usuarios administradores pueden generar un enlace de inicio de sesión para un usuario administrador
+error.error_login_token_no_user_password: No se puede generar un enlace de inicio de sesión para este usuario porque no tiene contraseña establecida
 sidebar.selected_elements: Elementos seleccionados
 sidebar.grid_config: Configuración de cuadrícula
 sidebar.tag_filters: Filtros de etiquetas
@@ -587,8 +589,6 @@ website-settings.columns.language: Idioma
 website-settings.columns.value: Valor
 website-settings.columns.site: Sitio
 website-settings.columns.actions: Acciones
-website-settings.website-settings-already-exist.title: La configuración del sitio web ya existe
-website-settings.website-settings-already-exist.error: El nombre ya está en uso, elija uno diferente
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Campos obligatorios faltantes
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: El nombre y el tipo son campos obligatorios y deben completarse.
 document-types.new: Nuevo
@@ -2708,6 +2708,7 @@ quantity-values.create-modal.create: Crear
 quantity-values.export: Exportar
 quantity-values.import: Importar
 quantity-values.import-modal.title: Importar unidades de valor de cantidad
+quantity-values.delete-confirmation: Eliminar esta unidad afectará a todos los elementos relacionados que hacen referencia a ella. ¿Está seguro de que desea continuar?
 owner: Propietario
 reverse-object-relation.tooltip: Los objetos no propietarios representan relaciones con otro objeto de la misma manera que los objetos. La diferencia es que un campo de objeto no propietario no es el dueño de los datos de la relación, es simplemente una vista de los datos almacenados en otros objetos. Seleccione el propietario y el nombre del campo donde se almacenan originalmente los datos.
 disabled-fields: Campos deshabilitados

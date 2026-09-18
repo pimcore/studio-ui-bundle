@@ -9,7 +9,7 @@
  */
 
 import React, { type ReactNode, useMemo } from 'react'
-import { isEmpty, isNil } from 'lodash'
+import { isEmpty, isNil, isString } from 'lodash'
 import { AccordionView, type AccordionViewProps } from './accordion-view'
 import { CardView, type CardViewProps } from './card-view'
 import { Icon, type ElementIcon } from '@Pimcore/components/icon/icon'
@@ -44,7 +44,9 @@ export const BaseView = ({ theme = 'card-with-highlight', ...props }: BaseViewPr
     )
   }
 
-  const translatedTitle = translateLabel(props.title)
+  // Titles can be ReactNodes (e.g. the block data type passes a <FieldLabel />);
+  // only strings are translation-key candidates, everything else renders as-is
+  const translatedTitle = isString(props.title) ? translateLabel(props.title) : props.title
 
   return useMemo(() => {
     if (!isPaddedLayout) {

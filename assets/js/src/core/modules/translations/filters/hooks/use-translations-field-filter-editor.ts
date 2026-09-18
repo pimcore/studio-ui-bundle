@@ -18,14 +18,23 @@ import { useTranslationsDraftFilters } from '@Pimcore/modules/translations/filte
 import { useTranslationFilterColumns } from '@Pimcore/modules/translations/filters/hooks/use-translation-filter-columns'
 import { type TranslationFilterColumn } from '@Pimcore/modules/translations/filters/types'
 
+export interface UseTranslationsFieldFilterEditorProps {
+  /**
+   * Applies the given field filters right away, i.e. what the "Apply" button does. Injected so
+   * every host expresses applying in exactly one place, next to its "Apply" handler.
+   */
+  onCommit: (fieldFilters: FieldFilter[]) => void
+}
+
 export interface UseTranslationsFieldFilterEditorReturn {
   filters: FieldFiltersProps['data']
   onFilterChange: NonNullable<FieldFiltersProps['onChange']>
+  onFilterCommit: NonNullable<FieldFiltersProps['onCommit']>
   columnGroups: Array<ColumnPickerGroup<TranslationFilterColumn>>
   handleColumnClick: (column: TranslationFilterColumn) => void
 }
 
-export const useTranslationsFieldFilterEditor = (): UseTranslationsFieldFilterEditorReturn => {
+export const useTranslationsFieldFilterEditor = ({ onCommit }: UseTranslationsFieldFilterEditorProps): UseTranslationsFieldFilterEditorReturn => {
   const { getType } = useDynamicTypeResolver()
   const { values, setValue } = useTranslationsDraftFilters()
   const columns = useTranslationFilterColumns()
@@ -61,18 +70,27 @@ export const useTranslationsFieldFilterEditor = (): UseTranslationsFieldFilterEd
     setFilters(initialFilters)
   }, [initialFilters])
 
+  const toFieldFilters = (data: FieldFiltersProps['data']): FieldFilter[] => data.map((filter) => ({
+    key: filter.id,
+    filterValue: filter.data,
+    type: filter.type,
+    locale: filter.locale,
+    meta: {
+      translationKey: filter.translationKey,
+      ...filter.config ?? {}
+    }
+  }))
+
   const onFilterChange: UseTranslationsFieldFilterEditorReturn['onFilterChange'] = (data) => {
     setFilters(data)
-    setValue('fieldFilters', data.map((filter) => ({
-      key: filter.id,
-      filterValue: filter.data,
-      type: filter.type,
-      locale: filter.locale,
-      meta: {
-        translationKey: filter.translationKey,
-        ...filter.config ?? {}
-      }
-    })))
+    setValue('fieldFilters', toFieldFilters(data))
+  }
+
+  const onFilterCommit: UseTranslationsFieldFilterEditorReturn['onFilterCommit'] = (data) => {
+    setFilters(data)
+    const fieldFilters = toFieldFilters(data)
+    setValue('fieldFilters', fieldFilters)
+    onCommit(fieldFilters)
   }
 
   const handleColumnClick = (column: TranslationFilterColumn): void => {
@@ -127,5 +145,5 @@ export const useTranslationsFieldFilterEditor = (): UseTranslationsFieldFilterEd
     }]
   }, [availableColumns])
 
-  return { filters, onFilterChange, columnGroups, handleColumnClick }
+  return { filters, onFilterChange, onFilterCommit, columnGroups, handleColumnClick }
 }

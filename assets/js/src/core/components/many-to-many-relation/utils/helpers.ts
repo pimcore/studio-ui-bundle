@@ -22,7 +22,8 @@ export const getElementCellConfig = (disabled?: boolean): ElementCellConfig => {
       const elementType = mapToElementType(element.type)
       return {
         elementType: elementType ?? undefined,
-        id: element.id,
+        // without an id the path tag is not clickable, so a denied element cannot be opened
+        id: element.hasViewAccess === false ? undefined : element.id,
         fullPath: element.fullPath,
         published: element.isPublished ?? undefined,
         disabled

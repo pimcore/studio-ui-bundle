@@ -25,6 +25,8 @@ error.error_document_language_not_set: The document has no language property set
 error.error_inconsistent_asset_type: Only assets of same type are allowed here.
 error.error_recycle_bin_restore: Cannot restore element from recycle bin
 error.error_recycle_bin_restore_missing_parent: Cannot restore element from recycle bin, parent element is missing
+error.error_login_token_as_admin_non_admin_user: Only admin users can generate a login link for an admin user
+error.error_login_token_no_user_password: A login link cannot be generated for this user because no password is set
 error.syntax_error: Syntax error
 sidebar.selected_elements: Selected Elements
 sidebar.grid_config: Grid config
@@ -589,8 +591,6 @@ website-settings.columns.language: Language
 website-settings.columns.value: Value
 website-settings.columns.site: Site
 website-settings.columns.actions: Actions
-website-settings.website-settings-already-exist.title: Website Setting already exists
-website-settings.website-settings-already-exist.error: Name is already in use, please choose a different one
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Mandatory fields missing
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Name and type are mandatory fields and need to be filled out.
 document-types.new: New
@@ -1274,6 +1274,7 @@ relations.fullpath: Full Path
 relations.remove-all.confirm: Do you really want to delete all relations?
 relation: relation
 items-limit-reached: The maximum number of items ({{maxItems}}) has been reached.
+asset-upload-type-not-allowed: The uploaded asset's type is not allowed for this field.
 actions: Actions
 asset: Asset
 data-object: Data Object
@@ -2741,6 +2742,7 @@ quantity-values.export: Export
 quantity-values.import: Import
 quantity-values.import-modal.title: Import Quantity Value Units
 quantity-values.search: Search
+quantity-values.delete-confirmation: Deleting this unit will impact all related elements that reference it. Are you sure you want to proceed?
 owner: Owner
 reverse-object-relation.tooltip: Non owner objects represent relations to an other object just in the same way as objects do. The difference is, that a non-owner object field is not the owner of the relation data, it is merely a view on data stored in other objects. Please choose the owner and field name where the data is originally stored.
 disabled-fields: Disabled fields

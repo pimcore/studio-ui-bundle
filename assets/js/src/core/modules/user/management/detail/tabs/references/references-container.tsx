@@ -8,27 +8,56 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Table } from '@Pimcore/modules/user/management/detail/tabs/references/components/table/table'
+import { Pagination } from '@Pimcore/modules/user/management/detail/tabs/references/components/pagination/pagination'
 import { Accordion } from '@Pimcore/components/accordion/accordion'
-import { useUserManagementDraft } from '@Pimcore/modules/user/hooks/use-user-management-draft'
+import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
+import { useUserGetObjectDependenciesQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
 import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-management-context'
 import { createTabContentTestId } from '@Pimcore/utils/test-id-generator'
+import { DEFAULT_PAGE_SIZE } from '@Pimcore/modules/user/management/detail/tabs/references/constants'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 const ReferenceContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useUserManagementContext()
-  const { user } = useUserManagementDraft(id)
+  const [page, setPage] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(DEFAULT_PAGE_SIZE)
+
+  const { data, currentData, isLoading, isFetching, isError, error } = useUserGetObjectDependenciesQuery({ id, page, pageSize })
+
+  useEffect(() => {
+    if (isError) {
+      trackError(new ApiError(error))
+    }
+  }, [isError])
+
+  function onPageChange (page: number, pageSize: number): void {
+    setPage(page)
+    setPageSize(pageSize)
+  }
 
   const accordionContent = [
     {
       key: '1',
       title: <>{ t('user-management.references.object-dependencies') }</>,
-      children: <Table
-        data={ user?.objectDependencies?.dependencies ?? [] }
-        isLoading={ false }
-                />
+      children: <>
+        <Toolbar justify='flex-end'>
+          <Pagination
+            { ...data }
+            isLoading={ isLoading }
+            onChange={ onPageChange }
+            page={ page }
+          />
+        </Toolbar>
+
+        <Table
+          data={ currentData?.items ?? [] }
+          isLoading={ isFetching }
+        />
+      </>
     }
   ]
 

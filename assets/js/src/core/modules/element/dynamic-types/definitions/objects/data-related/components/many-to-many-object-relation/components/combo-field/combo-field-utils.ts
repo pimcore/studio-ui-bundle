@@ -15,6 +15,17 @@ import { type VisibleFieldDefinition } from '../../many-to-many-object-relation'
 
 export type SearchItem = NonNullable<DataObjectGetSearchApiResponse['items']>[number]
 
+export const COMBO_PAGE_SIZE = 200
+export const BACKGROUND_LOAD_THRESHOLD = 1000
+
+export const SEARCH_DEBOUNCE_MS = 300
+export const FULLTEXT_FILTER_TYPE = 'system.fulltext'
+
+export const SYSTEM_COLUMNS = [
+  { key: 'fullpath', type: 'system.string', locale: null, config: [] as string[] },
+  { key: 'classname', type: 'system.string', locale: null, config: [] as string[] }
+]
+
 const isBlankColumnValue = (v: unknown): boolean => {
   if (isNil(v)) return true
   if (isString(v)) return isEmpty(v) || v === 'null'

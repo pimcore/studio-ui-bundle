@@ -26,6 +26,8 @@ error.error_document_language_not_set: Dokumentet har ingen språkegenskap angiv
 error.error_inconsistent_asset_type: Bara assets av samma typ tillåts här.
 error.error_recycle_bin_restore: Kan inte återställa elementet från papperskorgen
 error.error_recycle_bin_restore_missing_parent: Kan inte återställa elementet från papperskorgen, överordnat element saknas
+error.error_login_token_as_admin_non_admin_user: Endast admin-användare kan generera en inloggningslänk för en admin-användare
+error.error_login_token_no_user_password: En inloggningslänk kan inte genereras för den här användaren eftersom inget lösenord är satt
 sidebar.selected_elements: Valda element
 sidebar.grid_config: Rutnätskonfiguration
 sidebar.tag_filters: Taggfilter
@@ -587,8 +589,6 @@ website-settings.columns.language: Språk
 website-settings.columns.value: Värde
 website-settings.columns.site: Sajt
 website-settings.columns.actions: Åtgärder
-website-settings.website-settings-already-exist.title: Webbplatsinställningen finns redan
-website-settings.website-settings-already-exist.error: Namnet används redan, välj ett annat
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Obligatoriska fält saknas
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Namn och typ är obligatoriska fält och måste fyllas i.
 document-types.new: Ny
@@ -2708,6 +2708,7 @@ quantity-values.create-modal.create: Skapa
 quantity-values.export: Exportera
 quantity-values.import: Importera
 quantity-values.import-modal.title: Importera kvantitetsvärdets enheter
+quantity-values.delete-confirmation: Om du tar bort den här enheten påverkas alla relaterade objekt som refererar till den. Är du säker på att du vill fortsätta?
 owner: Ägare
 reverse-object-relation.tooltip: Icke-ägande objekt representerar relationer till ett annat objekt på samma sätt som objekt gör. Skillnaden är att ett icke-ägande objektfält inte äger relationsdata, utan det är bara en vy av data lagrad i andra objekt. Välj ägare och fältnamn där data ursprungligen lagras.
 disabled-fields: Inaktiverade fält

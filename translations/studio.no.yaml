@@ -26,6 +26,8 @@ error.error_document_language_not_set: Dokumentet har ingen språkegenskap angit
 error.error_inconsistent_asset_type: Kun ressurser av samme type er tillatt her.
 error.error_recycle_bin_restore: Kan ikke gjenopprette elementet fra papirkurven
 error.error_recycle_bin_restore_missing_parent: Kan ikke gjenopprette elementet fra papirkurven, overordnet element mangler
+error.error_login_token_as_admin_non_admin_user: Bare admin-brukere kan generere en påloggingslenke for en admin-bruker
+error.error_login_token_no_user_password: Det kan ikke genereres en påloggingslenke for denne brukeren fordi det ikke er angitt noe passord
 sidebar.selected_elements: Valgte elementer
 sidebar.grid_config: Rutenettskonfigurasjon
 sidebar.tag_filters: Taggfiltre
@@ -587,8 +589,6 @@ website-settings.columns.language: Språk
 website-settings.columns.value: Verdi
 website-settings.columns.site: Nettsted
 website-settings.columns.actions: Handlinger
-website-settings.website-settings-already-exist.title: Nettstedsinnstillingen finnes allerede
-website-settings.website-settings-already-exist.error: Navnet er allerede i bruk, vennligst velg et annet
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Obligatoriske felt mangler
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Navn og type er obligatoriske felt og må fylles ut.
 document-types.new: Ny
@@ -2708,6 +2708,7 @@ quantity-values.create-modal.create: Opprett
 quantity-values.export: Eksporter
 quantity-values.import: Importer
 quantity-values.import-modal.title: Importer mengdeverdi-enheter
+quantity-values.delete-confirmation: Hvis du sletter denne enheten, påvirkes alle relaterte elementer som refererer til den. Er du sikker på at du vil fortsette?
 owner: Eier
 reverse-object-relation.tooltip: Ikke-eierobjekter representerer relasjoner til et annet objekt på samme måte som objekter gjør. Forskjellen er at et ikke-eierobjektfelt ikke er eier av relasjonsdataene, det er kun en visning av data lagret i andre objekter. Vennligst velg eier og feltnavn der dataene opprinnelig er lagret.
 disabled-fields: Deaktiverte felt

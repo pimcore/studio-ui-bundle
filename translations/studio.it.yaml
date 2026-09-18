@@ -26,6 +26,8 @@ error.error_document_language_not_set: Il documento non ha una proprietà lingua
 error.error_inconsistent_asset_type: Qui sono consentiti solo asset dello stesso tipo.
 error.error_recycle_bin_restore: "Impossibile ripristinare l'elemento dal cestino"
 error.error_recycle_bin_restore_missing_parent: "Impossibile ripristinare l'elemento dal cestino, l'elemento padre è mancante"
+error.error_login_token_as_admin_non_admin_user: Solo gli utenti amministratori possono generare un link di accesso per un utente amministratore
+error.error_login_token_no_user_password: "Impossibile generare un link di accesso per questo utente perché non è impostata alcuna password"
 sidebar.selected_elements: Elementi selezionati
 sidebar.grid_config: Configurazione griglia
 sidebar.tag_filters: Filtri tag
@@ -587,8 +589,6 @@ website-settings.columns.language: Lingua
 website-settings.columns.value: Valore
 website-settings.columns.site: Sito
 website-settings.columns.actions: Azioni
-website-settings.website-settings-already-exist.title: Impostazione sito web già esistente
-website-settings.website-settings-already-exist.error: Il nome è già in uso, scegliere un nome diverso
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Campi obbligatori mancanti
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Nome e tipo sono campi obbligatori e devono essere compilati.
 document-types.new: Nuovo
@@ -2708,6 +2708,7 @@ quantity-values.create-modal.create: Crea
 quantity-values.export: Esporta
 quantity-values.import: Importa
 quantity-values.import-modal.title: Importa unità valori quantitativi
+quantity-values.delete-confirmation: L'eliminazione di questa unità influirà su tutti gli elementi correlati che vi fanno riferimento. Continuare?
 owner: Proprietario
 reverse-object-relation.tooltip: Gli oggetti non proprietari rappresentano le relazioni verso un altro oggetto nello stesso modo degli oggetti. La differenza è che un campo oggetto non proprietario non è il proprietario dei dati della relazione, è semplicemente una vista sui dati memorizzati in altri oggetti. Scegliere il proprietario e il nome del campo in cui i dati sono originariamente memorizzati.
 disabled-fields: Campi disabilitati

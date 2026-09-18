@@ -26,6 +26,8 @@ error.error_document_language_not_set: Le document n'a pas de propriété de lan
 error.error_inconsistent_asset_type: Seuls les assets du même type sont autorisés ici.
 error.error_recycle_bin_restore: "Impossible de restaurer l'élément depuis la corbeille"
 error.error_recycle_bin_restore_missing_parent: "Impossible de restaurer l'élément depuis la corbeille, l'élément parent est manquant"
+error.error_login_token_as_admin_non_admin_user: Seuls les utilisateurs administrateurs peuvent générer un lien de connexion pour un utilisateur administrateur
+error.error_login_token_no_user_password: "Impossible de générer un lien de connexion pour cet utilisateur car aucun mot de passe n'est défini"
 sidebar.selected_elements: Éléments sélectionnés
 sidebar.grid_config: Configuration de la grille
 sidebar.tag_filters: Filtres par tags
@@ -587,8 +589,6 @@ website-settings.columns.language: Langue
 website-settings.columns.value: Valeur
 website-settings.columns.site: Site
 website-settings.columns.actions: Actions
-website-settings.website-settings-already-exist.title: Le paramètre de site web existe déjà
-website-settings.website-settings-already-exist.error: Le nom est déjà utilisé, veuillez en choisir un autre
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Champs obligatoires manquants
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Le nom et le type sont des champs obligatoires et doivent être remplis.
 document-types.new: Nouveau
@@ -2708,6 +2708,7 @@ quantity-values.create-modal.create: Créer
 quantity-values.export: Exporter
 quantity-values.import: Importer
 quantity-values.import-modal.title: Importer des unités de valeur de quantité
+quantity-values.delete-confirmation: La suppression de cette unité affectera tous les éléments associés qui y font référence. Voulez-vous vraiment continuer?
 owner: Propriétaire
 reverse-object-relation.tooltip: "Les objets non propriétaires représentent des relations vers un autre objet de la même manière que les objets. La différence est qu'un champ d'objet non propriétaire n'est pas le propriétaire des données de relation, il s'agit simplement d'une vue sur les données stockées dans d'autres objets. Veuillez choisir le propriétaire et le nom du champ où les données sont stockées à l'origine."
 disabled-fields: Champs désactivés

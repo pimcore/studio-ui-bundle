@@ -17,11 +17,12 @@ export {
 export {
   AppliedFiltersProvider,
   useAppliedFilters,
+  useAppliedFiltersOptional,
   DraftFiltersProvider,
   useDraftFilters,
   useDraftFiltersOptional
 } from './stores'
-export { elementFilterDefinitions } from './definitions'
+export { elementFilterDefinitions, prepareFieldFilters } from './definitions'
 export { buildElementFilterQuery } from './build-element-filter-query'
 export { elementFilterSetup, useElementFilterContext } from './element-filter-setup'
 export {
