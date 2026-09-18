@@ -1,0 +1,2 @@
+/*! For license information please see __federation_expose_modules__auth.65d96793.js.LICENSE.txt */
+"use strict";(self["chunk_pimcore_studio_ui_bundle "]=self["chunk_pimcore_studio_ui_bundle "]||[]).push([["1064"],{69676(e,s,t){t.r(s),t.d(s,{isAllowed:()=>i.J,useIsAuthenticated:()=>d.X,useUser:()=>r.J,getCurrentUser:()=>c,UserPermission:()=>u.F});var u=t(9653),i=t(44499),r=t(61549),d=t(19808),o=t(41630),_=t(73565);let c=()=>(0,_.xu)(o.M_.getState());void 0!==(e=t.hmd(e)).hot&&e.hot.accept()}}]);
