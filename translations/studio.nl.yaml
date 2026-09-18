@@ -700,7 +700,8 @@ button.confirm: Bevestigen
 button.save-apply: Opslaan & toepassen
 button.add-edit: Toevoegen & bewerken
 button.cancel-edits: Bewerkingen annuleren
-toggle.advanced-mode: Geavanceerde modus
+toggle.pql-filter.enable: PQL-filter inschakelen
+toggle.pql-filter.disable: PQL-filter uitschakelen
 actions.open: Openen
 open: Openen
 edit: Bewerken

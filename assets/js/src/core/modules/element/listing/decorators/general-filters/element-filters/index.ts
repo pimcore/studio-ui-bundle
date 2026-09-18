@@ -22,7 +22,7 @@ export {
   useDraftFilters,
   useDraftFiltersOptional
 } from './stores'
-export { elementFilterDefinitions, prepareFieldFilters } from './definitions'
+export { elementFilterDefinitions, elementFilterDefaults, prepareFieldFilters } from './definitions'
 export { buildElementFilterQuery } from './build-element-filter-query'
 export { elementFilterSetup, useElementFilterContext } from './element-filter-setup'
 export {

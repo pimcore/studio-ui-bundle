@@ -700,7 +700,8 @@ button.confirm: Bekräfta
 button.save-apply: Spara & Tillämpa
 button.add-edit: Lägg till & Redigera
 button.cancel-edits: Avbryt redigeringar
-toggle.advanced-mode: Avancerat läge
+toggle.pql-filter.enable: Aktivera PQL-filter
+toggle.pql-filter.disable: Inaktivera PQL-filter
 actions.open: Öppna
 open: Öppna
 edit: Redigera
