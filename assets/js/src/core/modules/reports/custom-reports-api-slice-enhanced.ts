@@ -14,6 +14,9 @@ const api = baseApi.enhanceEndpoints({
   endpoints: {
     customReportExportCsv: {
       invalidatesTags: () => []
+    },
+    customReportsConfigExport: {
+      providesTags: () => []
     }
   }
 })
@@ -28,6 +31,8 @@ export const {
   useCustomReportsColumnConfigListQuery,
   useCustomReportsConfigUpdateMutation,
   useCustomReportsConfigDeleteMutation,
+  useCustomReportsConfigExportQuery,
+  useCustomReportsConfigImportMutation,
   useCustomReportsReportQuery,
   useCustomReportsConfigGetTreeQuery,
   useCustomReportExportCsvMutation,
