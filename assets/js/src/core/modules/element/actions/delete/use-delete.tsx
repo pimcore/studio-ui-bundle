@@ -66,25 +66,28 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
         elementType,
         treeId,
         nodeId: String(id),
-        parentFolderId: parentId
+        parentFolderId: parentId,
+        onSuccess: () => {
+          // Notify listeners (e.g. grid row selection) that this element no longer exists
+          eventBus.publish({
+            identifier: { type: eventTypes['element:item:deleted'] },
+            payload: { id, elementType }
+          })
+
+          // Handle widget closing and recycle bin refresh here since job can't use hooks
+          const widgetId = getWidgetId(elementType, id)
+          if (isMainWidgetOpen(widgetId)) {
+            closeWidget(widgetId)
+          }
+          refreshRecycleBin()
+        },
+        // Runs whether the delete succeeded or not: callers use it to release their own busy state.
+        onFinished: () => {
+          onFinish?.()
+        }
       })
 
       await executionEngine.runJob(job)
-
-      // Notify listeners (e.g. grid row selection) that this element no longer exists
-      eventBus.publish({
-        identifier: { type: eventTypes['element:item:deleted'] },
-        payload: { id, elementType }
-      })
-
-      // Handle widget closing and recycle bin refresh here since job can't use hooks
-      const widgetId = getWidgetId(elementType, id)
-      if (isMainWidgetOpen(widgetId)) {
-        closeWidget(widgetId)
-      }
-      refreshRecycleBin()
-
-      onFinish?.()
     } catch (error: any) {
       trackError(new GeneralError(error.message as string))
     } finally {
