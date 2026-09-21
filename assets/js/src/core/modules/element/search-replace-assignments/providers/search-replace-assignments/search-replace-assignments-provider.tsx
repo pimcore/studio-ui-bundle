@@ -54,10 +54,6 @@ interface SearchReplaceAssignmentsProviderProps {
   children: ReactNode
   initialSearchFor?: ManyToOneRelationValue | null
   initialReplaceWith?: ManyToOneRelationValue | null
-  /**
-   * Called once a replace run has ended, whatever its terminal state. `data` is the job's outcome,
-   * undefined when the run never reached the execution engine.
-   */
   onApplied?: (data?: JobCompletionData) => void
 }
 
