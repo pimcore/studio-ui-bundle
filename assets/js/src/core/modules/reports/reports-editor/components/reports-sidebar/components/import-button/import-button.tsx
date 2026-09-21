@@ -43,6 +43,7 @@ export const ImportButton = ({ disabled = false, onImportSuccess }: IImportButto
           disabled={ disabled }
           icon={ { value: 'upload-import' } }
           onClick={ () => { setIsModalOpen(true) } }
+          title={ t('import') }
           type="link"
         />
       </Tooltip>
