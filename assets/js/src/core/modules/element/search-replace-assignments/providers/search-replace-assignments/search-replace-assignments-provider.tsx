@@ -17,7 +17,6 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
 import { SearchReplaceAssignmentsJob } from '@Pimcore/modules/execution-engine/jobs/search-replace-assignments/search-replace-assignments-job'
-import { type JobCompletionData } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/message-bus-job-handler-types'
 
 interface SearchReplaceAssignmentsContextValue {
   // State
@@ -54,7 +53,7 @@ interface SearchReplaceAssignmentsProviderProps {
   children: ReactNode
   initialSearchFor?: ManyToOneRelationValue | null
   initialReplaceWith?: ManyToOneRelationValue | null
-  onApplied?: (data?: JobCompletionData) => void
+  onApplied?: () => void
 }
 
 export const SearchReplaceAssignmentsProvider = ({ children, initialSearchFor = null, initialReplaceWith = null, onApplied }: SearchReplaceAssignmentsProviderProps): React.JSX.Element => {
@@ -130,10 +129,10 @@ export const SearchReplaceAssignmentsProvider = ({ children, initialSearchFor = 
         sourceElementId: searchFor.id,
         targetElementType: replaceWith.type as ElementType,
         targetElementId: replaceWith.id,
-        onFinish: (data) => {
+        onFinish: () => {
           handleRefresh()
           setSelectedRows({})
-          onAppliedRef.current?.(data)
+          onAppliedRef.current?.()
         }
       })
 
@@ -164,10 +163,10 @@ export const SearchReplaceAssignmentsProvider = ({ children, initialSearchFor = 
         targetElementType: replaceWith.type as ElementType,
         targetElementId: replaceWith.id,
         elements: selectedElements,
-        onFinish: (data) => {
+        onFinish: () => {
           handleRefresh()
           setSelectedRows({})
-          onAppliedRef.current?.(data)
+          onAppliedRef.current?.()
         }
       })
 

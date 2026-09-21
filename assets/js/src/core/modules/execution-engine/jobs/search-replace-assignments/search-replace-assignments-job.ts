@@ -24,12 +24,7 @@ export interface SearchReplaceAssignmentsJobOptions {
   targetElementType: ElementType
   targetElementId: number
   elements?: ElementUsageBaseItem[]
-  /**
-   * Called once the run has ended, whatever its terminal state. `data` carries the outcome
-   * (`isSuccessful`, `isFailed`, `status`, messages); it is undefined when the run never reached the
-   * execution engine, i.e. the replace request itself failed or returned no job run.
-   */
-  onFinish?: (data?: JobCompletionData) => void
+  onFinish?: () => void
 }
 
 export class SearchReplaceAssignmentsJob implements JobInterface {
@@ -38,7 +33,7 @@ export class SearchReplaceAssignmentsJob implements JobInterface {
   private readonly targetElementType: ElementType
   private readonly targetElementId: number
   private readonly elements?: ElementUsageBaseItem[]
-  private readonly onFinish?: (data?: JobCompletionData) => void
+  private readonly onFinish?: () => void
 
   constructor (options: SearchReplaceAssignmentsJobOptions) {
     this.sourceElementType = options.sourceElementType
@@ -63,9 +58,9 @@ export class SearchReplaceAssignmentsJob implements JobInterface {
       const handler = SearchReplaceAssignmentsJob.buildHandler({
         jobRunId,
         elementCount: this.elements?.length ?? 0,
-        onJobCompletion: async (data: JobCompletionData) => {
+        onJobCompletion: async () => {
           try {
-            await this.handleCompletion(data)
+            await this.handleCompletion()
           } catch (error) {
             await this.handleJobFailure(error)
           }
@@ -100,8 +95,8 @@ export class SearchReplaceAssignmentsJob implements JobInterface {
     return response.data?.jobRunId ?? null
   }
 
-  private async handleCompletion (data?: JobCompletionData): Promise<void> {
-    this.onFinish?.(data)
+  private async handleCompletion (): Promise<void> {
+    this.onFinish?.()
   }
 
   private async handleJobFailure (error: any): Promise<void> {
