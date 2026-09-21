@@ -80,7 +80,9 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
             closeWidget(widgetId)
           }
           refreshRecycleBin()
-
+        },
+        // Runs whether the delete succeeded or not: callers use it to release their own busy state.
+        onFinished: () => {
           onFinish?.()
         }
       })

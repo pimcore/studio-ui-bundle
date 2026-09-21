@@ -49,14 +49,15 @@ const HandlerMock = MessageBusJobHandler as jest.MockedClass<typeof MessageBusJo
 
 const runOptions = { messageBus: { registerHandler: jest.fn() } } as unknown as JobRunOptions
 
-function buildJob (onSuccess: jest.Mock): DeleteJob {
+function buildJob (onSuccess: jest.Mock, onFinished: jest.Mock = jest.fn()): DeleteJob {
   return new DeleteJob({
     elementId: 42,
     elementType: 'data-object',
     treeId: 'tree-1',
     nodeId: '42',
     parentFolderId: 1,
-    onSuccess
+    onSuccess,
+    onFinished
   })
 }
 
@@ -123,6 +124,14 @@ describe('DeleteJob rejected delete request', () => {
 
     expect(HandlerMock).not.toHaveBeenCalled()
   })
+
+  it('still reports the job as finished so callers can release their busy state', async () => {
+    const onFinished = jest.fn()
+
+    await buildJob(jest.fn(), onFinished).run(runOptions)
+
+    expect(onFinished).toHaveBeenCalledTimes(1)
+  })
 })
 
 describe('DeleteJob successful delete', () => {
@@ -173,10 +182,41 @@ describe('DeleteJob successful delete', () => {
   it('does not report success when an asynchronous job run fails', async () => {
     initiateMock.mockReturnValue(Promise.resolve({ data: { jobRunId: 7 } }))
     const onSuccess = jest.fn()
+    const onFinished = jest.fn()
 
-    await buildJob(onSuccess).run(runOptions)
+    await buildJob(onSuccess, onFinished).run(runOptions)
     await capturedOnJobCompletion()(completion(JobStatus.FAILED))
 
     expect(onSuccess).not.toHaveBeenCalled()
+    expect(onFinished).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('DeleteJob duplicate terminal updates', () => {
+  // Mercure and the polling fallback can both deliver the terminal update, and neither cancels the other.
+  it('runs the completion callbacks only once', async () => {
+    initiateMock.mockReturnValue(Promise.resolve({ data: { jobRunId: 7 } }))
+    const onSuccess = jest.fn()
+    const onFinished = jest.fn()
+
+    await buildJob(onSuccess, onFinished).run(runOptions)
+
+    const onJobCompletion = capturedOnJobCompletion()
+    await onJobCompletion(completion(JobStatus.SUCCESS))
+    await onJobCompletion(completion(JobStatus.SUCCESS))
+
+    expect(onSuccess).toHaveBeenCalledTimes(1)
+    expect(onFinished).toHaveBeenCalledTimes(1)
+  })
+
+  it('arms the callbacks again when the job is retried', async () => {
+    initiateMock.mockReturnValue(Promise.resolve({ data: {} }))
+    const onSuccess = jest.fn()
+
+    const job = buildJob(onSuccess)
+    await job.run(runOptions)
+    await job.run(runOptions)
+
+    expect(onSuccess).toHaveBeenCalledTimes(2)
   })
 })

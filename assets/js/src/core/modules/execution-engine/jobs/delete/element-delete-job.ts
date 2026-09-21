@@ -29,6 +29,8 @@ export interface DeleteJobOptions {
   parentFolderId?: number
   /** Runs once the element is really gone, not when the delete request was merely accepted. */
   onSuccess?: () => void
+  /** Runs once the job settled, whether the element was deleted or not. */
+  onFinished?: () => void
 }
 
 /** The delete request was rejected. Its error has already been reported to the user. */
@@ -43,6 +45,12 @@ export class DeleteJob implements JobInterface {
   private readonly nodeId?: string
   private readonly parentFolderId?: number
   private readonly onSuccess?: () => void
+  private readonly onFinished?: () => void
+  /**
+   * The terminal update reaches the job through both Mercure and the polling fallback, and neither
+   * cancels the other, so the completion callbacks have to guard against running twice.
+   */
+  private hasSettled = false
 
   constructor (options: DeleteJobOptions) {
     this.elementId = options.elementId
@@ -51,10 +59,14 @@ export class DeleteJob implements JobInterface {
     this.nodeId = options.nodeId
     this.parentFolderId = options.parentFolderId
     this.onSuccess = options.onSuccess
+    this.onFinished = options.onFinished
   }
 
   async run (options: JobRunOptions): Promise<void> {
     const { messageBus } = options
+
+    // A retry runs the job again, so the previous attempt must not keep its callbacks disarmed.
+    this.hasSettled = false
 
     if (isString(this.treeId) && isString(this.nodeId)) {
       store.dispatch(setNodeFetching({ treeId: this.treeId, nodeId: this.nodeId, isFetching: true }))
@@ -140,9 +152,7 @@ export class DeleteJob implements JobInterface {
       }))
     }
 
-    if (isSuccessful) {
-      this.onSuccess?.()
-    }
+    this.settle(isSuccessful)
   }
 
   private async handleJobFailure (error: any): Promise<void> {
@@ -157,6 +167,23 @@ export class DeleteJob implements JobInterface {
     }))
 
     console.error('Delete job failed:', error)
+
+    this.settle(false)
+  }
+
+  /** Runs the completion callbacks, at most once per job run. */
+  private settle (isSuccessful: boolean): void {
+    if (this.hasSettled) {
+      return
+    }
+
+    this.hasSettled = true
+
+    if (isSuccessful) {
+      this.onSuccess?.()
+    }
+
+    this.onFinished?.()
   }
 
   static rehydrate (jobRuns: JobRunList): MessageBusJobHandler {
