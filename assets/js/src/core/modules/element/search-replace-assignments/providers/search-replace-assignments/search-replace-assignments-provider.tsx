@@ -17,6 +17,7 @@ import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type ExecutionEngine } from '@Pimcore/modules/execution-engine/services/execution-engine'
 import { SearchReplaceAssignmentsJob } from '@Pimcore/modules/execution-engine/jobs/search-replace-assignments/search-replace-assignments-job'
+import { type JobCompletionData } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/message-bus-job-handler-types'
 
 interface SearchReplaceAssignmentsContextValue {
   // State
@@ -53,7 +54,11 @@ interface SearchReplaceAssignmentsProviderProps {
   children: ReactNode
   initialSearchFor?: ManyToOneRelationValue | null
   initialReplaceWith?: ManyToOneRelationValue | null
-  onApplied?: () => void
+  /**
+   * Called once a replace run has ended, whatever its terminal state. `data` is the job's outcome,
+   * undefined when the run never reached the execution engine.
+   */
+  onApplied?: (data?: JobCompletionData) => void
 }
 
 export const SearchReplaceAssignmentsProvider = ({ children, initialSearchFor = null, initialReplaceWith = null, onApplied }: SearchReplaceAssignmentsProviderProps): React.JSX.Element => {
@@ -129,10 +134,10 @@ export const SearchReplaceAssignmentsProvider = ({ children, initialSearchFor = 
         sourceElementId: searchFor.id,
         targetElementType: replaceWith.type as ElementType,
         targetElementId: replaceWith.id,
-        onFinish: () => {
+        onFinish: (data) => {
           handleRefresh()
           setSelectedRows({})
-          onAppliedRef.current?.()
+          onAppliedRef.current?.(data)
         }
       })
 
@@ -163,10 +168,10 @@ export const SearchReplaceAssignmentsProvider = ({ children, initialSearchFor = 
         targetElementType: replaceWith.type as ElementType,
         targetElementId: replaceWith.id,
         elements: selectedElements,
-        onFinish: () => {
+        onFinish: (data) => {
           handleRefresh()
           setSelectedRows({})
-          onAppliedRef.current?.()
+          onAppliedRef.current?.(data)
         }
       })
 
