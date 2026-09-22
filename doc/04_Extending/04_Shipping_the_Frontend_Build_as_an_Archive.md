@@ -7,15 +7,16 @@ title: Shipping the Frontend Build as an Archive
 A bundle installed via Composer must make sure the files referenced by its `entrypoints.json` exist on the target
 installation. There are three ways to do that:
 
-- **Commit the expanded build directory** (`public/build/`). This is what the Studio Example Bundle does and needs
-  nothing beyond the provider from [Registering the Frontend Build](./03_Registering_the_Frontend_Build.md). Every
-  build changes the hashed file names, so build output accumulates in the repository and branches conflict on it.
+- **Commit the expanded build directory** (`public/build/`). Needs nothing beyond the provider from
+  [Registering the Frontend Build](./03_Registering_the_Frontend_Build.md). Every build changes the hashed file names,
+  so build output accumulates in the repository and branches conflict on it.
 - **Build during deployment.** Commit no build output and run `npm ci && npm run build` for the bundle in the
   deployment pipeline, before `assets:install`. Also needs only the plain provider, but requires Node.js on the build
   host and a build step per bundle.
 - **Commit a single build archive.** Commit one zip file, `build-dist/build-<id>.zip`, and let Studio extract it into
   `public/build/` on the target system. No build-output churn in git and no build step at deploy time. This is how the
-  Studio UI Bundle itself and other Pimcore bundles ship their frontend, and it is what the rest of this page describes.
+  Studio UI Bundle itself, the Studio Example Bundle and other Pimcore bundles ship their frontend, and it is what the
+  rest of this page describes.
 
 The archive mechanism is opt-in and available in Studio UI Bundle 2025.4.9+ and 2026.2.1+ (not in the 2026.1 line).
 
