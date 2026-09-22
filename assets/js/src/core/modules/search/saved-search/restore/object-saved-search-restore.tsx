@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { isEmpty, isNil, isString } from 'lodash'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
@@ -35,6 +35,8 @@ export const ObjectSavedSearchRestore = (): null => {
   const { selectedColumns } = useSelectedColumns()
   const { selectedClassDefinition, setSelectedClassDefinition } = useClassDefinitionSelection()
   const { getById, data: classCatalog } = useClassDefinitions()
+  // the proposal this restore has already applied at least once
+  const appliedTo = useRef<unknown>(undefined)
   const applySavedSearch = useApplySavedSearch()
 
   const classId = pendingRestore?.classId
@@ -75,11 +77,17 @@ export const ObjectSavedSearchRestore = (): null => {
     // Convergent, not one-shot: a late default-configuration write (a config loader mounting
     // after the apply) overwrites the restored columns, so the restore is only CONSUMED once
     // the grid actually carries the saved layout — until then every clobber re-applies it.
+    // A search carries more than columns — its filter, its type select, its page size — so
+    // "the grid already shows the saved columns" cannot stand in for "applied" until it has
+    // been applied once. A search that names NO columns matches that test on the first tick,
+    // and without this it would be consumed having applied nothing at all.
     const expected = restoredColumnKeys(savedColumns, availableColumns)
-    const applied = expected.length === 0 ||
+    const columnsCarried = expected.length === 0 ||
       (selectedColumns.length === expected.length && expected.every((key, index) => selectedColumns[index]?.key === key))
-    if (!applied) {
+    if (appliedTo.current !== pendingRestore || !columnsCarried) {
+      appliedTo.current = pendingRestore
       applySavedSearch(pendingRestore)
+
       return
     }
 
