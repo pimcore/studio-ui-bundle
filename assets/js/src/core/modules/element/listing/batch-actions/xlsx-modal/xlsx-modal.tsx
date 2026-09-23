@@ -25,6 +25,7 @@ import { isNil } from 'lodash'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
 import { type GridColumnRequest } from '@sdk/api/data-object'
 import { Form } from '@sdk/components'
+import { buildGridExportFileName } from '../export-file-name'
 
 export interface XlsxModalProps {
   open: boolean
@@ -44,6 +45,7 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
   const { getArgs } = useDataQueryHelper()
   const classDefinitionSelection = useClassDefinitionSelection(true)
   const selectedClassDefinition = classDefinitionSelection?.selectedClassDefinition
+  const gridName = selectedClassDefinition?.name ?? elementType
   const initialFormValues: XLSXFormValues = {
     header: 'name'
   }
@@ -92,13 +94,18 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
 
   function onFinish (values: XLSXFormValues): void {
     const isFolderExport = numberedSelectedRows.length === 0
-    const job = new XlsxDownloadJob({ action: async () => await getDownloadAction(values.header), isFolderExport })
+    const job = new XlsxDownloadJob({
+      action: async () => await getDownloadAction(values.header),
+      isFolderExport,
+      title: t('jobs.download-xlsx-job.title-with-grid', { grid: gridName })
+    })
     void executionEngine.runJob(job)
 
     props.setOpen(false)
   }
 
   async function getDownloadAction (header: XLSXFormValues['header']): Promise<number> {
+    const fileName = buildGridExportFileName(gridName, 'xlsx')
     const extractedColumnsFromColumnArg: GridColumnRequest[] = []
     const columns = getArgs()?.body?.columns ?? []
 
@@ -130,7 +137,8 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
           elementType,
           columns: extractedColumnsFromColumnArg,
           config: {
-            header
+            header,
+            fileName
           },
           filters: {
             ...filters
@@ -149,7 +157,8 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
           elementType,
           columns: extractedColumnsFromColumnArg,
           config: {
-            header
+            header,
+            fileName
           },
           ...(!isNil(selectedClassDefinition?.id) && { classId: selectedClassDefinition.id })
         }
