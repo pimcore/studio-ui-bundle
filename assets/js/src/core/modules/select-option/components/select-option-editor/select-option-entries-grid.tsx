@@ -132,10 +132,10 @@ const useReadOnlyColumns = (annotations: Record<string, FormItemAnnotation> | un
 
   return useMemo(() => {
     // a removed row is still a row: struck through, so the reader sees what goes
-    const text = (info: { getValue: () => unknown, row: { original: SelectOptionData } }): React.JSX.Element => (
+    const text = (info: { getValue: () => string | undefined, row: { original: SelectOptionData } }): React.JSX.Element => (
       <ReadOnlyCell>
         <span className={ annotations?.[info.row.original.value]?.status === 'removed' ? styles.removed : undefined }>
-          { String(info.getValue() ?? '') }
+          { info.getValue() ?? '' }
         </span>
       </ReadOnlyCell>
     )
