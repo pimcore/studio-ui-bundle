@@ -26,7 +26,7 @@ function passThroughComponent (name: string): Record<string, unknown> {
 // contract matters here, so it is replaced by a provider that publishes a value through a real
 // React context — `useUploadModalContext` keeps reading that same context object.
 jest.mock('@Pimcore/components/modal-upload/provider/upload-modal-provider/upload-modal-provider', () => {
-  const { createContext } = jest.requireActual('react')
+  const { createContext } = jest.requireActual<typeof React>('react')
   const UploadContext = createContext<unknown>(undefined)
   const uploadContextValue = { triggerUpload: jest.fn() }
 
