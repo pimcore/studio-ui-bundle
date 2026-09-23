@@ -29,7 +29,17 @@ export const useNavOpenState = (isMenuOpen: boolean): IUseNavOpenStateReturn => 
     isMenuOpenRef.current = isMenuOpen
   }, [isMenuOpen])
 
+  const cancelHoverPreview = (): void => {
+    if (hoverPreviewTimer.current !== null) {
+      clearTimeout(hoverPreviewTimer.current)
+      hoverPreviewTimer.current = null
+    }
+  }
+
   const handleOpenState = (key: string): void => {
+    // a click lands inside the preview delay of the pointer enter that preceded it
+    cancelHoverPreview()
+
     if (key.includes('-')) {
       const searchKey = key.substring(0, key.length - 1)
       const newOpenKeys = openKeys.filter(k => !k.startsWith(searchKey))
@@ -38,13 +48,6 @@ export const useNavOpenState = (isMenuOpen: boolean): IUseNavOpenStateReturn => 
 
     if (!key.includes('-')) {
       setOpenKeys(openKeys.includes(key) ? openKeys.filter(k => k !== key) : [key])
-    }
-  }
-
-  const cancelHoverPreview = (): void => {
-    if (hoverPreviewTimer.current !== null) {
-      clearTimeout(hoverPreviewTimer.current)
-      hoverPreviewTimer.current = null
     }
   }
 

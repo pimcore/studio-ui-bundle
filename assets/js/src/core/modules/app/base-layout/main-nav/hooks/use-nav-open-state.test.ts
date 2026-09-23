@@ -115,4 +115,19 @@ describe('useNavOpenState', () => {
 
     expect(result.current.openKeys).toEqual(['1'])
   })
+  it('does not let a pending preview undo a click that closed the group', () => {
+    const { result } = renderHook(() => useNavOpenState(true))
+
+    act(() => { result.current.handleOpenState('1') })
+    expect(result.current.openKeys).toEqual(['1'])
+
+    // pointer enters the row, then the click lands inside the preview delay
+    act(() => { result.current.handleRootPointerEnter(MOUSE, '1', true) })
+    act(() => { jest.advanceTimersByTime(80) })
+    act(() => { result.current.handleOpenState('1') })
+    expect(result.current.openKeys).toEqual([])
+
+    act(() => { jest.advanceTimersByTime(150) })
+    expect(result.current.openKeys).toEqual([])
+  })
 })
