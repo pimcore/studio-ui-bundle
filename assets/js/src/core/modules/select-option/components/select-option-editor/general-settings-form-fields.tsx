@@ -90,5 +90,5 @@ export const SelectOptionGeneralSettingsFormFields = ({
         </FormKit.Panel>
       )}
     </>
-  ), [selectOptionId, readOnly, showUsages, entryAnnotations])
+  ), [selectOptionId, readOnly, showUsages, entryAnnotations, t])
 }

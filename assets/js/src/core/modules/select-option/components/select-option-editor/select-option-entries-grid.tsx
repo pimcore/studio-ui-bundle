@@ -11,6 +11,7 @@
 import { Box, ButtonGroup, CsvImportButton, IconButton, OperationalGrid, Space } from '@sdk/components'
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import React, { useContext, useMemo } from 'react'
+import { isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import type { SelectOptionData } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { Grid } from '@Pimcore/components/grid/grid'
@@ -144,7 +145,7 @@ const useReadOnlyColumns = (annotations: Record<string, FormItemAnnotation> | un
       columnHelper.accessor('value', { header: t('select-option.entries.value'), cell: text }),
       columnHelper.accessor('name', { header: t('select-option.entries.name'), cell: text })
     ]
-    if (annotations !== undefined) {
+    if (!isUndefined(annotations)) {
       columns.push(columnHelper.display({
         id: 'annotation',
         header: '',
@@ -153,7 +154,7 @@ const useReadOnlyColumns = (annotations: Record<string, FormItemAnnotation> | un
           const annotation = annotations[info.row.original.value]
           return (
             <ReadOnlyCell>
-              { annotation === undefined
+              { isUndefined(annotation)
                 ? null
                 : (
                   <AnnotationTag
@@ -167,7 +168,7 @@ const useReadOnlyColumns = (annotations: Record<string, FormItemAnnotation> | un
       }))
     }
     return columns
-  }, [annotations, styles, annotationStyles])
+  }, [annotations, styles, annotationStyles, t])
 }
 
 const ReadOnlyEntriesGrid = ({ value, annotations }: { value: SelectOptionData[], annotations?: Record<string, FormItemAnnotation> }): React.JSX.Element => {
