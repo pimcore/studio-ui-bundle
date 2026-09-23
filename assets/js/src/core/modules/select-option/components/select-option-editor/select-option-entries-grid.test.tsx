@@ -86,6 +86,18 @@ describe('SelectOptionEntriesGrid read-only', () => {
     expect(screen.getByText('Head').closest('.default-cell')).not.toBeNull()
   })
 
+  it('does not annotate a row whose value names an Object.prototype member', () => {
+    render(
+      <SelectOptionEntriesGrid
+        annotations={ {} }
+        readOnly
+        value={ [{ value: 'constructor', label: 'Constructor', name: '' }, { value: '__proto__', label: 'Proto', name: '' }] }
+      />
+    )
+
+    expect(screen.queryByText(/^form\.annotation\./)).not.toBeInTheDocument()
+  })
+
   it('stays the editing grid when nothing says otherwise', () => {
     render(<SelectOptionEntriesGrid value={ rows } />)
 

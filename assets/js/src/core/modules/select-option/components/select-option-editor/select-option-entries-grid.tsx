@@ -126,6 +126,10 @@ const ReadOnlyCell = ({ children }: { children: React.ReactNode }): React.JSX.El
   )
 }
 
+// option values are user data: 'constructor' or '__proto__' must not resolve through the prototype
+const annotationFor = (annotations: Record<string, FormItemAnnotation> | undefined, value: string): FormItemAnnotation | undefined =>
+  !isUndefined(annotations) && Object.hasOwn(annotations, value) ? annotations[value] : undefined
+
 const useReadOnlyColumns = (annotations: Record<string, FormItemAnnotation> | undefined): Array<ColumnDef<SelectOptionData, any>> => {
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -135,7 +139,7 @@ const useReadOnlyColumns = (annotations: Record<string, FormItemAnnotation> | un
     // a removed row is still a row: struck through, so the reader sees what goes
     const text = (info: { getValue: () => string | undefined, row: { original: SelectOptionData } }): React.JSX.Element => (
       <ReadOnlyCell>
-        <span className={ annotations?.[info.row.original.value]?.status === 'removed' ? styles.removed : undefined }>
+        <span className={ annotationFor(annotations, info.row.original.value)?.status === 'removed' ? styles.removed : undefined }>
           { info.getValue() ?? '' }
         </span>
       </ReadOnlyCell>
@@ -151,7 +155,7 @@ const useReadOnlyColumns = (annotations: Record<string, FormItemAnnotation> | un
         header: '',
         size: 110,
         cell: (info) => {
-          const annotation = annotations[info.row.original.value]
+          const annotation = annotationFor(annotations, info.row.original.value)
           return (
             <ReadOnlyCell>
               { isUndefined(annotation)
