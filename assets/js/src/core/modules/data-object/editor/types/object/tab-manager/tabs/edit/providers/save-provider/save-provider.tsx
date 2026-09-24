@@ -14,6 +14,9 @@ import { SaveTaskType } from '@Pimcore/modules/data-object/actions/save/use-save
 export interface QueuedDask {
   task: SaveTaskType | undefined
   editableData: Record<string, any>
+  /** useSave instance that queued the task: only it runs it, so it sees the result. */
+  ownerId: string
+  onFinish?: () => void
 }
 
 export interface ISaveContext {
@@ -21,6 +24,8 @@ export interface ISaveContext {
   setRunningTask: (loadingTask?: SaveTaskType) => void
   isAutoSaveLoading: boolean
   runningTaskRef: React.MutableRefObject<SaveTaskType | undefined>
+  /** Editable data the running task sends. */
+  runningEditableDataRef: React.MutableRefObject<Record<string, any> | undefined>
   queuedTask?: QueuedDask
   queuedTaskRef: React.MutableRefObject<QueuedDask | undefined>
   setQueuedTask: (task?: QueuedDask) => void
@@ -31,6 +36,7 @@ export const SaveContext = createContext<ISaveContext | undefined>(undefined)
 export const SaveProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [runningTask, setRunningTaskState] = useState<SaveTaskType | undefined>(undefined)
   const runningTaskRef = useRef<SaveTaskType | undefined>(undefined)
+  const runningEditableDataRef = useRef<Record<string, any> | undefined>(undefined)
   const [queuedTask, setQueuedTaskState] = useState<QueuedDask | undefined>(undefined)
   const queuedTaskRef = useRef<QueuedDask | undefined>(undefined)
 
@@ -49,6 +55,7 @@ export const SaveProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setRunningTask,
     isAutoSaveLoading: runningTask === SaveTaskType.AutoSave,
     runningTaskRef,
+    runningEditableDataRef,
     queuedTask,
     queuedTaskRef,
     setQueuedTask

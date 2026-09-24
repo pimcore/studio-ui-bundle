@@ -8,10 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import React from 'react'
 import { renderHook } from '@testing-library/react'
 import { type NamePath } from 'antd/es/form/interface'
 import { type InheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/inheritance-state-provider'
 import { useRestoreInheritance } from './use-restore-inheritance'
+import { RestoreInheritanceKeyedListContext } from './restore-inheritance-keyed-list-context'
 
 const resetFields = jest.fn()
 const setFieldValue = jest.fn()
@@ -120,6 +122,25 @@ describe('useRestoreInheritance', () => {
 
       expect(resetFields).not.toHaveBeenCalled()
       expect(setFieldValue).not.toHaveBeenCalled()
+      expect(clearDataObjectAttribute).not.toHaveBeenCalled()
+    })
+
+    it('reaches the list through a list that masks it, as in the block header', () => {
+      const outerList = { onFieldRestore }
+      // the block's numbered list hides the keyed list from its title
+      keyedList = undefined
+
+      const { result } = renderHook(() => useRestoreInheritance(name), {
+        wrapper: ({ children }) => (
+          <RestoreInheritanceKeyedListContext.Provider value={ { keyedList: outerList as any } }>
+            {children}
+          </RestoreInheritanceKeyedListContext.Provider>
+        )
+      })
+      result.current.restore()
+
+      expect(onFieldRestore).toHaveBeenCalledWith(name)
+      expect(resetFields).not.toHaveBeenCalled()
       expect(clearDataObjectAttribute).not.toHaveBeenCalled()
     })
 

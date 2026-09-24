@@ -25,23 +25,28 @@ jest.mock('@Pimcore/components/form/item/provider/item/use-item', () => ({
   useItemOptional: () => ({ name: ['manufacturer'] })
 }))
 
-// The real Divider and Flex transitively import antd-style (untranspiled ESM),
-// which jest cannot load — same reason as keyed-list.test.tsx. Style and gap are
-// forwarded so the placement of the wrapper (see below) can be asserted on.
+// The real Divider, Flex and style hook import antd-style (untranspiled ESM), which
+// jest cannot load — same reason as keyed-list.test.tsx. Class name and gap are
+// forwarded so it can be asserted which styles end up where; the rules themselves
+// live in restore-inheritance-label-extra.styles.ts.
+jest.mock('./restore-inheritance-label-extra.styles', () => ({
+  useStyles: () => ({ styles: { action: 'action-class', divider: 'divider-class' } })
+}))
+
 jest.mock('@Pimcore/components/divider/divider', () => ({
-  Divider: ({ style }: { style?: React.CSSProperties }) => (
+  Divider: ({ className }: { className?: string }) => (
     <span
+      className={ className }
       data-testid="divider"
-      style={ style }
     />
   )
 }))
 
 jest.mock('@Pimcore/components/flex/flex', () => ({
-  Flex: ({ children, gap, style }: { children?: React.ReactNode, gap?: string, style?: React.CSSProperties }) => (
+  Flex: ({ children, gap, className }: { children?: React.ReactNode, gap?: string, className?: string }) => (
     <div
+      className={ className }
       data-gap={ gap }
-      style={ style }
     >
       {children}
     </div>
@@ -74,33 +79,19 @@ describe('RestoreInheritanceLabelExtra', () => {
     expect(restore).toHaveBeenCalled()
   })
 
-  it('sits on the first text line of the label, which is also all the height it can take', () => {
+  it('places the action and its divider in the label row through their styles', () => {
     render(<RestoreInheritanceLabelExtra />)
 
-    const wrapper = screen.getByTestId('divider').parentElement
+    const divider = screen.getByTestId('divider')
 
-    expect(wrapper).toHaveStyle({ alignSelf: 'flex-start', height: '1lh' })
+    expect(divider.parentElement).toHaveClass('action-class')
+    expect(divider).toHaveClass('divider-class')
   })
 
-  it('spaces the divider off the label and off the button by the same margin', () => {
+  it('spaces the divider off the button by the gap of the action', () => {
     render(<RestoreInheritanceLabelExtra />)
 
-    const wrapper = screen.getByTestId('divider').parentElement
-
-    expect(wrapper).toHaveAttribute('data-gap', 'mini')
-    expect(wrapper).toHaveStyle({ marginInlineStart: '4px' })
-  })
-
-  it('does not let the divider add a vertical margin on top of that one line', () => {
-    render(<RestoreInheritanceLabelExtra />)
-
-    expect(screen.getByTestId('divider')).toHaveStyle({ margin: '0px' })
-  })
-
-  it('keeps the divider on the text line of the label, not on the offset Ant lifts a vertical divider by', () => {
-    render(<RestoreInheritanceLabelExtra />)
-
-    expect(screen.getByTestId('divider')).toHaveStyle({ top: '0px', height: '1em' })
+    expect(screen.getByTestId('divider').parentElement).toHaveAttribute('data-gap', 'mini')
   })
 
   it('separates the action from the label with a divider', () => {

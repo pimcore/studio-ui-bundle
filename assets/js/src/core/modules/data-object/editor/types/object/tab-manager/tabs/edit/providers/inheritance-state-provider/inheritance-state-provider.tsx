@@ -13,6 +13,7 @@ import { type NamePath } from 'antd/es/form/interface'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { type DataObjectDraft } from '@Pimcore/modules/data-object/data-object-draft-slice'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
+import { isArray } from 'lodash'
 
 export interface InheritanceState {
   /**
@@ -42,7 +43,7 @@ export interface IInheritanceStateContext {
 
 export const InheritanceStateContext = React.createContext<IInheritanceStateContext | undefined>(undefined)
 
-const getStateKey = (name: NamePath): string => Array.isArray(name) ? name.join('.') : name.toString()
+const getStateKey = (name: NamePath): string => isArray(name) ? name.join('.') : name.toString()
 
 interface RestoreTarget {
   state: InheritanceState
@@ -159,6 +160,11 @@ export const InheritanceStateProvider: React.FC<{ children: React.ReactNode }> =
    * Gives a field back to its origin object: a field inherited when loaded returns to
    * that state, a field overridden when loaded becomes inherited from an ancestor that
    * is not known here. Fields without an ancestor value are left untouched.
+   *
+   * Applied right away, not as a transition like breakInheritance: the change
+   * handlers only break a field whose state reads as inherited, so an edit landing
+   * while a restore is still pending would read 'broken', skip the break, and the
+   * restore committing afterwards would mark the own value as inherited.
    */
   const restoreInheritance = useCallback((name: NamePath): void => {
     const key = getStateKey(name)
@@ -168,12 +174,10 @@ export const InheritanceStateProvider: React.FC<{ children: React.ReactNode }> =
       return
     }
 
-    startTransition(() => {
-      setInheritanceStates(prevStates => ({
-        ...prevStates,
-        [key]: restoreTarget.state
-      }))
-    })
+    setInheritanceStates(prevStates => ({
+      ...prevStates,
+      [key]: restoreTarget.state
+    }))
   }, [restoreTargets])
 
   const value = useMemo(() => ({

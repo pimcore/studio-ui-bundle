@@ -17,9 +17,17 @@ import {
 import { SaveTaskType, useSave } from './use-save'
 
 const saveDataObject = jest.fn()
+let mockMutationInstances = 0
 
+// Every hook instance gets a mutation of its own, like RTK Query hands out, and tags
+// its calls with it, so a test can tell which instance sent a request.
 jest.mock('@Pimcore/modules/data-object/data-object-api-slice-enhanced', () => ({
-  useDataObjectUpdateByIdMutation: () => [saveDataObject, { isLoading: false }]
+  useDataObjectUpdateByIdMutation: () => {
+    const { useState } = jest.requireActual<typeof React>('react')
+    const [instance] = useState(() => mockMutationInstances++)
+
+    return [async (argument: unknown) => await saveDataObject(argument, instance), { isLoading: false }]
+  }
 }))
 
 jest.mock('@Pimcore/modules/data-object/hooks/use-data-object-draft', () => ({
@@ -64,6 +72,8 @@ const openSave = (): { finish: () => void } => {
 
 const sentPayloads = (): Array<Record<string, unknown>> =>
   saveDataObject.mock.calls.map(([argument]) => argument.body.data)
+
+const sendingInstances = (): number[] => saveDataObject.mock.calls.map(([, instance]) => instance)
 
 /**
  * Puts a save in flight and waits until it is, so what follows really collides with
@@ -128,29 +138,61 @@ describe('useSave', () => {
     expect(sentPayloads()[1].editableData).toEqual({ a: 1, b: 2, c: 3 })
   })
 
-  it('does not let an auto save displace a queued task the user is waiting on', async () => {
+  it('lets a queued task the user is waiting on keep its place and carry a later auto save', async () => {
     const running = openSave()
     const { result } = renderHook(() => useSave(), { wrapper })
 
     await startSave(result.current.save, { a: 1 }, SaveTaskType.AutoSave)
     await act(async () => { await result.current.save({ a: 1 }, SaveTaskType.Publish) })
-    await act(async () => { await result.current.save({ a: 1 }, SaveTaskType.AutoSave) })
+    await act(async () => { await result.current.save({ a: 1, restored: null }, SaveTaskType.AutoSave) })
 
     await act(async () => { running.finish() })
 
     await waitFor(() => { expect(saveDataObject).toHaveBeenCalledTimes(2) })
     expect(sentPayloads()[1].task).toBe(SaveTaskType.Publish)
+    expect(sentPayloads()[1].editableData).toEqual({ a: 1, restored: null })
   })
 
-  it('drops an auto save that collides with a task the user is waiting on', async () => {
+  it('drops an auto save the running task of the user already sends', async () => {
     const running = openSave()
     const { result } = renderHook(() => useSave(), { wrapper })
 
     await startSave(result.current.save, { a: 1 }, SaveTaskType.Publish)
-    await act(async () => { await result.current.save({ b: 2 }, SaveTaskType.AutoSave) })
+    await act(async () => { await result.current.save({ a: 1 }, SaveTaskType.AutoSave) })
 
     await act(async () => { running.finish() })
 
     await waitFor(() => { expect(saveDataObject).toHaveBeenCalledTimes(1) })
+  })
+
+  it('follows a running task of the user with an auto save that carries more', async () => {
+    const running = openSave()
+    const { result } = renderHook(() => useSave(), { wrapper })
+
+    await startSave(result.current.save, { a: 1 }, SaveTaskType.Publish)
+    await act(async () => { await result.current.save({ a: 1, restored: null }, SaveTaskType.AutoSave) })
+
+    await act(async () => { running.finish() })
+
+    await waitFor(() => { expect(saveDataObject).toHaveBeenCalledTimes(2) })
+    expect(sentPayloads()[1].task).toBe(SaveTaskType.AutoSave)
+    expect(sentPayloads()[1].editableData).toEqual({ a: 1, restored: null })
+  })
+
+  it('runs a queued task through the instance that queued it, with its onFinish', async () => {
+    const running = openSave()
+    const onFinish = jest.fn()
+    // the edit form and the toolbar mount useSave independently
+    const { result } = renderHook(() => ({ editForm: useSave(), toolbar: useSave() }), { wrapper })
+
+    await startSave(result.current.editForm.save, { a: 1 }, SaveTaskType.AutoSave)
+    await act(async () => { await result.current.toolbar.save({ a: 1 }, SaveTaskType.Publish, onFinish) })
+
+    await act(async () => { running.finish() })
+
+    await waitFor(() => { expect(saveDataObject).toHaveBeenCalledTimes(2) })
+    const [autoSaveInstance, publishInstance] = sendingInstances()
+    expect(publishInstance).not.toBe(autoSaveInstance)
+    await waitFor(() => { expect(onFinish).toHaveBeenCalledTimes(1) })
   })
 })

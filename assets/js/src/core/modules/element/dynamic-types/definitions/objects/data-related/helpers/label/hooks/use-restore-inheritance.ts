@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useCallback } from 'react'
+import { useCallback, useContext } from 'react'
 import { type NamePath } from 'antd/es/form/interface'
 import {
   useKeyedListOptional
@@ -19,6 +19,7 @@ import {
 import {
   useInheritanceState
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
+import { RestoreInheritanceKeyedListContext } from './restore-inheritance-keyed-list-context'
 
 export interface UseRestoreInheritanceReturn {
   /**
@@ -48,7 +49,9 @@ export const useRestoreInheritance = (
 ): UseRestoreInheritanceReturn => {
   const inheritanceStateContext = useInheritanceState()
   const editFormContext = useEditFormContextOptional()
-  const keyedList = useKeyedListOptional()
+  const nearestKeyedList = useKeyedListOptional()
+  const keyedListOverride = useContext(RestoreInheritanceKeyedListContext)
+  const keyedList = keyedListOverride !== undefined ? keyedListOverride.keyedList : nearestKeyedList
 
   const isKeyedList = keyedList !== undefined
   const isRestorable = name !== undefined &&
