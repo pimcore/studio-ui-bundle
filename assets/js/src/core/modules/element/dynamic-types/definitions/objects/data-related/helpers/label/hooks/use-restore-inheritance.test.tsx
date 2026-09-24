@@ -25,6 +25,7 @@ const onFieldRestore = jest.fn()
 let inheritedState: InheritanceState | undefined
 let inheritedValue: unknown
 let hasEditForm = true
+let isDisabled = false
 let keyedList: { onFieldRestore?: (field: NamePath) => void } | undefined
 
 jest.mock('@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state', () => ({
@@ -39,7 +40,7 @@ jest.mock('@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edi
 
 jest.mock('@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider', () => ({
   useEditFormContextOptional: () => hasEditForm
-    ? { form: { resetFields, setFieldValue }, clearDataObjectAttribute, updateDraft }
+    ? { form: { resetFields, setFieldValue }, clearDataObjectAttribute, updateDraft, disabled: isDisabled }
     : undefined
 }))
 
@@ -63,6 +64,7 @@ beforeEach(() => {
   inheritedState = broken
   inheritedValue = undefined
   hasEditForm = true
+  isDisabled = false
   keyedList = undefined
 })
 
@@ -153,6 +155,21 @@ describe('useRestoreInheritance', () => {
   })
 
   describe('fields that offer no restore', () => {
+    it.each([
+      ['held by the Ant form store', undefined],
+      ['held by a keyed list', { onFieldRestore }]
+    ])('leaves a field %s untouched in a read-only editor', (_label, list) => {
+      isDisabled = true
+      keyedList = list
+
+      expect(restoreField(name)).toBe(false)
+      expect(resetFields).not.toHaveBeenCalled()
+      expect(clearDataObjectAttribute).not.toHaveBeenCalled()
+      expect(updateDraft).not.toHaveBeenCalled()
+      expect(onFieldRestore).not.toHaveBeenCalled()
+      expect(restoreInheritance).not.toHaveBeenCalled()
+    })
+
     it.each([
       ['inherited', { objectId: 7, inherited: true } satisfies InheritanceState],
       ['carrying an own value', { objectId: 1, inherited: false } satisfies InheritanceState]

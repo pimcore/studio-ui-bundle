@@ -57,7 +57,11 @@ export const useRestoreInheritance = (
   const isRestorable = name !== undefined &&
     inheritanceStateContext?.canRestoreInheritance(name) === true
 
-  const canRestore = isRestorable && (
+  // A read-only editor ignores writes (see RootComponent), and so does restore, which
+  // bypasses its change handler. The overridden marker still shows.
+  const isEditable = editFormContext?.disabled !== true
+
+  const canRestore = isRestorable && isEditable && (
     isKeyedList
       ? keyedList.onFieldRestore !== undefined
       : editFormContext !== undefined
