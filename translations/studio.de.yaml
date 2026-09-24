@@ -25,6 +25,8 @@ error.error_document_language_not_set: Für das Dokument ist keine Sprache festg
 error.error_inconsistent_asset_type: Nur Assets desselben Typs sind hier erlaubt.
 error.error_recycle_bin_restore: Element kann nicht aus dem Papierkorb wiederhergestellt werden
 error.error_recycle_bin_restore_missing_parent: Element kann nicht aus dem Papierkorb wiederhergestellt werden, übergeordnetes Element fehlt
+error.error_login_token_as_admin_non_admin_user: Nur Admin-Benutzer können einen Anmeldelink für einen Admin-Benutzer generieren
+error.error_login_token_no_user_password: Für diesen Benutzer kann kein Anmeldelink generiert werden, da kein Passwort gesetzt ist
 error.syntax_error: Syntaxfehler
 sidebar.selected_elements: Ausgewählte Elemente
 sidebar.grid_config: Grid-Konfiguration
@@ -426,6 +428,24 @@ login-form.username: Benutzername
 login-form.password: Passwort
 aria.login-form-additional-logins.additional-login-provider: "Zusätzlicher Login-Anbieter:"
 aria.login-form-additional-logins.remember-me-checkbox: Angemeldet-bleiben-Kontrollkästchen
+oauth.consent.title: Zugriff autorisieren
+oauth.consent.subtitle: "{{client}} möchte als Sie auf Pimcore zugreifen."
+oauth.consent.unverified: Pimcore hat diese Anwendung nicht verifiziert. Fahren Sie nur fort, wenn Sie dies von einer Anwendung aus gestartet haben, der Sie vertrauen.
+oauth.consent.redirect-to: "Nach Ihrer Zustimmung werden Sie zu {{host}} weitergeleitet"
+oauth.consent.permissions-heading: "Dies ermöglicht Folgendes:"
+oauth.consent.no-scopes-warning: Diese Anwendung hat keine spezifischen Berechtigungen angefordert, daher können keine aufgelistet werden. Erlauben Sie den Zugriff nur, wenn Sie ihr vertrauen, in Ihrem Namen zu handeln.
+oauth.consent.signed-in-as: "Angemeldet als {{username}}"
+oauth.consent.allow: Erlauben
+oauth.consent.deny: Ablehnen
+oauth.consent.scope.mcp-read.label: Ihre Daten lesen
+oauth.consent.scope.mcp-read.description: Lesen, Auflisten und Durchsuchen der Ihnen zur Verfügung stehenden Tools.
+oauth.consent.scope.mcp-write.label: Ihre Daten ändern
+oauth.consent.scope.mcp-write.description: Verwendung von Tools, die Daten ändern, weiterhin beschränkt auf Ihre eigenen Berechtigungen.
+oauth.consent.retry: Erneut versuchen
+oauth.consent.error.load-failed: Diese Autorisierungsanfrage konnte nicht geladen werden.
+oauth.consent.error.decision-failed: Ihre Entscheidung konnte nicht übermittelt werden. Bitte versuchen Sie es erneut.
+oauth.consent.expired.title: Diese Autorisierungsanfrage ist abgelaufen
+oauth.consent.expired.description: Bitte starten Sie erneut über Ihre Anwendung.
 unsaved-notice: Bitte speichern Sie, um Ihre Änderungen zu bestätigen
 widget-manager.tab-title.close-confirmation: Sie haben ungespeicherte Änderungen. Sind Sie sicher, dass Sie diesen Tab schließen möchten?
 action-applied-successfully: Aktion erfolgreich angewendet
@@ -481,8 +501,8 @@ aria.version.expand: Version aufklappen
 clear-all: Alle löschen
 empty: Leer
 none: Keine
-yes: Ja
-no: Nein
+'yes': Ja
+'no': Nein
 by: Von
 field: Feld
 no-data-available: Keine Daten verfügbar
@@ -680,7 +700,8 @@ button.confirm: Bestätigen
 button.save-apply: Speichern & Übernehmen
 button.add-edit: Hinzufügen & Bearbeiten
 button.cancel-edits: Bearbeitungen abbrechen
-toggle.advanced-mode: Erweiterter Modus
+toggle.pql-filter.enable: PQL-Filter aktivieren
+toggle.pql-filter.disable: PQL-Filter deaktivieren
 actions.open: Öffnen
 open: Öffnen
 edit: Bearbeiten
@@ -1043,6 +1064,8 @@ regex-flags-tooltip: "RegExp ohne Begrenzer, muss in JS funktionieren (Begrenzer
 test-string: Testzeichenkette
 regex-validation-error-message: Die Zeichenkette entspricht nicht dem erforderlichen Format.
 calculator-class: Berechnungsklasse
+calculator-data: Berechnungsdaten
+calculator-data-tooltip: Optionale Freitext-Daten, die an die Berechnung übergeben werden, z. B. ein einfacher Wert, eine kommagetrennte Liste oder eine JSON-kodierte Struktur.
 calculator-expression: Berechnungsausdruck
 calculator-type: Berechnungstyp
 calculator-type-tooltip: Lesen Sie die offizielle Dokumentation, um mehr über das Definieren von Ausdrücken oder Klassen zu erfahren.
@@ -1160,6 +1183,10 @@ export-xlsx-form.form-field.header: Kopfzeile
 export-xlsx-form.form-field.header.option.name: Systemschlüssel
 export-xlsx-form.form-field.header.option.title: Bezeichnung
 export-xlsx-form.form-field.header.option.no-header: Keine Kopfzeile
+form.annotation.added: Hinzugefügt
+form.annotation.changed: Geändert
+form.annotation.removed: Entfernt
+form.annotation.moved: Verschoben
 form.validation.required: Dieses Feld ist erforderlich
 form.validation.max-length: Die maximale Länge für dieses Feld beträgt {{max}} Zeichen
 form.validation.min: Der Minimalwert ist {{min}}
@@ -1311,6 +1338,12 @@ relations.classname: Klasse
 relations.fullpath: Vollständiger Pfad
 relations.remove-all.confirm: Möchten Sie wirklich alle Relationen löschen?
 relations.upload.subtype-not-allowed: Hochgeladene Assets, deren Typ diese Relation nicht zulässt, wurden nicht zugewiesen.
+relations.create-object.title: Neues Objekt
+relations.create-object.submit: Erstellen
+relations.create-object.name: Name
+relations.create-object.parent: Übergeordnetes Element
+relations.create-object.parent.placeholder: Übergeordnetes Element wählen
+relations.create-object.class: Klasse
 relation: Relation
 items-limit-reached: Die maximale Anzahl von Einträgen ({{maxItems}}) wurde erreicht.
 asset-upload-type-not-allowed: Der Typ des hochgeladenen Assets ist für dieses Feld nicht zulässig.
@@ -1337,8 +1370,14 @@ upload.assets-items-failed-message: Upload mit Fehlern abgeschlossen.
 quantity-value.converted-units: Umgerechnete Einheiten
 table.empty.confirm: Sind Sie sicher, dass Sie alle Daten löschen möchten?
 table.new-column: Neue Spalte
+table.insert-column-left: Spalte links einfügen
+table.insert-column-right: Spalte rechts einfügen
+table.column-insert-options: Optionen zum Einfügen von Spalten
 table.delete-column: Spalte löschen
 table.new-row: Neue Zeile
+table.insert-row-above: Zeile oberhalb einfügen
+table.insert-row-below: Zeile unterhalb einfügen
+table.row-insert-options: Optionen zum Einfügen von Zeilen
 table.delete-row: Zeile löschen
 table.duplicate-row: Zeile duplizieren
 table.copy: Kopieren
@@ -2878,3 +2917,4 @@ saved-search.update.success: Gespeicherte Suche aktualisiert
 saved-search.delete.success: Gespeicherte Suche gelöscht
 saved-search.shared-modified.info: Sie haben die ursprüngliche Konfiguration geändert. Da sie jemand anderem gehört, können Sie sie als neue Suche speichern.
 saved-search.menu-shortcut-group: Menügruppe
+skip-to-content: Zum Inhalt springen

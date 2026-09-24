@@ -25,6 +25,8 @@ error.error_document_language_not_set: El documento no tiene ninguna propiedad d
 error.error_inconsistent_asset_type: Solo se permiten assets del mismo tipo aquí.
 error.error_recycle_bin_restore: No se puede restaurar el elemento de la papelera de reciclaje
 error.error_recycle_bin_restore_missing_parent: No se puede restaurar el elemento de la papelera de reciclaje, el elemento padre no existe
+error.error_login_token_as_admin_non_admin_user: Solo los usuarios administradores pueden generar un enlace de inicio de sesión para un usuario administrador
+error.error_login_token_no_user_password: No se puede generar un enlace de inicio de sesión para este usuario porque no tiene contraseña establecida
 error.syntax_error: Error de sintaxis
 sidebar.selected_elements: Elementos seleccionados
 sidebar.grid_config: Configuración de cuadrícula
@@ -426,6 +428,24 @@ login-form.username: Nombre de usuario
 login-form.password: Contraseña
 aria.login-form-additional-logins.additional-login-provider: "Proveedor de inicio de sesión adicional:"
 aria.login-form-additional-logins.remember-me-checkbox: Casilla de recordarme
+oauth.consent.title: Autorizar acceso
+oauth.consent.subtitle: "{{client}} desea acceder a Pimcore en su nombre."
+oauth.consent.unverified: Pimcore no ha verificado esta aplicación. Continúe solo si inició esto desde una aplicación en la que confía.
+oauth.consent.redirect-to: "Después de permitirlo, será redirigido a {{host}}"
+oauth.consent.permissions-heading: "Esto le permitirá:"
+oauth.consent.no-scopes-warning: Esta aplicación no solicitó permisos específicos, por lo que no se puede mostrar ninguno. Permita el acceso solo si confía en que actúe en su nombre.
+oauth.consent.signed-in-as: "Sesión iniciada como {{username}}"
+oauth.consent.allow: Permitir
+oauth.consent.deny: Denegar
+oauth.consent.scope.mcp-read.label: Leer sus datos
+oauth.consent.scope.mcp-read.description: Leer, listar y buscar en las herramientas disponibles para usted.
+oauth.consent.scope.mcp-write.label: Modificar sus datos
+oauth.consent.scope.mcp-write.description: Usar herramientas que modifican datos, siempre limitadas a sus propios permisos.
+oauth.consent.retry: Intentar de nuevo
+oauth.consent.error.load-failed: No se pudo cargar esta solicitud de autorización.
+oauth.consent.error.decision-failed: No se pudo enviar su decisión. Vuelva a intentarlo.
+oauth.consent.expired.title: Esta solicitud de autorización ha caducado
+oauth.consent.expired.description: Vuelva a empezar desde su aplicación.
 unsaved-notice: Guarde para confirmar sus cambios
 widget-manager.tab-title.close-confirmation: Tiene cambios sin guardar, ¿está seguro de que desea cerrar esta pestaña?
 action-applied-successfully: Acción aplicada con éxito
@@ -481,8 +501,8 @@ aria.version.expand: Expandir versión
 clear-all: Limpiar todo
 empty: Vacío
 none: Ninguno
-yes: Sí
-no: No
+'yes': Sí
+'no': No
 by: Por
 field: Campo
 no-data-available: No hay datos disponibles
@@ -680,7 +700,8 @@ button.confirm: Confirmar
 button.save-apply: Guardar y aplicar
 button.add-edit: Añadir y editar
 button.cancel-edits: Cancelar ediciones
-toggle.advanced-mode: Modo avanzado
+toggle.pql-filter.enable: Activar filtro PQL
+toggle.pql-filter.disable: Desactivar filtro PQL
 actions.open: Abrir
 open: Abrir
 edit: Editar
@@ -1043,6 +1064,8 @@ regex-flags-tooltip: "RegExp sin delimitadores, debe funcionar en JS (Delimitado
 test-string: Cadena de prueba
 regex-validation-error-message: La cadena no coincide con el formato requerido.
 calculator-class: Clase de calculadora
+calculator-data: Datos de calculadora
+calculator-data-tooltip: Datos opcionales de formato libre que se pasan a la calculadora, p. ej. un valor simple, una lista separada por comas o una estructura codificada en JSON.
 calculator-expression: Expresión de calculadora
 calculator-type: Tipo de calculadora
 calculator-type-tooltip: Consulte la documentación oficial para obtener más información sobre cómo definir expresiones o clases.
@@ -1160,6 +1183,10 @@ export-xlsx-form.form-field.header: Encabezado
 export-xlsx-form.form-field.header.option.name: Clave del sistema
 export-xlsx-form.form-field.header.option.title: Etiqueta
 export-xlsx-form.form-field.header.option.no-header: Sin encabezado
+form.annotation.added: Añadido
+form.annotation.changed: Modificado
+form.annotation.removed: Eliminado
+form.annotation.moved: Movido
 form.validation.required: Este campo es obligatorio
 form.validation.max-length: La longitud máxima para este campo es de {{max}} caracteres
 form.validation.min: El valor mínimo es {{min}}
@@ -1311,6 +1338,12 @@ relations.classname: Clase
 relations.fullpath: Ruta completa
 relations.remove-all.confirm: ¿Realmente desea eliminar todas las relaciones?
 relations.upload.subtype-not-allowed: Los assets subidos cuyo tipo no está permitido en esta relación no se asignaron.
+relations.create-object.title: Nuevo objeto
+relations.create-object.submit: Crear
+relations.create-object.name: Nombre
+relations.create-object.parent: Padre
+relations.create-object.parent.placeholder: Seleccionar un padre
+relations.create-object.class: Clase
 relation: relación
 items-limit-reached: Se ha alcanzado el número máximo de elementos ({{maxItems}}).
 asset-upload-type-not-allowed: El tipo del asset subido no está permitido para este campo.
@@ -1337,8 +1370,14 @@ upload.assets-items-failed-message: La subida finalizó con errores.
 quantity-value.converted-units: Unidades convertidas
 table.empty.confirm: ¿Está seguro de que desea borrar todos los datos?
 table.new-column: Nueva columna
+table.insert-column-left: Insertar columna a la izquierda
+table.insert-column-right: Insertar columna a la derecha
+table.column-insert-options: Opciones de inserción de columna
 table.delete-column: Eliminar columna
 table.new-row: Nueva fila
+table.insert-row-above: Insertar fila encima
+table.insert-row-below: Insertar fila debajo
+table.row-insert-options: Opciones de inserción de fila
 table.delete-row: Eliminar fila
 table.duplicate-row: Duplicar fila
 table.copy: Copiar
@@ -2878,3 +2917,4 @@ saved-search.update.success: Búsqueda guardada actualizada
 saved-search.delete.success: Búsqueda guardada eliminada
 saved-search.shared-modified.info: Has realizado modificaciones en la configuración original. Como pertenece a otra persona, puedes guardarla como una nueva búsqueda.
 saved-search.menu-shortcut-group: Grupo de menú
+skip-to-content: Saltar al contenido

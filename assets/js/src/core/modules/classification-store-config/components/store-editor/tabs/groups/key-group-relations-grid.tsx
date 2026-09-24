@@ -9,6 +9,8 @@
  */
 
 import React, { useCallback, useMemo, useState } from 'react'
+import { appConfig } from '@Pimcore/app/config/app-config'
+import { theme } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -42,11 +44,12 @@ export const KeyGroupRelationsGrid = ({
   groupName
 }: IKeyGroupRelationsGridProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { token } = theme.useToken()
   const modal = useFormModal()
 
   const [keyDialogOpen, setKeyDialogOpen] = useState(false)
   const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(20)
+  const [pageSize, setPageSize] = useState(appConfig.defaultPageSize)
 
   const { data, isLoading, isFetching, refetch } = useClassificationStoreConfigurationKeyGroupRelationCollectionQuery(
     { groupId: groupId!, body: { filters: { page, pageSize } } },
@@ -215,7 +218,7 @@ export const KeyGroupRelationsGrid = ({
         <Flex
           align="center"
           justify="space-between"
-          style={ { padding: '8px 16px' } }
+          style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
         >
           <Header title={ headerTitle } />
           { groupId !== undefined && (

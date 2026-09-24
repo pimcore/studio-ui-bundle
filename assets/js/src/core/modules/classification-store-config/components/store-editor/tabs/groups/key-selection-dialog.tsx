@@ -9,6 +9,7 @@
  */
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import { useTranslation } from 'react-i18next'
 import { Input } from 'antd'
 import { Modal } from '@Pimcore/components/modal/modal'
@@ -43,7 +44,7 @@ export const KeySelectionDialog = ({
   const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
   const [sorting, setSorting] = useState<SortingState>([])
   const [page, setPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(20)
+  const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
 
   const onSortingChange = useCallback((newSorting: SortingState) => {
     setSorting(newSorting)

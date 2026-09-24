@@ -25,6 +25,8 @@ error.error_document_language_not_set: Dokumentet har ingen språkegenskap angit
 error.error_inconsistent_asset_type: Kun ressurser av samme type er tillatt her.
 error.error_recycle_bin_restore: Kan ikke gjenopprette elementet fra papirkurven
 error.error_recycle_bin_restore_missing_parent: Kan ikke gjenopprette elementet fra papirkurven, overordnet element mangler
+error.error_login_token_as_admin_non_admin_user: Bare admin-brukere kan generere en påloggingslenke for en admin-bruker
+error.error_login_token_no_user_password: Det kan ikke genereres en påloggingslenke for denne brukeren fordi det ikke er angitt noe passord
 error.syntax_error: Syntaksfeil
 sidebar.selected_elements: Valgte elementer
 sidebar.grid_config: Rutenettskonfigurasjon
@@ -426,6 +428,24 @@ login-form.username: Brukernavn
 login-form.password: Passord
 aria.login-form-additional-logins.additional-login-provider: "Ekstra innloggingsleverandør:"
 aria.login-form-additional-logins.remember-me-checkbox: Husk meg-avkrysningsboks
+oauth.consent.title: Autoriser tilgang
+oauth.consent.subtitle: "{{client}} vil ha tilgang til Pimcore som deg."
+oauth.consent.unverified: Pimcore har ikke verifisert denne applikasjonen. Fortsett bare hvis du startet dette fra en applikasjon du stoler på.
+oauth.consent.redirect-to: "Etter at du godkjenner, blir du sendt til {{host}}"
+oauth.consent.permissions-heading: "Dette vil gi den mulighet til å:"
+oauth.consent.no-scopes-warning: Denne applikasjonen ba ikke om spesifikke tillatelser, så ingen kan vises. Tillat bare tilgang hvis du stoler på at den handler på dine vegne.
+oauth.consent.signed-in-as: "Logget inn som {{username}}"
+oauth.consent.allow: Tillat
+oauth.consent.deny: Avslå
+oauth.consent.scope.mcp-read.label: Lese dine data
+oauth.consent.scope.mcp-read.description: Lese, liste opp og søke blant verktøyene som er tilgjengelige for deg.
+oauth.consent.scope.mcp-write.label: Endre dine data
+oauth.consent.scope.mcp-write.description: Bruke verktøy som endrer data, fortsatt begrenset til dine egne tillatelser.
+oauth.consent.retry: Prøv igjen
+oauth.consent.error.load-failed: Denne autorisasjonsforespørselen kunne ikke lastes.
+oauth.consent.error.decision-failed: Din beslutning kunne ikke sendes inn. Prøv igjen.
+oauth.consent.expired.title: Denne autorisasjonsforespørselen har utløpt
+oauth.consent.expired.description: Vennligst start på nytt fra applikasjonen din.
 unsaved-notice: Vennligst lagre for å bekrefte endringene
 widget-manager.tab-title.close-confirmation: Du har ulagrede endringer, er du sikker på at du vil lukke denne fanen?
 action-applied-successfully: Handling utført
@@ -481,8 +501,8 @@ aria.version.expand: Utvid versjon
 clear-all: Fjern alle
 empty: Tom
 none: Ingen
-yes: Ja
-no: Nei
+'yes': Ja
+'no': Nei
 by: Av
 field: Felt
 no-data-available: Ingen data tilgjengelig
@@ -680,7 +700,8 @@ button.confirm: Bekreft
 button.save-apply: Lagre og bruk
 button.add-edit: Legg til og rediger
 button.cancel-edits: Avbryt endringer
-toggle.advanced-mode: Avansert modus
+toggle.pql-filter.enable: Aktiver PQL-filter
+toggle.pql-filter.disable: Deaktiver PQL-filter
 actions.open: Åpne
 open: Åpne
 edit: Rediger
@@ -1043,6 +1064,8 @@ regex-flags-tooltip: "RegExp uten skilletegn, må fungere i JS (Skilletegn: #)"
 test-string: Teststreng
 regex-validation-error-message: Strengen samsvarer ikke med det påkrevde formatet.
 calculator-class: Kalkulatorklasse
+calculator-data: Kalkulatordata
+calculator-data-tooltip: Valgfrie fritekstdata som sendes til kalkulatoren, f.eks. en enkel verdi, en kommaseparert liste eller en JSON-kodet struktur.
 calculator-expression: Kalkulatoruttrykk
 calculator-type: Kalkulatortype
 calculator-type-tooltip: Se den offisielle dokumentasjonen for å lære mer om å definere uttrykk eller klasser.
@@ -1160,6 +1183,10 @@ export-xlsx-form.form-field.header: Overskrift
 export-xlsx-form.form-field.header.option.name: Systemnøkkel
 export-xlsx-form.form-field.header.option.title: Etikett
 export-xlsx-form.form-field.header.option.no-header: Ingen overskrift
+form.annotation.added: Lagt til
+form.annotation.changed: Endret
+form.annotation.removed: Fjernet
+form.annotation.moved: Flyttet
 form.validation.required: Dette feltet er obligatorisk
 form.validation.max-length: Maksimal lengde for dette feltet er {{max}} tegn
 form.validation.min: Minimumsverdien er {{min}}
@@ -1311,9 +1338,15 @@ relations.classname: Klasse
 relations.fullpath: Full sti
 relations.remove-all.confirm: Vil du virkelig slette alle relasjoner?
 relations.upload.subtype-not-allowed: Opplastede assets med en type som denne relasjonen ikke tillater, ble ikke tilordnet.
+relations.create-object.title: Nytt objekt
+relations.create-object.submit: Opprett
+relations.create-object.name: Navn
+relations.create-object.parent: Overordnet
+relations.create-object.parent.placeholder: Velg et overordnet element
+relations.create-object.class: Klasse
 relation: relasjon
 items-limit-reached: Maksimalt antall elementer ({{maxItems}}) er nådd.
-asset-upload-type-not-allowed: Typen til det opplastede assetet er ikke tillatt for dette feltet.
+asset-upload-type-not-allowed: Typen til den opplastede ressursen er ikke tillatt for dette feltet.
 actions: Handlinger
 asset: Ressurs
 data-object: Data Object
@@ -1337,8 +1370,14 @@ upload.assets-items-failed-message: Opplasting fullført med feil.
 quantity-value.converted-units: Konverterte enheter
 table.empty.confirm: Er du sikker på at du vil fjerne alle data?
 table.new-column: Ny kolonne
+table.insert-column-left: Sett inn kolonne til venstre
+table.insert-column-right: Sett inn kolonne til høyre
+table.column-insert-options: Alternativer for å sette inn kolonne
 table.delete-column: Slett kolonne
 table.new-row: Ny rad
+table.insert-row-above: Sett inn rad over
+table.insert-row-below: Sett inn rad under
+table.row-insert-options: Alternativer for å sette inn rad
 table.delete-row: Slett rad
 table.duplicate-row: Dupliser rad
 table.copy: Kopier
@@ -2878,3 +2917,4 @@ saved-search.update.success: Lagret søk oppdatert
 saved-search.delete.success: Lagret søk slettet
 saved-search.shared-modified.info: Du har gjort endringer i den opprinnelige konfigurasjonen. Siden den eies av noen andre, kan du lagre den som et nytt søk.
 saved-search.menu-shortcut-group: Menygruppe
+skip-to-content: Hopp til innhold

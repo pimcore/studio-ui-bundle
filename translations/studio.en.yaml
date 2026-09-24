@@ -25,6 +25,8 @@ error.error_document_language_not_set: The document has no language property set
 error.error_inconsistent_asset_type: Only assets of same type are allowed here.
 error.error_recycle_bin_restore: Cannot restore element from recycle bin
 error.error_recycle_bin_restore_missing_parent: Cannot restore element from recycle bin, parent element is missing
+error.error_login_token_as_admin_non_admin_user: Only admin users can generate a login link for an admin user
+error.error_login_token_no_user_password: A login link cannot be generated for this user because no password is set
 error.syntax_error: Syntax error
 sidebar.selected_elements: Selected Elements
 sidebar.grid_config: Grid Config
@@ -426,6 +428,24 @@ login-form.username: Username
 login-form.password: Password
 aria.login-form-additional-logins.additional-login-provider: "Additional login provider:"
 aria.login-form-additional-logins.remember-me-checkbox: Remember me checkbox
+oauth.consent.title: Authorize access
+oauth.consent.subtitle: "{{client}} wants to access Pimcore as you."
+oauth.consent.unverified: Pimcore has not verified this application. Only continue if you started this from an application you trust.
+oauth.consent.redirect-to: "After you allow, you will be sent to {{host}}"
+oauth.consent.permissions-heading: "This will allow it to:"
+oauth.consent.no-scopes-warning: This application did not request specific permissions, so none can be listed. Only allow it if you trust it to act on your behalf.
+oauth.consent.signed-in-as: "Signed in as {{username}}"
+oauth.consent.allow: Allow
+oauth.consent.deny: Deny
+oauth.consent.scope.mcp-read.label: Read your data
+oauth.consent.scope.mcp-read.description: Read, list and search across the tools available to you.
+oauth.consent.scope.mcp-write.label: Modify your data
+oauth.consent.scope.mcp-write.description: Use tools that change data, still limited to your own permissions.
+oauth.consent.retry: Try again
+oauth.consent.error.load-failed: This authorization request could not be loaded.
+oauth.consent.error.decision-failed: Your decision could not be submitted. Please try again.
+oauth.consent.expired.title: This authorization request has expired
+oauth.consent.expired.description: Please start again from your application.
 unsaved-notice: Please save to confirm your changes
 widget-manager.tab-title.close-confirmation: You have unsaved changes, are you sure you want to close this tab?
 action-applied-successfully: Action applied successfully
@@ -680,7 +700,8 @@ button.confirm: Confirm
 button.save-apply: Save & apply
 button.add-edit: Add & edit
 button.cancel-edits: Cancel edits
-toggle.advanced-mode: Advanced mode
+toggle.pql-filter.enable: Enable PQL Filter
+toggle.pql-filter.disable: Disable PQL Filter
 actions.open: Open
 open: Open
 edit: Edit
@@ -1043,6 +1064,8 @@ regex-flags-tooltip: "RegExp without delimiters, has to work in JS (Delimiter: #
 test-string: Test string
 regex-validation-error-message: The string does not match the required format.
 calculator-class: Calculator Class
+calculator-data: Calculator Data
+calculator-data-tooltip: Optional free-form data passed to the calculator, e.g. a plain value, a comma-separated list or a JSON encoded structure.
 calculator-expression: Calculator Expression
 calculator-type: Calculator Type
 calculator-type-tooltip: See the official documentation to learn more about defining expressions or classes.
@@ -1160,6 +1183,10 @@ export-xlsx-form.form-field.header: Header
 export-xlsx-form.form-field.header.option.name: System key
 export-xlsx-form.form-field.header.option.title: Label
 export-xlsx-form.form-field.header.option.no-header: No header
+form.annotation.added: Added
+form.annotation.changed: Changed
+form.annotation.removed: Removed
+form.annotation.moved: Moved
 form.validation.required: This field is required
 form.validation.max-length: The maximum length for this field is {{max}} characters
 form.validation.min: The minimum value is {{min}}
@@ -1311,6 +1338,12 @@ relations.classname: Class
 relations.fullpath: Full Path
 relations.remove-all.confirm: Do you really want to delete all relations?
 relations.upload.subtype-not-allowed: Uploaded assets whose type this relation does not allow were not assigned.
+relations.create-object.title: New object
+relations.create-object.submit: Create
+relations.create-object.name: Name
+relations.create-object.parent: Parent
+relations.create-object.parent.placeholder: Select a parent
+relations.create-object.class: Class
 relation: Relation
 items-limit-reached: The maximum number of items ({{maxItems}}) has been reached.
 asset-upload-type-not-allowed: The uploaded asset's type is not allowed for this field.
@@ -1337,8 +1370,14 @@ upload.assets-items-failed-message: Upload finished with errors.
 quantity-value.converted-units: Converted Units
 table.empty.confirm: Are you sure you want to clear all data?
 table.new-column: New column
+table.insert-column-left: Insert column left
+table.insert-column-right: Insert column right
+table.column-insert-options: Column insert options
 table.delete-column: Delete column
 table.new-row: New row
+table.insert-row-above: Insert row above
+table.insert-row-below: Insert row below
+table.row-insert-options: Row insert options
 table.delete-row: Delete row
 table.duplicate-row: Duplicate row
 table.copy: Copy
@@ -2878,3 +2917,4 @@ saved-search.update.success: Saved search updated
 saved-search.delete.success: Saved search deleted
 saved-search.shared-modified.info: You have made modifications to the original configuration. Since it is owned by someone else, you can save it as a new search.
 saved-search.menu-shortcut-group: Menu group
+skip-to-content: Skip to content

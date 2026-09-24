@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { render } from '@testing-library/react'
+import { ObjectSavedSearchRestore } from './object-saved-search-restore'
 
 const applySavedSearch = jest.fn()
 const setPendingRestore = jest.fn()
@@ -44,8 +45,6 @@ jest.mock('./use-apply-saved-search', () => ({
   restoredColumnKeys: (saved: Array<{ key?: string }>, available: Array<{ key: string }>) =>
     saved.map((column) => column.key ?? '').filter((key) => available.some((entry) => entry.key === key))
 }))
-
-const { ObjectSavedSearchRestore } = require('./object-saved-search-restore')
 
 describe('ObjectSavedSearchRestore', () => {
   beforeEach(() => {

@@ -25,6 +25,8 @@ error.error_document_language_not_set: Le document n'a pas de propriété de lan
 error.error_inconsistent_asset_type: Seuls les assets du même type sont autorisés ici.
 error.error_recycle_bin_restore: "Impossible de restaurer l'élément depuis la corbeille"
 error.error_recycle_bin_restore_missing_parent: "Impossible de restaurer l'élément depuis la corbeille, l'élément parent est manquant"
+error.error_login_token_as_admin_non_admin_user: Seuls les utilisateurs administrateurs peuvent générer un lien de connexion pour un utilisateur administrateur
+error.error_login_token_no_user_password: "Impossible de générer un lien de connexion pour cet utilisateur car aucun mot de passe n'est défini"
 error.syntax_error: Erreur de syntaxe
 sidebar.selected_elements: Éléments sélectionnés
 sidebar.grid_config: Configuration de la grille
@@ -426,6 +428,24 @@ login-form.username: Nom d'utilisateur
 login-form.password: Mot de passe
 aria.login-form-additional-logins.additional-login-provider: "Fournisseur de connexion supplémentaire :"
 aria.login-form-additional-logins.remember-me-checkbox: Case à cocher Se souvenir de moi
+oauth.consent.title: Autoriser l'accès
+oauth.consent.subtitle: "{{client}} souhaite accéder à Pimcore en tant que vous."
+oauth.consent.unverified: Pimcore n'a pas vérifié cette application. Ne continuez que si vous avez démarré cette action depuis une application à laquelle vous faites confiance.
+oauth.consent.redirect-to: "Après avoir autorisé, vous serez redirigé vers {{host}}"
+oauth.consent.permissions-heading: "Cela lui permettra de:"
+oauth.consent.no-scopes-warning: Cette application n'a demandé aucune autorisation spécifique, aucune ne peut donc être affichée. N'autorisez l'accès que si vous lui faites confiance pour agir en votre nom.
+oauth.consent.signed-in-as: "Connecté en tant que {{username}}"
+oauth.consent.allow: Autoriser
+oauth.consent.deny: Refuser
+oauth.consent.scope.mcp-read.label: Lire vos données
+oauth.consent.scope.mcp-read.description: Lire, lister et effectuer des recherches parmi les outils qui vous sont accessibles.
+oauth.consent.scope.mcp-write.label: Modifier vos données
+oauth.consent.scope.mcp-write.description: Utiliser des outils qui modifient des données, toujours limités à vos propres autorisations.
+oauth.consent.retry: Réessayer
+oauth.consent.error.load-failed: Cette demande d'autorisation n'a pas pu être chargée.
+oauth.consent.error.decision-failed: Votre décision n'a pas pu être envoyée. Veuillez réessayer.
+oauth.consent.expired.title: Cette demande d'autorisation a expiré
+oauth.consent.expired.description: Veuillez recommencer depuis votre application.
 unsaved-notice: Veuillez enregistrer pour confirmer vos modifications
 widget-manager.tab-title.close-confirmation: Vous avez des modifications non enregistrées, êtes-vous sûr de vouloir fermer cet onglet ?
 action-applied-successfully: Action appliquée avec succès
@@ -481,8 +501,8 @@ aria.version.expand: Développer la version
 clear-all: Tout effacer
 empty: Vide
 none: Aucun
-yes: Oui
-no: Non
+'yes': Oui
+'no': Non
 by: Par
 field: Champ
 no-data-available: Aucune donnée disponible
@@ -680,7 +700,8 @@ button.confirm: Confirmer
 button.save-apply: Enregistrer et appliquer
 button.add-edit: Ajouter et modifier
 button.cancel-edits: Annuler les modifications
-toggle.advanced-mode: Mode avancé
+toggle.pql-filter.enable: Activer le filtre PQL
+toggle.pql-filter.disable: Désactiver le filtre PQL
 actions.open: Ouvrir
 open: Ouvrir
 edit: Modifier
@@ -1043,6 +1064,8 @@ regex-flags-tooltip: "RegExp sans délimiteurs, doit fonctionner en JS (Délimit
 test-string: Chaîne de test
 regex-validation-error-message: La chaîne ne correspond pas au format requis.
 calculator-class: Classe du calculateur
+calculator-data: Données du calculateur
+calculator-data-tooltip: Données libres facultatives transmises au calculateur, p. ex. une valeur simple, une liste séparée par des virgules ou une structure encodée en JSON.
 calculator-expression: Expression du calculateur
 calculator-type: Type de calculateur
 calculator-type-tooltip: Consultez la documentation officielle pour en savoir plus sur la définition des expressions ou des classes.
@@ -1160,6 +1183,10 @@ export-xlsx-form.form-field.header: En-tête
 export-xlsx-form.form-field.header.option.name: Clé système
 export-xlsx-form.form-field.header.option.title: Libellé
 export-xlsx-form.form-field.header.option.no-header: Sans en-tête
+form.annotation.added: Ajouté
+form.annotation.changed: Modifié
+form.annotation.removed: Supprimé
+form.annotation.moved: Déplacé
 form.validation.required: Ce champ est obligatoire
 form.validation.max-length: La longueur maximale pour ce champ est de {{max}} caractères
 form.validation.min: La valeur minimale est {{min}}
@@ -1311,6 +1338,12 @@ relations.classname: Classe
 relations.fullpath: Chemin complet
 relations.remove-all.confirm: Voulez-vous vraiment supprimer toutes les relations ?
 relations.upload.subtype-not-allowed: Les assets téléversés dont le type n'est pas autorisé par cette relation n'ont pas été affectés.
+relations.create-object.title: Nouvel objet
+relations.create-object.submit: Créer
+relations.create-object.name: Nom
+relations.create-object.parent: Parent
+relations.create-object.parent.placeholder: Sélectionner un parent
+relations.create-object.class: Classe
 relation: relation
 items-limit-reached: Le nombre maximum d'éléments ({{maxItems}}) a été atteint.
 asset-upload-type-not-allowed: Le type de l'asset téléversé n'est pas autorisé pour ce champ.
@@ -1337,8 +1370,14 @@ upload.assets-items-failed-message: Le téléversement s'est terminé avec des e
 quantity-value.converted-units: Unités converties
 table.empty.confirm: Êtes-vous sûr de vouloir effacer toutes les données ?
 table.new-column: Nouvelle colonne
+table.insert-column-left: Insérer une colonne à gauche
+table.insert-column-right: Insérer une colonne à droite
+table.column-insert-options: Options d'insertion de colonne
 table.delete-column: Supprimer la colonne
 table.new-row: Nouvelle ligne
+table.insert-row-above: Insérer une ligne au-dessus
+table.insert-row-below: Insérer une ligne en dessous
+table.row-insert-options: Options d'insertion de ligne
 table.delete-row: Supprimer la ligne
 table.duplicate-row: Dupliquer la ligne
 table.copy: Copier
@@ -2878,3 +2917,4 @@ saved-search.update.success: Recherche enregistrée mise à jour
 saved-search.delete.success: Recherche enregistrée supprimée
 saved-search.shared-modified.info: "Vous avez modifié la configuration d’origine. Comme elle appartient à quelqu’un d’autre, vous pouvez l’enregistrer comme nouvelle recherche."
 saved-search.menu-shortcut-group: Groupe de menu
+skip-to-content: Passer au contenu
