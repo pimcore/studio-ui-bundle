@@ -503,8 +503,8 @@ aria.version.expand: Rozwiń wersję
 clear-all: Wyczyść wszystko
 empty: Pusty
 none: Brak
-yes: Tak
-no: Nie
+'yes': Tak
+'no': Nie
 by: Przez
 field: Pole
 no-data-available: Brak dostępnych danych
