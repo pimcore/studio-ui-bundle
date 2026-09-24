@@ -146,3 +146,33 @@ export const filterInheritedFields = (obj: any, isInherited: (name: string) => b
 
   return result
 }
+
+/**
+ * Sends restored keys as empty. The store only writes the keys it receives, so leaving
+ * a restored key out of the payload would keep the own value it holds - loaded with
+ * it, or written by an auto save before the restore - instead of letting it inherit.
+ *
+ * @param payload Result of filterInheritedFields, changed in place.
+ * @param restoredFieldNames Restored keys relative to the store (group.language.key).
+ * @param isSkipped Keys to leave alone, e.g. changed again or in a deleted group.
+ */
+export const markRestoredFieldsEmpty = (
+  payload: Record<string, any>,
+  restoredFieldNames: string[],
+  isSkipped: (name: string) => boolean
+): void => {
+  forEach(restoredFieldNames, fieldName => {
+    if (isSkipped(fieldName)) {
+      return
+    }
+
+    const groupName = fieldName.split('.')[0]
+
+    // filterInheritedFields encodes a group without own values as an empty list
+    if (isArray(payload[groupName])) {
+      payload[groupName] = {}
+    }
+
+    setWith(payload, fieldName.split('.'), null, Object)
+  })
+}

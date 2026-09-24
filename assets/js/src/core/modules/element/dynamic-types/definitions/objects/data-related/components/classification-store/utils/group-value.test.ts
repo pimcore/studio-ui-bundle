@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { filterInheritedFields, getMergedValue } from './group-value'
+import { filterInheritedFields, getMergedValue, markRestoredFieldsEmpty } from './group-value'
 
 const notInherited = (): boolean => false
 
@@ -131,5 +131,38 @@ describe('getMergedValue', () => {
     const result = getMergedValue(currentValue, originalValue, currentValue, notInherited)
 
     expect(result[2].default[4]).toBe('own value')
+  })
+})
+
+describe('markRestoredFieldsEmpty', () => {
+  const skipNothing = (): boolean => false
+
+  it('sends a restored key as empty so an auto-saved own value is cleared', () => {
+    // key 4 was changed, auto saved and restored: the filter drops it as inherited
+    const value = { 2: { default: { 4: 'Own', 5: 'Other' } } }
+    const payload = filterInheritedFields(value, name => name === '2.default.4')
+
+    markRestoredFieldsEmpty(payload, ['2.default.4'], skipNothing)
+
+    expect(payload[2].default).toEqual({ 4: null, 5: 'Other' })
+  })
+
+  it('turns a group without own values back into an object', () => {
+    const value = { 2: { default: { 4: 'Own' } } }
+    const payload = filterInheritedFields(value, () => true)
+
+    expect(payload[2]).toEqual([])
+
+    markRestoredFieldsEmpty(payload, ['2.default.4'], skipNothing)
+
+    expect(payload[2]).toEqual({ default: { 4: null } })
+  })
+
+  it('leaves skipped keys alone', () => {
+    const payload: Record<string, any> = { 2: { default: { 4: 'Changed again' } } }
+
+    markRestoredFieldsEmpty(payload, ['2.default.4', '3.default.6'], () => true)
+
+    expect(payload).toEqual({ 2: { default: { 4: 'Changed again' } } })
   })
 })

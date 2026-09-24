@@ -17,7 +17,8 @@ import { ClassificationStoreContent } from './classification-store-content'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
-import { DELETED, filterInheritedFields, getMergedValue } from './utils/group-value'
+import { DELETED, filterInheritedFields, getMergedValue, markRestoredFieldsEmpty } from './utils/group-value'
+import { applyRestoredValues } from '../../helpers/inheritance/apply-restored-values'
 import { ClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
 import { ClassificationStoreProvider } from './provider'
 import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
@@ -50,6 +51,8 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
   const deletedGroupsRef = useRef(new Set<string>())
   const changedFieldsRef = useRef<Set<string>>(new Set())
   const restoredFieldsRef = useRef<Set<string>>(new Set())
+  // ancestor values of restored keys that were overridden when loaded, see applyRestoredValues
+  const restoredValuesRef = useRef<Map<string, unknown>>(new Map())
 
   const { id } = useElementContext()
   const { dataObject } = useDataObjectDraft(id)
@@ -66,6 +69,11 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
 
   const fieldNameToString = (field: NamePath): string => {
     return Array.isArray(field) ? field.join('.') : field
+  }
+
+  // restored keys are tracked by their full form path, the payload is relative to the store
+  const toRelativeFieldName = (fullFieldName: string): string => {
+    return fullFieldName.slice(fieldNameToString(classificationStoreName).length + 1)
   }
 
   const onFieldChange = (field: NamePath, value: any): void => {
@@ -108,6 +116,12 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
       }
     })
 
+    markRestoredFieldsEmpty(
+      filteredValue,
+      Array.from(restoredFieldsRef.current, toRelativeFieldName),
+      restoredFieldName => deletedGroupsRef.current.has(restoredFieldName.split('.')[0]) || !isInherited(restoredFieldName)
+    )
+
     forEach(Array.from(deletedGroupsRef.current.keys()), key => {
       filteredValue[key] = { action: DELETED }
     })
@@ -129,22 +143,28 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
   }
 
   /**
-   * Puts a key back to the value it was loaded with. The value itself needs no write:
-   * once the key counts as inherited again, getMergedValue reads it from the loaded
-   * data. The payload is emitted directly, because restoring writes no value and the
-   * change effect of the keyed list would therefore never report it.
+   * Gives a key back to its origin object. The value itself needs no write: once the
+   * key counts as inherited again, getMergedValue reads it from the loaded data, or
+   * from the ancestor value for a key that was overridden when loaded. The payload is
+   * emitted directly, because restoring writes no value and the change effect of the
+   * keyed list would therefore never report it.
    */
   const onFieldRestore = (field: NamePath): void => {
     const fieldName = fieldNameToString(field)
+    const inheritedValue = inheritanceState?.getInheritedValue(field)
 
     changedFieldsRef.current.delete(fieldName)
     restoredFieldsRef.current.add(fieldName)
+
+    if (inheritedValue !== undefined) {
+      restoredValuesRef.current.set(toRelativeFieldName(fieldName), inheritedValue)
+    }
 
     emit(buildPayload(mergedValue))
   }
 
   const mergedValue = useMemo(
-    () => getMergedValue(valueRef.current, originalValue, value, isInherited)
+    () => getMergedValue(valueRef.current, applyRestoredValues(originalValue, restoredValuesRef.current), value, isInherited)
     , [valueRef.current, originalValue]
   )
 
