@@ -10,7 +10,7 @@
 
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useClassDefinitionSelection } from '../../../../class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useDataObjectGetAvailableGridColumnsQuery, useDataObjectGetGridConfigurationQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
@@ -38,12 +38,22 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
   const { selectedColumns, setSelectedColumns } = useSelectedColumns()
   const { setAvailableColumns } = useAvailableColumns()
   const { setGridConfig } = useGridConfig()
+  const appliedFor = useRef<string | undefined>(undefined)
   const appliedFiltersStore = useAppliedFiltersOptional()
 
   useEffect(() => {
     if (data === undefined || initialConfigurationData === undefined) {
       return
     }
+
+    // apply once per configuration: the query objects change identity on refetch and under
+    // StrictMode's double pass, and re-applying the defaults then would silently overwrite a
+    // column set something else has installed since — a restored saved search loses its columns
+    const configKey = `${selectedClassDefinition!.id}|${String(configId)}`
+    if (appliedFor.current === configKey) {
+      return
+    }
+    appliedFor.current = configKey
 
     const selectedColumns: SelectedColumnsContextProps['selectedColumns'] = []
     const availableColumns: AvailableColumn[] = data.columns!.map(column => column)
