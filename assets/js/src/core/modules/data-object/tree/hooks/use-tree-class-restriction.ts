@@ -13,7 +13,7 @@ import { useTreeFilter } from '@Pimcore/components/element-tree/provider/tree-fi
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import { useTreeCopyPasteContext } from '@Pimcore/modules/element/actions/copy-paste/tree-copy-paste-context'
 import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
-import { isEmpty } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
 
 type Source = TreeNodeProps | Element | undefined
 
@@ -23,7 +23,7 @@ export interface UseTreeClassRestrictionReturn {
 }
 
 const getClassName = (source: Source): string | undefined => {
-  if (source === undefined) {
+  if (isUndefined(source)) {
     return undefined
   }
 
@@ -44,7 +44,7 @@ export const useTreeClassRestriction = (): UseTreeClassRestrictionReturn => {
   const { getStoredNode } = useTreeCopyPasteContext('data-object')
 
   const isClassAllowed = (source: Source): boolean => {
-    if (classIds === undefined || classIds.length === 0) {
+    if (isUndefined(classIds) || classIds.length === 0) {
       return true
     }
 
@@ -54,13 +54,13 @@ export const useTreeClassRestriction = (): UseTreeClassRestrictionReturn => {
 
     const className = getClassName(source)
 
-    if (className === undefined || isEmpty(className)) {
+    if (isUndefined(className) || isEmpty(className)) {
       return true
     }
 
     const classId = getByName(className)?.id
 
-    return classId !== undefined && classIds.includes(classId)
+    return !isUndefined(classId) && classIds.includes(classId)
   }
 
   const isPasteHiddenForClass = (): boolean => !isClassAllowed(getStoredNode())
