@@ -15,13 +15,28 @@ import { type DataObjectDraft } from '@Pimcore/modules/data-object/data-object-d
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
 
 export interface InheritanceState {
+  /**
+   * 'broken' marks a field that takes part in inheritance but carries an own value:
+   * either changed during this editing session or already overridden when loaded.
+   */
   inherited: boolean | 'broken'
-  objectId: number
+  /**
+   * Object the value originates from. Undefined after restoring a field that was
+   * overridden when loaded: the backend reports the ancestor value, not its object.
+   */
+  objectId?: number
 }
 
 export interface IInheritanceStateContext {
   getInheritanceState: (name: NamePath) => InheritanceState | undefined
   breakInheritance: (name: NamePath) => void
+  /** Whether restoreInheritance can give the field back to its origin object. */
+  canRestoreInheritance: (name: NamePath) => boolean
+  /**
+   * Value the field takes when its inheritance is restored, normalized like the
+   * object data. Undefined when that is the value the field was loaded with.
+   */
+  getInheritedValue: (name: NamePath) => unknown
   restoreInheritance: (name: NamePath) => void
 }
 
@@ -29,11 +44,23 @@ export const InheritanceStateContext = React.createContext<IInheritanceStateCont
 
 const getStateKey = (name: NamePath): string => Array.isArray(name) ? name.join('.') : name.toString()
 
-const getInitialInheritanceState = (dataObjectDraft?: DataObjectDraft): Record<string, InheritanceState> => {
+interface RestoreTarget {
+  state: InheritanceState
+  /** See IInheritanceStateContext.getInheritedValue. */
+  value?: unknown
+}
+
+interface InitialInheritance {
+  states: Record<string, InheritanceState>
+  restoreTargets: Record<string, RestoreTarget>
+}
+
+const getInitialInheritance = (dataObjectDraft?: DataObjectDraft): InitialInheritance => {
   const inheritanceStates: Record<string, InheritanceState> = {}
+  const restoreTargets: Record<string, RestoreTarget> = {}
 
   if (dataObjectDraft === undefined) {
-    return inheritanceStates
+    return { states: inheritanceStates, restoreTargets }
   }
   const traverseMetaData = (metaData: unknown, path: string[] = []): void => {
     if (typeof metaData !== 'object' || metaData === null) return
@@ -48,10 +75,26 @@ const getInitialInheritanceState = (dataObjectDraft?: DataObjectDraft): Record<s
           typeof value.inherited === 'boolean'
       ) {
         const stateKey = currentPath.join('.')
-        inheritanceStates[stateKey] = {
-          objectId: value.objectId,
-          inherited: value.inherited
+
+        if (value.inherited) {
+          inheritanceStates[stateKey] = { objectId: value.objectId, inherited: true }
+          restoreTargets[stateKey] = { state: inheritanceStates[stateKey] }
+          return
         }
+
+        // An own value that hides an ancestor value: overridden in an earlier session.
+        // inheritedValue is null when no ancestor holds a value, so there is nothing to
+        // restore, and absent when inheritable is false.
+        const isOverridden = 'inheritable' in value && value.inheritable === true &&
+          'inheritedValue' in value && value.inheritedValue !== null && value.inheritedValue !== undefined
+
+        if (isOverridden) {
+          inheritanceStates[stateKey] = { objectId: value.objectId, inherited: 'broken' }
+          restoreTargets[stateKey] = { state: { inherited: true }, value: value.inheritedValue }
+          return
+        }
+
+        inheritanceStates[stateKey] = { objectId: value.objectId, inherited: false }
       } else {
         traverseMetaData(value, currentPath)
       }
@@ -68,13 +111,13 @@ const getInitialInheritanceState = (dataObjectDraft?: DataObjectDraft): Record<s
     traverseMetaData(dataObjectDraft.inheritanceData.metaData)
   }
 
-  return inheritanceStates
+  return { states: inheritanceStates, restoreTargets }
 }
 
 export const InheritanceStateProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { id } = useContext(DataObjectContext)
   const { dataObject } = useDataObjectDraft(id)
-  const [initialInheritanceStates] = useState<Record<string, InheritanceState>>(() => getInitialInheritanceState(dataObject))
+  const [{ states: initialInheritanceStates, restoreTargets }] = useState<InitialInheritance>(() => getInitialInheritance(dataObject))
   const [inheritanceStates, setInheritanceStates] = useState<Record<string, InheritanceState>>(initialInheritanceStates)
   const [, startTransition] = useTransition()
 
@@ -102,32 +145,44 @@ export const InheritanceStateProvider: React.FC<{ children: React.ReactNode }> =
     })
   }, [])
 
+  const canRestoreInheritance = useCallback((name: NamePath): boolean => {
+    const key = getStateKey(name)
+
+    return inheritanceStates[key]?.inherited === 'broken' && restoreTargets[key] !== undefined
+  }, [inheritanceStates, restoreTargets])
+
+  const getInheritedValue = useCallback((name: NamePath): unknown => {
+    return restoreTargets[getStateKey(name)]?.value
+  }, [restoreTargets])
+
   /**
-   * Puts a field that was broken during this editing session back to the state it
-   * was loaded with. Fields that already carried an own value when the editor was
-   * opened have no known inherited value, so they are left untouched.
+   * Gives a field back to its origin object: a field inherited when loaded returns to
+   * that state, a field overridden when loaded becomes inherited from an ancestor that
+   * is not known here. Fields without an ancestor value are left untouched.
    */
   const restoreInheritance = useCallback((name: NamePath): void => {
     const key = getStateKey(name)
-    const initialState = initialInheritanceStates[key]
+    const restoreTarget = restoreTargets[key]
 
-    if (initialState?.inherited !== true) {
+    if (restoreTarget === undefined) {
       return
     }
 
     startTransition(() => {
       setInheritanceStates(prevStates => ({
         ...prevStates,
-        [key]: initialState
+        [key]: restoreTarget.state
       }))
     })
-  }, [initialInheritanceStates])
+  }, [restoreTargets])
 
   const value = useMemo(() => ({
     getInheritanceState,
     breakInheritance,
+    canRestoreInheritance,
+    getInheritedValue,
     restoreInheritance
-  }), [getInheritanceState, breakInheritance, restoreInheritance])
+  }), [getInheritanceState, breakInheritance, canRestoreInheritance, getInheritedValue, restoreInheritance])
 
   return (
     <InheritanceStateContext.Provider value={ value }>

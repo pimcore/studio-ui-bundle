@@ -18,6 +18,7 @@ import { forEach, get, isEmpty, isEqual, isPlainObject, isUndefined, keys, union
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
 import { DELETED, filterInheritedFields, getMergedValue } from './utils/brick-value'
+import { applyRestoredValues } from '../../helpers/inheritance/apply-restored-values'
 
 export interface ObjectBrickProps extends AbstractObjectDataDefinition {
   border?: boolean
@@ -38,6 +39,8 @@ export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
   const inheritanceState = useInheritanceState()
   const changedFieldsRef = useRef<Set<string>>(new Set())
   const restoredFieldsRef = useRef<Set<string>>(new Set())
+  // ancestor values of restored fields that were overridden when loaded, see applyRestoredValues
+  const restoredValuesRef = useRef<Map<string, unknown>>(new Map())
   const { id } = useContext(DataObjectContext)
   const { dataObject } = useDataObjectDraft(id)
 
@@ -118,22 +121,28 @@ export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
   }
 
   /**
-   * Puts a field back to the value it was loaded with. The value itself needs no
-   * write: once the field counts as inherited again, getMergedValue reads it from the
-   * loaded data. The payload is emitted directly, because the guards in onChange
-   * compare against the same encoding and would drop it as unchanged.
+   * Gives a field back to its origin object. The value itself needs no write: once the
+   * field counts as inherited again, getMergedValue reads it from the loaded data, or
+   * from the ancestor value for a field that was overridden when loaded. The payload
+   * is emitted directly, because the guards in onChange compare against the same
+   * encoding and would drop it as unchanged.
    */
   const onFieldRestore = (field: NamePath): void => {
     const fieldName = fieldNameToString(field)
+    const inheritedValue = inheritanceState?.getInheritedValue(field)
 
     changedFieldsRef.current.delete(fieldName)
     restoredFieldsRef.current.add(fieldName)
+
+    if (inheritedValue !== undefined) {
+      restoredValuesRef.current.set(fieldName.slice(fieldNameToString(props.name).length + 1), inheritedValue)
+    }
 
     emit(buildPayload(mergedValue))
   }
 
   const mergedValue = useMemo(
-    () => getMergedValue(valueRef.current, originalValue, props.value, isInherited)
+    () => getMergedValue(valueRef.current, applyRestoredValues(originalValue, restoredValuesRef.current), props.value, isInherited)
     , [valueRef.current, originalValue]
   )
 

@@ -2091,6 +2091,7 @@ preview.phone-horizontal: Querformat Telefon
 preview.select_date_time: Datum & Uhrzeit auswählen
 preview.screen_size_too_small: Der verfügbare Platz ist zu klein, um den ausgewählten Vorschaumodus anzuzeigen.
 inheritance-active: "Daten geerbt von Objekt-ID {{id}}"
+inheritance-active-unknown-origin: Daten geerbt von einem übergeordneten Objekt
 inheritance-broken: Datenvererbung unterbrochen
 inheritance-restore: Wiederherstellen
 main: Haupt

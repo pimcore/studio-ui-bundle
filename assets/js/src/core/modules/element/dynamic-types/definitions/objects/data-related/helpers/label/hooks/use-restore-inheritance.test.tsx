@@ -14,25 +14,30 @@ import { type InheritanceState } from '@Pimcore/modules/data-object/editor/types
 import { useRestoreInheritance } from './use-restore-inheritance'
 
 const resetFields = jest.fn()
+const setFieldValue = jest.fn()
 const clearDataObjectAttribute = jest.fn()
 const updateDraft = jest.fn(async () => {})
 const restoreInheritance = jest.fn()
 const onFieldRestore = jest.fn()
 
 let inheritedState: InheritanceState | undefined
+let inheritedValue: unknown
 let hasEditForm = true
 let keyedList: { onFieldRestore?: (field: NamePath) => void } | undefined
 
 jest.mock('@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state', () => ({
   useInheritanceState: () => ({
     getInheritanceState: () => inheritedState,
+    // the provider offers a restore for every broken field it knows a restore target of
+    canRestoreInheritance: () => inheritedState?.inherited === 'broken',
+    getInheritedValue: () => inheritedValue,
     restoreInheritance
   })
 }))
 
 jest.mock('@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider', () => ({
   useEditFormContextOptional: () => hasEditForm
-    ? { form: { resetFields }, clearDataObjectAttribute, updateDraft }
+    ? { form: { resetFields, setFieldValue }, clearDataObjectAttribute, updateDraft }
     : undefined
 }))
 
@@ -54,6 +59,7 @@ const restoreField = (fieldName: NamePath | undefined, emptyValue?: unknown): bo
 beforeEach(() => {
   jest.clearAllMocks()
   inheritedState = broken
+  inheritedValue = undefined
   hasEditForm = true
   keyedList = undefined
 })
@@ -64,8 +70,20 @@ describe('useRestoreInheritance', () => {
       expect(restoreField(name)).toBe(true)
 
       expect(resetFields).toHaveBeenCalledWith([name])
+      expect(setFieldValue).not.toHaveBeenCalled()
       expect(clearDataObjectAttribute).toHaveBeenCalledWith(name, null)
       expect(updateDraft).toHaveBeenCalled()
+      expect(restoreInheritance).toHaveBeenCalledWith(name)
+    })
+
+    it('puts the ancestor value into a field that was overridden when loaded', () => {
+      inheritedValue = 'Parent value'
+
+      expect(restoreField(name)).toBe(true)
+
+      expect(setFieldValue).toHaveBeenCalledWith(name, 'Parent value')
+      expect(resetFields).not.toHaveBeenCalled()
+      expect(clearDataObjectAttribute).toHaveBeenCalledWith(name, null)
       expect(restoreInheritance).toHaveBeenCalledWith(name)
     })
 
@@ -97,9 +115,11 @@ describe('useRestoreInheritance', () => {
     })
 
     it('leaves the Ant form store alone', () => {
+      inheritedValue = 'Parent value'
       restoreField(name)
 
       expect(resetFields).not.toHaveBeenCalled()
+      expect(setFieldValue).not.toHaveBeenCalled()
       expect(clearDataObjectAttribute).not.toHaveBeenCalled()
     })
 

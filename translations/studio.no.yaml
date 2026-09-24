@@ -2091,6 +2091,7 @@ preview.phone-horizontal: Telefon horisontal
 preview.select_date_time: Velg dato og tid
 preview.screen_size_too_small: Tilgjengelig plass er for liten til å vise valgt forhåndsvisningsmodus.
 inheritance-active: "Data arvet fra objekt-ID {{id}}"
+inheritance-active-unknown-origin: Data arvet fra et overordnet objekt
 inheritance-broken: Dataarv brutt
 inheritance-restore: Gjenopprett
 main: Hoved

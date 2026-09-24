@@ -2091,6 +2091,7 @@ preview.phone-horizontal: Teléfono horizontal
 preview.select_date_time: Seleccionar fecha y hora
 preview.screen_size_too_small: El espacio disponible es demasiado pequeño para mostrar el modo de vista previa seleccionado.
 inheritance-active: "Datos heredados del objeto con ID {{id}}"
+inheritance-active-unknown-origin: Datos heredados de un objeto padre
 inheritance-broken: Herencia de datos interrumpida
 inheritance-restore: Restaurar
 main: Principal

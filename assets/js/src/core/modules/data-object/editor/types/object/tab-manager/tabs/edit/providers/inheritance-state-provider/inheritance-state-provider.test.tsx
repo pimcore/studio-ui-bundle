@@ -27,6 +27,9 @@ const mockDataObject = {
     metaData: {
       manufacturer: { objectId: parentId, inherited: true },
       name: { objectId, inherited: false },
+      sku: { objectId, inherited: false, inheritable: true, inheritedValue: 'SKU-PARENT' },
+      ean: { objectId, inherited: false, inheritable: true, inheritedValue: null },
+      slug: { objectId, inherited: false, inheritable: false, inheritedValue: null },
       localizedfields: {
         description: {
           de: { objectId: parentId, inherited: true }
@@ -49,6 +52,8 @@ const FieldHarness = ({ name }: { name: string | string[] }): React.JSX.Element 
     <>
       <span data-testid="state">{ String(state?.inherited) }</span>
       <span data-testid="origin">{ String(state?.objectId) }</span>
+      <span data-testid="can-restore">{ String(inheritanceState?.canRestoreInheritance(name)) }</span>
+      <span data-testid="inherited-value">{ String(inheritanceState?.getInheritedValue(name)) }</span>
       <button
         data-testid="break"
         onClick={ () => { inheritanceState?.breakInheritance(name) } }
@@ -75,6 +80,8 @@ const renderField = (name: string | string[]): void => {
 
 const state = (): string => screen.getByTestId('state').textContent ?? ''
 const origin = (): string => screen.getByTestId('origin').textContent ?? ''
+const canRestore = (): string => screen.getByTestId('can-restore').textContent ?? ''
+const inheritedValue = (): string => screen.getByTestId('inherited-value').textContent ?? ''
 
 describe('InheritanceStateProvider', () => {
   it('restores an inherited field that was broken during the session', async () => {
@@ -86,9 +93,47 @@ describe('InheritanceStateProvider', () => {
     await user.click(screen.getByTestId('break'))
     expect(state()).toBe('broken')
 
+    expect(canRestore()).toBe('true')
+    // restored through the value it was loaded with
+    expect(inheritedValue()).toBe('undefined')
+
     await user.click(screen.getByTestId('restore'))
     expect(state()).toBe('true')
     expect(origin()).toBe(String(parentId))
+    expect(canRestore()).toBe('false')
+  })
+
+  it('marks a field overridden in an earlier session and restores it to the ancestor value', async () => {
+    const user = userEvent.setup()
+    renderField('sku')
+
+    expect(state()).toBe('broken')
+    expect(canRestore()).toBe('true')
+    expect(inheritedValue()).toBe('SKU-PARENT')
+
+    await user.click(screen.getByTestId('restore'))
+    expect(state()).toBe('true')
+    // the backend reports the ancestor value, not the object holding it
+    expect(origin()).toBe('undefined')
+    expect(canRestore()).toBe('false')
+
+    await user.click(screen.getByTestId('break'))
+    expect(state()).toBe('broken')
+    expect(canRestore()).toBe('true')
+  })
+
+  it.each([
+    ['no ancestor holds a value', 'ean'],
+    ['the field cannot inherit', 'slug']
+  ])('treats an own value as not overridden when %s', async (_label, fieldName) => {
+    const user = userEvent.setup()
+    renderField(fieldName)
+
+    expect(state()).toBe('false')
+    expect(canRestore()).toBe('false')
+
+    await user.click(screen.getByTestId('restore'))
+    expect(state()).toBe('false')
   })
 
   it('restores a localized field by its full form path', async () => {

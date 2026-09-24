@@ -21,20 +21,23 @@ import {
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
 
 export interface UseRestoreInheritanceReturn {
-  /** Whether the field was inherited when the editor was opened and has been changed since. */
+  /**
+   * Whether the field carries an own value that hides an ancestor value, set during
+   * this editing session or an earlier one.
+   */
   canRestore: boolean
   restore: () => void
 }
 
 /**
- * Undoes the change that broke a field's inheritance, so the field takes its value
- * from the origin object again.
+ * Removes a field's own value, so the field takes its value from the origin object
+ * again.
  *
  * Where the value lives decides how that is done. Plain fields are held by the Ant
- * form store, so the form resets them and the field is persisted as empty. Inside a
- * Form.KeyedList - object bricks and the classification store - the value is held by
- * the list, which encodes inherited fields in its own payload, so only its owner can
- * put one back.
+ * form store, so the form shows the inherited value again and the field is persisted
+ * as empty. Inside a Form.KeyedList - object bricks and the classification store - the
+ * value is held by the list, which encodes inherited fields in its own payload, so
+ * only its owner can put one back.
  *
  * @param name Form path of the field, which is also the key of its inheritance state.
  * @param emptyValue Value that clears the field, see DynamicTypeObjectDataAbstract.
@@ -48,10 +51,10 @@ export const useRestoreInheritance = (
   const keyedList = useKeyedListOptional()
 
   const isKeyedList = keyedList !== undefined
-  const isBroken = name !== undefined &&
-    inheritanceStateContext?.getInheritanceState(name)?.inherited === 'broken'
+  const isRestorable = name !== undefined &&
+    inheritanceStateContext?.canRestoreInheritance(name) === true
 
-  const canRestore = isBroken && (
+  const canRestore = isRestorable && (
     isKeyedList
       ? keyedList.onFieldRestore !== undefined
       : editFormContext !== undefined
@@ -65,10 +68,17 @@ export const useRestoreInheritance = (
     if (isKeyedList) {
       keyedList.onFieldRestore?.(name)
     } else {
-      // Resetting puts the value the field was loaded with, the inherited one, back
-      // into the form. Ant does not report a reset through onValuesChange, so the
-      // field is not counted as changed again.
-      editFormContext?.form.resetFields([name])
+      // A field inherited when loaded gets the value it was loaded with back through a
+      // reset, one overridden when loaded gets the ancestor value the backend reported.
+      // Ant reports neither through onValuesChange, so the field is not counted as
+      // changed again.
+      const inheritedValue = inheritanceStateContext?.getInheritedValue(name)
+
+      if (inheritedValue === undefined) {
+        editFormContext?.form.resetFields([name])
+      } else {
+        editFormContext?.form.setFieldValue(name, inheritedValue)
+      }
 
       // An auto save may already have written the own value into the draft, so the
       // field has to be persisted as empty for the backend to resolve it from the

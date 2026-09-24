@@ -2089,7 +2089,9 @@ preview.phone-horizontal: Telefoon horizontaal
 preview.select_date_time: Datum & tijd selecteren
 preview.screen_size_too_small: De beschikbare ruimte is te klein om de geselecteerde voorbeeldmodus weer te geven.
 inheritance-active: "Gegevens overgeërfd van object-ID {{id}}"
+inheritance-active-unknown-origin: Gegevens overgeërfd van een bovenliggend object
 inheritance-broken: Gegevensovererving onderbroken
+inheritance-restore: Herstellen
 main: Hoofd
 main_admin: Hoofd (beheerdermodus)
 draft-alert: De huidige versie is een concept. Je kunt het concept verwijderen om de vorige versie te herstellen.

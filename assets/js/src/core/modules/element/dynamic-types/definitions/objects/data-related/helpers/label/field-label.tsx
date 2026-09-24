@@ -38,10 +38,16 @@ export const FieldLabel: React.FC<FieldLabelProps> = (props: FieldLabelProps): R
       align="center"
       gap="extra-small"
     >
-      { inheritanceState?.inherited === true && (
+      { inheritanceState?.inherited === true && inheritanceState.objectId !== undefined && (
         <InheritanceButton
           objectId={ inheritanceState.objectId }
         />
+      )}
+      { inheritanceState?.inherited === true && inheritanceState.objectId === undefined && (
+        // Restored from an own value: the origin object is not known, so there is nothing to open.
+        <Tooltip title={ t('inheritance-active-unknown-origin') }>
+          <Icon value="inheritance-active" />
+        </Tooltip>
       )}
       { inheritanceState?.inherited === 'broken' && (
         <Tooltip title={ t('inheritance-broken') }>
