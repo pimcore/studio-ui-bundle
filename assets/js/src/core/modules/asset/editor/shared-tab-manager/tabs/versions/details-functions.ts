@@ -121,10 +121,12 @@ export const versionsDataToTableData = (data: AssetVersionData[]): object[] => {
   const t = i18n.t
   const tableBaseData: object[] = []
   const tableMetaData: object[] = []
-  const fieldColumn = t('field')
+  // Structural keys consumed by the views (e.g. `item.Field`, keys starting
+  // with 'Version') — must stay untranslated, labels get translated on render
+  const fieldColumn = 'Field'
 
   data.forEach((versionData, index) => {
-    const dataColumn = `${t('version.version')} ${versionData.versionCount}`
+    const dataColumn = `Version ${versionData.versionCount}`
 
     Object.keys(versionData.baseDataFormatted).forEach((key) => {
       if (key === 'dimensions' && !checkIsImageVersion(versionData.dataRaw)) {
@@ -166,8 +168,8 @@ export const versionsDataToTableData = (data: AssetVersionData[]): object[] => {
   })
 
   tableMetaData.sort((a: [], b: []) => {
-    const keyA: string = a[t('field')].key.toLowerCase()
-    const keyB: string = b[t('field')].key.toLowerCase()
+    const keyA: string = a[fieldColumn].key.toLowerCase()
+    const keyB: string = b[fieldColumn].key.toLowerCase()
 
     if (keyA < keyB) {
       return -1

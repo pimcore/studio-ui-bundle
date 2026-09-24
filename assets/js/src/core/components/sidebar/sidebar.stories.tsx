@@ -11,6 +11,7 @@
 import { type Meta } from '@storybook/react'
 import { Sidebar } from '@Pimcore/components/sidebar/sidebar'
 import { SidebarProvider, ProvidedSidebar, useSidebar } from '@Pimcore/components/sidebar'
+import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Button } from 'antd'
 import React from 'react'
@@ -26,9 +27,12 @@ const config: Meta = {
       <div style={ { display: 'flex', height: '50vh' } }>
         <Sidebar
           buttons={ args.buttons }
+          collapsible={ args.collapsible }
           entries={ args.entries }
           highlights={ args.highlights }
+          resizable={ args.resizable }
           sizing={ args.sizing }
+          tooltipPlacement={ args.tooltipPlacement }
         />
       </div>
     )
@@ -52,6 +56,11 @@ It can be used in two ways:
 - Manually resizable width: a resize handle appears when hovering the left edge of the
   expanded sidebar — drag it (or focus it and use the arrow keys); the width of the
   current size acts as the minimum
+- Pinned open with \`collapsible={false}\` — the active tab can be switched but not closed
+- Container-sized with \`resizable={false}\` — no handle of its own, the panel fills the
+  space a resizable parent such as \`SplitLayout\` gives it
+- \`tooltipPlacement\` points the rail tooltips at the main content, so a sidebar on the
+  left edge opens them to the right
 - Provider pattern for dynamic state management
         `
       }
@@ -76,6 +85,19 @@ It can be used in two ways:
     },
     highlights: {
       description: 'Array of entry keys to highlight'
+    },
+    collapsible: {
+      control: { type: 'boolean' },
+      description: 'When false the sidebar stays expanded and tabs can only be switched (default: true)'
+    },
+    resizable: {
+      control: { type: 'boolean' },
+      description: 'When false the sidebar drops its handle and fills the container (default: true)'
+    },
+    tooltipPlacement: {
+      control: { type: 'inline-radio' },
+      options: ['left', 'right'],
+      description: 'Side the rail tooltips open towards (default: left)'
     }
   }
 }
@@ -364,6 +386,61 @@ Open the tab, then hover the left edge of the sidebar: a resize handle appears. 
 to widen the panel — useful for long values such as controller names. The handle also
 supports the keyboard: focus it and press ArrowLeft/ArrowRight. The width of the
 configured sizing is the minimum.
+        `
+      }
+    }
+  }
+}
+
+export const InsideASplitLayout = {
+  render: () => (
+    <div style={ { height: '50vh', width: '700px' } }>
+      <SplitLayout
+        leftItem={ {
+          size: 50,
+          minSize: 200,
+          children: (
+            <SidebarProvider initialActiveTab="document-configuration">
+              <Sidebar
+                collapsible={ false }
+                entries={ [
+                  {
+                    key: 'document-configuration',
+                    icon: (
+                      <Icon
+                        options={ { width: '16px', height: '16px' } }
+                        value="settings"
+                      />
+                    ),
+                    component: (
+                      <div style={ { padding: '16px', minWidth: 0 } }>
+                        <h4>Document Configuration</h4>
+                        <p>Description</p>
+                      </div>
+                    ),
+                    tooltip: 'Document Configuration'
+                  }
+                ] }
+                resizable={ false }
+                tooltipPlacement="right"
+              />
+            </SidebarProvider>
+          )
+        } }
+        resizeAble
+        rightItem={ { size: 50, minSize: 200, children: <div style={ { padding: '16px' } }>Main content</div> } }
+        withDivider
+      />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: `
+A sidebar that does not own its width. \`resizable={false}\` drops its own hover-revealed
+handle and lets the panel fill the pane, so the split layout's divider — drawn between the
+panes and draggable from either side — is the only resize affordance. Pair it with
+\`collapsible={false}\` when the panel should always be showing something.
         `
       }
     }

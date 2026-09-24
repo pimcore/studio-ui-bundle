@@ -21,6 +21,7 @@ import { useTableValue, type TableValue } from './hooks/use-table-value'
 import { getCopyData, getPasteData } from './utils/copy-paste'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { NewColumnButton, NewRowButton } from './components/insert-buttons/insert-buttons'
 import { Content } from '@Pimcore/components/content/content'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { copyToClipboardWithFeedback } from '@Pimcore/utils/clipboard'
@@ -39,6 +40,9 @@ export interface TableProps {
   height?: number | string | null
   data?: string | null // default data from class definition
   className?: string
+  // Offers explicit insert positions (above/below, left/right) via a split button
+  // instead of a single button that always inserts before the selected cell.
+  allowInsertPosition?: boolean
 }
 
 const parseFieldDefinitionData = (data?: string | null): TableValue | null => {
@@ -100,30 +104,28 @@ export const Table = (props: TableProps): React.JSX.Element => {
     }
   }, [value])
 
+  const allowInsertPosition = props.allowInsertPosition === true
+
   const items: ReactElement[] = []
 
   if (props.disabled !== true) {
     if (props.rowsFixed !== true || rows < (props.rows ?? 0)) {
       items.push(
-        <IconTextButton
-          icon={ { value: 'new-row' } }
-          onClick={ newRow }
-          type="default"
-        >
-          {t('table.new-row')}
-        </IconTextButton>
+        <NewRowButton
+          allowInsertPosition={ allowInsertPosition }
+          hasSelection={ activeCell !== undefined }
+          onInsert={ newRow }
+        />
       )
     }
 
     if (!columnConfigActivated && (props.colsFixed !== true || cols < (props.cols ?? 0))) {
       items.push(
-        <IconTextButton
-          icon={ { value: 'new-column' } }
-          onClick={ newColumn }
-          type="default"
-        >
-          {t('table.new-column')}
-        </IconTextButton>
+        <NewColumnButton
+          allowInsertPosition={ allowInsertPosition }
+          hasSelection={ activeCell !== undefined }
+          onInsert={ newColumn }
+        />
       )
     }
 

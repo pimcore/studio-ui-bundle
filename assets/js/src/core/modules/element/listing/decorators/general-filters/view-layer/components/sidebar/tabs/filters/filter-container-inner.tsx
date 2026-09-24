@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Title } from '@Pimcore/components/title/title'
@@ -20,103 +20,63 @@ import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { FieldFilters } from '@Pimcore/components/field-filters/field-filters'
 import { ColumnPickerPopover } from '@Pimcore/components/column-picker/column-picker-popover'
-import { FiltersRenderer, type FilterValues } from '@Pimcore/components/filters'
+import { FilterCommitProvider, FiltersRenderer } from '@Pimcore/components/filters'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
-import { useFieldFilterEditor } from './field-filters/use-field-filter-editor'
 import {
   ContentLayout
 } from '@Pimcore/components/content-layout/content-layout'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Content } from '@Pimcore/components/content/content'
-import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
-import { useGeneralFiltersConfig } from '../../../../../context-layer/provider/general-filters-config/use-general-filters-config'
-import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
-import { useAppliedFilters, useDraftFilterValues, useDraftFilters, useElementFilterContext, elementFilterDefinitions } from '../../../../../element-filters'
+import { useDraftFilters, useElementFilterContext, elementFilterDefinitions } from '../../../../../element-filters'
+import { useFilterPanel } from './use-filter-panel'
 
 export const FilterContainerInner = (): React.JSX.Element => {
-  const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
+  const { t } = useTranslation()
 
-  const { setPage } = usePaging()
-  const { setValues: setAppliedValues } = useAppliedFilters()
-  const { handleSearchTermInSidebar, showOnlyUnreferencedFilter } = useGeneralFiltersConfig()
-  const { setDataLoadingState } = useData()
-
-  const { searchTerm, directChildren, unreferenced, pql, fieldFilters, reset } = useDraftFilterValues()
   const draftStore = useDraftFilters()
   const filterContext = useElementFilterContext()
 
-  const { t } = useTranslation()
-  const { filters, onFilterChange, columnGroups, handleColumnClick } = useFieldFilterEditor()
-
-  // Reflect a pre-applied PQL query (e.g. from a restored saved search) as advanced mode, so the
-  // query is shown and editable instead of silently active behind the regular filters.
-  useEffect(() => {
-    if (pql !== '') {
-      setIsAdvancedMode(true)
-    }
-  }, [pql])
-
-  const handleApplyClick = (): void => {
-    const valuesToApply: FilterValues = {
-      fieldFilters,
-      directChildren,
-      pql: isAdvancedMode ? pql : ''
-    }
-
-    if (showOnlyUnreferencedFilter === true) {
-      valuesToApply.unreferenced = unreferenced
-    }
-
-    if (handleSearchTermInSidebar) {
-      valuesToApply.searchTerm = searchTerm
-    }
-
-    setAppliedValues(valuesToApply)
-
-    setPage(1)
-    setDataLoadingState('filters-applied')
-  }
-
-  const handleResetAllFiltersClick = (): void => {
-    reset()
-  }
+  const {
+    isPqlFilterEnabled,
+    applyFilters,
+    onApplyClick,
+    onClearAllClick,
+    onPqlFilterToggle,
+    fieldFilterEditor: { filters, onFilterChange, onFilterCommit, columnGroups, handleColumnClick }
+  } = useFilterPanel()
 
   return (
     <ContentLayout
       renderToolbar={
         <Toolbar theme='secondary'>
-          {!isAdvancedMode
-            ? (
-              <ColumnPickerPopover<AvailableColumn>
-                data-testid="listing-field-filter-add"
-                groups={ columnGroups }
-                onSelect={ (item) => { handleColumnClick(item.meta!) } }
-                placement="leftBottom"
-              >
-                <IconTextButton
-                  data-testid="listing-field-filter-add-button"
-                  icon={ { value: 'new' } }
-                  type='default'
-                >
-                  {t('listing.add-column')}
-                </IconTextButton>
-              </ColumnPickerPopover>
-              )
-            : <div />}
+          <ColumnPickerPopover<AvailableColumn>
+            data-testid="listing-field-filter-add"
+            groups={ columnGroups }
+            onSelect={ (item) => { handleColumnClick(item.meta!) } }
+            placement="leftBottom"
+          >
+            <IconTextButton
+              data-testid="listing-field-filter-add-button"
+              icon={ { value: 'new' } }
+              type='default'
+            >
+              {t('listing.add-column')}
+            </IconTextButton>
+          </ColumnPickerPopover>
 
           <Flex gap='extra-small'>
             <IconTextButton
               data-testid="listing-filter-clear-button"
               icon={ { value: 'close' } }
-              onClick={ handleResetAllFiltersClick }
+              onClick={ onClearAllClick }
               type='link'
             >
-              {t('sidebar.clear-all-filters')}
+              {t('clear-all')}
             </IconTextButton>
 
             <Button
               data-testid="listing-filter-apply-button"
-              onClick={ handleApplyClick }
+              onClick={ onApplyClick }
               type='primary'
             >
               {t('button.apply')}
@@ -131,58 +91,54 @@ export const FilterContainerInner = (): React.JSX.Element => {
           justify='space-between'
         >
           <Title>{t('sidebar.search_filter')}</Title>
-          <Flex gap='extra-small'>
-            <Text>{t('toggle.advanced-mode')}</Text>
-            <Switch
-              checked={ isAdvancedMode }
-              data-testid="listing-filter-advanced-toggle"
-              onChange={ () => {
-                setIsAdvancedMode(!isAdvancedMode)
-              } }
-            />
-          </Flex>
+          <Switch
+            checked={ isPqlFilterEnabled }
+            data-testid="listing-filter-advanced-toggle"
+            labelLeft={ <Text>{isPqlFilterEnabled ? t('toggle.pql-filter.disable') : t('toggle.pql-filter.enable')}</Text> }
+            onChange={ onPqlFilterToggle }
+          />
         </Flex>
 
-        {isAdvancedMode
-          ? (
-            <FiltersRenderer
-              context={ filterContext }
-              descriptors={ elementFilterDefinitions }
-              section='advanced'
-              store={ draftStore }
-            />
-            )
+        <Form>
+          <Flex
+            gap='small'
+            style={ { width: '100%' } }
+            vertical
+          >
+            { /* Lets a control apply on its own, e.g. Enter in the search field */ }
+            <FilterCommitProvider onCommit={ applyFilters }>
+              <FiltersRenderer
+                context={ filterContext }
+                descriptors={ elementFilterDefinitions }
+                section='controls'
+                store={ draftStore }
+              />
+
+              {isPqlFilterEnabled && (
+                <FiltersRenderer
+                  context={ filterContext }
+                  descriptors={ elementFilterDefinitions }
+                  section='advanced'
+                  store={ draftStore }
+                />
+              )}
+            </FilterCommitProvider>
+          </Flex>
+        </Form>
+
+        <Title>
+          {t('element.sidebar.field-filters')}
+        </Title>
+
+        { filters.length === 0
+          ? <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } />
           : (
-            <>
-              <Form>
-                <Flex
-                  gap='small'
-                  style={ { width: '100%' } }
-                  vertical
-                >
-                  <FiltersRenderer
-                    context={ filterContext }
-                    descriptors={ elementFilterDefinitions }
-                    section='controls'
-                    store={ draftStore }
-                  />
-                </Flex>
-              </Form>
-
-              <Title>
-                {t('element.sidebar.field-filters')}
-              </Title>
-
-              { filters.length === 0
-                ? <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } />
-                : (
-                  <FieldFilters
-                    data={ filters }
-                    onChange={ onFilterChange }
-                  />
-                  ) }
-            </>
-            )}
+            <FieldFilters
+              data={ filters }
+              onChange={ onFilterChange }
+              onCommit={ onFilterCommit }
+            />
+            ) }
       </Content>
     </ContentLayout>
   )

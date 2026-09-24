@@ -19,6 +19,7 @@ import { Tooltip } from '../tooltip/tooltip'
 import useElementOverflow from '../../utils/use-element-overflow'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
+import { useElementClickBehavior } from '@Pimcore/modules/element/providers/element-click-behavior/element-click-behavior-provider'
 
 export interface ElementTagProps extends Omit<TagProps, 'id' | 'children'> {
   path: string
@@ -33,6 +34,7 @@ export interface ElementTagProps extends Omit<TagProps, 'id' | 'children'> {
 
 export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, published, disabled, onClose, inline = false, pathIsHtml = false, ...props }) => {
   const { openElement } = useElementHelper()
+  const { onElementClick } = useElementClickBehavior()
   const { styles } = useStyles()
   const textRef = useRef<HTMLSpanElement>(null)
   const isOverflow = useElementOverflow(textRef)
@@ -43,6 +45,8 @@ export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, p
 
   const onClick = async (): Promise<void> => {
     if (isClickable) {
+      onElementClick()
+
       await openElement({
         type: elementType,
         id
@@ -50,8 +54,14 @@ export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, p
     }
   }
 
+  // The tooltip is placed to the side rather than above, matching the element tree's tooltip.
+  // A path tooltip sitting on top covers the rows above it - exactly the content being compared
+  // when scanning a list of paths.
   return (
-    <Tooltip title={ isOverflow && !pathIsHtml ? path : '' }>
+    <Tooltip
+      placement="right"
+      title={ isOverflow && !pathIsHtml ? path : '' }
+    >
       <Tag
         bordered={ false }
         className={ cn(inline ? styles.tagInline : styles.tag, { [styles.tagClickable]: isClickable, [styles.tagDisabled]: disabled }) }
