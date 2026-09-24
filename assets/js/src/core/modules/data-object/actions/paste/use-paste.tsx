@@ -23,6 +23,7 @@ import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-h
 import { ContextMenuActionName } from '@Pimcore/modules/element/actions'
 import { useTreeCopyPasteContext, type StoreNode } from '@Pimcore/modules/element/actions/copy-paste/tree-copy-paste-context'
 import { usePasteVisibility } from '@Pimcore/modules/element/actions/copy-paste/use-paste-visibility'
+import { useTreeClassRestriction } from '../../tree/hooks/use-tree-class-restriction'
 
 export interface UsePasteHookReturn {
   pasteAsChildTreeContextMenuItem: (node: TreeNodeProps) => ItemType
@@ -40,6 +41,7 @@ export const usePaste = (): UsePasteHookReturn => {
   const [replaceContentMutation] = useDataObjectReplaceContentMutation()
   const { getStoredNode } = useTreeCopyPasteContext('data-object')
   const { isPasteHidden } = usePasteVisibility('data-object')
+  const { isPasteHiddenForClass } = useTreeClassRestriction()
 
   const replaceContent = async (storedNode: StoreNode, node: Element | TreeNodeProps): Promise<void> => {
     dispatch(setNodeFetching({ treeId, nodeId: String(node.id), isFetching: true }))
@@ -112,7 +114,7 @@ export const usePaste = (): UsePasteHookReturn => {
   }
 
   const isPasteOptionHidden = (node: Element | TreeNodeProps): boolean => {
-    return isPasteHidden(node, 'copy')
+    return isPasteHidden(node, 'copy') || isPasteHiddenForClass()
   }
 
   const isPasteOnlyContentsHidden = (node: Element | TreeNodeProps): boolean => {

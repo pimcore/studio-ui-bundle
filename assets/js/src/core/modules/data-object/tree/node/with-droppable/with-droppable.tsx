@@ -19,6 +19,7 @@ import { useDndAllowed } from '@Pimcore/modules/element/tree/node/with-droppable
 import { HotspotDroppable, type HotspotDroppableProps } from '@Pimcore/components/drag-and-drop/hotspot-droppable'
 import { useSorting } from '@Pimcore/modules/element/actions/sorting/use-sorting'
 import { useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
+import { useTreeClassRestriction } from '../../hooks/use-tree-class-restriction'
 
 interface OnSortingDropProps {
   info: DragAndDropInfo
@@ -30,6 +31,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
     const { move } = useCopyPaste('data-object')
     const { move: moveByIndex } = useSorting('data-object')
     const { isSourceAllowed, isTargetAllowed } = useDndAllowed()
+    const { isClassAllowed } = useTreeClassRestriction()
     const parentNode = useElementTreeNode(props.parentId ?? '-1')
     const hasParent = parentNode !== undefined
     let sortingMode = 'keyed'
@@ -90,7 +92,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
 
     const checkForValidData: DroppableProps['isValidData'] = (info) => {
       const sourceObject: DataObject = info.data
-      return info.type === 'data-object' && targetObject.type !== 'variant' && isSourceAllowed(sourceObject) && isTargetAllowed(targetObject)
+      return info.type === 'data-object' && targetObject.type !== 'variant' && isSourceAllowed(sourceObject) && isTargetAllowed(targetObject) && isClassAllowed(sourceObject)
     }
 
     let hotspots: HotspotDroppableProps['hotspots'] = [
