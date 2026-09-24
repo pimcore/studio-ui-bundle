@@ -501,8 +501,8 @@ aria.version.expand: Versie uitvouwen
 clear-all: Alles wissen
 empty: Leeg
 none: Geen
-yes: Ja
-no: Nee
+'yes': Ja
+'no': Nee
 by: Door
 field: Veld
 no-data-available: Geen gegevens beschikbaar
@@ -1064,6 +1064,8 @@ regex-flags-tooltip: "RegExp zonder scheidingstekens, moet werken in JS (Scheidi
 test-string: Testtekenreeks
 regex-validation-error-message: De tekenreeks voldoet niet aan het vereiste formaat.
 calculator-class: Berekeningsklasse
+calculator-data: Berekeningsgegevens
+calculator-data-tooltip: Optionele vrije gegevens die aan de berekening worden doorgegeven, bijv. een enkele waarde, een door komma's gescheiden lijst of een JSON-gecodeerde structuur.
 calculator-expression: Berekeningsteken
 calculator-type: Berekeningstype
 calculator-type-tooltip: Zie de officiële documentatie voor meer informatie over het definiëren van uitdrukkingen of klassen.

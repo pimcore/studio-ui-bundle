@@ -502,7 +502,7 @@ clear-all: Limpiar todo
 empty: Vacío
 none: Ninguno
 'yes': Sí
-'no': No
+'no': 'No'
 by: Por
 field: Campo
 no-data-available: No hay datos disponibles

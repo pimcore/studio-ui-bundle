@@ -501,8 +501,8 @@ aria.version.expand: Expand version
 clear-all: Clear all
 empty: Empty
 none: None
-yes: Yes
-no: No
+'yes': 'Yes'
+'no': 'No'
 by: By
 field: Field
 no-data-available: No Data Available
