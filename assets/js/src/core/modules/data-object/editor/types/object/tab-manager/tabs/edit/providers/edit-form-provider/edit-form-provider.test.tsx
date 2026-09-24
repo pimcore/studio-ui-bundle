@@ -71,7 +71,12 @@ jest.mock('./utils/merge-form-changes', () => ({
 
 type EditFormContext = ReturnType<typeof useEditFormContext>
 
-function renderProvider (): EditFormContext {
+interface RenderedProvider {
+  context: EditFormContext
+  rerender: () => void
+}
+
+function renderProviderWithRerender (): RenderedProvider {
   let context: EditFormContext | undefined
 
   const Consumer = (): null => {
@@ -79,13 +84,23 @@ function renderProvider (): EditFormContext {
     return null
   }
 
-  render(
+  const buildTree = (): React.JSX.Element => (
     <EditFormProvider>
       <Consumer />
     </EditFormProvider>
   )
 
-  return context!
+  const { rerender } = render(buildTree())
+  const initialContext = context!
+
+  return {
+    context: initialContext,
+    rerender: () => { rerender(buildTree()) }
+  }
+}
+
+function renderProvider (): EditFormContext {
+  return renderProviderWithRerender().context
 }
 
 async function changeFieldAndUpdateDraft (context: EditFormContext): Promise<void> {
@@ -125,6 +140,18 @@ describe('EditFormProvider auto-save', () => {
     await changeFieldAndUpdateDraft(renderProvider())
 
     expect(mockMarkObjectDataAsModified).toHaveBeenCalled()
+    expect(mockSave).not.toHaveBeenCalled()
+  })
+
+  it('respects a disabled interval that arrives after the provider mounted', async () => {
+    mockSettings = {}
+    const { context: initialContext, rerender } = renderProviderWithRerender()
+
+    mockSettings = { object_auto_save_interval: 0 }
+    rerender()
+
+    await changeFieldAndUpdateDraft(initialContext)
+
     expect(mockSave).not.toHaveBeenCalled()
   })
 })

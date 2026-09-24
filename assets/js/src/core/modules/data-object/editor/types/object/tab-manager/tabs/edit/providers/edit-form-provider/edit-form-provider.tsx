@@ -53,7 +53,9 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const { dataObject, markObjectDataAsModified } = useDataObjectDraft(id)
   const { save, isError } = useSave()
   const settings = useSettings()
-  const isAutoSaveEnabled = settings.object_auto_save_interval !== 0
+  // A ref, because the memoized context keeps the first render's updateDraft while settings may load later.
+  const isAutoSaveEnabledRef = useRef<boolean>(true)
+  isAutoSaveEnabledRef.current = settings.object_auto_save_interval !== 0
 
   const messageApi = useMessage()
   const { t } = useTranslation()
@@ -115,7 +117,7 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         markObjectDataAsModified()
       }
 
-      if (!isAutoSaveEnabled) {
+      if (!isAutoSaveEnabledRef.current) {
         return
       }
 
