@@ -130,6 +130,14 @@ const defaultComponentConfig = {
           }
         }
       },
+      editTab: {
+        // above the form, beside the draft alert; empty unless a bundle registers
+        topBar: {
+          type: ComponentType.SLOT,
+          name: 'dataObject.editor.editTab.topBar',
+          defaultEntries: []
+        }
+      },
       tab: {
         listing: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.listing' },
         edit: { type: ComponentType.SINGLE, name: 'dataObject.editor.tab.edit' },

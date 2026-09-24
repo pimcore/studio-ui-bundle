@@ -20,6 +20,7 @@ import {
 import {
   DraftAlert
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/root-component/draft-alert'
+import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 import { FieldWidthProvider } from '../../../../../../../../element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { buildFieldTypeMap } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/utils/build-field-type-map'
@@ -66,7 +67,12 @@ export const RootComponent = ({ layout, data, className }: RootComponentProps): 
           preserve
         >
           <ContentLayout
-            renderTopBar={ <DraftAlert /> }
+            renderTopBar={ (
+              <>
+                <DraftAlert />
+                <SlotRenderer slot="dataObject.editor.editTab.topBar" />
+              </>
+            ) }
           >
             <ObjectComponent { ...layout } />
           </ContentLayout>
