@@ -2147,6 +2147,8 @@ reports.field-filters: Field Filters
 reports.editor.delete.content: Do you really want to delete Custom Report "{{reportName}}"?
 reports.editor.clone.content: Enter the name of the new item (a-zA-Z-_)
 reports.editor.add.content: Enter the name of the new item. Name must be alphanumeric and at least 3 characters long (a-zA-Z0-9_-)
+reports.editor.import.title: Import Custom Report
+reports.editor.import.success: Custom report imported successfully
 reports.editor.content.validation.message: The customer report name is invalid
 reports.editor.general-settings.title: General Settings
 reports.editor.general-settings.name-label: Name

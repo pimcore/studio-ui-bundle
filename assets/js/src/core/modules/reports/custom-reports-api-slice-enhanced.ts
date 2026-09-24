@@ -14,6 +14,27 @@ const api = baseApi.enhanceEndpoints({
   endpoints: {
     customReportExportCsv: {
       invalidatesTags: () => []
+    },
+    customReportsConfigExport: {
+      query: (args) => ({
+        url: `/pimcore-studio/api/bundle/custom-reports/config/${encodeURIComponent(args.name)}/export`,
+        responseHandler: async (response): Promise<Blob> => {
+          return await response.blob()
+        }
+      }),
+      providesTags: () => []
+    },
+    customReportsConfigImport: {
+      query: (args) => {
+        const formData = new FormData()
+        formData.append('file', args.body.file)
+
+        return {
+          url: '/pimcore-studio/api/bundle/custom-reports/config/import',
+          method: 'POST',
+          body: formData
+        }
+      }
     }
   }
 })
@@ -28,6 +49,8 @@ export const {
   useCustomReportsColumnConfigListQuery,
   useCustomReportsConfigUpdateMutation,
   useCustomReportsConfigDeleteMutation,
+  useCustomReportsConfigExportQuery,
+  useCustomReportsConfigImportMutation,
   useCustomReportsReportQuery,
   useCustomReportsConfigGetTreeQuery,
   useCustomReportExportCsvMutation,
