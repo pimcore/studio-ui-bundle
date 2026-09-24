@@ -75,4 +75,7 @@ services:
 ```
 
 A complete working example is the
-[Studio Example Bundle](https://github.com/pimcore/studio-example-bundle/blob/main/src/Webpack/WebpackEntryPointProvider.php).
+[Studio Example Bundle](https://github.com/pimcore/studio-example-bundle/blob/main/config/services.yaml). Its provider
+ships the build as an archive, so the class itself follows
+[Shipping the Frontend Build as an Archive](./04_Shipping_the_Frontend_Build_as_an_Archive.md) rather than the plain
+provider above; the service registration and the tags are the same either way.
