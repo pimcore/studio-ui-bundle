@@ -1183,6 +1183,7 @@ export-xlsx-form.form-field.header: Overskrift
 export-xlsx-form.form-field.header.option.name: Systemnøkkel
 export-xlsx-form.form-field.header.option.title: Etikett
 export-xlsx-form.form-field.header.option.no-header: Ingen overskrift
+form.optional-mark: (valgfritt)
 form.annotation.added: Lagt til
 form.annotation.changed: Endret
 form.annotation.removed: Fjernet
@@ -2091,7 +2092,9 @@ preview.phone-horizontal: Telefon horisontal
 preview.select_date_time: Velg dato og tid
 preview.screen_size_too_small: Tilgjengelig plass er for liten til å vise valgt forhåndsvisningsmodus.
 inheritance-active: "Data arvet fra objekt-ID {{id}}"
+inheritance-active-unknown-origin: Data arvet fra et overordnet objekt
 inheritance-broken: Dataarv brutt
+inheritance-restore: Gjenopprett
 main: Hoved
 main_admin: Hoved (administratormodus)
 draft-alert: Gjeldende versjon er et utkast. Du kan slette utkastet for å gjenopprette forrige versjon.

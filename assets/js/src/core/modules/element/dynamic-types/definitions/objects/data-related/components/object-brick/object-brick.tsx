@@ -18,6 +18,7 @@ import { forEach, get, isEmpty, isEqual, isPlainObject, isUndefined, keys, union
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
 import { DELETED, filterInheritedFields, getMergedValue } from './utils/brick-value'
+import { applyRestoredValues } from '../../helpers/inheritance/apply-restored-values'
 
 export interface ObjectBrickProps extends AbstractObjectDataDefinition {
   border?: boolean
@@ -37,6 +38,9 @@ export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
   const deletedBricksRef = useRef(new Set<string>())
   const inheritanceState = useInheritanceState()
   const changedFieldsRef = useRef<Set<string>>(new Set())
+  const restoredFieldsRef = useRef<Set<string>>(new Set())
+  // ancestor values of restored fields that were overridden when loaded, see applyRestoredValues
+  const restoredValuesRef = useRef<Map<string, unknown>>(new Map())
   const { id } = useContext(DataObjectContext)
   const { dataObject } = useDataObjectDraft(id)
 
@@ -66,11 +70,20 @@ export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
 
   const isInherited = (name: string): boolean => {
     const fullFieldNamePath = [...props.name, ...name.split('.')]
-    return !changedFieldsRef.current.has(fullFieldNamePath.join('.')) && inheritanceState?.getInheritanceState(fullFieldNamePath)?.inherited === true
+    const fieldName = fullFieldNamePath.join('.')
+
+    if (changedFieldsRef.current.has(fieldName)) {
+      return false
+    }
+
+    // A restore counts right away: restoreInheritance only schedules a state update,
+    // which the payload built below must not wait for.
+    return restoredFieldsRef.current.has(fieldName) ||
+      inheritanceState?.getInheritanceState(fullFieldNamePath)?.inherited === true
   }
 
-  const onChange = (changedValue: any): void => {
-    const filteredValue = filterInheritedFields(changedValue, isInherited)
+  const buildPayload = (rawValue: any): any => {
+    const filteredValue = filterInheritedFields(rawValue, isInherited)
 
     const allBrickNames = union([...keys(originalValue), ...keys(valueRef.current)])
     forEach(allBrickNames, key => {
@@ -85,7 +98,16 @@ export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
       filteredValue[key] = { action: DELETED }
     })
 
-    const newValue = isEmpty(filteredValue) ? [] : filteredValue
+    return isEmpty(filteredValue) ? [] : filteredValue
+  }
+
+  const emit = (newValue: any): void => {
+    props.onChange(newValue)
+    valueRef.current = newValue
+  }
+
+  const onChange = (changedValue: any): void => {
+    const newValue = buildPayload(changedValue)
 
     // newValue encodes inherited fields as null, while the incoming value carries the
     // resolved inherited values — the comparison must use the same encoding, otherwise
@@ -94,13 +116,33 @@ export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
     const currentValue = isEmpty(currentFilteredValue) ? [] : currentFilteredValue
 
     if (!isEqual(newValue, currentValue) && !isEqual(newValue, valueRef.current)) {
-      props.onChange(newValue)
-      valueRef.current = newValue
+      emit(newValue)
     }
   }
 
+  /**
+   * Gives a field back to its origin object. The value itself needs no write: once the
+   * field counts as inherited again, getMergedValue reads it from the loaded data, or
+   * from the ancestor value for a field that was overridden when loaded. The payload
+   * is emitted directly, because the guards in onChange compare against the same
+   * encoding and would drop it as unchanged.
+   */
+  const onFieldRestore = (field: NamePath): void => {
+    const fieldName = fieldNameToString(field)
+    const inheritedValue = inheritanceState?.getInheritedValue(field)
+
+    changedFieldsRef.current.delete(fieldName)
+    restoredFieldsRef.current.add(fieldName)
+
+    if (!isUndefined(inheritedValue)) {
+      restoredValuesRef.current.set(fieldName.slice(fieldNameToString(props.name).length + 1), inheritedValue)
+    }
+
+    emit(buildPayload(mergedValue))
+  }
+
   const mergedValue = useMemo(
-    () => getMergedValue(valueRef.current, originalValue, props.value, isInherited)
+    () => getMergedValue(valueRef.current, applyRestoredValues(originalValue, restoredValuesRef.current), props.value, isInherited)
     , [valueRef.current, originalValue]
   )
 
@@ -113,6 +155,7 @@ export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
       getAdditionalComponentProps={ getAdditionalComponentProps }
       onChange={ onChange }
       onFieldChange={ onFieldChange }
+      onFieldRestore={ onFieldRestore }
       value={ mergedValue }
     >
       <ObjectBrickContent { ...props } />

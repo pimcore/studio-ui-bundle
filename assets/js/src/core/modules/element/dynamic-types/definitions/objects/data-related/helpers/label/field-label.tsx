@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next'
 import { useItemOptional } from '@Pimcore/components/form/item/provider/item/use-item'
 import { InheritanceButton } from '@Pimcore/modules/data-object/components/inheritance-button'
 import { isNonEmptyString } from '@sdk/utils'
+import { isUndefined } from 'lodash'
 
 export interface FieldLabelProps {
   name: FormItemProps['name']
@@ -38,10 +39,16 @@ export const FieldLabel: React.FC<FieldLabelProps> = (props: FieldLabelProps): R
       align="center"
       gap="extra-small"
     >
-      { inheritanceState?.inherited === true && (
+      { inheritanceState?.inherited === true && !isUndefined(inheritanceState.objectId) && (
         <InheritanceButton
           objectId={ inheritanceState.objectId }
         />
+      )}
+      { inheritanceState?.inherited === true && isUndefined(inheritanceState.objectId) && (
+        // Restored from an own value: the origin object is not known, so there is nothing to open.
+        <Tooltip title={ t('inheritance-active-unknown-origin') }>
+          <Icon value="inheritance-active" />
+        </Tooltip>
       )}
       { inheritanceState?.inherited === 'broken' && (
         <Tooltip title={ t('inheritance-broken') }>

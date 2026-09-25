@@ -1064,6 +1064,8 @@ regex-flags-tooltip: "RegExp zonder scheidingstekens, moet werken in JS (Scheidi
 test-string: Testtekenreeks
 regex-validation-error-message: De tekenreeks voldoet niet aan het vereiste formaat.
 calculator-class: Berekeningsklasse
+calculator-data: Berekeningsgegevens
+calculator-data-tooltip: Optionele vrije-vormgegevens die worden doorgegeven aan de berekening, bijv. een eenvoudige waarde, een door komma's gescheiden lijst of een JSON-gecodeerde structuur.
 calculator-expression: Berekeningsteken
 calculator-type: Berekeningstype
 calculator-type-tooltip: Zie de officiële documentatie voor meer informatie over het definiëren van uitdrukkingen of klassen.
@@ -1181,6 +1183,7 @@ export-xlsx-form.form-field.header: Koptekst
 export-xlsx-form.form-field.header.option.name: Systeemsleutel
 export-xlsx-form.form-field.header.option.title: Label
 export-xlsx-form.form-field.header.option.no-header: Geen koptekst
+form.optional-mark: (optioneel)
 form.annotation.added: Toegevoegd
 form.annotation.changed: Gewijzigd
 form.annotation.removed: Verwijderd
@@ -2089,7 +2092,9 @@ preview.phone-horizontal: Telefoon horizontaal
 preview.select_date_time: Datum & tijd selecteren
 preview.screen_size_too_small: De beschikbare ruimte is te klein om de geselecteerde voorbeeldmodus weer te geven.
 inheritance-active: "Gegevens overgeërfd van object-ID {{id}}"
+inheritance-active-unknown-origin: Gegevens overgeërfd van een bovenliggend object
 inheritance-broken: Gegevensovererving onderbroken
+inheritance-restore: Herstellen
 main: Hoofd
 main_admin: Hoofd (beheerdermodus)
 draft-alert: De huidige versie is een concept. Je kunt het concept verwijderen om de vorige versie te herstellen.

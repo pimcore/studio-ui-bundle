@@ -1183,6 +1183,7 @@ export-xlsx-form.form-field.header: Intestazione
 export-xlsx-form.form-field.header.option.name: Chiave di sistema
 export-xlsx-form.form-field.header.option.title: Etichetta
 export-xlsx-form.form-field.header.option.no-header: Nessuna intestazione
+form.optional-mark: (opzionale)
 form.annotation.added: Aggiunto
 form.annotation.changed: Modificato
 form.annotation.removed: Rimosso
@@ -2091,7 +2092,9 @@ preview.phone-horizontal: Telefono orizzontale
 preview.select_date_time: Seleziona data e ora
 preview.screen_size_too_small: Lo spazio disponibile è troppo piccolo per visualizzare la modalità anteprima selezionata.
 inheritance-active: "Dati ereditati dall'oggetto ID {{id}}"
+inheritance-active-unknown-origin: Dati ereditati da un oggetto padre
 inheritance-broken: Ereditarietà dati interrotta
+inheritance-restore: Ripristina
 main: Principale
 main_admin: Principale (Modalità admin)
 draft-alert: La versione corrente è una bozza. È possibile eliminare la bozza per ripristinare la versione precedente.

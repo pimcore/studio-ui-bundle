@@ -1183,6 +1183,7 @@ export-xlsx-form.form-field.header: En-tête
 export-xlsx-form.form-field.header.option.name: Clé système
 export-xlsx-form.form-field.header.option.title: Libellé
 export-xlsx-form.form-field.header.option.no-header: Sans en-tête
+form.optional-mark: (facultatif)
 form.annotation.added: Ajouté
 form.annotation.changed: Modifié
 form.annotation.removed: Supprimé
@@ -2091,7 +2092,9 @@ preview.phone-horizontal: Téléphone horizontal
 preview.select_date_time: Sélectionner la date et l'heure
 preview.screen_size_too_small: L'espace disponible est trop petit pour afficher le mode d'aperçu sélectionné.
 inheritance-active: "Données héritées de l'objet ID {{id}}"
+inheritance-active-unknown-origin: "Données héritées d'un objet parent"
 inheritance-broken: Héritage des données interrompu
+inheritance-restore: Restaurer
 main: Principal
 main_admin: Principal (Mode Admin)
 draft-alert: La version actuelle est un brouillon. Vous pouvez supprimer le brouillon pour restaurer la version précédente.

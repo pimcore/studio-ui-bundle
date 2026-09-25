@@ -1064,6 +1064,8 @@ regex-flags-tooltip: "RegExp bez separatorów, musi działać w JS (Separator: #
 test-string: Ciąg testowy
 regex-validation-error-message: Ciąg nie spełnia wymaganego formatu.
 calculator-class: Klasa kalkulatora
+calculator-data: Dane kalkulatora
+calculator-data-tooltip: Opcjonalne dane w dowolnym formacie przekazywane do kalkulatora, np. prosta wartość, lista rozdzielona przecinkami lub struktura zakodowana w formacie JSON.
 calculator-expression: Wyrażenie obliczeniowe
 calculator-type: Typ kalkulatora
 calculator-type-tooltip: Więcej informacji o definiowaniu wyrażeń lub klas znajdziesz w oficjalnej dokumentacji.
@@ -1181,6 +1183,7 @@ export-xlsx-form.form-field.header: Nagłówek
 export-xlsx-form.form-field.header.option.name: Klucz systemowy
 export-xlsx-form.form-field.header.option.title: Etykieta
 export-xlsx-form.form-field.header.option.no-header: Bez nagłówka
+form.optional-mark: (opcjonalne)
 form.annotation.added: Dodano
 form.annotation.changed: Zmieniono
 form.annotation.removed: Usunięto
@@ -2089,7 +2092,9 @@ preview.phone-horizontal: Telefon poziomo
 preview.select_date_time: Wybierz datę i godzinę
 preview.screen_size_too_small: Dostępna przestrzeń jest zbyt mała, aby wyświetlić wybrany tryb podglądu.
 inheritance-active: "Dane odziedziczone z obiektu o ID {{id}}"
+inheritance-active-unknown-origin: Dane odziedziczone z obiektu nadrzędnego
 inheritance-broken: Dziedziczenie danych przerwane
+inheritance-restore: Przywróć
 main: Główny
 main_admin: Główny (tryb administratora)
 draft-alert: Bieżąca wersja jest wersją roboczą. Możesz usunąć wersję roboczą, aby przywrócić poprzednią wersję.
