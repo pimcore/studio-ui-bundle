@@ -14,6 +14,7 @@ import { type NamePath } from 'antd/es/form/interface'
 import { type InheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/inheritance-state-provider'
 import { useRestoreInheritance } from './use-restore-inheritance'
 import { RestoreInheritanceKeyedListContext } from './restore-inheritance-keyed-list-context'
+import { RestoreInheritanceLocaleContext } from './restore-inheritance-locale-context'
 
 const resetFields = jest.fn()
 const setFieldValue = jest.fn()
@@ -186,6 +187,43 @@ describe('useRestoreInheritance', () => {
       expect(restoreField(name)).toBe(false)
       expect(clearDataObjectAttribute).not.toHaveBeenCalled()
       expect(restoreInheritance).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('classification store keys, whose locale comes from the locale context', () => {
+    const renderInLocale = (contextLocale: string): boolean => {
+      const { result } = renderHook(() => useRestoreInheritance(name), {
+        wrapper: ({ children }) => (
+          <RestoreInheritanceLocaleContext.Provider value={ contextLocale }>
+            {children}
+          </RestoreInheritanceLocaleContext.Provider>
+        )
+      })
+      result.current.restore()
+
+      return result.current.canRestore
+    }
+
+    beforeEach(() => {
+      keyedList = { onFieldRestore }
+      localizedEdit = 'en,de'
+    })
+
+    it('restores a key in a language the user may edit', () => {
+      expect(renderInLocale('en')).toBe(true)
+      expect(onFieldRestore).toHaveBeenCalledWith(name)
+    })
+
+    it('leaves a key in a language the user may not edit untouched', () => {
+      expect(renderInLocale('fr')).toBe(false)
+      expect(onFieldRestore).not.toHaveBeenCalled()
+      expect(restoreInheritance).not.toHaveBeenCalled()
+    })
+
+    it('lets the localized fields decide over the locale context', () => {
+      locale = 'en'
+
+      expect(renderInLocale('fr')).toBe(true)
     })
   })
 

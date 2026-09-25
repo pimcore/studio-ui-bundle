@@ -20,6 +20,7 @@ import {
   useInheritanceState
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
 import { RestoreInheritanceKeyedListContext } from './restore-inheritance-keyed-list-context'
+import { RestoreInheritanceLocaleContext } from './restore-inheritance-locale-context'
 import { isUndefined } from 'lodash'
 import { useAppSelector } from '@sdk/app'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
@@ -114,18 +115,21 @@ export const useRestoreInheritance = (
 }
 
 /**
- * Whether the locale of the surrounding localized fields may be edited, by the same
- * localizedEdit permission the localized control disables itself by (see
- * FormControlWithElementContext). True outside localized fields.
+ * Whether the locale of the field may be edited, by the same localizedEdit permission
+ * the localized control disables itself by (see FormControlWithElementContext). The
+ * locale comes from the surrounding localized fields, or from the locale context for
+ * fields localized another way (classification store keys). True without either.
  */
 const useIsLocaleEditable = (): boolean => {
   const localizedFields = useLocalizedFields()
+  const contextLocale = useContext(RestoreInheritanceLocaleContext)
   const { id } = useContext(DataObjectContext)
   const permissions = useAppSelector(state => selectDataObjectById(state, id))?.permissions
+  const locale = localizedFields?.locales[0] ?? contextLocale
 
-  if (isUndefined(localizedFields)) {
+  if (isUndefined(locale)) {
     return true
   }
 
-  return isLanguageEditable(getLanguagePermission(permissions, 'localizedEdit'), localizedFields.locales[0])
+  return isLanguageEditable(getLanguagePermission(permissions, 'localizedEdit'), locale)
 }

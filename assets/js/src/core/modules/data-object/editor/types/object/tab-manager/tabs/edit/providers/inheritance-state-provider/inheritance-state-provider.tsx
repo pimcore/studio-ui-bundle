@@ -64,7 +64,7 @@ const getInitialInheritance = (dataObjectDraft?: DataObjectDraft): InitialInheri
     return { states: inheritanceStates, restoreTargets }
   }
   const traverseMetaData = (metaData: unknown, path: string[] = []): void => {
-    if (typeof metaData !== 'object' || metaData === null) return
+    if (isNil(metaData) || typeof metaData !== 'object') return
 
     Object.entries(metaData).forEach(([key, value]) => {
       const currentPath = [...path, key]

@@ -50,7 +50,7 @@ interface FormComponent {
 
 const Form = (({ ...props }: FormProps) => {
   const { styles } = useStyles()
-  const { form, children, onFinish, onFinishFailed, ...restProps } = props
+  const { form, children, onFinish, onFinishFailed, requiredMark: callerRequiredMark, ...restProps } = props
   const [formInstance] = useForm(form)
 
   const currentFormInstance = form ?? formInstance
@@ -68,19 +68,28 @@ const Form = (({ ...props }: FormProps) => {
     currentFormInstance.setOnValuesChangeHandler(props.onValuesChange)
   }, [currentFormInstance])
 
-  // The label extra stays outside the Space: Ant renders the locale suffix and the
-  // tooltip icon into `label`, so the slot after the Space is the end of the row.
-  const requiredMark: FormProps['requiredMark'] = useCallback((label, { required }): ReactNode => {
-    return (
-      <>
+  // The label row always ends with the label-extra slot, so a requiredMark of the
+  // caller is composed with it rather than replacing it: a render function draws the
+  // label, `false` drops the mark. The label extra stays outside the Space: Ant renders
+  // the locale suffix and the tooltip icon into `label`, so the slot after the Space is
+  // the end of the row.
+  const requiredMark = useCallback((label: ReactNode, info: { required: boolean }): ReactNode => {
+    const markedLabel = typeof callerRequiredMark === 'function'
+      ? callerRequiredMark(label, info)
+      : (
         <Space size='mini'>
           {label}
-          {required === true && '*'}
+          {info.required && callerRequiredMark !== false && '*'}
         </Space>
+        )
+
+    return (
+      <>
+        {markedLabel}
         <LabelExtra />
       </>
     )
-  }, [])
+  }, [callerRequiredMark])
 
   const className = useMemo(() => `${props.className ?? ''} ${styles.container}`, [props.className, styles.container])
 
