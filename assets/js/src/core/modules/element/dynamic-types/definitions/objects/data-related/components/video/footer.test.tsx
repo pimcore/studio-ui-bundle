@@ -13,6 +13,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { NumberedList } from '@Pimcore/components/form/controls/numbered-list/numbered-list'
 import { Group } from '@Pimcore/components/form/group/group'
 import { ItemProvider } from '@Pimcore/components/form/item/provider/item/item-provider'
+import { LocalizedFieldsProvider } from '@Pimcore/components/form/localisation/localized-fields/provider/localized-fields-provider/localized-fields-provider'
 import { VideoModalProvider } from '@Pimcore/modules/element/components/video-modal/provider/video-modal-provider'
 import { VideoFooter } from './footer'
 
@@ -67,17 +68,28 @@ jest.mock('@Pimcore/components/form/item/virtual-item', () => {
   }
 })
 
+// Keep the locale-suffixing Form.Item, but skip the language-permission control and its app graph.
+jest.mock('@Pimcore/components/form/localisation/localized-fields/form-item/localized-form-item-control', () => {
+  const { Children, cloneElement } = jest.requireActual('react')
+
+  return {
+    LocalizedFormItemControl: ({ children, ...props }: { children: React.ReactElement }) =>
+      cloneElement(Children.only(children), props)
+  }
+})
+
 jest.mock('@Pimcore/components/form/form', () => {
   const { Form: FormComponent } = jest.requireActual('antd')
   const { Group: FormGroup } = jest.requireActual('@Pimcore/components/form/group/group')
   const { withGroupName } = jest.requireActual('@Pimcore/components/form/item/with-group-name')
   const { withNumberedItemContext } = jest.requireActual('@Pimcore/components/form/item/with-numbered-item-context')
+  const { withLocalizedFieldsLocale } = jest.requireActual('@Pimcore/components/form/localisation/localized-fields/form-item/with-localized-fields-locale')
 
   const Form = (props: React.ComponentProps<typeof FormComponent>): React.JSX.Element => (
     <FormComponent { ...props } />
   )
 
-  Form.Item = withGroupName(withNumberedItemContext(FormComponent.Item))
+  Form.Item = withGroupName(withLocalizedFieldsLocale(withNumberedItemContext(FormComponent.Item)))
   Form.Group = FormGroup
   Form.useForm = FormComponent.useForm
 
@@ -148,6 +160,33 @@ describe('VideoFooter', () => {
     expect(onChange).toHaveBeenCalledWith({
       type: 'youtube',
       data: 'LJo3EQhQ-aM'
+    })
+  })
+
+  it('saves a parsed YouTube ID from a modal opened inside localized fields', () => {
+    const onChange = jest.fn()
+
+    render(
+      <VideoModalProvider>
+        <LocalizedFieldsProvider locales={ ['en'] }>
+          <VideoFooter
+            allowedVideoTypes={ ['youtube'] }
+            onSave={ onChange }
+            value={ { type: 'youtube', data: '' } }
+          />
+        </LocalizedFieldsProvider>
+      </VideoModalProvider>
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: 'edit' }))
+    fireEvent.change(screen.getByPlaceholderText('video.url'), {
+      target: { value: 'https://www.youtube.com/watch?v=Z0uwenXu9y0' }
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'save' }))
+
+    expect(onChange).toHaveBeenCalledWith({
+      type: 'youtube',
+      data: 'Z0uwenXu9y0'
     })
   })
 })
