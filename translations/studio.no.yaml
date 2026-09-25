@@ -2082,6 +2082,8 @@ classification-store.select-key: Velg nøkkel
 classification-store.search-keys: Søk i nøkler…
 classification-store.select-group: Velg gruppe
 classification-store.search-groups: Søk i grupper…
+classification-store.store-id: "ID: {{id}}"
+classification-store.store-tab-label: "{{name}} (ID: {{id}})"
 home: Hjem
 preview.label: Forhåndsvisning
 preview.desktop: Skrivebord
