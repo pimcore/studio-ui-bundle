@@ -2082,6 +2082,8 @@ classification-store.select-key: Schlüssel auswählen
 classification-store.search-keys: Schlüssel suchen…
 classification-store.select-group: Gruppe auswählen
 classification-store.search-groups: Gruppen suchen…
+classification-store.store-id: "ID: {{id}}"
+classification-store.store-tab-label: "{{name}} (ID: {{id}})"
 home: Startseite
 preview.label: Vorschau
 preview.desktop: Desktop

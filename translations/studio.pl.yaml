@@ -2080,6 +2080,8 @@ classification-store.select-key: Wybierz klucz
 classification-store.search-keys: Szukaj kluczy…
 classification-store.select-group: Wybierz grupę
 classification-store.search-groups: Szukaj grup…
+classification-store.store-id: "ID: {{id}}"
+classification-store.store-tab-label: "{{name}} (ID: {{id}})"
 home: Strona główna
 preview.label: Podgląd
 preview.desktop: Komputer

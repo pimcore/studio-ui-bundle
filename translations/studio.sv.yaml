@@ -2082,6 +2082,8 @@ classification-store.select-key: Välj nyckel
 classification-store.search-keys: Sök nycklar…
 classification-store.select-group: Välj grupp
 classification-store.search-groups: Sök grupper…
+classification-store.store-id: "ID: {{id}}"
+classification-store.store-tab-label: "{{name}} (ID: {{id}})"
 home: Hem
 preview.label: Förhandsvisning
 preview.desktop: Dator

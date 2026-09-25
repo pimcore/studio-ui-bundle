@@ -2080,6 +2080,8 @@ classification-store.select-key: Sleutel selecteren
 classification-store.search-keys: Sleutels zoeken…
 classification-store.select-group: Groep selecteren
 classification-store.search-groups: Groepen zoeken…
+classification-store.store-id: "ID: {{id}}"
+classification-store.store-tab-label: "{{name}} (ID: {{id}})"
 home: Startpagina
 preview.label: Voorbeeld
 preview.desktop: Bureaublad
