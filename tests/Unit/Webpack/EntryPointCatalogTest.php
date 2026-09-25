@@ -243,6 +243,48 @@ class EntryPointCatalogTest extends Unit
         $this->assertSame(2, $failing->calls);
     }
 
+    public function testResetAsksAFailingProviderAgain(): void
+    {
+        $failing = $this->archiveProvider(new RuntimeException('target not writable'));
+        $catalog = $this->catalog([$failing]);
+
+        $this->assertProviderFails($catalog, $failing);
+        $this->assertProviderFails($catalog, $failing);
+        $this->assertSame(1, $failing->calls);
+
+        // what kernel.reset does between the requests of a worker
+        $catalog->reset();
+
+        $this->assertProviderFails($catalog, $failing);
+        $this->assertSame(2, $failing->calls);
+    }
+
+    public function testARebuildReusesWhatTheRequestAlreadyReadOfOtherProviders(): void
+    {
+        $otherDir = $this->workDir . '/public/other';
+        $this->writeBuild('aaaa', []);
+        $this->writeBuild('cccc', [], null, $otherDir);
+        $rebuilt = $this->archiveProvider();
+        $other = $this->archiveProvider(null, $otherDir);
+        $this->catalog([$rebuilt, $other])->getEntryPointsJsonLocations($other);
+
+        $this->removeDirectory($this->targetDir . '/aaaa');
+        $this->writeBuild('bbbb', []);
+
+        $catalog = $this->catalog([$rebuilt, $other]);
+        $catalog->getEntryPointsJsonLocations($other);
+        $this->assertSame([$this->location('bbbb')], $catalog->getEntryPointsJsonLocations($rebuilt));
+        $this->assertSame(2, $rebuilt->calls);
+        $this->assertSame(1, $other->calls);
+
+        // the rebuilt manifest still serves both
+        $next = $this->catalog([$rebuilt, $other]);
+        $this->assertSame([$this->location('bbbb')], $next->getEntryPointsJsonLocations($rebuilt));
+        $this->assertSame([$otherDir . '/cccc/entrypoints.json'], $next->getEntryPointsJsonLocations($other));
+        $this->assertSame(2, $rebuilt->calls);
+        $this->assertSame(1, $other->calls);
+    }
+
     public function testAnUnwritableCacheFallsBackToReadingPerRequest(): void
     {
         $this->writeBuild('aaaa', []);
@@ -282,14 +324,17 @@ class EntryPointCatalogTest extends Unit
     ): void {
         $catalog = $this->catalog([$failing, $healthy]);
         $this->assertCount(1, $catalog->getEntryPointsJsonLocations($healthy));
+        $this->assertProviderFails($catalog, $failing);
+        $this->assertProviderFails($catalog, $failing);
+    }
 
-        for ($access = 0; $access < 2; $access++) {
-            try {
-                $catalog->getEntryPointsJsonLocations($failing);
-                $this->fail('expected the provider error');
-            } catch (RuntimeException $e) {
-                $this->assertSame('target not writable', $e->getMessage());
-            }
+    private function assertProviderFails(EntryPointCatalog $catalog, WebpackEntryPointProviderInterface $provider): void
+    {
+        try {
+            $catalog->getEntryPointsJsonLocations($provider);
+            $this->fail('expected the provider error');
+        } catch (RuntimeException $e) {
+            $this->assertSame('target not writable', $e->getMessage());
         }
     }
 
@@ -320,9 +365,13 @@ class EntryPointCatalogTest extends Unit
         );
     }
 
-    private function archiveProvider(?RuntimeException $failure = null): BuildArchiveProviderInterface
-    {
-        return new class($this->workDir, $this->targetDir, $failure) implements BuildArchiveProviderInterface {
+    private function archiveProvider(
+        ?RuntimeException $failure = null,
+        ?string $targetDir = null
+    ): BuildArchiveProviderInterface {
+        $dir = $targetDir ?? $this->targetDir;
+
+        return new class($this->workDir, $dir, $failure) implements BuildArchiveProviderInterface {
             public int $calls = 0;
 
             public function __construct(
@@ -405,9 +454,13 @@ class EntryPointCatalogTest extends Unit
         };
     }
 
-    private function writeBuild(string $id, array $entrypoints, ?string $exposeRemote = null): void
-    {
-        $dir = $this->targetDir . '/' . $id;
+    private function writeBuild(
+        string $id,
+        array $entrypoints,
+        ?string $exposeRemote = null,
+        ?string $targetDir = null
+    ): void {
+        $dir = ($targetDir ?? $this->targetDir) . '/' . $id;
         if (!is_dir($dir)) {
             mkdir($dir, 0775, true);
         }
