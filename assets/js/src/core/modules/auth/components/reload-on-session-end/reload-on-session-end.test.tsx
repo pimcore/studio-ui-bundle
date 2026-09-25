@@ -20,7 +20,7 @@ jest.mock('../../auth-slice', () => ({
   selectIsAuthenticated: jest.fn()
 }))
 
-jest.mock('./session-end', () => ({
+jest.mock('../../util/session-end', () => ({
   isSessionGone: async () => await mockIsSessionGone(),
   reloadPage: () => mockReloadPage()
 }))

@@ -11,7 +11,7 @@
 import { useEffect, useRef } from 'react'
 import { useAppSelector } from '@sdk/app'
 import { selectIsAuthenticated } from '../../auth-slice'
-import { isSessionGone, reloadPage } from './session-end'
+import { isSessionGone, reloadPage } from '../../util/session-end'
 
 /**
  * Reloads the page when an authenticated session ends (e.g. an API call answered 401), so
@@ -23,10 +23,10 @@ import { isSessionGone, reloadPage } from './session-end'
  * the URL the user was on, exactly as without the reload. Logout and login reload the page
  * as well, so a session always starts and ends with a fresh boot.
  *
- * Any 401 on the shared API flips the auth state, including one from a plugin endpoint whose
- * own session check failed while the Studio session is still valid. Reloading on that would
- * hit the same 401 on every boot and never stop, so the server has to confirm the session is
- * gone first. When it does not, nothing is reloaded and the login screen stays as before.
+ * The state is set to `false` on a 401 from Studio's API, and by other code as well (e.g. the
+ * OAuth consent screen on a 401 of its own endpoint). A reload on a still-valid session would
+ * hit the same failure on every boot and never stop, so the server has to confirm the session
+ * is gone first. When it does not, nothing is reloaded and the login screen stays as before.
  *
  * Only the change away from `true` counts. The initial check after a boot goes from
  * `undefined` to `false` or `true`, so a reload cannot trigger another one.

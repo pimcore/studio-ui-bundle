@@ -11,6 +11,7 @@
 import { isRejectedWithValue } from '@reduxjs/toolkit'
 import type { Middleware } from '@reduxjs/toolkit'
 import type { UserInformation } from '@Pimcore/modules/auth/user/user-api-slice.gen'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 
 interface ErrorPayload {
   status?: number
@@ -52,6 +53,24 @@ const initialState: UserInformation = {
   }
 }
 
+/**
+ * Whether a failed request went to Studio's own API, which answers 401 only without a session.
+ * Decided from the request itself: the action has to be passed on or dropped right away,
+ * because callers read the result from the store as soon as the request settles. A request
+ * without a known URL counts as Studio's, as every 401 did before.
+ */
+const isStudioApiRequest = (meta: unknown): boolean => {
+  const url = (meta as { baseQueryMeta?: { request?: Request } } | undefined)?.baseQueryMeta?.request?.url
+
+  if (url === undefined) {
+    return true
+  }
+
+  const { origin, pathname } = new URL(url, globalThis.location.origin)
+
+  return origin === globalThis.location.origin && pathname.startsWith(getPrefix())
+}
+
 export const rtkQueryErrorLogger: Middleware =
   (api) => (next) => (action) => {
     // RTK Query uses `createAsyncThunk` from redux-toolkit under the hood, so we're able to utilize these matchers!
@@ -60,9 +79,15 @@ export const rtkQueryErrorLogger: Middleware =
       const actionMetaArgs = action.meta?.arg as any
 
       // Handle the case when the user's session has expired and further requests return a 401 status.
-      // @todo - check if we can bind it to another endpoint that is specific to the user session
       if (payload?.status === 401) {
         if ('endpointName' in actionMetaArgs && actionMetaArgs.endpointName === 'userGetCurrentInformation') {
+          return next(action)
+        }
+
+        // Extensions share this API but not always Studio's session: an external service (e.g.
+        // an agent server) answers 401 when its own check fails while the Studio session is
+        // fine. Such a request just failed, so its action goes on like any other error.
+        if (!isStudioApiRequest(action.meta)) {
           return next(action)
         }
 
