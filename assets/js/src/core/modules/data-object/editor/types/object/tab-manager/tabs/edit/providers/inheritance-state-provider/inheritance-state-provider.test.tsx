@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useRef } from 'react'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { InheritanceStateProvider } from './inheritance-state-provider'
@@ -43,9 +43,12 @@ jest.mock('@Pimcore/modules/data-object/hooks/use-data-object-draft', () => ({
   useDataObjectDraft: () => ({ dataObject: mockDataObject })
 }))
 
-// Renders the state of a single field and offers the two transitions on it.
+// Renders the state of a single field and offers the two transitions on it. Break
+// goes through the context of the first render, as the object editor form does: it
+// keeps the change handler it was created with.
 const FieldHarness = ({ name }: { name: string | string[] }): React.JSX.Element => {
   const inheritanceState = useInheritanceState()
+  const firstRenderContext = useRef(inheritanceState)
   const state = inheritanceState?.getInheritanceState(name)
 
   return (
@@ -56,7 +59,7 @@ const FieldHarness = ({ name }: { name: string | string[] }): React.JSX.Element 
       <span data-testid="inherited-value">{ String(inheritanceState?.getInheritedValue(name)) }</span>
       <button
         data-testid="break"
-        onClick={ () => { inheritanceState?.breakInheritance(name) } }
+        onClick={ () => { firstRenderContext.current?.breakInheritance(name) } }
       >
         break
       </button>
@@ -120,6 +123,23 @@ describe('InheritanceStateProvider', () => {
     await user.click(screen.getByTestId('break'))
     expect(state()).toBe('broken')
     expect(canRestore()).toBe('true')
+  })
+
+  it('only breaks a field that reads as inherited', async () => {
+    const user = userEvent.setup()
+    renderField('name')
+
+    await user.click(screen.getByTestId('break'))
+    expect(state()).toBe('false')
+  })
+
+  it('ignores a break for a field without inheritance data', async () => {
+    const user = userEvent.setup()
+    renderField('unknown')
+
+    await user.click(screen.getByTestId('break'))
+    expect(state()).toBe('undefined')
+    expect(canRestore()).toBe('false')
   })
 
   it.each([

@@ -126,25 +126,23 @@ export const InheritanceStateProvider: React.FC<{ children: React.ReactNode }> =
     return inheritanceStates[getStateKey(name)]
   }, [inheritanceStates])
 
-  const setInheritanceState = useCallback((name: NamePath, state: InheritanceState): void => {
-    setInheritanceStates(prevStates => ({
-      ...prevStates,
-      [getStateKey(name)]: state
-    }))
-  }, [])
-
+  /**
+   * Marks an inherited field as carrying an own value. Only a field that currently
+   * reads as inherited is broken, decided on the latest state rather than on the
+   * caller's: the object editor form keeps the change handler of its first render,
+   * so its view of the state can be as old as the editor, and a field restored since
+   * then would otherwise never be broken again.
+   */
   const breakInheritance = useCallback((name: NamePath): void => {
-    if (getInheritanceState(name)?.inherited === false) {
-      return
-    }
+    const key = getStateKey(name)
 
     startTransition(() => {
-      setInheritanceState(name, {
-        objectId: id,
-        inherited: 'broken'
-      })
+      setInheritanceStates(prevStates => prevStates[key]?.inherited === true
+        ? { ...prevStates, [key]: { objectId: id, inherited: 'broken' } }
+        : prevStates
+      )
     })
-  }, [])
+  }, [id])
 
   const canRestoreInheritance = useCallback((name: NamePath): boolean => {
     const key = getStateKey(name)
