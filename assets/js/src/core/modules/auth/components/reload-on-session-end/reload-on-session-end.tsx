@@ -20,8 +20,8 @@ import { isSessionGone, reloadPage } from '../../util/session-end'
  * user, module-level singletons and plugin state.
  *
  * The reload keeps the address, so the route guard renders the login screen in place at
- * the URL the user was on, exactly as without the reload. Logout and login reload the page
- * as well, so a session always starts and ends with a fresh boot.
+ * the URL the user was on, exactly as without the reload. Logging out and the login form
+ * reload the page as well.
  *
  * The state is set to `false` on a 401 from Studio's API, and by other code as well (e.g. the
  * OAuth consent screen on a 401 of its own endpoint). A reload on a still-valid session would

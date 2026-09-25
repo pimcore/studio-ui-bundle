@@ -9,6 +9,7 @@
  */
 
 import { isRejectedWithValue } from '@reduxjs/toolkit'
+import { isUndefined } from 'lodash'
 import type { Middleware, MiddlewareAPI } from '@reduxjs/toolkit'
 import type { UserInformation } from '@Pimcore/modules/auth/user/user-api-slice.gen'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
@@ -63,7 +64,7 @@ const initialState: UserInformation = {
 const isStudioApiRequest = (meta: unknown): boolean => {
   const url = (meta as { baseQueryMeta?: { request?: Request } } | undefined)?.baseQueryMeta?.request?.url
 
-  if (url === undefined) {
+  if (isUndefined(url)) {
     return true
   }
 

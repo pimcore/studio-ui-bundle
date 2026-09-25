@@ -22,6 +22,8 @@ jest.mock('@Pimcore/modules/auth/util/session-end', () => ({
 import { rtkQueryErrorLogger } from './rtkQueryErrorLogger'
 // eslint-disable-next-line import/first
 import type { MiddlewareAPI } from '@reduxjs/toolkit'
+// eslint-disable-next-line import/first
+import { isUndefined } from 'lodash'
 
 const LOGGED_OUT = { type: 'authentication/setAuthState', payload: false }
 
@@ -38,7 +40,7 @@ const rejected = (
     requestStatus: 'rejected',
     requestId: 'r1',
     arg: { endpointName },
-    ...(url === undefined ? {} : { baseQueryMeta: { request: { url } } })
+    ...(isUndefined(url) ? {} : { baseQueryMeta: { request: { url } } })
   }
 })
 
