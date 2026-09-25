@@ -128,6 +128,23 @@ class EntryPointCatalogTest extends Unit
         $this->assertSame(2, $provider->calls);
     }
 
+    public function testProductionRebuildsTheManifestWhenItsArchiveIsReplaced(): void
+    {
+        $dist = $this->workDir . '/build-dist';
+        $this->writeBuild('aaaa', []);
+        touch($dist . '/build-aaaa.zip');
+        $provider = $this->archiveProvider();
+
+        $this->locationsInNewRequest($provider);
+
+        // what pulling a new build does; asked again, the provider extracts the new archive
+        rename($dist . '/build-aaaa.zip', $dist . '/build-bbbb.zip');
+
+        $this->locationsInNewRequest($provider);
+        $this->locationsInNewRequest($provider);
+        $this->assertSame(2, $provider->calls);
+    }
+
     public function testAProviderWithoutABuildIsNotCached(): void
     {
         $provider = $this->archiveProvider();

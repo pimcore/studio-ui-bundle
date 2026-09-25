@@ -31,7 +31,11 @@ use Throwable;
  *
  * Providers that ship an archive are served from a manifest in the cache dir; in debug mode
  * it is rebuilt when the archive, the build dir or a build file changes, in any mode when a
- * cached build is gone. Other providers are read live, because their locations may be dynamic.
+ * cached build or its archive is gone. Other providers are read live, because their locations
+ * may be dynamic.
+ *
+ * @phpstan-type BuildFile array{json?: array<mixed>, error?: string, exposeRemote: ?string}
+ * @phpstan-type ManifestEntry array{archives: string[], files: array<string, BuildFile>}
  *
  * @internal
  */
@@ -40,12 +44,12 @@ final class EntryPointCatalog implements ResetInterface
     private const string EXPOSE_REMOTE_FILE = 'exposeRemote.js';
 
     /**
-     * @var array<string, array<string, array{json?: array<mixed>, error?: string, exposeRemote: ?string}>>|null
+     * @var array<string, ManifestEntry>|null
      */
     private ?array $manifest = null;
 
     /**
-     * @var array<int, array<string, array{json?: array<mixed>, error?: string, exposeRemote: ?string}>>
+     * @var array<int, array<string, BuildFile>>
      */
     private array $resolved = [];
 
@@ -110,7 +114,7 @@ final class EntryPointCatalog implements ResetInterface
     }
 
     /**
-     * @return array<string, array{json?: array<mixed>, error?: string, exposeRemote: ?string}>
+     * @return array<string, BuildFile>
      */
     private function resolve(WebpackEntryPointProviderInterface $provider): array
     {
@@ -123,7 +127,7 @@ final class EntryPointCatalog implements ResetInterface
     }
 
     /**
-     * @return array<string, array{json?: array<mixed>, error?: string, exposeRemote: ?string}>|null
+     * @return array<string, BuildFile>|null
      */
     private function manifestEntry(WebpackEntryPointProviderInterface $provider): ?array
     {
@@ -137,23 +141,29 @@ final class EntryPointCatalog implements ResetInterface
 
         $entry = $this->manifest[$key] ?? null;
         if ($entry === null || $this->isPresent($entry)) {
-            return $entry;
+            return $entry['files'] ?? null;
         }
 
-        // the build was removed or extracted again: rebuilding lets the provider extract it
+        // the build or its archive was removed or replaced: rebuilding lets the provider extract it
         @unlink($manifestFile);
         $this->manifest = $this->loadManifest($manifestFile);
         $entry = $this->manifest[$key] ?? null;
 
-        return $entry !== null && $this->isPresent($entry) ? $entry : null;
+        return $entry !== null && $this->isPresent($entry) ? $entry['files'] : null;
     }
 
     /**
-     * @param array<string, array{json?: array<mixed>, error?: string, exposeRemote: ?string}> $files
+     * @param ManifestEntry $entry
      */
-    private function isPresent(array $files): bool
+    private function isPresent(array $entry): bool
     {
-        foreach ($files as $location => $file) {
+        foreach ($entry['archives'] as $archive) {
+            if (!is_file($archive)) {
+                return false;
+            }
+        }
+
+        foreach ($entry['files'] as $location => $file) {
             if (isset($file['json']) && !is_file($location)) {
                 return false;
             }
@@ -163,7 +173,7 @@ final class EntryPointCatalog implements ResetInterface
     }
 
     /**
-     * @return array<string, array<string, array{json?: array<mixed>, error?: string, exposeRemote: ?string}>>
+     * @return array<string, ManifestEntry>
      */
     private function loadManifest(string $cacheFile): array
     {
@@ -189,7 +199,7 @@ final class EntryPointCatalog implements ResetInterface
                         continue;
                     }
 
-                    $manifest[$key] = $files;
+                    $manifest[$key] = ['archives' => $this->archivesOf($provider), 'files' => $files];
                     array_push($resources, ...$this->resourcesOf($provider, $files));
                 }
 
@@ -223,7 +233,20 @@ final class EntryPointCatalog implements ResetInterface
     }
 
     /**
-     * @param array<string, array{json?: array<mixed>, error?: string, exposeRemote: ?string}> $files
+     * @return string[]
+     */
+    private function archivesOf(BuildArchiveProviderInterface $provider): array
+    {
+        $archive = $provider->getBuildArchive();
+        if ($archive === null) {
+            return [];
+        }
+
+        return glob($archive->archiveGlob) ?: [];
+    }
+
+    /**
+     * @param array<string, BuildFile> $files
      *
      * @return ResourceInterface[]
      */
@@ -250,7 +273,7 @@ final class EntryPointCatalog implements ResetInterface
     }
 
     /**
-     * @return array<string, array{json?: array<mixed>, error?: string, exposeRemote: ?string}>
+     * @return array<string, BuildFile>
      */
     private function read(WebpackEntryPointProviderInterface $provider): array
     {
@@ -263,7 +286,7 @@ final class EntryPointCatalog implements ResetInterface
     }
 
     /**
-     * @return array{json?: array<mixed>, error?: string, exposeRemote: ?string}
+     * @return BuildFile
      */
     private function readLocation(string $location): array
     {
