@@ -117,14 +117,14 @@ class EntryPointCatalogTest extends Unit
         $this->writeBuild('aaaa', []);
         $provider = $this->archiveProvider();
 
-        $this->assertSame([$this->location('aaaa')], $this->catalog([$provider])->getEntryPointsJsonLocations($provider));
+        $this->assertSame([$this->location('aaaa')], $this->locationsInNewRequest($provider));
 
         // what an extraction does: the build dir is replaced by one named after the new build id
         $this->removeDirectory($this->targetDir . '/aaaa');
         $this->writeBuild('bbbb', []);
 
-        $this->assertSame([$this->location('bbbb')], $this->catalog([$provider])->getEntryPointsJsonLocations($provider));
-        $this->assertSame([$this->location('bbbb')], $this->catalog([$provider])->getEntryPointsJsonLocations($provider));
+        $this->assertSame([$this->location('bbbb')], $this->locationsInNewRequest($provider));
+        $this->assertSame([$this->location('bbbb')], $this->locationsInNewRequest($provider));
         $this->assertSame(2, $provider->calls);
     }
 
@@ -132,11 +132,11 @@ class EntryPointCatalogTest extends Unit
     {
         $provider = $this->archiveProvider();
 
-        $this->assertSame([], $this->catalog([$provider])->getEntryPointsJsonLocations($provider));
+        $this->assertSame([], $this->locationsInNewRequest($provider));
 
         $this->writeBuild('aaaa', []);
 
-        $this->assertSame([$this->location('aaaa')], $this->catalog([$provider])->getEntryPointsJsonLocations($provider));
+        $this->assertSame([$this->location('aaaa')], $this->locationsInNewRequest($provider));
     }
 
     public function testOtherProvidersAreReadOncePerRequestButNeverCached(): void
@@ -252,6 +252,14 @@ class EntryPointCatalogTest extends Unit
         } catch (RuntimeException $e) {
             $this->assertSame('target not writable', $e->getMessage());
         }
+    }
+
+    /**
+     * @return string[]
+     */
+    private function locationsInNewRequest(WebpackEntryPointProviderInterface $provider): array
+    {
+        return $this->catalog([$provider])->getEntryPointsJsonLocations($provider);
     }
 
     private function location(string $build): string
