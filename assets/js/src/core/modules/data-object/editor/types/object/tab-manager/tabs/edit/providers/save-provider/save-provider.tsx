@@ -9,14 +9,14 @@
  */
 
 import React, { createContext, useMemo, useRef, useState } from 'react'
-import { SaveTaskType } from '@Pimcore/modules/data-object/actions/save/use-save'
+import { SaveTaskType, type SaveFinishCallback } from '@Pimcore/modules/data-object/actions/save/use-save'
 
 export interface QueuedDask {
   task: SaveTaskType | undefined
   editableData: Record<string, any>
   /** useSave instance that queued the task: only it runs it, so it sees the result. */
   ownerId: string
-  onFinish?: () => void
+  onFinish?: SaveFinishCallback
 }
 
 export interface ISaveContext {

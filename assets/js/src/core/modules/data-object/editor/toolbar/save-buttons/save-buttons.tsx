@@ -77,15 +77,12 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
 
   async function handleSaveClick (task: SaveTaskType, onFinish?: () => void): Promise<void> {
     if (dataObject?.changes === undefined) return
-    // Captured once, synchronously, so the reset below can tell whether anything was
-    // merged into the modified-attributes map after this exact snapshot was sent - the
-    // save this triggers may run much later (e.g. queued behind another one), during
-    // which the user can keep editing.
-    const editableData = getModifiedDataObjectAttributes()
-
+    // The reset compares against the data the save actually sent, not the data read
+    // here: the save may run much later (queued behind another one), take over the data
+    // of an auto save folded into it meanwhile, and the user can keep editing after that.
     Promise.all([
-      saveDataObject(editableData, task, () => {
-        resetModifiedDataObjectAttributes(editableData)
+      saveDataObject(getModifiedDataObjectAttributes(), task, (savedEditableData) => {
+        resetModifiedDataObjectAttributes(savedEditableData)
         onFinish?.()
       }),
       saveSchedules()

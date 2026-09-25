@@ -217,7 +217,10 @@ const Toolbar = (): React.JSX.Element => {
   const { save, isLoading, isSuccess } = useSave()
   const { getModifiedDataObjectAttributes, resetModifiedDataObjectAttributes } = useEditFormContext()
   const publish = useCallback((): void => {
-    void save(getModifiedDataObjectAttributes(), SaveTaskType.Publish, resetModifiedDataObjectAttributes)
+    // resets against the data the save actually sent, as save-buttons.tsx does
+    void save(getModifiedDataObjectAttributes(), SaveTaskType.Publish, (savedEditableData) => {
+      resetModifiedDataObjectAttributes(savedEditableData)
+    })
   }, [save, getModifiedDataObjectAttributes, resetModifiedDataObjectAttributes])
 
   return (
@@ -394,6 +397,33 @@ describe('restoring inheritance while a save is in flight', () => {
 
     expect(mockSend).toHaveBeenCalledTimes(1)
     await waitFor(() => { expect(toolbar()).toEqual({ loading: false, success: true }) })
+  })
+
+  it('clears what a queued publish sent, including an auto save folded into it', async () => {
+    renderEditor()
+
+    await user.type(inputOf('Name'), '!')
+    const running = holdNextSave()
+    await runAutoSave()
+    await requestsSent(1)
+
+    // the publish queues behind the running auto save, then a later auto save folds into it
+    await clickPublish()
+    await user.type(inputOf('Name'), '?')
+    await runAutoSave()
+    expect(mockSend).toHaveBeenCalledTimes(1)
+
+    await act(async () => { running.finish() })
+
+    await requestsSent(2)
+    expect(sentRequests()[1]).toEqual({ editableData: { name: 'Parent name!?' }, task: SaveTaskType.Publish, useDraftData: true })
+
+    // what the publish sent is no longer pending: the next edit sends only itself
+    await user.type(inputOf('SKU'), '!')
+    await runAutoSave()
+
+    await requestsSent(3)
+    expect(sentRequests()[2].editableData).toEqual({ sku: 'SKU-OWN!' })
   })
 
   it('saves a change made right after a restore as an own value', async () => {

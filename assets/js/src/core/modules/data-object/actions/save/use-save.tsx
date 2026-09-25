@@ -45,8 +45,15 @@ export enum SaveTaskType {
   Unpublish = 'unpublish'
 }
 
+/**
+ * Runs once a save went through, with the editable data it actually sent - which is
+ * not necessarily what was passed to save(): a queued task takes over the data of a
+ * later auto save folded into it (see queueAutoSave).
+ */
+export type SaveFinishCallback = (savedEditableData: Record<string, any>) => void
+
 export interface UseSaveHookReturn {
-  save: (editableData: Record<string, any>, task?: SaveTaskType, onFinish?: () => void) => Promise<void>
+  save: (editableData: Record<string, any>, task?: SaveTaskType, onFinish?: SaveFinishCallback) => Promise<void>
   isLoading: boolean
   isSuccess: boolean
   isError: boolean
@@ -81,7 +88,7 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
     }
   }, [runningTask, queuedTask])
 
-  const save = async (editableData: Record<string, any>, task?: SaveTaskType, onFinish?: () => void): Promise<void> => {
+  const save = async (editableData: Record<string, any>, task?: SaveTaskType, onFinish?: SaveFinishCallback): Promise<void> => {
     if (dataObject?.changes === undefined) return
 
     // Hold autosaves until the edit-lock check resolves in the user's favour.
@@ -182,7 +189,7 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
 
         eventBus.publish(event)
 
-        onFinish?.()
+        onFinish?.(editableData)
       }
       runningEditableDataRef.current = undefined
       setRunningTask(undefined)
