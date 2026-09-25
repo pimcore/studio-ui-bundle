@@ -14,7 +14,6 @@ import { ThemeProvider } from '@Pimcore/modules/app/theme/theme-provider'
 import React from 'react'
 import { Provider } from 'react-redux'
 import { ElementSelectorProvider } from '../element/element-selector/provider/element-selector/element-selector-provider'
-import { SessionScope } from '../auth/components/session-scope/session-scope'
 
 export interface GlobalProviderProps {
   children: React.ReactNode
@@ -26,11 +25,9 @@ export const GlobalProvider = ({ children, themeId }: GlobalProviderProps): Reac
     <ContainerProvider>
       <Provider store={ store }>
         <ThemeProvider id={ themeId }>
-          <SessionScope>
-            <ElementSelectorProvider>
-              {children}
-            </ElementSelectorProvider>
-          </SessionScope>
+          <ElementSelectorProvider>
+            {children}
+          </ElementSelectorProvider>
         </ThemeProvider>
       </Provider>
     </ContainerProvider>
