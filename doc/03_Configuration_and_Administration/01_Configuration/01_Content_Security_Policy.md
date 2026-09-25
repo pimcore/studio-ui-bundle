@@ -79,7 +79,8 @@ Add the nonce attribute to inline scripts to prevent CSP violations:
 
 ## Extending CSP in Your Application
 
-If your bundle or application serves resources from external origins (Rsbuild dev servers, CDNs, module federation), register these origins using the `CspEvent`:
+If your bundle or application serves resources from external origins (Rsbuild dev servers, CDNs, module federation), register these origins using the `CspEvent`.
+The event is dispatched for HTML responses only; other Studio responses, such as API calls, get the policy without these origins.
 
 ### Example Subscriber
 

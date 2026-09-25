@@ -21,6 +21,7 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -77,14 +78,26 @@ final class CspHeaderSubscriber implements EventSubscriberInterface, LoggerAware
             }
         }
 
-        $this->addBuildRemoteOrigins($request);
-
         $response = $event->getResponse();
+
+        // build origins only matter for a page that loads the Studio bundles, not for API responses
+        if ($this->isHtml($response)) {
+            $this->addBuildRemoteOrigins($request);
+        }
+
         $cspHeader = $this->contentSecurityPolicyHandler->getCspHeader();
 
         $response->headers->set('Content-Security-Policy', $cspHeader);
 
         $this->logger->debug('CSP header set', ['header' => $cspHeader]);
+    }
+
+    private function isHtml(Response $response): bool
+    {
+        $contentType = $response->headers->get('Content-Type');
+
+        // without a content type yet, Symfony prepares the response as HTML
+        return $contentType === null || str_contains($contentType, 'html');
     }
 
     private function addBuildRemoteOrigins(\Symfony\Component\HttpFoundation\Request $request): void
