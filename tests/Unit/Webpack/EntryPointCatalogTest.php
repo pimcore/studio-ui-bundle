@@ -112,6 +112,33 @@ class EntryPointCatalogTest extends Unit
         $this->assertSame([self::OLD_JS], $json['entrypoints']['main']['js']);
     }
 
+    public function testProductionRebuildsTheManifestWhenACachedBuildIsGone(): void
+    {
+        $this->writeBuild('aaaa', []);
+        $provider = $this->archiveProvider();
+
+        $this->assertSame([$this->location('aaaa')], $this->catalog([$provider])->getEntryPointsJsonLocations($provider));
+
+        // what an extraction does: the build dir is replaced by one named after the new build id
+        $this->removeDirectory($this->targetDir . '/aaaa');
+        $this->writeBuild('bbbb', []);
+
+        $this->assertSame([$this->location('bbbb')], $this->catalog([$provider])->getEntryPointsJsonLocations($provider));
+        $this->assertSame([$this->location('bbbb')], $this->catalog([$provider])->getEntryPointsJsonLocations($provider));
+        $this->assertSame(2, $provider->calls);
+    }
+
+    public function testAProviderWithoutABuildIsNotCached(): void
+    {
+        $provider = $this->archiveProvider();
+
+        $this->assertSame([], $this->catalog([$provider])->getEntryPointsJsonLocations($provider));
+
+        $this->writeBuild('aaaa', []);
+
+        $this->assertSame([$this->location('aaaa')], $this->catalog([$provider])->getEntryPointsJsonLocations($provider));
+    }
+
     public function testOtherProvidersAreReadOncePerRequestButNeverCached(): void
     {
         $this->writeBuild('aaaa', []);

@@ -30,8 +30,8 @@ use Throwable;
  * The entrypoints.json files of every provider, read once per request instead of once per consumer.
  *
  * Providers that ship an archive are served from a manifest in the cache dir; in debug mode
- * it is rebuilt when the archive, the build dir or a build file changes. Other providers are
- * read live, because their locations may be dynamic.
+ * it is rebuilt when the archive, the build dir or a build file changes, in any mode when a
+ * cached build is gone. Other providers are read live, because their locations may be dynamic.
  *
  * @internal
  */
@@ -132,9 +132,34 @@ final class EntryPointCatalog implements ResetInterface
             return null;
         }
 
-        $this->manifest ??= $this->loadManifest($this->manifestFile($this->cacheDir));
+        $manifestFile = $this->manifestFile($this->cacheDir);
+        $this->manifest ??= $this->loadManifest($manifestFile);
 
-        return $this->manifest[$key] ?? null;
+        $entry = $this->manifest[$key] ?? null;
+        if ($entry === null || $this->isPresent($entry)) {
+            return $entry;
+        }
+
+        // the build was removed or extracted again: rebuilding lets the provider extract it
+        @unlink($manifestFile);
+        $this->manifest = $this->loadManifest($manifestFile);
+        $entry = $this->manifest[$key] ?? null;
+
+        return $entry !== null && $this->isPresent($entry) ? $entry : null;
+    }
+
+    /**
+     * @param array<string, array{json?: array<mixed>, error?: string, exposeRemote: ?string}> $files
+     */
+    private function isPresent(array $files): bool
+    {
+        foreach ($files as $location => $file) {
+            if (isset($file['json']) && !is_file($location)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -153,13 +178,19 @@ final class EntryPointCatalog implements ResetInterface
                     }
 
                     try {
-                        $manifest[$key] = $this->read($provider);
+                        $files = $this->read($provider);
                     } catch (Throwable) {
                         // not cached: the provider keeps failing on access, as before
                         continue;
                     }
 
-                    array_push($resources, ...$this->resourcesOf($provider, $manifest[$key]));
+                    // no build yet: read per request so it is found once it exists
+                    if ($files === []) {
+                        continue;
+                    }
+
+                    $manifest[$key] = $files;
+                    array_push($resources, ...$this->resourcesOf($provider, $files));
                 }
 
                 $cache->write(json_encode($manifest, JSON_THROW_ON_ERROR), $resources);

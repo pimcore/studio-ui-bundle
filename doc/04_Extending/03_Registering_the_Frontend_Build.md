@@ -56,7 +56,7 @@ final class WebpackEntryPointProvider implements WebpackEntryPointProviderInterf
 }
 ```
 
-Studio asks each provider once per request. A provider that ships its build as an archive (see [Shipping the Frontend Build as an Archive](./04_Shipping_the_Frontend_Build_as_an_Archive.md)) is read once and cached; in debug mode the cache is refreshed when the archive, the build directory or an `entrypoints.json` changes.
+Studio asks each provider once per request. A provider that ships its build as an archive (see [Shipping the Frontend Build as an Archive](./04_Shipping_the_Frontend_Build_as_an_Archive.md)) is read once and cached; in debug mode the cache is refreshed when the archive, the build directory or an `entrypoints.json` changes, and in every mode when a cached build has been removed.
 
 ## Service tags
 
