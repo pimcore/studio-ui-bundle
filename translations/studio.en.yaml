@@ -1183,6 +1183,7 @@ export-xlsx-form.form-field.header: Header
 export-xlsx-form.form-field.header.option.name: System key
 export-xlsx-form.form-field.header.option.title: Label
 export-xlsx-form.form-field.header.option.no-header: No header
+form.optional-mark: (optional)
 form.annotation.added: Added
 form.annotation.changed: Changed
 form.annotation.removed: Removed

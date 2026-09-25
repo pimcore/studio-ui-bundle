@@ -8,15 +8,15 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ReactNode, useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { Form as AntForm, type FormProps as AntFormProps, type FormItemProps } from 'antd'
 import { type ValidateErrorEntity } from 'rc-field-form/lib/interface'
-import { Space } from '../space/space'
+import { useTranslation } from 'react-i18next'
 import { withGroupName } from './item/with-group-name'
 import { Group } from './group/group'
 import { KeyedList } from './controls/keyed-list/keyed-list'
 import { withItemProvider } from './item/with-item-provider'
-import { LabelExtra } from './item/provider/label-extra/label-extra-provider'
+import { buildRequiredMark } from './item/label-required-mark'
 import { withKeyedItemContext } from './item/with-keyed-item-context'
 import { withLocalizedFieldsLocale } from '@Pimcore/components/form/localisation/localized-fields/form-item/with-localized-fields-locale'
 import { compose } from '@reduxjs/toolkit'
@@ -50,6 +50,7 @@ interface FormComponent {
 
 const Form = (({ ...props }: FormProps) => {
   const { styles } = useStyles()
+  const { t } = useTranslation()
   const { form, children, onFinish, onFinishFailed, requiredMark: callerRequiredMark, ...restProps } = props
   const [formInstance] = useForm(form)
 
@@ -69,27 +70,11 @@ const Form = (({ ...props }: FormProps) => {
   }, [currentFormInstance])
 
   // The label row always ends with the label-extra slot, so a requiredMark of the
-  // caller is composed with it rather than replacing it: a render function draws the
-  // label, `false` drops the mark. The label extra stays outside the Space: Ant renders
-  // the locale suffix and the tooltip icon into `label`, so the slot after the Space is
-  // the end of the row.
-  const requiredMark = useCallback((label: ReactNode, info: { required: boolean }): ReactNode => {
-    const markedLabel = typeof callerRequiredMark === 'function'
-      ? callerRequiredMark(label, info)
-      : (
-        <Space size='mini'>
-          {label}
-          {info.required && callerRequiredMark !== false && '*'}
-        </Space>
-        )
-
-    return (
-      <>
-        {markedLabel}
-        <LabelExtra />
-      </>
-    )
-  }, [callerRequiredMark])
+  // caller is composed with it rather than replacing it (see buildRequiredMark).
+  const requiredMark = useMemo(
+    () => buildRequiredMark(callerRequiredMark, t('form.optional-mark')),
+    [callerRequiredMark, t]
+  )
 
   const className = useMemo(() => `${props.className ?? ''} ${styles.container}`, [props.className, styles.container])
 
