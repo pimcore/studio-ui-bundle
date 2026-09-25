@@ -134,7 +134,7 @@ export const ObjectBrick = (props: ObjectBrickProps): React.JSX.Element => {
     changedFieldsRef.current.delete(fieldName)
     restoredFieldsRef.current.add(fieldName)
 
-    if (inheritedValue !== undefined) {
+    if (!isUndefined(inheritedValue)) {
       restoredValuesRef.current.set(fieldName.slice(fieldNameToString(props.name).length + 1), inheritedValue)
     }
 

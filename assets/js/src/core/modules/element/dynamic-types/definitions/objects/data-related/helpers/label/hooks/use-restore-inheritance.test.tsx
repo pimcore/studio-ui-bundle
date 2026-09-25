@@ -26,6 +26,8 @@ let inheritedState: InheritanceState | undefined
 let inheritedValue: unknown
 let hasEditForm = true
 let isDisabled = false
+let locale: string | undefined
+let localizedEdit: string | undefined
 let keyedList: { onFieldRestore?: (field: NamePath) => void } | undefined
 
 jest.mock('@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state', () => ({
@@ -44,6 +46,19 @@ jest.mock('@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edi
     : undefined
 }))
 
+jest.mock('@Pimcore/components/form/localisation/localized-fields/provider/localized-fields-provider/use-localized-fields', () => ({
+  useLocalizedFields: () => locale === undefined ? undefined : { locales: [locale] }
+}))
+
+// the object permissions, as the store holds them
+jest.mock('@sdk/app', () => ({
+  useAppSelector: (selector: () => unknown) => selector()
+}))
+
+jest.mock('@Pimcore/modules/data-object/data-object-draft-slice', () => ({
+  selectDataObjectById: () => ({ permissions: { localizedEdit } })
+}))
+
 jest.mock('@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-optional', () => ({
   useKeyedListOptional: () => keyedList
 }))
@@ -52,8 +67,8 @@ const name = ['manufacturer']
 const broken: InheritanceState = { objectId: 7, inherited: 'broken' }
 
 // Explicit parameter, no default: passing undefined has to reach the hook as undefined.
-const restoreField = (fieldName: NamePath | undefined, emptyValue?: unknown): boolean => {
-  const { result } = renderHook(() => useRestoreInheritance(fieldName, emptyValue))
+const restoreField = (fieldName: NamePath | undefined, emptyValue?: unknown, readOnly?: boolean): boolean => {
+  const { result } = renderHook(() => useRestoreInheritance(fieldName, emptyValue, readOnly))
   result.current.restore()
 
   return result.current.canRestore
@@ -65,6 +80,8 @@ beforeEach(() => {
   inheritedValue = undefined
   hasEditForm = true
   isDisabled = false
+  locale = undefined
+  localizedEdit = undefined
   keyedList = undefined
 })
 
@@ -154,7 +171,32 @@ describe('useRestoreInheritance', () => {
     })
   })
 
+  describe('localized fields', () => {
+    it('restores a field in a locale the user may edit', () => {
+      locale = 'en'
+      localizedEdit = 'en,de'
+
+      expect(restoreField(name)).toBe(true)
+    })
+
+    it('leaves a field in a locale the user may not edit untouched', () => {
+      locale = 'fr'
+      localizedEdit = 'en,de'
+
+      expect(restoreField(name)).toBe(false)
+      expect(clearDataObjectAttribute).not.toHaveBeenCalled()
+      expect(restoreInheritance).not.toHaveBeenCalled()
+    })
+  })
+
   describe('fields that offer no restore', () => {
+    it('leaves a read-only field untouched', () => {
+      expect(restoreField(name, null, true)).toBe(false)
+      expect(resetFields).not.toHaveBeenCalled()
+      expect(clearDataObjectAttribute).not.toHaveBeenCalled()
+      expect(restoreInheritance).not.toHaveBeenCalled()
+    })
+
     it.each([
       ['held by the Ant form store', undefined],
       ['held by a keyed list', { onFieldRestore }]

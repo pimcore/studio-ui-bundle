@@ -13,7 +13,7 @@ import { type NamePath } from 'antd/es/form/interface'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { type DataObjectDraft } from '@Pimcore/modules/data-object/data-object-draft-slice'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
-import { isArray } from 'lodash'
+import { isArray, isNil, isUndefined } from 'lodash'
 
 export interface InheritanceState {
   /**
@@ -87,7 +87,7 @@ const getInitialInheritance = (dataObjectDraft?: DataObjectDraft): InitialInheri
         // inheritedValue is null when no ancestor holds a value, so there is nothing to
         // restore, and absent when inheritable is false.
         const isOverridden = 'inheritable' in value && value.inheritable === true &&
-          'inheritedValue' in value && value.inheritedValue !== null && value.inheritedValue !== undefined
+          'inheritedValue' in value && !isNil(value.inheritedValue)
 
         if (isOverridden) {
           inheritanceStates[stateKey] = { objectId: value.objectId, inherited: 'broken' }
@@ -149,7 +149,7 @@ export const InheritanceStateProvider: React.FC<{ children: React.ReactNode }> =
   const canRestoreInheritance = useCallback((name: NamePath): boolean => {
     const key = getStateKey(name)
 
-    return inheritanceStates[key]?.inherited === 'broken' && restoreTargets[key] !== undefined
+    return inheritanceStates[key]?.inherited === 'broken' && !isUndefined(restoreTargets[key])
   }, [inheritanceStates, restoreTargets])
 
   const getInheritedValue = useCallback((name: NamePath): unknown => {
@@ -170,7 +170,7 @@ export const InheritanceStateProvider: React.FC<{ children: React.ReactNode }> =
     const key = getStateKey(name)
     const restoreTarget = restoreTargets[key]
 
-    if (restoreTarget === undefined) {
+    if (isUndefined(restoreTarget)) {
       return
     }
 

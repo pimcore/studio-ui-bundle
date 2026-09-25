@@ -48,7 +48,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   getAdditionalComponentPropsRef.current = getAdditionalComponentProps
   const onFieldRestoreRef = useRef(onFieldRestore)
   onFieldRestoreRef.current = onFieldRestore
-  const supportsFieldRestore = onFieldRestore !== undefined
+  const supportsFieldRestore = !isUndefined(onFieldRestore)
   // the initial value enriched with the values the child fields register on mount,
   // so that those registrations are not reported as changes
   const baselineValue = useRef(cloneDeep(initialValue))

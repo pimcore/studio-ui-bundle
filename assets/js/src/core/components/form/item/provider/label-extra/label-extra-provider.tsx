@@ -9,6 +9,7 @@
  */
 
 import React, { createContext, useContext, type ReactNode } from 'react'
+import { isNil } from 'lodash'
 
 const LabelExtraContext = createContext<ReactNode | undefined>(undefined)
 
@@ -36,7 +37,7 @@ export const LabelExtraProvider = ({ extra, children }: LabelExtraProviderProps)
 export const LabelExtra = (): React.JSX.Element | null => {
   const extra = useContext(LabelExtraContext)
 
-  if (extra === undefined || extra === null) {
+  if (isNil(extra)) {
     return null
   }
 

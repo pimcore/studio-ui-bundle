@@ -21,6 +21,8 @@ import { useStyles } from './restore-inheritance-label-extra.styles'
 
 /** Value that clears the field of the current form item, see DynamicTypeObjectDataAbstract.getEmptyValue. */
 const EmptyValueContext = createContext<unknown>(null)
+/** Whether the field of the current form item is read-only (noteditable). */
+const ReadOnlyContext = createContext<boolean>(false)
 
 export interface RestoreInheritanceActionProps {
   onRestore: () => void
@@ -56,10 +58,16 @@ export const RestoreInheritanceAction = ({ onRestore }: RestoreInheritanceAction
  * its value back to the origin object. Decides by the item context, so the same
  * node serves every label below a RestoreInheritanceLabelExtraProvider.
  */
-export const RestoreInheritanceLabelExtra = (): React.JSX.Element | null => {
+export interface RestoreInheritanceLabelExtraProps {
+  /** Overrides the read-only state of the provider, for labels rendered outside one. */
+  readOnly?: boolean
+}
+
+export const RestoreInheritanceLabelExtra = ({ readOnly }: RestoreInheritanceLabelExtraProps): React.JSX.Element | null => {
   const itemContext = useItemOptional()
   const emptyValue = useContext(EmptyValueContext)
-  const { canRestore, restore } = useRestoreInheritance(itemContext?.name, emptyValue)
+  const providedReadOnly = useContext(ReadOnlyContext)
+  const { canRestore, restore } = useRestoreInheritance(itemContext?.name, emptyValue, readOnly ?? providedReadOnly)
 
   if (!canRestore) {
     return null
@@ -71,14 +79,18 @@ export const RestoreInheritanceLabelExtra = (): React.JSX.Element | null => {
 export interface RestoreInheritanceLabelExtraProviderProps {
   /** Value that clears the field the provider wraps, see DynamicTypeObjectDataAbstract.getEmptyValue. */
   emptyValue: unknown
+  /** Whether the field the provider wraps is read-only (noteditable). */
+  readOnly?: boolean
   children: ReactNode
 }
 
 /** Offers the restore-inheritance action at the end of the form item labels below. */
-export const RestoreInheritanceLabelExtraProvider = ({ emptyValue, children }: RestoreInheritanceLabelExtraProviderProps): React.JSX.Element => (
+export const RestoreInheritanceLabelExtraProvider = ({ emptyValue, readOnly = false, children }: RestoreInheritanceLabelExtraProviderProps): React.JSX.Element => (
   <EmptyValueContext.Provider value={ emptyValue }>
-    <LabelExtraProvider extra={ <RestoreInheritanceLabelExtra /> }>
-      {children}
-    </LabelExtraProvider>
+    <ReadOnlyContext.Provider value={ readOnly }>
+      <LabelExtraProvider extra={ <RestoreInheritanceLabelExtra /> }>
+        {children}
+      </LabelExtraProvider>
+    </ReadOnlyContext.Provider>
   </EmptyValueContext.Provider>
 )

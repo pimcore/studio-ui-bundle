@@ -15,10 +15,10 @@ import { RestoreInheritanceLabelExtra, RestoreInheritanceLabelExtraProvider } fr
 
 const restore = jest.fn()
 let canRestore = true
-const useRestoreInheritance = jest.fn((name: unknown, emptyValue: unknown) => ({ canRestore, restore }))
+const useRestoreInheritance = jest.fn((name: unknown, emptyValue: unknown, readOnly: unknown) => ({ canRestore, restore }))
 
 jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/hooks/use-restore-inheritance', () => ({
-  useRestoreInheritance: (name: unknown, emptyValue: unknown) => useRestoreInheritance(name, emptyValue)
+  useRestoreInheritance: (name: unknown, emptyValue: unknown, readOnly: unknown) => useRestoreInheritance(name, emptyValue, readOnly)
 }))
 
 jest.mock('@Pimcore/components/form/item/provider/item/use-item', () => ({
@@ -75,7 +75,7 @@ describe('RestoreInheritanceLabelExtra', () => {
 
     screen.getByRole('button', { name: 'restore' }).click()
 
-    expect(useRestoreInheritance).toHaveBeenCalledWith(['manufacturer'], null)
+    expect(useRestoreInheritance).toHaveBeenCalledWith(['manufacturer'], null, false)
     expect(restore).toHaveBeenCalled()
   })
 
@@ -118,7 +118,26 @@ describe('RestoreInheritanceLabelExtra', () => {
       </RestoreInheritanceLabelExtraProvider>
     )
 
-    expect(useRestoreInheritance).toHaveBeenCalledWith(['manufacturer'], [])
+    expect(useRestoreInheritance).toHaveBeenCalledWith(['manufacturer'], [], false)
+  })
+
+  it('offers no restore for a read-only field of the surrounding provider', () => {
+    render(
+      <RestoreInheritanceLabelExtraProvider
+        emptyValue={ null }
+        readOnly
+      >
+        <RestoreInheritanceLabelExtra />
+      </RestoreInheritanceLabelExtraProvider>
+    )
+
+    expect(useRestoreInheritance).toHaveBeenCalledWith(['manufacturer'], null, true)
+  })
+
+  it('lets a label outside a provider say itself that its field is read-only', () => {
+    render(<RestoreInheritanceLabelExtra readOnly />)
+
+    expect(useRestoreInheritance).toHaveBeenCalledWith(['manufacturer'], null, true)
   })
 
   it('is served by the label-extra slot below its provider', () => {

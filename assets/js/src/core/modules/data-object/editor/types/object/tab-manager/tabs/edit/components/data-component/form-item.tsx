@@ -51,7 +51,10 @@ const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDat
         contentSelector=".ant-form-item-control-input-content"
         parentSelector=".ant-space-item"
       >
-        <RestoreInheritanceLabelExtraProvider emptyValue={ objectDataType.getEmptyValue() }>
+        <RestoreInheritanceLabelExtraProvider
+          emptyValue={ objectDataType.getEmptyValue() }
+          readOnly={ _props.noteditable === true }
+        >
           <Form.Item
             { ...effectiveFormItemProps }
             className={ cn(effectiveFormItemProps.className, inheritanceOverlayStyle) }

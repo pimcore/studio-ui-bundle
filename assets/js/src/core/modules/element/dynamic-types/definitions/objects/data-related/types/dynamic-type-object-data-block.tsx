@@ -54,7 +54,7 @@ export class DynamicTypeObjectDataBlock extends DynamicTypeObjectDataAbstract {
               label={ props.title }
               name={ props.name }
             />
-            <RestoreInheritanceLabelExtra />
+            <RestoreInheritanceLabelExtra readOnly={ props.noteditable === true } />
           </Flex>
         }
       />

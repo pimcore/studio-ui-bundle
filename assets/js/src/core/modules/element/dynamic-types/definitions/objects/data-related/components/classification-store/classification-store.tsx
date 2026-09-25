@@ -156,7 +156,7 @@ export const ClassificationStore = (props: ClassificationStoreProps): React.JSX.
     changedFieldsRef.current.delete(fieldName)
     restoredFieldsRef.current.add(fieldName)
 
-    if (inheritedValue !== undefined) {
+    if (!isUndefined(inheritedValue)) {
       restoredValuesRef.current.set(toRelativeFieldName(fieldName), inheritedValue)
     }
 

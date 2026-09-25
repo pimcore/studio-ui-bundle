@@ -20,6 +20,14 @@ import {
   useInheritanceState
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
 import { RestoreInheritanceKeyedListContext } from './restore-inheritance-keyed-list-context'
+import { isUndefined } from 'lodash'
+import { useAppSelector } from '@sdk/app'
+import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
+import { selectDataObjectById } from '@Pimcore/modules/data-object/data-object-draft-slice'
+import {
+  useLocalizedFields
+} from '@Pimcore/components/form/localisation/localized-fields/provider/localized-fields-provider/use-localized-fields'
+import { getLanguagePermission, isLanguageEditable } from '@Pimcore/components/language-selection/helpers'
 
 export interface UseRestoreInheritanceReturn {
   /**
@@ -42,33 +50,38 @@ export interface UseRestoreInheritanceReturn {
  *
  * @param name Form path of the field, which is also the key of its inheritance state.
  * @param emptyValue Value that clears the field, see DynamicTypeObjectDataAbstract.
+ * @param readOnly Whether the field itself is read-only (noteditable).
  */
 export const useRestoreInheritance = (
   name: NamePath | undefined,
-  emptyValue: unknown = null
+  emptyValue: unknown = null,
+  readOnly: boolean = false
 ): UseRestoreInheritanceReturn => {
   const inheritanceStateContext = useInheritanceState()
   const editFormContext = useEditFormContextOptional()
   const nearestKeyedList = useKeyedListOptional()
   const keyedListOverride = useContext(RestoreInheritanceKeyedListContext)
-  const keyedList = keyedListOverride !== undefined ? keyedListOverride.keyedList : nearestKeyedList
+  const keyedList = isUndefined(keyedListOverride) ? nearestKeyedList : keyedListOverride.keyedList
+  const isLocaleEditable = useIsLocaleEditable()
 
-  const isKeyedList = keyedList !== undefined
-  const isRestorable = name !== undefined &&
+  const isKeyedList = !isUndefined(keyedList)
+  const isRestorable = !isUndefined(name) &&
     inheritanceStateContext?.canRestoreInheritance(name) === true
 
-  // A read-only editor ignores writes (see RootComponent), and so does restore, which
-  // bypasses its change handler. The overridden marker still shows.
-  const isEditable = editFormContext?.disabled !== true
+  // Restore writes past the control, so it has to respect whatever makes the control
+  // read-only: the whole editor (whose change handler ignores writes, see
+  // RootComponent), the field itself, or the locale of a localized field. The
+  // overridden marker still shows.
+  const isEditable = editFormContext?.disabled !== true && !readOnly && isLocaleEditable
 
   const canRestore = isRestorable && isEditable && (
     isKeyedList
-      ? keyedList.onFieldRestore !== undefined
-      : editFormContext !== undefined
+      ? !isUndefined(keyedList.onFieldRestore)
+      : !isUndefined(editFormContext)
   )
 
   const restore = useCallback((): void => {
-    if (!canRestore || name === undefined) {
+    if (!canRestore || isUndefined(name)) {
       return
     }
 
@@ -81,7 +94,7 @@ export const useRestoreInheritance = (
       // changed again.
       const inheritedValue = inheritanceStateContext?.getInheritedValue(name)
 
-      if (inheritedValue === undefined) {
+      if (isUndefined(inheritedValue)) {
         editFormContext?.form.resetFields([name])
       } else {
         editFormContext?.form.setFieldValue(name, inheritedValue)
@@ -98,4 +111,21 @@ export const useRestoreInheritance = (
   }, [canRestore, name, emptyValue, isKeyedList, keyedList, editFormContext, inheritanceStateContext])
 
   return { canRestore, restore }
+}
+
+/**
+ * Whether the locale of the surrounding localized fields may be edited, by the same
+ * localizedEdit permission the localized control disables itself by (see
+ * FormControlWithElementContext). True outside localized fields.
+ */
+const useIsLocaleEditable = (): boolean => {
+  const localizedFields = useLocalizedFields()
+  const { id } = useContext(DataObjectContext)
+  const permissions = useAppSelector(state => selectDataObjectById(state, id))?.permissions
+
+  if (isUndefined(localizedFields)) {
+    return true
+  }
+
+  return isLanguageEditable(getLanguagePermission(permissions, 'localizedEdit'), localizedFields.locales[0])
 }
