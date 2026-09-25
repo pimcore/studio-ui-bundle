@@ -15,7 +15,7 @@ namespace Pimcore\Bundle\StudioUiBundle\EventSubscriber\Csp;
 
 use Pimcore\Bundle\StudioUiBundle\Event\Csp\CspEvent;
 use Pimcore\Bundle\StudioUiBundle\Security\Csp\CspOriginFileParserInterface;
-use Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointManager;
+use Pimcore\Bundle\StudioUiBundle\Webpack\EntryPointCatalog;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
@@ -41,7 +41,7 @@ final class BuildRemoteEntryCspSubscriber implements EventSubscriberInterface, L
 
     public function __construct(
         private readonly CspOriginFileParserInterface $cspOriginFileParser,
-        private readonly WebpackEntryPointManager $webpackEntryPointManager
+        private readonly EntryPointCatalog $entryPointCatalog
     ) {
         $this->logger = new NullLogger();
     }
@@ -55,29 +55,32 @@ final class BuildRemoteEntryCspSubscriber implements EventSubscriberInterface, L
 
     public function onCspEvent(CspEvent $event): void
     {
-        $exposeRemoteFiles = [];
+        $sources = [];
 
-        foreach ($this->webpackEntryPointManager->getProviders() as $provider) {
-            foreach ($provider->getEntryPointsJsonLocations() as $entryPointLocation) {
-                $directory = dirname($entryPointLocation);
-                $exposeRemoteFile = $directory . '/exposeRemote.js';
+        foreach ($this->entryPointCatalog->getProviders() as $provider) {
+            foreach ($this->entryPointCatalog->getEntryPointsJsonLocations($provider) as $entryPointLocation) {
+                $source = $this->entryPointCatalog->getExposeRemoteSource($provider, $entryPointLocation);
 
-                if (file_exists($exposeRemoteFile)) {
-                    $exposeRemoteFiles[] = $exposeRemoteFile;
-                    $this->logger->debug('Found exposeRemote.js', ['file' => $exposeRemoteFile]);
+                if ($source !== null) {
+                    $sources[] = $source;
+                    $this->logger->debug('Found exposeRemote.js', ['file' => dirname($entryPointLocation) . '/exposeRemote.js']);
                 }
             }
         }
 
-        if (empty($exposeRemoteFiles)) {
+        if (empty($sources)) {
             $this->logger->debug('No exposeRemote.js files found');
 
             return;
         }
 
-        $this->logger->debug('Scanning exposeRemote.js files', ['files_found' => count($exposeRemoteFiles)]);
+        $this->logger->debug('Scanning exposeRemote.js files', ['files_found' => count($sources)]);
 
-        $origins = $this->cspOriginFileParser->extractOriginsFromFiles($exposeRemoteFiles);
+        $origins = [];
+        foreach ($sources as $source) {
+            array_push($origins, ...$this->cspOriginFileParser->extractOriginsFromContent($source));
+        }
+        $origins = array_values(array_unique($origins));
 
         if (!empty($origins)) {
             $this->logger->debug('Extracted origins from exposeRemote.js files', ['origins' => $origins]);
