@@ -15,6 +15,8 @@ import { ColumnPipelineForm } from './column-pipeline-form'
 export interface ColumnEditorItemBodyProps {
   column: AdvancedEditorColumn
   entity: string
+  /** Class definition id the pipeline form scopes class-bound pickers (e.g. classification store) to. */
+  classDefinitionId?: string
   objectId: number | null
   onPipelineChange: (id: string, pipeline: Record<string, any>) => void
   /** Service ID of the DynamicTypePipelineRegistry to use for source fields. */
@@ -28,6 +30,7 @@ export interface ColumnEditorItemBodyProps {
 export const ColumnEditorItemBody = ({
   column,
   entity,
+  classDefinitionId,
   objectId,
   onPipelineChange,
   sourceFieldsRegistryId,
@@ -36,6 +39,7 @@ export const ColumnEditorItemBody = ({
 }: ColumnEditorItemBodyProps): React.JSX.Element => {
   return (
     <ColumnPipelineForm
+      classDefinitionId={ classDefinitionId }
       column={ column }
       compact={ compact }
       config={ column.pipelineConfig }

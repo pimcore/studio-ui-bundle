@@ -20,10 +20,18 @@ import { Tabs } from '@Pimcore/components/tabs/tabs'
 import { isEqual } from 'lodash'
 import { type AdvancedEditorColumn } from './types'
 import { ColumnPreview } from './column-preview'
+import { ClassificationStoreFieldPickerProvider } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/classification-store/classification-store-field-picker-provider'
 
 export interface ColumnPipelineFormProps {
   column?: AdvancedEditorColumn
   entity?: string
+  /**
+   * Class definition id class-bound source field/transformer pickers (e.g. the classification
+   * store field picker) scope their selection to. Any dynamic type registered against
+   * `sourceFieldsRegistryId`/`transformersRegistryId` may rely on this — pass it whenever it is
+   * known, the same way Studio's own advanced-column form does.
+   */
+  classDefinitionId?: string
   config?: Record<string, any>
   objectId?: number | null
   value?: Record<string, any>
@@ -38,6 +46,7 @@ export interface ColumnPipelineFormProps {
 
 export const ColumnPipelineForm = ({
   column,
+  classDefinitionId,
   config,
   objectId,
   value,
@@ -120,52 +129,54 @@ export const ColumnPipelineForm = ({
       layout='vertical'
       onValuesChange={ onValuesChange }
     >
-      <PipelineConfigProvider initialConfig={ config ?? {} }>
-        <Form.Item name='value'>
-          <Pipeline
-            items={ [
-              {
-                id: 'title',
-                component: (
-                  <Pipeline.CustomItem>
-                    <Box padding={ { top: 'mini', bottom: 'mini', x: 'none' } }>
-                      <Form.Item name='title'>
-                        <Input
-                          placeholder={ t('column-editor.pipeline.title') }
-                          style={ { maxWidth: '100%' } }
+      <ClassificationStoreFieldPickerProvider defaultClassId={ classDefinitionId }>
+        <PipelineConfigProvider initialConfig={ config ?? {} }>
+          <Form.Item name='value'>
+            <Pipeline
+              items={ [
+                {
+                  id: 'title',
+                  component: (
+                    <Pipeline.CustomItem>
+                      <Box padding={ { top: 'mini', bottom: 'mini', x: 'none' } }>
+                        <Form.Item name='title'>
+                          <Input
+                            placeholder={ t('column-editor.pipeline.title') }
+                            style={ { maxWidth: '100%' } }
+                          />
+                        </Form.Item>
+                      </Box>
+                    </Pipeline.CustomItem>
+                  )
+                },
+                {
+                  id: 'fields',
+                  component: (
+                    <Pipeline.CustomItem>
+                      { fieldsLayout }
+                    </Pipeline.CustomItem>
+                  )
+                },
+                {
+                  id: 'preview',
+                  component: (
+                    <Pipeline.CustomItem>
+                      { column !== undefined && (
+                        <ColumnPreview
+                          column={ column }
+                          objectId={ objectId ?? null }
+                          pipelineValue={ liveValue }
                         />
-                      </Form.Item>
-                    </Box>
-                  </Pipeline.CustomItem>
-                )
-              },
-              {
-                id: 'fields',
-                component: (
-                  <Pipeline.CustomItem>
-                    { fieldsLayout }
-                  </Pipeline.CustomItem>
-                )
-              },
-              {
-                id: 'preview',
-                component: (
-                  <Pipeline.CustomItem>
-                    { column !== undefined && (
-                      <ColumnPreview
-                        column={ column }
-                        objectId={ objectId ?? null }
-                        pipelineValue={ liveValue }
-                      />
-                    ) }
-                  </Pipeline.CustomItem>
-                )
-              }
-            ] }
-            value={ value ?? {} }
-          />
-        </Form.Item>
-      </PipelineConfigProvider>
+                      ) }
+                    </Pipeline.CustomItem>
+                  )
+                }
+              ] }
+              value={ value ?? {} }
+            />
+          </Form.Item>
+        </PipelineConfigProvider>
+      </ClassificationStoreFieldPickerProvider>
     </Form>
   )
 }

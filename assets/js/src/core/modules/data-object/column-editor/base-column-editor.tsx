@@ -138,6 +138,7 @@ export const BaseColumnEditor = forwardRef<ColumnEditorHandle, BaseColumnEditorP
       draft,
       isLoading,
       objectId,
+      resolvedClassId,
       columnGroups,
       onAddAdvancedColumn,
       openElementSelector,
@@ -173,6 +174,7 @@ export const BaseColumnEditor = forwardRef<ColumnEditorHandle, BaseColumnEditorP
               body: col.pipelineConfig !== undefined
                 ? (
                   <ColumnEditorItemBody
+                    classDefinitionId={ resolvedClassId }
                     column={ col }
                     compact={ compact }
                     entity={ entity }

@@ -44,6 +44,8 @@ interface UseColumnEditorStateResult {
   draft: AdvancedEditorColumn[]
   isLoading: boolean
   objectId: number | null
+  /** The resolved class definition id (explicit prop, or looked up from `entity`) pipeline forms scope class-bound pickers to. */
+  resolvedClassId: string
   availableFields: GridColumnConfiguration[]
   columnGroups: Array<ColumnPickerGroup<GridColumnConfiguration>>
   /** Adds an advanced (pipeline) column, or undefined when the schema offers none. */
@@ -204,6 +206,7 @@ export const useColumnEditorState = ({
     draft,
     isLoading,
     objectId,
+    resolvedClassId,
     availableFields,
     columnGroups,
     onAddAdvancedColumn,
