@@ -53,6 +53,11 @@ final class EntryPointCatalog implements ResetInterface
      */
     private array $resolved = [];
 
+    /**
+     * @var array<int, Throwable>
+     */
+    private array $failed = [];
+
     public function __construct(
         private readonly WebpackEntryPointManager $entryPointManager,
         private readonly ConfigCacheFactoryInterface $configCacheFactory,
@@ -111,6 +116,7 @@ final class EntryPointCatalog implements ResetInterface
     {
         $this->manifest = null;
         $this->resolved = [];
+        $this->failed = [];
     }
 
     /**
@@ -119,11 +125,36 @@ final class EntryPointCatalog implements ResetInterface
     private function resolve(WebpackEntryPointProviderInterface $provider): array
     {
         $id = spl_object_id($provider);
-        if (!isset($this->resolved[$id])) {
-            $this->resolved[$id] = $this->manifestEntry($provider) ?? $this->read($provider);
+        if (!$this->isKnown($id)) {
+            $files = $this->manifestEntry($provider);
+            if ($files !== null) {
+                $this->resolved[$id] = $files;
+            } elseif (!$this->isKnown($id)) {
+                // unless building the manifest just read it
+                $this->remember($provider);
+            }
         }
 
-        return $this->resolved[$id];
+        if (isset($this->failed[$id])) {
+            throw $this->failed[$id];
+        }
+
+        return $this->resolved[$id] ?? [];
+    }
+
+    private function isKnown(int $id): bool
+    {
+        return isset($this->resolved[$id]) || isset($this->failed[$id]);
+    }
+
+    private function remember(WebpackEntryPointProviderInterface $provider): void
+    {
+        try {
+            $this->resolved[spl_object_id($provider)] = $this->read($provider);
+        } catch (Throwable $e) {
+            // rethrown on every access of this request instead of asking the provider again
+            $this->failed[spl_object_id($provider)] = $e;
+        }
     }
 
     /**
@@ -187,14 +218,13 @@ final class EntryPointCatalog implements ResetInterface
                         continue;
                     }
 
-                    try {
-                        $files = $this->read($provider);
-                    } catch (Throwable) {
-                        // not cached: the provider keeps failing on access, as before
-                        continue;
+                    // kept for this request, so resolve() does not ask the provider again
+                    if (!$this->isKnown(spl_object_id($provider))) {
+                        $this->remember($provider);
                     }
 
-                    // no build yet: read per request so it is found once it exists
+                    // failed or no build yet: not cached, so it is read again next request
+                    $files = $this->resolved[spl_object_id($provider)] ?? [];
                     if ($files === []) {
                         continue;
                     }

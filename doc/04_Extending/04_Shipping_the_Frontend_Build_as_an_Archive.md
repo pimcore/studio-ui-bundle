@@ -131,9 +131,8 @@ final class WebpackEntryPointProvider implements BuildArchiveProviderInterface
 through setter autowiring, so the provider must be an autowired service (`autowire: true`, the default in most bundle
 `services.yaml` files).
 
-Service tags are the same as for a plain provider. The provider must carry the main tag
-`pimcore_studio_ui.webpack_entry_point_provider`: cache warmup only discovers providers with that tag, so a provider
-registered only with the `.document_editor_iframe` tag is never extracted.
+Service tags are the same as for a plain provider. Cache warmup extracts providers registered with either tag, including
+one registered only with the `.document_editor_iframe` tag.
 
 ## Deployment
 

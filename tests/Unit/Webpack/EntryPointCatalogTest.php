@@ -165,10 +165,12 @@ class EntryPointCatalogTest extends Unit
         $provider = $this->archiveProvider();
 
         $this->assertSame([], $this->locationsInNewRequest($provider));
+        $this->assertSame(1, $provider->calls);
 
         $this->writeBuild('aaaa', []);
 
         $this->assertSame([$this->location('aaaa')], $this->locationsInNewRequest($provider));
+        $this->assertSame(2, $provider->calls);
     }
 
     public function testOtherProvidersAreReadOncePerRequestButNeverCached(): void
@@ -233,11 +235,12 @@ class EntryPointCatalogTest extends Unit
         $failing = $this->archiveProvider(new RuntimeException('target not writable'));
         $healthy = $this->archiveProvider();
 
-        // two requests: the healthy provider comes from the manifest, the failing one is asked again
+        // two requests: the healthy provider comes from the manifest, the failing one is asked once per request
         $this->assertFailingAndHealthyProviders($failing, $healthy);
         $this->assertFailingAndHealthyProviders($failing, $healthy);
 
         $this->assertSame(1, $healthy->calls);
+        $this->assertSame(2, $failing->calls);
     }
 
     public function testAnUnwritableCacheFallsBackToReadingPerRequest(): void
@@ -257,7 +260,9 @@ class EntryPointCatalogTest extends Unit
         );
 
         $this->assertCount(1, $catalog->getEntryPointsJsonLocations($provider));
+        $catalog->getEntryPointsJson($provider, $this->location('aaaa'));
         $this->assertCount(1, $logger->warnings);
+        $this->assertSame(1, $provider->calls);
     }
 
     public function testWarmUpWritesTheManifestIntoTheGivenCacheDir(): void
@@ -278,11 +283,13 @@ class EntryPointCatalogTest extends Unit
         $catalog = $this->catalog([$failing, $healthy]);
         $this->assertCount(1, $catalog->getEntryPointsJsonLocations($healthy));
 
-        try {
-            $catalog->getEntryPointsJsonLocations($failing);
-            $this->fail('expected the provider error');
-        } catch (RuntimeException $e) {
-            $this->assertSame('target not writable', $e->getMessage());
+        for ($access = 0; $access < 2; $access++) {
+            try {
+                $catalog->getEntryPointsJsonLocations($failing);
+                $this->fail('expected the provider error');
+            } catch (RuntimeException $e) {
+                $this->assertSame('target not writable', $e->getMessage());
+            }
         }
     }
 
