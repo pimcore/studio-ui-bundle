@@ -32,6 +32,8 @@ class EntryPointCatalogTest extends Unit
 
     private const NEW_JS = '/build/aaaa/new.js';
 
+    private const FAILURE = 'target not writable';
+
     private string $workDir;
 
     private string $targetDir;
@@ -120,7 +122,7 @@ class EntryPointCatalogTest extends Unit
         $this->assertSame([$this->location('aaaa')], $this->locationsInNewRequest($provider));
 
         // what an extraction does: the build dir is replaced by one named after the new build id
-        $this->removeDirectory($this->targetDir . '/aaaa');
+        $this->removeDirectory(dirname($this->location('aaaa')));
         $this->writeBuild('bbbb', []);
 
         $this->assertSame([$this->location('bbbb')], $this->locationsInNewRequest($provider));
@@ -204,7 +206,7 @@ class EntryPointCatalogTest extends Unit
 
     public function testInvalidEntrypointsJsonFailsWithTheSameMessage(): void
     {
-        mkdir($this->targetDir . '/aaaa');
+        mkdir(dirname($this->location('aaaa')));
         file_put_contents($this->location('aaaa'), '{not json');
         $location = $this->location('aaaa');
         $provider = $this->archiveProvider();
@@ -232,7 +234,7 @@ class EntryPointCatalogTest extends Unit
     public function testAFailingProviderIsNotCachedAndFailsOnEveryAccess(): void
     {
         $this->writeBuild('aaaa', []);
-        $failing = $this->archiveProvider(new RuntimeException('target not writable'));
+        $failing = $this->archiveProvider(new RuntimeException(self::FAILURE));
         $healthy = $this->archiveProvider();
 
         // two requests: the healthy provider comes from the manifest, the failing one is asked once per request
@@ -245,7 +247,7 @@ class EntryPointCatalogTest extends Unit
 
     public function testResetAsksAFailingProviderAgain(): void
     {
-        $failing = $this->archiveProvider(new RuntimeException('target not writable'));
+        $failing = $this->archiveProvider(new RuntimeException(self::FAILURE));
         $catalog = $this->catalog([$failing]);
 
         $this->assertProviderFails($catalog, $failing);
@@ -268,7 +270,7 @@ class EntryPointCatalogTest extends Unit
         $other = $this->archiveProvider(null, $otherDir);
         $this->catalog([$rebuilt, $other])->getEntryPointsJsonLocations($other);
 
-        $this->removeDirectory($this->targetDir . '/aaaa');
+        $this->removeDirectory(dirname($this->location('aaaa')));
         $this->writeBuild('bbbb', []);
 
         $catalog = $this->catalog([$rebuilt, $other]);
@@ -334,7 +336,7 @@ class EntryPointCatalogTest extends Unit
             $catalog->getEntryPointsJsonLocations($provider);
             $this->fail('expected the provider error');
         } catch (RuntimeException $e) {
-            $this->assertSame('target not writable', $e->getMessage());
+            $this->assertSame(self::FAILURE, $e->getMessage());
         }
     }
 
