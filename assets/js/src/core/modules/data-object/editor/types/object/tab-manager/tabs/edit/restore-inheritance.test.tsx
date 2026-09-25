@@ -30,6 +30,8 @@ import {
   LocalizedFieldsContext
 } from '@Pimcore/components/form/localisation/localized-fields/provider/localized-fields-provider/localized-fields-provider'
 import { FieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label'
+import { ObjectBlock } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/block/object-block'
+import { RestoreInheritanceLabelExtra } from '@Pimcore/modules/data-object/components/restore-inheritance-label-extra'
 import DataComponentFormItem from './components/data-component/form-item'
 import { RootComponent } from './components/root-component'
 import { EditFormProvider } from './providers/edit-form-provider/edit-form-provider'
@@ -123,10 +125,48 @@ jest.mock('@Pimcore/components/form/form', () => {
     />
   )
   Form.Item = withItemProvider(AntForm.Item)
+  Form.Group = jest.requireActual('@Pimcore/components/form/group/group').Group
   Form.useForm = AntForm.useForm
   Form.useFormInstance = AntForm.useFormInstance
+  // resolved on use: the numbered list imports this barrel itself
+  Object.defineProperty(Form, 'NumberedList', {
+    get: () => jest.requireActual('@Pimcore/components/form/controls/numbered-list/numbered-list').NumberedList
+  })
 
   return { Form }
+})
+
+// The block layout (accordion, items) is replaced by its header, the items the
+// numbered list holds and a way to add one, as the block's add button does.
+jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/block/object-block-content', () => {
+  const {
+    useNumberedListContext,
+    useNumberedListSelector
+  } = jest.requireActual('@Pimcore/components/form/controls/numbered-list/provider/numbered-list/use-numbered-list-value')
+  const selectItems = (items: unknown[]): unknown[] => items
+
+  return {
+    ObjectBlockContent: ({ title }: { title: ReactNode }) => {
+      const { operations } = useNumberedListContext()
+      const items = useNumberedListSelector(selectItems)
+
+      return (
+        <>
+          <div data-testid="block-header">{title}</div>
+          <span
+            data-testid="block-items"
+            data-value={ JSON.stringify(items) }
+          />
+          <button
+            onClick={ () => { operations.add({ type: 'block', data: { text: 'own item' } }) } }
+            type="button"
+          >
+            add block item
+          </button>
+        </>
+      )
+    }
+  }
 })
 jest.mock('@sdk/components', () => jest.requireMock('@Pimcore/components/form/form'))
 
@@ -193,6 +233,7 @@ interface FieldOptions {
   noteditable?: boolean
   emptyValue?: unknown
   probe?: boolean
+  block?: boolean
 }
 
 /** A data type with the parts of DynamicTypeObjectDataAbstract the form item reads. */
@@ -215,8 +256,32 @@ const dataType = (emptyValue: unknown): any => ({
       )
 })
 
+/**
+ * A block, as DynamicTypeObjectDataBlock builds it: the form item carries no label,
+ * the Restore sits in the header of the block next to its field label.
+ */
+const blockType = (): any => ({
+  inheritedMaskOverlay: 'form-element',
+  getEmptyValue: () => [],
+  getObjectDataFormItemProps: (props: any) => ({ name: props.name, label: null }),
+  getObjectDataComponent: (props: any) => (
+    <ObjectBlock
+      { ...props }
+      title={ (
+        <span>
+          <FieldLabel
+            label={ props.title }
+            name={ props.name }
+          />
+          <RestoreInheritanceLabelExtra readOnly={ props.noteditable === true } />
+        </span>
+      ) }
+    />
+  )
+})
+
 /** A field as DataComponent hands it to the form item. */
-const Field = ({ name, title, noteditable = false, emptyValue = null, probe = false }: FieldOptions): React.JSX.Element => {
+const Field = ({ name, title, noteditable = false, emptyValue = null, probe = false, block = false }: FieldOptions): React.JSX.Element => {
   const inheritanceState = React.useContext(InheritanceStateProbeContext)
   const inheritedNow = inheritanceState?.(name) === true
 
@@ -224,7 +289,7 @@ const Field = ({ name, title, noteditable = false, emptyValue = null, probe = fa
     <DataComponentFormItem
       _props={ { name, title, noteditable, probe, inherited: inheritedNow } as any }
       formFieldName={ name }
-      objectDataType={ dataType(emptyValue) }
+      objectDataType={ block ? blockType() : dataType(emptyValue) }
     />
   )
 }
@@ -303,6 +368,27 @@ const hasOverlay = (title: string): boolean => formItem(title).classList.contain
 
 const probeValue = (name: string[]): unknown =>
   JSON.parse(screen.getByTestId(`value-${name.join('.')}`).getAttribute('data-value') ?? 'null')
+
+// --- the block ------------------------------------------------------------------
+
+const blockHeader = (): HTMLElement => screen.getByTestId('block-header')
+const blockIconOf = (): string | undefined => blockHeader().querySelector('[data-icon]')?.getAttribute('data-icon') ?? undefined
+const blockRestore = (): HTMLElement | null => within(blockHeader()).queryByRole('button', { name: 'inheritance-restore' })
+const blockParentLink = (): HTMLElement | null => within(blockHeader()).queryByRole('button', { name: `open-parent-${parentId}` })
+const blockItems = (): unknown => JSON.parse(screen.getByTestId('block-items').getAttribute('data-value') ?? 'null')
+
+const clickBlockRestore = async (): Promise<void> => {
+  const restore = blockRestore()
+  if (restore === null) throw new Error('no Restore in the block header')
+
+  await user.click(restore)
+}
+
+const parentItem = { type: 'block', data: { text: 'parent item' } }
+const ownItem = { type: 'block', data: { text: 'own item' } }
+
+/** The numbered list reports a change 10ms after it. */
+const flushBlockChange = (): void => { act(() => { jest.advanceTimersByTime(20) }) }
 
 /** The auto save runs 800ms after the last change. */
 const flushAutoSave = (): void => { act(() => { jest.advanceTimersByTime(1000) }) }
@@ -623,6 +709,89 @@ describe('restoring inheritance in the object editor', () => {
       expect(iconOf('Description de')).toBe('inheritance-broken')
       expect(restoreOf('Description de')).not.toBeInTheDocument()
       expect(restoreOf('Description en')).toBeInTheDocument()
+    })
+  })
+
+  describe('a block', () => {
+    it('gives the parent items back on Restore in its header once it was changed, and persists it as empty', async () => {
+      mockDataObject.inheritanceData.metaData = { blocks: inherited() }
+      renderEditor(
+        <Field
+          block
+          name={ ['blocks'] }
+          title="Blocks"
+        />,
+        { blocks: [parentItem] }
+      )
+
+      expect(blockItems()).toEqual([parentItem])
+      expect(blockParentLink()).toBeInTheDocument()
+      expect(blockRestore()).not.toBeInTheDocument()
+
+      await user.click(screen.getByRole('button', { name: 'add block item' }))
+      flushBlockChange()
+
+      expect(blockItems()).toEqual([parentItem, ownItem])
+      expect(blockIconOf()).toBe('inheritance-broken')
+      expect(blockRestore()).toBeInTheDocument()
+      flushAutoSave()
+      expect(lastSavedData()).toEqual({ blocks: [parentItem, ownItem] })
+
+      await clickBlockRestore()
+
+      expect(blockItems()).toEqual([parentItem])
+      expect(blockParentLink()).toBeInTheDocument()
+      expect(blockRestore()).not.toBeInTheDocument()
+      // a block is cleared with an empty list, its API takes no null
+      flushAutoSave()
+      expect(lastSavedData()).toEqual({ blocks: [] })
+    })
+
+    it('shows the parent items of a block overridden in an earlier session on Restore, and persists it as empty', async () => {
+      mockDataObject.inheritanceData.metaData = { blocks: overridden([parentItem]) }
+      renderEditor(
+        <Field
+          block
+          name={ ['blocks'] }
+          title="Blocks"
+        />,
+        { blocks: [ownItem] }
+      )
+
+      expect(blockItems()).toEqual([ownItem])
+      expect(blockIconOf()).toBe('inheritance-broken')
+
+      await clickBlockRestore()
+
+      expect(blockItems()).toEqual([parentItem])
+      expect(blockIconOf()).toBe('inheritance-active')
+      expect(blockParentLink()).not.toBeInTheDocument()
+      expect(blockRestore()).not.toBeInTheDocument()
+      flushAutoSave()
+      expect(lastSavedData()).toEqual({ blocks: [] })
+    })
+
+    it('offers no Restore for a localized block in a locale the user may not edit', () => {
+      mockDataObject.permissions = { ...editable, localizedEdit: 'en' }
+      mockDataObject.inheritanceData.metaData = { localizedfields: { blocks: { de: overridden([parentItem]) } } }
+      const LocalizedBlock = (): React.JSX.Element => {
+        const localizedFields = useMemo(() => ({ locales: ['de'] }), [])
+
+        return (
+          <LocalizedFieldsContext.Provider value={ localizedFields }>
+            <Field
+              block
+              name={ ['localizedfields', 'blocks', 'de'] }
+              title="Blocks"
+            />
+          </LocalizedFieldsContext.Provider>
+        )
+      }
+      renderEditor(<LocalizedBlock />, { localizedfields: { blocks: { de: [ownItem] } } })
+
+      // the block's numbered list hides the locale from its header; the header must still see it
+      expect(blockIconOf()).toBe('inheritance-broken')
+      expect(blockRestore()).not.toBeInTheDocument()
     })
   })
 

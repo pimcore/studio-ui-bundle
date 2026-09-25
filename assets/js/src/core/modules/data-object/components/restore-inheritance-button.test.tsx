@@ -11,6 +11,7 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Collapse } from 'antd'
 import { RestoreInheritanceButton } from './restore-inheritance-button'
 
 // The real button and style hook import antd-style (untranspiled ESM), which jest
@@ -52,6 +53,22 @@ describe('RestoreInheritanceButton', () => {
 
     expect(onRestore).toHaveBeenCalledTimes(1)
     expect(onHeaderClick).not.toHaveBeenCalled()
+  })
+
+  it('restores without opening the accordion panel it sits in the header of', async () => {
+    const user = userEvent.setup()
+    const onRestore = jest.fn()
+
+    render(
+      <Collapse
+        items={ [{ key: 'block', label: <RestoreInheritanceButton onRestore={ onRestore } />, children: <span>panel body</span> }] }
+      />
+    )
+
+    await user.click(screen.getByRole('button', { name: 'inheritance-restore' }))
+
+    expect(onRestore).toHaveBeenCalledTimes(1)
+    expect(screen.queryByText('panel body')).not.toBeInTheDocument()
   })
 
   it('takes the type of the label it sits in through its styles', () => {
