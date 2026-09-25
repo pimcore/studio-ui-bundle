@@ -1,0 +1,195 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import React from 'react'
+import { render, screen } from '@testing-library/react'
+import { BaseColumnEditor, type BaseColumnEditorProps } from './base-column-editor'
+
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({ t: (key: string) => key })
+}))
+
+// antd-style's createStyles reaches its untranspiled ESM core under Jest; only class names
+// matter to the behaviour under test, so the emotion class generation is stubbed out
+jest.mock('./base-column-editor.styles', () => ({
+  useStyles: () => ({ styles: { body: 'body', fieldsPanel: 'fieldsPanel', list: 'list' } })
+}))
+
+// The fields-to-add panel pulls in the full searchable ColumnPicker tree, which is irrelevant
+// to the toolbar-visibility behaviour under test here.
+jest.mock('./fields-to-add-panel', () => ({
+  FieldsToAddPanel: () => <div data-testid='fields-to-add-panel' />
+}))
+
+// The advanced-column pipeline form (rendered only for advanced columns, none of which exist in
+// these tests) reaches antd-style's untranspiled ESM core via Box/Pipeline/Tabs, which this Jest
+// config cannot parse from node_modules.
+jest.mock('./column-editor-item', () => ({
+  ColumnEditorItemBody: () => <div data-testid='column-editor-item-body' />
+}))
+
+// LanguageSelection reaches the Icon component (icon library DI + antd-style), which this Jest
+// config cannot render either; not exercised here since no draft column is localizable.
+jest.mock('./column-locale-control', () => ({
+  ColumnLocaleControl: () => <div data-testid='column-locale-control' />
+}))
+
+jest.mock('@Pimcore/components/language-selection/language-selection-with-provider', () => ({
+  LanguageSelectionWithProvider: () => <div data-testid='language-selection' />
+}))
+
+// The real provider module also exports LanguageSelectionProvider, which pulls in the element
+// context / draft hooks and, transitively, the whole app router and antd-style's untranspiled
+// ESM core - irrelevant to the toolbar-visibility behaviour under test here.
+jest.mock('@Pimcore/components/language-selection/provider/language-selection-provider', () => ({
+  LanguageSelectionContext: React.createContext({
+    currentLanguage: 'en',
+    setCurrentLanguage: () => {},
+    hasLocalizedFields: false,
+    setHasLocalizedFields: () => {}
+  })
+}))
+
+jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({
+  useUser: () => ({ contentLanguages: ['en'] })
+}))
+
+jest.mock('@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions', () => ({
+  useClassDefinitions: () => ({ getByName: () => undefined })
+}))
+
+jest.mock('@Pimcore/modules/data-object/data-object-api-slice-enhanced', () => ({
+  api: {
+    endpoints: {
+      dataObjectGetAvailableGridColumns: { useQuery: () => ({ data: { columns: [] }, isLoading: false }) },
+      dataObjectGetGrid: { useQuery: () => ({ data: { items: [] } }) },
+      dataObjectGetGridPreview: { useQuery: () => ({ data: undefined, isFetching: false, error: undefined }) }
+    }
+  }
+}))
+
+jest.mock('@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector', () => ({
+  useElementSelector: () => ({ open: jest.fn() })
+}))
+
+jest.mock('@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider', () => ({
+  SelectionType: { Single: 'single', Multiple: 'multiple' }
+}))
+
+// Pass every layout/chrome component through to plain DOM so button text stays queryable,
+// without pulling in the DI-backed Icon rendering (icon library, color-group registry, ...).
+// Declared as a hoisted function (not `const`) because jest hoists the `jest.mock()` calls
+// below above this file's own top-level statements, and a `const` would still be in its
+// temporal dead zone at that point.
+function passthrough (testId: string): React.FC<{ children?: React.ReactNode }> {
+  const Passthrough = ({ children }: { children?: React.ReactNode }): React.JSX.Element => (
+    <div data-testid={ testId }>{ children }</div>
+  )
+  Passthrough.displayName = `Passthrough(${testId})`
+  return Passthrough
+}
+
+jest.mock('@Pimcore/components/content/content', () => ({ Content: passthrough('content') }))
+jest.mock('@Pimcore/components/content-layout/content-layout', () => ({
+  ContentLayout: ({ renderTopBar, renderToolbar, children }: { renderTopBar?: React.ReactNode, renderToolbar?: React.ReactNode, children?: React.ReactNode }): React.JSX.Element => (
+    <div>
+      <div data-testid='top-bar'>{ renderTopBar }</div>
+      <div data-testid='toolbar'>{ renderToolbar }</div>
+      <div data-testid='content'>{ children }</div>
+    </div>
+  )
+}))
+jest.mock('@Pimcore/components/flex/flex', () => ({ Flex: passthrough('flex') }))
+jest.mock('@Pimcore/components/space/space', () => ({ Space: passthrough('space') }))
+jest.mock('@Pimcore/components/spin/spin', () => ({ Spin: () => <div data-testid='spin' /> }))
+jest.mock('@Pimcore/components/stack-list/stack-list', () => ({ StackList: () => <div data-testid='stack-list' /> }))
+jest.mock('@Pimcore/components/toolbar/toolbar', () => ({ Toolbar: passthrough('toolbar-inner') }))
+jest.mock('@Pimcore/components/button/button', () => ({
+  Button: ({ children, onClick }: { children?: React.ReactNode, onClick?: () => void }) => <button onClick={ onClick }>{ children }</button>
+}))
+jest.mock('@Pimcore/components/icon-button/icon-button', () => ({
+  IconButton: ({ onClick }: { onClick?: () => void }) => <button onClick={ onClick }>icon-button</button>
+}))
+jest.mock('@Pimcore/components/icon-text-button/icon-text-button', () => ({
+  IconTextButton: ({ children, onClick }: { children?: React.ReactNode, onClick?: () => void }) => <button onClick={ onClick }>{ children }</button>
+}))
+
+const defaultProps: BaseColumnEditorProps = {
+  entity: 'CAR',
+  classDefinitionId: 'CAR',
+  columns: [],
+  onApply: jest.fn(),
+  onCancel: jest.fn(),
+  sourceFieldsRegistryId: 'sourceFields',
+  transformersRegistryId: 'transformers'
+}
+
+describe('BaseColumnEditor toolbar visibility', () => {
+  it('renders both the add-column and the apply/discard controls by default', () => {
+    render(<BaseColumnEditor { ...defaultProps } />)
+
+    expect(screen.getByText('column-editor.add-column')).toBeInTheDocument()
+    expect(screen.getByText('column-editor.apply')).toBeInTheDocument()
+    expect(screen.getByText('column-editor.discard')).toBeInTheDocument()
+  })
+
+  it('hideApplyDiscard hides Apply/Discard but keeps the add-column buttons', () => {
+    render(
+      <BaseColumnEditor
+        { ...defaultProps }
+        hideApplyDiscard
+      />
+    )
+
+    expect(screen.getByText('column-editor.add-column')).toBeInTheDocument()
+    expect(screen.queryByText('column-editor.apply')).not.toBeInTheDocument()
+    expect(screen.queryByText('column-editor.discard')).not.toBeInTheDocument()
+  })
+
+  it('hideAddButtons hides the add-column buttons but keeps Apply/Discard', () => {
+    render(
+      <BaseColumnEditor
+        { ...defaultProps }
+        hideAddButtons
+      />
+    )
+
+    expect(screen.queryByText('column-editor.add-column')).not.toBeInTheDocument()
+    expect(screen.getByText('column-editor.apply')).toBeInTheDocument()
+    expect(screen.getByText('column-editor.discard')).toBeInTheDocument()
+  })
+
+  it('the deprecated hideToolbar alias hides both halves', () => {
+    render(
+      <BaseColumnEditor
+        { ...defaultProps }
+        hideToolbar
+      />
+    )
+
+    expect(screen.queryByText('column-editor.add-column')).not.toBeInTheDocument()
+    expect(screen.queryByText('column-editor.apply')).not.toBeInTheDocument()
+    expect(screen.queryByText('column-editor.discard')).not.toBeInTheDocument()
+  })
+
+  it('an explicit split flag overrides the deprecated hideToolbar alias', () => {
+    render(
+      <BaseColumnEditor
+        { ...defaultProps }
+        hideApplyDiscard={ false }
+        hideToolbar
+      />
+    )
+
+    expect(screen.queryByText('column-editor.add-column')).not.toBeInTheDocument()
+    expect(screen.getByText('column-editor.apply')).toBeInTheDocument()
+    expect(screen.getByText('column-editor.discard')).toBeInTheDocument()
+  })
+})
