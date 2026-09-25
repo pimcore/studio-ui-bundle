@@ -115,19 +115,26 @@ final class EntryPointCatalog implements ResetInterface
     private function resolve(WebpackEntryPointProviderInterface $provider): array
     {
         $id = spl_object_id($provider);
-        if (isset($this->resolved[$id])) {
-            return $this->resolved[$id];
+        if (!isset($this->resolved[$id])) {
+            $this->resolved[$id] = $this->manifestEntry($provider) ?? $this->read($provider);
         }
 
+        return $this->resolved[$id];
+    }
+
+    /**
+     * @return array<string, array{json?: array<mixed>, error?: string, exposeRemote: ?string}>|null
+     */
+    private function manifestEntry(WebpackEntryPointProviderInterface $provider): ?array
+    {
         $key = $this->manifestKey($provider);
-        if ($key !== null) {
-            $this->manifest ??= $this->loadManifest($this->manifestFile($this->cacheDir));
-            if (isset($this->manifest[$key])) {
-                return $this->resolved[$id] = $this->manifest[$key];
-            }
+        if ($key === null) {
+            return null;
         }
 
-        return $this->resolved[$id] = $this->read($provider);
+        $this->manifest ??= $this->loadManifest($this->manifestFile($this->cacheDir));
+
+        return $this->manifest[$key] ?? null;
     }
 
     /**
@@ -155,10 +162,10 @@ final class EntryPointCatalog implements ResetInterface
                     array_push($resources, ...$this->resourcesOf($provider, $manifest[$key]));
                 }
 
-                $cache->write('<?php return ' . var_export($manifest, true) . ';' . PHP_EOL, $resources);
+                $cache->write(json_encode($manifest, JSON_THROW_ON_ERROR), $resources);
             });
 
-            return require $cache->getPath();
+            return json_decode((string) file_get_contents($cache->getPath()), true, 512, JSON_THROW_ON_ERROR);
         } catch (Throwable $e) {
             $this->logger->warning('Studio entry point manifest unavailable, reading builds per request: {reason}', [
                 'reason' => $e->getMessage(),
@@ -170,7 +177,7 @@ final class EntryPointCatalog implements ResetInterface
 
     private function manifestFile(string $cacheDir): string
     {
-        return $cacheDir . '/pimcore_studio_ui/entry_points.' . $this->name . '.php';
+        return $cacheDir . '/pimcore_studio_ui/entry_points.' . $this->name . '.json';
     }
 
     private function manifestKey(WebpackEntryPointProviderInterface $provider): ?string
@@ -229,8 +236,7 @@ final class EntryPointCatalog implements ResetInterface
      */
     private function readLocation(string $location): array
     {
-        $exposeRemoteFile = dirname($location) . '/' . self::EXPOSE_REMOTE_FILE;
-        $exposeRemote = is_file($exposeRemoteFile) ? (@file_get_contents($exposeRemoteFile) ?: null) : null;
+        $exposeRemote = $this->readExposeRemote(dirname($location) . '/' . self::EXPOSE_REMOTE_FILE);
 
         if (!file_exists($location)) {
             return [
@@ -249,5 +255,16 @@ final class EntryPointCatalog implements ResetInterface
         }
 
         return ['json' => is_array($json) ? $json : [], 'exposeRemote' => $exposeRemote];
+    }
+
+    private function readExposeRemote(string $file): ?string
+    {
+        if (!is_file($file)) {
+            return null;
+        }
+
+        $content = @file_get_contents($file);
+
+        return $content === false || $content === '' ? null : $content;
     }
 }

@@ -38,7 +38,10 @@ class BuildRemoteEntryCspSubscriberTest extends Unit
             file_put_contents($this->workDir . '/' . $build . '/entrypoints.json', '{"entrypoints":{}}');
         }
         file_put_contents($this->workDir . '/one/exposeRemote.js', 'load("https://cdn.example.com/a.js")');
-        file_put_contents($this->workDir . '/two/exposeRemote.js', 'load("https://cdn.example.com/b.js", "https://static.example.org/c.js")');
+        file_put_contents(
+            $this->workDir . '/two/exposeRemote.js',
+            'load("https://cdn.example.com/b.js", "https://static.example.org/c.js")'
+        );
     }
 
     public function _after(): void
@@ -82,7 +85,8 @@ class BuildRemoteEntryCspSubscriberTest extends Unit
         );
         $event = new CspEvent(new Request(), new ContentSecurityPolicyHandler(true));
 
-        (new BuildRemoteEntryCspSubscriber(new CspOriginFileParser(new CspOriginValidator()), $catalog))->onCspEvent($event);
+        $subscriber = new BuildRemoteEntryCspSubscriber(new CspOriginFileParser(new CspOriginValidator()), $catalog);
+        $subscriber->onCspEvent($event);
 
         $origins = $event->getAdditionalBuildOrigins();
         sort($origins);

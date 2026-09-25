@@ -63,7 +63,9 @@ final class BuildRemoteEntryCspSubscriber implements EventSubscriberInterface, L
 
                 if ($source !== null) {
                     $sources[] = $source;
-                    $this->logger->debug('Found exposeRemote.js', ['file' => dirname($entryPointLocation) . '/exposeRemote.js']);
+                    $this->logger->debug('Found exposeRemote.js', [
+                        'file' => dirname($entryPointLocation) . '/exposeRemote.js',
+                    ]);
                 }
             }
         }

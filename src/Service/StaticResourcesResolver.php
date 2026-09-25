@@ -95,7 +95,10 @@ final readonly class StaticResourcesResolver implements StaticResourcesResolverI
             $entryPointJsonContents = [];
 
             foreach ($this->entryPointCatalog->getEntryPointsJsonLocations($entryPointProvider) as $location) {
-                $entryPointJsonContents[] = $this->entryPointCatalog->getEntryPointsJson($entryPointProvider, $location);
+                $entryPointJsonContents[] = $this->entryPointCatalog->getEntryPointsJson(
+                    $entryPointProvider,
+                    $location
+                );
             }
 
             foreach ($this->getEntryPoints($entryPointProvider) as $entryPointName) {

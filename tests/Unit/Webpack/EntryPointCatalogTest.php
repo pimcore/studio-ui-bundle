@@ -28,6 +28,10 @@ use Symfony\Component\Config\ConfigCacheFactory;
 
 class EntryPointCatalogTest extends Unit
 {
+    private const OLD_JS = '/build/aaaa/old.js';
+
+    private const NEW_JS = '/build/aaaa/new.js';
+
     private string $workDir;
 
     private string $targetDir;
@@ -57,26 +61,26 @@ class EntryPointCatalogTest extends Unit
 
         $first = $this->catalog([$provider]);
         $first->getEntryPointsJsonLocations($provider);
-        $json = $first->getEntryPointsJson($provider, $this->targetDir . '/aaaa/entrypoints.json');
+        $json = $first->getEntryPointsJson($provider, $this->location('aaaa'));
 
         $second = $this->catalog([$provider]);
-        $this->assertSame($json, $second->getEntryPointsJson($provider, $this->targetDir . '/aaaa/entrypoints.json'));
+        $this->assertSame($json, $second->getEntryPointsJson($provider, $this->location('aaaa')));
         $this->assertSame(1, $provider->calls);
     }
 
     public function testDebugModeRebuildsWhenAnEntrypointsJsonChanges(): void
     {
-        $this->writeBuild('aaaa', ['main' => ['js' => ['/build/aaaa/old.js']]]);
+        $this->writeBuild('aaaa', ['main' => ['js' => [self::OLD_JS]]]);
         $provider = $this->archiveProvider();
-        $location = $this->targetDir . '/aaaa/entrypoints.json';
+        $location = $this->location('aaaa');
 
         $this->catalog([$provider], true)->getEntryPointsJson($provider, $location);
 
-        $this->writeBuild('aaaa', ['main' => ['js' => ['/build/aaaa/new.js']]]);
+        $this->writeBuild('aaaa', ['main' => ['js' => [self::NEW_JS]]]);
         touch($location, time() + 10);
 
         $json = $this->catalog([$provider], true)->getEntryPointsJson($provider, $location);
-        $this->assertSame(['/build/aaaa/new.js'], $json['entrypoints']['main']['js']);
+        $this->assertSame([self::NEW_JS], $json['entrypoints']['main']['js']);
         $this->assertSame(2, $provider->calls);
     }
 
@@ -95,23 +99,23 @@ class EntryPointCatalogTest extends Unit
 
     public function testProductionKeepsTheManifestUntilTheCacheIsRebuilt(): void
     {
-        $this->writeBuild('aaaa', ['main' => ['js' => ['/build/aaaa/old.js']]]);
+        $this->writeBuild('aaaa', ['main' => ['js' => [self::OLD_JS]]]);
         $provider = $this->archiveProvider();
-        $location = $this->targetDir . '/aaaa/entrypoints.json';
+        $location = $this->location('aaaa');
 
         $this->catalog([$provider])->getEntryPointsJson($provider, $location);
 
-        $this->writeBuild('aaaa', ['main' => ['js' => ['/build/aaaa/new.js']]]);
+        $this->writeBuild('aaaa', ['main' => ['js' => [self::NEW_JS]]]);
         touch($location, time() + 10);
 
         $json = $this->catalog([$provider])->getEntryPointsJson($provider, $location);
-        $this->assertSame(['/build/aaaa/old.js'], $json['entrypoints']['main']['js']);
+        $this->assertSame([self::OLD_JS], $json['entrypoints']['main']['js']);
     }
 
     public function testOtherProvidersAreReadOncePerRequestButNeverCached(): void
     {
         $this->writeBuild('aaaa', []);
-        $provider = $this->plainProvider([$this->targetDir . '/aaaa/entrypoints.json']);
+        $provider = $this->plainProvider([$this->location('aaaa')]);
 
         $catalog = $this->catalog([$provider]);
         $catalog->getEntryPointsJsonLocations($provider);
@@ -128,7 +132,7 @@ class EntryPointCatalogTest extends Unit
 
     public function testMissingEntrypointsJsonFailsWithTheSameMessage(): void
     {
-        $location = $this->targetDir . '/missing/entrypoints.json';
+        $location = $this->location('missing');
         $provider = $this->plainProvider([$location]);
 
         $this->expectException(InvalidEntryPointsJsonException::class);
@@ -140,8 +144,8 @@ class EntryPointCatalogTest extends Unit
     public function testInvalidEntrypointsJsonFailsWithTheSameMessage(): void
     {
         mkdir($this->targetDir . '/aaaa');
-        file_put_contents($this->targetDir . '/aaaa/entrypoints.json', '{not json');
-        $location = $this->targetDir . '/aaaa/entrypoints.json';
+        file_put_contents($this->location('aaaa'), '{not json');
+        $location = $this->location('aaaa');
         $provider = $this->archiveProvider();
 
         $this->expectException(InvalidEntryPointsJsonException::class);
@@ -159,9 +163,9 @@ class EntryPointCatalogTest extends Unit
 
         $this->assertSame(
             'window.remote = "https://cdn.example.com/remote.js";',
-            $catalog->getExposeRemoteSource($provider, $this->targetDir . '/aaaa/entrypoints.json')
+            $catalog->getExposeRemoteSource($provider, $this->location('aaaa'))
         );
-        $this->assertNull($catalog->getExposeRemoteSource($provider, $this->targetDir . '/bbbb/entrypoints.json'));
+        $this->assertNull($catalog->getExposeRemoteSource($provider, $this->location('bbbb')));
     }
 
     public function testAFailingProviderIsNotCachedAndFailsOnEveryAccess(): void
@@ -170,17 +174,9 @@ class EntryPointCatalogTest extends Unit
         $failing = $this->archiveProvider(new RuntimeException('target not writable'));
         $healthy = $this->archiveProvider();
 
-        foreach ([1, 2] as $request) {
-            $catalog = $this->catalog([$failing, $healthy]);
-            $this->assertCount(1, $catalog->getEntryPointsJsonLocations($healthy));
-
-            try {
-                $catalog->getEntryPointsJsonLocations($failing);
-                $this->fail('expected the provider error');
-            } catch (RuntimeException $e) {
-                $this->assertSame('target not writable', $e->getMessage());
-            }
-        }
+        // two requests: the healthy provider comes from the manifest, the failing one is asked again
+        $this->assertFailingAndHealthyProviders($failing, $healthy);
+        $this->assertFailingAndHealthyProviders($failing, $healthy);
 
         $this->assertSame(1, $healthy->calls);
     }
@@ -213,7 +209,27 @@ class EntryPointCatalogTest extends Unit
 
         $this->catalog([$this->archiveProvider()])->warmUp($warmupDir);
 
-        $this->assertFileExists($warmupDir . '/pimcore_studio_ui/entry_points.default.php');
+        $this->assertFileExists($warmupDir . '/pimcore_studio_ui/entry_points.default.json');
+    }
+
+    private function assertFailingAndHealthyProviders(
+        BuildArchiveProviderInterface $failing,
+        BuildArchiveProviderInterface $healthy
+    ): void {
+        $catalog = $this->catalog([$failing, $healthy]);
+        $this->assertCount(1, $catalog->getEntryPointsJsonLocations($healthy));
+
+        try {
+            $catalog->getEntryPointsJsonLocations($failing);
+            $this->fail('expected the provider error');
+        } catch (RuntimeException $e) {
+            $this->assertSame('target not writable', $e->getMessage());
+        }
+    }
+
+    private function location(string $build): string
+    {
+        return $this->targetDir . '/' . $build . '/entrypoints.json';
     }
 
     /**
@@ -321,7 +337,10 @@ class EntryPointCatalogTest extends Unit
         if (!is_dir($dir)) {
             mkdir($dir, 0775, true);
         }
-        file_put_contents($dir . '/entrypoints.json', json_encode(['entrypoints' => $entrypoints], JSON_THROW_ON_ERROR));
+        file_put_contents(
+            $dir . '/entrypoints.json',
+            json_encode(['entrypoints' => $entrypoints], JSON_THROW_ON_ERROR)
+        );
         if ($exposeRemote !== null) {
             file_put_contents($dir . '/exposeRemote.js', $exposeRemote);
         }
