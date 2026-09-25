@@ -31,8 +31,8 @@ final readonly class EntryPointCatalogCacheWarmer implements CacheWarmerInterfac
 
     public function isOptional(): bool
     {
-        // without it the manifest is written on the first request
-        return true;
+        // a cache dir that is read-only at runtime can only get the manifest here
+        return false;
     }
 
     public function warmUp(string $cacheDir, ?string $buildDir = null): array

@@ -208,6 +208,8 @@ final class EntryPointCatalog implements ResetInterface
 
             return json_decode((string) file_get_contents($cache->getPath()), true, 512, JSON_THROW_ON_ERROR);
         } catch (Throwable $e) {
+            // an unreadable manifest would otherwise stay until the next cache:clear
+            @unlink($cacheFile);
             $this->logger->warning('Studio entry point manifest unavailable, reading builds per request: {reason}', [
                 'reason' => $e->getMessage(),
             ]);

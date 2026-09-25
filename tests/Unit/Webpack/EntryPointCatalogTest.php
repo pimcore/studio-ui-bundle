@@ -145,6 +145,21 @@ class EntryPointCatalogTest extends Unit
         $this->assertSame(2, $provider->calls);
     }
 
+    public function testACorruptManifestIsRebuiltOnTheNextRequest(): void
+    {
+        $this->writeBuild('aaaa', []);
+        $provider = $this->archiveProvider();
+        $this->locationsInNewRequest($provider);
+
+        file_put_contents($this->cacheDir . '/pimcore_studio_ui/entry_points.default.json', '{"broken');
+
+        // read live and dropped, rebuilt, then served from the manifest again
+        $this->locationsInNewRequest($provider);
+        $this->locationsInNewRequest($provider);
+        $this->locationsInNewRequest($provider);
+        $this->assertSame(3, $provider->calls);
+    }
+
     public function testAProviderWithoutABuildIsNotCached(): void
     {
         $provider = $this->archiveProvider();
