@@ -47,4 +47,13 @@ describe('isSessionGone', () => {
 
     await expect(isSessionGone()).resolves.toBe(false)
   })
+
+  it('asks the server once for several failing requests at once', async () => {
+    const fetchMock = respondWith(Promise.resolve(new Response(null, { status: 401 })))
+
+    const answers = await Promise.all([isSessionGone(), isSessionGone(), isSessionGone()])
+
+    expect(answers).toEqual([true, true, true])
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
 })

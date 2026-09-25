@@ -43,7 +43,7 @@ const renderWithAuthStates = async (...states: Array<boolean | undefined>): Prom
   })
 
   // Let a pending session check settle before asserting.
-  await act(async () => { await Promise.resolve() })
+  await act(async () => { await new Promise(resolve => setTimeout(resolve, 0)) })
 }
 
 describe('ReloadOnSessionEnd', () => {
