@@ -1183,6 +1183,7 @@ export-xlsx-form.form-field.header: Rubrik
 export-xlsx-form.form-field.header.option.name: Systemnyckel
 export-xlsx-form.form-field.header.option.title: Etikett
 export-xlsx-form.form-field.header.option.no-header: Ingen rubrik
+form.optional-mark: (valfritt)
 form.annotation.added: Tillagd
 form.annotation.changed: Ändrad
 form.annotation.removed: Borttagen

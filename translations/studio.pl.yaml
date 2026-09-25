@@ -1183,6 +1183,7 @@ export-xlsx-form.form-field.header: Nagłówek
 export-xlsx-form.form-field.header.option.name: Klucz systemowy
 export-xlsx-form.form-field.header.option.title: Etykieta
 export-xlsx-form.form-field.header.option.no-header: Bez nagłówka
+form.optional-mark: (opcjonalne)
 form.annotation.added: Dodano
 form.annotation.changed: Zmieniono
 form.annotation.removed: Usunięto

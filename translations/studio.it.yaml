@@ -1183,6 +1183,7 @@ export-xlsx-form.form-field.header: Intestazione
 export-xlsx-form.form-field.header.option.name: Chiave di sistema
 export-xlsx-form.form-field.header.option.title: Etichetta
 export-xlsx-form.form-field.header.option.no-header: Nessuna intestazione
+form.optional-mark: (opzionale)
 form.annotation.added: Aggiunto
 form.annotation.changed: Modificato
 form.annotation.removed: Rimosso

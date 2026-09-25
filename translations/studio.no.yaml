@@ -1183,6 +1183,7 @@ export-xlsx-form.form-field.header: Overskrift
 export-xlsx-form.form-field.header.option.name: Systemnøkkel
 export-xlsx-form.form-field.header.option.title: Etikett
 export-xlsx-form.form-field.header.option.no-header: Ingen overskrift
+form.optional-mark: (valgfritt)
 form.annotation.added: Lagt til
 form.annotation.changed: Endret
 form.annotation.removed: Fjernet

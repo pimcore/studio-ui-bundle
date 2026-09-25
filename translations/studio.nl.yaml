@@ -1183,6 +1183,7 @@ export-xlsx-form.form-field.header: Koptekst
 export-xlsx-form.form-field.header.option.name: Systeemsleutel
 export-xlsx-form.form-field.header.option.title: Label
 export-xlsx-form.form-field.header.option.no-header: Geen koptekst
+form.optional-mark: (optioneel)
 form.annotation.added: Toegevoegd
 form.annotation.changed: Gewijzigd
 form.annotation.removed: Verwijderd

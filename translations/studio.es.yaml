@@ -1183,6 +1183,7 @@ export-xlsx-form.form-field.header: Encabezado
 export-xlsx-form.form-field.header.option.name: Clave del sistema
 export-xlsx-form.form-field.header.option.title: Etiqueta
 export-xlsx-form.form-field.header.option.no-header: Sin encabezado
+form.optional-mark: (opcional)
 form.annotation.added: Añadido
 form.annotation.changed: Modificado
 form.annotation.removed: Eliminado
