@@ -17,7 +17,9 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { GridContentRenderer } from '@Pimcore/components/grid-content-renderer/grid-content-renderer'
 import { Text } from '@Pimcore/components/text/text'
-import { type DynamicTypeGridCellRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/dynamic-type-grid-cell-registry'
+import {
+  type DynamicTypeGridCellRegistry
+} from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/dynamic-type-grid-cell-registry'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
 import { api, type GridColumnRequest } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { createColumnHelper } from '@tanstack/react-table'

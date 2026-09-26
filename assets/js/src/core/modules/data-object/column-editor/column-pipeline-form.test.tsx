@@ -122,7 +122,9 @@ jest.mock('@Pimcore/components/pipeline/pipeline', () => {
   const { KeyedList: RealKeyedList } = jest.requireActual(
     '@Pimcore/components/form/controls/keyed-list/keyed-list'
   )
-  const { DynamicTypePipelineGridSourceFieldsSimpleFieldComponent: RealSimpleField } = jest.requireActual(
+  const {
+    DynamicTypePipelineGridSourceFieldsSimpleFieldComponent: RealSimpleField
+  } = jest.requireActual(
     '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/components/simple-field/simple-field'
   )
 
