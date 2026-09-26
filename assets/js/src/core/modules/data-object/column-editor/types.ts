@@ -142,3 +142,58 @@ export const advancedToSchemaColumn = (col: AdvancedEditorColumn): SchemaColumn 
     : col.config,
   locale: col.locale
 })
+
+/**
+ * The column type registered by the backend for a classification store field: one Studio
+ * "available column" entry per container field (e.g. `technicalAttributes`), picked further down
+ * into one column per group/key via the group/key picker (see `BaseColumnEditor` and Studio's own
+ * grid configuration, which already opens the same picker).
+ */
+export const CLASSIFICATION_STORE_COLUMN_TYPE = 'dataobject.classificationstore'
+
+export interface ColumnIdentityInput {
+  key: string
+  type: string
+  config?: Record<string, any>
+}
+
+/**
+ * A stable identity for a persisted column: the bare `key` for every column type except
+ * classification store, where several picked keys are persisted under the same container field
+ * `key` (e.g. `technicalAttributes`) and only `config.groupId`/`config.keyId` tell them apart.
+ * Used for duplicate detection while adding columns, for column list row identity, and as the base
+ * Backend Power Tools' Output Channels builds its label-storage keys from.
+ *
+ * This is the single source of truth for the format (`<key>#<groupId>.<keyId>`). Output Channels
+ * mirrors it verbatim in `OutputChannelColumn::getIdentity()` (PHP) and reuses this exact function
+ * from its own TypeScript (`buildLabelKey`/`validateColumns`/`useColumnTitles`) - keep all of them in
+ * sync if this format ever changes.
+ */
+export const getColumnIdentity = (column: ColumnIdentityInput): string => {
+  const groupId = column.config?.groupId
+  const keyId = column.config?.keyId
+
+  if (column.type === CLASSIFICATION_STORE_COLUMN_TYPE && groupId !== undefined && keyId !== undefined) {
+    return `${column.key}#${groupId}.${keyId}`
+  }
+
+  return column.key
+}
+
+export interface ClassificationStoreColumnLabelInput {
+  config?: Record<string, any>
+}
+
+/**
+ * "Group › key" display label for a classification store column, e.g. "Dimensions › Height". Falls
+ * back to the key's own title/name (or, as a last resort, its raw key id) when no group name is
+ * available - columns picked before the group/key picker started recording `config.groupName` only
+ * have `config.groupId`.
+ */
+export const getClassificationStoreColumnLabel = (column: ClassificationStoreColumnLabelInput): string => {
+  const fieldDefinition = column.config?.fieldDefinition as { title?: string, name?: string } | undefined
+  const keyLabel = fieldDefinition?.title ?? fieldDefinition?.name ?? String(column.config?.keyId ?? '')
+  const groupName = column.config?.groupName
+
+  return typeof groupName === 'string' && groupName !== '' ? `${groupName} › ${keyLabel}` : keyLabel
+}

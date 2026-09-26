@@ -12,6 +12,9 @@ import {
   ADVANCED_COLUMN_TYPE,
   advancedFromSchemaColumn,
   advancedToSchemaColumn,
+  CLASSIFICATION_STORE_COLUMN_TYPE,
+  getClassificationStoreColumnLabel,
+  getColumnIdentity,
   type SchemaColumn
 } from './types'
 
@@ -81,5 +84,60 @@ describe('advancedFromSchemaColumn / advancedToSchemaColumn round trip', () => {
 
     const draft = advancedFromSchemaColumn(schemaColumn)
     expect(draft.pipeline?.sourceFields).toEqual([{ key: 'name', type: 'dataobject.adapter', config: {} }])
+  })
+})
+
+describe('getColumnIdentity', () => {
+  it('is the bare key for a non-classification-store column', () => {
+    expect(getColumnIdentity({ key: 'productionYear', type: 'dataobject.adapter' })).toBe('productionYear')
+  })
+
+  it('combines key, groupId and keyId for a classification store column', () => {
+    expect(getColumnIdentity({
+      key: 'technicalAttributes',
+      type: CLASSIFICATION_STORE_COLUMN_TYPE,
+      config: { groupId: 1, keyId: 2 }
+    })).toBe('technicalAttributes#1.2')
+  })
+
+  it('tells two classification store columns with the same key apart by group/key', () => {
+    const height = getColumnIdentity({
+      key: 'technicalAttributes',
+      type: CLASSIFICATION_STORE_COLUMN_TYPE,
+      config: { groupId: 1, keyId: 1 }
+    })
+    const weight = getColumnIdentity({
+      key: 'technicalAttributes',
+      type: CLASSIFICATION_STORE_COLUMN_TYPE,
+      config: { groupId: 2, keyId: 5 }
+    })
+
+    expect(height).not.toBe(weight)
+  })
+
+  it('falls back to the bare key when a classification store column has no groupId/keyId yet', () => {
+    expect(getColumnIdentity({ key: 'technicalAttributes', type: CLASSIFICATION_STORE_COLUMN_TYPE }))
+      .toBe('technicalAttributes')
+  })
+})
+
+describe('getClassificationStoreColumnLabel', () => {
+  it('renders "group › key" when a group name is recorded', () => {
+    const label = getClassificationStoreColumnLabel({
+      config: { groupName: 'Dimensions', fieldDefinition: { title: 'Height' } }
+    })
+
+    expect(label).toBe('Dimensions › Height')
+  })
+
+  it('falls back to the key title alone when no group name is available', () => {
+    const label = getClassificationStoreColumnLabel({ config: { fieldDefinition: { title: 'Height' } } })
+
+    expect(label).toBe('Height')
+  })
+
+  it('falls back to the field definition name, then the raw key id', () => {
+    expect(getClassificationStoreColumnLabel({ config: { fieldDefinition: { name: 'height' } } })).toBe('height')
+    expect(getClassificationStoreColumnLabel({ config: { keyId: 7 } })).toBe('7')
   })
 })

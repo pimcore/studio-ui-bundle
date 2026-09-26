@@ -89,6 +89,21 @@ jest.mock('@Pimcore/modules/element/element-selector/provider/element-selector/e
   SelectionType: { Single: 'single', Multiple: 'multiple' }
 }))
 
+// See the identical mock + comment in base-column-editor.test.tsx.
+jest.mock(
+  '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider',
+  () => ({
+    ClassificationStoreModalProvider: (
+      { children }: { children: React.ReactNode }
+    ) => <>{ children }</>,
+    useClassificationStoreModal: () => ({
+      openModal: jest.fn(),
+      closeModal: jest.fn(),
+      fireUpdateEvent: jest.fn()
+    })
+  })
+)
+
 function passthrough (testId: string): React.FC<{ children?: React.ReactNode }> {
   const Passthrough = ({ children }: { children?: React.ReactNode }): React.JSX.Element => (
     <div data-testid={ testId }>{ children }</div>

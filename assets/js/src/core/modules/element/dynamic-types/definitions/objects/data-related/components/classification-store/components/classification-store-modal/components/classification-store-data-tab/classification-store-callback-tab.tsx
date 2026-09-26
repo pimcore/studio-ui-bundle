@@ -63,6 +63,12 @@ export const ClassificationStoreCallbackTab = <T,>({ tabId, queryHook, queryArgs
     { refetchOnMountOrArgChange: true }
   )
 
+  // Aliased (not read as `data.items` inside `handleApplySelectionClick` below): that function
+  // declares its own `const data = await Promise.all(...)`, which would otherwise shadow this
+  // outer `data` for its whole body, including any reference before that declaration.
+  const groupByKeyRows = data?.items as unknown as
+    Array<{ groupId: number, keyId: number, groupName?: string }> | undefined
+
   const [fetchLayoutByKey] = useLazyClassificationStoreGetLayoutByKeyQuery()
 
   const fetchLayoutDataByKey = async (keyId: string, groupId: number): Promise<ClassificationStoreCollection2> => {
@@ -94,11 +100,18 @@ export const ClassificationStoreCallbackTab = <T,>({ tabId, queryHook, queryArgs
       if (tabId === TabId.GroupByKey) {
         const itemId = key.split('-')[1]
         const groupId = parseInt(key.split('-')[0])
+        // The row this selection came from already carries the group's display name (the
+        // relayout fetch below does not); passed along so a consumer building its own display
+        // label (e.g. BaseColumnEditor's classification store column picker) doesn't need a
+        // second, dedicated lookup just for that.
+        const groupName = groupByKeyRows
+          ?.find((row) => row.groupId === groupId && String(row.keyId) === itemId)?.groupName
 
         const promise = fetchLayoutDataByKey(itemId, groupId).then((itemData) => {
           return {
             ...itemData,
-            groupId
+            groupId,
+            groupName
           }
         })
 

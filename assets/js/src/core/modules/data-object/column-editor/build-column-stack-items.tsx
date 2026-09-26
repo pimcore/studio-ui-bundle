@@ -17,10 +17,16 @@ import { Spin } from '@Pimcore/components/spin/spin'
 import { type StackListProps } from '@Pimcore/components/stack-list/stack-list'
 import { ColumnEditorItemBody } from './column-editor-item'
 import { ColumnLocaleControl } from './column-locale-control'
-import { ADVANCED_COLUMN_TYPE, type AdvancedEditorColumn } from './types'
+import {
+  ADVANCED_COLUMN_TYPE,
+  CLASSIFICATION_STORE_COLUMN_TYPE,
+  getClassificationStoreColumnLabel,
+  type AdvancedEditorColumn
+} from './types'
 
 const getColumnLabel = (col: AdvancedEditorColumn): string => {
   if (col.key === '') return ''
+  if (col.type === CLASSIFICATION_STORE_COLUMN_TYPE) return getClassificationStoreColumnLabel(col)
   return col.key
 }
 

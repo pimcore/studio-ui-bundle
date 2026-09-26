@@ -28,7 +28,7 @@ import {
 } from './types'
 import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column-picker.types'
 import { useAddColumnGroups } from './use-add-column-groups'
-import { resolveFieldtype } from './resolve-fieldtype'
+import { buildEditorColumnFromAvailable } from './build-editor-column'
 
 const SYSTEM_COLUMNS = [
   { key: 'id', type: 'system.id', group: ['system'] as string[], config: [] as never[] },
@@ -218,15 +218,7 @@ export const useColumnEditorState = ({
   }, [availableFields])
 
   const handleAddColumnOfType = useCallback((column: GridColumnConfiguration): void => {
-    setDraft(prev => [...prev, {
-      _id: crypto.randomUUID(),
-      key: column.key,
-      fieldtype: resolveFieldtype(column),
-      type: column.type,
-      pipelineConfig: column.config as Record<string, any> | undefined,
-      localizable: column.localizable,
-      isNew: true
-    }])
+    setDraft(prev => [...prev, buildEditorColumnFromAvailable(column)])
   }, [])
 
   // Only the add-column dropdown is restricted to exportable columns. The full

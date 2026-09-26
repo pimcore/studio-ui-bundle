@@ -25,7 +25,9 @@ import { FieldsToAddPanel } from './fields-to-add-panel'
 import { LanguageSelectionContext } from '@Pimcore/components/language-selection/provider/language-selection-provider'
 import { LanguageSelectionWithProvider } from '@Pimcore/components/language-selection/language-selection-with-provider'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { ClassificationStoreModalProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
 import { useColumnEditorState } from './use-column-editor-state'
+import { useClassificationStoreColumnPicker } from './use-classification-store-column-picker'
 import { buildColumnStackItems } from './build-column-stack-items'
 import { type ColumnEditorHandle, type SchemaColumn } from './types'
 
@@ -80,8 +82,29 @@ export interface BaseColumnEditorProps {
   hidePreviewControls?: boolean
 }
 
+/**
+ * Wraps {@link BaseColumnEditorInner} with its own, self-contained
+ * {@link ClassificationStoreModalProvider}: the editor is mounted in several realms that don't
+ * already provide one (the Studio main window's settings area, and - so far - the document editor
+ * iframe dialog), so it cannot rely on an ambient provider the way Studio's own grid configuration
+ * does. Nesting is safe even where an ambient provider *does* exist (each provider instance owns its
+ * own modal state).
+ */
 export const BaseColumnEditor = forwardRef<ColumnEditorHandle, BaseColumnEditorProps>(
-  function BaseColumnEditor ({
+  function BaseColumnEditor (props, ref) {
+    return (
+      <ClassificationStoreModalProvider>
+        <BaseColumnEditorInner
+          { ...props }
+          ref={ ref }
+        />
+      </ClassificationStoreModalProvider>
+    )
+  }
+)
+
+const BaseColumnEditorInner = forwardRef<ColumnEditorHandle, BaseColumnEditorProps>(
+  function BaseColumnEditorInner ({
     entity,
     classDefinitionId,
     columns,
@@ -156,10 +179,17 @@ export const BaseColumnEditor = forwardRef<ColumnEditorHandle, BaseColumnEditorP
       getColumns
     } = useColumnEditorState({ entity, classDefinitionId, columns, onApply, onCancel, exportableOnly, onChange })
 
+    const { handleColumnPick } = useClassificationStoreColumnPicker({
+      resolvedClassId,
+      entity,
+      draft,
+      handleAddColumnOfType
+    })
+
     useImperativeHandle(ref, () => ({
       getColumns,
-      addColumn: handleAddColumnOfType
-    }), [getColumns, handleAddColumnOfType])
+      addColumn: handleColumnPick
+    }), [getColumns, handleColumnPick])
 
     const stackItems = buildColumnStackItems({
       draft,
@@ -227,7 +257,7 @@ export const BaseColumnEditor = forwardRef<ColumnEditorHandle, BaseColumnEditorP
                 <FieldsToAddPanel
                   groups={ columnGroups }
                   onClose={ () => { setFieldsToAddOpen(false) } }
-                  onColumnSelect={ handleAddColumnOfType }
+                  onColumnSelect={ handleColumnPick }
                 />
               ) }
 
