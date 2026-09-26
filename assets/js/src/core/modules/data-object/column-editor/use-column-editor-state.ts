@@ -15,6 +15,8 @@ import { api, type GridColumnConfiguration } from '@Pimcore/modules/data-object/
 import { useClassDefinitionCollectionQuery } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
+import { skipToken } from '@reduxjs/toolkit/query'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { isNil } from 'lodash'
 import {
   advancedFromSchemaColumn,
@@ -46,8 +48,12 @@ interface UseColumnEditorStateResult {
   draft: AdvancedEditorColumn[]
   isLoading: boolean
   objectId: number | null
-  /** The resolved class definition id (explicit prop, or looked up from `entity`) pipeline forms scope class-bound pickers to. */
-  resolvedClassId: string
+  /**
+   * The resolved class definition id (explicit prop, or looked up from `entity`) pipeline forms
+   * scope class-bound pickers to. Stays `undefined` while a class-id lookup by `entity` name is
+   * still in flight, rather than falling back to the name itself.
+   */
+  resolvedClassId?: string
   availableFields: GridColumnConfiguration[]
   columnGroups: Array<ColumnPickerGroup<GridColumnConfiguration>>
   /** Adds an advanced (pipeline) column, or undefined when the schema offers none. */
@@ -80,19 +86,36 @@ export const useColumnEditorState = ({
   // Studio grid's own "add column" entry point.
   const needsClassLookup = isNil(classDefinitionId)
   const hasObjectsPermission = isAllowed(UserPermission.Objects)
-  const { data: classDefinitionsData } = useClassDefinitionCollectionQuery(undefined, {
+  const {
+    data: classDefinitionsData,
+    isLoading: isClassDefinitionsLoading,
+    error: classDefinitionsError
+  } = useClassDefinitionCollectionQuery(undefined, {
     skip: !needsClassLookup || !hasObjectsPermission
   })
 
+  useEffect(() => {
+    if (classDefinitionsError !== undefined) {
+      trackError(new ApiError(classDefinitionsError))
+    }
+  }, [classDefinitionsError])
+
+  // While the lookup is in flight, resolvedClassId stays undefined instead of falling back to
+  // the class NAME: passing the name as a classId fires `available-columns`/grid requests
+  // against the wrong id, which then get replaced once the real id resolves.
+  const isClassLookupPending = needsClassLookup && hasObjectsPermission && isClassDefinitionsLoading
+
   const resolvedClassId = useMemo(() => {
     if (!isNil(classDefinitionId)) return classDefinitionId
+    if (isClassLookupPending) return undefined
     return classDefinitionsData?.items?.find((item) => item.name === entity)?.id ?? entity
-  }, [classDefinitionId, entity, classDefinitionsData])
+  }, [classDefinitionId, entity, classDefinitionsData, isClassLookupPending])
 
-  const { data, isLoading } = api.endpoints.dataObjectGetAvailableGridColumns.useQuery({
-    classId: resolvedClassId,
-    folderId: 1
-  })
+  const { data, isLoading: isAvailableColumnsLoading } = api.endpoints.dataObjectGetAvailableGridColumns.useQuery(
+    resolvedClassId !== undefined ? { classId: resolvedClassId, folderId: 1 } : skipToken
+  )
+
+  const isLoading = isClassLookupPending || isAvailableColumnsLoading
 
   const [draft, setDraft] = useState<AdvancedEditorColumn[]>(() =>
     columns.map(advancedFromSchemaColumn)
@@ -106,8 +129,9 @@ export const useColumnEditorState = ({
   const hasManualSelection = useRef(false)
 
   const { data: gridData } = api.endpoints.dataObjectGetGrid.useQuery(
-    { classId: resolvedClassId, body: { folderId: 1, columns: SYSTEM_COLUMNS, filters: { includeDescendants: true, page: 1, pageSize: 1 } } },
-    { skip: resolvedClassId === undefined }
+    resolvedClassId !== undefined
+      ? { classId: resolvedClassId, body: { folderId: 1, columns: SYSTEM_COLUMNS, filters: { includeDescendants: true, page: 1, pageSize: 1 } } }
+      : skipToken
   )
 
   useEffect(() => {

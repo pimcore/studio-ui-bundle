@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { render, screen } from '@testing-library/react'
+import { skipToken } from '@reduxjs/toolkit/query'
 import { BaseColumnEditor, type BaseColumnEditorProps } from './base-column-editor'
 
 jest.mock('react-i18next', () => ({
@@ -66,7 +67,13 @@ jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({
 // rather than through useClassDefinitions()/ClassDefinitionsProvider: BaseColumnEditor also
 // mounts inside the document editor iframe realm (BPT's `outputdata` editable), which has no
 // such provider.
-const classDefinitionCollectionQueryMock = jest.fn((_arg?: unknown, _options?: { skip?: boolean }) => ({ data: undefined, isLoading: false }))
+interface ClassDefinitionCollectionQueryMockResult {
+  data: { items: Array<{ id: string, name: string }> } | undefined
+  isLoading: boolean
+}
+const classDefinitionCollectionQueryMock = jest.fn(
+  (_arg?: unknown, _options?: { skip?: boolean }): ClassDefinitionCollectionQueryMockResult => ({ data: undefined, isLoading: false })
+)
 jest.mock('@Pimcore/modules/class-definition/class-definition-slice.gen', () => ({
   useClassDefinitionCollectionQuery: (arg: unknown, options?: { skip?: boolean }) => classDefinitionCollectionQueryMock(arg, options)
 }))
@@ -79,14 +86,22 @@ jest.mock('@Pimcore/modules/auth/enums/user-permission', () => ({
   UserPermission: { Objects: 'objects' }
 }))
 
+const dataObjectGetAvailableGridColumnsMock = jest.fn((_arg?: unknown) => ({ data: { columns: [] }, isLoading: false }))
+const dataObjectGetGridMock = jest.fn((_arg?: unknown) => ({ data: { items: [] } }))
 jest.mock('@Pimcore/modules/data-object/data-object-api-slice-enhanced', () => ({
   api: {
     endpoints: {
-      dataObjectGetAvailableGridColumns: { useQuery: () => ({ data: { columns: [] }, isLoading: false }) },
-      dataObjectGetGrid: { useQuery: () => ({ data: { items: [] } }) },
+      dataObjectGetAvailableGridColumns: { useQuery: (arg?: unknown) => dataObjectGetAvailableGridColumnsMock(arg) },
+      dataObjectGetGrid: { useQuery: (arg?: unknown) => dataObjectGetGridMock(arg) },
       dataObjectGetGridPreview: { useQuery: () => ({ data: undefined, isFetching: false, error: undefined }) }
     }
   }
+}))
+
+jest.mock('@Pimcore/modules/app/error-handler', () => ({
+  __esModule: true,
+  default: jest.fn(),
+  ApiError: jest.fn()
 }))
 
 jest.mock('@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector', () => ({
@@ -228,6 +243,52 @@ describe('BaseColumnEditor without a ClassDefinitionsProvider ancestor', () => {
     expect(classDefinitionCollectionQueryMock).toHaveBeenCalledWith(
       undefined,
       expect.objectContaining({ skip: true })
+    )
+  })
+})
+
+describe('BaseColumnEditor resolving the class id from the entity name', () => {
+  // Regression coverage for a bug where, while the class-definition list lookup was still in
+  // flight, resolvedClassId fell back to the class NAME (`entity`) instead of staying
+  // undefined - firing `available-columns`/grid requests against the wrong id, which then got
+  // silently replaced by a second, correct request once the lookup resolved.
+  beforeEach(() => {
+    classDefinitionCollectionQueryMock.mockClear()
+    dataObjectGetAvailableGridColumnsMock.mockClear()
+    dataObjectGetGridMock.mockClear()
+  })
+
+  it('does not request columns for the raw entity name while the lookup is in flight', () => {
+    classDefinitionCollectionQueryMock.mockReturnValue({ data: undefined, isLoading: true })
+
+    render(
+      <BaseColumnEditor
+        { ...defaultProps }
+        classDefinitionId={ undefined }
+      />
+    )
+
+    expect(screen.getByTestId('spin')).toBeInTheDocument()
+    expect(dataObjectGetAvailableGridColumnsMock).toHaveBeenCalledWith(skipToken)
+    expect(dataObjectGetGridMock).toHaveBeenCalledWith(skipToken)
+  })
+
+  it('resolves the class id by name once the lookup completes and requests with the real id', () => {
+    classDefinitionCollectionQueryMock.mockReturnValue({
+      data: { items: [{ id: 'CAR_ID', name: 'CAR' }] },
+      isLoading: false
+    })
+
+    render(
+      <BaseColumnEditor
+        { ...defaultProps }
+        classDefinitionId={ undefined }
+      />
+    )
+
+    expect(dataObjectGetAvailableGridColumnsMock).toHaveBeenCalledWith({ classId: 'CAR_ID', folderId: 1 })
+    expect(dataObjectGetGridMock).toHaveBeenCalledWith(
+      expect.objectContaining({ classId: 'CAR_ID' })
     )
   })
 })
