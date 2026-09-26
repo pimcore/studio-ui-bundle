@@ -413,7 +413,7 @@ grid.advanced-column.advancedColumns.translate: Translate
 grid.advanced-column.advancedColumns.phpCode: PHP code
 grid.advanced-column.advancedColumns.phpCodeKey: PHP Transformer Key
 grid.advanced-column.advancedColumns.arguments: Arguments
-column-editor.add-column: Add Column
+column-editor.add-column: Add column
 column-editor.add-advanced-column: Add advanced column
 column-editor.fields-to-add: Fields to add
 column-editor.apply: Apply changes
