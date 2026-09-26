@@ -74,11 +74,19 @@ const PreviewGrid = ({ value }: { value: Array<{ type: string, value: any }> }):
   )
 }
 
-const PreviewResult = ({ column, objectId, pipelineValue }: { column: AdvancedEditorColumn, objectId: number, pipelineValue?: Record<string, any> }): React.JSX.Element => {
+interface PreviewResultProps {
+  column: AdvancedEditorColumn
+  objectId: number
+  pipelineValue?: Record<string, any>
+}
+
+const PreviewResult = ({ column, objectId, pipelineValue }: PreviewResultProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { currentLanguage } = useLanguageSelection()
 
-  const pipeline = (pipelineValue !== undefined && Object.keys(pipelineValue).length > 0) ? pipelineValue : column.pipeline
+  const pipeline = (pipelineValue !== undefined && Object.keys(pipelineValue).length > 0)
+    ? pipelineValue
+    : column.pipeline
 
   // Resolve locale: explicit per-column override > global language (only for localizable columns)
   const resolvedLocale = column.localizable === true

@@ -41,7 +41,10 @@ export interface ColumnPipelineFormProps {
   sourceFieldsRegistryId: string
   /** Service ID of the DynamicTypePipelineRegistry to use for transformers. */
   transformersRegistryId: string
-  /** True when the form is rendered in a horizontally constrained context (source fields/transformers stack into tabs). */
+  /**
+   * True when the form is rendered in a horizontally constrained context (source fields/
+   * transformers stack into tabs).
+   */
   compact?: boolean
 }
 

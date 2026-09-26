@@ -292,3 +292,6 @@ describe('BaseColumnEditor resolving the class id from the entity name', () => {
     )
   })
 })
+
+// hidePreviewControls (finding J) and onChange (finding A) are covered in
+// base-column-editor.preview-and-onchange.test.tsx, split out to stay under the file line budget.

@@ -28,6 +28,7 @@ import {
 } from './types'
 import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column-picker.types'
 import { useAddColumnGroups } from './use-add-column-groups'
+import { resolveFieldtype } from './resolve-fieldtype'
 
 const SYSTEM_COLUMNS = [
   { key: 'id', type: 'system.id', group: ['system'] as string[], config: [] as never[] },
@@ -42,6 +43,12 @@ interface UseColumnEditorStateOptions {
   onCancel: () => void
   /** When true, only columns marked as exportable are offered in the add-column dropdown. */
   exportableOnly?: boolean
+  /**
+   * Called whenever the draft changes (add/remove/reorder/pipeline/locale edits), with the same
+   * shape `getColumns()`/`onApply` use. Additive: existing callers that only read the draft via
+   * `getColumns()` on demand (e.g. through the imperative handle) are unaffected.
+   */
+  onChange?: (columns: SchemaColumn[]) => void
 }
 
 interface UseColumnEditorStateResult {
@@ -75,7 +82,8 @@ export const useColumnEditorState = ({
   columns,
   onApply,
   onCancel,
-  exportableOnly = false
+  exportableOnly = false,
+  onChange
 }: UseColumnEditorStateOptions): UseColumnEditorStateResult => {
   // Resolved directly from the class-definition list query rather than through
   // useClassDefinitions()/ClassDefinitionsProvider: this hook is also mounted inside the
@@ -121,8 +129,33 @@ export const useColumnEditorState = ({
     columns.map(advancedFromSchemaColumn)
   )
 
+  // Tracks the draft reference last produced by re-seeding from the `columns` prop (below), so the
+  // onChange effect can tell a genuine user edit apart from the render the re-seed itself causes.
+  // Declared before the re-seed effect: effects for the same commit run in declaration order, and
+  // the onChange effect below must compare against the *previous* baseline, not one a sibling
+  // effect already advanced further down in the same flush.
+  const lastSeededDraft = useRef(draft)
+
+  // Notifies the host on every draft change (add/remove/reorder/pipeline/locale edits), so a
+  // consumer that embeds the editor without its own Apply/Discard toolbar (e.g. Backend Power
+  // Tools' Output Channels) can track dirty state and the current columns without polling
+  // `ref.getColumns()`. Skipped when this render's draft is the one the re-seed effect (below)
+  // just produced from the `columns` prop, to avoid a spurious "dirty" notification on mount or
+  // whenever the host passes an equivalent-but-new `columns` array.
   useEffect(() => {
-    setDraft(columns.map(advancedFromSchemaColumn))
+    if (draft === lastSeededDraft.current) {
+      return
+    }
+
+    onChange?.(draft.filter(col => col.key !== '').map(advancedToSchemaColumn))
+    // `onChange` is intentionally excluded from the dependency array: the effect must fire once
+    // per draft change, not whenever the caller passes a new callback identity.
+  }, [draft])
+
+  useEffect(() => {
+    const reseeded = columns.map(advancedFromSchemaColumn)
+    lastSeededDraft.current = reseeded
+    setDraft(reseeded)
   }, [columns])
 
   const [objectId, setObjectId] = useState<number | null>(null)
@@ -130,7 +163,14 @@ export const useColumnEditorState = ({
 
   const { data: gridData } = api.endpoints.dataObjectGetGrid.useQuery(
     resolvedClassId !== undefined
-      ? { classId: resolvedClassId, body: { folderId: 1, columns: SYSTEM_COLUMNS, filters: { includeDescendants: true, page: 1, pageSize: 1 } } }
+      ? {
+          classId: resolvedClassId,
+          body: {
+            folderId: 1,
+            columns: SYSTEM_COLUMNS,
+            filters: { includeDescendants: true, page: 1, pageSize: 1 }
+          }
+        }
       : skipToken
   )
 
@@ -181,7 +221,7 @@ export const useColumnEditorState = ({
     setDraft(prev => [...prev, {
       _id: crypto.randomUUID(),
       key: column.key,
-      fieldtype: column.key,
+      fieldtype: resolveFieldtype(column),
       type: column.type,
       pipelineConfig: column.config as Record<string, any> | undefined,
       localizable: column.localizable,

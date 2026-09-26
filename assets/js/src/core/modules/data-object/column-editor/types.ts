@@ -49,6 +49,16 @@ export const ADVANCED_COLUMN_KEY = 'advanced'
 export const ADVANCED_COLUMN_TYPE = 'dataobject.advanced'
 
 /**
+ * The `fieldtype` value system columns (`id`, `fullpath`, ...) are persisted with. Both Data Hub
+ * export adapters shipped in this platform version key off this exact literal - not the column's
+ * `type` (e.g. `system.id`) and not its key - to recognize/skip system columns:
+ * `data-hub-file-export`'s `UpdateConfiguration` schema example and `AbstractExporter`
+ * (`$column['fieldtype'] ?? '' === 'system'`), and `data-hub-simple-rest`'s
+ * `DataObjectMappingAndDataExtractor` (`$column['fieldtype'] !== 'system'`).
+ */
+export const SYSTEM_COLUMN_FIELDTYPE = 'system'
+
+/**
  * Frontend-only draft column type used by the column editor when it supports
  * advanced (pipeline) columns. Extends the base persisted shape with working-state
  * fields that are never written to the backend directly.
