@@ -34,6 +34,7 @@ export * from '@Pimcore/modules/app/hook/use-handle-keybindings'
 export * from '@Pimcore/modules/app/hook/use-date-converter'
 
 export * from '@Pimcore/modules/app/modal-holder/use-modal-holder'
+export * from '@Pimcore/app/public-api/modal/custom-modal-registry'
 
 export * from '@Pimcore/modules/app/settings/hooks/use-settings'
 // Intentionally narrowed: only read selectors of the settings slice are part

@@ -21,6 +21,18 @@ export enum ApiGatewayEventType {
   openHotspotMarkersModal = 'openHotspotMarkersModal',
   openVideoModal = 'openVideoModal',
   locateInTree = 'locateInTree',
+  openCustomModal = 'openCustomModal',
+}
+
+/**
+ * Payload for {@link ApiGatewayEventType.openCustomModal}. `payload` and the `onClose` result are
+ * intentionally untyped here - the type-safe generics live on the public
+ * `PimcoreStudio.modal.openCustom` API and on `registerIframeModal`, keyed by the same `id`.
+ */
+export interface OpenCustomModalPayload {
+  id: string
+  payload: unknown
+  onClose?: (result?: unknown) => void
 }
 
 /**
@@ -34,6 +46,7 @@ export interface ApiGatewayEventPayloadMap {
   [ApiGatewayEventType.openHotspotMarkersModal]: HotspotMarkersModalProps
   [ApiGatewayEventType.openVideoModal]: VideoModalProps
   [ApiGatewayEventType.locateInTree]: { id: number, elementType: ElementType }
+  [ApiGatewayEventType.openCustomModal]: OpenCustomModalPayload
 }
 
 /**
