@@ -9,29 +9,29 @@
  */
 
 import React from 'react'
-import { getIframeModal, registerIframeModal, type CustomModalComponentProps } from './custom-modal-registry'
+import { getCustomModal, registerCustomModal, type CustomModalComponentProps } from './custom-modal-registry'
 
 const ModalA = (_props: CustomModalComponentProps): React.JSX.Element => <div>a</div>
 const ModalB = (_props: CustomModalComponentProps): React.JSX.Element => <div>b</div>
 
 describe('custom-modal-registry', () => {
   it('returns undefined for an id that was never registered', () => {
-    expect(getIframeModal('never-registered')).toBeUndefined()
+    expect(getCustomModal('never-registered')).toBeUndefined()
   })
 
   it('returns the component registered under an id', () => {
-    registerIframeModal('registry-test.a', ModalA)
+    registerCustomModal('registry-test.a', ModalA)
 
-    expect(getIframeModal('registry-test.a')).toBe(ModalA)
+    expect(getCustomModal('registry-test.a')).toBe(ModalA)
   })
 
   it('overwrites a previous registration under the same id and warns', () => {
     const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
 
-    registerIframeModal('registry-test.b', ModalA)
-    registerIframeModal('registry-test.b', ModalB)
+    registerCustomModal('registry-test.b', ModalA)
+    registerCustomModal('registry-test.b', ModalB)
 
-    expect(getIframeModal('registry-test.b')).toBe(ModalB)
+    expect(getCustomModal('registry-test.b')).toBe(ModalB)
     expect(warnSpy).toHaveBeenCalledWith(
       expect.stringContaining('registry-test.b')
     )

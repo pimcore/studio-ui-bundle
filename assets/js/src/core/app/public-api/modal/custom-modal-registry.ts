@@ -27,7 +27,9 @@ const customModalRegistry = new Map<string, CustomModalComponent>()
  * Registers a component that a plugin's own code (running inside the document editor iframe, or
  * any other realm) can ask Studio to render in the parent, main-window realm - the same place the
  * built-in element selector, link, upload, crop and video modals render - via
- * `PimcoreStudio.modal.openCustom(id, payload, options)`.
+ * `PimcoreStudio.modal.openCustom(id, payload, options)`. The name reflects what the modal *does*
+ * (renders in the main window regardless of which realm asked for it), not the realm the caller
+ * happens to be in - a plugin with no iframe presence at all can register and open one too.
  *
  * A plugin whose federation module loads into more than one realm (e.g. both the main Studio app
  * and the document editor iframe, via a second `pimcore_studio_ui.webpack_entry_point_provider.*`
@@ -44,11 +46,15 @@ const customModalRegistry = new Map<string, CustomModalComponent>()
  * Registering a second component under the same `id` overwrites the first and logs a warning, the
  * same as {@link registerApiGatewayHandler}.
  *
+ * Only this registration function is exported from the SDK (`modules/app`) - the lookup side
+ * ({@link getCustomModal}) is an implementation detail of the `openCustomModal` API gateway
+ * handler, not something a plugin ever needs to call itself.
+ *
  * @param id - A unique identifier for the modal, e.g. `"my-bundle.my-modal"`.
  * @param component - The component to render. Receives `payload` (whatever was passed to
  * `openCustom`) and an `onClose` callback to close the modal and hand a result back to the caller.
  */
-export const registerIframeModal = <TPayload = unknown, TResult = unknown>(
+export const registerCustomModal = <TPayload = unknown, TResult = unknown>(
   id: string,
   component: CustomModalComponent<TPayload, TResult>
 ): void => {
@@ -59,9 +65,10 @@ export const registerIframeModal = <TPayload = unknown, TResult = unknown>(
 }
 
 /**
- * Looks up a component registered via {@link registerIframeModal}. Used internally by the
- * `openCustomModal` API gateway handler; not normally called directly by plugins.
+ * Looks up a component registered via {@link registerCustomModal}. Used internally by the
+ * `openCustomModal` API gateway handler; not exported from the SDK and not normally called
+ * directly by plugins.
  */
-export const getIframeModal = (id: string): CustomModalComponent | undefined => {
+export const getCustomModal = (id: string): CustomModalComponent | undefined => {
   return customModalRegistry.get(id)
 }

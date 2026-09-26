@@ -10,14 +10,14 @@
 
 import React from 'react'
 import { isUndefined } from 'lodash'
-import { getIframeModal } from '@Pimcore/app/public-api/modal/custom-modal-registry'
+import { getCustomModal } from '@Pimcore/app/public-api/modal/custom-modal-registry'
 import { type ApiGatewayHandler } from '../registry/handler-registry'
 import { type ApiGatewayEventType } from '../types/event-types'
 
 export const openCustomModalHandler: ApiGatewayHandler<ApiGatewayEventType.openCustomModal> = (payload, context) => {
   const { modalHolderContext } = context
   const { id, onClose } = payload
-  const Component = getIframeModal(id)
+  const Component = getCustomModal(id)
 
   if (isUndefined(Component)) {
     console.warn(`No custom modal is registered for id "${id}"`)

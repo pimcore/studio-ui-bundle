@@ -40,25 +40,48 @@ describe('modalApi.openCustom', () => {
     window.removeEventListener(API_GATEWAY_EVENT, listener)
   })
 
+  it('returns a handle whose close() dispatches a closeCustomModal event for the same id', () => {
+    jest.mocked(isInIframe).mockReturnValue(false)
+    const listener = jest.fn()
+    window.addEventListener(API_GATEWAY_EVENT, listener)
+
+    const handle = modalApi.openCustom('modal-api-test.close-handle', { foo: 'bar' })
+    listener.mockClear()
+    handle.close()
+
+    expect(listener).toHaveBeenCalledTimes(1)
+    const [event] = listener.mock.calls[0]
+    expect(event.detail).toEqual({
+      type: ApiGatewayEventType.closeCustomModal,
+      payload: { id: 'modal-api-test.close-handle' }
+    })
+
+    window.removeEventListener(API_GATEWAY_EVENT, listener)
+  })
+
   it('delegates to the parent window API when running inside an iframe', () => {
     jest.mocked(isInIframe).mockReturnValue(true)
-    const openCustom = jest.fn()
+    const closeHandle = { close: jest.fn() }
+    const openCustom = jest.fn().mockReturnValue(closeHandle)
     jest.mocked(getPimcoreStudioApi).mockReturnValue({
       modal: { openCustom }
     } as unknown as ReturnType<typeof getPimcoreStudioApi>)
 
-    modalApi.openCustom('modal-api-test.iframe', { foo: 'baz' })
+    const handle = modalApi.openCustom('modal-api-test.iframe', { foo: 'baz' })
 
     expect(openCustom).toHaveBeenCalledWith('modal-api-test.iframe', { foo: 'baz' }, undefined)
+    expect(handle).toBe(closeHandle)
   })
 
-  it('logs an error instead of throwing when the parent API cannot be reached', () => {
+  it('logs an error and returns a no-op handle instead of throwing when the parent API cannot be reached', () => {
     jest.mocked(isInIframe).mockReturnValue(true)
     jest.mocked(getPimcoreStudioApi).mockImplementation(() => { throw new Error('no api') })
     const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
 
-    expect(() => { modalApi.openCustom('modal-api-test.error', {}) }).not.toThrow()
+    let handle: ReturnType<typeof modalApi.openCustom> | undefined
+    expect(() => { handle = modalApi.openCustom('modal-api-test.error', {}) }).not.toThrow()
     expect(errorSpy).toHaveBeenCalled()
+    expect(() => { handle?.close() }).not.toThrow()
 
     errorSpy.mockRestore()
   })

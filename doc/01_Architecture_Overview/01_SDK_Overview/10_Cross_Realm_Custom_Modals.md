@@ -11,15 +11,17 @@ website page and is constrained to the iframe's viewport, instead of getting Stu
 at full size.
 
 Studio's built-in element selector, link, upload, crop, hotspot and video modals avoid this by
-always rendering in the main window, no matter which realm asked for them. `registerIframeModal`
-and `PimcoreStudio.modal.openCustom` extend the same mechanism to plugin-defined dialogs.
+always rendering in the main window, no matter which realm asked for them. `registerCustomModal`
+and `PimcoreStudio.modal.openCustom` extend the same mechanism to plugin-defined dialogs - the name
+describes what the modal does (always renders in the main window), not the realm the caller happens
+to be in, since a plugin with no iframe presence at all can register and open one too.
 
 ## Registering a modal
 
-Call `registerIframeModal` once, unconditionally, from your plugin's `onInit`:
+Call `registerCustomModal` once, unconditionally, from your plugin's `onInit`:
 
 ```typescript
-import { registerIframeModal, type CustomModalComponentProps } from '@pimcore/studio-ui-bundle/modules/app'
+import { registerCustomModal, type CustomModalComponentProps } from '@pimcore/studio-ui-bundle/modules/app'
 
 interface MyModalPayload {
   objectId: number
@@ -38,10 +40,13 @@ const MyModal = ({ payload, onClose }: CustomModalComponentProps<MyModalPayload,
 export const MyPlugin: IAbstractPlugin = {
   name: 'my-plugin',
   onInit: (): void => {
-    registerIframeModal('my-plugin.my-modal', MyModal)
+    registerCustomModal('my-plugin.my-modal', MyModal)
   }
 }
 ```
+
+Only the registration function is exported from the SDK - there is no public lookup function, since
+a plugin never needs to look up another plugin's registration.
 
 If your plugin's federation module loads into both the main app and the `document_editor_iframe`
 (a second `pimcore_studio_ui.webpack_entry_point_provider.document_editor_iframe` tag, the same
@@ -59,7 +64,7 @@ From anywhere - the iframe or the main window itself:
 ```typescript
 import { getPimcoreStudioApi } from '@pimcore/studio-ui-bundle/app'
 
-getPimcoreStudioApi().modal.openCustom<MyModalPayload, MyModalResult>(
+const handle = getPimcoreStudioApi().modal.openCustom<MyModalPayload, MyModalResult>(
   'my-plugin.my-modal',
   { objectId: 42 },
   {
@@ -75,12 +80,28 @@ getPimcoreStudioApi().modal.openCustom<MyModalPayload, MyModalResult>(
 `payload` and the `onClose` result are plain data (functions are fine as callbacks, since both
 realms share the same origin) - nothing here is serialized through `postMessage` or JSON.
 
+`openCustom` returns a handle (`{ close: () => void }`) so the caller can close the modal itself,
+without waiting for the person to dismiss it - typically from a `useEffect` cleanup, when the
+component that opened it unmounts first:
+
+```typescript
+useEffect(() => {
+  const handle = getPimcoreStudioApi().modal.openCustom('my-plugin.my-modal', payload)
+
+  return () => { handle.close() }
+}, [])
+```
+
+`close()` does not invoke `onClose` - it is the caller withdrawing the modal, not the modal's own
+cancel/confirm outcome.
+
 ## How it works
 
 `PimcoreStudio.modal.openCustom` mirrors `element.openElementSelector`: called from an iframe, it
 resolves the parent window's `PimcoreStudio` API via `getPimcoreStudioApi()` and calls `openCustom`
 on that instance, so the rest of the call executes in the main window. There it dispatches an
-`openCustomModal` API Gateway event, which a handler resolves against the `registerIframeModal`
+`openCustomModal` API Gateway event, which a handler resolves against the `registerCustomModal`
 registry and renders through the same modal holder (`ModalHolderProvider`/`useModalHolder`) that
 Studio's own ad hoc modals (bulk import/export, "About", …) use, mounted once alongside the
-`ApiGateway` in the main application.
+`ApiGateway` in the main application. The returned handle's `close()` dispatches a matching
+`closeCustomModal` event, resolved by a handler that removes the modal from the same holder.

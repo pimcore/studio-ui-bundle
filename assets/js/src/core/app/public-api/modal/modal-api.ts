@@ -27,6 +27,16 @@ export interface CustomModalOptions<TResult = unknown> {
   onClose?: (result?: TResult) => void
 }
 
+/**
+ * Returned by `openCustom` so the caller can close the modal itself - e.g. from a `useEffect`
+ * cleanup, when the component that opened it unmounts before the person closed it themselves.
+ * Calling `close()` does not invoke `onClose` (see {@link CustomModalOptions.onClose}'s docblock):
+ * it is the caller withdrawing the modal, not the modal's own cancel/confirm outcome.
+ */
+export interface CustomModalHandle {
+  close: () => void
+}
+
 export interface ModalApi {
   setModalInstance: (modal: ModalStaticFunctions) => void
   info: ModalStaticFunctions['info']
@@ -38,7 +48,7 @@ export interface ModalApi {
     id: string,
     payload: TPayload,
     options?: CustomModalOptions<TResult>
-  ) => void
+  ) => CustomModalHandle
 }
 
 class ModalApiImpl implements ModalApi {
@@ -74,24 +84,31 @@ class ModalApiImpl implements ModalApi {
   }
 
   /**
-   * Opens a component registered via `registerIframeModal(id, …)` in the main-window (parent)
+   * Opens a component registered via `registerCustomModal(id, …)` in the main-window (parent)
    * realm - callable from an iframe (e.g. a document editor editable) or directly from the main
-   * window. See {@link registerIframeModal} for the registration side.
+   * window. See {@link registerCustomModal} for the registration side.
+   *
+   * Returns a handle the caller can use to close the modal itself (see {@link CustomModalHandle}).
+   * A no-op handle is returned when the parent API could not be reached at all, so callers never
+   * need to guard the return value before calling `close()`.
    */
   openCustom = <TPayload = unknown, TResult = unknown> (
     id: string,
     payload: TPayload,
     options?: CustomModalOptions<TResult>
-  ): void => {
+  ): CustomModalHandle => {
     try {
       if (isInIframe()) {
         const { modal } = getPimcoreStudioApi()
-        modal.openCustom(id, payload, options)
-      } else {
-        this.openCustomDirectly(id, payload, options)
+
+        return modal.openCustom(id, payload, options)
       }
+
+      return this.openCustomDirectly(id, payload, options)
     } catch (error) {
       console.error('Failed to open custom modal:', error)
+
+      return { close: () => {} }
     }
   }
 
@@ -99,13 +116,19 @@ class ModalApiImpl implements ModalApi {
     id: string,
     payload: TPayload,
     options?: CustomModalOptions<TResult>
-  ): void {
+  ): CustomModalHandle {
     const event = new ApiGatewayEvent(ApiGatewayEventType.openCustomModal, {
       id,
       payload,
       onClose: options?.onClose as ((result?: unknown) => void) | undefined
     })
     window.dispatchEvent(event)
+
+    return {
+      close: () => {
+        window.dispatchEvent(new ApiGatewayEvent(ApiGatewayEventType.closeCustomModal, { id }))
+      }
+    }
   }
 }
 

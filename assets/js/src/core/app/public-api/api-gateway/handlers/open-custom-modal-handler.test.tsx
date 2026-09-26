@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { registerIframeModal, type CustomModalComponentProps } from '@Pimcore/app/public-api/modal/custom-modal-registry'
+import { registerCustomModal, type CustomModalComponentProps } from '@Pimcore/app/public-api/modal/custom-modal-registry'
 import { type ApiGatewayHandlerContext } from '../registry/handler-registry'
 import { openCustomModalHandler } from './open-custom-modal-handler'
 
@@ -46,7 +46,7 @@ describe('openCustomModalHandler', () => {
     const TestModal = ({ payload }: CustomModalComponentProps<{ label: string }>): React.JSX.Element => (
       <div>{ payload.label }</div>
     )
-    registerIframeModal('open-custom-modal-handler-test.with-payload', TestModal)
+    registerCustomModal('open-custom-modal-handler-test.with-payload', TestModal)
     const context = createContext()
 
     openCustomModalHandler({ id: 'open-custom-modal-handler-test.with-payload', payload: { label: 'hello' } }, context)
@@ -59,7 +59,7 @@ describe('openCustomModalHandler', () => {
 
   it('removes the modal and forwards the result when the rendered component closes', () => {
     const TestModal = (_props: CustomModalComponentProps<undefined, string>): React.JSX.Element => <div />
-    registerIframeModal('open-custom-modal-handler-test.on-close', TestModal)
+    registerCustomModal('open-custom-modal-handler-test.on-close', TestModal)
     const context = createContext()
     const onClose = jest.fn()
 
