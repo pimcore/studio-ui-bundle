@@ -26,9 +26,10 @@ export interface DynamicGroupContentProps {
   dynamicTypeRegistryId: DynamicGroupProps['dynamicTypeRegistryId']
   showTitle?: Exclude<DynamicGroupProps['showTitle'], undefined>
   translationKeyPrefix?: Exclude<DynamicGroupProps['translationKeyPrefix'], undefined>
+  readOnly?: Exclude<DynamicGroupProps['readOnly'], undefined>
 }
 
-export const DynamicGroupContent = ({ dynamicTypeRegistryId, id, showTitle = false, translationKeyPrefix = 'grid.advanced-column' }: DynamicGroupContentProps): React.JSX.Element => {
+export const DynamicGroupContent = ({ dynamicTypeRegistryId, id, showTitle = false, translationKeyPrefix = 'grid.advanced-column', readOnly = false }: DynamicGroupContentProps): React.JSX.Element => {
   const { values, operations } = useNumberedList()
   const [items, setItems] = React.useState(() => values.map((_, index) => index + 1))
   const isEmpty = values.length === 0
@@ -76,23 +77,29 @@ export const DynamicGroupContent = ({ dynamicTypeRegistryId, id, showTitle = fal
   }, [items, operations])
 
   const addButtonElement = useMemo(() => (
-    <DynamicGroupDropdown dynamicTypeRegistryId={ dynamicTypeRegistryId }>
-      <IconTextButton
-        icon={ { value: 'new' } }
-        type="link"
-      >{ t(`${translationKeyPrefix}.${id}.add`) }</IconTextButton>
-    </DynamicGroupDropdown>
-  ), [dynamicTypeRegistryId, id])
+    readOnly
+      ? null
+      : (
+        <DynamicGroupDropdown dynamicTypeRegistryId={ dynamicTypeRegistryId }>
+          <IconTextButton
+            icon={ { value: 'new' } }
+            type="link"
+          >{ t(`${translationKeyPrefix}.${id}.add`) }</IconTextButton>
+        </DynamicGroupDropdown>
+        )
+  ), [dynamicTypeRegistryId, id, readOnly, t, translationKeyPrefix])
 
   const headerElement = useMemo(() => (
     <Flex align="center">
       <Header title={ t(`${translationKeyPrefix}.${id}`) }>
-        <DynamicGroupDropdown dynamicTypeRegistryId={ dynamicTypeRegistryId }>
-          <IconTextButton icon={ { value: 'new' } }>{t('add')}</IconTextButton>
-        </DynamicGroupDropdown>
+        { !readOnly && (
+          <DynamicGroupDropdown dynamicTypeRegistryId={ dynamicTypeRegistryId }>
+            <IconTextButton icon={ { value: 'new' } }>{t('add')}</IconTextButton>
+          </DynamicGroupDropdown>
+        ) }
       </Header>
     </Flex>
-  ), [dynamicTypeRegistryId, id])
+  ), [dynamicTypeRegistryId, id, readOnly, t, translationKeyPrefix])
 
   const itemsList = useMemo(() => (
     <DndContext
@@ -113,13 +120,14 @@ export const DynamicGroupContent = ({ dynamicTypeRegistryId, id, showTitle = fal
               <DynamicGroupItem
                 dynamicTypeRegistryId={ dynamicTypeRegistryId }
                 id={ index }
+                readOnly={ readOnly }
               />
             </React.Fragment>
           ))}
         </Space>
       </SortableContext>
     </DndContext>
-  ), [memoizedValues, items, onDragEnd, sensors, dynamicTypeRegistryId])
+  ), [memoizedValues, items, onDragEnd, sensors, dynamicTypeRegistryId, readOnly])
 
   return (
     <Box padding={ { x: 'mini', y: 'extra-small' } }>

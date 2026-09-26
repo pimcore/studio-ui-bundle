@@ -74,7 +74,9 @@ jest.mock('@Pimcore/components/select/select', () => ({
 }))
 
 jest.mock('@Pimcore/components/box/box', () => ({ Box: ({ children }: any) => <div>{ children }</div> }))
-jest.mock('@Pimcore/components/input/input', () => ({ Input: (props: any) => <input { ...props } /> }))
+// The real Input (not a bare `<input>` mock): the readOnly tests below rely on antd's Form
+// `disabled` context cascading into it, the same way it reaches every other Form.Item-connected
+// control - a bare mock never reads that context and would never appear disabled.
 jest.mock('@Pimcore/components/tabs/tabs', () => ({
   Tabs: ({ items }: any) => (
     <div data-testid='tabs-layout'>
@@ -194,7 +196,10 @@ describe('ColumnPipelineForm', () => {
   })
 
   describe('readOnly', () => {
-    it('disables the title input and marks the fields area inert', () => {
+    // The title input is a plain antd `Form.Item`, so `Form`'s own `disabled` prop already
+    // reaches it - no bespoke `pointer-events: none`/`aria-disabled` wrapper is needed (and one
+    // used to sit here, which blocked *viewing* the fields area, not just editing it).
+    it('disables the title input via the surrounding Form', () => {
       render(
         <ColumnPipelineForm
           classDefinitionId='CAR'
@@ -206,7 +211,6 @@ describe('ColumnPipelineForm', () => {
       )
 
       expect(screen.getByPlaceholderText('column-editor.pipeline.title')).toBeDisabled()
-      expect(document.querySelector('[aria-disabled="true"]')).not.toBeNull()
     })
 
     it('leaves the form interactive by default', () => {
@@ -220,7 +224,25 @@ describe('ColumnPipelineForm', () => {
       )
 
       expect(screen.getByPlaceholderText('column-editor.pipeline.title')).not.toBeDisabled()
-      expect(document.querySelector('[aria-disabled="true"]')).toBeNull()
+    })
+
+    it('keeps the tabs and the preview panel visible when compact and readOnly', () => {
+      render(
+        <ColumnPipelineForm
+          classDefinitionId='CAR'
+          column={ { _id: 'col-1', key: 'name', fieldtype: 'input', type: 'dataobject.adapter' } }
+          compact
+          config={ sourceFieldConfig }
+          readOnly
+          sourceFieldsRegistryId='sourceFields'
+          transformersRegistryId='transformers'
+        />
+      )
+
+      expect(screen.getByTestId('tabs-layout')).toBeInTheDocument()
+      expect(screen.getByText('column-editor.pipeline.sourceFields')).toBeInTheDocument()
+      expect(screen.getByText('column-editor.pipeline.transformers')).toBeInTheDocument()
+      expect(screen.getByTestId('column-preview')).toBeInTheDocument()
     })
   })
 

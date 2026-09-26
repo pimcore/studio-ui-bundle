@@ -17,11 +17,9 @@ import { Pipeline } from '@Pimcore/components/pipeline/pipeline'
 import { PipelineConfigProvider } from '@Pimcore/components/pipeline/provider/pipeline-config/pipeline-config-provider'
 import { SplitLayout } from '@Pimcore/components/split-layout/split-layout'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
-import cn from 'classnames'
 import { isEqual } from 'lodash'
 import { type AdvancedEditorColumn } from './types'
 import { ColumnPreview } from './column-preview'
-import { useStyles } from './column-pipeline-form.styles'
 import {
   ClassificationStoreFieldPickerProvider
 } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/classification-store/classification-store-field-picker-provider'
@@ -67,7 +65,6 @@ export const ColumnPipelineForm = ({
   readOnly = false
 }: ColumnPipelineFormProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const { styles } = useStyles()
   const [form] = Form.useForm()
   const [liveValue, setLiveValue] = useState<Record<string, any>>(value ?? {})
 
@@ -75,6 +72,7 @@ export const ColumnPipelineForm = ({
     <Pipeline.DynamicGroupItem
       dynamicTypeRegistryId={ sourceFieldsRegistryId }
       id='sourceFields'
+      readOnly={ readOnly }
       showTitle={ !compact }
       translationKeyPrefix='column-editor.pipeline'
     />
@@ -84,6 +82,7 @@ export const ColumnPipelineForm = ({
     <Pipeline.DynamicGroupItem
       dynamicTypeRegistryId={ transformersRegistryId }
       id='transformers'
+      readOnly={ readOnly }
       showTitle={ !compact }
       translationKeyPrefix='column-editor.pipeline'
     />
@@ -142,60 +141,54 @@ export const ColumnPipelineForm = ({
       layout='vertical'
       onValuesChange={ onValuesChange }
     >
-      <div
-        aria-disabled={ readOnly }
-        className={ cn({ [styles.readOnly]: readOnly }) }
-      >
-        <ClassificationStoreFieldPickerProvider defaultClassId={ classDefinitionId }>
-          <PipelineConfigProvider initialConfig={ config ?? {} }>
-            <Form.Item name='value'>
-              <Pipeline
-                items={ [
-                  {
-                    id: 'title',
-                    component: (
-                      <Pipeline.CustomItem>
-                        <Box padding={ { top: 'mini', bottom: 'mini', x: 'none' } }>
-                          <Form.Item name='title'>
-                            <Input
-                              disabled={ readOnly }
-                              placeholder={ t('column-editor.pipeline.title') }
-                              style={ { maxWidth: '100%' } }
-                            />
-                          </Form.Item>
-                        </Box>
-                      </Pipeline.CustomItem>
-                    )
-                  },
-                  {
-                    id: 'fields',
-                    component: (
-                      <Pipeline.CustomItem>
-                        { fieldsLayout }
-                      </Pipeline.CustomItem>
-                    )
-                  },
-                  {
-                    id: 'preview',
-                    component: (
-                      <Pipeline.CustomItem>
-                        { column !== undefined && (
-                          <ColumnPreview
-                            column={ column }
-                            objectId={ objectId ?? null }
-                            pipelineValue={ liveValue }
+      <ClassificationStoreFieldPickerProvider defaultClassId={ classDefinitionId }>
+        <PipelineConfigProvider initialConfig={ config ?? {} }>
+          <Form.Item name='value'>
+            <Pipeline
+              items={ [
+                {
+                  id: 'title',
+                  component: (
+                    <Pipeline.CustomItem>
+                      <Box padding={ { top: 'mini', bottom: 'mini', x: 'none' } }>
+                        <Form.Item name='title'>
+                          <Input
+                            placeholder={ t('column-editor.pipeline.title') }
+                            style={ { maxWidth: '100%' } }
                           />
-                        ) }
-                      </Pipeline.CustomItem>
-                    )
-                  }
-                ] }
-                value={ value ?? {} }
-              />
-            </Form.Item>
-          </PipelineConfigProvider>
-        </ClassificationStoreFieldPickerProvider>
-      </div>
+                        </Form.Item>
+                      </Box>
+                    </Pipeline.CustomItem>
+                  )
+                },
+                {
+                  id: 'fields',
+                  component: (
+                    <Pipeline.CustomItem>
+                      { fieldsLayout }
+                    </Pipeline.CustomItem>
+                  )
+                },
+                {
+                  id: 'preview',
+                  component: (
+                    <Pipeline.CustomItem>
+                      { column !== undefined && (
+                        <ColumnPreview
+                          column={ column }
+                          objectId={ objectId ?? null }
+                          pipelineValue={ liveValue }
+                        />
+                      ) }
+                    </Pipeline.CustomItem>
+                  )
+                }
+              ] }
+              value={ value ?? {} }
+            />
+          </Form.Item>
+        </PipelineConfigProvider>
+      </ClassificationStoreFieldPickerProvider>
     </Form>
   )
 }
