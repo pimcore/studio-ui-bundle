@@ -25,6 +25,8 @@ export interface ColumnEditorItemBodyProps {
   transformersRegistryId: string
   /** True when the pipeline form is rendered in a horizontally constrained context. */
   compact?: boolean
+  /** When true, the pipeline form (title, source fields, transformers) is fully disabled. */
+  readOnly?: boolean
 }
 
 export const ColumnEditorItemBody = ({
@@ -35,7 +37,8 @@ export const ColumnEditorItemBody = ({
   onPipelineChange,
   sourceFieldsRegistryId,
   transformersRegistryId,
-  compact
+  compact,
+  readOnly
 }: ColumnEditorItemBodyProps): React.JSX.Element => {
   return (
     <ColumnPipelineForm
@@ -46,6 +49,7 @@ export const ColumnEditorItemBody = ({
       entity={ entity }
       objectId={ objectId }
       onChange={ (pipeline) => { onPipelineChange(column._id, pipeline) } }
+      readOnly={ readOnly }
       sourceFieldsRegistryId={ sourceFieldsRegistryId }
       transformersRegistryId={ transformersRegistryId }
       value={ column.pipeline }

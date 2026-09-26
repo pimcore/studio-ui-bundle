@@ -80,6 +80,12 @@ export interface BaseColumnEditorProps {
    * language for advanced columns' own inline pipeline preview.
    */
   hidePreviewControls?: boolean
+  /**
+   * When true, renders a fully non-interactive view: no add/fields panel, no drag handles, no
+   * remove/locale controls, and every pipeline form is disabled. Implies `hideApplyDiscard`/
+   * `hideAddButtons`. Use this for a schema/channel whose storage is not writeable.
+   */
+  readOnly?: boolean
 }
 
 /**
@@ -120,7 +126,8 @@ const BaseColumnEditorInner = forwardRef<ColumnEditorHandle, BaseColumnEditorPro
     exportableOnly = false,
     compact = false,
     onChange,
-    hidePreviewControls = false
+    hidePreviewControls = false,
+    readOnly = false
   }: BaseColumnEditorProps, ref): React.JSX.Element {
     const { t } = useTranslation()
     const { styles } = useStyles()
@@ -128,11 +135,12 @@ const BaseColumnEditorInner = forwardRef<ColumnEditorHandle, BaseColumnEditorPro
     const [fieldsToAddOpen, setFieldsToAddOpen] = useState(true)
 
     // hideToolbar is a deprecated alias that hides both halves of the toolbar; the split flags
-    // take precedence when explicitly set, so a caller can hide only one half.
+    // take precedence when explicitly set, so a caller can hide only one half. `readOnly` always
+    // hides both, regardless of what the split flags say.
     const resolvedHideApplyDiscard = hideApplyDiscard ?? hideToolbar
     const resolvedHideAddButtons = hideAddButtons ?? hideToolbar
-    const showAddButtons = !resolvedHideAddButtons
-    const showApplyDiscard = !resolvedHideApplyDiscard
+    const showAddButtons = !resolvedHideAddButtons && !readOnly
+    const showApplyDiscard = !resolvedHideApplyDiscard && !readOnly
     const showToolbar = showAddButtons || showApplyDiscard
 
     // Own the language state here. Initialize once from the prop, falling back to
@@ -202,6 +210,7 @@ const BaseColumnEditorInner = forwardRef<ColumnEditorHandle, BaseColumnEditorPro
       onPipelineChange: handlePipelineChange,
       onLocaleChange: handleLocaleChange,
       onRemove: handleRemove,
+      readOnly,
       t
     })
 
@@ -277,7 +286,7 @@ const BaseColumnEditorInner = forwardRef<ColumnEditorHandle, BaseColumnEditorPro
                       onItemsChange={ (items) => {
                         handleReorder(items.map(item => String(item.id)))
                       } }
-                      sortable
+                      sortable={ !readOnly }
                     />
                   ) }
                 </Space>

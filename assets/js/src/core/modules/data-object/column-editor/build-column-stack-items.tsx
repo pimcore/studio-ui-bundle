@@ -38,6 +38,8 @@ export interface BuildColumnStackItemsParams {
   onPipelineChange: (id: string, pipeline: Record<string, any>) => void
   onLocaleChange: (id: string, locale: string | null) => void
   onRemove: (id: string) => void
+  /** When true, hides the drag handle, locale control and remove button, and disables pipeline forms. */
+  readOnly: boolean
   t: TFunction
 }
 
@@ -56,6 +58,7 @@ export const buildColumnStackItems = ({
   onPipelineChange,
   onLocaleChange,
   onRemove,
+  readOnly,
   t
 }: BuildColumnStackItemsParams): StackListProps['items'] => draft.map(col => {
   const isAdvanced = col.type === ADVANCED_COLUMN_TYPE
@@ -64,7 +67,7 @@ export const buildColumnStackItems = ({
 
   return {
     id: col._id,
-    sortable: true,
+    sortable: !readOnly,
     type: isAdvanced ? 'collapse' as const : 'default' as const,
     defaultActive: isAdvanced && col.isNew === true,
     children: isAdvanced
@@ -92,6 +95,7 @@ export const buildColumnStackItems = ({
                 entity={ entity }
                 objectId={ objectId }
                 onPipelineChange={ onPipelineChange }
+                readOnly={ readOnly }
                 sourceFieldsRegistryId={ sourceFieldsRegistryId }
                 transformersRegistryId={ transformersRegistryId }
               />
@@ -99,21 +103,25 @@ export const buildColumnStackItems = ({
             : <Spin />
         }
       : {}),
-    renderRightToolbar: (
-      <Space size='mini'>
-        { col.localizable === true && isAdvanced && (
-          <ColumnLocaleControl
-            onChange={ (locale) => { onLocaleChange(col._id, locale) } }
-            value={ col.locale }
-          />
-        ) }
-        <IconButton
-          aria-label={ t('remove') }
-          icon={ { value: 'trash' } }
-          onClick={ () => { onRemove(col._id) } }
-          theme='secondary'
-        />
-      </Space>
-    )
+    ...(readOnly
+      ? {}
+      : {
+          renderRightToolbar: (
+            <Space size='mini'>
+              { col.localizable === true && isAdvanced && (
+                <ColumnLocaleControl
+                  onChange={ (locale) => { onLocaleChange(col._id, locale) } }
+                  value={ col.locale }
+                />
+              ) }
+              <IconButton
+                aria-label={ t('remove') }
+                icon={ { value: 'trash' } }
+                onClick={ () => { onRemove(col._id) } }
+                theme='secondary'
+              />
+            </Space>
+          )
+        })
   }
 })

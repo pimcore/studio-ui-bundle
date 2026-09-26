@@ -193,6 +193,37 @@ describe('ColumnPipelineForm', () => {
     expect(screen.getByRole('option', { name: 'Name' })).toBeInTheDocument()
   })
 
+  describe('readOnly', () => {
+    it('disables the title input and marks the fields area inert', () => {
+      render(
+        <ColumnPipelineForm
+          classDefinitionId='CAR'
+          config={ sourceFieldConfig }
+          readOnly
+          sourceFieldsRegistryId='sourceFields'
+          transformersRegistryId='transformers'
+        />
+      )
+
+      expect(screen.getByPlaceholderText('column-editor.pipeline.title')).toBeDisabled()
+      expect(document.querySelector('[aria-disabled="true"]')).not.toBeNull()
+    })
+
+    it('leaves the form interactive by default', () => {
+      render(
+        <ColumnPipelineForm
+          classDefinitionId='CAR'
+          config={ sourceFieldConfig }
+          sourceFieldsRegistryId='sourceFields'
+          transformersRegistryId='transformers'
+        />
+      )
+
+      expect(screen.getByPlaceholderText('column-editor.pipeline.title')).not.toBeDisabled()
+      expect(document.querySelector('[aria-disabled="true"]')).toBeNull()
+    })
+  })
+
   describe('compact layout', () => {
     it('lays source fields and transformers out side by side (SplitLayout) by default', () => {
       render(

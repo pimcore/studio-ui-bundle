@@ -241,6 +241,21 @@ describe('BaseColumnEditor toolbar visibility', () => {
     expect(screen.getByText('column-editor.apply')).toBeInTheDocument()
     expect(screen.getByText('column-editor.discard')).toBeInTheDocument()
   })
+
+  it('readOnly hides both halves regardless of the split flags', () => {
+    render(
+      <BaseColumnEditor
+        { ...defaultProps }
+        hideAddButtons={ false }
+        hideApplyDiscard={ false }
+        readOnly
+      />
+    )
+
+    expect(screen.queryByText('column-editor.add-column')).not.toBeInTheDocument()
+    expect(screen.queryByText('column-editor.apply')).not.toBeInTheDocument()
+    expect(screen.queryByText('column-editor.discard')).not.toBeInTheDocument()
+  })
 })
 
 describe('BaseColumnEditor without a ClassDefinitionsProvider ancestor', () => {
