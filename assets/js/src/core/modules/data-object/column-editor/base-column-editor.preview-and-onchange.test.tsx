@@ -98,9 +98,14 @@ function passthrough (testId: string): React.FC<{ children?: React.ReactNode }> 
 }
 
 jest.mock('@Pimcore/components/content/content', () => ({ Content: passthrough('content') }))
+interface ContentLayoutMockProps {
+  renderTopBar?: React.ReactNode
+  renderToolbar?: React.ReactNode
+  children?: React.ReactNode
+}
 jest.mock('@Pimcore/components/content-layout/content-layout', () => ({
   ContentLayout: (
-    { renderTopBar, children }: { renderTopBar?: React.ReactNode, renderToolbar?: React.ReactNode, children?: React.ReactNode }
+    { renderTopBar, children }: ContentLayoutMockProps
   ): React.JSX.Element => (
     <div>
       <div data-testid='top-bar'>{ renderTopBar }</div>
@@ -113,14 +118,18 @@ jest.mock('@Pimcore/components/space/space', () => ({ Space: passthrough('space'
 jest.mock('@Pimcore/components/spin/spin', () => ({ Spin: () => <div data-testid='spin' /> }))
 jest.mock('@Pimcore/components/stack-list/stack-list', () => ({ StackList: () => <div data-testid='stack-list' /> }))
 jest.mock('@Pimcore/components/toolbar/toolbar', () => ({ Toolbar: passthrough('toolbar-inner') }))
+interface ClickableMockProps {
+  children?: React.ReactNode
+  onClick?: () => void
+}
 jest.mock('@Pimcore/components/button/button', () => ({
-  Button: ({ children, onClick }: { children?: React.ReactNode, onClick?: () => void }) => <button onClick={ onClick }>{ children }</button>
+  Button: ({ children, onClick }: ClickableMockProps) => <button onClick={ onClick }>{ children }</button>
 }))
 jest.mock('@Pimcore/components/icon-button/icon-button', () => ({
-  IconButton: ({ onClick }: { onClick?: () => void }) => <button onClick={ onClick }>icon-button</button>
+  IconButton: ({ onClick }: ClickableMockProps) => <button onClick={ onClick }>icon-button</button>
 }))
 jest.mock('@Pimcore/components/icon-text-button/icon-text-button', () => ({
-  IconTextButton: ({ children, onClick }: { children?: React.ReactNode, onClick?: () => void }) => <button onClick={ onClick }>{ children }</button>
+  IconTextButton: ({ children, onClick }: ClickableMockProps) => <button onClick={ onClick }>{ children }</button>
 }))
 
 const defaultProps: BaseColumnEditorProps = {
