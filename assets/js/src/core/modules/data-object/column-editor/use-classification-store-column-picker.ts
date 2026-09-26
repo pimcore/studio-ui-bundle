@@ -84,7 +84,14 @@ export const useClassificationStoreColumnPicker = (
       handleAddColumnOfType({
         ...baseColumn,
         frontendType: item.definition?.fieldtype,
-        locale: baseColumn.localizable ? 'default' : undefined,
+        // A column with no locale of its own already follows the consumer's own render/grid
+        // locale (see e.g. Output Channels' `OutputChannelExtractor`, which falls the column's
+        // locale back to the render locale and, for a genuinely non-localized store, relies on
+        // `Classificationstore::getLocalizedKeyValue()`'s own "no value in this bucket -> read the
+        // default bucket" fallback) - so the locale is deliberately left unset here for every
+        // classification store column, localizable or not, rather than hardcoding the store's
+        // internal "default" bucket name into the saved column.
+        locale: undefined,
         config: {
           keyId: item.id,
           groupId: item.groupId,

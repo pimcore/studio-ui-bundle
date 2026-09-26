@@ -239,7 +239,8 @@ describe('BaseColumnEditor classification store column picker', () => {
         key: 'technicalAttributes',
         fieldtype: 'quantityValue',
         type: 'dataobject.classificationstore',
-        locale: 'default',
+        // No literal "default" is written here any more, localizable or not.
+        locale: undefined,
         config: {
           keyId: 1,
           groupId: 1,
