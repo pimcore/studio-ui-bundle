@@ -24,6 +24,7 @@ import { ClassificationStoreFieldPickerProvider } from '@Pimcore/modules/element
 
 export interface ColumnPipelineFormProps {
   column?: AdvancedEditorColumn
+  /** @deprecated Unused by this component; kept for backward compatibility with existing callers. */
   entity?: string
   /**
    * Class definition id class-bound source field/transformer pickers (e.g. the classification

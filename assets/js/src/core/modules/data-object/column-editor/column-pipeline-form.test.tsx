@@ -76,10 +76,16 @@ jest.mock('@Pimcore/components/select/select', () => ({
 jest.mock('@Pimcore/components/box/box', () => ({ Box: ({ children }: any) => <div>{ children }</div> }))
 jest.mock('@Pimcore/components/input/input', () => ({ Input: (props: any) => <input { ...props } /> }))
 jest.mock('@Pimcore/components/tabs/tabs', () => ({
-  Tabs: ({ items }: any) => <>{ (items ?? []).map((item: any) => <div key={ item.key }>{ item.children }</div>) }</>
+  Tabs: ({ items }: any) => (
+    <div data-testid='tabs-layout'>
+      { (items ?? []).map((item: any) => <div key={ item.key }>{ item.label }{ item.children }</div>) }
+    </div>
+  )
 }))
 jest.mock('@Pimcore/components/split-layout/split-layout', () => ({
-  SplitLayout: ({ leftItem, rightItem }: any) => <>{ leftItem?.children }{ rightItem?.children }</>
+  SplitLayout: ({ leftItem, rightItem }: any) => (
+    <div data-testid='split-layout'>{ leftItem?.children }{ rightItem?.children }</div>
+  )
 }))
 jest.mock('./column-preview', () => ({ ColumnPreview: () => <div data-testid='column-preview' /> }))
 
@@ -164,5 +170,38 @@ describe('ColumnPipelineForm', () => {
     expect(screen.getByText('field')).toBeInTheDocument()
     expect(screen.getByRole('option', { name: 'ID' })).toBeInTheDocument()
     expect(screen.getByRole('option', { name: 'Name' })).toBeInTheDocument()
+  })
+
+  describe('compact layout', () => {
+    it('lays source fields and transformers out side by side (SplitLayout) by default', () => {
+      render(
+        <ColumnPipelineForm
+          classDefinitionId='CAR'
+          config={ sourceFieldConfig }
+          sourceFieldsRegistryId='sourceFields'
+          transformersRegistryId='transformers'
+        />
+      )
+
+      expect(screen.getByTestId('split-layout')).toBeInTheDocument()
+      expect(screen.queryByTestId('tabs-layout')).not.toBeInTheDocument()
+    })
+
+    it('switches source fields and transformers into tabs when compact', () => {
+      render(
+        <ColumnPipelineForm
+          classDefinitionId='CAR'
+          compact
+          config={ sourceFieldConfig }
+          sourceFieldsRegistryId='sourceFields'
+          transformersRegistryId='transformers'
+        />
+      )
+
+      expect(screen.getByTestId('tabs-layout')).toBeInTheDocument()
+      expect(screen.queryByTestId('split-layout')).not.toBeInTheDocument()
+      expect(screen.getByText('column-editor.pipeline.sourceFields')).toBeInTheDocument()
+      expect(screen.getByText('column-editor.pipeline.transformers')).toBeInTheDocument()
+    })
   })
 })
