@@ -94,10 +94,19 @@ jest.mock('./column-preview', () => ({ ColumnPreview: () => <div data-testid='co
 // turn reaches the app shell/store - none of which this test exercises. Only the picker
 // *context* wiring (`ClassificationStoreFieldPickerProvider`) is under test here, so stub the
 // modal launcher itself the same way simple-field.test.tsx stubs the unrelated value control.
-jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider', () => ({
-  ClassificationStoreModalProvider: ({ children }: { children: React.ReactNode }) => <>{ children }</>,
-  useClassificationStoreModal: () => ({ openModal: jest.fn(), closeModal: jest.fn(), fireUpdateEvent: jest.fn() })
-}))
+jest.mock(
+  '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider',
+  () => ({
+    ClassificationStoreModalProvider: (
+      { children }: { children: React.ReactNode }
+    ) => <>{ children }</>,
+    useClassificationStoreModal: () => ({
+      openModal: jest.fn(),
+      closeModal: jest.fn(),
+      fireUpdateEvent: jest.fn()
+    })
+  })
+)
 
 // `Pipeline.DynamicGroupItem` is how Studio mounts a registered source-field/transformer
 // dynamic type; the real implementation resolves the dynamic type through a DI-backed
@@ -107,14 +116,24 @@ jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-relat
 // `KeyedList`) - the same core Studio grid source-field dynamic type named in the bug report.
 jest.mock('@Pimcore/components/pipeline/pipeline', () => {
   const ReactActual = jest.requireActual('react')
-  const { ItemProvider: RealItemProvider } = jest.requireActual('@Pimcore/components/form/item/provider/item/item-provider')
-  const { KeyedList: RealKeyedList } = jest.requireActual('@Pimcore/components/form/controls/keyed-list/keyed-list')
+  const { ItemProvider: RealItemProvider } = jest.requireActual(
+    '@Pimcore/components/form/item/provider/item/item-provider'
+  )
+  const { KeyedList: RealKeyedList } = jest.requireActual(
+    '@Pimcore/components/form/controls/keyed-list/keyed-list'
+  )
   const { DynamicTypePipelineGridSourceFieldsSimpleFieldComponent: RealSimpleField } = jest.requireActual(
     '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/components/simple-field/simple-field'
   )
 
   const FakePipeline = ({ items }: any): React.JSX.Element => (
-    <>{ (items ?? []).map((item: any) => <ReactActual.Fragment key={ item.id }>{ item.component }</ReactActual.Fragment>) }</>
+    <>
+      {(items ?? []).map((item: any) => (
+        <ReactActual.Fragment key={ item.id }>
+          { item.component }
+        </ReactActual.Fragment>
+      ))}
+    </>
   )
 
   function FakePipelineCustomItem ({ children }: any): React.JSX.Element {

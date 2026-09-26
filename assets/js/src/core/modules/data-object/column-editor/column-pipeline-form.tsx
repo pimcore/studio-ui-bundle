@@ -20,7 +20,9 @@ import { Tabs } from '@Pimcore/components/tabs/tabs'
 import { isEqual } from 'lodash'
 import { type AdvancedEditorColumn } from './types'
 import { ColumnPreview } from './column-preview'
-import { ClassificationStoreFieldPickerProvider } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/classification-store/classification-store-field-picker-provider'
+import {
+  ClassificationStoreFieldPickerProvider
+} from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/grid/source-fields/classification-store/classification-store-field-picker-provider'
 
 export interface ColumnPipelineFormProps {
   column?: AdvancedEditorColumn

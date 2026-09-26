@@ -6,6 +6,10 @@ title: Upgrade Information
 
 The following steps are necessary when updating to newer versions.
 
+## Upgrade to 2026.4
+
+- [Data Object Module] The `BaseColumnEditor` component is now part of the Studio SDK (`@pimcore/studio-ui-bundle/modules/data-object`). It accepts new props: `onChange`, `compact`, `hideApplyDiscard`, `hideAddButtons`, `hidePreviewControls`. The `hideToolbar` prop is deprecated. Newly added columns store the real field type in `fieldtype` ('system' for system columns, 'advanced' for advanced columns) instead of the column key.
+
 ## Upgrade to 2025.4.6
 
 - [Frontend build] The compiled frontend now ships as a single archive (`build-dist/build-<id>.zip`) instead of a committed `public/build/` directory, and is extracted into `public/build/` automatically during cache warmup.

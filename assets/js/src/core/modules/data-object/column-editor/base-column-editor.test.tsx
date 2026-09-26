@@ -72,10 +72,12 @@ interface ClassDefinitionCollectionQueryMockResult {
   isLoading: boolean
 }
 const classDefinitionCollectionQueryMock = jest.fn(
-  (_arg?: unknown, _options?: { skip?: boolean }): ClassDefinitionCollectionQueryMockResult => ({ data: undefined, isLoading: false })
+  (_arg?: unknown, _options?: { skip?: boolean }): ClassDefinitionCollectionQueryMockResult =>
+    ({ data: undefined, isLoading: false })
 )
 jest.mock('@Pimcore/modules/class-definition/class-definition-slice.gen', () => ({
-  useClassDefinitionCollectionQuery: (arg: unknown, options?: { skip?: boolean }) => classDefinitionCollectionQueryMock(arg, options)
+  useClassDefinitionCollectionQuery: (arg: unknown, options?: { skip?: boolean }) =>
+    classDefinitionCollectionQueryMock(arg, options)
 }))
 
 jest.mock('@Pimcore/modules/auth/permission-helper', () => ({
@@ -127,7 +129,7 @@ function passthrough (testId: string): React.FC<{ children?: React.ReactNode }> 
 
 jest.mock('@Pimcore/components/content/content', () => ({ Content: passthrough('content') }))
 jest.mock('@Pimcore/components/content-layout/content-layout', () => ({
-  ContentLayout: ({ renderTopBar, renderToolbar, children }: { renderTopBar?: React.ReactNode, renderToolbar?: React.ReactNode, children?: React.ReactNode }): React.JSX.Element => (
+  ContentLayout: ({ renderTopBar, renderToolbar, children }: any): React.JSX.Element => (
     <div>
       <div data-testid='top-bar'>{ renderTopBar }</div>
       <div data-testid='toolbar'>{ renderToolbar }</div>
@@ -141,13 +143,13 @@ jest.mock('@Pimcore/components/spin/spin', () => ({ Spin: () => <div data-testid
 jest.mock('@Pimcore/components/stack-list/stack-list', () => ({ StackList: () => <div data-testid='stack-list' /> }))
 jest.mock('@Pimcore/components/toolbar/toolbar', () => ({ Toolbar: passthrough('toolbar-inner') }))
 jest.mock('@Pimcore/components/button/button', () => ({
-  Button: ({ children, onClick }: { children?: React.ReactNode, onClick?: () => void }) => <button onClick={ onClick }>{ children }</button>
+  Button: ({ children, onClick }: any) => <button onClick={ onClick }>{ children }</button>
 }))
 jest.mock('@Pimcore/components/icon-button/icon-button', () => ({
-  IconButton: ({ onClick }: { onClick?: () => void }) => <button onClick={ onClick }>icon-button</button>
+  IconButton: ({ onClick }: any) => <button onClick={ onClick }>icon-button</button>
 }))
 jest.mock('@Pimcore/components/icon-text-button/icon-text-button', () => ({
-  IconTextButton: ({ children, onClick }: { children?: React.ReactNode, onClick?: () => void }) => <button onClick={ onClick }>{ children }</button>
+  IconTextButton: ({ children, onClick }: any) => <button onClick={ onClick }>{ children }</button>
 }))
 
 const defaultProps: BaseColumnEditorProps = {
