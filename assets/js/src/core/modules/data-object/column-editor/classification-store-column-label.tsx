@@ -9,6 +9,7 @@
  */
 
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Text } from '@Pimcore/components/text/text'
 import { useClassificationStoreColumnLabel } from './use-classification-store-column-label'
 import { type ColumnIdentityInput } from './types'
@@ -31,10 +32,11 @@ export interface ClassificationStoreColumnLabelProps {
 export const ClassificationStoreColumnLabel = (
   { column, classId }: ClassificationStoreColumnLabelProps
 ): React.JSX.Element => {
+  const { t } = useTranslation()
   const { label, isMissing } = useClassificationStoreColumnLabel(column, classId)
 
   if (isMissing) {
-    return <Text type='warning'>{`${label} (missing)`}</Text>
+    return <Text type='warning'>{ t('column-editor.classification-store.missing', { label }) }</Text>
   }
 
   return <>{label}</>

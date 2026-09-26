@@ -428,6 +428,7 @@ column-editor.pipeline.sourceFields: Pola źródłowe
 column-editor.pipeline.sourceFields.add: Dodaj pole źródłowe
 column-editor.pipeline.transformers: Transformacje
 column-editor.pipeline.transformers.add: Dodaj transformator
+column-editor.classification-store.missing: '{{label}} (brak)'
 component.workflow-card.action-btn: Akcje workflow
 component.pql.placeholder: Wpisz swoje zapytanie
 component.pql.description: Pimcore Query Language (PQL) to prosty, ale potężny język zapytań, który umożliwia wyszukiwanie danych według różnych kryteriów, w tym filtrowanie wartości w powiązanych elementach, dla precyzyjnego i kompleksowego pobierania danych. Szczegóły zob. <anchorPQL>dokumentacja PQL</anchorPQL>

@@ -428,6 +428,7 @@ column-editor.pipeline.sourceFields: Bronvelden
 column-editor.pipeline.sourceFields.add: Bronveld toevoegen
 column-editor.pipeline.transformers: Transformaties
 column-editor.pipeline.transformers.add: Transformer toevoegen
+column-editor.classification-store.missing: '{{label}} (ontbreekt)'
 component.workflow-card.action-btn: Workflowacties
 component.pql.placeholder: Typ je query
 component.pql.description: Pimcore Query Language (PQL) is een eenvoudige maar krachtige querytaal waarmee je gegevens kunt zoeken aan de hand van diverse criteria, inclusief het filteren van waarden in gerelateerde elementen, voor nauwkeurig en uitgebreid gegevensophalen. Zie <anchorPQL>PQL-documentatie</anchorPQL> voor details

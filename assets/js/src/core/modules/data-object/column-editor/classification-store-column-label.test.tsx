@@ -14,6 +14,12 @@ jest.mock('./use-classification-store-column-label', () => ({
   useClassificationStoreColumnLabel: (...args: unknown[]) => useClassificationStoreColumnLabelMock(...args)
 }))
 
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string, options?: { label?: string }) => `${key}|${options?.label ?? ''}`
+  })
+}))
+
 // eslint-disable-next-line import/first
 import React from 'react'
 // eslint-disable-next-line import/first
@@ -53,6 +59,6 @@ describe('ClassificationStoreColumnLabel', () => {
       column={ { key: 'technicalAttributes', type: 'dataobject.classificationstore' } }
            />)
 
-    expect(screen.getByText('#1.2 (missing)')).toBeInTheDocument()
+    expect(screen.getByText('column-editor.classification-store.missing|#1.2')).toBeInTheDocument()
   })
 })

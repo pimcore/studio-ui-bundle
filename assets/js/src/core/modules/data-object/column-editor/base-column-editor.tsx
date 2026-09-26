@@ -201,7 +201,8 @@ const BaseColumnEditorInner = forwardRef<ColumnEditorHandle, BaseColumnEditorPro
       transformersRegistryId,
       onPipelineChange: handlePipelineChange,
       onLocaleChange: handleLocaleChange,
-      onRemove: handleRemove
+      onRemove: handleRemove,
+      t
     })
 
     if (isLoading) {
@@ -263,8 +264,8 @@ const BaseColumnEditorInner = forwardRef<ColumnEditorHandle, BaseColumnEditorPro
 
               <div className={ styles.list }>
                 <Space
+                  className='w-full'
                   direction='vertical'
-                  style={ { width: '100%' } }
                 >
                   { draft.length === 0 && (
                     <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } />

@@ -23,12 +23,21 @@ export const useStyles = createStyles(({ token, css }) => ({
     width: 280px;
     height: 100%;
     padding-right: ${token.paddingSM}px;
-    border-right: 1px solid ${token.colorBorderSecondary};
+    border-right: ${token.lineWidth}px ${token.lineType} ${token.colorBorderSecondary};
   `,
   list: css`
     flex: 1;
     min-width: 0;
     height: 100%;
     overflow-y: auto;
+
+    // Long field keys (e.g. "attributes.Bodywork.numberOfDoors") would otherwise run under the
+    // row's own locale/remove controls in a narrow pane.
+    .ant-tag {
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+    }
   `
 }))

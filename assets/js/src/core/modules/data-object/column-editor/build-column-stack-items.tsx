@@ -11,6 +11,7 @@
 import React from 'react'
 import { Tag } from 'antd'
 import { isNil } from 'lodash'
+import { type TFunction } from 'i18next'
 import { Space } from '@Pimcore/components/space/space'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Spin } from '@Pimcore/components/spin/spin'
@@ -37,6 +38,7 @@ export interface BuildColumnStackItemsParams {
   onPipelineChange: (id: string, pipeline: Record<string, any>) => void
   onLocaleChange: (id: string, locale: string | null) => void
   onRemove: (id: string) => void
+  t: TFunction
 }
 
 /**
@@ -53,7 +55,8 @@ export const buildColumnStackItems = ({
   transformersRegistryId,
   onPipelineChange,
   onLocaleChange,
-  onRemove
+  onRemove,
+  t
 }: BuildColumnStackItemsParams): StackListProps['items'] => draft.map(col => {
   const isAdvanced = col.type === ADVANCED_COLUMN_TYPE
   const isClassificationStore = col.type === CLASSIFICATION_STORE_COLUMN_TYPE
@@ -105,6 +108,7 @@ export const buildColumnStackItems = ({
           />
         ) }
         <IconButton
+          aria-label={ t('remove') }
           icon={ { value: 'trash' } }
           onClick={ () => { onRemove(col._id) } }
           theme='secondary'

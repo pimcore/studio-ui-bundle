@@ -43,6 +43,7 @@ export const FieldsToAddPanel = ({ groups, onColumnSelect, onClose }: FieldsToAd
           justify='flex-end'
         >
           <IconButton
+            aria-label={ t('close') }
             icon={ { value: 'collapse-sidebar', colorToken: 'colorPrimary' } }
             onClick={ onClose }
           />
