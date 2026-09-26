@@ -17,18 +17,14 @@ import { Spin } from '@Pimcore/components/spin/spin'
 import { type StackListProps } from '@Pimcore/components/stack-list/stack-list'
 import { ColumnEditorItemBody } from './column-editor-item'
 import { ColumnLocaleControl } from './column-locale-control'
+import { ClassificationStoreColumnLabel } from './classification-store-column-label'
 import {
   ADVANCED_COLUMN_TYPE,
   CLASSIFICATION_STORE_COLUMN_TYPE,
-  getClassificationStoreColumnLabel,
   type AdvancedEditorColumn
 } from './types'
 
-const getColumnLabel = (col: AdvancedEditorColumn): string => {
-  if (col.key === '') return ''
-  if (col.type === CLASSIFICATION_STORE_COLUMN_TYPE) return getClassificationStoreColumnLabel(col)
-  return col.key
-}
+const getColumnLabel = (col: AdvancedEditorColumn): string => col.key === '' ? '' : col.key
 
 export interface BuildColumnStackItemsParams {
   draft: AdvancedEditorColumn[]
@@ -60,6 +56,7 @@ export const buildColumnStackItems = ({
   onRemove
 }: BuildColumnStackItemsParams): StackListProps['items'] => draft.map(col => {
   const isAdvanced = col.type === ADVANCED_COLUMN_TYPE
+  const isClassificationStore = col.type === CLASSIFICATION_STORE_COLUMN_TYPE
   const label = getColumnLabel(col)
 
   return {
@@ -69,7 +66,18 @@ export const buildColumnStackItems = ({
     defaultActive: isAdvanced && col.isNew === true,
     children: isAdvanced
       ? <Tag color='purple'>{ !isNil(col.pipeline?.title) ? String(col.pipeline?.title) : label }</Tag>
-      : <Tag>{ label }</Tag>,
+      : (
+        <Tag>
+          { isClassificationStore
+            ? (
+              <ClassificationStoreColumnLabel
+                classId={ resolvedClassId }
+                column={ col }
+              />
+              )
+            : label }
+        </Tag>
+        ),
     ...(isAdvanced
       ? {
           body: col.pipelineConfig !== undefined
