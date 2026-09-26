@@ -61,8 +61,22 @@ jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({
   useUser: () => ({ contentLanguages: ['en'] })
 }))
 
-jest.mock('@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions', () => ({
-  useClassDefinitions: () => ({ getByName: () => undefined })
+// useColumnEditorState() resolves the class definition directly through this query (skipped
+// whenever classDefinitionId is supplied, see the "no ClassDefinitionsProvider" tests below)
+// rather than through useClassDefinitions()/ClassDefinitionsProvider: BaseColumnEditor also
+// mounts inside the document editor iframe realm (BPT's `outputdata` editable), which has no
+// such provider.
+const classDefinitionCollectionQueryMock = jest.fn((_arg?: unknown, _options?: { skip?: boolean }) => ({ data: undefined, isLoading: false }))
+jest.mock('@Pimcore/modules/class-definition/class-definition-slice.gen', () => ({
+  useClassDefinitionCollectionQuery: (arg: unknown, options?: { skip?: boolean }) => classDefinitionCollectionQueryMock(arg, options)
+}))
+
+jest.mock('@Pimcore/modules/auth/permission-helper', () => ({
+  isAllowed: () => true
+}))
+
+jest.mock('@Pimcore/modules/auth/enums/user-permission', () => ({
+  UserPermission: { Objects: 'objects' }
 }))
 
 jest.mock('@Pimcore/modules/data-object/data-object-api-slice-enhanced', () => ({
@@ -191,5 +205,29 @@ describe('BaseColumnEditor toolbar visibility', () => {
     expect(screen.queryByText('column-editor.add-column')).not.toBeInTheDocument()
     expect(screen.getByText('column-editor.apply')).toBeInTheDocument()
     expect(screen.getByText('column-editor.discard')).toBeInTheDocument()
+  })
+})
+
+describe('BaseColumnEditor without a ClassDefinitionsProvider ancestor', () => {
+  // Regression test for a crash reported from the document editor iframe realm (BPT's
+  // `outputdata` editable, document_editor_iframe entry point): that realm has no
+  // ClassDefinitionsProvider, and useColumnEditorState() used to call useClassDefinitions()
+  // unconditionally, throwing the instant BaseColumnEditor mounted there even though
+  // classDefinitionId was already supplied. None of the tests in this file render inside a
+  // ClassDefinitionsProvider (or mock ClassDefinitionContext), so a passing render here is
+  // already the regression check; this test also asserts the class-lookup query is skipped
+  // rather than merely not throwing.
+  beforeEach(() => {
+    classDefinitionCollectionQueryMock.mockClear()
+  })
+
+  it('renders with classDefinitionId supplied, skipping the class-lookup fallback query', () => {
+    render(<BaseColumnEditor { ...defaultProps } />)
+
+    expect(screen.getByText('column-editor.add-column')).toBeInTheDocument()
+    expect(classDefinitionCollectionQueryMock).toHaveBeenCalledWith(
+      undefined,
+      expect.objectContaining({ skip: true })
+    )
   })
 })

@@ -12,7 +12,9 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { api, type GridColumnConfiguration } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
-import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
+import { useClassDefinitionCollectionQuery } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
+import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { isNil } from 'lodash'
 import {
   advancedFromSchemaColumn,
@@ -69,12 +71,23 @@ export const useColumnEditorState = ({
   onCancel,
   exportableOnly = false
 }: UseColumnEditorStateOptions): UseColumnEditorStateResult => {
-  const { getByName } = useClassDefinitions()
+  // Resolved directly from the class-definition list query rather than through
+  // useClassDefinitions()/ClassDefinitionsProvider: this hook is also mounted inside the
+  // document editor iframe realm (BPT's `outputdata` editable), which has no
+  // ClassDefinitionsProvider ancestor. The query is only a fallback for when the caller
+  // does not already know the class id, so it is skipped entirely whenever
+  // `classDefinitionId` is supplied - the common case for every embedding except the
+  // Studio grid's own "add column" entry point.
+  const needsClassLookup = isNil(classDefinitionId)
+  const hasObjectsPermission = isAllowed(UserPermission.Objects)
+  const { data: classDefinitionsData } = useClassDefinitionCollectionQuery(undefined, {
+    skip: !needsClassLookup || !hasObjectsPermission
+  })
 
   const resolvedClassId = useMemo(() => {
     if (!isNil(classDefinitionId)) return classDefinitionId
-    return getByName(entity)?.id ?? entity
-  }, [classDefinitionId, entity, getByName])
+    return classDefinitionsData?.items?.find((item) => item.name === entity)?.id ?? entity
+  }, [classDefinitionId, entity, classDefinitionsData])
 
   const { data, isLoading } = api.endpoints.dataObjectGetAvailableGridColumns.useQuery({
     classId: resolvedClassId,
