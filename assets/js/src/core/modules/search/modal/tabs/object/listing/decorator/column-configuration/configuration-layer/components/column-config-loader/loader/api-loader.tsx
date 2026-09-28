@@ -31,27 +31,27 @@ export const ApiLoader = ({ Component }: ColumnConfigLoaderProps): React.JSX.Ele
   const { setDataLoadingState } = useDataQueryHelper()
   const { getId } = useElementId()
   const { selectedClassDefinition } = useClassDefinitionSelection()
-  const { isLoading, data } = useDataObjectGetAvailableGridColumnsQuery({ folderId: getId(), classId: selectedClassDefinition!.id })
-  const { isLoading: isInitialConfigLoading, data: initialConfigurationData } = useDataObjectGetSearchConfigurationQuery({ classId: selectedClassDefinition!.id })
+  const { isLoading, currentData: data } = useDataObjectGetAvailableGridColumnsQuery({ folderId: getId(), classId: selectedClassDefinition!.id })
+  const { isLoading: isInitialConfigLoading, currentData: initialConfigurationData } = useDataObjectGetSearchConfigurationQuery({ classId: selectedClassDefinition!.id })
   const { selectedColumns, setSelectedColumns } = useSelectedColumns()
   const { setAvailableColumns } = useAvailableColumns()
   const { setGridConfig } = useGridConfig()
   const { loadedSavedSearch } = useSearch()
-  const appliedFor = useRef<string | undefined>(undefined)
+  const applied = useRef<{ columns?: unknown, configuration?: unknown }>({})
 
   useEffect(() => {
     if (data === undefined || initialConfigurationData === undefined) {
       return
     }
 
-    // apply once per class: the query objects change identity on refetch and under StrictMode's
-    // second pass, and re-applying the class defaults then silently overwrites a column set
-    // something else installed since — a restored saved search loses its columns
-    const configKey = String(selectedClassDefinition!.id)
-    if (appliedFor.current === configKey) {
+    // apply each response pair once: StrictMode's second pass and a refetch RTK answers with the
+    // cached result carry the same objects, and re-applying the defaults then would overwrite a
+    // column set installed since (a restored saved search). A changed response applies — and
+    // currentData stays empty while the class changes, so two classes' answers never mix
+    if (applied.current.columns === data && applied.current.configuration === initialConfigurationData) {
       return
     }
-    appliedFor.current = configKey
+    applied.current = { columns: data, configuration: initialConfigurationData }
 
     const selectedColumns: SelectedColumnsContextProps['selectedColumns'] = []
     const availableColumns: AvailableColumn[] = data.columns!.map(column => column)
