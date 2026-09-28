@@ -150,6 +150,7 @@ class CspHeaderSubscriberTest extends Unit
 
             private function __clone()
             {
+                // a decorator may forbid cloning; the subscriber must not rely on it
             }
 
             public function getCspHeader(): string
