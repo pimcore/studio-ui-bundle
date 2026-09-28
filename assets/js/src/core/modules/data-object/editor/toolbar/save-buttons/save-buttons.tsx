@@ -77,9 +77,12 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
 
   async function handleSaveClick (task: SaveTaskType, onFinish?: () => void): Promise<void> {
     if (dataObject?.changes === undefined) return
+    // The reset compares against the data the save actually sent, not the data read
+    // here: the save may run much later (queued behind another one), take over the data
+    // of an auto save folded into it meanwhile, and the user can keep editing after that.
     Promise.all([
-      saveDataObject(getModifiedDataObjectAttributes(), task, () => {
-        resetModifiedDataObjectAttributes()
+      saveDataObject(getModifiedDataObjectAttributes(), task, (savedEditableData) => {
+        resetModifiedDataObjectAttributes(savedEditableData)
         onFinish?.()
       }),
       saveSchedules()

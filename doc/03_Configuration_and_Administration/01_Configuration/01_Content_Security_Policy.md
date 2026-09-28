@@ -79,7 +79,10 @@ Add the nonce attribute to inline scripts to prevent CSP violations:
 
 ## Extending CSP in Your Application
 
-If your bundle or application serves resources from external origins (Rsbuild dev servers, CDNs, module federation), register these origins using the `CspEvent`:
+If your bundle or application serves resources from external origins (Rsbuild dev servers, CDNs, module federation), register these origins using the `CspEvent`.
+The event is dispatched for every Studio response. Build origins only apply to pages, so a listener that scans files can
+return early when `$event->isHtmlResponse()` is false, as Studio's own listeners do. Changes made through
+`$event->getCspHandler()` apply to the current response only.
 
 ### Example Subscriber
 
@@ -108,6 +111,11 @@ final readonly class MyBundleCspSubscriber implements EventSubscriberInterface
 
     public function onCspEvent(CspEvent $event): void
     {
+        // Origins only apply to pages; skip API and other responses
+        if (!$event->isHtmlResponse()) {
+            return;
+        }
+
         // Option 1: Add origins extracted from files
         $remoteEntryFiles = glob(__DIR__ . '/../../public/build/*/exposeRemote.js') ?: [];
         if (!empty($remoteEntryFiles)) {
