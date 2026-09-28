@@ -14,6 +14,7 @@ import {
   Pagination as BasePagination,
   type PaginationProps as BasePaginationProps
 } from '@Pimcore/components/pagination/pagination'
+import { appConfig } from '@Pimcore/app/config/app-config'
 
 interface PaginationProps {
   page: number
@@ -38,7 +39,7 @@ export const Pagination = ({ page, setPage, pageSize, setPageSize, totalItems }:
       current={ page }
       defaultPageSize={ pageSize }
       onChange={ handleChange }
-      pageSizeOptions={ [10, 20, 50, 100] }
+      pageSizeOptions={ appConfig.pageSizeOptions }
       showSizeChanger
       showTotal={ (total) => t('pagination.show-total', { total }) }
       total={ totalItems }

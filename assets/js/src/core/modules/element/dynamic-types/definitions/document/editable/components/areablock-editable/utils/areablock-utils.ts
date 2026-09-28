@@ -132,11 +132,11 @@ export const configUtils = {
     const groupedTypes: Record<string, AreaType[]> = {}
 
     Object.entries(groupConfig).forEach(([groupName, typeIds]) => {
-      const uniqueTypeIds = [...new Set(typeIds)]
+      const groupTypeIds = new Set(typeIds)
 
-      const groupTypes = uniqueTypeIds
-        .map(typeId => availableTypes.find(type => type.type === typeId))
-        .filter((type): type is AreaType => !isNil(type))
+      // `types` arrives pre-sorted by the backend (`sorting` config), so filter it
+      // instead of iterating the group config to keep that order within each group
+      const groupTypes = availableTypes.filter(type => groupTypeIds.has(type.type))
 
       if (groupTypes.length > 0) {
         groupedTypes[groupName] = groupTypes

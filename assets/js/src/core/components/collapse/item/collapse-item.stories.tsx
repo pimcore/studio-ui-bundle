@@ -137,3 +137,18 @@ export const Nested: StoryObj<CollapseItemProps> = {
     )
   }
 }
+
+export const NotExpandable: StoryObj<CollapseItemProps> = {
+  args: {
+    ..._default.args,
+    expandable: false,
+    children: 'Never rendered — a non-expandable item has no content box.'
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'For rows with nothing to reveal, such as a note that has a title but no description. No expand icon, no content box, and the header is inert — it carries no disclosure role, no disabled state and no tab stop, so it reads as ordinary content rather than an unavailable control.'
+      }
+    }
+  }
+}

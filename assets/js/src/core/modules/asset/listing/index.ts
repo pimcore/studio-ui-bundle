@@ -117,7 +117,8 @@ moduleSystem.registerModule({
       decorator: GeneralFiltersDecorator,
       config: {
         ...generalFiltersDecoratorDefaultConfig,
-        showOnlyUnreferencedFilter: true
+        showOnlyUnreferencedFilter: true,
+        elementType: 'asset'
       }
     })
   }
