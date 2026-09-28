@@ -325,6 +325,8 @@ aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Custom thumbnail f
 aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Download custom thumbnail
 aria.asset.image-sidebar.tab.details.precreated-thumbnail: Select precreated thumbnail to download
 aria.asset.image-sidebar.tab.details.download-thumbnail: Download thumbnail
+aria.asset.image-sidebar.tab.details.downloadable-thumbnail: Select downloadable thumbnail
+aria.asset.image-sidebar.tab.details.download-downloadable-thumbnail: Download selected thumbnail
 notification.action-list.actions: Actions
 notification.action-list.cancel: Cancel
 notification.action-list.cancel-all: Cancel all
@@ -1124,6 +1126,7 @@ asset.sidebar.original-file: Original File
 asset.sidebar.web-format: Web Format
 asset.sidebar.print-format: Print Format
 asset.sidebar.office-format: Office Format
+asset.sidebar.thumbnail-download: Thumbnail Download
 jobs.notification.title: Running jobs
 jobs.notification.tooltip: Open running jobs
 jobs.notification.jobs_one: "{{count}} Action"

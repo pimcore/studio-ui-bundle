@@ -14,6 +14,34 @@ export function replaceFileEnding (name: string, ending: string): string {
   return extensionP.join('.')
 }
 
+/**
+ * Extracts the filename a server suggests in a Content-Disposition header.
+ * Prefers the RFC 5987 `filename*` form (percent-encoded, may carry non-ASCII characters)
+ * over the plain `filename` form. Returns undefined when no filename is given.
+ */
+export function getFilenameFromContentDisposition (header: string | null | undefined): string | undefined {
+  if (header === null || header === undefined) {
+    return undefined
+  }
+
+  const encodedMatch = /filename\*\s*=\s*[^']*'[^']*'([^;]+)/i.exec(header)
+  if (encodedMatch !== null) {
+    try {
+      return decodeURIComponent(encodedMatch[1].trim())
+    } catch {
+      // fall through to the plain filename
+    }
+  }
+
+  const plainMatch = /filename\s*=\s*(?:"([^"]*)"|([^;]+))/i.exec(header)
+  if (plainMatch !== null) {
+    const filename = (plainMatch[1] ?? plainMatch[2]).trim()
+    return filename === '' ? undefined : filename
+  }
+
+  return undefined
+}
+
 export function saveFileLocal (url: string, name?: string): void {
   const a = document.createElement('a')
   a.download = name ?? ''

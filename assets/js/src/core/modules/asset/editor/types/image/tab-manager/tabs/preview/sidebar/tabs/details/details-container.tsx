@@ -15,18 +15,30 @@ import {
   AssetEditorSidebarDetailsView,
   type CustomDownloadProps
 } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar/tabs/details/details-view'
-import { replaceFileEnding, saveFileLocal } from '@Pimcore/utils/files'
+import { getFilenameFromContentDisposition, replaceFileEnding, saveFileLocal } from '@Pimcore/utils/files'
 import { buildQueryString } from '@Pimcore/utils/query-string'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { useThumbnailImageGetCollectionQuery } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
+import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 
 const DetailContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
   const { data } = useAssetGetByIdQuery({ id: assetContext.id })
   const imageData = data! as Image
 
+  // the collection endpoint is gated by the thumbnails permission on top of the assets permission
+  const canListThumbnails = isAllowed(UserPermission.Thumbnails)
+  const { data: thumbnailsData } = useThumbnailImageGetCollectionQuery(undefined, { skip: !canListThumbnails })
+  const downloadableThumbnails = (thumbnailsData?.items ?? []).map(thumbnail => ({
+    value: thumbnail.id,
+    label: thumbnail.text
+  }))
+
   return (
     <AssetEditorSidebarDetailsView
+      downloadableThumbnails={ downloadableThumbnails }
       height={ imageData.height ?? 0 }
       onClickCustomDownload={ async (customDownloadProps) => {
         downloadImageByCustomSettings(assetContext.id, customDownloadProps)
@@ -34,9 +46,30 @@ const DetailContainer = (): React.JSX.Element => {
       onClickDownloadByFormat={ async (format) => {
         downloadImageByFormat(assetContext.id, format)
       } }
+      onClickDownloadByThumbnail={ (thumbnailName) => {
+        downloadImageByThumbnail(assetContext.id, thumbnailName)
+      } }
       width={ imageData.width ?? 0 }
     />
   )
+
+  function downloadImageByThumbnail (id: number, thumbnailName: string): void {
+    fetch(`${getPrefix()}/assets/${id}/image/download/thumbnail/${encodeURIComponent(thumbnailName)}`)
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error(`Thumbnail download failed with status ${response.status}`)
+        }
+
+        const filename = getFilenameFromContentDisposition(response.headers.get('Content-Disposition'))
+        return { filename, blob: await response.blob() }
+      })
+      .then(({ filename, blob }) => {
+        saveFileLocal(URL.createObjectURL(blob), filename ?? imageData.filename)
+      })
+      .catch(() => {
+        trackError(new GeneralError('Could not download thumbnail'))
+      })
+  }
 
   function downloadImageByCustomSettings (id, {
     width,

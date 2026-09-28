@@ -29,9 +29,16 @@ export interface CustomDownloadProps {
   format: string
 }
 
+export interface DownloadableThumbnailOption {
+  value: string
+  label: string
+}
+
 interface AssetEditorSidebarDetailsViewProps {
   width: number
   height: number
+  downloadableThumbnails: DownloadableThumbnailOption[]
+  onClickDownloadByThumbnail: (thumbnailName: string) => void
   onClickDownloadByFormat: (format: string) => void
   onClickCustomDownload: ({
     width,
@@ -46,10 +53,15 @@ interface AssetEditorSidebarDetailsViewProps {
 export const AssetEditorSidebarDetailsView = ({
   width,
   height,
+  downloadableThumbnails,
+  onClickDownloadByThumbnail,
   onClickDownloadByFormat,
   onClickCustomDownload
 }: AssetEditorSidebarDetailsViewProps): React.JSX.Element => {
   const [downloadFormat, setDownloadFormat] = useState<string>('original')
+  // the list arrives asynchronously, so the first entry is the fallback until the user picks one
+  const [selectedThumbnail, setSelectedThumbnail] = useState<string | undefined>(undefined)
+  const downloadThumbnail = selectedThumbnail ?? downloadableThumbnails[0]?.value
   const [customWidth, setCustomWidth] = useState(width)
   const [customHeight, setCustomHeight] = useState(height)
   const [customQuality, setCustomQuality] = useState(-1)
@@ -189,6 +201,33 @@ export const AssetEditorSidebarDetailsView = ({
             <p>{height} px</p>
           </div>
         </div>
+
+        {downloadableThumbnails.length > 0 && (
+          <div className={ ['m-t-small', styles.sidebarContentDownload].join(' ') }>
+            <p className={ 'sidebar__content-label' }>{t('asset.sidebar.thumbnail-download')}</p>
+
+            <div className={ 'entry-content__download-content' }>
+              <div className={ 'entry-content__download-content-thumbnail' }>
+                <Select
+                  aria-label={ t('aria.asset.image-sidebar.tab.details.downloadable-thumbnail') }
+                  onChange={ (thumbnailName: string) => { setSelectedThumbnail(thumbnailName) } }
+                  options={ downloadableThumbnails }
+                  value={ downloadThumbnail }
+                />
+
+                <IconButton
+                  aria-label={ t('aria.asset.image-sidebar.tab.details.download-downloadable-thumbnail') }
+                  icon={ { value: 'download' } }
+                  onClick={ () => {
+                    if (downloadThumbnail !== undefined) {
+                      onClickDownloadByThumbnail(downloadThumbnail)
+                    }
+                  } }
+                />
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className={ ['m-t-small', styles.sidebarContentDownload].join(' ') }>
           <p className={ 'sidebar__content-label' }>{t('download')}</p>

@@ -8,7 +8,28 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { downloadFromUrlWithCheck } from './files'
+import { downloadFromUrlWithCheck, getFilenameFromContentDisposition } from './files'
+
+describe('getFilenameFromContentDisposition', () => {
+  it('returns the quoted filename of an attachment header', () => {
+    expect(getFilenameFromContentDisposition('attachment; filename="photo.webp"')).toBe('photo.webp')
+  })
+
+  it('returns an unquoted filename', () => {
+    expect(getFilenameFromContentDisposition('attachment; filename=photo.webp')).toBe('photo.webp')
+  })
+
+  it('prefers the RFC 5987 encoded filename when present', () => {
+    expect(getFilenameFromContentDisposition(
+      "attachment; filename=\"fallback.jpg\"; filename*=utf-8''caf%C3%A9%20photo.jpg"
+    )).toBe('café photo.jpg')
+  })
+
+  it('returns undefined when the header is missing or has no filename', () => {
+    expect(getFilenameFromContentDisposition(null)).toBeUndefined()
+    expect(getFilenameFromContentDisposition('inline')).toBeUndefined()
+  })
+})
 
 describe('downloadFromUrlWithCheck', () => {
   let clickSpy: jest.Mock
