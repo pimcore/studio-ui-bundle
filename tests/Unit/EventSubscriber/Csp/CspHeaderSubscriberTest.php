@@ -92,8 +92,10 @@ class CspHeaderSubscriberTest extends Unit
         $this->handle($this->page('text/html; charset=UTF-8'), self::PAGE_PATH);
         $this->handle(new Response('<html lang="en"></html>'), self::PAGE_PATH);
         $this->handle($this->page('Text/HTML; charset=UTF-8'), self::PAGE_PATH);
+        $this->handle(new Response(null, Response::HTTP_NO_CONTENT), self::API_PATH);
+        $this->handle(new Response(null, Response::HTTP_NOT_MODIFIED), self::API_PATH);
 
-        $this->assertSame([false, true, true, true], $this->pageFlags);
+        $this->assertSame([false, true, true, true, false, false], $this->pageFlags);
     }
 
     public function testAnApiResponseGetsNoBuildOrigins(): void

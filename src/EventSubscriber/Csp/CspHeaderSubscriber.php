@@ -93,6 +93,11 @@ final class CspHeaderSubscriber implements EventSubscriberInterface, LoggerAware
 
     private function isHtml(Response $response): bool
     {
+        // 204 and 304 carry no page; a nonce-protected page is never served from a 304
+        if ($response->isEmpty()) {
+            return false;
+        }
+
         $contentType = $response->headers->get('Content-Type');
 
         // without a content type yet, Symfony prepares the response as HTML
