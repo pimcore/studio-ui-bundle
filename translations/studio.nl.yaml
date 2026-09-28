@@ -1066,6 +1066,8 @@ regex-flags-tooltip: "RegExp zonder scheidingstekens, moet werken in JS (Scheidi
 test-string: Testtekenreeks
 regex-validation-error-message: De tekenreeks voldoet niet aan het vereiste formaat.
 calculator-class: Berekeningsklasse
+calculator-data: Berekeningsgegevens
+calculator-data-tooltip: Optionele vrije-vorm gegevens die aan de berekening worden doorgegeven, bijv. een eenvoudige waarde, een kommagescheiden lijst of een JSON-gecodeerde structuur.
 calculator-expression: Berekeningsteken
 calculator-type: Berekeningstype
 calculator-type-tooltip: Zie de officiële documentatie voor meer informatie over het definiëren van uitdrukkingen of klassen.

@@ -1066,6 +1066,8 @@ regex-flags-tooltip: "RegExp bez separatorów, musi działać w JS (Separator: #
 test-string: Ciąg testowy
 regex-validation-error-message: Ciąg nie spełnia wymaganego formatu.
 calculator-class: Klasa kalkulatora
+calculator-data: Dane kalkulatora
+calculator-data-tooltip: Opcjonalne dowolne dane przekazywane do kalkulatora, np. zwykła wartość, lista rozdzielona przecinkami lub struktura zakodowana w formacie JSON.
 calculator-expression: Wyrażenie obliczeniowe
 calculator-type: Typ kalkulatora
 calculator-type-tooltip: Więcej informacji o definiowaniu wyrażeń lub klas znajdziesz w oficjalnej dokumentacji.
