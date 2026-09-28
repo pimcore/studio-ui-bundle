@@ -16,46 +16,67 @@ export function replaceFileEnding (name: string, ending: string): string {
   return extensionP.join('.')
 }
 
+interface ParsedValue {
+  value: string
+  /** index of the `;` that starts the next parameter, or -1 when this was the last one */
+  next: number
+}
+
+/** Reads a quoted-string starting at the opening quote, unescaping `\x` to `x`. */
+function readQuotedValue (header: string, openingQuote: number): ParsedValue {
+  let value = ''
+  let cursor = openingQuote + 1
+
+  while (cursor < header.length && header[cursor] !== '"') {
+    const isEscape = header[cursor] === '\\' && cursor + 1 < header.length
+    if (isEscape) {
+      cursor++
+    }
+    value += header[cursor]
+    cursor++
+  }
+
+  return { value, next: header.indexOf(';', cursor) }
+}
+
+/** Reads an unquoted token value up to the next `;`. */
+function readTokenValue (header: string, start: number): ParsedValue {
+  const next = header.indexOf(';', start)
+  const value = next === -1 ? header.slice(start) : header.slice(start, next)
+
+  return { value: value.trim(), next }
+}
+
+/** Reads the value of a parameter whose `=` sits at the given index. */
+function readParameterValue (header: string, equals: number): ParsedValue {
+  let start = equals + 1
+  while (header[start] === ' ') {
+    start++
+  }
+
+  return header[start] === '"' ? readQuotedValue(header, start) : readTokenValue(header, start)
+}
+
 /**
  * Splits the parameters of a Content-Disposition header into lower-cased names and raw values.
  * A single linear pass that honours quoted strings, so `;` or `\"` inside a quoted value survive.
  */
 function parseDispositionParameters (header: string): Map<string, string> {
   const parameters = new Map<string, string>()
-  let index = header.indexOf(';')
+  let separator = header.indexOf(';')
 
-  while (index !== -1 && index < header.length) {
-    const equals = header.indexOf('=', index + 1)
+  while (separator !== -1) {
+    const equals = header.indexOf('=', separator + 1)
     if (equals === -1) {
       break
     }
 
-    const name = header.slice(index + 1, equals).trim().toLowerCase()
-    let cursor = equals + 1
-    while (header[cursor] === ' ') {
-      cursor++
-    }
-
-    let value = ''
-    if (header[cursor] === '"') {
-      cursor++
-      while (cursor < header.length && header[cursor] !== '"') {
-        if (header[cursor] === '\\' && cursor + 1 < header.length) {
-          cursor++
-        }
-        value += header[cursor]
-        cursor++
-      }
-      index = header.indexOf(';', cursor)
-    } else {
-      const end = header.indexOf(';', cursor)
-      value = (end === -1 ? header.slice(cursor) : header.slice(cursor, end)).trim()
-      index = end
-    }
-
+    const name = header.slice(separator + 1, equals).trim().toLowerCase()
+    const { value, next } = readParameterValue(header, equals)
     if (!parameters.has(name)) {
       parameters.set(name, value)
     }
+    separator = next
   }
 
   return parameters
@@ -83,7 +104,7 @@ function decodeExtendedValue (extendedValue: string): string | undefined {
 
     if (charset === 'iso-8859-1') {
       // every ISO-8859-1 byte maps to the Unicode code point of the same value
-      return encoded.replace(/%([0-9a-f]{2})/gi, (_match, hex: string) => String.fromCharCode(parseInt(hex, 16)))
+      return encoded.replace(/%([0-9a-f]{2})/gi, (_match, hex: string) => String.fromCodePoint(Number.parseInt(hex, 16)))
     }
   } catch {
     return undefined
