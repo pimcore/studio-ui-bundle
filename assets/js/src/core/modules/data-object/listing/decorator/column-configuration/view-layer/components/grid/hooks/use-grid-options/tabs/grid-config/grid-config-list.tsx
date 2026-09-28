@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useMemo, useRef, type ReactNode } from 'react'
+import React, { useMemo, type ReactNode } from 'react'
 import { StackList, type StackListProps } from '@Pimcore/components/stack-list/stack-list'
 import { Empty, Tag } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
@@ -16,6 +16,7 @@ import { useGridConfig } from './hooks/use-grid-config'
 import { useTranslation } from 'react-i18next'
 import { Space } from '@Pimcore/components/space/space'
 import { uuid } from '@Pimcore/utils/uuid'
+import { useScrollToLastAdded } from '@Pimcore/components/stack-list/use-scroll-to-last-added'
 import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-list-item'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { AdvancedColumnForm } from './forms/advanced-column-form/advanced-column-form'
@@ -29,16 +30,6 @@ import { type DynamicTypePipelineRegistry } from '@Pimcore/modules/element/dynam
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { convertColumnToAdvanced, findColumnConversion } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/convert-column-to-advanced'
 
-function findScrollableParent (element: HTMLElement | null): HTMLElement | null {
-  if (element === null || element === document.documentElement) return null
-  const { overflow, overflowY } = window.getComputedStyle(element)
-  if (/(auto|scroll)/.test(overflow + overflowY) && element.scrollHeight > element.clientHeight) {
-    return element
-  }
-  return findScrollableParent(element.parentElement)
-}
-
-
 interface ColumnStackListItemProps extends StackListItemProps {
   meta: AvailableColumn
 }
@@ -50,54 +41,17 @@ interface ColumnStackListProps extends Omit<StackListProps, 'items'> {
 export const GridConfigList = (): React.JSX.Element => {
   const { setColumns, columns } = useGridConfig()
   const { t } = useTranslation()
-  const containerRef = useRef<HTMLDivElement>(null)
-  const prevColumnKeysRef = useRef<string[]>([])
-  const hasMountedRef = useRef(false)
   const { getAdvancedColumnTemplate } = useAvailableColumns()
   const sourceFieldsRegistry = useInjection<DynamicTypePipelineRegistry>(serviceIds['DynamicTypes/Grid/SourceFieldsRegistry'])
 
   const advancedColumnTemplate = useMemo(() => getAdvancedColumnTemplate(), [getAdvancedColumnTemplate])
   const sourceFieldTypes = useMemo(() => sourceFieldsRegistry.getDynamicTypes(), [sourceFieldsRegistry])
 
-  useEffect(() => {
-    const currentKeys = columns.map((col) => col.__meta?.uniqueId ?? col.key)
-
-    if (!hasMountedRef.current) {
-      hasMountedRef.current = true
-      prevColumnKeysRef.current = currentKeys
-      return
-    }
-
-    const prevKeys = prevColumnKeysRef.current
-    const isAppend = currentKeys.length > prevKeys.length &&
-      prevKeys.every((key, i) => key === currentKeys[i])
-
-    if (isAppend) {
-      const isAdvanced = columns[columns.length - 1]?.key === 'advanced'
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          const container = containerRef.current
-          if (container === null) return
-
-          const scrollParent = findScrollableParent(container.parentElement)
-          if (scrollParent === null) return
-
-          if (isAdvanced) {
-            const items = container.querySelectorAll<HTMLElement>('.stack-list__item')
-            const lastItem = items[items.length - 1]
-            if (lastItem === undefined) return
-            const itemTop = lastItem.getBoundingClientRect().top - scrollParent.getBoundingClientRect().top + scrollParent.scrollTop
-            scrollParent.scrollTo({ top: itemTop - 8, behavior: 'smooth' })
-          } else {
-            scrollParent.scrollTo({ top: scrollParent.scrollHeight - scrollParent.clientHeight, behavior: 'smooth' })
-          }
-        })
-      })
-    }
-
-    prevColumnKeysRef.current = currentKeys
-  }, [columns])
+  // Scrolls the newly added column into view for every add flow (the available-columns tree,
+  // "Add advanced column", and the classification store group/key picker, which can add several
+  // at once via `onClassificationStoreUpdate` - see `GridConfigInner`), while staying inert on the
+  // initial load and on remove/reorder/edit.
+  const scrollContainerRef = useScrollToLastAdded({ items: columns, getItemId: (col) => col.__meta?.uniqueId ?? col.key })
 
   const stackListItems: ColumnStackListProps['items'] = useMemo(() => columns.map((column) => {
     const uniqueId = column.__meta?.uniqueId ?? uuid()
@@ -162,7 +116,7 @@ export const GridConfigList = (): React.JSX.Element => {
     <>
       { stackListItems.length === 0 && <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } /> }
       { stackListItems.length > 0 && (
-        <div ref={ containerRef }>
+        <div ref={ scrollContainerRef }>
           <StackList
             items={ stackListItems }
             onItemsChange={ onItemsChange }

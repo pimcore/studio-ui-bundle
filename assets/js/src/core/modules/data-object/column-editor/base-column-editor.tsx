@@ -18,6 +18,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Space } from '@Pimcore/components/space/space'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { StackList } from '@Pimcore/components/stack-list/stack-list'
+import { useScrollToLastAdded } from '@Pimcore/components/stack-list/use-scroll-to-last-added'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { useStyles } from './base-column-editor.styles'
 import { ColumnEditorToolbar } from './column-editor-toolbar'
@@ -29,64 +30,9 @@ import { ClassificationStoreModalProvider } from '@Pimcore/modules/element/dynam
 import { useColumnEditorState } from './use-column-editor-state'
 import { useClassificationStoreColumnPicker } from './use-classification-store-column-picker'
 import { buildColumnStackItems } from './build-column-stack-items'
-import { type ColumnEditorHandle, type SchemaColumn } from './types'
+import { type BaseColumnEditorProps, type ColumnEditorHandle } from './types'
 
-export interface BaseColumnEditorProps {
-  entity: string
-  classDefinitionId?: string
-  columns: SchemaColumn[]
-  onApply: (columns: SchemaColumn[]) => void
-  onCancel: () => void
-  /**
-   * When true, the Apply/Discard toolbar buttons are hidden (used e.g. in a split migration view
-   * where the host renders its own confirm/cancel actions). The add-column buttons still render.
-   */
-  hideApplyDiscard?: boolean
-  /**
-   * When true, the "Add column" / "Add advanced column" toolbar buttons and the embedded
-   * fields-to-add panel are hidden (used when the host provides its own way to add columns).
-   */
-  hideAddButtons?: boolean
-  /**
-   * @deprecated Use `hideApplyDiscard` and/or `hideAddButtons` instead. When true and the split
-   * flags are not explicitly set, this hides both the Apply/Discard buttons and the add-column
-   * buttons, matching the previous all-or-nothing behavior.
-   */
-  hideToolbar?: boolean
-  /** Service ID of the DynamicTypePipelineRegistry to use for source fields. */
-  sourceFieldsRegistryId: string
-  /** Service ID of the DynamicTypePipelineRegistry to use for transformers. */
-  transformersRegistryId: string
-  /** The currently selected preview language. When provided, the LanguageSelection is controlled externally. */
-  language?: string
-  /** Called when the user changes the preview language inside the modal. */
-  onLanguageChange?: (language: string) => void
-  /** When true, only columns marked as exportable are offered in the add-column dropdown. */
-  exportableOnly?: boolean
-  /** True when the editor is rendered in a horizontally constrained context (e.g. a dialog split view). */
-  compact?: boolean
-  /**
-   * Called whenever the draft changes (add/remove/reorder/pipeline/locale edits), with the same
-   * `SchemaColumn[]` shape `onApply`/`getColumns()` use. Additive: existing callers that only read
-   * the draft on demand via the imperative handle's `getColumns()` are unaffected. Useful for a host
-   * that embeds the editor with `hideApplyDiscard` and needs to track dirty state or mirror the
-   * current columns elsewhere (e.g. a sibling preview panel) without polling the ref.
-   */
-  onChange?: (columns: SchemaColumn[]) => void
-  /**
-   * When true, hides the top bar's own preview object picker and language selector. Use this when
-   * the host renders its own equivalent controls next to the editor (e.g. a preview panel) and the
-   * two would otherwise duplicate each other; the editor still resolves an internal default object/
-   * language for advanced columns' own inline pipeline preview.
-   */
-  hidePreviewControls?: boolean
-  /**
-   * When true, renders a fully non-interactive view: no add/fields panel, no drag handles, no
-   * remove/locale controls, and every pipeline form is disabled. Implies `hideApplyDiscard`/
-   * `hideAddButtons`. Use this for a schema/channel whose storage is not writeable.
-   */
-  readOnly?: boolean
-}
+export type { BaseColumnEditorProps } from './types'
 
 /**
  * Wraps {@link BaseColumnEditorInner} with its own, self-contained
@@ -199,6 +145,15 @@ const BaseColumnEditorInner = forwardRef<ColumnEditorHandle, BaseColumnEditorPro
       addColumn: handleColumnPick
     }), [getColumns, handleColumnPick])
 
+    // Scrolls the newly added row (the last one, when several were added at once - e.g. picking
+    // several classification store keys) into view for every user-initiated add: a fields-panel
+    // pick, "Add advanced column", the classification store picker, and the imperative
+    // `ref.addColumn`, all funnel through `handleAddColumnOfType`/`handleColumnPick` above and end
+    // up appending to `draft`. Stays inert on initial load, on re-seeding from the `columns` prop
+    // (see `useColumnEditorState`, which always mints a fresh `_id` per re-seed), and on
+    // remove/reorder/edit, none of which are a pure append of `draft`'s existing ids.
+    const scrollContainerRef = useScrollToLastAdded({ items: draft, getItemId: (col) => col._id })
+
     const stackItems = buildColumnStackItems({
       draft,
       resolvedClassId,
@@ -281,13 +236,15 @@ const BaseColumnEditorInner = forwardRef<ColumnEditorHandle, BaseColumnEditorPro
                   ) }
 
                   { draft.length > 0 && (
-                    <StackList
-                      items={ stackItems }
-                      onItemsChange={ (items) => {
-                        handleReorder(items.map(item => String(item.id)))
-                      } }
-                      sortable={ !readOnly }
-                    />
+                    <div ref={ scrollContainerRef }>
+                      <StackList
+                        items={ stackItems }
+                        onItemsChange={ (items) => {
+                          handleReorder(items.map(item => String(item.id)))
+                        } }
+                        sortable={ !readOnly }
+                      />
+                    </div>
                   ) }
                 </Space>
               </div>
