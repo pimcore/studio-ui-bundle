@@ -80,12 +80,11 @@ final class CspHeaderSubscriber implements EventSubscriberInterface, LoggerAware
 
         $response = $event->getResponse();
 
-        // build origins only matter for a page that loads the Studio bundles, not for API responses
-        if ($this->isHtml($response)) {
-            $this->addBuildRemoteOrigins($request);
-        }
+        // a clone per response: additions of this request must not reach the next one in a worker
+        $policy = clone $this->contentSecurityPolicyHandler;
+        $this->addBuildRemoteOrigins($request, $policy, $this->isHtml($response));
 
-        $cspHeader = $this->contentSecurityPolicyHandler->getCspHeader();
+        $cspHeader = $policy->getCspHeader();
 
         $response->headers->set('Content-Security-Policy', $cspHeader);
 
@@ -97,12 +96,15 @@ final class CspHeaderSubscriber implements EventSubscriberInterface, LoggerAware
         $contentType = $response->headers->get('Content-Type');
 
         // without a content type yet, Symfony prepares the response as HTML
-        return $contentType === null || str_contains($contentType, 'html');
+        return $contentType === null || stripos($contentType, 'html') !== false;
     }
 
-    private function addBuildRemoteOrigins(\Symfony\Component\HttpFoundation\Request $request): void
-    {
-        $cspEvent = new CspEvent($request, $this->contentSecurityPolicyHandler);
+    private function addBuildRemoteOrigins(
+        \Symfony\Component\HttpFoundation\Request $request,
+        ContentSecurityPolicyHandlerInterface $policy,
+        bool $htmlResponse
+    ): void {
+        $cspEvent = new CspEvent($request, $policy, $htmlResponse);
         $this->eventDispatcher->dispatch($cspEvent);
 
         $allOrigins = $cspEvent->getAdditionalBuildOrigins();
@@ -117,11 +119,11 @@ final class CspHeaderSubscriber implements EventSubscriberInterface, LoggerAware
 
         $webSocketOrigins = $this->generateWebSocketOrigins($allOrigins);
 
-        $this->contentSecurityPolicyHandler->addAllowedUrls(ContentSecurityPolicyHandlerInterface::SCRIPT_OPT, $allOrigins);
-        $this->contentSecurityPolicyHandler->addAllowedUrls(ContentSecurityPolicyHandlerInterface::STYLE_OPT, $allOrigins);
-        $this->contentSecurityPolicyHandler->addAllowedUrls(ContentSecurityPolicyHandlerInterface::FONT_OPT, $allOrigins);
+        $policy->addAllowedUrls(ContentSecurityPolicyHandlerInterface::SCRIPT_OPT, $allOrigins);
+        $policy->addAllowedUrls(ContentSecurityPolicyHandlerInterface::STYLE_OPT, $allOrigins);
+        $policy->addAllowedUrls(ContentSecurityPolicyHandlerInterface::FONT_OPT, $allOrigins);
 
-        $this->contentSecurityPolicyHandler->addAllowedUrls(
+        $policy->addAllowedUrls(
             ContentSecurityPolicyHandlerInterface::CONNECT_OPT,
             array_merge($allOrigins, $webSocketOrigins)
         );

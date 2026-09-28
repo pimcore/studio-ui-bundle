@@ -18,10 +18,12 @@ use Pimcore\Bundle\StudioUiBundle\Event\Csp\CspEvent;
 use Pimcore\Bundle\StudioUiBundle\EventSubscriber\Csp\CspHeaderSubscriber;
 use Pimcore\Bundle\StudioUiBundle\Request\StudioRequestMatcher;
 use Pimcore\Bundle\StudioUiBundle\Security\Csp\ContentSecurityPolicyHandler;
+use Pimcore\Bundle\StudioUiBundle\Security\Csp\ContentSecurityPolicyHandlerInterface;
 use Pimcore\Http\RequestHelper;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -30,61 +32,142 @@ class CspHeaderSubscriberTest extends Unit
 {
     private const BUILD_ORIGIN = 'https://cdn.example.com';
 
-    private const PAGE = '<html lang="en"></html>';
+    private const PARTNER = 'https://partner.example.com';
 
-    private int $cspEvents = 0;
+    private const PAGE_PATH = '/pimcore-studio/';
 
-    public function testAnApiResponseGetsTheHeaderWithoutAskingForBuildOrigins(): void
+    private const API_PATH = '/pimcore-studio/api/user/current-user-information';
+
+    /**
+     * @var bool[]
+     */
+    private array $pageFlags = [];
+
+    private int $responses = 0;
+
+    private RequestStack $requestStack;
+
+    private ContentSecurityPolicyHandler $handler;
+
+    private CspHeaderSubscriber $subscriber;
+
+    public function _before(): void
     {
-        $header = $this->handle(new JsonResponse(['ok' => true]), '/pimcore-studio/api/user/current-user-information');
+        $this->requestStack = new RequestStack();
+        $this->handler = new ContentSecurityPolicyHandler(true, [], $this->requestStack);
 
-        $this->assertSame(0, $this->cspEvents);
-        $this->assertStringContainsString("frame-ancestors 'self'", $header);
-        $this->assertStringNotContainsString(self::BUILD_ORIGIN, $header);
-    }
-
-    public function testAStudioPageGetsTheBuildOrigins(): void
-    {
-        $response = new Response(self::PAGE);
-        $response->headers->set('Content-Type', 'text/html; charset=UTF-8');
-
-        $header = $this->handle($response, '/pimcore-studio/');
-
-        $this->assertSame(1, $this->cspEvents);
-        $this->assertStringContainsString(self::BUILD_ORIGIN, $header);
-    }
-
-    public function testAResponseWithoutAContentTypeIsTreatedAsAPage(): void
-    {
-        $header = $this->handle(new Response(self::PAGE), '/pimcore-studio/');
-
-        $this->assertSame(1, $this->cspEvents);
-        $this->assertStringContainsString(self::BUILD_ORIGIN, $header);
-    }
-
-    private function handle(Response $response, string $path): string
-    {
         $dispatcher = new EventDispatcher();
         $dispatcher->addListener(CspEvent::class, function (CspEvent $event): void {
-            $this->cspEvents++;
-            $event->addBuildOrigins([self::BUILD_ORIGIN]);
+            $this->pageFlags[] = $event->isHtmlResponse();
+            // what Studio's build origin listeners do
+            if ($event->isHtmlResponse()) {
+                $event->addBuildOrigins([self::BUILD_ORIGIN]);
+            }
+            // a listener changing a directive for one response only
+            if (++$this->responses === 1) {
+                $event->getCspHandler()->addAllowedUrls(ContentSecurityPolicyHandlerInterface::FRAME_ANCHESTORS, [
+                    self::PARTNER,
+                ]);
+            }
         });
 
         $requestHelper = $this->createMock(RequestHelper::class);
         $requestHelper->method('isFrontendRequestByAdmin')->willReturn(false);
 
-        $subscriber = new CspHeaderSubscriber(
+        $this->subscriber = new CspHeaderSubscriber(
             $requestHelper,
-            new ContentSecurityPolicyHandler(true),
+            $this->handler,
             new StudioRequestMatcher('/pimcore-studio'),
             $dispatcher,
             true,
             []
         );
+    }
 
-        $subscriber->onKernelResponse(new ResponseEvent(
+    public function testEveryResponseDispatchesTheEventAndTellsWhetherItIsAPage(): void
+    {
+        $this->handle(new JsonResponse(['ok' => true]), self::API_PATH);
+        $this->handle($this->page('text/html; charset=UTF-8'), self::PAGE_PATH);
+        $this->handle(new Response('<html lang="en"></html>'), self::PAGE_PATH);
+        $this->handle($this->page('Text/HTML; charset=UTF-8'), self::PAGE_PATH);
+
+        $this->assertSame([false, true, true, true], $this->pageFlags);
+    }
+
+    public function testAnApiResponseGetsNoBuildOrigins(): void
+    {
+        $this->handle($this->page('text/html'), self::PAGE_PATH);
+        $api = $this->handle(new JsonResponse(['ok' => true]), self::API_PATH);
+
+        $this->assertStringNotContainsString(self::BUILD_ORIGIN, $api);
+        $this->assertStringContainsString("frame-ancestors 'self'", $api);
+    }
+
+    public function testNothingFromOneResponseReachesTheNext(): void
+    {
+        $page = $this->handle($this->page('text/html'), self::PAGE_PATH);
+        $api = $this->handle(new JsonResponse(['ok' => true]), self::API_PATH);
+
+        $this->assertStringContainsString(self::BUILD_ORIGIN, $page);
+        $this->assertStringContainsString(self::PARTNER, $page);
+        $this->assertStringNotContainsString(self::BUILD_ORIGIN, $api);
+        $this->assertStringNotContainsString(self::PARTNER, $api);
+        $this->assertStringNotContainsString(self::BUILD_ORIGIN, $this->handler->getCspHeader());
+    }
+
+    public function testTheHeaderDoesNotGrowOverManyResponses(): void
+    {
+        $headers = [];
+        for ($i = 0; $i < 5; $i++) {
+            $header = $this->handle($this->page('text/html'), self::PAGE_PATH);
+            $headers[] = preg_replace("/'nonce-[^']+'/", "'nonce'", $header);
+        }
+
+        $this->assertCount(1, array_unique(array_slice($headers, 1)));
+    }
+
+    public function testEachRequestGetsItsOwnNonceMatchingItsTemplate(): void
+    {
+        $nonces = [];
+        for ($i = 0; $i < 2; $i++) {
+            $request = Request::create(self::PAGE_PATH);
+            $this->requestStack->push($request);
+
+            // the template renders the nonce through the shared handler, before the response is built
+            preg_match('/nonce="([^"]+)"/', $this->handler->getNonceHtmlAttribute(), $match);
+            $header = $this->respond($request, $this->page('text/html'));
+            $this->requestStack->pop();
+
+            $this->assertStringContainsString("'nonce-" . $match[1] . "'", $header);
+            $nonces[] = $match[1];
+        }
+
+        $this->assertNotSame($nonces[0], $nonces[1]);
+    }
+
+    private function page(string $contentType): Response
+    {
+        $response = new Response('<html lang="en"></html>');
+        $response->headers->set('Content-Type', $contentType);
+
+        return $response;
+    }
+
+    private function handle(Response $response, string $path): string
+    {
+        $request = Request::create($path);
+        $this->requestStack->push($request);
+        $header = $this->respond($request, $response);
+        $this->requestStack->pop();
+
+        return $header;
+    }
+
+    private function respond(Request $request, Response $response): string
+    {
+        $this->subscriber->onKernelResponse(new ResponseEvent(
             $this->createMock(HttpKernelInterface::class),
-            Request::create($path),
+            $request,
             HttpKernelInterface::MAIN_REQUEST,
             $response
         ));
