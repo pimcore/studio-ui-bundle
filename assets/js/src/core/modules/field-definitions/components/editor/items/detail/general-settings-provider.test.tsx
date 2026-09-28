@@ -53,24 +53,22 @@ describe('GeneralSettingsProvider', () => {
   it('keeps local edits when the server data only changes identity', () => {
     const rerender = renderProvider({ title: 'saved' })
     act(() => { context.setGeneralSettings({ title: 'edited' }) })
-    const revision = context.revision
 
     rerender({ title: 'saved' })
 
     expect(context.generalSettings).toEqual({ title: 'edited' })
-    expect(context.revision).toBe(revision)
+    expect(context.revision).toBe(0)
     expect(context.getIsDirty()).toBe(true)
   })
 
   it('replaces local state and bumps the revision when the server data changes', () => {
     const rerender = renderProvider({ title: 'before' })
     act(() => { context.setGeneralSettings({ title: 'edited' }) })
-    const revision = context.revision
 
     rerender({ title: 'after' })
 
     expect(context.generalSettings).toEqual({ title: 'after' })
-    expect(context.revision).toBe(revision + 1)
+    expect(context.revision).toBe(1)
     expect(context.getIsDirty()).toBe(false)
   })
 })

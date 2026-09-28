@@ -17,8 +17,8 @@ export interface IGeneralSettingsContext {
   generalSettings: GeneralSettings | undefined
   setGeneralSettings: (settings: GeneralSettings | undefined) => void
   getIsDirty: () => boolean
-  // bumped whenever new server data replaces the local state
-  revision: number
+  // bumped whenever new server data replaces the local state; optional so existing context values stay valid
+  revision?: number
 }
 
 export const GeneralSettingsContext = createContext<IGeneralSettingsContext | undefined>(undefined)
