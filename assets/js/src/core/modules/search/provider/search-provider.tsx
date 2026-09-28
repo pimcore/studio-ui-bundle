@@ -12,6 +12,17 @@ import React, { createContext, useMemo, useState } from 'react'
 import { type SavedSearchDetailedConfiguration } from '../search-api-slice.gen'
 import { FULLTEXT_SEARCH_MODE_ID } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/search-mode-abstract'
 
+/** The Save panel's live values as the user edits them: its form fields and who the search is shared with. */
+export interface SavedSearchPanelDraft {
+  name: string
+  description?: string
+  createMenuShortcut?: boolean
+  menuShortcutGroup?: string
+  shareGlobally?: boolean
+  sharedUsers: number[]
+  sharedRoles: number[]
+}
+
 export interface SearchContextData {
   activeKey: string
   setActiveKey: (key: string) => void
@@ -30,8 +41,8 @@ export interface SearchContextData {
   loadedSavedSearch: SavedSearchDetailedConfiguration | undefined
   setLoadedSavedSearch: (configuration: SavedSearchDetailedConfiguration | undefined) => void
   /** The Save panel's live form values (name, description, shortcut, sharing) as the user edits them. */
-  panelDraft: Record<string, unknown> | undefined
-  setPanelDraft: (draft: Record<string, unknown> | undefined) => void
+  panelDraft: SavedSearchPanelDraft | undefined
+  setPanelDraft: (draft: SavedSearchPanelDraft | undefined) => void
 }
 
 export type SearchContextProps = SearchContextData | undefined
@@ -52,7 +63,7 @@ export const SearchProvider = (props: SearchProviderProps): React.JSX.Element =>
   const [searchMode, setSearchMode] = useState<string>(FULLTEXT_SEARCH_MODE_ID)
   const [pendingRestore, setPendingRestore] = useState<SavedSearchDetailedConfiguration | undefined>(props.initialPendingRestore)
   const [loadedSavedSearch, setLoadedSavedSearch] = useState<SavedSearchDetailedConfiguration | undefined>(props.initialLoadedSavedSearch)
-  const [panelDraft, setPanelDraft] = useState<Record<string, unknown> | undefined>(undefined)
+  const [panelDraft, setPanelDraft] = useState<SavedSearchPanelDraft | undefined>(undefined)
 
   return useMemo(() => (
     <SearchContext.Provider value={ { open, setOpen, activeKey, setActiveKey, searchTerm, setSearchTerm, searchMode, setSearchMode, pendingRestore, setPendingRestore, loadedSavedSearch, setLoadedSavedSearch, panelDraft, setPanelDraft } }>

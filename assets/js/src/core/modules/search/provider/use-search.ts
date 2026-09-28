@@ -9,7 +9,7 @@
  */
 
 import { useContext } from 'react'
-import { SearchContext } from './search-provider'
+import { SearchContext, type SavedSearchPanelDraft } from './search-provider'
 import { type SavedSearchDetailedConfiguration } from '../search-api-slice.gen'
 import { FULLTEXT_SEARCH_MODE_ID } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/search-mode-abstract'
 
@@ -27,8 +27,8 @@ export interface UseSearchReturn {
   setPendingRestore: (configuration: SavedSearchDetailedConfiguration | undefined) => void
   loadedSavedSearch: SavedSearchDetailedConfiguration | undefined
   setLoadedSavedSearch: (configuration: SavedSearchDetailedConfiguration | undefined) => void
-  panelDraft: Record<string, unknown> | undefined
-  setPanelDraft: (draft: Record<string, unknown> | undefined) => void
+  panelDraft: SavedSearchPanelDraft | undefined
+  setPanelDraft: (draft: SavedSearchPanelDraft | undefined) => void
 }
 
 export const useSearch = (): UseSearchReturn => {
