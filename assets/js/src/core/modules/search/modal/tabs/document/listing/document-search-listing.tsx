@@ -54,11 +54,13 @@ const buildListingProps = (savedSearchReadOnly: boolean): AbstractDecoratorProps
 
 export const DocumentSearchListing = ({ savedSearchReadOnly = false, defaultSidebarTab, extraSidebarEntries, listingSlot }: SearchListingProps = {}): React.JSX.Element => {
   const { close } = useSearch()
-  // memoized: buildListingProps composes NEW component types per call, and passing fresh
-  // types into the settings remounts the whole listing tree on every re-render
+  // buildListingProps composes NEW component types per call, and fresh types remount the whole
+  // listing tree — so the composition is memoized apart from the entries, which an embedder may
+  // well pass inline and which only wrap the sidebar hook
+  const baseProps = useMemo(() => buildListingProps(savedSearchReadOnly), [savedSearchReadOnly])
   const listingProps = useMemo(
-    () => withExtraSidebarEntries(buildListingProps(savedSearchReadOnly), extraSidebarEntries),
-    [savedSearchReadOnly, extraSidebarEntries]
+    () => withExtraSidebarEntries(baseProps, extraSidebarEntries),
+    [baseProps, extraSidebarEntries]
   )
 
   return (
