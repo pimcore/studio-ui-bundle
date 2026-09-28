@@ -72,11 +72,14 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
 
   // Opening the default has to happen through whichever setter is live: with a SidebarContext in
   // the tree its own (empty) activeTab wins over local state, so seeding local state is not enough.
+  // Handled on the first pass whatever it finds, or collapsing the default would reopen it.
   const openedDefault = useRef(false)
   useEffect(() => {
-    if (openedDefault.current || defaultActiveTab === '' || activeTab !== '') return
+    if (openedDefault.current) return
     openedDefault.current = true
-    setActiveTab(defaultActiveTab)
+    if (defaultActiveTab !== '' && activeTab === '') {
+      setActiveTab(defaultActiveTab)
+    }
   }, [defaultActiveTab, activeTab])
 
   const isExpanded = activeTab !== ''
