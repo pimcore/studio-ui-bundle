@@ -59,7 +59,8 @@ const DetailContainer = (): React.JSX.Element => {
   )
 
   function downloadImageByThumbnail (id: number, thumbnailName: string): void {
-    fetchThumbnailDownload({ id, thumbnailName })
+    const request = fetchThumbnailDownload({ id, thumbnailName })
+    request
       .unwrap()
       .then((blob) => {
         const objectUrl = URL.createObjectURL(blob)
@@ -68,6 +69,9 @@ const DetailContainer = (): React.JSX.Element => {
       })
       .catch(() => {
         trackError(new GeneralError('Could not download thumbnail'))
+      })
+      .finally(() => {
+        request.unsubscribe()
       })
   }
 
