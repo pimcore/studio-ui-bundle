@@ -8,18 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-// jsdom (as used by this jest environment) does not implement crypto.randomUUID, only
-// crypto.getRandomValues; the editor draft relies on it to key each row.
-if (globalThis.crypto?.randomUUID === undefined) {
-  Object.defineProperty(globalThis.crypto, 'randomUUID', {
-    value: (): string => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/gu, (char) => {
-      const random = Math.random() * 16 | 0
-      const value = char === 'x' ? random : (random & 0x3) | 0x8
-      return value.toString(16)
-    })
-  })
-}
-
 const dataObjectGetAvailableGridColumnsMock = jest.fn((_arg?: unknown) => ({ data: { columns: [] }, isLoading: false }))
 const dataObjectGetGridMock = jest.fn((_arg?: unknown) => ({ data: { items: [] } }))
 

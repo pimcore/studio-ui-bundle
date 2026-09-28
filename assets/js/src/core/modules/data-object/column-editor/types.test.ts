@@ -18,18 +18,6 @@ import {
   type SchemaColumn
 } from './types'
 
-// jsdom (as used by this jest environment) does not implement crypto.randomUUID, only
-// crypto.getRandomValues; advancedFromSchemaColumn relies on it to key the editor draft.
-if (globalThis.crypto?.randomUUID === undefined) {
-  Object.defineProperty(globalThis.crypto, 'randomUUID', {
-    value: (): string => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/gu, (char) => {
-      const random = Math.random() * 16 | 0
-      const value = char === 'x' ? random : (random & 0x3) | 0x8
-      return value.toString(16)
-    })
-  })
-}
-
 describe('advancedFromSchemaColumn / advancedToSchemaColumn round trip', () => {
   it('round-trips a plain (non-advanced) column unchanged', () => {
     const schemaColumn: SchemaColumn = {
@@ -139,5 +127,21 @@ describe('getClassificationStoreColumnLabel', () => {
   it('falls back to the field definition name, then the raw key id', () => {
     expect(getClassificationStoreColumnLabel({ config: { fieldDefinition: { name: 'height' } } })).toBe('height')
     expect(getClassificationStoreColumnLabel({ config: { keyId: 7 } })).toBe('7')
+  })
+})
+
+describe('advancedFromSchemaColumn without crypto.randomUUID (non-secure http origins)', () => {
+  it('still creates a draft id', () => {
+    const original = globalThis.crypto.randomUUID
+    Object.defineProperty(globalThis.crypto, 'randomUUID', { value: undefined, configurable: true })
+
+    try {
+      const column = advancedFromSchemaColumn({ key: 'name', fieldtype: 'input', type: 'dataobject.adapter' })
+
+      expect(typeof column._id).toBe('string')
+      expect(column._id.length).toBeGreaterThan(0)
+    } finally {
+      Object.defineProperty(globalThis.crypto, 'randomUUID', { value: original, configurable: true })
+    }
   })
 })

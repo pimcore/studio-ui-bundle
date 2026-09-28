@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { uuid } from '@Pimcore/utils/uuid'
 import { type GridColumnConfiguration } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 
 /**
@@ -102,7 +103,7 @@ export interface AdvancedEditorColumn {
  * (which holds the user title) is mapped to pipeline.title.
  */
 export const advancedFromSchemaColumn = (col: SchemaColumn): AdvancedEditorColumn => ({
-  _id: crypto.randomUUID(),
+  _id: uuid(),
   key: col.key,
   fieldtype: col.fieldtype,
   type: col.type,

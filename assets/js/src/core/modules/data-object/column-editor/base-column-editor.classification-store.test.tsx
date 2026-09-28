@@ -20,16 +20,6 @@ import { render, act } from '@testing-library/react'
 import { BaseColumnEditor, type BaseColumnEditorProps } from './base-column-editor'
 import { type ColumnEditorHandle, type SchemaColumn } from './types'
 
-if (globalThis.crypto?.randomUUID === undefined) {
-  Object.defineProperty(globalThis.crypto, 'randomUUID', {
-    value: (): string => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/gu, (char) => {
-      const random = Math.random() * 16 | 0
-      const value = char === 'x' ? random : (random & 0x3) | 0x8
-      return value.toString(16)
-    })
-  })
-}
-
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key })
 }))

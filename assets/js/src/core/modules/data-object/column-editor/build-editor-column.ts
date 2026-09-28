@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { uuid } from '@Pimcore/utils/uuid'
 import { type GridColumnConfiguration } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { resolveFieldtype } from './resolve-fieldtype'
 import { type AdvancedEditorColumn } from './types'
@@ -22,7 +23,7 @@ import { type AdvancedEditorColumn } from './types'
  * carried the latter.
  */
 export const buildEditorColumnFromAvailable = (column: GridColumnConfiguration): AdvancedEditorColumn => ({
-  _id: crypto.randomUUID(),
+  _id: uuid(),
   key: column.key,
   fieldtype: resolveFieldtype(column),
   type: column.type,
