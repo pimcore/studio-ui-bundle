@@ -77,6 +77,14 @@ final class ContentSecurityPolicyHandler implements ContentSecurityPolicyHandler
         ]);
     }
 
+    /**
+     * An independent copy for one response; the policy state is arrays and scalars, so no clone shares it.
+     */
+    public function forResponse(): self
+    {
+        return clone $this;
+    }
+
     public function getCspHeader(): string
     {
         $cspHeaderOptions = array_map(function ($k, $v) {

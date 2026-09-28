@@ -53,13 +53,15 @@ class CspHeaderSubscriberTest extends Unit
 
     private CspHeaderSubscriber $subscriber;
 
+    private EventDispatcher $dispatcher;
+
     public function _before(): void
     {
         $this->requestStack = new RequestStack();
         $this->handler = new ContentSecurityPolicyHandler(true, [], $this->requestStack);
 
-        $dispatcher = new EventDispatcher();
-        $dispatcher->addListener(CspEvent::class, function (CspEvent $event): void {
+        $this->dispatcher = new EventDispatcher();
+        $this->dispatcher->addListener(CspEvent::class, function (CspEvent $event): void {
             $this->pageFlags[] = $event->isHtmlResponse();
             // what Studio's build origin listeners do
             if ($event->isHtmlResponse()) {
@@ -73,17 +75,7 @@ class CspHeaderSubscriberTest extends Unit
             }
         });
 
-        $requestHelper = $this->createMock(RequestHelper::class);
-        $requestHelper->method('isFrontendRequestByAdmin')->willReturn(false);
-
-        $this->subscriber = new CspHeaderSubscriber(
-            $requestHelper,
-            $this->handler,
-            new StudioRequestMatcher('/pimcore-studio'),
-            $dispatcher,
-            true,
-            []
-        );
+        $this->subscriber = $this->subscriberFor($this->handler);
     }
 
     public function testEveryResponseDispatchesTheEventAndTellsWhetherItIsAPage(): void
@@ -147,6 +139,64 @@ class CspHeaderSubscriberTest extends Unit
         }
 
         $this->assertNotSame($nonces[0], $nonces[1]);
+    }
+
+    public function testADecoratedHandlerThatCannotBeClonedStillGetsItsHeader(): void
+    {
+        $decorated = new class($this->handler) implements ContentSecurityPolicyHandlerInterface {
+            public function __construct(private readonly ContentSecurityPolicyHandlerInterface $inner)
+            {
+            }
+
+            private function __clone()
+            {
+            }
+
+            public function getCspHeader(): string
+            {
+                return $this->inner->getCspHeader();
+            }
+
+            public function addAllowedUrls(string $key, array $value): static
+            {
+                $this->inner->addAllowedUrls($key, $value);
+
+                return $this;
+            }
+
+            public function setCspHeader(string $key, string $value): static
+            {
+                $this->inner->setCspHeader($key, $value);
+
+                return $this;
+            }
+
+            public function getNonceHtmlAttribute(): string
+            {
+                return $this->inner->getNonceHtmlAttribute();
+            }
+        };
+        $this->subscriber = $this->subscriberFor($decorated);
+
+        $header = $this->handle($this->page(self::HTML), self::PAGE_PATH);
+
+        $this->assertStringContainsString(self::BUILD_ORIGIN, $header);
+        $this->assertStringContainsString("script-src 'self' 'nonce-", $header);
+    }
+
+    private function subscriberFor(ContentSecurityPolicyHandlerInterface $handler): CspHeaderSubscriber
+    {
+        $requestHelper = $this->createMock(RequestHelper::class);
+        $requestHelper->method('isFrontendRequestByAdmin')->willReturn(false);
+
+        return new CspHeaderSubscriber(
+            $requestHelper,
+            $handler,
+            new StudioRequestMatcher('/pimcore-studio'),
+            $this->dispatcher,
+            true,
+            []
+        );
     }
 
     private function page(string $contentType): Response

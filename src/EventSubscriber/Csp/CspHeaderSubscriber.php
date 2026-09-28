@@ -15,6 +15,7 @@ namespace Pimcore\Bundle\StudioUiBundle\EventSubscriber\Csp;
 
 use Pimcore\Bundle\StudioUiBundle\Event\Csp\CspEvent;
 use Pimcore\Bundle\StudioUiBundle\Request\StudioRequestMatcher;
+use Pimcore\Bundle\StudioUiBundle\Security\Csp\ContentSecurityPolicyHandler;
 use Pimcore\Bundle\StudioUiBundle\Security\Csp\ContentSecurityPolicyHandlerInterface;
 use Pimcore\Http\RequestHelper;
 use Psr\Log\LoggerAwareInterface;
@@ -80,8 +81,10 @@ final class CspHeaderSubscriber implements EventSubscriberInterface, LoggerAware
 
         $response = $event->getResponse();
 
-        // a clone per response: additions of this request must not reach the next one in a worker
-        $policy = clone $this->contentSecurityPolicyHandler;
+        // a copy per response so additions never reach the next one in a worker; only the default
+        // handler is known to copy cleanly, a decorated one is shared as before
+        $handler = $this->contentSecurityPolicyHandler;
+        $policy = $handler instanceof ContentSecurityPolicyHandler ? $handler->forResponse() : $handler;
         $this->addBuildRemoteOrigins($request, $policy, $this->isHtml($response));
 
         $cspHeader = $policy->getCspHeader();
