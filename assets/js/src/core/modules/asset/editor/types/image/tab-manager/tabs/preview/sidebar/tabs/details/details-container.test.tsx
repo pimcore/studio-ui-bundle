@@ -23,7 +23,7 @@ jest.mock('./details-view', () => ({
 const downloadThumbnail = jest.fn()
 jest.mock('@Pimcore/modules/asset/asset-api-slice-enhanced', () => ({
   useAssetGetByIdQuery: () => ({ data: { id: 42, filename: 'photo.jpg', width: 800, height: 600 } }),
-  useLazyAssetImageDownloadByThumbnailFileQuery: () => [downloadThumbnail]
+  useLazyAssetImageDownloadByThumbnailQuery: () => [downloadThumbnail]
 }))
 
 const resolveDownload = (value: unknown): void => {
@@ -78,10 +78,6 @@ describe('image DetailContainer thumbnail download', () => {
     global.URL.revokeObjectURL = jest.fn()
   })
 
-  afterEach(() => {
-    jest.useRealTimers()
-  })
-
   it('hands the downloadable thumbnails to the view as select options', () => {
     renderContainer()
 
@@ -108,38 +104,25 @@ describe('image DetailContainer thumbnail download', () => {
     expect(useThumbnailImageGetCollectionQuery).toHaveBeenCalledWith(undefined, { skip: true })
   })
 
-  it('downloads the image rendered with the chosen thumbnail under the server-suggested name', async () => {
-    resolveDownload({ blob: new Blob(['image']), filename: 'photo.webp' })
+  it('downloads the image rendered with the chosen thumbnail under the asset filename', async () => {
+    resolveDownload(new Blob(['image']))
 
     renderContainer()
     viewProps.onClickDownloadByThumbnail('web-large')
 
     expect(downloadThumbnail).toHaveBeenCalledWith({ id: 42, thumbnailName: 'web-large' })
-    await waitFor(() => { expect(saveFileLocal).toHaveBeenCalledWith('blob:photo', 'photo.webp') })
-  })
-
-  it('falls back to the asset filename when the server suggests none', async () => {
-    resolveDownload({ blob: new Blob(['image']), filename: undefined })
-
-    renderContainer()
-    viewProps.onClickDownloadByThumbnail('web-large')
-
     await waitFor(() => { expect(saveFileLocal).toHaveBeenCalledWith('blob:photo', 'photo.jpg') })
   })
 
-  it('releases the object URL once the download has been handed to the browser', async () => {
-    jest.useFakeTimers()
-    resolveDownload({ blob: new Blob(['image']), filename: 'photo.webp' })
+  it('releases the object URL after the download has been handed to the browser', async () => {
+    resolveDownload(new Blob(['image']))
 
     renderContainer()
     viewProps.onClickDownloadByThumbnail('web-large')
 
-    await waitFor(() => { expect(saveFileLocal).toHaveBeenCalled() })
-    expect(global.URL.revokeObjectURL).not.toHaveBeenCalled()
-
-    jest.runAllTimers()
-
-    expect(global.URL.revokeObjectURL).toHaveBeenCalledWith('blob:photo')
+    await waitFor(() => { expect(global.URL.revokeObjectURL).toHaveBeenCalledWith('blob:photo') })
+    const revokeMock = global.URL.revokeObjectURL as jest.Mock
+    expect(saveFileLocal.mock.invocationCallOrder[0]).toBeLessThan(revokeMock.mock.invocationCallOrder[0])
   })
 
   it('tracks the error and saves nothing when the download request fails', async () => {

@@ -12,7 +12,7 @@ import React, { useContext } from 'react'
 import {
   type Image,
   useAssetGetByIdQuery,
-  useLazyAssetImageDownloadByThumbnailFileQuery
+  useLazyAssetImageDownloadByThumbnailQuery
 } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import {
@@ -27,14 +27,11 @@ import { useThumbnailImageGetCollectionQuery } from '@Pimcore/modules/asset/edit
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 
-// long enough for every browser to have started reading the object URL after the click
-const OBJECT_URL_RELEASE_DELAY_MS = 40_000
-
 const DetailContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
   const { data } = useAssetGetByIdQuery({ id: assetContext.id })
   const imageData = data! as Image
-  const [fetchThumbnailDownload] = useLazyAssetImageDownloadByThumbnailFileQuery()
+  const [fetchThumbnailDownload] = useLazyAssetImageDownloadByThumbnailQuery()
 
   // the collection endpoint is gated by the thumbnails permission on top of the assets permission
   const canListThumbnails = isAllowed(UserPermission.Thumbnails)
@@ -64,10 +61,10 @@ const DetailContainer = (): React.JSX.Element => {
   function downloadImageByThumbnail (id: number, thumbnailName: string): void {
     fetchThumbnailDownload({ id, thumbnailName })
       .unwrap()
-      .then(({ blob, filename }) => {
+      .then((blob) => {
         const objectUrl = URL.createObjectURL(blob)
-        saveFileLocal(objectUrl, filename ?? imageData.filename)
-        setTimeout(() => { URL.revokeObjectURL(objectUrl) }, OBJECT_URL_RELEASE_DELAY_MS)
+        saveFileLocal(objectUrl, imageData.filename)
+        setTimeout(() => { URL.revokeObjectURL(objectUrl) }, 0)
       })
       .catch(() => {
         trackError(new GeneralError('Could not download thumbnail'))
