@@ -17,18 +17,16 @@ import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listin
 import { useClassDefinitions } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { resolveSavedSearchElementType } from '@Pimcore/modules/search/saved-search/utils/resolve-element-type'
-import { restoredColumnKeys, useApplySavedSearch } from './use-apply-saved-search'
+import { useApplySavedSearch } from './use-apply-saved-search'
+import { carriesLayout, restoredColumnLayout } from './restored-layout'
+import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
+import { useDataObjectGetAvailableGridColumnsQuery } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 
 /**
  * Logic-only component mounted inside the Data Object search listing. Selects the saved class first
  * (so its columns load) when one is set, then applies the saved search. A data-object search can be
  * classless (search across all classes), so routing is by elementType, not by the presence of a classId.
  */
-/** the columns every object listing offers without a class — what the classless static set holds */
-const SYSTEM_COLUMN_KEYS = new Set([
-  'id', 'type', 'fullpath', 'key', 'published', 'classname', 'filename', 'creationDate', 'modificationDate', 'index'
-])
-
 export const ObjectSavedSearchRestore = (): null => {
   const { pendingRestore, setPendingRestore } = useSearch()
   const { availableColumns } = useAvailableColumns()
@@ -38,10 +36,16 @@ export const ObjectSavedSearchRestore = (): null => {
   // the proposal this restore has already applied at least once
   const appliedTo = useRef<unknown>(undefined)
   const applySavedSearch = useApplySavedSearch()
+  const { getId } = useSettings().useElementId()
 
   const classId = pendingRestore?.classId
   const hasClass = isString(classId) && !isEmpty(classId)
   const belongsToObject = !isNil(pendingRestore) && resolveSavedSearchElementType(pendingRestore) === elementTypes.dataObject
+  // the same query the class column loader runs, so this reads its cache entry rather than a second request
+  const { currentData: classColumns } = useDataObjectGetAvailableGridColumnsQuery(
+    { folderId: getId(), classId: classId! },
+    { skip: !belongsToObject || !hasClass }
+  )
 
   // Select the saved class up front so the listing loads that class's columns. Depends on the
   // class catalog as well: mounted while it still loads, a one-shot lookup misses and the
@@ -81,9 +85,8 @@ export const ObjectSavedSearchRestore = (): null => {
     // "the grid already shows the saved columns" cannot stand in for "applied" until it has
     // been applied once. A search that names NO columns matches that test on the first tick,
     // and without this it would be consumed having applied nothing at all.
-    const expected = restoredColumnKeys(savedColumns, availableColumns)
-    const columnsCarried = expected.length === 0 ||
-      (selectedColumns.length === expected.length && expected.every((key, index) => selectedColumns[index]?.key === key))
+    const expected = restoredColumnLayout(savedColumns, availableColumns)
+    const columnsCarried = expected.length === 0 || carriesLayout(selectedColumns, expected)
     if (appliedTo.current !== pendingRestore || !columnsCarried) {
       appliedTo.current = pendingRestore
       applySavedSearch(pendingRestore)
@@ -92,13 +95,14 @@ export const ObjectSavedSearchRestore = (): null => {
     }
 
     // The class column set loads after the class selection — and after the type select, which
-    // the apply itself restores. Until it lands, the available columns are still the classless
-    // system set and the match above only covers the saved system columns: applied, but not yet
-    // consumable. When the class columns arrive the expectation widens and the columns re-apply.
-    const savedKeys = (savedColumns as Array<{ key?: string }>).map((column) => column.key ?? '')
-    const savesClassColumns = hasClass && savedKeys.some((key) => key !== '' && !SYSTEM_COLUMN_KEYS.has(key))
-    const classColumnsArrived = availableColumns.some((column) => !SYSTEM_COLUMN_KEYS.has(column.key))
-    if (savesClassColumns && !classColumnsArrived) {
+    // the apply itself restores. Until the listing carries exactly what the class query returned,
+    // the match above only covers the classless set: applied, but not yet consumable. When the
+    // class columns arrive the expectation widens and the columns re-apply.
+    const classColumnKeys = (classColumns?.columns ?? []).map((column) => column.key)
+    const classColumnsLoaded = !isNil(classColumns?.columns) &&
+      classColumnKeys.length === availableColumns.length &&
+      classColumnKeys.every((key, index) => availableColumns[index]?.key === key)
+    if (hasClass && !classColumnsLoaded) {
       return
     }
 
@@ -110,7 +114,7 @@ export const ObjectSavedSearchRestore = (): null => {
     }, 1200)
 
     return () => { window.clearTimeout(timer) }
-  }, [pendingRestore, availableColumns, selectedColumns, selectedClassDefinition])
+  }, [pendingRestore, availableColumns, selectedColumns, selectedClassDefinition, classColumns])
 
   return null
 }

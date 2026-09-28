@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { render } from '@testing-library/react'
+import { act, render } from '@testing-library/react'
 import { ObjectSavedSearchRestore } from './object-saved-search-restore'
 
 const applySavedSearch = jest.fn()
@@ -18,7 +18,8 @@ const setSelectedClassDefinition = jest.fn()
 
 let pendingRestore: Record<string, unknown> | undefined
 let availableColumns: Array<{ key: string }> = []
-let selectedColumns: Array<{ key: string }> = []
+let selectedColumns: Array<{ key: string, locale?: string | null, width?: number | null }> = []
+let classColumns: Array<{ key: string }> | undefined
 
 jest.mock('@Pimcore/modules/search/provider/use-search', () => ({
   useSearch: () => ({ pendingRestore, setPendingRestore })
@@ -40,17 +41,28 @@ jest.mock('@Pimcore/modules/data-object/utils/provider/class-defintions/use-clas
   useClassDefinitions: () => ({ getById: () => ({ id: 'CAR' }), data: { items: [{ id: 'CAR' }] } })
 }))
 
+jest.mock('@Pimcore/modules/element/listing/abstract/settings/use-settings', () => ({
+  useSettings: () => ({ useElementId: () => ({ getId: () => 1 }) })
+}))
+
+jest.mock('@Pimcore/modules/data-object/data-object-api-slice.gen', () => ({
+  useDataObjectGetAvailableGridColumnsQuery: () => ({ currentData: classColumns === undefined ? undefined : { columns: classColumns } })
+}))
+
 jest.mock('./use-apply-saved-search', () => ({
-  useApplySavedSearch: () => applySavedSearch,
-  restoredColumnKeys: (saved: Array<{ key?: string }>, available: Array<{ key: string }>) =>
-    saved.map((column) => column.key ?? '').filter((key) => available.some((entry) => entry.key === key))
+  useApplySavedSearch: () => applySavedSearch
 }))
 
 describe('ObjectSavedSearchRestore', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     availableColumns = [{ key: 'id' }, { key: 'fullpath' }, { key: 'color' }]
+    classColumns = availableColumns
     selectedColumns = []
+  })
+
+  afterEach(() => {
+    jest.useRealTimers()
   })
 
   it('applies a search that names no columns — its filter still has to reach the grid', () => {
@@ -92,5 +104,65 @@ describe('ObjectSavedSearchRestore', () => {
     render(<ObjectSavedSearchRestore />)
 
     expect(applySavedSearch).toHaveBeenCalledWith(pendingRestore)
+  })
+
+  it('consumes a search on a class with no data fields once that class\'s column set is loaded', () => {
+    jest.useFakeTimers()
+    // the class offers only the system columns; the search still names a field the class lost
+    availableColumns = [{ key: 'id' }, { key: 'fullpath' }]
+    classColumns = availableColumns
+    pendingRestore = {
+      elementType: 'data-object',
+      classId: 'CAR',
+      columns: [{ key: 'id' }, { key: 'deletedField' }],
+      filter: [{ columnFilters: [] }]
+    }
+
+    const { rerender } = render(<ObjectSavedSearchRestore />)
+    selectedColumns = [{ key: 'id', locale: null }]
+    rerender(<ObjectSavedSearchRestore />)
+    act(() => { jest.advanceTimersByTime(1200) })
+
+    expect(setPendingRestore).toHaveBeenCalledWith(undefined)
+  })
+
+  it('is not consumed while the listing still carries a column set other than the class\'s', () => {
+    jest.useFakeTimers()
+    availableColumns = [{ key: 'id' }, { key: 'fullpath' }]
+    classColumns = [{ key: 'id' }, { key: 'fullpath' }, { key: 'color' }]
+    pendingRestore = {
+      elementType: 'data-object',
+      classId: 'CAR',
+      columns: [{ key: 'id' }],
+      filter: [{ columnFilters: [] }]
+    }
+
+    const { rerender } = render(<ObjectSavedSearchRestore />)
+    selectedColumns = [{ key: 'id', locale: null }]
+    rerender(<ObjectSavedSearchRestore />)
+    act(() => { jest.advanceTimersByTime(5000) })
+
+    expect(setPendingRestore).not.toHaveBeenCalled()
+  })
+
+  it('re-applies when a late write keeps the keys but drops the saved locale and width', () => {
+    jest.useFakeTimers()
+    availableColumns = [{ key: 'id' }, { key: 'name' }]
+    classColumns = availableColumns
+    pendingRestore = {
+      elementType: 'data-object',
+      classId: 'CAR',
+      columns: [{ key: 'name', locale: 'de', width: 300 }],
+      filter: [{ columnFilters: [] }]
+    }
+
+    const { rerender } = render(<ObjectSavedSearchRestore />)
+    // a default configuration landing after the apply: same key, default locale and width
+    selectedColumns = [{ key: 'name', locale: null, width: null }]
+    rerender(<ObjectSavedSearchRestore />)
+    act(() => { jest.advanceTimersByTime(5000) })
+
+    expect(applySavedSearch).toHaveBeenCalledTimes(2)
+    expect(setPendingRestore).not.toHaveBeenCalled()
   })
 })

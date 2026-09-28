@@ -21,6 +21,7 @@ import { type SavedSearchDetailedConfiguration, type GridFilter } from '@Pimcore
 import { useTagFilter } from '@Pimcore/modules/asset/listing/decorator/tag-filter/context-layer/provider/tag-filter/use-tag-filter'
 import { tagFilterType, type SelectedTags } from '@Pimcore/modules/asset/listing/decorator/tag-filter/context-layer/provider/tag-filter/tag-filter-provider'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
+import { buildSelectedColumns, type SavedColumn } from './restored-layout'
 import { useTypeSelect } from '@Pimcore/modules/element/components/type-select/provider/use-type-select'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
@@ -49,7 +50,6 @@ interface ColumnFilterEntry {
   locale?: string | null
   meta?: { translationKey?: string, [key: string]: unknown }
 }
-interface SavedColumn { key?: string, locale?: string | null, width?: number | null }
 
 /** The backend models `filter` as an array but stores a single FilterParameter — normalise to one object. */
 const getFilter = (configuration: SavedSearchDetailedConfiguration): GridFilter | undefined => {
@@ -58,34 +58,6 @@ const getFilter = (configuration: SavedSearchDetailedConfiguration): GridFilter 
     return raw[0] as GridFilter | undefined
   }
   return (raw ?? undefined) as GridFilter | undefined
-}
-
-/** Merges the saved key/locale/width with the live available-column definition (same transform grid-config uses). */
-const buildSelectedColumns = (savedColumns: SavedColumn[], availableColumns: AvailableColumn[]): SelectedColumn[] => {
-  const selectedColumns: SelectedColumn[] = []
-  for (const savedColumn of savedColumns) {
-    const availableColumn = availableColumns.find((available) => available.key === savedColumn.key)
-    if (isNil(availableColumn)) {
-      continue
-    }
-    selectedColumns.push({
-      key: savedColumn.key,
-      // normalized to null: the column mappers compare locale strictly, and the grid data
-      // carries null — a column saved without a locale (an agent's bare key) must still map
-      locale: savedColumn.locale ?? null,
-      type: availableColumn.type,
-      config: availableColumn.config,
-      sortable: availableColumn.sortable,
-      editable: availableColumn.editable,
-      localizable: availableColumn.localizable,
-      exportable: availableColumn.exportable,
-      frontendType: availableColumn.frontendType,
-      group: availableColumn.group,
-      width: savedColumn.width,
-      originalApiDefinition: availableColumn
-    })
-  }
-  return selectedColumns
 }
 
 /**
@@ -175,10 +147,3 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
     setDataLoadingState('config-changed')
   }
 }
-
-/**
- * The column keys a saved search resolves to against the live available columns — the set the
- * restore is expected to leave in the grid. Empty when nothing the search names is available.
- */
-export const restoredColumnKeys = (saved: SavedColumn[], available: AvailableColumn[]): string[] =>
-  buildSelectedColumns(saved, available).map((column) => column.key ?? '')

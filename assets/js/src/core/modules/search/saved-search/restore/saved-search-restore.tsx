@@ -15,7 +15,8 @@ import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { resolveSavedSearchElementType } from '@Pimcore/modules/search/saved-search/utils/resolve-element-type'
-import { restoredColumnKeys, useApplySavedSearch } from './use-apply-saved-search'
+import { useApplySavedSearch } from './use-apply-saved-search'
+import { carriesLayout, restoredColumnLayout } from './restored-layout'
 
 interface SavedSearchRestoreProps {
   elementType?: ElementType
@@ -47,9 +48,8 @@ export const SavedSearchRestore = ({ elementType }: SavedSearchRestoreProps): nu
     // Convergent, not one-shot: a late default-configuration write (a config loader mounting
     // after the apply) overwrites the restored columns, so the restore is only CONSUMED once
     // the grid actually carries the saved layout — until then every clobber re-applies it.
-    const expected = restoredColumnKeys(savedColumns, availableColumns)
-    const applied = expected.length === 0 ||
-      (selectedColumns.length === expected.length && expected.every((key, index) => selectedColumns[index]?.key === key))
+    const expected = restoredColumnLayout(savedColumns, availableColumns)
+    const applied = expected.length === 0 || carriesLayout(selectedColumns, expected)
 
     if (!applied) {
       applySavedSearch(pendingRestore)
