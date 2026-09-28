@@ -122,6 +122,34 @@ describe('AssetEditorSidebarDetailsView thumbnail download', () => {
     expect(onClickDownloadByThumbnail).toHaveBeenCalledWith('print-hires')
   })
 
+  it('falls back to the first thumbnail when the picked one is no longer downloadable', () => {
+    const onClickDownloadByThumbnail = jest.fn()
+    const props = {
+      height: 600,
+      width: 800,
+      onClickCustomDownload: jest.fn(),
+      onClickDownloadByFormat: jest.fn(),
+      onClickDownloadByThumbnail
+    }
+    const { rerender } = render(
+      <AssetEditorSidebarDetailsView
+        { ...props }
+        downloadableThumbnails={ downloadableThumbnails }
+      />
+    )
+
+    fireEvent.change(thumbnailSelect(), { target: { value: 'print-hires' } })
+    rerender(
+      <AssetEditorSidebarDetailsView
+        { ...props }
+        downloadableThumbnails={ [{ value: 'web-large', label: 'web-large' }] }
+      />
+    )
+    fireEvent.click(thumbnailDownloadButton())
+
+    expect(onClickDownloadByThumbnail).toHaveBeenCalledWith('web-large')
+  })
+
   it('hides the block when no thumbnail is downloadable', () => {
     renderView({ downloadableThumbnails: [] })
 

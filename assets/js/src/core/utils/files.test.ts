@@ -25,6 +25,30 @@ describe('getFilenameFromContentDisposition', () => {
     )).toBe('café photo.jpg')
   })
 
+  it('decodes an ISO-8859-1 encoded filename', () => {
+    expect(getFilenameFromContentDisposition("attachment; filename*=ISO-8859-1''%A3%20rates.jpg")).toBe('£ rates.jpg')
+  })
+
+  it('falls back to the plain filename when the encoded one uses an unsupported charset', () => {
+    expect(getFilenameFromContentDisposition(
+      "attachment; filename=\"fallback.jpg\"; filename*=shift_jis''%82%A0.jpg"
+    )).toBe('fallback.jpg')
+  })
+
+  it('falls back to the plain filename when the encoded one is malformed', () => {
+    expect(getFilenameFromContentDisposition(
+      "attachment; filename=\"fallback.jpg\"; filename*=utf-8''%E0%A4%A.jpg"
+    )).toBe('fallback.jpg')
+  })
+
+  it('keeps semicolons and escaped quotes inside a quoted filename', () => {
+    expect(getFilenameFromContentDisposition('attachment; filename="a;b \\"c\\".jpg"')).toBe('a;b "c".jpg')
+  })
+
+  it('does not mistake filename* for a plain filename', () => {
+    expect(getFilenameFromContentDisposition("attachment; filename*=shift_jis''%82%A0.jpg")).toBeUndefined()
+  })
+
   it('returns undefined when the header is missing or has no filename', () => {
     expect(getFilenameFromContentDisposition(null)).toBeUndefined()
     expect(getFilenameFromContentDisposition('inline')).toBeUndefined()

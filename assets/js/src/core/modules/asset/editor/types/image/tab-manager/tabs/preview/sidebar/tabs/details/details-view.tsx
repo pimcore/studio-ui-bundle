@@ -9,6 +9,7 @@
  */
 
 import React, { useState } from 'react'
+import { isEmpty, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { Form, Input } from 'antd'
 import { Select } from '@Pimcore/components/select/select'
@@ -59,9 +60,11 @@ export const AssetEditorSidebarDetailsView = ({
   onClickCustomDownload
 }: AssetEditorSidebarDetailsViewProps): React.JSX.Element => {
   const [downloadFormat, setDownloadFormat] = useState<string>('original')
-  // the list arrives asynchronously, so the first entry is the fallback until the user picks one
+  // the list arrives asynchronously and is refetched when a definition changes, so the pick only
+  // counts while it is still offered; otherwise the first entry is used
   const [selectedThumbnail, setSelectedThumbnail] = useState<string | undefined>(undefined)
-  const downloadThumbnail = selectedThumbnail ?? downloadableThumbnails[0]?.value
+  const isSelectionOffered = downloadableThumbnails.some(option => option.value === selectedThumbnail)
+  const downloadThumbnail = isSelectionOffered ? selectedThumbnail : downloadableThumbnails[0]?.value
   const [customWidth, setCustomWidth] = useState(width)
   const [customHeight, setCustomHeight] = useState(height)
   const [customQuality, setCustomQuality] = useState(-1)
@@ -202,7 +205,7 @@ export const AssetEditorSidebarDetailsView = ({
           </div>
         </div>
 
-        {downloadableThumbnails.length > 0 && (
+        {!isEmpty(downloadableThumbnails) && (
           <div className={ ['m-t-small', styles.sidebarContentDownload].join(' ') }>
             <p className={ 'sidebar__content-label' }>{t('asset.sidebar.thumbnail-download')}</p>
 
@@ -219,7 +222,7 @@ export const AssetEditorSidebarDetailsView = ({
                   aria-label={ t('aria.asset.image-sidebar.tab.details.download-downloadable-thumbnail') }
                   icon={ { value: 'download' } }
                   onClick={ () => {
-                    if (downloadThumbnail !== undefined) {
+                    if (!isUndefined(downloadThumbnail)) {
                       onClickDownloadByThumbnail(downloadThumbnail)
                     }
                   } }

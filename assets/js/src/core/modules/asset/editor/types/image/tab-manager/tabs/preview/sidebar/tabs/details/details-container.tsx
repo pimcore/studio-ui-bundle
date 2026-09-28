@@ -9,13 +9,17 @@
  */
 
 import React, { useContext } from 'react'
-import { type Image, useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import {
+  type Image,
+  useAssetGetByIdQuery,
+  useLazyAssetImageDownloadByThumbnailFileQuery
+} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import {
   AssetEditorSidebarDetailsView,
   type CustomDownloadProps
 } from '@Pimcore/modules/asset/editor/types/image/tab-manager/tabs/preview/sidebar/tabs/details/details-view'
-import { getFilenameFromContentDisposition, replaceFileEnding, saveFileLocal } from '@Pimcore/utils/files'
+import { replaceFileEnding, saveFileLocal } from '@Pimcore/utils/files'
 import { buildQueryString } from '@Pimcore/utils/query-string'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
@@ -23,10 +27,14 @@ import { useThumbnailImageGetCollectionQuery } from '@Pimcore/modules/asset/edit
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 
+// long enough for every browser to have started reading the object URL after the click
+const OBJECT_URL_RELEASE_DELAY_MS = 40_000
+
 const DetailContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
   const { data } = useAssetGetByIdQuery({ id: assetContext.id })
   const imageData = data! as Image
+  const [fetchThumbnailDownload] = useLazyAssetImageDownloadByThumbnailFileQuery()
 
   // the collection endpoint is gated by the thumbnails permission on top of the assets permission
   const canListThumbnails = isAllowed(UserPermission.Thumbnails)
@@ -54,17 +62,12 @@ const DetailContainer = (): React.JSX.Element => {
   )
 
   function downloadImageByThumbnail (id: number, thumbnailName: string): void {
-    fetch(`${getPrefix()}/assets/${id}/image/download/thumbnail/${encodeURIComponent(thumbnailName)}`)
-      .then(async (response) => {
-        if (!response.ok) {
-          throw new Error(`Thumbnail download failed with status ${response.status}`)
-        }
-
-        const filename = getFilenameFromContentDisposition(response.headers.get('Content-Disposition'))
-        return { filename, blob: await response.blob() }
-      })
-      .then(({ filename, blob }) => {
-        saveFileLocal(URL.createObjectURL(blob), filename ?? imageData.filename)
+    fetchThumbnailDownload({ id, thumbnailName })
+      .unwrap()
+      .then(({ blob, filename }) => {
+        const objectUrl = URL.createObjectURL(blob)
+        saveFileLocal(objectUrl, filename ?? imageData.filename)
+        setTimeout(() => { URL.revokeObjectURL(objectUrl) }, OBJECT_URL_RELEASE_DELAY_MS)
       })
       .catch(() => {
         trackError(new GeneralError('Could not download thumbnail'))

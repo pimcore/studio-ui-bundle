@@ -20,9 +20,19 @@ jest.mock('./details-view', () => ({
   }
 }))
 
+const downloadThumbnail = jest.fn()
 jest.mock('@Pimcore/modules/asset/asset-api-slice-enhanced', () => ({
-  useAssetGetByIdQuery: () => ({ data: { id: 42, filename: 'photo.jpg', width: 800, height: 600 } })
+  useAssetGetByIdQuery: () => ({ data: { id: 42, filename: 'photo.jpg', width: 800, height: 600 } }),
+  useLazyAssetImageDownloadByThumbnailFileQuery: () => [downloadThumbnail]
 }))
+
+const resolveDownload = (value: unknown): void => {
+  downloadThumbnail.mockReturnValue({ unwrap: async () => await Promise.resolve(value) })
+}
+
+const rejectDownload = (error: unknown): void => {
+  downloadThumbnail.mockReturnValue({ unwrap: async () => await Promise.reject(error) })
+}
 
 const useThumbnailImageGetCollectionQuery = jest.fn()
 jest.mock('@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen', () => ({
@@ -32,10 +42,6 @@ jest.mock('@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen', 
 const isAllowed = jest.fn()
 jest.mock('@Pimcore/modules/auth/permission-helper', () => ({
   isAllowed: (...args: unknown[]) => isAllowed(...args)
-}))
-
-jest.mock('@Pimcore/app/api/pimcore/route', () => ({
-  getPrefix: () => '/studio/api'
 }))
 
 const saveFileLocal = jest.fn()
@@ -69,11 +75,11 @@ describe('image DetailContainer thumbnail download', () => {
       data: { items: [{ id: 'web-large', text: 'web-large' }, { id: 'print-hires', text: 'print-hires' }] }
     })
     global.URL.createObjectURL = jest.fn(() => 'blob:photo')
+    global.URL.revokeObjectURL = jest.fn()
   })
 
   afterEach(() => {
-    // @ts-expect-error cleanup test global
-    delete global.fetch
+    jest.useRealTimers()
   })
 
   it('hands the downloadable thumbnails to the view as select options', () => {
@@ -103,25 +109,17 @@ describe('image DetailContainer thumbnail download', () => {
   })
 
   it('downloads the image rendered with the chosen thumbnail under the server-suggested name', async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: true,
-      headers: new Headers({ 'Content-Disposition': 'attachment; filename="photo.webp"' }),
-      blob: async () => new Blob(['image'])
-    }) as unknown as typeof fetch
+    resolveDownload({ blob: new Blob(['image']), filename: 'photo.webp' })
 
     renderContainer()
     viewProps.onClickDownloadByThumbnail('web-large')
 
-    expect(global.fetch).toHaveBeenCalledWith('/studio/api/assets/42/image/download/thumbnail/web-large')
+    expect(downloadThumbnail).toHaveBeenCalledWith({ id: 42, thumbnailName: 'web-large' })
     await waitFor(() => { expect(saveFileLocal).toHaveBeenCalledWith('blob:photo', 'photo.webp') })
   })
 
   it('falls back to the asset filename when the server suggests none', async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: true,
-      headers: new Headers(),
-      blob: async () => new Blob(['image'])
-    }) as unknown as typeof fetch
+    resolveDownload({ blob: new Blob(['image']), filename: undefined })
 
     renderContainer()
     viewProps.onClickDownloadByThumbnail('web-large')
@@ -129,14 +127,24 @@ describe('image DetailContainer thumbnail download', () => {
     await waitFor(() => { expect(saveFileLocal).toHaveBeenCalledWith('blob:photo', 'photo.jpg') })
   })
 
-  it('does not save anything when the download request fails', async () => {
+  it('releases the object URL once the download has been handed to the browser', async () => {
+    jest.useFakeTimers()
+    resolveDownload({ blob: new Blob(['image']), filename: 'photo.webp' })
+
+    renderContainer()
+    viewProps.onClickDownloadByThumbnail('web-large')
+
+    await waitFor(() => { expect(saveFileLocal).toHaveBeenCalled() })
+    expect(global.URL.revokeObjectURL).not.toHaveBeenCalled()
+
+    jest.runAllTimers()
+
+    expect(global.URL.revokeObjectURL).toHaveBeenCalledWith('blob:photo')
+  })
+
+  it('tracks the error and saves nothing when the download request fails', async () => {
     const trackError = jest.requireMock('@Pimcore/modules/app/error-handler').default
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: false,
-      status: 404,
-      headers: new Headers(),
-      blob: async () => new Blob([''])
-    }) as unknown as typeof fetch
+    rejectDownload({ status: 404, data: new Blob(['']) })
 
     renderContainer()
     viewProps.onClickDownloadByThumbnail('web-large')

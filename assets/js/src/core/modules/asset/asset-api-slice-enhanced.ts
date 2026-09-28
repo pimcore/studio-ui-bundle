@@ -9,7 +9,8 @@
  */
 
 import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
-import { api as baseApi } from './asset-api-slice.gen'
+import { api as baseApi, type AssetImageDownloadByThumbnailApiArg } from './asset-api-slice.gen'
+import { type ImageThumbnailDownload, queryImageThumbnailDownload } from './utils/image-thumbnail-download'
 
 const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.ASSET, tagNames.ASSET_TREE, tagNames.ASSET_DETAIL],
@@ -103,6 +104,16 @@ const api = baseApi.enhanceEndpoints({
       providesTags: (result, error, args) => providingTags.ASSET_GRID_CONFIGURATION_LIST()
     }
   }
+}).injectEndpoints({
+  endpoints: (build) => ({
+    // the generated assetImageDownloadByThumbnail only yields the Blob; downloads also need the filename
+    assetImageDownloadByThumbnailFile: build.query<ImageThumbnailDownload, AssetImageDownloadByThumbnailApiArg>({
+      queryFn: async (arg, _api, _extraOptions, baseQuery) =>
+        await queryImageThumbnailDownload(arg, async (args) => await baseQuery(args)),
+      // a download is a one-off; don't keep the file in the cache once the caller is done with it
+      keepUnusedDataFor: 0
+    })
+  })
 })
 
 export type * from './asset-api-slice.gen'
@@ -131,7 +142,8 @@ export const {
   useAssetGetAvailableGridColumnsQuery,
   useAssetPatchFolderByIdMutation,
   useAssetUploadInfoQuery,
-  useAssetVideoThumbnailStatusQuery
+  useAssetVideoThumbnailStatusQuery,
+  useLazyAssetImageDownloadByThumbnailFileQuery
 } = api
 
 export { api }
