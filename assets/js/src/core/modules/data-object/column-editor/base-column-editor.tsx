@@ -27,8 +27,10 @@ import { LanguageSelectionContext } from '@Pimcore/components/language-selection
 import { LanguageSelectionWithProvider } from '@Pimcore/components/language-selection/language-selection-with-provider'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { ClassificationStoreModalProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
+import { AvailableColumnsProvider } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useColumnEditorState } from './use-column-editor-state'
 import { useClassificationStoreColumnPicker } from './use-classification-store-column-picker'
+import { useSyncAvailableColumnsContext } from './use-sync-available-columns-context'
 import { buildColumnStackItems } from './build-column-stack-items'
 import { type BaseColumnEditorProps, type ColumnEditorHandle } from './types'
 
@@ -36,20 +38,25 @@ export type { BaseColumnEditorProps } from './types'
 
 /**
  * Wraps {@link BaseColumnEditorInner} with its own, self-contained
- * {@link ClassificationStoreModalProvider}: the editor is mounted in several realms that don't
- * already provide one (the Studio main window's settings area, and - so far - the document editor
- * iframe dialog), so it cannot rely on an ambient provider the way Studio's own grid configuration
- * does. Nesting is safe even where an ambient provider *does* exist (each provider instance owns its
- * own modal state).
+ * {@link ClassificationStoreModalProvider} and {@link AvailableColumnsProvider}: the editor is
+ * mounted in several realms that don't already provide either (the Studio main window's settings
+ * area, and - so far - the document editor iframe dialog), so it cannot rely on an ambient
+ * provider the way Studio's own grid configuration does. `AvailableColumnsProvider` is populated
+ * from the editor's own available-columns query via `useSyncAvailableColumnsContext` below, so a
+ * pipeline source field (e.g. "Simple field") that groups its options by `column.group` sees the
+ * same groups the listing grid config offers. Nesting either provider is safe even where an
+ * ambient one *does* exist (each provider instance owns its own state).
  */
 export const BaseColumnEditor = forwardRef<ColumnEditorHandle, BaseColumnEditorProps>(
   function BaseColumnEditor (props, ref) {
     return (
       <ClassificationStoreModalProvider>
-        <BaseColumnEditorInner
-          { ...props }
-          ref={ ref }
-        />
+        <AvailableColumnsProvider>
+          <BaseColumnEditorInner
+            { ...props }
+            ref={ ref }
+          />
+        </AvailableColumnsProvider>
       </ClassificationStoreModalProvider>
     )
   }
@@ -120,6 +127,7 @@ const BaseColumnEditorInner = forwardRef<ColumnEditorHandle, BaseColumnEditorPro
       isLoading,
       objectId,
       resolvedClassId,
+      availableFields,
       columnGroups,
       onAddAdvancedColumn,
       openElementSelector,
@@ -144,6 +152,10 @@ const BaseColumnEditorInner = forwardRef<ColumnEditorHandle, BaseColumnEditorPro
       getColumns,
       addColumn: handleColumnPick
     }), [getColumns, handleColumnPick])
+
+    // Lets pipeline source fields (e.g. "Simple field") group their options by `column.group`,
+    // the same way the listing grid configuration's own source-field dropdown does.
+    useSyncAvailableColumnsContext(availableFields)
 
     // Scrolls the newly added row (the last one, when several were added at once - e.g. picking
     // several classification store keys) into view for every user-initiated add: a fields-panel
