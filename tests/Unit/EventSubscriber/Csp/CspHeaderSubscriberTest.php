@@ -36,6 +36,8 @@ class CspHeaderSubscriberTest extends Unit
 
     private const PAGE_PATH = '/pimcore-studio/';
 
+    private const HTML = 'text/html';
+
     private const API_PATH = '/pimcore-studio/api/user/current-user-information';
 
     /**
@@ -96,7 +98,7 @@ class CspHeaderSubscriberTest extends Unit
 
     public function testAnApiResponseGetsNoBuildOrigins(): void
     {
-        $this->handle($this->page('text/html'), self::PAGE_PATH);
+        $this->handle($this->page(self::HTML), self::PAGE_PATH);
         $api = $this->handle(new JsonResponse(['ok' => true]), self::API_PATH);
 
         $this->assertStringNotContainsString(self::BUILD_ORIGIN, $api);
@@ -105,7 +107,7 @@ class CspHeaderSubscriberTest extends Unit
 
     public function testNothingFromOneResponseReachesTheNext(): void
     {
-        $page = $this->handle($this->page('text/html'), self::PAGE_PATH);
+        $page = $this->handle($this->page(self::HTML), self::PAGE_PATH);
         $api = $this->handle(new JsonResponse(['ok' => true]), self::API_PATH);
 
         $this->assertStringContainsString(self::BUILD_ORIGIN, $page);
@@ -119,7 +121,7 @@ class CspHeaderSubscriberTest extends Unit
     {
         $headers = [];
         for ($i = 0; $i < 5; $i++) {
-            $header = $this->handle($this->page('text/html'), self::PAGE_PATH);
+            $header = $this->handle($this->page(self::HTML), self::PAGE_PATH);
             $headers[] = preg_replace("/'nonce-[^']+'/", "'nonce'", $header);
         }
 
@@ -135,7 +137,7 @@ class CspHeaderSubscriberTest extends Unit
 
             // the template renders the nonce through the shared handler, before the response is built
             preg_match('/nonce="([^"]+)"/', $this->handler->getNonceHtmlAttribute(), $match);
-            $header = $this->respond($request, $this->page('text/html'));
+            $header = $this->respond($request, $this->page(self::HTML));
             $this->requestStack->pop();
 
             $this->assertStringContainsString("'nonce-" . $match[1] . "'", $header);

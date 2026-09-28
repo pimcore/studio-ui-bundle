@@ -21,13 +21,16 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ContentSecurityPolicyHandlerTest extends Unit
 {
+    private const CDN = 'https://cdn.example.com';
+
     public function testTheScriptDirectiveCarriesTheNonceOfTheTemplate(): void
     {
         $handler = new ContentSecurityPolicyHandler(true);
 
         preg_match('/nonce="([^"]+)"/', $handler->getNonceHtmlAttribute(), $match);
 
-        $this->assertStringContainsString("script-src 'self' 'nonce-" . $match[1] . "' 'unsafe-eval' ", $handler->getCspHeader());
+        $expected = "script-src 'self' 'nonce-" . $match[1] . "' 'unsafe-eval' ";
+        $this->assertStringContainsString($expected, $handler->getCspHeader());
     }
 
     public function testEachMainRequestGetsItsOwnNonce(): void
@@ -49,9 +52,9 @@ class ContentSecurityPolicyHandlerTest extends Unit
         $handler = new ContentSecurityPolicyHandler(true);
         $clone = clone $handler;
 
-        $clone->addAllowedUrls(ContentSecurityPolicyHandlerInterface::SCRIPT_OPT, ['https://cdn.example.com']);
+        $clone->addAllowedUrls(ContentSecurityPolicyHandlerInterface::SCRIPT_OPT, [self::CDN]);
 
-        $this->assertStringContainsString('https://cdn.example.com', $clone->getCspHeader());
-        $this->assertStringNotContainsString('https://cdn.example.com', $handler->getCspHeader());
+        $this->assertStringContainsString(self::CDN, $clone->getCspHeader());
+        $this->assertStringNotContainsString(self::CDN, $handler->getCspHeader());
     }
 }

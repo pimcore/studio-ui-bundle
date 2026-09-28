@@ -134,7 +134,11 @@ final class ContentSecurityPolicyHandler implements ContentSecurityPolicyHandler
     {
         $request = $this->requestStack?->getMainRequest();
         if ($request === null) {
-            return $this->nonce ??= generateRandomSymfonySecret();
+            if ($this->nonce === null) {
+                $this->nonce = generateRandomSymfonySecret();
+            }
+
+            return $this->nonce;
         }
 
         if (!$request->attributes->has(self::NONCE_ATTRIBUTE)) {
