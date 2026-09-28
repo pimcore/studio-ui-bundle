@@ -80,7 +80,8 @@ const BaseColumnEditorInner = forwardRef<ColumnEditorHandle, BaseColumnEditorPro
     compact = false,
     onChange,
     hidePreviewControls = false,
-    readOnly = false
+    readOnly = false,
+    fillHeight = false
   }: BaseColumnEditorProps, ref): React.JSX.Element {
     const { t } = useTranslation()
     const { styles } = useStyles()
@@ -227,7 +228,11 @@ const BaseColumnEditorInner = forwardRef<ColumnEditorHandle, BaseColumnEditorPro
           <Content
             padded
             padding={ { x: 'none', y: 'small' } }
-            style={ { height: 'calc(80vh - 200px)' } }
+            // `fillHeight` consumers (a full-height tab pane, a dialog body sized by the host)
+            // already give this element a definite height to grow into via Content's own
+            // `height: 100%` default - the fixed calc() below is only needed for the original
+            // Data Hub modal use, whose antd Modal has no definite height of its own.
+            style={ fillHeight ? undefined : { height: 'calc(80vh - 200px)' } }
           >
             <div className={ styles.body }>
               { showAddButtons && fieldsToAddOpen && (

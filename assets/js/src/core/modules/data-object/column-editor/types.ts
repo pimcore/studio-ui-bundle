@@ -95,6 +95,16 @@ export interface BaseColumnEditorProps {
    * `hideAddButtons`. Use this for a schema/channel whose storage is not writeable.
    */
   readOnly?: boolean
+  /**
+   * When true, the editor stretches to fill 100% of its container's height instead of the fixed
+   * `calc(80vh - 200px)` the editor originally inherited from its Data Hub modal use. Pass this
+   * when the host already gives the editor a definite height to grow into (a full-height tab pane,
+   * a dialog body with its own fixed height, ...) so the fields panel, column list and any nested
+   * preview scroll internally within the available space instead of clipping at a fixed height.
+   * Defaults to false so existing modal consumers (Data Hub's column config modal, which relies on
+   * the fixed height because its own antd Modal has no definite height of its own) are unaffected.
+   */
+  fillHeight?: boolean
 }
 
 /**
