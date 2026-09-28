@@ -55,13 +55,52 @@ class BuildRemoteEntryCspSubscriberTest extends Unit
 
     public function testAddsTheOriginsOfEveryRemoteEntryOnce(): void
     {
-        $provider = new class($this->workDir) implements WebpackEntryPointProviderInterface {
+        $event = new CspEvent(new Request(), new ContentSecurityPolicyHandler(true));
+
+        $this->subscriber($this->provider())->onCspEvent($event);
+
+        $origins = $event->getAdditionalBuildOrigins();
+        sort($origins);
+        $this->assertSame(['https://cdn.example.com', 'https://static.example.org'], $origins);
+    }
+
+    public function testLeavesTheBuildsAloneForAnApiResponse(): void
+    {
+        $provider = $this->provider();
+        $event = new CspEvent(new Request(), new ContentSecurityPolicyHandler(true), false);
+
+        $this->subscriber($provider)->onCspEvent($event);
+
+        $this->assertSame([], $event->getAdditionalBuildOrigins());
+        $this->assertSame(0, $provider->calls);
+    }
+
+    private function subscriber(WebpackEntryPointProviderInterface $provider): BuildRemoteEntryCspSubscriber
+    {
+        $catalog = new EntryPointCatalog(
+            new WebpackEntryPointManager([$provider]),
+            new ConfigCacheFactory(false),
+            $this->workDir . '/cache',
+            'default',
+            new NullLogger()
+        );
+
+        return new BuildRemoteEntryCspSubscriber(new CspOriginFileParser(new CspOriginValidator()), $catalog);
+    }
+
+    private function provider(): WebpackEntryPointProviderInterface
+    {
+        return new class($this->workDir) implements WebpackEntryPointProviderInterface {
+            public int $calls = 0;
+
             public function __construct(private readonly string $dir)
             {
             }
 
             public function getEntryPointsJsonLocations(): array
             {
+                $this->calls++;
+
                 return glob($this->dir . '/*/entrypoints.json') ?: [];
             }
 
@@ -75,21 +114,5 @@ class BuildRemoteEntryCspSubscriberTest extends Unit
                 return [];
             }
         };
-
-        $catalog = new EntryPointCatalog(
-            new WebpackEntryPointManager([$provider]),
-            new ConfigCacheFactory(false),
-            $this->workDir . '/cache',
-            'default',
-            new NullLogger()
-        );
-        $event = new CspEvent(new Request(), new ContentSecurityPolicyHandler(true));
-
-        $subscriber = new BuildRemoteEntryCspSubscriber(new CspOriginFileParser(new CspOriginValidator()), $catalog);
-        $subscriber->onCspEvent($event);
-
-        $origins = $event->getAdditionalBuildOrigins();
-        sort($origins);
-        $this->assertSame(['https://cdn.example.com', 'https://static.example.org'], $origins);
     }
 }
