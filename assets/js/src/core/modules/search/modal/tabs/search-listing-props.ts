@@ -14,6 +14,7 @@
  * decision made elsewhere.
  */
 import type React from 'react'
+import { isEmpty } from 'lodash'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
 import { type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 
@@ -40,7 +41,7 @@ export function withExtraSidebarEntries (
   props: AbstractDecoratorProps,
   entries: ISidebarEntry[] = []
 ): AbstractDecoratorProps {
-  if (entries.length === 0) return props
+  if (isEmpty(entries)) return props
 
   const useBaseHook = props.useSidebarOptions
 

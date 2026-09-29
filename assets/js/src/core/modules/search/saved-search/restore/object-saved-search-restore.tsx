@@ -92,7 +92,7 @@ export const ObjectSavedSearchRestore = (): null => {
     // been applied once. A search that names NO columns matches that test on the first tick,
     // and without this it would be consumed having applied nothing at all.
     const expected = restoredColumnLayout(savedColumns, availableColumns)
-    const columnsCarried = expected.length === 0 || carriesLayout(selectedColumns, expected)
+    const columnsCarried = isEmpty(expected) || carriesLayout(selectedColumns, expected)
     if (appliedTo.current !== pendingRestore || !columnsCarried) {
       appliedTo.current = pendingRestore
       applySavedSearch(pendingRestore)

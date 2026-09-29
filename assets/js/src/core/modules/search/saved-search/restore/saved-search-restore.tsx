@@ -58,7 +58,7 @@ export const SavedSearchRestore = ({ elementType }: SavedSearchRestoreProps): nu
     // An apply rewrites filters and paging and reloads, so it runs once per configuration and
     // again only after a clobber; once a prior apply is carried the restore is consumed as is.
     const expected = restoredColumnLayout(savedColumns, availableColumns)
-    const carried = expected.length === 0 || carriesLayout(selectedColumns, expected)
+    const carried = isEmpty(expected) || carriesLayout(selectedColumns, expected)
 
     if (appliedTo.current !== pendingRestore || !carried) {
       appliedTo.current = pendingRestore
