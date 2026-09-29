@@ -65,9 +65,15 @@ export const SearchProvider = (props: SearchProviderProps): React.JSX.Element =>
   const [loadedSavedSearch, setLoadedSavedSearch] = useState<SavedSearchDetailedConfiguration | undefined>(props.initialLoadedSavedSearch)
   const [panelDraft, setPanelDraft] = useState<SavedSearchPanelDraft | undefined>(undefined)
 
-  return useMemo(() => (
-    <SearchContext.Provider value={ { open, setOpen, activeKey, setActiveKey, searchTerm, setSearchTerm, searchMode, setSearchMode, pendingRestore, setPendingRestore, loadedSavedSearch, setLoadedSavedSearch, panelDraft, setPanelDraft } }>
+  // the value is memoized, not the element: a host may swap the children while the state holds
+  const value = useMemo(
+    () => ({ open, setOpen, activeKey, setActiveKey, searchTerm, setSearchTerm, searchMode, setSearchMode, pendingRestore, setPendingRestore, loadedSavedSearch, setLoadedSavedSearch, panelDraft, setPanelDraft }),
+    [open, activeKey, searchTerm, searchMode, pendingRestore, loadedSavedSearch, panelDraft]
+  )
+
+  return (
+    <SearchContext.Provider value={ value }>
       { props.children }
     </SearchContext.Provider>
-  ), [open, activeKey, searchTerm, searchMode, pendingRestore, loadedSavedSearch, panelDraft])
+  )
 }
