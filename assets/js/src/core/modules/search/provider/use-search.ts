@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useContext } from 'react'
+import { useContext, type Dispatch, type SetStateAction } from 'react'
 import { SearchContext, type SavedSearchPanelDraft } from './search-provider'
 import { type SavedSearchDetailedConfiguration } from '../search-api-slice.gen'
 import { FULLTEXT_SEARCH_MODE_ID } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/search-mode-abstract'
@@ -28,7 +28,7 @@ export interface UseSearchReturn {
   loadedSavedSearch: SavedSearchDetailedConfiguration | undefined
   setLoadedSavedSearch: (configuration: SavedSearchDetailedConfiguration | undefined) => void
   panelDraft: SavedSearchPanelDraft | undefined
-  setPanelDraft: (draft: SavedSearchPanelDraft | undefined) => void
+  setPanelDraft: Dispatch<SetStateAction<SavedSearchPanelDraft | undefined>>
 }
 
 export const useSearch = (): UseSearchReturn => {

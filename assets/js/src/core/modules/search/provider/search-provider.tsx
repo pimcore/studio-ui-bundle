@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { createContext, useMemo, useState } from 'react'
+import React, { createContext, useMemo, useState, type Dispatch, type SetStateAction } from 'react'
 import { type SavedSearchDetailedConfiguration } from '../search-api-slice.gen'
 import { FULLTEXT_SEARCH_MODE_ID } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/search-mode-abstract'
 
@@ -42,7 +42,7 @@ export interface SearchContextData {
   setLoadedSavedSearch: (configuration: SavedSearchDetailedConfiguration | undefined) => void
   /** The Save panel's live form values (name, description, shortcut, sharing) as the user edits them. */
   panelDraft: SavedSearchPanelDraft | undefined
-  setPanelDraft: (draft: SavedSearchPanelDraft | undefined) => void
+  setPanelDraft: Dispatch<SetStateAction<SavedSearchPanelDraft | undefined>>
 }
 
 export type SearchContextProps = SearchContextData | undefined

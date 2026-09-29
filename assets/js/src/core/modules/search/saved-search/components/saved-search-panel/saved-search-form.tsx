@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
-import { useSearch } from '@Pimcore/modules/search/provider/use-search'
+import { usePanelDraftPublisher } from '@Pimcore/modules/search/provider/use-panel-draft-publisher'
 import { Form } from '@Pimcore/components/form/form'
 import { type formInstanceType } from '@Pimcore/components/form/use-form'
 import { Input } from '@Pimcore/components/input/input'
@@ -73,21 +73,21 @@ export const SavedSearchForm = ({
   // group (kept at the normal spacing otherwise, so the toggle isn't cramped against the next field).
   const createMenuShortcutEnabled = Form.useWatch('createMenuShortcut', form) === true
 
-  const { setPanelDraft } = useSearch()
+  const publishDraft = usePanelDraftPublisher()
 
   const handleFormValuesChange = (changedValues: Partial<SavedSearchFormValues>, allValues: SavedSearchFormValues): void => {
     if (changedValues.shareGlobally !== undefined) {
       onSharedGloballyChange(changedValues.shareGlobally)
     }
     // the live form values, for anything hosting this panel that mirrors what the user types
-    setPanelDraft({ ...allValues, sharedUsers, sharedRoles })
+    publishDraft({ ...allValues, sharedUsers, sharedRoles })
   }
 
   // The users and roles a search is shared with are picked in a dropdown, not in the form, so
   // they reach a host only from here — without this a host mirroring the panel would miss the
   // one sharing change the form never sees.
   useEffect(() => {
-    setPanelDraft({ ...(form.getFieldsValue() as SavedSearchFormValues), sharedUsers, sharedRoles })
+    publishDraft({ ...(form.getFieldsValue() as SavedSearchFormValues), sharedUsers, sharedRoles })
   }, [sharedUsers, sharedRoles])
 
   const renderIcon = (iconName: string, size?: number): React.JSX.Element => (
