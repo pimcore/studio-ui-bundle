@@ -36,7 +36,7 @@ export const ApiLoader = ({ Component }: ColumnConfigLoaderProps): React.JSX.Ele
   const { selectedColumns, setSelectedColumns } = useSelectedColumns()
   const { setAvailableColumns } = useAvailableColumns()
   const { setGridConfig } = useGridConfig()
-  const { loadedSavedSearch } = useSearch()
+  const { pendingRestore } = useSearch()
   const applied = useRef<{ columns?: unknown, configuration?: unknown }>({})
 
   useEffect(() => {
@@ -91,10 +91,10 @@ export const ApiLoader = ({ Component }: ColumnConfigLoaderProps): React.JSX.Ele
       }
     }
 
-    // a loaded saved search owns this class's column selection — its restore installed (or is
-    // about to install) the saved layout, and the class defaults landing late must not win
-    const restoreOwnsColumns = loadedSavedSearch?.classId === selectedClassDefinition!.id &&
-      (loadedSavedSearch?.columns ?? []).length > 0
+    // a saved search still being restored onto this class owns its column selection, and the
+    // class defaults landing late must not win; once restored, a class switch shows defaults again
+    const restoreOwnsColumns = pendingRestore?.classId === selectedClassDefinition!.id &&
+      (pendingRestore?.columns ?? []).length > 0
     if (!restoreOwnsColumns) {
       setSelectedColumns(selectedColumns)
     }
