@@ -245,7 +245,7 @@ export const Select = forwardRef<RefSelectProps, SelectProps>(({
                           >
           <Icon
             className={ 'm-r-mini' }
-            value={ 'warning-circle' }
+            value={ 'alert-outline' }
           /> {t('no-data-available')}</Flex> }
         onBlur={ handleBlur }
         onDropdownVisibleChange={ handleDropdownVisibleChange }

@@ -38,7 +38,7 @@ export const useMessage = (messageConfig?: ConfigOptions): MessageInstance => {
     config.icon = (
       <Icon
         options={ { width: '16px', height: '16px' } }
-        value={ 'info-circle' }
+        value={ 'info-outline' }
       />
     )
 
@@ -54,7 +54,7 @@ export const useMessage = (messageConfig?: ConfigOptions): MessageInstance => {
       return message.open({
         icon: <Icon
           options={ { width: '16px', height: '16px' } }
-          value={ 'info-circle' }
+          value={ 'info-outline' }
               />,
         className: styles.message,
         ...config

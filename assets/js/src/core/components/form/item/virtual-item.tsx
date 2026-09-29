@@ -127,7 +127,7 @@ export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX
                         : (
                           <Icon
                             options={ { width: 14, height: 14 } }
-                            value="info-circle"
+                            value="info-outline"
                           />
                           )}
                     </Tooltip>
