@@ -15,18 +15,21 @@ import { componentConfig } from '@Pimcore/modules/app/component-registry/compone
 import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 import { type Credentials, useLoginMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
 import { useStyle } from '@Pimcore/modules/auth/components/login-form/login-form-style'
+import { useTwoFactorAuthentication, type TwoFactorStep } from '@Pimcore/modules/auth/hooks/use-two-factor-authentication'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { sendStatistics } from '@Pimcore/modules/auth/services/statisticsService'
 import { Checkbox, Input } from 'antd'
+import { isUndefined } from 'lodash'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Icon } from '../../../../components/icon/icon'
 
 interface ILoginFormProps {
   onPasswordForgotten?: () => void
+  onTwoFactorRequired?: (step: TwoFactorStep) => void
 }
 
-export const LoginForm = ({ onPasswordForgotten }: ILoginFormProps): React.JSX.Element => {
+export const LoginForm = ({ onPasswordForgotten, onTwoFactorRequired }: ILoginFormProps): React.JSX.Element => {
   const user = useUser()
   const { styles } = useStyle()
   const messageApi = useMessage()
@@ -39,6 +42,7 @@ export const LoginForm = ({ onPasswordForgotten }: ILoginFormProps): React.JSX.E
   })
 
   const [login] = useLoginMutation()
+  const { getTwoFactorStep } = useTwoFactorAuthentication()
   // Use manual isLoading state because the rtkQueryErrorLogger prevents this action on 401 error
   const [isLoginLoading, setIsLoginLoading] = useState(false)
 
@@ -58,6 +62,14 @@ export const LoginForm = ({ onPasswordForgotten }: ILoginFormProps): React.JSX.E
 
       if (response.error !== undefined) {
         trackError(new ApiError(response.error))
+      }
+
+      const twoFactorStep = response.error === undefined ? getTwoFactorStep(response.data) : undefined
+
+      if (!isUndefined(twoFactorStep)) {
+        setIsLoginLoading(false)
+        onTwoFactorRequired?.(twoFactorStep)
+        return
       }
 
       if (response.error === undefined) {
