@@ -49,7 +49,8 @@ export const ObjectSavedSearchRestore = (): null => {
 
   // Select the saved class up front so the listing loads that class's columns. Depends on the
   // class catalog as well: mounted while it still loads, a one-shot lookup misses and the
-  // restore would hang at the class gate below forever.
+  // restore would hang at the class gate below forever — and on the selected class, which the
+  // user can change before the restore is consumed.
   useEffect(() => {
     if (!belongsToObject || !hasClass) {
       return
@@ -58,7 +59,7 @@ export const ObjectSavedSearchRestore = (): null => {
     if (!isNil(classDefinition) && selectedClassDefinition?.id !== classId) {
       setSelectedClassDefinition(classDefinition)
     }
-  }, [pendingRestore, classCatalog])
+  }, [pendingRestore, classCatalog, selectedClassDefinition?.id])
 
   useEffect(() => {
     if (isNil(pendingRestore) || !belongsToObject) {

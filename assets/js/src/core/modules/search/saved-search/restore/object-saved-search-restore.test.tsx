@@ -20,6 +20,7 @@ let pendingRestore: Record<string, unknown> | undefined
 let availableColumns: Array<{ key: string }> = []
 let selectedColumns: Array<{ key: string, locale?: string | null, width?: number | null }> = []
 let classColumns: Array<{ key: string }> | undefined
+let selectedClassId = 'CAR'
 
 jest.mock('@Pimcore/modules/search/provider/use-search', () => ({
   useSearch: () => ({ pendingRestore, setPendingRestore })
@@ -34,11 +35,13 @@ jest.mock('@Pimcore/modules/element/listing/abstract/configuration-layer/provide
 }))
 
 jest.mock('@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection', () => ({
-  useClassDefinitionSelection: () => ({ selectedClassDefinition: { id: 'CAR' }, setSelectedClassDefinition })
+  useClassDefinitionSelection: () => ({ selectedClassDefinition: { id: selectedClassId }, setSelectedClassDefinition })
 }))
 
+// one catalog object, as RTK hands back: a fresh one per render would re-run the class effect on its own
+const classCatalog = { items: [{ id: 'CAR' }] }
 jest.mock('@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions', () => ({
-  useClassDefinitions: () => ({ getById: () => ({ id: 'CAR' }), data: { items: [{ id: 'CAR' }] } })
+  useClassDefinitions: () => ({ getById: () => ({ id: 'CAR' }), data: classCatalog })
 }))
 
 jest.mock('@Pimcore/modules/element/listing/abstract/settings/use-settings', () => ({
@@ -59,6 +62,7 @@ describe('ObjectSavedSearchRestore', () => {
     availableColumns = [{ key: 'id' }, { key: 'fullpath' }, { key: 'color' }]
     classColumns = availableColumns
     selectedColumns = []
+    selectedClassId = 'CAR'
   })
 
   afterEach(() => {
@@ -164,5 +168,21 @@ describe('ObjectSavedSearchRestore', () => {
 
     expect(applySavedSearch).toHaveBeenCalledTimes(2)
     expect(setPendingRestore).not.toHaveBeenCalled()
+  })
+
+  it('selects the saved class again when the class changes before the restore is consumed', () => {
+    pendingRestore = {
+      elementType: 'data-object',
+      classId: 'CAR',
+      columns: [{ key: 'id' }],
+      filter: [{ columnFilters: [] }]
+    }
+
+    const { rerender } = render(<ObjectSavedSearchRestore />)
+    // the user picks another class inside the convergence window
+    selectedClassId = 'AP'
+    rerender(<ObjectSavedSearchRestore />)
+
+    expect(setSelectedClassDefinition).toHaveBeenCalledWith({ id: 'CAR' })
   })
 })
