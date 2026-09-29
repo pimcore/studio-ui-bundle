@@ -27,6 +27,26 @@ import { useThumbnailImageGetCollectionQuery } from '@Pimcore/modules/asset/edit
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 
+// a thumbnail config can change the image format, so the saved file takes the extension of what was rendered
+const thumbnailFileEndings: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'image/webp': 'webp',
+  'image/avif': 'avif',
+  'image/gif': 'gif',
+  'image/tiff': 'tiff',
+  'image/svg+xml': 'svg'
+}
+
+const getThumbnailFilename = (assetFilename: string, mimeType: string): string => {
+  const fileEnding = thumbnailFileEndings[mimeType]
+  if (fileEnding === undefined || !assetFilename.includes('.')) {
+    return assetFilename
+  }
+
+  return replaceFileEnding(assetFilename, fileEnding)
+}
+
 const DetailContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
   const { data } = useAssetGetByIdQuery({ id: assetContext.id })
@@ -64,7 +84,7 @@ const DetailContainer = (): React.JSX.Element => {
       .unwrap()
       .then((blob) => {
         const objectUrl = URL.createObjectURL(blob)
-        saveFileLocal(objectUrl, imageData.filename)
+        saveFileLocal(objectUrl, getThumbnailFilename(imageData.filename, blob.type))
         setTimeout(() => { URL.revokeObjectURL(objectUrl) }, 0)
       })
       .catch(() => {

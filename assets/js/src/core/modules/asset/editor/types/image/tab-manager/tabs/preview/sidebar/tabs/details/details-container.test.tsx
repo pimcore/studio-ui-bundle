@@ -21,17 +21,18 @@ jest.mock('./details-view', () => ({
 }))
 
 const downloadThumbnail = jest.fn()
+const unsubscribe = jest.fn()
 jest.mock('@Pimcore/modules/asset/asset-api-slice-enhanced', () => ({
   useAssetGetByIdQuery: () => ({ data: { id: 42, filename: 'photo.jpg', width: 800, height: 600 } }),
   useLazyAssetImageDownloadByThumbnailQuery: () => [downloadThumbnail]
 }))
 
 const resolveDownload = (value: unknown): void => {
-  downloadThumbnail.mockReturnValue({ unwrap: async () => await Promise.resolve(value) })
+  downloadThumbnail.mockReturnValue({ unwrap: async () => await Promise.resolve(value), unsubscribe })
 }
 
 const rejectDownload = (error: unknown): void => {
-  downloadThumbnail.mockReturnValue({ unwrap: async () => await Promise.reject(error) })
+  downloadThumbnail.mockReturnValue({ unwrap: async () => await Promise.reject(error), unsubscribe })
 }
 
 const useThumbnailImageGetCollectionQuery = jest.fn()
@@ -105,13 +106,40 @@ describe('image DetailContainer thumbnail download', () => {
   })
 
   it('downloads the image rendered with the chosen thumbnail under the asset filename', async () => {
-    resolveDownload(new Blob(['image']))
+    resolveDownload(new Blob(['image'], { type: 'image/jpeg' }))
 
     renderContainer()
     viewProps.onClickDownloadByThumbnail('web-large')
 
     expect(downloadThumbnail).toHaveBeenCalledWith({ id: 42, thumbnailName: 'web-large' })
     await waitFor(() => { expect(saveFileLocal).toHaveBeenCalledWith('blob:photo', 'photo.jpg') })
+  })
+
+  it('uses the file ending of the rendered format when the thumbnail changes it', async () => {
+    resolveDownload(new Blob(['image'], { type: 'image/webp' }))
+
+    renderContainer()
+    viewProps.onClickDownloadByThumbnail('web-large')
+
+    await waitFor(() => { expect(saveFileLocal).toHaveBeenCalledWith('blob:photo', 'photo.webp') })
+  })
+
+  it('keeps the asset filename when the rendered format is unknown', async () => {
+    resolveDownload(new Blob(['image']))
+
+    renderContainer()
+    viewProps.onClickDownloadByThumbnail('web-large')
+
+    await waitFor(() => { expect(saveFileLocal).toHaveBeenCalledWith('blob:photo', 'photo.jpg') })
+  })
+
+  it('releases the request once the download is done', async () => {
+    resolveDownload(new Blob(['image'], { type: 'image/jpeg' }))
+
+    renderContainer()
+    viewProps.onClickDownloadByThumbnail('web-large')
+
+    await waitFor(() => { expect(unsubscribe).toHaveBeenCalledTimes(1) })
   })
 
   it('releases the object URL after the download has been handed to the browser', async () => {
@@ -132,7 +160,8 @@ describe('image DetailContainer thumbnail download', () => {
     renderContainer()
     viewProps.onClickDownloadByThumbnail('web-large')
 
-    await waitFor(() => { expect(trackError).toHaveBeenCalled() })
+    await waitFor(() => { expect(unsubscribe).toHaveBeenCalledTimes(1) })
+    expect(trackError).toHaveBeenCalled()
     expect(saveFileLocal).not.toHaveBeenCalled()
   })
 })
