@@ -15,11 +15,13 @@ import { Title } from '@Pimcore/components/title/title'
 import { ProvidedTypeSelect } from '@Pimcore/modules/element/components/type-select/provided-type-select'
 import { SearchTermFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/search/search-term-filter'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
+import { useStyles } from '@Pimcore/modules/search/modal/tabs/shared/saved-search-top-bar.styles'
 import React from 'react'
 
 export const TopBar = (): React.JSX.Element => {
   const { isOpen, setSearchTerm, loadedSavedSearch } = useSearch()
   const isSavedSearchWidget = loadedSavedSearch !== undefined
+  const { styles } = useStyles()
 
   const search = <SearchTermFilter onCommit={ isOpen ? setSearchTerm : undefined } />
 
@@ -33,7 +35,7 @@ export const TopBar = (): React.JSX.Element => {
           <Title>{loadedSavedSearch.name}</Title>
           <ProvidedTypeSelect />
         </Flex>
-        <div style={ { width: 320, flexShrink: 0 } }>
+        <div className={ styles.searchContainer }>
           {search}
         </div>
       </Header>
