@@ -20,6 +20,7 @@ import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils
 import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useDataObjectGetSearchConfigurationQuery } from '@Pimcore/modules/search/search-api-slice.gen'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
+import { restoredColumnLayout, type SavedColumn } from '@Pimcore/modules/search/saved-search/restore/restored-layout'
 import { uuid } from '@Pimcore/utils/uuid'
 
 export interface ColumnConfigLoaderProps {
@@ -92,9 +93,10 @@ export const ApiLoader = ({ Component }: ColumnConfigLoaderProps): React.JSX.Ele
     }
 
     // a saved search still being restored onto this class owns its column selection, and the
-    // class defaults landing late must not win; once restored, a class switch shows defaults again
+    // class defaults landing late must not win — unless none of its columns exist here, when the
+    // defaults are the fallback. Once restored, a class switch shows defaults again
     const restoreOwnsColumns = pendingRestore?.classId === selectedClassDefinition!.id &&
-      (pendingRestore?.columns ?? []).length > 0
+      restoredColumnLayout((pendingRestore?.columns ?? []) as SavedColumn[], availableColumns).length > 0
     if (!restoreOwnsColumns) {
       setSelectedColumns(selectedColumns)
     }

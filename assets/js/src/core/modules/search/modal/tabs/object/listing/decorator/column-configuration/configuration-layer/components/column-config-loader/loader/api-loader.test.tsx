@@ -91,4 +91,12 @@ describe('ApiLoader', () => {
     expect(appliedKeys(1)).toEqual(['erpNumber'])
     expect(appliedKeys(2)).toEqual(['color'])
   })
+
+  it('falls back to the class defaults when none of the saved columns exist in this class', () => {
+    pendingRestore = { classId: 'CAR', columns: [{ key: 'goneFromTheClass' }] }
+    render(<ApiLoader Component={ Configuration } />)
+
+    expect(setSelectedColumns).toHaveBeenCalledTimes(1)
+    expect(appliedKeys(0)).toEqual(['color'])
+  })
 })
