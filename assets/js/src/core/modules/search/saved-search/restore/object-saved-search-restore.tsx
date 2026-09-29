@@ -40,11 +40,14 @@ export const ObjectSavedSearchRestore = (): null => {
 
   const classId = pendingRestore?.classId
   const hasClass = isString(classId) && !isEmpty(classId)
+  // a class deleted since the search was saved can never be selected: once the catalog has loaded
+  // without it, the search restores classless — as it did before it waited for its class
+  const scopedToClass = hasClass && (isNil(classCatalog) || !isNil(getById(classId)))
   const belongsToObject = !isNil(pendingRestore) && resolveSavedSearchElementType(pendingRestore) === elementTypes.dataObject
   // the same query the class column loader runs, so this reads its cache entry rather than a second request
   const { currentData: classColumns } = useDataObjectGetAvailableGridColumnsQuery(
     { folderId: getId(), classId: classId! },
-    { skip: !belongsToObject || !hasClass }
+    { skip: !belongsToObject || !scopedToClass }
   )
 
   // Select the saved class up front so the listing loads that class's columns. Depends on the
@@ -74,7 +77,7 @@ export const ObjectSavedSearchRestore = (): null => {
     // has taken effect, the available columns are the classless static set — the saved columns
     // map to almost nothing against them, and a restore applied there "matches" that reduced
     // set and consumes itself before the class columns ever arrive.
-    if (hasClass && selectedClassDefinition?.id !== classId) {
+    if (scopedToClass && selectedClassDefinition?.id !== classId) {
       return
     }
     // Wait for the available columns before applying, otherwise the saved column layout (and
@@ -112,7 +115,7 @@ export const ObjectSavedSearchRestore = (): null => {
     const classColumnsLoaded = !isNil(classColumns?.columns) &&
       classColumnKeys.length === availableColumns.length &&
       classColumnKeys.every((key, index) => availableColumns[index]?.key === key)
-    if (hasClass && !classColumnsLoaded) {
+    if (scopedToClass && !classColumnsLoaded) {
       return
     }
 
@@ -124,7 +127,7 @@ export const ObjectSavedSearchRestore = (): null => {
     }, 1200)
 
     return () => { window.clearTimeout(timer) }
-  }, [pendingRestore, availableColumns, selectedColumns, selectedClassDefinition, classColumns])
+  }, [pendingRestore, availableColumns, selectedColumns, selectedClassDefinition, classColumns, scopedToClass])
 
   return null
 }

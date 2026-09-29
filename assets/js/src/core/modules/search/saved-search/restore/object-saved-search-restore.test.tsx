@@ -39,9 +39,13 @@ jest.mock('@Pimcore/modules/data-object/listing/decorator/class-definition-selec
 }))
 
 // one catalog object, as RTK hands back: a fresh one per render would re-run the class effect on its own
-const classCatalog = { items: [{ id: 'CAR' }] }
+const loadedCatalog = { items: [{ id: 'CAR' }] }
+let classCatalog: typeof loadedCatalog | undefined = loadedCatalog
 jest.mock('@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions', () => ({
-  useClassDefinitions: () => ({ getById: () => ({ id: 'CAR' }), data: classCatalog })
+  useClassDefinitions: () => ({
+    getById: (id: string) => (classCatalog !== undefined && id === 'CAR' ? { id: 'CAR' } : undefined),
+    data: classCatalog
+  })
 }))
 
 jest.mock('@Pimcore/modules/element/listing/abstract/settings/use-settings', () => ({
@@ -63,6 +67,7 @@ describe('ObjectSavedSearchRestore', () => {
     classColumns = availableColumns
     selectedColumns = []
     selectedClassId = 'CAR'
+    classCatalog = loadedCatalog
   })
 
   afterEach(() => {
@@ -220,5 +225,43 @@ describe('ObjectSavedSearchRestore', () => {
     rerender(<ObjectSavedSearchRestore />)
 
     expect(applySavedSearch).toHaveBeenCalledTimes(2)
+  })
+
+  it('restores a search whose class was deleted classless, once the catalog has loaded', () => {
+    jest.useFakeTimers()
+    availableColumns = [{ key: 'id' }, { key: 'fullpath' }]
+    pendingRestore = {
+      elementType: 'data-object',
+      classId: 'DELETED',
+      columns: [{ key: 'id' }],
+      filter: [{ columnFilters: [] }]
+    }
+
+    const { rerender } = render(<ObjectSavedSearchRestore />)
+    selectedColumns = [{ key: 'id', locale: null }]
+    rerender(<ObjectSavedSearchRestore />)
+    act(() => { jest.advanceTimersByTime(1200) })
+
+    expect(applySavedSearch).toHaveBeenCalledWith(pendingRestore)
+    expect(setSelectedClassDefinition).not.toHaveBeenCalled()
+    expect(setPendingRestore).toHaveBeenCalledWith(undefined)
+  })
+
+  it('waits for a class it cannot find while the catalog is still loading', () => {
+    jest.useFakeTimers()
+    classCatalog = undefined
+    pendingRestore = {
+      elementType: 'data-object',
+      classId: 'CAR',
+      columns: [{ key: 'id' }],
+      filter: [{ columnFilters: [] }]
+    }
+    selectedClassId = 'OTHER'
+
+    render(<ObjectSavedSearchRestore />)
+    act(() => { jest.advanceTimersByTime(5000) })
+
+    expect(applySavedSearch).not.toHaveBeenCalled()
+    expect(setPendingRestore).not.toHaveBeenCalled()
   })
 })
