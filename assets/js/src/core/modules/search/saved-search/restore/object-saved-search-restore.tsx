@@ -31,7 +31,7 @@ export const ObjectSavedSearchRestore = (): null => {
   const { pendingRestore, setPendingRestore } = useSearch()
   const { availableColumns } = useAvailableColumns()
   const { selectedColumns } = useSelectedColumns()
-  const { selectedClassDefinition, setSelectedClassDefinition } = useClassDefinitionSelection()
+  const { selectedClassDefinition, setSelectedClassDefinition, availableClassDefinitions } = useClassDefinitionSelection()
   const { getById, data: classCatalog } = useClassDefinitions()
   // the proposal this restore has already applied at least once
   const appliedTo = useRef<unknown>(undefined)
@@ -43,6 +43,10 @@ export const ObjectSavedSearchRestore = (): null => {
   // a class deleted since the search was saved can never be selected: once the catalog has loaded
   // without it, the search restores classless — as it did before it waited for its class
   const scopedToClass = hasClass && (isNil(classCatalog) || !isNil(getById(classId)))
+  // restoring classless means no class selected — except in a listing offering a single class,
+  // which always shows that one and has no classless state
+  const staleClassSelected = hasClass && !scopedToClass && !isNil(selectedClassDefinition) &&
+    availableClassDefinitions.length !== 1
   const belongsToObject = !isNil(pendingRestore) && resolveSavedSearchElementType(pendingRestore) === elementTypes.dataObject
   // the same query the class column loader runs, so this reads its cache entry rather than a second request
   const { currentData: classColumns } = useDataObjectGetAvailableGridColumnsQuery(
@@ -58,11 +62,15 @@ export const ObjectSavedSearchRestore = (): null => {
     if (!belongsToObject || !hasClass) {
       return
     }
+    if (staleClassSelected) {
+      setSelectedClassDefinition(undefined)
+      return
+    }
     const classDefinition = getById(classId)
     if (!isNil(classDefinition) && selectedClassDefinition?.id !== classId) {
       setSelectedClassDefinition(classDefinition)
     }
-  }, [pendingRestore, classCatalog, selectedClassDefinition?.id])
+  }, [pendingRestore, classCatalog, selectedClassDefinition?.id, staleClassSelected])
 
   useEffect(() => {
     // a host may hand the same configuration object back later: it has to apply again
@@ -77,7 +85,7 @@ export const ObjectSavedSearchRestore = (): null => {
     // has taken effect, the available columns are the classless static set — the saved columns
     // map to almost nothing against them, and a restore applied there "matches" that reduced
     // set and consumes itself before the class columns ever arrive.
-    if (scopedToClass && selectedClassDefinition?.id !== classId) {
+    if ((scopedToClass && selectedClassDefinition?.id !== classId) || staleClassSelected) {
       return
     }
     // Wait for the available columns before applying, otherwise the saved column layout (and
@@ -127,7 +135,7 @@ export const ObjectSavedSearchRestore = (): null => {
     }, 1200)
 
     return () => { window.clearTimeout(timer) }
-  }, [pendingRestore, availableColumns, selectedColumns, selectedClassDefinition, classColumns, scopedToClass])
+  }, [pendingRestore, availableColumns, selectedColumns, selectedClassDefinition, classColumns, scopedToClass, staleClassSelected])
 
   return null
 }

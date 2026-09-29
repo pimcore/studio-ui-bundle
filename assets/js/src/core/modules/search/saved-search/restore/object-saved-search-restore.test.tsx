@@ -20,7 +20,8 @@ let pendingRestore: Record<string, unknown> | undefined
 let availableColumns: Array<{ key: string }> = []
 let selectedColumns: Array<{ key: string, locale?: string | null, width?: number | null }> = []
 let classColumns: Array<{ key: string }> | undefined
-let selectedClassId = 'CAR'
+let selectedClassId: string | undefined = 'CAR'
+let availableClassDefinitions: Array<{ id: string }> = [{ id: 'CAR' }, { id: 'AP' }]
 
 jest.mock('@Pimcore/modules/search/provider/use-search', () => ({
   useSearch: () => ({ pendingRestore, setPendingRestore })
@@ -35,7 +36,11 @@ jest.mock('@Pimcore/modules/element/listing/abstract/configuration-layer/provide
 }))
 
 jest.mock('@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection', () => ({
-  useClassDefinitionSelection: () => ({ selectedClassDefinition: { id: selectedClassId }, setSelectedClassDefinition })
+  useClassDefinitionSelection: () => ({
+    selectedClassDefinition: selectedClassId === undefined ? undefined : { id: selectedClassId },
+    setSelectedClassDefinition,
+    availableClassDefinitions
+  })
 }))
 
 // one catalog object, as RTK hands back: a fresh one per render would re-run the class effect on its own
@@ -60,6 +65,13 @@ jest.mock('./use-apply-saved-search', () => ({
   useApplySavedSearch: () => applySavedSearch
 }))
 
+const objectSearch = (classId: string, columns: Array<Record<string, unknown>>): Record<string, unknown> => ({
+  elementType: 'data-object',
+  classId,
+  columns,
+  filter: [{ columnFilters: [] }]
+})
+
 describe('ObjectSavedSearchRestore', () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -67,6 +79,7 @@ describe('ObjectSavedSearchRestore', () => {
     classColumns = availableColumns
     selectedColumns = []
     selectedClassId = 'CAR'
+    availableClassDefinitions = [{ id: 'CAR' }, { id: 'AP' }]
     classCatalog = loadedCatalog
   })
 
@@ -90,12 +103,7 @@ describe('ObjectSavedSearchRestore', () => {
   })
 
   it('applies a search whose columns are all unavailable, rather than treating it as done', () => {
-    pendingRestore = {
-      elementType: 'data-object',
-      classId: 'CAR',
-      columns: [{ key: 'goneFromTheClass' }],
-      filter: [{ columnFilters: [] }]
-    }
+    pendingRestore = objectSearch('CAR', [{ key: 'goneFromTheClass' }])
 
     render(<ObjectSavedSearchRestore />)
 
@@ -103,12 +111,7 @@ describe('ObjectSavedSearchRestore', () => {
   })
 
   it('still applies when the grid does not yet carry the saved columns', () => {
-    pendingRestore = {
-      elementType: 'data-object',
-      classId: 'CAR',
-      columns: [{ key: 'id' }, { key: 'color' }],
-      filter: [{ columnFilters: [] }]
-    }
+    pendingRestore = objectSearch('CAR', [{ key: 'id' }, { key: 'color' }])
 
     render(<ObjectSavedSearchRestore />)
 
@@ -120,12 +123,7 @@ describe('ObjectSavedSearchRestore', () => {
     // the class offers only the system columns; the search still names a field the class lost
     availableColumns = [{ key: 'id' }, { key: 'fullpath' }]
     classColumns = availableColumns
-    pendingRestore = {
-      elementType: 'data-object',
-      classId: 'CAR',
-      columns: [{ key: 'id' }, { key: 'deletedField' }],
-      filter: [{ columnFilters: [] }]
-    }
+    pendingRestore = objectSearch('CAR', [{ key: 'id' }, { key: 'deletedField' }])
 
     const { rerender } = render(<ObjectSavedSearchRestore />)
     selectedColumns = [{ key: 'id', locale: null }]
@@ -139,12 +137,7 @@ describe('ObjectSavedSearchRestore', () => {
     jest.useFakeTimers()
     availableColumns = [{ key: 'id' }, { key: 'fullpath' }]
     classColumns = [{ key: 'id' }, { key: 'fullpath' }, { key: 'color' }]
-    pendingRestore = {
-      elementType: 'data-object',
-      classId: 'CAR',
-      columns: [{ key: 'id' }],
-      filter: [{ columnFilters: [] }]
-    }
+    pendingRestore = objectSearch('CAR', [{ key: 'id' }])
 
     const { rerender } = render(<ObjectSavedSearchRestore />)
     selectedColumns = [{ key: 'id', locale: null }]
@@ -158,12 +151,7 @@ describe('ObjectSavedSearchRestore', () => {
     jest.useFakeTimers()
     availableColumns = [{ key: 'id' }, { key: 'name' }]
     classColumns = availableColumns
-    pendingRestore = {
-      elementType: 'data-object',
-      classId: 'CAR',
-      columns: [{ key: 'name', locale: 'de', width: 300 }],
-      filter: [{ columnFilters: [] }]
-    }
+    pendingRestore = objectSearch('CAR', [{ key: 'name', locale: 'de', width: 300 }])
 
     const { rerender } = render(<ObjectSavedSearchRestore />)
     // a default configuration landing after the apply: same key, default locale and width
@@ -176,12 +164,7 @@ describe('ObjectSavedSearchRestore', () => {
   })
 
   it('selects the saved class again when the class changes before the restore is consumed', () => {
-    pendingRestore = {
-      elementType: 'data-object',
-      classId: 'CAR',
-      columns: [{ key: 'id' }],
-      filter: [{ columnFilters: [] }]
-    }
+    pendingRestore = objectSearch('CAR', [{ key: 'id' }])
 
     const { rerender } = render(<ObjectSavedSearchRestore />)
     // the user picks another class inside the convergence window
@@ -229,13 +212,9 @@ describe('ObjectSavedSearchRestore', () => {
 
   it('restores a search whose class was deleted classless, once the catalog has loaded', () => {
     jest.useFakeTimers()
+    selectedClassId = undefined
     availableColumns = [{ key: 'id' }, { key: 'fullpath' }]
-    pendingRestore = {
-      elementType: 'data-object',
-      classId: 'DELETED',
-      columns: [{ key: 'id' }],
-      filter: [{ columnFilters: [] }]
-    }
+    pendingRestore = objectSearch('DELETED', [{ key: 'id' }])
 
     const { rerender } = render(<ObjectSavedSearchRestore />)
     selectedColumns = [{ key: 'id', locale: null }]
@@ -250,12 +229,7 @@ describe('ObjectSavedSearchRestore', () => {
   it('waits for a class it cannot find while the catalog is still loading', () => {
     jest.useFakeTimers()
     classCatalog = undefined
-    pendingRestore = {
-      elementType: 'data-object',
-      classId: 'CAR',
-      columns: [{ key: 'id' }],
-      filter: [{ columnFilters: [] }]
-    }
+    pendingRestore = objectSearch('CAR', [{ key: 'id' }])
     selectedClassId = 'OTHER'
 
     render(<ObjectSavedSearchRestore />)
@@ -263,5 +237,28 @@ describe('ObjectSavedSearchRestore', () => {
 
     expect(applySavedSearch).not.toHaveBeenCalled()
     expect(setPendingRestore).not.toHaveBeenCalled()
+  })
+
+  it('drops a stale class selection before restoring a deleted-class search classless', () => {
+    availableColumns = [{ key: 'id' }, { key: 'fullpath' }]
+    pendingRestore = objectSearch('DELETED', [{ key: 'id' }])
+
+    const { rerender } = render(<ObjectSavedSearchRestore />)
+    expect(setSelectedClassDefinition).toHaveBeenCalledWith(undefined)
+    expect(applySavedSearch).not.toHaveBeenCalled()
+
+    selectedClassId = undefined
+    rerender(<ObjectSavedSearchRestore />)
+    expect(applySavedSearch).toHaveBeenCalledWith(pendingRestore)
+  })
+
+  it('restores a deleted-class search against the only class a single-class listing offers', () => {
+    availableClassDefinitions = [{ id: 'CAR' }]
+    pendingRestore = objectSearch('DELETED', [{ key: 'id' }])
+
+    render(<ObjectSavedSearchRestore />)
+
+    expect(setSelectedClassDefinition).not.toHaveBeenCalled()
+    expect(applySavedSearch).toHaveBeenCalledWith(pendingRestore)
   })
 })
