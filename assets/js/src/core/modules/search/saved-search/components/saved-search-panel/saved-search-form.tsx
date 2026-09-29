@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { usePanelDraftPublisher } from '@Pimcore/modules/search/provider/use-panel-draft-publisher'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { Form } from '@Pimcore/components/form/form'
 import { type formInstanceType } from '@Pimcore/components/form/use-form'
 import { Input } from '@Pimcore/components/input/input'
@@ -52,6 +53,8 @@ interface SavedSearchFormProps {
   onUsersRolesChange: (changes: { sharedUsers: number[], sharedRoles: number[] }) => void
   /** Whether to show the sharing controls — hidden when viewing someone else's search (clone). */
   showSharing: boolean
+  /** the listing the panel belongs to: only the shown panel's values become the search's draft */
+  elementType?: ElementType
 }
 
 export const SavedSearchForm = ({
@@ -61,7 +64,8 @@ export const SavedSearchForm = ({
   sharedUsers,
   sharedRoles,
   onUsersRolesChange,
-  showSharing
+  showSharing,
+  elementType
 }: SavedSearchFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -73,7 +77,7 @@ export const SavedSearchForm = ({
   // group (kept at the normal spacing otherwise, so the toggle isn't cramped against the next field).
   const createMenuShortcutEnabled = Form.useWatch('createMenuShortcut', form) === true
 
-  const publishDraft = usePanelDraftPublisher()
+  const publishDraft = usePanelDraftPublisher(elementType)
 
   const handleFormValuesChange = (changedValues: Partial<SavedSearchFormValues>, allValues: SavedSearchFormValues): void => {
     if (changedValues.shareGlobally !== undefined) {

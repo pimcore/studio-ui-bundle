@@ -259,6 +259,7 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState, readOnly = 
           )}
 
           <SavedSearchForm
+            elementType={ elementType }
             form={ form }
             isSharedGlobally={ isSharedGlobally }
             onSharedGloballyChange={ setIsSharedGlobally }
