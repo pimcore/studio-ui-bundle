@@ -56,6 +56,8 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
   const setActiveTab = sidebarContext?.toggleTab ?? setLocalActiveTab
 
   const isExpanded = activeTab !== ''
+  // Roving tabindex: keep one tab reachable via Tab key, falling back to the first tab while collapsed
+  const focusableTabKey = preparedEntries.some((entry) => entry.key === activeTab) ? activeTab : preparedEntries[0]?.key
   const {
     sidebarRef,
     contentRef,
@@ -146,7 +148,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
                         }
                       } }
                       role={ 'tab' }
-                      tabIndex={ entry.key === activeTab ? 0 : -1 }
+                      tabIndex={ entry.key === focusableTabKey ? 0 : -1 }
                     >
                       {entry.icon}
                     </div>
