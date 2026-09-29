@@ -21,6 +21,8 @@ import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 import { useIframeI18nSetup } from '@Pimcore/app/i18n/hooks/use-iframe-i18n-setup'
 import { ModalsProvider } from '@Pimcore/modules/app/modals-provider'
 import { DocumentEditorIframeGlobalStyles } from './styles/global.styles'
+import { getEditmodeStyleContainer } from './styles/editmode-style-container'
+import { StyleProvider } from 'antd-style'
 import { useForwardKeyBindings } from './use-forward-key-bindings'
 
 export interface DocumentEditorIframeWindow extends Window {
@@ -64,18 +66,28 @@ export const DocumentEditorIframeAppView = (): React.JSX.Element => {
   return (
     <StrictMode>
       <ErrorBoundary>
-        <GlobalProvider>
-          <AntApp>
-            <DocumentEditorIframeGlobalStyles />
-            <ModalsProvider>
-              <DateTimeConfig>
-                <DocumentProvider id={ documentId }>
-                  <EditablesLoader editableDefinitions={ editableDefinitions } />
-                </DocumentProvider>
-              </DateTimeConfig>
-            </ModalsProvider>
-          </AntApp>
-        </GlobalProvider>
+        { /* The app shares the document with the website page: collect all
+             css-in-js styles at the end of the head and drop the :where()
+             wrapper from the antd selectors, so equal-specificity website
+             rules (e.g. `.button`) no longer win the cascade against the
+             studio components portaled into the page (platform-version#233). */ }
+        <StyleProvider
+          container={ getEditmodeStyleContainer() }
+          hashPriority='high'
+        >
+          <GlobalProvider>
+            <AntApp>
+              <DocumentEditorIframeGlobalStyles />
+              <ModalsProvider>
+                <DateTimeConfig>
+                  <DocumentProvider id={ documentId }>
+                    <EditablesLoader editableDefinitions={ editableDefinitions } />
+                  </DocumentProvider>
+                </DateTimeConfig>
+              </ModalsProvider>
+            </AntApp>
+          </GlobalProvider>
+        </StyleProvider>
       </ErrorBoundary>
     </StrictMode>
   )
