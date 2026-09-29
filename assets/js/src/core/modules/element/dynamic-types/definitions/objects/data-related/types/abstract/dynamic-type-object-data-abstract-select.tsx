@@ -56,6 +56,7 @@ export abstract class DynamicTypeObjectDataAbstractSelect extends DynamicTypeObj
         optionFilterProp={ hasHtmlLabels ? 'title' : 'label' }
         options={ options }
         showSearch
+        sortableTags={ props.multiSelect === true }
         style={ { maxWidth: toCssDimension(props.width, props.defaultFieldWidth.medium) } }
         value={ this.normalizeValue(props.value) }
       />
