@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isNil } from 'lodash'
+
 let styleContainer: HTMLElement | null = null
 
 /**
@@ -26,7 +28,7 @@ let styleContainer: HTMLElement | null = null
  * rendering) reuse one element.
  */
 export const getEditmodeStyleContainer = (): HTMLElement => {
-  if (styleContainer?.parentNode == null) {
+  if (isNil(styleContainer?.parentNode)) {
     styleContainer = document.createElement('div')
     styleContainer.setAttribute('data-studio-editmode-styles', '')
     document.head.appendChild(styleContainer)
