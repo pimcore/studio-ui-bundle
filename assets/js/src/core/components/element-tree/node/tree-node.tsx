@@ -96,6 +96,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     onRightClick,
     nodesRefs,
     nodeOrder,
+    hasRootNode,
     tooltipSlotName
   } = useContext(TreeContext)
   const { isExpanded, setExpanded, isSelected, isScrollTo, setScrollTo, setSelectedIds } = useElementTreeNode(id)
@@ -212,11 +213,15 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     nodesRefs!.current[internalKey] = nodeRef
   }
 
+  // the visible root is rendered with level -1 and its children with level 0,
+  // so shift by one more when the root is shown to keep aria-level starting at 1
+  const ariaLevel = level + (hasRootNode === true ? 2 : 1)
+
   const nodeContent = (
     <Flex
       align="center"
       aria-expanded={ props.hasChildren === true ? isExpanded : undefined }
-      aria-level={ Math.max(1, level + 1) }
+      aria-level={ ariaLevel }
       aria-selected={ isSelected }
       className={ cn('tree-node__content-inner') }
       gap="small"

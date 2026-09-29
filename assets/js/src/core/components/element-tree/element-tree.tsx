@@ -70,6 +70,7 @@ export interface INodeRef {
 export interface ITreeContext extends TreeProps {
   nodesRefs?: MutableRefObject<Record<string, INodeRef>>
   nodeOrder?: () => string[]
+  hasRootNode?: boolean
 }
 
 export const defaultTreeProps: TreeProps = {
@@ -125,7 +126,7 @@ const ElementTree = (
     event.preventDefault()
   }
 
-  const treeContextValue: ITreeContext = useMemo(() => ({ ...props, nodesRefs, nodeOrder, renderNode, renderNodeContent, onRightClick }), [props, nodesRefs, nodeOrder, renderNode, renderNodeContent, onRightClick])
+  const treeContextValue: ITreeContext = useMemo(() => ({ ...props, nodesRefs, nodeOrder, hasRootNode, renderNode, renderNodeContent, onRightClick }), [props, nodesRefs, nodeOrder, hasRootNode, renderNode, renderNodeContent, onRightClick])
 
   const items: string[] = getChildren()
 
