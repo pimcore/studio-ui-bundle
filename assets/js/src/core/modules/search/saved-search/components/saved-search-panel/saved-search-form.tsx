@@ -10,7 +10,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmpty } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { usePanelDraftPublisher } from '@Pimcore/modules/search/provider/use-panel-draft-publisher'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
@@ -80,7 +80,7 @@ export const SavedSearchForm = ({
   const publishDraft = usePanelDraftPublisher(elementType)
 
   const handleFormValuesChange = (changedValues: Partial<SavedSearchFormValues>, allValues: SavedSearchFormValues): void => {
-    if (changedValues.shareGlobally !== undefined) {
+    if (!isUndefined(changedValues.shareGlobally)) {
       onSharedGloballyChange(changedValues.shareGlobally)
     }
     // the live form values, for anything hosting this panel that mirrors what the user types
