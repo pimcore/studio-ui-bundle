@@ -30,7 +30,7 @@ let styleContainer: HTMLElement | null = null
 export const getEditmodeStyleContainer = (): HTMLElement => {
   if (isNil(styleContainer?.parentNode)) {
     styleContainer = document.createElement('div')
-    styleContainer.setAttribute('data-studio-editmode-styles', '')
+    styleContainer.dataset.studioEditmodeStyles = ''
     document.head.appendChild(styleContainer)
   }
 
