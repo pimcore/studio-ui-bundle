@@ -185,4 +185,20 @@ describe('ObjectSavedSearchRestore', () => {
 
     expect(setSelectedClassDefinition).toHaveBeenCalledWith({ id: 'CAR' })
   })
+
+  it('consumes a search that names no columns, not only applies it', () => {
+    jest.useFakeTimers()
+    pendingRestore = {
+      elementType: 'data-object',
+      classId: 'CAR',
+      columns: [],
+      filter: [{ columnFilters: [{ type: 'system.pql', filterValue: 'color = "red"' }] }]
+    }
+
+    render(<ObjectSavedSearchRestore />)
+    act(() => { jest.advanceTimersByTime(1200) })
+
+    expect(applySavedSearch).toHaveBeenCalledTimes(1)
+    expect(setPendingRestore).toHaveBeenCalledWith(undefined)
+  })
 })

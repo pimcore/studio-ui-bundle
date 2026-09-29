@@ -92,7 +92,11 @@ export const ObjectSavedSearchRestore = (): null => {
       appliedTo.current = pendingRestore
       applySavedSearch(pendingRestore)
 
-      return
+      // a column update still to land re-runs this effect; a layout already carried gives it
+      // nothing to wait for, so it goes on to schedule the consumption
+      if (!columnsCarried) {
+        return
+      }
     }
 
     // The class column set loads after the class selection — and after the type select, which
