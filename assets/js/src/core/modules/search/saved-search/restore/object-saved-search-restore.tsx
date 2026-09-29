@@ -62,7 +62,12 @@ export const ObjectSavedSearchRestore = (): null => {
   }, [pendingRestore, classCatalog, selectedClassDefinition?.id])
 
   useEffect(() => {
-    if (isNil(pendingRestore) || !belongsToObject) {
+    // a host may hand the same configuration object back later: it has to apply again
+    if (isNil(pendingRestore)) {
+      appliedTo.current = undefined
+      return
+    }
+    if (!belongsToObject) {
       return
     }
     // A class-scoped search restores against ITS class's columns. Until the class selection

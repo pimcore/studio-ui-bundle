@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { isEmpty, isNil } from 'lodash'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
@@ -33,9 +33,16 @@ export const SavedSearchRestore = ({ elementType }: SavedSearchRestoreProps): nu
   const { availableColumns } = useAvailableColumns()
   const { selectedColumns } = useSelectedColumns()
   const applySavedSearch = useApplySavedSearch()
+  // the configuration this restore has already applied; reset once none is pending, so a host
+  // handing the same object back applies it again
+  const appliedTo = useRef<unknown>(undefined)
 
   useEffect(() => {
-    if (isNil(pendingRestore) || resolveSavedSearchElementType(pendingRestore) !== elementType) {
+    if (isNil(pendingRestore)) {
+      appliedTo.current = undefined
+      return
+    }
+    if (resolveSavedSearchElementType(pendingRestore) !== elementType) {
       return
     }
     // Wait for the available columns before applying, otherwise the saved column layout (and
@@ -48,15 +55,19 @@ export const SavedSearchRestore = ({ elementType }: SavedSearchRestoreProps): nu
     // Convergent, not one-shot: a late default-configuration write (a config loader mounting
     // after the apply) overwrites the restored columns, so the restore is only CONSUMED once
     // the grid actually carries the saved layout — until then every clobber re-applies it.
+    // An apply rewrites filters and paging and reloads, so it runs once per configuration and
+    // again only after a clobber; once a prior apply is carried the restore is consumed as is.
     const expected = restoredColumnLayout(savedColumns, availableColumns)
-    const applied = expected.length === 0 || carriesLayout(selectedColumns, expected)
+    const carried = expected.length === 0 || carriesLayout(selectedColumns, expected)
 
-    if (!applied) {
+    if (appliedTo.current !== pendingRestore || !carried) {
+      appliedTo.current = pendingRestore
       applySavedSearch(pendingRestore)
-      return
+      if (!carried) {
+        return
+      }
     }
 
-    applySavedSearch(pendingRestore)
     setPendingRestore(undefined)
   }, [pendingRestore, availableColumns, selectedColumns])
 

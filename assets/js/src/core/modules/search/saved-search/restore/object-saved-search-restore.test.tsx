@@ -201,4 +201,24 @@ describe('ObjectSavedSearchRestore', () => {
     expect(applySavedSearch).toHaveBeenCalledTimes(1)
     expect(setPendingRestore).toHaveBeenCalledWith(undefined)
   })
+
+  it('applies the same configuration again when a host hands it back after consumption', () => {
+    jest.useFakeTimers()
+    const configuration = {
+      elementType: 'data-object',
+      classId: 'CAR',
+      columns: [],
+      filter: [{ columnFilters: [{ type: 'system.pql', filterValue: 'color = "red"' }] }]
+    }
+    pendingRestore = configuration
+
+    const { rerender } = render(<ObjectSavedSearchRestore />)
+    act(() => { jest.advanceTimersByTime(1200) })
+    pendingRestore = undefined
+    rerender(<ObjectSavedSearchRestore />)
+    pendingRestore = configuration
+    rerender(<ObjectSavedSearchRestore />)
+
+    expect(applySavedSearch).toHaveBeenCalledTimes(2)
+  })
 })
