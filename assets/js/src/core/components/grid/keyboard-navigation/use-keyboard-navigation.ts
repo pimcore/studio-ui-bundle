@@ -41,14 +41,20 @@ export const useKeyboardNavigation = (props: DefaultCellProps): KeyboardNavigati
 
   function resolveTabTarget (event: KeyboardEvent, row: number, col: number): { row: number, column: number } | undefined {
     const next = event.shiftKey ? findPrevCell(row, col) : findNextCell(row, col)
-    if (next === undefined) return undefined // Let Tab exit the grid at boundaries
+    // Let Tab exit the grid at boundaries or reach custom cells (e.g. selection) natively
+    if (next === undefined || findCellElement(next.row, next.column) === null) return undefined
     event.preventDefault()
     return next
   }
 
+  function findCellElement (rowId: number, columnId: number): HTMLDivElement | null {
+    const tableNode = tableElement?.current
+    if (tableNode === null || tableNode === undefined) return null
+    return tableNode.querySelector<HTMLDivElement>(`[data-grid-row="${rowId}"][data-grid-column="${columnId}"]`)
+  }
+
   function focusCell (rowId: number, columnId: number): void {
-    if (tableElement?.current === null) return
-    const cellElement = tableElement!.current.querySelector<HTMLDivElement>(`[data-grid-row="${rowId}"][data-grid-column="${columnId}"]`)
+    const cellElement = findCellElement(rowId, columnId)
     if (cellElement === null) return
     cellElement.focus()
     const range = document.createRange()
