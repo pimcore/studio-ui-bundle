@@ -1520,6 +1520,11 @@ user-management.settings.language.abbreviation: Abbreviation
 user-management.settings.language.view: View
 user-management.settings.language.edit: Edit
 user-management.two-factor-authentication: Two Factor Authentication
+user-management.two-factor-authentication.reset: Reset two-factor authentication
+user-management.two-factor-authentication.reset.confirmation.title: Reset two-factor authentication
+user-management.two-factor-authentication.reset.confirmation.text: The user's authenticator app will no longer work for this account. If two-factor authentication is required, the user has to set it up again at the next login.
+user-management.two-factor-authentication.reset.success: Two-factor authentication has been reset
+user-management.two-factor-authentication.reset.error: Two-factor authentication could not be reset
 user-management.workspaces.documents: Documents
 user-management.workspaces.assets: Assets
 user-management.workspaces.objects: Data Objects

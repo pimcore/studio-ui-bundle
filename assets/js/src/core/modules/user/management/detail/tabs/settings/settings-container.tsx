@@ -20,6 +20,7 @@ import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-m
 import { Content } from '@Pimcore/components/content/content'
 import { createTabContentTestId } from '@Pimcore/utils/test-id-generator'
 import { UserAvatar } from '@Pimcore/modules/user/management/detail/tabs/settings/components/user-avatar'
+import { TwoFactorResetButton } from '@Pimcore/modules/user/management/detail/tabs/settings/components/two-factor-reset-button/two-factor-reset-button'
 import { generatePassword, getGroupedPermissions } from '@Pimcore/modules/user/management/detail/tabs/settings/settings-helper'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
@@ -172,6 +173,11 @@ const SettingsContainer = ({ ...props }): React.JSX.Element => {
                       size={ 'small' }
                     />
                   </Form.Item>
+
+                  <TwoFactorResetButton
+                    isTwoFactorActive={ openedUser?.twoFactorAuthentication?.active ?? false }
+                    userId={ id }
+                  />
                 </>
               }
             ]
