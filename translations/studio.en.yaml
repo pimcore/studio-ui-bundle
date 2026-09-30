@@ -378,6 +378,7 @@ grid.advanced-column.preview: Preview
 grid.advanced-column.no-preview: No preview item available
 grid.advanced-column.no-preview-data: No preview data available
 grid.advanced-column.error-preview-data: Error loading preview
+grid.advanced-column.no-source-fields: Add a source field to see a preview.
 grid.advanced-column.preview-item: Preview item
 grid.advanced-column.trim: Trim
 grid.advanced-column.find: Find
@@ -423,6 +424,7 @@ column-editor.preview.placeholder: Select a preview object to see results.
 column-editor.preview.loading: Loading preview…
 column-editor.preview.error: Error loading preview.
 column-editor.preview.no-data: No data for this object.
+column-editor.preview.no-source-fields: Add a source field to see a preview.
 column-editor.pipeline.title: Title
 column-editor.pipeline.sourceFields: Source fields
 column-editor.pipeline.sourceFields.add: Add source field

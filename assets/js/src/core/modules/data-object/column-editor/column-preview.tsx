@@ -22,6 +22,7 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/dynamic-type-grid-cell-registry'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
 import { api, type GridColumnRequest } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
+import { ApiError, isApiErrorData } from '@Pimcore/modules/app/error-handler'
 import { createColumnHelper } from '@tanstack/react-table'
 import { type AdvancedEditorColumn } from './types'
 
@@ -90,6 +91,13 @@ const PreviewResult = ({ column, objectId, pipelineValue }: PreviewResultProps):
     ? pipelineValue
     : column.pipeline
 
+  // A freshly added (or still-empty) pipeline has no source fields yet - querying the backend at
+  // that point always fails with "Invalid column configuration" (422), since there is nothing to
+  // resolve a value from. Skip the request entirely until the user has added at least one source
+  // field, and show a hint instead of a misleading generic error.
+  const sourceFields = pipeline?.sourceFields ?? []
+  const hasSourceFields = sourceFields.length > 0
+
   // Resolve locale: explicit per-column override > global language (only for localizable columns)
   const resolvedLocale = column.localizable === true
     ? (column.locale ?? currentLanguage)
@@ -102,22 +110,27 @@ const PreviewResult = ({ column, objectId, pipelineValue }: PreviewResultProps):
         type: column.type,
         key: column.key,
         locale: resolvedLocale,
-        config: pipeline !== undefined
-          ? {
-              advancedColumns: pipeline.sourceFields ?? [],
-              transformers: pipeline.transformers
-            } as unknown as GridColumnRequest['config']
-          : undefined
+        config: {
+          advancedColumns: sourceFields,
+          transformers: pipeline?.transformers
+        } as unknown as GridColumnRequest['config']
       }
     }
-  })
+  }, { skip: !hasSourceFields })
 
   // Keep the last successful data so re-fetches don't flash "no data"
   const lastData = useRef(data)
   if (data !== undefined) lastData.current = data
 
+  if (!hasSourceFields) {
+    return <Text type='secondary'>{ t('column-editor.preview.no-source-fields') }</Text>
+  }
+
   if (error !== undefined) {
-    const message = 'error' in (error as object) ? (error as any).error : t('column-editor.preview.error')
+    // Surface the backend's actual validation message (e.g. "Invalid column configuration")
+    // rather than a generic fallback whenever the API error response carries one.
+    const content = isApiErrorData(error) ? new ApiError(error).getContent() : undefined
+    const message = typeof content === 'string' ? content : t('column-editor.preview.error')
     return <Text type='danger'>{ message }</Text>
   }
 
@@ -149,8 +162,9 @@ export const ColumnPreview = ({ column, objectId, pipelineValue }: ColumnPreview
       <Flex
         align='center'
         gap='small'
+        wrap='wrap'
       >
-        <Text style={ { wordBreak: 'keep-all' } }>{ t('grid.advanced-column.preview') }:</Text>
+        <Text style={ { wordBreak: 'keep-all', flexShrink: 0 } }>{ t('grid.advanced-column.preview') }:</Text>
         { objectId === null
           ? (
             <Text type='secondary'>
