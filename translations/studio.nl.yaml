@@ -1520,6 +1520,11 @@ user-management.settings.language.abbreviation: Afkorting
 user-management.settings.language.view: Weergave
 user-management.settings.language.edit: Bewerken
 user-management.two-factor-authentication: Tweefactorauthenticatie
+user-management.two-factor-authentication.reset: Tweefactorauthenticatie resetten
+user-management.two-factor-authentication.reset.confirmation.title: Tweefactorauthenticatie resetten
+user-management.two-factor-authentication.reset.confirmation.text: De authenticatie-app van de gebruiker werkt niet meer voor dit account. Als tweefactorauthenticatie verplicht is, moet de gebruiker deze bij de volgende keer inloggen opnieuw instellen.
+user-management.two-factor-authentication.reset.success: Tweefactorauthenticatie is gereset
+user-management.two-factor-authentication.reset.error: Tweefactorauthenticatie kon niet worden gereset
 user-management.workspaces.documents: Documenten
 user-management.workspaces.assets: Assets
 user-management.workspaces.objects: Gegevensobjecten
@@ -2255,6 +2260,19 @@ user-profile.password-old: Oud wachtwoord
 user-profile.password-new: Nieuw wachtwoord
 user-profile.password-repeat: Wachtwoord herhalen
 user-profile.password-repeat-error: Wachtwoorden komen niet overeen
+user-profile.two-factor-authentication: Tweefactorauthenticatie
+user-profile.two-factor-authentication.status.active: Tweefactorauthenticatie is actief voor je account.
+user-profile.two-factor-authentication.status.inactive: Tweefactorauthenticatie is niet ingesteld voor je account.
+user-profile.two-factor-authentication.required-hint: Tweefactorauthenticatie is verplicht voor je account en kan daarom niet worden uitgeschakeld.
+user-profile.two-factor-authentication.setup: Tweefactorauthenticatie instellen
+user-profile.two-factor-authentication.renew: Authenticatiesleutel vernieuwen
+user-profile.two-factor-authentication.setup.description: Scan de QR-code met je authenticatie-app en voer de 6-cijferige code in om te bevestigen. Je huidige sleutel blijft werken totdat de nieuwe is bevestigd.
+user-profile.two-factor-authentication.setup.success: Tweefactorauthenticatie is ingesteld
+user-profile.two-factor-authentication.disable: Tweefactorauthenticatie uitschakelen
+user-profile.two-factor-authentication.disable.confirmation.title: Tweefactorauthenticatie uitschakelen
+user-profile.two-factor-authentication.disable.confirmation.text: Je logt dan alleen nog in met je gebruikersnaam en wachtwoord. Je kunt tweefactorauthenticatie op elk moment opnieuw instellen.
+user-profile.two-factor-authentication.disable.success: Tweefactorauthenticatie is uitgeschakeld
+user-profile.two-factor-authentication.disable.error: Tweefactorauthenticatie kon niet worden uitgeschakeld
 creatable-select.add-custom-option: Aangepaste optie toevoegen
 creatable-select.add: Toevoegen
 creatable-select.option-already-exists: Optie bestaat al
@@ -2692,6 +2710,17 @@ forgot-password-form.username.placeholder: Gebruikersnaam
 forgot-password-form.reset-password: Wachtwoord herstellen
 forgot-password-form.success-message: Er is een tijdelijke inloglink verstuurd naar je e-mailadres. Controleer je postvak.
 forgot-password-form.back: Terug naar inloggen
+two-factor-form.description: Voer de 6-cijferige code uit je authenticatie-app in
+two-factor-form.code.placeholder: Authenticatiecode
+two-factor-form.code.required: Voer de authenticatiecode in
+two-factor-form.code.invalid-format: De code moet uit 6 cijfers bestaan
+two-factor-form.verify: Verifiëren
+two-factor-form.error: De code kon niet worden geverifieerd. Probeer het opnieuw.
+two-factor-form.back: Terug naar inloggen
+two-factor-setup-form.description: Tweefactorauthenticatie is verplicht voor je account. Scan de QR-code met je authenticatie-app en voer de 6-cijferige code in om te bevestigen.
+two-factor-setup-form.manual-entry: Of voer deze sleutel handmatig in
+two-factor-setup-form.confirm: Activeren
+two-factor-setup-form.load-error: Tweefactorauthenticatie kon niet worden ingesteld. Probeer het later opnieuw.
 subscription-details.community-edition: Meer informatie over Pimcore-edities
 config_not_writeable: Niet schrijfbaar; dit kan meerdere oorzaken hebben. Zie de documentatie voor details.
 navigation.about: Over

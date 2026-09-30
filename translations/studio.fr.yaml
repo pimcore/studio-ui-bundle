@@ -1520,6 +1520,11 @@ user-management.settings.language.abbreviation: Abréviation
 user-management.settings.language.view: Affichage
 user-management.settings.language.edit: Édition
 user-management.two-factor-authentication: Authentification à deux facteurs
+user-management.two-factor-authentication.reset: Réinitialiser l'authentification à deux facteurs
+user-management.two-factor-authentication.reset.confirmation.title: Réinitialiser l'authentification à deux facteurs
+user-management.two-factor-authentication.reset.confirmation.text: L'application d'authentification de l'utilisateur ne fonctionnera plus pour ce compte. Si l'authentification à deux facteurs est requise, l'utilisateur devra la configurer à nouveau lors de sa prochaine connexion.
+user-management.two-factor-authentication.reset.success: L'authentification à deux facteurs a été réinitialisée
+user-management.two-factor-authentication.reset.error: L'authentification à deux facteurs n'a pas pu être réinitialisée
 user-management.workspaces.documents: Documents
 user-management.workspaces.assets: Assets
 user-management.workspaces.objects: Data Objects
@@ -2255,6 +2260,19 @@ user-profile.password-old: Ancien mot de passe
 user-profile.password-new: Nouveau mot de passe
 user-profile.password-repeat: Répéter le mot de passe
 user-profile.password-repeat-error: Les mots de passe ne correspondent pas
+user-profile.two-factor-authentication: Authentification à deux facteurs
+user-profile.two-factor-authentication.status.active: L'authentification à deux facteurs est active pour votre compte.
+user-profile.two-factor-authentication.status.inactive: L'authentification à deux facteurs n'est pas configurée pour votre compte.
+user-profile.two-factor-authentication.required-hint: L'authentification à deux facteurs est requise pour votre compte et ne peut donc pas être désactivée.
+user-profile.two-factor-authentication.setup: Configurer l'authentification à deux facteurs
+user-profile.two-factor-authentication.renew: Renouveler la clé d'authentification
+user-profile.two-factor-authentication.setup.description: Scannez le code QR avec votre application d'authentification et saisissez le code à 6 chiffres pour confirmer. Votre clé actuelle reste valable jusqu'à la confirmation de la nouvelle.
+user-profile.two-factor-authentication.setup.success: L'authentification à deux facteurs a été configurée
+user-profile.two-factor-authentication.disable: Désactiver l'authentification à deux facteurs
+user-profile.two-factor-authentication.disable.confirmation.title: Désactiver l'authentification à deux facteurs
+user-profile.two-factor-authentication.disable.confirmation.text: Vous vous connecterez uniquement avec votre nom d'utilisateur et votre mot de passe. Vous pouvez configurer à nouveau l'authentification à deux facteurs à tout moment.
+user-profile.two-factor-authentication.disable.success: L'authentification à deux facteurs a été désactivée
+user-profile.two-factor-authentication.disable.error: L'authentification à deux facteurs n'a pas pu être désactivée
 creatable-select.add-custom-option: Ajouter une option personnalisée
 creatable-select.add: Ajouter
 creatable-select.option-already-exists: L'option existe déjà
@@ -2692,6 +2710,17 @@ forgot-password-form.username.placeholder: Nom d'utilisateur
 forgot-password-form.reset-password: Réinitialiser le mot de passe
 forgot-password-form.success-message: Un lien de connexion temporaire a été envoyé à votre adresse e-mail. Veuillez vérifier votre boîte de réception.
 forgot-password-form.back: Retour à la connexion
+two-factor-form.description: Saisissez le code à 6 chiffres de votre application d'authentification
+two-factor-form.code.placeholder: Code d'authentification
+two-factor-form.code.required: Veuillez saisir le code d'authentification
+two-factor-form.code.invalid-format: Le code doit comporter 6 chiffres
+two-factor-form.verify: Vérifier
+two-factor-form.error: Le code n'a pas pu être vérifié. Veuillez réessayer.
+two-factor-form.back: Retour à la connexion
+two-factor-setup-form.description: L'authentification à deux facteurs est requise pour votre compte. Scannez le code QR avec votre application d'authentification et saisissez le code à 6 chiffres pour confirmer.
+two-factor-setup-form.manual-entry: Ou saisissez cette clé manuellement
+two-factor-setup-form.confirm: Activer
+two-factor-setup-form.load-error: L'authentification à deux facteurs n'a pas pu être configurée. Veuillez réessayer plus tard.
 subscription-details.community-edition: En savoir plus sur les éditions Pimcore
 config_not_writeable: Non modifiable, cela peut avoir plusieurs raisons. Pour plus de détails, veuillez consulter la documentation.
 navigation.about: À propos

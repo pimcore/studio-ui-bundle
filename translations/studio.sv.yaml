@@ -1520,6 +1520,11 @@ user-management.settings.language.abbreviation: Förkortning
 user-management.settings.language.view: Visa
 user-management.settings.language.edit: Redigera
 user-management.two-factor-authentication: Tvåfaktorsautentisering
+user-management.two-factor-authentication.reset: Återställ tvåfaktorsautentisering
+user-management.two-factor-authentication.reset.confirmation.title: Återställ tvåfaktorsautentisering
+user-management.two-factor-authentication.reset.confirmation.text: Användarens autentiseringsapp fungerar inte längre för det här kontot. Om tvåfaktorsautentisering krävs måste användaren konfigurera den igen vid nästa inloggning.
+user-management.two-factor-authentication.reset.success: Tvåfaktorsautentisering har återställts
+user-management.two-factor-authentication.reset.error: Tvåfaktorsautentisering kunde inte återställas
 user-management.workspaces.documents: Dokument
 user-management.workspaces.assets: Assets
 user-management.workspaces.objects: Data Objects
@@ -2255,6 +2260,19 @@ user-profile.password-old: Gammalt lösenord
 user-profile.password-new: Nytt lösenord
 user-profile.password-repeat: Upprepa lösenord
 user-profile.password-repeat-error: Lösenorden matchar inte
+user-profile.two-factor-authentication: Tvåfaktorsautentisering
+user-profile.two-factor-authentication.status.active: Tvåfaktorsautentisering är aktiv för ditt konto.
+user-profile.two-factor-authentication.status.inactive: Tvåfaktorsautentisering är inte konfigurerad för ditt konto.
+user-profile.two-factor-authentication.required-hint: Tvåfaktorsautentisering krävs för ditt konto och kan därför inte inaktiveras.
+user-profile.two-factor-authentication.setup: Konfigurera tvåfaktorsautentisering
+user-profile.two-factor-authentication.renew: Förnya autentiseringsnyckel
+user-profile.two-factor-authentication.setup.description: Skanna QR-koden med din autentiseringsapp och ange den 6-siffriga koden för att bekräfta. Din nuvarande nyckel fungerar tills den nya har bekräftats.
+user-profile.two-factor-authentication.setup.success: Tvåfaktorsautentisering har konfigurerats
+user-profile.two-factor-authentication.disable: Inaktivera tvåfaktorsautentisering
+user-profile.two-factor-authentication.disable.confirmation.title: Inaktivera tvåfaktorsautentisering
+user-profile.two-factor-authentication.disable.confirmation.text: Du loggar då bara in med ditt användarnamn och lösenord. Du kan konfigurera tvåfaktorsautentisering igen när som helst.
+user-profile.two-factor-authentication.disable.success: Tvåfaktorsautentisering har inaktiverats
+user-profile.two-factor-authentication.disable.error: Tvåfaktorsautentisering kunde inte inaktiveras
 creatable-select.add-custom-option: Lägg till anpassat alternativ
 creatable-select.add: Lägg till
 creatable-select.option-already-exists: Alternativet finns redan
@@ -2692,6 +2710,17 @@ forgot-password-form.username.placeholder: Användarnamn
 forgot-password-form.reset-password: Återställ lösenord
 forgot-password-form.success-message: En tillfällig inloggningslänk har skickats till din e-postadress. Kontrollera din inkorg.
 forgot-password-form.back: Tillbaka till inloggning
+two-factor-form.description: Ange den 6-siffriga koden från din autentiseringsapp
+two-factor-form.code.placeholder: Autentiseringskod
+two-factor-form.code.required: Ange autentiseringskoden
+two-factor-form.code.invalid-format: Koden måste bestå av 6 siffror
+two-factor-form.verify: Verifiera
+two-factor-form.error: Koden kunde inte verifieras. Försök igen.
+two-factor-form.back: Tillbaka till inloggning
+two-factor-setup-form.description: Tvåfaktorsautentisering krävs för ditt konto. Skanna QR-koden med din autentiseringsapp och ange den 6-siffriga koden för att bekräfta.
+two-factor-setup-form.manual-entry: Eller ange den här nyckeln manuellt
+two-factor-setup-form.confirm: Aktivera
+two-factor-setup-form.load-error: Tvåfaktorsautentisering kunde inte konfigureras. Försök igen senare.
 subscription-details.community-edition: Läs mer om Pimcore-utgåvor
 config_not_writeable: Inte skrivbar, detta kan ha flera orsaker. Se dokumentationen för detaljer.
 navigation.about: Om

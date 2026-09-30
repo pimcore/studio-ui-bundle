@@ -1520,6 +1520,11 @@ user-management.settings.language.abbreviation: Abbreviazione
 user-management.settings.language.view: Visualizza
 user-management.settings.language.edit: Modifica
 user-management.two-factor-authentication: Autenticazione a due fattori
+user-management.two-factor-authentication.reset: Reimposta autenticazione a due fattori
+user-management.two-factor-authentication.reset.confirmation.title: Reimposta autenticazione a due fattori
+user-management.two-factor-authentication.reset.confirmation.text: L'app di autenticazione dell'utente non funzionerà più per questo account. Se l'autenticazione a due fattori è obbligatoria, l'utente dovrà configurarla di nuovo al prossimo accesso.
+user-management.two-factor-authentication.reset.success: L'autenticazione a due fattori è stata reimpostata
+user-management.two-factor-authentication.reset.error: Impossibile reimpostare l'autenticazione a due fattori
 user-management.workspaces.documents: Documenti
 user-management.workspaces.assets: Asset
 user-management.workspaces.objects: Data Objects
@@ -2255,6 +2260,19 @@ user-profile.password-old: Vecchia password
 user-profile.password-new: Nuova password
 user-profile.password-repeat: Ripeti password
 user-profile.password-repeat-error: Le password non corrispondono
+user-profile.two-factor-authentication: Autenticazione a due fattori
+user-profile.two-factor-authentication.status.active: L'autenticazione a due fattori è attiva per il Suo account.
+user-profile.two-factor-authentication.status.inactive: L'autenticazione a due fattori non è configurata per il Suo account.
+user-profile.two-factor-authentication.required-hint: L'autenticazione a due fattori è obbligatoria per il Suo account, quindi non può essere disattivata.
+user-profile.two-factor-authentication.setup: Configura autenticazione a due fattori
+user-profile.two-factor-authentication.renew: Rinnova chiave di autenticazione
+user-profile.two-factor-authentication.setup.description: Scansioni il codice QR con la Sua app di autenticazione e inserisca il codice a 6 cifre per confermare. La chiave attuale resta valida finché la nuova non viene confermata.
+user-profile.two-factor-authentication.setup.success: L'autenticazione a due fattori è stata configurata
+user-profile.two-factor-authentication.disable: Disattiva autenticazione a due fattori
+user-profile.two-factor-authentication.disable.confirmation.title: Disattiva autenticazione a due fattori
+user-profile.two-factor-authentication.disable.confirmation.text: Accederà solo con nome utente e password. Può configurare di nuovo l'autenticazione a due fattori in qualsiasi momento.
+user-profile.two-factor-authentication.disable.success: L'autenticazione a due fattori è stata disattivata
+user-profile.two-factor-authentication.disable.error: Impossibile disattivare l'autenticazione a due fattori
 creatable-select.add-custom-option: Aggiungi opzione personalizzata
 creatable-select.add: Aggiungi
 creatable-select.option-already-exists: Opzione già esistente
@@ -2692,6 +2710,17 @@ forgot-password-form.username.placeholder: Nome utente
 forgot-password-form.reset-password: Reimposta password
 forgot-password-form.success-message: Un link di accesso temporaneo è stato inviato al Suo indirizzo email. Controllare la casella di posta.
 forgot-password-form.back: Torna al login
+two-factor-form.description: Inserisca il codice a 6 cifre della Sua app di autenticazione
+two-factor-form.code.placeholder: Codice di autenticazione
+two-factor-form.code.required: Inserisca il codice di autenticazione
+two-factor-form.code.invalid-format: Il codice deve essere composto da 6 cifre
+two-factor-form.verify: Verifica
+two-factor-form.error: Impossibile verificare il codice. Riprovi.
+two-factor-form.back: Torna al login
+two-factor-setup-form.description: L'autenticazione a due fattori è obbligatoria per il Suo account. Scansioni il codice QR con la Sua app di autenticazione e inserisca il codice a 6 cifre per confermare.
+two-factor-setup-form.manual-entry: Oppure inserisca questa chiave manualmente
+two-factor-setup-form.confirm: Attiva
+two-factor-setup-form.load-error: Impossibile configurare l'autenticazione a due fattori. Riprovi più tardi.
 subscription-details.community-edition: Scopri di più sulle edizioni Pimcore
 config_not_writeable: Non scrivibile, questo può avere diverse cause. Per dettagli consultare la documentazione.
 navigation.about: Informazioni

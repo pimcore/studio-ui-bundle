@@ -1520,6 +1520,11 @@ user-management.settings.language.abbreviation: Skrót
 user-management.settings.language.view: Widok
 user-management.settings.language.edit: Edytuj
 user-management.two-factor-authentication: Uwierzytelnianie dwuetapowe
+user-management.two-factor-authentication.reset: Resetuj uwierzytelnianie dwuetapowe
+user-management.two-factor-authentication.reset.confirmation.title: Resetuj uwierzytelnianie dwuetapowe
+user-management.two-factor-authentication.reset.confirmation.text: Aplikacja uwierzytelniająca użytkownika przestanie działać dla tego konta. Jeśli uwierzytelnianie dwuetapowe jest wymagane, użytkownik musi skonfigurować je ponownie przy następnym logowaniu.
+user-management.two-factor-authentication.reset.success: Uwierzytelnianie dwuetapowe zostało zresetowane
+user-management.two-factor-authentication.reset.error: Nie udało się zresetować uwierzytelniania dwuetapowego
 user-management.workspaces.documents: Dokumenty
 user-management.workspaces.assets: Assety
 user-management.workspaces.objects: Obiekty danych
@@ -2255,6 +2260,19 @@ user-profile.password-old: Stare hasło
 user-profile.password-new: Nowe hasło
 user-profile.password-repeat: Powtórz hasło
 user-profile.password-repeat-error: Hasła nie są zgodne
+user-profile.two-factor-authentication: Uwierzytelnianie dwuetapowe
+user-profile.two-factor-authentication.status.active: Uwierzytelnianie dwuetapowe jest aktywne dla Twojego konta.
+user-profile.two-factor-authentication.status.inactive: Uwierzytelnianie dwuetapowe nie jest skonfigurowane dla Twojego konta.
+user-profile.two-factor-authentication.required-hint: Uwierzytelnianie dwuetapowe jest wymagane dla Twojego konta, więc nie można go wyłączyć.
+user-profile.two-factor-authentication.setup: Skonfiguruj uwierzytelnianie dwuetapowe
+user-profile.two-factor-authentication.renew: Odnów klucz uwierzytelniający
+user-profile.two-factor-authentication.setup.description: Zeskanuj kod QR w aplikacji uwierzytelniającej i wpisz 6-cyfrowy kod, aby potwierdzić. Obecny klucz działa do momentu potwierdzenia nowego.
+user-profile.two-factor-authentication.setup.success: Uwierzytelnianie dwuetapowe zostało skonfigurowane
+user-profile.two-factor-authentication.disable: Wyłącz uwierzytelnianie dwuetapowe
+user-profile.two-factor-authentication.disable.confirmation.title: Wyłącz uwierzytelnianie dwuetapowe
+user-profile.two-factor-authentication.disable.confirmation.text: Będziesz logować się tylko za pomocą nazwy użytkownika i hasła. Uwierzytelnianie dwuetapowe możesz ponownie skonfigurować w dowolnym momencie.
+user-profile.two-factor-authentication.disable.success: Uwierzytelnianie dwuetapowe zostało wyłączone
+user-profile.two-factor-authentication.disable.error: Nie udało się wyłączyć uwierzytelniania dwuetapowego
 creatable-select.add-custom-option: Dodaj niestandardową opcję
 creatable-select.add: Dodaj
 creatable-select.option-already-exists: Opcja już istnieje
@@ -2692,6 +2710,17 @@ forgot-password-form.username.placeholder: Nazwa użytkownika
 forgot-password-form.reset-password: Resetuj hasło
 forgot-password-form.success-message: Tymczasowy link logowania został wysłany na Twój adres e-mail. Sprawdź swoją skrzynkę odbiorczą.
 forgot-password-form.back: Powrót do logowania
+two-factor-form.description: Wpisz 6-cyfrowy kod z aplikacji uwierzytelniającej
+two-factor-form.code.placeholder: Kod uwierzytelniający
+two-factor-form.code.required: Wpisz kod uwierzytelniający
+two-factor-form.code.invalid-format: Kod musi składać się z 6 cyfr
+two-factor-form.verify: Zweryfikuj
+two-factor-form.error: Nie udało się zweryfikować kodu. Spróbuj ponownie.
+two-factor-form.back: Powrót do logowania
+two-factor-setup-form.description: Uwierzytelnianie dwuetapowe jest wymagane dla Twojego konta. Zeskanuj kod QR w aplikacji uwierzytelniającej i wpisz 6-cyfrowy kod, aby potwierdzić.
+two-factor-setup-form.manual-entry: Możesz też wpisać ten klucz ręcznie
+two-factor-setup-form.confirm: Aktywuj
+two-factor-setup-form.load-error: Nie udało się skonfigurować uwierzytelniania dwuetapowego. Spróbuj ponownie później.
 subscription-details.community-edition: Więcej informacji o edycjach Pimcore
 config_not_writeable: Brak możliwości zapisu; może to mieć wiele przyczyn. Szczegóły znajdziesz w dokumentacji.
 navigation.about: O programie

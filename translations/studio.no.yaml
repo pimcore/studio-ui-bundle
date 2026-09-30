@@ -1520,6 +1520,11 @@ user-management.settings.language.abbreviation: Forkortelse
 user-management.settings.language.view: Visning
 user-management.settings.language.edit: Rediger
 user-management.two-factor-authentication: Tofaktorautentisering
+user-management.two-factor-authentication.reset: Tilbakestill tofaktorautentisering
+user-management.two-factor-authentication.reset.confirmation.title: Tilbakestill tofaktorautentisering
+user-management.two-factor-authentication.reset.confirmation.text: Brukerens autentiseringsapp vil ikke lenger fungere for denne kontoen. Hvis tofaktorautentisering er påkrevd, må brukeren sette den opp på nytt ved neste innlogging.
+user-management.two-factor-authentication.reset.success: Tofaktorautentisering er tilbakestilt
+user-management.two-factor-authentication.reset.error: Tofaktorautentisering kunne ikke tilbakestilles
 user-management.workspaces.documents: Dokumenter
 user-management.workspaces.assets: Ressurser
 user-management.workspaces.objects: Data Objects
@@ -2255,6 +2260,19 @@ user-profile.password-old: Gammelt passord
 user-profile.password-new: Nytt passord
 user-profile.password-repeat: Gjenta passord
 user-profile.password-repeat-error: Passordene samsvarer ikke
+user-profile.two-factor-authentication: Tofaktorautentisering
+user-profile.two-factor-authentication.status.active: Tofaktorautentisering er aktiv for kontoen din.
+user-profile.two-factor-authentication.status.inactive: Tofaktorautentisering er ikke satt opp for kontoen din.
+user-profile.two-factor-authentication.required-hint: Tofaktorautentisering er påkrevd for kontoen din, så den kan ikke deaktiveres.
+user-profile.two-factor-authentication.setup: Sett opp tofaktorautentisering
+user-profile.two-factor-authentication.renew: Forny autentiseringsnøkkel
+user-profile.two-factor-authentication.setup.description: Skann QR-koden med autentiseringsappen din og skriv inn den 6-sifrede koden for å bekrefte. Den nåværende nøkkelen din fungerer til den nye er bekreftet.
+user-profile.two-factor-authentication.setup.success: Tofaktorautentisering er satt opp
+user-profile.two-factor-authentication.disable: Deaktiver tofaktorautentisering
+user-profile.two-factor-authentication.disable.confirmation.title: Deaktiver tofaktorautentisering
+user-profile.two-factor-authentication.disable.confirmation.text: Du logger da bare inn med brukernavn og passord. Du kan sette opp tofaktorautentisering igjen når som helst.
+user-profile.two-factor-authentication.disable.success: Tofaktorautentisering er deaktivert
+user-profile.two-factor-authentication.disable.error: Tofaktorautentisering kunne ikke deaktiveres
 creatable-select.add-custom-option: Legg til egendefinert alternativ
 creatable-select.add: Legg til
 creatable-select.option-already-exists: Alternativet finnes allerede
@@ -2692,6 +2710,17 @@ forgot-password-form.username.placeholder: Brukernavn
 forgot-password-form.reset-password: Tilbakestill passord
 forgot-password-form.success-message: En midlertidig innloggingslenke er sendt til e-postadressen din. Vennligst sjekk innboksen din.
 forgot-password-form.back: Tilbake til innlogging
+two-factor-form.description: Skriv inn den 6-sifrede koden fra autentiseringsappen din
+two-factor-form.code.placeholder: Autentiseringskode
+two-factor-form.code.required: Skriv inn autentiseringskoden
+two-factor-form.code.invalid-format: Koden må bestå av 6 sifre
+two-factor-form.verify: Bekreft
+two-factor-form.error: Koden kunne ikke bekreftes. Prøv igjen.
+two-factor-form.back: Tilbake til innlogging
+two-factor-setup-form.description: Tofaktorautentisering er påkrevd for kontoen din. Skann QR-koden med autentiseringsappen din og skriv inn den 6-sifrede koden for å bekrefte.
+two-factor-setup-form.manual-entry: Eller skriv inn denne nøkkelen manuelt
+two-factor-setup-form.confirm: Aktiver
+two-factor-setup-form.load-error: Tofaktorautentisering kunne ikke settes opp. Prøv igjen senere.
 subscription-details.community-edition: Lær mer om Pimcore-utgaver
 config_not_writeable: Ikke skrivbar, dette kan ha flere årsaker. For detaljer se dokumentasjonen.
 navigation.about: Om
