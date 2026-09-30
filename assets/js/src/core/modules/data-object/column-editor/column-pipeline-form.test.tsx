@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { ColumnPipelineForm } from './column-pipeline-form'
 
 jest.mock('react-i18next', () => ({
@@ -168,6 +168,21 @@ jest.mock('@Pimcore/components/pipeline/pipeline', () => {
 const sourceFieldConfig = { simpleField: [{ key: 'id', name: 'ID' }, { key: 'name', name: 'Name' }] }
 
 describe('ColumnPipelineForm', () => {
+  // Common props every test needs (classDefinitionId/config/registry ids); each call only passes
+  // what it varies (readOnly/compact/column/...), which is what keeps this file's many render
+  // sites from ballooning the line count back out past the shared per-file budget.
+  const renderPipelineForm = (props: Partial<React.ComponentProps<typeof ColumnPipelineForm>> = {}): void => {
+    render(
+      <ColumnPipelineForm
+        classDefinitionId='CAR'
+        config={ sourceFieldConfig }
+        sourceFieldsRegistryId='sourceFields'
+        transformersRegistryId='transformers'
+        { ...props }
+      />
+    )
+  }
+
   // Regression test: adding an advanced column and choosing the core Studio grid
   // "Simple field" source-field dynamic type used to crash BaseColumnEditor with
   // "useClassificationStoreFieldPicker must be used within a
@@ -176,16 +191,7 @@ describe('ColumnPipelineForm', () => {
   // `useClassificationStoreFieldActions` -> `useClassificationStoreFieldPicker`, even for a
   // plain (non-classification-store) field, so mounting it here without the fix throws.
   it('renders a "Simple field" source field without the ClassificationStoreFieldPicker crash', () => {
-    expect(() => {
-      render(
-        <ColumnPipelineForm
-          classDefinitionId='CAR'
-          config={ sourceFieldConfig }
-          sourceFieldsRegistryId='sourceFields'
-          transformersRegistryId='transformers'
-        />
-      )
-    }).not.toThrow()
+    expect(() => { renderPipelineForm() }).not.toThrow()
 
     // The "Simple field" source field mounted and rendered its field picker (options sourced
     // from the pipeline config), proving the tree beneath `ColumnPipelineForm` has access to
@@ -200,44 +206,23 @@ describe('ColumnPipelineForm', () => {
     // reaches it - no bespoke `pointer-events: none`/`aria-disabled` wrapper is needed (and one
     // used to sit here, which blocked *viewing* the fields area, not just editing it).
     it('disables the title input via the surrounding Form', () => {
-      render(
-        <ColumnPipelineForm
-          classDefinitionId='CAR'
-          config={ sourceFieldConfig }
-          readOnly
-          sourceFieldsRegistryId='sourceFields'
-          transformersRegistryId='transformers'
-        />
-      )
+      renderPipelineForm({ readOnly: true })
 
       expect(screen.getByPlaceholderText('column-editor.pipeline.title')).toBeDisabled()
     })
 
     it('leaves the form interactive by default', () => {
-      render(
-        <ColumnPipelineForm
-          classDefinitionId='CAR'
-          config={ sourceFieldConfig }
-          sourceFieldsRegistryId='sourceFields'
-          transformersRegistryId='transformers'
-        />
-      )
+      renderPipelineForm()
 
       expect(screen.getByPlaceholderText('column-editor.pipeline.title')).not.toBeDisabled()
     })
 
     it('keeps the tabs and the preview panel visible when compact and readOnly', () => {
-      render(
-        <ColumnPipelineForm
-          classDefinitionId='CAR'
-          column={ { _id: 'col-1', key: 'name', fieldtype: 'input', type: 'dataobject.adapter' } }
-          compact
-          config={ sourceFieldConfig }
-          readOnly
-          sourceFieldsRegistryId='sourceFields'
-          transformersRegistryId='transformers'
-        />
-      )
+      renderPipelineForm({
+        column: { _id: 'col-1', key: 'name', fieldtype: 'input', type: 'dataobject.adapter' },
+        compact: true,
+        readOnly: true
+      })
 
       expect(screen.getByTestId('tabs-layout')).toBeInTheDocument()
       expect(screen.getByText('column-editor.pipeline.sourceFields')).toBeInTheDocument()
@@ -246,31 +231,36 @@ describe('ColumnPipelineForm', () => {
     })
   })
 
+  // A blank title only shows a message once touched (antd's default validateTrigger is 'onChange').
+  describe('title validation', () => {
+    it('shows a required-field message once the title is touched and left empty', async () => {
+      renderPipelineForm()
+      const titleInput = screen.getByPlaceholderText('column-editor.pipeline.title')
+      fireEvent.change(titleInput, { target: { value: 'x' } })
+      fireEvent.change(titleInput, { target: { value: '' } })
+
+      expect(await screen.findByText('form.validation.required')).toBeInTheDocument()
+    })
+
+    it('shows no required-field message once a title is entered', () => {
+      renderPipelineForm()
+      const titleInput = screen.getByPlaceholderText('column-editor.pipeline.title')
+      fireEvent.change(titleInput, { target: { value: 'Engine description' } })
+
+      expect(screen.queryByText('form.validation.required')).not.toBeInTheDocument()
+    })
+  })
+
   describe('compact layout', () => {
     it('lays source fields and transformers out side by side (SplitLayout) by default', () => {
-      render(
-        <ColumnPipelineForm
-          classDefinitionId='CAR'
-          config={ sourceFieldConfig }
-          sourceFieldsRegistryId='sourceFields'
-          transformersRegistryId='transformers'
-        />
-      )
+      renderPipelineForm()
 
       expect(screen.getByTestId('split-layout')).toBeInTheDocument()
       expect(screen.queryByTestId('tabs-layout')).not.toBeInTheDocument()
     })
 
     it('switches source fields and transformers into tabs when compact', () => {
-      render(
-        <ColumnPipelineForm
-          classDefinitionId='CAR'
-          compact
-          config={ sourceFieldConfig }
-          sourceFieldsRegistryId='sourceFields'
-          transformersRegistryId='transformers'
-        />
-      )
+      renderPipelineForm({ compact: true })
 
       expect(screen.getByTestId('tabs-layout')).toBeInTheDocument()
       expect(screen.queryByTestId('split-layout')).not.toBeInTheDocument()

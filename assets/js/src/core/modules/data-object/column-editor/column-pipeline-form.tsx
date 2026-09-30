@@ -151,7 +151,10 @@ export const ColumnPipelineForm = ({
                   component: (
                     <Pipeline.CustomItem>
                       <Box padding={ { top: 'mini', bottom: 'mini', x: 'none' } }>
-                        <Form.Item name='title'>
+                        <Form.Item
+                          name='title'
+                          rules={ [{ required: true, message: t('form.validation.required') }] }
+                        >
                           <Input
                             placeholder={ t('column-editor.pipeline.title') }
                             style={ { maxWidth: '100%' } }
