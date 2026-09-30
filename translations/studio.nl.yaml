@@ -325,6 +325,8 @@ aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Aangepast miniatuu
 aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Aangepast miniatuur downloaden
 aria.asset.image-sidebar.tab.details.precreated-thumbnail: Voorgemaakte miniatuur selecteren om te downloaden
 aria.asset.image-sidebar.tab.details.download-thumbnail: Miniatuur downloaden
+aria.asset.image-sidebar.tab.details.downloadable-thumbnail: Downloadbare miniatuur selecteren
+aria.asset.image-sidebar.tab.details.download-downloadable-thumbnail: Geselecteerde miniatuur downloaden
 notification.action-list.actions: Acties
 notification.action-list.cancel: Annuleren
 notification.action-list.cancel-all: Alles annuleren
@@ -1064,6 +1066,8 @@ regex-flags-tooltip: "RegExp zonder scheidingstekens, moet werken in JS (Scheidi
 test-string: Testtekenreeks
 regex-validation-error-message: De tekenreeks voldoet niet aan het vereiste formaat.
 calculator-class: Berekeningsklasse
+calculator-data: Berekeningsgegevens
+calculator-data-tooltip: Optionele vrije-vorm gegevens die aan de berekening worden doorgegeven, bijv. een eenvoudige waarde, een kommagescheiden lijst of een JSON-gecodeerde structuur.
 calculator-expression: Berekeningsteken
 calculator-type: Berekeningstype
 calculator-type-tooltip: Zie de officiële documentatie voor meer informatie over het definiëren van uitdrukkingen of klassen.
@@ -1122,6 +1126,7 @@ asset.sidebar.original-file: Origineel bestand
 asset.sidebar.web-format: Webformaat
 asset.sidebar.print-format: Afdrukformaat
 asset.sidebar.office-format: Kantoorformaat
+asset.sidebar.thumbnail-download: Miniatuur downloaden
 jobs.notification.title: Lopende taken
 jobs.notification.tooltip: Lopende taken openen
 jobs.notification.jobs_one: "{{count}} actie"

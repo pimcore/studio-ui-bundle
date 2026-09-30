@@ -325,6 +325,8 @@ aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Selezione formato 
 aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Scarica anteprima personalizzata
 aria.asset.image-sidebar.tab.details.precreated-thumbnail: Seleziona anteprima preconfigurata da scaricare
 aria.asset.image-sidebar.tab.details.download-thumbnail: Scarica anteprima
+aria.asset.image-sidebar.tab.details.downloadable-thumbnail: Seleziona anteprima scaricabile
+aria.asset.image-sidebar.tab.details.download-downloadable-thumbnail: Scarica anteprima selezionata
 notification.action-list.actions: Azioni
 notification.action-list.cancel: Annulla
 notification.action-list.cancel-all: Annulla tutte
@@ -1124,6 +1126,7 @@ asset.sidebar.original-file: File originale
 asset.sidebar.web-format: Formato web
 asset.sidebar.print-format: Formato stampa
 asset.sidebar.office-format: Formato ufficio
+asset.sidebar.thumbnail-download: Download anteprima
 jobs.notification.title: Lavori in corso
 jobs.notification.tooltip: Apri lavori in corso
 jobs.notification.jobs_one: "{{count}} Azione"

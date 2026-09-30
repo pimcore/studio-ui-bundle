@@ -325,6 +325,8 @@ aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Velg tilpasset min
 aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Last ned tilpasset miniatyrbilde
 aria.asset.image-sidebar.tab.details.precreated-thumbnail: Velg forhåndslaget miniatyrbilde for nedlasting
 aria.asset.image-sidebar.tab.details.download-thumbnail: Last ned miniatyrbilde
+aria.asset.image-sidebar.tab.details.downloadable-thumbnail: Velg nedlastbart miniatyrbilde
+aria.asset.image-sidebar.tab.details.download-downloadable-thumbnail: Last ned valgt miniatyrbilde
 notification.action-list.actions: Handlinger
 notification.action-list.cancel: Avbryt
 notification.action-list.cancel-all: Avbryt alle
@@ -1124,6 +1126,7 @@ asset.sidebar.original-file: Originalfil
 asset.sidebar.web-format: Webformat
 asset.sidebar.print-format: Utskriftsformat
 asset.sidebar.office-format: Kontorformat
+asset.sidebar.thumbnail-download: Last ned miniatyrbilde
 jobs.notification.title: Kjørende jobber
 jobs.notification.tooltip: Åpne kjørende jobber
 jobs.notification.jobs_one: "{{count}} handling"
