@@ -29,6 +29,7 @@ import {
 import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column-picker.types'
 import { useAddColumnGroups } from './use-add-column-groups'
 import { buildEditorColumnFromAvailable } from './build-editor-column'
+import { hydrateDraft, reorderDraft } from './draft-helpers'
 
 const SYSTEM_COLUMNS = [
   { key: 'id', type: 'system.id', group: ['system'] as string[], config: [] as never[] },
@@ -204,17 +205,7 @@ export const useColumnEditorState = ({
 
   useEffect(() => {
     if (availableFields.length === 0) return
-    setDraft(prev => prev.map(col => {
-      const available = availableFields.find(f =>
-        f.key === col.key || (col.type === ADVANCED_COLUMN_TYPE && f.type === col.type)
-      )
-      if (available === undefined) return col
-      return {
-        ...col,
-        localizable: col.localizable ?? available.localizable,
-        pipelineConfig: col.pipelineConfig ?? (available.config as Record<string, any> | undefined)
-      }
-    }))
+    setDraft(prev => hydrateDraft(prev, availableFields))
   }, [availableFields])
 
   const handleAddColumnOfType = useCallback((column: GridColumnConfiguration): void => {
@@ -264,11 +255,7 @@ export const useColumnEditorState = ({
   }
 
   const handleReorder = (ids: string[]): void => {
-    setDraft(prev => {
-      return ids
-        .map(id => prev.find(col => col._id === id))
-        .filter((col): col is AdvancedEditorColumn => col !== undefined)
-    })
+    setDraft(prev => reorderDraft(prev, ids))
   }
 
   return {

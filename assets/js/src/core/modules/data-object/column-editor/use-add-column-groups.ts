@@ -15,91 +15,87 @@ import { type GridColumnConfiguration } from '@Pimcore/modules/data-object/data-
 import { isNil } from 'lodash'
 import { ADVANCED_COLUMN_KEY, ADVANCED_COLUMN_TYPE } from './types'
 
+type GroupTree = Record<string, any>
+type PickerGroups = Array<ColumnPickerGroup<GridColumnConfiguration>>
+
+const normalizeGroups = (group: unknown): Array<string | string[]> => {
+  if (Array.isArray(group)) {
+    return group.some((item: any) => Array.isArray(item)) ? group : [group as string[]]
+  }
+  return [String(group)]
+}
+
+const toGroupParts = (groupPath: string | string[]): string[] => {
+  return Array.isArray(groupPath) ? groupPath.map((part: any) => String(part)) : groupPath.split('.')
+}
+
+const addColumnToTree = (tree: GroupTree, column: GridColumnConfiguration, parts: string[]): void => {
+  let currentLevel = tree
+  parts.forEach((part, index) => {
+    if (isNil(currentLevel[part])) {
+      currentLevel[part] = { items: [], subGroups: {} }
+    }
+    if (index === parts.length - 1) {
+      currentLevel[part].items.push(column)
+    } else {
+      currentLevel = currentLevel[part].subGroups
+    }
+  })
+}
+
+const buildGroupTree = (columns: GridColumnConfiguration[]): GroupTree => {
+  const tree: GroupTree = {}
+  columns.forEach((column) => {
+    normalizeGroups(column.group).forEach((groupPath) => {
+      addColumnToTree(tree, column, toGroupParts(groupPath))
+    })
+  })
+  return tree
+}
+
+const resolveTranslationKey = (column: GridColumnConfiguration): string => {
+  if (!isNil(column.config) && 'fieldDefinition' in column.config) {
+    const fieldDefinition = column.config.fieldDefinition as Record<string, any>
+    return fieldDefinition?.title ?? column.key
+  }
+  return column.key
+}
+
+const convertTreeToGroups = (
+  tree: GroupTree,
+  t: (key: string) => string,
+  counter: { value: number }
+): PickerGroups => {
+  const result: PickerGroups = []
+  Object.entries(tree).forEach(([groupName, groupData]) => {
+    const children = convertTreeToGroups(groupData.subGroups as GroupTree, t, counter)
+    const items = (groupData.items as GridColumnConfiguration[]).map((column) => ({
+      key: column.key,
+      label: t(resolveTranslationKey(column)),
+      meta: column
+    }))
+
+    if (items.length > 0 || children.length > 0) {
+      result.push({ key: `group-${counter.value++}`, label: t(groupName), items, children })
+    }
+  })
+  return result
+}
+
 /**
  * Builds grouped, selectable column groups for the studio ColumnPicker from a
  * flat list of GridColumnConfiguration entries. Each leaf carries its column in
  * `meta`, so the picker's `onSelect` can hand it back to the add-column handler.
  */
-export const useAddColumnGroups = (
-  availableColumns: GridColumnConfiguration[]
-): Array<ColumnPickerGroup<GridColumnConfiguration>> => {
+export const useAddColumnGroups = (availableColumns: GridColumnConfiguration[]): PickerGroups => {
   const { t } = useTranslation()
 
-  return useMemo((): Array<ColumnPickerGroup<GridColumnConfiguration>> => {
-    const groupTree: Record<string, any> = {}
-
+  return useMemo((): PickerGroups => {
     // The advanced column is offered through its own dedicated button, not the tree.
     const treeColumns = availableColumns.filter(
       (column) => column.key !== ADVANCED_COLUMN_KEY && column.type !== ADVANCED_COLUMN_TYPE
     )
 
-    treeColumns.forEach((column) => {
-      let normalizedGroups: Array<string | string[]> = []
-      if (Array.isArray(column.group)) {
-        const hasNestedArrays = column.group.some((item: any) => Array.isArray(item))
-        if (hasNestedArrays) {
-          normalizedGroups = column.group
-        } else {
-          normalizedGroups = [column.group as unknown as string[]]
-        }
-      } else if (typeof column.group === 'string') {
-        normalizedGroups = [column.group]
-      } else {
-        normalizedGroups = [String(column.group)]
-      }
-
-      normalizedGroups.forEach((groupPath) => {
-        let groupParts: string[]
-        if (typeof groupPath === 'string') {
-          groupParts = groupPath.split('.')
-        } else if (Array.isArray(groupPath)) {
-          groupParts = groupPath.map((part: any) => String(part))
-        } else {
-          groupParts = [String(groupPath)]
-        }
-
-        let currentLevel = groupTree
-        groupParts.forEach((part, index) => {
-          if (isNil(currentLevel[part])) {
-            currentLevel[part] = { items: [], subGroups: {} }
-          }
-          if (index === groupParts.length - 1) {
-            currentLevel[part].items.push(column)
-          } else {
-            currentLevel = currentLevel[part].subGroups
-          }
-        })
-      })
-    })
-
-    let groupIndex = 0
-
-    const convertTreeToGroups = (
-      tree: Record<string, any>
-    ): Array<ColumnPickerGroup<GridColumnConfiguration>> => {
-      return Object.entries(tree).reduce<Array<ColumnPickerGroup<GridColumnConfiguration>>>(
-        (acc, [groupName, groupData]) => {
-          const children = convertTreeToGroups(groupData.subGroups as Record<string, any>)
-
-          const items = (groupData.items as GridColumnConfiguration[]).map((column) => {
-            let translationKey = column.key
-            if (!isNil(column.config) && 'fieldDefinition' in column.config) {
-              const fieldDefinition = column.config.fieldDefinition as Record<string, any>
-              translationKey = fieldDefinition?.title ?? column.key
-            }
-            return { key: column.key, label: t(translationKey), meta: column }
-          })
-
-          if (items.length > 0 || children.length > 0) {
-            acc.push({ key: `group-${groupIndex++}`, label: t(groupName), items, children })
-          }
-
-          return acc
-        },
-        []
-      )
-    }
-
-    return convertTreeToGroups(groupTree)
+    return convertTreeToGroups(buildGroupTree(treeColumns), t, { value: 0 })
   }, [availableColumns, t])
 }
