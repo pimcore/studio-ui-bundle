@@ -378,6 +378,7 @@ grid.advanced-column.preview: Voorbeeld
 grid.advanced-column.no-preview: Geen voorbeelditem beschikbaar
 grid.advanced-column.no-preview-data: Geen voorbeeldgegevens beschikbaar
 grid.advanced-column.error-preview-data: Fout bij laden van voorbeeld
+grid.advanced-column.no-source-fields: Voeg een bronveld toe om een voorbeeld te zien.
 grid.advanced-column.preview-item: Voorbeelditem
 grid.advanced-column.trim: Inkorten
 grid.advanced-column.find: Zoeken
@@ -423,6 +424,7 @@ column-editor.preview.placeholder: Selecteer een voorbeeldobject om resultaten t
 column-editor.preview.loading: Voorbeeld laden…
 column-editor.preview.error: Fout bij laden van voorbeeld.
 column-editor.preview.no-data: Geen gegevens voor dit object.
+column-editor.preview.no-source-fields: Voeg een bronveld toe om een voorbeeld te zien.
 column-editor.pipeline.title: Titel
 column-editor.pipeline.sourceFields: Bronvelden
 column-editor.pipeline.sourceFields.add: Bronveld toevoegen

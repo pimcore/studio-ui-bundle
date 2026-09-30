@@ -378,6 +378,7 @@ grid.advanced-column.preview: Anteprima
 grid.advanced-column.no-preview: Nessun elemento di anteprima disponibile
 grid.advanced-column.no-preview-data: Nessun dato di anteprima disponibile
 grid.advanced-column.error-preview-data: Errore nel caricamento dell'anteprima
+grid.advanced-column.no-source-fields: Aggiungi un campo sorgente per vedere un'anteprima.
 grid.advanced-column.preview-item: Elemento di anteprima
 grid.advanced-column.trim: Trim
 grid.advanced-column.find: Trova
@@ -423,6 +424,7 @@ column-editor.preview.placeholder: Seleziona un oggetto di anteprima per vedere 
 column-editor.preview.loading: Caricamento anteprima…
 column-editor.preview.error: Errore durante il caricamento dell'anteprima.
 column-editor.preview.no-data: Nessun dato per questo oggetto.
+column-editor.preview.no-source-fields: Aggiungi un campo sorgente per vedere un'anteprima.
 column-editor.pipeline.title: Titolo
 column-editor.pipeline.sourceFields: Campi di origine
 column-editor.pipeline.sourceFields.add: Aggiungi campo di origine

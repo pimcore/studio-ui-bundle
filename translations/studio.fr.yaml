@@ -378,6 +378,7 @@ grid.advanced-column.preview: Aperçu
 grid.advanced-column.no-preview: Aucun élément d'aperçu disponible
 grid.advanced-column.no-preview-data: Aucune donnée d'aperçu disponible
 grid.advanced-column.error-preview-data: Erreur lors du chargement de l'aperçu
+grid.advanced-column.no-source-fields: Ajoutez un champ source pour voir un aperçu.
 grid.advanced-column.preview-item: Élément d'aperçu
 grid.advanced-column.trim: Rogner
 grid.advanced-column.find: Rechercher
@@ -423,6 +424,7 @@ column-editor.preview.placeholder: Sélectionnez un objet d'aperçu pour voir le
 column-editor.preview.loading: Chargement de l'aperçu…
 column-editor.preview.error: Erreur lors du chargement de l'aperçu.
 column-editor.preview.no-data: Aucune donnée pour cet objet.
+column-editor.preview.no-source-fields: Ajoutez un champ source pour voir un aperçu.
 column-editor.pipeline.title: Titre
 column-editor.pipeline.sourceFields: Champs source
 column-editor.pipeline.sourceFields.add: Ajouter un champ source

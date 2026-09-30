@@ -378,6 +378,7 @@ grid.advanced-column.preview: Podgląd
 grid.advanced-column.no-preview: Brak dostępnego elementu podglądu
 grid.advanced-column.no-preview-data: Brak dostępnych danych podglądu
 grid.advanced-column.error-preview-data: Błąd podczas ładowania podglądu
+grid.advanced-column.no-source-fields: Dodaj pole źródłowe, aby zobaczyć podgląd.
 grid.advanced-column.preview-item: Element podglądu
 grid.advanced-column.trim: Przytnij
 grid.advanced-column.find: Szukaj
@@ -423,6 +424,7 @@ column-editor.preview.placeholder: Wybierz obiekt podglądu, aby zobaczyć wynik
 column-editor.preview.loading: Ładowanie podglądu…
 column-editor.preview.error: Błąd podczas ładowania podglądu.
 column-editor.preview.no-data: Brak danych dla tego obiektu.
+column-editor.preview.no-source-fields: Dodaj pole źródłowe, aby zobaczyć podgląd.
 column-editor.pipeline.title: Tytuł
 column-editor.pipeline.sourceFields: Pola źródłowe
 column-editor.pipeline.sourceFields.add: Dodaj pole źródłowe

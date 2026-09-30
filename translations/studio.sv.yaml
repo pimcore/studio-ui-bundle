@@ -378,6 +378,7 @@ grid.advanced-column.preview: Förhandsvisning
 grid.advanced-column.no-preview: Inget förhandsvisningsobjekt tillgängligt
 grid.advanced-column.no-preview-data: Ingen förhandsvisningsdata tillgänglig
 grid.advanced-column.error-preview-data: Fel vid laddning av förhandsvisning
+grid.advanced-column.no-source-fields: Lägg till ett källfält för att se en förhandsvisning.
 grid.advanced-column.preview-item: Förhandsvisningsobjekt
 grid.advanced-column.trim: Trimma
 grid.advanced-column.find: Sök
@@ -423,6 +424,7 @@ column-editor.preview.placeholder: Välj ett förhandsgranskningsobjekt för att
 column-editor.preview.loading: Laddar förhandsgranskning…
 column-editor.preview.error: Fel vid inläsning av förhandsgranskning.
 column-editor.preview.no-data: Inga data för detta objekt.
+column-editor.preview.no-source-fields: Lägg till ett källfält för att se en förhandsvisning.
 column-editor.pipeline.title: Titel
 column-editor.pipeline.sourceFields: Källfält
 column-editor.pipeline.sourceFields.add: Lägg till källfält
