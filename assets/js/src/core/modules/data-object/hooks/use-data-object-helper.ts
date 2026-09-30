@@ -16,7 +16,6 @@ import { useDataObjectUpdateByIdMutation } from '../data-object-api-slice.gen'
 import { publishDraft, unpublishDraft } from '../data-object-draft-slice'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
-import { type Error } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 
 interface OpenDataObjectWidgetProps {
   config: EditorContainerProps
@@ -47,38 +46,35 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
       }
     })
 
-    updateTask.catch((error: Error) => {
-      trackError(new ApiError(error))
-    })
+    let isSuccessful = false
 
     try {
       dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: true }))
       const response = (await updateTask)
 
       if (response.error !== undefined) {
-        dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: false }))
         trackError(new ApiError(response.error))
-        onFinish?.(false)
-        return
-      }
+      } else {
+        if (task === SaveTaskType.Unpublish) {
+          dispatch(unpublishDraft({ id }))
+        }
 
-      if (task === SaveTaskType.Unpublish) {
-        dispatch(unpublishDraft({ id }))
-      }
+        if (task === SaveTaskType.Publish) {
+          dispatch(publishDraft({ id }))
+        }
 
-      if (task === SaveTaskType.Publish) {
-        dispatch(publishDraft({ id }))
-      }
+        if (task === SaveTaskType.Unpublish || task === SaveTaskType.Publish) {
+          dispatch(setNodePublished({ nodeId: String(id), elementType: 'data-object', isPublished: task === 'publish' }))
+        }
 
-      if (task === SaveTaskType.Unpublish || task === SaveTaskType.Publish) {
-        dispatch(setNodePublished({ nodeId: String(id), elementType: 'data-object', isPublished: task === 'publish' }))
+        isSuccessful = true
       }
-
-      dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: false }))
-      onFinish?.(true)
     } catch (e: any) {
       trackError(new GeneralError(e.message as string))
     }
+
+    dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: false }))
+    onFinish?.(isSuccessful)
   }
 
   return { openDataObject, executeDataObjectTask }
