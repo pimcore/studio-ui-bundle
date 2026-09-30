@@ -22,6 +22,7 @@ export interface UseTwoFactorAuthenticationReturn {
   loadSetup: () => Promise<TwoFactorSetupData>
   confirmSetup: (code: string) => Promise<void>
   resetUserTwoFactor: (userId: number) => Promise<void>
+  disableTwoFactor: () => Promise<void>
 }
 
 // Placeholder until the Studio backend provides the 2FA endpoints, see pimcore/studio-ui-bundle#3902
@@ -36,6 +37,7 @@ export const useTwoFactorAuthentication = (): UseTwoFactorAuthenticationReturn =
     verifyCode: notAvailable,
     loadSetup: notAvailable,
     confirmSetup: notAvailable,
-    resetUserTwoFactor: notAvailable
+    resetUserTwoFactor: notAvailable,
+    disableTwoFactor: notAvailable
   }
 }

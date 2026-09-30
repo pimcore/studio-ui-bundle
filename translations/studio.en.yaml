@@ -2260,6 +2260,19 @@ user-profile.password-old: Old Password
 user-profile.password-new: New Password
 user-profile.password-repeat: Repeat Password
 user-profile.password-repeat-error: Passwords do not match
+user-profile.two-factor-authentication: Two-Factor Authentication
+user-profile.two-factor-authentication.status.active: Two-factor authentication is active for your account.
+user-profile.two-factor-authentication.status.inactive: Two-factor authentication is not set up for your account.
+user-profile.two-factor-authentication.required-hint: Two-factor authentication is required for your account, so it cannot be disabled.
+user-profile.two-factor-authentication.setup: Set up two-factor authentication
+user-profile.two-factor-authentication.renew: Renew authenticator key
+user-profile.two-factor-authentication.setup.description: Scan the QR code with your authenticator app and enter the 6-digit code to confirm. Your current key keeps working until the new one is confirmed.
+user-profile.two-factor-authentication.setup.success: Two-factor authentication has been set up
+user-profile.two-factor-authentication.disable: Disable two-factor authentication
+user-profile.two-factor-authentication.disable.confirmation.title: Disable two-factor authentication
+user-profile.two-factor-authentication.disable.confirmation.text: You will log in with your username and password only. You can set up two-factor authentication again at any time.
+user-profile.two-factor-authentication.disable.success: Two-factor authentication has been disabled
+user-profile.two-factor-authentication.disable.error: Two-factor authentication could not be disabled
 creatable-select.add-custom-option: Add custom option
 creatable-select.add: Add
 creatable-select.option-already-exists: Option already exists

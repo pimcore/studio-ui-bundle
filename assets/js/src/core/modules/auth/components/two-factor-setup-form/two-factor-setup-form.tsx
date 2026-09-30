@@ -11,7 +11,7 @@
 import { Form } from '@Pimcore/components/form/form'
 import { Alert, Button, Flex, FormKit, Spin, Text } from '@sdk/components'
 import { QRCode } from 'antd'
-import { isUndefined } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { type TwoFactorSetupData } from '../../hooks/use-two-factor-authentication'
@@ -21,10 +21,11 @@ import { useStyles } from './two-factor-setup-form.styles'
 export interface TwoFactorSetupFormProps {
   loadSetup: () => Promise<TwoFactorSetupData>
   onConfirm: (code: string) => Promise<void>
-  onGetBack: () => void
+  onGetBack?: () => void
+  description?: string
 }
 
-export const TwoFactorSetupForm = ({ loadSetup, onConfirm, onGetBack }: TwoFactorSetupFormProps): React.JSX.Element => {
+export const TwoFactorSetupForm = ({ loadSetup, onConfirm, onGetBack, description }: TwoFactorSetupFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const [form] = Form.useForm<TwoFactorCodeFormValues>()
@@ -127,18 +128,20 @@ export const TwoFactorSetupForm = ({ loadSetup, onConfirm, onGetBack }: TwoFacto
       gap={ 'normal' }
       vertical
     >
-      <Text>{t('two-factor-setup-form.description')}</Text>
+      <Text>{description ?? t('two-factor-setup-form.description')}</Text>
 
       {renderSetup()}
 
-      <Flex justify="center">
-        <Button
-          onClick={ onGetBack }
-          type="link"
-        >
-          {t('two-factor-form.back')}
-        </Button>
-      </Flex>
+      {!isNil(onGetBack) && (
+        <Flex justify="center">
+          <Button
+            onClick={ onGetBack }
+            type="link"
+          >
+            {t('two-factor-form.back')}
+          </Button>
+        </Flex>
+      )}
     </Flex>
   )
 }
