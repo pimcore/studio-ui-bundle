@@ -23,7 +23,7 @@ interface OpenDocumentWidgetProps {
 
 interface UseDocumentReturn {
   openDocument: (props: OpenDocumentWidgetProps) => Promise<void>
-  executeDocumentTask: (id: number, task: SaveTaskType, onFinish?: () => void) => Promise<void>
+  executeDocumentTask: (id: number, task: SaveTaskType, onFinish?: (isSuccessful: boolean) => void) => Promise<void>
 }
 
 export const useDocumentHelper = (): UseDocumentReturn => {
@@ -36,7 +36,7 @@ export const useDocumentHelper = (): UseDocumentReturn => {
     await element.openDocument(config.id)
   }
 
-  const executeDocumentTask = async (id: number, task: SaveTaskType, onFinish?: () => void): Promise<void> => {
+  const executeDocumentTask = async (id: number, task: SaveTaskType, onFinish?: (isSuccessful: boolean) => void): Promise<void> => {
     const updateTask = update({
       id,
       body: {
@@ -57,7 +57,7 @@ export const useDocumentHelper = (): UseDocumentReturn => {
       if (response.error !== undefined) {
         dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'document', loading: false }))
         trackError(new ApiError(response.error))
-        onFinish?.()
+        onFinish?.(false)
         return
       }
 
@@ -74,7 +74,7 @@ export const useDocumentHelper = (): UseDocumentReturn => {
       }
 
       dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'document', loading: false }))
-      onFinish?.()
+      onFinish?.(true)
     } catch (e: any) {
       trackError(new GeneralError(e.message as string))
     }

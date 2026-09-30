@@ -24,7 +24,7 @@ interface OpenDataObjectWidgetProps {
 
 interface UseDataObjectReturn {
   openDataObject: (props: OpenDataObjectWidgetProps) => Promise<void>
-  executeDataObjectTask: (id: number, task: SaveTaskType, onFinish?: () => void) => Promise<void>
+  executeDataObjectTask: (id: number, task: SaveTaskType, onFinish?: (isSuccessful: boolean) => void) => Promise<void>
 }
 
 export const useDataObjectHelper = (): UseDataObjectReturn => {
@@ -37,7 +37,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
     await element.openDataObject(config.id)
   }
 
-  const executeDataObjectTask = async (id: number, task: SaveTaskType, onFinish?: () => void): Promise<void> => {
+  const executeDataObjectTask = async (id: number, task: SaveTaskType, onFinish?: (isSuccessful: boolean) => void): Promise<void> => {
     const updateTask = update({
       id,
       body: {
@@ -58,7 +58,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
       if (response.error !== undefined) {
         dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: false }))
         trackError(new ApiError(response.error))
-        onFinish?.()
+        onFinish?.(false)
         return
       }
 
@@ -75,7 +75,7 @@ export const useDataObjectHelper = (): UseDataObjectReturn => {
       }
 
       dispatch(setNodeLoadingInAllTree({ nodeId: String(id), elementType: 'data-object', loading: false }))
-      onFinish?.()
+      onFinish?.(true)
     } catch (e: any) {
       trackError(new GeneralError(e.message as string))
     }
