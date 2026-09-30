@@ -325,6 +325,8 @@ aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Val av anpassat mi
 aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Ladda ner anpassad miniatyrbild
 aria.asset.image-sidebar.tab.details.precreated-thumbnail: Välj förskapad miniatyrbild att ladda ner
 aria.asset.image-sidebar.tab.details.download-thumbnail: Ladda ner miniatyrbild
+aria.asset.image-sidebar.tab.details.downloadable-thumbnail: Välj nedladdningsbar miniatyrbild
+aria.asset.image-sidebar.tab.details.download-downloadable-thumbnail: Ladda ner vald miniatyrbild
 notification.action-list.actions: Åtgärder
 notification.action-list.cancel: Avbryt
 notification.action-list.cancel-all: Avbryt alla
@@ -1124,6 +1126,7 @@ asset.sidebar.original-file: Originalfil
 asset.sidebar.web-format: Webbformat
 asset.sidebar.print-format: Utskriftsformat
 asset.sidebar.office-format: Kontorsformat
+asset.sidebar.thumbnail-download: Ladda ner miniatyrbild
 jobs.notification.title: Pågående jobb
 jobs.notification.tooltip: Öppna pågående jobb
 jobs.notification.jobs_one: "{{count}} åtgärd"

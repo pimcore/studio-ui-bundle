@@ -325,6 +325,8 @@ aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Aangepast miniatuu
 aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Aangepast miniatuur downloaden
 aria.asset.image-sidebar.tab.details.precreated-thumbnail: Voorgemaakte miniatuur selecteren om te downloaden
 aria.asset.image-sidebar.tab.details.download-thumbnail: Miniatuur downloaden
+aria.asset.image-sidebar.tab.details.downloadable-thumbnail: Downloadbare miniatuur selecteren
+aria.asset.image-sidebar.tab.details.download-downloadable-thumbnail: Geselecteerde miniatuur downloaden
 notification.action-list.actions: Acties
 notification.action-list.cancel: Annuleren
 notification.action-list.cancel-all: Alles annuleren
@@ -1124,6 +1126,7 @@ asset.sidebar.original-file: Origineel bestand
 asset.sidebar.web-format: Webformaat
 asset.sidebar.print-format: Afdrukformaat
 asset.sidebar.office-format: Kantoorformaat
+asset.sidebar.thumbnail-download: Miniatuur downloaden
 jobs.notification.title: Lopende taken
 jobs.notification.tooltip: Lopende taken openen
 jobs.notification.jobs_one: "{{count}} actie"

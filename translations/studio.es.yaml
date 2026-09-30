@@ -325,6 +325,8 @@ aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Selección de form
 aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Descargar miniatura personalizada
 aria.asset.image-sidebar.tab.details.precreated-thumbnail: Seleccionar miniatura precreada para descargar
 aria.asset.image-sidebar.tab.details.download-thumbnail: Descargar miniatura
+aria.asset.image-sidebar.tab.details.downloadable-thumbnail: Seleccionar miniatura descargable
+aria.asset.image-sidebar.tab.details.download-downloadable-thumbnail: Descargar miniatura seleccionada
 notification.action-list.actions: Acciones
 notification.action-list.cancel: Cancelar
 notification.action-list.cancel-all: Cancelar todo
@@ -1124,6 +1126,7 @@ asset.sidebar.original-file: Archivo original
 asset.sidebar.web-format: Formato web
 asset.sidebar.print-format: Formato de impresión
 asset.sidebar.office-format: Formato de oficina
+asset.sidebar.thumbnail-download: Descarga de miniatura
 jobs.notification.title: Trabajos en ejecución
 jobs.notification.tooltip: Abrir trabajos en ejecución
 jobs.notification.jobs_one: "{{count}} Acción"

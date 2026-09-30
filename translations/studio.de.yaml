@@ -325,6 +325,8 @@ aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Auswahl des benutz
 aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Benutzerdefiniertes Vorschaubild herunterladen
 aria.asset.image-sidebar.tab.details.precreated-thumbnail: Vorgefertigtes Vorschaubild zum Herunterladen auswählen
 aria.asset.image-sidebar.tab.details.download-thumbnail: Vorschaubild herunterladen
+aria.asset.image-sidebar.tab.details.downloadable-thumbnail: Herunterladbares Vorschaubild auswählen
+aria.asset.image-sidebar.tab.details.download-downloadable-thumbnail: Ausgewähltes Vorschaubild herunterladen
 notification.action-list.actions: Aktionen
 notification.action-list.cancel: Abbrechen
 notification.action-list.cancel-all: Alle abbrechen
@@ -1124,6 +1126,7 @@ asset.sidebar.original-file: Originaldatei
 asset.sidebar.web-format: Web-Format
 asset.sidebar.print-format: Druck-Format
 asset.sidebar.office-format: Office-Format
+asset.sidebar.thumbnail-download: Vorschaubild herunterladen
 jobs.notification.title: Laufende Aufträge
 jobs.notification.tooltip: Laufende Aufträge öffnen
 jobs.notification.jobs_one: "{{count}} Aktion"
