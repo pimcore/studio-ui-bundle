@@ -32,6 +32,8 @@ export enum ApiGatewayEventType {
  */
 export interface OpenCustomModalPayload {
   id: string
+  /** Unique per open; keys the holder entry so re-opening the same modal id keeps both instances apart. */
+  instanceId?: string
   payload: unknown
   onClose?: (result?: unknown) => void
 }
@@ -45,6 +47,8 @@ export interface OpenCustomModalPayload {
  */
 export interface CloseCustomModalPayload {
   id: string
+  /** The `instanceId` of the opened modal; falls back to `id` when absent. */
+  instanceId?: string
 }
 
 /**

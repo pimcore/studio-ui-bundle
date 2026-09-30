@@ -136,6 +136,8 @@ export const useColumnEditorState = ({
   // the onChange effect below must compare against the *previous* baseline, not one a sibling
   // effect already advanced further down in the same flush.
   const lastSeededDraft = useRef(draft)
+  const onChangeRef = useRef(onChange)
+  onChangeRef.current = onChange
 
   // Notifies the host on every draft change (add/remove/reorder/pipeline/locale edits), so a
   // consumer that embeds the editor without its own Apply/Discard toolbar (e.g. Backend Power
@@ -148,9 +150,9 @@ export const useColumnEditorState = ({
       return
     }
 
-    onChange?.(draft.filter(col => col.key !== '').map(advancedToSchemaColumn))
-    // `onChange` is intentionally excluded from the dependency array: the effect must fire once
-    // per draft change, not whenever the caller passes a new callback identity.
+    onChangeRef.current?.(draft.filter(col => col.key !== '').map(advancedToSchemaColumn))
+    // The latest callback is read via a ref, so the effect fires once per draft change and never
+    // because the caller passed a new callback identity.
   }, [draft])
 
   useEffect(() => {

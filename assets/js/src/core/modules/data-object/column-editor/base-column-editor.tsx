@@ -102,6 +102,13 @@ const BaseColumnEditorInner = forwardRef<ColumnEditorHandle, BaseColumnEditorPro
     // no synchronization effects needed.
     const initialLanguage = language ?? (user.contentLanguages as string[] | undefined)?.[0] ?? 'en'
     const [currentLanguage, setCurrentLanguage] = useState(initialLanguage)
+    // Keep the preview language in step with a controlled `language` prop (host-driven changes).
+    // Does not call onLanguageChange: only user selection reports back.
+    useEffect(() => {
+      if (language !== undefined) {
+        setCurrentLanguage(language)
+      }
+    }, [language])
     const [hasLocalizedFields, setHasLocalizedFields] = useState(false)
 
     // On mount, persist the resolved initial language to the parent so that

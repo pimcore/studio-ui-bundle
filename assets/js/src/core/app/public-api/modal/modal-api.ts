@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { uuid } from '@Pimcore/utils/uuid'
 import { type App } from 'antd'
 import { isNull } from 'lodash'
 import { getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
@@ -117,8 +118,10 @@ class ModalApiImpl implements ModalApi {
     payload: TPayload,
     options?: CustomModalOptions<TResult>
   ): CustomModalHandle {
+    const instanceId = uuid()
     const event = new ApiGatewayEvent(ApiGatewayEventType.openCustomModal, {
       id,
+      instanceId,
       payload,
       onClose: options?.onClose as ((result?: unknown) => void) | undefined
     })
@@ -126,7 +129,7 @@ class ModalApiImpl implements ModalApi {
 
     return {
       close: () => {
-        window.dispatchEvent(new ApiGatewayEvent(ApiGatewayEventType.closeCustomModal, { id }))
+        window.dispatchEvent(new ApiGatewayEvent(ApiGatewayEventType.closeCustomModal, { id, instanceId }))
       }
     }
   }

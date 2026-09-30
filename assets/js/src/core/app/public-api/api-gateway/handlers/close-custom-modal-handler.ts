@@ -20,5 +20,5 @@ export const closeCustomModalHandler: ApiGatewayHandler<ApiGatewayEventType.clos
   payload,
   context
 ) => {
-  context.modalHolderContext.removeModal(payload.id)
+  context.modalHolderContext.removeModal(payload.instanceId ?? payload.id)
 }

@@ -34,7 +34,12 @@ describe('modalApi.openCustom', () => {
     const [event] = listener.mock.calls[0]
     expect(event.detail).toEqual({
       type: ApiGatewayEventType.openCustomModal,
-      payload: { id: 'modal-api-test.direct', payload: { foo: 'bar' }, onClose }
+      payload: {
+        id: 'modal-api-test.direct',
+        instanceId: expect.any(String),
+        payload: { foo: 'bar' },
+        onClose
+      }
     })
 
     window.removeEventListener(API_GATEWAY_EVENT, listener)
@@ -46,6 +51,7 @@ describe('modalApi.openCustom', () => {
     window.addEventListener(API_GATEWAY_EVENT, listener)
 
     const handle = modalApi.openCustom('modal-api-test.close-handle', { foo: 'bar' })
+    const openedInstanceId = listener.mock.calls[0][0].detail.payload.instanceId
     listener.mockClear()
     handle.close()
 
@@ -53,7 +59,7 @@ describe('modalApi.openCustom', () => {
     const [event] = listener.mock.calls[0]
     expect(event.detail).toEqual({
       type: ApiGatewayEventType.closeCustomModal,
-      payload: { id: 'modal-api-test.close-handle' }
+      payload: { id: 'modal-api-test.close-handle', instanceId: openedInstanceId }
     })
 
     window.removeEventListener(API_GATEWAY_EVENT, listener)

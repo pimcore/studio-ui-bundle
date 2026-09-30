@@ -17,6 +17,7 @@ import { type ApiGatewayEventType } from '../types/event-types'
 export const openCustomModalHandler: ApiGatewayHandler<ApiGatewayEventType.openCustomModal> = (payload, context) => {
   const { modalHolderContext } = context
   const { id, onClose } = payload
+  const holderKey = payload.instanceId ?? id
   const Component = getCustomModal(id)
 
   if (isUndefined(Component)) {
@@ -25,7 +26,7 @@ export const openCustomModalHandler: ApiGatewayHandler<ApiGatewayEventType.openC
   }
 
   const handleClose = (result?: unknown): void => {
-    modalHolderContext.removeModal(id)
+    modalHolderContext.removeModal(holderKey)
     onClose?.(result)
   }
 
@@ -36,5 +37,5 @@ export const openCustomModalHandler: ApiGatewayHandler<ApiGatewayEventType.openC
     />
   )
 
-  modalHolderContext.addModal(id, element)
+  modalHolderContext.addModal(holderKey, element)
 }

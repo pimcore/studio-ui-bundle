@@ -11,7 +11,7 @@
 import { uuid } from '@Pimcore/utils/uuid'
 import { type GridColumnConfiguration } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { resolveFieldtype } from './resolve-fieldtype'
-import { type AdvancedEditorColumn } from './types'
+import { ADVANCED_COLUMN_TYPE, type AdvancedEditorColumn } from './types'
 
 /**
  * Builds a fresh {@link AdvancedEditorColumn} draft entry for a column the user just picked (from
@@ -27,7 +27,9 @@ export const buildEditorColumnFromAvailable = (column: GridColumnConfiguration):
   key: column.key,
   fieldtype: resolveFieldtype(column),
   type: column.type,
-  config: column.config as Record<string, any> | undefined,
+  // An advanced column's `config` is the fields-to-add schema catalog, not a persisted pipeline:
+  // keep it in `pipelineConfig` only so it is never serialized as the saved column config.
+  config: column.type === ADVANCED_COLUMN_TYPE ? undefined : column.config as Record<string, any> | undefined,
   pipelineConfig: column.config as Record<string, any> | undefined,
   localizable: column.localizable,
   locale: column.locale,
