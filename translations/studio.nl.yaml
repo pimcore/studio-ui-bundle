@@ -503,8 +503,8 @@ aria.version.expand: Versie uitvouwen
 clear-all: Alles wissen
 empty: Leeg
 none: Geen
-yes: Ja
-no: Nee
+'yes': Ja
+'no': Nee
 by: Door
 field: Veld
 no-data-available: Geen gegevens beschikbaar
