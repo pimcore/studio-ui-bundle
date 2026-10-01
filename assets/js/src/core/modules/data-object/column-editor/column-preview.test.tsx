@@ -155,3 +155,42 @@ describe('ColumnPreview - real backend error message (bug A)', () => {
     expect(screen.getByText('column-editor.preview.error')).toBeInTheDocument()
   })
 })
+
+describe('ColumnPreview - requested locale', () => {
+  const localizedColumn = (locale?: string | null): AdvancedEditorColumn => ({
+    ...baseColumn,
+    localizable: true,
+    locale,
+    pipeline: { title: 'My column', sourceFields: [{ key: 'name', type: 'input' }] }
+  })
+  const requestedLocale = (): unknown => useQueryMock.mock.calls[0][0].body.column.locale
+
+  beforeEach(() => {
+    useQueryMock.mockReset()
+    useQueryMock.mockReturnValue({ data: undefined, error: undefined, isFetching: false })
+  })
+
+  it('normalizes the "default" language sentinel to null, like the grid pipeline', () => {
+    render(<ColumnPreview
+      column={ localizedColumn('default') }
+      objectId={ 9 }
+           />)
+
+    expect(requestedLocale()).toBeNull()
+  })
+
+  it('uses the pinned locale, or the current language when none is pinned', () => {
+    render(<ColumnPreview
+      column={ localizedColumn('de') }
+      objectId={ 9 }
+           />)
+    expect(requestedLocale()).toBe('de')
+
+    useQueryMock.mockClear()
+    render(<ColumnPreview
+      column={ localizedColumn(null) }
+      objectId={ 9 }
+           />)
+    expect(requestedLocale()).toBe('en')
+  })
+})

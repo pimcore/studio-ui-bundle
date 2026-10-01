@@ -18,8 +18,19 @@ const availableColumnsMock = jest.fn((_arg?: unknown) => ({
   }
 }))
 
-const keyGroupRelationsMock = jest.fn((_arg?: unknown) => ({
-  data: { totalItems: 1, items: [{ groupId: 1, keyId: 2, keyName: 'height', groupName: 'Dimensions' }] }
+const singlePage = {
+  totalItems: 1, items: [{ groupId: 1, keyId: 2, keyName: 'height', groupName: 'Dimensions' }]
+}
+
+const keyGroupRelationsMock = jest.fn((_arg?: unknown): { data: any, currentData: any } => ({
+  data: singlePage,
+  currentData: singlePage
+}))
+
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string, options?: { defaultValue?: string }) => key === 'Dimensions' ? 'Abmessungen' : (options?.defaultValue ?? key)
+  })
 }))
 
 interface LayoutByKeyResult {
@@ -59,7 +70,7 @@ describe('useClassificationStoreColumnLabel', () => {
     jest.clearAllMocks()
   })
 
-  it('resolves the live "Group › Key" label for a classification store column', () => {
+  it('resolves the live, translated "Group › Key" label for a classification store column', () => {
     const column = {
       key: 'technicalAttributes',
       type: 'dataobject.classificationstore',
@@ -68,7 +79,7 @@ describe('useClassificationStoreColumnLabel', () => {
 
     const { result } = renderHook(() => useClassificationStoreColumnLabel(column, 'AP'))
 
-    expect(result.current).toEqual({ label: 'Dimensions › Height', isLoading: false, isMissing: false })
+    expect(result.current).toEqual({ label: 'Abmessungen › Height', isLoading: false, isMissing: false })
   })
 
   it('falls back to the config snapshot label while the live title is still loading', () => {
@@ -81,7 +92,7 @@ describe('useClassificationStoreColumnLabel', () => {
 
     const { result } = renderHook(() => useClassificationStoreColumnLabel(column, 'AP'))
 
-    expect(result.current).toEqual({ label: 'Dimensions › Height', isLoading: true, isMissing: false })
+    expect(result.current).toEqual({ label: 'Abmessungen › Height', isLoading: true, isMissing: false })
   })
 
   it('reports isMissing once the key/group relation 404s, instead of a silent bare-id fallback', () => {
@@ -118,5 +129,26 @@ describe('useClassificationStoreColumnLabel', () => {
     expect(result.current).toEqual({ label: '', isLoading: false, isMissing: false })
     expect(keyGroupRelationsMock).toHaveBeenCalledWith(skipToken)
     expect(layoutByKeyMock).toHaveBeenCalledWith(skipToken)
+  })
+
+  it('keeps paging the key/group relations until the column\'s group is found', () => {
+    const page1 = { totalItems: 600, items: [{ groupId: 9, keyId: 1, keyName: 'x', groupName: 'Other' }] }
+    const page2 = { totalItems: 600, items: [{ groupId: 1, keyId: 2, keyName: 'height', groupName: 'Dimensions' }] }
+    keyGroupRelationsMock.mockImplementation((arg?: unknown) => {
+      const page = (arg as { page?: number } | undefined)?.page
+      if (page === undefined) return { data: undefined, currentData: undefined }
+      const data = page === 1 ? page1 : page2
+      return { data, currentData: data }
+    })
+    const column = {
+      key: 'technicalAttributes',
+      type: 'dataobject.classificationstore',
+      config: { groupId: 1, keyId: 2 }
+    }
+
+    const { result } = renderHook(() => useClassificationStoreColumnLabel(column, 'AP'))
+
+    expect(keyGroupRelationsMock).toHaveBeenCalledWith(expect.objectContaining({ page: 2 }))
+    expect(result.current.label).toBe('Abmessungen › Height')
   })
 })

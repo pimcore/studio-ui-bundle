@@ -102,6 +102,14 @@ class ModalApiImpl implements ModalApi {
       if (isInIframe()) {
         const { modal } = getPimcoreStudioApi()
 
+        // Without a reachable parent API the lookup falls back to this very window's API, whose
+        // `modal` is this instance - delegating to it would recurse forever.
+        if (modal === this) {
+          console.error('Failed to open custom modal: parent PimcoreStudio API is not available')
+
+          return { close: () => {} }
+        }
+
         return modal.openCustom(id, payload, options)
       }
 

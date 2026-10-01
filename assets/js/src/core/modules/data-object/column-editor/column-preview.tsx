@@ -99,8 +99,10 @@ const PreviewResult = ({ column, objectId, pipelineValue }: PreviewResultProps):
   const hasSourceFields = sourceFields.length > 0
 
   // Resolve locale: explicit per-column override > global language (only for localizable columns)
+  // The `default` language is a sentinel for the non-localized bucket; the grid pipeline sends null for it.
+  const effectiveLanguage = column.locale ?? currentLanguage
   const resolvedLocale = column.localizable === true
-    ? (column.locale ?? currentLanguage)
+    ? (effectiveLanguage === 'default' ? null : effectiveLanguage)
     : undefined
 
   const { data, error, isFetching } = api.endpoints.dataObjectGetGridPreview.useQuery({

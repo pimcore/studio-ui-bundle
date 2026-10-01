@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isNil } from 'lodash'
 import { uuid } from '@Pimcore/utils/uuid'
 import { type GridColumnConfiguration } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 
@@ -262,10 +263,18 @@ export interface ClassificationStoreColumnLabelInput {
  * available - columns picked before the group/key picker started recording `config.groupName` only
  * have `config.groupId`.
  */
-export const getClassificationStoreColumnLabel = (column: ClassificationStoreColumnLabelInput): string => {
+export const getClassificationStoreColumnLabel = (
+  column: ClassificationStoreColumnLabelInput,
+  translate: (name: string) => string = (name) => name
+): string => {
   const fieldDefinition = column.config?.fieldDefinition as { title?: string, name?: string } | undefined
-  const keyLabel = fieldDefinition?.title ?? fieldDefinition?.name ?? String(column.config?.keyId ?? '')
+  const rawKeyLabel = fieldDefinition?.title ?? fieldDefinition?.name
+  const keyLabel = rawKeyLabel !== undefined ? translate(rawKeyLabel) : String(column.config?.keyId ?? '')
   const groupName = column.config?.groupName
 
-  return typeof groupName === 'string' && groupName !== '' ? `${groupName} › ${keyLabel}` : keyLabel
+  return joinClassificationStoreLabel(typeof groupName === 'string' ? translate(groupName) : undefined, keyLabel)
 }
+
+/** Joins an (already translated) group name and key title into the "Group › Key" label. */
+export const joinClassificationStoreLabel = (groupLabel: string | null | undefined, keyLabel: string): string =>
+  isNil(groupLabel) || groupLabel === '' ? keyLabel : `${groupLabel} › ${keyLabel}`

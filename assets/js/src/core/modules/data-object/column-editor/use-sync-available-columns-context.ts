@@ -8,7 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import { isEqual } from 'lodash'
 import { type GridColumnConfiguration } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 
@@ -30,17 +31,18 @@ import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators
 export const useSyncAvailableColumnsContext = (availableFields: GridColumnConfiguration[]): void => {
   const { setAvailableColumns } = useAvailableColumns()
 
+  const lastPublished = useRef<GridColumnConfiguration[] | null>(null)
+
+  // Publishes every result, including an empty one: a class without columns (or a switch to a
+  // different class) must replace the previous class's list instead of leaving it stale. Compared
+  // by content against the last published list, so a list that only changes identity between
+  // renders (an unstable `data?.columns ?? []`) can never re-trigger this effect in a loop.
   useEffect(() => {
-    // Guards the same way useColumnEditorState's own "hydrate from availableFields" effect does:
-    // skips a still-loading (or genuinely columnless) result rather than publishing an empty list.
-    // Beyond avoiding a no-op update, this matters because `availableFields` has no stable identity
-    // while the underlying query result is undefined (`data?.columns ?? []` mints a fresh array each
-    // render) - publishing it unconditionally would re-trigger this same effect on every render and
-    // loop.
-    if (availableFields.length === 0) {
+    if (lastPublished.current !== null && isEqual(lastPublished.current, availableFields)) {
       return
     }
 
+    lastPublished.current = availableFields
     setAvailableColumns(availableFields)
   }, [availableFields])
 }

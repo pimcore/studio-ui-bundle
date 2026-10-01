@@ -108,7 +108,7 @@ export const buildColumnStackItems = ({
       : {
           renderRightToolbar: (
             <Space size='mini'>
-              { col.localizable === true && isAdvanced && (
+              { col.localizable === true && (
                 <ColumnLocaleControl
                   onChange={ (locale) => { onLocaleChange(col._id, locale) } }
                   value={ col.locale }

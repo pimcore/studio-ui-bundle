@@ -17,7 +17,7 @@ import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
 import { skipToken } from '@reduxjs/toolkit/query'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
-import { isNil } from 'lodash'
+import { isEqual, isNil } from 'lodash'
 import {
   advancedFromSchemaColumn,
   advancedToSchemaColumn,
@@ -30,6 +30,9 @@ import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column
 import { useAddColumnGroups } from './use-add-column-groups'
 import { buildEditorColumnFromAvailable } from './build-editor-column'
 import { hydrateDraft, reorderDraft } from './draft-helpers'
+
+// Stable identity for "no columns yet", so effects keyed on `availableFields` do not re-run every render.
+const NO_AVAILABLE_FIELDS: GridColumnConfiguration[] = []
 
 const SYSTEM_COLUMNS = [
   { key: 'id', type: 'system.id', group: ['system'] as string[], config: [] as never[] },
@@ -155,7 +158,17 @@ export const useColumnEditorState = ({
     // because the caller passed a new callback identity.
   }, [draft])
 
+  // Re-seeds only when the host's `columns` really changed in content. A new array instance with
+  // equal contents (a host re-rendering with fresh data) must not discard unapplied local edits.
+  const lastSeededColumns = useRef(columns)
+
   useEffect(() => {
+    if (isEqual(columns, lastSeededColumns.current)) {
+      lastSeededColumns.current = columns
+      return
+    }
+
+    lastSeededColumns.current = columns
     const reseeded = columns.map(advancedFromSchemaColumn)
     lastSeededDraft.current = reseeded
     setDraft(reseeded)
@@ -203,7 +216,7 @@ export const useColumnEditorState = ({
     }
   })
 
-  const availableFields: GridColumnConfiguration[] = data?.columns ?? []
+  const availableFields: GridColumnConfiguration[] = data?.columns ?? NO_AVAILABLE_FIELDS
 
   useEffect(() => {
     if (availableFields.length === 0) return

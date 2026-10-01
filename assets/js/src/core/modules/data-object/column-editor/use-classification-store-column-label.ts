@@ -8,8 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { isNil } from 'lodash'
+import { type TFunction } from 'i18next'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { api as dataObjectApi } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import {
@@ -19,6 +21,7 @@ import {
 import {
   CLASSIFICATION_STORE_COLUMN_TYPE,
   getClassificationStoreColumnLabel,
+  joinClassificationStoreLabel,
   type ColumnIdentityInput
 } from './types'
 
@@ -32,6 +35,9 @@ export interface ClassificationStoreColumnLabelState {
 }
 
 const KEY_GROUP_RELATIONS_PAGE_SIZE = 500
+
+/** Group/key names are translatable (the picker translates them too); falls back to the raw name. */
+const translateName = (t: TFunction, name: string): string => t(name, { defaultValue: name })
 
 const isNotFoundError = (error: unknown): boolean => (error as { status?: number } | undefined)?.status === 404
 
@@ -71,7 +77,8 @@ export const useClassificationStoreColumnLabel = (
     !isNil(classId) &&
     classId !== ''
 
-  const snapshotLabel = getClassificationStoreColumnLabel(column)
+  const { t } = useTranslation()
+  const snapshotLabel = getClassificationStoreColumnLabel(column, (name) => translateName(t, name))
 
   const { data: availableColumnsData } = dataObjectApi.endpoints.dataObjectGetAvailableGridColumns.useQuery(
     canResolve ? { classId, folderId: 1 } : skipToken
@@ -86,19 +93,36 @@ export const useClassificationStoreColumnLabel = (
     return config?.fieldDefinition?.storeId
   }, [availableColumnsData, column.key])
 
-  const { data: relationsData } = useClassificationStoreGetKeyGroupRelationsQuery(
+  // A store can have more groups than one page holds: walk the pages until the column's group turns
+  // up (or the pages run out) instead of assuming it is within the first `PAGE_SIZE` relations.
+  const relationsScope = `${String(storeId)}|${String(classId)}|${column.key}`
+  const [relationsPage, setRelationsPage] = useState(1)
+  useEffect(() => { setRelationsPage(1) }, [relationsScope])
+
+  const { data: relationsData, currentData: currentRelationsData } = useClassificationStoreGetKeyGroupRelationsQuery(
     canResolve && storeId !== undefined
       ? {
           storeId,
           classId,
           fieldName: column.key,
-          page: 1,
+          page: relationsPage,
           pageSize: KEY_GROUP_RELATIONS_PAGE_SIZE
         }
       : skipToken
   )
 
   const groupName = relationsData?.items.find((item) => item.groupId === groupId)?.groupName
+
+  const hasMoreRelationPages = groupName === undefined &&
+    currentRelationsData !== undefined &&
+    currentRelationsData.items.length > 0 &&
+    relationsPage * KEY_GROUP_RELATIONS_PAGE_SIZE < currentRelationsData.totalItems
+
+  useEffect(() => {
+    if (hasMoreRelationPages) {
+      setRelationsPage((page) => page + 1)
+    }
+  }, [hasMoreRelationPages, relationsPage])
 
   const { data: layoutData, isFetching: isLayoutFetching, error: layoutError } =
     useClassificationStoreGetLayoutByKeyQuery(
@@ -120,7 +144,10 @@ export const useClassificationStoreColumnLabel = (
     return { label: snapshotLabel, isLoading: isLayoutFetching, isMissing: false }
   }
 
-  const label = isNil(groupName) || groupName === '' ? keyTitle : `${groupName} › ${keyTitle}`
+  const label = joinClassificationStoreLabel(
+    isNil(groupName) ? undefined : translateName(t, groupName),
+    translateName(t, keyTitle)
+  )
 
   return { label, isLoading: false, isMissing: false }
 }

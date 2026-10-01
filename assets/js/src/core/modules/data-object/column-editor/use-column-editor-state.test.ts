@@ -148,3 +148,25 @@ describe('useColumnEditorState onChange (review round 2, finding A)', () => {
     expect(onChange).toHaveBeenLastCalledWith([])
   })
 })
+
+describe('useColumnEditorState re-seeding from the columns prop', () => {
+  const columns: SchemaColumn[] = [{ key: 'name', fieldtype: 'input', type: 'dataobject.adapter' }]
+
+  it('keeps unapplied local edits when an equivalent new columns array is passed', () => {
+    const { result, rerender } = setup({ columns })
+
+    act(() => { result.current.handleAddColumnOfType(regularField) })
+    rerender({ columns: columns.map(column => ({ ...column })) })
+
+    expect(result.current.draft.map(col => col.key)).toEqual(['name', 'productionYear'])
+  })
+
+  it('re-seeds the draft when the columns content really changes', () => {
+    const { result, rerender } = setup({ columns })
+
+    act(() => { result.current.handleAddColumnOfType(regularField) })
+    rerender({ columns: [{ key: 'other', fieldtype: 'input', type: 'dataobject.adapter' }] })
+
+    expect(result.current.draft.map(col => col.key)).toEqual(['other'])
+  })
+})

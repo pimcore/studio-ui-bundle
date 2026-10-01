@@ -91,4 +91,19 @@ describe('modalApi.openCustom', () => {
 
     errorSpy.mockRestore()
   })
+
+  it('returns a no-op handle instead of recursing when the API lookup resolves to itself', () => {
+    jest.mocked(isInIframe).mockReturnValue(true)
+    jest.mocked(getPimcoreStudioApi).mockReturnValue({
+      modal: modalApi
+    } as unknown as ReturnType<typeof getPimcoreStudioApi>)
+    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+
+    let handle: ReturnType<typeof modalApi.openCustom> | undefined
+    expect(() => { handle = modalApi.openCustom('modal-api-test.self', {}) }).not.toThrow()
+    expect(() => { handle?.close() }).not.toThrow()
+    expect(errorSpy).toHaveBeenCalled()
+
+    errorSpy.mockRestore()
+  })
 })

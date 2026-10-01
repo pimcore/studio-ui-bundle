@@ -103,4 +103,17 @@ describe('buildColumnStackItems', () => {
     render(<>{ items[0].body }</>)
     expect(screen.getByTestId('column-editor-item-body')).toHaveTextContent('false')
   })
+
+  it('offers the locale control for localizable ordinary columns, not for non-localizable ones', () => {
+    const localized = buildColumnStackItems({
+      ...baseParams, draft: [{ ...simpleColumn, localizable: true }], readOnly: false
+    })
+    const plain = buildColumnStackItems({ ...baseParams, draft: [simpleColumn], readOnly: false })
+
+    render(<>{ localized[0].renderRightToolbar }</>)
+    expect(screen.getByTestId('column-locale-control')).toBeInTheDocument()
+
+    render(<>{ plain[0].renderRightToolbar }</>)
+    expect(screen.getAllByTestId('column-locale-control')).toHaveLength(1)
+  })
 })
