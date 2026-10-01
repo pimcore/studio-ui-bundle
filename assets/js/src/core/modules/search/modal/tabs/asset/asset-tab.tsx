@@ -14,7 +14,7 @@ import { Content } from '@Pimcore/components/content/content'
 
 export const AssetTab = (): React.JSX.Element => {
   return (
-    <Content style={ { height: '65vh' } }>
+    <Content style={ { height: '100%' } }>
       <AssetSearchListing />
     </Content>
   )

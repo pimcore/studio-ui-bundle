@@ -46,6 +46,11 @@ const generateVariableName = (fileName: string): string => {
         variableName += 'Icon';
     }
 
+    // identifiers must not start with a digit (e.g. `3d` -> `icon3d`)
+    if (/^\d/.test(variableName)) {
+        variableName = `icon${variableName}`;
+    }
+
     return variableName;
 };
 
@@ -151,7 +156,7 @@ content += `
 `;
 
 try {
-    fs.writeFileSync(OUTPUT_FILE, content.trim());
+    fs.writeFileSync(OUTPUT_FILE, content.trim() + '\n');
     console.log(`Index file generated successfully at: ${OUTPUT_FILE}`);
 } catch (error) {
     console.error('Error generating the index file:', error);

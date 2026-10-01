@@ -9,6 +9,7 @@
  */
 
 import { useAssetGetTreeQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import React, { useContext, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAssetDraft } from '@Pimcore/modules/asset/hooks/use-asset-draft'
@@ -29,7 +30,7 @@ const PreviewContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
   const assetContext = useContext(AssetContext)
   const [currentPage, setCurrentPage] = useState(1)
-  const [pageSize, setPageSize] = useState(20)
+  const [pageSize, setPageSize] = useState(appConfig.defaultPageSize)
   const assetId = assetContext.id
   const { asset } = useAssetDraft(assetId)
   const { imageSize: cardSize, setImageSize: setCardSize } = useFolderPreviewImageSize(assetId)

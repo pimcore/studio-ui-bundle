@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { getElementIcon } from '@Pimcore/modules/element/element-helper'
+import { getElementIcon, getElementKey } from '@Pimcore/modules/element/element-helper'
 import { type DataObjectGetTreeApiResponse, type DataObjectPermissions, type DataObject, type DataObjectFolder } from '../../data-object-api-slice.gen'
 import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
 import { type DataTransformerSourceNode, type DataTransformerReturnType } from '@Pimcore/components/element-tree/types/node-api-hook'
@@ -19,7 +19,7 @@ export const transformApiDataToNode = (dataObjectNode: DataObject | DataObjectFo
     id: dataObjectNode.id.toString(),
     elementType: elementTypes.dataObject,
     icon: getElementIcon(dataObjectNode, { type: 'name', value: 'data-object' }),
-    label: dataObjectNode.key,
+    label: getElementKey(dataObjectNode, elementTypes.dataObject),
     type: dataObjectNode.type,
     parentId: dataObjectNode.parentId.toString(),
     fullPath: dataObjectNode.fullPath,

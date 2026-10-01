@@ -44,7 +44,7 @@ interface ClassificationStoreDataTabProps<T> {
 }
 
 export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, columns }: ClassificationStoreDataTabProps<T>): React.JSX.Element => {
-  const { getSearchValue, setSearchValue, closeModal, currentLayoutData, updateCurrentLayoutData } = useClassificationStore()
+  const { getSearchValue, setSearchValue, closeModal, currentLayoutData, updateCurrentLayoutData, markGroupsAsNew } = useClassificationStore()
   const { operations, values } = useKeyedList()
   const { activeGroups, groupCollectionMapping, ...activeGroupsData } = values
   const { t } = useTranslation()
@@ -158,6 +158,11 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
     const results = await Promise.all(promisesList)
     const allGroups: ClassificationStoreGroupLayout2[] = results.flat()
     const uniqueGroups = uniqBy(allGroups, 'id')
+
+    // Before the groups become visible, so "hide empty data" leaves their still
+    // empty keys alone.
+    markGroupsAsNew(uniqueGroups.map((group) => String(group.id)))
+
     updateCurrentLayoutData([...currentLayoutData, ...uniqueGroups])
 
     const updatedActiveGroups = { ...values.activeGroups, ...activeGroupsUpdate }
@@ -219,11 +224,13 @@ export const ClassificationStoreDataTab = <T,>({ tabId, queryHook, queryArgs, co
       >
         <Box padding={ { top: 'small', bottom: 'small' } }>
           <Grid
+            autoWidth
             columns={ columns }
             data={ data?.items ?? [] }
             enableMultipleRowSelection
             isLoading={ isLoading }
             onSelectedRowsChange={ (row: RowSelectionState) => { setSelectedItems(row) } }
+            resizable
             selectedRows={ selectedItems }
             setRowId={ (row) => isGroupByKey && !isUndefined(row.groupId) ? `${row.groupId}-${row.keyId}` : row.id }
           />

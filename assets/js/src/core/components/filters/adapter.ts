@@ -17,14 +17,19 @@ export interface FilterHostAdapter<TContribution, TContext, TQuery> {
   composeIntoQuery: (contributions: TContribution[], baseQuery: TQuery, context: TContext) => TQuery
 }
 
+/**
+ * `overrides` lets a caller build the query from values that are not in `appliedValues` yet.
+ * A filter that applies itself immediately (Enter in a text field) writes its value into the
+ * store in the same render, so the value has to be passed in explicitly.
+ */
 export const useFilterQuery = <TContribution, TContext, TQuery>(
   adapter: FilterHostAdapter<TContribution, TContext, TQuery>,
   appliedValues: FilterValues
-): ((baseQuery: TQuery) => TQuery) => {
+): ((baseQuery: TQuery, overrides?: FilterValues) => TQuery) => {
   const context = adapter.useBuildContext()
 
-  return (baseQuery) => adapter.composeIntoQuery(
-    composeQuery(adapter.descriptors, appliedValues, context),
+  return (baseQuery, overrides = {}) => adapter.composeIntoQuery(
+    composeQuery(adapter.descriptors, { ...appliedValues, ...overrides }, context),
     baseQuery,
     context
   )

@@ -9,7 +9,14 @@
  */
 
 import { invalidatingTags, providingTags, tagNames, type Tag } from '@Pimcore/app/api/pimcore/tags'
-import { api as baseApi } from './emails-api-slice.gen'
+import { getPrefix } from '@sdk/api'
+import { api as baseApi, type EmailLogGetCollectionApiResponse } from './emails-api-slice.gen'
+
+interface EmailLogSearchApiArg {
+  page: number
+  pageSize: number
+  email: string
+}
 
 export const api = baseApi.enhanceEndpoints({
   addTagTypes: [tagNames.EMAIL_BLOCKLIST, tagNames.EMAIL_BLOCKLIST_DETAIL, tagNames.EMAIL_LOG, tagNames.EMAIL_LOG_DETAIL],
@@ -52,6 +59,24 @@ export const api = baseApi.enhanceEndpoints({
       }
     }
   }
+}).injectEndpoints({
+  endpoints: (build) => ({
+    emailLogSearch: build.query<EmailLogGetCollectionApiResponse, EmailLogSearchApiArg>({
+      query: ({ page, pageSize, email }) => ({
+        url: `${getPrefix()}/emails/search`,
+        method: 'POST',
+        body: {
+          filters: {
+            page,
+            pageSize,
+            columnFilters: [{ type: 'email', filterValue: email }]
+          }
+        }
+      }),
+      providesTags: providingTags.EMAIL_LOG()
+    })
+  }),
+  overrideExisting: false
 })
 
 export type * from './emails-api-slice.gen'
@@ -60,6 +85,7 @@ export const {
   useEmailBlocklistAddMutation,
   useEmailBlocklistDeleteMutation,
   useEmailLogGetCollectionQuery,
+  useEmailLogSearchQuery,
   useEmailLogGetByIdQuery,
   useEmailLogDeleteMutation,
   useEmailLogGetHtmlQuery,

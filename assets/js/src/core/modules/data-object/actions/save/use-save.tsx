@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useId } from 'react'
 import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-provider'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import type { DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
@@ -19,7 +19,7 @@ import { useDataObjectUpdateByIdMutation } from '@Pimcore/modules/data-object/da
 import {
   useSaveContext
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/use-save-context'
-import { isNil, isUndefined } from 'lodash'
+import { isEqual, isNil, isUndefined } from 'lodash'
 import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { type SerializedError } from '@reduxjs/toolkit'
 import { useAppDispatch } from '@sdk/app'
@@ -45,8 +45,15 @@ export enum SaveTaskType {
   Unpublish = 'unpublish'
 }
 
+/**
+ * Runs once a save went through, with the editable data it actually sent - which is
+ * not necessarily what was passed to save(): a queued task takes over the data of a
+ * later auto save folded into it (see queueAutoSave).
+ */
+export type SaveFinishCallback = (savedEditableData: Record<string, any>) => void
+
 export interface UseSaveHookReturn {
-  save: (editableData: Record<string, any>, task?: SaveTaskType, onFinish?: () => void) => Promise<void>
+  save: (editableData: Record<string, any>, task?: SaveTaskType, onFinish?: SaveFinishCallback) => Promise<void>
   isLoading: boolean
   isSuccess: boolean
   isError: boolean
@@ -57,14 +64,21 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
   const { id } = useContext(DataObjectContext)
   const { dataObject, properties, setDraftData } = useDataObjectDraft(id)
   const [saveDataObject, { isLoading, isSuccess, isError, error }] = useDataObjectUpdateByIdMutation()
-  const { setRunningTask, runningTask, runningTaskRef, queuedTask, setQueuedTask } = useSaveContext()
+  const { setRunningTask, runningTask, runningTaskRef, runningEditableDataRef, queuedTask, queuedTaskRef, setQueuedTask } = useSaveContext()
   const dispatch = useAppDispatch()
+  const ownerId = useId()
 
   const executeQueuedTask = async (): Promise<void> => {
-    if (!isNil(queuedTask)) {
-      const executeTask = { ...queuedTask }
+    // useSave is mounted in several places that share this context (the edit form for
+    // auto saves, the toolbar for the user's tasks), and each has its own mutation
+    // state. Only the instance that queued a task runs it, so the result reaches the
+    // one waiting for it. Reading it through the ref, not the state, keeps it from
+    // being sent twice when the effect runs again before the state caught up.
+    const executeTask = queuedTaskRef?.current
+
+    if (!isNil(executeTask) && executeTask.ownerId === ownerId) {
       setQueuedTask(undefined)
-      await save(executeTask.editableData, executeTask.task)
+      await save(executeTask.editableData, executeTask.task, executeTask.onFinish)
     }
   }
 
@@ -74,7 +88,7 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
     }
   }, [runningTask, queuedTask])
 
-  const save = async (editableData: Record<string, any>, task?: SaveTaskType, onFinish?: () => void): Promise<void> => {
+  const save = async (editableData: Record<string, any>, task?: SaveTaskType, onFinish?: SaveFinishCallback): Promise<void> => {
     if (dataObject?.changes === undefined) return
 
     // Hold autosaves until the edit-lock check resolves in the user's favour.
@@ -84,6 +98,7 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
 
     if (!isNil(runningTaskRef?.current)) {
       if (task === SaveTaskType.AutoSave) {
+        queueAutoSave(editableData)
         return
       }
 
@@ -93,12 +108,15 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
 
       setQueuedTask({
         task,
-        editableData
+        editableData,
+        ownerId,
+        onFinish
       })
       return
     }
 
     setRunningTask(task)
+    runningEditableDataRef.current = editableData
 
     const updatedData: DataObjectSaveUpdateData = {}
     if (dataObject.changes.properties) {
@@ -171,10 +189,40 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
 
         eventBus.publish(event)
 
-        onFinish?.()
+        onFinish?.(editableData)
       }
+      runningEditableDataRef.current = undefined
       setRunningTask(undefined)
     })
+  }
+
+  /**
+   * An auto save that collides with a running task must not get lost: some writes,
+   * e.g. restoring a field's inheritance, leave no later form change behind to carry
+   * them. Auto saves send the complete set of modified attributes, so the latest one
+   * carries every earlier one.
+   */
+  const queueAutoSave = (editableData: Record<string, any>): void => {
+    const queued = queuedTaskRef.current
+
+    // A task the user is waiting on keeps its place and sends the latest data.
+    if (!isNil(queued) && queued.task !== SaveTaskType.AutoSave) {
+      setQueuedTask({ ...queued, editableData })
+      return
+    }
+
+    // Nothing to follow up on when the running task of the user already sends this
+    // data: a follow-up auto save would only turn the saved state into a draft again.
+    const isCarriedByRunningTask = runningTaskRef.current !== SaveTaskType.AutoSave &&
+      isEqual(editableData, runningEditableDataRef.current)
+
+    if (!isCarriedByRunningTask) {
+      setQueuedTask({
+        task: SaveTaskType.AutoSave,
+        editableData,
+        ownerId
+      })
+    }
   }
 
   return {

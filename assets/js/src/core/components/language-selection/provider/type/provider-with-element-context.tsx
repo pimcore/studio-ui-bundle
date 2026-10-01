@@ -11,25 +11,23 @@
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { getLanguagePermission, resolveAllowedLanguages } from '@Pimcore/components/language-selection/helpers'
 import React, { useMemo, useState } from 'react'
 import { LanguageSelectionContext, type LanguageSelectionProviderProps } from '../language-selection-provider'
 
 export const ProviderWithElementContext = ({ children }: LanguageSelectionProviderProps): React.JSX.Element => {
   const user = useUser()
-  let initialLanguage = user.contentLanguages?.[0] ?? 'en'
   const element = useElementContext()
   const elementDraft = useElementDraft(element.id, element.elementType)
+  const contentLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
 
-  if ('permissions' in elementDraft) {
-    const permissions: Record<string, any> = elementDraft.permissions as Record<string, any>
-    const viewableLanguages: string[] = permissions?.localizedView?.split(',') ?? []
-
-    if ((viewableLanguages.length === 1 && viewableLanguages[0] === 'default') || (viewableLanguages.length === 0)) {
-      initialLanguage = user.contentLanguages?.[0] ?? 'en'
-    } else {
-      initialLanguage = ((user.contentLanguages as string[])?.filter(lang => viewableLanguages.includes(lang)) ?? [])[0] ?? 'en'
-    }
-  }
+  // The permissions live on the loaded element, not on the draft wrapper returned by
+  // useElementDraft() - reading them from the wrapper root never matched, so the editor could
+  // open on a language the user is not allowed to view.
+  const initialLanguage = resolveAllowedLanguages(
+    getLanguagePermission(elementDraft.element?.permissions, 'localizedView'),
+    contentLanguages
+  )[0] ?? 'en'
 
   const [currentLanguage, setCurrentLanguage] = useState(initialLanguage)
   const [hasLocalizedFields, setHasLocalizedFields] = useState(false)

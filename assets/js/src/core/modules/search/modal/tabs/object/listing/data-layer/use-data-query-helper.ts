@@ -9,6 +9,7 @@
  */
 
 import { type AdvancedColumnConfig, type DataObjectGetGridApiArg } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { type SettingsProviderProps } from '@Pimcore/modules/element/listing/abstract/settings/settings-provider'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
@@ -39,13 +40,19 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
 
   const columnsArg: DataObjectGetGridApiArg['body']['columns'] = selectedColumns.map(column => {
     let advancedColumnConfig: AdvancedColumnConfig | undefined
+    let key = column.key
 
     if (column.type === 'dataobject.advanced') {
       advancedColumnConfig = column.originalApiDefinition?.__meta?.advancedColumnConfig as unknown as AdvancedColumnConfig
+      // Every advanced column shares the same reserved 'advanced' key (and often a
+      // blank/duplicate user-provided title); send its stable per-instance id instead
+      // so the returned ColumnData.key can be uniquely matched back to this column
+      // (https://github.com/pimcore/service-operations/issues/927).
+      key = column.originalApiDefinition?.__meta?.uniqueId ?? column.key
     }
 
     return {
-      key: column.key,
+      key,
       type: column.type,
       locale: column.localizable ? ((column.locale ?? currentLanguage) === 'default' ? null : (column.locale ?? currentLanguage)) : undefined,
       group: column.group as unknown as string[] | undefined,
@@ -76,7 +83,7 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
         filters: {
           includeDescendants: true,
           page: 1,
-          pageSize: 20
+          pageSize: appConfig.defaultPageSize
         }
       }
     }

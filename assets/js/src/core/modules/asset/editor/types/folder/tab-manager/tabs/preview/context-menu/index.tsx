@@ -50,7 +50,7 @@ moduleSystem.registerModule({
 
         return {
           key: 'info',
-          icon: <Icon value="info-circle" />,
+          icon: <Icon value="info-outline" />,
           label: t('asset.copy-info'),
           children: actionMenuItems
         }

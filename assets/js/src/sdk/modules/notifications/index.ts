@@ -15,3 +15,11 @@ if (module.hot !== undefined) {
 export * from '@Pimcore/modules/notifications/notification-list'
 
 export * as NotificationApiSlice from '@Pimcore/modules/notifications/notifications-slice-enhanced'
+
+// Extension seams for bundles contributing notification types or delivery channels; register a
+// definition in your module's onInit.
+export * from '@Pimcore/modules/notifications/dynamic-types/definitions/dynamic-type-abstract-notification'
+export * from '@Pimcore/modules/notifications/dynamic-types/definitions/dynamic-type-abstract-notification-channel'
+export * from '@Pimcore/modules/notifications/dynamic-types/registry/dynamic-type-notification-registry'
+export * from '@Pimcore/modules/notifications/dynamic-types/registry/dynamic-type-notification-channel-registry'
+export * from '@Pimcore/modules/notifications/utils/notification-payload'

@@ -15,7 +15,7 @@ import { type TreeNode, type TreeNodeProps } from '@Pimcore/components/element-t
 import { useTranslation } from 'react-i18next'
 import { useElementDragInfo } from '@Pimcore/components/element-tree/hooks/use-element-drag-info'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
-import { isString } from 'lodash'
+import { isString, isUndefined } from 'lodash'
 
 export const withDraggable = (Component: typeof TreeNode): typeof TreeNode => {
   const DraggableNodeContent = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
@@ -31,14 +31,17 @@ export const withDraggable = (Component: typeof TreeNode): typeof TreeNode => {
     }
 
     return (
-      <Draggable
-        info={ resolveDragInfo }
-      >
-        <Component
-          { ...props }
-          ref={ ref }
-        />
-      </Draggable>
+      <Component
+        { ...props }
+        ref={ ref }
+        wrapNode={ (children) => (
+          <Draggable
+            info={ resolveDragInfo }
+          >
+            {!isUndefined(props.wrapNode) ? props.wrapNode(children) : children}
+          </Draggable>
+        ) }
+      />
     )
   }
 

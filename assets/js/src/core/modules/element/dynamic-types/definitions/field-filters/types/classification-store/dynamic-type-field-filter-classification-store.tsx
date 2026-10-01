@@ -50,10 +50,10 @@ export class DynamicTypeFieldFilterClassificationStore extends DynamicTypeFieldF
 
     const splittedType = filterType.split('.')
     splittedType[0] = 'classificationstore'
-    filter.type = splittedType.join('.')
 
     return {
       ...filter,
+      type: splittedType.join('.'),
       filterValue: {
         value: subTypeFilter.filterValue,
         keyId: filter.meta.keyId,

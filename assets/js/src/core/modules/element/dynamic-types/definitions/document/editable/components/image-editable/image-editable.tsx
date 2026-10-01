@@ -12,8 +12,7 @@ import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AssetTarget } from '@Pimcore/components/asset-target/asset-target'
 import { DocumentHotspotImagePreview } from './hotspot-image-preview'
-import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
-import { type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/droppable'
+import { Droppable, type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/droppable'
 import { isNil, isBoolean } from 'lodash'
 import { useCropModal } from '@Pimcore/modules/element/components/crop-modal/hooks/use-crop-modal'
 import { useHotspotMarkersModal } from '@Pimcore/modules/element/components/hotspot-markers-modal/hooks/use-hotspot-markers-modal'
@@ -33,6 +32,7 @@ import { useAssetDimensions } from '../../helpers/responsive-asset-preview/hooks
 import { EditableOverlay } from '../editable-overlay/editable-overlay'
 import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
 import { type ImageEditableConfig, type ImageEditableValue } from '../../types/image-editable-types'
+import { imageUploadAccept } from '@Pimcore/modules/asset/utils/upload-accept'
 export { type ImageEditableConfig, type ImageEditableValue } from '../../types/image-editable-types'
 
 interface HotspotImageValue {
@@ -167,7 +167,7 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
 
     triggerUpload({
       targetFolderPath: props.config?.uploadPath,
-      accept: 'image/*',
+      accept: imageUploadAccept,
       multiple: false,
       maxItems: 1,
       showSuccessMessage,
@@ -210,7 +210,7 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
 
     return (
       <InlineUpload
-        accept="image/*"
+        accept={ imageUploadAccept }
         assetType="image"
         disabled={ disabled }
         fullWidth={ isNil(smartDimensions?.width ?? width) }

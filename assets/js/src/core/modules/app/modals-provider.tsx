@@ -16,7 +16,7 @@ import { HotspotMarkersModalProvider } from '../element/components/hotspot-marke
 import { VideoModalProvider } from '../element/components/video-modal/provider/video-modal-provider'
 import { SendTestEmailProvider } from '../email/test-mail/provider/send-test-email-provider'
 import { SiteModalProvider } from '../document/actions/site/provider/site-modal-provider'
-import { ModalHolderProvider } from './modal-holder/modal-holder-provider'
+import { ModalHolderOutlet, ModalHolderProvider } from './modal-holder/modal-holder-provider'
 import { AboutDialogWrapper } from '@Pimcore/modules/about/components/about-dialog/about-dialog-wrapper'
 import { BulkExportWrapper } from '@Pimcore/modules/bulk-export/components/bulk-export-modal/bulk-export-wrapper'
 import { BulkImportWrapper } from '@Pimcore/modules/bulk-import/components/bulk-import-modal/bulk-import-wrapper'
@@ -31,10 +31,14 @@ export interface ModalsProviderProps {
 /**
  * Centralized provider for all modal-related functionality.
  * Groups together all modal providers to keep the global provider clean.
+ *
+ * The modal holder stays outermost so every provider below can hold modals, but the held
+ * modals themselves are rendered through the outlet at the innermost level, so they can use
+ * the upload, link, crop, … providers just like the rest of the app.
  */
 export const ModalsProvider = ({ children }: ModalsProviderProps): React.JSX.Element => {
   return (
-    <ModalHolderProvider>
+    <ModalHolderProvider renderModals={ false }>
       <UploadModalProvider>
         <LinkModalProvider>
           <CropModalProvider>
@@ -48,6 +52,7 @@ export const ModalsProvider = ({ children }: ModalsProviderProps): React.JSX.Ele
                           <SiteModalProvider>
                             <SlotRenderer slot={ componentConfig.global.modal.name } />
                             {children}
+                            <ModalHolderOutlet />
                           </SiteModalProvider>
                         </OpenElementWrapper>
                       </BulkImportWrapper>

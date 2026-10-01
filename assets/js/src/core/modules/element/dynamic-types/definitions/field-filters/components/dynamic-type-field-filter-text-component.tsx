@@ -16,7 +16,7 @@ import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/us
 export interface DynamicTypeFieldFilterTextProps extends AbstractFieldFilterDefinition {}
 
 export const DynamicTypeFieldFilterTextComponent = (): React.JSX.Element => {
-  const { data, setData } = useDynamicFilter()
+  const { data, setData, commit } = useDynamicFilter()
   const [_value, setValue] = useState(data)
 
   useEffect(() => {
@@ -27,12 +27,27 @@ export const DynamicTypeFieldFilterTextComponent = (): React.JSX.Element => {
     <Input
       onBlur={ onBlur }
       onChange={ (event) => { setValue(event.target.value) } }
+      onPressEnter={ onPressEnter }
       type='text'
       value={ _value }
     />
   )
 
   function onBlur (): void {
+    setData(_value)
+  }
+
+  /**
+   * Hosts that apply filters immediately expose commit(), so Enter applies the value
+   * right away. Hosts that only collect a draft until their own "Apply" button have no
+   * commit(), and Enter behaves like leaving the field.
+   */
+  function onPressEnter (): void {
+    if (commit !== undefined) {
+      commit(_value)
+      return
+    }
+
     setData(_value)
   }
 }

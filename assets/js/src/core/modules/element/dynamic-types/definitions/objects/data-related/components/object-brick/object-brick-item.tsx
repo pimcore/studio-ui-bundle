@@ -21,7 +21,7 @@ import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/t
 
 export interface ObjectBrickItemProps {
   type: string
-  noteditable?: AbstractObjectDataDefinition['noteditable']
+  noteditable?: Exclude<AbstractObjectDataDefinition['noteditable'], undefined>
   name: FormItemProps['name']
 }
 

@@ -167,5 +167,15 @@ export const contextMenuConfig = {
       download: 600,
       delete: 700
     }
+  },
+
+  // Every row below the username header is a provider. Logout's 9999 clears the `?? 999` default.
+  userMenu: {
+    name: 'user-menu',
+    priority: {
+      notifications: 100,
+      myProfile: 200,
+      logout: 9999
+    }
   }
 }

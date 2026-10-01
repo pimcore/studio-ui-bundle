@@ -154,6 +154,13 @@ export const useStyle = createStyles(({ token, css }) => {
         }
       }
 
+      /* the container owns the width, so the panel grows from its sizing rather than
+         being pinned to it */
+      &.sidebar--container-sized .sidebar__content {
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+
       .sidebar__resize-overlay {
         position: fixed;
         inset: 0;

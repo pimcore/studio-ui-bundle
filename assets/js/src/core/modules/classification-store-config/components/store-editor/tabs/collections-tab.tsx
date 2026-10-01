@@ -11,6 +11,8 @@
 /* eslint-disable max-lines */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { appConfig } from '@Pimcore/app/config/app-config'
+import { theme } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -52,13 +54,14 @@ interface ICollectionDetailFormValues {
 
 export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { token } = theme.useToken()
   const { localModal: modal } = useStudioModal()
   const [collectionForm] = Form.useForm<{ name: string, description: string }>()
   const [detailForm] = Form.useForm<ICollectionDetailFormValues>()
 
   const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
   const [page, setPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(20)
+  const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [sorting, setSorting] = useState<SortingState>([])
 
@@ -380,7 +383,7 @@ export const CollectionsTab = ({ storeId }: ICollectionsTabProps): React.JSX.Ele
                 >
                   <Flex
                     gap="small"
-                    style={ { padding: '8px 16px' } }
+                    style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
                     vertical
                   >
                     <Form.Item

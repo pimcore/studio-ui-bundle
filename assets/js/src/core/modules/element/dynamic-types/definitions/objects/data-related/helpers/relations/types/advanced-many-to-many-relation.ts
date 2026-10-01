@@ -15,6 +15,7 @@ export interface AdvancedManyToManyRelationValueItem {
     subtype: string | null
     fullPath: string
     isPublished: boolean | null
+    hasViewAccess?: boolean
   }
   fieldName: string
   columns: string[] | null

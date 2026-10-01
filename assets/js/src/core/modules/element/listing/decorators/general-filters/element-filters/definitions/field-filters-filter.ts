@@ -14,7 +14,7 @@ import { DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic
 import { type FieldFilter } from '../../context-layer/provider/field-filters/field-filters-provider'
 import { type ElementFilterQueryPart, type ElementFilterContext } from '../element-filter-types'
 
-const prepareFieldFilters = (filters: FieldFilter[], context: ElementFilterContext): ColumnFilter[] => {
+export const prepareFieldFilters = (filters: FieldFilter[], context: ElementFilterContext): ColumnFilter[] => {
   const { availableColumns, getType } = context
   const preparedFilters: ColumnFilter[] = []
 

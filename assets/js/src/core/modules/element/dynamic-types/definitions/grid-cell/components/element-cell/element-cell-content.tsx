@@ -21,6 +21,9 @@ import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
 import { isElementReference, type ElementReference } from '@Pimcore/modules/element/element-helper'
 import { useEditMode, Input } from '@sdk/components'
 import { type InputRef } from 'antd'
+import {
+  useIsElementSelectorListing
+} from '@Pimcore/modules/element/element-selector/provider/is-element-selector-listing/use-is-element-selector-listing'
 
 export interface ElementCellContentProps extends DefaultCellProps {
   dropDisabled?: boolean
@@ -33,6 +36,7 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
   const propertyData = props.row.original
   const { getStateClasses } = useDroppable()
   const { fireOnUpdateCellDataEvent, isInEditMode, disableEditMode } = useEditMode(props)
+  const { isElementSelector } = useIsElementSelectorListing()
   const inputRef = useRef<InputRef>(null)
 
   const expectsStringValue = Boolean(props.column.columnDef.meta?.config?.expectsStringValue)
@@ -136,7 +140,7 @@ export const ElementCellContent = forwardRef(function ElementCellContent (props:
             )}
 
             <div>
-              { props.dropDisabled !== true && (
+              { props.dropDisabled !== true && !isElementSelector && (
               <Icon
                 className={ styles.elementOptionsIcon }
                 value={ 'drop-target' }

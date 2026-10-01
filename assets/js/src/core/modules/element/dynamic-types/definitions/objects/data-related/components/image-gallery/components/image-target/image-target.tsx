@@ -21,6 +21,7 @@ import { useStyles } from '../../image-gallery.styles'
 import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
 import { InlineUpload } from '@Pimcore/components/inline-upload'
 import { useUploadModal } from '@Pimcore/components/modal-upload/hooks/use-upload-modal'
+import { imageUploadAccept } from '@Pimcore/modules/asset/utils/upload-accept'
 
 interface ImageGalleryImageTargetProps {
   index: number
@@ -70,7 +71,7 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, widt
   const handleUpload = useCallback(() => {
     triggerUpload({
       targetFolderPath: uploadPath ?? '',
-      accept: 'image/*',
+      accept: imageUploadAccept,
       multiple: false,
       maxItems: 1,
       onSuccess: async (assets) => {
@@ -91,7 +92,7 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, widt
 
   return (
     <InlineUpload
-      accept="image/*"
+      accept={ imageUploadAccept }
       assetType="image"
       disabled={ disabled }
       onSuccess={ handleFileSystemUpload }

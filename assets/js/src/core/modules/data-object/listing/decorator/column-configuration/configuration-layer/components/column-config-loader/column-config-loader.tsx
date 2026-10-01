@@ -10,7 +10,7 @@
 
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useClassDefinitionSelection } from '../../../../class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useDataObjectGetAvailableGridColumnsQuery, useDataObjectGetGridConfigurationQuery } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
@@ -19,6 +19,9 @@ import { type SelectedColumnsContextProps } from '@Pimcore/modules/element/listi
 import { useSelectedGridConfigId } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/selected-grid-config-id/use-selected-grid-config-id'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/use-grid-config'
+import { uuid } from '@Pimcore/utils/uuid'
+import { useAppliedFiltersOptional } from '@Pimcore/modules/element/listing/decorators/general-filters/element-filters'
+import { restoreFieldFilters } from './restore-field-filters'
 
 export interface ColumnConfigLoaderProps {
   Component: AbstractDecoratorProps['ConfigurationComponent']
@@ -29,17 +32,28 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
   const { setDataLoadingState } = useDataQueryHelper()
   const { getId } = useElementId()
   const { selectedClassDefinition } = useClassDefinitionSelection()
-  const { isLoading, data } = useDataObjectGetAvailableGridColumnsQuery({ folderId: getId(), classId: selectedClassDefinition!.id })
+  const { isLoading, currentData: data } = useDataObjectGetAvailableGridColumnsQuery({ folderId: getId(), classId: selectedClassDefinition!.id })
   const { id: configId } = useSelectedGridConfigId()
-  const { isLoading: isInitialConfigLoading, data: initialConfigurationData } = useDataObjectGetGridConfigurationQuery({ classId: selectedClassDefinition!.id, folderId: getId(), configurationId: configId })
+  const { isLoading: isInitialConfigLoading, currentData: initialConfigurationData } = useDataObjectGetGridConfigurationQuery({ classId: selectedClassDefinition!.id, folderId: getId(), configurationId: configId })
   const { selectedColumns, setSelectedColumns } = useSelectedColumns()
   const { setAvailableColumns } = useAvailableColumns()
   const { setGridConfig } = useGridConfig()
+  const applied = useRef<{ columns?: unknown, configuration?: unknown }>({})
+  const appliedFiltersStore = useAppliedFiltersOptional()
 
   useEffect(() => {
     if (data === undefined || initialConfigurationData === undefined) {
       return
     }
+
+    // apply each response pair once: StrictMode's second pass and a refetch RTK answers with the
+    // cached result carry the same objects, and re-applying the defaults then would overwrite a
+    // column set installed since (a restored saved search). A changed response applies — and
+    // currentData stays empty while the arguments change, so two classes' answers never mix
+    if (applied.current.columns === data && applied.current.configuration === initialConfigurationData) {
+      return
+    }
+    applied.current = { columns: data, configuration: initialConfigurationData }
 
     const selectedColumns: SelectedColumnsContextProps['selectedColumns'] = []
     const availableColumns: AvailableColumn[] = data.columns!.map(column => column)
@@ -52,6 +66,11 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
           ...availableColumn,
           config: availableColumn.type === 'dataobject.classificationstore' ? 'config' in column && column.config : availableColumn.config,
           __meta: {
+            // Advanced columns share the same reserved 'advanced' key (and often a
+            // blank/duplicate title) from a persisted config, which is not unique -
+            // assign each loaded instance its own id so it can be told apart from
+            // sibling advanced columns (https://github.com/pimcore/service-operations/issues/927).
+            uniqueId: uuid(),
             advancedColumnConfig: currentColumn.config ?? {}
           }
         }
@@ -76,6 +95,13 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
     setSelectedColumns(selectedColumns)
     setAvailableColumns(availableColumns)
     setGridConfig(initialConfigurationData)
+
+    // saveFilter: false means this configuration never managed filter state - leave the
+    // user's currently-applied filters alone rather than clearing them to [].
+    if (initialConfigurationData.saveFilter) {
+      appliedFiltersStore?.setValue('fieldFilters', restoreFieldFilters(initialConfigurationData.filter, availableColumns))
+    }
+
     setDataLoadingState('config-changed')
   }, [data, initialConfigurationData])
 

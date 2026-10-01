@@ -18,9 +18,9 @@ use Exception;
 use Pimcore\Bundle\StudioUiBundle\Security\Csp\ContentSecurityPolicyHandlerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * This is the class that loads and manages your bundle configuration.
@@ -44,6 +44,11 @@ class PimcoreStudioUiExtension extends Extension implements PrependExtensionInte
 
         $container->setParameter('pimcore_studio_ui.url_path', rtrim($config['url_path'], '/'));
 
+        $container->setParameter(
+            'pimcore_studio_ui.asset_upload.max_parallel_uploads',
+            $config['asset_upload']['max_parallel_uploads']
+        );
+
         $container->getDefinition('pimcore_studio.static_resources_resolver.default')
             ->setArgument('$additionalCssFiles', array_unique($config['static_resources']['css']))
             ->setArgument('$additionalJsFiles', array_unique($config['static_resources']['js']));
@@ -66,6 +71,10 @@ class PimcoreStudioUiExtension extends Extension implements PrependExtensionInte
         $cspSubscriberDefinition
             ->setArgument('$cspEnabled', $config['csp_header']['enabled'])
             ->setArgument('$excludePaths', $config['csp_header']['exclude_paths']);
+
+        foreach ($config['pagination'] as $key => $value) {
+            $container->setParameter('pimcore_studio_ui.pagination.' . $key, $value);
+        }
     }
 
     /**

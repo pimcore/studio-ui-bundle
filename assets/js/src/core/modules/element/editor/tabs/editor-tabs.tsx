@@ -49,7 +49,7 @@ export const EditorTabs = ({ defaultActiveKey, showLabelIfActive, items }: IEdit
   const { width: editorTabsWidth } = useElementResize(elementRef)
 
   useEffect(() => {
-    if (activeTab === null && items?.length > 0) {
+    if (items?.length > 0 && (activeTab === null || !items.some((item) => item.key === activeTab))) {
       setActiveTab(items[0].key)
     }
   }, [items])

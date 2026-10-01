@@ -8,8 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect, useState } from 'react'
-import type { ColumnDef } from '@tanstack/react-table'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import type { ColumnDef, RowSelectionState } from '@tanstack/react-table'
 import { isEqual, isNil } from 'lodash'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import { getDraggedElements, toElementType } from '@Pimcore/components/drag-and-drop/element-drag'
@@ -22,10 +22,16 @@ import { dndValidRelationElements, type IRelationAllowedTypesDataComponent } fro
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Content } from '@Pimcore/components/content/content'
 import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
+import { useFilterQuery } from '@Pimcore/components/filters'
+import { relationFilterAdapter, useRelationFilters } from './filters/filters'
+import { useRelationFilterColumns } from '@Pimcore/components/many-to-many-relation/filters'
+import { RelationFiltersProvider } from './filters/provider/relation-filters-provider'
 
 export interface ManyToManyRelationClassDefinitionProps {
   assetUploadPath?: string | null
   allowToClearRelation: boolean
+  /** Object relations only: offers a toolbar action that creates a new object into the relation. */
+  allowToCreateNewObject?: boolean
   maxItems: number | null
   pathFormatterClass: string | null
   width: number | string | null
@@ -51,14 +57,29 @@ export interface ManyToManyRelationProps extends IRelationAllowedTypesDataCompon
   disableInlineUpload?: boolean
   enableRowDrag?: boolean
   noteditable?: boolean | null
+  /** Renders a filter dropdown in the header of every filterable column. */
+  enableColumnFilters?: boolean
+  enableMultipleRowSelection?: boolean
+  selectedRows?: RowSelectionState
+  onSelectedRowsChange?: (selectedRows: RowSelectionState) => void
+  extraToolbarItems?: React.ReactNode
 }
 
-export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToManyRelationProps): React.JSX.Element => {
+interface ManyToManyRelationContentProps extends ManyToManyRelationProps {
+  enableRowDrag: boolean
+}
+
+const ManyToManyRelationContent = ({ enableRowDrag, ...props }: ManyToManyRelationContentProps): React.JSX.Element => {
   const [value, setValue] = useState<ManyToManyRelationValue | null>(props.value ?? null)
   const [displayedValue, setDisplayedValue] = useState<DisplayManyToManyRelationValue | null>(props.value ?? null)
 
+  const { values: appliedFilters } = useRelationFilters()
+  const { columns: filterableColumns } = useRelationFilterColumns()
+  const buildFilterQuery = useFilterQuery(relationFilterAdapter, appliedFilters)
+  const { matchRow } = buildFilterQuery({})
+
   const { addDroppedElements, deleteItem, onSearch, onOrderChange, addAssets, addItems, updateDisplayValue, maxRemainingItems, getOriginalIndex, hasActiveSearch } = useValue(
-    value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments, { name: props.combinedFieldName, class: props.pathFormatterClass ?? undefined }, props?.visibleFieldsValue
+    value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments, { name: props.combinedFieldName, class: props.pathFormatterClass ?? undefined }, props?.visibleFieldsValue, matchRow
   )
   const allowDragAndDrop = !isNil(displayedValue) && displayedValue?.length > 1 && !hasActiveSearch && !props?.noteditable
 
@@ -83,6 +104,34 @@ export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToMan
       updateDisplayValue(props.value ?? null)
     }
   }, [props.value])
+
+  const hasAppliedFiltersOnce = useRef<boolean>(false)
+
+  /**
+   * What the rows are matched against is not only the applied filter values: a
+   * filterable column that is gone - or filtering that got disabled altogether -
+   * drops its matcher, and refreshed visible field data changes the values the
+   * matchers and the search read. All of them have to refresh the rows, or the
+   * grid keeps showing what the previous context matched.
+   *
+   * Serialized on purpose: the hosts build the column definition and the visible
+   * fields anew on every render, so depending on their identity would refresh the
+   * rows in a loop.
+   */
+  const filterContextKey = useMemo(() => JSON.stringify({
+    filters: appliedFilters,
+    columns: filterableColumns.map((column) => column.key),
+    visibleFields: props.visibleFieldsValue
+  }), [appliedFilters, filterableColumns, props.visibleFieldsValue])
+
+  useEffect(() => {
+    if (!hasAppliedFiltersOnce.current) {
+      hasAppliedFiltersOnce.current = true
+      return
+    }
+
+    updateDisplayValue(value)
+  }, [filterContextKey])
 
   if (props.isLoading === true) {
     return (
@@ -123,6 +172,7 @@ export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToMan
           columnDefinition={ props.columnDefinition }
           deleteItem={ deleteItem }
           disabled={ props.disabled }
+          enableMultipleRowSelection={ props.enableMultipleRowSelection }
           enableRowDrag={ enableRowDrag && allowDragAndDrop }
           enableRowVirtualizer={ !props.noteditable }
           enrichRowData={ props.enrichRowData }
@@ -131,8 +181,10 @@ export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToMan
           hideOpenButton={ props.hideOpenButton }
           hint={ props.hint }
           inherited={ props.inherited }
+          onSelectedRowsChange={ props.onSelectedRowsChange }
           onUpdateCellData={ handleUpdateCellData }
           pathFormatterConfig={ { name: props.combinedFieldName, class: props.pathFormatterClass ?? undefined } }
+          selectedRows={ props.selectedRows }
           value={ displayedValue }
           width={ props.width }
         />
@@ -154,11 +206,27 @@ export const ManyToManyRelation = ({ enableRowDrag = true, ...props }: ManyToMan
             setValue(null)
           } }
           enableUpload={ props.assetsAllowed === true && props.disabled !== true && props.disableInlineUpload !== true }
+          itemLimitReached={ maxRemainingItems !== undefined && maxRemainingItems <= 0 }
           onSearch={ onSearch }
           uploadMaxItems={ maxRemainingItems !== undefined && maxRemainingItems > 0 ? maxRemainingItems : (props.maxItems ?? undefined) }
           uploadShowMaxItemsError={ maxRemainingItems !== undefined && maxRemainingItems <= 0 }
         />
       </Content>
     </>
+  )
+}
+
+export const ManyToManyRelation = ({ enableRowDrag = true, enableColumnFilters = true, ...props }: ManyToManyRelationProps): React.JSX.Element => {
+  return (
+    <RelationFiltersProvider
+      columnDefinition={ props.columnDefinition }
+      enabled={ enableColumnFilters }
+      visibleFieldsValue={ props.visibleFieldsValue }
+    >
+      <ManyToManyRelationContent
+        { ...props }
+        enableRowDrag={ enableRowDrag }
+      />
+    </RelationFiltersProvider>
   )
 }

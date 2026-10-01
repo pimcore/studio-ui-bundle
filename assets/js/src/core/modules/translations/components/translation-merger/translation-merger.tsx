@@ -34,7 +34,6 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
     revertableCount,
     paginatedRows,
     currentPage,
-    pageSize,
     totalRows,
     setCurrentPage,
     setPageSize,
@@ -115,11 +114,7 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
             columns={ columns }
             dataSource={ paginatedRows }
             pagination={ false }
-            rowClassName={ (record: MergerRow) => {
-              if (record.state === 'pending') return 'row-conflict'
-              if (record.state === 'applied' || record.state === 'reverted') return 'row-applied'
-              return ''
-            } }
+            rowClassName={ (record: MergerRow) => record.state === 'applied' ? '' : 'row-conflict' }
             size="small"
           />
         </Box>

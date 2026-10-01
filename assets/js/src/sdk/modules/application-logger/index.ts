@@ -33,4 +33,10 @@ export {
 
 export { PrioritySelect } from '@Pimcore/modules/application-logger/components/sidebar/tabs/filter/components/priority-select/priority-select'
 
+export {
+  mapSortingToSortFilter,
+  APPLICATION_LOGGER_SORT_KEY_MAP,
+  DEFAULT_APPLICATION_LOGGER_SORT_FILTER
+} from '@Pimcore/modules/application-logger/utils/sorting'
+
 export * from '@Pimcore/modules/application-logger/application-logger-api-slice-enhanced'

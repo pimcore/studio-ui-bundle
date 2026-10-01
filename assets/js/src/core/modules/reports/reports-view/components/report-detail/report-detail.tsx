@@ -232,6 +232,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
             data={ chartData }
             dataTestId="report-detail-grid"
             enableColumnVirtualizer
+            enableRowVirtualizer
             enableSorting
             isLoading={ isLoading }
             manualSorting

@@ -22,7 +22,7 @@ export interface SelectOption {
 }
 
 export interface FieldDefinitionSelectOptionsGridProps {
-  value?: SelectOption[]
+  value?: SelectOption[] | null
   onChange?: (value: SelectOption[]) => void
   className?: string
   autoWidth?: boolean
@@ -45,10 +45,14 @@ const useColumns = (autoWidth?: boolean): Array<ColumnDef<SelectOption, any>> =>
   ], [t, autoWidth])
 }
 
-export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange, className, autoWidth }: FieldDefinitionSelectOptionsGridProps): React.JSX.Element => {
+export const FieldDefinitionSelectOptionsGrid = ({ value: valueProp, onChange, className, autoWidth }: FieldDefinitionSelectOptionsGridProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { textarea } = useFormModal()
   const [selectedRows, setSelectedRows] = useState({})
+
+  // a class-definition select field whose options were never configured serializes "options"
+  // as `null` (not `[]`) - a default parameter does not cover that, only `undefined`
+  const value = valueProp ?? []
 
   const columns = useColumns(autoWidth)
 
@@ -57,7 +61,7 @@ export const FieldDefinitionSelectOptionsGrid = ({ value = [], onChange, classNa
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event
 
-    if (active.id !== over?.id && (value !== null && value !== undefined)) {
+    if (active.id !== over?.id) {
       const oldIndex = value.findIndex((_: any, index: number) => `row-${value[index].key}-${index}` === active.id)
       const newIndex = value.findIndex((_: any, index: number) => `row-${value[index].key}-${index}` === over?.id)
 

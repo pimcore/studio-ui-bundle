@@ -9,6 +9,9 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react'
+import React, { useState } from 'react'
+import { type RowSelectionState } from '@tanstack/react-table'
+import { Button } from '@Pimcore/components/button/button'
 import { ManyToManyRelation } from './many-to-many-relation'
 
 const meta: Meta<typeof ManyToManyRelation> = {
@@ -82,9 +85,80 @@ export const Disabled: Story = {
   }
 }
 
+/**
+ * Every filterable column offers a filter dropdown in its header. The filters
+ * of all columns are combined and applied to the rows in the grid.
+ */
+export const WithColumnFilters: Story = {
+  args: {
+    ...Default.args,
+    width: 600,
+    value: [
+      ...(Default.args?.value ?? []),
+      {
+        id: 3,
+        type: 'object',
+        subtype: 'Category',
+        fullPath: '/Categories/Furniture',
+        isPublished: true
+      },
+      {
+        id: 4,
+        type: 'document',
+        subtype: 'page',
+        fullPath: '/Home/Furniture',
+        isPublished: true
+      }
+    ]
+  }
+}
+
+export const WithoutColumnFilters: Story = {
+  args: {
+    ...Default.args,
+    enableColumnFilters: false
+  }
+}
+
 export const WithMaxItems: Story = {
   args: {
     ...Default.args,
     maxItems: 3
   }
+}
+
+/**
+ * Row selection and the toolbar slot are passthroughs: the grid owns neither, it just forwards
+ * them. This renders both without a feature consumer, so the shared behaviour can be checked on
+ * its own - the selection is controlled here, and extraToolbarItems reflects what is ticked.
+ */
+const SelectionStory = (args: React.ComponentProps<typeof ManyToManyRelation>): React.JSX.Element => {
+  const [selectedRows, setSelectedRows] = useState<RowSelectionState>({ 0: true })
+  const selectedCount = Object.keys(selectedRows).length
+
+  return (
+    <ManyToManyRelation
+      { ...args }
+      enableMultipleRowSelection
+      extraToolbarItems={
+        <Button
+          disabled={ selectedCount === 0 }
+          onClick={ () => { setSelectedRows({}) } }
+          type="link"
+        >
+          { selectedCount === 0 ? 'Apply to all' : `Apply to selection (${selectedCount})` }
+        </Button>
+      }
+      onSelectedRowsChange={ setSelectedRows }
+      selectedRows={ selectedRows }
+    />
+  )
+}
+
+// Typed on the component props rather than on `meta`, so `render` receives the full prop set.
+export const WithRowSelection: StoryObj<React.ComponentProps<typeof ManyToManyRelation>> = {
+  args: {
+    ...Default.args
+  },
+  render: (args) => <SelectionStory { ...args } />
 }

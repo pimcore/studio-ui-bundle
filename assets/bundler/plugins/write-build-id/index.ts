@@ -23,7 +23,8 @@ interface PluginOptions {
  *
  * Reset to archive mode with `rm -rf public/build/`.
  *
- * @internal
+ * Exported via `@pimcore/studio-ui-bundle/rsbuild/plugins` for bundles that ship their build
+ * as a committed archive (see doc/04_Extending/04_Shipping_the_Frontend_Build_as_an_Archive.md).
  */
 export const pluginWriteBuildId = (options: PluginOptions): RsbuildPlugin => ({
   name: 'write-build-id',

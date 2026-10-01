@@ -14,7 +14,7 @@ import { type GridProps } from '@Pimcore/types/components/types'
 const BORDER_WIDTH = 1
 
 export interface UseStylesProps {
-  size?: GridProps['size']
+  size?: Exclude<GridProps['size'], undefined>
   enableRowVirtualizer: boolean
   enableColumnVirtualizer: boolean
 }
@@ -173,6 +173,16 @@ export const useStyles = createStyles(({ token, css }, { size = 'normal', enable
           
           &::before {
             ${hideBorder('right')}
+          }
+
+          // A resize handle straddles the border of its column, which on the last column is the
+          // right edge of the table. Hanging over that edge it makes a grid that fills its
+          // container exactly (autoWidth) overflow it by those few pixels, which shows up as a
+          // horizontal scrollbar the grid does not need. The last handle sits inside the table
+          // instead - it keeps the full width to grab, just no longer centered on the border.
+          .grid__resizer,
+          .grid__resizer.grid__resizer--resizing {
+            right: 0;
           }
         }
 

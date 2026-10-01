@@ -136,6 +136,15 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Assets"],
             }),
+            assetDownloadZipAvailable: build.query<
+                AssetDownloadZipAvailableApiResponse,
+                AssetDownloadZipAvailableApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/download/zip/${queryArg.jobRunId}/available`,
+                }),
+                providesTags: ["Assets"],
+            }),
             assetDownloadById: build.query<AssetDownloadByIdApiResponse, AssetDownloadByIdApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/assets/${queryArg.id}/download` }),
                 providesTags: ["Assets"],
@@ -392,6 +401,14 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["Assets"],
             }),
+            assetUploadBatchInfo: build.query<AssetUploadBatchInfoApiResponse, AssetUploadBatchInfoApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/assets/exists/${queryArg.parentId}`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                providesTags: ["Assets"],
+            }),
             assetReplace: build.mutation<AssetReplaceApiResponse, AssetReplaceApiArg>({
                 query: (queryArg) => ({
                     url: `/pimcore-studio/api/assets/${queryArg.id}/replace`,
@@ -604,6 +621,12 @@ export type AssetDeleteZipApiArg = {
     /** JobRunId of the JobRun */
     jobRunId: number;
 };
+export type AssetDownloadZipAvailableApiResponse =
+    /** status 200 Availability flag for the ZIP archive */ DownloadAvailability;
+export type AssetDownloadZipAvailableApiArg = {
+    /** JobRunId of the JobRun */
+    jobRunId: number;
+};
 export type AssetDownloadByIdApiResponse = /** status 200 Original asset binary file */ Blob;
 export type AssetDownloadByIdApiArg = {
     /** Id of the asset */
@@ -663,6 +686,10 @@ export type AssetUpdateByIdApiArg = {
             parentId?: number | null;
             key?: string | null;
             locked?: string | null;
+            /** Optional coauthor type stored on versions created by this save */
+            coauthorType?: string;
+            /** Optional coauthor identifier stored on versions created by this save */
+            coauthor?: string;
             data?: string | null;
             dataUri?: string | null;
             metadata?: UpdateCustomMetadata[] | null;
@@ -878,6 +905,10 @@ export type AssetPatchByIdApiArg = {
             parentId?: number | null;
             key?: string | null;
             locked?: string | null;
+            /** Optional coauthor type stored on versions created by this save */
+            coauthorType?: string;
+            /** Optional coauthor identifier stored on versions created by this save */
+            coauthor?: string;
             metadata?: PatchCustomMetadata[] | null;
         }[];
     };
@@ -950,6 +981,17 @@ export type AssetUploadInfoApiArg = {
     parentId: number;
     /** Name of the file to upload */
     fileName: string;
+};
+export type AssetUploadBatchInfoApiResponse =
+    /** status 200 Returns one entry per requested file name, in the order they were sent, each with the existing asset ID if a file with that name already exists in the same path. <br> Names that exist but are not viewable by the current user are reported as not existing with <strong>accessDenied</strong> set, so a single denied file does not fail the whole batch */ {
+        items: AssetUploadBatchInfo[];
+    };
+export type AssetUploadBatchInfoApiArg = {
+    /** ParentId of the asset */
+    parentId: number;
+    body: {
+        fileNames: string[];
+    };
 };
 export type AssetReplaceApiResponse = /** status 200 File name of the successfully replaced asset */ {
     /** new file name of the asset */
@@ -1057,6 +1099,10 @@ export type CustomSettings = {
     fixedCustomSettings?: FixedCustomSettings | null;
     /** dynamic custom settings - can be any key-value pair */
     dynamicCustomSettings?: object[];
+};
+export type DownloadAvailability = {
+    /** Whether the exported file is still available for download */
+    available: boolean;
 };
 export type ExportAllFilter = {
     /** Column Filter */
@@ -1401,6 +1447,16 @@ export type AssetUploadInfo = {
     /** Id of existing asset */
     assetId: number | null;
 };
+export type AssetUploadBatchInfo = {
+    /** Name of the checked file */
+    fileName: string;
+    /** True if asset exists */
+    exists: boolean;
+    /** Id of existing asset */
+    assetId: number | null;
+    /** True if an asset with that name exists but the current user may not view it. The name is therefore reported as not existing, since no ID can be handed out. */
+    accessDenied: boolean;
+};
 export type VideoThumbnailStatus = {
     /** AdditionalAttributes */
     additionalAttributes?: {
@@ -1445,6 +1501,7 @@ export const {
     useAssetDocumentStreamByThumbnailQuery,
     useAssetDownloadZipQuery,
     useAssetDeleteZipMutation,
+    useAssetDownloadZipAvailableQuery,
     useAssetDownloadByIdQuery,
     useAssetExportZipAssetMutation,
     useAssetExportZipFolderMutation,
@@ -1473,6 +1530,7 @@ export const {
     useAssetGetTreeQuery,
     useAssetAddMutation,
     useAssetUploadInfoQuery,
+    useAssetUploadBatchInfoQuery,
     useAssetReplaceMutation,
     useAssetUploadZipMutation,
     useAssetVideoImageThumbnailStreamQuery,

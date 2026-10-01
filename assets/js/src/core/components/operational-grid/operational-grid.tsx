@@ -16,7 +16,7 @@ import { useOperations } from './hooks/use-operations'
 import { type ColumnDef } from '@tanstack/react-table'
 
 export interface OperationalGridProps extends Omit<GridProps, 'data' | 'onUpdateCellData'> {
-  value?: GridProps['data']
+  value?: GridProps['data'] | null
   onChange?: (value: GridProps['data']) => void
   onColumnsChange?: (columns: Array<ColumnDef<any>>) => void
   children: React.ReactNode
@@ -24,7 +24,12 @@ export interface OperationalGridProps extends Omit<GridProps, 'data' | 'onUpdate
 }
 
 const OperationalGrid = (props: OperationalGridProps): React.JSX.Element => {
-  const { value = [], onChange, onColumnsChange, children, onUpdateCellData, columns = [], ...gridProps } = props
+  const { value: valueProp, onChange, onColumnsChange, children, onUpdateCellData, columns = [], ...gridProps } = props
+  // a default parameter only kicks in for `undefined`, not for an explicit `null` (e.g. a
+  // class definition field whose options were never configured serializes as `null`) - guard
+  // it explicitly so every consumer of this grid (add/delete/reorder row, csv import, ...)
+  // always operates on an array
+  const value = valueProp ?? []
 
   const defaultOnUpdateCellData: GridProps['onUpdateCellData'] = (event) => {
     const { columnId, rowIndex, value: newCellValue } = event

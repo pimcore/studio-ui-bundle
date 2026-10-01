@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { type AbstractObjectDataDefinition, type WithEditModalGridCellDefinition } from '../../../../objects/data-related/dynamic-type-object-data-abstract'
 import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
@@ -38,7 +38,8 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
   const { t } = useTranslation()
   const { currentLanguage } = useLanguageSelection()
 
-  const initialFormValues = { value: props.cellProps.getValue() }
+  const cellValue = props.cellProps.getValue()
+  const initialFormValues = { value: cellValue }
   const rowDataObjectId = props.cellProps.row.original.id as number
 
   const onFormFinish = (values): void => {
@@ -53,7 +54,15 @@ export const EditModalCell = (props: EditModalModeCellProps): React.JSX.Element 
     form.resetFields()
     disableEditMode()
   }
-  props.objectCellDefinition.handleDefaultValue?.(props.objectCellDefinition.editComponent.props as AbstractObjectDataDefinition, form, ['value'])
+
+  useEffect(() => {
+    if (!isInEditMode) {
+      return
+    }
+
+    form.setFieldValue(['value'], cellValue)
+    props.objectCellDefinition.handleDefaultValue?.(props.objectCellDefinition.editComponent.props as AbstractObjectDataDefinition, form, ['value'])
+  }, [isInEditMode])
 
   const column = decodeColumnIdentifier(props.cellProps.column.id)
   const apiColumns = props?.cellProps?.row?.original?.['__api-data']

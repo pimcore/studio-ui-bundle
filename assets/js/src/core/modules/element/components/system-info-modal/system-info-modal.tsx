@@ -23,6 +23,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { USERS_WIDGET } from '@Pimcore/modules/user'
 import { formatDataUnit } from '@Pimcore/utils/data-unit'
+import { buildElementPublicUrl } from '@Pimcore/utils/element-public-url'
 import { currentDomain } from '@Pimcore/app/config/app-config'
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
@@ -146,8 +147,8 @@ export const SystemInfoModal = ({ onClose, data }: ISystemInfoModalProps): React
   const getPublicUrl = (): string => {
     const fullPath = data.fullPath
 
-    if (data.elementType === elementTypes.asset && !isNil(assetFrontendPrefix)) {
-      return `${assetFrontendPrefix}${fullPath}`
+    if (data.elementType === elementTypes.asset) {
+      return buildElementPublicUrl({ fullPath, currentDomain, assetFrontendPrefix })
     }
 
     return `${currentDomain}${fullPath}`

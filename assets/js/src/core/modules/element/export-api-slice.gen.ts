@@ -6,6 +6,15 @@ const injectedRtkApi = api
     })
     .injectEndpoints({
         endpoints: (build) => ({
+            exportDownloadCsvAvailable: build.query<
+                ExportDownloadCsvAvailableApiResponse,
+                ExportDownloadCsvAvailableApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/export/download/csv/${queryArg.jobRunId}/available`,
+                }),
+                providesTags: ["Export"],
+            }),
             exportDownloadCsv: build.query<ExportDownloadCsvApiResponse, ExportDownloadCsvApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/export/download/csv/${queryArg.jobRunId}` }),
                 providesTags: ["Export"],
@@ -28,6 +37,15 @@ const injectedRtkApi = api
                     body: queryArg.body,
                 }),
                 invalidatesTags: ["Export"],
+            }),
+            exportDownloadXlsxAvailable: build.query<
+                ExportDownloadXlsxAvailableApiResponse,
+                ExportDownloadXlsxAvailableApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/export/download/xlsx/${queryArg.jobRunId}/available`,
+                }),
+                providesTags: ["Export"],
             }),
             exportDownloadXlsx: build.query<ExportDownloadXlsxApiResponse, ExportDownloadXlsxApiArg>({
                 query: (queryArg) => ({ url: `/pimcore-studio/api/export/download/xlsx/${queryArg.jobRunId}` }),
@@ -56,6 +74,12 @@ const injectedRtkApi = api
         overrideExisting: false,
     });
 export { injectedRtkApi as api };
+export type ExportDownloadCsvAvailableApiResponse =
+    /** status 200 Availability flag for the CSV export */ DownloadAvailability;
+export type ExportDownloadCsvAvailableApiArg = {
+    /** JobRunId of the JobRun */
+    jobRunId: number;
+};
 export type ExportDownloadCsvApiResponse = /** status 200 CSV File as attachment */ Blob;
 export type ExportDownloadCsvApiArg = {
     /** JobRunId of the JobRun */
@@ -168,6 +192,12 @@ export type ExportCsvFolderApiArg = {
         classId?: string | null;
     };
 };
+export type ExportDownloadXlsxAvailableApiResponse =
+    /** status 200 Availability flag for the XLSX export */ DownloadAvailability;
+export type ExportDownloadXlsxAvailableApiArg = {
+    /** JobRunId of the JobRun */
+    jobRunId: number;
+};
 export type ExportDownloadXlsxApiResponse = /** status 200 XLSX File as attachment */ Blob;
 export type ExportDownloadXlsxApiArg = {
     /** JobRunId of the JobRun */
@@ -279,6 +309,10 @@ export type ExportXlsxFolderApiArg = {
         classId?: string | null;
     };
 };
+export type DownloadAvailability = {
+    /** Whether the exported file is still available for download */
+    available: boolean;
+};
 export type Error = {
     /** Message */
     message: string;
@@ -350,10 +384,12 @@ export type ExportAllFilter = {
     additionalSortFilters?: object[];
 };
 export const {
+    useExportDownloadCsvAvailableQuery,
     useExportDownloadCsvQuery,
     useExportDeleteCsvMutation,
     useExportCsvMutation,
     useExportCsvFolderMutation,
+    useExportDownloadXlsxAvailableQuery,
     useExportDownloadXlsxQuery,
     useExportDeleteXlsxMutation,
     useExportXlsxMutation,

@@ -13,7 +13,7 @@ import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-sl
 import { type Document } from '@Pimcore/modules/document/document-api-slice.gen'
 import type { ElementType } from '../../types/enums/element/element-type'
 import { type DragAndDropInfo } from '@sdk/components'
-import { has, isBoolean, isPlainObject } from 'lodash'
+import { has, isBoolean, isNil, isPlainObject } from 'lodash'
 import { baseUrl } from '@Pimcore/app/router/router'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
@@ -61,6 +61,10 @@ const determineElementIcon = (element: Element, defaultIcon: ElementIcon): Eleme
 }
 
 export const getElementKey = (element: Element, elementType: ElementType): string => {
+  if (!isNil(element.customAttributes?.key)) {
+    return element.customAttributes.key
+  }
+
   if (elementType === 'asset') {
     return (element as Asset).filename ?? ''
   }

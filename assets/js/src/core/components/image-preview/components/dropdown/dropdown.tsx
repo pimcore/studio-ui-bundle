@@ -14,7 +14,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useStyle } from './dropdown.styles'
 
 export interface ImagePreviewDropdownProps {
-  dropdownItems?: DropdownProps['menu']['items']
+  dropdownItems?: Exclude<DropdownProps['menu']['items'], undefined>
 }
 
 export const ImagePreviewDropdown = (props: ImagePreviewDropdownProps): React.JSX.Element => {

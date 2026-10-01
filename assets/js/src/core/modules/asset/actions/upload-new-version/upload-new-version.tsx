@@ -86,6 +86,7 @@ export const useUploadNewVersion = (): UseUploadNewVersionReturn => {
       action: `${getPrefix()}/assets/${id}/replace`,
       maxItems: 1,
       multiple: false,
+      skipConflictCheck: true,
       onSuccess: async (result: any) => {
         await refreshTreeNode(id)
         onFinish?.()

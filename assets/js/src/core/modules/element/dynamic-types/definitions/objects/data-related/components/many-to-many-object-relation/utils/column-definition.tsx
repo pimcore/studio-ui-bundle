@@ -73,6 +73,8 @@ export const enrichRowData = (visibleFieldDefinitions: VisibleFieldDefinition[] 
   return {
     ...row,
     ...additionalColumns,
+    // internal permission flag must not be shadowed by a user-defined visible field of the same name
+    hasViewAccess: row.hasViewAccess,
     '__api-data': { columns: rowData }
   }
 }

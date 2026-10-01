@@ -12,7 +12,7 @@ import React, { type ReactElement, type Ref, type ComponentProps, forwardRef } f
 import { Draggable } from '@Pimcore/components/drag-and-drop/draggable'
 import { type Asset } from '../../asset-api-slice-enhanced'
 import { type TreeNode } from '@Pimcore/components/element-tree/node/tree-node'
-import { isString } from 'lodash'
+import { isString, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { useElementDragInfo } from '@Pimcore/components/element-tree/hooks/use-element-drag-info'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
@@ -34,14 +34,17 @@ export const withDraggable = (Component: typeof TreeNode): typeof TreeNode => {
     }
 
     return (
-      <Draggable
-        info={ resolveDragInfo }
-      >
-        <Component
-          { ...props }
-          ref={ ref }
-        />
-      </Draggable>
+      <Component
+        { ...props }
+        ref={ ref }
+        wrapNode={ (children) => (
+          <Draggable
+            info={ resolveDragInfo }
+          >
+            {!isUndefined(props.wrapNode) ? props.wrapNode(children) : children}
+          </Draggable>
+        ) }
+      />
     )
   }
 

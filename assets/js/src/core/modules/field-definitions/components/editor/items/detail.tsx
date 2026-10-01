@@ -28,7 +28,7 @@ export interface ItemDetailProps {
 }
 
 export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
-  const { useDetailGeneralSettingsQuery, useDetailLayoutQuery, useDetailLayoutAccessor, customLayouts, LayoutProvider } = useSettings()
+  const { useDetailGeneralSettingsQuery, useDetailLayoutQuery, useDetailLayoutAccessor, customLayouts, LayoutProvider, useDetailUpdateMutation, readOnly = false } = useSettings()
   const { setDetailView } = useItems()
   const layoutResult = useDetailLayoutQuery?.({
     id: props.configuration.id
@@ -121,12 +121,12 @@ export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
                     onClick={ () => { void refreshLayout() } }
                   />
 
-                  <ImportExportActions />
+                  {!readOnly && <ImportExportActions />}
 
-                  {customLayouts?.ModalContent !== undefined && <CustomLayout />}
+                  {!readOnly && customLayouts?.ModalContent !== undefined && <CustomLayout />}
                 </Flex>
 
-                <DetailSave />
+                {!readOnly && useDetailUpdateMutation !== undefined && <DetailSave useDetailUpdateMutation={ useDetailUpdateMutation } />}
               </Toolbar>
             }
           >

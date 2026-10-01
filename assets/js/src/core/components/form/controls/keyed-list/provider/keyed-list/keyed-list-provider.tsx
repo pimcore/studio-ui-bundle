@@ -40,6 +40,11 @@ export interface KeyedListContextValue {
   operations: KeyedListData['operations']
   store: KeyedListStore
   getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
+  /**
+   * Puts a field back to the value it was loaded with. Only the owner of the list can
+   * do that, so it is undefined when the owner has no notion of a loaded value.
+   */
+  onFieldRestore?: (field: NamePath) => void
 }
 
 export type KeyedListContextProps = KeyedListContextValue | undefined
@@ -51,14 +56,16 @@ export interface KeyedListProviderProps {
   store: KeyedListStore
   operations: KeyedListData['operations']
   getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
+  onFieldRestore?: (field: NamePath) => void
 }
 
-export const KeyedListProvider = ({ children, store, operations, getAdditionalComponentProps }: KeyedListProviderProps): React.JSX.Element => {
+export const KeyedListProvider = ({ children, store, operations, getAdditionalComponentProps, onFieldRestore }: KeyedListProviderProps): React.JSX.Element => {
   const contextValue = useMemo(() => ({
     operations,
     store,
-    getAdditionalComponentProps
-  }), [operations, store, getAdditionalComponentProps])
+    getAdditionalComponentProps,
+    onFieldRestore
+  }), [operations, store, getAdditionalComponentProps, onFieldRestore])
 
   return (
     <NumberedListContext.Provider value={ undefined }>

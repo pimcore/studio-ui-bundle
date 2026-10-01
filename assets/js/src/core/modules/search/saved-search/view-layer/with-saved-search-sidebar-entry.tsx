@@ -18,6 +18,7 @@ import { SavedSearchPanel } from '../components/saved-search-panel/saved-search-
 interface SavedSearchSidebarEntryConfig {
   elementType?: ElementType
   supportsLoadedState: boolean
+  readOnly?: boolean
 }
 
 export const withSavedSearchSidebarEntry = (
@@ -40,6 +41,7 @@ export const withSavedSearchSidebarEntry = (
             component: (
               <SavedSearchPanel
                 elementType={ config.elementType }
+                readOnly={ config.readOnly ?? false }
                 supportsLoadedState={ config.supportsLoadedState }
               />
             ),

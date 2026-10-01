@@ -9,6 +9,7 @@
  */
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import { Title } from '@Pimcore/components/title/title'
 import { t } from 'i18next'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -44,7 +45,7 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
 
   const [nameFilter, setNameFilter] = useState<string>('')
   const [page, setPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(20)
+  const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
   const [sorting, setSorting] = useState<SortingState>([])
 
   const onSortingChange = useCallback((newSorting: SortingState) => {
@@ -126,41 +127,23 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
   }, [error])
 
   const {
-    showModal: showDuplicateEntryModal,
-    closeModal: closeDuplicateEntryModal,
-    renderModal: DuplicateEntryModal
+    showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal
   } = useModal({
-    type: 'error'
-  })
-  const { showModal: showMandatoryModal, closeModal: closeMandatoryModal, renderModal: MandatoryModal } = useModal({
     type: 'error'
   })
 
   const errorModals = (
-    <><DuplicateEntryModal
+    <MandatoryModal
       footer={ <ModalFooter>
         <Button
-          onClick={ closeDuplicateEntryModal }
+          onClick={ closeMandatoryModal }
           type='primary'
         >{t('button.ok')}</Button>
       </ModalFooter> }
-      title={ t('website-settings.website-settings-already-exist.title') }
-      >
-      {t('website-settings.website-settings-already-exist.error')}
-    </DuplicateEntryModal>
-
-      <MandatoryModal
-        footer={ <ModalFooter>
-          <Button
-            onClick={ closeMandatoryModal }
-            type='primary'
-          >{t('button.ok')}</Button>
-        </ModalFooter> }
-        title={ t('website-settings.website-settings.add-entry-mandatory-fields-missing.title') }
-      >
-        {t('website-settings.website-settings.add-entry-mandatory-fields-missing.error')}
-      </MandatoryModal>
-    </>
+      title={ t('website-settings.website-settings.add-entry-mandatory-fields-missing.title') }
+    >
+      {t('website-settings.website-settings.add-entry-mandatory-fields-missing.error')}
+    </MandatoryModal>
   )
 
   const onCreateProperty = async (name: string, type: string): Promise<void> => {
@@ -169,11 +152,6 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
 
     if (!isValidNameInput || !isValidTypeSelectValue) {
       showMandatoryModal()
-      return
-    }
-
-    if (websiteSettingRows?.find((setting) => setting.name === name) !== undefined) {
-      showDuplicateEntryModal()
       return
     }
 

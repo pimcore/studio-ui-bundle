@@ -11,6 +11,8 @@
 /* eslint-disable max-lines */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { appConfig } from '@Pimcore/app/config/app-config'
+import { theme } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { Flex } from '@Pimcore/components/flex/flex'
@@ -51,13 +53,14 @@ interface IGroupDetailFormValues {
 
 export const GroupsTab = ({ storeId }: IGroupsTabProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { token } = theme.useToken()
   const { localModal: modal } = useStudioModal()
   const [groupForm] = Form.useForm<{ name: string, description: string }>()
   const [detailForm] = Form.useForm<IGroupDetailFormValues>()
 
   const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
   const [page, setPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(20)
+  const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [sorting, setSorting] = useState<SortingState>([])
 
@@ -293,7 +296,7 @@ export const GroupsTab = ({ storeId }: IGroupsTabProps): React.JSX.Element => {
               <Flex
                 align="center"
                 justify="space-between"
-                style={ { padding: '8px 16px' } }
+                style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
               >
                 <Flex
                   align="center"
@@ -375,7 +378,7 @@ export const GroupsTab = ({ storeId }: IGroupsTabProps): React.JSX.Element => {
               renderTopBar={
                 <Flex
                   align="center"
-                  style={ { padding: '8px 16px' } }
+                  style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
                 >
                   <Header title={ activeGroup.name } />
                 </Flex>
@@ -394,7 +397,7 @@ export const GroupsTab = ({ storeId }: IGroupsTabProps): React.JSX.Element => {
                 >
                   <Flex
                     gap="small"
-                    style={ { padding: '8px 16px' } }
+                    style={ { padding: `${token.paddingXS}px ${token.padding}px` } }
                     vertical
                   >
                     <Form.Item

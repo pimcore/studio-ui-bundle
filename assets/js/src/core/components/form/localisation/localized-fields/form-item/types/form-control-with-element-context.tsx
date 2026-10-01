@@ -23,7 +23,7 @@ import { type FormItemProps } from 'antd'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
-import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
+import { getLanguagePermission, isLanguageEditable } from '@Pimcore/components/language-selection/helpers'
 import { useLocalizedFields } from '../../provider/localized-fields-provider/use-localized-fields'
 
 export interface KeyedFormItemControlProps {
@@ -37,27 +37,16 @@ export interface KeyedFormItemControlProps {
 
 export const FormControlWithElementContext = ({ children, ...props }: KeyedFormItemControlProps): React.JSX.Element => {
   const Child = useMemo(() => Children.only(children), [children])
-  let isDisabled = false
-  const user = useUser()
   const element = useElementContext()
   const elementDraft = useElementDraft(element.id, element.elementType)
   const languageSelection = useLanguageSelection()
   const localizedContext = useLocalizedFields()
   const activeLanguage = localizedContext?.locales[0] ?? languageSelection.currentLanguage
 
-  if ('permissions' in elementDraft) {
-    const permissions: Record<string, any> = elementDraft.permissions as Record<string, any>
-    let editableLanguages: string[] = permissions?.localizedEdit?.split(',') ?? []
-
-    const isEmptyEditableLanguages = editableLanguages.length === 0
-
-    // empty array or 'default' means all languages are editable
-    if ((editableLanguages.length === 1 && editableLanguages[0] === 'default') || isEmptyEditableLanguages) {
-      editableLanguages = Array.isArray(user.contentLanguages) ? user.contentLanguages as string[] : []
-    }
-
-    isDisabled = !isEmptyEditableLanguages && !editableLanguages.includes(activeLanguage)
-  }
+  // The permissions live on the loaded element, not on the draft wrapper returned by
+  // useElementDraft() - reading them from the wrapper root never matches, which left every
+  // language editable no matter what localizedEdit allowed.
+  const isDisabled = !isLanguageEditable(getLanguagePermission(elementDraft.element?.permissions, 'localizedEdit'), activeLanguage)
 
   if (!isValidElement(Child)) {
     throw new Error('KeyedFormItemControl only accepts a single child')

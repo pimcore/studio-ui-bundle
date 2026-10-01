@@ -10,6 +10,7 @@
 
 /* eslint-disable max-lines */
 
+import { theme as antdTheme, type MappingAlgorithm } from 'antd'
 import { DynamicTypeThemeAbstract, type PimcoreThemeConfig } from '../dynamic-type-theme-abstract'
 import { studioThemeIds } from '../../../constants/theme-ids'
 const staticTokens = {
@@ -24,6 +25,23 @@ const staticTokens = {
     }
   }
 }
+
+/**
+ * Raises disabled and placeholder text to WCAG AA. antd aliases both colorTextDisabled and
+ * colorTextPlaceholder to colorTextQuaternary, whose default of 25% reaches only 1.84:1 on
+ * white; 55% gives 4.74:1.
+ *
+ * Deliberately a mapping algorithm rather than a plain token. Themes extending this one
+ * inherit its `token` values unless they override each key, so a literal here would land a
+ * black value on the dark surfaces of any dark theme that has not yet added its own
+ * override. `algorithm` is replaced wholesale on merge instead of deep-merged, so a child
+ * defining its own (as every dark theme must) simply keeps antd's derivation for its own
+ * text base — no regression, with or without a matching release of that theme.
+ */
+const raiseDisabledTextContrast: MappingAlgorithm = (seed, map) => ({
+  ...(map ?? antdTheme.defaultAlgorithm(seed)),
+  colorTextQuaternary: 'rgba(0, 0, 0, 0.55)'
+})
 
 export const studioDefaultLightThemeConfig = {
   token: {
@@ -207,7 +225,7 @@ export const studioDefaultLightThemeConfig = {
     },
     Menu: {
       darkItemColor: 'rgba(255, 255, 255, 0.65)',
-      darkItemDisabledColor: 'rgba(255, 255, 255, 0.25)',
+      darkItemDisabledColor: 'rgba(255, 255, 255, 0.52)',
       darkGroupTitleColor: 'rgba(255, 255, 255, 0.65)'
     },
     Collapse: {
@@ -215,7 +233,7 @@ export const studioDefaultLightThemeConfig = {
     },
     Image: {
       previewOperationColor: 'rgba(255, 255, 255, 0.65)',
-      previewOperationColorDisabled: 'rgba(255, 255, 255, 0.25)',
+      previewOperationColorDisabled: 'rgba(255, 255, 255, 0.52)',
       previewOperationHoverColor: 'rgba(255, 255, 255, 0.85)'
     },
     Table: {
@@ -252,7 +270,7 @@ export const studioDefaultLightThemeConfig = {
       colorInfoBorder: '#d3adf7'
     },
     Empty: {
-      colorTextDisabled: 'rgba(0, 0, 0, 0.25)'
+      colorTextDisabled: 'rgba(0, 0, 0, 0.55)'
     },
     Colors: {
       Neutral: {
@@ -323,7 +341,9 @@ export const studioDefaultLightThemeConfig = {
     Split: {
       colorFillSecondary: undefined
     }
-  }
+  },
+
+  algorithm: [antdTheme.defaultAlgorithm, raiseDisabledTextContrast]
 }
 
 export class DynamicTypeThemeStudioDefaultLight extends DynamicTypeThemeAbstract {

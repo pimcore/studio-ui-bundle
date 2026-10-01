@@ -117,7 +117,7 @@ export const useLinkDataType = (props: LinkProps): UseLinkDataTypeReturn => {
           key: 'details',
           title: t('details')
         }, createElement(IconButton, {
-          icon: { value: 'info-circle' },
+          icon: { value: 'info-outline' },
           onClick: showModal,
           type: 'default'
         }))

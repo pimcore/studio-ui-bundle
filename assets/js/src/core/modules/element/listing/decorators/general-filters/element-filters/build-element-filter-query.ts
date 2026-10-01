@@ -31,11 +31,15 @@ export const buildElementFilterQuery = (
   const isDataObject = 'classId' in baseArgs
   const baseFilters = baseArgs.body.filters
 
-  const columnsToFilterOut = availableColumns.map((column) => column.key)
-  columnsToFilterOut.push(pqlFilterType, searchTermFilterType, unreferencedFilterType)
+  const columnsToFilterOut = new Set([
+    ...availableColumns.map((column) => column.key),
+    pqlFilterType, searchTermFilterType, unreferencedFilterType,
+    // A restored mode filter would duplicate the one the mode emits (backend 422).
+    ...(context.searchMode?.registeredFilterTypes ?? [])
+  ])
 
   const retainedColumnFilters = (baseFilters.columnFilters ?? [])
-    .filter((columnFilter) => !columnsToFilterOut.includes(columnFilter.type))
+    .filter((columnFilter) => !columnsToFilterOut.has(columnFilter.type))
 
   let filters: ElementListingFilters = { ...baseFilters }
   const columnFilters: ColumnFilter[] = [...retainedColumnFilters]

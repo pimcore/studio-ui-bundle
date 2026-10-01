@@ -20,13 +20,13 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 const fetchingDrafts = new Map<number, boolean>()
 
 interface UseDataObjectDraftFetcherReturn {
-  updateDataObjectDraft: (id: number, forceRefetch?: boolean) => Promise<void>
+  updateDataObjectDraft: (id: number, forceRefetch?: boolean, preserveActiveTab?: string | null) => Promise<void>
 }
 
 export const useDataObjectDraftFetcher = (): UseDataObjectDraftFetcherReturn => {
   const dispatch = useAppDispatch()
 
-  const updateDataObjectDraft = async (id: number, forceRefetch: boolean = false): Promise<void> => {
+  const updateDataObjectDraft = async (id: number, forceRefetch: boolean = false, preserveActiveTab?: string | null): Promise<void> => {
     if (fetchingDrafts.get(id) === true && !forceRefetch) {
       return
     }
@@ -51,7 +51,8 @@ export const useDataObjectDraftFetcher = (): UseDataObjectDraftFetcherReturn => 
           changes: {},
           modifiedCells: {},
           modifiedObjectData: {},
-          ...initialTabsStateValue
+          ...initialTabsStateValue,
+          activeTab: preserveActiveTab ?? initialTabsStateValue.activeTab
         }
 
         dispatch(dataObjectReceived(mergedDataObjectData))

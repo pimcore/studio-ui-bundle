@@ -42,6 +42,10 @@ export class MainNavWidgetRestorer implements WidgetRestorer {
       return false
     }
 
+    if (!isNil(item.hidden) && item.hidden()) {
+      return false
+    }
+
     if (!isNil(item.widgetConfig)) {
       const mergedConfig = merge({}, config, item.widgetConfig)
 

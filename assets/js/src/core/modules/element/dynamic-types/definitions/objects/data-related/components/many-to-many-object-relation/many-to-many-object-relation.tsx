@@ -12,7 +12,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isUndefined, isEmpty, find, isNil } from 'lodash'
 import { ManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/many-to-many-relation'
-import { type ColumnDef } from '@tanstack/react-table'
+import { type ColumnDef, type RowSelectionState } from '@tanstack/react-table'
 import type { ManyToManyRelationValue, ManyToManyRelationValueItem } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
 import type { IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
 import { enrichRowData, visibleFieldsToColumnDefinitions } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/utils/column-definition'
@@ -26,11 +26,12 @@ import {
   useDataObjectGetAvailableGridColumnsForRelationQuery
 } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { type IUseDataObjectGridsReturn, useDataObjectGrids } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-data-object-grids'
+import { useResetOnLanguageChange } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-reset-on-language-change'
 import { useGridOptions } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/hooks/use-grid-options'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 import { SelectedColumnsProvider, type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
-import { useUserContentLanguage } from '@Pimcore/modules/auth/hooks/use-user-content-language'
+import { useLanguageSelection } from '@Pimcore/components/language-selection'
 import { useClassDefinitionSelectionOptional } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 
 export interface ManyToManyObjectRelationClassDefinitionProps {
@@ -70,6 +71,10 @@ export interface ManyToManyObjectRelationProps extends IRelationAllowedTypesData
   hint?: React.ReactNode | null
   onUpdateCellData?: (event: OnUpdateCellDataEvent) => void
   className?: string
+  enableMultipleRowSelection?: boolean
+  selectedRows?: RowSelectionState
+  onSelectedRowsChange?: (selectedRows: RowSelectionState) => void
+  extraToolbarItems?: React.ReactNode
 }
 
 const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): React.JSX.Element => {
@@ -83,7 +88,9 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   const listingClassSelection = useClassDefinitionSelectionOptional()
 
   const { transformGridColumn, getDefaultVisibleFieldDefinitions } = useGridOptions()
-  const userLanguage = useUserContentLanguage()
+  // Localized visible fields follow the content language selected in the
+  // editor's language switcher, like every other localized part of the editor.
+  const { currentLanguage: userLanguage } = useLanguageSelection()
 
   const editorClassId = !isUndefined(dataObject) ? getByName(dataObject.className)?.id : undefined
   const listingClassId = listingClassSelection?.selectedClassDefinition?.id
@@ -94,14 +101,12 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
   const dataRelationClasses = props?.allowedClasses
 
   const [cachedGridFullData, setCachedGridFullData] = useState<IUseDataObjectGridsReturn['data']>([])
-  const prevLanguageRef = useRef(userLanguage)
   const prevDataObjectRef = useRef(dataObject)
 
   // Synchronously reset cache when language changes, before useDataObjectGrids is called
-  if (prevLanguageRef.current !== userLanguage) {
-    prevLanguageRef.current = userLanguage
+  useResetOnLanguageChange(userLanguage, () => {
     cachedGridFullData.length > 0 && setCachedGridFullData([])
-  }
+  })
 
   const { isLoading: isAvailableGridColumnsLoading, data: availableGridColumnsData } = useDataObjectGetAvailableGridColumnsForRelationQuery({
     classId,

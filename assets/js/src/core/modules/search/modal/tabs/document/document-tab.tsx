@@ -14,7 +14,7 @@ import { Content } from '@Pimcore/components/content/content'
 
 export const DocumentTab = (): React.JSX.Element => {
   return (
-    <Content style={ { height: '65vh' } }>
+    <Content style={ { height: '100%' } }>
       <DocumentSearchListing />
     </Content>
   )

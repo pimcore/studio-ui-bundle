@@ -26,6 +26,7 @@ const TreeElementItem = ({ title, onSelected }: ITreeElementItemProps): React.JS
           }
         }
       } }
+      type="button"
     >
       {title}
     </button>

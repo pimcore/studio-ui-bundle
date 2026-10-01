@@ -18,6 +18,7 @@ import { type IRowSelectionDecoratorConfig, RowSelectionDecorator } from '@Pimco
 import { useElementSelectorHelper } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector-helper'
 import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-types/registry/provider/dynamic-type-registry-provider'
 import { GlobalRowSelectionDecorator, type IGlobalRowSelectionConfig } from '@Pimcore/modules/element/element-selector/listing-decorators/global-row-selection/global-row-selection-decorator'
+import { type ISelectionInteractionConfig, SelectionInteractionDecorator } from '@Pimcore/modules/element/element-selector/listing-decorators/selection-interaction/selection-interaction-decorator'
 import { useRootElementId } from '@Pimcore/modules/asset/listing/hooks/use-root-element-id'
 import { ClassDefinitionSelectionDecorator, type ClassDefinitionSelectionDecoratorConfig } from '../listing/decorator/class-definition-selection/class-definition-selection-decorator'
 import { DefaultView } from './view-layer/views/default-view'
@@ -57,6 +58,7 @@ export const DataObjectSelectorListing = (): React.JSX.Element => {
     [RowSelectionDecorator, { rowSelectionMode: config?.selectionType } as IRowSelectionDecoratorConfig],
     SortingDecorator,
     [GlobalRowSelectionDecorator, { rowSelectionMode: config?.selectionType, elementType: 'data-object' } as IGlobalRowSelectionConfig],
+    [SelectionInteractionDecorator, { elementType: elementTypes.dataObject } as ISelectionInteractionConfig],
     TagFilterDecorator,
     [
       ClassDefinitionSelectionDecorator,

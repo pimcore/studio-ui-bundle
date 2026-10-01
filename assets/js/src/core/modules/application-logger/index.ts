@@ -16,6 +16,7 @@ import { ApplicationLoggerContainer } from './application-logger-container'
 import { type MainNavRegistry } from '../app/base-layout/main-nav/services/main-nav-registry'
 import { UserPermission } from '../auth/enums/user-permission'
 import { NavPermission } from '../perspectives/enums/nav-permission'
+import { isBundleActive } from '@Pimcore/modules/app/settings/active-bundles-helper'
 import { type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 
 export const APPLICATION_LOGGER_WIDGET: WidgetManagerTabConfig = {
@@ -42,6 +43,7 @@ moduleSystem.registerModule({
       order: 500,
       permission: UserPermission.ApplicationLogger,
       perspectivePermission: NavPermission.ApplicationLogger,
+      hidden: () => !isBundleActive('PimcoreApplicationLoggerBundle'),
       widgetConfig: APPLICATION_LOGGER_WIDGET
     })
 

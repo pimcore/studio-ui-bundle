@@ -24,7 +24,7 @@ import { useStyle } from '../../components/image-editable/image-editable-preview
 interface ResponsiveAssetPreviewProps {
   assetId?: number
   className?: string
-  dropdownItems?: DropdownProps['menu']['items']
+  dropdownItems?: Exclude<DropdownProps['menu']['items'], undefined>
   dropClass?: string
   imgAttributes?: Record<string, string>
   onImageLoad?: (event: React.SyntheticEvent<HTMLImageElement>) => void

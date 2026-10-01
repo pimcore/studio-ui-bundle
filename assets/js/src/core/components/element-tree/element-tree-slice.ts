@@ -529,7 +529,9 @@ const slice = createSlice({
         }
 
         const isParentIdCurrent = state[payload.treeId]?.nodes[String(elementId)]?.treeNodeProps?.parentId === String(parentId)
-        if (hasParentChanged || !isParentIdCurrent) {
+        const isElementNodeCleared = hasParentChanged || !isParentIdCurrent
+
+        if (isElementNodeCleared) {
           hasParentChanged = true
           updateNodeState(state, payload.treeId, String(elementId), node => {
             return {
@@ -540,7 +542,10 @@ const slice = createSlice({
         }
 
         updateNodeState(state, payload.treeId, String(parentId), node => {
-          const isItemOnPage = node.page === pageNumber && isUndefined(node.searchTerm) && isParentIdCurrent
+          // The children of this level have to be fetched again whenever the node of this level was cleared -
+          // otherwise the cleared node keeps its empty props and is never rendered (and therefore never
+          // selected) again, even though the parent already sits on the requested page.
+          const isItemOnPage = node.page === pageNumber && isUndefined(node.searchTerm) && !isElementNodeCleared
 
           return {
             ...node,
