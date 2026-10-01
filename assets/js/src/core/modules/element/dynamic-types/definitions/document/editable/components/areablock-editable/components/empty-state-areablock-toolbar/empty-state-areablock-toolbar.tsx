@@ -81,6 +81,7 @@ export const EmptyStateAreablockToolbar = ({
     if (areaTypes.length === 1) {
       return (
         <IconButton
+          aria-label={ t('areablock.new') }
           icon={ { value: 'new' } }
           onClick={ isInherited ? undefined : () => { void onClick(areaTypes[0].type) } }
           size="small"
@@ -96,6 +97,7 @@ export const EmptyStateAreablockToolbar = ({
         trigger={ isInherited ? [] : ['click'] }
       >
         <IconButton
+          aria-label={ t('areablock.new') }
           icon={ { value: 'new' } }
           size="small"
           tooltip={ { title: t('areablock.new') } }
@@ -106,6 +108,7 @@ export const EmptyStateAreablockToolbar = ({
 
   const renderPasteButton = (): React.ReactNode => (
     <IconButton
+      aria-label={ t('areablock.paste') }
       disabled={ !canPaste }
       icon={ { value: 'paste' } }
       onClick={ isInherited ? undefined : () => { onPasteArea(null) } }

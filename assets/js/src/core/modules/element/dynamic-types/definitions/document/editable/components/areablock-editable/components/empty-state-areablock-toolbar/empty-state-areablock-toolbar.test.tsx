@@ -34,9 +34,9 @@ jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
 }))
 
 jest.mock('@Pimcore/components/icon-button/icon-button', () => ({
-  IconButton: (props: { disabled?: boolean, onClick?: () => void, tooltip?: { title: string } }) => (
+  IconButton: (props: { 'aria-label'?: string, disabled?: boolean, onClick?: () => void }) => (
     <button
-      aria-label={ props.tooltip?.title }
+      aria-label={ props['aria-label'] }
       disabled={ props.disabled }
       onClick={ props.onClick }
     />
