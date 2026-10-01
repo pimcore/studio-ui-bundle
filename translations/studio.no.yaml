@@ -647,6 +647,7 @@ properties.label: Egenskaper
 properties.editable-properties: Redigerbare egenskaper
 properties.all-properties: Alle egenskaper
 properties.predefined-properties: Forhåndsdefinerte egenskaper
+properties.predefined-properties.reload-error: Kunne ikke laste inn de forhåndsdefinerte egenskapene
 properties.new-custom-property: Ny egendefinert egenskap
 translations.columns.type: Type
 translations.columns.key: Nøkkel
