@@ -9,7 +9,8 @@
  */
 
 import React from 'react'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { PropertiesContainer } from './properties-container'
 
 interface MockSelectProps {
@@ -26,6 +27,19 @@ jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
 jest.mock('@Pimcore/components/icon/icon', () => ({
   Icon: (): null => null
 }))
+
+jest.mock('@Pimcore/modules/app/error-handler', () => {
+  class ApiError { constructor (public readonly errorData: unknown) {} }
+  class GeneralError { constructor (public readonly message: string) {} }
+
+  return {
+    __esModule: true,
+    default: jest.fn(),
+    ApiError,
+    GeneralError,
+    isApiErrorData: (error: unknown) => typeof error === 'object' && error !== null && 'status' in error
+  }
+})
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key })
@@ -65,13 +79,17 @@ jest.mock('@Pimcore/components/select/select', () => ({
   )
 }))
 
-const createQueryResult = (name: string): typeof queryResult => ({
+const createQueryResult = (name: string, reload: () => Promise<unknown> = async () => ({})): typeof queryResult => ({
   data: { items: [{ id: 'abc', key: 'nofollow', name }] },
   isFetching: false,
-  refetch: jest.fn().mockResolvedValue({})
+  refetch: jest.fn(() => ({ unwrap: reload }))
 })
 
 describe('PropertiesContainer predefined properties select', () => {
+  beforeEach(() => {
+    jest.mocked(trackError).mockClear()
+  })
+
   it('reloads the predefined properties when the select is opened', () => {
     queryResult = createQueryResult('Old name')
     render(<PropertiesContainer />)
@@ -101,5 +119,18 @@ describe('PropertiesContainer predefined properties select', () => {
 
     expect(screen.getByText('New name')).toBeInTheDocument()
     expect(screen.queryByText('Old name')).not.toBeInTheDocument()
+  })
+
+  it('tracks an API error when reloading the predefined properties fails', async () => {
+    const apiErrorData = { status: 500, data: { message: 'Server error' } }
+    queryResult = createQueryResult('Old name', async () => await Promise.reject(apiErrorData))
+    render(<PropertiesContainer />)
+
+    await act(async () => {
+      fireEvent.click(screen.getByText('open'))
+    })
+
+    expect(trackError).toHaveBeenCalledTimes(1)
+    expect(jest.mocked(trackError).mock.calls[0][0]).toEqual(new ApiError(apiErrorData))
   })
 })

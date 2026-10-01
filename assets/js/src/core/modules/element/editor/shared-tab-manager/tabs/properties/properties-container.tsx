@@ -32,7 +32,7 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { isDisallowedPropertyKey } from './constants/disallowed-keys'
 import { PropertyType } from './constants/property-types'
 import { buildPredefinedPropertyOptions } from './utils/predefined-property-options'
-import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError, GeneralError, isApiErrorData } from '@Pimcore/modules/app/error-handler'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -67,8 +67,8 @@ export const PropertiesContainer = (): React.JSX.Element => {
   // Predefined properties can be changed in the settings while this tab is open, so reload them whenever the select is opened
   const onPredefinedPropertiesSelectOpenChange = (open: boolean): void => {
     if (open) {
-      void refetch().catch(() => {
-        trackError(new GeneralError('Error while reloading predefined properties'))
+      void refetch().unwrap().catch((error) => {
+        trackError(isApiErrorData(error) ? new ApiError(error) : new GeneralError('Error while reloading predefined properties'))
       })
     }
   }
