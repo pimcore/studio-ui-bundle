@@ -23,7 +23,7 @@ export const useSettingsLoader = (): UseSettingsLoaderReturn => {
   const loadSettings = async (): Promise<void> => {
     const settingsFetcher = dispatch(api.endpoints.systemSettingsGet.initiate())
 
-    settingsFetcher
+    await settingsFetcher
       .then(({ data, isSuccess, isError, error }) => {
         isError && trackError(new ApiError(error))
 

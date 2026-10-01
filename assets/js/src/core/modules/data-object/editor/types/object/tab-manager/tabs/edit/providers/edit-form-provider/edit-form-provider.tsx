@@ -23,6 +23,7 @@ import { type DynamicTypeObjectDataRegistry } from '@Pimcore/modules/element/dyn
 import { mergeFormChanges } from './utils/merge-form-changes'
 import { clearFormField } from './utils/clear-form-field'
 import { type NamePath } from 'antd/es/form/interface'
+import { useSettings } from '@Pimcore/modules/app/settings/hooks/use-settings'
 
 interface EditFormContextProps {
   form: formInstanceType
@@ -70,6 +71,10 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const { id } = useElementContext()
   const { dataObject, markObjectDataAsModified } = useDataObjectDraft(id)
   const { save, isError } = useSave()
+  const settings = useSettings()
+  // A ref, because the memoized context keeps the first render's updateDraft while settings may load later.
+  const isAutoSaveEnabledRef = useRef<boolean>(true)
+  isAutoSaveEnabledRef.current = settings.object_auto_save_interval !== 0
 
   const messageApi = useMessage()
   const { t } = useTranslation()
@@ -139,6 +144,10 @@ export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     if (!isEmpty(modifiedAttributes)) {
       if (!modifiedRef.current) {
         markObjectDataAsModified()
+      }
+
+      if (!isAutoSaveEnabledRef.current) {
+        return
       }
 
       await save(modifiedAttributes, SaveTaskType.AutoSave)
