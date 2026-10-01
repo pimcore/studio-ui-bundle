@@ -17,7 +17,7 @@ import { TreeExpander } from '../expander/tree-expander'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
 import { type ElementIcon } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useElementTreeNode } from '../hooks/use-element-tree-node'
-import { isEmpty, isNil } from 'lodash'
+import { isNil } from 'lodash'
 import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/utils/widget-content-scroll'
 import { createNodeTestId } from '@Pimcore/utils/test-id-generator'
 import { ComponentRenderer } from '@Pimcore/modules/app/component-registry/component-renderer'
@@ -95,7 +95,6 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     onSelect,
     onRightClick,
     nodesRefs,
-    nodeOrder,
     hasRootNode,
     tooltipSlotName
   } = useContext(TreeContext)
@@ -196,7 +195,6 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   }
 
   const isExpandable = props.hasChildren === true
-  const isFirstNode = !isEmpty(nodeOrder?.()) && nodeOrder!()[0] === internalKey
 
   // the visible root is rendered with level -1 and its children with level 0,
   // so shift by one more when the root is shown to keep aria-level starting at 1
@@ -216,7 +214,8 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
       onKeyDown={ onKeyDown }
       ref={ setRef }
       role='treeitem'
-      tabIndex={ isSelected || isFirstNode ? 0 : -1 }
+      // The tree container moves the one Tab stop to the selected (else first) node; see useRovingTabStop.
+      tabIndex={ -1 }
     >
       <Flex
         align="center"

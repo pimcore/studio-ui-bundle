@@ -26,6 +26,7 @@ import { type TreeNode } from './element-tree-slice'
 import { TreeList } from './list/tree-list'
 import { useTreeId } from '@Pimcore/components/element-tree/provider/tree-id-provider/use-tree-id'
 import { createTreeTestId } from '@Pimcore/utils/test-id-generator'
+import { useRovingTabStop } from './hooks/use-roving-tab-stop'
 
 export interface TreeSearchProps {
   node: TreeNodeProps
@@ -132,11 +133,13 @@ const ElementTree = (
 
   const TreeNode = renderNode
   const treeTestId = createTreeTestId(treeId)
+  const treeRef = useRovingTabStop()
   const treeContent = (
     <div
       aria-label={ props.ariaLabel }
       className={ ['tree', styles.tree].join(' ') }
       data-testid={ treeTestId }
+      ref={ treeRef }
       role="tree"
     >
       <TreeContext.Provider value={ treeContextValue }>
