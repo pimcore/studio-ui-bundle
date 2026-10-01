@@ -55,6 +55,10 @@ final class BuildRemoteEntryCspSubscriber implements EventSubscriberInterface, L
 
     public function onCspEvent(CspEvent $event): void
     {
+        if (!$event->isHtmlResponse()) {
+            return;
+        }
+
         $sources = [];
 
         foreach ($this->entryPointCatalog->getProviders() as $provider) {

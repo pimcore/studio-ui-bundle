@@ -8,19 +8,18 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isArray, isEmpty, isNil, isNumber, isString } from 'lodash'
+import { isArray, isEmpty, isNumber, isString } from 'lodash'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
 import { useAppliedFilters } from '@Pimcore/modules/element/listing/decorators/general-filters/element-filters'
 import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
-import { type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
-import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { type SavedSearchDetailedConfiguration, type GridFilter } from '@Pimcore/modules/search/search-api-slice.gen'
 import { useTagFilter } from '@Pimcore/modules/asset/listing/decorator/tag-filter/context-layer/provider/tag-filter/use-tag-filter'
 import { tagFilterType, type SelectedTags } from '@Pimcore/modules/asset/listing/decorator/tag-filter/context-layer/provider/tag-filter/tag-filter-provider'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
+import { buildSelectedColumns, type SavedColumn } from './restored-layout'
 import { useTypeSelect } from '@Pimcore/modules/element/components/type-select/provider/use-type-select'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
@@ -49,7 +48,6 @@ interface ColumnFilterEntry {
   locale?: string | null
   meta?: { translationKey?: string, [key: string]: unknown }
 }
-interface SavedColumn { key?: string, locale?: string | null, width?: number | null }
 
 /** The backend models `filter` as an array but stores a single FilterParameter — normalise to one object. */
 const getFilter = (configuration: SavedSearchDetailedConfiguration): GridFilter | undefined => {
@@ -58,32 +56,6 @@ const getFilter = (configuration: SavedSearchDetailedConfiguration): GridFilter 
     return raw[0] as GridFilter | undefined
   }
   return (raw ?? undefined) as GridFilter | undefined
-}
-
-/** Merges the saved key/locale/width with the live available-column definition (same transform grid-config uses). */
-const buildSelectedColumns = (savedColumns: SavedColumn[], availableColumns: AvailableColumn[]): SelectedColumn[] => {
-  const selectedColumns: SelectedColumn[] = []
-  for (const savedColumn of savedColumns) {
-    const availableColumn = availableColumns.find((available) => available.key === savedColumn.key)
-    if (isNil(availableColumn)) {
-      continue
-    }
-    selectedColumns.push({
-      key: savedColumn.key,
-      locale: savedColumn.locale,
-      type: availableColumn.type,
-      config: availableColumn.config,
-      sortable: availableColumn.sortable,
-      editable: availableColumn.editable,
-      localizable: availableColumn.localizable,
-      exportable: availableColumn.exportable,
-      frontendType: availableColumn.frontendType,
-      group: availableColumn.group,
-      width: savedColumn.width,
-      originalApiDefinition: availableColumn
-    })
-  }
-  return selectedColumns
 }
 
 /**
