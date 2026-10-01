@@ -62,6 +62,12 @@ export const useStyles = createStyles(({ token, css }) => {
         align-items: center;
         justify-content: center;
     `,
+    // The tooltip needs a real element to hold its ref, and a plain inline span would drop the
+    // icon onto the text baseline instead of centring it beside the channel label and its icon.
+    channelWarning: css`
+        display: inline-flex;
+        align-items: center;
+    `,
     toolbar: css`
         display: flex;
         align-items: center;

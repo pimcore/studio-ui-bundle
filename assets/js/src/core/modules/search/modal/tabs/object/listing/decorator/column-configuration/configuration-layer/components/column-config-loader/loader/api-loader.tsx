@@ -10,7 +10,7 @@
 
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/decorators/abstract-decorator'
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useDataObjectGetAvailableGridColumnsQuery } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
@@ -19,6 +19,8 @@ import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorator
 import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/grid-config/use-grid-config'
 import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useDataObjectGetSearchConfigurationQuery } from '@Pimcore/modules/search/search-api-slice.gen'
+import { useSearch } from '@Pimcore/modules/search/provider/use-search'
+import { restoredColumnLayout, type SavedColumn } from '@Pimcore/modules/search/saved-search/restore/restored-layout'
 import { uuid } from '@Pimcore/utils/uuid'
 
 export interface ColumnConfigLoaderProps {
@@ -30,16 +32,27 @@ export const ApiLoader = ({ Component }: ColumnConfigLoaderProps): React.JSX.Ele
   const { setDataLoadingState } = useDataQueryHelper()
   const { getId } = useElementId()
   const { selectedClassDefinition } = useClassDefinitionSelection()
-  const { isLoading, data } = useDataObjectGetAvailableGridColumnsQuery({ folderId: getId(), classId: selectedClassDefinition!.id })
-  const { isLoading: isInitialConfigLoading, data: initialConfigurationData } = useDataObjectGetSearchConfigurationQuery({ classId: selectedClassDefinition!.id })
+  const { isLoading, currentData: data } = useDataObjectGetAvailableGridColumnsQuery({ folderId: getId(), classId: selectedClassDefinition!.id })
+  const { isLoading: isInitialConfigLoading, currentData: initialConfigurationData } = useDataObjectGetSearchConfigurationQuery({ classId: selectedClassDefinition!.id })
   const { selectedColumns, setSelectedColumns } = useSelectedColumns()
   const { setAvailableColumns } = useAvailableColumns()
   const { setGridConfig } = useGridConfig()
+  const { pendingRestore } = useSearch()
+  const applied = useRef<{ columns?: unknown, configuration?: unknown }>({})
 
   useEffect(() => {
     if (data === undefined || initialConfigurationData === undefined) {
       return
     }
+
+    // apply each response pair once: StrictMode's second pass and a refetch RTK answers with the
+    // cached result carry the same objects, and re-applying the defaults then would overwrite a
+    // column set installed since (a restored saved search). A changed response applies — and
+    // currentData stays empty while the class changes, so two classes' answers never mix
+    if (applied.current.columns === data && applied.current.configuration === initialConfigurationData) {
+      return
+    }
+    applied.current = { columns: data, configuration: initialConfigurationData }
 
     const selectedColumns: SelectedColumnsContextProps['selectedColumns'] = []
     const availableColumns: AvailableColumn[] = data.columns!.map(column => column)
@@ -79,7 +92,14 @@ export const ApiLoader = ({ Component }: ColumnConfigLoaderProps): React.JSX.Ele
       }
     }
 
-    setSelectedColumns(selectedColumns)
+    // a saved search still being restored onto this class owns its column selection, and the
+    // class defaults landing late must not win — unless none of its columns exist here, when the
+    // defaults are the fallback. Once restored, a class switch shows defaults again
+    const restoreOwnsColumns = pendingRestore?.classId === selectedClassDefinition!.id &&
+      restoredColumnLayout((pendingRestore?.columns ?? []) as SavedColumn[], availableColumns).length > 0
+    if (!restoreOwnsColumns) {
+      setSelectedColumns(selectedColumns)
+    }
     setAvailableColumns(availableColumns)
     setGridConfig(initialConfigurationData)
     setDataLoadingState('config-changed')

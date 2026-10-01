@@ -26,6 +26,7 @@ export type RelationEditableDefinition = Omit<AbstractDocumentEditableDefinition
     reload?: boolean
     width?: number
     uploadPath?: string
+    disableInlineUpload?: boolean
     class?: string
   }
 }
@@ -49,9 +50,11 @@ export class DynamicTypeDocumentEditableRelation extends DynamicTypeDocumentEdit
         allowedClasses={ props.config?.classes }
         allowedDataObjectTypes={ props.config?.subtypes?.object }
         allowedDocumentTypes={ props.config?.subtypes?.document }
+        assetUploadPath={ props.config?.uploadPath ?? undefined }
         assetsAllowed={ isTypeAllowed(props.config?.types, 'asset') }
         className={ props.config?.class }
         dataObjectsAllowed={ isTypeAllowed(props.config?.types, 'object') }
+        disableInlineUpload={ props.config?.disableInlineUpload ?? undefined }
         documentsAllowed={ isTypeAllowed(props.config?.types, 'document') }
         inherited={ props.inherited }
         width={ props.config?.width }

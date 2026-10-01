@@ -8,10 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmpty } from 'lodash'
+import { isEmpty, isUndefined } from 'lodash'
 import { Flex } from '@Pimcore/components/flex/flex'
+import { usePanelDraftPublisher } from '@Pimcore/modules/search/provider/use-panel-draft-publisher'
+import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { Form } from '@Pimcore/components/form/form'
 import { type formInstanceType } from '@Pimcore/components/form/use-form'
 import { Input } from '@Pimcore/components/input/input'
@@ -51,6 +53,8 @@ interface SavedSearchFormProps {
   onUsersRolesChange: (changes: { sharedUsers: number[], sharedRoles: number[] }) => void
   /** Whether to show the sharing controls — hidden when viewing someone else's search (clone). */
   showSharing: boolean
+  /** the listing the panel belongs to: only the shown panel's values become the search's draft */
+  elementType?: ElementType
 }
 
 export const SavedSearchForm = ({
@@ -60,7 +64,8 @@ export const SavedSearchForm = ({
   sharedUsers,
   sharedRoles,
   onUsersRolesChange,
-  showSharing
+  showSharing,
+  elementType
 }: SavedSearchFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -72,11 +77,22 @@ export const SavedSearchForm = ({
   // group (kept at the normal spacing otherwise, so the toggle isn't cramped against the next field).
   const createMenuShortcutEnabled = Form.useWatch('createMenuShortcut', form) === true
 
-  const handleFormValuesChange = (changedValues: Partial<SavedSearchFormValues>): void => {
-    if (changedValues.shareGlobally !== undefined) {
+  const publishDraft = usePanelDraftPublisher(elementType)
+
+  const handleFormValuesChange = (changedValues: Partial<SavedSearchFormValues>, allValues: SavedSearchFormValues): void => {
+    if (!isUndefined(changedValues.shareGlobally)) {
       onSharedGloballyChange(changedValues.shareGlobally)
     }
+    // the live form values, for anything hosting this panel that mirrors what the user types
+    publishDraft({ ...allValues, sharedUsers, sharedRoles })
   }
+
+  // The users and roles a search is shared with are picked in a dropdown, not in the form, so
+  // they reach a host only from here — without this a host mirroring the panel would miss the
+  // one sharing change the form never sees.
+  useEffect(() => {
+    publishDraft({ ...(form.getFieldsValue() as SavedSearchFormValues), sharedUsers, sharedRoles })
+  }, [sharedUsers, sharedRoles])
 
   const renderIcon = (iconName: string, size?: number): React.JSX.Element => (
     <Icon

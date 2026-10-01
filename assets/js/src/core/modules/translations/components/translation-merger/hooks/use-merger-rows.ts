@@ -9,6 +9,7 @@
  */
 
 import { useMemo, useState } from 'react'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import type { DeltaItem } from '../../../../app/translations/translations-api-slice.gen'
 import { useTranslationUpdateMutation } from '../../../../app/translations/translations-api-slice-enhanced'
 import trackError, { GeneralError } from '../../../../app/error-handler'
@@ -64,7 +65,7 @@ export const useMergerRows = (domain: string, deltaItems: DeltaItem[]): UseMerge
   const [updateTranslations] = useTranslationUpdateMutation()
   const [loadingRows, setLoadingRows] = useState<Set<string>>(new Set())
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(20)
+  const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
 
   const initialRows: MergerRow[] = useMemo(() => deltaItems.flatMap(item =>
     item.deltaValues.map(delta => ({

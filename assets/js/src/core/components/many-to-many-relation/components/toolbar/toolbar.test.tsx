@@ -24,8 +24,20 @@ jest.mock('@Pimcore/components/modal/form-modal/hooks/use-form-modal', () => ({
   useFormModal: () => ({ confirm: jest.fn() })
 }))
 
+// Records the props so the upload guard can be driven through the real `onSuccess`.
+let mockUploadButtonProps: Record<string, any> | null = null
+
 jest.mock('@Pimcore/components/modal-upload/components/modal-upload-button/modal-upload-button', () => ({
-  ModalUploadButton: () => null
+  ModalUploadButton: (props: Record<string, any>) => {
+    mockUploadButtonProps = props
+    return null
+  }
+}))
+
+const mockAlertWarn = jest.fn()
+
+jest.mock('@Pimcore/components/modal/alert-modal/hooks/use-alert-modal', () => ({
+  useAlertModal: () => ({ warn: mockAlertWarn })
 }))
 
 jest.mock('@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button', () => ({
@@ -38,6 +50,18 @@ jest.mock('@Pimcore/modules/element/element-selector/provider/element-selector/e
 
 jest.mock('@Pimcore/components/search-input/search-input', () => ({
   SearchInput: () => null
+}))
+
+// The create-object modal reaches the app store through the shared Form component
+jest.mock('../create-object/create-object-modal', () => ({
+  CreateObjectModal: ({ open }: { open: boolean }) => (open ? <div data-testid="create-object-modal" /> : null)
+}))
+
+const creatableClasses = jest.fn((allowedClasses?: string[], skip?: boolean) => (
+  { classes: [{ id: 'CAR-ID', name: 'Car' }], isLoading: false }
+))
+jest.mock('../create-object/use-creatable-relation-classes', () => ({
+  useCreatableRelationClasses: (allowedClasses?: string[], skip?: boolean) => creatableClasses(allowedClasses, skip)
 }))
 
 // The icon component resolves its definition through the DI container
@@ -63,7 +87,13 @@ const appliedFilter = {
   locale: null
 }
 
-const renderToolbar = (initialValues?: Record<string, unknown>): void => {
+const renderToolbar = (
+  initialValues?: Record<string, unknown>,
+  overrides: Partial<ManyToManyRelationToolbarProps> = {}
+): void => {
+  mockUploadButtonProps = null
+  mockAlertWarn.mockClear()
+
   const props: ManyToManyRelationToolbarProps = {
     addAssets: async () => {},
     addItems: () => {},
@@ -71,7 +101,8 @@ const renderToolbar = (initialValues?: Record<string, unknown>): void => {
     empty: () => {},
     enableUpload: false,
     onSearch: () => {},
-    disabled: true
+    disabled: true,
+    ...overrides
   }
 
   render(
@@ -103,5 +134,126 @@ describe('ManyToManyRelationToolbar clear filters button', () => {
     fireEvent.click(screen.getByLabelText(CLEAR_FILTERS_LABEL))
 
     expect(screen.queryByLabelText(CLEAR_FILTERS_LABEL)).not.toBeInTheDocument()
+  })
+})
+
+describe('ManyToManyRelationToolbar inline upload guard', () => {
+  const image = { id: 1, type: 'image', fullPath: '/examples/image.jpg' }
+  const pdf = { id: 2, type: 'document', fullPath: '/examples/spec.pdf' }
+
+  const renderUploadToolbar = (
+    overrides: Partial<ManyToManyRelationToolbarProps> = {}
+  ): jest.Mock => {
+    const addAssets = jest.fn(async () => {})
+
+    renderToolbar(undefined, {
+      addAssets,
+      disabled: false,
+      enableUpload: true,
+      assetsAllowed: true,
+      ...overrides
+    })
+
+    return addAssets
+  }
+
+  it('assigns every uploaded asset when the relation restricts no subtype', async () => {
+    const addAssets = renderUploadToolbar()
+
+    await mockUploadButtonProps?.onSuccess([image, pdf])
+
+    expect(addAssets).toHaveBeenCalledWith([image, pdf])
+    expect(mockAlertWarn).not.toHaveBeenCalled()
+  })
+
+  it('drops the uploaded assets whose type the relation disallows', async () => {
+    const addAssets = renderUploadToolbar({ allowedAssetTypes: ['image'] })
+
+    await mockUploadButtonProps?.onSuccess([image, pdf])
+
+    expect(addAssets).toHaveBeenCalledWith([image])
+    expect(mockAlertWarn).toHaveBeenCalledWith({ content: 'relations.upload.subtype-not-allowed' })
+  })
+
+  it('does not touch the value when every uploaded asset is disallowed', async () => {
+    const addAssets = renderUploadToolbar({ allowedAssetTypes: ['image'] })
+
+    await mockUploadButtonProps?.onSuccess([pdf])
+
+    expect(addAssets).not.toHaveBeenCalled()
+    expect(mockAlertWarn).toHaveBeenCalledWith({ content: 'relations.upload.subtype-not-allowed' })
+  })
+})
+
+const CREATE_OBJECT_LABEL = 'relations.create-object.title'
+
+// An object relation with the class-definition flag switched on.
+const creatableRelation = {
+  allowToCreateNewObject: true,
+  dataObjectsAllowed: true,
+  disabled: false
+}
+
+describe('ManyToManyRelationToolbar create object action', () => {
+  beforeEach(() => {
+    creatableClasses.mockReturnValue({ classes: [{ id: 'CAR-ID', name: 'Car' }], isLoading: false })
+  })
+
+  it('stays hidden while the class definition does not allow it', () => {
+    renderToolbar(undefined, { ...creatableRelation, allowToCreateNewObject: false })
+
+    expect(screen.queryByLabelText(CREATE_OBJECT_LABEL)).not.toBeInTheDocument()
+  })
+
+  it('stays hidden on a relation that does not explicitly accept objects', () => {
+    renderToolbar(undefined, { ...creatableRelation, dataObjectsAllowed: undefined })
+
+    expect(screen.queryByLabelText(CREATE_OBJECT_LABEL)).not.toBeInTheDocument()
+  })
+
+  it('stays hidden while the relation is read-only', () => {
+    renderToolbar(undefined, { ...creatableRelation, disabled: true })
+
+    expect(screen.queryByLabelText(CREATE_OBJECT_LABEL)).not.toBeInTheDocument()
+  })
+
+  it('stays hidden when the user may create none of the allowed classes', () => {
+    creatableClasses.mockReturnValue({ classes: [], isLoading: false })
+    renderToolbar(undefined, creatableRelation)
+
+    expect(screen.queryByLabelText(CREATE_OBJECT_LABEL)).not.toBeInTheDocument()
+  })
+
+  it('is the first action in the toolbar', () => {
+    renderToolbar(undefined, creatableRelation)
+
+    const buttons = screen.getAllByRole('button')
+    expect(buttons[0]).toHaveAttribute('aria-label', CREATE_OBJECT_LABEL)
+  })
+
+  it('opens the modal on click', () => {
+    renderToolbar(undefined, creatableRelation)
+
+    expect(screen.queryByTestId('create-object-modal')).not.toBeInTheDocument()
+
+    fireEvent.click(screen.getByLabelText(CREATE_OBJECT_LABEL))
+
+    expect(screen.getByTestId('create-object-modal')).toBeInTheDocument()
+  })
+
+  it('warns instead of opening the modal once maxItems is reached', () => {
+    renderToolbar(undefined, { ...creatableRelation, itemLimitReached: true, maxItems: 2 })
+
+    fireEvent.click(screen.getByLabelText(CREATE_OBJECT_LABEL))
+
+    expect(mockAlertWarn).toHaveBeenCalled()
+    expect(screen.queryByTestId('create-object-modal')).not.toBeInTheDocument()
+  })
+
+  it('skips the class lookup for relations that cannot create objects', () => {
+    creatableClasses.mockClear()
+    renderToolbar(undefined, { ...creatableRelation, allowToCreateNewObject: false })
+
+    expect(creatableClasses).toHaveBeenCalledWith(undefined, true)
   })
 })

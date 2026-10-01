@@ -11,6 +11,7 @@
 import { type FormItemProps } from 'antd'
 import React, { useCallback, useEffect, useId, useMemo, useRef } from 'react'
 import { ItemProvider } from './provider/item/item-provider'
+import { LabelExtra } from './provider/label-extra/label-extra-provider'
 import { useStyles } from './virtual-item.styles'
 import { Space } from '@Pimcore/components/space/space'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
@@ -126,7 +127,7 @@ export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX
                         : (
                           <Icon
                             options={ { width: 14, height: 14 } }
-                            value="info-circle"
+                            value="info-outline"
                           />
                           )}
                     </Tooltip>
@@ -135,6 +136,7 @@ export const VirtualItem = ({ children, ...props }: VirtualItemProps): React.JSX
               </label>
               {isRequired && <span className="required-indicator">*</span>}
             </Space>
+            <LabelExtra />
           </div>
         )}
 
