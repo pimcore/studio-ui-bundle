@@ -37,8 +37,9 @@ jest.mock('@Pimcore/modules/element/listing/abstract/configuration-layer/provide
   useSelectedColumns: () => ({ setSelectedColumns })
 }))
 
+let availableColumns: unknown[] = []
 jest.mock('@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns', () => ({
-  useAvailableColumns: () => ({ availableColumns: [] })
+  useAvailableColumns: () => ({ availableColumns })
 }))
 
 jest.mock('@Pimcore/modules/asset/listing/decorator/tag-filter/context-layer/provider/tag-filter/use-tag-filter', () => ({
@@ -53,12 +54,18 @@ jest.mock('@Pimcore/modules/search/provider/use-search', () => ({
   useSearch: () => ({ setSearchTerm: setSharedSearchTerm })
 }))
 
+// One registered search mode emitting `system.semanticSearch` column filters.
+jest.mock('@Pimcore/app/depency-injection', () => ({
+  useInjection: () => ({ getDynamicTypes: () => [{ columnFilterType: 'system.semanticSearch' }] })
+}))
+
 const buildConfiguration = (columnFilters: unknown[]): SavedSearchDetailedConfiguration =>
   ({ filter: [{ columnFilters }] } as unknown as SavedSearchDetailedConfiguration)
 
 describe('useApplySavedSearch', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    availableColumns = []
   })
 
   it('restores the type select from the saved `type` column filter', () => {
@@ -94,5 +101,54 @@ describe('useApplySavedSearch', () => {
     result.current(configuration)
 
     expect(setType).toHaveBeenCalledWith(null)
+  })
+
+  it('excludes registered search-mode filters from the restored field filters', () => {
+    const configuration = buildConfiguration([
+      { filterValue: 'red car', type: 'system.semanticSearch' },
+      { key: 'name', filterValue: 'E-Type', type: 'system.string' }
+    ])
+
+    const { result } = renderHook(() => useApplySavedSearch())
+    result.current(configuration)
+
+    expect(setAppliedFilters).toHaveBeenCalledWith(expect.objectContaining({
+      fieldFilters: [expect.objectContaining({ key: 'name', filterValue: 'E-Type' })]
+    }))
+  })
+
+  it('resets the search mode to full text, so a mode left over from before the restore does not re-emit the restored term', () => {
+    const configuration = buildConfiguration([])
+
+    const { result } = renderHook(() => useApplySavedSearch())
+    result.current(configuration)
+
+    expect(setAppliedFilters).toHaveBeenCalledWith(expect.objectContaining({ searchMode: 'fulltext' }))
+  })
+
+  it('restores a column that was saved without a locale as `null`, which is what the grid data carries', () => {
+    availableColumns = [{ key: 'productionYear', type: 'dataobject.adapter', frontendType: 'numeric' }]
+    const configuration = {
+      ...buildConfiguration([]),
+      columns: [{ key: 'productionYear' }]
+    } as unknown as SavedSearchDetailedConfiguration
+
+    const { result } = renderHook(() => useApplySavedSearch())
+    result.current(configuration)
+
+    expect(setSelectedColumns).toHaveBeenCalledWith([expect.objectContaining({ key: 'productionYear', locale: null })])
+  })
+
+  it('keeps a saved locale as it stands', () => {
+    availableColumns = [{ key: 'name', type: 'dataobject.adapter', frontendType: 'input', localizable: true }]
+    const configuration = {
+      ...buildConfiguration([]),
+      columns: [{ key: 'name', locale: 'de' }]
+    } as unknown as SavedSearchDetailedConfiguration
+
+    const { result } = renderHook(() => useApplySavedSearch())
+    result.current(configuration)
+
+    expect(setSelectedColumns).toHaveBeenCalledWith([expect.objectContaining({ key: 'name', locale: 'de' })])
   })
 })

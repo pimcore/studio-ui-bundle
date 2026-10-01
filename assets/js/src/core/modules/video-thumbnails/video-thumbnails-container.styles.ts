@@ -15,7 +15,7 @@ export const useStyles = createStyles(({ token, css }) => {
     emptyState: css`
       text-align: center;
       color: ${token.colorTextDisabled};
-      margin-top: 50px;
+      margin-top: ${token.marginXXL}px;
     `
   }
 })

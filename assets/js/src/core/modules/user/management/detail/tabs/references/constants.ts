@@ -8,4 +8,5 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-export const DEFAULT_PAGE_SIZE = 20
+/** Cap of GET /users/{id}/object-dependencies (ObjectDependenciesServiceInterface::MAX_PAGE_SIZE). */
+export const MAX_PAGE_SIZE = 100

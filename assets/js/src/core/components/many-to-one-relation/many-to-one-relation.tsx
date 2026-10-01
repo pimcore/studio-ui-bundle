@@ -53,6 +53,7 @@ export interface PathTextInputValue {
 
 export interface ManyToOneRelationClassDefinitionProps {
   assetInlineDownloadAllowed?: boolean
+  /** Folder the inline upload puts the new asset into. Defaults to the asset root. */
   assetUploadPath?: string | null
   allowToClearRelation?: boolean
   allowPathTextInput?: boolean
@@ -70,6 +71,8 @@ export interface ManyToOneRelationProps extends IRelationAllowedTypesDataCompone
   onChange?: (value: ManyToOneRelationValueType) => void
   onOpenElement?: () => void
   className?: string
+  /** Hides the upload button that is otherwise shown whenever assets are allowed. */
+  disableInlineUpload?: boolean
   combinedFieldName?: string
   pathFormatterClass?: string
   additionalButtons?: (value: ManyToOneRelationValueType) => React.ReactNode
@@ -214,7 +217,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
           />
         )}
 
-        {isEnabled && props.assetsAllowed === true && (
+        {isEnabled && props.assetsAllowed === true && props.disableInlineUpload !== true && (
           <ModalUploadButton
             maxItems={ 1 }
             multiple={ false }

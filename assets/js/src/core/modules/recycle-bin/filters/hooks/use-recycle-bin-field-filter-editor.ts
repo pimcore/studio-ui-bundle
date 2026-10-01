@@ -18,14 +18,23 @@ import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column
 import { RECYCLE_BIN_FILTERABLE_FIELDS, useRecycleBinDraftFilters } from '@Pimcore/modules/recycle-bin/filters/filters'
 import { type RecycleBinFilterColumn } from '@Pimcore/modules/recycle-bin/filters/types'
 
+export interface UseRecycleBinFieldFilterEditorProps {
+  /**
+   * Applies the given field filters right away, i.e. what the "Apply" button does. Injected so
+   * every host expresses applying in exactly one place, next to its "Apply" handler.
+   */
+  onCommit: (fieldFilters: FieldFilter[]) => void
+}
+
 export interface UseRecycleBinFieldFilterEditorReturn {
   filters: FieldFiltersProps['data']
   onFilterChange: NonNullable<FieldFiltersProps['onChange']>
+  onFilterCommit: NonNullable<FieldFiltersProps['onCommit']>
   columnGroups: Array<ColumnPickerGroup<RecycleBinFilterColumn>>
   handleColumnClick: (column: RecycleBinFilterColumn) => void
 }
 
-export const useRecycleBinFieldFilterEditor = (): UseRecycleBinFieldFilterEditorReturn => {
+export const useRecycleBinFieldFilterEditor = ({ onCommit }: UseRecycleBinFieldFilterEditorProps): UseRecycleBinFieldFilterEditorReturn => {
   const { t } = useTranslation()
 
   const { getType } = useDynamicTypeResolver()
@@ -62,18 +71,27 @@ export const useRecycleBinFieldFilterEditor = (): UseRecycleBinFieldFilterEditor
     setFilters(initialFilters)
   }, [initialFilters])
 
+  const toFieldFilters = (data: FieldFiltersProps['data']): FieldFilter[] => data.map((filter) => ({
+    key: filter.id,
+    filterValue: filter.data,
+    type: filter.type,
+    locale: filter.locale,
+    meta: {
+      translationKey: filter.translationKey,
+      ...filter.config ?? {}
+    }
+  }))
+
   const onFilterChange: UseRecycleBinFieldFilterEditorReturn['onFilterChange'] = (data) => {
     setFilters(data)
-    setValue('fieldFilters', data.map((filter) => ({
-      key: filter.id,
-      filterValue: filter.data,
-      type: filter.type,
-      locale: filter.locale,
-      meta: {
-        translationKey: filter.translationKey,
-        ...filter.config ?? {}
-      }
-    })))
+    setValue('fieldFilters', toFieldFilters(data))
+  }
+
+  const onFilterCommit: UseRecycleBinFieldFilterEditorReturn['onFilterCommit'] = (data) => {
+    setFilters(data)
+    const fieldFilters = toFieldFilters(data)
+    setValue('fieldFilters', fieldFilters)
+    onCommit(fieldFilters)
   }
 
   const handleColumnClick = (column: RecycleBinFilterColumn): void => {
@@ -128,5 +146,5 @@ export const useRecycleBinFieldFilterEditor = (): UseRecycleBinFieldFilterEditor
     }]
   }, [availableColumns, t])
 
-  return { filters, onFilterChange, columnGroups, handleColumnClick }
+  return { filters, onFilterChange, onFilterCommit, columnGroups, handleColumnClick }
 }

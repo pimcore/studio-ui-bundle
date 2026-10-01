@@ -105,7 +105,7 @@ export const useElementActionsMenu = ({ element, elementType }: IUseElementActio
           align="center"
           gap="extra-small"
         >
-          <Icon value="info-circle" />
+          <Icon value="info-outline" />
           <Text>{t('element.toolbar.show-full-info')}</Text>
         </Flex>
       ),

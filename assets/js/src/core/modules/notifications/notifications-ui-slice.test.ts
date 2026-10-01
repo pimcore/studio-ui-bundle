@@ -8,7 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { clearExpandRequest, notificationsUiReducer, requestExpandNotification } from './notifications-ui-slice'
+import {
+  clearExpandRequest,
+  clearNotificationsSectionRequest,
+  notificationsUiReducer,
+  requestExpandNotification,
+  requestNotificationsSection
+} from './notifications-ui-slice'
 
 // The slice self-registers with the app store on import; stub that side effect so the test
 // exercises just the reducer. jest hoists this above the import.
@@ -44,5 +50,33 @@ describe('notifications-ui slice', () => {
     const cleared = notificationsUiReducer(requested, clearExpandRequest())
 
     expect(cleared.expandRequest).toBeNull()
+  })
+
+  it('records the requested section', () => {
+    const state = notificationsUiReducer(undefined, requestNotificationsSection('settings'))
+
+    expect(state.sectionRequest).toEqual({ section: 'settings', token: 1 })
+  })
+
+  it('advances the token on a repeat of the same section, so a tab left by hand is re-selected', () => {
+    const first = notificationsUiReducer(undefined, requestNotificationsSection('settings'))
+    const second = notificationsUiReducer(first, requestNotificationsSection('settings'))
+
+    expect(second.sectionRequest).toEqual({ section: 'settings', token: 2 })
+  })
+
+  it('clears the section request once consumed so the user can switch tabs afterwards', () => {
+    const requested = notificationsUiReducer(undefined, requestNotificationsSection('settings'))
+    const cleared = notificationsUiReducer(requested, clearNotificationsSectionRequest())
+
+    expect(cleared.sectionRequest).toBeNull()
+  })
+
+  it('keeps the two requests independent', () => {
+    const withSection = notificationsUiReducer(undefined, requestNotificationsSection('inbox'))
+    const withBoth = notificationsUiReducer(withSection, requestExpandNotification(7))
+
+    expect(withBoth.sectionRequest).toEqual({ section: 'inbox', token: 1 })
+    expect(withBoth.expandRequest).toEqual({ id: 7, token: 1 })
   })
 })

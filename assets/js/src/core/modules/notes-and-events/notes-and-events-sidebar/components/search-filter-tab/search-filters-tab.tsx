@@ -20,7 +20,12 @@ import { Title } from '@Pimcore/components/title/title'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { ColumnPickerPopover } from '@Pimcore/components/column-picker/column-picker-popover'
 import { FieldFilters } from '@Pimcore/components/field-filters/field-filters'
-import { FiltersRenderer } from '@Pimcore/components/filters'
+import {
+  FilterCommitProvider,
+  FiltersRenderer,
+  type FilterValues,
+  commitFilterValues
+} from '@Pimcore/components/filters'
 import { notesFilterDescriptors, useNotesAppliedFilters, useNotesDraftFilters, useNotesFilterContext } from '@Pimcore/modules/notes-and-events/filters/filters'
 import { useNotesFieldFilterEditor } from '@Pimcore/modules/notes-and-events/filters/hooks/use-notes-field-filter-editor'
 import { type NotesFilterColumn } from '@Pimcore/modules/notes-and-events/filters/types'
@@ -31,9 +36,21 @@ export const SearchFiltersTab = (): React.JSX.Element => {
   const draftStore = useNotesDraftFilters()
   const appliedStore = useNotesAppliedFilters()
   const filterContext = useNotesFilterContext()
-  const { filters, onFilterChange, columnGroups, handleColumnClick } = useNotesFieldFilterEditor()
 
-  const handleApplyFilters = (): void => { appliedStore.setValues(draftStore.values) }
+  /**
+   * Publishes the draft, i.e. what the "Apply" button does. `committed` carries the value of a
+   * filter that applies itself immediately (Enter in the search field or in a text field
+   * filter): its draft write happens in the same render, so it is not in the draft here yet.
+   */
+  const applyFilters = (committed?: FilterValues): void => {
+    commitFilterValues(appliedStore, draftStore.values, committed)
+  }
+
+  const { filters, onFilterChange, onFilterCommit, columnGroups, handleColumnClick } = useNotesFieldFilterEditor({
+    onCommit: (fieldFilters) => { applyFilters({ fieldFilters }) }
+  })
+
+  const handleApplyFilters = (): void => { applyFilters() }
 
   const handleClearFilters = (): void => { draftStore.reset() }
 
@@ -85,12 +102,15 @@ export const SearchFiltersTab = (): React.JSX.Element => {
           style={ { width: '100%' } }
           vertical
         >
-          <FiltersRenderer
-            context={ filterContext }
-            descriptors={ notesFilterDescriptors }
-            section='search'
-            store={ draftStore }
-          />
+          { /* Lets a control apply on its own, e.g. Enter in the search field */ }
+          <FilterCommitProvider onCommit={ applyFilters }>
+            <FiltersRenderer
+              context={ filterContext }
+              descriptors={ notesFilterDescriptors }
+              section='search'
+              store={ draftStore }
+            />
+          </FilterCommitProvider>
         </Flex>
 
         <Title>{t('element.sidebar.field-filters')}</Title>
@@ -101,6 +121,7 @@ export const SearchFiltersTab = (): React.JSX.Element => {
             <FieldFilters
               data={ filters }
               onChange={ onFilterChange }
+              onCommit={ onFilterCommit }
             />
             ) }
       </Content>

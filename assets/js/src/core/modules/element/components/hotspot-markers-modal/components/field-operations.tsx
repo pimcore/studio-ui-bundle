@@ -71,8 +71,8 @@ const FieldOperations = ({
             <HotspotManyToOneRelation
               allowPathTextInput
               assetsAllowed={ false }
-              dataObjectsAllowed
-              documentsAllowed={ false }
+              dataObjectsAllowed={ false }
+              documentsAllowed
               type={ 'document' }
             />
           )

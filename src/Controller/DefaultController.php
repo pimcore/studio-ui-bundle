@@ -41,12 +41,16 @@ final class DefaultController extends FrontendController
     #[Route('')]
     #[Route('/login')]
     #[Route('/reset-password')]
+    #[Route('/oauth/consent')]
     #[Route('/{elementType}/{id}', requirements: ['elementType' => 'asset|data-object|document', 'id' => '\d+'])]
     public function indexAction(
         string $studioUrlPath,
         array $studioWysiwygConfiguration,
         string $studioApiPrefix,
-        int $studioMaxParallelUploads
+        int $studioMaxParallelUploads,
+        array $studioPageSizeOptions,
+        int $studioDefaultPageSize,
+        int $studioMaxPageSize
     ): Response {
         $appConfig = [
             'baseUrl' => $studioUrlPath . '/',
@@ -54,6 +58,9 @@ final class DefaultController extends FrontendController
             'wysiwyg' => $studioWysiwygConfiguration,
             'apiPrefix' => $studioApiPrefix,
             'maxParallelUploads' => $studioMaxParallelUploads,
+            'pageSizeOptions' => $studioPageSizeOptions,
+            'defaultPageSize' => $studioDefaultPageSize,
+            'maxPageSize' => $studioMaxPageSize,
         ];
 
         foreach ($this->appConfigProviders as $provider) {
