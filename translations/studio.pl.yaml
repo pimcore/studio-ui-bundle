@@ -129,7 +129,7 @@ document.tree.context-menu.add-hardlink: Nowe łącze stałe
 document.required-fields.validation-title: Brakujące pola obowiązkowe
 document.required-fields.validation-message: Następujące pola obowiązkowe muszą zostać wypełnione przed publikacją
 document.site.remove-site: Usuń witrynę
-document.site.remove-site-confirmation: Czy na pewno chcesz usunąć tę witrynę? Tej operacji nie można cofnąć.
+document.site.remove-site-confirmation: Czy na pewno chcesz trwale usunąć tę witrynę? Tej operacji nie można cofnąć.
 document.site.use-as-site: Użyj jako witryny
 document.site.edit-site: Edytuj witrynę
 document.site.form.main-domain: Domena główna
@@ -159,8 +159,8 @@ data-object.select-class-to-display: Wybierz klasę do wyświetlenia
 data-object.tree.context-menu.add-object: Nowy obiekt
 data-object.tree.context-menu.add-variant: Nowy wariant
 data-object.variant-listing.create-data-variant: Nowy wariant
-data-object.create-data-object: "Dodaj nowy obiekt typu {{className}}"
-data-object.create-variant: "Dodaj nowy wariant typu {{className}}"
+data-object.create-data-object: "Nowy obiekt typu {{className}}"
+data-object.create-variant: "Nowy wariant typu {{className}}"
 data-object.object-editor-tabs.variants: Warianty
 object.object-editor-tabs.children-listing: Siatka elementów podrzędnych
 workflow.label: Workflow
@@ -190,7 +190,7 @@ class-definition.import-file-label: Wybierz plik JSON
 class-definition.import-success: Definicja klasy zaimportowana pomyślnie
 class-definition.export-success: Definicja klasy wyeksportowana pomyślnie
 class-definition.custom-layouts.default-layout: Layout domyślny
-class-definition.create-new: Utwórz nową definicję klasy
+class-definition.create-new: Nowa definicja klasy
 class-definition.class-name: Nazwa klasy
 class-definition.unique-identifier: Unikalny identyfikator
 class-definition.unique-identifier-warning: Zachowaj ostrożność przy unikalnym identyfikatorze, ponieważ nazwy tabel mogą zawierać maksymalnie 64 znaki.
@@ -246,7 +246,7 @@ class-definition.composite-indices.type-localized-query: Zapytanie zlokalizowane
 class-definition.composite-indices.type-store: Magazyn
 class-definition.composite-indices.type-localized-store: Magazyn zlokalizowany
 class-definition.composite-indices.index-label: Indeks
-field-collection.create-new: Utwórz nową Field Collection
+field-collection.create-new: Nowa Field Collection
 field-collection.key: Klucz
 field-collection.validation.enter-key: Wprowadź klucz
 field-collection.validation.key-format: Klucz musi zaczynać się od litery i może zawierać tylko litery, cyfry i podkreślenia.
@@ -260,7 +260,7 @@ field-collection.general-settings.implements-interfaces: Implementuje interfejsy
 field-collection.general-settings.usages.title: Użycie
 field-collection.general-settings.usages.class: Klasa
 field-collection.general-settings.usages.field: Pole
-object-brick.create-new: Utwórz nowy Object Brick
+object-brick.create-new: Nowy Object Brick
 object-brick.key: Klucz
 object-brick.validation.enter-key: Wprowadź klucz
 object-brick.validation.key-format: Klucz musi zaczynać się od litery i może zawierać tylko litery, cyfry i podkreślenia.
@@ -275,7 +275,7 @@ object-brick.class-definitions-block.classname: Klasa
 object-brick.class-definitions-block.select-classname: Wybierz klasę
 object-brick.class-definitions-block.fieldname: Pole
 object-brick.class-definitions-block.select-fieldname: Wybierz pole
-select-option.create-new: Utwórz nową opcję wyboru
+select-option.create-new: Nowa opcja wyboru
 select-option.id: ID
 select-option.enter-name-new-item: Wprowadź nazwę nowego elementu
 select-option.validation.enter-id: Wprowadź ID
@@ -647,6 +647,7 @@ properties.label: Właściwości
 properties.editable-properties: Edytowalne właściwości
 properties.all-properties: Wszystkie właściwości
 properties.predefined-properties: Predefiniowane właściwości
+properties.predefined-properties.reload-error: Nie można było załadować wstępnie zdefiniowanych właściwości
 properties.new-custom-property: Nowa niestandardowa właściwość
 translations.columns.type: Typ
 translations.columns.key: Klucz
@@ -841,7 +842,7 @@ field-definitions.saved-successfully: Zapisano pomyślnie.
 field-definitions.select-item-configuration: Wybierz konfigurację elementu
 field-definitions.custom-layout-title: Custom Layout
 field-definitions.custom-layouts: Custom Layouts
-field-definitions.create-new-class-definition: Utwórz nowy Custom Layout
+field-definitions.create-new-class-definition: Nowy Custom Layout
 field-definitions.select-field-message: Wybierz pole w drzewie, aby edytować właściwości.
 field-definitions.loading-general-settings: Ładowanie ustawień ogólnych...
 field-definitions.type-not-supported: Typ nie jest obsługiwany
@@ -1549,6 +1550,8 @@ user-management.workspaces.localized-fields.edit: Uprawnienia do edycji
 user-management.workspaces.custom-layouts: Custom Layouts
 user-management.workspaces.custom-layouts.select: Wybierz jedno lub więcej pól
 user-management.add-folder.success: Folder dodany pomyślnie
+user-management.remove-folder: Usuń folder
+user-management.remove-folder.text: 'Czy na pewno chcesz trwale usunąć ten folder? Tej operacji nie można cofnąć.'
 user-management.remove-folder.success: Folder usunięty pomyślnie
 user-management.clone-user: Klonuj użytkownika
 user-management.clone-user.text: Wprowadź nazwę nowego użytkownika
@@ -1564,9 +1567,9 @@ user-management.roles: Role
 user-management.role: Rola
 user-management.users: Użytkownicy
 user-management.user: Użytkownik
-user-management.add-folder: Dodaj nowy folder
+user-management.add-folder: Nowy folder
 user-management.add-folder.label: Wprowadź nazwę nowego folderu
-user-management.add-user: Dodaj nowego użytkownika
+user-management.add-user: Nowy użytkownik
 user-management.add-user.label: Wprowadź nazwę nowego użytkownika
 user-management.last-login: Ostatnie logowanie
 user-management.search.id: ID
@@ -1577,6 +1580,8 @@ roles.clone-role: Klonuj rolę
 roles.clone-role.text: Wprowadź nazwę nowej roli
 roles.remove-role: Usuń rolę
 roles.remove-role.text: 'Czy na pewno chcesz trwale usunąć rolę "{{name}}"? Tej operacji nie można cofnąć.'
+roles.remove-folder: Usuń folder
+roles.remove-folder.text: 'Czy na pewno chcesz trwale usunąć ten folder? Tej operacji nie można cofnąć.'
 roles.remove-folder.success: Folder usunięty pomyślnie
 roles.remove-item.success: Rola usunięta pomyślnie
 roles.add-item.success: Rola dodana pomyślnie
@@ -1584,9 +1589,9 @@ roles.add-folder.success: Folder dodany pomyślnie
 roles.general: Ogólne
 roles.settings.title: Ustawienia
 roles.workspaces.title: Workspaces
-roles.add-folder: Dodaj nowy folder
+roles.add-folder: Nowy folder
 roles.add-folder.label: Wprowadź nazwę nowego folderu
-roles.add-role: Dodaj nową rolę
+roles.add-role: Nowa rola
 roles.add-role.label: Wprowadź nazwę nowej roli
 roles.search.id: ID
 navigation.quick-access: Szybki dostęp

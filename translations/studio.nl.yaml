@@ -129,7 +129,7 @@ document.tree.context-menu.add-hardlink: Nieuwe harde link
 document.required-fields.validation-title: Verplichte velden ontbreken
 document.required-fields.validation-message: De volgende verplichte velden moeten worden ingevuld vóór publicatie
 document.site.remove-site: Site verwijderen
-document.site.remove-site-confirmation: Weet je zeker dat je deze site wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.
+document.site.remove-site-confirmation: Weet je zeker dat je deze site permanent wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.
 document.site.use-as-site: Gebruiken als site
 document.site.edit-site: Site bewerken
 document.site.form.main-domain: Hoofddomein
@@ -159,8 +159,8 @@ data-object.select-class-to-display: Selecteer een klasse om weer te geven
 data-object.tree.context-menu.add-object: Nieuw object
 data-object.tree.context-menu.add-variant: Nieuwe variant
 data-object.variant-listing.create-data-variant: Nieuwe variant
-data-object.create-data-object: "Nieuw object van type {{className}} toevoegen"
-data-object.create-variant: "Nieuwe variant van type {{className}} toevoegen"
+data-object.create-data-object: "Nieuw object van type {{className}}"
+data-object.create-variant: "Nieuwe variant van type {{className}}"
 data-object.object-editor-tabs.variants: Varianten
 object.object-editor-tabs.children-listing: Kindraster
 workflow.label: Workflow
@@ -190,7 +190,7 @@ class-definition.import-file-label: JSON-bestand selecteren
 class-definition.import-success: Klassedefinitie succesvol geïmporteerd
 class-definition.export-success: Klassedefinitie succesvol geëxporteerd
 class-definition.custom-layouts.default-layout: Standaardlayout
-class-definition.create-new: Nieuwe klassedefinitie aanmaken
+class-definition.create-new: Nieuwe klassedefinitie
 class-definition.class-name: Klassenaam
 class-definition.unique-identifier: Unieke identificatie
 class-definition.unique-identifier-warning: Wees voorzichtig met de unieke identificatie, want tabelnamen mogen maximaal 64 tekens bevatten.
@@ -246,7 +246,7 @@ class-definition.composite-indices.type-localized-query: Gelokaliseerde query
 class-definition.composite-indices.type-store: Opslag
 class-definition.composite-indices.type-localized-store: Gelokaliseerde opslag
 class-definition.composite-indices.index-label: Index
-field-collection.create-new: Nieuwe Field Collection aanmaken
+field-collection.create-new: Nieuwe Field Collection
 field-collection.key: Sleutel
 field-collection.validation.enter-key: Voer een sleutel in
 field-collection.validation.key-format: De sleutel moet beginnen met een letter en mag alleen letters, cijfers en underscores bevatten.
@@ -260,7 +260,7 @@ field-collection.general-settings.implements-interfaces: Implementeert interface
 field-collection.general-settings.usages.title: Gebruik
 field-collection.general-settings.usages.class: Klasse
 field-collection.general-settings.usages.field: Veld
-object-brick.create-new: Nieuwe Object Brick aanmaken
+object-brick.create-new: Nieuwe Object Brick
 object-brick.key: Sleutel
 object-brick.validation.enter-key: Voer een sleutel in
 object-brick.validation.key-format: De sleutel moet beginnen met een letter en mag alleen letters, cijfers en underscores bevatten.
@@ -275,7 +275,7 @@ object-brick.class-definitions-block.classname: Klasse
 object-brick.class-definitions-block.select-classname: Klasse selecteren
 object-brick.class-definitions-block.fieldname: Veld
 object-brick.class-definitions-block.select-fieldname: Veld selecteren
-select-option.create-new: Nieuwe selectieoptie aanmaken
+select-option.create-new: Nieuwe selectieoptie
 select-option.id: ID
 select-option.enter-name-new-item: Naam van het nieuwe item invoeren
 select-option.validation.enter-id: Voer een ID in
@@ -647,6 +647,7 @@ properties.label: Eigenschappen
 properties.editable-properties: Bewerkbare eigenschappen
 properties.all-properties: Alle eigenschappen
 properties.predefined-properties: Vooraf gedefinieerde eigenschappen
+properties.predefined-properties.reload-error: Kon de voorgedefinieerde eigenschappen niet herladen
 properties.new-custom-property: Nieuwe aangepaste eigenschap
 translations.columns.type: Type
 translations.columns.key: Sleutel
@@ -841,7 +842,7 @@ field-definitions.saved-successfully: Succesvol opgeslagen.
 field-definitions.select-item-configuration: Itemconfiguratie selecteren
 field-definitions.custom-layout-title: Custom Layout
 field-definitions.custom-layouts: Custom Layouts
-field-definitions.create-new-class-definition: Nieuwe Custom Layout aanmaken
+field-definitions.create-new-class-definition: Nieuwe Custom Layout
 field-definitions.select-field-message: Selecteer een veld in de boom om de eigenschappen te bewerken.
 field-definitions.loading-general-settings: Algemene instellingen laden...
 field-definitions.type-not-supported: Type wordt niet ondersteund
@@ -1549,6 +1550,8 @@ user-management.workspaces.localized-fields.edit: Bewerkrechten
 user-management.workspaces.custom-layouts: Custom Layouts
 user-management.workspaces.custom-layouts.select: Een of meer velden selecteren
 user-management.add-folder.success: Map succesvol toegevoegd
+user-management.remove-folder: Map verwijderen
+user-management.remove-folder.text: 'Weet je zeker dat je deze map definitief wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.'
 user-management.remove-folder.success: Map succesvol verwijderd
 user-management.clone-user: Gebruiker klonen
 user-management.clone-user.text: Voer de naam in van de nieuwe gebruiker
@@ -1564,9 +1567,9 @@ user-management.roles: Rollen
 user-management.role: Rol
 user-management.users: Gebruikers
 user-management.user: Gebruiker
-user-management.add-folder: Nieuwe map toevoegen
+user-management.add-folder: Nieuwe map
 user-management.add-folder.label: Voer de naam in van de nieuwe map
-user-management.add-user: Nieuwe gebruiker toevoegen
+user-management.add-user: Nieuwe gebruiker
 user-management.add-user.label: Voer de naam in van de nieuwe gebruiker
 user-management.last-login: Laatste aanmelding
 user-management.search.id: ID
@@ -1577,6 +1580,8 @@ roles.clone-role: Rol klonen
 roles.clone-role.text: Voer de naam in van de nieuwe rol
 roles.remove-role: Rol verwijderen
 roles.remove-role.text: 'Weet je zeker dat je rol "{{name}}" definitief wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.'
+roles.remove-folder: Map verwijderen
+roles.remove-folder.text: 'Weet je zeker dat je deze map definitief wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.'
 roles.remove-folder.success: Map succesvol verwijderd
 roles.remove-item.success: Rol succesvol verwijderd
 roles.add-item.success: Rol succesvol toegevoegd
@@ -1584,9 +1589,9 @@ roles.add-folder.success: Map succesvol toegevoegd
 roles.general: Algemeen
 roles.settings.title: Instellingen
 roles.workspaces.title: Workspaces
-roles.add-folder: Nieuwe map toevoegen
+roles.add-folder: Nieuwe map
 roles.add-folder.label: Voer de naam in van de nieuwe map
-roles.add-role: Nieuwe rol toevoegen
+roles.add-role: Nieuwe rol
 roles.add-role.label: Voer de naam in van de nieuwe rol
 roles.search.id: ID
 navigation.quick-access: Snelle toegang
