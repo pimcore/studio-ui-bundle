@@ -32,6 +32,7 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { isDisallowedPropertyKey } from './constants/disallowed-keys'
 import { PropertyType } from './constants/property-types'
 import { buildPredefinedPropertyOptions } from './utils/predefined-property-options'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -59,9 +60,18 @@ export const PropertiesContainer = (): React.JSX.Element => {
   const keyInputRef = useRef<InputRef>(null)
   const typeSelectValue = useRef<string>('')
 
-  const { data, isLoading } = usePropertyGetCollectionQuery({
+  const { data, isFetching, refetch } = usePropertyGetCollectionQuery({
     elementType
   })
+
+  // Predefined properties can be changed in the settings while this tab is open, so reload them whenever the select is opened
+  const onPredefinedPropertiesSelectOpenChange = (open: boolean): void => {
+    if (open) {
+      void refetch().catch(() => {
+        trackError(new GeneralError('Error while reloading predefined properties'))
+      })
+    }
+  }
 
   useEffect(() => {
     if (createManualPropertyMode) {
@@ -174,7 +184,8 @@ export const PropertiesContainer = (): React.JSX.Element => {
                     return (option?.label as unknown as string ?? '').toLowerCase().includes(input.toLowerCase())
                   } }
                   key={ 'properties-select' }
-                  loading={ isLoading }
+                  loading={ isFetching }
+                  onDropdownVisibleChange={ onPredefinedPropertiesSelectOpenChange }
                   onSelect={ onPredefinedPropertyChange }
                   options={ buildPredefinedPropertyOptions(data?.items, t) }
                   placeholder={ t('properties.predefined-properties') }
