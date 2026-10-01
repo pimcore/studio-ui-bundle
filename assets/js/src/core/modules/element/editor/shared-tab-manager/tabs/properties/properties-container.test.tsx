@@ -10,7 +10,7 @@
 
 import React from 'react'
 import { act, fireEvent, render, screen } from '@testing-library/react'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
 import { PropertiesContainer } from './properties-container'
 
 interface MockSelectProps {
@@ -132,5 +132,17 @@ describe('PropertiesContainer predefined properties select', () => {
 
     expect(trackError).toHaveBeenCalledTimes(1)
     expect(jest.mocked(trackError).mock.calls[0][0]).toEqual(new ApiError(apiErrorData))
+  })
+
+  it('tracks a translated general error when reloading fails without API error data', async () => {
+    queryResult = createQueryResult('Old name', async () => await Promise.reject(new Error('Network down')))
+    render(<PropertiesContainer />)
+
+    await act(async () => {
+      fireEvent.click(screen.getByText('open'))
+    })
+
+    expect(trackError).toHaveBeenCalledTimes(1)
+    expect(jest.mocked(trackError).mock.calls[0][0]).toEqual(new GeneralError('properties.predefined-properties.reload-error'))
   })
 })

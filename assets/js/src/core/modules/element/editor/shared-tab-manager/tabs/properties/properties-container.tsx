@@ -68,7 +68,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
   const onPredefinedPropertiesSelectOpenChange = (open: boolean): void => {
     if (open) {
       void refetch().unwrap().catch((error) => {
-        trackError(isApiErrorData(error) ? new ApiError(error) : new GeneralError('Error while reloading predefined properties'))
+        trackError(isApiErrorData(error) ? new ApiError(error) : new GeneralError(t('properties.predefined-properties.reload-error')))
       })
     }
   }
