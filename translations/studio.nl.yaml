@@ -1755,7 +1755,7 @@ image-thumbnails.editor.advanced: Geavanceerd
 image-thumbnails.editor.quality: Kwaliteit
 image-thumbnails.editor.quality.tooltip: JPEG-kwaliteitsinstelling (1-100)
 image-thumbnails.editor.high-resolution: Hoge resolutie
-image-thumbnails.editor.high-resolution.tooltip: Factor voor hoge resolutie voor retina-schermen
+image-thumbnails.editor.high-resolution.tooltip: Factor voor hoge resolutie (bijv. voor Web-to-Print of overal waar srcset niet mogelijk of voldoende is). Niet nodig voor gewone webminiaturen – die krijgen automatisch een srcset-attribuut met 1x en 2x.
 image-thumbnails.editor.preserve-color: Kleur bewaren
 image-thumbnails.editor.preserve-color.tooltip: "Kleur bewaren (profiel, ruimte) (Imagick, ORIGINEEL)\n('Metadata bewaren' en 'kleur bewaren' werken alleen voor overgangen zonder composities (kader, achtergrondkleur, ...) en kleurwijzigingen (grijswaarden, sepia, ...))"
 image-thumbnails.editor.force-process-icc: ICC-profielen verwerking forceren
