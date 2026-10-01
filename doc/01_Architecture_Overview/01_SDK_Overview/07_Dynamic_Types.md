@@ -57,6 +57,14 @@ mapping each data or asset metadata type to a suitable filter UI component.
 
 - [Field-filters](https://github.com/pimcore/studio-ui-bundle/tree/2026.x/assets/js/src/core/modules/element/dynamic-types/definitions/field-filters)
 
+### Search Modes
+Search modes define what the listing search input sends to the backend. The built-in full-text
+search is the default; registered modes replace it with their own column filter, for example a semantic search.
+
+#### Source
+
+- [Search modes](https://github.com/pimcore/studio-ui-bundle/tree/2026.x/assets/js/src/core/modules/element/listing/decorators/general-filters/search-modes)
+
 ## Overriding Dynamic Types
 
 Override dynamic types from plugins by rebinding them in the DI container.

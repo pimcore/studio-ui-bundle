@@ -31,6 +31,7 @@ import { uuid } from '@Pimcore/utils/uuid'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { isDisallowedPropertyKey } from './constants/disallowed-keys'
 import { PropertyType } from './constants/property-types'
+import { buildPredefinedPropertyOptions } from './utils/predefined-property-options'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -175,14 +176,7 @@ export const PropertiesContainer = (): React.JSX.Element => {
                   key={ 'properties-select' }
                   loading={ isLoading }
                   onSelect={ onPredefinedPropertyChange }
-                  options={ data?.items
-                    ?.slice()
-                    ?.sort((a, b) => a.name.localeCompare(b.name))
-                    ?.map((item) => ({
-                      label: item.name,
-                      value: item.id
-                    }))
-                  }
+                  options={ buildPredefinedPropertyOptions(data?.items, t) }
                   placeholder={ t('properties.predefined-properties') }
                   showSearch
                 />

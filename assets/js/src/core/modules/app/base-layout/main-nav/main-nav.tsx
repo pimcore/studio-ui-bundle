@@ -50,14 +50,14 @@ export const MainNav = (): React.JSX.Element => {
 
   const [openKeys, setOpenKeys] = React.useState<string[]>([])
   const handleOpenState = (key: string): void => {
-    if (key.includes('-')) {
-      const searchKey = key.substring(0, key.length - 1)
-      const newOpenKeys = openKeys.filter(k => !k.startsWith(searchKey))
-      setOpenKeys([...newOpenKeys, key])
-    }
+    // Indexes can be multi-digit, so the sibling prefix has to be cut at the last separator.
+    const separatorIndex = key.lastIndexOf('-')
 
-    if (!key.includes('-')) {
+    if (separatorIndex === -1) {
       setOpenKeys(openKeys.includes(key) ? openKeys.filter(k => k !== key) : [key])
+    } else {
+      const siblingPrefix = key.substring(0, separatorIndex + 1)
+      setOpenKeys([...openKeys.filter(k => !k.startsWith(siblingPrefix)), key])
     }
   }
 

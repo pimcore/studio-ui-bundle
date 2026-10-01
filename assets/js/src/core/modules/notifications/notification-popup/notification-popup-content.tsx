@@ -13,7 +13,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { NotificationPopupItem } from './notification-popup-item'
 import { openMainWidget } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { useAppDispatch } from '@sdk/app'
-import { requestExpandNotification } from '../notifications-ui-slice'
+import { requestExpandNotification, requestNotificationsSection } from '../notifications-ui-slice'
 export interface OpenNotification {
   id: number
   title: string
@@ -61,6 +61,9 @@ export const NotificationPopupContent: React.FC<NotificationPopupCollapseProps> 
                   activeNotification: notification.id
                 }
               }))
+              // The widget may have been left on its settings section, where the row would
+              // expand out of sight.
+              dispatch(requestNotificationsSection('inbox'))
               dispatch(requestExpandNotification(notification.id))
             } }
           />

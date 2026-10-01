@@ -46,15 +46,14 @@ export const TopBar = (): React.JSX.Element => {
     <Toolbar
       padding={ { left: 'none', right: 'none' } }
       position='none'
+      // The search-mode warning line needs a second row.
+      size='auto'
       theme='secondary'
     >
-      <Flex
-        className='w-full'
-        gap={ 'extra-small' }
-      >
-        <ProvidedTypeSelect />
-        {search}
-      </Flex>
+      <SearchTermFilter
+        onCommit={ isOpen ? setSearchTerm : undefined }
+        prefixControls={ <ProvidedTypeSelect /> }
+      />
     </Toolbar>
   )
 }

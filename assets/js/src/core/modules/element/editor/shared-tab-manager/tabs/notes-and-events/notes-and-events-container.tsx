@@ -9,6 +9,7 @@
  */
 
 import React, { useState } from 'react'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import {
   NotesAndEventsTabView
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-view'
@@ -28,7 +29,7 @@ export const NotesAndEventsTabContainer = (): React.JSX.Element => {
   const { id, elementType } = useElementContext()
 
   const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(20)
+  const [pageSize, setPageSize] = useState(appConfig.defaultPageSize)
   const [deleteNote, { error: deleteError, isLoading: deleteLoading }] = useNoteDeleteByIdMutation()
 
   const { isLoading, data, error, refetch: refetchNotes } = useNoteElementGetCollectionQuery({

@@ -30,7 +30,9 @@ moduleSystem.registerModule({
       path: 'System/System Settings',
       label: 'navigation.systemSettings',
       className: 'item-style-modifier',
-      order: 600,
+      // Below Workflow Designer, which registers no order and so falls back to the registry's
+      // default of 1000. Stays clear of About, which pins itself last at 9999.
+      order: 1100,
       permission: UserPermission.SystemSettings,
       perspectivePermission: NavPermission.SystemSettings,
       widgetConfig: {
