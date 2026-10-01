@@ -647,6 +647,7 @@ properties.label: Eigenschappen
 properties.editable-properties: Bewerkbare eigenschappen
 properties.all-properties: Alle eigenschappen
 properties.predefined-properties: Vooraf gedefinieerde eigenschappen
+properties.predefined-properties.reload-error: Kon de voorgedefinieerde eigenschappen niet herladen
 properties.new-custom-property: Nieuwe aangepaste eigenschap
 translations.columns.type: Type
 translations.columns.key: Sleutel

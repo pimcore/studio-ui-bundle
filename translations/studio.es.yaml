@@ -647,6 +647,7 @@ properties.label: Propiedades
 properties.editable-properties: Propiedades editables
 properties.all-properties: Todas las propiedades
 properties.predefined-properties: Propiedades predefinidas
+properties.predefined-properties.reload-error: No se pudieron recargar las propiedades predefinidas
 properties.new-custom-property: Nueva propiedad personalizada
 translations.columns.type: Tipo
 translations.columns.key: Clave

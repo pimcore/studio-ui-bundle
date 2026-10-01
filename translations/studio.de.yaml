@@ -647,6 +647,7 @@ properties.label: Eigenschaften
 properties.editable-properties: Bearbeitbare Eigenschaften
 properties.all-properties: Alle Eigenschaften
 properties.predefined-properties: Vordefinierte Eigenschaften
+properties.predefined-properties.reload-error: Die vordefinierten Eigenschaften konnten nicht neu geladen werden
 properties.new-custom-property: Neue benutzerdefinierte Eigenschaft
 translations.columns.type: Typ
 translations.columns.key: Schlüssel

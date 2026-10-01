@@ -647,6 +647,7 @@ properties.label: Egenskaper
 properties.editable-properties: Redigerbara egenskaper
 properties.all-properties: Alla egenskaper
 properties.predefined-properties: Fördefinierade egenskaper
+properties.predefined-properties.reload-error: Kunde inte läsa in de fördefinierede egenskaperna
 properties.new-custom-property: Ny anpassad egenskap
 translations.columns.type: Typ
 translations.columns.key: Nyckel
