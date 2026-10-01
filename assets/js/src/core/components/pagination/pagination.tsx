@@ -10,12 +10,16 @@
 
 import React, { useEffect, useState } from 'react'
 import { Pagination as BasePagination, type PaginationProps as BasePaginationProps, ConfigProvider } from 'antd'
-import { Flex, IconButton, Select, type SelectProps } from '@sdk/components'
+import { CreatableSelect, Flex, IconButton, type SelectProps } from '@sdk/components'
+import { type SelectOptionType } from '@sdk/modules/element'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from '@Pimcore/components/pagination/pagination.styles'
 import cn from 'classnames'
+import { getDefaultPageSize, getMaxPageSize, getPageSizeOptions } from '@Pimcore/components/pagination/page-size'
 
 export interface PaginationProps extends Omit<BasePaginationProps, 'pageSize' | 'defaultCurrent' | 'onShowSizeChange' | 'responsive' | 'totalBoundaryShowSizeChanger'> {
+  /** Cap of the endpoint behind this pager, when it is stricter than the configured maximum. */
+  maxPageSize?: number
 }
 
 export const Pagination = (props: PaginationProps): React.JSX.Element => {
@@ -26,18 +30,22 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
 
   const defaultProps: Partial<PaginationProps> = {
     current: 1,
-    defaultPageSize: 20,
-    pageSizeOptions: ['10', '20', '50', '100'],
+    defaultPageSize: getDefaultPageSize(props.maxPageSize),
+    pageSizeOptions: getPageSizeOptions(props.maxPageSize),
     showSizeChanger: false,
     simple: true,
     size: 'small'
   }
 
-  const { showSizeChanger, className, hideOnSinglePage, defaultPageSize, current: baseCurrent, onChange, ...paginationProps } = { ...defaultProps, ...props }
+  const { showSizeChanger, className, hideOnSinglePage, defaultPageSize, maxPageSize, current: baseCurrent, onChange, ...paginationProps } = { ...defaultProps, ...props }
   const classNames = cn(styles.pagination, className)
 
+  const maxPageSizeLimit = getMaxPageSize(maxPageSize)
+  const isValidPageSize = (size: number): boolean => Number.isInteger(size) && size > 0 && size <= maxPageSizeLimit
+  const initialPageSize = Math.min(defaultPageSize ?? getDefaultPageSize(maxPageSize), maxPageSizeLimit)
+
   const [current, setCurrent] = useState(baseCurrent ?? 1)
-  const [pageSize, setPageSize] = useState(defaultPageSize ?? 20)
+  const [pageSize, setPageSize] = useState(initialPageSize)
 
   useEffect(() => {
     setCurrent(baseCurrent ?? 1)
@@ -52,14 +60,24 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
     setPageSize(size)
   }
 
-  const selectOptions: SelectProps['options'] = paginationProps.pageSizeOptions?.map(option => ({
-    label: `${option} / ${t('pagination.page')}`,
-    value: option
-  })) ?? []
+  // Only bites when a pager passes a stricter endpoint cap; config validation already bounds the rest.
+  const selectOptions: SelectOptionType[] = (paginationProps.pageSizeOptions ?? [])
+    .map(Number)
+    .filter(isValidPageSize)
+    .map(option => ({
+      label: `${option} / ${t('pagination.page')}`,
+      value: String(option)
+    }))
 
   const onSelectChange: SelectProps['onChange'] = (value) => {
+    const parsedValue = Number(value)
+
+    if (!isValidPageSize(parsedValue)) {
+      return
+    }
+
     setCurrent(1)
-    setPageSize(Number(value))
+    setPageSize(parsedValue)
   }
 
   const itemRenderer: PaginationProps['itemRender'] = (page, type, originalElement) => {
@@ -106,11 +124,19 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
       />
 
       {showSizeChanger === true && (
-        <Select
+        <CreatableSelect
           disabled={ paginationProps.disabled }
+          inputType="number"
+          numberInputProps={ { min: 1, max: maxPageSizeLimit, precision: 0 } }
           onChange={ onSelectChange }
+          onCreateOption={ (value) => ({
+            value,
+            label: `${value} / ${t('pagination.page')}`
+          }) }
           options={ selectOptions }
-          value={ `${pageSize} / ${t('pagination.page')}` }
+          popupMatchSelectWidth={ false }
+          validate={ (value) => /^\d+$/.test(value.trim()) && isValidPageSize(Number(value)) }
+          value={ String(pageSize) }
           width={ 112 }
         />
       )}

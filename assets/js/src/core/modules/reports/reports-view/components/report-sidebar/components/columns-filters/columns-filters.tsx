@@ -20,7 +20,7 @@ import { Title } from '@Pimcore/components/title/title'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { ColumnPickerPopover } from '@Pimcore/components/column-picker/column-picker-popover'
 import { FieldFilters } from '@Pimcore/components/field-filters/field-filters'
-import { useFilterQuery } from '@Pimcore/components/filters'
+import { type FilterValues, useFilterQuery } from '@Pimcore/components/filters'
 import { type BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
 import {
@@ -35,14 +35,26 @@ export const ColumnsFilters = (): React.JSX.Element => {
   const draftStore = useReportsDraftFilters()
   const buildQuery = useFilterQuery(reportsFilterAdapter, draftStore.values)
   const { setPage } = useReportDataContext()
-  const { fieldFilters, onFilterChange, columnGroups, handleColumnClick } = useFieldFilterEditor()
+
+  /**
+   * Rebuilds the grid query from the draft, i.e. what the "Apply" button does. `committed`
+   * carries the value of a filter that applies itself immediately (Enter in a text field
+   * filter): its draft write happens in the same render, so it is not in the draft here yet.
+   */
+  const applyFilters = (committed?: FilterValues): void => {
+    setPage(PAGE_INITIAL)
+
+    setFilters(buildQuery(filters, committed))
+  }
+
+  const { fieldFilters, onFilterChange, onFilterCommit, columnGroups, handleColumnClick } = useFieldFilterEditor({
+    onCommit: (fieldFilters) => { applyFilters({ fieldFilters }) }
+  })
 
   const { t } = useTranslation()
 
   const handleApplyFilters = (): void => {
-    setPage(PAGE_INITIAL)
-
-    setFilters(buildQuery(filters))
+    applyFilters()
   }
 
   const handleClearFilters = (): void => {
@@ -104,6 +116,7 @@ export const ColumnsFilters = (): React.JSX.Element => {
             <FieldFilters
               data={ fieldFilters }
               onChange={ onFilterChange }
+              onCommit={ onFilterCommit }
             />
             ) }
       </Content>

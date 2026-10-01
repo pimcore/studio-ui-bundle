@@ -9,7 +9,8 @@
  */
 
 import { useStyles } from '@Pimcore/components/toolbar/toolbar.styles'
-import { Flex, type FlexProps } from 'antd'
+import { type FlexProps } from 'antd'
+import { Flex } from '@Pimcore/components/flex/flex'
 import React from 'react'
 import { HorizontalScroll } from '../horizontal-scroll/horizontal-scroll'
 import { Box, type BoxProps } from '@Pimcore/components/box/box'
@@ -60,7 +61,7 @@ export const Toolbar = ({
         <Flex
           align={ align }
           className='w-full'
-          gap={ 16 }
+          gap="extra-small"
           justify={ justify }
           { ...props }
         >

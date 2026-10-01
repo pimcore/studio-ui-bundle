@@ -11,13 +11,14 @@
 import { Pagination as BasePagination, type PaginationProps as BasePaginationProps } from '@Pimcore/components/pagination/pagination'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { appConfig } from '@Pimcore/app/config/app-config'
 
 export const Pagination = (props: BasePaginationProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
     <BasePagination
-      pageSizeOptions={ [10, 20, 50, 100] }
+      pageSizeOptions={ appConfig.pageSizeOptions }
       showSizeChanger
       showTotal={ (total) => t('component.pagination.showing-items', { total }) }
       { ...props }

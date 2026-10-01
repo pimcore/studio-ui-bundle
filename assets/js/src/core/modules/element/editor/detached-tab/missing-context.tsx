@@ -35,7 +35,7 @@ export default function MissingContext ({ description }: IMissingContextProps): 
           align='center'
           gap={ 'mini' }
         >
-          <Icon value='info-circle' />
+          <Icon value='info-outline' />
           <span>{t('widget.missing-context.title')}</span>
         </Flex>
 

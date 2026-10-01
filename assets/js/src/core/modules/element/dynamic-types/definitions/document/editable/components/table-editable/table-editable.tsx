@@ -37,6 +37,7 @@ export const TableEditable = ({
       style={ { maxWidth: toCssDimension(width) } }
     >
       <Table
+        allowInsertPosition
         disabled={ inherited }
         onChange={ onChange }
         value={ value }
