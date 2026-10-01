@@ -1760,7 +1760,7 @@ image-thumbnails.editor.advanced: Avancerat
 image-thumbnails.editor.quality: Kvalitet
 image-thumbnails.editor.quality.tooltip: JPEG-kvalitetsinställning (1-100)
 image-thumbnails.editor.high-resolution: Hög upplösning
-image-thumbnails.editor.high-resolution.tooltip: Högupplösningsfaktor för retinaskärmar
+image-thumbnails.editor.high-resolution.tooltip: Högupplösningsfaktor (t.ex. för Web-to-Print eller överallt där srcset inte är möjligt eller tillräckligt). Behövs inte för vanliga webbminiatyrer – de får automatiskt ett srcset-attribut med 1x och 2x.
 image-thumbnails.editor.preserve-color: Bevara färg
 image-thumbnails.editor.preserve-color.tooltip: "Bevara färg (profil, rymd) (Imagick, ORIGINAL)\n('Bevara metadata' och 'bevara färg' fungerar bara för transformationer utan kompositioner (ram, bakgrundsfärg, ...) och färgändringar (gråskala, sepia, ...))"
 image-thumbnails.editor.force-process-icc: Tvinga bearbetning av ICC-profiler
