@@ -26,16 +26,3 @@ export const NOTIFICATIONS: WidgetManagerTabConfig = {
   }
 }
 
-export const NOTIFICATION_SETTINGS: WidgetManagerTabConfig = {
-  component: 'notification-settings',
-  name: 'Notification settings',
-  id: 'notification-settings',
-  permission: UserPermission.Notifications,
-  config: {
-    translationKey: 'notifications.settings.label',
-    icon: {
-      type: 'name',
-      value: 'settings'
-    }
-  }
-}

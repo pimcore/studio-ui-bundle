@@ -9,7 +9,9 @@
  */
 
 import { App, type ModalFuncProps } from 'antd'
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
+import { isUndefined } from 'lodash'
+import { Icon } from '@Pimcore/components/icon/icon'
 import { isInIframe } from '@Pimcore/utils/iframe'
 import { isPimcoreStudioApiAvailable, getPimcoreStudioApi } from '@Pimcore/app/public-api/helpers/api-helper'
 import { withDraggableModalRender } from '@Pimcore/components/modal/hooks/draggable-modal-render'
@@ -18,6 +20,26 @@ type ModalStaticFunctions = ReturnType<typeof App.useApp>['modal']
 
 /** Imperative modal methods whose dialogs should become draggable by their title. */
 const DRAGGABLE_METHODS = ['confirm', 'info', 'success', 'error', 'warning'] as const
+
+/**
+ * Studio's stand-in for Ant Design's default confirm glyph. It is applied here rather than in
+ * `useFormModal` so that dialogs opened straight off this instance are covered too, and only when
+ * no icon was passed at all: `icon` is a ReactNode, so an explicit `null` means "no icon" and the
+ * form-style dialogs rely on it.
+ */
+const withConfirmIcon = (config: ModalFuncProps): ModalFuncProps => (
+  isUndefined(config.icon)
+    ? {
+        ...config,
+        icon: (
+          <Icon
+            options={ { width: 22, height: 22 } }
+            value='alert'
+          />
+        )
+      }
+    : config
+)
 
 /**
  * Wraps an imperative modal instance so its confirm/info/success/error/warning
@@ -30,7 +52,7 @@ function withDraggableModals (modal: ModalStaticFunctions): ModalStaticFunctions
   DRAGGABLE_METHODS.forEach((method) => {
     const original = modal[method]
     wrapped[method] = (config: ModalFuncProps) => original({
-      ...config,
+      ...(method === 'confirm' ? withConfirmIcon(config) : config),
       modalRender: withDraggableModalRender(config.modalRender)
     })
   })

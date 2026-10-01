@@ -12,7 +12,7 @@ import { type ReactElement, useContext } from 'react'
 import { type DynamicTypeAbstract, type DynamicTypeRegistryAbstract } from '../../registry/dynamic-type-registry-abstract'
 import { DynamicTypeResolver, type DynamicTypesResolverTargets } from '../dynamic-type-resolver'
 import { DynamicTypeRegistryContext } from '../../registry/provider/dynamic-type-registry-provider'
-import { container } from '@Pimcore/app/depency-injection'
+import { ContainerContext } from '@Pimcore/app/depency-injection'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 
 export interface IComponentRenderer {
@@ -38,6 +38,7 @@ export const useDynamicTypeResolver = (): UseDynamicTypeResolverReturnType => {
   }
 
   const { serviceIds } = context!
+  const container = useContext(ContainerContext)
   const registries = serviceIds.map(serviceId => container.get<InstanceType<typeof DynamicTypeRegistryAbstract>>(serviceId))
 
   function getComponentRenderer<T> (props: typeProps): IComponentRenderer {

@@ -29,7 +29,7 @@ export const ItemDetail = (): React.JSX.Element => {
   const { activeConfiguration, setDetailView } = useItems()
   const { guard } = useUnsavedChanges()
   const configuration = activeConfiguration!
-  const { useDetailGeneralSettingsQuery, useDetailLayoutQuery, useDetailLayoutAccessor, customLayouts, LayoutProvider } = useSettings()
+  const { useDetailGeneralSettingsQuery, useDetailLayoutQuery, useDetailLayoutAccessor, customLayouts, LayoutProvider, useDetailUpdateMutation } = useSettings()
   const layoutResult = useDetailLayoutQuery?.({
     id: configuration.id
   })
@@ -133,7 +133,7 @@ export const ItemDetail = (): React.JSX.Element => {
                     {customLayouts?.ModalContent !== undefined && <CustomLayout />}
                   </Flex>
 
-                  <DetailSave />
+                  {useDetailUpdateMutation !== undefined && <DetailSave useDetailUpdateMutation={ useDetailUpdateMutation } />}
                 </Flex>
               </Toolbar>
             }

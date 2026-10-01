@@ -42,6 +42,7 @@ export const NotificationButton = (): React.JSX.Element => {
             description: <JobList />
           })
         } }
+        tooltip={ { title: t('jobs.notification.tooltip'), placement: 'right' } }
         type={ 'text' }
       />
     </Badge>

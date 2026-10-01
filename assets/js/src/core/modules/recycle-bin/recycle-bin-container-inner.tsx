@@ -9,6 +9,7 @@
  */
 
 import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import { Box } from '@Pimcore/components/box/box'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { Content } from '@Pimcore/components/content/content'
@@ -37,7 +38,7 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(20)
+  const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { flush } = useRecycleBin()
   const { selectedRows } = useSelectedRowsContext()
