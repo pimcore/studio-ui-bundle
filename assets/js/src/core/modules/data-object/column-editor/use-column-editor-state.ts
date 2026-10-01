@@ -9,8 +9,6 @@
  */
 
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
-import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
-import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { api, type GridColumnConfiguration } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useClassDefinitionCollectionQuery } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
@@ -30,14 +28,10 @@ import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column
 import { useAddColumnGroups } from './use-add-column-groups'
 import { buildEditorColumnFromAvailable } from './build-editor-column'
 import { hydrateDraft, reorderDraft } from './draft-helpers'
+import { usePreviewObject } from './use-preview-object'
 
 // Stable identity for "no columns yet", so effects keyed on `availableFields` do not re-run every render.
 const NO_AVAILABLE_FIELDS: GridColumnConfiguration[] = []
-
-const SYSTEM_COLUMNS = [
-  { key: 'id', type: 'system.id', group: ['system'] as string[], config: [] as never[] },
-  { key: 'fullpath', type: 'system.string', group: ['system'] as string[], config: [] as never[] }
-]
 
 interface UseColumnEditorStateOptions {
   entity: string
@@ -123,7 +117,8 @@ export const useColumnEditorState = ({
     return classDefinitionsData?.items?.find((item) => item.name === entity)?.id ?? entity
   }, [classDefinitionId, entity, classDefinitionsData, isClassLookupPending])
 
-  const { data, isLoading: isAvailableColumnsLoading } = api.endpoints.dataObjectGetAvailableGridColumns.useQuery(
+  // `currentData`, not `data`: `data` keeps the previous class's result while a new class loads.
+  const { currentData: data, isLoading: isAvailableColumnsLoading } = api.endpoints.dataObjectGetAvailableGridColumns.useQuery(
     resolvedClassId !== undefined ? { classId: resolvedClassId, folderId: 1 } : skipToken
   )
 
@@ -139,6 +134,9 @@ export const useColumnEditorState = ({
   // the onChange effect below must compare against the *previous* baseline, not one a sibling
   // effect already advanced further down in the same flush.
   const lastSeededDraft = useRef(draft)
+  // The current draft for effects that must not depend on it (see the hydration effect below).
+  const draftRef = useRef(draft)
+  draftRef.current = draft
   const onChangeRef = useRef(onChange)
   onChangeRef.current = onChange
 
@@ -158,69 +156,45 @@ export const useColumnEditorState = ({
     // because the caller passed a new callback identity.
   }, [draft])
 
-  // Re-seeds only when the host's `columns` really changed in content. A new array instance with
-  // equal contents (a host re-rendering with fresh data) must not discard unapplied local edits.
-  const lastSeededColumns = useRef(columns)
+  // Re-seeds only when the host's `columns` really changed in content, or the class changed. A new
+  // array instance with equal contents (a host re-rendering with fresh data) must not discard
+  // unapplied local edits; a class change always rebuilds the class-bound draft metadata.
+  const lastSeed = useRef({ columns, classId: resolvedClassId })
 
   useEffect(() => {
-    if (isEqual(columns, lastSeededColumns.current)) {
-      lastSeededColumns.current = columns
+    const isSameClass = lastSeed.current.classId === resolvedClassId
+    const isSameContent = isEqual(columns, lastSeed.current.columns)
+    lastSeed.current = { columns, classId: resolvedClassId }
+
+    if (isSameClass && isSameContent) {
       return
     }
 
-    lastSeededColumns.current = columns
     const reseeded = columns.map(advancedFromSchemaColumn)
     lastSeededDraft.current = reseeded
+    draftRef.current = reseeded
     setDraft(reseeded)
-  }, [columns])
+  }, [columns, resolvedClassId])
 
-  const [objectId, setObjectId] = useState<number | null>(null)
-  const hasManualSelection = useRef(false)
-
-  const { data: gridData } = api.endpoints.dataObjectGetGrid.useQuery(
-    resolvedClassId !== undefined
-      ? {
-          classId: resolvedClassId,
-          body: {
-            folderId: 1,
-            columns: SYSTEM_COLUMNS,
-            filters: { includeDescendants: true, page: 1, pageSize: 1 }
-          }
-        }
-      : skipToken
-  )
-
-  useEffect(() => {
-    if (hasManualSelection.current) return
-    const firstItem = gridData?.items?.[0]
-    if (firstItem?.id !== undefined) {
-      setObjectId(firstItem.id)
-    }
-  }, [gridData?.items])
-
-  const { open: openElementSelector } = useElementSelector({
-    selectionType: SelectionType.Single,
-    areas: { object: true, asset: false, document: false },
-    config: {
-      objects: {
-        allowedTypes: ['object'],
-        ...(entity !== undefined ? { allowedClasses: [entity] } : {})
-      }
-    },
-    onFinish: (event) => {
-      const item = event?.items?.[0]
-      if (item !== undefined) {
-        hasManualSelection.current = true
-        setObjectId(item.data.id)
-      }
-    }
-  })
+  const { objectId, openElementSelector } = usePreviewObject(resolvedClassId, entity)
 
   const availableFields: GridColumnConfiguration[] = data?.columns ?? NO_AVAILABLE_FIELDS
 
+  // Hydration is a seed operation, not a user edit: it keeps the draft reference when it changes
+  // nothing, and moves the seed baseline along when the draft is still unedited, so a metadata
+  // response arriving after mount never reports the editor as changed.
   useEffect(() => {
     if (availableFields.length === 0) return
-    setDraft(prev => hydrateDraft(prev, availableFields))
+
+    const current = draftRef.current
+    const hydrated = hydrateDraft(current, availableFields)
+    if (isEqual(hydrated, current)) return
+
+    if (current === lastSeededDraft.current) {
+      lastSeededDraft.current = hydrated
+    }
+    draftRef.current = hydrated
+    setDraft(hydrated)
   }, [availableFields])
 
   const handleAddColumnOfType = useCallback((column: GridColumnConfiguration): void => {

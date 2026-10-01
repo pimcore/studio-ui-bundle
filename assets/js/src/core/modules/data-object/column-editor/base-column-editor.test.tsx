@@ -87,8 +87,8 @@ jest.mock('@Pimcore/modules/auth/enums/user-permission', () => ({
   UserPermission: { Objects: 'objects' }
 }))
 
-const dataObjectGetAvailableGridColumnsMock = jest.fn((_arg?: unknown) => ({ data: { columns: [] }, isLoading: false }))
-const dataObjectGetGridMock = jest.fn((_arg?: unknown) => ({ data: { items: [] } }))
+const dataObjectGetAvailableGridColumnsMock = jest.fn((_arg?: unknown) => ({ data: { columns: [] }, currentData: { columns: [] }, isLoading: false }))
+const dataObjectGetGridMock = jest.fn((_arg?: unknown) => ({ data: { items: [] }, currentData: { items: [] } }))
 jest.mock('@Pimcore/modules/data-object/data-object-api-slice-enhanced', () => ({
   api: {
     endpoints: {

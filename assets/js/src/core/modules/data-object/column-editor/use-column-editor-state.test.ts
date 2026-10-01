@@ -8,8 +8,15 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-const dataObjectGetAvailableGridColumnsMock = jest.fn((_arg?: unknown) => ({ data: { columns: [] }, isLoading: false }))
-const dataObjectGetGridMock = jest.fn((_arg?: unknown) => ({ data: { items: [] } }))
+interface AvailableColumnsResult {
+  data: { columns: unknown[] }
+  currentData: { columns: unknown[] }
+  isLoading: boolean
+}
+const dataObjectGetAvailableGridColumnsMock = jest.fn((_arg?: unknown): AvailableColumnsResult => (
+  { data: { columns: [] }, currentData: { columns: [] }, isLoading: false }
+))
+const dataObjectGetGridMock = jest.fn((_arg?: unknown) => ({ data: { items: [] }, currentData: { items: [] } }))
 
 jest.mock('@Pimcore/modules/data-object/data-object-api-slice-enhanced', () => ({
   api: {
@@ -168,5 +175,50 @@ describe('useColumnEditorState re-seeding from the columns prop', () => {
     rerender({ columns: [{ key: 'other', fieldtype: 'input', type: 'dataobject.adapter' }] })
 
     expect(result.current.draft.map(col => col.key)).toEqual(['other'])
+  })
+})
+
+describe('useColumnEditorState hydration and class changes', () => {
+  const column: SchemaColumn = { key: 'productionYear', type: 'dataobject.adapter', fieldtype: 'numeric' }
+  const loaded = { data: { columns: [regularField] }, currentData: { columns: [regularField] }, isLoading: false }
+  const loading = { data: { columns: [] }, currentData: { columns: [] }, isLoading: true }
+
+  afterEach(() => {
+    dataObjectGetAvailableGridColumnsMock.mockImplementation(
+      () => ({ data: { columns: [] }, currentData: { columns: [] }, isLoading: false })
+    )
+  })
+
+  it('does not report a change when available columns arrive after mount', () => {
+    const onChange = jest.fn()
+    dataObjectGetAvailableGridColumnsMock.mockImplementation(() => loading)
+    const { result, rerender } = setup({ columns: [column], onChange })
+
+    dataObjectGetAvailableGridColumnsMock.mockImplementation(() => loaded)
+    rerender({ columns: [column], onChange })
+
+    expect(result.current.draft[0].localizable).toBe(false)
+    expect(onChange).not.toHaveBeenCalled()
+  })
+
+  it('re-seeds the draft when the class changes while the columns stay equivalent', () => {
+    const columns = [column]
+    const { result, rerender } = renderHook(
+      (props: { classId: string }) => useColumnEditorState({
+        entity: props.classId,
+        classDefinitionId: props.classId,
+        columns,
+        onApply: jest.fn(),
+        onCancel: jest.fn()
+      }),
+      { initialProps: { classId: 'CAR' } }
+    )
+
+    act(() => { result.current.handleAddColumnOfType(regularField) })
+    expect(result.current.draft).toHaveLength(2)
+
+    rerender({ classId: 'AP' })
+
+    expect(result.current.draft).toHaveLength(1)
   })
 })

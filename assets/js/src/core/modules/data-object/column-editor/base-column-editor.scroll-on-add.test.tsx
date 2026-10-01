@@ -83,8 +83,8 @@ const gridData = { items: [] as unknown[] }
 jest.mock('@Pimcore/modules/data-object/data-object-api-slice-enhanced', () => ({
   api: {
     endpoints: {
-      dataObjectGetAvailableGridColumns: { useQuery: () => ({ data: availableGridColumnsData, isLoading: false }) },
-      dataObjectGetGrid: { useQuery: () => ({ data: gridData }) },
+      dataObjectGetAvailableGridColumns: { useQuery: () => ({ data: availableGridColumnsData, currentData: availableGridColumnsData, isLoading: false }) },
+      dataObjectGetGrid: { useQuery: () => ({ data: gridData, currentData: gridData }) },
       dataObjectGetGridPreview: { useQuery: () => ({ data: undefined, isFetching: false, error: undefined }) }
     }
   }

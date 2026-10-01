@@ -71,8 +71,8 @@ jest.mock('@Pimcore/modules/auth/enums/user-permission', () => ({
 jest.mock('@Pimcore/modules/data-object/data-object-api-slice-enhanced', () => ({
   api: {
     endpoints: {
-      dataObjectGetAvailableGridColumns: { useQuery: () => ({ data: { columns: [] }, isLoading: false }) },
-      dataObjectGetGrid: { useQuery: () => ({ data: { items: [] } }) },
+      dataObjectGetAvailableGridColumns: { useQuery: () => ({ data: { columns: [] }, currentData: { columns: [] }, isLoading: false }) },
+      dataObjectGetGrid: { useQuery: () => ({ data: { items: [] }, currentData: { items: [] } }) },
       dataObjectGetGridPreview: { useQuery: () => ({ data: undefined, isFetching: false, error: undefined }) }
     }
   }
