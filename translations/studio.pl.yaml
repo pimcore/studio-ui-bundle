@@ -1755,7 +1755,7 @@ image-thumbnails.editor.advanced: Zaawansowane
 image-thumbnails.editor.quality: Jakość
 image-thumbnails.editor.quality.tooltip: Ustawienie jakości JPEG (1-100)
 image-thumbnails.editor.high-resolution: Wysoka rozdzielczość
-image-thumbnails.editor.high-resolution.tooltip: Współczynnik wysokiej rozdzielczości dla ekranów retina
+image-thumbnails.editor.high-resolution.tooltip: Współczynnik wysokiej rozdzielczości (np. dla Web-to-Print lub wszędzie tam, gdzie srcset nie jest możliwy lub wystarczający). Niepotrzebny dla zwykłych miniatur internetowych – otrzymują one automatycznie atrybut srcset z 1x i 2x.
 image-thumbnails.editor.preserve-color: Zachowaj kolor
 image-thumbnails.editor.preserve-color.tooltip: "Zachowaj kolor (profil, przestrzeń) (Imagick, ORYGINAŁ)\n('Zachowaj metadane' i 'zachowaj kolor' działają tylko dla transformacji bez kompozycji (ramka, kolor tła, ...) i zmian koloru (skala szarości, sepia, ...))"
 image-thumbnails.editor.force-process-icc: Wymuś przetwarzanie profili ICC
