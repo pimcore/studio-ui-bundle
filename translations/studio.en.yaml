@@ -380,6 +380,7 @@ grid.advanced-column.preview: Preview
 grid.advanced-column.no-preview: No preview item available
 grid.advanced-column.no-preview-data: No preview data available
 grid.advanced-column.error-preview-data: Error loading preview
+grid.advanced-column.no-source-fields: Add a source field to see a preview.
 grid.advanced-column.preview-item: Preview item
 grid.advanced-column.trim: Trim
 grid.advanced-column.find: Find

@@ -380,6 +380,7 @@ grid.advanced-column.preview: Voorbeeld
 grid.advanced-column.no-preview: Geen voorbeelditem beschikbaar
 grid.advanced-column.no-preview-data: Geen voorbeeldgegevens beschikbaar
 grid.advanced-column.error-preview-data: Fout bij laden van voorbeeld
+grid.advanced-column.no-source-fields: Voeg een bronveld toe om een voorbeeld te zien.
 grid.advanced-column.preview-item: Voorbeelditem
 grid.advanced-column.trim: Inkorten
 grid.advanced-column.find: Zoeken

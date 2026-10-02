@@ -12,13 +12,16 @@ import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { useCommitKeyedListDefault } from '@Pimcore/components/form/controls/keyed-list/hooks/use-commit-keyed-list-default'
 
 export const DynamicTypePipelineGridTransformersExplodeComponent = (): React.JSX.Element => {
   const { t } = useTranslation()
 
+  // an untouched default delimiter must still be part of the saved config (see the hook's docs)
+  useCommitKeyedListDefault('delimiter', ',')
+
   return (
     <Form.Item
-      initialValue={ ',' }
       label={ t('grid.advanced-column.delimiter') }
       name={ 'delimiter' }
     >
