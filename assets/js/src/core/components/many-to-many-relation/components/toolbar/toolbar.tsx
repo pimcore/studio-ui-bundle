@@ -46,6 +46,7 @@ export interface ManyToManyRelationToolbarProps extends IRelationAllowedTypesDat
   /** No slots left under `maxItems`; creating another object would overflow the relation. */
   itemLimitReached?: boolean
   maxItems?: number | null
+  extraToolbarItems?: React.ReactNode
 }
 
 export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps): React.JSX.Element => {
@@ -219,7 +220,13 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
         gap={ withButton ? 'extra-small' : undefined }
         justify={ withButton ? 'space-between' : 'start' }
       >
-        { withButton ? <ButtonGroup items={ buttons } /> : <div></div> }
+        <Flex
+          align="center"
+          gap="extra-small"
+        >
+          { withButton && <ButtonGroup items={ buttons } /> }
+          {props.extraToolbarItems}
+        </Flex>
 
         <div>
           <SearchInput

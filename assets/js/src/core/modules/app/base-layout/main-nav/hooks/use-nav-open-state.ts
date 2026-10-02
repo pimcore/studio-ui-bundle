@@ -40,14 +40,14 @@ export const useNavOpenState = (isMenuOpen: boolean): IUseNavOpenStateReturn => 
     // a click lands inside the preview delay of the pointer enter that preceded it
     cancelHoverPreview()
 
-    if (key.includes('-')) {
-      const searchKey = key.substring(0, key.length - 1)
-      const newOpenKeys = openKeys.filter(k => !k.startsWith(searchKey))
-      setOpenKeys([...newOpenKeys, key])
-    }
+    // indexes can be multi-digit, so the sibling prefix has to be cut at the last separator
+    const separatorIndex = key.lastIndexOf('-')
 
-    if (!key.includes('-')) {
+    if (separatorIndex === -1) {
       setOpenKeys(openKeys.includes(key) ? openKeys.filter(k => k !== key) : [key])
+    } else {
+      const siblingPrefix = key.substring(0, separatorIndex + 1)
+      setOpenKeys([...openKeys.filter(k => !k.startsWith(siblingPrefix)), key])
     }
   }
 

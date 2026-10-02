@@ -45,7 +45,7 @@ class DocumentRequiredFieldsValidationServiceImpl implements DocumentRequiredFie
       const requiredFields: string[] = []
 
       for (const editableDefinition of editableDefinitions) {
-        removeRequiredStyling(editableDefinition.name, iframeDocument)
+        removeRequiredStyling(editableDefinition.id, iframeDocument)
       }
 
       for (const editableDefinition of editableDefinitions) {
@@ -66,7 +66,7 @@ class DocumentRequiredFieldsValidationServiceImpl implements DocumentRequiredFie
             : editableDefinition.name
 
           requiredFields.push(fieldName)
-          applyRequiredStyling(editableDefinition.name, iframeDocument)
+          applyRequiredStyling(editableDefinition.id, iframeDocument)
         }
       }
 
