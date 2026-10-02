@@ -21,6 +21,34 @@ export enum ApiGatewayEventType {
   openHotspotMarkersModal = 'openHotspotMarkersModal',
   openVideoModal = 'openVideoModal',
   locateInTree = 'locateInTree',
+  openCustomModal = 'openCustomModal',
+  closeCustomModal = 'closeCustomModal',
+}
+
+/**
+ * Payload for {@link ApiGatewayEventType.openCustomModal}. `payload` and the `onClose` result are
+ * intentionally untyped here - the type-safe generics live on the public
+ * `PimcoreStudio.modal.openCustom` API and on `registerCustomModal`, keyed by the same `id`.
+ */
+export interface OpenCustomModalPayload {
+  id: string
+  /** Unique per open; keys the holder entry so re-opening the same modal id keeps both instances apart. */
+  instanceId?: string
+  payload: unknown
+  onClose?: (result?: unknown) => void
+}
+
+/**
+ * Payload for {@link ApiGatewayEventType.closeCustomModal} - closes (without a result) a modal
+ * previously opened via {@link ApiGatewayEventType.openCustomModal}, identified by the same `id`.
+ * Dispatched by the close handle {@link ApiGatewayEventType.openCustomModal} itself returns, so a
+ * caller can close a modal it opened without waiting for the person to dismiss it (e.g. the
+ * opening component unmounting).
+ */
+export interface CloseCustomModalPayload {
+  id: string
+  /** The `instanceId` of the opened modal; falls back to `id` when absent. */
+  instanceId?: string
 }
 
 /**
@@ -34,6 +62,8 @@ export interface ApiGatewayEventPayloadMap {
   [ApiGatewayEventType.openHotspotMarkersModal]: HotspotMarkersModalProps
   [ApiGatewayEventType.openVideoModal]: VideoModalProps
   [ApiGatewayEventType.locateInTree]: { id: number, elementType: ElementType }
+  [ApiGatewayEventType.openCustomModal]: OpenCustomModalPayload
+  [ApiGatewayEventType.closeCustomModal]: CloseCustomModalPayload
 }
 
 /**

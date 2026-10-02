@@ -17,6 +17,8 @@ import { openCropModalHandler } from './crop-modal-handler'
 import { openHotspotMarkersModalHandler } from './hotspot-markers-modal-handler'
 import { openVideoModalHandler } from './video-modal-handler'
 import { locateInTreeHandler } from './locate-in-tree-handler'
+import { openCustomModalHandler } from './open-custom-modal-handler'
+import { closeCustomModalHandler } from './close-custom-modal-handler'
 
 export const initializeHandlers = (): void => {
   // Register all handlers here
@@ -27,6 +29,8 @@ export const initializeHandlers = (): void => {
   registerApiGatewayHandler(ApiGatewayEventType.openHotspotMarkersModal, openHotspotMarkersModalHandler)
   registerApiGatewayHandler(ApiGatewayEventType.openVideoModal, openVideoModalHandler)
   registerApiGatewayHandler(ApiGatewayEventType.locateInTree, locateInTreeHandler)
+  registerApiGatewayHandler(ApiGatewayEventType.openCustomModal, openCustomModalHandler)
+  registerApiGatewayHandler(ApiGatewayEventType.closeCustomModal, closeCustomModalHandler)
 }
 
 // Export all handlers for potential direct use
@@ -37,3 +41,5 @@ export { openCropModalHandler } from './crop-modal-handler'
 export { openHotspotMarkersModalHandler } from './hotspot-markers-modal-handler'
 export { openVideoModalHandler } from './video-modal-handler'
 export { locateInTreeHandler } from './locate-in-tree-handler'
+export { openCustomModalHandler } from './open-custom-modal-handler'
+export { closeCustomModalHandler } from './close-custom-modal-handler'

@@ -34,6 +34,14 @@ export * from '@Pimcore/modules/app/hook/use-handle-keybindings'
 export * from '@Pimcore/modules/app/hook/use-date-converter'
 
 export * from '@Pimcore/modules/app/modal-holder/use-modal-holder'
+// Only the registration side is public API - the lookup function (`getCustomModal`) is an
+// implementation detail of the `openCustomModal` API gateway handler, not something a plugin
+// calls itself (see `custom-modal-registry.ts`).
+export {
+  registerCustomModal,
+  type CustomModalComponent,
+  type CustomModalComponentProps
+} from '@Pimcore/app/public-api/modal/custom-modal-registry'
 
 export * from '@Pimcore/modules/app/settings/hooks/use-settings'
 // Intentionally narrowed: only read selectors of the settings slice are part

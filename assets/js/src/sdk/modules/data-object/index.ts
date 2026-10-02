@@ -55,3 +55,13 @@ export * from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-
 
 export * from '@Pimcore/modules/data-object/listing/decorator/column-configuration/view-layer/components/grid/hooks/use-grid-options/tabs/grid-config/forms/advanced-column-form/advanced-column-form'
 export * from '@Pimcore/modules/data-object/listing/decorator/column-configuration/view-layer/components/grid/hooks/use-grid-options/tabs/grid-config/forms/advanced-column-form/pipeline-layout-provider'
+
+export * from '@Pimcore/modules/data-object/column-editor/base-column-editor'
+export * from '@Pimcore/modules/data-object/column-editor/classification-store-column-label'
+export * from '@Pimcore/modules/data-object/column-editor/column-editor-item'
+export * from '@Pimcore/modules/data-object/column-editor/column-locale-control'
+export * from '@Pimcore/modules/data-object/column-editor/column-pipeline-form'
+export * from '@Pimcore/modules/data-object/column-editor/column-preview'
+export * from '@Pimcore/modules/data-object/column-editor/types'
+export * from '@Pimcore/modules/data-object/column-editor/use-add-column-groups'
+export * from '@Pimcore/modules/data-object/column-editor/use-classification-store-column-label'

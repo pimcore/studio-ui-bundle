@@ -17,9 +17,11 @@ export interface DynamicGroupProps {
   dynamicTypeRegistryId: string
   showTitle?: boolean
   translationKeyPrefix?: string
+  /** When true, hides the add/delete/drag controls; the configured items stay viewable. */
+  readOnly?: boolean
 }
 
-const PipelineDynamicGroup = ({ id, dynamicTypeRegistryId, showTitle = false, translationKeyPrefix }: DynamicGroupProps): React.JSX.Element => {
+const PipelineDynamicGroup = ({ id, dynamicTypeRegistryId, showTitle = false, translationKeyPrefix, readOnly = false }: DynamicGroupProps): React.JSX.Element => {
   return (
     <Form.Item
       initialValue={ [] }
@@ -29,6 +31,7 @@ const PipelineDynamicGroup = ({ id, dynamicTypeRegistryId, showTitle = false, tr
         <DynamicGroupContent
           dynamicTypeRegistryId={ dynamicTypeRegistryId }
           id={ id }
+          readOnly={ readOnly }
           showTitle={ showTitle }
           translationKeyPrefix={ translationKeyPrefix }
         />
