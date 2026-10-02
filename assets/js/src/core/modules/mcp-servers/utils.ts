@@ -41,15 +41,18 @@ export const deriveScopes = (toolNames: string[], tools: McpTool[]): string[] =>
 type AccessInfo = Pick<McpServer, 'shareGlobal' | 'sharedUsers' | 'sharedRoles'>
 
 /**
- * A short human-readable access summary, e.g. "Global", "Admin-only" or "3 users, 1 role".
+ * Who can connect to the server, e.g. "any authenticated user" or "Users: 3, Roles: 1".
+ * Only a public server or an explicit MCP Server Access grant lets anyone connect:
+ * neither admins nor the owner get it implicitly, and a grant with only Config Read
+ * or Edit connects no one, so only grants with `canAccess` are counted.
  */
 export const describeAccess = (server: AccessInfo, t: TFunction): string => {
   if (server.shareGlobal) {
-    return t('mcp-servers.access.global')
+    return t('mcp-servers.access.global-extra')
   }
 
-  const userCount = server.sharedUsers.length
-  const roleCount = server.sharedRoles.length
+  const userCount = server.sharedUsers.filter((grant) => grant.canAccess).length
+  const roleCount = server.sharedRoles.filter((grant) => grant.canAccess).length
   const parts: string[] = []
 
   // Count-neutral labels ("Users: 3"): grammatical number differs per language
@@ -65,7 +68,7 @@ export const describeAccess = (server: AccessInfo, t: TFunction): string => {
   }
 
   if (parts.length === 0) {
-    return t('mcp-servers.access.admin-only')
+    return t('mcp-servers.access.nobody')
   }
 
   return parts.join(', ')

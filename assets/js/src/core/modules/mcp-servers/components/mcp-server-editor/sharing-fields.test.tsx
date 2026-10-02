@@ -100,6 +100,15 @@ describe('SharingFields', () => {
     expect(janeRemove).toBeEnabled()
   })
 
+  // A new private server seeds the owner row with Config Read + Edit but without
+  // MCP Server Access, so nobody can connect yet and the summary must not claim
+  // that admins or the owner can.
+  it('reports that nobody can connect for a default private server', () => {
+    renderUsers([{ name: 'owner', canRead: true, canEdit: true, canAccess: false }])
+
+    expect(screen.getByText('mcp-servers.sharing.who-can-access: mcp-servers.access.nobody')).toBeInTheDocument()
+  })
+
   it('gives the icon-only remove control an accessible name', () => {
     renderUsers([grant('jane')])
 

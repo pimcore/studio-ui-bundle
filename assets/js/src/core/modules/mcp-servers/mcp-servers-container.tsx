@@ -8,12 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ConfigLayout } from '@Pimcore/components/predefined-layouts/config/config-layout'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { useMessage } from '@Pimcore/components/message/useMessage'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import {
   useMcpGetServersQuery,
   useMcpGetToolsQuery,
@@ -26,6 +25,7 @@ import { McpServersRail } from './components/mcp-servers-rail/mcp-servers-rail'
 import { McpServerTabs } from './components/mcp-server-tabs/mcp-server-tabs'
 import { type McpServerEditorBody } from './components/mcp-server-editor/mcp-server-editor'
 import { useMcpServerTabManager, NEW_SERVER_KEY } from './hooks/use-mcp-server-tab-manager'
+import { useTrackApiError } from './hooks/use-track-api-error'
 import { useStyles } from './mcp-servers-container.styles'
 
 export const McpServersContainer = (): React.JSX.Element => {
@@ -52,12 +52,13 @@ export const McpServersContainer = (): React.JSX.Element => {
   const servers = serversData?.items ?? []
   const tools = toolsData?.items ?? []
 
-  useEffect(() => {
-    const error = serversError ?? toolsError ?? createError ?? updateError ?? deleteError
-    if (error !== undefined) {
-      trackError(new ApiError(error))
-    }
-  }, [serversError, toolsError, createError, updateError, deleteError])
+  // One per query and mutation: coalescing them would report only the first, so a
+  // persistent failure (e.g. the tool catalogue) would mask a later failed save.
+  useTrackApiError(serversError)
+  useTrackApiError(toolsError)
+  useTrackApiError(createError)
+  useTrackApiError(updateError)
+  useTrackApiError(deleteError)
 
   const handleSelect = (server: McpServer): void => {
     tabManager.openTab({ id: server.id, name: server.name, writeable: server.writeable })

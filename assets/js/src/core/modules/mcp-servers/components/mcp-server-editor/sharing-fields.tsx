@@ -212,13 +212,8 @@ export const SharingFields = ({
     [roleList]
   )
 
-  const base = t('mcp-servers.access.admins-owner')
-  const hasGrants = sharedUsers.length > 0 || sharedRoles.length > 0
-  const summary = shareGlobal
-    ? `${base}, ${t('mcp-servers.access.global-extra')}`
-    : hasGrants
-      ? `${base}, ${describeAccess({ shareGlobal, sharedUsers, sharedRoles }, t)}`
-      : t('mcp-servers.access.admin-owner-only')
+  // Who can connect, not who can see the configuration: see describeAccess().
+  const summary = describeAccess({ shareGlobal, sharedUsers, sharedRoles }, t)
 
   return (
     <Flex
