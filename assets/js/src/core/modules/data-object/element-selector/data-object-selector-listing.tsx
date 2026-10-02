@@ -24,6 +24,7 @@ import { ClassDefinitionSelectionDecorator, type ClassDefinitionSelectionDecorat
 import { DefaultView } from './view-layer/views/default-view'
 import { GeneralFiltersDecorator, type GeneralFiltersDecoratorConfig } from '@Pimcore/modules/element/listing/decorators/general-filters/general-filters-decorator'
 import { TagFilterDecorator } from '@Pimcore/modules/asset/listing/decorator/tag-filter/tag-filter-decorator'
+import { FieldNameFilterDecorator } from './decorator/field-name-filter/field-name-filter-decorator'
 import { ColumnConfigurationDecorator } from '@Pimcore/modules/search/modal/tabs/object/listing/decorator/column-configuration/column-configuration-decorator'
 import { TypeFilterDecorator, type TypeFilterDecoratorConfig } from '@Pimcore/modules/element/listing/decorators/type-filter/type-filter-decorator'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
@@ -60,6 +61,7 @@ export const DataObjectSelectorListing = (): React.JSX.Element => {
     [GlobalRowSelectionDecorator, { rowSelectionMode: config?.selectionType, elementType: 'data-object' } as IGlobalRowSelectionConfig],
     [SelectionInteractionDecorator, { elementType: elementTypes.dataObject } as ISelectionInteractionConfig],
     TagFilterDecorator,
+    FieldNameFilterDecorator,
     [
       ClassDefinitionSelectionDecorator,
       {
