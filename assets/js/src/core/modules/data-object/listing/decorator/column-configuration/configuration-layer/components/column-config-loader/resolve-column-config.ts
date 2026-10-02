@@ -8,36 +8,43 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isFunction, isNumber, isObject } from 'lodash'
+import { isNumber, isObject } from 'lodash'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 
 const CLASSIFICATION_STORE_TYPE = 'dataobject.classificationstore'
 
 /**
- * A classification store column is only addressable with a numeric groupId and keyId.
+ * The grid endpoint addresses a classification store column by a numeric groupId and keyId and rejects
+ * the whole request for a column without them (e.g. the bare default column).
  */
-export const hasClassificationStoreKey = (config: unknown): config is object => {
-  if (!isObject(config) || isFunction(config)) {
+export const isKeylessClassificationStoreColumn = (column: { type: string, config?: unknown }): boolean => {
+  if (column.type !== CLASSIFICATION_STORE_TYPE) {
     return false
   }
 
+  const { config } = column
+  if (!isObject(config)) {
+    return true
+  }
+
   const { groupId, keyId } = config as { groupId?: unknown, keyId?: unknown }
-  return isNumber(groupId) && isNumber(keyId)
+  return !isNumber(groupId) || !isNumber(keyId)
 }
 
 /**
- * Resolves the config of a persisted column. Returns `undefined` for a classification store column
- * without groupId/keyId (e.g. the bare default column): the grid endpoint rejects such a column, so
- * the caller must not select it.
+ * Classification store columns carry their groupId/keyId in the persisted column config, all other
+ * column types use the config of the available column.
  */
 export const resolveColumnConfig = (
   availableColumn: Pick<AvailableColumn, 'type' | 'config'>,
-  persistedColumn: { config?: unknown }
+  persistedColumn: { config?: AvailableColumn['config'] }
 ): AvailableColumn['config'] | undefined => {
-  if (availableColumn.type !== CLASSIFICATION_STORE_TYPE) {
-    return availableColumn.config
-  }
+  return availableColumn.type === CLASSIFICATION_STORE_TYPE ? persistedColumn.config : availableColumn.config
+}
 
-  const { config } = persistedColumn
-  return hasClassificationStoreKey(config) ? config : undefined
+/**
+ * Leaves out the columns the grid endpoint cannot resolve.
+ */
+export const filterRequestableColumns = <T extends { type: string, config?: unknown }>(columns: T[]): T[] => {
+  return columns.filter(column => !isKeylessClassificationStoreColumn(column))
 }

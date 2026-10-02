@@ -8,11 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { hasClassificationStoreKey, resolveColumnConfig } from './resolve-column-config'
+import { filterRequestableColumns, isKeylessClassificationStoreColumn, resolveColumnConfig } from './resolve-column-config'
 
-const csColumn = { type: 'dataobject.classificationstore', config: { fromApi: true } }
+const CS = 'dataobject.classificationstore'
 
-describe('resolveColumnConfig', () => {
+describe('isKeylessClassificationStoreColumn', () => {
   it.each([
     ['missing config', {}],
     ['empty object', { config: {} }],
@@ -20,13 +20,23 @@ describe('resolveColumnConfig', () => {
     ['false', { config: false }],
     ['string', { config: 'config' }],
     ['only groupId', { config: { groupId: 1 } }]
-  ])('drops a keyless classification store column (%s)', (_label, persisted) => {
-    expect(resolveColumnConfig(csColumn, persisted)).toBeUndefined()
+  ])('is true for a classification store column (%s)', (_label, column) => {
+    expect(isKeylessClassificationStoreColumn({ type: CS, ...column })).toBe(true)
   })
 
-  it('keeps the persisted groupId and keyId of a classification store column', () => {
+  it('is false for a classification store column with groupId and keyId', () => {
+    expect(isKeylessClassificationStoreColumn({ type: CS, config: { groupId: 1, keyId: 2 } })).toBe(false)
+  })
+
+  it('is false for other column types', () => {
+    expect(isKeylessClassificationStoreColumn({ type: 'input' })).toBe(false)
+  })
+})
+
+describe('resolveColumnConfig', () => {
+  it('uses the persisted config for classification store columns', () => {
     const config = { groupId: 1, keyId: 2 }
-    expect(resolveColumnConfig(csColumn, { config })).toBe(config)
+    expect(resolveColumnConfig({ type: CS, config: { fromApi: true } }, { config })).toBe(config)
   })
 
   it('uses the available column config for other column types', () => {
@@ -35,10 +45,13 @@ describe('resolveColumnConfig', () => {
   })
 })
 
-describe('hasClassificationStoreKey', () => {
-  it('requires numeric groupId and keyId', () => {
-    expect(hasClassificationStoreKey({ groupId: 1, keyId: 2 })).toBe(true)
-    expect(hasClassificationStoreKey({ groupId: 1 })).toBe(false)
-    expect(hasClassificationStoreKey(undefined)).toBe(false)
+describe('filterRequestableColumns', () => {
+  const keyless = { key: 'a', type: CS, config: {} }
+  const keyed = { key: 'b', type: CS, config: { groupId: 1, keyId: 2 } }
+  const input = { key: 'c', type: 'input', config: false }
+  const advanced = { key: 'advanced', type: 'dataobject.advanced', config: undefined }
+
+  it('removes keyless classification store columns and keeps all others', () => {
+    expect(filterRequestableColumns([keyless, keyed, input, advanced])).toEqual([keyed, input, advanced])
   })
 })
