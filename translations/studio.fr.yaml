@@ -640,10 +640,8 @@ mcp-servers.read-only-notice: Les définitions de serveur sont gérées par fich
 mcp-servers.save-success: Serveur MCP enregistré
 mcp-servers.access.global: Global
 mcp-servers.access.admin-only: Administrateurs uniquement
-mcp-servers.access.user: Utilisateur
-mcp-servers.access.users: Utilisateurs
-mcp-servers.access.role: rôle
-mcp-servers.access.roles: Rôles
+mcp-servers.access.users-count: "Utilisateurs: {{number}}"
+mcp-servers.access.roles-count: "Rôles: {{number}}"
 mcp-servers.access.admins-owner: Administrateurs et le propriétaire
 mcp-servers.access.admin-owner-only: Administrateurs et le propriétaire uniquement
 mcp-servers.access.global-extra: tout utilisateur authentifié
@@ -666,6 +664,7 @@ mcp-servers.editor.tools-placeholder: Sélectionnez les outils exposés par ce s
 mcp-servers.editor.scopes: Scopes annoncés
 mcp-servers.editor.scopes-empty: Aucun scope — sélectionnez des outils pour déduire les scopes requis.
 mcp-servers.editor.url: URL du serveur
+mcp-servers.editor.copy-url: "Copier l'URL du serveur"
 mcp-servers.editor.connect-hint: Configurez votre client MCP sur cette URL et authentifiez-vous avec votre compte Pimcore.
 mcp-servers.sharing.title: Partage
 mcp-servers.sharing.share-globally: Partager globalement

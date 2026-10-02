@@ -640,10 +640,8 @@ mcp-servers.read-only-notice: Serverdefinities worden in deze omgeving via besta
 mcp-servers.save-success: MCP-server opgeslagen
 mcp-servers.access.global: Globaal
 mcp-servers.access.admin-only: Alleen beheerders
-mcp-servers.access.user: gebruiker
-mcp-servers.access.users: gebruikers
-mcp-servers.access.role: rol
-mcp-servers.access.roles: rollen
+mcp-servers.access.users-count: "Gebruikers: {{number}}"
+mcp-servers.access.roles-count: "Rollen: {{number}}"
 mcp-servers.access.admins-owner: Beheerders en de eigenaar
 mcp-servers.access.admin-owner-only: Alleen beheerders en de eigenaar
 mcp-servers.access.global-extra: elke geauthenticeerde gebruiker
@@ -666,6 +664,7 @@ mcp-servers.editor.tools-placeholder: Selecteer de tools die deze server aanbied
 mcp-servers.editor.scopes: Geadverteerde scopes
 mcp-servers.editor.scopes-empty: Geen scopes — selecteer tools om de vereiste scopes af te leiden.
 mcp-servers.editor.url: Server-URL
+mcp-servers.editor.copy-url: "Server-URL kopiëren"
 mcp-servers.editor.connect-hint: Richt je MCP-client op deze URL en authenticeer je met je Pimcore-account.
 mcp-servers.sharing.title: Delen
 mcp-servers.sharing.share-globally: Globaal delen

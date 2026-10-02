@@ -640,10 +640,8 @@ mcp-servers.read-only-notice: Serverdefinitioner hanteras via filer i den här m
 mcp-servers.save-success: MCP-server sparad
 mcp-servers.access.global: Global
 mcp-servers.access.admin-only: Endast administratörer
-mcp-servers.access.user: Användare
-mcp-servers.access.users: Användare
-mcp-servers.access.role: roll
-mcp-servers.access.roles: Roller
+mcp-servers.access.users-count: "Användare: {{number}}"
+mcp-servers.access.roles-count: "Roller: {{number}}"
 mcp-servers.access.admins-owner: Administratörer och ägaren
 mcp-servers.access.admin-owner-only: Endast administratörer och ägaren
 mcp-servers.access.global-extra: alla autentiserade användare
@@ -666,6 +664,7 @@ mcp-servers.editor.tools-placeholder: Välj de verktyg som servern exponerar
 mcp-servers.editor.scopes: Annonserade scopes
 mcp-servers.editor.scopes-empty: Inga scopes — välj verktyg för att härleda de nödvändiga scopes.
 mcp-servers.editor.url: Server-URL
+mcp-servers.editor.copy-url: "Kopiera server-URL"
 mcp-servers.editor.connect-hint: Rikta din MCP-klient mot denna URL och autentisera dig med ditt Pimcore-konto.
 mcp-servers.sharing.title: Delning
 mcp-servers.sharing.share-globally: Dela globalt
