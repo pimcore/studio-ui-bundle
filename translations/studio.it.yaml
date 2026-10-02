@@ -638,13 +638,10 @@ mcp-servers.tabs.empty: Seleziona un server per visualizzarne o modificarne la c
 mcp-servers.tabs.new-server: Nuovo server
 mcp-servers.read-only-notice: Le definizioni dei server sono gestite tramite file in questo ambiente e non possono essere modificate qui.
 mcp-servers.save-success: Server MCP salvato
-mcp-servers.access.global: Globale
-mcp-servers.access.admin-only: Solo amministratori
 mcp-servers.access.users-count: "Utenti: {{number}}"
 mcp-servers.access.roles-count: "Ruoli: {{number}}"
-mcp-servers.access.admins-owner: Amministratori e il proprietario
-mcp-servers.access.admin-owner-only: Solo amministratori e il proprietario
 mcp-servers.access.global-extra: qualsiasi utente autenticato
+mcp-servers.access.nobody: "Ancora nessuno"
 mcp-servers.badge.read: Lettura
 mcp-servers.badge.write: Scrittura
 mcp-servers.editor.create-title: Nuovo server MCP

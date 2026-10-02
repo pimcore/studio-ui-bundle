@@ -638,13 +638,10 @@ mcp-servers.tabs.empty: Selecteer een server om de configuratie te bekijken of t
 mcp-servers.tabs.new-server: Nieuwe server
 mcp-servers.read-only-notice: Serverdefinities worden in deze omgeving via bestanden beheerd en kunnen hier niet worden bewerkt.
 mcp-servers.save-success: MCP-server opgeslagen
-mcp-servers.access.global: Globaal
-mcp-servers.access.admin-only: Alleen beheerders
 mcp-servers.access.users-count: "Gebruikers: {{number}}"
 mcp-servers.access.roles-count: "Rollen: {{number}}"
-mcp-servers.access.admins-owner: Beheerders en de eigenaar
-mcp-servers.access.admin-owner-only: Alleen beheerders en de eigenaar
 mcp-servers.access.global-extra: elke geauthenticeerde gebruiker
+mcp-servers.access.nobody: "Nog niemand"
 mcp-servers.badge.read: Lezen
 mcp-servers.badge.write: Schrijven
 mcp-servers.editor.create-title: Nieuwe MCP-server

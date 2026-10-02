@@ -638,13 +638,10 @@ mcp-servers.tabs.empty: Velg en server for å se eller redigere konfigurasjonen.
 mcp-servers.tabs.new-server: Ny server
 mcp-servers.read-only-notice: Serverdefinisjoner administreres via filer i dette miljøet og kan ikke redigeres her.
 mcp-servers.save-success: MCP-server lagret
-mcp-servers.access.global: Global
-mcp-servers.access.admin-only: Kun administratorer
 mcp-servers.access.users-count: "Brukere: {{number}}"
 mcp-servers.access.roles-count: "Roller: {{number}}"
-mcp-servers.access.admins-owner: Administratorer og eieren
-mcp-servers.access.admin-owner-only: Kun administratorer og eieren
 mcp-servers.access.global-extra: alle autentiserte brukere
+mcp-servers.access.nobody: "Ingen ennå"
 mcp-servers.badge.read: Les
 mcp-servers.badge.write: Skriv
 mcp-servers.editor.create-title: Ny MCP-server
