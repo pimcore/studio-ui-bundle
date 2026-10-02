@@ -47,7 +47,7 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
       type: column.type,
       locale: column.localizable ? ((column.locale ?? currentLanguage) === 'default' ? null : (column.locale ?? currentLanguage)) : undefined,
       group: column.group as unknown as string[] | undefined,
-      config: advancedColumnConfig ?? column.config
+      config: advancedColumnConfig ?? (column.type === 'dataobject.classificationstore' ? (column.config ?? {}) : column.config)
     })
   })
 
