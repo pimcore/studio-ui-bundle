@@ -8,22 +8,36 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isFunction, isObject } from 'lodash'
+import { isFunction, isNumber, isObject } from 'lodash'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 
+const CLASSIFICATION_STORE_TYPE = 'dataobject.classificationstore'
+
 /**
- * Classification store columns carry their groupId/keyId in the persisted column config. A persisted
- * column without a config (e.g. the bare default column) must resolve to an empty object, never to a
- * boolean, because the grid data endpoint requires an array/object config.
+ * A classification store column is only addressable with a numeric groupId and keyId.
+ */
+export const hasClassificationStoreKey = (config: unknown): config is object => {
+  if (!isObject(config) || isFunction(config)) {
+    return false
+  }
+
+  const { groupId, keyId } = config as { groupId?: unknown, keyId?: unknown }
+  return isNumber(groupId) && isNumber(keyId)
+}
+
+/**
+ * Resolves the config of a persisted column. Returns `undefined` for a classification store column
+ * without groupId/keyId (e.g. the bare default column): the grid endpoint rejects such a column, so
+ * the caller must not select it.
  */
 export const resolveColumnConfig = (
   availableColumn: Pick<AvailableColumn, 'type' | 'config'>,
-  persistedColumn: object
-): AvailableColumn['config'] => {
-  if (availableColumn.type !== 'dataobject.classificationstore') {
+  persistedColumn: { config?: unknown }
+): AvailableColumn['config'] | undefined => {
+  if (availableColumn.type !== CLASSIFICATION_STORE_TYPE) {
     return availableColumn.config
   }
 
-  const config: unknown = 'config' in persistedColumn ? persistedColumn.config : undefined
-  return isObject(config) && !isFunction(config) ? config : {}
+  const { config } = persistedColumn
+  return hasClassificationStoreKey(config) ? config : undefined
 }

@@ -52,10 +52,14 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
     for (const column of initialConfigurationData.columns) {
       const availableColumn = data.columns!.find(availableColumn => availableColumn.key === column.key)
       const currentColumn = column as AvailableColumn
-      if (availableColumn !== undefined) {
+      const columnConfig = availableColumn === undefined ? undefined : resolveColumnConfig(availableColumn, currentColumn)
+      const isKeylessClassificationStoreColumn = availableColumn?.type === 'dataobject.classificationstore' && columnConfig === undefined
+
+      // A classification store column without groupId/keyId cannot be requested from the grid endpoint
+      if (availableColumn !== undefined && !isKeylessClassificationStoreColumn) {
         const apiColumn = {
           ...availableColumn,
-          config: resolveColumnConfig(availableColumn, column),
+          config: columnConfig,
           __meta: {
             // Advanced columns share the same reserved 'advanced' key (and often a
             // blank/duplicate title) from a persisted config, which is not unique -
@@ -70,7 +74,7 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
           key: column.key,
           locale: column.locale,
           type: availableColumn.type,
-          config: resolveColumnConfig(availableColumn, column),
+          config: columnConfig,
           sortable: availableColumn.sortable,
           editable: availableColumn.editable,
           localizable: availableColumn.localizable,

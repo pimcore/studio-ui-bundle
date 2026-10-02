@@ -17,6 +17,7 @@ import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/pr
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
 import { appConfig } from '@Pimcore/app/config/app-config'
+import { hasClassificationStoreKey } from '../../decorator/column-configuration/configuration-layer/components/column-config-loader/resolve-column-config'
 
 export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = () => {
   const { useElementId } = useSettings()
@@ -29,7 +30,12 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
 
   const columnsArg: DataObjectGetGridApiArg['body']['columns'] = []
 
-  selectedColumns.forEach(column => {
+  // The grid endpoint rejects the whole request for a classification store column without groupId/keyId
+  const requestableColumns = selectedColumns.filter(column =>
+    column.type !== 'dataobject.classificationstore' || hasClassificationStoreKey(column.config)
+  )
+
+  requestableColumns.forEach(column => {
     let advancedColumnConfig: AdvancedColumnConfig | undefined
     let key = column.key
 
@@ -47,7 +53,7 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
       type: column.type,
       locale: column.localizable ? ((column.locale ?? currentLanguage) === 'default' ? null : (column.locale ?? currentLanguage)) : undefined,
       group: column.group as unknown as string[] | undefined,
-      config: advancedColumnConfig ?? (column.type === 'dataobject.classificationstore' ? (column.config ?? {}) : column.config)
+      config: advancedColumnConfig ?? column.config
     })
   })
 
