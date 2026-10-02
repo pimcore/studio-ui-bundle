@@ -11,7 +11,7 @@
 /* eslint-disable max-lines */
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isNil, isUndefined } from 'lodash'
+import { isNil, isNull, isUndefined } from 'lodash'
 import type { DragAndDropInfo } from '@sdk/components'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
@@ -273,7 +273,7 @@ export const useValue = (
   const deleteItem = (rowIndex: number): void => {
     const originalIndex = getOriginalIndex(rowIndex)
     const currentValue = valueRef.current
-    const newValue = currentValue === null ? null : currentValue.filter((_item, index) => index !== originalIndex)
+    const newValue = isNull(currentValue) ? null : currentValue.filter((_item, index) => index !== originalIndex)
     setValue(newValue)
     updateDisplayValue(newValue)
   }
