@@ -121,8 +121,10 @@ export const ColumnPipelineForm = ({
       />
       )
 
+  // A controlled `value` update replaces both stores, so the preview follows the new pipeline.
   useEffect(() => {
     form.setFieldValue('value', value ?? {})
+    setLiveValue(value ?? {})
   }, [value])
 
   const onValuesChange = (changedValues: Record<string, any>): void => {

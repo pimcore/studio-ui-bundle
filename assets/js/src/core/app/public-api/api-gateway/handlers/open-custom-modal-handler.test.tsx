@@ -72,4 +72,21 @@ describe('openCustomModalHandler', () => {
     expect(context.modalHolderContext.removeModal).toHaveBeenCalledWith('open-custom-modal-handler-test.on-close')
     expect(onClose).toHaveBeenCalledWith('the-result')
   })
+
+  it('closes only once when the rendered component invokes onClose repeatedly', () => {
+    const TestModal = (_props: CustomModalComponentProps<undefined, string>): React.JSX.Element => <div />
+    registerCustomModal('open-custom-modal-handler-test.close-once', TestModal)
+    const context = createContext()
+    const onClose = jest.fn()
+
+    openCustomModalHandler({ id: 'open-custom-modal-handler-test.close-once', payload: undefined, onClose }, context)
+
+    const [, element] = (context.modalHolderContext.addModal as jest.Mock).mock.calls[0]
+    element.props.onClose('first')
+    element.props.onClose('second')
+
+    expect(context.modalHolderContext.removeModal).toHaveBeenCalledTimes(1)
+    expect(onClose).toHaveBeenCalledTimes(1)
+    expect(onClose).toHaveBeenCalledWith('first')
+  })
 })

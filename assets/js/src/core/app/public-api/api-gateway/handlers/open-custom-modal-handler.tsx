@@ -25,7 +25,15 @@ export const openCustomModalHandler: ApiGatewayHandler<ApiGatewayEventType.openC
     return
   }
 
+  let isClosed = false
+
+  // `onClose` is promised to fire once: a double click or a component closing twice is ignored.
   const handleClose = (result?: unknown): void => {
+    if (isClosed) {
+      return
+    }
+
+    isClosed = true
     modalHolderContext.removeModal(holderKey)
     onClose?.(result)
   }

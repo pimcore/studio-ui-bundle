@@ -15,12 +15,17 @@ import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 export interface ColumnLocaleControlProps {
   value: string | null | undefined
   onChange: (locale: string | null) => void
+  /** Extra selectable keys besides the content languages, e.g. `default` for classification store columns. */
+  customKeys?: string[]
 }
 
-export const ColumnLocaleControl = ({ value, onChange }: ColumnLocaleControlProps): React.JSX.Element => {
+export const ColumnLocaleControl = (
+  { value, onChange, customKeys = [] }: ColumnLocaleControlProps
+): React.JSX.Element => {
   const user = useUser()
   const languages: string[] = [
     '-',
+    ...customKeys,
     ...(Array.isArray(user.contentLanguages) ? (user.contentLanguages as string[]) : [])
   ]
   const selected = value ?? '-'

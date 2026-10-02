@@ -110,6 +110,7 @@ export const buildColumnStackItems = ({
             <Space size='mini'>
               { col.localizable === true && (
                 <ColumnLocaleControl
+                  customKeys={ col.type === CLASSIFICATION_STORE_COLUMN_TYPE ? ['default'] : [] }
                   onChange={ (locale) => { onLocaleChange(col._id, locale) } }
                   value={ col.locale }
                 />
