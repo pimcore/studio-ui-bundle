@@ -22,6 +22,7 @@ import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils
 import { uuid } from '@Pimcore/utils/uuid'
 import { useAppliedFiltersOptional } from '@Pimcore/modules/element/listing/decorators/general-filters/element-filters'
 import { restoreFieldFilters } from './restore-field-filters'
+import { isKeylessClassificationStoreColumn, resolveColumnConfig } from './resolve-column-config'
 
 export interface ColumnConfigLoaderProps {
   Component: AbstractDecoratorProps['ConfigurationComponent']
@@ -51,10 +52,13 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
     for (const column of initialConfigurationData.columns) {
       const availableColumn = data.columns!.find(availableColumn => availableColumn.key === column.key)
       const currentColumn = column as AvailableColumn
-      if (availableColumn !== undefined) {
+      const columnConfig = availableColumn === undefined ? undefined : resolveColumnConfig(availableColumn, currentColumn)
+
+      // A classification store column without groupId/keyId cannot be requested from the grid endpoint
+      if (availableColumn !== undefined && !isKeylessClassificationStoreColumn({ type: availableColumn.type, config: columnConfig })) {
         const apiColumn = {
           ...availableColumn,
-          config: availableColumn.type === 'dataobject.classificationstore' ? 'config' in column && column.config : availableColumn.config,
+          config: columnConfig,
           __meta: {
             // Advanced columns share the same reserved 'advanced' key (and often a
             // blank/duplicate title) from a persisted config, which is not unique -
@@ -69,7 +73,7 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
           key: column.key,
           locale: column.locale,
           type: availableColumn.type,
-          config: availableColumn.type === 'dataobject.classificationstore' ? 'config' in column && column.config : availableColumn.config,
+          config: columnConfig,
           sortable: availableColumn.sortable,
           editable: availableColumn.editable,
           localizable: availableColumn.localizable,

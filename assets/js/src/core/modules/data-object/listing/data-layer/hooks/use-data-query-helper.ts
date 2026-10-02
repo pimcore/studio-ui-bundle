@@ -17,6 +17,7 @@ import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/pr
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
 import { appConfig } from '@Pimcore/app/config/app-config'
+import { filterRequestableColumns } from '@Pimcore/modules/data-object/listing/decorator/column-configuration/configuration-layer/components/column-config-loader/resolve-column-config'
 
 export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = () => {
   const { useElementId } = useSettings()
@@ -29,7 +30,8 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
 
   const columnsArg: DataObjectGetGridApiArg['body']['columns'] = []
 
-  selectedColumns.forEach(column => {
+  // The grid endpoint rejects the whole request for a classification store column without groupId/keyId
+  filterRequestableColumns(selectedColumns).forEach(column => {
     let advancedColumnConfig: AdvancedColumnConfig | undefined
     let key = column.key
 
