@@ -68,6 +68,12 @@ export const useValue = (
 
   const currentSearchTerm = useRef<string>('')
 
+  // Always reflect the latest render so callbacks captured by memoized grid cells don't operate on stale data
+  const valueRef = useRef(value)
+  valueRef.current = value
+  const displayedValueRef = useRef(displayedValue)
+  displayedValueRef.current = displayedValue
+
   const { t } = useTranslation()
 
   const validatePathFormatting = (
@@ -266,9 +272,10 @@ export const useValue = (
 
   const deleteItem = (rowIndex: number): void => {
     const originalIndex = getOriginalIndex(rowIndex)
-    const filterFunction = (item: ManyToManyRelationValueItem, _index: number): boolean => _index !== originalIndex
-    setValue(value === null ? null : value.filter(filterFunction))
-    updateDisplayValue(value === null ? null : value.filter(filterFunction))
+    const currentValue = valueRef.current
+    const newValue = currentValue === null ? null : currentValue.filter((_item, index) => index !== originalIndex)
+    setValue(newValue)
+    updateDisplayValue(newValue)
   }
 
   const onSearch = (searchTerm: string): void => {
@@ -294,7 +301,7 @@ export const useValue = (
   }
 
   const getOriginalIndex = (displayedRowIndex: number): number => {
-    const displayedItem = displayedValue?.[displayedRowIndex]
+    const displayedItem = displayedValueRef.current?.[displayedRowIndex]
     return displayedItem?.originalIndex ?? displayedRowIndex
   }
 
