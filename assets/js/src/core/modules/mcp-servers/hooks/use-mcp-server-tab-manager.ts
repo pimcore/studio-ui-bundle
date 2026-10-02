@@ -34,6 +34,16 @@ export interface McpServerTabManager {
   markDirty: (key: string, dirty: boolean) => void
 }
 
+/**
+ * The tab that becomes active when `key` closes: the one after it, or the one
+ * before it when it was the last; undefined when no tab remains.
+ */
+const successorTabKey = (tabs: McpServerTab[], key: string): string | undefined => {
+  const index = tabs.findIndex((entry) => entry.id === key)
+  const remaining = tabs.filter((entry) => entry.id !== key)
+  return remaining[Math.min(index, remaining.length - 1)]?.id
+}
+
 export function useMcpServerTabManager (): McpServerTabManager {
   const [tabs, setTabs] = useState<McpServerTab[]>([])
   const [activeTabKey, setActiveTabKey] = useState<string | undefined>(undefined)
@@ -52,18 +62,12 @@ export function useMcpServerTabManager (): McpServerTabManager {
 
   const closeTab = useCallback((key: string) => {
     setTabs((prev) => {
-      const filtered = prev.filter((entry) => entry.id !== key)
+      const successor = successorTabKey(prev, key)
       // Functional update: the tab context menu closes several tabs in one batch
       // through the same callback, so a captured activeTabKey would be stale for
       // every close after the first and could leave a closed tab marked active.
-      setActiveTabKey((current) => {
-        if (current !== key) {
-          return current
-        }
-        const idx = prev.findIndex((entry) => entry.id === key)
-        return filtered[Math.min(idx, filtered.length - 1)]?.id
-      })
-      return filtered
+      setActiveTabKey((current) => (current === key ? successor : current))
+      return prev.filter((entry) => entry.id !== key)
     })
   }, [])
 
