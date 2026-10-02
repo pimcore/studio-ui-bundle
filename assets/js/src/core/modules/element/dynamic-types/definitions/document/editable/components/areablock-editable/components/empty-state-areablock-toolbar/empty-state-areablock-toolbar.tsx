@@ -11,13 +11,15 @@
 import React from 'react'
 import { ToolStrip } from '@Pimcore/components/toolstrip/tool-strip'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { Dropdown } from '@sdk/components'
+import { Dropdown, Space } from '@sdk/components'
 import { useStyles } from '../../areablock-editable.styles'
 import { type AreaType, type AreablockEditableConfig } from '../../areablock-editable'
 import { useAreablockMenu } from '../../hooks/use-areablock-menu'
+import { useAreablockClipboard } from '../../hooks/use-areablock-clipboard'
 import { EditableDropzone } from '../../../../helpers/editable-dropzone-sorting/components/editable-dropzone/editable-dropzone'
 import { configUtils } from '../../utils/areablock-utils'
-import { isString } from 'lodash'
+import { isNil, isString } from 'lodash'
+import { useTranslation } from 'react-i18next'
 import { EditableDropzoneContent } from '../../../../helpers/editable-dropzone-sorting/components/editable-dropzone/dropzone-content'
 import { InheritanceWrapper } from '../../../inheritance-wrapper/inheritance-wrapper'
 
@@ -32,6 +34,7 @@ export interface EmptyStateAreablockToolbarProps {
   areaTypes: AreaType[]
   config?: AreablockEditableConfig
   onClick: (areaType?: string) => Promise<void>
+  onPasteArea: (element: HTMLElement | null) => void
   isInherited?: boolean
   onOverwrite?: () => void
 }
@@ -40,10 +43,17 @@ export const EmptyStateAreablockToolbar = ({
   areaTypes,
   config,
   onClick,
+  onPasteArea,
   isInherited = false,
   onOverwrite
 }: EmptyStateAreablockToolbarProps): React.JSX.Element => {
   const { styles } = useStyles()
+  const { t } = useTranslation()
+
+  const clipboardItem = useAreablockClipboard()
+  const canPaste = !isNil(clipboardItem) &&
+    !configUtils.isLimitReached(0, config?.limit) &&
+    configUtils.isTypePasteable(config, clipboardItem.type)
 
   const { menuItems } = useAreablockMenu({
     config,
@@ -71,9 +81,11 @@ export const EmptyStateAreablockToolbar = ({
     if (areaTypes.length === 1) {
       return (
         <IconButton
+          aria-label={ t('areablock.new') }
           icon={ { value: 'new' } }
           onClick={ isInherited ? undefined : () => { void onClick(areaTypes[0].type) } }
           size="small"
+          tooltip={ { title: t('areablock.new') } }
         />
       )
     }
@@ -85,12 +97,25 @@ export const EmptyStateAreablockToolbar = ({
         trigger={ isInherited ? [] : ['click'] }
       >
         <IconButton
+          aria-label={ t('areablock.new') }
           icon={ { value: 'new' } }
           size="small"
+          tooltip={ { title: t('areablock.new') } }
         />
       </Dropdown>
     )
   }
+
+  const renderPasteButton = (): React.ReactNode => (
+    <IconButton
+      aria-label={ t('areablock.paste') }
+      disabled={ !canPaste }
+      icon={ { value: 'paste' } }
+      onClick={ isInherited ? undefined : () => { onPasteArea(null) } }
+      size="small"
+      tooltip={ { title: t('areablock.paste') } }
+    />
+  )
 
   return (
     <>
@@ -105,7 +130,10 @@ export const EmptyStateAreablockToolbar = ({
           disabled={ isInherited }
           theme="inverse"
         >
-          {renderAddButton()}
+          <Space size="small">
+            {renderAddButton()}
+            {renderPasteButton()}
+          </Space>
         </ToolStrip>
       </InheritanceWrapper>
       {!isInherited && (
