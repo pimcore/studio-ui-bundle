@@ -380,6 +380,7 @@ grid.advanced-column.preview: Vorschau
 grid.advanced-column.no-preview: Kein Vorschauelement verfügbar
 grid.advanced-column.no-preview-data: Keine Vorschaudaten verfügbar
 grid.advanced-column.error-preview-data: Fehler beim Laden der Vorschau
+grid.advanced-column.no-source-fields: Fügen Sie ein Quellfeld hinzu, um eine Vorschau zu sehen.
 grid.advanced-column.preview-item: Vorschauelement
 grid.advanced-column.trim: Kürzen
 grid.advanced-column.find: Suchen
