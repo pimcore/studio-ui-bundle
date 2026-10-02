@@ -632,6 +632,54 @@ website-settings.columns.site: Witryna
 website-settings.columns.actions: Akcje
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Brakujące pola obowiązkowe
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Nazwa i typ są polami obowiązkowymi i muszą zostać wypełnione.
+mcp-servers.rail.new-server: Nowy serwer
+mcp-servers.placeholder: Wybierz serwer, aby wyświetlić lub edytować jego konfigurację.
+mcp-servers.tabs.empty: Wybierz serwer, aby wyświetlić lub edytować jego konfigurację.
+mcp-servers.tabs.new-server: Nowy serwer
+mcp-servers.read-only-notice: Definicje serwerów są zarządzane poprzez pliki w tym środowisku i nie można ich tutaj edytować.
+mcp-servers.save-success: Zapisano serwer MCP
+mcp-servers.access.users-count: "Użytkownicy: {{number}}"
+mcp-servers.access.roles-count: "Role: {{number}}"
+mcp-servers.access.global-extra: dowolny uwierzytelniony użytkownik
+mcp-servers.access.nobody: "Jeszcze nikt"
+mcp-servers.badge.read: Odczyt
+mcp-servers.badge.write: Zapis
+mcp-servers.editor.create-title: Nowy serwer MCP
+mcp-servers.editor.edit-title: Edytuj serwer MCP
+mcp-servers.editor.general: Ogólne
+mcp-servers.editor.permissions: Uprawnienia
+mcp-servers.editor.identity: Tożsamość
+mcp-servers.editor.name: Nazwa
+mcp-servers.editor.name-required: Podaj nazwę.
+mcp-servers.editor.url-slug: Slug URL
+mcp-servers.editor.url-slug-required: Podaj slug URL.
+mcp-servers.editor.url-slug-pattern: Dozwolone są tylko małe litery, cyfry i myślniki.
+mcp-servers.editor.description: Opis
+mcp-servers.editor.enabled: Aktywny
+mcp-servers.editor.tools: Narzędzia
+mcp-servers.editor.tools-placeholder: Wybierz narzędzia udostępniane przez ten serwer
+mcp-servers.editor.scopes: Udostępniane scope'y
+mcp-servers.editor.scopes-empty: Brak scope'ów — wybierz narzędzia, aby wywnioskować wymagane scope'y.
+mcp-servers.editor.url: Adres URL serwera
+mcp-servers.editor.copy-url: "Kopiuj adres URL serwera"
+mcp-servers.editor.connect-hint: Skieruj swojego klienta MCP na ten adres URL i uwierzytelnij się swoim kontem Pimcore.
+mcp-servers.sharing.title: Udostępnianie
+mcp-servers.sharing.share-globally: Udostępnij globalnie
+mcp-servers.sharing.share-globally-tooltip: Każdy uwierzytelniony użytkownik otrzymuje Odczyt konfiguracji i Dostęp do serwera MCP (nie Edycję konfiguracji)
+mcp-servers.sharing.users: Użytkownicy
+mcp-servers.sharing.roles: Role
+mcp-servers.sharing.add-user: Dodaj użytkownika…
+mcp-servers.sharing.add-role: Dodaj rolę…
+mcp-servers.sharing.name: Nazwa
+mcp-servers.sharing.config-read: Odczyt konfiguracji
+mcp-servers.sharing.config-edit: Edycja konfiguracji
+mcp-servers.sharing.mcp-access: Dostęp do serwera MCP
+mcp-servers.sharing.level: Poziom dostępu
+mcp-servers.sharing.read: Odczyt
+mcp-servers.sharing.write: Może edytować
+mcp-servers.sharing.who-can-access: Kto ma dostęp
+mcp-servers.delete.title: Usuń serwer MCP
+mcp-servers.delete.confirm: Czy na pewno chcesz usunąć "{{name}}"?
 document-types.new: Nowy
 document-types.columns.name: Nazwa
 document-types.columns.group: Grupa
@@ -1615,6 +1663,7 @@ navigation.appearance-branding: Wygląd i branding
 navigation.reporting: Raportowanie
 navigation.system: System
 navigation.website-settings: Ustawienia witryny
+navigation.mcp-servers: Serwery MCP
 navigation.document-types: Typy dokumentów
 navigation.cache: Pamięć podręczna
 navigation.cache.clear-cache: Wyczyść pamięć podręczną
@@ -1703,6 +1752,7 @@ widget.predefined-properties: Predefiniowane właściwości
 widget.search-replace-assignments: Szukaj i zamień przypisania
 widget.document-types: Typy dokumentów
 widget.website-settings: Ustawienia witryny
+widget.mcp-servers: Serwery MCP
 widget.role-management: Role
 widget.user-management: Użytkownicy
 widget.class-definitions: Klasy
