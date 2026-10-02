@@ -51,7 +51,14 @@ export const useStyles = createStyles(({ token, css }) => {
       .tree-node__content-inner {
         padding: 0 ${token.paddingXS}px 0 0;
 
-        &:focus {
+        &:focus-visible {
+          outline: 2px solid ${token.colorPrimaryBorder};
+          outline-offset: -2px;
+          border-radius: ${token.borderRadiusSM}px;
+          background-color: ${token.controlItemBgActiveHover};
+        }
+
+        &:focus:not(:focus-visible) {
           outline: none;
         }
       }
