@@ -8,138 +8,15 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-// Split out of base-column-editor.test.tsx; covers the classification store group/key picker
-// (`use-classification-store-column-picker.ts`). Driven through the imperative handle's
-// `addColumn` (exercised the same way a host consumer's ref would) rather than clicking through
-// the real "fields to add" ColumnPicker tree, which is mocked out like in the sibling test files.
-// The classification store modal provider is a controllable stub (not a static no-op) so tests can
-// simulate a group/key selection by invoking the captured `onUpdate` callback directly.
+// Covers the classification store group/key picker (`use-classification-store-column-picker.ts`),
+// driven through the imperative handle's `addColumn`. Group/key picks are simulated by invoking the
+// `onUpdate` callback captured by the modal stub in base-column-editor.test-mocks.tsx.
 
 import React from 'react'
 import { render, act } from '@testing-library/react'
+import { classificationStoreModal } from './base-column-editor.test-mocks'
 import { BaseColumnEditor, type BaseColumnEditorProps } from './base-column-editor'
 import { type ColumnEditorHandle, type SchemaColumn } from './types'
-
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({ t: (key: string) => key })
-}))
-
-jest.mock('./base-column-editor.styles', () => ({
-  useStyles: () => ({ styles: { body: 'body', fieldsPanel: 'fieldsPanel', list: 'list' } })
-}))
-
-jest.mock('./fields-to-add-panel', () => ({
-  FieldsToAddPanel: () => <div data-testid='fields-to-add-panel' />
-}))
-
-jest.mock('./column-editor-item', () => ({
-  ColumnEditorItemBody: () => <div data-testid='column-editor-item-body' />
-}))
-
-jest.mock('./column-locale-control', () => ({
-  ColumnLocaleControl: () => <div data-testid='column-locale-control' />
-}))
-
-jest.mock('@Pimcore/components/language-selection/language-selection-with-provider', () => ({
-  LanguageSelectionWithProvider: () => <div data-testid='language-selection' />
-}))
-
-jest.mock('@Pimcore/components/language-selection/provider/language-selection-provider', () => ({
-  LanguageSelectionContext: React.createContext({
-    currentLanguage: 'en',
-    setCurrentLanguage: () => {},
-    hasLocalizedFields: false,
-    setHasLocalizedFields: () => {}
-  })
-}))
-
-jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({
-  useUser: () => ({ contentLanguages: ['en'] })
-}))
-
-jest.mock('@Pimcore/modules/class-definition/class-definition-slice.gen', () => ({
-  useClassDefinitionCollectionQuery: () => ({ data: undefined, isLoading: false })
-}))
-
-jest.mock('@Pimcore/modules/auth/permission-helper', () => ({
-  isAllowed: () => true
-}))
-
-jest.mock('@Pimcore/modules/auth/enums/user-permission', () => ({
-  UserPermission: { Objects: 'objects' }
-}))
-
-jest.mock('@Pimcore/modules/data-object/data-object-api-slice-enhanced', () => ({
-  api: {
-    endpoints: {
-      dataObjectGetAvailableGridColumns: { useQuery: () => ({ data: { columns: [] }, currentData: { columns: [] }, isLoading: false }) },
-      dataObjectGetGrid: { useQuery: () => ({ data: { items: [] }, currentData: { items: [] } }) },
-      dataObjectGetGridPreview: { useQuery: () => ({ data: undefined, isFetching: false, error: undefined }) }
-    }
-  }
-}))
-
-jest.mock('@Pimcore/modules/app/error-handler', () => ({
-  __esModule: true,
-  default: jest.fn(),
-  ApiError: jest.fn()
-}))
-
-jest.mock('@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector', () => ({
-  useElementSelector: () => ({ open: jest.fn() })
-}))
-
-jest.mock('@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider', () => ({
-  SelectionType: { Single: 'single', Multiple: 'multiple' }
-}))
-
-const openModalMock = jest.fn()
-let capturedOnUpdate: ((data: unknown) => void) | undefined
-
-jest.mock(
-  '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider',
-  () => ({
-    ClassificationStoreModalProvider: (
-      { children }: { children: React.ReactNode }
-    ) => <>{ children }</>,
-    useClassificationStoreModal: (props: { onUpdate?: (data: unknown) => void }) => {
-      capturedOnUpdate = props.onUpdate
-      return { openModal: openModalMock, closeModal: jest.fn(), fireUpdateEvent: jest.fn() }
-    }
-  })
-)
-
-jest.mock(
-  '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types',
-  () => ({ TabId: { Collection: 'collection', Group: 'group', GroupByKey: 'group-by-key' } })
-)
-
-function passthrough (testId: string): React.FC<{ children?: React.ReactNode }> {
-  const Passthrough = ({ children }: { children?: React.ReactNode }): React.JSX.Element => (
-    <div data-testid={ testId }>{ children }</div>
-  )
-  Passthrough.displayName = `Passthrough(${testId})`
-  return Passthrough
-}
-
-jest.mock('@Pimcore/components/content/content', () => ({ Content: passthrough('content') }))
-jest.mock('@Pimcore/components/content-layout/content-layout', () => ({
-  ContentLayout: ({ children }: any): React.JSX.Element => <div data-testid='content'>{ children }</div>
-}))
-jest.mock('@Pimcore/components/flex/flex', () => ({ Flex: passthrough('flex') }))
-jest.mock('@Pimcore/components/space/space', () => ({ Space: passthrough('space') }))
-jest.mock('@Pimcore/components/spin/spin', () => ({ Spin: () => <div data-testid='spin' /> }))
-jest.mock('@Pimcore/components/stack-list/stack-list', () => ({ StackList: () => <div data-testid='stack-list' /> }))
-jest.mock('@Pimcore/components/toolbar/toolbar', () => ({ Toolbar: passthrough('toolbar-inner') }))
-jest.mock('@Pimcore/components/button/button', () => ({
-  Button: ({ children, onClick }: any) => <button onClick={ onClick }>{ children }</button>
-}))
-jest.mock('@Pimcore/components/icon-button/icon-button', () => ({
-  IconButton: ({ onClick }: any) => <button onClick={ onClick }>icon-button</button>
-}))
-jest.mock('@Pimcore/components/icon-text-button/icon-text-button', () => ({
-  IconTextButton: ({ children, onClick }: any) => <button onClick={ onClick }>{ children }</button>
-}))
 
 const classificationStoreColumn = {
   key: 'technicalAttributes',
@@ -163,8 +40,8 @@ const defaultProps: BaseColumnEditorProps = {
 
 describe('BaseColumnEditor classification store column picker', () => {
   beforeEach(() => {
-    openModalMock.mockClear()
-    capturedOnUpdate = undefined
+    classificationStoreModal.openModal.mockClear()
+    classificationStoreModal.onUpdate = undefined
   })
 
   it('opens the group/key picker instead of adding the container field directly', () => {
@@ -178,7 +55,7 @@ describe('BaseColumnEditor classification store column picker', () => {
 
     act(() => { ref.current?.addColumn(classificationStoreColumn) })
 
-    expect(openModalMock).toHaveBeenCalledWith({
+    expect(classificationStoreModal.openModal).toHaveBeenCalledWith({
       storeId: 1,
       classId: 'AP',
       fieldName: 'technicalAttributes',
@@ -200,10 +77,10 @@ describe('BaseColumnEditor classification store column picker', () => {
     )
 
     act(() => { ref.current?.addColumn(classificationStoreColumn) })
-    expect(capturedOnUpdate).toBeDefined()
+    expect(classificationStoreModal.onUpdate).toBeDefined()
 
     act(() => {
-      capturedOnUpdate?.({
+      classificationStoreModal.onUpdate?.({
         type: 'group-by-key',
         data: [
           {
@@ -247,7 +124,7 @@ describe('BaseColumnEditor classification store column picker', () => {
     // Picking the very same group/key again (e.g. reopening the picker for the same column)
     // must not add a duplicate.
     act(() => {
-      capturedOnUpdate?.({
+      classificationStoreModal.onUpdate?.({
         type: 'group-by-key',
         data: [
           {
