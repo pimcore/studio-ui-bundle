@@ -34,7 +34,8 @@
     },
     "conflict": {
         "pimcore/asset-metadata-class-definitions": "<3.0.1",
-        "pimcore/quill-bundle": "<2.0.1"
+        "pimcore/quill-bundle": "<2.0.1",
+        "phpunit/phpunit": ">=13.4"
     },
     "autoload": {
         "psr-4": {
