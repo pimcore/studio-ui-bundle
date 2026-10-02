@@ -380,6 +380,7 @@ grid.advanced-column.preview: Förhandsvisning
 grid.advanced-column.no-preview: Inget förhandsvisningsobjekt tillgängligt
 grid.advanced-column.no-preview-data: Ingen förhandsvisningsdata tillgänglig
 grid.advanced-column.error-preview-data: Fel vid laddning av förhandsvisning
+grid.advanced-column.no-source-fields: Lägg till ett källfält för att se en förhandsvisning.
 grid.advanced-column.preview-item: Förhandsvisningsobjekt
 grid.advanced-column.trim: Trimma
 grid.advanced-column.find: Sök

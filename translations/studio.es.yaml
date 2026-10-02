@@ -380,6 +380,7 @@ grid.advanced-column.preview: Vista previa
 grid.advanced-column.no-preview: No hay elemento de vista previa disponible
 grid.advanced-column.no-preview-data: No hay datos de vista previa disponibles
 grid.advanced-column.error-preview-data: Error al cargar la vista previa
+grid.advanced-column.no-source-fields: Añada un campo de origen para ver una vista previa.
 grid.advanced-column.preview-item: Elemento de vista previa
 grid.advanced-column.trim: Recortar
 grid.advanced-column.find: Buscar

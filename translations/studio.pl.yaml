@@ -380,6 +380,7 @@ grid.advanced-column.preview: Podgląd
 grid.advanced-column.no-preview: Brak dostępnego elementu podglądu
 grid.advanced-column.no-preview-data: Brak dostępnych danych podglądu
 grid.advanced-column.error-preview-data: Błąd podczas ładowania podglądu
+grid.advanced-column.no-source-fields: Dodaj pole źródłowe, aby zobaczyć podgląd.
 grid.advanced-column.preview-item: Element podglądu
 grid.advanced-column.trim: Przytnij
 grid.advanced-column.find: Szukaj
