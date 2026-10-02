@@ -107,14 +107,17 @@ const SharingGrid = ({
             align="center"
             justify="center"
           >
+            {/* The owner's row is locked like its Read/Edit cells: removing it would drop
+                the owner's MCP Server Access; revoking Access is done with its checkbox. */}
             <IconButton
-              disabled={ disabled }
+              disabled={ disabled || isPrivileged(info.row.original) }
               icon={ { value: 'trash' } }
               onClick={ () => {
                 const next = [...value]
                 next.splice(info.row.index, 1)
                 onChange(next)
               } }
+              title={ t('delete') }
               type="text"
             />
           </Flex>

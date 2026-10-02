@@ -136,6 +136,7 @@ export const McpServersRail = ({
               disabled={ isFetching }
               icon={ { value: 'refresh' } }
               onClick={ onRefresh }
+              title={ t('refresh') }
               type="link"
             />
           </Tooltip>

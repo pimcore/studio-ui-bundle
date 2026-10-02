@@ -53,14 +53,19 @@ export function useMcpServerTabManager (): McpServerTabManager {
   const closeTab = useCallback((key: string) => {
     setTabs((prev) => {
       const filtered = prev.filter((entry) => entry.id !== key)
-      if (activeTabKey === key) {
+      // Functional update: the tab context menu closes several tabs in one batch
+      // through the same callback, so a captured activeTabKey would be stale for
+      // every close after the first and could leave a closed tab marked active.
+      setActiveTabKey((current) => {
+        if (current !== key) {
+          return current
+        }
         const idx = prev.findIndex((entry) => entry.id === key)
-        const next = filtered[Math.min(idx, filtered.length - 1)]
-        setActiveTabKey(next?.id)
-      }
+        return filtered[Math.min(idx, filtered.length - 1)]?.id
+      })
       return filtered
     })
-  }, [activeTabKey])
+  }, [])
 
   const setActiveTab = useCallback((key: string) => {
     setActiveTabKey(key)

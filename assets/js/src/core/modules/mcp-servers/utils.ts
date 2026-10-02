@@ -52,12 +52,16 @@ export const describeAccess = (server: AccessInfo, t: TFunction): string => {
   const roleCount = server.sharedRoles.length
   const parts: string[] = []
 
+  // Count-neutral labels ("Users: 3"): grammatical number differs per language
+  // (Polish has one/few/many forms), and the translation files can only mirror the
+  // English keys, so a "N user(s)" phrase cannot be right in every language.
+  // `number`, not `count`, keeps i18next's plural resolution out of it.
   if (userCount > 0) {
-    parts.push(`${userCount} ${userCount === 1 ? t('mcp-servers.access.user') : t('mcp-servers.access.users')}`)
+    parts.push(t('mcp-servers.access.users-count', { number: userCount }))
   }
 
   if (roleCount > 0) {
-    parts.push(`${roleCount} ${roleCount === 1 ? t('mcp-servers.access.role') : t('mcp-servers.access.roles')}`)
+    parts.push(t('mcp-servers.access.roles-count', { number: roleCount }))
   }
 
   if (parts.length === 0) {

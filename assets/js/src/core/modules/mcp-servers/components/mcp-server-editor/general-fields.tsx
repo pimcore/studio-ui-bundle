@@ -101,6 +101,7 @@ export const GeneralFields = ({
             <IconButton
               icon={ { value: 'copy' } }
               onClick={ () => { onCopyUrl(server.url) } }
+              title={ t('mcp-servers.editor.copy-url') }
               type="link"
             />
           </Flex>

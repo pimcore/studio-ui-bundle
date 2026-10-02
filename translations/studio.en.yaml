@@ -640,10 +640,8 @@ mcp-servers.read-only-notice: Server definitions are file-managed on this enviro
 mcp-servers.save-success: MCP server saved
 mcp-servers.access.global: Global
 mcp-servers.access.admin-only: Admin-only
-mcp-servers.access.user: user
-mcp-servers.access.users: users
-mcp-servers.access.role: role
-mcp-servers.access.roles: roles
+mcp-servers.access.users-count: "Users: {{number}}"
+mcp-servers.access.roles-count: "Roles: {{number}}"
 mcp-servers.access.admins-owner: Administrators and the owner
 mcp-servers.access.admin-owner-only: Administrators and the owner only
 mcp-servers.access.global-extra: any authenticated user
@@ -666,6 +664,7 @@ mcp-servers.editor.tools-placeholder: Select the tools this server exposes
 mcp-servers.editor.scopes: Advertised scopes
 mcp-servers.editor.scopes-empty: No scopes — select tools to derive the required scopes.
 mcp-servers.editor.url: Server URL
+mcp-servers.editor.copy-url: Copy server URL
 mcp-servers.editor.connect-hint: Point your MCP client at this URL and authenticate with your Pimcore account.
 mcp-servers.sharing.title: Sharing
 mcp-servers.sharing.share-globally: Share globally
