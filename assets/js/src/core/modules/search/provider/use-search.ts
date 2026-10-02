@@ -69,3 +69,12 @@ export const useSearch = (): UseSearchReturn => {
     setPanelDraft: context.setPanelDraft
   }
 }
+
+/**
+ * The saved search still being restored, or undefined when none is — and when there is no
+ * SearchProvider at all, as in the element selectors that reuse the search listings outside the
+ * Quick Search modal. Use this instead of useSearch where the provider is optional.
+ */
+export const usePendingRestore = (): SavedSearchDetailedConfiguration | undefined => {
+  return useContext(SearchContext)?.pendingRestore
+}

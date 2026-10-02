@@ -55,7 +55,7 @@ jest.mock('@Pimcore/modules/data-object/listing/decorator/class-definition-selec
   useClassDefinitionSelection: () => ({ selectedClassDefinition: { id: classId } })
 }))
 jest.mock('@Pimcore/modules/search/provider/use-search', () => ({
-  useSearch: () => ({ pendingRestore, loadedSavedSearch })
+  usePendingRestore: () => pendingRestore
 }))
 
 const Configuration = (): React.JSX.Element => <div />
