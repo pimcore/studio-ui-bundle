@@ -10,6 +10,7 @@
 
 import { Content } from '@Pimcore/components/content/content'
 import { getLanguageExtensions } from '@Pimcore/components/text-editor/detect-language'
+import { useCodeMirrorThemeExtensions } from '@Pimcore/components/code-editor/use-code-mirror-theme'
 import { type EmailLog, useEmailLogGetTextQuery } from '@Pimcore/modules/email/emails-api-slice.gen'
 import ReactCodeMirror from '@uiw/react-codemirror'
 import { isUndefined } from 'lodash'
@@ -24,6 +25,12 @@ interface TextPreviewProps {
 export const TextPreview = ({ email, hasTextLog }: TextPreviewProps): React.JSX.Element => {
   const { data, isLoading } = useEmailLogGetTextQuery({ id: email.id }, { skip: !hasTextLog })
   const { styles } = useStyles()
+  const themeExtensions = useCodeMirrorThemeExtensions()
+
+  const extensions = React.useMemo(
+    () => [...themeExtensions, ...getLanguageExtensions('html')],
+    [themeExtensions]
+  )
 
   return (
     <Content
@@ -37,8 +44,9 @@ export const TextPreview = ({ email, hasTextLog }: TextPreviewProps): React.JSX.
           searchKeymap: true
         } }
         className={ styles.codeEditor }
-        extensions={ getLanguageExtensions('html') }
+        extensions={ extensions }
         readOnly
+        theme="none"
         value={ data?.data ?? '' }
       />
     </Content>
