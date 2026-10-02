@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isFunction, isObject } from 'lodash'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 
 /**
@@ -24,5 +25,5 @@ export const resolveColumnConfig = (
   }
 
   const config: unknown = 'config' in persistedColumn ? persistedColumn.config : undefined
-  return typeof config === 'object' && config !== null ? config : {}
+  return isObject(config) && !isFunction(config) ? config : {}
 }
