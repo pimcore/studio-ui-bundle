@@ -12,6 +12,13 @@ import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
+    // reset the ul defaults only; the per-level indent comes from `.tree-node > .tree-list` in element-tree.styles
+    'tree-list': css`
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    `,
+
     'tree-list__pager': css` 
       padding: ${token.paddingXXS}px 0;
 
