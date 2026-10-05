@@ -33,7 +33,7 @@ interface SelectedRowsProviderProps {
 export const SelectedRowsProvider = ({ children }: SelectedRowsProviderProps): React.JSX.Element => {
   const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
   const [selectedRowsTypes, setSelectedRowsTypes] = useState<Record<string, string>>({})
-  const [loadingIds, setLoadingIdsState] = useState<Record<RecycleBinAction, number[]>>({ restore: [], delete: [] })
+  const [loadingIds, setLoadingIds] = useState<Record<RecycleBinAction, number[]>>({ restore: [], delete: [] })
 
   const updateSelectedRows = (newState: RowSelectionState, pageItems: RecycleBin[]): void => {
     const addedIds = Object.keys(newState).filter((id) => isUndefined(selectedRows[id]))
@@ -64,8 +64,8 @@ export const SelectedRowsProvider = ({ children }: SelectedRowsProviderProps): R
     setSelectedRowsTypes({})
   }
 
-  const setLoadingIds = (action: RecycleBinAction, ids: number[], isLoading: boolean): void => {
-    setLoadingIdsState((prev) => ({
+  const updateLoadingIds = (action: RecycleBinAction, ids: number[], isLoading: boolean): void => {
+    setLoadingIds((prev) => ({
       ...prev,
       [action]: isLoading
         ? [...prev[action], ...ids]
@@ -79,7 +79,7 @@ export const SelectedRowsProvider = ({ children }: SelectedRowsProviderProps): R
     setSelectedRows: updateSelectedRows,
     resetSelectedRows,
     loadingIds,
-    setLoadingIds
+    setLoadingIds: updateLoadingIds
   }), [selectedRows, selectedRowsTypes, loadingIds])
 
   return (
