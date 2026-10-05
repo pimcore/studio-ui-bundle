@@ -52,9 +52,14 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
       const availableColumn = data.columns!.find(availableColumn => availableColumn.key === column.key)
       const currentColumn = column as AvailableColumn
       if (availableColumn !== undefined) {
+        let columnConfig = availableColumn.config
+        if (availableColumn.type === 'dataobject.classificationstore') {
+          columnConfig = ('config' in column ? column.config : undefined) ?? {}
+        }
+
         const apiColumn = {
           ...availableColumn,
-          config: availableColumn.type === 'dataobject.classificationstore' ? 'config' in column && column.config : availableColumn.config,
+          config: columnConfig,
           __meta: {
             // Advanced columns share the same reserved 'advanced' key (and often a
             // blank/duplicate title) from a persisted config, which is not unique -
@@ -69,7 +74,7 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
           key: column.key,
           locale: column.locale,
           type: availableColumn.type,
-          config: availableColumn.type === 'dataobject.classificationstore' ? 'config' in column && column.config : availableColumn.config,
+          config: columnConfig,
           sortable: availableColumn.sortable,
           editable: availableColumn.editable,
           localizable: availableColumn.localizable,
