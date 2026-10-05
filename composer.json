@@ -22,7 +22,7 @@
         "pimcore/studio-backend-bundle": "^2025.4.12"
     },
     "require-dev": {
-        "codeception/codeception": "^5.3.5",
+        "codeception/codeception": "^5.3.7",
         "codeception/module-asserts": "^2",
         "codeception/module-symfony": "^3.1.1",
         "phpstan/phpstan": "2.1.26",
@@ -34,8 +34,7 @@
     },
     "conflict": {
         "pimcore/asset-metadata-class-definitions": "<3.0.1",
-        "pimcore/quill-bundle": "<2.0.1",
-        "phpunit/phpunit": ">=13.4"
+        "pimcore/quill-bundle": "<2.0.1"
     },
     "autoload": {
         "psr-4": {
