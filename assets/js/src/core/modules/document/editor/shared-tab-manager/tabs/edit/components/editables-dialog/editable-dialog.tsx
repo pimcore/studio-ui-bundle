@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useState } from 'react'
 import { WindowModal, Card } from '@sdk/components'
 import { type DialogConfig, type DialogConfigItem, type DialogConfigItems, type SerializedDialogConfigItems } from './types'
 import { useInjection } from '@Pimcore/app/depency-injection'
@@ -17,22 +17,95 @@ import { type DynamicTypeEditableDialogLayoutRegistry } from '@Pimcore/modules/e
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useDocumentEditor } from '../../hooks/use-document-editor'
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
-import { isArray, isNil, isPlainObject } from 'lodash'
+import { cloneDeep, isArray, isEqual, isNil, isPlainObject, union } from 'lodash'
 import { TemplateAwareEditable } from './template-aware-editable'
 import { useTranslation } from 'react-i18next'
+import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
+import { type ValueType } from '@Pimcore/app/public-api/document-editor-iframe/editable-data/editable-data'
+
+interface EditableDialogSnapshot {
+  values: Record<string, ValueType>
+  inheritanceState: Record<string, boolean>
+}
 
 export interface EditableDialogProps {
   config: DialogConfig
   visible: boolean
+  /** Called when the dialog is confirmed via the save button and values were changed. */
   onClose: () => void
+  /** Called when the dialog closes without changes to save: dismissed (cancel button, close icon, Esc) with its changes discarded, or saved unchanged. */
+  onCancel: () => void
   editableDefinitions: AbstractDocumentEditableDefinition[]
 }
 
-export const EditableDialog = ({ config, visible, onClose, editableDefinitions }: EditableDialogProps): React.JSX.Element => {
+export const EditableDialog = ({ config, visible, onClose, onCancel, editableDefinitions }: EditableDialogProps): React.JSX.Element => {
   const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
   const editableDialogLayoutRegistry = useInjection<DynamicTypeEditableDialogLayoutRegistry>(serviceIds['DynamicTypes/EditableDialogLayoutRegistry'])
-  const { getValue } = useDocumentEditor()
+  const { getValue, getValues, updateValue, removeValues, getInheritanceState, setInheritanceState } = useDocumentEditor()
+  const { modal } = useStudioModal()
   const { t } = useTranslation()
+
+  // Editables write their changes straight into the document editable store, so the state at the
+  // time the dialog opened is captured to be able to restore it when the dialog gets cancelled.
+  const [snapshot] = useState<EditableDialogSnapshot>(() => ({
+    values: cloneDeep(getValues()),
+    inheritanceState: Object.fromEntries(
+      editableDefinitions.map(editable => [editable.name, getInheritanceState(editable.name)])
+    )
+  }))
+
+  const getChangedValueKeys = (): string[] => {
+    const currentValues = getValues()
+
+    return union(Object.keys(snapshot.values), Object.keys(currentValues))
+      .filter(key => !isEqual(snapshot.values[key], currentValues[key]))
+  }
+
+  const restoreSnapshot = (changedKeys: string[]): void => {
+    const addedKeys = changedKeys.filter(key => isNil(snapshot.values[key]))
+
+    if (addedKeys.length > 0) {
+      removeValues(addedKeys)
+    }
+
+    changedKeys
+      .filter(key => !isNil(snapshot.values[key]))
+      .forEach(key => { updateValue(key, snapshot.values[key]) })
+
+    Object.entries(snapshot.inheritanceState).forEach(([name, inherited]) => {
+      setInheritanceState(name, inherited)
+    })
+  }
+
+  // Without any changes there is nothing to save, so the dialog just closes without a reload.
+  const handleSave = (): void => {
+    if (getChangedValueKeys().length === 0) {
+      onCancel()
+      return
+    }
+
+    onClose()
+  }
+
+  const handleCancel = (): void => {
+    const changedKeys = getChangedValueKeys()
+
+    if (changedKeys.length === 0) {
+      onCancel()
+      return
+    }
+
+    void modal.confirm({
+      title: t('unsaved-changes.title'),
+      content: t('unsaved-changes.close-message'),
+      okText: t('discard-changes'),
+      cancelText: t('cancel'),
+      onOk: () => {
+        restoreSnapshot(changedKeys)
+        onCancel()
+      }
+    })
+  }
 
   const findMatchingEditableDefinition = (dialogConfigItem: DialogConfigItem): AbstractDocumentEditableDefinition | null => {
     const matchingEditable = editableDefinitions.find(editable =>
@@ -141,12 +214,12 @@ export const EditableDialog = ({ config, visible, onClose, editableDefinitions }
 
   return (
     <WindowModal
-      cancelButtonProps={ { style: { display: 'none' } } }
-      closable={ false }
+      cancelText={ t('cancel') }
       destroyOnClose
       getContainer={ () => document.body }
       okText={ t('save') }
-      onOk={ onClose }
+      onCancel={ handleCancel }
+      onOk={ handleSave }
       open={ visible }
       size="L"
       title={ t('area-settings') }

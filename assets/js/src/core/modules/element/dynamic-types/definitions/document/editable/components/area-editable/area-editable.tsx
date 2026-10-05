@@ -81,6 +81,10 @@ export const AreaEditable = ({
     handleReloadOnClose()
   }
 
+  const cancelDialog = (): void => {
+    setDialogVisible(false)
+  }
+
   return (
     <>
       {!isNil(editButtonContainer) && hasDialog && createPortal(
@@ -98,6 +102,7 @@ export const AreaEditable = ({
         <EditableDialog
           config={ dialogConfig }
           editableDefinitions={ editableDefinitions }
+          onCancel={ cancelDialog }
           onClose={ closeDialog }
           visible={ dialogVisible }
         />
