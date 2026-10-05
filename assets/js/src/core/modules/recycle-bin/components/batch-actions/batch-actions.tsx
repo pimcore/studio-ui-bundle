@@ -11,7 +11,7 @@
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelectedRowsContext } from '../../context/selected-items-context'
 import { useRecycleBin } from '../../hooks/use-recycle-bin'
@@ -21,6 +21,7 @@ export const BatchActions = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { selectedRows, selectedRowsTypes, resetSelectedRows } = useSelectedRowsContext()
   const { removeItems, restoreItems } = useRecycleBin()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const getSelectedItems = (): Array<Pick<RecycleBin, 'id' | 'type'>> => {
     return Object.keys(selectedRows).map((id): Pick<RecycleBin, 'id' | 'type'> => ({
@@ -36,8 +37,10 @@ export const BatchActions = (): React.JSX.Element => {
         label: t('recycle-bin.actions.delete'),
         icon: <Icon value={ 'trash' } />,
         onClick: () => {
+          setIsLoading(true)
           void removeItems(getSelectedItems(), () => {
             resetSelectedRows()
+            setIsLoading(false)
           })
         }
       },
@@ -46,8 +49,10 @@ export const BatchActions = (): React.JSX.Element => {
         label: t('recycle-bin.actions.restore'),
         icon: <Icon value={ 'restore' } />,
         onClick: () => {
+          setIsLoading(true)
           void restoreItems(getSelectedItems(), () => {
             resetSelectedRows()
+            setIsLoading(false)
           })
         }
       }
@@ -56,9 +61,15 @@ export const BatchActions = (): React.JSX.Element => {
 
   return (
     <Dropdown
+      disabled={ isLoading }
       menu={ menu }
     >
-      <DropdownButton key={ 'dropdown-button' }>{t('listing.actions')}</DropdownButton>
+      <DropdownButton
+        key={ 'dropdown-button' }
+        loading={ isLoading }
+      >
+        {t('listing.actions')}
+      </DropdownButton>
     </Dropdown>
   )
 }

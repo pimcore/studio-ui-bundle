@@ -130,6 +130,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
                   setRestoreLoading((prev) => prev.filter(id => id !== row.original.id))
                 })
               } }
+              tooltip={ { title: t('recycle-bin.actions.restore') } }
               type="link"
             />
 
@@ -143,6 +144,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
                   setRemoveLoading(prev => prev.filter(id => id !== row.original.id))
                 })
               } }
+              tooltip={ { title: t('recycle-bin.actions.delete') } }
               type="link"
             />
           </Flex>
