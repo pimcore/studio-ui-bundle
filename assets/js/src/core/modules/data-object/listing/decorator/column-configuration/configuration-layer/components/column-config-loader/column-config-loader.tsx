@@ -22,7 +22,6 @@ import { useGridConfig } from '@Pimcore/modules/element/listing/decorators/utils
 import { uuid } from '@Pimcore/utils/uuid'
 import { useAppliedFiltersOptional } from '@Pimcore/modules/element/listing/decorators/general-filters/element-filters'
 import { restoreFieldFilters } from './restore-field-filters'
-import { isKeylessClassificationStoreColumn, resolveColumnConfig } from './resolve-column-config'
 
 export interface ColumnConfigLoaderProps {
   Component: AbstractDecoratorProps['ConfigurationComponent']
@@ -52,10 +51,12 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
     for (const column of initialConfigurationData.columns) {
       const availableColumn = data.columns!.find(availableColumn => availableColumn.key === column.key)
       const currentColumn = column as AvailableColumn
-      const columnConfig = availableColumn === undefined ? undefined : resolveColumnConfig(availableColumn, currentColumn)
+      if (availableColumn !== undefined) {
+        let columnConfig = availableColumn.config
+        if (availableColumn.type === 'dataobject.classificationstore') {
+          columnConfig = ('config' in column ? column.config : undefined) ?? {}
+        }
 
-      // A classification store column without groupId/keyId cannot be requested from the grid endpoint
-      if (availableColumn !== undefined && !isKeylessClassificationStoreColumn({ type: availableColumn.type, config: columnConfig })) {
         const apiColumn = {
           ...availableColumn,
           config: columnConfig,
