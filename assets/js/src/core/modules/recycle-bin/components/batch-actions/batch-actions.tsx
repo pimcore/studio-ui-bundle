@@ -11,7 +11,7 @@
 import { DropdownButton } from '@Pimcore/components/dropdown-button/dropdown-button'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelectedRowsContext } from '../../context/selected-items-context'
 import { useRecycleBin } from '../../hooks/use-recycle-bin'
@@ -19,9 +19,9 @@ import { type RecycleBin } from '../../recycle-bin-api-slice.gen'
 
 export const BatchActions = (): React.JSX.Element => {
   const { t } = useTranslation()
-  const { selectedRows, selectedRowsTypes, resetSelectedRows } = useSelectedRowsContext()
+  const { selectedRows, selectedRowsTypes, resetSelectedRows, loadingIds, setLoadingIds } = useSelectedRowsContext()
   const { removeItems, restoreItems } = useRecycleBin()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const isLoading = loadingIds.restore.length > 0 || loadingIds.delete.length > 0
 
   const getSelectedItems = (): Array<Pick<RecycleBin, 'id' | 'type'>> => {
     return Object.keys(selectedRows).map((id): Pick<RecycleBin, 'id' | 'type'> => ({
@@ -37,10 +37,12 @@ export const BatchActions = (): React.JSX.Element => {
         label: t('recycle-bin.actions.delete'),
         icon: <Icon value={ 'trash' } />,
         onClick: () => {
-          setIsLoading(true)
-          void removeItems(getSelectedItems(), () => {
+          const items = getSelectedItems()
+          const ids = items.map((item) => item.id)
+          setLoadingIds('delete', ids, true)
+          void removeItems(items, () => {
+            setLoadingIds('delete', ids, false)
             resetSelectedRows()
-            setIsLoading(false)
           })
         }
       },
@@ -49,10 +51,12 @@ export const BatchActions = (): React.JSX.Element => {
         label: t('recycle-bin.actions.restore'),
         icon: <Icon value={ 'restore' } />,
         onClick: () => {
-          setIsLoading(true)
-          void restoreItems(getSelectedItems(), () => {
+          const items = getSelectedItems()
+          const ids = items.map((item) => item.id)
+          setLoadingIds('restore', ids, true)
+          void restoreItems(items, () => {
+            setLoadingIds('restore', ids, false)
             resetSelectedRows()
-            setIsLoading(false)
           })
         }
       }
@@ -64,12 +68,7 @@ export const BatchActions = (): React.JSX.Element => {
       disabled={ isLoading }
       menu={ menu }
     >
-      <DropdownButton
-        key={ 'dropdown-button' }
-        loading={ isLoading }
-      >
-        {t('listing.actions')}
-      </DropdownButton>
+      <DropdownButton key={ 'dropdown-button' }>{t('listing.actions')}</DropdownButton>
     </Dropdown>
   )
 }
