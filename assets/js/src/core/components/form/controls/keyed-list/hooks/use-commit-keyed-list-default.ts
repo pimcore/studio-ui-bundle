@@ -9,9 +9,9 @@
  */
 
 import { useEffect } from 'react'
-import { isUndefined } from 'lodash'
+import { isArray, isUndefined } from 'lodash'
 import { useItem } from '../../../item/provider/item/use-item'
-import { useKeyedList } from '../provider/keyed-list/use-keyed-list'
+import { useKeyedListContext } from '../provider/keyed-list/use-keyed-list-value'
 
 /**
  * Commits `value` into `field` of the enclosing keyed-list once, via a real (non-initial)
@@ -28,15 +28,18 @@ import { useKeyedList } from '../provider/keyed-list/use-keyed-list'
  *
  * A field that already has a value — loaded from a saved config, or set by the user — is left
  * untouched, and `value === undefined` is a no-op (nothing committed, nothing cleared).
+ * The value is read through `operations.getValue`, so the host does not re-render on every
+ * change of the list.
  */
 export const useCommitKeyedListDefault = (field: string, value: unknown): void => {
   const { name } = useItem()
-  const { operations, getValueByKey } = useKeyedList()
-  const namePath = Array.isArray(name) ? name : [name]
+  const { operations } = useKeyedListContext()
 
   useEffect(() => {
-    if (isUndefined(getValueByKey(field)) && !isUndefined(value)) {
-      operations.update([...namePath, field], value, false)
+    const fieldPath = [...(isArray(name) ? name : [name]), field]
+
+    if (isUndefined(operations.getValue(fieldPath)) && !isUndefined(value)) {
+      operations.update(fieldPath, value, false)
     }
   }, [])
 }

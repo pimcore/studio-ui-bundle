@@ -11,7 +11,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from './preview-loader.styles'
-import { isUndefined } from 'lodash'
+import { isArray, isEmpty, isString, isUndefined } from 'lodash'
 import { type AdvancedColumnConfig } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useDataObjectGetGridPreviewQuery } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
@@ -47,7 +47,7 @@ export const PreviewLoader = (props: PreviewProps): React.JSX.Element => {
   // the backend always rejects ("Advanced column config is not set").
   const pipelineValue = column?.__meta?.advancedColumnConfig as AdvancedColumnPipelineValue | undefined
   const sourceFields = pipelineValue?.advancedColumns ?? []
-  const hasSourceFields = Array.isArray(sourceFields) && sourceFields.length > 0
+  const hasSourceFields = isArray(sourceFields) && !isEmpty(sourceFields)
 
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -74,7 +74,7 @@ export const PreviewLoader = (props: PreviewProps): React.JSX.Element => {
     // Surface the backend's actual validation message when the API error response carries one,
     // rather than only the raw RTK Query network-error shape (`'error' in error`).
     const content = isApiErrorData(error) ? new ApiError(error).getContent() : undefined
-    const message = typeof content === 'string' ? content : undefined
+    const message = isString(content) ? content : undefined
 
     return (
       <>
