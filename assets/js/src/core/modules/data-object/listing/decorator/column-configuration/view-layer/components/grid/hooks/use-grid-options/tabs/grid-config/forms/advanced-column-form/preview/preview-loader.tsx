@@ -11,7 +11,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from './preview-loader.styles'
-import { isUndefined } from 'lodash'
+import { isArray, isEmpty, isString, isUndefined } from 'lodash'
 import { type AdvancedColumnConfig } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { useDataObjectGetGridPreviewQuery } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
@@ -20,9 +20,16 @@ import { PreviewValue } from './preview-value'
 import { Text } from '@Pimcore/components/text/text'
 import { usePreviewItem } from './preview-item-provider'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
+import { ApiError, isApiErrorData } from '@Pimcore/modules/app/error-handler'
 
 export interface PreviewProps {
   column: AvailableColumn
+}
+
+interface AdvancedColumnPipelineValue {
+  advancedColumns?: unknown[]
+  transformers?: unknown
+  title?: string
 }
 
 export const PreviewLoader = (props: PreviewProps): React.JSX.Element => {
@@ -33,7 +40,14 @@ export const PreviewLoader = (props: PreviewProps): React.JSX.Element => {
   const { currentLanguage } = useLanguageSelection()
 
   const firstItem = gridData.items[0]
-  const advancedColumnConfig = (column?.__meta?.advancedColumnConfig ?? column.config) as unknown as AdvancedColumnConfig[] | undefined
+  // Only the live/persisted pipeline value (never `column.config`, the "fields to add" schema
+  // catalog used to populate the source-field/transformer pickers - not an actual selection) can
+  // tell us whether the user has picked any source fields yet. Falling back to that catalog here
+  // sent it as the query's `config` whenever a freshly added column had not been touched, which
+  // the backend always rejects ("Advanced column config is not set").
+  const pipelineValue = column?.__meta?.advancedColumnConfig as AdvancedColumnPipelineValue | undefined
+  const sourceFields = pipelineValue?.advancedColumns ?? []
+  const hasSourceFields = isArray(sourceFields) && !isEmpty(sourceFields)
 
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -46,36 +60,31 @@ export const PreviewLoader = (props: PreviewProps): React.JSX.Element => {
         locale: column.localizable
           ? ((column.locale ?? currentLanguage) === 'default' ? null : (column.locale ?? currentLanguage))
           : undefined,
-        config: advancedColumnConfig
+        config: pipelineValue as unknown as AdvancedColumnConfig[] | undefined
       },
       objectId: item?.data?.id ?? firstItem?.id
     }
-  })
+  }, { skip: !hasSourceFields })
 
-  return (
-    <>
-      {!isUndefined(error) && (
-        <>
-          <Text type="danger">{t('grid.advanced-column.error-preview-data')} </Text>
-          {'error' in error && (
-            <Text className={ styles.descriptionText }>{error.error}</Text>
-          )}
-        </>
-      )}
+  if (!hasSourceFields) {
+    return <Text className={ styles.descriptionText }>{t('grid.advanced-column.no-source-fields')}</Text>
+  }
 
-      {isUndefined(error)
-        ? (
-          <>
-            {data?.value?.length > 0
-              ? (
-                <PreviewValue value={ data?.value } />
-                )
-              : (
-                <Text className={ styles.descriptionText }>{t('grid.advanced-column.no-preview-data')}</Text>
-                )}
-          </>
-          )
-        : null}
-    </>
-  )
+  if (!isUndefined(error)) {
+    // Surface the backend's actual validation message when the API error response carries one,
+    // rather than only the raw RTK Query network-error shape (`'error' in error`).
+    const content = isApiErrorData(error) ? new ApiError(error).getContent() : undefined
+    const message = isString(content) ? content : undefined
+
+    return (
+      <>
+        <Text type="danger">{t('grid.advanced-column.error-preview-data')} </Text>
+        <Text className={ styles.descriptionText }>{message ?? ('error' in error ? error.error : '')}</Text>
+      </>
+    )
+  }
+
+  return data?.value?.length > 0
+    ? <PreviewValue value={ data?.value } />
+    : <Text className={ styles.descriptionText }>{t('grid.advanced-column.no-preview-data')}</Text>
 }
