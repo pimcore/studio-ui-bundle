@@ -115,10 +115,11 @@ export const useAreablockControls = ({
           await handleAddArea(null, areaType)
         } }
         onOverwrite={ onOverwrite }
+        onPasteArea={ onPasteArea }
       />
     )
     return ReactDOM.createPortal(emptyStateToolbar, container)
-  }, [areaTypes, config, handleAddArea, isInherited, onOverwrite])
+  }, [areaTypes, config, handleAddArea, isInherited, onOverwrite, onPasteArea])
 
   const renderAreablockToolbar = useCallback((): React.JSX.Element => {
     const portals: React.ReactPortal[] = []
