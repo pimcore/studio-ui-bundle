@@ -182,7 +182,7 @@ export const LanguageComparisonContent = ({ layoutData, locales, editableLanguag
         ))}
       </Flex>
     )
-  }, [locales, sections])
+  }, [locales, sections, t])
 
   return (
     <ConfigProvider theme={ { components: { Form: { itemMarginBottom: token.marginXS } } } }>
