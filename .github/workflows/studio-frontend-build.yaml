@@ -11,6 +11,7 @@ on:
   pull_request:
     paths:
       - "assets/**"
+      - ".github/workflows/studio-frontend-build.yaml"
   workflow_dispatch:
 
 # PR runs and push runs are grouped separately; superseded runs are cancelled —
@@ -18,7 +19,7 @@ on:
 # build-dist/** on push (not pull_request) catches stale build output after merges.
 concurrency:
   group: studio-frontend-build-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name != 'push' }}
 
 permissions:
   contents: write
@@ -35,3 +36,5 @@ jobs:
       build-output-path: ./build-dist/
       api-client: true
       test: true
+    secrets:
+      SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
