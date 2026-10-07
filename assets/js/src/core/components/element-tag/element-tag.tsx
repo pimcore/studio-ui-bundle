@@ -54,8 +54,14 @@ export const ElementTag: React.FC<ElementTagProps> = ({ path, elementType, id, p
     }
   }
 
+  // The tooltip is placed to the side rather than above, matching the element tree's tooltip.
+  // A path tooltip sitting on top covers the rows above it - exactly the content being compared
+  // when scanning a list of paths.
   return (
-    <Tooltip title={ isOverflow && !pathIsHtml ? path : '' }>
+    <Tooltip
+      placement="right"
+      title={ isOverflow && !pathIsHtml ? path : '' }
+    >
       <Tag
         bordered={ false }
         className={ cn(inline ? styles.tagInline : styles.tag, { [styles.tagClickable]: isClickable, [styles.tagDisabled]: disabled }) }

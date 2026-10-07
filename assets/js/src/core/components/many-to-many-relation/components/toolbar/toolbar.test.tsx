@@ -52,6 +52,18 @@ jest.mock('@Pimcore/components/search-input/search-input', () => ({
   SearchInput: () => null
 }))
 
+// The create-object modal reaches the app store through the shared Form component
+jest.mock('../create-object/create-object-modal', () => ({
+  CreateObjectModal: ({ open }: { open: boolean }) => (open ? <div data-testid="create-object-modal" /> : null)
+}))
+
+const creatableClasses = jest.fn((allowedClasses?: string[], skip?: boolean) => (
+  { classes: [{ id: 'CAR-ID', name: 'Car' }], isLoading: false }
+))
+jest.mock('../create-object/use-creatable-relation-classes', () => ({
+  useCreatableRelationClasses: (allowedClasses?: string[], skip?: boolean) => creatableClasses(allowedClasses, skip)
+}))
+
 // The icon component resolves its definition through the DI container
 jest.mock('@Pimcore/components/icon/icon', () => ({
   Icon: () => null
@@ -170,5 +182,78 @@ describe('ManyToManyRelationToolbar inline upload guard', () => {
 
     expect(addAssets).not.toHaveBeenCalled()
     expect(mockAlertWarn).toHaveBeenCalledWith({ content: 'relations.upload.subtype-not-allowed' })
+  })
+})
+
+const CREATE_OBJECT_LABEL = 'relations.create-object.title'
+
+// An object relation with the class-definition flag switched on.
+const creatableRelation = {
+  allowToCreateNewObject: true,
+  dataObjectsAllowed: true,
+  disabled: false
+}
+
+describe('ManyToManyRelationToolbar create object action', () => {
+  beforeEach(() => {
+    creatableClasses.mockReturnValue({ classes: [{ id: 'CAR-ID', name: 'Car' }], isLoading: false })
+  })
+
+  it('stays hidden while the class definition does not allow it', () => {
+    renderToolbar(undefined, { ...creatableRelation, allowToCreateNewObject: false })
+
+    expect(screen.queryByLabelText(CREATE_OBJECT_LABEL)).not.toBeInTheDocument()
+  })
+
+  it('stays hidden on a relation that does not explicitly accept objects', () => {
+    renderToolbar(undefined, { ...creatableRelation, dataObjectsAllowed: undefined })
+
+    expect(screen.queryByLabelText(CREATE_OBJECT_LABEL)).not.toBeInTheDocument()
+  })
+
+  it('stays hidden while the relation is read-only', () => {
+    renderToolbar(undefined, { ...creatableRelation, disabled: true })
+
+    expect(screen.queryByLabelText(CREATE_OBJECT_LABEL)).not.toBeInTheDocument()
+  })
+
+  it('stays hidden when the user may create none of the allowed classes', () => {
+    creatableClasses.mockReturnValue({ classes: [], isLoading: false })
+    renderToolbar(undefined, creatableRelation)
+
+    expect(screen.queryByLabelText(CREATE_OBJECT_LABEL)).not.toBeInTheDocument()
+  })
+
+  it('is the first action in the toolbar', () => {
+    renderToolbar(undefined, creatableRelation)
+
+    const buttons = screen.getAllByRole('button')
+    expect(buttons[0]).toHaveAttribute('aria-label', CREATE_OBJECT_LABEL)
+  })
+
+  it('opens the modal on click', () => {
+    renderToolbar(undefined, creatableRelation)
+
+    expect(screen.queryByTestId('create-object-modal')).not.toBeInTheDocument()
+
+    fireEvent.click(screen.getByLabelText(CREATE_OBJECT_LABEL))
+
+    expect(screen.getByTestId('create-object-modal')).toBeInTheDocument()
+  })
+
+  it('warns instead of opening the modal once maxItems is reached', () => {
+    renderToolbar(undefined, { ...creatableRelation, itemLimitReached: true, maxItems: 2 })
+
+    fireEvent.click(screen.getByLabelText(CREATE_OBJECT_LABEL))
+
+    expect(mockAlertWarn).toHaveBeenCalled()
+    expect(screen.queryByTestId('create-object-modal')).not.toBeInTheDocument()
+  })
+
+  it('skips the class lookup for relations that cannot create objects', () => {
+    creatableClasses.mockClear()
+    renderToolbar(undefined, { ...creatableRelation, allowToCreateNewObject: false })
+
+    expect(creatableClasses).toHaveBeenCalledWith(undefined, true)
   })
 })

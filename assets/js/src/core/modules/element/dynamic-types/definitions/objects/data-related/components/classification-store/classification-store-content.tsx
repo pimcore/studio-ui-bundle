@@ -28,6 +28,9 @@ import { Button } from '@Pimcore/components/button/button'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
 import { type ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
+import {
+  RestoreInheritanceLocaleContext
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/hooks/restore-inheritance-locale-context'
 
 // Project the keyed-list value to the bits this view actually depends on: the
 // group keys and the two bookkeeping maps. None of these change when a field
@@ -156,29 +159,32 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
       theme='default'
       title={ props.title }
     >
-      <Space
-        className='w-full'
-        direction='vertical'
-        size='small'
-      >
-        {groupKeys.map((key) => {
-          return (
-            <Form.Group
-              key={ `${key}` }
-              name={ [key, localizationGroup] }
-            >
-              <ClassificationStoreItem
-                currentLayoutData={ currentLayoutData }
-                groupLayout={ find(currentLayoutData, { id: parseInt(key) }) }
-                hideEmptyData={ isHideEmptyDataEnabled && hideEmptyData }
-                hideEmptyDataRevision={ hideEmptyDataRevision }
-                localizationGroup={ localizationGroup }
-                updateCurrentLayoutData={ updateCurrentLayoutData }
-              />
-            </Form.Group>
-          )
-        })}
-      </Space>
+      {/* the keys shown are those of one language, which the restore of a key checks the edit permission of */}
+      <RestoreInheritanceLocaleContext.Provider value={ localizationGroup === 'default' ? undefined : localizationGroup }>
+        <Space
+          className='w-full'
+          direction='vertical'
+          size='small'
+        >
+          {groupKeys.map((key) => {
+            return (
+              <Form.Group
+                key={ `${key}` }
+                name={ [key, localizationGroup] }
+              >
+                <ClassificationStoreItem
+                  currentLayoutData={ currentLayoutData }
+                  groupLayout={ find(currentLayoutData, { id: parseInt(key) }) }
+                  hideEmptyData={ isHideEmptyDataEnabled && hideEmptyData }
+                  hideEmptyDataRevision={ hideEmptyDataRevision }
+                  localizationGroup={ localizationGroup }
+                  updateCurrentLayoutData={ updateCurrentLayoutData }
+                />
+              </Form.Group>
+            )
+          })}
+        </Space>
+      </RestoreInheritanceLocaleContext.Provider>
 
       <Form.Item
         name={ ['activeGroups'] }

@@ -26,6 +26,7 @@ import { useAddObject } from '../../actions/add-object/use-add-object'
 import { usePaste } from '@Pimcore/modules/data-object/actions/paste/use-paste'
 import { usePublish } from '@Pimcore/modules/element/actions/publish/use-publish'
 import { useAddVariant } from '../../actions/add-variant/use-add-variant'
+import { useTreeClassRestriction } from '../hooks/use-tree-class-restriction'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -126,7 +127,17 @@ moduleSystem.registerModule({
       priority: config.priority.pasteCut,
       useMenuItem: (context: DataObjectTreeContextMenuProps) => {
         const { pasteCutContextMenuItem } = useCopyPaste('data-object')
-        return pasteCutContextMenuItem(context.target)
+        const { isPasteHiddenForClass } = useTreeClassRestriction()
+        const item = pasteCutContextMenuItem(context.target)
+
+        if (item === null) {
+          return null
+        }
+
+        return {
+          ...item,
+          hidden: ('hidden' in item && item.hidden === true) || isPasteHiddenForClass()
+        }
       }
     })
 

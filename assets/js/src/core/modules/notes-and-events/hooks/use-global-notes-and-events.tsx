@@ -9,6 +9,7 @@
  */
 
 import { useEffect, useState } from 'react'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import { type Note, useNoteGetCollectionQuery } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/notes-and-events/notes-and-events-api-slice-enhanced'
 import { useFilterQuery } from '@Pimcore/components/filters'
 import { notesFilterAdapter, useNotesAppliedFilters } from '@Pimcore/modules/notes-and-events/filters/filters'
@@ -31,7 +32,7 @@ interface UseGlobalNotesAndEventsReturn {
 
 export const useNotesAndEvents = (): UseGlobalNotesAndEventsReturn => {
   const [page, setPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState(20)
+  const [pageSize, setPageSize] = useState(appConfig.defaultPageSize)
 
   const { values: appliedValues } = useNotesAppliedFilters()
   const buildFilterQuery = useFilterQuery(notesFilterAdapter, appliedValues)

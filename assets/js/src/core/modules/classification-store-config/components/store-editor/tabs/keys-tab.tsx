@@ -11,6 +11,7 @@
 /* eslint-disable max-lines */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import { theme } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
@@ -66,7 +67,7 @@ export const KeysTab = ({ storeId }: IKeysTabProps): React.JSX.Element => {
   const [definitionKeyId, setDefinitionKeyId] = useState<number | undefined>(undefined)
   const [definitionModalOpen, setDefinitionModalOpen] = useState(false)
   const [page, setPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(20)
+  const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [sorting, setSorting] = useState<SortingState>([])
 

@@ -12,6 +12,7 @@ import React, { useMemo } from 'react'
 import { Content } from '@Pimcore/components/content/content'
 import { ContentLayout } from '@Pimcore/components/content-layout/content-layout'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
+import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { Sidebar } from '@Pimcore/modules/element/listing/abstract/view-layer/components/sidebar/sidebar'
 import { GridContainer } from '@Pimcore/modules/element/listing/abstract/view-layer/components/grid/grid-container'
 import { TopBar } from '../../top-bar/top-bar'
@@ -23,6 +24,7 @@ import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 export const DefaultView = (): React.JSX.Element => {
   const { dataQueryResult } = useData()
+  const { listingSlot } = useSettings()
 
   const content = useMemo(() => (
     <>
@@ -47,6 +49,7 @@ export const DefaultView = (): React.JSX.Element => {
       <SavedSearchRestore elementType={ elementTypes.document } />
       <SavedSearchDirtyTracker elementType={ elementTypes.document } />
       <SearchTermTakeover elementType={ elementTypes.document } />
+      {listingSlot}
       {content}
     </>
   )

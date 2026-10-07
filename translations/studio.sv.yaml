@@ -25,6 +25,8 @@ error.error_document_language_not_set: Dokumentet har ingen språkegenskap angiv
 error.error_inconsistent_asset_type: Bara assets av samma typ tillåts här.
 error.error_recycle_bin_restore: Kan inte återställa elementet från papperskorgen
 error.error_recycle_bin_restore_missing_parent: Kan inte återställa elementet från papperskorgen, överordnat element saknas
+error.error_login_token_as_admin_non_admin_user: Endast admin-användare kan generera en inloggningslänk för en admin-användare
+error.error_login_token_no_user_password: En inloggningslänk kan inte genereras för den här användaren eftersom inget lösenord är satt
 error.syntax_error: Syntaxfel
 sidebar.selected_elements: Valda element
 sidebar.grid_config: Rutnätskonfiguration
@@ -127,7 +129,7 @@ document.tree.context-menu.add-hardlink: Ny Hardlink
 document.required-fields.validation-title: Obligatoriska fält saknas
 document.required-fields.validation-message: Följande obligatoriska fält måste fyllas i innan publicering
 document.site.remove-site: Ta bort sajt
-document.site.remove-site-confirmation: Är du säker på att du vill ta bort den här sajten? Åtgärden kan inte ångras.
+document.site.remove-site-confirmation: Är du säker på att du vill ta bort den här sajten permanent? Åtgärden kan inte ångras.
 document.site.use-as-site: Använd som sajt
 document.site.edit-site: Redigera sajt
 document.site.form.main-domain: Huvuddomän
@@ -157,8 +159,8 @@ data-object.select-class-to-display: Välj en klass att visa
 data-object.tree.context-menu.add-object: Nytt objekt
 data-object.tree.context-menu.add-variant: Ny variant
 data-object.variant-listing.create-data-variant: Ny variant
-data-object.create-data-object: Lägg till nytt objekt av typen {{className}}
-data-object.create-variant: Lägg till ny variant av typen {{className}}
+data-object.create-data-object: Nytt objekt av typen {{className}}
+data-object.create-variant: Ny variant av typen {{className}}
 data-object.object-editor-tabs.variants: Varianter
 object.object-editor-tabs.children-listing: Barnrutnät
 workflow.label: Workflow
@@ -188,7 +190,7 @@ class-definition.import-file-label: Välj JSON-fil
 class-definition.import-success: Klassdefinitionen har importerats
 class-definition.export-success: Klassdefinitionen har exporterats
 class-definition.custom-layouts.default-layout: Standardlayout
-class-definition.create-new: Skapa ny klassdefinition
+class-definition.create-new: Ny klassdefinition
 class-definition.class-name: Klassnamn
 class-definition.unique-identifier: Unik identifierare
 class-definition.unique-identifier-warning: Var försiktig med den unika identifieraren eftersom tabellnamn kan innehålla max 64 tecken.
@@ -244,7 +246,7 @@ class-definition.composite-indices.type-localized-query: Lokaliserad Query
 class-definition.composite-indices.type-store: Store
 class-definition.composite-indices.type-localized-store: Lokaliserad Store
 class-definition.composite-indices.index-label: Index
-field-collection.create-new: Skapa ny Field Collection
+field-collection.create-new: Ny Field Collection
 field-collection.key: Nyckel
 field-collection.validation.enter-key: Ange en nyckel
 field-collection.validation.key-format: Nyckeln måste börja med en bokstav och kan bara innehålla bokstäver, siffror och understreck.
@@ -258,7 +260,7 @@ field-collection.general-settings.implements-interfaces: Implementerar gränssni
 field-collection.general-settings.usages.title: Användningar
 field-collection.general-settings.usages.class: Klass
 field-collection.general-settings.usages.field: Fält
-object-brick.create-new: Skapa ny Object Brick
+object-brick.create-new: Ny Object Brick
 object-brick.key: Nyckel
 object-brick.validation.enter-key: Ange en nyckel
 object-brick.validation.key-format: Nyckeln måste börja med en bokstav och kan bara innehålla bokstäver, siffror och understreck.
@@ -273,7 +275,7 @@ object-brick.class-definitions-block.classname: Klass
 object-brick.class-definitions-block.select-classname: Välj klass
 object-brick.class-definitions-block.fieldname: Fält
 object-brick.class-definitions-block.select-fieldname: Välj fält
-select-option.create-new: Skapa nytt valalternativ
+select-option.create-new: Nytt valalternativ
 select-option.id: ID
 select-option.enter-name-new-item: Ange namnet på det nya objektet
 select-option.validation.enter-id: Ange ett ID
@@ -323,6 +325,8 @@ aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Val av anpassat mi
 aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Ladda ner anpassad miniatyrbild
 aria.asset.image-sidebar.tab.details.precreated-thumbnail: Välj förskapad miniatyrbild att ladda ner
 aria.asset.image-sidebar.tab.details.download-thumbnail: Ladda ner miniatyrbild
+aria.asset.image-sidebar.tab.details.downloadable-thumbnail: Välj nedladdningsbar miniatyrbild
+aria.asset.image-sidebar.tab.details.download-downloadable-thumbnail: Ladda ner vald miniatyrbild
 notification.action-list.actions: Åtgärder
 notification.action-list.cancel: Avbryt
 notification.action-list.cancel-all: Avbryt alla
@@ -376,6 +380,7 @@ grid.advanced-column.preview: Förhandsvisning
 grid.advanced-column.no-preview: Inget förhandsvisningsobjekt tillgängligt
 grid.advanced-column.no-preview-data: Ingen förhandsvisningsdata tillgänglig
 grid.advanced-column.error-preview-data: Fel vid laddning av förhandsvisning
+grid.advanced-column.no-source-fields: Lägg till ett källfält för att se en förhandsvisning.
 grid.advanced-column.preview-item: Förhandsvisningsobjekt
 grid.advanced-column.trim: Trimma
 grid.advanced-column.find: Sök
@@ -426,6 +431,24 @@ login-form.username: Användarnamn
 login-form.password: Lösenord
 aria.login-form-additional-logins.additional-login-provider: "Ytterligare inloggningsleverantör:"
 aria.login-form-additional-logins.remember-me-checkbox: Kom ihåg mig-kryssruta
+oauth.consent.title: Auktorisera åtkomst
+oauth.consent.subtitle: "{{client}} vill komma åt Pimcore som du."
+oauth.consent.unverified: Pimcore har inte verifierat den här applikationen. Fortsätt endast om du startade detta från en applikation du litar på.
+oauth.consent.redirect-to: "Efter att du tillåter detta skickas du till {{host}}"
+oauth.consent.permissions-heading: "Detta ger den möjlighet att:"
+oauth.consent.no-scopes-warning: Den här applikationen begärde inga specifika behörigheter, så inga kan visas. Tillåt bara åtkomst om du litar på att den agerar å dina vägnar.
+oauth.consent.signed-in-as: "Inloggad som {{username}}"
+oauth.consent.allow: Tillåt
+oauth.consent.deny: Neka
+oauth.consent.scope.mcp-read.label: Läsa din data
+oauth.consent.scope.mcp-read.description: Läsa, lista och söka bland de verktyg som är tillgängliga för dig.
+oauth.consent.scope.mcp-write.label: Ändra din data
+oauth.consent.scope.mcp-write.description: Använda verktyg som ändrar data, fortfarande begränsat till dina egna behörigheter.
+oauth.consent.retry: Försök igen
+oauth.consent.error.load-failed: Den här auktoriseringsförfrågan kunde inte läsas in.
+oauth.consent.error.decision-failed: Ditt beslut kunde inte skickas. Försök igen.
+oauth.consent.expired.title: Denna auktoriseringsförfrågan har gått ut
+oauth.consent.expired.description: Börja om från din applikation.
 unsaved-notice: Spara för att bekräfta dina ändringar
 widget-manager.tab-title.close-confirmation: Du har osparade ändringar, är du säker på att du vill stänga den här fliken?
 action-applied-successfully: Åtgärden har tillämpats
@@ -481,8 +504,8 @@ aria.version.expand: Expandera version
 clear-all: Rensa allt
 empty: Tom
 none: Ingen
-yes: Ja
-no: Nej
+'yes': Ja
+'no': Nej
 by: Av
 field: Fält
 no-data-available: Ingen data tillgänglig
@@ -625,6 +648,7 @@ properties.label: Egenskaper
 properties.editable-properties: Redigerbara egenskaper
 properties.all-properties: Alla egenskaper
 properties.predefined-properties: Fördefinierade egenskaper
+properties.predefined-properties.reload-error: Kunde inte läsa in de fördefinierede egenskaperna
 properties.new-custom-property: Ny anpassad egenskap
 translations.columns.type: Typ
 translations.columns.key: Nyckel
@@ -680,7 +704,8 @@ button.confirm: Bekräfta
 button.save-apply: Spara & Tillämpa
 button.add-edit: Lägg till & Redigera
 button.cancel-edits: Avbryt redigeringar
-toggle.advanced-mode: Avancerat läge
+toggle.pql-filter.enable: Aktivera PQL-filter
+toggle.pql-filter.disable: Inaktivera PQL-filter
 actions.open: Öppna
 open: Öppna
 edit: Redigera
@@ -818,7 +843,7 @@ field-definitions.saved-successfully: Sparades.
 field-definitions.select-item-configuration: Välj objektkonfiguration
 field-definitions.custom-layout-title: Custom Layout
 field-definitions.custom-layouts: Custom Layouts
-field-definitions.create-new-class-definition: Skapa ny anpassad layout
+field-definitions.create-new-class-definition: Ny anpassad layout
 field-definitions.select-field-message: Välj ett fält från trädet för att redigera dess egenskaper.
 field-definitions.loading-general-settings: Laddar allmänna inställningar...
 field-definitions.type-not-supported: Typen stöds inte
@@ -1043,6 +1068,8 @@ regex-flags-tooltip: "RegExp utan avgränsare, måste fungera i JS (Avgränsare:
 test-string: Teststräng
 regex-validation-error-message: Strängen matchar inte det obligatoriska formatet.
 calculator-class: Kalkylatorklass
+calculator-data: Kalkylatordata
+calculator-data-tooltip: Valfria fritextdata som skickas till kalkylatorn, t.ex. ett enkelt värde, en kommaseparerad lista eller en JSON-kodad struktur.
 calculator-expression: Kalkylatoruttryck
 calculator-type: Kalkylatortyp
 calculator-type-tooltip: Se den officiella dokumentationen för att lära dig mer om att definiera uttryck eller klasser.
@@ -1101,6 +1128,7 @@ asset.sidebar.original-file: Originalfil
 asset.sidebar.web-format: Webbformat
 asset.sidebar.print-format: Utskriftsformat
 asset.sidebar.office-format: Kontorsformat
+asset.sidebar.thumbnail-download: Ladda ner miniatyrbild
 jobs.notification.title: Pågående jobb
 jobs.notification.tooltip: Öppna pågående jobb
 jobs.notification.jobs_one: "{{count}} åtgärd"
@@ -1160,6 +1188,7 @@ export-xlsx-form.form-field.header: Rubrik
 export-xlsx-form.form-field.header.option.name: Systemnyckel
 export-xlsx-form.form-field.header.option.title: Etikett
 export-xlsx-form.form-field.header.option.no-header: Ingen rubrik
+form.optional-mark: (valfritt)
 form.annotation.added: Tillagd
 form.annotation.changed: Ändrad
 form.annotation.removed: Borttagen
@@ -1315,9 +1344,15 @@ relations.classname: Klass
 relations.fullpath: Fullständig sökväg
 relations.remove-all.confirm: Vill du verkligen ta bort alla relationer?
 relations.upload.subtype-not-allowed: Uppladdade assets vars typ den här relationen inte tillåter tilldelades inte.
+relations.create-object.title: Nytt objekt
+relations.create-object.submit: Skapa
+relations.create-object.name: Namn
+relations.create-object.parent: Överordnad
+relations.create-object.parent.placeholder: Välj en överordnad
+relations.create-object.class: Klass
 relation: relation
 items-limit-reached: Maximalt antal objekt ({{maxItems}}) har nåtts.
-asset-upload-type-not-allowed: Typen på det uppladdade assetet är inte tillåten för det här fältet.
+asset-upload-type-not-allowed: Den uppladdade assetens typ tillåts inte för det här fältet.
 actions: Åtgärder
 asset: Asset
 data-object: Data Object
@@ -1341,8 +1376,14 @@ upload.assets-items-failed-message: Uppladdningen slutfördes med fel.
 quantity-value.converted-units: Konverterade enheter
 table.empty.confirm: Är du säker på att du vill rensa all data?
 table.new-column: Ny kolumn
+table.insert-column-left: Infoga kolumn till vänster
+table.insert-column-right: Infoga kolumn till höger
+table.column-insert-options: Alternativ för att infoga kolumn
 table.delete-column: Ta bort kolumn
 table.new-row: Ny rad
+table.insert-row-above: Infoga rad ovanför
+table.insert-row-below: Infoga rad nedanför
+table.row-insert-options: Alternativ för att infoga rad
 table.delete-row: Ta bort rad
 table.duplicate-row: Duplicera rad
 table.copy: Kopiera
@@ -1510,6 +1551,8 @@ user-management.workspaces.localized-fields.edit: Redigeringsbehörigheter
 user-management.workspaces.custom-layouts: Custom Layouts
 user-management.workspaces.custom-layouts.select: Välj ett eller flera fält
 user-management.add-folder.success: Mappen har lagts till
+user-management.remove-folder: Ta bort mapp
+user-management.remove-folder.text: 'Är du säker på att du vill ta bort den här mappen permanent? Åtgärden kan inte ångras.'
 user-management.remove-folder.success: Mappen har tagits bort
 user-management.clone-user: Klona användare
 user-management.clone-user.text: Ange namnet på den nya användaren
@@ -1525,9 +1568,9 @@ user-management.roles: Roller
 user-management.role: Roll
 user-management.users: Användare
 user-management.user: Användare
-user-management.add-folder: Lägg till ny mapp
+user-management.add-folder: Ny mapp
 user-management.add-folder.label: Ange namnet på den nya mappen
-user-management.add-user: Lägg till ny användare
+user-management.add-user: Ny användare
 user-management.add-user.label: Ange namnet på den nya användaren
 user-management.last-login: Senaste inloggning
 user-management.search.id: ID
@@ -1538,6 +1581,8 @@ roles.clone-role: Klona roll
 roles.clone-role.text: Ange namnet på den nya rollen
 roles.remove-role: Ta bort roll
 roles.remove-role.text: 'Är du säker på att du vill permanent ta bort rollen "{{name}}"? Åtgärden kan inte ångras.'
+roles.remove-folder: Ta bort mapp
+roles.remove-folder.text: 'Är du säker på att du vill ta bort den här mappen permanent? Åtgärden kan inte ångras.'
 roles.remove-folder.success: Mappen har tagits bort
 roles.remove-item.success: Rollen har tagits bort
 roles.add-item.success: Rollen har lagts till
@@ -1545,9 +1590,9 @@ roles.add-folder.success: Mappen har lagts till
 roles.general: Allmänt
 roles.settings.title: Inställningar
 roles.workspaces.title: Workspaces
-roles.add-folder: Lägg till ny mapp
+roles.add-folder: Ny mapp
 roles.add-folder.label: Ange namnet på den nya mappen
-roles.add-role: Lägg till ny roll
+roles.add-role: Ny roll
 roles.add-role.label: Ange namnet på den nya rollen
 roles.search.id: ID
 navigation.quick-access: Snabbåtkomst
@@ -1716,7 +1761,7 @@ image-thumbnails.editor.advanced: Avancerat
 image-thumbnails.editor.quality: Kvalitet
 image-thumbnails.editor.quality.tooltip: JPEG-kvalitetsinställning (1-100)
 image-thumbnails.editor.high-resolution: Hög upplösning
-image-thumbnails.editor.high-resolution.tooltip: Högupplösningsfaktor för retinaskärmar
+image-thumbnails.editor.high-resolution.tooltip: Högupplösningsfaktor (t.ex. för Web-to-Print eller överallt där srcset inte är möjligt eller tillräckligt). Behövs inte för vanliga webbminiatyrer – de får automatiskt ett srcset-attribut med 1x och 2x.
 image-thumbnails.editor.preserve-color: Bevara färg
 image-thumbnails.editor.preserve-color.tooltip: "Bevara färg (profil, rymd) (Imagick, ORIGINAL)\n('Bevara metadata' och 'bevara färg' fungerar bara för transformationer utan kompositioner (ram, bakgrundsfärg, ...) och färgändringar (gråskala, sepia, ...))"
 image-thumbnails.editor.force-process-icc: Tvinga bearbetning av ICC-profiler
@@ -2047,6 +2092,8 @@ classification-store.select-key: Välj nyckel
 classification-store.search-keys: Sök nycklar…
 classification-store.select-group: Välj grupp
 classification-store.search-groups: Sök grupper…
+classification-store.store-id: "ID: {{id}}"
+classification-store.store-tab-label: "{{name}} (ID: {{id}})"
 home: Hem
 preview.label: Förhandsvisning
 preview.desktop: Dator
@@ -2056,7 +2103,9 @@ preview.phone-horizontal: Telefon horisontell
 preview.select_date_time: Välj datum & tid
 preview.screen_size_too_small: Det tillgängliga utrymmet är för litet för att visa det valda förhandsvisningsläget.
 inheritance-active: "Data ärvt från objekt-ID {{id}}"
+inheritance-active-unknown-origin: Data ärvt från ett överordnat objekt
 inheritance-broken: Dataarv brutet
+inheritance-restore: Återställ
 main: Huvud
 main_admin: Huvud (Adminläge)
 draft-alert: Den aktuella versionen är ett utkast. Du kan ta bort utkastet för att återställa föregående version.

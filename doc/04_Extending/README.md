@@ -16,3 +16,5 @@ and dynamic type system for client-side customization.
 
 - [Getting Started with Your First Plugin](./01_Getting_Started_with_Your_First_Plugin.md)
 - [Plugin Development Examples](./02_Plugin_Development_Examples/README.md)
+- [Registering the Frontend Build](./03_Registering_the_Frontend_Build.md)
+- [Shipping the Frontend Build as an Archive](./04_Shipping_the_Frontend_Build_as_an_Archive.md)

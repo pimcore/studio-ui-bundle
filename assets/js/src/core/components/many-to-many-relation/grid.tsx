@@ -15,17 +15,18 @@ import { arrayMove } from '@dnd-kit/sortable'
 import { type DragEndEvent } from '@dnd-kit/core'
 import { useDroppable } from '@Pimcore/components/drag-and-drop/hooks/use-droppable'
 import { Grid } from '@Pimcore/components/grid/grid'
-import { type ColumnDef } from '@tanstack/react-table'
-import { type ManyToManyRelationValue, type ManyToManyRelationValueItem } from './hooks/use-value'
+import { type ColumnDef, type RowSelectionState } from '@tanstack/react-table'
+import { type DisplayManyToManyRelationValue, type ManyToManyRelationValue, type ManyToManyRelationValueItem } from './hooks/use-value'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { toCssDimension } from '@Pimcore/utils/css'
+import { getRelationRowId } from './utils/helpers'
 import { Content } from '@Pimcore/components/content/content'
 import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
 import { useColumns } from './hooks/use-columns'
 import { useStyles } from './grid.styles'
 
 export interface ManyToManyRelationGridProps {
-  value?: ManyToManyRelationValue | null
+  value?: DisplayManyToManyRelationValue | null
   deleteItem: (rowIndex: number) => void
   assetInlineDownloadAllowed: boolean
   disabled?: boolean
@@ -42,6 +43,9 @@ export interface ManyToManyRelationGridProps {
   pathFormatterConfig?: { name: string | undefined, class: string | undefined }
   enableRowVirtualizer: boolean
   hideOpenButton?: boolean
+  enableMultipleRowSelection?: boolean
+  selectedRows?: RowSelectionState
+  onSelectedRowsChange?: (selectedRows: RowSelectionState) => void
 }
 
 export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid (props: ManyToManyRelationGridProps, ref: MutableRefObject<HTMLDivElement>): React.JSX.Element {
@@ -75,8 +79,8 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
 
     if (!isNil(active) && !isNil(over) && !isEqual(active.id, over.id)) {
       setData(prev => {
-        const oldIndex = prev.findIndex(row => row.id === active.id)
-        const newIndex = prev.findIndex(row => row.id === over.id)
+        const oldIndex = prev.findIndex((row, index) => getRelationRowId(row, index) === String(active.id))
+        const newIndex = prev.findIndex((row, index) => getRelationRowId(row, index) === String(over.id))
 
         if (oldIndex === -1 || newIndex === -1) return prev
 
@@ -103,12 +107,15 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
           columns={ columns }
           data={ data }
           disabled={ props.disabled === true || props.inherited === true }
+          enableMultipleRowSelection={ props.enableMultipleRowSelection }
           enableRowDrag={ props.enableRowDrag }
           enableRowVirtualizer={ props?.enableRowVirtualizer }
           handleDragEnd={ handleDragEnd }
+          onSelectedRowsChange={ props.onSelectedRowsChange }
           onUpdateCellData={ props.onUpdateCellData }
           resizable
-          setRowId={ (originalRow) => originalRow.id }
+          selectedRows={ props.selectedRows }
+          setRowId={ getRelationRowId }
         />
         {props.hint}
       </div>

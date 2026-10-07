@@ -9,7 +9,7 @@
  */
 
 import { useStyle } from './sidebar.styles'
-import React, { isValidElement, useState, useContext, useRef } from 'react'
+import React, { isValidElement, useState, useContext, useEffect, useRef } from 'react'
 import { type ISidebarButton, type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
@@ -25,11 +25,26 @@ export interface SidebarProps {
   entries: ISidebarEntry[]
   buttons?: ISidebarButton[]
   sizing?: 'large' | 'medium' | 'default'
+  /** the entry to open on mount; without it the sidebar starts collapsed */
+  defaultActiveTab?: string
   highlights?: Array<ISidebarEntry['key']>
   translateTooltips?: boolean
+  /** When false the sidebar stays expanded: a tab can be switched but never closed. */
+  collapsible?: boolean
+  /**
+   * When false the sidebar does not manage its own width: it drops its resize handle and
+   * lets the panel fill whatever the container gives it. Use it inside a layout that
+   * already resizes its panes, such as SplitLayout.
+   */
+  resizable?: boolean
+  /**
+   * Side the rail tooltips open towards. Point them at the main content, away from the
+   * layout edge the sidebar sits on, so they do not run off it.
+   */
+  tooltipPlacement?: 'left' | 'right'
 }
 
-export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights = [], translateTooltips = false }: SidebarProps): React.JSX.Element => {
+export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights = [], translateTooltips = false, defaultActiveTab = '', collapsible = true, resizable = true, tooltipPlacement = 'left' }: SidebarProps): React.JSX.Element => {
   const { styles } = useStyle()
   const sidebarContext = useContext(SidebarContext)
   const { t } = useTranslation()
@@ -49,13 +64,27 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
     }
   })
 
-  const [localActiveTab, setLocalActiveTab] = useState<string>('')
+  const [localActiveTab, setLocalActiveTab] = useState<string>(defaultActiveTab)
 
   // Use context active tab if available, otherwise use local state
   const activeTab = sidebarContext?.activeTab ?? localActiveTab
   const setActiveTab = sidebarContext?.toggleTab ?? setLocalActiveTab
 
+  // Opening the default has to happen through whichever setter is live: with a SidebarContext in
+  // the tree its own (empty) activeTab wins over local state, so seeding local state is not enough.
+  // Handled on the first pass whatever it finds, or collapsing the default would reopen it.
+  const openedDefault = useRef(false)
+  useEffect(() => {
+    if (openedDefault.current) return
+    openedDefault.current = true
+    if (defaultActiveTab !== '' && activeTab === '') {
+      setActiveTab(defaultActiveTab)
+    }
+  }, [defaultActiveTab, activeTab])
+
   const isExpanded = activeTab !== ''
+  // Roving tabindex: keep one tab reachable via Tab key, falling back to the first tab while collapsed
+  const focusableTabKey = preparedEntries.some((entry) => entry.key === activeTab) ? activeTab : preparedEntries[0]?.key
   const {
     sidebarRef,
     contentRef,
@@ -66,7 +95,21 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
     onKeyboardResize
   } = useSidebarResize(sizing)
 
+  // a sidebar that cannot be collapsed has to settle on an entry itself: the active tab
+  // can name none, before the caller has picked one or after the entry it named was removed
+  const hasActivePanel = entries.some((entry) => entry.key === activeTab)
+
+  useEffect(() => {
+    if (!collapsible && !hasActivePanel && entries.length > 0) {
+      setActiveTab(entries[0].key)
+    }
+  }, [collapsible, hasActivePanel, entries])
+
   function handleSidebarClick (key: string): void {
+    if (!collapsible && key === activeTab) {
+      return
+    }
+
     if (sidebarContext !== null && sidebarContext !== undefined) {
       // When using context, use the toggleTab method
       sidebarContext.toggleTab(key)
@@ -83,10 +126,10 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
   return (
     <ContentConfigProvider gap="extra-small">
       <div
-        className={ styles.sidebar }
+        className={ [styles.sidebar, resizable ? '' : 'sidebar--container-sized'].join(' ') }
         ref={ sidebarRef }
       >
-        {isExpanded && (
+        {resizable && isExpanded && (
           // eslint-disable-next-line jsx-a11y/no-static-element-interactions
           <div
             className={ 'sidebar__resizer' + (isResizing ? ' sidebar__resizer--active' : '') }
@@ -113,7 +156,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
                 return (
                   <Tooltip
                     key={ entry.key }
-                    placement="left"
+                    placement={ tooltipPlacement }
                     title={ translateTooltips && !isNil(entry?.tooltip) ? t(entry.tooltip) : entry?.tooltip }
                   >
                     <div
@@ -127,11 +170,26 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
                       onClick={ () => {
                         handleSidebarClick(entry.key)
                       } }
-                      onKeyDown={ () => {
-                        handleSidebarClick(entry.key)
+                      onKeyDown={ (event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                          event.preventDefault()
+                          handleSidebarClick(entry.key)
+                        }
+                        if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
+                          event.preventDefault()
+                          const next = (index + 1) % entries.length
+                          const nextEl = event.currentTarget.parentElement?.parentElement?.querySelectorAll<HTMLElement>('[role="tab"]')[next]
+                          nextEl?.focus()
+                        }
+                        if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
+                          event.preventDefault()
+                          const prev = (index - 1 + entries.length) % entries.length
+                          const prevEl = event.currentTarget.parentElement?.parentElement?.querySelectorAll<HTMLElement>('[role="tab"]')[prev]
+                          prevEl?.focus()
+                        }
                       } }
                       role={ 'tab' }
-                      tabIndex={ index }
+                      tabIndex={ entry.key === focusableTabKey ? 0 : -1 }
                     >
                       {entry.icon}
                     </div>
@@ -168,7 +226,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
         <div
           className={ `sidebar__content sidebar__content--sizing-${sizing} ` + (isExpanded ? 'expanded' : '') }
           onKeyDown={ (event) => {
-            if (event.key === 'Escape' && isExpanded) {
+            if (event.key === 'Escape' && isExpanded && collapsible) {
               event.stopPropagation()
               setActiveTab('')
               // Move focus to the tab that was active, so the user isn't left on a hidden element.
@@ -179,7 +237,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
             }
           } }
           ref={ contentRef }
-          style={ isNil(contentWidth) ? undefined : { width: contentWidth } }
+          style={ !resizable || isNil(contentWidth) ? undefined : { width: contentWidth } }
         >
           {preparedEntries.map((entry, index) => (
             <LazyTabPanel

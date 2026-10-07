@@ -14,6 +14,7 @@ export * from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-fie
 export * from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-registry'
 export * from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/dynamic-type-field-defintion-data-abstract'
 export * from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/field-defintion-data-form-fields'
+export * from '@Pimcore/modules/field-definitions/dynamic-types/types/data/_abstracts/use-sync-title-from-name'
 export * from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/_abstracts/dynamic-type-field-defintion-layout-abstract'
 export * from '@Pimcore/modules/field-definitions/dynamic-types/types/layout/_abstracts/field-defintion-layout-form-fields'
 export * from '@Pimcore/modules/field-definitions/dynamic-types/types/data/manyToManyObjectRelation/dynamic-type-field-definition-many-to-many-object'

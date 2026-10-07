@@ -125,7 +125,7 @@ const GridRow = ({ row, isSelected, modifiedCells, rowStyle, virtualColumns, vir
 
   const visibleCells = useMemo(() => {
     return enableColumnVirtualizer ? virtualColumns?.map((virtualColumn) => row.getVisibleCells()[virtualColumn.index]) : row.getVisibleCells()
-  }, [enableColumnVirtualizer, virtualColumns, JSON.stringify(row)])
+  }, [enableColumnVirtualizer, virtualColumns, JSON.stringify(row), props.columns])
 
   return useMemo(() => renderWithContextMenu(
     <tr

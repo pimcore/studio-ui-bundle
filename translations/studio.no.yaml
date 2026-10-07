@@ -25,6 +25,8 @@ error.error_document_language_not_set: Dokumentet har ingen språkegenskap angit
 error.error_inconsistent_asset_type: Kun ressurser av samme type er tillatt her.
 error.error_recycle_bin_restore: Kan ikke gjenopprette elementet fra papirkurven
 error.error_recycle_bin_restore_missing_parent: Kan ikke gjenopprette elementet fra papirkurven, overordnet element mangler
+error.error_login_token_as_admin_non_admin_user: Bare admin-brukere kan generere en påloggingslenke for en admin-bruker
+error.error_login_token_no_user_password: Det kan ikke genereres en påloggingslenke for denne brukeren fordi det ikke er angitt noe passord
 error.syntax_error: Syntaksfeil
 sidebar.selected_elements: Valgte elementer
 sidebar.grid_config: Rutenettskonfigurasjon
@@ -126,8 +128,8 @@ document.tree.context-menu.add-link: Ny lenke
 document.tree.context-menu.add-hardlink: Ny hardlink
 document.required-fields.validation-title: Påkrevde felt mangler
 document.required-fields.validation-message: Følgende påkrevde felt må fylles ut før publisering
-document.site.remove-site: Fjern nettsted
-document.site.remove-site-confirmation: Er du sikker på at du vil fjerne dette nettstedet? Denne handlingen kan ikke angres.
+document.site.remove-site: Slett nettsted
+document.site.remove-site-confirmation: Er du sikker på at du vil slette dette nettstedet permanent? Denne handlingen kan ikke angres.
 document.site.use-as-site: Bruk som nettsted
 document.site.edit-site: Rediger nettsted
 document.site.form.main-domain: Hoveddomene
@@ -157,8 +159,8 @@ data-object.select-class-to-display: Velg en klasse å vise
 data-object.tree.context-menu.add-object: Nytt objekt
 data-object.tree.context-menu.add-variant: Ny variant
 data-object.variant-listing.create-data-variant: Ny variant
-data-object.create-data-object: Legg til nytt objekt av type {{className}}
-data-object.create-variant: Legg til ny variant av type {{className}}
+data-object.create-data-object: Nytt objekt av type {{className}}
+data-object.create-variant: Ny variant av type {{className}}
 data-object.object-editor-tabs.variants: Varianter
 object.object-editor-tabs.children-listing: Underordnet rutenett
 workflow.label: Arbeidsflyt
@@ -188,7 +190,7 @@ class-definition.import-file-label: Velg JSON-fil
 class-definition.import-success: Klassedefinisjon importert
 class-definition.export-success: Klassedefinisjon eksportert
 class-definition.custom-layouts.default-layout: Standard Layout
-class-definition.create-new: Opprett ny klassedefinisjon
+class-definition.create-new: Ny klassedefinisjon
 class-definition.class-name: Klassenavn
 class-definition.unique-identifier: Unik identifikator
 class-definition.unique-identifier-warning: Vær forsiktig med den unike identifikatoren fordi tabellnavn kun kan inneholde opptil 64 tegn.
@@ -244,7 +246,7 @@ class-definition.composite-indices.type-localized-query: Lokalisert Query
 class-definition.composite-indices.type-store: Store
 class-definition.composite-indices.type-localized-store: Lokalisert Store
 class-definition.composite-indices.index-label: Indeks
-field-collection.create-new: Opprett ny Field Collection
+field-collection.create-new: Ny Field Collection
 field-collection.key: Nøkkel
 field-collection.validation.enter-key: Vennligst oppgi en nøkkel
 field-collection.validation.key-format: Nøkkelen må begynne med en bokstav og kan kun inneholde bokstaver, tall og understrek.
@@ -258,7 +260,7 @@ field-collection.general-settings.implements-interfaces: Implementerer grensesni
 field-collection.general-settings.usages.title: Bruk
 field-collection.general-settings.usages.class: Klasse
 field-collection.general-settings.usages.field: Felt
-object-brick.create-new: Opprett ny Object Brick
+object-brick.create-new: Ny Object Brick
 object-brick.key: Nøkkel
 object-brick.validation.enter-key: Vennligst oppgi en nøkkel
 object-brick.validation.key-format: Nøkkelen må begynne med en bokstav og kan kun inneholde bokstaver, tall og understrek.
@@ -273,7 +275,7 @@ object-brick.class-definitions-block.classname: Klasse
 object-brick.class-definitions-block.select-classname: Velg klasse
 object-brick.class-definitions-block.fieldname: Felt
 object-brick.class-definitions-block.select-fieldname: Velg felt
-select-option.create-new: Opprett ny Select Option
+select-option.create-new: Ny Select Option
 select-option.id: ID
 select-option.enter-name-new-item: Oppgi navnet på det nye elementet
 select-option.validation.enter-id: Vennligst oppgi en ID
@@ -323,6 +325,8 @@ aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Velg tilpasset min
 aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Last ned tilpasset miniatyrbilde
 aria.asset.image-sidebar.tab.details.precreated-thumbnail: Velg forhåndslaget miniatyrbilde for nedlasting
 aria.asset.image-sidebar.tab.details.download-thumbnail: Last ned miniatyrbilde
+aria.asset.image-sidebar.tab.details.downloadable-thumbnail: Velg nedlastbart miniatyrbilde
+aria.asset.image-sidebar.tab.details.download-downloadable-thumbnail: Last ned valgt miniatyrbilde
 notification.action-list.actions: Handlinger
 notification.action-list.cancel: Avbryt
 notification.action-list.cancel-all: Avbryt alle
@@ -376,6 +380,7 @@ grid.advanced-column.preview: Forhåndsvisning
 grid.advanced-column.no-preview: Ingen forhåndsvisningselement tilgjengelig
 grid.advanced-column.no-preview-data: Ingen forhåndsvisningsdata tilgjengelig
 grid.advanced-column.error-preview-data: Feil ved lasting av forhåndsvisning
+grid.advanced-column.no-source-fields: Legg til et kildefelt for å se en forhåndsvisning.
 grid.advanced-column.preview-item: Forhåndsvisningselement
 grid.advanced-column.trim: Trim
 grid.advanced-column.find: Finn
@@ -426,6 +431,24 @@ login-form.username: Brukernavn
 login-form.password: Passord
 aria.login-form-additional-logins.additional-login-provider: "Ekstra innloggingsleverandør:"
 aria.login-form-additional-logins.remember-me-checkbox: Husk meg-avkrysningsboks
+oauth.consent.title: Autoriser tilgang
+oauth.consent.subtitle: "{{client}} vil ha tilgang til Pimcore som deg."
+oauth.consent.unverified: Pimcore har ikke verifisert denne applikasjonen. Fortsett bare hvis du startet dette fra en applikasjon du stoler på.
+oauth.consent.redirect-to: "Etter at du godkjenner, blir du sendt til {{host}}"
+oauth.consent.permissions-heading: "Dette vil gi den mulighet til å:"
+oauth.consent.no-scopes-warning: Denne applikasjonen ba ikke om spesifikke tillatelser, så ingen kan vises. Tillat bare tilgang hvis du stoler på at den handler på dine vegne.
+oauth.consent.signed-in-as: "Logget inn som {{username}}"
+oauth.consent.allow: Tillat
+oauth.consent.deny: Avslå
+oauth.consent.scope.mcp-read.label: Lese dine data
+oauth.consent.scope.mcp-read.description: Lese, liste opp og søke blant verktøyene som er tilgjengelige for deg.
+oauth.consent.scope.mcp-write.label: Endre dine data
+oauth.consent.scope.mcp-write.description: Bruke verktøy som endrer data, fortsatt begrenset til dine egne tillatelser.
+oauth.consent.retry: Prøv igjen
+oauth.consent.error.load-failed: Denne autorisasjonsforespørselen kunne ikke lastes.
+oauth.consent.error.decision-failed: Din beslutning kunne ikke sendes inn. Prøv igjen.
+oauth.consent.expired.title: Denne autorisasjonsforespørselen har utløpt
+oauth.consent.expired.description: Vennligst start på nytt fra applikasjonen din.
 unsaved-notice: Vennligst lagre for å bekrefte endringene
 widget-manager.tab-title.close-confirmation: Du har ulagrede endringer, er du sikker på at du vil lukke denne fanen?
 action-applied-successfully: Handling utført
@@ -481,8 +504,8 @@ aria.version.expand: Utvid versjon
 clear-all: Fjern alle
 empty: Tom
 none: Ingen
-yes: Ja
-no: Nei
+'yes': Ja
+'no': Nei
 by: Av
 field: Felt
 no-data-available: Ingen data tilgjengelig
@@ -625,6 +648,7 @@ properties.label: Egenskaper
 properties.editable-properties: Redigerbare egenskaper
 properties.all-properties: Alle egenskaper
 properties.predefined-properties: Forhåndsdefinerte egenskaper
+properties.predefined-properties.reload-error: Kunne ikke laste inn de forhåndsdefinerte egenskapene
 properties.new-custom-property: Ny egendefinert egenskap
 translations.columns.type: Type
 translations.columns.key: Nøkkel
@@ -680,7 +704,8 @@ button.confirm: Bekreft
 button.save-apply: Lagre og bruk
 button.add-edit: Legg til og rediger
 button.cancel-edits: Avbryt endringer
-toggle.advanced-mode: Avansert modus
+toggle.pql-filter.enable: Aktiver PQL-filter
+toggle.pql-filter.disable: Deaktiver PQL-filter
 actions.open: Åpne
 open: Åpne
 edit: Rediger
@@ -704,7 +729,7 @@ notifications.settings.discard.keep-editing: Fortsett å redigere
 notifications.settings.unsaved-changes_one: "{{count}} ulagret endring"
 notifications.settings.unsaved-changes_other: "{{count}} ulagrede endringer"
 notifications.settings.group.general: Generelt
-notifications.remove-all: Fjern alle
+notifications.remove-all: Slett alle
 notifications.new-notification: Nytt varsel
 notifications.columns.title: Tittel
 notifications.columns.date: Dato
@@ -818,7 +843,7 @@ field-definitions.saved-successfully: Lagret.
 field-definitions.select-item-configuration: Velg elementkonfigurasjon
 field-definitions.custom-layout-title: Custom Layout
 field-definitions.custom-layouts: Custom Layouts
-field-definitions.create-new-class-definition: Opprett ny Custom Layout
+field-definitions.create-new-class-definition: Ny Custom Layout
 field-definitions.select-field-message: Velg et felt fra treet for å redigere egenskapene.
 field-definitions.loading-general-settings: Laster generelle innstillinger...
 field-definitions.type-not-supported: Type ikke støttet
@@ -1043,6 +1068,8 @@ regex-flags-tooltip: "RegExp uten skilletegn, må fungere i JS (Skilletegn: #)"
 test-string: Teststreng
 regex-validation-error-message: Strengen samsvarer ikke med det påkrevde formatet.
 calculator-class: Kalkulatorklasse
+calculator-data: Kalkulatordata
+calculator-data-tooltip: Valgfrie fritekstdata som sendes til kalkulatoren, f.eks. en enkel verdi, en kommaseparert liste eller en JSON-kodet struktur.
 calculator-expression: Kalkulatoruttrykk
 calculator-type: Kalkulatortype
 calculator-type-tooltip: Se den offisielle dokumentasjonen for å lære mer om å definere uttrykk eller klasser.
@@ -1101,6 +1128,7 @@ asset.sidebar.original-file: Originalfil
 asset.sidebar.web-format: Webformat
 asset.sidebar.print-format: Utskriftsformat
 asset.sidebar.office-format: Kontorformat
+asset.sidebar.thumbnail-download: Last ned miniatyrbilde
 jobs.notification.title: Kjørende jobber
 jobs.notification.tooltip: Åpne kjørende jobber
 jobs.notification.jobs_one: "{{count}} handling"
@@ -1160,6 +1188,7 @@ export-xlsx-form.form-field.header: Overskrift
 export-xlsx-form.form-field.header.option.name: Systemnøkkel
 export-xlsx-form.form-field.header.option.title: Etikett
 export-xlsx-form.form-field.header.option.no-header: Ingen overskrift
+form.optional-mark: (valgfritt)
 form.annotation.added: Lagt til
 form.annotation.changed: Endret
 form.annotation.removed: Fjernet
@@ -1315,9 +1344,15 @@ relations.classname: Klasse
 relations.fullpath: Full sti
 relations.remove-all.confirm: Vil du virkelig slette alle relasjoner?
 relations.upload.subtype-not-allowed: Opplastede assets med en type som denne relasjonen ikke tillater, ble ikke tilordnet.
+relations.create-object.title: Nytt objekt
+relations.create-object.submit: Opprett
+relations.create-object.name: Navn
+relations.create-object.parent: Overordnet
+relations.create-object.parent.placeholder: Velg et overordnet element
+relations.create-object.class: Klasse
 relation: relasjon
 items-limit-reached: Maksimalt antall elementer ({{maxItems}}) er nådd.
-asset-upload-type-not-allowed: Typen til det opplastede assetet er ikke tillatt for dette feltet.
+asset-upload-type-not-allowed: Typen til den opplastede ressursen er ikke tillatt for dette feltet.
 actions: Handlinger
 asset: Ressurs
 data-object: Data Object
@@ -1341,8 +1376,14 @@ upload.assets-items-failed-message: Opplasting fullført med feil.
 quantity-value.converted-units: Konverterte enheter
 table.empty.confirm: Er du sikker på at du vil fjerne alle data?
 table.new-column: Ny kolonne
+table.insert-column-left: Sett inn kolonne til venstre
+table.insert-column-right: Sett inn kolonne til høyre
+table.column-insert-options: Alternativer for å sette inn kolonne
 table.delete-column: Slett kolonne
 table.new-row: Ny rad
+table.insert-row-above: Sett inn rad over
+table.insert-row-below: Sett inn rad under
+table.row-insert-options: Alternativer for å sette inn rad
 table.delete-row: Slett rad
 table.duplicate-row: Dupliser rad
 table.copy: Kopier
@@ -1371,7 +1412,7 @@ tree.actions.role: Rolle
 tree.actions.add-role: Legg til rolle
 tree.actions.clone-role: Klon rolle
 tree.actions.remove-role: Slett rolle
-tree.actions.remove-folder: Fjern mappe
+tree.actions.remove-folder: Slett mappe
 tag-configuration.new: Ny
 tag-configuration.new-tag: Ny tagg
 tag-configuration.name: Navn
@@ -1510,7 +1551,9 @@ user-management.workspaces.localized-fields.edit: Redigeringstillatelser
 user-management.workspaces.custom-layouts: Custom Layouts
 user-management.workspaces.custom-layouts.select: Velg ett eller flere felt
 user-management.add-folder.success: Mappe lagt til
-user-management.remove-folder.success: Mappe fjernet
+user-management.remove-folder: Slett mappe
+user-management.remove-folder.text: 'Er du sikker på at du vil slette denne mappen permanent? Denne handlingen kan ikke angres.'
+user-management.remove-folder.success: Mappen ble slettet
 user-management.clone-user: Klon bruker
 user-management.clone-user.text: Oppgi navnet på den nye brukeren
 user-management.clone-user.success: Bruker klonet
@@ -1519,15 +1562,15 @@ user-management.save-user.password.success: Passord oppdatert
 user-management.add-user.success: Bruker lagt til
 user-management.remove-user: Slett bruker
 user-management.remove-user.text: 'Er du sikker på at du vil slette brukeren "{{name}}" permanent? Denne handlingen kan ikke angres.'
-user-management.remove-user.success: Bruker fjernet
+user-management.remove-user.success: Brukeren ble slettet
 user-management.perspectives: Perspektiver
 user-management.roles: Roller
 user-management.role: Rolle
 user-management.users: Brukere
 user-management.user: Bruker
-user-management.add-folder: Legg til ny mappe
+user-management.add-folder: Ny mappe
 user-management.add-folder.label: Oppgi navnet på den nye mappen
-user-management.add-user: Legg til ny bruker
+user-management.add-user: Ny bruker
 user-management.add-user.label: Oppgi navnet på den nye brukeren
 user-management.last-login: Siste innlogging
 user-management.search.id: ID
@@ -1538,16 +1581,18 @@ roles.clone-role: Klon rolle
 roles.clone-role.text: Oppgi navnet på den nye rollen
 roles.remove-role: Slett rolle
 roles.remove-role.text: 'Er du sikker på at du vil slette rollen "{{name}}" permanent? Denne handlingen kan ikke angres.'
-roles.remove-folder.success: Mappe fjernet
+roles.remove-folder: Slett mappe
+roles.remove-folder.text: 'Er du sikker på at du vil slette denne mappen permanent? Denne handlingen kan ikke angres.'
+roles.remove-folder.success: Mappen ble slettet
 roles.remove-item.success: Rolle fjernet
 roles.add-item.success: Rolle lagt til
 roles.add-folder.success: Mappe lagt til
 roles.general: Generelt
 roles.settings.title: Innstillinger
 roles.workspaces.title: Workspaces
-roles.add-folder: Legg til ny mappe
+roles.add-folder: Ny mappe
 roles.add-folder.label: Oppgi navnet på den nye mappen
-roles.add-role: Legg til ny rolle
+roles.add-role: Ny rolle
 roles.add-role.label: Oppgi navnet på den nye rollen
 roles.search.id: ID
 navigation.quick-access: Hurtigtilgang
@@ -1716,7 +1761,7 @@ image-thumbnails.editor.advanced: Avansert
 image-thumbnails.editor.quality: Kvalitet
 image-thumbnails.editor.quality.tooltip: JPEG-kvalitetsinnstilling (1-100)
 image-thumbnails.editor.high-resolution: Høy oppløsning
-image-thumbnails.editor.high-resolution.tooltip: Høyoppløsningsfaktor for retina-skjermer
+image-thumbnails.editor.high-resolution.tooltip: Høyoppløsningsfaktor (f.eks. for Web-to-Print eller overalt der srcset ikke er mulig eller tilstrekkelig). Ikke nødvendig for vanlige nettminiatyrbilder – de får automatisk et srcset-attributt med 1x og 2x.
 image-thumbnails.editor.preserve-color: Bevar farge
 image-thumbnails.editor.preserve-color.tooltip: "Bevar farge (profil, fargerom) (Imagick, ORIGINAL)\n('Bevar metadata' og 'bevar farge' fungerer kun for transformasjoner uten komposisjoner (ramme, bakgrunnsfarge, ...) og fargemodifikasjoner (gråtoner, sepia, ...))"
 image-thumbnails.editor.force-process-icc: Tving prosessering av ICC-profiler
@@ -1827,7 +1872,7 @@ image-thumbnails.transformations.effects.intensity: Intensitet
 image-thumbnails.transformations.add: Legg til transformasjon
 image-thumbnails.transformations.move-up: Flytt opp
 image-thumbnails.transformations.move-down: Flytt ned
-image-thumbnails.transformations.remove: Fjern
+image-thumbnails.transformations.remove: Slett
 
 # Ukjent/fallback-transformasjon
 image-thumbnails.transformations.unknown-type: "Ukjent transformasjonstype: {{type}}"
@@ -1863,7 +1908,7 @@ video-thumbnails.add.validation.message: Miniatyrbildenavnet er ugyldig
 # Videotransformasjonsverktøylinje
 video-thumbnails.transformations.move-up: Flytt opp
 video-thumbnails.transformations.move-down: Flytt ned
-video-thumbnails.transformations.remove: Fjern
+video-thumbnails.transformations.remove: Slett
 
 # Endre størrelse-transformasjon
 video-thumbnails.transformations.resize.config-title: Konfigurer endre størrelse
@@ -2047,6 +2092,8 @@ classification-store.select-key: Velg nøkkel
 classification-store.search-keys: Søk i nøkler…
 classification-store.select-group: Velg gruppe
 classification-store.search-groups: Søk i grupper…
+classification-store.store-id: "ID: {{id}}"
+classification-store.store-tab-label: "{{name}} (ID: {{id}})"
 home: Hjem
 preview.label: Forhåndsvisning
 preview.desktop: Skrivebord
@@ -2056,7 +2103,9 @@ preview.phone-horizontal: Telefon horisontal
 preview.select_date_time: Velg dato og tid
 preview.screen_size_too_small: Tilgjengelig plass er for liten til å vise valgt forhåndsvisningsmodus.
 inheritance-active: "Data arvet fra objekt-ID {{id}}"
+inheritance-active-unknown-origin: Data arvet fra et overordnet objekt
 inheritance-broken: Dataarv brutt
+inheritance-restore: Gjenopprett
 main: Hoved
 main_admin: Hoved (administratormodus)
 draft-alert: Gjeldende versjon er et utkast. Du kan slette utkastet for å gjenopprette forrige versjon.

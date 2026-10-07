@@ -9,6 +9,7 @@
  */
 
 import React, { useEffect, useState } from 'react'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import { Content } from '@Pimcore/components/content/content'
 import { SearchResultItem } from './search-result-item'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
@@ -52,6 +53,9 @@ export const SearchResultList = ({ data, isLoading, errorText, onPageChange, res
     return selectedItem?.id === item.id && selectedItem?.elementType === item.elementType
   }
 
+  // One tab stop in the list: the active item, or the first one while no listed item is active
+  const hasActiveItem = data?.items.some(detectItemActivity) === true
+
   if (isLoading) {
     return <Content loading />
   }
@@ -73,11 +77,13 @@ export const SearchResultList = ({ data, isLoading, errorText, onPageChange, res
                 <Flex
                   className='w-full h-full'
                   gap={ 0 }
+                  role="listbox"
                   vertical
                 >
-                  {data?.items.map((item) => (
+                  {data?.items.map((item, index) => (
                     <SearchResultItem
                       active={ detectItemActivity(item) }
+                      first={ index === 0 && !hasActiveItem }
                       item={ item }
                       key={ `${item.id}-${item.elementType}` }
                       onMouseEnter={ () => { setSelectedItemQuery(item) } }
@@ -121,7 +127,7 @@ export const SearchResultList = ({ data, isLoading, errorText, onPageChange, res
       >
         <Pagination
           onChange={ onChange }
-          pageSizeOptions={ [10, 20, 50, 100] }
+          pageSizeOptions={ appConfig.pageSizeOptions }
           showSizeChanger
           showTotal={ (total) => `Total ${total} items` }
           total={ data?.totalItems ?? 0 }

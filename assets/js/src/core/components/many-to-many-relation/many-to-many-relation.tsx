@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import type { ColumnDef } from '@tanstack/react-table'
+import type { ColumnDef, RowSelectionState } from '@tanstack/react-table'
 import { isEqual, isNil } from 'lodash'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
 import { ManyToManyRelationGrid } from './grid'
@@ -29,6 +29,8 @@ import { RelationFiltersProvider } from './filters/provider/relation-filters-pro
 export interface ManyToManyRelationClassDefinitionProps {
   assetUploadPath?: string | null
   allowToClearRelation: boolean
+  /** Object relations only: offers a toolbar action that creates a new object into the relation. */
+  allowToCreateNewObject?: boolean
   maxItems: number | null
   pathFormatterClass: string | null
   width: number | string | null
@@ -56,6 +58,10 @@ export interface ManyToManyRelationProps extends IRelationAllowedTypesDataCompon
   noteditable?: boolean | null
   /** Renders a filter dropdown in the header of every filterable column. */
   enableColumnFilters?: boolean
+  enableMultipleRowSelection?: boolean
+  selectedRows?: RowSelectionState
+  onSelectedRowsChange?: (selectedRows: RowSelectionState) => void
+  extraToolbarItems?: React.ReactNode
 }
 
 interface ManyToManyRelationContentProps extends ManyToManyRelationProps {
@@ -153,6 +159,7 @@ const ManyToManyRelationContent = ({ enableRowDrag, ...props }: ManyToManyRelati
           columnDefinition={ props.columnDefinition }
           deleteItem={ deleteItem }
           disabled={ props.disabled }
+          enableMultipleRowSelection={ props.enableMultipleRowSelection }
           enableRowDrag={ enableRowDrag && allowDragAndDrop }
           enableRowVirtualizer={ !props.noteditable }
           enrichRowData={ props.enrichRowData }
@@ -161,8 +168,10 @@ const ManyToManyRelationContent = ({ enableRowDrag, ...props }: ManyToManyRelati
           hideOpenButton={ props.hideOpenButton }
           hint={ props.hint }
           inherited={ props.inherited }
+          onSelectedRowsChange={ props.onSelectedRowsChange }
           onUpdateCellData={ handleUpdateCellData }
           pathFormatterConfig={ { name: props.combinedFieldName, class: props.pathFormatterClass ?? undefined } }
+          selectedRows={ props.selectedRows }
           value={ displayedValue }
           width={ props.width }
         />
@@ -184,6 +193,7 @@ const ManyToManyRelationContent = ({ enableRowDrag, ...props }: ManyToManyRelati
             setValue(null)
           } }
           enableUpload={ props.assetsAllowed === true && props.disabled !== true && props.disableInlineUpload !== true }
+          itemLimitReached={ maxRemainingItems !== undefined && maxRemainingItems <= 0 }
           onSearch={ onSearch }
           uploadMaxItems={ maxRemainingItems !== undefined && maxRemainingItems > 0 ? maxRemainingItems : (props.maxItems ?? undefined) }
           uploadShowMaxItemsError={ maxRemainingItems !== undefined && maxRemainingItems <= 0 }

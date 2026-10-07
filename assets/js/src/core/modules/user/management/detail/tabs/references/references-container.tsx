@@ -17,14 +17,15 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { useUserGetObjectDependenciesQuery } from '@Pimcore/modules/user/user-api-slice-enhanced'
 import { useUserManagementContext } from '@Pimcore/modules/user/hooks/use-user-management-context'
 import { createTabContentTestId } from '@Pimcore/utils/test-id-generator'
-import { DEFAULT_PAGE_SIZE } from '@Pimcore/modules/user/management/detail/tabs/references/constants'
+import { MAX_PAGE_SIZE } from '@Pimcore/modules/user/management/detail/tabs/references/constants'
+import { getDefaultPageSize } from '@Pimcore/components/pagination/page-size'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 
 const ReferenceContainer = ({ ...props }): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useUserManagementContext()
   const [page, setPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(DEFAULT_PAGE_SIZE)
+  const [pageSize, setPageSize] = useState<number>(getDefaultPageSize(MAX_PAGE_SIZE))
 
   const { data, currentData, isLoading, isFetching, isError, error } = useUserGetObjectDependenciesQuery({ id, page, pageSize })
 

@@ -58,9 +58,9 @@ export const RenderEditable = ({ editableDefinition, containerRef }: RenderEdita
     if (isRequired) {
       const isEmpty = editableType?.isEmpty(newValue, editableDefinition) ?? true
       if (isEmpty) {
-        applyRequiredStyling(editableDefinition.name, document)
+        applyRequiredStyling(editableDefinition.id, document)
       } else {
-        removeRequiredStyling(editableDefinition.name, document)
+        removeRequiredStyling(editableDefinition.id, document)
       }
     }
 

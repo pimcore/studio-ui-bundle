@@ -13,7 +13,7 @@ import { Form } from '../../form'
 import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import { type KeyedListData, KeyedListProvider } from './provider/keyed-list/keyed-list-provider'
 import { KeyedListIterator } from './iterator/keyed-list-iterator'
-import { cloneDeep, isArray, isEqual, isObject, get, isUndefined, setWith, isEmpty } from 'lodash'
+import { cloneDeep, isArray, isEqual, isNil, isObject, get, isUndefined, setWith, isEmpty } from 'lodash'
 import { useItem } from '../../item/provider/item/use-item'
 import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
 
@@ -23,9 +23,11 @@ export interface KeyedListProps {
   onChange?: (value: KeyedListData['values']) => void
   onFieldChange?: (field: NamePath, value: any) => void
   getAdditionalComponentProps?: (name: NamePath) => Record<string, any>
+  /** Counterpart of onFieldChange: puts a field back to the value it was loaded with. */
+  onFieldRestore?: (field: NamePath) => void
 }
 
-const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps }: KeyedListProps): React.JSX.Element => {
+const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onFieldChange, getAdditionalComponentProps, onFieldRestore }: KeyedListProps): React.JSX.Element => {
   const initialValue = useMemo(() => isArray(baseValue) ? {} : baseValue ?? {}, [baseValue])
   const [value, setValue] = useState(cloneDeep(initialValue))
   // Mirror of the current value, kept in sync during render so the (referentially
@@ -44,6 +46,9 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   onFieldChangeRef.current = onFieldChange
   const getAdditionalComponentPropsRef = useRef(getAdditionalComponentProps)
   getAdditionalComponentPropsRef.current = getAdditionalComponentProps
+  const onFieldRestoreRef = useRef(onFieldRestore)
+  onFieldRestoreRef.current = onFieldRestore
+  const supportsFieldRestore = !isUndefined(onFieldRestore)
   // the initial value enriched with the values the child fields register on mount,
   // so that those registrations are not reported as changes
   const baselineValue = useRef(cloneDeep(initialValue))
@@ -114,7 +119,9 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     }
 
     const setAsObject = (obj): object => {
-      if (isUndefined(obj)) {
+      // a null intermediate (e.g. localized fields without any value) would stop setWith from writing at all;
+      // registrations keep it, otherwise they would differ from the loaded value and be reported as a change
+      if (isInitialValue ? isUndefined(obj) : isNil(obj)) {
         return {}
       }
 
@@ -171,6 +178,11 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     []
   )
 
+  const stableOnFieldRestore = useCallback(
+    (field: NamePath): void => { onFieldRestoreRef.current?.(field) },
+    []
+  )
+
   // Stable external store: subscribers (per-field via useKeyedListValue) read the
   // current value through getSnapshot and are notified whenever it changes.
   const store = useMemo(() => ({
@@ -192,6 +204,7 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
   return (
     <KeyedListProvider
       getAdditionalComponentProps={ stableGetAdditionalComponentProps }
+      onFieldRestore={ supportsFieldRestore ? stableOnFieldRestore : undefined }
       operations={ operations }
       store={ store }
     >

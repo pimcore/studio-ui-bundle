@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { Form } from '@Pimcore/components/form/form'
 import { usePipelineConfig } from '@Pimcore/components/pipeline/provider/pipeline-config/use-pipeline-config'
 import { Select } from '@Pimcore/components/select/select'
+import { useCommitKeyedListDefault } from '@Pimcore/components/form/controls/keyed-list/hooks/use-commit-keyed-list-default'
 
 export const DynamicTypePipelineGridTransformersTrimComponent = (): React.JSX.Element => {
   const { config } = usePipelineConfig()
@@ -25,9 +26,11 @@ export const DynamicTypePipelineGridTransformersTrimComponent = (): React.JSX.El
 
   const modeOptions = transformerConfig.configOptions.mode.options
 
+  // an untouched pre-selected mode must still be part of the saved config (see the hook's docs)
+  useCommitKeyedListDefault('mode', modeOptions[0]?.value)
+
   return (
     <Form.Item
-      initialValue={ modeOptions[0].value }
       label={ t('grid.advanced-column.trim') }
       name={ 'mode' }
     >

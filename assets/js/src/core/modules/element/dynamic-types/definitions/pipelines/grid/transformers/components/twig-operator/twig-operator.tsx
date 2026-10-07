@@ -13,13 +13,16 @@ import { useTranslation } from 'react-i18next'
 import { Form } from '@Pimcore/components/form/form'
 import { getLanguageExtensions } from '@Pimcore/components/text-editor/detect-language'
 import { CodeEditor } from '@Pimcore/components/code-editor'
+import { useCommitKeyedListDefault } from '@Pimcore/components/form/controls/keyed-list/hooks/use-commit-keyed-list-default'
 
 export const DynamicTypePipelineGridTransformersTwigOperatorComponent = (): React.JSX.Element => {
   const { t } = useTranslation()
 
+  // an untouched default template must still be part of the saved config (see the hook's docs)
+  useCommitKeyedListDefault('template', '{{ value }}')
+
   return (
     <Form.Item
-      initialValue={ '{{ value }}' }
       label={ t('grid.advanced-column.twigTemplate') }
       name={ 'template' }
     >

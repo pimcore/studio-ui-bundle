@@ -9,7 +9,11 @@
  */
 
 import React, { useContext } from 'react'
-import { type Image, useAssetGetByIdQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import {
+  type Image,
+  useAssetGetByIdQuery,
+  useLazyAssetImageDownloadByThumbnailQuery
+} from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { AssetContext } from '@Pimcore/modules/asset/asset-provider'
 import {
   AssetEditorSidebarDetailsView,
@@ -19,14 +23,47 @@ import { replaceFileEnding, saveFileLocal } from '@Pimcore/utils/files'
 import { buildQueryString } from '@Pimcore/utils/query-string'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
+import { useThumbnailImageGetCollectionQuery } from '@Pimcore/modules/asset/editor/types/asset-thumbnails-api-slice.gen'
+import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
+import { UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
+
+// a thumbnail config can change the image format, so the saved file takes the extension of what was rendered
+const thumbnailFileEndings: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'image/webp': 'webp',
+  'image/avif': 'avif',
+  'image/gif': 'gif',
+  'image/tiff': 'tiff',
+  'image/svg+xml': 'svg'
+}
+
+const getThumbnailFilename = (assetFilename: string, mimeType: string): string => {
+  const fileEnding = thumbnailFileEndings[mimeType]
+  if (fileEnding === undefined || !assetFilename.includes('.')) {
+    return assetFilename
+  }
+
+  return replaceFileEnding(assetFilename, fileEnding)
+}
 
 const DetailContainer = (): React.JSX.Element => {
   const assetContext = useContext(AssetContext)
   const { data } = useAssetGetByIdQuery({ id: assetContext.id })
   const imageData = data! as Image
+  const [fetchThumbnailDownload] = useLazyAssetImageDownloadByThumbnailQuery()
+
+  // the collection endpoint is gated by the thumbnails permission on top of the assets permission
+  const canListThumbnails = isAllowed(UserPermission.Thumbnails)
+  const { data: thumbnailsData } = useThumbnailImageGetCollectionQuery(undefined, { skip: !canListThumbnails })
+  const downloadableThumbnails = (thumbnailsData?.items ?? []).map(thumbnail => ({
+    value: thumbnail.id,
+    label: thumbnail.text
+  }))
 
   return (
     <AssetEditorSidebarDetailsView
+      downloadableThumbnails={ downloadableThumbnails }
       height={ imageData.height ?? 0 }
       onClickCustomDownload={ async (customDownloadProps) => {
         downloadImageByCustomSettings(assetContext.id, customDownloadProps)
@@ -34,9 +71,29 @@ const DetailContainer = (): React.JSX.Element => {
       onClickDownloadByFormat={ async (format) => {
         downloadImageByFormat(assetContext.id, format)
       } }
+      onClickDownloadByThumbnail={ (thumbnailName) => {
+        downloadImageByThumbnail(assetContext.id, thumbnailName)
+      } }
       width={ imageData.width ?? 0 }
     />
   )
+
+  function downloadImageByThumbnail (id: number, thumbnailName: string): void {
+    const request = fetchThumbnailDownload({ id, thumbnailName })
+    request
+      .unwrap()
+      .then((blob) => {
+        const objectUrl = URL.createObjectURL(blob)
+        saveFileLocal(objectUrl, getThumbnailFilename(imageData.filename, blob.type))
+        setTimeout(() => { URL.revokeObjectURL(objectUrl) }, 0)
+      })
+      .catch(() => {
+        trackError(new GeneralError('Could not download thumbnail'))
+      })
+      .finally(() => {
+        request.unsubscribe()
+      })
+  }
 
   function downloadImageByCustomSettings (id, {
     width,

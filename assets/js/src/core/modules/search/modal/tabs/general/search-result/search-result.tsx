@@ -9,6 +9,7 @@
  */
 
 import React, { useEffect, useState } from 'react'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import { useSearchTerm } from '../provider/use-search-term'
 import { useSimpleSearchGetQuery } from '@Pimcore/modules/search/search-api-slice-enhanced'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
@@ -18,7 +19,7 @@ import { SearchResultList } from './search-result-list'
 export const SearchResult = (): React.JSX.Element => {
   const { searchTerm } = useSearchTerm()
   const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(20)
+  const [pageSize, setPageSize] = useState(appConfig.defaultPageSize)
   const { isLoading, isError, error, data } = useSimpleSearchGetQuery({ searchTerm, page, pageSize })
 
   useEffect(() => {

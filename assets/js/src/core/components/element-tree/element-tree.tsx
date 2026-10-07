@@ -26,6 +26,7 @@ import { type TreeNode } from './element-tree-slice'
 import { TreeList } from './list/tree-list'
 import { useTreeId } from '@Pimcore/components/element-tree/provider/tree-id-provider/use-tree-id'
 import { createTreeTestId } from '@Pimcore/utils/test-id-generator'
+import { useRovingTabStop } from './hooks/use-roving-tab-stop'
 
 export interface TreeSearchProps {
   node: TreeNodeProps
@@ -59,6 +60,7 @@ export interface TreeProps {
   onRightClick?: (event: React.MouseEvent, node: TreeNode) => void
 
   showRoot: boolean
+  ariaLabel?: string
 }
 
 export interface INodeRef {
@@ -69,6 +71,7 @@ export interface INodeRef {
 export interface ITreeContext extends TreeProps {
   nodesRefs?: MutableRefObject<Record<string, INodeRef>>
   nodeOrder?: () => string[]
+  hasRootNode?: boolean
 }
 
 export const defaultTreeProps: TreeProps = {
@@ -124,16 +127,20 @@ const ElementTree = (
     event.preventDefault()
   }
 
-  const treeContextValue: ITreeContext = useMemo(() => ({ ...props, nodesRefs, nodeOrder, renderNode, renderNodeContent, onRightClick }), [props, nodesRefs, nodeOrder, renderNode, renderNodeContent, onRightClick])
+  const treeContextValue: ITreeContext = useMemo(() => ({ ...props, nodesRefs, nodeOrder, hasRootNode, renderNode, renderNodeContent, onRightClick }), [props, nodesRefs, nodeOrder, hasRootNode, renderNode, renderNodeContent, onRightClick])
 
   const items: string[] = getChildren()
 
   const TreeNode = renderNode
   const treeTestId = createTreeTestId(treeId)
+  const treeRef = useRovingTabStop()
   const treeContent = (
     <div
+      aria-label={ props.ariaLabel }
       className={ ['tree', styles.tree].join(' ') }
       data-testid={ treeTestId }
+      ref={ treeRef }
+      role="tree"
     >
       <TreeContext.Provider value={ treeContextValue }>
 

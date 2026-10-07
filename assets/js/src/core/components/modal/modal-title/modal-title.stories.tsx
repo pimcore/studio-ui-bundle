@@ -24,7 +24,7 @@ export default config
 
 export const ModalTitleWithIcon = {
   args: {
-    iconName: 'x-circle',
+    iconName: 'close-outline',
     children: 'Modal Title With Icon'
   }
 }

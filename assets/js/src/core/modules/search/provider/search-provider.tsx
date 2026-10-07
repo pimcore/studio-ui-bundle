@@ -8,9 +8,20 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { createContext, useMemo, useState } from 'react'
+import React, { createContext, useMemo, useState, type Dispatch, type SetStateAction } from 'react'
 import { type SavedSearchDetailedConfiguration } from '../search-api-slice.gen'
 import { FULLTEXT_SEARCH_MODE_ID } from '@Pimcore/modules/element/listing/decorators/general-filters/search-modes/search-mode-abstract'
+
+/** The Save panel's live values as the user edits them: its form fields and who the search is shared with. */
+export interface SavedSearchPanelDraft {
+  name: string
+  description?: string
+  createMenuShortcut?: boolean
+  menuShortcutGroup?: string
+  shareGlobally?: boolean
+  sharedUsers: number[]
+  sharedRoles: number[]
+}
 
 export interface SearchContextData {
   activeKey: string
@@ -29,6 +40,9 @@ export interface SearchContextData {
   /** The saved search currently loaded into a typed tab (drives the Save panel's update/clone state). */
   loadedSavedSearch: SavedSearchDetailedConfiguration | undefined
   setLoadedSavedSearch: (configuration: SavedSearchDetailedConfiguration | undefined) => void
+  /** The Save panel's live form values (name, description, shortcut, sharing) as the user edits them. */
+  panelDraft: SavedSearchPanelDraft | undefined
+  setPanelDraft: Dispatch<SetStateAction<SavedSearchPanelDraft | undefined>>
 }
 
 export type SearchContextProps = SearchContextData | undefined
@@ -49,10 +63,17 @@ export const SearchProvider = (props: SearchProviderProps): React.JSX.Element =>
   const [searchMode, setSearchMode] = useState<string>(FULLTEXT_SEARCH_MODE_ID)
   const [pendingRestore, setPendingRestore] = useState<SavedSearchDetailedConfiguration | undefined>(props.initialPendingRestore)
   const [loadedSavedSearch, setLoadedSavedSearch] = useState<SavedSearchDetailedConfiguration | undefined>(props.initialLoadedSavedSearch)
+  const [panelDraft, setPanelDraft] = useState<SavedSearchPanelDraft | undefined>(undefined)
 
-  return useMemo(() => (
-    <SearchContext.Provider value={ { open, setOpen, activeKey, setActiveKey, searchTerm, setSearchTerm, searchMode, setSearchMode, pendingRestore, setPendingRestore, loadedSavedSearch, setLoadedSavedSearch } }>
+  // the value is memoized, not the element: a host may swap the children while the state holds
+  const value = useMemo(
+    () => ({ open, setOpen, activeKey, setActiveKey, searchTerm, setSearchTerm, searchMode, setSearchMode, pendingRestore, setPendingRestore, loadedSavedSearch, setLoadedSavedSearch, panelDraft, setPanelDraft }),
+    [open, activeKey, searchTerm, searchMode, pendingRestore, loadedSavedSearch, panelDraft]
+  )
+
+  return (
+    <SearchContext.Provider value={ value }>
       { props.children }
     </SearchContext.Provider>
-  ), [open, activeKey, searchTerm, searchMode, pendingRestore, loadedSavedSearch])
+  )
 }

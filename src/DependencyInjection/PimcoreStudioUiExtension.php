@@ -71,6 +71,10 @@ class PimcoreStudioUiExtension extends Extension implements PrependExtensionInte
         $cspSubscriberDefinition
             ->setArgument('$cspEnabled', $config['csp_header']['enabled'])
             ->setArgument('$excludePaths', $config['csp_header']['exclude_paths']);
+
+        foreach ($config['pagination'] as $key => $value) {
+            $container->setParameter('pimcore_studio_ui.pagination.' . $key, $value);
+        }
     }
 
     /**

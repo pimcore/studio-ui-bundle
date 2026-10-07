@@ -25,6 +25,8 @@ error.error_document_language_not_set: Für das Dokument ist keine Sprache festg
 error.error_inconsistent_asset_type: Nur Assets desselben Typs sind hier erlaubt.
 error.error_recycle_bin_restore: Element kann nicht aus dem Papierkorb wiederhergestellt werden
 error.error_recycle_bin_restore_missing_parent: Element kann nicht aus dem Papierkorb wiederhergestellt werden, übergeordnetes Element fehlt
+error.error_login_token_as_admin_non_admin_user: Nur Admin-Benutzer können einen Anmeldelink für einen Admin-Benutzer generieren
+error.error_login_token_no_user_password: Für diesen Benutzer kann kein Anmeldelink generiert werden, da kein Passwort gesetzt ist
 error.syntax_error: Syntaxfehler
 sidebar.selected_elements: Ausgewählte Elemente
 sidebar.grid_config: Grid-Konfiguration
@@ -126,8 +128,8 @@ document.tree.context-menu.add-link: Neuer Link
 document.tree.context-menu.add-hardlink: Neuer Hardlink
 document.required-fields.validation-title: Pflichtfelder fehlen
 document.required-fields.validation-message: Die folgenden Pflichtfelder müssen vor dem Veröffentlichen ausgefüllt werden
-document.site.remove-site: Site entfernen
-document.site.remove-site-confirmation: Sind Sie sicher, dass Sie diese Site entfernen möchten? Diese Aktion kann nicht rückgängig gemacht werden.
+document.site.remove-site: Site löschen
+document.site.remove-site-confirmation: Möchten Sie diese Site wirklich dauerhaft löschen? Diese Aktion kann nicht rückgängig gemacht werden.
 document.site.use-as-site: Als Site verwenden
 document.site.edit-site: Site bearbeiten
 document.site.form.main-domain: Hauptdomain
@@ -157,8 +159,8 @@ data-object.select-class-to-display: Wählen Sie eine Klasse zur Anzeige
 data-object.tree.context-menu.add-object: Neues Objekt
 data-object.tree.context-menu.add-variant: Neue Variante
 data-object.variant-listing.create-data-variant: Neue Variante
-data-object.create-data-object: Neues Objekt vom Typ {{className}} hinzufügen
-data-object.create-variant: Neue Variante vom Typ {{className}} hinzufügen
+data-object.create-data-object: Neues Objekt vom Typ {{className}}
+data-object.create-variant: Neue Variante vom Typ {{className}}
 data-object.object-editor-tabs.variants: Varianten
 object.object-editor-tabs.children-listing: Kinder-Grid
 workflow.label: Workflow
@@ -188,7 +190,7 @@ class-definition.import-file-label: JSON-Datei auswählen
 class-definition.import-success: Klassendefinition erfolgreich importiert
 class-definition.export-success: Klassendefinition erfolgreich exportiert
 class-definition.custom-layouts.default-layout: Standard-Layout
-class-definition.create-new: Neue Klassendefinition erstellen
+class-definition.create-new: Neue Klassendefinition
 class-definition.class-name: Klassenname
 class-definition.unique-identifier: Eindeutiger Bezeichner
 class-definition.unique-identifier-warning: Seien Sie vorsichtig mit dem eindeutigen Bezeichner, da Tabellennamen nur bis zu 64 Zeichen enthalten können.
@@ -244,7 +246,7 @@ class-definition.composite-indices.type-localized-query: Lokalisierte Query
 class-definition.composite-indices.type-store: Store
 class-definition.composite-indices.type-localized-store: Lokalisierter Store
 class-definition.composite-indices.index-label: Index
-field-collection.create-new: Neue Field Collection erstellen
+field-collection.create-new: Neue Field Collection
 field-collection.key: Schlüssel
 field-collection.validation.enter-key: Bitte geben Sie einen Schlüssel ein
 field-collection.validation.key-format: Der Schlüssel muss mit einem Buchstaben beginnen und darf nur Buchstaben, Zahlen und Unterstriche enthalten.
@@ -258,7 +260,7 @@ field-collection.general-settings.implements-interfaces: Implementiert Interface
 field-collection.general-settings.usages.title: Verwendungen
 field-collection.general-settings.usages.class: Klasse
 field-collection.general-settings.usages.field: Feld
-object-brick.create-new: Neuen Object Brick erstellen
+object-brick.create-new: Neuer Object Brick
 object-brick.key: Schlüssel
 object-brick.validation.enter-key: Bitte geben Sie einen Schlüssel ein
 object-brick.validation.key-format: Der Schlüssel muss mit einem Buchstaben beginnen und darf nur Buchstaben, Zahlen und Unterstriche enthalten.
@@ -273,7 +275,7 @@ object-brick.class-definitions-block.classname: Klasse
 object-brick.class-definitions-block.select-classname: Klasse auswählen
 object-brick.class-definitions-block.fieldname: Feld
 object-brick.class-definitions-block.select-fieldname: Feld auswählen
-select-option.create-new: Neue Auswahloption erstellen
+select-option.create-new: Neue Auswahloption
 select-option.id: ID
 select-option.enter-name-new-item: Geben Sie den Namen des neuen Eintrags ein
 select-option.validation.enter-id: Bitte geben Sie eine ID ein
@@ -323,6 +325,8 @@ aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Auswahl des benutz
 aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Benutzerdefiniertes Vorschaubild herunterladen
 aria.asset.image-sidebar.tab.details.precreated-thumbnail: Vorgefertigtes Vorschaubild zum Herunterladen auswählen
 aria.asset.image-sidebar.tab.details.download-thumbnail: Vorschaubild herunterladen
+aria.asset.image-sidebar.tab.details.downloadable-thumbnail: Herunterladbares Vorschaubild auswählen
+aria.asset.image-sidebar.tab.details.download-downloadable-thumbnail: Ausgewähltes Vorschaubild herunterladen
 notification.action-list.actions: Aktionen
 notification.action-list.cancel: Abbrechen
 notification.action-list.cancel-all: Alle abbrechen
@@ -376,6 +380,7 @@ grid.advanced-column.preview: Vorschau
 grid.advanced-column.no-preview: Kein Vorschauelement verfügbar
 grid.advanced-column.no-preview-data: Keine Vorschaudaten verfügbar
 grid.advanced-column.error-preview-data: Fehler beim Laden der Vorschau
+grid.advanced-column.no-source-fields: Fügen Sie ein Quellfeld hinzu, um eine Vorschau zu sehen.
 grid.advanced-column.preview-item: Vorschauelement
 grid.advanced-column.trim: Kürzen
 grid.advanced-column.find: Suchen
@@ -426,6 +431,24 @@ login-form.username: Benutzername
 login-form.password: Passwort
 aria.login-form-additional-logins.additional-login-provider: "Zusätzlicher Login-Anbieter:"
 aria.login-form-additional-logins.remember-me-checkbox: Angemeldet-bleiben-Kontrollkästchen
+oauth.consent.title: Zugriff autorisieren
+oauth.consent.subtitle: "{{client}} möchte als Sie auf Pimcore zugreifen."
+oauth.consent.unverified: Pimcore hat diese Anwendung nicht verifiziert. Fahren Sie nur fort, wenn Sie dies von einer Anwendung aus gestartet haben, der Sie vertrauen.
+oauth.consent.redirect-to: "Nach Ihrer Zustimmung werden Sie zu {{host}} weitergeleitet"
+oauth.consent.permissions-heading: "Dies ermöglicht Folgendes:"
+oauth.consent.no-scopes-warning: Diese Anwendung hat keine spezifischen Berechtigungen angefordert, daher können keine aufgelistet werden. Erlauben Sie den Zugriff nur, wenn Sie ihr vertrauen, in Ihrem Namen zu handeln.
+oauth.consent.signed-in-as: "Angemeldet als {{username}}"
+oauth.consent.allow: Erlauben
+oauth.consent.deny: Ablehnen
+oauth.consent.scope.mcp-read.label: Ihre Daten lesen
+oauth.consent.scope.mcp-read.description: Lesen, Auflisten und Durchsuchen der Ihnen zur Verfügung stehenden Tools.
+oauth.consent.scope.mcp-write.label: Ihre Daten ändern
+oauth.consent.scope.mcp-write.description: Verwendung von Tools, die Daten ändern, weiterhin beschränkt auf Ihre eigenen Berechtigungen.
+oauth.consent.retry: Erneut versuchen
+oauth.consent.error.load-failed: Diese Autorisierungsanfrage konnte nicht geladen werden.
+oauth.consent.error.decision-failed: Ihre Entscheidung konnte nicht übermittelt werden. Bitte versuchen Sie es erneut.
+oauth.consent.expired.title: Diese Autorisierungsanfrage ist abgelaufen
+oauth.consent.expired.description: Bitte starten Sie erneut über Ihre Anwendung.
 unsaved-notice: Bitte speichern Sie, um Ihre Änderungen zu bestätigen
 widget-manager.tab-title.close-confirmation: Sie haben ungespeicherte Änderungen. Sind Sie sicher, dass Sie diesen Tab schließen möchten?
 action-applied-successfully: Aktion erfolgreich angewendet
@@ -481,8 +504,8 @@ aria.version.expand: Version aufklappen
 clear-all: Alle löschen
 empty: Leer
 none: Keine
-yes: Ja
-no: Nein
+'yes': Ja
+'no': Nein
 by: Von
 field: Feld
 no-data-available: Keine Daten verfügbar
@@ -625,6 +648,7 @@ properties.label: Eigenschaften
 properties.editable-properties: Bearbeitbare Eigenschaften
 properties.all-properties: Alle Eigenschaften
 properties.predefined-properties: Vordefinierte Eigenschaften
+properties.predefined-properties.reload-error: Die vordefinierten Eigenschaften konnten nicht neu geladen werden
 properties.new-custom-property: Neue benutzerdefinierte Eigenschaft
 translations.columns.type: Typ
 translations.columns.key: Schlüssel
@@ -680,7 +704,8 @@ button.confirm: Bestätigen
 button.save-apply: Speichern & Übernehmen
 button.add-edit: Hinzufügen & Bearbeiten
 button.cancel-edits: Bearbeitungen abbrechen
-toggle.advanced-mode: Erweiterter Modus
+toggle.pql-filter.enable: PQL-Filter aktivieren
+toggle.pql-filter.disable: PQL-Filter deaktivieren
 actions.open: Öffnen
 open: Öffnen
 edit: Bearbeiten
@@ -704,7 +729,7 @@ notifications.settings.discard.keep-editing: Weiter bearbeiten
 notifications.settings.unsaved-changes_one: "{{count}} nicht gespeicherte Änderung"
 notifications.settings.unsaved-changes_other: "{{count}} nicht gespeicherte Änderungen"
 notifications.settings.group.general: Allgemein
-notifications.remove-all: Alle entfernen
+notifications.remove-all: Alle löschen
 notifications.new-notification: Neue Benachrichtigung
 notifications.columns.title: Titel
 notifications.columns.date: Datum
@@ -818,7 +843,7 @@ field-definitions.saved-successfully: Erfolgreich gespeichert.
 field-definitions.select-item-configuration: Elementkonfiguration auswählen
 field-definitions.custom-layout-title: Benutzerdefiniertes Layout
 field-definitions.custom-layouts: Benutzerdefinierte Layouts
-field-definitions.create-new-class-definition: Neues benutzerdefiniertes Layout erstellen
+field-definitions.create-new-class-definition: Neues benutzerdefiniertes Layout
 field-definitions.select-field-message: Bitte wählen Sie ein Feld aus dem Baum, um dessen Eigenschaften zu bearbeiten.
 field-definitions.loading-general-settings: Allgemeine Einstellungen werden geladen...
 field-definitions.type-not-supported: Typ nicht unterstützt
@@ -1043,6 +1068,8 @@ regex-flags-tooltip: "RegExp ohne Begrenzer, muss in JS funktionieren (Begrenzer
 test-string: Testzeichenkette
 regex-validation-error-message: Die Zeichenkette entspricht nicht dem erforderlichen Format.
 calculator-class: Berechnungsklasse
+calculator-data: Berechnungsdaten
+calculator-data-tooltip: Optionale Freitext-Daten, die an die Berechnung übergeben werden, z. B. ein einfacher Wert, eine kommagetrennte Liste oder eine JSON-kodierte Struktur.
 calculator-expression: Berechnungsausdruck
 calculator-type: Berechnungstyp
 calculator-type-tooltip: Lesen Sie die offizielle Dokumentation, um mehr über das Definieren von Ausdrücken oder Klassen zu erfahren.
@@ -1101,6 +1128,7 @@ asset.sidebar.original-file: Originaldatei
 asset.sidebar.web-format: Web-Format
 asset.sidebar.print-format: Druck-Format
 asset.sidebar.office-format: Office-Format
+asset.sidebar.thumbnail-download: Vorschaubild herunterladen
 jobs.notification.title: Laufende Aufträge
 jobs.notification.tooltip: Laufende Aufträge öffnen
 jobs.notification.jobs_one: "{{count}} Aktion"
@@ -1160,6 +1188,7 @@ export-xlsx-form.form-field.header: Kopfzeile
 export-xlsx-form.form-field.header.option.name: Systemschlüssel
 export-xlsx-form.form-field.header.option.title: Bezeichnung
 export-xlsx-form.form-field.header.option.no-header: Keine Kopfzeile
+form.optional-mark: (optional)
 form.annotation.added: Hinzugefügt
 form.annotation.changed: Geändert
 form.annotation.removed: Entfernt
@@ -1315,6 +1344,12 @@ relations.classname: Klasse
 relations.fullpath: Vollständiger Pfad
 relations.remove-all.confirm: Möchten Sie wirklich alle Relationen löschen?
 relations.upload.subtype-not-allowed: Hochgeladene Assets, deren Typ diese Relation nicht zulässt, wurden nicht zugewiesen.
+relations.create-object.title: Neues Objekt
+relations.create-object.submit: Erstellen
+relations.create-object.name: Name
+relations.create-object.parent: Übergeordnetes Element
+relations.create-object.parent.placeholder: Übergeordnetes Element wählen
+relations.create-object.class: Klasse
 relation: Relation
 items-limit-reached: Die maximale Anzahl von Einträgen ({{maxItems}}) wurde erreicht.
 asset-upload-type-not-allowed: Der Typ des hochgeladenen Assets ist für dieses Feld nicht zulässig.
@@ -1341,8 +1376,14 @@ upload.assets-items-failed-message: Upload mit Fehlern abgeschlossen.
 quantity-value.converted-units: Umgerechnete Einheiten
 table.empty.confirm: Sind Sie sicher, dass Sie alle Daten löschen möchten?
 table.new-column: Neue Spalte
+table.insert-column-left: Spalte links einfügen
+table.insert-column-right: Spalte rechts einfügen
+table.column-insert-options: Optionen zum Einfügen von Spalten
 table.delete-column: Spalte löschen
 table.new-row: Neue Zeile
+table.insert-row-above: Zeile oberhalb einfügen
+table.insert-row-below: Zeile unterhalb einfügen
+table.row-insert-options: Optionen zum Einfügen von Zeilen
 table.delete-row: Zeile löschen
 table.duplicate-row: Zeile duplizieren
 table.copy: Kopieren
@@ -1371,7 +1412,7 @@ tree.actions.role: Rolle
 tree.actions.add-role: Rolle hinzufügen
 tree.actions.clone-role: Rolle klonen
 tree.actions.remove-role: Rolle löschen
-tree.actions.remove-folder: Ordner entfernen
+tree.actions.remove-folder: Ordner löschen
 tag-configuration.new: Neu
 tag-configuration.new-tag: Neuer Tag
 tag-configuration.name: Name
@@ -1510,7 +1551,9 @@ user-management.workspaces.localized-fields.edit: Bearbeitungsberechtigungen
 user-management.workspaces.custom-layouts: Benutzerdefinierte Layouts
 user-management.workspaces.custom-layouts.select: Ein oder mehrere Felder auswählen
 user-management.add-folder.success: Ordner erfolgreich hinzugefügt
-user-management.remove-folder.success: Ordner erfolgreich entfernt
+user-management.remove-folder: Ordner löschen
+user-management.remove-folder.text: 'Möchten Sie diesen Ordner wirklich dauerhaft löschen? Diese Aktion kann nicht rückgängig gemacht werden.'
+user-management.remove-folder.success: Ordner erfolgreich gelöscht
 user-management.clone-user: Benutzer klonen
 user-management.clone-user.text: Geben Sie den Namen des neuen Benutzers ein
 user-management.clone-user.success: Benutzer erfolgreich geklont
@@ -1519,15 +1562,15 @@ user-management.save-user.password.success: Passwort erfolgreich aktualisiert
 user-management.add-user.success: Benutzer erfolgreich hinzugefügt
 user-management.remove-user: Benutzer löschen
 user-management.remove-user.text: 'Sind Sie sicher, dass Sie den Benutzer "{{name}}" endgültig löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.'
-user-management.remove-user.success: Benutzer erfolgreich entfernt
+user-management.remove-user.success: Benutzer erfolgreich gelöscht
 user-management.perspectives: Perspektiven
 user-management.roles: Rollen
 user-management.role: Rolle
 user-management.users: Benutzer
 user-management.user: Benutzer
-user-management.add-folder: Neuen Ordner hinzufügen
+user-management.add-folder: Neuer Ordner
 user-management.add-folder.label: Geben Sie den Namen des neuen Ordners ein
-user-management.add-user: Neuen Benutzer hinzufügen
+user-management.add-user: Neuer Benutzer
 user-management.add-user.label: Geben Sie den Namen des neuen Benutzers ein
 user-management.last-login: Letzte Anmeldung
 user-management.search.id: ID
@@ -1538,16 +1581,18 @@ roles.clone-role: Rolle klonen
 roles.clone-role.text: Geben Sie den Namen der neuen Rolle ein
 roles.remove-role: Rolle löschen
 roles.remove-role.text: 'Sind Sie sicher, dass Sie die Rolle "{{name}}" endgültig löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.'
-roles.remove-folder.success: Ordner erfolgreich entfernt
+roles.remove-folder: Ordner löschen
+roles.remove-folder.text: 'Möchten Sie diesen Ordner wirklich dauerhaft löschen? Diese Aktion kann nicht rückgängig gemacht werden.'
+roles.remove-folder.success: Ordner erfolgreich gelöscht
 roles.remove-item.success: Rolle erfolgreich entfernt
 roles.add-item.success: Rolle erfolgreich hinzugefügt
 roles.add-folder.success: Ordner erfolgreich hinzugefügt
 roles.general: Allgemein
 roles.settings.title: Einstellungen
 roles.workspaces.title: Workspaces
-roles.add-folder: Neuen Ordner hinzufügen
+roles.add-folder: Neuer Ordner
 roles.add-folder.label: Geben Sie den Namen des neuen Ordners ein
-roles.add-role: Neue Rolle hinzufügen
+roles.add-role: Neue Rolle
 roles.add-role.label: Geben Sie den Namen der neuen Rolle ein
 roles.search.id: ID
 navigation.quick-access: Schnellzugriff
@@ -1716,7 +1761,7 @@ image-thumbnails.editor.advanced: Erweitert
 image-thumbnails.editor.quality: Qualität
 image-thumbnails.editor.quality.tooltip: JPEG-Qualitätseinstellung (1-100)
 image-thumbnails.editor.high-resolution: Hohe Auflösung
-image-thumbnails.editor.high-resolution.tooltip: Hochauflösungsfaktor für Retina-Displays
+image-thumbnails.editor.high-resolution.tooltip: Hochauflösungsfaktor (z. B. für Web-to-Print oder überall dort, wo srcset nicht möglich oder ausreichend ist). Für normale Web-Vorschaubilder nicht nötig – diese erhalten automatisch ein srcset-Attribut mit 1x und 2x.
 image-thumbnails.editor.preserve-color: Farbe beibehalten
 image-thumbnails.editor.preserve-color.tooltip: "Farbe beibehalten (Profil, Farbraum) (Imagick, ORIGINAL)\n('Metadaten beibehalten' und 'Farbe beibehalten' funktioniert nur bei Transformationen ohne Kompositionen (Rahmen, Hintergrundfarbe, ...) und Farbänderungen (Graustufen, Sepia, ...))"
 image-thumbnails.editor.force-process-icc: ICC-Profile zwingend verarbeiten
@@ -1827,7 +1872,7 @@ image-thumbnails.transformations.effects.intensity: Intensität
 image-thumbnails.transformations.add: Transformation hinzufügen
 image-thumbnails.transformations.move-up: Nach oben
 image-thumbnails.transformations.move-down: Nach unten
-image-thumbnails.transformations.remove: Entfernen
+image-thumbnails.transformations.remove: Löschen
 
 # Unknown/Fallback Transformation
 image-thumbnails.transformations.unknown-type: "Unbekannter Transformationstyp: {{type}}"
@@ -1863,7 +1908,7 @@ video-thumbnails.add.validation.message: Der Vorschaubild-Name ist ungültig
 # Video Transformation tool strip
 video-thumbnails.transformations.move-up: Nach oben
 video-thumbnails.transformations.move-down: Nach unten
-video-thumbnails.transformations.remove: Entfernen
+video-thumbnails.transformations.remove: Löschen
 
 # Resize Transformation
 video-thumbnails.transformations.resize.config-title: Größenänderung konfigurieren
@@ -2047,6 +2092,8 @@ classification-store.select-key: Schlüssel auswählen
 classification-store.search-keys: Schlüssel suchen…
 classification-store.select-group: Gruppe auswählen
 classification-store.search-groups: Gruppen suchen…
+classification-store.store-id: "ID: {{id}}"
+classification-store.store-tab-label: "{{name}} (ID: {{id}})"
 home: Startseite
 preview.label: Vorschau
 preview.desktop: Desktop
@@ -2056,7 +2103,9 @@ preview.phone-horizontal: Querformat Telefon
 preview.select_date_time: Datum & Uhrzeit auswählen
 preview.screen_size_too_small: Der verfügbare Platz ist zu klein, um den ausgewählten Vorschaumodus anzuzeigen.
 inheritance-active: "Daten geerbt von Objekt-ID {{id}}"
+inheritance-active-unknown-origin: Daten geerbt von einem übergeordneten Objekt
 inheritance-broken: Datenvererbung unterbrochen
+inheritance-restore: Wiederherstellen
 main: Haupt
 main_admin: Haupt (Admin-Modus)
 draft-alert: Die aktuelle Version ist ein Entwurf. Sie können den Entwurf löschen, um die vorherige Version wiederherzustellen.

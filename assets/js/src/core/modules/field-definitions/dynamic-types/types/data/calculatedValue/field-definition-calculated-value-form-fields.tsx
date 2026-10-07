@@ -9,7 +9,7 @@
  */
 
 import { type FieldDefinitionAbstractFormFieldsProps } from '@Pimcore/modules/field-definitions/dynamic-types/dynamic-type-field-definition-abstract'
-import { Form, Input, InputNumber, Select } from '@sdk/components'
+import { Form, Input, InputNumber, Select, TextArea } from '@sdk/components'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -88,6 +88,14 @@ export const FieldDefinitionCalculatedValueFormFields = (props: FieldDefinitionA
             <Input />
           </Form.Item>
         </Form.Conditional>
+
+        <Form.Item
+          label={ t('calculator-data') }
+          name="calculatorData"
+          tooltip={ t('calculator-data-tooltip') }
+        >
+          <TextArea autoSize />
+        </Form.Item>
       </>
       )}
     </>

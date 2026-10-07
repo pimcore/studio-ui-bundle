@@ -9,6 +9,7 @@
  */
 
 import { type AdvancedColumnConfig, type DataObjectGetGridApiArg } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { appConfig } from '@Pimcore/app/config/app-config'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { type SettingsProviderProps } from '@Pimcore/modules/element/listing/abstract/settings/settings-provider'
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
@@ -82,7 +83,7 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
         filters: {
           includeDescendants: true,
           page: 1,
-          pageSize: 20
+          pageSize: appConfig.defaultPageSize
         }
       }
     }

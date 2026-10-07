@@ -53,8 +53,8 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
         </div>
       )}
 
-      <div
-        className='tree-list'
+      <ul
+        className={ ['tree-list', styles['tree-list']].join(' ') }
         data-testid={ `tree-list-${node.id}` }
       >
         {childrenIds.map((childId) => (
@@ -64,7 +64,7 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
             nodeId={ childId }
           />
         ))}
-      </div>
+      </ul>
 
       {RenderPager !== undefined && (
         <div

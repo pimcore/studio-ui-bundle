@@ -25,6 +25,7 @@ import { componentConfig } from '@Pimcore/modules/app/component-registry/compone
 import { useComponentRegistry } from '@Pimcore/modules/app/component-registry/use-component-registry'
 import { useAppDispatch } from '@sdk/app'
 import { withContextMenu } from './node/with-context-menu'
+import { useTranslation } from 'react-i18next'
 
 export interface TreeContainerProps {
   id: number
@@ -34,6 +35,7 @@ export interface TreeContainerProps {
 export const DocumentTreeNode = withDroppable(withActionStates(withDraggable(withContextMenu(TreeNodeComponent))))
 
 const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const { openDocument } = useDocumentHelper()
   const { rootNode, isLoading } = useElementTreeRootNode(id, showRoot)
   const componentRegistry = useComponentRegistry()
@@ -64,6 +66,7 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
 
   return (
     <ElementTree
+      ariaLabel={ t('document.document-tree.title') }
       contextMenu={ contextMenu as React.ElementType<TreeContextMenuProps> | undefined }
       nodeId={ id }
       onSelect={ onSelect }
