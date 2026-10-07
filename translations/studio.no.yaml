@@ -380,6 +380,7 @@ grid.advanced-column.preview: Forhåndsvisning
 grid.advanced-column.no-preview: Ingen forhåndsvisningselement tilgjengelig
 grid.advanced-column.no-preview-data: Ingen forhåndsvisningsdata tilgjengelig
 grid.advanced-column.error-preview-data: Feil ved lasting av forhåndsvisning
+grid.advanced-column.no-source-fields: Legg til et kildefelt for å se en forhåndsvisning.
 grid.advanced-column.preview-item: Forhåndsvisningselement
 grid.advanced-column.trim: Trim
 grid.advanced-column.find: Finn

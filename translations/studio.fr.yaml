@@ -380,6 +380,7 @@ grid.advanced-column.preview: Aperçu
 grid.advanced-column.no-preview: Aucun élément d'aperçu disponible
 grid.advanced-column.no-preview-data: Aucune donnée d'aperçu disponible
 grid.advanced-column.error-preview-data: Erreur lors du chargement de l'aperçu
+grid.advanced-column.no-source-fields: Ajoutez un champ source pour voir un aperçu.
 grid.advanced-column.preview-item: Élément d'aperçu
 grid.advanced-column.trim: Rogner
 grid.advanced-column.find: Rechercher

@@ -10,6 +10,7 @@
 
 import React, { useMemo } from 'react'
 import { ConfigProvider, theme } from 'antd'
+import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
 import { isEmpty, isNil, isUndefined } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
@@ -56,11 +57,12 @@ const groupIntoSections = (items: ILocalizedFieldDescriptor[]): ILocalizedSectio
 export const LanguageComparisonContent = ({ layoutData, locales, editableLanguages, isAllowedToEdit }: ILanguageComparisonColumnProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { token } = theme.useToken()
+  const { t } = useTranslation()
 
   const renderSectionTitle = ({ breadcrumbTitle, hideSectionTitle }: { breadcrumbTitle: string, hideSectionTitle: boolean }): React.JSX.Element | null => {
     if (isEmptyValue(breadcrumbTitle)) return null
 
-    const titleParts = breadcrumbTitle.split('/')
+    const titleParts = breadcrumbTitle.split('/').map(part => t(part))
     const [firstTitlePart, ...remainingTitleParts] = titleParts
     const secondTitlePart = remainingTitleParts.length > 0 ? ` | ${remainingTitleParts.join(' | ')}` : ''
 
@@ -180,7 +182,7 @@ export const LanguageComparisonContent = ({ layoutData, locales, editableLanguag
         ))}
       </Flex>
     )
-  }, [locales, sections])
+  }, [locales, sections, t])
 
   return (
     <ConfigProvider theme={ { components: { Form: { itemMarginBottom: token.marginXS } } } }>
