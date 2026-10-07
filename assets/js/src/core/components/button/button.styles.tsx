@@ -45,7 +45,7 @@ export const useStyles = createStyles(({ token, css }) => {
         border-radius: ${token.borderRadius}px ${token.borderRadius}px 0 0;
 
         &.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover {
-          background-color: ${token.colorFillActive};
+          background-color: ${token.colorFill};
         }
       }
 

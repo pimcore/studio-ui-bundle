@@ -29,6 +29,7 @@ export interface ClassificationStoreProps extends AbstractObjectDataDefinition {
   allowedGroupIds: string[]
   localized: boolean
   hideEmptyData?: boolean
+  disallowAddRemove?: boolean
   value: any
   onChange: (value: any) => void
 }
