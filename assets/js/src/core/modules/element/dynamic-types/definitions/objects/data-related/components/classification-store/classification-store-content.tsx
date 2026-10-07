@@ -17,6 +17,7 @@ import { Form } from '@Pimcore/components/form/form'
 import { Input } from '@Pimcore/components/input/input'
 import { BaseView } from '../../../layout-related/views/base-view'
 import { ClassificationStoreItem } from './classification-store-item'
+import { ClassificationStoreContentEmpty } from './classification-store-content-empty'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
 import { useLanguageIndependentValuePermission } from './hooks/use-language-independent-value-permission'
 import { LocalizationSwitch } from './components/localization-switch/localization-switch'
@@ -66,6 +67,8 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
   const isLanguageIndependentValuePermitted = useLanguageIndependentValuePermission()
 
   const isLocalizable = props.localized ?? false
+  const isAddRemoveDisallowed = props.noteditable === true || props.disallowAddRemove === true
+  const hasGroups = groupKeys.length > 0
   // A non localized store only ever has the language independent column, so no language
   // permission applies to it.
   const allowLanguageIndependentValue = !isLocalizable || isLanguageIndependentValuePermitted
@@ -104,88 +107,9 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
     localizationGroup = currentLanguage
   }
 
-  return useMemo(() => (
-    <BaseView
-      border
-      collapsed={ false }
-      collapsible
-      extra={
-        <Flex
-          align='center'
-          className='w-full'
-          justify='space-between'
-        >
-          <Button
-            color="default"
-            icon={ <Icon value="folder-search" /> }
-            onClick={ (e) => {
-              e.stopPropagation()
-
-              openModal()
-            } }
-            variant="filled"
-          >
-            {t('add')}
-          </Button>
-
-          <Flex
-            align='center'
-            gap='small'
-          >
-            {isHideEmptyDataEnabled
-              ? (
-                <Switch
-                  aria-label={ t('hide-empty-data') }
-                  checked={ hideEmptyData }
-                  labelLeft={ <Text>{t('hide-empty-data')}</Text> }
-                  onChange={ handleHideEmptyDataChange }
-                />
-                )
-              : <></>}
-
-            {isLocalizable
-              ? (
-                <LocalizationSwitch
-                  allowLanguageIndependentValue={ allowLanguageIndependentValue }
-                  initialValue={ localizationMode }
-                  onChange={ handleLocalizationChange }
-                />
-                )
-              : <></>}
-          </Flex>
-        </Flex>
-      }
-      extraPosition='start'
-      theme='default'
-      title={ props.title }
-    >
-      {/* the keys shown are those of one language, which the restore of a key checks the edit permission of */}
-      <RestoreInheritanceLocaleContext.Provider value={ localizationGroup === 'default' ? undefined : localizationGroup }>
-        <Space
-          className='w-full'
-          direction='vertical'
-          size='small'
-        >
-          {groupKeys.map((key) => {
-            return (
-              <Form.Group
-                key={ `${key}` }
-                name={ [key, localizationGroup] }
-              >
-                <ClassificationStoreItem
-                  currentLayoutData={ currentLayoutData }
-                  groupLayout={ find(currentLayoutData, { id: parseInt(key) }) }
-                  hideEmptyData={ isHideEmptyDataEnabled && hideEmptyData }
-                  hideEmptyDataRevision={ hideEmptyDataRevision }
-                  localizationGroup={ localizationGroup }
-                  updateCurrentLayoutData={ updateCurrentLayoutData }
-                />
-              </Form.Group>
-            )
-          })}
-        </Space>
-      </RestoreInheritanceLocaleContext.Provider>
-
+  // the group bookkeeping is part of the store value, so it is kept in the form in both states
+  const hiddenFormItems = (
+    <>
       <Form.Item
         name={ ['activeGroups'] }
         style={ { display: 'none' } }
@@ -205,8 +129,109 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
           value={ groupCollectionMapping ?? {} }
         />
       </Form.Item>
-    </BaseView>
-  ), [
+    </>
+  )
+
+  return useMemo(() => !hasGroups
+    ? (
+      <>
+        <ClassificationStoreContentEmpty
+          disallowAdd={ isAddRemoveDisallowed }
+          onAdd={ openModal }
+          title={ props.title }
+        />
+        {hiddenFormItems}
+      </>
+      )
+    : (
+      <BaseView
+        border
+        collapsed={ false }
+        collapsible
+        extra={
+          <Flex
+            align='center'
+            className='w-full'
+            justify='space-between'
+          >
+            {!isAddRemoveDisallowed
+              ? (
+                <Button
+                  icon={ <Icon value="folder-search" /> }
+                  onClick={ (e) => {
+                    e.stopPropagation()
+
+                    openModal()
+                  } }
+                  type='action'
+                >
+                  {t('add')}
+                </Button>
+                )
+              : <div />}
+
+            <Flex
+              align='center'
+              gap='small'
+            >
+              {isHideEmptyDataEnabled
+                ? (
+                  <Switch
+                    aria-label={ t('hide-empty-data') }
+                    checked={ hideEmptyData }
+                    labelLeft={ <Text>{t('hide-empty-data')}</Text> }
+                    onChange={ handleHideEmptyDataChange }
+                  />
+                  )
+                : <></>}
+
+              {isLocalizable
+                ? (
+                  <LocalizationSwitch
+                    allowLanguageIndependentValue={ allowLanguageIndependentValue }
+                    initialValue={ localizationMode }
+                    onChange={ handleLocalizationChange }
+                  />
+                  )
+                : <></>}
+            </Flex>
+          </Flex>
+      }
+        extraPosition='start'
+        theme='default'
+        title={ props.title }
+      >
+        {/* the keys shown are those of one language, which the restore of a key checks the edit permission of */}
+        <RestoreInheritanceLocaleContext.Provider value={ localizationGroup === 'default' ? undefined : localizationGroup }>
+          <Space
+            className='w-full'
+            direction='vertical'
+            size='small'
+          >
+            {groupKeys.map((key) => {
+              return (
+                <Form.Group
+                  key={ `${key}` }
+                  name={ [key, localizationGroup] }
+                >
+                  <ClassificationStoreItem
+                    currentLayoutData={ currentLayoutData }
+                    disallowDelete={ isAddRemoveDisallowed }
+                    groupLayout={ find(currentLayoutData, { id: parseInt(key) }) }
+                    hideEmptyData={ isHideEmptyDataEnabled && hideEmptyData }
+                    hideEmptyDataRevision={ hideEmptyDataRevision }
+                    localizationGroup={ localizationGroup }
+                    updateCurrentLayoutData={ updateCurrentLayoutData }
+                  />
+                </Form.Group>
+              )
+            })}
+          </Space>
+        </RestoreInheritanceLocaleContext.Provider>
+
+        {hiddenFormItems}
+      </BaseView>
+      ), [
     groupKeys,
     activeGroups,
     groupCollectionMapping,
@@ -215,6 +240,8 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
     allowLanguageIndependentValue,
     currentLayoutData,
     hideEmptyData,
-    hideEmptyDataRevision
+    hideEmptyDataRevision,
+    isAddRemoveDisallowed,
+    props.title
   ])
 }

@@ -24,6 +24,7 @@ import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-for
 import { Panel } from '@Pimcore/components/panel/panel'
 import { useClassificationStore } from './provider'
 import { getHiddenKeyIds } from './utils/hide-empty-data'
+import { useStyles } from './classification-store-item.styles'
 
 export interface ClassificationStoreItemProps {
   groupLayout?: ClassificationStoreGroupLayout2
@@ -35,6 +36,8 @@ export interface ClassificationStoreItemProps {
   hideEmptyDataRevision?: number
   /** Localization the group is currently edited in ('default' or a language). */
   localizationGroup?: string
+  /** Hides the delete button, e.g. when the store is not editable. */
+  disallowDelete?: boolean
 }
 
 export const ClassificationStoreItem = (props: ClassificationStoreItemProps): React.JSX.Element => {
@@ -44,7 +47,8 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
     updateCurrentLayoutData,
     hideEmptyData = false,
     hideEmptyDataRevision = 0,
-    localizationGroup = 'default'
+    localizationGroup = 'default',
+    disallowDelete = false
   } = props
 
   const { name } = useItem()
@@ -53,6 +57,7 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
   const { isNewGroup } = useClassificationStore()
 
   const modal = useFormModal()
+  const { styles } = useStyles()
   const { t } = useTranslation()
 
   const fieldName: string = isArray(name) ? name[name.length - 1] : name
@@ -103,16 +108,19 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
         border={ false }
         collapsed={ false }
         collapsible
-        extra={ (
-          <Flex className='w-full'>
-            <Button
-              color="default"
-              icon={ <Icon value="trash" /> }
-              onClick={ handleClose }
-              variant="filled"
-            />
-          </Flex>
-        ) }
+        extra={ disallowDelete
+          ? undefined
+          : (
+            <Flex className='w-full'>
+              <Button
+                aria-label={ t('delete') }
+                className={ styles.deleteButton }
+                icon={ <Icon value="trash" /> }
+                onClick={ handleClose }
+                type='action'
+              />
+            </Flex>
+            ) }
         extraPosition="start"
         theme='border-highlight'
         title={ groupLayout?.name }
@@ -128,5 +136,5 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
         </Panel>
       </BaseView>
     )
-  }, [groupLayout, id, fieldName, currentLayoutData, visibleKeys])
+  }, [groupLayout, id, fieldName, currentLayoutData, visibleKeys, disallowDelete])
 }
