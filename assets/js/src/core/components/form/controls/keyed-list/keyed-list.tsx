@@ -13,7 +13,7 @@ import { Form } from '../../form'
 import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import { type KeyedListData, KeyedListProvider } from './provider/keyed-list/keyed-list-provider'
 import { KeyedListIterator } from './iterator/keyed-list-iterator'
-import { cloneDeep, isArray, isEqual, isObject, get, isUndefined, setWith, isEmpty } from 'lodash'
+import { cloneDeep, isArray, isEqual, isNil, isObject, get, isUndefined, setWith, isEmpty } from 'lodash'
 import { useItem } from '../../item/provider/item/use-item'
 import { useDebounce } from '@Pimcore/utils/hooks/use-debounce'
 
@@ -114,7 +114,8 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     }
 
     const setAsObject = (obj): object => {
-      if (isUndefined(obj)) {
+      // a null intermediate (e.g. localized fields without any value) would stop setWith from writing at all
+      if (isNil(obj)) {
         return {}
       }
 

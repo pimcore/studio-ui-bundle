@@ -334,6 +334,20 @@ describe('KeyedList', () => {
       expect(onChange).toHaveBeenCalledWith({ newBrick: { credentials: { username: 'admin' } } })
     })
 
+    it('update() replaces a null intermediate structure on nested paths', () => {
+      // localized fields without any value are loaded as null, e.g. in a newly added object brick
+      const onChange = jest.fn()
+
+      renderKeyedList({ value: { myBrick: { localizedfields: null } }, onChange })
+      flushDebounce()
+
+      act(() => { operations.update(['attributes', 'myBrick', 'localizedfields', 'rel', 'en'], [4], false) })
+      flushDebounce()
+
+      expect(onChange).toHaveBeenCalledTimes(1)
+      expect(onChange).toHaveBeenCalledWith({ myBrick: { localizedfields: { rel: { en: [4] } } } })
+    })
+
     it('remove() of the last remaining entry is not reported (empty values stay silent)', () => {
       // the empty-value guard also suppresses this case — consumers handling deletions
       // (like ObjectBrick) track them through their own deletion markers instead
