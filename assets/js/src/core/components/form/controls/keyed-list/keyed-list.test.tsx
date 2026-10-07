@@ -348,6 +348,26 @@ describe('KeyedList', () => {
       expect(onChange).toHaveBeenCalledWith({ myBrick: { localizedfields: { rel: { en: [4] } } } })
     })
 
+    it('keeps a null intermediate structure for registrations of fields mounting with the list', () => {
+      // replacing the null for mere registrations would report a change nobody made
+      const onChange = jest.fn()
+
+      renderKeyedList(
+        { value: { myBrick: { localizedfields: null } }, onChange },
+        <RegisteringField name={ ['attributes', 'myBrick', 'localizedfields', 'rel', 'en'] } />
+      )
+      flushDebounce()
+
+      expect(onChange).not.toHaveBeenCalled()
+      expect(operations.getValue(['attributes', 'myBrick', 'localizedfields'])).toBeNull()
+
+      act(() => { operations.update(['attributes', 'myBrick', 'localizedfields', 'rel', 'en'], [4], false) })
+      flushDebounce()
+
+      expect(onChange).toHaveBeenCalledTimes(1)
+      expect(onChange).toHaveBeenCalledWith({ myBrick: { localizedfields: { rel: { en: [4] } } } })
+    })
+
     it('remove() of the last remaining entry is not reported (empty values stay silent)', () => {
       // the empty-value guard also suppresses this case — consumers handling deletions
       // (like ObjectBrick) track them through their own deletion markers instead

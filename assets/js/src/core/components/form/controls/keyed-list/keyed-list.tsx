@@ -114,8 +114,9 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
     }
 
     const setAsObject = (obj): object => {
-      // a null intermediate (e.g. localized fields without any value) would stop setWith from writing at all
-      if (isNil(obj)) {
+      // a null intermediate (e.g. localized fields without any value) would stop setWith from writing at all;
+      // registrations keep it, otherwise they would differ from the loaded value and be reported as a change
+      if (isInitialValue ? isUndefined(obj) : isNil(obj)) {
         return {}
       }
 
