@@ -25,8 +25,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Space } from '@Pimcore/components/space/space'
 import { Switch, type SwitchProps } from '@Pimcore/components/switch/switch'
 import { Text } from '@Pimcore/components/text/text'
-import { Button } from '@Pimcore/components/button/button'
-import { Icon } from '@Pimcore/components/icon/icon'
+import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
 import { type ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 import {
@@ -68,7 +67,7 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
 
   const isLocalizable = props.localized ?? false
   const isAddRemoveDisallowed = props.noteditable === true || props.disallowAddRemove === true
-  const hasGroups = groupKeys.length > 0
+  const hasGroups = !isEmpty(groupKeys)
   // A non localized store only ever has the language independent column, so no language
   // permission applies to it.
   const allowLanguageIndependentValue = !isLocalizable || isLanguageIndependentValuePermitted
@@ -156,8 +155,8 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
           >
             {!isAddRemoveDisallowed
               ? (
-                <Button
-                  icon={ <Icon value="folder-search" /> }
+                <IconTextButton
+                  icon={ { value: 'folder-search' } }
                   onClick={ (e) => {
                     e.stopPropagation()
 
@@ -166,7 +165,7 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
                   type='action'
                 >
                   {t('add')}
-                </Button>
+                </IconTextButton>
                 )
               : <div />}
 

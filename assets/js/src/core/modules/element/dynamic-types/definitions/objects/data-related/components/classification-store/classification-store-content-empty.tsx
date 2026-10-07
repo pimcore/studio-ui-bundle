@@ -9,6 +9,7 @@
  */
 
 import React, { type ReactNode } from 'react'
+import { isString } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { Space } from '@Pimcore/components/space/space'
 import { Text } from '@Pimcore/components/text/text'
@@ -27,7 +28,7 @@ export interface ClassificationStoreContentEmptyProps {
 // Same layout as the empty state of blocks and field collections (see CollectionContentEmpty)
 export const ClassificationStoreContentEmpty = ({ title, disallowAdd = false, onAdd }: ClassificationStoreContentEmptyProps): React.JSX.Element => {
   const { t } = useTranslation()
-  const translatedTitle = typeof title === 'string' ? translateLabel(title) : title
+  const translatedTitle = isString(title) ? translateLabel(title) : title
 
   return (
     <Space

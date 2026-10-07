@@ -16,8 +16,7 @@ import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/objec
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { BaseView } from '../../../layout-related/views/base-view'
 import { type ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
-import { Icon } from '@Pimcore/components/icon/icon'
-import { Button } from '@Pimcore/components/button/button'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useKeyedListContext } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
@@ -112,11 +111,11 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
           ? undefined
           : (
             <Flex className='w-full'>
-              <Button
-                aria-label={ t('delete') }
+              <IconButton
                 className={ styles.deleteButton }
-                icon={ <Icon value="trash" /> }
+                icon={ { value: 'trash' } }
                 onClick={ handleClose }
+                title={ t('delete') }
                 type='action'
               />
             </Flex>

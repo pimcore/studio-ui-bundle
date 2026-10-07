@@ -14,6 +14,7 @@ export const useStyles = createStyles(({ css, token }) => {
   return {
     deleteButton: css`
       &.ant-btn {
+        width: auto;
         padding-inline: ${token.paddingSM}px;
       }
     `
