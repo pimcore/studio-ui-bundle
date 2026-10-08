@@ -112,10 +112,11 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
           : (
             <Flex className='w-full'>
               <IconButton
+                aria-label={ t('delete') }
                 className={ styles.deleteButton }
                 icon={ { value: 'trash' } }
                 onClick={ handleClose }
-                title={ t('delete') }
+                tooltip={ { title: t('delete') } }
                 type='action'
               />
             </Flex>

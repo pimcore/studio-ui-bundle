@@ -12,6 +12,7 @@ import React from 'react'
 import { Flex, IconButton } from '@sdk/components'
 import { type CellContext } from '@tanstack/react-table'
 import { type RedirectRow, useRedirects } from '../hooks/use-redirects'
+import { t } from 'i18next'
 
 type RedirectWithActions = RedirectRow & { actions: React.ReactNode }
 
@@ -40,9 +41,11 @@ export const ActionsCell = ({ info, setRedirectRows }: ActionsCellProps): React.
       justify="center"
     >
       <IconButton
+        aria-label={ t('delete') }
         icon={ { value: 'trash' } }
         loading={ deleteLoading }
         onClick={ handleDelete }
+        tooltip={ { title: t('delete') } }
         type="link"
       />
     </Flex>

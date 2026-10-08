@@ -34,6 +34,7 @@ import { SelectionType } from '@Pimcore/modules/element/element-selector/provide
 import { ModalUploadButton } from '@Pimcore/components/modal-upload/components/modal-upload-button/modal-upload-button'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
+import { actionTooltipDelay } from '@Pimcore/components/tooltip/tooltip'
 
 export type ManyToOneRelationValueType = ManyToOneRelationValue | PathTextInputValue | null
 
@@ -152,6 +153,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
         {props.hideOpenButton !== true && (props.allowPathTextInput !== true || props.showOpenForTextInput === true) && !isNull(value) && (
           <Tooltip
             key="open"
+            mouseEnterDelay={ actionTooltipDelay }
             title={ t('open') }
           >
             <IconButton
@@ -166,6 +168,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
         {props.assetInlineDownloadAllowed === true && value?.textInput !== true && (
           <Tooltip
             key="download"
+            mouseEnterDelay={ actionTooltipDelay }
             title={ t('download') }
           >
             <IconButton
@@ -184,6 +187,7 @@ export const ManyToOneRelation = (props: ManyToOneRelationProps): React.JSX.Elem
         {props.allowToClearRelation === true && !(isNull(value) || props.disabled === true) && (
           <Tooltip
             key="empty"
+            mouseEnterDelay={ actionTooltipDelay }
             title={ t('empty') }
           >
             <IconButton

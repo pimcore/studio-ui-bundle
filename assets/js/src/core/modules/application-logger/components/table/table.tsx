@@ -158,10 +158,12 @@ export const Table = ({ items, isLoading, sorting, onSortingChange }: TableProps
             className='w-full'
           >
             <IconButton
+              aria-label={ t('details') }
               icon={ { value: 'expand-01' } }
               onClick={ async () => {
                 openModal(column)
               } }
+              tooltip={ { title: t('details') } }
               type="link"
             />
           </Flex>

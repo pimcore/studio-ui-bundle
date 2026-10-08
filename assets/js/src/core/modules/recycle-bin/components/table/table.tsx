@@ -121,6 +121,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
             justify='center'
           >
             <IconButton
+              aria-label={ t('recycle-bin.actions.restore') }
               data-testid={ buildTestId(['button', 'restore']) }
               icon={ { value: 'restore' } }
               loading={ restoreLoading.includes(row.original.id) }
@@ -130,10 +131,12 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
                   setRestoreLoading((prev) => prev.filter(id => id !== row.original.id))
                 })
               } }
+              tooltip={ { title: t('recycle-bin.actions.restore') } }
               type="link"
             />
 
             <IconButton
+              aria-label={ t('recycle-bin.actions.delete') }
               data-testid={ buildTestId(['button', 'delete']) }
               icon={ { value: 'trash' } }
               loading={ removeLoading.includes(row.original.id) }
@@ -143,6 +146,7 @@ export const Table = ({ items }: TableProps): React.JSX.Element => {
                   setRemoveLoading(prev => prev.filter(id => id !== row.original.id))
                 })
               } }
+              tooltip={ { title: t('recycle-bin.actions.delete') } }
               type="link"
             />
           </Flex>

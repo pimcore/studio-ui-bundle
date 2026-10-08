@@ -15,6 +15,7 @@ import { IconButton } from '@sdk/components'
 import { type PredefinedPropertyRow, usePredefinedProperty } from '../hooks/use-predefined-property'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { TRANSLATIONS_WIDGET } from '@Pimcore/modules/translations'
+import { t } from 'i18next'
 
 type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
 
@@ -53,14 +54,18 @@ export const ActionsCell = ({ info, setPredefinedPropertyRows }: ActionsCellProp
   return (
     <div className="properties-table--actions-column">
       <IconButton
+        aria-label={ t('translate') }
         icon={ { value: 'translate' } }
         onClick={ handleTranslate }
+        tooltip={ { title: t('translate') } }
         type="link"
       />
       <IconButton
+        aria-label={ t('delete') }
         icon={ { value: 'trash' } }
         loading={ deleteLoading }
         onClick={ handleDelete }
+        tooltip={ { title: t('delete') } }
         type="link"
       />
     </div>

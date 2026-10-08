@@ -92,6 +92,7 @@ export const NotesAndEventsTabView = ({
               onClickTrash(note.id)
             } }
             theme='primary'
+            tooltip={ { title: i18n.t('delete') } }
           />
           )}
         </Space>

@@ -12,6 +12,7 @@ import React from 'react'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { Box } from '@Pimcore/components/box/box'
+import { t } from 'i18next'
 
 interface RefetchProps {
   isFetching: boolean
@@ -29,8 +30,10 @@ export const Refetch = ({ isFetching, refetch }: RefetchProps): React.JSX.Elemen
 
   return (
     <IconButton
+      aria-label={ t('refresh') }
       icon={ { value: 'refresh' } }
       onClick={ async () => { refetch() } }
+      tooltip={ { title: t('refresh') } }
     />
   )
 }

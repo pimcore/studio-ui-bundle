@@ -13,6 +13,7 @@ import { type CellContext } from '@tanstack/react-table'
 import { type PredefinedMetadata } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice-enhanced'
 import { Flex, IconButton } from '@sdk/components'
 import { type PredefinedAssetMetadataRow, usePredefinedAssetMetadata } from '../hooks/use-predefined-asset-metadata'
+import { t } from 'i18next'
 
 type PredefinedAssetMetadataWithActions = PredefinedMetadata & { actions: React.ReactNode }
 
@@ -38,9 +39,11 @@ export const ActionsCell = ({ info, setPredefinedAssetMetadataRows }: ActionsCel
       justify='center'
     >
       <IconButton
+        aria-label={ t('delete') }
         icon={ { value: 'trash' } }
         loading={ deleteLoading }
         onClick={ handleDelete }
+        tooltip={ { title: t('delete') } }
         type="link"
       />
     </Flex>

@@ -27,6 +27,7 @@ import { uuid } from '@Pimcore/utils/uuid'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { useStyles } from './image-gallery.styles'
 import { type DataTemplates } from '@Pimcore/modules/element/components/hotspot-markers-modal/hotspot-markers-modal'
+import { actionTooltipDelay } from '@Pimcore/components/tooltip/tooltip'
 
 export interface ImageGalleryProps {
   value?: ImageGalleryValue | null
@@ -113,6 +114,7 @@ export const ImageGallery = (props: ImageGalleryProps): React.JSX.Element => {
         : (
           <Tooltip
             key="empty"
+            mouseEnterDelay={ actionTooltipDelay }
             title={ t('empty') }
           >
             <IconButton

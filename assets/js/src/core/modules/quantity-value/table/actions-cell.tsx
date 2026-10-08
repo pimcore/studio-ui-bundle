@@ -52,9 +52,11 @@ export const ActionsCell = ({ info, setQuantityValueUnitRows }: ActionsCellProps
       justify="center"
     >
       <IconButton
+        aria-label={ t('delete') }
         icon={ { value: 'trash' } }
         loading={ deleteLoading }
         onClick={ handleDelete }
+        tooltip={ { title: t('delete') } }
         type="link"
       />
     </Flex>

@@ -500,6 +500,8 @@ version.category.title.meta: Meta Data
 version.category.title.properties: Properties
 version.changed-attributes: "Changed attributes: {{attributes}}"
 aria.version.delete: Delete version
+aria.notes-and-events.delete: Delete note
+aria.card.close: Close
 aria.version.expand: Expand version
 clear-all: Clear all
 empty: Empty
@@ -758,6 +760,7 @@ tags.apply-tags-to-children: Apply tags to children
 tags.remove-and-apply-tags-to-children: Remove and apply tags to children
 tags.columns.path: Path
 tags.columns.actions: Remove
+tags.actions.delete: Remove tag
 csv-separated-options: CSV separated options
 csv-separated-options-info: The list of available options can be specified as comma-separated list, as single-column values or mixed. For the single-column way, the key will also be used as the value.
 add: Add
@@ -1322,6 +1325,9 @@ success: Success
 no-value-set: No value set
 set-to-null: Empty (set to null)
 remove: Remove
+move-up: Move up
+move-down: Move down
+translate: Translate
 delete: Delete
 clone: Clone
 jobs.clone-job.step2.title: Updating references
@@ -2906,6 +2912,7 @@ translations.merger.state.reverted: Reverted
 translations.merger.state.pending: Pending
 translations.merger.apply-all: Apply all
 translations.merger.revert-all: Revert all
+translations.merger.revert: Revert
 translations.merger.title: "Merge Translations (Domain: {{domain}})"
 translations.merger.column.language: Language
 translations.merger.items: items

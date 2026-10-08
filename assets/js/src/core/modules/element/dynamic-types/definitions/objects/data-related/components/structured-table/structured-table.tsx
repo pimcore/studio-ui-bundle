@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Content } from '@Pimcore/components/content/content'
+import { actionTooltipDelay } from '@Pimcore/components/tooltip/tooltip'
 
 export interface StructuredTableProps {
   disabled?: boolean
@@ -104,7 +105,10 @@ export const StructuredTable = (props: StructuredTableProps): React.JSX.Element 
       </Content>
       { props.disabled !== true && (
       <Box padding="extra-small">
-        <Tooltip title={ t('empty') }>
+        <Tooltip
+          mouseEnterDelay={ actionTooltipDelay }
+          title={ t('empty') }
+        >
           <IconButton
             icon={ { value: 'trash' } }
             onClick={ () => {

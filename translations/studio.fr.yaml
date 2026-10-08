@@ -500,6 +500,8 @@ version.category.title.meta: Métadonnées
 version.category.title.properties: Propriétés
 version.changed-attributes: "Attributs modifiés : {{attributes}}"
 aria.version.delete: Supprimer la version
+aria.notes-and-events.delete: Supprimer la note
+aria.card.close: Fermer
 aria.version.expand: Développer la version
 clear-all: Tout effacer
 empty: Vide
@@ -758,6 +760,7 @@ tags.apply-tags-to-children: Appliquer les tags aux enfants
 tags.remove-and-apply-tags-to-children: Supprimer et appliquer les tags aux enfants
 tags.columns.path: Chemin
 tags.columns.actions: Supprimer
+tags.actions.delete: Supprimer le tag
 csv-separated-options: Options séparées par des virgules
 csv-separated-options-info: La liste des options disponibles peut être spécifiée sous forme de liste séparée par des virgules, de valeurs à colonne unique ou de façon mixte. Pour le mode colonne unique, la clé sera également utilisée comme valeur.
 add: Ajouter
@@ -1322,6 +1325,9 @@ success: Succès
 no-value-set: Aucune valeur définie
 set-to-null: Vide (défini à null)
 remove: Supprimer
+move-up: Monter
+move-down: Descendre
+translate: Traduire
 delete: Supprimer
 clone: Cloner
 jobs.clone-job.step2.title: Mise à jour des références
@@ -2906,6 +2912,7 @@ translations.merger.state.reverted: Rétabli
 translations.merger.state.pending: En attente
 translations.merger.apply-all: Tout appliquer
 translations.merger.revert-all: Tout rétablir
+translations.merger.revert: Rétablir
 translations.merger.title: "Fusionner les traductions (Domaine : {{domain}})"
 translations.merger.column.language: Langue
 translations.merger.items: éléments

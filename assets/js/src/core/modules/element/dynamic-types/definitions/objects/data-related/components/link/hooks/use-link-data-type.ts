@@ -12,7 +12,7 @@ import type React from 'react'
 import { createElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { actionTooltipDelay, Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { isEmpty, isNil } from 'lodash'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { convertType } from '../utils/link-value-converter'
@@ -89,6 +89,7 @@ export const useLinkDataType = (props: LinkProps): UseLinkDataTypeReturn => {
     if (value !== null && !isEmpty(value.fullPath)) {
       actions.push(
         createElement(Tooltip, {
+          mouseEnterDelay: actionTooltipDelay,
           key: 'open',
           title: t('open')
         }, createElement(IconButton, {
@@ -103,6 +104,7 @@ export const useLinkDataType = (props: LinkProps): UseLinkDataTypeReturn => {
     if (props.disabled !== true) {
       actions.push(
         createElement(Tooltip, {
+          mouseEnterDelay: actionTooltipDelay,
           key: 'edit',
           title: t('edit')
         }, createElement(IconButton, {
@@ -114,6 +116,7 @@ export const useLinkDataType = (props: LinkProps): UseLinkDataTypeReturn => {
     } else {
       actions.push(
         createElement(Tooltip, {
+          mouseEnterDelay: actionTooltipDelay,
           key: 'details',
           title: t('details')
         }, createElement(IconButton, {

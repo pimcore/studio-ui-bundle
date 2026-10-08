@@ -13,8 +13,10 @@ import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useAssetHelper } from '@Pimcore/modules/asset/hooks/use-asset-helper'
 import { Flex } from 'antd'
+import { useTranslation } from 'react-i18next'
 
 export const AssetActionsCell = ({ row }: DefaultCellProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const data = row.original
   const { openAsset } = useAssetHelper()
 
@@ -25,8 +27,10 @@ export const AssetActionsCell = ({ row }: DefaultCellProps): React.JSX.Element =
         justify='center'
       >
         <IconButton
+          aria-label={ t('open') }
           icon={ { value: 'open-folder' } }
           onClick={ () => { openAsset({ config: { id: data.id } }) } }
+          tooltip={ { title: t('open') } }
           type='link'
         />
       </Flex>
