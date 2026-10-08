@@ -16,6 +16,7 @@ export const useStyles = createStyles(({ token, css }) => {
       position: relative;
 
       .button__loading-spinner,
+      .button__success-mark,
       .ant-spin-dot {
         position: absolute;
         top: 50%;
@@ -34,7 +35,13 @@ export const useStyles = createStyles(({ token, css }) => {
         }
       }
       
-      .button__loading-spinner + .button__text {
+      .button__success-mark {
+        display: flex;
+        justify-content: center;
+      }
+
+      .button__loading-spinner + .button__text,
+      .button__success-mark + .button__text {
         opacity: 0;
       }
 

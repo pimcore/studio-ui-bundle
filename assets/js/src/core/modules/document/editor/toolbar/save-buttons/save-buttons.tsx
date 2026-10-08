@@ -25,13 +25,14 @@ import {
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useRequiredFieldsValidation } from '@Pimcore/modules/document/hooks/use-required-fields-validation'
 import { isNil } from 'lodash'
-import React, { type ReactElement, useContext, useEffect } from 'react'
+import React, { type ReactElement, useContext, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 import { useDocumentSaveTask } from '@Pimcore/modules/document/hooks/use-document-save-task'
 import { DocumentSaveTaskManager } from '@Pimcore/modules/document/services'
 import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
+import { useTemporaryValue } from '@Pimcore/utils/hooks/use-temporary-value'
 
 export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -50,6 +51,9 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { deleteDraft, isLoading: isDraftDeleteLoading, buttonText: deleteDraftButtonText } = useDeleteDraft('document')
   const messageApi = useMessage()
   const isAutoSaved = document?.draftData?.isAutoSave === true
+  // the button of the save that just succeeded briefly confirms it with a check mark
+  const lastSaveTaskRef = useRef<SaveTaskType | null>(null)
+  const [savedTask, showSavedTask] = useTemporaryValue<SaveTaskType>()
   const {
     validateRequiredFields,
     showValidationErrorModal
@@ -59,6 +63,11 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     const handleSuccessEvent = async (): Promise<void> => {
       if (isSuccess && isSchedulesSuccess) {
         removeTrackedChanges()
+
+        if (!isNil(lastSaveTaskRef.current)) {
+          showSavedTask(lastSaveTaskRef.current)
+        }
+
         await messageApi.success(t('save-success'))
       }
     }
@@ -101,6 +110,8 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
       }
     }
 
+    lastSaveTaskRef.current = task
+
     Promise.all([
       saveDocument(task, () => {
         onFinish?.()
@@ -128,6 +139,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
             onClick={ async () => {
               await handleSaveClick(SaveTaskType.Version)
             } }
+            success={ savedTask === SaveTaskType.Version }
             type="default"
           >
             {t('toolbar.save-draft')}
@@ -144,6 +156,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
             onClick={ async () => {
               await handleSaveClick(SaveTaskType.Save)
             } }
+            success={ savedTask === SaveTaskType.Save }
             type="default"
           >
             {t('toolbar.save-draft')}
@@ -193,6 +206,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
           onClick={ async () => {
             await handleSaveClick(SaveTaskType.Save)
           } }
+          success={ savedTask === SaveTaskType.Save }
           type="primary"
         >
           {t('toolbar.save')}
@@ -215,6 +229,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
               }
             })
           } }
+          success={ savedTask === SaveTaskType.Publish }
           type="primary"
         >
           {t('toolbar.save-and-publish')}
