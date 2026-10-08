@@ -13,14 +13,16 @@ import { isNil } from 'lodash'
 import { DocumentSaveTaskManager } from '@Pimcore/modules/document/services'
 import { SaveTaskType } from '@Pimcore/modules/document/actions/save/use-save'
 import { useTemporaryValue } from '@Pimcore/utils/hooks/use-temporary-value'
+import { confirmWhenSchedulesSaved } from '@Pimcore/modules/element/editor/save-confirmation'
 
 /**
  * The manual save task of a document that has just been saved, for a short confirmation.
  *
  * A task counts as saved when it ends without an error. Tasks queued behind an auto save only start
  * once that one has finished, and ignored duplicate clicks never start, so neither is confirmed early.
+ * The confirmation also waits for the schedules saved by the same action (see getSchedulesSaved).
  */
-export const useSavedTask = (documentId: number): SaveTaskType | null => {
+export const useSavedTask = (documentId: number, getSchedulesSaved?: () => Promise<boolean> | undefined): SaveTaskType | null => {
   const [savedTask, showSavedTask] = useTemporaryValue<SaveTaskType>()
 
   useEffect(() => {
@@ -36,7 +38,8 @@ export const useSavedTask = (documentId: number): SaveTaskType | null => {
 
     const unsubscribeTask = taskManager.onRunningTaskChange((task) => {
       if (!isNil(runningTask) && runningTask !== SaveTaskType.AutoSave && !hasFailed) {
-        showSavedTask(runningTask)
+        const savedTask = runningTask
+        void confirmWhenSchedulesSaved(getSchedulesSaved?.(), () => { showSavedTask(savedTask) })
       }
 
       runningTask = task

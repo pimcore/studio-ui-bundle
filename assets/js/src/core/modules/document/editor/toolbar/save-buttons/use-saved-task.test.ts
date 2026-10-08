@@ -33,7 +33,8 @@ jest.mock('@Pimcore/modules/document/actions/save/use-save', () => ({
   SaveTaskType: { AutoSave: 'autoSave', Version: 'version', Publish: 'publish', Save: 'save' }
 }))
 
-const run = (task?: SaveTaskType): void => { act(() => { taskCallbacks.forEach((callback) => { callback(task) }) }) }
+// the confirmation waits for the schedules (a promise), so pending promises are flushed as well
+const run = async (task?: SaveTaskType): Promise<void> => { await act(async () => { taskCallbacks.forEach((callback) => { callback(task) }) }) }
 const fail = (task: SaveTaskType): void => { act(() => { errorCallbacks.forEach((callback) => { callback(new Error('failed'), task) }) }) }
 
 describe('useSavedTask', () => {
@@ -47,40 +48,58 @@ describe('useSavedTask', () => {
     jest.useRealTimers()
   })
 
-  it('confirms a manual save once it has ended, for a short moment', () => {
+  it('confirms a manual save once it has ended, for a short moment', async () => {
     const { result } = renderHook(() => useSavedTask(1))
 
-    run(SaveTaskType.Publish)
+    await run(SaveTaskType.Publish)
     expect(result.current).toBeNull()
 
-    run(undefined)
+    await run(undefined)
     expect(result.current).toBe(SaveTaskType.Publish)
 
     act(() => { jest.advanceTimersByTime(motionDuration.confirmation) })
     expect(result.current).toBeNull()
   })
 
-  it('confirms a save queued behind an auto save only after it ran itself', () => {
+  it('confirms a save queued behind an auto save only after it ran itself', async () => {
     const { result } = renderHook(() => useSavedTask(1))
 
-    run(SaveTaskType.AutoSave)
-    run(undefined)
+    await run(SaveTaskType.AutoSave)
+    await run(undefined)
     expect(result.current).toBeNull()
 
-    run(SaveTaskType.Version)
+    await run(SaveTaskType.Version)
     expect(result.current).toBeNull()
 
-    run(undefined)
+    await run(undefined)
     expect(result.current).toBe(SaveTaskType.Version)
   })
 
-  it('does not confirm a failed save', () => {
+  it('does not confirm a failed save', async () => {
     const { result } = renderHook(() => useSavedTask(1))
 
-    run(SaveTaskType.Publish)
+    await run(SaveTaskType.Publish)
     fail(SaveTaskType.Publish)
-    run(undefined)
+    await run(undefined)
 
     expect(result.current).toBeNull()
+  })
+
+  it('does not confirm a save whose schedules failed', async () => {
+    const { result } = renderHook(() => useSavedTask(1, async () => await Promise.resolve(false)))
+
+    await run(SaveTaskType.Publish)
+    await run(undefined)
+
+    expect(result.current).toBeNull()
+  })
+
+  it('confirms a save once its schedules are saved as well', async () => {
+    const { result } = renderHook(() => useSavedTask(1, async () => await Promise.resolve(true)))
+
+    await run(SaveTaskType.Save)
+    await run(undefined)
+
+    expect(result.current).toBe(SaveTaskType.Save)
   })
 })

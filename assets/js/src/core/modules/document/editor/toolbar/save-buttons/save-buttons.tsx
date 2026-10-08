@@ -25,7 +25,7 @@ import {
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useRequiredFieldsValidation } from '@Pimcore/modules/document/hooks/use-required-fields-validation'
 import { isNil } from 'lodash'
-import React, { type ReactElement, useContext, useEffect } from 'react'
+import React, { type ReactElement, useContext, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
@@ -52,7 +52,9 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const messageApi = useMessage()
   const isAutoSaved = document?.draftData?.isAutoSave === true
   // the button of the save that just succeeded briefly confirms it with a check mark
-  const savedTask = useSavedTask(id)
+  // schedules saved by the latest save action, the confirmation waits for them
+  const schedulesSavedRef = useRef<Promise<boolean> | undefined>(undefined)
+  const savedTask = useSavedTask(id, async () => await schedulesSavedRef.current)
   const {
     validateRequiredFields,
     showValidationErrorModal
@@ -104,12 +106,13 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
       }
     }
 
-    Promise.all([
-      saveDocument(task, () => {
-        onFinish?.()
-      }),
-      saveSchedules()
-    ]).catch((error) => {
+    const documentSaved = saveDocument(task, () => {
+      onFinish?.()
+    })
+    const schedulesSaved = saveSchedules()
+    schedulesSavedRef.current = schedulesSaved
+
+    Promise.all([documentSaved, schedulesSaved]).catch((error) => {
       console.error(error)
     })
   }
