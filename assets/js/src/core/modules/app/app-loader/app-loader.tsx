@@ -34,6 +34,8 @@ import { type AppLoaderRegistry } from './services/app-loader-registry'
 import { container, serviceIds } from '@sdk/app'
 import { useGlobalMessageBusLoader } from './loader/global-message-bus/loader'
 import { AppLoadingContext, type AppLoadingContextValue } from './context/app-loading-context'
+import { IconMotionGlobalStyles } from '@Pimcore/styles/icon-motion.styles'
+import { useIconClickMotion } from '@Pimcore/utils/hooks/use-icon-click-motion'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -81,6 +83,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
 
   const modal = useAlertModal()
   const { modal: studioModal } = App.useApp()
+  useIconClickMotion()
 
   // Register the modal instance to allow centralized error message display throughout the project
   ErrorModalService.setModalInstance(modal)
@@ -185,6 +188,8 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
           </div>
         )}
       </AppLoadingContext.Provider>
+
+      <IconMotionGlobalStyles />
     </>
   )
 }
