@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { isNull, isUndefined } from 'lodash'
 import { type Action, Actions, BorderNode, type Model } from 'flexlayout-react'
 import { motionDuration } from '@Pimcore/utils/motion'
@@ -38,42 +38,65 @@ export const getSideWidgetMotion = (model: Model, action: Action): SideWidgetMot
   return border.getSelectedNode()?.getId() === node.getId() ? 'closing' : null
 }
 
+/** Which side bars of a layout are open, e.g. "100" for an open left and closed right and bottom side bar. */
+export const getOpenSideBars = (model: Model): string =>
+  model.getBorderSet().getBorders().map((border) => border.getSelected() === -1 ? '0' : '1').join('')
+
+/** Resolves the motion between two states of the open side bars, see getOpenSideBars. */
+export const getSideBarsMotion = (previous: string, next: string): SideWidgetMotion => {
+  const changes = next.split('').map((open, index) => `${previous[index] ?? '0'}${open}`)
+
+  if (changes.includes('01')) {
+    return 'opening'
+  }
+
+  return changes.includes('10') ? 'closing' : null
+}
+
 /**
  * Tracks a side bar opening or closing for as long as its panel animates, so the main area can
  * resize along with the panel instead of jumping to its new size. Other layout changes (window
  * resizing, splitters, maximizing) stay instant.
+ *
+ * Side bars are opened by clicking them (layout actions) or from code, e.g. "locate in tree", which
+ * replaces the model. So the open side bars are also compared on every render. Both paths mark the
+ * motion in the same render as the new layout, so the transition applies to it.
  */
 export const useSideWidgetMotion = (model: Model): {
   motion: SideWidgetMotion
   onAction: (action: Action) => void
 } => {
-  const [motion, setMotion] = useState<SideWidgetMotion>(null)
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [state, setState] = useState<{ motion: SideWidgetMotion, id: number }>({ motion: null, id: 0 })
+  const openSideBars = getOpenSideBars(model)
+  const [trackedOpenSideBars, setTrackedOpenSideBars] = useState(openSideBars)
 
-  useEffect(() => () => {
-    if (!isNull(timeoutRef.current)) {
-      clearTimeout(timeoutRef.current)
+  const start = (motion: SideWidgetMotion): void => {
+    if (!isNull(motion)) {
+      setState((current) => ({ motion, id: current.id + 1 }))
     }
-  }, [])
+  }
 
-  const onAction = useCallback((action: Action): void => {
-    const nextMotion = getSideWidgetMotion(model, action)
+  // side bars opened or closed from code are noticed while rendering the new layout
+  if (trackedOpenSideBars !== openSideBars) {
+    setTrackedOpenSideBars(openSideBars)
+    start(getSideBarsMotion(trackedOpenSideBars, openSideBars))
+  }
 
-    if (isNull(nextMotion)) {
+  useEffect(() => {
+    if (isNull(state.motion)) {
       return
     }
 
-    if (!isNull(timeoutRef.current)) {
-      clearTimeout(timeoutRef.current)
-    }
+    const timeout = setTimeout(() => {
+      setState((current) => current.id === state.id ? { ...current, motion: null } : current)
+    }, state.motion === 'opening' ? motionDuration.panelEnter : motionDuration.panelLeave)
 
-    setMotion(nextMotion)
+    return () => { clearTimeout(timeout) }
+  }, [state.id])
 
-    timeoutRef.current = setTimeout(() => {
-      setMotion(null)
-      timeoutRef.current = null
-    }, nextMotion === 'opening' ? motionDuration.panelEnter : motionDuration.panelLeave)
+  const onAction = useCallback((action: Action): void => {
+    start(getSideWidgetMotion(model, action))
   }, [model])
 
-  return { motion, onAction }
+  return { motion: state.motion, onAction }
 }

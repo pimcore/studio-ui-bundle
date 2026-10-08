@@ -48,19 +48,22 @@ const resize = (timing: string): string => `left ${timing}, top ${timing}, width
  * An opened side widget unfolds from its side bar while the main area makes room for it at the
  * same pace, and both move back together when the side bar is closed. The `widget-manager--side-widget-*`
  * classes are only set while a side bar opens or closes (see useSideWidgetMotion), so window
- * resizing and splitters stay instant. Switching between widgets of an open side bar is instant too.
+ * resizing, splitters and switching between widgets of an open side bar stay instant.
  * Hidden widgets stay mounted (useVisibility), so nothing is re-rendered.
  */
 export const sideWidgetMotion = `
         .flexlayout__tab_border {
           z-index: 2;
-          transition: opacity ${enter};
 
           &[style*='visibility: hidden'] {
             opacity: 0;
             pointer-events: none;
             transition: none;
           }
+        }
+
+        &.widget-manager--side-widget-opening .flexlayout__tab_border {
+          transition: opacity ${enter};
         }
 
         ${locations.map(([location]) => `
@@ -72,6 +75,9 @@ export const sideWidgetMotion = `
         ${motionAllowedMediaQuery} {
           .flexlayout__tab_border {
             clip-path: ${revealed};
+          }
+
+          &.widget-manager--side-widget-opening .flexlayout__tab_border {
             transition: opacity ${motionDuration.enter}ms ${motionEaseOut}, clip-path ${enter};
           }
 

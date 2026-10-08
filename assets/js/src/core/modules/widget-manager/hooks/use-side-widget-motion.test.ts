@@ -10,7 +10,7 @@
 
 import { act, renderHook } from '@testing-library/react'
 import { Actions, type IJsonModel, Model } from 'flexlayout-react'
-import { getSideWidgetMotion, useSideWidgetMotion } from './use-side-widget-motion'
+import { getOpenSideBars, getSideBarsMotion, getSideWidgetMotion, useSideWidgetMotion } from './use-side-widget-motion'
 import { motionDuration } from '@Pimcore/utils/motion'
 
 const createModel = (selected: number): Model => Model.fromJson({
@@ -73,5 +73,42 @@ describe('useSideWidgetMotion', () => {
     act(() => { jest.advanceTimersByTime(motionDuration.panelLeave) })
 
     expect(result.current.motion).toBeNull()
+  })
+
+  it('tracks a side bar that is opened from code, which replaces the model', () => {
+    const { result, rerender } = renderHook(({ model }) => useSideWidgetMotion(model), {
+      initialProps: { model: createModel(-1) }
+    })
+
+    expect(result.current.motion).toBeNull()
+
+    rerender({ model: createModel(0) })
+
+    expect(result.current.motion).toBe('opening')
+
+    act(() => { jest.advanceTimersByTime(motionDuration.panelEnter) })
+
+    expect(result.current.motion).toBeNull()
+  })
+
+  it('ignores a replaced model with the same open side bars', () => {
+    const { result, rerender } = renderHook(({ model }) => useSideWidgetMotion(model), {
+      initialProps: { model: createModel(0) }
+    })
+
+    rerender({ model: createModel(1) })
+
+    expect(result.current.motion).toBeNull()
+  })
+})
+
+describe('getSideBarsMotion', () => {
+  it('compares the open side bars of two layouts', () => {
+    expect(getOpenSideBars(createModel(-1))).toBe('0')
+    expect(getOpenSideBars(createModel(1))).toBe('1')
+    expect(getSideBarsMotion('0', '1')).toBe('opening')
+    expect(getSideBarsMotion('1', '0')).toBe('closing')
+    expect(getSideBarsMotion('10', '01')).toBe('opening')
+    expect(getSideBarsMotion('1', '1')).toBeNull()
   })
 })
