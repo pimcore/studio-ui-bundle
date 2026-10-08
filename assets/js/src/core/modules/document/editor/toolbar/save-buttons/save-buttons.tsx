@@ -32,7 +32,7 @@ import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-d
 import { useDocumentSaveTask } from '@Pimcore/modules/document/hooks/use-document-save-task'
 import { DocumentSaveTaskManager } from '@Pimcore/modules/document/services'
 import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
-import { useSavedTask } from './use-saved-task'
+import { isSaveAccepted, useSavedTask } from './use-saved-task'
 
 export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -54,7 +54,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   // the button of the save that just succeeded briefly confirms it with a check mark
   // schedules saved by the latest save action, the confirmation waits for them
   const schedulesSavedRef = useRef<Promise<boolean> | undefined>(undefined)
-  const savedTask = useSavedTask(id, async () => await schedulesSavedRef.current)
+  const savedTask = useSavedTask(id, schedulesSavedRef)
   const {
     validateRequiredFields,
     showValidationErrorModal
@@ -106,11 +106,17 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
       }
     }
 
+    // a save the task manager ignores (another manual save is running) must not replace the
+    // schedules the running save is confirmed with
+    const isAccepted = isSaveAccepted(id)
     const documentSaved = saveDocument(task, () => {
       onFinish?.()
     })
     const schedulesSaved = saveSchedules()
-    schedulesSavedRef.current = schedulesSaved
+
+    if (isAccepted) {
+      schedulesSavedRef.current = schedulesSaved
+    }
 
     Promise.all([documentSaved, schedulesSaved]).catch((error) => {
       console.error(error)

@@ -9,7 +9,7 @@
  */
 
 import { act, renderHook } from '@testing-library/react'
-import { useSavedTask } from './use-saved-task'
+import { isSaveAccepted, useSavedTask } from './use-saved-task'
 import { SaveTaskType } from '@Pimcore/modules/document/actions/save/use-save'
 import { motionDuration } from '@Pimcore/utils/motion'
 
@@ -18,11 +18,13 @@ type ErrorCallback = (error: unknown, task?: SaveTaskType) => void
 
 // stands in for DocumentSaveTaskManager: emits task starts/ends and errors the same way
 const taskCallbacks = new Set<TaskCallback>()
+let mockRunningTask: SaveTaskType | undefined
 const errorCallbacks = new Set<ErrorCallback>()
 
 jest.mock('@Pimcore/modules/document/services', () => ({
   DocumentSaveTaskManager: {
     getInstance: () => ({
+      getRunningTask: () => mockRunningTask,
       onRunningTaskChange: (callback: TaskCallback) => { taskCallbacks.add(callback); return () => taskCallbacks.delete(callback) },
       onErrorChange: (callback: ErrorCallback) => { errorCallbacks.add(callback); return () => errorCallbacks.delete(callback) }
     })
@@ -86,7 +88,7 @@ describe('useSavedTask', () => {
   })
 
   it('does not confirm a save whose schedules failed', async () => {
-    const { result } = renderHook(() => useSavedTask(1, async () => await Promise.resolve(false)))
+    const { result } = renderHook(() => useSavedTask(1, { current: Promise.resolve(false) }))
 
     await run(SaveTaskType.Publish)
     await run(undefined)
@@ -95,11 +97,40 @@ describe('useSavedTask', () => {
   })
 
   it('confirms a save once its schedules are saved as well', async () => {
-    const { result } = renderHook(() => useSavedTask(1, async () => await Promise.resolve(true)))
+    const { result } = renderHook(() => useSavedTask(1, { current: Promise.resolve(true) }))
 
     await run(SaveTaskType.Save)
     await run(undefined)
 
     expect(result.current).toBe(SaveTaskType.Save)
+  })
+
+  it('confirms a save without recorded schedules', async () => {
+    const { result } = renderHook(() => useSavedTask(1, { current: undefined }))
+
+    await run(SaveTaskType.Save)
+    await run(undefined)
+
+    expect(result.current).toBe(SaveTaskType.Save)
+  })
+})
+
+describe('isSaveAccepted', () => {
+  afterEach(() => {
+    mockRunningTask = undefined
+  })
+
+  it('accepts a save when nothing or only an auto save is running', () => {
+    mockRunningTask = undefined
+    expect(isSaveAccepted(1)).toBe(true)
+
+    mockRunningTask = SaveTaskType.AutoSave
+    expect(isSaveAccepted(1)).toBe(true)
+  })
+
+  it('does not accept a save while another manual save is running, e.g. a publish shortcut', () => {
+    mockRunningTask = SaveTaskType.Save
+
+    expect(isSaveAccepted(1)).toBe(false)
   })
 })

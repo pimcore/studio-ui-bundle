@@ -20,9 +20,9 @@ import { confirmWhenSchedulesSaved } from '@Pimcore/modules/element/editor/save-
  *
  * A task counts as saved when it ends without an error. Tasks queued behind an auto save only start
  * once that one has finished, and ignored duplicate clicks never start, so neither is confirmed early.
- * The confirmation also waits for the schedules saved by the same action (see getSchedulesSaved).
+ * The confirmation also waits for the schedules saved by the same action (see schedulesSavedRef).
  */
-export const useSavedTask = (documentId: number, getSchedulesSaved?: () => Promise<boolean> | undefined): SaveTaskType | null => {
+export const useSavedTask = (documentId: number, schedulesSavedRef?: { current: Promise<boolean> | undefined }): SaveTaskType | null => {
   const [savedTask, showSavedTask] = useTemporaryValue<SaveTaskType>()
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export const useSavedTask = (documentId: number, getSchedulesSaved?: () => Promi
     const unsubscribeTask = taskManager.onRunningTaskChange((task) => {
       if (!isNil(runningTask) && runningTask !== SaveTaskType.AutoSave && !hasFailed) {
         const savedTask = runningTask
-        void confirmWhenSchedulesSaved(getSchedulesSaved?.(), () => { showSavedTask(savedTask) })
+        void confirmWhenSchedulesSaved(schedulesSavedRef?.current, () => { showSavedTask(savedTask) })
       }
 
       runningTask = task
@@ -53,4 +53,14 @@ export const useSavedTask = (documentId: number, getSchedulesSaved?: () => Promi
   }, [documentId])
 
   return savedTask
+}
+
+/**
+ * Whether the task manager runs a save requested now: it is ignored while another manual save is
+ * running, and queued while an auto save is running.
+ */
+export const isSaveAccepted = (documentId: number): boolean => {
+  const runningTask = DocumentSaveTaskManager.getInstance(documentId).getRunningTask()
+
+  return isNil(runningTask) || runningTask === SaveTaskType.AutoSave
 }
