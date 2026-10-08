@@ -110,11 +110,12 @@ export const MotionGlobalStyles = createGlobalStyle`
     transition-timing-function: ${motionEaseOut};
   }
 
-  /* the press dip replaces the click ripple on selection controls */
+  /* the press dip replaces the click ripple on selection controls; the ripple is only hidden, so
+     antd can still remove it once its transition has ended */
   body .ant-checkbox .ant-wave,
   body .ant-radio .ant-wave,
   body .ant-switch .ant-wave {
-    display: none;
+    visibility: hidden;
   }
 
   /* reduced motion: the state change only fades, nothing scales, dips or glides */

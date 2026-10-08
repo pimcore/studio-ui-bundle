@@ -13,6 +13,7 @@ import { store } from '@Pimcore/app/store'
 import { ThemeProvider } from '@Pimcore/modules/app/theme/theme-provider'
 import React from 'react'
 import { MotionConfig } from 'framer-motion'
+import { MotionGlobalStyles } from '@Pimcore/styles/motion.styles'
 import { Provider } from 'react-redux'
 import { ElementSelectorProvider } from '../element/element-selector/provider/element-selector/element-selector-provider'
 
@@ -26,7 +27,10 @@ export const GlobalProvider = ({ children, themeId }: GlobalProviderProps): Reac
     <ContainerProvider>
       <Provider store={ store }>
         <ThemeProvider id={ themeId }>
-          {/* with a reduced motion preference, framer-motion skips movement and keeps opacity changes */}
+          {/* shared by all application roots, including the document editor iframe */}
+          <MotionGlobalStyles />
+
+          {/* with a reduced motion preference, framer-motion skips transform and layout animations */}
           <MotionConfig reducedMotion='user'>
             <ElementSelectorProvider>
               {children}
