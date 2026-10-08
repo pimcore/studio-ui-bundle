@@ -18,7 +18,7 @@ import { type ColumnFilter } from '@Pimcore/modules/app/types/column-filter'
 import { type AvailableColumn, AvailableColumnsContext, type AvailableColumnsData } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { GeneralFiltersConfigProvider } from '../context-layer/provider/general-filters-config/general-filters-config-provider'
 import { type FieldFilter } from '../context-layer/provider/field-filters/field-filters-provider'
-import { DraftFiltersProvider, useDraftFilters } from '../element-filters/stores'
+import { AppliedFiltersProvider, DraftFiltersProvider, useAppliedFilters, useDraftFilters } from '../element-filters/stores'
 import { readElementFilterValues } from '../element-filters/use-element-filter-values'
 import { FULLTEXT_SEARCH_MODE_ID, SearchModeAbstract, type SearchModeAvailability } from './search-mode-abstract'
 import { SearchModeRegistry } from './search-mode-registry'
@@ -52,27 +52,33 @@ class ScoreMode extends SearchModeAbstract {
 const filter = (key: string): FieldFilter => ({ key, type: `test.${key}`, filterValue: 80, locale: undefined, meta: { translationKey: key } })
 const idColumn: AvailableColumn = { ...scoreColumn, key: 'id', type: 'system.id' }
 
-const render = (availableColumns: AvailableColumn[]): ReturnType<typeof renderHook<ReturnType<typeof useDraftFilters>, unknown>> => {
+const render = (
+  availableColumns: AvailableColumn[],
+  source: 'draft' | 'applied' = 'draft'
+): ReturnType<typeof renderHook<ReturnType<typeof useDraftFilters>, unknown>> => {
   const container = new Container()
   const registry = new SearchModeRegistry()
   registry.registerDynamicType(new ScoreMode('score'))
   registry.registerDynamicType(new ScoreMode('other-score'))
   container.bind(serviceIds['Element/Listing/SearchModeRegistry']).toConstantValue(registry)
 
+  const FiltersProvider = source === 'draft' ? DraftFiltersProvider : AppliedFiltersProvider
+  const useFilters = source === 'draft' ? useDraftFilters : useAppliedFilters
+
   return renderHook(() => {
-    useDropVanishedModeColumnFilters()
-    return useDraftFilters()
+    useDropVanishedModeColumnFilters(source)
+    return useFilters()
   }, {
     wrapper: ({ children }: { children: React.ReactNode }) => (
       <ContainerProvider container={ container }>
         <GeneralFiltersConfigProvider config={ { handleSearchTermInSidebar: true, elementType: 'asset' } }>
           <AvailableColumnsContext.Provider value={ { availableColumns } as unknown as AvailableColumnsData }>
-            <DraftFiltersProvider
+            <FiltersProvider
               descriptors={ [{ key: 'searchMode', defaultValue: FULLTEXT_SEARCH_MODE_ID }, { key: 'fieldFilters', defaultValue: [] }] }
               initialValues={ { searchMode: 'score', fieldFilters: [filter('score'), filter('id')] } }
             >
               {children}
-            </DraftFiltersProvider>
+            </FiltersProvider>
           </AvailableColumnsContext.Provider>
         </GeneralFiltersConfigProvider>
       </ContainerProvider>
@@ -80,7 +86,7 @@ const render = (availableColumns: AvailableColumn[]): ReturnType<typeof renderHo
   })
 }
 
-const draftFilterKeys = (result: { current: ReturnType<typeof useDraftFilters> }): string[] =>
+const filterKeys = (result: { current: ReturnType<typeof useDraftFilters> }): string[] =>
   readElementFilterValues(result.current.values).fieldFilters.map((fieldFilter) => fieldFilter.key)
 
 describe('useDropVanishedModeColumnFilters', () => {
@@ -89,7 +95,7 @@ describe('useDropVanishedModeColumnFilters', () => {
 
     act(() => { result.current.setValue('searchMode', FULLTEXT_SEARCH_MODE_ID) })
 
-    expect(draftFilterKeys(result)).toEqual(['id'])
+    expect(filterKeys(result)).toEqual(['id'])
   })
 
   it('keeps the filter when the listing itself provides the column', () => {
@@ -97,7 +103,7 @@ describe('useDropVanishedModeColumnFilters', () => {
 
     act(() => { result.current.setValue('searchMode', FULLTEXT_SEARCH_MODE_ID) })
 
-    expect(draftFilterKeys(result)).toEqual(['score', 'id'])
+    expect(filterKeys(result)).toEqual(['score', 'id'])
   })
 
   it('keeps the filter when the new mode provides the column too', () => {
@@ -105,7 +111,7 @@ describe('useDropVanishedModeColumnFilters', () => {
 
     act(() => { result.current.setValue('searchMode', 'other-score') })
 
-    expect(draftFilterKeys(result)).toEqual(['score', 'id'])
+    expect(filterKeys(result)).toEqual(['score', 'id'])
   })
 
   it('leaves the draft alone while the mode does not change', () => {
@@ -115,5 +121,14 @@ describe('useDropVanishedModeColumnFilters', () => {
     act(() => { result.current.setValue('searchTerm', 'car') })
 
     expect(result.current.values.fieldFilters).toBe(before)
+  })
+
+  it('removes the filter from the applied store when an immediate-apply surface switches the mode', () => {
+    const { result } = render([idColumn], 'applied')
+
+    act(() => { result.current.setValue('searchMode', FULLTEXT_SEARCH_MODE_ID) })
+    act(() => { result.current.setValue('searchMode', 'score') })
+
+    expect(filterKeys(result)).toEqual(['id'])
   })
 })

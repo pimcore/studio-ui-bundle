@@ -87,4 +87,31 @@ describe('getExportColumns', () => {
 
     expect(result).toEqual([])
   })
+
+  it('does not export a same-key column of another locale, like one a search mode adds', () => {
+    const result = getExportColumns(
+      [{ ...requestColumn('name', 'dataobject.input'), locale: 'en' }, { ...requestColumn('name', 'dataobject.input'), locale: 'de' }],
+      [{ ...selectedColumn('name', 'dataobject.input'), localizable: true, locale: 'en' }]
+    )
+
+    expect(result.map((column) => column.locale)).toEqual(['en'])
+  })
+
+  it('matches a selected column that follows the current language to any request locale', () => {
+    const result = getExportColumns(
+      [{ ...requestColumn('name', 'dataobject.input'), locale: 'de' }],
+      [{ ...selectedColumn('name', 'dataobject.input'), localizable: true }]
+    )
+
+    expect(result.map((column) => column.locale)).toEqual(['de'])
+  })
+
+  it('matches the default locale, which the request sends as null', () => {
+    const result = getExportColumns(
+      [{ ...requestColumn('name', 'dataobject.input'), locale: null }],
+      [{ ...selectedColumn('name', 'dataobject.input'), localizable: true, locale: 'default' }]
+    )
+
+    expect(result).toHaveLength(1)
+  })
 })

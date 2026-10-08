@@ -16,6 +16,14 @@ import {
 
 const ADVANCED_COLUMN_TYPE = 'dataobject.advanced'
 
+const normalizeLocale = (locale?: string | null): string | null => locale === undefined || locale === 'default' ? null : locale
+
+// A selected column without a locale follows the current language, so any request locale fits it;
+// a fixed locale must match, or a same-key column of another locale (e.g. from a search mode) is exported too.
+const matchesLocale = (column: GridColumnRequest, selectedColumn: SelectedColumn): boolean =>
+  selectedColumn.locale === undefined || selectedColumn.locale === null ||
+  normalizeLocale(selectedColumn.locale) === normalizeLocale(column.locale)
+
 // The grid request sends an advanced column under its per-instance `__meta.uniqueId` instead of its
 // shared 'advanced' key, so sibling advanced columns can be told apart (see use-data-query-helper.ts).
 const findSelectedColumn = (
@@ -29,7 +37,7 @@ const findSelectedColumn = (
     )
   }
 
-  return selectedColumns.find((selectedColumn) => selectedColumn.key === column.key)
+  return selectedColumns.find((selectedColumn) => selectedColumn.key === column.key && matchesLocale(column, selectedColumn))
 }
 
 /**

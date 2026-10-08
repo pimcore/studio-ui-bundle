@@ -49,9 +49,7 @@ export const toAdditionalSelectedColumn = (column: GridColumnConfiguration): Sel
 })
 
 const ADVANCED_COLUMN_TYPE = 'dataobject.advanced'
-
-const isSameColumn = (a: SelectedColumn, b: SelectedColumn): boolean =>
-  a.key === b.key && (a.locale ?? null) === (b.locale ?? null)
+const CLASSIFICATION_STORE_COLUMN_TYPE = 'dataobject.classificationstore'
 
 /** Session placement of a search mode column, keyed by its identity (getColumnIdentity). */
 export interface SearchModeColumnPlacement {
@@ -64,7 +62,10 @@ export interface SearchModeColumnPlacement {
 
 export type SearchModeColumnPlacements = Record<string, SearchModeColumnPlacement>
 
-/** Stable column identity: key + locale, the per-instance __meta.uniqueId for advanced columns. */
+/**
+ * Stable column identity: key + locale, plus key and group id for classification store columns
+ * (siblings share the field key); the per-instance __meta.uniqueId for advanced columns.
+ */
 export const getColumnIdentity = (column: SelectedColumn): string => {
   const uniqueId = column.originalApiDefinition?.__meta?.uniqueId
 
@@ -72,11 +73,22 @@ export const getColumnIdentity = (column: SelectedColumn): string => {
     return JSON.stringify({ uniqueId })
   }
 
+  if (column.type === CLASSIFICATION_STORE_COLUMN_TYPE) {
+    return JSON.stringify({
+      key: column.key,
+      locale: column.locale ?? null,
+      keyId: column.config?.keyId ?? null,
+      groupId: column.config?.groupId ?? null
+    })
+  }
+
   return JSON.stringify({ key: column.key, locale: column.locale ?? null })
 }
 
+const isSameColumn = (a: SelectedColumn, b: SelectedColumn): boolean => getColumnIdentity(a) === getColumnIdentity(b)
+
 /**
- * Inserts additional columns not yet present (key + locale) after their anchored user column; a missing
+ * Inserts additional columns not yet present (getColumnIdentity) after their anchored user column; a missing
  * or unknown anchor appends. Returns the input array when nothing is added.
  */
 export const placeAdditionalColumns = (
@@ -155,7 +167,7 @@ export const splitSearchModeColumns = (
   return { selectedColumns, placements }
 }
 
-/** Columns of `previous` that are no longer in `current` (key + locale). */
+/** Columns of `previous` that are no longer in `current` (getColumnIdentity). */
 export const findRemovedColumns = (previous: SelectedColumn[], current: SelectedColumn[]): SelectedColumn[] =>
   previous.filter((column) => !current.some((candidate) => isSameColumn(candidate, column)))
 

@@ -224,6 +224,19 @@ describe('placeAdditionalColumns with placements', () => {
     expect(placeAdditionalColumns([first, second, id], [score], placements)).toEqual([first, second, score, id])
   })
 
+  it('anchors to a classification store column by its key and group id, not the shared field key', () => {
+    const storeColumn = (keyId: number): SelectedColumn => ({
+      ...selected('attributes'),
+      type: 'dataobject.classificationstore',
+      config: { keyId, groupId: 1 }
+    })
+    const first = storeColumn(1)
+    const second = storeColumn(2)
+    const placements = { [getColumnIdentity(score)]: { anchor: getColumnIdentity(second) } }
+
+    expect(placeAdditionalColumns([first, second, id], [score], placements)).toEqual([first, second, score, id])
+  })
+
   it('applies a stored width without touching the user columns', () => {
     const columns = [id]
     const placed = placeAdditionalColumns(columns, [score], { [getColumnIdentity(score)]: { width: 222 } })
