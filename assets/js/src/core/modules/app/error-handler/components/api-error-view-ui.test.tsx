@@ -11,21 +11,28 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import { ApiErrorViewUI } from '@Pimcore/modules/app/error-handler/components/api-error-view-ui'
+import ApiError from '@Pimcore/modules/app/error-handler/classes/api-error'
 import { ErrorKeyTypes } from '@Pimcore/modules/app/error-handler/constants/errorTypes'
 
+const t = jest.fn((key: string) => `<b>${key}</b>`)
+
 jest.mock('react-i18next', () => ({
-  useTranslation: () => ({ t: (key: string) => `<b>${key}</b>` })
+  useTranslation: () => ({ t })
 }))
 
 describe('ApiErrorViewUI', () => {
+  beforeEach(() => {
+    t.mockClear()
+  })
+
   it('renders a validation message as text, not as markup', () => {
     const message = 'Value in field [ code ] is invalid: <b>bad</b>'
-    const { container } = render(
-      <ApiErrorViewUI errorContent={ { errorKey: ErrorKeyTypes.ELEMENT_VALIDATION_FAILED, message } } />
-    )
+    const content = new ApiError({ data: { errorKey: ErrorKeyTypes.ELEMENT_VALIDATION_FAILED, message } }).getContent()
+    const { container } = render(<ApiErrorViewUI errorContent={ content } />)
 
     expect(container.textContent).toBe(message)
     expect(container.querySelector('b')).toBeNull()
+    expect(t).not.toHaveBeenCalled()
   })
 
   it('renders a translated error key as sanitized HTML', () => {
