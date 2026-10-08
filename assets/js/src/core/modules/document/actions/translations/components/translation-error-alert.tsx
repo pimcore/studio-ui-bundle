@@ -10,9 +10,8 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { isString } from 'lodash'
 import { Alert } from '@Pimcore/components/alert/alert'
-import { ApiError } from '@Pimcore/modules/app/error-handler'
+import { ApiError, getErrorMessage } from '@Pimcore/modules/app/error-handler'
 import type { ApiErrorData } from '@Pimcore/modules/app/error-handler/types'
 
 interface TranslationErrorAlertProps {
@@ -22,7 +21,7 @@ interface TranslationErrorAlertProps {
 export const TranslationErrorAlert = ({ error }: TranslationErrorAlertProps): React.JSX.Element => {
   const { t } = useTranslation()
   const content = new ApiError(error).getContent()
-  const message = isString(content) ? content : t(`error.${content.errorKey}`)
+  const message = getErrorMessage(content, t)
 
   return (
     <Alert
