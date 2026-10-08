@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { isString, isUndefined } from 'lodash'
 import { type IErrorGetContent } from '@Pimcore/modules/app/error-handler/types'
 import { getErrorMessage } from '@Pimcore/modules/app/error-handler/utils/get-error-message'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { DEFAULT_ERROR_CONTENT } from '@Pimcore/modules/app/error-handler/classes/api-error'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 
@@ -22,6 +23,11 @@ interface IApiErrorViewUIProps {
 
 export const ApiErrorViewUI = ({ errorContent }: IApiErrorViewUIProps): React.JSX.Element => {
   const { t } = useTranslation()
+
+  // Server-composed messages can contain entered values: render them as text, never as markup.
+  if (!isString(errorContent) && isNonEmptyString(errorContent?.message)) {
+    return <div>{ errorContent.message }</div>
+  }
 
   const getErrorKeyValue = (): string => {
     if (!isString(errorContent) && !isUndefined(errorContent?.errorKey)) {

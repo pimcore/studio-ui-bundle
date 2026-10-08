@@ -29,9 +29,10 @@ class ApiError extends Error {
     const errorValue = errorData?.error
 
     if (!isEmpty(errorKey) && errorKey === ErrorKeyTypes.ELEMENT_VALIDATION_FAILED) {
+      // `errorKey` keeps carrying the message for SDK consumers that read it; render `message` instead.
       return {
         title: errorKey,
-        errorKey,
+        errorKey: errorMessage!,
         message: errorMessage
       }
     }

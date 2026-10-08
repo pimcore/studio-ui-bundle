@@ -38,6 +38,14 @@ describe('getErrorMessage', () => {
     expect(content).toMatchObject({ title: ErrorKeyTypes.ELEMENT_VALIDATION_FAILED })
   })
 
+  it('keeps the message in errorKey for existing SDK consumers', () => {
+    const content = new ApiError({
+      data: { errorKey: ErrorKeyTypes.ELEMENT_VALIDATION_FAILED, message: validationMessage }
+    }).getContent()
+
+    expect(content).toMatchObject({ errorKey: validationMessage, message: validationMessage })
+  })
+
   it('translates any other error key', () => {
     const content = new ApiError({
       data: { errorKey: 'error_permission_denied', message: 'Permission denied' }
