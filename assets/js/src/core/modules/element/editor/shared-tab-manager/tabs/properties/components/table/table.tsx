@@ -140,6 +140,7 @@ export const Table = ({
                 info.row.original.data !== null &&
               (
                 <IconButton
+                  aria-label={ t('open') }
                   icon={ { value: 'open-folder' } }
                   onClick={ async () => {
                     const typeValue = mapToElementType(info.row.original.type)
@@ -149,6 +150,7 @@ export const Table = ({
                       id: info.row.original.data.id
                     })
                   } }
+                  tooltip={ { title: t('open') } }
                   type="link"
                 />
               )
@@ -156,10 +158,12 @@ export const Table = ({
 
             {tableType === 'own' && (
               <IconButton
+                aria-label={ t('delete') }
                 icon={ { value: 'trash' } }
                 onClick={ () => {
                   removeProperty(info.row.original)
                 } }
+                tooltip={ { title: t('delete') } }
                 type="link"
               />
             )}

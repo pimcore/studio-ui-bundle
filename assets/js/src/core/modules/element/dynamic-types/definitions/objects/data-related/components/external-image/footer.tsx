@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { isEmpty } from 'lodash'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
+import { actionTooltipDelay } from '@Pimcore/components/tooltip/tooltip'
 
 interface ExternalImageFooterProps {
   value?: string
@@ -49,6 +50,7 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
   const buttons: ReactElement[] = [
     <Tooltip
       key="external-image-open-url"
+      mouseEnterDelay={ actionTooltipDelay }
       title={ t('open') }
     >
       <IconButton
@@ -63,6 +65,7 @@ export const ExternalImageFooter = (props: ExternalImageFooterProps): React.JSX.
     buttons.push(
       <Tooltip
         key="external-image-delete"
+        mouseEnterDelay={ actionTooltipDelay }
         title={ t('set-to-null') }
       >
         <IconButton

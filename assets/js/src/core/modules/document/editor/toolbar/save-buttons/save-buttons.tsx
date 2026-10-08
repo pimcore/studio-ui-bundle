@@ -167,9 +167,11 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
             } }
           >
             <IconButton
+              aria-label={ t('more-actions') }
               disabled={ isLoading || isSchedulesLoading || isDraftLoading }
               icon={ { value: 'chevron-down' } }
               loading={ isDraftDeleteLoading }
+              tooltip={ { title: t('more-actions') } }
               type="default"
             />
           </Dropdown>

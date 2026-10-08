@@ -64,6 +64,7 @@ export const AssignedTagsTable = ({ tags, isLoading }: { tags: Tag[], isLoading:
             aria-label={ t('tags.actions.delete') }
             icon={ { value: 'trash' } }
             onClick={ async () => { await handleRemoveTag(info.row.original.id) } }
+            tooltip={ { title: t('remove') } }
             type="link"
           />
         </Flex>

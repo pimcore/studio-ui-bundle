@@ -15,6 +15,9 @@ import cn from 'classnames'
 import { isUndefined } from 'lodash'
 import { ContextMenuWrapper } from '@Pimcore/components/context-menu-wrapper/context-menu-wrapper'
 import { TabContextMenu } from '@Pimcore/components/tabs/tab-context-menu'
+import { CloseOutlined } from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
+import { actionTooltipDelay, Tooltip } from '@Pimcore/components/tooltip/tooltip'
 
 export interface ITabsProps extends TabsProps {
   onClose?: (any) => void
@@ -25,6 +28,7 @@ export interface ITabsProps extends TabsProps {
 }
 
 const Component = ({ items, className, activeKey, onClose, hasStickyHeader = false, fullHeight = false, ...props }: ITabsProps, ref: RefObject<HTMLElement | null>): React.JSX.Element => {
+  const { t } = useTranslation()
   const { styles } = useStyles()
 
   const classNames = cn(
@@ -113,6 +117,14 @@ const Component = ({ items, className, activeKey, onClose, hasStickyHeader = fal
       hideAdd
       items={ enhancedItems }
       onEdit={ onEdit }
+      removeIcon={ (
+        <Tooltip
+          mouseEnterDelay={ actionTooltipDelay }
+          title={ t('remove') }
+        >
+          <CloseOutlined />
+        </Tooltip>
+      ) }
       type={ tabType }
       { ...props }
     />

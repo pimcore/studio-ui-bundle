@@ -13,7 +13,7 @@ import { createPortal } from 'react-dom'
 import { isNil } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '@sdk/components'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { actionTooltipDelay, Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { type AreaEditableConfig } from '../../types/dynamic-type-document-editable-area'
 import { EditableDialog } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-dialog/editable-dialog'
 import { useEditableDialog } from '../../hooks/use-editable-dialog'
@@ -84,7 +84,10 @@ export const AreaEditable = ({
   return (
     <>
       {!isNil(editButtonContainer) && hasDialog && createPortal(
-        <Tooltip title={ t('area-settings') }>
+        <Tooltip
+          mouseEnterDelay={ actionTooltipDelay }
+          title={ t('area-settings') }
+        >
           <IconButton
             icon={ { value: 'edit' } }
             onClick={ openDialog }

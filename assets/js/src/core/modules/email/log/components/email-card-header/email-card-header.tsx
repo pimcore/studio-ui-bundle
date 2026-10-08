@@ -21,7 +21,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useEmailLog } from '../../hooks/use-email-log'
 import { ForwardModal } from '../forward-modal/forward-modal'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { actionTooltipDelay, Tooltip } from '@Pimcore/components/tooltip/tooltip'
 
 interface EmailCardHeaderProps {
   email: EmailLog
@@ -64,7 +64,10 @@ export const EmailCardHeader = ({ email }: EmailCardHeaderProps): React.JSX.Elem
       </Flex>
 
       <div>
-        <Tooltip title={ t('email-log.tooltip.resend') }>
+        <Tooltip
+          mouseEnterDelay={ actionTooltipDelay }
+          title={ t('email-log.tooltip.resend') }
+        >
           <IconButton
             data-testid={ `email-log-resend-button-${email.id}` }
             icon={ { value: 'vector' } }
@@ -80,7 +83,10 @@ export const EmailCardHeader = ({ email }: EmailCardHeaderProps): React.JSX.Elem
           />
         </Tooltip>
 
-        <Tooltip title={ t('email-log.tooltip.forward') }>
+        <Tooltip
+          mouseEnterDelay={ actionTooltipDelay }
+          title={ t('email-log.tooltip.forward') }
+        >
           <IconButton
             data-testid={ `email-log-forward-button-${email.id}` }
             icon={ { value: 'flip-forward' } }
@@ -88,7 +94,10 @@ export const EmailCardHeader = ({ email }: EmailCardHeaderProps): React.JSX.Elem
           />
         </Tooltip>
 
-        <Tooltip title={ t('email-log.tooltip.delete') }>
+        <Tooltip
+          mouseEnterDelay={ actionTooltipDelay }
+          title={ t('email-log.tooltip.delete') }
+        >
           <IconButton
             data-testid={ `email-log-delete-button-${email.id}` }
             icon={ { value: 'trash' } }

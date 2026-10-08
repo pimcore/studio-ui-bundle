@@ -109,6 +109,7 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
 
           <Flex align="center">
             <IconButton
+              aria-label={ t('refresh') }
               disabled={ isRTKLoading || isLoading }
               icon={ { value: 'refresh' } }
               onClick={ () => {
@@ -118,6 +119,7 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
                   )
                 )
               } }
+              tooltip={ { title: t('refresh') } }
             />
 
             {total > 0 && (

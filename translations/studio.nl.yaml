@@ -500,6 +500,8 @@ version.category.title.meta: Metadata
 version.category.title.properties: Eigenschappen
 version.changed-attributes: "Gewijzigde attributen: {{attributes}}"
 aria.version.delete: Versie verwijderen
+aria.notes-and-events.delete: Notitie verwijderen
+aria.card.close: Sluiten
 aria.version.expand: Versie uitvouwen
 clear-all: Alles wissen
 empty: Leeg
@@ -758,6 +760,7 @@ tags.apply-tags-to-children: Tags toepassen op onderliggende items
 tags.remove-and-apply-tags-to-children: Tags verwijderen en toepassen op onderliggende items
 tags.columns.path: Pad
 tags.columns.actions: Verwijderen
+tags.actions.delete: Tag verwijderen
 csv-separated-options: CSV-gescheiden opties
 csv-separated-options-info: De lijst met beschikbare opties kan worden opgegeven als kommagescheiden lijst, als enkelvoudige kolomwaarden of gemengd. Bij de enkelvoudige kolommanier wordt de sleutel ook als waarde gebruikt.
 add: Toevoegen
@@ -1322,6 +1325,9 @@ success: Succes
 no-value-set: Geen waarde ingesteld
 set-to-null: Leeg (instellen op null)
 remove: Verwijderen
+move-up: Omhoog verplaatsen
+move-down: Omlaag verplaatsen
+translate: Vertalen
 delete: Verwijderen
 clone: Klonen
 jobs.clone-job.step2.title: Verwijzingen bijwerken
@@ -2906,6 +2912,7 @@ translations.merger.state.reverted: Teruggezet
 translations.merger.state.pending: In behandeling
 translations.merger.apply-all: Alles toepassen
 translations.merger.revert-all: Alles terugzetten
+translations.merger.revert: Terugzetten
 translations.merger.title: "Vertalingen samenvoegen (domein: {{domain}})"
 translations.merger.column.language: Taal
 translations.merger.items: items

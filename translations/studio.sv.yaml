@@ -500,6 +500,8 @@ version.category.title.meta: Metadata
 version.category.title.properties: Egenskaper
 version.changed-attributes: "Ändrade attribut: {{attributes}}"
 aria.version.delete: Ta bort version
+aria.notes-and-events.delete: Ta bort anteckning
+aria.card.close: Stäng
 aria.version.expand: Expandera version
 clear-all: Rensa allt
 empty: Tom
@@ -758,6 +760,7 @@ tags.apply-tags-to-children: Tillämpa taggar på barn
 tags.remove-and-apply-tags-to-children: Ta bort och tillämpa taggar på barn
 tags.columns.path: Sökväg
 tags.columns.actions: Ta bort
+tags.actions.delete: Ta bort tagg
 csv-separated-options: CSV-separerade alternativ
 csv-separated-options-info: Listan med tillgängliga alternativ kan anges som kommaseparerad lista, som enskilda kolumnvärden eller blandat. Vid enskild kolumn kommer nyckeln även att användas som värde.
 add: Lägg till
@@ -1322,6 +1325,9 @@ success: Framgång
 no-value-set: Inget värde angivet
 set-to-null: Tom (sätt till null)
 remove: Ta bort
+move-up: Flytta upp
+move-down: Flytta ner
+translate: Översätt
 delete: Ta bort
 clone: Klona
 jobs.clone-job.step2.title: Uppdaterar referenser
@@ -2906,6 +2912,7 @@ translations.merger.state.reverted: Återställd
 translations.merger.state.pending: Väntande
 translations.merger.apply-all: Tillämpa alla
 translations.merger.revert-all: Återställ alla
+translations.merger.revert: Återställ
 translations.merger.title: "Sammanfoga översättningar (Domän: {{domain}})"
 translations.merger.column.language: Språk
 translations.merger.items: objekt

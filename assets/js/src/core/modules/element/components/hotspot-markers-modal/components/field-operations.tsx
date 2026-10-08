@@ -126,11 +126,12 @@ const FieldOperations = ({
       <Card
         extra={
           <IconButton
+            aria-label={ t('remove') }
             icon={ { value: 'trash' } }
             onClick={ () => {
               handleRemoveField(index)
             } }
-            title={ t('remove') }
+            tooltip={ { title: t('remove') } }
           />
                 }
         key={ index + field.type }

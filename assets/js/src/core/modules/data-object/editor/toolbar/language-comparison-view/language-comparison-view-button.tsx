@@ -15,10 +15,12 @@ import { DataObjectContext } from '@Pimcore/modules/data-object/data-object-prov
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
 import { TAB_EDIT } from '../../types/object/tab-manager/tabs/edit/edit-container'
 import { LanguageComparisonModal } from './language-comparison-modal'
+import { useTranslation } from 'react-i18next'
 
 const VISIBLE_TABS = new Set([TAB_EDIT.key])
 
 export const LanguageComparisonViewButton = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
   const { id } = useContext(DataObjectContext)
@@ -35,9 +37,11 @@ export const LanguageComparisonViewButton = (): React.JSX.Element => {
   return (
     <>
       <IconButton
+        aria-label={ t('language-comparison-view.title') }
         data-testid="data-object-editor-language-comparison-button"
         icon={ { value: 'split-view' } }
         onClick={ () => { setIsModalOpen(true) } }
+        tooltip={ { title: t('language-comparison-view.title') } }
       />
 
       <LanguageComparisonModal

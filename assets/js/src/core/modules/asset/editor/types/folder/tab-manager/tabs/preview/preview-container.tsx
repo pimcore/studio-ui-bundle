@@ -71,9 +71,11 @@ const PreviewContainer = (): React.JSX.Element => {
           </Flex>
           <Split size='extra-small'>
             <IconButton
+              aria-label={ t('refresh') }
               icon={ { value: 'refresh' } }
               loading={ isFetching }
               onClick={ async () => await refetch() }
+              tooltip={ { title: t('refresh') } }
             />
             <Pagination
               current={ currentPage }

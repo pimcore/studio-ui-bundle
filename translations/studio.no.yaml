@@ -500,6 +500,8 @@ version.category.title.meta: Metadata
 version.category.title.properties: Egenskaper
 version.changed-attributes: "Endrede attributter: {{attributes}}"
 aria.version.delete: Slett versjon
+aria.notes-and-events.delete: Slett notat
+aria.card.close: Lukk
 aria.version.expand: Utvid versjon
 clear-all: Fjern alle
 empty: Tom
@@ -758,6 +760,7 @@ tags.apply-tags-to-children: Bruk tagger på underelementer
 tags.remove-and-apply-tags-to-children: Fjern og bruk tagger på underelementer
 tags.columns.path: Sti
 tags.columns.actions: Fjern
+tags.actions.delete: Fjern tagg
 csv-separated-options: CSV-separerte alternativer
 csv-separated-options-info: Listen over tilgjengelige alternativer kan angis som kommaseparert liste, som verdier i enkeltkolonner eller blandet. For enkeltkolonne-metoden vil nøkkelen også brukes som verdi.
 add: Legg til
@@ -1322,6 +1325,9 @@ success: Suksess
 no-value-set: Ingen verdi satt
 set-to-null: Tom (sett til null)
 remove: Fjern
+move-up: Flytt opp
+move-down: Flytt ned
+translate: Oversett
 delete: Slett
 clone: Klon
 jobs.clone-job.step2.title: Oppdaterer referanser
@@ -2906,6 +2912,7 @@ translations.merger.state.reverted: Tilbakestilt
 translations.merger.state.pending: Ventende
 translations.merger.apply-all: Bruk alle
 translations.merger.revert-all: Tilbakestill alle
+translations.merger.revert: Tilbakestill
 translations.merger.title: "Slå sammen oversettelser (Domene: {{domain}})"
 translations.merger.column.language: Språk
 translations.merger.items: elementer

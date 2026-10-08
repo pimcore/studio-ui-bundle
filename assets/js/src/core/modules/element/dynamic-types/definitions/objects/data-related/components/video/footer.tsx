@@ -16,7 +16,7 @@ import {
 } from './video'
 import { useTranslation } from 'react-i18next'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { Tooltip, actionTooltipDelay } from '@Pimcore/components/tooltip/tooltip'
 import { useVideoModal } from '@Pimcore/modules/element/components/video-modal/hooks/use-video-modal'
 import { isEmpty, isNull } from 'lodash'
 
@@ -51,6 +51,7 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
     buttons.push((
       <Tooltip
         key="empty"
+        mouseEnterDelay={ actionTooltipDelay }
         title={ t('empty') }
       >
         <IconButton
@@ -64,6 +65,7 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
     buttons.push((
       <Tooltip
         key="edit"
+        mouseEnterDelay={ actionTooltipDelay }
         title={ t('edit') }
       >
         <IconButton
@@ -77,6 +79,7 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
       buttons.push((
         <Tooltip
           key="upload"
+          mouseEnterDelay={ actionTooltipDelay }
           title={ t('upload') }
         >
           <IconButton
@@ -92,6 +95,7 @@ export const VideoFooter = (props: VideoFooterProps): React.JSX.Element => {
     buttons.push((
       <Tooltip
         key="details"
+        mouseEnterDelay={ actionTooltipDelay }
         title={ t('details') }
       >
         <IconButton
