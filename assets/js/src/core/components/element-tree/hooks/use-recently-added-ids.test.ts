@@ -66,4 +66,30 @@ describe('useRecentlyAddedIds', () => {
 
     expect(result.current.size).toBe(0)
   })
+
+  it('clears an active highlight when paging or searching', () => {
+    const { result, rerender } = renderList({ ids: ['1', '2'] })
+
+    rerender({ ids: ['1', '2', '3'] })
+    expect([...result.current]).toEqual(['3'])
+
+    rerender({ ids: ['1', '2', '3'], listKey: '1|search' })
+
+    expect(result.current.size).toBe(0)
+  })
+
+  it('highlights nothing when the results of a page arrive after the page changed', () => {
+    const { result, rerender } = renderList({ ids: ['1', '2'] })
+
+    // the page changes before its children are fetched, then the new children arrive
+    rerender({ ids: ['1', '2'], listKey: '2|' })
+    rerender({ ids: ['3', '4'], listKey: '2|' })
+
+    expect(result.current.size).toBe(0)
+
+    // from then on additions to that page are highlighted again
+    rerender({ ids: ['3', '4', '5'], listKey: '2|' })
+
+    expect([...result.current]).toEqual(['5'])
+  })
 })

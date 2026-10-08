@@ -14,9 +14,9 @@ import { motionDuration } from '@Pimcore/utils/motion'
 
 /**
  * Holds a value for a short moment and resets it to null afterwards, e.g. to show which action
- * was just confirmed. Setting a value again restarts the timer.
+ * was just confirmed. Setting a value again restarts the timer, clearing resets it right away.
  */
-export const useTemporaryValue = <T>(duration: number = motionDuration.confirmation): [T | null, (value: T) => void] => {
+export const useTemporaryValue = <T>(duration: number = motionDuration.confirmation): [T | null, (value: T) => void, () => void] => {
   const [value, setValue] = useState<T | null>(null)
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -39,5 +39,14 @@ export const useTemporaryValue = <T>(duration: number = motionDuration.confirmat
     }, duration)
   }, [duration])
 
-  return [value, show]
+  const clear = useCallback((): void => {
+    if (!isNull(timeoutRef.current)) {
+      clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
+    }
+
+    setValue(null)
+  }, [])
+
+  return [value, show, clear]
 }

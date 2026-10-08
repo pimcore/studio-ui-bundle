@@ -32,7 +32,7 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { isNil } from 'lodash'
-import React, { type ReactElement, useContext, useEffect, useRef } from 'react'
+import React, { type ReactElement, useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
 import { useTemporaryValue } from '@Pimcore/utils/hooks/use-temporary-value'
@@ -55,18 +55,12 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const messageApi = useMessage()
   const isAutoSaved = dataObject?.draftData?.isAutoSave === true
   // the button of the save that just succeeded briefly confirms it with a check mark
-  const lastSaveTaskRef = useRef<SaveTaskType | null>(null)
   const [savedTask, showSavedTask] = useTemporaryValue<SaveTaskType>()
 
   useEffect(() => {
     const handleSuccessEvent = async (): Promise<void> => {
       if (isSuccess && isSchedulesSuccess) {
         removeTrackedChanges()
-
-        if (!isNil(lastSaveTaskRef.current)) {
-          showSavedTask(lastSaveTaskRef.current)
-        }
-
         await messageApi.success(t('save-success'))
       }
     }
@@ -86,13 +80,14 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
 
   async function handleSaveClick (task: SaveTaskType, onFinish?: () => void): Promise<void> {
     if (dataObject?.changes === undefined) return
-    lastSaveTaskRef.current = task
     // The reset compares against the data the save actually sent, not the data read
     // here: the save may run much later (queued behind another one), take over the data
     // of an auto save folded into it meanwhile, and the user can keep editing after that.
     Promise.all([
       saveDataObject(getModifiedDataObjectAttributes(), task, (savedEditableData) => {
         resetModifiedDataObjectAttributes(savedEditableData)
+        // only called once this very save has succeeded, also when it was queued
+        showSavedTask(task)
         onFinish?.()
       }),
       saveSchedules()

@@ -18,7 +18,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { type Element, getElementDeeplink } from '@Pimcore/modules/element/element-helper'
 import type { ElementType } from '@Pimcore/types/enums/element/element-type'
 import { type ISystemInfoModalProps, SystemInfoModal } from '@Pimcore/modules/element/components/system-info-modal/system-info-modal'
-import { copyToClipboard } from '@Pimcore/utils/clipboard'
+import { copyToClipboardWithFeedback } from '@Pimcore/utils/clipboard'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 
 export type IElement = Element & {
@@ -48,11 +48,11 @@ export const useElementActionsMenu = ({ element, elementType }: IUseElementActio
 
   // the menu closes on click, so the confirmation can't be shown in place
   const copyWithFeedback = async (text: string): Promise<void> => {
-    if (await copyToClipboard(text)) {
-      void message.success(t('clipboard.copy.success'))
-    } else {
-      void message.error(t('clipboard.copy.error'))
-    }
+    await copyToClipboardWithFeedback(
+      text,
+      () => { void message.success(t('clipboard.copy.success')) },
+      () => { void message.error(t('clipboard.copy.error')) }
+    )
   }
 
   const showSystemInfoModal = (data: ISystemInfoModalProps['data']): void => {
