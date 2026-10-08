@@ -9,6 +9,7 @@
  */
 
 import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
+import { arrowTurnTransition } from '@Pimcore/utils/motion'
 
 export const useStyles = createStyles(({ css, token }) => {
   const themeToken = {
@@ -25,8 +26,23 @@ export const useStyles = createStyles(({ css, token }) => {
         background: transparent;
         border: none;
 
+        /* the expand arrow turns when opening and closing, and highlights on hover and while pressed */
         .expand-icon {
-          color: ${token.colorIcon}
+          color: ${token.colorIcon};
+          transition: color ${token.motionDurationFast} ${token.motionEaseOut};
+          ${arrowTurnTransition(`color ${token.motionDurationFast} ${token.motionEaseOut}`)}
+
+          &.expand-icon--open {
+            transform: rotate(180deg);
+          }
+
+          &:hover {
+            color: ${token.colorPrimaryHover};
+          }
+
+          &:active {
+            color: ${token.colorPrimaryActive};
+          }
         }
 
         &.ant-collapse-small >.ant-collapse-item >.ant-collapse-header {
