@@ -31,7 +31,8 @@ class ApiError extends Error {
     if (!isEmpty(errorKey) && errorKey === ErrorKeyTypes.ELEMENT_VALIDATION_FAILED) {
       return {
         title: errorKey,
-        errorKey: errorMessage!
+        errorKey,
+        message: errorMessage
       }
     }
 

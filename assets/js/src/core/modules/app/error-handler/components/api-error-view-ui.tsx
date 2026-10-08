@@ -12,6 +12,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { isString, isUndefined } from 'lodash'
 import { type IErrorGetContent } from '@Pimcore/modules/app/error-handler/types'
+import { getErrorMessage } from '@Pimcore/modules/app/error-handler/utils/get-error-message'
 import { DEFAULT_ERROR_CONTENT } from '@Pimcore/modules/app/error-handler/classes/api-error'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 
@@ -24,7 +25,7 @@ export const ApiErrorViewUI = ({ errorContent }: IApiErrorViewUIProps): React.JS
 
   const getErrorKeyValue = (): string => {
     if (!isString(errorContent) && !isUndefined(errorContent?.errorKey)) {
-      return t(`error.${errorContent.errorKey}`)
+      return getErrorMessage(errorContent, t)
     }
 
     return DEFAULT_ERROR_CONTENT
