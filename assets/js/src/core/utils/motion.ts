@@ -66,14 +66,24 @@ export const motionEaseInPanel = 'cubic-bezier(0.4, 0, 1, 1)'
 /**
  * Transition of expand arrows: one arrow turns between its closed and open direction with a soft
  * spring. With a reduced motion preference it switches direction instantly. Further transitions of
- * the same element can be passed, so they are kept.
+ * the same element can be passed: they are kept in both cases, only the turn depends on the preference.
  */
 export const arrowTurnTransition = (otherTransitions?: string): string => {
-  const others = isUndefined(otherTransitions) ? '' : `${otherTransitions}, `
+  const turn = `transform ${motionDuration.settle}ms ${motionEaseSpring}`
+
+  if (isUndefined(otherTransitions)) {
+    return `
+      ${motionAllowedMediaQuery} {
+        transition: ${turn};
+      }
+    `
+  }
 
   return `
+    transition: ${otherTransitions};
+
     ${motionAllowedMediaQuery} {
-      transition: ${others}transform ${motionDuration.settle}ms ${motionEaseSpring};
+      transition: ${otherTransitions}, ${turn};
     }
   `
 }

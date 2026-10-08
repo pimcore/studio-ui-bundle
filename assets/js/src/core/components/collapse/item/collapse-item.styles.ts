@@ -29,7 +29,6 @@ export const useStyles = createStyles(({ css, token }) => {
         /* the expand arrow turns when opening and closing, and highlights on hover and while pressed */
         .expand-icon {
           color: ${token.colorIcon};
-          transition: color ${token.motionDurationFast} ${token.motionEaseOut};
           ${arrowTurnTransition(`color ${token.motionDurationFast} ${token.motionEaseOut}`)}
 
           &.expand-icon--open {

@@ -67,7 +67,8 @@ export const TreeExpander = ({ node, state }: TreeExpanderProps): React.JSX.Elem
           {/* one arrow that turns, kept mounted while the children load so the turn stays visible */}
           <Icon
             className={ cn('tree-expander__arrow', {
-              'tree-expander__arrow--open': isExpanded,
+              // the turn starts once the spinner is gone, so it stays visible on a first expand
+              'tree-expander__arrow--open': isExpanded && isLoading !== true,
               'tree-expander__arrow--loading': isLoading === true
             }) }
             options={ { width: 16, height: 16 } }
