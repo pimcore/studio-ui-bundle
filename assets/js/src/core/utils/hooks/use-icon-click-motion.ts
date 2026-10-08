@@ -10,24 +10,26 @@
 
 import { useEffect } from 'react'
 import { isNil } from 'lodash'
-import { iconClickMotionClass, iconClickMotionIcons } from '@Pimcore/styles/icon-motion.styles'
+import { iconClickMotionClass, iconClickMotionIcons, iconMotionControls } from '@Pimcore/styles/icon-motion.styles'
+import { motionReducedMediaQuery } from '@Pimcore/utils/motion'
 
-const controlSelector = '.ant-btn, .ant-dropdown-menu-item, [role="button"]'
+const reducedMotionQuery = motionReducedMediaQuery.replace('@media ', '')
 const iconSelector = iconClickMotionIcons.map((icon) => `.pimcore-icon-${icon}`).join(', ')
 
 /**
  * Plays the one-off click animation of action icons (see IconMotionGlobalStyles), e.g. a single turn
  * of the refresh icon. CSS alone can't start an animation on click, so a single delegated listener
- * marks the icon until its animation ends. Without an animation (reduced motion) nothing is marked.
+ * marks the icon until its animation ends. With a reduced motion preference there is no animation,
+ * so nothing is marked.
  */
 export const useIconClickMotion = (): void => {
   useEffect(() => {
     const onClick = (event: MouseEvent): void => {
-      if (!(event.target instanceof Element)) {
+      if (!(event.target instanceof Element) || window.matchMedia(reducedMotionQuery).matches) {
         return
       }
 
-      const icon = event.target.closest(controlSelector)?.querySelector(iconSelector)
+      const icon = event.target.closest(iconMotionControls)?.querySelector(iconSelector)
 
       if (isNil(icon)) {
         return

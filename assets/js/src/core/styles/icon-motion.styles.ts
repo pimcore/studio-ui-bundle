@@ -17,8 +17,14 @@ export const iconClickMotionClass = 'pimcore-icon--click-motion'
 /** Icons that animate once when the control they sit in is clicked. */
 export const iconClickMotionIcons = ['refresh']
 
+/**
+ * Controls whose icons react: buttons and menu items. Generic `role="button"` elements are left out,
+ * as e.g. every grid cell has that role and may show these icons as plain content.
+ */
+export const iconMotionControls = '.ant-btn, .ant-dropdown-menu-item'
+
 // icons only change when the control they belong to is hovered or pressed, never on their own
-const interactive = ':is(.ant-btn:not(:disabled), .ant-dropdown-menu-item:not(.ant-dropdown-menu-item-disabled), [role="button"]:not([aria-disabled="true"]))'
+const interactive = ':is(.ant-btn:not(:disabled), .ant-dropdown-menu-item:not(.ant-dropdown-menu-item-disabled))'
 const hover = `${interactive}:hover`
 const press = `${interactive}:active`
 

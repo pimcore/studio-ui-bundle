@@ -43,6 +43,15 @@ const Controls = (): React.JSX.Element => {
         />
         Delete
       </button>
+
+      {/* a grid cell has the button role, but its icons are plain content */}
+      <div role='button'>
+        <div
+          className='pimcore-icon pimcore-icon-refresh'
+          data-testid='cell-icon'
+        />
+        Cell
+      </div>
     </>
   )
 }
@@ -67,5 +76,33 @@ describe('useIconClickMotion', () => {
     fireEvent.click(screen.getByText('Delete'))
 
     expect(screen.getByTestId('trash-icon')).not.toHaveClass(iconClickMotionClass)
+  })
+
+  it('leaves icons of elements that only have the button role alone', () => {
+    render(<Controls />)
+
+    fireEvent.click(screen.getByText('Cell'))
+
+    expect(screen.getByTestId('cell-icon')).not.toHaveClass(iconClickMotionClass)
+  })
+
+  it('does not mark icons with a reduced motion preference', () => {
+    const matchMedia = window.matchMedia
+    window.matchMedia = jest.fn().mockImplementation((query: string) => ({
+      matches: query.includes('reduce'),
+      media: query,
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn()
+    }))
+
+    try {
+      render(<Controls />)
+
+      fireEvent.click(screen.getByText('Refresh'))
+
+      expect(screen.getByTestId('refresh-icon')).not.toHaveClass(iconClickMotionClass)
+    } finally {
+      window.matchMedia = matchMedia
+    }
   })
 })
