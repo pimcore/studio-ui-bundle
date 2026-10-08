@@ -50,6 +50,7 @@ let changed = false
 const set = (patch: Partial<World>): void => { world = { ...world, ...patch }; changed = true }
 
 jest.mock('@Pimcore/modules/search/provider/use-search', () => ({
+  usePendingRestore: () => world.pending,
   useSearch: () => ({
     pendingRestore: world.pending,
     loadedSavedSearch: undefined,
