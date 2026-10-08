@@ -558,6 +558,8 @@ userModification: Benutzer Änderung
 userOwner: Eigentümer
 listing.grid-config.convert-to-advanced: In erweiterte Spalte umwandeln
 listing.grid-config.title: Grid-Konfiguration
+listing.grid-config.search-mode-column.label: Automatisch
+listing.grid-config.search-mode-column.tooltip: Vom aktiven Suchmodus hinzugefügt. Sie können sie wie jede andere Spalte verschieben; sie wird nicht mit der Grid-Konfiguration gespeichert.
 grid-config.discard-all-changes: Alle Änderungen verwerfen
 grid-config.apply-changes: Änderungen übernehmen
 grid-config.reload: Neu laden

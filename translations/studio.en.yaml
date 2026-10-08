@@ -558,6 +558,8 @@ userModification: User modification
 userOwner: User owner
 listing.grid-config.convert-to-advanced: Convert to advanced column
 listing.grid-config.title: Grid Config
+listing.grid-config.search-mode-column.label: Automatic
+listing.grid-config.search-mode-column.tooltip: Added by the active search mode. You can move it like any other column; it is not saved with the grid configuration.
 grid-config.discard-all-changes: Discard all changes
 grid-config.apply-changes: Apply changes
 grid-config.reload: Reload

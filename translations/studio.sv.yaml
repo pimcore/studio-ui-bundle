@@ -558,6 +558,8 @@ userModification: Ändrad av
 userOwner: Ägare
 listing.grid-config.convert-to-advanced: Konvertera till avancerad kolumn
 listing.grid-config.title: Rutnätskonfiguration
+listing.grid-config.search-mode-column.label: Automatisk
+listing.grid-config.search-mode-column.tooltip: Tillagd av det aktiva sökläget. Du kan flytta den som alla andra kolumner; den sparas inte med rutnätskonfigurationen.
 grid-config.discard-all-changes: Förkasta alla ändringar
 grid-config.apply-changes: Tillämpa ändringar
 grid-config.reload: Läs om

@@ -23,6 +23,8 @@ import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-li
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
+import { isSearchModeDraftColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/search-mode-draft-columns'
+import { SearchModeColumnBadge } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/components/search-mode-column-badge/search-mode-column-badge'
 
 function findScrollableParent (element: HTMLElement | null): HTMLElement | null {
   if (element === null || element === document.documentElement) return null
@@ -99,17 +101,20 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
 
       children: <Tag>{t(`${translationKey}`)}</Tag>,
 
-      renderRightToolbar: (
-        <Space size='mini'>
-          { getLanguageSelection(uniqueId, column) }
-          <IconButton
-            icon={ { value: 'trash' } }
-            onClick={ () => { onRemoveColumn(uniqueId) } }
-            size='small'
-            theme='secondary'
-          />
-        </Space>
-      )
+      // search mode columns can only be moved: they come and go with the mode
+      renderRightToolbar: isSearchModeDraftColumn(column)
+        ? <SearchModeColumnBadge />
+        : (
+          <Space size='mini'>
+            { getLanguageSelection(uniqueId, column) }
+            <IconButton
+              icon={ { value: 'trash' } }
+              onClick={ () => { onRemoveColumn(uniqueId) } }
+              size='small'
+              theme='secondary'
+            />
+          </Space>
+          )
     }
   })
 

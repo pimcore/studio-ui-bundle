@@ -21,7 +21,7 @@ import { appConfig } from '@Pimcore/app/config/app-config'
 export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = () => {
   const { useElementId } = useSettings()
   const { getId } = useElementId()
-  const { selectedColumns } = useSelectedColumns()
+  const { visibleColumns } = useSelectedColumns()
   const { availableColumns } = useAvailableColumns()
   const { selectedClassDefinition } = useClassDefinitionSelection()
   const { dataLoadingState, setDataLoadingState } = useData()
@@ -29,7 +29,7 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
 
   const columnsArg: DataObjectGetGridApiArg['body']['columns'] = []
 
-  selectedColumns.forEach(column => {
+  visibleColumns.forEach(column => {
     let advancedColumnConfig: AdvancedColumnConfig | undefined
     let key = column.key
 

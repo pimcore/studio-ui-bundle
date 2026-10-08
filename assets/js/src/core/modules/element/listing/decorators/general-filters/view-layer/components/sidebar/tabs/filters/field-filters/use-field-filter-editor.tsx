@@ -11,7 +11,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
-import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { type AvailableColumn, buildColumnPickerGroups, resolveColumnTranslationKey } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { type ColumnPickerGroup } from '@Pimcore/components/column-picker/column-picker.types'
 import { type FieldFiltersProps } from '@Pimcore/components/field-filters/field-filters'
@@ -23,6 +22,7 @@ import { useClassDefinitionSelectionOptional } from '@Pimcore/modules/data-objec
 import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/types'
 import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
+import { useFilterableColumns } from '../../../../../../search-modes/use-filterable-columns'
 
 export interface UseFieldFilterEditorProps {
   /**
@@ -48,7 +48,8 @@ export interface UseFieldFilterEditorReturn {
  */
 export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): UseFieldFilterEditorReturn => {
   const { t } = useTranslation()
-  const { availableColumns } = useAvailableColumns()
+  // includes the draft search mode's columns, so a mode picked in the panel can be filtered on
+  const availableColumns = useFilterableColumns('draft')
   const { getType } = useDynamicTypeResolver()
   const { fieldFilters, setFieldFilters } = useDraftFilterValues()
   const { openModal } = useClassificationStoreModal({ onUpdate: onAddClassificationStoreColumn })

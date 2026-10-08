@@ -12,6 +12,7 @@ import { injectable } from 'inversify'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { type ColumnFilter } from '@Pimcore/modules/app/types/column-filter'
 import { type SimpleSearchResult } from '@Pimcore/modules/search/search-api-slice.gen'
+import { type GridColumnConfiguration } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { DynamicTypeAbstract } from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
 
 /** The built-in full-text mode; not part of the SearchModeRegistry. */
@@ -22,7 +23,10 @@ export type SearchModeSurfaceType = ElementType | 'all'
 
 export interface SearchModeContext {
   elementType: SearchModeSurfaceType
-  /** True when the listing sends an explicit column sort. */
+  /**
+   * True when the listing sends an explicit column sort, including a sort on a mode column (e.g. a score column).
+   * Only in getAdditionalColumns it ignores sorts on mode columns, as these columns are being resolved there.
+   */
   hasExplicitSorting: boolean
 }
 
@@ -86,6 +90,16 @@ export abstract class SearchModeAbstract extends DynamicTypeAbstract {
   abstract getAvailability (context: SearchModeContext): SearchModeAvailability
 
   abstract buildColumnFilter (query: string, context: SearchModeContext): ColumnFilter
+
+  /**
+   * Columns the listing shows while this mode is applied, appended unless the user selected them.
+   * They are requested like visible columns but never stored in a grid configuration or saved search;
+   * a sort on them is dropped when they disappear. Here context.hasExplicitSorting ignores sorts on mode columns;
+   * in getAvailability and buildColumnFilter it counts them.
+   */
+  getAdditionalColumns (context: SearchModeContext): GridColumnConfiguration[] {
+    return []
+  }
 
   /** Modes that can serve the All tab return an adapter; undefined = not offered there. */
   getGlobalSearch? (): GlobalSearchAdapter

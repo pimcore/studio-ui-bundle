@@ -558,6 +558,8 @@ userModification: Utente modifica
 userOwner: Utente proprietario
 listing.grid-config.convert-to-advanced: Converti in colonna avanzata
 listing.grid-config.title: Configurazione griglia
+listing.grid-config.search-mode-column.label: Automatica
+listing.grid-config.search-mode-column.tooltip: Aggiunta dalla modalità di ricerca attiva. Puoi spostarla come qualsiasi altra colonna; non viene salvata con la configurazione della griglia.
 grid-config.discard-all-changes: Annulla tutte le modifiche
 grid-config.apply-changes: Applica modifiche
 grid-config.reload: Ricarica

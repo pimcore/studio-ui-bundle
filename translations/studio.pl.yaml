@@ -558,6 +558,8 @@ userModification: Użytkownik modyfikacji
 userOwner: Właściciel (użytkownik)
 listing.grid-config.convert-to-advanced: Konwertuj na kolumnę zaawansowaną
 listing.grid-config.title: Ustawienia siatki
+listing.grid-config.search-mode-column.label: Automatyczna
+listing.grid-config.search-mode-column.tooltip: Dodana przez aktywny tryb wyszukiwania. Możesz ją przenosić jak każdą inną kolumnę; nie jest zapisywana w konfiguracji siatki.
 grid-config.discard-all-changes: Odrzuć wszystkie zmiany
 grid-config.apply-changes: Zastosuj zmiany
 grid-config.reload: Przeładuj
