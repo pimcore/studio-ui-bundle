@@ -14,6 +14,7 @@ import { store } from '@Pimcore/app/store'
 import { appIntro } from '@Pimcore/components/background/background.styles'
 import { componentConfig, ComponentRenderer } from '@Pimcore/modules/app/component-registry/component-registry'
 import { GlobalStyles } from '@Pimcore/styles/global.styles'
+import { MotionGlobalStyles } from '@Pimcore/styles/motion.styles'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
 import { useIsAuthenticated } from '@Pimcore/modules/auth/hooks/use-is-authenticated'
@@ -169,6 +170,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   return (
     <>
       <GlobalStyles />
+      <MotionGlobalStyles />
 
       <AppLoadingContext.Provider value={ appLoadingContextValue }>
         <ComponentRenderer
