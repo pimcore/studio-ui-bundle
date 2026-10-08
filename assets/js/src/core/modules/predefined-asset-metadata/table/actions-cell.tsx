@@ -13,7 +13,7 @@ import { type CellContext } from '@tanstack/react-table'
 import { type PredefinedMetadata } from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice-enhanced'
 import { Flex, IconButton } from '@sdk/components'
 import { type PredefinedAssetMetadataRow, usePredefinedAssetMetadata } from '../hooks/use-predefined-asset-metadata'
-import { t } from 'i18next'
+import { useTranslation } from 'react-i18next'
 
 type PredefinedAssetMetadataWithActions = PredefinedMetadata & { actions: React.ReactNode }
 
@@ -23,6 +23,7 @@ interface ActionsCellProps {
 }
 
 export const ActionsCell = ({ info, setPredefinedAssetMetadataRows }: ActionsCellProps): JSX.Element => {
+  const { t } = useTranslation()
   const id = info.row.original.id
   const { deleteMetadataById, deleteLoading } = usePredefinedAssetMetadata()
 

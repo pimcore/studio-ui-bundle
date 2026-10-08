@@ -15,7 +15,7 @@ import { IconButton } from '@sdk/components'
 import { type PredefinedPropertyRow, usePredefinedProperty } from '../hooks/use-predefined-property'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { TRANSLATIONS_WIDGET } from '@Pimcore/modules/translations'
-import { t } from 'i18next'
+import { useTranslation } from 'react-i18next'
 
 type PredefinedPropertyWithActions = PredefinedProperty & { actions: React.ReactNode }
 
@@ -25,6 +25,7 @@ interface ActionsCellProps {
 }
 
 export const ActionsCell = ({ info, setPredefinedPropertyRows }: ActionsCellProps): JSX.Element => {
+  const { t } = useTranslation()
   const id = info.row.original.id
   const name = info.row.original.name
   const { deletePropertyById, deleteLoading } = usePredefinedProperty()

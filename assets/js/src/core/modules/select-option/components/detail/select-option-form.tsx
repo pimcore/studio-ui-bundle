@@ -15,7 +15,7 @@ import { Form } from '@Pimcore/components/form/form'
 import { FormKit } from '@Pimcore/components/form/form-kit'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { actionTooltipDelay, Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import type { SelectOptionDetail, SchemaUsedToUpdateSelectOptionConfigurations } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -95,7 +95,10 @@ export const SelectOptionForm = ({ selectOption }: SelectOptionFormProps): React
               title={ t('refresh') }
             />
 
-            <Tooltip title={ isWriteable ? '' : t('config_not_writeable') }>
+            <Tooltip
+              mouseEnterDelay={ actionTooltipDelay }
+              title={ isWriteable ? '' : t('config_not_writeable') }
+            >
               <IconButton
                 disabled={ isLoading || !isWriteable }
                 icon={ { value: 'trash' } }

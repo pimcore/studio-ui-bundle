@@ -15,7 +15,7 @@ import { type DocumentTypeRow, useDocumentType } from '../hooks/use-document-typ
 import { type DocumentTypeWithActions } from './table'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { TRANSLATIONS_WIDGET } from '@Pimcore/modules/translations'
-import { t } from 'i18next'
+import { useTranslation } from 'react-i18next'
 
 interface ActionsCellProps {
   info: CellContext<DocumentTypeWithActions, React.ReactNode>
@@ -23,6 +23,7 @@ interface ActionsCellProps {
 }
 
 export const ActionsCell = ({ info, setDocumentTypeRows }: ActionsCellProps): JSX.Element => {
+  const { t } = useTranslation()
   const id = info.row.original.id
   const name = info.row.original.name
   const { deleteDocumentTypeById, deleteLoading } = useDocumentType()

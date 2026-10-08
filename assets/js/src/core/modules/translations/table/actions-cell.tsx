@@ -13,7 +13,7 @@ import { type CellContext } from '@tanstack/react-table'
 import { Flex, IconButton } from '@sdk/components'
 import { useTranslation } from '../hooks/use-translation'
 import { type TranslationRow } from '../helpers/translation-helpers'
-import { t } from 'i18next'
+import { useTranslation as useI18nTranslation } from 'react-i18next'
 
 type TranslationRowWithActions = TranslationRow & { actions: React.ReactNode }
 
@@ -23,6 +23,7 @@ interface ActionsCellProps {
 }
 
 export const ActionsCell = ({ info, setTranslationRows }: ActionsCellProps): React.JSX.Element => {
+  const { t } = useI18nTranslation()
   const key = info.row.original.key
   const { deleteTranslationByKey, deleteLoading } = useTranslation()
   const handleDelete = async (): Promise<void> => {
