@@ -45,9 +45,9 @@ jest.mock('react-i18next', () => ({
 
 const node = (isPublished?: boolean): TreeNodeProps => ({
   id: '81',
-  type: 'folder',
+  type: 'page',
   isPublished,
-  metaData: {}
+  metaData: { document: {} }
 }) as unknown as TreeNodeProps
 
 const renderTooltip = (isPublished?: boolean): void => {
