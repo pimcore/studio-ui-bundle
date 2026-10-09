@@ -25,13 +25,14 @@ import {
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useRequiredFieldsValidation } from '@Pimcore/modules/document/hooks/use-required-fields-validation'
 import { isNil } from 'lodash'
-import React, { type ReactElement, useContext, useEffect } from 'react'
+import React, { type ReactElement, useContext, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { useDocumentDraft } from '@Pimcore/modules/document/hooks/use-document-draft'
 import { useDocumentSaveTask } from '@Pimcore/modules/document/hooks/use-document-save-task'
 import { DocumentSaveTaskManager } from '@Pimcore/modules/document/services'
 import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
+import { isSaveAccepted, useSavedTask } from './use-saved-task'
 
 export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -50,6 +51,10 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { deleteDraft, isLoading: isDraftDeleteLoading, buttonText: deleteDraftButtonText } = useDeleteDraft('document')
   const messageApi = useMessage()
   const isAutoSaved = document?.draftData?.isAutoSave === true
+  // the button of the save that just succeeded briefly confirms it with a check mark
+  // schedules saved by the latest save action, the confirmation waits for them
+  const schedulesSavedRef = useRef<Promise<boolean> | undefined>(undefined)
+  const savedTask = useSavedTask(id, schedulesSavedRef)
   const {
     validateRequiredFields,
     showValidationErrorModal
@@ -101,12 +106,19 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
       }
     }
 
-    Promise.all([
-      saveDocument(task, () => {
-        onFinish?.()
-      }),
-      saveSchedules()
-    ]).catch((error) => {
+    // a save the task manager ignores (another manual save is running) must not replace the
+    // schedules the running save is confirmed with
+    const isAccepted = isSaveAccepted(id)
+    const documentSaved = saveDocument(task, () => {
+      onFinish?.()
+    })
+    const schedulesSaved = saveSchedules()
+
+    if (isAccepted) {
+      schedulesSavedRef.current = schedulesSaved
+    }
+
+    Promise.all([documentSaved, schedulesSaved]).catch((error) => {
       console.error(error)
     })
   }
@@ -128,6 +140,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
             onClick={ async () => {
               await handleSaveClick(SaveTaskType.Version)
             } }
+            success={ savedTask === SaveTaskType.Version }
             type="default"
           >
             {t('toolbar.save-draft')}
@@ -144,6 +157,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
             onClick={ async () => {
               await handleSaveClick(SaveTaskType.Save)
             } }
+            success={ savedTask === SaveTaskType.Save }
             type="default"
           >
             {t('toolbar.save-draft')}
@@ -193,6 +207,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
           onClick={ async () => {
             await handleSaveClick(SaveTaskType.Save)
           } }
+          success={ savedTask === SaveTaskType.Save }
           type="primary"
         >
           {t('toolbar.save')}
@@ -215,6 +230,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
               }
             })
           } }
+          success={ savedTask === SaveTaskType.Publish }
           type="primary"
         >
           {t('toolbar.save-and-publish')}

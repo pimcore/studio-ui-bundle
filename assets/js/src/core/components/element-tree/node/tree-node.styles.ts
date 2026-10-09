@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { recentlyAddedHighlightDuration } from '../hooks/use-recently-added-ids'
 import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ token, css }) => {
@@ -67,6 +68,17 @@ export const useStyles = createStyles(({ token, css }) => {
         position: relative;
         padding: 2px 0 2px 0;
         gap: ${token.paddingXXS}px;
+      }
+
+      /* a just added or located node is tinted and fades back to its regular background */
+      .tree-node__content--highlighted {
+        animation: tree-node-highlight ${recentlyAddedHighlightDuration}ms ease-out;
+      }
+
+      @keyframes tree-node-highlight {
+        from {
+          background-color: ${token.colorPrimaryBgHover};
+        }
       }
 
       .tree-node__content--selected {

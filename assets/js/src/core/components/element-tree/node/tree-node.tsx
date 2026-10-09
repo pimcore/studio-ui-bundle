@@ -22,6 +22,7 @@ import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/util
 import { createNodeTestId } from '@Pimcore/utils/test-id-generator'
 import { ComponentRenderer } from '@Pimcore/modules/app/component-registry/component-renderer'
 import cn from 'classnames'
+import { useTreeNodeHighlight } from '../hooks/use-tree-node-highlight'
 
 export type TreeNodeWrapper = (children: React.ReactNode) => React.ReactNode
 export interface TreeNodeProps {
@@ -43,6 +44,8 @@ export interface TreeNodeProps {
   parentId?: string
   isRoot?: boolean
   isLoading?: boolean
+  /** Briefly highlights a node that was just added to its list, e.g. after creating or pasting it. */
+  isRecentlyAdded?: boolean
   danger?: boolean
   ref?: MutableRefObject<HTMLDivElement>
   isPublished?: boolean
@@ -99,6 +102,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     tooltipSlotName
   } = useContext(TreeContext)
   const { isExpanded, setExpanded, isSelected, isScrollTo, setScrollTo, setSelectedIds } = useElementTreeNode(id)
+  const { isHighlighted, highlight } = useTreeNodeHighlight(props.isRecentlyAdded === true)
   const treeNodeProps = { id, icon, label, internalKey, level, isLoading, isRoot, danger, ...props }
 
   useEffect(() => {
@@ -117,9 +121,12 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
       if (!isNil(nodeElement)) {
         scrollToNodeElement(nodeElement)
         setScrollTo(false)
+        highlight()
       }
     }
   }, [isScrollTo, nodesRefs, internalKey, setScrollTo])
+
+  const contentClassName = cn('tree-node__content', { 'tree-node__content--selected': isSelected, 'tree-node__content--highlighted': isHighlighted })
 
   function getClasses (): string {
     const classes = ['tree-node', styles.treeNode]
@@ -248,7 +255,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
             props={ {
               node: treeNodeProps,
               children: (
-                <div className={ cn('tree-node__content', { 'tree-node__content--selected': isSelected }) }>
+                <div className={ contentClassName }>
                   {wrapNode(nodeContent)}
                 </div>
               )
@@ -256,7 +263,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
           />
           )
         : (
-          <div className={ cn('tree-node__content', { 'tree-node__content--selected': isSelected }) }>
+          <div className={ contentClassName }>
             {wrapNode(nodeContent)}
           </div>
           )}

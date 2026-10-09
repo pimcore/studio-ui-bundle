@@ -35,6 +35,8 @@ import { isNil } from 'lodash'
 import React, { type ReactElement, useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
+import { useTemporaryValue } from '@Pimcore/utils/hooks/use-temporary-value'
+import { confirmWhenSchedulesSaved } from '@Pimcore/modules/element/editor/save-confirmation'
 
 export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -53,6 +55,8 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { deleteDraft, isLoading: isDraftDeleteLoading, buttonText: deleteDraftButtonText } = useDeleteDraft('data-object')
   const messageApi = useMessage()
   const isAutoSaved = dataObject?.draftData?.isAutoSave === true
+  // the button of the save that just succeeded briefly confirms it with a check mark
+  const [savedTask, showSavedTask] = useTemporaryValue<SaveTaskType>()
 
   useEffect(() => {
     const handleSuccessEvent = async (): Promise<void> => {
@@ -80,13 +84,18 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
     // The reset compares against the data the save actually sent, not the data read
     // here: the save may run much later (queued behind another one), take over the data
     // of an auto save folded into it meanwhile, and the user can keep editing after that.
-    Promise.all([
-      saveDataObject(getModifiedDataObjectAttributes(), task, (savedEditableData) => {
-        resetModifiedDataObjectAttributes(savedEditableData)
-        onFinish?.()
-      }),
-      saveSchedules()
-    ]).catch((error) => {
+    // filled right below; read once the object is saved
+    const action: { schedulesSaved?: Promise<boolean> } = {}
+    const objectSaved = saveDataObject(getModifiedDataObjectAttributes(), task, (savedEditableData) => {
+      resetModifiedDataObjectAttributes(savedEditableData)
+      // only called once this very save has succeeded, also when it was queued; the confirmation
+      // also waits for the schedules saved by the same action
+      void confirmWhenSchedulesSaved(action.schedulesSaved, () => { showSavedTask(task) })
+      onFinish?.()
+    })
+    action.schedulesSaved = saveSchedules()
+
+    Promise.all([objectSaved, action.schedulesSaved]).catch((error) => {
       console.error(error)
     })
   }
@@ -108,6 +117,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
             onClick={ async () => {
               await handleSaveClick(SaveTaskType.Version)
             } }
+            success={ savedTask === SaveTaskType.Version }
             type="default"
           >
             {t('toolbar.save-draft')}
@@ -124,6 +134,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
             onClick={ async () => {
               await handleSaveClick(SaveTaskType.Save)
             } }
+            success={ savedTask === SaveTaskType.Save }
             type="default"
           >
             {t('toolbar.save-draft')}
@@ -173,6 +184,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
           onClick={ async () => {
             await handleSaveClick(SaveTaskType.Save)
           } }
+          success={ savedTask === SaveTaskType.Save }
           type="primary"
         >
           {t('toolbar.save')}
@@ -195,6 +207,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
               }
             })
           } }
+          success={ savedTask === SaveTaskType.Publish }
           type="primary"
         >
           {t('toolbar.save-and-publish')}
