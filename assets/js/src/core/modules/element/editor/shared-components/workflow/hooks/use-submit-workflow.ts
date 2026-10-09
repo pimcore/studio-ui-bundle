@@ -13,7 +13,7 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { t } from 'i18next'
-import { type WorkflowAction, type WorkflowOptions } from '../types/workflow-types'
+import { type WorkflowAction, type WorkflowActionSubject, type WorkflowOptions } from '../types/workflow-types'
 import { useAlertModal } from '@sdk/components'
 import { useWorkflowModalState } from './use-workflow-modal-state'
 import { useWorkflowActionSubject } from '../provider/workflow-provider'
@@ -61,6 +61,22 @@ export const useSubmitWorkflow = (): UseSubmitWorkflowReturn => {
       return
     }
 
+    const beforeSubmit = subject.beforeSubmit ?? (async () => true)
+
+    beforeSubmit(workflowAction).then((proceed) => {
+      if (!proceed) {
+        closeModal()
+        return
+      }
+
+      submit(subject, workflowAction, workflowOptions)
+    }).catch((error) => {
+      console.error(error)
+      closeModal()
+    })
+  }
+
+  const submit = (subject: WorkflowActionSubject, workflowAction: WorkflowAction, workflowOptions?: WorkflowOptions): void => {
     fetchSubmitWorkflowActionMutation(workFlowTransition(workflowAction, workflowOptions)).unwrap().then(() => {
       void messageApi.success({
         content: t('action-applied-successfully') + ': ' + t(workflowAction.label),
