@@ -74,8 +74,7 @@ export const useSubmitWorkflow = (): UseSubmitWorkflowReturn => {
     setIsGuarding(true)
 
     const run = async (): Promise<void> => {
-      const beforeSubmit = subject.beforeSubmit ?? (async () => true)
-      const proceed = await beforeSubmit(workflowAction)
+      const proceed = subject.beforeSubmit === undefined || await subject.beforeSubmit(workflowAction)
       setIsGuarding(false)
 
       if (!proceed) {

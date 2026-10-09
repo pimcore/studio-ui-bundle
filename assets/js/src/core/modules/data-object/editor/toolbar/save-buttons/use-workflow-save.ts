@@ -65,20 +65,28 @@ export const useWorkflowSave = ({ getTask, startSave, isError, isSchedulesError,
     }
   }, [isError, isSchedulesError, isSchedulesSuccess, dataSavedTick])
 
+  // Called by the save buttons once the data save finished; the effect above then settles the
+  // pending save as soon as the schedules are saved too.
+  const markDataSaved = (): void => {
+    if (pendingRef.current === null) {
+      return
+    }
+
+    pendingRef.current.dataSaved = true
+    setDataSavedTick((tick) => tick + 1)
+  }
+
+  const startPendingSave = (task: SaveTaskType, resolve: (saved: boolean) => void): void => {
+    pendingRef.current = { resolve, dataSaved: false }
+    startSave(task, markDataSaved)
+  }
+
   useRegisterUnsavedChangesSaver(async () => {
     const task = getTask()
     if (task === undefined || pendingRef.current !== null) {
       return false
     }
 
-    return await new Promise<boolean>((resolve) => {
-      const pending: PendingSave = { resolve, dataSaved: false }
-      pendingRef.current = pending
-
-      startSave(task, () => {
-        pending.dataSaved = true
-        setDataSavedTick((tick) => tick + 1)
-      })
-    })
+    return await new Promise<boolean>((resolve) => { startPendingSave(task, resolve) })
   })
 }
