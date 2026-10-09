@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { versionsDataToTableData, type AssetVersionData } from './details-functions'
+import { hydrateVersionData, loadPreviewImage, versionsDataToTableData, type AssetVersionData } from './details-functions'
 import { getAssetCategoriesList } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/helpers/assetCategoriesHelper'
 import { type IAssetVersionField } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/versions/components/versions-fields-list/types'
 import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
@@ -18,6 +18,7 @@ import { VersionCategoryName } from '@Pimcore/constants/versionConstants'
 jest.mock('i18next', () => ({
   t: (key: string) => (key === 'field' ? 'Feld' : `de:${key}`)
 }))
+jest.mock('@Pimcore/app/api/pimcore/route', () => ({ getPrefix: () => '/my-studio/api' }))
 jest.mock('@Pimcore/app/depency-injection', () => ({ container: { get: jest.fn() } }))
 jest.mock('@Pimcore/utils/date-time', () => ({ formatDateTime: jest.fn(() => '') }))
 jest.mock('@Pimcore/modules/app/error-handler', () => ({
@@ -95,5 +96,28 @@ describe('versionsDataToTableData', () => {
 
     expect(categoryKeys).toContain(VersionCategoryName.SYSTEM_DATA)
     expect(categoryKeys).toContain(VersionCategoryName.META)
+  })
+})
+
+describe('version preview image url', () => {
+  const imageVersion = { ...createVersionData(1, 'image.png').dataRaw, metadata: [] }
+
+  afterEach(() => {
+    jest.restoreAllMocks()
+  })
+
+  it('points the preview image below the configured api prefix', () => {
+    const hydrated = hydrateVersionData(imageVersion, 7, 1)
+
+    expect(hydrated.previewImageUrl).toBe('/my-studio/api/versions/7/image/stream')
+  })
+
+  it('fetches the preview image below the configured api prefix', async () => {
+    const fetchSpy = jest.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(new Blob(['x'])))
+    ;(URL as unknown as { createObjectURL: () => string }).createObjectURL = jest.fn(() => 'blob:preview')
+
+    await loadPreviewImage(imageVersion, 7)
+
+    expect(fetchSpy).toHaveBeenCalledWith('/my-studio/api/versions/7/image/stream', expect.anything())
   })
 })
