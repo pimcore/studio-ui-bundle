@@ -87,4 +87,43 @@ describe('getExportColumns', () => {
 
     expect(result).toEqual([])
   })
+
+  it('does not export a same-key column of another locale, like one a search mode adds', () => {
+    const result = getExportColumns(
+      [{ ...requestColumn('name', 'dataobject.input'), locale: 'en' }, { ...requestColumn('name', 'dataobject.input'), locale: 'de' }],
+      [{ ...selectedColumn('name', 'dataobject.input'), localizable: true, locale: 'en' }]
+    )
+
+    expect(result.map((column) => column.locale)).toEqual(['en'])
+  })
+
+  it('matches a selected column that follows the current language to any request locale', () => {
+    const result = getExportColumns(
+      [{ ...requestColumn('name', 'dataobject.input'), locale: 'de' }],
+      [{ ...selectedColumn('name', 'dataobject.input'), localizable: true }]
+    )
+
+    expect(result.map((column) => column.locale)).toEqual(['de'])
+  })
+
+  it('matches the default locale, which the request sends as null', () => {
+    const result = getExportColumns(
+      [{ ...requestColumn('name', 'dataobject.input'), locale: null }],
+      [{ ...selectedColumn('name', 'dataobject.input'), localizable: true, locale: 'default' }]
+    )
+
+    expect(result).toHaveLength(1)
+  })
+
+  it('does not export a classification store sibling, like one a search mode adds', () => {
+    const storeRequest = (keyId: number): GridColumnRequest =>
+      requestColumn('attributes', 'dataobject.classificationstore', { keyId, groupId: 1 } as unknown as GridColumnRequest['config'])
+
+    const result = getExportColumns(
+      [storeRequest(1), storeRequest(2)],
+      [{ ...selectedColumn('attributes', 'dataobject.classificationstore'), config: { keyId: 1, groupId: 1 } }]
+    )
+
+    expect(result.map((column) => column.config)).toEqual([{ keyId: 1, groupId: 1 }])
+  })
 })

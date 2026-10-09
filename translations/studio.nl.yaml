@@ -558,6 +558,8 @@ userModification: Gebruiker wijziging
 userOwner: Gebruikerseigenaar
 listing.grid-config.convert-to-advanced: Converteren naar geavanceerde kolom
 listing.grid-config.title: Rasterinstelling
+listing.grid-config.search-mode-column.label: Automatisch
+listing.grid-config.search-mode-column.tooltip: Toegevoegd door de actieve zoekmodus. U kunt deze net als elke andere kolom verplaatsen; deze wordt niet opgeslagen in de rasterconfiguratie.
 grid-config.discard-all-changes: Alle wijzigingen verwerpen
 grid-config.apply-changes: Wijzigingen toepassen
 grid-config.reload: Herladen

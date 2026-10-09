@@ -558,6 +558,8 @@ userModification: Endret av (bruker)
 userOwner: Eier (bruker)
 listing.grid-config.convert-to-advanced: Konverter til avansert kolonne
 listing.grid-config.title: Rutenettskonfigurasjon
+listing.grid-config.search-mode-column.label: Automatisk
+listing.grid-config.search-mode-column.tooltip: Lagt til av den aktive søkemodusen. Du kan flytte den som enhver annen kolonne; den lagres ikke med rutenettkonfigurasjonen.
 grid-config.discard-all-changes: Forkast alle endringer
 grid-config.apply-changes: Bruk endringer
 grid-config.reload: Last på nytt

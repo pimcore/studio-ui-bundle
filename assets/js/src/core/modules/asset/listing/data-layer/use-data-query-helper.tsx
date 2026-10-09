@@ -18,11 +18,11 @@ import { type AssetGetGridApiArg } from '../../asset-api-slice-enhanced'
 export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = () => {
   const { useElementId } = useSettings()
   const { getId } = useElementId()
-  const { selectedColumns } = useSelectedColumns()
+  const { visibleColumns } = useSelectedColumns()
   const { availableColumns } = useAvailableColumns()
   const { dataLoadingState, setDataLoadingState } = useData()
 
-  const columnsArg: AssetGetGridApiArg['body']['columns'] = selectedColumns.map(column => ({
+  const columnsArg: AssetGetGridApiArg['body']['columns'] = visibleColumns.map(column => ({
     key: column.key,
     type: column.type,
     group: column.group as unknown as string[] | undefined,

@@ -558,6 +558,8 @@ userModification: Modificado por
 userOwner: Propietario
 listing.grid-config.convert-to-advanced: Convertir en columna avanzada
 listing.grid-config.title: Configuración de cuadrícula
+listing.grid-config.search-mode-column.label: Automática
+listing.grid-config.search-mode-column.tooltip: Añadida por el modo de búsqueda activo. Puede moverla como cualquier otra columna; no se guarda con la configuración de la cuadrícula.
 grid-config.discard-all-changes: Descartar todos los cambios
 grid-config.apply-changes: Aplicar cambios
 grid-config.reload: Recargar
