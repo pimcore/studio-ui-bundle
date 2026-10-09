@@ -26,9 +26,9 @@ import { type Document } from '@Pimcore/modules/document/document-api-slice.gen'
 type Element = DataObject | Document
 
 export interface UseUnpublishHookReturn {
-  unpublishTreeContextMenuItem: (node: TreeNodeProps, onFinish?: () => void) => ItemType
-  unpublishContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
-  unpublishTreeNode: (node: TreeNodeProps | Element, onFinish?: () => void) => void
+  unpublishTreeContextMenuItem: (node: TreeNodeProps, onFinish?: (isSuccessful: boolean) => void) => ItemType
+  unpublishContextMenuItem: (node: Element, onFinish?: (isSuccessful: boolean) => void) => ItemType
+  unpublishTreeNode: (node: TreeNodeProps | Element, onFinish?: (isSuccessful: boolean) => void) => void
 }
 
 export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn => {
@@ -43,12 +43,12 @@ export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn =
       node.isLocked
   }
 
-  const unpublishTreeNode = (node: TreeNodeProps | Element, onFinish?: () => void): void => {
+  const unpublishTreeNode = (node: TreeNodeProps | Element, onFinish?: (isSuccessful: boolean) => void): void => {
     const nodeId = typeof node.id === 'string' ? parseInt(node.id) : node.id
     executeElementTask(elementType, nodeId, SaveTaskType.Unpublish, onFinish)
   }
 
-  const unpublishContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
+  const unpublishContextMenuItem = (node: Element, onFinish?: (isSuccessful: boolean) => void): ItemType => {
     return {
       label: t('element.unpublish'),
       key: ContextMenuActionName.unpublish,
@@ -57,15 +57,15 @@ export const useUnpublish = (elementType: ElementType): UseUnpublishHookReturn =
       hidden: !node.published || isUnpublishHidden(node),
       onClick: () => {
         setIsLoading(true)
-        unpublishTreeNode(node, () => {
-          onFinish?.()
+        unpublishTreeNode(node, (isSuccessful) => {
+          onFinish?.(isSuccessful)
           setIsLoading(false)
         })
       }
     }
   }
 
-  const unpublishTreeContextMenuItem = (node: TreeNodeProps, onFinish?: () => void): ItemType => {
+  const unpublishTreeContextMenuItem = (node: TreeNodeProps, onFinish?: (isSuccessful: boolean) => void): ItemType => {
     return {
       label: t('element.unpublish'),
       key: ContextMenuActionName.unpublish,
