@@ -1285,6 +1285,8 @@ element.delete.batch.show-paths: Visa element
 element.delete.batch.dependencies-warning.confirmed_one: 'Obs: Detta element har beroenden.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Obs: Dessa element har beroenden.'
 element.open: Öppna
+element.state: Status
+element.state.unpublished: Opublicerad
 element.toolbar.copy-id: Kopiera ID
 element.toolbar.copy-full-path-to-clipboard: Kopiera fullständig sökväg
 element.toolbar.copy-deep-link-to-clipboard: Kopiera Deeplink

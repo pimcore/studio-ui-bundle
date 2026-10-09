@@ -29,9 +29,11 @@ interface TabTitleViewProps {
   iconColorGroup?: IconColorGroup
   active?: boolean
   detached?: boolean
+  /** Fades the icon and adds the unpublished sub icon, like the element tree. */
+  unpublished?: boolean
 }
 
-const TabTitleViewInner = ({ icon, title, onClose, onConfirm, dataTestId, iconColorGroup, active = false, detached = false }: TabTitleViewProps): React.JSX.Element => {
+const TabTitleViewInner = ({ icon, title, onClose, onConfirm, dataTestId, iconColorGroup, active = false, detached = false, unpublished = false }: TabTitleViewProps): React.JSX.Element => {
   const { styles } = useStyles()
   const { t } = useTranslation()
   const { user } = useUserDraft()
@@ -78,6 +80,8 @@ const TabTitleViewInner = ({ icon, title, onClose, onConfirm, dataTestId, iconCo
         iconColorGroup={ iconColorGroup }
         options={ { width: 16, height: 16 } }
         { ...icon }
+        className={ cn({ [styles.unpublishedIcon]: unpublished }) }
+        subIconName={ unpublished ? 'eye-off' : undefined }
       />
 
       <Filename
