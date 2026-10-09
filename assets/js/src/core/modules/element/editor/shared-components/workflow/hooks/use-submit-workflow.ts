@@ -8,12 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { useRef, useState } from 'react'
 import {
   useWorkflowActionSubmitMutation, type WorkflowActionSubmitApiArg
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { t } from 'i18next'
-import { type WorkflowAction, type WorkflowOptions } from '../types/workflow-types'
+import { type WorkflowAction, type WorkflowActionSubject, type WorkflowOptions } from '../types/workflow-types'
 import { useAlertModal } from '@sdk/components'
 import { useWorkflowModalState } from './use-workflow-modal-state'
 import { useWorkflowActionSubject } from '../provider/workflow-provider'
@@ -36,8 +37,12 @@ export const useSubmitWorkflow = (): UseSubmitWorkflowReturn => {
   const { closeModal } = useWorkflowModalState()
   const alertModal = useAlertModal()
   const messageApi = useMessage()
+  // Covers the whole guard-plus-submit run, so the controls stay busy while the unsaved-changes
+  // guard saves or asks, and a second click cannot submit the same action again.
+  const [isGuarding, setIsGuarding] = useState<boolean>(false)
+  const inFlightRef = useRef<boolean>(false)
   const [fetchSubmitWorkflowActionMutation, {
-    isLoading: submissionLoading,
+    isLoading: isSubmitting,
     isSuccess: submissionSuccess,
     isError: isSubmissionError
   }] = useWorkflowActionSubmitMutation(
@@ -61,7 +66,36 @@ export const useSubmitWorkflow = (): UseSubmitWorkflowReturn => {
       return
     }
 
-    fetchSubmitWorkflowActionMutation(workFlowTransition(workflowAction, workflowOptions)).unwrap().then(() => {
+    if (inFlightRef.current) {
+      return
+    }
+
+    inFlightRef.current = true
+    setIsGuarding(true)
+
+    const run = async (): Promise<void> => {
+      const proceed = subject.beforeSubmit === undefined || await subject.beforeSubmit(workflowAction)
+      setIsGuarding(false)
+
+      if (!proceed) {
+        closeModal()
+        return
+      }
+
+      await submit(subject, workflowAction, workflowOptions)
+    }
+
+    run().catch((error) => {
+      console.error(error)
+      closeModal()
+    }).finally(() => {
+      inFlightRef.current = false
+      setIsGuarding(false)
+    })
+  }
+
+  const submit = async (subject: WorkflowActionSubject, workflowAction: WorkflowAction, workflowOptions?: WorkflowOptions): Promise<void> => {
+    await fetchSubmitWorkflowActionMutation(workFlowTransition(workflowAction, workflowOptions)).unwrap().then(() => {
       void messageApi.success({
         content: t('action-applied-successfully') + ': ' + t(workflowAction.label),
         type: 'success',
@@ -80,7 +114,7 @@ export const useSubmitWorkflow = (): UseSubmitWorkflowReturn => {
 
   return {
     submitWorkflowAction,
-    submissionLoading,
+    submissionLoading: isGuarding || isSubmitting,
     submissionSuccess,
     submissionError: isSubmissionError
   }

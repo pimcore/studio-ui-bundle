@@ -13,6 +13,13 @@ import { type WorkflowDetails } from '../../../shared-tab-manager/tabs/workflow/
 
 export type ActionType = 'transition' | 'global'
 
+/**
+ * What to do with unsaved changes when a transition is applied, as configured
+ * per transition (`options.unsavedChangesBehaviour`): save them first, warn
+ * that they will be lost, or ignore them.
+ */
+export type UnsavedChangesBehaviour = 'save' | 'warn' | 'ignore'
+
 interface WorkflowAdditionalField {
   name: string
   fieldType: string
@@ -34,6 +41,7 @@ export interface WorkflowAction {
   transitionId: string
   label: string
   notes?: WorkflowNotes
+  unsavedChangesBehaviour?: UnsavedChangesBehaviour
 }
 
 export interface WorkflowActionData {
@@ -50,6 +58,11 @@ export interface WorkflowActionSubject {
   elementId: number
   elementType: string
   onApplied?: (action: WorkflowAction) => void
+  /**
+   * Runs before an action is submitted; resolving to false cancels it. The editor uses it to apply
+   * the transition's unsavedChangesBehaviour.
+   */
+  beforeSubmit?: (action: WorkflowAction) => Promise<boolean>
 }
 
 export interface WorkflowOptions {
@@ -63,7 +76,11 @@ interface ActionItem {
   name: string
   label: string
   notes?: WorkflowNotes
+  unsavedChangesBehaviour?: string
 }
+
+const isUnsavedChangesBehaviour = (value: string | undefined): value is UnsavedChangesBehaviour =>
+  value === 'save' || value === 'warn' || value === 'ignore'
 
 const createWorkflowAction = (
   actionType: ActionType,
@@ -74,7 +91,8 @@ const createWorkflowAction = (
   workflowId: workflowName,
   transitionId: item.name,
   label: item.label,
-  notes: isEmpty(item.notes) ? undefined : item.notes
+  notes: isEmpty(item.notes) ? undefined : item.notes,
+  unsavedChangesBehaviour: isUnsavedChangesBehaviour(item.unsavedChangesBehaviour) ? item.unsavedChangesBehaviour : undefined
 })
 
 export const getWorkflowActions = (workflow: WorkflowDetails): WorkflowActionsList => {
