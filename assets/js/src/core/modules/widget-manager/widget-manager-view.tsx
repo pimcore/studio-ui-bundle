@@ -10,12 +10,14 @@
 
 import React, { memo } from 'react'
 import cn from 'classnames'
-import { Layout, type ILayoutProps, type TabNode } from 'flexlayout-react'
+import { isNull, isUndefined } from 'lodash'
+import { type Action, Layout, type ILayoutProps, type TabNode } from 'flexlayout-react'
 import { useStyles } from './widget-manager-view.styles'
 import { type CreateContextMenuItemsProps, useContextMenu } from '@Pimcore/modules/widget-manager/hooks/use-context-menu'
 import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
+import { useSideWidgetMotion } from '@Pimcore/modules/widget-manager/hooks/use-side-widget-motion'
 
 export interface WidgetManagerProps extends ILayoutProps {
   className?: string
@@ -26,6 +28,17 @@ const WidgetManagerViewInner = ({ className, createContextMenuItems, ...props }:
   const { styles } = useStyles()
   const { showContextMenu, dropdown } = useContextMenu(props.model, createContextMenuItems)
   const { closeWidget } = useWidgetManager()
+  const { motion, onAction: trackSideWidgetMotion } = useSideWidgetMotion(props.model)
+
+  const onAction = (action: Action): Action | undefined => {
+    const result = isUndefined(props.onAction) ? action : props.onAction(action)
+
+    if (!isUndefined(result)) {
+      trackSideWidgetMotion(result)
+    }
+
+    return result
+  }
 
   useHandleKeyBindings(() => {
     props.model.getActiveTabset()?.getChildren().forEach((tabNode: TabNode) => {
@@ -34,9 +47,10 @@ const WidgetManagerViewInner = ({ className, createContextMenuItems, ...props }:
   }, 'closeAllTabs', true)
 
   return (
-    <div className={ cn('widget-manager', className, styles.widgetManager) }>
+    <div className={ cn('widget-manager', className, styles.widgetManager, { [`widget-manager--side-widget-${motion}`]: !isNull(motion) }) }>
       <Layout
         { ...props }
+        onAction={ onAction }
         onContextMenu={ showContextMenu }
       />
       { dropdown }
