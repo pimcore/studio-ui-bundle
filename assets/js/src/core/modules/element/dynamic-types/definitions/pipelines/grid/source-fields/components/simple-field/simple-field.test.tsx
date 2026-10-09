@@ -14,6 +14,8 @@ import { KeyedList } from '@Pimcore/components/form/controls/keyed-list/keyed-li
 import { type KeyedListData } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/keyed-list-provider'
 import { ItemProvider } from '@Pimcore/components/form/item/provider/item/item-provider'
 import { PipelineConfigProvider } from '@Pimcore/components/pipeline/provider/pipeline-config/pipeline-config-provider'
+import { AvailableColumnsProvider, type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
+import { useSyncAvailableColumnsContext } from '@Pimcore/modules/data-object/column-editor/use-sync-available-columns-context'
 import { DynamicTypePipelineGridSourceFieldsSimpleFieldComponent } from './simple-field'
 
 // `create-styles` transitively pulls in antd-style's ESM build, which jest cannot
@@ -42,10 +44,14 @@ jest.mock('../../classification-store/classification-store-value-control', () =>
 // -> date-time util -> auth slice -> router -> antd table style, another untransformed
 // ESM build) — none of that is relevant to this fix, so stub it with a plain controlled
 // element that still round-trips `value`/`onChange`/`onSelect` like the real one does.
+// `data-options` additionally exposes the raw (possibly grouped) `options` prop verbatim, since
+// the flattened `<option>` list below renders identically whether or not the source field
+// grouping tests further down are exercising the grouped shape.
 jest.mock('@Pimcore/components/select/select', () => ({
   Select: ({ value, onChange, onSelect, options, ...props }: any) => (
     <select
       { ...props }
+      data-options={ JSON.stringify(options ?? []) }
       onChange={ (e: any) => {
         onChange?.(e.target.value)
         onSelect?.(e.target.value)
@@ -97,6 +103,32 @@ const renderSimpleField = (props: Pick<KeyedListData, 'onChange'> & { value?: Ke
   )
 )
 
+// Populates `AvailableColumnsContext` via the same hook BaseColumnEditor wires up
+// (`useSyncAvailableColumnsContext`), rather than the listing's own `ColumnConfigLoader` - this is
+// what proves the fix reaches SimpleField from inside BaseColumnEditor specifically.
+function WithAvailableColumns (
+  { availableColumns, children }: { availableColumns: AvailableColumn[], children: React.ReactNode }
+): React.JSX.Element {
+  useSyncAvailableColumnsContext(availableColumns)
+  return <>{ children }</>
+}
+
+const renderSimpleFieldGrouped = (availableColumns: AvailableColumn[]): ReturnType<typeof render> => (
+  render(
+    <AvailableColumnsProvider>
+      <WithAvailableColumns availableColumns={ availableColumns }>
+        <ItemProvider item={ { name: ['0', 'config'] } }>
+          <PipelineConfigProvider initialConfig={ initialConfig }>
+            <KeyedList onChange={ jest.fn() }>
+              <DynamicTypePipelineGridSourceFieldsSimpleFieldComponent />
+            </KeyedList>
+          </PipelineConfigProvider>
+        </ItemProvider>
+      </WithAvailableColumns>
+    </AvailableColumnsProvider>
+  )
+)
+
 // the KeyedList -> onChange bubble is debounced by 10ms — flush it deterministically
 const flushDebounce = (): void => { act(() => { jest.advanceTimersByTime(20) }) }
 
@@ -125,6 +157,37 @@ describe('DynamicTypePipelineGridSourceFieldsSimpleFieldComponent', () => {
 
     onChange.mock.calls.forEach(([reportedValue]) => {
       expect(reportedValue).toEqual(expect.objectContaining({ field: 'name' }))
+    })
+  })
+
+  // The listing grid config's own source-field dropdown groups by `column.group` (e.g.
+  // "Attributes / attributes / Bodywork") because it mounts inside the listing's
+  // AvailableColumnsProvider; BaseColumnEditor previously mounted no such provider, so every
+  // option fell back to "ungrouped" there instead. `WithAvailableColumns` reproduces
+  // BaseColumnEditor's own fix (`useSyncAvailableColumnsContext`, not the listing's loader).
+  describe('grouping via AvailableColumnsContext (BaseColumnEditor fix)', () => {
+    const availableColumns = [
+      { key: 'id', type: 'system.id', group: ['System'], sortable: true, editable: false, localizable: false, config: {} },
+      { key: 'name', type: 'input', group: ['Attributes', 'general'], sortable: true, editable: true, localizable: false, config: {} }
+    ] as unknown as AvailableColumn[]
+
+    it('groups options by the matching available column\'s group', () => {
+      renderSimpleFieldGrouped(availableColumns)
+
+      const options = JSON.parse(document.querySelector('select')?.getAttribute('data-options') ?? '[]')
+
+      expect(options).toEqual([
+        { label: 'Attributes / general', options: [{ label: 'Name', value: 'name' }] },
+        { label: 'System', options: [{ label: 'ID', value: 'id' }] }
+      ])
+    })
+
+    it('falls back to an ungrouped list once more when no matching available column has a group', () => {
+      renderSimpleFieldGrouped([])
+
+      const options = JSON.parse(document.querySelector('select')?.getAttribute('data-options') ?? '[]')
+
+      expect(options).toEqual([{ label: 'ID', value: 'id' }, { label: 'Name', value: 'name' }])
     })
   })
 })

@@ -416,6 +416,23 @@ grid.advanced-column.advancedColumns.translate: Traducir
 grid.advanced-column.advancedColumns.phpCode: Código PHP
 grid.advanced-column.advancedColumns.phpCodeKey: Clave de transformador PHP
 grid.advanced-column.advancedColumns.arguments: Argumentos
+column-editor.add-column: Añadir columna
+column-editor.add-advanced-column: Añadir columna avanzada
+column-editor.fields-to-add: Campos para añadir
+column-editor.apply: Aplicar cambios
+column-editor.discard: Descartar todos los cambios
+column-editor.preview.select-object: Seleccionar objeto de vista previa
+column-editor.preview.placeholder: Seleccione un objeto de vista previa para ver los resultados.
+column-editor.preview.loading: Cargando vista previa…
+column-editor.preview.error: Error al cargar la vista previa.
+column-editor.preview.no-data: No hay datos para este objeto.
+column-editor.preview.no-source-fields: Añada un campo de origen para ver una vista previa.
+column-editor.pipeline.title: Título
+column-editor.pipeline.sourceFields: Campos de origen
+column-editor.pipeline.sourceFields.add: Añadir campo de origen
+column-editor.pipeline.transformers: Transformadores
+column-editor.pipeline.transformers.add: Añadir transformador
+column-editor.classification-store.missing: '{{label}} (no encontrado)'
 component.workflow-card.action-btn: Acciones de Workflow
 component.pql.placeholder: Escriba su consulta
 component.pql.description: Pimcore Query Language (PQL) es un lenguaje de consulta simple pero potente que le permite buscar datos utilizando diversos criterios, incluyendo filtrado de valores en elementos relacionados, para permitir una recuperación de datos precisa y completa. Para más detalles consulte la <anchorPQL>documentación de PQL</anchorPQL>

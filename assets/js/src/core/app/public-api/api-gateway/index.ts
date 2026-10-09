@@ -18,7 +18,8 @@ export { ApiGatewayEvent, type ApiGatewayEventDetail, API_GATEWAY_EVENT } from '
 export {
   ApiGatewayEventType,
   type ApiGatewayEventPayloadMap,
-  type ApiGatewayEventPayload
+  type ApiGatewayEventPayload,
+  type OpenCustomModalPayload
 } from './types/event-types'
 
 // Registry
@@ -33,5 +34,6 @@ export {
 export {
   initializeHandlers,
   openElementSelectorHandler,
-  openUploadModalHandler
+  openUploadModalHandler,
+  openCustomModalHandler
 } from './handlers'

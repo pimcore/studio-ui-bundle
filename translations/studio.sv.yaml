@@ -416,6 +416,23 @@ grid.advanced-column.advancedColumns.translate: Översätt
 grid.advanced-column.advancedColumns.phpCode: PHP-kod
 grid.advanced-column.advancedColumns.phpCodeKey: PHP Transformer-nyckel
 grid.advanced-column.advancedColumns.arguments: Argument
+column-editor.add-column: Lägg till kolumn
+column-editor.add-advanced-column: Lägg till avancerad kolumn
+column-editor.fields-to-add: Fält att lägga till
+column-editor.apply: Tillämpa ändringar
+column-editor.discard: Förkasta alla ändringar
+column-editor.preview.select-object: Välj förhandsgranskningsobjekt
+column-editor.preview.placeholder: Välj ett förhandsgranskningsobjekt för att se resultat.
+column-editor.preview.loading: Laddar förhandsgranskning…
+column-editor.preview.error: Fel vid inläsning av förhandsgranskning.
+column-editor.preview.no-data: Inga data för detta objekt.
+column-editor.preview.no-source-fields: Lägg till ett källfält för att se en förhandsvisning.
+column-editor.pipeline.title: Titel
+column-editor.pipeline.sourceFields: Källfält
+column-editor.pipeline.sourceFields.add: Lägg till källfält
+column-editor.pipeline.transformers: Transformers
+column-editor.pipeline.transformers.add: Lägg till transformer
+column-editor.classification-store.missing: '{{label}} (saknas)'
 component.workflow-card.action-btn: Workflowåtgärder
 component.pql.placeholder: Skriv din fråga
 component.pql.description: Pimcore Query Language (PQL) är ett enkelt men kraftfullt frågespråk som låter dig söka data med olika kriterier, inklusive filtrering av värden i relaterade element, för att möjliggöra precis och omfattande datahämtning. Se <anchorPQL>PQL-dokumentation</anchorPQL> för detaljer

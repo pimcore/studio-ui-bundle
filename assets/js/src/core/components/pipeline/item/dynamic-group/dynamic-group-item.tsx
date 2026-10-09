@@ -25,12 +25,14 @@ import { useTranslation } from 'react-i18next'
 export interface DynamicGroupItemProps {
   id: number
   dynamicTypeRegistryId: string
+  /** When true, hides the drag handle/delete button; the item's own content stays viewable. */
+  readOnly?: boolean
 }
 
-const DynamicGroupItem = ({ id, dynamicTypeRegistryId }: DynamicGroupItemProps): React.JSX.Element => {
+const DynamicGroupItem = ({ id, dynamicTypeRegistryId, readOnly = false }: DynamicGroupItemProps): React.JSX.Element => {
   const { operations, getValueByKey } = useNumberedList()
   const { styles } = useStyles()
-  const { listeners, setNodeRef, setActivatorNodeRef, transform, transition } = useSortable({ id: id + 1 })
+  const { listeners, setNodeRef, setActivatorNodeRef, transform, transition } = useSortable({ disabled: readOnly, id: id + 1 })
   const { t } = useTranslation()
 
   const style = useMemo(() => ({
@@ -64,20 +66,24 @@ const DynamicGroupItem = ({ id, dynamicTypeRegistryId }: DynamicGroupItemProps):
             align="center"
             gap="mini"
           >
-            <IconButton
-              icon={ { value: 'drag-option' } }
-              ref={ setActivatorNodeRef }
-              theme="secondary"
-              variant="minimal"
-              { ...listeners }
-            />
+            { !readOnly && (
+              <IconButton
+                icon={ { value: 'drag-option' } }
+                ref={ setActivatorNodeRef }
+                theme="secondary"
+                variant="minimal"
+                { ...listeners }
+              />
+            ) }
             <Text strong>{t(`grid.advanced-column.advancedColumns.${keyValue}`)}</Text>
           </Flex>
 
-          <IconButton
-            icon={ { value: 'trash' } }
-            onClick={ onDelete }
-          />
+          { !readOnly && (
+            <IconButton
+              icon={ { value: 'trash' } }
+              onClick={ onDelete }
+            />
+          ) }
         </Flex>
 
         <Form.Item
