@@ -27,8 +27,8 @@ import { useBrandThumbnailUrlLoader } from './loader/brand-thumbnail-urls/loader
 import { useAdminSettingsLoader } from './loader/admin-settings/loader'
 import { selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'
 import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
-import { App } from 'antd'
 import { modalApi } from '@Pimcore/app/public-api/modal/modal-api'
+import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { loadReportsMenuItems } from '@Pimcore/modules/reports/utils/reports-loader'
 import { type AppLoaderRegistry } from './services/app-loader-registry'
 import { container, serviceIds } from '@sdk/app'
@@ -80,7 +80,9 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   }, [])
 
   const modal = useAlertModal()
-  const { modal: studioModal } = App.useApp()
+  // The local (parent window) instance is used, which is already wrapped with the draggable render and
+  // confirm icon. Iframes must not wrap it themselves, as their elements belong to another React instance.
+  const { localModal: studioModal } = useStudioModal()
 
   // Register the modal instance to allow centralized error message display throughout the project
   ErrorModalService.setModalInstance(modal)
