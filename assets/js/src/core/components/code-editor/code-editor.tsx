@@ -11,6 +11,7 @@
 import React from 'react'
 import ReactCodeMirror, { type ReactCodeMirrorProps, EditorView } from '@uiw/react-codemirror'
 import { getPresetExtensions } from '@Pimcore/components/code-editor/helpers'
+import { useCodeMirrorThemeExtensions } from '@Pimcore/components/code-editor/use-code-mirror-theme'
 import { useStyles } from './code-editor.styles'
 
 export type CodeEditorPreset = 'text' | 'yaml' | 'html' | 'json'
@@ -23,17 +24,22 @@ export interface CodeEditorProps extends Omit<ReactCodeMirrorProps, 'extensions'
   lineWrapping?: boolean
 }
 
-export const CodeEditor = ({ preset, extensions, value, onChange, lineWrapping = false, ...props }: CodeEditorProps): React.JSX.Element => {
+export const CodeEditor = ({ preset, extensions, value, onChange, lineWrapping = false, theme, ...props }: CodeEditorProps): React.JSX.Element => {
   const { styles } = useStyles()
+  const themeExtensions = useCodeMirrorThemeExtensions()
 
-  // Combine preset extensions with custom extensions
+  // A caller that supplies its own `theme` keeps it, and keeps control of the visuals:
+  // the theme built from the Studio tokens is not applied on that path.
+  const isThemeDerived = theme === undefined
+
   const combinedExtensions = React.useMemo(() => {
     const presetExtensions = preset !== null && preset !== undefined ? getPresetExtensions(preset) : []
     const customExtensions = extensions ?? []
     const wrappingExtensions = lineWrapping ? [EditorView.lineWrapping] : []
+    const studioTheme = isThemeDerived ? themeExtensions : []
 
-    return [...presetExtensions, ...customExtensions, ...wrappingExtensions]
-  }, [preset, extensions, lineWrapping])
+    return [...studioTheme, ...presetExtensions, ...customExtensions, ...wrappingExtensions]
+  }, [preset, extensions, lineWrapping, isThemeDerived, themeExtensions])
 
   // Handle onChange to ensure it matches Ant Design Form expectations
   const handleChange = React.useCallback((val: string) => {
@@ -46,6 +52,7 @@ export const CodeEditor = ({ preset, extensions, value, onChange, lineWrapping =
       className={ styles.editor }
       extensions={ combinedExtensions }
       onChange={ handleChange }
+      theme={ theme ?? 'none' }
       value={ value ?? '' }
     />
   )
