@@ -270,6 +270,9 @@ const config: ConfigFile = {
     },
     '../../js/src/core/modules/oauth/oauth-api-slice.gen.ts': {
       filterEndpoints: pathMatcher(/\/api\/oauth\//i)
+    },
+    '../../js/src/core/modules/mcp-servers/mcp-servers-api-slice.gen.ts': {
+      filterEndpoints: pathMatcher(/\/api\/mcp\//i)
     }
   },
   exportName: 'api',

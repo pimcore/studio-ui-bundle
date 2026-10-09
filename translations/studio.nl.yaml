@@ -633,6 +633,54 @@ website-settings.columns.site: Site
 website-settings.columns.actions: Acties
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Verplichte velden ontbreken
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Naam en type zijn verplichte velden en moeten worden ingevuld.
+mcp-servers.rail.new-server: Nieuwe server
+mcp-servers.placeholder: Selecteer een server om de configuratie te bekijken of te bewerken.
+mcp-servers.tabs.empty: Selecteer een server om de configuratie te bekijken of te bewerken.
+mcp-servers.tabs.new-server: Nieuwe server
+mcp-servers.read-only-notice: Serverdefinities worden in deze omgeving via bestanden beheerd en kunnen hier niet worden bewerkt.
+mcp-servers.save-success: MCP-server opgeslagen
+mcp-servers.access.users-count: "Gebruikers: {{number}}"
+mcp-servers.access.roles-count: "Rollen: {{number}}"
+mcp-servers.access.global-extra: elke geauthenticeerde gebruiker
+mcp-servers.access.nobody: "Nog niemand"
+mcp-servers.badge.read: Lezen
+mcp-servers.badge.write: Schrijven
+mcp-servers.editor.create-title: Nieuwe MCP-server
+mcp-servers.editor.edit-title: MCP-server bewerken
+mcp-servers.editor.general: Algemeen
+mcp-servers.editor.permissions: Rechten
+mcp-servers.editor.identity: Identiteit
+mcp-servers.editor.name: Naam
+mcp-servers.editor.name-required: Geef een naam op.
+mcp-servers.editor.url-slug: URL-slug
+mcp-servers.editor.url-slug-required: Geef een URL-slug op.
+mcp-servers.editor.url-slug-pattern: Alleen kleine letters, cijfers en koppeltekens zijn toegestaan.
+mcp-servers.editor.description: Beschrijving
+mcp-servers.editor.enabled: Actief
+mcp-servers.editor.tools: Tools
+mcp-servers.editor.tools-placeholder: Selecteer de tools die deze server aanbiedt
+mcp-servers.editor.scopes: Geadverteerde scopes
+mcp-servers.editor.scopes-empty: Geen scopes — selecteer tools om de vereiste scopes af te leiden.
+mcp-servers.editor.url: Server-URL
+mcp-servers.editor.copy-url: "Server-URL kopiëren"
+mcp-servers.editor.connect-hint: Richt je MCP-client op deze URL en authenticeer je met je Pimcore-account.
+mcp-servers.sharing.title: Delen
+mcp-servers.sharing.share-globally: Globaal delen
+mcp-servers.sharing.share-globally-tooltip: Elke geauthenticeerde gebruiker krijgt Configuratie lezen en MCP-servertoegang (geen Configuratie bewerken)
+mcp-servers.sharing.users: Gebruikers
+mcp-servers.sharing.roles: Rollen
+mcp-servers.sharing.add-user: Gebruiker toevoegen…
+mcp-servers.sharing.add-role: Rol toevoegen…
+mcp-servers.sharing.name: Naam
+mcp-servers.sharing.config-read: Configuratie lezen
+mcp-servers.sharing.config-edit: Configuratie bewerken
+mcp-servers.sharing.mcp-access: MCP-servertoegang
+mcp-servers.sharing.level: Toegangsniveau
+mcp-servers.sharing.read: Lezen
+mcp-servers.sharing.write: Kan bewerken
+mcp-servers.sharing.who-can-access: Wie heeft toegang
+mcp-servers.delete.title: MCP-server verwijderen
+mcp-servers.delete.confirm: Weet je zeker dat je "{{name}}" wilt verwijderen?
 document-types.new: Nieuw
 document-types.columns.name: Naam
 document-types.columns.group: Groep
@@ -1616,6 +1664,7 @@ navigation.appearance-branding: Uiterlijk & huisstijl
 navigation.reporting: Rapportage
 navigation.system: Systeem
 navigation.website-settings: Website-instellingen
+navigation.mcp-servers: MCP-servers
 navigation.document-types: Documenttypen
 navigation.cache: Cache
 navigation.cache.clear-cache: Cache wissen
@@ -1704,6 +1753,7 @@ widget.predefined-properties: Vooraf gedefinieerde eigenschappen
 widget.search-replace-assignments: Toewijzingen zoeken & vervangen
 widget.document-types: Documenttypen
 widget.website-settings: Website-instellingen
+widget.mcp-servers: MCP-servers
 widget.role-management: Rollen
 widget.user-management: Gebruikers
 widget.class-definitions: Klassen

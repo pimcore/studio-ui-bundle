@@ -633,6 +633,54 @@ website-settings.columns.site: Nettsted
 website-settings.columns.actions: Handlinger
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Obligatoriske felt mangler
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Navn og type er obligatoriske felt og må fylles ut.
+mcp-servers.rail.new-server: Ny server
+mcp-servers.placeholder: Velg en server for å se eller redigere konfigurasjonen.
+mcp-servers.tabs.empty: Velg en server for å se eller redigere konfigurasjonen.
+mcp-servers.tabs.new-server: Ny server
+mcp-servers.read-only-notice: Serverdefinisjoner administreres via filer i dette miljøet og kan ikke redigeres her.
+mcp-servers.save-success: MCP-server lagret
+mcp-servers.access.users-count: "Brukere: {{number}}"
+mcp-servers.access.roles-count: "Roller: {{number}}"
+mcp-servers.access.global-extra: alle autentiserte brukere
+mcp-servers.access.nobody: "Ingen ennå"
+mcp-servers.badge.read: Les
+mcp-servers.badge.write: Skriv
+mcp-servers.editor.create-title: Ny MCP-server
+mcp-servers.editor.edit-title: Rediger MCP-server
+mcp-servers.editor.general: Generelt
+mcp-servers.editor.permissions: Tillatelser
+mcp-servers.editor.identity: Identitet
+mcp-servers.editor.name: Navn
+mcp-servers.editor.name-required: Oppgi et navn.
+mcp-servers.editor.url-slug: URL-slug
+mcp-servers.editor.url-slug-required: Oppgi en URL-slug.
+mcp-servers.editor.url-slug-pattern: Bare små bokstaver, tall og bindestreker er tillatt.
+mcp-servers.editor.description: Beskrivelse
+mcp-servers.editor.enabled: Aktiv
+mcp-servers.editor.tools: Verktøy
+mcp-servers.editor.tools-placeholder: Velg verktøyene denne serveren eksponerer
+mcp-servers.editor.scopes: Annonserte scopes
+mcp-servers.editor.scopes-empty: Ingen scopes — velg verktøy for å utlede de nødvendige scopes.
+mcp-servers.editor.url: Server-URL
+mcp-servers.editor.copy-url: "Kopier server-URL"
+mcp-servers.editor.connect-hint: Pek MCP-klienten din mot denne URL-en og autentiser deg med Pimcore-kontoen din.
+mcp-servers.sharing.title: Deling
+mcp-servers.sharing.share-globally: Del globalt
+mcp-servers.sharing.share-globally-tooltip: Alle autentiserte brukere får konfigurasjonslesing og MCP-servertilgang (ikke konfigurasjonsredigering)
+mcp-servers.sharing.users: Brukere
+mcp-servers.sharing.roles: Roller
+mcp-servers.sharing.add-user: Legg til en bruker…
+mcp-servers.sharing.add-role: Legg til en rolle…
+mcp-servers.sharing.name: Navn
+mcp-servers.sharing.config-read: Konfigurasjonslesing
+mcp-servers.sharing.config-edit: Konfigurasjonsredigering
+mcp-servers.sharing.mcp-access: MCP-servertilgang
+mcp-servers.sharing.level: Tilgangsnivå
+mcp-servers.sharing.read: Les
+mcp-servers.sharing.write: Kan redigere
+mcp-servers.sharing.who-can-access: Hvem har tilgang
+mcp-servers.delete.title: Slett MCP-server
+mcp-servers.delete.confirm: Er du sikker på at du vil slette "{{name}}"?
 document-types.new: Ny
 document-types.columns.name: Navn
 document-types.columns.group: Gruppe
@@ -1616,6 +1664,7 @@ navigation.appearance-branding: Utseende og merkevare
 navigation.reporting: Rapportering
 navigation.system: System
 navigation.website-settings: Nettstedsinnstillinger
+navigation.mcp-servers: MCP-servere
 navigation.document-types: Dokumenttyper
 navigation.cache: Hurtigbuffer
 navigation.cache.clear-cache: Tøm hurtigbuffer
@@ -1704,6 +1753,7 @@ widget.predefined-properties: Forhåndsdefinerte egenskaper
 widget.search-replace-assignments: Søk og erstatt tilordninger
 widget.document-types: Dokumenttyper
 widget.website-settings: Nettstedsinnstillinger
+widget.mcp-servers: MCP-servere
 widget.role-management: Roller
 widget.user-management: Brukere
 widget.class-definitions: Klasser
