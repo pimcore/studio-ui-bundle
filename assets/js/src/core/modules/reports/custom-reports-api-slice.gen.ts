@@ -66,6 +66,21 @@ const injectedRtkApi = api
                 }),
                 invalidatesTags: ["Bundle Custom Reports"],
             }),
+            customReportsConfigExport: build.query<CustomReportsConfigExportApiResponse, CustomReportsConfigExportApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/bundle/custom-reports/config/${queryArg.name}/export` }),
+                providesTags: ["Bundle Custom Reports"],
+            }),
+            customReportsConfigImport: build.mutation<
+                CustomReportsConfigImportApiResponse,
+                CustomReportsConfigImportApiArg
+            >({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/bundle/custom-reports/config/import`,
+                    method: "POST",
+                    body: queryArg.body,
+                }),
+                invalidatesTags: ["Bundle Custom Reports"],
+            }),
             customReportsConfigDelete: build.mutation<
                 CustomReportsConfigDeleteApiResponse,
                 CustomReportsConfigDeleteApiArg
@@ -172,6 +187,20 @@ export type CustomReportsConfigUpdateApiArg = {
     /** Name of the report */
     name: string;
     bundleCustomReportUpdate: BundleCustomReportUpdate;
+};
+export type CustomReportsConfigExportApiResponse =
+    /** status 200 JSON file containing the custom report configuration */ Blob;
+export type CustomReportsConfigExportApiArg = {
+    /** Name of the report to export */
+    name: string;
+};
+export type CustomReportsConfigImportApiResponse =
+    /** status 201 Successfully imported custom report configuration */ BundleCustomReportsDetails;
+export type CustomReportsConfigImportApiArg = {
+    body: {
+        /** Custom report JSON export file to upload */
+        file: Blob;
+    };
 };
 export type CustomReportsConfigDeleteApiResponse = unknown;
 export type CustomReportsConfigDeleteApiArg = {
