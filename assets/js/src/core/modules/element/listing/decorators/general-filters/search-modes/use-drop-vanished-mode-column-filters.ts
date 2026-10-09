@@ -15,8 +15,9 @@ import { dropVanishedModeColumnFilters, mergeAvailableColumns } from './search-m
 import { useFilterableColumnSources } from './use-filterable-columns'
 
 /**
- * When the search mode of the given store changes, removes field filters on columns only the previous mode
- * provided; otherwise they stay hidden in the store, get applied and saved, and return with the mode.
+ * When the mode columns of the given store change (another mode, or the same mode becoming unavailable),
+ * removes field filters on columns only the previous columns provided; otherwise they stay hidden in the
+ * store, get applied and saved, and return with the columns.
  * 'draft' runs in the filter panel; 'applied' runs with the listing query, as immediate-apply surfaces
  * (search term field, search modal) switch the applied mode directly.
  */
@@ -25,14 +26,14 @@ export const useDropVanishedModeColumnFilters = (source: 'draft' | 'applied' = '
   const appliedStore = useAppliedFiltersOptional()
   const store = source === 'draft' ? draftStore : appliedStore
   const { availableColumns, modeColumns } = useFilterableColumnSources(source)
-  const searchModeId = store === undefined ? undefined : readElementFilterValues(store.values).searchMode
 
-  const previous = useRef({ searchModeId, modeColumns })
+  const previousModeColumnsRef = useRef(modeColumns)
   useEffect(() => {
-    const { searchModeId: previousModeId, modeColumns: previousModeColumns } = previous.current
-    previous.current = { searchModeId, modeColumns }
+    const previousModeColumns = previousModeColumnsRef.current
+    previousModeColumnsRef.current = modeColumns
 
-    if (store === undefined || previousModeId === searchModeId) {
+    // modeColumns keeps its reference while its content is unchanged (useSearchModeColumns)
+    if (store === undefined || previousModeColumns === modeColumns) {
       return
     }
 
@@ -42,5 +43,5 @@ export const useDropVanishedModeColumnFilters = (source: 'draft' | 'applied' = '
     if (kept !== fieldFilters) {
       store.setValue('fieldFilters', kept)
     }
-  }, [searchModeId, modeColumns])
+  }, [modeColumns])
 }

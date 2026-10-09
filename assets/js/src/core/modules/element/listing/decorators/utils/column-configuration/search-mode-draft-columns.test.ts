@@ -94,4 +94,19 @@ describe('applyColumnConfigurationDraft', () => {
 
     expect(updatePlacements).toHaveBeenCalledWith({ [getColumnIdentity(selected('score'))]: { anchor: null, order: 0 } })
   })
+
+  it('stores the placement of an advanced mode column under its own identity', () => {
+    const advanced: SelectedColumn = {
+      ...selected('advanced'),
+      type: 'dataobject.advanced',
+      originalApiDefinition: { ...available('advanced'), type: 'dataobject.advanced', __meta: { uniqueId: 'adv-1' } }
+    }
+    const isAdvancedMode = (column: SelectedColumn): boolean => column.type === 'dataobject.advanced'
+    const draft = buildColumnConfigurationDraft([selected('id'), selected('filename'), advanced], isAdvancedMode, toDraft)
+    const updatePlacements = jest.fn()
+
+    applyColumnConfigurationDraft([draft[0], draft[2], draft[1]], toSelected, jest.fn(), updatePlacements)
+
+    expect(updatePlacements).toHaveBeenCalledWith({ [getColumnIdentity(advanced)]: { anchor: getColumnIdentity(selected('id')), order: 0 } })
+  })
 })

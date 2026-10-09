@@ -33,8 +33,8 @@ export const buildColumnConfigurationDraft = (
 
   return {
     ...draft,
-    // stable id so the list item survives draft re-syncs
-    __meta: { ...draft.__meta, uniqueId: `search-mode:${getColumnIdentity(column)}`, searchModeColumn: true }
+    // stable id so the list item survives draft re-syncs; an existing one is kept, it is the column identity
+    __meta: { ...draft.__meta, uniqueId: draft.__meta?.uniqueId ?? `search-mode:${getColumnIdentity(column)}`, searchModeColumn: true }
   }
 })
 

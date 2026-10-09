@@ -35,6 +35,9 @@ const scoreColumn: GridColumnConfiguration = {
   config: []
 }
 
+// e.g. a mode that is unavailable while the user sorts by a regular column
+const availability = { score: true }
+
 class ScoreMode extends SearchModeAbstract {
   readonly columnFilterType = 'test.filter'
   readonly order = 10
@@ -44,7 +47,7 @@ class ScoreMode extends SearchModeAbstract {
 
   getMenuLabel (): string { return this.id }
   getCollapsedLabel (): string { return this.id }
-  getAvailability (): SearchModeAvailability { return { available: true } }
+  getAvailability (): SearchModeAvailability { return { available: this.id !== 'score' || availability.score } }
   buildColumnFilter (query: string): ColumnFilter { return { type: this.columnFilterType, filterValue: query } }
   getAdditionalColumns (): GridColumnConfiguration[] { return [{ ...scoreColumn }] }
 }
@@ -90,6 +93,8 @@ const filterKeys = (result: { current: ReturnType<typeof useDraftFilters> }): st
   readElementFilterValues(result.current.values).fieldFilters.map((fieldFilter) => fieldFilter.key)
 
 describe('useDropVanishedModeColumnFilters', () => {
+  beforeEach(() => { availability.score = true })
+
   it('removes a filter on a mode column from the draft store when the mode no longer provides it', () => {
     const { result } = render([idColumn])
 
@@ -128,6 +133,17 @@ describe('useDropVanishedModeColumnFilters', () => {
 
     act(() => { result.current.setValue('searchMode', FULLTEXT_SEARCH_MODE_ID) })
     act(() => { result.current.setValue('searchMode', 'score') })
+
+    expect(filterKeys(result)).toEqual(['id'])
+  })
+
+  it('removes the filter when the same mode becomes unavailable and its columns vanish', () => {
+    const { result, rerender } = render([idColumn], 'applied')
+
+    availability.score = false
+    rerender()
+    availability.score = true
+    rerender()
 
     expect(filterKeys(result)).toEqual(['id'])
   })
