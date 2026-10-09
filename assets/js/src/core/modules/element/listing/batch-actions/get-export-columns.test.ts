@@ -114,4 +114,16 @@ describe('getExportColumns', () => {
 
     expect(result).toHaveLength(1)
   })
+
+  it('does not export a classification store sibling, like one a search mode adds', () => {
+    const storeRequest = (keyId: number): GridColumnRequest =>
+      requestColumn('attributes', 'dataobject.classificationstore', { keyId, groupId: 1 } as unknown as GridColumnRequest['config'])
+
+    const result = getExportColumns(
+      [storeRequest(1), storeRequest(2)],
+      [{ ...selectedColumn('attributes', 'dataobject.classificationstore'), config: { keyId: 1, groupId: 1 } }]
+    )
+
+    expect(result.map((column) => column.config)).toEqual([{ keyId: 1, groupId: 1 }])
+  })
 })
