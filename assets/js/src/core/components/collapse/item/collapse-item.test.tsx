@@ -17,6 +17,16 @@ jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
   keyframes: () => ''
 }))
 
+// icons resolve through the dependency injection container, which is not set up here
+jest.mock('@Pimcore/components/icon/icon', () => ({
+  Icon: ({ value, className }: { value: string, className?: string }) => (
+    <span
+      className={ className }
+      data-testid={ `icon-${value}` }
+    />
+  )
+}))
+
 // eslint-disable-next-line import/first
 import React from 'react'
 // eslint-disable-next-line import/first
@@ -103,5 +113,22 @@ describe('CollapseItem', () => {
     expect(header).not.toHaveAttribute('aria-disabled')
     expect(header).not.toHaveAttribute('tabindex')
     expect(container.querySelector('.ant-collapse-item-disabled')).not.toBeInTheDocument()
+  })
+
+  it('turns the same default arrow instead of swapping icons when expanding', async () => {
+    render(
+      <CollapseItem label='a note'>
+        the body
+      </CollapseItem>
+    )
+
+    const arrow = screen.getByTestId('icon-chevron-down')
+    expect(arrow).not.toHaveClass('expand-icon--open')
+
+    await userEvent.click(screen.getByText('a note'))
+
+    expect(screen.getByTestId('icon-chevron-down')).toBe(arrow)
+    expect(arrow).toHaveClass('expand-icon--open')
+    expect(screen.queryByTestId('icon-chevron-up')).not.toBeInTheDocument()
   })
 })

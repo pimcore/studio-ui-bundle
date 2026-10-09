@@ -14,6 +14,7 @@ import { TreeContext } from '../element-tree'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import { Spin } from '@Pimcore/components/spin/spin'
+import cn from 'classnames'
 
 export interface TreeExpanderProps {
   node: TreeNodeProps
@@ -48,7 +49,9 @@ export const TreeExpander = ({ node, state }: TreeExpanderProps): React.JSX.Elem
       style={ { minWidth: 16, width: 16, height: 16 } }
     >
       {isLoading === true && (
-        <Spin type='classic' />
+        <span className='tree-expander__spinner'>
+          <Spin type='classic' />
+        </span>
       )}
 
       {node.hasChildren === true && (
@@ -56,28 +59,21 @@ export const TreeExpander = ({ node, state }: TreeExpanderProps): React.JSX.Elem
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events
         <span
           aria-label={ t('tree.aria.expand-and-collapse') }
+          className='tree-expander__toggle'
           onClick={ onClick }
           role='button'
           tabIndex={ -1 }
         >
-          {isLoading !== true && (
-            <>
-              {isExpanded
-                ? (
-                  <Icon
-                    options={ { width: 16, height: 16 } }
-                    value="chevron-down"
-                  />
-                  )
-                : (
-                  <Icon
-                    options={ { width: 16, height: 16 } }
-                    value="chevron-right"
-                  />
-                  )
-              }
-            </>
-          )}
+          {/* one arrow that turns, kept mounted while the children load so the turn stays visible */}
+          <Icon
+            className={ cn('tree-expander__arrow', {
+              // the turn starts once the spinner is gone, so it stays visible on a first expand
+              'tree-expander__arrow--open': isExpanded && isLoading !== true,
+              'tree-expander__arrow--loading': isLoading === true
+            }) }
+            options={ { width: 16, height: 16 } }
+            value='chevron-right'
+          />
         </span>
       )}
     </div>
