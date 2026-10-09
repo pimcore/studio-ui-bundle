@@ -22,11 +22,13 @@ import { selectMainWidgetContext } from '../widget-manager-slice'
 export interface TabTitleContainerProps {
   node: TabNode
   modified?: boolean
+  /** Shows the element as unpublished (false), like the tree does. */
+  published?: boolean
   title?: string
   icon?: ElementIcon
 }
 
-const TabTitleContainerInner = ({ node, modified, title: titleProp, icon: iconProp }: TabTitleContainerProps): React.JSX.Element => {
+const TabTitleContainerInner = ({ node, modified, published, title: titleProp, icon: iconProp }: TabTitleContainerProps): React.JSX.Element => {
   const [isBorderNode] = useState(node.getParent() instanceof BorderNode)
 
   const { closeWidget } = useWidgetManager()
@@ -82,6 +84,7 @@ const TabTitleContainerInner = ({ node, modified, title: titleProp, icon: iconPr
       onClose={ isCloseable ? onClose : undefined }
       onConfirm={ modified === true ? onConfirm : undefined }
       title={ getTitle() }
+      unpublished={ published === false }
     />
   )
 

@@ -1285,6 +1285,8 @@ element.delete.batch.show-paths: Mostra elementi
 element.delete.batch.dependencies-warning.confirmed_one: 'Nota: Questo elemento ha dipendenze.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Nota: Questi elementi hanno dipendenze.'
 element.open: Apri
+element.state: Stato
+element.state.unpublished: Non pubblicato
 element.toolbar.copy-id: Copia ID
 element.toolbar.copy-full-path-to-clipboard: Copia percorso completo
 element.toolbar.copy-deep-link-to-clipboard: Copia Deeplink
