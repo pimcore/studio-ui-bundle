@@ -459,6 +459,7 @@ workflow-modal.perform-action: Perform Action
 workflow.unsaved-changes.title: Unsaved changes
 workflow.unsaved-changes.warn: There are unsaved changes. They will be lost when this action is applied. Apply it anyway?
 workflow.unsaved-changes.apply-anyway: Apply anyway
+workflow.unsaved-changes.save-failed: The unsaved changes could not be saved, so the action was not applied.
 workflow-modal.cancel: Cancel
 workflow-modal.notes: Notes
 workflow-modal.notes-required: Please enter your notes

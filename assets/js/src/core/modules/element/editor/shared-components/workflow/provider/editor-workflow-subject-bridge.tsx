@@ -8,12 +8,17 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef } from 'react'
 import { useOptionalElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementRefresh } from '@sdk/modules/element'
 import { useLayoutSelection } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/use-layout-selection'
 import { type WorkflowActionSubject } from '../types/workflow-types'
 import { useUnsavedChangesGuard } from '../hooks/use-unsaved-changes-guard'
+import {
+  type IUnsavedChangesSaverContext,
+  type UnsavedChangesSaver,
+  UnsavedChangesSaverContext
+} from './unsaved-changes-saver-context'
 import { WorkflowActionSubjectContext } from './workflow-provider'
 
 interface EditorWorkflowSubjectBridgeProps {
@@ -26,13 +31,18 @@ interface EditorWorkflowSubjectBridgeProps {
  * editor-only dependencies (element context, element refresh, data-object layout reset) so the shared
  * submit/modal flow stays element-editor-agnostic. On success it refreshes the element and, for a
  * data-object, resets the current layout — the exact behaviour the toolbars had before the refactor.
- * Before submitting it applies the transition's unsavedChangesBehaviour (see useUnsavedChangesGuard).
+ * Before submitting it applies the transition's unsavedChangesBehaviour (see useUnsavedChangesGuard),
+ * saving through the saver the editor's save flow registers in UnsavedChangesSaverContext.
  */
 export const EditorWorkflowSubjectBridge = ({ children }: EditorWorkflowSubjectBridgeProps): React.JSX.Element => {
   const element = useOptionalElementContext()
   const { refreshElement } = useElementRefresh(element?.elementType ?? 'asset')
   const { setCurrentLayout } = useLayoutSelection()
-  const { guard } = useUnsavedChangesGuard(element?.id ?? 0, element?.elementType ?? 'asset')
+  const saverRef = useRef<UnsavedChangesSaver | undefined>(undefined)
+  const saverContext = useMemo<IUnsavedChangesSaverContext>(() => ({
+    setSaver: (saver) => { saverRef.current = saver }
+  }), [])
+  const { guard } = useUnsavedChangesGuard(element?.id ?? 0, element?.elementType ?? 'asset', () => saverRef.current)
 
   const subject = useMemo<WorkflowActionSubject | null>(() => {
     if (element === null) {
@@ -54,7 +64,9 @@ export const EditorWorkflowSubjectBridge = ({ children }: EditorWorkflowSubjectB
 
   return (
     <WorkflowActionSubjectContext.Provider value={ subject }>
-      {children}
+      <UnsavedChangesSaverContext.Provider value={ saverContext }>
+        {children}
+      </UnsavedChangesSaverContext.Provider>
     </WorkflowActionSubjectContext.Provider>
   )
 }

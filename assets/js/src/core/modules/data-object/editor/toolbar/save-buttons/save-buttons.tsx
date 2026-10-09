@@ -35,13 +35,14 @@ import { isNil } from 'lodash'
 import React, { type ReactElement, useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
+import { useWorkflowSave } from './use-workflow-save'
 
 export const EditorToolbarSaveButtons = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { id } = useContext(DataObjectContext)
   const { dataObject, removeTrackedChanges, publishDraft } = useDataObjectDraft(id)
   const { save: saveDataObject, isLoading, isSuccess, isError, error } = useSave()
-  const { isAutoSaveLoading, runningTask } = useSaveContext()
+  const { isAutoSaveLoading, runningTask, runningTaskRef } = useSaveContext()
   const {
     saveSchedules,
     isLoading: isSchedulesLoading,
@@ -90,6 +91,30 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
       console.error(error)
     })
   }
+
+  // A transition with unsavedChangesBehaviour "save" saves through this same flow, using the
+  // task of the primary button. A user's own save that is still running is not queued behind.
+  useWorkflowSave({
+    getTask: () => {
+      if (dataObject?.changes === undefined) {
+        return undefined
+      }
+
+      if (!isNil(runningTaskRef?.current) && runningTaskRef?.current !== SaveTaskType.AutoSave) {
+        return undefined
+      }
+
+      if (!dataObject.published) {
+        return SaveTaskType.Save
+      }
+
+      return checkElementPermission(dataObject.permissions, 'publish') ? SaveTaskType.Publish : undefined
+    },
+    startSave: (task, onSaved) => { void handleSaveClick(task, onSaved) },
+    isError,
+    isSchedulesError,
+    isSchedulesSuccess
+  })
 
   const getSecondaryButtons = (): ReactElement[] => {
     if (dataObject?.type === 'folder') {

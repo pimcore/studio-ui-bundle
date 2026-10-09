@@ -12,13 +12,12 @@ import { isEmpty } from 'lodash'
 import { t } from 'i18next'
 import { useAlertModal } from '@sdk/components'
 import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
-import { useDataObjectUpdateByIdMutation } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import {
-  useOptionalEditFormContext
+  useEditFormContextOptional
 } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider'
-import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
 import { type WorkflowAction } from '../types/workflow-types'
+import { type UnsavedChangesSaver } from '../provider/unsaved-changes-saver-context'
 
 interface UseUnsavedChangesGuardReturn {
   /**
@@ -35,17 +34,21 @@ interface UseUnsavedChangesGuardReturn {
  * reloads it afterwards, so without this, unsaved changes are dropped
  * silently:
  *
- * - `save`: saves the element first (data objects; other element types fall
- *   back to `warn`);
+ * - `save`: saves the element first through the saver its editor registered
+ *   (the data-object save buttons; see UnsavedChangesSaverContext) and only
+ *   continues once that save succeeded. Without a saver it falls back to `warn`;
  * - `warn`: asks whether to apply the action and lose the changes;
  * - `ignore`: submits right away.
  *
  * Global actions and elements without changes are never held up.
  */
-export const useUnsavedChangesGuard = (id: number, elementType: ElementType): UseUnsavedChangesGuardReturn => {
-  const { element, removeTrackedChanges } = useElementDraft(id, elementType)
-  const editForm = useOptionalEditFormContext()
-  const [updateDataObject] = useDataObjectUpdateByIdMutation()
+export const useUnsavedChangesGuard = (
+  id: number,
+  elementType: ElementType,
+  getSaver: () => UnsavedChangesSaver | undefined
+): UseUnsavedChangesGuardReturn => {
+  const { element } = useElementDraft(id, elementType)
+  const editForm = useEditFormContextOptional()
   const alertModal = useAlertModal()
 
   // The edit form collects changes right away; the draft is only marked as
@@ -64,33 +67,6 @@ export const useUnsavedChangesGuard = (id: number, elementType: ElementType): Us
     })
   })
 
-  const saveDataObject = async (): Promise<boolean> => {
-    const published = (element as { published?: boolean } | undefined)?.published === true
-
-    const response = await updateDataObject({
-      id,
-      body: {
-        data: {
-          editableData: editForm?.getModifiedDataObjectAttributes() ?? {},
-          // Same task as the primary save button.
-          task: published ? 'publish' : 'save',
-          useDraftData: true
-        }
-      }
-    })
-
-    if (response.error !== undefined) {
-      trackError(new ApiError(response.error))
-
-      return false
-    }
-
-    editForm?.resetModifiedDataObjectAttributes()
-    removeTrackedChanges()
-
-    return true
-  }
-
   const guard = async (workflowAction: WorkflowAction): Promise<boolean> => {
     const behaviour = workflowAction.unsavedChangesBehaviour
 
@@ -98,11 +74,20 @@ export const useUnsavedChangesGuard = (id: number, elementType: ElementType): Us
       return true
     }
 
-    if (behaviour === 'save' && elementType === 'data-object') {
-      return await saveDataObject()
+    const saver = behaviour === 'save' ? getSaver() : undefined
+    if (saver === undefined) {
+      return await confirmDiscard()
     }
 
-    return await confirmDiscard()
+    const saved = await saver()
+    if (!saved) {
+      alertModal.error({
+        title: t('action-could-not-be-applied'),
+        content: t('workflow.unsaved-changes.save-failed')
+      })
+    }
+
+    return saved
   }
 
   return { guard }
