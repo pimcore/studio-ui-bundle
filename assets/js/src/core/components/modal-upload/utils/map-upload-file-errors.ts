@@ -35,7 +35,12 @@ const formatErrorMessage = (errorData: unknown, t: TFunction): string => {
   if (!isString(content) && !isEmpty(content.validationErrors)) {
     const rows = [...new Set(content.validationErrors!.map(validationErrorToText))]
 
-    return rows.slice(0, MAX_TOOLTIP_ROWS).join('; ') + (rows.length > MAX_TOOLTIP_ROWS ? '; …' : '')
+    const shown = rows.slice(0, MAX_TOOLTIP_ROWS)
+    if (rows.length > MAX_TOOLTIP_ROWS) {
+      shown.push(t('validation.and_more', { n: rows.length - MAX_TOOLTIP_ROWS }))
+    }
+
+    return shown.join('; ')
   }
 
   return getErrorMessage(content, t)

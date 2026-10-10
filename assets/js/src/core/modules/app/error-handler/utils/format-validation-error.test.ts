@@ -142,6 +142,13 @@ describe('format-validation-error', () => {
     expect(text).toBe('Attributes (EN): bad')
   })
 
+  it('keeps a lone language when there is neither field nor location', () => {
+    expect(validationErrorToText({
+      message: 'bad',
+      path: [{ field: 'localizedfields', title: null, language: 'de' }]
+    })).toBe('(DE): bad')
+  })
+
   it('does not report malformed message keys as missing translations', () => {
     expect(getMissingValidationKeys([
       { message: 'm', messageKey: 'bad key with spaces' },

@@ -133,12 +133,14 @@ export const formatValidationError = (error: IValidationError): IFormattedValida
   const fieldLabel = getFieldLabel(error)
   const suffix = isNonEmptyString(language) ? ` (${language})` : ''
 
-  // without a field the language belongs to the innermost location crumb
-  if (fieldLabel === '' && suffix !== '' && location.length > 0) {
+  let label = fieldLabel + suffix
+  if (fieldLabel === '' && location.length > 0) {
+    // without a field the language belongs to the innermost location crumb
     location[location.length - 1] += suffix
+    label = ''
+  } else if (fieldLabel === '') {
+    label = suffix.trim()
   }
-
-  const label = fieldLabel === '' ? '' : fieldLabel + suffix
 
   return { location, label, ...resolveValidationMessage(error, label) }
 }

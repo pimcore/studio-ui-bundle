@@ -50,6 +50,6 @@ describe('mapUploadFileErrors', () => {
       validationErrors: Array.from({ length: 12 }, (_v, i) => ({ message: `e${i}` }))
     })], options)
 
-    expect(file.response).toBe(`${Array.from({ length: 10 }, (_v, i) => `row: e${i}`).join('; ')}; …`)
+    expect(file.response).toBe(`${Array.from({ length: 10 }, (_v, i) => `row: e${i}`).join('; ')}; validation.and_more`)
   })
 })
