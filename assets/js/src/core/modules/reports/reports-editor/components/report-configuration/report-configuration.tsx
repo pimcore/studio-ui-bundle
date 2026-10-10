@@ -26,8 +26,7 @@ import { useReportActions } from '@Pimcore/modules/reports/reports-editor/hooks/
 import { REFETCH_BTN_PORTAL_ID, SAVE_BTN_PORTAL_ID, ActiveReportTabContext } from '@Pimcore/modules/reports/reports-editor/reports-editor'
 import { GeneralSettings } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/general-settings/general-settings'
 import { SourceDefinition } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/source-definition/source-definition'
-import { ColumnConfiguration } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/column-configuration/column-configuration'
-import { ChartSettings } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/chart-settings/chart-settings'
+import { AdapterConfiguration } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/adapter-configuration/adapter-configuration'
 import { Permissions } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/permissions/permissions'
 import {
   normalizeChartData,
@@ -171,11 +170,11 @@ export const ReportConfiguration = ({ report, modifiedReports, setModifiedReport
           form={ form }
           updateFormData={ updateFormData }
         />
-        <ColumnConfiguration
+        <AdapterConfiguration
           currentData={ currentData }
+          form={ form }
           updateFormData={ updateFormData }
         />
-        <ChartSettings currentData={ currentData } />
         <Permissions
           currentData={ currentData }
           updateFormData={ updateFormData }
