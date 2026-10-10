@@ -28,6 +28,29 @@ error.error_recycle_bin_restore_missing_parent: Cannot restore element from recy
 error.error_login_token_as_admin_non_admin_user: Only admin users can generate a login link for an admin user
 error.error_login_token_no_user_password: A login link cannot be generated for this user because no password is set
 error.syntax_error: Syntax error
+validation.mandatory: "{{field}} is mandatory"
+validation.regex_mismatch: "{{field}} does not match the required pattern {{regex}}"
+validation.max_length: "{{field}} must not be longer than {{max}} characters"
+validation.min_length: "{{field}} must be at least {{min}} characters long"
+validation.not_numeric: "{{field}} must be a number, got {{value}}"
+validation.not_integer: "{{field}} must be a whole number, got {{value}}"
+validation.not_unsigned: "{{field}} must not be negative, got {{value}}"
+validation.min_value: "{{field}} must be at least {{min}}, got {{value}}"
+validation.max_value: "{{field}} must be at most {{max}}, got {{value}}"
+validation.range_start_after_end: "{{field}}: the start must not be after the end"
+validation.invalid_email: "{{field}} is not a valid email address: {{value}}"
+validation.invalid_option: "{{field}} has an invalid option: {{value}}"
+validation.invalid_time: "{{field}} is not a valid time: {{value}}"
+validation.invalid_relation: "{{field}} contains an invalid relation"
+validation.max_relations: "{{field}} allows at most {{max}} relations"
+validation.max_items: "{{field}} allows at most {{max}} items"
+validation.slug_not_unique: "The URL slug {{value}} in {{field}} is already in use"
+validation.slug_invalid: "{{field}} is not a valid URL slug"
+validation.slug_reserved_characters: "{{field}} contains reserved characters: {{characters}}"
+validation.unique_constraint: "{{field}} violates a unique constraint"
+validation.missing_required_editables: "Values for required editables are missing"
+validation.image_too_large: "Image {{filename}} is too large (max. {{max_megapixels}} megapixels). Resize it to {{suggested_width}}×{{suggested_height}} pixels or smaller"
+validation.and_more: "and {{n}} more"
 sidebar.selected_elements: Selected Elements
 sidebar.grid_config: Grid Config
 sidebar.tag_filters: Tag Filters

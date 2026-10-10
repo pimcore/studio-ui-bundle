@@ -28,6 +28,29 @@ error.error_recycle_bin_restore_missing_parent: Nie można przywrócić elementu
 error.error_login_token_as_admin_non_admin_user: Tylko administratorzy mogą wygenerować link logowania dla użytkownika administracyjnego
 error.error_login_token_no_user_password: Nie można wygenerować linku logowania dla tego użytkownika, ponieważ nie ustawiono hasła
 error.syntax_error: Błąd składni
+validation.mandatory: "{{field}} jest wymagane"
+validation.regex_mismatch: "{{field}} nie pasuje do wymaganego wzorca {{regex}}"
+validation.max_length: "{{field}} nie może być dłuższe niż {{max}} znaków"
+validation.min_length: "{{field}} musi mieć co najmniej {{min}} znaków"
+validation.not_numeric: "{{field}} musi być liczbą, otrzymano: {{value}}"
+validation.not_integer: "{{field}} musi być liczbą całkowitą, otrzymano: {{value}}"
+validation.not_unsigned: "{{field}} nie może być ujemne, otrzymano: {{value}}"
+validation.min_value: "{{field}} musi wynosić co najmniej {{min}}, otrzymano: {{value}}"
+validation.max_value: "{{field}} może wynosić co najwyżej {{max}}, otrzymano: {{value}}"
+validation.range_start_after_end: "{{field}}: początek nie może być po końcu"
+validation.invalid_email: "{{field}} nie jest prawidłowym adresem e-mail: {{value}}"
+validation.invalid_option: "{{field}} ma nieprawidłową opcję: {{value}}"
+validation.invalid_time: "{{field}} nie jest prawidłową godziną: {{value}}"
+validation.invalid_relation: "{{field}} zawiera nieprawidłową relację"
+validation.max_relations: "{{field}} dopuszcza co najwyżej {{max}} relacji"
+validation.max_items: "{{field}} dopuszcza co najwyżej {{max}} elementów"
+validation.slug_not_unique: "Slug URL {{value}} w polu {{field}} jest już używany"
+validation.slug_invalid: "{{field}} nie jest prawidłowym slugiem URL"
+validation.slug_reserved_characters: "{{field}} zawiera zarezerwowane znaki: {{characters}}"
+validation.unique_constraint: "{{field}} narusza ograniczenie unikalności"
+validation.missing_required_editables: "Brakuje wartości dla wymaganych elementów edytowalnych"
+validation.image_too_large: "Obraz {{filename}} jest za duży (maks. {{max_megapixels}} megapikseli). Zmień jego rozmiar na {{suggested_width}}×{{suggested_height}} pikseli lub mniej"
+validation.and_more: "i {{n}} więcej"
 sidebar.selected_elements: Wybrane elementy
 sidebar.grid_config: Ustawienia siatki
 sidebar.tag_filters: Filtry tagów

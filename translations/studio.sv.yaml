@@ -28,6 +28,29 @@ error.error_recycle_bin_restore_missing_parent: Kan inte återställa elementet 
 error.error_login_token_as_admin_non_admin_user: Endast admin-användare kan generera en inloggningslänk för en admin-användare
 error.error_login_token_no_user_password: En inloggningslänk kan inte genereras för den här användaren eftersom inget lösenord är satt
 error.syntax_error: Syntaxfel
+validation.mandatory: "{{field}} är obligatoriskt"
+validation.regex_mismatch: "{{field}} matchar inte det obligatoriska mönstret {{regex}}"
+validation.max_length: "{{field}} får inte vara längre än {{max}} tecken"
+validation.min_length: "{{field}} måste vara minst {{min}} tecken långt"
+validation.not_numeric: "{{field}} måste vara ett tal, fick: {{value}}"
+validation.not_integer: "{{field}} måste vara ett heltal, fick: {{value}}"
+validation.not_unsigned: "{{field}} får inte vara negativt, fick: {{value}}"
+validation.min_value: "{{field}} måste vara minst {{min}}, fick: {{value}}"
+validation.max_value: "{{field}} får vara högst {{max}}, fick: {{value}}"
+validation.range_start_after_end: "{{field}}: början får inte ligga efter slutet"
+validation.invalid_email: "{{field}} är inte en giltig e-postadress: {{value}}"
+validation.invalid_option: "{{field}} har ett ogiltigt alternativ: {{value}}"
+validation.invalid_time: "{{field}} är inte en giltig tid: {{value}}"
+validation.invalid_relation: "{{field}} innehåller en ogiltig relation"
+validation.max_relations: "{{field}} tillåter högst {{max}} relationer"
+validation.max_items: "{{field}} tillåter högst {{max}} objekt"
+validation.slug_not_unique: "URL-slugen {{value}} i {{field}} används redan"
+validation.slug_invalid: "{{field}} är inte en giltig URL-slug"
+validation.slug_reserved_characters: "{{field}} innehåller reserverade tecken: {{characters}}"
+validation.unique_constraint: "{{field}} bryter mot en unikhetsbegränsning"
+validation.missing_required_editables: "Värden för obligatoriska redigerbara element saknas"
+validation.image_too_large: "Bilden {{filename}} är för stor (max. {{max_megapixels}} megapixlar). Ändra storlek till {{suggested_width}}×{{suggested_height}} pixlar eller mindre"
+validation.and_more: "och {{n}} till"
 sidebar.selected_elements: Valda element
 sidebar.grid_config: Rutnätskonfiguration
 sidebar.tag_filters: Taggfilter
