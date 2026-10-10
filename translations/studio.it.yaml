@@ -28,6 +28,29 @@ error.error_recycle_bin_restore_missing_parent: "Impossibile ripristinare l'elem
 error.error_login_token_as_admin_non_admin_user: Solo gli utenti amministratori possono generare un link di accesso per un utente amministratore
 error.error_login_token_no_user_password: "Impossibile generare un link di accesso per questo utente perché non è impostata alcuna password"
 error.syntax_error: Errore di sintassi
+validation.mandatory: "{{field}} è obbligatorio"
+validation.regex_mismatch: "{{field}} non corrisponde al modello richiesto {{regex}}"
+validation.max_length: "{{field}} non deve superare {{max}} caratteri"
+validation.min_length: "{{field}} deve contenere almeno {{min}} caratteri"
+validation.not_numeric: "{{field}} deve essere un numero, ricevuto: {{value}}"
+validation.not_integer: "{{field}} deve essere un numero intero, ricevuto: {{value}}"
+validation.not_unsigned: "{{field}} non deve essere negativo, ricevuto: {{value}}"
+validation.min_value: "{{field}} deve essere almeno {{min}}, ricevuto: {{value}}"
+validation.max_value: "{{field}} deve essere al massimo {{max}}, ricevuto: {{value}}"
+validation.range_start_after_end: "{{field}}: l'inizio non deve essere successivo alla fine"
+validation.invalid_email: "{{field}} non è un indirizzo e-mail valido: {{value}}"
+validation.invalid_option: "{{field}} contiene un'opzione non valida: {{value}}"
+validation.invalid_time: "{{field}} non è un orario valido: {{value}}"
+validation.invalid_relation: "{{field}} contiene una relazione non valida"
+validation.max_relations: "{{field}} consente al massimo {{max}} relazioni"
+validation.max_items: "{{field}} consente al massimo {{max}} elementi"
+validation.slug_not_unique: "Lo slug URL {{value}} in {{field}} è già in uso"
+validation.slug_invalid: "{{field}} non è uno slug URL valido"
+validation.slug_reserved_characters: "{{field}} contiene caratteri riservati: {{characters}}"
+validation.unique_constraint: "{{field}} viola un vincolo di unicità"
+validation.missing_required_editable: "{{field}} è un editable obbligatorio ed è mancante"
+validation.image_too_large: "L'immagine {{filename}} è troppo grande (max. {{max_megapixels}} megapixel). Ridimensionala a {{suggested_width}}×{{suggested_height}} pixel o meno"
+validation.and_more: "e altri {{n}}"
 sidebar.selected_elements: Elementi selezionati
 sidebar.grid_config: Configurazione griglia
 sidebar.tag_filters: Filtri tag

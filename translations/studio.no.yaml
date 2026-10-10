@@ -28,6 +28,29 @@ error.error_recycle_bin_restore_missing_parent: Kan ikke gjenopprette elementet 
 error.error_login_token_as_admin_non_admin_user: Bare admin-brukere kan generere en påloggingslenke for en admin-bruker
 error.error_login_token_no_user_password: Det kan ikke genereres en påloggingslenke for denne brukeren fordi det ikke er angitt noe passord
 error.syntax_error: Syntaksfeil
+validation.mandatory: "{{field}} er obligatorisk"
+validation.regex_mismatch: "{{field}} samsvarer ikke med det påkrevde mønsteret {{regex}}"
+validation.max_length: "{{field}} kan ikke være lengre enn {{max}} tegn"
+validation.min_length: "{{field}} må være minst {{min}} tegn langt"
+validation.not_numeric: "{{field}} må være et tall, fikk: {{value}}"
+validation.not_integer: "{{field}} må være et heltall, fikk: {{value}}"
+validation.not_unsigned: "{{field}} kan ikke være negativt, fikk: {{value}}"
+validation.min_value: "{{field}} må være minst {{min}}, fikk: {{value}}"
+validation.max_value: "{{field}} kan være høyst {{max}}, fikk: {{value}}"
+validation.range_start_after_end: "{{field}}: starten kan ikke være etter slutten"
+validation.invalid_email: "{{field}} er ikke en gyldig e-postadresse: {{value}}"
+validation.invalid_option: "{{field}} har et ugyldig alternativ: {{value}}"
+validation.invalid_time: "{{field}} er ikke et gyldig klokkeslett: {{value}}"
+validation.invalid_relation: "{{field}} inneholder en ugyldig relasjon"
+validation.max_relations: "{{field}} tillater høyst {{max}} relasjoner"
+validation.max_items: "{{field}} tillater høyst {{max}} elementer"
+validation.slug_not_unique: "URL-sluggen {{value}} i {{field}} er allerede i bruk"
+validation.slug_invalid: "{{field}} er ikke en gyldig URL-slug"
+validation.slug_reserved_characters: "{{field}} inneholder reserverte tegn: {{characters}}"
+validation.unique_constraint: "{{field}} bryter en unikhetsbegrensning"
+validation.missing_required_editable: "{{field}} er en påkrevd editable og mangler"
+validation.image_too_large: "Bildet {{filename}} er for stort (maks. {{max_megapixels}} megapiksler). Endre størrelsen til {{suggested_width}}×{{suggested_height}} piksler eller mindre"
+validation.and_more: "og {{n}} til"
 sidebar.selected_elements: Valgte elementer
 sidebar.grid_config: Rutenettskonfigurasjon
 sidebar.tag_filters: Taggfiltre

@@ -1,0 +1,32 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import i18n from 'i18next'
+import { resolveValidationMessage } from './format-validation-error'
+
+describe('resolveValidationMessage with real i18next', () => {
+  beforeAll(async () => {
+    await i18n.init({
+      lng: 'en',
+      keySeparator: false,
+      resources: { en: { translation: { 'validation.max_length': '{{field}} max {{max}}: {{value}}' } } }
+    })
+  })
+
+  it('does not interpret or escape entered values', () => {
+    const value = '<b>x</b> {{field}} $t(foo)'
+    const text = resolveValidationMessage(
+      { message: 'm', messageKey: 'validation.max_length', parameters: { max: 5, value } },
+      'Title'
+    )
+
+    expect(text).toBe(`Title max 5: ${value}`)
+  })
+})
