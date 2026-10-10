@@ -15,6 +15,8 @@ import { ApiError, getErrorMessage } from '@Pimcore/modules/app/error-handler'
 import { type ApiErrorData } from '@sdk/modules/app'
 import { validationErrorToText } from '@Pimcore/modules/app/error-handler/utils/format-validation-error'
 
+const MAX_TOOLTIP_ROWS = 10
+
 export interface MapUploadFileErrorsOptions {
   t: TFunction
   hasCheckError: (file: RcFile) => boolean
@@ -31,7 +33,9 @@ const formatErrorMessage = (errorData: unknown, t: TFunction): string => {
 
   // e.g. "image too large": the translated rows instead of the server's plain (HTML) message
   if (!isString(content) && !isEmpty(content.validationErrors)) {
-    return [...new Set(content.validationErrors!.map(validationErrorToText))].join('; ')
+    const rows = [...new Set(content.validationErrors!.map(validationErrorToText))]
+
+    return rows.slice(0, MAX_TOOLTIP_ROWS).join('; ') + (rows.length > MAX_TOOLTIP_ROWS ? '; …' : '')
   }
 
   return getErrorMessage(content, t)

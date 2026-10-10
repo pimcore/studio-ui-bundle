@@ -42,4 +42,14 @@ describe('mapUploadFileErrors', () => {
 
     expect(file.response).toBe('Validation failed')
   })
+
+  it('caps the tooltip at 10 rows', () => {
+    const [file] = mapUploadFileErrors([failedFile({
+      errorKey: 'error_element_validation_failed',
+      message: 'many',
+      validationErrors: Array.from({ length: 12 }, (_v, i) => ({ message: `e${i}` }))
+    })], options)
+
+    expect(file.response).toBe(`${Array.from({ length: 10 }, (_v, i) => `row: e${i}`).join('; ')}; …`)
+  })
 })

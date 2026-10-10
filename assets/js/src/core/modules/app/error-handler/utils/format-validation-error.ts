@@ -24,6 +24,8 @@ export interface IResolvedMessage {
   includesLabel: boolean
 }
 
+const MESSAGE_KEY = /^[\w.-]{1,190}$/u
+
 // i18next also accepts `{{ field }}`, `{{- field}}` and `{{field, format}}`
 const FIELD_PLACEHOLDER = /\{\{-?\s*field\s*(,[^}]*)?\}\}/u
 
@@ -49,7 +51,8 @@ const findTranslation = (key: string): string | undefined => {
 
 /** Unique message keys without any resource. Only the fixed keys are returned, never a message. */
 export const getMissingValidationKeys = (errors: IValidationError[]): string[] => {
-  const keys = errors.map(error => error.messageKey).filter(isNonEmptyString)
+  // only well-formed keys: they end up as translation rows
+  const keys = errors.map(error => error.messageKey).filter(isNonEmptyString).filter(key => MESSAGE_KEY.test(key))
 
   return [...new Set(keys)].filter(key => isNil(findResource(key)))
 }
@@ -128,7 +131,14 @@ const getFieldLabel = (error: IValidationError): string => {
 export const formatValidationError = (error: IValidationError): IFormattedValidationError => {
   const { location, language } = buildLocation(error.path ?? [])
   const fieldLabel = getFieldLabel(error)
-  const label = fieldLabel + (isNonEmptyString(language) ? ` (${language})` : '')
+  const suffix = isNonEmptyString(language) ? ` (${language})` : ''
+
+  // without a field the language belongs to the innermost location crumb
+  if (fieldLabel === '' && suffix !== '' && location.length > 0) {
+    location[location.length - 1] += suffix
+  }
+
+  const label = fieldLabel === '' ? '' : fieldLabel + suffix
 
   return { location, label, ...resolveValidationMessage(error, label) }
 }

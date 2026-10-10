@@ -130,6 +130,25 @@ describe('format-validation-error', () => {
       .toBe('Prevented publishing')
   })
 
+  it('puts the language on the innermost crumb when there is no field', () => {
+    const text = validationErrorToText({
+      message: 'bad',
+      path: [
+        { field: 'localizedfields', title: null, language: 'en' },
+        { field: 'attributes', title: 'Attributes' }
+      ]
+    })
+
+    expect(text).toBe('Attributes (EN): bad')
+  })
+
+  it('does not report malformed message keys as missing translations', () => {
+    expect(getMissingValidationKeys([
+      { message: 'm', messageKey: 'bad key with spaces' },
+      { message: 'm', messageKey: 'validation.unknown' }
+    ])).toEqual(['validation.unknown'])
+  })
+
   it('prefers the translated brick or collection title over its key', () => {
     const text = validationErrorToText({
       field: 'power',
