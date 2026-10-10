@@ -48,7 +48,6 @@ validation.slug_not_unique: "Le slug d'URL {{value}} dans {{field}} est déjà u
 validation.slug_invalid: "{{field}} n'est pas un slug d'URL valide"
 validation.slug_reserved_characters: "{{field}} contient des caractères réservés : {{characters}}"
 validation.unique_constraint: "{{field}} enfreint une contrainte d'unicité"
-validation.missing_required_editable: "{{field}} est un éditable requis et est manquant"
 validation.missing_required_editables: "Des valeurs pour des éléments éditables obligatoires sont manquantes"
 validation.image_too_large: "L'image {{filename}} est trop grande (max. {{max_megapixels}} mégapixels). Redimensionnez-la à {{suggested_width}}×{{suggested_height}} pixels ou moins"
 validation.and_more: "et {{n}} de plus"

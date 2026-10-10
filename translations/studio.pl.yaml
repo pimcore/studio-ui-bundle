@@ -48,7 +48,6 @@ validation.slug_not_unique: "Slug URL {{value}} w polu {{field}} jest już używ
 validation.slug_invalid: "{{field}} nie jest prawidłowym slugiem URL"
 validation.slug_reserved_characters: "{{field}} zawiera zarezerwowane znaki: {{characters}}"
 validation.unique_constraint: "{{field}} narusza ograniczenie unikalności"
-validation.missing_required_editable: "{{field}} jest wymaganym editable i brakuje go"
 validation.missing_required_editables: "Brakuje wartości dla wymaganych elementów edytowalnych"
 validation.image_too_large: "Obraz {{filename}} jest za duży (maks. {{max_megapixels}} megapikseli). Zmień jego rozmiar na {{suggested_width}}×{{suggested_height}} pikseli lub mniej"
 validation.and_more: "i {{n}} więcej"

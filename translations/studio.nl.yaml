@@ -48,7 +48,6 @@ validation.slug_not_unique: "De URL-slug {{value}} in {{field}} is al in gebruik
 validation.slug_invalid: "{{field}} is geen geldige URL-slug"
 validation.slug_reserved_characters: "{{field}} bevat gereserveerde tekens: {{characters}}"
 validation.unique_constraint: "{{field}} schendt een uniciteitsbeperking"
-validation.missing_required_editable: "{{field}} is een vereiste editable en ontbreekt"
 validation.missing_required_editables: "Waarden voor verplichte editables ontbreken"
 validation.image_too_large: "Afbeelding {{filename}} is te groot (max. {{max_megapixels}} megapixels). Verklein haar tot {{suggested_width}}×{{suggested_height}} pixels of minder"
 validation.and_more: "en nog {{n}}"
