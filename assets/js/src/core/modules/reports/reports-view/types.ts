@@ -26,6 +26,6 @@ export type FilterDrillDownType = FilterDrillDown | undefined
 export interface ICustomReportViewProps {
   reportName: string
   reportDetailData: BundleCustomReportsDetails
-  /** Generic report data; chartDetailData can still belong to the previous report while isFetching is true */
+  /** Generic report data; chartDetailData is not loaded for adapters with their own view */
   reportData: IReportDataContext
 }

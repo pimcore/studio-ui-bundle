@@ -10,7 +10,7 @@
 
 import React, { Fragment, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmpty, isFunction, isNil, isNull, isUndefined } from 'lodash'
+import { isEmpty, isFunction, isNull, isUndefined } from 'lodash'
 import type { DefaultOptionType } from 'antd/es/select'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
@@ -26,13 +26,7 @@ import { Text } from '@Pimcore/components/text/text'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { useReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
 import type { ISourceDefinition } from '@Pimcore/modules/reports/reports-editor/types'
-import { DynamicTypeCustomReportDefinitionAbstract } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-abstract'
-import { getCustomReportDefinitionAdapter } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/get-custom-report-definition-adapter'
-
-// Adapters registered by bundles built against an older SDK may not provide the method at all
-const providesCustomView = (adapter: DynamicTypeCustomReportDefinitionAbstract | undefined): adapter is DynamicTypeCustomReportDefinitionAbstract =>
-  isFunction(adapter?.getCustomReportView) &&
-  adapter.getCustomReportView !== DynamicTypeCustomReportDefinitionAbstract.prototype.getCustomReportView
+import { getCustomReportDefinitionAdapter, providesCustomReportView } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/get-custom-report-definition-adapter'
 
 interface IReportViewContentProps {
   currentReport: string | null
@@ -66,7 +60,7 @@ export const ReportViewContent = ({ currentReport, setCurrentReport, reportsTree
   }, [currentReport, currentAdapter])
 
   const renderCustomView = (): React.JSX.Element | null => {
-    if (isNull(currentReport) || isUndefined(reportDetailData) || !providesCustomView(currentAdapter)) {
+    if (isNull(currentReport) || isUndefined(reportDetailData) || !providesCustomReportView(currentAdapter)) {
       return null
     }
 
@@ -76,10 +70,6 @@ export const ReportViewContent = ({ currentReport, setCurrentReport, reportsTree
     }
 
     const view = currentAdapter.getCustomReportView({ reportName: currentReport, reportDetailData, reportData })
-
-    if (isNil(view)) {
-      return null
-    }
 
     // Keyed so that switching between two reports of the same adapter does not keep the previous view state
     return <Fragment key={ currentReport }>{view}</Fragment>

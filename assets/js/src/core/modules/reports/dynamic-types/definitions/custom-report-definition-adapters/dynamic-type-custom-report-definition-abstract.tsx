@@ -33,7 +33,8 @@ export abstract class DynamicTypeCustomReportDefinitionAbstract implements Dynam
 
   /**
    * Replaces the generic report view (grid, chart and sidebar) below the report selection.
-   * Return null to keep the generic view.
+   * Overriding this method means the adapter loads the report data itself: the generic chart request is
+   * not sent and reportData.chartDetailData stays undefined. The default (null) keeps the generic view.
    * Called during render: return an element such as <MyView { ...props } /> and do not call hooks here.
    */
   getCustomReportView (props: ICustomReportViewProps): ReactElement | null {

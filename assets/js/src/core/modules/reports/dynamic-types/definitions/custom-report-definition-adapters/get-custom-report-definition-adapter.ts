@@ -8,11 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isUndefined } from 'lodash'
+import { isFunction, isUndefined } from 'lodash'
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type DynamicTypeCustomReportDefinitionRegistry } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-registry'
-import { type DynamicTypeCustomReportDefinitionAbstract } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-abstract'
+import { DynamicTypeCustomReportDefinitionAbstract } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-abstract'
 
 export const getCustomReportDefinitionAdapter = (type: string | undefined, throwException: boolean = true): DynamicTypeCustomReportDefinitionAbstract | undefined => {
   if (isUndefined(type)) {
@@ -23,3 +23,8 @@ export const getCustomReportDefinitionAdapter = (type: string | undefined, throw
 
   return registry.getDynamicType(type, throwException) ?? undefined
 }
+
+// Adapters registered by bundles built against an older SDK may not provide the method at all
+export const providesCustomReportView = (adapter: DynamicTypeCustomReportDefinitionAbstract | undefined): adapter is DynamicTypeCustomReportDefinitionAbstract =>
+  isFunction(adapter?.getCustomReportView) &&
+  adapter.getCustomReportView !== DynamicTypeCustomReportDefinitionAbstract.prototype.getCustomReportView

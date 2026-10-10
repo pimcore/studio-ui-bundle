@@ -170,13 +170,14 @@ describe('ReportViewContent', () => {
     })
   })
 
-  it('renders the generic view when the adapter view returns undefined', () => {
+  it('does not fall back to the generic view when an adapter view returns undefined', () => {
     mockReportData('undefined-view')
     mockGetDynamicType.mockReturnValue(new UndefinedViewAdapter())
 
     renderView()
 
-    expectGenericView()
+    expect(screen.queryByTestId('generic-report-detail')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('generic-report-sidebar')).not.toBeInTheDocument()
   })
 
   it('shows a loading state instead of the generic view while the selected report replaces an adapter view', () => {

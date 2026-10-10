@@ -14,7 +14,10 @@ import {
   useCustomReportsChartQuery,
   useCustomReportsReportQuery
 } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
+import { isUndefined } from 'lodash'
 import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { type ISourceDefinition } from '@Pimcore/modules/reports/reports-editor/types'
+import { getCustomReportDefinitionAdapter, providesCustomReportView } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/get-custom-report-definition-adapter'
 import { type IGridFilter } from '@Pimcore/modules/reports/reports-view/types'
 import { type ISorting } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
 
@@ -41,28 +44,38 @@ export const useReportData = ({ name, filters, page, pageSize, sorting }: IUseRe
   const {
     isLoading: isReportDetailLoading,
     data: reportDetailData,
+    currentData: currentReportDetailData,
     refetch: reportDetailRefetch,
     isFetching: isReportDetailFetching
   } = useCustomReportsReportQuery({ name }, { skip: isEmptyValue(name) })
+
+  // An adapter that renders its own view loads its data itself; the generic chart request would run the report twice.
+  // currentData is undefined until the details of this very report are loaded, so the adapter is never taken from a previous report.
+  const adapter = getCustomReportDefinitionAdapter((currentReportDetailData?.dataSourceConfig as ISourceDefinition | undefined)?.type, false)
+  const skipChartQuery = isEmptyValue(name) || isUndefined(currentReportDetailData) || providesCustomReportView(adapter)
 
   const {
     isLoading: isChartDetailLoading,
     data: chartDetailData,
     refetch: chartDetailRefetch,
     isFetching: isChartDetailFetching
-  } = useCustomReportsChartQuery({ body: { name, filters, page, pageSize, sortBy: sorting?.sortBy, sortOrder: sorting?.sortOrder } }, { skip: isEmptyValue(name) })
+  } = useCustomReportsChartQuery({ body: { name, filters, page, pageSize, sortBy: sorting?.sortBy, sortOrder: sorting?.sortOrder } }, { skip: skipChartQuery })
 
   const isLoading: boolean = isReportDetailLoading || isChartDetailLoading
   const isFetching: boolean = isReportDetailFetching || isChartDetailFetching
 
   const refetchAll = (): void => {
     reportDetailRefetch().catch(e => { console.error(e) })
-    chartDetailRefetch().catch(e => { console.error(e) })
+    // refetching a skipped query throws
+    if (!skipChartQuery) {
+      chartDetailRefetch().catch(e => { console.error(e) })
+    }
   }
 
   return {
     reportDetailData,
-    chartDetailData,
+    // a skipped query keeps the result of the previously selected report
+    chartDetailData: skipChartQuery ? undefined : chartDetailData,
     isLoading,
     isFetching,
     refetchAll
