@@ -15,6 +15,7 @@ const translations: Record<string, string> = {
   Name: 'Name (translated)',
   'validation.mandatory': '{{field}} is mandatory',
   'my_bundle.too_long': 'Must not be longer than {{max}} characters',
+  'my_bundle.spaced': '{{ field }} is spaced',
   'validation.empty': '',
   'validation.same': 'validation.same'
 }
@@ -118,6 +119,10 @@ describe('format-validation-error', () => {
     })
 
     expect(text).toBe('Name (translated): Must not be longer than 5 characters')
+  })
+
+  it('recognises a spaced {{ field }} placeholder', () => {
+    expect(resolveValidationMessage({ message: 'm', messageKey: 'my_bundle.spaced' }, 'X').includesLabel).toBe(true)
   })
 
   it('prefers the translated brick or collection title over its key', () => {

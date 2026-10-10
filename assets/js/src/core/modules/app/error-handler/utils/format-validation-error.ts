@@ -24,7 +24,8 @@ export interface IResolvedMessage {
   includesLabel: boolean
 }
 
-const FIELD_PLACEHOLDER = '{{field}}'
+// i18next also accepts `{{ field }}`, `{{- field}}` and `{{field, format}}`
+const FIELD_PLACEHOLDER = /\{\{-?\s*field\s*(,[^}]*)?\}\}/u
 
 // Walks the current language and its fallbacks. Deliberately no import from app/i18n or the store:
 // this module is part of the error handler, which those modules import themselves.
@@ -70,7 +71,7 @@ export const resolveValidationMessage = (error: IValidationError, fieldLabel: st
     })
 
     if (isNonEmptyString(translated)) {
-      return { text: translated, includesLabel: template.includes(FIELD_PLACEHOLDER) }
+      return { text: translated, includesLabel: FIELD_PLACEHOLDER.test(template) }
     }
   }
 
