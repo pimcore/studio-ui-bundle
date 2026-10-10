@@ -20,12 +20,9 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t })
 }))
 
-const dispatch = jest.fn()
+const emit = jest.fn()
 
-jest.mock('@Pimcore/app/store', () => ({ useAppDispatch: () => dispatch }))
-jest.mock('@Pimcore/app/i18n/store/missingTranslations.slice', () => ({
-  addMissingTranslation: (key: string) => ({ type: 'missing', payload: key })
-}))
+jest.mock('i18next', () => ({ __esModule: true, default: { language: 'de', emit: (...args: unknown[]) => emit(...args) } }))
 jest.mock('@Pimcore/modules/app/error-handler/utils/format-validation-error', () => ({
   getMissingValidationKeys: (errors: Array<{ messageKey?: string }>) =>
     [...new Set(errors.map(e => e.messageKey).filter(Boolean))],
@@ -47,7 +44,7 @@ const renderErrors = (messages: string[]): HTMLElement => {
 describe('ApiErrorViewUI', () => {
   beforeEach(() => {
     t.mockClear()
-    dispatch.mockClear()
+    emit.mockClear()
   })
 
   it('renders a validation message as text, not as markup', () => {
@@ -103,7 +100,7 @@ describe('ApiErrorViewUI', () => {
     const { rerender } = render(<ApiErrorViewUI errorContent={ content } />)
     rerender(<ApiErrorViewUI errorContent={ content } />)
 
-    expect(dispatch).toHaveBeenCalledTimes(1)
-    expect(dispatch).toHaveBeenCalledWith({ type: 'missing', payload: 'validation.x' })
+    expect(emit).toHaveBeenCalledTimes(1)
+    expect(emit).toHaveBeenCalledWith('missingKey', ['de'], 'translation', 'validation.x', 'validation.x')
   })
 })

@@ -11,12 +11,21 @@
 import i18n from 'i18next'
 import { resolveValidationMessage } from './format-validation-error'
 
+
 describe('resolveValidationMessage with real i18next', () => {
   beforeAll(async () => {
     await i18n.init({
       lng: 'en',
       keySeparator: false,
-      resources: { en: { translation: { 'validation.max_length': '{{field}} max {{max}}: {{value}}' } } }
+      resources: {
+        en: {
+          translation: {
+            'validation.max_length': '{{field}} max {{max}}: {{value}}',
+            'validation.empty': '',
+            'validation.same': 'validation.same'
+          }
+        }
+      }
     })
   })
 
@@ -27,6 +36,21 @@ describe('resolveValidationMessage with real i18next', () => {
       'Title'
     )
 
-    expect(text).toBe(`Title max 5: ${value}`)
+    expect(text).toEqual({ text: `Title max 5: ${value}`, translated: true })
+  })
+
+  it('ignores server sent parameter names that are i18next options', () => {
+    const result = resolveValidationMessage({
+      message: 'm',
+      messageKey: 'validation.max_length',
+      parameters: { count: 2, lng: 'de', returnObjects: true, max: 5, value: 'v' }
+    }, 'Title')
+
+    expect(result).toEqual({ text: 'Title max 5: v', translated: true })
+  })
+
+  it.each(['validation.empty', 'validation.same', 'validation.unknown'])('falls back to the message for %s', key => {
+    expect(resolveValidationMessage({ message: 'Plain', messageKey: key }, 'Title'))
+      .toEqual({ text: 'Plain', translated: false })
   })
 })

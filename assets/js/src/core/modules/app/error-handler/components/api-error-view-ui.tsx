@@ -10,13 +10,12 @@
 
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import i18n from 'i18next'
 import { isEmpty, isString, isUndefined } from 'lodash'
 import { type IErrorGetContent } from '@Pimcore/modules/app/error-handler/types'
 import { getErrorMessage } from '@Pimcore/modules/app/error-handler/utils/get-error-message'
 import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 import { DEFAULT_ERROR_CONTENT } from '@Pimcore/modules/app/error-handler/classes/api-error'
-import { useAppDispatch } from '@Pimcore/app/store'
-import { addMissingTranslation } from '@Pimcore/app/i18n/store/missingTranslations.slice'
 import { getMissingValidationKeys, validationErrorToText } from '@Pimcore/modules/app/error-handler/utils/format-validation-error'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 
@@ -29,14 +28,17 @@ interface IApiErrorViewUIProps {
 export const ApiErrorViewUI = ({ errorContent }: IApiErrorViewUIProps): React.JSX.Element => {
   const { t } = useTranslation()
 
-  const dispatch = useAppDispatch()
   const validationErrors = isString(errorContent) ? undefined : errorContent?.validationErrors
 
-  // Register unknown message keys (never the messages) so admins can translate them.
+  // Register unknown message keys (never the messages) so admins can translate them. Goes through the
+  // missingKey event like i18n-api.ts, because importing the store here would create an import cycle.
   useEffect(() => {
-    getMissingValidationKeys(validationErrors ?? []).forEach(key => dispatch(addMissingTranslation(key)))
+    getMissingValidationKeys(validationErrors ?? []).forEach(key => {
+      i18n.emit('missingKey', [i18n.language], 'translation', key, key)
+    })
   }, [validationErrors])
 
+  // The aggregated `message` is intentionally not shown here: it is the joined form of these rows.
   // Everything below is rendered as React text nodes only, never as markup.
   if (!isString(errorContent) && !isEmpty(errorContent?.validationErrors)) {
     const errors = errorContent.validationErrors!

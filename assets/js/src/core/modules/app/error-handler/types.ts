@@ -17,6 +17,7 @@ export interface IValidationErrorPathSegment {
   language?: string | null
   index?: number | null
   type?: string | null
+  typeTitle?: string | null
 }
 
 export interface IValidationError {
