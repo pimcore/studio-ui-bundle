@@ -26,7 +26,8 @@ export const useTreeNodeOpenPermission = (): ((node: TreeNode) => boolean) => {
       return true
     }
 
-    void messageApi.info(t('element.tree.open-no-permission'))
+    // A fixed key replaces the previous message instead of stacking one per click.
+    void messageApi.info({ content: t('element.tree.open-no-permission'), key: 'element-tree-open-no-permission' })
 
     return false
   }

@@ -22,11 +22,11 @@ jest.mock('@Pimcore/components/message/useMessage', () => ({
   useMessage: () => ({ info: mockInfo })
 }))
 
-const createNode = (view: boolean): TreeNode => ({
+const createNode = (view?: boolean): TreeNode => ({
   id: '9',
   icon: { type: 'name', value: 'folder' },
   label: 'workspace-parent',
-  permissions: {
+  permissions: view === undefined ? undefined : {
     list: true,
     view,
     publish: false,
@@ -57,6 +57,15 @@ describe('useTreeNodeOpenPermission', () => {
     const { result } = renderHook(() => useTreeNodeOpenPermission())
 
     expect(result.current(createNode(false))).toBe(false)
-    expect(mockInfo).toHaveBeenCalledWith('element.tree.open-no-permission')
+    expect(mockInfo).toHaveBeenCalledWith({
+      content: 'element.tree.open-no-permission',
+      key: 'element-tree-open-no-permission'
+    })
+  })
+
+  it('refuses a node without permissions', () => {
+    const { result } = renderHook(() => useTreeNodeOpenPermission())
+
+    expect(result.current(createNode())).toBe(false)
   })
 })

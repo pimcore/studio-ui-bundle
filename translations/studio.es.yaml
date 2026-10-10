@@ -1230,8 +1230,8 @@ element.tree.copy: Copiar
 element.tree.copy-success-description: '{{elementType}} "{{name}}" ha sido copiado y está listo para pegar'
 element.tree.paste: Pegar
 element.tree.paste-as-child: Pegar como hijo
-element.tree.open-no-permission: No tiene permiso para abrir este elemento.
 element.tree.paste-as-child-recursive: Pegar como hijo (recursivo)
+element.tree.open-no-permission: No tiene permiso para abrir este elemento.
 element.tree.paste-recursive-updating-references: Pegar recursivo, actualizando referencias
 element.tree.paste-only-contents: Pegar solo el contenido aquí
 element.tree.cut: Cortar

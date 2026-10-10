@@ -1230,8 +1230,8 @@ element.tree.copy: Copy
 element.tree.copy-success-description: '{{elementType}} "{{name}}" has been copied and is ready to paste'
 element.tree.paste: Paste
 element.tree.paste-as-child: Paste as child
-element.tree.open-no-permission: "You don't have permission to open this element."
 element.tree.paste-as-child-recursive: Paste as child (recursive)
+element.tree.open-no-permission: "You don't have permission to open this element."
 element.tree.paste-recursive-updating-references: Paste recursive, updating references
 element.tree.paste-only-contents: Paste only contents here
 element.tree.cut: Cut

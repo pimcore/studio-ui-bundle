@@ -1230,8 +1230,8 @@ element.tree.copy: Copia
 element.tree.copy-success-description: '{{elementType}} "{{name}}" è stato copiato ed è pronto per incollare'
 element.tree.paste: Incolla
 element.tree.paste-as-child: Incolla come figlio
-element.tree.open-no-permission: Non hai il permesso di aprire questo elemento.
 element.tree.paste-as-child-recursive: Incolla come figlio (ricorsivo)
+element.tree.open-no-permission: "Non disponi dell'autorizzazione per aprire questo elemento."
 element.tree.paste-recursive-updating-references: Incolla ricorsivo, aggiornando i riferimenti
 element.tree.paste-only-contents: Incolla solo il contenuto qui
 element.tree.cut: Taglia
