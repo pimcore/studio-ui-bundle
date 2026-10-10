@@ -8,6 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { type BundleCustomReportsDetails } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
+import { type IReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
+
 export interface IGridFilter {
   columnFilters?: Array<{ property: string, value: any, type: string, operator: string }>
   drillDownFilters?: Record<string, any>
@@ -19,3 +22,10 @@ export enum FilterDrillDown {
 }
 
 export type FilterDrillDownType = FilterDrillDown | undefined
+
+export interface ICustomReportViewProps {
+  reportName: string
+  reportDetailData: BundleCustomReportsDetails
+  /** Generic report data; chartDetailData can still belong to the previous report while isFetching is true */
+  reportData: IReportDataContext
+}
