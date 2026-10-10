@@ -1230,6 +1230,7 @@ element.tree.copy: Copier
 element.tree.copy-success-description: '{{elementType}} "{{name}}" a été copié et est prêt à être collé'
 element.tree.paste: Coller
 element.tree.paste-as-child: Coller comme enfant
+element.tree.open-no-permission: "Vous n'avez pas l'autorisation d'ouvrir cet élément."
 element.tree.paste-as-child-recursive: Coller comme enfant (récursif)
 element.tree.paste-recursive-updating-references: Coller récursivement, en mettant à jour les références
 element.tree.paste-only-contents: Coller uniquement le contenu ici

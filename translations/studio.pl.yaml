@@ -1230,6 +1230,7 @@ element.tree.copy: Kopiuj
 element.tree.copy-success-description: '{{elementType}} "{{name}}" został skopiowany i jest gotowy do wklejenia'
 element.tree.paste: Wklej
 element.tree.paste-as-child: Wklej jako element podrzędny
+element.tree.open-no-permission: Nie masz uprawnień do otwarcia tego elementu.
 element.tree.paste-as-child-recursive: Wklej jako element podrzędny (rekursywnie)
 element.tree.paste-recursive-updating-references: Wklej rekursywnie i zaktualizuj odwołania
 element.tree.paste-only-contents: Wklej tutaj tylko treść
