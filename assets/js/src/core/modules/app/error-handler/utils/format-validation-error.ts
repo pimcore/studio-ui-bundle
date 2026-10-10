@@ -70,8 +70,10 @@ export const resolveValidationMessage = (error: IValidationError, fieldLabel: st
       interpolation: { escapeValue: false }
     })
 
-    if (isNonEmptyString(translated)) {
-      return { text: translated, includesLabel: FIELD_PLACEHOLDER.test(template) }
+    const usesField = FIELD_PLACEHOLDER.test(template)
+    // a template that names the field cannot be used for an error without field
+    if (isNonEmptyString(translated) && (!usesField || fieldLabel !== '')) {
+      return { text: translated, includesLabel: usesField }
     }
   }
 

@@ -125,6 +125,11 @@ describe('format-validation-error', () => {
     expect(resolveValidationMessage({ message: 'm', messageKey: 'my_bundle.spaced' }, 'X').includesLabel).toBe(true)
   })
 
+  it('falls back to the plain message when a {{field}} template has no field to show', () => {
+    expect(validationErrorToText({ message: 'Prevented publishing', messageKey: 'validation.mandatory' }))
+      .toBe('Prevented publishing')
+  })
+
   it('prefers the translated brick or collection title over its key', () => {
     const text = validationErrorToText({
       field: 'power',

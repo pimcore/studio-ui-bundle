@@ -49,6 +49,7 @@ validation.slug_invalid: "{{field}} is not a valid URL slug"
 validation.slug_reserved_characters: "{{field}} contains reserved characters: {{characters}}"
 validation.unique_constraint: "{{field}} violates a unique constraint"
 validation.missing_required_editable: "{{field}} is a required editable and is missing"
+validation.missing_required_editables: "Values for required editables are missing"
 validation.image_too_large: "Image {{filename}} is too large (max. {{max_megapixels}} megapixels). Resize it to {{suggested_width}}×{{suggested_height}} pixels or smaller"
 validation.and_more: "and {{n}} more"
 sidebar.selected_elements: Selected Elements

@@ -8,11 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isNil } from 'lodash'
+import { isEmpty, isNil, isString } from 'lodash'
 import type { RcFile, UploadFile } from 'antd/es/upload/interface'
 import type { TFunction } from '@sdk/app'
 import { ApiError, getErrorMessage } from '@Pimcore/modules/app/error-handler'
 import { type ApiErrorData } from '@sdk/modules/app'
+import { validationErrorToText } from '@Pimcore/modules/app/error-handler/utils/format-validation-error'
 
 export interface MapUploadFileErrorsOptions {
   t: TFunction
@@ -26,6 +27,11 @@ const formatErrorMessage = (errorData: unknown, t: TFunction): string => {
 
   if (isNil(content)) {
     return t('error.error_something_generic_went_wrong')
+  }
+
+  // e.g. "image too large": the translated rows instead of the server's plain (HTML) message
+  if (!isString(content) && !isEmpty(content.validationErrors)) {
+    return [...new Set(content.validationErrors!.map(validationErrorToText))].join('; ')
   }
 
   return getErrorMessage(content, t)
