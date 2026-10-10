@@ -14,6 +14,7 @@ import { getMissingValidationKeys, resolveValidationMessage, validationErrorToTe
 const translations: Record<string, string> = {
   Name: 'Name (translated)',
   'validation.mandatory': '{{field}} is mandatory',
+  'my_bundle.too_long': 'Must not be longer than {{max}} characters',
   'validation.empty': '',
   'validation.same': 'validation.same'
 }
@@ -64,7 +65,7 @@ describe('format-validation-error', () => {
     ['empty', 'validation.empty'],
     ['equal to the key', 'validation.same']
   ])('falls back to the message when the translation is %s', (_name, messageKey) => {
-    expect(resolveValidationMessage({ message: 'Plain', messageKey }, 'X')).toEqual({ text: 'Plain', translated: false })
+    expect(resolveValidationMessage({ message: 'Plain', messageKey }, 'X')).toEqual({ text: 'Plain', includesLabel: false })
   })
 
   it('does not call t() for a missing key', () => {
@@ -88,7 +89,7 @@ describe('format-validation-error', () => {
     expect(keys).toEqual(['validation.unknown'])
   })
 
-  it('uses the plain message without a message key and ', () => {
+  it('uses the plain message without a message key', () => {
     expect(resolveValidationMessage({ message: 'Plain', messageKey: null }, 'X').text).toBe('Plain')
   })
 
@@ -105,6 +106,18 @@ describe('format-validation-error', () => {
     })
 
     expect(text).toBe('blocks › Attributes #2 › SaleInformation › Other (EN): bad')
+  })
+
+  it('keeps the label when a translation does not use {{field}}', () => {
+    const text = validationErrorToText({
+      field: 'code',
+      fieldTitle: 'Name',
+      message: 'too long',
+      messageKey: 'my_bundle.too_long',
+      parameters: { max: 5 }
+    })
+
+    expect(text).toBe('Name (translated): Must not be longer than 5 characters')
   })
 
   it('prefers the translated brick or collection title over its key', () => {

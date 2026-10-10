@@ -41,13 +41,14 @@ export const ApiErrorViewUI = ({ errorContent }: IApiErrorViewUIProps): React.JS
   // The aggregated `message` is intentionally not shown here: it is the joined form of these rows.
   // Everything below is rendered as React text nodes only, never as markup.
   if (!isString(errorContent) && !isEmpty(errorContent?.validationErrors)) {
-    const errors = errorContent.validationErrors!
-    const rest = errors.length - MAX_VALIDATION_ROWS
+    // identical rows carry no extra information, and the text doubles as a stable key
+    const rows = [...new Set(errorContent.validationErrors!.map(validationErrorToText))]
+    const rest = rows.length - MAX_VALIDATION_ROWS
 
     return (
       <ul>
-        { errors.slice(0, MAX_VALIDATION_ROWS).map((error, index) => (
-          <li key={ index }>{ validationErrorToText(error) }</li>
+        { rows.slice(0, MAX_VALIDATION_ROWS).map(row => (
+          <li key={ row }>{ row }</li>
         )) }
         { rest > 0 && <li>{ t('validation.and_more', { n: rest }) }</li> }
       </ul>

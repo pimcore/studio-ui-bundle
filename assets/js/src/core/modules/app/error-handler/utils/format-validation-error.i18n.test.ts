@@ -36,7 +36,7 @@ describe('resolveValidationMessage with real i18next', () => {
       'Title'
     )
 
-    expect(text).toEqual({ text: `Title max 5: ${value}`, translated: true })
+    expect(text).toEqual({ text: `Title max 5: ${value}`, includesLabel: true })
   })
 
   it('ignores server sent parameter names that are i18next options', () => {
@@ -46,11 +46,11 @@ describe('resolveValidationMessage with real i18next', () => {
       parameters: { count: 2, lng: 'de', returnObjects: true, max: 5, value: 'v' }
     }, 'Title')
 
-    expect(result).toEqual({ text: 'Title max 5: v', translated: true })
+    expect(result).toEqual({ text: 'Title max 5: v', includesLabel: true })
   })
 
   it.each(['validation.empty', 'validation.same', 'validation.unknown'])('falls back to the message for %s', key => {
     expect(resolveValidationMessage({ message: 'Plain', messageKey: key }, 'Title'))
-      .toEqual({ text: 'Plain', translated: false })
+      .toEqual({ text: 'Plain', includesLabel: false })
   })
 })
