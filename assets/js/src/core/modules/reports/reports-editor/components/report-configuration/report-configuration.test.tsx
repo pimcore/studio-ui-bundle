@@ -15,8 +15,8 @@ import { ReportConfiguration } from './report-configuration'
 const mockGetAdapter = jest.fn()
 
 jest.mock('@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/get-custom-report-definition-adapter', () => ({
-  getCustomReportDefinitionAdapter: (...args: unknown[]) => mockGetAdapter(...args),
-  hasMainCustomReportEditor: (adapter: any) => adapter?.isCustomReportEditorMain?.() === true
+  ...jest.requireActual('@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/get-custom-report-definition-adapter'),
+  getCustomReportDefinitionAdapter: (...args: unknown[]) => mockGetAdapter(...args)
 }))
 jest.mock('@Pimcore/modules/reports/custom-reports-api-slice-enhanced', () => ({
   useCustomReportsReportQuery: () => ({ isLoading: false, isFetching: false, data: {}, refetch: jest.fn() })
