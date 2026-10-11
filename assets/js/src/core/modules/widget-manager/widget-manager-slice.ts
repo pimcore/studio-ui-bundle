@@ -144,6 +144,17 @@ const slice = createSlice({
       }
     },
 
+    migrateWidget: (state, action: PayloadAction<{ originalId: string, config: WidgetManagerTabConfig }>) => {
+      const { originalId, config } = action.payload
+      const model = Model.fromJson(state.innerModel)
+      const targetExists = config.id !== undefined && model.getNodeById(config.id) !== undefined
+
+      if (model.getNodeById(originalId) !== undefined) {
+        model.doAction(targetExists ? Actions.deleteTab(originalId) : Actions.updateNodeAttributes(originalId, config))
+        state.innerModel = { ...model.toJson() }
+      }
+    },
+
     openBottomWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
       const model = Model.fromJson(state.outerModel)
       let node: Node | undefined
@@ -280,5 +291,5 @@ injectSliceWithState({
   reducer: persistedReducer
 })
 
-export const { updateOuterModel, updateMainWidgetContext, updateInnerModel, setWidgetManagerRestored, openMainWidget, updateWidget, openBottomWidget, openLeftWidget, openRightWidget, setActiveWidgetById, closeWidget } = slice.actions
+export const { updateOuterModel, updateMainWidgetContext, updateInnerModel, setWidgetManagerRestored, openMainWidget, updateWidget, migrateWidget, openBottomWidget, openLeftWidget, openRightWidget, setActiveWidgetById, closeWidget } = slice.actions
 export const { selectInnerModel, selectOuterModel, selectMainWidgetContext, selectWidgetManagerRestored } = slice.selectors

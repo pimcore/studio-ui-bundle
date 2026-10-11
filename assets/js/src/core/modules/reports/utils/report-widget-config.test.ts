@@ -33,14 +33,16 @@ jest.mock('@Pimcore/modules/widget-manager/widget-manager-persistence', () => ({
 
 /* eslint-disable import/first */
 import { type Reducer, type UnknownAction } from '@reduxjs/toolkit'
-import { Model } from 'flexlayout-react'
+import { merge } from 'lodash'
+import { Model, type TabNode } from 'flexlayout-react'
 import { injectSliceWithState } from '@sdk/app'
 import {
   initialState,
+  migrateWidget,
   openMainWidget,
   type WidgetManagerState
 } from '@Pimcore/modules/widget-manager/widget-manager-slice'
-import { buildReportWidgetConfig } from './report-widget-config'
+import { buildReportWidgetConfig, isLegacyReportWidget } from './report-widget-config'
 /* eslint-enable import/first */
 
 interface SliceLike {
@@ -63,7 +65,7 @@ const getReportTabs = (): Array<{ id: string, title: string }> => {
   const tabs: Array<{ id: string, title: string }> = []
   Model.fromJson(state.innerModel).visitNodes((node) => {
     if (node.getType() === 'tab' && node.getId().startsWith('dynamic-report-')) {
-      tabs.push({ id: node.getId(), title: (node as any).getConfig().label })
+      tabs.push({ id: node.getId(), title: (node as TabNode).getConfig().label })
     }
   })
   return tabs
@@ -97,5 +99,45 @@ describe('opening reports', () => {
       { id: 'dynamic-report-sales', title: 'Sales Report' },
       { id: 'dynamic-report-stock', title: 'stock' }
     ])
+  })
+})
+
+describe('restoring legacy report tabs', () => {
+  const legacy = {
+    id: '#generated-by-flexlayout',
+    name: 'All Reports',
+    component: 'dynamic-report',
+    config: { label: 'All Reports', mainNavPath: 'Reporting/sales' }
+  }
+
+  const restore = (persisted: typeof legacy): void => {
+    const current = buildReportWidgetConfig({ name: 'sales', niceName: 'Sales Report' })
+    const merged = merge({}, persisted, current)
+    expect(isLegacyReportWidget(persisted, merged)).toBe(true)
+    state = slice.reducer(state, migrateWidget({ originalId: persisted.id, config: merged }))
+  }
+
+  beforeEach(() => {
+    state = slice.reducer(initialState, openMainWidget(legacy))
+  })
+
+  it('migrates the old tab to the stable id and title instead of leaving it behind', () => {
+    restore(legacy)
+    expect(getReportTabs()).toEqual([{ id: 'dynamic-report-sales', title: 'Sales Report' }])
+
+    openReport('sales', 'Sales Report')
+    expect(getReportTabs()).toHaveLength(1)
+  })
+
+  it('drops the old tab when the stable one already exists', () => {
+    openReport('sales', 'Sales Report')
+    restore(legacy)
+    expect(getReportTabs()).toEqual([{ id: 'dynamic-report-sales', title: 'Sales Report' }])
+  })
+
+  it('does not treat current or other widgets as legacy', () => {
+    const current = buildReportWidgetConfig({ name: 'sales' })
+    expect(isLegacyReportWidget(current, current)).toBe(false)
+    expect(isLegacyReportWidget({ ...legacy, component: 'other' }, current)).toBe(false)
   })
 })

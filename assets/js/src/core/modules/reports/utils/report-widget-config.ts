@@ -36,3 +36,16 @@ export const buildReportWidgetConfig = (report: ReportWidgetSource): WidgetManag
     }
   }
 }
+
+/**
+ * Report tabs persisted before reports got a stable id carry a generated one. They are migrated
+ * in place (by their original id) to the id and title of the current widget config.
+ */
+export const isLegacyReportWidget = (
+  persisted: WidgetManagerTabConfig,
+  current: WidgetManagerTabConfig
+): boolean =>
+  persisted.component === 'dynamic-report' &&
+  !isEmptyValue(persisted.id) &&
+  !isEmptyValue(current.id) &&
+  persisted.id !== current.id
