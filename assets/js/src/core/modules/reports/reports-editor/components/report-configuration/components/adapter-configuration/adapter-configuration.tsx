@@ -16,7 +16,7 @@ import { ColumnConfiguration } from '@Pimcore/modules/reports/reports-editor/com
 import { ChartSettings } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/components/chart-settings/chart-settings'
 
 export const AdapterConfiguration = ({ currentData, updateFormData, form }: IReportConfigurationSectionProps): React.JSX.Element => {
-  // SourceDefinition already reports unknown adapters
+  // SourceDefinition shows a hint for unknown adapters
   const adapter = getCustomReportDefinitionAdapter((currentData.dataSourceConfig as ISourceDefinition)?.type, false)
 
   // Adapters registered by bundles built against an older SDK may not provide this method

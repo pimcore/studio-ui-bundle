@@ -9,7 +9,7 @@
  */
 
 import React, { type ReactElement, type ReactNode, useState } from 'react'
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { DynamicTypeCustomReportDefinitionAbstract } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-abstract'
 import { type ICustomReportViewProps } from '@Pimcore/modules/reports/reports-view/types'
 import { ReportViewContent } from './report-view-content'
@@ -26,7 +26,7 @@ jest.mock('@Pimcore/modules/reports/reports-view/context/report-data-context', (
   useReportDataContext: () => mockUseReportDataContext()
 }))
 jest.mock('@Pimcore/modules/element/editor/layouts/tabs-toolbar-view', () => ({
-  TabsToolbarView: ({ renderTabbar }: { renderTabbar: ReactNode }) => <>{renderTabbar}</>
+  TabsToolbarView: ({ renderTabbar, renderToolbar }: { renderTabbar: ReactNode, renderToolbar: ReactNode }) => <>{renderTabbar}{renderToolbar}</>
 }))
 jest.mock('@Pimcore/components/content-layout/content-layout', () => ({
   ContentLayout: ({ renderTopBar, renderSidebar, renderToolbar, children }: { renderTopBar?: ReactNode, renderSidebar?: ReactNode, renderToolbar?: ReactNode, children: ReactNode }) => (
@@ -44,10 +44,17 @@ jest.mock('@Pimcore/components/content/content', () => ({
     : <>{children}</>
 }))
 // The Studio layout components import antd-style (ESM), which Jest cannot load untransformed
-jest.mock('@Pimcore/components/toolbar/toolbar', () => ({ Toolbar: () => null }))
+jest.mock('@Pimcore/components/toolbar/toolbar', () => ({ Toolbar: ({ children }: { children: ReactNode }) => <>{children}</> }))
 jest.mock('@Pimcore/components/flex/flex', () => ({ Flex: ({ children }: { children: ReactNode }) => <>{children}</> }))
 jest.mock('@Pimcore/components/text/text', () => ({ Text: ({ children }: { children: ReactNode }) => <>{children}</> }))
-jest.mock('@Pimcore/modules/reports/components/refetch/refetch', () => ({ Refetch: () => null }))
+jest.mock('@Pimcore/modules/reports/components/refetch/refetch', () => ({
+  Refetch: ({ refetch }: { refetch: () => void }) => (
+    <button
+      data-testid="refetch"
+      onClick={ refetch }
+    />
+  )
+}))
 jest.mock('@Pimcore/modules/reports/reports-view/components/report-toolbar/report-toolbar', () => ({
   ReportToolbar: ({ showPagination }: { showPagination: boolean }) => <div data-testid="generic-report-toolbar">{showPagination ? 'pagination' : 'no-pagination'}</div>
 }))
@@ -226,6 +233,17 @@ describe('ReportViewContent', () => {
 
     expect(screen.queryByTestId('content-loading')).not.toBeInTheDocument()
     expect(screen.getByTestId('generic-report-detail')).toBeInTheDocument()
+  })
+
+  it('passes an increasing refreshToken to the adapter view when the report is refetched', () => {
+    const reportData = mockReportData('custom')
+    mockGetDynamicType.mockReturnValue(new CustomViewAdapter())
+    renderView()
+
+    fireEvent.click(screen.getByTestId('refetch'))
+
+    expect(reportData.refetchAll).toHaveBeenCalledTimes(1)
+    expect(customViewProps.mock.calls.at(-1)?.[0].refreshToken).toBe(1)
   })
 
   it('remounts the adapter view when switching between reports of the same adapter', () => {

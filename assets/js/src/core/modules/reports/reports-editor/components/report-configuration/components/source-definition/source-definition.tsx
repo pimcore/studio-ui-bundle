@@ -101,7 +101,9 @@ export const SourceDefinition = ({ form, currentData, updateFormData }: IReportC
               options={ sourceDefinitionOptions }
             />
           </Form.Item>
-          {currentAdapter?.getCustomReportData({ currentData, updateFormData, form })}
+          {isUndefined(currentAdapter)
+            ? <Text type="warning">{t('reports.editor.source-definition.not-available')}</Text>
+            : currentAdapter.getCustomReportData({ currentData, updateFormData, form })}
         </Form.Group>
       </Flex>
       )}
