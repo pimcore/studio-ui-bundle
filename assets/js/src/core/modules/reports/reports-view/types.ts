@@ -26,8 +26,10 @@ export type FilterDrillDownType = FilterDrillDown | undefined
 export interface ICustomReportViewProps {
   reportName: string
   reportDetailData: BundleCustomReportsDetails
-  /** Generic report data; chartDetailData is not loaded for adapters with their own view */
-  /** The export (CSV) uses the filters of useGridFilterContext: write the view's filters there so the export matches */
+  /**
+   * Generic report data; chartDetailData is not loaded for adapters with their own view.
+   * The export (CSV) uses the filters of useGridFilterContext: write the view's filters there so the export matches.
+   */
   reportData: IReportDataContext
   /** Increases each time the user clicks the refresh button; reload the adapter's own data when it changes */
   refreshToken: number
