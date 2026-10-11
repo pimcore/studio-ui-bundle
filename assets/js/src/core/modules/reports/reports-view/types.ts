@@ -34,3 +34,12 @@ export interface ICustomReportViewProps {
   /** Increases each time the user clicks the refresh button; reload the adapter's own data when it changes */
   refreshToken: number
 }
+
+export type CustomReportDashboardVisualization = 'table' | 'chart' | 'single_value'
+
+export interface ICustomReportDashboardViewProps {
+  reportName: string
+  /** What the dashboard widget is configured to show */
+  visualization: CustomReportDashboardVisualization
+  showLegend: boolean
+}

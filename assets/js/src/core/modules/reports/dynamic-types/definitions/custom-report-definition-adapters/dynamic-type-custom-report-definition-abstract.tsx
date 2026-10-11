@@ -8,11 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type ReactElement } from 'react'
+import { type ReactElement, type ReactNode } from 'react'
 import { injectable } from 'inversify'
 import { type DynamicTypeAbstract } from '@Pimcore/modules/element/dynamic-types/registry/dynamic-type-registry-abstract'
 import { type IReportConfigurationSectionProps } from '@Pimcore/modules/reports/reports-editor/types'
-import { type ICustomReportViewProps } from '@Pimcore/modules/reports/reports-view/types'
+import { type ICustomReportDashboardViewProps, type ICustomReportViewProps } from '@Pimcore/modules/reports/reports-view/types'
 
 @injectable()
 export abstract class DynamicTypeCustomReportDefinitionAbstract implements DynamicTypeAbstract {
@@ -49,5 +49,22 @@ export abstract class DynamicTypeCustomReportDefinitionAbstract implements Dynam
    */
   isCustomReportEditorMain (): boolean {
     return false
+  }
+
+  /**
+   * Return true when the adapter renders its own content for the custom report dashboard widget.
+   * Default false: the widget keeps its standard rendering.
+   */
+  providesCustomReportDashboardView (): boolean {
+    return false
+  }
+
+  /**
+   * Content of the custom report dashboard widget, used when providesCustomReportDashboardView returns true.
+   * The adapter loads its own data for the given report. Default: null (standard rendering).
+   * Called during render: return an element such as <MyTile { ...props } /> and do not call hooks here.
+   */
+  getCustomReportDashboardView (props: ICustomReportDashboardViewProps): ReactNode {
+    return null
   }
 }
