@@ -25,7 +25,11 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useStyles } from '../../report-configuration.styles'
 
-export const Permissions = ({ currentData, updateFormData }: IReportConfigurationSectionProps): React.JSX.Element => {
+interface IPermissionsProps extends IReportConfigurationSectionProps {
+  collapsed?: boolean
+}
+
+export const Permissions = ({ currentData, updateFormData, collapsed = false }: IPermissionsProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
 
@@ -139,7 +143,11 @@ export const Permissions = ({ currentData, updateFormData }: IReportConfiguratio
   }
 
   return (
-    <FormKit.Panel title={ t('reports.editor.permissions.title') }>
+    <FormKit.Panel
+      collapsed={ collapsed }
+      collapsible={ collapsed }
+      title={ t('reports.editor.permissions.title') }
+    >
       <Form.Item name="sharedGlobally">
         <Switch
           labelLeft={ <Text>{t('grid.configuration.shared')}</Text> }

@@ -41,4 +41,13 @@ export abstract class DynamicTypeCustomReportDefinitionAbstract implements Dynam
   getCustomReportView (props: ICustomReportViewProps): ReactElement | null {
     return null
   }
+
+  /**
+   * Return true when the editor from getCustomReportEditor is the main content of the report editor.
+   * The General Settings and Permissions panels are then shown below it as collapsed, collapsible panels.
+   * Default false: the panels keep their usual position and are expanded.
+   */
+  isCustomReportEditorMain (): boolean {
+    return false
+  }
 }

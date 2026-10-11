@@ -35,6 +35,10 @@ import {
   normalizeIconFields
 } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/helpers'
 import { Form } from '@Pimcore/components/form/form'
+import {
+  getCustomReportDefinitionAdapter,
+  hasMainCustomReportEditor
+} from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/get-custom-report-definition-adapter'
 import { loadReportsMenuItems } from '@Pimcore/modules/reports/utils/reports-loader'
 
 interface IReportConfigurationProps {
@@ -63,6 +67,7 @@ export const ReportConfiguration = ({ report, modifiedReports, setModifiedReport
   const dataSourceConfig: IDataSourceConfig | null | undefined = currentData?.dataSourceConfig
 
   const { t } = useTranslation()
+  const isEditorMain = hasMainCustomReportEditor(getCustomReportDefinitionAdapter(dataSourceConfig?.type, false))
 
   const prevDataSourceTypeRef = useRef<string | undefined>(undefined)
 
@@ -164,7 +169,7 @@ export const ReportConfiguration = ({ report, modifiedReports, setModifiedReport
         } }
         key={ dataSourceConfig?.type }
       >
-        <GeneralSettings />
+        {!isEditorMain && <GeneralSettings />}
         <SourceDefinition
           currentData={ currentData }
           form={ form }
@@ -175,7 +180,9 @@ export const ReportConfiguration = ({ report, modifiedReports, setModifiedReport
           form={ form }
           updateFormData={ updateFormData }
         />
+        {isEditorMain && <GeneralSettings collapsed />}
         <Permissions
+          collapsed={ isEditorMain }
           currentData={ currentData }
           updateFormData={ updateFormData }
         />
