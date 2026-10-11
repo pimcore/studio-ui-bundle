@@ -34,7 +34,7 @@ export const hasMainCustomReportEditor = (adapter: DynamicTypeCustomReportDefini
   isFunction(adapter?.isCustomReportEditorMain) && adapter.isCustomReportEditorMain()
 
 // Adapters registered by bundles built against an older SDK may not provide the methods at all
-export const hasCustomReportDashboardView = (adapter: DynamicTypeCustomReportDefinitionAbstract | undefined): adapter is DynamicTypeCustomReportDefinitionAbstract =>
+export const hasCustomReportDashboardView = (adapter: DynamicTypeCustomReportDefinitionAbstract | undefined): boolean =>
   isFunction(adapter?.providesCustomReportDashboardView) &&
   isFunction(adapter.getCustomReportDashboardView) &&
   adapter.providesCustomReportDashboardView()
