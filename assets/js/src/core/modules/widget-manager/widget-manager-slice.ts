@@ -11,7 +11,7 @@
 import { isUndefined } from 'lodash'
 import { injectSliceWithState } from '@sdk/app'
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { type IJsonModel, type IJsonTabNode, Model, Actions, DockLocation, type Node, BorderNode } from 'flexlayout-react'
+import { type IJsonModel, type IJsonTabNode, Model, Actions, DockLocation, type Node, type TabSetNode, BorderNode } from 'flexlayout-react'
 import { getInitialModelJson as getInitialOuterModelJson } from './utils/widget-manager-outer-model'
 import { getInitialModelJson as getInitialInnerModelJson } from './utils/widget-manager-inner-model'
 import { createWidgetManagerPersistedReducer } from './widget-manager-persistence'
@@ -147,12 +147,16 @@ const slice = createSlice({
     migrateWidget: (state, action: PayloadAction<{ originalId: string, config: WidgetManagerTabConfig }>) => {
       const { originalId, config } = action.payload
       const model = Model.fromJson(state.innerModel)
-      const targetExists = config.id !== undefined && model.getNodeById(config.id) !== undefined
+      const node = model.getNodeById(originalId)
 
-      if (model.getNodeById(originalId) !== undefined) {
-        model.doAction(targetExists ? Actions.deleteTab(originalId) : Actions.updateNodeAttributes(originalId, config))
-        state.innerModel = { ...model.toJson() }
+      if (node !== undefined && config.id !== undefined && model.getNodeById(config.id) !== undefined) {
+        const wasSelected = (node.getParent() as TabSetNode).getSelectedNode() === node
+        model.doAction(Actions.deleteTab(originalId))
+        if (wasSelected) model.doAction(Actions.selectTab(config.id))
+      } else if (node !== undefined) {
+        model.doAction(Actions.updateNodeAttributes(originalId, config))
       }
+      state.innerModel = { ...model.toJson() }
     },
 
     openBottomWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {

@@ -9,7 +9,11 @@
  */
 
 import { type WidgetRestorer } from '@Pimcore/modules/widget-manager/services/widget-restorer-registry'
-import { migrateWidget, updateWidget, type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+import {
+  migrateWidget,
+  updateWidget,
+  type WidgetManagerTabConfig
+} from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { type AppDispatch } from '@sdk/app'
 import { container } from '@Pimcore/app/depency-injection'
 import { type IMainNavItem, type MainNavRegistry } from './main-nav-registry'

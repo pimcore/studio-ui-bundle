@@ -31,10 +31,22 @@ jest.mock('@Pimcore/modules/widget-manager/widget-manager-persistence', () => ({
   createWidgetManagerPersistedReducer: (reducer: unknown) => reducer
 }))
 
+jest.mock('@Pimcore/app/depency-injection', () => ({
+  container: {
+    get: () => ({
+      getMainNavItem: () => ({ path: 'Reporting/sales', widgetConfig: mockWidgetConfig() }),
+      getMainNavItems: () => []
+    })
+  }
+}))
+
+jest.mock('@Pimcore/modules/auth/permission-helper', () => ({ isAllowed: () => true }))
+jest.mock('@Pimcore/modules/perspectives/permission-checker', () => ({ isAllowedInPerspective: () => true }))
+
 /* eslint-disable import/first */
 import { type Reducer, type UnknownAction } from '@reduxjs/toolkit'
 import { merge } from 'lodash'
-import { Model, type TabNode } from 'flexlayout-react'
+import { Model, type TabNode, type TabSetNode } from 'flexlayout-react'
 import { injectSliceWithState } from '@sdk/app'
 import {
   initialState,
@@ -42,8 +54,11 @@ import {
   openMainWidget,
   type WidgetManagerState
 } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+import { MainNavWidgetRestorer } from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-widget-restorer'
 import { buildReportWidgetConfig, isLegacyReportWidget } from './report-widget-config'
 /* eslint-enable import/first */
+
+const mockWidgetConfig = (): unknown => buildReportWidgetConfig({ name: 'sales', niceName: 'Sales Report' })
 
 interface SliceLike {
   name: string
@@ -139,5 +154,43 @@ describe('restoring legacy report tabs', () => {
     const current = buildReportWidgetConfig({ name: 'sales' })
     expect(isLegacyReportWidget(current, current)).toBe(false)
     expect(isLegacyReportWidget({ ...legacy, component: 'other' }, current)).toBe(false)
+  })
+})
+
+describe('MainNavWidgetRestorer with a legacy report tab', () => {
+  it('migrates the persisted tab and keeps the selection on the stable tab', () => {
+    const legacy = {
+      id: '#generated-by-flexlayout',
+      name: 'All Reports',
+      component: 'dynamic-report',
+      config: { label: 'All Reports', mainNavPath: 'Reporting/sales' }
+    }
+    state = slice.reducer(initialState, openMainWidget(mockWidgetConfig() as never))
+    state = slice.reducer(state, openMainWidget(legacy))
+
+    const dispatch = (action: UnknownAction): void => {
+      state = slice.reducer(state, action)
+    }
+    const restored = new MainNavWidgetRestorer().restore(legacy, dispatch as never)
+
+    expect(restored).toBe(true)
+    expect(getReportTabs()).toEqual([{ id: 'dynamic-report-sales', title: 'Sales Report' }])
+    const tabset = Model.fromJson(state.innerModel).getNodeById('main_tabset') as TabSetNode
+    expect(tabset.getSelectedNode()?.getId()).toBe('dynamic-report-sales')
+  })
+
+  it('migrates a lone legacy tab in place', () => {
+    const legacy = {
+      id: '#generated-by-flexlayout',
+      name: 'All Reports',
+      component: 'dynamic-report',
+      config: { label: 'All Reports', mainNavPath: 'Reporting/sales' }
+    }
+    state = slice.reducer(initialState, openMainWidget(legacy))
+    new MainNavWidgetRestorer().restore(legacy, ((action: UnknownAction) => {
+      state = slice.reducer(state, action)
+    }) as never)
+
+    expect(getReportTabs()).toEqual([{ id: 'dynamic-report-sales', title: 'Sales Report' }])
   })
 })
