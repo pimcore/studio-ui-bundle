@@ -27,6 +27,7 @@ export * from '@Pimcore/modules/reports/reports-view/components/report-chart/com
 export * from '@Pimcore/modules/reports/reports-view/helpers'
 export * from '@Pimcore/modules/reports/reports-view/types'
 export { useReportDataContext, type IReportDataContext, type ISorting } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
+export { useGridFilterContext } from '@Pimcore/modules/reports/reports-view/context/grid-filter-context'
 export type { IUseReportDataReturn, IReportDetailData, IChartDetailData } from '@Pimcore/modules/reports/reports-view/hooks/useReportData'
 
 export * as ReportsApiSlice from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'

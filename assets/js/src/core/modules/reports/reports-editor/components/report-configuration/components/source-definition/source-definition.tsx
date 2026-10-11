@@ -22,6 +22,7 @@ import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-b
 import { Select } from '@Pimcore/components/select/select'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { type DynamicTypeCustomReportDefinitionRegistry } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-registry'
+import { getCustomReportDefinitionAdapter } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/get-custom-report-definition-adapter'
 import { useStyles } from '@Pimcore/modules/reports/reports-editor/reports-editor.styles'
 
 export const SourceDefinition = ({ form, currentData, updateFormData }: IReportConfigurationSectionProps): React.JSX.Element => {
@@ -36,7 +37,7 @@ export const SourceDefinition = ({ form, currentData, updateFormData }: IReportC
 
   const sourceDefinitionService = container.get<DynamicTypeCustomReportDefinitionRegistry>(serviceIds['DynamicTypes/CustomReportDefinitionRegistry'])
   const adapters = sourceDefinitionService.getDynamicTypes()
-  const currentAdapter = !isEmptySourceDefinitionConfig ? sourceDefinitionService.getDynamicType(currentSourceDefinition) : undefined
+  const currentAdapter = getCustomReportDefinitionAdapter(currentSourceDefinition, false)
 
   const sourceDefinitionOptions = useMemo(() => adapters.map(adapter => ({
     key: adapter.id,

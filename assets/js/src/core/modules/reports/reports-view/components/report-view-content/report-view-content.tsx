@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { Fragment, useMemo } from 'react'
+import React, { Fragment, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isEmpty, isFunction, isNull, isUndefined } from 'lodash'
 import type { DefaultOptionType } from 'antd/es/select'
@@ -38,6 +38,7 @@ export const ReportViewContent = ({ currentReport, setCurrentReport, reportsTree
   const { t } = useTranslation()
 
   const reportData = useReportDataContext()
+  const [refreshToken, setRefreshToken] = useState(0)
   const { isLoading, isFetching, reportDetailData, chartDetailData, refetchAll, page, setPage, pageSize, setPageSize } = reportData
 
   const isCurrentReportSelected = !isEmptyValue(currentReport)
@@ -45,7 +46,7 @@ export const ReportViewContent = ({ currentReport, setCurrentReport, reportsTree
 
   const currentSourceDefinition = (reportDetailData?.dataSourceConfig as ISourceDefinition)?.type
 
-  const currentAdapter = getCustomReportDefinitionAdapter(currentSourceDefinition)
+  const currentAdapter = getCustomReportDefinitionAdapter(currentSourceDefinition, false)
 
   const showPagination = useMemo(() => {
     if (isNull(currentReport) || isUndefined(currentAdapter)) {
@@ -69,7 +70,7 @@ export const ReportViewContent = ({ currentReport, setCurrentReport, reportsTree
       return isFetching ? <Content loading /> : null
     }
 
-    const view = currentAdapter.getCustomReportView({ reportName: currentReport, reportDetailData, reportData })
+    const view = currentAdapter.getCustomReportView({ reportName: currentReport, reportDetailData, reportData, refreshToken })
 
     // Keyed so that switching between two reports of the same adapter does not keep the previous view state
     return <Fragment key={ currentReport }>{view}</Fragment>
@@ -111,14 +112,14 @@ export const ReportViewContent = ({ currentReport, setCurrentReport, reportsTree
       renderSidebar={ !hasCustomView && !isEmpty(reportDetailData) && (
         <ReportSidebar />
       ) }
-      renderToolbar={ !hasCustomView && !isEmpty(chartDetailData?.items) && !isFetching && (
+      renderToolbar={ (hasCustomView || (!isEmpty(chartDetailData?.items) && !isFetching)) && (
         <ReportToolbar
           currentReport={ currentReport }
           page={ page }
           pageSize={ pageSize }
           setPage={ setPage }
           setPageSize={ setPageSize }
-          showPagination={ showPagination }
+          showPagination={ !hasCustomView && showPagination }
           totalItems={ chartDetailData?.totalItems ?? 0 }
         />
       ) }
@@ -141,7 +142,10 @@ export const ReportViewContent = ({ currentReport, setCurrentReport, reportsTree
         <Toolbar>
           <Refetch
             isFetching={ isLoadingReportsData }
-            refetch={ refetchAll }
+            refetch={ () => {
+              refetchAll()
+              setRefreshToken(token => token + 1)
+            } }
           />
         </Toolbar>
       ) }

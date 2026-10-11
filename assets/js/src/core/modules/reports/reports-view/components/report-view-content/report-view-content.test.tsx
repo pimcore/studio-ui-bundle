@@ -49,7 +49,7 @@ jest.mock('@Pimcore/components/flex/flex', () => ({ Flex: ({ children }: { child
 jest.mock('@Pimcore/components/text/text', () => ({ Text: ({ children }: { children: ReactNode }) => <>{children}</> }))
 jest.mock('@Pimcore/modules/reports/components/refetch/refetch', () => ({ Refetch: () => null }))
 jest.mock('@Pimcore/modules/reports/reports-view/components/report-toolbar/report-toolbar', () => ({
-  ReportToolbar: () => <div data-testid="generic-report-toolbar" />
+  ReportToolbar: ({ showPagination }: { showPagination: boolean }) => <div data-testid="generic-report-toolbar">{showPagination ? 'pagination' : 'no-pagination'}</div>
 }))
 jest.mock('@Pimcore/modules/reports/reports-view/components/report-top-bar/report-top-bar', () => ({
   ReportTopBar: () => <div data-testid="report-top-bar" />
@@ -143,6 +143,19 @@ describe('ReportViewContent', () => {
     expectGenericView()
   })
 
+  it('does not throw for an adapter type that is not registered', () => {
+    mockReportData('unregistered')
+    mockGetDynamicType.mockImplementation((id: string, throwException: boolean = true) => {
+      if (throwException) {
+        throw new Error(`Dynamic type with id "${id}" not found`)
+      }
+    })
+
+    renderView()
+
+    expectGenericView()
+  })
+
   it('renders the generic view for an adapter without the view method', () => {
     mockReportData('legacy')
     mockGetDynamicType.mockReturnValue({ id: 'legacy', getLabel: () => <>Legacy</>, getPagination: () => false })
@@ -162,11 +175,13 @@ describe('ReportViewContent', () => {
     expect(screen.getByTestId('report-top-bar')).toBeInTheDocument()
     expect(screen.queryByTestId('generic-report-detail')).not.toBeInTheDocument()
     expect(screen.queryByTestId('generic-report-sidebar')).not.toBeInTheDocument()
-    expect(screen.queryByTestId('generic-report-toolbar')).not.toBeInTheDocument()
+    // export stays available, the pagination belongs to the generic grid
+    expect(screen.getByTestId('generic-report-toolbar')).toHaveTextContent('no-pagination')
     expect(customViewProps).toHaveBeenCalledWith({
       reportName: 'report',
       reportDetailData: reportData.reportDetailData,
-      reportData
+      reportData,
+      refreshToken: 0
     })
   })
 

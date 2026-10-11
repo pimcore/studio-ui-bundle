@@ -28,4 +28,6 @@ export interface ICustomReportViewProps {
   reportDetailData: BundleCustomReportsDetails
   /** Generic report data; chartDetailData is not loaded for adapters with their own view */
   reportData: IReportDataContext
+  /** Increases each time the user clicks the refresh button; reload the adapter's own data when it changes */
+  refreshToken: number
 }
