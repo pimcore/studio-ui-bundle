@@ -1231,6 +1231,7 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" wurde kopiert
 element.tree.paste: Einfügen
 element.tree.paste-as-child: Als Kind einfügen
 element.tree.paste-as-child-recursive: Als Kind einfügen (rekursiv)
+element.tree.open-no-permission: Sie haben keine Berechtigung, dieses Element zu öffnen.
 element.tree.paste-recursive-updating-references: Rekursiv einfügen, Referenzen aktualisieren
 element.tree.paste-only-contents: Nur Inhalte hier einfügen
 element.tree.cut: Ausschneiden

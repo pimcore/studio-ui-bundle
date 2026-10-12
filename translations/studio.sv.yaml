@@ -1231,6 +1231,7 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" har kopierats
 element.tree.paste: Klistra in
 element.tree.paste-as-child: Klistra in som barn
 element.tree.paste-as-child-recursive: Klistra in som barn (rekursivt)
+element.tree.open-no-permission: Du har inte behörighet att öppna det här elementet.
 element.tree.paste-recursive-updating-references: Klistra in rekursivt, uppdatera referenser
 element.tree.paste-only-contents: Klistra bara in innehåll här
 element.tree.cut: Klipp ut

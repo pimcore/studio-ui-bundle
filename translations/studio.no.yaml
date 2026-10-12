@@ -1231,6 +1231,7 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" er kopiert og
 element.tree.paste: Lim inn
 element.tree.paste-as-child: Lim inn som underelement
 element.tree.paste-as-child-recursive: Lim inn som underelement (rekursiv)
+element.tree.open-no-permission: Du har ikke tillatelse til å åpne dette elementet.
 element.tree.paste-recursive-updating-references: Lim inn rekursivt, oppdater referanser
 element.tree.paste-only-contents: Lim inn kun innhold her
 element.tree.cut: Klipp ut

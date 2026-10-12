@@ -1231,6 +1231,7 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" is gekopieerd
 element.tree.paste: Plakken
 element.tree.paste-as-child: Plakken als onderliggend item
 element.tree.paste-as-child-recursive: Plakken als onderliggend item (recursief)
+element.tree.open-no-permission: Je hebt geen toestemming om dit element te openen.
 element.tree.paste-recursive-updating-references: Recursief plakken en verwijzingen bijwerken
 element.tree.paste-only-contents: Alleen inhoud hier plakken
 element.tree.cut: Knippen
