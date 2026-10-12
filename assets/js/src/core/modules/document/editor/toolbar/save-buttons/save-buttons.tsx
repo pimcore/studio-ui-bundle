@@ -16,6 +16,7 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { UnpublishedLabel } from '@Pimcore/modules/element/editor/shared-components/unpublished-label/unpublished-label'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useDeleteDraft } from '@Pimcore/modules/element/actions/delete-draft/use-delete-draft'
 import { SaveTaskType, useSave } from '@Pimcore/modules/document/actions/save/use-save'
@@ -264,6 +265,7 @@ export const EditorToolbarSaveButtons = (): React.JSX.Element => {
           <Icon value="auto-save" />
         </Tooltip>
       )}
+      <UnpublishedLabel published={ document?.published } />
       {secondaryButtons.length > 0 && (
         <ButtonGroup
           items={ secondaryButtons }

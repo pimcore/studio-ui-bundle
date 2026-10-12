@@ -31,6 +31,7 @@ export const TitleContainer = (props: TabTitleContainerProps): React.JSX.Element
     <TabTitleContainer
       modified={ document?.modified ?? false }
       node={ node }
+      published={ document?.published }
     />
   )
 }
