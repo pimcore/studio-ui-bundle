@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type Element, getElementIcon, getElementKey } from '@Pimcore/modules/element/element-helper'
+import { type Element, getElementIcon, getElementKey, getElementRealKey } from '@Pimcore/modules/element/element-helper'
 import { type DocumentGetTreeApiResponse, type DocumentPermissions, type Document } from '../../document-api-slice.gen'
 import { type TreeNode } from '@Pimcore/components/element-tree/element-tree-slice'
 import { type DataTransformerSourceNode, type DataTransformerReturnType } from '@Pimcore/components/element-tree/types/node-api-hook'
@@ -20,6 +20,7 @@ export const transformApiDataToNode = (documentNode: Document, node: DataTransfo
     elementType: elementTypes.document,
     icon: getElementIcon(documentNode as Element, { type: 'name', value: 'document' }),
     label: getElementKey(documentNode as Element, elementTypes.document),
+    realKey: getElementRealKey(documentNode as Element, elementTypes.document),
     type: documentNode.type,
     parentId: documentNode.parentId.toString(),
     fullPath: documentNode.fullPath,
