@@ -35,9 +35,20 @@ jest.mock('@Pimcore/app/depency-injection', () => ({
   container: {
     get: () => ({
       getMainNavItem: () => ({ path: 'Reporting/sales', widgetConfig: mockWidgetConfig() }),
-      getMainNavItems: () => []
+      getMainNavItems: () => mockNavItems
     })
   }
+}))
+
+let mockNavItems: unknown[] = []
+let mockReportTree: unknown[] = []
+
+jest.mock('@Pimcore/app/store', () => ({
+  store: { dispatch: () => ({ unwrap: async () => ({ items: mockReportTree }) }) }
+}))
+
+jest.mock('@Pimcore/modules/reports/custom-reports-api-slice.gen', () => ({
+  api: { endpoints: { customReportsGetTree: { initiate: jest.fn() } } }
 }))
 
 jest.mock('@Pimcore/modules/auth/permission-helper', () => ({ isAllowed: () => true }))
@@ -52,9 +63,11 @@ import {
   initialState,
   migrateWidget,
   openMainWidget,
+  rebindWidget,
   type WidgetManagerState
 } from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { MainNavWidgetRestorer } from '@Pimcore/modules/app/base-layout/main-nav/services/main-nav-widget-restorer'
+import { ReportWidgetRestorer } from '@Pimcore/modules/reports/services/report-widget-restorer'
 import { buildReportWidgetConfig, isLegacyReportWidget } from './report-widget-config'
 /* eslint-enable import/first */
 
@@ -192,5 +205,92 @@ describe('MainNavWidgetRestorer with a legacy report tab', () => {
     }) as never)
 
     expect(getReportTabs()).toEqual([{ id: 'dynamic-report-sales', title: 'Sales Report' }])
+  })
+})
+
+describe('switching the report in a tab', () => {
+  const genericReportsTab = {
+    id: 'reports',
+    name: 'Reports',
+    component: 'reports',
+    config: { translationKey: 'navigation.reports', mainNavPath: 'Reporting/Reports' }
+  }
+
+  const switchTo = (originalId: string, name: string, niceName?: string): void => {
+    state = slice.reducer(state, rebindWidget({ originalId, config: buildReportWidgetConfig({ name, niceName }) }))
+  }
+
+  const getSelectedTabId = (): string | undefined =>
+    (Model.fromJson(state.innerModel).getNodeById('main_tabset') as TabSetNode).getSelectedNode()?.getId()
+
+  it('re-binds a report tab to the picked report', () => {
+    state = initialState
+    openReport('sales', 'Sales Report')
+    switchTo('dynamic-report-sales', 'stock')
+
+    expect(getReportTabs()).toEqual([{ id: 'dynamic-report-stock', title: 'stock' }])
+    expect(state.mainWidgetContext?.nodeId).toBe('dynamic-report-stock')
+  })
+
+  it('turns the generic Reports tab into the picked report tab', () => {
+    state = slice.reducer(initialState, openMainWidget(genericReportsTab))
+    switchTo('reports', 'sales', 'Sales Report')
+
+    const tab = Model.fromJson(state.innerModel).getNodeById('dynamic-report-sales') as TabNode
+    expect(getReportTabs()).toEqual([{ id: 'dynamic-report-sales', title: 'Sales Report' }])
+    expect(Model.fromJson(state.innerModel).getNodeById('reports')).toBeUndefined()
+    expect(tab.getComponent()).toBe('dynamic-report')
+    expect(tab.getConfig().translationKey).toBeUndefined()
+    expect(tab.getConfig().mainNavPath).toBeUndefined()
+  })
+
+  it('focuses the report tab that is already open and keeps the current tab', () => {
+    state = initialState
+    openReport('sales', 'Sales Report')
+    openReport('stock')
+    switchTo('dynamic-report-stock', 'sales', 'Sales Report')
+
+    expect(getReportTabs()).toEqual([
+      { id: 'dynamic-report-sales', title: 'Sales Report' },
+      { id: 'dynamic-report-stock', title: 'stock' }
+    ])
+    expect(getSelectedTabId()).toBe('dynamic-report-sales')
+  })
+})
+
+describe('ReportWidgetRestorer', () => {
+  const restorer = new ReportWidgetRestorer()
+
+  afterEach(() => {
+    mockNavItems = []
+    mockReportTree = []
+  })
+
+  it('restores re-bound report tabs with the current title', async () => {
+    const config = { ...buildReportWidgetConfig({ name: 'stock' }), name: 'Old', config: { reportId: 'stock' } }
+    mockReportTree = [{ name: 'stock', niceName: 'Stock Report', hasDataSourceConfig: true }]
+    state = slice.reducer(initialState, openMainWidget(config))
+
+    expect(restorer.supports(config)).toBe(true)
+    const dispatch = (action: UnknownAction): void => {
+      state = slice.reducer(state, action)
+    }
+    expect(await restorer.restore(config, dispatch as never)).toBe(true)
+    expect(getReportTabs()).toEqual([{ id: 'dynamic-report-stock', title: 'Stock Report' }])
+  })
+
+  it('drops tabs of reports that no longer exist', async () => {
+    expect(await restorer.restore(buildReportWidgetConfig({ name: 'gone' }), jest.fn())).toBe(false)
+  })
+
+  it('leaves tabs with a main navigation item and other widgets to their restorers', () => {
+    const fromNav = buildReportWidgetConfig({ name: 'sales' })
+    fromNav.config.mainNavPath = 'Reporting/sales'
+    expect(restorer.supports(fromNav)).toBe(false)
+
+    mockNavItems = [{ path: 'Reporting/sales', widgetConfig: buildReportWidgetConfig({ name: 'sales' }) }]
+    expect(restorer.supports(buildReportWidgetConfig({ name: 'sales' }))).toBe(false)
+
+    expect(restorer.supports({ id: 'reports', component: 'reports', config: {} })).toBe(false)
   })
 })
