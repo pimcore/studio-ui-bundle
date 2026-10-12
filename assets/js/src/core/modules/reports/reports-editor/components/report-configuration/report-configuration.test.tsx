@@ -12,12 +12,6 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { ReportConfiguration } from './report-configuration'
 
-const mockGetAdapter = jest.fn()
-
-jest.mock('@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/get-custom-report-definition-adapter', () => ({
-  ...jest.requireActual('@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/get-custom-report-definition-adapter'),
-  getCustomReportDefinitionAdapter: (...args: unknown[]) => mockGetAdapter(...args)
-}))
 jest.mock('@Pimcore/modules/reports/custom-reports-api-slice-enhanced', () => ({
   useCustomReportsReportQuery: () => ({ isLoading: false, isFetching: false, data: {}, refetch: jest.fn() })
 }))
@@ -50,20 +44,10 @@ jest.mock('@Pimcore/components/content/content', () => ({ Content: ({ children }
 jest.mock('@Pimcore/components/form/form-kit', () => ({ FormKit: ({ children }: any) => <div>{children}</div> }))
 jest.mock('@Pimcore/components/form/form', () => ({ Form: { useForm: () => [{}] } }))
 jest.mock('./components/general-settings/general-settings', () => ({
-  GeneralSettings: ({ collapsed }: any) => (
-    <div
-      data-collapsed={ String(collapsed === true) }
-      data-testid="general-settings"
-    />
-  )
+  GeneralSettings: () => <div data-testid="general-settings" />
 }))
 jest.mock('./components/permissions/permissions', () => ({
-  Permissions: ({ collapsed }: any) => (
-    <div
-      data-collapsed={ String(collapsed === true) }
-      data-testid="permissions"
-    />
-  )
+  Permissions: () => <div data-testid="permissions" />
 }))
 jest.mock('./components/source-definition/source-definition', () => ({ SourceDefinition: () => <div data-testid="source" /> }))
 jest.mock('./components/adapter-configuration/adapter-configuration', () => ({ AdapterConfiguration: () => <div data-testid="adapter" /> }))
@@ -81,28 +65,9 @@ describe('ReportConfiguration layout', () => {
     )
   }
 
-  it('keeps General Settings first and expanded by default', () => {
-    mockGetAdapter.mockReturnValue({ isCustomReportEditorMain: () => false })
+  it('renders General Settings, the source definition, the adapter configuration and Permissions in this order', () => {
     renderConfiguration()
 
     expect(order()).toEqual(['general-settings', 'source', 'adapter', 'permissions'])
-    expect(screen.getByTestId('general-settings').dataset.collapsed).toBe('false')
-    expect(screen.getByTestId('permissions').dataset.collapsed).toBe('false')
-  })
-
-  it('keeps the default layout for adapters without the method', () => {
-    mockGetAdapter.mockReturnValue({})
-    renderConfiguration()
-
-    expect(order()).toEqual(['general-settings', 'source', 'adapter', 'permissions'])
-  })
-
-  it('moves General Settings below the editor, collapsed, when the adapter editor is the main area', () => {
-    mockGetAdapter.mockReturnValue({ isCustomReportEditorMain: () => true })
-    renderConfiguration()
-
-    expect(order()).toEqual(['source', 'adapter', 'general-settings', 'permissions'])
-    expect(screen.getByTestId('general-settings').dataset.collapsed).toBe('true')
-    expect(screen.getByTestId('permissions').dataset.collapsed).toBe('true')
   })
 })

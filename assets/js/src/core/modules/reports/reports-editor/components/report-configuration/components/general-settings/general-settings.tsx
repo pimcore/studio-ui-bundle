@@ -16,11 +16,7 @@ import { Input } from '@Pimcore/components/input/input'
 import { IconSelector } from '@Pimcore/components/icon-selector/icon-selector'
 import { Switch } from '@Pimcore/components/switch/switch'
 
-interface IGeneralSettingsProps {
-  collapsed?: boolean
-}
-
-export const GeneralSettings = ({ collapsed = false }: IGeneralSettingsProps): React.JSX.Element => {
+export const GeneralSettings = (): React.JSX.Element => {
   const { t } = useTranslation()
 
   const renderInputItem = ({ label, name, disabled = false, tooltip }: { label: string, name: string, disabled?: boolean, tooltip?: string }): React.JSX.Element => (
@@ -34,11 +30,7 @@ export const GeneralSettings = ({ collapsed = false }: IGeneralSettingsProps): R
   )
 
   return (
-    <FormKit.Panel
-      collapsed={ collapsed }
-      collapsible={ collapsed }
-      title={ t('reports.editor.general-settings.title') }
-    >
+    <FormKit.Panel title={ t('reports.editor.general-settings.title') }>
       {renderInputItem({ label: t('reports.editor.general-settings.name-label'), name: 'name', disabled: true })}
       {renderInputItem({ label: t('reports.editor.general-settings.display-name-label'), name: 'niceName' })}
       <Form.Item
