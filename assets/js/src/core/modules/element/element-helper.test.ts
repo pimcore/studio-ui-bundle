@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type Element, getElementKey } from './element-helper'
+import { type Element, getElementKey, getElementRealKey } from './element-helper'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { type Document } from '@Pimcore/modules/document/document-api-slice.gen'
@@ -112,5 +112,56 @@ describe('getElementKey', () => {
     const document = buildDocument({ key: 'original-key' })
 
     expect(getElementKey(document, 'document')).toBe('original-key')
+  })
+})
+
+describe('getElementRealKey', () => {
+  it('ignores the custom attribute key and returns the filename for an asset', () => {
+    const asset = buildAsset({
+      filename: 'original-filename',
+      customAttributes: {
+        icon: null,
+        tooltip: null,
+        additionalIcons: [],
+        key: 'custom-key',
+        additionalCssClasses: []
+      }
+    })
+
+    expect(getElementRealKey(asset, 'asset')).toBe('original-filename')
+  })
+
+  it('ignores the custom attribute key and returns the key for a data object', () => {
+    const dataObject = buildDataObject({
+      key: 'original-key',
+      customAttributes: {
+        icon: null,
+        tooltip: null,
+        additionalIcons: [],
+        key: 'custom-key',
+        additionalCssClasses: []
+      }
+    })
+
+    expect(getElementRealKey(dataObject, 'data-object')).toBe('original-key')
+  })
+
+  it('ignores the custom attribute key and returns the key for a document', () => {
+    const document = buildDocument({
+      key: 'original-key',
+      customAttributes: {
+        icon: null,
+        tooltip: null,
+        additionalIcons: [],
+        key: 'custom-key',
+        additionalCssClasses: []
+      }
+    })
+
+    expect(getElementRealKey(document, 'document')).toBe('original-key')
+  })
+
+  it('returns the key when no custom attribute key is set', () => {
+    expect(getElementRealKey(buildDataObject({ key: 'original-key' }), 'data-object')).toBe('original-key')
   })
 })

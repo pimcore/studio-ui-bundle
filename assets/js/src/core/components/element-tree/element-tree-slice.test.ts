@@ -25,6 +25,7 @@ import { injectSliceWithState } from '@sdk/app'
 import {
   type InternalNodeState,
   locateInTree,
+  renameNode,
   setFetchTriggered,
   setNodePage,
   type TreeNode,
@@ -168,5 +169,23 @@ describe('element-tree-slice: locateInTree', () => {
 
     expect(state[treeId].nodes['30'].isSelected).toBe(true)
     expect(state[treeId].nodes['30'].isScrollTo).toBe(true)
+  })
+})
+
+describe('element-tree-slice: renameNode', () => {
+  it('updates the label and the real key of the renamed node', () => {
+    const state = dispatchAll([
+      updateNodesByParentId({
+        treeId,
+        parentId: '1',
+        nodes: [{ ...createNode('10', '1'), label: 'car - test', realKey: 'car' }],
+        total: 1
+      }),
+      renameNode({ nodeId: '10', elementType: 'data-object', newLabel: 'new-car' })
+    ])
+
+    const nodeProps = state[treeId].nodes['10'].treeNodeProps
+    expect(nodeProps?.label).toBe('new-car')
+    expect(nodeProps?.realKey).toBe('new-car')
   })
 })

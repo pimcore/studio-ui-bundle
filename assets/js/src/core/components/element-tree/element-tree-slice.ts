@@ -26,6 +26,8 @@ export interface TreeNode {
   fullPath?: string
   icon: ElementIcon
   label: string
+  // Real element key (not the display label, which may be overridden by customAttributes.key)
+  realKey?: string
   labelAddon?: string
   type?: string
 
@@ -467,7 +469,8 @@ const slice = createSlice({
             treeNodeProps: !isUndefined(node.treeNodeProps)
               ? {
                   ...node.treeNodeProps,
-                  label: payload.newLabel
+                  label: payload.newLabel,
+                  realKey: payload.newLabel
                 }
               : undefined
           }))
