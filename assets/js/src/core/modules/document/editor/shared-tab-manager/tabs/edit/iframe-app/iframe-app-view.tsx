@@ -23,6 +23,7 @@ import { ModalsProvider } from '@Pimcore/modules/app/modals-provider'
 import { DocumentEditorIframeGlobalStyles } from './styles/global.styles'
 import { EditmodeStyleProvider } from './styles/editmode-style-provider'
 import { useForwardKeyBindings } from './use-forward-key-bindings'
+import { IconMotion } from '@Pimcore/modules/app/icon-motion/icon-motion'
 
 export interface DocumentEditorIframeWindow extends Window {
   editableDefinitions?: AbstractDocumentEditableDefinition[]
@@ -69,6 +70,7 @@ export const DocumentEditorIframeAppView = (): React.JSX.Element => {
           <GlobalProvider>
             <AntApp>
               <DocumentEditorIframeGlobalStyles />
+              <IconMotion />
               <ModalsProvider>
                 <DateTimeConfig>
                   <DocumentProvider id={ documentId }>

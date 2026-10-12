@@ -34,6 +34,7 @@ import { type AppLoaderRegistry } from './services/app-loader-registry'
 import { container, serviceIds } from '@sdk/app'
 import { useGlobalMessageBusLoader } from './loader/global-message-bus/loader'
 import { AppLoadingContext, type AppLoadingContextValue } from './context/app-loading-context'
+import { IconMotion } from '@Pimcore/modules/app/icon-motion/icon-motion'
 
 export interface IAppLoaderProps {
   children: React.ReactNode
@@ -185,6 +186,8 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
           </div>
         )}
       </AppLoadingContext.Provider>
+
+      <IconMotion />
     </>
   )
 }
