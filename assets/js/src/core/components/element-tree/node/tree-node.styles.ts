@@ -9,6 +9,7 @@
  */
 
 import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
+import { arrowTurnTransition } from '@Pimcore/utils/motion'
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
@@ -19,6 +20,45 @@ export const useStyles = createStyles(({ token, css }) => {
         .tree-node__content .tree-node__content-wrapper {
           color: ${token.colorError};
           text-decoration: line-through;
+        }
+      }
+
+      /* the loading spinner covers the arrow, which stays mounted so it turns once the children are loaded */
+      .tree-expander {
+        position: relative;
+      }
+
+      .tree-expander__spinner {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .tree-expander__arrow {
+        ${arrowTurnTransition()}
+
+        &.tree-expander__arrow--open {
+          transform: rotate(90deg);
+        }
+
+        &.tree-expander__arrow--loading {
+          visibility: hidden;
+        }
+      }
+
+      /* the expand arrow highlights on hover and while pressed */
+      .tree-expander__toggle {
+        display: inline-flex;
+        transition: color ${token.motionDurationFast} ${token.motionEaseOut};
+
+        &:hover {
+          color: ${token.colorPrimaryHover};
+        }
+
+        &:active {
+          color: ${token.colorPrimaryActive};
         }
       }
 
