@@ -232,8 +232,8 @@ export const PdfEditable = (props: PdfEditableProps): React.JSX.Element => {
               dndIcon
               height={ smartDimensions?.height ?? height ?? DEFAULT_HEIGHT }
               onResize={ handleAssetTargetResize }
-              onSearch={ openElementSelector }
-              onUpload={ handleUpload }
+              onSearch={ disabled ? undefined : openElementSelector }
+              onUpload={ disabled ? undefined : handleUpload }
               title={ t('pdf-editable.dnd-target') }
               width={ smartDimensions?.width ?? width ?? '100%' }
             />
