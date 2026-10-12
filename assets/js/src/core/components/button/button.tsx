@@ -10,7 +10,7 @@
 
 import React, { type RefObject, useLayoutEffect, useImperativeHandle, useRef } from 'react'
 import { Button as AntdButton, type ButtonProps as AntdButtonProps } from 'antd'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, type Transition } from 'framer-motion'
 import { motionDuration } from '@Pimcore/utils/motion'
 import cn from 'classnames'
 import { Spin } from '../spin/spin'
@@ -24,7 +24,8 @@ export interface ButtonProps extends Omit<AntdButtonProps, 'type' | 'color'> {
   color?: 'default' | 'primary' | 'secondary' | 'danger'
 }
 
-const successMarkTransition = {
+// typed, so the cubic-bezier ease is checked as the four-number tuple framer-motion 12 requires
+const successMarkTransition: Transition = {
   duration: motionDuration.draw / 1000,
   ease: [0, 0, 0.2, 1],
   delay: motionDuration.enter / 3 / 1000
