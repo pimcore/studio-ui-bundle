@@ -53,18 +53,33 @@ export interface UseSaveHookReturn {
   error: FetchBaseQueryError | SerializedError | undefined
 }
 
+const chainFinishCallbacks = (first?: () => void, second?: () => void): (() => void) | undefined => {
+  if (first === undefined) {
+    return second
+  }
+
+  if (second === undefined) {
+    return first
+  }
+
+  return () => {
+    first()
+    second()
+  }
+}
+
 export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
   const { id } = useContext(DataObjectContext)
   const { dataObject, properties, setDraftData } = useDataObjectDraft(id)
   const [saveDataObject, { isLoading, isSuccess, isError, error }] = useDataObjectUpdateByIdMutation()
-  const { setRunningTask, runningTask, runningTaskRef, queuedTask, setQueuedTask } = useSaveContext()
+  const { setRunningTask, runningTask, runningTaskRef, queuedTask, queuedTaskRef, setQueuedTask } = useSaveContext()
   const dispatch = useAppDispatch()
 
   const executeQueuedTask = async (): Promise<void> => {
     if (!isNil(queuedTask)) {
       const executeTask = { ...queuedTask }
       setQueuedTask(undefined)
-      await save(executeTask.editableData, executeTask.task)
+      await save(executeTask.editableData, executeTask.task, executeTask.onFinish)
     }
   }
 
@@ -91,9 +106,14 @@ export const useSave = (useDraftData: boolean = true): UseSaveHookReturn => {
         return
       }
 
+      // Only one task waits behind the auto save, and it sends the complete set of
+      // modified attributes, so the later one takes the place of an earlier one. Whoever
+      // waits on that earlier one (e.g. a workflow transition saving first) must still
+      // hear that the data was saved, so its onFinish is carried along.
       setQueuedTask({
         task,
-        editableData
+        editableData,
+        onFinish: chainFinishCallbacks(queuedTaskRef.current?.onFinish, onFinish)
       })
       return
     }

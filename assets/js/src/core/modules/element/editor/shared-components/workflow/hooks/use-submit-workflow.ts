@@ -13,10 +13,11 @@ import {
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import { t } from 'i18next'
-import { type WorkflowAction, type WorkflowOptions } from '../types/workflow-types'
+import { type WorkflowAction, type WorkflowActionSubject, type WorkflowOptions } from '../types/workflow-types'
 import { useAlertModal } from '@sdk/components'
 import { useWorkflowModalState } from './use-workflow-modal-state'
 import { useWorkflowActionSubject } from '../provider/workflow-provider'
+import { useWorkflowRunLock } from '../provider/workflow-editor-coordinator'
 
 interface UseSubmitWorkflowReturn {
   submitWorkflowAction: (workflowAction: WorkflowAction, workflowOptions?: WorkflowOptions) => void
@@ -36,8 +37,12 @@ export const useSubmitWorkflow = (): UseSubmitWorkflowReturn => {
   const { closeModal } = useWorkflowModalState()
   const alertModal = useAlertModal()
   const messageApi = useMessage()
+  // One run (guard plus submit) at a time per editor: the lock is shared by every workflow control
+  // of the editor — toolbar menu, workflow tab cards, comment modal — so while the unsaved-changes
+  // guard saves or asks, or the action is being submitted, no control can start another one.
+  const { beginRun, endRun, isRunning } = useWorkflowRunLock()
   const [fetchSubmitWorkflowActionMutation, {
-    isLoading: submissionLoading,
+    isLoading: isSubmitting,
     isSuccess: submissionSuccess,
     isError: isSubmissionError
   }] = useWorkflowActionSubmitMutation(
@@ -61,7 +66,31 @@ export const useSubmitWorkflow = (): UseSubmitWorkflowReturn => {
       return
     }
 
-    fetchSubmitWorkflowActionMutation(workFlowTransition(workflowAction, workflowOptions)).unwrap().then(() => {
+    if (!beginRun()) {
+      return
+    }
+
+    const run = async (): Promise<void> => {
+      const proceed = subject.beforeSubmit === undefined || await subject.beforeSubmit(workflowAction)
+
+      if (!proceed) {
+        closeModal()
+        return
+      }
+
+      await submit(subject, workflowAction, workflowOptions)
+    }
+
+    run().catch((error) => {
+      console.error(error)
+      closeModal()
+    }).finally(() => {
+      endRun()
+    })
+  }
+
+  const submit = async (subject: WorkflowActionSubject, workflowAction: WorkflowAction, workflowOptions?: WorkflowOptions): Promise<void> => {
+    await fetchSubmitWorkflowActionMutation(workFlowTransition(workflowAction, workflowOptions)).unwrap().then(() => {
       void messageApi.success({
         content: t('action-applied-successfully') + ': ' + t(workflowAction.label),
         type: 'success',
@@ -80,7 +109,7 @@ export const useSubmitWorkflow = (): UseSubmitWorkflowReturn => {
 
   return {
     submitWorkflowAction,
-    submissionLoading,
+    submissionLoading: isRunning || isSubmitting,
     submissionSuccess,
     submissionError: isSubmissionError
   }
