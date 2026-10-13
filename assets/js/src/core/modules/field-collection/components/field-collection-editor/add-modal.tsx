@@ -15,6 +15,7 @@ import { Form, Input } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
 import { type InputRef } from 'antd'
 import React, { useRef } from 'react'
+import { isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
 export const FieldCollectionAddModal = (): React.JSX.Element => {
@@ -32,7 +33,7 @@ export const FieldCollectionAddModal = (): React.JSX.Element => {
       }
     }).then((data) => {
       // RTK Query resolves (not rejects) on API errors — surface the backend message and keep the modal open.
-      if (data.error !== undefined) {
+      if (!isUndefined(data.error)) {
         trackError(new ApiError(data.error))
         return
       }
@@ -41,8 +42,8 @@ export const FieldCollectionAddModal = (): React.JSX.Element => {
       closeModal()
 
       const fieldCollection: ConfigurationPartial = {
-        id: data.data.key,
-        name: data.data.title ?? data.data.key
+        id: data.data!.key,
+        name: data.data!.title ?? data.data!.key
       }
 
       openConfiguration(fieldCollection)
