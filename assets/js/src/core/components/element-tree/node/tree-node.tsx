@@ -23,6 +23,7 @@ import { createNodeTestId } from '@Pimcore/utils/test-id-generator'
 import { ComponentRenderer } from '@Pimcore/modules/app/component-registry/component-renderer'
 import cn from 'classnames'
 import { useTreeNodeHighlight } from '../hooks/use-tree-node-highlight'
+import { moveFocus, moveFocusToParent } from './tree-node-focus'
 
 export type TreeNodeWrapper = (children: React.ReactNode) => React.ReactNode
 export interface TreeNodeProps {
@@ -198,7 +199,6 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     }
   }
 
-
   function setRef (el: HTMLElement): void {
     nodesRefs!.current[internalKey] = { el, node: treeNodeProps }
   }
@@ -278,25 +278,3 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
 })
 
 export { TreeNode }
-
-/** All focusable tree node elements in the tree container, in visual DOM order. */
-function getVisibleNodes (from: HTMLElement): HTMLElement[] {
-  const tree = from.closest('.tree')
-  if (isNil(tree)) return []
-  return Array.from(tree.querySelectorAll<HTMLElement>('.tree-node__content-inner'))
-}
-
-function moveFocus (current: HTMLElement, offset: number | 'first' | 'last'): void {
-  const nodes = getVisibleNodes(current)
-  const idx = nodes.indexOf(current)
-  if (idx === -1) return
-  const target = offset === 'first' ? 0 : offset === 'last' ? nodes.length - 1 : idx + offset
-  if (target >= 0 && target < nodes.length) { nodes[target].focus() }
-}
-
-function moveFocusToParent (current: HTMLElement): void {
-  const ownTreeNode = current.closest('.tree-node')
-  const parentTreeNode = ownTreeNode?.parentElement?.closest('.tree-node')
-  const parentInner = parentTreeNode?.querySelector<HTMLElement>('.tree-node__content-inner')
-  parentInner?.focus()
-}
