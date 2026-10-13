@@ -12,14 +12,16 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { ProvidedTypeSelect } from '@Pimcore/modules/element/components/type-select/provided-type-select'
 import { SearchTermFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/view-layer/components/search/search-term-filter'
 import { useSearch } from '@Pimcore/modules/search/provider/use-search'
+import { useSearchToolbarPadding } from '@Pimcore/modules/search/modal/tabs/shared/use-search-toolbar-padding'
 import React from 'react'
 
 export const TopBar = (): React.JSX.Element => {
   const { isOpen, setSearchTerm } = useSearch()
+  const padding = useSearchToolbarPadding()
 
   return (
     <Toolbar
-      padding={ { left: 'none', right: 'none' } }
+      padding={ padding }
       position='none'
       // The search-mode warning line needs a second row.
       size='auto'

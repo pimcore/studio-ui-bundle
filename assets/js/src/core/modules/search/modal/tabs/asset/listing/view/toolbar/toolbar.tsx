@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { Toolbar as BaseToolbar } from '@Pimcore/components/toolbar/toolbar'
+import { useSearchToolbarPadding } from '@Pimcore/modules/search/modal/tabs/shared/use-search-toolbar-padding'
 import { RowSelectionTotal } from '@Pimcore/modules/element/listing/decorators/row-selection/view-layer/components/row-selection-total/row-reselection-total'
 import { Split } from '@Pimcore/components/split/split'
 import { Refetch } from '@Pimcore/modules/element/listing/abstract/view-layer/components/refetch/refetch'
@@ -17,9 +18,11 @@ import { Pagination } from '@Pimcore/modules/element/listing/decorators/paging/p
 import { Flex } from '@Pimcore/components/flex/flex'
 
 export const Toolbar = (): React.JSX.Element => {
+  const padding = useSearchToolbarPadding()
+
   return (
     <BaseToolbar
-      padding={ { right: 'none', left: 'none' } }
+      padding={ padding }
       theme='secondary'
     >
       <Flex
