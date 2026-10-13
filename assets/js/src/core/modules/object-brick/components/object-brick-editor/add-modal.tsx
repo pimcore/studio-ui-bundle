@@ -26,18 +26,23 @@ export const ObjectBrickAddModal = (): React.JSX.Element => {
   const { openConfiguration } = useItems()
 
   const onFormFinish = (values: any): void => {
-    form.resetFields()
-
     createObjectBrick({
       createObjectBrick: {
         key: values.key
       }
     }).then((data) => {
+      // RTK Query resolves (not rejects) on API errors — surface the backend message and keep the modal open.
+      if (data.error !== undefined) {
+        trackError(new ApiError(data.error))
+        return
+      }
+
+      form.resetFields()
       closeModal()
 
       const objectBrick: ConfigurationPartial = {
-        id: data.data!.key,
-        name: data.data!.title ?? data.data!.key
+        id: data.data.key,
+        name: data.data.title ?? data.data.key
       }
 
       openConfiguration(objectBrick)

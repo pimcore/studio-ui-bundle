@@ -63,17 +63,23 @@ export const CustomLayoutAddModal = (): React.JSX.Element => {
         name: values.name
       }
     }).then((data) => {
+      // RTK Query resolves (not rejects) on API errors — surface the backend message and keep the modal open.
+      if (data.error !== undefined) {
+        trackError(new ApiError(data.error))
+        return
+      }
+
       form.resetFields()
       closeModal()
 
       const layoutDef: ConfigurationPartial = {
-        id: data.data!.id,
-        name: data.data!.name,
+        id: data.data.id,
+        name: data.data.name,
         // @todo check schema with backend
         /*  @ts-expect-error group currently not in backend schema */
-        group: data.data!.group,
+        group: data.data.group,
         /*  @ts-expect-error icon currently not in backend schema */
-        icon: data.data!.icon
+        icon: data.data.icon
       }
 
       openConfiguration(layoutDef)
