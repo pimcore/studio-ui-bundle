@@ -12,6 +12,8 @@ import React from 'react'
 import { TabTitleContainer, type TabTitleContainerProps } from '@Pimcore/modules/widget-manager/title/tab-title-container'
 import { useAssetDraft } from '../../hooks/use-asset-draft'
 import { useTranslation } from 'react-i18next'
+import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 export const TitleContainer = (props: TabTitleContainerProps): React.JSX.Element => {
   const { node } = props
@@ -24,7 +26,9 @@ export const TitleContainer = (props: TabTitleContainerProps): React.JSX.Element
       return t('home')
     }
 
-    return asset?.filename ?? nodeName
+    const key = asset !== undefined ? getElementKey(asset as Element, elementTypes.asset) : ''
+
+    return key !== '' ? key : nodeName
   }
 
   return (
