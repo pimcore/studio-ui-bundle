@@ -560,6 +560,8 @@ userModification: Utente modifica
 userOwner: Utente proprietario
 listing.grid-config.convert-to-advanced: Converti in colonna avanzata
 listing.grid-config.title: Configurazione griglia
+listing.grid-config.search-mode-column.label: Automatica
+listing.grid-config.search-mode-column.tooltip: Aggiunta dalla modalità di ricerca attiva. Puoi spostarla come qualsiasi altra colonna; non viene salvata con la configurazione della griglia.
 grid-config.discard-all-changes: Annulla tutte le modifiche
 grid-config.apply-changes: Applica modifiche
 grid-config.reload: Ricarica
@@ -1235,6 +1237,7 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" è stato copi
 element.tree.paste: Incolla
 element.tree.paste-as-child: Incolla come figlio
 element.tree.paste-as-child-recursive: Incolla come figlio (ricorsivo)
+element.tree.open-no-permission: "Non disponi dell'autorizzazione per aprire questo elemento."
 element.tree.paste-recursive-updating-references: Incolla ricorsivo, aggiornando i riferimenti
 element.tree.paste-only-contents: Incolla solo il contenuto qui
 element.tree.cut: Taglia
@@ -1286,6 +1289,8 @@ element.delete.batch.show-paths: Mostra elementi
 element.delete.batch.dependencies-warning.confirmed_one: 'Nota: Questo elemento ha dipendenze.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Nota: Questi elementi hanno dipendenze.'
 element.open: Apri
+element.state: Stato
+element.state.unpublished: Non pubblicato
 element.toolbar.copy-id: Copia ID
 element.toolbar.copy-full-path-to-clipboard: Copia percorso completo
 element.toolbar.copy-deep-link-to-clipboard: Copia Deeplink

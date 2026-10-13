@@ -560,6 +560,8 @@ userModification: Gebruiker wijziging
 userOwner: Gebruikerseigenaar
 listing.grid-config.convert-to-advanced: Converteren naar geavanceerde kolom
 listing.grid-config.title: Rasterinstelling
+listing.grid-config.search-mode-column.label: Automatisch
+listing.grid-config.search-mode-column.tooltip: Toegevoegd door de actieve zoekmodus. U kunt deze net als elke andere kolom verplaatsen; deze wordt niet opgeslagen in de rasterconfiguratie.
 grid-config.discard-all-changes: Alle wijzigingen verwerpen
 grid-config.apply-changes: Wijzigingen toepassen
 grid-config.reload: Herladen
@@ -1235,6 +1237,7 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" is gekopieerd
 element.tree.paste: Plakken
 element.tree.paste-as-child: Plakken als onderliggend item
 element.tree.paste-as-child-recursive: Plakken als onderliggend item (recursief)
+element.tree.open-no-permission: Je hebt geen toestemming om dit element te openen.
 element.tree.paste-recursive-updating-references: Recursief plakken en verwijzingen bijwerken
 element.tree.paste-only-contents: Alleen inhoud hier plakken
 element.tree.cut: Knippen
@@ -1286,6 +1289,8 @@ element.delete.batch.show-paths: Items weergeven
 element.delete.batch.dependencies-warning.confirmed_one: "Let op: dit item heeft afhankelijkheden."
 element.delete.batch.dependencies-warning.confirmed_other: "Let op: deze items hebben afhankelijkheden."
 element.open: Openen
+element.state: Status
+element.state.unpublished: Niet gepubliceerd
 element.toolbar.copy-id: ID kopiëren
 element.toolbar.copy-full-path-to-clipboard: Volledig pad kopiëren
 element.toolbar.copy-deep-link-to-clipboard: Diepe link kopiëren

@@ -23,7 +23,7 @@ import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
 
 export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = () => {
-  const { selectedColumns } = useSelectedColumns()
+  const { visibleColumns } = useSelectedColumns()
   const { availableColumns } = useAvailableColumns()
   const { selectedClassDefinition } = useClassDefinitionSelection()
   const { dataLoadingState, setDataLoadingState } = useData()
@@ -38,7 +38,7 @@ export const useDataQueryHelper: SettingsProviderProps['useDataQueryHelper'] = (
     isValidClass = type.allowClassSelectionInSearch && selectedClassDefinition?.id !== undefined
   }
 
-  const columnsArg: DataObjectGetGridApiArg['body']['columns'] = selectedColumns.map(column => {
+  const columnsArg: DataObjectGetGridApiArg['body']['columns'] = visibleColumns.map(column => {
     let advancedColumnConfig: AdvancedColumnConfig | undefined
     let key = column.key
 

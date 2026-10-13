@@ -18,7 +18,8 @@ import { Icon } from '@Pimcore/components/icon/icon'
 import { type Element, getElementDeeplink } from '@Pimcore/modules/element/element-helper'
 import type { ElementType } from '@Pimcore/types/enums/element/element-type'
 import { type ISystemInfoModalProps, SystemInfoModal } from '@Pimcore/modules/element/components/system-info-modal/system-info-modal'
-import { copyToClipboard } from '@Pimcore/utils/clipboard'
+import { copyToClipboardWithFeedback } from '@Pimcore/utils/clipboard'
+import { useMessage } from '@Pimcore/components/message/useMessage'
 
 export type IElement = Element & {
   fileSize: number
@@ -37,12 +38,22 @@ interface IUseElementActionsMenuReturn {
 export const useElementActionsMenu = ({ element, elementType }: IUseElementActionsMenuProps): IUseElementActionsMenuReturn => {
   const { t } = useTranslation()
   const { localModal: modal } = useStudioModal()
+  const message = useMessage()
 
   if (element === undefined) {
     return { actionMenuItems: [] }
   }
 
   const deeplinkUrl = getElementDeeplink(elementType, element.id)
+
+  // the menu closes on click, so the confirmation can't be shown in place
+  const copyWithFeedback = async (text: string): Promise<void> => {
+    await copyToClipboardWithFeedback(
+      text,
+      () => { void message.success(t('clipboard.copy.success')) },
+      () => { void message.error(t('clipboard.copy.error')) }
+    )
+  }
 
   const showSystemInfoModal = (data: ISystemInfoModalProps['data']): void => {
     const modalInstance = modal.info({
@@ -74,7 +85,7 @@ export const useElementActionsMenu = ({ element, elementType }: IUseElementActio
       onClick: (e) => {
         e.domEvent.stopPropagation()
 
-        void copyToClipboard(element.id.toString())
+        void copyWithFeedback(element.id.toString())
       }
     },
     {
@@ -83,7 +94,7 @@ export const useElementActionsMenu = ({ element, elementType }: IUseElementActio
       onClick: (e) => {
         e.domEvent.stopPropagation()
 
-        void copyToClipboard(element.fullPath)
+        void copyWithFeedback(element.fullPath)
       }
     },
     {
@@ -92,7 +103,7 @@ export const useElementActionsMenu = ({ element, elementType }: IUseElementActio
       onClick: (e) => {
         e.domEvent.stopPropagation()
 
-        void copyToClipboard(deeplinkUrl)
+        void copyWithFeedback(deeplinkUrl)
       }
     },
     {
@@ -128,7 +139,7 @@ export const useElementActionsMenu = ({ element, elementType }: IUseElementActio
       onClick: (e) => {
         e.domEvent.stopPropagation()
 
-        void copyToClipboard(element.className)
+        void copyWithFeedback(element.className)
       }
     })
   }

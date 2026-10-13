@@ -8,10 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isNil, isString } from 'lodash'
+import { isNil } from 'lodash'
 import type { RcFile, UploadFile } from 'antd/es/upload/interface'
 import type { TFunction } from '@sdk/app'
-import { ApiError } from '@Pimcore/modules/app/error-handler'
+import { ApiError, getErrorMessage } from '@Pimcore/modules/app/error-handler'
 import { type ApiErrorData } from '@sdk/modules/app'
 
 export interface MapUploadFileErrorsOptions {
@@ -28,11 +28,7 @@ const formatErrorMessage = (errorData: unknown, t: TFunction): string => {
     return t('error.error_something_generic_went_wrong')
   }
 
-  if (isString(content)) {
-    return content
-  }
-
-  return t(`error.${content.errorKey}`)
+  return getErrorMessage(content, t)
 }
 
 /**

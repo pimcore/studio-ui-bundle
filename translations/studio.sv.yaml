@@ -560,6 +560,8 @@ userModification: Ändrad av
 userOwner: Ägare
 listing.grid-config.convert-to-advanced: Konvertera till avancerad kolumn
 listing.grid-config.title: Rutnätskonfiguration
+listing.grid-config.search-mode-column.label: Automatisk
+listing.grid-config.search-mode-column.tooltip: Tillagd av det aktiva sökläget. Du kan flytta den som alla andra kolumner; den sparas inte med rutnätskonfigurationen.
 grid-config.discard-all-changes: Förkasta alla ändringar
 grid-config.apply-changes: Tillämpa ändringar
 grid-config.reload: Läs om
@@ -1235,6 +1237,7 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" har kopierats
 element.tree.paste: Klistra in
 element.tree.paste-as-child: Klistra in som barn
 element.tree.paste-as-child-recursive: Klistra in som barn (rekursivt)
+element.tree.open-no-permission: Du har inte behörighet att öppna det här elementet.
 element.tree.paste-recursive-updating-references: Klistra in rekursivt, uppdatera referenser
 element.tree.paste-only-contents: Klistra bara in innehåll här
 element.tree.cut: Klipp ut
@@ -1286,6 +1289,8 @@ element.delete.batch.show-paths: Visa element
 element.delete.batch.dependencies-warning.confirmed_one: 'Obs: Detta element har beroenden.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Obs: Dessa element har beroenden.'
 element.open: Öppna
+element.state: Status
+element.state.unpublished: Opublicerad
 element.toolbar.copy-id: Kopiera ID
 element.toolbar.copy-full-path-to-clipboard: Kopiera fullständig sökväg
 element.toolbar.copy-deep-link-to-clipboard: Kopiera Deeplink

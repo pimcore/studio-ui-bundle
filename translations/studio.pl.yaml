@@ -560,6 +560,8 @@ userModification: Użytkownik modyfikacji
 userOwner: Właściciel (użytkownik)
 listing.grid-config.convert-to-advanced: Konwertuj na kolumnę zaawansowaną
 listing.grid-config.title: Ustawienia siatki
+listing.grid-config.search-mode-column.label: Automatyczna
+listing.grid-config.search-mode-column.tooltip: Dodana przez aktywny tryb wyszukiwania. Możesz ją przenosić jak każdą inną kolumnę; nie jest zapisywana w konfiguracji siatki.
 grid-config.discard-all-changes: Odrzuć wszystkie zmiany
 grid-config.apply-changes: Zastosuj zmiany
 grid-config.reload: Przeładuj
@@ -1235,6 +1237,7 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" został skopi
 element.tree.paste: Wklej
 element.tree.paste-as-child: Wklej jako element podrzędny
 element.tree.paste-as-child-recursive: Wklej jako element podrzędny (rekursywnie)
+element.tree.open-no-permission: Nie masz uprawnień do otwarcia tego elementu.
 element.tree.paste-recursive-updating-references: Wklej rekursywnie i zaktualizuj odwołania
 element.tree.paste-only-contents: Wklej tutaj tylko treść
 element.tree.cut: Wytnij
@@ -1286,6 +1289,8 @@ element.delete.batch.show-paths: Pokaż elementy
 element.delete.batch.dependencies-warning.confirmed_one: "Uwaga: ten element ma zależności."
 element.delete.batch.dependencies-warning.confirmed_other: "Uwaga: te elementy mają zależności."
 element.open: Otwórz
+element.state: Status
+element.state.unpublished: Nieopublikowany
 element.toolbar.copy-id: Kopiuj ID
 element.toolbar.copy-full-path-to-clipboard: Kopiuj pełną ścieżkę
 element.toolbar.copy-deep-link-to-clipboard: Kopiuj głęboki link

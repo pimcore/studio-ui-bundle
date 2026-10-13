@@ -560,6 +560,8 @@ userModification: Modificado por
 userOwner: Propietario
 listing.grid-config.convert-to-advanced: Convertir en columna avanzada
 listing.grid-config.title: Configuración de cuadrícula
+listing.grid-config.search-mode-column.label: Automática
+listing.grid-config.search-mode-column.tooltip: Añadida por el modo de búsqueda activo. Puede moverla como cualquier otra columna; no se guarda con la configuración de la cuadrícula.
 grid-config.discard-all-changes: Descartar todos los cambios
 grid-config.apply-changes: Aplicar cambios
 grid-config.reload: Recargar
@@ -1235,6 +1237,7 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" ha sido copia
 element.tree.paste: Pegar
 element.tree.paste-as-child: Pegar como hijo
 element.tree.paste-as-child-recursive: Pegar como hijo (recursivo)
+element.tree.open-no-permission: No tiene permiso para abrir este elemento.
 element.tree.paste-recursive-updating-references: Pegar recursivo, actualizando referencias
 element.tree.paste-only-contents: Pegar solo el contenido aquí
 element.tree.cut: Cortar
@@ -1286,6 +1289,8 @@ element.delete.batch.show-paths: Mostrar elementos
 element.delete.batch.dependencies-warning.confirmed_one: 'Tenga en cuenta: Este elemento tiene dependencias.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Tenga en cuenta: Estos elementos tienen dependencias.'
 element.open: Abrir
+element.state: Estado
+element.state.unpublished: No publicado
 element.toolbar.copy-id: Copiar ID
 element.toolbar.copy-full-path-to-clipboard: Copiar ruta completa
 element.toolbar.copy-deep-link-to-clipboard: Copiar Deeplink

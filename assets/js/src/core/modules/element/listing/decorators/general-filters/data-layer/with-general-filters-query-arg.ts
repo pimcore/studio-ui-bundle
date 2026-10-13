@@ -12,6 +12,7 @@ import { type AbstractDecoratorProps } from '@Pimcore/modules/element/listing/de
 import { useFilterQuery } from '@Pimcore/components/filters'
 import { useAppliedFilters, elementFilterSetup } from '../element-filters'
 import { type ElementListingQueryArgs } from '../element-filters/element-filter-types'
+import { useDropVanishedModeColumnFilters } from '../search-modes/use-drop-vanished-mode-column-filters'
 
 export { unreferencedFilterType } from '../element-filters/definitions/unreferenced-filter'
 
@@ -20,6 +21,8 @@ export const withGeneralFiltersQueryArg = (useBaseHook: AbstractDecoratorProps['
     const { getArgs: baseGetArgs, ...baseMethods } = useBaseHook()
     const { values } = useAppliedFilters()
     const applyFilters = useFilterQuery(elementFilterSetup, values)
+    // mounted with the listing, unlike the filter panel which cleans the draft
+    useDropVanishedModeColumnFilters('applied')
 
     const getArgs: typeof baseGetArgs = () => {
       const baseArgs = baseGetArgs()

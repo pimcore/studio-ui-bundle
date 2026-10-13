@@ -560,6 +560,8 @@ userModification: Utilisateur de modification
 userOwner: Propriétaire
 listing.grid-config.convert-to-advanced: Convertir en colonne avancée
 listing.grid-config.title: Configuration de la grille
+listing.grid-config.search-mode-column.label: Automatique
+listing.grid-config.search-mode-column.tooltip: Ajoutée par le mode de recherche actif. Vous pouvez la déplacer comme toute autre colonne ; elle n’est pas enregistrée avec la configuration de la grille.
 grid-config.discard-all-changes: Annuler toutes les modifications
 grid-config.apply-changes: Appliquer les modifications
 grid-config.reload: Recharger
@@ -1235,6 +1237,7 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" a été copi�
 element.tree.paste: Coller
 element.tree.paste-as-child: Coller comme enfant
 element.tree.paste-as-child-recursive: Coller comme enfant (récursif)
+element.tree.open-no-permission: "Vous n'avez pas l'autorisation d'ouvrir cet élément."
 element.tree.paste-recursive-updating-references: Coller récursivement, en mettant à jour les références
 element.tree.paste-only-contents: Coller uniquement le contenu ici
 element.tree.cut: Couper
@@ -1286,6 +1289,8 @@ element.delete.batch.show-paths: Afficher les éléments
 element.delete.batch.dependencies-warning.confirmed_one: 'Remarque : Cet élément a des dépendances.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Remarque : Ces éléments ont des dépendances.'
 element.open: Ouvrir
+element.state: État
+element.state.unpublished: Non publié
 element.toolbar.copy-id: Copier l'ID
 element.toolbar.copy-full-path-to-clipboard: Copier le chemin complet
 element.toolbar.copy-deep-link-to-clipboard: Copier le lien profond

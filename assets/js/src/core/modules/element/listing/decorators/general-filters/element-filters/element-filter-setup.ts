@@ -9,11 +9,11 @@
  */
 
 import { type FilterHostAdapter } from '@Pimcore/components/filters'
-import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
 import { useGeneralFiltersConfig } from '../context-layer/provider/general-filters-config/use-general-filters-config'
 import { useSearchMode } from '../search-modes/use-search-mode'
+import { useFilterableColumns } from '../search-modes/use-filterable-columns'
 import { elementFilterDefinitions } from './definitions'
 import { buildElementFilterQuery } from './build-element-filter-query'
 import {
@@ -24,7 +24,8 @@ import {
 
 export const useElementFilterContext = (): ElementFilterContext => {
   const config = useGeneralFiltersConfig()
-  const { availableColumns } = useAvailableColumns()
+  // applied mode only: a mode column filter is never sent without its mode
+  const availableColumns = useFilterableColumns('applied')
   const { getType } = useDynamicTypeResolver()
   const { currentLanguage } = useLanguageSelection()
   const searchMode = useSearchMode('applied')
