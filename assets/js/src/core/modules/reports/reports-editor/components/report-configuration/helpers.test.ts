@@ -11,7 +11,6 @@
 import { type ReportFormData } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
 import {
   createSectionPropsComparator,
-  GENERAL_SETTINGS_FIELDS,
   PERMISSION_FIELDS
 } from '@Pimcore/modules/reports/reports-editor/components/report-configuration/helpers'
 
@@ -31,7 +30,7 @@ describe('createSectionPropsComparator', () => {
   const update = jest.fn()
 
   it('mode "except" ignores the given fields only', () => {
-    const isEqual = createSectionPropsComparator([...GENERAL_SETTINGS_FIELDS, ...PERMISSION_FIELDS], 'except')
+    const isEqual = createSectionPropsComparator([...PERMISSION_FIELDS, 'niceName'], 'except')
     const prev = { currentData: data(), updateFormData: update }
 
     expect(isEqual(prev, { currentData: data({ niceName: 'x', sharedGlobally: true }), updateFormData: update })).toBe(true)

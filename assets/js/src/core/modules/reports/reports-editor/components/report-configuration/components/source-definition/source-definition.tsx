@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { memo, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isUndefined } from 'lodash'
 import { container } from '@Pimcore/app/depency-injection'
@@ -24,13 +24,8 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { type DynamicTypeCustomReportDefinitionRegistry } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/dynamic-type-custom-report-definition-registry'
 import { getCustomReportDefinitionAdapter } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/get-custom-report-definition-adapter'
 import { useStyles } from '@Pimcore/modules/reports/reports-editor/reports-editor.styles'
-import {
-  createSectionPropsComparator,
-  GENERAL_SETTINGS_FIELDS,
-  PERMISSION_FIELDS
-} from '@Pimcore/modules/reports/reports-editor/components/report-configuration/helpers'
 
-const SourceDefinitionComponent = ({ form, currentData, updateFormData }: IReportConfigurationSectionProps): React.JSX.Element => {
+export const SourceDefinition = ({ form, currentData, updateFormData }: IReportConfigurationSectionProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
 
@@ -115,9 +110,3 @@ const SourceDefinitionComponent = ({ form, currentData, updateFormData }: IRepor
     </FormKit.Panel>
   )
 }
-
-// The source definition and its adapter do not read the general settings or the permissions
-export const SourceDefinition = memo(
-  SourceDefinitionComponent,
-  createSectionPropsComparator([...GENERAL_SETTINGS_FIELDS, ...PERMISSION_FIELDS], 'except')
-)

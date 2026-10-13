@@ -76,10 +76,6 @@ export const normalizeIconFields = (data: ReportFormData): INormalizeIconFieldsR
 
 export type ReportFormField = keyof ReportFormData
 
-export const GENERAL_SETTINGS_FIELDS: ReportFormField[] = [
-  'niceName', 'iconClass', 'groupIconClass', 'group', 'reportClass', 'menuShortcut'
-]
-
 export const PERMISSION_FIELDS: ReportFormField[] = ['sharedGlobally', 'sharedUserNames', 'sharedRoleNames']
 
 const hasChangedField = (prev: ReportFormData, next: ReportFormData, field: ReportFormField): boolean =>
