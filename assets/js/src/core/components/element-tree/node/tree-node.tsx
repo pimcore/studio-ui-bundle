@@ -29,6 +29,8 @@ export interface TreeNodeProps {
   id: string
   icon: ElementIcon
   label: string
+  // Real element key (not the display label, which may be overridden by customAttributes.key)
+  realKey?: string
   labelAddon?: string
   internalKey: string
   children?: TreeNodeProps[]
