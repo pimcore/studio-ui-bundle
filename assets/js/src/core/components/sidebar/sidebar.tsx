@@ -83,6 +83,8 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
   }, [defaultActiveTab, activeTab])
 
   const isExpanded = activeTab !== ''
+  // Roving tabindex: keep one tab reachable via Tab key, falling back to the first tab while collapsed
+  const focusableTabKey = preparedEntries.some((entry) => entry.key === activeTab) ? activeTab : preparedEntries[0]?.key
   const {
     sidebarRef,
     contentRef,
@@ -168,11 +170,26 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
                       onClick={ () => {
                         handleSidebarClick(entry.key)
                       } }
-                      onKeyDown={ () => {
-                        handleSidebarClick(entry.key)
+                      onKeyDown={ (event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                          event.preventDefault()
+                          handleSidebarClick(entry.key)
+                        }
+                        if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
+                          event.preventDefault()
+                          const next = (index + 1) % entries.length
+                          const nextEl = event.currentTarget.parentElement?.parentElement?.querySelectorAll<HTMLElement>('[role="tab"]')[next]
+                          nextEl?.focus()
+                        }
+                        if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
+                          event.preventDefault()
+                          const prev = (index - 1 + entries.length) % entries.length
+                          const prevEl = event.currentTarget.parentElement?.parentElement?.querySelectorAll<HTMLElement>('[role="tab"]')[prev]
+                          prevEl?.focus()
+                        }
                       } }
                       role={ 'tab' }
-                      tabIndex={ index }
+                      tabIndex={ entry.key === focusableTabKey ? 0 : -1 }
                     >
                       {entry.icon}
                     </div>

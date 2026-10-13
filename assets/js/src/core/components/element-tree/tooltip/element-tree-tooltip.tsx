@@ -156,6 +156,9 @@ export const ElementTreeTooltip = ({ node, children }: ElementTreeTooltipProps):
     <>
       <div>{t('ID')}: {node.id}</div>
       <div>{t('Type')}: {isObject && (node.type === 'object' || node.type === 'variant') ? t(node.metaData.dataObject.className as string) : t(node.type!)}</div>
+      {node.isPublished === false && (
+        <div>{t('element.state')}: {t('element.state.unpublished')}</div>
+      )}
     </>
   )
 

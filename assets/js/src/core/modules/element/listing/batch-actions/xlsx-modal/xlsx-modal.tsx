@@ -25,6 +25,7 @@ import { isNil } from 'lodash'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
 import { type GridColumnRequest } from '@sdk/api/data-object'
 import { Form } from '@sdk/components'
+import { getExportColumns } from '../get-export-columns'
 
 export interface XlsxModalProps {
   open: boolean
@@ -98,22 +99,8 @@ export const XlsxModal = (props: XlsxModalProps): React.JSX.Element => {
   }
 
   async function getDownloadAction (header: XLSXFormValues['header']): Promise<number> {
-    const extractedColumnsFromColumnArg: GridColumnRequest[] = []
-    const columns = getArgs()?.body?.columns ?? []
-
-    for (const column of columns) {
-      if (selectedColumns.find((selectedColumn) => selectedColumn.key === column.key) === undefined) {
-        continue
-      }
-
-      extractedColumnsFromColumnArg.push({
-        key: column.key,
-        type: column.type,
-        group: column.group as unknown as string[] | undefined,
-        locale: column.locale,
-        config: column.config
-      })
-    }
+    const requestColumns: GridColumnRequest[] = getArgs()?.body?.columns ?? []
+    const extractedColumnsFromColumnArg = getExportColumns(requestColumns, selectedColumns)
 
     if (numberedSelectedRows.length === 0) {
       const filters = getArgs()?.body?.filters ?? {}

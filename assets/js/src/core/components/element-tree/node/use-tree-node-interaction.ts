@@ -19,6 +19,7 @@ import { buildOrderedNodes, resolveNodeIdRange } from '../utils/selection-range'
  * useElementTreeNode.
  */
 export interface TreeNodeInteractionState {
+  isExpanded: boolean
   setExpanded: (expanded: boolean) => void
   setSelectedIds: (selectedNodeIds: string[]) => void
   toggleSelection: () => void
@@ -47,6 +48,7 @@ export const useTreeNodeInteraction = (
 ): UseTreeNodeInteractionReturnType => {
   const { onSelect, onRightClick, nodesRefs, nodeOrder } = useContext(TreeContext)
   const {
+    isExpanded,
     setExpanded,
     setSelectedIds,
     toggleSelection,
@@ -113,15 +115,36 @@ export const useTreeNodeInteraction = (
     }
   }
 
-  const focusSibling = (event: KeyboardEvent, offset: number): void => {
+  const focusSibling = (event: KeyboardEvent, offset: number | 'first' | 'last'): void => {
     if (isUndefined(nodeOrder)) {
       return
     }
 
     const order = nodeOrder()
+
+    if (offset === 'first' || offset === 'last') {
+      focusNode(event, offset === 'first' ? order[0] : order[order.length - 1])
+      return
+    }
+
     const targetIndex = order.indexOf(node.internalKey) + offset
 
     focusNode(event, targetIndex >= 0 && targetIndex < order.length ? order[targetIndex] : undefined)
+  }
+
+  /**
+   * Moves focus up to the node this one hangs under. The refs are keyed by
+   * internal key, so the parent is found by its element id.
+   */
+  const focusParent = (event: KeyboardEvent): void => {
+    if (isNil(nodesRefs) || isUndefined(node.parentId)) {
+      return
+    }
+
+    const parent = Object.values(nodesRefs.current)
+      .find((entry) => String(entry.node.id) === String(node.parentId))
+
+    focusNode(event, parent?.node.internalKey)
   }
 
   const onClick = (event: MouseEvent): void => {
@@ -167,12 +190,26 @@ export const useTreeNodeInteraction = (
       clearSelection()
     }
 
+    // A closed node opens, an open one steps into its children.
     if (event.key === 'ArrowRight') {
-      setExpanded(true)
+      event.preventDefault()
+
+      if (node.hasChildren === true && !isExpanded) {
+        setExpanded(true)
+      } else {
+        focusSibling(event, 1)
+      }
     }
 
+    // An open node closes, a closed one steps back out to its parent.
     if (event.key === 'ArrowLeft') {
-      setExpanded(false)
+      event.preventDefault()
+
+      if (isExpanded) {
+        setExpanded(false)
+      } else {
+        focusParent(event)
+      }
     }
 
     if (event.key === 'ArrowDown') {
@@ -181,6 +218,14 @@ export const useTreeNodeInteraction = (
 
     if (event.key === 'ArrowUp') {
       focusSibling(event, -1)
+    }
+
+    if (event.key === 'Home') {
+      focusSibling(event, 'first')
+    }
+
+    if (event.key === 'End') {
+      focusSibling(event, 'last')
     }
   }
 

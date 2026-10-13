@@ -28,6 +28,8 @@ import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type DynamicTypePipelineRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-registry'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { convertColumnToAdvanced, findColumnConversion } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/convert-column-to-advanced'
+import { isSearchModeDraftColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/search-mode-draft-columns'
+import { SearchModeColumnBadge } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/components/search-mode-column-badge/search-mode-column-badge'
 
 function findScrollableParent (element: HTMLElement | null): HTMLElement | null {
   if (element === null || element === document.documentElement) return null
@@ -135,26 +137,29 @@ export const GridConfigList = (): React.JSX.Element => {
           }
         : {}),
 
-      renderRightToolbar: (
-        <Space size='mini'>
-          { isConvertible(column) && (
+      // search mode columns can only be moved: they come and go with the mode
+      renderRightToolbar: isSearchModeDraftColumn(column)
+        ? <SearchModeColumnBadge />
+        : (
+          <Space size='mini'>
+            { isConvertible(column) && (
+              <IconButton
+                icon={ { value: 'transformation' } }
+                onClick={ () => { onConvertColumn(uniqueId) } }
+                size='small'
+                theme='secondary'
+                tooltip={ { title: t('listing.grid-config.convert-to-advanced') } }
+              />
+            ) }
+            { getLanguageSelection(uniqueId, column) }
             <IconButton
-              icon={ { value: 'transformation' } }
-              onClick={ () => { onConvertColumn(uniqueId) } }
+              icon={ { value: 'trash' } }
+              onClick={ () => { onRemoveColumn(uniqueId) } }
               size='small'
               theme='secondary'
-              tooltip={ { title: t('listing.grid-config.convert-to-advanced') } }
             />
-          ) }
-          { getLanguageSelection(uniqueId, column) }
-          <IconButton
-            icon={ { value: 'trash' } }
-            onClick={ () => { onRemoveColumn(uniqueId) } }
-            size='small'
-            theme='secondary'
-          />
-        </Space>
-      )
+          </Space>
+          )
     }
   }), [columns, advancedColumnTemplate, sourceFieldTypes])
 

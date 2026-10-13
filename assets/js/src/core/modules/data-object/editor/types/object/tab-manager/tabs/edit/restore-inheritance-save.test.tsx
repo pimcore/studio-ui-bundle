@@ -95,6 +95,7 @@ jest.mock('@Pimcore/modules/element/hooks/use-element-context', () => ({
   useElementContext: () => ({ id: 42, elementType: 'data-object' }),
   useOptionalElementContext: () => null
 }))
+jest.mock('@Pimcore/modules/app/settings/hooks/use-settings', () => ({ useSettings: () => ({}) }))
 jest.mock('@sdk/app', () => ({
   useAppSelector: (selector: () => unknown) => selector(),
   useAppDispatch: () => jest.fn()

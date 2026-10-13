@@ -16,14 +16,14 @@ import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/objec
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { BaseView } from '../../../layout-related/views/base-view'
 import { type ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
-import { Icon } from '@Pimcore/components/icon/icon'
-import { Button } from '@Pimcore/components/button/button'
+import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { useKeyedListContext } from '@Pimcore/components/form/controls/keyed-list/provider/keyed-list/use-keyed-list-value'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { Panel } from '@Pimcore/components/panel/panel'
 import { useClassificationStore } from './provider'
 import { getHiddenKeyIds } from './utils/hide-empty-data'
+import { useStyles } from './classification-store-item.styles'
 
 export interface ClassificationStoreItemProps {
   groupLayout?: ClassificationStoreGroupLayout2
@@ -35,6 +35,8 @@ export interface ClassificationStoreItemProps {
   hideEmptyDataRevision?: number
   /** Localization the group is currently edited in ('default' or a language). */
   localizationGroup?: string
+  /** Hides the delete button, e.g. when the store is not editable. */
+  disallowDelete?: boolean
 }
 
 export const ClassificationStoreItem = (props: ClassificationStoreItemProps): React.JSX.Element => {
@@ -44,7 +46,8 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
     updateCurrentLayoutData,
     hideEmptyData = false,
     hideEmptyDataRevision = 0,
-    localizationGroup = 'default'
+    localizationGroup = 'default',
+    disallowDelete = false
   } = props
 
   const { name } = useItem()
@@ -53,6 +56,7 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
   const { isNewGroup } = useClassificationStore()
 
   const modal = useFormModal()
+  const { styles } = useStyles()
   const { t } = useTranslation()
 
   const fieldName: string = isArray(name) ? name[name.length - 1] : name
@@ -103,16 +107,19 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
         border={ false }
         collapsed={ false }
         collapsible
-        extra={ (
-          <Flex className='w-full'>
-            <Button
-              color="default"
-              icon={ <Icon value="trash" /> }
-              onClick={ handleClose }
-              variant="filled"
-            />
-          </Flex>
-        ) }
+        extra={ disallowDelete
+          ? undefined
+          : (
+            <Flex className='w-full'>
+              <IconButton
+                className={ styles.deleteButton }
+                icon={ { value: 'trash' } }
+                onClick={ handleClose }
+                title={ t('delete') }
+                type='action'
+              />
+            </Flex>
+            ) }
         extraPosition="start"
         theme='border-highlight'
         title={ groupLayout?.name }
@@ -128,5 +135,5 @@ export const ClassificationStoreItem = (props: ClassificationStoreItemProps): Re
         </Panel>
       </BaseView>
     )
-  }, [groupLayout, id, fieldName, currentLayoutData, visibleKeys])
+  }, [groupLayout, id, fieldName, currentLayoutData, visibleKeys, disallowDelete])
 }

@@ -37,7 +37,12 @@ export const SortButton = ({ onSortingChange, ...props }: SortButtonProps): Reac
     <div
       className={ [styles.button, 'sort-button', `sort-button--sorting-${value}`].join(' ') }
       onClick={ onClick }
-      onKeyUp={ onClick }
+      onKeyDown={ (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          onClick()
+        }
+      } }
       role="button"
       tabIndex={ 0 }
     >

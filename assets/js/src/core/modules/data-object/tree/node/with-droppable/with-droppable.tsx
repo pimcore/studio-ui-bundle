@@ -25,6 +25,7 @@ import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { HotspotDroppable, type HotspotDroppableProps } from '@Pimcore/components/drag-and-drop/hotspot-droppable'
 import { useSorting } from '@Pimcore/modules/element/actions/sorting/use-sorting'
 import { useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
+import { useTreeClassRestriction } from '../../hooks/use-tree-class-restriction'
 
 interface OnSortingDropProps {
   info: DragAndDropInfo
@@ -38,6 +39,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
     const { move: moveByIndex } = useSorting('data-object')
     const { isSourceAllowed, isTargetAllowed } = useDndAllowed()
     const { getAncestorIds } = useElementTree()
+    const { isClassAllowed } = useTreeClassRestriction()
     const parentNode = useElementTreeNode(props.parentId ?? '-1')
     const hasParent = parentNode !== undefined
     let sortingMode = 'keyed'
@@ -71,7 +73,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
       }
 
       const objects = getDraggedElements<DataObject>(info)
-        .filter(object => object.type !== 'variant' && isSourceAllowed(object))
+        .filter(object => object.type !== 'variant' && isSourceAllowed(object) && isClassAllowed(object))
 
       return toMovableElements(targetObject.id, objects, getAncestorIds)
     }
@@ -119,7 +121,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
       }
 
       const objects = getDraggedElements<DataObject>(info)
-        .filter(object => object.type !== 'variant' && isSourceAllowed(object))
+        .filter(object => object.type !== 'variant' && isSourceAllowed(object) && isClassAllowed(object))
 
       // Sorting a set relative to one of its own members has no defined result.
       if (objects.some(object => String(object.id) === String(targetObject.id))) {
@@ -182,7 +184,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
 
     const checkForValidData: DroppableProps['isValidData'] = (info) => {
       const sourceObject: DataObject = info.data
-      return info.type === 'data-object' && targetObject.type !== 'variant' && isSourceAllowed(sourceObject) && isTargetAllowed(targetObject)
+      return info.type === 'data-object' && targetObject.type !== 'variant' && isSourceAllowed(sourceObject) && isTargetAllowed(targetObject) && isClassAllowed(sourceObject)
     }
 
     let hotspots: HotspotDroppableProps['hotspots'] = [

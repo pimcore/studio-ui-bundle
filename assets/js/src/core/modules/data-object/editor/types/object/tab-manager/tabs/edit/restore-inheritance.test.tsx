@@ -84,6 +84,8 @@ jest.mock('@Pimcore/modules/element/hooks/use-element-context', () => ({
   useOptionalElementContext: () => null
 }))
 
+jest.mock('@Pimcore/modules/app/settings/hooks/use-settings', () => ({ useSettings: () => ({}) }))
+
 // the object permissions as the store holds them, read by the locale check
 jest.mock('@sdk/app', () => ({ useAppSelector: (selector: () => unknown) => selector() }))
 jest.mock('@Pimcore/modules/data-object/data-object-draft-slice', () => ({
