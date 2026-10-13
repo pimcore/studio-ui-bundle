@@ -194,3 +194,47 @@ describe('InputNumber keystroke filtering', () => {
     expect(fireEvent.keyDown(getInput(), { key: 'x' })).toBe(true)
   })
 })
+
+describe('InputNumber text insertion filtering', () => {
+  beforeEach(() => { language = 'en' })
+
+  const beforeInput = (data: string, cancelable = true): boolean =>
+    fireEvent(getInput(), new InputEvent('beforeinput', { data, cancelable, bubbles: true }))
+
+  it('rejects pasted text that cannot be a number', async () => {
+    const user = userEvent.setup()
+
+    render(<InputNumber />)
+    await user.click(getInput())
+    await user.paste('ab12')
+
+    expect(getInput().value).toBe('')
+
+    await user.paste('12.5')
+
+    expect(getInput().value).toBe('12.5')
+  })
+
+  it('judges inserted text by the same character set as typing', () => {
+    language = 'de'
+
+    render(<InputNumber />)
+
+    expect(beforeInput('-12,5')).toBe(true)
+    expect(beforeInput('3.25')).toBe(true)
+    expect(beforeInput('1e5')).toBe(false)
+    expect(beforeInput('12 000')).toBe(false)
+  })
+
+  it('leaves non-cancelable insertions such as IME composition alone', () => {
+    render(<InputNumber />)
+
+    expect(beforeInput('abc', false)).toBe(true)
+  })
+
+  it('leaves insertions alone when a custom parser is given', () => {
+    render(<InputNumber parser={ (value) => (value ?? '').replace(/[^0-9]/g, '') } />)
+
+    expect(beforeInput('abc')).toBe(true)
+  })
+})
