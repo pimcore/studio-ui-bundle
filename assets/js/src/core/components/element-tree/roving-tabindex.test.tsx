@@ -181,4 +181,27 @@ describe('ElementTree: roving tabindex', () => {
     await waitFor(() => { expect(screen.queryByText('node-12')).not.toBeInTheDocument() })
     await waitFor(() => { expect(tabStops()).toEqual([treeItemOf('1')]) })
   })
+
+  it('announces multi selection and keeps a single tab stop while several nodes are selected', async () => {
+    const treeId = 'roving-tabindex-multi'
+    act(() => { store.dispatch(setNodeExpanded({ treeId, nodeId: '1', expanded: true })) })
+
+    render(<TestTree
+      showRoot={ false }
+      treeId={ treeId }
+           />)
+    await waitFor(() => { expect(screen.getByText('node-12')).toBeInTheDocument() })
+
+    expect(screen.getByRole('tree')).toHaveAttribute('aria-multiselectable', 'true')
+
+    act(() => { store.dispatch(setSelectedNodeIds({ treeId, selectedNodeIds: ['11', '12'] })) })
+
+    await waitFor(() => {
+      expect(treeItemOf('11')).toHaveAttribute('aria-selected', 'true')
+      expect(treeItemOf('12')).toHaveAttribute('aria-selected', 'true')
+    })
+    expect(treeItemOf('10')).toHaveAttribute('aria-selected', 'false')
+    // the first selected node in tree order holds the one tab stop
+    await waitFor(() => { expect(tabStops()).toEqual([treeItemOf('11')]) })
+  })
 })

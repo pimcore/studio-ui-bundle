@@ -141,6 +141,8 @@ const ElementTree = (
   const treeContent = (
     <div
       aria-label={ props.ariaLabel }
+      // every element tree supports Ctrl/Shift selection; items carry aria-selected
+      aria-multiselectable
       className={ ['tree', styles.tree].join(' ') }
       data-testid={ treeTestId }
       ref={ treeRef }
