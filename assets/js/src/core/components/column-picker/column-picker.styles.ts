@@ -31,6 +31,11 @@ export const useStyles = createStyles(({ css, token }) => {
       overflow-x: hidden;
     `,
 
+    // The virtual tree scrolls itself, a second scrollbar here would double up
+    listVirtual: css`
+      overflow: hidden;
+    `,
+
     listFill: css`
       flex: 1;
       min-height: 0;
