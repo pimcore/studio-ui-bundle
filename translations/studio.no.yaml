@@ -2716,11 +2716,13 @@ two-factor-form.code.required: Skriv inn autentiseringskoden
 two-factor-form.code.invalid-format: Koden må bestå av 6 sifre
 two-factor-form.verify: Bekreft
 two-factor-form.error: Koden kunne ikke bekreftes. Prøv igjen.
+two-factor-form.too-many-attempts: For mange forsøk. Vent noen minutter før du prøver igjen.
 two-factor-form.back: Tilbake til innlogging
 two-factor-setup-form.description: Tofaktorautentisering er påkrevd for kontoen din. Skann QR-koden med autentiseringsappen din og skriv inn den 6-sifrede koden for å bekrefte.
 two-factor-setup-form.manual-entry: Eller skriv inn denne nøkkelen manuelt
 two-factor-setup-form.confirm: Aktiver
 two-factor-setup-form.load-error: Tofaktorautentisering kunne ikke settes opp. Prøv igjen senere.
+two-factor-setup-form.expired: Oppsettet er utløpt. Skann den nye QR-koden og skriv inn koden som vises.
 subscription-details.community-edition: Lær mer om Pimcore-utgaver
 config_not_writeable: Ikke skrivbar, dette kan ha flere årsaker. For detaljer se dokumentasjonen.
 navigation.about: Om

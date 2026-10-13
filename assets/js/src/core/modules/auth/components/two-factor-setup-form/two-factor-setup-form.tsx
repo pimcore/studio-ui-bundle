@@ -14,7 +14,7 @@ import { QRCode } from 'antd'
 import { isNil, isUndefined } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { type TwoFactorSetupData } from '../../hooks/use-two-factor-authentication'
+import { TwoFactorCodeError, type TwoFactorSetupData } from '../../hooks/use-two-factor-authentication'
 import { TwoFactorCodeField, type TwoFactorCodeFormValues } from '../two-factor-code-field/two-factor-code-field'
 import { useStyles } from './two-factor-setup-form.styles'
 
@@ -31,26 +31,43 @@ export const TwoFactorSetupForm = ({ loadSetup, onConfirm, onGetBack, descriptio
   const [form] = Form.useForm<TwoFactorCodeFormValues>()
   const [setup, setSetup] = useState<TwoFactorSetupData | undefined>(undefined)
   const [hasLoadError, setHasLoadError] = useState<boolean>(false)
-  const [hasCodeError, setHasCodeError] = useState<boolean>(false)
+  const [codeError, setCodeError] = useState<TwoFactorCodeError | undefined>(undefined)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [setupRequest, setSetupRequest] = useState<number>(0)
 
   useEffect(() => {
+    // Each request replaces the pending secret, so only the newest answer may be shown
+    let isCurrent = true
+
     loadSetup()
-      .then(setSetup)
-      .catch(() => { setHasLoadError(true) })
-  }, [])
+      .then((data) => { if (isCurrent) setSetup(data) })
+      .catch(() => { if (isCurrent) setHasLoadError(true) })
+
+    return () => { isCurrent = false }
+  }, [setupRequest])
 
   const handleFinish = async (values: TwoFactorCodeFormValues): Promise<void> => {
     setIsLoading(true)
-    setHasCodeError(false)
+    setCodeError(undefined)
 
     try {
       await onConfirm(values.code)
-    } catch {
+    } catch (error) {
       form.resetFields()
-      setHasCodeError(true)
+      setCodeError(error instanceof TwoFactorCodeError ? error : undefined)
       setIsLoading(false)
+
+      if (error instanceof TwoFactorCodeError && error.reason === 'setup-expired') {
+        setSetup(undefined)
+        setSetupRequest((request) => request + 1)
+      }
     }
+  }
+
+  const codeErrorMessages: Record<TwoFactorCodeError['reason'], string> = {
+    'invalid-code': t('two-factor-form.error'),
+    'too-many-attempts': t('two-factor-form.too-many-attempts'),
+    'setup-expired': t('two-factor-setup-form.expired')
   }
 
   const renderSetup = (): React.JSX.Element => {
@@ -94,9 +111,9 @@ export const TwoFactorSetupForm = ({ loadSetup, onConfirm, onGetBack, descriptio
           </Text>
         </Flex>
 
-        {hasCodeError && (
+        {codeError !== undefined && (
           <Alert
-            description={ t('two-factor-form.error') }
+            description={ codeErrorMessages[codeError.reason] }
             showIcon
             type="error"
           />

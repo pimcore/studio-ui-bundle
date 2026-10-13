@@ -13,7 +13,7 @@ import { useMessage } from '@Pimcore/components/message/useMessage'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { useTwoFactorAuthentication } from '@Pimcore/modules/auth/hooks/use-two-factor-authentication'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 export interface TwoFactorResetButtonProps {
@@ -26,13 +26,12 @@ export const TwoFactorResetButton = ({ userId, isTwoFactorActive }: TwoFactorRes
   const modal = useFormModal()
   const messageApi = useMessage()
   const currentUser = useUser()
-  const { isAvailable, resetUserTwoFactor } = useTwoFactorAuthentication()
-  const [isReset, setIsReset] = useState<boolean>(false)
+  const { resetUserTwoFactor } = useTwoFactorAuthentication()
 
   // Same rule as the backend: admins may reset anyone, other users only themselves
   const mayReset = currentUser.isAdmin || currentUser.id === userId
 
-  if (!isAvailable || !isTwoFactorActive || isReset || !mayReset) {
+  if (!isTwoFactorActive || !mayReset) {
     return null
   }
 
@@ -44,10 +43,9 @@ export const TwoFactorResetButton = ({ userId, isTwoFactorActive }: TwoFactorRes
       onOk: async () => {
         try {
           await resetUserTwoFactor(userId)
-          setIsReset(true)
-          await messageApi.success(t('user-management.two-factor-authentication.reset.success'))
+          void messageApi.success(t('user-management.two-factor-authentication.reset.success'))
         } catch {
-          await messageApi.error(t('user-management.two-factor-authentication.reset.error'))
+          void messageApi.error(t('user-management.two-factor-authentication.reset.error'))
         }
       }
     })

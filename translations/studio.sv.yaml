@@ -2716,11 +2716,13 @@ two-factor-form.code.required: Ange autentiseringskoden
 two-factor-form.code.invalid-format: Koden måste bestå av 6 siffror
 two-factor-form.verify: Verifiera
 two-factor-form.error: Koden kunde inte verifieras. Försök igen.
+two-factor-form.too-many-attempts: För många försök. Vänta några minuter innan du försöker igen.
 two-factor-form.back: Tillbaka till inloggning
 two-factor-setup-form.description: Tvåfaktorsautentisering krävs för ditt konto. Skanna QR-koden med din autentiseringsapp och ange den 6-siffriga koden för att bekräfta.
 two-factor-setup-form.manual-entry: Eller ange den här nyckeln manuellt
 two-factor-setup-form.confirm: Aktivera
 two-factor-setup-form.load-error: Tvåfaktorsautentisering kunde inte konfigureras. Försök igen senare.
+two-factor-setup-form.expired: Konfigurationen har gått ut. Skanna den nya QR-koden och ange koden som visas.
 subscription-details.community-edition: Läs mer om Pimcore-utgåvor
 config_not_writeable: Inte skrivbar, detta kan ha flera orsaker. Se dokumentationen för detaljer.
 navigation.about: Om

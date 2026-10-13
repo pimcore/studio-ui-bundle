@@ -11,11 +11,10 @@
 const mockReset = jest.fn(async () => {})
 const mockSuccess = jest.fn()
 const mockError = jest.fn()
-const mockTwoFactor = { isAvailable: true }
 const mockCurrentUser = { id: 1, isAdmin: true }
 
 jest.mock('@Pimcore/modules/auth/hooks/use-two-factor-authentication', () => ({
-  useTwoFactorAuthentication: () => ({ isAvailable: mockTwoFactor.isAvailable, resetUserTwoFactor: mockReset })
+  useTwoFactorAuthentication: () => ({ resetUserTwoFactor: mockReset })
 }))
 jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({ useUser: () => mockCurrentUser }))
 jest.mock('@Pimcore/components/message/useMessage', () => ({
@@ -49,20 +48,12 @@ const renderButton = (isTwoFactorActive: boolean, userId: number): void => {
 
 describe('TwoFactorResetButton', () => {
   beforeEach(() => {
-    mockTwoFactor.isAvailable = true
     mockCurrentUser.id = 1
     mockCurrentUser.isAdmin = true
     mockReset.mockReset()
     mockReset.mockResolvedValue(undefined)
     mockSuccess.mockClear()
     mockError.mockClear()
-  })
-
-  it('is hidden while the backend does not provide 2FA', () => {
-    mockTwoFactor.isAvailable = false
-    renderButton(true, 5)
-
-    expect(screen.queryByText(label)).toBeNull()
   })
 
   it('is hidden when the user has no active 2FA', () => {
@@ -91,14 +82,13 @@ describe('TwoFactorResetButton', () => {
     expect(screen.getByText(label)).toBeTruthy()
   })
 
-  it('resets after confirmation and hides the button', async () => {
+  it('resets after confirmation', async () => {
     renderButton(true, 5)
 
     fireEvent.click(screen.getByText(label))
 
-    await waitFor(() => { expect(screen.queryByText(label)).toBeNull() })
+    await waitFor(() => { expect(mockSuccess).toHaveBeenCalled() })
     expect(mockReset).toHaveBeenCalledWith(5)
-    expect(mockSuccess).toHaveBeenCalled()
   })
 
   it('keeps the button and shows an error when the reset fails', async () => {

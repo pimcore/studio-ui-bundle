@@ -12,6 +12,7 @@ import { Form } from '@Pimcore/components/form/form'
 import { Alert, Button, Flex, FormKit, Text } from '@sdk/components'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { TwoFactorCodeError } from '../../hooks/use-two-factor-authentication'
 import { TwoFactorCodeField, type TwoFactorCodeFormValues } from '../two-factor-code-field/two-factor-code-field'
 
 export interface TwoFactorFormProps {
@@ -23,17 +24,17 @@ export const TwoFactorForm = ({ onVerify, onGetBack }: TwoFactorFormProps): Reac
   const { t } = useTranslation()
   const [form] = Form.useForm<TwoFactorCodeFormValues>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [hasError, setHasError] = useState<boolean>(false)
+  const [codeError, setCodeError] = useState<TwoFactorCodeError | undefined>(undefined)
 
   const handleFinish = async (values: TwoFactorCodeFormValues): Promise<void> => {
     setIsLoading(true)
-    setHasError(false)
+    setCodeError(undefined)
 
     try {
       await onVerify(values.code)
-    } catch {
+    } catch (error) {
       form.resetFields()
-      setHasError(true)
+      setCodeError(error instanceof TwoFactorCodeError ? error : undefined)
       setIsLoading(false)
     }
   }
@@ -45,9 +46,9 @@ export const TwoFactorForm = ({ onVerify, onGetBack }: TwoFactorFormProps): Reac
     >
       <Text>{t('two-factor-form.description')}</Text>
 
-      {hasError && (
+      {codeError !== undefined && (
         <Alert
-          description={ t('two-factor-form.error') }
+          description={ t(codeError.reason === 'too-many-attempts' ? 'two-factor-form.too-many-attempts' : 'two-factor-form.error') }
           showIcon
           type="error"
         />

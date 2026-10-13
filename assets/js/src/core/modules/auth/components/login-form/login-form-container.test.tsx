@@ -9,16 +9,25 @@
  */
 
 const mockLogout = jest.fn(async () => {})
+const mockVerifyCode = jest.fn(async (code: string) => {})
+const mockReload = jest.fn()
 
 jest.mock('@Pimcore/modules/auth/components/login-form/login-form-style', () => ({ useStyle: () => ({ styles: {} }) }))
 jest.mock('@Pimcore/modules/auth/authorization-api-slice.gen', () => ({ useLogoutMutation: () => [mockLogout] }))
 jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({ useUser: () => ({ isAdmin: false }) }))
 jest.mock('@Pimcore/modules/auth/services/statisticsService', () => ({ sendStatistics: jest.fn() }))
+jest.mock('../../hooks/use-two-factor-authentication', () => ({
+  useTwoFactorAuthentication: () => ({ verifyCode: mockVerifyCode, loadSetup: jest.fn() })
+}))
 jest.mock('../forgot-password-form/forgot-password-form', () => ({ ForgotPasswordForm: () => <div>forgot-password</div> }))
 jest.mock('../two-factor-form/two-factor-form', () => ({
   TwoFactorForm: ({ onGetBack }: { onGetBack: () => void }) => <button onClick={ onGetBack }>verify-step</button>
 }))
-jest.mock('../two-factor-setup-form/two-factor-setup-form', () => ({ TwoFactorSetupForm: () => <div>setup-step</div> }))
+jest.mock('../two-factor-setup-form/two-factor-setup-form', () => ({
+  TwoFactorSetupForm: ({ onConfirm }: { onConfirm: (code: string) => Promise<void> }) => (
+    <button onClick={ () => { void onConfirm('123456') } }>setup-step</button>
+  )
+}))
 jest.mock('./login-form', () => ({
   LoginForm: ({ onTwoFactorRequired }: { onTwoFactorRequired: (step: string) => void }) => (
     <>
@@ -36,8 +45,20 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { LoginFormContainer } from './login-form-container'
 
 describe('LoginFormContainer two-factor steps', () => {
+  const originalLocation = globalThis.location
+
+  beforeAll(() => {
+    Object.defineProperty(globalThis, 'location', { configurable: true, value: { ...originalLocation, reload: mockReload } })
+  })
+
+  afterAll(() => {
+    Object.defineProperty(globalThis, 'location', { configurable: true, value: originalLocation })
+  })
+
   afterEach(() => {
     mockLogout.mockClear()
+    mockVerifyCode.mockClear()
+    mockReload.mockClear()
   })
 
   it('shows the code step when the login requires a code', () => {
@@ -55,6 +76,23 @@ describe('LoginFormContainer two-factor steps', () => {
     fireEvent.click(screen.getByText('login-setup'))
 
     expect(screen.getByText('setup-step')).toBeTruthy()
+  })
+
+  it('finishes a login setup with the login code endpoint and reloads', async () => {
+    render(<LoginFormContainer />)
+
+    fireEvent.click(screen.getByText('login-setup'))
+    fireEvent.click(screen.getByText('setup-step'))
+
+    await waitFor(() => { expect(mockReload).toHaveBeenCalledTimes(1) })
+    expect(mockVerifyCode).toHaveBeenCalledWith('123456')
+  })
+
+  it('opens the step of a login that is still waiting for its code', () => {
+    render(<LoginFormContainer pendingTwoFactorStep="verify" />)
+
+    expect(screen.getByText('verify-step')).toBeTruthy()
+    expect(screen.queryByText('login-verify')).toBeNull()
   })
 
   it('logs out and returns to the login step when going back', async () => {

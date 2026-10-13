@@ -16,38 +16,26 @@ import { Modal } from '@Pimcore/components/modal/modal'
 import { TwoFactorSetupForm } from '@Pimcore/modules/auth/components/two-factor-setup-form/two-factor-setup-form'
 import { useTwoFactorAuthentication } from '@Pimcore/modules/auth/hooks/use-two-factor-authentication'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
-import { setUser } from '@Pimcore/modules/auth/user/user-slice'
-import { useAppDispatch } from '@sdk/app'
 import { Flex, Text } from '@sdk/components'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export const TwoFactorAccordion = (): React.JSX.Element | null => {
+export const TwoFactorAccordion = (): React.JSX.Element => {
   const { t } = useTranslation()
   const user = useUser()
-  const dispatch = useAppDispatch()
   const modal = useFormModal()
   const messageApi = useMessage()
-  const { isAvailable, loadSetup, confirmSetup, disableTwoFactor } = useTwoFactorAuthentication()
+  const { loadSetup, confirmSetup, disableTwoFactor } = useTwoFactorAuthentication()
   const [isSetupOpen, setIsSetupOpen] = useState<boolean>(false)
-
-  if (!isAvailable) {
-    return null
-  }
 
   const twoFactor = user.twoFactorAuthentication
   const isActive = twoFactor.active
   const isRequired = twoFactor.required
 
-  const updateTwoFactorState = (changes: Partial<typeof twoFactor>): void => {
-    dispatch(setUser({ ...user, twoFactorAuthentication: { ...twoFactor, ...changes } }))
-  }
-
   const handleConfirmSetup = async (code: string): Promise<void> => {
     await confirmSetup(code)
-    updateTwoFactorState({ enabled: true, active: true, type: 'google' })
     setIsSetupOpen(false)
-    await messageApi.success(t('user-profile.two-factor-authentication.setup.success'))
+    void messageApi.success(t('user-profile.two-factor-authentication.setup.success'))
   }
 
   const handleDisable = (): void => {
@@ -58,10 +46,9 @@ export const TwoFactorAccordion = (): React.JSX.Element | null => {
       onOk: async () => {
         try {
           await disableTwoFactor()
-          updateTwoFactorState({ enabled: false, active: false, type: '' })
-          await messageApi.success(t('user-profile.two-factor-authentication.disable.success'))
+          void messageApi.success(t('user-profile.two-factor-authentication.disable.success'))
         } catch {
-          await messageApi.error(t('user-profile.two-factor-authentication.disable.error'))
+          void messageApi.error(t('user-profile.two-factor-authentication.disable.error'))
         }
       }
     })

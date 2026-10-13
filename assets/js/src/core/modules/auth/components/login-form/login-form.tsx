@@ -15,7 +15,7 @@ import { componentConfig } from '@Pimcore/modules/app/component-registry/compone
 import { SlotRenderer } from '@Pimcore/modules/app/component-registry/slot-renderer'
 import { type Credentials, useLoginMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
 import { useStyle } from '@Pimcore/modules/auth/components/login-form/login-form-style'
-import { useTwoFactorAuthentication, type TwoFactorStep } from '@Pimcore/modules/auth/hooks/use-two-factor-authentication'
+import { getTwoFactorStep, type TwoFactorStep } from '@Pimcore/modules/auth/hooks/use-two-factor-authentication'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { sendStatistics } from '@Pimcore/modules/auth/services/statisticsService'
 import { Checkbox, Input } from 'antd'
@@ -42,7 +42,6 @@ export const LoginForm = ({ onPasswordForgotten, onTwoFactorRequired }: ILoginFo
   })
 
   const [login] = useLoginMutation()
-  const { getTwoFactorStep } = useTwoFactorAuthentication()
   // Use manual isLoading state because the rtkQueryErrorLogger prevents this action on 401 error
   const [isLoginLoading, setIsLoginLoading] = useState(false)
 

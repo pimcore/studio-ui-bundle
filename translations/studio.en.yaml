@@ -2716,11 +2716,13 @@ two-factor-form.code.required: Please enter the authentication code
 two-factor-form.code.invalid-format: The code must consist of 6 digits
 two-factor-form.verify: Verify
 two-factor-form.error: The code could not be verified. Please try again.
+two-factor-form.too-many-attempts: Too many attempts. Please wait a few minutes before you try again.
 two-factor-form.back: Back to login
 two-factor-setup-form.description: Two-factor authentication is required for your account. Scan the QR code with your authenticator app and enter the 6-digit code to confirm.
 two-factor-setup-form.manual-entry: Or enter this key manually
 two-factor-setup-form.confirm: Activate
 two-factor-setup-form.load-error: Two-factor authentication could not be set up. Please try again later.
+two-factor-setup-form.expired: The setup has expired. Scan the new QR code and enter the code it shows.
 subscription-details.community-edition: Learn more about Pimcore Editions
 config_not_writeable: Not writable, this can have several reasons. For details please have a look into the docs.
 navigation.about: About

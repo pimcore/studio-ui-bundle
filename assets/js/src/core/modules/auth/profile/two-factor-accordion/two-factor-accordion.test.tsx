@@ -10,10 +10,8 @@
 
 const mockConfirmSetup = jest.fn(async () => {})
 const mockDisable = jest.fn(async () => {})
-const mockDispatch = jest.fn()
 const mockSuccess = jest.fn()
 const mockError = jest.fn()
-const mockTwoFactor = { isAvailable: true }
 const mockUser: { id: number, twoFactorAuthentication: { required: boolean, enabled: boolean, type: string, active: boolean } } = {
   id: 1,
   twoFactorAuthentication: { required: false, enabled: false, type: '', active: false }
@@ -21,15 +19,12 @@ const mockUser: { id: number, twoFactorAuthentication: { required: boolean, enab
 
 jest.mock('@Pimcore/modules/auth/hooks/use-two-factor-authentication', () => ({
   useTwoFactorAuthentication: () => ({
-    isAvailable: mockTwoFactor.isAvailable,
     loadSetup: jest.fn(),
     confirmSetup: mockConfirmSetup,
     disableTwoFactor: mockDisable
   })
 }))
 jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({ useUser: () => mockUser }))
-jest.mock('@Pimcore/modules/auth/user/user-slice', () => ({ setUser: (payload: unknown) => ({ type: 'auth/setUser', payload }) }))
-jest.mock('@sdk/app', () => ({ useAppDispatch: () => mockDispatch }))
 jest.mock('@sdk/components', () => ({
   Flex: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   Text: ({ children }: { children: React.ReactNode }) => <span>{children}</span>
@@ -74,21 +69,12 @@ const setTwoFactor = (active: boolean, required: boolean): void => {
 
 describe('TwoFactorAccordion', () => {
   beforeEach(() => {
-    mockTwoFactor.isAvailable = true
     setTwoFactor(false, false)
     mockConfirmSetup.mockClear()
     mockDisable.mockReset()
     mockDisable.mockResolvedValue(undefined)
-    mockDispatch.mockClear()
     mockSuccess.mockClear()
     mockError.mockClear()
-  })
-
-  it('is hidden while the backend does not provide 2FA', () => {
-    mockTwoFactor.isAvailable = false
-    const { container } = render(<TwoFactorAccordion />)
-
-    expect(container.innerHTML).toBe('')
   })
 
   it('offers setup but no disable when 2FA is not set up', () => {
@@ -115,7 +101,7 @@ describe('TwoFactorAccordion', () => {
     expect(screen.queryByText(disableLabel)).toBeNull()
   })
 
-  it('marks 2FA active after a confirmed setup and keeps required unchanged', async () => {
+  it('closes the setup after a confirmed code', async () => {
     render(<TwoFactorAccordion />)
 
     fireEvent.click(screen.getByText(setupLabel))
@@ -123,16 +109,10 @@ describe('TwoFactorAccordion', () => {
 
     await waitFor(() => { expect(mockSuccess).toHaveBeenCalled() })
     expect(mockConfirmSetup).toHaveBeenCalledWith('123456')
-    expect(mockDispatch).toHaveBeenCalledWith({
-      type: 'auth/setUser',
-      payload: expect.objectContaining({
-        twoFactorAuthentication: { required: false, enabled: true, type: 'google', active: true }
-      })
-    })
     expect(screen.queryByText('confirm-setup')).toBeNull()
   })
 
-  it('marks 2FA inactive after disabling', async () => {
+  it('disables after confirmation', async () => {
     setTwoFactor(true, false)
     render(<TwoFactorAccordion />)
 
@@ -140,15 +120,9 @@ describe('TwoFactorAccordion', () => {
 
     await waitFor(() => { expect(mockSuccess).toHaveBeenCalled() })
     expect(mockDisable).toHaveBeenCalledTimes(1)
-    expect(mockDispatch).toHaveBeenCalledWith({
-      type: 'auth/setUser',
-      payload: expect.objectContaining({
-        twoFactorAuthentication: { required: false, enabled: false, type: '', active: false }
-      })
-    })
   })
 
-  it('shows an error and keeps the state when disabling fails', async () => {
+  it('shows an error when disabling fails', async () => {
     setTwoFactor(true, false)
     mockDisable.mockRejectedValue(new Error('failed'))
     render(<TwoFactorAccordion />)
@@ -156,6 +130,6 @@ describe('TwoFactorAccordion', () => {
     fireEvent.click(screen.getByText(disableLabel))
 
     await waitFor(() => { expect(mockError).toHaveBeenCalled() })
-    expect(mockDispatch).not.toHaveBeenCalled()
+    expect(mockSuccess).not.toHaveBeenCalled()
   })
 })

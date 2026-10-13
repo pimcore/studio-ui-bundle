@@ -2716,11 +2716,13 @@ two-factor-form.code.required: Wpisz kod uwierzytelniający
 two-factor-form.code.invalid-format: Kod musi składać się z 6 cyfr
 two-factor-form.verify: Zweryfikuj
 two-factor-form.error: Nie udało się zweryfikować kodu. Spróbuj ponownie.
+two-factor-form.too-many-attempts: Zbyt wiele prób. Odczekaj kilka minut, zanim spróbujesz ponownie.
 two-factor-form.back: Powrót do logowania
 two-factor-setup-form.description: Uwierzytelnianie dwuetapowe jest wymagane dla Twojego konta. Zeskanuj kod QR w aplikacji uwierzytelniającej i wpisz 6-cyfrowy kod, aby potwierdzić.
 two-factor-setup-form.manual-entry: Możesz też wpisać ten klucz ręcznie
 two-factor-setup-form.confirm: Aktywuj
 two-factor-setup-form.load-error: Nie udało się skonfigurować uwierzytelniania dwuetapowego. Spróbuj ponownie później.
+two-factor-setup-form.expired: Konfiguracja wygasła. Zeskanuj nowy kod QR i wpisz wyświetlony kod.
 subscription-details.community-edition: Więcej informacji o edycjach Pimcore
 config_not_writeable: Brak możliwości zapisu; może to mieć wiele przyczyn. Szczegóły znajdziesz w dokumentacji.
 navigation.about: O programie
