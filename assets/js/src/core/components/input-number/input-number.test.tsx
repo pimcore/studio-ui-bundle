@@ -27,6 +27,8 @@ import React from 'react'
 // eslint-disable-next-line import/first
 import { fireEvent, render, screen } from '@testing-library/react'
 // eslint-disable-next-line import/first
+import userEvent from '@testing-library/user-event'
+// eslint-disable-next-line import/first
 import { InputNumber } from './input-number'
 
 const getInput = (): HTMLInputElement => screen.getByRole('spinbutton')
@@ -111,5 +113,84 @@ describe('InputNumber decimal separator', () => {
     type('12,4')
 
     expect(onChange).toHaveBeenLastCalledWith(124)
+  })
+})
+
+describe('InputNumber keystroke filtering', () => {
+  beforeEach(() => { language = 'en' })
+
+  it('drops typed characters that cannot be part of a number', async () => {
+    const user = userEvent.setup()
+
+    render(<InputNumber />)
+    await user.type(getInput(), 'abc12x')
+
+    expect(getInput().value).toBe('12')
+  })
+
+  it('accepts digits, a minus sign and the locale decimal separator', async () => {
+    language = 'de'
+    const onChange = jest.fn()
+    const user = userEvent.setup()
+
+    render(<InputNumber onChange={ onChange } />)
+    await user.type(getInput(), '-12,5')
+
+    expect(onChange).toHaveBeenLastCalledWith(-12.5)
+  })
+
+  it('accepts the dot as decimal separator in comma locales', async () => {
+    language = 'de'
+    const onChange = jest.fn()
+    const user = userEvent.setup()
+
+    render(<InputNumber onChange={ onChange } />)
+    await user.type(getInput(), '3.25')
+
+    expect(onChange).toHaveBeenLastCalledWith(3.25)
+  })
+
+  it('blocks letters, exponent notation, whitespace and the foreign decimal separator', () => {
+    render(<InputNumber />)
+
+    expect(fireEvent.keyDown(getInput(), { key: 'x' })).toBe(false)
+    expect(fireEvent.keyDown(getInput(), { key: 'e' })).toBe(false)
+    expect(fireEvent.keyDown(getInput(), { key: ' ' })).toBe(false)
+    expect(fireEvent.keyDown(getInput(), { key: ',' })).toBe(false)
+  })
+
+  it('lets the locale decimal separator through', () => {
+    language = 'de'
+
+    render(<InputNumber />)
+
+    expect(fireEvent.keyDown(getInput(), { key: ',' })).toBe(true)
+    expect(fireEvent.keyDown(getInput(), { key: '.' })).toBe(true)
+    expect(fireEvent.keyDown(getInput(), { key: '-' })).toBe(true)
+  })
+
+  it('does not block keyboard shortcuts or navigation keys', () => {
+    render(<InputNumber />)
+
+    expect(fireEvent.keyDown(getInput(), { key: 'a', ctrlKey: true })).toBe(true)
+    expect(fireEvent.keyDown(getInput(), { key: 'v', metaKey: true })).toBe(true)
+    expect(fireEvent.keyDown(getInput(), { key: 'Backspace' })).toBe(true)
+    expect(fireEvent.keyDown(getInput(), { key: 'ArrowLeft' })).toBe(true)
+    expect(fireEvent.keyDown(getInput(), { key: 'Tab' })).toBe(true)
+  })
+
+  it('still calls a passed onKeyDown handler', () => {
+    const onKeyDown = jest.fn()
+
+    render(<InputNumber onKeyDown={ onKeyDown } />)
+    fireEvent.keyDown(getInput(), { key: 'x' })
+
+    expect(onKeyDown).toHaveBeenCalledTimes(1)
+  })
+
+  it('leaves the keystrokes alone when a custom parser is given', () => {
+    render(<InputNumber parser={ (value) => (value ?? '').replace(/[^0-9]/g, '') } />)
+
+    expect(fireEvent.keyDown(getInput(), { key: 'x' })).toBe(true)
   })
 })
