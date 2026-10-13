@@ -1163,7 +1163,9 @@ jobs.zip-upload-job.title: Przesyłanie ZIP
 jobs.zip-upload-job.step1.title: Rozpakowywanie ZIP
 jobs.zip-upload-job.step2.title: Tworzenie assetów
 jobs.download-csv-job.title: Eksport CSV
+jobs.download-csv-job.title-with-context: "Eksport CSV ({{name}})"
 jobs.download-xlsx-job.title: Eksport XLSX
+jobs.download-xlsx-job.title-with-context: "Eksport XLSX ({{name}})"
 jobs.download-zip-job.title: Pobieranie ZIP
 batch-edit.modal-title: Edycja zbiorcza
 batch-edit.no-content: Nie dodano jeszcze żadnych kolumn
