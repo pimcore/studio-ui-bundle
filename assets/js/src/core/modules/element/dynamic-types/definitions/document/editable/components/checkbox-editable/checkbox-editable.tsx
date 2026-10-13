@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { Checkbox, Flex, Text } from '@sdk/components'
+import { Checkbox, Flex, Switch, Text } from '@sdk/components'
 import { FieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label'
 import { EditableOverlay } from '../editable-overlay/editable-overlay'
 import { isUndefined } from 'lodash'
@@ -22,6 +22,8 @@ export interface CheckboxEditableConfig {
   label?: string
   class?: string
   reload?: boolean
+  /** 'switch' draws the value as an on/off switch, with the label to its right. */
+  display?: 'checkbox' | 'switch'
 }
 
 interface CheckboxEditableProps {
@@ -57,7 +59,31 @@ export const CheckboxEditable = ({
     onChange: handleChange
   }
 
+  const renderLabel = (label: string): React.JSX.Element => (
+    <Text>
+      <FieldLabel
+        label={ label }
+        name={ name }
+      />
+    </Text>
+  )
+
+  const renderSwitch = (): React.JSX.Element => (
+    <Switch
+      checked={ Boolean(value) }
+      className={ checkboxProps.className }
+      disabled={ inherited }
+      labelRight={ isUndefined(config?.label) ? undefined : renderLabel(config.label) }
+      onChange={ handleChange }
+      size="small"
+    />
+  )
+
   const renderCheckbox = (): React.JSX.Element => {
+    if (config?.display === 'switch') {
+      return renderSwitch()
+    }
+
     if (!isUndefined(config?.label)) {
       return (
         <Flex
@@ -65,12 +91,7 @@ export const CheckboxEditable = ({
           gap="extra-small"
         >
           <Checkbox { ...checkboxProps } />
-          <Text>
-            <FieldLabel
-              label={ config.label }
-              name={ name }
-            />
-          </Text>
+          {renderLabel(config.label)}
         </Flex>
       )
     }
