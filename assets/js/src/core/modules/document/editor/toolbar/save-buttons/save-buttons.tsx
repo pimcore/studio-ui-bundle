@@ -20,9 +20,7 @@ import { UnpublishedLabel } from '@Pimcore/modules/element/editor/shared-compone
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useDeleteDraft } from '@Pimcore/modules/element/actions/delete-draft/use-delete-draft'
 import { SaveTaskType, useSave } from '@Pimcore/modules/document/actions/save/use-save'
-import {
-  useSaveSchedules
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
+import { useSaveSchedules } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useRequiredFieldsValidation } from '@Pimcore/modules/document/hooks/use-required-fields-validation'
 import { isNil } from 'lodash'
