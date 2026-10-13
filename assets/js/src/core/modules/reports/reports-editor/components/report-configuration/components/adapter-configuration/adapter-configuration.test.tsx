@@ -112,4 +112,33 @@ describe('AdapterConfiguration', () => {
     expect(mockGetDynamicType).toHaveBeenCalledWith('custom', false)
     expect(customEditorProps).toHaveBeenCalledWith({ currentData, updateFormData, form: undefined })
   })
+
+  it('does not re-render the adapter editor when only general settings or permissions change', () => {
+    mockGetDynamicType.mockReturnValue(new CustomEditorAdapter())
+    const updateFormData = jest.fn()
+    const base: ReportFormData = { ...reportData('custom'), niceName: 'a', sharedGlobally: false }
+
+    const { rerender } = render(<AdapterConfiguration
+      currentData={ base }
+      updateFormData={ updateFormData }
+                                />)
+
+    expect(customEditorProps).toHaveBeenCalledTimes(1)
+
+    rerender(<AdapterConfiguration
+      currentData={ { ...base, niceName: 'b', sharedGlobally: true } }
+      updateFormData={ updateFormData }
+             />)
+
+    expect(customEditorProps).toHaveBeenCalledTimes(1)
+
+    const changedSource: ReportFormData = { ...base, dataSourceConfig: { type: 'custom', x: 1 } }
+
+    rerender(<AdapterConfiguration
+      currentData={ changedSource }
+      updateFormData={ updateFormData }
+             />)
+
+    expect(customEditorProps).toHaveBeenCalledTimes(2)
+  })
 })

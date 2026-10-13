@@ -80,10 +80,7 @@ export const ReportConfiguration = ({ report, modifiedReports, setModifiedReport
 
     if (!isNull(currentData) && !isUndefined(currentType) && !isUndefined(prevType) && prevType !== currentType) {
       form.resetFields()
-      updateFormData?.({
-        ...currentData,
-        columnConfigurations: []
-      })
+      updateFormData?.({ columnConfigurations: [] })
     }
   }, [dataSourceConfig?.type])
 
@@ -96,7 +93,8 @@ export const ReportConfiguration = ({ report, modifiedReports, setModifiedReport
   }, [isDirty])
 
   const onValuesChange = (changedValues: Partial<ReportFormData>, allValues: ReportFormData): void => {
-    updateFormData?.({ ...currentData, ...allValues })
+    // updateFormData merges into the latest state, no need to spread a possibly stale currentData
+    updateFormData?.(allValues)
   }
 
   const handleSave = (): void => {

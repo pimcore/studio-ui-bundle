@@ -9,6 +9,7 @@
  */
 
 import { castArray, isNull } from 'lodash'
+import { type IReportConfigurationSectionProps } from '@Pimcore/modules/reports/reports-editor/types'
 import { type ReportFormData } from '@Pimcore/modules/reports/reports-editor/hooks/use-report-form-state'
 import {
   type BundleCustomReportsColumnConfigurationUpdateData,
@@ -72,3 +73,35 @@ export const normalizeIconFields = (data: ReportFormData): INormalizeIconFieldsR
     groupIconClass: denormalizeIcon(data?.groupIconClass) ?? ''
   }
 }
+
+export type ReportFormField = keyof ReportFormData
+
+export const GENERAL_SETTINGS_FIELDS: ReportFormField[] = [
+  'niceName', 'iconClass', 'groupIconClass', 'group', 'reportClass', 'menuShortcut'
+]
+
+export const PERMISSION_FIELDS: ReportFormField[] = ['sharedGlobally', 'sharedUserNames', 'sharedRoleNames']
+
+const hasChangedField = (prev: ReportFormData, next: ReportFormData, field: ReportFormField): boolean =>
+  prev[field] !== next[field]
+
+/**
+ * Creates a React.memo comparator for section components. `currentData` is compared field by field (by reference),
+ * either only the given fields (`mode: 'only'`) or all fields except the given ones (`mode: 'except'`). All other
+ * props are compared by reference.
+ */
+export const createSectionPropsComparator = (
+  fields: ReportFormField[],
+  mode: 'only' | 'except'
+): ((prev: IReportConfigurationSectionProps, next: IReportConfigurationSectionProps) => boolean) =>
+  (prev, next) => {
+    if (prev.form !== next.form || prev.updateFormData !== next.updateFormData) return false
+    if (prev.currentData === next.currentData) return true
+
+    const keys = mode === 'only'
+      ? fields
+      : [...new Set([...Object.keys(prev.currentData), ...Object.keys(next.currentData)])]
+          .filter(key => !fields.includes(key as ReportFormField)) as ReportFormField[]
+
+    return !keys.some(key => hasChangedField(prev.currentData, next.currentData, key))
+  }
