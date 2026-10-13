@@ -25,7 +25,6 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Tag } from 'antd'
 import { Space } from '@Pimcore/components/space/space'
-import i18n from 'i18next'
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Text } from '@Pimcore/components/text/text'
@@ -84,7 +83,7 @@ export const NotesAndEventsTabView = ({
           <span>{formatDateTime({ timestamp: note.date, dateStyle: 'short', timeStyle: 'medium' })}</span>
           { !note.locked && (
           <IconButton
-            aria-label={ i18n.t('aria.notes-and-events.delete') }
+            aria-label={ t('aria.notes-and-events.delete') }
             icon={ { value: 'trash' } }
             loading={ deleteLoading }
             onClick={ (e) => {
@@ -92,7 +91,7 @@ export const NotesAndEventsTabView = ({
               onClickTrash(note.id)
             } }
             theme='primary'
-            tooltip={ { title: i18n.t('delete') } }
+            tooltip={ { title: t('delete') } }
           />
           )}
         </Space>
