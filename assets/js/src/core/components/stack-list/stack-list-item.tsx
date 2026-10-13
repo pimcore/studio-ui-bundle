@@ -11,6 +11,7 @@
 import React, { useMemo } from 'react'
 import { useStyles } from './stack-list-item.styles'
 import { type UniqueIdentifier } from '@dnd-kit/core'
+import { useTranslation } from 'react-i18next'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { IconButton } from '../icon-button/icon-button'
@@ -39,7 +40,8 @@ export interface StackListItemProps {
 export const StackListItem = (props: StackListItemProps): React.JSX.Element => {
   const { id, children, body, sortable = false, renderLeftToolbar, renderRightToolbar, type = StackListItemTypes.DEFAULT, defaultActive } = props
   const { styles } = useStyles()
-  const { listeners, setNodeRef, setActivatorNodeRef, transform, transition } = useSortable({ id })
+  const { t } = useTranslation()
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition } = useSortable({ id })
 
   const style = {
     transform: CSS.Translate.toString(transform),
@@ -57,8 +59,10 @@ export const StackListItem = (props: StackListItemProps): React.JSX.Element => {
           <div className="stack-list-item__title">
             {sortable && (
               <IconButton
+                aria-label={ t('aria.stack-list.drag-handle') }
                 icon={ { value: 'drag-option' } }
                 ref={ setActivatorNodeRef }
+                { ...attributes }
                 theme='secondary'
                 { ...listeners }
               ></IconButton>
@@ -87,8 +91,10 @@ export const StackListItem = (props: StackListItemProps): React.JSX.Element => {
         <div className="stack-list-item__title">
           {sortable && (
             <IconButton
+              aria-label={ t('aria.stack-list.drag-handle') }
               icon={ { value: 'drag-option' } }
               ref={ setActivatorNodeRef }
+              { ...attributes }
               theme='secondary'
               { ...listeners }
             ></IconButton>
