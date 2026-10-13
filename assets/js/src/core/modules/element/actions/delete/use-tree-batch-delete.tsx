@@ -20,6 +20,7 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
 import { AssetBatchDeleteJob } from '@Pimcore/modules/execution-engine/jobs/batch-delete/asset-batch-delete-job'
 import { DataObjectBatchDeleteJob } from '@Pimcore/modules/execution-engine/jobs/batch-delete/data-object-batch-delete-job'
+import { DocumentBatchDeleteJob } from '@Pimcore/modules/execution-engine/jobs/batch-delete/document-batch-delete-job'
 import { useRecycleBin } from '@Pimcore/modules/recycle-bin/hooks/use-recycle-bin'
 import { useWidgetManager } from '@Pimcore/modules/widget-manager/hooks/use-widget-manager'
 import { getWidgetId } from '@Pimcore/modules/widget-manager/utils/tools'
@@ -36,8 +37,6 @@ export interface DeletableNode {
 }
 
 export interface UseTreeBatchDeleteReturn {
-  /** False for documents, which have no batch delete endpoint. */
-  isSupported: boolean
   /** The nodes a delete triggered on this node would remove. */
   getDeletableNodes: (node: DeletableNode) => DeletableNode[]
   confirmDeleteNodes: (nodes: DeletableNode[]) => Promise<void>
@@ -57,8 +56,6 @@ export const useTreeBatchDelete = (elementType: ElementType): UseTreeBatchDelete
   const { getSelectedNodes, getAncestorIds } = useElementTreeOptional()
   const { refreshRecycleBin } = useRecycleBin()
   const { isMainWidgetOpen, closeWidget } = useWidgetManager()
-
-  const isSupported = elementType !== elementTypes.document
 
   const getDeletableNodes = (node: DeletableNode): DeletableNode[] => {
     const targets = resolveActionTargets<DeletableNode>(node, getSelectedNodes())
@@ -126,14 +123,17 @@ export const useTreeBatchDelete = (elementType: ElementType): UseTreeBatchDelete
           refreshRecycleBin()
         }
 
-        const job = elementType === elementTypes.asset
-          ? new AssetBatchDeleteJob({ itemIds, onFinish })
-          : new DataObjectBatchDeleteJob({ itemIds, onFinish })
+        const jobs = {
+          [elementTypes.asset]: AssetBatchDeleteJob,
+          [elementTypes.dataObject]: DataObjectBatchDeleteJob,
+          [elementTypes.document]: DocumentBatchDeleteJob
+        }
+        const job = new jobs[elementType]({ itemIds, onFinish })
 
         await executionEngine.runJob(job)
       }
     })
   }
 
-  return { isSupported, getDeletableNodes, confirmDeleteNodes }
+  return { getDeletableNodes, confirmDeleteNodes }
 }

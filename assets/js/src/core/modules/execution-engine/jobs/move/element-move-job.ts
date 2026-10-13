@@ -12,8 +12,10 @@ import { isNil, isUndefined } from 'lodash'
 import { t } from 'i18next'
 import { store } from '@Pimcore/app/store'
 import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import { type ApiErrorData } from '@Pimcore/modules/app/error-handler/types'
 import { api as assetApi } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { api as dataObjectApi } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
+import { api as documentApi } from '@Pimcore/modules/document/document-api-slice.gen'
 import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { MessageBusJobHandler, type JobCompletionData } from '../../message-handlers/message-bus-job/message-bus-job-handler'
@@ -24,7 +26,7 @@ import { api as executionEngineApi } from '../../execution-engine-api-slice.gen'
 export interface ElementMoveJobItem {
   id: number
   parentId: number
-  /** Position among the new siblings; data objects only, and only when sorting. */
+  /** Position among the new siblings; data objects and documents, only when sorting. */
   index?: number
 }
 
@@ -39,8 +41,7 @@ export interface ElementMoveJobOptions {
  *
  * The patch endpoint turns a request with more than one element into a job that
  * continues past failures, so progress and the per element error list come from
- * the execution engine. Documents have no batch patch endpoint and are therefore
- * not supported here.
+ * the execution engine.
  */
 export class ElementMoveJob implements JobInterface {
   static readonly jobNames = ['studio_ee_job_patch_elements'] as const
@@ -102,14 +103,30 @@ export class ElementMoveJob implements JobInterface {
     }
   }
 
+  /**
+   * Each element type has its own patch endpoint. An unknown type fails instead of
+   * falling through to another type's endpoint, which would patch unrelated
+   * elements that happen to share the ids.
+   */
+  private async dispatchPatch (data: ElementMoveJobItem[]): Promise<{ data?: { jobRunId?: number } | null, error?: ApiErrorData }> {
+    switch (this.elementType) {
+      case elementTypes.asset:
+        return await store.dispatch(assetApi.endpoints.assetPatchById.initiate({ body: { data } }))
+      case elementTypes.dataObject:
+        return await store.dispatch(dataObjectApi.endpoints.dataObjectPatchById.initiate({ body: { data } }))
+      case elementTypes.document:
+        return await store.dispatch(documentApi.endpoints.documentPatchById.initiate({ body: { data } }))
+      default:
+        throw new Error(`Moving elements of type "${String(this.elementType)}" is not supported`)
+    }
+  }
+
   private async executeMoveRequest (): Promise<number | null> {
     const data = this.items.map(item => isUndefined(item.index)
       ? { id: item.id, parentId: item.parentId }
       : { id: item.id, parentId: item.parentId, index: item.index })
 
-    const response = this.elementType === elementTypes.asset
-      ? await store.dispatch(assetApi.endpoints.assetPatchById.initiate({ body: { data } }))
-      : await store.dispatch(dataObjectApi.endpoints.dataObjectPatchById.initiate({ body: { data } }))
+    const response = await this.dispatchPatch(data)
 
     if (!isUndefined(response.error)) {
       trackError(new ApiError(response.error))

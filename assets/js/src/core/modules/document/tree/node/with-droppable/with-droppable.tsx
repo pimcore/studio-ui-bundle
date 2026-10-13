@@ -11,13 +11,18 @@
 import { type TreeNode, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import React, { forwardRef, type ReactElement, type Ref } from 'react'
 import { type DragAndDropInfo, type DroppableProps } from '@Pimcore/components/drag-and-drop/droppable'
-import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
+import { useMoveElements } from '@Pimcore/modules/element/actions/move/use-move-elements'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type Document } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { isUndefined } from 'lodash'
 import { useDndAllowed } from '@Pimcore/modules/element/tree/node/with-droppable/use-dnd-allowed'
 import { HotspotDroppable, type HotspotDroppableProps } from '@Pimcore/components/drag-and-drop/hotspot-droppable'
 import { useSorting } from '@Pimcore/modules/element/actions/sorting/use-sorting'
+import { getDraggedElements, isElementDrag, isElementListDragType } from '@Pimcore/components/drag-and-drop/element-drag'
+import { toMovableElements } from '@Pimcore/components/element-tree/utils/drop-target-validation'
+import { orderForSorting } from '@Pimcore/components/element-tree/utils/sort-order'
+import { useElementTree } from '@Pimcore/components/element-tree/hooks/use-element-tree'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 interface OnSortingDropProps {
   info: DragAndDropInfo
@@ -26,9 +31,10 @@ interface OnSortingDropProps {
 
 export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
   const DroppableNodeContent = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
-    const { move } = useCopyPaste('document')
+    const { moveMultiple, sortMultiple } = useMoveElements('document')
     const { move: moveByIndex } = useSorting('document')
     const { isSourceAllowed, isTargetAllowed } = useDndAllowed()
+    const { getAncestorIds } = useElementTree()
 
     if (props.metaData?.document === undefined) {
       return (
@@ -44,23 +50,43 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
       )
     }
 
-    const onDrop: DroppableProps['onDrop'] = (info) => {
-      const sourceDocument: Document = info.data
+    /**
+     * The dragged documents this node would accept as children: everything the user
+     * may move, reduced to the topmost elements, and nothing at all when the target
+     * is part of the drag.
+     */
+    const acceptableDocuments = (info: DragAndDropInfo): Document[] => {
+      if (!isElementDrag(info, [elementTypes.document]) || !isTargetAllowed(targetDocument)) {
+        return []
+      }
 
-      if (!isSourceAllowed(sourceDocument) || !isTargetAllowed(targetDocument)) {
+      const documents = getDraggedElements<Document>(info).filter(document => isSourceAllowed(document))
+
+      return toMovableElements(targetDocument.id, documents, getAncestorIds)
+    }
+
+    const onDrop: DroppableProps['onDrop'] = (info) => {
+      const documents = acceptableDocuments(info)
+
+      if (documents.length === 0) {
         return
       }
 
-      move({
-        currentElement: { id: sourceDocument.id, parentId: sourceDocument.parentId },
-        targetElement: { id: targetDocument.id, parentId: targetDocument.parentId }
+      moveMultiple({
+        currentElements: documents.map(document => ({ id: document.id, parentId: document.parentId })),
+        targetElement: { id: targetDocument.id, parentId: targetDocument.parentId },
+        skippedCount: getDraggedElements(info).length - documents.length
       }).catch(() => {
-        trackError(new GeneralError('Item could not be moved'))
+        trackError(new GeneralError('Items could not be moved'))
       })
     }
 
-    const checkForValidContext: DroppableProps['isValidContext'] = (context) => {
-      return context.type === 'document'
+    const checkForValidMoveContext: DroppableProps['isValidContext'] = (info) => {
+      return isElementDrag(info, [elementTypes.document])
+    }
+
+    const checkForValidMoveData: DroppableProps['isValidData'] = (info) => {
+      return acceptableDocuments(info).length > 0
     }
 
     const checkForValidData: DroppableProps['isValidData'] = (info) => {
@@ -85,11 +111,67 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
       })
     }
 
+    /**
+     * The dragged documents that may be sorted next to this node. Sorting places them
+     * among the target's siblings, so the destination is the target's parent.
+     */
+    const acceptableSortDocuments = (info: DragAndDropInfo): Document[] => {
+      if (!isElementDrag(info, [elementTypes.document])) {
+        return []
+      }
+
+      const documents = getDraggedElements<Document>(info).filter(document => isSourceAllowed(document))
+
+      // Sorting a set relative to one of its own members has no defined result.
+      if (documents.some(document => String(document.id) === String(targetDocument.id))) {
+        return []
+      }
+
+      return toMovableElements(targetDocument.parentId ?? targetDocument.id, documents, getAncestorIds)
+    }
+
+    const onSortingDropMultiple = (info: DragAndDropInfo, position: 'top' | 'bottom'): void => {
+      const documents = acceptableSortDocuments(info)
+
+      if (documents.length < 2) {
+        return
+      }
+
+      sortMultiple({
+        currentElements: orderForSorting(documents).map(document => ({ id: document.id, parentId: document.parentId })),
+        targetElement: { id: targetDocument.parentId ?? targetDocument.id },
+        startIndex: position === 'top' ? targetDocument.index : targetDocument.index + 1,
+        skippedCount: getDraggedElements(info).length - documents.length
+      }).catch(() => {
+        trackError(new GeneralError('Items could not be sorted'))
+      })
+    }
+
+    const checkForValidSortContext: DroppableProps['isValidContext'] = (info) => {
+      return isElementDrag(info, [elementTypes.document])
+    }
+
+    const checkForValidSortData: DroppableProps['isValidData'] = (info) => {
+      return isElementListDragType(info.type)
+        ? acceptableSortDocuments(info).length > 1
+        : checkForValidData(info)
+    }
+
+    const onSortingDropAny = (info: DragAndDropInfo, position: 'top' | 'bottom'): void => {
+      if (isElementListDragType(info.type)) {
+        onSortingDropMultiple(info, position)
+
+        return
+      }
+
+      onSortingDrop({ info, position })
+    }
+
     let hotspots: HotspotDroppableProps['hotspots'] = [
       {
         id: 'drop-middle',
-        isValidContext: checkForValidContext,
-        isValidData: checkForValidData,
+        isValidContext: checkForValidMoveContext,
+        isValidData: checkForValidMoveData,
         position: { x: '0', y: '0%', width: '100%', height: '100%' },
         onDrop
       }
@@ -100,25 +182,25 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
         {
           id: 'sorting-top',
           className: 'dnd__sorting dnd__sorting--top',
-          isValidContext: checkForValidContext,
-          isValidData: checkForValidData,
+          isValidContext: checkForValidSortContext,
+          isValidData: checkForValidSortData,
           position: { x: 0, y: 0, width: '100%', height: '30%' },
-          onDrop: (info) => { onSortingDrop({ info, position: 'top' }) }
+          onDrop: (info) => { onSortingDropAny(info, 'top') }
         },
         {
           id: 'drop-middle',
-          isValidContext: checkForValidContext,
-          isValidData: checkForValidData,
+          isValidContext: checkForValidMoveContext,
+          isValidData: checkForValidMoveData,
           position: { x: '0', y: '30%', width: '100%', height: '40%' },
           onDrop
         },
         {
           id: 'sorting-bottom',
           className: 'dnd__sorting dnd__sorting--bottom',
-          isValidContext: checkForValidContext,
-          isValidData: checkForValidData,
+          isValidContext: checkForValidSortContext,
+          isValidData: checkForValidSortData,
           position: { x: 0, y: '70%', width: '100%', height: '30%' },
-          onDrop: (info) => { onSortingDrop({ info, position: 'bottom' }) }
+          onDrop: (info) => { onSortingDropAny(info, 'bottom') }
         }
       ]
     }

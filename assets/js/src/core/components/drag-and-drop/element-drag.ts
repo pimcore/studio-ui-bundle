@@ -77,3 +77,35 @@ export const getDraggedElements = <T = any>(info: DragAndDropInfo): T[] => {
 
 export const getDraggedElementCount = (info: DragAndDropInfo): number =>
   getDraggedElements(info).length
+
+/**
+ * Whether a target that refuses a dragged set would take one of its elements on
+ * its own - the case of a field that holds a single element. The drop stays
+ * refused, but the target can tell the user why instead of ignoring the drag.
+ *
+ * The target's own validators decide, fed with the single element form of each
+ * dragged element. A validator that cannot handle that form counts as a refusal.
+ */
+export const acceptsSingleElementOf = (
+  info: DragAndDropInfo,
+  isValidContext: boolean | ((info: DragAndDropInfo) => boolean),
+  isValidData?: (info: DragAndDropInfo) => boolean
+): boolean => {
+  if (!isElementListDragType(info.type)) {
+    return false
+  }
+
+  const type = toElementType(info.type)
+
+  return getDraggedElements(info).some(element => {
+    const singleElementInfo: DragAndDropInfo = { ...info, type, data: element }
+
+    try {
+      const isContextValid = typeof isValidContext === 'function' ? isValidContext(singleElementInfo) : isValidContext
+
+      return isContextValid && (isValidData?.(singleElementInfo) ?? true)
+    } catch {
+      return false
+    }
+  })
+}

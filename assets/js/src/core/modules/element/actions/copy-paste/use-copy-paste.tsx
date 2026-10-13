@@ -13,6 +13,7 @@ import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-n
 import type { ItemType } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import React from 'react'
+import { isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { type CloneParameters } from '@Pimcore/modules/element/hooks/use-element-api'
 import { type MoveProps, useMoveElement } from '../move/use-move-element'
@@ -43,7 +44,10 @@ type StoreNode = TreeNodeProps | Element | undefined
 export type { MoveProps }
 
 /** What deciding whether an element may be cut needs from it. */
-type CuttableNode = Pick<TreeNodeProps, 'id' | 'permissions' | 'isLocked'> & { parentId?: string | number | null }
+type CuttableNode = Pick<TreeNodeProps, 'id' | 'permissions' | 'isLocked' | 'metaData'> & { parentId?: string | number | null }
+
+/** Whether a cut entry may be pasted into the tree the paste happens in. */
+export type IsClipboardEntryAllowed = (entry: ClipboardEntry) => boolean
 
 export interface UseCopyPasteHookReturn {
   getStoredNode: () => StoreNode
@@ -51,14 +55,14 @@ export interface UseCopyPasteHookReturn {
   copy: (node: TreeNodeProps) => void
   cut: (node: TreeNodeProps) => void
   paste: (parentId: number, cloneParameters?: CloneParameters, node?: StoreNode) => Promise<void>
-  pasteCut: (parentId: number) => Promise<void>
+  pasteCut: (parentId: number, isEntryAllowed?: IsClipboardEntryAllowed) => Promise<void>
   move: (props: MoveProps) => Promise<void>
   copyTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   copyContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
   cutTreeContextMenuItem: (node: TreeNodeProps) => ItemType
   cutContextMenuItem: (node: Element, onFinish?: () => void) => ItemType
   pasteTreeContextMenuItem: (node: TreeNodeProps) => ItemType
-  pasteCutContextMenuItem: (targetNode: TreeNodeProps) => ItemType
+  pasteCutContextMenuItem: (targetNode: TreeNodeProps, isEntryAllowed?: IsClipboardEntryAllowed) => ItemType
 }
 
 export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn => {
@@ -103,16 +107,22 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
   }
 
   /**
-   * Pastes everything that was cut into the target, as one move.
+   * Pastes everything that was cut into the target, as one move. Entries the target
+   * tree does not allow stay where they are and are reported as skipped.
    */
-  const pasteCut = async (parentId: number): Promise<void> => {
+  const pasteCut = async (parentId: number, isEntryAllowed?: IsClipboardEntryAllowed): Promise<void> => {
     const storedNodes = getStoredNodes()
+    const pastableNodes = isUndefined(isEntryAllowed) ? storedNodes : storedNodes.filter(isEntryAllowed)
 
-    if (storedNodes.length === 0) {
+    if (pastableNodes.length === 0) {
       return
     }
 
-    await moveMultiple({ currentElements: storedNodes, targetElement: { id: parentId } })
+    await moveMultiple({
+      currentElements: pastableNodes,
+      targetElement: { id: parentId },
+      skippedCount: storedNodes.length - pastableNodes.length
+    })
 
     clearCopyPaste()
   }
@@ -155,7 +165,13 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
 
     return targets
       .filter(target => checkElementPermission(target.permissions, 'rename') && !(target.isLocked ?? false))
-      .map(target => ({ id: target.id, parentId: target.parentId }))
+      .map(target => {
+        const className = target.metaData?.dataObject?.className
+
+        return isUndefined(className)
+          ? { id: target.id, parentId: target.parentId }
+          : { id: target.id, parentId: target.parentId, className }
+      })
   }
 
   const cutTreeContextMenuItem = (node: TreeNodeProps): ItemType => {
@@ -206,8 +222,9 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
     }
   }
 
-  const pasteCutContextMenuItem = (targetNode: TreeNodeProps): ItemType => {
-    const storedCount = getStoredNodes().length
+  const pasteCutContextMenuItem = (targetNode: TreeNodeProps, isEntryAllowed?: IsClipboardEntryAllowed): ItemType => {
+    const storedNodes = getStoredNodes()
+    const storedCount = isUndefined(isEntryAllowed) ? storedNodes.length : storedNodes.filter(isEntryAllowed).length
 
     return {
       label: storedCount > 1
@@ -217,7 +234,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       icon: <Icon value={ 'paste' } />,
       hidden: isPasteHiddenHook(targetNode, 'cut'),
       onClick: async () => {
-        await pasteCut(parseInt(targetNode.id))
+        await pasteCut(parseInt(targetNode.id), isEntryAllowed)
       }
     }
   }

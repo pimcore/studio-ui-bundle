@@ -24,6 +24,11 @@ export type StoreNode = TreeNodeProps | Element | undefined
 export interface ClipboardEntry {
   id: string | number
   parentId?: string | number | null
+  /**
+   * Class of a cut data object. Kept with the entry so a class restricted tree can
+   * check a cut selection without loading every element again.
+   */
+  className?: string
 }
 
 export interface TreeCopyPasteContextType {

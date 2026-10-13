@@ -147,6 +147,26 @@ export const useTreeNodeInteraction = (
     focusNode(event, parent?.node.internalKey)
   }
 
+  /**
+   * Selects every node the tree currently renders, the way Ctrl/Cmd + A selects all
+   * rows of a list. Collapsed children are not rendered and stay out, and so does
+   * the root, which can neither be moved nor deleted. The tree caps the selection.
+   */
+  const selectAllVisible = (event: KeyboardEvent): void => {
+    event.preventDefault()
+
+    if (isUndefined(nodeOrder) || isNil(nodesRefs)) {
+      return
+    }
+
+    const nodeIds = nodeOrder()
+      .map(internalKey => nodesRefs.current[internalKey]?.node)
+      .filter(visibleNode => !isNil(visibleNode) && visibleNode.isRoot !== true)
+      .map(visibleNode => visibleNode.id)
+
+    selectRange(nodeIds)
+  }
+
   const onClick = (event: MouseEvent): void => {
     if (event.shiftKey) {
       // Suppress the text selection the browser paints across a shift range.
@@ -188,6 +208,10 @@ export const useTreeNodeInteraction = (
 
     if (event.key === 'Escape') {
       clearSelection()
+    }
+
+    if (event.key.toLowerCase() === 'a' && (event.ctrlKey || event.metaKey) && !event.shiftKey && !event.altKey) {
+      selectAllVisible(event)
     }
 
     // A closed node opens, an open one steps into its children.

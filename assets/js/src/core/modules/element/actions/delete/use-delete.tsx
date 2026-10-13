@@ -64,7 +64,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   const { styles } = useStyles()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { treeId } = useTreeId(true)
-  const { isSupported: isBatchDeleteSupported, getDeletableNodes, confirmDeleteNodes } = useTreeBatchDelete(elementType)
+  const { getDeletableNodes, confirmDeleteNodes } = useTreeBatchDelete(elementType)
 
   const runDeleteJob = async (id: number, parentId?: number, onFinish?: () => void): Promise<void> => {
     setIsLoading(true)
@@ -155,9 +155,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   }
 
   const deleteTreeContextMenuItem = (node: TreeNodeProps, onFinish?: () => void): ItemType => {
-    // Documents have no batch delete endpoint, so they stay on the single path
-    // even when several nodes are selected.
-    const deletableNodes = isBatchDeleteSupported ? getDeletableNodes(node) : [node]
+    const deletableNodes = getDeletableNodes(node)
     const isBatchDelete = deletableNodes.length > 1
 
     return {

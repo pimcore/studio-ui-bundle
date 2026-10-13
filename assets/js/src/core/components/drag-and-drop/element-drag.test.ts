@@ -10,6 +10,7 @@
 
 import { type DragAndDropInfo } from './droppable'
 import {
+  acceptsSingleElementOf,
   elementDragTypes,
   getDraggedElementCount,
   getDraggedElements,
@@ -75,5 +76,50 @@ describe('getDraggedElements', () => {
 
   it('does not trust a list type carrying a single object', () => {
     expect(getDraggedElements(info('asset-list', { id: 7 }))).toEqual([])
+  })
+})
+
+describe('acceptsSingleElementOf', () => {
+  // the validators of a single image field
+  const isValidContext = (dragInfo: DragAndDropInfo): boolean => ['asset', 'document', 'data-object'].includes(dragInfo.type)
+  const isValidData = (dragInfo: DragAndDropInfo): boolean => dragInfo.type === 'asset' && dragInfo.data.type === 'image'
+
+  it('is true when one dragged element would be accepted on its own', () => {
+    const set = info('asset-list', [{ id: 1, type: 'video' }, { id: 2, type: 'image' }])
+
+    expect(acceptsSingleElementOf(set, isValidContext, isValidData)).toBe(true)
+  })
+
+  it('is false when no dragged element would be accepted on its own', () => {
+    const set = info('asset-list', [{ id: 1, type: 'video' }, { id: 2, type: 'document' }])
+
+    expect(acceptsSingleElementOf(set, isValidContext, isValidData)).toBe(false)
+  })
+
+  it('is false for a single element drag, which the target judges directly', () => {
+    expect(acceptsSingleElementOf(info('asset', { id: 1, type: 'image' }), isValidContext, isValidData)).toBe(false)
+  })
+
+  it('hands every validator the single element form', () => {
+    const seen: string[] = []
+    const recordingContext = (dragInfo: DragAndDropInfo): boolean => {
+      seen.push(`${dragInfo.type}:${String(dragInfo.data.id)}`)
+      return false
+    }
+
+    acceptsSingleElementOf(info('data-object-list', [{ id: 1 }, { id: 2 }]), recordingContext)
+
+    expect(seen).toEqual(['data-object:1', 'data-object:2'])
+  })
+
+  it('supports a boolean context and a missing data validator', () => {
+    expect(acceptsSingleElementOf(info('asset-list', [{ id: 1 }]), true)).toBe(true)
+    expect(acceptsSingleElementOf(info('asset-list', [{ id: 1 }]), false)).toBe(false)
+  })
+
+  it('treats a validator that throws as a refusal', () => {
+    const throwing = (): boolean => { throw new Error('unexpected payload') }
+
+    expect(acceptsSingleElementOf(info('asset-list', [{ id: 1 }]), throwing)).toBe(false)
   })
 })
