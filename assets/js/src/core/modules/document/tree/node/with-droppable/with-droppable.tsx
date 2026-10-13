@@ -21,7 +21,10 @@ import { useSorting } from '@Pimcore/modules/element/actions/sorting/use-sorting
 import { getDraggedElements, isElementDrag, isElementListDragType } from '@Pimcore/components/drag-and-drop/element-drag'
 import { toMovableElements } from '@Pimcore/components/element-tree/utils/drop-target-validation'
 import { orderForSorting } from '@Pimcore/components/element-tree/utils/sort-order'
+import { planSetSort } from '@Pimcore/components/element-tree/utils/sort-positions'
+import { useTreeFilter } from '@Pimcore/components/element-tree/provider/tree-filter-provider/use-tree-filter'
 import { useElementTree } from '@Pimcore/components/element-tree/hooks/use-element-tree'
+import { useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
 interface OnSortingDropProps {
@@ -35,6 +38,8 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
     const { move: moveByIndex } = useSorting('document')
     const { isSourceAllowed, isTargetAllowed } = useDndAllowed()
     const { getAncestorIds } = useElementTree()
+    const parentNode = useElementTreeNode(props.parentId ?? '-1')
+    const { pageSize } = useTreeFilter()
 
     if (props.metaData?.document === undefined) {
       return (
@@ -130,18 +135,37 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
       return toMovableElements(targetDocument.parentId ?? targetDocument.id, documents, getAncestorIds)
     }
 
-    const onSortingDropMultiple = (info: DragAndDropInfo, position: 'top' | 'bottom'): void => {
+    /**
+     * The set with the index each element is sent with, or nothing when the tree
+     * cannot tell where it would end up (filtered level, member on another page).
+     */
+    const planSort = (info: DragAndDropInfo, position: 'top' | 'bottom'): ReturnType<typeof planSetSort<{ id: number, parentId: number }>> => {
       const documents = acceptableSortDocuments(info)
 
       if (documents.length < 2) {
+        return []
+      }
+
+      return planSetSort({
+        parent: { id: String(props.parentId), childrenIds: parentNode.childrenIds, page: parentNode.page, searchTerm: parentNode.searchTerm },
+        pageSize,
+        elements: orderForSorting(documents).map(document => ({ id: document.id, parentId: document.parentId })),
+        targetId: String(targetDocument.id),
+        edge: position
+      })
+    }
+
+    const onSortingDropMultiple = (info: DragAndDropInfo, position: 'top' | 'bottom'): void => {
+      const elements = planSort(info, position)
+
+      if (elements.length === 0) {
         return
       }
 
       sortMultiple({
-        currentElements: orderForSorting(documents).map(document => ({ id: document.id, parentId: document.parentId })),
+        currentElements: elements,
         targetElement: { id: targetDocument.parentId ?? targetDocument.id },
-        startIndex: position === 'top' ? targetDocument.index : targetDocument.index + 1,
-        skippedCount: getDraggedElements(info).length - documents.length
+        skippedCount: getDraggedElements(info).length - elements.length
       }).catch(() => {
         trackError(new GeneralError('Items could not be sorted'))
       })
@@ -153,7 +177,7 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
 
     const checkForValidSortData: DroppableProps['isValidData'] = (info) => {
       return isElementListDragType(info.type)
-        ? acceptableSortDocuments(info).length > 1
+        ? planSort(info, 'top').length > 1
         : checkForValidData(info)
     }
 

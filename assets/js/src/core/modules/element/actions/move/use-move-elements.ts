@@ -32,14 +32,15 @@ export interface MoveMultipleProps {
 }
 
 export interface SortMultipleProps {
-  /** Already in the order they should end up in. */
-  currentElements: MoveElementRef[]
+  /**
+   * In the order they should end up in, each with the index to send - see
+   * planSetSort, which replays how the backend applies them one by one.
+   */
+  currentElements: Array<MoveElementRef & { index: number }>
   /** Dragged elements the target could not take, so the user is told about them. */
   skippedCount?: number
   /** The parent the elements are sorted into. */
   targetElement: MoveTarget
-  /** Index of the first element; the rest follow consecutively. */
-  startIndex: number
 }
 
 export interface UseMoveElementsReturn {
@@ -142,7 +143,7 @@ export const useMoveElements = (elementType: ElementType): UseMoveElementsReturn
    * always behaved; only the dragged set is renumbered.
    */
   const sortMultiple = async (props: SortMultipleProps): Promise<void> => {
-    const { currentElements, targetElement, startIndex } = props
+    const { currentElements, targetElement } = props
 
     reportSkipped(props.skippedCount)
 
@@ -165,10 +166,10 @@ export const useMoveElements = (elementType: ElementType): UseMoveElementsReturn
 
     const job = new ElementMoveJob({
       elementType,
-      items: currentElements.map((element, position) => ({
+      items: currentElements.map(element => ({
         id: Number(element.id),
         parentId: Number(targetElement.id),
-        index: startIndex + position
+        index: element.index
       })),
       onFinish: async () => {
         // The target gets its own refresh, so refreshing it as a source as well
