@@ -17,6 +17,7 @@ import { AddressSearchField } from '@Pimcore/components/geo-map/components/addre
 import { Tooltip } from 'antd'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useTranslation } from 'react-i18next'
+import { actionTooltipDelay } from '@Pimcore/components/tooltip/tooltip'
 
 export interface GeoMapCardFooterProps {
   onSearch: (geoPoint: GeoPoint) => void
@@ -51,6 +52,7 @@ export const GeoMapCardFooter = (props: GeoMapCardFooterProps): React.JSX.Elemen
         { props.disabled !== true && (
           <div className="remove-button-wrapper">
             <Tooltip
+              mouseEnterDelay={ actionTooltipDelay }
               title={ t('set-to-null') }
             >
               <IconButton

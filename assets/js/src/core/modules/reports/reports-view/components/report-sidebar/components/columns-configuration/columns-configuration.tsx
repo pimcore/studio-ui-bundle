@@ -85,9 +85,11 @@ export const ColumnsConfiguration = (): React.JSX.Element => {
       renderRightToolbar: (
         <Space size='mini'>
           <IconButton
+            aria-label={ t('remove') }
             icon={ { value: 'trash' } }
             onClick={ () => { handleRemoveColumn(stableId) } }
             theme='secondary'
+            tooltip={ { title: t('remove') } }
           />
         </Space>
       )
