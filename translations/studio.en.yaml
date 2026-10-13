@@ -500,6 +500,8 @@ version.category.title.meta: Meta Data
 version.category.title.properties: Properties
 version.changed-attributes: "Changed attributes: {{attributes}}"
 aria.version.delete: Delete version
+aria.notes-and-events.delete: Delete note
+aria.card.close: Close
 aria.version.expand: Expand version
 clear-all: Clear all
 empty: Empty
@@ -760,6 +762,7 @@ tags.apply-tags-to-children: Apply tags to children
 tags.remove-and-apply-tags-to-children: Remove and apply tags to children
 tags.columns.path: Path
 tags.columns.actions: Remove
+tags.actions.delete: Remove tag
 csv-separated-options: CSV separated options
 csv-separated-options-info: The list of available options can be specified as comma-separated list, as single-column values or mixed. For the single-column way, the key will also be used as the value.
 add: Add
@@ -1234,6 +1237,7 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" has been copi
 element.tree.paste: Paste
 element.tree.paste-as-child: Paste as child
 element.tree.paste-as-child-recursive: Paste as child (recursive)
+element.tree.open-no-permission: "You don't have permission to open this element."
 element.tree.paste-recursive-updating-references: Paste recursive, updating references
 element.tree.paste-only-contents: Paste only contents here
 element.tree.cut: Cut
@@ -1285,6 +1289,8 @@ element.delete.batch.show-paths: Show items
 element.delete.batch.dependencies-warning.confirmed_one: 'Please note: This item has dependencies.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Please note: These items have dependencies.'
 element.open: Open
+element.state: State
+element.state.unpublished: Unpublished
 element.toolbar.copy-id: Copy ID
 element.toolbar.copy-full-path-to-clipboard: Copy full path
 element.toolbar.copy-deep-link-to-clipboard: Copy deep link
@@ -1324,6 +1330,9 @@ success: Success
 no-value-set: No value set
 set-to-null: Empty (set to null)
 remove: Remove
+move-up: Move up
+move-down: Move down
+translate: Translate
 delete: Delete
 clone: Clone
 jobs.clone-job.step2.title: Updating references
@@ -2909,6 +2918,7 @@ translations.merger.state.reverted: Reverted
 translations.merger.state.pending: Pending
 translations.merger.apply-all: Apply all
 translations.merger.revert-all: Revert all
+translations.merger.revert: Revert
 translations.merger.title: "Merge Translations (Domain: {{domain}})"
 translations.merger.column.language: Language
 translations.merger.items: items

@@ -500,6 +500,8 @@ version.category.title.meta: Metadatos
 version.category.title.properties: Propiedades
 version.changed-attributes: "Atributos modificados: {{attributes}}"
 aria.version.delete: Eliminar versión
+aria.notes-and-events.delete: Eliminar nota
+aria.card.close: Cerrar
 aria.version.expand: Expandir versión
 clear-all: Limpiar todo
 empty: Vacío
@@ -760,6 +762,7 @@ tags.apply-tags-to-children: Aplicar etiquetas a los hijos
 tags.remove-and-apply-tags-to-children: Eliminar y aplicar etiquetas a los hijos
 tags.columns.path: Ruta
 tags.columns.actions: Eliminar
+tags.actions.delete: Eliminar etiqueta
 csv-separated-options: Opciones separadas por CSV
 csv-separated-options-info: La lista de opciones disponibles se puede especificar como una lista separada por comas, como valores de una sola columna o mixta. Para el modo de columna única, la clave también se utilizará como valor.
 add: Añadir
@@ -1234,6 +1237,7 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" ha sido copia
 element.tree.paste: Pegar
 element.tree.paste-as-child: Pegar como hijo
 element.tree.paste-as-child-recursive: Pegar como hijo (recursivo)
+element.tree.open-no-permission: No tiene permiso para abrir este elemento.
 element.tree.paste-recursive-updating-references: Pegar recursivo, actualizando referencias
 element.tree.paste-only-contents: Pegar solo el contenido aquí
 element.tree.cut: Cortar
@@ -1285,6 +1289,8 @@ element.delete.batch.show-paths: Mostrar elementos
 element.delete.batch.dependencies-warning.confirmed_one: 'Tenga en cuenta: Este elemento tiene dependencias.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Tenga en cuenta: Estos elementos tienen dependencias.'
 element.open: Abrir
+element.state: Estado
+element.state.unpublished: No publicado
 element.toolbar.copy-id: Copiar ID
 element.toolbar.copy-full-path-to-clipboard: Copiar ruta completa
 element.toolbar.copy-deep-link-to-clipboard: Copiar Deeplink
@@ -1324,6 +1330,9 @@ success: Éxito
 no-value-set: No se ha establecido ningún valor
 set-to-null: Vacío (establecer como nulo)
 remove: Eliminar
+move-up: Mover arriba
+move-down: Mover abajo
+translate: Traducir
 delete: Eliminar
 clone: Clonar
 jobs.clone-job.step2.title: Actualizando referencias
@@ -2909,6 +2918,7 @@ translations.merger.state.reverted: Revertido
 translations.merger.state.pending: Pendiente
 translations.merger.apply-all: Aplicar todo
 translations.merger.revert-all: Revertir todo
+translations.merger.revert: Revertir
 translations.merger.title: "Fusionar traducciones (Dominio: {{domain}})"
 translations.merger.column.language: Idioma
 translations.merger.items: elementos

@@ -22,6 +22,14 @@ export const useStyles = createStyles(({ token, css }) => {
       .ant-space-item:has(.widget-manager__tab-title-close-button) {
         margin-inline-start: ${token.sizeXXS}px;
       }
+    `,
+
+    // same as the unpublished elements in the tree: the icon fades, its "eye-off" sub icon stays opaque
+    unpublishedIcon: css`
+      .pimcore-icon__svg,
+      .pimcore-icon__image {
+        opacity: 0.4;
+      }
     `
   }
 }, { hashPriority: 'low' })

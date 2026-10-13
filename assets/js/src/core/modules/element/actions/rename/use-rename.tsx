@@ -17,7 +17,7 @@ import React, { useState } from 'react'
 import type { TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
-import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
+import { type Element, getElementRealKey } from '@Pimcore/modules/element/element-helper'
 import { type GridContextMenuProps } from '@Pimcore/components/grid/grid'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 import { useTreePermission } from '../../../../components/element-tree/provider/tree-permission-provider/use-tree-permission'
@@ -82,7 +82,7 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
       hidden: !checkElementPermission(node.permissions, 'rename') || node.isLocked,
       onClick: () => {
         const parentId = node.parentId ?? undefined
-        rename(node.id, getElementKey(node, elementType), parentId, onFinish)
+        rename(node.id, getElementRealKey(node, elementType), parentId, onFinish)
       }
     }
   }
@@ -110,7 +110,7 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
     const parentId = node!.parentId ?? undefined
     rename(
       id,
-      getElementKey(node!, elementType),
+      getElementRealKey(node!, elementType),
       parentId,
       () => { void refreshGrid() }
     )
@@ -125,7 +125,7 @@ export const useRename = (elementType: ElementType, cacheKey?: string): UseRenam
       onClick: () => {
         const id = parseInt(node.id)
         const parentId = node.parentId !== undefined ? parseInt(node.parentId) : undefined
-        rename(id, node.label, parentId, onFinish)
+        rename(id, node.realKey ?? node.label, parentId, onFinish)
       }
     }
   }

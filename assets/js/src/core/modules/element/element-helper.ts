@@ -60,11 +60,17 @@ const determineElementIcon = (element: Element, defaultIcon: ElementIcon): Eleme
   return defaultIcon
 }
 
+// Display key: honors customAttributes.key. Use only for labels/titles, never as a value to persist (e.g. rename).
 export const getElementKey = (element: Element, elementType: ElementType): string => {
   if (!isNil(element.customAttributes?.key)) {
     return element.customAttributes.key
   }
 
+  return getElementRealKey(element, elementType)
+}
+
+// Real key (filename for assets) as stored on the element, ignoring customAttributes.key.
+export const getElementRealKey = (element: Element, elementType: ElementType): string => {
   if (elementType === 'asset') {
     return (element as Asset).filename ?? ''
   }

@@ -143,8 +143,10 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
 
               <Flex gap={ 'mini' }>
                 <IconButton
+                  aria-label={ t('listing.grid-config.title') }
                   icon={ { value: 'show-details' } }
                   onClick={ () => { setOpen(true) } }
+                  tooltip={ { title: t('listing.grid-config.title') } }
                 />
               </Flex>
             </Flex>

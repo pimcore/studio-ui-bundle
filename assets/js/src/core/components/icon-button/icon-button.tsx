@@ -12,13 +12,18 @@ import React, { forwardRef } from 'react'
 import cn from 'classnames'
 import { Button, type ButtonProps } from '../button/button'
 import { Icon, type IconProps } from '../icon/icon'
-import { Tooltip } from '../tooltip/tooltip'
+import { actionTooltipDelay, Tooltip } from '../tooltip/tooltip'
 import { useStyles } from './icon-button.styles'
 import { type SizeType } from 'antd/es/config-provider/SizeContext'
 import { type TooltipProps } from 'antd'
+import { isNil, isString, isUndefined } from 'lodash'
 
 export interface IconButtonProps extends Omit<ButtonProps, 'icon' | 'variant'> {
   icon: IconProps
+  /**
+   * Tooltip of the button, shown after a short delay. Without it, a text passed as children
+   * (which is never rendered next to the icon) is used as tooltip and accessible label.
+   */
   tooltip?: TooltipProps
   theme?: 'primary' | 'secondary'
   variant?: 'minimal' | 'static'
@@ -41,6 +46,10 @@ const Component = (props: IconButtonProps, ref): React.JSX.Element => {
   } = props
 
   const { styles } = useStyles()
+
+  const label = isNil(children) || children === '' || children === false ? undefined : children
+  const resolvedTooltip = tooltip ?? (isUndefined(label) ? undefined : { title: label })
+  const ariaLabel = buttonProps['aria-label'] ?? (isString(label) ? label : undefined)
 
   const iconButtonClassNames = cn(
     styles.button,
@@ -67,6 +76,7 @@ const Component = (props: IconButtonProps, ref): React.JSX.Element => {
     <Button
       type={ type }
       { ...buttonProps }
+      aria-label={ ariaLabel }
       className={ iconButtonClassNames }
       ref={ ref }
     >
@@ -74,9 +84,12 @@ const Component = (props: IconButtonProps, ref): React.JSX.Element => {
     </Button>
   )
 
-  if (tooltip !== undefined) {
+  if (!isUndefined(resolvedTooltip)) {
     return (
-      <Tooltip { ...tooltip }>
+      <Tooltip
+        mouseEnterDelay={ actionTooltipDelay }
+        { ...resolvedTooltip }
+      >
         {button}
       </Tooltip>
     )

@@ -500,6 +500,8 @@ version.category.title.meta: Metadati
 version.category.title.properties: Proprietà
 version.changed-attributes: "Attributi modificati: {{attributes}}"
 aria.version.delete: Elimina versione
+aria.notes-and-events.delete: Elimina nota
+aria.card.close: Chiudi
 aria.version.expand: Espandi versione
 clear-all: Cancella tutto
 empty: Vuoto
@@ -760,6 +762,7 @@ tags.apply-tags-to-children: Applica tag ai figli
 tags.remove-and-apply-tags-to-children: Rimuovi e applica tag ai figli
 tags.columns.path: Percorso
 tags.columns.actions: Rimuovi
+tags.actions.delete: Rimuovi tag
 csv-separated-options: Opzioni separate da CSV
 csv-separated-options-info: "L'elenco delle opzioni disponibili può essere specificato come elenco separato da virgole, come valori a colonna singola o misto. Per il modo a colonna singola, la chiave verrà utilizzata anche come valore."
 add: Aggiungi
@@ -1234,6 +1237,7 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" è stato copi
 element.tree.paste: Incolla
 element.tree.paste-as-child: Incolla come figlio
 element.tree.paste-as-child-recursive: Incolla come figlio (ricorsivo)
+element.tree.open-no-permission: "Non disponi dell'autorizzazione per aprire questo elemento."
 element.tree.paste-recursive-updating-references: Incolla ricorsivo, aggiornando i riferimenti
 element.tree.paste-only-contents: Incolla solo il contenuto qui
 element.tree.cut: Taglia
@@ -1285,6 +1289,8 @@ element.delete.batch.show-paths: Mostra elementi
 element.delete.batch.dependencies-warning.confirmed_one: 'Nota: Questo elemento ha dipendenze.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Nota: Questi elementi hanno dipendenze.'
 element.open: Apri
+element.state: Stato
+element.state.unpublished: Non pubblicato
 element.toolbar.copy-id: Copia ID
 element.toolbar.copy-full-path-to-clipboard: Copia percorso completo
 element.toolbar.copy-deep-link-to-clipboard: Copia Deeplink
@@ -1324,6 +1330,9 @@ success: Successo
 no-value-set: Nessun valore impostato
 set-to-null: Vuoto (imposta a null)
 remove: Rimuovi
+move-up: Sposta su
+move-down: Sposta giù
+translate: Traduci
 delete: Elimina
 clone: Clona
 jobs.clone-job.step2.title: Aggiornamento riferimenti
@@ -2909,6 +2918,7 @@ translations.merger.state.reverted: Ripristinato
 translations.merger.state.pending: In sospeso
 translations.merger.apply-all: Applica tutto
 translations.merger.revert-all: Ripristina tutto
+translations.merger.revert: Ripristina
 translations.merger.title: "Unisci traduzioni (Dominio: {{domain}})"
 translations.merger.column.language: Lingua
 translations.merger.items: elementi

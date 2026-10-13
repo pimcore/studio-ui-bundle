@@ -500,6 +500,8 @@ version.category.title.meta: Metadane
 version.category.title.properties: Właściwości
 version.changed-attributes: "Zmienione atrybuty: {{attributes}}"
 aria.version.delete: Usuń wersję
+aria.notes-and-events.delete: Usuń notatkę
+aria.card.close: Zamknij
 aria.version.expand: Rozwiń wersję
 clear-all: Wyczyść wszystko
 empty: Pusty
@@ -760,6 +762,7 @@ tags.apply-tags-to-children: Zastosuj tagi do elementów podrzędnych
 tags.remove-and-apply-tags-to-children: Usuń i zastosuj tagi do elementów podrzędnych
 tags.columns.path: Ścieżka
 tags.columns.actions: Usuń
+tags.actions.delete: Usuń tag
 csv-separated-options: Opcje rozdzielone CSV
 csv-separated-options-info: Listę dostępnych opcji można podać jako listę rozdzielaną przecinkami, jako wartości w jednej kolumnie lub mieszanie. W przypadku jednej kolumny klucz jest również używany jako wartość.
 add: Dodaj
@@ -1234,6 +1237,7 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" został skopi
 element.tree.paste: Wklej
 element.tree.paste-as-child: Wklej jako element podrzędny
 element.tree.paste-as-child-recursive: Wklej jako element podrzędny (rekursywnie)
+element.tree.open-no-permission: Nie masz uprawnień do otwarcia tego elementu.
 element.tree.paste-recursive-updating-references: Wklej rekursywnie i zaktualizuj odwołania
 element.tree.paste-only-contents: Wklej tutaj tylko treść
 element.tree.cut: Wytnij
@@ -1285,6 +1289,8 @@ element.delete.batch.show-paths: Pokaż elementy
 element.delete.batch.dependencies-warning.confirmed_one: "Uwaga: ten element ma zależności."
 element.delete.batch.dependencies-warning.confirmed_other: "Uwaga: te elementy mają zależności."
 element.open: Otwórz
+element.state: Status
+element.state.unpublished: Nieopublikowany
 element.toolbar.copy-id: Kopiuj ID
 element.toolbar.copy-full-path-to-clipboard: Kopiuj pełną ścieżkę
 element.toolbar.copy-deep-link-to-clipboard: Kopiuj głęboki link
@@ -1324,6 +1330,9 @@ success: Sukces
 no-value-set: Nie ustawiono wartości
 set-to-null: Pusty (ustaw na null)
 remove: Usuń
+move-up: Przenieś w górę
+move-down: Przenieś w dół
+translate: Przetłumacz
 delete: Usuń
 clone: Klonuj
 jobs.clone-job.step2.title: Aktualizacja odwołań
@@ -2909,6 +2918,7 @@ translations.merger.state.reverted: Cofnięto
 translations.merger.state.pending: Oczekujące
 translations.merger.apply-all: Zastosuj wszystko
 translations.merger.revert-all: Cofnij wszystko
+translations.merger.revert: Cofnij
 translations.merger.title: "Scalanie tłumaczeń (domena: {{domain}})"
 translations.merger.column.language: Język
 translations.merger.items: elementy

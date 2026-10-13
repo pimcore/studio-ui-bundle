@@ -13,8 +13,10 @@ import { useData } from '../../../data-layer/provider/data/use-data'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { Box } from '@Pimcore/components/box/box'
+import { useTranslation } from 'react-i18next'
 
 export const Refetch = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const { dataQueryResult } = useData()
 
   if (dataQueryResult === undefined) {
@@ -33,9 +35,11 @@ export const Refetch = (): React.JSX.Element => {
 
   return (
     <IconButton
+      aria-label={ t('refresh') }
       data-testid="listing-reload-button"
       icon={ { value: 'refresh' } }
       onClick={ async () => await refetch() }
+      tooltip={ { title: t('refresh') } }
     />
   )
 }
