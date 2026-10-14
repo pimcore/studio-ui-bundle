@@ -10,6 +10,7 @@
 
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
 jest.mock('@Pimcore/components/form/form', () => ({ Form: jest.requireActual('antd').Form }))
+jest.mock('./two-factor-code-field.styles', () => ({ useStyles: () => ({ styles: {} }) }))
 
 // eslint-disable-next-line import/first
 import React from 'react'

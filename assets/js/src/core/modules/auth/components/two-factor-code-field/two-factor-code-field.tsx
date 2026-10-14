@@ -12,6 +12,7 @@ import { Form } from '@Pimcore/components/form/form'
 import { type GetRef, Input } from 'antd'
 import React, { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useStyles } from './two-factor-code-field.styles'
 
 export interface TwoFactorCodeFormValues {
   code: string
@@ -26,6 +27,7 @@ interface TwoFactorCodeInputProps {
 
 const TwoFactorCodeInput = ({ onChange }: TwoFactorCodeInputProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyles()
   const form = Form.useFormInstance<TwoFactorCodeFormValues>()
   const boxes = useRef<GetRef<typeof CodeBoxes>>(null)
 
@@ -46,15 +48,17 @@ const TwoFactorCodeInput = ({ onChange }: TwoFactorCodeInputProps): React.JSX.El
   }
 
   return (
-    <CodeBoxes
-      aria-label={ t('two-factor-form.code.placeholder') }
-      inputMode="numeric"
-      length={ CODE_LENGTH }
-      onChange={ () => { form.submit() } }
-      onInput={ handleInput }
-      ref={ boxes }
-      role="group"
-    />
+    <div className={ styles.codeBoxes }>
+      <CodeBoxes
+        aria-label={ t('two-factor-form.code.placeholder') }
+        inputMode="numeric"
+        length={ CODE_LENGTH }
+        onChange={ () => { form.submit() } }
+        onInput={ handleInput }
+        ref={ boxes }
+        role="group"
+      />
+    </div>
   )
 }
 
