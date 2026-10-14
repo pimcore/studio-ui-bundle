@@ -92,7 +92,9 @@ const api = baseApi.enhanceEndpoints({
         }
 
         // A move changes the children of both the old and the new parent; the old one is not known here.
-        if (args.body.data.some((dataObject) => !isNil(dataObject.parentId))) {
+        // Only a single-element patch is applied within the request, multi-element patches return a jobRunId.
+        const isAppliedSynchronously = isNil(result?.jobRunId)
+        if (isAppliedSynchronously && args.body.data.some((dataObject) => !isNil(dataObject.parentId))) {
           invalidatingTagsForPatch.push(...invalidatingTags.DATA_OBJECT_GRID())
         }
 

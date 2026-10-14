@@ -32,6 +32,11 @@ describe('data object api cache invalidation', () => {
   beforeEach(() => {
     gridFolderIds.clear()
     fetchMock = jest.fn(async (input: Request) => {
+      // A single-element patch is applied synchronously and answered with an empty response.
+      if (input.method === 'PATCH') {
+        return new Response(null, { status: 200 })
+      }
+
       if (input.url.endsWith(GRID_URL)) {
         gridFolderIds.set(input, JSON.parse(await input.clone().text()).folderId as number)
       }
@@ -83,6 +88,20 @@ describe('data object api cache invalidation', () => {
       expect(countGridRequests(PARENT_ID)).toBe(2)
       expect(countGridRequests(TARGET_PARENT_ID)).toBe(2)
     })
+  })
+
+  it('does not refetch children grids while a multi-element move still runs as a job', async () => {
+    const store = createStore()
+    await subscribeToGrid(store, PARENT_ID)
+    fetchMock.mockImplementationOnce(async () => new Response(JSON.stringify({ jobRunId: 1 }), {
+      status: 201,
+      headers: { 'Content-Type': 'application/json' }
+    }))
+
+    await store.dispatch(api.endpoints.dataObjectPatchById.initiate({ body: { data: [{ id: 12, parentId: TARGET_PARENT_ID }, { id: 13, parentId: TARGET_PARENT_ID }] } }) as any)
+    await flushRefetches()
+
+    expect(countGridRequests(PARENT_ID)).toBe(1)
   })
 
   it('does not refetch children grids for a patch that keeps the parent', async () => {
