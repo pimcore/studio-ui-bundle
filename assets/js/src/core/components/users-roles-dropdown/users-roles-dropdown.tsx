@@ -100,7 +100,18 @@ export const UsersRolesDropdown = ({
   )
   const roleItems = useMemo(() => roleList?.items ?? [], [roleList])
 
-  const userNameById = useMemo(() => new Map(userItems.map(item => [item.id, item.username])), [userItems])
+  // Labels are resolved from the FULL user list (not the filtered options): the
+  // current user is excluded from the assignable options (you can't share with
+  // yourself), but may already be present in a shared value — e.g. an admin
+  // shared this entity with them. Fall back to the current user's own name so
+  // their badge doesn't render blank.
+  const userNameById = useMemo(() => {
+    const map = new Map((userList?.items ?? []).map(item => [item.id, item.username]))
+    if (userData?.id !== undefined && !map.has(userData.id)) {
+      map.set(userData.id, userData.username)
+    }
+    return map
+  }, [userList, userData])
   const roleNameById = useMemo(() => new Map(roleItems.map(item => [item.id, item.name])), [roleItems])
 
   const renderLabel = (labelName: string | undefined, iconName: string): React.JSX.Element => (
