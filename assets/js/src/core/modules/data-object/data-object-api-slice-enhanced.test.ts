@@ -104,11 +104,42 @@ describe('data object api cache invalidation', () => {
     expect(countGridRequests(PARENT_ID)).toBe(1)
   })
 
-  it('does not refetch children grids for a patch that keeps the parent', async () => {
+  it.each(['save', 'publish', 'unpublish'] as const)('refetches children grids after a data object is updated with task %s', async (task) => {
     const store = createStore()
     await subscribeToGrid(store, PARENT_ID)
 
-    await store.dispatch(api.endpoints.dataObjectPatchById.initiate({ body: { data: [{ id: 12, key: 'renamed' }] } }) as any)
+    await store.dispatch(api.endpoints.dataObjectUpdateById.initiate({ id: 12, body: { data: { task } } }) as any)
+
+    await waitFor(() => { expect(countGridRequests(PARENT_ID)).toBe(2) })
+  })
+
+  it('does not refetch children grids after an auto save', async () => {
+    const store = createStore()
+    await subscribeToGrid(store, PARENT_ID)
+
+    await store.dispatch(api.endpoints.dataObjectUpdateById.initiate({ id: 12, body: { data: { task: 'autoSave' } } }) as any)
+    await flushRefetches()
+
+    expect(countGridRequests(PARENT_ID)).toBe(1)
+  })
+
+  it.each([
+    ['rename', { key: 'renamed' }],
+    ['lock', { locked: 'self' }]
+  ])('refetches children grids after a %s', async (_, change) => {
+    const store = createStore()
+    await subscribeToGrid(store, PARENT_ID)
+
+    await store.dispatch(api.endpoints.dataObjectPatchById.initiate({ body: { data: [{ id: 12, ...change }] } }) as any)
+
+    await waitFor(() => { expect(countGridRequests(PARENT_ID)).toBe(2) })
+  })
+
+  it('does not refetch children grids for an inline edit, which updates the cached rows itself', async () => {
+    const store = createStore()
+    await subscribeToGrid(store, PARENT_ID)
+
+    await store.dispatch(api.endpoints.dataObjectPatchById.initiate({ body: { data: [{ id: 12, editableData: { name: 'changed' } }] } }) as any)
     await flushRefetches()
 
     expect(countGridRequests(PARENT_ID)).toBe(1)

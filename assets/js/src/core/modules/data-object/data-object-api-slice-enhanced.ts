@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isNil } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { normalizeLayoutTreeIcons } from '@Pimcore/utils/normalize-icon'
 import { api as baseApi, type Layout } from './data-object-api-slice.gen'
@@ -62,7 +62,8 @@ const api = baseApi.enhanceEndpoints({
     },
 
     dataObjectUpdateById: {
-      invalidatesTags: (result, error, args) => args.body.data.task === 'autoSave' ? [] : invalidatingTags.DATA_OBJECT_DETAIL_ID(args.id)
+      // The grid has no per-row tags and the parent is not part of the request, so every children grid can be stale.
+      invalidatesTags: (result, error, args) => args.body.data.task === 'autoSave' ? [] : [...invalidatingTags.DATA_OBJECT_DETAIL_ID(args.id), ...invalidatingTags.DATA_OBJECT_GRID()]
     },
 
     dataObjectAdd: {
@@ -91,10 +92,14 @@ const api = baseApi.enhanceEndpoints({
           invalidatingTagsForPatch.push(...invalidatingTags.DATA_OBJECT_DETAIL_ID(dataObject.id))
         }
 
-        // A move changes the children of both the old and the new parent; the old one is not known here.
+        // A move, rename or lock changes rows of a children grid whose parent is not known here (for a move, the old one).
+        // Inline edits only send editableData/published and update the cached grid rows themselves.
         // Only a single-element patch is applied within the request, multi-element patches return a jobRunId.
         const isAppliedSynchronously = isNil(result?.jobRunId)
-        if (isAppliedSynchronously && args.body.data.some((dataObject) => !isNil(dataObject.parentId))) {
+        const changesGridRows = args.body.data.some((dataObject) =>
+          !isNil(dataObject.parentId) || !isNil(dataObject.key) || !isUndefined(dataObject.locked)
+        )
+        if (isAppliedSynchronously && changesGridRows) {
           invalidatingTagsForPatch.push(...invalidatingTags.DATA_OBJECT_GRID())
         }
 
