@@ -12,17 +12,23 @@ import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
-    pagination: css`
+    // First, previous, next and last, with the total in front of them.
+    controls: css`
       .pagination-control {
         padding: 0;
         height: 24px;
       }
 
-      &.ant-pagination-disabled .pagination-control,
-      .ant-pagination-next.ant-pagination-disabled,
-      .ant-pagination-prev.ant-pagination-disabled {
+      .pagination-control:disabled {
         opacity: 0.5;
       }
+    `,
+
+    // Antd's own total text is styled only inside its list; this matches it next to the controls.
+    totalText: css`
+      margin-inline-end: ${token.marginXS}px;
+      line-height: ${token.controlHeightSM}px;
+      white-space: nowrap;
     `
   }
 })

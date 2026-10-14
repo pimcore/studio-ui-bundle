@@ -91,7 +91,9 @@ import checkbox from '@Pimcore/assets/icons/checkbox.inline.svg?react'
 import checkmark from '@Pimcore/assets/icons/checkmark.inline.svg?react'
 import chevronDown from '@Pimcore/assets/icons/chevron-down.inline.svg?react'
 import chevronLeft from '@Pimcore/assets/icons/chevron-left.inline.svg?react'
+import chevronLeftPipe from '@Pimcore/assets/icons/chevron-left-pipe.inline.svg?react'
 import chevronRight from '@Pimcore/assets/icons/chevron-right.inline.svg?react'
+import chevronRightPipe from '@Pimcore/assets/icons/chevron-right-pipe.inline.svg?react'
 import chevronSelectorHorizontal from '@Pimcore/assets/icons/chevron-selector-horizontal.inline.svg?react'
 import chevronUp from '@Pimcore/assets/icons/chevron-up.inline.svg?react'
 import childrenGrid from '@Pimcore/assets/icons/children-grid.inline.svg?react'
@@ -837,8 +839,16 @@ moduleSystem.registerModule({
       component: chevronLeft
     })
     iconLibrary.register({
+      name: 'chevron-left-pipe',
+      component: chevronLeftPipe
+    })
+    iconLibrary.register({
       name: 'chevron-right',
       component: chevronRight
+    })
+    iconLibrary.register({
+      name: 'chevron-right-pipe',
+      component: chevronRightPipe
     })
     iconLibrary.register({
       name: 'chevron-selector-horizontal',

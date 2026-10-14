@@ -14,7 +14,6 @@ import { CreatableSelect, Flex, IconButton, type SelectProps } from '@sdk/compon
 import { type SelectOptionType } from '@sdk/modules/element'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from '@Pimcore/components/pagination/pagination.styles'
-import cn from 'classnames'
 import { getDefaultPageSize, getMaxPageSize, getPageSizeOptions } from '@Pimcore/components/pagination/page-size'
 
 export interface PaginationProps extends Omit<BasePaginationProps, 'pageSize' | 'defaultCurrent' | 'onShowSizeChange' | 'responsive' | 'totalBoundaryShowSizeChanger'> {
@@ -37,8 +36,7 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
     size: 'small'
   }
 
-  const { showSizeChanger, className, hideOnSinglePage, defaultPageSize, maxPageSize, current: baseCurrent, onChange, ...paginationProps } = { ...defaultProps, ...props }
-  const classNames = cn(styles.pagination, className)
+  const { showSizeChanger, className, hideOnSinglePage, defaultPageSize, maxPageSize, current: baseCurrent, onChange, showTotal, itemRender, ...paginationProps } = { ...defaultProps, ...props }
 
   const maxPageSizeLimit = getMaxPageSize(maxPageSize)
   const isValidPageSize = (size: number): boolean => Number.isInteger(size) && size > 0 && size <= maxPageSizeLimit
@@ -80,27 +78,42 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
     setPageSize(parsedValue)
   }
 
-  const itemRenderer: PaginationProps['itemRender'] = (page, type, originalElement) => {
-    if (type === 'next') {
-      return (
-        <IconButton
-          className='pagination-control pagination-control--next'
-          icon={ { value: 'chevron-right' } }
-        />
-      )
+  const total = paginationProps.total ?? 0
+  // The page count as antd computes it: no page at all for an empty list.
+  const pageCount = Math.floor((total - 1) / pageSize) + 1
+  const isDisabled = paginationProps.disabled === true
+  const canGoBack = !isDisabled && current > 1
+  const canGoForward = !isDisabled && current < pageCount
+
+  // Antd has no first and last page controls, so all four page controls are drawn here, around
+  // antd's page input; antd's own previous and next are left out (pageItemRenderer).
+  const pageControl = (name: string, icon: string, label: string, page: number, enabled: boolean): React.JSX.Element => (
+    <IconButton
+      className={ `pagination-control pagination-control--${name}` }
+      disabled={ !enabled }
+      icon={ { value: icon } }
+      onClick={ () => { setCurrent(page) } }
+    >
+      {label}
+    </IconButton>
+  )
+
+  const pageItemRenderer: PaginationProps['itemRender'] = (page, type, originalElement) => {
+    if (type === 'prev' || type === 'next') {
+      return null
     }
 
-    if (type === 'prev') {
-      return (
-        <IconButton
-          className='pagination-control pagination-control--prev'
-          icon={ { value: 'chevron-left' } }
-        />
-      )
-    }
-
-    return originalElement
+    return itemRender?.(page, type, originalElement) ?? originalElement
   }
+
+  // Drawn here rather than by antd, which would put it between the previous control and the input.
+  const totalText = showTotal === undefined
+    ? null
+    : (
+      <span className={ styles.totalText }>
+        {showTotal(total, [total === 0 ? 0 : (current - 1) * pageSize + 1, Math.min(current * pageSize, total)])}
+      </span>
+      )
 
   const shouldHidePagination = hideOnSinglePage === true && paginationProps.total !== undefined && paginationProps.total <= pageSize
 
@@ -113,15 +126,25 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
       gap={ 'extra-small' }
       style={ { marginLeft: 4 } }
     >
-      <BasePagination
-        { ...paginationProps }
-        className={ classNames }
-        current={ current }
-        itemRender={ paginationProps.itemRender ?? itemRenderer }
-        onChange={ onBasePaginationChange }
-        pageSize={ pageSize }
-        showSizeChanger={ false }
-      />
+      <Flex
+        align='center'
+        className={ styles.controls }
+      >
+        {totalText}
+        {pageControl('first', 'chevron-left-pipe', t('pagination.first-page'), 1, canGoBack)}
+        {pageControl('prev', 'chevron-left', t('pagination.previous-page'), current - 1, canGoBack)}
+        <BasePagination
+          { ...paginationProps }
+          className={ className }
+          current={ current }
+          itemRender={ pageItemRenderer }
+          onChange={ onBasePaginationChange }
+          pageSize={ pageSize }
+          showSizeChanger={ false }
+        />
+        {pageControl('next', 'chevron-right', t('pagination.next-page'), current + 1, canGoForward)}
+        {pageControl('last', 'chevron-right-pipe', t('pagination.last-page'), pageCount, canGoForward)}
+      </Flex>
 
       {showSizeChanger === true && (
         <CreatableSelect
