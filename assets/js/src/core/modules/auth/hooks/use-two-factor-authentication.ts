@@ -71,6 +71,12 @@ const getStatus = (error: RequestError): number | undefined => {
   return 'status' in error && typeof error.status === 'number' ? error.status : undefined
 }
 
+// Tracks the API failure first, so the diagnostics are not lost behind the user-facing error
+const trackedError = (error: RequestError, message: string): Error => {
+  trackError(new ApiError(error))
+  return new Error(message)
+}
+
 const throwCodeError = (error: RequestError, reasons: Partial<Record<number, TwoFactorCodeErrorReason>>): never => {
   const reason = reasons[getStatus(error) ?? 0]
 
@@ -78,8 +84,7 @@ const throwCodeError = (error: RequestError, reasons: Partial<Record<number, Two
     throw new TwoFactorCodeError(reason)
   }
 
-  trackError(new ApiError(error))
-  throw new Error('Two-factor request failed')
+  throw trackedError(error, 'Two-factor request failed')
 }
 
 export const useTwoFactorAuthentication = (): UseTwoFactorAuthenticationReturn => {
@@ -113,7 +118,7 @@ export const useTwoFactorAuthentication = (): UseTwoFactorAuthenticationReturn =
     const result = await setup()
 
     if (result.error !== undefined) {
-      throw new Error('Two-factor setup could not be created')
+      throw trackedError(result.error, 'Two-factor setup could not be created')
     }
 
     return result.data
@@ -133,7 +138,7 @@ export const useTwoFactorAuthentication = (): UseTwoFactorAuthenticationReturn =
     const result = await disable()
 
     if (result.error !== undefined) {
-      throw new Error('Two-factor authentication could not be disabled')
+      throw trackedError(result.error, 'Two-factor authentication could not be disabled')
     }
 
     applyTwoFactorState(currentUser.id, INACTIVE)
@@ -143,7 +148,7 @@ export const useTwoFactorAuthentication = (): UseTwoFactorAuthenticationReturn =
     const result = await reset({ id: userId })
 
     if (result.error !== undefined) {
-      throw new Error('Two-factor authentication could not be reset')
+      throw trackedError(result.error, 'Two-factor authentication could not be reset')
     }
 
     applyTwoFactorState(userId, INACTIVE)

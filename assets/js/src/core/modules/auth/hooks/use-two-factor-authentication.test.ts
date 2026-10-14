@@ -9,6 +9,7 @@
  */
 
 const mockLoginTwoFactor = jest.fn()
+const mockSetup = jest.fn()
 const mockConfirm = jest.fn()
 const mockDisable = jest.fn()
 const mockReset = jest.fn()
@@ -27,7 +28,7 @@ jest.mock('@Pimcore/modules/auth/authorization-api-slice.gen', () => ({
   useLoginTwoFactorMutation: () => [mockLoginTwoFactor]
 }))
 jest.mock('@Pimcore/modules/auth/user/user-api-slice.gen', () => ({
-  useUserTwoFactorSetupMutation: () => [jest.fn()],
+  useUserTwoFactorSetupMutation: () => [mockSetup],
   useUserTwoFactorConfirmMutation: () => [mockConfirm],
   useUserTwoFactorDisableMutation: () => [mockDisable],
   useUserTwoFactorResetByIdMutation: () => [mockReset]
@@ -74,6 +75,7 @@ describe('getTwoFactorStep', () => {
 describe('useTwoFactorAuthentication', () => {
   beforeEach(() => {
     mockLoginTwoFactor.mockReset()
+    mockSetup.mockReset()
     mockConfirm.mockReset()
     mockDisable.mockReset()
     mockReset.mockReset()
@@ -165,5 +167,17 @@ describe('useTwoFactorAuthentication', () => {
 
     expect(await reasonOf(result.current.confirmSetup('123456'))).toBe('other')
     expect(mockTrackError).toHaveBeenCalledTimes(1)
+  })
+
+  it('reports a failed setup, disable or reset through trackError', async () => {
+    mockSetup.mockResolvedValue(failWith(403))
+    mockDisable.mockResolvedValue(failWith(500))
+    mockReset.mockResolvedValue(failWith(404))
+    const { result } = renderHook(() => useTwoFactorAuthentication())
+
+    await expect(result.current.loadSetup()).rejects.toThrow('could not be created')
+    await expect(result.current.disableTwoFactor()).rejects.toThrow('could not be disabled')
+    await expect(result.current.resetUserTwoFactor(CURRENT_USER_ID)).rejects.toThrow('could not be reset')
+    expect(mockTrackError).toHaveBeenCalledTimes(3)
   })
 })
