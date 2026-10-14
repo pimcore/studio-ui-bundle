@@ -8,6 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isBoolean, isUndefined } from 'lodash'
+
 export interface DataObjectPatchData {
   published?: boolean
   editableData: Record<string, unknown>
@@ -24,9 +26,13 @@ const PUBLISHED_KEY = 'published'
 export const buildPatchData = (values: Record<string, unknown>): DataObjectPatchData => {
   const { [PUBLISHED_KEY]: published, ...editableData } = values
 
-  if (published === undefined) {
+  if (isUndefined(published)) {
     return { editableData }
   }
 
-  return { published: Boolean(published), editableData }
+  if (!isBoolean(published)) {
+    throw new Error(`Batch edit value for "${PUBLISHED_KEY}" must be a boolean, got ${typeof published}`)
+  }
+
+  return { published, editableData }
 }

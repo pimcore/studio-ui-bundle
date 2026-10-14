@@ -35,6 +35,11 @@ describe('buildPatchData', () => {
     })
   })
 
+  it('rejects a non-boolean published value instead of coercing it', () => {
+    expect(() => buildPatchData({ published: 'false' })).toThrow('published')
+    expect(() => buildPatchData({ published: 1 })).toThrow('published')
+  })
+
   it('does not mutate the given values', () => {
     const values = { published: true, name: 'Isetta' }
     buildPatchData(values)
