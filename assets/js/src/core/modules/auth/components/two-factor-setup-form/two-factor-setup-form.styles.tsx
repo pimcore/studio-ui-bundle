@@ -17,7 +17,6 @@ export const useStyles = createStyles(({ css, token }) => {
       align-self: center;
       align-items: center;
       gap: ${token.marginXS}px;
-      max-width: 100%;
       padding: ${token.paddingXS}px ${token.paddingSM}px;
       border: 1px solid ${token.colorBorderSecondary};
       border-radius: ${token.borderRadius}px;
@@ -47,9 +46,8 @@ export const useStyles = createStyles(({ css, token }) => {
       text-align: center;
     `,
 
-    // The key has no spaces, so it may break anywhere; 26 characters split the usual 52 into two equal lines
+    // The key has no spaces, so it may break anywhere
     secretValue: css`
-      max-width: 26ch;
       overflow-wrap: anywhere;
       text-align: center;
     `
