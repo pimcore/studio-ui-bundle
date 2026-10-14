@@ -161,7 +161,9 @@ export const useRoleHelper = (): IUseRoleReturn => {
     }))
     await handleNotification(t('roles.save-item.success'), error)
 
-    dispatch(roleUpdated(id))
+    if (error === undefined) {
+      dispatch(roleUpdated(id))
+    }
 
     return data
   }

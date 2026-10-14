@@ -206,20 +206,24 @@ export const useUserManagementHelper = (): UseUserReturn => {
         }
       }))
 
-      await handleNotification(t('user-management.save-user.success'), passwordError)
+      await handleNotification(t('user-management.save-user.success'), error ?? passwordError)
     }
 
     if (currentUser.id === id && !currentUser.isAdmin) {
       void refreshPerspectives()
     }
 
-    const userDraft: UserDraft = {
-      ...data,
-      modified: false,
-      changes: {},
-      modifiedCells: {}
+    // on a failed update there is no saved user to apply; upserting {...undefined} would add an entity without id
+    if (error === undefined && data !== undefined) {
+      const userDraft: UserDraft = {
+        ...data,
+        modified: false,
+        changes: {},
+        modifiedCells: {}
+      }
+      dispatch(userUpdated(userDraft))
     }
-    dispatch(userUpdated(userDraft))
+
     return data
   }
 
