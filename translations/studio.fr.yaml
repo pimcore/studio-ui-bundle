@@ -781,7 +781,7 @@ notifications.settings.discard.keep-editing: Continuer la modification
 notifications.settings.unsaved-changes_one: "{{count}} modification non enregistrée"
 notifications.settings.unsaved-changes_other: "{{count}} modifications non enregistrées"
 notifications.settings.group.general: Général
-notifications.remove-all: Tout supprimer
+notifications.remove-all: Tout effacer
 notifications.new-notification: Nouvelle notification
 notifications.columns.title: Titre
 notifications.columns.date: Date
@@ -1933,7 +1933,7 @@ image-thumbnails.transformations.effects.intensity: Intensité
 image-thumbnails.transformations.add: Ajouter une transformation
 image-thumbnails.transformations.move-up: Monter
 image-thumbnails.transformations.move-down: Descendre
-image-thumbnails.transformations.remove: Supprimer
+image-thumbnails.transformations.remove: Effacer
 
 # Transformation inconnue / par défaut
 image-thumbnails.transformations.unknown-type: "Type de transformation inconnu : {{type}}"
@@ -1969,7 +1969,7 @@ video-thumbnails.add.validation.message: Le nom de la miniature est invalide
 # Barre d'outils de transformation vidéo
 video-thumbnails.transformations.move-up: Monter
 video-thumbnails.transformations.move-down: Descendre
-video-thumbnails.transformations.remove: Supprimer
+video-thumbnails.transformations.remove: Effacer
 
 # Transformation Redimensionnement
 video-thumbnails.transformations.resize.config-title: Configurer le redimensionnement
