@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isUndefined } from 'lodash'
 import { useAppDispatch, useAppSelector } from '@sdk/app'
 import { roleOpened, roleClosed, roleUpdated } from '@Pimcore/modules/user/roles/roles-slice'
 import { useTranslation } from 'react-i18next'
@@ -161,7 +162,7 @@ export const useRoleHelper = (): IUseRoleReturn => {
     }))
     await handleNotification(t('roles.save-item.success'), error)
 
-    if (error === undefined) {
+    if (isUndefined(error)) {
       dispatch(roleUpdated(id))
     }
 

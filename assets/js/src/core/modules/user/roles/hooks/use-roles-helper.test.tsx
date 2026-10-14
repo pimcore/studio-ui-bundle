@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isUndefined } from 'lodash'
 import { renderHook } from '@testing-library/react'
 import { useRoleHelper } from './use-roles-helper'
 
@@ -44,7 +45,7 @@ jest.mock('@Pimcore/components/message/useMessage', () => ({
 
 const setupDispatch = (result: Record<string, unknown>): void => {
   mockDispatch.mockImplementation((action: { endpoint?: string }): unknown =>
-    action.endpoint !== undefined ? Promise.resolve(result) : action
+    !isUndefined(action.endpoint) ? Promise.resolve(result) : action
   )
 }
 

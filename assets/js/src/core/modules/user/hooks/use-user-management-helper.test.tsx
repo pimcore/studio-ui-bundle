@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isUndefined } from 'lodash'
 import { renderHook } from '@testing-library/react'
 import { useUserManagementHelper } from './use-user-management-helper'
 
@@ -65,12 +66,17 @@ type ApiResult = Record<string, unknown>
 
 const setupDispatch = (results: Record<string, ApiResult>): void => {
   mockDispatch.mockImplementation((action: { endpoint?: string }): unknown => {
-    if (action.endpoint !== undefined) {
+    if (!isUndefined(action.endpoint)) {
       return Promise.resolve(results[action.endpoint])
     }
     return action
   })
 }
+
+const dispatchedEndpoints = (): unknown[] =>
+  mockDispatch.mock.calls
+    .map(([action]) => action?.endpoint)
+    .filter((endpoint) => !isUndefined(endpoint))
 
 const dispatchedUserUpdated = (): unknown[] =>
   mockDispatch.mock.calls
@@ -96,13 +102,14 @@ describe('useUserManagementHelper.updateUserById', () => {
     expect(mockMessageSuccess).not.toHaveBeenCalled()
   })
 
-  it('surfaces the user update error even when a password change is included', async () => {
+  it('does not change the password when the user update fails', async () => {
     const error = { status: 422, data: { message: 'Validation failed' } }
     setupDispatch({ userUpdateById: { error }, userUpdatePasswordById: { data: null } })
 
     const { result } = renderHook(() => useUserManagementHelper())
     await result.current.updateUserById({ id: 42, user: { ...user, password: 'secret-password' } })
 
+    expect(dispatchedEndpoints()).not.toContain('userUpdatePasswordById')
     expect(dispatchedUserUpdated()).toEqual([])
     expect(mockMessageError).toHaveBeenCalledWith('Validation failed')
     expect(mockMessageSuccess).not.toHaveBeenCalled()
