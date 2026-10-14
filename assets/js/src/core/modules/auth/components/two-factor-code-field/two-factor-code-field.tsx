@@ -60,7 +60,6 @@ const TwoFactorCodeInput = ({ align, digits, onChange }: TwoFactorCodeInputProps
         onInput={ handleInput }
         ref={ boxes }
         role="group"
-        size={ align === 'center' ? 'large' : 'middle' }
       />
     </div>
   )

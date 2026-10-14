@@ -31,8 +31,8 @@ export const useStyles = createStyles(({ css, token }) => {
       }
 
       .ant-otp .ant-otp-input {
-        width: ${token.controlHeightLG}px;
-        height: ${token.controlHeightLG}px;
+        width: ${token.controlHeight}px;
+        height: ${token.controlHeight}px;
       }
     `
   }

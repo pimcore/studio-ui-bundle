@@ -121,7 +121,7 @@ export const TwoFactorSetupForm = ({ loadSetup, onConfirm, onGetBack, getDescrip
             <>
               <Flex
                 align="center"
-                gap={ 'normal' }
+                gap={ 'extra-small' }
               >
                 {qrCode}
                 <Text className={ styles.sideDescription }>{description}</Text>
