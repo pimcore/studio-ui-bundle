@@ -19,6 +19,12 @@ export const useStyles = createStyles(({ css, token }) => {
         height: 24px;
       }
 
+      /* Antd's list gave its previous and next buttons the text colour; outside it, an icon
+         button would take the link colour. Same weight as antd's rule, so hover still wins. */
+      button.pagination-control {
+        color: ${token.colorText};
+      }
+
       .pagination-control:disabled {
         opacity: 0.5;
       }

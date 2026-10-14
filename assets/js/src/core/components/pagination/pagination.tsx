@@ -89,13 +89,13 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
   // antd's page input; antd's own previous and next are left out (pageItemRenderer).
   const pageControl = (name: string, icon: string, label: string, page: number, enabled: boolean): React.JSX.Element => (
     <IconButton
+      aria-label={ label }
       className={ `pagination-control pagination-control--${name}` }
       disabled={ !enabled }
       icon={ { value: icon } }
       onClick={ () => { setCurrent(page) } }
-    >
-      {label}
-    </IconButton>
+      tooltip={ { title: label } }
+    />
   )
 
   const pageItemRenderer: PaginationProps['itemRender'] = (page, type, originalElement) => {

@@ -13,13 +13,13 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { Pagination } from './pagination'
 
 // The SDK barrel loads every Studio component and its styles; these stand-ins keep what the pager
-// relies on: an icon button names itself after its label, which is also its tooltip.
+// relies on: an icon button with an accessible name and a tooltip.
 jest.mock('@sdk/components', () => {
   const { createElement } = jest.requireActual('react')
   return {
     CreatableSelect: () => null,
     Flex: ({ children }: any) => createElement('div', null, children),
-    IconButton: ({ children, icon, className, ...props }: any) => createElement('button', { ...props, 'aria-label': children, 'data-icon': icon.value, type: 'button' })
+    IconButton: ({ icon, className, tooltip, ...props }: any) => createElement('button', { ...props, 'data-icon': icon.value, 'data-tooltip': tooltip?.title, type: 'button' })
   }
 })
 jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
@@ -40,6 +40,7 @@ describe('Pagination', () => {
     const names = screen.getAllByRole('button').map((button) => button.getAttribute('aria-label'))
     expect(names).toEqual(['pagination.first-page', 'pagination.previous-page', 'pagination.next-page', 'pagination.last-page'])
     expect(control('first-page')).toHaveAttribute('data-icon', 'chevron-left-pipe')
+    expect(control('first-page')).toHaveAttribute('data-tooltip', 'pagination.first-page')
     expect(control('last-page')).toHaveAttribute('data-icon', 'chevron-right-pipe')
     expect(screen.getByRole('textbox')).toHaveValue('1')
   })
