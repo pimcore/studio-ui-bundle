@@ -17,7 +17,7 @@ import { type DynamicTypeEditableDialogLayoutRegistry } from '@Pimcore/modules/e
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useDocumentEditor } from '../../hooks/use-document-editor'
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
-import { isArray, isNil, isPlainObject } from 'lodash'
+import { isArray, isEmpty, isNil, isPlainObject } from 'lodash'
 import { TemplateAwareEditable } from './template-aware-editable'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from './editable-dialog.styles'
@@ -100,7 +100,7 @@ export const EditableDialog = ({ config, visible, onClose, editableDefinitions }
               key={ configItem.name }
               title={ configItem.label }
             >
-              {!isNil(configItem.description) && configItem.description !== '' && (
+              {!isEmpty(configItem.description) && (
                 <div className={ styles.description }>{configItem.description}</div>
               )}
               <TemplateAwareEditable editableDefinition={ editableDefinition } />
