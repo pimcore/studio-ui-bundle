@@ -128,5 +128,5 @@ export const StackListItem = (props: StackListItemProps): React.JSX.Element => {
     }
 
     throw new Error(`Unknown StackListItem type: ${type as string}`)
-  }, [props, transform])
+  }, [props, transform, t])
 }
