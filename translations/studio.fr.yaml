@@ -1164,7 +1164,9 @@ jobs.zip-upload-job.title: Téléverser un ZIP
 jobs.zip-upload-job.step1.title: Extraction du ZIP
 jobs.zip-upload-job.step2.title: Création des assets
 jobs.download-csv-job.title: CSV export
+jobs.download-csv-job.title-with-context: "CSV export ({{name}})"
 jobs.download-xlsx-job.title: XLSX export
+jobs.download-xlsx-job.title-with-context: "XLSX export ({{name}})"
 jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Édition par lot
 batch-edit.no-content: Il n'y a pas encore de colonnes ajoutées

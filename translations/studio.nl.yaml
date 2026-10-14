@@ -1164,7 +1164,9 @@ jobs.zip-upload-job.title: ZIP uploaden
 jobs.zip-upload-job.step1.title: ZIP uitpakken
 jobs.zip-upload-job.step2.title: Assets aanmaken
 jobs.download-csv-job.title: CSV exporteren
+jobs.download-csv-job.title-with-context: "CSV exporteren ({{name}})"
 jobs.download-xlsx-job.title: XLSX exporteren
+jobs.download-xlsx-job.title-with-context: "XLSX exporteren ({{name}})"
 jobs.download-zip-job.title: ZIP downloaden
 batch-edit.modal-title: Batchbewerking
 batch-edit.no-content: Er zijn nog geen kolommen toegevoegd

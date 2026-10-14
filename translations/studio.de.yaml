@@ -1164,7 +1164,9 @@ jobs.zip-upload-job.title: ZIP hochladen
 jobs.zip-upload-job.step1.title: ZIP wird entpackt
 jobs.zip-upload-job.step2.title: Assets werden erstellt
 jobs.download-csv-job.title: CSV export
+jobs.download-csv-job.title-with-context: "CSV export ({{name}})"
 jobs.download-xlsx-job.title: XLSX export
+jobs.download-xlsx-job.title-with-context: "XLSX export ({{name}})"
 jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Stapelbearbeitung
 batch-edit.no-content: Es sind noch keine Spalten hinzugefügt
