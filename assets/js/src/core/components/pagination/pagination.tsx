@@ -16,6 +16,10 @@ import { useTranslation } from 'react-i18next'
 import { useStyles } from '@Pimcore/components/pagination/pagination.styles'
 import { getDefaultPageSize, getMaxPageSize, getPageSizeOptions } from '@Pimcore/components/pagination/page-size'
 
+// Seconds. The page controls explain themselves; their tooltip is only a fallback, so it waits much
+// longer than the delay of other action buttons and does not pop up while paging.
+const pageControlTooltipDelay = 1.5
+
 export interface PaginationProps extends Omit<BasePaginationProps, 'pageSize' | 'defaultCurrent' | 'onShowSizeChange' | 'responsive' | 'totalBoundaryShowSizeChanger'> {
   /** Cap of the endpoint behind this pager, when it is stricter than the configured maximum. */
   maxPageSize?: number
@@ -94,7 +98,7 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
       disabled={ !enabled }
       icon={ { value: icon } }
       onClick={ () => { setCurrent(page) } }
-      tooltip={ { title: label } }
+      tooltip={ { title: label, mouseEnterDelay: pageControlTooltipDelay } }
     />
   )
 

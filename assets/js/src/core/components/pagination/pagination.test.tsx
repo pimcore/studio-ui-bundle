@@ -19,7 +19,7 @@ jest.mock('@sdk/components', () => {
   return {
     CreatableSelect: () => null,
     Flex: ({ children }: any) => createElement('div', null, children),
-    IconButton: ({ icon, className, tooltip, ...props }: any) => createElement('button', { ...props, 'data-icon': icon.value, 'data-tooltip': tooltip?.title, type: 'button' })
+    IconButton: ({ icon, className, tooltip, ...props }: any) => createElement('button', { ...props, 'data-icon': icon.value, 'data-tooltip': tooltip?.title, 'data-tooltip-delay': tooltip?.mouseEnterDelay, type: 'button' })
   }
 })
 jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
@@ -41,6 +41,8 @@ describe('Pagination', () => {
     expect(names).toEqual(['pagination.first-page', 'pagination.previous-page', 'pagination.next-page', 'pagination.last-page'])
     expect(control('first-page')).toHaveAttribute('data-icon', 'chevron-left-pipe')
     expect(control('first-page')).toHaveAttribute('data-tooltip', 'pagination.first-page')
+    // Only a fallback: the tooltip waits much longer than an action button's.
+    expect(control('first-page')).toHaveAttribute('data-tooltip-delay', '1.5')
     expect(control('last-page')).toHaveAttribute('data-icon', 'chevron-right-pipe')
     expect(screen.getByRole('textbox')).toHaveValue('1')
   })
