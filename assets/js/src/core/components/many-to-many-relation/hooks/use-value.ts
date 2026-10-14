@@ -305,9 +305,11 @@ export const useValue = (
       return
     }
 
-    const remainingItems = maxItems !== null
-      ? Math.max(0, maxItems - (value?.length ?? 0))
-      : newItems.length
+    // A field definition without a limit can arrive as undefined as well as null;
+    // both mean "no limit" rather than NaN slots.
+    const remainingItems = isNil(maxItems)
+      ? newItems.length
+      : Math.max(0, maxItems - (value?.length ?? 0))
 
     if (remainingItems === 0) {
       modal.warn({
