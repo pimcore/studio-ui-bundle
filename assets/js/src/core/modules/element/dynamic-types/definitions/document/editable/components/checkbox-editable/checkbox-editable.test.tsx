@@ -65,6 +65,29 @@ describe('CheckboxEditable', () => {
     expect(onChange).toHaveBeenCalledWith(true)
   })
 
+  it('names the switch by its label, and the label toggles it', () => {
+    const onChange = jest.fn()
+    render(
+      <CheckboxEditable
+        config={ { label: 'Enable language redirect', display: 'switch' } }
+        onChange={ onChange }
+        value={ false }
+      />
+    )
+
+    expect(screen.getByRole('switch', { name: 'Enable language redirect' })).toBeInTheDocument()
+
+    fireEvent.click(screen.getByText('Enable language redirect'))
+
+    expect(onChange).toHaveBeenCalledWith(true)
+  })
+
+  it('names the checkbox by its label', () => {
+    render(<CheckboxEditable config={ { label: 'Only guest user' } } />)
+
+    expect(screen.getByRole('checkbox', { name: 'Only guest user' })).toBeInTheDocument()
+  })
+
   it('disables the switch when the value is inherited', () => {
     render(
       <CheckboxEditable

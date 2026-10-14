@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { useId } from 'react'
 import { Checkbox, Flex, Switch, Text } from '@sdk/components'
 import { FieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label'
 import { EditableOverlay } from '../editable-overlay/editable-overlay'
@@ -52,7 +52,11 @@ export const CheckboxEditable = ({
     onChange?.(Boolean(value))
   }
 
+  // The label names the control and toggles it on click, as a native checkbox label would.
+  const controlId = useId()
+
   const checkboxProps = {
+    id: controlId,
     checked: Boolean(value),
     className: className ?? config?.class,
     disabled: inherited,
@@ -60,12 +64,14 @@ export const CheckboxEditable = ({
   }
 
   const renderLabel = (label: string): React.JSX.Element => (
-    <Text>
-      <FieldLabel
-        label={ label }
-        name={ name }
-      />
-    </Text>
+    <label htmlFor={ controlId }>
+      <Text>
+        <FieldLabel
+          label={ label }
+          name={ name }
+        />
+      </Text>
+    </label>
   )
 
   const renderSwitch = (): React.JSX.Element => (
@@ -73,6 +79,7 @@ export const CheckboxEditable = ({
       checked={ Boolean(value) }
       className={ checkboxProps.className }
       disabled={ inherited }
+      id={ controlId }
       labelRight={ isUndefined(config?.label) ? undefined : renderLabel(config.label) }
       onChange={ handleChange }
       size="small"
