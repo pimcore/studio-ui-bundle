@@ -21,11 +21,14 @@ export interface TwoFactorCodeFormValues {
 const CODE_LENGTH = 6
 const CodeBoxes = Input.OTP
 
+export type TwoFactorCodeAlign = 'stretch' | 'center'
+
 interface TwoFactorCodeInputProps {
+  align: TwoFactorCodeAlign
   onChange?: (value: string) => void
 }
 
-const TwoFactorCodeInput = ({ onChange }: TwoFactorCodeInputProps): React.JSX.Element => {
+const TwoFactorCodeInput = ({ align, onChange }: TwoFactorCodeInputProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const form = Form.useFormInstance<TwoFactorCodeFormValues>()
@@ -48,7 +51,7 @@ const TwoFactorCodeInput = ({ onChange }: TwoFactorCodeInputProps): React.JSX.El
   }
 
   return (
-    <div className={ styles.codeBoxes }>
+    <div className={ align === 'center' ? styles.codeBoxesCentered : styles.codeBoxes }>
       <CodeBoxes
         aria-label={ t('two-factor-form.code.placeholder') }
         inputMode="numeric"
@@ -57,12 +60,17 @@ const TwoFactorCodeInput = ({ onChange }: TwoFactorCodeInputProps): React.JSX.El
         onInput={ handleInput }
         ref={ boxes }
         role="group"
+        size={ align === 'center' ? 'large' : 'middle' }
       />
     </div>
   )
 }
 
-export const TwoFactorCodeField = (): React.JSX.Element => {
+export interface TwoFactorCodeFieldProps {
+  align?: TwoFactorCodeAlign
+}
+
+export const TwoFactorCodeField = ({ align = 'stretch' }: TwoFactorCodeFieldProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
@@ -74,7 +82,7 @@ export const TwoFactorCodeField = (): React.JSX.Element => {
       ] }
       validateTrigger={ false }
     >
-      <TwoFactorCodeInput />
+      <TwoFactorCodeInput align={ align } />
     </Form.Item>
   )
 }

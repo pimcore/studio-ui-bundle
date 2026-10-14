@@ -112,6 +112,7 @@ export const TwoFactorAccordion = (): React.JSX.Element => {
         title={ t('user-profile.two-factor-authentication') }
       >
         <TwoFactorSetupForm
+          codeAlign="center"
           description={ t('user-profile.two-factor-authentication.setup.description') }
           loadSetup={ loadSetup }
           onConfirm={ handleConfirmSetup }

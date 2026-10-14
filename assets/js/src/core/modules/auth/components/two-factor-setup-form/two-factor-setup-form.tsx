@@ -15,7 +15,7 @@ import { isNil, isUndefined } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TwoFactorCodeError, type TwoFactorSetupData } from '../../hooks/use-two-factor-authentication'
-import { TwoFactorCodeField, type TwoFactorCodeFormValues } from '../two-factor-code-field/two-factor-code-field'
+import { type TwoFactorCodeAlign, TwoFactorCodeField, type TwoFactorCodeFormValues } from '../two-factor-code-field/two-factor-code-field'
 import { useStyles } from './two-factor-setup-form.styles'
 
 export interface TwoFactorSetupFormProps {
@@ -23,9 +23,10 @@ export interface TwoFactorSetupFormProps {
   onConfirm: (code: string) => Promise<void>
   onGetBack?: () => void
   description?: string
+  codeAlign?: TwoFactorCodeAlign
 }
 
-export const TwoFactorSetupForm = ({ loadSetup, onConfirm, onGetBack, description }: TwoFactorSetupFormProps): React.JSX.Element => {
+export const TwoFactorSetupForm = ({ loadSetup, onConfirm, onGetBack, description, codeAlign }: TwoFactorSetupFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const [form] = Form.useForm<TwoFactorCodeFormValues>()
@@ -125,7 +126,7 @@ export const TwoFactorSetupForm = ({ loadSetup, onConfirm, onGetBack, descriptio
             onFinish: handleFinish
           } }
         >
-          <TwoFactorCodeField />
+          <TwoFactorCodeField align={ codeAlign } />
 
           <Button
             className="w-full"

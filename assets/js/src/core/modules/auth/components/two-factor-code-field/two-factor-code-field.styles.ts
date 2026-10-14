@@ -10,7 +10,7 @@
 
 import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
-export const useStyles = createStyles(({ css }) => {
+export const useStyles = createStyles(({ css, token }) => {
   return {
     codeBoxes: css`
       .ant-otp {
@@ -21,6 +21,18 @@ export const useStyles = createStyles(({ css }) => {
       .ant-otp .ant-otp-input {
         flex: 1;
         min-width: 0;
+      }
+    `,
+
+    codeBoxesCentered: css`
+      .ant-otp {
+        display: flex;
+        justify-content: center;
+      }
+
+      .ant-otp .ant-otp-input {
+        width: ${token.controlHeightLG}px;
+        height: ${token.controlHeightLG}px;
       }
     `
   }
