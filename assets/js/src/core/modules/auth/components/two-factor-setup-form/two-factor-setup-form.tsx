@@ -9,13 +9,13 @@
  */
 
 import { Form } from '@Pimcore/components/form/form'
-import { Alert, Button, Flex, FormKit, Spin, Text } from '@sdk/components'
+import { Alert, Button, Divider, Flex, FormKit, Spin, Text } from '@sdk/components'
 import { QRCode } from 'antd'
 import { isNil, isUndefined } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TwoFactorCodeError, type TwoFactorSetupData } from '../../hooks/use-two-factor-authentication'
-import { type TwoFactorCodeAlign, TwoFactorCodeField, type TwoFactorCodeFormValues } from '../two-factor-code-field/two-factor-code-field'
+import { TwoFactorCodeField, type TwoFactorCodeFormValues } from '../two-factor-code-field/two-factor-code-field'
 import { useStyles } from './two-factor-setup-form.styles'
 
 // Groups of four are easier to type; authenticator apps ignore the spaces
@@ -26,10 +26,10 @@ export interface TwoFactorSetupFormProps {
   onConfirm: (code: string) => Promise<void>
   onGetBack?: () => void
   description?: string
-  codeAlign?: TwoFactorCodeAlign
+  layout?: 'login' | 'dialog'
 }
 
-export const TwoFactorSetupForm = ({ loadSetup, onConfirm, onGetBack, description, codeAlign }: TwoFactorSetupFormProps): React.JSX.Element => {
+export const TwoFactorSetupForm = ({ loadSetup, onConfirm, onGetBack, description, layout = 'dialog' }: TwoFactorSetupFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const [form] = Form.useForm<TwoFactorCodeFormValues>()
@@ -93,26 +93,53 @@ export const TwoFactorSetupForm = ({ loadSetup, onConfirm, onGetBack, descriptio
       )
     }
 
+    const isLogin = layout === 'login'
+
+    const qrCode = (
+      <QRCode
+        bgColor="#ffffff"
+        size={ isLogin ? 128 : 180 }
+        value={ setup.otpauthUri }
+      />
+    )
+
+    const secret = (
+      <Text
+        className={ styles.secret }
+        copyable={ { text: setup.secret } }
+      >
+        <span className={ styles.secretValue }>{groupKey(setup.secret)}</span>
+      </Text>
+    )
+
     return (
       <>
-        <Flex
-          align="center"
-          gap={ 'small' }
-          vertical
-        >
-          <QRCode
-            bgColor="#ffffff"
-            size={ 180 }
-            value={ setup.otpauthUri }
-          />
-          <Text type="secondary">{t('two-factor-setup-form.manual-entry')}</Text>
-          <Text
-            className={ styles.secret }
-            copyable={ { text: setup.secret } }
-          >
-            <span className={ styles.secretValue }>{groupKey(setup.secret)}</span>
-          </Text>
-        </Flex>
+        {isLogin
+          ? (
+            <>
+              <Flex
+                align="center"
+                gap={ 'normal' }
+              >
+                {qrCode}
+                <Text className={ styles.sideDescription }>{t('two-factor-setup-form.description')}</Text>
+              </Flex>
+              {secret}
+            </>
+            )
+          : (
+            <Flex
+              align="center"
+              gap={ 'small' }
+              vertical
+            >
+              {qrCode}
+              <Text type="secondary">{t('two-factor-setup-form.manual-entry')}</Text>
+              {secret}
+            </Flex>
+            )}
+
+        {isLogin && <Divider className={ styles.divider } />}
 
         {codeError !== undefined && (
           <Alert
@@ -128,7 +155,8 @@ export const TwoFactorSetupForm = ({ loadSetup, onConfirm, onGetBack, descriptio
             onFinish: handleFinish
           } }
         >
-          <TwoFactorCodeField align={ codeAlign } />
+          {isLogin && <Text className={ styles.codeLabel }>{t('two-factor-form.code.placeholder')}</Text>}
+          <TwoFactorCodeField align="center" />
 
           <Button
             className="w-full"
@@ -148,7 +176,7 @@ export const TwoFactorSetupForm = ({ loadSetup, onConfirm, onGetBack, descriptio
       gap={ 'normal' }
       vertical
     >
-      <Text>{description ?? t('two-factor-setup-form.description')}</Text>
+      {layout === 'dialog' && <Text>{description ?? t('two-factor-setup-form.description')}</Text>}
 
       {renderSetup()}
 

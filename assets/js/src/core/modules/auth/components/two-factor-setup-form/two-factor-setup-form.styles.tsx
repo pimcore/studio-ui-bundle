@@ -30,6 +30,23 @@ export const useStyles = createStyles(({ css, token }) => {
       }
     `,
 
+    // Long words, such as a raw translation key before login, must not push the QR code aside
+    sideDescription: css`
+      flex: 1;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    `,
+
+    divider: css`
+      margin: 0;
+    `,
+
+    codeLabel: css`
+      display: block;
+      margin-bottom: ${token.marginXS}px;
+      text-align: center;
+    `,
+
     // At most seven groups of four per line, so the box keeps the same shape everywhere
     secretValue: css`
       max-width: 34ch;

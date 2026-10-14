@@ -35,6 +35,13 @@ export const _default = {
   }
 }
 
+export const Login = {
+  args: {
+    ..._default.args,
+    layout: 'login'
+  }
+}
+
 export const LoadError = {
   args: {
     loadSetup: async () => await Promise.reject(new Error('Setup not available')),

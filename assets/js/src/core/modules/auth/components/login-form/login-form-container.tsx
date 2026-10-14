@@ -70,6 +70,7 @@ export const LoginFormContainer = ({ pendingTwoFactorStep }: LoginFormContainerP
 
       {step === 'setup' && (
         <TwoFactorSetupForm
+          layout="login"
           loadSetup={ loadSetup }
           onConfirm={ handleVerify }
           onGetBack={ handleCancelTwoFactor }
