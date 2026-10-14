@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isUndefined } from 'lodash'
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { type ISystemInfoModalData, SystemInfoModal } from './system-info-modal'
@@ -98,7 +99,7 @@ const createDocument = (settingsData?: Record<string, unknown>): ISystemInfoModa
   creationDate: null,
   userOwner: 0,
   userModification: 0,
-  ...(settingsData !== undefined ? { settingsData } : {})
+  ...(!isUndefined(settingsData) ? { settingsData } : {})
 } as unknown as ISystemInfoModalData)
 
 const getPublicUrl = (): string => {
