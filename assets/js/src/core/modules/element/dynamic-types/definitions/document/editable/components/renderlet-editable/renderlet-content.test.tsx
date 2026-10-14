@@ -27,8 +27,10 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key })
 }))
 
+const useElementSelector = jest.fn((_config: unknown) => ({ open: jest.fn() }))
+
 jest.mock('@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector', () => ({
-  useElementSelector: () => ({ open: jest.fn() })
+  useElementSelector: (config: unknown) => useElementSelector(config)
 }))
 
 // element-selector-provider transitively pulls in antd-style (see icon.tsx comment
@@ -75,6 +77,7 @@ describe('RenderletContent', () => {
 
   afterEach(() => {
     useDocumentRenderletRenderQuery.mockClear()
+    useElementSelector.mockClear()
   })
 
   it('sends the open document id from DocumentContext as parentDocumentId, without any router context', () => {
@@ -82,5 +85,94 @@ describe('RenderletContent', () => {
 
     const [apiParams] = useDocumentRenderletRenderQuery.mock.calls[0]
     expect(apiParams?.parentDocumentId).toBe(234)
+  })
+
+  // The "Search" context-menu action opens the element selector. The selector expects
+  // class names under `objects.allowedClasses`; `objects.allowedTypes` means the object
+  // *type* (object / variant / folder). Passing class names as types locks the type
+  // filter to a non-existent type, so the listing is empty and no classId is sent
+  // (https://pimcore.atlassian.net/browse/PEES-1691).
+  describe('element selector configuration', () => {
+    const getSelectorConfig = (): any => useElementSelector.mock.calls[0][0]
+
+    it('restricts the selector to the configured class name', () => {
+      render(
+        <DocumentContext.Provider value={ { id: 1 } }>
+          <RenderletContent
+            config={ { controller: 'App\\Controller\\MyController::renderAction', type: 'object', className: 'Car' } }
+            onChange={ jest.fn() }
+          />
+        </DocumentContext.Provider>
+      )
+
+      expect(getSelectorConfig().config.objects).toEqual({ allowedClasses: ['Car'] })
+    })
+
+    it('restricts the selector to all configured class names when className is an array', () => {
+      render(
+        <DocumentContext.Provider value={ { id: 1 } }>
+          <RenderletContent
+            config={ { controller: 'App\\Controller\\MyController::renderAction', type: 'object', className: ['Car', 'Manufacturer'] } }
+            onChange={ jest.fn() }
+          />
+        </DocumentContext.Provider>
+      )
+
+      expect(getSelectorConfig().config.objects).toEqual({ allowedClasses: ['Car', 'Manufacturer'] })
+    })
+
+    it('does not restrict classes when no className is configured', () => {
+      render(
+        <DocumentContext.Provider value={ { id: 1 } }>
+          <RenderletContent
+            config={ { controller: 'App\\Controller\\MyController::renderAction', type: 'object' } }
+            onChange={ jest.fn() }
+          />
+        </DocumentContext.Provider>
+      )
+
+      expect(getSelectorConfig().config.objects).toBeUndefined()
+    })
+  })
+
+  // The selector reports data objects with the Studio-internal element type
+  // 'data-object'. The renderlet value (and core's Renderlet editable, which resolves
+  // the element via Element\Service::getElementById) uses 'object' — the same mapping
+  // the drop handler in renderlet-editable.tsx already applies.
+  describe('element selector selection', () => {
+    const finishWith = (elementType: string, data: Record<string, unknown>): jest.Mock => {
+      const onChange = jest.fn()
+      render(
+        <DocumentContext.Provider value={ { id: 1 } }>
+          <RenderletContent
+            config={ { controller: 'App\\Controller\\MyController::renderAction', type: 'object' } }
+            onChange={ onChange }
+          />
+        </DocumentContext.Provider>
+      )
+
+      const { onFinish } = useElementSelector.mock.calls[0][0] as { onFinish: (event: unknown) => void }
+      onFinish({ items: [{ elementType, data }] })
+
+      return onChange
+    }
+
+    it('stores a selected data object with type "object"', () => {
+      const onChange = finishWith('data-object', { id: 42, type: 'object' })
+
+      expect(onChange).toHaveBeenCalledWith({ id: 42, type: 'object', subtype: 'object' })
+    })
+
+    it('stores a selected variant with type "object" and subtype "variant"', () => {
+      const onChange = finishWith('data-object', { id: 43, type: 'variant' })
+
+      expect(onChange).toHaveBeenCalledWith({ id: 43, type: 'object', subtype: 'variant' })
+    })
+
+    it('keeps the element type for assets and documents', () => {
+      const onChange = finishWith('asset', { id: 7, type: 'image' })
+
+      expect(onChange).toHaveBeenCalledWith({ id: 7, type: 'asset', subtype: 'image' })
+    })
   })
 })

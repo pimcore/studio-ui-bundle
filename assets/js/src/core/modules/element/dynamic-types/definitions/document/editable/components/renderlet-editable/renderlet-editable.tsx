@@ -15,6 +15,7 @@ import { RenderletContent } from './renderlet-content'
 import { isNil } from 'lodash'
 import { allElementTypes } from '@Pimcore/modules/element/utils/element-type'
 import { EditableOverlay } from '../editable-overlay/editable-overlay'
+import { getRenderletElementType } from './renderlet-utils'
 
 export interface RenderletValue {
   id?: number
@@ -52,13 +53,9 @@ export const RenderletEditable = ({
   inherited = false,
   disabled = false
 }: RenderletEditableProps): React.JSX.Element => {
-  const getConfigType = (dndType: string): string => {
-    return dndType === 'data-object' ? 'object' : dndType
-  }
-
   const handleDrop = (info: DragAndDropInfo): void => {
     if (!isNil(info.data?.id) && !isNil(info.data?.type)) {
-      const configType = getConfigType(info.type)
+      const configType = getRenderletElementType(info.type)
 
       if (!isNil(config?.type) && config.type !== configType) {
         return
@@ -81,7 +78,7 @@ export const RenderletEditable = ({
   }
 
   const isValidData = (info: DragAndDropInfo): boolean => {
-    const configType = getConfigType(info.type)
+    const configType = getRenderletElementType(info.type)
 
     if (!isNil(config?.type) && config.type !== configType) {
       return false
