@@ -19,8 +19,10 @@ import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { isHtmlContent } from '@Pimcore/utils/html'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
 import { isString } from 'lodash'
+import { useTranslation } from 'react-i18next'
 
 export const TextareaCell = (props: DefaultCellProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const { isInEditMode, disableEditMode, fireOnUpdateCellDataEvent } = useEditMode(props)
   const [textAreaValue, setTextAreaValue] = useState(String(props.getValue() ?? ''))
   const element = React.createRef<TextAreaRef>()
@@ -95,10 +97,12 @@ export const TextareaCell = (props: DefaultCellProps): React.JSX.Element => {
         { callback && (
           <div style={ { position: 'absolute', top: '5px', right: '8px', zIndex: 1 } }>
             <IconButton
+              aria-label={ t('edit') }
               icon={ { value: 'edit' } }
               onClick={ async () => { await openEditMode() } }
               onMouseDown={ (e) => { e.preventDefault() } }
               size="small"
+              tooltip={ { title: t('edit') } }
             />
           </div>
         ) }

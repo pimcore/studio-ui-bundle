@@ -27,6 +27,15 @@ export interface UseElementIdReturn {
 }
 
 export interface SettingsContextProps {
+  /** the sidebar entry to open on mount; without it the sidebar starts collapsed */
+  defaultSidebarTab?: string
+  /**
+   * Rendered inside the listing's view layer, within every provider the listing composes.
+   * An embedder's seam for logic-only companions — something that has to read the live
+   * listing state (filters, columns, paging) from outside the listing cannot otherwise
+   * reach it.
+   */
+  listingSlot?: React.ReactNode
   ContextComponent: ElementType
   ConfigurationComponent: ElementType
   DataComponent: ElementType

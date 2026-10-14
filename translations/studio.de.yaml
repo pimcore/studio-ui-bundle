@@ -128,8 +128,8 @@ document.tree.context-menu.add-link: Neuer Link
 document.tree.context-menu.add-hardlink: Neuer Hardlink
 document.required-fields.validation-title: Pflichtfelder fehlen
 document.required-fields.validation-message: Die folgenden Pflichtfelder müssen vor dem Veröffentlichen ausgefüllt werden
-document.site.remove-site: Site entfernen
-document.site.remove-site-confirmation: Sind Sie sicher, dass Sie diese Site entfernen möchten? Diese Aktion kann nicht rückgängig gemacht werden.
+document.site.remove-site: Site löschen
+document.site.remove-site-confirmation: Möchten Sie diese Site wirklich dauerhaft löschen? Diese Aktion kann nicht rückgängig gemacht werden.
 document.site.use-as-site: Als Site verwenden
 document.site.edit-site: Site bearbeiten
 document.site.form.main-domain: Hauptdomain
@@ -159,8 +159,8 @@ data-object.select-class-to-display: Wählen Sie eine Klasse zur Anzeige
 data-object.tree.context-menu.add-object: Neues Objekt
 data-object.tree.context-menu.add-variant: Neue Variante
 data-object.variant-listing.create-data-variant: Neue Variante
-data-object.create-data-object: Neues Objekt vom Typ {{className}} hinzufügen
-data-object.create-variant: Neue Variante vom Typ {{className}} hinzufügen
+data-object.create-data-object: Neues Objekt vom Typ {{className}}
+data-object.create-variant: Neue Variante vom Typ {{className}}
 data-object.object-editor-tabs.variants: Varianten
 object.object-editor-tabs.children-listing: Kinder-Grid
 workflow.label: Workflow
@@ -190,7 +190,7 @@ class-definition.import-file-label: JSON-Datei auswählen
 class-definition.import-success: Klassendefinition erfolgreich importiert
 class-definition.export-success: Klassendefinition erfolgreich exportiert
 class-definition.custom-layouts.default-layout: Standard-Layout
-class-definition.create-new: Neue Klassendefinition erstellen
+class-definition.create-new: Neue Klassendefinition
 class-definition.class-name: Klassenname
 class-definition.unique-identifier: Eindeutiger Bezeichner
 class-definition.unique-identifier-warning: Seien Sie vorsichtig mit dem eindeutigen Bezeichner, da Tabellennamen nur bis zu 64 Zeichen enthalten können.
@@ -246,7 +246,7 @@ class-definition.composite-indices.type-localized-query: Lokalisierte Query
 class-definition.composite-indices.type-store: Store
 class-definition.composite-indices.type-localized-store: Lokalisierter Store
 class-definition.composite-indices.index-label: Index
-field-collection.create-new: Neue Field Collection erstellen
+field-collection.create-new: Neue Field Collection
 field-collection.key: Schlüssel
 field-collection.validation.enter-key: Bitte geben Sie einen Schlüssel ein
 field-collection.validation.key-format: Der Schlüssel muss mit einem Buchstaben beginnen und darf nur Buchstaben, Zahlen und Unterstriche enthalten.
@@ -260,7 +260,7 @@ field-collection.general-settings.implements-interfaces: Implementiert Interface
 field-collection.general-settings.usages.title: Verwendungen
 field-collection.general-settings.usages.class: Klasse
 field-collection.general-settings.usages.field: Feld
-object-brick.create-new: Neuen Object Brick erstellen
+object-brick.create-new: Neuer Object Brick
 object-brick.key: Schlüssel
 object-brick.validation.enter-key: Bitte geben Sie einen Schlüssel ein
 object-brick.validation.key-format: Der Schlüssel muss mit einem Buchstaben beginnen und darf nur Buchstaben, Zahlen und Unterstriche enthalten.
@@ -275,7 +275,7 @@ object-brick.class-definitions-block.classname: Klasse
 object-brick.class-definitions-block.select-classname: Klasse auswählen
 object-brick.class-definitions-block.fieldname: Feld
 object-brick.class-definitions-block.select-fieldname: Feld auswählen
-select-option.create-new: Neue Auswahloption erstellen
+select-option.create-new: Neue Auswahloption
 select-option.id: ID
 select-option.enter-name-new-item: Geben Sie den Namen des neuen Eintrags ein
 select-option.validation.enter-id: Bitte geben Sie eine ID ein
@@ -325,6 +325,8 @@ aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Auswahl des benutz
 aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Benutzerdefiniertes Vorschaubild herunterladen
 aria.asset.image-sidebar.tab.details.precreated-thumbnail: Vorgefertigtes Vorschaubild zum Herunterladen auswählen
 aria.asset.image-sidebar.tab.details.download-thumbnail: Vorschaubild herunterladen
+aria.asset.image-sidebar.tab.details.downloadable-thumbnail: Herunterladbares Vorschaubild auswählen
+aria.asset.image-sidebar.tab.details.download-downloadable-thumbnail: Ausgewähltes Vorschaubild herunterladen
 notification.action-list.actions: Aktionen
 notification.action-list.cancel: Abbrechen
 notification.action-list.cancel-all: Alle abbrechen
@@ -378,6 +380,7 @@ grid.advanced-column.preview: Vorschau
 grid.advanced-column.no-preview: Kein Vorschauelement verfügbar
 grid.advanced-column.no-preview-data: Keine Vorschaudaten verfügbar
 grid.advanced-column.error-preview-data: Fehler beim Laden der Vorschau
+grid.advanced-column.no-source-fields: Fügen Sie ein Quellfeld hinzu, um eine Vorschau zu sehen.
 grid.advanced-column.preview-item: Vorschauelement
 grid.advanced-column.trim: Kürzen
 grid.advanced-column.find: Suchen
@@ -497,6 +500,8 @@ version.category.title.meta: Metadaten
 version.category.title.properties: Eigenschaften
 version.changed-attributes: "Geänderte Attribute: {{attributes}}"
 aria.version.delete: Version löschen
+aria.notes-and-events.delete: Notiz löschen
+aria.card.close: Schließen
 aria.version.expand: Version aufklappen
 clear-all: Alle löschen
 empty: Leer
@@ -555,6 +560,8 @@ userModification: Benutzer Änderung
 userOwner: Eigentümer
 listing.grid-config.convert-to-advanced: In erweiterte Spalte umwandeln
 listing.grid-config.title: Grid-Konfiguration
+listing.grid-config.search-mode-column.label: Automatisch
+listing.grid-config.search-mode-column.tooltip: Vom aktiven Suchmodus hinzugefügt. Sie können sie wie jede andere Spalte verschieben; sie wird nicht mit der Grid-Konfiguration gespeichert.
 grid-config.discard-all-changes: Alle Änderungen verwerfen
 grid-config.apply-changes: Änderungen übernehmen
 grid-config.reload: Neu laden
@@ -630,6 +637,54 @@ website-settings.columns.site: Site
 website-settings.columns.actions: Aktionen
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Pflichtfelder fehlen
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Name und Typ sind Pflichtfelder und müssen ausgefüllt werden.
+mcp-servers.rail.new-server: Neuer Server
+mcp-servers.placeholder: Wählen Sie einen Server aus, um seine Konfiguration anzuzeigen oder zu bearbeiten.
+mcp-servers.tabs.empty: Wählen Sie einen Server aus, um seine Konfiguration anzuzeigen oder zu bearbeiten.
+mcp-servers.tabs.new-server: Neuer Server
+mcp-servers.read-only-notice: Serverdefinitionen werden in dieser Umgebung dateibasiert verwaltet und können hier nicht bearbeitet werden.
+mcp-servers.save-success: MCP-Server gespeichert
+mcp-servers.access.users-count: "Benutzer: {{number}}"
+mcp-servers.access.roles-count: "Rollen: {{number}}"
+mcp-servers.access.global-extra: jeder authentifizierte Benutzer
+mcp-servers.access.nobody: "Noch niemand"
+mcp-servers.badge.read: Lesen
+mcp-servers.badge.write: Schreiben
+mcp-servers.editor.create-title: Neuer MCP-Server
+mcp-servers.editor.edit-title: MCP-Server bearbeiten
+mcp-servers.editor.general: Allgemein
+mcp-servers.editor.permissions: Berechtigungen
+mcp-servers.editor.identity: Identität
+mcp-servers.editor.name: Name
+mcp-servers.editor.name-required: Bitte geben Sie einen Namen an.
+mcp-servers.editor.url-slug: URL Slug
+mcp-servers.editor.url-slug-required: Bitte geben Sie einen URL-Slug an.
+mcp-servers.editor.url-slug-pattern: Nur Kleinbuchstaben, Zahlen und Bindestriche sind erlaubt.
+mcp-servers.editor.description: Beschreibung
+mcp-servers.editor.enabled: Aktiv
+mcp-servers.editor.tools: Werkzeuge
+mcp-servers.editor.tools-placeholder: Wählen Sie die Tools aus, die dieser Server bereitstellt
+mcp-servers.editor.scopes: Angebotene Scopes
+mcp-servers.editor.scopes-empty: Keine Scopes — wählen Sie Tools aus, um die erforderlichen Scopes abzuleiten.
+mcp-servers.editor.url: Server-URL
+mcp-servers.editor.copy-url: "Server-URL kopieren"
+mcp-servers.editor.connect-hint: Richten Sie Ihren MCP-Client auf diese URL und authentifizieren Sie sich mit Ihrem Pimcore-Konto.
+mcp-servers.sharing.title: Freigabe
+mcp-servers.sharing.share-globally: Global teilen
+mcp-servers.sharing.share-globally-tooltip: Jeder authentifizierte Benutzer erhält Konfiguration lesen und MCP-Serverzugriff (nicht Konfiguration bearbeiten)
+mcp-servers.sharing.users: Benutzer
+mcp-servers.sharing.roles: Rollen
+mcp-servers.sharing.add-user: Benutzer hinzufügen…
+mcp-servers.sharing.add-role: Rolle hinzufügen…
+mcp-servers.sharing.name: Name
+mcp-servers.sharing.config-read: Konfiguration lesen
+mcp-servers.sharing.config-edit: Konfiguration bearbeiten
+mcp-servers.sharing.mcp-access: MCP-Serverzugriff
+mcp-servers.sharing.level: Zugriffsebene
+mcp-servers.sharing.read: Lesen
+mcp-servers.sharing.write: Kann bearbeiten
+mcp-servers.sharing.who-can-access: Wer hat Zugriff
+mcp-servers.delete.title: MCP-Server löschen
+mcp-servers.delete.confirm: Möchten Sie "{{name}}" wirklich löschen?
 document-types.new: Neu
 document-types.columns.name: Name
 document-types.columns.group: Gruppe
@@ -645,6 +700,7 @@ properties.label: Eigenschaften
 properties.editable-properties: Bearbeitbare Eigenschaften
 properties.all-properties: Alle Eigenschaften
 properties.predefined-properties: Vordefinierte Eigenschaften
+properties.predefined-properties.reload-error: Die vordefinierten Eigenschaften konnten nicht neu geladen werden
 properties.new-custom-property: Neue benutzerdefinierte Eigenschaft
 translations.columns.type: Typ
 translations.columns.key: Schlüssel
@@ -725,7 +781,7 @@ notifications.settings.discard.keep-editing: Weiter bearbeiten
 notifications.settings.unsaved-changes_one: "{{count}} nicht gespeicherte Änderung"
 notifications.settings.unsaved-changes_other: "{{count}} nicht gespeicherte Änderungen"
 notifications.settings.group.general: Allgemein
-notifications.remove-all: Alle entfernen
+notifications.remove-all: Alle löschen
 notifications.new-notification: Neue Benachrichtigung
 notifications.columns.title: Titel
 notifications.columns.date: Datum
@@ -754,6 +810,7 @@ tags.apply-tags-to-children: Tags auf Kinder anwenden
 tags.remove-and-apply-tags-to-children: Tags entfernen und auf Kinder anwenden
 tags.columns.path: Pfad
 tags.columns.actions: Entfernen
+tags.actions.delete: Tag entfernen
 csv-separated-options: CSV-getrennte Optionen
 csv-separated-options-info: Die Liste der verfügbaren Optionen kann als kommagetrennte Liste, als einspaltiger Wert oder gemischt angegeben werden. Bei der einspaltigen Variante wird der Schlüssel auch als Wert verwendet.
 add: Hinzufügen
@@ -839,7 +896,7 @@ field-definitions.saved-successfully: Erfolgreich gespeichert.
 field-definitions.select-item-configuration: Elementkonfiguration auswählen
 field-definitions.custom-layout-title: Benutzerdefiniertes Layout
 field-definitions.custom-layouts: Benutzerdefinierte Layouts
-field-definitions.create-new-class-definition: Neues benutzerdefiniertes Layout erstellen
+field-definitions.create-new-class-definition: Neues benutzerdefiniertes Layout
 field-definitions.select-field-message: Bitte wählen Sie ein Feld aus dem Baum, um dessen Eigenschaften zu bearbeiten.
 field-definitions.loading-general-settings: Allgemeine Einstellungen werden geladen...
 field-definitions.type-not-supported: Typ nicht unterstützt
@@ -1124,6 +1181,7 @@ asset.sidebar.original-file: Originaldatei
 asset.sidebar.web-format: Web-Format
 asset.sidebar.print-format: Druck-Format
 asset.sidebar.office-format: Office-Format
+asset.sidebar.thumbnail-download: Vorschaubild herunterladen
 jobs.notification.title: Laufende Aufträge
 jobs.notification.tooltip: Laufende Aufträge öffnen
 jobs.notification.jobs_one: "{{count}} Aktion"
@@ -1227,6 +1285,7 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" wurde kopiert
 element.tree.paste: Einfügen
 element.tree.paste-as-child: Als Kind einfügen
 element.tree.paste-as-child-recursive: Als Kind einfügen (rekursiv)
+element.tree.open-no-permission: Sie haben keine Berechtigung, dieses Element zu öffnen.
 element.tree.paste-recursive-updating-references: Rekursiv einfügen, Referenzen aktualisieren
 element.tree.paste-only-contents: Nur Inhalte hier einfügen
 element.tree.cut: Ausschneiden
@@ -1278,6 +1337,8 @@ element.delete.batch.show-paths: Elemente anzeigen
 element.delete.batch.dependencies-warning.confirmed_one: 'Bitte beachten: Dieses Element hat Abhängigkeiten.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Bitte beachten: Diese Elemente haben Abhängigkeiten.'
 element.open: Öffnen
+element.state: Status
+element.state.unpublished: Unveröffentlicht
 element.toolbar.copy-id: ID kopieren
 element.toolbar.copy-full-path-to-clipboard: Vollständigen Pfad kopieren
 element.toolbar.copy-deep-link-to-clipboard: Deeplink kopieren
@@ -1317,6 +1378,9 @@ success: Erfolg
 no-value-set: Kein Wert gesetzt
 set-to-null: Leer (auf null setzen)
 remove: Entfernen
+move-up: Nach oben verschieben
+move-down: Nach unten verschieben
+translate: Übersetzen
 delete: Löschen
 clone: Klonen
 jobs.clone-job.step2.title: Referenzen werden aktualisiert
@@ -1407,7 +1471,7 @@ tree.actions.role: Rolle
 tree.actions.add-role: Rolle hinzufügen
 tree.actions.clone-role: Rolle klonen
 tree.actions.remove-role: Rolle löschen
-tree.actions.remove-folder: Ordner entfernen
+tree.actions.remove-folder: Ordner löschen
 tag-configuration.new: Neu
 tag-configuration.new-tag: Neuer Tag
 tag-configuration.name: Name
@@ -1551,7 +1615,9 @@ user-management.workspaces.localized-fields.edit: Bearbeitungsberechtigungen
 user-management.workspaces.custom-layouts: Benutzerdefinierte Layouts
 user-management.workspaces.custom-layouts.select: Ein oder mehrere Felder auswählen
 user-management.add-folder.success: Ordner erfolgreich hinzugefügt
-user-management.remove-folder.success: Ordner erfolgreich entfernt
+user-management.remove-folder: Ordner löschen
+user-management.remove-folder.text: 'Möchten Sie diesen Ordner wirklich dauerhaft löschen? Diese Aktion kann nicht rückgängig gemacht werden.'
+user-management.remove-folder.success: Ordner erfolgreich gelöscht
 user-management.clone-user: Benutzer klonen
 user-management.clone-user.text: Geben Sie den Namen des neuen Benutzers ein
 user-management.clone-user.success: Benutzer erfolgreich geklont
@@ -1560,15 +1626,15 @@ user-management.save-user.password.success: Passwort erfolgreich aktualisiert
 user-management.add-user.success: Benutzer erfolgreich hinzugefügt
 user-management.remove-user: Benutzer löschen
 user-management.remove-user.text: 'Sind Sie sicher, dass Sie den Benutzer "{{name}}" endgültig löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.'
-user-management.remove-user.success: Benutzer erfolgreich entfernt
+user-management.remove-user.success: Benutzer erfolgreich gelöscht
 user-management.perspectives: Perspektiven
 user-management.roles: Rollen
 user-management.role: Rolle
 user-management.users: Benutzer
 user-management.user: Benutzer
-user-management.add-folder: Neuen Ordner hinzufügen
+user-management.add-folder: Neuer Ordner
 user-management.add-folder.label: Geben Sie den Namen des neuen Ordners ein
-user-management.add-user: Neuen Benutzer hinzufügen
+user-management.add-user: Neuer Benutzer
 user-management.add-user.label: Geben Sie den Namen des neuen Benutzers ein
 user-management.last-login: Letzte Anmeldung
 user-management.search.id: ID
@@ -1579,16 +1645,18 @@ roles.clone-role: Rolle klonen
 roles.clone-role.text: Geben Sie den Namen der neuen Rolle ein
 roles.remove-role: Rolle löschen
 roles.remove-role.text: 'Sind Sie sicher, dass Sie die Rolle "{{name}}" endgültig löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.'
-roles.remove-folder.success: Ordner erfolgreich entfernt
+roles.remove-folder: Ordner löschen
+roles.remove-folder.text: 'Möchten Sie diesen Ordner wirklich dauerhaft löschen? Diese Aktion kann nicht rückgängig gemacht werden.'
+roles.remove-folder.success: Ordner erfolgreich gelöscht
 roles.remove-item.success: Rolle erfolgreich entfernt
 roles.add-item.success: Rolle erfolgreich hinzugefügt
 roles.add-folder.success: Ordner erfolgreich hinzugefügt
 roles.general: Allgemein
 roles.settings.title: Einstellungen
 roles.workspaces.title: Workspaces
-roles.add-folder: Neuen Ordner hinzufügen
+roles.add-folder: Neuer Ordner
 roles.add-folder.label: Geben Sie den Namen des neuen Ordners ein
-roles.add-role: Neue Rolle hinzufügen
+roles.add-role: Neue Rolle
 roles.add-role.label: Geben Sie den Namen der neuen Rolle ein
 roles.search.id: ID
 navigation.quick-access: Schnellzugriff
@@ -1612,6 +1680,7 @@ navigation.appearance-branding: Erscheinungsbild & Branding
 navigation.reporting: Berichte
 navigation.system: System
 navigation.website-settings: Website Einstellungen
+navigation.mcp-servers: MCP-Server
 navigation.document-types: Dokumenttypen
 navigation.cache: Cache
 navigation.cache.clear-cache: Cache leeren
@@ -1700,6 +1769,7 @@ widget.predefined-properties: Vordefinierte Eigenschaften
 widget.search-replace-assignments: Zuweisungen suchen & ersetzen
 widget.document-types: Dokumenttypen
 widget.website-settings: Website Einstellungen
+widget.mcp-servers: MCP-Server
 widget.role-management: Rollen
 widget.user-management: Benutzer
 widget.class-definitions: Klassen
@@ -1757,7 +1827,7 @@ image-thumbnails.editor.advanced: Erweitert
 image-thumbnails.editor.quality: Qualität
 image-thumbnails.editor.quality.tooltip: JPEG-Qualitätseinstellung (1-100)
 image-thumbnails.editor.high-resolution: Hohe Auflösung
-image-thumbnails.editor.high-resolution.tooltip: Hochauflösungsfaktor für Retina-Displays
+image-thumbnails.editor.high-resolution.tooltip: Hochauflösungsfaktor (z. B. für Web-to-Print oder überall dort, wo srcset nicht möglich oder ausreichend ist). Für normale Web-Vorschaubilder nicht nötig – diese erhalten automatisch ein srcset-Attribut mit 1x und 2x.
 image-thumbnails.editor.preserve-color: Farbe beibehalten
 image-thumbnails.editor.preserve-color.tooltip: "Farbe beibehalten (Profil, Farbraum) (Imagick, ORIGINAL)\n('Metadaten beibehalten' und 'Farbe beibehalten' funktioniert nur bei Transformationen ohne Kompositionen (Rahmen, Hintergrundfarbe, ...) und Farbänderungen (Graustufen, Sepia, ...))"
 image-thumbnails.editor.force-process-icc: ICC-Profile zwingend verarbeiten
@@ -1868,7 +1938,7 @@ image-thumbnails.transformations.effects.intensity: Intensität
 image-thumbnails.transformations.add: Transformation hinzufügen
 image-thumbnails.transformations.move-up: Nach oben
 image-thumbnails.transformations.move-down: Nach unten
-image-thumbnails.transformations.remove: Entfernen
+image-thumbnails.transformations.remove: Löschen
 
 # Unknown/Fallback Transformation
 image-thumbnails.transformations.unknown-type: "Unbekannter Transformationstyp: {{type}}"
@@ -1904,7 +1974,7 @@ video-thumbnails.add.validation.message: Der Vorschaubild-Name ist ungültig
 # Video Transformation tool strip
 video-thumbnails.transformations.move-up: Nach oben
 video-thumbnails.transformations.move-down: Nach unten
-video-thumbnails.transformations.remove: Entfernen
+video-thumbnails.transformations.remove: Löschen
 
 # Resize Transformation
 video-thumbnails.transformations.resize.config-title: Größenänderung konfigurieren
@@ -2928,6 +2998,7 @@ translations.merger.state.reverted: Zurückgesetzt
 translations.merger.state.pending: Ausstehend
 translations.merger.apply-all: Alle anwenden
 translations.merger.revert-all: Alle zurücksetzen
+translations.merger.revert: Zurücksetzen
 translations.merger.title: "Übersetzungen zusammenführen (Domain: {{domain}})"
 translations.merger.column.language: Sprache
 translations.merger.items: Einträge

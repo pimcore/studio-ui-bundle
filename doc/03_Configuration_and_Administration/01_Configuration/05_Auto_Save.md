@@ -17,6 +17,20 @@ with an 800ms debounce, creating a version with the `autoSave` task type.
 4. If a manual save or publish is triggered while an auto-save is running, the manual operation is queued
    and executes after the auto-save completes.
 
+## Disabling auto-save for data objects
+
+Set `auto_save_interval` to `0` to turn off auto-save for data objects:
+
+```yaml
+pimcore:
+    objects:
+        auto_save_interval: 0
+```
+
+With auto-save disabled, changes stay in the editor and are only persisted when the user saves or publishes.
+Any other value keeps auto-save enabled; Studio still uses the 800ms debounce described above, not the
+configured interval.
+
 ## Draft restoration
 
 When opening an element, if a newer auto-save version exists, the detail response includes draft data.

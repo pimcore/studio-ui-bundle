@@ -74,8 +74,10 @@ export const TranslationMerger = ({ domain, deltaItems }: TranslationMergerProps
           </Flex>
           <Flex align="center">
             <IconButton
+              aria-label={ t('reset') }
               icon={ { value: 'refresh' } }
               onClick={ resetRows }
+              tooltip={ { title: t('reset') } }
             />
             <Divider
               style={ { height: 24 } }

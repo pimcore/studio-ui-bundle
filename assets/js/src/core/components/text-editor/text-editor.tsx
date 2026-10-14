@@ -12,6 +12,7 @@ import React from 'react'
 import ReactCodeMirror from '@uiw/react-codemirror'
 import cn from 'classnames'
 import { getLanguageExtensions, type SupportedLanguage } from '@Pimcore/components/text-editor/detect-language'
+import { useCodeMirrorThemeExtensions } from '@Pimcore/components/code-editor/use-code-mirror-theme'
 import { useStyle } from './text-editor.styles'
 
 interface TextEditorProps {
@@ -30,6 +31,12 @@ export const TextEditor = ({
   setTextValue
 }: TextEditorProps): React.JSX.Element => {
   const { styles } = useStyle()
+  const themeExtensions = useCodeMirrorThemeExtensions()
+
+  const extensions = React.useMemo(
+    () => [...themeExtensions, ...getLanguageExtensions(language)],
+    [themeExtensions, language]
+  )
 
   return (
     <ReactCodeMirror
@@ -37,8 +44,9 @@ export const TextEditor = ({
         lineNumbers
       } }
       className={ cn(styles.editor, className) }
-      extensions={ getLanguageExtensions(language) }
+      extensions={ extensions }
       onChange={ (value) => { setTextValue(value) } }
+      theme="none"
       value={ textValue }
     />
   )

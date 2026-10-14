@@ -30,6 +30,7 @@ import { debounce } from 'lodash'
 import { RELATION_COLUMN_FILTERS_KEY, useRelationFiltersOptional } from '../../filters/filters'
 import { CreateObjectModal } from '../create-object/create-object-modal'
 import { useCreatableRelationClasses } from '../create-object/use-creatable-relation-classes'
+import { actionTooltipDelay } from '@Pimcore/components/tooltip/tooltip'
 
 export interface ManyToManyRelationToolbarProps extends IRelationAllowedTypesDataComponent {
   empty: () => void
@@ -101,7 +102,10 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
 
   if (canCreateObject) {
     buttons.push(
-      <Tooltip title={ t('relations.create-object.title') }>
+      <Tooltip
+        mouseEnterDelay={ actionTooltipDelay }
+        title={ t('relations.create-object.title') }
+      >
         <IconButton
           aria-label={ t('relations.create-object.title') }
           disabled={ isLoadingClasses }
@@ -167,7 +171,10 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
 
   if (props.allowClear) {
     buttons.push(
-      <Tooltip title={ t('empty') }>
+      <Tooltip
+        mouseEnterDelay={ actionTooltipDelay }
+        title={ t('empty') }
+      >
         <IconButton
           icon={ { value: 'trash' } }
           onClick={ () => {
@@ -185,7 +192,10 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
 
   if (hasAppliedFilters) {
     buttons.push(
-      <Tooltip title={ clearFiltersLabel }>
+      <Tooltip
+        mouseEnterDelay={ actionTooltipDelay }
+        title={ clearFiltersLabel }
+      >
         <IconButton
           aria-label={ clearFiltersLabel }
           icon={ { value: 'clear-filter' } }

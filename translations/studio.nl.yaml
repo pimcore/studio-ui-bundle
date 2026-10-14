@@ -129,7 +129,7 @@ document.tree.context-menu.add-hardlink: Nieuwe harde link
 document.required-fields.validation-title: Verplichte velden ontbreken
 document.required-fields.validation-message: De volgende verplichte velden moeten worden ingevuld vóór publicatie
 document.site.remove-site: Site verwijderen
-document.site.remove-site-confirmation: Weet je zeker dat je deze site wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.
+document.site.remove-site-confirmation: Weet je zeker dat je deze site permanent wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.
 document.site.use-as-site: Gebruiken als site
 document.site.edit-site: Site bewerken
 document.site.form.main-domain: Hoofddomein
@@ -159,8 +159,8 @@ data-object.select-class-to-display: Selecteer een klasse om weer te geven
 data-object.tree.context-menu.add-object: Nieuw object
 data-object.tree.context-menu.add-variant: Nieuwe variant
 data-object.variant-listing.create-data-variant: Nieuwe variant
-data-object.create-data-object: "Nieuw object van type {{className}} toevoegen"
-data-object.create-variant: "Nieuwe variant van type {{className}} toevoegen"
+data-object.create-data-object: "Nieuw object van type {{className}}"
+data-object.create-variant: "Nieuwe variant van type {{className}}"
 data-object.object-editor-tabs.variants: Varianten
 object.object-editor-tabs.children-listing: Kindraster
 workflow.label: Workflow
@@ -190,7 +190,7 @@ class-definition.import-file-label: JSON-bestand selecteren
 class-definition.import-success: Klassedefinitie succesvol geïmporteerd
 class-definition.export-success: Klassedefinitie succesvol geëxporteerd
 class-definition.custom-layouts.default-layout: Standaardlayout
-class-definition.create-new: Nieuwe klassedefinitie aanmaken
+class-definition.create-new: Nieuwe klassedefinitie
 class-definition.class-name: Klassenaam
 class-definition.unique-identifier: Unieke identificatie
 class-definition.unique-identifier-warning: Wees voorzichtig met de unieke identificatie, want tabelnamen mogen maximaal 64 tekens bevatten.
@@ -246,7 +246,7 @@ class-definition.composite-indices.type-localized-query: Gelokaliseerde query
 class-definition.composite-indices.type-store: Opslag
 class-definition.composite-indices.type-localized-store: Gelokaliseerde opslag
 class-definition.composite-indices.index-label: Index
-field-collection.create-new: Nieuwe Field Collection aanmaken
+field-collection.create-new: Nieuwe Field Collection
 field-collection.key: Sleutel
 field-collection.validation.enter-key: Voer een sleutel in
 field-collection.validation.key-format: De sleutel moet beginnen met een letter en mag alleen letters, cijfers en underscores bevatten.
@@ -260,7 +260,7 @@ field-collection.general-settings.implements-interfaces: Implementeert interface
 field-collection.general-settings.usages.title: Gebruik
 field-collection.general-settings.usages.class: Klasse
 field-collection.general-settings.usages.field: Veld
-object-brick.create-new: Nieuwe Object Brick aanmaken
+object-brick.create-new: Nieuwe Object Brick
 object-brick.key: Sleutel
 object-brick.validation.enter-key: Voer een sleutel in
 object-brick.validation.key-format: De sleutel moet beginnen met een letter en mag alleen letters, cijfers en underscores bevatten.
@@ -275,7 +275,7 @@ object-brick.class-definitions-block.classname: Klasse
 object-brick.class-definitions-block.select-classname: Klasse selecteren
 object-brick.class-definitions-block.fieldname: Veld
 object-brick.class-definitions-block.select-fieldname: Veld selecteren
-select-option.create-new: Nieuwe selectieoptie aanmaken
+select-option.create-new: Nieuwe selectieoptie
 select-option.id: ID
 select-option.enter-name-new-item: Naam van het nieuwe item invoeren
 select-option.validation.enter-id: Voer een ID in
@@ -325,6 +325,8 @@ aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Aangepast miniatuu
 aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Aangepast miniatuur downloaden
 aria.asset.image-sidebar.tab.details.precreated-thumbnail: Voorgemaakte miniatuur selecteren om te downloaden
 aria.asset.image-sidebar.tab.details.download-thumbnail: Miniatuur downloaden
+aria.asset.image-sidebar.tab.details.downloadable-thumbnail: Downloadbare miniatuur selecteren
+aria.asset.image-sidebar.tab.details.download-downloadable-thumbnail: Geselecteerde miniatuur downloaden
 notification.action-list.actions: Acties
 notification.action-list.cancel: Annuleren
 notification.action-list.cancel-all: Alles annuleren
@@ -378,6 +380,7 @@ grid.advanced-column.preview: Voorbeeld
 grid.advanced-column.no-preview: Geen voorbeelditem beschikbaar
 grid.advanced-column.no-preview-data: Geen voorbeeldgegevens beschikbaar
 grid.advanced-column.error-preview-data: Fout bij laden van voorbeeld
+grid.advanced-column.no-source-fields: Voeg een bronveld toe om een voorbeeld te zien.
 grid.advanced-column.preview-item: Voorbeelditem
 grid.advanced-column.trim: Inkorten
 grid.advanced-column.find: Zoeken
@@ -497,12 +500,14 @@ version.category.title.meta: Metadata
 version.category.title.properties: Eigenschappen
 version.changed-attributes: "Gewijzigde attributen: {{attributes}}"
 aria.version.delete: Versie verwijderen
+aria.notes-and-events.delete: Notitie verwijderen
+aria.card.close: Sluiten
 aria.version.expand: Versie uitvouwen
 clear-all: Alles wissen
 empty: Leeg
 none: Geen
-yes: Ja
-no: Nee
+'yes': Ja
+'no': Nee
 by: Door
 field: Veld
 no-data-available: Geen gegevens beschikbaar
@@ -555,6 +560,8 @@ userModification: Gebruiker wijziging
 userOwner: Gebruikerseigenaar
 listing.grid-config.convert-to-advanced: Converteren naar geavanceerde kolom
 listing.grid-config.title: Rasterinstelling
+listing.grid-config.search-mode-column.label: Automatisch
+listing.grid-config.search-mode-column.tooltip: Toegevoegd door de actieve zoekmodus. U kunt deze net als elke andere kolom verplaatsen; deze wordt niet opgeslagen in de rasterconfiguratie.
 grid-config.discard-all-changes: Alle wijzigingen verwerpen
 grid-config.apply-changes: Wijzigingen toepassen
 grid-config.reload: Herladen
@@ -630,6 +637,54 @@ website-settings.columns.site: Site
 website-settings.columns.actions: Acties
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Verplichte velden ontbreken
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Naam en type zijn verplichte velden en moeten worden ingevuld.
+mcp-servers.rail.new-server: Nieuwe server
+mcp-servers.placeholder: Selecteer een server om de configuratie te bekijken of te bewerken.
+mcp-servers.tabs.empty: Selecteer een server om de configuratie te bekijken of te bewerken.
+mcp-servers.tabs.new-server: Nieuwe server
+mcp-servers.read-only-notice: Serverdefinities worden in deze omgeving via bestanden beheerd en kunnen hier niet worden bewerkt.
+mcp-servers.save-success: MCP-server opgeslagen
+mcp-servers.access.users-count: "Gebruikers: {{number}}"
+mcp-servers.access.roles-count: "Rollen: {{number}}"
+mcp-servers.access.global-extra: elke geauthenticeerde gebruiker
+mcp-servers.access.nobody: "Nog niemand"
+mcp-servers.badge.read: Lezen
+mcp-servers.badge.write: Schrijven
+mcp-servers.editor.create-title: Nieuwe MCP-server
+mcp-servers.editor.edit-title: MCP-server bewerken
+mcp-servers.editor.general: Algemeen
+mcp-servers.editor.permissions: Rechten
+mcp-servers.editor.identity: Identiteit
+mcp-servers.editor.name: Naam
+mcp-servers.editor.name-required: Geef een naam op.
+mcp-servers.editor.url-slug: URL-slug
+mcp-servers.editor.url-slug-required: Geef een URL-slug op.
+mcp-servers.editor.url-slug-pattern: Alleen kleine letters, cijfers en koppeltekens zijn toegestaan.
+mcp-servers.editor.description: Beschrijving
+mcp-servers.editor.enabled: Actief
+mcp-servers.editor.tools: Tools
+mcp-servers.editor.tools-placeholder: Selecteer de tools die deze server aanbiedt
+mcp-servers.editor.scopes: Geadverteerde scopes
+mcp-servers.editor.scopes-empty: Geen scopes — selecteer tools om de vereiste scopes af te leiden.
+mcp-servers.editor.url: Server-URL
+mcp-servers.editor.copy-url: "Server-URL kopiëren"
+mcp-servers.editor.connect-hint: Richt je MCP-client op deze URL en authenticeer je met je Pimcore-account.
+mcp-servers.sharing.title: Delen
+mcp-servers.sharing.share-globally: Globaal delen
+mcp-servers.sharing.share-globally-tooltip: Elke geauthenticeerde gebruiker krijgt Configuratie lezen en MCP-servertoegang (geen Configuratie bewerken)
+mcp-servers.sharing.users: Gebruikers
+mcp-servers.sharing.roles: Rollen
+mcp-servers.sharing.add-user: Gebruiker toevoegen…
+mcp-servers.sharing.add-role: Rol toevoegen…
+mcp-servers.sharing.name: Naam
+mcp-servers.sharing.config-read: Configuratie lezen
+mcp-servers.sharing.config-edit: Configuratie bewerken
+mcp-servers.sharing.mcp-access: MCP-servertoegang
+mcp-servers.sharing.level: Toegangsniveau
+mcp-servers.sharing.read: Lezen
+mcp-servers.sharing.write: Kan bewerken
+mcp-servers.sharing.who-can-access: Wie heeft toegang
+mcp-servers.delete.title: MCP-server verwijderen
+mcp-servers.delete.confirm: Weet je zeker dat je "{{name}}" wilt verwijderen?
 document-types.new: Nieuw
 document-types.columns.name: Naam
 document-types.columns.group: Groep
@@ -645,6 +700,7 @@ properties.label: Eigenschappen
 properties.editable-properties: Bewerkbare eigenschappen
 properties.all-properties: Alle eigenschappen
 properties.predefined-properties: Vooraf gedefinieerde eigenschappen
+properties.predefined-properties.reload-error: Kon de voorgedefinieerde eigenschappen niet herladen
 properties.new-custom-property: Nieuwe aangepaste eigenschap
 translations.columns.type: Type
 translations.columns.key: Sleutel
@@ -754,6 +810,7 @@ tags.apply-tags-to-children: Tags toepassen op onderliggende items
 tags.remove-and-apply-tags-to-children: Tags verwijderen en toepassen op onderliggende items
 tags.columns.path: Pad
 tags.columns.actions: Verwijderen
+tags.actions.delete: Tag verwijderen
 csv-separated-options: CSV-gescheiden opties
 csv-separated-options-info: De lijst met beschikbare opties kan worden opgegeven als kommagescheiden lijst, als enkelvoudige kolomwaarden of gemengd. Bij de enkelvoudige kolommanier wordt de sleutel ook als waarde gebruikt.
 add: Toevoegen
@@ -839,7 +896,7 @@ field-definitions.saved-successfully: Succesvol opgeslagen.
 field-definitions.select-item-configuration: Itemconfiguratie selecteren
 field-definitions.custom-layout-title: Custom Layout
 field-definitions.custom-layouts: Custom Layouts
-field-definitions.create-new-class-definition: Nieuwe Custom Layout aanmaken
+field-definitions.create-new-class-definition: Nieuwe Custom Layout
 field-definitions.select-field-message: Selecteer een veld in de boom om de eigenschappen te bewerken.
 field-definitions.loading-general-settings: Algemene instellingen laden...
 field-definitions.type-not-supported: Type wordt niet ondersteund
@@ -1124,6 +1181,7 @@ asset.sidebar.original-file: Origineel bestand
 asset.sidebar.web-format: Webformaat
 asset.sidebar.print-format: Afdrukformaat
 asset.sidebar.office-format: Kantoorformaat
+asset.sidebar.thumbnail-download: Miniatuur downloaden
 jobs.notification.title: Lopende taken
 jobs.notification.tooltip: Lopende taken openen
 jobs.notification.jobs_one: "{{count}} actie"
@@ -1227,6 +1285,7 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" is gekopieerd
 element.tree.paste: Plakken
 element.tree.paste-as-child: Plakken als onderliggend item
 element.tree.paste-as-child-recursive: Plakken als onderliggend item (recursief)
+element.tree.open-no-permission: Je hebt geen toestemming om dit element te openen.
 element.tree.paste-recursive-updating-references: Recursief plakken en verwijzingen bijwerken
 element.tree.paste-only-contents: Alleen inhoud hier plakken
 element.tree.cut: Knippen
@@ -1278,6 +1337,8 @@ element.delete.batch.show-paths: Items weergeven
 element.delete.batch.dependencies-warning.confirmed_one: "Let op: dit item heeft afhankelijkheden."
 element.delete.batch.dependencies-warning.confirmed_other: "Let op: deze items hebben afhankelijkheden."
 element.open: Openen
+element.state: Status
+element.state.unpublished: Niet gepubliceerd
 element.toolbar.copy-id: ID kopiëren
 element.toolbar.copy-full-path-to-clipboard: Volledig pad kopiëren
 element.toolbar.copy-deep-link-to-clipboard: Diepe link kopiëren
@@ -1317,6 +1378,9 @@ success: Succes
 no-value-set: Geen waarde ingesteld
 set-to-null: Leeg (instellen op null)
 remove: Verwijderen
+move-up: Omhoog verplaatsen
+move-down: Omlaag verplaatsen
+translate: Vertalen
 delete: Verwijderen
 clone: Klonen
 jobs.clone-job.step2.title: Verwijzingen bijwerken
@@ -1551,6 +1615,8 @@ user-management.workspaces.localized-fields.edit: Bewerkrechten
 user-management.workspaces.custom-layouts: Custom Layouts
 user-management.workspaces.custom-layouts.select: Een of meer velden selecteren
 user-management.add-folder.success: Map succesvol toegevoegd
+user-management.remove-folder: Map verwijderen
+user-management.remove-folder.text: 'Weet je zeker dat je deze map definitief wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.'
 user-management.remove-folder.success: Map succesvol verwijderd
 user-management.clone-user: Gebruiker klonen
 user-management.clone-user.text: Voer de naam in van de nieuwe gebruiker
@@ -1566,9 +1632,9 @@ user-management.roles: Rollen
 user-management.role: Rol
 user-management.users: Gebruikers
 user-management.user: Gebruiker
-user-management.add-folder: Nieuwe map toevoegen
+user-management.add-folder: Nieuwe map
 user-management.add-folder.label: Voer de naam in van de nieuwe map
-user-management.add-user: Nieuwe gebruiker toevoegen
+user-management.add-user: Nieuwe gebruiker
 user-management.add-user.label: Voer de naam in van de nieuwe gebruiker
 user-management.last-login: Laatste aanmelding
 user-management.search.id: ID
@@ -1579,6 +1645,8 @@ roles.clone-role: Rol klonen
 roles.clone-role.text: Voer de naam in van de nieuwe rol
 roles.remove-role: Rol verwijderen
 roles.remove-role.text: 'Weet je zeker dat je rol "{{name}}" definitief wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.'
+roles.remove-folder: Map verwijderen
+roles.remove-folder.text: 'Weet je zeker dat je deze map definitief wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.'
 roles.remove-folder.success: Map succesvol verwijderd
 roles.remove-item.success: Rol succesvol verwijderd
 roles.add-item.success: Rol succesvol toegevoegd
@@ -1586,9 +1654,9 @@ roles.add-folder.success: Map succesvol toegevoegd
 roles.general: Algemeen
 roles.settings.title: Instellingen
 roles.workspaces.title: Workspaces
-roles.add-folder: Nieuwe map toevoegen
+roles.add-folder: Nieuwe map
 roles.add-folder.label: Voer de naam in van de nieuwe map
-roles.add-role: Nieuwe rol toevoegen
+roles.add-role: Nieuwe rol
 roles.add-role.label: Voer de naam in van de nieuwe rol
 roles.search.id: ID
 navigation.quick-access: Snelle toegang
@@ -1612,6 +1680,7 @@ navigation.appearance-branding: Uiterlijk & huisstijl
 navigation.reporting: Rapportage
 navigation.system: Systeem
 navigation.website-settings: Website-instellingen
+navigation.mcp-servers: MCP-servers
 navigation.document-types: Documenttypen
 navigation.cache: Cache
 navigation.cache.clear-cache: Cache wissen
@@ -1700,6 +1769,7 @@ widget.predefined-properties: Vooraf gedefinieerde eigenschappen
 widget.search-replace-assignments: Toewijzingen zoeken & vervangen
 widget.document-types: Documenttypen
 widget.website-settings: Website-instellingen
+widget.mcp-servers: MCP-servers
 widget.role-management: Rollen
 widget.user-management: Gebruikers
 widget.class-definitions: Klassen
@@ -1757,7 +1827,7 @@ image-thumbnails.editor.advanced: Geavanceerd
 image-thumbnails.editor.quality: Kwaliteit
 image-thumbnails.editor.quality.tooltip: JPEG-kwaliteitsinstelling (1-100)
 image-thumbnails.editor.high-resolution: Hoge resolutie
-image-thumbnails.editor.high-resolution.tooltip: Factor voor hoge resolutie voor retina-schermen
+image-thumbnails.editor.high-resolution.tooltip: Factor voor hoge resolutie (bijv. voor Web-to-Print of overal waar srcset niet mogelijk of voldoende is). Niet nodig voor gewone webminiaturen – die krijgen automatisch een srcset-attribuut met 1x en 2x.
 image-thumbnails.editor.preserve-color: Kleur bewaren
 image-thumbnails.editor.preserve-color.tooltip: "Kleur bewaren (profiel, ruimte) (Imagick, ORIGINEEL)\n('Metadata bewaren' en 'kleur bewaren' werken alleen voor overgangen zonder composities (kader, achtergrondkleur, ...) en kleurwijzigingen (grijswaarden, sepia, ...))"
 image-thumbnails.editor.force-process-icc: ICC-profielen verwerking forceren
@@ -2928,6 +2998,7 @@ translations.merger.state.reverted: Teruggezet
 translations.merger.state.pending: In behandeling
 translations.merger.apply-all: Alles toepassen
 translations.merger.revert-all: Alles terugzetten
+translations.merger.revert: Terugzetten
 translations.merger.title: "Vertalingen samenvoegen (domein: {{domain}})"
 translations.merger.column.language: Taal
 translations.merger.items: items

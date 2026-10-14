@@ -11,7 +11,7 @@
 /* eslint-disable max-lines */
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isNil, isUndefined } from 'lodash'
+import { isNil, isNull, isUndefined } from 'lodash'
 import type { DragAndDropInfo } from '@sdk/components'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
@@ -75,6 +75,12 @@ export const useValue = (
   // column filters that are applied right now.
   const currentMatchRow = useRef<RelationRowMatcher | undefined>(matchRow)
   currentMatchRow.current = matchRow
+
+  // Always reflect the latest render so callbacks captured by memoized grid cells don't operate on stale data
+  const valueRef = useRef(value)
+  valueRef.current = value
+  const displayedValueRef = useRef(displayedValue)
+  displayedValueRef.current = displayedValue
 
   const { t } = useTranslation()
 
@@ -282,9 +288,10 @@ export const useValue = (
 
   const deleteItem = (rowIndex: number): void => {
     const originalIndex = getOriginalIndex(rowIndex)
-    const filterFunction = (item: ManyToManyRelationValueItem, _index: number): boolean => _index !== originalIndex
-    setValue(value === null ? null : value.filter(filterFunction))
-    updateDisplayValue(value === null ? null : value.filter(filterFunction))
+    const currentValue = valueRef.current
+    const newValue = isNull(currentValue) ? null : currentValue.filter((_item, index) => index !== originalIndex)
+    setValue(newValue)
+    updateDisplayValue(newValue)
   }
 
   const onSearch = (searchTerm: string): void => {
@@ -310,7 +317,7 @@ export const useValue = (
   }
 
   const getOriginalIndex = (displayedRowIndex: number): number => {
-    const displayedItem = displayedValue?.[displayedRowIndex]
+    const displayedItem = displayedValueRef.current?.[displayedRowIndex]
     return displayedItem?.originalIndex ?? displayedRowIndex
   }
 

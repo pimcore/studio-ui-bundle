@@ -26,6 +26,7 @@ import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { type ImageValue } from '../image/image'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
+import { actionTooltipDelay } from '@Pimcore/components/tooltip/tooltip'
 
 interface HotspotImageFooterProps {
   emptyValue?: () => void
@@ -57,6 +58,7 @@ export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.El
   const buttons: ReactElement[] = [
     <Tooltip
       key="open"
+      mouseEnterDelay={ actionTooltipDelay }
       title={ t('open') }
     >
       <IconButton
@@ -100,6 +102,7 @@ export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.El
     buttons.push(
       <Tooltip
         key="empty"
+        mouseEnterDelay={ actionTooltipDelay }
         title={ t('empty') }
       >
         <IconButton
@@ -160,6 +163,7 @@ export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.El
         trigger={ ['click'] }
       >
         <IconButton
+          aria-label={ t('more-actions') }
           icon={ { value: 'more' } }
           onClick={ (e) => { e.stopPropagation() } }
         />

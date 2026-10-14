@@ -21,7 +21,9 @@ import ErrorBoundary from '@Pimcore/modules/app/error-boundary/error-boundary'
 import { useIframeI18nSetup } from '@Pimcore/app/i18n/hooks/use-iframe-i18n-setup'
 import { ModalsProvider } from '@Pimcore/modules/app/modals-provider'
 import { DocumentEditorIframeGlobalStyles } from './styles/global.styles'
+import { EditmodeStyleProvider } from './styles/editmode-style-provider'
 import { useForwardKeyBindings } from './use-forward-key-bindings'
+import { IconMotion } from '@Pimcore/modules/app/icon-motion/icon-motion'
 
 export interface DocumentEditorIframeWindow extends Window {
   editableDefinitions?: AbstractDocumentEditableDefinition[]
@@ -64,18 +66,21 @@ export const DocumentEditorIframeAppView = (): React.JSX.Element => {
   return (
     <StrictMode>
       <ErrorBoundary>
-        <GlobalProvider>
-          <AntApp>
-            <DocumentEditorIframeGlobalStyles />
-            <ModalsProvider>
-              <DateTimeConfig>
-                <DocumentProvider id={ documentId }>
-                  <EditablesLoader editableDefinitions={ editableDefinitions } />
-                </DocumentProvider>
-              </DateTimeConfig>
-            </ModalsProvider>
-          </AntApp>
-        </GlobalProvider>
+        <EditmodeStyleProvider>
+          <GlobalProvider>
+            <AntApp>
+              <DocumentEditorIframeGlobalStyles />
+              <IconMotion />
+              <ModalsProvider>
+                <DateTimeConfig>
+                  <DocumentProvider id={ documentId }>
+                    <EditablesLoader editableDefinitions={ editableDefinitions } />
+                  </DocumentProvider>
+                </DateTimeConfig>
+              </ModalsProvider>
+            </AntApp>
+          </GlobalProvider>
+        </EditmodeStyleProvider>
       </ErrorBoundary>
     </StrictMode>
   )
