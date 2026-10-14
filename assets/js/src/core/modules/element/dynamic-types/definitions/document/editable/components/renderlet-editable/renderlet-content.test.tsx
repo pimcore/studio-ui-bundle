@@ -13,6 +13,7 @@ import { render } from '@testing-library/react'
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { type DocumentRenderletRenderApiArg } from '@Pimcore/modules/document/document-api-slice.gen'
 import { RenderletContent } from './renderlet-content'
+import { type ElementSelectorConfig, type SelectedItem } from '@sdk/modules/element'
 
 const useDocumentRenderletRenderQuery = jest.fn((_params: DocumentRenderletRenderApiArg | undefined, _options?: unknown) => (
   { data: undefined, isLoading: false, error: undefined }
@@ -27,10 +28,10 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key })
 }))
 
-const useElementSelector = jest.fn((_config: unknown) => ({ open: jest.fn() }))
+const useElementSelector = jest.fn((_config: ElementSelectorConfig) => ({ open: jest.fn() }))
 
 jest.mock('@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector', () => ({
-  useElementSelector: (config: unknown) => useElementSelector(config)
+  useElementSelector: (config: ElementSelectorConfig) => useElementSelector(config)
 }))
 
 // element-selector-provider transitively pulls in antd-style (see icon.tsx comment
@@ -75,6 +76,8 @@ describe('RenderletContent', () => {
     )
   }
 
+  const getSelectorConfig = (): ElementSelectorConfig => useElementSelector.mock.calls[0][0]
+
   afterEach(() => {
     useDocumentRenderletRenderQuery.mockClear()
     useElementSelector.mockClear()
@@ -93,8 +96,6 @@ describe('RenderletContent', () => {
   // filter to a non-existent type, so the listing is empty and no classId is sent
   // (https://pimcore.atlassian.net/browse/PEES-1691).
   describe('element selector configuration', () => {
-    const getSelectorConfig = (): any => useElementSelector.mock.calls[0][0]
-
     it('restricts the selector to the configured class name', () => {
       render(
         <DocumentContext.Provider value={ { id: 1 } }>
@@ -105,7 +106,7 @@ describe('RenderletContent', () => {
         </DocumentContext.Provider>
       )
 
-      expect(getSelectorConfig().config.objects).toEqual({ allowedClasses: ['Car'] })
+      expect(getSelectorConfig().config?.objects).toEqual({ allowedClasses: ['Car'] })
     })
 
     it('restricts the selector to all configured class names when className is an array', () => {
@@ -118,7 +119,7 @@ describe('RenderletContent', () => {
         </DocumentContext.Provider>
       )
 
-      expect(getSelectorConfig().config.objects).toEqual({ allowedClasses: ['Car', 'Manufacturer'] })
+      expect(getSelectorConfig().config?.objects).toEqual({ allowedClasses: ['Car', 'Manufacturer'] })
     })
 
     it('does not restrict classes when no className is configured', () => {
@@ -131,7 +132,7 @@ describe('RenderletContent', () => {
         </DocumentContext.Provider>
       )
 
-      expect(getSelectorConfig().config.objects).toBeUndefined()
+      expect(getSelectorConfig().config?.objects).toBeUndefined()
     })
   })
 
@@ -140,7 +141,7 @@ describe('RenderletContent', () => {
   // the element via Element\Service::getElementById) uses 'object' — the same mapping
   // the drop handler in renderlet-editable.tsx already applies.
   describe('element selector selection', () => {
-    const finishWith = (elementType: string, data: Record<string, unknown>): jest.Mock => {
+    const finishWith = (elementType: SelectedItem['elementType'], data: Pick<SelectedItem['data'], 'id' | 'type'>): jest.Mock => {
       const onChange = jest.fn()
       render(
         <DocumentContext.Provider value={ { id: 1 } }>
@@ -151,8 +152,8 @@ describe('RenderletContent', () => {
         </DocumentContext.Provider>
       )
 
-      const { onFinish } = useElementSelector.mock.calls[0][0] as { onFinish: (event: unknown) => void }
-      onFinish({ items: [{ elementType, data }] })
+      const { onFinish } = getSelectorConfig()
+      onFinish?.({ items: [{ elementType, data: { fullpath: '/some/element', ...data } }] })
 
       return onChange
     }
