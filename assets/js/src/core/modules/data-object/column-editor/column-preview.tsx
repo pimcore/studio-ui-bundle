@@ -34,6 +34,8 @@ export interface ColumnPreviewProps {
 
 const columnHelper = createColumnHelper()
 
+const getSafeKey = (type: string, index: number): string => `${type.replaceAll('.', '_')}-${index}`
+
 const PreviewGrid = ({ value }: { value: Array<{ type: string, value: any }> }): React.JSX.Element => {
   const advancedGridCellRegistry = useInjection<DynamicTypeGridCellRegistry>(
     serviceIds['DynamicTypes/AdvancedGridCellRegistry']
@@ -41,7 +43,7 @@ const PreviewGrid = ({ value }: { value: Array<{ type: string, value: any }> }):
 
   const columns = value.map((item, index) => {
     const isAdvancedCellType = advancedGridCellRegistry.hasDynamicType(item.type)
-    const safeKey = `${item.type.replace(/\./g, '_')}-${index}`
+    const safeKey = getSafeKey(item.type, index)
 
     return columnHelper.accessor(safeKey, {
       header: item.type,
@@ -62,7 +64,7 @@ const PreviewGrid = ({ value }: { value: Array<{ type: string, value: any }> }):
 
   const row: Record<string, any> = {}
   value.forEach((item, index) => {
-    const safeKey = `${item.type.replace(/\./g, '_')}-${index}`
+    const safeKey = getSafeKey(item.type, index)
     row[safeKey] = item.value
   })
 
