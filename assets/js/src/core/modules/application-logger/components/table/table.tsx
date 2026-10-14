@@ -9,6 +9,7 @@
  */
 
 import { Flex } from '@Pimcore/components/flex/flex'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
@@ -88,7 +89,7 @@ export const Table = ({ items, isLoading, sorting, onSortingChange }: TableProps
       enableSorting: true,
       cell: ({ row }): React.JSX.Element => {
         const column = row.original
-        const fileObjectBasePath = '/pimcore-studio/api/bundle/application-logger/file-object?filePath='
+        const fileObjectBasePath = `${getPrefix()}/bundle/application-logger/file-object?filePath=`
 
         if (isNil(column.fileObject)) {
           return <></>

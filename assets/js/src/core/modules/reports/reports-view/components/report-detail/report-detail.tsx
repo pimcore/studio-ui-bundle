@@ -27,7 +27,7 @@ import { type BundleCustomReportsColumnConfiguration } from '@Pimcore/modules/re
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { useElementHelper } from '@Pimcore/modules/element/hooks/use-element-helper'
 import { getTypeByActionType, ReportActionType } from '@Pimcore/modules/reports/reports-view/helpers'
-import { currentDomain } from '@Pimcore/app/config/app-config'
+import { appConfig, currentDomain } from '@Pimcore/app/config/app-config'
 import { useStyles } from '@Pimcore/modules/reports/reports-view/reports-view.styles'
 
 interface IReportDetailProps {
@@ -89,7 +89,7 @@ export const ReportDetail = ({ isLoading, currentReport, reportDetailData, chart
 
   const handleElementOpen = useCallback(({ id, actionType }: { id: number, actionType?: ReportActionType }): void => {
     if (actionType === ReportActionType.OPEN_URL) {
-      window.open(`${currentDomain}/pimcore-studio/${id}`, '_blank')
+      window.open(`${currentDomain}${appConfig.baseUrl}${id}`, '_blank')
     } else {
       const type = getTypeByActionType(actionType)
 

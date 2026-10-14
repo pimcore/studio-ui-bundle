@@ -10,6 +10,7 @@
 
 import { formatDateTime } from '@Pimcore/utils/date-time'
 import { formatDataUnit } from '@Pimcore/utils/data-unit'
+import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import {
   type CustomMetadataVersion,
   type AssetVersion
@@ -65,7 +66,7 @@ export const hydrateVersionData = (dataRaw: AssetVersion, versionId: number, ver
       dimensions: dataRaw.dimensions !== null && dataRaw.dimensions !== undefined ? dataRaw.dimensions.width + ' x ' + dataRaw.dimensions.height : ''
     },
     metadata: formatMetadata(dataRaw.metadata),
-    previewImageUrl: `/pimcore-studio/api/versions/${versionId}/image/stream`,
+    previewImageUrl: `${getPrefix()}/versions/${versionId}/image/stream`,
     dataRaw
   }
 }
@@ -104,7 +105,7 @@ export const loadPreviewImage = async (version: AssetVersion, versionId: number)
   }
   let result: string | null = null
 
-  await fetch(`/pimcore-studio/api/versions/${versionId}/image/stream`, {
+  await fetch(`${getPrefix()}/versions/${versionId}/image/stream`, {
     cache: 'force-cache'
   })
     .then(async (response) => await response.blob())
