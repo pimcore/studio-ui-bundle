@@ -26,7 +26,7 @@ const secret = 'JBSWY3DPEHPK3PXP'
 
 export const _default = {
   args: {
-    loadSetup: async () => ({
+    loadSetup: async () => await Promise.resolve({
       secret,
       otpauthUri: `otpauth://totp/Pimcore:admin?secret=${secret}&issuer=Pimcore`
     }),
@@ -37,7 +37,7 @@ export const _default = {
 
 export const LoadError = {
   args: {
-    loadSetup: async () => { throw new Error('Setup not available') },
+    loadSetup: async () => await Promise.reject(new Error('Setup not available')),
     onConfirm: async () => {},
     onGetBack: () => {}
   }

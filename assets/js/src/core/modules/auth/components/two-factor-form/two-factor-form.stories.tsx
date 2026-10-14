@@ -31,7 +31,7 @@ export const _default = {
 
 export const InvalidCode = {
   args: {
-    onVerify: async () => { throw new Error('Invalid code') },
+    onVerify: async () => await Promise.reject(new Error('Invalid code')),
     onGetBack: () => {}
   }
 }
