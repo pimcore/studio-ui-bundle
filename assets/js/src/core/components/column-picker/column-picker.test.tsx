@@ -12,7 +12,7 @@ import React from 'react'
 import { render } from '@testing-library/react'
 import { ColumnPicker } from './column-picker'
 
-const mockTreeElement = jest.fn()
+const mockTreeElement = jest.fn<undefined, [{ height?: number }]>()
 
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
 jest.mock('./column-picker.styles', () => ({
@@ -20,7 +20,7 @@ jest.mock('./column-picker.styles', () => ({
 }))
 jest.mock('@Pimcore/components/search-input/search-input', () => ({ SearchInput: () => <input /> }))
 jest.mock('@Pimcore/components/tree-element/tree-element', () => ({
-  TreeElement: (props: unknown) => {
+  TreeElement: (props: { height?: number }) => {
     mockTreeElement(props)
 
     return <div data-testid="tree" />
@@ -42,7 +42,7 @@ describe('ColumnPicker', () => {
     expect(mockTreeElement).toHaveBeenCalledWith(expect.objectContaining({ height: 300 }))
   })
 
-  it('renders the whole tree when no height is given', () => {
+  it('does not pass a height to the tree when none is given', () => {
     render(<ColumnPicker
       groups={ groups }
       onSelect={ jest.fn() }

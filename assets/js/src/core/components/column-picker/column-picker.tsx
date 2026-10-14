@@ -36,7 +36,7 @@ export interface ColumnPickerProps<TMeta = unknown> {
   fillHeight?: boolean
   flat?: boolean
   /**
-   * Fixed height (px) of the tree. When set, the tree uses antd's virtual list
+   * Maximum height (px, > 0, ignored with `flat`). When set, the tree uses antd's virtual list
    * and only renders the visible rows, which keeps large catalogs (hundreds of
    * items) fast. The tree then scrolls itself, so the list container neither caps
    * its height nor scrolls. Leave unset to render the whole tree (default).
@@ -85,7 +85,7 @@ export const ColumnPicker = <TMeta, >({
     [flat, filteredGroups]
   )
 
-  const isVirtual = !isUndefined(height) && !flat
+  const isVirtual = !isUndefined(height) && height > 0 && !flat
 
   const hasResults = flat ? flatItems.length > 0 : treeData.length > 0
 
