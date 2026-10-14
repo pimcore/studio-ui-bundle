@@ -16,7 +16,7 @@ const DEFAULT_WEIGHT = 100
 type LayoutNode = IJsonRowNode | IJsonTabSetNode
 
 const restoreRow = (row: IJsonRowNode): IJsonRowNode => {
-  const children = row.children ?? []
+  const children = row.children
   let changed = false
 
   let restoredChildren = children.map((child: LayoutNode) => {

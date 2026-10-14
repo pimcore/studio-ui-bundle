@@ -253,7 +253,7 @@ const slice = createSlice({
       if (isOuterModelNode) {
         state.outerModel = { ...model.toJson() }
       } else {
-        state.innerModel = { ...restoreCollapsedRows(model.toJson()) }
+        state.innerModel = restoreCollapsedRows(model.toJson())
         state.mainWidgetContext = resolveMainWidgetContext(model)
       }
     }
