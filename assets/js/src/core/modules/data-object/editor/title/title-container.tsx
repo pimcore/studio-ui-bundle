@@ -12,6 +12,7 @@ import React from 'react'
 import { TabTitleContainer, type TabTitleContainerProps } from '@Pimcore/modules/widget-manager/title/tab-title-container'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { useTranslation } from 'react-i18next'
+import { isUndefined } from 'lodash'
 import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 
@@ -26,7 +27,7 @@ export const TitleContainer = (props: TabTitleContainerProps): React.JSX.Element
       node.getName = () => t('home')
     }
 
-    const key = dataObject !== undefined ? getElementKey(dataObject as Element, elementTypes.dataObject) : ''
+    const key = !isUndefined(dataObject) ? getElementKey(dataObject as Element, elementTypes.dataObject) : ''
 
     return key !== '' ? key : nodeName
   }
