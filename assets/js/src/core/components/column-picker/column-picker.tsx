@@ -11,6 +11,7 @@
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
+import { isUndefined } from 'lodash'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Text } from '@Pimcore/components/text/text'
 import { TreeElement, type TreeDataItem } from '@Pimcore/components/tree-element/tree-element'
@@ -84,7 +85,7 @@ export const ColumnPicker = <TMeta, >({
     [flat, filteredGroups]
   )
 
-  const isVirtual = height !== undefined && !flat
+  const isVirtual = !isUndefined(height) && !flat
 
   const hasResults = flat ? flatItems.length > 0 : treeData.length > 0
 
