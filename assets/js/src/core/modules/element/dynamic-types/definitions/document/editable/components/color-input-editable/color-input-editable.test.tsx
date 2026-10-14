@@ -10,14 +10,22 @@
 
 import React from 'react'
 import { render, screen } from '@testing-library/react'
+import { type Color } from 'antd/es/color-picker'
 import { ColorInputEditable, type ColorInputEditableProps } from './color-input-editable'
 import { DynamicTypeDocumentEditableInput, type InputEditableDefinition } from '../../types/dynamic-type-document-editable-input'
 
 // The SDK barrel loads every Studio component and its styles; antd's ColorPicker is all this needs.
+// The props of the last rendered picker are kept, to drive its onChange the way a pick or a clear does.
+const mockPicker: { props?: { onChange: (color: Color) => void } } = {}
 jest.mock('@sdk/components', () => {
   const { createElement } = jest.requireActual('react')
   const antd = jest.requireActual('antd')
-  return { ColorPicker: ({ inherited, ...props }: any) => createElement(antd.ColorPicker, props) }
+  return {
+    ColorPicker: ({ inherited, ...props }: any) => {
+      mockPicker.props = props
+      return createElement(antd.ColorPicker, props)
+    }
+  }
 })
 jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
   createStyles: () => () => ({ styles: new Proxy({}, { get: (_t, key) => String(key) }), cx: (...names: any[]) => names.filter(Boolean).join(' '), theme: {} })
@@ -40,6 +48,22 @@ describe('ColorInputEditable', () => {
     )
 
     expect(screen.getByText('#F9F0FF')).toHaveClass('placeholder')
+  })
+
+  it('stores a picked colour as its hex text, and an empty string once cleared', () => {
+    const onChange = jest.fn()
+    const color = (hex: string, cleared: boolean): Color => ({ cleared, toHexString: () => hex }) as unknown as Color
+    render(
+      <ColorInputEditable
+        onChange={ onChange }
+        value="#3535d1"
+      />
+    )
+
+    mockPicker.props?.onChange(color('#22075e', false))
+    mockPicker.props?.onChange(color('#000000', true))
+
+    expect(onChange.mock.calls).toEqual([['#22075e'], ['']])
   })
 })
 
