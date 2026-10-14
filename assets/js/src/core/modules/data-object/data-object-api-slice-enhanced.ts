@@ -8,12 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isNil } from 'lodash'
 import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { normalizeLayoutTreeIcons } from '@Pimcore/utils/normalize-icon'
 import { api as baseApi, type Layout } from './data-object-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_TREE, tagNames.DATA_OBJECT_DETAIL, tagNames.DATA_OBJECT_GRID_CONFIGURATION, tagNames.DATA_OBJECT_GRID_CONFIGURATION_LIST, tagNames.DATA_OBJECT_GRID_CONFIGURATION_DETAIL],
+  addTagTypes: [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_TREE, tagNames.DATA_OBJECT_DETAIL, tagNames.DATA_OBJECT_GRID, tagNames.DATA_OBJECT_GRID_CONFIGURATION, tagNames.DATA_OBJECT_GRID_CONFIGURATION_LIST, tagNames.DATA_OBJECT_GRID_CONFIGURATION_DETAIL],
   endpoints: {
 
     dataObjectClone: {
@@ -65,7 +66,7 @@ const api = baseApi.enhanceEndpoints({
     },
 
     dataObjectAdd: {
-      invalidatesTags: (result, error, args) => invalidatingTags.DATA_OBJECT_TREE_ID(args.parentId)
+      invalidatesTags: (result, error, args) => [...invalidatingTags.DATA_OBJECT_TREE_ID(args.parentId), ...invalidatingTags.DATA_OBJECT_GRID_ID(args.parentId)]
     },
 
     dataObjectGetLayoutById: {
@@ -88,6 +89,11 @@ const api = baseApi.enhanceEndpoints({
 
         for (const dataObject of args.body.data) {
           invalidatingTagsForPatch.push(...invalidatingTags.DATA_OBJECT_DETAIL_ID(dataObject.id))
+        }
+
+        // A move changes the children of both the old and the new parent; the old one is not known here.
+        if (args.body.data.some((dataObject) => !isNil(dataObject.parentId))) {
+          invalidatingTagsForPatch.push(...invalidatingTags.DATA_OBJECT_GRID())
         }
 
         return invalidatingTagsForPatch

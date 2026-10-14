@@ -10,6 +10,8 @@
 
 import { isNil, isString } from 'lodash'
 import { store } from '@Pimcore/app/store'
+import { api } from '@Pimcore/modules/element/element-api-slice-enhanced'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { setNodeFetching, refreshNodeChildren } from '@Pimcore/components/element-tree/element-tree-slice'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { MessageBusJobHandler, type MessageBusJob } from '../../message-handlers/message-bus-job/message-bus-job-handler'
@@ -94,6 +96,9 @@ export abstract class AbstractCloneJob implements JobInterface {
       elementType: this.elementType,
       nodeId: this.targetId.toString()
     }))
+
+    // The clone runs as a background job, so the target's children grid is only stale once it finished.
+    store.dispatch(api.util.invalidateTags(invalidatingTags.ELEMENT_GRID_ID(this.elementType, this.targetId)))
   }
 
   protected async handleJobFailure (error: any): Promise<void> {
