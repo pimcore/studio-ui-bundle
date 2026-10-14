@@ -24,7 +24,7 @@ interface EditorWorkflowSubjectBridgeProps {
  * `WorkFlowProvider` is used inside an editor and no explicit `subject` is passed. Isolates the
  * editor-only dependencies (element context, element refresh, data-object layout reset) so the shared
  * submit/modal flow stays element-editor-agnostic. On success it refreshes the element and, for a
- * data-object, resets the current layout — the exact behaviour the toolbars had before the refactor.
+ * data-object, switches to the action's configured object layout or otherwise resets the current layout.
  */
 export const EditorWorkflowSubjectBridge = ({ children }: EditorWorkflowSubjectBridgeProps): React.JSX.Element => {
   const element = useOptionalElementContext()
@@ -39,9 +39,10 @@ export const EditorWorkflowSubjectBridge = ({ children }: EditorWorkflowSubjectB
     return {
       elementId: element.id,
       elementType: element.elementType,
-      onApplied: () => {
+      onApplied: (action) => {
         if (element.elementType === 'data-object') {
-          setCurrentLayout(null)
+          // switch to the custom layout configured on the transition, otherwise reset to the default one
+          setCurrentLayout(action.objectLayout ?? null)
         }
         refreshElement(element.id)
       }
