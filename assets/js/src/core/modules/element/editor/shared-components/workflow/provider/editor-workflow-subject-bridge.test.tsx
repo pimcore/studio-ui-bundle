@@ -40,10 +40,10 @@ const createWorkflow = (objectLayout: unknown): WorkflowDetails => ({
 } as unknown as WorkflowDetails)
 
 const applyTransition = (objectLayout: unknown): jest.Mock => {
-  let subject: WorkflowActionSubject | null = null
+  const captured: { subject?: WorkflowActionSubject | null } = {}
 
   const Probe = (): null => {
-    subject = useWorkflowActionSubject()
+    captured.subject = useWorkflowActionSubject()
     return null
   }
 
@@ -54,7 +54,7 @@ const applyTransition = (objectLayout: unknown): jest.Mock => {
   )
 
   const [action] = getWorkflowActions(createWorkflow(objectLayout))
-  subject!.onApplied!(action)
+  captured.subject!.onApplied!(action)
 
   return mockSetCurrentLayout
 }

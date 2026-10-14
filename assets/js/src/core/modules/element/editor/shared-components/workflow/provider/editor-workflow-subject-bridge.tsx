@@ -8,10 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { useOptionalElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementRefresh } from '@sdk/modules/element'
 import { useLayoutSelection } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/use-layout-selection'
+import { WorkflowLayoutOverrideContext } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/workflow-layout-override-context'
 import { type WorkflowActionSubject } from '../types/workflow-types'
 import { WorkflowActionSubjectContext } from './workflow-provider'
 
@@ -30,6 +31,7 @@ export const EditorWorkflowSubjectBridge = ({ children }: EditorWorkflowSubjectB
   const element = useOptionalElementContext()
   const { refreshElement } = useElementRefresh(element?.elementType ?? 'asset')
   const { setCurrentLayout } = useLayoutSelection()
+  const setWorkflowLayoutOverride = useContext(WorkflowLayoutOverrideContext)
 
   const subject = useMemo<WorkflowActionSubject | null>(() => {
     if (element === null) {
@@ -41,13 +43,15 @@ export const EditorWorkflowSubjectBridge = ({ children }: EditorWorkflowSubjectB
       elementType: element.elementType,
       onApplied: (action) => {
         if (element.elementType === 'data-object') {
-          // switch to the custom layout configured on the transition, otherwise reset to the default one
+          // switch to the custom layout configured on the transition, otherwise reset to the default one;
+          // the override keeps it once the refresh changes the derived default layout (new place)
+          setWorkflowLayoutOverride(action.objectLayout ?? null)
           setCurrentLayout(action.objectLayout ?? null)
         }
         refreshElement(element.id)
       }
     }
-  }, [element, refreshElement, setCurrentLayout])
+  }, [element, refreshElement, setCurrentLayout, setWorkflowLayoutOverride])
 
   return (
     <WorkflowActionSubjectContext.Provider value={ subject }>
