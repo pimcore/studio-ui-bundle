@@ -334,6 +334,7 @@ notification.action-list.completed-actions: Slutförda åtgärder
 aria.notification.action-list.toggle-collapse: Växla lista med åtgärder
 aria.notification.action-list.cancel-all: Avbryt alla pågående åtgärder
 aria.notification.action-list.cancel: Avbryt åtgärd
+aria.stack-list.drag-handle: Dra för att sortera om
 asset.image.editor.zoom.reset: Återställ
 aria.asset.image.editor.zoom.reset: Återställ zoom
 aria.asset.image.editor.zoom.zoom-in: Zooma in

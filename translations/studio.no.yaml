@@ -334,6 +334,7 @@ notification.action-list.completed-actions: Fullførte handlinger
 aria.notification.action-list.toggle-collapse: Slå av/på liste over handlinger
 aria.notification.action-list.cancel-all: Avbryt alle pågående handlinger
 aria.notification.action-list.cancel: Avbryt handling
+aria.stack-list.drag-handle: Dra for å sortere på nytt
 asset.image.editor.zoom.reset: Tilbakestill
 aria.asset.image.editor.zoom.reset: Tilbakestill zoom
 aria.asset.image.editor.zoom.zoom-in: Zoom inn

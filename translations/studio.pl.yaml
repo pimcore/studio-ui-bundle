@@ -334,6 +334,7 @@ notification.action-list.completed-actions: Zakończone akcje
 aria.notification.action-list.toggle-collapse: Rozwiń/zwiń listę akcji
 aria.notification.action-list.cancel-all: Anuluj wszystkie trwające akcje
 aria.notification.action-list.cancel: Anuluj akcję
+aria.stack-list.drag-handle: Przeciągnij, aby zmienić kolejność
 asset.image.editor.zoom.reset: Resetuj
 aria.asset.image.editor.zoom.reset: Resetuj powiększenie
 aria.asset.image.editor.zoom.zoom-in: Powiększ

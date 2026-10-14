@@ -334,6 +334,7 @@ notification.action-list.completed-actions: Voltooide acties
 aria.notification.action-list.toggle-collapse: Actielijst in-/uitklappen
 aria.notification.action-list.cancel-all: Alle lopende acties annuleren
 aria.notification.action-list.cancel: Actie annuleren
+aria.stack-list.drag-handle: Sleep om te herschikken
 asset.image.editor.zoom.reset: Herstellen
 aria.asset.image.editor.zoom.reset: Zoom herstellen
 aria.asset.image.editor.zoom.zoom-in: Inzoomen

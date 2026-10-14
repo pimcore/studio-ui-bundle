@@ -334,6 +334,7 @@ notification.action-list.completed-actions: Acciones completadas
 aria.notification.action-list.toggle-collapse: Alternar lista de acciones
 aria.notification.action-list.cancel-all: Cancelar todas las acciones en ejecución
 aria.notification.action-list.cancel: Cancelar acción
+aria.stack-list.drag-handle: Arrastrar para reordenar
 asset.image.editor.zoom.reset: Restablecer
 aria.asset.image.editor.zoom.reset: Restablecer zoom
 aria.asset.image.editor.zoom.zoom-in: Acercar
