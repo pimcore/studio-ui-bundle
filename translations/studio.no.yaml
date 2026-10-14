@@ -2336,7 +2336,8 @@ user-profile.two-factor-authentication.status.inactive: Tofaktorautentisering er
 user-profile.two-factor-authentication.required-hint: Tofaktorautentisering er påkrevd for kontoen din, så den kan ikke deaktiveres.
 user-profile.two-factor-authentication.setup: Sett opp tofaktorautentisering
 user-profile.two-factor-authentication.renew: Forny autentiseringsnøkkel
-user-profile.two-factor-authentication.setup.description: Skann QR-koden med autentiseringsappen din og skriv inn den {{digits}}-sifrede koden for å bekrefte. Den nåværende nøkkelen din fungerer til den nye er bekreftet.
+user-profile.two-factor-authentication.setup.description: Skann QR-koden med autentiseringsappen din og skriv inn den {{digits}}-sifrede koden for å bekrefte.
+user-profile.two-factor-authentication.renew.description: Skann QR-koden med autentiseringsappen din og skriv inn den {{digits}}-sifrede koden for å bekrefte. Den nåværende nøkkelen din fungerer til den nye er bekreftet.
 user-profile.two-factor-authentication.setup.success: Tofaktorautentisering er satt opp
 user-profile.two-factor-authentication.disable: Deaktiver tofaktorautentisering
 user-profile.two-factor-authentication.disable.confirmation.title: Deaktiver tofaktorautentisering

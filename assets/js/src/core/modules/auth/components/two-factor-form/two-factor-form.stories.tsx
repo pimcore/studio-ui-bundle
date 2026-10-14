@@ -9,6 +9,7 @@
  */
 
 import { type Meta } from '@storybook/react'
+import { TwoFactorCodeError } from '../../hooks/use-two-factor-authentication'
 import { TwoFactorForm } from './two-factor-form'
 
 const config: Meta = {
@@ -33,7 +34,7 @@ export const _default = {
 export const InvalidCode = {
   args: {
     digits: 6,
-    onVerify: async () => await Promise.reject(new Error('Invalid code')),
+    onVerify: async () => await Promise.reject(new TwoFactorCodeError('invalid-code')),
     onGetBack: () => {}
   }
 }

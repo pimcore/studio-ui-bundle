@@ -2336,7 +2336,8 @@ user-profile.two-factor-authentication.status.inactive: Tweefactorauthenticatie 
 user-profile.two-factor-authentication.required-hint: Tweefactorauthenticatie is verplicht voor je account en kan daarom niet worden uitgeschakeld.
 user-profile.two-factor-authentication.setup: Tweefactorauthenticatie instellen
 user-profile.two-factor-authentication.renew: Authenticatiesleutel vernieuwen
-user-profile.two-factor-authentication.setup.description: Scan de QR-code met je authenticatie-app en voer de {{digits}}-cijferige code in om te bevestigen. Je huidige sleutel blijft werken totdat de nieuwe is bevestigd.
+user-profile.two-factor-authentication.setup.description: Scan de QR-code met je authenticatie-app en voer de {{digits}}-cijferige code in om te bevestigen.
+user-profile.two-factor-authentication.renew.description: Scan de QR-code met je authenticatie-app en voer de {{digits}}-cijferige code in om te bevestigen. Je huidige sleutel blijft werken totdat de nieuwe is bevestigd.
 user-profile.two-factor-authentication.setup.success: Tweefactorauthenticatie is ingesteld
 user-profile.two-factor-authentication.disable: Tweefactorauthenticatie uitschakelen
 user-profile.two-factor-authentication.disable.confirmation.title: Tweefactorauthenticatie uitschakelen

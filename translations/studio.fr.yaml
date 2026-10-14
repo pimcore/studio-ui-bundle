@@ -2336,7 +2336,8 @@ user-profile.two-factor-authentication.status.inactive: L'authentification à de
 user-profile.two-factor-authentication.required-hint: L'authentification à deux facteurs est requise pour votre compte et ne peut donc pas être désactivée.
 user-profile.two-factor-authentication.setup: Configurer l'authentification à deux facteurs
 user-profile.two-factor-authentication.renew: Renouveler la clé d'authentification
-user-profile.two-factor-authentication.setup.description: Scannez le code QR avec votre application d'authentification et saisissez le code à {{digits}} chiffres pour confirmer. Votre clé actuelle reste valable jusqu'à la confirmation de la nouvelle.
+user-profile.two-factor-authentication.setup.description: Scannez le code QR avec votre application d'authentification et saisissez le code à {{digits}} chiffres pour confirmer.
+user-profile.two-factor-authentication.renew.description: Scannez le code QR avec votre application d'authentification et saisissez le code à {{digits}} chiffres pour confirmer. Votre clé actuelle reste valable jusqu'à la confirmation de la nouvelle.
 user-profile.two-factor-authentication.setup.success: L'authentification à deux facteurs a été configurée
 user-profile.two-factor-authentication.disable: Désactiver l'authentification à deux facteurs
 user-profile.two-factor-authentication.disable.confirmation.title: Désactiver l'authentification à deux facteurs

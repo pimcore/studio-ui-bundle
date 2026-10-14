@@ -8,12 +8,20 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-const mockLogout = jest.fn(async () => {})
+const mockLogout = jest.fn<Promise<{ data?: unknown, error?: unknown }>, []>(async () => ({ data: null }))
+const mockTrackError = jest.fn()
 const mockVerifyCode = jest.fn(async (code: string) => {})
 const mockReload = jest.fn()
 
 jest.mock('@Pimcore/modules/auth/components/login-form/login-form-style', () => ({ useStyle: () => ({ styles: {} }) }))
 jest.mock('@Pimcore/modules/auth/authorization-api-slice.gen', () => ({ useLogoutMutation: () => [mockLogout] }))
+jest.mock('@Pimcore/modules/app/error-handler', () => ({
+  __esModule: true,
+  default: (error: unknown) => mockTrackError(error),
+  ApiError: class {
+    constructor (public readonly cause: unknown) {}
+  }
+}))
 jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({ useUser: () => ({ isAdmin: false }) }))
 jest.mock('@Pimcore/modules/auth/services/statisticsService', () => ({ sendStatistics: jest.fn() }))
 jest.mock('../../hooks/use-two-factor-authentication', () => ({
@@ -62,6 +70,7 @@ describe('LoginFormContainer two-factor steps', () => {
 
   afterEach(() => {
     mockLogout.mockClear()
+    mockTrackError.mockClear()
     mockVerifyCode.mockClear()
     mockReload.mockClear()
   })
@@ -110,5 +119,17 @@ describe('LoginFormContainer two-factor steps', () => {
 
     await waitFor(() => { expect(screen.getByText('login-verify')).toBeTruthy() })
     expect(mockLogout).toHaveBeenCalledTimes(1)
+    expect(mockTrackError).not.toHaveBeenCalled()
+  })
+
+  it('reports a failed logout and still returns to the login step', async () => {
+    mockLogout.mockResolvedValueOnce({ error: { status: 500, data: {} } })
+    render(<LoginFormContainer />)
+
+    fireEvent.click(screen.getByText('login-verify'))
+    fireEvent.click(screen.getByText('verify-step'))
+
+    await waitFor(() => { expect(screen.getByText('login-verify')).toBeTruthy() })
+    expect(mockTrackError).toHaveBeenCalledTimes(1)
   })
 })

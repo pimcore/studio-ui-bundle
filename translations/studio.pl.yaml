@@ -2336,7 +2336,8 @@ user-profile.two-factor-authentication.status.inactive: Uwierzytelnianie dwuetap
 user-profile.two-factor-authentication.required-hint: Uwierzytelnianie dwuetapowe jest wymagane dla Twojego konta, więc nie można go wyłączyć.
 user-profile.two-factor-authentication.setup: Skonfiguruj uwierzytelnianie dwuetapowe
 user-profile.two-factor-authentication.renew: Odnów klucz uwierzytelniający
-user-profile.two-factor-authentication.setup.description: Zeskanuj kod QR w aplikacji uwierzytelniającej i wpisz {{digits}}-cyfrowy kod, aby potwierdzić. Obecny klucz działa do momentu potwierdzenia nowego.
+user-profile.two-factor-authentication.setup.description: Zeskanuj kod QR w aplikacji uwierzytelniającej i wpisz {{digits}}-cyfrowy kod, aby potwierdzić.
+user-profile.two-factor-authentication.renew.description: Zeskanuj kod QR w aplikacji uwierzytelniającej i wpisz {{digits}}-cyfrowy kod, aby potwierdzić. Obecny klucz działa do momentu potwierdzenia nowego.
 user-profile.two-factor-authentication.setup.success: Uwierzytelnianie dwuetapowe zostało skonfigurowane
 user-profile.two-factor-authentication.disable: Wyłącz uwierzytelnianie dwuetapowe
 user-profile.two-factor-authentication.disable.confirmation.title: Wyłącz uwierzytelnianie dwuetapowe

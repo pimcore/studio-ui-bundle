@@ -78,7 +78,7 @@ export const TwoFactorCodeField = ({ digits, align = 'stretch' }: TwoFactorCodeF
       name="code"
       rules={ [
         { required: true, message: t('two-factor-form.code.required') },
-        { pattern: new RegExp(`^\\d{${digits}}$`), message: t('two-factor-form.code.invalid-format', { digits }) }
+        { pattern: new RegExp(String.raw`^\d{${digits}}$`), message: t('two-factor-form.code.invalid-format', { digits }) }
       ] }
       validateTrigger={ false }
     >

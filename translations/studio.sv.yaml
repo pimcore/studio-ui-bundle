@@ -2336,7 +2336,8 @@ user-profile.two-factor-authentication.status.inactive: Tvåfaktorsautentisering
 user-profile.two-factor-authentication.required-hint: Tvåfaktorsautentisering krävs för ditt konto och kan därför inte inaktiveras.
 user-profile.two-factor-authentication.setup: Konfigurera tvåfaktorsautentisering
 user-profile.two-factor-authentication.renew: Förnya autentiseringsnyckel
-user-profile.two-factor-authentication.setup.description: Skanna QR-koden med din autentiseringsapp och ange den {{digits}}-siffriga koden för att bekräfta. Din nuvarande nyckel fungerar tills den nya har bekräftats.
+user-profile.two-factor-authentication.setup.description: Skanna QR-koden med din autentiseringsapp och ange den {{digits}}-siffriga koden för att bekräfta.
+user-profile.two-factor-authentication.renew.description: Skanna QR-koden med din autentiseringsapp och ange den {{digits}}-siffriga koden för att bekräfta. Din nuvarande nyckel fungerar tills den nya har bekräftats.
 user-profile.two-factor-authentication.setup.success: Tvåfaktorsautentisering har konfigurerats
 user-profile.two-factor-authentication.disable: Inaktivera tvåfaktorsautentisering
 user-profile.two-factor-authentication.disable.confirmation.title: Inaktivera tvåfaktorsautentisering

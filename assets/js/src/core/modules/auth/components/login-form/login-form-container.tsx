@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { useStyle } from '@Pimcore/modules/auth/components/login-form/login-form-style'
 import { useLogoutMutation } from '@Pimcore/modules/auth/authorization-api-slice.gen'
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
@@ -55,8 +56,15 @@ export const LoginFormContainer = ({ pendingTwoFactor }: LoginFormContainerProps
     await completeLogin()
   }
 
+  // A failed logout still returns to the password form: a new password login starts over
   const handleCancelTwoFactor = (): void => {
-    void logout().finally(() => { setStep('login') })
+    void logout()
+      .then((result) => {
+        if (result.error !== undefined) {
+          trackError(new ApiError(result.error))
+        }
+      })
+      .finally(() => { setStep('login') })
   }
 
   return (
