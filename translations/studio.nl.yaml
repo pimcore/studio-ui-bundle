@@ -85,6 +85,13 @@ asset.upload.overwrite: Overschrijven
 asset.upload.keep-both: Beide bewaren
 asset.upload.skip: Overslaan
 asset.upload.apply-to-all: Op alles toepassen
+asset.upload.files-exist.title: 'Bestanden bestaan al'
+asset.upload.files-exist.message: '{{total}} van de geselecteerde bestanden bestaan al in deze map. Wat wil je ermee doen?'
+asset.upload.files-exist.more: 'en {{hidden}} meer'
+asset.upload.review-each: 'Per bestand bekijken'
+asset.upload.skip-all: 'Alles overslaan'
+asset.upload.keep-both-all: 'Voor alles beide bewaren'
+asset.upload.overwrite-all: 'Alles overschrijven'
 asset.upload.checking-duplicate-file-names: "Controleren op dubbele bestandsnamen ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Mappen aanmaken
 asset.upload.folder-drop.creating-folders-hint: Even geduld terwijl de mappenstructuur wordt aangemaakt…
