@@ -28,7 +28,8 @@ export const _default = {
   args: {
     loadSetup: async () => await Promise.resolve({
       secret,
-      otpauthUri: `otpauth://totp/Pimcore:admin?secret=${secret}&issuer=Pimcore`
+      otpauthUri: `otpauth://totp/Pimcore:admin?secret=${secret}&issuer=Pimcore`,
+      digits: 6
     }),
     onConfirm: async () => { await new Promise((resolve) => setTimeout(resolve, 1000)) },
     onGetBack: () => {}

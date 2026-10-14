@@ -2266,7 +2266,7 @@ user-profile.two-factor-authentication.status.inactive: Tvåfaktorsautentisering
 user-profile.two-factor-authentication.required-hint: Tvåfaktorsautentisering krävs för ditt konto och kan därför inte inaktiveras.
 user-profile.two-factor-authentication.setup: Konfigurera tvåfaktorsautentisering
 user-profile.two-factor-authentication.renew: Förnya autentiseringsnyckel
-user-profile.two-factor-authentication.setup.description: Skanna QR-koden med din autentiseringsapp och ange den 6-siffriga koden för att bekräfta. Din nuvarande nyckel fungerar tills den nya har bekräftats.
+user-profile.two-factor-authentication.setup.description: Skanna QR-koden med din autentiseringsapp och ange den {{digits}}-siffriga koden för att bekräfta. Din nuvarande nyckel fungerar tills den nya har bekräftats.
 user-profile.two-factor-authentication.setup.success: Tvåfaktorsautentisering har konfigurerats
 user-profile.two-factor-authentication.disable: Inaktivera tvåfaktorsautentisering
 user-profile.two-factor-authentication.disable.confirmation.title: Inaktivera tvåfaktorsautentisering
@@ -2710,15 +2710,15 @@ forgot-password-form.username.placeholder: Användarnamn
 forgot-password-form.reset-password: Återställ lösenord
 forgot-password-form.success-message: En tillfällig inloggningslänk har skickats till din e-postadress. Kontrollera din inkorg.
 forgot-password-form.back: Tillbaka till inloggning
-two-factor-form.description: Ange den 6-siffriga koden från din autentiseringsapp
+two-factor-form.description: Ange den {{digits}}-siffriga koden från din autentiseringsapp
 two-factor-form.code.placeholder: Autentiseringskod
 two-factor-form.code.required: Ange autentiseringskoden
-two-factor-form.code.invalid-format: Koden måste bestå av 6 siffror
+two-factor-form.code.invalid-format: Koden måste bestå av {{digits}} siffror
 two-factor-form.verify: Verifiera
 two-factor-form.error: Koden kunde inte verifieras. Försök igen.
 two-factor-form.too-many-attempts: För många försök. Vänta några minuter innan du försöker igen.
 two-factor-form.back: Tillbaka till inloggning
-two-factor-setup-form.description: Tvåfaktorsautentisering krävs för ditt konto. Skanna QR-koden med din autentiseringsapp och ange den 6-siffriga koden för att bekräfta.
+two-factor-setup-form.description: Tvåfaktorsautentisering krävs för ditt konto. Skanna QR-koden med din autentiseringsapp och ange den {{digits}}-siffriga koden för att bekräfta.
 two-factor-setup-form.manual-entry: Eller ange den här nyckeln manuellt
 two-factor-setup-form.confirm: Aktivera
 two-factor-setup-form.load-error: Tvåfaktorsautentisering kunde inte konfigureras. Försök igen senare.

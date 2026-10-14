@@ -16,11 +16,12 @@ import { TwoFactorCodeError } from '../../hooks/use-two-factor-authentication'
 import { TwoFactorCodeField, type TwoFactorCodeFormValues } from '../two-factor-code-field/two-factor-code-field'
 
 export interface TwoFactorFormProps {
+  digits: number
   onVerify: (code: string) => Promise<void>
   onGetBack: () => void
 }
 
-export const TwoFactorForm = ({ onVerify, onGetBack }: TwoFactorFormProps): React.JSX.Element => {
+export const TwoFactorForm = ({ digits, onVerify, onGetBack }: TwoFactorFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm<TwoFactorCodeFormValues>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -44,7 +45,7 @@ export const TwoFactorForm = ({ onVerify, onGetBack }: TwoFactorFormProps): Reac
       gap={ 'normal' }
       vertical
     >
-      <Text>{t('two-factor-form.description')}</Text>
+      <Text>{t('two-factor-form.description', { digits })}</Text>
 
       {codeError !== undefined && (
         <Alert
@@ -60,7 +61,7 @@ export const TwoFactorForm = ({ onVerify, onGetBack }: TwoFactorFormProps): Reac
           onFinish: handleFinish
         } }
       >
-        <TwoFactorCodeField />
+        <TwoFactorCodeField digits={ digits } />
 
         <Button
           className="w-full"

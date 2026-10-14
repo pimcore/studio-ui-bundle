@@ -59,6 +59,8 @@ export type TwoFactorLoginStep = {
     twoFactorRequired: boolean;
     /** What to do next */
     twoFactorStep: "verify" | "setup";
+    /** Number of digits in a code */
+    digits: number;
 };
 export type InvalidCredentials = {
     /** Error */

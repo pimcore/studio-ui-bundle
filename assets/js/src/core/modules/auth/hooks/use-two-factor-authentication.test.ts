@@ -45,7 +45,7 @@ jest.mock('@sdk/app', () => ({ useAppDispatch: () => mockDispatch }))
 // eslint-disable-next-line import/first
 import { renderHook } from '@testing-library/react'
 // eslint-disable-next-line import/first
-import { getTwoFactorStep, TwoFactorCodeError, useTwoFactorAuthentication } from './use-two-factor-authentication'
+import { getTwoFactorChallenge, TwoFactorCodeError, useTwoFactorAuthentication } from './use-two-factor-authentication'
 
 const failWith = (status: number): { error: { status: number, data: object } } => ({ error: { status, data: {} } })
 
@@ -58,17 +58,19 @@ const reasonOf = async (promise: Promise<void>): Promise<string | undefined> => 
   }
 }
 
-describe('getTwoFactorStep', () => {
-  it('reads the step from the login answer and from the 401 of a pending login', () => {
-    expect(getTwoFactorStep({ twoFactorRequired: true, twoFactorStep: 'verify' })).toBe('verify')
-    expect(getTwoFactorStep({ message: 'Two-factor authentication is required.', twoFactorRequired: true, twoFactorStep: 'setup' })).toBe('setup')
+describe('getTwoFactorChallenge', () => {
+  it('reads the step and digit count from the login answer and from the 401 of a pending login', () => {
+    expect(getTwoFactorChallenge({ twoFactorRequired: true, twoFactorStep: 'verify', digits: 6 })).toEqual({ step: 'verify', digits: 6 })
+    expect(getTwoFactorChallenge({ message: 'Two-factor authentication is required.', twoFactorRequired: true, twoFactorStep: 'setup', digits: 8 })).toEqual({ step: 'setup', digits: 8 })
   })
 
-  it('finds no step in an empty login answer or an ordinary 401', () => {
-    expect(getTwoFactorStep(null)).toBeUndefined()
-    expect(getTwoFactorStep('')).toBeUndefined()
-    expect(getTwoFactorStep({ error: 'Invalid credentials.' })).toBeUndefined()
-    expect(getTwoFactorStep({ twoFactorRequired: true, twoFactorStep: 'other' })).toBeUndefined()
+  it('finds no challenge in an empty login answer, an ordinary 401 or an answer without a usable digit count', () => {
+    expect(getTwoFactorChallenge(null)).toBeUndefined()
+    expect(getTwoFactorChallenge('')).toBeUndefined()
+    expect(getTwoFactorChallenge({ error: 'Invalid credentials.' })).toBeUndefined()
+    expect(getTwoFactorChallenge({ twoFactorRequired: true, twoFactorStep: 'other', digits: 6 })).toBeUndefined()
+    expect(getTwoFactorChallenge({ twoFactorRequired: true, twoFactorStep: 'verify' })).toBeUndefined()
+    expect(getTwoFactorChallenge({ twoFactorRequired: true, twoFactorStep: 'verify', digits: 0 })).toBeUndefined()
   })
 })
 

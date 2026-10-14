@@ -21,7 +21,7 @@ import { Form } from 'antd'
 // eslint-disable-next-line import/first
 import { TwoFactorCodeField, type TwoFactorCodeFormValues } from './two-factor-code-field'
 
-const CodeForm = ({ onSubmit }: { onSubmit: (code: string) => Promise<void> }): React.JSX.Element => {
+const CodeForm = ({ onSubmit, digits = 6 }: { onSubmit: (code: string) => Promise<void>, digits?: number }): React.JSX.Element => {
   const [form] = Form.useForm<TwoFactorCodeFormValues>()
 
   const handleFinish = async (values: TwoFactorCodeFormValues): Promise<void> => {
@@ -37,7 +37,7 @@ const CodeForm = ({ onSubmit }: { onSubmit: (code: string) => Promise<void> }): 
       form={ form }
       onFinish={ handleFinish }
     >
-      <TwoFactorCodeField />
+      <TwoFactorCodeField digits={ digits } />
       <button type="submit">verify</button>
     </Form>
   )
@@ -86,6 +86,25 @@ describe('TwoFactorCodeField', () => {
     typeCode('123456')
 
     await waitFor(() => { expect(onSubmit).toHaveBeenCalledWith('123456') })
+  })
+
+  it('draws one box per digit and waits for all of them', async () => {
+    const onSubmit = jest.fn(async () => {})
+    render(<CodeForm
+      digits={ 8 }
+      onSubmit={ onSubmit }
+           />)
+
+    expect(boxes()).toHaveLength(8)
+    typeCode('123456')
+    await act(async () => { await new Promise((resolve) => setTimeout(resolve, 100)) })
+    expect(onSubmit).not.toHaveBeenCalled()
+
+    fireEvent.click(screen.getByText('verify'))
+    expect(await screen.findByText('two-factor-form.code.invalid-format')).toBeTruthy()
+
+    typeCode('12345678')
+    await waitFor(() => { expect(onSubmit).toHaveBeenCalledWith('12345678') })
   })
 
   it('submits a pasted code', async () => {

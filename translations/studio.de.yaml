@@ -2266,7 +2266,7 @@ user-profile.two-factor-authentication.status.inactive: Die Zwei-Faktor-Authenti
 user-profile.two-factor-authentication.required-hint: Die Zwei-Faktor-Authentifizierung ist für Ihr Konto erforderlich und kann daher nicht deaktiviert werden.
 user-profile.two-factor-authentication.setup: Zwei-Faktor-Authentifizierung einrichten
 user-profile.two-factor-authentication.renew: Authenticator-Schlüssel erneuern
-user-profile.two-factor-authentication.setup.description: Scannen Sie den QR-Code mit Ihrer Authenticator-App und geben Sie zur Bestätigung den 6-stelligen Code ein. Ihr bisheriger Schlüssel funktioniert weiter, bis der neue bestätigt ist.
+user-profile.two-factor-authentication.setup.description: Scannen Sie den QR-Code mit Ihrer Authenticator-App und geben Sie zur Bestätigung den {{digits}}-stelligen Code ein. Ihr bisheriger Schlüssel funktioniert weiter, bis der neue bestätigt ist.
 user-profile.two-factor-authentication.setup.success: Die Zwei-Faktor-Authentifizierung wurde eingerichtet
 user-profile.two-factor-authentication.disable: Zwei-Faktor-Authentifizierung deaktivieren
 user-profile.two-factor-authentication.disable.confirmation.title: Zwei-Faktor-Authentifizierung deaktivieren
@@ -2710,15 +2710,15 @@ forgot-password-form.username.placeholder: Benutzername
 forgot-password-form.reset-password: Passwort zurücksetzen
 forgot-password-form.success-message: Ein temporärer Login-Link wurde an Ihre E-Mail-Adresse gesendet. Bitte überprüfen Sie Ihr Postfach.
 forgot-password-form.back: Zurück zur Anmeldung
-two-factor-form.description: Geben Sie den 6-stelligen Code aus Ihrer Authenticator-App ein
+two-factor-form.description: Geben Sie den {{digits}}-stelligen Code aus Ihrer Authenticator-App ein
 two-factor-form.code.placeholder: Authentifizierungscode
 two-factor-form.code.required: Bitte geben Sie den Authentifizierungscode ein
-two-factor-form.code.invalid-format: Der Code muss aus 6 Ziffern bestehen
+two-factor-form.code.invalid-format: Der Code muss aus {{digits}} Ziffern bestehen
 two-factor-form.verify: Bestätigen
 two-factor-form.error: Der Code konnte nicht überprüft werden. Bitte versuchen Sie es erneut.
 two-factor-form.too-many-attempts: Zu viele Versuche. Bitte warten Sie einige Minuten, bevor Sie es erneut versuchen.
 two-factor-form.back: Zurück zur Anmeldung
-two-factor-setup-form.description: Für Ihr Konto ist die Zwei-Faktor-Authentifizierung erforderlich. Scannen Sie den QR-Code mit Ihrer Authenticator-App und geben Sie zur Bestätigung den 6-stelligen Code ein.
+two-factor-setup-form.description: Für Ihr Konto ist die Zwei-Faktor-Authentifizierung erforderlich. Scannen Sie den QR-Code mit Ihrer Authenticator-App und geben Sie zur Bestätigung den {{digits}}-stelligen Code ein.
 two-factor-setup-form.manual-entry: Oder geben Sie diesen Schlüssel manuell ein
 two-factor-setup-form.confirm: Aktivieren
 two-factor-setup-form.load-error: Die Zwei-Faktor-Authentifizierung konnte nicht eingerichtet werden. Bitte versuchen Sie es später erneut.

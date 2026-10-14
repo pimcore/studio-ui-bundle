@@ -10,12 +10,12 @@
 
 import { injectSliceWithState, type RootState } from '@sdk/app'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { type TwoFactorStep } from './hooks/use-two-factor-authentication'
+import { type TwoFactorChallenge } from './hooks/use-two-factor-authentication'
 
 interface AuthState {
   isAuthenticated: boolean | undefined
   // Set when the session holds a login that still waits for its two-factor code, e.g. after an SSO redirect
-  twoFactorStep?: TwoFactorStep
+  twoFactor?: TwoFactorChallenge
 }
 
 const initialState: AuthState = {
@@ -29,8 +29,8 @@ const authSlice = createSlice({
     setAuthState (state, action: PayloadAction<boolean | undefined>) {
       state.isAuthenticated = action.payload
     },
-    setTwoFactorStep (state, action: PayloadAction<TwoFactorStep | undefined>) {
-      state.twoFactorStep = action.payload
+    setTwoFactorChallenge (state, action: PayloadAction<TwoFactorChallenge | undefined>) {
+      state.twoFactor = action.payload
     },
     resetAuthState (state) {
       state.isAuthenticated = undefined
@@ -40,7 +40,7 @@ const authSlice = createSlice({
 
 injectSliceWithState(authSlice)
 
-export const { setAuthState, setTwoFactorStep, resetAuthState } = authSlice.actions
+export const { setAuthState, setTwoFactorChallenge, resetAuthState } = authSlice.actions
 export const selectIsAuthenticated = (state: RootState): AuthState['isAuthenticated'] => state.authentication.isAuthenticated
-export const selectTwoFactorStep = (state: RootState): AuthState['twoFactorStep'] => state.authentication.twoFactorStep
+export const selectTwoFactorChallenge = (state: RootState): AuthState['twoFactor'] => state.authentication.twoFactor
 export default authSlice.reducer

@@ -11,18 +11,18 @@
 import { useEffect } from 'react'
 import { useUserGetCurrentInformationQuery } from '../user/user-api-slice-enhanced'
 import { useAppDispatch, useAppSelector } from '@sdk/app'
-import { selectIsAuthenticated, selectTwoFactorStep, setAuthState, setTwoFactorStep } from '../auth-slice'
-import { getTwoFactorStep, type TwoFactorStep } from './use-two-factor-authentication'
+import { selectIsAuthenticated, selectTwoFactorChallenge, setAuthState, setTwoFactorChallenge } from '../auth-slice'
+import { getTwoFactorChallenge, type TwoFactorChallenge } from './use-two-factor-authentication'
 
 export interface UseIsAuthenticatedReturn {
   isAuthenticated?: boolean
-  twoFactorStep?: TwoFactorStep
+  twoFactor?: TwoFactorChallenge
   recheck: () => void
 }
 
 export const useIsAuthenticated = (): UseIsAuthenticatedReturn => {
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
-  const twoFactorStep = useAppSelector(selectTwoFactorStep)
+  const twoFactor = useAppSelector(selectTwoFactorChallenge)
   const dispatch = useAppDispatch()
   const { isError, error, isSuccess, refetch } = useUserGetCurrentInformationQuery(undefined, { skip: isAuthenticated !== undefined })
 
@@ -32,7 +32,7 @@ export const useIsAuthenticated = (): UseIsAuthenticatedReturn => {
 
   useEffect(() => {
     if (isError) {
-      dispatch(setTwoFactorStep(getTwoFactorStep(error !== undefined && 'data' in error ? error.data : undefined)))
+      dispatch(setTwoFactorChallenge(getTwoFactorChallenge(error !== undefined && 'data' in error ? error.data : undefined)))
       dispatch(setAuthState(false))
     }
 
@@ -43,7 +43,7 @@ export const useIsAuthenticated = (): UseIsAuthenticatedReturn => {
 
   return {
     isAuthenticated,
-    twoFactorStep,
+    twoFactor,
     recheck
   }
 }

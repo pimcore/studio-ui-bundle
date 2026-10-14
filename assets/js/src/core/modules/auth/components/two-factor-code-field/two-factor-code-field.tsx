@@ -18,17 +18,17 @@ export interface TwoFactorCodeFormValues {
   code: string
 }
 
-const CODE_LENGTH = 6
 const CodeBoxes = Input.OTP
 
 export type TwoFactorCodeAlign = 'stretch' | 'center'
 
 interface TwoFactorCodeInputProps {
   align: TwoFactorCodeAlign
+  digits: number
   onChange?: (value: string) => void
 }
 
-const TwoFactorCodeInput = ({ align, onChange }: TwoFactorCodeInputProps): React.JSX.Element => {
+const TwoFactorCodeInput = ({ align, digits, onChange }: TwoFactorCodeInputProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const form = Form.useFormInstance<TwoFactorCodeFormValues>()
@@ -55,7 +55,7 @@ const TwoFactorCodeInput = ({ align, onChange }: TwoFactorCodeInputProps): React
       <CodeBoxes
         aria-label={ t('two-factor-form.code.placeholder') }
         inputMode="numeric"
-        length={ CODE_LENGTH }
+        length={ digits }
         onChange={ () => { form.submit() } }
         onInput={ handleInput }
         ref={ boxes }
@@ -67,10 +67,11 @@ const TwoFactorCodeInput = ({ align, onChange }: TwoFactorCodeInputProps): React
 }
 
 export interface TwoFactorCodeFieldProps {
+  digits: number
   align?: TwoFactorCodeAlign
 }
 
-export const TwoFactorCodeField = ({ align = 'stretch' }: TwoFactorCodeFieldProps): React.JSX.Element => {
+export const TwoFactorCodeField = ({ digits, align = 'stretch' }: TwoFactorCodeFieldProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
@@ -78,11 +79,14 @@ export const TwoFactorCodeField = ({ align = 'stretch' }: TwoFactorCodeFieldProp
       name="code"
       rules={ [
         { required: true, message: t('two-factor-form.code.required') },
-        { pattern: new RegExp(`^\\d{${CODE_LENGTH}}$`), message: t('two-factor-form.code.invalid-format') }
+        { pattern: new RegExp(`^\\d{${digits}}$`), message: t('two-factor-form.code.invalid-format', { digits }) }
       ] }
       validateTrigger={ false }
     >
-      <TwoFactorCodeInput align={ align } />
+      <TwoFactorCodeInput
+        align={ align }
+        digits={ digits }
+      />
     </Form.Item>
   )
 }

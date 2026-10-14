@@ -13,7 +13,7 @@ import { useLogoutMutation } from '@Pimcore/modules/auth/authorization-api-slice
 import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 import { sendStatistics } from '@Pimcore/modules/auth/services/statisticsService'
 import React, { useEffect, useState } from 'react'
-import { useTwoFactorAuthentication, type TwoFactorStep } from '../../hooks/use-two-factor-authentication'
+import { type TwoFactorChallenge, useTwoFactorAuthentication, type TwoFactorStep } from '../../hooks/use-two-factor-authentication'
 import { ForgotPasswordForm } from '../forgot-password-form/forgot-password-form'
 import { TwoFactorForm } from '../two-factor-form/two-factor-form'
 import { TwoFactorSetupForm } from '../two-factor-setup-form/two-factor-setup-form'
@@ -22,21 +22,27 @@ import { LoginForm } from './login-form'
 type LoginStep = 'login' | 'forgot-password' | TwoFactorStep
 
 export interface LoginFormContainerProps {
-  pendingTwoFactorStep?: TwoFactorStep
+  pendingTwoFactor?: TwoFactorChallenge
 }
 
-export const LoginFormContainer = ({ pendingTwoFactorStep }: LoginFormContainerProps): React.JSX.Element => {
+export const LoginFormContainer = ({ pendingTwoFactor }: LoginFormContainerProps): React.JSX.Element => {
   const { styles } = useStyle()
   const user = useUser()
-  const [step, setStep] = useState<LoginStep>(pendingTwoFactorStep ?? 'login')
+  const [step, setStep] = useState<LoginStep>(pendingTwoFactor?.step ?? 'login')
+  const [digits, setDigits] = useState<number | undefined>(pendingTwoFactor?.digits)
   const [logout] = useLogoutMutation()
   const { verifyCode, loadSetup } = useTwoFactorAuthentication()
 
+  const openTwoFactorStep = (challenge: TwoFactorChallenge): void => {
+    setDigits(challenge.digits)
+    setStep(challenge.step)
+  }
+
   useEffect(() => {
-    if (pendingTwoFactorStep !== undefined) {
-      setStep(pendingTwoFactorStep)
+    if (pendingTwoFactor !== undefined) {
+      openTwoFactorStep(pendingTwoFactor)
     }
-  }, [pendingTwoFactorStep])
+  }, [pendingTwoFactor])
 
   const completeLogin = async (): Promise<void> => {
     await sendStatistics(user.isAdmin)
@@ -61,8 +67,9 @@ export const LoginFormContainer = ({ pendingTwoFactorStep }: LoginFormContainerP
         />
       )}
 
-      {step === 'verify' && (
+      {step === 'verify' && digits !== undefined && (
         <TwoFactorForm
+          digits={ digits }
           onGetBack={ handleCancelTwoFactor }
           onVerify={ handleVerify }
         />
@@ -80,7 +87,7 @@ export const LoginFormContainer = ({ pendingTwoFactorStep }: LoginFormContainerP
       {step === 'login' && (
         <LoginForm
           onPasswordForgotten={ () => { setStep('forgot-password') } }
-          onTwoFactorRequired={ setStep }
+          onTwoFactorRequired={ openTwoFactorStep }
         />
       )}
     </div>

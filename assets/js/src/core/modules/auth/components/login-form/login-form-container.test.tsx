@@ -21,7 +21,12 @@ jest.mock('../../hooks/use-two-factor-authentication', () => ({
 }))
 jest.mock('../forgot-password-form/forgot-password-form', () => ({ ForgotPasswordForm: () => <div>forgot-password</div> }))
 jest.mock('../two-factor-form/two-factor-form', () => ({
-  TwoFactorForm: ({ onGetBack }: { onGetBack: () => void }) => <button onClick={ onGetBack }>verify-step</button>
+  TwoFactorForm: ({ onGetBack, digits }: { onGetBack: () => void, digits: number }) => (
+    <>
+      <button onClick={ onGetBack }>verify-step</button>
+      <span>{`digits ${digits}`}</span>
+    </>
+  )
 }))
 jest.mock('../two-factor-setup-form/two-factor-setup-form', () => ({
   TwoFactorSetupForm: ({ onConfirm }: { onConfirm: (code: string) => Promise<void> }) => (
@@ -29,10 +34,10 @@ jest.mock('../two-factor-setup-form/two-factor-setup-form', () => ({
   )
 }))
 jest.mock('./login-form', () => ({
-  LoginForm: ({ onTwoFactorRequired }: { onTwoFactorRequired: (step: string) => void }) => (
+  LoginForm: ({ onTwoFactorRequired }: { onTwoFactorRequired: (challenge: { step: string, digits: number }) => void }) => (
     <>
-      <button onClick={ () => { onTwoFactorRequired('verify') } }>login-verify</button>
-      <button onClick={ () => { onTwoFactorRequired('setup') } }>login-setup</button>
+      <button onClick={ () => { onTwoFactorRequired({ step: 'verify', digits: 8 }) } }>login-verify</button>
+      <button onClick={ () => { onTwoFactorRequired({ step: 'setup', digits: 6 }) } }>login-setup</button>
     </>
   )
 }))
@@ -67,6 +72,7 @@ describe('LoginFormContainer two-factor steps', () => {
     fireEvent.click(screen.getByText('login-verify'))
 
     expect(screen.getByText('verify-step')).toBeTruthy()
+    expect(screen.getByText('digits 8')).toBeTruthy()
     expect(screen.queryByText('login-verify')).toBeNull()
   })
 
@@ -89,9 +95,10 @@ describe('LoginFormContainer two-factor steps', () => {
   })
 
   it('opens the step of a login that is still waiting for its code', () => {
-    render(<LoginFormContainer pendingTwoFactorStep="verify" />)
+    render(<LoginFormContainer pendingTwoFactor={ { step: 'verify', digits: 7 } } />)
 
     expect(screen.getByText('verify-step')).toBeTruthy()
+    expect(screen.getByText('digits 7')).toBeTruthy()
     expect(screen.queryByText('login-verify')).toBeNull()
   })
 

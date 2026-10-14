@@ -2266,7 +2266,7 @@ user-profile.two-factor-authentication.status.inactive: Uwierzytelnianie dwuetap
 user-profile.two-factor-authentication.required-hint: Uwierzytelnianie dwuetapowe jest wymagane dla Twojego konta, więc nie można go wyłączyć.
 user-profile.two-factor-authentication.setup: Skonfiguruj uwierzytelnianie dwuetapowe
 user-profile.two-factor-authentication.renew: Odnów klucz uwierzytelniający
-user-profile.two-factor-authentication.setup.description: Zeskanuj kod QR w aplikacji uwierzytelniającej i wpisz 6-cyfrowy kod, aby potwierdzić. Obecny klucz działa do momentu potwierdzenia nowego.
+user-profile.two-factor-authentication.setup.description: Zeskanuj kod QR w aplikacji uwierzytelniającej i wpisz {{digits}}-cyfrowy kod, aby potwierdzić. Obecny klucz działa do momentu potwierdzenia nowego.
 user-profile.two-factor-authentication.setup.success: Uwierzytelnianie dwuetapowe zostało skonfigurowane
 user-profile.two-factor-authentication.disable: Wyłącz uwierzytelnianie dwuetapowe
 user-profile.two-factor-authentication.disable.confirmation.title: Wyłącz uwierzytelnianie dwuetapowe
@@ -2710,15 +2710,15 @@ forgot-password-form.username.placeholder: Nazwa użytkownika
 forgot-password-form.reset-password: Resetuj hasło
 forgot-password-form.success-message: Tymczasowy link logowania został wysłany na Twój adres e-mail. Sprawdź swoją skrzynkę odbiorczą.
 forgot-password-form.back: Powrót do logowania
-two-factor-form.description: Wpisz 6-cyfrowy kod z aplikacji uwierzytelniającej
+two-factor-form.description: Wpisz {{digits}}-cyfrowy kod z aplikacji uwierzytelniającej
 two-factor-form.code.placeholder: Kod uwierzytelniający
 two-factor-form.code.required: Wpisz kod uwierzytelniający
-two-factor-form.code.invalid-format: Kod musi składać się z 6 cyfr
+two-factor-form.code.invalid-format: Kod musi składać się z {{digits}} cyfr
 two-factor-form.verify: Zweryfikuj
 two-factor-form.error: Nie udało się zweryfikować kodu. Spróbuj ponownie.
 two-factor-form.too-many-attempts: Zbyt wiele prób. Odczekaj kilka minut, zanim spróbujesz ponownie.
 two-factor-form.back: Powrót do logowania
-two-factor-setup-form.description: Uwierzytelnianie dwuetapowe jest wymagane dla Twojego konta. Zeskanuj kod QR w aplikacji uwierzytelniającej i wpisz 6-cyfrowy kod, aby potwierdzić.
+two-factor-setup-form.description: Uwierzytelnianie dwuetapowe jest wymagane dla Twojego konta. Zeskanuj kod QR w aplikacji uwierzytelniającej i wpisz {{digits}}-cyfrowy kod, aby potwierdzić.
 two-factor-setup-form.manual-entry: Możesz też wpisać ten klucz ręcznie
 two-factor-setup-form.confirm: Aktywuj
 two-factor-setup-form.load-error: Nie udało się skonfigurować uwierzytelniania dwuetapowego. Spróbuj ponownie później.

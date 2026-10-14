@@ -703,6 +703,8 @@ export type TwoFactorSetup = {
     secret: string;
     /** otpauth URI to show as a QR code */
     otpauthUri: string;
+    /** Number of digits in a code */
+    digits: number;
 };
 export type UserProfile = {
     /** Firstname of the User */

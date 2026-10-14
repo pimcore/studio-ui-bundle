@@ -25,11 +25,12 @@ export interface TwoFactorSetupFormProps {
   loadSetup: () => Promise<TwoFactorSetupData>
   onConfirm: (code: string) => Promise<void>
   onGetBack?: () => void
-  description?: string
+  // The text depends on the code's digit count, which only the loaded setup knows
+  getDescription?: (digits: number) => string
   layout?: 'login' | 'dialog'
 }
 
-export const TwoFactorSetupForm = ({ loadSetup, onConfirm, onGetBack, description, layout = 'dialog' }: TwoFactorSetupFormProps): React.JSX.Element => {
+export const TwoFactorSetupForm = ({ loadSetup, onConfirm, onGetBack, getDescription, layout = 'dialog' }: TwoFactorSetupFormProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { styles } = useStyles()
   const [form] = Form.useForm<TwoFactorCodeFormValues>()
@@ -94,6 +95,7 @@ export const TwoFactorSetupForm = ({ loadSetup, onConfirm, onGetBack, descriptio
     }
 
     const isLogin = layout === 'login'
+    const description = getDescription?.(setup.digits) ?? t('two-factor-setup-form.description', { digits: setup.digits })
 
     const qrCode = (
       <QRCode
@@ -122,20 +124,26 @@ export const TwoFactorSetupForm = ({ loadSetup, onConfirm, onGetBack, descriptio
                 gap={ 'normal' }
               >
                 {qrCode}
-                <Text className={ styles.sideDescription }>{t('two-factor-setup-form.description')}</Text>
+                <Text className={ styles.sideDescription }>{description}</Text>
               </Flex>
               {secret}
             </>
             )
           : (
             <Flex
-              align="center"
-              gap={ 'small' }
+              gap={ 'normal' }
               vertical
             >
-              {qrCode}
-              <Text type="secondary">{t('two-factor-setup-form.manual-entry')}</Text>
-              {secret}
+              <Text>{description}</Text>
+              <Flex
+                align="center"
+                gap={ 'small' }
+                vertical
+              >
+                {qrCode}
+                <Text type="secondary">{t('two-factor-setup-form.manual-entry')}</Text>
+                {secret}
+              </Flex>
             </Flex>
             )}
 
@@ -156,7 +164,10 @@ export const TwoFactorSetupForm = ({ loadSetup, onConfirm, onGetBack, descriptio
           } }
         >
           {isLogin && <Text className={ styles.codeLabel }>{t('two-factor-form.code.placeholder')}</Text>}
-          <TwoFactorCodeField align="center" />
+          <TwoFactorCodeField
+            align="center"
+            digits={ setup.digits }
+          />
 
           <Button
             className="w-full"
@@ -176,8 +187,6 @@ export const TwoFactorSetupForm = ({ loadSetup, onConfirm, onGetBack, descriptio
       gap={ 'normal' }
       vertical
     >
-      {layout === 'dialog' && <Text>{description ?? t('two-factor-setup-form.description')}</Text>}
-
       {renderSetup()}
 
       {!isNil(onGetBack) && (

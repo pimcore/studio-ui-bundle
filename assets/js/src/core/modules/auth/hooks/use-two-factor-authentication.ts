@@ -27,7 +27,12 @@ import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 
 export type TwoFactorStep = TwoFactorLoginStep['twoFactorStep']
 
-export type TwoFactorSetupData = Pick<TwoFactorSetup, 'secret' | 'otpauthUri'>
+export type TwoFactorSetupData = Pick<TwoFactorSetup, 'secret' | 'otpauthUri' | 'digits'>
+
+export interface TwoFactorChallenge {
+  step: TwoFactorStep
+  digits: number
+}
 
 export type TwoFactorCodeErrorReason = 'invalid-code' | 'too-many-attempts' | 'setup-expired'
 
@@ -52,19 +57,23 @@ type TwoFactorState = Pick<TwoFactorAuthenticationData, 'enabled' | 'active' | '
 const ACTIVE: TwoFactorState = { enabled: true, active: true, type: 'google' }
 const INACTIVE: TwoFactorState = { enabled: false, active: false, type: '' }
 
-// Both the login answer and the 401 of a login waiting for its code carry the step
-export const getTwoFactorStep = (body: unknown): TwoFactorStep | undefined => {
+// Both the login answer and the 401 of a login waiting for its code carry the step and the code's digit count
+export const getTwoFactorChallenge = (body: unknown): TwoFactorChallenge | undefined => {
   if (typeof body !== 'object' || body === null) {
     return undefined
   }
 
-  const { twoFactorRequired, twoFactorStep } = body as Partial<TwoFactorLoginStep>
+  const { twoFactorRequired, twoFactorStep, digits } = body as Partial<TwoFactorLoginStep>
 
   if (twoFactorRequired !== true || (twoFactorStep !== 'verify' && twoFactorStep !== 'setup')) {
     return undefined
   }
 
-  return twoFactorStep
+  if (typeof digits !== 'number' || !Number.isInteger(digits) || digits < 1) {
+    return undefined
+  }
+
+  return { step: twoFactorStep, digits }
 }
 
 const getStatus = (error: RequestError): number | undefined => {

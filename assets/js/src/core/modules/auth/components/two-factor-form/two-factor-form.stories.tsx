@@ -24,6 +24,7 @@ export default config
 
 export const _default = {
   args: {
+    digits: 6,
     onVerify: async () => { await new Promise((resolve) => setTimeout(resolve, 1000)) },
     onGetBack: () => {}
   }
@@ -31,6 +32,7 @@ export const _default = {
 
 export const InvalidCode = {
   args: {
+    digits: 6,
     onVerify: async () => await Promise.reject(new Error('Invalid code')),
     onGetBack: () => {}
   }
