@@ -206,7 +206,6 @@ export const invalidatingTags = {
   ASSET_GRID_CONFIGURATION: () => [tagNames.ASSET_GRID_CONFIGURATION],
   ASSET_GRID_CONFIGURATION_DETAIL: (configurationId?: number) => [{ type: tagNames.ASSET_GRID_CONFIGURATION_DETAIL, id: configurationId }, tagNames.ASSET_GRID_CONFIGURATION],
   ASSET_GRID_CONFIGURATION_LIST: () => [{ type: tagNames.ASSET_GRID_CONFIGURATION_LIST }],
-  ASSET_GRID: () => [tagNames.ASSET_GRID],
   ASSET_GRID_ID: (id: number) => [{ type: tagNames.ASSET_GRID, id }],
   DATA_OBJECT: () => [tagNames.DATA_OBJECT],
   DATA_OBJECT_DETAIL: () => [tagNames.DATA_OBJECT_DETAIL],

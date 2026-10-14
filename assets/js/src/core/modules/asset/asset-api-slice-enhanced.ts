@@ -8,12 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isNil } from 'lodash'
 import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { api as baseApi } from './asset-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.ASSET, tagNames.ASSET_TREE, tagNames.ASSET_DETAIL, tagNames.ASSET_GRID],
+  addTagTypes: [tagNames.ASSET, tagNames.ASSET_TREE, tagNames.ASSET_DETAIL],
   endpoints: {
     assetClone: {
       invalidatesTags: (result, error, args) => invalidatingTags.ASSET_TREE_ID(args.parentId)
@@ -57,7 +56,7 @@ const api = baseApi.enhanceEndpoints({
     },
 
     assetAdd: {
-      invalidatesTags: (result, error, args) => [...invalidatingTags.ASSET_TREE_ID(args.parentId), ...invalidatingTags.ASSET_GRID_ID(args.parentId)]
+      invalidatesTags: (result, error, args) => invalidatingTags.ASSET_TREE_ID(args.parentId)
     },
 
     assetPatchById: {
@@ -66,13 +65,6 @@ const api = baseApi.enhanceEndpoints({
 
         for (const asset of args.body.data) {
           invalidatingTagsForPatch.push(...invalidatingTags.ASSET_DETAIL_ID(asset.id))
-        }
-
-        // A move changes the children of both the old and the new parent; the old one is not known here.
-        // Only a single-element patch is applied within the request, multi-element patches return a jobRunId.
-        const isAppliedSynchronously = isNil(result?.jobRunId)
-        if (isAppliedSynchronously && args.body.data.some((asset) => !isNil(asset.parentId))) {
-          invalidatingTagsForPatch.push(...invalidatingTags.ASSET_GRID())
         }
 
         return invalidatingTagsForPatch
