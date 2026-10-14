@@ -33,6 +33,7 @@ import { useAppDispatch } from '@sdk/app'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 import { shouldIncludeColumnItem } from './utils/dropdown-filter'
+import { buildPatchData } from './utils/build-patch-data'
 import { FieldCollectionProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/field-collection/providers/field-collection-provider'
 import { useClassDefinitionSelection } from '../../decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useClassificationStoreModal } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider/classifcation-store-modal-provider'
@@ -160,7 +161,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
     form.submit()
   }
 
-  const onFormFinish = async (values: any): Promise<void> => {
+  const onFormFinish = async (values: Record<string, unknown>): Promise<void> => {
     if (selectedRowsCount === 0) {
       const filters = getArgs()?.body?.filters ?? {}
       delete filters.page
@@ -182,7 +183,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
           data: [
             {
               id: parseInt(selectedRowsIds[0]),
-              editableData: values
+              ...buildPatchData(values)
             }
           ]
         }
