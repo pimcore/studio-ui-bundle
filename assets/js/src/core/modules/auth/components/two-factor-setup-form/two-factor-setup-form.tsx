@@ -18,9 +18,6 @@ import { TwoFactorCodeError, type TwoFactorSetupData } from '../../hooks/use-two
 import { TwoFactorCodeField, type TwoFactorCodeFormValues } from '../two-factor-code-field/two-factor-code-field'
 import { useStyles } from './two-factor-setup-form.styles'
 
-// Groups of four are easier to type; authenticator apps ignore the spaces
-const groupKey = (secret: string): string => secret.match(/.{1,4}/g)?.join(' ') ?? secret
-
 export interface TwoFactorSetupFormProps {
   loadSetup: () => Promise<TwoFactorSetupData>
   onConfirm: (code: string) => Promise<void>
@@ -110,7 +107,7 @@ export const TwoFactorSetupForm = ({ loadSetup, onConfirm, onGetBack, getDescrip
         className={ styles.secret }
         copyable={ { text: setup.secret } }
       >
-        <span className={ styles.secretValue }>{groupKey(setup.secret)}</span>
+        <span className={ styles.secretValue }>{setup.secret}</span>
       </Text>
     )
 

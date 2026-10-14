@@ -47,11 +47,11 @@ export const useStyles = createStyles(({ css, token }) => {
       text-align: center;
     `,
 
-    // At most seven groups of four per line, so the box keeps the same shape everywhere
+    // The key has no spaces, so it may break anywhere; 26 characters split the usual 52 into two equal lines
     secretValue: css`
-      max-width: 34ch;
+      max-width: 26ch;
+      overflow-wrap: anywhere;
       text-align: center;
-      text-wrap: balance;
     `
   }
 })
