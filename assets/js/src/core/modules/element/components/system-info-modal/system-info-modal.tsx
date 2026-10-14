@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { isNil, isUndefined } from 'lodash'
+import { get, isEmpty, isNil, isString, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import Link from 'antd/es/typography/Link'
 import { FormKit } from '@Pimcore/components/form/form-kit'
@@ -149,6 +149,13 @@ export const SystemInfoModal = ({ onClose, data }: ISystemInfoModalProps): React
 
     if (data.elementType === elementTypes.asset) {
       return buildElementPublicUrl({ fullPath, currentDomain, assetFrontendPrefix })
+    }
+
+    // The backend sends the site-aware URL (site root stripped, site domain or pretty URL applied)
+    // for page/snippet documents, the same one used by "open in new window"
+    const documentUrl: unknown = get(data, ['settingsData', 'url'])
+    if (data.elementType === elementTypes.document && isString(documentUrl) && !isEmpty(documentUrl)) {
+      return documentUrl
     }
 
     return `${currentDomain}${fullPath}`
