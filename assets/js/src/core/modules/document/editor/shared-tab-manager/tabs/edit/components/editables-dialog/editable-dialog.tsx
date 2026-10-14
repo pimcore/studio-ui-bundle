@@ -17,9 +17,10 @@ import { type DynamicTypeEditableDialogLayoutRegistry } from '@Pimcore/modules/e
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useDocumentEditor } from '../../hooks/use-document-editor'
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
-import { isArray, isNil, isPlainObject } from 'lodash'
+import { isArray, isEmpty, isNil, isPlainObject } from 'lodash'
 import { TemplateAwareEditable } from './template-aware-editable'
 import { useTranslation } from 'react-i18next'
+import { useStyles } from './editable-dialog.styles'
 
 export interface EditableDialogProps {
   config: DialogConfig
@@ -33,6 +34,7 @@ export const EditableDialog = ({ config, visible, onClose, editableDefinitions }
   const editableDialogLayoutRegistry = useInjection<DynamicTypeEditableDialogLayoutRegistry>(serviceIds['DynamicTypes/EditableDialogLayoutRegistry'])
   const { getValue } = useDocumentEditor()
   const { t } = useTranslation()
+  const { styles } = useStyles()
 
   const findMatchingEditableDefinition = (dialogConfigItem: DialogConfigItem): AbstractDocumentEditableDefinition | null => {
     const matchingEditable = editableDefinitions.find(editable =>
@@ -98,6 +100,9 @@ export const EditableDialog = ({ config, visible, onClose, editableDefinitions }
               key={ configItem.name }
               title={ configItem.label }
             >
+              {!isEmpty(configItem.description) && (
+                <div className={ styles.description }>{configItem.description}</div>
+              )}
               <TemplateAwareEditable editableDefinition={ editableDefinition } />
             </Card>
           )
