@@ -32,7 +32,7 @@ const formatErrorMessage = (errorData: unknown, t: TFunction): string => {
     return content
   }
 
-  return t(`error.${content.errorKey}`)
+  return t(`error.${content.errorKey}`, content.params)
 }
 
 /**

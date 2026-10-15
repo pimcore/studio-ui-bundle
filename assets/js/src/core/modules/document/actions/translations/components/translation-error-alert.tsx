@@ -22,7 +22,7 @@ interface TranslationErrorAlertProps {
 export const TranslationErrorAlert = ({ error }: TranslationErrorAlertProps): React.JSX.Element => {
   const { t } = useTranslation()
   const content = new ApiError(error).getContent()
-  const message = isString(content) ? content : t(`error.${content.errorKey}`)
+  const message = isString(content) ? content : t(`error.${content.errorKey}`, content.params)
 
   return (
     <Alert

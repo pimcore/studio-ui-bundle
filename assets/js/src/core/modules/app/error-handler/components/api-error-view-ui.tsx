@@ -24,7 +24,7 @@ export const ApiErrorViewUI = ({ errorContent }: IApiErrorViewUIProps): React.JS
 
   const getErrorKeyValue = (): string => {
     if (!isString(errorContent) && !isUndefined(errorContent?.errorKey)) {
-      return t(`error.${errorContent.errorKey}`)
+      return t(`error.${errorContent.errorKey}`, errorContent.params)
     }
 
     return DEFAULT_ERROR_CONTENT
