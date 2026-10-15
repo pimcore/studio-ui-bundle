@@ -13,12 +13,12 @@ import { injectSliceWithState } from '@sdk/app'
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { type IJsonModel, type IJsonTabNode, Model, Actions, DockLocation, type Node, BorderNode } from 'flexlayout-react'
 import { getInitialModelJson as getInitialOuterModelJson } from './utils/widget-manager-outer-model'
-import { getInitialModelJson as getInitialInnerModelJson, TAB_SET_MIN_SIZE } from './utils/widget-manager-inner-model'
+import { getInitialModelJson as getInitialInnerModelJson } from './utils/widget-manager-inner-model'
 import { createWidgetManagerPersistedReducer } from './widget-manager-persistence'
 import { resolveMainWidgetContext } from './utils/resolve-main-widget-context'
 import { getNextTabId } from './utils/get-next-tab-id'
 import { migrateTab, rebindTab, type ReplaceTabPayload } from './utils/replace-tab'
-import { restoreCollapsedRows } from './utils/restore-collapsed-rows'
+import { normalizeInnerModel, restoreCollapsedRows } from './utils/restore-collapsed-rows'
 import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
 import { type ElementIcon } from '@sdk/components'
 import { type UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
@@ -65,13 +65,7 @@ const slice = createSlice({
     },
 
     updateInnerModel: (state, action: PayloadAction<IJsonModel>) => {
-      const model = restoreCollapsedRows(action.payload)
-
-      // layouts saved before the min size existed would otherwise drop it on restore
-      state.innerModel = {
-        ...model,
-        global: { ...model.global, tabSetMinWidth: TAB_SET_MIN_SIZE, tabSetMinHeight: TAB_SET_MIN_SIZE }
-      }
+      state.innerModel = normalizeInnerModel(action.payload)
     },
 
     setWidgetManagerRestored: (state, action: PayloadAction<boolean>) => {
