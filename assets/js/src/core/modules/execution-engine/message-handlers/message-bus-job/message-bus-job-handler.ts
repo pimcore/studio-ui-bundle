@@ -336,6 +336,10 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       }
     }
 
+    this.updateProgressFromData(data, progressData)
+  }
+
+  private updateProgressFromData (data: any, progressData: any): void {
     const { currentStep, totalSteps } = this.stepTracker.state
     const result = this.progressCalculator.calculateProgress(progressData, {
       currentStep,
@@ -347,7 +351,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       this.handleProgressUpdate(result, data)
     } else if (data?.status === 'running' && this.lastProgressValue < 0) {
       // No progress value for the current step yet (polling carries none, and a step change
-      // resets it above): a bar at 0% - or at the previous step's value - would claim more than is known
+      // resets it): a bar at 0% - or at the previous step's value - would claim more than is known
       this.updateJob({ indeterminate: true })
     }
   }
