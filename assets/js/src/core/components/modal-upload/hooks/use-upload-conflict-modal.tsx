@@ -37,6 +37,54 @@ export interface UploadConflictModalResult {
 /** File names listed in the summary prompt before the rest is collapsed into a count. */
 const LISTED_FILE_NAMES = 5
 
+const UploadConflictSummary = ({ fileNames }: { fileNames: string[] }): React.JSX.Element => {
+  const { t } = useTranslation()
+  const hiddenFileNames = fileNames.length - LISTED_FILE_NAMES
+
+  return (
+    <>
+      <Box margin={ { bottom: 'small' } }>
+        {t('asset.upload.files-exist.message', { total: fileNames.length })}
+      </Box>
+      <Box margin={ { bottom: 'small' } }>
+        {fileNames.slice(0, LISTED_FILE_NAMES).map((fileName, index) => (
+          <div key={ `${fileName}-${index}` }>{fileName}</div>
+        ))}
+        {hiddenFileNames > 0 && (
+          <div>{t('asset.upload.files-exist.more', { hidden: hiddenFileNames })}</div>
+        )}
+      </Box>
+    </>
+  )
+}
+
+const UploadConflictSummaryActions = (
+  { onAction }: { onAction: (action: UploadConflictAction | null) => void }
+): React.JSX.Element => {
+  const { t } = useTranslation()
+
+  return (
+    <Flex
+      gap={ { x: 0, y: 'small' } }
+      justify="flex-end"
+      wrap="wrap"
+    >
+      <Button onClick={ () => { onAction(null) } }>
+        {t('asset.upload.review-each')}
+      </Button>
+      <Button onClick={ () => { onAction(UploadConflictAction.SKIP) } }>
+        {t('asset.upload.skip-all')}
+      </Button>
+      <Button onClick={ () => { onAction(UploadConflictAction.KEEP) } }>
+        {t('asset.upload.keep-both-all')}
+      </Button>
+      <Button onClick={ () => { onAction(UploadConflictAction.OVERWRITE) } }>
+        {t('asset.upload.overwrite-all')}
+      </Button>
+    </Flex>
+  )
+}
+
 export const useUploadConflictModal = (): UploadConflictModalResult => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
@@ -186,8 +234,6 @@ export const useUploadConflictModal = (): UploadConflictModalResult => {
         resolve(action)
       }
 
-      const hiddenFileNames = fileNames.length - LISTED_FILE_NAMES
-
       const modalInstance = modal.confirm({
         title: t('asset.upload.files-exist.title'),
         icon: (
@@ -196,41 +242,8 @@ export const useUploadConflictModal = (): UploadConflictModalResult => {
             value="warning-circle"
           />
         ),
-        content: (
-          <>
-            <Box margin={ { bottom: 'small' } }>
-              {t('asset.upload.files-exist.message', { total: fileNames.length })}
-            </Box>
-            <Box margin={ { bottom: 'small' } }>
-              {fileNames.slice(0, LISTED_FILE_NAMES).map((fileName, index) => (
-                <div key={ `${fileName}-${index}` }>{fileName}</div>
-              ))}
-              {hiddenFileNames > 0 && (
-                <div>{t('asset.upload.files-exist.more', { hidden: hiddenFileNames })}</div>
-              )}
-            </Box>
-          </>
-        ),
-        footer: () => (
-          <Flex
-            gap={ { x: 0, y: 'small' } }
-            justify="flex-end"
-            wrap="wrap"
-          >
-            <Button onClick={ () => { handleAction(null) } }>
-              {t('asset.upload.review-each')}
-            </Button>
-            <Button onClick={ () => { handleAction(UploadConflictAction.SKIP) } }>
-              {t('asset.upload.skip-all')}
-            </Button>
-            <Button onClick={ () => { handleAction(UploadConflictAction.KEEP) } }>
-              {t('asset.upload.keep-both-all')}
-            </Button>
-            <Button onClick={ () => { handleAction(UploadConflictAction.OVERWRITE) } }>
-              {t('asset.upload.overwrite-all')}
-            </Button>
-          </Flex>
-        ),
+        content: <UploadConflictSummary fileNames={ fileNames } />,
+        footer: () => <UploadConflictSummaryActions onAction={ handleAction } />,
         closable: false,
         maskClosable: false,
         keyboard: false
