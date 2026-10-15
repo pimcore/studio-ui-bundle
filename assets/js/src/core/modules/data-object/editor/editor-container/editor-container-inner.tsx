@@ -27,6 +27,9 @@ import { createSafeTestIdString } from '@Pimcore/utils/test-id-generator'
 import { getBaseDataObjectContextIdentifiers } from '@Pimcore/utils/global-context-identifiers'
 import { TAB_LISTING } from '@Pimcore/modules/asset/editor/types/folder/tab-manager/tabs/listing/listing-container'
 import { useEditLock } from '@Pimcore/modules/element/hooks/use-edit-lock'
+import {
+  WorkflowEditorCoordinator
+} from '@Pimcore/modules/element/editor/shared-components/workflow/provider/workflow-editor-coordinator'
 
 export interface EditorContainerInnerProps {
   id: number
@@ -89,18 +92,20 @@ const EditorContainerInner = (props: EditorContainerInnerProps): React.JSX.Eleme
         <EditFormProvider>
           <InheritanceStateProvider>
             <LanguageSelectionProvider>
-              <TabsToolbarView
-                dataTestId={ `data-object-editor-${createSafeTestIdString(id.toString())}` }
-                renderTabbar={
-                  <TabsContainer
-                    elementEditorType={ editorType }
-                  />
-                  }
+              <WorkflowEditorCoordinator>
+                <TabsToolbarView
+                  dataTestId={ `data-object-editor-${createSafeTestIdString(id.toString())}` }
+                  renderTabbar={
+                    <TabsContainer
+                      elementEditorType={ editorType }
+                    />
+                    }
 
-                renderToolbar={
-                  <Toolbar />
-                  }
-              />
+                  renderToolbar={
+                    <Toolbar />
+                    }
+                />
+              </WorkflowEditorCoordinator>
             </LanguageSelectionProvider>
           </InheritanceStateProvider>
         </EditFormProvider>

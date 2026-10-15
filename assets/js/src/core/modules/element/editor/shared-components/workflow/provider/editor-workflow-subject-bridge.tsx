@@ -13,6 +13,8 @@ import { useOptionalElementContext } from '@Pimcore/modules/element/hooks/use-el
 import { useElementRefresh } from '@sdk/modules/element'
 import { useLayoutSelection } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/use-layout-selection'
 import { type WorkflowActionSubject } from '../types/workflow-types'
+import { useUnsavedChangesGuard } from '../hooks/use-unsaved-changes-guard'
+import { WorkflowEditorCoordinatorFallback, useWorkflowEditorCoordinatorOptional } from './workflow-editor-coordinator'
 import { WorkflowActionSubjectContext } from './workflow-provider'
 
 interface EditorWorkflowSubjectBridgeProps {
@@ -25,11 +27,21 @@ interface EditorWorkflowSubjectBridgeProps {
  * editor-only dependencies (element context, element refresh, data-object layout reset) so the shared
  * submit/modal flow stays element-editor-agnostic. On success it refreshes the element and, for a
  * data-object, resets the current layout — the exact behaviour the toolbars had before the refactor.
+ * Before submitting it applies the transition's unsavedChangesBehaviour (see useUnsavedChangesGuard),
+ * saving through the saver the editor's save flow registered with the editor's workflow coordinator.
  */
-export const EditorWorkflowSubjectBridge = ({ children }: EditorWorkflowSubjectBridgeProps): React.JSX.Element => {
+export const EditorWorkflowSubjectBridge = ({ children }: EditorWorkflowSubjectBridgeProps): React.JSX.Element => (
+  <WorkflowEditorCoordinatorFallback>
+    <EditorWorkflowSubjectBridgeInner>{children}</EditorWorkflowSubjectBridgeInner>
+  </WorkflowEditorCoordinatorFallback>
+)
+
+const EditorWorkflowSubjectBridgeInner = ({ children }: EditorWorkflowSubjectBridgeProps): React.JSX.Element => {
   const element = useOptionalElementContext()
   const { refreshElement } = useElementRefresh(element?.elementType ?? 'asset')
   const { setCurrentLayout } = useLayoutSelection()
+  const coordinator = useWorkflowEditorCoordinatorOptional()
+  const { guard } = useUnsavedChangesGuard(element?.id ?? 0, element?.elementType ?? 'asset', () => coordinator?.getSaver())
 
   const subject = useMemo<WorkflowActionSubject | null>(() => {
     if (element === null) {
@@ -44,9 +56,10 @@ export const EditorWorkflowSubjectBridge = ({ children }: EditorWorkflowSubjectB
           setCurrentLayout(null)
         }
         refreshElement(element.id)
-      }
+      },
+      beforeSubmit: guard
     }
-  }, [element, refreshElement, setCurrentLayout])
+  }, [element, refreshElement, setCurrentLayout, guard])
 
   return (
     <WorkflowActionSubjectContext.Provider value={ subject }>

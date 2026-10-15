@@ -44,6 +44,14 @@ export const useEditFormContext = (): EditFormContextProps => {
   return context
 }
 
+/**
+ * For components that are also rendered outside the object editor, e.g. the workflow of
+ * an asset or document editor.
+ */
+export const useEditFormContextOptional = (): EditFormContextProps | undefined => {
+  return useContext(EditFormContext)
+}
+
 export const EditFormProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [form] = Form.useForm()
   const modifiedDataObjectAttributesRef = useRef<Record<string, any>>({})

@@ -14,6 +14,8 @@ import { SaveTaskType } from '@Pimcore/modules/data-object/actions/save/use-save
 export interface QueuedDask {
   task: SaveTaskType | undefined
   editableData: Record<string, any>
+  /** Follows the queued save once it succeeded, like the onFinish of a save that ran right away. */
+  onFinish?: () => void
 }
 
 export interface ISaveContext {
@@ -22,6 +24,7 @@ export interface ISaveContext {
   isAutoSaveLoading: boolean
   runningTaskRef: React.MutableRefObject<SaveTaskType | undefined>
   queuedTask?: QueuedDask
+  queuedTaskRef: React.MutableRefObject<QueuedDask | undefined>
   setQueuedTask: (task?: QueuedDask) => void
 }
 
@@ -49,6 +52,7 @@ export const SaveProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isAutoSaveLoading: runningTask === SaveTaskType.AutoSave,
     runningTaskRef,
     queuedTask,
+    queuedTaskRef,
     setQueuedTask
   }), [runningTask, queuedTask])
 
