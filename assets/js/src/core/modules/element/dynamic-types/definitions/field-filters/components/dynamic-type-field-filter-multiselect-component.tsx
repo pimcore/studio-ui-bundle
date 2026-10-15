@@ -14,11 +14,13 @@ import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/us
 import { type DefaultOptionType } from 'antd/es/select'
 import { renderSelectOptionLabel } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/utils/select-options'
 import { DynamicTypeFieldFilterTextComponent } from './dynamic-type-field-filter-text-component'
+import { useTranslation } from 'react-i18next'
 
 export type MultiselectValue = string[]
 
 export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element => {
   const { setData, data, config } = useDynamicFilter()
+  const { t } = useTranslation()
   const [value, setValue] = useState<string[]>(data as MultiselectValue)
 
   useEffect(() => {
@@ -38,6 +40,14 @@ export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element 
       ...renderSelectOptionLabel(String(opt?.key)),
       value: opt?.value
     }))
+  }
+
+  // An empty select value is matched as "no value" (null or '') by the backend.
+  const offersEmptyOption = config?.fieldDefinition?.fieldtype === 'select' &&
+    !formattedOptions.some(o => o.value === '')
+
+  if (offersEmptyOption) {
+    formattedOptions = [{ label: t('empty'), value: '' }, ...formattedOptions]
   }
 
   const handleChange = (value: MultiselectValue): void => {
