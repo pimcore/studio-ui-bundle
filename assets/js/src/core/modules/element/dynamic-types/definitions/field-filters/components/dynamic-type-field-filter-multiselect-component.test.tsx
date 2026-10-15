@@ -11,13 +11,14 @@
 // The SDK components are replaced by minimal stand-ins: the test only cares about the
 // options the filter select receives.
 jest.mock('@Pimcore/components/select/select', () => ({
-  Select: ({ options }: { options?: Array<{ value: string, label: string }> }) => (
-    <span data-testid="filter-select">{(options ?? []).map((o) => `[${o.value}=${o.label}]`).join('')}</span>
+  Select: ({ options }: { options?: Array<{ value: string, label: string, title?: string }> }) => (
+    <span data-testid="filter-select">{(options ?? []).map((o) => `[${o.value}=${o.label}${o.title === undefined ? '' : `|${o.title}`}]`).join('')}</span>
   )
 }))
 
 jest.mock('@Pimcore/modules/element/dynamic-types/definitions/grid-cell/utils/select-options', () => ({
-  renderSelectOptionLabel: (key: string) => ({ label: key })
+  // HTML labels come with a plain-text title used for searching, plain labels without one
+  renderSelectOptionLabel: (key: string) => (key.includes('<') ? { label: key, title: key.replace(/<[^>]*>/g, '') } : { label: key })
 }))
 
 jest.mock('./dynamic-type-field-filter-text-component', () => ({
@@ -68,5 +69,17 @@ describe('multiselect field filter', () => {
     renderFilter({ fieldtype: 'select', options: [{ key: 'None', value: '' }, ...options] })
 
     expect(screen.getByTestId('filter-select')).toHaveTextContent('[=None][red=Red][blue=Blue]')
+  })
+
+  it('gives the empty option a title when the options are searched by title (HTML labels)', () => {
+    renderFilter({ fieldtype: 'select', options: [{ key: '<b>Red</b>', value: 'red' }] })
+
+    expect(screen.getByTestId('filter-select')).toHaveTextContent('[=empty|empty][red=<b>Red</b>|Red]')
+  })
+
+  it('keeps the empty option without a title for plain labels', () => {
+    renderFilter({ fieldtype: 'select', options })
+
+    expect(screen.getByTestId('filter-select')).toHaveTextContent('[=empty][red=Red][blue=Blue]')
   })
 })

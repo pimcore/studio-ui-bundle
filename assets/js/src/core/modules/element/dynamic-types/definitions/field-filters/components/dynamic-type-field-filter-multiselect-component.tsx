@@ -42,20 +42,25 @@ export const DynamicTypeFieldFilterMultiselectComponent = (): React.JSX.Element 
     }))
   }
 
+  // HTML labels are searched by their title, plain labels by the label itself
+  const hasHtmlLabels = formattedOptions.some(o => o.title !== undefined)
+
   // An empty select value is matched as "no value" (null or '') by the backend.
   const offersEmptyOption = config?.fieldDefinition?.fieldtype === 'select' &&
     !formattedOptions.some(o => o.value === '')
 
   if (offersEmptyOption) {
-    formattedOptions = [{ label: t('empty'), value: '' }, ...formattedOptions]
+    const emptyLabel = t('empty')
+    formattedOptions = [
+      { label: emptyLabel, value: '', ...(hasHtmlLabels ? { title: emptyLabel } : {}) },
+      ...formattedOptions
+    ]
   }
 
   const handleChange = (value: MultiselectValue): void => {
     setValue(value)
     setData(value)
   }
-
-  const hasHtmlLabels = formattedOptions.some(o => o.title !== undefined)
 
   return (
     <Select
