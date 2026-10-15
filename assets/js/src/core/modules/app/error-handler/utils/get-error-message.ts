@@ -24,5 +24,5 @@ export const getErrorMessage = (content: IErrorGetContent['data'], t: TFunction)
     return content.message
   }
 
-  return t(`error.${content.errorKey}`)
+  return t(`error.${content.errorKey}`, content.params)
 }
