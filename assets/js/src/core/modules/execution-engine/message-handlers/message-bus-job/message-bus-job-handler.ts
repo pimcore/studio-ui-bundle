@@ -251,7 +251,8 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       const messageBus = container.get<GlobalMessageBus>(serviceIds.globalMessageBus)
       messageBus.unregisterHandler(this.jobRunId)
     } else if (data.status === 'running') {
-      this.updateJob({ status: JobStatus.RUNNING })
+      // Without a progress value yet (polling carries none) a 0% bar would claim more than is known
+      this.updateJob({ status: JobStatus.RUNNING, ...(this.lastProgressValue < 0 && { indeterminate: true }) })
     }
 
     return false
@@ -286,7 +287,8 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
   private async handlePolledStatusUpdate (data: JobStatusUpdateData): Promise<void> {
     const polledData = {
       status: data.status,
-      currentStep: data.currentStep,
+      // The job run list reports the step 0-based, the Mercure progress messages count from 1
+      currentStep: isNil(data.currentStep) ? undefined : data.currentStep + 1,
       totalSteps: data.totalSteps,
       jobRunChildId: data.jobRun.jobRunChildId ?? undefined,
       messages: !isNil(data.currentMessage) ? [data.currentMessage] : undefined

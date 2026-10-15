@@ -17,6 +17,13 @@ import { JobStatus } from '@Pimcore/modules/execution-engine/jobs/abstact-job'
 
 const COMPLETION_STATES = ['finished', 'finished_with_errors', 'failed']
 
+/**
+ * Polling is only the fallback for missed Mercure updates, so a missed update has to be
+ * noticed within about a minute, not after the several minutes an uncapped backoff reaches.
+ */
+const POLLING_INITIAL_DELAY = 10000
+const POLLING_MAX_DELAY = 60000
+
 export interface JobRunPollingCallbacks {
   onStatusUpdate: (data: JobStatusUpdateData) => void | Promise<void>
   onError?: (error: Error) => void
@@ -40,14 +47,16 @@ export class JobRunPolling {
   private isPolling: boolean = false
   private isDestroyed: boolean = false
   private lastJobSnapshot: JobRunSnapshot | null = null
+  // First state seen for this job run; unlike lastJobSnapshot it survives stopPolling()
+  private baselineSnapshot: JobRunSnapshot | null = null
   private readonly pollingBackoff: ExponentialBackoff
 
   constructor (jobRunId: string | number, callbacks: JobRunPollingCallbacks) {
     this.jobRunId = jobRunId
     this.callbacks = callbacks
     this.pollingBackoff = new ExponentialBackoff({
-      initialDelay: 10000,
-      maxDelay: 300000,
+      initialDelay: POLLING_INITIAL_DELAY,
+      maxDelay: POLLING_MAX_DELAY,
       multiplier: 1.25
     })
   }
@@ -63,7 +72,11 @@ export class JobRunPolling {
       return
     }
 
+    // Mercure is delivering, so the fallback starts over: without the reset every update would
+    // push the next poll further out (each schedule() lengthens the delay), and the first poll
+    // after Mercure falls silent would come minutes late.
     this.stopPolling()
+    this.pollingBackoff.reset()
     this.schedulePolling()
   }
 
@@ -119,6 +132,25 @@ export class JobRunPolling {
     }
   }
 
+  /**
+   * The engine sets a job run to `running` (current step 0, 0-based) the moment it is created,
+   * so the state alone cannot tell a job that waits for a worker from one that is being
+   * processed, and the current step stays 0 for the whole run of a single-step job. Processing
+   * a message changes the job run (modification date, message, step), so a running job counts
+   * as started once it differs from the first state seen.
+   */
+  private resolveStatus (jobRun: JobRun, snapshot: JobRunSnapshot, baseline: JobRunSnapshot): string {
+    if (jobRun.state !== JobStatus.RUNNING) {
+      return jobRun.state
+    }
+
+    const hasStarted = (jobRun.currentStep ?? 0) > 0 ||
+      snapshot.modificationDate !== baseline.modificationDate ||
+      snapshot.currentMessage !== baseline.currentMessage
+
+    return hasStarted ? JobStatus.RUNNING : JobStatus.QUEUED
+  }
+
   private async pollJobStatus (): Promise<void> {
     if (this.isDestroyed) {
       this.stopPolling()
@@ -160,8 +192,9 @@ export class JobRunPolling {
           }
 
           this.lastJobSnapshot = currentSnapshot
+          this.baselineSnapshot = this.baselineSnapshot ?? currentSnapshot
 
-          const effectiveStatus = jobRun.currentStep === 0 ? JobStatus.QUEUED : jobRun.state
+          const effectiveStatus = this.resolveStatus(jobRun, currentSnapshot, this.baselineSnapshot)
 
           await this.callbacks.onStatusUpdate({
             status: effectiveStatus,
