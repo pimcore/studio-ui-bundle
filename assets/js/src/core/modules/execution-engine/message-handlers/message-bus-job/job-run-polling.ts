@@ -24,6 +24,12 @@ const COMPLETION_STATES = ['finished', 'finished_with_errors', 'failed']
 const POLLING_INITIAL_DELAY = 10000
 const POLLING_MAX_DELAY = 60000
 
+/**
+ * A job run modified this long after its creation has been processed: creating it takes a
+ * few updates within the same request, so a smaller gap says nothing.
+ */
+const STARTED_AFTER_CREATION_SECONDS = 5
+
 export interface JobRunPollingCallbacks {
   onStatusUpdate: (data: JobStatusUpdateData) => void | Promise<void>
   onError?: (error: Error) => void
@@ -137,14 +143,19 @@ export class JobRunPolling {
    * so the state alone cannot tell a job that waits for a worker from one that is being
    * processed, and the current step stays 0 for the whole run of a single-step job. Processing
    * a message changes the job run (modification date, message, step), so a running job counts
-   * as started once it differs from the first state seen.
+   * as started once it was modified well after its creation or differs from the first state
+   * seen (a first poll may come after processing began).
    */
   private resolveStatus (jobRun: JobRun, snapshot: JobRunSnapshot, baseline: JobRunSnapshot): string {
     if (jobRun.state !== JobStatus.RUNNING) {
       return jobRun.state
     }
 
+    const modifiedAfterCreation = !isNil(jobRun.creationDate) && !isNil(jobRun.modificationDate) &&
+      jobRun.modificationDate - jobRun.creationDate >= STARTED_AFTER_CREATION_SECONDS
+
     const hasStarted = (jobRun.currentStep ?? 0) > 0 ||
+      modifiedAfterCreation ||
       snapshot.modificationDate !== baseline.modificationDate ||
       snapshot.currentMessage !== baseline.currentMessage
 

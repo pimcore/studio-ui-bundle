@@ -251,8 +251,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       const messageBus = container.get<GlobalMessageBus>(serviceIds.globalMessageBus)
       messageBus.unregisterHandler(this.jobRunId)
     } else if (data.status === 'running') {
-      // Without a progress value yet (polling carries none) a 0% bar would claim more than is known
-      this.updateJob({ status: JobStatus.RUNNING, ...(this.lastProgressValue < 0 && { indeterminate: true }) })
+      this.updateJob({ status: JobStatus.RUNNING })
     }
 
     return false
@@ -294,10 +293,13 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
       messages: !isNil(data.currentMessage) ? [data.currentMessage] : undefined
     }
 
-    await this.processUpdate(polledData)
+    // Progress calculators that count finished steps read the step as "steps completed so far",
+    // which is exactly what the 0-based polled step is: the 1-based one would count the step
+    // that is still running as done
+    await this.processUpdate(polledData, { ...polledData, currentStep: data.currentStep ?? undefined })
   }
 
-  private async processUpdate (data: any): Promise<void> {
+  private async processUpdate (data: any, progressData: any = data): Promise<void> {
     if (!isNil(data?.status)) {
       const transitioned = await this.handleStatusUpdate(data)
       if (transitioned) {
@@ -335,7 +337,7 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
     }
 
     const { currentStep, totalSteps } = this.stepTracker.state
-    const result = this.progressCalculator.calculateProgress(data, {
+    const result = this.progressCalculator.calculateProgress(progressData, {
       currentStep,
       totalSteps,
       lastProgressValue: this.lastProgressValue
@@ -343,6 +345,10 @@ export class MessageBusJobHandler extends AbstractMessageHandler {
 
     if (result !== PROGRESS_NO_UPDATE) {
       this.handleProgressUpdate(result, data)
+    } else if (data?.status === 'running' && this.lastProgressValue < 0) {
+      // No progress value for the current step yet (polling carries none, and a step change
+      // resets it above): a bar at 0% - or at the previous step's value - would claim more than is known
+      this.updateJob({ indeterminate: true })
     }
   }
 }

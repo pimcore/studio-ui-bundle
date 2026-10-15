@@ -141,6 +141,18 @@ describe('status reported for a running job', () => {
     polling.destroy()
   })
 
+  it('reports running when the very first poll already finds a job run that was modified long after its creation', async () => {
+    // processing began before the first poll and nothing changes between polls (one slow element)
+    respondWith(jobRunFixture({ creationDate: 1000, modificationDate: 1040 }))
+    const { polling, updates } = setup()
+    polling.start()
+
+    await advance(INITIAL_DELAY)
+
+    expect(updates.map(u => u.status)).toEqual([JobStatus.RUNNING])
+    polling.destroy()
+  })
+
   it('reports running when the first poll already finds the job on a later step', async () => {
     respondWith(jobRunFixture({ currentStep: 1, totalSteps: 3 }))
     const { polling, updates } = setup()

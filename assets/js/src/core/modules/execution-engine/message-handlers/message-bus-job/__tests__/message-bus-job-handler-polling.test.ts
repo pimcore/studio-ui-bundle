@@ -24,6 +24,7 @@ import { store } from '@Pimcore/app/store'
 import { type JobCompletionData } from '../message-bus-job-handler'
 import { ChildJobStepTracker } from '../step-tracker/child-job-step-tracker'
 import { DefaultStepTracker } from '../step-tracker/default-step-tracker'
+import { StepCompletionCalculator } from '../progress-calculator/step-completion-calculator'
 
 jest.mock('@Pimcore/modules/global-message-bus/message-handlers/abstract-message-handler', () => ({
   AbstractMessageHandler: class AbstractMessageHandler {} // eslint-disable-line @typescript-eslint/no-extraneous-class
@@ -173,7 +174,10 @@ describe('status=running', () => {
     makeHandler()
     await sendPollingUpdate({ status: 'running', jobRun: jobRunFixture() })
     expect(mockJobUpdated).toHaveBeenCalledWith(expect.objectContaining({
-      changes: expect.objectContaining({ status: JobStatus.RUNNING, indeterminate: true })
+      changes: expect.objectContaining({ status: JobStatus.RUNNING })
+    }))
+    expect(mockJobUpdated).toHaveBeenCalledWith(expect.objectContaining({
+      changes: expect.objectContaining({ indeterminate: true })
     }))
   })
 
@@ -611,5 +615,39 @@ describe('progress field absent from polling data', () => {
       return 'progress' in (payload?.changes ?? {})
     })
     expect(progressUpdates.length).toBeGreaterThan(0)
+  })
+})
+
+// ─── Progress and spinner derived from polled data ────────────────────────────
+//
+// The polled step is the step being processed, so it must not count as a completed step
+// when progress is calculated from finished steps, and a step change found by polling must
+// not keep the percentage that Mercure reported for the previous step.
+
+describe('progress derived from polled data', () => {
+  it('step-completion progress counts only the steps finished before the polled active step', async () => {
+    capturedOnStatusUpdate = undefined
+    const handler = new MessageBusJobHandler({ jobRunId: 1, title: 'Test', progressCalculator: new StepCompletionCalculator() })
+    handler.onRegister()
+    mockJobUpdated.mockClear()
+
+    // polled (0-based) step 1 of 2: the first step is done, the second one is running
+    await sendPollingUpdate({ status: 'running', currentStep: 1, totalSteps: 2, jobRun: jobRunFixture({ currentStep: 1, totalSteps: 2 }) })
+
+    const progressValues = mockJobUpdated.mock.calls
+      .map((args: unknown[]) => (args[0] as { changes: Record<string, unknown> }).changes.progress)
+      .filter((value) => value !== undefined)
+    expect(progressValues).toEqual([50])
+  })
+
+  it('shows the spinner when polling finds a later step after Mercure reported progress for the previous one', async () => {
+    const handler = makeStepHandler()
+    await sendMercureUpdate(handler, { progress: 40 })
+    mockJobUpdated.mockClear()
+
+    await sendPollingUpdate({ status: 'running', currentStep: 1, totalSteps: 2, jobRun: jobRunFixture({ currentStep: 1, totalSteps: 2 }) })
+
+    const changes = mockJobUpdated.mock.calls.map((args: unknown[]) => (args[0] as { changes: Record<string, unknown> }).changes)
+    expect(changes.some((change) => change.indeterminate === true)).toBe(true)
   })
 })
