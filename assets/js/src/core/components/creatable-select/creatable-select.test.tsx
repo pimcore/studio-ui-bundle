@@ -25,16 +25,16 @@ jest.mock('@Pimcore/components/input-number/input-number.styles', () => ({
   useStyles: () => ({ styles: { inputNumber: 'input-number', inherited: 'inherited' } })
 }))
 
+jest.mock('./creatable-select.styles', () => ({ useStyles: () => ({ styles: { footer: 'footer' } }) }))
+
 // The barrel pulls in antd-style too. InputNumber stays real — its decimalSeparator is under test.
 jest.mock('@sdk/components', () => {
   const antd = jest.requireActual('antd')
   const react = jest.requireActual('react')
 
   return {
-    Box: ({ children }: { children?: React.ReactNode }) => react.createElement('div', null, children),
     Text: ({ children }: { children?: React.ReactNode }) => react.createElement('span', null, children),
-    Button: antd.Button,
-    Divider: antd.Divider,
+    IconTextButton: ({ icon, ...props }: { icon: unknown }) => react.createElement(antd.Button, props),
     Flex: antd.Flex,
     Input: antd.Input,
     InputNumber: jest.requireActual('@Pimcore/components/input-number/input-number').InputNumber,

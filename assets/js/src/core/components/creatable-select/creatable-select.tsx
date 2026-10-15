@@ -8,12 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Box, Button, Divider, Flex, Input, InputNumber, Select, Text, type SelectProps } from '@sdk/components'
+import { Flex, IconTextButton, Input, InputNumber, Select, Text, type SelectProps } from '@sdk/components'
 import { type SelectOptionType } from '@sdk/modules/element'
 import { isNil, isUndefined } from 'lodash'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getDecimalSeparator } from '@Pimcore/utils/number'
+import { useStyles } from './creatable-select.styles'
 
 export interface CreatableSelectProps extends Omit<SelectProps, 'options'> {
   options: SelectOptionType[]
@@ -40,6 +41,7 @@ const Component = ({
   ...selectProps
 }: CreatableSelectProps): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyles()
   const [customOptions, setCustomOptions] = useState<SelectOptionType[]>([])
   const [newOptionText, setNewOptionText] = useState('')
   // `onChange` only reports parseable numbers, so the displayed text is tracked via `onInput`.
@@ -202,22 +204,25 @@ const Component = ({
     return (
       <>
         {menu}
-        <Divider size="normal" />
-        <Box padding={ { x: 'small', top: 'extra-small', bottom: 'small' } }>
+        <div className={ styles.footer }>
           <Flex
             gap="extra-small"
             vertical
           >
-            <Flex gap="small">
+            <Flex
+              align="center"
+              gap="extra-small"
+            >
               {getInputDependantField()}
-              <Button
+              <IconTextButton
                 disabled={ currentInputText.trim() === '' || !isInputTextValid() || (!allowDuplicates && allOptions.some(opt => opt.value === newOptionText.trim())) }
+                icon={ { value: 'new' } }
                 onClick={ handleAddOption }
                 size="small"
-                type="primary"
+                type="link"
               >
                 {t('creatable-select.add')}
-              </Button>
+              </IconTextButton>
             </Flex>
             {!allowDuplicates && currentInputText.trim() !== '' && isInputTextValid() && allOptions.some(opt => opt.value === newOptionText.trim()) && (
               <Text type="danger">
@@ -230,7 +235,7 @@ const Component = ({
               </Text>
             )}
           </Flex>
-        </Box>
+        </div>
       </>
     )
   }
