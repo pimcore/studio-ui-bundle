@@ -12,6 +12,7 @@ import React from 'react'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Spin } from '@Pimcore/components/spin/spin'
 import { Box } from '@Pimcore/components/box/box'
+import { useTranslation } from 'react-i18next'
 
 interface RefetchProps {
   isFetching: boolean
@@ -19,6 +20,7 @@ interface RefetchProps {
 }
 
 export const Refetch = ({ isFetching, refetch }: RefetchProps): React.JSX.Element => {
+  const { t } = useTranslation()
   if (isFetching) {
     return (
       <Box padding={ { x: 'extra-small', y: 'extra-small' } }>
@@ -29,8 +31,10 @@ export const Refetch = ({ isFetching, refetch }: RefetchProps): React.JSX.Elemen
 
   return (
     <IconButton
+      aria-label={ t('refresh') }
       icon={ { value: 'refresh' } }
       onClick={ async () => { refetch() } }
+      tooltip={ { title: t('refresh') } }
     />
   )
 }

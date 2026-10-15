@@ -31,7 +31,13 @@ export interface IValidationError {
 }
 
 export interface IErrorGetContent {
-  data: string | { errorKey: string, title?: string, message?: string, validationErrors?: IValidationError[] }
+  data: string | {
+    errorKey: string
+    title?: string
+    message?: string
+    params?: Record<string, string | number>
+    validationErrors?: IValidationError[]
+  }
 }
 
 export type ApiErrorData = FetchBaseQueryError | SerializedError | { data: IApiErrorDetails }

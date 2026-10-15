@@ -10,6 +10,7 @@
 
 import { IconButton, type IconButtonProps } from '@Pimcore/components/icon-button/icon-button'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { useElementSelector } from '../../../provider/element-selector/use-element-selector'
 import { type ElementSelectorConfig } from '@sdk/modules/element'
 
@@ -20,6 +21,7 @@ export interface ElementSelectorButtonProps extends Omit<IconButtonProps, 'onCli
 export const ElementSelectorButton = (props: ElementSelectorButtonProps): React.JSX.Element => {
   const { elementSelectorConfig, ...baseProps } = props
   const { open } = useElementSelector(elementSelectorConfig)
+  const { t } = useTranslation()
 
   const onClick = (): void => {
     open()
@@ -27,6 +29,8 @@ export const ElementSelectorButton = (props: ElementSelectorButtonProps): React.
 
   return (
     <IconButton
+      aria-label={ t('search') }
+      tooltip={ { title: t('search') } }
       { ...baseProps }
       icon={ { value: 'folder-search' } }
       onClick={ onClick }

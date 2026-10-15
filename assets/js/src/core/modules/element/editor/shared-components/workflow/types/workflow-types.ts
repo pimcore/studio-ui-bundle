@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isEmpty, isNil } from 'lodash'
+import { isEmpty, isNil, isNumber, isString } from 'lodash'
 import { type WorkflowDetails } from '../../../shared-tab-manager/tabs/workflow/workflow-api-slice.gen'
 
 export type ActionType = 'transition' | 'global'
@@ -34,6 +34,8 @@ export interface WorkflowAction {
   transitionId: string
   label: string
   notes?: WorkflowNotes
+  /** Custom layout id the data-object editor switches to after the action was applied. */
+  objectLayout?: string
 }
 
 export interface WorkflowActionData {
@@ -63,6 +65,8 @@ interface ActionItem {
   name: string
   label: string
   notes?: WorkflowNotes
+  // the backend sends the configured layout id, or false when none is set
+  objectLayout?: boolean | number | string
 }
 
 const createWorkflowAction = (
@@ -74,7 +78,10 @@ const createWorkflowAction = (
   workflowId: workflowName,
   transitionId: item.name,
   label: item.label,
-  notes: isEmpty(item.notes) ? undefined : item.notes
+  notes: isEmpty(item.notes) ? undefined : item.notes,
+  objectLayout: (isString(item.objectLayout) || isNumber(item.objectLayout)) && String(item.objectLayout) !== ''
+    ? String(item.objectLayout)
+    : undefined
 })
 
 export const getWorkflowActions = (workflow: WorkflowDetails): WorkflowActionsList => {

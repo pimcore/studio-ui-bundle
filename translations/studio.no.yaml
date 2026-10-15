@@ -108,6 +108,13 @@ asset.upload.overwrite: Overskriv
 asset.upload.keep-both: Behold begge
 asset.upload.skip: Hopp over
 asset.upload.apply-to-all: Bruk på alle
+asset.upload.files-exist.title: 'Filene finnes allerede'
+asset.upload.files-exist.message: '{{total}} av de valgte filene finnes allerede i denne mappen. Hva vil du gjøre med dem?'
+asset.upload.files-exist.more: 'og {{hidden}} til'
+asset.upload.review-each: 'Gå gjennom én og én'
+asset.upload.skip-all: 'Hopp over alle'
+asset.upload.keep-both-all: 'Behold begge for alle'
+asset.upload.overwrite-all: 'Overskriv alle'
 asset.upload.checking-duplicate-file-names: "Sjekker etter dupliserte filnavn ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Oppretter mapper
 asset.upload.folder-drop.creating-folders-hint: Vennligst vent mens mappestrukturen opprettes…
@@ -357,6 +364,7 @@ notification.action-list.completed-actions: Fullførte handlinger
 aria.notification.action-list.toggle-collapse: Slå av/på liste over handlinger
 aria.notification.action-list.cancel-all: Avbryt alle pågående handlinger
 aria.notification.action-list.cancel: Avbryt handling
+aria.stack-list.drag-handle: Dra for å sortere på nytt
 asset.image.editor.zoom.reset: Tilbakestill
 aria.asset.image.editor.zoom.reset: Tilbakestill zoom
 aria.asset.image.editor.zoom.zoom-in: Zoom inn
@@ -523,6 +531,8 @@ version.category.title.meta: Metadata
 version.category.title.properties: Egenskaper
 version.changed-attributes: "Endrede attributter: {{attributes}}"
 aria.version.delete: Slett versjon
+aria.notes-and-events.delete: Slett notat
+aria.card.close: Lukk
 aria.version.expand: Utvid versjon
 clear-all: Fjern alle
 empty: Tom
@@ -658,6 +668,54 @@ website-settings.columns.site: Nettsted
 website-settings.columns.actions: Handlinger
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Obligatoriske felt mangler
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Navn og type er obligatoriske felt og må fylles ut.
+mcp-servers.rail.new-server: Ny server
+mcp-servers.placeholder: Velg en server for å se eller redigere konfigurasjonen.
+mcp-servers.tabs.empty: Velg en server for å se eller redigere konfigurasjonen.
+mcp-servers.tabs.new-server: Ny server
+mcp-servers.read-only-notice: Serverdefinisjoner administreres via filer i dette miljøet og kan ikke redigeres her.
+mcp-servers.save-success: MCP-server lagret
+mcp-servers.access.users-count: "Brukere: {{number}}"
+mcp-servers.access.roles-count: "Roller: {{number}}"
+mcp-servers.access.global-extra: alle autentiserte brukere
+mcp-servers.access.nobody: "Ingen ennå"
+mcp-servers.badge.read: Les
+mcp-servers.badge.write: Skriv
+mcp-servers.editor.create-title: Ny MCP-server
+mcp-servers.editor.edit-title: Rediger MCP-server
+mcp-servers.editor.general: Generelt
+mcp-servers.editor.permissions: Tillatelser
+mcp-servers.editor.identity: Identitet
+mcp-servers.editor.name: Navn
+mcp-servers.editor.name-required: Oppgi et navn.
+mcp-servers.editor.url-slug: URL-slug
+mcp-servers.editor.url-slug-required: Oppgi en URL-slug.
+mcp-servers.editor.url-slug-pattern: Bare små bokstaver, tall og bindestreker er tillatt.
+mcp-servers.editor.description: Beskrivelse
+mcp-servers.editor.enabled: Aktiv
+mcp-servers.editor.tools: Verktøy
+mcp-servers.editor.tools-placeholder: Velg verktøyene denne serveren eksponerer
+mcp-servers.editor.scopes: Annonserte scopes
+mcp-servers.editor.scopes-empty: Ingen scopes — velg verktøy for å utlede de nødvendige scopes.
+mcp-servers.editor.url: Server-URL
+mcp-servers.editor.copy-url: "Kopier server-URL"
+mcp-servers.editor.connect-hint: Pek MCP-klienten din mot denne URL-en og autentiser deg med Pimcore-kontoen din.
+mcp-servers.sharing.title: Deling
+mcp-servers.sharing.share-globally: Del globalt
+mcp-servers.sharing.share-globally-tooltip: Alle autentiserte brukere får konfigurasjonslesing og MCP-servertilgang (ikke konfigurasjonsredigering)
+mcp-servers.sharing.users: Brukere
+mcp-servers.sharing.roles: Roller
+mcp-servers.sharing.add-user: Legg til en bruker…
+mcp-servers.sharing.add-role: Legg til en rolle…
+mcp-servers.sharing.name: Navn
+mcp-servers.sharing.config-read: Konfigurasjonslesing
+mcp-servers.sharing.config-edit: Konfigurasjonsredigering
+mcp-servers.sharing.mcp-access: MCP-servertilgang
+mcp-servers.sharing.level: Tilgangsnivå
+mcp-servers.sharing.read: Les
+mcp-servers.sharing.write: Kan redigere
+mcp-servers.sharing.who-can-access: Hvem har tilgang
+mcp-servers.delete.title: Slett MCP-server
+mcp-servers.delete.confirm: Er du sikker på at du vil slette "{{name}}"?
 document-types.new: Ny
 document-types.columns.name: Navn
 document-types.columns.group: Gruppe
@@ -783,6 +841,7 @@ tags.apply-tags-to-children: Bruk tagger på underelementer
 tags.remove-and-apply-tags-to-children: Fjern og bruk tagger på underelementer
 tags.columns.path: Sti
 tags.columns.actions: Fjern
+tags.actions.delete: Fjern tagg
 csv-separated-options: CSV-separerte alternativer
 csv-separated-options-info: Listen over tilgjengelige alternativer kan angis som kommaseparert liste, som verdier i enkeltkolonner eller blandet. For enkeltkolonne-metoden vil nøkkelen også brukes som verdi.
 add: Legg til
@@ -1188,7 +1247,9 @@ jobs.zip-upload-job.title: Last opp ZIP
 jobs.zip-upload-job.step1.title: Pakker ut ZIP
 jobs.zip-upload-job.step2.title: Oppretter ressurser
 jobs.download-csv-job.title: CSV export
+jobs.download-csv-job.title-with-context: "CSV export ({{name}})"
 jobs.download-xlsx-job.title: XLSX export
+jobs.download-xlsx-job.title-with-context: "XLSX export ({{name}})"
 jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Masseredigering
 batch-edit.no-content: Ingen kolonner lagt til ennå
@@ -1257,6 +1318,7 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" er kopiert og
 element.tree.paste: Lim inn
 element.tree.paste-as-child: Lim inn som underelement
 element.tree.paste-as-child-recursive: Lim inn som underelement (rekursiv)
+element.tree.open-no-permission: Du har ikke tillatelse til å åpne dette elementet.
 element.tree.paste-recursive-updating-references: Lim inn rekursivt, oppdater referanser
 element.tree.paste-only-contents: Lim inn kun innhold her
 element.tree.cut: Klipp ut
@@ -1308,6 +1370,8 @@ element.delete.batch.show-paths: Vis elementer
 element.delete.batch.dependencies-warning.confirmed_one: 'Merk: Dette elementet har avhengigheter.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Merk: Disse elementene har avhengigheter.'
 element.open: Åpne
+element.state: Status
+element.state.unpublished: Upublisert
 element.toolbar.copy-id: Kopier ID
 element.toolbar.copy-full-path-to-clipboard: Kopier full sti
 element.toolbar.copy-deep-link-to-clipboard: Kopier Deeplink
@@ -1347,6 +1411,9 @@ success: Suksess
 no-value-set: Ingen verdi satt
 set-to-null: Tom (sett til null)
 remove: Fjern
+move-up: Flytt opp
+move-down: Flytt ned
+translate: Oversett
 delete: Slett
 clone: Klon
 jobs.clone-job.step2.title: Oppdaterer referanser
@@ -1641,6 +1708,7 @@ navigation.appearance-branding: Utseende og merkevare
 navigation.reporting: Rapportering
 navigation.system: System
 navigation.website-settings: Nettstedsinnstillinger
+navigation.mcp-servers: MCP-servere
 navigation.document-types: Dokumenttyper
 navigation.cache: Hurtigbuffer
 navigation.cache.clear-cache: Tøm hurtigbuffer
@@ -1729,6 +1797,7 @@ widget.predefined-properties: Forhåndsdefinerte egenskaper
 widget.search-replace-assignments: Søk og erstatt tilordninger
 widget.document-types: Dokumenttyper
 widget.website-settings: Nettstedsinnstillinger
+widget.mcp-servers: MCP-servere
 widget.role-management: Roller
 widget.user-management: Brukere
 widget.class-definitions: Klasser
@@ -2931,6 +3000,7 @@ translations.merger.state.reverted: Tilbakestilt
 translations.merger.state.pending: Ventende
 translations.merger.apply-all: Bruk alle
 translations.merger.revert-all: Tilbakestill alle
+translations.merger.revert: Tilbakestill
 translations.merger.title: "Slå sammen oversettelser (Domene: {{domain}})"
 translations.merger.column.language: Språk
 translations.merger.items: elementer

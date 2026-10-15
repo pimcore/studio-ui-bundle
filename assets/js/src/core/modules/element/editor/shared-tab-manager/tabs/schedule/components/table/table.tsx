@@ -79,10 +79,12 @@ export const Table = ({ data }: { data: Schedule[] }): React.JSX.Element => {
             justify='center'
           >
             <IconButton
+              aria-label={ t('delete') }
               icon={ { value: 'trash' } }
               onClick={ (): void => {
                 removeSchedule(info.row.original)
               } }
+              tooltip={ { title: t('delete') } }
               type="link"
             />
           </Flex>

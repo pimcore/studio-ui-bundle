@@ -49,3 +49,20 @@ export const Outlined = {
     type: 'default'
   }
 }
+
+// the tooltip names the action and appears after a short delay (actionTooltipDelay)
+export const WithTooltip = {
+  args: {
+    ..._default.args,
+    'aria-label': 'Delete',
+    tooltip: { title: 'Delete' }
+  }
+}
+
+// without a tooltip, a passed text is used as tooltip and accessible label instead of being rendered
+export const WithTextLabel = {
+  args: {
+    ..._default.args,
+    children: 'Delete'
+  }
+}

@@ -108,10 +108,12 @@ export const GridConfigList = ({ columns }: GridConfigListProps): React.JSX.Elem
           <Space size='mini'>
             { getLanguageSelection(uniqueId, column) }
             <IconButton
+              aria-label={ t('remove') }
               icon={ { value: 'trash' } }
               onClick={ () => { onRemoveColumn(uniqueId) } }
               size='small'
               theme='secondary'
+              tooltip={ { title: t('remove') } }
             />
           </Space>
           )

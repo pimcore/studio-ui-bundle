@@ -8,10 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { useOptionalElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { useElementRefresh } from '@sdk/modules/element'
 import { useLayoutSelection } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/use-layout-selection'
+import { WorkflowLayoutOverrideContext } from '@Pimcore/modules/data-object/editor/toolbar/context-menu/provider/workflow-layout-override-context'
 import { type WorkflowActionSubject } from '../types/workflow-types'
 import { WorkflowActionSubjectContext } from './workflow-provider'
 
@@ -24,12 +25,13 @@ interface EditorWorkflowSubjectBridgeProps {
  * `WorkFlowProvider` is used inside an editor and no explicit `subject` is passed. Isolates the
  * editor-only dependencies (element context, element refresh, data-object layout reset) so the shared
  * submit/modal flow stays element-editor-agnostic. On success it refreshes the element and, for a
- * data-object, resets the current layout — the exact behaviour the toolbars had before the refactor.
+ * data-object, switches to the action's configured object layout or otherwise resets the current layout.
  */
 export const EditorWorkflowSubjectBridge = ({ children }: EditorWorkflowSubjectBridgeProps): React.JSX.Element => {
   const element = useOptionalElementContext()
   const { refreshElement } = useElementRefresh(element?.elementType ?? 'asset')
   const { setCurrentLayout } = useLayoutSelection()
+  const setWorkflowLayoutOverride = useContext(WorkflowLayoutOverrideContext)
 
   const subject = useMemo<WorkflowActionSubject | null>(() => {
     if (element === null) {
@@ -39,14 +41,17 @@ export const EditorWorkflowSubjectBridge = ({ children }: EditorWorkflowSubjectB
     return {
       elementId: element.id,
       elementType: element.elementType,
-      onApplied: () => {
+      onApplied: (action) => {
         if (element.elementType === 'data-object') {
-          setCurrentLayout(null)
+          // switch to the custom layout configured on the transition, otherwise reset to the default one;
+          // the override keeps it once the refresh changes the derived default layout (new place)
+          setWorkflowLayoutOverride(action.objectLayout ?? null)
+          setCurrentLayout(action.objectLayout ?? null)
         }
         refreshElement(element.id)
       }
     }
-  }, [element, refreshElement, setCurrentLayout])
+  }, [element, refreshElement, setCurrentLayout, setWorkflowLayoutOverride])
 
   return (
     <WorkflowActionSubjectContext.Provider value={ subject }>

@@ -16,6 +16,7 @@ import { useStyles } from './tree-list.styles'
 import { Skeleton } from './../skeleton/skeleton'
 import { useElementTreeNode } from '../hooks/use-element-tree-node'
 import { TreeListNode } from './tree-list-node'
+import { useRecentlyAddedIds } from '../hooks/use-recently-added-ids'
 
 interface TreeListProps {
   node: TreeNodeProps
@@ -27,7 +28,11 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
   const { token } = useToken()
   const { styles } = useStyles()
   const { renderFilter: RenderFilter, renderPager: RenderPager } = useContext(TreeContext)
-  const { isLoading, isFetching, getChildren, total } = useElementTreeNode(node.id)
+  const { isLoading, isFetching, getChildren, total, childrenIds: loadedChildrenIds, page, searchTerm } = useElementTreeNode(node.id)
+  const recentlyAddedIds = useRecentlyAddedIds(loadedChildrenIds ?? [], {
+    isLoading: isLoading === true,
+    listKey: `${page}|${searchTerm ?? ''}`
+  })
 
   if (isLoading === true) {
     return (
@@ -59,6 +64,7 @@ export const TreeList = ({ node }: TreeListProps): React.JSX.Element => {
       >
         {childrenIds.map((childId) => (
           <TreeListNode
+            isRecentlyAdded={ recentlyAddedIds.has(childId) }
             key={ childId }
             level={ node.level + 1 }
             nodeId={ childId }

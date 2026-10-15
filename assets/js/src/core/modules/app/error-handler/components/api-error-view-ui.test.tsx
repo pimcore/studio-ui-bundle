@@ -13,8 +13,9 @@ import { render } from '@testing-library/react'
 import { ApiErrorViewUI } from '@Pimcore/modules/app/error-handler/components/api-error-view-ui'
 import ApiError from '@Pimcore/modules/app/error-handler/classes/api-error'
 import { ErrorKeyTypes } from '@Pimcore/modules/app/error-handler/constants/errorTypes'
+import type { ApiErrorData } from '@Pimcore/modules/app/error-handler/types'
 
-const t = jest.fn((key: string) => `<b>${key}</b>`)
+const t = jest.fn((key: string, params?: Record<string, unknown>) => `<b>${key}${params === undefined ? '' : ':' + JSON.stringify(params)}</b>`)
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t })
@@ -60,6 +61,7 @@ describe('ApiErrorViewUI', () => {
   it('renders a translated error key as sanitized HTML', () => {
     const { container } = render(<ApiErrorViewUI errorContent={ { errorKey: 'error_permission_denied' } } />)
 
+    expect(t).toHaveBeenCalledWith('error.error_permission_denied', undefined)
     expect(container.querySelector('b')?.textContent).toBe('error.error_permission_denied')
   })
 
@@ -74,7 +76,7 @@ describe('ApiErrorViewUI', () => {
     const rows = container.querySelectorAll('li')
 
     expect(rows).toHaveLength(11)
-    expect(rows[10].textContent).toBe('<b>validation.and_more</b>')
+    expect(rows[10].textContent).toBe('<b>validation.and_more:{"n":3}</b>')
     expect(t).toHaveBeenCalledWith('validation.and_more', { n: 3 })
   })
 
@@ -102,5 +104,13 @@ describe('ApiErrorViewUI', () => {
 
     expect(emit).toHaveBeenCalledTimes(1)
     expect(emit).toHaveBeenCalledWith('missingKey', ['de'], 'translation', 'validation.x', 'validation.x')
+  })
+
+  it('translates a parse error with the HTTP status as interpolation value', () => {
+    const content = new ApiError({ status: 'PARSING_ERROR', originalStatus: 502, data: '<html></html>' } as unknown as ApiErrorData).getContent()
+    const { container } = render(<ApiErrorViewUI errorContent={ content } />)
+
+    expect(t).toHaveBeenCalledWith('error.error_response_not_json_with_status', { status: 502 })
+    expect(container.querySelector('b')?.textContent).toBe('error.error_response_not_json_with_status:{"status":502}')
   })
 })

@@ -13,11 +13,15 @@ import React, { createContext, type ReactNode, useContext, useMemo, useState } f
 import { type RowSelectionState } from '@tanstack/react-table'
 import { type RecycleBin } from '../recycle-bin-api-slice.gen'
 
+export type RecycleBinAction = 'restore' | 'delete'
+
 export interface SelectedItemsContext {
   selectedRows: RowSelectionState
   selectedRowsTypes: Record<string, string>
   setSelectedRows: (newState: RowSelectionState, pageItems: RecycleBin[]) => void
   resetSelectedRows: () => void
+  loadingIds: Record<RecycleBinAction, number[]>
+  setLoadingIds: (action: RecycleBinAction, ids: number[], isLoading: boolean) => void
 }
 
 const SelectedItemsContext = createContext<SelectedItemsContext | undefined>(undefined)
@@ -29,6 +33,7 @@ interface SelectedRowsProviderProps {
 export const SelectedRowsProvider = ({ children }: SelectedRowsProviderProps): React.JSX.Element => {
   const [selectedRows, setSelectedRows] = useState<RowSelectionState>({})
   const [selectedRowsTypes, setSelectedRowsTypes] = useState<Record<string, string>>({})
+  const [loadingIds, setLoadingIds] = useState<Record<RecycleBinAction, number[]>>({ restore: [], delete: [] })
 
   const updateSelectedRows = (newState: RowSelectionState, pageItems: RecycleBin[]): void => {
     const addedIds = Object.keys(newState).filter((id) => isUndefined(selectedRows[id]))
@@ -59,12 +64,23 @@ export const SelectedRowsProvider = ({ children }: SelectedRowsProviderProps): R
     setSelectedRowsTypes({})
   }
 
+  const updateLoadingIds = (action: RecycleBinAction, ids: number[], isLoading: boolean): void => {
+    setLoadingIds((prev) => ({
+      ...prev,
+      [action]: isLoading
+        ? [...prev[action], ...ids]
+        : prev[action].filter((id) => !ids.includes(id))
+    }))
+  }
+
   const contextValue = useMemo(() => ({
     selectedRows,
     selectedRowsTypes,
     setSelectedRows: updateSelectedRows,
-    resetSelectedRows
-  }), [selectedRows, selectedRowsTypes])
+    resetSelectedRows,
+    loadingIds,
+    setLoadingIds: updateLoadingIds
+  }), [selectedRows, selectedRowsTypes, loadingIds])
 
   return (
     <SelectedItemsContext.Provider value={ contextValue }>

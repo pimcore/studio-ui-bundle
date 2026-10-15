@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isUndefined } from 'lodash'
 import { useAppDispatch, useAppSelector } from '@sdk/app'
 import {
   api,
@@ -195,7 +196,7 @@ export const useUserManagementHelper = (): UseUserReturn => {
       updateUser
     }))
 
-    if (user.password === undefined) {
+    if (isUndefined(user.password) || !isUndefined(error)) { // no password change after a rejected save
       await handleNotification(t('user-management.save-user.success'), error)
     } else {
       const { error: passwordError }: any = await dispatch(api.endpoints.userUpdatePasswordById.initiate({
@@ -213,13 +214,12 @@ export const useUserManagementHelper = (): UseUserReturn => {
       void refreshPerspectives()
     }
 
-    const userDraft: UserDraft = {
-      ...data,
-      modified: false,
-      changes: {},
-      modifiedCells: {}
+    // a failed update has no saved user to apply; upserting {...undefined} would add an entity without id
+    if (isUndefined(error) && !isUndefined(data)) {
+      const userDraft: UserDraft = { ...data, modified: false, changes: {}, modifiedCells: {} }
+      dispatch(userUpdated(userDraft))
     }
-    dispatch(userUpdated(userDraft))
+
     return data
   }
 

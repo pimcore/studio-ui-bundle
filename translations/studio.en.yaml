@@ -19,6 +19,8 @@ error.error_invalid_argument: Invalid argument
 error.error_widget_name_missing: Widget name have to be provided
 error.error_widget_name_invalid: Widget name is invalid (only alphanumeric characters, underscores and spaces are allowed, must be at least 3 characters long and less than 80 long)
 error.error_validation_failed: Validation failed
+error.error_response_not_json: The server returned an unexpected response that is not valid JSON.
+error.error_response_not_json_with_status: "The server returned an unexpected response that is not valid JSON (HTTP {{status}})."
 error.error_validation.email_failed: Please enter a valid email address
 error.error_element_not_found: Element not found
 error.error_document_language_not_set: The document has no language property set
@@ -108,6 +110,13 @@ asset.upload.overwrite: Overwrite
 asset.upload.keep-both: Keep both
 asset.upload.skip: Skip
 asset.upload.apply-to-all: Apply to all
+asset.upload.files-exist.title: 'Files already exist'
+asset.upload.files-exist.message: '{{total}} of the selected files already exist in this folder. What do you want to do with them?'
+asset.upload.files-exist.more: 'and {{hidden}} more'
+asset.upload.review-each: 'Review each'
+asset.upload.skip-all: 'Skip all'
+asset.upload.keep-both-all: 'Keep both for all'
+asset.upload.overwrite-all: 'Overwrite all'
 asset.upload.checking-duplicate-file-names: "Checking for duplicate file names ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Creating folders
 asset.upload.folder-drop.creating-folders-hint: Please wait while the folder structure is being created…
@@ -357,6 +366,7 @@ notification.action-list.completed-actions: Completed actions
 aria.notification.action-list.toggle-collapse: Toggle list of actions
 aria.notification.action-list.cancel-all: Cancel all currently running action
 aria.notification.action-list.cancel: Cancel action
+aria.stack-list.drag-handle: Drag to reorder
 asset.image.editor.zoom.reset: Reset
 aria.asset.image.editor.zoom.reset: Reset zoom
 aria.asset.image.editor.zoom.zoom-in: Zoom in
@@ -523,6 +533,8 @@ version.category.title.meta: Meta Data
 version.category.title.properties: Properties
 version.changed-attributes: "Changed attributes: {{attributes}}"
 aria.version.delete: Delete version
+aria.notes-and-events.delete: Delete note
+aria.card.close: Close
 aria.version.expand: Expand version
 clear-all: Clear all
 empty: Empty
@@ -658,6 +670,54 @@ website-settings.columns.site: Site
 website-settings.columns.actions: Actions
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Mandatory fields missing
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Name and type are mandatory fields and need to be filled out.
+mcp-servers.rail.new-server: New server
+mcp-servers.placeholder: Select a server to view or edit its configuration.
+mcp-servers.tabs.empty: Select a server to view or edit its configuration.
+mcp-servers.tabs.new-server: New server
+mcp-servers.read-only-notice: Server definitions are file-managed on this environment and cannot be edited here.
+mcp-servers.save-success: MCP server saved
+mcp-servers.access.users-count: "Users: {{number}}"
+mcp-servers.access.roles-count: "Roles: {{number}}"
+mcp-servers.access.global-extra: any authenticated user
+mcp-servers.access.nobody: Nobody yet
+mcp-servers.badge.read: Read
+mcp-servers.badge.write: Write
+mcp-servers.editor.create-title: New MCP server
+mcp-servers.editor.edit-title: Edit MCP server
+mcp-servers.editor.general: General
+mcp-servers.editor.permissions: Permissions
+mcp-servers.editor.identity: Identity
+mcp-servers.editor.name: Name
+mcp-servers.editor.name-required: Please provide a name.
+mcp-servers.editor.url-slug: URL slug
+mcp-servers.editor.url-slug-required: Please provide a URL slug.
+mcp-servers.editor.url-slug-pattern: Only lowercase letters, numbers and hyphens are allowed.
+mcp-servers.editor.description: Description
+mcp-servers.editor.enabled: Active
+mcp-servers.editor.tools: Tools
+mcp-servers.editor.tools-placeholder: Select the tools this server exposes
+mcp-servers.editor.scopes: Advertised scopes
+mcp-servers.editor.scopes-empty: No scopes — select tools to derive the required scopes.
+mcp-servers.editor.url: Server URL
+mcp-servers.editor.copy-url: Copy server URL
+mcp-servers.editor.connect-hint: Point your MCP client at this URL and authenticate with your Pimcore account.
+mcp-servers.sharing.title: Sharing
+mcp-servers.sharing.share-globally: Share globally
+mcp-servers.sharing.share-globally-tooltip: Any authenticated user gets Config Read and MCP Server Access (not Config Edit)
+mcp-servers.sharing.users: Users
+mcp-servers.sharing.roles: Roles
+mcp-servers.sharing.add-user: Add a user…
+mcp-servers.sharing.add-role: Add a role…
+mcp-servers.sharing.name: Name
+mcp-servers.sharing.config-read: Config Read
+mcp-servers.sharing.config-edit: Config Edit
+mcp-servers.sharing.mcp-access: MCP Server Access
+mcp-servers.sharing.level: Access level
+mcp-servers.sharing.read: Read
+mcp-servers.sharing.write: Can edit
+mcp-servers.sharing.who-can-access: Who can access
+mcp-servers.delete.title: Delete MCP server
+mcp-servers.delete.confirm: Are you sure you want to delete "{{name}}"?
 document-types.new: New
 document-types.columns.name: Name
 document-types.columns.group: Group
@@ -783,6 +843,7 @@ tags.apply-tags-to-children: Apply tags to children
 tags.remove-and-apply-tags-to-children: Remove and apply tags to children
 tags.columns.path: Path
 tags.columns.actions: Remove
+tags.actions.delete: Remove tag
 csv-separated-options: CSV separated options
 csv-separated-options-info: The list of available options can be specified as comma-separated list, as single-column values or mixed. For the single-column way, the key will also be used as the value.
 add: Add
@@ -1188,7 +1249,9 @@ jobs.zip-upload-job.title: Upload ZIP
 jobs.zip-upload-job.step1.title: Extracting ZIP
 jobs.zip-upload-job.step2.title: Creating assets
 jobs.download-csv-job.title: CSV export
+jobs.download-csv-job.title-with-context: "CSV export ({{name}})"
 jobs.download-xlsx-job.title: XLSX export
+jobs.download-xlsx-job.title-with-context: "XLSX export ({{name}})"
 jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Batch edit
 batch-edit.no-content: There are no added columns yet
@@ -1257,6 +1320,7 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" has been copi
 element.tree.paste: Paste
 element.tree.paste-as-child: Paste as child
 element.tree.paste-as-child-recursive: Paste as child (recursive)
+element.tree.open-no-permission: "You don't have permission to open this element."
 element.tree.paste-recursive-updating-references: Paste recursive, updating references
 element.tree.paste-only-contents: Paste only contents here
 element.tree.cut: Cut
@@ -1308,6 +1372,8 @@ element.delete.batch.show-paths: Show items
 element.delete.batch.dependencies-warning.confirmed_one: 'Please note: This item has dependencies.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Please note: These items have dependencies.'
 element.open: Open
+element.state: State
+element.state.unpublished: Unpublished
 element.toolbar.copy-id: Copy ID
 element.toolbar.copy-full-path-to-clipboard: Copy full path
 element.toolbar.copy-deep-link-to-clipboard: Copy deep link
@@ -1347,6 +1413,9 @@ success: Success
 no-value-set: No value set
 set-to-null: Empty (set to null)
 remove: Remove
+move-up: Move up
+move-down: Move down
+translate: Translate
 delete: Delete
 clone: Clone
 jobs.clone-job.step2.title: Updating references
@@ -1641,6 +1710,7 @@ navigation.appearance-branding: Appearance & Branding
 navigation.reporting: Reporting
 navigation.system: System
 navigation.website-settings: Website Settings
+navigation.mcp-servers: MCP Servers
 navigation.document-types: Document Types
 navigation.cache: Cache
 navigation.cache.clear-cache: Clear Cache
@@ -1729,6 +1799,7 @@ widget.predefined-properties: Predefined Properties
 widget.search-replace-assignments: Search & Replace Assignments
 widget.document-types: Document Types
 widget.website-settings: Website Settings
+widget.mcp-servers: MCP Servers
 widget.role-management: Roles
 widget.user-management: Users
 widget.class-definitions: Classes
@@ -2931,6 +3002,7 @@ translations.merger.state.reverted: Reverted
 translations.merger.state.pending: Pending
 translations.merger.apply-all: Apply all
 translations.merger.revert-all: Revert all
+translations.merger.revert: Revert
 translations.merger.title: "Merge Translations (Domain: {{domain}})"
 translations.merger.column.language: Language
 translations.merger.items: items
