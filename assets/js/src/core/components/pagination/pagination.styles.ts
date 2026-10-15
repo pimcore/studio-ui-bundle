@@ -14,9 +14,11 @@ export const useStyles = createStyles(({ css, token }) => {
   return {
     // First, previous, next and last, with the total in front of them.
     controls: css`
+      /* The icon with a small margin on each side; the controls' gap keeps them apart. */
       .pagination-control {
         padding: 0;
-        height: 24px;
+        width: ${token.controlHeightSM}px;
+        height: ${token.controlHeightSM}px;
       }
 
       /* Antd's list gave its previous and next buttons the text colour; outside it, an icon

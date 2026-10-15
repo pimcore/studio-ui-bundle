@@ -133,6 +133,7 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
       <Flex
         align='center'
         className={ styles.controls }
+        gap='mini'
       >
         {totalText}
         {pageControl('first', 'chevron-left-pipe', t('pagination.first-page'), 1, canGoBack)}
