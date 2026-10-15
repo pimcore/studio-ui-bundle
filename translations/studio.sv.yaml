@@ -85,6 +85,13 @@ asset.upload.overwrite: Skriv över
 asset.upload.keep-both: Behåll båda
 asset.upload.skip: Hoppa över
 asset.upload.apply-to-all: Tillämpa på alla
+asset.upload.files-exist.title: 'Filerna finns redan'
+asset.upload.files-exist.message: '{{total}} av de valda filerna finns redan i den här mappen. Vad vill du göra med dem?'
+asset.upload.files-exist.more: 'och {{hidden}} till'
+asset.upload.review-each: 'Granska en i taget'
+asset.upload.skip-all: 'Hoppa över alla'
+asset.upload.keep-both-all: 'Behåll båda för alla'
+asset.upload.overwrite-all: 'Skriv över alla'
 asset.upload.checking-duplicate-file-names: "Kontrollerar dubbletter av filnamn ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Skapar mappar
 asset.upload.folder-drop.creating-folders-hint: Vänta medan mappstrukturen skapas…

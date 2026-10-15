@@ -85,6 +85,13 @@ asset.upload.overwrite: Überschreiben
 asset.upload.keep-both: Beide behalten
 asset.upload.skip: Überspringen
 asset.upload.apply-to-all: Auf alle anwenden
+asset.upload.files-exist.title: 'Dateien existieren bereits'
+asset.upload.files-exist.message: '{{total}} der ausgewählten Dateien existieren bereits in diesem Ordner. Wie möchten Sie damit verfahren?'
+asset.upload.files-exist.more: 'und {{hidden}} weitere'
+asset.upload.review-each: 'Einzeln prüfen'
+asset.upload.skip-all: 'Alle überspringen'
+asset.upload.keep-both-all: 'Für alle beide behalten'
+asset.upload.overwrite-all: 'Alle überschreiben'
 asset.upload.checking-duplicate-file-names: "Dateinamen werden auf Duplikate geprüft ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Ordner werden erstellt
 asset.upload.folder-drop.creating-folders-hint: Bitte warten Sie, während die Ordnerstruktur erstellt wird…

@@ -47,7 +47,7 @@ interface UseUploadConflictHandlerResult {
 }
 
 export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHandlerProps): UseUploadConflictHandlerResult => {
-  const { checkFilesExist, askUserOverwrite, resetApplyToAll } = useUploadConflictModal()
+  const { checkFilesExist, askUserOverwrite, askUserOverwriteAll, resetApplyToAll } = useUploadConflictModal()
 
   const replaceFilesRef = useRef<Map<string, number>>(new Map())
   const batchCheckPromiseRef = useRef<Promise<boolean> | null>(null)
@@ -97,8 +97,15 @@ export const useUploadConflictHandler = ({ targetFolderId }: UseUploadConflictHa
           }
         })
 
-        for (const { file: f, id } of checkResults.filter(r => r.exists && !isNil(r.id))) {
-          const action = await askUserOverwrite(f.name)
+        const existingFiles = checkResults.filter(r => r.exists && !isNil(r.id))
+
+        // One prompt for the whole batch; a single conflict keeps its own prompt.
+        const batchAction = existingFiles.length > 1
+          ? await askUserOverwriteAll(existingFiles.map(({ file: f }) => f.name))
+          : null
+
+        for (const { file: f, id } of existingFiles) {
+          const action = batchAction ?? await askUserOverwrite(f.name)
 
           if (action === UploadConflictAction.SKIP) {
             skippedFilesRef.current.add(f.uid)
