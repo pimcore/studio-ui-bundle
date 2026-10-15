@@ -19,6 +19,8 @@ error.error_invalid_argument: Invalid argument
 error.error_widget_name_missing: Widget name have to be provided
 error.error_widget_name_invalid: Widget name is invalid (only alphanumeric characters, underscores and spaces are allowed, must be at least 3 characters long and less than 80 long)
 error.error_validation_failed: Validation failed
+error.error_response_not_json: The server returned an unexpected response that is not valid JSON.
+error.error_response_not_json_with_status: "The server returned an unexpected response that is not valid JSON (HTTP {{status}})."
 error.error_validation.email_failed: Please enter a valid email address
 error.error_element_not_found: Element not found
 error.error_document_language_not_set: The document has no language property set
