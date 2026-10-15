@@ -69,8 +69,18 @@ describe('sanitiseMediaQuery', () => {
     expect(sanitiseMediaQuery('(max-width: 375px)\\`')).toBe('(max-width: 375px)')
   })
 
-  it('collapses newlines and tabs rather than keeping them in a yaml key', () => {
-    expect(sanitiseMediaQuery('(max-width:\n375px)')).toBe('(max-width:375px)')
+  it('keeps a calc() value intact, including its multiplication operator', () => {
+    expect(sanitiseMediaQuery('(min-width: calc(200px * 2))'))
+      .toBe('(min-width: calc(200px * 2))')
+  })
+
+  it('collapses a newline to a space rather than keeping it in a yaml key', () => {
+    expect(sanitiseMediaQuery('(max-width:\n375px)')).toBe('(max-width: 375px)')
+  })
+
+  it('collapses a tab to a space instead of welding two tokens together', () => {
+    expect(sanitiseMediaQuery('screen\tand (min-width: 768px)'))
+      .toBe('screen and (min-width: 768px)')
   })
 
   /**
