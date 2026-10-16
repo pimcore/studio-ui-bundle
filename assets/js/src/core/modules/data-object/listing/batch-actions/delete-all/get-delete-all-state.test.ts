@@ -9,14 +9,13 @@
  */
 
 import { type ElementPermissions } from '@Pimcore/modules/element/permissions/permission-helper'
-import { canDeleteAllChildren, getDeleteAllState, type DeleteAllChild, type DeleteAllFolder } from './get-delete-all-state'
+import { canDeleteAllChildren, isDeleteAllHidden, type DeleteAllChild, type DeleteAllFolder } from './get-delete-all-state'
 
 const permissions = (canDelete: boolean): ElementPermissions => ({ delete: canDelete }) as unknown as ElementPermissions
 
 const folder = (overrides: Partial<DeleteAllFolder> = {}): DeleteAllFolder => ({
   id: 42,
   type: 'folder',
-  hasChildren: true,
   ...overrides
 })
 
@@ -27,29 +26,31 @@ const child = (overrides: Partial<DeleteAllChild> = {}): DeleteAllChild => ({
   ...overrides
 })
 
-describe('getDeleteAllState', () => {
-  it('offers an enabled action for a folder with children and no selection', () => {
-    expect(getDeleteAllState(folder(), false)).toEqual({ hidden: false, disabled: false })
+describe('isDeleteAllHidden', () => {
+  it('offers the action for a folder without selection', () => {
+    expect(isDeleteAllHidden(folder(), false)).toBe(false)
+  })
+
+  it('offers the action regardless of the stale hasChildren flag of the draft', () => {
+    // Adding the first object to an open empty folder does not update its draft
+    const staleDraft: DeleteAllFolder & { hasChildren: boolean } = { ...folder(), hasChildren: false }
+    expect(isDeleteAllHidden(staleDraft, false)).toBe(false)
   })
 
   it('is hidden while rows are selected', () => {
-    expect(getDeleteAllState(folder(), true).hidden).toBe(true)
+    expect(isDeleteAllHidden(folder(), true)).toBe(true)
   })
 
   it('is hidden when the listing does not belong to a folder', () => {
-    expect(getDeleteAllState(folder({ type: 'object' }), false).hidden).toBe(true)
+    expect(isDeleteAllHidden(folder({ type: 'object' }), false)).toBe(true)
   })
 
   it('is hidden for the root folder', () => {
-    expect(getDeleteAllState(folder({ id: 1 }), false).hidden).toBe(true)
+    expect(isDeleteAllHidden(folder({ id: 1 }), false)).toBe(true)
   })
 
   it('is hidden while the folder is not loaded yet', () => {
-    expect(getDeleteAllState(undefined, false)).toEqual({ hidden: true, disabled: true })
-  })
-
-  it('is disabled for an empty folder', () => {
-    expect(getDeleteAllState(folder({ hasChildren: false }), false).disabled).toBe(true)
+    expect(isDeleteAllHidden(undefined, false)).toBe(true)
   })
 })
 

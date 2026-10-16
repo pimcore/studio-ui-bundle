@@ -20,7 +20,7 @@ import { useBatchDelete } from '@Pimcore/modules/data-object/actions/batch-delet
 import { api as dataObjectApi } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { useDataObjectDraft } from '@Pimcore/modules/data-object/hooks/use-data-object-draft'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
-import { canDeleteAllChildren, type DeleteAllChild, getDeleteAllState } from './get-delete-all-state'
+import { canDeleteAllChildren, type DeleteAllChild, isDeleteAllHidden } from './get-delete-all-state'
 
 const CHILDREN_PAGE_SIZE = 1000
 
@@ -39,7 +39,7 @@ export const useDeleteAllMenuItem = (hasSelectedItems: boolean): ItemType => {
   const { dataObject } = useDataObjectDraft(id)
   const { confirmBatchDelete } = useBatchDelete()
 
-  const { hidden, disabled } = getDeleteAllState(dataObject, hasSelectedItems)
+  const hidden = isDeleteAllHidden(dataObject, hasSelectedItems)
 
   // Loaded on click and not taken from the grid: the grid is paginated, may be filtered and only
   // shows one class, while the folder can contain items of any class and sub folders.
@@ -83,7 +83,6 @@ export const useDeleteAllMenuItem = (hasSelectedItems: boolean): ItemType => {
   return {
     key: 'delete-all',
     hidden,
-    disabled,
     label: t('listing.actions.delete-all'),
     icon: <Icon value={ 'trash' } />,
     onClick: async () => {
