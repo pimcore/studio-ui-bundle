@@ -586,6 +586,7 @@ listing.non-selected.actions: Bruk på alle
 listing.actions.zip-download: ZIP-nedlasting
 listing.actions.delete: Slett
 listing.actions.delete-all: Slett alle
+listing.actions.delete-all.not-allowed: "Mappen er låst, eller du har ikke tillatelse til å slette den."
 listing.actions.export: Eksporter
 reports.csv-export-modal.title: CSV-eksportalternativer
 reports.csv-export-modal.include-headers: Inkluder kolonneoverskrifter

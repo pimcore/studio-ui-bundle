@@ -586,6 +586,7 @@ listing.non-selected.actions: Aplicar a todos
 listing.actions.zip-download: Descarga ZIP
 listing.actions.delete: Eliminar
 listing.actions.delete-all: Eliminar todo
+listing.actions.delete-all.not-allowed: "La carpeta está bloqueada o no tienes permiso para eliminarla."
 listing.actions.export: Exportar
 reports.csv-export-modal.title: Opciones de exportación CSV
 reports.csv-export-modal.include-headers: Incluir encabezados de columna
