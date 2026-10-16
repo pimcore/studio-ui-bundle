@@ -358,6 +358,7 @@ grid.filter.to: Do
 grid.filter.is: Jest
 grid.filter.less: Mniej niż
 grid.filter.more: Więcej niż
+grid.filter.string.placeholder: Wyszukaj lub wklej listę z jedną wartością na wiersz, aby znaleźć dokładnie jedno z nich
 grid.filter.column: "Filtruj {{column}}"
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
