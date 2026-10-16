@@ -28,6 +28,7 @@ import { useAdminSettingsLoader } from './loader/admin-settings/loader'
 import { selectCurrentUser } from '@Pimcore/modules/auth/user/user-slice'
 import { usePerspectives } from '@Pimcore/modules/perspectives/hooks/use-perspectives'
 import { App } from 'antd'
+import { withDraggableModals } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { modalApi } from '@Pimcore/app/public-api/modal/modal-api'
 import { loadReportsMenuItems } from '@Pimcore/modules/reports/utils/reports-loader'
 import { type AppLoaderRegistry } from './services/app-loader-registry'
@@ -85,7 +86,7 @@ export const AppLoader = (props: IAppLoaderProps): React.JSX.Element => {
   // Register the modal instance to allow centralized error message display throughout the project
   ErrorModalService.setModalInstance(modal)
   // Register the modal instance for iframe communication
-  modalApi.setModalInstance(studioModal)
+  modalApi.setModalInstance(withDraggableModals(studioModal))
 
   const { isAuthenticated } = useIsAuthenticated()
 
