@@ -19,6 +19,25 @@ interface IUseNavOpenStateReturn {
   cancelHoverPreview: () => void
 }
 
+// indexes can be multi-digit, so the sibling prefix has to be cut at the last separator
+const getSiblingPrefix = (key: string): string => key.substring(0, key.lastIndexOf('-') + 1)
+
+const getHoverPreviewOpenKeys = (currentOpenKeys: string[], index: string, hasChildren: boolean): string[] => {
+  // already open: keep the deeper levels the user opened by click
+  if (hasChildren && currentOpenKeys.includes(index)) {
+    return currentOpenKeys
+  }
+
+  const siblingPrefix = getSiblingPrefix(index)
+  const remainingOpenKeys = currentOpenKeys.filter(k => !k.startsWith(siblingPrefix))
+
+  if (hasChildren) {
+    return [...remainingOpenKeys, index]
+  }
+
+  return remainingOpenKeys.length === currentOpenKeys.length ? currentOpenKeys : remainingOpenKeys
+}
+
 export const useNavOpenState = (isMenuOpen: boolean): IUseNavOpenStateReturn => {
   const [openKeys, setOpenKeys] = useState<string[]>([])
   const hoverPreviewTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -34,9 +53,6 @@ export const useNavOpenState = (isMenuOpen: boolean): IUseNavOpenStateReturn => 
       hoverPreviewTimer.current = null
     }
   }
-
-  // indexes can be multi-digit, so the sibling prefix has to be cut at the last separator
-  const getSiblingPrefix = (key: string): string => key.substring(0, key.lastIndexOf('-') + 1)
 
   const handleOpenState = (key: string): void => {
     // a click lands inside the preview delay of the pointer enter that preceded it
@@ -54,21 +70,7 @@ export const useNavOpenState = (isMenuOpen: boolean): IUseNavOpenStateReturn => 
     cancelHoverPreview()
 
     hoverPreviewTimer.current = setTimeout(() => {
-      setOpenKeys((currentOpenKeys) => {
-        // already open: keep the deeper levels the user opened by click
-        if (hasChildren && currentOpenKeys.includes(index)) {
-          return currentOpenKeys
-        }
-
-        const siblingPrefix = getSiblingPrefix(index)
-        const remainingOpenKeys = currentOpenKeys.filter(k => !k.startsWith(siblingPrefix))
-
-        if (hasChildren) {
-          return [...remainingOpenKeys, index]
-        }
-
-        return remainingOpenKeys.length === currentOpenKeys.length ? currentOpenKeys : remainingOpenKeys
-      })
+      setOpenKeys((currentOpenKeys) => getHoverPreviewOpenKeys(currentOpenKeys, index, hasChildren))
     }, HOVER_PREVIEW_DELAY)
   }
 
