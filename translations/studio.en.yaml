@@ -588,7 +588,8 @@ listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download
 listing.actions.delete: Delete
 listing.actions.delete-all: Delete all
-listing.actions.delete-all.not-allowed: "The folder is locked or you are not allowed to delete it."
+listing.actions.delete-all.not-allowed: "Some items in this folder are locked or you are not allowed to delete them."
+listing.actions.delete-all.empty: "This folder contains no items to delete."
 listing.actions.export: Export
 reports.csv-export-modal.title: CSV Export Options
 reports.csv-export-modal.include-headers: Include column headers

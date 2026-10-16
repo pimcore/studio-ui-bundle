@@ -586,7 +586,8 @@ listing.non-selected.actions: Auf alle anwenden
 listing.actions.zip-download: ZIP-Download
 listing.actions.delete: Löschen
 listing.actions.delete-all: Alle löschen
-listing.actions.delete-all.not-allowed: "Der Ordner ist gesperrt oder Sie dürfen ihn nicht löschen."
+listing.actions.delete-all.not-allowed: "Einige Elemente in diesem Ordner sind gesperrt oder Sie dürfen sie nicht löschen."
+listing.actions.delete-all.empty: "Dieser Ordner enthält keine Elemente zum Löschen."
 listing.actions.export: Export
 reports.csv-export-modal.title: CSV-Exportoptionen
 reports.csv-export-modal.include-headers: Spaltenüberschriften einbeziehen

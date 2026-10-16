@@ -9,20 +9,26 @@
  */
 
 import { type ElementPermissions } from '@Pimcore/modules/element/permissions/permission-helper'
-import { getDeleteAllState, type DeleteAllTarget } from './get-delete-all-state'
+import { canDeleteAllChildren, getDeleteAllState, type DeleteAllChild, type DeleteAllFolder } from './get-delete-all-state'
 
 const permissions = (canDelete: boolean): ElementPermissions => ({ delete: canDelete }) as unknown as ElementPermissions
 
-const folder = (overrides: Partial<DeleteAllTarget> = {}): DeleteAllTarget => ({
+const folder = (overrides: Partial<DeleteAllFolder> = {}): DeleteAllFolder => ({
   id: 42,
   type: 'folder',
+  hasChildren: true,
+  ...overrides
+})
+
+const child = (overrides: Partial<DeleteAllChild> = {}): DeleteAllChild => ({
+  id: 100,
   permissions: permissions(true),
   isLocked: false,
   ...overrides
 })
 
 describe('getDeleteAllState', () => {
-  it('offers an enabled action for a deletable folder without selection', () => {
+  it('offers an enabled action for a folder with children and no selection', () => {
     expect(getDeleteAllState(folder(), false)).toEqual({ hidden: false, disabled: false })
   })
 
@@ -42,11 +48,25 @@ describe('getDeleteAllState', () => {
     expect(getDeleteAllState(undefined, false)).toEqual({ hidden: true, disabled: true })
   })
 
-  it('is disabled without delete permission', () => {
-    expect(getDeleteAllState(folder({ permissions: permissions(false) }), false).disabled).toBe(true)
+  it('is disabled for an empty folder', () => {
+    expect(getDeleteAllState(folder({ hasChildren: false }), false).disabled).toBe(true)
+  })
+})
+
+describe('canDeleteAllChildren', () => {
+  it('allows deleting when every child is deletable', () => {
+    expect(canDeleteAllChildren([child({ id: 1 }), child({ id: 2 })])).toBe(true)
   })
 
-  it('is disabled for a locked folder', () => {
-    expect(getDeleteAllState(folder({ isLocked: true }), false).disabled).toBe(true)
+  it('refuses when one child lacks the delete permission', () => {
+    expect(canDeleteAllChildren([child({ id: 1 }), child({ id: 2, permissions: permissions(false) })])).toBe(false)
+  })
+
+  it('refuses when one child is locked', () => {
+    expect(canDeleteAllChildren([child({ id: 1 }), child({ id: 2, isLocked: true })])).toBe(false)
+  })
+
+  it('refuses when the permissions of a child are unknown', () => {
+    expect(canDeleteAllChildren([child({ permissions: undefined })])).toBe(false)
   })
 })
