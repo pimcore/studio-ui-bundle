@@ -13,6 +13,7 @@ import { defineFilter } from '@Pimcore/components/filters'
 import { type IDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/dynamic-filter-provider'
 import { type DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
 import { DynamicTypeFieldFilterNumber } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/number/dynamic-type-field-filter-number'
+import { DynamicTypeFieldFilterDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/datetime/dynamic-type-field-filter-datetime'
 import { type NumberValue } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-number-component'
 import { DynamicTypeFieldFilterDate } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/date/dynamic-type-field-filter-date'
 import { type DateValue } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-date-component'
@@ -53,7 +54,7 @@ const buildColumnFilters = (
 
     if (dynType instanceof DynamicTypeFieldFilterNumber) {
       filterData = getNumberFieldFilterData(item.data as NumberValue)
-    } else if (dynType instanceof DynamicTypeFieldFilterDate) {
+    } else if (dynType instanceof DynamicTypeFieldFilterDate || dynType instanceof DynamicTypeFieldFilterDatetime) {
       filterData = getDateFieldFilterData(item.data as DateValue)
     } else {
       filterData = [defaultFilterData]
