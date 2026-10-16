@@ -87,6 +87,25 @@ describe('toDayJs — non-numeric inputs are unchanged', () => {
     expect(toDayJs(d, undefined, { respectTimezone: false, timezone: 'Europe/Vienna' })).toBe(d)
   })
 
+  // Bundles loaded via module federation may ship their own dayjs copy. Its objects pass
+  // `dayjs.isDayjs()` but lack the plugins (weekday, localeData, ...) antd's pickers call, which
+  // crashed the pricing rule date range condition with "t.weekday is not a function".
+  it('re-creates dayjs values of a foreign dayjs instance with the local one', () => {
+    let foreignDayjs: typeof dayjs = dayjs
+    jest.isolateModules(() => {
+      foreignDayjs = jest.requireActual('dayjs')
+    })
+    expect(foreignDayjs).not.toBe(dayjs)
+
+    const foreign = foreignDayjs('2024-01-15 13:30')
+    const result = toDayJs(foreign)
+
+    expect(result).not.toBe(foreign)
+    expect(result).toBeInstanceOf(dayjs)
+    expect(result?.valueOf()).toBe(foreign.valueOf())
+    expect(typeof result?.tz).toBe('function')
+  })
+
   it('parses strings with the given format and returns null for nullish', () => {
     expect(toDayJs('2024-01-15', 'YYYY-MM-DD')?.format('YYYY-MM-DD')).toBe('2024-01-15')
     expect(toDayJs(null)).toBeNull()
