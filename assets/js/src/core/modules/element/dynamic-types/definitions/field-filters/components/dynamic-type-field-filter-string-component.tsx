@@ -13,17 +13,29 @@ import { useTranslation } from 'react-i18next'
 import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter-abstract'
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { TextArea } from '@sdk/components'
+import { useMultiValueFilterSupport } from '../utils/multi-value-filter-support'
+import { DynamicTypeFieldFilterTextComponent } from './dynamic-type-field-filter-text-component'
 
 export interface DynamicTypeFieldFilterStringProps extends AbstractFieldFilterDefinition {}
 
 const MAX_ROWS = 8
 
 /**
- * A text filter that also takes a list: a single line is searched for as before, several lines
- * (e.g. a column pasted from a spreadsheet) match any of the values exactly. Enter applies the
- * filter, Shift+Enter starts a new line.
+ * The string filter: where the host supports lists it is a text filter that also takes a list,
+ * everywhere else it stays the single-line input it always was.
  */
 export const DynamicTypeFieldFilterStringComponent = (): React.JSX.Element => {
+  const supportsMultiValue = useMultiValueFilterSupport()
+
+  return supportsMultiValue ? <DynamicTypeFieldFilterMultiValueComponent /> : <DynamicTypeFieldFilterTextComponent />
+}
+
+/**
+ * A single line is searched for as before, several lines (e.g. a column pasted from a
+ * spreadsheet) match any of the values exactly. Enter applies the filter, Shift+Enter starts
+ * a new line.
+ */
+const DynamicTypeFieldFilterMultiValueComponent = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { data, setData, commit } = useDynamicFilter()
   const [_value, setValue] = useState<string>(typeof data === 'string' ? data : '')
