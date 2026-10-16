@@ -73,7 +73,9 @@ export const parseFilterDate = (dateStr: string | null): number | null => {
 
 export const toDayJs = (value?: unknown, format?: string, options?: ToDayJsOptions): Dayjs | null => {
   if (dayjs.isDayjs(value)) {
-    return value
+    // A dayjs object created by another bundle's dayjs copy (module federation) lacks the plugins
+    // antd's pickers rely on (e.g. weekday) - re-create it with the local, fully extended instance.
+    return value instanceof dayjs ? value : dayjs(value.valueOf())
   }
   if (typeof value === 'number') {
     if (options?.respectTimezone === false && isNonEmptyString(options.timezone)) {
