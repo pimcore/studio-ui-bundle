@@ -15,6 +15,8 @@ import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
 import { useZipDownload } from '@Pimcore/modules/asset/actions/zip-download/use-zip-download'
 import { useBatchDelete } from '@Pimcore/modules/asset/actions/batch-delete/use-batch-delete'
+import { useDeleteAllMenuItem } from '@Pimcore/modules/element/listing/batch-actions/delete-all/use-delete-all-menu-item'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { useRowSelectionOptional } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection-optional'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { BatchEditProvider } from './batch-edit-modal/batch-edit-provider'
@@ -25,6 +27,7 @@ import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-co
 
 export const BatchActions = (): React.JSX.Element => {
   const rowSelection = useRowSelectionOptional()
+  const deleteAllMenuItem = useDeleteAllMenuItem(elementTypes.asset, Object.keys(rowSelection?.selectedRows ?? {}).length > 0)
   const { id } = useElementContext()
   const { useDataQueryHelper } = useSettings()
   const { getArgs } = useDataQueryHelper()
@@ -98,7 +101,8 @@ export const BatchActions = (): React.JSX.Element => {
         label: t('listing.actions.delete'),
         icon: <Icon value={ 'trash' } />,
         onClick: handleBatchDeleteConfirm
-      }
+      },
+      deleteAllMenuItem
     ]
   }
 

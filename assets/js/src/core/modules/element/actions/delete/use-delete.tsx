@@ -37,7 +37,7 @@ import { useRecycleBin } from '@Pimcore/modules/recycle-bin/hooks/use-recycle-bi
 import { useTreeId } from '@Pimcore/components/element-tree/provider/tree-id-provider/use-tree-id'
 
 export interface UseDeleteHookReturn {
-  deleteElement: (id: number, label: string, parentId?: number, onFinish?: () => void) => void
+  deleteElement: (id: number, label: string, parentId?: number, onFinish?: () => void, isFolder?: boolean) => void
   /**
    * Deletes without the built-in confirmation modal, for callers that supply their own confirmation
    * (e.g. a bundle's popconfirm). Runs the same delete job and side effects as `deleteElement`.

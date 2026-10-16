@@ -585,6 +585,7 @@ listing.actions: Op selectie toepassen
 listing.non-selected.actions: Op alles toepassen
 listing.actions.zip-download: ZIP downloaden
 listing.actions.delete: Verwijderen
+listing.actions.delete-all: Alles verwijderen
 listing.actions.export: Exporteren
 reports.csv-export-modal.title: CSV-exportopties
 reports.csv-export-modal.include-headers: Kolomkoppen opnemen

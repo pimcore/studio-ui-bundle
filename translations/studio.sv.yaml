@@ -585,6 +585,7 @@ listing.actions: Tillämpa på val
 listing.non-selected.actions: Tillämpa på alla
 listing.actions.zip-download: ZIP-nedladdning
 listing.actions.delete: Ta bort
+listing.actions.delete-all: Ta bort alla
 listing.actions.export: Exportera
 reports.csv-export-modal.title: CSV-exportalternativ
 reports.csv-export-modal.include-headers: Inkludera kolumnrubriker

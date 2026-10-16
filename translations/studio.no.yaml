@@ -585,6 +585,7 @@ listing.actions: Bruk på utvalg
 listing.non-selected.actions: Bruk på alle
 listing.actions.zip-download: ZIP-nedlasting
 listing.actions.delete: Slett
+listing.actions.delete-all: Slett alle
 listing.actions.export: Eksporter
 reports.csv-export-modal.title: CSV-eksportalternativer
 reports.csv-export-modal.include-headers: Inkluder kolonneoverskrifter

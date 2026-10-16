@@ -585,6 +585,7 @@ listing.actions: Applica alla selezione
 listing.non-selected.actions: Applica a tutti
 listing.actions.zip-download: Download ZIP
 listing.actions.delete: Elimina
+listing.actions.delete-all: Elimina tutto
 listing.actions.export: Esporta
 reports.csv-export-modal.title: Opzioni esportazione CSV
 reports.csv-export-modal.include-headers: Includi intestazioni colonne
