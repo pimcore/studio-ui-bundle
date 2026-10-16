@@ -1,0 +1,2 @@
+/*! For license information please see 2472.f40725db.js.LICENSE.txt */
+"use strict";(self["chunk_pimcore_studio_ui_bundle "]=self["chunk_pimcore_studio_ui_bundle "]||[]).push([["2472"],{83371(e,i,l){l.r(i),l.d(i,{default:()=>t});var s=l(74848);l(47867);let t=e=>(0,s.jsx)("svg",{xmlns:"http://www.w3.org/2000/svg",width:"1em",height:"1em",viewBox:"0 0 640 480",...e,children:(0,s.jsxs)("g",{fillRule:"evenodd",strokeWidth:"1pt",children:[(0,s.jsx)("path",{fill:"#132c77",d:"M0 0h639.994v240.802H0z"}),(0,s.jsx)("path",{fill:"#c00011",d:"M0 240.802h639.994v239.215H0z"})]})})}}]);
