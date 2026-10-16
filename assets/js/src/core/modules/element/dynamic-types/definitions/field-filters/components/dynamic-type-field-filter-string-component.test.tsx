@@ -11,7 +11,12 @@
 // The SDK barrel and the text component pull in untranspiled ESM; the test only cares which
 // editor the string filter picks.
 jest.mock('@sdk/components', () => ({
-  TextArea: () => <textarea data-testid="list-editor" />
+  TextArea: ({ autoSize, ...props }: React.TextareaHTMLAttributes<HTMLTextAreaElement> & { autoSize?: unknown }) => (
+    <textarea
+      data-testid="list-editor"
+      { ...props }
+    />
+  )
 }))
 
 jest.mock('./dynamic-type-field-filter-text-component', () => ({
@@ -27,7 +32,7 @@ jest.mock('react-i18next', () => ({
 // eslint-disable-next-line import/first
 import React from 'react'
 // eslint-disable-next-line import/first
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 // eslint-disable-next-line import/first
 import { DynamicFilterProvider } from '@Pimcore/components/dynamic-filter/provider/dynamic-filter-provider'
 // eslint-disable-next-line import/first
@@ -35,11 +40,13 @@ import { MultiValueFilterSupportProvider } from '../utils/multi-value-filter-sup
 // eslint-disable-next-line import/first
 import { DynamicTypeFieldFilterStringComponent } from './dynamic-type-field-filter-string-component'
 
-const renderFilter = (children: React.ReactNode): void => {
+const renderFilter = (children: React.ReactNode, data: unknown = '', handlers: { onChange?: (data: unknown) => void, onCommit?: (data: unknown) => void } = {}): void => {
   render(
     <DynamicFilterProvider
-      data=""
+      data={ data }
       id="test"
+      onChange={ handlers.onChange }
+      onCommit={ handlers.onCommit }
       translationKey="test"
       type="test"
     >
@@ -78,5 +85,65 @@ describe('DynamicTypeFieldFilterStringComponent', () => {
 
     expect(screen.getByTestId('single-line-editor')).toBeTruthy()
     expect(screen.queryByTestId('list-editor')).toBeNull()
+  })
+
+  describe('restored saved filters', () => {
+    const renderListEditor = (data: unknown, handlers: { onChange?: (data: unknown) => void, onCommit?: (data: unknown) => void }): HTMLTextAreaElement => {
+      renderFilter(
+        <MultiValueFilterSupportProvider supported>
+          <DynamicTypeFieldFilterStringComponent />
+        </MultiValueFilterSupportProvider>,
+        data,
+        handlers
+      )
+
+      return screen.getByTestId<HTMLTextAreaElement>('list-editor')
+    }
+
+    it('shows a restored list one value per line and hands it back untouched when the editor is left', () => {
+      const onChange = jest.fn()
+      const list = ['A-1', 'B-2']
+      const editor = renderListEditor(list, { onChange })
+
+      expect(editor.value).toBe('A-1\nB-2')
+
+      fireEvent.blur(editor)
+
+      expect(onChange).toHaveBeenCalledWith(list)
+    })
+
+    it('keeps a restored single-value list exact when the editor is left or confirmed', () => {
+      const onChange = jest.fn()
+      const onCommit = jest.fn()
+      const singleton = ['A-1']
+      const editor = renderListEditor(singleton, { onChange, onCommit })
+
+      expect(editor.value).toBe('A-1')
+
+      fireEvent.blur(editor)
+      expect(onChange).toHaveBeenCalledWith(singleton)
+
+      fireEvent.keyDown(editor, { key: 'Enter' })
+      expect(onCommit).toHaveBeenCalledWith(singleton)
+    })
+
+    it('hands back the text once a restored list was edited', () => {
+      const onCommit = jest.fn()
+      const editor = renderListEditor(['A-1', 'B-2'], { onCommit })
+
+      fireEvent.change(editor, { target: { value: 'A-1\nB-2\nC-3' } })
+      fireEvent.keyDown(editor, { key: 'Enter' })
+
+      expect(onCommit).toHaveBeenCalledWith('A-1\nB-2\nC-3')
+    })
+
+    it('does not apply on Shift+Enter', () => {
+      const onCommit = jest.fn()
+      const editor = renderListEditor('A-1', { onCommit })
+
+      fireEvent.keyDown(editor, { key: 'Enter', shiftKey: true })
+
+      expect(onCommit).not.toHaveBeenCalled()
+    })
   })
 })

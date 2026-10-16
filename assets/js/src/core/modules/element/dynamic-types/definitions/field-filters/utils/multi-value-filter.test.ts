@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { parseMultiValueFilter } from './multi-value-filter'
+import { formatMultiValueFilter, parseMultiValueFilter, resolveEditedMultiValueFilter } from './multi-value-filter'
 
 describe('parseMultiValueFilter', () => {
   it('keeps a single-line text as the text it is', () => {
@@ -41,5 +41,43 @@ describe('parseMultiValueFilter', () => {
 
   it('keeps case, because the match is exact', () => {
     expect(parseMultiValueFilter('a-1\nA-1')).toEqual(['a-1', 'A-1'])
+  })
+})
+
+describe('formatMultiValueFilter', () => {
+  it('shows a text as it is', () => {
+    expect(formatMultiValueFilter('A-1')).toBe('A-1')
+    expect(formatMultiValueFilter('A-1\nB-2')).toBe('A-1\nB-2')
+  })
+
+  it('shows a restored list one value per line', () => {
+    expect(formatMultiValueFilter(['A-1', 'B-2'])).toBe('A-1\nB-2')
+    expect(formatMultiValueFilter(['A-1'])).toBe('A-1')
+  })
+
+  it('shows nothing for anything else', () => {
+    expect(formatMultiValueFilter(undefined)).toBe('')
+    expect(formatMultiValueFilter(null)).toBe('')
+    expect(formatMultiValueFilter(5)).toBe('')
+  })
+})
+
+describe('resolveEditedMultiValueFilter', () => {
+  it('hands back an untouched restored list as it was, also a single-value one', () => {
+    const list = ['A-1', 'B-2']
+    const singleton = ['A-1']
+
+    expect(resolveEditedMultiValueFilter('A-1\nB-2', list)).toBe(list)
+    expect(resolveEditedMultiValueFilter('A-1', singleton)).toBe(singleton)
+  })
+
+  it('hands back the text once it was edited', () => {
+    expect(resolveEditedMultiValueFilter('A-1\nB-2\nC-3', ['A-1', 'B-2'])).toBe('A-1\nB-2\nC-3')
+    expect(resolveEditedMultiValueFilter('', ['A-1'])).toBe('')
+  })
+
+  it('hands back the text when there was no list', () => {
+    expect(resolveEditedMultiValueFilter('A-1', 'A-1')).toBe('A-1')
+    expect(resolveEditedMultiValueFilter('A-1', undefined)).toBe('A-1')
   })
 })

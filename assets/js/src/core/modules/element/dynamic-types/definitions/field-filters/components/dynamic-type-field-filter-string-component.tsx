@@ -14,6 +14,7 @@ import { type AbstractFieldFilterDefinition } from '../dynamic-type-field-filter
 import { useDynamicFilter } from '@Pimcore/components/dynamic-filter/provider/use-dynamic-filter'
 import { TextArea } from '@sdk/components'
 import { useMultiValueFilterSupport } from '../utils/multi-value-filter-support'
+import { formatMultiValueFilter, resolveEditedMultiValueFilter } from '../utils/multi-value-filter'
 import { DynamicTypeFieldFilterTextComponent } from './dynamic-type-field-filter-text-component'
 
 export interface DynamicTypeFieldFilterStringProps extends AbstractFieldFilterDefinition {}
@@ -38,10 +39,10 @@ export const DynamicTypeFieldFilterStringComponent = (): React.JSX.Element => {
 const DynamicTypeFieldFilterMultiValueComponent = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { data, setData, commit } = useDynamicFilter()
-  const [_value, setValue] = useState<string>(typeof data === 'string' ? data : '')
+  const [_value, setValue] = useState<string>(formatMultiValueFilter(data))
 
   useEffect(() => {
-    setValue(typeof data === 'string' ? data : '')
+    setValue(formatMultiValueFilter(data))
   }, [data])
 
   return (
@@ -56,7 +57,7 @@ const DynamicTypeFieldFilterMultiValueComponent = (): React.JSX.Element => {
   )
 
   function onBlur (): void {
-    setData(_value)
+    setData(resolveEditedMultiValueFilter(_value, data))
   }
 
   /**
@@ -71,11 +72,13 @@ const DynamicTypeFieldFilterMultiValueComponent = (): React.JSX.Element => {
 
     event.preventDefault()
 
+    const value = resolveEditedMultiValueFilter(_value, data)
+
     if (commit !== undefined) {
-      commit(_value)
+      commit(value)
       return
     }
 
-    setData(_value)
+    setData(value)
   }
 }

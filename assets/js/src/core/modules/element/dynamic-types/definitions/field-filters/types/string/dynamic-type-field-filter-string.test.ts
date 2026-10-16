@@ -45,6 +45,13 @@ describe('DynamicTypeFieldFilterString', () => {
     expect(filter.filterValue).toBe('A-1\nB-2\r\nA-1\n')
   })
 
+  it('keeps a restored list - also a single-value one - exact', () => {
+    expect(type.transformFilterToApiRequest(createFilter(['A-1', 'B-2'])).filterValue).toEqual(['A-1', 'B-2'])
+    expect(type.transformFilterToApiRequest(createFilter(['A-1'])).filterValue).toEqual(['A-1'])
+    expect(type.shouldApply(createFilter(['A-1']))).toBe(true)
+    expect(type.shouldApply(createFilter([]))).toBe(false)
+  })
+
   it('applies a filter with text only', () => {
     expect(type.shouldApply(createFilter('A-1'))).toBe(true)
     expect(type.shouldApply(createFilter('A-1\nB-2'))).toBe(true)
