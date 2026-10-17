@@ -49,7 +49,7 @@ export const MainNav = (): React.JSX.Element => {
   const { input } = useFormModal()
   const { openElementByPathOrId } = openElementHelper()
 
-  const { openKeys, handleOpenState, handleRootPointerEnter, cancelHoverPreview } = useNavOpenState(isOpen)
+  const { openKeys, handleOpenState, handleItemPointerEnter, cancelHoverPreview } = useNavOpenState(isOpen)
 
   const renderDivider = (show: boolean | undefined): React.JSX.Element | null => {
     if (show === true) {
@@ -98,14 +98,13 @@ export const MainNav = (): React.JSX.Element => {
     }
 
     const elementWithGroupIcon = hasChildren ? item.children?.find(child => !isEmpty(child.groupIcon)) : undefined
-    const isRootItem = !index.includes('-')
 
     return (
       <li
         className={ `main-nav__list-item ${openKeys.includes(index) ? 'is-active' : ''} ${item.className ?? ''}` }
         data-testid={ `nav-item-${createSafeTestIdString(item.path)}` }
         key={ item.path }
-        onPointerEnter={ isRootItem ? (event) => { handleRootPointerEnter(event, index, hasChildren) } : undefined }
+        onPointerEnter={ (event) => { handleItemPointerEnter(event, index, hasChildren) } }
       >
         {!isUndefined(item.useCustomMainNavItem)
           ? (() => {
