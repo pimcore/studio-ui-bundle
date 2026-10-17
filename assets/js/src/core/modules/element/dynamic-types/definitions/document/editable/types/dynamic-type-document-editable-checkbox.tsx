@@ -17,6 +17,7 @@ export type CheckboxEditableDefinition = Omit<AbstractDocumentEditableDefinition
     label?: string
     class?: string
     reload?: boolean
+    display?: 'checkbox' | 'switch'
   }
 }
 
