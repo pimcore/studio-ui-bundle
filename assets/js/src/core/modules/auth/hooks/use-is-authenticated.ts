@@ -11,15 +11,18 @@
 import { useEffect } from 'react'
 import { useUserGetCurrentInformationQuery } from '../user/user-api-slice-enhanced'
 import { useAppDispatch, useAppSelector } from '@sdk/app'
-import { selectIsAuthenticated, setAuthState } from '../auth-slice'
+import { selectIsAuthenticated, selectTwoFactorChallenge, setAuthState, setTwoFactorChallenge } from '../auth-slice'
+import { getTwoFactorChallenge, type TwoFactorChallenge } from './use-two-factor-authentication'
 
 export interface UseIsAuthenticatedReturn {
   isAuthenticated?: boolean
+  twoFactor?: TwoFactorChallenge
   recheck: () => void
 }
 
 export const useIsAuthenticated = (): UseIsAuthenticatedReturn => {
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
+  const twoFactor = useAppSelector(selectTwoFactorChallenge)
   const dispatch = useAppDispatch()
   const { isError, error, isSuccess, refetch } = useUserGetCurrentInformationQuery(undefined, { skip: isAuthenticated !== undefined })
 
@@ -29,6 +32,7 @@ export const useIsAuthenticated = (): UseIsAuthenticatedReturn => {
 
   useEffect(() => {
     if (isError) {
+      dispatch(setTwoFactorChallenge(getTwoFactorChallenge(error !== undefined && 'data' in error ? error.data : undefined)))
       dispatch(setAuthState(false))
     }
 
@@ -39,6 +43,7 @@ export const useIsAuthenticated = (): UseIsAuthenticatedReturn => {
 
   return {
     isAuthenticated,
+    twoFactor,
     recheck
   }
 }
