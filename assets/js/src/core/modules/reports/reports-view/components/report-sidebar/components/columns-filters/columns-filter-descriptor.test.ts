@@ -69,6 +69,13 @@ describe('columnsFilterDescriptor.toQuery', () => {
     )
   })
 
+  it.each([
+    [DatePickerSettingValue.BEFORE, { setting: DatePickerSettingValue.BEFORE, on: null, from: null, to: null }],
+    [DatePickerSettingValue.BETWEEN, { setting: DatePickerSettingValue.BETWEEN, on: null, from: null, to: null }]
+  ])('sends no condition for a datetime filter with setting %s and no date', (_setting, data) => {
+    expect(toQuery({ frontendType: 'datetime', data })).toEqual([])
+  })
+
   it('converts a number filter to number operators', () => {
     expect(toQuery({ frontendType: 'number', data: { setting: 'is', from: null, to: null, is: 5 } })).toEqual([
       { property: FIELD, type: 'numeric', operator: 'eq', value: '5' }

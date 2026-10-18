@@ -14,6 +14,7 @@ import { type IDynamicFilter } from '@Pimcore/components/dynamic-filter/provider
 import { type DynamicTypeFieldFilterAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/dynamic-type-field-filter-abstract'
 import { DynamicTypeFieldFilterNumber } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/number/dynamic-type-field-filter-number'
 import { DynamicTypeFieldFilterDatetime } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/datetime/dynamic-type-field-filter-datetime'
+import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
 import { type NumberValue } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-number-component'
 import { DynamicTypeFieldFilterDate } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/date/dynamic-type-field-filter-date'
 import { type DateValue } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/components/dynamic-type-field-filter-date-component'
@@ -48,6 +49,19 @@ const buildColumnFilters = (
 
     if (isNull(dynType)) {
       return [{ ...baseFilterData, ...defaultFilterData }]
+    }
+
+    // Incomplete filters (e.g. a date filter without a date) must not reach the backend as an empty condition
+    const fieldFilter: FieldFilter = {
+      key: item.name!,
+      type: item.type,
+      filterValue: item.data,
+      locale: null,
+      meta: { translationKey: item.translationKey }
+    }
+
+    if (!dynType.shouldApply(fieldFilter)) {
+      return []
     }
 
     let filterData: IFieldFilterTypeData[]
