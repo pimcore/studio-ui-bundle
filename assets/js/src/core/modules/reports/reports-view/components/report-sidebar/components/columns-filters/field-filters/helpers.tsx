@@ -81,4 +81,6 @@ const OPERATOR_MAP: Record<DateFilterOperator, FieldFilterOperators> = {
 }
 
 export const getDateFieldFilterData = (data: DateValue): IFieldFilterTypeData[] =>
-  transformDateFilter(data).map(({ operator, value }) => ({ operator: OPERATOR_MAP[operator], value }))
+  transformDateFilter(data)
+    .filter(({ value }) => value !== '')
+    .map(({ operator, value }) => ({ operator: OPERATOR_MAP[operator], value }))

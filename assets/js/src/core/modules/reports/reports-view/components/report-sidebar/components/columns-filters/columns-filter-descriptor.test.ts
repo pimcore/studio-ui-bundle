@@ -76,6 +76,15 @@ describe('columnsFilterDescriptor.toQuery', () => {
     expect(toQuery({ frontendType: 'datetime', data })).toEqual([])
   })
 
+  it.each([
+    [{ setting: DatePickerSettingValue.BETWEEN, on: null, from: DATE_FROM, to: null }, [{ operator: 'gt', value: DATE_FROM }]],
+    [{ setting: DatePickerSettingValue.BETWEEN, on: null, from: null, to: DATE_TO }, [{ operator: 'lt', value: DATE_TO }]]
+  ])('drops the empty side of a half-filled between filter', (data, expected) => {
+    expect(toQuery({ frontendType: 'datetime', data })).toEqual(
+      expected.map((condition) => ({ property: FIELD, type: 'date', ...condition }))
+    )
+  })
+
   it('converts a number filter to number operators', () => {
     expect(toQuery({ frontendType: 'number', data: { setting: 'is', from: null, to: null, is: 5 } })).toEqual([
       { property: FIELD, type: 'numeric', operator: 'eq', value: '5' }
