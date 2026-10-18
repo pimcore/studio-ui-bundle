@@ -74,11 +74,14 @@ const buildColumnFilters = (
       filterData = [defaultFilterData]
     }
 
-    return filterData.map((filter) => ({
-      ...baseFilterData,
-      operator: filter.operator,
-      value: filter.value
-    }))
+    // The empty side of a half-filled range (e.g. Between with only "from") would compare against '' and empty the grid
+    return filterData
+      .filter((filter) => filter.operator === FieldFilterOperators.LIKE || filter.value !== '')
+      .map((filter) => ({
+        ...baseFilterData,
+        operator: filter.operator,
+        value: filter.value
+      }))
   })
 
 export const columnsFilterDescriptor = defineFilter<IDynamicFilter[], ReportFilterContribution, ReportFilterContext>({

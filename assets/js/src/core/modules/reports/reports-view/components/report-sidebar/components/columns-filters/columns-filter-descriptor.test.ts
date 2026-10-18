@@ -85,6 +85,20 @@ describe('columnsFilterDescriptor.toQuery', () => {
     )
   })
 
+  it('drops the empty side of a half-filled number between filter', () => {
+    expect(toQuery({ frontendType: 'number', data: { setting: 'between', from: 5, to: null, is: null } })).toEqual([
+      { property: FIELD, type: 'numeric', operator: 'gt', value: '5' }
+    ])
+  })
+
+  it('sends no condition for a number filter without values', () => {
+    expect(toQuery({ frontendType: 'number', data: { setting: 'is', from: null, to: null, is: null } })).toEqual([])
+  })
+
+  it('sends no condition for an empty string filter', () => {
+    expect(toQuery({ frontendType: 'string', data: '' })).toEqual([])
+  })
+
   it('converts a number filter to number operators', () => {
     expect(toQuery({ frontendType: 'number', data: { setting: 'is', from: null, to: null, is: 5 } })).toEqual([
       { property: FIELD, type: 'numeric', operator: 'eq', value: '5' }
