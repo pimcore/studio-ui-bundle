@@ -318,6 +318,10 @@ custom-layout.empty-state.edit: Velg en eksisterende custom layout for å begynn
 example-prefix: Eksempel-prefiks
 pagination.show-total: Totalt {{total}} elementer
 pagination.page: Side
+pagination.first-page: Første side
+pagination.previous-page: Forrige side
+pagination.next-page: Neste side
+pagination.last-page: Siste side
 pagination.showing-x-of-y: Viser {{loaded}} av {{total}}
 preview-card.locate-in-tree: Finn i treet
 preview-card.rename: Gi nytt navn
@@ -2337,7 +2341,8 @@ user-profile.password-new: Nytt passord
 user-profile.password-repeat: Gjenta passord
 user-profile.password-repeat-error: Passordene samsvarer ikke
 creatable-select.add-custom-option: Legg til egendefinert alternativ
-creatable-select.add: Legg til
+creatable-select.press-enter-to-add: Trykk Enter for å legge til
+creatable-select.option-added: '{{label}} lagt til'
 creatable-select.option-already-exists: Alternativet finnes allerede
 creatable-select.invalid-option: Ugyldig alternativ
 drag-snippet-here: Dra en snippet hit

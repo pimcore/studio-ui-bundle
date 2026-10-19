@@ -318,6 +318,10 @@ custom-layout.empty-state.edit: Välj en befintlig anpassad layout för att bör
 example-prefix: Exempelprefix
 pagination.show-total: Totalt {{total}} objekt
 pagination.page: Sida
+pagination.first-page: Första sidan
+pagination.previous-page: Föregående sida
+pagination.next-page: Nästa sida
+pagination.last-page: Sista sidan
 pagination.showing-x-of-y: Visar {{loaded}} av {{total}}
 preview-card.locate-in-tree: Hitta i träd
 preview-card.rename: Byt namn
@@ -2337,7 +2341,8 @@ user-profile.password-new: Nytt lösenord
 user-profile.password-repeat: Upprepa lösenord
 user-profile.password-repeat-error: Lösenorden matchar inte
 creatable-select.add-custom-option: Lägg till anpassat alternativ
-creatable-select.add: Lägg till
+creatable-select.press-enter-to-add: Tryck Enter för att lägga till
+creatable-select.option-added: '{{label}} tillagt'
 creatable-select.option-already-exists: Alternativet finns redan
 creatable-select.invalid-option: Ogiltigt alternativ
 drag-snippet-here: Dra ett kodavsnitt hit

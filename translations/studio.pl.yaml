@@ -318,6 +318,10 @@ custom-layout.empty-state.edit: Wybierz istniejący Custom Layout, aby rozpoczą
 example-prefix: Przykładowy prefiks
 pagination.show-total: "Łącznie {{total}} elementów"
 pagination.page: Strona
+pagination.first-page: Pierwsza strona
+pagination.previous-page: Poprzednia strona
+pagination.next-page: Następna strona
+pagination.last-page: Ostatnia strona
 pagination.showing-x-of-y: "Wyświetlono {{loaded}} z {{total}}"
 preview-card.locate-in-tree: Znajdź w drzewie
 preview-card.rename: Zmień nazwę
@@ -2337,7 +2341,8 @@ user-profile.password-new: Nowe hasło
 user-profile.password-repeat: Powtórz hasło
 user-profile.password-repeat-error: Hasła nie są zgodne
 creatable-select.add-custom-option: Dodaj niestandardową opcję
-creatable-select.add: Dodaj
+creatable-select.press-enter-to-add: Naciśnij Enter, aby dodać
+creatable-select.option-added: '{{label}} dodane'
 creatable-select.option-already-exists: Opcja już istnieje
 creatable-select.invalid-option: Nieprawidłowa opcja
 drag-snippet-here: Przeciągnij tutaj fragment
