@@ -17,7 +17,7 @@ export const DeepLink = (): React.JSX.Element => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    navigate(routes.root, { state: { isDeeplink: true, id, elementType } })
+    void navigate(routes.root, { state: { isDeeplink: true, id, elementType } })
   }, [id, elementType])
 
   return <></>
