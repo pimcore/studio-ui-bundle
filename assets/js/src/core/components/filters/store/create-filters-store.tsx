@@ -21,7 +21,8 @@ export type FilterWriteCounts = Record<string, number>
 
 export interface FiltersStore {
   values: FilterValues
-  writeCounts: FilterWriteCounts
+  /** Always filled by `createFiltersStore`; optional so a custom store implementing this interface stays valid. */
+  writeCounts?: FilterWriteCounts
   setValue: (key: string, value: unknown) => void
   setValues: (values: FilterValues) => void
   reset: () => void
