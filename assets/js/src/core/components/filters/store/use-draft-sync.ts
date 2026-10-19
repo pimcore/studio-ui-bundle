@@ -9,6 +9,7 @@
  */
 
 import { useEffect, useRef } from 'react'
+import { isEmpty, isUndefined } from 'lodash'
 import { type FilterValues } from '../types'
 import { type FilterWriteCounts, type FiltersStore } from './create-filters-store'
 
@@ -18,7 +19,7 @@ const findChangedKeys = (
   appliedWriteCounts?: FilterWriteCounts,
   previousWriteCounts?: FilterWriteCounts
 ): string[] => {
-  if (appliedWriteCounts !== undefined && previousWriteCounts !== undefined) {
+  if (!isUndefined(appliedWriteCounts) && !isUndefined(previousWriteCounts)) {
     // A write counts even when it kept the value: a reset or a restore has to reach the draft.
     return Object.keys(appliedWriteCounts).filter((key) => appliedWriteCounts[key] !== previousWriteCounts[key])
   }
@@ -46,7 +47,7 @@ export const useDraftSync = (
     const last = previous.current
     previous.current = { values: appliedValues, writeCounts: appliedWriteCounts }
 
-    if (last === undefined) {
+    if (isUndefined(last)) {
       setValues(appliedValues)
       return
     }
@@ -57,7 +58,7 @@ export const useDraftSync = (
       changedValues[key] = appliedValues[key]
     }
 
-    if (Object.keys(changedValues).length > 0) {
+    if (!isEmpty(changedValues)) {
       setValues(changedValues)
     }
   }, [appliedValues])
