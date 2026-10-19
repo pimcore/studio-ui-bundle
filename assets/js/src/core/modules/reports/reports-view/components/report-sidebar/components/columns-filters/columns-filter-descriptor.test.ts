@@ -89,9 +89,9 @@ describe('columnsFilterDescriptor.toQuery', () => {
   })
 
   it.each([
-    [{ setting: DatePickerSettingValue.BETWEEN, on: null, from: DATE_FROM, to: null }, [{ operator: 'gt', value: DATE_FROM }]],
-    [{ setting: DatePickerSettingValue.BETWEEN, on: null, from: null, to: DATE_TO }, [{ operator: 'lt', value: DATE_TO }]]
-  ])('drops the empty side of a half-filled date between filter', (data, expected) => {
+    ['from', { setting: DatePickerSettingValue.BETWEEN, on: null, from: DATE_FROM, to: null }, [{ operator: 'gt', value: DATE_FROM }]],
+    ['to', { setting: DatePickerSettingValue.BETWEEN, on: null, from: null, to: DATE_TO }, [{ operator: 'lt', value: DATE_TO }]]
+  ])('drops the empty side of a date between filter with only %s filled', (_side, data, expected) => {
     expect(toQuery({ frontendType: 'datetime', data })).toEqual(
       expected.map((condition) => ({ property: FIELD, type: 'date', ...condition }))
     )
