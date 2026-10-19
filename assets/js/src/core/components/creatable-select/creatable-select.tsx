@@ -8,10 +8,10 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Flex, IconTextButton, Input, InputNumber, Select, Text, type SelectProps } from '@sdk/components'
+import { Input, InputNumber, Select, Text, type SelectProps } from '@sdk/components'
 import { type SelectOptionType } from '@sdk/modules/element'
 import { isNil, isUndefined } from 'lodash'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getDecimalSeparator } from '@Pimcore/utils/number'
 import { useStyles } from './creatable-select.styles'
@@ -47,6 +47,10 @@ const Component = ({
   // `onChange` only reports parseable numbers, so the displayed text is tracked via `onInput`.
   const [numberInputText, setNumberInputText] = useState('')
   const [pendingSelection, setPendingSelection] = useState<SelectOptionType | null>(null)
+  // Announced after an add, since focus stays in the field (WCAG 4.1.3).
+  const [addedMessage, setAddedMessage] = useState('')
+  const hintId = useId()
+  const messageId = useId()
   const allOptions = [...options, ...customOptions]
   const decimalSeparator = inputType === 'number'
     ? numberInputProps.decimalSeparator ?? getDecimalSeparator()
@@ -145,7 +149,8 @@ const Component = ({
 
     // Set pending selection to trigger after state update
     setPendingSelection(newOption)
-  }, [newOptionText, allOptions, allowDuplicates, onCreateOption, isInputTextValid])
+    setAddedMessage(t('creatable-select.option-added', { label: typeof newOption.label === 'string' ? newOption.label : trimmedValue }))
+  }, [newOptionText, allOptions, allowDuplicates, onCreateOption, isInputTextValid, t])
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent): void => {
     if (e.key !== 'Enter') return
@@ -159,6 +164,23 @@ const Component = ({
     handleAddOption()
   }, [inputType, handleAddOption])
 
+  const hasText = currentInputText.trim() !== ''
+  const isInvalid = hasText && !isInputTextValid()
+  const isDuplicate = hasText && !isInvalid && !allowDuplicates && allOptions.some(opt => opt.value === newOptionText.trim())
+  const placeholder = t(createOptionLabel ?? 'creatable-select.add-custom-option')
+
+  // Enter adds the value, so there is no button: the field is named, says how it works, and is
+  // marked invalid with its message when the value cannot be added.
+  const fieldProps = {
+    'aria-describedby': isInvalid || isDuplicate ? `${hintId} ${messageId}` : hintId,
+    'aria-invalid': isInvalid || isDuplicate,
+    'aria-label': placeholder,
+    className: styles.field,
+    onKeyDown: handleKeyDown,
+    placeholder,
+    value: newOptionText
+  }
+
   const getInputDependantField = (): React.JSX.Element => {
     switch (inputType) {
       case 'number':
@@ -166,6 +188,7 @@ const Component = ({
           <InputNumber
             changeOnBlur={ false }
             { ...numberInputProps }
+            { ...fieldProps }
             onChange={ (value) => {
               const committedText = isNil(value) ? '' : value.toString()
 
@@ -174,25 +197,20 @@ const Component = ({
             } }
             onInput={ (text) => {
               setNumberInputText(text)
+              setAddedMessage('')
               numberInputProps.onInput?.(text)
             } }
-            onKeyDown={ handleKeyDown }
-            placeholder={ t(createOptionLabel ?? 'creatable-select.add-custom-option') }
-            size="small"
-            style={ { flex: 1 } }
-            value={ newOptionText }
           />
         )
       case 'string':
       default:
         return (
           <Input
-            onChange={ (e) => { setNewOptionText(e.target.value) } }
-            onKeyDown={ handleKeyDown }
-            placeholder={ t(createOptionLabel ?? 'creatable-select.add-custom-option') }
-            size="small"
-            style={ { flex: 1 } }
-            value={ newOptionText }
+            { ...fieldProps }
+            onChange={ (e) => {
+              setNewOptionText(e.target.value)
+              setAddedMessage('')
+            } }
           />
         )
     }
@@ -205,36 +223,27 @@ const Component = ({
       <>
         {menu}
         <div className={ styles.footer }>
-          <Flex
-            gap="extra-small"
-            vertical
+          {getInputDependantField()}
+          <span
+            className={ styles.visuallyHidden }
+            id={ hintId }
           >
-            <Flex
-              align="center"
-              gap="extra-small"
-            >
-              {getInputDependantField()}
-              <IconTextButton
-                disabled={ currentInputText.trim() === '' || !isInputTextValid() || (!allowDuplicates && allOptions.some(opt => opt.value === newOptionText.trim())) }
-                icon={ { value: 'new' } }
-                onClick={ handleAddOption }
-                size="small"
-                type="link"
+            {t('creatable-select.press-enter-to-add')}
+          </span>
+          <div
+            aria-live="polite"
+            id={ messageId }
+          >
+            {(isInvalid || isDuplicate) && (
+              <Text
+                className={ styles.message }
+                type="danger"
               >
-                {t('creatable-select.add')}
-              </IconTextButton>
-            </Flex>
-            {!allowDuplicates && currentInputText.trim() !== '' && isInputTextValid() && allOptions.some(opt => opt.value === newOptionText.trim()) && (
-              <Text type="danger">
-                {t('creatable-select.option-already-exists')}
+                {t(isInvalid ? 'creatable-select.invalid-option' : 'creatable-select.option-already-exists')}
               </Text>
             )}
-            {currentInputText.trim() !== '' && !isInputTextValid() && (
-              <Text type="danger">
-                {t('creatable-select.invalid-option')}
-              </Text>
-            )}
-          </Flex>
+            <span className={ styles.visuallyHidden }>{addedMessage}</span>
+          </div>
         </div>
       </>
     )
