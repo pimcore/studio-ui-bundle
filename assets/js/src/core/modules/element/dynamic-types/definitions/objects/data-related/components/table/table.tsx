@@ -25,6 +25,7 @@ import { NewColumnButton, NewRowButton } from './components/insert-buttons/inser
 import { Content } from '@Pimcore/components/content/content'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { copyToClipboardWithFeedback } from '@Pimcore/utils/clipboard'
+import { actionTooltipDelay } from '@Pimcore/components/tooltip/tooltip'
 
 export interface TableProps {
   rows: number | null
@@ -169,7 +170,10 @@ export const Table = (props: TableProps): React.JSX.Element => {
     }
   }
   items.push(
-    <Tooltip title={ t('table.copy') }>
+    <Tooltip
+      mouseEnterDelay={ actionTooltipDelay }
+      title={ t('table.copy') }
+    >
       <IconButton
         icon={ { value: 'copy' } }
         onClick={ () => modal.textarea({
@@ -197,7 +201,10 @@ export const Table = (props: TableProps): React.JSX.Element => {
 
   if (props.disabled !== true) {
     items.push(
-      <Tooltip title={ t('table.paste') }>
+      <Tooltip
+        mouseEnterDelay={ actionTooltipDelay }
+        title={ t('table.paste') }
+      >
         <IconButton
           icon={ { value: 'paste' } }
           onClick={ () => modal.textarea({
@@ -216,7 +223,10 @@ export const Table = (props: TableProps): React.JSX.Element => {
       </Tooltip>
     )
     items.push(
-      <Tooltip title={ t('empty') }>
+      <Tooltip
+        mouseEnterDelay={ actionTooltipDelay }
+        title={ t('empty') }
+      >
         <IconButton
           icon={ { value: 'trash' } }
           onClick={ () => {

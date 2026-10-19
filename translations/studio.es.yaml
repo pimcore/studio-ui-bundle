@@ -85,6 +85,13 @@ asset.upload.overwrite: Sobrescribir
 asset.upload.keep-both: Conservar ambos
 asset.upload.skip: Omitir
 asset.upload.apply-to-all: Aplicar a todos
+asset.upload.files-exist.title: 'Los archivos ya existen'
+asset.upload.files-exist.message: '{{total}} de los archivos seleccionados ya existen en esta carpeta. ¿Qué desea hacer con ellos?'
+asset.upload.files-exist.more: 'y {{hidden}} más'
+asset.upload.review-each: 'Revisar uno por uno'
+asset.upload.skip-all: 'Omitir todos'
+asset.upload.keep-both-all: 'Conservar ambos en todos'
+asset.upload.overwrite-all: 'Sobrescribir todos'
 asset.upload.checking-duplicate-file-names: "Comprobando nombres de archivo duplicados ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Creando carpetas
 asset.upload.folder-drop.creating-folders-hint: Espere mientras se crea la estructura de carpetas…
@@ -334,6 +341,7 @@ notification.action-list.completed-actions: Acciones completadas
 aria.notification.action-list.toggle-collapse: Alternar lista de acciones
 aria.notification.action-list.cancel-all: Cancelar todas las acciones en ejecución
 aria.notification.action-list.cancel: Cancelar acción
+aria.stack-list.drag-handle: Arrastrar para reordenar
 asset.image.editor.zoom.reset: Restablecer
 aria.asset.image.editor.zoom.reset: Restablecer zoom
 aria.asset.image.editor.zoom.zoom-in: Acercar
@@ -350,6 +358,7 @@ grid.filter.to: Hasta
 grid.filter.is: Es
 grid.filter.less: Menor que
 grid.filter.more: Mayor que
+grid.filter.string.placeholder: Buscar o pegar una lista con un valor por línea para que coincida exactamente con una de ellas
 grid.filter.column: 'Filtrar {{column}}'
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
@@ -500,6 +509,8 @@ version.category.title.meta: Metadatos
 version.category.title.properties: Propiedades
 version.changed-attributes: "Atributos modificados: {{attributes}}"
 aria.version.delete: Eliminar versión
+aria.notes-and-events.delete: Eliminar nota
+aria.card.close: Cerrar
 aria.version.expand: Expandir versión
 clear-all: Limpiar todo
 empty: Vacío
@@ -635,6 +646,54 @@ website-settings.columns.site: Sitio
 website-settings.columns.actions: Acciones
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Campos obligatorios faltantes
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: El nombre y el tipo son campos obligatorios y deben completarse.
+mcp-servers.rail.new-server: Nuevo servidor
+mcp-servers.placeholder: Seleccione un servidor para ver o editar su configuración.
+mcp-servers.tabs.empty: Seleccione un servidor para ver o editar su configuración.
+mcp-servers.tabs.new-server: Nuevo servidor
+mcp-servers.read-only-notice: Las definiciones de servidor se gestionan mediante archivos en este entorno y no se pueden editar aquí.
+mcp-servers.save-success: Servidor MCP guardado
+mcp-servers.access.users-count: "Usuarios: {{number}}"
+mcp-servers.access.roles-count: "Roles: {{number}}"
+mcp-servers.access.global-extra: cualquier usuario autenticado
+mcp-servers.access.nobody: "Nadie todavía"
+mcp-servers.badge.read: Lectura
+mcp-servers.badge.write: Escritura
+mcp-servers.editor.create-title: Nuevo servidor MCP
+mcp-servers.editor.edit-title: Editar servidor MCP
+mcp-servers.editor.general: General
+mcp-servers.editor.permissions: Permisos
+mcp-servers.editor.identity: Identidad
+mcp-servers.editor.name: Nombre
+mcp-servers.editor.name-required: Proporcione un nombre.
+mcp-servers.editor.url-slug: URL Slug
+mcp-servers.editor.url-slug-required: Proporcione un slug de URL.
+mcp-servers.editor.url-slug-pattern: Solo se permiten letras minúsculas, números y guiones.
+mcp-servers.editor.description: Descripción
+mcp-servers.editor.enabled: Activo
+mcp-servers.editor.tools: Herramientas
+mcp-servers.editor.tools-placeholder: Seleccione las herramientas que expone este servidor
+mcp-servers.editor.scopes: Scopes anunciados
+mcp-servers.editor.scopes-empty: Sin scopes — seleccione herramientas para derivar los scopes necesarios.
+mcp-servers.editor.url: URL del servidor
+mcp-servers.editor.copy-url: "Copiar URL del servidor"
+mcp-servers.editor.connect-hint: Apunte su cliente MCP a esta URL y autentíquese con su cuenta de Pimcore.
+mcp-servers.sharing.title: Compartir
+mcp-servers.sharing.share-globally: compartir globalmente
+mcp-servers.sharing.share-globally-tooltip: Cualquier usuario autenticado obtiene Lectura de configuración y Acceso al servidor MCP (no Edición de configuración)
+mcp-servers.sharing.users: Usuarios
+mcp-servers.sharing.roles: Perfiles
+mcp-servers.sharing.add-user: Agregar un usuario…
+mcp-servers.sharing.add-role: Agregar un rol…
+mcp-servers.sharing.name: Nombre
+mcp-servers.sharing.config-read: Lectura de configuración
+mcp-servers.sharing.config-edit: Edición de configuración
+mcp-servers.sharing.mcp-access: Acceso al servidor MCP
+mcp-servers.sharing.level: Nivel de acceso
+mcp-servers.sharing.read: Lectura
+mcp-servers.sharing.write: Puede editar
+mcp-servers.sharing.who-can-access: Quién puede acceder
+mcp-servers.delete.title: Eliminar servidor MCP
+mcp-servers.delete.confirm: ¿Está seguro de que desea eliminar "{{name}}"?
 document-types.new: Nuevo
 document-types.columns.name: Nombre
 document-types.columns.group: Grupo
@@ -760,6 +819,7 @@ tags.apply-tags-to-children: Aplicar etiquetas a los hijos
 tags.remove-and-apply-tags-to-children: Eliminar y aplicar etiquetas a los hijos
 tags.columns.path: Ruta
 tags.columns.actions: Eliminar
+tags.actions.delete: Eliminar etiqueta
 csv-separated-options: Opciones separadas por CSV
 csv-separated-options-info: La lista de opciones disponibles se puede especificar como una lista separada por comas, como valores de una sola columna o mixta. Para el modo de columna única, la clave también se utilizará como valor.
 add: Añadir
@@ -1165,7 +1225,9 @@ jobs.zip-upload-job.title: Subir ZIP
 jobs.zip-upload-job.step1.title: Extrayendo ZIP
 jobs.zip-upload-job.step2.title: Creando assets
 jobs.download-csv-job.title: CSV export
+jobs.download-csv-job.title-with-context: "CSV export ({{name}})"
 jobs.download-xlsx-job.title: XLSX export
+jobs.download-xlsx-job.title-with-context: "XLSX export ({{name}})"
 jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Edición por lotes
 batch-edit.no-content: Aún no se han añadido columnas
@@ -1341,6 +1403,9 @@ success: Éxito
 no-value-set: No se ha establecido ningún valor
 set-to-null: Vacío (establecer como nulo)
 remove: Eliminar
+move-up: Mover arriba
+move-down: Mover abajo
+translate: Traducir
 delete: Eliminar
 clone: Clonar
 jobs.clone-job.step2.title: Actualizando referencias
@@ -1638,6 +1703,7 @@ navigation.appearance-branding: Apariencia y marca
 navigation.reporting: Informes
 navigation.system: Sistema
 navigation.website-settings: Configuración del sitio web
+navigation.mcp-servers: Servidores MCP
 navigation.document-types: Tipos de documento
 navigation.cache: Caché
 navigation.cache.clear-cache: Limpiar caché
@@ -1726,6 +1792,7 @@ widget.predefined-properties: Propiedades predefinidas
 widget.search-replace-assignments: Buscar y reemplazar asignaciones
 widget.document-types: Tipos de documento
 widget.website-settings: Configuración del sitio web
+widget.mcp-servers: Servidores MCP
 widget.role-management: Roles
 widget.user-management: Usuarios
 widget.class-definitions: Clases
@@ -2928,6 +2995,7 @@ translations.merger.state.reverted: Revertido
 translations.merger.state.pending: Pendiente
 translations.merger.apply-all: Aplicar todo
 translations.merger.revert-all: Revertir todo
+translations.merger.revert: Revertir
 translations.merger.title: "Fusionar traducciones (Dominio: {{domain}})"
 translations.merger.column.language: Idioma
 translations.merger.items: elementos

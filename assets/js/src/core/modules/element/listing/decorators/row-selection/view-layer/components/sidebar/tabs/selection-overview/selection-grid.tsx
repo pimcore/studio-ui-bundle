@@ -15,8 +15,10 @@ import { type GridProps } from '@Pimcore/types/components/types'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
+import { useTranslation } from 'react-i18next'
 
 export const SelectionGrid = (): React.JSX.Element => {
+  const { t } = useTranslation()
   const { selectedRows, selectedRowsData, setSelectedRows } = useRowSelection()
   const currentSelectedRows = selectedRows!
   const columnHelper = createColumnHelper<any>()
@@ -51,8 +53,10 @@ export const SelectionGrid = (): React.JSX.Element => {
           justify='center'
         >
           <IconButton
+            aria-label={ t('remove') }
             icon={ { value: 'close' } }
             onClick={ () => { onRemoveItemClick(info.getValue() as string) } }
+            tooltip={ { title: t('remove') } }
           />
         </Flex>
       )

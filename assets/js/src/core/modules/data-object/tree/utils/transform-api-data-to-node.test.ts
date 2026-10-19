@@ -66,4 +66,22 @@ describe('transformApiDataToNode (data object)', () => {
 
     expect(node.label).toBe('original-key')
   })
+
+  it('exposes the real key on the node even when a custom attribute key is set', () => {
+    const dataObjectNode = buildDataObjectNode({
+      key: 'original-key',
+      customAttributes: {
+        icon: null,
+        tooltip: null,
+        additionalIcons: [],
+        key: 'custom-key',
+        additionalCssClasses: []
+      }
+    })
+
+    const node = transformApiDataToNode(dataObjectNode, { id: '0', internalKey: 'root' })
+
+    expect(node.label).toBe('custom-key')
+    expect(node.realKey).toBe('original-key')
+  })
 })

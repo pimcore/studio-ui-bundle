@@ -17,12 +17,11 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
 import { ElementSelectorProvider, SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import {
-  convertAllowedTypes,
   createElementSelectorAreas,
   createElementSelectorConfig,
-  dndValidRelationElements,
-  type IRelationAllowedTypesClassDefinition
+  dndValidRelationElements
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
+import { resolveRelationFilterAllowedTypes, type RelationFilterFieldDefinition } from './resolve-relation-filter-allowed-types'
 import { mapToLegacyElementType, isValidElementType } from '@Pimcore/modules/element/utils/element-type'
 import { Droppable, type DragAndDropInfo } from '@Pimcore/components/drag-and-drop/droppable'
 import { getDraggedElements, toElementType } from '@Pimcore/components/drag-and-drop/element-drag'
@@ -156,15 +155,7 @@ export const DynamicTypeFieldFilterRelationComponent = (): React.JSX.Element => 
   const { t } = useTranslation()
   const modal = useAlertModal()
 
-  const fieldDefinition = config?.fieldDefinition as IRelationAllowedTypesClassDefinition | undefined
-  const convertedTypes = fieldDefinition !== undefined ? convertAllowedTypes(fieldDefinition) : undefined
-  const nothingAllowed = convertedTypes !== undefined &&
-    convertedTypes.assetsAllowed !== true &&
-    convertedTypes.dataObjectsAllowed !== true &&
-    convertedTypes.documentsAllowed !== true
-  const allowedTypes = convertedTypes === undefined || nothingAllowed
-    ? { assetsAllowed: true, dataObjectsAllowed: true, documentsAllowed: true }
-    : convertedTypes
+  const allowedTypes = resolveRelationFilterAllowedTypes(config?.fieldDefinition as RelationFilterFieldDefinition | undefined)
 
   const [items, setItems] = useState<ManyToManyRelationValueItem[]>([])
 

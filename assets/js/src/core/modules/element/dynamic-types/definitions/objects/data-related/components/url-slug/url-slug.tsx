@@ -21,6 +21,7 @@ import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { cloneDeep, isEmpty, isNil, isPlainObject } from 'lodash'
 import { useFieldWidth } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/use-field-width'
 import { useStyles } from './url-slug.styles'
+import { actionTooltipDelay } from '@Pimcore/components/tooltip/tooltip'
 
 export interface UrlSlugEntry {
   slug: string
@@ -161,7 +162,10 @@ export const UrlSlug = (props: UrlSlugProps): React.JSX.Element => {
               )}
             </div>
             { props.disabled !== true && (
-            <Tooltip title={ t('remove') }>
+            <Tooltip
+              mouseEnterDelay={ actionTooltipDelay }
+              title={ t('remove') }
+            >
               <IconButton
                 disabled={ item.siteId === 0 }
                 icon={ { value: 'trash' } }

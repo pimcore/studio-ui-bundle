@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import dayjs from 'dayjs'
+import dayjs, { type PluginFunc } from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
 import { toDayJs, fromDayJs, toServerWallClock, formatFilterDate, parseFilterDate } from './date-picker-utils'
@@ -85,6 +85,62 @@ describe('toDayJs — non-numeric inputs are unchanged', () => {
   it('passes through dayjs values', () => {
     const d = dayjs.unix(WINTER_UNIX)
     expect(toDayJs(d, undefined, { respectTimezone: false, timezone: 'Europe/Vienna' })).toBe(d)
+  })
+
+  // Bundles loaded via module federation may ship their own dayjs copy. Its objects pass
+  // `dayjs.isDayjs()` but lack the plugins (weekday, localeData, ...) antd's pickers call, which
+  // crashed the pricing rule date range condition with "t.weekday is not a function".
+  it('re-creates dayjs values of a foreign dayjs instance with the local one', () => {
+    let foreignDayjs: typeof dayjs = dayjs
+    jest.isolateModules(() => {
+      foreignDayjs = jest.requireActual('dayjs')
+    })
+    expect(foreignDayjs).not.toBe(dayjs)
+
+    const foreign = foreignDayjs('2024-01-15 13:30')
+    const result = toDayJs(foreign)
+
+    expect(result).not.toBe(foreign)
+    expect(result).toBeInstanceOf(dayjs)
+    expect(result?.valueOf()).toBe(foreign.valueOf())
+    expect(typeof result?.tz).toBe('function')
+  })
+
+  describe('keeps the timezone semantics of foreign dayjs values', () => {
+    let foreignDayjs: typeof dayjs = dayjs
+    jest.isolateModules(() => {
+      foreignDayjs = jest.requireActual('dayjs')
+      foreignDayjs.extend(jest.requireActual<PluginFunc>('dayjs/plugin/utc'))
+      foreignDayjs.extend(jest.requireActual<PluginFunc>('dayjs/plugin/timezone'))
+    })
+    const WALL_CLOCK = 'YYYY-MM-DD HH:mm Z'
+
+    it('keeps UTC mode', () => {
+      const foreign = foreignDayjs.utc('2024-01-15T00:30:00Z')
+      const result = toDayJs(foreign)
+
+      expect(result).toBeInstanceOf(dayjs)
+      expect(result?.isUTC()).toBe(true)
+      expect(result?.format(WALL_CLOCK)).toBe(foreign.format(WALL_CLOCK))
+    })
+
+    it('keeps a named timezone', () => {
+      const foreign = foreignDayjs.tz('2024-01-15 09:00', 'Asia/Tokyo')
+      const result = toDayJs(foreign)
+
+      expect(result).toBeInstanceOf(dayjs)
+      expect(result?.format(WALL_CLOCK)).toBe('2024-01-15 09:00 +09:00')
+      expect(result?.valueOf()).toBe(foreign.valueOf())
+    })
+
+    it('keeps a fixed UTC offset', () => {
+      const foreign = foreignDayjs.utc('2024-01-15T00:30:00Z').utcOffset(330)
+      const result = toDayJs(foreign)
+
+      expect(result).toBeInstanceOf(dayjs)
+      expect(result?.format(WALL_CLOCK)).toBe('2024-01-15 06:00 +05:30')
+      expect(result?.valueOf()).toBe(foreign.valueOf())
+    })
   })
 
   it('parses strings with the given format and returns null for nullish', () => {

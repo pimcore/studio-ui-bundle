@@ -108,11 +108,13 @@ export const BatchEditListContainer = (): React.JSX.Element => {
             ]
           : []),
           <IconButton
+            aria-label={ t('remove') }
             icon={ { value: 'close' } }
             key={ 'remove' }
             onClick={ () => {
               handleRemove(batchEdit)
             } }
+            tooltip={ { title: t('remove') } }
           />
         ]
       }

@@ -113,9 +113,11 @@ export const PredefinedAssetMetadataContainer = (): React.JSX.Element => {
       renderToolbar={ (
         <Toolbar justify="space-between">
           <IconButton
+            aria-label={ t('refresh') }
             disabled={ isDataLoading }
             icon={ { value: 'refresh' } }
             onClick={ handleRefresh }
+            tooltip={ { title: t('refresh') } }
           />
 
           <IconTextButton

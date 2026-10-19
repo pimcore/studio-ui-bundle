@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { actionTooltipDelay, Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDataObjectHelper } from '../hooks/use-data-object-helper'
@@ -23,7 +23,10 @@ export const InheritanceButton = (props: InheritanceButtonProps): React.JSX.Elem
   const { openDataObject } = useDataObjectHelper()
 
   return (
-    <Tooltip title={ t('inheritance-active', { id: props.objectId }) }>
+    <Tooltip
+      mouseEnterDelay={ actionTooltipDelay }
+      title={ t('inheritance-active', { id: props.objectId }) }
+    >
       <IconButton
         icon={ { value: 'inheritance-active' } }
         onClick={ () => { void openDataObject({ config: { id: props.objectId } }) } }

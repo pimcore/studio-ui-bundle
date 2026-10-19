@@ -172,9 +172,11 @@ export const WebsiteSettingsContainer = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme="secondary">
           <IconButton
+            aria-label={ t('refresh') }
             disabled={ websiteSettingsFetching }
             icon={ { value: 'refresh' } }
             onClick={ reload }
+            tooltip={ { title: t('refresh') } }
           />
           <Pagination
             current={ page }

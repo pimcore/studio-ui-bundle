@@ -19,7 +19,7 @@ import {
 import { dragItem } from '@Pimcore/components/hotspot-image/utils/drag'
 import { type Coordinates, type Rectangle } from '@Pimcore/components/hotspot-image/types/types'
 import { resizeItem } from '@Pimcore/components/hotspot-image/utils/resize'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { actionTooltipDelay, Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useTranslation } from 'react-i18next'
 import { type ExpandedHotspotMarkerData } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/hotspot-image/types/hotspot-types'
 import { isEqual } from 'lodash'
@@ -207,7 +207,10 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
                     )
                   : null}
 
-                <Tooltip title={ t('remove') }>
+                <Tooltip
+                  mouseEnterDelay={ actionTooltipDelay }
+                  title={ t('remove') }
+                >
                   <IconButton
                     icon={ { value: 'trash' } }
                     onClick={ () => { onRemove?.(hotspot.id) } }
@@ -217,7 +220,10 @@ export const HotspotImage = ({ src, data, styleOptions = defaultStyleOptions, on
 
                 {onClone !== undefined
                   ? (
-                    <Tooltip title={ t('clone') }>
+                    <Tooltip
+                      mouseEnterDelay={ actionTooltipDelay }
+                      title={ t('clone') }
+                    >
                       <IconButton
                         icon={ { value: 'content-duplicate' } }
                         onClick={ () => { onClone(hotspot.id) } }
