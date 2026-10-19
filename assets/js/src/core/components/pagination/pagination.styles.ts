@@ -32,9 +32,9 @@ export const useStyles = createStyles(({ css, token }) => {
       }
     `,
 
-    // Antd's own total text is styled only inside its list; this matches it next to the controls.
+    // Antd's own total text is styled only inside its list; this matches it next to the controls,
+    // whose gap is all the space it needs.
     totalText: css`
-      margin-inline-end: ${token.marginXS}px;
       line-height: ${token.controlHeightSM}px;
       white-space: nowrap;
     `
