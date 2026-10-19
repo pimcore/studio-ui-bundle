@@ -129,4 +129,53 @@ describe('Pagination', () => {
     expect(totalText.compareDocumentPosition(control('first-page')) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     expect(container.querySelector('.ant-pagination-total-text')).toBeNull()
   })
+
+  it('moves to the last page when the total shrinks under the current one, and reports it', () => {
+    const onChange = jest.fn()
+    const { rerender } = render(
+      <Pagination
+        current={ 5 }
+        onChange={ onChange }
+        total={ 45 }
+      />
+    )
+
+    rerender(
+      <Pagination
+        current={ 5 }
+        onChange={ onChange }
+        total={ 15 }
+      />
+    )
+
+    expect(screen.getByRole('textbox')).toHaveValue('2')
+    expect(onChange).toHaveBeenLastCalledWith(2, 10)
+    expect(control('next-page')).toBeDisabled()
+
+    fireEvent.click(control('previous-page'))
+    expect(onChange).toHaveBeenLastCalledWith(1, 10)
+  })
+
+  it('disables every control for an empty list even with a later page still set', () => {
+    render(
+      <Pagination
+        current={ 3 }
+        total={ 0 }
+      />
+    )
+
+    expect(screen.getAllByRole('button').every((button) => (button as HTMLButtonElement).disabled)).toBe(true)
+  })
+
+  it('keeps what a custom itemRender returns, also nothing', () => {
+    const { container } = render(
+      <Pagination
+        itemRender={ (_page, type, element) => (type === 'page' ? null : element) }
+        simple={ false }
+        total={ 45 }
+      />
+    )
+
+    expect(container.querySelectorAll('.ant-pagination-item')).toHaveLength(0)
+  })
 })

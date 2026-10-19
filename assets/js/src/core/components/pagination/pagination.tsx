@@ -85,9 +85,20 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
   const total = paginationProps.total ?? 0
   // The page count as antd computes it: no page at all for an empty list.
   const pageCount = Math.floor((total - 1) / pageSize) + 1
+  // The page shown and navigated from stays within the pages that exist, also when the total
+  // shrinks under a later page or the list is empty.
+  const currentPage = pageCount === 0 ? 1 : Math.min(Math.max(current, 1), pageCount)
   const isDisabled = paginationProps.disabled === true
-  const canGoBack = !isDisabled && current > 1
-  const canGoForward = !isDisabled && current < pageCount
+  const canGoBack = !isDisabled && pageCount > 0 && currentPage > 1
+  const canGoForward = !isDisabled && currentPage < pageCount
+
+  // A total that shrinks under the current page moves to the last page, and reports it, so the
+  // caller loads a page that exists. An empty list (no pages yet) leaves the page alone.
+  useEffect(() => {
+    if (pageCount > 0 && current > pageCount) {
+      setCurrent(pageCount)
+    }
+  }, [pageCount, current])
 
   // Antd has no first and last page controls, so all four page controls are drawn here, around
   // antd's page input; antd's own previous and next are left out (pageItemRenderer).
@@ -107,7 +118,8 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
       return null
     }
 
-    return itemRender?.(page, type, originalElement) ?? originalElement
+    // A custom renderer's result stands, also when it renders nothing.
+    return itemRender === undefined ? originalElement : itemRender(page, type, originalElement)
   }
 
   // Drawn here rather than by antd, which would put it between the previous control and the input.
@@ -115,7 +127,7 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
     ? null
     : (
       <span className={ styles.totalText }>
-        {showTotal(total, [total === 0 ? 0 : (current - 1) * pageSize + 1, Math.min(current * pageSize, total)])}
+        {showTotal(total, [total === 0 ? 0 : (currentPage - 1) * pageSize + 1, Math.min(currentPage * pageSize, total)])}
       </span>
       )
 
@@ -137,17 +149,17 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
       >
         {totalText}
         {pageControl('first', 'chevron-left-pipe', t('pagination.first-page'), 1, canGoBack)}
-        {pageControl('prev', 'chevron-left', t('pagination.previous-page'), current - 1, canGoBack)}
+        {pageControl('prev', 'chevron-left', t('pagination.previous-page'), currentPage - 1, canGoBack)}
         <BasePagination
           { ...paginationProps }
           className={ className }
-          current={ current }
+          current={ currentPage }
           itemRender={ pageItemRenderer }
           onChange={ onBasePaginationChange }
           pageSize={ pageSize }
           showSizeChanger={ false }
         />
-        {pageControl('next', 'chevron-right', t('pagination.next-page'), current + 1, canGoForward)}
+        {pageControl('next', 'chevron-right', t('pagination.next-page'), currentPage + 1, canGoForward)}
         {pageControl('last', 'chevron-right-pipe', t('pagination.last-page'), pageCount, canGoForward)}
       </Flex>
 
