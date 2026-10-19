@@ -43,7 +43,7 @@ const objectsOfClass = (className: string | null | undefined): IRelationAllowedT
  * assets/objects/documents flags.
  */
 export const resolveRelationFilterAllowedTypes = (fieldDefinition: RelationFilterFieldDefinition | undefined): IRelationAllowedTypesDataComponent => {
-  if (fieldDefinition === undefined) {
+  if (isNil(fieldDefinition)) {
     return ALL_TYPES_ALLOWED
   }
 
