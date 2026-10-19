@@ -40,7 +40,7 @@ export const LoginPage = (): React.JSX.Element => {
       (async () => {
         const redirectPath: string = location?.state?.from?.pathname
 
-        navigate(redirectPath ?? routes.root)
+        void navigate(redirectPath ?? routes.root)
 
         await sendStatistics(user.isAdmin)
       })().catch(() => { })
@@ -52,11 +52,11 @@ export const LoginPage = (): React.JSX.Element => {
       void loginWithToken(
         token,
         async () => {
-          navigate(routes.root)
+          void navigate(routes.root)
           dispatch(setAuthState(true))
         },
         () => {
-          navigate(routes.login)
+          void navigate(routes.login)
         }
       )
     }
