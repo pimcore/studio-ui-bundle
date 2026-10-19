@@ -12,7 +12,7 @@ import { type KeyboardEvent, type MouseEvent, useContext } from 'react'
 import { isNil, isUndefined } from 'lodash'
 import { TreeContext } from '../element-tree'
 import { type TreeNodeProps } from './tree-node'
-import { buildOrderedNodes, resolveNodeIdRange } from '../utils/selection-range'
+import { useSelectionGestures } from './use-selection-gestures'
 
 /**
  * The selection and expansion part of the node state, as returned by
@@ -28,6 +28,7 @@ export interface TreeNodeInteractionState {
   setActive: () => void
   getSelectedIds: () => string[]
   getAnchorId: () => string | undefined
+  isSelectionImplicit: () => boolean
 }
 
 export interface UseTreeNodeInteractionReturnType {
@@ -53,23 +54,13 @@ export const useTreeNodeInteraction = (
     isExpanded,
     setExpanded,
     setSelectedIds,
-    toggleSelection,
-    selectRange,
     clearSelection,
     setActive,
-    getSelectedIds,
-    getAnchorId
+    getSelectedIds
   } = state
 
   const nodeId = node.id
-
-  const getOrderedNodes = (): ReturnType<typeof buildOrderedNodes> => {
-    if (isUndefined(nodeOrder) || isNil(nodesRefs)) {
-      return []
-    }
-
-    return buildOrderedNodes(nodeOrder(), nodesRefs.current)
-  }
+  const { extendSelectionTo, toggleNode, selectAllVisible } = useSelectionGestures(node, state)
 
   /**
    * Plain activation: the node becomes the only selected node, becomes the active
@@ -82,19 +73,6 @@ export const useTreeNodeInteraction = (
     if (!isUndefined(onSelect)) {
       onSelect(node)
     }
-  }
-
-  /**
-   * Extends the selection from the anchor to a target node. Never opens the
-   * element - selecting several nodes must not open several editors.
-   */
-  const extendSelectionTo = (targetNodeId: string, additive: boolean = false): void => {
-    if (isUndefined(getAnchorId())) {
-      // The first extension starts the range at this node.
-      setSelectedIds([nodeId])
-    }
-
-    selectRange(resolveNodeIdRange(getOrderedNodes(), getAnchorId() ?? nodeId, targetNodeId), additive)
   }
 
   const focusNode = (event: KeyboardEvent, targetInternalKey: string | undefined): void => {
@@ -149,26 +127,6 @@ export const useTreeNodeInteraction = (
     focusNode(event, parent?.node.internalKey)
   }
 
-  /**
-   * Selects every node the tree currently renders, the way Ctrl/Cmd + A selects all
-   * rows of a list. Collapsed children are not rendered and stay out, and so does
-   * the root, which can neither be moved nor deleted. The tree caps the selection.
-   */
-  const selectAllVisible = (event: KeyboardEvent): void => {
-    event.preventDefault()
-
-    if (isUndefined(nodeOrder) || isNil(nodesRefs)) {
-      return
-    }
-
-    const nodeIds = nodeOrder()
-      .map(internalKey => nodesRefs.current[internalKey]?.node)
-      .filter(visibleNode => !isNil(visibleNode) && visibleNode.isRoot !== true)
-      .map(visibleNode => visibleNode.id)
-
-    selectRange(nodeIds)
-  }
-
   const onClick = (event: MouseEvent): void => {
     if (!isMultiSelect) {
       activateNode()
@@ -183,7 +141,7 @@ export const useTreeNodeInteraction = (
     }
 
     if (event.ctrlKey || event.metaKey) {
-      toggleSelection()
+      toggleNode()
       return
     }
 
@@ -210,7 +168,7 @@ export const useTreeNodeInteraction = (
     // Ctrl/Cmd + Space is the keyboard equivalent of a modifier click.
     if (isMultiSelect && event.key === ' ' && (event.ctrlKey || event.metaKey)) {
       event.preventDefault()
-      toggleSelection()
+      toggleNode()
     }
 
     if (event.key === 'Escape') {

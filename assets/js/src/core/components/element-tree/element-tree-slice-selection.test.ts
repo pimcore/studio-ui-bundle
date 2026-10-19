@@ -28,6 +28,7 @@ import {
   markNodesDeleting,
   selectActiveNodeId,
   selectAnchorNodeId,
+  selectIsSelectionImplicit,
   selectIsSelectionLimitReached,
   selectNodeRange,
   selectSelectedNodeIds,
@@ -309,6 +310,40 @@ describe('element-tree-slice selection', () => {
 
     expect(bothTrees[treeId].selectedNodeIds).toEqual(['2'])
     expect(bothTrees['second-tree'].selectedNodeIds).toEqual(['9'])
+  })
+})
+
+describe('element-tree-slice implicit selection', () => {
+  const implicit = (state: Record<string, any>): boolean => selectIsSelectionImplicit(asRootState(state), treeId)
+
+  it('treats a single node set without a modifier as implicit', () => {
+    const state = slice.reducer(withLoadedNodes(['2', '3']), setSelectedNodeIds({ treeId, selectedNodeIds: ['2'] }))
+
+    expect(implicit(state)).toBe(true)
+  })
+
+  it('treats several nodes set at once as explicit', () => {
+    const state = slice.reducer(withLoadedNodes(['2', '3']), setSelectedNodeIds({ treeId, selectedNodeIds: ['2', '3'] }))
+
+    expect(implicit(state)).toBe(false)
+  })
+
+  it('makes a selection explicit with a toggle or a range', () => {
+    const opened = slice.reducer(withLoadedNodes(['2', '3', '4']), setSelectedNodeIds({ treeId, selectedNodeIds: ['2'] }))
+
+    expect(implicit(slice.reducer(opened, toggleNodeSelection({ treeId, nodeId: '3' })))).toBe(false)
+    expect(implicit(slice.reducer(opened, selectNodeRange({ treeId, nodeIds: ['3', '4'] })))).toBe(false)
+  })
+
+  it('treats a located node as implicit', () => {
+    const explicit = slice.reducer(withLoadedNodes(['2', '3']), setSelectedNodeIds({ treeId, selectedNodeIds: ['2', '3'] }))
+    const located = slice.reducer(explicit, locateInTree({ treeId, nodeId: '3', treeLevelData: [] }))
+
+    expect(implicit(located)).toBe(true)
+  })
+
+  it('is not implicit for an unknown tree', () => {
+    expect(selectIsSelectionImplicit(asRootState(emptyState()), 'unknown')).toBe(false)
   })
 })
 

@@ -103,6 +103,7 @@ const nodeStateFixture = (childrenByNodeId: Record<string, string[]>) => (nodeId
   setActive: jest.fn(),
   getSelectedIds: () => [],
   getAnchorId: () => undefined,
+  isSelectionImplicit: () => false,
   getChildren: () => childrenByNodeId[nodeId] ?? []
 })
 

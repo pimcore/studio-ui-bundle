@@ -9,7 +9,7 @@
  */
 
 import { store, useAppDispatch } from '@Pimcore/app/store'
-import { type InternalNodeState, selectActiveNodeId, selectAnchorNodeId, selectNodeState, selectSelectedNodeIds, selectSelectedNodes, selectAncestorNodeIds, type TreeNode, setActiveNodeId, setNodeExpanded, setNodeLoading, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, setNodeFetching, setNodeHasChildren, toggleNodeSelection, selectNodeRange, clearSelection as clearSelectionAction } from '../element-tree-slice'
+import { type InternalNodeState, selectActiveNodeId, selectAnchorNodeId, selectIsSelectionImplicit, selectNodeState, selectSelectedNodeIds, selectSelectedNodes, selectAncestorNodeIds, type TreeNode, setActiveNodeId, setNodeExpanded, setNodeLoading, setNodePage, setNodeSearchTerm, setSelectedNodeIds, setNodeScrollTo, updateNodesByParentId, setNodeFetching, setNodeHasChildren, toggleNodeSelection, selectNodeRange, clearSelection as clearSelectionAction } from '../element-tree-slice'
 import { isUndefined } from 'lodash'
 import { type DataTransformerReturnType, type DataTransformerSourceNode } from '../types/node-api-hook'
 import { useNodeApiHook } from '../provider/node-api-hook-provider/use-node-api-hook'
@@ -42,6 +42,8 @@ export interface UseElementTreeReturnType {
   /** Node data of the selection; omits selected nodes that are not loaded. */
   getSelectedNodes: () => TreeNode[]
   getAnchorId: () => string | undefined
+  /** True while the selection is just the node a plain click opened. */
+  isSelectionImplicit: () => boolean
   getActiveId: () => string | undefined
   /** Ancestor ids of a node, closest first. */
   getAncestorIds: (nodeId: string) => string[]
@@ -159,6 +161,8 @@ export const useElementTree = (): UseElementTreeReturnType => {
 
   const getAnchorId = (): string | undefined => selectAnchorNodeId(store.getState(), treeId)
 
+  const isSelectionImplicit = (): boolean => selectIsSelectionImplicit(store.getState(), treeId)
+
   const getActiveId = (): string | undefined => selectActiveNodeId(store.getState(), treeId)
 
   const setScrollTo = (nodeId: string, scrollTo: boolean): void => {
@@ -187,6 +191,7 @@ export const useElementTree = (): UseElementTreeReturnType => {
     getSelectedIds,
     getSelectedNodes,
     getAnchorId,
+    isSelectionImplicit,
     getActiveId,
     getAncestorIds
   }

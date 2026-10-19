@@ -33,11 +33,12 @@ export const useElementTreeNode = (nodeId: string): NodeState & {
   setActive: () => void
   getSelectedIds: () => string[]
   getAnchorId: () => string | undefined
+  isSelectionImplicit: () => boolean
   getChildren: () => string[]
 } => {
   const dispatch = useAppDispatch()
   const { treeId } = useTreeId()
-  const { refreshChildren, setLoading, setFetching, setExpanded, setPage, setSearchTerm, setSelectedIds, setScrollTo, toggleSelection, selectRange, clearSelection, setActiveId, getSelectedIds, getAnchorId } = useElementTree()
+  const { refreshChildren, setLoading, setFetching, setExpanded, setPage, setSearchTerm, setSelectedIds, setScrollTo, toggleSelection, selectRange, clearSelection, setActiveId, getSelectedIds, getAnchorId, isSelectionImplicit } = useElementTree()
 
   const nodeState = useSelector((state: RootState) => selectNodeState(state, treeId, nodeId))
 
@@ -84,6 +85,7 @@ export const useElementTreeNode = (nodeId: string): NodeState & {
     setActive: () => { setActiveId(nodeId) },
     getSelectedIds,
     getAnchorId,
+    isSelectionImplicit,
     getChildren
   }
 }

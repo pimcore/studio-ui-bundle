@@ -71,6 +71,7 @@ const buildState = (overrides: Partial<TreeNodeInteractionState> = {}): TreeNode
   setActive: jest.fn(),
   getSelectedIds: jest.fn(() => []),
   getAnchorId: jest.fn(() => undefined),
+  isSelectionImplicit: jest.fn(() => false),
   ...overrides
 })
 

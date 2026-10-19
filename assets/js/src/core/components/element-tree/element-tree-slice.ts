@@ -82,6 +82,14 @@ interface TreeState {
    */
   anchorNodeId?: string
 
+  /**
+   * True while the selection is only what a plain click (or locate, a context menu
+   * or a drag) picked - a single node the user opened rather than chose for a set.
+   * The first modifier gesture then starts a set of its own instead of pulling
+   * that node in. Modifier gestures make a selection explicit.
+   */
+  isSelectionImplicit?: boolean
+
   isSelectionLimitReached: boolean
 }
 
@@ -221,6 +229,8 @@ const removeDescendants = (nodes: TreeNodesState, parentId: string, keepBasicSta
 interface SelectionUpdate {
   anchorNodeId?: string
   activeNodeId?: string
+  /** Left as it is when not given. */
+  isImplicit?: boolean
 }
 
 /**
@@ -273,6 +283,10 @@ const applySelection = (
 
   if (!isUndefined(update.activeNodeId)) {
     tree.activeNodeId = update.activeNodeId
+  }
+
+  if (!isUndefined(update.isImplicit)) {
+    tree.isSelectionImplicit = update.isImplicit
   }
 
   if (nextIds.length === 0) {
@@ -430,7 +444,8 @@ const slice = createSlice({
       { payload }: PayloadAction<{ treeId: string, selectedNodeIds: string[] }>
     ) => {
       applySelection(state, payload.treeId, payload.selectedNodeIds, {
-        anchorNodeId: payload.selectedNodeIds[payload.selectedNodeIds.length - 1]
+        anchorNodeId: payload.selectedNodeIds[payload.selectedNodeIds.length - 1],
+        isImplicit: payload.selectedNodeIds.length <= 1
       })
     },
     setActiveNodeId: (
@@ -451,7 +466,8 @@ const slice = createSlice({
         : [...tree.selectedNodeIds, payload.nodeId]
 
       applySelection(state, payload.treeId, selectedNodeIds, {
-        anchorNodeId: payload.nodeId
+        anchorNodeId: payload.nodeId,
+        isImplicit: false
       })
     },
     selectNodeRange: (
@@ -466,7 +482,7 @@ const slice = createSlice({
         ? [...tree.selectedNodeIds, ...payload.nodeIds]
         : payload.nodeIds
 
-      applySelection(state, payload.treeId, selectedNodeIds)
+      applySelection(state, payload.treeId, selectedNodeIds, { isImplicit: false })
     },
     clearSelection: (
       state,
@@ -567,7 +583,8 @@ const slice = createSlice({
       // replaces the selection and becomes the active node.
       applySelection(state, payload.treeId, [payload.nodeId], {
         anchorNodeId: payload.nodeId,
-        activeNodeId: payload.nodeId
+        activeNodeId: payload.nodeId,
+        isImplicit: true
       })
     },
     setNodeFetching: (
@@ -1048,6 +1065,9 @@ export const selectActiveNodeId = (state: RootState, treeId: string): string | u
 
 export const selectAnchorNodeId = (state: RootState, treeId: string): string | undefined =>
   state.trees[treeId]?.anchorNodeId
+
+export const selectIsSelectionImplicit = (state: RootState, treeId: string): boolean =>
+  state.trees[treeId]?.isSelectionImplicit === true
 
 export const selectIsSelectionLimitReached = (state: RootState, treeId: string): boolean =>
   state.trees[treeId]?.isSelectionLimitReached ?? false
