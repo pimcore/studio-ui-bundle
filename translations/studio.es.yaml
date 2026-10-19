@@ -318,10 +318,10 @@ custom-layout.empty-state.edit: Seleccione un diseño personalizado existente pa
 example-prefix: Prefijo de ejemplo
 pagination.show-total: Total {{total}} elementos
 pagination.page: Página
-pagination.first-page: primera página
-pagination.previous-page: pagina anterior
-pagination.next-page: pagina siguiente
-pagination.last-page: última página
+pagination.first-page: Primera página
+pagination.previous-page: Página anterior
+pagination.next-page: Página siguiente
+pagination.last-page: Última página
 pagination.showing-x-of-y: Mostrando {{loaded}} de {{total}}
 preview-card.locate-in-tree: Localizar en el árbol
 preview-card.rename: Renombrar
