@@ -27,6 +27,11 @@ export interface ModifiedCellsAction {
   modifiedCells: ModifiedCells
 }
 
+export interface ResetChangesForTypesAction {
+  id: number
+  types: string[]
+}
+
 export interface TrackableChangesDraft {
   modified: boolean
   changes: Record<string, boolean>
@@ -35,6 +40,7 @@ export interface TrackableChangesDraft {
 
 interface UseTrackableChangesReturn {
   resetChanges: (state: EntityState<TrackableChangesDraft, number>, action: PayloadAction<number>) => void
+  resetChangesForTypes: (state: EntityState<TrackableChangesDraft, number>, action: PayloadAction<ResetChangesForTypesAction>) => void
   setModifiedCells: (state: EntityState<TrackableChangesDraft, number>, action: PayloadAction<ModifiedCellsAction>) => void
 }
 
@@ -44,6 +50,21 @@ export const useTrackableChangesReducers = (entityAdapter: EntityAdapter<Trackab
       draft.changes = {}
       draft.modifiedCells = {}
       draft.modified = false
+
+      return draft
+    })
+  }
+
+  const resetChangesForTypes = (state: EntityState<TrackableChangesDraft, number>, action: PayloadAction<ResetChangesForTypesAction>): void => {
+    const typesToReset = new Set(action.payload.types)
+    const withoutResetTypes = <T>(record: Record<string, T>): Record<string, T> => {
+      return Object.fromEntries(Object.entries(record).filter(([type]) => !typesToReset.has(type)))
+    }
+
+    modifyDraft(state, action.payload.id, (draft: TrackableChangesDraft): TrackableChangesDraft => {
+      draft.changes = withoutResetTypes(draft.changes)
+      draft.modifiedCells = withoutResetTypes(draft.modifiedCells)
+      draft.modified = Object.keys(draft.changes).length > 0
 
       return draft
     })
@@ -72,24 +93,35 @@ export const useTrackableChangesReducers = (entityAdapter: EntityAdapter<Trackab
 
   return {
     resetChanges,
+    resetChangesForTypes,
     setModifiedCells
   }
 }
 
 export interface UseTrackableChangesDraftReturn {
-  removeTrackedChanges: () => void
+  /**
+   * Without `types` every tracked change is reset. With `types` only these change types are reset,
+   * so changes tracked in the meantime (e.g. while a save request is in flight) are kept.
+   */
+  removeTrackedChanges: (types?: string[]) => void
   setModifiedCells: (type: string, modifiedCells: ModifiedCells) => void
 }
 
 export const useTrackableChangesDraft = (
   id: number,
   resetChangesAction: ActionCreatorWithPayload<number>,
-  setModifiedCellsAction: ActionCreatorWithPayload<ModifiedCellsAction>
+  setModifiedCellsAction: ActionCreatorWithPayload<ModifiedCellsAction>,
+  resetChangesForTypesAction?: ActionCreatorWithPayload<ResetChangesForTypesAction>
 ): UseTrackableChangesDraftReturn => {
   const dispatch = useAppDispatch()
 
   return {
-    removeTrackedChanges: (): void => {
+    removeTrackedChanges: (types?: string[]): void => {
+      if (types !== undefined && resetChangesForTypesAction !== undefined) {
+        dispatch(resetChangesForTypesAction({ id, types }))
+        return
+      }
+
       dispatch(resetChangesAction(id))
     },
     setModifiedCells: (type, modifiedCells): void => {

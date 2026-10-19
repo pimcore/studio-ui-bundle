@@ -15,16 +15,8 @@ import { useAssetDraft } from '../../../hooks/use-asset-draft'
 import { useAssetUpdateByIdMutation } from '../../../asset-api-slice-enhanced'
 import { useMessage } from '@Pimcore/components/message/useMessage'
 import {
-  type DataProperty as DataPropertyApi
-} from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/properties/properties-api-slice.gen'
-import {
   useSaveSchedules
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/schedule/hooks/use-save-schedules'
-import {
-  type CustomMetadata as CustomMetadataApi
-} from '@Pimcore/modules/asset/editor/shared-tab-manager/tabs/custom-metadata/metadata-api-slice-enhanced'
-import { type DataProperty } from '@Pimcore/modules/element/draft/hooks/use-properties'
-import { type CustomMetadata } from '@Pimcore/modules/asset/draft/hooks/use-custom-metadata'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { isNil } from 'lodash'
@@ -42,6 +34,7 @@ import { type AssetPostUpdateEvent } from '@Pimcore/modules/asset/events/post-up
 import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
 import { useAppDispatch } from '@sdk/app'
 import { setModificationDate } from '@Pimcore/modules/asset/asset-draft-slice'
+import { collectAssetUpdateData, hasAssetUpdateData } from './collect-asset-update-data'
 
 export const EditorToolbarSaveButton = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -50,28 +43,14 @@ export const EditorToolbarSaveButton = (): React.JSX.Element => {
 
   const { asset, properties, removeTrackedChanges, customMetadata, customSettings, imageSettings, textData } = useAssetDraft(id)
 
-  const [saveAsset, { isLoading, isSuccess, isError, error }] = useAssetUpdateByIdMutation()
+  const [saveAsset, { isLoading, isError, error }] = useAssetUpdateByIdMutation()
   const {
     saveSchedules,
     isLoading: isSchedulesLoading,
-    isSuccess: isSchedulesSuccess,
     isError: isSchedulesError,
     error: schedulesError
   } = useSaveSchedules('asset', id, false)
   const messageApi = useMessage()
-
-  useEffect(() => {
-    const handleSuccessEvent = async (): Promise<void> => {
-      if (isSuccess && isSchedulesSuccess) {
-        removeTrackedChanges()
-        await messageApi.success(t('save-success'))
-      }
-    }
-
-    handleSuccessEvent().catch((error) => {
-      console.error(error)
-    })
-  }, [isSuccess, isSchedulesSuccess])
 
   useEffect(() => {
     if (isError && !isNil(error)) {
@@ -108,61 +87,48 @@ export const EditorToolbarSaveButton = (): React.JSX.Element => {
     </>
   )
 
+  async function updateAsset (update: AssetSaveUpdateData): Promise<Awaited<ReturnType<typeof saveAsset>>> {
+    const response = await saveAsset({
+      id,
+      body: {
+        data: {
+          ...update
+        }
+      }
+    })
+
+    if (response.error === undefined) {
+      if ('modificationDate' in response.data) {
+        dispatch(setModificationDate({ id, modificationDate: response.data.modificationDate ?? null }))
+      }
+
+      const event: AssetPostUpdateEvent = {
+        identifier: {
+          type: eventTypes['asset:editor:post-update'],
+          id: String(id)
+        },
+        payload: {
+          id,
+          updatedData: update,
+          responseData: response.data
+        }
+      }
+      eventBus.publish(event)
+    }
+
+    return response
+  }
+
   function onSaveClick (): void {
     if (asset?.changes === undefined) return
 
-    const update: AssetSaveUpdateData = {}
-
-    if (asset.changes.properties) {
-      const propertyUpdate = properties?.map((property: DataProperty): DataPropertyApi => {
-        const { rowId, ...propertyApi } = property
-
-        if (typeof propertyApi.data === 'object') {
-          return {
-            ...propertyApi,
-            data: propertyApi?.data?.id ?? null
-          }
-        }
-
-        return propertyApi
-      })
-
-      update.properties = propertyUpdate?.filter((property) => !property.inherited)
-    }
-
-    if (asset.changes.customMetadata) {
-      update.metadata = customMetadata?.map((metadata: CustomMetadata): CustomMetadataApi => {
-        const { rowId, ...metadataApi } = metadata
-
-        if (metadataApi.type.startsWith('metadata.')) {
-          metadataApi.type = metadataApi.type.replace('metadata.', '')
-        }
-
-        if (metadataApi.data === null) {
-          if (metadataApi.type === 'input' || metadataApi.type === 'textarea') {
-            metadataApi.data = ''
-          }
-
-          if (metadataApi.type === 'checkbox') {
-            metadataApi.data = false
-          }
-        }
-
-        return metadataApi
-      })
-    }
-
-    if (asset.changes.customSettings) {
-      update.customSettings = customSettings
-    }
-
-    if (asset.changes.imageSettings) {
-      update.image = imageSettings
-    }
-
-    if (asset.changes.textData) {
-      update.data = textData
-    }
+    const { updateData: update, collectedTypes } = collectAssetUpdateData(asset.changes, {
+      properties,
+      customMetadata,
+      customSettings,
+      imageSettings,
+      textData
+    })
 
     const saveDataProcessorRegistry = container.get<AssetSaveDataProcessorRegistry>(
       serviceIds['Asset/ProcessorRegistry/SaveDataProcessor']
@@ -171,38 +137,25 @@ export const EditorToolbarSaveButton = (): React.JSX.Element => {
     const context = new AssetSaveDataContext(id, update)
     saveDataProcessorRegistry.executeProcessors(context)
 
-    const saveAssetPromise = saveAsset({
-      id,
-      body: {
-        data: {
-          ...update
-        }
-      }
-    }).then((response) => {
-      if (response.error === undefined) {
-        if ('modificationDate' in response.data) {
-          dispatch(setModificationDate({ id, modificationDate: response.data.modificationDate ?? null }))
-        }
-
-        const event: AssetPostUpdateEvent = {
-          identifier: {
-            type: eventTypes['asset:editor:post-update'],
-            id: String(id)
-          },
-          payload: {
-            id,
-            updatedData: update,
-            responseData: response.data
-          }
-        }
-        eventBus.publish(event)
-      }
-      return response
-    })
+    // An asset save without data would only create a version and bump the modification date
+    const saveAssetPromise = hasAssetUpdateData(update)
+      ? updateAsset(update)
+      : Promise.resolve(undefined)
 
     const saveSchedulesPromise = saveSchedules()
 
-    Promise.all([saveAssetPromise, saveSchedulesPromise]).catch((error) => {
+    Promise.all([saveAssetPromise, saveSchedulesPromise]).then(async ([assetResponse, isSchedulesSaved]) => {
+      if (assetResponse?.error !== undefined || !isSchedulesSaved) {
+        return
+      }
+
+      // Only reset what was sent: changes tracked while the request was in flight must survive
+      if (collectedTypes.length > 0) {
+        removeTrackedChanges(collectedTypes)
+      }
+
+      await messageApi.success(t('save-success'))
+    }).catch((error) => {
       console.log(error)
     })
   }
