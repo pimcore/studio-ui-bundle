@@ -8,17 +8,41 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { type FilterValues } from '../types'
 import { type FiltersStore } from './create-filters-store'
 
+/**
+ * Mirrors the applied store into the draft, limited to the values that changed since the last
+ * run. Copying everything on every change would let an unrelated applied write - the search term
+ * typed into a top bar, for instance - overwrite the draft edits that are still waiting for Apply.
+ */
 export const useDraftSync = (
   appliedValues: FilterValues,
   draftStore: Pick<FiltersStore, 'setValues'>
 ): void => {
   const { setValues } = draftStore
+  const previousValues = useRef<FilterValues | undefined>(undefined)
 
   useEffect(() => {
-    setValues(appliedValues)
+    const previous = previousValues.current
+    previousValues.current = appliedValues
+
+    if (previous === undefined) {
+      setValues(appliedValues)
+      return
+    }
+
+    const changedValues: FilterValues = {}
+
+    for (const key of Object.keys(appliedValues)) {
+      if (!Object.is(previous[key], appliedValues[key])) {
+        changedValues[key] = appliedValues[key]
+      }
+    }
+
+    if (Object.keys(changedValues).length > 0) {
+      setValues(changedValues)
+    }
   }, [appliedValues])
 }
