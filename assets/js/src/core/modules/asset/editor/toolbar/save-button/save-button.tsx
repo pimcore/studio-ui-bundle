@@ -34,7 +34,7 @@ import { type AssetPostUpdateEvent } from '@Pimcore/modules/asset/events/post-up
 import { useHandleKeyBindings } from '@Pimcore/modules/app/hook/use-handle-keybindings'
 import { useAppDispatch } from '@sdk/app'
 import { setModificationDate } from '@Pimcore/modules/asset/asset-draft-slice'
-import { collectAssetUpdateData, hasAssetUpdateData } from './collect-asset-update-data'
+import { collectAssetUpdateData, getSentChangeTypes, hasAssetUpdateData } from './collect-asset-update-data'
 
 export const EditorToolbarSaveButton = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -122,13 +122,8 @@ export const EditorToolbarSaveButton = (): React.JSX.Element => {
   function onSaveClick (): void {
     if (asset?.changes === undefined) return
 
-    const { updateData: update, collectedTypes } = collectAssetUpdateData(asset.changes, {
-      properties,
-      customMetadata,
-      customSettings,
-      imageSettings,
-      textData
-    })
+    const draftData = { properties, customMetadata, customSettings, imageSettings, textData }
+    const { updateData: update, collectedTypes } = collectAssetUpdateData(asset.changes, draftData)
 
     const saveDataProcessorRegistry = container.get<AssetSaveDataProcessorRegistry>(
       serviceIds['Asset/ProcessorRegistry/SaveDataProcessor']
@@ -149,9 +144,10 @@ export const EditorToolbarSaveButton = (): React.JSX.Element => {
         return
       }
 
-      // Only reset what was sent: changes tracked while the request was in flight must survive
-      if (collectedTypes.length > 0) {
-        removeTrackedChanges(collectedTypes)
+      // Only reset what was sent and not edited since: changes tracked while the request was in flight must survive
+      const sentTypes = getSentChangeTypes(collectedTypes, update)
+      if (sentTypes.length > 0) {
+        removeTrackedChanges(sentTypes, draftData)
       }
 
       await messageApi.success(t('save-success'))

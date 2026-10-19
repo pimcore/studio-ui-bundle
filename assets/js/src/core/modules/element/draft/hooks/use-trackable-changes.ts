@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import type { ActionCreatorWithPayload, PayloadAction } from '@reduxjs/toolkit'
+import { isDraft, original, type ActionCreatorWithPayload, type PayloadAction } from '@reduxjs/toolkit'
 import type { EntityAdapter, EntityState } from '@reduxjs/toolkit/src/entities/models'
 
 import { useAppDispatch } from '@sdk/app'
@@ -30,6 +30,9 @@ export interface ModifiedCellsAction {
 export interface ResetChangesForTypesAction {
   id: number
   types: string[]
+
+  /** Draft sections as they were when the changes were sent; a type is only reset while its section is still the same */
+  snapshot?: Record<string, unknown>
 }
 
 export interface TrackableChangesDraft {
@@ -56,14 +59,25 @@ export const useTrackableChangesReducers = (entityAdapter: EntityAdapter<Trackab
   }
 
   const resetChangesForTypes = (state: EntityState<TrackableChangesDraft, number>, action: PayloadAction<ResetChangesForTypesAction>): void => {
-    const typesToReset = new Set(action.payload.types)
-    const withoutResetTypes = <T>(record: Record<string, T>): Record<string, T> => {
-      return Object.fromEntries(Object.entries(record).filter(([type]) => !typesToReset.has(type)))
+    const withoutTypes = <T>(record: Record<string, T>, types: Set<string>): Record<string, T> => {
+      return Object.fromEntries(Object.entries(record).filter(([type]) => !types.has(type)))
     }
 
     modifyDraft(state, action.payload.id, (draft: TrackableChangesDraft): TrackableChangesDraft => {
-      draft.changes = withoutResetTypes(draft.changes)
-      draft.modifiedCells = withoutResetTypes(draft.modifiedCells)
+      const { snapshot } = action.payload
+      const sections = draft as unknown as Record<string, unknown>
+      const typesToReset = new Set(action.payload.types.filter((type) => {
+        if (snapshot === undefined || !(type in snapshot)) {
+          return true
+        }
+
+        const section = sections[type]
+
+        return (isDraft(section) ? original(section) : section) === snapshot[type]
+      }))
+
+      draft.changes = withoutTypes(draft.changes, typesToReset)
+      draft.modifiedCells = withoutTypes(draft.modifiedCells, typesToReset)
       draft.modified = Object.keys(draft.changes).length > 0
 
       return draft
@@ -102,8 +116,9 @@ export interface UseTrackableChangesDraftReturn {
   /**
    * Without `types` every tracked change is reset. With `types` only these change types are reset,
    * so changes tracked in the meantime (e.g. while a save request is in flight) are kept.
+   * With a `snapshot` of the draft sections, a type is additionally kept when its section was edited since.
    */
-  removeTrackedChanges: (types?: string[]) => void
+  removeTrackedChanges: (types?: string[], snapshot?: Record<string, unknown>) => void
   setModifiedCells: (type: string, modifiedCells: ModifiedCells) => void
 }
 
@@ -116,9 +131,9 @@ export const useTrackableChangesDraft = (
   const dispatch = useAppDispatch()
 
   return {
-    removeTrackedChanges: (types?: string[]): void => {
+    removeTrackedChanges: (types?: string[], snapshot?: Record<string, unknown>): void => {
       if (types !== undefined && resetChangesForTypesAction !== undefined) {
-        dispatch(resetChangesForTypesAction({ id, types }))
+        dispatch(resetChangesForTypesAction({ id, types, snapshot }))
         return
       }
 

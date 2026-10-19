@@ -81,7 +81,7 @@ const clickSave = (): void => {
 
 describe('Asset EditorToolbarSaveButton', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    jest.resetAllMocks()
     ;(useAssetUpdateByIdMutation as jest.Mock).mockReturnValue([
       mockSaveAsset,
       { isLoading: false, isError: false, error: undefined }
@@ -146,7 +146,10 @@ describe('Asset EditorToolbarSaveButton', () => {
       id: 5,
       body: { data: { properties: [], customSettings: [{ key: 'a' }] } }
     })
-    expect(mockRemoveTrackedChanges).toHaveBeenCalledWith(['properties', 'customSettings'])
+    expect(mockRemoveTrackedChanges).toHaveBeenCalledWith(
+      ['properties', 'customSettings'],
+      expect.objectContaining({ properties: [], customSettings: [{ key: 'a' }] })
+    )
     expect(mockPublish).toHaveBeenCalledTimes(1)
   })
 
@@ -175,6 +178,36 @@ describe('Asset EditorToolbarSaveButton', () => {
       id: 5,
       body: { data: { customSettings: [{ key: 'from-processor' }] } }
     })
+    expect(mockRemoveTrackedChanges).not.toHaveBeenCalled()
+  })
+
+  it('keeps the change flag of a section that a save data processor removed from the update', async () => {
+    mockExecuteProcessors.mockImplementation((context: { updateData: Record<string, unknown> }) => {
+      context.updateData.properties = undefined
+    })
+    mockDraft(
+      { customSettings: true, properties: true },
+      { customSettings: [{ key: 'a' }], properties: [{ key: 'p' }] }
+    )
+    render(<EditorToolbarSaveButton />)
+
+    clickSave()
+
+    await waitFor(() => { expect(mockMessageSuccess).toHaveBeenCalled() })
+    expect(mockRemoveTrackedChanges).toHaveBeenCalledWith(['customSettings'], expect.anything())
+  })
+
+  it('does not reset anything when every collected section was removed by a processor', async () => {
+    mockExecuteProcessors.mockImplementation((context: { updateData: Record<string, unknown> }) => {
+      context.updateData.properties = undefined
+    })
+    mockDraft({ properties: true }, { properties: [{ key: 'p' }] })
+    render(<EditorToolbarSaveButton />)
+
+    clickSave()
+
+    await waitFor(() => { expect(mockMessageSuccess).toHaveBeenCalled() })
+    expect(mockSaveAsset).not.toHaveBeenCalled()
     expect(mockRemoveTrackedChanges).not.toHaveBeenCalled()
   })
 

@@ -106,3 +106,23 @@ export const collectAssetUpdateData = (
 export const hasAssetUpdateData = (updateData: AssetSaveUpdateData): boolean => {
   return Object.values(updateData).some((value) => value !== undefined)
 }
+
+const updateKeyByChangeType: Record<string, keyof AssetSaveUpdateData> = {
+  properties: 'properties',
+  customMetadata: 'metadata',
+  customSettings: 'customSettings',
+  imageSettings: 'image',
+  textData: 'data'
+}
+
+/**
+ * Narrows the collected change types to those whose section is still part of the update,
+ * e.g. after the save data processors removed one, so sections that were not sent stay tracked.
+ */
+export const getSentChangeTypes = (collectedTypes: string[], updateData: AssetSaveUpdateData): string[] => {
+  return collectedTypes.filter((type) => {
+    const updateKey = updateKeyByChangeType[type]
+
+    return updateKey !== undefined && updateData[updateKey] !== undefined
+  })
+}

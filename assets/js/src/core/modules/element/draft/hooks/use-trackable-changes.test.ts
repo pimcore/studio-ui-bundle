@@ -27,6 +27,8 @@ jest.mock('@Pimcore/modules/app/error-handler', () => ({
 
 interface TestDraft extends TrackableChangesDraft {
   id: number
+  properties?: Array<{ key: string }>
+  textData?: string
 }
 
 const adapter = createEntityAdapter<TestDraft>({})
@@ -87,6 +89,35 @@ describe('useTrackableChangesReducers', () => {
     expect(state.entities[1]).toMatchObject({ modified: false, changes: {} })
   })
 
+  it('resetChangesForTypes resets a type whose section is still the snapshotted one', () => {
+    const properties = [{ key: 'a' }]
+    const state = slice.reducer(
+      stateWith({ changes: { properties: true }, properties }),
+      resetChangesForTypes({ id: 1, types: ['properties'], snapshot: { properties } })
+    )
+
+    expect(state.entities[1]).toMatchObject({ modified: false, changes: {} })
+  })
+
+  it('resetChangesForTypes keeps a type whose section was edited after the snapshot was taken', () => {
+    const modifiedCells = { rowIndex: 1, columnId: 'data' }
+    const state = slice.reducer(
+      stateWith({
+        changes: { properties: true, textData: true },
+        modifiedCells: { properties: [modifiedCells] },
+        properties: [{ key: 'a' }, { key: 'added-while-saving' }],
+        textData: 'same'
+      }),
+      resetChangesForTypes({ id: 1, types: ['properties', 'textData'], snapshot: { properties: [{ key: 'a' }], textData: 'same' } })
+    )
+
+    expect(state.entities[1]).toMatchObject({
+      modified: true,
+      changes: { properties: true },
+      modifiedCells: { properties: [modifiedCells] }
+    })
+  })
+
   it('resetChangesForTypes keeps a change that was not part of the given types', () => {
     const state = slice.reducer(
       stateWith({ changes: { properties: true } }),
@@ -127,6 +158,13 @@ describe('useTrackableChangesDraft', () => {
 
     expect(resetChangesForTypesAction).toHaveBeenCalledWith({ id: 1, types: ['properties'] })
     expect(resetChangesAction).not.toHaveBeenCalled()
+  })
+
+  it('removeTrackedChanges passes the snapshot on', () => {
+    const snapshot = { properties: [] }
+    render(true).removeTrackedChanges(['properties'], snapshot)
+
+    expect(resetChangesForTypesAction).toHaveBeenCalledWith({ id: 1, types: ['properties'], snapshot })
   })
 
   it('removeTrackedChanges with types falls back to a full reset when the draft has no per-type action', () => {

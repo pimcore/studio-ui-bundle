@@ -8,7 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { collectAssetUpdateData, hasAssetUpdateData, type AssetUpdateDraftData } from './collect-asset-update-data'
+import { type AssetSaveUpdateData } from '@Pimcore/modules/asset/services/processors/asset-save-data-processor-registry'
+import { collectAssetUpdateData, getSentChangeTypes, hasAssetUpdateData, type AssetUpdateDraftData } from './collect-asset-update-data'
 
 jest.mock('@Pimcore/modules/asset/hooks/use-asset-draft', () => ({}))
 
@@ -122,5 +123,24 @@ describe('hasAssetUpdateData', () => {
 
   it('counts any defined section, also falsy ones', () => {
     expect(hasAssetUpdateData({ data: '' })).toBe(true)
+  })
+})
+
+describe('getSentChangeTypes', () => {
+  it('keeps the types whose section is part of the update', () => {
+    const updateData: AssetSaveUpdateData = { properties: [], metadata: [], image: {} }
+
+    expect(getSentChangeTypes(['properties', 'customMetadata', 'imageSettings'], updateData))
+      .toEqual(['properties', 'customMetadata', 'imageSettings'])
+  })
+
+  it('drops a type whose section was removed from the update, e.g. by a save data processor', () => {
+    const updateData: AssetSaveUpdateData = { properties: undefined, data: 'text' }
+
+    expect(getSentChangeTypes(['properties', 'textData'], updateData)).toEqual(['textData'])
+  })
+
+  it('drops unknown change types', () => {
+    expect(getSentChangeTypes(['unknown'], { properties: [] })).toEqual([])
   })
 })
