@@ -12,23 +12,29 @@ import { createStyles } from '@Pimcore/modules/ant-design/styles/create-styles'
 
 export const useStyles = createStyles(({ css, token }) => {
   return {
-    // Set apart from the options by a hairline, as other select footers in Studio, on the
-    // dropdown's own 4px rhythm: the field sits as far from the hairline as from the edge.
+    // Set apart from the options by a hairline, as other select footers in Studio. The field has
+    // 8px of room on every side: below the hairline and to the dropdown's edges, whose own 4px
+    // padding makes up the rest at the sides and the bottom.
     footer: css`
       margin-top: ${token.marginXXS}px;
-      padding-top: ${token.paddingXXS}px;
+      padding: ${token.paddingXS}px ${token.paddingXXS}px ${token.paddingXXS}px;
       border-top: 1px solid ${token.colorBorderSecondary};
     `,
 
-    // Default size: an option row's height, the input radius, and text starting where the
-    // option labels start.
+    // Default size: an option row's height and the input radius. The small inner padding keeps
+    // the text starting where the option labels start, despite the room around the field.
     field: css`
       width: 100%;
+
+      &.ant-input,
+      .ant-input-number-input {
+        padding-inline: ${token.controlPaddingHorizontalSM - token.lineWidth}px;
+      }
     `,
 
     message: css`
       display: block;
-      padding: ${token.paddingXXS}px ${token.controlPaddingHorizontal}px 0;
+      padding: ${token.paddingXXS}px ${token.controlPaddingHorizontalSM}px 0;
     `,
 
     visuallyHidden: css`
