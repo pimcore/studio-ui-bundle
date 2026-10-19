@@ -37,6 +37,13 @@ export const useStyles = createStyles(({ css, token }) => {
     totalText: css`
       line-height: ${token.controlHeightSM}px;
       white-space: nowrap;
+    `,
+
+    // A small select takes the small radius; the page-size select matches the page input next to it.
+    pageSizeSelect: css`
+      &.ant-select .ant-select-selector {
+        border-radius: ${token.borderRadius}px;
+      }
     `
   }
 })

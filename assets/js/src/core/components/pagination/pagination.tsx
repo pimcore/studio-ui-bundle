@@ -153,6 +153,7 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
 
       {showSizeChanger === true && (
         <CreatableSelect
+          className={ styles.pageSizeSelect }
           disabled={ paginationProps.disabled }
           inputType="number"
           numberInputProps={ { min: 1, max: maxPageSizeLimit, precision: 0 } }
