@@ -93,10 +93,11 @@ export const Pagination = (props: PaginationProps): React.JSX.Element => {
   const canGoForward = !isDisabled && currentPage < pageCount
 
   // A total that shrinks under the current page moves to the last page, and reports it, so the
-  // caller loads a page that exists. An empty list (no pages yet) leaves the page alone.
+  // caller loads a page that exists. An empty list (no pages yet) leaves the page alone. The
+  // updater builds on a page the parent set in the same render (a search resetting to page 1).
   useEffect(() => {
     if (pageCount > 0 && current > pageCount) {
-      setCurrent(pageCount)
+      setCurrent((page) => Math.min(page, pageCount))
     }
   }, [pageCount, current])
 

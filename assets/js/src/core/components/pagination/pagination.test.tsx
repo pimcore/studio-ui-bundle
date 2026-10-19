@@ -156,6 +156,28 @@ describe('Pagination', () => {
     expect(onChange).toHaveBeenLastCalledWith(1, 10)
   })
 
+  it('keeps a reset to the first page that comes with a smaller total', () => {
+    const onChange = jest.fn()
+    const { rerender } = render(
+      <Pagination
+        current={ 5 }
+        onChange={ onChange }
+        total={ 45 }
+      />
+    )
+
+    rerender(
+      <Pagination
+        current={ 1 }
+        onChange={ onChange }
+        total={ 15 }
+      />
+    )
+
+    expect(screen.getByRole('textbox')).toHaveValue('1')
+    expect(onChange).toHaveBeenLastCalledWith(1, 10)
+  })
+
   it('disables every control for an empty list even with a later page still set', () => {
     render(
       <Pagination
