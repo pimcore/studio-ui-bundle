@@ -16,8 +16,12 @@ export interface FilterValueSeed {
   defaultValue: unknown
 }
 
+/** How often each key was written. Lets a consumer tell a write that kept the value from no write at all. */
+export type FilterWriteCounts = Record<string, number>
+
 export interface FiltersStore {
   values: FilterValues
+  writeCounts: FilterWriteCounts
   setValue: (key: string, value: unknown) => void
   setValues: (values: FilterValues) => void
   reset: () => void
@@ -51,22 +55,38 @@ export const createFiltersStore = (): FiltersStoreInstance => {
   const FiltersStoreProvider: FC<FiltersStoreProviderProps> = ({ children, descriptors, initialValues }) => {
     const defaults = useMemo(() => buildDefaults(descriptors), [descriptors])
     const [values, setValuesState] = useState<FilterValues>(() => ({ ...defaults, ...initialValues }))
+    const [writeCounts, setWriteCounts] = useState<FilterWriteCounts>({})
+
+    const countWrites = useCallback((keys: string[]): void => {
+      setWriteCounts((previous) => {
+        const next = { ...previous }
+
+        for (const key of keys) {
+          next[key] = (next[key] ?? 0) + 1
+        }
+
+        return next
+      })
+    }, [])
 
     const setValue = useCallback((key: string, value: unknown): void => {
       setValuesState((previous) => ({ ...previous, [key]: value }))
-    }, [])
+      countWrites([key])
+    }, [countWrites])
 
     const setValues = useCallback((next: FilterValues): void => {
       setValuesState((previous) => ({ ...previous, ...next }))
-    }, [])
+      countWrites(Object.keys(next))
+    }, [countWrites])
 
     const reset = useCallback((): void => {
       setValuesState({ ...defaults })
-    }, [defaults])
+      countWrites(Object.keys(defaults))
+    }, [defaults, countWrites])
 
     const store = useMemo<FiltersStore>(
-      () => ({ values, setValue, setValues, reset }),
-      [values, setValue, setValues, reset]
+      () => ({ values, writeCounts, setValue, setValues, reset }),
+      [values, writeCounts, setValue, setValues, reset]
     )
 
     return (

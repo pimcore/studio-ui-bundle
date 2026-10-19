@@ -19,7 +19,7 @@ const descriptors = [
   { key: 'fieldFilters', defaultValue: [] }
 ]
 
-const renderSyncedStores = (appliedInitial = {}): { current: { applied: FiltersStore, draft: FiltersStore } } => {
+const renderSyncedStores = (appliedInitial = {}, trackWrites = true): { current: { applied: FiltersStore, draft: FiltersStore } } => {
   const appliedStore = createFiltersStore()
   const draftStore = createFiltersStore()
 
@@ -41,7 +41,7 @@ const renderSyncedStores = (appliedInitial = {}): { current: { applied: FiltersS
     const applied = appliedStore.useFiltersStore()
     const draft = draftStore.useFiltersStore()
 
-    useDraftSync(applied.values, draft)
+    useDraftSync(applied.values, draft, trackWrites ? applied.writeCounts : undefined)
 
     return { applied, draft }
   }, { wrapper })
@@ -96,5 +96,44 @@ describe('useDraftSync', () => {
     act(() => { stores.current.applied.setValues({ searchTerm: '', directChildren: false, fieldFilters: [] }) })
 
     expect(stores.current.draft.values).toEqual({ searchTerm: '', directChildren: false, fieldFilters: [] })
+  })
+
+  it('mirrors a reset of the applied store over draft-only edits', () => {
+    const stores = renderSyncedStores()
+
+    act(() => { stores.current.draft.setValues({ directChildren: true, fieldFilters: [{ key: 'name', filterValue: 'draft only' }] }) })
+    act(() => { stores.current.applied.reset() })
+
+    expect(stores.current.draft.values).toEqual({ searchTerm: '', directChildren: false, fieldFilters: [] })
+  })
+
+  it('mirrors a write that keeps the applied value over a draft edit of the same key', () => {
+    const stores = renderSyncedStores({ searchTerm: 'jaguar' })
+
+    act(() => { stores.current.draft.setValue('searchTerm', 'typed in the sidebar') })
+    act(() => { stores.current.applied.setValues({ searchTerm: 'jaguar' }) })
+
+    expect(stores.current.draft.values.searchTerm).toBe('jaguar')
+  })
+
+  describe('without write counts', () => {
+    it('keeps unapplied draft edits when an unrelated applied value changes', () => {
+      const stores = renderSyncedStores({}, false)
+      const unappliedFilters = [{ key: 'name', filterValue: 'typed but not applied' }]
+
+      act(() => { stores.current.draft.setValue('fieldFilters', unappliedFilters) })
+      act(() => { stores.current.applied.setValue('searchTerm', 'jaguar') })
+
+      expect(stores.current.draft.values.searchTerm).toBe('jaguar')
+      expect(stores.current.draft.values.fieldFilters).toBe(unappliedFilters)
+    })
+
+    it('mirrors a changed applied value into the draft', () => {
+      const stores = renderSyncedStores({}, false)
+
+      act(() => { stores.current.applied.setValue('directChildren', true) })
+
+      expect(stores.current.draft.values.directChildren).toBe(true)
+    })
   })
 })
