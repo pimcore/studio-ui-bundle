@@ -149,7 +149,11 @@ const Component = ({
 
     // Set pending selection to trigger after state update
     setPendingSelection(newOption)
-    setAddedMessage(t('creatable-select.option-added', { label: typeof newOption.label === 'string' ? newOption.label : trimmedValue }))
+    // React escapes the text itself; i18next escaping would read "/" out as "&#x2F;".
+    setAddedMessage(t('creatable-select.option-added', {
+      label: typeof newOption.label === 'string' ? newOption.label : trimmedValue,
+      interpolation: { escapeValue: false }
+    }))
   }, [newOptionText, allOptions, allowDuplicates, onCreateOption, isInputTextValid, t])
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent): void => {
@@ -178,6 +182,8 @@ const Component = ({
     className: styles.field,
     onKeyDown: handleKeyDown,
     placeholder,
+    // Explicit, so a small pager around the select does not shrink the field.
+    size: 'middle' as const,
     value: newOptionText
   }
 
