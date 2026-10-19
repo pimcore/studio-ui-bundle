@@ -46,7 +46,9 @@ export const useTreeNodeInteraction = (
   node: TreeNodeProps,
   state: TreeNodeInteractionState
 ): UseTreeNodeInteractionReturnType => {
-  const { onSelect, onRightClick, nodesRefs, nodeOrder } = useContext(TreeContext)
+  const { onSelect, onRightClick, nodesRefs, nodeOrder, selectionMode } = useContext(TreeContext)
+  // Without the opt in, the modifier gestures fall back to their plain meaning.
+  const isMultiSelect = selectionMode === 'multiple'
   const {
     isExpanded,
     setExpanded,
@@ -110,7 +112,7 @@ export const useTreeNodeInteraction = (
 
     targetNode.el.focus()
 
-    if (event.shiftKey) {
+    if (event.shiftKey && isMultiSelect) {
       extendSelectionTo(targetNode.node.id)
     }
   }
@@ -168,6 +170,11 @@ export const useTreeNodeInteraction = (
   }
 
   const onClick = (event: MouseEvent): void => {
+    if (!isMultiSelect) {
+      activateNode()
+      return
+    }
+
     if (event.shiftKey) {
       // Suppress the text selection the browser paints across a shift range.
       event.preventDefault()
@@ -201,7 +208,7 @@ export const useTreeNodeInteraction = (
     }
 
     // Ctrl/Cmd + Space is the keyboard equivalent of a modifier click.
-    if (event.key === ' ' && (event.ctrlKey || event.metaKey)) {
+    if (isMultiSelect && event.key === ' ' && (event.ctrlKey || event.metaKey)) {
       event.preventDefault()
       toggleSelection()
     }
@@ -210,7 +217,7 @@ export const useTreeNodeInteraction = (
       clearSelection()
     }
 
-    if (event.key.toLowerCase() === 'a' && (event.ctrlKey || event.metaKey) && !event.shiftKey && !event.altKey) {
+    if (isMultiSelect && event.key.toLowerCase() === 'a' && (event.ctrlKey || event.metaKey) && !event.shiftKey && !event.altKey) {
       selectAllVisible(event)
     }
 

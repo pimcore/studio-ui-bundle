@@ -65,6 +65,13 @@ export interface TreeProps {
 
   showRoot: boolean
   ariaLabel?: string
+
+  /**
+   * 'multiple' lets users select several nodes with Ctrl/Cmd and Shift. It is an
+   * opt in: a tree should only offer it when its actions can handle a selection,
+   * otherwise users build a selection nothing acts on.
+   */
+  selectionMode?: 'single' | 'multiple'
 }
 
 export interface INodeRef {
@@ -82,7 +89,8 @@ export const defaultTreeProps: TreeProps = {
   nodeId: 1,
   renderNodeContent: TreeNodeContent,
   renderNode: TreeNodeComponent,
-  showRoot: true
+  showRoot: true,
+  selectionMode: 'single'
 }
 
 export const TreeContext = createContext<ITreeContext>({
@@ -137,12 +145,12 @@ const ElementTree = (
 
   const TreeNode = renderNode
   const treeTestId = createTreeTestId(treeId)
+  const isMultiSelect = props.selectionMode === 'multiple'
   const treeRef = useRovingTabStop()
   const treeContent = (
     <div
       aria-label={ props.ariaLabel }
-      // every element tree supports Ctrl/Shift selection; items carry aria-selected
-      aria-multiselectable
+      aria-multiselectable={ isMultiSelect ? true : undefined }
       className={ ['tree', styles.tree].join(' ') }
       data-testid={ treeTestId }
       ref={ treeRef }
@@ -150,7 +158,7 @@ const ElementTree = (
     >
       <TreeContext.Provider value={ treeContextValue }>
 
-        <TreeSelectionBar />
+        {isMultiSelect && <TreeSelectionBar />}
 
         {hasRootNode && (
         <TreeNode

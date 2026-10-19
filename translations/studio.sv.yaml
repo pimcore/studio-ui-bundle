@@ -1374,7 +1374,7 @@ items-limit-reached: Maximalt antal objekt ({{maxItems}}) har nåtts.
 asset-upload-type-not-allowed: Den uppladdade assetens typ tillåts inte för det här fältet.
 relation.drop.not-allowed-elements-skipped_one: '1 element lades inte till: det här fältet tillåter inte dess typ.'
 relation.drop.not-allowed-elements-skipped_other: '{{count}} element lades inte till: det här fältet tillåter inte deras typer.'
-drag-and-drop.drop.single-element-only: 'Det här fältet tar bara emot ett element. Dra ett enskilt element hit.'
+drag-and-drop.drop.single-element-only: 'Bara ett element kan släppas här.'
 actions: Åtgärder
 asset: Asset
 data-object: Data Object

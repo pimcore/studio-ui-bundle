@@ -1374,7 +1374,7 @@ items-limit-reached: "Het maximum aantal items ({{maxItems}}) is bereikt."
 asset-upload-type-not-allowed: Het type van de geüploade asset is niet toegestaan voor dit veld.
 relation.drop.not-allowed-elements-skipped_one: "1 element is niet toegevoegd: dit veld staat dit type niet toe."
 relation.drop.not-allowed-elements-skipped_other: "{{count}} elementen zijn niet toegevoegd: dit veld staat deze typen niet toe."
-drag-and-drop.drop.single-element-only: 'Dit veld accepteert slechts één element. Sleep hier één enkel element naartoe.'
+drag-and-drop.drop.single-element-only: 'Hier kan maar één element worden neergezet.'
 actions: Acties
 asset: Asset
 data-object: Gegevensobject

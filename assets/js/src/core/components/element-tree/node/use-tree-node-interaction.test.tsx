@@ -30,7 +30,7 @@ jest.mock('@sdk/app', () => {
 })
 
 // eslint-disable-next-line import/first
-import React, { type KeyboardEvent } from 'react'
+import React, { type KeyboardEvent, type MouseEvent } from 'react'
 // eslint-disable-next-line import/first
 import { renderHook } from '@testing-library/react'
 // eslint-disable-next-line import/first
@@ -84,7 +84,9 @@ const keyEvent = (key: string, modifiers: Partial<Pick<KeyboardEvent, 'ctrlKey' 
   preventDefault: jest.fn()
 }) as unknown as KeyboardEvent
 
-const setup = (nodeId: string, state: TreeNodeInteractionState): { onKeyDown: (event: KeyboardEvent) => void, refs: Record<string, INodeRef> } => {
+type Interaction = ReturnType<typeof useTreeNodeInteraction> & { refs: Record<string, INodeRef> }
+
+const setup = (nodeId: string, state: TreeNodeInteractionState, selectionMode: 'single' | 'multiple' = 'multiple'): Interaction => {
   const refs = buildRefs()
   const node = nodes.find(candidate => candidate.id === nodeId) as TreeNodeProps
 
@@ -92,6 +94,7 @@ const setup = (nodeId: string, state: TreeNodeInteractionState): { onKeyDown: (e
     <TreeContext.Provider
       value={ {
         ...defaultTreeProps,
+        selectionMode,
         nodesRefs: { current: refs },
         nodeOrder: () => nodes.map(candidate => candidate.internalKey!)
       } }
@@ -102,7 +105,7 @@ const setup = (nodeId: string, state: TreeNodeInteractionState): { onKeyDown: (e
 
   const { result } = renderHook(() => useTreeNodeInteraction(node, state), { wrapper })
 
-  return { onKeyDown: result.current.onKeyDown, refs }
+  return { ...result.current, refs }
 }
 
 describe('useTreeNodeInteraction', () => {
@@ -199,6 +202,46 @@ describe('useTreeNodeInteraction', () => {
       onKeyDown(keyEvent('End', { shiftKey: true }))
 
       expect(state.selectRange).toHaveBeenCalledWith(['20', '21', '11'], false)
+    })
+  })
+
+  describe('without the multi selection opt in', () => {
+    const click = (modifiers: { ctrlKey?: boolean, metaKey?: boolean, shiftKey?: boolean }): MouseEvent =>
+      ({ ctrlKey: false, metaKey: false, shiftKey: false, ...modifiers, preventDefault: jest.fn() }) as unknown as MouseEvent
+
+    it('treats Ctrl/Cmd and Shift clicks as plain clicks', () => {
+      const state = buildState({ getAnchorId: jest.fn(() => '20') })
+      const { onClick } = setup('21', state, 'single')
+
+      onClick(click({ ctrlKey: true }))
+      onClick(click({ metaKey: true }))
+      onClick(click({ shiftKey: true }))
+
+      expect(state.toggleSelection).not.toHaveBeenCalled()
+      expect(state.selectRange).not.toHaveBeenCalled()
+      expect(state.setSelectedIds).toHaveBeenCalledTimes(3)
+      expect(state.setSelectedIds).toHaveBeenLastCalledWith(['21'])
+    })
+
+    it('ignores Ctrl/Cmd + A and Ctrl/Cmd + Space', () => {
+      const state = buildState()
+      const { onKeyDown } = setup('20', state, 'single')
+
+      onKeyDown(keyEvent('a', { ctrlKey: true }))
+      onKeyDown(keyEvent(' ', { metaKey: true }))
+
+      expect(state.selectRange).not.toHaveBeenCalled()
+      expect(state.toggleSelection).not.toHaveBeenCalled()
+    })
+
+    it('moves focus with Shift + arrow keys without building a range', () => {
+      const state = buildState({ getAnchorId: jest.fn(() => '20') })
+      const { onKeyDown, refs } = setup('20', state, 'single')
+
+      onKeyDown(keyEvent('ArrowDown', { shiftKey: true }))
+
+      expect(refs['1-10-21'].el.focus).toHaveBeenCalled()
+      expect(state.selectRange).not.toHaveBeenCalled()
     })
   })
 })

@@ -107,7 +107,7 @@ const useNodeApiHookMock = (): NodeApiHookReturnType => {
   return { fetchRoot, fetchChildren } as const
 }
 
-const TestTree = ({ treeId, showRoot }: { treeId: string, showRoot: boolean }): React.JSX.Element => (
+const TestTree = ({ treeId, showRoot, selectionMode }: { treeId: string, showRoot: boolean, selectionMode?: 'single' | 'multiple' }): React.JSX.Element => (
   <Provider store={ store }>
     <TreeIdProvider treeId={ treeId }>
       <TreeFilterProvider pageSize={ 10 }>
@@ -118,6 +118,7 @@ const TestTree = ({ treeId, showRoot }: { treeId: string, showRoot: boolean }): 
             renderNodeContent={ defaultTreeProps.renderNodeContent }
             // The caller loads the root (useElementTreeRootNode); here it is given.
             rootNode={ showRoot ? createNode('1', '0', true) : undefined }
+            selectionMode={ selectionMode }
             showRoot={ showRoot }
           />
         </NodeApiHookProvider>
@@ -187,6 +188,7 @@ describe('ElementTree: roving tabindex', () => {
     act(() => { store.dispatch(setNodeExpanded({ treeId, nodeId: '1', expanded: true })) })
 
     render(<TestTree
+      selectionMode="multiple"
       showRoot={ false }
       treeId={ treeId }
            />)
@@ -203,5 +205,23 @@ describe('ElementTree: roving tabindex', () => {
     expect(treeItemOf('10')).toHaveAttribute('aria-selected', 'false')
     // the first selected node in tree order holds the one tab stop
     await waitFor(() => { expect(tabStops()).toEqual([treeItemOf('11')]) })
+  })
+
+  it('keeps a tree without the multi selection opt in a single selection tree', async () => {
+    const treeId = 'roving-tabindex-single'
+    act(() => { store.dispatch(setNodeExpanded({ treeId, nodeId: '1', expanded: true })) })
+
+    const { container } = render(<TestTree
+      showRoot={ false }
+      treeId={ treeId }
+                                 />)
+    await waitFor(() => { expect(screen.getByText('node-12')).toBeInTheDocument() })
+
+    expect(screen.getByRole('tree')).not.toHaveAttribute('aria-multiselectable')
+
+    // even a selection set from outside does not bring up the selection bar
+    act(() => { store.dispatch(setSelectedNodeIds({ treeId, selectedNodeIds: ['11', '12'] })) })
+    await waitFor(() => { expect(treeItemOf('12')).toHaveAttribute('aria-selected', 'true') })
+    expect(container.querySelector('.tree-selection-bar')).toBeNull()
   })
 })

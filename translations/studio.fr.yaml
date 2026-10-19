@@ -1374,7 +1374,7 @@ items-limit-reached: Le nombre maximum d'éléments ({{maxItems}}) a été attei
 asset-upload-type-not-allowed: Le type de l'asset téléversé n'est pas autorisé pour ce champ.
 relation.drop.not-allowed-elements-skipped_one: "1 élément n'a pas été ajouté : ce champ n'autorise pas son type."
 relation.drop.not-allowed-elements-skipped_other: "{{count}} éléments n'ont pas été ajoutés : ce champ n'autorise pas leurs types."
-drag-and-drop.drop.single-element-only: "Ce champ n'accepte qu'un seul élément. Faites glisser un seul élément ici."
+drag-and-drop.drop.single-element-only: 'Un seul élément peut être déposé ici.'
 actions: Actions
 asset: Asset
 data-object: Data Object

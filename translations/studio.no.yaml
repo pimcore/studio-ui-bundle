@@ -1374,7 +1374,7 @@ items-limit-reached: Maksimalt antall elementer ({{maxItems}}) er nådd.
 asset-upload-type-not-allowed: Typen til den opplastede ressursen er ikke tillatt for dette feltet.
 relation.drop.not-allowed-elements-skipped_one: '1 element ble ikke lagt til: dette feltet tillater ikke typen.'
 relation.drop.not-allowed-elements-skipped_other: '{{count}} elementer ble ikke lagt til: dette feltet tillater ikke typene.'
-drag-and-drop.drop.single-element-only: 'Dette feltet tar bare imot ett element. Dra ett enkelt element hit.'
+drag-and-drop.drop.single-element-only: 'Bare ett element kan slippes her.'
 actions: Handlinger
 asset: Ressurs
 data-object: Data Object
