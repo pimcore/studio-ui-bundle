@@ -10,7 +10,9 @@
 
 import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
-import * as sdk from './index'
+import fs from 'fs'
+import path from 'path'
+import * as sdk from './preview-mode/index'
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key })
@@ -32,6 +34,12 @@ jest.mock('@Pimcore/modules/element/element-selector/provider/element-selector/u
 }))
 
 describe('SDK preview mode export', () => {
+  it('AC1: the public components index re-exports the preview mode module', () => {
+    // the full index cannot be loaded in Jest (ESM antd styles, circular app imports), so check its source
+    const indexSource = fs.readFileSync(path.join(__dirname, 'index.ts'), 'utf8')
+    expect(indexSource).toContain("export * from './preview-mode/index'")
+  })
+
   it('AC1: the SDK index exports provider, switch, bar and column-preview slot', () => {
     expect(sdk.PreviewModeProvider).toBeDefined()
     expect(sdk.PreviewModeSwitch).toBeDefined()
@@ -52,5 +60,16 @@ describe('SDK preview mode export', () => {
     expect(screen.queryByText('the value')).not.toBeInTheDocument()
     fireEvent.click(screen.getByRole('switch'))
     expect(screen.getByText('the value')).toBeInTheDocument()
+  })
+
+  it('AC2: the docs explain with an example how to add preview mode to a modal', () => {
+    const doc = fs.readFileSync(
+      path.join(__dirname, '../../../../../doc/04_Extending/02_Plugin_Development_Examples/21_Add_Preview_Mode_to_a_Modal.md'),
+      'utf8'
+    )
+    for (const name of ['PreviewModeProvider', 'PreviewModeSwitch', 'PreviewModeBar', 'ColumnPreview']) {
+      expect(doc).toContain(name)
+    }
+    expect(doc).toContain('```tsx')
   })
 })
