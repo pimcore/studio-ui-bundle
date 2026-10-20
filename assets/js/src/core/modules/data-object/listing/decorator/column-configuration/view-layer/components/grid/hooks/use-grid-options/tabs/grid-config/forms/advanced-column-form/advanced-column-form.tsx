@@ -17,6 +17,7 @@ import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorator
 import { isEqual } from 'lodash'
 import { PipelineConfigProvider } from '@Pimcore/components/pipeline/provider/pipeline-config/pipeline-config-provider'
 import { Preview } from './preview/preview'
+import { ColumnPreview } from '@Pimcore/components/preview-mode/column-preview'
 import { usePreviewModeOptional } from '@Pimcore/components/preview-mode/preview-mode-provider'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
 import { Box } from '@Pimcore/components/box/box'
@@ -157,7 +158,7 @@ export const AdvancedColumnForm = ({ column, onChange, showPreview = true }: Adv
                 },
 
                 ...(showPreview && previewModeEnabled
-                  ? [{ id: 'Preview', component: <Preview column={ column } /> }]
+                  ? [{ id: 'Preview', component: <ColumnPreview>{() => <Preview column={ column } />}</ColumnPreview> }]
                   : [])
               ] }
             />
