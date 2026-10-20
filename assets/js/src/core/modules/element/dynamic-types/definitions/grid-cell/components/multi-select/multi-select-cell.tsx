@@ -28,6 +28,7 @@ export interface MultiSelectCellConfig {
     context?: SelectOptionsHookContext
   ) => { isLoading: boolean, options: SelectOptionType[] } | undefined
   fieldName?: string
+  maxItems?: number
   [META_SUPPORTS_BATCH_APPEND_MODE]?: boolean
 }
 
@@ -87,6 +88,7 @@ export const MultiSelectCell = (props: DefaultCellProps): React.JSX.Element => {
   return (
     <div className={ cn('default-cell__content', 'default-cell__content--padded', styles['multi-select-cell']) }>
       <Select
+        maxCount={ config.maxItems }
         mode="multiple"
         onBlur={ disableEditMode }
         onChange={ onChange }

@@ -17,6 +17,8 @@ import { getInitialModelJson as getInitialInnerModelJson } from './utils/widget-
 import { createWidgetManagerPersistedReducer } from './widget-manager-persistence'
 import { resolveMainWidgetContext } from './utils/resolve-main-widget-context'
 import { getNextTabId } from './utils/get-next-tab-id'
+import { migrateTab, rebindTab, type ReplaceTabPayload } from './utils/replace-tab'
+import { normalizeInnerModel, restoreCollapsedRows } from './utils/restore-collapsed-rows'
 import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
 import { type ElementIcon } from '@sdk/components'
 import { type UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
@@ -63,7 +65,7 @@ const slice = createSlice({
     },
 
     updateInnerModel: (state, action: PayloadAction<IJsonModel>) => {
-      state.innerModel = { ...action.payload }
+      state.innerModel = normalizeInnerModel(action.payload)
     },
 
     setWidgetManagerRestored: (state, action: PayloadAction<boolean>) => {
@@ -142,6 +144,19 @@ const slice = createSlice({
         model.doAction(Actions.updateNodeAttributes(node.getId(), action.payload))
         state.innerModel = { ...model.toJson() }
       }
+    },
+
+    migrateWidget: (state, action: PayloadAction<ReplaceTabPayload>) => {
+      const model = Model.fromJson(state.innerModel)
+      migrateTab(model, action.payload)
+      state.innerModel = { ...model.toJson() }
+    },
+
+    rebindWidget: (state, action: PayloadAction<ReplaceTabPayload>) => {
+      const model = Model.fromJson(state.innerModel)
+      rebindTab(model, action.payload)
+      state.innerModel = { ...model.toJson() }
+      state.mainWidgetContext = resolveMainWidgetContext(model)
     },
 
     openBottomWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
@@ -246,7 +261,7 @@ const slice = createSlice({
       if (isOuterModelNode) {
         state.outerModel = { ...model.toJson() }
       } else {
-        state.innerModel = { ...model.toJson() }
+        state.innerModel = restoreCollapsedRows(model.toJson())
         state.mainWidgetContext = resolveMainWidgetContext(model)
       }
     }
@@ -280,5 +295,5 @@ injectSliceWithState({
   reducer: persistedReducer
 })
 
-export const { updateOuterModel, updateMainWidgetContext, updateInnerModel, setWidgetManagerRestored, openMainWidget, updateWidget, openBottomWidget, openLeftWidget, openRightWidget, setActiveWidgetById, closeWidget } = slice.actions
+export const { updateOuterModel, updateMainWidgetContext, updateInnerModel, setWidgetManagerRestored, openMainWidget, updateWidget, migrateWidget, rebindWidget, openBottomWidget, openLeftWidget, openRightWidget, setActiveWidgetById, closeWidget } = slice.actions
 export const { selectInnerModel, selectOuterModel, selectMainWidgetContext, selectWidgetManagerRestored } = slice.selectors

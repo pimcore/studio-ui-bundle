@@ -85,6 +85,13 @@ asset.upload.overwrite: Sovrascrivi
 asset.upload.keep-both: Mantieni entrambi
 asset.upload.skip: Salta
 asset.upload.apply-to-all: Applica a tutti
+asset.upload.files-exist.title: 'I file esistono già'
+asset.upload.files-exist.message: '{{total}} dei file selezionati esistono già in questa cartella. Cosa desidera fare?'
+asset.upload.files-exist.more: 'e altri {{hidden}}'
+asset.upload.review-each: 'Esamina uno per uno'
+asset.upload.skip-all: 'Salta tutti'
+asset.upload.keep-both-all: 'Mantieni entrambi per tutti'
+asset.upload.overwrite-all: 'Sovrascrivi tutti'
 asset.upload.checking-duplicate-file-names: "Controllo dei nomi file duplicati ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Creazione cartelle
 asset.upload.folder-drop.creating-folders-hint: Attendere mentre la struttura delle cartelle viene creata…
@@ -334,6 +341,7 @@ notification.action-list.completed-actions: Azioni completate
 aria.notification.action-list.toggle-collapse: Mostra/nascondi elenco azioni
 aria.notification.action-list.cancel-all: Annulla tutte le azioni in corso
 aria.notification.action-list.cancel: Annulla azione
+aria.stack-list.drag-handle: Trascinare per riordinare
 asset.image.editor.zoom.reset: Ripristina
 aria.asset.image.editor.zoom.reset: Ripristina zoom
 aria.asset.image.editor.zoom.zoom-in: Ingrandisci
@@ -350,6 +358,7 @@ grid.filter.to: A
 grid.filter.is: È
 grid.filter.less: Minore di
 grid.filter.more: Maggiore di
+grid.filter.string.placeholder: Cerca o incolla un elenco con un valore per riga per trovare esattamente una di queste opzioni
 grid.filter.column: 'Filtra {{column}}'
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
@@ -500,6 +509,8 @@ version.category.title.meta: Metadati
 version.category.title.properties: Proprietà
 version.changed-attributes: "Attributi modificati: {{attributes}}"
 aria.version.delete: Elimina versione
+aria.notes-and-events.delete: Elimina nota
+aria.card.close: Chiudi
 aria.version.expand: Espandi versione
 clear-all: Cancella tutto
 empty: Vuoto
@@ -558,6 +569,8 @@ userModification: Utente modifica
 userOwner: Utente proprietario
 listing.grid-config.convert-to-advanced: Converti in colonna avanzata
 listing.grid-config.title: Configurazione griglia
+listing.grid-config.search-mode-column.label: Automatica
+listing.grid-config.search-mode-column.tooltip: Aggiunta dalla modalità di ricerca attiva. Puoi spostarla come qualsiasi altra colonna; non viene salvata con la configurazione della griglia.
 grid-config.discard-all-changes: Annulla tutte le modifiche
 grid-config.apply-changes: Applica modifiche
 grid-config.reload: Ricarica
@@ -633,6 +646,54 @@ website-settings.columns.site: Sito
 website-settings.columns.actions: Azioni
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Campi obbligatori mancanti
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Nome e tipo sono campi obbligatori e devono essere compilati.
+mcp-servers.rail.new-server: Nuovo server
+mcp-servers.placeholder: Seleziona un server per visualizzarne o modificarne la configurazione.
+mcp-servers.tabs.empty: Seleziona un server per visualizzarne o modificarne la configurazione.
+mcp-servers.tabs.new-server: Nuovo server
+mcp-servers.read-only-notice: Le definizioni dei server sono gestite tramite file in questo ambiente e non possono essere modificate qui.
+mcp-servers.save-success: Server MCP salvato
+mcp-servers.access.users-count: "Utenti: {{number}}"
+mcp-servers.access.roles-count: "Ruoli: {{number}}"
+mcp-servers.access.global-extra: qualsiasi utente autenticato
+mcp-servers.access.nobody: "Ancora nessuno"
+mcp-servers.badge.read: Lettura
+mcp-servers.badge.write: Scrittura
+mcp-servers.editor.create-title: Nuovo server MCP
+mcp-servers.editor.edit-title: Modifica server MCP
+mcp-servers.editor.general: Generale
+mcp-servers.editor.permissions: Permessi
+mcp-servers.editor.identity: Identità
+mcp-servers.editor.name: Nome
+mcp-servers.editor.name-required: Inserisci un nome.
+mcp-servers.editor.url-slug: URL Slug
+mcp-servers.editor.url-slug-required: Inserisci uno slug URL.
+mcp-servers.editor.url-slug-pattern: Sono ammessi solo lettere minuscole, numeri e trattini.
+mcp-servers.editor.description: Descrizione
+mcp-servers.editor.enabled: Attivo
+mcp-servers.editor.tools: Strumenti
+mcp-servers.editor.tools-placeholder: Seleziona gli strumenti esposti da questo server
+mcp-servers.editor.scopes: Scope pubblicizzati
+mcp-servers.editor.scopes-empty: Nessuno scope — seleziona gli strumenti per ricavare gli scope richiesti.
+mcp-servers.editor.url: URL del server
+mcp-servers.editor.copy-url: "Copia URL del server"
+mcp-servers.editor.connect-hint: Indirizza il tuo client MCP a questo URL e autenticati con il tuo account Pimcore.
+mcp-servers.sharing.title: Condivisione
+mcp-servers.sharing.share-globally: Condividi globalmente
+mcp-servers.sharing.share-globally-tooltip: Qualsiasi utente autenticato ottiene Lettura configurazione e Accesso al server MCP (non Modifica configurazione)
+mcp-servers.sharing.users: Utenti
+mcp-servers.sharing.roles: Ruoli
+mcp-servers.sharing.add-user: Aggiungi un utente…
+mcp-servers.sharing.add-role: Aggiungi un ruolo…
+mcp-servers.sharing.name: Nome
+mcp-servers.sharing.config-read: Lettura configurazione
+mcp-servers.sharing.config-edit: Modifica configurazione
+mcp-servers.sharing.mcp-access: Accesso al server MCP
+mcp-servers.sharing.level: Livello di accesso
+mcp-servers.sharing.read: Lettura
+mcp-servers.sharing.write: Può modificare
+mcp-servers.sharing.who-can-access: Chi può accedere
+mcp-servers.delete.title: Elimina server MCP
+mcp-servers.delete.confirm: Sei sicuro di voler eliminare "{{name}}"?
 document-types.new: Nuovo
 document-types.columns.name: Nome
 document-types.columns.group: Gruppo
@@ -758,6 +819,7 @@ tags.apply-tags-to-children: Applica tag ai figli
 tags.remove-and-apply-tags-to-children: Rimuovi e applica tag ai figli
 tags.columns.path: Percorso
 tags.columns.actions: Rimuovi
+tags.actions.delete: Rimuovi tag
 csv-separated-options: Opzioni separate da CSV
 csv-separated-options-info: "L'elenco delle opzioni disponibili può essere specificato come elenco separato da virgole, come valori a colonna singola o misto. Per il modo a colonna singola, la chiave verrà utilizzata anche come valore."
 add: Aggiungi
@@ -1163,7 +1225,9 @@ jobs.zip-upload-job.title: Carica ZIP
 jobs.zip-upload-job.step1.title: Estrazione ZIP
 jobs.zip-upload-job.step2.title: Creazione asset
 jobs.download-csv-job.title: CSV export
+jobs.download-csv-job.title-with-context: "CSV export ({{name}})"
 jobs.download-xlsx-job.title: XLSX export
+jobs.download-xlsx-job.title-with-context: "XLSX export ({{name}})"
 jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Modifica in blocco
 batch-edit.no-content: Non sono ancora state aggiunte colonne
@@ -1232,6 +1296,7 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" è stato copi
 element.tree.paste: Incolla
 element.tree.paste-as-child: Incolla come figlio
 element.tree.paste-as-child-recursive: Incolla come figlio (ricorsivo)
+element.tree.open-no-permission: "Non disponi dell'autorizzazione per aprire questo elemento."
 element.tree.paste-recursive-updating-references: Incolla ricorsivo, aggiornando i riferimenti
 element.tree.paste-only-contents: Incolla solo il contenuto qui
 element.tree.cut: Taglia
@@ -1283,6 +1348,8 @@ element.delete.batch.show-paths: Mostra elementi
 element.delete.batch.dependencies-warning.confirmed_one: 'Nota: Questo elemento ha dipendenze.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Nota: Questi elementi hanno dipendenze.'
 element.open: Apri
+element.state: Stato
+element.state.unpublished: Non pubblicato
 element.toolbar.copy-id: Copia ID
 element.toolbar.copy-full-path-to-clipboard: Copia percorso completo
 element.toolbar.copy-deep-link-to-clipboard: Copia Deeplink
@@ -1322,6 +1389,9 @@ success: Successo
 no-value-set: Nessun valore impostato
 set-to-null: Vuoto (imposta a null)
 remove: Rimuovi
+move-up: Sposta su
+move-down: Sposta giù
+translate: Traduci
 delete: Elimina
 clone: Clona
 jobs.clone-job.step2.title: Aggiornamento riferimenti
@@ -1616,6 +1686,7 @@ navigation.appearance-branding: Aspetto e branding
 navigation.reporting: Reportistica
 navigation.system: Sistema
 navigation.website-settings: Impostazioni sito web
+navigation.mcp-servers: Server MCP
 navigation.document-types: Tipi di documento
 navigation.cache: Cache
 navigation.cache.clear-cache: Svuota cache
@@ -1704,6 +1775,7 @@ widget.predefined-properties: Proprietà predefinite
 widget.search-replace-assignments: Cerca e sostituisci assegnazioni
 widget.document-types: Tipi di documento
 widget.website-settings: Impostazioni sito web
+widget.mcp-servers: Server MCP
 widget.role-management: Ruoli
 widget.user-management: Utenti
 widget.class-definitions: Classi
@@ -2906,6 +2978,7 @@ translations.merger.state.reverted: Ripristinato
 translations.merger.state.pending: In sospeso
 translations.merger.apply-all: Applica tutto
 translations.merger.revert-all: Ripristina tutto
+translations.merger.revert: Ripristina
 translations.merger.title: "Unisci traduzioni (Dominio: {{domain}})"
 translations.merger.column.language: Lingua
 translations.merger.items: elementi

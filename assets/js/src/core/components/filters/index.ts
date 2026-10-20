@@ -20,6 +20,7 @@ export {
   createFiltersStore,
   type FiltersStore,
   type FiltersStoreInstance,
+  type FilterWriteCounts,
   type FiltersStoreProviderProps,
   type FilterValueSeed
 } from './store/create-filters-store'

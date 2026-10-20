@@ -61,11 +61,13 @@ export const useMergerColumns = ({ loadingRows, applyRow, revertRow }: UseMerger
         if (record.state === 'applied') {
           return (
             <IconButton
+              aria-label={ t('translations.merger.revert') }
               danger
               disabled={ isLoading }
               icon={ { value: 'corner-up-left' } }
               loading={ isLoading }
               onClick={ () => { void revertRow(record) } }
+              tooltip={ { title: t('translations.merger.revert') } }
               type="link"
             />
           )
@@ -73,10 +75,12 @@ export const useMergerColumns = ({ loadingRows, applyRow, revertRow }: UseMerger
 
         return (
           <IconButton
+            aria-label={ t('apply') }
             disabled={ isLoading }
             icon={ { value: 'arrow-square-right' } }
             loading={ isLoading }
             onClick={ () => { void applyRow(record) } }
+            tooltip={ { title: t('apply') } }
             type="link"
           />
         )

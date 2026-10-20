@@ -13,7 +13,7 @@ import React, { isValidElement, useState, useContext, useEffect, useRef } from '
 import { type ISidebarButton, type ISidebarEntry } from '@Pimcore/modules/element/sidebar/sidebar-manager'
 import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { actionTooltipDelay, Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { SidebarContext } from './sidebar-provider'
 import { useTranslation } from 'react-i18next'
 import { isNil } from 'lodash'
@@ -156,6 +156,7 @@ export const Sidebar = ({ entries, buttons = [], sizing = 'default', highlights 
                 return (
                   <Tooltip
                     key={ entry.key }
+                    mouseEnterDelay={ actionTooltipDelay }
                     placement={ tooltipPlacement }
                     title={ translateTooltips && !isNil(entry?.tooltip) ? t(entry.tooltip) : entry?.tooltip }
                   >

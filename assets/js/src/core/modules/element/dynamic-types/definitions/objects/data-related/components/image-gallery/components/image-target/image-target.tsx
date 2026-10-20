@@ -116,8 +116,8 @@ export const ImageGalleryImageTarget = ({ index, value, setValue, disabled, widt
                 newValue.splice(index, 1)
                 setValue(newValue)
               } }
-          onSearch={ openElementSelector }
-          onUpload={ handleUpload }
+          onSearch={ disabled === true ? undefined : openElementSelector }
+          onUpload={ disabled === true ? undefined : handleUpload }
           removeLabel={ t('image-gallery.delete-frame') }
           title={ t(disabled === true ? 'empty' : 'image.add.and.dnd') }
           width={ width }

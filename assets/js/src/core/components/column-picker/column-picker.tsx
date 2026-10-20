@@ -11,6 +11,7 @@
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
+import { isUndefined } from 'lodash'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Text } from '@Pimcore/components/text/text'
 import { TreeElement, type TreeDataItem } from '@Pimcore/components/tree-element/tree-element'
@@ -34,6 +35,13 @@ export interface ColumnPickerProps<TMeta = unknown> {
    */
   fillHeight?: boolean
   flat?: boolean
+  /**
+   * Maximum height (px, > 0, ignored with `flat`). When set, the tree uses antd's virtual list
+   * and only renders the visible rows, which keeps large catalogs (hundreds of
+   * items) fast. The tree then scrolls itself, so the list container neither caps
+   * its height nor scrolls. Leave unset to render the whole tree (default).
+   */
+  height?: number
   'data-testid'?: string
 }
 
@@ -52,6 +60,7 @@ export const ColumnPicker = <TMeta, >({
   emptyText,
   fillHeight = false,
   flat = false,
+  height,
   'data-testid': dataTestId
 }: ColumnPickerProps<TMeta>): React.JSX.Element => {
   const { styles } = useStyles()
@@ -75,6 +84,8 @@ export const ColumnPicker = <TMeta, >({
     () => (flat ? flattenItems(filteredGroups) : []),
     [flat, filteredGroups]
   )
+
+  const isVirtual = !isUndefined(height) && height > 0 && !flat
 
   const hasResults = flat ? flatItems.length > 0 : treeData.length > 0
 
@@ -103,7 +114,7 @@ export const ColumnPicker = <TMeta, >({
         />
       ) }
 
-      <div className={ cn(styles.list, { [styles.listFill]: fillHeight }) }>
+      <div className={ cn(isVirtual ? styles.listVirtual : styles.list, { [styles.listFill]: fillHeight }) }>
         { !hasResults && (
           <Text className={ styles.empty }>
             { emptyText ?? t('listing.column-picker.no-results') }
@@ -125,6 +136,7 @@ export const ColumnPicker = <TMeta, >({
         { hasResults && !flat && (
           <TreeElement
             defaultExpandedKeys={ expandedKeys }
+            height={ height }
             hideExpanders={ false }
             onSelected={ handleSelected }
             titleRender={ (node, initialComponent) => {

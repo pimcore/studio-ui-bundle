@@ -8,12 +8,13 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isNil, isUndefined } from 'lodash'
 import { invalidatingTags, providingTags, type Tag, tagNames } from '@Pimcore/app/api/pimcore/tags'
 import { normalizeLayoutTreeIcons } from '@Pimcore/utils/normalize-icon'
 import { api as baseApi, type Layout } from './data-object-api-slice.gen'
 
 const api = baseApi.enhanceEndpoints({
-  addTagTypes: [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_TREE, tagNames.DATA_OBJECT_DETAIL, tagNames.DATA_OBJECT_GRID_CONFIGURATION, tagNames.DATA_OBJECT_GRID_CONFIGURATION_LIST, tagNames.DATA_OBJECT_GRID_CONFIGURATION_DETAIL],
+  addTagTypes: [tagNames.DATA_OBJECT, tagNames.DATA_OBJECT_TREE, tagNames.DATA_OBJECT_DETAIL, tagNames.DATA_OBJECT_GRID, tagNames.DATA_OBJECT_GRID_CONFIGURATION, tagNames.DATA_OBJECT_GRID_CONFIGURATION_LIST, tagNames.DATA_OBJECT_GRID_CONFIGURATION_DETAIL],
   endpoints: {
 
     dataObjectClone: {
@@ -61,11 +62,12 @@ const api = baseApi.enhanceEndpoints({
     },
 
     dataObjectUpdateById: {
-      invalidatesTags: (result, error, args) => args.body.data.task === 'autoSave' ? [] : invalidatingTags.DATA_OBJECT_DETAIL_ID(args.id)
+      // The grid has no per-row tags and the parent is not part of the request, so every children grid can be stale.
+      invalidatesTags: (result, error, args) => args.body.data.task === 'autoSave' ? [] : [...invalidatingTags.DATA_OBJECT_DETAIL_ID(args.id), ...invalidatingTags.DATA_OBJECT_GRID()]
     },
 
     dataObjectAdd: {
-      invalidatesTags: (result, error, args) => invalidatingTags.DATA_OBJECT_TREE_ID(args.parentId)
+      invalidatesTags: (result, error, args) => [...invalidatingTags.DATA_OBJECT_TREE_ID(args.parentId), ...invalidatingTags.DATA_OBJECT_GRID_ID(args.parentId)]
     },
 
     dataObjectGetLayoutById: {
@@ -88,6 +90,17 @@ const api = baseApi.enhanceEndpoints({
 
         for (const dataObject of args.body.data) {
           invalidatingTagsForPatch.push(...invalidatingTags.DATA_OBJECT_DETAIL_ID(dataObject.id))
+        }
+
+        // A move, rename or lock changes rows of a children grid whose parent is not known here (for a move, the old one).
+        // Inline edits only send editableData/published and update the cached grid rows themselves.
+        // Only a single-element patch is applied within the request, multi-element patches return a jobRunId.
+        const isAppliedSynchronously = isNil(result?.jobRunId)
+        const changesGridRows = args.body.data.some((dataObject) =>
+          !isNil(dataObject.parentId) || !isNil(dataObject.key) || !isUndefined(dataObject.locked)
+        )
+        if (isAppliedSynchronously && changesGridRows) {
+          invalidatingTagsForPatch.push(...invalidatingTags.DATA_OBJECT_GRID())
         }
 
         return invalidatingTagsForPatch

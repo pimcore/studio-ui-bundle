@@ -9,7 +9,7 @@
  */
 
 import { useMemo } from 'react'
-import { map, filter, isEmpty } from 'lodash'
+import { map, filter, isEmpty, isUndefined } from 'lodash'
 import {
   type DataObjectGetGridApiResponse,
   type GridColumnRequest,
@@ -64,7 +64,8 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, applyF
     )
   })
 
-  const isLoading = queries.some(q => q.isLoading || q.isFetching)
+  // A refetch of data already shown (e.g. after any data object save invalidated the grids) runs in the background.
+  const isLoading = queries.some(q => q.isLoading || (q.isFetching && isUndefined(q.data)))
   const data = useMemo(() => queries.flatMap(q => q.data?.items ?? []), queries.map(q => q.data))
   const refetchAll = (): void => { queries.forEach(q => { void q.refetch() }) }
 

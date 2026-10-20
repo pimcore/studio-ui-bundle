@@ -23,6 +23,7 @@ import { useDocumentRenderletRenderQuery } from '@Pimcore/modules/document/docum
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { type RenderletValue, type RenderletEditableConfig } from './renderlet-editable'
 import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { mapToLegacyElementType } from '@Pimcore/modules/element/utils/element-type'
 
 export interface RenderletContentProps {
   value?: RenderletValue
@@ -119,7 +120,7 @@ export const RenderletContent = ({
     config: {
       objects: !isNil(config?.className)
         ? {
-            allowedTypes: isArray(config.className) ? config.className : [config.className]
+            allowedClasses: isArray(config.className) ? config.className : [config.className]
           }
         : undefined
     },
@@ -128,7 +129,7 @@ export const RenderletContent = ({
         const selectedElement = event.items[0]
         const newValue: RenderletValue = {
           id: selectedElement.data.id,
-          type: selectedElement.elementType,
+          type: mapToLegacyElementType(selectedElement.elementType),
           subtype: selectedElement.data.type ?? selectedElement.data.subtype
         }
         onChange(newValue)

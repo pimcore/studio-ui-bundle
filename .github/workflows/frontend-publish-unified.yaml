@@ -133,3 +133,5 @@ jobs:
       # OIDC trusted publishing (no NPM_TOKEN). npm is pinned to 11 because
       # npm@12 fails at publish time with a broken sigstore dependency.
       npm-cli-version: "11"
+    secrets:
+      SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}

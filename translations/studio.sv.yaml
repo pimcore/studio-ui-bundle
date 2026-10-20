@@ -85,6 +85,13 @@ asset.upload.overwrite: Skriv över
 asset.upload.keep-both: Behåll båda
 asset.upload.skip: Hoppa över
 asset.upload.apply-to-all: Tillämpa på alla
+asset.upload.files-exist.title: 'Filerna finns redan'
+asset.upload.files-exist.message: '{{total}} av de valda filerna finns redan i den här mappen. Vad vill du göra med dem?'
+asset.upload.files-exist.more: 'och {{hidden}} till'
+asset.upload.review-each: 'Granska en i taget'
+asset.upload.skip-all: 'Hoppa över alla'
+asset.upload.keep-both-all: 'Behåll båda för alla'
+asset.upload.overwrite-all: 'Skriv över alla'
 asset.upload.checking-duplicate-file-names: "Kontrollerar dubbletter av filnamn ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Skapar mappar
 asset.upload.folder-drop.creating-folders-hint: Vänta medan mappstrukturen skapas…
@@ -334,6 +341,7 @@ notification.action-list.completed-actions: Slutförda åtgärder
 aria.notification.action-list.toggle-collapse: Växla lista med åtgärder
 aria.notification.action-list.cancel-all: Avbryt alla pågående åtgärder
 aria.notification.action-list.cancel: Avbryt åtgärd
+aria.stack-list.drag-handle: Dra för att sortera om
 asset.image.editor.zoom.reset: Återställ
 aria.asset.image.editor.zoom.reset: Återställ zoom
 aria.asset.image.editor.zoom.zoom-in: Zooma in
@@ -350,6 +358,7 @@ grid.filter.to: Till
 grid.filter.is: Är
 grid.filter.less: Mindre än
 grid.filter.more: Mer än
+grid.filter.string.placeholder: Sök eller klistra in en lista med ett värde per rad för att matcha någon av dem exakt
 grid.filter.column: 'Filtrera {{column}}'
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
@@ -500,6 +509,8 @@ version.category.title.meta: Metadata
 version.category.title.properties: Egenskaper
 version.changed-attributes: "Ändrade attribut: {{attributes}}"
 aria.version.delete: Ta bort version
+aria.notes-and-events.delete: Ta bort anteckning
+aria.card.close: Stäng
 aria.version.expand: Expandera version
 clear-all: Rensa allt
 empty: Tom
@@ -558,6 +569,8 @@ userModification: Ändrad av
 userOwner: Ägare
 listing.grid-config.convert-to-advanced: Konvertera till avancerad kolumn
 listing.grid-config.title: Rutnätskonfiguration
+listing.grid-config.search-mode-column.label: Automatisk
+listing.grid-config.search-mode-column.tooltip: Tillagd av det aktiva sökläget. Du kan flytta den som alla andra kolumner; den sparas inte med rutnätskonfigurationen.
 grid-config.discard-all-changes: Förkasta alla ändringar
 grid-config.apply-changes: Tillämpa ändringar
 grid-config.reload: Läs om
@@ -633,6 +646,54 @@ website-settings.columns.site: Sajt
 website-settings.columns.actions: Åtgärder
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Obligatoriska fält saknas
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Namn och typ är obligatoriska fält och måste fyllas i.
+mcp-servers.rail.new-server: Ny server
+mcp-servers.placeholder: Välj en server för att visa eller redigera dess konfiguration.
+mcp-servers.tabs.empty: Välj en server för att visa eller redigera dess konfiguration.
+mcp-servers.tabs.new-server: Ny server
+mcp-servers.read-only-notice: Serverdefinitioner hanteras via filer i den här miljön och kan inte redigeras här.
+mcp-servers.save-success: MCP-server sparad
+mcp-servers.access.users-count: "Användare: {{number}}"
+mcp-servers.access.roles-count: "Roller: {{number}}"
+mcp-servers.access.global-extra: alla autentiserade användare
+mcp-servers.access.nobody: "Ingen ännu"
+mcp-servers.badge.read: Läs
+mcp-servers.badge.write: Skriv
+mcp-servers.editor.create-title: Ny MCP-server
+mcp-servers.editor.edit-title: Redigera MCP-server
+mcp-servers.editor.general: Generellt
+mcp-servers.editor.permissions: Rättigheter
+mcp-servers.editor.identity: Identitet
+mcp-servers.editor.name: Namn
+mcp-servers.editor.name-required: Ange ett namn.
+mcp-servers.editor.url-slug: URL Slug
+mcp-servers.editor.url-slug-required: Ange en URL-slug.
+mcp-servers.editor.url-slug-pattern: Endast gemener, siffror och bindestreck är tillåtna.
+mcp-servers.editor.description: Beskrivning
+mcp-servers.editor.enabled: Aktiv
+mcp-servers.editor.tools: Verktyg
+mcp-servers.editor.tools-placeholder: Välj de verktyg som servern exponerar
+mcp-servers.editor.scopes: Annonserade scopes
+mcp-servers.editor.scopes-empty: Inga scopes — välj verktyg för att härleda de nödvändiga scopes.
+mcp-servers.editor.url: Server-URL
+mcp-servers.editor.copy-url: "Kopiera server-URL"
+mcp-servers.editor.connect-hint: Rikta din MCP-klient mot denna URL och autentisera dig med ditt Pimcore-konto.
+mcp-servers.sharing.title: Delning
+mcp-servers.sharing.share-globally: Dela globalt
+mcp-servers.sharing.share-globally-tooltip: Alla autentiserade användare får konfigurationsläsning och MCP-serveråtkomst (inte konfigurationsredigering)
+mcp-servers.sharing.users: Användare
+mcp-servers.sharing.roles: Roller
+mcp-servers.sharing.add-user: Lägg till en användare…
+mcp-servers.sharing.add-role: Lägg till en roll…
+mcp-servers.sharing.name: Namn
+mcp-servers.sharing.config-read: Konfigurationsläsning
+mcp-servers.sharing.config-edit: Konfigurationsredigering
+mcp-servers.sharing.mcp-access: MCP-serveråtkomst
+mcp-servers.sharing.level: Åtkomstnivå
+mcp-servers.sharing.read: Läs
+mcp-servers.sharing.write: Kan redigera
+mcp-servers.sharing.who-can-access: Vem har åtkomst
+mcp-servers.delete.title: Ta bort MCP-server
+mcp-servers.delete.confirm: Är du säker på att du vill ta bort "{{name}}"?
 document-types.new: Ny
 document-types.columns.name: Namn
 document-types.columns.group: Grupp
@@ -758,6 +819,7 @@ tags.apply-tags-to-children: Tillämpa taggar på barn
 tags.remove-and-apply-tags-to-children: Ta bort och tillämpa taggar på barn
 tags.columns.path: Sökväg
 tags.columns.actions: Ta bort
+tags.actions.delete: Ta bort tagg
 csv-separated-options: CSV-separerade alternativ
 csv-separated-options-info: Listan med tillgängliga alternativ kan anges som kommaseparerad lista, som enskilda kolumnvärden eller blandat. Vid enskild kolumn kommer nyckeln även att användas som värde.
 add: Lägg till
@@ -1163,7 +1225,9 @@ jobs.zip-upload-job.title: Ladda upp ZIP
 jobs.zip-upload-job.step1.title: Extraherar ZIP
 jobs.zip-upload-job.step2.title: Skapar assets
 jobs.download-csv-job.title: CSV export
+jobs.download-csv-job.title-with-context: "CSV export ({{name}})"
 jobs.download-xlsx-job.title: XLSX export
+jobs.download-xlsx-job.title-with-context: "XLSX export ({{name}})"
 jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Massredigering
 batch-edit.no-content: Det finns inga tillagda kolumner ännu
@@ -1232,6 +1296,7 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" har kopierats
 element.tree.paste: Klistra in
 element.tree.paste-as-child: Klistra in som barn
 element.tree.paste-as-child-recursive: Klistra in som barn (rekursivt)
+element.tree.open-no-permission: Du har inte behörighet att öppna det här elementet.
 element.tree.paste-recursive-updating-references: Klistra in rekursivt, uppdatera referenser
 element.tree.paste-only-contents: Klistra bara in innehåll här
 element.tree.cut: Klipp ut
@@ -1283,6 +1348,8 @@ element.delete.batch.show-paths: Visa element
 element.delete.batch.dependencies-warning.confirmed_one: 'Obs: Detta element har beroenden.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Obs: Dessa element har beroenden.'
 element.open: Öppna
+element.state: Status
+element.state.unpublished: Opublicerad
 element.toolbar.copy-id: Kopiera ID
 element.toolbar.copy-full-path-to-clipboard: Kopiera fullständig sökväg
 element.toolbar.copy-deep-link-to-clipboard: Kopiera Deeplink
@@ -1322,6 +1389,9 @@ success: Framgång
 no-value-set: Inget värde angivet
 set-to-null: Tom (sätt till null)
 remove: Ta bort
+move-up: Flytta upp
+move-down: Flytta ner
+translate: Översätt
 delete: Ta bort
 clone: Klona
 jobs.clone-job.step2.title: Uppdaterar referenser
@@ -1616,6 +1686,7 @@ navigation.appearance-branding: Utseende & Varumärke
 navigation.reporting: Rapportering
 navigation.system: System
 navigation.website-settings: Webbplatsinställningar
+navigation.mcp-servers: MCP-servrar
 navigation.document-types: Dokumenttyper
 navigation.cache: Cache
 navigation.cache.clear-cache: Rensa cache
@@ -1704,6 +1775,7 @@ widget.predefined-properties: Fördefinierade egenskaper
 widget.search-replace-assignments: Sök & Ersätt tilldelningar
 widget.document-types: Dokumenttyper
 widget.website-settings: Webbplatsinställningar
+widget.mcp-servers: MCP-servrar
 widget.role-management: Roller
 widget.user-management: Användare
 widget.class-definitions: Klasser
@@ -2906,6 +2978,7 @@ translations.merger.state.reverted: Återställd
 translations.merger.state.pending: Väntande
 translations.merger.apply-all: Tillämpa alla
 translations.merger.revert-all: Återställ alla
+translations.merger.revert: Återställ
 translations.merger.title: "Sammanfoga översättningar (Domän: {{domain}})"
 translations.merger.column.language: Språk
 translations.merger.items: objekt

@@ -24,6 +24,8 @@ import {
   type DynamicTypeCustomReportDefinitionSqlAdapter
 } from '@Pimcore/modules/reports/dynamic-types/definitions/custom-report-definition-adapters/types/dynamic-type-custom-report-definition-sql-adapter'
 import type { WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+import { type WidgetRestorerRegistry } from '@Pimcore/modules/widget-manager/services/widget-restorer-registry'
+import { ReportWidgetRestorer } from '@Pimcore/modules/reports/services/report-widget-restorer'
 
 const REPORTS_SECTION_NAME = 'Reporting'
 
@@ -92,5 +94,7 @@ moduleSystem.registerModule({
       name: 'custom-reports',
       component: ReportsEditor
     })
+
+    container.get<WidgetRestorerRegistry>(serviceIds.widgetRestorerRegistry).register(new ReportWidgetRestorer())
   }
 })

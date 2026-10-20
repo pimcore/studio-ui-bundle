@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isEmpty, isString, isUndefined } from 'lodash'
+import { isEmpty, isNumber, isString, isUndefined } from 'lodash'
 import { ErrorKeyTypes } from '@Pimcore/modules/app/error-handler/constants/errorTypes'
 import { type ApiErrorData, type IApiErrorDetails, type IErrorGetContent } from '@Pimcore/modules/app/error-handler/types'
 
@@ -29,9 +29,11 @@ class ApiError extends Error {
     const errorValue = errorData?.error
 
     if (!isEmpty(errorKey) && errorKey === ErrorKeyTypes.ELEMENT_VALIDATION_FAILED) {
+      // `errorKey` keeps carrying the message for SDK consumers that read it; render `message` instead.
       return {
         title: errorKey,
-        errorKey: errorMessage!
+        errorKey: errorMessage!,
+        message: errorMessage
       }
     }
 
@@ -44,11 +46,33 @@ class ApiError extends Error {
     if (!isEmpty(errorValue)) { return errorValue! }
   }
 
+  /**
+   * RTK Query reports a response whose body is not JSON (e.g. an HTML error page from a proxy
+   * or a PHP fatal error) as a `PARSING_ERROR` whose `error` is only the JSON parser's
+   * `SyntaxError`. That says nothing about what went wrong, so a translatable message carrying
+   * the HTTP status is returned instead. The raw body is deliberately not shown.
+   */
+  private getParsingErrorContent (): IErrorGetContent['data'] | undefined {
+    if (!('status' in this.errorData) || this.errorData.status !== 'PARSING_ERROR') {
+      return undefined
+    }
+
+    const originalStatus = (this.errorData as { originalStatus?: unknown }).originalStatus
+
+    return isNumber(originalStatus)
+      ? { errorKey: 'error_response_not_json_with_status', params: { status: originalStatus } }
+      : { errorKey: 'error_response_not_json' }
+  }
+
   public getContent (): IErrorGetContent['data'] {
     if (!isEmpty(this.errorData)) {
       if (!isEmpty((this.errorData as Error)?.message)) {
         return (this.errorData as Error).message
       }
+
+      const parsingErrorContent = this.getParsingErrorContent()
+
+      if (!isUndefined(parsingErrorContent)) return parsingErrorContent
 
       if ('data' in this.errorData) {
         const apiErrorDetails = this.handleApiErrorDetails(this.errorData.data as IApiErrorDetails)

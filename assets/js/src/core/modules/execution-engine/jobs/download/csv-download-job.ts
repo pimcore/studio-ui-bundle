@@ -12,6 +12,7 @@ import { type MessageBusJobHandler } from '../../message-handlers/message-bus-jo
 import { AbstractDownloadJob, type AbstractDownloadJobOptions } from './abstract-download-job'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 import { t } from 'i18next'
+import { isEmpty } from 'lodash'
 import { type RehydratableJob, type JobRunList } from '../../services/job-rehydration-registry'
 import { resolveChildJobRunOptions } from '../rehydration-helpers'
 
@@ -27,12 +28,17 @@ export class CsvDownloadJob extends AbstractDownloadJob {
   private readonly isFolderExport: boolean
 
   constructor (options: CsvDownloadJobOptions) {
-    super({ action: options.action })
+    super({ action: options.action, context: options.context })
     this.isFolderExport = options.isFolderExport ?? false
   }
 
   protected usesChildJob (): boolean { return this.isFolderExport }
-  protected static override getTitle (): string { return t('jobs.download-csv-job.title') }
+  protected static override getTitle (context?: string): string {
+    return isEmpty(context)
+      ? t('jobs.download-csv-job.title')
+      : t('jobs.download-csv-job.title-with-context', { name: context })
+  }
+
   protected static override getDownloadUrl (): string { return `${getPrefix()}/export/download/csv/{jobRunId}` }
 
   static rehydrate (jobRuns: JobRunList): MessageBusJobHandler {

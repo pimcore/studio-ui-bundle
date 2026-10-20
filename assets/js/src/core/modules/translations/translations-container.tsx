@@ -212,10 +212,12 @@ const TranslationsContent = ({ initialSearchTerm }: TranslationsContainerProps):
           </Flex>
           <Flex align="center">
             <IconButton
+              aria-label={ t('refresh') }
               data-testid={ `${TEST_ID_PREFIX}-refresh-button` }
               disabled={ translationsLoading }
               icon={ { value: 'refresh' } }
               onClick={ reload }
+              tooltip={ { title: t('refresh') } }
             />
             <Divider
               style={ { height: 24 } }

@@ -13,8 +13,10 @@ import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Flex } from 'antd'
 import { useDataObjectHelper } from '@Pimcore/modules/data-object/hooks/use-data-object-helper'
+import { useTranslation } from 'react-i18next'
 
 export const DataObjectActionsCell = ({ row }: DefaultCellProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const data = row.original
   const { openDataObject } = useDataObjectHelper()
 
@@ -25,8 +27,10 @@ export const DataObjectActionsCell = ({ row }: DefaultCellProps): React.JSX.Elem
         justify='center'
       >
         <IconButton
+          aria-label={ t('open') }
           icon={ { value: 'open-folder' } }
           onClick={ () => { void openDataObject({ config: { id: data.id } }) } }
+          tooltip={ { title: t('open') } }
           type='link'
         />
       </Flex>

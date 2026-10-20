@@ -9,8 +9,14 @@
  */
 
 import { createGlobalStyle } from 'antd-style'
+import { designTokenDeclarations } from './design-token-variables'
 
 export const DocumentEditorIframeGlobalStyles = createGlobalStyle`
+  /* Studio design tokens for the templates' own editmode CSS; see design-token-variables.ts. */
+  :root {
+    ${props => designTokenDeclarations(props.theme)}
+  }
+
   /* Required field styling for document editables - Default behavior: style direct children of wrapper */
   [data-required-active="true"]:not(:has(.studio-required-field-target)) .studio-required-field-wrapper > * {
     outline: 2px dashed ${props => props.theme.colorError} !important;
