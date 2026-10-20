@@ -19,8 +19,15 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key })
 }))
 
-jest.mock('./preview-mode-bar.styles', () => ({
-  useStyles: () => ({ styles: { description: 'description' } })
+jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
+  createStyles: () => () => ({ styles: { description: 'description' }, cx: () => '', theme: {} }),
+  css: () => '',
+  cx: () => '',
+  keyframes: () => ''
+}))
+
+jest.mock('@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider', () => ({
+  SelectionType: { Disabled: 'disabled', Single: 'single', Multiple: 'multiple' }
 }))
 
 const openMock = jest.fn()
@@ -83,18 +90,15 @@ describe('ColumnPreview slot', () => {
 
   it('AC4: renders the children render-prop lazily only while on (so nothing is fetched while off)', () => {
     const fetcher = jest.fn(() => <span>fetched</span>)
-    const { rerender } = render(
+    render(
       <PreviewModeProvider>
+        <PreviewModeSwitch />
         <ColumnPreview>{ fetcher }</ColumnPreview>
       </PreviewModeProvider>
     )
     expect(fetcher).not.toHaveBeenCalled()
 
-    rerender(
-      <PreviewModeProvider defaultEnabled>
-        <ColumnPreview>{ fetcher }</ColumnPreview>
-      </PreviewModeProvider>
-    )
+    fireEvent.click(screen.getByRole('switch'))
     expect(screen.getByText('fetched')).toBeInTheDocument()
   })
 
@@ -165,7 +169,7 @@ describe('PreviewModeBar', () => {
 
   it('AC3/DR-P3: says no item is available when nothing is picked and there is no fallback', () => {
     render(<PreviewModeProvider defaultEnabled><PreviewModeBar /></PreviewModeProvider>)
-    expect(screen.getByText('grid.advanced-column.no-preview')).toBeInTheDocument()
+    expect(screen.getByText('preview-mode.no-item')).toBeInTheDocument()
   })
 
   it('AC3: onFinish stores the picked item', () => {

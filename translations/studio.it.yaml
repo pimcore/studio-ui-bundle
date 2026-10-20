@@ -3042,3 +3042,6 @@ saved-search.delete.success: Ricerca salvata eliminata
 saved-search.shared-modified.info: Hai apportato modifiche alla configurazione originale. Poiché appartiene a qualcun altro, puoi salvarla come nuova ricerca.
 saved-search.menu-shortcut-group: Gruppo di menu
 skip-to-content: Vai al contenuto
+preview-mode.switch: Modalità anteprima
+preview-mode.preview-item: Elemento di anteprima
+preview-mode.no-item: Nessun elemento di anteprima disponibile

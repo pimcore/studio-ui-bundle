@@ -17,6 +17,7 @@ import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorator
 import { isEqual } from 'lodash'
 import { PipelineConfigProvider } from '@Pimcore/components/pipeline/provider/pipeline-config/pipeline-config-provider'
 import { Preview } from './preview/preview'
+import { usePreviewModeOptional } from '@Pimcore/components/preview-mode/preview-mode-provider'
 import { Tabs } from '@Pimcore/components/tabs/tabs'
 import { Box } from '@Pimcore/components/box/box'
 import { usePipelineLayoutContext } from './pipeline-layout-provider'
@@ -36,6 +37,7 @@ export const AdvancedColumnForm = ({ column, onChange, showPreview = true }: Adv
   const { pipelineLayout } = usePipelineLayoutContext()
   const { t } = useTranslation()
   const classDefinitionSelection = useClassDefinitionSelectionOptional()
+  const { enabled: previewModeEnabled } = usePreviewModeOptional()
 
   useEffect(() => {
     form.setFieldValue('value', column?.__meta?.advancedColumnConfig ?? {})
@@ -154,7 +156,7 @@ export const AdvancedColumnForm = ({ column, onChange, showPreview = true }: Adv
                   </Pipeline.CustomItem>
                 },
 
-                ...(showPreview
+                ...(showPreview && previewModeEnabled
                   ? [{ id: 'Preview', component: <Preview column={ column } /> }]
                   : [])
               ] }

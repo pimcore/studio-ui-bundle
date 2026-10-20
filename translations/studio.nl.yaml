@@ -3042,3 +3042,6 @@ saved-search.delete.success: Opgeslagen zoekopdracht verwijderd
 saved-search.shared-modified.info: Je hebt wijzigingen aangebracht in de oorspronkelijke configuratie. Omdat deze van iemand anders is, kun je deze opslaan als nieuwe zoekopdracht.
 saved-search.menu-shortcut-group: Menugroep
 skip-to-content: Naar de inhoud
+preview-mode.switch: Voorbeeldmodus
+preview-mode.preview-item: Voorbeelditem
+preview-mode.no-item: Geen voorbeelditem beschikbaar

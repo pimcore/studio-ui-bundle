@@ -15,6 +15,7 @@ import { ContentLayout } from '@Pimcore/components/content-layout/content-layout
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@Pimcore/components/button/button'
+import { Flex } from '@Pimcore/components/flex/flex'
 import { Space } from '@Pimcore/components/space/space'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
@@ -23,13 +24,35 @@ import { AddColumnControls } from '@Pimcore/modules/element/listing/decorators/u
 import { FieldsToAddPanel } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/components/fields-to-add-panel/fields-to-add-panel'
 import { PipelineLayoutProvider } from './forms/advanced-column-form/pipeline-layout-provider'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
-import { PreviewItemProvider } from './forms/advanced-column-form/preview/preview-item-provider'
-import { PreviewItemSelection } from './forms/advanced-column-form/preview/preview-item-selection'
+import { PreviewModeProvider, usePreviewModeOptional } from '@Pimcore/components/preview-mode/preview-mode-provider'
+import { PreviewModeSwitch } from '@Pimcore/components/preview-mode/preview-mode-switch'
+import { PreviewModeBar } from '@Pimcore/components/preview-mode/preview-mode-bar'
+import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
+import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useStyles } from './grid-config-modal.styles'
 
 export interface GridConfigModalProps extends EditViewProps {
   open?: boolean
   onOpenChange?: (open: boolean) => void
+}
+
+const PreviewModeToolbarContent = (): React.JSX.Element => {
+  const { enabled } = usePreviewModeOptional()
+  const { selectedClassDefinition } = useClassDefinitionSelection()
+
+  return (
+    <Flex
+      align="center"
+      gap="small"
+    >
+      <PreviewModeSwitch />
+      {enabled && (
+        <PreviewModeBar
+          allowedClasses={ selectedClassDefinition?.name !== undefined ? [selectedClassDefinition.name] : undefined }
+        />
+      )}
+    </Flex>
+  )
 }
 
 export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element => {
@@ -44,8 +67,12 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
   } = props
 
   const { t } = useTranslation()
+  const { data: gridData } = useData()
+  const { selectedClassDefinition } = useClassDefinitionSelection()
   const { styles } = useStyles()
   const [fieldsToAddOpen, setFieldsToAddOpen] = useState<boolean>(true)
+
+  const firstRow = gridData?.items?.[0] as { id?: number, fullpath?: string } | undefined
 
   const onApplyClick = (): void => {
     baseOnApplyClick()
@@ -55,7 +82,10 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
   return (
     <>
       {open && (
-        <PreviewItemProvider>
+        <PreviewModeProvider
+          fallbackItem={ firstRow?.id !== undefined ? { id: firstRow.id, fullpath: firstRow.fullpath } : null }
+          resetKey={ selectedClassDefinition?.id }
+        >
           <PipelineLayoutProvider pipelineLayout="verbose">
             <Modal
               closable={ false }
@@ -76,7 +106,7 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
                   position="content"
                   theme="secondary"
                 >
-                  <PreviewItemSelection />
+                  <PreviewModeToolbarContent />
                 </Toolbar>
 
                 <Content style={ { height: 'calc(80vh - 200px)' } }>
@@ -133,7 +163,7 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
               </ContentLayout>
             </Modal>
           </PipelineLayoutProvider>
-        </PreviewItemProvider>
+        </PreviewModeProvider>
       )}
     </>
   )
