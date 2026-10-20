@@ -40,11 +40,21 @@ export const ColumnPreview = ({ source, children }: ColumnPreviewProps): React.J
   }
 
   if (source?.isLoading === true) {
-    return <Spin data-testid="preview-mode-column-preview-loading" size="small" />
+    return (
+      <Spin
+        data-testid="preview-mode-column-preview-loading"
+        size="small"
+      />
+    )
   }
 
   if (source?.error !== undefined && source.error !== null) {
-    return <Text className={ styles.description } type="danger">{source.error}</Text>
+    return (
+      <Text
+        className={ styles.description }
+        type="danger"
+      >{source.error}</Text>
+    )
   }
 
   return <>{source?.value ?? null}</>

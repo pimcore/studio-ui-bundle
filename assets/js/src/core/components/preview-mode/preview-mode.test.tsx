@@ -127,7 +127,7 @@ describe('ColumnPreview slot', () => {
 })
 
 describe('PreviewModeBar', () => {
-  it('AC3: shows ID and last two path parts, full path in a tooltip, and opens a single data-object selector for the class', () => {
+  it('AC3: shows ID and last two path parts, full path in a tooltip, and opens a single data-object selector for the class', async () => {
     render(
       <PreviewModeProvider defaultEnabled>
         <PreviewModeBar allowedClasses={ ['Car'] } />
@@ -143,19 +143,22 @@ describe('PreviewModeBar', () => {
 
     fireEvent.mouseEnter(info)
     // full path appears as the tooltip title
-    return screen.findByText('/a/b/c/d').then((el) => { expect(el).toBeInTheDocument() }).then(() => {
-      fireEvent.click(screen.getByRole('button', { name: 'preview-mode.preview-item' }))
-      expect(openMock).toHaveBeenCalled()
-      const options = useElementSelectorMock.mock.calls[0][0]
-      expect(options.selectionType).toBe('single')
-      expect(options.areas).toEqual({ object: true, asset: false, document: false })
-      expect(options.config.objects.allowedClasses).toEqual(['Car'])
-    })
+    expect(await screen.findByText('/a/b/c/d')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'preview-mode.preview-item' }))
+    expect(openMock).toHaveBeenCalled()
+    const options = useElementSelectorMock.mock.calls[0][0]
+    expect(options.selectionType).toBe('single')
+    expect(options.areas).toEqual({ object: true, asset: false, document: false })
+    expect(options.config.objects.allowedClasses).toEqual(['Car'])
   })
 
   it('AC3/DR-P3: shows the fallback item until one is picked, picking replaces it', () => {
     render(
-      <PreviewModeProvider defaultEnabled fallbackItem={ { id: 7, fullpath: '/x/y' } }>
+      <PreviewModeProvider
+        defaultEnabled
+        fallbackItem={ { id: 7, fullpath: '/x/y' } }
+      >
         <PreviewModeBar />
         <ModeProbe />
       </PreviewModeProvider>

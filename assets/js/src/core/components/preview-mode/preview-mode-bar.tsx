@@ -16,7 +16,7 @@ import { Text } from '@Pimcore/components/text/text'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
-import { usePreviewMode } from './preview-mode-provider'
+import { usePreviewMode, type PreviewModeItem } from './preview-mode-provider'
 import { useStyles } from './preview-mode-bar.styles'
 
 export interface PreviewModeBarProps {
@@ -42,7 +42,7 @@ export const PreviewModeBar = ({ allowedClasses }: PreviewModeBarProps): React.J
     areas: { object: true, asset: false, document: false },
     config: { objects: { allowedClasses } },
     onFinish: (event) => {
-      setItem((event?.items?.[0] as any) ?? null)
+      setItem((event?.items?.[0] as PreviewModeItem | undefined) ?? null)
     }
   })
 
