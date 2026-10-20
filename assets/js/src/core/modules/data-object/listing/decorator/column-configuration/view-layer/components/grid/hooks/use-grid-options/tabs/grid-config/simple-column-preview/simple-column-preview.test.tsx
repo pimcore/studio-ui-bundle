@@ -42,7 +42,7 @@ jest.mock('@Pimcore/modules/element/listing/abstract/settings/use-settings', () 
 // The grid cell renderers themselves are covered elsewhere; here only what is handed to the grid matters
 jest.mock('@Pimcore/components/grid/grid', () => ({
   Grid: ({ columns, data }: any) => (
-    <div data-testid={ `grid-${columns[0].accessorKey}` }>{String(data[0]?.[columns[0].accessorKey])}</div>
+    <div data-testid={ `grid-${columns[0].header}` }>{String(data[0]?.[columns[0].accessorKey])}</div>
   )
 }))
 jest.mock('@Pimcore/components/grid-content-renderer/grid-content-renderer', () => ({

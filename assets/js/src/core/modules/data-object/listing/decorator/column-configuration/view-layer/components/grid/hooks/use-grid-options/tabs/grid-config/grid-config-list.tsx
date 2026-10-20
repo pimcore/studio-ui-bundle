@@ -18,6 +18,8 @@ import { Space } from '@Pimcore/components/space/space'
 import { uuid } from '@Pimcore/utils/uuid'
 import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-list-item'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
+import { SimpleColumnPreview, SimpleColumnPreviewsProvider } from './simple-column-preview/simple-column-preview'
+import { usePreviewModeOptional } from '@Pimcore/components/preview-mode/preview-mode-provider'
 import { AdvancedColumnForm } from './forms/advanced-column-form/advanced-column-form'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
@@ -55,6 +57,7 @@ export const GridConfigList = (): React.JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null)
   const prevColumnKeysRef = useRef<string[]>([])
   const hasMountedRef = useRef(false)
+  const { enabled: previewEnabled } = usePreviewModeOptional()
   const { getAdvancedColumnTemplate } = useAvailableColumns()
   const sourceFieldsRegistry = useInjection<DynamicTypePipelineRegistry>(serviceIds['DynamicTypes/Grid/SourceFieldsRegistry'])
 
@@ -135,7 +138,7 @@ export const GridConfigList = (): React.JSX.Element => {
               />
             )
           }
-        : {}),
+        : (previewEnabled ? { body: <SimpleColumnPreview column={ column } /> } : {})),
 
       // search mode columns can only be moved: they come and go with the mode
       renderRightToolbar: isSearchModeDraftColumn(column)
@@ -163,18 +166,20 @@ export const GridConfigList = (): React.JSX.Element => {
           </Space>
           )
     }
-  }), [columns, advancedColumnTemplate, sourceFieldTypes])
+  }), [columns, advancedColumnTemplate, sourceFieldTypes, previewEnabled])
 
   return (
     <>
       { stackListItems.length === 0 && <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } /> }
       { stackListItems.length > 0 && (
         <div ref={ containerRef }>
-          <StackList
-            items={ stackListItems }
-            onItemsChange={ onItemsChange }
-            sortable
-          />
+          <SimpleColumnPreviewsProvider columns={ columns }>
+            <StackList
+              items={ stackListItems }
+              onItemsChange={ onItemsChange }
+              sortable
+            />
+          </SimpleColumnPreviewsProvider>
         </div>
       ) }
     </>
