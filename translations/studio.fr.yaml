@@ -585,6 +585,9 @@ listing.actions: Appliquer à la sélection
 listing.non-selected.actions: Appliquer à tous
 listing.actions.zip-download: Téléchargement ZIP
 listing.actions.delete: Supprimer
+listing.actions.delete-all: Tout supprimer
+listing.actions.delete-all.not-allowed: "Certains éléments de ce dossier sont verrouillés ou vous n'êtes pas autorisé à les supprimer."
+listing.actions.delete-all.empty: "Ce dossier ne contient aucun élément à supprimer."
 listing.actions.export: Exporter
 reports.csv-export-modal.title: Options d'export CSV
 reports.csv-export-modal.include-headers: Inclure les en-têtes de colonnes

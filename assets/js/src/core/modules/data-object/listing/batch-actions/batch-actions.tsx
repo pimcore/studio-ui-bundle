@@ -13,6 +13,7 @@ import React, { useState } from 'react'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
+import { useDeleteAllMenuItem } from './delete-all/use-delete-all-menu-item'
 import { useRowSelectionOptional } from '@Pimcore/modules/element/listing/decorators/row-selection/context-layer/provider/use-row-selection-optional'
 import { BatchEditProvider } from './batch-edit-modal/batch-edit-provider'
 import { BatchEditModal } from './batch-edit-modal/batch-edit-modal'
@@ -24,6 +25,7 @@ import { checkElementPermission, type ElementPermissionKeys, type ElementPermiss
 
 export const BatchActions = (): React.JSX.Element => {
   const rowSelection = useRowSelectionOptional()
+  const deleteAllMenuItem = useDeleteAllMenuItem(Object.keys(rowSelection?.selectedRows ?? {}).length > 0)
   const { confirmBatchDelete } = useBatchDelete()
 
   const [batchEditModalOpen, setBatchEditModalOpen] = useState<boolean>(false)
@@ -98,7 +100,8 @@ export const BatchActions = (): React.JSX.Element => {
         label: t('listing.actions.delete'),
         icon: <Icon value={ 'trash' } />,
         onClick: handleBatchDeleteConfirm
-      }
+      },
+      deleteAllMenuItem
     ]
   }
 
