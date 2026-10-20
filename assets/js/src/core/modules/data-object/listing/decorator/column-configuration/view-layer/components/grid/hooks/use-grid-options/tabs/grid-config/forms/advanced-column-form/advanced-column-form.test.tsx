@@ -21,14 +21,14 @@ jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
 }))
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
 jest.mock('@Pimcore/components/form/form', () => {
-  const Form = ({ children }: any): React.JSX.Element => <form>{children}</form>
+  const Form: any = ({ children }: any): React.JSX.Element => <form>{children}</form>
   Form.Item = ({ children }: any): React.JSX.Element => <div>{children}</div>
   Form.Item.displayName = 'FormItem'
   Form.useForm = () => [{ setFieldValue: jest.fn() }]
   return { Form }
 })
 jest.mock('@Pimcore/components/pipeline/pipeline', () => {
-  const Pipeline = ({ items }: any): React.JSX.Element => <div>{items.map((i: any) => <div key={ i.id }>{i.component}</div>)}</div>
+  const Pipeline: any = ({ items }: any): React.JSX.Element => <div>{items.map((i: any) => <div key={ i.id }>{i.component}</div>)}</div>
   Pipeline.CustomItem = ({ children }: any): React.JSX.Element => <div>{children}</div>
   Pipeline.CustomItem.displayName = 'CustomItem'
   Pipeline.DynamicGroupItem = (): null => null
