@@ -1,0 +1,86 @@
+/**
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
+
+import { Form } from '@Pimcore/components/form/form'
+import { Alert, Button, Flex, FormKit, Text } from '@sdk/components'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { TwoFactorCodeError } from '../../hooks/use-two-factor-authentication'
+import { TwoFactorCodeField, type TwoFactorCodeFormValues } from '../two-factor-code-field/two-factor-code-field'
+
+export interface TwoFactorFormProps {
+  digits: number
+  onVerify: (code: string) => Promise<void>
+  onGetBack: () => void
+}
+
+export const TwoFactorForm = ({ digits, onVerify, onGetBack }: TwoFactorFormProps): React.JSX.Element => {
+  const { t } = useTranslation()
+  const [form] = Form.useForm<TwoFactorCodeFormValues>()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [codeError, setCodeError] = useState<TwoFactorCodeError | undefined>(undefined)
+
+  const handleFinish = async (values: TwoFactorCodeFormValues): Promise<void> => {
+    setIsLoading(true)
+    setCodeError(undefined)
+
+    try {
+      await onVerify(values.code)
+    } catch (error) {
+      form.resetFields()
+      setCodeError(error instanceof TwoFactorCodeError ? error : undefined)
+      setIsLoading(false)
+    }
+  }
+
+  return (
+    <Flex
+      gap={ 'normal' }
+      vertical
+    >
+      <Text>{t('two-factor-form.description', { digits })}</Text>
+
+      {codeError !== undefined && (
+        <Alert
+          description={ t(codeError.reason === 'too-many-attempts' ? 'two-factor-form.too-many-attempts' : 'two-factor-form.error') }
+          showIcon
+          type="error"
+        />
+      )}
+
+      <FormKit
+        formProps={ {
+          form,
+          onFinish: handleFinish
+        } }
+      >
+        <TwoFactorCodeField digits={ digits } />
+
+        <Button
+          className="w-full"
+          htmlType="submit"
+          loading={ isLoading }
+          type="primary"
+        >
+          {t('two-factor-form.verify')}
+        </Button>
+      </FormKit>
+
+      <Flex justify="center">
+        <Button
+          onClick={ onGetBack }
+          type="link"
+        >
+          {t('two-factor-form.back')}
+        </Button>
+      </Flex>
+    </Flex>
+  )
+}
