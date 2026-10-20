@@ -20,7 +20,7 @@ import { type Asset } from '@Pimcore/modules/asset/asset-api-slice.gen'
 import { ButtonGroup } from '@Pimcore/components/button-group/button-group'
 import { ElementSelectorButton } from '@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
-import { createElementSelectorAreas, createElementSelectorConfig, type IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
+import { createElementSelectorAreas, createElementSelectorConfig, isAllowedSubType, type IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
 import { mapToLegacyElementType } from '@Pimcore/modules/element/utils/element-type'
 import { type ManyToManyRelationValueItem } from '../../hooks/use-value'
 import { type SelectedItem } from '@sdk/modules/element'
@@ -55,10 +55,11 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
 
   // Gated on the class-definition flag, and on the relation explicitly accepting objects —
   // the flag only exists on the object relation types, but the toolbar is shared by all of
-  // them, and an omitted `dataObjectsAllowed` means "not allowed" everywhere else too.
+  // them, and an omitted `dataObjectsAllowed` means "not allowed" everywhere else too. A
+  // folder-only relation also has `dataObjectsAllowed`, so the `object` subtype is required.
   const relationCanCreateObjects = props.allowToCreateNewObject === true &&
     props.disabled !== true &&
-    props.dataObjectsAllowed === true
+    isAllowedSubType('data-object', 'object', props)
 
   // Skipped entirely for relations that cannot create objects, so asset/document relations
   // do not fetch the class collection.
