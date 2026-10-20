@@ -318,6 +318,10 @@ custom-layout.empty-state.edit: Selecteer een bestaande Custom Layout om te bewe
 example-prefix: Voorbeeldprefix
 pagination.show-total: "Totaal {{total}} items"
 pagination.page: Pagina
+pagination.first-page: Eerste pagina
+pagination.previous-page: Vorige pagina
+pagination.next-page: Volgende pagina
+pagination.last-page: Laatste pagina
 pagination.showing-x-of-y: "{{loaded}} van {{total}} weergegeven"
 preview-card.locate-in-tree: In boom zoeken
 preview-card.rename: Hernoemen
@@ -2337,7 +2341,8 @@ user-profile.password-new: Nieuw wachtwoord
 user-profile.password-repeat: Wachtwoord herhalen
 user-profile.password-repeat-error: Wachtwoorden komen niet overeen
 creatable-select.add-custom-option: Aangepaste optie toevoegen
-creatable-select.add: Toevoegen
+creatable-select.press-enter-to-add: Druk op Enter om toe te voegen
+creatable-select.option-added: '{{label}} toegevoegd'
 creatable-select.option-already-exists: Optie bestaat al
 creatable-select.invalid-option: Ongeldige optie
 drag-snippet-here: Sleep hier een fragment
