@@ -594,6 +594,9 @@ listing.actions: Op selectie toepassen
 listing.non-selected.actions: Op alles toepassen
 listing.actions.zip-download: ZIP downloaden
 listing.actions.delete: Verwijderen
+listing.actions.delete-all: Alles verwijderen
+listing.actions.delete-all.not-allowed: "Sommige items in deze map zijn vergrendeld of je mag ze niet verwijderen."
+listing.actions.delete-all.empty: "Deze map bevat geen items om te verwijderen."
 listing.actions.export: Exporteren
 reports.csv-export-modal.title: CSV-exportopties
 reports.csv-export-modal.include-headers: Kolomkoppen opnemen
