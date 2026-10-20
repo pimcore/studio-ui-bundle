@@ -64,6 +64,8 @@ jest.mock('./parent-selector', () => ({
 }))
 
 // eslint-disable-next-line import/first
+import '@testing-library/jest-dom'
+// eslint-disable-next-line import/first
 import React from 'react'
 // eslint-disable-next-line import/first
 import { act, fireEvent, render, screen } from '@testing-library/react'
