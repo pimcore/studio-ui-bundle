@@ -16,12 +16,19 @@ jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
   createStyles: () => () => ({ styles: {}, cx: (...classNames: unknown[]) => classNames.filter(Boolean).join(' '), theme: {} })
 }))
 
-// The real Form pulls the app store and untranspiled ESM through Jest (see toolbar.test.tsx);
-// this bypasses that HOC chain while keeping antd's real Form/Form.Item field registration,
-// which is exactly the mechanism this suite is exercising.
+// The shared Form.Item wrappers namespace field names from the surrounding form contexts (group,
+// locale, list). Simulated here as a trap: the create-object form is standalone and must stay on
+// plain antd fields, otherwise its values would be registered under `localizedfields.<name>.en`
+// and the top-level classId/key/parent assertions below would fail.
 jest.mock('@Pimcore/components/form/form', () => {
   const antd = jest.requireActual('antd')
-  return { Form: antd.Form }
+  const NamespacedItem = ({ name, ...rest }: Record<string, any>): React.JSX.Element => (
+    <antd.Form.Item
+      name={ ['localizedfields', name, 'en'] }
+      { ...rest }
+    />
+  )
+  return { Form: Object.assign(antd.Form, { Item: NamespacedItem }) }
 })
 
 jest.mock('@Pimcore/components/input/input', () => ({
@@ -64,11 +71,13 @@ jest.mock('./parent-selector', () => ({
 }))
 
 // eslint-disable-next-line import/first
+import '@testing-library/jest-dom'
+// eslint-disable-next-line import/first
 import React from 'react'
 // eslint-disable-next-line import/first
 import { act, fireEvent, render, screen } from '@testing-library/react'
 // eslint-disable-next-line import/first
-import { Form } from '@Pimcore/components/form/form'
+import { Form } from 'antd'
 // eslint-disable-next-line import/first
 import { type ClassDefinitionListItem } from '@Pimcore/modules/class-definition/class-definition-slice.gen'
 // eslint-disable-next-line import/first
