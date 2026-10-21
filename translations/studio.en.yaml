@@ -10,6 +10,7 @@ index-sync.confirmation.title: Synchronize search index
 index-sync.confirmation.text: All data objects, assets and documents are queued for re-indexing in the background. Existing indices are updated in place; an index whose changed mapping cannot be applied to its documents (for example after a field type change) is recreated and refilled. Depending on the amount of data this can take a while and put load on the search server. Do you want to continue?
 index-sync.confirmation.ok: Synchronize
 index-sync.job.title: Synchronizing search index
+index-sync.start-failed: Failed to start the search index synchronization
 dont-ask-again: "Don't ask again"
 widget.missing-context.title: Missing context
 widget.missing-context.description: No related element found

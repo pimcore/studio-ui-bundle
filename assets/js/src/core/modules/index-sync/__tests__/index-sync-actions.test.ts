@@ -71,5 +71,6 @@ describe('index sync actions', () => {
     await expect(startIndexSync()).resolves.toBeUndefined()
 
     expect(trackError).toHaveBeenCalledTimes(1)
+    expect(trackError).toHaveBeenCalledWith(expect.objectContaining({ content: 'index-sync.start-failed' }))
   })
 })

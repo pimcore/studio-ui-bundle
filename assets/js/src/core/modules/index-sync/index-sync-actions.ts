@@ -28,7 +28,7 @@ export const startIndexSync = async (): Promise<void> => {
 
 const reportStartFailure = (): void => {
   try {
-    trackError(new GeneralError('Failed to start the search index synchronization'))
+    trackError(new GeneralError(t('index-sync.start-failed')))
   } catch {
     // trackError shows the error dialog and then throws; the confirmation dialog must still close
   }
