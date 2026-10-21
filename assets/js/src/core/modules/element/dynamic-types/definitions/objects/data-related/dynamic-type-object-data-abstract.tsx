@@ -95,6 +95,9 @@ export abstract class DynamicTypeObjectDataAbstract implements DynamicTypeAbstra
     return this.isAllowedInBatchEdit
   }
 
+  // The edit form shows the label after the control on one row (as for a checkbox) instead of above it.
+  labelAfterControl: boolean = false
+
   gridCellEditMode: EditMode = 'default'
   gridCellEditModalSettings: EditModalSettings = {
     modalSize: 'M',
