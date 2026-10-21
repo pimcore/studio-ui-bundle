@@ -61,6 +61,7 @@ export const useSaveSchedules = (elementType: ElementType, id: number, showNotif
       setIsSuccess(true)
       return true
     }
+    setIsSuccess(false)
     const result = await updateSchedulesApi({
       elementType,
       id,
