@@ -1245,6 +1245,7 @@ batch-edit.append-mode.replace: Massersättning
 batch-edit.append-mode.add: Masstillägg
 batch-edit.append-mode.remove: Massborttagning
 batch-delete.job-title: Ta bort
+element-move.job-title: Flytta
 export-csv-form.modal-title: Exportera CSV
 export-csv-form.export-notice: Observera att exporten inte stöder vissa fält (t.ex. förhandsvisning, storlek). Tryck OK för att fortsätta med exporten.
 export-csv-form.form-field.delimiter: Avgränsare
@@ -1309,6 +1310,18 @@ element.tree.paste-only-contents: Klistra bara in innehåll här
 element.tree.cut: Klipp ut
 element.tree.cut-success-description: '{{elementType}} "{{name}}" har klippts ut och är redo att klistras in'
 element.tree.paste-cut: Klistra in utklippt element
+element.tree.cut-multiple: 'Klipp ut {{count}} element'
+element.tree.cut-multiple-success-description: '{{count}} element har klippts ut och kan klistras in'
+element.tree.paste-cut-multiple: 'Klistra in {{count}} utklippta element'
+element.tree.selection.count_one: '{{count}} element valt'
+element.tree.selection.count_other: '{{count}} element valda'
+element.tree.selection.clear: Rensa markering
+element.tree.selection.limit-reached: 'Maximalt {{limit}} element uppnått'
+element.tree.drag.elements_one: '{{count}} element'
+element.tree.drag.elements_other: '{{count}} element'
+element.tree.drag.elements-partial: '{{count}} av {{selected}} element'
+element.tree.move.skipped-elements_one: '1 element flyttades inte: det är låst eller du kan inte redigera det.'
+element.tree.move.skipped-elements_other: '{{count}} element flyttades inte: de är låsta eller du kan inte redigera dem.'
 element.lock: Lås
 element.lock-and-propagate-to-children: Lås och sprid till barn
 element.unlock: Lås upp
@@ -1333,6 +1346,7 @@ element.rename.label: Ange det nya namnet
 element.rename.validation: Ange ett giltigt namn
 element.share-via-notification: Dela via aviseringar
 element.delete: Ta bort
+element.delete-multiple: 'Ta bort {{count}} element'
 element.delete.confirmation.title: Ta bort objekt
 element.delete.confirmation.text: Vill du verkligen ta bort det här objektet?
 element.delete.confirmation.ok: Ta bort permanent
@@ -1430,6 +1444,9 @@ relations.create-object.class: Klass
 relation: relation
 items-limit-reached: Maximalt antal objekt ({{maxItems}}) har nåtts.
 asset-upload-type-not-allowed: Den uppladdade assetens typ tillåts inte för det här fältet.
+relation.drop.not-allowed-elements-skipped_one: '1 element lades inte till: det här fältet tillåter inte dess typ.'
+relation.drop.not-allowed-elements-skipped_other: '{{count}} element lades inte till: det här fältet tillåter inte deras typer.'
+drag-and-drop.drop.single-element-only: 'Bara ett element kan släppas här.'
 actions: Åtgärder
 asset: Asset
 data-object: Data Object

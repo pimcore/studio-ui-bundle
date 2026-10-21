@@ -1247,6 +1247,7 @@ batch-edit.append-mode.replace: Batch replace
 batch-edit.append-mode.add: Batch add
 batch-edit.append-mode.remove: Batch remove
 batch-delete.job-title: Delete
+element-move.job-title: Move
 export-csv-form.modal-title: Export CSV
 export-csv-form.export-notice: Please note that the export does not support some fields(e.g. preview, size). Press OK to continue with the export.
 export-csv-form.form-field.delimiter: Delimiter
@@ -1311,6 +1312,18 @@ element.tree.paste-only-contents: Paste only contents here
 element.tree.cut: Cut
 element.tree.cut-success-description: '{{elementType}} "{{name}}" has been cut and is ready to paste'
 element.tree.paste-cut: Paste cut-out element
+element.tree.cut-multiple: 'Cut {{count}} elements'
+element.tree.cut-multiple-success-description: '{{count}} elements have been cut and are ready to paste'
+element.tree.paste-cut-multiple: 'Paste {{count}} cut elements'
+element.tree.selection.count_one: '{{count}} element selected'
+element.tree.selection.count_other: '{{count}} elements selected'
+element.tree.selection.clear: Clear selection
+element.tree.selection.limit-reached: 'Maximum of {{limit}} elements reached'
+element.tree.drag.elements_one: '{{count}} element'
+element.tree.drag.elements_other: '{{count}} elements'
+element.tree.drag.elements-partial: '{{count}} of {{selected}} elements'
+element.tree.move.skipped-elements_one: '1 element was not moved: it is locked or you cannot edit it.'
+element.tree.move.skipped-elements_other: '{{count}} elements were not moved: they are locked or you cannot edit them.'
 element.lock: Lock
 element.lock-and-propagate-to-children: Lock and propagate to children
 element.unlock: Unlock
@@ -1335,6 +1348,7 @@ element.rename.label: Please enter the new name
 element.rename.validation: Please enter a valid name
 element.share-via-notification: Share via Notifications
 element.delete: Delete
+element.delete-multiple: 'Delete {{count}} elements'
 element.delete.confirmation.title: Delete item
 element.delete.confirmation.text: Do you really want to delete this item?
 element.delete.confirmation.ok: Delete permanently
@@ -1432,6 +1446,9 @@ relations.create-object.class: Class
 relation: Relation
 items-limit-reached: The maximum number of items ({{maxItems}}) has been reached.
 asset-upload-type-not-allowed: The uploaded asset's type is not allowed for this field.
+relation.drop.not-allowed-elements-skipped_one: '1 element was not added: this field does not allow its type.'
+relation.drop.not-allowed-elements-skipped_other: '{{count}} elements were not added: this field does not allow their type.'
+drag-and-drop.drop.single-element-only: 'Only one element can be dropped here.'
 actions: Actions
 asset: Asset
 data-object: Data Object

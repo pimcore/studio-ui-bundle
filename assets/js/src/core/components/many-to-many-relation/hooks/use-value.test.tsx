@@ -36,11 +36,11 @@ const createItem = (id: number): ManyToManyRelationValue[number] => ({
   isPublished: null
 })
 
-const renderUseValue = (initialValue: ManyToManyRelationValue): ReturnType<typeof renderHook<{ value: ManyToManyRelationValue | null, hook: ReturnType<typeof useValue> }, unknown>> => {
+const renderUseValue = (initialValue: ManyToManyRelationValue, maxItems: number | null = null): ReturnType<typeof renderHook<{ value: ManyToManyRelationValue | null, hook: ReturnType<typeof useValue> }, unknown>> => {
   return renderHook(() => {
     const [value, setValue] = useState<ManyToManyRelationValue | null>(initialValue)
     const [displayedValue, setDisplayedValue] = useState<DisplayManyToManyRelationValue | null>(initialValue)
-    const hook = useValue(value, setValue, displayedValue, setDisplayedValue, null)
+    const hook = useValue(value, setValue, displayedValue, setDisplayedValue, maxItems)
     return { value, hook }
   })
 }
@@ -62,5 +62,50 @@ describe('useValue', () => {
       staleDeleteItem(0)
     })
     expect(result.current.value).toEqual([b, c])
+  })
+
+  describe('addDroppedElements', () => {
+    const dropped = (id: number): Record<string, unknown> => ({ id, type: 'image', fullPath: `/item-${id}` })
+
+    it('adds every dropped element when the field has no limit', async () => {
+      const { result } = renderUseValue([createItem(1)], null)
+
+      await act(async () => {
+        result.current.hook.addDroppedElements([dropped(2), dropped(3)], 'asset')
+      })
+
+      expect(result.current.value?.map(item => item.id)).toEqual([1, 2, 3])
+    })
+
+    it('treats an unset limit like no limit', async () => {
+      // field definitions without maxItems hand over undefined at runtime
+      const { result } = renderUseValue([createItem(1)], undefined as unknown as null)
+
+      await act(async () => {
+        result.current.hook.addDroppedElements([dropped(2), dropped(3)], 'asset')
+      })
+
+      expect(result.current.value?.map(item => item.id)).toEqual([1, 2, 3])
+    })
+
+    it('fills up to the limit and leaves the rest out', async () => {
+      const { result } = renderUseValue([createItem(1)], 2)
+
+      await act(async () => {
+        result.current.hook.addDroppedElements([dropped(2), dropped(3)], 'asset')
+      })
+
+      expect(result.current.value?.map(item => item.id)).toEqual([1, 2])
+    })
+
+    it('adds nothing to a full field', async () => {
+      const { result } = renderUseValue([createItem(1), createItem(2)], 2)
+
+      await act(async () => {
+        result.current.hook.addDroppedElements([dropped(3)], 'asset')
+      })
+
+      expect(result.current.value?.map(item => item.id)).toEqual([1, 2])
+    })
   })
 })

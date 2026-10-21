@@ -13,6 +13,7 @@ import React, {
   type ElementType,
   type MutableRefObject,
   useCallback,
+  useEffect,
   useMemo,
   useRef
 } from 'react'
@@ -26,6 +27,9 @@ import { type TreeNode } from './element-tree-slice'
 import { TreeList } from './list/tree-list'
 import { useTreeId } from '@Pimcore/components/element-tree/provider/tree-id-provider/use-tree-id'
 import { createTreeTestId } from '@Pimcore/utils/test-id-generator'
+import { TreeSelectionBar } from './selection/tree-selection-bar'
+import { useElementTree } from './hooks/use-element-tree'
+import { buildVisibleNodeOrder } from './utils/visible-node-order'
 import { useRovingTabStop } from './hooks/use-roving-tab-stop'
 
 export interface TreeSearchProps {
@@ -61,6 +65,13 @@ export interface TreeProps {
 
   showRoot: boolean
   ariaLabel?: string
+
+  /**
+   * 'multiple' lets users select several nodes with Ctrl/Cmd and Shift. It is an
+   * opt in: a tree should only offer it when its actions can handle a selection,
+   * otherwise users build a selection nothing acts on.
+   */
+  selectionMode?: 'single' | 'multiple'
 }
 
 export interface INodeRef {
@@ -78,7 +89,8 @@ export const defaultTreeProps: TreeProps = {
   nodeId: 1,
   renderNodeContent: TreeNodeContent,
   renderNode: TreeNodeComponent,
-  showRoot: true
+  showRoot: true,
+  selectionMode: 'single'
 }
 
 export const TreeContext = createContext<ITreeContext>({
@@ -104,23 +116,23 @@ const ElementTree = (
   const listNode: TreeNodeProps = { ...defaultProps, ...preparedRootNode, id: preparedRootNode?.id ?? String(nodeId), level: -1 }
   const { getChildren, isLoading } = useElementTreeNode(String(nodeId))
 
+  const { clearSelection } = useElementTree()
+
+  // A different root means a different set of elements, so the selection is
+  // dropped instead of surviving into a tree it does not belong to.
+  const previousNodeId = useRef(nodeId)
+  useEffect(() => {
+    if (previousNodeId.current !== nodeId) {
+      previousNodeId.current = nodeId
+      clearSelection()
+    }
+  }, [nodeId, clearSelection])
+
   const nodesRefs = useRef<Record<string, INodeRef>>({})
+  // Visible top to bottom order of the rendered nodes, used for keyboard
+  // navigation and range selection.
   const nodeOrder = useCallback(() => {
-    return Object.keys(nodesRefs.current).sort((a: string, b: string) => {
-      const nodeA = nodesRefs.current[a].node
-      const nodeB = nodesRefs.current[b].node
-
-      const indexesA = nodeA.internalKey.split('-')
-      const indexesB = nodeB.internalKey.split('-')
-
-      for (let index = 0; index < indexesA.length; index++) {
-        if (indexesA[index] !== indexesB[index]) {
-          return parseInt(indexesA[index]) - parseInt(indexesB[index])
-        }
-      }
-
-      return 0
-    })
+    return buildVisibleNodeOrder(nodesRefs.current)
   }, [nodesRefs.current])
 
   async function onRightClick (event: React.MouseEvent, node: TreeNodeProps): Promise<void> {
@@ -133,16 +145,20 @@ const ElementTree = (
 
   const TreeNode = renderNode
   const treeTestId = createTreeTestId(treeId)
+  const isMultiSelect = props.selectionMode === 'multiple'
   const treeRef = useRovingTabStop()
   const treeContent = (
     <div
       aria-label={ props.ariaLabel }
+      aria-multiselectable={ isMultiSelect ? true : undefined }
       className={ ['tree', styles.tree].join(' ') }
       data-testid={ treeTestId }
       ref={ treeRef }
       role="tree"
     >
       <TreeContext.Provider value={ treeContextValue }>
+
+        {isMultiSelect && <TreeSelectionBar />}
 
         {hasRootNode && (
         <TreeNode

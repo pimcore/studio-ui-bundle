@@ -11,11 +11,18 @@
 import { type TreeNode, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import React, { forwardRef, type ReactElement, type Ref } from 'react'
 import { type DragAndDropInfo, type DroppableProps } from '@Pimcore/components/drag-and-drop/droppable'
-import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
+import { useMoveElements } from '@Pimcore/modules/element/actions/move/use-move-elements'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
 import { isUndefined } from 'lodash'
 import { useDndAllowed } from '@Pimcore/modules/element/tree/node/with-droppable/use-dnd-allowed'
+import { getDraggedElements, isElementDrag, isElementListDragType } from '@Pimcore/components/drag-and-drop/element-drag'
+import { toMovableElements } from '@Pimcore/components/element-tree/utils/drop-target-validation'
+import { orderForSorting } from '@Pimcore/components/element-tree/utils/sort-order'
+import { planSetSort } from '@Pimcore/components/element-tree/utils/sort-positions'
+import { useTreeFilter } from '@Pimcore/components/element-tree/provider/tree-filter-provider/use-tree-filter'
+import { useElementTree } from '@Pimcore/components/element-tree/hooks/use-element-tree'
+import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { HotspotDroppable, type HotspotDroppableProps } from '@Pimcore/components/drag-and-drop/hotspot-droppable'
 import { useSorting } from '@Pimcore/modules/element/actions/sorting/use-sorting'
 import { useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
@@ -28,11 +35,13 @@ interface OnSortingDropProps {
 
 export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
   const DroppableNodeContent = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
-    const { move } = useCopyPaste('data-object')
+    const { moveMultiple, sortMultiple } = useMoveElements('data-object')
     const { move: moveByIndex } = useSorting('data-object')
     const { isSourceAllowed, isTargetAllowed } = useDndAllowed()
+    const { getAncestorIds } = useElementTree()
     const { isClassAllowed } = useTreeClassRestriction()
     const parentNode = useElementTreeNode(props.parentId ?? '-1')
+    const { pageSize } = useTreeFilter()
     const hasParent = parentNode !== undefined
     let sortingMode = 'keyed'
 
@@ -54,18 +63,35 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
       )
     }
 
-    const onDrop: DroppableProps['onDrop'] = (info) => {
-      const sourceObject: DataObject = info.data
+    /**
+     * The dragged objects this node would accept as children: everything the user
+     * may move, without variants, reduced to the topmost elements, and nothing at
+     * all when the target is part of the drag.
+     */
+    const acceptableObjects = (info: DragAndDropInfo): DataObject[] => {
+      if (!isElementDrag(info, [elementTypes.dataObject]) || !isTargetAllowed(targetObject) || targetObject.type === 'variant') {
+        return []
+      }
 
-      if (!isSourceAllowed(sourceObject) || !isTargetAllowed(targetObject)) {
+      const objects = getDraggedElements<DataObject>(info)
+        .filter(object => object.type !== 'variant' && isSourceAllowed(object) && isClassAllowed(object))
+
+      return toMovableElements(targetObject.id, objects, getAncestorIds)
+    }
+
+    const onDrop: DroppableProps['onDrop'] = (info) => {
+      const objects = acceptableObjects(info)
+
+      if (objects.length === 0) {
         return
       }
 
-      move({
-        currentElement: { id: sourceObject.id, parentId: sourceObject.parentId },
-        targetElement: { id: targetObject.id, parentId: targetObject.parentId }
+      moveMultiple({
+        currentElements: objects.map(object => ({ id: object.id, parentId: object.parentId })),
+        targetElement: { id: targetObject.id, parentId: targetObject.parentId },
+        skippedCount: getDraggedElements(info).length - objects.length
       }).catch(() => {
-        trackError(new GeneralError('Item could not be moved'))
+        trackError(new GeneralError('Items could not be moved'))
       })
     }
 
@@ -86,8 +112,90 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
       })
     }
 
-    const checkForValidContext: DroppableProps['isValidContext'] = (context) => {
-      return context.type === 'data-object' && context.data.type !== 'variant'
+    /**
+     * The dragged objects that may be sorted next to this node. Sorting places them
+     * among the target's siblings, so the destination is the target's parent.
+     */
+    const acceptableSortObjects = (info: DragAndDropInfo): DataObject[] => {
+      if (!isElementDrag(info, [elementTypes.dataObject]) || targetObject.type === 'variant') {
+        return []
+      }
+
+      const objects = getDraggedElements<DataObject>(info)
+        .filter(object => object.type !== 'variant' && isSourceAllowed(object) && isClassAllowed(object))
+
+      // Sorting a set relative to one of its own members has no defined result.
+      if (objects.some(object => String(object.id) === String(targetObject.id))) {
+        return []
+      }
+
+      return toMovableElements(targetObject.parentId ?? targetObject.id, objects, getAncestorIds)
+    }
+
+    /**
+     * The set with the index each element is sent with, or nothing when the tree
+     * cannot tell where it would end up (filtered level, member on another page).
+     */
+    const planSort = (info: DragAndDropInfo, position: 'top' | 'bottom'): ReturnType<typeof planSetSort<{ id: number, parentId: number }>> => {
+      const objects = acceptableSortObjects(info)
+
+      if (objects.length < 2) {
+        return []
+      }
+
+      return planSetSort({
+        parent: { id: String(props.parentId), childrenIds: parentNode.childrenIds, page: parentNode.page, searchTerm: parentNode.searchTerm },
+        pageSize,
+        elements: orderForSorting(objects).map(object => ({ id: object.id, parentId: object.parentId })),
+        targetId: String(targetObject.id),
+        edge: position
+      })
+    }
+
+    const onSortingDropMultiple = (info: DragAndDropInfo, position: 'top' | 'bottom'): void => {
+      const elements = planSort(info, position)
+
+      if (elements.length === 0) {
+        return
+      }
+
+      sortMultiple({
+        currentElements: elements,
+        targetElement: { id: targetObject.parentId ?? targetObject.id },
+        skippedCount: getDraggedElements(info).length - elements.length
+      }).catch(() => {
+        trackError(new GeneralError('Items could not be sorted'))
+      })
+    }
+
+    const checkForValidSortContext: DroppableProps['isValidContext'] = (info) => {
+      return isElementDrag(info, [elementTypes.dataObject])
+    }
+
+    const checkForValidSortData: DroppableProps['isValidData'] = (info) => {
+      return isElementListDragType(info.type)
+        ? planSort(info, 'top').length > 1
+        : (checkForValidData?.(info) ?? false)
+    }
+
+    const onSortingDropAny = (info: DragAndDropInfo, position: 'top' | 'bottom'): void => {
+      if (isElementListDragType(info.type)) {
+        onSortingDropMultiple(info, position)
+
+        return
+      }
+
+      onSortingDrop({ info, position })
+    }
+
+    // Only moving into a node handles a set; sorting by index stays single element,
+    // so its hotspots keep the validators below and refuse a list drag.
+    const checkForValidMoveContext: DroppableProps['isValidContext'] = (info) => {
+      return isElementDrag(info, [elementTypes.dataObject])
+    }
+
+    const checkForValidMoveData: DroppableProps['isValidData'] = (info) => {
+      return acceptableObjects(info).length > 0
     }
 
     const checkForValidData: DroppableProps['isValidData'] = (info) => {
@@ -98,8 +206,8 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
     let hotspots: HotspotDroppableProps['hotspots'] = [
       {
         id: 'drop-middle',
-        isValidContext: checkForValidContext,
-        isValidData: checkForValidData,
+        isValidContext: checkForValidMoveContext,
+        isValidData: checkForValidMoveData,
         position: { x: '0', y: '0%', width: '100%', height: '100%' },
         onDrop
       }
@@ -110,25 +218,25 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
         {
           id: 'sorting-top',
           className: 'dnd__sorting dnd__sorting--top',
-          isValidContext: checkForValidContext,
-          isValidData: checkForValidData,
+          isValidContext: checkForValidSortContext,
+          isValidData: checkForValidSortData,
           position: { x: 0, y: 0, width: '100%', height: '30%' },
-          onDrop: (info) => { onSortingDrop({ info, position: 'top' }) }
+          onDrop: (info) => { onSortingDropAny(info, 'top') }
         },
         {
           id: 'drop-middle',
-          isValidContext: checkForValidContext,
-          isValidData: checkForValidData,
+          isValidContext: checkForValidMoveContext,
+          isValidData: checkForValidMoveData,
           position: { x: '0', y: '30%', width: '100%', height: '40%' },
           onDrop
         },
         {
           id: 'sorting-bottom',
           className: 'dnd__sorting dnd__sorting--bottom',
-          isValidContext: checkForValidContext,
-          isValidData: checkForValidData,
+          isValidContext: checkForValidSortContext,
+          isValidData: checkForValidSortData,
           position: { x: 0, y: '70%', width: '100%', height: '30%' },
-          onDrop: (info) => { onSortingDrop({ info, position: 'bottom' }) }
+          onDrop: (info) => { onSortingDropAny(info, 'bottom') }
         }
       ]
     }

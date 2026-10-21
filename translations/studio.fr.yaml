@@ -1245,6 +1245,7 @@ batch-edit.append-mode.replace: Remplacement par lot
 batch-edit.append-mode.add: Ajout par lot
 batch-edit.append-mode.remove: Suppression par lot
 batch-delete.job-title: Supprimer
+element-move.job-title: Déplacer
 export-csv-form.modal-title: Export CSV
 export-csv-form.export-notice: Veuillez noter que l'export ne prend pas en charge certains champs (ex. aperçu, taille). Cliquez sur OK pour continuer l'export.
 export-csv-form.form-field.delimiter: Délimiteur
@@ -1309,6 +1310,18 @@ element.tree.paste-only-contents: Coller uniquement le contenu ici
 element.tree.cut: Couper
 element.tree.cut-success-description: '{{elementType}} "{{name}}" a été coupé et est prêt à être collé'
 element.tree.paste-cut: Coller l'élément coupé
+element.tree.cut-multiple: 'Couper {{count}} éléments'
+element.tree.cut-multiple-success-description: '{{count}} éléments ont été coupés et sont prêts à être collés'
+element.tree.paste-cut-multiple: 'Coller {{count}} éléments coupés'
+element.tree.selection.count_one: '{{count}} élément sélectionné'
+element.tree.selection.count_other: '{{count}} éléments sélectionnés'
+element.tree.selection.clear: Effacer la sélection
+element.tree.selection.limit-reached: 'Maximum de {{limit}} éléments atteint'
+element.tree.drag.elements_one: '{{count}} élément'
+element.tree.drag.elements_other: '{{count}} éléments'
+element.tree.drag.elements-partial: '{{count}} sur {{selected}} éléments'
+element.tree.move.skipped-elements_one: "1 élément n'a pas été déplacé : il est verrouillé ou vous ne pouvez pas le modifier."
+element.tree.move.skipped-elements_other: "{{count}} éléments n'ont pas été déplacés : ils sont verrouillés ou vous ne pouvez pas les modifier."
 element.lock: Verrouiller
 element.lock-and-propagate-to-children: Verrouiller et propager aux enfants
 element.unlock: Déverrouiller
@@ -1333,6 +1346,7 @@ element.rename.label: Veuillez entrer le nouveau nom
 element.rename.validation: Veuillez entrer un nom valide
 element.share-via-notification: Partager via notifications
 element.delete: Supprimer
+element.delete-multiple: 'Supprimer {{count}} éléments'
 element.delete.confirmation.title: Supprimer l'élément
 element.delete.confirmation.text: Voulez-vous vraiment supprimer cet élément ?
 element.delete.confirmation.ok: Supprimer définitivement
@@ -1430,6 +1444,9 @@ relations.create-object.class: Classe
 relation: relation
 items-limit-reached: Le nombre maximum d'éléments ({{maxItems}}) a été atteint.
 asset-upload-type-not-allowed: Le type de l'asset téléversé n'est pas autorisé pour ce champ.
+relation.drop.not-allowed-elements-skipped_one: "1 élément n'a pas été ajouté : ce champ n'autorise pas son type."
+relation.drop.not-allowed-elements-skipped_other: "{{count}} éléments n'ont pas été ajoutés : ce champ n'autorise pas leurs types."
+drag-and-drop.drop.single-element-only: 'Un seul élément peut être déposé ici.'
 actions: Actions
 asset: Asset
 data-object: Data Object

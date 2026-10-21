@@ -20,6 +20,7 @@ import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-h
 import { useRefreshGrid } from '@Pimcore/modules/element/actions/refresh-grid/use-refresh-grid'
 import { type Element, getElementKey } from '@Pimcore/modules/element/element-helper'
 import { api as elementApi } from '@Pimcore/modules/element/element-api-slice.gen'
+import { deselectNodes } from '@Pimcore/components/element-tree/element-tree-slice'
 import { useElementApi } from '@Pimcore/modules/element/hooks/use-element-api'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
@@ -35,6 +36,8 @@ import { TreePermission } from '../../../perspectives/enums/tree-permission'
 import { useTreePermission } from '@Pimcore/components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { useRecycleBin } from '@Pimcore/modules/recycle-bin/hooks/use-recycle-bin'
 import { useTreeId } from '@Pimcore/components/element-tree/provider/tree-id-provider/use-tree-id'
+import { useTreeBatchDelete } from './use-tree-batch-delete'
+import { needsBatchDelete } from './delete-targets'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number, onFinish?: () => void) => void
@@ -62,6 +65,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   const { styles } = useStyles()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { treeId } = useTreeId(true)
+  const { getDeletableNodes, confirmDeleteNodes } = useTreeBatchDelete(elementType)
 
   const runDeleteJob = async (id: number, parentId?: number, onFinish?: () => void): Promise<void> => {
     setIsLoading(true)
@@ -85,6 +89,10 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
             closeWidget(widgetId)
           }
           refreshRecycleBin()
+
+          // A deleted id never comes back, so it must not linger in a selection and
+          // end up in the next bulk action.
+          dispatch(deselectNodes({ nodeIds: [String(id)], elementType }))
         },
         // Runs whether the delete succeeded or not: callers use it to release their own busy state.
         onFinished: () => {
@@ -148,12 +156,23 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
   }
 
   const deleteTreeContextMenuItem = (node: TreeNodeProps, onFinish?: () => void): ItemType => {
+    const deletableNodes = getDeletableNodes(node)
+    const isBatchDelete = needsBatchDelete(node, deletableNodes)
+
     return {
-      label: t('element.delete'),
+      label: deletableNodes.length > 1
+        ? t('element.delete-multiple', { count: deletableNodes.length })
+        : t('element.delete'),
       key: ContextMenuActionName.delete,
       icon: <Icon value={ 'trash' } />,
       hidden: !isTreeActionAllowed(TreePermission.Delete) || !checkElementPermission(node.permissions, 'delete') || node.isLocked,
       onClick: () => {
+        if (isBatchDelete) {
+          void confirmDeleteNodes(deletableNodes).then(() => { onFinish?.() })
+
+          return
+        }
+
         const id = parseInt(node.id)
         const parentId = node.parentId !== undefined ? parseInt(node.parentId) : undefined
         deleteElement(id, node.label, parentId, onFinish, node.type === 'folder')

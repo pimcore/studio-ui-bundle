@@ -1245,6 +1245,7 @@ batch-edit.append-mode.replace: Zamień zbiorczo
 batch-edit.append-mode.add: Dodaj zbiorczo
 batch-edit.append-mode.remove: Usuń zbiorczo
 batch-delete.job-title: Usuń
+element-move.job-title: "Przenoszenie"
 export-csv-form.modal-title: Eksport CSV
 export-csv-form.export-notice: "Uwaga: eksport nie obsługuje niektórych pól (np. podgląd, rozmiar). Naciśnij OK, aby kontynuować eksport."
 export-csv-form.form-field.delimiter: Separator
@@ -1309,6 +1310,18 @@ element.tree.paste-only-contents: Wklej tutaj tylko treść
 element.tree.cut: Wytnij
 element.tree.cut-success-description: '{{elementType}} "{{name}}" został wycięty i jest gotowy do wklejenia'
 element.tree.paste-cut: Wklej wycięty element
+element.tree.cut-multiple: "Wytnij {{count}} elementów"
+element.tree.cut-multiple-success-description: "{{count}} elementów zostało wyciętych i można je wkleić"
+element.tree.paste-cut-multiple: "Wklej {{count}} wyciętych elementów"
+element.tree.selection.count_one: "{{count}} element zaznaczony"
+element.tree.selection.count_other: "{{count}} elementów zaznaczonych"
+element.tree.selection.clear: "Wyczyść zaznaczenie"
+element.tree.selection.limit-reached: "Osiągnięto maksimum {{limit}} elementów"
+element.tree.drag.elements_one: "{{count}} element"
+element.tree.drag.elements_other: "{{count}} elementów"
+element.tree.drag.elements-partial: "{{count}} z {{selected}} elementów"
+element.tree.move.skipped-elements_one: "1 element nie został przeniesiony: jest zablokowany lub nie masz uprawnień do jego edycji."
+element.tree.move.skipped-elements_other: "{{count}} elementów nie zostało przeniesionych: są zablokowane lub nie masz uprawnień do ich edycji."
 element.lock: Zablokuj
 element.lock-and-propagate-to-children: Zablokuj i przekaż elementom podrzędnym
 element.unlock: Odblokuj
@@ -1333,6 +1346,7 @@ element.rename.label: Wprowadź nową nazwę
 element.rename.validation: Wprowadź prawidłową nazwę
 element.share-via-notification: Udostępnij przez powiadomienia
 element.delete: Usuń
+element.delete-multiple: "Usuń {{count}} elementów"
 element.delete.confirmation.title: Usuń element
 element.delete.confirmation.text: Czy na pewno chcesz usunąć ten element?
 element.delete.confirmation.ok: Usuń trwale
@@ -1430,6 +1444,9 @@ relations.create-object.class: Klasa
 relation: relacja
 items-limit-reached: "Osiągnięto maksymalną liczbę elementów ({{maxItems}})."
 asset-upload-type-not-allowed: Typ przesłanego assetu nie jest dozwolony dla tego pola.
+relation.drop.not-allowed-elements-skipped_one: "1 element nie został dodany: to pole nie dopuszcza tego typu."
+relation.drop.not-allowed-elements-skipped_other: "{{count}} elementów nie zostało dodanych: to pole nie dopuszcza tych typów."
+drag-and-drop.drop.single-element-only: 'Tutaj można upuścić tylko jeden element.'
 actions: Akcje
 asset: Asset
 data-object: Obiekt danych

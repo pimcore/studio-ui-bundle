@@ -34,7 +34,7 @@ export const useDocumentDraftFetcher = (): UseDocumentDraftFetcherReturn => {
 
     fetchingDrafts.set(id, true)
     try {
-      const { data: documentData, error } = await dispatch(documentApi.endpoints.documentGetById.initiate({ id }, { forceRefetch }))
+      const { data: documentData, error } = await dispatch(documentApi.endpoints.documentGetById.initiate({ id }, { forceRefetch, subscribe: false }))
 
       if (!isUndefined(error)) {
         trackError(new ApiError(error))

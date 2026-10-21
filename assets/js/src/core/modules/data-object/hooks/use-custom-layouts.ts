@@ -15,6 +15,7 @@ import {
 } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { isUndefined } from 'lodash'
+import { useRef } from 'react'
 import { useWorkflowGetDetailsQuery } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/workflow/workflow-api-slice-enhanced'
 import { isWorkflowAvailable } from '@Pimcore/modules/element/utils/workflow-availability'
 
@@ -28,7 +29,20 @@ export interface UseCustomLayoutsReturn {
 
 export const useCustomLayouts = (id: number): UseCustomLayoutsReturn => {
   const { dataObject, isLoading: isDraftLoading } = useDataObjectDraft(id)
-  const { data, error, isLoading: isCustomLayoutLoading } = useClassCustomLayoutEditorCollectionQuery({ objectId: id }, { skip: dataObject === undefined || dataObject.type === 'folder' })
+
+  // The layouts of an object depend on its class, not on the object itself, so the
+  // query must not be dropped and re-subscribed every time the object is refetched
+  // - moving or renaming it would otherwise fetch the layouts again. Once it is
+  // known not to be a folder, the subscription stays.
+  const isLayoutHolder = useRef(false)
+
+  if (!isUndefined(dataObject) && dataObject.type !== 'folder') {
+    isLayoutHolder.current = true
+  }
+
+  const skipLayouts = !isLayoutHolder.current && (isUndefined(dataObject) || dataObject.type === 'folder')
+
+  const { data, error, isLoading: isCustomLayoutLoading } = useClassCustomLayoutEditorCollectionQuery({ objectId: id }, { skip: skipLayouts })
   if (error !== undefined) {
     trackError(new ApiError(error))
   }

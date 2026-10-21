@@ -1245,6 +1245,7 @@ batch-edit.append-mode.replace: Masseerstatt
 batch-edit.append-mode.add: Masselegg til
 batch-edit.append-mode.remove: Massefjerning
 batch-delete.job-title: Slett
+element-move.job-title: Flytt
 export-csv-form.modal-title: Eksporter CSV
 export-csv-form.export-notice: Vær oppmerksom på at eksporten ikke støtter noen felt (f.eks. forhåndsvisning, størrelse). Trykk OK for å fortsette med eksporten.
 export-csv-form.form-field.delimiter: Skilletegn
@@ -1309,6 +1310,18 @@ element.tree.paste-only-contents: Lim inn kun innhold her
 element.tree.cut: Klipp ut
 element.tree.cut-success-description: '{{elementType}} "{{name}}" er klippet ut og klar til å limes inn'
 element.tree.paste-cut: Lim inn utklippet element
+element.tree.cut-multiple: 'Klipp ut {{count}} elementer'
+element.tree.cut-multiple-success-description: '{{count}} elementer er klippet ut og kan limes inn'
+element.tree.paste-cut-multiple: 'Lim inn {{count}} utklippede elementer'
+element.tree.selection.count_one: '{{count}} element valgt'
+element.tree.selection.count_other: '{{count}} elementer valgt'
+element.tree.selection.clear: Fjern valg
+element.tree.selection.limit-reached: 'Maksimalt {{limit}} elementer nådd'
+element.tree.drag.elements_one: '{{count}} element'
+element.tree.drag.elements_other: '{{count}} elementer'
+element.tree.drag.elements-partial: '{{count}} av {{selected}} elementer'
+element.tree.move.skipped-elements_one: '1 element ble ikke flyttet: det er låst eller du kan ikke redigere det.'
+element.tree.move.skipped-elements_other: '{{count}} elementer ble ikke flyttet: de er låst eller du kan ikke redigere dem.'
 element.lock: Lås
 element.lock-and-propagate-to-children: Lås og propager til underelementer
 element.unlock: Lås opp
@@ -1333,6 +1346,7 @@ element.rename.label: Vennligst oppgi det nye navnet
 element.rename.validation: Vennligst oppgi et gyldig navn
 element.share-via-notification: Del via varsler
 element.delete: Slett
+element.delete-multiple: 'Slett {{count}} elementer'
 element.delete.confirmation.title: Slett element
 element.delete.confirmation.text: Vil du virkelig slette dette elementet?
 element.delete.confirmation.ok: Slett permanent
@@ -1430,6 +1444,9 @@ relations.create-object.class: Klasse
 relation: relasjon
 items-limit-reached: Maksimalt antall elementer ({{maxItems}}) er nådd.
 asset-upload-type-not-allowed: Typen til den opplastede ressursen er ikke tillatt for dette feltet.
+relation.drop.not-allowed-elements-skipped_one: '1 element ble ikke lagt til: dette feltet tillater ikke typen.'
+relation.drop.not-allowed-elements-skipped_other: '{{count}} elementer ble ikke lagt til: dette feltet tillater ikke typene.'
+drag-and-drop.drop.single-element-only: 'Bare ett element kan slippes her.'
 actions: Handlinger
 asset: Ressurs
 data-object: Data Object

@@ -1245,6 +1245,7 @@ batch-edit.append-mode.replace: Batch vervangen
 batch-edit.append-mode.add: Batch toevoegen
 batch-edit.append-mode.remove: Batch verwijderen
 batch-delete.job-title: Verwijderen
+element-move.job-title: "Verplaatsen"
 export-csv-form.modal-title: CSV exporteren
 export-csv-form.export-notice: "Let op: de export ondersteunt sommige velden niet (bijv. voorbeeld, grootte). Druk op OK om door te gaan met de export."
 export-csv-form.form-field.delimiter: Scheidingsteken
@@ -1309,6 +1310,18 @@ element.tree.paste-only-contents: Alleen inhoud hier plakken
 element.tree.cut: Knippen
 element.tree.cut-success-description: '{{elementType}} "{{name}}" is geknipt en klaar om te plakken'
 element.tree.paste-cut: Geknipt element plakken
+element.tree.cut-multiple: "{{count}} elementen knippen"
+element.tree.cut-multiple-success-description: "{{count}} elementen zijn geknipt en kunnen worden geplakt"
+element.tree.paste-cut-multiple: "{{count}} geknipte elementen plakken"
+element.tree.selection.count_one: "{{count}} element geselecteerd"
+element.tree.selection.count_other: "{{count}} elementen geselecteerd"
+element.tree.selection.clear: "Selectie wissen"
+element.tree.selection.limit-reached: "Maximum van {{limit}} elementen bereikt"
+element.tree.drag.elements_one: "{{count}} element"
+element.tree.drag.elements_other: "{{count}} elementen"
+element.tree.drag.elements-partial: "{{count}} van {{selected}} elementen"
+element.tree.move.skipped-elements_one: "1 element is niet verplaatst: het is vergrendeld of u kunt het niet bewerken."
+element.tree.move.skipped-elements_other: "{{count}} elementen zijn niet verplaatst: ze zijn vergrendeld of u kunt ze niet bewerken."
 element.lock: Vergrendelen
 element.lock-and-propagate-to-children: Vergrendelen en doorgeven aan onderliggende items
 element.unlock: Ontgrendelen
@@ -1333,6 +1346,7 @@ element.rename.label: Voer de nieuwe naam in
 element.rename.validation: Voer een geldige naam in
 element.share-via-notification: Delen via meldingen
 element.delete: Verwijderen
+element.delete-multiple: "{{count}} elementen verwijderen"
 element.delete.confirmation.title: Item verwijderen
 element.delete.confirmation.text: Weet je echt zeker dat je dit item wilt verwijderen?
 element.delete.confirmation.ok: Definitief verwijderen
@@ -1430,6 +1444,9 @@ relations.create-object.class: Klasse
 relation: relatie
 items-limit-reached: "Het maximum aantal items ({{maxItems}}) is bereikt."
 asset-upload-type-not-allowed: Het type van de geüploade asset is niet toegestaan voor dit veld.
+relation.drop.not-allowed-elements-skipped_one: "1 element is niet toegevoegd: dit veld staat dit type niet toe."
+relation.drop.not-allowed-elements-skipped_other: "{{count}} elementen zijn niet toegevoegd: dit veld staat deze typen niet toe."
+drag-and-drop.drop.single-element-only: 'Hier kan maar één element worden neergezet.'
 actions: Acties
 asset: Asset
 data-object: Gegevensobject

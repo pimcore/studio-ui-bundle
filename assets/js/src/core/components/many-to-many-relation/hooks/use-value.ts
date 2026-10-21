@@ -12,7 +12,6 @@
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isNil, isNull, isUndefined } from 'lodash'
-import type { DragAndDropInfo } from '@sdk/components'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { type IFormatPathItem, useFormatPath } from '@Pimcore/modules/data-object/hooks/use-format-path'
@@ -42,7 +41,7 @@ export type ManyToManyRelationValue = ManyToManyRelationValueItem[]
 export type DisplayManyToManyRelationValue = DisplayManyToManyRelationValueItem[]
 
 interface UseValueReturn {
-  onDrop: (info: DragAndDropInfo) => void
+  addDroppedElements: (elements: any[], elementType: string, skippedCount?: number) => void
   deleteItem: (rowIndex: number) => void
   onSearch: (searchTerm: string) => void
   onOrderChange: (data: ManyToManyRelationValue) => void
@@ -235,55 +234,93 @@ export const useValue = (
     updateDisplayValue(newValue)
   }
 
-  const addItem = (item: ManyToManyRelationValueItem): void => {
-    addItems([item])
+  const toValueItem = (elementType: string, element: any): ManyToManyRelationValueItem | undefined => {
+    if (elementType === 'data-object') {
+      return {
+        id: element.id,
+        type: mapToLegacyElementType(elementType),
+        subtype: element.className ?? element.type,
+        isPublished: element.published,
+        fullPath: element.fullPath
+      }
+    }
+
+    if (elementType === 'asset') {
+      return {
+        id: element.id,
+        type: elementType,
+        subtype: element.type,
+        isPublished: null,
+        fullPath: element.fullPath
+      }
+    }
+
+    if (elementType === 'document') {
+      return {
+        id: element.id,
+        type: elementType,
+        subtype: element.type,
+        isPublished: element.published,
+        fullPath: element.fullPath
+      }
+    }
+
+    return undefined
   }
 
-  const onDrop = (info: DragAndDropInfo): void => {
-    if (itemIsInValue(info.data.id as number, info.type)) {
+  /**
+   * Adds dropped elements to the value.
+   *
+   * The caller passes the elements the field accepts - deciding that needs the
+   * allowed types and classes, which live in the component's props - so this must
+   * never be handed a raw drag payload.
+   *
+   * Duplicates and the item limit are resolved once for the whole set and written
+   * in a single update: applying the elements one by one would compare each of
+   * them against a stale value and overshoot maxItems.
+   */
+  const addDroppedElements = (elements: any[], elementType: string, skippedCount: number = 0): void => {
+    // Dropping a selection that holds types this field does not accept would
+    // otherwise add a few of them and drop the rest without a word.
+    if (skippedCount > 0) {
+      modal.warn({
+        content: t('relation.drop.not-allowed-elements-skipped', { count: skippedCount })
+      })
+    }
+
+    const droppedItems = elements
+      .map(element => toValueItem(elementType, element))
+      .filter((item): item is ManyToManyRelationValueItem => item !== undefined)
+
+    const newItems = allowMultipleAssignments !== true
+      ? droppedItems.filter(item => !itemIsInValue(item.id, item.type))
+      : droppedItems
+
+    if (newItems.length === 0) {
       return
     }
 
-    if (maxItems !== null && value !== null && value.length >= maxItems) {
+    // A field definition without a limit can arrive as undefined as well as null;
+    // both mean "no limit" rather than NaN slots.
+    const remainingItems = isNil(maxItems)
+      ? newItems.length
+      : Math.max(0, maxItems - (value?.length ?? 0))
+
+    if (remainingItems === 0) {
       modal.warn({
         content: t('items-limit-reached', { maxItems })
       })
+
       return
     }
 
-    let newValue: ManyToManyRelationValueItem | undefined
-
-    if (info.type === 'data-object') {
-      newValue = {
-        id: info.data.id,
-        type: mapToLegacyElementType(info.type),
-        subtype: info.data.className ?? info.data.type,
-        isPublished: info.data.published,
-        fullPath: info.data.fullPath
-      }
-    } else if (info.type === 'asset') {
-      newValue = {
-        id: info.data.id,
-        type: info.type,
-        subtype: info.data.type,
-        isPublished: null,
-        fullPath: info.data.fullPath
-      }
-    } else if (info.type === 'document') {
-      newValue = {
-        id: info.data.id,
-        type: info.type,
-        subtype: info.data.type,
-        isPublished: info.data.published,
-        fullPath: info.data.fullPath
-      }
+    if (newItems.length > remainingItems) {
+      modal.warn({
+        content: t('items-limit-reached', { maxItems })
+      })
     }
 
-    if (newValue === undefined) {
-      return
-    }
-
-    addItem(newValue)
+    addItems(newItems.slice(0, remainingItems))
   }
 
   const deleteItem = (rowIndex: number): void => {
@@ -324,7 +361,7 @@ export const useValue = (
   const maxRemainingItems = maxItems === null ? undefined : Math.max(maxItems - (value?.length ?? 0), 0)
 
   return {
-    onDrop,
+    addDroppedElements,
     deleteItem,
     onSearch,
     onOrderChange,
