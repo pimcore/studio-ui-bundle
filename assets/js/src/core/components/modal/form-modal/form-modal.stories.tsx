@@ -108,25 +108,25 @@ export const Input = {
 }
 
 export const InputWithValidation = {
-    args: {
-        type: 'input',
-        rule: {
-            required: true,
-            validator: async (_rule, value?: string) => {
-                const input = value?.trim() ?? '';
+  args: {
+    type: 'input',
+    rule: {
+      required: true,
+      validator: async (_rule, value?: string) => {
+        const input = value?.trim() ?? ''
 
-                if (input === '') {
-                    throw new Error('Please enter a value');
-                }
+        if (input === '') {
+          throw new Error('Please enter a value')
+        }
 
-                if (!/^[A-Za-z0-9]+$/.test(input)) {
-                    throw new Error('Only letters and numbers are allowed');
-                }
-            }
-        },
-        title: 'Rename',
-        label: 'Please enter the new name'
-    }
+        if (!/^[A-Za-z0-9]+$/.test(input)) {
+          throw new Error('Only letters and numbers are allowed')
+        }
+      }
+    },
+    title: 'Rename',
+    label: 'Please enter the new name'
+  }
 }
 
 export const InputWithInitialValue = {
