@@ -6,6 +6,10 @@ common.clear: Fjern
 cache.clear-cache-success: Hurtigbufferen ble tømt
 cache.clear-full-page-cache-success: Fullsidebufferen ble tømt
 cache.clear-temporary-files-success: Midlertidige filer ble slettet
+index-sync.confirmation.title: Synkroniser søkeindeks
+index-sync.confirmation.text: "Alle dataobjekter, Assets og dokumenter er i kø for reindeksering i bakgrunnen. Ingen indeks blir slettet. Avhengig av datamengden kan dette ta litt tid og belaste søkeserveren. Vil du fortsette ?"
+index-sync.confirmation.ok: Synkroniser
+index-sync.job.title: Synkroniserer søkeindeks
 dont-ask-again: Ikke spør igjen
 widget.missing-context.title: Manglende kontekst
 widget.missing-context.description: Ingen relatert element funnet
@@ -1704,6 +1708,7 @@ navigation.cache: Hurtigbuffer
 navigation.cache.clear-cache: Tøm hurtigbuffer
 navigation.cache.clear-full-page-cache: Tøm fullsidebuffer
 navigation.cache.clear-temporary-files: Slett midlertidige filer
+navigation.index-sync: Synkroniser søkeindeks
 navigation.clear-cache: Tøm fullsidebuffer
 navigation.reports: Alle rapporter
 navigation.custom-reports: Konfigurasjon av egendefinerte rapporter

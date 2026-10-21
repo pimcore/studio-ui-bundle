@@ -6,6 +6,10 @@ common.clear: Effacer
 cache.clear-cache-success: Cache vidé avec succès
 cache.clear-full-page-cache-success: Cache des pages complètes vidé avec succès
 cache.clear-temporary-files-success: Fichiers temporaires supprimés avec succès
+index-sync.confirmation.title: Synchroniser l'index de recherche
+index-sync.confirmation.text: "Tous les objets de données, les Assets et les documents sont en attente de réindexation en arrière-plan. Aucun index n'est supprimé. Selon la quantité de données, cela peut prendre du temps et charger le serveur de recherche. Voulez-vous continuer ?"
+index-sync.confirmation.ok: Synchroniser
+index-sync.job.title: Synchronisation de l'index de recherche en cours
 dont-ask-again: Ne plus demander
 widget.missing-context.title: Contexte manquant
 widget.missing-context.description: Aucun élément associé trouvé
@@ -1704,6 +1708,7 @@ navigation.cache: Cache
 navigation.cache.clear-cache: Vider le cache
 navigation.cache.clear-full-page-cache: Vider le cache des pages complètes
 navigation.cache.clear-temporary-files: Supprimer les fichiers temporaires
+navigation.index-sync: Synchroniser l'index de recherche
 navigation.clear-cache: Vider le cache des pages complètes
 navigation.reports: Tous les rapports
 navigation.custom-reports: Configuration des rapports personnalisés
