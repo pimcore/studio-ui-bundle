@@ -10,6 +10,7 @@ index-sync.confirmation.title: Synchroniser l'index de recherche
 index-sync.confirmation.text: "Tous les objets de données, les assets et les documents sont mis en file d'attente pour une réindexation en arrière-plan. Les index existants sont mis à jour sur place ; un index dont le mappage modifié ne peut pas être appliqué à ses documents (par exemple après un changement de type de champ) est recréé et rempli. Selon la quantité de données, cela peut prendre un certain temps et surcharger le serveur de recherche. Voulez-vous continuer ?"
 index-sync.confirmation.ok: Synchroniser
 index-sync.job.title: Synchronisation de l'index de recherche en cours
+index-sync.start-failed: Impossible de démarrer la synchronisation de l'index de recherche
 dont-ask-again: Ne plus demander
 widget.missing-context.title: Contexte manquant
 widget.missing-context.description: Aucun élément associé trouvé

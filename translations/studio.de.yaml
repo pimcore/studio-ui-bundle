@@ -10,6 +10,7 @@ index-sync.confirmation.title: Suchindex synchronisieren
 index-sync.confirmation.text: "Alle Datenobjekte, Assets und Dokumente sind für die Neuindexierung im Hintergrund eingeplant. Bestehende Indizes werden aktualisiert; ein Index, dessen geänderte Zuordnung nicht auf die Dokumente angewendet werden kann (zum Beispiel nach einer Feldtypänderung), wird neu erstellt und aufgefüllt. Abhängig von der Datenmenge kann dies eine Weile dauern und die Last auf dem Suchserver erhöhen. Möchten Sie fortfahren?"
 index-sync.confirmation.ok: Synchronisieren
 index-sync.job.title: Suchindex wird synchronisiert
+index-sync.start-failed: Fehler beim Starten der Suchindex-Synchronisierung
 dont-ask-again: Nicht erneut fragen
 widget.missing-context.title: Fehlender Kontext
 widget.missing-context.description: Kein zugehöriges Element gefunden

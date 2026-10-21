@@ -10,6 +10,7 @@ index-sync.confirmation.title: Synkroniser søkeindeks
 index-sync.confirmation.text: "Alle dataobjekter, ressurser og dokumenter er satt i kø for omindeksering i bakgrunnen. Eksisterende indekser oppdateres på plass; en indeks hvis endrede kartlegging ikke kan brukes på dokumentene (for eksempel etter en felttypsendring) opprettes på nytt og fylles opp. Avhengig av datamengden kan dette ta en stund og belaste søkeserveren. Vil du fortsette?"
 index-sync.confirmation.ok: Synkroniser
 index-sync.job.title: Synkroniserer søkeindeks
+index-sync.start-failed: Det gikk ikke å starte synkroniseringen av søkeindeksen
 dont-ask-again: Ikke spør igjen
 widget.missing-context.title: Manglende kontekst
 widget.missing-context.description: Ingen relatert element funnet
