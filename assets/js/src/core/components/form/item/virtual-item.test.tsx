@@ -83,4 +83,32 @@ describe('VirtualItem', () => {
 
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
   })
+
+  it('hides a hidden item inline and leaves a shown item\'s display to its classes', () => {
+    const { rerender } = render(
+      <VirtualItem
+        className="field-layout"
+        hidden
+        label="Name"
+        name="field"
+      >
+        <input />
+      </VirtualItem>
+    )
+
+    const item = screen.getByText('Name').closest<HTMLElement>('.field-layout')!
+    expect(item.style.display).toBe('none')
+
+    rerender(
+      <VirtualItem
+        className="field-layout"
+        label="Name"
+        name="field"
+      >
+        <input />
+      </VirtualItem>
+    )
+
+    expect(item.style.display).toBe('')
+  })
 })
