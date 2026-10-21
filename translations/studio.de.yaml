@@ -7,7 +7,6 @@ cache.clear-cache-success: Cache wurde erfolgreich geleert
 cache.clear-full-page-cache-success: Ganzseitiger Cache wurde erfolgreich geleert
 cache.clear-temporary-files-success: Temporäre Dateien wurden erfolgreich gelöscht
 index-sync.confirmation.title: Suchindex synchronisieren
-index-sync.confirmation.text: "Alle Datenobjekte, Assets und Dokumente sind zur Neuindexierung im Hintergrund eingeplant. Es wird kein Index gelöscht. Je nach Datenmenge kann dies eine Weile dauern und den Suchserver belasten. Möchten Sie fortfahren?"
 index-sync.confirmation.ok: Synchronisieren
 index-sync.job.title: Suchindex wird synchronisiert
 dont-ask-again: Nicht erneut fragen

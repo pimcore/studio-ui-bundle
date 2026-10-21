@@ -7,7 +7,6 @@ cache.clear-cache-success: Caché limpiada con éxito
 cache.clear-full-page-cache-success: Caché de página completa limpiada con éxito
 cache.clear-temporary-files-success: Archivos temporales eliminados con éxito
 index-sync.confirmation.title: Sincronizar índice de búsqueda
-index-sync.confirmation.text: "Todos los objetos de datos, Assets y documentos están en cola para ser reindexados en segundo plano. Ningún índice se elimina. Según la cantidad de datos, esto puede tomar un tiempo y cargar el servidor de búsqueda. ¿Desea continuar ?"
 index-sync.confirmation.ok: Sincronizar
 index-sync.job.title: Sincronizando índice de búsqueda
 dont-ask-again: No volver a preguntar

@@ -7,7 +7,6 @@ cache.clear-cache-success: Pamięć podręczna pomyślnie wyczyszczona
 cache.clear-full-page-cache-success: Pamięć podręczna całej strony pomyślnie wyczyszczona
 cache.clear-temporary-files-success: Pliki tymczasowe pomyślnie wyczyszczone
 index-sync.confirmation.title: Synchronizuj indeks wyszukiwania
-index-sync.confirmation.text: "Wszystkie obiekty danych, Assets i dokumenty są w kolejce do ponownego indeksowania w tle. Żaden indeks nie jest usuwany. W zależności od ilości danych może to zająć chwilę i obciążyć serwer wyszukiwania. Czy chcesz kontynuować ?"
 index-sync.confirmation.ok: Synchronizuj
 index-sync.job.title: Synchronizowanie indeksu wyszukiwania
 dont-ask-again: Nie pytaj ponownie

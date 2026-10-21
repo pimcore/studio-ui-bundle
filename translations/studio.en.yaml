@@ -7,7 +7,7 @@ cache.clear-cache-success: Cache successfully cleared
 cache.clear-full-page-cache-success: Full page cache successfully cleared
 cache.clear-temporary-files-success: Temporary files successfully cleared
 index-sync.confirmation.title: Synchronize search index
-index-sync.confirmation.text: All data objects, assets and documents are queued for re-indexing in the background. No index is deleted. Depending on the amount of data this can take a while and put load on the search server. Do you want to continue?
+index-sync.confirmation.text: All data objects, assets and documents are queued for re-indexing in the background. Existing indices are updated in place; an index whose changed mapping cannot be applied to its documents (for example after a field type change) is recreated and refilled. Depending on the amount of data this can take a while and put load on the search server. Do you want to continue?
 index-sync.confirmation.ok: Synchronize
 index-sync.job.title: Synchronizing search index
 dont-ask-again: "Don't ask again"
