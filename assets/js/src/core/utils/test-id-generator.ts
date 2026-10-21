@@ -136,7 +136,7 @@ export const createTreeTestId = (treeId: string): string => {
  */
 export const createTreeSelectionBarTestId = (treeId: string): string => {
   if (treeId != null && treeId !== '') {
-    return buildTestId(['tree-selection-bar', treeId.replace(/_/g, '-')])
+    return buildTestId(['tree-selection-bar', treeId.replaceAll('_', '-')])
   }
 
   return 'tree-selection-bar'

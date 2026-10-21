@@ -8,12 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isNil, isUndefined, uniq } from 'lodash'
+import { isNil, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { useAppDispatch } from '@sdk/app'
 import { markNodesDeleting, refreshSourceNode, refreshTargetNode } from '@Pimcore/components/element-tree/element-tree-slice'
-import { type ElementType } from '@Pimcore/types/enums/element/element-type'
+import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/element-type'
+import { api } from '@Pimcore/modules/element/element-api-slice-enhanced'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
 import { ElementMoveJob } from '@Pimcore/modules/execution-engine/jobs/move/element-move-job'
 import { type MoveTarget, useMoveElement } from './use-move-element'
@@ -77,6 +79,41 @@ export const useMoveElements = (elementType: ElementType): UseMoveElementsReturn
    * execution engine. Both sides are refreshed once the job reports back, which
    * also clears the deleting marker of elements that could not be moved.
    */
+  const getSourceParentIds = (elements: MoveElementRef[]): string[] => [...new Set(
+    elements
+      .map(element => element.parentId)
+      .filter(parentId => !isNil(parentId))
+      .map(String)
+  )]
+
+  /**
+   * Multi-element patches run as a job, so the patch mutation cannot refresh open
+   * listings when it returns - it only does so for a single, synchronous patch.
+   * Once the job is done, the listings of the folders involved are reloaded.
+   */
+  const invalidateListings = (folderIds: string[]): void => {
+    if (elementType === elementTypes.dataObject) {
+      dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_GRID()))
+    }
+
+    if (elementType === elementTypes.asset) {
+      dispatch(api.util.invalidateTags(folderIds.flatMap(folderId => invalidatingTags.ASSET_GRID_ID(Number(folderId)))))
+    }
+  }
+
+  const refreshAfterMove = (sourceParentIds: string[], targetId: string): void => {
+    // The target gets its own refresh, so refreshing it as a source as well
+    // would make the same node fetch its children twice.
+    sourceParentIds
+      .filter(parentId => parentId !== targetId)
+      .forEach(parentId => {
+        dispatch(refreshSourceNode({ nodeId: parentId, elementType }))
+      })
+
+    dispatch(refreshTargetNode({ nodeId: targetId, elementType }))
+    invalidateListings([...sourceParentIds, targetId])
+  }
+
   const moveMultiple = async (props: MoveMultipleProps): Promise<void> => {
     const { currentElements, targetElement } = props
 
@@ -101,12 +138,7 @@ export const useMoveElements = (elementType: ElementType): UseMoveElementsReturn
       return
     }
 
-    const sourceParentIds = uniq(
-      elements
-        .map(element => element.parentId)
-        .filter(parentId => !isNil(parentId))
-        .map(parentId => String(parentId))
-    )
+    const sourceParentIds = getSourceParentIds(elements)
 
     dispatch(markNodesDeleting({
       nodeIds: elements.map(element => String(element.id)),
@@ -118,15 +150,7 @@ export const useMoveElements = (elementType: ElementType): UseMoveElementsReturn
       elementType,
       items: elements.map(element => ({ id: Number(element.id), parentId: Number(targetElement.id) })),
       onFinish: async () => {
-        // The target gets its own refresh, so refreshing it as a source as well
-        // would make the same node fetch its children twice.
-        sourceParentIds
-          .filter(parentId => parentId !== String(targetElement.id))
-          .forEach(parentId => {
-            dispatch(refreshSourceNode({ nodeId: parentId, elementType }))
-          })
-
-        dispatch(refreshTargetNode({ nodeId: String(targetElement.id), elementType }))
+        refreshAfterMove(sourceParentIds, String(targetElement.id))
       }
     })
 
@@ -151,12 +175,7 @@ export const useMoveElements = (elementType: ElementType): UseMoveElementsReturn
       return
     }
 
-    const sourceParentIds = uniq(
-      currentElements
-        .map(element => element.parentId)
-        .filter(parentId => !isNil(parentId))
-        .map(parentId => String(parentId))
-    )
+    const sourceParentIds = getSourceParentIds(currentElements)
 
     dispatch(markNodesDeleting({
       nodeIds: currentElements.map(element => String(element.id)),
@@ -172,15 +191,7 @@ export const useMoveElements = (elementType: ElementType): UseMoveElementsReturn
         index: element.index
       })),
       onFinish: async () => {
-        // The target gets its own refresh, so refreshing it as a source as well
-        // would make the same node fetch its children twice.
-        sourceParentIds
-          .filter(parentId => parentId !== String(targetElement.id))
-          .forEach(parentId => {
-            dispatch(refreshSourceNode({ nodeId: parentId, elementType }))
-          })
-
-        dispatch(refreshTargetNode({ nodeId: String(targetElement.id), elementType }))
+        refreshAfterMove(sourceParentIds, String(targetElement.id))
       }
     })
 

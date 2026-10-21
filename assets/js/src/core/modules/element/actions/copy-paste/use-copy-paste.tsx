@@ -22,15 +22,10 @@ import { checkElementPermission } from '@Pimcore/modules/element/permissions/per
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import { useTreePermission } from '../../../../components/element-tree/provider/tree-permission-provider/use-tree-permission'
 import { TreePermission } from '../../../perspectives/enums/tree-permission'
-import {
-  markNodeDeleting,
-  refreshSourceNode,
-  refreshTargetNode
-} from '@Pimcore/components/element-tree/element-tree-slice'
-import { useAppDispatch } from '@sdk/app'
 import { useTreeId } from '../../../../components/element-tree/provider/tree-id-provider/use-tree-id'
 import { useElementTreeOptional } from '@Pimcore/components/element-tree/hooks/use-element-tree-optional'
 import { resolveActionTargets } from '@Pimcore/components/element-tree/utils/selection-targets'
+import { toTopmostElements } from '@Pimcore/components/element-tree/utils/drop-target-validation'
 import { ContextMenuActionName } from '..'
 import { type ClipboardEntry, useTreeCopyPasteContext } from './tree-copy-paste-context'
 import { useCloseContextMenu } from '@Pimcore/components/context-menu-wrapper/context-menu-wrapper'
@@ -71,10 +66,9 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
   const { moveMultiple } = useMoveElements(elementType)
   const { t } = useTranslation()
   const { isTreeActionAllowed } = useTreePermission()
-  const dispatch = useAppDispatch()
   const { treeId } = useTreeId(true)
   const closeContextMenu = useCloseContextMenu()
-  const { getSelectedNodes: getSelectedTreeNodes } = useElementTreeOptional()
+  const { getSelectedNodes: getSelectedTreeNodes, getAncestorIds } = useElementTreeOptional()
   const { isPasteHidden: isPasteHiddenHook } = usePasteVisibility(elementType)
   const executionEngine = useExecutionEngine()
 
@@ -97,7 +91,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
 
     const id = typeof node.id === 'number'
       ? node.id
-      : parseInt(node.id)
+      : Number.parseInt(node.id)
 
     const job = elementType === 'asset'
       ? new AssetCloneJob({ sourceId: id, targetId: parentId, treeId, nodeId: String(parentId) })
@@ -112,7 +106,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
    */
   const pasteCut = async (parentId: number, isEntryAllowed?: IsClipboardEntryAllowed): Promise<void> => {
     const storedNodes = getStoredNodes()
-    const pastableNodes = isUndefined(isEntryAllowed) ? storedNodes : storedNodes.filter(isEntryAllowed)
+    const pastableNodes = isUndefined(isEntryAllowed) ? storedNodes : storedNodes.filter(entry => isEntryAllowed(entry))
 
     if (pastableNodes.length === 0) {
       return
@@ -162,9 +156,11 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
    */
   const getCuttableNodes = (node: TreeNodeProps): ClipboardEntry[] => {
     const targets = resolveActionTargets<CuttableNode>(node, getSelectedTreeNodes())
-
-    return targets
       .filter(target => checkElementPermission(target.permissions, 'rename') && !(target.isLocked ?? false))
+
+    // A selected folder takes its selected descendants along. Moving them as well
+    // would make them siblings of their former parent.
+    return toTopmostElements(targets, getAncestorIds)
       .map(target => {
         const className = target.metaData?.dataObject?.className
 
@@ -217,14 +213,14 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       icon: <Icon value={ 'paste' } />,
       hidden: isPasteHiddenHook(node, 'copy'),
       onClick: async () => {
-        await paste(parseInt(node.id))
+        await paste(Number.parseInt(node.id))
       }
     }
   }
 
   const pasteCutContextMenuItem = (targetNode: TreeNodeProps, isEntryAllowed?: IsClipboardEntryAllowed): ItemType => {
     const storedNodes = getStoredNodes()
-    const storedCount = isUndefined(isEntryAllowed) ? storedNodes.length : storedNodes.filter(isEntryAllowed).length
+    const storedCount = isUndefined(isEntryAllowed) ? storedNodes.length : storedNodes.filter(entry => isEntryAllowed(entry)).length
 
     return {
       label: storedCount > 1
@@ -234,7 +230,7 @@ export const useCopyPaste = (elementType: ElementType): UseCopyPasteHookReturn =
       icon: <Icon value={ 'paste' } />,
       hidden: isPasteHiddenHook(targetNode, 'cut'),
       onClick: async () => {
-        await pasteCut(parseInt(targetNode.id), isEntryAllowed)
+        await pasteCut(Number.parseInt(targetNode.id), isEntryAllowed)
       }
     }
   }

@@ -37,6 +37,7 @@ import { useTreePermission } from '@Pimcore/components/element-tree/provider/tre
 import { useRecycleBin } from '@Pimcore/modules/recycle-bin/hooks/use-recycle-bin'
 import { useTreeId } from '@Pimcore/components/element-tree/provider/tree-id-provider/use-tree-id'
 import { useTreeBatchDelete } from './use-tree-batch-delete'
+import { needsBatchDelete } from './delete-targets'
 
 export interface UseDeleteHookReturn {
   deleteElement: (id: number, label: string, parentId?: number, onFinish?: () => void) => void
@@ -156,10 +157,10 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
 
   const deleteTreeContextMenuItem = (node: TreeNodeProps, onFinish?: () => void): ItemType => {
     const deletableNodes = getDeletableNodes(node)
-    const isBatchDelete = deletableNodes.length > 1
+    const isBatchDelete = needsBatchDelete(node, deletableNodes)
 
     return {
-      label: isBatchDelete
+      label: deletableNodes.length > 1
         ? t('element.delete-multiple', { count: deletableNodes.length })
         : t('element.delete'),
       key: ContextMenuActionName.delete,

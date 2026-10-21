@@ -16,7 +16,7 @@ import { type TreeLevelData } from '@Pimcore/modules/element/element-api-slice.g
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { injectSliceWithState, type RootState } from '@sdk/app'
-import { camelCase, isEqual, isUndefined, merge, uniq } from 'lodash'
+import { camelCase, isEqual, isUndefined, merge } from 'lodash'
 import { createSelector } from 'reselect'
 
 export interface TreeNode {
@@ -247,7 +247,7 @@ const applySelection = (
   selectedNodeIds: string[],
   update: SelectionUpdate = {}
 ): void => {
-  const requestedIds = uniq(selectedNodeIds)
+  const requestedIds = [...new Set(selectedNodeIds)]
   const nextIds = requestedIds.slice(0, treeSelectionLimit)
   const previousIds = initializeTreeState(state, treeId).selectedNodeIds
 

@@ -23,7 +23,7 @@ export interface UsePasteVisibilityReturn {
 }
 
 export const usePasteVisibility = (elementType: ElementType): UsePasteVisibilityReturn => {
-  const { getStoredNode, getStoredNodes, getNodeTask } = useTreeCopyPasteContext(elementType)
+  const { getStoredNodes, getNodeTask } = useTreeCopyPasteContext(elementType)
   const { isTreeActionAllowed } = useTreePermission()
   const { getAncestorIds } = useElementTreeOptional()
 

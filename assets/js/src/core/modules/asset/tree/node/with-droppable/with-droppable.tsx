@@ -12,7 +12,6 @@ import { type TreeNode, type TreeNodeProps } from '@Pimcore/components/element-t
 import React, { forwardRef, type ReactElement, type Ref } from 'react'
 import { type DragAndDropInfo, Droppable, type DroppableProps } from '@Pimcore/components/drag-and-drop/droppable'
 import { type Asset } from '../../../asset-api-slice-enhanced'
-import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import { useMoveElements } from '@Pimcore/modules/element/actions/move/use-move-elements'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { isUndefined } from 'lodash'

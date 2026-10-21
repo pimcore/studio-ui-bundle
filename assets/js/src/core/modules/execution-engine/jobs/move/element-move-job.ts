@@ -20,7 +20,6 @@ import { type ElementType, elementTypes } from '@Pimcore/types/enums/element/ele
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { MessageBusJobHandler, type JobCompletionData } from '../../message-handlers/message-bus-job/message-bus-job-handler'
 import { BatchedStepProgressCalculator } from '../../message-handlers/message-bus-job/progress-calculator/batched-step-progress-calculator'
-import { type JobRunList, type RehydratableJob } from '../../services/job-rehydration-registry'
 import { api as executionEngineApi } from '../../execution-engine-api-slice.gen'
 
 export interface ElementMoveJobItem {
@@ -42,10 +41,13 @@ export interface ElementMoveJobOptions {
  * The patch endpoint turns a request with more than one element into a job that
  * continues past failures, so progress and the per element error list come from
  * the execution engine.
+ *
+ * Not rehydratable: the backend runs a move as a plain element patch job
+ * (studio_ee_job_patch_elements), and a running job carries nothing that tells
+ * it apart from a batch edit. After a reload it is restored by the batch edit
+ * job, so it shows its progress instead of staying quiet - nothing is lost.
  */
 export class ElementMoveJob implements JobInterface {
-  static readonly jobNames = ['studio_ee_job_patch_elements'] as const
-
   private readonly elementType: ElementType
   private readonly items: ElementMoveJobItem[]
   private readonly onFinish?: () => Promise<void>
@@ -142,12 +144,6 @@ export class ElementMoveJob implements JobInterface {
     }
   }
 
-  static rehydrate (jobRuns: JobRunList): MessageBusJobHandler {
-    const [parent] = jobRuns
-
-    return this.buildHandler({ jobRunId: parent.id })
-  }
-
   private static buildHandler (options: {
     jobRunId: number
     onJobCompletion?: (data: JobCompletionData) => Promise<void>
@@ -165,5 +161,3 @@ export class ElementMoveJob implements JobInterface {
     })
   }
 }
-
-void (ElementMoveJob satisfies RehydratableJob)

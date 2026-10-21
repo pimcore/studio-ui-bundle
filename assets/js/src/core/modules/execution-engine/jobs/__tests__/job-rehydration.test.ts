@@ -513,26 +513,12 @@ describe('AbstractFolderBatchEditJob: run() matches rehydrate() structurally', (
   })
 })
 
-describe('ElementMoveJob.rehydrate()', () => {
-  it('uses parent.id as jobRunId', () => {
-    ElementMoveJob.rehydrate([jobRun(70, 'studio_ee_job_patch_elements')])
-
-    expect(HandlerMock.mock.calls.at(-1)![0].jobRunId).toBe(70)
-  })
-
-  it('reports progress per patched element', () => {
-    ElementMoveJob.rehydrate([jobRun(70, 'studio_ee_job_patch_elements')])
-
-    expect(HandlerMock.mock.calls.at(-1)![0].progressCalculator).toBeInstanceOf(BatchedStepProgressCalculator)
-  })
-
-  it('claims the job name the backend uses for element patching', () => {
-    expect(ElementMoveJob.jobNames).toEqual(['studio_ee_job_patch_elements'])
-  })
-
-  it('stays out of the notification list unless it reports errors', () => {
-    ElementMoveJob.rehydrate([jobRun(70, 'studio_ee_job_patch_elements')])
-
-    expect(HandlerMock.mock.calls.at(-1)![0].notifyOnErrorOnly).toBe(true)
+describe('ElementMoveJob', () => {
+  it('leaves the shared element patch job name to the batch edit job', () => {
+    // A move and a batch edit are the same job for the backend; registering both
+    // would silently overwrite one of them.
+    expect('jobNames' in ElementMoveJob).toBe(false)
+    expect('rehydrate' in ElementMoveJob).toBe(false)
+    expect(AbstractBatchEditJob.jobNames).toContain('studio_ee_job_patch_elements')
   })
 })

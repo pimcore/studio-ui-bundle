@@ -12,7 +12,6 @@
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isNil, isNull, isUndefined } from 'lodash'
-import type { DragAndDropInfo } from '@sdk/components'
 import { useAlertModal } from '@Pimcore/components/modal/alert-modal/hooks/use-alert-modal'
 import { type Asset } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { type IFormatPathItem, useFormatPath } from '@Pimcore/modules/data-object/hooks/use-format-path'
@@ -233,10 +232,6 @@ export const useValue = (
     setValue(newValue)
 
     updateDisplayValue(newValue)
-  }
-
-  const addItem = (item: ManyToManyRelationValueItem): void => {
-    addItems([item])
   }
 
   const toValueItem = (elementType: string, element: any): ManyToManyRelationValueItem | undefined => {

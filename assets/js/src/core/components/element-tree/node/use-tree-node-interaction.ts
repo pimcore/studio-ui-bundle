@@ -160,27 +160,28 @@ export const useTreeNodeInteraction = (
     }
   }
 
-  const onKeyDown = (event: KeyboardEvent): void => {
-    if (event.key === 'Enter') {
-      activateNode()
+  /** Ctrl/Cmd + Space toggles like a modifier click, Ctrl/Cmd + A selects everything. */
+  const onSelectionKey = (event: KeyboardEvent): void => {
+    if (!isMultiSelect || !(event.ctrlKey || event.metaKey)) {
+      return
     }
 
-    // Ctrl/Cmd + Space is the keyboard equivalent of a modifier click.
-    if (isMultiSelect && event.key === ' ' && (event.ctrlKey || event.metaKey)) {
+    if (event.key === ' ') {
       event.preventDefault()
       toggleNode()
+      return
     }
 
-    if (event.key === 'Escape') {
-      clearSelection()
-    }
-
-    if (isMultiSelect && event.key.toLowerCase() === 'a' && (event.ctrlKey || event.metaKey) && !event.shiftKey && !event.altKey) {
+    if (event.key.toLowerCase() === 'a' && !event.shiftKey && !event.altKey) {
       selectAllVisible(event)
     }
+  }
 
+  const keyHandlers: Partial<Record<string, (event: KeyboardEvent) => void>> = {
+    Enter: () => { activateNode() },
+    Escape: () => { clearSelection() },
     // A closed node opens, an open one steps into its children.
-    if (event.key === 'ArrowRight') {
+    ArrowRight: (event) => {
       event.preventDefault()
 
       if (node.hasChildren === true && !isExpanded) {
@@ -188,10 +189,9 @@ export const useTreeNodeInteraction = (
       } else {
         focusSibling(event, 1)
       }
-    }
-
+    },
     // An open node closes, a closed one steps back out to its parent.
-    if (event.key === 'ArrowLeft') {
+    ArrowLeft: (event) => {
       event.preventDefault()
 
       if (isExpanded) {
@@ -199,23 +199,16 @@ export const useTreeNodeInteraction = (
       } else {
         focusParent(event)
       }
-    }
+    },
+    ArrowDown: (event) => { focusSibling(event, 1) },
+    ArrowUp: (event) => { focusSibling(event, -1) },
+    Home: (event) => { focusSibling(event, 'first') },
+    End: (event) => { focusSibling(event, 'last') }
+  }
 
-    if (event.key === 'ArrowDown') {
-      focusSibling(event, 1)
-    }
-
-    if (event.key === 'ArrowUp') {
-      focusSibling(event, -1)
-    }
-
-    if (event.key === 'Home') {
-      focusSibling(event, 'first')
-    }
-
-    if (event.key === 'End') {
-      focusSibling(event, 'last')
-    }
+  const onKeyDown = (event: KeyboardEvent): void => {
+    onSelectionKey(event)
+    keyHandlers[event.key]?.(event)
   }
 
   return { onClick, onContextMenu, onKeyDown }

@@ -11,7 +11,6 @@
 import { type TreeNode, type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 import React, { forwardRef, type ReactElement, type Ref } from 'react'
 import { type DragAndDropInfo, type DroppableProps } from '@Pimcore/components/drag-and-drop/droppable'
-import { useCopyPaste } from '@Pimcore/modules/element/actions/copy-paste/use-copy-paste'
 import { useMoveElements } from '@Pimcore/modules/element/actions/move/use-move-elements'
 import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type DataObject } from '@Pimcore/modules/data-object/data-object-api-slice-enhanced'
@@ -36,7 +35,6 @@ interface OnSortingDropProps {
 
 export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
   const DroppableNodeContent = (props: TreeNodeProps, ref: Ref<HTMLDivElement>): ReactElement => {
-    const { move } = useCopyPaste('data-object')
     const { moveMultiple, sortMultiple } = useMoveElements('data-object')
     const { move: moveByIndex } = useSorting('data-object')
     const { isSourceAllowed, isTargetAllowed } = useDndAllowed()
@@ -198,10 +196,6 @@ export const withDroppable = (Component: typeof TreeNode): typeof TreeNode => {
 
     const checkForValidMoveData: DroppableProps['isValidData'] = (info) => {
       return acceptableObjects(info).length > 0
-    }
-
-    const checkForValidContext: DroppableProps['isValidContext'] = (context) => {
-      return context.type === 'data-object' && context.data.type !== 'variant'
     }
 
     const checkForValidData: DroppableProps['isValidData'] = (info) => {

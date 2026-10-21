@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isNil, uniq } from 'lodash'
+import { isNil } from 'lodash'
 import { useAppDispatch } from '@Pimcore/app/store'
 import { eventBus, eventTypes } from '@Pimcore/lib/event-bus'
 import { deselectNodes, markNodesDeleting, refreshSourceNode } from '@Pimcore/components/element-tree/element-tree-slice'
@@ -69,6 +69,59 @@ export const useTreeBatchDelete = (elementType: ElementType): UseTreeBatchDelete
     return toTopmostElements(deletable, getAncestorIds)
   }
 
+  const refreshParents = (parentIds: string[]): void => {
+    parentIds.forEach(parentId => {
+      dispatch(refreshSourceNode({ nodeId: parentId, elementType }))
+    })
+  }
+
+  const announceDeleted = (itemIds: number[]): void => {
+    itemIds.forEach(id => {
+      eventBus.publish({
+        identifier: { type: eventTypes['element:item:deleted'] },
+        payload: { id, elementType }
+      })
+
+      const widgetId = getWidgetId(elementType, id)
+
+      if (isMainWidgetOpen(widgetId)) {
+        closeWidget(widgetId)
+      }
+    })
+  }
+
+  const runDeleteJob = async (itemIds: number[], parentIds: string[]): Promise<void> => {
+    const nodeIds = itemIds.map(String)
+
+    dispatch(markNodesDeleting({ nodeIds, elementType, isDeleting: true }))
+
+    // Deleted ids never come back, so they leave the selection right away.
+    dispatch(deselectNodes({ nodeIds, elementType }))
+
+    const onFinish = async (): Promise<void> => {
+      // Refreshing the parents also clears the deleting marker of anything the
+      // job could not remove, since a reloaded node comes back undeleted.
+      refreshParents(parentIds)
+      announceDeleted(itemIds)
+      refreshRecycleBin()
+    }
+
+    // A failed request or job leaves the nodes in place, so they must not keep
+    // looking as if they were being deleted.
+    const onFailure = async (): Promise<void> => {
+      dispatch(markNodesDeleting({ nodeIds, elementType, isDeleting: false }))
+      refreshParents(parentIds)
+    }
+
+    const jobs = {
+      [elementTypes.asset]: AssetBatchDeleteJob,
+      [elementTypes.dataObject]: DataObjectBatchDeleteJob,
+      [elementTypes.document]: DocumentBatchDeleteJob
+    }
+
+    await executionEngine.runJob(new jobs[elementType]({ itemIds, onFinish, onFailure }))
+  }
+
   const confirmDeleteNodes = async (nodes: DeletableNode[]): Promise<void> => {
     if (nodes.length === 0) {
       return
@@ -81,57 +134,18 @@ export const useTreeBatchDelete = (elementType: ElementType): UseTreeBatchDelete
       nodes.map(node => [Number(node.id), { fullpath: node.fullPath }])
     )
 
-    const parentIds = uniq(
+    const parentIds = [...new Set(
       nodes
         .map(node => node.parentId)
         .filter(parentId => !isNil(parentId))
-        .map(parentId => String(parentId))
-    )
+        .map(String)
+    )]
 
     await confirmBatchDelete({
       elementType,
       itemIds,
       selectedRowsData,
-      onOk: async () => {
-        const nodeIds = itemIds.map(id => String(id))
-
-        dispatch(markNodesDeleting({ nodeIds, elementType, isDeleting: true }))
-
-        // Deleted ids never come back, so they leave the selection right away.
-        dispatch(deselectNodes({ nodeIds, elementType }))
-
-        const onFinish = async (): Promise<void> => {
-          // Refreshing the parents also clears the deleting marker of anything the
-          // job could not remove, since a reloaded node comes back undeleted.
-          parentIds.forEach(parentId => {
-            dispatch(refreshSourceNode({ nodeId: parentId, elementType }))
-          })
-
-          itemIds.forEach(id => {
-            eventBus.publish({
-              identifier: { type: eventTypes['element:item:deleted'] },
-              payload: { id, elementType }
-            })
-
-            const widgetId = getWidgetId(elementType, id)
-
-            if (isMainWidgetOpen(widgetId)) {
-              closeWidget(widgetId)
-            }
-          })
-
-          refreshRecycleBin()
-        }
-
-        const jobs = {
-          [elementTypes.asset]: AssetBatchDeleteJob,
-          [elementTypes.dataObject]: DataObjectBatchDeleteJob,
-          [elementTypes.document]: DocumentBatchDeleteJob
-        }
-        const job = new jobs[elementType]({ itemIds, onFinish })
-
-        await executionEngine.runJob(job)
-      }
+      onOk: async () => { await runDeleteJob(itemIds, parentIds) }
     })
   }
 
