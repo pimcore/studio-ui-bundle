@@ -64,10 +64,11 @@ describe('index sync actions', () => {
     expect(trackError).not.toHaveBeenCalled()
   })
 
-  it('tracks an error when the job cannot be started', async () => {
+  it('reports a failure to start the job exactly once, even though trackError throws after showing the dialog', async () => {
     runJob.mockRejectedValue(new Error('boom'))
+    ;(trackError as jest.Mock).mockImplementation(() => { throw new Error('Failed to start the search index synchronization') })
 
-    await startIndexSync()
+    await expect(startIndexSync()).resolves.toBeUndefined()
 
     expect(trackError).toHaveBeenCalledTimes(1)
   })

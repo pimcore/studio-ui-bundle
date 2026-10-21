@@ -70,13 +70,22 @@ describe('IndexSyncJob', () => {
     expect(registerHandler).not.toHaveBeenCalled()
   })
 
-  it('reports the error when dispatching the request throws', async () => {
+  it('lets an unexpected failure propagate so that the caller reports it once', async () => {
     dispatchMock.mockRejectedValue(new Error('network down'))
 
-    await new IndexSyncJob().run(runOptions)
+    await expect(new IndexSyncJob().run(runOptions)).rejects.toThrow('network down')
 
-    expect(trackError).toHaveBeenCalledTimes(1)
+    expect(trackError).not.toHaveBeenCalled()
     expect(registerHandler).not.toHaveBeenCalled()
+  })
+
+  it('lets a failing handler registration propagate', async () => {
+    dispatchMock.mockResolvedValue({ data: { jobRunId: JOB_RUN_ID } })
+    registerHandler.mockImplementationOnce(() => { throw new Error('no message bus') })
+
+    await expect(new IndexSyncJob().run(runOptions)).rejects.toThrow('no message bus')
+
+    expect(trackError).not.toHaveBeenCalled()
   })
 
   it('rebuilds the handler of a running job run after a reload', () => {

@@ -22,7 +22,15 @@ export const startIndexSync = async (): Promise<void> => {
   try {
     await executionEngine.runJob(new IndexSyncJob())
   } catch (error) {
+    reportStartFailure()
+  }
+}
+
+const reportStartFailure = (): void => {
+  try {
     trackError(new GeneralError('Failed to start the search index synchronization'))
+  } catch {
+    // trackError shows the error dialog and then throws; the confirmation dialog must still close
   }
 }
 

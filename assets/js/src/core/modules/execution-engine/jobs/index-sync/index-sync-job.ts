@@ -10,7 +10,7 @@
 
 import { isNil, isUndefined } from 'lodash'
 import { store } from '@Pimcore/app/store'
-import trackError, { ApiError, GeneralError } from '@Pimcore/modules/app/error-handler'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type JobInterface, type JobRunOptions } from '../job-interface'
 import { MessageBusJobHandler } from '../../message-handlers/message-bus-job/message-bus-job-handler'
 import { api } from '@Pimcore/modules/index-sync/index-sync-api-slice.gen'
@@ -18,20 +18,18 @@ import { t } from 'i18next'
 import { type RehydratableJob, type JobRunList } from '../../services/job-rehydration-registry'
 
 export class IndexSyncJob implements JobInterface {
+  /**
+   * API errors are reported here; any other failure propagates to the caller (startIndexSync), which owns the
+   * reporting of startup failures, so the user is not shown two dialogs for one error.
+   */
   async run (options: JobRunOptions): Promise<void> {
-    const { messageBus } = options
+    const jobRunId = await this.executeRequest()
 
-    try {
-      const jobRunId = await this.executeRequest()
-
-      if (isNil(jobRunId)) {
-        return
-      }
-
-      messageBus.registerHandler(IndexSyncJob.buildHandler(jobRunId))
-    } catch (error: any) {
-      trackError(new GeneralError(error.message as string))
+    if (isNil(jobRunId)) {
+      return
     }
+
+    options.messageBus.registerHandler(IndexSyncJob.buildHandler(jobRunId))
   }
 
   private async executeRequest (): Promise<number | null> {
