@@ -7,6 +7,7 @@ cache.clear-cache-success: Hurtigbufferen ble tømt
 cache.clear-full-page-cache-success: Fullsidebufferen ble tømt
 cache.clear-temporary-files-success: Midlertidige filer ble slettet
 index-sync.confirmation.title: Synkroniser søkeindeks
+index-sync.confirmation.text: "Alle dataobjekter, ressurser og dokumenter er satt i kø for omindeksering i bakgrunnen. Eksisterende indekser oppdateres på plass; en indeks hvis endrede kartlegging ikke kan brukes på dokumentene (for eksempel etter en felttypsendring) opprettes på nytt og fylles opp. Avhengig av datamengden kan dette ta en stund og belaste søkeserveren. Vil du fortsette?"
 index-sync.confirmation.ok: Synkroniser
 index-sync.job.title: Synkroniserer søkeindeks
 dont-ask-again: Ikke spør igjen
