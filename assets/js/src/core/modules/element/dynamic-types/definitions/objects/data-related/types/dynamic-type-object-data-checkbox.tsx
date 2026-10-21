@@ -28,6 +28,7 @@ export type CheckboxObjectDataDefinition = AbstractObjectDataDefinition & {
 
 export class DynamicTypeObjectDataCheckbox extends DynamicTypeObjectDataAbstract {
   id: string = 'checkbox'
+  labelAfterControl: boolean = true
 
   dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/BooleanSelect'])
 

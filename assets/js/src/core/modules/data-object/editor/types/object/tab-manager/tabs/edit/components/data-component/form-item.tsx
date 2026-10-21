@@ -22,6 +22,7 @@ import { useSuppressEmptyFieldLabel } from '@Pimcore/modules/element/dynamic-typ
 import { useInheritanceState } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/inheritance-state-provider/use-inheritance-state'
 import { RestoreInheritanceLabelExtraProvider } from '@Pimcore/modules/data-object/components/restore-inheritance-label-extra'
 import { isNonEmptyString } from '@sdk/utils'
+import { useStyles } from './form-item.styles'
 
 interface DataComponentFormItemProps {
   objectDataType: DynamicTypeObjectDataAbstract
@@ -33,6 +34,7 @@ const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDat
   const formItemProps = objectDataType.getObjectDataFormItemProps(_props)
   const objectDataComponent = objectDataType.getObjectDataComponent(_props)
   const inheritanceOverlayStyle = useInheritanceOverlayStyle({ inherited: _props.inherited, type: objectDataType.inheritedMaskOverlay })
+  const { styles } = useStyles()
 
   const suppressEmptyLabel = useSuppressEmptyFieldLabel()
   const inheritanceStateContext = useInheritanceState()
@@ -57,7 +59,7 @@ const DataComponentFormItem: React.FC<DataComponentFormItemProps> = ({ objectDat
         >
           <Form.Item
             { ...effectiveFormItemProps }
-            className={ cn(effectiveFormItemProps.className, inheritanceOverlayStyle) }
+            className={ cn(effectiveFormItemProps.className, inheritanceOverlayStyle, { [styles.labelAfterControl]: objectDataType.labelAfterControl }) }
             name={ formFieldName }
           >
             { objectDataComponent }

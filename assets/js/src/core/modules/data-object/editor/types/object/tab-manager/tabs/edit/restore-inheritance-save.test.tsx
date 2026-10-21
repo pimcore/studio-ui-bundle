@@ -174,6 +174,7 @@ jest.mock('@Pimcore/modules/data-object/components/inheritance-button', () => ({
 }))
 jest.mock('@Pimcore/modules/data-object/components/restore-inheritance-button.styles', () => ({ useStyles: () => ({ styles: {} }) }))
 jest.mock('@Pimcore/modules/data-object/components/restore-inheritance-label-extra.styles', () => ({ useStyles: () => ({ styles: {} }) }))
+jest.mock('./components/data-component/form-item.styles', () => ({ useStyles: () => ({ styles: {} }) }))
 jest.mock('@Pimcore/components/divider/divider', () => ({ Divider: () => null }))
 jest.mock('@Pimcore/components/flex/flex', () => ({ Flex: ({ children }: { children: ReactNode }) => <span>{children}</span> }))
 jest.mock('@Pimcore/components/icon-text-button/icon-text-button', () => ({

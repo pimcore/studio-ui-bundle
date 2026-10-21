@@ -320,6 +320,10 @@ custom-layout.empty-state.edit: Select an existing custom layout to start editin
 example-prefix: Example Prefix
 pagination.show-total: Total {{total}} items
 pagination.page: Page
+pagination.first-page: First page
+pagination.previous-page: Previous page
+pagination.next-page: Next page
+pagination.last-page: Last page
 pagination.showing-x-of-y: Showing {{loaded}} of {{total}}
 preview-card.locate-in-tree: Locate in Tree
 preview-card.rename: Rename
@@ -592,6 +596,9 @@ listing.actions: Apply to selection
 listing.non-selected.actions: Apply to all
 listing.actions.zip-download: ZIP Download
 listing.actions.delete: Delete
+listing.actions.delete-all: Delete all
+listing.actions.delete-all.not-allowed: "Some items in this folder are locked or you are not allowed to delete them."
+listing.actions.delete-all.empty: "This folder contains no items to delete."
 listing.actions.export: Export
 reports.csv-export-modal.title: CSV Export Options
 reports.csv-export-modal.include-headers: Include column headers
@@ -1614,6 +1621,11 @@ user-management.settings.language.abbreviation: Abbreviation
 user-management.settings.language.view: View
 user-management.settings.language.edit: Edit
 user-management.two-factor-authentication: Two Factor Authentication
+user-management.two-factor-authentication.reset: Reset two-factor authentication
+user-management.two-factor-authentication.reset.confirmation.title: Reset two-factor authentication
+user-management.two-factor-authentication.reset.confirmation.text: The user's authenticator app will no longer work for this account. If two-factor authentication is required, the user has to set it up again at the next login.
+user-management.two-factor-authentication.reset.success: Two-factor authentication has been reset
+user-management.two-factor-authentication.reset.error: Two-factor authentication could not be reset
 user-management.workspaces.documents: Documents
 user-management.workspaces.assets: Assets
 user-management.workspaces.objects: Data Objects
@@ -2355,8 +2367,23 @@ user-profile.password-old: Old Password
 user-profile.password-new: New Password
 user-profile.password-repeat: Repeat Password
 user-profile.password-repeat-error: Passwords do not match
+user-profile.two-factor-authentication: Two-Factor Authentication
+user-profile.two-factor-authentication.status.active: Two-factor authentication is active for your account.
+user-profile.two-factor-authentication.status.inactive: Two-factor authentication is not set up for your account.
+user-profile.two-factor-authentication.required-hint: Two-factor authentication is required for your account, so it cannot be disabled.
+user-profile.two-factor-authentication.setup: Set up two-factor authentication
+user-profile.two-factor-authentication.renew: Renew authenticator key
+user-profile.two-factor-authentication.setup.description: Scan the QR code with your authenticator app and enter the {{digits}}-digit code to confirm.
+user-profile.two-factor-authentication.renew.description: Scan the QR code with your authenticator app and enter the {{digits}}-digit code to confirm. Your current key keeps working until the new one is confirmed.
+user-profile.two-factor-authentication.setup.success: Two-factor authentication has been set up
+user-profile.two-factor-authentication.disable: Disable two-factor authentication
+user-profile.two-factor-authentication.disable.confirmation.title: Disable two-factor authentication
+user-profile.two-factor-authentication.disable.confirmation.text: You will log in with your username and password only. You can set up two-factor authentication again at any time.
+user-profile.two-factor-authentication.disable.success: Two-factor authentication has been disabled
+user-profile.two-factor-authentication.disable.error: Two-factor authentication could not be disabled
 creatable-select.add-custom-option: Add custom option
-creatable-select.add: Add
+creatable-select.press-enter-to-add: Press Enter to add
+creatable-select.option-added: '{{label}} added'
 creatable-select.option-already-exists: Option already exists
 creatable-select.invalid-option: Invalid option
 drag-snippet-here: Drag a snippet here
@@ -2792,6 +2819,19 @@ forgot-password-form.username.placeholder: Username
 forgot-password-form.reset-password: Reset password
 forgot-password-form.success-message: A temporary login link has been sent to your email address. Please check your mailbox.
 forgot-password-form.back: Back to login
+two-factor-form.description: Enter the {{digits}}-digit code from your authenticator app
+two-factor-form.code.placeholder: Authentication code
+two-factor-form.code.required: Please enter the authentication code
+two-factor-form.code.invalid-format: The code must consist of {{digits}} digits
+two-factor-form.verify: Verify
+two-factor-form.error: The code could not be verified. Please try again.
+two-factor-form.too-many-attempts: Too many attempts. Please wait a few minutes before you try again.
+two-factor-form.back: Back to login
+two-factor-setup-form.description: Two-factor authentication is required for your account. Scan the QR code with your authenticator app and enter the {{digits}}-digit code to confirm.
+two-factor-setup-form.manual-entry: Or enter this key manually
+two-factor-setup-form.confirm: Activate
+two-factor-setup-form.load-error: Two-factor authentication could not be set up. Please try again later.
+two-factor-setup-form.expired: The setup has expired. Scan the new QR code and enter the code it shows.
 subscription-details.community-edition: Learn more about Pimcore Editions
 config_not_writeable: Not writable, this can have several reasons. For details please have a look into the docs.
 navigation.about: About

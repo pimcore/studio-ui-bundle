@@ -318,6 +318,10 @@ custom-layout.empty-state.edit: Selecteer een bestaande Custom Layout om te bewe
 example-prefix: Voorbeeldprefix
 pagination.show-total: "Totaal {{total}} items"
 pagination.page: Pagina
+pagination.first-page: Eerste pagina
+pagination.previous-page: Vorige pagina
+pagination.next-page: Volgende pagina
+pagination.last-page: Laatste pagina
 pagination.showing-x-of-y: "{{loaded}} van {{total}} weergegeven"
 preview-card.locate-in-tree: In boom zoeken
 preview-card.rename: Hernoemen
@@ -590,6 +594,9 @@ listing.actions: Op selectie toepassen
 listing.non-selected.actions: Op alles toepassen
 listing.actions.zip-download: ZIP downloaden
 listing.actions.delete: Verwijderen
+listing.actions.delete-all: Alles verwijderen
+listing.actions.delete-all.not-allowed: "Sommige items in deze map zijn vergrendeld of je mag ze niet verwijderen."
+listing.actions.delete-all.empty: "Deze map bevat geen items om te verwijderen."
 listing.actions.export: Exporteren
 reports.csv-export-modal.title: CSV-exportopties
 reports.csv-export-modal.include-headers: Kolomkoppen opnemen
@@ -1612,6 +1619,11 @@ user-management.settings.language.abbreviation: Afkorting
 user-management.settings.language.view: Weergave
 user-management.settings.language.edit: Bewerken
 user-management.two-factor-authentication: Tweefactorauthenticatie
+user-management.two-factor-authentication.reset: Tweefactorauthenticatie resetten
+user-management.two-factor-authentication.reset.confirmation.title: Tweefactorauthenticatie resetten
+user-management.two-factor-authentication.reset.confirmation.text: De authenticatie-app van de gebruiker werkt niet meer voor dit account. Als tweefactorauthenticatie verplicht is, moet de gebruiker deze bij de volgende keer inloggen opnieuw instellen.
+user-management.two-factor-authentication.reset.success: Tweefactorauthenticatie is gereset
+user-management.two-factor-authentication.reset.error: Tweefactorauthenticatie kon niet worden gereset
 user-management.workspaces.documents: Documenten
 user-management.workspaces.assets: Assets
 user-management.workspaces.objects: Gegevensobjecten
@@ -2353,8 +2365,23 @@ user-profile.password-old: Oud wachtwoord
 user-profile.password-new: Nieuw wachtwoord
 user-profile.password-repeat: Wachtwoord herhalen
 user-profile.password-repeat-error: Wachtwoorden komen niet overeen
+user-profile.two-factor-authentication: Tweefactorauthenticatie
+user-profile.two-factor-authentication.status.active: Tweefactorauthenticatie is actief voor je account.
+user-profile.two-factor-authentication.status.inactive: Tweefactorauthenticatie is niet ingesteld voor je account.
+user-profile.two-factor-authentication.required-hint: Tweefactorauthenticatie is verplicht voor je account en kan daarom niet worden uitgeschakeld.
+user-profile.two-factor-authentication.setup: Tweefactorauthenticatie instellen
+user-profile.two-factor-authentication.renew: Authenticatiesleutel vernieuwen
+user-profile.two-factor-authentication.setup.description: Scan de QR-code met je authenticatie-app en voer de {{digits}}-cijferige code in om te bevestigen.
+user-profile.two-factor-authentication.renew.description: Scan de QR-code met je authenticatie-app en voer de {{digits}}-cijferige code in om te bevestigen. Je huidige sleutel blijft werken totdat de nieuwe is bevestigd.
+user-profile.two-factor-authentication.setup.success: Tweefactorauthenticatie is ingesteld
+user-profile.two-factor-authentication.disable: Tweefactorauthenticatie uitschakelen
+user-profile.two-factor-authentication.disable.confirmation.title: Tweefactorauthenticatie uitschakelen
+user-profile.two-factor-authentication.disable.confirmation.text: Je logt dan alleen nog in met je gebruikersnaam en wachtwoord. Je kunt tweefactorauthenticatie op elk moment opnieuw instellen.
+user-profile.two-factor-authentication.disable.success: Tweefactorauthenticatie is uitgeschakeld
+user-profile.two-factor-authentication.disable.error: Tweefactorauthenticatie kon niet worden uitgeschakeld
 creatable-select.add-custom-option: Aangepaste optie toevoegen
-creatable-select.add: Toevoegen
+creatable-select.press-enter-to-add: Druk op Enter om toe te voegen
+creatable-select.option-added: '{{label}} toegevoegd'
 creatable-select.option-already-exists: Optie bestaat al
 creatable-select.invalid-option: Ongeldige optie
 drag-snippet-here: Sleep hier een fragment
@@ -2790,6 +2817,19 @@ forgot-password-form.username.placeholder: Gebruikersnaam
 forgot-password-form.reset-password: Wachtwoord herstellen
 forgot-password-form.success-message: Er is een tijdelijke inloglink verstuurd naar je e-mailadres. Controleer je postvak.
 forgot-password-form.back: Terug naar inloggen
+two-factor-form.description: Voer de {{digits}}-cijferige code uit je authenticatie-app in
+two-factor-form.code.placeholder: Authenticatiecode
+two-factor-form.code.required: Voer de authenticatiecode in
+two-factor-form.code.invalid-format: De code moet uit {{digits}} cijfers bestaan
+two-factor-form.verify: Verifiëren
+two-factor-form.error: De code kon niet worden geverifieerd. Probeer het opnieuw.
+two-factor-form.too-many-attempts: Te veel pogingen. Wacht een paar minuten voordat je het opnieuw probeert.
+two-factor-form.back: Terug naar inloggen
+two-factor-setup-form.description: Tweefactorauthenticatie is verplicht voor je account. Scan de QR-code met je authenticatie-app en voer de {{digits}}-cijferige code in om te bevestigen.
+two-factor-setup-form.manual-entry: Of voer deze sleutel handmatig in
+two-factor-setup-form.confirm: Activeren
+two-factor-setup-form.load-error: Tweefactorauthenticatie kon niet worden ingesteld. Probeer het later opnieuw.
+two-factor-setup-form.expired: De instelling is verlopen. Scan de nieuwe QR-code en voer de getoonde code in.
 subscription-details.community-edition: Meer informatie over Pimcore-edities
 config_not_writeable: Niet schrijfbaar; dit kan meerdere oorzaken hebben. Zie de documentatie voor details.
 navigation.about: Over
