@@ -6,6 +6,11 @@ common.clear: Rensa
 cache.clear-cache-success: Cachen har rensats
 cache.clear-full-page-cache-success: Helsidescachen har rensats
 cache.clear-temporary-files-success: Temporära filer har tagits bort
+index-sync.confirmation.title: Synkronisera sökindex
+index-sync.confirmation.text: "Alla dataobjekt, resurser och dokument är köade för omindexering i bakgrunden. Befintliga index uppdateras på plats; ett index vars ändrade mappning inte kan tillämpas på dess dokument (till exempel efter en fälttypsändring) återskapas och fylls på. Beroende på datamängden kan detta ta ett tag och belasta sökservern. Vill du fortsätta?"
+index-sync.confirmation.ok: Synkronisera
+index-sync.job.title: Synkroniserar sökindex
+index-sync.start-failed: Det gick inte att starta synkroniseringen av sökindex
 dont-ask-again: Fråga inte igen
 widget.missing-context.title: Saknar kontext
 widget.missing-context.description: Inget relaterat element hittades
@@ -1704,6 +1709,7 @@ navigation.cache: Cache
 navigation.cache.clear-cache: Rensa cache
 navigation.cache.clear-full-page-cache: Rensa helsidescache
 navigation.cache.clear-temporary-files: Ta bort temporära filer
+navigation.index-sync: Synkronisera sökindex
 navigation.clear-cache: Rensa helsidescache
 navigation.reports: Alla rapporter
 navigation.custom-reports: Konfiguration av anpassade rapporter

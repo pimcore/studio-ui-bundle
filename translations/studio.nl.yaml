@@ -6,6 +6,11 @@ common.clear: Wissen
 cache.clear-cache-success: Cache succesvol gewist
 cache.clear-full-page-cache-success: Volledige paginacache succesvol gewist
 cache.clear-temporary-files-success: Tijdelijke bestanden succesvol gewist
+index-sync.confirmation.title: Zoekindex synchroniseren
+index-sync.confirmation.text: "Alle gegevensobjecten, assets en documenten staan in de wachtrij voor herindexering op de achtergrond. Bestaande indices worden ter plaatse bijgewerkt; een index waarvan de gewijzigde mapping niet kan worden toegepast op de documenten (bijvoorbeeld na een veldtypewijziging) wordt opnieuw gemaakt en gevuld. Afhankelijk van de hoeveelheid gegevens kan dit enige tijd duren en belasting op de zoekserver veroorzaken. Wil je doorgaan?"
+index-sync.confirmation.ok: Synchroniseren
+index-sync.job.title: Zoekindex wordt gesynchroniseerd
+index-sync.start-failed: Kon de zoekindexsynchronisatie niet starten
 dont-ask-again: Niet meer vragen
 widget.missing-context.title: Ontbrekende context
 widget.missing-context.description: Geen gerelateerd element gevonden
@@ -1704,6 +1709,7 @@ navigation.cache: Cache
 navigation.cache.clear-cache: Cache wissen
 navigation.cache.clear-full-page-cache: Volledige paginacache wissen
 navigation.cache.clear-temporary-files: Tijdelijke bestanden wissen
+navigation.index-sync: Zoekindex synchroniseren
 navigation.clear-cache: Volledige paginacache wissen
 navigation.reports: Alle rapporten
 navigation.custom-reports: Aangepaste rapporten configureren

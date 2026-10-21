@@ -6,6 +6,11 @@ common.clear: Wyczyść
 cache.clear-cache-success: Pamięć podręczna pomyślnie wyczyszczona
 cache.clear-full-page-cache-success: Pamięć podręczna całej strony pomyślnie wyczyszczona
 cache.clear-temporary-files-success: Pliki tymczasowe pomyślnie wyczyszczone
+index-sync.confirmation.title: Synchronizuj indeks wyszukiwania
+index-sync.confirmation.text: "Wszystkie obiekty danych, zasoby i dokumenty są kolejkowane do ponownego indeksowania w tle. Istniejące indeksy są aktualizowane w miejscu; indeks, którego zmienione mapowanie nie może być zastosowane do jego dokumentów (na przykład po zmianie typu pola), jest odtwarzany i uzupełniany. W zależności od ilości danych może to zająć trochę czasu i obciążyć serwer wyszukiwania. Czy chcesz kontynuować?"
+index-sync.confirmation.ok: Synchronizuj
+index-sync.job.title: Synchronizowanie indeksu wyszukiwania
+index-sync.start-failed: Nie można rozpocząć synchronizacji indeksu wyszukiwania
 dont-ask-again: Nie pytaj ponownie
 widget.missing-context.title: Brakujący kontekst
 widget.missing-context.description: Nie znaleziono powiązanego elementu
@@ -1704,6 +1709,7 @@ navigation.cache: Pamięć podręczna
 navigation.cache.clear-cache: Wyczyść pamięć podręczną
 navigation.cache.clear-full-page-cache: Wyczyść pamięć podręczną całej strony
 navigation.cache.clear-temporary-files: Wyczyść pliki tymczasowe
+navigation.index-sync: Synchronizuj indeks wyszukiwania
 navigation.clear-cache: Wyczyść pamięć podręczną całej strony
 navigation.reports: Wszystkie raporty
 navigation.custom-reports: Konfiguruj niestandardowe raporty
