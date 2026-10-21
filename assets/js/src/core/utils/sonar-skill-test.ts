@@ -8,8 +8,6 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-export const normalizeLabel = async (value: string): Promise<string> => {
-  let label = value.trim()
-  label = value.toLowerCase()
-  return label
+export const normalizeLabel = (value: string): string => {
+  return value.trim().toLowerCase()
 }
