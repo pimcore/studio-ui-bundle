@@ -26,6 +26,7 @@ import { useLanguageLookup } from '@Pimcore/modules/translations/hooks/use-langu
 import { useDocumentGetTranslationParentByLanguageQuery, useLazyDocumentGetTranslationsQuery } from '@Pimcore/modules/document/document-api-slice-enhanced'
 import { type Element } from '@Pimcore/modules/element/element-helper'
 import { TranslationErrorAlert } from './translation-error-alert'
+import { getUntranslatedLanguages } from '../utils/get-untranslated-languages'
 
 export interface NewTranslationModalProps {
   isOpen: boolean
@@ -59,7 +60,7 @@ export const NewTranslationModal = ({
 
   const documentId = isNil(currentDocument?.id) ? 0 : Number(currentDocument.id)
 
-  const [fetchTranslations, { isFetching: isTranslationsLoading, error: translationsError }] = useLazyDocumentGetTranslationsQuery()
+  const [fetchTranslations, { data: translations, isFetching: isTranslationsLoading, error: translationsError }] = useLazyDocumentGetTranslationsQuery()
 
   useEffect(() => {
     if (isOpen && documentId !== 0) {
@@ -70,10 +71,9 @@ export const NewTranslationModal = ({
   const languageProperty = (!isNil(currentDocument) && has(currentDocument, 'properties') && Array.isArray(currentDocument?.properties))
     ? currentDocument.properties?.find(prop => prop.key === 'language')
     : undefined
-  const currentDocumentLanguage = isString(languageProperty?.data) ? languageProperty.data : ''
+  const currentDocumentLanguage: string = isString(languageProperty?.data) ? languageProperty.data : ''
 
-  const availableLanguages: LanguageOption[] = (settings.validLanguages ?? [])
-    .filter((locale: string) => locale !== currentDocumentLanguage)
+  const availableLanguages: LanguageOption[] = getUntranslatedLanguages((settings.validLanguages ?? []) as string[], translations, currentDocumentLanguage)
     .map((locale: string) => ({
       value: locale,
       label: `${getDisplayName(locale)} [${locale}]`
