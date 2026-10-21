@@ -11,13 +11,11 @@
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { container } from '@Pimcore/app/depency-injection'
 import { moduleSystem } from '@Pimcore/app/module-system/module-system'
-import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { type JobRehydrationRegistry } from '@Pimcore/modules/execution-engine/services/job-rehydration-registry'
 import { IndexSyncJob } from '@Pimcore/modules/execution-engine/jobs/index-sync/index-sync-job'
 import { type MainNavRegistry } from '@sdk/modules/app'
 import { UserPermission } from '@sdk/modules/auth'
-import { useTranslation } from 'react-i18next'
-import { startIndexSync } from './index-sync-actions'
+import { confirmIndexSync } from './index-sync-actions'
 
 moduleSystem.registerModule({
   onInit: () => {
@@ -28,20 +26,11 @@ moduleSystem.registerModule({
       label: 'navigation.index-sync',
       order: 600,
       permission: UserPermission.SystemSettings,
+      // No hooks in here: MainNav only calls this while the menu is open
       useCustomMainNavItem: () => {
-        const { t } = useTranslation()
-        const modal = useFormModal()
-
         return {
           name: 'IndexSync',
-          onClick: () => {
-            modal.confirm({
-              title: t('index-sync.confirmation.title'),
-              content: t('index-sync.confirmation.text'),
-              okText: t('index-sync.confirmation.ok'),
-              onOk: startIndexSync
-            })
-          }
+          onClick: confirmIndexSync
         }
       }
     })
