@@ -8,6 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { act, renderHook } from '@testing-library/react'
+import { useOpenInNewWindow } from './use-open-in-new-window'
+
 const initiate = jest.fn()
 const dispatch = jest.fn()
 const trackError = jest.fn()
@@ -39,17 +42,12 @@ jest.mock('@Pimcore/modules/element/permissions/permission-helper', () => ({
 }))
 
 jest.mock('@Pimcore/components/icon/icon', () => ({
-  Icon: () => null
+  Icon: jest.fn(() => null)
 }))
 
 jest.mock('@Pimcore/modules/element/actions', () => ({
   ContextMenuActionName: { openInNewWindow: 'openInNewWindow' }
 }))
-
-// eslint-disable-next-line import/first
-import { act, renderHook } from '@testing-library/react'
-// eslint-disable-next-line import/first
-import { useOpenInNewWindow } from './use-open-in-new-window'
 
 interface DocumentResponse {
   fullPath?: string
