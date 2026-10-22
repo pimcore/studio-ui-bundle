@@ -17,6 +17,7 @@ import { type DynamicTypeFieldFilterObjectAdapter } from './definitions/field-fi
 import { type DynamicTypeFieldFilterDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/data-object-brick/dynamic-type-field-filter-data-object-object-brick'
 import { type DynamicTypeFieldFilterString } from './definitions/field-filters/types/string/dynamic-type-field-filter-string'
 import { type DynamicTypeFieldFilterNone } from './definitions/field-filters/types/none/dynamic-type-field-filter-none'
+import { type DynamicTypeFieldFilterEmptyOnly } from './definitions/field-filters/types/empty-only/dynamic-type-field-filter-empty-only'
 import { type DynamicTypeFieldFilterId } from './definitions/field-filters/types/id/dynamic-type-field-filter-id'
 import { type DynamicTypeFieldFilterNumber } from './definitions/field-filters/types/number/dynamic-type-field-filter-number'
 import { type DynamicTypeFieldFilterFileSize } from './definitions/field-filters/types/file-size/dynamic-type-field-filter-file-size'
@@ -241,6 +242,7 @@ moduleSystem.registerModule({
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterDataObjectObjectBrick>(serviceIds['DynamicTypes/FieldFilter/DataObjectObjectBrick']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterString>(serviceIds['DynamicTypes/FieldFilter/String']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterNone>(serviceIds['DynamicTypes/FieldFilter/None']))
+    fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterEmptyOnly>(serviceIds['DynamicTypes/FieldFilter/EmptyOnly']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterId>(serviceIds['DynamicTypes/FieldFilter/Id']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterNumber>(serviceIds['DynamicTypes/FieldFilter/Number']))
     fieldFilterRegistry.registerDynamicType(container.get<DynamicTypeFieldFilterFileSize>(serviceIds['DynamicTypes/FieldFilter/FileSize']))

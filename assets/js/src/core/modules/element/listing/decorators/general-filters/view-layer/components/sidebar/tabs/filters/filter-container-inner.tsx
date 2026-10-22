@@ -20,6 +20,7 @@ import { Text } from '@Pimcore/components/text/text'
 import { Switch } from '@Pimcore/components/switch/switch'
 import { FieldFilters } from '@Pimcore/components/field-filters/field-filters'
 import { MultiValueFilterSupportProvider } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/utils/multi-value-filter-support'
+import { EmptyFilterSupportProvider } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/utils/empty-filter-support'
 import { ColumnPickerPopover } from '@Pimcore/components/column-picker/column-picker-popover'
 import { FilterCommitProvider, FiltersRenderer } from '@Pimcore/components/filters'
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
@@ -135,11 +136,13 @@ export const FilterContainerInner = (): React.JSX.Element => {
           ? <Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } />
           : (
             <MultiValueFilterSupportProvider supported>
-              <FieldFilters
-                data={ filters }
-                onChange={ onFilterChange }
-                onCommit={ onFilterCommit }
-              />
+              <EmptyFilterSupportProvider supported>
+                <FieldFilters
+                  data={ filters }
+                  onChange={ onFilterChange }
+                  onCommit={ onFilterCommit }
+                />
+              </EmptyFilterSupportProvider>
             </MultiValueFilterSupportProvider>
             ) }
       </Content>

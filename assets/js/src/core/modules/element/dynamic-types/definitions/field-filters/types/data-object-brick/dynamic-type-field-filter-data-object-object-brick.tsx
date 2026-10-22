@@ -38,6 +38,17 @@ export class DynamicTypeFieldFilterDataObjectObjectBrick extends DynamicTypeFiel
     return objectType.dynamicTypeFieldFilterType.isFilterAvailable(null)
   }
 
+  isEmptyFilterAvailable (subtype: string | null): boolean {
+    if (subtype === null) {
+      return false
+    }
+
+    const objectRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+
+    const objectType = objectRegistry.getDynamicType(subtype)
+    return objectType.dynamicTypeFieldFilterType.isEmptyFilterAvailable(null)
+  }
+
   getFieldFilterComponent (props: DynamicTypeFieldFilterObjectBrickProps): ReactElement<DynamicTypeFieldFilterObjectBrickProps> {
     return (
       <DynamicTypeFieldFilterObjectBrickComponent { ...props } />
@@ -49,5 +60,12 @@ export class DynamicTypeFieldFilterDataObjectObjectBrick extends DynamicTypeFiel
 
     const objectType = objectRegistry.getDynamicType(filter.meta.fieldDefinition.fieldtype as string)
     return objectType.dynamicTypeFieldFilterType.transformFilterToApiRequest(filter)
+  }
+
+  transformOperatorFilterToApiRequest (filter: FieldFilter): any {
+    const objectRegistry = container.get<DynamicTypeObjectDataRegistry>(serviceIds['DynamicTypes/ObjectDataRegistry'])
+
+    const objectType = objectRegistry.getDynamicType(filter.meta.fieldDefinition.fieldtype as string)
+    return objectType.dynamicTypeFieldFilterType.transformOperatorFilterToApiRequest(filter)
   }
 }

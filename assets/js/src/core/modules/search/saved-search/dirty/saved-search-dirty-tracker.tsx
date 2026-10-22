@@ -36,10 +36,10 @@ const normaliseColumns = (columns: unknown): string =>
 // Column filters compared by key + type + value, order-independent. Excludes paging and sorting,
 // which the restore does not round-trip (paging) / restore yet (sorting).
 const normaliseColumnFilters = (filter: ReturnType<typeof getFilterObject>): string => {
-  const entries = (isArray(filter?.columnFilters) ? filter.columnFilters : []) as Array<{ key?: string, type?: string, filterValue?: unknown }>
+  const entries = (isArray(filter?.columnFilters) ? filter.columnFilters : []) as Array<{ key?: string, type?: string, filterValue?: unknown, operator?: string }>
   return JSON.stringify(
     entries
-      .map((entry) => ({ key: entry.key, type: entry.type, value: JSON.stringify(entry.filterValue ?? null) }))
+      .map((entry) => ({ key: entry.key, type: entry.type, operator: entry.operator ?? null, value: JSON.stringify(entry.filterValue ?? null) }))
       .sort((a, b) => `${a.key}${a.type}`.localeCompare(`${b.key}${b.type}`))
   )
 }
