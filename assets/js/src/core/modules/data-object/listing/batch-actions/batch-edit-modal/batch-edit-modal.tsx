@@ -56,7 +56,7 @@ export interface BatchEditModalProps {
 export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: BatchEditModalProps): React.JSX.Element => {
   const { batchEdits, addOrUpdateBatchEdit, addOrUpdateBatchEdits, resetBatchEdits } = useBatchEdit()
   const [form] = Form.useForm()
-  const { selectedRows, setSelectedRows } = useRowSelection()
+  const { selectedRows, deselectRows } = useRowSelection()
   const [patchObjectsInFolder, { error: folderPatchError, isError: isFolderPatchError, isSuccess: isFolderPatchSuccess }] = useDataObjectPatchFolderByIdMutation()
   const [patchObjectsByIds, { error: idPatchError, isError: isIdPatchError, isSuccess: isIdPatchSuccess }] = useDataObjectPatchByIdMutation()
   const { useDataQueryHelper } = useSettings()
@@ -94,11 +94,6 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   useEffect(() => {
     if (isFolderPatchSuccess || isIdPatchSuccess) {
       resetModal()
-    }
-
-    if (isIdPatchSuccess && selectedRowsCount === 1) {
-      dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_GRID_ID(id)))
-      setSelectedRows({})
     }
   }, [isFolderPatchSuccess, isIdPatchSuccess])
 
@@ -183,7 +178,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
       })
       await executionEngine.runJob(job)
     } else if (selectedRowsCount === 1) {
-      await patchObjectsByIds({
+      const response = await patchObjectsByIds({
         body: {
           data: [
             {
@@ -193,6 +188,11 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
           ]
         }
       })
+
+      if (response.error === undefined) {
+        dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_GRID_ID(id)))
+        deselectRows(selectedRowsIds)
+      }
     } else {
       const job = new DataObjectBatchEditJob({
         patchObjectsByIds,
@@ -200,7 +200,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         values,
         assetContextId: id,
         refreshGrid,
-        onFinish: async () => { setSelectedRows({}) }
+        onFinish: async () => { deselectRows(selectedRowsIds) }
       })
       await executionEngine.runJob(job)
     }
