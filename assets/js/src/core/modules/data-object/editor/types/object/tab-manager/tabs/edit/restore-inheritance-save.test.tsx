@@ -211,6 +211,7 @@ const Field = ({ name, title }: { name: string[], title: string }): React.JSX.El
     _props={ { name, title, noteditable: false, inherited: false } as any }
     formFieldName={ name }
     objectDataType={ dataType }
+    technicalName={ name[name.length - 1] }
   />
 )
 

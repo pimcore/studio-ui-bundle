@@ -24,6 +24,7 @@ import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/co
 import { useEditMode } from '@Pimcore/components/grid/grid'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
 import { useResolvedFieldName } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/utils/resolve-field-name'
+import { FieldLabelTechnicalNameProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label-technical-name-provider'
 
 export interface DataObjectAdapterCellProps extends DefaultCellProps {}
 
@@ -99,10 +100,12 @@ export const DataObjectAdapterCell = (props: DataObjectAdapterCellProps): React.
 
   if (cellDefinition.mode === 'edit-modal') {
     return (
-      <EditModalCell
-        cellProps={ props }
-        objectCellDefinition={ cellDefinition }
-      />
+      <FieldLabelTechnicalNameProvider technicalName={ fieldDefinition.name }>
+        <EditModalCell
+          cellProps={ props }
+          objectCellDefinition={ cellDefinition }
+        />
+      </FieldLabelTechnicalNameProvider>
     )
   }
 

@@ -295,6 +295,7 @@ const Field = ({ name, title, noteditable = false, emptyValue = null, probe = fa
       _props={ { name, title, noteditable, probe, inherited: inheritedNow } as any }
       formFieldName={ name }
       objectDataType={ block ? blockType() : dataType(emptyValue) }
+      technicalName={ name[name.length - 1] }
     />
   )
 }

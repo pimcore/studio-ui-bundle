@@ -14,17 +14,19 @@ import {
   type AbstractObjectDataDefinition,
   type DynamicTypeObjectDataAbstract
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
+import { FieldLabel } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label'
 import DataComponentFormItem from './form-item'
 
 // The real Form, providers and styles pull in antd-style (untranspiled ESM), which jest cannot
-// load; the item only needs to show the class it is given.
+// load; the item only needs to show the class and label it is given.
 jest.mock('@Pimcore/components/form/form', () => ({
   Form: {
-    Item: ({ className, children }: { className?: string, children?: React.ReactNode }) => (
+    Item: ({ className, label, children }: { className?: string, label?: React.ReactNode, children?: React.ReactNode }) => (
       <div
         className={ className }
         data-testid="form-item"
       >
+        { label }
         { children }
       </div>
     )
@@ -55,11 +57,32 @@ jest.mock('@sdk/utils', () => ({
 jest.mock('./form-item.styles', () => ({
   useStyles: () => ({ styles: { labelAfterControl: 'label-after-control' } })
 }))
+jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
+jest.mock('@Pimcore/modules/data-object/components/inheritance-button', () => ({
+  InheritanceButton: () => null
+}))
+jest.mock('@Pimcore/components/icon/icon', () => ({
+  Icon: () => null
+}))
+jest.mock('@Pimcore/components/flex/flex', () => ({
+  Flex: ({ children }: { children?: React.ReactNode }) => <span>{ children }</span>
+}))
+jest.mock('@Pimcore/components/tooltip/tooltip', () => ({
+  Tooltip: ({ title, children }: { title: string, children?: React.ReactNode }) => <span data-tooltip={ title }>{ children }</span>
+}))
 
 const objectDataType = (labelAfterControl: boolean): DynamicTypeObjectDataAbstract => ({
   labelAfterControl,
   inheritedMaskOverlay: false,
-  getObjectDataFormItemProps: () => ({ className: 'w-full' }),
+  getObjectDataFormItemProps: (props: AbstractObjectDataDefinition) => ({
+    className: 'w-full',
+    label: (
+      <FieldLabel
+        label={ props.title }
+        name={ props.name }
+      />
+    )
+  }),
   getObjectDataComponent: () => <input type="checkbox" />,
   getEmptyValue: () => null
 }) as unknown as DynamicTypeObjectDataAbstract
@@ -70,6 +93,7 @@ const renderItem = (labelAfterControl: boolean): HTMLElement => {
       _props={ { name: 'active', title: 'Active' } as unknown as AbstractObjectDataDefinition }
       formFieldName={ ['active'] }
       objectDataType={ objectDataType(labelAfterControl) }
+      technicalName="active"
     />
   )
 
@@ -86,5 +110,11 @@ describe('DataComponentFormItem', () => {
 
   it('keeps the label above the control for every other type', () => {
     expect(renderItem(false)).not.toHaveClass('label-after-control')
+  })
+
+  it('shows the technical field name when hovering the label', () => {
+    renderItem(false)
+
+    expect(screen.getByText('Active').closest('[data-tooltip]')).toHaveAttribute('data-tooltip', 'active')
   })
 })
