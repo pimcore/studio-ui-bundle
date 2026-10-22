@@ -11,7 +11,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Title } from '@Pimcore/components/title/title'
-import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { Button } from '@Pimcore/components/button/button'
 import {
   ContentLayout
@@ -49,14 +48,13 @@ export const TagFiltersContainerInner = (): React.JSX.Element => {
     <ContentLayout
       renderToolbar={
         <Toolbar theme='secondary'>
-          <IconTextButton
+          <Button
             data-testid="listing-tag-filter-clear-button"
-            icon={ { value: 'close' } }
             onClick={ handleResetAllFiltersClick }
             type='link'
           >
             Clear all filters
-          </IconTextButton>
+          </Button>
 
           <Button
             data-testid="listing-tag-filter-apply-button"
@@ -70,7 +68,7 @@ export const TagFiltersContainerInner = (): React.JSX.Element => {
     >
       <Content
         padded
-        padding="small"
+        padding={ { top: 'extra-small', x: 'small', bottom: 'small' } }
       >
         <Title>{t('sidebar.tag_filters')}</Title>
 
