@@ -14,15 +14,18 @@ import { useTranslation } from 'react-i18next'
 import { defineFilter, type FilterControlProps } from '@Pimcore/components/filters'
 import { type ColumnFilter } from '@Pimcore/modules/app/types/column-filter'
 import { type ElementFilterQueryPart, type ElementFilterContext } from '../element-filter-types'
+import { useStyles } from './checkbox-filter.styles'
 
 export const unreferencedFilterType = 'system.unreferenced'
 
 const UnreferencedControl = ({ value, onChange }: FilterControlProps<boolean>): React.JSX.Element => {
   const { t } = useTranslation()
+  const { styles } = useStyles()
 
   return (
     <Checkbox
       checked={ value }
+      className={ styles.checkbox }
       onChange={ (e) => { onChange(e.target.checked) } }
     >
       {t('element.sidebar.filter.only-unreferenced')}

@@ -91,7 +91,10 @@ export const SaveView = ({ formProps, onCancelClick, isLoading, onDeleteClick, i
         </Toolbar>
       }
     >
-      <Content padded>
+      <Content
+        padded
+        padding={ { top: 'extra-small', x: 'small', bottom: 'extra-small' } }
+      >
         <Flex
           gap='small'
           vertical
