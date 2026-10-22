@@ -22,7 +22,7 @@ jest.mock('@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edi
   useInheritanceState: () => undefined
 }))
 jest.mock('@Pimcore/modules/data-object/components/inheritance-button', () => ({
-  InheritanceButton: () => null
+  InheritanceButton: () => <span />
 }))
 jest.mock('@Pimcore/components/icon/icon', () => ({
   Icon: ({ value }: { value: string }) => <span data-icon={ value } />

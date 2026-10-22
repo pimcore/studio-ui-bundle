@@ -29,9 +29,9 @@ jest.mock('@Pimcore/components/language-selection/provider/use-language-selectio
 jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/utils/resolve-field-name', () => ({
   useResolvedFieldName: () => 'shortDescription'
 }))
-jest.mock('./types/default-mode-cell', () => ({ DefaultModeCell: () => null }))
-jest.mock('./types/column-meta-cell', () => ({ ColumnMetaCell: () => null }))
-jest.mock('./inheritance-layer', () => ({ InheritanceLayer: () => null }))
+jest.mock('./types/default-mode-cell', () => ({ DefaultModeCell: () => <span /> }))
+jest.mock('./types/column-meta-cell', () => ({ ColumnMetaCell: () => <span /> }))
+jest.mock('./inheritance-layer', () => ({ InheritanceLayer: () => <span /> }))
 jest.mock('./types/edit-modal-mode-cell', () => {
   const { useFieldLabelTechnicalName } = jest.requireActual('@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/field-label-technical-name-provider')
 

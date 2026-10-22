@@ -59,10 +59,10 @@ jest.mock('./form-item.styles', () => ({
 }))
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
 jest.mock('@Pimcore/modules/data-object/components/inheritance-button', () => ({
-  InheritanceButton: () => null
+  InheritanceButton: () => <span />
 }))
 jest.mock('@Pimcore/components/icon/icon', () => ({
-  Icon: () => null
+  Icon: () => <span />
 }))
 jest.mock('@Pimcore/components/flex/flex', () => ({
   Flex: ({ children }: { children?: React.ReactNode }) => <span>{ children }</span>
