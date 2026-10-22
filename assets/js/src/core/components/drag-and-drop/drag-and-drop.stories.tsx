@@ -238,7 +238,11 @@ const config: Meta = {
   parameters: {
     layout: 'centered'
   },
-  tags: ['autodocs']
+  // Hidden from the sidebar and from autodocs: nothing can be dragged here, because the
+  // draggable dispatches its drag info on the story's own window while the droppables listen
+  // on window.parent, which in Storybook is the manager rather than the preview. The examples
+  // stay in place so the story can be restored once the components handle that case.
+  tags: ['!dev', '!autodocs']
 }
 
 export default config
