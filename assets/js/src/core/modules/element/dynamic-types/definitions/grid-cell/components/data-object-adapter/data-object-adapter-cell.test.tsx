@@ -19,6 +19,7 @@ jest.mock('@Pimcore/app/depency-injection', () => ({
   })
 }))
 jest.mock('@Pimcore/app/config/services/service-ids', () => ({ serviceIds: {} }))
+jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({ useUser: () => ({ isAdmin: true }) }))
 jest.mock('@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns', () => ({
   useSelectedColumns: () => ({ decodeColumnIdentifier: () => undefined })
 }))

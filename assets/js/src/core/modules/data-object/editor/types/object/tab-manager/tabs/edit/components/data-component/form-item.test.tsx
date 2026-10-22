@@ -58,6 +58,7 @@ jest.mock('./form-item.styles', () => ({
   useStyles: () => ({ styles: { labelAfterControl: 'label-after-control' } })
 }))
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
+jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({ useUser: () => ({ isAdmin: true }) }))
 jest.mock('@Pimcore/modules/data-object/components/inheritance-button', () => ({
   InheritanceButton: () => <span />
 }))

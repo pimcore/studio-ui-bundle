@@ -100,6 +100,7 @@ jest.mock('@Pimcore/modules/data-object/actions/save/use-save', () => ({
 
 jest.mock('@Pimcore/components/message/useMessage', () => ({ useMessage: () => ({ error: jest.fn() }) }))
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
+jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({ useUser: () => ({ isAdmin: true }) }))
 jest.mock('@Pimcore/app/depency-injection', () => ({
   container: { get: () => ({ hasDynamicType: () => false, getDynamicType: () => undefined }) }
 }))

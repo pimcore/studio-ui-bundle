@@ -14,7 +14,10 @@ import { FieldLabel } from './field-label'
 import { FieldLabelTechnicalNameProvider } from './field-label-technical-name-provider'
 import { CheckboxEditable } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/components/checkbox-editable/checkbox-editable'
 
+let mockIsAdmin = true
+
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
+jest.mock('@Pimcore/modules/auth/hooks/use-user', () => ({ useUser: () => ({ isAdmin: mockIsAdmin }) }))
 jest.mock('@sdk/utils', () => ({
   isNonEmptyString: (value: unknown) => typeof value === 'string' && value !== ''
 }))
@@ -45,18 +48,33 @@ jest.mock('@Pimcore/modules/element/dynamic-types/definitions/document/editable/
 const tooltipOfLabel = (label: string): string | null =>
   screen.getByText(label).closest('[data-tooltip]')?.getAttribute('data-tooltip') ?? null
 
+const renderDataObjectLabel = (): void => {
+  render(
+    <FieldLabelTechnicalNameProvider technicalName="shortDescription">
+      <FieldLabel
+        label="Short description"
+        name={ ['localizedfields', 'shortDescription', 'en'] }
+      />
+    </FieldLabelTechnicalNameProvider>
+  )
+}
+
 describe('FieldLabel', () => {
+  beforeEach(() => {
+    mockIsAdmin = true
+  })
+
   it('shows the technical name given by the data object form item on the label text', () => {
-    render(
-      <FieldLabelTechnicalNameProvider technicalName="shortDescription">
-        <FieldLabel
-          label="Short description"
-          name={ ['localizedfields', 'shortDescription', 'en'] }
-        />
-      </FieldLabelTechnicalNameProvider>
-    )
+    renderDataObjectLabel()
 
     expect(tooltipOfLabel('Short description')).toBe('shortDescription')
+  })
+
+  it('shows no technical name to a user who is not an admin', () => {
+    mockIsAdmin = false
+    renderDataObjectLabel()
+
+    expect(tooltipOfLabel('Short description')).toBeNull()
   })
 
   it('shows no technical name on the label of a document editable', () => {

@@ -9,6 +9,7 @@
  */
 
 import React, { createContext, useContext, type ReactNode } from 'react'
+import { useUser } from '@Pimcore/modules/auth/hooks/use-user'
 
 const FieldLabelTechnicalNameContext = createContext<string | undefined>(undefined)
 
@@ -18,8 +19,10 @@ export interface FieldLabelTechnicalNameProviderProps {
 }
 
 export const FieldLabelTechnicalNameProvider = ({ technicalName, children }: FieldLabelTechnicalNameProviderProps): React.JSX.Element => {
+  const { isAdmin } = useUser()
+
   return (
-    <FieldLabelTechnicalNameContext.Provider value={ technicalName }>
+    <FieldLabelTechnicalNameContext.Provider value={ isAdmin ? technicalName : undefined }>
       { children }
     </FieldLabelTechnicalNameContext.Provider>
   )
