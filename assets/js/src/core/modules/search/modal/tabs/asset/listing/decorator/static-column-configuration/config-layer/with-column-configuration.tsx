@@ -14,10 +14,13 @@ import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/co
 import { type SelectedColumnsContextProps } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
+import { useAssetGetAvailableGridColumnsQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { staticAvailableColumns } from './static-available-columns'
+import { mergeAvailableColumns } from './merge-available-columns'
 
 export const withColumnConfiguration = (Component: AbstractDecoratorProps['ConfigurationComponent']): AbstractDecoratorProps['ConfigurationComponent'] => {
   const WithAssetColumnConfiguration = (): React.JSX.Element => {
+    const { data } = useAssetGetAvailableGridColumnsQuery()
     const { useDataQueryHelper } = useSettings()
     const { setSelectedColumns } = useSelectedColumns()
     const { setAvailableColumns } = useAvailableColumns()
@@ -46,9 +49,12 @@ export const withColumnConfiguration = (Component: AbstractDecoratorProps['Confi
       }
 
       setSelectedColumns(selectedColumns)
-      setAvailableColumns(staticAvailableColumns)
       setDataLoadingState('config-changed')
     }, [])
+
+    useEffect(() => {
+      setAvailableColumns(mergeAvailableColumns(staticAvailableColumns, data?.columns))
+    }, [data])
 
     return (
       <Component />
