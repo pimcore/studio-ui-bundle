@@ -15,12 +15,13 @@ import { type SelectedColumnsContextProps } from '@Pimcore/modules/element/listi
 import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/use-settings'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { useAssetGetAvailableGridColumnsQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
+import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { staticAvailableColumns } from './static-available-columns'
 import { mergeAvailableColumns } from './merge-available-columns'
 
 export const withColumnConfiguration = (Component: AbstractDecoratorProps['ConfigurationComponent']): AbstractDecoratorProps['ConfigurationComponent'] => {
   const WithAssetColumnConfiguration = (): React.JSX.Element => {
-    const { data } = useAssetGetAvailableGridColumnsQuery()
+    const { data, isLoading, isError, error } = useAssetGetAvailableGridColumnsQuery()
     const { useDataQueryHelper } = useSettings()
     const { setSelectedColumns } = useSelectedColumns()
     const { setAvailableColumns } = useAvailableColumns()
@@ -53,8 +54,20 @@ export const withColumnConfiguration = (Component: AbstractDecoratorProps['Confi
     }, [])
 
     useEffect(() => {
+      if (isError) {
+        trackError(new ApiError(error))
+      }
+    }, [isError])
+
+    // Publish only once the request has settled: a saved search restores as soon as the available
+    // columns are non-empty, so the static fallback alone would drop its saved metadata columns.
+    useEffect(() => {
+      if (isLoading) {
+        return
+      }
+
       setAvailableColumns(mergeAvailableColumns(staticAvailableColumns, data?.columns))
-    }, [data])
+    }, [isLoading, data])
 
     return (
       <Component />
