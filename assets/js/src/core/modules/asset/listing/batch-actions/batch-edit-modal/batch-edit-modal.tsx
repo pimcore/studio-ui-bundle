@@ -147,7 +147,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         patches,
         assetContextId: id,
         refreshGrid,
-        onFinish: async () => { deselectRows(selectedRowsIds) }
+        onFinish: () => { deselectRows(selectedRowsIds) }
       })
       await executionEngine.runJob(job)
     }

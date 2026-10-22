@@ -200,7 +200,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         values,
         assetContextId: id,
         refreshGrid,
-        onFinish: async () => { deselectRows(selectedRowsIds) }
+        onFinish: () => { deselectRows(selectedRowsIds) }
       })
       await executionEngine.runJob(job)
     }

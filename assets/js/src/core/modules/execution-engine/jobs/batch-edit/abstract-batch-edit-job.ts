@@ -20,7 +20,7 @@ import { type RehydratableJob, type JobRunList } from '../../services/job-rehydr
 export interface AbstractBatchEditJobOptions {
   assetContextId: number
   refreshGrid: () => Promise<void>
-  onFinish?: () => Promise<void>
+  onFinish?: () => void | Promise<void>
 }
 
 export interface BatchEditHandlerOptions {
@@ -34,7 +34,7 @@ export abstract class AbstractBatchEditJob implements JobInterface {
   static readonly jobNames: readonly string[] = ['studio_ee_job_patch_elements', 'studio_ee_job_rewrite_element_references']
 
   protected readonly assetContextId: number
-  protected readonly onFinish?: () => Promise<void>
+  protected readonly onFinish?: () => void | Promise<void>
   protected readonly refreshGrid: () => Promise<void>
 
   constructor (options: AbstractBatchEditJobOptions) {
