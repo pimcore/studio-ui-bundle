@@ -1501,7 +1501,6 @@ tree.actions.user: Gebruiker
 tree.actions.add-folder: Nieuwe map
 tree.actions.add-tag: Nieuwe tag
 tree.actions.delete-tag: Verwijderen
-tree.actions.rename-tag: Hernoemen
 tree.actions.role: Rol
 tree.actions.add-role: Rol toevoegen
 tree.actions.clone-role: Rol klonen
@@ -1513,7 +1512,6 @@ tag-configuration.name: Naam
 tag-configuration.parent-tag: Bovenliggende tag
 tag-configuration.create: Aanmaken
 tag-configuration.save: Opslaan
-tag-configuration.rename: Tag hernoemen
 tag-configuration.successful-add: Tag succesvol toegevoegd
 tag-configuration.successful-update: Tag succesvol bijgewerkt
 tag-configuration.successful-deletion: Tag succesvol verwijderd
@@ -3062,3 +3060,8 @@ saved-search.delete.success: Opgeslagen zoekopdracht verwijderd
 saved-search.shared-modified.info: Je hebt wijzigingen aangebracht in de oorspronkelijke configuratie. Omdat deze van iemand anders is, kun je deze opslaan als nieuwe zoekopdracht.
 saved-search.menu-shortcut-group: Menugroep
 skip-to-content: Naar de inhoud
+tag-configuration.move-under: 'Verplaatsen onder'
+tag-configuration.move-search-placeholder: 'Zoek een tag'
+tree.actions.edit-tag: Bewerken
+tag-configuration.edit-tag: '"{{name}}" bewerken'
+tag-configuration.name-required: 'Voer een tagnaam in'

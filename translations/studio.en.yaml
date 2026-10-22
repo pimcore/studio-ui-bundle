@@ -1503,7 +1503,6 @@ tree.actions.user: User
 tree.actions.add-folder: New Folder
 tree.actions.add-tag: New Tag
 tree.actions.delete-tag: Delete
-tree.actions.rename-tag: Rename
 tree.actions.role: Role
 tree.actions.add-role: Add Role
 tree.actions.clone-role: Clone role
@@ -1515,7 +1514,6 @@ tag-configuration.name: Name
 tag-configuration.parent-tag: Parent Tag
 tag-configuration.create: Create
 tag-configuration.save: Save
-tag-configuration.rename: Rename tag
 tag-configuration.successful-add: Tag has been added successfully
 tag-configuration.successful-update: Tag has been updated successfully
 tag-configuration.successful-deletion: Tag has been deleted successfully
@@ -3064,3 +3062,8 @@ saved-search.delete.success: Saved search deleted
 saved-search.shared-modified.info: You have made modifications to the original configuration. Since it is owned by someone else, you can save it as a new search.
 saved-search.menu-shortcut-group: Menu group
 skip-to-content: Skip to content
+tag-configuration.move-under: 'Move under'
+tag-configuration.move-search-placeholder: 'Search for a tag'
+tree.actions.edit-tag: Edit
+tag-configuration.edit-tag: 'Edit "{{name}}"'
+tag-configuration.name-required: 'Please enter a tag name'

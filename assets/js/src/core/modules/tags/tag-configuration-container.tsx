@@ -32,6 +32,7 @@ import { useAppDispatch } from '@sdk/app'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
 import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Content } from '@Pimcore/components/content/content'
+import { EditTagModal, type EditTagFormValues } from '@Pimcore/modules/tags/components/edit-tag-modal/edit-tag-modal'
 
 export type Mode = 'create' | 'update'
 
@@ -57,6 +58,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
 
   const [loadingTagKey, setLoadingTagKey] = useState<string | undefined>('')
   const [expandedKeys, setExpandedKeys] = React.useState<any[]>([0])
+  const [tagToEdit, setTagToEdit] = useState<Tag | undefined>(undefined)
 
   useEffect(() => {
     (tagsFetching && loadingTagKey === undefined)
@@ -66,7 +68,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
 
   const tagActions: TreeAction[] =
     [{ key: 'add-tag', icon: 'new' },
-      { key: 'rename-tag', icon: 'edit' },
+      { key: 'edit-tag', icon: 'edit' },
       { key: 'delete-tag', icon: 'trash' }]
 
   const rootActions: TreeAction[] =
@@ -120,21 +122,8 @@ const TagConfigurationContainer = (): React.JSX.Element => {
           }
         })
         break
-      case 'rename-tag':
-        input({
-          title: t('tag-configuration.rename'),
-          label: t('tag-configuration.name'),
-          rule: {
-            required: true,
-            message: 'Please enter a tag name'
-          },
-          okText: t('tag-configuration.save'),
-          initialValue: newFocusTag.text,
-          onOk: async (value: string) => {
-            setLoadingTagKey(newFocusTag.id.toString())
-            await handleTagUpdate(newFocusTag.id, newFocusTag.parentId, value)
-          }
-        })
+      case 'edit-tag':
+        setTagToEdit(newFocusTag)
         break
       case 'delete-tag':
         confirm({
@@ -219,6 +208,20 @@ const TagConfigurationContainer = (): React.JSX.Element => {
           withCustomSwitcherIcon
         />
       </Content>
+
+      { tagToEdit !== undefined && (
+        <EditTagModal
+          onCancel={ () => { setTagToEdit(undefined) } }
+          onSave={ async ({ name, parentId }: EditTagFormValues) => {
+            setLoadingTagKey(tagToEdit.id.toString())
+            setTagToEdit(undefined)
+            await handleTagUpdate(tagToEdit.id, parentId, name)
+          } }
+          rootTag={ rootTagFolder }
+          tag={ tagToEdit }
+          tags={ tags }
+        />
+      ) }
     </ContentLayout>
   )
 }
