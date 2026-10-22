@@ -8,6 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import '@testing-library/jest-dom'
+import React from 'react'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { SearchContainer } from './search-container'
+import { useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
+import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
+
 jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
   createStyles: () => () => ({ styles: {}, cx: (...classNames: unknown[]) => classNames.filter(Boolean).join(' '), theme: {} })
 }))
@@ -23,21 +31,6 @@ jest.mock('@Pimcore/components/element-tree/hooks/use-element-tree-node', () => 
 jest.mock('../provider/tree-filter-provider/use-tree-filter', () => ({
   useTreeFilter: () => ({ pageSize: 30 })
 }))
-
-// eslint-disable-next-line import/first
-import '@testing-library/jest-dom'
-// eslint-disable-next-line import/first
-import React from 'react'
-// eslint-disable-next-line import/first
-import { render, screen } from '@testing-library/react'
-// eslint-disable-next-line import/first
-import userEvent from '@testing-library/user-event'
-// eslint-disable-next-line import/first
-import { SearchContainer } from './search-container'
-// eslint-disable-next-line import/first
-import { useElementTreeNode } from '@Pimcore/components/element-tree/hooks/use-element-tree-node'
-// eslint-disable-next-line import/first
-import { type TreeNodeProps } from '@Pimcore/components/element-tree/node/tree-node'
 
 const mockUseElementTreeNode = useElementTreeNode as jest.MockedFunction<typeof useElementTreeNode>
 
