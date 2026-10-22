@@ -50,7 +50,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const { t } = useTranslation()
   const [patchAssets, { isError, isSuccess, error }] = useAssetPatchByIdMutation()
   const [patchAssetsInFolder, { isError: isFolderPatchError, isSuccess: isFolderPatchSuccess, error: folderPatchError }] = useAssetPatchFolderByIdMutation()
-  const { selectedRows } = useRowSelection()
+  const { selectedRows, setSelectedRows } = useRowSelection()
   const selectedRowsIds = Object.keys(selectedRows ?? {}).map(Number)
   const selectedRowsCount = selectedRowsIds.length
   const executionEngine = container.get<ExecutionEngine>(serviceIds.executionEngine)
@@ -126,7 +126,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
       })
       await executionEngine.runJob(job)
     } else if (selectedRowsCount === 1) {
-      await patchAssets({
+      const response = await patchAssets({
         body: {
           data: [
             {
@@ -136,13 +136,18 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
           ]
         }
       })
+
+      if (response.error === undefined) {
+        setSelectedRows({})
+      }
     } else {
       const job = new AssetBatchEditJob({
         patchAssets,
         selectedRowsIds,
         patches,
         assetContextId: id,
-        refreshGrid
+        refreshGrid,
+        onFinish: async () => { setSelectedRows({}) }
       })
       await executionEngine.runJob(job)
     }

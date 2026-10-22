@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
 import React, { useEffect, useMemo, useState } from 'react'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { FieldsToAddPanel } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/components/fields-to-add-panel/fields-to-add-panel'
@@ -55,7 +56,7 @@ export interface BatchEditModalProps {
 export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: BatchEditModalProps): React.JSX.Element => {
   const { batchEdits, addOrUpdateBatchEdit, addOrUpdateBatchEdits, resetBatchEdits } = useBatchEdit()
   const [form] = Form.useForm()
-  const { selectedRows } = useRowSelection()
+  const { selectedRows, setSelectedRows } = useRowSelection()
   const [patchObjectsInFolder, { error: folderPatchError, isError: isFolderPatchError, isSuccess: isFolderPatchSuccess }] = useDataObjectPatchFolderByIdMutation()
   const [patchObjectsByIds, { error: idPatchError, isError: isIdPatchError, isSuccess: isIdPatchSuccess }] = useDataObjectPatchByIdMutation()
   const { useDataQueryHelper } = useSettings()
@@ -97,6 +98,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
 
     if (isIdPatchSuccess && selectedRowsCount === 1) {
       dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_GRID_ID(id)))
+      setSelectedRows({})
     }
   }, [isFolderPatchSuccess, isIdPatchSuccess])
 
@@ -197,7 +199,8 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
         selectedRowsIds: selectedRowsIds.map(Number),
         values,
         assetContextId: id,
-        refreshGrid
+        refreshGrid,
+        onFinish: async () => { setSelectedRows({}) }
       })
       await executionEngine.runJob(job)
     }
