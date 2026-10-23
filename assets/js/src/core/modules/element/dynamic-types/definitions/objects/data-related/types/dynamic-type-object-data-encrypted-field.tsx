@@ -41,6 +41,8 @@ export class DynamicTypeObjectDataEncryptedField extends DynamicTypeObjectDataAb
         fieldType={ props.delegateDatatype }
         name={ props.name }
         { ...props.delegate }
+        title={ props.title }
+        tooltip={ props.tooltip }
       />
     )
   }
