@@ -2274,6 +2274,7 @@ reports.editor.general-settings.report-class-label: Classe du rapport
 reports.editor.general-settings.group-icon-class-label: Icon Class du groupe
 reports.editor.general-settings.shortcut-menu-label: Créer un raccourci dans le menu
 reports.editor.source-definition.title: Définition de la source
+reports.editor.source-definition.not-available: La définition de la source de ce rapport n'est pas disponible. Le Bundle qui la fournit n'est peut-être pas installé.
 reports.editor.source-definition.no-content: Aucun champ disponible pour le moment. Commencez par ajouter un champ.
 reports.editor.source-definition.select-source-definition: Sélectionner une définition de source
 reports.editor.source-definition.sql-select-field: SELECT (ex. a,b,c)*

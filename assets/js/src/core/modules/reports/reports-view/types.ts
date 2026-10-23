@@ -8,6 +8,9 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { type BundleCustomReportsDetails } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
+import { type IReportDataContext } from '@Pimcore/modules/reports/reports-view/context/report-data-context'
+
 export interface IGridFilter {
   columnFilters?: Array<{ property: string, value: any, type: string, operator: string }>
   drillDownFilters?: Record<string, any>
@@ -19,3 +22,24 @@ export enum FilterDrillDown {
 }
 
 export type FilterDrillDownType = FilterDrillDown | undefined
+
+export interface ICustomReportViewProps {
+  reportName: string
+  reportDetailData: BundleCustomReportsDetails
+  /**
+   * Generic report data; chartDetailData is not loaded for adapters with their own view.
+   * The export (CSV) uses the filters of useGridFilterContext: write the view's filters there so the export matches.
+   */
+  reportData: IReportDataContext
+  /** Increases each time the user clicks the refresh button; reload the adapter's own data when it changes */
+  refreshToken: number
+}
+
+export type CustomReportDashboardVisualization = 'table' | 'chart' | 'single_value'
+
+export interface ICustomReportDashboardViewProps {
+  reportName: string
+  /** What the dashboard widget is configured to show */
+  visualization: CustomReportDashboardVisualization
+  showLegend: boolean
+}

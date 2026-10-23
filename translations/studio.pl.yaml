@@ -2274,6 +2274,7 @@ reports.editor.general-settings.report-class-label: Klasa raportu
 reports.editor.general-settings.group-icon-class-label: Klasa ikony grupy
 reports.editor.general-settings.shortcut-menu-label: Utwórz skrót w menu
 reports.editor.source-definition.title: Definicja źródła
+reports.editor.source-definition.not-available: Definicja źródła tego raportu nie jest dostępna. Pakiet, który ją dostarcza, może nie być zainstalowany.
 reports.editor.source-definition.no-content: Brak dostępnych pól. Zacznij od dodania pola.
 reports.editor.source-definition.select-source-definition: Wybierz definicję źródła
 reports.editor.source-definition.sql-select-field: SELECT (np. a,b,c)*

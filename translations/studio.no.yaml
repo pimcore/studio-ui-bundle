@@ -2274,6 +2274,7 @@ reports.editor.general-settings.report-class-label: Rapportklasse
 reports.editor.general-settings.group-icon-class-label: Gruppeikon-klasse
 reports.editor.general-settings.shortcut-menu-label: Opprett snarvei i menyen
 reports.editor.source-definition.title: Kildedefinisjon
+reports.editor.source-definition.not-available: Kildedefinisionen for denne rapporten er ikke tilgjengelig. Bundlen som gir den, er kanskje ikke installert.
 reports.editor.source-definition.no-content: Ingen tilgjengelige felt ennå. Begynn med å legge til et felt.
 reports.editor.source-definition.select-source-definition: Velg en kildedefinisjon
 reports.editor.source-definition.sql-select-field: SELECT (f.eks. a,b,c)*
