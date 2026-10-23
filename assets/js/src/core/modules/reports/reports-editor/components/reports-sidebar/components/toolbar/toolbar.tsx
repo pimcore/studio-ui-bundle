@@ -13,22 +13,33 @@ import { useTranslation } from 'react-i18next'
 import { Toolbar as ToolbarView } from '@Pimcore/components/toolbar/toolbar'
 import { Refetch } from '@Pimcore/modules/reports/components/refetch/refetch'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
+import { Flex } from '@Pimcore/components/flex/flex'
+import { ImportButton } from '@Pimcore/modules/reports/reports-editor/components/reports-sidebar/components/import-button/import-button'
+import { type BundleCustomReportsDetails } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 
 interface IToolbarProps {
   isFetching: boolean
   refetch: () => void
   handleReportAdd: () => void
+  handleReportImported: (report: BundleCustomReportsDetails) => Promise<void>
 }
 
-export const Toolbar = ({ isFetching, refetch, handleReportAdd }: IToolbarProps): React.JSX.Element => {
+export const Toolbar = ({ isFetching, refetch, handleReportAdd, handleReportImported }: IToolbarProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (
     <ToolbarView>
-      <Refetch
-        isFetching={ isFetching }
-        refetch={ refetch }
-      />
+      <Flex gap="extra-small">
+        <Refetch
+          isFetching={ isFetching }
+          refetch={ refetch }
+        />
+
+        <ImportButton
+          disabled={ isFetching }
+          onImportSuccess={ handleReportImported }
+        />
+      </Flex>
 
       <IconTextButton
         data-testid="reports-editor-add-button"

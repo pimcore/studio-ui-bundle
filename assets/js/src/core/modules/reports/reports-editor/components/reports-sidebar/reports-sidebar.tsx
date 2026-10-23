@@ -18,6 +18,7 @@ import { SearchInput } from '@Pimcore/components/search-input/search-input'
 import { Toolbar } from '@Pimcore/modules/reports/reports-editor/components/reports-sidebar/components/toolbar/toolbar'
 import {
   type BundleCustomReportsConfigurationTreeNode,
+  type BundleCustomReportsDetails,
   type CustomReportsConfigGetTreeApiResponse
 } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { useFormModal } from '@Pimcore/components/modal/form-modal/hooks/use-form-modal'
@@ -27,6 +28,7 @@ import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { loadReportsMenuItems } from '@Pimcore/modules/reports/utils/reports-loader'
 import { isFolder } from '@Pimcore/modules/reports/reports-editor/components/helpers'
 import { TreeElement, type TreeDataItem } from '@Pimcore/components/tree-element/tree-element'
+import { downloadReportExport } from '@Pimcore/modules/reports/reports-editor/utils/config-transfer-urls'
 
 interface IReportsSidebarProps {
   isLoading: boolean
@@ -97,6 +99,19 @@ export const ReportsSidebar = ({ isLoading, refetch, isFetching, reportsList, ha
     })
   }
 
+  const handleReportImported = async (report: BundleCustomReportsDetails): Promise<void> => {
+    const { data: updatedData } = await refetch()
+    void loadReportsMenuItems()
+
+    const importedReport = findReportById(updatedData?.items, report.name)
+
+    !isUndefined(importedReport) && handleOpenReport(importedReport)
+  }
+
+  const handleReportExport = (report: BundleCustomReportsConfigurationTreeNode): void => {
+    downloadReportExport(report.id)
+  }
+
   const handleReportDelete = (report: BundleCustomReportsConfigurationTreeNode): void => {
     modal.confirm({
       title: t('delete'),
@@ -139,6 +154,7 @@ export const ReportsSidebar = ({ isLoading, refetch, isFetching, reportsList, ha
 
   const reportActions = [
     { key: 'clone', icon: 'copy-03', translationKey: 'clone' },
+    { key: 'export', icon: 'export', translationKey: 'export' },
     { key: 'delete', icon: 'trash', translationKey: 'delete' }
   ]
 
@@ -180,6 +196,10 @@ export const ReportsSidebar = ({ isLoading, refetch, isFetching, reportsList, ha
       handleReportClone(report)
     }
 
+    if (action === 'export') {
+      handleReportExport(report)
+    }
+
     if (action === 'delete') {
       handleReportDelete(report)
     }
@@ -189,6 +209,7 @@ export const ReportsSidebar = ({ isLoading, refetch, isFetching, reportsList, ha
     <ContentLayout renderToolbar={ (
       <Toolbar
         handleReportAdd={ handleReportAdd }
+        handleReportImported={ handleReportImported }
         isFetching={ isFetching }
         refetch={ refetch }
       />
