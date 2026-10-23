@@ -1501,7 +1501,6 @@ tree.actions.user: Bruker
 tree.actions.add-folder: Ny mappe
 tree.actions.add-tag: Ny tagg
 tree.actions.delete-tag: Slett
-tree.actions.rename-tag: Gi nytt navn
 tree.actions.role: Rolle
 tree.actions.add-role: Legg til rolle
 tree.actions.clone-role: Klon rolle
@@ -1513,7 +1512,6 @@ tag-configuration.name: Navn
 tag-configuration.parent-tag: Overordnet tagg
 tag-configuration.create: Opprett
 tag-configuration.save: Lagre
-tag-configuration.rename: Gi nytt navn til tagg
 tag-configuration.successful-add: Tagg lagt til
 tag-configuration.successful-update: Tagg oppdatert
 tag-configuration.successful-deletion: Tagg slettet
@@ -3062,3 +3060,9 @@ saved-search.delete.success: Lagret søk slettet
 saved-search.shared-modified.info: Du har gjort endringer i den opprinnelige konfigurasjonen. Siden den eies av noen andre, kan du lagre den som et nytt søk.
 saved-search.menu-shortcut-group: Menygruppe
 skip-to-content: Hopp til innhold
+tag-configuration.move-under: 'Flytt under'
+tag-configuration.move-search-placeholder: 'Søk etter en tagg'
+tree.actions.edit-tag: Rediger
+tag-configuration.edit-tag: 'Rediger "{{name}}"'
+tag-configuration.name-required: 'Skriv inn et taggnavn'
+tag-configuration.move-targets-failed: 'Listen over tagger kunne ikke lastes inn, så bare navnet kan endres'

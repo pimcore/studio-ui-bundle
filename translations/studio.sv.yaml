@@ -1501,7 +1501,6 @@ tree.actions.user: Användare
 tree.actions.add-folder: Ny mapp
 tree.actions.add-tag: Ny tagg
 tree.actions.delete-tag: Ta bort
-tree.actions.rename-tag: Byt namn
 tree.actions.role: Roll
 tree.actions.add-role: Lägg till roll
 tree.actions.clone-role: Klona roll
@@ -1513,7 +1512,6 @@ tag-configuration.name: Namn
 tag-configuration.parent-tag: Överordnad tagg
 tag-configuration.create: Skapa
 tag-configuration.save: Spara
-tag-configuration.rename: Byt namn på tagg
 tag-configuration.successful-add: Taggen har lagts till
 tag-configuration.successful-update: Taggen har uppdaterats
 tag-configuration.successful-deletion: Taggen har tagits bort
@@ -3062,3 +3060,9 @@ saved-search.delete.success: Sparad sökning borttagen
 saved-search.shared-modified.info: Du har gjort ändringar i den ursprungliga konfigurationen. Eftersom den ägs av någon annan kan du spara den som en ny sökning.
 saved-search.menu-shortcut-group: Menygrupp
 skip-to-content: Hoppa till innehållet
+tag-configuration.move-under: 'Flytta under'
+tag-configuration.move-search-placeholder: 'Sök efter en tagg'
+tree.actions.edit-tag: Redigera
+tag-configuration.edit-tag: 'Redigera "{{name}}"'
+tag-configuration.name-required: 'Ange ett taggnamn'
+tag-configuration.move-targets-failed: 'Listan över taggar kunde inte läsas in, så endast namnet kan ändras'

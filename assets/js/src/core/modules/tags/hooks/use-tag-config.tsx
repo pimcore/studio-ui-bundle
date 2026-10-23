@@ -31,6 +31,9 @@ interface UseTagConfigReturn {
   getTag: (key: string) => Tag | undefined
   rootTagFolder: Tag
   setTagFilter: (filter: string) => void
+  moveTargetTags: Tag[]
+  moveTargetTagsFetching: boolean
+  moveTargetTagsFailed: boolean
 }
 
 export const useTagConfig = (): UseTagConfigReturn => {
@@ -43,6 +46,19 @@ export const useTagConfig = (): UseTagConfigReturn => {
     page: 1,
     pageSize: 9999,
     filter
+  })
+
+  // The move destinations stay independent of the toolbar search: a tag the tree filter hides is
+  // still somewhere a tag can be moved to, and the modal's own search cannot bring back what the
+  // collection never held. While the toolbar is empty both queries share one cache entry.
+  const {
+    data: moveTargetTags,
+    isFetching: moveTargetTagsFetching,
+    isError: moveTargetTagsFailed
+  } = useTagGetCollectionQuery({
+    page: 1,
+    pageSize: 9999,
+    filter: ''
   })
 
   const [updateTag] = useTagUpdateByIdMutation()
@@ -159,6 +175,6 @@ export const useTagConfig = (): UseTagConfigReturn => {
   }
 
   return {
-    tags: tags?.items ?? [], setTagFilter: setFilter, tagsFetching, tagsLoading, handleTagUpdate, handleTagCreation, tagDeletion, getTag, rootTagFolder
+    tags: tags?.items ?? [], setTagFilter: setFilter, tagsFetching, tagsLoading, handleTagUpdate, handleTagCreation, tagDeletion, getTag, rootTagFolder, moveTargetTags: moveTargetTags?.items ?? [], moveTargetTagsFetching, moveTargetTagsFailed
   }
 }

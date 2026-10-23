@@ -1501,7 +1501,6 @@ tree.actions.user: Utente
 tree.actions.add-folder: Nuova cartella
 tree.actions.add-tag: Nuovo tag
 tree.actions.delete-tag: Elimina
-tree.actions.rename-tag: Rinomina
 tree.actions.role: Ruolo
 tree.actions.add-role: Aggiungi ruolo
 tree.actions.clone-role: Clona ruolo
@@ -1513,7 +1512,6 @@ tag-configuration.name: Nome
 tag-configuration.parent-tag: Tag genitore
 tag-configuration.create: Crea
 tag-configuration.save: Salva
-tag-configuration.rename: Rinomina tag
 tag-configuration.successful-add: Tag aggiunto con successo
 tag-configuration.successful-update: Tag aggiornato con successo
 tag-configuration.successful-deletion: Tag eliminato con successo
@@ -3062,3 +3060,9 @@ saved-search.delete.success: Ricerca salvata eliminata
 saved-search.shared-modified.info: Hai apportato modifiche alla configurazione originale. Poiché appartiene a qualcun altro, puoi salvarla come nuova ricerca.
 saved-search.menu-shortcut-group: Gruppo di menu
 skip-to-content: Vai al contenuto
+tag-configuration.move-under: 'Sposta sotto'
+tag-configuration.move-search-placeholder: 'Cerca un tag'
+tree.actions.edit-tag: Modifica
+tag-configuration.edit-tag: 'Modifica "{{name}}"'
+tag-configuration.name-required: 'Inserire un nome per il tag'
+tag-configuration.move-targets-failed: "Non è stato possibile caricare l'elenco dei tag, quindi è possibile modificare solo il nome"

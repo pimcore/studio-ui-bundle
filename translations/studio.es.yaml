@@ -1501,7 +1501,6 @@ tree.actions.user: Usuario
 tree.actions.add-folder: Nueva carpeta
 tree.actions.add-tag: Nueva etiqueta
 tree.actions.delete-tag: Eliminar
-tree.actions.rename-tag: Renombrar
 tree.actions.role: Rol
 tree.actions.add-role: Añadir rol
 tree.actions.clone-role: Clonar rol
@@ -1513,7 +1512,6 @@ tag-configuration.name: Nombre
 tag-configuration.parent-tag: Etiqueta padre
 tag-configuration.create: Crear
 tag-configuration.save: Guardar
-tag-configuration.rename: Renombrar etiqueta
 tag-configuration.successful-add: La etiqueta se ha añadido con éxito
 tag-configuration.successful-update: La etiqueta se ha actualizado con éxito
 tag-configuration.successful-deletion: La etiqueta se ha eliminado con éxito
@@ -3062,3 +3060,9 @@ saved-search.delete.success: Búsqueda guardada eliminada
 saved-search.shared-modified.info: Has realizado modificaciones en la configuración original. Como pertenece a otra persona, puedes guardarla como una nueva búsqueda.
 saved-search.menu-shortcut-group: Grupo de menú
 skip-to-content: Saltar al contenido
+tag-configuration.move-under: 'Mover debajo de'
+tag-configuration.move-search-placeholder: 'Buscar una etiqueta'
+tree.actions.edit-tag: Editar
+tag-configuration.edit-tag: 'Editar "{{name}}"'
+tag-configuration.name-required: 'Introduzca un nombre de etiqueta'
+tag-configuration.move-targets-failed: 'No se pudo cargar la lista de etiquetas, por lo que solo se puede cambiar el nombre'
