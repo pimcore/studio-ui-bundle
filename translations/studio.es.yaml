@@ -1342,10 +1342,12 @@ element.tree.refresh: Actualizar
 element.new-folder: Nueva carpeta
 element.new-folder.validation: Introduzca un nombre válido
 element.rename: Renombrar
+element.rename-folder: Renombrar carpeta
 element.rename.label: Introduzca el nuevo nombre
 element.rename.validation: Introduzca un nombre válido
 element.share-via-notification: Compartir mediante notificaciones
 element.delete: Eliminar
+element.delete-folder: Eliminar carpeta
 element.delete-multiple: 'Eliminar {{count}} elementos'
 element.delete.confirmation.title: Eliminar elemento
 element.delete.confirmation.text: ¿Realmente desea eliminar este elemento?

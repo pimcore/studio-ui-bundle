@@ -1342,10 +1342,12 @@ element.tree.refresh: Vernieuwen
 element.new-folder: Nieuwe map
 element.new-folder.validation: Voer een geldige naam in
 element.rename: Hernoemen
+element.rename-folder: Map hernoemen
 element.rename.label: Voer de nieuwe naam in
 element.rename.validation: Voer een geldige naam in
 element.share-via-notification: Delen via meldingen
 element.delete: Verwijderen
+element.delete-folder: Map verwijderen
 element.delete-multiple: "{{count}} elementen verwijderen"
 element.delete.confirmation.title: Item verwijderen
 element.delete.confirmation.text: Weet je echt zeker dat je dit item wilt verwijderen?

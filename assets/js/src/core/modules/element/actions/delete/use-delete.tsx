@@ -162,7 +162,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
     return {
       label: deletableNodes.length > 1
         ? t('element.delete-multiple', { count: deletableNodes.length })
-        : t('element.delete'),
+        : t(isBatchDelete || node.type !== 'folder' ? 'element.delete' : 'element.delete-folder'),
       key: ContextMenuActionName.delete,
       icon: <Icon value={ 'trash' } />,
       hidden: !isTreeActionAllowed(TreePermission.Delete) || !checkElementPermission(node.permissions, 'delete') || node.isLocked,
@@ -182,7 +182,7 @@ export const useDelete = (elementType: ElementType, cacheKey?: string): UseDelet
 
   const deleteContextMenuItem = (node: Element, onFinish?: () => void): ItemType => {
     return {
-      label: t('element.delete'),
+      label: t(node.type === 'folder' ? 'element.delete-folder' : 'element.delete'),
       key: ContextMenuActionName.delete,
       isLoading,
       icon: <Icon value={ 'trash' } />,

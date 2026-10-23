@@ -1342,10 +1342,12 @@ element.tree.refresh: Aktualisieren
 element.new-folder: Neuer Ordner
 element.new-folder.validation: Bitte geben Sie einen gültigen Namen ein
 element.rename: Umbenennen
+element.rename-folder: Ordner umbenennen
 element.rename.label: Bitte geben Sie den neuen Namen ein
 element.rename.validation: Bitte geben Sie einen gültigen Namen ein
 element.share-via-notification: Über Benachrichtigungen teilen
 element.delete: Löschen
+element.delete-folder: Ordner löschen
 element.delete-multiple: '{{count}} Elemente löschen'
 element.delete.confirmation.title: Element löschen
 element.delete.confirmation.text: Möchten Sie dieses Element wirklich löschen?
