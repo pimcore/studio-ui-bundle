@@ -8,9 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { SplitLayout, type SplitLayoutProps } from '@Pimcore/components/split-layout/split-layout'
+import { type SplitLayoutProps } from '@Pimcore/components/split-layout/split-layout'
+import { PageLayout } from '@Pimcore/components/page-layout/page-layout'
 import React from 'react'
 
+/**
+ * @deprecated Use `PageLayoutConfigProps` (with `variant: 'config'`) instead.
+ * This type is kept for backward compatibility and will be removed in the next major version.
+ */
 export interface ConfigLayoutProps extends SplitLayoutProps {}
 
 /**
@@ -18,10 +23,15 @@ export interface ConfigLayoutProps extends SplitLayoutProps {}
  *
  * This component should be used exclusively for configuration screens to maintain
  * consistency across all configuration interfaces. It provides a standardized
- * 25/75 split layout with:
- * - Left panel (25% width, 170px min, 280px max): Configuration navigation/options
- * - Right panel (75% width): Main configuration content
- * - Built-in divider and optional toolbar support
+ * 20/80 split layout with:
+ * - Left panel (20% width, 170px min, no max): Configuration navigation/options
+ * - Right panel (80% width): Main configuration content
+ * - Built-in divider and toolbar alignment (`withDivider` and `withToolbar` default to true)
+ * - `leftItemFullWidth` and `rightItemFullWidth` are ignored
+ *
+ * @deprecated Use `PageLayout` with `variant="config"` instead; the other props and defaults are the same,
+ * and it also supports the full-width flags. This alias is kept for backward compatibility and will be
+ * removed in the next major version.
  *
  * @example
  * ```tsx
@@ -37,27 +47,17 @@ export const ConfigLayout = (props: ConfigLayoutProps): React.JSX.Element => {
   const {
     leftItem,
     rightItem,
-    withDivider = true,
-    resizeAble = false,
-    withToolbar = true
+    withDivider,
+    resizeAble,
+    withToolbar
   } = props
 
-  const mergedLeftItem = {
-    size: 20,
-    minSize: 170,
-    ...leftItem
-  }
-
-  const mergedRightItem = {
-    size: 80,
-    ...rightItem
-  }
-
   return (
-    <SplitLayout
-      leftItem={ mergedLeftItem }
+    <PageLayout
+      leftItem={ leftItem }
       resizeAble={ resizeAble }
-      rightItem={ mergedRightItem }
+      rightItem={ rightItem }
+      variant="config"
       withDivider={ withDivider }
       withToolbar={ withToolbar }
     />

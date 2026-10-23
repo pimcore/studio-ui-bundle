@@ -17,9 +17,14 @@ const config: Meta = {
   title: 'Components/Layout/SplitLayout',
   component: SplitLayout,
   parameters: {
-    layout: 'fullscreen'
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        component: '**Deprecated:** use `PageLayout` with `variant="split"` instead (Components/Layout/PageLayout).'
+      }
+    }
   },
-  tags: ['autodocs']
+  tags: ['autodocs', 'deprecated']
 }
 
 export default config
