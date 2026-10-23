@@ -18,6 +18,7 @@ jest.mock('@Pimcore/modules/element/dynamic-types/utils/column-helper', () => ({
 jest.mock('@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/data-component', () => ({ DataComponent: () => null }))
 jest.mock('@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/edit-form-provider/edit-form-provider', () => ({ EditFormProvider: () => null }))
 jest.mock('@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/save-provider/save-provider', () => ({ SaveProvider: () => null }))
+jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/suppress-empty-field-label-provider', () => ({ SuppressEmptyFieldLabelProvider: () => null }))
 
 const { DynamicTypeObjectDataEncryptedField } = jest.requireActual('./dynamic-type-object-data-encrypted-field')
 
@@ -42,5 +43,15 @@ describe('DynamicTypeObjectDataEncryptedField.getObjectDataComponent', () => {
     const element = type.getObjectDataComponent({ ...definition, delegate: { title: 'delegate_title' } })
 
     expect(element.props.title).toBe('encrypted_title')
+  })
+
+  it('leaves the wrapped field without a label in the version view, which renders the title itself', () => {
+    const element = type.getVersionObjectDataComponent({ ...definition, delegate: { title: 'delegate_title' } })
+    const suppressProvider = element.props.children.props.children
+    const dataComponent = suppressProvider.props.children
+
+    expect(suppressProvider.type.name).toBe('SuppressEmptyFieldLabelProvider')
+    expect(dataComponent.props.title).toBe('')
+    expect(dataComponent.props.tooltip).toBe('')
   })
 })

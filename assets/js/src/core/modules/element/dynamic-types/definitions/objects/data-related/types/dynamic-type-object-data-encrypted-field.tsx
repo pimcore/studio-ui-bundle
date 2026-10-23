@@ -20,6 +20,9 @@ import {
   type GetGridCellDefinitionProps,
   type WithEditModalGridCellDefinition
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/dynamic-type-object-data-abstract'
+import {
+  SuppressEmptyFieldLabelProvider
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/suppress-empty-field-label-provider'
 import { getDefaultGridColumnWidthFromDynamicObjectType } from '@Pimcore/modules/element/dynamic-types/utils/column-helper'
 import type { FormItemProps } from 'antd/es/form/FormItem'
 import React from 'react'
@@ -51,7 +54,10 @@ export class DynamicTypeObjectDataEncryptedField extends DynamicTypeObjectDataAb
     return (
       <SaveProvider>
         <EditFormProvider>
-          {this.getObjectDataComponent(props)}
+          {/* the version view renders the field title itself, so the wrapped field gets no label of its own */}
+          <SuppressEmptyFieldLabelProvider>
+            {this.getObjectDataComponent({ ...props, title: '', tooltip: '' })}
+          </SuppressEmptyFieldLabelProvider>
         </EditFormProvider>
       </SaveProvider>
     )
