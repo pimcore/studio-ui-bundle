@@ -26,7 +26,10 @@ export interface EditTagFormValues {
 
 export interface EditTagModalProps {
   tag: Tag
+  /** Every tag, independent of the tree filter: a tag the tree hides is still a destination. */
   tags: Tag[]
+  moveTargetsLoading: boolean
+  moveTargetsFailed: boolean
   rootTag: Tag
   onCancel: () => void
   onSave: (values: EditTagFormValues) => Promise<void>
@@ -37,7 +40,15 @@ export interface EditTagModalProps {
  * tree offers it through dragging only. Every tag is a possible destination, listed by its full
  * path, so a tag can be moved under any tag rather than only under one that already has children.
  */
-export const EditTagModal = ({ tag, tags, rootTag, onCancel, onSave }: EditTagModalProps): React.JSX.Element => {
+export const EditTagModal = ({
+  tag,
+  tags,
+  moveTargetsLoading,
+  moveTargetsFailed,
+  rootTag,
+  onCancel,
+  onSave
+}: EditTagModalProps): React.JSX.Element => {
   const { t } = useTranslation()
   const [form] = Form.useForm<EditTagFormValues>()
   const [saving, setSaving] = useState<boolean>(false)
@@ -99,16 +110,20 @@ export const EditTagModal = ({ tag, tags, rootTag, onCancel, onSave }: EditTagMo
           name="name"
           rules={ [{ required: true, message: t('tag-configuration.name-required') }] }
         >
-          <Input />
+          <Input onPressEnter={ handleSave } />
         </Form.Item>
 
         <Form.Item
+          help={ moveTargetsFailed ? t('tag-configuration.move-targets-failed') : undefined }
           label={ t('tag-configuration.move-under') }
           name="parentId"
+          validateStatus={ moveTargetsFailed ? 'error' : undefined }
         >
           <Select
             className="w-full"
+            disabled={ moveTargetsLoading || moveTargetsFailed }
             filterOption={ matchesMoveTarget }
+            loading={ moveTargetsLoading }
             options={ options }
             placeholder={ t('tag-configuration.move-search-placeholder') }
             showSearch

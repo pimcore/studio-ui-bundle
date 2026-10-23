@@ -3065,3 +3065,4 @@ tag-configuration.move-search-placeholder: 'Zoek een tag'
 tree.actions.edit-tag: Bewerken
 tag-configuration.edit-tag: '"{{name}}" bewerken'
 tag-configuration.name-required: 'Voer een tagnaam in'
+tag-configuration.move-targets-failed: 'De lijst met tags kon niet worden geladen, dus alleen de naam kan worden gewijzigd'

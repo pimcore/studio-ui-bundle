@@ -3065,3 +3065,4 @@ tag-configuration.move-search-placeholder: 'Cerca un tag'
 tree.actions.edit-tag: Modifica
 tag-configuration.edit-tag: 'Modifica "{{name}}"'
 tag-configuration.name-required: 'Inserire un nome per il tag'
+tag-configuration.move-targets-failed: "Non è stato possibile caricare l'elenco dei tag, quindi è possibile modificare solo il nome"

@@ -3065,3 +3065,4 @@ tag-configuration.move-search-placeholder: 'Sök efter en tagg'
 tree.actions.edit-tag: Redigera
 tag-configuration.edit-tag: 'Redigera "{{name}}"'
 tag-configuration.name-required: 'Ange ett taggnamn'
+tag-configuration.move-targets-failed: 'Listan över taggar kunde inte läsas in, så endast namnet kan ändras'

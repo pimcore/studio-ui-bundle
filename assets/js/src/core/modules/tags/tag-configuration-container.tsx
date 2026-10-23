@@ -52,7 +52,10 @@ const TagConfigurationContainer = (): React.JSX.Element => {
     tagDeletion,
     setTagFilter,
     handleTagUpdate,
-    handleTagCreation
+    handleTagCreation,
+    moveTargetTags,
+    moveTargetTagsFetching,
+    moveTargetTagsFailed
   } = useTagConfig()
   const { confirm, input } = useFormModal()
 
@@ -211,6 +214,8 @@ const TagConfigurationContainer = (): React.JSX.Element => {
 
       { tagToEdit !== undefined && (
         <EditTagModal
+          moveTargetsFailed={ moveTargetTagsFailed }
+          moveTargetsLoading={ moveTargetTagsFetching }
           onCancel={ () => { setTagToEdit(undefined) } }
           onSave={ async ({ name, parentId }: EditTagFormValues) => {
             setLoadingTagKey(tagToEdit.id.toString())
@@ -219,7 +224,7 @@ const TagConfigurationContainer = (): React.JSX.Element => {
           } }
           rootTag={ rootTagFolder }
           tag={ tagToEdit }
-          tags={ tags }
+          tags={ moveTargetTags }
         />
       ) }
     </ContentLayout>
