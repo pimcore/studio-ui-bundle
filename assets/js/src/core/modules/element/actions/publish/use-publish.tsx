@@ -23,8 +23,8 @@ import { ContextMenuActionName } from '..'
 import { checkElementPermission } from '@sdk/modules/element'
 
 export interface PublishHookReturn {
-  publishTreeContextMenuItem: (node: TreeNodeProps, onFinish?: () => void) => ItemType
-  publishNode: (node: TreeNodeProps | Element, onFinish?: () => void) => void
+  publishTreeContextMenuItem: (node: TreeNodeProps, onFinish?: (isSuccessful: boolean) => void) => ItemType
+  publishNode: (node: TreeNodeProps | Element, onFinish?: (isSuccessful: boolean) => void) => void
 }
 
 export const usePublish = (elementType: ElementType): PublishHookReturn => {
@@ -39,12 +39,12 @@ export const usePublish = (elementType: ElementType): PublishHookReturn => {
            node.isPublished === true
   }
 
-  const publishNode = (node: TreeNodeProps | Element, onFinish?: () => void): void => {
+  const publishNode = (node: TreeNodeProps | Element, onFinish?: (isSuccessful: boolean) => void): void => {
     const nodeId = typeof node.id === 'string' ? parseInt(node.id) : node.id
     executeElementTask(elementType, nodeId, SaveTaskType.Publish, onFinish)
   }
 
-  const publishTreeContextMenuItem = (node: TreeNodeProps, onFinish?: () => void): ItemType => {
+  const publishTreeContextMenuItem = (node: TreeNodeProps, onFinish?: (isSuccessful: boolean) => void): ItemType => {
     return {
       label: t('element.publish'),
       key: ContextMenuActionName.publish,
