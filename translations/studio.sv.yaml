@@ -385,6 +385,7 @@ grid.advanced-column.advancedColumns.group.date: Datum
 grid.advanced-column.advancedColumns.group.string: Sträng
 grid.advanced-column.advancedColumns.group.other: Övrigt
 grid.advanced-column.title.placeholder: Lägg till en titel
+grid.advanced-column.expand: Expandera
 grid.advanced-column.advancedColumns: Källfält
 grid.advanced-column.advancedColumns.add: Lägg till ett källfält
 grid.advanced-column.transformers: Transformerare
