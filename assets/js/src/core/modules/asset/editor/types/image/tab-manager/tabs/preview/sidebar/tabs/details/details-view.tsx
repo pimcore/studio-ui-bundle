@@ -16,7 +16,7 @@ import { Select } from '@Pimcore/components/select/select'
 import { Button } from '@Pimcore/components/button/button'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
-import { Header } from '@Pimcore/components/header/header'
+import { Title } from '@Pimcore/components/title/title'
 import { useDetailsViewData } from './hooks/use-details-view-data'
 import { useStyle } from './details.styles'
 import { CollapseItem } from '@Pimcore/components/collapse/item/collapse-item'
@@ -189,9 +189,9 @@ export const AssetEditorSidebarDetailsView = ({
     <Content
       className={ styles.sidebarContentEntry }
       padded
-      padding={ { top: 'none', x: 'small', bottom: 'mini' } }
+      padding={ { top: 'extra-small', x: 'small', bottom: 'extra-small' } }
     >
-      <Header title={ t('asset.sidebar.details') } />
+      <Title>{ t('asset.sidebar.details') }</Title>
 
       <div className={ 'sidebar__content-entry-content' }>
         <div className={ styles.sidebarContentDimensions }>

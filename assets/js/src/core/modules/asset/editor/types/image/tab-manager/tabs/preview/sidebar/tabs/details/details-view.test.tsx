@@ -57,8 +57,8 @@ jest.mock('@Pimcore/components/content/content', () => ({
   Content: ({ children }: any) => <div>{children}</div>
 }))
 
-jest.mock('@Pimcore/components/header/header', () => ({
-  Header: ({ title }: any) => <h2>{title}</h2>
+jest.mock('@Pimcore/components/title/title', () => ({
+  Title: ({ children }: any) => <h2>{children}</h2>
 }))
 
 jest.mock('@Pimcore/components/collapse/item/collapse-item', () => ({
