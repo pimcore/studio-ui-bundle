@@ -8,35 +8,19 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { forwardRef } from 'react'
-import { useStyles } from './split-layout-item.styles'
+import type React from 'react'
+import { PageLayoutPane, type PageLayoutPaneProps } from '../../../page-layout/components/pane/page-layout-pane'
 
-export interface SplitLayoutItemProps {
-  size?: number
-  children: React.ReactNode
-  minSize?: number
-  maxSize?: number
-}
+/**
+ * @deprecated Use `PageLayoutPaneProps` instead, the item type of the `split` and `config` variants of `PageLayout`.
+ * This type is kept for backward compatibility and will be removed in the next major version.
+ */
+export interface SplitLayoutItemProps extends PageLayoutPaneProps {}
 
-const SplitLayoutItem = (props: SplitLayoutItemProps, ref): React.JSX.Element => {
-  const { children, size = 50, minSize, maxSize } = props
-  const { styles } = useStyles()
-
-  return (
-    <div
-      className={ styles.splitLayoutItem }
-      ref={ ref }
-      style={ {
-        width: `${size}%`,
-        minWidth: minSize !== undefined ? `${minSize}px` : 'auto',
-        maxWidth: maxSize !== undefined ? `${maxSize}px` : 'auto'
-      } }
-    >
-      {children}
-    </div>
-  )
-}
-
-const forwardedComponent = forwardRef(SplitLayoutItem)
+/**
+ * @deprecated Use `PageLayout` with `variant="split"` instead; it renders its items itself.
+ * This alias is kept for backward compatibility and will be removed in the next major version.
+ */
+const forwardedComponent: React.ForwardRefExoticComponent<SplitLayoutItemProps & React.RefAttributes<unknown>> = PageLayoutPane
 
 export { forwardedComponent as SplitLayoutItem }
