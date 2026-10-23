@@ -12,6 +12,7 @@ import React, { useEffect } from 'react'
 import { LocalizedFieldsProvider } from '@Pimcore/components/form/localisation/localized-fields/provider/localized-fields-provider/localized-fields-provider'
 import { type AbstractObjectDataDefinition } from '../../../../../definitions/objects/data-related/dynamic-type-object-data-abstract'
 import { type AbstractObjectLayoutDefinition } from '../../../../../definitions/objects/layout-related/dynamic-type-object-layout-abstract'
+import { BaseView } from '../../../../../definitions/objects/layout-related/views/base-view'
 import { ObjectComponent } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component'
 import { Space } from '@Pimcore/components/space/space'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
@@ -21,10 +22,11 @@ import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/t
 // Props for the legacy object definitions version
 export interface ObjectLocalizedFieldsProps extends AbstractObjectDataDefinition {
   children?: Array<AbstractObjectDataDefinition | AbstractObjectLayoutDefinition>
+  border?: boolean
 }
 
 // Legacy ObjectLocalizedFields component - supports object definition arrays
-export const ObjectLocalizedFields = ({ children, noteditable, className }: ObjectLocalizedFieldsProps): React.JSX.Element => {
+export const ObjectLocalizedFields = ({ children, noteditable, className, title, border }: ObjectLocalizedFieldsProps): React.JSX.Element => {
   const { currentLanguage, hasLocalizedFields, setHasLocalizedFields } = useLanguageSelection()
 
   const isParentNotEditable = noteditable === true
@@ -37,20 +39,28 @@ export const ObjectLocalizedFields = ({ children, noteditable, className }: Obje
     <LocalizedFieldsProvider locales={ [currentLanguage] }>
       <CombinedFieldNameProvider combinedFieldNameParent={ ['localizedfields'] }>
         <Form.Group name={ 'localizedfields' } >
-          <Space
-            className="w-full"
-            direction='vertical'
-            size='small'
+          {/* Localizedfields::$title and ::$border are part of the class definition;
+              BaseView renders the children bare when neither is set. */}
+          <BaseView
+            border={ border }
+            theme='default'
+            title={ title }
           >
-            {children?.map((child, index) => (
-              <ObjectComponent
-                key={ index }
-                { ...child }
-                className={ className }
-                noteditable={ isParentNotEditable || child.noteditable }
-              />
-            ))}
-          </Space>
+            <Space
+              className="w-full"
+              direction='vertical'
+              size='small'
+            >
+              {children?.map((child, index) => (
+                <ObjectComponent
+                  key={ index }
+                  { ...child }
+                  className={ className }
+                  noteditable={ isParentNotEditable || child.noteditable }
+                />
+              ))}
+            </Space>
+          </BaseView>
         </Form.Group>
       </CombinedFieldNameProvider>
     </LocalizedFieldsProvider>
