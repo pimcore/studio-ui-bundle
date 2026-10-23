@@ -8,19 +8,12 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => jest.requireActual('@test-utils/mocks/create-styles-mock'))
-
-// The resize icon resolves its registry through the DI container, which only exists in the running app.
-jest.mock('@Pimcore/components/icon-button/icon-button', () => ({ IconButton: () => null }))
-
-// eslint-disable-next-line import/first
 import React from 'react'
-// eslint-disable-next-line import/first
 import { fireEvent, render, screen } from '@testing-library/react'
-// eslint-disable-next-line import/first
 import { mockSplitLayoutGeometry } from '@test-utils/mocks/split-layout-geometry'
-// eslint-disable-next-line import/first
 import { ConfigLayout } from './config-layout'
+
+jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => jest.requireActual('@test-utils/mocks/create-styles-mock'))
 
 const tree = <p>tree</p>
 const form = <p>form</p>

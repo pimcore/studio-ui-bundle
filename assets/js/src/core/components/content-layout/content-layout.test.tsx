@@ -8,14 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => jest.requireActual('@test-utils/mocks/create-styles-mock'))
-
-// eslint-disable-next-line import/first
 import React from 'react'
-// eslint-disable-next-line import/first
 import { render } from '@testing-library/react'
-// eslint-disable-next-line import/first
 import { ContentLayout } from './content-layout'
+
+jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => jest.requireActual('@test-utils/mocks/create-styles-mock'))
 
 // The snapshots were taken from the ContentLayout implementation of 2026.x before it became a PageLayout wrapper.
 describe('ContentLayout (deprecated wrapper, parity with 2026.x)', () => {

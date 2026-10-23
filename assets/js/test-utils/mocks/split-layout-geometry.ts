@@ -11,7 +11,7 @@
 const toPx = (value: string): number | undefined => value.endsWith('px') ? parseFloat(value) : undefined
 
 const toRect = (width: number): DOMRect => ({
-  x: 0, y: 0, top: 0, left: 0, bottom: 0, right: width, width, height: 0, toJSON: () => ({})
+  width, height: 0, x: 0, y: 0, top: 0, left: 0, bottom: 0, right: width, toJSON: () => ({})
 })
 
 /**
