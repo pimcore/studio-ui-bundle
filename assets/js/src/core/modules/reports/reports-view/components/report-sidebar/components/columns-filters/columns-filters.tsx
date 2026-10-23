@@ -107,7 +107,10 @@ export const ColumnsFilters = (): React.JSX.Element => {
         </Toolbar>
       }
     >
-      <Content padded>
+      <Content
+        padded
+        padding={ { top: 'extra-small', x: 'small', bottom: 'small' } }
+      >
         <Title>{t('reports.field-filters')}</Title>
 
         { fieldFilters.length === 0

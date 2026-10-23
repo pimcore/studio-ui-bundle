@@ -111,7 +111,10 @@ export const ColumnsConfiguration = (): React.JSX.Element => {
         </Toolbar>
       }
     >
-      <Content padded>
+      <Content
+        padded
+        padding={ { top: 'extra-small', x: 'small', bottom: 'small' } }
+      >
         <Title>{t('reports.grid-config.title-columns')}</Title>
         <Space
           direction='vertical'
