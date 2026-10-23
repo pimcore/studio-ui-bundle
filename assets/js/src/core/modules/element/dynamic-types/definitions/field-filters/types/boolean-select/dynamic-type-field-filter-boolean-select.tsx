@@ -22,6 +22,11 @@ export class DynamicTypeFieldFilterBooleanSelect extends DynamicTypeFieldFilterA
     return FieldFilterFrontendType.Boolean
   }
 
+  // "Empty" is already one of its options
+  isEmptyFilterAvailable (): boolean {
+    return false
+  }
+
   getFieldFilterComponent (): ReactElement<DynamicTypeFieldFilterAbstract> {
     return (
       <DynamicTypeFieldFilterBooleanSelectComponent />

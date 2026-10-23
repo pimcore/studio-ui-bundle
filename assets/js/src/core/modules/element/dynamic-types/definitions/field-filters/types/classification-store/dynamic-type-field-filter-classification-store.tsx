@@ -28,6 +28,11 @@ export class DynamicTypeFieldFilterClassificationStore extends DynamicTypeFieldF
     return true
   }
 
+  // Its fields are addressed by group and key, which a "no value" search does not cover
+  isEmptyFilterAvailable (): boolean {
+    return false
+  }
+
   getFieldFilterComponent (props: DynamicTypeFieldFilterObjectAdapterProps): ReactElement<DynamicTypeFieldFilterObjectAdapterProps> {
     // The classification store filter only takes a single string, whatever the host supports.
     return (

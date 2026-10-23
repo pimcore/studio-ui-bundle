@@ -243,6 +243,7 @@ import { DynamicTypeGridCellSystemDatetime } from '@Pimcore/modules/element/dyna
 import { DynamicTypeGridCellSystemInteger } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-integer/dynamic-type-grid-cell-system-integer'
 import { DynamicTypeGridCellSystemUser } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/system-user/dynamic-type-grid-cell-system-user'
 import { DynamicTypeFieldFilterNone } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/none/dynamic-type-field-filter-none'
+import { DynamicTypeFieldFilterEmptyOnly } from '@Pimcore/modules/element/dynamic-types/definitions/field-filters/types/empty-only/dynamic-type-field-filter-empty-only'
 import { DynamicTypeDocumentPage } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-page'
 import { DynamicTypeDocumentRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/document/dynamic-type-document-registry'
 import { DynamicTypeDocumentEmail } from '@Pimcore/modules/element/dynamic-types/definitions/document/types/dynamic-type-document-email'
@@ -478,6 +479,7 @@ export function installCoreServices (container: Container): void {
   container.bind(serviceIds['DynamicTypes/FieldFilter/DataObjectObjectBrick']).to(DynamicTypeFieldFilterDataObjectObjectBrick).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldFilter/String']).to(DynamicTypeFieldFilterString).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldFilter/None']).to(DynamicTypeFieldFilterNone).inSingletonScope()
+  container.bind(serviceIds['DynamicTypes/FieldFilter/EmptyOnly']).to(DynamicTypeFieldFilterEmptyOnly).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldFilter/Id']).to(DynamicTypeFieldFilterId).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldFilter/Number']).to(DynamicTypeFieldFilterNumber).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/FieldFilter/FileSize']).to(DynamicTypeFieldFilterFileSize).inSingletonScope()

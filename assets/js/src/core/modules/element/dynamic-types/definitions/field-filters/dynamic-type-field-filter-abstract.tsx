@@ -46,11 +46,34 @@ export abstract class DynamicTypeFieldFilterAbstract implements DynamicTypeAbstr
     return true
   }
 
+  /**
+   * Whether the field can be searched for "no value" / "any value". That does not need a value filter, so by default
+   * it is the case wherever the value filter is available.
+   */
+  isEmptyFilterAvailable (subtype: string | null): boolean {
+    return this.isFilterAvailable(subtype)
+  }
+
   transformFilterToApiRequest (filter: FieldFilter): FieldFilter {
     return {
       ...filter,
       key: filter.meta?.filters?.key ?? filter.key,
       type: this.getFieldFilterType()
+    }
+  }
+
+  /**
+   * The request for a filter that carries an operator. It has no value, only the type (it tells text fields apart,
+   * where an empty string counts as no value as well).
+   */
+  transformOperatorFilterToApiRequest (filter: FieldFilter): FieldFilter {
+    return {
+      key: filter.meta?.filters?.key ?? filter.key,
+      type: this.getFieldFilterType() !== '' ? this.getFieldFilterType() : filter.type,
+      operator: filter.operator,
+      locale: filter.locale,
+      filterValue: null,
+      meta: filter.meta
     }
   }
 }

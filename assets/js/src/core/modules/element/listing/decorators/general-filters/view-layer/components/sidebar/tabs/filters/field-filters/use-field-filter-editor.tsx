@@ -23,6 +23,23 @@ import { TabId } from '@Pimcore/modules/element/dynamic-types/definitions/object
 import { type ClassificationStoreModalProps } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/components/classification-store-modal/classification-store-modal'
 import { hasFieldDefinition } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/has-field-definition'
 import { useFilterableColumns } from '../../../../../../search-modes/use-filterable-columns'
+import { type FilterOperator } from '@Pimcore/components/dynamic-filter/filter-operator'
+
+const toFieldFilterType = (type: unknown): DynamicTypeFieldFilterAbstract | null => {
+  if (type === null || type === undefined) {
+    return null
+  }
+
+  if (type instanceof DynamicTypeFieldFilterAbstract) {
+    return type
+  }
+
+  if (typeof type === 'object' && 'dynamicTypeFieldFilterType' in type) {
+    return type.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
+  }
+
+  return null
+}
 
 export interface UseFieldFilterEditorProps {
   /**
@@ -69,6 +86,7 @@ export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): U
         id: `${filter.key}`,
         translationKey: filter.meta?.translationKey ?? filter.key,
         data: filter.filterValue,
+        operator: filter.operator,
         type: filter.type,
         frontendType: currentColumn?.frontendType,
         localizable: currentColumn?.localizable,
@@ -86,6 +104,7 @@ export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): U
   const toFieldFilters = (data: FieldFiltersProps['data']): FieldFilter[] => data.map((filter) => ({
     key: filter.id,
     filterValue: filter.data,
+    operator: filter.operator,
     type: filter.type,
     locale: filter.locale,
     meta: {
@@ -167,25 +186,34 @@ export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): U
       return
     }
 
-    setFilters((prevFilters) => [
-      ...prevFilters,
-      {
-        data: undefined,
-        translationKey: t(resolveColumnTranslationKey(column)),
-        id: column.key,
-        type: column.type,
-        frontendType: column.frontendType,
-        localizable: column.localizable,
-        locale: column.locale,
-        config: column.config,
-        nameTooltip: column?.group !== undefined ? Array.isArray(column.group) ? column.group.join('/') : undefined : undefined
-      }
-    ])
+    // Fields without a value filter can only be searched for "no value" / "any value"
+    const fieldFilterType = toFieldFilterType(getType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.type, column.frontendType!] }))
+    const operator: FilterOperator | undefined = fieldFilterType?.isFilterAvailable(column.frontendType ?? null) === false ? 'empty' : undefined
+
+    const newFilter: FieldFiltersProps['data'][number] = {
+      data: undefined,
+      operator,
+      translationKey: t(resolveColumnTranslationKey(column)),
+      id: column.key,
+      type: column.type,
+      frontendType: column.frontendType,
+      localizable: column.localizable,
+      locale: column.locale,
+      config: column.config,
+      nameTooltip: column?.group !== undefined ? Array.isArray(column.group) ? column.group.join('/') : undefined : undefined
+    }
+
+    const nextFilters = [...filters, newFilter]
+    setFilters(nextFilters)
+
+    // A filter that already has its operator is complete, so it has to reach the draft filters right away. Any other
+    // filter only gets there once its value is entered.
+    if (operator !== undefined) {
+      setFieldFilters(toFieldFilters(nextFilters))
+    }
   }
 
   const availableFilterColumns = useMemo(() => availableColumns.filter((column) => {
-    let dynamicType = getType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.type, column.frontendType!] })
-
     if (column.type === 'dataobject.classificationstore' && classDefinitionContext !== undefined) {
       return true
     }
@@ -194,19 +222,15 @@ export const useFieldFilterEditor = ({ onCommit }: UseFieldFilterEditorProps): U
       return false
     }
 
+    const dynamicType = toFieldFilterType(getType({ target: 'FIELD_FILTER', dynamicTypeIds: [column.type, column.frontendType!] }))
+
     if (dynamicType === null) {
       return false
     }
 
-    if (!(dynamicType instanceof DynamicTypeFieldFilterAbstract)) {
-      if ('dynamicTypeFieldFilterType' in dynamicType) {
-        dynamicType = dynamicType.dynamicTypeFieldFilterType as DynamicTypeFieldFilterAbstract
-      } else {
-        return false
-      }
-    }
-
-    return (dynamicType as DynamicTypeFieldFilterAbstract).isFilterAvailable(column.frontendType ?? null)
+    // This panel applies the empty operator, so a field without a value filter is available as well as soon as it can
+    // be searched for "no value"
+    return dynamicType.isFilterAvailable(column.frontendType ?? null) || dynamicType.isEmptyFilterAvailable(column.frontendType ?? null)
   }), [availableColumns, filters])
 
   const columnGroups = useMemo(

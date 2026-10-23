@@ -22,6 +22,11 @@ export class DynamicTypeFieldFilterId extends DynamicTypeFieldFilterAbstract {
     return FieldFilterFrontendType.Number
   }
 
+  // An element always has an id
+  isEmptyFilterAvailable (): boolean {
+    return false
+  }
+
   getFieldFilterComponent (props: DynamicTypeFieldFilterNumberProps): ReactElement<DynamicTypeFieldFilterNumberProps> {
     return (
       <DynamicTypeFieldFilterNumberComponent { ...props } />

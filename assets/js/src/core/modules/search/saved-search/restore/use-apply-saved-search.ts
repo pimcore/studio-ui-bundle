@@ -13,6 +13,7 @@ import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/pr
 import { usePaging } from '@Pimcore/modules/element/listing/decorators/paging/context-layer/paging/provider/use-paging'
 import { useAppliedFilters } from '@Pimcore/modules/element/listing/decorators/general-filters/element-filters'
 import { type FieldFilter } from '@Pimcore/modules/element/listing/decorators/general-filters/context-layer/provider/field-filters/field-filters-provider'
+import { type FilterOperator } from '@Pimcore/components/dynamic-filter/filter-operator'
 import { useSelectedColumns } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/use-selected-columns'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { type SavedSearchDetailedConfiguration, type GridFilter } from '@Pimcore/modules/search/search-api-slice.gen'
@@ -45,6 +46,7 @@ interface ColumnFilterEntry {
   key?: string
   type?: string
   filterValue?: unknown
+  operator?: FilterOperator
   locale?: string | null
   meta?: { translationKey?: string, [key: string]: unknown }
 }
@@ -95,6 +97,7 @@ export const useApplySavedSearch = (): ((configuration: SavedSearchDetailedConfi
         key: entry.key ?? '',
         type: entry.type ?? '',
         filterValue: entry.filterValue,
+        operator: entry.operator,
         locale: entry.locale,
         meta: { translationKey: entry.meta?.translationKey ?? '', ...entry.meta }
       }))
