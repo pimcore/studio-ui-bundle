@@ -15,11 +15,11 @@ import { Header } from '@Pimcore/components/header/header'
 import { Space } from '@Pimcore/components/space/space'
 import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { Dropdown, type DropdownMenuProps } from '@Pimcore/components/dropdown/dropdown'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tooltip } from 'antd'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
-import { GridConfigList } from '../grid-config-list'
+import { GridConfigList, type GridConfigPipelineItem } from '../grid-config-list'
 import { Compact } from '@Pimcore/components/compact/compact'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Icon } from '@Pimcore/components/icon/icon'
@@ -50,6 +50,7 @@ export interface EditViewProps {
 
 export const EditView = (props: EditViewProps): React.JSX.Element => {
   const [open, setOpen] = useState(false)
+  const [focusedPipelineItem, setFocusedPipelineItem] = useState<GridConfigPipelineItem | undefined>(undefined)
   const {
     onApplyClick,
     onEditConfigurationClick,
@@ -71,11 +72,25 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
   const isSavedConfiguration = gridConfig?.name !== 'Predefined' && gridConfig !== undefined
   const isGridTemplateOwner = currentUserId === gridConfig?.ownerId
 
+  const onOpenChange = (isOpen: boolean): void => {
+    setOpen(isOpen)
+
+    if (!isOpen) {
+      setFocusedPipelineItem(undefined)
+    }
+  }
+
+  const onExpandPipelineItem = useCallback((item: GridConfigPipelineItem): void => {
+    setFocusedPipelineItem(item)
+    setOpen(true)
+  }, [])
+
   return (
     <>
       <GridConfigModal
         { ...props }
-        onOpenChange={ setOpen }
+        focusedPipelineItem={ focusedPipelineItem }
+        onOpenChange={ onOpenChange }
         open={ open }
       />
 
@@ -160,7 +175,7 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
             direction='vertical'
             style={ { width: '100%' } }
           >
-            <GridConfigList />
+            <GridConfigList onExpandPipelineItem={ onExpandPipelineItem } />
           </Space>
         </Content>
       </ContentLayout>
