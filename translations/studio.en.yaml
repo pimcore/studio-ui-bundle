@@ -1345,10 +1345,12 @@ element.tree.refresh: Refresh
 element.new-folder: New Folder
 element.new-folder.validation: Please enter a valid name
 element.rename: Rename
+element.rename-folder: Rename Folder
 element.rename.label: Please enter the new name
 element.rename.validation: Please enter a valid name
 element.share-via-notification: Share via Notifications
 element.delete: Delete
+element.delete-folder: Delete Folder
 element.delete-multiple: 'Delete {{count}} elements'
 element.delete.confirmation.title: Delete item
 element.delete.confirmation.text: Do you really want to delete this item?

@@ -1343,10 +1343,12 @@ element.tree.refresh: Actualiser
 element.new-folder: Nouveau dossier
 element.new-folder.validation: Veuillez entrer un nom valide
 element.rename: Renommer
+element.rename-folder: Renommer le dossier
 element.rename.label: Veuillez entrer le nouveau nom
 element.rename.validation: Veuillez entrer un nom valide
 element.share-via-notification: Partager via notifications
 element.delete: Supprimer
+element.delete-folder: Supprimer le dossier
 element.delete-multiple: 'Supprimer {{count}} éléments'
 element.delete.confirmation.title: Supprimer l'élément
 element.delete.confirmation.text: Voulez-vous vraiment supprimer cet élément ?

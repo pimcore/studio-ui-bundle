@@ -1343,10 +1343,12 @@ element.tree.refresh: Aggiorna
 element.new-folder: Nuova cartella
 element.new-folder.validation: Inserire un nome valido
 element.rename: Rinomina
+element.rename-folder: Rinomina cartella
 element.rename.label: Inserire il nuovo nome
 element.rename.validation: Inserire un nome valido
 element.share-via-notification: Condividi tramite notifiche
 element.delete: Elimina
+element.delete-folder: Elimina cartella
 element.delete-multiple: 'Elimina {{count}} elementi'
 element.delete.confirmation.title: Elimina elemento
 element.delete.confirmation.text: Eliminare questo elemento?

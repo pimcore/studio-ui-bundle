@@ -1343,10 +1343,12 @@ element.tree.refresh: Odśwież
 element.new-folder: Nowy folder
 element.new-folder.validation: Wprowadź prawidłową nazwę
 element.rename: Zmień nazwę
+element.rename-folder: Zmień nazwę folderu
 element.rename.label: Wprowadź nową nazwę
 element.rename.validation: Wprowadź prawidłową nazwę
 element.share-via-notification: Udostępnij przez powiadomienia
 element.delete: Usuń
+element.delete-folder: Usuń folder
 element.delete-multiple: "Usuń {{count}} elementów"
 element.delete.confirmation.title: Usuń element
 element.delete.confirmation.text: Czy na pewno chcesz usunąć ten element?

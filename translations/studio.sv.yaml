@@ -1343,10 +1343,12 @@ element.tree.refresh: Uppdatera
 element.new-folder: Ny mapp
 element.new-folder.validation: Ange ett giltigt namn
 element.rename: Byt namn
+element.rename-folder: Byt namn på mapp
 element.rename.label: Ange det nya namnet
 element.rename.validation: Ange ett giltigt namn
 element.share-via-notification: Dela via aviseringar
 element.delete: Ta bort
+element.delete-folder: Ta bort mapp
 element.delete-multiple: 'Ta bort {{count}} element'
 element.delete.confirmation.title: Ta bort objekt
 element.delete.confirmation.text: Vill du verkligen ta bort det här objektet?
