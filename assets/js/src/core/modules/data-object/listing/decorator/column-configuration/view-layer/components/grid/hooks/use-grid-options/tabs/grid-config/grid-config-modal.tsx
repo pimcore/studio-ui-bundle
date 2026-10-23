@@ -26,6 +26,7 @@ import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { PreviewItemProvider } from './forms/advanced-column-form/preview/preview-item-provider'
 import { PreviewItemSelection } from './forms/advanced-column-form/preview/preview-item-selection'
 import { useStyles } from './grid-config-modal.styles'
+import { useOpenAnimationDone } from './use-open-animation-done'
 
 export interface GridConfigModalProps extends EditViewProps {
   open?: boolean
@@ -49,7 +50,7 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
   const { styles } = useStyles()
   const [fieldsToAddOpen, setFieldsToAddOpen] = useState<boolean>(true)
   // scrolling waits for the open animation, the zoomed-in modal would throw off the scroll position
-  const [isOpenAnimationDone, setIsOpenAnimationDone] = useState<boolean>(false)
+  const { isOpenAnimationDone, setIsOpenAnimationDone } = useOpenAnimationDone(open)
 
   const onApplyClick = (): void => {
     baseOnApplyClick()

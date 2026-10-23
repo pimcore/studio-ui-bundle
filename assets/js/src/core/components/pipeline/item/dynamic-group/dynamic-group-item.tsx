@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next'
 import { useInjection } from '@Pimcore/app/depency-injection'
 import { type DynamicTypePipelineRegistry } from '@Pimcore/modules/element/dynamic-types/definitions/pipelines/dynamic-type-pipeline-registry'
 import { usePipelineItemExpand } from '../../provider/pipeline-item-expand/use-pipeline-item-expand'
+import { focusFirstEditableField } from './focus-first-editable-field'
 
 export interface DynamicGroupItemProps {
   id: number
@@ -73,7 +74,7 @@ const DynamicGroupItem = ({ id, groupId, dynamicTypeRegistryId }: DynamicGroupIt
     }
 
     itemRef.current.scrollIntoView({ block: 'center' })
-    itemRef.current.querySelector<HTMLElement>('[contenteditable="true"], input:not([type="hidden"]), textarea')?.focus({ preventScroll: true })
+    focusFirstEditableField(itemRef.current)
   }, [isFocused])
 
   return (
