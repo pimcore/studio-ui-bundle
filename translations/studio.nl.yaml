@@ -385,6 +385,7 @@ grid.advanced-column.advancedColumns.group.date: Datum
 grid.advanced-column.advancedColumns.group.string: Tekst
 grid.advanced-column.advancedColumns.group.other: Overige
 grid.advanced-column.title.placeholder: Titel toevoegen
+grid.advanced-column.expand: Uitvouwen
 grid.advanced-column.advancedColumns: Bronveld
 grid.advanced-column.advancedColumns.add: Bronveld toevoegen
 grid.advanced-column.transformers: Transformaties

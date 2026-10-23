@@ -385,6 +385,7 @@ grid.advanced-column.advancedColumns.group.date: Datum
 grid.advanced-column.advancedColumns.group.string: Zeichenkette
 grid.advanced-column.advancedColumns.group.other: Sonstige
 grid.advanced-column.title.placeholder: Titel hinzufügen
+grid.advanced-column.expand: Erweitern
 grid.advanced-column.advancedColumns: Quellfeld
 grid.advanced-column.advancedColumns.add: Quellfeld hinzufügen
 grid.advanced-column.transformers: Transformatoren
