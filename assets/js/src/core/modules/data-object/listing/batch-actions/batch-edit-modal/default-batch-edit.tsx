@@ -14,7 +14,7 @@ import { type BatchEdit } from './batch-edit-provider'
 
 export interface DefaultBatchEditProps {
   batchEdit: BatchEdit
-  // Called once the row, including its form field, has mounted.
+  // Called when the row, including its form field, has mounted or unmounted.
   onMount?: () => void
 }
 
@@ -24,6 +24,8 @@ export const DefaultBatchEdit = ({ batchEdit, onMount }: DefaultBatchEditProps):
 
   useEffect(() => {
     onMount?.()
+
+    return () => { onMount?.() }
   }, [])
 
   return useMemo(() => {

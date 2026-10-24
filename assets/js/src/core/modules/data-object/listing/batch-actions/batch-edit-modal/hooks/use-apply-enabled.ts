@@ -14,12 +14,13 @@ import { type formInstanceType } from '@Pimcore/components/form/use-form'
 
 export interface UseApplyEnabledReturn {
   applyEnabled: boolean
-  // Re-checks the form once a row's field has registered.
+  // Re-checks the form once a row's field has registered or unregistered.
   onRowMount: () => void
 }
 
 // Rows with a required choice (e.g. Published: Publish / Unpublish) keep "Apply changes" disabled until all are set.
-// A new row's field registers after the rows changed and without changing a form value, so its mount re-triggers the check.
+// A new row's field registers after the rows changed and without changing a form value, so its mount re-triggers the check; a removed row is
+// unregistered one render late, so its unmount does too.
 export const useApplyEnabled = (form: formInstanceType, rows: unknown): UseApplyEnabledReturn => {
   const [applyEnabled, setApplyEnabled] = useState<boolean>(true)
   const [mountedRows, setMountedRows] = useState<number>(0)
@@ -28,9 +29,9 @@ export const useApplyEnabled = (form: formInstanceType, rows: unknown): UseApply
   useEffect(() => {
     form.validateFields({ validateOnly: true })
       .then(() => { setApplyEnabled(true) })
-      .catch((error: { errorFields?: unknown[], outOfDate?: boolean }) => {
-        // A validation superseded by a newer run rejects without errors; the newer run sets the state.
-        if (error.outOfDate !== true || (error.errorFields?.length ?? 0) > 0) {
+      .catch((error: { outOfDate?: boolean }) => {
+        // A superseded validation may still carry errors of older values; only the newer run sets the state.
+        if (error.outOfDate !== true) {
           setApplyEnabled(false)
         }
       })

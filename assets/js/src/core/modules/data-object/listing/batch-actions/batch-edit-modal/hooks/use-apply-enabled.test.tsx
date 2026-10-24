@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, render, renderHook, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Form as AntForm } from 'antd'
 import { type formInstanceType } from '@Pimcore/components/form/use-form'
@@ -44,7 +44,11 @@ describe('useApplyEnabled', () => {
   }
 
   const Row = ({ name, required, onMount }: { name: string, required: boolean, onMount: () => void }): React.JSX.Element => {
-    useEffect(() => { onMount() }, [])
+    useEffect(() => {
+      onMount()
+
+      return () => { onMount() }
+    }, [])
 
     return (
       <AntForm.Item
@@ -71,6 +75,10 @@ describe('useApplyEnabled', () => {
           onClick={ () => { setRows((current) => [...current, 'published']) } }
           type='button'
         >add-published</button>
+        <button
+          onClick={ () => { setRows((current) => current.filter((key) => key !== 'published')) } }
+          type='button'
+        >remove-published</button>
         <DelayedRows
           onRowMount={ onRowMount }
           rows={ rows }
@@ -95,5 +103,37 @@ describe('useApplyEnabled', () => {
     await userEvent.click(screen.getByText('add-published'))
 
     await waitFor(() => { expect(screen.getByTestId('apply')).toHaveTextContent('disabled') })
+  })
+
+  it('is enabled again after the untouched Published row is removed', async () => {
+    render(<Harness />)
+    await userEvent.click(screen.getByText('add-name'))
+    await userEvent.click(screen.getByText('add-published'))
+    await waitFor(() => { expect(screen.getByTestId('apply')).toHaveTextContent('disabled') })
+
+    await userEvent.click(screen.getByText('remove-published'))
+
+    await waitFor(() => { expect(screen.getByTestId('apply')).toHaveTextContent('enabled') })
+  })
+
+  it('ignores an out-of-date validation that finishes after a newer successful one', async () => {
+    const runs: Array<{ resolve: () => void, reject: (error: unknown) => void }> = []
+    const form = {
+      validateFields: jest.fn(async () => {
+        await new Promise<void>((resolve, reject) => { runs.push({ resolve, reject }) })
+      })
+    }
+    const { result, rerender } = renderHook(
+      ({ rows }) => useApplyEnabled(form as unknown as formInstanceType, rows),
+      { initialProps: { rows: [] as string[] } }
+    )
+    rerender({ rows: ['published'] })
+    await waitFor(() => { expect(runs.length).toBeGreaterThanOrEqual(2) })
+
+    const newest = runs.length - 1
+    await act(async () => { runs[newest].resolve() })
+    await act(async () => { runs[newest - 1].reject({ outOfDate: true, errorFields: [{ name: ['published'] }] }) })
+
+    expect(result.current.applyEnabled).toBe(true)
   })
 })
