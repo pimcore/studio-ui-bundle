@@ -174,6 +174,7 @@ export const serviceIds = {
   'DynamicTypes/BatchEdit/Datetime': 'DynamicTypes/BatchEdit/Datetime',
   'DynamicTypes/BatchEdit/Select': 'DynamicTypes/BatchEdit/Select',
   'DynamicTypes/BatchEdit/Checkbox': 'DynamicTypes/BatchEdit/Checkbox',
+  'DynamicTypes/BatchEdit/SystemBoolean': 'DynamicTypes/BatchEdit/SystemBoolean',
   'DynamicTypes/BatchEdit/ElementDropzone': 'DynamicTypes/BatchEdit/ElementDropzone',
   'DynamicTypes/BatchEdit/ClassificationStore': 'DynamicTypes/BatchEdit/ClassificationStore',
   'DynamicTypes/BatchEdit/DataObjectAdapter': 'DynamicTypes/BatchEdit/DataObjectAdapter',

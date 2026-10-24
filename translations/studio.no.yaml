@@ -1242,6 +1242,10 @@ batch-edit.no-content: Ingen kolonner lagt til ennå
 batch-edit.modal-footer.apply-changes: Bruk endringer
 batch-edit.modal-footer.discard-all-changes: Forkast alle endringer
 batch-edit.modal-footer.add-a-column: Legg til en kolonne
+batch-edit.system-boolean.publish: "Publiser"
+batch-edit.system-boolean.unpublish: "Avpubliser"
+batch-edit.system-boolean.placeholder: "Velg en handling"
+batch-edit.system-boolean.required: "Velg Publiser eller Avpubliser"
 batch-edit.append-mode.replace: Masseerstatt
 batch-edit.append-mode.add: Masselegg til
 batch-edit.append-mode.remove: Massefjerning

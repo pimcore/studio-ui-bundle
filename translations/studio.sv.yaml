@@ -1242,6 +1242,10 @@ batch-edit.no-content: Det finns inga tillagda kolumner ännu
 batch-edit.modal-footer.apply-changes: Tillämpa ändringar
 batch-edit.modal-footer.discard-all-changes: Kassera alla ändringar
 batch-edit.modal-footer.add-a-column: Lägg till en kolumn
+batch-edit.system-boolean.publish: "Publicera"
+batch-edit.system-boolean.unpublish: "Avpublicera"
+batch-edit.system-boolean.placeholder: "Välj en åtgärd"
+batch-edit.system-boolean.required: "Välj Publicera eller Avpublicera"
 batch-edit.append-mode.replace: Massersättning
 batch-edit.append-mode.add: Masstillägg
 batch-edit.append-mode.remove: Massborttagning

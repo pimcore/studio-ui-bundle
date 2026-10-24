@@ -1242,6 +1242,10 @@ batch-edit.no-content: Er zijn nog geen kolommen toegevoegd
 batch-edit.modal-footer.apply-changes: Wijzigingen toepassen
 batch-edit.modal-footer.discard-all-changes: Alle wijzigingen verwerpen
 batch-edit.modal-footer.add-a-column: Een kolom toevoegen
+batch-edit.system-boolean.publish: "Publiceren"
+batch-edit.system-boolean.unpublish: "Publicatie ongedaan maken"
+batch-edit.system-boolean.placeholder: "Selecteer een actie"
+batch-edit.system-boolean.required: "Kies Publiceren of Publicatie ongedaan maken"
 batch-edit.append-mode.replace: Batch vervangen
 batch-edit.append-mode.add: Batch toevoegen
 batch-edit.append-mode.remove: Batch verwijderen
