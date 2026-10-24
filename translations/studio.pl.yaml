@@ -1242,6 +1242,10 @@ batch-edit.no-content: Nie dodano jeszcze żadnych kolumn
 batch-edit.modal-footer.apply-changes: Zastosuj zmiany
 batch-edit.modal-footer.discard-all-changes: Odrzuć wszystkie zmiany
 batch-edit.modal-footer.add-a-column: Dodaj kolumnę
+batch-edit.system-boolean.publish: "Opublikuj"
+batch-edit.system-boolean.unpublish: "Cofnij publikację"
+batch-edit.system-boolean.placeholder: "Wybierz akcję"
+batch-edit.system-boolean.required: "Wybierz Opublikuj lub Cofnij publikację"
 batch-edit.append-mode.replace: Zamień zbiorczo
 batch-edit.append-mode.add: Dodaj zbiorczo
 batch-edit.append-mode.remove: Usuń zbiorczo

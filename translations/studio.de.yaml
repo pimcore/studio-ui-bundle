@@ -1242,6 +1242,10 @@ batch-edit.no-content: Es sind noch keine Spalten hinzugefügt
 batch-edit.modal-footer.apply-changes: Änderungen übernehmen
 batch-edit.modal-footer.discard-all-changes: Alle Änderungen verwerfen
 batch-edit.modal-footer.add-a-column: Spalte hinzufügen
+batch-edit.system-boolean.publish: "Veröffentlichen"
+batch-edit.system-boolean.unpublish: "Veröffentlichung aufheben"
+batch-edit.system-boolean.placeholder: "Aktion auswählen"
+batch-edit.system-boolean.required: "Veröffentlichen oder Veröffentlichung aufheben wählen"
 batch-edit.append-mode.replace: Stapel ersetzen
 batch-edit.append-mode.add: Stapel hinzufügen
 batch-edit.append-mode.remove: Stapel entfernen

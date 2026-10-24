@@ -1244,6 +1244,10 @@ batch-edit.no-content: There are no added columns yet
 batch-edit.modal-footer.apply-changes: Apply changes
 batch-edit.modal-footer.discard-all-changes: Discard all changes
 batch-edit.modal-footer.add-a-column: Add a column
+batch-edit.system-boolean.publish: "Publish"
+batch-edit.system-boolean.unpublish: "Unpublish"
+batch-edit.system-boolean.placeholder: "Select an action"
+batch-edit.system-boolean.required: "Choose Publish or Unpublish"
 batch-edit.append-mode.replace: Batch replace
 batch-edit.append-mode.add: Batch add
 batch-edit.append-mode.remove: Batch remove

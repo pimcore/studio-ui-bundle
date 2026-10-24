@@ -1242,6 +1242,10 @@ batch-edit.no-content: Non sono ancora state aggiunte colonne
 batch-edit.modal-footer.apply-changes: Applica modifiche
 batch-edit.modal-footer.discard-all-changes: Scarta tutte le modifiche
 batch-edit.modal-footer.add-a-column: Aggiungi una colonna
+batch-edit.system-boolean.publish: "Pubblica"
+batch-edit.system-boolean.unpublish: "Annulla pubblicazione"
+batch-edit.system-boolean.placeholder: "Seleziona un'azione"
+batch-edit.system-boolean.required: "Scegli Pubblica o Annulla pubblicazione"
 batch-edit.append-mode.replace: Sostituzione in blocco
 batch-edit.append-mode.add: Aggiunta in blocco
 batch-edit.append-mode.remove: Rimozione in blocco

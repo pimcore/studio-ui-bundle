@@ -75,6 +75,15 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const { openModal } = useClassificationStoreModal({ onUpdate: onClassificationStoreUpdate })
   const { availableColumns } = useAvailableColumns()
   const [fieldsToAddOpen, setFieldsToAddOpen] = useState<boolean>(true)
+  const [applyEnabled, setApplyEnabled] = useState<boolean>(true)
+  const formValues = Form.useWatch([], form)
+
+  // Rows with a required choice (e.g. Published: Publish / Unpublish) keep "Apply changes" disabled until all are set.
+  useEffect(() => {
+    form.validateFields({ validateOnly: true })
+      .then(() => { setApplyEnabled(true) })
+      .catch(() => { setApplyEnabled(false) })
+  }, [form, formValues, batchEdits])
 
   const resetModal = (): void => {
     resetBatchEdits()
@@ -251,6 +260,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
                   {t('batch-edit.modal-footer.discard-all-changes')}
                 </IconTextButton>
                 <Button
+                  disabled={ !applyEnabled }
                   onClick={ handleApplyChanges }
                   type='primary'
                 >
