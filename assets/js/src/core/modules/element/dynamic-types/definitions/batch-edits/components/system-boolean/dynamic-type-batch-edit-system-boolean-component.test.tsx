@@ -16,14 +16,15 @@ import { DynamicTypeBatchEditSystemBooleanComponent } from './dynamic-type-batch
 
 // The Pimcore form and select wrappers pull in the whole component library; the plain antd ones behave the same here.
 jest.mock('@Pimcore/components/form/form', () => ({ Form: jest.requireActual('antd').Form }))
-// antd's Select does not render under jsdom; a plain list of option buttons keeps the options and the stored value testable.
+// A plain list of option buttons stands in for the Select: it keeps the options, the shown value and onChange testable.
 jest.mock('@Pimcore/components/select/select', () => ({
-  Select: ({ options, onChange }: { options: Array<{ value: string, label: string }>, onChange?: (value: string) => void }) => (
+  Select: ({ options, onChange, value }: { options: Array<{ value: string, label: string }>, onChange?: (value: string) => void, value?: string }) => (
     <>
-      { options.map(({ value, label }) => (
+      <span data-testid='select-value'>{ value ?? '' }</span>
+      { options.map(({ value: optionValue, label }) => (
         <button
           key={ label }
-          onClick={ () => { onChange?.(value) } }
+          onClick={ () => { onChange?.(optionValue) } }
           type='button'
         >
           { label }
@@ -39,7 +40,7 @@ jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) =>
  * unchecked by default, so "Apply changes" silently unpublished every selected object.
  */
 describe('DynamicTypeBatchEditSystemBooleanComponent', () => {
-  const batchEdit: any = { key: 'published', type: 'system.boolean', frontendType: 'boolean' }
+  const batchEdit: any = { key: 'published', type: 'system.boolean', frontendType: 'checkbox' }
 
   const setup = (): { form: ReturnType<typeof AntForm.useForm>[0] } => {
     let formInstance: any
@@ -60,6 +61,7 @@ describe('DynamicTypeBatchEditSystemBooleanComponent', () => {
     const { form } = setup()
 
     expect(form.getFieldValue('published')).toBeUndefined()
+    expect(screen.getByTestId('select-value')).toBeEmptyDOMElement()
     await act(async () => { await expect(form.validateFields()).rejects.toBeDefined() })
   })
 
@@ -78,6 +80,7 @@ describe('DynamicTypeBatchEditSystemBooleanComponent', () => {
     await userEvent.click(screen.getByText(label))
 
     await waitFor(() => { expect(form.getFieldValue('published')).toBe(expected) })
+    expect(screen.getByTestId('select-value')).toHaveTextContent(expected ? 'publish' : 'unpublish')
     await act(async () => { await expect(form.validateFields()).resolves.toEqual({ published: expected }) })
   })
 })

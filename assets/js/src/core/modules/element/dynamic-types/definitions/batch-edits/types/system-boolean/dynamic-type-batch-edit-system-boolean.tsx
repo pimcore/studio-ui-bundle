@@ -11,6 +11,7 @@
 import React, { type ReactElement } from 'react'
 import { injectable } from 'inversify'
 import { type DynamicTypeBatchEditAbstract } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/dynamic-type-batch-edit-abstract'
+import { DynamicTypeBatchEditCheckboxComponent } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/components/checkbox/dynamic-type-batch-edit-checkbox-component'
 import { DynamicTypeBatchEditSystemBooleanComponent, type DynamicTypeBatchEditSystemBooleanProps } from '@Pimcore/modules/element/dynamic-types/definitions/batch-edits/components/system-boolean/dynamic-type-batch-edit-system-boolean-component'
 
 @injectable()
@@ -18,6 +19,13 @@ export class DynamicTypeBatchEditSystemBoolean implements DynamicTypeBatchEditAb
   id = 'system.boolean'
 
   getBatchEditComponent (props: DynamicTypeBatchEditSystemBooleanProps): ReactElement<DynamicTypeBatchEditSystemBooleanProps> {
+    // Publish / Unpublish only describes the published column; any other system boolean keeps the checkbox.
+    if (props.batchEdit.key !== 'published') {
+      return (
+        <DynamicTypeBatchEditCheckboxComponent { ...props } />
+      )
+    }
+
     return (
       <DynamicTypeBatchEditSystemBooleanComponent { ...props } />
     )

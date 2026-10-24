@@ -8,17 +8,23 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useDynamicTypeResolver } from '@Pimcore/modules/element/dynamic-types/resolver/hooks/use-dynamic-type-resolver'
 import { type BatchEdit } from './batch-edit-provider'
 
 export interface DefaultBatchEditProps {
   batchEdit: BatchEdit
+  // Called once the row, including its form field, has mounted.
+  onMount?: () => void
 }
 
-export const DefaultBatchEdit = ({ batchEdit }: DefaultBatchEditProps): React.JSX.Element => {
+export const DefaultBatchEdit = ({ batchEdit, onMount }: DefaultBatchEditProps): React.JSX.Element => {
   const { frontendType, type } = batchEdit
   const { getComponentRenderer } = useDynamicTypeResolver()
+
+  useEffect(() => {
+    onMount?.()
+  }, [])
 
   return useMemo(() => {
     const { ComponentRenderer } = getComponentRenderer({ dynamicTypeIds: [type, frontendType!], target: 'BATCH_EDIT' })
