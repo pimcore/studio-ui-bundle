@@ -392,6 +392,19 @@ describe('KeyedList', () => {
       expect(onChange).not.toHaveBeenCalled()
     })
 
+    it('does not report an empty list when a registered entry is removed again', () => {
+      // the registration extends the baseline of a list that came in empty; removing it must stay silent
+      const onChange = jest.fn()
+
+      renderKeyedList({ value: {}, onChange }, <RegisteringField name={ ['attributes', 'late', 'name'] } />)
+      flushDebounce()
+
+      act(() => { operations.remove('late') })
+      flushDebounce()
+
+      expect(onChange).not.toHaveBeenCalled()
+    })
+
     it('getValue() resolves names relative to the item name', () => {
       renderKeyedList({ value: { myBrick: { name: 'test' } }, onChange: jest.fn() })
 
