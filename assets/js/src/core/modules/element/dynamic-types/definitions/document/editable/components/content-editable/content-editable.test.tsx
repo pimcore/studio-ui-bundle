@@ -30,7 +30,7 @@ const placeCaret = (node: Node, offset: number): void => {
 }
 
 describe('ContentEditable Enter key (multi line)', () => {
-  it('inserts a <br> at the end of the content and leaves a collapsed caret behind it', () => {
+  it('inserts two <br> at the end of the content and leaves a collapsed caret behind it', () => {
     const { container } = render(<ContentEditable
       allowMultiLine
       value="abc"
@@ -125,6 +125,27 @@ describe('ContentEditable Enter key (multi line)', () => {
 
     expect(typed.isConnected).toBe(true)
     expect(editable.innerHTML).toBe('abc<br>x<br>')
+  })
+
+  it('rebuilds the field when it differs from the value by more than a trailing <br>', () => {
+    const Controlled = (): JSX.Element => {
+      const [value, setValue] = React.useState<string | null>('abc')
+
+      return (
+        <ContentEditable
+          allowMultiLine
+          onChange={ setValue }
+          value={ value }
+        />
+      )
+    }
+    const { container } = render(<Controlled />)
+    const editable = container.querySelector('[contenteditable]')!
+    editable.innerHTML = 'abc<b>x</b>'
+
+    fireEvent.input(editable)
+
+    expect(editable.innerHTML).toBe('abcx')
   })
 
   it('does not insert a line break when multi line is off', () => {

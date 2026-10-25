@@ -84,8 +84,10 @@ const ContentEditable = ({
   useEffect(() => {
     if (!isNull(contentRef.current)) {
       const htmlContent = valueToHtml(value)
-      // Compare the converted content, a kept trailing <br> is trimmed from the value and must not trigger a reset
-      if (contentRef.current.innerHTML !== htmlContent && htmlToValue(contentRef.current.innerHTML) !== (value ?? '')) {
+      const currentHtml = contentRef.current.innerHTML
+      // A kept trailing <br> is trimmed from the value and must not trigger a reset
+      const currentHtmlWithoutTrailingBreaks = currentHtml.replace(/(<br\s*\/?>)+$/i, '')
+      if (currentHtml !== htmlContent && currentHtmlWithoutTrailingBreaks !== htmlContent) {
         contentRef.current.innerHTML = htmlContent
       }
       currentValueRef.current = value
@@ -149,7 +151,7 @@ const ContentEditable = ({
             range.insertNode(br)
 
             // A trailing <br> is collapsed by the browser, a second one makes the new line visible
-            if (contentRef.current !== null && hasNoContentAfter(br, contentRef.current)) {
+            if (!isNull(contentRef.current) && hasNoContentAfter(br, contentRef.current)) {
               br.after(document.createElement('br'))
             }
 
