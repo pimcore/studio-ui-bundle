@@ -1758,6 +1758,10 @@ redirects.source-site: Bronsite
 redirects.source: Bron
 redirects.target-site: Doelsite
 redirects.target: Doel
+redirects.target-type: Doeltype
+redirects.target-type.document: Document
+redirects.target-type.asset: Asset
+redirects.target-type.object: Gegevensobject
 redirects.status: Status
 redirects.priority: Prioriteit
 redirects.regex: RegEx
@@ -1776,6 +1780,7 @@ redirects.beginner-modal.title: Nieuwe beginnerdoorverwijzing
 redirects.beginner-modal.type: Type
 redirects.beginner-modal.path: Pad
 redirects.beginner-modal.target: Doel
+redirects.beginner-modal.target-type: Doeltype
 redirects.beginner-modal.type.required: Voeg een type toe
 redirects.beginner-modal.path.required: Voeg een pad toe
 redirects.beginner-modal.target.required: Voeg een doel toe

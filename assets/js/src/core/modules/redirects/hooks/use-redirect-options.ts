@@ -54,3 +54,20 @@ export const useRedirectPriorityOptions = (): OptionsHookResult => {
     })) ?? []
   }
 }
+
+/**
+ * The element types a redirect target can point to. They are a fixed part of the data model,
+ * so unlike the other redirect options they are not fetched from the API.
+ */
+export const useRedirectTargetTypeOptions = (): OptionsHookResult => {
+  const { t } = useTranslation()
+
+  return {
+    isLoading: false,
+    options: [
+      { label: t('redirects.target-type.document'), value: 'document' },
+      { label: t('redirects.target-type.asset'), value: 'asset' },
+      { label: t('redirects.target-type.object'), value: 'object' }
+    ]
+  }
+}

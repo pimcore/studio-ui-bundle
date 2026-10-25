@@ -18,10 +18,15 @@ import { ActionsCell } from './actions-cell'
 import {
   useRedirectTypeOptions,
   useRedirectStatusOptions,
-  useRedirectPriorityOptions
+  useRedirectPriorityOptions,
+  useRedirectTargetTypeOptions
 } from '../hooks/use-redirect-options'
 import { useSites } from '@Pimcore/modules/document/hooks/use-sites'
 import { type Site } from '@Pimcore/modules/document/document-api-slice-enhanced'
+import { isElementReference } from '@Pimcore/modules/element/element-helper'
+import { mapToElementType } from '@Pimcore/modules/element/utils/element-type'
+import { type DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
+import { isNil, isUndefined } from 'lodash'
 
 type RedirectWithActions = RedirectRow & { actions: React.ReactNode }
 
@@ -83,8 +88,32 @@ export const Table = ({ onSortingChange, sorting, redirectRows, setRedirectRows 
     }),
     columnHelper.accessor('target', {
       header: t('redirects.target'),
-      meta: { editable: true, type: 'element', config: { allowedTypes: ['asset', 'document'], showPublishedState: false, expectsStringValue: true, allowTextInput: true } },
+      meta: {
+        editable: true,
+        type: 'element',
+        config: {
+          allowedTypes: ['asset', 'data-object', 'document'],
+          showPublishedState: false,
+          allowTextInput: true,
+          // the row keeps the target as a path, so the tag icon comes from the target type
+          getElementInfo: (cellProps: DefaultCellProps) => ({
+            fullPath: String(cellProps.getValue() ?? ''),
+            elementType: mapToElementType(
+              (cellProps.row.original as RedirectRow).targetType ?? 'document'
+            ) ?? undefined
+          })
+        }
+      },
       size: 200
+    }),
+    columnHelper.accessor('targetType', {
+      header: t('redirects.target-type'),
+      meta: {
+        type: 'select',
+        editable: true,
+        config: { useOptionsHook: () => useRedirectTargetTypeOptions() }
+      },
+      size: 110
     }),
     columnHelper.accessor('statusCode', {
       header: t('redirects.status'),
@@ -137,6 +166,20 @@ export const Table = ({ onSortingChange, sorting, redirectRows, setRedirectRows 
     })
   ], [siteOptions, t])
 
+  const getUpdatedRow = (columnId: string, value: unknown, rowData: RedirectRow): RedirectRow => {
+    if (columnId !== 'target') {
+      return { ...rowData, [columnId]: value }
+    }
+
+    // dropping an element onto the target cell also tells us which element type it is
+    if (isElementReference(value)) {
+      return { ...rowData, target: value.fullPath, targetType: value.type }
+    }
+
+    // a manually entered path or URL is resolved by the server, which decides on the type
+    return { ...rowData, target: isNil(value) ? null : String(value), targetType: null }
+  }
+
   const onUpdateCellData = async ({
     columnId,
     value,
@@ -147,7 +190,7 @@ export const Table = ({ onSortingChange, sorting, redirectRows, setRedirectRows 
     rowData: RedirectRow
   }): Promise<void> => {
     const rowId = rowData.rowId
-    const updatedRow: RedirectRow = { ...rowData, [columnId]: value }
+    const updatedRow = getUpdatedRow(columnId, value, rowData)
 
     setRedirectRows(prev =>
       prev.map(row =>
@@ -158,10 +201,19 @@ export const Table = ({ onSortingChange, sorting, redirectRows, setRedirectRows 
     setModifiedCells([{ columnId, rowIndex: rowId }])
 
     if (updatedRow.id !== null) {
-      const { success } = await updateRedirectById(updatedRow.id, updatedRow)
+      const { success, data } = await updateRedirectById(updatedRow.id, updatedRow)
 
       if (success) {
         setModifiedCells([])
+
+        // the server resolves the target against the target type, so take over its result
+        if (!isUndefined(data)) {
+          setRedirectRows(prev =>
+            prev.map(row =>
+              row.rowId === rowId ? { ...data, rowId } : row
+            )
+          )
+        }
       } else {
         setRedirectRows(prev =>
           prev.map(row =>

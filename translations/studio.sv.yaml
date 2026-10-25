@@ -1758,6 +1758,10 @@ redirects.source-site: Källsajt
 redirects.source: Källa
 redirects.target-site: Målsajt
 redirects.target: Mål
+redirects.target-type: Måltyp
+redirects.target-type.document: Dokument
+redirects.target-type.asset: Asset
+redirects.target-type.object: Data Object
 redirects.status: Status
 redirects.priority: Prioritet
 redirects.regex: RegEx
@@ -1776,6 +1780,7 @@ redirects.beginner-modal.title: Ny nybörjaromdirigering
 redirects.beginner-modal.type: Typ
 redirects.beginner-modal.path: Sökväg
 redirects.beginner-modal.target: Mål
+redirects.beginner-modal.target-type: Måltyp
 redirects.beginner-modal.type.required: Lägg till en typ
 redirects.beginner-modal.path.required: Lägg till en sökväg
 redirects.beginner-modal.target.required: Lägg till ett mål

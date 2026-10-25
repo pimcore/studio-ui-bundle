@@ -1758,6 +1758,10 @@ redirects.source-site: Sitio de origen
 redirects.source: Origen
 redirects.target-site: Sitio de destino
 redirects.target: Destino
+redirects.target-type: Tipo de destino
+redirects.target-type.document: Documento
+redirects.target-type.asset: Asset
+redirects.target-type.object: Data Object
 redirects.status: Estado
 redirects.priority: Prioridad
 redirects.regex: RegEx
@@ -1776,6 +1780,7 @@ redirects.beginner-modal.title: Nueva redirección para principiantes
 redirects.beginner-modal.type: Tipo
 redirects.beginner-modal.path: Ruta
 redirects.beginner-modal.target: Destino
+redirects.beginner-modal.target-type: Tipo de destino
 redirects.beginner-modal.type.required: Añada un tipo
 redirects.beginner-modal.path.required: Añada una ruta
 redirects.beginner-modal.target.required: Añada un destino

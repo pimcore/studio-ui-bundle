@@ -1758,6 +1758,10 @@ redirects.source-site: Quell-Site
 redirects.source: Quelle
 redirects.target-site: Ziel-Site
 redirects.target: Ziel
+redirects.target-type: Zieltyp
+redirects.target-type.document: Dokument
+redirects.target-type.asset: Asset
+redirects.target-type.object: Data Object
 redirects.status: Status
 redirects.priority: Priorität
 redirects.regex: RegEx
@@ -1776,6 +1780,7 @@ redirects.beginner-modal.title: Neue Einsteiger-Weiterleitung
 redirects.beginner-modal.type: Typ
 redirects.beginner-modal.path: Pfad
 redirects.beginner-modal.target: Ziel
+redirects.beginner-modal.target-type: Zieltyp
 redirects.beginner-modal.type.required: Bitte fügen Sie einen Typ hinzu
 redirects.beginner-modal.path.required: Bitte fügen Sie einen Pfad hinzu
 redirects.beginner-modal.target.required: Bitte fügen Sie ein Ziel hinzu
