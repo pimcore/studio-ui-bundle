@@ -16,7 +16,7 @@ let mockIsAuthenticated: boolean | undefined
 jest.mock('../authorization-api-slice.gen', () => ({
   useSessionGetStatusQuery: (...args: unknown[]) => mockSessionQuery(...args)
 }))
-// The probe must not go through the current-user endpoint any more: it answers 401 without a session
+// Only a backend without the session route is asked here: the current-user route answers 401 without a session
 jest.mock('../user/user-api-slice-enhanced', () => ({
   useUserGetCurrentInformationQuery: (...args: unknown[]) => mockCurrentUserQuery(...args)
 }))
@@ -48,17 +48,38 @@ describe('useIsAuthenticated', () => {
   beforeEach(() => {
     mockIsAuthenticated = undefined
     mockSessionQuery.mockReturnValue(queryResult({}))
+    mockCurrentUserQuery.mockReturnValue(queryResult({}))
   })
 
   afterEach(() => {
     jest.clearAllMocks()
   })
 
-  it('asks the session status route and never the current-user route', () => {
+  it('asks the session status route first and leaves the current-user route alone', () => {
     renderHook(() => useIsAuthenticated())
 
     expect(mockSessionQuery).toHaveBeenCalledWith(undefined, { skip: false })
-    expect(mockCurrentUserQuery).not.toHaveBeenCalled()
+    expect(mockCurrentUserQuery).toHaveBeenCalledWith(undefined, { skip: true })
+  })
+
+  it('asks the current-user route when the backend does not know the session route yet', () => {
+    mockSessionQuery.mockReturnValue(queryResult({ isError: true, error: { status: 404, data: {} } }))
+    mockCurrentUserQuery.mockReturnValue(queryResult({ isSuccess: true }))
+
+    renderHook(() => useIsAuthenticated())
+
+    expect(mockCurrentUserQuery).toHaveBeenCalledWith(undefined, { skip: false })
+    expect(mockDispatch).toHaveBeenCalledWith(setAuthState(true))
+    expect(mockDispatch).not.toHaveBeenCalledWith(setAuthState(false))
+  })
+
+  it('shows the login when the old backend has no session either', () => {
+    mockSessionQuery.mockReturnValue(queryResult({ isError: true, error: { status: 404, data: {} } }))
+    mockCurrentUserQuery.mockReturnValue(queryResult({ isError: true, error: { status: 401, data: {} } }))
+
+    renderHook(() => useIsAuthenticated())
+
+    expect(mockDispatch).toHaveBeenCalledWith(setAuthState(false))
   })
 
   it('does not ask again once the state is known', () => {
