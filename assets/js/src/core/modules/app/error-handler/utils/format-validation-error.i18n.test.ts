@@ -22,6 +22,7 @@ describe('resolveValidationMessage with real i18next', () => {
           translation: {
             'validation.max_length': '{{field}} max {{max}}: {{value}}',
             'validation.slug': 'The URL slug {{value}} in {{field}} is already in use',
+            'validation.custom': '{{min-length}} / {{größe}} / {{field}}',
             'validation.empty': '',
             'validation.same': 'validation.same'
           }
@@ -58,6 +59,16 @@ describe('resolveValidationMessage with real i18next', () => {
     }, 'Slug')
 
     expect(result).toEqual({ text: 'The URL slug {"a":[1,true]} in Slug is already in use', includesLabel: true })
+  })
+
+  it('fills placeholder names with a hyphen or non-ASCII letters like i18next does', () => {
+    const result = resolveValidationMessage({
+      message: 'm',
+      messageKey: 'validation.custom',
+      parameters: { 'min-length': 3, größe: 'XL' }
+    }, 'Title')
+
+    expect(result).toEqual({ text: '3 / XL / Title', includesLabel: true })
   })
 
   it('ignores server sent parameter names that are i18next options', () => {

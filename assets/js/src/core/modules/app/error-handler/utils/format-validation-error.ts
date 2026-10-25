@@ -27,7 +27,7 @@ export interface IResolvedMessage {
 const MESSAGE_KEY = /^[\w.-]{1,190}$/u
 
 // i18next also accepts `{{ field }}`, `{{- field}}` and `{{field, format}}`
-const PLACEHOLDER = /\{\{-?\s*([\w.]+)\s*(?:,[^}]*)?\}\}/gu
+const PLACEHOLDER = /\{\{-?\s*([\p{L}\p{N}_.-]+)\s*(?:,[^}]*)?\}\}/gu
 const FIELD_PLACEHOLDER = /\{\{-?\s*field\s*(?:,[^}]*)?\}\}/u
 
 const stringify = (value: unknown): string => {
