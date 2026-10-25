@@ -134,38 +134,41 @@ const ContentEditable = ({
     setTimeout(handleContentChange, 0)
   }
 
+  const insertLineBreak = (): void => {
+    const selection = window.getSelection?.()
+    if (isNil(selection) || selection.rangeCount === 0) {
+      return
+    }
+
+    const range = selection.getRangeAt(0)
+    const br = document.createElement('br')
+
+    range.deleteContents()
+    range.insertNode(br)
+
+    // A trailing <br> is collapsed by the browser, a second one makes the new line visible
+    if (!isNull(contentRef.current) && hasNoContentAfter(br, contentRef.current)) {
+      br.after(document.createElement('br'))
+    }
+
+    // Collapsed caret behind the <br>: Firefox drops the <br> when typing replaces a selected node
+    range.setStartAfter(br)
+    range.collapse(true)
+
+    selection.removeAllRanges()
+    selection.addRange(range)
+  }
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
-    if (e.key === 'Enter') {
-      if (!allowMultiLine) {
-        e.preventDefault()
-      } else {
-        e.preventDefault()
+    if (e.key !== 'Enter') {
+      return
+    }
 
-        if (!isNil(window.getSelection)) {
-          const selection = window.getSelection()
-          if (!isNull(selection) && selection.rangeCount > 0) {
-            const range = selection.getRangeAt(0)
-            const br = document.createElement('br')
+    e.preventDefault()
 
-            range.deleteContents()
-            range.insertNode(br)
-
-            // A trailing <br> is collapsed by the browser, a second one makes the new line visible
-            if (!isNull(contentRef.current) && hasNoContentAfter(br, contentRef.current)) {
-              br.after(document.createElement('br'))
-            }
-
-            // Collapsed caret behind the <br>: Firefox drops the <br> when typing replaces a selected node
-            range.setStartAfter(br)
-            range.collapse(true)
-
-            selection.removeAllRanges()
-            selection.addRange(range)
-          }
-        }
-
-        setTimeout(handleContentChange, 0)
-      }
+    if (allowMultiLine) {
+      insertLineBreak()
+      setTimeout(handleContentChange, 0)
     }
   }
 
