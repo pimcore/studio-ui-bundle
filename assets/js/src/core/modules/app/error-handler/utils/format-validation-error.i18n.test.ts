@@ -50,6 +50,16 @@ describe('resolveValidationMessage with real i18next', () => {
     expect(result).toEqual({ text: 'The URL slug /{{field}} in Slug is already in use', includesLabel: true })
   })
 
+  it('writes object and array values as JSON and booleans as text, never as [object Object]', () => {
+    const result = resolveValidationMessage({
+      message: 'm',
+      messageKey: 'validation.slug',
+      parameters: { value: { a: [1, true] } }
+    }, 'Slug')
+
+    expect(result).toEqual({ text: 'The URL slug {"a":[1,true]} in Slug is already in use', includesLabel: true })
+  })
+
   it('ignores server sent parameter names that are i18next options', () => {
     const result = resolveValidationMessage({
       message: 'm',

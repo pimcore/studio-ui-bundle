@@ -35,7 +35,16 @@ const stringify = (value: unknown): string => {
     return ''
   }
 
-  return typeof value === 'object' ? JSON.stringify(value) : String(value)
+  if (typeof value === 'string') {
+    return value
+  }
+
+  if (typeof value === 'number' || typeof value === 'boolean' || typeof value === 'bigint') {
+    return value.toString()
+  }
+
+  // objects and arrays explicitly as JSON, never as `[object Object]`; symbols and functions have no useful text
+  return typeof value === 'object' ? (JSON.stringify(value) ?? '') : ''
 }
 
 // One pass over the template: a value is never scanned again, so entered text such as `{{field}}` stays as typed.
