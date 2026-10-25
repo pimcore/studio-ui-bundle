@@ -157,4 +157,17 @@ describe('ContentEditable Enter key (multi line)', () => {
 
     expect(editable.innerHTML).toBe('abc')
   })
+
+  it('ignores keys other than Enter in multi line mode', () => {
+    const { container } = render(<ContentEditable
+      allowMultiLine
+      value="abc"
+                                 />)
+    const editable = container.querySelector('[contenteditable]')!
+    placeCaret(editable.firstChild!, 3)
+
+    fireEvent.keyDown(editable, { key: 'a' })
+
+    expect(editable.innerHTML).toBe('abc')
+  })
 })
