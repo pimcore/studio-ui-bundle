@@ -134,13 +134,20 @@ const ContentEditable = ({
           if (!isNull(selection) && selection.rangeCount > 0) {
             const range = selection.getRangeAt(0)
             const br = document.createElement('br')
-            const textNode = document.createTextNode('\u00a0')
 
             range.deleteContents()
             range.insertNode(br)
-            range.collapse(false)
-            range.insertNode(textNode)
-            range.selectNodeContents(textNode)
+
+            // A trailing <br> is collapsed by the browser, a second one makes the new line visible
+            // (insertNode may leave an empty text node behind the <br> when it splits a text node)
+            const next = br.nextSibling
+            if (isNil(next) || (next.nodeType === Node.TEXT_NODE && next.textContent === '')) {
+              br.after(document.createElement('br'))
+            }
+
+            // Collapsed caret behind the <br>: Firefox drops the <br> when typing replaces a selected node
+            range.setStartAfter(br)
+            range.collapse(true)
 
             selection.removeAllRanges()
             selection.addRange(range)
