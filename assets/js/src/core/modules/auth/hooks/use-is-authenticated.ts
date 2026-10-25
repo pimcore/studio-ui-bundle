@@ -9,7 +9,7 @@
  */
 
 import { useEffect } from 'react'
-import { useUserGetCurrentInformationQuery } from '../user/user-api-slice-enhanced'
+import { useSessionGetStatusQuery } from '../authorization-api-slice.gen'
 import { useAppDispatch, useAppSelector } from '@sdk/app'
 import { selectIsAuthenticated, selectTwoFactorChallenge, setAuthState, setTwoFactorChallenge } from '../auth-slice'
 import { getTwoFactorChallenge, type TwoFactorChallenge } from './use-two-factor-authentication'
@@ -24,7 +24,9 @@ export const useIsAuthenticated = (): UseIsAuthenticatedReturn => {
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
   const twoFactor = useAppSelector(selectTwoFactorChallenge)
   const dispatch = useAppDispatch()
-  const { isError, error, isSuccess, refetch } = useUserGetCurrentInformationQuery(undefined, { skip: isAuthenticated !== undefined })
+  // The session status answers 200 without a session, so the login page shows no failed request. The
+  // current-user route answers 401 there.
+  const { isError, error, isSuccess, data, refetch } = useSessionGetStatusQuery(undefined, { skip: isAuthenticated !== undefined })
 
   const recheck = (): void => {
     void refetch()
@@ -37,9 +39,11 @@ export const useIsAuthenticated = (): UseIsAuthenticatedReturn => {
     }
 
     if (isSuccess) {
-      dispatch(setAuthState(true))
+      // A login that waits for its code is no session yet; the status carries the step like the 401 does
+      dispatch(setTwoFactorChallenge(data.authenticated ? undefined : getTwoFactorChallenge(data)))
+      dispatch(setAuthState(data.authenticated))
     }
-  }, [isError, isSuccess, error])
+  }, [isError, isSuccess, error, data])
 
   return {
     isAuthenticated,

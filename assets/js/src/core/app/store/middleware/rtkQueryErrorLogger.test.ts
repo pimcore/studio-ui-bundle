@@ -143,6 +143,15 @@ describe('rtkQueryErrorLogger', () => {
     expect(dispatch).not.toHaveBeenCalled()
   })
 
+  it('leaves the session status check to its own handling', () => {
+    const action = rejected(401, 'http://localhost/pimcore-studio/api/session', 'sessionGetStatus')
+
+    const { dispatch, next } = run(action)
+
+    expect(next).toHaveBeenCalledWith(action)
+    expect(dispatch).not.toHaveBeenCalled()
+  })
+
   it('passes other errors on', () => {
     const action = rejected(500, 'http://localhost/pimcore-studio/api/documents/tree')
 
