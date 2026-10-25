@@ -28,6 +28,15 @@ export interface ContentEditableProps {
   inherited?: boolean
 }
 
+const hasNoContentAfter = (node: Node, root: HTMLElement): boolean => {
+  const rest = document.createRange()
+  rest.setStartAfter(node)
+  rest.setEnd(root, root.childNodes.length)
+  const content = rest.cloneContents()
+
+  return content.textContent === '' && isNull(content.querySelector('br'))
+}
+
 const ContentEditable = ({
   value,
   onChange,
@@ -75,7 +84,8 @@ const ContentEditable = ({
   useEffect(() => {
     if (!isNull(contentRef.current)) {
       const htmlContent = valueToHtml(value)
-      if (contentRef.current.innerHTML !== htmlContent) {
+      // Compare the converted content, a kept trailing <br> is trimmed from the value and must not trigger a reset
+      if (contentRef.current.innerHTML !== htmlContent && htmlToValue(contentRef.current.innerHTML) !== (value ?? '')) {
         contentRef.current.innerHTML = htmlContent
       }
       currentValueRef.current = value
@@ -139,9 +149,7 @@ const ContentEditable = ({
             range.insertNode(br)
 
             // A trailing <br> is collapsed by the browser, a second one makes the new line visible
-            // (insertNode may leave an empty text node behind the <br> when it splits a text node)
-            const next = br.nextSibling
-            if (isNil(next) || (next.nodeType === Node.TEXT_NODE && next.textContent === '')) {
+            if (contentRef.current !== null && hasNoContentAfter(br, contentRef.current)) {
               br.after(document.createElement('br'))
             }
 

@@ -58,7 +58,7 @@ describe('ContentEditable Enter key (multi line)', () => {
     fireEvent.keyDown(editable, { key: 'Enter' })
 
     expect(window.getSelection()!.toString()).toBe('')
-    expect(editable.textContent).not.toContain(' ')
+    expect(editable.textContent).not.toContain('\u00A0')
   })
 
   it('adds no extra <br> when the line break is inserted in the middle of the content', () => {
@@ -72,6 +72,59 @@ describe('ContentEditable Enter key (multi line)', () => {
     fireEvent.keyDown(editable, { key: 'Enter' })
 
     expect(editable.innerHTML).toBe('abc<br>def')
+  })
+
+  it('adds one <br> when the caret is at the end of a line that has more text after it', () => {
+    const { container } = render(<ContentEditable
+      allowMultiLine
+      value={ 'abc\ndef' }
+                                 />)
+    const editable = container.querySelector('[contenteditable]')!
+    placeCaret(editable.firstChild!, 3)
+
+    fireEvent.keyDown(editable, { key: 'Enter' })
+
+    expect(editable.innerHTML).toBe('abc<br><br>def')
+  })
+
+  it('adds one <br> inside an inline element when text follows it', () => {
+    const { container } = render(<ContentEditable
+      allowMultiLine
+      value="x"
+                                 />)
+    const editable = container.querySelector('[contenteditable]')!
+    editable.innerHTML = '<b>abc</b>def'
+    placeCaret(editable.querySelector('b')!.firstChild!, 3)
+
+    fireEvent.keyDown(editable, { key: 'Enter' })
+
+    expect(editable.querySelectorAll('br')).toHaveLength(1)
+  })
+
+  it('keeps the typed content when the value is fed back after Enter at the end and typing', () => {
+    const Controlled = (): JSX.Element => {
+      const [value, setValue] = React.useState<string | null>('abc')
+
+      return (
+        <ContentEditable
+          allowMultiLine
+          onChange={ setValue }
+          value={ value }
+        />
+      )
+    }
+    const { container } = render(<Controlled />)
+    const editable = container.querySelector('[contenteditable]')!
+    placeCaret(editable.firstChild!, 3)
+
+    fireEvent.keyDown(editable, { key: 'Enter' })
+    const range = window.getSelection()!.getRangeAt(0)
+    const typed = document.createTextNode('x')
+    range.insertNode(typed)
+    fireEvent.input(editable)
+
+    expect(typed.isConnected).toBe(true)
+    expect(editable.innerHTML).toBe('abc<br>x<br>')
   })
 
   it('does not insert a line break when multi line is off', () => {
