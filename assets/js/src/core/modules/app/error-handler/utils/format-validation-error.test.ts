@@ -14,6 +14,7 @@ import { getMissingValidationKeys, resolveValidationMessage, validationErrorToTe
 const translations: Record<string, string> = {
   Name: 'Name (translated)',
   'validation.mandatory': '{{field}} is mandatory',
+  'validation.max_length': '{{field}} max {{max}}: {{value}}',
   'my_bundle.too_long': 'Must not be longer than {{max}} characters',
   'my_bundle.spaced': '{{ field }} is spaced',
   'validation.empty': '',
@@ -41,8 +42,8 @@ describe('format-validation-error', () => {
     jest.clearAllMocks()
     exists.mockImplementation((key: string) => key in translations)
     getResource.mockImplementation((lng: string, _ns: string, key: string) => lng === 'en' ? translations[key] : undefined)
-    translate.mockImplementation((key: string, options: { replace?: Record<string, string> } = {}) =>
-      translations[key].replace(/{{(\w+)}}/g, (_m, name: string) => options.replace?.[name] ?? ''))
+    // only labels go through t() (translateLabel); validation messages are filled in without it
+    translate.mockImplementation((key: string) => translations[key] ?? key)
   })
 
   it('translates the key and the field label', () => {
@@ -53,12 +54,22 @@ describe('format-validation-error', () => {
     expect(text).toBe('Name (translated) is mandatory')
   })
 
-  it('passes parameters and disables escaping', () => {
-    resolveValidationMessage({ message: 'm', messageKey: 'validation.mandatory', parameters: { max: 3 } }, 'X')
+  it('fills in the parameters and the field in one pass', () => {
+    const result = resolveValidationMessage(
+      { message: 'm', messageKey: 'validation.max_length', parameters: { max: 3, value: '{{field}}' } },
+      'X'
+    )
 
-    expect(translate).toHaveBeenCalledWith('validation.mandatory', {
-      replace: { max: 3, field: 'X' }, nsSeparator: false, interpolation: { escapeValue: false }
-    })
+    expect(result).toEqual({ text: 'X max 3: {{field}}', includesLabel: true })
+  })
+
+  it('leaves a placeholder-like value alone when it comes before another placeholder', () => {
+    const result = resolveValidationMessage(
+      { message: 'm', messageKey: 'validation.max_length', parameters: { value: '{{max}}', max: 3 } },
+      'X'
+    )
+
+    expect(result.text).toBe('X max 3: {{max}}')
   })
 
   it.each([
@@ -147,6 +158,14 @@ describe('format-validation-error', () => {
       message: 'bad',
       path: [{ field: 'localizedfields', title: null, language: 'de' }]
     })).toBe('(DE): bad')
+  })
+
+  it('does not use a template that names the field when only a language is known', () => {
+    expect(validationErrorToText({
+      message: 'Mandatory',
+      messageKey: 'validation.mandatory',
+      path: [{ field: 'localizedfields', title: null, language: 'de' }]
+    })).toBe('(DE): Mandatory')
   })
 
   it('does not report malformed message keys as missing translations', () => {

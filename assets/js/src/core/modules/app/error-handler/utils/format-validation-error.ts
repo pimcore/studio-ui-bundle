@@ -27,7 +27,20 @@ export interface IResolvedMessage {
 const MESSAGE_KEY = /^[\w.-]{1,190}$/u
 
 // i18next also accepts `{{ field }}`, `{{- field}}` and `{{field, format}}`
-const FIELD_PLACEHOLDER = /\{\{-?\s*field\s*(,[^}]*)?\}\}/u
+const PLACEHOLDER = /\{\{-?\s*([\w.]+)\s*(?:,[^}]*)?\}\}/gu
+const FIELD_PLACEHOLDER = /\{\{-?\s*field\s*(?:,[^}]*)?\}\}/u
+
+const stringify = (value: unknown): string => {
+  if (isNil(value)) {
+    return ''
+  }
+
+  return typeof value === 'object' ? JSON.stringify(value) : String(value)
+}
+
+// One pass over the template: a value is never scanned again, so entered text such as `{{field}}` stays as typed.
+const interpolate = (template: string, values: Record<string, unknown>): string =>
+  template.replace(PLACEHOLDER, (_match, name: string) => stringify(values[name]))
 
 // Walks the current language and its fallbacks. Deliberately no import from app/i18n or the store:
 // this module is part of the error handler, which those modules import themselves.
@@ -58,20 +71,17 @@ export const getMissingValidationKeys = (errors: IValidationError[]): string[] =
 }
 
 /**
- * Pure. Translates `messageKey` only when a real translation exists, decided from the raw resource. Never calls
- * `t()` otherwise (the global missingKey handler would store key -> key). Values go in via `replace`, so server
- * sent parameter names cannot act as i18next options.
+ * Translates `messageKey` only when a real translation exists, decided from the raw resource (reads the global
+ * i18n state). Never calls `t()` (the global missingKey handler would store key -> key) and does not hand the
+ * values to i18next: they are filled in here, so server sent parameter names cannot act as i18next options and
+ * a value cannot be mistaken for a placeholder.
  */
 export const resolveValidationMessage = (error: IValidationError, fieldLabel: string): IResolvedMessage => {
   const key = error.messageKey
   const template = isNonEmptyString(key) ? findTranslation(key) : undefined
 
   if (isNonEmptyString(key) && template !== undefined) {
-    const translated = i18n.t(key, {
-      replace: { ...error.parameters, field: fieldLabel },
-      nsSeparator: false,
-      interpolation: { escapeValue: false }
-    })
+    const translated = interpolate(template, { ...error.parameters, field: fieldLabel })
 
     const usesField = FIELD_PLACEHOLDER.test(template)
     // a template that names the field cannot be used for an error without field
@@ -142,7 +152,8 @@ export const formatValidationError = (error: IValidationError): IFormattedValida
     label = suffix.trim()
   }
 
-  return { location, label, ...resolveValidationMessage(error, label) }
+  // a language alone is no field: templates that name the field then fall back to the plain message
+  return { location, label, ...resolveValidationMessage(error, fieldLabel === '' ? '' : label) }
 }
 
 export const validationErrorToText = (error: IValidationError): string => {

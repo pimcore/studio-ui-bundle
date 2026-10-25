@@ -80,6 +80,19 @@ describe('ApiErrorViewUI', () => {
     expect(t).toHaveBeenCalledWith('validation.and_more', { n: 3 })
   })
 
+  it('collapses identical rows into one', () => {
+    const container = renderErrors(['same', 'other', 'same'])
+
+    expect(Array.from(container.querySelectorAll('li')).map(li => li.textContent)).toEqual(['same', 'other'])
+  })
+
+  it('counts the "and N more" row after removing duplicates', () => {
+    const container = renderErrors([...Array.from({ length: 12 }, (_v, i) => `e${i}`), 'e0', 'e1'])
+
+    expect(container.querySelectorAll('li')).toHaveLength(11)
+    expect(t).toHaveBeenCalledWith('validation.and_more', { n: 2 })
+  })
+
   it('renders markup and placeholders in messages literally', () => {
     const literal = '<b>x</b> {{field}} $t(foo)'
     const container = renderErrors([literal])

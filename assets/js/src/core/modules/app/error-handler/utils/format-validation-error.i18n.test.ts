@@ -21,6 +21,7 @@ describe('resolveValidationMessage with real i18next', () => {
         en: {
           translation: {
             'validation.max_length': '{{field}} max {{max}}: {{value}}',
+            'validation.slug': 'The URL slug {{value}} in {{field}} is already in use',
             'validation.empty': '',
             'validation.same': 'validation.same'
           }
@@ -37,6 +38,16 @@ describe('resolveValidationMessage with real i18next', () => {
     )
 
     expect(text).toEqual({ text: `Title max 5: ${value}`, includesLabel: true })
+  })
+
+  it('keeps a value with a later placeholder in it literally (value before the other placeholders)', () => {
+    const result = resolveValidationMessage({
+      message: 'm',
+      messageKey: 'validation.slug',
+      parameters: { value: '/{{field}}' }
+    }, 'Slug')
+
+    expect(result).toEqual({ text: 'The URL slug /{{field}} in Slug is already in use', includesLabel: true })
   })
 
   it('ignores server sent parameter names that are i18next options', () => {

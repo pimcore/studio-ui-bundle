@@ -52,4 +52,29 @@ describe('mapUploadFileErrors', () => {
 
     expect(file.response).toBe(`${Array.from({ length: 10 }, (_v, i) => `row: e${i}`).join('; ')}; validation.and_more`)
   })
+
+  it('passes the number of hidden rows to the "and N more" text', () => {
+    const t = jest.fn((key: string, params?: { n: number }) => `${key}=${params?.n}`)
+    const [file] = mapUploadFileErrors([failedFile({
+      errorKey: 'error_element_validation_failed',
+      message: 'many',
+      validationErrors: Array.from({ length: 12 }, (_v, i) => ({ message: `e${i}` }))
+    })], { ...options, t: t as unknown as typeof options.t })
+
+    expect(file.response).toMatch(/; validation\.and_more=2$/)
+  })
+
+  it('shows identical rows once and counts the rest without them', () => {
+    const t = jest.fn((key: string, params?: { n: number }) => `${key}=${params?.n}`)
+    const [file] = mapUploadFileErrors([failedFile({
+      errorKey: 'error_element_validation_failed',
+      message: 'dup',
+      validationErrors: [
+        ...Array.from({ length: 11 }, (_v, i) => ({ message: `e${i}` })),
+        { message: 'e0' }
+      ]
+    })], { ...options, t: t as unknown as typeof options.t })
+
+    expect(file.response).toBe(`${Array.from({ length: 10 }, (_v, i) => `row: e${i}`).join('; ')}; validation.and_more=1`)
+  })
 })
