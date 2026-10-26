@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useRef } from 'react'
 import { Grid } from '@Pimcore/components/grid/grid'
 import { createColumnHelper, type SortingState } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
@@ -44,6 +44,10 @@ export const Table = ({ onSortingChange, sorting, redirectRows, setRedirectRows 
   const { getAllSites } = useSites()
 
   const [modifiedCells, setModifiedCells] = useState<ModifiedCells>([])
+
+  // the newest submission per row, so that a response that lost a race cannot overwrite a
+  // row that has been edited again in the meantime
+  const latestSubmission = useRef<Record<string, number>>({})
 
   const availableSites: Site[] = getAllSites()
   const siteOptions = availableSites.map(site => ({
@@ -192,37 +196,43 @@ export const Table = ({ onSortingChange, sorting, redirectRows, setRedirectRows 
   }): Promise<void> => {
     const rowId = rowData.rowId
     const updatedRow = getUpdatedRow(columnId, value, rowData)
+    const submission = (latestSubmission.current[rowId] ?? 0) + 1
+    latestSubmission.current[rowId] = submission
 
-    setRedirectRows(prev =>
-      prev.map(row =>
-        row.rowId === rowId ? updatedRow : row
+    const replaceRow = (next: RedirectRow): void => {
+      setRedirectRows(prev =>
+        prev.map(row =>
+          row.rowId === rowId ? next : row
+        )
       )
-    )
+    }
 
+    replaceRow(updatedRow)
     setModifiedCells([{ columnId, rowIndex: rowId }])
 
-    if (updatedRow.id !== null) {
-      const { success, data } = await updateRedirectById(updatedRow.id, updatedRow)
-
-      if (success) {
-        setModifiedCells([])
-
-        // the server resolves the target against the target type, so take over its result
-        if (!isUndefined(data)) {
-          setRedirectRows(prev =>
-            prev.map(row =>
-              row.rowId === rowId ? { ...data, rowId } : row
-            )
-          )
-        }
-      } else {
-        setRedirectRows(prev =>
-          prev.map(row =>
-            row.rowId === rowId ? rowData : row
-          )
-        )
-      }
+    if (updatedRow.id === null) {
+      return
     }
+
+    const { success, data } = await updateRedirectById(updatedRow.id, updatedRow)
+
+    // the row has been edited again while this request was in flight, so the newer edit owns it
+    if (latestSubmission.current[rowId] !== submission) {
+      return
+    }
+
+    if (success) {
+      setModifiedCells([])
+
+      // the server resolves the target against the target type, so take over its result
+      if (!isUndefined(data)) {
+        replaceRow({ ...data, rowId })
+      }
+
+      return
+    }
+
+    replaceRow(rowData)
   }
 
   return (
