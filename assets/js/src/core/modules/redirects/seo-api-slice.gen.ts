@@ -188,7 +188,7 @@ export type BundleSeoRedirect = {
     /** Target URL */
     target: string | null;
     /** Type of the element the target points to */
-    targetType: ("document" | "asset" | "object") | null;
+    targetType: ("document" | "asset" | "object" | null) | ("document" | "asset" | "object" | null);
     /** ID of the target site */
     targetSite: number | null;
     /** Status code */
@@ -228,7 +228,7 @@ export type BundleSeoRedirectAdd = {
     /** Target URL */
     target: string | null;
     /** Type of the element the target points to. Detected from the target when omitted. */
-    targetType?: ("document" | "asset" | "object") | null;
+    targetType?: ("document" | "asset" | "object" | null) | ("document" | "asset" | "object" | null);
 };
 export type BundleSeoRedirectUpdate = {
     /** Type of redirect */
@@ -242,7 +242,7 @@ export type BundleSeoRedirectUpdate = {
     /** Target URL */
     target: string | null;
     /** Type of the element the target points to. Detected from the target when omitted. */
-    targetType?: ("document" | "asset" | "object") | null;
+    targetType?: ("document" | "asset" | "object" | null) | ("document" | "asset" | "object" | null);
     /** Status code */
     statusCode: number;
     /** Priority */
