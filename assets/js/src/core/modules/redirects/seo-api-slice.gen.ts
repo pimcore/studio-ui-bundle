@@ -227,7 +227,7 @@ export type BundleSeoRedirectAdd = {
     source: string | null;
     /** Target URL */
     target: string | null;
-    /** Type of the element the target points to. Defaults to a document target. */
+    /** Type of the element the target points to. Detected from the target when omitted. */
     targetType?: ("document" | "asset" | "object") | null;
 };
 export type BundleSeoRedirectUpdate = {
@@ -241,7 +241,7 @@ export type BundleSeoRedirectUpdate = {
     targetSite: number | null;
     /** Target URL */
     target: string | null;
-    /** Type of the element the target points to. Defaults to a document target. */
+    /** Type of the element the target points to. Detected from the target when omitted. */
     targetType?: ("document" | "asset" | "object") | null;
     /** Status code */
     statusCode: number;
