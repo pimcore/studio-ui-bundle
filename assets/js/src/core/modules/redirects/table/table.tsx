@@ -176,9 +176,9 @@ export const Table = ({ onSortingChange, sorting, redirectRows, setRedirectRows 
       return { ...rowData, target: value.fullPath, targetType: value.type }
     }
 
-    // a manually entered path is resolved by the server against the row's target type;
-    // the server clears the type itself when the target turns out not to be an element
-    return { ...rowData, target: isNil(value) ? null : String(value) }
+    // a manually entered target is resolved by the server, which detects the element type
+    // (or clears it when the target is not an element at all)
+    return { ...rowData, target: isNil(value) ? null : String(value), targetType: null }
   }
 
   const onUpdateCellData = async ({
