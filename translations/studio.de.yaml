@@ -1780,7 +1780,6 @@ redirects.beginner-modal.title: Neue Einsteiger-Weiterleitung
 redirects.beginner-modal.type: Typ
 redirects.beginner-modal.path: Pfad
 redirects.beginner-modal.target: Ziel
-redirects.beginner-modal.target-type: Zieltyp
 redirects.beginner-modal.type.required: Bitte fügen Sie einen Typ hinzu
 redirects.beginner-modal.path.required: Bitte fügen Sie einen Pfad hinzu
 redirects.beginner-modal.target.required: Bitte fügen Sie ein Ziel hinzu

@@ -1780,7 +1780,6 @@ redirects.beginner-modal.title: Nuovo reindirizzamento principiante
 redirects.beginner-modal.type: Tipo
 redirects.beginner-modal.path: Percorso
 redirects.beginner-modal.target: Destinazione
-redirects.beginner-modal.target-type: Tipo di destinazione
 redirects.beginner-modal.type.required: Aggiungere un tipo
 redirects.beginner-modal.path.required: Aggiungere un percorso
 redirects.beginner-modal.target.required: Aggiungere una destinazione

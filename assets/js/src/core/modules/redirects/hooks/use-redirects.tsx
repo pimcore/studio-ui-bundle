@@ -44,8 +44,7 @@ export const useRedirects = (): UseRedirectsReturn => {
       const defaultRedirect: BundleSeoRedirectAdd = {
         type: redirectData?.type ?? 'entire_uri',
         source: redirectData?.source ?? null,
-        target: redirectData?.target ?? null,
-        targetType: redirectData?.targetType ?? null
+        target: redirectData?.target ?? null
       }
 
       const result = await createRedirect({ bundleSeoRedirectAdd: defaultRedirect })

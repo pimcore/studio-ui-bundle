@@ -15,20 +15,18 @@ import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { Select } from '@Pimcore/components/select/select'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useBundleSeoRedirectListTypesQuery, type BundleSeoRedirectAdd } from '../seo-api-slice-enhanced'
-import { useRedirectTargetTypeOptions } from '../hooks/use-redirect-options'
+import { useBundleSeoRedirectListTypesQuery } from '../seo-api-slice-enhanced'
 
 interface BeginnerRedirectModalProps {
   open: boolean
   setOpen: (open: boolean) => void
-  createRedirect: (redirectData?: Partial<BundleSeoRedirectAdd>) => Promise<boolean>
+  createRedirect: (redirectData?: { type: string, source: string, target: string }) => Promise<boolean>
 }
 
 interface BeginnerRedirectFormValues {
   type: string
   path: string
   target: string
-  targetType: BundleSeoRedirectAdd['targetType']
 }
 
 export const BeginnerRedirectModal = ({ open, setOpen, createRedirect }: BeginnerRedirectModalProps): React.JSX.Element => {
@@ -36,7 +34,6 @@ export const BeginnerRedirectModal = ({ open, setOpen, createRedirect }: Beginne
   const [form] = Form.useForm()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { data: typesData } = useBundleSeoRedirectListTypesQuery()
-  const { options: targetTypeOptions } = useRedirectTargetTypeOptions()
 
   const typeOptions = typesData?.types?.map(type => ({ label: t(type), value: type })) ?? []
 
@@ -46,8 +43,7 @@ export const BeginnerRedirectModal = ({ open, setOpen, createRedirect }: Beginne
     const success = await createRedirect({
       type: values.type,
       source: values.path,
-      target: values.target,
-      targetType: values.targetType ?? 'document'
+      target: values.target
     })
 
     if (success) {
@@ -80,7 +76,6 @@ export const BeginnerRedirectModal = ({ open, setOpen, createRedirect }: Beginne
     >
       <Form
         form={ form }
-        initialValues={ { targetType: 'document' } }
         layout="vertical"
         onFinish={ onFinish }
       >
@@ -110,17 +105,6 @@ export const BeginnerRedirectModal = ({ open, setOpen, createRedirect }: Beginne
           rules={ [{ required: true, message: t('redirects.beginner-modal.target.required') }] }
         >
           <Input placeholder={ t('redirects.beginner-modal.target') } />
-        </Form.Item>
-
-        <Form.Item
-          label={ t('redirects.beginner-modal.target-type') }
-          name="targetType"
-        >
-          <Select
-            data-testid="redirects-target-type-select"
-            options={ targetTypeOptions }
-            placeholder={ t('redirects.beginner-modal.target-type') }
-          />
         </Form.Item>
       </Form>
     </Modal>

@@ -15,7 +15,6 @@ import { Table } from './table/table'
 import { Box } from '@sdk/components'
 import {
   api,
-  type BundleSeoRedirectAdd,
   useBundleSeoRedirectsGetCollectionQuery
 } from './seo-api-slice-enhanced'
 import trackError, { ApiError } from '../app/error-handler'
@@ -76,14 +75,14 @@ export const RedirectsContainer = (): React.JSX.Element => {
     dispatch(api.util.invalidateTags(invalidatingTags.REDIRECTS()))
   }
 
-  const handleCreateRedirect = async (redirectData?: Partial<BundleSeoRedirectAdd>): Promise<boolean> => {
+  const handleCreateRedirect = async (redirectData?: { type: string, source: string, target: string }): Promise<boolean> => {
     const tempId = uuid()
     const optimisticRedirect: RedirectRow = {
       id: Date.now(),
       type: redirectData?.type ?? 'entire_uri',
       source: redirectData?.source ?? null,
       target: redirectData?.target ?? null,
-      targetType: redirectData?.targetType ?? null,
+      targetType: null,
       sourceSite: null,
       targetSite: null,
       statusCode: 301,

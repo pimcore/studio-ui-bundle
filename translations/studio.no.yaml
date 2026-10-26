@@ -1780,7 +1780,6 @@ redirects.beginner-modal.title: Ny nybegynneromdirigering
 redirects.beginner-modal.type: Type
 redirects.beginner-modal.path: Sti
 redirects.beginner-modal.target: Mål
-redirects.beginner-modal.target-type: Måltype
 redirects.beginner-modal.type.required: Vennligst legg til en type
 redirects.beginner-modal.path.required: Vennligst legg til en sti
 redirects.beginner-modal.target.required: Vennligst legg til et mål
