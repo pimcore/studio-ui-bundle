@@ -12,7 +12,7 @@ import { type NamePath } from 'antd/es/form/interface'
 
 /** The field name of the classification store, without the form path it is nested in. */
 export const getClassificationStoreName = (name: NamePath): string => {
-  return String(Array.isArray(name) ? name[name.length - 1] : name)
+  return String(Array.isArray(name) ? name.at(-1) : name)
 }
 
 /**
