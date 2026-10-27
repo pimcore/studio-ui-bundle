@@ -425,6 +425,7 @@ import save from '@Pimcore/assets/icons/save.inline.svg?react'
 import schedule from '@Pimcore/assets/icons/schedule.inline.svg?react'
 import scissorsCut01 from '@Pimcore/assets/icons/scissors-cut-01.inline.svg?react'
 import search from '@Pimcore/assets/icons/search.inline.svg?react'
+import searchReplace from '@Pimcore/assets/icons/search-replace.inline.svg?react'
 import security from '@Pimcore/assets/icons/security.inline.svg?react'
 import seemode from '@Pimcore/assets/icons/seemode.inline.svg?react'
 import segmentTagging from '@Pimcore/assets/icons/segment-tagging.inline.svg?react'
@@ -2165,6 +2166,10 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'search',
       component: search
+    })
+    iconLibrary.register({
+      name: 'search-replace',
+      component: searchReplace
     })
     iconLibrary.register({
       name: 'security',
