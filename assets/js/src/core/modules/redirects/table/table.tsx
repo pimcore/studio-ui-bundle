@@ -30,6 +30,9 @@ import { isNil, isUndefined } from 'lodash'
 
 type RedirectWithActions = RedirectRow & { actions: React.ReactNode }
 
+const withRowReplaced = (rows: RedirectRow[], rowId: string, next: RedirectRow): RedirectRow[] =>
+  rows.map(row => (row.rowId === rowId ? next : row))
+
 interface TableProps {
   onSortingChange?: (sorting: SortingState) => void
   sorting?: SortingState
@@ -200,11 +203,7 @@ export const Table = ({ onSortingChange, sorting, redirectRows, setRedirectRows 
     latestSubmission.current[rowId] = submission
 
     const replaceRow = (next: RedirectRow): void => {
-      setRedirectRows(prev =>
-        prev.map(row =>
-          row.rowId === rowId ? next : row
-        )
-      )
+      setRedirectRows(prev => withRowReplaced(prev, rowId, next))
     }
 
     replaceRow(updatedRow)
