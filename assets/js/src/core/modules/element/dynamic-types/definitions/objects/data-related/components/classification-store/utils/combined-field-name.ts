@@ -8,12 +8,11 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { isArray } from 'lodash'
 import { type NamePath } from 'antd/es/form/interface'
 
 /** The field name of the classification store, without the form path it is nested in. */
 export const getClassificationStoreName = (name: NamePath): string => {
-  return String(isArray(name) ? name[name.length - 1] : name)
+  return String(Array.isArray(name) ? name[name.length - 1] : name)
 }
 
 /**
