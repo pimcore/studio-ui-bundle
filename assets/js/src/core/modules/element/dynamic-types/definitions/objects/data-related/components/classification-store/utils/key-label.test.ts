@@ -33,4 +33,9 @@ describe('getKeyLabel', () => {
   it('ignores a title carried in the key definition', () => {
     expect(getKeyLabel(key(null, { title: 'Legacy' }))).toBe(KEY_NAME)
   })
+
+  // the shape the object layout delivers for a group that is already active
+  it('falls back to the name when the key carries no title at all', () => {
+    expect(getKeyLabel({ name: KEY_NAME })).toBe(KEY_NAME)
+  })
 })
