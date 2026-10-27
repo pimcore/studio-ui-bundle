@@ -9,7 +9,8 @@
  */
 
 /**
- * A group offers its delete action unless deleting is disallowed by the store.
+ * A group offers its delete action unless deleting is disallowed by the store,
+ * and labels its keys by the title configured for them.
  */
 
 // The `.styles` files pull in antd-style's untranspiled ESM build, which jest does not
@@ -31,6 +32,7 @@ import userEvent from '@testing-library/user-event'
 import { ClassificationStoreItem } from './classification-store-item'
 
 const mockConfirm = jest.fn()
+const mockObjectComponent = jest.fn()
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key })
@@ -57,7 +59,11 @@ jest.mock('@Pimcore/components/modal/form-modal/hooks/use-form-modal', () => ({
   useFormModal: () => ({ confirm: mockConfirm })
 }))
 jest.mock('@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/components/object-component', () => ({
-  ObjectComponent: () => null
+  ObjectComponent: (props: Record<string, unknown>) => {
+    mockObjectComponent(props)
+
+    return null
+  }
 }))
 jest.mock('@Pimcore/components/panel/panel', () => ({
   Panel: ({ children }: { children: React.ReactNode }) => <>{children}</>
@@ -65,9 +71,18 @@ jest.mock('@Pimcore/components/panel/panel', () => ({
 
 const groupLayout = { id: 1, name: 'Dimensions', keys: [] } as any
 
+const keyedGroupLayout = {
+  ...groupLayout,
+  keys: [
+    { id: 11, name: 'ef000001', title: 'Height', definition: { datatype: 'data', title: 'Legacy' } },
+    { id: 12, name: 'ef000002', title: null, definition: { datatype: 'data' } }
+  ]
+}
+
 describe('ClassificationStoreItem', () => {
   beforeEach(() => {
     mockConfirm.mockClear()
+    mockObjectComponent.mockClear()
   })
 
   it('asks for confirmation when the group is deleted', async () => {
@@ -96,5 +111,33 @@ describe('ClassificationStoreItem', () => {
 
     expect(screen.getByText('Dimensions')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'delete' })).not.toBeInTheDocument()
+  })
+
+  it('labels a key with its title, overriding the title of its definition', () => {
+    render(
+      <ClassificationStoreItem
+        currentLayoutData={ [keyedGroupLayout] }
+        groupLayout={ keyedGroupLayout }
+        updateCurrentLayoutData={ jest.fn() }
+      />
+    )
+
+    expect(mockObjectComponent).toHaveBeenCalledWith(
+      expect.objectContaining({ name: 11, title: 'Height' })
+    )
+  })
+
+  it('labels a key without a title by its name', () => {
+    render(
+      <ClassificationStoreItem
+        currentLayoutData={ [keyedGroupLayout] }
+        groupLayout={ keyedGroupLayout }
+        updateCurrentLayoutData={ jest.fn() }
+      />
+    )
+
+    expect(mockObjectComponent).toHaveBeenCalledWith(
+      expect.objectContaining({ name: 12, title: 'ef000002' })
+    )
   })
 })

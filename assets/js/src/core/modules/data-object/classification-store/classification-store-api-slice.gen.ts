@@ -906,6 +906,8 @@ export type ClassificationStoreCollection2 = {
     description: string;
     /** Layout Definition */
     definition: object;
+    /** Configured title of the key */
+    title?: string | null;
 };
 export type ClassificationStoreGroupLayout2 = {
     /** AdditionalAttributes */
