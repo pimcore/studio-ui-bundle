@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-const toPx = (value: string): number | undefined => value.endsWith('px') ? parseFloat(value) : undefined
+const toPx = (value: string): number | undefined => value.endsWith('px') ? Number.parseFloat(value) : undefined
 
 const toRect = (width: number): DOMRect => ({
   width, height: 0, x: 0, y: 0, top: 0, left: 0, bottom: 0, right: width, toJSON: () => ({})
@@ -25,7 +25,7 @@ export const mockSplitLayoutGeometry = (containerWidth: number): jest.SpyInstanc
       return toRect(containerWidth)
     }
 
-    const width = parseFloat(this.style.width) / 100 * containerWidth
+    const width = Number.parseFloat(this.style.width) / 100 * containerWidth
     const minWidth = toPx(this.style.minWidth) ?? 0
     const maxWidth = toPx(this.style.maxWidth) ?? Number.POSITIVE_INFINITY
 

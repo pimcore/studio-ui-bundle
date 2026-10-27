@@ -8,15 +8,14 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { type SplitLayoutProps } from '@Pimcore/components/split-layout/split-layout'
-import { PageLayout } from '@Pimcore/components/page-layout/page-layout'
+import { PageLayout, type PageLayoutSplitOptions } from '@Pimcore/components/page-layout/page-layout'
 import React from 'react'
 
 /**
  * @deprecated Use `PageLayoutConfigProps` (with `variant: 'config'`) instead.
  * This type is kept for backward compatibility and will be removed in the next major version.
  */
-export interface ConfigLayoutProps extends SplitLayoutProps {}
+export interface ConfigLayoutProps extends PageLayoutSplitOptions {}
 
 /**
  * ConfigLayout - A predefined layout component for configuration interfaces
