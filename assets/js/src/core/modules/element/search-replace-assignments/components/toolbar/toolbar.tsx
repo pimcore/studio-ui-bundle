@@ -43,7 +43,7 @@ export const Toolbar = (): React.JSX.Element => {
       {hasSelection && (
         <Flex
           align="center"
-          gap="extra-small"
+          gap="mini"
         >
           <Checkbox
             checked
