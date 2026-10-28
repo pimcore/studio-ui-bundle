@@ -33,6 +33,7 @@ import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-ty
 import { SelectedColumnsProvider, type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
 import { useClassDefinitionSelectionOptional } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
+import { Text } from '@Pimcore/components/text/text'
 
 export interface ManyToManyObjectRelationClassDefinitionProps {
   allowToClearRelation: boolean
@@ -150,7 +151,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     locale: col.localizable ? userLanguage : undefined
   })), [visibleFieldDefinitions, userLanguage])
 
-  const { data: gridFullData, isLoading: isGridFullDataLoading, refetchAll } = useDataObjectGrids({
+  const { data: gridFullData, isLoading: isGridFullDataLoading, isError: isGridFullDataError, refetchAll } = useDataObjectGrids({
     classIds: dataRelationClasses,
     convertClassName: getByName,
     columns: visibleColumns,
@@ -233,6 +234,24 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     [gridDataMap, visibleFieldDefinitions]
   )
 
+  // The rows come with the object data; the visible field values follow in their own request, so the
+  // field shows the rows right away and only tells while the values are loading or when they failed.
+  let visibleFieldsStatus: React.ReactNode = null
+  if (isGridFullDataLoading) {
+    visibleFieldsStatus = <Text type="secondary">{ t('relations.visible-fields.loading') }</Text>
+  } else if (isGridFullDataError) {
+    visibleFieldsStatus = <Text type="danger">{ t('relations.visible-fields.error') }</Text>
+  }
+
+  const hint = visibleFieldsStatus === null
+    ? props.hint
+    : (
+      <>
+        { props.hint }
+        <div>{ visibleFieldsStatus }</div>
+      </>
+      )
+
   return (
     <SelectedColumnsProvider columns={ selectedColumns }>
       <ManyToManyRelation
@@ -240,7 +259,8 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
         columnDefinition={ [...columnDefinition, ...(props.columnDefinition ?? [])] }
         dataObjectsAllowed
         enrichRowData={ handleEnrichRowData }
-        isLoading={ isAvailableGridColumnsLoading || isGridFullDataLoading }
+        hint={ hint }
+        isLoading={ isAvailableGridColumnsLoading }
         value={ props.value }
         visibleFieldsValue={ visibleFieldsValue }
       />

@@ -49,42 +49,46 @@ export const ManyToManyRelationGrid = forwardRef(function ManyToManyRelationGrid
   const { mapToLegacyElementType } = useElementHelper()
   const { columns } = useColumns(props)
   const { styles } = useStyles({ height: toCssDimension(props.height) ?? null })
-  const [data, setData] = useState(getDataArray())
+  const [rows, setRows] = useState(getRows())
 
   useEffect(() => {
-    setData(getDataArray())
+    setRows(getRows())
   }, [props.value])
 
-  function getDataArray (): ManyToManyRelationValue {
+  // Enriched on render, not stored: the enrichment (e.g. visible field values) can arrive after the rows.
+  const data = useMemo(() => enrichRows(rows), [rows, props.enrichRowData])
+
+  function getRows (): ManyToManyRelationValue {
     const result = props.value ?? []
 
     return result.map((item: ManyToManyRelationValueItem) => {
       const elementType = mapToLegacyElementType(item.type)
-      const resultRow = { ...item, type: elementType ?? '' }
 
-      if (props.enrichRowData !== undefined) {
-        return props.enrichRowData(resultRow)
-      }
-
-      return resultRow
+      return { ...item, type: elementType ?? '' }
     })
+  }
+
+  function enrichRows (rowsToEnrich: ManyToManyRelationValue): ManyToManyRelationValue {
+    const enrichRowData = props.enrichRowData
+
+    return enrichRowData === undefined ? rowsToEnrich : rowsToEnrich.map((row) => enrichRowData(row))
   }
 
   const handleDragEnd = (event: DragEndEvent): void => {
     const { active, over } = event
 
     if (!isNil(active) && !isNil(over) && !isEqual(active.id, over.id)) {
-      setData(prev => {
+      setRows(prev => {
         const oldIndex = prev.findIndex(row => row.id === active.id)
         const newIndex = prev.findIndex(row => row.id === over.id)
 
         if (oldIndex === -1 || newIndex === -1) return prev
 
-        const reorderedData = arrayMove(prev, oldIndex, newIndex)
+        const reorderedRows = arrayMove(prev, oldIndex, newIndex)
 
-        props.handleOrderChange(reorderedData)
+        props.handleOrderChange(enrichRows(reorderedRows))
 
-        return reorderedData
+        return reorderedRows
       })
     }
   }
