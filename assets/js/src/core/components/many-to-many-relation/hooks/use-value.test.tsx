@@ -84,4 +84,26 @@ describe('useValue', () => {
 
     await waitFor(() => { expect(result.current.displayedValue?.map(item => item.id)).toEqual([2]) })
   })
+
+  // The toolbar debounces the search, so a search can run with an onSearch of a render before the
+  // visible field values arrived; it must still match them.
+  it('matches the latest visible field values in a search started before they arrived', async () => {
+    const [a, b] = [1, 2].map(createItem)
+    const { result, rerender } = renderHook(({ visibleFieldsValue }: { visibleFieldsValue: Array<Record<string, any>> }) => {
+      const [value, setValue] = useState<ManyToManyRelationValue | null>([a, b])
+      const [displayedValue, setDisplayedValue] = useState<DisplayManyToManyRelationValue | null>([a, b])
+      const hook = useValue(value, setValue, displayedValue, setDisplayedValue, null, false, undefined, visibleFieldsValue)
+      return { displayedValue, hook }
+    }, { initialProps: { visibleFieldsValue: [] as Array<Record<string, any>> } })
+
+    const searchOfEarlierRender = result.current.hook.onSearch
+
+    rerender({ visibleFieldsValue: [{ id: 1, name: 'Polo' }, { id: 2, name: 'Golf' }] })
+
+    await act(async () => {
+      searchOfEarlierRender('golf')
+    })
+
+    await waitFor(() => { expect(result.current.displayedValue?.map(item => item.id)).toEqual([2]) })
+  })
 })

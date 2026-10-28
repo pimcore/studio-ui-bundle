@@ -73,6 +73,9 @@ export const useValue = (
   valueRef.current = value
   const displayedValueRef = useRef(displayedValue)
   displayedValueRef.current = displayedValue
+  // The toolbar debounces the search, so a search can run with a closure of an earlier render
+  const visibleFieldsValueRef = useRef(visibleFieldsValue)
+  visibleFieldsValueRef.current = visibleFieldsValue
 
   const { t } = useTranslation()
 
@@ -149,6 +152,7 @@ export const useValue = (
     if (searchTerm === '') return items
 
     const normalizedSearch = searchTerm.toLowerCase()
+    const visibleFieldsValue = visibleFieldsValueRef.current
     const hasVisibleFields = !isNil(visibleFieldsValue)
     const visibleFieldsMap = hasVisibleFields
       ? new Map(
