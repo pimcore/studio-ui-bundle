@@ -8,8 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useEffect, useMemo } from 'react'
-import { map, filter, isEmpty, isUndefined } from 'lodash'
+import { useEffect, useMemo, useRef } from 'react'
+import { map, filter, isEmpty, isNil } from 'lodash'
 import {
   type DataObjectGetGridApiResponse,
   type GridColumnRequest,
@@ -70,13 +70,17 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, applyF
 
   const isLoading = queries.some(q => q.isLoading || q.isFetching)
   const isError = queries.some(q => q.isError)
-  const error = queries.find(q => q.isError)?.error
 
+  // Every class has its own request; each failure is tracked once, also when another class failed before.
+  const trackedErrors = useRef(new WeakSet<object>())
   useEffect(() => {
-    if (!isUndefined(error)) {
-      trackError(new ApiError(error))
-    }
-  }, [error])
+    queries.forEach(q => {
+      if (q.isError && !isNil(q.error) && !trackedErrors.current.has(q.error)) {
+        trackedErrors.current.add(q.error)
+        trackError(new ApiError(q.error))
+      }
+    })
+  })
 
   const data = useMemo(() => queries.flatMap(q => q.data?.items ?? []), queries.map(q => q.data))
   const refetchAll = (): void => { queries.forEach(q => { void q.refetch() }) }

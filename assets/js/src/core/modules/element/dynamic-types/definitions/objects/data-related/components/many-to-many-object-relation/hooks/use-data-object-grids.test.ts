@@ -49,6 +49,7 @@ const requestedFilters = (callIndex: number = 0): any => mockUseDataObjectGetGri
 describe('useDataObjectGrids', () => {
   beforeEach(() => {
     mockUseDataObjectGetGridQuery.mockClear()
+    mockUseDataObjectGetGridQuery.mockImplementation((args: any, options: any) => queryResult)
     mockTrackError.mockClear()
     queryResult = { isLoading: false, isFetching: false, isError: false, data: undefined, refetch: jest.fn() }
   })
@@ -86,6 +87,30 @@ describe('useDataObjectGrids', () => {
 
     expect(mockTrackError).toHaveBeenCalledTimes(1)
     expect(mockTrackError.mock.calls[0][0].errorData).toBe(error)
+  })
+
+  // Each class has its own request; a later failure of another class must be tracked as well.
+  it('tracks the failures of several classes once each', () => {
+    const carError = { status: 500, data: { message: 'car failed' } }
+    const bikeError = { status: 500, data: { message: 'bike failed' } }
+    const results: Record<string, Record<string, any>> = {
+      'Car-class-id': { isLoading: false, isFetching: false, isError: true, error: carError, data: undefined, refetch: jest.fn() },
+      'Bike-class-id': { isLoading: false, isFetching: true, isError: false, data: undefined, refetch: jest.fn() }
+    }
+    mockUseDataObjectGetGridQuery.mockImplementation((args: any) => results[args.classId])
+
+    const { rerender } = renderHook(() => useDataObjectGrids({
+      classIds: ['Car', 'Bike'],
+      convertClassName: (name: string) => ({ id: `${name}-class-id` }) as any,
+      columns: [{ key: 'name', type: 'dataobject.adapter', locale: null, config: [] }] as any,
+      dataValue: [...relatedObjects(1, 'Car'), ...relatedObjects(1, 'Bike', 100)]
+    }))
+
+    results['Bike-class-id'] = { isLoading: false, isFetching: false, isError: true, error: bikeError, data: undefined, refetch: jest.fn() }
+    rerender()
+    rerender()
+
+    expect(mockTrackError.mock.calls.map(call => call[0].errorData)).toEqual([carError, bikeError])
   })
 
   it('reports no error when the grid requests succeed', () => {
