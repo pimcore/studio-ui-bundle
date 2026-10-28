@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { Dropdown } from 'antd'
+import { Dropdown, Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import {
   AssignedTagsTable
@@ -29,6 +29,7 @@ import {
   useTagGetCollectionForElementByTypeAndIdQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
 import { Button } from '@Pimcore/components/button/button'
+import { actionTooltipDelay } from '@Pimcore/components/tooltip/tooltip'
 
 export const TagsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -52,6 +53,16 @@ export const TagsTabContainer = (): React.JSX.Element => {
       )
     : (
       <Dropdown.Button
+        buttonsRender={ ([leftButton, rightButton]) => [
+          leftButton,
+          <Tooltip
+            key="more"
+            mouseEnterDelay={ actionTooltipDelay }
+            title={ t('more-actions') }
+          >
+            {rightButton}
+          </Tooltip>
+        ] }
         disabled={ element?.hasChildren !== true }
         menu={ {
           items: [{

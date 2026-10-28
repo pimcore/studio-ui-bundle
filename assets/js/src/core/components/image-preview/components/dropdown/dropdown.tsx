@@ -42,6 +42,7 @@ export const ImagePreviewDropdown = (props: ImagePreviewDropdownProps): React.JS
           e.stopPropagation()
           e.preventDefault()
         } }
+        tooltip={ { title: t('more-actions') } }
         type="default"
       />
     </Dropdown>

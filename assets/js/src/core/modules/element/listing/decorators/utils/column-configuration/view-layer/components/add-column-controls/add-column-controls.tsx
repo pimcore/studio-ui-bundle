@@ -201,8 +201,10 @@ export const AddColumnControls = ({
               } }
             >
               <IconButton
+                aria-label={ t('more-actions') }
                 data-testid="listing-grid-config-add-advanced-button"
                 icon={ { value: 'more' } }
+                tooltip={ { title: t('more-actions') } }
                 type="default"
               />
             </Dropdown>
