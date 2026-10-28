@@ -19,7 +19,7 @@ import { resolveMainWidgetContext } from './utils/resolve-main-widget-context'
 import { getNextTabId } from './utils/get-next-tab-id'
 import { migrateTab, rebindTab, type ReplaceTabPayload } from './utils/replace-tab'
 import { normalizeInnerModel, restoreCollapsedRows } from './utils/restore-collapsed-rows'
-import { endMaximize, forgetMaximizeIfEnded, restoreMaximizeIfNoMainWidget, toggleMaximize } from './utils/maximize-main-widget'
+import { endMaximize, forgetMaximizeIfEnded, isLastMaximizedTab, restoreMaximizeIfMaximized, toggleMaximize } from './utils/maximize-main-widget'
 import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
 import { type ElementIcon } from '@sdk/components'
 import { type UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
@@ -208,8 +208,11 @@ const slice = createSlice({
         isOuterModelNode = false
       }
 
+      let endsMaximize = false
+
       if (node !== undefined) {
         const nextTabId = isOuterModelNode ? undefined : getNextTabId(node)
+        endsMaximize = !isOuterModelNode && isLastMaximizedTab(node)
 
         model.doAction(Actions.deleteTab(node.getId()))
 
@@ -223,7 +226,10 @@ const slice = createSlice({
       } else {
         state.innerModel = restoreCollapsedRows(model.toJson())
         state.mainWidgetContext = resolveMainWidgetContext(model)
-        restoreMaximizeIfNoMainWidget(state, model)
+
+        if (endsMaximize) {
+          restoreMaximizeIfMaximized(state)
+        }
       }
     }
   },

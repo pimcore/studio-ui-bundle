@@ -95,6 +95,23 @@ const splitLayout: IJsonModel = {
   }
 }
 
+// like the real inner layout: the main tabset stays when emptied, other tabsets are removed
+const splitLayoutKeptMainTabset: IJsonModel = {
+  global: {},
+  layout: {
+    type: 'row',
+    id: 'main',
+    children: [
+      { type: 'tabset', id: 'main_tabset', enableDeleteWhenEmpty: false, children: [{ type: 'tab', id: 'car', component: 'element' }] },
+      {
+        type: 'tabset',
+        id: 'bike_tabset',
+        children: [{ type: 'tab', id: 'bike', component: 'element' }, { type: 'tab', id: 'scooter', component: 'element' }]
+      }
+    ]
+  }
+}
+
 const openSideWidgets = (json: IJsonModel): Array<string | undefined> =>
   Model.fromJson(json).getBorderSet().getBorders().map((border) => border.getSelectedNode()?.getId())
 
@@ -154,6 +171,27 @@ describe('widget-manager-slice maximize of the main area', () => {
 
     expect(maximizedTabset(closed.outerModel)).toBeUndefined()
     expect(openSideWidgets(closed.outerModel)).toEqual(['tree', undefined])
+  })
+
+  it.each([
+    ['the kept main tabset', ['car']],
+    ['a removable tabset', ['scooter', 'bike']]
+  ])('ends the mode when the last tab of the maximized tabset in a split layout closes (%s)', (_, tabIds) => {
+    const maximized = reducer(createState(splitLayoutKeptMainTabset), toggleMainWidgetMaximize(tabIds[0]))
+    const closed = tabIds.reduce((current, tabId) => reducer(current, closeWidget(tabId)), maximized)
+
+    expect(maximizedTabset(closed.outerModel)).toBeUndefined()
+    expect(maximizedTabset(closed.innerModel)).toBeUndefined()
+    expect(openSideWidgets(closed.outerModel)).toEqual(['tree', undefined])
+    expect(closed.maximizeRestoreTabIds).toBeUndefined()
+  })
+
+  it('keeps the mode when another tab of the maximized tabset remains', () => {
+    const maximized = reducer(createState(splitLayoutKeptMainTabset), toggleMainWidgetMaximize('bike'))
+    const closed = reducer(maximized, closeWidget('scooter'))
+
+    expect(maximizedTabset(closed.outerModel)).toBe('main_tabset')
+    expect(maximizedTabset(closed.innerModel)).toBe('bike_tabset')
   })
 
   it('drops the split maximize when the outer layout is replaced, e.g. by a perspective switch', () => {

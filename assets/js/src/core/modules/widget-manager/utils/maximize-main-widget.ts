@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { Actions, BorderNode, Model, TabSetNode } from 'flexlayout-react'
+import { Actions, BorderNode, Model, type Node, TabSetNode } from 'flexlayout-react'
 import { isUndefined } from 'lodash'
 import { type WidgetManagerState } from '../widget-manager-slice'
 
@@ -117,8 +117,17 @@ export const forgetMaximizeIfEnded = (state: WidgetManagerState): void => {
   }
 }
 
-export const restoreMaximizeIfNoMainWidget = (state: WidgetManagerState, innerModel: Model): void => {
-  if (countNodes(innerModel, 'tab') === 0 && isMainAreaMaximized(Model.fromJson(state.outerModel))) {
+/** Whether closing this main tab empties the maximized tabset or the whole main area. */
+export const isLastMaximizedTab = (node: Node): boolean => {
+  const tabset = node.getParent()
+
+  return tabset instanceof TabSetNode &&
+    tabset.getChildren().length === 1 &&
+    (tabset.isMaximized() || countNodes(node.getModel(), 'tab') === 1)
+}
+
+export const restoreMaximizeIfMaximized = (state: WidgetManagerState): void => {
+  if (isMainAreaMaximized(Model.fromJson(state.outerModel))) {
     restore(state)
   }
 }
