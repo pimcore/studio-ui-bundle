@@ -16,11 +16,12 @@
 import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { type TabNode } from 'flexlayout-react'
+import { MainTabTitle } from './main-tab-title'
 
-const dispatch = jest.fn()
+const mockDispatch = jest.fn()
 
 jest.mock('@sdk/app', () => ({
-  useAppDispatch: () => dispatch
+  useAppDispatch: () => mockDispatch
 }))
 
 jest.mock('../widget-manager-slice', () => ({
@@ -31,24 +32,21 @@ jest.mock('./tab-title-outer-container', () => ({
   TabTitleOuterContainer: () => <span data-testid='title'>car</span>
 }))
 
-// eslint-disable-next-line import/first
-import { MainTabTitle } from './main-tab-title'
-
 describe('MainTabTitle', () => {
   const node = { getId: () => 'car' } as unknown as TabNode
 
   beforeEach(() => {
-    dispatch.mockClear()
+    mockDispatch.mockClear()
   })
 
   it('toggles the maximized main area on the second press of a double-click', () => {
     render(<MainTabTitle node={ node } />)
 
     fireEvent.mouseDown(screen.getByTestId('title'), { button: 0, detail: 1 })
-    expect(dispatch).not.toHaveBeenCalled()
+    expect(mockDispatch).not.toHaveBeenCalled()
 
     fireEvent.mouseDown(screen.getByTestId('title'), { button: 0, detail: 2 })
-    expect(dispatch).toHaveBeenCalledWith({ type: 'toggle', payload: 'car' })
+    expect(mockDispatch).toHaveBeenCalledWith({ type: 'toggle', payload: 'car' })
   })
 
   it('ignores a middle-click double-click, which closes tabs', () => {
@@ -56,6 +54,6 @@ describe('MainTabTitle', () => {
 
     fireEvent.mouseDown(screen.getByTestId('title'), { button: 1, detail: 2 })
 
-    expect(dispatch).not.toHaveBeenCalled()
+    expect(mockDispatch).not.toHaveBeenCalled()
   })
 })

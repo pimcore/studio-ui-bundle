@@ -29,10 +29,10 @@ const MainTabTitleInner = ({ node }: MainTabTitleProps): React.JSX.Element => {
   }, [dispatch, node])
 
   return (
-    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <span
       className='widget-manager__main-tab-title'
       onMouseDown={ onMouseDown }
+      role='presentation'
       style={ { display: 'contents' } }
     >
       <TabTitleOuterContainer node={ node } />
