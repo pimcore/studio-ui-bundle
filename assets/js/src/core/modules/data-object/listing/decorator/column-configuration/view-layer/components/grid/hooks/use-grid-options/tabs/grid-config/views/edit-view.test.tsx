@@ -50,15 +50,15 @@ jest.mock('@Pimcore/components/compact/compact', () => ({
 }))
 
 jest.mock('@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/components/add-column-controls/add-column-controls', () => ({
-  AddColumnControls: () => null
+  AddColumnControls: () => <div />
 }))
 
 jest.mock('../grid-config-list', () => ({
-  GridConfigList: () => null
+  GridConfigList: () => <div />
 }))
 
 jest.mock('../grid-config-modal', () => ({
-  GridConfigModal: () => null
+  GridConfigModal: () => <div />
 }))
 
 jest.mock('@Pimcore/modules/asset/listing/decorator/column-configuration/view-layer/components/sidebar/tabs/grid-config/povider/settings/use-settings', () => ({

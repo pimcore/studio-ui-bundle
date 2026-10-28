@@ -49,7 +49,7 @@ jest.mock('@Pimcore/components/message/useMessage', () => ({
 }))
 
 jest.mock('@Pimcore/modules/element/element-selector/components/triggers/button/element-selector-button', () => ({
-  ElementSelectorButton: () => null
+  ElementSelectorButton: () => <div />
 }))
 
 jest.mock('@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider', () => ({

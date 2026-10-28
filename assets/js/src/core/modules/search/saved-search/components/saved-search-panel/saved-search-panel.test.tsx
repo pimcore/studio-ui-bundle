@@ -90,7 +90,7 @@ jest.mock('@Pimcore/modules/search/saved-search/dirty/saved-search-dirty-slice',
 }))
 
 jest.mock('./saved-search-form', () => ({
-  SavedSearchForm: () => null,
+  SavedSearchForm: () => <div />,
   defaultValues: { shareGlobally: true }
 }))
 

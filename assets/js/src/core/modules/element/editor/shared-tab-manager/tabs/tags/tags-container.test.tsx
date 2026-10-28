@@ -37,11 +37,11 @@ jest.mock('@Pimcore/components/header/header', () => ({
 }))
 
 jest.mock('./components/assigned-tags/assigned-tags', () => ({
-  AssignedTagsTable: () => null
+  AssignedTagsTable: () => <div />
 }))
 
 jest.mock('./components/tags-tree/tags-tree-container', () => ({
-  TagsTreeContainer: () => null
+  TagsTreeContainer: () => <div />
 }))
 
 jest.mock('./hooks/use-shortcut-actions', () => ({
