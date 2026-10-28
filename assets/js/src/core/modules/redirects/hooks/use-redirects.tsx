@@ -93,6 +93,13 @@ export const useRedirects = (): UseRedirectsReturn => {
     try {
       const result = await updateRedirect({ id, bundleSeoRedirectUpdate: toApiRedirect(row) })
 
+      // the API rejects a target type that resolves to no usable element, and RTK Query
+      // reports that in result.error instead of throwing
+      if (!isUndefined(result.error)) {
+        trackError(new ApiError(result.error))
+        return { success: false }
+      }
+
       if ('data' in result) {
         return { success: true, data: result.data }
       }
