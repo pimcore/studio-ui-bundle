@@ -4,8 +4,8 @@ title: Relation Visible Fields
 
 # Relation Visible Fields
 
-The **Visible Fields** setting of a many-to-many object relation (*Advanced Many-to-Many
-Object Relation*) chooses which fields of the related objects are shown as columns in the
+The **Visible Fields** setting of the Many-to-Many Object Relation and the Advanced
+Many-to-Many Object Relation chooses which fields of the related objects are shown as columns in the
 relation. This page describes how Pimcore Studio loads these values and what calculated
 values cost.
 
@@ -17,7 +17,7 @@ values cost.
    the top of the relation get their values first. The first chunk is smaller (50 related
    objects), so the rows on screen get their values quickly. A few chunks load at the same time.
 3. While values are loading, a hint below the field shows the progress, for example
-   *Loading visible fields… (200 of 650)*. If a request fails, the hint says that the
+   *Loading visible fields… (250 of 650)*. If a request fails, the hint says that the
    visible fields could not be loaded.
 
 The values are read with the regular Data Object grid endpoint
@@ -25,7 +25,8 @@ The values are read with the regular Data Object grid endpoint
 related objects.
 
 > Search and column filters on visible field values only see the values that are already
-> loaded. Wait until the hint has disappeared before relying on their results.
+> loaded. They update by themselves as more values arrive, so the results are complete
+> once the hint has disappeared.
 
 ## Performance
 

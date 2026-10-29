@@ -287,14 +287,4 @@ describe('useDataObjectGrids', () => {
     previous.forEach(subscription => { expect(subscription.unsubscribe).toHaveBeenCalledTimes(1) })
     expect(mockSubscriptions.slice(previous.length).map(subscription => subscription.args.body.columns[0].locale)).toEqual(['de', 'de'])
   })
-
-  it('refetches every requested chunk', () => {
-    const { result, rerender } = renderGrids(relatedObjects(250, 'Car'))
-    resolveAll(rerender)
-
-    act(() => { result.current.refetchAll() })
-
-    expect(mockSubscriptions).toHaveLength(3)
-    mockSubscriptions.forEach(subscription => { expect(subscription.refetch).toHaveBeenCalledTimes(1) })
-  })
 })

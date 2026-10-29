@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { chunk, flatMap, map, sortBy } from 'lodash'
+import { chunk, flatMap, isEmpty, map, sortBy } from 'lodash'
 import { type ManyToManyRelationValue } from '@Pimcore/components/many-to-many-relation'
 
 // Related objects per grid request. Larger requests cost less per row.
@@ -26,7 +26,7 @@ export interface GridChunk {
 }
 
 const splitIntoChunks = <T>(items: T[], chunkSize: number, firstChunkSize: number): T[][] =>
-  items.length === 0 ? [] : [items.slice(0, firstChunkSize), ...chunk(items.slice(firstChunkSize), chunkSize)]
+  isEmpty(items) ? [] : [items.slice(0, firstChunkSize), ...chunk(items.slice(firstChunkSize), chunkSize)]
 
 export const buildGridChunks = (
   dataValue: ManyToManyRelationValue | null | undefined,

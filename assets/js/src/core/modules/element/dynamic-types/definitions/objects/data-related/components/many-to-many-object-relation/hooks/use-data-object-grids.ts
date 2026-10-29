@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { shallowEqual } from 'react-redux'
 import { isEmpty, isNil, isUndefined, map, sumBy } from 'lodash'
 import {
@@ -99,6 +99,8 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, applyF
   const results = useAppSelector(state => selectors.map(select => select(state as GridQueryState)), shallowEqual)
 
   const subscriptions = useRef(new Map<string, GridSubscription>())
+  // Changes when refetchAll() released the subscriptions, so the queue requests the chunks again.
+  const [refetchRound, setRefetchRound] = useState(0)
 
   const isSettled = (index: number): boolean => results[index].isSuccess || results[index].isError
   const settledKey = results.map((_, index) => isSettled(index) ? '1' : '0').join('')
@@ -123,7 +125,7 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, applyF
       subscriptions.current.set(request.key, dispatch(api.endpoints.dataObjectGetGrid.initiate(request.args, { forceRefetch: true })))
       running++
     })
-  }, [requests, settledKey])
+  }, [requests, settledKey, refetchRound])
 
   useEffect(() => () => {
     subscriptions.current.forEach(subscription => { subscription.unsubscribe() })
@@ -152,6 +154,7 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, applyF
   }, [results, columnsKey])
 
   const { data, loadedCount } = useMemo(() => {
+    // Safe: the ref is only written in the effect above, after a render, and a render with the same inputs reads the same value.
     const keptBySlot = previousItems.current.columnsKey === columnsKey ? previousItems.current.bySlot : []
     const relationIds = new Set(requests.flatMap(request => request.ids))
     const freshIds = new Set(results.flatMap(result => map(result.data?.items ?? [], 'id')))
@@ -189,7 +192,13 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, applyF
     })
   }, [results])
 
-  const refetchAll = (): void => { subscriptions.current.forEach(subscription => { void subscription.refetch() }) }
+  // Releases the subscriptions so the queue requests every chunk again, first rows first and with at most
+  // VISIBLE_FIELDS_MAX_PARALLEL at the same time. The cached data stays visible meanwhile.
+  const refetchAll = (): void => {
+    subscriptions.current.forEach(subscription => { subscription.unsubscribe() })
+    subscriptions.current.clear()
+    setRefetchRound(round => round + 1)
+  }
 
   return { isLoading, isError, data, loadedCount, totalCount, refetchAll }
 }
