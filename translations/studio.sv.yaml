@@ -111,6 +111,8 @@ areablock.move-below: Flytta ner
 areablock.show: Visa
 areablock.hide: Dölj
 areablock.new: Ny
+areablock.insert-above: Infoga ovanför
+areablock.insert-below: Infoga nedanför
 areablock.copy: Kopiera
 areablock.paste: Klistra in
 areablock.cut: Klipp ut

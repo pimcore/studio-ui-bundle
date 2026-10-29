@@ -16,7 +16,7 @@ import { useDocumentEditor } from '@Pimcore/modules/document/editor/shared-tab-m
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import trackError, { GeneralError, ApiError } from '@Pimcore/modules/app/error-handler'
 import { type AbstractDocumentEditableDefinition } from '../../../dynamic-type-document-editable-abstract'
-import { type AreablockEditableConfig, type AreablockValue, type AreablockRenderTrigger } from '../areablock-editable'
+import { type AreaInsertPosition, type AreablockEditableConfig, type AreablockValue, type AreablockRenderTrigger } from '../areablock-editable'
 import { type AreablockManager } from '../utils/areablock-manager'
 import { createEditableDataFromDefinitions } from '../../../utils/editable-utils'
 import { createDropzoneContainer } from '../../../helpers/editable-dropzone-sorting/utils/dom-utils'
@@ -38,7 +38,7 @@ export interface UseAreablockEditableParams {
 
 export interface UseAreablockEditableReturn {
   dynamicEditables: AbstractDocumentEditableDefinition[]
-  addArea: (element: HTMLElement | null, areaType?: string) => Promise<void>
+  addArea: (element: HTMLElement | null, areaType?: string, position?: AreaInsertPosition) => Promise<void>
   removeArea: (element: HTMLElement) => void
   moveAreaUp: (element: HTMLElement) => void
   moveAreaDown: (element: HTMLElement) => void
@@ -46,6 +46,11 @@ export interface UseAreablockEditableReturn {
   copyArea: (element: HTMLElement) => void
   cutArea: (element: HTMLElement) => void
   pasteArea: (element: HTMLElement | null) => void
+}
+
+// 'above' takes the current element's own index, 'below' the one after it.
+function getInsertIndex (elementIndex: number, position: AreaInsertPosition): number {
+  return position === 'above' ? elementIndex : elementIndex + 1
 }
 
 function mergeAreablockTypesFromDefinitions (documentId: number, editableDefinitions: AbstractDocumentEditableDefinition[]): void {
@@ -112,7 +117,37 @@ export const useAreablockEditable = ({
     onChange?.(newValue)
   }, [onChange, areablockManager])
 
-  const addArea = useCallback(async (element: HTMLElement | null, areaType?: string) => {
+  // Puts the rendered markup into the DOM at `index`. Kept out of addArea so that
+  // function stays within the cognitive complexity budget.
+  const insertRenderedArea = useCallback((container: HTMLElement, htmlCode: string, index: number): void => {
+    const tempDiv = document.createElement('div')
+    tempDiv.innerHTML = htmlCode
+    const newElement = tempDiv.firstElementChild
+
+    if (isNil(newElement)) return
+
+    const newAreaElement = newElement as HTMLElement
+
+    hideElementUntilRendered(newAreaElement)
+
+    const existingElements = areablockManager.queryElements()
+
+    if (existingElements.length === 0) {
+      container.appendChild(newAreaElement)
+      const initialDropzoneContainer = createDropzoneContainer(areablockManager.getEditableName(), true)
+      newAreaElement.parentNode?.insertBefore(initialDropzoneContainer, newAreaElement)
+    } else if (!isNil(existingElements[index - 1])) {
+      existingElements[index - 1].insertAdjacentElement('afterend', newAreaElement)
+    } else if (!isNil(existingElements[index])) {
+      existingElements[index].insertAdjacentElement('beforebegin', newAreaElement)
+    }
+
+    const dropzoneContainer = createDropzoneContainer(areablockManager.getEditableName())
+    newAreaElement.appendChild(dropzoneContainer)
+    applyStylesToAreaEntries()
+  }, [areablockManager, hideElementUntilRendered, applyStylesToAreaEntries])
+
+  const addArea = useCallback(async (element: HTMLElement | null, areaType?: string, position: AreaInsertPosition = 'below') => {
     if (disabled) return
 
     const limit = configUtils.getEffectiveLimit(config)
@@ -123,7 +158,8 @@ export const useAreablockEditable = ({
     const typeToUse = areaType ?? (!isEmpty(availableTypes) ? availableTypes[0].type : 'default')
 
     if (!configUtils.isTypeAllowed(config, typeToUse)) return
-    const index = !isNil(element) ? areablockManager.findElementIndex(element) + 1 : 0
+    // Without an element the area becomes the first one.
+    const index = isNil(element) ? 0 : getInsertIndex(areablockManager.findElementIndex(element), position)
     const nextKey = areablockManager.calculateNextKey()
 
     if (configUtils.isReloadMode(config)) {
@@ -168,31 +204,7 @@ export const useAreablockEditable = ({
       }
 
       if (!isNil(data?.htmlCode)) {
-        const tempDiv = document.createElement('div')
-        tempDiv.innerHTML = data.htmlCode
-        const newElement = tempDiv.firstElementChild
-
-        if (!isNil(newElement)) {
-          const newAreaElement = newElement as HTMLElement
-
-          hideElementUntilRendered(newAreaElement)
-
-          const existingElements = areablockManager.queryElements()
-
-          if (existingElements.length === 0) {
-            container.appendChild(newAreaElement)
-            const initialDropzoneContainer = createDropzoneContainer(areablockManager.getEditableName(), true)
-            newAreaElement.parentNode?.insertBefore(initialDropzoneContainer, newAreaElement)
-          } else if (!isNil(existingElements[index - 1])) {
-            existingElements[index - 1].insertAdjacentElement('afterend', newAreaElement)
-          } else if (!isNil(existingElements[index])) {
-            existingElements[index].insertAdjacentElement('beforebegin', newAreaElement)
-          }
-
-          const dropzoneContainer = createDropzoneContainer(areablockManager.getEditableName())
-          newAreaElement.appendChild(dropzoneContainer)
-          applyStylesToAreaEntries()
-        }
+        insertRenderedArea(container, data.htmlCode, index)
       }
 
       if (!isNil(data?.editableDefinitions) && isArray(data?.editableDefinitions)) {
@@ -211,7 +223,8 @@ export const useAreablockEditable = ({
       console.error('Failed to add area:', error)
       handlePostOperation()
     }
-  }, [disabled, config, handleReloadMode, handlePostOperation, areablockManager, documentId])
+  }, [disabled, config, handleReloadMode, handlePostOperation, areablockManager, documentId, insertRenderedArea])
+
   const removeArea = useCallback((element: HTMLElement) => {
     if (disabled) return
 

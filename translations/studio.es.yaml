@@ -111,6 +111,8 @@ areablock.move-below: Mover abajo
 areablock.show: Mostrar
 areablock.hide: Ocultar
 areablock.new: Nuevo
+areablock.insert-above: Insertar encima
+areablock.insert-below: Insertar debajo
 areablock.copy: Copiar
 areablock.paste: Pegar
 areablock.cut: Cortar

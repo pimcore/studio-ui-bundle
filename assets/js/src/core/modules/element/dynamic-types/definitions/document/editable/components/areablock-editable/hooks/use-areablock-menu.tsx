@@ -12,23 +12,20 @@ import React, { useMemo } from 'react'
 import { useTranslation, type UseTranslationResponse } from 'react-i18next'
 import { isEmpty, isUndefined } from 'lodash'
 import { type MenuProps } from 'antd'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { SanitizeHtml } from '@Pimcore/components/sanitize-html/sanitize-html'
-import { type AreablockEditableConfig, type AreaType } from '../areablock-editable'
+import { type AreablockEditableConfig, type AreaType, type AreaInsertPosition } from '../areablock-editable'
 import { configUtils } from '../utils/areablock-utils'
+import { AreablockMenuItem } from '../components/areablock-menu-item'
 
 export interface UseAreablockMenuOptions {
   config?: AreablockEditableConfig
-  onAddArea: (areaType: string) => void
+  onAddArea: (areaType: string, position: AreaInsertPosition) => void
+  /**
+   * Adds the insert above and insert below buttons to every entry. Only meaningful
+   * next to an existing area, so the empty state leaves it off.
+   */
+  showInsertPosition?: boolean
 }
-
-// The areablock toolbar (ToolStrip) raises itself to z-index 10000 while activated
-// (see tool-strip.styles.ts), which sits above antd's default popup z-index range.
-// The first entry in this menu is rendered directly beneath that toolbar, so its
-// tooltip (opening upward by default) would otherwise be painted behind it. Elements
-// that must render above the activated toolbar use 10001 elsewhere in the app
-// (see editable-dialog.tsx) — match that convention here.
-const areablockMenuTooltipZIndex = 10001
 
 export interface UseAreablockMenuReturn {
   menuItems: MenuProps['items']
@@ -50,7 +47,7 @@ const getTooltipTitle = (areaType: AreaType, t: UseTranslationResponse<'translat
   )
 }
 
-export const useAreablockMenu = ({ config, onAddArea }: UseAreablockMenuOptions): UseAreablockMenuReturn => {
+export const useAreablockMenu = ({ config, onAddArea, showInsertPosition = false }: UseAreablockMenuOptions): UseAreablockMenuReturn => {
   const { t } = useTranslation()
 
   const menuItems = useMemo(() => {
@@ -59,14 +56,13 @@ export const useAreablockMenu = ({ config, onAddArea }: UseAreablockMenuOptions)
     const toMenuItem = (areaType: AreaType): NonNullable<MenuProps['items']>[number] => ({
       key: areaType.type,
       label: (
-        <Tooltip
-          title={ getTooltipTitle(areaType, t) }
-          zIndex={ areablockMenuTooltipZIndex }
-        >
-          <span>{t(areaType.name)}</span>
-        </Tooltip>
+        <AreablockMenuItem
+          name={ t(areaType.name) }
+          onInsert={ showInsertPosition ? (position) => { onAddArea(areaType.type, position) } : undefined }
+          tooltipTitle={ getTooltipTitle(areaType, t) }
+        />
       ),
-      onClick: () => { onAddArea(areaType.type) }
+      onClick: () => { onAddArea(areaType.type, 'below') }
     })
 
     if (Array.isArray(groupedTypes)) {
@@ -84,7 +80,7 @@ export const useAreablockMenu = ({ config, onAddArea }: UseAreablockMenuOptions)
     })
 
     return items
-  }, [config, onAddArea, t])
+  }, [config, onAddArea, showInsertPosition, t])
 
   return {
     menuItems
