@@ -31,6 +31,8 @@ import { uuid } from '@Pimcore/utils/uuid'
 import { checkElementPermission } from '@Pimcore/modules/element/permissions/permission-helper'
 import { isDisallowedPropertyKey } from './constants/disallowed-keys'
 import { PropertyType } from './constants/property-types'
+import { buildPredefinedPropertyOptions } from './utils/predefined-property-options'
+import trackError, { ApiError, GeneralError, isApiErrorData } from '@Pimcore/modules/app/error-handler'
 
 export const PropertiesContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -58,9 +60,18 @@ export const PropertiesContainer = (): React.JSX.Element => {
   const keyInputRef = useRef<InputRef>(null)
   const typeSelectValue = useRef<string>('')
 
-  const { data, isLoading } = usePropertyGetCollectionQuery({
+  const { data, isFetching, refetch } = usePropertyGetCollectionQuery({
     elementType
   })
+
+  // Predefined properties can be changed in the settings while this tab is open, so reload them whenever the select is opened
+  const onPredefinedPropertiesSelectOpenChange = (open: boolean): void => {
+    if (open) {
+      void refetch().unwrap().catch((error) => {
+        trackError(isApiErrorData(error) ? new ApiError(error) : new GeneralError(t('properties.predefined-properties.reload-error')))
+      })
+    }
+  }
 
   useEffect(() => {
     if (createManualPropertyMode) {
@@ -173,16 +184,10 @@ export const PropertiesContainer = (): React.JSX.Element => {
                     return (option?.label as unknown as string ?? '').toLowerCase().includes(input.toLowerCase())
                   } }
                   key={ 'properties-select' }
-                  loading={ isLoading }
+                  loading={ isFetching }
+                  onDropdownVisibleChange={ onPredefinedPropertiesSelectOpenChange }
                   onSelect={ onPredefinedPropertyChange }
-                  options={ data?.items
-                    ?.slice()
-                    ?.sort((a, b) => a.name.localeCompare(b.name))
-                    ?.map((item) => ({
-                      label: item.name,
-                      value: item.id
-                    }))
-                  }
+                  options={ buildPredefinedPropertyOptions(data?.items, t) }
                   placeholder={ t('properties.predefined-properties') }
                   showSearch
                 />

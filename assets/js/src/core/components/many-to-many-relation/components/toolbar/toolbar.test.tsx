@@ -211,6 +211,18 @@ describe('ManyToManyRelationToolbar create object action', () => {
     expect(screen.queryByLabelText(CREATE_OBJECT_LABEL)).not.toBeInTheDocument()
   })
 
+  it('stays hidden on a folder-only relation', () => {
+    renderToolbar(undefined, { ...creatableRelation, allowedDataObjectTypes: ['folder'] })
+
+    expect(screen.queryByLabelText(CREATE_OBJECT_LABEL)).not.toBeInTheDocument()
+  })
+
+  it('is offered when the relation accepts the object subtype among others', () => {
+    renderToolbar(undefined, { ...creatableRelation, allowedDataObjectTypes: ['folder', 'object'] })
+
+    expect(screen.getByLabelText(CREATE_OBJECT_LABEL)).toBeInTheDocument()
+  })
+
   it('stays hidden while the relation is read-only', () => {
     renderToolbar(undefined, { ...creatableRelation, disabled: true })
 

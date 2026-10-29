@@ -101,6 +101,15 @@ const api = baseApi.enhanceEndpoints({
 
     assetGetSavedGridConfigurations: {
       providesTags: (result, error, args) => providingTags.ASSET_GRID_CONFIGURATION_LIST()
+    },
+
+    assetImageDownloadByThumbnail: {
+      query: (queryArg) => ({
+        url: `/pimcore-studio/api/assets/${queryArg.id}/image/download/thumbnail/${encodeURIComponent(queryArg.thumbnailName)}`,
+        responseHandler: async (response): Promise<Blob> => await response.blob()
+      }),
+      // a download is a one-off; don't keep the file in the cache once the caller is done with it
+      keepUnusedDataFor: 0
     }
   }
 })
@@ -131,7 +140,8 @@ export const {
   useAssetGetAvailableGridColumnsQuery,
   useAssetPatchFolderByIdMutation,
   useAssetUploadInfoQuery,
-  useAssetVideoThumbnailStatusQuery
+  useAssetVideoThumbnailStatusQuery,
+  useLazyAssetImageDownloadByThumbnailQuery
 } = api
 
 export { api }

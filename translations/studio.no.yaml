@@ -85,6 +85,13 @@ asset.upload.overwrite: Overskriv
 asset.upload.keep-both: Behold begge
 asset.upload.skip: Hopp over
 asset.upload.apply-to-all: Bruk på alle
+asset.upload.files-exist.title: 'Filene finnes allerede'
+asset.upload.files-exist.message: '{{total}} av de valgte filene finnes allerede i denne mappen. Hva vil du gjøre med dem?'
+asset.upload.files-exist.more: 'og {{hidden}} til'
+asset.upload.review-each: 'Gå gjennom én og én'
+asset.upload.skip-all: 'Hopp over alle'
+asset.upload.keep-both-all: 'Behold begge for alle'
+asset.upload.overwrite-all: 'Overskriv alle'
 asset.upload.checking-duplicate-file-names: "Sjekker etter dupliserte filnavn ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Oppretter mapper
 asset.upload.folder-drop.creating-folders-hint: Vennligst vent mens mappestrukturen opprettes…
@@ -104,6 +111,8 @@ areablock.move-below: Flytt ned
 areablock.show: Vis
 areablock.hide: Skjul
 areablock.new: Ny
+areablock.insert-above: Sett inn over
+areablock.insert-below: Sett inn under
 areablock.copy: Kopier
 areablock.paste: Lim inn
 areablock.cut: Klipp ut
@@ -128,8 +137,8 @@ document.tree.context-menu.add-link: Ny lenke
 document.tree.context-menu.add-hardlink: Ny hardlink
 document.required-fields.validation-title: Påkrevde felt mangler
 document.required-fields.validation-message: Følgende påkrevde felt må fylles ut før publisering
-document.site.remove-site: Fjern nettsted
-document.site.remove-site-confirmation: Er du sikker på at du vil fjerne dette nettstedet? Denne handlingen kan ikke angres.
+document.site.remove-site: Slett nettsted
+document.site.remove-site-confirmation: Er du sikker på at du vil slette dette nettstedet permanent? Denne handlingen kan ikke angres.
 document.site.use-as-site: Bruk som nettsted
 document.site.edit-site: Rediger nettsted
 document.site.form.main-domain: Hoveddomene
@@ -159,8 +168,8 @@ data-object.select-class-to-display: Velg en klasse å vise
 data-object.tree.context-menu.add-object: Nytt objekt
 data-object.tree.context-menu.add-variant: Ny variant
 data-object.variant-listing.create-data-variant: Ny variant
-data-object.create-data-object: Legg til nytt objekt av type {{className}}
-data-object.create-variant: Legg til ny variant av type {{className}}
+data-object.create-data-object: Nytt objekt av type {{className}}
+data-object.create-variant: Ny variant av type {{className}}
 data-object.object-editor-tabs.variants: Varianter
 object.object-editor-tabs.children-listing: Underordnet rutenett
 workflow.label: Arbeidsflyt
@@ -190,7 +199,7 @@ class-definition.import-file-label: Velg JSON-fil
 class-definition.import-success: Klassedefinisjon importert
 class-definition.export-success: Klassedefinisjon eksportert
 class-definition.custom-layouts.default-layout: Standard Layout
-class-definition.create-new: Opprett ny klassedefinisjon
+class-definition.create-new: Ny klassedefinisjon
 class-definition.class-name: Klassenavn
 class-definition.unique-identifier: Unik identifikator
 class-definition.unique-identifier-warning: Vær forsiktig med den unike identifikatoren fordi tabellnavn kun kan inneholde opptil 64 tegn.
@@ -246,7 +255,7 @@ class-definition.composite-indices.type-localized-query: Lokalisert Query
 class-definition.composite-indices.type-store: Store
 class-definition.composite-indices.type-localized-store: Lokalisert Store
 class-definition.composite-indices.index-label: Indeks
-field-collection.create-new: Opprett ny Field Collection
+field-collection.create-new: Ny Field Collection
 field-collection.key: Nøkkel
 field-collection.validation.enter-key: Vennligst oppgi en nøkkel
 field-collection.validation.key-format: Nøkkelen må begynne med en bokstav og kan kun inneholde bokstaver, tall og understrek.
@@ -260,7 +269,7 @@ field-collection.general-settings.implements-interfaces: Implementerer grensesni
 field-collection.general-settings.usages.title: Bruk
 field-collection.general-settings.usages.class: Klasse
 field-collection.general-settings.usages.field: Felt
-object-brick.create-new: Opprett ny Object Brick
+object-brick.create-new: Ny Object Brick
 object-brick.key: Nøkkel
 object-brick.validation.enter-key: Vennligst oppgi en nøkkel
 object-brick.validation.key-format: Nøkkelen må begynne med en bokstav og kan kun inneholde bokstaver, tall og understrek.
@@ -275,7 +284,7 @@ object-brick.class-definitions-block.classname: Klasse
 object-brick.class-definitions-block.select-classname: Velg klasse
 object-brick.class-definitions-block.fieldname: Felt
 object-brick.class-definitions-block.select-fieldname: Velg felt
-select-option.create-new: Opprett ny Select Option
+select-option.create-new: Ny Select Option
 select-option.id: ID
 select-option.enter-name-new-item: Oppgi navnet på det nye elementet
 select-option.validation.enter-id: Vennligst oppgi en ID
@@ -311,6 +320,10 @@ custom-layout.empty-state.edit: Velg en eksisterende custom layout for å begynn
 example-prefix: Eksempel-prefiks
 pagination.show-total: Totalt {{total}} elementer
 pagination.page: Side
+pagination.first-page: Første side
+pagination.previous-page: Forrige side
+pagination.next-page: Neste side
+pagination.last-page: Siste side
 pagination.showing-x-of-y: Viser {{loaded}} av {{total}}
 preview-card.locate-in-tree: Finn i treet
 preview-card.rename: Gi nytt navn
@@ -325,6 +338,8 @@ aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Velg tilpasset min
 aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Last ned tilpasset miniatyrbilde
 aria.asset.image-sidebar.tab.details.precreated-thumbnail: Velg forhåndslaget miniatyrbilde for nedlasting
 aria.asset.image-sidebar.tab.details.download-thumbnail: Last ned miniatyrbilde
+aria.asset.image-sidebar.tab.details.downloadable-thumbnail: Velg nedlastbart miniatyrbilde
+aria.asset.image-sidebar.tab.details.download-downloadable-thumbnail: Last ned valgt miniatyrbilde
 notification.action-list.actions: Handlinger
 notification.action-list.cancel: Avbryt
 notification.action-list.cancel-all: Avbryt alle
@@ -332,6 +347,7 @@ notification.action-list.completed-actions: Fullførte handlinger
 aria.notification.action-list.toggle-collapse: Slå av/på liste over handlinger
 aria.notification.action-list.cancel-all: Avbryt alle pågående handlinger
 aria.notification.action-list.cancel: Avbryt handling
+aria.stack-list.drag-handle: Dra for å sortere på nytt
 asset.image.editor.zoom.reset: Tilbakestill
 aria.asset.image.editor.zoom.reset: Tilbakestill zoom
 aria.asset.image.editor.zoom.zoom-in: Zoom inn
@@ -348,6 +364,7 @@ grid.filter.to: Til
 grid.filter.is: Er
 grid.filter.less: Mindre enn
 grid.filter.more: Mer enn
+grid.filter.string.placeholder: Søk eller lim inn en liste med en verdi per linje for å få nøyaktig match med en av dem
 grid.filter.column: 'Filtrer {{column}}'
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
@@ -370,6 +387,7 @@ grid.advanced-column.advancedColumns.group.date: Dato
 grid.advanced-column.advancedColumns.group.string: Tekst
 grid.advanced-column.advancedColumns.group.other: Annet
 grid.advanced-column.title.placeholder: Legg til en tittel
+grid.advanced-column.expand: Utvid
 grid.advanced-column.advancedColumns: Kildefelt
 grid.advanced-column.advancedColumns.add: Legg til et kildefelt
 grid.advanced-column.transformers: Transformere
@@ -378,6 +396,7 @@ grid.advanced-column.preview: Forhåndsvisning
 grid.advanced-column.no-preview: Ingen forhåndsvisningselement tilgjengelig
 grid.advanced-column.no-preview-data: Ingen forhåndsvisningsdata tilgjengelig
 grid.advanced-column.error-preview-data: Feil ved lasting av forhåndsvisning
+grid.advanced-column.no-source-fields: Legg til et kildefelt for å se en forhåndsvisning.
 grid.advanced-column.preview-item: Forhåndsvisningselement
 grid.advanced-column.trim: Trim
 grid.advanced-column.find: Finn
@@ -497,6 +516,8 @@ version.category.title.meta: Metadata
 version.category.title.properties: Egenskaper
 version.changed-attributes: "Endrede attributter: {{attributes}}"
 aria.version.delete: Slett versjon
+aria.notes-and-events.delete: Slett notat
+aria.card.close: Lukk
 aria.version.expand: Utvid versjon
 clear-all: Fjern alle
 empty: Tom
@@ -555,6 +576,8 @@ userModification: Endret av (bruker)
 userOwner: Eier (bruker)
 listing.grid-config.convert-to-advanced: Konverter til avansert kolonne
 listing.grid-config.title: Rutenettskonfigurasjon
+listing.grid-config.search-mode-column.label: Automatisk
+listing.grid-config.search-mode-column.tooltip: Lagt til av den aktive søkemodusen. Du kan flytte den som enhver annen kolonne; den lagres ikke med rutenettkonfigurasjonen.
 grid-config.discard-all-changes: Forkast alle endringer
 grid-config.apply-changes: Bruk endringer
 grid-config.reload: Last på nytt
@@ -574,6 +597,9 @@ listing.actions: Bruk på utvalg
 listing.non-selected.actions: Bruk på alle
 listing.actions.zip-download: ZIP-nedlasting
 listing.actions.delete: Slett
+listing.actions.delete-all: Slett alle
+listing.actions.delete-all.not-allowed: "Noen elementer i denne mappen er låst, eller du har ikke tillatelse til å slette dem."
+listing.actions.delete-all.empty: "Denne mappen inneholder ingen elementer å slette."
 listing.actions.export: Eksporter
 reports.csv-export-modal.title: CSV-eksportalternativer
 reports.csv-export-modal.include-headers: Inkluder kolonneoverskrifter
@@ -630,6 +656,54 @@ website-settings.columns.site: Nettsted
 website-settings.columns.actions: Handlinger
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Obligatoriske felt mangler
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Navn og type er obligatoriske felt og må fylles ut.
+mcp-servers.rail.new-server: Ny server
+mcp-servers.placeholder: Velg en server for å se eller redigere konfigurasjonen.
+mcp-servers.tabs.empty: Velg en server for å se eller redigere konfigurasjonen.
+mcp-servers.tabs.new-server: Ny server
+mcp-servers.read-only-notice: Serverdefinisjoner administreres via filer i dette miljøet og kan ikke redigeres her.
+mcp-servers.save-success: MCP-server lagret
+mcp-servers.access.users-count: "Brukere: {{number}}"
+mcp-servers.access.roles-count: "Roller: {{number}}"
+mcp-servers.access.global-extra: alle autentiserte brukere
+mcp-servers.access.nobody: "Ingen ennå"
+mcp-servers.badge.read: Les
+mcp-servers.badge.write: Skriv
+mcp-servers.editor.create-title: Ny MCP-server
+mcp-servers.editor.edit-title: Rediger MCP-server
+mcp-servers.editor.general: Generelt
+mcp-servers.editor.permissions: Tillatelser
+mcp-servers.editor.identity: Identitet
+mcp-servers.editor.name: Navn
+mcp-servers.editor.name-required: Oppgi et navn.
+mcp-servers.editor.url-slug: URL-slug
+mcp-servers.editor.url-slug-required: Oppgi en URL-slug.
+mcp-servers.editor.url-slug-pattern: Bare små bokstaver, tall og bindestreker er tillatt.
+mcp-servers.editor.description: Beskrivelse
+mcp-servers.editor.enabled: Aktiv
+mcp-servers.editor.tools: Verktøy
+mcp-servers.editor.tools-placeholder: Velg verktøyene denne serveren eksponerer
+mcp-servers.editor.scopes: Annonserte scopes
+mcp-servers.editor.scopes-empty: Ingen scopes — velg verktøy for å utlede de nødvendige scopes.
+mcp-servers.editor.url: Server-URL
+mcp-servers.editor.copy-url: "Kopier server-URL"
+mcp-servers.editor.connect-hint: Pek MCP-klienten din mot denne URL-en og autentiser deg med Pimcore-kontoen din.
+mcp-servers.sharing.title: Deling
+mcp-servers.sharing.share-globally: Del globalt
+mcp-servers.sharing.share-globally-tooltip: Alle autentiserte brukere får konfigurasjonslesing og MCP-servertilgang (ikke konfigurasjonsredigering)
+mcp-servers.sharing.users: Brukere
+mcp-servers.sharing.roles: Roller
+mcp-servers.sharing.add-user: Legg til en bruker…
+mcp-servers.sharing.add-role: Legg til en rolle…
+mcp-servers.sharing.name: Navn
+mcp-servers.sharing.config-read: Konfigurasjonslesing
+mcp-servers.sharing.config-edit: Konfigurasjonsredigering
+mcp-servers.sharing.mcp-access: MCP-servertilgang
+mcp-servers.sharing.level: Tilgangsnivå
+mcp-servers.sharing.read: Les
+mcp-servers.sharing.write: Kan redigere
+mcp-servers.sharing.who-can-access: Hvem har tilgang
+mcp-servers.delete.title: Slett MCP-server
+mcp-servers.delete.confirm: Er du sikker på at du vil slette "{{name}}"?
 document-types.new: Ny
 document-types.columns.name: Navn
 document-types.columns.group: Gruppe
@@ -645,6 +719,7 @@ properties.label: Egenskaper
 properties.editable-properties: Redigerbare egenskaper
 properties.all-properties: Alle egenskaper
 properties.predefined-properties: Forhåndsdefinerte egenskaper
+properties.predefined-properties.reload-error: Kunne ikke laste inn de forhåndsdefinerte egenskapene
 properties.new-custom-property: Ny egendefinert egenskap
 translations.columns.type: Type
 translations.columns.key: Nøkkel
@@ -725,7 +800,7 @@ notifications.settings.discard.keep-editing: Fortsett å redigere
 notifications.settings.unsaved-changes_one: "{{count}} ulagret endring"
 notifications.settings.unsaved-changes_other: "{{count}} ulagrede endringer"
 notifications.settings.group.general: Generelt
-notifications.remove-all: Fjern alle
+notifications.remove-all: Slett alle
 notifications.new-notification: Nytt varsel
 notifications.columns.title: Tittel
 notifications.columns.date: Dato
@@ -754,6 +829,7 @@ tags.apply-tags-to-children: Bruk tagger på underelementer
 tags.remove-and-apply-tags-to-children: Fjern og bruk tagger på underelementer
 tags.columns.path: Sti
 tags.columns.actions: Fjern
+tags.actions.delete: Fjern tagg
 csv-separated-options: CSV-separerte alternativer
 csv-separated-options-info: Listen over tilgjengelige alternativer kan angis som kommaseparert liste, som verdier i enkeltkolonner eller blandet. For enkeltkolonne-metoden vil nøkkelen også brukes som verdi.
 add: Legg til
@@ -839,7 +915,7 @@ field-definitions.saved-successfully: Lagret.
 field-definitions.select-item-configuration: Velg elementkonfigurasjon
 field-definitions.custom-layout-title: Custom Layout
 field-definitions.custom-layouts: Custom Layouts
-field-definitions.create-new-class-definition: Opprett ny Custom Layout
+field-definitions.create-new-class-definition: Ny Custom Layout
 field-definitions.select-field-message: Velg et felt fra treet for å redigere egenskapene.
 field-definitions.loading-general-settings: Laster generelle innstillinger...
 field-definitions.type-not-supported: Type ikke støttet
@@ -1064,6 +1140,8 @@ regex-flags-tooltip: "RegExp uten skilletegn, må fungere i JS (Skilletegn: #)"
 test-string: Teststreng
 regex-validation-error-message: Strengen samsvarer ikke med det påkrevde formatet.
 calculator-class: Kalkulatorklasse
+calculator-data: Kalkulatordata
+calculator-data-tooltip: Valgfrie fritekstdata som sendes til kalkulatoren, f.eks. en enkel verdi, en kommaseparert liste eller en JSON-kodet struktur.
 calculator-expression: Kalkulatoruttrykk
 calculator-type: Kalkulatortype
 calculator-type-tooltip: Se den offisielle dokumentasjonen for å lære mer om å definere uttrykk eller klasser.
@@ -1122,6 +1200,7 @@ asset.sidebar.original-file: Originalfil
 asset.sidebar.web-format: Webformat
 asset.sidebar.print-format: Utskriftsformat
 asset.sidebar.office-format: Kontorformat
+asset.sidebar.thumbnail-download: Last ned miniatyrbilde
 jobs.notification.title: Kjørende jobber
 jobs.notification.tooltip: Åpne kjørende jobber
 jobs.notification.jobs_one: "{{count}} handling"
@@ -1156,17 +1235,24 @@ jobs.zip-upload-job.title: Last opp ZIP
 jobs.zip-upload-job.step1.title: Pakker ut ZIP
 jobs.zip-upload-job.step2.title: Oppretter ressurser
 jobs.download-csv-job.title: CSV export
+jobs.download-csv-job.title-with-context: "CSV export ({{name}})"
 jobs.download-xlsx-job.title: XLSX export
+jobs.download-xlsx-job.title-with-context: "XLSX export ({{name}})"
 jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Masseredigering
 batch-edit.no-content: Ingen kolonner lagt til ennå
 batch-edit.modal-footer.apply-changes: Bruk endringer
 batch-edit.modal-footer.discard-all-changes: Forkast alle endringer
 batch-edit.modal-footer.add-a-column: Legg til en kolonne
+batch-edit.system-boolean.publish: "Publiser"
+batch-edit.system-boolean.unpublish: "Avpubliser"
+batch-edit.system-boolean.placeholder: "Velg en handling"
+batch-edit.system-boolean.required: "Velg Publiser eller Avpubliser"
 batch-edit.append-mode.replace: Masseerstatt
 batch-edit.append-mode.add: Masselegg til
 batch-edit.append-mode.remove: Massefjerning
 batch-delete.job-title: Slett
+element-move.job-title: Flytt
 export-csv-form.modal-title: Eksporter CSV
 export-csv-form.export-notice: Vær oppmerksom på at eksporten ikke støtter noen felt (f.eks. forhåndsvisning, størrelse). Trykk OK for å fortsette med eksporten.
 export-csv-form.form-field.delimiter: Skilletegn
@@ -1181,6 +1267,7 @@ export-xlsx-form.form-field.header: Overskrift
 export-xlsx-form.form-field.header.option.name: Systemnøkkel
 export-xlsx-form.form-field.header.option.title: Etikett
 export-xlsx-form.form-field.header.option.no-header: Ingen overskrift
+form.optional-mark: (valgfritt)
 form.annotation.added: Lagt til
 form.annotation.changed: Endret
 form.annotation.removed: Fjernet
@@ -1224,11 +1311,24 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" er kopiert og
 element.tree.paste: Lim inn
 element.tree.paste-as-child: Lim inn som underelement
 element.tree.paste-as-child-recursive: Lim inn som underelement (rekursiv)
+element.tree.open-no-permission: Du har ikke tillatelse til å åpne dette elementet.
 element.tree.paste-recursive-updating-references: Lim inn rekursivt, oppdater referanser
 element.tree.paste-only-contents: Lim inn kun innhold her
 element.tree.cut: Klipp ut
 element.tree.cut-success-description: '{{elementType}} "{{name}}" er klippet ut og klar til å limes inn'
 element.tree.paste-cut: Lim inn utklippet element
+element.tree.cut-multiple: 'Klipp ut {{count}} elementer'
+element.tree.cut-multiple-success-description: '{{count}} elementer er klippet ut og kan limes inn'
+element.tree.paste-cut-multiple: 'Lim inn {{count}} utklippede elementer'
+element.tree.selection.count_one: '{{count}} element valgt'
+element.tree.selection.count_other: '{{count}} elementer valgt'
+element.tree.selection.clear: Fjern valg
+element.tree.selection.limit-reached: 'Maksimalt {{limit}} elementer nådd'
+element.tree.drag.elements_one: '{{count}} element'
+element.tree.drag.elements_other: '{{count}} elementer'
+element.tree.drag.elements-partial: '{{count}} av {{selected}} elementer'
+element.tree.move.skipped-elements_one: '1 element ble ikke flyttet: det er låst eller du kan ikke redigere det.'
+element.tree.move.skipped-elements_other: '{{count}} elementer ble ikke flyttet: de er låst eller du kan ikke redigere dem.'
 element.lock: Lås
 element.lock-and-propagate-to-children: Lås og propager til underelementer
 element.unlock: Lås opp
@@ -1249,10 +1349,13 @@ element.tree.refresh: Oppdater
 element.new-folder: Ny mappe
 element.new-folder.validation: Vennligst oppgi et gyldig navn
 element.rename: Gi nytt navn
+element.rename-folder: Gi nytt navn til mappe
 element.rename.label: Vennligst oppgi det nye navnet
 element.rename.validation: Vennligst oppgi et gyldig navn
 element.share-via-notification: Del via varsler
 element.delete: Slett
+element.delete-folder: Slett mappe
+element.delete-multiple: 'Slett {{count}} elementer'
 element.delete.confirmation.title: Slett element
 element.delete.confirmation.text: Vil du virkelig slette dette elementet?
 element.delete.confirmation.ok: Slett permanent
@@ -1275,6 +1378,8 @@ element.delete.batch.show-paths: Vis elementer
 element.delete.batch.dependencies-warning.confirmed_one: 'Merk: Dette elementet har avhengigheter.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Merk: Disse elementene har avhengigheter.'
 element.open: Åpne
+element.state: Status
+element.state.unpublished: Upublisert
 element.toolbar.copy-id: Kopier ID
 element.toolbar.copy-full-path-to-clipboard: Kopier full sti
 element.toolbar.copy-deep-link-to-clipboard: Kopier Deeplink
@@ -1314,6 +1419,9 @@ success: Suksess
 no-value-set: Ingen verdi satt
 set-to-null: Tom (sett til null)
 remove: Fjern
+move-up: Flytt opp
+move-down: Flytt ned
+translate: Oversett
 delete: Slett
 clone: Klon
 jobs.clone-job.step2.title: Oppdaterer referanser
@@ -1345,6 +1453,9 @@ relations.create-object.class: Klasse
 relation: relasjon
 items-limit-reached: Maksimalt antall elementer ({{maxItems}}) er nådd.
 asset-upload-type-not-allowed: Typen til den opplastede ressursen er ikke tillatt for dette feltet.
+relation.drop.not-allowed-elements-skipped_one: '1 element ble ikke lagt til: dette feltet tillater ikke typen.'
+relation.drop.not-allowed-elements-skipped_other: '{{count}} elementer ble ikke lagt til: dette feltet tillater ikke typene.'
+drag-and-drop.drop.single-element-only: 'Bare ett element kan slippes her.'
 actions: Handlinger
 asset: Ressurs
 data-object: Data Object
@@ -1399,19 +1510,17 @@ tree.actions.user: Bruker
 tree.actions.add-folder: Ny mappe
 tree.actions.add-tag: Ny tagg
 tree.actions.delete-tag: Slett
-tree.actions.rename-tag: Gi nytt navn
 tree.actions.role: Rolle
 tree.actions.add-role: Legg til rolle
 tree.actions.clone-role: Klon rolle
 tree.actions.remove-role: Slett rolle
-tree.actions.remove-folder: Fjern mappe
+tree.actions.remove-folder: Slett mappe
 tag-configuration.new: Ny
 tag-configuration.new-tag: Ny tagg
 tag-configuration.name: Navn
 tag-configuration.parent-tag: Overordnet tagg
 tag-configuration.create: Opprett
 tag-configuration.save: Lagre
-tag-configuration.rename: Gi nytt navn til tagg
 tag-configuration.successful-add: Tagg lagt til
 tag-configuration.successful-update: Tagg oppdatert
 tag-configuration.successful-deletion: Tagg slettet
@@ -1517,6 +1626,11 @@ user-management.settings.language.abbreviation: Forkortelse
 user-management.settings.language.view: Visning
 user-management.settings.language.edit: Rediger
 user-management.two-factor-authentication: Tofaktorautentisering
+user-management.two-factor-authentication.reset: Tilbakestill tofaktorautentisering
+user-management.two-factor-authentication.reset.confirmation.title: Tilbakestill tofaktorautentisering
+user-management.two-factor-authentication.reset.confirmation.text: Brukerens autentiseringsapp vil ikke lenger fungere for denne kontoen. Hvis tofaktorautentisering er påkrevd, må brukeren sette den opp på nytt ved neste innlogging.
+user-management.two-factor-authentication.reset.success: Tofaktorautentisering er tilbakestilt
+user-management.two-factor-authentication.reset.error: Tofaktorautentisering kunne ikke tilbakestilles
 user-management.workspaces.documents: Dokumenter
 user-management.workspaces.assets: Ressurser
 user-management.workspaces.objects: Data Objects
@@ -1543,7 +1657,9 @@ user-management.workspaces.localized-fields.edit: Redigeringstillatelser
 user-management.workspaces.custom-layouts: Custom Layouts
 user-management.workspaces.custom-layouts.select: Velg ett eller flere felt
 user-management.add-folder.success: Mappe lagt til
-user-management.remove-folder.success: Mappe fjernet
+user-management.remove-folder: Slett mappe
+user-management.remove-folder.text: 'Er du sikker på at du vil slette denne mappen permanent? Denne handlingen kan ikke angres.'
+user-management.remove-folder.success: Mappen ble slettet
 user-management.clone-user: Klon bruker
 user-management.clone-user.text: Oppgi navnet på den nye brukeren
 user-management.clone-user.success: Bruker klonet
@@ -1552,15 +1668,15 @@ user-management.save-user.password.success: Passord oppdatert
 user-management.add-user.success: Bruker lagt til
 user-management.remove-user: Slett bruker
 user-management.remove-user.text: 'Er du sikker på at du vil slette brukeren "{{name}}" permanent? Denne handlingen kan ikke angres.'
-user-management.remove-user.success: Bruker fjernet
+user-management.remove-user.success: Brukeren ble slettet
 user-management.perspectives: Perspektiver
 user-management.roles: Roller
 user-management.role: Rolle
 user-management.users: Brukere
 user-management.user: Bruker
-user-management.add-folder: Legg til ny mappe
+user-management.add-folder: Ny mappe
 user-management.add-folder.label: Oppgi navnet på den nye mappen
-user-management.add-user: Legg til ny bruker
+user-management.add-user: Ny bruker
 user-management.add-user.label: Oppgi navnet på den nye brukeren
 user-management.last-login: Siste innlogging
 user-management.search.id: ID
@@ -1571,16 +1687,18 @@ roles.clone-role: Klon rolle
 roles.clone-role.text: Oppgi navnet på den nye rollen
 roles.remove-role: Slett rolle
 roles.remove-role.text: 'Er du sikker på at du vil slette rollen "{{name}}" permanent? Denne handlingen kan ikke angres.'
-roles.remove-folder.success: Mappe fjernet
+roles.remove-folder: Slett mappe
+roles.remove-folder.text: 'Er du sikker på at du vil slette denne mappen permanent? Denne handlingen kan ikke angres.'
+roles.remove-folder.success: Mappen ble slettet
 roles.remove-item.success: Rolle fjernet
 roles.add-item.success: Rolle lagt til
 roles.add-folder.success: Mappe lagt til
 roles.general: Generelt
 roles.settings.title: Innstillinger
 roles.workspaces.title: Workspaces
-roles.add-folder: Legg til ny mappe
+roles.add-folder: Ny mappe
 roles.add-folder.label: Oppgi navnet på den nye mappen
-roles.add-role: Legg til ny rolle
+roles.add-role: Ny rolle
 roles.add-role.label: Oppgi navnet på den nye rollen
 roles.search.id: ID
 navigation.quick-access: Hurtigtilgang
@@ -1604,6 +1722,7 @@ navigation.appearance-branding: Utseende og merkevare
 navigation.reporting: Rapportering
 navigation.system: System
 navigation.website-settings: Nettstedsinnstillinger
+navigation.mcp-servers: MCP-servere
 navigation.document-types: Dokumenttyper
 navigation.cache: Hurtigbuffer
 navigation.cache.clear-cache: Tøm hurtigbuffer
@@ -1692,6 +1811,7 @@ widget.predefined-properties: Forhåndsdefinerte egenskaper
 widget.search-replace-assignments: Søk og erstatt tilordninger
 widget.document-types: Dokumenttyper
 widget.website-settings: Nettstedsinnstillinger
+widget.mcp-servers: MCP-servere
 widget.role-management: Roller
 widget.user-management: Brukere
 widget.class-definitions: Klasser
@@ -1749,7 +1869,7 @@ image-thumbnails.editor.advanced: Avansert
 image-thumbnails.editor.quality: Kvalitet
 image-thumbnails.editor.quality.tooltip: JPEG-kvalitetsinnstilling (1-100)
 image-thumbnails.editor.high-resolution: Høy oppløsning
-image-thumbnails.editor.high-resolution.tooltip: Høyoppløsningsfaktor for retina-skjermer
+image-thumbnails.editor.high-resolution.tooltip: Høyoppløsningsfaktor (f.eks. for Web-to-Print eller overalt der srcset ikke er mulig eller tilstrekkelig). Ikke nødvendig for vanlige nettminiatyrbilder – de får automatisk et srcset-attributt med 1x og 2x.
 image-thumbnails.editor.preserve-color: Bevar farge
 image-thumbnails.editor.preserve-color.tooltip: "Bevar farge (profil, fargerom) (Imagick, ORIGINAL)\n('Bevar metadata' og 'bevar farge' fungerer kun for transformasjoner uten komposisjoner (ramme, bakgrunnsfarge, ...) og fargemodifikasjoner (gråtoner, sepia, ...))"
 image-thumbnails.editor.force-process-icc: Tving prosessering av ICC-profiler
@@ -1860,7 +1980,7 @@ image-thumbnails.transformations.effects.intensity: Intensitet
 image-thumbnails.transformations.add: Legg til transformasjon
 image-thumbnails.transformations.move-up: Flytt opp
 image-thumbnails.transformations.move-down: Flytt ned
-image-thumbnails.transformations.remove: Fjern
+image-thumbnails.transformations.remove: Slett
 
 # Ukjent/fallback-transformasjon
 image-thumbnails.transformations.unknown-type: "Ukjent transformasjonstype: {{type}}"
@@ -1896,7 +2016,7 @@ video-thumbnails.add.validation.message: Miniatyrbildenavnet er ugyldig
 # Videotransformasjonsverktøylinje
 video-thumbnails.transformations.move-up: Flytt opp
 video-thumbnails.transformations.move-down: Flytt ned
-video-thumbnails.transformations.remove: Fjern
+video-thumbnails.transformations.remove: Slett
 
 # Endre størrelse-transformasjon
 video-thumbnails.transformations.resize.config-title: Konfigurer endre størrelse
@@ -2080,6 +2200,8 @@ classification-store.select-key: Velg nøkkel
 classification-store.search-keys: Søk i nøkler…
 classification-store.select-group: Velg gruppe
 classification-store.search-groups: Søk i grupper…
+classification-store.store-id: "ID: {{id}}"
+classification-store.store-tab-label: "{{name}} (ID: {{id}})"
 home: Hjem
 preview.label: Forhåndsvisning
 preview.desktop: Skrivebord
@@ -2089,7 +2211,9 @@ preview.phone-horizontal: Telefon horisontal
 preview.select_date_time: Velg dato og tid
 preview.screen_size_too_small: Tilgjengelig plass er for liten til å vise valgt forhåndsvisningsmodus.
 inheritance-active: "Data arvet fra objekt-ID {{id}}"
+inheritance-active-unknown-origin: Data arvet fra et overordnet objekt
 inheritance-broken: Dataarv brutt
+inheritance-restore: Gjenopprett
 main: Hoved
 main_admin: Hoved (administratormodus)
 draft-alert: Gjeldende versjon er et utkast. Du kan slette utkastet for å gjenopprette forrige versjon.
@@ -2248,8 +2372,23 @@ user-profile.password-old: Gammelt passord
 user-profile.password-new: Nytt passord
 user-profile.password-repeat: Gjenta passord
 user-profile.password-repeat-error: Passordene samsvarer ikke
+user-profile.two-factor-authentication: Tofaktorautentisering
+user-profile.two-factor-authentication.status.active: Tofaktorautentisering er aktiv for kontoen din.
+user-profile.two-factor-authentication.status.inactive: Tofaktorautentisering er ikke satt opp for kontoen din.
+user-profile.two-factor-authentication.required-hint: Tofaktorautentisering er påkrevd for kontoen din, så den kan ikke deaktiveres.
+user-profile.two-factor-authentication.setup: Sett opp tofaktorautentisering
+user-profile.two-factor-authentication.renew: Forny autentiseringsnøkkel
+user-profile.two-factor-authentication.setup.description: Skann QR-koden med autentiseringsappen din og skriv inn den {{digits}}-sifrede koden for å bekrefte.
+user-profile.two-factor-authentication.renew.description: Skann QR-koden med autentiseringsappen din og skriv inn den {{digits}}-sifrede koden for å bekrefte. Den nåværende nøkkelen din fungerer til den nye er bekreftet.
+user-profile.two-factor-authentication.setup.success: Tofaktorautentisering er satt opp
+user-profile.two-factor-authentication.disable: Deaktiver tofaktorautentisering
+user-profile.two-factor-authentication.disable.confirmation.title: Deaktiver tofaktorautentisering
+user-profile.two-factor-authentication.disable.confirmation.text: Du logger da bare inn med brukernavn og passord. Du kan sette opp tofaktorautentisering igjen når som helst.
+user-profile.two-factor-authentication.disable.success: Tofaktorautentisering er deaktivert
+user-profile.two-factor-authentication.disable.error: Tofaktorautentisering kunne ikke deaktiveres
 creatable-select.add-custom-option: Legg til egendefinert alternativ
-creatable-select.add: Legg til
+creatable-select.press-enter-to-add: Trykk Enter for å legge til
+creatable-select.option-added: '{{label}} lagt til'
 creatable-select.option-already-exists: Alternativet finnes allerede
 creatable-select.invalid-option: Ugyldig alternativ
 drag-snippet-here: Dra en snippet hit
@@ -2685,6 +2824,19 @@ forgot-password-form.username.placeholder: Brukernavn
 forgot-password-form.reset-password: Tilbakestill passord
 forgot-password-form.success-message: En midlertidig innloggingslenke er sendt til e-postadressen din. Vennligst sjekk innboksen din.
 forgot-password-form.back: Tilbake til innlogging
+two-factor-form.description: Skriv inn den {{digits}}-sifrede koden fra autentiseringsappen din
+two-factor-form.code.placeholder: Autentiseringskode
+two-factor-form.code.required: Skriv inn autentiseringskoden
+two-factor-form.code.invalid-format: Koden må bestå av {{digits}} sifre
+two-factor-form.verify: Bekreft
+two-factor-form.error: Koden kunne ikke bekreftes. Prøv igjen.
+two-factor-form.too-many-attempts: For mange forsøk. Vent noen minutter før du prøver igjen.
+two-factor-form.back: Tilbake til innlogging
+two-factor-setup-form.description: Tofaktorautentisering er påkrevd for kontoen din. Skann QR-koden med autentiseringsappen din og skriv inn den {{digits}}-sifrede koden for å bekrefte.
+two-factor-setup-form.manual-entry: Eller skriv inn denne nøkkelen manuelt
+two-factor-setup-form.confirm: Aktiver
+two-factor-setup-form.load-error: Tofaktorautentisering kunne ikke settes opp. Prøv igjen senere.
+two-factor-setup-form.expired: Oppsettet er utløpt. Skann den nye QR-koden og skriv inn koden som vises.
 subscription-details.community-edition: Lær mer om Pimcore-utgaver
 config_not_writeable: Ikke skrivbar, dette kan ha flere årsaker. For detaljer se dokumentasjonen.
 navigation.about: Om
@@ -2890,6 +3042,7 @@ translations.merger.state.reverted: Tilbakestilt
 translations.merger.state.pending: Ventende
 translations.merger.apply-all: Bruk alle
 translations.merger.revert-all: Tilbakestill alle
+translations.merger.revert: Tilbakestill
 translations.merger.title: "Slå sammen oversettelser (Domene: {{domain}})"
 translations.merger.column.language: Språk
 translations.merger.items: elementer
@@ -2916,3 +3069,9 @@ saved-search.delete.success: Lagret søk slettet
 saved-search.shared-modified.info: Du har gjort endringer i den opprinnelige konfigurasjonen. Siden den eies av noen andre, kan du lagre den som et nytt søk.
 saved-search.menu-shortcut-group: Menygruppe
 skip-to-content: Hopp til innhold
+tag-configuration.move-under: 'Flytt under'
+tag-configuration.move-search-placeholder: 'Søk etter en tagg'
+tree.actions.edit-tag: Rediger
+tag-configuration.edit-tag: 'Rediger "{{name}}"'
+tag-configuration.name-required: 'Skriv inn et taggnavn'
+tag-configuration.move-targets-failed: 'Listen over tagger kunne ikke lastes inn, så bare navnet kan endres'

@@ -123,7 +123,7 @@ export const NotificationSettingsView = ({
                   >
                     <Icon
                       colorToken={ 'colorWarning' }
-                      value={ 'warning-circle' }
+                      value={ 'alert-outline' }
                     />
                   </span>
                 </Tooltip>

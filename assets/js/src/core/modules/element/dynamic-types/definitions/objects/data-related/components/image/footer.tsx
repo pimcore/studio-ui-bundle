@@ -20,6 +20,7 @@ import { SelectionType } from '@Pimcore/modules/element/element-selector/provide
 import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
+import { actionTooltipDelay } from '@Pimcore/components/tooltip/tooltip'
 
 export interface ImageValue {
   type: 'asset'
@@ -43,6 +44,7 @@ export const ImageFooter = (props: ImageFooterProps): React.JSX.Element => {
   const buttons: ReactElement[] = [
     <Tooltip
       key="open"
+      mouseEnterDelay={ actionTooltipDelay }
       title={ t('open') }
     >
       <IconButton
@@ -86,6 +88,7 @@ export const ImageFooter = (props: ImageFooterProps): React.JSX.Element => {
     buttons.push(
       <Tooltip
         key="empty"
+        mouseEnterDelay={ actionTooltipDelay }
         title={ t('empty') }
       >
         <IconButton
@@ -123,6 +126,7 @@ export const ImageFooter = (props: ImageFooterProps): React.JSX.Element => {
           trigger={ ['click'] }
         >
           <IconButton
+            aria-label={ t('more-actions') }
             icon={ { value: 'more' } }
             onClick={ (e) => { e.stopPropagation() } }
           />

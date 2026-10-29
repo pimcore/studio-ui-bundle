@@ -15,7 +15,7 @@ export const useStyles = createStyles(({ token, css }) => {
     stackList: css`
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: ${token.marginXS}px;
     `
   }
 })

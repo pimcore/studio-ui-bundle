@@ -17,7 +17,7 @@ import { type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { ImagePreviewDropdown } from '@Pimcore/components/image-preview/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { Button } from '@Pimcore/components/button/button'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { actionTooltipDelay, Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { useTranslation } from 'react-i18next'
 import { type ImageThumbnailSettings } from './utils/custom-image-thumbnail'
 import { getAssetPreviewUrl } from './utils/get-asset-preview-url'
@@ -141,6 +141,7 @@ export const ImagePreview = forwardRef(function ImagePreview ({
           { onHotspotsDataButtonClick !== undefined && (
             <Tooltip
               className={ styles.hotspotButton }
+              mouseEnterDelay={ actionTooltipDelay }
               title={ t('hotspots.has-hotspots-or-marker') }
             >
               <Button

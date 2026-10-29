@@ -65,4 +65,22 @@ describe('transformApiDataToNode (asset)', () => {
 
     expect(node.label).toBe('original-filename')
   })
+
+  it('exposes the real filename on the node even when a custom attribute key is set', () => {
+    const assetNode = buildAssetNode({
+      filename: 'original-key',
+      customAttributes: {
+        icon: null,
+        tooltip: null,
+        additionalIcons: [],
+        key: 'custom-key',
+        additionalCssClasses: []
+      }
+    })
+
+    const node = transformApiDataToNode(assetNode, { id: '0', internalKey: 'root' })
+
+    expect(node.label).toBe('custom-key')
+    expect(node.realKey).toBe('original-key')
+  })
 })

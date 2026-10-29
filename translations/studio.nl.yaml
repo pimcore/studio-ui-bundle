@@ -85,6 +85,13 @@ asset.upload.overwrite: Overschrijven
 asset.upload.keep-both: Beide bewaren
 asset.upload.skip: Overslaan
 asset.upload.apply-to-all: Op alles toepassen
+asset.upload.files-exist.title: 'Bestanden bestaan al'
+asset.upload.files-exist.message: '{{total}} van de geselecteerde bestanden bestaan al in deze map. Wat wil je ermee doen?'
+asset.upload.files-exist.more: 'en {{hidden}} meer'
+asset.upload.review-each: 'Per bestand bekijken'
+asset.upload.skip-all: 'Alles overslaan'
+asset.upload.keep-both-all: 'Voor alles beide bewaren'
+asset.upload.overwrite-all: 'Alles overschrijven'
 asset.upload.checking-duplicate-file-names: "Controleren op dubbele bestandsnamen ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Mappen aanmaken
 asset.upload.folder-drop.creating-folders-hint: Even geduld terwijl de mappenstructuur wordt aangemaakt…
@@ -104,6 +111,8 @@ areablock.move-below: Eronder verplaatsen
 areablock.show: Weergeven
 areablock.hide: Verbergen
 areablock.new: Nieuw
+areablock.insert-above: Erboven invoegen
+areablock.insert-below: Eronder invoegen
 areablock.copy: Kopiëren
 areablock.paste: Plakken
 areablock.cut: Knippen
@@ -129,7 +138,7 @@ document.tree.context-menu.add-hardlink: Nieuwe harde link
 document.required-fields.validation-title: Verplichte velden ontbreken
 document.required-fields.validation-message: De volgende verplichte velden moeten worden ingevuld vóór publicatie
 document.site.remove-site: Site verwijderen
-document.site.remove-site-confirmation: Weet je zeker dat je deze site wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.
+document.site.remove-site-confirmation: Weet je zeker dat je deze site permanent wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.
 document.site.use-as-site: Gebruiken als site
 document.site.edit-site: Site bewerken
 document.site.form.main-domain: Hoofddomein
@@ -159,8 +168,8 @@ data-object.select-class-to-display: Selecteer een klasse om weer te geven
 data-object.tree.context-menu.add-object: Nieuw object
 data-object.tree.context-menu.add-variant: Nieuwe variant
 data-object.variant-listing.create-data-variant: Nieuwe variant
-data-object.create-data-object: "Nieuw object van type {{className}} toevoegen"
-data-object.create-variant: "Nieuwe variant van type {{className}} toevoegen"
+data-object.create-data-object: "Nieuw object van type {{className}}"
+data-object.create-variant: "Nieuwe variant van type {{className}}"
 data-object.object-editor-tabs.variants: Varianten
 object.object-editor-tabs.children-listing: Kindraster
 workflow.label: Workflow
@@ -190,7 +199,7 @@ class-definition.import-file-label: JSON-bestand selecteren
 class-definition.import-success: Klassedefinitie succesvol geïmporteerd
 class-definition.export-success: Klassedefinitie succesvol geëxporteerd
 class-definition.custom-layouts.default-layout: Standaardlayout
-class-definition.create-new: Nieuwe klassedefinitie aanmaken
+class-definition.create-new: Nieuwe klassedefinitie
 class-definition.class-name: Klassenaam
 class-definition.unique-identifier: Unieke identificatie
 class-definition.unique-identifier-warning: Wees voorzichtig met de unieke identificatie, want tabelnamen mogen maximaal 64 tekens bevatten.
@@ -246,7 +255,7 @@ class-definition.composite-indices.type-localized-query: Gelokaliseerde query
 class-definition.composite-indices.type-store: Opslag
 class-definition.composite-indices.type-localized-store: Gelokaliseerde opslag
 class-definition.composite-indices.index-label: Index
-field-collection.create-new: Nieuwe Field Collection aanmaken
+field-collection.create-new: Nieuwe Field Collection
 field-collection.key: Sleutel
 field-collection.validation.enter-key: Voer een sleutel in
 field-collection.validation.key-format: De sleutel moet beginnen met een letter en mag alleen letters, cijfers en underscores bevatten.
@@ -260,7 +269,7 @@ field-collection.general-settings.implements-interfaces: Implementeert interface
 field-collection.general-settings.usages.title: Gebruik
 field-collection.general-settings.usages.class: Klasse
 field-collection.general-settings.usages.field: Veld
-object-brick.create-new: Nieuwe Object Brick aanmaken
+object-brick.create-new: Nieuwe Object Brick
 object-brick.key: Sleutel
 object-brick.validation.enter-key: Voer een sleutel in
 object-brick.validation.key-format: De sleutel moet beginnen met een letter en mag alleen letters, cijfers en underscores bevatten.
@@ -275,7 +284,7 @@ object-brick.class-definitions-block.classname: Klasse
 object-brick.class-definitions-block.select-classname: Klasse selecteren
 object-brick.class-definitions-block.fieldname: Veld
 object-brick.class-definitions-block.select-fieldname: Veld selecteren
-select-option.create-new: Nieuwe selectieoptie aanmaken
+select-option.create-new: Nieuwe selectieoptie
 select-option.id: ID
 select-option.enter-name-new-item: Naam van het nieuwe item invoeren
 select-option.validation.enter-id: Voer een ID in
@@ -311,6 +320,10 @@ custom-layout.empty-state.edit: Selecteer een bestaande Custom Layout om te bewe
 example-prefix: Voorbeeldprefix
 pagination.show-total: "Totaal {{total}} items"
 pagination.page: Pagina
+pagination.first-page: Eerste pagina
+pagination.previous-page: Vorige pagina
+pagination.next-page: Volgende pagina
+pagination.last-page: Laatste pagina
 pagination.showing-x-of-y: "{{loaded}} van {{total}} weergegeven"
 preview-card.locate-in-tree: In boom zoeken
 preview-card.rename: Hernoemen
@@ -325,6 +338,8 @@ aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Aangepast miniatuu
 aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Aangepast miniatuur downloaden
 aria.asset.image-sidebar.tab.details.precreated-thumbnail: Voorgemaakte miniatuur selecteren om te downloaden
 aria.asset.image-sidebar.tab.details.download-thumbnail: Miniatuur downloaden
+aria.asset.image-sidebar.tab.details.downloadable-thumbnail: Downloadbare miniatuur selecteren
+aria.asset.image-sidebar.tab.details.download-downloadable-thumbnail: Geselecteerde miniatuur downloaden
 notification.action-list.actions: Acties
 notification.action-list.cancel: Annuleren
 notification.action-list.cancel-all: Alles annuleren
@@ -332,6 +347,7 @@ notification.action-list.completed-actions: Voltooide acties
 aria.notification.action-list.toggle-collapse: Actielijst in-/uitklappen
 aria.notification.action-list.cancel-all: Alle lopende acties annuleren
 aria.notification.action-list.cancel: Actie annuleren
+aria.stack-list.drag-handle: Sleep om te herschikken
 asset.image.editor.zoom.reset: Herstellen
 aria.asset.image.editor.zoom.reset: Zoom herstellen
 aria.asset.image.editor.zoom.zoom-in: Inzoomen
@@ -348,6 +364,7 @@ grid.filter.to: Tot
 grid.filter.is: Is
 grid.filter.less: Minder dan
 grid.filter.more: Meer dan
+grid.filter.string.placeholder: Zoeken of een lijst met één waarde per regel plakken om exact één van deze waarden te vinden
 grid.filter.column: "Filter {{column}}"
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
@@ -370,6 +387,7 @@ grid.advanced-column.advancedColumns.group.date: Datum
 grid.advanced-column.advancedColumns.group.string: Tekst
 grid.advanced-column.advancedColumns.group.other: Overige
 grid.advanced-column.title.placeholder: Titel toevoegen
+grid.advanced-column.expand: Uitvouwen
 grid.advanced-column.advancedColumns: Bronveld
 grid.advanced-column.advancedColumns.add: Bronveld toevoegen
 grid.advanced-column.transformers: Transformaties
@@ -378,6 +396,7 @@ grid.advanced-column.preview: Voorbeeld
 grid.advanced-column.no-preview: Geen voorbeelditem beschikbaar
 grid.advanced-column.no-preview-data: Geen voorbeeldgegevens beschikbaar
 grid.advanced-column.error-preview-data: Fout bij laden van voorbeeld
+grid.advanced-column.no-source-fields: Voeg een bronveld toe om een voorbeeld te zien.
 grid.advanced-column.preview-item: Voorbeelditem
 grid.advanced-column.trim: Inkorten
 grid.advanced-column.find: Zoeken
@@ -497,12 +516,14 @@ version.category.title.meta: Metadata
 version.category.title.properties: Eigenschappen
 version.changed-attributes: "Gewijzigde attributen: {{attributes}}"
 aria.version.delete: Versie verwijderen
+aria.notes-and-events.delete: Notitie verwijderen
+aria.card.close: Sluiten
 aria.version.expand: Versie uitvouwen
 clear-all: Alles wissen
 empty: Leeg
 none: Geen
-yes: Ja
-no: Nee
+'yes': Ja
+'no': Nee
 by: Door
 field: Veld
 no-data-available: Geen gegevens beschikbaar
@@ -555,6 +576,8 @@ userModification: Gebruiker wijziging
 userOwner: Gebruikerseigenaar
 listing.grid-config.convert-to-advanced: Converteren naar geavanceerde kolom
 listing.grid-config.title: Rasterinstelling
+listing.grid-config.search-mode-column.label: Automatisch
+listing.grid-config.search-mode-column.tooltip: Toegevoegd door de actieve zoekmodus. U kunt deze net als elke andere kolom verplaatsen; deze wordt niet opgeslagen in de rasterconfiguratie.
 grid-config.discard-all-changes: Alle wijzigingen verwerpen
 grid-config.apply-changes: Wijzigingen toepassen
 grid-config.reload: Herladen
@@ -574,6 +597,9 @@ listing.actions: Op selectie toepassen
 listing.non-selected.actions: Op alles toepassen
 listing.actions.zip-download: ZIP downloaden
 listing.actions.delete: Verwijderen
+listing.actions.delete-all: Alles verwijderen
+listing.actions.delete-all.not-allowed: "Sommige items in deze map zijn vergrendeld of je mag ze niet verwijderen."
+listing.actions.delete-all.empty: "Deze map bevat geen items om te verwijderen."
 listing.actions.export: Exporteren
 reports.csv-export-modal.title: CSV-exportopties
 reports.csv-export-modal.include-headers: Kolomkoppen opnemen
@@ -630,6 +656,54 @@ website-settings.columns.site: Site
 website-settings.columns.actions: Acties
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Verplichte velden ontbreken
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Naam en type zijn verplichte velden en moeten worden ingevuld.
+mcp-servers.rail.new-server: Nieuwe server
+mcp-servers.placeholder: Selecteer een server om de configuratie te bekijken of te bewerken.
+mcp-servers.tabs.empty: Selecteer een server om de configuratie te bekijken of te bewerken.
+mcp-servers.tabs.new-server: Nieuwe server
+mcp-servers.read-only-notice: Serverdefinities worden in deze omgeving via bestanden beheerd en kunnen hier niet worden bewerkt.
+mcp-servers.save-success: MCP-server opgeslagen
+mcp-servers.access.users-count: "Gebruikers: {{number}}"
+mcp-servers.access.roles-count: "Rollen: {{number}}"
+mcp-servers.access.global-extra: elke geauthenticeerde gebruiker
+mcp-servers.access.nobody: "Nog niemand"
+mcp-servers.badge.read: Lezen
+mcp-servers.badge.write: Schrijven
+mcp-servers.editor.create-title: Nieuwe MCP-server
+mcp-servers.editor.edit-title: MCP-server bewerken
+mcp-servers.editor.general: Algemeen
+mcp-servers.editor.permissions: Rechten
+mcp-servers.editor.identity: Identiteit
+mcp-servers.editor.name: Naam
+mcp-servers.editor.name-required: Geef een naam op.
+mcp-servers.editor.url-slug: URL-slug
+mcp-servers.editor.url-slug-required: Geef een URL-slug op.
+mcp-servers.editor.url-slug-pattern: Alleen kleine letters, cijfers en koppeltekens zijn toegestaan.
+mcp-servers.editor.description: Beschrijving
+mcp-servers.editor.enabled: Actief
+mcp-servers.editor.tools: Tools
+mcp-servers.editor.tools-placeholder: Selecteer de tools die deze server aanbiedt
+mcp-servers.editor.scopes: Geadverteerde scopes
+mcp-servers.editor.scopes-empty: Geen scopes — selecteer tools om de vereiste scopes af te leiden.
+mcp-servers.editor.url: Server-URL
+mcp-servers.editor.copy-url: "Server-URL kopiëren"
+mcp-servers.editor.connect-hint: Richt je MCP-client op deze URL en authenticeer je met je Pimcore-account.
+mcp-servers.sharing.title: Delen
+mcp-servers.sharing.share-globally: Globaal delen
+mcp-servers.sharing.share-globally-tooltip: Elke geauthenticeerde gebruiker krijgt Configuratie lezen en MCP-servertoegang (geen Configuratie bewerken)
+mcp-servers.sharing.users: Gebruikers
+mcp-servers.sharing.roles: Rollen
+mcp-servers.sharing.add-user: Gebruiker toevoegen…
+mcp-servers.sharing.add-role: Rol toevoegen…
+mcp-servers.sharing.name: Naam
+mcp-servers.sharing.config-read: Configuratie lezen
+mcp-servers.sharing.config-edit: Configuratie bewerken
+mcp-servers.sharing.mcp-access: MCP-servertoegang
+mcp-servers.sharing.level: Toegangsniveau
+mcp-servers.sharing.read: Lezen
+mcp-servers.sharing.write: Kan bewerken
+mcp-servers.sharing.who-can-access: Wie heeft toegang
+mcp-servers.delete.title: MCP-server verwijderen
+mcp-servers.delete.confirm: Weet je zeker dat je "{{name}}" wilt verwijderen?
 document-types.new: Nieuw
 document-types.columns.name: Naam
 document-types.columns.group: Groep
@@ -645,6 +719,7 @@ properties.label: Eigenschappen
 properties.editable-properties: Bewerkbare eigenschappen
 properties.all-properties: Alle eigenschappen
 properties.predefined-properties: Vooraf gedefinieerde eigenschappen
+properties.predefined-properties.reload-error: Kon de voorgedefinieerde eigenschappen niet herladen
 properties.new-custom-property: Nieuwe aangepaste eigenschap
 translations.columns.type: Type
 translations.columns.key: Sleutel
@@ -754,6 +829,7 @@ tags.apply-tags-to-children: Tags toepassen op onderliggende items
 tags.remove-and-apply-tags-to-children: Tags verwijderen en toepassen op onderliggende items
 tags.columns.path: Pad
 tags.columns.actions: Verwijderen
+tags.actions.delete: Tag verwijderen
 csv-separated-options: CSV-gescheiden opties
 csv-separated-options-info: De lijst met beschikbare opties kan worden opgegeven als kommagescheiden lijst, als enkelvoudige kolomwaarden of gemengd. Bij de enkelvoudige kolommanier wordt de sleutel ook als waarde gebruikt.
 add: Toevoegen
@@ -839,7 +915,7 @@ field-definitions.saved-successfully: Succesvol opgeslagen.
 field-definitions.select-item-configuration: Itemconfiguratie selecteren
 field-definitions.custom-layout-title: Custom Layout
 field-definitions.custom-layouts: Custom Layouts
-field-definitions.create-new-class-definition: Nieuwe Custom Layout aanmaken
+field-definitions.create-new-class-definition: Nieuwe Custom Layout
 field-definitions.select-field-message: Selecteer een veld in de boom om de eigenschappen te bewerken.
 field-definitions.loading-general-settings: Algemene instellingen laden...
 field-definitions.type-not-supported: Type wordt niet ondersteund
@@ -1064,6 +1140,8 @@ regex-flags-tooltip: "RegExp zonder scheidingstekens, moet werken in JS (Scheidi
 test-string: Testtekenreeks
 regex-validation-error-message: De tekenreeks voldoet niet aan het vereiste formaat.
 calculator-class: Berekeningsklasse
+calculator-data: Berekeningsgegevens
+calculator-data-tooltip: Optionele vrije-vormgegevens die worden doorgegeven aan de berekening, bijv. een eenvoudige waarde, een door komma's gescheiden lijst of een JSON-gecodeerde structuur.
 calculator-expression: Berekeningsteken
 calculator-type: Berekeningstype
 calculator-type-tooltip: Zie de officiële documentatie voor meer informatie over het definiëren van uitdrukkingen of klassen.
@@ -1122,6 +1200,7 @@ asset.sidebar.original-file: Origineel bestand
 asset.sidebar.web-format: Webformaat
 asset.sidebar.print-format: Afdrukformaat
 asset.sidebar.office-format: Kantoorformaat
+asset.sidebar.thumbnail-download: Miniatuur downloaden
 jobs.notification.title: Lopende taken
 jobs.notification.tooltip: Lopende taken openen
 jobs.notification.jobs_one: "{{count}} actie"
@@ -1156,17 +1235,24 @@ jobs.zip-upload-job.title: ZIP uploaden
 jobs.zip-upload-job.step1.title: ZIP uitpakken
 jobs.zip-upload-job.step2.title: Assets aanmaken
 jobs.download-csv-job.title: CSV exporteren
+jobs.download-csv-job.title-with-context: "CSV exporteren ({{name}})"
 jobs.download-xlsx-job.title: XLSX exporteren
+jobs.download-xlsx-job.title-with-context: "XLSX exporteren ({{name}})"
 jobs.download-zip-job.title: ZIP downloaden
 batch-edit.modal-title: Batchbewerking
 batch-edit.no-content: Er zijn nog geen kolommen toegevoegd
 batch-edit.modal-footer.apply-changes: Wijzigingen toepassen
 batch-edit.modal-footer.discard-all-changes: Alle wijzigingen verwerpen
 batch-edit.modal-footer.add-a-column: Een kolom toevoegen
+batch-edit.system-boolean.publish: "Publiceren"
+batch-edit.system-boolean.unpublish: "Publicatie ongedaan maken"
+batch-edit.system-boolean.placeholder: "Selecteer een actie"
+batch-edit.system-boolean.required: "Kies Publiceren of Publicatie ongedaan maken"
 batch-edit.append-mode.replace: Batch vervangen
 batch-edit.append-mode.add: Batch toevoegen
 batch-edit.append-mode.remove: Batch verwijderen
 batch-delete.job-title: Verwijderen
+element-move.job-title: "Verplaatsen"
 export-csv-form.modal-title: CSV exporteren
 export-csv-form.export-notice: "Let op: de export ondersteunt sommige velden niet (bijv. voorbeeld, grootte). Druk op OK om door te gaan met de export."
 export-csv-form.form-field.delimiter: Scheidingsteken
@@ -1181,6 +1267,7 @@ export-xlsx-form.form-field.header: Koptekst
 export-xlsx-form.form-field.header.option.name: Systeemsleutel
 export-xlsx-form.form-field.header.option.title: Label
 export-xlsx-form.form-field.header.option.no-header: Geen koptekst
+form.optional-mark: (optioneel)
 form.annotation.added: Toegevoegd
 form.annotation.changed: Gewijzigd
 form.annotation.removed: Verwijderd
@@ -1224,11 +1311,24 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" is gekopieerd
 element.tree.paste: Plakken
 element.tree.paste-as-child: Plakken als onderliggend item
 element.tree.paste-as-child-recursive: Plakken als onderliggend item (recursief)
+element.tree.open-no-permission: Je hebt geen toestemming om dit element te openen.
 element.tree.paste-recursive-updating-references: Recursief plakken en verwijzingen bijwerken
 element.tree.paste-only-contents: Alleen inhoud hier plakken
 element.tree.cut: Knippen
 element.tree.cut-success-description: '{{elementType}} "{{name}}" is geknipt en klaar om te plakken'
 element.tree.paste-cut: Geknipt element plakken
+element.tree.cut-multiple: "{{count}} elementen knippen"
+element.tree.cut-multiple-success-description: "{{count}} elementen zijn geknipt en kunnen worden geplakt"
+element.tree.paste-cut-multiple: "{{count}} geknipte elementen plakken"
+element.tree.selection.count_one: "{{count}} element geselecteerd"
+element.tree.selection.count_other: "{{count}} elementen geselecteerd"
+element.tree.selection.clear: "Selectie wissen"
+element.tree.selection.limit-reached: "Maximum van {{limit}} elementen bereikt"
+element.tree.drag.elements_one: "{{count}} element"
+element.tree.drag.elements_other: "{{count}} elementen"
+element.tree.drag.elements-partial: "{{count}} van {{selected}} elementen"
+element.tree.move.skipped-elements_one: "1 element is niet verplaatst: het is vergrendeld of u kunt het niet bewerken."
+element.tree.move.skipped-elements_other: "{{count}} elementen zijn niet verplaatst: ze zijn vergrendeld of u kunt ze niet bewerken."
 element.lock: Vergrendelen
 element.lock-and-propagate-to-children: Vergrendelen en doorgeven aan onderliggende items
 element.unlock: Ontgrendelen
@@ -1249,10 +1349,13 @@ element.tree.refresh: Vernieuwen
 element.new-folder: Nieuwe map
 element.new-folder.validation: Voer een geldige naam in
 element.rename: Hernoemen
+element.rename-folder: Map hernoemen
 element.rename.label: Voer de nieuwe naam in
 element.rename.validation: Voer een geldige naam in
 element.share-via-notification: Delen via meldingen
 element.delete: Verwijderen
+element.delete-folder: Map verwijderen
+element.delete-multiple: "{{count}} elementen verwijderen"
 element.delete.confirmation.title: Item verwijderen
 element.delete.confirmation.text: Weet je echt zeker dat je dit item wilt verwijderen?
 element.delete.confirmation.ok: Definitief verwijderen
@@ -1275,6 +1378,8 @@ element.delete.batch.show-paths: Items weergeven
 element.delete.batch.dependencies-warning.confirmed_one: "Let op: dit item heeft afhankelijkheden."
 element.delete.batch.dependencies-warning.confirmed_other: "Let op: deze items hebben afhankelijkheden."
 element.open: Openen
+element.state: Status
+element.state.unpublished: Niet gepubliceerd
 element.toolbar.copy-id: ID kopiëren
 element.toolbar.copy-full-path-to-clipboard: Volledig pad kopiëren
 element.toolbar.copy-deep-link-to-clipboard: Diepe link kopiëren
@@ -1314,6 +1419,9 @@ success: Succes
 no-value-set: Geen waarde ingesteld
 set-to-null: Leeg (instellen op null)
 remove: Verwijderen
+move-up: Omhoog verplaatsen
+move-down: Omlaag verplaatsen
+translate: Vertalen
 delete: Verwijderen
 clone: Klonen
 jobs.clone-job.step2.title: Verwijzingen bijwerken
@@ -1345,6 +1453,9 @@ relations.create-object.class: Klasse
 relation: relatie
 items-limit-reached: "Het maximum aantal items ({{maxItems}}) is bereikt."
 asset-upload-type-not-allowed: Het type van de geüploade asset is niet toegestaan voor dit veld.
+relation.drop.not-allowed-elements-skipped_one: "1 element is niet toegevoegd: dit veld staat dit type niet toe."
+relation.drop.not-allowed-elements-skipped_other: "{{count}} elementen zijn niet toegevoegd: dit veld staat deze typen niet toe."
+drag-and-drop.drop.single-element-only: 'Hier kan maar één element worden neergezet.'
 actions: Acties
 asset: Asset
 data-object: Gegevensobject
@@ -1399,7 +1510,6 @@ tree.actions.user: Gebruiker
 tree.actions.add-folder: Nieuwe map
 tree.actions.add-tag: Nieuwe tag
 tree.actions.delete-tag: Verwijderen
-tree.actions.rename-tag: Hernoemen
 tree.actions.role: Rol
 tree.actions.add-role: Rol toevoegen
 tree.actions.clone-role: Rol klonen
@@ -1411,7 +1521,6 @@ tag-configuration.name: Naam
 tag-configuration.parent-tag: Bovenliggende tag
 tag-configuration.create: Aanmaken
 tag-configuration.save: Opslaan
-tag-configuration.rename: Tag hernoemen
 tag-configuration.successful-add: Tag succesvol toegevoegd
 tag-configuration.successful-update: Tag succesvol bijgewerkt
 tag-configuration.successful-deletion: Tag succesvol verwijderd
@@ -1517,6 +1626,11 @@ user-management.settings.language.abbreviation: Afkorting
 user-management.settings.language.view: Weergave
 user-management.settings.language.edit: Bewerken
 user-management.two-factor-authentication: Tweefactorauthenticatie
+user-management.two-factor-authentication.reset: Tweefactorauthenticatie resetten
+user-management.two-factor-authentication.reset.confirmation.title: Tweefactorauthenticatie resetten
+user-management.two-factor-authentication.reset.confirmation.text: De authenticatie-app van de gebruiker werkt niet meer voor dit account. Als tweefactorauthenticatie verplicht is, moet de gebruiker deze bij de volgende keer inloggen opnieuw instellen.
+user-management.two-factor-authentication.reset.success: Tweefactorauthenticatie is gereset
+user-management.two-factor-authentication.reset.error: Tweefactorauthenticatie kon niet worden gereset
 user-management.workspaces.documents: Documenten
 user-management.workspaces.assets: Assets
 user-management.workspaces.objects: Gegevensobjecten
@@ -1543,6 +1657,8 @@ user-management.workspaces.localized-fields.edit: Bewerkrechten
 user-management.workspaces.custom-layouts: Custom Layouts
 user-management.workspaces.custom-layouts.select: Een of meer velden selecteren
 user-management.add-folder.success: Map succesvol toegevoegd
+user-management.remove-folder: Map verwijderen
+user-management.remove-folder.text: 'Weet je zeker dat je deze map definitief wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.'
 user-management.remove-folder.success: Map succesvol verwijderd
 user-management.clone-user: Gebruiker klonen
 user-management.clone-user.text: Voer de naam in van de nieuwe gebruiker
@@ -1558,9 +1674,9 @@ user-management.roles: Rollen
 user-management.role: Rol
 user-management.users: Gebruikers
 user-management.user: Gebruiker
-user-management.add-folder: Nieuwe map toevoegen
+user-management.add-folder: Nieuwe map
 user-management.add-folder.label: Voer de naam in van de nieuwe map
-user-management.add-user: Nieuwe gebruiker toevoegen
+user-management.add-user: Nieuwe gebruiker
 user-management.add-user.label: Voer de naam in van de nieuwe gebruiker
 user-management.last-login: Laatste aanmelding
 user-management.search.id: ID
@@ -1571,6 +1687,8 @@ roles.clone-role: Rol klonen
 roles.clone-role.text: Voer de naam in van de nieuwe rol
 roles.remove-role: Rol verwijderen
 roles.remove-role.text: 'Weet je zeker dat je rol "{{name}}" definitief wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.'
+roles.remove-folder: Map verwijderen
+roles.remove-folder.text: 'Weet je zeker dat je deze map definitief wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.'
 roles.remove-folder.success: Map succesvol verwijderd
 roles.remove-item.success: Rol succesvol verwijderd
 roles.add-item.success: Rol succesvol toegevoegd
@@ -1578,9 +1696,9 @@ roles.add-folder.success: Map succesvol toegevoegd
 roles.general: Algemeen
 roles.settings.title: Instellingen
 roles.workspaces.title: Workspaces
-roles.add-folder: Nieuwe map toevoegen
+roles.add-folder: Nieuwe map
 roles.add-folder.label: Voer de naam in van de nieuwe map
-roles.add-role: Nieuwe rol toevoegen
+roles.add-role: Nieuwe rol
 roles.add-role.label: Voer de naam in van de nieuwe rol
 roles.search.id: ID
 navigation.quick-access: Snelle toegang
@@ -1604,6 +1722,7 @@ navigation.appearance-branding: Uiterlijk & huisstijl
 navigation.reporting: Rapportage
 navigation.system: Systeem
 navigation.website-settings: Website-instellingen
+navigation.mcp-servers: MCP-servers
 navigation.document-types: Documenttypen
 navigation.cache: Cache
 navigation.cache.clear-cache: Cache wissen
@@ -1692,6 +1811,7 @@ widget.predefined-properties: Vooraf gedefinieerde eigenschappen
 widget.search-replace-assignments: Toewijzingen zoeken & vervangen
 widget.document-types: Documenttypen
 widget.website-settings: Website-instellingen
+widget.mcp-servers: MCP-servers
 widget.role-management: Rollen
 widget.user-management: Gebruikers
 widget.class-definitions: Klassen
@@ -1749,7 +1869,7 @@ image-thumbnails.editor.advanced: Geavanceerd
 image-thumbnails.editor.quality: Kwaliteit
 image-thumbnails.editor.quality.tooltip: JPEG-kwaliteitsinstelling (1-100)
 image-thumbnails.editor.high-resolution: Hoge resolutie
-image-thumbnails.editor.high-resolution.tooltip: Factor voor hoge resolutie voor retina-schermen
+image-thumbnails.editor.high-resolution.tooltip: Factor voor hoge resolutie (bijv. voor Web-to-Print of overal waar srcset niet mogelijk of voldoende is). Niet nodig voor gewone webminiaturen – die krijgen automatisch een srcset-attribuut met 1x en 2x.
 image-thumbnails.editor.preserve-color: Kleur bewaren
 image-thumbnails.editor.preserve-color.tooltip: "Kleur bewaren (profiel, ruimte) (Imagick, ORIGINEEL)\n('Metadata bewaren' en 'kleur bewaren' werken alleen voor overgangen zonder composities (kader, achtergrondkleur, ...) en kleurwijzigingen (grijswaarden, sepia, ...))"
 image-thumbnails.editor.force-process-icc: ICC-profielen verwerking forceren
@@ -2080,6 +2200,8 @@ classification-store.select-key: Sleutel selecteren
 classification-store.search-keys: Sleutels zoeken…
 classification-store.select-group: Groep selecteren
 classification-store.search-groups: Groepen zoeken…
+classification-store.store-id: "ID: {{id}}"
+classification-store.store-tab-label: "{{name}} (ID: {{id}})"
 home: Startpagina
 preview.label: Voorbeeld
 preview.desktop: Bureaublad
@@ -2089,7 +2211,9 @@ preview.phone-horizontal: Telefoon horizontaal
 preview.select_date_time: Datum & tijd selecteren
 preview.screen_size_too_small: De beschikbare ruimte is te klein om de geselecteerde voorbeeldmodus weer te geven.
 inheritance-active: "Gegevens overgeërfd van object-ID {{id}}"
+inheritance-active-unknown-origin: Gegevens overgeërfd van een bovenliggend object
 inheritance-broken: Gegevensovererving onderbroken
+inheritance-restore: Herstellen
 main: Hoofd
 main_admin: Hoofd (beheerdermodus)
 draft-alert: De huidige versie is een concept. Je kunt het concept verwijderen om de vorige versie te herstellen.
@@ -2248,8 +2372,23 @@ user-profile.password-old: Oud wachtwoord
 user-profile.password-new: Nieuw wachtwoord
 user-profile.password-repeat: Wachtwoord herhalen
 user-profile.password-repeat-error: Wachtwoorden komen niet overeen
+user-profile.two-factor-authentication: Tweefactorauthenticatie
+user-profile.two-factor-authentication.status.active: Tweefactorauthenticatie is actief voor je account.
+user-profile.two-factor-authentication.status.inactive: Tweefactorauthenticatie is niet ingesteld voor je account.
+user-profile.two-factor-authentication.required-hint: Tweefactorauthenticatie is verplicht voor je account en kan daarom niet worden uitgeschakeld.
+user-profile.two-factor-authentication.setup: Tweefactorauthenticatie instellen
+user-profile.two-factor-authentication.renew: Authenticatiesleutel vernieuwen
+user-profile.two-factor-authentication.setup.description: Scan de QR-code met je authenticatie-app en voer de {{digits}}-cijferige code in om te bevestigen.
+user-profile.two-factor-authentication.renew.description: Scan de QR-code met je authenticatie-app en voer de {{digits}}-cijferige code in om te bevestigen. Je huidige sleutel blijft werken totdat de nieuwe is bevestigd.
+user-profile.two-factor-authentication.setup.success: Tweefactorauthenticatie is ingesteld
+user-profile.two-factor-authentication.disable: Tweefactorauthenticatie uitschakelen
+user-profile.two-factor-authentication.disable.confirmation.title: Tweefactorauthenticatie uitschakelen
+user-profile.two-factor-authentication.disable.confirmation.text: Je logt dan alleen nog in met je gebruikersnaam en wachtwoord. Je kunt tweefactorauthenticatie op elk moment opnieuw instellen.
+user-profile.two-factor-authentication.disable.success: Tweefactorauthenticatie is uitgeschakeld
+user-profile.two-factor-authentication.disable.error: Tweefactorauthenticatie kon niet worden uitgeschakeld
 creatable-select.add-custom-option: Aangepaste optie toevoegen
-creatable-select.add: Toevoegen
+creatable-select.press-enter-to-add: Druk op Enter om toe te voegen
+creatable-select.option-added: '{{label}} toegevoegd'
 creatable-select.option-already-exists: Optie bestaat al
 creatable-select.invalid-option: Ongeldige optie
 drag-snippet-here: Sleep hier een fragment
@@ -2685,6 +2824,19 @@ forgot-password-form.username.placeholder: Gebruikersnaam
 forgot-password-form.reset-password: Wachtwoord herstellen
 forgot-password-form.success-message: Er is een tijdelijke inloglink verstuurd naar je e-mailadres. Controleer je postvak.
 forgot-password-form.back: Terug naar inloggen
+two-factor-form.description: Voer de {{digits}}-cijferige code uit je authenticatie-app in
+two-factor-form.code.placeholder: Authenticatiecode
+two-factor-form.code.required: Voer de authenticatiecode in
+two-factor-form.code.invalid-format: De code moet uit {{digits}} cijfers bestaan
+two-factor-form.verify: Verifiëren
+two-factor-form.error: De code kon niet worden geverifieerd. Probeer het opnieuw.
+two-factor-form.too-many-attempts: Te veel pogingen. Wacht een paar minuten voordat je het opnieuw probeert.
+two-factor-form.back: Terug naar inloggen
+two-factor-setup-form.description: Tweefactorauthenticatie is verplicht voor je account. Scan de QR-code met je authenticatie-app en voer de {{digits}}-cijferige code in om te bevestigen.
+two-factor-setup-form.manual-entry: Of voer deze sleutel handmatig in
+two-factor-setup-form.confirm: Activeren
+two-factor-setup-form.load-error: Tweefactorauthenticatie kon niet worden ingesteld. Probeer het later opnieuw.
+two-factor-setup-form.expired: De instelling is verlopen. Scan de nieuwe QR-code en voer de getoonde code in.
 subscription-details.community-edition: Meer informatie over Pimcore-edities
 config_not_writeable: Niet schrijfbaar; dit kan meerdere oorzaken hebben. Zie de documentatie voor details.
 navigation.about: Over
@@ -2890,6 +3042,7 @@ translations.merger.state.reverted: Teruggezet
 translations.merger.state.pending: In behandeling
 translations.merger.apply-all: Alles toepassen
 translations.merger.revert-all: Alles terugzetten
+translations.merger.revert: Terugzetten
 translations.merger.title: "Vertalingen samenvoegen (domein: {{domain}})"
 translations.merger.column.language: Taal
 translations.merger.items: items
@@ -2916,3 +3069,9 @@ saved-search.delete.success: Opgeslagen zoekopdracht verwijderd
 saved-search.shared-modified.info: Je hebt wijzigingen aangebracht in de oorspronkelijke configuratie. Omdat deze van iemand anders is, kun je deze opslaan als nieuwe zoekopdracht.
 saved-search.menu-shortcut-group: Menugroep
 skip-to-content: Naar de inhoud
+tag-configuration.move-under: 'Verplaatsen onder'
+tag-configuration.move-search-placeholder: 'Zoek een tag'
+tree.actions.edit-tag: Bewerken
+tag-configuration.edit-tag: '"{{name}}" bewerken'
+tag-configuration.name-required: 'Voer een tagnaam in'
+tag-configuration.move-targets-failed: 'De lijst met tags kon niet worden geladen, dus alleen de naam kan worden gewijzigd'

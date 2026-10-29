@@ -9,13 +9,14 @@
  */
 
 import React, { useState } from 'react'
+import { isEmpty, isUndefined } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { Form, Input } from 'antd'
 import { Select } from '@Pimcore/components/select/select'
 import { Button } from '@Pimcore/components/button/button'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
-import { Header } from '@Pimcore/components/header/header'
+import { Title } from '@Pimcore/components/title/title'
 import { useDetailsViewData } from './hooks/use-details-view-data'
 import { useStyle } from './details.styles'
 import { CollapseItem } from '@Pimcore/components/collapse/item/collapse-item'
@@ -29,9 +30,16 @@ export interface CustomDownloadProps {
   format: string
 }
 
+export interface DownloadableThumbnailOption {
+  value: string
+  label: string
+}
+
 interface AssetEditorSidebarDetailsViewProps {
   width: number
   height: number
+  downloadableThumbnails: DownloadableThumbnailOption[]
+  onClickDownloadByThumbnail: (thumbnailName: string) => void
   onClickDownloadByFormat: (format: string) => void
   onClickCustomDownload: ({
     width,
@@ -46,10 +54,17 @@ interface AssetEditorSidebarDetailsViewProps {
 export const AssetEditorSidebarDetailsView = ({
   width,
   height,
+  downloadableThumbnails,
+  onClickDownloadByThumbnail,
   onClickDownloadByFormat,
   onClickCustomDownload
 }: AssetEditorSidebarDetailsViewProps): React.JSX.Element => {
   const [downloadFormat, setDownloadFormat] = useState<string>('original')
+  // the list arrives asynchronously and is refetched when a definition changes, so the pick only
+  // counts while it is still offered; otherwise the first entry is used
+  const [selectedThumbnail, setSelectedThumbnail] = useState<string | undefined>(undefined)
+  const isSelectionOffered = downloadableThumbnails.some(option => option.value === selectedThumbnail)
+  const downloadThumbnail = isSelectionOffered ? selectedThumbnail : downloadableThumbnails[0]?.value
   const [customWidth, setCustomWidth] = useState(width)
   const [customHeight, setCustomHeight] = useState(height)
   const [customQuality, setCustomQuality] = useState(-1)
@@ -174,9 +189,9 @@ export const AssetEditorSidebarDetailsView = ({
     <Content
       className={ styles.sidebarContentEntry }
       padded
-      padding={ { top: 'none', x: 'small', bottom: 'mini' } }
+      padding={ { top: 'extra-small', x: 'small', bottom: 'extra-small' } }
     >
-      <Header title={ t('asset.sidebar.details') } />
+      <Title>{ t('asset.sidebar.details') }</Title>
 
       <div className={ 'sidebar__content-entry-content' }>
         <div className={ styles.sidebarContentDimensions }>
@@ -189,6 +204,33 @@ export const AssetEditorSidebarDetailsView = ({
             <p>{height} px</p>
           </div>
         </div>
+
+        {!isEmpty(downloadableThumbnails) && (
+          <div className={ ['m-t-small', styles.sidebarContentDownload].join(' ') }>
+            <p className={ 'sidebar__content-label' }>{t('asset.sidebar.thumbnail-download')}</p>
+
+            <div className={ 'entry-content__download-content' }>
+              <div className={ 'entry-content__download-content-thumbnail' }>
+                <Select
+                  aria-label={ t('aria.asset.image-sidebar.tab.details.downloadable-thumbnail') }
+                  onChange={ (thumbnailName: string) => { setSelectedThumbnail(thumbnailName) } }
+                  options={ downloadableThumbnails }
+                  value={ downloadThumbnail }
+                />
+
+                <IconButton
+                  aria-label={ t('aria.asset.image-sidebar.tab.details.download-downloadable-thumbnail') }
+                  icon={ { value: 'download' } }
+                  onClick={ () => {
+                    if (!isUndefined(downloadThumbnail)) {
+                      onClickDownloadByThumbnail(downloadThumbnail)
+                    }
+                  } }
+                />
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className={ ['m-t-small', styles.sidebarContentDownload].join(' ') }>
           <p className={ 'sidebar__content-label' }>{t('download')}</p>

@@ -18,15 +18,19 @@ import { t } from 'i18next'
 export interface AbstractBatchDeleteJobOptions {
   itemIds: number[]
   onFinish?: () => Promise<void>
+  /** Runs when the request or the job fails, e.g. to undo state set up for the delete. */
+  onFailure?: () => Promise<void>
 }
 
 export abstract class AbstractBatchDeleteJob implements JobInterface {
   protected readonly itemIds: number[]
   protected readonly onFinish?: () => Promise<void>
+  protected readonly onFailure?: () => Promise<void>
 
   constructor (options: AbstractBatchDeleteJobOptions) {
     this.itemIds = options.itemIds
     this.onFinish = options.onFinish
+    this.onFailure = options.onFailure
   }
 
   async run (options: JobRunOptions): Promise<void> {
@@ -75,6 +79,8 @@ export abstract class AbstractBatchDeleteJob implements JobInterface {
 
   protected async handleJobFailure (error: any): Promise<void> {
     console.error('Batch delete job failed:', error)
+
+    await this.onFailure?.()
   }
 
   protected static buildHandler (options: {

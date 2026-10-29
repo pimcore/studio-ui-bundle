@@ -59,3 +59,15 @@ export enum ContextMenuActionName {
 
   shareViaNotification = 'shareViaNotification',
 }
+
+/**
+ * Actions that operate on a whole selection.
+ *
+ * While more than one element is selected, everything else is hidden from the tree
+ * context menu instead of quietly acting on the node that happened to be right
+ * clicked. Extend this list when an action learns to handle a set.
+ */
+export const multiSelectionContextMenuActions: string[] = [
+  ContextMenuActionName.delete,
+  ContextMenuActionName.cut
+]

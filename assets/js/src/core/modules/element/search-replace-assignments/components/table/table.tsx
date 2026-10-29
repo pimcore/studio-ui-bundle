@@ -94,7 +94,7 @@ export const Table = (): React.JSX.Element => {
   ]
 
   return (
-    <Box margin={ { x: 'small', bottom: 'small' } }>
+    <Box margin={ { x: 'extra-small', bottom: 'small' } }>
       <Grid
         autoWidth
         columns={ columns }

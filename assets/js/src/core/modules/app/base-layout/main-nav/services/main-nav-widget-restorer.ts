@@ -9,13 +9,18 @@
  */
 
 import { type WidgetRestorer } from '@Pimcore/modules/widget-manager/services/widget-restorer-registry'
-import { updateWidget, type WidgetManagerTabConfig } from '@Pimcore/modules/widget-manager/widget-manager-slice'
+import {
+  migrateWidget,
+  updateWidget,
+  type WidgetManagerTabConfig
+} from '@Pimcore/modules/widget-manager/widget-manager-slice'
 import { type AppDispatch } from '@sdk/app'
 import { container } from '@Pimcore/app/depency-injection'
 import { type IMainNavItem, type MainNavRegistry } from './main-nav-registry'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { isAllowed } from '@Pimcore/modules/auth/permission-helper'
 import { isAllowedInPerspective } from '@Pimcore/modules/perspectives/permission-checker'
+import { isLegacyReportWidget } from '@Pimcore/modules/reports/utils/report-widget-config'
 import { merge, isNil, isString } from 'lodash'
 
 export class MainNavWidgetRestorer implements WidgetRestorer {
@@ -54,7 +59,11 @@ export class MainNavWidgetRestorer implements WidgetRestorer {
       }
       mergedConfig.config.mainNavPath = item.path
 
-      dispatch(updateWidget(mergedConfig))
+      if (isLegacyReportWidget(config, mergedConfig)) {
+        dispatch(migrateWidget({ originalId: config.id!, config: mergedConfig }))
+      } else {
+        dispatch(updateWidget(mergedConfig))
+      }
       return true
     }
 

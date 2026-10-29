@@ -39,7 +39,12 @@ const getFormPath = (batchEdit: BatchEdit, locale: string | null): NamePath | nu
   return batchEdit.localizable ? ['localizedfields', batchEdit.key, locale ?? ''] : [batchEdit.key]
 }
 
-export const BatchEditListContainer = (): React.JSX.Element => {
+export interface BatchEditListContainerProps {
+  // Called when a row has mounted and its form field is registered.
+  onRowMount?: () => void
+}
+
+export const BatchEditListContainer = ({ onRowMount }: BatchEditListContainerProps): React.JSX.Element => {
   const { batchEdits, removeBatchEdit, updateLocale } = useBatchEdit()
   const form = Form.useFormInstance()
 
@@ -108,16 +113,21 @@ export const BatchEditListContainer = (): React.JSX.Element => {
             ]
           : []),
           <IconButton
+            aria-label={ t('remove') }
             icon={ { value: 'close' } }
             key={ 'remove' }
             onClick={ () => {
               handleRemove(batchEdit)
             } }
+            tooltip={ { title: t('remove') } }
           />
         ]
       }
                           />,
-      body: <DefaultBatchEdit batchEdit={ batchEdit } />
+      body: <DefaultBatchEdit
+        batchEdit={ batchEdit }
+        onMount={ onRowMount }
+            />
     })
   })
 

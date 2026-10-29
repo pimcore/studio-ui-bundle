@@ -27,7 +27,8 @@ final class CspEvent extends Event
 
     public function __construct(
         private readonly Request $request,
-        private readonly ContentSecurityPolicyHandlerInterface $cspHandler
+        private readonly ContentSecurityPolicyHandlerInterface $cspHandler,
+        private readonly bool $htmlResponse = true
     ) {
     }
 
@@ -36,9 +37,21 @@ final class CspEvent extends Event
         return $this->request;
     }
 
+    /**
+     * The policy of the current response; changes made here do not reach other responses.
+     */
     public function getCspHandler(): ContentSecurityPolicyHandlerInterface
     {
         return $this->cspHandler;
+    }
+
+    /**
+     * Whether the response is a page. Build origins only apply to pages, so listeners that
+     * scan files can return early for API and other responses.
+     */
+    public function isHtmlResponse(): bool
+    {
+        return $this->htmlResponse;
     }
 
     /**

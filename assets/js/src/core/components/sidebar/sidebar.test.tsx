@@ -166,6 +166,54 @@ describe('Sidebar', () => {
     })
   })
 
+  describe('defaultActiveTab', () => {
+    it('opens the given tab on mount through the provider', () => {
+      renderSidebar({ defaultActiveTab: 'second' })
+
+      expect(isOpen('second')).toBe(true)
+      expect(isOpen('first')).toBe(false)
+    })
+
+    it('opens the given tab on mount without a provider', () => {
+      render(
+        <Sidebar
+          defaultActiveTab="second"
+          entries={ entries }
+        />
+      )
+
+      expect(isOpen('second')).toBe(true)
+    })
+
+    it('lets the default be collapsed without a provider', () => {
+      render(
+        <Sidebar
+          defaultActiveTab="first"
+          entries={ entries }
+        />
+      )
+
+      fireEvent.click(railIcon('first'))
+
+      expect(isOpen('first')).toBe(false)
+    })
+
+    it('lets the default be collapsed through the provider', () => {
+      renderSidebar({ defaultActiveTab: 'first' })
+
+      fireEvent.click(railIcon('first'))
+
+      expect(isOpen('first')).toBe(false)
+    })
+
+    it('leaves a tab the provider already opened alone', () => {
+      renderSidebar({ defaultActiveTab: 'second' }, 'first')
+
+      expect(isOpen('first')).toBe(true)
+      expect(isOpen('second')).toBe(false)
+    })
+  })
+
   describe('resizable', () => {
     it('renders its own resize handle by default', () => {
       renderSidebar({}, 'first')

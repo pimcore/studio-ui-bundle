@@ -75,6 +75,16 @@ export const slice = createSlice({
       }
       userAdapter.updateOne(state, update)
     },
+    // A 2FA change made elsewhere (profile, reset); not an edit, so the draft stays unmodified
+    userTwoFactorAuthenticationChanged: (state, action: PayloadAction<{ id: number, twoFactorAuthentication: Partial<User['twoFactorAuthentication']> }>): void => {
+      const user = state.entities[action.payload.id]
+
+      if (isUndefined(user)) {
+        return
+      }
+
+      user.twoFactorAuthentication = { ...user.twoFactorAuthentication, ...action.payload.twoFactorAuthentication }
+    },
     updateUserImage: (state, action: PayloadAction<{ id: any, image: any }>): void => {
       const update: Update<any, any> = {
         id: action.payload.id,
@@ -102,6 +112,7 @@ export const {
   userAvailablePermissionsFetched,
   changeUser,
   updateUserImage,
+  userTwoFactorAuthenticationChanged,
   userUpdated
 } = slice.actions
 

@@ -23,13 +23,14 @@ const TAG_COLOR: Record<FormItemAnnotationStatus, string> = {
   moved: 'geekblue'
 }
 
-interface AnnotationTagProps {
+export interface AnnotationTagProps {
   status: FormItemAnnotationStatus
-  className: string
+  className?: string
 }
 
-// its own component so only an annotated item pays for the translation subscription
-const AnnotationTag = ({ status, className }: AnnotationTagProps): React.JSX.Element => {
+// its own component so only an annotated item pays for the translation subscription; exported
+// so a grid can mark a row with the very tag a form item carries
+export const AnnotationTag = ({ status, className }: AnnotationTagProps): React.JSX.Element => {
   const { t } = useTranslation()
 
   return (

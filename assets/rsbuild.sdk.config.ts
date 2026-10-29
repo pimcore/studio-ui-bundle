@@ -136,6 +136,7 @@ export default defineConfig({
       './modules/icon-library': './js/src/sdk/modules/icon-library/index.ts',
       './modules/reports': './js/src/sdk/modules/reports/index.ts',
       './modules/rule-builder': './js/src/sdk/modules/rule-builder/index.ts',
+      './modules/select-option': './js/src/sdk/modules/select-option/index.ts',
       './modules/translations': './js/src/sdk/modules/translations/index.ts',
       './modules/user': './js/src/sdk/modules/user/index.ts',
       './modules/widget-editor': './js/src/sdk/modules/widget-editor/index.ts',

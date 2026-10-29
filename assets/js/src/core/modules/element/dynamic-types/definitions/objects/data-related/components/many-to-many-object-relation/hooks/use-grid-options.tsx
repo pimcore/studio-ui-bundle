@@ -95,7 +95,10 @@ export const useGridOptions = (): UseGridOptionsReturn => {
       }
     }
 
-    return 150
+    // Leave the size of data columns open, so the grid resolves it from the
+    // column's dynamic type (e.g. a narrow checkbox column), the same way the
+    // data-object listing does.
+    return undefined
   }
 
   const transformGridColumn = (column: VisibleFieldDefinition, disabled: boolean): IdentifiedColumnDef<unknown, never> => {

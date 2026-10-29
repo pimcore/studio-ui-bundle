@@ -9,15 +9,16 @@
  */
 
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import type { ColumnDef } from '@tanstack/react-table'
+import type { ColumnDef, RowSelectionState } from '@tanstack/react-table'
 import { isEqual, isNil } from 'lodash'
 import { Droppable } from '@Pimcore/components/drag-and-drop/droppable'
+import { getDraggedElements, toElementType } from '@Pimcore/components/drag-and-drop/element-drag'
 import { ManyToManyRelationGrid } from './grid'
 import { type ManyToManyRelationValue, type ManyToManyRelationValueItem, type DisplayManyToManyRelationValue, useValue } from './hooks/use-value'
 import type { DragAndDropInfo } from '@sdk/components'
 import { isValidElementType } from '@Pimcore/modules/element/utils/element-type'
 import { ManyToManyRelationToolbar } from './components/toolbar/toolbar'
-import { dndIsValidData, type IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
+import { dndValidRelationElements, type IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
 import { toCssDimension } from '@Pimcore/utils/css'
 import { Content } from '@Pimcore/components/content/content'
 import { type OnUpdateCellDataEvent } from '@Pimcore/types/components/types'
@@ -58,6 +59,10 @@ export interface ManyToManyRelationProps extends IRelationAllowedTypesDataCompon
   noteditable?: boolean | null
   /** Renders a filter dropdown in the header of every filterable column. */
   enableColumnFilters?: boolean
+  enableMultipleRowSelection?: boolean
+  selectedRows?: RowSelectionState
+  onSelectedRowsChange?: (selectedRows: RowSelectionState) => void
+  extraToolbarItems?: React.ReactNode
 }
 
 interface ManyToManyRelationContentProps extends ManyToManyRelationProps {
@@ -73,7 +78,7 @@ const ManyToManyRelationContent = ({ enableRowDrag, ...props }: ManyToManyRelati
   const buildFilterQuery = useFilterQuery(relationFilterAdapter, appliedFilters)
   const { matchRow } = buildFilterQuery({})
 
-  const { onDrop, deleteItem, onSearch, onOrderChange, addAssets, addItems, updateDisplayValue, maxRemainingItems, getOriginalIndex, hasActiveSearch } = useValue(
+  const { addDroppedElements, deleteItem, onSearch, onOrderChange, addAssets, addItems, updateDisplayValue, maxRemainingItems, getOriginalIndex, hasActiveSearch } = useValue(
     value, setValue, displayedValue, setDisplayedValue, props.maxItems, props.allowMultipleAssignments, { name: props.combinedFieldName, class: props.pathFormatterClass ?? undefined }, props?.visibleFieldsValue, matchRow
   )
   const allowDragAndDrop = !isNil(displayedValue) && displayedValue?.length > 1 && !hasActiveSearch && !props?.noteditable
@@ -144,9 +149,21 @@ const ManyToManyRelationContent = ({ enableRowDrag, ...props }: ManyToManyRelati
     <>
       <Droppable
         disableDndActiveIndicator
-        isValidContext={ (info: DragAndDropInfo) => props.disabled !== true && isValidElementType(info.type) }
-        isValidData={ (info: DragAndDropInfo) => dndIsValidData(info, props) }
-        onDrop={ onDrop }
+        isValidContext={ (info: DragAndDropInfo) => props.disabled !== true && isValidElementType(toElementType(info.type)) }
+        isValidData={ (info: DragAndDropInfo) => dndValidRelationElements(info, props).length > 0 }
+        onDrop={ (info: DragAndDropInfo) => {
+          // Exactly the elements the hover state was based on: a set may hold
+          // classes this field does not accept, and those must not slip in just
+          // because one element in it was allowed.
+          const droppedElements = getDraggedElements(info)
+          const allowedElements = dndValidRelationElements(info, props)
+
+          addDroppedElements(
+            allowedElements,
+            toElementType(info.type),
+            droppedElements.length - allowedElements.length
+          )
+        } }
         variant="outline"
       >
         <ManyToManyRelationGrid
@@ -155,6 +172,7 @@ const ManyToManyRelationContent = ({ enableRowDrag, ...props }: ManyToManyRelati
           columnDefinition={ props.columnDefinition }
           deleteItem={ deleteItem }
           disabled={ props.disabled }
+          enableMultipleRowSelection={ props.enableMultipleRowSelection }
           enableRowDrag={ enableRowDrag && allowDragAndDrop }
           enableRowVirtualizer={ !props.noteditable }
           enrichRowData={ props.enrichRowData }
@@ -163,8 +181,10 @@ const ManyToManyRelationContent = ({ enableRowDrag, ...props }: ManyToManyRelati
           hideOpenButton={ props.hideOpenButton }
           hint={ props.hint }
           inherited={ props.inherited }
+          onSelectedRowsChange={ props.onSelectedRowsChange }
           onUpdateCellData={ handleUpdateCellData }
           pathFormatterConfig={ { name: props.combinedFieldName, class: props.pathFormatterClass ?? undefined } }
+          selectedRows={ props.selectedRows }
           value={ displayedValue }
           width={ props.width }
         />

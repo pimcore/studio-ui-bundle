@@ -12,7 +12,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isUndefined, isEmpty, find, isNil } from 'lodash'
 import { ManyToManyRelation } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/many-to-many-relation'
-import { type ColumnDef } from '@tanstack/react-table'
+import { type ColumnDef, type RowSelectionState } from '@tanstack/react-table'
 import type { ManyToManyRelationValue, ManyToManyRelationValueItem } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-relation/hooks/use-value'
 import type { IRelationAllowedTypesDataComponent } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/relations/allowed-types'
 import { enrichRowData, visibleFieldsToColumnDefinitions } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/utils/column-definition'
@@ -33,6 +33,7 @@ import { DynamicTypeRegistryProvider } from '@Pimcore/modules/element/dynamic-ty
 import { SelectedColumnsProvider, type SelectedColumn } from '@Pimcore/modules/element/listing/abstract/configuration-layer/provider/selected-columns/selected-columns-provider'
 import { useLanguageSelection } from '@Pimcore/components/language-selection'
 import { useClassDefinitionSelectionOptional } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
+import { Text } from '@Pimcore/components/text/text'
 
 export interface ManyToManyObjectRelationClassDefinitionProps {
   allowToClearRelation: boolean
@@ -71,6 +72,10 @@ export interface ManyToManyObjectRelationProps extends IRelationAllowedTypesData
   hint?: React.ReactNode | null
   onUpdateCellData?: (event: OnUpdateCellDataEvent) => void
   className?: string
+  enableMultipleRowSelection?: boolean
+  selectedRows?: RowSelectionState
+  onSelectedRowsChange?: (selectedRows: RowSelectionState) => void
+  extraToolbarItems?: React.ReactNode
 }
 
 const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): React.JSX.Element => {
@@ -150,7 +155,7 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     locale: col.localizable ? userLanguage : undefined
   })), [visibleFieldDefinitions, userLanguage])
 
-  const { data: gridFullData, isLoading: isGridFullDataLoading, refetchAll } = useDataObjectGrids({
+  const { data: gridFullData, isLoading: isGridFullDataLoading, isError: isGridFullDataError, refetchAll } = useDataObjectGrids({
     classIds: dataRelationClasses,
     convertClassName: getByName,
     columns: visibleColumns,
@@ -233,6 +238,24 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
     [gridDataMap, visibleFieldDefinitions]
   )
 
+  // The rows come with the object data; the visible field values follow in their own request, so the
+  // field shows the rows right away and only tells while the values are loading or when they failed.
+  let visibleFieldsStatus: React.ReactNode = null
+  if (isGridFullDataLoading) {
+    visibleFieldsStatus = <Text type="secondary">{ t('relations.visible-fields.loading') }</Text>
+  } else if (isGridFullDataError) {
+    visibleFieldsStatus = <Text type="danger">{ t('relations.visible-fields.error') }</Text>
+  }
+
+  const hint = visibleFieldsStatus === null
+    ? props.hint
+    : (
+      <>
+        { props.hint }
+        <div>{ visibleFieldsStatus }</div>
+      </>
+      )
+
   return (
     <SelectedColumnsProvider columns={ selectedColumns }>
       <ManyToManyRelation
@@ -240,7 +263,8 @@ const ManyToManyObjectRelationInner = (props: ManyToManyObjectRelationProps): Re
         columnDefinition={ [...columnDefinition, ...(props.columnDefinition ?? [])] }
         dataObjectsAllowed
         enrichRowData={ handleEnrichRowData }
-        isLoading={ isAvailableGridColumnsLoading || isGridFullDataLoading }
+        hint={ hint }
+        isLoading={ isAvailableGridColumnsLoading }
         value={ props.value }
         visibleFieldsValue={ visibleFieldsValue }
       />

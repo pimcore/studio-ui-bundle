@@ -10,6 +10,7 @@
 
 import { Content } from '@Pimcore/components/content/content'
 import { getLanguageExtensions } from '@Pimcore/components/text-editor/detect-language'
+import { useCodeMirrorThemeExtensions } from '@Pimcore/components/code-editor/use-code-mirror-theme'
 import ReactCodeMirror from '@uiw/react-codemirror'
 import React from 'react'
 import { useStyles } from './translation-html-preview.styles'
@@ -24,6 +25,12 @@ export const TranslationHtmlPreview = ({
   onChange
 }: TranslationHtmlEditorProps): React.JSX.Element => {
   const { styles } = useStyles()
+  const themeExtensions = useCodeMirrorThemeExtensions()
+
+  const extensions = React.useMemo(
+    () => [...themeExtensions, ...getLanguageExtensions('html')],
+    [themeExtensions]
+  )
 
   return (
     <Content
@@ -36,8 +43,9 @@ export const TranslationHtmlPreview = ({
           searchKeymap: true
         } }
         className={ styles.codeEditor }
-        extensions={ getLanguageExtensions('html') }
+        extensions={ extensions }
         onChange={ onChange }
+        theme="none"
         value={ value }
       />
     </Content>

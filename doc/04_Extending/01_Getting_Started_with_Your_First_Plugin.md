@@ -47,7 +47,7 @@ Then create a `rsbuild.config.ts` file in your assets root folder to configure t
 [Example Rsbuild configuration](https://github.com/pimcore/studio-example-bundle/blob/main/assets/rsbuild.config.ts)
 
 Additionally, we need to create a `main.ts` in a source folder (e.g. `/assets/js/src`) which serves as the entrypoint in the rsbuild and 
-is referenced in the [rsbuild.config.ts](https://github.com/pimcore/studio-example-bundle/blob/main/assets/rsbuild.config.ts#L48). 
+is referenced in the [rsbuild.config.ts](https://github.com/pimcore/studio-example-bundle/blob/main/assets/rsbuild.config.ts#L59). 
 Start with an empty file.
 
 Update your package.json with the following commands:

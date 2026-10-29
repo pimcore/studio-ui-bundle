@@ -24,7 +24,9 @@ import { useElementTreeRootNode } from '@Pimcore/components/element-tree/hooks/u
 import { componentConfig } from '@Pimcore/modules/app/component-registry/component-config'
 import { useComponentRegistry } from '@Pimcore/modules/app/component-registry/use-component-registry'
 import { useAppDispatch } from '@sdk/app'
+import { useTreeNodeOpenPermission } from '@Pimcore/modules/element/tree/hooks/use-tree-node-open-permission'
 import { withContextMenu } from './node/with-context-menu'
+import { useTranslation } from 'react-i18next'
 
 export interface TreeContainerProps {
   id: number
@@ -34,10 +36,12 @@ export interface TreeContainerProps {
 export const DocumentTreeNode = withDroppable(withActionStates(withDraggable(withContextMenu(TreeNodeComponent))))
 
 const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const { openDocument } = useDocumentHelper()
   const { rootNode, isLoading } = useElementTreeRootNode(id, showRoot)
   const componentRegistry = useComponentRegistry()
   const dispatch = useAppDispatch()
+  const canOpenTreeNode = useTreeNodeOpenPermission()
   const contextMenu = componentRegistry.get(componentConfig.document.tree.contextMenu.name)
 
   if (showRoot && isLoading) {
@@ -49,6 +53,10 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
   }
 
   async function onSelect (node: TreeNode): Promise<void> {
+    if (!canOpenTreeNode(node)) {
+      return
+    }
+
     dispatch(setNodeOpeningInAllTree({ nodeId: node.id, elementType: 'document', opening: true }))
 
     try {
@@ -64,6 +72,7 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
 
   return (
     <ElementTree
+      ariaLabel={ t('document.document-tree.title') }
       contextMenu={ contextMenu as React.ElementType<TreeContextMenuProps> | undefined }
       nodeId={ id }
       onSelect={ onSelect }
@@ -72,6 +81,7 @@ const TreeContainer = ({ id = 1, showRoot = true }: TreeContainerProps): React.J
       renderNodeContent={ defaultTreeProps.renderNodeContent }
       renderPager={ PagerContainer }
       rootNode={ rootNode }
+      selectionMode="multiple"
       showRoot={ showRoot }
       tooltipSlotName={ componentConfig.document.tree.tooltip.name }
     />

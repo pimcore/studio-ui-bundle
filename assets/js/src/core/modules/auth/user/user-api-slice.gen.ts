@@ -123,6 +123,26 @@ const injectedRtkApi = api
                 }),
                 providesTags: ["User Management"],
             }),
+            userTwoFactorConfirm: build.mutation<UserTwoFactorConfirmApiResponse, UserTwoFactorConfirmApiArg>({
+                query: (queryArg) => ({
+                    url: `/pimcore-studio/api/user/two-factor/confirm`,
+                    method: "POST",
+                    body: queryArg.twoFactorCode,
+                }),
+                invalidatesTags: ["User Management"],
+            }),
+            userTwoFactorDisable: build.mutation<UserTwoFactorDisableApiResponse, UserTwoFactorDisableApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/user/two-factor`, method: "DELETE" }),
+                invalidatesTags: ["User Management"],
+            }),
+            userTwoFactorResetById: build.mutation<UserTwoFactorResetByIdApiResponse, UserTwoFactorResetByIdApiArg>({
+                query: (queryArg) => ({ url: `/pimcore-studio/api/user/${queryArg.id}/two-factor`, method: "DELETE" }),
+                invalidatesTags: ["User Management"],
+            }),
+            userTwoFactorSetup: build.mutation<UserTwoFactorSetupApiResponse, UserTwoFactorSetupApiArg>({
+                query: () => ({ url: `/pimcore-studio/api/user/two-factor/setup`, method: "POST" }),
+                invalidatesTags: ["User Management"],
+            }),
             userUpdateActivePerspective: build.mutation<
                 UserUpdateActivePerspectiveApiResponse,
                 UserUpdateActivePerspectiveApiArg
@@ -288,6 +308,19 @@ export type UserTokenLinkGetApiArg = {
     id: number;
     tokenLink: TokenLink;
 };
+export type UserTwoFactorConfirmApiResponse = unknown;
+export type UserTwoFactorConfirmApiArg = {
+    twoFactorCode: TwoFactorCode;
+};
+export type UserTwoFactorDisableApiResponse = unknown;
+export type UserTwoFactorDisableApiArg = void;
+export type UserTwoFactorResetByIdApiResponse = unknown;
+export type UserTwoFactorResetByIdApiArg = {
+    /** Id of the User */
+    id: number;
+};
+export type UserTwoFactorSetupApiResponse = /** status 200 The new secret and its otpauth URI. */ TwoFactorSetup;
+export type UserTwoFactorSetupApiArg = void;
 export type UserUpdateActivePerspectiveApiResponse = unknown;
 export type UserUpdateActivePerspectiveApiArg = {
     /** Set active perspective by Id */
@@ -657,6 +690,22 @@ export type TokenLink = {
     /** Token login URL */
     tokenLoginUrl: string;
 };
+export type TwoFactorCode = {
+    /** Code */
+    code: string;
+};
+export type TwoFactorSetup = {
+    /** AdditionalAttributes */
+    additionalAttributes?: {
+        [key: string]: string | number | boolean | object;
+    };
+    /** Secret, for manual entry */
+    secret: string;
+    /** otpauth URI to show as a QR code */
+    otpauthUri: string;
+    /** Number of digits in a code */
+    digits: number;
+};
 export type UserProfile = {
     /** Firstname of the User */
     firstname: string | null;
@@ -698,6 +747,10 @@ export const {
     useUserResetPasswordMutation,
     usePimcoreStudioApiUserSearchQuery,
     useUserTokenLinkGetQuery,
+    useUserTwoFactorConfirmMutation,
+    useUserTwoFactorDisableMutation,
+    useUserTwoFactorResetByIdMutation,
+    useUserTwoFactorSetupMutation,
     useUserUpdateActivePerspectiveMutation,
     useUserUpdatePasswordByIdMutation,
     useUserUpdateProfileMutation,

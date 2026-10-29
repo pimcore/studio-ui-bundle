@@ -15,12 +15,14 @@ namespace Pimcore\Bundle\StudioUiBundle\EventSubscriber\Csp;
 
 use Pimcore\Bundle\StudioUiBundle\Event\Csp\CspEvent;
 use Pimcore\Bundle\StudioUiBundle\Request\StudioRequestMatcher;
+use Pimcore\Bundle\StudioUiBundle\Security\Csp\ContentSecurityPolicyHandler;
 use Pimcore\Bundle\StudioUiBundle\Security\Csp\ContentSecurityPolicyHandlerInterface;
 use Pimcore\Http\RequestHelper;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -77,19 +79,40 @@ final class CspHeaderSubscriber implements EventSubscriberInterface, LoggerAware
             }
         }
 
-        $this->addBuildRemoteOrigins($request);
-
         $response = $event->getResponse();
-        $cspHeader = $this->contentSecurityPolicyHandler->getCspHeader();
+
+        // a copy per response so additions never reach the next one in a worker; only the default
+        // handler is known to copy cleanly, a decorated one is shared as before
+        $handler = $this->contentSecurityPolicyHandler;
+        $policy = $handler instanceof ContentSecurityPolicyHandler ? $handler->forResponse() : $handler;
+        $this->addBuildRemoteOrigins($request, $policy, $this->isHtml($response));
+
+        $cspHeader = $policy->getCspHeader();
 
         $response->headers->set('Content-Security-Policy', $cspHeader);
 
         $this->logger->debug('CSP header set', ['header' => $cspHeader]);
     }
 
-    private function addBuildRemoteOrigins(\Symfony\Component\HttpFoundation\Request $request): void
+    private function isHtml(Response $response): bool
     {
-        $cspEvent = new CspEvent($request, $this->contentSecurityPolicyHandler);
+        // 204 and 304 carry no page; a nonce-protected page is never served from a 304
+        if ($response->isEmpty()) {
+            return false;
+        }
+
+        $contentType = $response->headers->get('Content-Type');
+
+        // without a content type yet, Symfony prepares the response as HTML
+        return $contentType === null || stripos($contentType, 'html') !== false;
+    }
+
+    private function addBuildRemoteOrigins(
+        \Symfony\Component\HttpFoundation\Request $request,
+        ContentSecurityPolicyHandlerInterface $policy,
+        bool $htmlResponse
+    ): void {
+        $cspEvent = new CspEvent($request, $policy, $htmlResponse);
         $this->eventDispatcher->dispatch($cspEvent);
 
         $allOrigins = $cspEvent->getAdditionalBuildOrigins();
@@ -104,11 +127,11 @@ final class CspHeaderSubscriber implements EventSubscriberInterface, LoggerAware
 
         $webSocketOrigins = $this->generateWebSocketOrigins($allOrigins);
 
-        $this->contentSecurityPolicyHandler->addAllowedUrls(ContentSecurityPolicyHandlerInterface::SCRIPT_OPT, $allOrigins);
-        $this->contentSecurityPolicyHandler->addAllowedUrls(ContentSecurityPolicyHandlerInterface::STYLE_OPT, $allOrigins);
-        $this->contentSecurityPolicyHandler->addAllowedUrls(ContentSecurityPolicyHandlerInterface::FONT_OPT, $allOrigins);
+        $policy->addAllowedUrls(ContentSecurityPolicyHandlerInterface::SCRIPT_OPT, $allOrigins);
+        $policy->addAllowedUrls(ContentSecurityPolicyHandlerInterface::STYLE_OPT, $allOrigins);
+        $policy->addAllowedUrls(ContentSecurityPolicyHandlerInterface::FONT_OPT, $allOrigins);
 
-        $this->contentSecurityPolicyHandler->addAllowedUrls(
+        $policy->addAllowedUrls(
             ContentSecurityPolicyHandlerInterface::CONNECT_OPT,
             array_merge($allOrigins, $webSocketOrigins)
         );

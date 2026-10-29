@@ -11,6 +11,7 @@
 import React, { useMemo } from 'react'
 import { Editor } from '@Pimcore/modules/field-definitions/components/editor'
 import {
+  api,
   useClassFieldCollectionDeleteMutation,
   useClassFieldCollectionGetByKeyQuery,
   useClassFieldCollectionGetLayoutByKeyQuery,
@@ -21,6 +22,7 @@ import { FieldCollectionGeneralSettingsFormFields } from '@Pimcore/modules/field
 import { useFieldCollectionUpdate } from '@Pimcore/modules/field-collection/components/field-collection-editor/use-field-collection-update'
 import { type ImportExportConfig } from '@Pimcore/modules/field-definitions/components/editor/settings-provider'
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
+import { invalidatingTags } from '@Pimcore/app/api/pimcore/tags'
 import { type ConfigurationPartial } from '@Pimcore/modules/field-definitions/components/editor/items/provider'
 import { type AnyMutationHook, type AnyQueryHook } from 'types/react-query'
 
@@ -104,7 +106,10 @@ const useFieldCollectionDeleteMutation: AnyMutationHook = (...args) => {
 
 const fieldCollectionImportExportConfig: ImportExportConfig = {
   getExportUrl: (id) => `${getPrefix()}/class/field-collection/${String(id)}/export`,
-  getImportUrl: (id) => `${getPrefix()}/class/field-collection/${String(id)}/import`
+  getImportUrl: (id) => `${getPrefix()}/class/field-collection/${String(id)}/import`,
+  // Which classes use this field collection is not known here, so every class's columns
+  // go - the same reasoning, and the same tag, as classFieldCollectionUpdate.
+  getImportInvalidation: () => api.util.invalidateTags(invalidatingTags.DATA_OBJECT_GRID_COLUMNS())
 }
 
 export const FieldCollectionWidget = (): React.JSX.Element => {

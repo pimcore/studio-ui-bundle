@@ -80,9 +80,11 @@ export const PredefinedPropertiesContainer = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme="secondary">
           <IconButton
+            aria-label={ t('refresh') }
             disabled={ predefinedPropertiesFetching }
             icon={ { value: 'refresh' } }
             onClick={ handleRefetch }
+            tooltip={ { title: t('refresh') } }
           />
         </Toolbar> }
       renderTopBar={

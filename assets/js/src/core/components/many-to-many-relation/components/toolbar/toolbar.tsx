@@ -30,6 +30,7 @@ import { debounce } from 'lodash'
 import { RELATION_COLUMN_FILTERS_KEY, useRelationFiltersOptional } from '../../filters/filters'
 import { CreateObjectModal } from '../create-object/create-object-modal'
 import { useCreatableRelationClasses } from '../create-object/use-creatable-relation-classes'
+import { actionTooltipDelay } from '@Pimcore/components/tooltip/tooltip'
 
 export interface ManyToManyRelationToolbarProps extends IRelationAllowedTypesDataComponent {
   empty: () => void
@@ -46,6 +47,7 @@ export interface ManyToManyRelationToolbarProps extends IRelationAllowedTypesDat
   /** No slots left under `maxItems`; creating another object would overflow the relation. */
   itemLimitReached?: boolean
   maxItems?: number | null
+  extraToolbarItems?: React.ReactNode
 }
 
 export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps): React.JSX.Element => {
@@ -77,10 +79,11 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
 
   // Gated on the class-definition flag, and on the relation explicitly accepting objects —
   // the flag only exists on the object relation types, but the toolbar is shared by all of
-  // them, and an omitted `dataObjectsAllowed` means "not allowed" everywhere else too.
+  // them, and an omitted `dataObjectsAllowed` means "not allowed" everywhere else too. A
+  // folder-only relation also has `dataObjectsAllowed`, so the `object` subtype is required.
   const relationCanCreateObjects = props.allowToCreateNewObject === true &&
     props.disabled !== true &&
-    props.dataObjectsAllowed === true
+    isAllowedSubType('data-object', 'object', props)
 
   // Skipped entirely for relations that cannot create objects, so asset/document relations
   // do not fetch the class collection.
@@ -100,7 +103,10 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
 
   if (canCreateObject) {
     buttons.push(
-      <Tooltip title={ t('relations.create-object.title') }>
+      <Tooltip
+        mouseEnterDelay={ actionTooltipDelay }
+        title={ t('relations.create-object.title') }
+      >
         <IconButton
           aria-label={ t('relations.create-object.title') }
           disabled={ isLoadingClasses }
@@ -166,7 +172,10 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
 
   if (props.allowClear) {
     buttons.push(
-      <Tooltip title={ t('empty') }>
+      <Tooltip
+        mouseEnterDelay={ actionTooltipDelay }
+        title={ t('empty') }
+      >
         <IconButton
           icon={ { value: 'trash' } }
           onClick={ () => {
@@ -184,7 +193,10 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
 
   if (hasAppliedFilters) {
     buttons.push(
-      <Tooltip title={ clearFiltersLabel }>
+      <Tooltip
+        mouseEnterDelay={ actionTooltipDelay }
+        title={ clearFiltersLabel }
+      >
         <IconButton
           aria-label={ clearFiltersLabel }
           icon={ { value: 'clear-filter' } }
@@ -219,7 +231,13 @@ export const ManyToManyRelationToolbar = (props: ManyToManyRelationToolbarProps)
         gap={ withButton ? 'extra-small' : undefined }
         justify={ withButton ? 'space-between' : 'start' }
       >
-        { withButton ? <ButtonGroup items={ buttons } /> : <div></div> }
+        <Flex
+          align="center"
+          gap="extra-small"
+        >
+          { withButton && <ButtonGroup items={ buttons } /> }
+          {props.extraToolbarItems}
+        </Flex>
 
         <div>
           <SearchInput

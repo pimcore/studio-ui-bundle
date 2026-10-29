@@ -8,14 +8,15 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { type ReactNode, useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { Form as AntForm, type FormProps as AntFormProps, type FormItemProps } from 'antd'
 import { type ValidateErrorEntity } from 'rc-field-form/lib/interface'
-import { Space } from '../space/space'
+import { useTranslation } from 'react-i18next'
 import { withGroupName } from './item/with-group-name'
 import { Group } from './group/group'
 import { KeyedList } from './controls/keyed-list/keyed-list'
 import { withItemProvider } from './item/with-item-provider'
+import { buildRequiredMark } from './item/label-required-mark'
 import { withKeyedItemContext } from './item/with-keyed-item-context'
 import { withLocalizedFieldsLocale } from '@Pimcore/components/form/localisation/localized-fields/form-item/with-localized-fields-locale'
 import { compose } from '@reduxjs/toolkit'
@@ -49,7 +50,8 @@ interface FormComponent {
 
 const Form = (({ ...props }: FormProps) => {
   const { styles } = useStyles()
-  const { form, children, onFinish, onFinishFailed, ...restProps } = props
+  const { t } = useTranslation()
+  const { form, children, onFinish, onFinishFailed, requiredMark: callerRequiredMark, ...restProps } = props
   const [formInstance] = useForm(form)
 
   const currentFormInstance = form ?? formInstance
@@ -67,14 +69,12 @@ const Form = (({ ...props }: FormProps) => {
     currentFormInstance.setOnValuesChangeHandler(props.onValuesChange)
   }, [currentFormInstance])
 
-  const requiredMark: FormProps['requiredMark'] = useCallback((label, { required }): ReactNode => {
-    return (
-      <Space size='mini'>
-        {label}
-        {required === true && '*'}
-      </Space>
-    )
-  }, [])
+  // The label row always ends with the label-extra slot, so a requiredMark of the
+  // caller is composed with it rather than replacing it (see buildRequiredMark).
+  const requiredMark = useMemo(
+    () => buildRequiredMark(callerRequiredMark, t('form.optional-mark')),
+    [callerRequiredMark, t]
+  )
 
   const className = useMemo(() => `${props.className ?? ''} ${styles.container}`, [props.className, styles.container])
 

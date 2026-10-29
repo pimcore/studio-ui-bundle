@@ -85,6 +85,13 @@ asset.upload.overwrite: Skriv över
 asset.upload.keep-both: Behåll båda
 asset.upload.skip: Hoppa över
 asset.upload.apply-to-all: Tillämpa på alla
+asset.upload.files-exist.title: 'Filerna finns redan'
+asset.upload.files-exist.message: '{{total}} av de valda filerna finns redan i den här mappen. Vad vill du göra med dem?'
+asset.upload.files-exist.more: 'och {{hidden}} till'
+asset.upload.review-each: 'Granska en i taget'
+asset.upload.skip-all: 'Hoppa över alla'
+asset.upload.keep-both-all: 'Behåll båda för alla'
+asset.upload.overwrite-all: 'Skriv över alla'
 asset.upload.checking-duplicate-file-names: "Kontrollerar dubbletter av filnamn ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Skapar mappar
 asset.upload.folder-drop.creating-folders-hint: Vänta medan mappstrukturen skapas…
@@ -104,6 +111,8 @@ areablock.move-below: Flytta ner
 areablock.show: Visa
 areablock.hide: Dölj
 areablock.new: Ny
+areablock.insert-above: Infoga ovanför
+areablock.insert-below: Infoga nedanför
 areablock.copy: Kopiera
 areablock.paste: Klistra in
 areablock.cut: Klipp ut
@@ -129,7 +138,7 @@ document.tree.context-menu.add-hardlink: Ny Hardlink
 document.required-fields.validation-title: Obligatoriska fält saknas
 document.required-fields.validation-message: Följande obligatoriska fält måste fyllas i innan publicering
 document.site.remove-site: Ta bort sajt
-document.site.remove-site-confirmation: Är du säker på att du vill ta bort den här sajten? Åtgärden kan inte ångras.
+document.site.remove-site-confirmation: Är du säker på att du vill ta bort den här sajten permanent? Åtgärden kan inte ångras.
 document.site.use-as-site: Använd som sajt
 document.site.edit-site: Redigera sajt
 document.site.form.main-domain: Huvuddomän
@@ -159,8 +168,8 @@ data-object.select-class-to-display: Välj en klass att visa
 data-object.tree.context-menu.add-object: Nytt objekt
 data-object.tree.context-menu.add-variant: Ny variant
 data-object.variant-listing.create-data-variant: Ny variant
-data-object.create-data-object: Lägg till nytt objekt av typen {{className}}
-data-object.create-variant: Lägg till ny variant av typen {{className}}
+data-object.create-data-object: Nytt objekt av typen {{className}}
+data-object.create-variant: Ny variant av typen {{className}}
 data-object.object-editor-tabs.variants: Varianter
 object.object-editor-tabs.children-listing: Barnrutnät
 workflow.label: Workflow
@@ -190,7 +199,7 @@ class-definition.import-file-label: Välj JSON-fil
 class-definition.import-success: Klassdefinitionen har importerats
 class-definition.export-success: Klassdefinitionen har exporterats
 class-definition.custom-layouts.default-layout: Standardlayout
-class-definition.create-new: Skapa ny klassdefinition
+class-definition.create-new: Ny klassdefinition
 class-definition.class-name: Klassnamn
 class-definition.unique-identifier: Unik identifierare
 class-definition.unique-identifier-warning: Var försiktig med den unika identifieraren eftersom tabellnamn kan innehålla max 64 tecken.
@@ -246,7 +255,7 @@ class-definition.composite-indices.type-localized-query: Lokaliserad Query
 class-definition.composite-indices.type-store: Store
 class-definition.composite-indices.type-localized-store: Lokaliserad Store
 class-definition.composite-indices.index-label: Index
-field-collection.create-new: Skapa ny Field Collection
+field-collection.create-new: Ny Field Collection
 field-collection.key: Nyckel
 field-collection.validation.enter-key: Ange en nyckel
 field-collection.validation.key-format: Nyckeln måste börja med en bokstav och kan bara innehålla bokstäver, siffror och understreck.
@@ -260,7 +269,7 @@ field-collection.general-settings.implements-interfaces: Implementerar gränssni
 field-collection.general-settings.usages.title: Användningar
 field-collection.general-settings.usages.class: Klass
 field-collection.general-settings.usages.field: Fält
-object-brick.create-new: Skapa ny Object Brick
+object-brick.create-new: Ny Object Brick
 object-brick.key: Nyckel
 object-brick.validation.enter-key: Ange en nyckel
 object-brick.validation.key-format: Nyckeln måste börja med en bokstav och kan bara innehålla bokstäver, siffror och understreck.
@@ -275,7 +284,7 @@ object-brick.class-definitions-block.classname: Klass
 object-brick.class-definitions-block.select-classname: Välj klass
 object-brick.class-definitions-block.fieldname: Fält
 object-brick.class-definitions-block.select-fieldname: Välj fält
-select-option.create-new: Skapa nytt valalternativ
+select-option.create-new: Nytt valalternativ
 select-option.id: ID
 select-option.enter-name-new-item: Ange namnet på det nya objektet
 select-option.validation.enter-id: Ange ett ID
@@ -311,6 +320,10 @@ custom-layout.empty-state.edit: Välj en befintlig anpassad layout för att bör
 example-prefix: Exempelprefix
 pagination.show-total: Totalt {{total}} objekt
 pagination.page: Sida
+pagination.first-page: Första sidan
+pagination.previous-page: Föregående sida
+pagination.next-page: Nästa sida
+pagination.last-page: Sista sidan
 pagination.showing-x-of-y: Visar {{loaded}} av {{total}}
 preview-card.locate-in-tree: Hitta i träd
 preview-card.rename: Byt namn
@@ -325,6 +338,8 @@ aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Val av anpassat mi
 aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Ladda ner anpassad miniatyrbild
 aria.asset.image-sidebar.tab.details.precreated-thumbnail: Välj förskapad miniatyrbild att ladda ner
 aria.asset.image-sidebar.tab.details.download-thumbnail: Ladda ner miniatyrbild
+aria.asset.image-sidebar.tab.details.downloadable-thumbnail: Välj nedladdningsbar miniatyrbild
+aria.asset.image-sidebar.tab.details.download-downloadable-thumbnail: Ladda ner vald miniatyrbild
 notification.action-list.actions: Åtgärder
 notification.action-list.cancel: Avbryt
 notification.action-list.cancel-all: Avbryt alla
@@ -332,6 +347,7 @@ notification.action-list.completed-actions: Slutförda åtgärder
 aria.notification.action-list.toggle-collapse: Växla lista med åtgärder
 aria.notification.action-list.cancel-all: Avbryt alla pågående åtgärder
 aria.notification.action-list.cancel: Avbryt åtgärd
+aria.stack-list.drag-handle: Dra för att sortera om
 asset.image.editor.zoom.reset: Återställ
 aria.asset.image.editor.zoom.reset: Återställ zoom
 aria.asset.image.editor.zoom.zoom-in: Zooma in
@@ -348,6 +364,7 @@ grid.filter.to: Till
 grid.filter.is: Är
 grid.filter.less: Mindre än
 grid.filter.more: Mer än
+grid.filter.string.placeholder: Sök eller klistra in en lista med ett värde per rad för att matcha någon av dem exakt
 grid.filter.column: 'Filtrera {{column}}'
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
@@ -370,6 +387,7 @@ grid.advanced-column.advancedColumns.group.date: Datum
 grid.advanced-column.advancedColumns.group.string: Sträng
 grid.advanced-column.advancedColumns.group.other: Övrigt
 grid.advanced-column.title.placeholder: Lägg till en titel
+grid.advanced-column.expand: Expandera
 grid.advanced-column.advancedColumns: Källfält
 grid.advanced-column.advancedColumns.add: Lägg till ett källfält
 grid.advanced-column.transformers: Transformerare
@@ -378,6 +396,7 @@ grid.advanced-column.preview: Förhandsvisning
 grid.advanced-column.no-preview: Inget förhandsvisningsobjekt tillgängligt
 grid.advanced-column.no-preview-data: Ingen förhandsvisningsdata tillgänglig
 grid.advanced-column.error-preview-data: Fel vid laddning av förhandsvisning
+grid.advanced-column.no-source-fields: Lägg till ett källfält för att se en förhandsvisning.
 grid.advanced-column.preview-item: Förhandsvisningsobjekt
 grid.advanced-column.trim: Trimma
 grid.advanced-column.find: Sök
@@ -497,6 +516,8 @@ version.category.title.meta: Metadata
 version.category.title.properties: Egenskaper
 version.changed-attributes: "Ändrade attribut: {{attributes}}"
 aria.version.delete: Ta bort version
+aria.notes-and-events.delete: Ta bort anteckning
+aria.card.close: Stäng
 aria.version.expand: Expandera version
 clear-all: Rensa allt
 empty: Tom
@@ -555,6 +576,8 @@ userModification: Ändrad av
 userOwner: Ägare
 listing.grid-config.convert-to-advanced: Konvertera till avancerad kolumn
 listing.grid-config.title: Rutnätskonfiguration
+listing.grid-config.search-mode-column.label: Automatisk
+listing.grid-config.search-mode-column.tooltip: Tillagd av det aktiva sökläget. Du kan flytta den som alla andra kolumner; den sparas inte med rutnätskonfigurationen.
 grid-config.discard-all-changes: Förkasta alla ändringar
 grid-config.apply-changes: Tillämpa ändringar
 grid-config.reload: Läs om
@@ -574,6 +597,9 @@ listing.actions: Tillämpa på val
 listing.non-selected.actions: Tillämpa på alla
 listing.actions.zip-download: ZIP-nedladdning
 listing.actions.delete: Ta bort
+listing.actions.delete-all: Ta bort alla
+listing.actions.delete-all.not-allowed: "Vissa objekt i mappen är låsta eller så har du inte behörighet att ta bort dem."
+listing.actions.delete-all.empty: "Mappen innehåller inga objekt att ta bort."
 listing.actions.export: Exportera
 reports.csv-export-modal.title: CSV-exportalternativ
 reports.csv-export-modal.include-headers: Inkludera kolumnrubriker
@@ -630,6 +656,54 @@ website-settings.columns.site: Sajt
 website-settings.columns.actions: Åtgärder
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Obligatoriska fält saknas
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Namn och typ är obligatoriska fält och måste fyllas i.
+mcp-servers.rail.new-server: Ny server
+mcp-servers.placeholder: Välj en server för att visa eller redigera dess konfiguration.
+mcp-servers.tabs.empty: Välj en server för att visa eller redigera dess konfiguration.
+mcp-servers.tabs.new-server: Ny server
+mcp-servers.read-only-notice: Serverdefinitioner hanteras via filer i den här miljön och kan inte redigeras här.
+mcp-servers.save-success: MCP-server sparad
+mcp-servers.access.users-count: "Användare: {{number}}"
+mcp-servers.access.roles-count: "Roller: {{number}}"
+mcp-servers.access.global-extra: alla autentiserade användare
+mcp-servers.access.nobody: "Ingen ännu"
+mcp-servers.badge.read: Läs
+mcp-servers.badge.write: Skriv
+mcp-servers.editor.create-title: Ny MCP-server
+mcp-servers.editor.edit-title: Redigera MCP-server
+mcp-servers.editor.general: Generellt
+mcp-servers.editor.permissions: Rättigheter
+mcp-servers.editor.identity: Identitet
+mcp-servers.editor.name: Namn
+mcp-servers.editor.name-required: Ange ett namn.
+mcp-servers.editor.url-slug: URL Slug
+mcp-servers.editor.url-slug-required: Ange en URL-slug.
+mcp-servers.editor.url-slug-pattern: Endast gemener, siffror och bindestreck är tillåtna.
+mcp-servers.editor.description: Beskrivning
+mcp-servers.editor.enabled: Aktiv
+mcp-servers.editor.tools: Verktyg
+mcp-servers.editor.tools-placeholder: Välj de verktyg som servern exponerar
+mcp-servers.editor.scopes: Annonserade scopes
+mcp-servers.editor.scopes-empty: Inga scopes — välj verktyg för att härleda de nödvändiga scopes.
+mcp-servers.editor.url: Server-URL
+mcp-servers.editor.copy-url: "Kopiera server-URL"
+mcp-servers.editor.connect-hint: Rikta din MCP-klient mot denna URL och autentisera dig med ditt Pimcore-konto.
+mcp-servers.sharing.title: Delning
+mcp-servers.sharing.share-globally: Dela globalt
+mcp-servers.sharing.share-globally-tooltip: Alla autentiserade användare får konfigurationsläsning och MCP-serveråtkomst (inte konfigurationsredigering)
+mcp-servers.sharing.users: Användare
+mcp-servers.sharing.roles: Roller
+mcp-servers.sharing.add-user: Lägg till en användare…
+mcp-servers.sharing.add-role: Lägg till en roll…
+mcp-servers.sharing.name: Namn
+mcp-servers.sharing.config-read: Konfigurationsläsning
+mcp-servers.sharing.config-edit: Konfigurationsredigering
+mcp-servers.sharing.mcp-access: MCP-serveråtkomst
+mcp-servers.sharing.level: Åtkomstnivå
+mcp-servers.sharing.read: Läs
+mcp-servers.sharing.write: Kan redigera
+mcp-servers.sharing.who-can-access: Vem har åtkomst
+mcp-servers.delete.title: Ta bort MCP-server
+mcp-servers.delete.confirm: Är du säker på att du vill ta bort "{{name}}"?
 document-types.new: Ny
 document-types.columns.name: Namn
 document-types.columns.group: Grupp
@@ -645,6 +719,7 @@ properties.label: Egenskaper
 properties.editable-properties: Redigerbara egenskaper
 properties.all-properties: Alla egenskaper
 properties.predefined-properties: Fördefinierade egenskaper
+properties.predefined-properties.reload-error: Kunde inte läsa in de fördefinierede egenskaperna
 properties.new-custom-property: Ny anpassad egenskap
 translations.columns.type: Typ
 translations.columns.key: Nyckel
@@ -754,6 +829,7 @@ tags.apply-tags-to-children: Tillämpa taggar på barn
 tags.remove-and-apply-tags-to-children: Ta bort och tillämpa taggar på barn
 tags.columns.path: Sökväg
 tags.columns.actions: Ta bort
+tags.actions.delete: Ta bort tagg
 csv-separated-options: CSV-separerade alternativ
 csv-separated-options-info: Listan med tillgängliga alternativ kan anges som kommaseparerad lista, som enskilda kolumnvärden eller blandat. Vid enskild kolumn kommer nyckeln även att användas som värde.
 add: Lägg till
@@ -839,7 +915,7 @@ field-definitions.saved-successfully: Sparades.
 field-definitions.select-item-configuration: Välj objektkonfiguration
 field-definitions.custom-layout-title: Custom Layout
 field-definitions.custom-layouts: Custom Layouts
-field-definitions.create-new-class-definition: Skapa ny anpassad layout
+field-definitions.create-new-class-definition: Ny anpassad layout
 field-definitions.select-field-message: Välj ett fält från trädet för att redigera dess egenskaper.
 field-definitions.loading-general-settings: Laddar allmänna inställningar...
 field-definitions.type-not-supported: Typen stöds inte
@@ -1064,6 +1140,8 @@ regex-flags-tooltip: "RegExp utan avgränsare, måste fungera i JS (Avgränsare:
 test-string: Teststräng
 regex-validation-error-message: Strängen matchar inte det obligatoriska formatet.
 calculator-class: Kalkylatorklass
+calculator-data: Kalkylatordata
+calculator-data-tooltip: Valfria fritextdata som skickas till kalkylatorn, t.ex. ett enkelt värde, en kommaseparerad lista eller en JSON-kodad struktur.
 calculator-expression: Kalkylatoruttryck
 calculator-type: Kalkylatortyp
 calculator-type-tooltip: Se den officiella dokumentationen för att lära dig mer om att definiera uttryck eller klasser.
@@ -1122,6 +1200,7 @@ asset.sidebar.original-file: Originalfil
 asset.sidebar.web-format: Webbformat
 asset.sidebar.print-format: Utskriftsformat
 asset.sidebar.office-format: Kontorsformat
+asset.sidebar.thumbnail-download: Ladda ner miniatyrbild
 jobs.notification.title: Pågående jobb
 jobs.notification.tooltip: Öppna pågående jobb
 jobs.notification.jobs_one: "{{count}} åtgärd"
@@ -1156,17 +1235,24 @@ jobs.zip-upload-job.title: Ladda upp ZIP
 jobs.zip-upload-job.step1.title: Extraherar ZIP
 jobs.zip-upload-job.step2.title: Skapar assets
 jobs.download-csv-job.title: CSV export
+jobs.download-csv-job.title-with-context: "CSV export ({{name}})"
 jobs.download-xlsx-job.title: XLSX export
+jobs.download-xlsx-job.title-with-context: "XLSX export ({{name}})"
 jobs.download-zip-job.title: ZIP download
 batch-edit.modal-title: Massredigering
 batch-edit.no-content: Det finns inga tillagda kolumner ännu
 batch-edit.modal-footer.apply-changes: Tillämpa ändringar
 batch-edit.modal-footer.discard-all-changes: Kassera alla ändringar
 batch-edit.modal-footer.add-a-column: Lägg till en kolumn
+batch-edit.system-boolean.publish: "Publicera"
+batch-edit.system-boolean.unpublish: "Avpublicera"
+batch-edit.system-boolean.placeholder: "Välj en åtgärd"
+batch-edit.system-boolean.required: "Välj Publicera eller Avpublicera"
 batch-edit.append-mode.replace: Massersättning
 batch-edit.append-mode.add: Masstillägg
 batch-edit.append-mode.remove: Massborttagning
 batch-delete.job-title: Ta bort
+element-move.job-title: Flytta
 export-csv-form.modal-title: Exportera CSV
 export-csv-form.export-notice: Observera att exporten inte stöder vissa fält (t.ex. förhandsvisning, storlek). Tryck OK för att fortsätta med exporten.
 export-csv-form.form-field.delimiter: Avgränsare
@@ -1181,6 +1267,7 @@ export-xlsx-form.form-field.header: Rubrik
 export-xlsx-form.form-field.header.option.name: Systemnyckel
 export-xlsx-form.form-field.header.option.title: Etikett
 export-xlsx-form.form-field.header.option.no-header: Ingen rubrik
+form.optional-mark: (valfritt)
 form.annotation.added: Tillagd
 form.annotation.changed: Ändrad
 form.annotation.removed: Borttagen
@@ -1224,11 +1311,24 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" har kopierats
 element.tree.paste: Klistra in
 element.tree.paste-as-child: Klistra in som barn
 element.tree.paste-as-child-recursive: Klistra in som barn (rekursivt)
+element.tree.open-no-permission: Du har inte behörighet att öppna det här elementet.
 element.tree.paste-recursive-updating-references: Klistra in rekursivt, uppdatera referenser
 element.tree.paste-only-contents: Klistra bara in innehåll här
 element.tree.cut: Klipp ut
 element.tree.cut-success-description: '{{elementType}} "{{name}}" har klippts ut och är redo att klistras in'
 element.tree.paste-cut: Klistra in utklippt element
+element.tree.cut-multiple: 'Klipp ut {{count}} element'
+element.tree.cut-multiple-success-description: '{{count}} element har klippts ut och kan klistras in'
+element.tree.paste-cut-multiple: 'Klistra in {{count}} utklippta element'
+element.tree.selection.count_one: '{{count}} element valt'
+element.tree.selection.count_other: '{{count}} element valda'
+element.tree.selection.clear: Rensa markering
+element.tree.selection.limit-reached: 'Maximalt {{limit}} element uppnått'
+element.tree.drag.elements_one: '{{count}} element'
+element.tree.drag.elements_other: '{{count}} element'
+element.tree.drag.elements-partial: '{{count}} av {{selected}} element'
+element.tree.move.skipped-elements_one: '1 element flyttades inte: det är låst eller du kan inte redigera det.'
+element.tree.move.skipped-elements_other: '{{count}} element flyttades inte: de är låsta eller du kan inte redigera dem.'
 element.lock: Lås
 element.lock-and-propagate-to-children: Lås och sprid till barn
 element.unlock: Lås upp
@@ -1249,10 +1349,13 @@ element.tree.refresh: Uppdatera
 element.new-folder: Ny mapp
 element.new-folder.validation: Ange ett giltigt namn
 element.rename: Byt namn
+element.rename-folder: Byt namn på mapp
 element.rename.label: Ange det nya namnet
 element.rename.validation: Ange ett giltigt namn
 element.share-via-notification: Dela via aviseringar
 element.delete: Ta bort
+element.delete-folder: Ta bort mapp
+element.delete-multiple: 'Ta bort {{count}} element'
 element.delete.confirmation.title: Ta bort objekt
 element.delete.confirmation.text: Vill du verkligen ta bort det här objektet?
 element.delete.confirmation.ok: Ta bort permanent
@@ -1275,6 +1378,8 @@ element.delete.batch.show-paths: Visa element
 element.delete.batch.dependencies-warning.confirmed_one: 'Obs: Detta element har beroenden.'
 element.delete.batch.dependencies-warning.confirmed_other: 'Obs: Dessa element har beroenden.'
 element.open: Öppna
+element.state: Status
+element.state.unpublished: Opublicerad
 element.toolbar.copy-id: Kopiera ID
 element.toolbar.copy-full-path-to-clipboard: Kopiera fullständig sökväg
 element.toolbar.copy-deep-link-to-clipboard: Kopiera Deeplink
@@ -1314,6 +1419,9 @@ success: Framgång
 no-value-set: Inget värde angivet
 set-to-null: Tom (sätt till null)
 remove: Ta bort
+move-up: Flytta upp
+move-down: Flytta ner
+translate: Översätt
 delete: Ta bort
 clone: Klona
 jobs.clone-job.step2.title: Uppdaterar referenser
@@ -1345,6 +1453,9 @@ relations.create-object.class: Klass
 relation: relation
 items-limit-reached: Maximalt antal objekt ({{maxItems}}) har nåtts.
 asset-upload-type-not-allowed: Den uppladdade assetens typ tillåts inte för det här fältet.
+relation.drop.not-allowed-elements-skipped_one: '1 element lades inte till: det här fältet tillåter inte dess typ.'
+relation.drop.not-allowed-elements-skipped_other: '{{count}} element lades inte till: det här fältet tillåter inte deras typer.'
+drag-and-drop.drop.single-element-only: 'Bara ett element kan släppas här.'
 actions: Åtgärder
 asset: Asset
 data-object: Data Object
@@ -1399,7 +1510,6 @@ tree.actions.user: Användare
 tree.actions.add-folder: Ny mapp
 tree.actions.add-tag: Ny tagg
 tree.actions.delete-tag: Ta bort
-tree.actions.rename-tag: Byt namn
 tree.actions.role: Roll
 tree.actions.add-role: Lägg till roll
 tree.actions.clone-role: Klona roll
@@ -1411,7 +1521,6 @@ tag-configuration.name: Namn
 tag-configuration.parent-tag: Överordnad tagg
 tag-configuration.create: Skapa
 tag-configuration.save: Spara
-tag-configuration.rename: Byt namn på tagg
 tag-configuration.successful-add: Taggen har lagts till
 tag-configuration.successful-update: Taggen har uppdaterats
 tag-configuration.successful-deletion: Taggen har tagits bort
@@ -1517,6 +1626,11 @@ user-management.settings.language.abbreviation: Förkortning
 user-management.settings.language.view: Visa
 user-management.settings.language.edit: Redigera
 user-management.two-factor-authentication: Tvåfaktorsautentisering
+user-management.two-factor-authentication.reset: Återställ tvåfaktorsautentisering
+user-management.two-factor-authentication.reset.confirmation.title: Återställ tvåfaktorsautentisering
+user-management.two-factor-authentication.reset.confirmation.text: Användarens autentiseringsapp fungerar inte längre för det här kontot. Om tvåfaktorsautentisering krävs måste användaren konfigurera den igen vid nästa inloggning.
+user-management.two-factor-authentication.reset.success: Tvåfaktorsautentisering har återställts
+user-management.two-factor-authentication.reset.error: Tvåfaktorsautentisering kunde inte återställas
 user-management.workspaces.documents: Dokument
 user-management.workspaces.assets: Assets
 user-management.workspaces.objects: Data Objects
@@ -1543,6 +1657,8 @@ user-management.workspaces.localized-fields.edit: Redigeringsbehörigheter
 user-management.workspaces.custom-layouts: Custom Layouts
 user-management.workspaces.custom-layouts.select: Välj ett eller flera fält
 user-management.add-folder.success: Mappen har lagts till
+user-management.remove-folder: Ta bort mapp
+user-management.remove-folder.text: 'Är du säker på att du vill ta bort den här mappen permanent? Åtgärden kan inte ångras.'
 user-management.remove-folder.success: Mappen har tagits bort
 user-management.clone-user: Klona användare
 user-management.clone-user.text: Ange namnet på den nya användaren
@@ -1558,9 +1674,9 @@ user-management.roles: Roller
 user-management.role: Roll
 user-management.users: Användare
 user-management.user: Användare
-user-management.add-folder: Lägg till ny mapp
+user-management.add-folder: Ny mapp
 user-management.add-folder.label: Ange namnet på den nya mappen
-user-management.add-user: Lägg till ny användare
+user-management.add-user: Ny användare
 user-management.add-user.label: Ange namnet på den nya användaren
 user-management.last-login: Senaste inloggning
 user-management.search.id: ID
@@ -1571,6 +1687,8 @@ roles.clone-role: Klona roll
 roles.clone-role.text: Ange namnet på den nya rollen
 roles.remove-role: Ta bort roll
 roles.remove-role.text: 'Är du säker på att du vill permanent ta bort rollen "{{name}}"? Åtgärden kan inte ångras.'
+roles.remove-folder: Ta bort mapp
+roles.remove-folder.text: 'Är du säker på att du vill ta bort den här mappen permanent? Åtgärden kan inte ångras.'
 roles.remove-folder.success: Mappen har tagits bort
 roles.remove-item.success: Rollen har tagits bort
 roles.add-item.success: Rollen har lagts till
@@ -1578,9 +1696,9 @@ roles.add-folder.success: Mappen har lagts till
 roles.general: Allmänt
 roles.settings.title: Inställningar
 roles.workspaces.title: Workspaces
-roles.add-folder: Lägg till ny mapp
+roles.add-folder: Ny mapp
 roles.add-folder.label: Ange namnet på den nya mappen
-roles.add-role: Lägg till ny roll
+roles.add-role: Ny roll
 roles.add-role.label: Ange namnet på den nya rollen
 roles.search.id: ID
 navigation.quick-access: Snabbåtkomst
@@ -1604,6 +1722,7 @@ navigation.appearance-branding: Utseende & Varumärke
 navigation.reporting: Rapportering
 navigation.system: System
 navigation.website-settings: Webbplatsinställningar
+navigation.mcp-servers: MCP-servrar
 navigation.document-types: Dokumenttyper
 navigation.cache: Cache
 navigation.cache.clear-cache: Rensa cache
@@ -1692,6 +1811,7 @@ widget.predefined-properties: Fördefinierade egenskaper
 widget.search-replace-assignments: Sök & Ersätt tilldelningar
 widget.document-types: Dokumenttyper
 widget.website-settings: Webbplatsinställningar
+widget.mcp-servers: MCP-servrar
 widget.role-management: Roller
 widget.user-management: Användare
 widget.class-definitions: Klasser
@@ -1749,7 +1869,7 @@ image-thumbnails.editor.advanced: Avancerat
 image-thumbnails.editor.quality: Kvalitet
 image-thumbnails.editor.quality.tooltip: JPEG-kvalitetsinställning (1-100)
 image-thumbnails.editor.high-resolution: Hög upplösning
-image-thumbnails.editor.high-resolution.tooltip: Högupplösningsfaktor för retinaskärmar
+image-thumbnails.editor.high-resolution.tooltip: Högupplösningsfaktor (t.ex. för Web-to-Print eller överallt där srcset inte är möjligt eller tillräckligt). Behövs inte för vanliga webbminiatyrer – de får automatiskt ett srcset-attribut med 1x och 2x.
 image-thumbnails.editor.preserve-color: Bevara färg
 image-thumbnails.editor.preserve-color.tooltip: "Bevara färg (profil, rymd) (Imagick, ORIGINAL)\n('Bevara metadata' och 'bevara färg' fungerar bara för transformationer utan kompositioner (ram, bakgrundsfärg, ...) och färgändringar (gråskala, sepia, ...))"
 image-thumbnails.editor.force-process-icc: Tvinga bearbetning av ICC-profiler
@@ -2080,6 +2200,8 @@ classification-store.select-key: Välj nyckel
 classification-store.search-keys: Sök nycklar…
 classification-store.select-group: Välj grupp
 classification-store.search-groups: Sök grupper…
+classification-store.store-id: "ID: {{id}}"
+classification-store.store-tab-label: "{{name}} (ID: {{id}})"
 home: Hem
 preview.label: Förhandsvisning
 preview.desktop: Dator
@@ -2089,7 +2211,9 @@ preview.phone-horizontal: Telefon horisontell
 preview.select_date_time: Välj datum & tid
 preview.screen_size_too_small: Det tillgängliga utrymmet är för litet för att visa det valda förhandsvisningsläget.
 inheritance-active: "Data ärvt från objekt-ID {{id}}"
+inheritance-active-unknown-origin: Data ärvt från ett överordnat objekt
 inheritance-broken: Dataarv brutet
+inheritance-restore: Återställ
 main: Huvud
 main_admin: Huvud (Adminläge)
 draft-alert: Den aktuella versionen är ett utkast. Du kan ta bort utkastet för att återställa föregående version.
@@ -2248,8 +2372,23 @@ user-profile.password-old: Gammalt lösenord
 user-profile.password-new: Nytt lösenord
 user-profile.password-repeat: Upprepa lösenord
 user-profile.password-repeat-error: Lösenorden matchar inte
+user-profile.two-factor-authentication: Tvåfaktorsautentisering
+user-profile.two-factor-authentication.status.active: Tvåfaktorsautentisering är aktiv för ditt konto.
+user-profile.two-factor-authentication.status.inactive: Tvåfaktorsautentisering är inte konfigurerad för ditt konto.
+user-profile.two-factor-authentication.required-hint: Tvåfaktorsautentisering krävs för ditt konto och kan därför inte inaktiveras.
+user-profile.two-factor-authentication.setup: Konfigurera tvåfaktorsautentisering
+user-profile.two-factor-authentication.renew: Förnya autentiseringsnyckel
+user-profile.two-factor-authentication.setup.description: Skanna QR-koden med din autentiseringsapp och ange den {{digits}}-siffriga koden för att bekräfta.
+user-profile.two-factor-authentication.renew.description: Skanna QR-koden med din autentiseringsapp och ange den {{digits}}-siffriga koden för att bekräfta. Din nuvarande nyckel fungerar tills den nya har bekräftats.
+user-profile.two-factor-authentication.setup.success: Tvåfaktorsautentisering har konfigurerats
+user-profile.two-factor-authentication.disable: Inaktivera tvåfaktorsautentisering
+user-profile.two-factor-authentication.disable.confirmation.title: Inaktivera tvåfaktorsautentisering
+user-profile.two-factor-authentication.disable.confirmation.text: Du loggar då bara in med ditt användarnamn och lösenord. Du kan konfigurera tvåfaktorsautentisering igen när som helst.
+user-profile.two-factor-authentication.disable.success: Tvåfaktorsautentisering har inaktiverats
+user-profile.two-factor-authentication.disable.error: Tvåfaktorsautentisering kunde inte inaktiveras
 creatable-select.add-custom-option: Lägg till anpassat alternativ
-creatable-select.add: Lägg till
+creatable-select.press-enter-to-add: Tryck Enter för att lägga till
+creatable-select.option-added: '{{label}} tillagt'
 creatable-select.option-already-exists: Alternativet finns redan
 creatable-select.invalid-option: Ogiltigt alternativ
 drag-snippet-here: Dra ett kodavsnitt hit
@@ -2685,6 +2824,19 @@ forgot-password-form.username.placeholder: Användarnamn
 forgot-password-form.reset-password: Återställ lösenord
 forgot-password-form.success-message: En tillfällig inloggningslänk har skickats till din e-postadress. Kontrollera din inkorg.
 forgot-password-form.back: Tillbaka till inloggning
+two-factor-form.description: Ange den {{digits}}-siffriga koden från din autentiseringsapp
+two-factor-form.code.placeholder: Autentiseringskod
+two-factor-form.code.required: Ange autentiseringskoden
+two-factor-form.code.invalid-format: Koden måste bestå av {{digits}} siffror
+two-factor-form.verify: Verifiera
+two-factor-form.error: Koden kunde inte verifieras. Försök igen.
+two-factor-form.too-many-attempts: För många försök. Vänta några minuter innan du försöker igen.
+two-factor-form.back: Tillbaka till inloggning
+two-factor-setup-form.description: Tvåfaktorsautentisering krävs för ditt konto. Skanna QR-koden med din autentiseringsapp och ange den {{digits}}-siffriga koden för att bekräfta.
+two-factor-setup-form.manual-entry: Eller ange den här nyckeln manuellt
+two-factor-setup-form.confirm: Aktivera
+two-factor-setup-form.load-error: Tvåfaktorsautentisering kunde inte konfigureras. Försök igen senare.
+two-factor-setup-form.expired: Konfigurationen har gått ut. Skanna den nya QR-koden och ange koden som visas.
 subscription-details.community-edition: Läs mer om Pimcore-utgåvor
 config_not_writeable: Inte skrivbar, detta kan ha flera orsaker. Se dokumentationen för detaljer.
 navigation.about: Om
@@ -2890,6 +3042,7 @@ translations.merger.state.reverted: Återställd
 translations.merger.state.pending: Väntande
 translations.merger.apply-all: Tillämpa alla
 translations.merger.revert-all: Återställ alla
+translations.merger.revert: Återställ
 translations.merger.title: "Sammanfoga översättningar (Domän: {{domain}})"
 translations.merger.column.language: Språk
 translations.merger.items: objekt
@@ -2916,3 +3069,9 @@ saved-search.delete.success: Sparad sökning borttagen
 saved-search.shared-modified.info: Du har gjort ändringar i den ursprungliga konfigurationen. Eftersom den ägs av någon annan kan du spara den som en ny sökning.
 saved-search.menu-shortcut-group: Menygrupp
 skip-to-content: Hoppa till innehållet
+tag-configuration.move-under: 'Flytta under'
+tag-configuration.move-search-placeholder: 'Sök efter en tagg'
+tree.actions.edit-tag: Redigera
+tag-configuration.edit-tag: 'Redigera "{{name}}"'
+tag-configuration.name-required: 'Ange ett taggnamn'
+tag-configuration.move-targets-failed: 'Listan över taggar kunde inte läsas in, så endast namnet kan ändras'

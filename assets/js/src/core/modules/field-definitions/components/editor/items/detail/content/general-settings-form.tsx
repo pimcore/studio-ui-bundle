@@ -19,6 +19,13 @@ import { useTranslation } from 'react-i18next'
 const PADDING = { x: 'small', bottom: 'small', top: 'none' } as const
 
 export const GeneralSettingsForm = (): React.JSX.Element => {
+  const { revision } = useGeneralSettings()
+
+  // antd applies initialValues only on mount, so new server data needs a fresh form
+  return <GeneralSettingsFormContent key={ revision } />
+}
+
+const GeneralSettingsFormContent = (): React.JSX.Element => {
   const { t } = useTranslation()
   const { generalSettings, setGeneralSettings } = useGeneralSettings()
   const { GeneralSettingsFormFields, readOnly = false } = useSettings()

@@ -34,7 +34,15 @@ services:
     pimcore_studio.static_resources_resolver.default:
         class: Pimcore\Bundle\StudioUiBundle\Service\StaticResourcesResolver
         arguments:
-            $webpackEntryPointManager: '@pimcore_studio.entry_point_manager.default'
+            $entryPointCatalog: '@pimcore_studio.entry_point_catalog.default'
+
+    pimcore_studio.entry_point_catalog.default:
+        class: Pimcore\Bundle\StudioUiBundle\Webpack\EntryPointCatalog
+        arguments:
+            $entryPointManager: '@pimcore_studio.entry_point_manager.default'
+            $configCacheFactory: '@config_cache_factory'
+            $cacheDir: '%kernel.cache_dir%'
+            $name: 'default'
 
     pimcore_studio.entry_point_manager.default:
         class: Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointManager
@@ -44,7 +52,21 @@ services:
     pimcore_studio.static_resources_resolver.document_editor_iframe:
         class: Pimcore\Bundle\StudioUiBundle\Service\StaticResourcesResolver
         arguments:
-            $webpackEntryPointManager: '@pimcore_studio.entry_point_manager.document_editor_iframe'
+            $entryPointCatalog: '@pimcore_studio.entry_point_catalog.document_editor_iframe'
+
+    pimcore_studio.entry_point_catalog.document_editor_iframe:
+        class: Pimcore\Bundle\StudioUiBundle\Webpack\EntryPointCatalog
+        arguments:
+            $entryPointManager: '@pimcore_studio.entry_point_manager.document_editor_iframe'
+            $configCacheFactory: '@config_cache_factory'
+            $cacheDir: '%kernel.cache_dir%'
+            $name: 'document_editor_iframe'
+
+    Pimcore\Bundle\StudioUiBundle\Webpack\EntryPointCatalogCacheWarmer:
+        arguments:
+            $catalogs:
+                - '@pimcore_studio.entry_point_catalog.default'
+                - '@pimcore_studio.entry_point_catalog.document_editor_iframe'
 
     pimcore_studio.entry_point_manager.document_editor_iframe:
         class: Pimcore\Bundle\StudioUiBundle\Webpack\WebpackEntryPointManager
@@ -98,7 +120,7 @@ services:
 
     Pimcore\Bundle\StudioUiBundle\EventSubscriber\Csp\BuildRemoteEntryCspSubscriber:
         arguments:
-            $webpackEntryPointManager: '@pimcore_studio.entry_point_manager.default'
+            $entryPointCatalog: '@pimcore_studio.entry_point_catalog.default'
         calls:
             - [setLogger, ['@logger']]
 

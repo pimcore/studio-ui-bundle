@@ -288,8 +288,8 @@ export const ImageEditable = (props: ImageEditableProps): React.JSX.Element => {
               minHeight={ minHeight }
               minWidth={ minWidth }
               onResize={ handleAssetTargetResize }
-              onSearch={ openElementSelector }
-              onUpload={ props.config?.disableInlineUpload === true ? undefined : handleUpload }
+              onSearch={ disabled ? undefined : openElementSelector }
+              onUpload={ disabled || props.config?.disableInlineUpload === true ? undefined : handleUpload }
               title={ props.config?.title ?? t('image.upload.add.and.dnd') }
               width={ smartDimensions?.width ?? width ?? '100%' }
             />

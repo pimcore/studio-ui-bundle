@@ -85,6 +85,13 @@ asset.upload.overwrite: Nadpisz
 asset.upload.keep-both: Zachowaj oba
 asset.upload.skip: Pomiń
 asset.upload.apply-to-all: Zastosuj do wszystkich
+asset.upload.files-exist.title: 'Pliki już istnieją'
+asset.upload.files-exist.message: '{{total}} z wybranych plików już istnieje w tym folderze. Co chcesz z nimi zrobić?'
+asset.upload.files-exist.more: 'i {{hidden}} więcej'
+asset.upload.review-each: 'Przejrzyj każdy osobno'
+asset.upload.skip-all: 'Pomiń wszystkie'
+asset.upload.keep-both-all: 'Zachowaj oba dla wszystkich'
+asset.upload.overwrite-all: 'Nadpisz wszystkie'
 asset.upload.checking-duplicate-file-names: "Sprawdzanie zduplikowanych nazw plików ... {{done}}/{{total}}"
 asset.upload.folder-drop.creating-folders: Tworzenie folderów
 asset.upload.folder-drop.creating-folders-hint: Poczekaj, aż struktura folderów zostanie utworzona…
@@ -104,6 +111,8 @@ areablock.move-below: Przenieś niżej
 areablock.show: Pokaż
 areablock.hide: Ukryj
 areablock.new: Nowy
+areablock.insert-above: Wstaw powyżej
+areablock.insert-below: Wstaw poniżej
 areablock.copy: Kopiuj
 areablock.paste: Wklej
 areablock.cut: Wytnij
@@ -129,7 +138,7 @@ document.tree.context-menu.add-hardlink: Nowe łącze stałe
 document.required-fields.validation-title: Brakujące pola obowiązkowe
 document.required-fields.validation-message: Następujące pola obowiązkowe muszą zostać wypełnione przed publikacją
 document.site.remove-site: Usuń witrynę
-document.site.remove-site-confirmation: Czy na pewno chcesz usunąć tę witrynę? Tej operacji nie można cofnąć.
+document.site.remove-site-confirmation: Czy na pewno chcesz trwale usunąć tę witrynę? Tej operacji nie można cofnąć.
 document.site.use-as-site: Użyj jako witryny
 document.site.edit-site: Edytuj witrynę
 document.site.form.main-domain: Domena główna
@@ -159,8 +168,8 @@ data-object.select-class-to-display: Wybierz klasę do wyświetlenia
 data-object.tree.context-menu.add-object: Nowy obiekt
 data-object.tree.context-menu.add-variant: Nowy wariant
 data-object.variant-listing.create-data-variant: Nowy wariant
-data-object.create-data-object: "Dodaj nowy obiekt typu {{className}}"
-data-object.create-variant: "Dodaj nowy wariant typu {{className}}"
+data-object.create-data-object: "Nowy obiekt typu {{className}}"
+data-object.create-variant: "Nowy wariant typu {{className}}"
 data-object.object-editor-tabs.variants: Warianty
 object.object-editor-tabs.children-listing: Siatka elementów podrzędnych
 workflow.label: Workflow
@@ -190,7 +199,7 @@ class-definition.import-file-label: Wybierz plik JSON
 class-definition.import-success: Definicja klasy zaimportowana pomyślnie
 class-definition.export-success: Definicja klasy wyeksportowana pomyślnie
 class-definition.custom-layouts.default-layout: Layout domyślny
-class-definition.create-new: Utwórz nową definicję klasy
+class-definition.create-new: Nowa definicja klasy
 class-definition.class-name: Nazwa klasy
 class-definition.unique-identifier: Unikalny identyfikator
 class-definition.unique-identifier-warning: Zachowaj ostrożność przy unikalnym identyfikatorze, ponieważ nazwy tabel mogą zawierać maksymalnie 64 znaki.
@@ -246,7 +255,7 @@ class-definition.composite-indices.type-localized-query: Zapytanie zlokalizowane
 class-definition.composite-indices.type-store: Magazyn
 class-definition.composite-indices.type-localized-store: Magazyn zlokalizowany
 class-definition.composite-indices.index-label: Indeks
-field-collection.create-new: Utwórz nową Field Collection
+field-collection.create-new: Nowa Field Collection
 field-collection.key: Klucz
 field-collection.validation.enter-key: Wprowadź klucz
 field-collection.validation.key-format: Klucz musi zaczynać się od litery i może zawierać tylko litery, cyfry i podkreślenia.
@@ -260,7 +269,7 @@ field-collection.general-settings.implements-interfaces: Implementuje interfejsy
 field-collection.general-settings.usages.title: Użycie
 field-collection.general-settings.usages.class: Klasa
 field-collection.general-settings.usages.field: Pole
-object-brick.create-new: Utwórz nowy Object Brick
+object-brick.create-new: Nowy Object Brick
 object-brick.key: Klucz
 object-brick.validation.enter-key: Wprowadź klucz
 object-brick.validation.key-format: Klucz musi zaczynać się od litery i może zawierać tylko litery, cyfry i podkreślenia.
@@ -275,7 +284,7 @@ object-brick.class-definitions-block.classname: Klasa
 object-brick.class-definitions-block.select-classname: Wybierz klasę
 object-brick.class-definitions-block.fieldname: Pole
 object-brick.class-definitions-block.select-fieldname: Wybierz pole
-select-option.create-new: Utwórz nową opcję wyboru
+select-option.create-new: Nowa opcja wyboru
 select-option.id: ID
 select-option.enter-name-new-item: Wprowadź nazwę nowego elementu
 select-option.validation.enter-id: Wprowadź ID
@@ -311,6 +320,10 @@ custom-layout.empty-state.edit: Wybierz istniejący Custom Layout, aby rozpoczą
 example-prefix: Przykładowy prefiks
 pagination.show-total: "Łącznie {{total}} elementów"
 pagination.page: Strona
+pagination.first-page: Pierwsza strona
+pagination.previous-page: Poprzednia strona
+pagination.next-page: Następna strona
+pagination.last-page: Ostatnia strona
 pagination.showing-x-of-y: "Wyświetlono {{loaded}} z {{total}}"
 preview-card.locate-in-tree: Znajdź w drzewie
 preview-card.rename: Zmień nazwę
@@ -325,6 +338,8 @@ aria.asset.image-sidebar.tab.details.custom-thumbnail-format: Wybierz niestandar
 aria.asset.image-sidebar.tab.details.download-custom-thumbnail: Pobierz niestandardową miniaturę
 aria.asset.image-sidebar.tab.details.precreated-thumbnail: Wybierz gotową miniaturę do pobrania
 aria.asset.image-sidebar.tab.details.download-thumbnail: Pobierz miniaturę
+aria.asset.image-sidebar.tab.details.downloadable-thumbnail: Wybierz miniaturę do pobrania
+aria.asset.image-sidebar.tab.details.download-downloadable-thumbnail: Pobierz wybraną miniaturę
 notification.action-list.actions: Akcje
 notification.action-list.cancel: Anuluj
 notification.action-list.cancel-all: Anuluj wszystko
@@ -332,6 +347,7 @@ notification.action-list.completed-actions: Zakończone akcje
 aria.notification.action-list.toggle-collapse: Rozwiń/zwiń listę akcji
 aria.notification.action-list.cancel-all: Anuluj wszystkie trwające akcje
 aria.notification.action-list.cancel: Anuluj akcję
+aria.stack-list.drag-handle: Przeciągnij, aby zmienić kolejność
 asset.image.editor.zoom.reset: Resetuj
 aria.asset.image.editor.zoom.reset: Resetuj powiększenie
 aria.asset.image.editor.zoom.zoom-in: Powiększ
@@ -348,6 +364,7 @@ grid.filter.to: Do
 grid.filter.is: Jest
 grid.filter.less: Mniej niż
 grid.filter.more: Więcej niż
+grid.filter.string.placeholder: Wyszukaj lub wklej listę z jedną wartością na wiersz, aby znaleźć dokładnie jedno z nich
 grid.filter.column: "Filtruj {{column}}"
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
@@ -370,6 +387,7 @@ grid.advanced-column.advancedColumns.group.date: Data
 grid.advanced-column.advancedColumns.group.string: Tekst
 grid.advanced-column.advancedColumns.group.other: Pozostałe
 grid.advanced-column.title.placeholder: Dodaj tytuł
+grid.advanced-column.expand: Rozwiń
 grid.advanced-column.advancedColumns: Pole źródłowe
 grid.advanced-column.advancedColumns.add: Dodaj pole źródłowe
 grid.advanced-column.transformers: Transformacje
@@ -378,6 +396,7 @@ grid.advanced-column.preview: Podgląd
 grid.advanced-column.no-preview: Brak dostępnego elementu podglądu
 grid.advanced-column.no-preview-data: Brak dostępnych danych podglądu
 grid.advanced-column.error-preview-data: Błąd podczas ładowania podglądu
+grid.advanced-column.no-source-fields: Dodaj pole źródłowe, aby zobaczyć podgląd.
 grid.advanced-column.preview-item: Element podglądu
 grid.advanced-column.trim: Przytnij
 grid.advanced-column.find: Szukaj
@@ -497,12 +516,14 @@ version.category.title.meta: Metadane
 version.category.title.properties: Właściwości
 version.changed-attributes: "Zmienione atrybuty: {{attributes}}"
 aria.version.delete: Usuń wersję
+aria.notes-and-events.delete: Usuń notatkę
+aria.card.close: Zamknij
 aria.version.expand: Rozwiń wersję
 clear-all: Wyczyść wszystko
 empty: Pusty
 none: Brak
-yes: Tak
-no: Nie
+'yes': Tak
+'no': Nie
 by: Przez
 field: Pole
 no-data-available: Brak dostępnych danych
@@ -555,6 +576,8 @@ userModification: Użytkownik modyfikacji
 userOwner: Właściciel (użytkownik)
 listing.grid-config.convert-to-advanced: Konwertuj na kolumnę zaawansowaną
 listing.grid-config.title: Ustawienia siatki
+listing.grid-config.search-mode-column.label: Automatyczna
+listing.grid-config.search-mode-column.tooltip: Dodana przez aktywny tryb wyszukiwania. Możesz ją przenosić jak każdą inną kolumnę; nie jest zapisywana w konfiguracji siatki.
 grid-config.discard-all-changes: Odrzuć wszystkie zmiany
 grid-config.apply-changes: Zastosuj zmiany
 grid-config.reload: Przeładuj
@@ -574,6 +597,9 @@ listing.actions: Zastosuj do wyboru
 listing.non-selected.actions: Zastosuj do wszystkich
 listing.actions.zip-download: Pobierz ZIP
 listing.actions.delete: Usuń
+listing.actions.delete-all: Usuń wszystko
+listing.actions.delete-all.not-allowed: "Niektóre elementy w tym folderze są zablokowane lub nie masz uprawnień do ich usunięcia."
+listing.actions.delete-all.empty: "Ten folder nie zawiera elementów do usunięcia."
 listing.actions.export: Eksportuj
 reports.csv-export-modal.title: Opcje eksportu CSV
 reports.csv-export-modal.include-headers: Uwzględnij nagłówki kolumn
@@ -630,6 +656,54 @@ website-settings.columns.site: Witryna
 website-settings.columns.actions: Akcje
 website-settings.website-settings.add-entry-mandatory-fields-missing.title: Brakujące pola obowiązkowe
 website-settings.website-settings.add-entry-mandatory-fields-missing.error: Nazwa i typ są polami obowiązkowymi i muszą zostać wypełnione.
+mcp-servers.rail.new-server: Nowy serwer
+mcp-servers.placeholder: Wybierz serwer, aby wyświetlić lub edytować jego konfigurację.
+mcp-servers.tabs.empty: Wybierz serwer, aby wyświetlić lub edytować jego konfigurację.
+mcp-servers.tabs.new-server: Nowy serwer
+mcp-servers.read-only-notice: Definicje serwerów są zarządzane poprzez pliki w tym środowisku i nie można ich tutaj edytować.
+mcp-servers.save-success: Zapisano serwer MCP
+mcp-servers.access.users-count: "Użytkownicy: {{number}}"
+mcp-servers.access.roles-count: "Role: {{number}}"
+mcp-servers.access.global-extra: dowolny uwierzytelniony użytkownik
+mcp-servers.access.nobody: "Jeszcze nikt"
+mcp-servers.badge.read: Odczyt
+mcp-servers.badge.write: Zapis
+mcp-servers.editor.create-title: Nowy serwer MCP
+mcp-servers.editor.edit-title: Edytuj serwer MCP
+mcp-servers.editor.general: Ogólne
+mcp-servers.editor.permissions: Uprawnienia
+mcp-servers.editor.identity: Tożsamość
+mcp-servers.editor.name: Nazwa
+mcp-servers.editor.name-required: Podaj nazwę.
+mcp-servers.editor.url-slug: Slug URL
+mcp-servers.editor.url-slug-required: Podaj slug URL.
+mcp-servers.editor.url-slug-pattern: Dozwolone są tylko małe litery, cyfry i myślniki.
+mcp-servers.editor.description: Opis
+mcp-servers.editor.enabled: Aktywny
+mcp-servers.editor.tools: Narzędzia
+mcp-servers.editor.tools-placeholder: Wybierz narzędzia udostępniane przez ten serwer
+mcp-servers.editor.scopes: Udostępniane scope'y
+mcp-servers.editor.scopes-empty: Brak scope'ów — wybierz narzędzia, aby wywnioskować wymagane scope'y.
+mcp-servers.editor.url: Adres URL serwera
+mcp-servers.editor.copy-url: "Kopiuj adres URL serwera"
+mcp-servers.editor.connect-hint: Skieruj swojego klienta MCP na ten adres URL i uwierzytelnij się swoim kontem Pimcore.
+mcp-servers.sharing.title: Udostępnianie
+mcp-servers.sharing.share-globally: Udostępnij globalnie
+mcp-servers.sharing.share-globally-tooltip: Każdy uwierzytelniony użytkownik otrzymuje Odczyt konfiguracji i Dostęp do serwera MCP (nie Edycję konfiguracji)
+mcp-servers.sharing.users: Użytkownicy
+mcp-servers.sharing.roles: Role
+mcp-servers.sharing.add-user: Dodaj użytkownika…
+mcp-servers.sharing.add-role: Dodaj rolę…
+mcp-servers.sharing.name: Nazwa
+mcp-servers.sharing.config-read: Odczyt konfiguracji
+mcp-servers.sharing.config-edit: Edycja konfiguracji
+mcp-servers.sharing.mcp-access: Dostęp do serwera MCP
+mcp-servers.sharing.level: Poziom dostępu
+mcp-servers.sharing.read: Odczyt
+mcp-servers.sharing.write: Może edytować
+mcp-servers.sharing.who-can-access: Kto ma dostęp
+mcp-servers.delete.title: Usuń serwer MCP
+mcp-servers.delete.confirm: Czy na pewno chcesz usunąć "{{name}}"?
 document-types.new: Nowy
 document-types.columns.name: Nazwa
 document-types.columns.group: Grupa
@@ -645,6 +719,7 @@ properties.label: Właściwości
 properties.editable-properties: Edytowalne właściwości
 properties.all-properties: Wszystkie właściwości
 properties.predefined-properties: Predefiniowane właściwości
+properties.predefined-properties.reload-error: Nie można było załadować wstępnie zdefiniowanych właściwości
 properties.new-custom-property: Nowa niestandardowa właściwość
 translations.columns.type: Typ
 translations.columns.key: Klucz
@@ -754,6 +829,7 @@ tags.apply-tags-to-children: Zastosuj tagi do elementów podrzędnych
 tags.remove-and-apply-tags-to-children: Usuń i zastosuj tagi do elementów podrzędnych
 tags.columns.path: Ścieżka
 tags.columns.actions: Usuń
+tags.actions.delete: Usuń tag
 csv-separated-options: Opcje rozdzielone CSV
 csv-separated-options-info: Listę dostępnych opcji można podać jako listę rozdzielaną przecinkami, jako wartości w jednej kolumnie lub mieszanie. W przypadku jednej kolumny klucz jest również używany jako wartość.
 add: Dodaj
@@ -839,7 +915,7 @@ field-definitions.saved-successfully: Zapisano pomyślnie.
 field-definitions.select-item-configuration: Wybierz konfigurację elementu
 field-definitions.custom-layout-title: Custom Layout
 field-definitions.custom-layouts: Custom Layouts
-field-definitions.create-new-class-definition: Utwórz nowy Custom Layout
+field-definitions.create-new-class-definition: Nowy Custom Layout
 field-definitions.select-field-message: Wybierz pole w drzewie, aby edytować właściwości.
 field-definitions.loading-general-settings: Ładowanie ustawień ogólnych...
 field-definitions.type-not-supported: Typ nie jest obsługiwany
@@ -1064,6 +1140,8 @@ regex-flags-tooltip: "RegExp bez separatorów, musi działać w JS (Separator: #
 test-string: Ciąg testowy
 regex-validation-error-message: Ciąg nie spełnia wymaganego formatu.
 calculator-class: Klasa kalkulatora
+calculator-data: Dane kalkulatora
+calculator-data-tooltip: Opcjonalne dane w dowolnym formacie przekazywane do kalkulatora, np. prosta wartość, lista rozdzielona przecinkami lub struktura zakodowana w formacie JSON.
 calculator-expression: Wyrażenie obliczeniowe
 calculator-type: Typ kalkulatora
 calculator-type-tooltip: Więcej informacji o definiowaniu wyrażeń lub klas znajdziesz w oficjalnej dokumentacji.
@@ -1122,6 +1200,7 @@ asset.sidebar.original-file: Oryginalny plik
 asset.sidebar.web-format: Format webowy
 asset.sidebar.print-format: Format do druku
 asset.sidebar.office-format: Format biurowy
+asset.sidebar.thumbnail-download: Pobieranie miniatury
 jobs.notification.title: Trwające zadania
 jobs.notification.tooltip: Otwórz trwające zadania
 jobs.notification.jobs_one: "{{count}} akcja"
@@ -1156,17 +1235,24 @@ jobs.zip-upload-job.title: Przesyłanie ZIP
 jobs.zip-upload-job.step1.title: Rozpakowywanie ZIP
 jobs.zip-upload-job.step2.title: Tworzenie assetów
 jobs.download-csv-job.title: Eksport CSV
+jobs.download-csv-job.title-with-context: "Eksport CSV ({{name}})"
 jobs.download-xlsx-job.title: Eksport XLSX
+jobs.download-xlsx-job.title-with-context: "Eksport XLSX ({{name}})"
 jobs.download-zip-job.title: Pobieranie ZIP
 batch-edit.modal-title: Edycja zbiorcza
 batch-edit.no-content: Nie dodano jeszcze żadnych kolumn
 batch-edit.modal-footer.apply-changes: Zastosuj zmiany
 batch-edit.modal-footer.discard-all-changes: Odrzuć wszystkie zmiany
 batch-edit.modal-footer.add-a-column: Dodaj kolumnę
+batch-edit.system-boolean.publish: "Opublikuj"
+batch-edit.system-boolean.unpublish: "Cofnij publikację"
+batch-edit.system-boolean.placeholder: "Wybierz akcję"
+batch-edit.system-boolean.required: "Wybierz Opublikuj lub Cofnij publikację"
 batch-edit.append-mode.replace: Zamień zbiorczo
 batch-edit.append-mode.add: Dodaj zbiorczo
 batch-edit.append-mode.remove: Usuń zbiorczo
 batch-delete.job-title: Usuń
+element-move.job-title: "Przenoszenie"
 export-csv-form.modal-title: Eksport CSV
 export-csv-form.export-notice: "Uwaga: eksport nie obsługuje niektórych pól (np. podgląd, rozmiar). Naciśnij OK, aby kontynuować eksport."
 export-csv-form.form-field.delimiter: Separator
@@ -1181,6 +1267,7 @@ export-xlsx-form.form-field.header: Nagłówek
 export-xlsx-form.form-field.header.option.name: Klucz systemowy
 export-xlsx-form.form-field.header.option.title: Etykieta
 export-xlsx-form.form-field.header.option.no-header: Bez nagłówka
+form.optional-mark: (opcjonalne)
 form.annotation.added: Dodano
 form.annotation.changed: Zmieniono
 form.annotation.removed: Usunięto
@@ -1224,11 +1311,24 @@ element.tree.copy-success-description: '{{elementType}} "{{name}}" został skopi
 element.tree.paste: Wklej
 element.tree.paste-as-child: Wklej jako element podrzędny
 element.tree.paste-as-child-recursive: Wklej jako element podrzędny (rekursywnie)
+element.tree.open-no-permission: Nie masz uprawnień do otwarcia tego elementu.
 element.tree.paste-recursive-updating-references: Wklej rekursywnie i zaktualizuj odwołania
 element.tree.paste-only-contents: Wklej tutaj tylko treść
 element.tree.cut: Wytnij
 element.tree.cut-success-description: '{{elementType}} "{{name}}" został wycięty i jest gotowy do wklejenia'
 element.tree.paste-cut: Wklej wycięty element
+element.tree.cut-multiple: "Wytnij {{count}} elementów"
+element.tree.cut-multiple-success-description: "{{count}} elementów zostało wyciętych i można je wkleić"
+element.tree.paste-cut-multiple: "Wklej {{count}} wyciętych elementów"
+element.tree.selection.count_one: "{{count}} element zaznaczony"
+element.tree.selection.count_other: "{{count}} elementów zaznaczonych"
+element.tree.selection.clear: "Wyczyść zaznaczenie"
+element.tree.selection.limit-reached: "Osiągnięto maksimum {{limit}} elementów"
+element.tree.drag.elements_one: "{{count}} element"
+element.tree.drag.elements_other: "{{count}} elementów"
+element.tree.drag.elements-partial: "{{count}} z {{selected}} elementów"
+element.tree.move.skipped-elements_one: "1 element nie został przeniesiony: jest zablokowany lub nie masz uprawnień do jego edycji."
+element.tree.move.skipped-elements_other: "{{count}} elementów nie zostało przeniesionych: są zablokowane lub nie masz uprawnień do ich edycji."
 element.lock: Zablokuj
 element.lock-and-propagate-to-children: Zablokuj i przekaż elementom podrzędnym
 element.unlock: Odblokuj
@@ -1249,10 +1349,13 @@ element.tree.refresh: Odśwież
 element.new-folder: Nowy folder
 element.new-folder.validation: Wprowadź prawidłową nazwę
 element.rename: Zmień nazwę
+element.rename-folder: Zmień nazwę folderu
 element.rename.label: Wprowadź nową nazwę
 element.rename.validation: Wprowadź prawidłową nazwę
 element.share-via-notification: Udostępnij przez powiadomienia
 element.delete: Usuń
+element.delete-folder: Usuń folder
+element.delete-multiple: "Usuń {{count}} elementów"
 element.delete.confirmation.title: Usuń element
 element.delete.confirmation.text: Czy na pewno chcesz usunąć ten element?
 element.delete.confirmation.ok: Usuń trwale
@@ -1275,6 +1378,8 @@ element.delete.batch.show-paths: Pokaż elementy
 element.delete.batch.dependencies-warning.confirmed_one: "Uwaga: ten element ma zależności."
 element.delete.batch.dependencies-warning.confirmed_other: "Uwaga: te elementy mają zależności."
 element.open: Otwórz
+element.state: Status
+element.state.unpublished: Nieopublikowany
 element.toolbar.copy-id: Kopiuj ID
 element.toolbar.copy-full-path-to-clipboard: Kopiuj pełną ścieżkę
 element.toolbar.copy-deep-link-to-clipboard: Kopiuj głęboki link
@@ -1314,6 +1419,9 @@ success: Sukces
 no-value-set: Nie ustawiono wartości
 set-to-null: Pusty (ustaw na null)
 remove: Usuń
+move-up: Przenieś w górę
+move-down: Przenieś w dół
+translate: Przetłumacz
 delete: Usuń
 clone: Klonuj
 jobs.clone-job.step2.title: Aktualizacja odwołań
@@ -1345,6 +1453,9 @@ relations.create-object.class: Klasa
 relation: relacja
 items-limit-reached: "Osiągnięto maksymalną liczbę elementów ({{maxItems}})."
 asset-upload-type-not-allowed: Typ przesłanego assetu nie jest dozwolony dla tego pola.
+relation.drop.not-allowed-elements-skipped_one: "1 element nie został dodany: to pole nie dopuszcza tego typu."
+relation.drop.not-allowed-elements-skipped_other: "{{count}} elementów nie zostało dodanych: to pole nie dopuszcza tych typów."
+drag-and-drop.drop.single-element-only: 'Tutaj można upuścić tylko jeden element.'
 actions: Akcje
 asset: Asset
 data-object: Obiekt danych
@@ -1399,7 +1510,6 @@ tree.actions.user: Użytkownik
 tree.actions.add-folder: Nowy folder
 tree.actions.add-tag: Nowy tag
 tree.actions.delete-tag: Usuń
-tree.actions.rename-tag: Zmień nazwę
 tree.actions.role: Rola
 tree.actions.add-role: Dodaj rolę
 tree.actions.clone-role: Klonuj rolę
@@ -1411,7 +1521,6 @@ tag-configuration.name: Nazwa
 tag-configuration.parent-tag: Tag nadrzędny
 tag-configuration.create: Utwórz
 tag-configuration.save: Zapisz
-tag-configuration.rename: Zmień nazwę tagu
 tag-configuration.successful-add: Tag dodany pomyślnie
 tag-configuration.successful-update: Tag zaktualizowany pomyślnie
 tag-configuration.successful-deletion: Tag usunięty pomyślnie
@@ -1517,6 +1626,11 @@ user-management.settings.language.abbreviation: Skrót
 user-management.settings.language.view: Widok
 user-management.settings.language.edit: Edytuj
 user-management.two-factor-authentication: Uwierzytelnianie dwuetapowe
+user-management.two-factor-authentication.reset: Resetuj uwierzytelnianie dwuetapowe
+user-management.two-factor-authentication.reset.confirmation.title: Resetuj uwierzytelnianie dwuetapowe
+user-management.two-factor-authentication.reset.confirmation.text: Aplikacja uwierzytelniająca użytkownika przestanie działać dla tego konta. Jeśli uwierzytelnianie dwuetapowe jest wymagane, użytkownik musi skonfigurować je ponownie przy następnym logowaniu.
+user-management.two-factor-authentication.reset.success: Uwierzytelnianie dwuetapowe zostało zresetowane
+user-management.two-factor-authentication.reset.error: Nie udało się zresetować uwierzytelniania dwuetapowego
 user-management.workspaces.documents: Dokumenty
 user-management.workspaces.assets: Assety
 user-management.workspaces.objects: Obiekty danych
@@ -1543,6 +1657,8 @@ user-management.workspaces.localized-fields.edit: Uprawnienia do edycji
 user-management.workspaces.custom-layouts: Custom Layouts
 user-management.workspaces.custom-layouts.select: Wybierz jedno lub więcej pól
 user-management.add-folder.success: Folder dodany pomyślnie
+user-management.remove-folder: Usuń folder
+user-management.remove-folder.text: 'Czy na pewno chcesz trwale usunąć ten folder? Tej operacji nie można cofnąć.'
 user-management.remove-folder.success: Folder usunięty pomyślnie
 user-management.clone-user: Klonuj użytkownika
 user-management.clone-user.text: Wprowadź nazwę nowego użytkownika
@@ -1558,9 +1674,9 @@ user-management.roles: Role
 user-management.role: Rola
 user-management.users: Użytkownicy
 user-management.user: Użytkownik
-user-management.add-folder: Dodaj nowy folder
+user-management.add-folder: Nowy folder
 user-management.add-folder.label: Wprowadź nazwę nowego folderu
-user-management.add-user: Dodaj nowego użytkownika
+user-management.add-user: Nowy użytkownik
 user-management.add-user.label: Wprowadź nazwę nowego użytkownika
 user-management.last-login: Ostatnie logowanie
 user-management.search.id: ID
@@ -1571,6 +1687,8 @@ roles.clone-role: Klonuj rolę
 roles.clone-role.text: Wprowadź nazwę nowej roli
 roles.remove-role: Usuń rolę
 roles.remove-role.text: 'Czy na pewno chcesz trwale usunąć rolę "{{name}}"? Tej operacji nie można cofnąć.'
+roles.remove-folder: Usuń folder
+roles.remove-folder.text: 'Czy na pewno chcesz trwale usunąć ten folder? Tej operacji nie można cofnąć.'
 roles.remove-folder.success: Folder usunięty pomyślnie
 roles.remove-item.success: Rola usunięta pomyślnie
 roles.add-item.success: Rola dodana pomyślnie
@@ -1578,9 +1696,9 @@ roles.add-folder.success: Folder dodany pomyślnie
 roles.general: Ogólne
 roles.settings.title: Ustawienia
 roles.workspaces.title: Workspaces
-roles.add-folder: Dodaj nowy folder
+roles.add-folder: Nowy folder
 roles.add-folder.label: Wprowadź nazwę nowego folderu
-roles.add-role: Dodaj nową rolę
+roles.add-role: Nowa rola
 roles.add-role.label: Wprowadź nazwę nowej roli
 roles.search.id: ID
 navigation.quick-access: Szybki dostęp
@@ -1604,6 +1722,7 @@ navigation.appearance-branding: Wygląd i branding
 navigation.reporting: Raportowanie
 navigation.system: System
 navigation.website-settings: Ustawienia witryny
+navigation.mcp-servers: Serwery MCP
 navigation.document-types: Typy dokumentów
 navigation.cache: Pamięć podręczna
 navigation.cache.clear-cache: Wyczyść pamięć podręczną
@@ -1692,6 +1811,7 @@ widget.predefined-properties: Predefiniowane właściwości
 widget.search-replace-assignments: Szukaj i zamień przypisania
 widget.document-types: Typy dokumentów
 widget.website-settings: Ustawienia witryny
+widget.mcp-servers: Serwery MCP
 widget.role-management: Role
 widget.user-management: Użytkownicy
 widget.class-definitions: Klasy
@@ -1749,7 +1869,7 @@ image-thumbnails.editor.advanced: Zaawansowane
 image-thumbnails.editor.quality: Jakość
 image-thumbnails.editor.quality.tooltip: Ustawienie jakości JPEG (1-100)
 image-thumbnails.editor.high-resolution: Wysoka rozdzielczość
-image-thumbnails.editor.high-resolution.tooltip: Współczynnik wysokiej rozdzielczości dla ekranów retina
+image-thumbnails.editor.high-resolution.tooltip: Współczynnik wysokiej rozdzielczości (np. dla Web-to-Print lub wszędzie tam, gdzie srcset nie jest możliwy lub wystarczający). Niepotrzebny dla zwykłych miniatur internetowych – otrzymują one automatycznie atrybut srcset z 1x i 2x.
 image-thumbnails.editor.preserve-color: Zachowaj kolor
 image-thumbnails.editor.preserve-color.tooltip: "Zachowaj kolor (profil, przestrzeń) (Imagick, ORYGINAŁ)\n('Zachowaj metadane' i 'zachowaj kolor' działają tylko dla transformacji bez kompozycji (ramka, kolor tła, ...) i zmian koloru (skala szarości, sepia, ...))"
 image-thumbnails.editor.force-process-icc: Wymuś przetwarzanie profili ICC
@@ -2080,6 +2200,8 @@ classification-store.select-key: Wybierz klucz
 classification-store.search-keys: Szukaj kluczy…
 classification-store.select-group: Wybierz grupę
 classification-store.search-groups: Szukaj grup…
+classification-store.store-id: "ID: {{id}}"
+classification-store.store-tab-label: "{{name}} (ID: {{id}})"
 home: Strona główna
 preview.label: Podgląd
 preview.desktop: Komputer
@@ -2089,7 +2211,9 @@ preview.phone-horizontal: Telefon poziomo
 preview.select_date_time: Wybierz datę i godzinę
 preview.screen_size_too_small: Dostępna przestrzeń jest zbyt mała, aby wyświetlić wybrany tryb podglądu.
 inheritance-active: "Dane odziedziczone z obiektu o ID {{id}}"
+inheritance-active-unknown-origin: Dane odziedziczone z obiektu nadrzędnego
 inheritance-broken: Dziedziczenie danych przerwane
+inheritance-restore: Przywróć
 main: Główny
 main_admin: Główny (tryb administratora)
 draft-alert: Bieżąca wersja jest wersją roboczą. Możesz usunąć wersję roboczą, aby przywrócić poprzednią wersję.
@@ -2248,8 +2372,23 @@ user-profile.password-old: Stare hasło
 user-profile.password-new: Nowe hasło
 user-profile.password-repeat: Powtórz hasło
 user-profile.password-repeat-error: Hasła nie są zgodne
+user-profile.two-factor-authentication: Uwierzytelnianie dwuetapowe
+user-profile.two-factor-authentication.status.active: Uwierzytelnianie dwuetapowe jest aktywne dla Twojego konta.
+user-profile.two-factor-authentication.status.inactive: Uwierzytelnianie dwuetapowe nie jest skonfigurowane dla Twojego konta.
+user-profile.two-factor-authentication.required-hint: Uwierzytelnianie dwuetapowe jest wymagane dla Twojego konta, więc nie można go wyłączyć.
+user-profile.two-factor-authentication.setup: Skonfiguruj uwierzytelnianie dwuetapowe
+user-profile.two-factor-authentication.renew: Odnów klucz uwierzytelniający
+user-profile.two-factor-authentication.setup.description: Zeskanuj kod QR w aplikacji uwierzytelniającej i wpisz {{digits}}-cyfrowy kod, aby potwierdzić.
+user-profile.two-factor-authentication.renew.description: Zeskanuj kod QR w aplikacji uwierzytelniającej i wpisz {{digits}}-cyfrowy kod, aby potwierdzić. Obecny klucz działa do momentu potwierdzenia nowego.
+user-profile.two-factor-authentication.setup.success: Uwierzytelnianie dwuetapowe zostało skonfigurowane
+user-profile.two-factor-authentication.disable: Wyłącz uwierzytelnianie dwuetapowe
+user-profile.two-factor-authentication.disable.confirmation.title: Wyłącz uwierzytelnianie dwuetapowe
+user-profile.two-factor-authentication.disable.confirmation.text: Będziesz logować się tylko za pomocą nazwy użytkownika i hasła. Uwierzytelnianie dwuetapowe możesz ponownie skonfigurować w dowolnym momencie.
+user-profile.two-factor-authentication.disable.success: Uwierzytelnianie dwuetapowe zostało wyłączone
+user-profile.two-factor-authentication.disable.error: Nie udało się wyłączyć uwierzytelniania dwuetapowego
 creatable-select.add-custom-option: Dodaj niestandardową opcję
-creatable-select.add: Dodaj
+creatable-select.press-enter-to-add: Naciśnij Enter, aby dodać
+creatable-select.option-added: '{{label}} dodane'
 creatable-select.option-already-exists: Opcja już istnieje
 creatable-select.invalid-option: Nieprawidłowa opcja
 drag-snippet-here: Przeciągnij tutaj fragment
@@ -2685,6 +2824,19 @@ forgot-password-form.username.placeholder: Nazwa użytkownika
 forgot-password-form.reset-password: Resetuj hasło
 forgot-password-form.success-message: Tymczasowy link logowania został wysłany na Twój adres e-mail. Sprawdź swoją skrzynkę odbiorczą.
 forgot-password-form.back: Powrót do logowania
+two-factor-form.description: Wpisz {{digits}}-cyfrowy kod z aplikacji uwierzytelniającej
+two-factor-form.code.placeholder: Kod uwierzytelniający
+two-factor-form.code.required: Wpisz kod uwierzytelniający
+two-factor-form.code.invalid-format: Kod musi składać się z {{digits}} cyfr
+two-factor-form.verify: Zweryfikuj
+two-factor-form.error: Nie udało się zweryfikować kodu. Spróbuj ponownie.
+two-factor-form.too-many-attempts: Zbyt wiele prób. Odczekaj kilka minut, zanim spróbujesz ponownie.
+two-factor-form.back: Powrót do logowania
+two-factor-setup-form.description: Uwierzytelnianie dwuetapowe jest wymagane dla Twojego konta. Zeskanuj kod QR w aplikacji uwierzytelniającej i wpisz {{digits}}-cyfrowy kod, aby potwierdzić.
+two-factor-setup-form.manual-entry: Możesz też wpisać ten klucz ręcznie
+two-factor-setup-form.confirm: Aktywuj
+two-factor-setup-form.load-error: Nie udało się skonfigurować uwierzytelniania dwuetapowego. Spróbuj ponownie później.
+two-factor-setup-form.expired: Konfiguracja wygasła. Zeskanuj nowy kod QR i wpisz wyświetlony kod.
 subscription-details.community-edition: Więcej informacji o edycjach Pimcore
 config_not_writeable: Brak możliwości zapisu; może to mieć wiele przyczyn. Szczegóły znajdziesz w dokumentacji.
 navigation.about: O programie
@@ -2890,6 +3042,7 @@ translations.merger.state.reverted: Cofnięto
 translations.merger.state.pending: Oczekujące
 translations.merger.apply-all: Zastosuj wszystko
 translations.merger.revert-all: Cofnij wszystko
+translations.merger.revert: Cofnij
 translations.merger.title: "Scalanie tłumaczeń (domena: {{domain}})"
 translations.merger.column.language: Język
 translations.merger.items: elementy
@@ -2916,3 +3069,9 @@ saved-search.delete.success: Zapisane wyszukiwanie usunięte
 saved-search.shared-modified.info: Wprowadzono zmiany w oryginalnej konfiguracji. Ponieważ jej właścicielem jest ktoś inny, możesz zapisać ją jako nowe wyszukiwanie.
 saved-search.menu-shortcut-group: Grupa menu
 skip-to-content: Przejdź do treści
+tag-configuration.move-under: 'Przenieś pod'
+tag-configuration.move-search-placeholder: 'Wyszukaj tag'
+tree.actions.edit-tag: Edytuj
+tag-configuration.edit-tag: 'Edytuj "{{name}}"'
+tag-configuration.name-required: 'Wprowadź nazwę tagu'
+tag-configuration.move-targets-failed: 'Nie udało się wczytać listy tagów, dlatego można zmienić tylko nazwę'

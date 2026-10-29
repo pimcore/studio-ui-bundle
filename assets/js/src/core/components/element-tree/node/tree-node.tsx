@@ -9,9 +9,9 @@
  */
 
 import { Flex } from 'antd'
-import React, { forwardRef, type KeyboardEvent, type MouseEvent, type MutableRefObject, useContext, useEffect } from 'react'
+import React, { forwardRef, type MutableRefObject, useContext, useEffect } from 'react'
 import { useStyles } from './tree-node.styles'
-import { type INodeRef, TreeContext } from '../element-tree'
+import { TreeContext } from '../element-tree'
 import { TreeList } from '../list/tree-list'
 import { TreeExpander } from '../expander/tree-expander'
 import { type ElementPermissions } from '@Pimcore/modules/element/element-api-slice-enhanced'
@@ -20,14 +20,18 @@ import { useElementTreeNode } from '../hooks/use-element-tree-node'
 import { isNil } from 'lodash'
 import { scrollToNodeElement } from '@Pimcore/modules/widget-manager/widget/utils/widget-content-scroll'
 import { createNodeTestId } from '@Pimcore/utils/test-id-generator'
+import { useTreeNodeInteraction } from './use-tree-node-interaction'
 import { ComponentRenderer } from '@Pimcore/modules/app/component-registry/component-renderer'
 import cn from 'classnames'
+import { useTreeNodeHighlight } from '../hooks/use-tree-node-highlight'
 
 export type TreeNodeWrapper = (children: React.ReactNode) => React.ReactNode
 export interface TreeNodeProps {
   id: string
   icon: ElementIcon
   label: string
+  // Real element key (not the display label, which may be overridden by customAttributes.key)
+  realKey?: string
   labelAddon?: string
   internalKey: string
   children?: TreeNodeProps[]
@@ -43,6 +47,8 @@ export interface TreeNodeProps {
   parentId?: string
   isRoot?: boolean
   isLoading?: boolean
+  /** Briefly highlights a node that was just added to its list, e.g. after creating or pasting it. */
+  isRecentlyAdded?: boolean
   danger?: boolean
   ref?: MutableRefObject<HTMLDivElement>
   isPublished?: boolean
@@ -92,14 +98,15 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
   const { styles } = useStyles()
   const {
     renderNodeContent: RenderNodeContent,
-    onSelect,
-    onRightClick,
     nodesRefs,
-    nodeOrder,
+    hasRootNode,
     tooltipSlotName
   } = useContext(TreeContext)
-  const { isExpanded, setExpanded, isSelected, isScrollTo, setScrollTo, setSelectedIds } = useElementTreeNode(id)
+  const nodeState = useElementTreeNode(id)
+  const { isExpanded, setExpanded, isSelected, isActive, isScrollTo, setScrollTo } = nodeState
+  const { isHighlighted, highlight } = useTreeNodeHighlight(props.isRecentlyAdded === true)
   const treeNodeProps = { id, icon, label, internalKey, level, isLoading, isRoot, danger, ...props }
+  const { onClick, onContextMenu, onKeyDown } = useTreeNodeInteraction(treeNodeProps, nodeState)
 
   useEffect(() => {
     return () => {
@@ -117,9 +124,12 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
       if (!isNil(nodeElement)) {
         scrollToNodeElement(nodeElement)
         setScrollTo(false)
+        highlight()
       }
     }
   }, [isScrollTo, nodesRefs, internalKey, setScrollTo])
+
+  const contentClassName = cn('tree-node__content', { 'tree-node__content--selected': isSelected, 'tree-node__content--active': isActive, 'tree-node__content--highlighted': isHighlighted })
 
   function getClasses (): string {
     const classes = ['tree-node', styles.treeNode]
@@ -135,86 +145,22 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
     return classes.join(' ')
   }
 
-  function selectNode (): void {
-    setSelectedIds([id])
-
-    if (onSelect !== undefined) {
-      onSelect(treeNodeProps)
-    }
-  }
-
-  function onClick (event: MouseEvent): void {
-    selectNode()
-  }
-
-  function onContextMenu (event: MouseEvent): void {
-    if (onRightClick !== undefined) {
-      onRightClick(event, treeNodeProps)
-    }
-  }
-
-  function onKeyDown (event: React.KeyboardEvent): void {
-    if (event.key === 'Enter') {
-      selectNode()
-    }
-
-    if (event.key === 'ArrowRight') {
-      expandItem()
-    }
-
-    if (event.key === 'ArrowLeft') {
-      collapseItem()
-    }
-
-    if (event.key === 'ArrowDown') {
-      gotoNextNode(event)
-    }
-
-    if (event.key === 'ArrowUp') {
-      gotoPreviousNode(event)
-    }
-  }
-
-  function expandItem (): void {
-    setExpanded(true)
-  }
-
-  function collapseItem (): void {
-    setExpanded(false)
-  }
-
-  function gotoNextNode (event: KeyboardEvent): void {
-    event.preventDefault()
-
-    const index = nodeOrder!().indexOf(internalKey)
-
-    if (index < nodeOrder!().length - 1) {
-      nodesRefs!.current[nodeOrder!()[index + 1]].el.focus()
-    }
-  }
-
-  function gotoPreviousNode (event: KeyboardEvent): void {
-    event.preventDefault()
-
-    const index = nodeOrder!().indexOf(internalKey)
-
-    if (index > 0) {
-      nodesRefs!.current[nodeOrder!()[index - 1]].el.focus()
-    }
-  }
-
   function setRef (el: HTMLElement): void {
-    registerNode(el)
+    nodesRefs!.current[internalKey] = { el, node: treeNodeProps }
   }
 
-  function registerNode (el: HTMLElement): void {
-    const nodeRef: INodeRef = { el, node: treeNodeProps }
-    nodesRefs!.current[internalKey] = nodeRef
-  }
+  const isExpandable = props.hasChildren === true
+
+  // the visible root is rendered with level -1 and its children with level 0,
+  // so shift by one more when the root is shown to keep aria-level starting at 1
+  const ariaLevel = level + (hasRootNode === true ? 2 : 1)
 
   const nodeContent = (
     <Flex
       align="center"
+      aria-expanded={ isExpandable ? isExpanded : undefined }
+      aria-level={ ariaLevel }
+      aria-selected={ isSelected }
       className={ cn('tree-node__content-inner') }
       gap="small"
       justify="center"
@@ -222,7 +168,8 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
       onContextMenu={ onContextMenu }
       onKeyDown={ onKeyDown }
       ref={ setRef }
-      role='button'
+      role='treeitem'
+      // The tree container moves the one Tab stop to the selected (else first) node; see useRovingTabStop.
       tabIndex={ -1 }
     >
       <Flex
@@ -256,7 +203,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
             props={ {
               node: treeNodeProps,
               children: (
-                <div className={ cn('tree-node__content', { 'tree-node__content--selected': isSelected }) }>
+                <div className={ contentClassName }>
                   {wrapNode(nodeContent)}
                 </div>
               )
@@ -264,7 +211,7 @@ const TreeNode = forwardRef(function ForwardedTreeNode ({
           />
           )
         : (
-          <div className={ cn('tree-node__content', { 'tree-node__content--selected': isSelected }) }>
+          <div className={ contentClassName }>
             {wrapNode(nodeContent)}
           </div>
           )}

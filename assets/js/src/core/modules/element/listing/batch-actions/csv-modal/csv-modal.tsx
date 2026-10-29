@@ -20,10 +20,13 @@ import { useSettings } from '@Pimcore/modules/element/listing/abstract/settings/
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import { type ExportCsvApiResponse, type ExportCsvFolderApiResponse, useExportCsvFolderMutation, useExportCsvMutation } from '@Pimcore/modules/element/export-api-slice.gen'
 import { useElementContext } from '@Pimcore/modules/element/hooks/use-element-context'
+import { useElementDraft } from '@Pimcore/modules/element/hooks/use-element-draft'
+import { getExportContextName } from '../get-export-context-name'
 import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { isNil } from 'lodash'
 import { useExecutionEngine } from '@Pimcore/modules/execution-engine/hooks/use-execution-engine'
 import { type GridColumnRequest } from '@sdk/api/asset'
+import { getExportColumns } from '../get-export-columns'
 import { Form } from '@sdk/components'
 
 export interface CsvModalProps {
@@ -35,6 +38,7 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
   const [form] = Form.useForm()
   const executionEngine = useExecutionEngine()
   const { id, elementType } = useElementContext()
+  const { element } = useElementDraft(id, elementType)
   const [fetchCreateCsv, { isError: isCreateCsvError, error: createCsvError }] = useExportCsvMutation()
   const [fetchCreateFolderCsv, { isError: isCreateFolderCsvError, error: createFolderCsvError }] = useExportCsvFolderMutation()
   const { selectedRows } = useRowSelection()
@@ -92,30 +96,15 @@ export const CsvModal = (props: CsvModalProps): React.JSX.Element => {
 
   function onFinish (values: CSVFormValues): void {
     const isFolderExport = numberedSelectedRows.length === 0
-    const job = new CsvDownloadJob({ action: async () => await getDownloadAction(values.delimiter, values.header), isFolderExport })
+    const job = new CsvDownloadJob({ action: async () => await getDownloadAction(values.delimiter, values.header), isFolderExport, context: getExportContextName(element?.fullPath) })
     void executionEngine.runJob(job)
 
     props.setOpen(false)
   }
 
   async function getDownloadAction (delimiter: CSVFormValues['delimiter'], header: CSVFormValues['header']): Promise<number> {
-    const extractedColumnsFromColumnArg: GridColumnRequest[] = []
-
-    const columns = getArgs()?.body?.columns ?? []
-
-    for (const column of columns) {
-      if (selectedColumns.find((selectedColumn) => selectedColumn.key === column.key) === undefined) {
-        continue
-      }
-
-      extractedColumnsFromColumnArg.push({
-        key: column.key,
-        type: column.type,
-        group: column.group as unknown as string[] | undefined,
-        locale: column.locale,
-        config: column.config
-      })
-    }
+    const requestColumns: GridColumnRequest[] = getArgs()?.body?.columns ?? []
+    const extractedColumnsFromColumnArg = getExportColumns(requestColumns, selectedColumns)
 
     if (numberedSelectedRows.length === 0) {
       const filters = getArgs()?.body?.filters ?? {}

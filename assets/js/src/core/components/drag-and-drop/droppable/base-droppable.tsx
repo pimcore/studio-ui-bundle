@@ -17,6 +17,9 @@ import { DroppableContextProvider } from '../droppable-context-provider'
 import useElementVisible from '@Pimcore/utils/hooks/use-element-visible'
 import { type DragInfoChangeEvent } from '../draggable'
 import { useDropClassHandlers } from '../hooks/use-drop-class-handlers'
+import { acceptsSingleElementOf } from '../element-drag'
+import { App } from 'antd'
+import { useTranslation } from 'react-i18next'
 
 export interface BaseDroppableProps {
   children: ReactNode
@@ -37,6 +40,10 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
   const [dragState, setDragState] = useState<DragState>('inactive')
   const isContextValid = useRef<boolean>(false)
   const isDataValid = useRef<boolean>(false)
+  // A dragged set over a target that only takes one element at a time
+  const isRefusedAsSet = useRef<boolean>(false)
+  const { message } = App.useApp()
+  const { t } = useTranslation()
   const dragInfoRef = useRef<DragAndDropInfo | null>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
   const isInIframe = wrapperRef.current?.ownerDocument !== document
@@ -60,6 +67,7 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
     if (isNull(info)) {
       isContextValid.current = false
       isDataValid.current = false
+      isRefusedAsSet.current = false
       updateDragState('inactive')
       return
     }
@@ -69,6 +77,10 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
       : isValidContext
 
     isDataValid.current = isContextValid.current && (isValidData?.(info) ?? true)
+
+    // Targets built for one element ignore a dragged set. When the target would take
+    // one of its elements on its own, show the drop as refused and say why on release.
+    isRefusedAsSet.current = !isContextValid.current && acceptsSingleElementOf(info, isValidContext, isValidData)
 
     if (isContextValid.current) {
       updateDragState('active')
@@ -91,6 +103,12 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault()
 
+    if (isRefusedAsSet.current) {
+      e.stopPropagation()
+      updateDragState('error')
+      return
+    }
+
     if (isNull(dragInfoRef.current) || !isContextValid.current) {
       updateDragState('inactive')
       return
@@ -104,6 +122,11 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
   const handleDragLeave = useCallback((e: React.DragEvent) => {
     e.preventDefault()
 
+    if (isRefusedAsSet.current) {
+      updateDragState('inactive')
+      return
+    }
+
     if (isContextValid.current) {
       updateDragState(!isNull(dragInfoRef.current) ? 'active' : 'inactive')
     }
@@ -112,10 +135,18 @@ export const BaseDroppable = ({ children, className, variant, shape, isValidCont
   const handleDrop = useCallback((e: React.DragEvent): void => {
     e.preventDefault()
     updateDragState('inactive')
+
+    if (isRefusedAsSet.current) {
+      // the set ends here instead of falling through to a target further out
+      e.stopPropagation()
+      void message?.warning?.(t('drag-and-drop.drop.single-element-only'))
+      return
+    }
+
     if (isInfoValid()) {
       onDrop(dragInfoRef.current!)
     }
-  }, [onDrop])
+  }, [onDrop, message, t])
 
   useDropClassHandlers({
     dropClass,

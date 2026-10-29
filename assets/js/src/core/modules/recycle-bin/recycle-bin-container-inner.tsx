@@ -21,6 +21,7 @@ import { Toolbar } from '@Pimcore/components/toolbar/toolbar'
 import { useFilterQuery } from '@Pimcore/components/filters'
 import { useAppDispatch } from '@sdk/app'
 import { Divider, IconTextButton, Header } from '@sdk/components'
+import { type SortingState } from '@tanstack/react-table'
 import { isUndefined } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -33,6 +34,7 @@ import { useRecycleBin } from './hooks/use-recycle-bin'
 import { api } from './recycle-bin-api-slice-enhanced'
 import { useRecycleBinGetCollectionQuery } from './recycle-bin-api-slice.gen'
 import { RecycleBinSidebar } from './recycle-bin-sidebar/recycle-bin-sidebar'
+import { mapSortingToSortFilter } from './utils/sorting'
 
 export const RecycleBinContainerInner = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -40,12 +42,15 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(appConfig.defaultPageSize)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [sorting, setSorting] = useState<SortingState>([])
   const { flush } = useRecycleBin()
   const { selectedRows } = useSelectedRowsContext()
 
   const { values: appliedValues } = useRecycleBinAppliedFilters()
   const buildFilterQuery = useFilterQuery(recycleBinFilterAdapter, appliedValues)
   const { columnFilters } = buildFilterQuery({})
+
+  const sortFilter = mapSortingToSortFilter(sorting)
 
   useEffect(() => {
     setCurrentPage(1)
@@ -56,7 +61,8 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
       filters: {
         page: currentPage,
         pageSize,
-        columnFilters
+        columnFilters,
+        sortFilter
       }
     }
   })
@@ -65,6 +71,11 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
   const onPagerChange = (page: number, pageSize: number): void => {
     setCurrentPage(page)
     setPageSize(pageSize)
+  }
+
+  const onSortingChange = (updatedSorting: SortingState): void => {
+    setSorting(updatedSorting)
+    setCurrentPage(1)
   }
 
   useEffect(() => {
@@ -109,6 +120,7 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
 
           <Flex align="center">
             <IconButton
+              aria-label={ t('refresh') }
               disabled={ isRTKLoading || isLoading }
               icon={ { value: 'refresh' } }
               onClick={ () => {
@@ -118,6 +130,7 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
                   )
                 )
               } }
+              tooltip={ { title: t('refresh') } }
             />
 
             {total > 0 && (
@@ -161,6 +174,8 @@ export const RecycleBinContainerInner = (): React.JSX.Element => {
         >
           <Table
             items={ data?.items ?? [] }
+            onSortingChange={ onSortingChange }
+            sorting={ sorting }
           />
         </Box>
       </Content>

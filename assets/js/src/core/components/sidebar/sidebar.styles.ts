@@ -28,7 +28,7 @@ export const useStyle = createStyles(({ token, css }) => {
       .sidebar__navigation {
           display: flex;
           width: ${SIDEBAR_NAV_WIDTH}px;
-          padding: 4px 8px ${token.paddingSM}px 8px;
+          padding: ${token.paddingXS}px ${token.paddingXS}px ${token.paddingSM}px ${token.paddingXS}px;
           flex-direction: column;
           align-items: center;
           flex-shrink: 0;

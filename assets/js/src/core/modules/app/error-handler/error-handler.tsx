@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { isUndefined } from 'lodash'
+import { isString, isUndefined } from 'lodash'
 import { ErrorModalService } from '@Pimcore/modules/app/error-handler/services/error-modal-service'
 import { GeneralError, ApiError } from '@Pimcore/modules/app/error-handler/index'
 import { ApiErrorViewUI } from '@Pimcore/modules/app/error-handler/components/api-error-view-ui'
@@ -24,15 +24,21 @@ const isGeneralError = (error: any): boolean => error instanceof GeneralError
 const isApiError = (error: any): boolean => error instanceof ApiError
 
 // Create a set to keep shown error content and avoid duplicates
-const shownErrors = new Set<IErrorGetContent['data']>()
+const shownErrors = new Set<string>()
+
+// Structured content is a fresh object on every call, so it is compared by value, not by identity.
+const getErrorContentId = (errorContent: IErrorGetContent['data']): string => {
+  return isString(errorContent) ? errorContent : JSON.stringify(errorContent)
+}
 
 const trackError = (data: IErrorContentProvider, handler?: ErrorHandler): never | void => {
   const errorContent = data.getContent()
+  const errorContentId = getErrorContentId(errorContent)
 
-  if (shownErrors.has(errorContent)) {
+  if (shownErrors.has(errorContentId)) {
     return
   } else {
-    shownErrors.add(errorContent)
+    shownErrors.add(errorContentId)
   }
 
   // Set a timeout to clear the shownErrors after the current execution cycle
