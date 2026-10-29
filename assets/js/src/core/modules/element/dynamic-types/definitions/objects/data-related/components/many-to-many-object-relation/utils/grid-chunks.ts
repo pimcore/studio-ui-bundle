@@ -12,10 +12,10 @@ import { chunk, flatMap, map, sortBy } from 'lodash'
 import { type ManyToManyRelationValue } from '@Pimcore/components/many-to-many-relation'
 
 // Related objects per grid request: small enough that the rows on screen get their values quickly.
-export const VISIBLE_FIELDS_CHUNK_SIZE = 100
+export const VISIBLE_FIELDS_CHUNK_SIZE = 200
 
 // Grid requests per relation field running at the same time.
-export const VISIBLE_FIELDS_MAX_PARALLEL = 2
+export const VISIBLE_FIELDS_MAX_PARALLEL = 3
 
 export interface GridChunk {
   classId: string

@@ -30,6 +30,7 @@ import { VISIBLE_FIELDS_MAX_PARALLEL } from '../utils/grid-chunks'
 
 const mockTrackError = jest.fn()
 
+jest.mock('../utils/grid-chunks', () => ({ ...jest.requireActual('../utils/grid-chunks'), VISIBLE_FIELDS_CHUNK_SIZE: 100, VISIBLE_FIELDS_MAX_PARALLEL: 2 }))
 jest.mock('@Pimcore/app/store', () => ({
   useAppDispatch: () => (action: unknown) => action,
   useAppSelector: (selector: (state: unknown) => unknown) => selector({})
