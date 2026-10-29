@@ -32,9 +32,12 @@ export const ColumnConfigLoader = ({ Component }: ColumnConfigLoaderProps): Reac
   const { setDataLoadingState } = useDataQueryHelper()
   const { getId } = useElementId()
   const { selectedClassDefinition } = useClassDefinitionSelection()
-  const { isLoading, data } = useDataObjectGetAvailableGridColumnsQuery({ folderId: getId(), classId: selectedClassDefinition!.id })
+  // currentData, not data: on a class switch data still holds the previous class's result
+  // until the new one arrives, and pairing it with the new configuration would restore its
+  // filters against the wrong columns (and mark that configuration as restored).
+  const { isLoading, currentData: data } = useDataObjectGetAvailableGridColumnsQuery({ folderId: getId(), classId: selectedClassDefinition!.id })
   const { id: configId } = useSelectedGridConfigId()
-  const { isLoading: isInitialConfigLoading, data: initialConfigurationData } = useDataObjectGetGridConfigurationQuery({ classId: selectedClassDefinition!.id, folderId: getId(), configurationId: configId })
+  const { isLoading: isInitialConfigLoading, currentData: initialConfigurationData } = useDataObjectGetGridConfigurationQuery({ classId: selectedClassDefinition!.id, folderId: getId(), configurationId: configId })
   const { selectedColumns, setSelectedColumns } = useSelectedColumns()
   const { setAvailableColumns } = useAvailableColumns()
   const { setGridConfig } = useGridConfig()
