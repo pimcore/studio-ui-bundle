@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useState } from 'react'
+import React, { useRef } from 'react'
 import { WindowModal, Card } from '@sdk/components'
 import { type DialogConfig, type DialogConfigItem, type DialogConfigItems, type SerializedDialogConfigItems } from './types'
 import { useInjection } from '@Pimcore/app/depency-injection'
@@ -17,17 +17,12 @@ import { type DynamicTypeEditableDialogLayoutRegistry } from '@Pimcore/modules/e
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { useDocumentEditor } from '../../hooks/use-document-editor'
 import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/element/dynamic-types/definitions/document/editable/dynamic-type-document-editable-abstract'
-import { cloneDeep, isArray, isEmpty, isEqual, isNil, isPlainObject, union } from 'lodash'
+import { isArray, isEmpty, isNil, isPlainObject } from 'lodash'
 import { TemplateAwareEditable } from './template-aware-editable'
 import { useTranslation } from 'react-i18next'
 import { useStyles } from './editable-dialog.styles'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
-import { type ValueType } from '@Pimcore/app/public-api/document-editor-iframe/editable-data/editable-data'
-
-interface EditableDialogSnapshot {
-  values: Record<string, ValueType>
-  inheritanceState: Record<string, boolean>
-}
+import { useEditableDialogSnapshot } from './hooks/use-editable-dialog-snapshot'
 
 export interface EditableDialogProps {
   config: DialogConfig
@@ -42,46 +37,19 @@ export interface EditableDialogProps {
 export const EditableDialog = ({ config, visible, onClose, onCancel, editableDefinitions }: EditableDialogProps): React.JSX.Element => {
   const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
   const editableDialogLayoutRegistry = useInjection<DynamicTypeEditableDialogLayoutRegistry>(serviceIds['DynamicTypes/EditableDialogLayoutRegistry'])
-  const { getValue, getValues, updateValue, removeValues, getInheritanceState, setInheritanceState } = useDocumentEditor()
+  const { getValue } = useDocumentEditor()
   const { modal } = useStudioModal()
   const { t } = useTranslation()
   const { styles } = useStyles()
 
-  // Editables write their changes straight into the document editable store, so the state at the
-  // time the dialog opened is captured to be able to restore it when the dialog gets cancelled.
-  const [snapshot] = useState<EditableDialogSnapshot>(() => ({
-    values: cloneDeep(getValues()),
-    inheritanceState: Object.fromEntries(
-      editableDefinitions.map(editable => [editable.name, getInheritanceState(editable.name)])
-    )
-  }))
-
-  const getChangedValueKeys = (): string[] => {
-    const currentValues = getValues()
-
-    return union(Object.keys(snapshot.values), Object.keys(currentValues))
-      .filter(key => !isEqual(snapshot.values[key], currentValues[key]))
-  }
-
-  const restoreSnapshot = (changedKeys: string[]): void => {
-    const addedKeys = changedKeys.filter(key => isNil(snapshot.values[key]))
-
-    if (addedKeys.length > 0) {
-      removeValues(addedKeys)
-    }
-
-    changedKeys
-      .filter(key => !isNil(snapshot.values[key]))
-      .forEach(key => { updateValue(key, snapshot.values[key]) })
-
-    Object.entries(snapshot.inheritanceState).forEach(([name, inherited]) => {
-      setInheritanceState(name, inherited)
-    })
-  }
+  // Only the editables rendered by this dialog are snapshotted: the window modal has no mask, so the
+  // page behind it stays editable and those edits must not be rolled back by a cancelled dialog.
+  const { getChangedKeys, restore } = useEditableDialogSnapshot(editableDefinitions.map(editable => editable.name))
+  const confirmPending = useRef(false)
 
   // Without any changes there is nothing to save, so the dialog just closes without a reload.
   const handleSave = (): void => {
-    if (getChangedValueKeys().length === 0) {
+    if (getChangedKeys().length === 0) {
       onCancel()
       return
     }
@@ -90,12 +58,17 @@ export const EditableDialog = ({ config, visible, onClose, onCancel, editableDef
   }
 
   const handleCancel = (): void => {
-    const changedKeys = getChangedValueKeys()
-
-    if (changedKeys.length === 0) {
+    if (getChangedKeys().length === 0) {
       onCancel()
       return
     }
+
+    // Esc and the close icon can fire again while the confirmation is still open.
+    if (confirmPending.current) {
+      return
+    }
+
+    confirmPending.current = true
 
     void modal.confirm({
       title: t('unsaved-changes.title'),
@@ -103,8 +76,12 @@ export const EditableDialog = ({ config, visible, onClose, onCancel, editableDef
       okText: t('discard-changes'),
       cancelText: t('cancel'),
       onOk: () => {
-        restoreSnapshot(changedKeys)
+        confirmPending.current = false
+        restore()
         onCancel()
+      },
+      onCancel: () => {
+        confirmPending.current = false
       }
     })
   }
