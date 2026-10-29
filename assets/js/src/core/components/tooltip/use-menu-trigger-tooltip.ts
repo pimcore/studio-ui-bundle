@@ -18,13 +18,25 @@ export interface MenuTriggerTooltip {
 
 /**
  * Tooltip of a button that opens a menu on click: hidden while the menu is open, so it never
- * covers the menu items. Pass `onMenuOpenChange` to the dropdown's `onOpenChange`.
+ * covers the menu items, and after the menu closes until the pointer enters the button again.
+ * Pass `onMenuOpenChange` to the dropdown's `onOpenChange`.
  */
 export const useMenuTriggerTooltip = (tooltip: TooltipProps): MenuTriggerTooltip => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false)
 
   return {
-    tooltip: isMenuOpen ? { ...tooltip, open: false } : tooltip,
-    onMenuOpenChange: (open: boolean): void => { setIsMenuOpen(open) }
+    tooltip: {
+      ...tooltip,
+      open: isTooltipOpen && !isMenuOpen,
+      onOpenChange: (open: boolean): void => {
+        setIsTooltipOpen(open)
+        tooltip.onOpenChange?.(open)
+      }
+    },
+    onMenuOpenChange: (open: boolean): void => {
+      setIsMenuOpen(open)
+      setIsTooltipOpen(false)
+    }
   }
 }
