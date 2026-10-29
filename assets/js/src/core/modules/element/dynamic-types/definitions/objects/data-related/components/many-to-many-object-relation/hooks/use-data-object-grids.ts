@@ -24,6 +24,7 @@ import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
 import {
   buildGridChunks,
   VISIBLE_FIELDS_CHUNK_SIZE,
+  VISIBLE_FIELDS_FIRST_CHUNK_SIZE,
   VISIBLE_FIELDS_MAX_PARALLEL
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/utils/grid-chunks'
 
@@ -64,7 +65,7 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, applyF
       return []
     }
 
-    return buildGridChunks(dataValue, classIds ?? [], VISIBLE_FIELDS_CHUNK_SIZE).map(({ classId, ids }) => {
+    return buildGridChunks(dataValue, classIds ?? [], VISIBLE_FIELDS_CHUNK_SIZE, VISIBLE_FIELDS_FIRST_CHUNK_SIZE).map(({ classId, ids }) => {
       const args: DataObjectGetGridApiArg = {
         classId: convertClassName(classId)?.id ?? '',
         body: {

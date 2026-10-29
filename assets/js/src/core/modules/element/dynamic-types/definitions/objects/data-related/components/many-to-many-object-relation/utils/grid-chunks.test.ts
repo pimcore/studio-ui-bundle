@@ -30,6 +30,14 @@ describe('buildGridChunks', () => {
     expect(chunks.flatMap(chunk => chunk.ids)).toEqual(range(1, 250))
   })
 
+  it('makes the first chunk of a class smaller so the top rows get their values first', () => {
+    const chunks = buildGridChunks(relatedObjects(250, 'Car'), ['Car'], 100, 30)
+
+    expect(chunks.map(chunk => chunk.ids.length)).toEqual([30, 100, 100, 20])
+    expect(chunks.flatMap(chunk => chunk.ids)).toEqual(range(1, 250))
+    expect(buildGridChunks(relatedObjects(20, 'Car'), ['Car'], 100, 30).map(chunk => chunk.ids.length)).toEqual([20])
+  })
+
   // The rows on top of the relation are on screen first, whatever class they belong to.
   it('orders the chunks of several classes by the relation position of their first row', () => {
     const value = [

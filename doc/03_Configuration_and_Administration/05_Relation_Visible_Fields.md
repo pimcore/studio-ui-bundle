@@ -14,7 +14,8 @@ values cost.
 1. The rows of the relation appear right away, together with the data of the object.
 2. The values of the visible fields follow in separate requests, in chunks of about 200
    related objects. The chunks are requested in the order of the relation, so the rows at
-   the top of the relation get their values first. A few chunks load at the same time.
+   the top of the relation get their values first. The first chunk is smaller (50 related
+   objects), so the rows on screen get their values quickly. A few chunks load at the same time.
 3. While values are loading, a hint below the field shows the progress, for example
    *Loading visible fields… (200 of 650)*. If a request fails, the hint says that the
    visible fields could not be loaded.
