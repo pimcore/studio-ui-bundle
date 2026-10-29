@@ -10,11 +10,13 @@
 
 import { configureStore } from '@reduxjs/toolkit'
 import { waitFor } from '@testing-library/react'
+import { api as classDefinitionApi } from '@Pimcore/modules/class-definition/class-definition-slice-enhanced'
 import { api } from './data-object-api-slice-enhanced'
 
 const PARENT_ID = 5
 const TARGET_PARENT_ID = 7
 const GRID_URL = '/pimcore-studio/api/data-objects/grid/Product'
+const AVAILABLE_COLUMNS_URL = '/pimcore-studio/api/data-object/grid/available-columns'
 
 const createStore = (): ReturnType<typeof configureStore> => configureStore({
   reducer: { [api.reducerPath]: api.reducer },
@@ -61,6 +63,16 @@ describe('data object api cache invalidation', () => {
   const subscribeToGrid = async (store: ReturnType<typeof createStore>, folderId: number): Promise<void> => {
     await store.dispatch(api.endpoints.dataObjectGetGrid.initiate({ classId: 'Product', body: { folderId } }) as any)
     expect(countGridRequests(folderId)).toBe(1)
+  }
+
+  const countAvailableColumnsRequests = (classId: string): number => fetchMock.mock.calls.filter(([input]) => {
+    const url = getUrl(input as Request)
+    return url.includes(AVAILABLE_COLUMNS_URL) && url.includes(`classId=${classId}`)
+  }).length
+
+  const subscribeToAvailableColumns = async (store: ReturnType<typeof createStore>, classId: string): Promise<void> => {
+    await store.dispatch(api.endpoints.dataObjectGetAvailableGridColumns.initiate({ classId, folderId: PARENT_ID }) as any)
+    expect(countAvailableColumnsRequests(classId)).toBe(1)
   }
 
   const flushRefetches = async (): Promise<void> => { await new Promise((resolve) => setTimeout(resolve, 50)) }
@@ -143,5 +155,19 @@ describe('data object api cache invalidation', () => {
     await flushRefetches()
 
     expect(countGridRequests(PARENT_ID)).toBe(1)
+  })
+
+  // The available columns carry the serialized field definitions the inline edit renders from, so an
+  // open grid keeps the field settings of the class it was opened with until this query is invalidated.
+  it('refetches the available grid columns of an open grid after its class definition is saved', async () => {
+    const store = createStore()
+    await subscribeToAvailableColumns(store, 'Product')
+
+    await store.dispatch(classDefinitionApi.endpoints.classDefinitionUpdate.initiate({
+      id: 'Product',
+      classDefinitionUpdate: { configuration: {}, values: {} }
+    }) as any)
+
+    await waitFor(() => { expect(countAvailableColumnsRequests('Product')).toBe(2) })
   })
 })
