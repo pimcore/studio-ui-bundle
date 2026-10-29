@@ -16,7 +16,7 @@ import { useDocumentEditor } from '@Pimcore/modules/document/editor/shared-tab-m
 import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import trackError, { GeneralError, ApiError } from '@Pimcore/modules/app/error-handler'
 import { type AbstractDocumentEditableDefinition } from '../../../dynamic-type-document-editable-abstract'
-import { type AreablockEditableConfig, type AreablockValue, type AreablockRenderTrigger } from '../areablock-editable'
+import { type AreaInsertPosition, type AreablockEditableConfig, type AreablockValue, type AreablockRenderTrigger } from '../areablock-editable'
 import { type AreablockManager } from '../utils/areablock-manager'
 import { createEditableDataFromDefinitions } from '../../../utils/editable-utils'
 import { createDropzoneContainer } from '../../../helpers/editable-dropzone-sorting/utils/dom-utils'
@@ -38,7 +38,7 @@ export interface UseAreablockEditableParams {
 
 export interface UseAreablockEditableReturn {
   dynamicEditables: AbstractDocumentEditableDefinition[]
-  addArea: (element: HTMLElement | null, areaType?: string) => Promise<void>
+  addArea: (element: HTMLElement | null, areaType?: string, position?: AreaInsertPosition) => Promise<void>
   removeArea: (element: HTMLElement) => void
   moveAreaUp: (element: HTMLElement) => void
   moveAreaDown: (element: HTMLElement) => void
@@ -112,7 +112,7 @@ export const useAreablockEditable = ({
     onChange?.(newValue)
   }, [onChange, areablockManager])
 
-  const addArea = useCallback(async (element: HTMLElement | null, areaType?: string) => {
+  const addArea = useCallback(async (element: HTMLElement | null, areaType?: string, position: AreaInsertPosition = 'below') => {
     if (disabled) return
 
     const limit = configUtils.getEffectiveLimit(config)
@@ -123,7 +123,9 @@ export const useAreablockEditable = ({
     const typeToUse = areaType ?? (!isEmpty(availableTypes) ? availableTypes[0].type : 'default')
 
     if (!configUtils.isTypeAllowed(config, typeToUse)) return
-    const index = !isNil(element) ? areablockManager.findElementIndex(element) + 1 : 0
+    // Without an element the area becomes the first one; with one, 'above' takes its
+    // index and 'below' the one after it.
+    const index = isNil(element) ? 0 : areablockManager.findElementIndex(element) + (position === 'above' ? 0 : 1)
     const nextKey = areablockManager.calculateNextKey()
 
     if (configUtils.isReloadMode(config)) {

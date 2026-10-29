@@ -268,6 +268,8 @@ import inheritanceBroken from '@Pimcore/assets/icons/inheritance-broken.inline.s
 import inlineHelp from '@Pimcore/assets/icons/inline-help.inline.svg?react'
 import innovation from '@Pimcore/assets/icons/innovation.inline.svg?react'
 import inputQuantityValue from '@Pimcore/assets/icons/input-quantity-value.inline.svg?react'
+import insertAbove from '@Pimcore/assets/icons/insert-above.inline.svg?react'
+import insertBelow from '@Pimcore/assets/icons/insert-below.inline.svg?react'
 import integration2 from '@Pimcore/assets/icons/integration-2.inline.svg?react'
 import integration from '@Pimcore/assets/icons/integration.inline.svg?react'
 import interactionAction from '@Pimcore/assets/icons/interaction-action.inline.svg?react'
@@ -1538,6 +1540,14 @@ moduleSystem.registerModule({
     iconLibrary.register({
       name: 'input-quantity-value',
       component: inputQuantityValue
+    })
+    iconLibrary.register({
+      name: 'insert-above',
+      component: insertAbove
+    })
+    iconLibrary.register({
+      name: 'insert-below',
+      component: insertBelow
     })
     iconLibrary.register({
       name: 'integration-2',

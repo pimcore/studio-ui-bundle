@@ -111,6 +111,8 @@ areablock.move-below: Flytt ned
 areablock.show: Vis
 areablock.hide: Skjul
 areablock.new: Ny
+areablock.insert-above: Sett inn over
+areablock.insert-below: Sett inn under
 areablock.copy: Kopier
 areablock.paste: Lim inn
 areablock.cut: Klipp ut
