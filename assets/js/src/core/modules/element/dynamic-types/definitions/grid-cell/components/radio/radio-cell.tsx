@@ -10,7 +10,8 @@
 
 import React, { useRef } from 'react'
 import type { DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import { Radio, type RadioRef } from 'antd'
+import { Radio } from 'antd'
+import { type RadioRef } from 'antd/es/radio'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { useStyle } from './radio-cell.styles'
 import cn from 'classnames'
