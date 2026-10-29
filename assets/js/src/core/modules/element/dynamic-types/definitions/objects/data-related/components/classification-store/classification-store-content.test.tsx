@@ -12,7 +12,8 @@
  * The store renders the shared empty state while no group is assigned, hides adding
  * and removing groups when the store is not editable or add/remove is disallowed,
  * renders the groups in the order the layout configures, and installs the layout the
- * object delivers for its already active groups with the key titles it carries.
+ * object delivers for its already active groups with the key titles it carries — which
+ * for a reopened object is a map keyed by group id, and so carries no order.
  */
 
 // The `.styles` files pull in antd-style's untranspiled ESM build, which jest does not
@@ -154,6 +155,28 @@ describe('ClassificationStoreContent', () => {
     renderContent()
 
     expect(mockItem.mock.calls.map(([props]) => props.groupLayout?.id)).toEqual([11, 3, 7])
+  })
+
+  // Reopening an object delivers its already active groups as a map keyed by group id, and
+  // JavaScript hands integer-like keys back in ascending numeric order — writing the map out
+  // of order below changes nothing. The layout installed for a reopened object therefore runs
+  // in ascending group id, and the panels with it: the sort above can only order what the
+  // layout carries, and this layout carries no order. Restoring a configured one needs the
+  // object layout payload to carry it, as an ordered list or explicit group positions.
+  it('falls back to ascending group id for the layout of a reopened object', () => {
+    mockGroupKeys = ['3', '7', '11']
+
+    renderContent({
+      activeGroupDefinitions: {
+        11: { id: 11, name: 'Dimensions', keys: [] },
+        3: { id: 3, name: 'Material', keys: [] },
+        7: { id: 7, name: 'Packaging', keys: [] }
+      }
+    } as unknown as Partial<ClassificationStoreProps>)
+
+    const installedLayout = mockUpdateCurrentLayoutData.mock.calls[0][0] as Array<{ id: number }>
+
+    expect(installedLayout.map((group) => group.id)).toEqual([3, 7, 11])
   })
 
   // reopening an object delivers its already active groups as a map keyed by group id,

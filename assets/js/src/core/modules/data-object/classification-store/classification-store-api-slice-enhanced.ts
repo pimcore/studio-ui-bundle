@@ -214,7 +214,10 @@ const api = baseApi.enhanceEndpoints({
               draft.items[idx] = {
                 ...draft.items[idx],
                 name: update.name,
-                title: update.title,
+                // A null title means "leave the stored one alone" to the server, just like a
+                // null type does, so writing it into the cache would blank the Title cell
+                // for the length of the request and let it come back with the response.
+                ...(update.title !== undefined && update.title !== null ? { title: update.title } : {}),
                 ...(update.type !== undefined && update.type !== null ? { type: update.type } : {}),
                 description: update.description
                 // `definition` intentionally excluded: a null definition means "leave the stored
