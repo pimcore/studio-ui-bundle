@@ -48,6 +48,11 @@ export interface UseAreablockEditableReturn {
   pasteArea: (element: HTMLElement | null) => void
 }
 
+// 'above' takes the current element's own index, 'below' the one after it.
+function getInsertIndex (elementIndex: number, position: AreaInsertPosition): number {
+  return position === 'above' ? elementIndex : elementIndex + 1
+}
+
 function mergeAreablockTypesFromDefinitions (documentId: number, editableDefinitions: AbstractDocumentEditableDefinition[]): void {
   try {
     const allGroupedTypes = buildGroupedTypes(editableDefinitions)
@@ -153,9 +158,8 @@ export const useAreablockEditable = ({
     const typeToUse = areaType ?? (!isEmpty(availableTypes) ? availableTypes[0].type : 'default')
 
     if (!configUtils.isTypeAllowed(config, typeToUse)) return
-    // Without an element the area becomes the first one; with one, 'above' takes its
-    // index and 'below' the one after it.
-    const index = isNil(element) ? 0 : areablockManager.findElementIndex(element) + (position === 'above' ? 0 : 1)
+    // Without an element the area becomes the first one.
+    const index = isNil(element) ? 0 : getInsertIndex(areablockManager.findElementIndex(element), position)
     const nextKey = areablockManager.calculateNextKey()
 
     if (configUtils.isReloadMode(config)) {
