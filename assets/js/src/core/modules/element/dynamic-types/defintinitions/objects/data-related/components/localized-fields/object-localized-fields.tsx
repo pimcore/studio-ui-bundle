@@ -67,11 +67,14 @@ export const ObjectLocalizedFields = ({ children, noteditable, className, title,
   // height on top of the card's own header and padding.
   const containerStyle = { height: cssHeight, width: cssWidth }
   const viewStyle = isPadded ? containerStyle : undefined
-  // Inside a sized card the stack fills what the card leaves it, which only
-  // matters for the fit layout — its flex children need a height to divide.
-  const innerStyle = isPadded
-    ? (isFit ? { height: '100%' } : undefined)
-    : containerStyle
+  // Inside a card the stack is left unsized. A `height: '100%'` here would be
+  // inert: the antd card body and the padding Box around it are both
+  // auto-height (components/card/card.tsx), and a percentage height resolves
+  // to nothing against an auto-height ancestor. So `layout: 'fit'` stretches
+  // the children only when no card is rendered; making it stretch inside one
+  // needs a flex chain through the shared Card, which has no className seam
+  // today and is used by every layout container.
+  const innerStyle = isPadded ? undefined : containerStyle
 
   // The utility class only has to go when this element is the sized one.
   const innerClassName = isNonEmptyString(cssWidth) && !isPadded ? undefined : 'w-full'
