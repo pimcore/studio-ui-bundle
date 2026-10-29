@@ -24,6 +24,7 @@ const setInheritanceState = jest.fn((key: string, inherited: boolean) => { store
 jest.mock('../../../hooks/use-document-editor', () => ({
   useDocumentEditor: () => ({
     getValue: (key: string) => store.values[key],
+    getValues: () => ({ ...store.values }),
     getInheritanceState: (key: string) => store.inheritance[key] ?? false,
     updateValue,
     removeValues,
@@ -125,6 +126,71 @@ describe('useEditableDialogSnapshot', () => {
 
     expect(setInheritanceState).toHaveBeenCalledWith('headline', true)
     expect(store.inheritance.headline).toBe(true)
+  })
+
+  it('writes the value again after restoring inheritance so the draft gets saved as inherited', () => {
+    // The override may already have been autosaved; only a value update schedules the next autosave.
+    store.inheritance.headline = true
+    const { result } = renderHook(() => useEditableDialogSnapshot(['headline']))
+
+    store.inheritance.headline = false
+    result.current.restore()
+
+    expect(setInheritanceState).toHaveBeenCalledWith('headline', true)
+    expect(updateValue).toHaveBeenCalledWith('headline', input('Hello'))
+    expect(setInheritanceState.mock.invocationCallOrder[0]).toBeLessThan(updateValue.mock.invocationCallOrder[0])
+  })
+
+  describe('child editables of a dialog editable', () => {
+    beforeEach(() => {
+      store.values.teaserBlock = { type: 'block', data: ['1'] }
+      store.values['teaserBlock:1.headline'] = input('Row 1')
+      store.values['teaserBlockExtra'] = input('Unrelated sibling')
+      store.values['other:1.headline'] = input('Row of another block')
+    })
+
+    it('reports a child value that changed since the snapshot', () => {
+      const { result } = renderHook(() => useEditableDialogSnapshot(['teaserBlock']))
+
+      store.values['teaserBlock:1.headline'] = input('Row 1 changed')
+
+      expect(result.current.getChangedKeys()).toEqual(['teaserBlock:1.headline'])
+    })
+
+    it('reports a child value created while the dialog was open', () => {
+      const { result } = renderHook(() => useEditableDialogSnapshot(['teaserBlock']))
+
+      store.values.teaserBlock = { type: 'block', data: ['1', '2'] }
+      store.values['teaserBlock:2.headline'] = input('Row 2')
+
+      expect(result.current.getChangedKeys().sort()).toEqual(['teaserBlock', 'teaserBlock:2.headline'])
+    })
+
+    it('removes created child values and restores the parent on discard, leaving other editables alone', () => {
+      const { result } = renderHook(() => useEditableDialogSnapshot(['teaserBlock']))
+
+      store.values.teaserBlock = { type: 'block', data: ['1', '2'] }
+      store.values['teaserBlock:2.headline'] = input('Row 2')
+      store.values['teaserBlockExtra'] = input('Edited on the page')
+      store.values['other:1.headline'] = input('Edited on the page too')
+      result.current.restore()
+
+      expect(removeValues).toHaveBeenCalledWith(['teaserBlock:2.headline'])
+      expect(updateValue).toHaveBeenCalledTimes(1)
+      expect(updateValue).toHaveBeenCalledWith('teaserBlock', { type: 'block', data: ['1'] })
+      expect(store.values['teaserBlock:2.headline']).toBeUndefined()
+      expect(store.values.teaserBlockExtra).toEqual(input('Edited on the page'))
+      expect(store.values['other:1.headline']).toEqual(input('Edited on the page too'))
+    })
+
+    it('restores a child value removed while the dialog was open', () => {
+      const { result } = renderHook(() => useEditableDialogSnapshot(['teaserBlock']))
+
+      delete store.values['teaserBlock:1.headline']
+      result.current.restore()
+
+      expect(updateValue).toHaveBeenCalledWith('teaserBlock:1.headline', input('Row 1'))
+    })
   })
 
   it('leaves untouched editables and editables outside the dialog alone when restoring', () => {

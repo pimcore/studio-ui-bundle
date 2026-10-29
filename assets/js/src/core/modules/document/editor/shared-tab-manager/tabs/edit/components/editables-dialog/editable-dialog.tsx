@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { useRef } from 'react'
+import React, { useMemo, useRef } from 'react'
 import { WindowModal, Card } from '@sdk/components'
 import { type DialogConfig, type DialogConfigItem, type DialogConfigItems, type SerializedDialogConfigItems } from './types'
 import { useInjection } from '@Pimcore/app/depency-injection'
@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next'
 import { useStyles } from './editable-dialog.styles'
 import { useStudioModal } from '@Pimcore/components/modal/hooks/use-studio-modal'
 import { useEditableDialogSnapshot } from './hooks/use-editable-dialog-snapshot'
+import { RenderEditableOptionsContext, type RenderEditableOptions } from '../editables-renderer/render-editable-options-context'
 
 export interface EditableDialogProps {
   config: DialogConfig
@@ -37,7 +38,7 @@ export interface EditableDialogProps {
 export const EditableDialog = ({ config, visible, onClose, onCancel, editableDefinitions }: EditableDialogProps): React.JSX.Element => {
   const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
   const editableDialogLayoutRegistry = useInjection<DynamicTypeEditableDialogLayoutRegistry>(serviceIds['DynamicTypes/EditableDialogLayoutRegistry'])
-  const { getValue } = useDocumentEditor()
+  const { getValue, triggerSaveAndReload } = useDocumentEditor()
   const { modal } = useStudioModal()
   const { t } = useTranslation()
   const { styles } = useStyles()
@@ -47,11 +48,24 @@ export const EditableDialog = ({ config, visible, onClose, onCancel, editableDef
   const { getChangedKeys, restore } = useEditableDialogSnapshot(editableDefinitions.map(editable => editable.name))
   const confirmPending = useRef(false)
 
+  // Reload-on-change editables would save and reload the document (and thereby destroy this dialog)
+  // on every change, so their reload is held back until the dialog is saved.
+  const reloadDeferred = useRef(false)
+  const renderOptions = useMemo<RenderEditableOptions>(() => ({
+    deferReloadOnChange: true,
+    onReloadDeferred: () => { reloadDeferred.current = true }
+  }), [])
+
   // Without any changes there is nothing to save, so the dialog just closes without a reload.
   const handleSave = (): void => {
     if (getChangedKeys().length === 0) {
       onCancel()
       return
+    }
+
+    // A dialog configured with reloadOnClose reloads through its owner anyway.
+    if (reloadDeferred.current && config.reloadOnClose !== true) {
+      triggerSaveAndReload()
     }
 
     onClose()
@@ -207,7 +221,9 @@ export const EditableDialog = ({ config, visible, onClose, onCancel, editableDef
       title={ t('area-settings') }
       zIndex={ 10001 }
     >
-      {!isNil(config.items) && renderDialogContent(normaliseFlatItems(config.items))}
+      <RenderEditableOptionsContext.Provider value={ renderOptions }>
+        {!isNil(config.items) && renderDialogContent(normaliseFlatItems(config.items))}
+      </RenderEditableOptionsContext.Provider>
     </WindowModal>
   )
 }

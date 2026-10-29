@@ -63,10 +63,12 @@ const setInheritanceState = jest.fn((key: string, inherited: boolean) => { store
 jest.mock('../../hooks/use-document-editor', () => ({
   useDocumentEditor: () => ({
     getValue: (key: string) => store.values[key],
+    getValues: () => ({ ...store.values }),
     getInheritanceState: (key: string) => store.inheritance[key] ?? false,
     updateValue,
     removeValues,
-    setInheritanceState
+    setInheritanceState,
+    triggerSaveAndReload: jest.fn()
   })
 }))
 
