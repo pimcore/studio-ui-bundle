@@ -756,12 +756,16 @@ export type ClassificationStoreConfigurationKeyDetail = {
     creationDate: number | null;
     /** Modification date as Unix timestamp */
     modificationDate: number | null;
+    /** Title of the key */
+    title?: string | null;
 };
 export type ClassificationStoreConfigurationKeyCreate = {
     /** Name of the key */
     name: string;
     /** ID of the store this key belongs to */
     storeId: number;
+    /** Title of the key */
+    title?: string | null;
 };
 export type ClassificationStoreConfigurationKeyUpdate = {
     /** Name of the key */
@@ -922,6 +926,8 @@ export type ClassificationStoreGroupLayout2 = {
     description: string | null;
     /** Description */
     keys: ClassificationStoreCollection2[];
+    /** Title of the group */
+    title?: string | null;
 };
 export type ClassificationStoreGroupLayout = {
     /** Groups */

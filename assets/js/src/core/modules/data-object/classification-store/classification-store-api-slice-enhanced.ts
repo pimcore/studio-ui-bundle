@@ -214,11 +214,11 @@ const api = baseApi.enhanceEndpoints({
               draft.items[idx] = {
                 ...draft.items[idx],
                 name: update.name,
+                title: update.title,
                 ...(update.type !== undefined && update.type !== null ? { type: update.type } : {}),
                 description: update.description
-                // `definition` intentionally excluded: it lives inside definition.title on KeyDetail,
-                // spreading definition: null would wipe the visible title during the optimistic window.
-                // `title` intentionally excluded: it does not exist as a top-level field on KeyDetail.
+                // `definition` intentionally excluded: a null definition means "leave the stored
+                // one alone" to the server, so spreading it would wipe the cached definition.
               }
             }
           }

@@ -71,6 +71,8 @@ jest.mock('@Pimcore/components/panel/panel', () => ({
 
 const groupLayout = { id: 1, name: 'Dimensions', keys: [] } as any
 
+// the shape the object layout delivers for a group that is already active when the object
+// is reopened: a title on the key next to the one its definition carries
 const keyedGroupLayout = {
   ...groupLayout,
   keys: [
