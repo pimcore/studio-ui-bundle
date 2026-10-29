@@ -11,9 +11,9 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { ImportModal } from '@Pimcore/components/import-modal/import-modal'
 import { useMessage } from '@Pimcore/components/message/useMessage'
+import trackError, { GeneralError } from '@Pimcore/modules/app/error-handler'
 import { type BundleCustomReportsDetails } from '@Pimcore/modules/reports/custom-reports-api-slice-enhanced'
 import { getReportImportUrl } from '@Pimcore/modules/reports/reports-editor/utils/config-transfer-urls'
 
@@ -22,7 +22,9 @@ interface IImportButtonProps {
   onImportSuccess: (report: BundleCustomReportsDetails) => Promise<void>
 }
 
-const isJsonFile = (file: File): boolean => file.type === 'application/json' || file.name.endsWith('.json')
+const JSON_FILE_EXTENSION = '.json'
+
+const isJsonFile = (file: File): boolean => file.name.toLowerCase().endsWith(JSON_FILE_EXTENSION)
 
 export const ImportButton = ({ disabled = false, onImportSuccess }: IImportButtonProps): React.JSX.Element => {
   const { t } = useTranslation()
@@ -32,33 +34,41 @@ export const ImportButton = ({ disabled = false, onImportSuccess }: IImportButto
   const handleUploadSuccess = (response: BundleCustomReportsDetails): void => {
     setIsModalOpen(false)
     void messageApi.success(t('reports.editor.import.success'))
-    void onImportSuccess(response)
+    onImportSuccess(response).catch(() => {
+      trackError(new GeneralError('Failed to refresh custom reports after import'))
+    })
+  }
+
+  const handleValidationError = (file: File): void => {
+    if (isJsonFile(file)) {
+      return
+    }
+
+    void messageApi.error(t('reports.editor.import.invalid-file'))
   }
 
   return (
     <>
-      <Tooltip title={ t('import') }>
-        <IconButton
-          data-testid="reports-editor-import-button"
-          disabled={ disabled }
-          icon={ { value: 'upload-import' } }
-          onClick={ () => { setIsModalOpen(true) } }
-          title={ t('import') }
-          type="link"
-        />
-      </Tooltip>
+      <IconButton
+        aria-label={ t('import') }
+        data-testid="reports-editor-import-button"
+        disabled={ disabled }
+        icon={ { value: 'upload-import' } }
+        onClick={ () => { setIsModalOpen(true) } }
+        tooltip={ { title: t('import') } }
+        type="link"
+      />
 
       <ImportModal
-        accept=".json,application/json"
-        acceptMimeTypes={ ['application/json'] }
+        accept={ JSON_FILE_EXTENSION }
         action={ getReportImportUrl() }
         onOpenChange={ setIsModalOpen }
         onUploadSuccess={ handleUploadSuccess }
+        onValidationError={ handleValidationError }
         open={ isModalOpen }
         showSuccessMessage={ false }
         title={ t('reports.editor.import.title') }
         uploadButtonLabel={ t('import') }
-        validateFile={ isJsonFile }
       />
     </>
   )
