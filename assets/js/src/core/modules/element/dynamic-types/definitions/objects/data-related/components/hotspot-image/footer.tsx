@@ -27,6 +27,7 @@ import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { type ImageValue } from '../image/image'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { actionTooltipDelay } from '@Pimcore/components/tooltip/tooltip'
+import { useMenuTriggerTooltip } from '@Pimcore/components/tooltip/use-menu-trigger-tooltip'
 
 interface HotspotImageFooterProps {
   emptyValue?: () => void
@@ -44,6 +45,7 @@ export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.El
   const { t } = useTranslation()
   const { openAsset } = useAssetHelper()
   const messageApi = useMessage()
+  const moreTooltip = useMenuTriggerTooltip({ title: t('more-actions') })
 
   const clearHotspotsMarkers = async (): Promise<void> => {
     props.setValue({
@@ -159,6 +161,7 @@ export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.El
             }
           ]
         } }
+        onOpenChange={ moreTooltip.onMenuOpenChange }
         placement='topLeft'
         trigger={ ['click'] }
       >
@@ -166,7 +169,7 @@ export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.El
           aria-label={ t('more-actions') }
           icon={ { value: 'more' } }
           onClick={ (e) => { e.stopPropagation() } }
-          tooltip={ { title: t('more-actions') } }
+          tooltip={ moreTooltip.tooltip }
         />
       </Dropdown>
     )
