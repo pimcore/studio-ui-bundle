@@ -10,20 +10,20 @@
 
 import React, { useRef } from 'react'
 import type { DefaultCellProps } from '@Pimcore/components/grid/columns/default-cell'
-import { Radio } from 'antd'
-import { type RadioRef } from 'antd/es/radio'
+import { type GetRef, Radio } from 'antd'
 import { useEditMode } from '@Pimcore/components/grid/edit-mode/use-edit-mode'
 import { useStyle } from './radio-cell.styles'
 import cn from 'classnames'
 
 export interface RadioCellConfig {
   align: 'left' | 'center' | 'right'
+  ariaLabel?: string
 }
 
 export const RadioCell = (props: DefaultCellProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { fireOnUpdateCellDataEvent } = useEditMode(props)
-  const radioRef = useRef<RadioRef>(null)
+  const radioRef = useRef<GetRef<typeof Radio>>(null)
   const { column } = props
 
   function saveValue (): void {
@@ -39,8 +39,9 @@ export const RadioCell = (props: DefaultCellProps): React.JSX.Element => {
   function getCellContent (): React.JSX.Element {
     return (
       <Radio
+        aria-label={ config?.ariaLabel }
         checked={ props.getValue() }
-        disabled={ props.column.columnDef.meta?.editable === false }
+        disabled={ props.column.columnDef.meta?.editable !== true }
         onChange={ saveValue }
         ref={ radioRef }
       />
