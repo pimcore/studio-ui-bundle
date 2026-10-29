@@ -9,8 +9,9 @@
  */
 
 /**
- * The store renders the shared empty state while no group is assigned, and hides adding
- * and removing groups when the store is not editable or add/remove is disallowed.
+ * The store renders the shared empty state while no group is assigned, hides adding
+ * and removing groups when the store is not editable or add/remove is disallowed,
+ * and renders the groups in the order the layout configures.
  */
 
 // The `.styles` files pull in antd-style's untranspiled ESM build, which jest does not
@@ -34,6 +35,7 @@ import { ClassificationStoreContent } from './classification-store-content'
 import { type ClassificationStoreProps } from './classification-store'
 
 let mockGroupKeys: string[] = []
+let mockCurrentLayoutData: Array<{ id: number }> = []
 const mockOpenModal = jest.fn()
 const mockItem = jest.fn()
 
@@ -62,7 +64,7 @@ jest.mock('@Pimcore/components/input/input', () => ({ Input: () => null }))
 jest.mock('./provider', () => ({
   useClassificationStore: () => ({
     openModal: mockOpenModal,
-    currentLayoutData: [],
+    currentLayoutData: mockCurrentLayoutData,
     updateCurrentLayoutData: jest.fn()
   })
 }))
@@ -74,7 +76,7 @@ jest.mock('./hooks/use-language-independent-value-permission', () => ({
 }))
 
 jest.mock('./classification-store-item', () => ({
-  ClassificationStoreItem: (props: { disallowDelete?: boolean }) => {
+  ClassificationStoreItem: (props: { disallowDelete?: boolean, groupLayout?: { id: number } }) => {
     mockItem(props)
     return <div data-testid='group' />
   }
@@ -92,6 +94,7 @@ const renderContent = (props: Partial<ClassificationStoreProps> = {}): void => {
 describe('ClassificationStoreContent', () => {
   beforeEach(() => {
     mockGroupKeys = []
+    mockCurrentLayoutData = []
     mockOpenModal.mockClear()
     mockItem.mockClear()
   })
@@ -139,5 +142,14 @@ describe('ClassificationStoreContent', () => {
     expect(screen.getByTestId('group')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'add' })).not.toBeInTheDocument()
     expect(mockItem).toHaveBeenCalledWith(expect.objectContaining({ disallowDelete: true }))
+  })
+
+  it('renders the groups in the order the layout configures, not in the order of their ids', () => {
+    mockGroupKeys = ['3', '7', '11']
+    mockCurrentLayoutData = [{ id: 11 }, { id: 3 }, { id: 7 }]
+
+    renderContent()
+
+    expect(mockItem.mock.calls.map(([props]) => props.groupLayout?.id)).toEqual([11, 3, 7])
   })
 })
