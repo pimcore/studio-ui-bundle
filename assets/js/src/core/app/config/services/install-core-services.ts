@@ -75,6 +75,7 @@ import { DynamicTypeGridCellAssetLink } from '@Pimcore/modules/element/dynamic-t
 import { DynamicTypeGridCellAssetPreview } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/asset-preview/dynamic-type-grid-cell-asset-preview'
 import { DynamicTypeGridCellAsset } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/asset/dynamic-type-grid-cell-asset'
 import { DynamicTypeGridCellCheckbox } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/checkbox/dynamic-type-grid-cell-checkbox'
+import { DynamicTypeGridCellRadio } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/radio/dynamic-type-grid-cell-radio'
 import { DynamicTypeGridCellDataObjectActions } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/data-object-actions/dynamic-type-grid-cell-data-object-actions'
 import { DynamicTypeGridCellDataObjectAdapter } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/data-object-adapter/dynamic-type-grid-cell-data-object-adapter'
 import { DynamicTypeGridCellDataObjectObjectBrick } from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/types/data-object-object-brick/dynamic-type-grid-cell-data-object-adapter'
@@ -516,6 +517,7 @@ export function installCoreServices (container: Container): void {
   container.bind(serviceIds['DynamicTypes/GridCell/Select']).to(DynamicTypeGridCellSelect).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/GridCell/MultiSelect']).to(DynamicTypeGridCellMultiSelect).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/GridCell/Checkbox']).to(DynamicTypeGridCellCheckbox).inSingletonScope()
+  container.bind(serviceIds['DynamicTypes/GridCell/Radio']).to(DynamicTypeGridCellRadio).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/GridCell/Boolean']).to(DynamicTypeGridCellBoolean).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/GridCell/Date']).to(DynamicTypeGridCellDate).inSingletonScope()
   container.bind(serviceIds['DynamicTypes/GridCell/Time']).to(DynamicTypeGridCellTime).inSingletonScope()

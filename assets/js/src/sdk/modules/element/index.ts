@@ -78,6 +78,7 @@ export * from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/comp
 export * from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/multi-select/multi-select-cell'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/number/number-cell'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/open-element/open-element-cell'
+export * from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/radio/radio-cell'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/select/select-cell'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/text/text-cell'
 export * from '@Pimcore/modules/element/dynamic-types/definitions/grid-cell/components/textarea/textarea-cell'
