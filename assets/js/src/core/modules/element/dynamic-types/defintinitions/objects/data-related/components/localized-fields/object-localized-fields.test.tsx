@@ -58,10 +58,11 @@ jest.mock('@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edi
 // wrapper is rendered at all. Only its leaf renderers and the icon/flex barrels
 // are replaced, so the assertions below exercise production logic, not a mock.
 jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/views/card-view', () => ({
-  CardView: ({ children, title, bordered }: any) => (
+  CardView: ({ children, title, bordered, style }: any) => (
     <div
       data-bordered={ bordered === true ? 'true' : 'false' }
       data-testid='card-view'
+      style={ style }
     >
       <span data-testid='card-title'>{title}</span>
       {children}
@@ -70,8 +71,11 @@ jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/layout-rel
 }))
 
 jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/layout-related/views/accordion-view', () => ({
-  AccordionView: ({ children, title }: any) => (
-    <div data-testid='accordion-view'>
+  AccordionView: ({ children, title, style }: any) => (
+    <div
+      data-testid='accordion-view'
+      style={ style }
+    >
       <span data-testid='card-title'>{title}</span>
       {children}
     </div>
@@ -137,9 +141,8 @@ describe('ObjectLocalizedFields', () => {
 
   const defaultChildren = [child('firstname'), child('lastname')]
 
-  // The sizing may legitimately land on the Space, on a wrapper around it, or on
-  // both — the class definition only promises that the container ends up that
-  // size, so the whole rendered tree is searched instead of one fixed element.
+  // The sizing may land on the Space or on a wrapper around it, so the whole
+  // rendered tree is searched instead of one fixed element.
   const sizedElements = (container: HTMLElement, width: string, height: string): HTMLElement[] =>
     Array.from(container.querySelectorAll<HTMLElement>('*'))
       .filter((element) => element.style.width === width && element.style.height === height)
@@ -191,11 +194,9 @@ describe('ObjectLocalizedFields', () => {
     expect(screen.queryByTestId('card-view')).toBeNull()
   })
 
-  // Localizedfields::$width and ::$height are persisted by the class editor and
-  // reach the renderer intact, so the container has to be sized by them — the
-  // sibling FieldContainer already applies its own the same way. Neither title
-  // nor border is set here, which is the common case: the sizing has to survive
-  // BaseView rendering the children bare.
+  // Persisted by the class editor and reaching the renderer intact, so the
+  // container has to be sized by them. Neither title nor border is set here,
+  // the common case: the sizing has to survive BaseView rendering children bare.
   it('applies the configured width and height to the container', () => {
     const container = renderLocalizedFields({ children: defaultChildren, width: 400, height: 200 })
 
@@ -204,9 +205,42 @@ describe('ObjectLocalizedFields', () => {
     expect(screen.queryByText('lastname')).not.toBeNull()
   })
 
-  // Localizedfields::$layout offers only '' and 'fit' in the class editor. 'fit'
-  // is the legacy ExtJS layout whose children fill the container, which the
-  // sibling FieldContainer already expresses as flex-1 items.
+  // BaseView wraps the children in a card once a title or border is set, and
+  // that card is the container being described; sizing only the inner stack
+  // would leave the visible box at its parent's width.
+  it.each([
+    ['a title', { title: 'Address' }],
+    ['a border', { border: true }]
+  ])('sizes the outer container when %s is set', (_name, wrapper) => {
+    renderLocalizedFields({ children: defaultChildren, width: 400, height: 200, ...wrapper })
+
+    const card = screen.getByTestId('card-view')
+
+    expect(card.style.width).toBe('400px')
+    expect(card.style.height).toBe('200px')
+  })
+
+  // Sizing both would compound a percentage width and stack the card's header
+  // and padding on top of a fixed height, so exactly one element carries them.
+  it('does not also size the inner stack when the card is sized', () => {
+    renderLocalizedFields({ children: defaultChildren, title: 'Address', width: 400, height: 200 })
+
+    const inner = screen.getByTestId('children')
+
+    expect(inner.style.width).toBe('')
+    expect(inner.style.height).toBe('')
+  })
+
+  it('still sizes the inner stack when no card is rendered', () => {
+    renderLocalizedFields({ children: defaultChildren, width: 400, height: 200 })
+
+    expect(screen.queryByTestId('card-view')).toBeNull()
+    expect(screen.getByTestId('children').style.width).toBe('400px')
+  })
+
+  // Localizedfields::$layout offers only '' and 'fit'. 'fit' is the legacy ExtJS
+  // layout whose children fill the container, which the sibling FieldContainer
+  // already expresses as flex-1 items.
   it('stretches the children to fill the container when the layout is fit', () => {
     renderLocalizedFields({ children: defaultChildren, layout: 'fit', height: 300 })
 

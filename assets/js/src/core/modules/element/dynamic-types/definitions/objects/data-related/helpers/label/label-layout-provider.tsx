@@ -70,5 +70,14 @@ export const labelLayoutItemProps = (layout: LabelLayout | null): LabelLayoutIte
     props.labelCol = { flex: `0 0 ${layout.labelWidth}px` }
   }
 
+  // The object editor's own Form is layout='vertical' (root-component.tsx), and
+  // antd ignores labelCol and labelAlign entirely in a vertical layout — the
+  // label owns its own row. Anything configured above therefore has to opt the
+  // item back into a horizontal layout, or it would be silently inert, which is
+  // the very bug this provider exists to fix.
+  if (Object.keys(props).length > 0) {
+    props.layout = 'horizontal'
+  }
+
   return props
 }

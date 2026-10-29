@@ -57,6 +57,25 @@ export const ObjectLocalizedFields = ({ children, noteditable, className, title,
   // configured container must keep antd's own label defaults.
   const hasLabelLayout = (typeof labelWidth === 'number' && labelWidth > 0) || isNonEmptyString(labelAlign)
 
+  // BaseView wraps the children in a card once a title or a border is
+  // configured, and that card — not the stack inside it — is the container the
+  // class definition is describing. The same condition BaseView itself uses.
+  const isPadded = border === true || isNonEmptyString(title)
+
+  // Exactly one element carries the dimensions. Applying them to both would
+  // compound a percentage width, and would give the inner stack the card's full
+  // height on top of the card's own header and padding.
+  const containerStyle = { height: cssHeight, width: cssWidth }
+  const viewStyle = isPadded ? containerStyle : undefined
+  // Inside a sized card the stack fills what the card leaves it, which only
+  // matters for the fit layout — its flex children need a height to divide.
+  const innerStyle = isPadded
+    ? (isFit ? { height: '100%' } : undefined)
+    : containerStyle
+
+  // The utility class only has to go when this element is the sized one.
+  const innerClassName = isNonEmptyString(cssWidth) && !isPadded ? undefined : 'w-full'
+
   useEffect(() => {
     if (!hasLocalizedFields) setHasLocalizedFields(true)
   }, [])
@@ -73,9 +92,9 @@ export const ObjectLocalizedFields = ({ children, noteditable, className, title,
   const container = isFit
     ? (
       <Flex
-        className={ isNonEmptyString(cssWidth) ? undefined : 'w-full' }
+        className={ innerClassName }
         gap={ { x: 'extra-small', y: 0 } }
-        style={ { height: cssHeight, width: cssWidth } }
+        style={ innerStyle }
         vertical
       >
         {children?.map((child, index) => (
@@ -90,10 +109,10 @@ export const ObjectLocalizedFields = ({ children, noteditable, className, title,
       )
     : (
       <Space
-        className={ isNonEmptyString(cssWidth) ? undefined : 'w-full' }
+        className={ innerClassName }
         direction='vertical'
         size='small'
-        style={ { height: cssHeight, width: cssWidth } }
+        style={ innerStyle }
       >
         {children?.map(renderChild)}
       </Space>
@@ -118,6 +137,7 @@ export const ObjectLocalizedFields = ({ children, noteditable, className, title,
               BaseView renders the children bare when neither is set. */}
           <BaseView
             border={ border }
+            style={ viewStyle }
             theme='default'
             title={ title }
           >
