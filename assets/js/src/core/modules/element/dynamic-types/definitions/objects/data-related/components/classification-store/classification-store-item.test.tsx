@@ -10,7 +10,7 @@
 
 /**
  * A group offers its delete action unless deleting is disallowed by the store,
- * and labels its keys by the title configured for them.
+ * and labels its keys by the title the layout carries for them.
  */
 
 // The `.styles` files pull in antd-style's untranspiled ESM build, which jest does not
@@ -72,7 +72,9 @@ jest.mock('@Pimcore/components/panel/panel', () => ({
 const groupLayout = { id: 1, name: 'Dimensions', keys: [] } as any
 
 // the shape the object layout delivers for a group that is already active when the object
-// is reopened: a title on the key next to the one its definition carries
+// is reopened: a title on the key next to the one its definition carries. The two differ here
+// only to pin down which one the component reads — on this path the backend still fills the
+// key title from the definition, so today they arrive equal.
 const keyedGroupLayout = {
   ...groupLayout,
   keys: [

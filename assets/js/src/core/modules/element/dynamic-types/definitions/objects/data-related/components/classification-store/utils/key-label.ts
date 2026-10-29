@@ -15,7 +15,7 @@ export interface KeyLabelKey {
   title?: string | null
 }
 
-/** Label of a classification store key: its configured title, or its name when no title is set. */
+/** Label of a classification store key: the title the layout carries for it, or its name when none is set. */
 export const getKeyLabel = (key: KeyLabelKey): string => {
   return isNonEmptyString(key.title) ? key.title : key.name
 }
