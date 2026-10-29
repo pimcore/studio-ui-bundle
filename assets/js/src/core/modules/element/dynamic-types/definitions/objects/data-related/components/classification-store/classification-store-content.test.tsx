@@ -37,7 +37,6 @@ import { ClassificationStoreContent } from './classification-store-content'
 import { type ClassificationStoreProps } from './classification-store'
 
 let mockGroupKeys: string[] = []
-let mockCurrentLayoutData: Array<{ id: number }> = []
 const mockOpenModal = jest.fn()
 const mockItem = jest.fn()
 const mockUpdateCurrentLayoutData = jest.fn()
@@ -67,7 +66,7 @@ jest.mock('@Pimcore/components/input/input', () => ({ Input: () => null }))
 jest.mock('./provider', () => ({
   useClassificationStore: () => ({
     openModal: mockOpenModal,
-    currentLayoutData: mockCurrentLayoutData,
+    currentLayoutData: [],
     updateCurrentLayoutData: mockUpdateCurrentLayoutData
   })
 }))
@@ -97,7 +96,6 @@ const renderContent = (props: Partial<ClassificationStoreProps> = {}): void => {
 describe('ClassificationStoreContent', () => {
   beforeEach(() => {
     mockGroupKeys = []
-    mockCurrentLayoutData = []
     mockOpenModal.mockClear()
     mockItem.mockClear()
     mockUpdateCurrentLayoutData.mockClear()
@@ -146,37 +144,6 @@ describe('ClassificationStoreContent', () => {
     expect(screen.getByTestId('group')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'add' })).not.toBeInTheDocument()
     expect(mockItem).toHaveBeenCalledWith(expect.objectContaining({ disallowDelete: true }))
-  })
-
-  it('renders the groups in the order the layout configures, not in the order of their ids', () => {
-    mockGroupKeys = ['3', '7', '11']
-    mockCurrentLayoutData = [{ id: 11 }, { id: 3 }, { id: 7 }]
-
-    renderContent()
-
-    expect(mockItem.mock.calls.map(([props]) => props.groupLayout?.id)).toEqual([11, 3, 7])
-  })
-
-  // Reopening an object delivers its already active groups as a map keyed by group id, and
-  // JavaScript hands integer-like keys back in ascending numeric order — writing the map out
-  // of order below changes nothing. The layout installed for a reopened object therefore runs
-  // in ascending group id, and the panels with it: the sort above can only order what the
-  // layout carries, and this layout carries no order. Restoring a configured one needs the
-  // object layout payload to carry it, as an ordered list or explicit group positions.
-  it('falls back to ascending group id for the layout of a reopened object', () => {
-    mockGroupKeys = ['3', '7', '11']
-
-    renderContent({
-      activeGroupDefinitions: {
-        11: { id: 11, name: 'Dimensions', keys: [] },
-        3: { id: 3, name: 'Material', keys: [] },
-        7: { id: 7, name: 'Packaging', keys: [] }
-      }
-    } as unknown as Partial<ClassificationStoreProps>)
-
-    const installedLayout = mockUpdateCurrentLayoutData.mock.calls[0][0] as Array<{ id: number }>
-
-    expect(installedLayout.map((group) => group.id)).toEqual([3, 7, 11])
   })
 
   // reopening an object delivers its already active groups as a map keyed by group id,

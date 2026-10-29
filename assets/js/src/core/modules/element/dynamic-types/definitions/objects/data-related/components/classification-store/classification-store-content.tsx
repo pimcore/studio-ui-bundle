@@ -27,7 +27,6 @@ import { Switch, type SwitchProps } from '@Pimcore/components/switch/switch'
 import { Text } from '@Pimcore/components/text/text'
 import { IconTextButton } from '@Pimcore/components/icon-text-button/icon-text-button'
 import { useClassificationStore } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/classification-store/provider'
-import { sortGroupKeys } from './utils/group-order'
 import { type ClassificationStoreGroupLayout2 } from '@Pimcore/modules/data-object/classification-store/classification-store-api-slice.gen'
 import {
   RestoreInheritanceLocaleContext
@@ -69,8 +68,6 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
   const isLocalizable = props.localized ?? false
   const isAddRemoveDisallowed = props.noteditable === true || props.disallowAddRemove === true
   const hasGroups = !isEmpty(groupKeys)
-  // the keys of the store value carry no order of their own, the layout does
-  const orderedGroupKeys = useMemo(() => sortGroupKeys(groupKeys, currentLayoutData), [groupKeys, currentLayoutData])
   // A non localized store only ever has the language independent column, so no language
   // permission applies to it.
   const allowLanguageIndependentValue = !isLocalizable || isLanguageIndependentValuePermitted
@@ -210,7 +207,7 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
             direction='vertical'
             size='small'
           >
-            {orderedGroupKeys.map((key) => {
+            {groupKeys.map((key) => {
               return (
                 <Form.Group
                   key={ `${key}` }
@@ -234,7 +231,7 @@ export const ClassificationStoreContent = (props: ClassificationStoreProps): Rea
         {hiddenFormItems}
       </BaseView>
       ), [
-    orderedGroupKeys,
+    groupKeys,
     activeGroups,
     groupCollectionMapping,
     localizationGroup,
