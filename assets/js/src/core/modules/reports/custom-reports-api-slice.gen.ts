@@ -503,6 +503,8 @@ export const {
     useCustomReportsConfigCloneMutation,
     useCustomReportsColumnConfigListQuery,
     useCustomReportsConfigUpdateMutation,
+    useCustomReportsConfigExportQuery,
+    useCustomReportsConfigImportMutation,
     useCustomReportsConfigDeleteMutation,
     useCustomReportsReportQuery,
     useCustomReportsConfigGetTreeQuery,

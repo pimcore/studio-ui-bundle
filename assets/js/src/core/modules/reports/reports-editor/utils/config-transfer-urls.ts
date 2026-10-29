@@ -10,17 +10,8 @@
 
 import { getPrefix } from '@Pimcore/app/api/pimcore/route'
 
-export const getReportExportUrl = (reportName: string): string =>
-  `${getPrefix()}/bundle/custom-reports/config/${encodeURIComponent(reportName)}/export`
-
 export const getReportImportUrl = (): string =>
   `${getPrefix()}/bundle/custom-reports/config/import`
 
-export const downloadReportExport = (reportName: string): void => {
-  const link = document.createElement('a')
-  link.href = getReportExportUrl(reportName)
-  link.style.display = 'none'
-  document.body.appendChild(link)
-  link.click()
-  link.remove()
-}
+export const getReportExportFileName = (reportName: string): string =>
+  `custom_report_${reportName}_export.json`

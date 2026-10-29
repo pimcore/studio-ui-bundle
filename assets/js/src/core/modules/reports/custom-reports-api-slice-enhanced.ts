@@ -23,23 +23,13 @@ const api = baseApi.enhanceEndpoints({
         }
       }),
       providesTags: () => []
-    },
-    customReportsConfigImport: {
-      query: (args) => {
-        const formData = new FormData()
-        formData.append('file', args.body.file)
-
-        return {
-          url: '/pimcore-studio/api/bundle/custom-reports/config/import',
-          method: 'POST',
-          body: formData
-        }
-      }
     }
   }
 })
 
 export type * from './custom-reports-api-slice.gen'
+
+export { api }
 
 export const {
   useCustomReportsListDrillDownOptionsQuery,
@@ -49,8 +39,6 @@ export const {
   useCustomReportsColumnConfigListQuery,
   useCustomReportsConfigUpdateMutation,
   useCustomReportsConfigDeleteMutation,
-  useCustomReportsConfigExportQuery,
-  useCustomReportsConfigImportMutation,
   useCustomReportsReportQuery,
   useCustomReportsConfigGetTreeQuery,
   useCustomReportExportCsvMutation,

@@ -28,7 +28,8 @@ import { isEmptyValue } from '@Pimcore/utils/type-utils'
 import { loadReportsMenuItems } from '@Pimcore/modules/reports/utils/reports-loader'
 import { isFolder } from '@Pimcore/modules/reports/reports-editor/components/helpers'
 import { TreeElement, type TreeDataItem } from '@Pimcore/components/tree-element/tree-element'
-import { downloadReportExport } from '@Pimcore/modules/reports/reports-editor/utils/config-transfer-urls'
+import { useAppDispatch } from '@Pimcore/app/store'
+import { exportReportConfig } from '@Pimcore/modules/reports/reports-editor/utils/export-report-config'
 
 interface IReportsSidebarProps {
   isLoading: boolean
@@ -41,6 +42,7 @@ interface IReportsSidebarProps {
 
 export const ReportsSidebar = ({ isLoading, refetch, isFetching, reportsList, handleOpenReport, handleCloseReport }: IReportsSidebarProps): React.JSX.Element => {
   const [reportsListData, setReportsListData] = useState<CustomReportsConfigGetTreeApiResponse['items']>([])
+  const dispatch = useAppDispatch()
 
   const flattenItems = (items: CustomReportsConfigGetTreeApiResponse['items']): BundleCustomReportsConfigurationTreeNode[] =>
     items.flatMap(item => isFolder(item) ? item.children : [item])
@@ -109,7 +111,7 @@ export const ReportsSidebar = ({ isLoading, refetch, isFetching, reportsList, ha
   }
 
   const handleReportExport = (report: BundleCustomReportsConfigurationTreeNode): void => {
-    downloadReportExport(report.id)
+    void exportReportConfig(dispatch, report.id)
   }
 
   const handleReportDelete = (report: BundleCustomReportsConfigurationTreeNode): void => {
