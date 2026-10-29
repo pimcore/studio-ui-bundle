@@ -94,7 +94,9 @@ export const FromTheAreablockToolstrip = {
                   name={ name }
                   onInsert={ (position) => { console.log(`insert ${name} ${position}`) } }
                 />
-              )
+              ),
+              // The row itself inserts below, as it does in the toolbar.
+              onClick: () => { console.log(`row click: insert ${name} below`) }
             }))
           } }
           open

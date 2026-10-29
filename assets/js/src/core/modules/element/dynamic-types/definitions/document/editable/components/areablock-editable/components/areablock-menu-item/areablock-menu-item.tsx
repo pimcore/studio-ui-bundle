@@ -64,6 +64,16 @@ export const AreablockMenuItem = ({ name, tooltipTitle, onInsert }: AreablockMen
     onInsert?.(position)
   }
 
+  // Enter and Space activate the button natively, and the resulting click is stopped
+  // above. The keydown itself still travels to the antd menu item, which would run
+  // the row's insert below and close the menu, so stop it here without preventing
+  // the activation.
+  const handleActivationKey = (event: React.KeyboardEvent): void => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.stopPropagation()
+    }
+  }
+
   return (
     <span className={ styles.item }>
       <Tooltip
@@ -81,6 +91,7 @@ export const AreablockMenuItem = ({ name, tooltipTitle, onInsert }: AreablockMen
               className={ styles.positionButton }
               icon={ { value: 'insert-above', options: { width: 16, height: 16 } } }
               onClick={ handleInsert('above') }
+              onKeyDown={ handleActivationKey }
               size="small"
               tooltip={ { title: t('areablock.insert-above'), zIndex: areablockMenuTooltipZIndex } }
             />
@@ -90,6 +101,7 @@ export const AreablockMenuItem = ({ name, tooltipTitle, onInsert }: AreablockMen
               className={ styles.positionButton }
               icon={ { value: 'insert-below', options: { width: 16, height: 16 } } }
               onClick={ handleInsert('below') }
+              onKeyDown={ handleActivationKey }
               size="small"
               tooltip={ { title: t('areablock.insert-below'), zIndex: areablockMenuTooltipZIndex } }
             />
