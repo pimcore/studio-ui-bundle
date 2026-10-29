@@ -55,6 +55,7 @@ export const RenderletContent = ({
     ? {
         id: value.id!,
         type: value.type!,
+        subtype: value.subtype,
         controller: config.controller,
         template: config?.template,
         ...omit(config, ['controller', 'template', 'className', 'height', 'width', 'reload', 'title', 'type', 'class']),
