@@ -83,7 +83,31 @@ jest.mock('@Pimcore/components/icon/icon', () => ({
 }))
 
 jest.mock('@Pimcore/components/flex/flex', () => ({
-  Flex: ({ children }: any) => <div>{children}</div>
+  Flex: ({ children, className, flex, style, vertical }: any) => (
+    <div
+      className={ className }
+      data-flex={ flex ?? '' }
+      data-testid={ flex === undefined ? 'flex-container' : 'flex-item' }
+      data-vertical={ vertical === true ? 'true' : 'false' }
+      style={ style }
+    >
+      {children}
+    </div>
+  )
+}))
+
+// The provider itself is covered by label-layout-provider.test.tsx; here it only
+// has to show which values the container hands it.
+jest.mock('@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/helpers/label/label-layout-provider', () => ({
+  LabelLayoutProvider: ({ children, labelAlign, labelWidth }: any) => (
+    <div
+      data-label-align={ labelAlign ?? '' }
+      data-label-width={ labelWidth ?? '' }
+      data-testid='label-layout'
+    >
+      {children}
+    </div>
+  )
 }))
 
 // Localizedfields::$width and ::$height are offered in the class editor and are
@@ -92,6 +116,9 @@ jest.mock('@Pimcore/components/flex/flex', () => ({
 interface ContainerSettingsProps {
   width?: number | string | null
   height?: number | string | null
+  layout?: string | null
+  labelWidth?: number | null
+  labelAlign?: string | null
 }
 
 describe('ObjectLocalizedFields', () => {
@@ -175,5 +202,64 @@ describe('ObjectLocalizedFields', () => {
     expect(sizedElements(container, '400px', '200px').length).toBeGreaterThan(0)
     expect(screen.queryByText('firstname')).not.toBeNull()
     expect(screen.queryByText('lastname')).not.toBeNull()
+  })
+
+  // Localizedfields::$layout offers only '' and 'fit' in the class editor. 'fit'
+  // is the legacy ExtJS layout whose children fill the container, which the
+  // sibling FieldContainer already expresses as flex-1 items.
+  it('stretches the children to fill the container when the layout is fit', () => {
+    renderLocalizedFields({ children: defaultChildren, layout: 'fit', height: 300 })
+
+    const items = screen.getAllByTestId('flex-item')
+
+    expect(items).toHaveLength(2)
+    items.forEach((item) => {
+      expect(item.dataset.flex).toBe('1')
+    })
+    expect(screen.getByTestId('flex-container').dataset.vertical).toBe('true')
+  })
+
+  it('sizes the fit container with the configured width and height', () => {
+    const container = renderLocalizedFields({ children: defaultChildren, layout: 'fit', width: 400, height: 200 })
+
+    expect(sizedElements(container, '400px', '200px').length).toBeGreaterThan(0)
+  })
+
+  // An unset or empty layout keeps the stacked Space rendering that every
+  // existing class definition already gets.
+  it.each([
+    ['unset', undefined],
+    ['empty', '']
+  ])('keeps the stacked rendering when the layout is %s', (_name, layout) => {
+    renderLocalizedFields({ children: defaultChildren, layout })
+
+    expect(screen.queryByTestId('flex-item')).toBeNull()
+    expect(screen.queryByTestId('children')).not.toBeNull()
+  })
+
+  // Localizedfields::$labelWidth and ::$labelAlign are container settings that
+  // have to reach the fields inside it, which is what the provider is for.
+  it('publishes the configured label layout to its children', () => {
+    renderLocalizedFields({ children: defaultChildren, labelWidth: 150, labelAlign: 'left' })
+
+    const provider = screen.getByTestId('label-layout')
+
+    expect(provider.dataset.labelWidth).toBe('150')
+    expect(provider.dataset.labelAlign).toBe('left')
+    expect(screen.queryByText('firstname')).not.toBeNull()
+  })
+
+  it('publishes a top alignment as well', () => {
+    renderLocalizedFields({ children: defaultChildren, labelAlign: 'top' })
+
+    expect(screen.getByTestId('label-layout').dataset.labelAlign).toBe('top')
+  })
+
+  // Nothing configured must not change how a field's label is rendered, so the
+  // container does not wrap its children in a provider at all.
+  it('does not publish a label layout when neither setting is configured', () => {
+    renderLocalizedFields({ children: defaultChildren })
+
+    expect(screen.queryByTestId('label-layout')).toBeNull()
   })
 })

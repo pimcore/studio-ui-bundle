@@ -1336,6 +1336,7 @@ info: Informacja
 success: Sukces
 no-value-set: Nie ustawiono wartości
 set-to-null: Pusty (ustaw na null)
+setting-without-effect-in-studio: "Brak efektu w Studio: wyświetlany jest jeden język naraz, wybierany globalnym selektorem. Ustawienie pozostaje, ponieważ ta sama definicja klasy nadal obsługuje starszy interfejs administratora."
 remove: Usuń
 delete: Usuń
 clone: Klonuj
