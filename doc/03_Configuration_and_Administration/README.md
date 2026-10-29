@@ -12,3 +12,4 @@ This section covers configuration, user management, and UI customization options
 - [Users and Roles](./02_Users_and_Roles/README.md)
 - [Perspectives](./03_Perspectives/README.md)
 - [Grid Advanced Columns](./04_Grid_Advanced_Columns/README.md)
+- [Relation Visible Fields](./05_Relation_Visible_Fields.md)
