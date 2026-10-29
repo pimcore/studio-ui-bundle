@@ -13,12 +13,18 @@ import { render, screen } from '@testing-library/react'
 import { PieChart } from './pie-chart'
 import type { IChartProps } from '@Pimcore/modules/reports/reports-view/components/report-chart/types'
 
+interface IMockPieProps {
+  annotations: Array<{ style: { text: string } }>
+  tooltip: { items: Array<(datum: { type: string, value: number }) => { value: string }> }
+  data: Array<{ type: string, value: number }>
+}
+
 jest.mock('@ant-design/plots', () => ({
-  Pie: (props: any) => (
+  Pie: (props: IMockPieProps) => (
     <div data-testid="pie">
       <span data-testid="pie-total">{props.annotations[0].style.text}</span>
-      <span data-testid="pie-tooltip">{props.tooltip.items[0]({ type: 'a', value: 3 }).value}</span>
-      <span data-testid="pie-values">{JSON.stringify(props.data.map((item: any) => item.value))}</span>
+      <span data-testid="pie-tooltip">{props.tooltip.items[0](props.data[0]).value}</span>
+      <span data-testid="pie-values">{JSON.stringify(props.data.map(item => item.value))}</span>
     </div>
   )
 }))
@@ -57,6 +63,15 @@ describe('pie chart', () => {
 
     expect(screen.getByTestId('pie-total')).toHaveTextContent(/^9$/)
     expect(screen.getByTestId('pie-values')).toHaveTextContent('[6,2,1]')
+  })
+
+  it('does not show float addition noise for decimal values', () => {
+    renderPie([
+      { type: 'a', cnt: '10.10' },
+      { type: 'b', cnt: '20.20' }
+    ])
+
+    expect(screen.getByTestId('pie-total')).toHaveTextContent(/^30\.3$/)
   })
 
   it('keeps the total for numeric values', () => {
