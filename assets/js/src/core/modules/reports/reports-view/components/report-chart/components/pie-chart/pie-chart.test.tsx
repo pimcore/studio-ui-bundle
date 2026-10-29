@@ -99,6 +99,18 @@ describe('pie chart', () => {
     expect(screen.getByTestId('pie-tooltip')).toHaveTextContent('3 (75%)')
   })
 
+  it('leaves the report data from the API untouched', () => {
+    const chartData = [
+      { type: 'a', cnt: '3' },
+      { type: 'b', cnt: '1' }
+    ]
+    const before = JSON.parse(JSON.stringify(chartData))
+
+    renderPie(chartData)
+
+    expect(chartData).toEqual(before)
+  })
+
   it('passes numeric values to the legend', () => {
     renderPie([{ type: 'a', cnt: '3' }])
 
