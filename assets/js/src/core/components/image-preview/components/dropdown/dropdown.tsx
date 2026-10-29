@@ -12,7 +12,6 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, type DropdownProps } from '@Pimcore/components/dropdown/dropdown'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
-import { useMenuTriggerTooltip } from '@Pimcore/components/tooltip/use-menu-trigger-tooltip'
 import { useStyle } from './dropdown.styles'
 
 export interface ImagePreviewDropdownProps {
@@ -22,7 +21,6 @@ export interface ImagePreviewDropdownProps {
 export const ImagePreviewDropdown = (props: ImagePreviewDropdownProps): React.JSX.Element => {
   const { styles } = useStyle()
   const { t } = useTranslation()
-  const moreTooltip = useMenuTriggerTooltip({ title: t('more-actions') })
 
   if (props.dropdownItems === undefined || props.dropdownItems.length === 0) {
     return <></>
@@ -33,7 +31,6 @@ export const ImagePreviewDropdown = (props: ImagePreviewDropdownProps): React.JS
       menu={ {
         items: props.dropdownItems
       } }
-      onOpenChange={ moreTooltip.onMenuOpenChange }
       placement='bottomLeft'
       trigger={ ['click'] }
     >
@@ -45,7 +42,7 @@ export const ImagePreviewDropdown = (props: ImagePreviewDropdownProps): React.JS
           e.stopPropagation()
           e.preventDefault()
         } }
-        tooltip={ moreTooltip.tooltip }
+        tooltip={ { title: t('more-actions') } }
         type="default"
       />
     </Dropdown>

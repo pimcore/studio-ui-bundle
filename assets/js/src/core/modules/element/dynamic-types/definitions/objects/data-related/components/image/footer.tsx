@@ -21,7 +21,6 @@ import { elementTypes } from '@Pimcore/types/enums/element/element-type'
 import { Dropdown } from '@Pimcore/components/dropdown/dropdown'
 import { Icon } from '@Pimcore/components/icon/icon'
 import { actionTooltipDelay } from '@Pimcore/components/tooltip/tooltip'
-import { useMenuTriggerTooltip } from '@Pimcore/components/tooltip/use-menu-trigger-tooltip'
 
 export interface ImageValue {
   type: 'asset'
@@ -41,7 +40,6 @@ interface ImageFooterProps {
 export const ImageFooter = (props: ImageFooterProps): React.JSX.Element => {
   const { t } = useTranslation()
   const { openAsset } = useAssetHelper()
-  const moreTooltip = useMenuTriggerTooltip({ title: t('more-actions') })
 
   const buttons: ReactElement[] = [
     <Tooltip
@@ -124,7 +122,6 @@ export const ImageFooter = (props: ImageFooterProps): React.JSX.Element => {
               }
             ]
           } }
-          onOpenChange={ moreTooltip.onMenuOpenChange }
           placement='topLeft'
           trigger={ ['click'] }
         >
@@ -132,7 +129,7 @@ export const ImageFooter = (props: ImageFooterProps): React.JSX.Element => {
             aria-label={ t('more-actions') }
             icon={ { value: 'more' } }
             onClick={ (e) => { e.stopPropagation() } }
-            tooltip={ moreTooltip.tooltip }
+            tooltip={ { title: t('more-actions') } }
           />
         </Dropdown>
       )

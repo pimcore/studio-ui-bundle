@@ -9,8 +9,7 @@
  */
 
 import React from 'react'
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-import { closeMenuActions, closeMenuAndCheckTooltipShown } from '@test-utils/menu-trigger-tooltip'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { ImageFooter } from './footer'
 
 jest.mock('react-i18next', () => ({
@@ -53,7 +52,7 @@ jest.mock('@Pimcore/modules/element/element-selector/provider/element-selector/e
 }))
 
 describe('ImageFooter', () => {
-  const openMenuAfterTooltip = async (): Promise<HTMLElement> => {
+  it('shows a tooltip on the more button and still opens its menu on click', async () => {
     render(
       <ImageFooter
         onSearch={ jest.fn() }
@@ -70,22 +69,5 @@ describe('ImageFooter', () => {
 
     fireEvent.click(button)
     expect(await screen.findByText('upload')).toBeInTheDocument()
-    await waitFor(() => { expect(screen.queryByRole('tooltip')).toBeNull() })
-
-    return button
-  }
-
-  it('shows a tooltip on the more button, opens its menu and hides the tooltip while the menu is open', async () => {
-    await openMenuAfterTooltip()
-  })
-
-  it.each(closeMenuActions)('keeps the tooltip hidden after closing the menu by %s until the pointer enters again', async (_, closeMenu) => {
-    const button = await openMenuAfterTooltip()
-
-    expect(await closeMenuAndCheckTooltipShown(button, 'upload', closeMenu)).toBe(false)
-
-    fireEvent.mouseLeave(button)
-    fireEvent.mouseEnter(button)
-    expect(await screen.findByRole('tooltip')).toHaveTextContent('more-actions')
   })
 })
