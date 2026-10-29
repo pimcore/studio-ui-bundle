@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+import { isUndefined } from 'lodash'
 import { AbstractDownloadJob } from '../abstract-download-job'
 import { downloadFromUrlWithCheck } from '@Pimcore/utils/files'
 import { type JobButtonCustomizationContext } from '@Pimcore/modules/execution-engine/message-handlers/message-bus-job/message-bus-job-notification'
@@ -53,7 +54,7 @@ function customizeButtons (): CustomizedButtons {
 
   customizer(context)
 
-  if (capturedAction === undefined) {
+  if (isUndefined(capturedAction)) {
     throw new Error('Expected the download button to be added as a success button')
   }
 
