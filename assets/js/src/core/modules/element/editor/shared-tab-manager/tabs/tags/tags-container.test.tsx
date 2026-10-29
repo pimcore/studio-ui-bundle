@@ -24,6 +24,10 @@ jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
   keyframes: jest.fn()
 }))
 
+jest.mock('@Pimcore/components/icon/icon', () => ({
+  Icon: () => <span />
+}))
+
 jest.mock('@Pimcore/components/split-layout/split-layout', () => ({
   SplitLayout: ({ rightItem }: { rightItem: { children: React.ReactNode } }) => <div>{rightItem.children}</div>
 }))
@@ -61,13 +65,22 @@ jest.mock('./tags-api-slice-enhanced', () => ({
 }))
 
 describe('TagsTabContainer', () => {
+  afterEach(() => {
+    jest.restoreAllMocks()
+  })
+
   it('shows a tooltip on the more button next to apply to children and still opens its menu', async () => {
+    const consoleError = jest.spyOn(console, 'error')
+
     render(<TagsTabContainer />)
 
-    const button = screen.getByText('tags.apply-tags-to-children').closest('.ant-space-compact')!.querySelectorAll('button')[1]
+    const button = screen.getByRole('button', { name: 'more-actions' })
+
+    expect(button).toBeEnabled()
 
     fireEvent.mouseEnter(button)
     expect(await screen.findByRole('tooltip')).toHaveTextContent('more-actions')
     expect(await screen.findByText('tags.remove-and-apply-tags-to-children')).toBeInTheDocument()
+    expect(consoleError).not.toHaveBeenCalled()
   })
 })
