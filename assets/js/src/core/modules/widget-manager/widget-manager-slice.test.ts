@@ -15,6 +15,7 @@ import {
   closeWidget,
   initialState,
   openBottomWidget,
+  openMainWidget,
   setActiveWidgetById,
   toggleMainWidgetMaximize,
   updateInnerModel,
@@ -192,6 +193,26 @@ describe('widget-manager-slice maximize of the main area', () => {
 
     expect(maximizedTabset(closed.outerModel)).toBe('main_tabset')
     expect(maximizedTabset(closed.innerModel)).toBe('bike_tabset')
+  })
+
+  it.each([
+    ['a new main tab', openMainWidget({ id: 'truck', type: 'tab', component: 'element', config: {} })],
+    ['an open main tab of the hidden tabset', openMainWidget({ id: 'car', type: 'tab', component: 'element', config: {} })],
+    ['a selected main tab of the hidden tabset', setActiveWidgetById('car')]
+  ])('shows both tab groups but keeps the mode for %s', (_, action) => {
+    const maximized = reducer(createState(splitLayout), toggleMainWidgetMaximize('bike'))
+    const opened = reducer(maximized, action)
+
+    expect(maximizedTabset(opened.innerModel)).toBeUndefined()
+    expect(maximizedTabset(opened.outerModel)).toBe('main_tabset')
+    expect(opened.maximizeRestoreTabIds).toEqual(['tree'])
+  })
+
+  it('keeps the split maximize for a main tab opened in the maximized tabset', () => {
+    const maximized = reducer(createState(splitLayout), toggleMainWidgetMaximize('car'))
+    const opened = reducer(maximized, openMainWidget({ id: 'truck', type: 'tab', component: 'element', config: {} }))
+
+    expect(maximizedTabset(opened.innerModel)).toBe('main_tabset')
   })
 
   it('drops the split maximize when the outer layout is replaced, e.g. by a perspective switch', () => {

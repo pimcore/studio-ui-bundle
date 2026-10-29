@@ -28,12 +28,16 @@ jest.mock('../widget-manager-slice', () => ({
   toggleMainWidgetMaximize: (nodeId: string) => ({ type: 'toggle', payload: nodeId })
 }))
 
+jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
+  createStyles: () => () => ({ styles: new Proxy({}, { get: (_target, name) => String(name) }) })
+}))
+
 jest.mock('./tab-title-outer-container', () => ({
-  TabTitleOuterContainer: () => <span data-testid='title'>car</span>
+  TabTitleOuterContainer: ({ node }: { node: TabNode }) => <span data-testid={ node.getId() }>{node.getId()}</span>
 }))
 
 describe('MainTabTitle', () => {
-  const node = { getId: () => 'car' } as unknown as TabNode
+  const node = { getId: () => 'title' } as unknown as TabNode
 
   beforeEach(() => {
     mockDispatch.mockClear()
@@ -46,7 +50,26 @@ describe('MainTabTitle', () => {
     expect(mockDispatch).not.toHaveBeenCalled()
 
     fireEvent.mouseDown(screen.getByTestId('title'), { button: 0, detail: 2 })
-    expect(mockDispatch).toHaveBeenCalledWith({ type: 'toggle', payload: 'car' })
+    expect(mockDispatch).toHaveBeenCalledWith({ type: 'toggle', payload: 'title' })
+  })
+
+  it.each([
+    ['another tab title', 'car'],
+    ['a close button', 'close']
+  ])('ignores a double-click whose first press hit %s', (_, firstTarget) => {
+    render(
+      <>
+        <MainTabTitle node={ node } />
+        <MainTabTitle node={ { getId: () => 'car' } as unknown as TabNode } />
+        <button data-testid='close'>x</button>
+      </>
+    )
+
+    fireEvent.mouseDown(screen.getByTestId('title'), { button: 0, detail: 1 })
+    fireEvent.mouseDown(screen.getByTestId(firstTarget), { button: 0, detail: 1 })
+    fireEvent.mouseDown(screen.getByTestId('title'), { button: 0, detail: 2 })
+
+    expect(mockDispatch).not.toHaveBeenCalled()
   })
 
   it('ignores a middle-click double-click, which closes tabs', () => {

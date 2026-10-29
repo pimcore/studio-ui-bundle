@@ -19,7 +19,7 @@ import { resolveMainWidgetContext } from './utils/resolve-main-widget-context'
 import { getNextTabId } from './utils/get-next-tab-id'
 import { migrateTab, rebindTab, type ReplaceTabPayload } from './utils/replace-tab'
 import { normalizeInnerModel, restoreCollapsedRows } from './utils/restore-collapsed-rows'
-import { endMaximize, forgetMaximizeIfEnded, isLastMaximizedTab, restoreMaximizeIfMaximized, toggleMaximize } from './utils/maximize-main-widget'
+import { endMaximize, forgetMaximizeIfEnded, isLastMaximizedTab, restoreMaximizeIfMaximized, showMainWidget, toggleMaximize } from './utils/maximize-main-widget'
 import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
 import { type ElementIcon } from '@sdk/components'
 import { type UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
@@ -120,6 +120,7 @@ const slice = createSlice({
         endMaximize(state, model)
         state.outerModel = { ...model.toJson() }
       } else {
+        showMainWidget(model, node)
         state.innerModel = { ...model.toJson() }
         state.mainWidgetContext = resolveMainWidgetContext(model)
       }
@@ -140,7 +141,7 @@ const slice = createSlice({
       if (node !== undefined) {
         model.doAction(Actions.selectTab(node.getId()))
       } else {
-        model.doAction(
+        node = model.doAction(
           Actions.addNode(
             action.payload,
             'main_tabset',
@@ -151,6 +152,7 @@ const slice = createSlice({
         )
       }
 
+      showMainWidget(model, node)
       state.innerModel = { ...model.toJson() }
       state.mainWidgetContext = resolveMainWidgetContext(model)
     },

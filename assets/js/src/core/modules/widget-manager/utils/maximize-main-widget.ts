@@ -11,6 +11,7 @@
 import { Actions, BorderNode, Model, type Node, TabSetNode } from 'flexlayout-react'
 import { isUndefined } from 'lodash'
 import { type WidgetManagerState } from '../widget-manager-slice'
+import { restoreCollapsedRows } from './restore-collapsed-rows'
 
 // tabset of the outer layout that holds the inner layout with the main widgets
 const MAIN_AREA_ID = 'main_tabset'
@@ -40,7 +41,7 @@ const forgetMaximize = (state: WidgetManagerState): void => {
   const innerModel = Model.fromJson(state.innerModel)
 
   if (clearMaximizedTabset(innerModel)) {
-    state.innerModel = { ...innerModel.toJson() }
+    state.innerModel = restoreCollapsedRows(innerModel.toJson())
   }
 
   state.maximizeRestoreTabIds = undefined
@@ -114,6 +115,15 @@ export const endMaximize = (state: WidgetManagerState, outerModel: Model): void 
 export const forgetMaximizeIfEnded = (state: WidgetManagerState): void => {
   if (!isUndefined(state.maximizeRestoreTabIds) && !isMainAreaMaximized(Model.fromJson(state.outerModel))) {
     forgetMaximize(state)
+  }
+}
+
+/** A main tab opened or selected outside the maximized inner tabset shows both tab groups again. */
+export const showMainWidget = (innerModel: Model, node: Node | undefined): void => {
+  const maximized = innerModel.getMaximizedTabset()
+
+  if (!isUndefined(maximized) && !isUndefined(node) && node.getParent() !== maximized) {
+    clearMaximizedTabset(innerModel)
   }
 }
 
