@@ -31,7 +31,15 @@ jest.mock('@Pimcore/components/form/form', () => ({
 }))
 
 jest.mock('@Pimcore/components/space/space', () => ({
-  Space: ({ children }: any) => <div data-testid='children'>{children}</div>
+  Space: ({ children, className, style }: any) => (
+    <div
+      className={ className }
+      data-testid='children'
+      style={ style }
+    >
+      {children}
+    </div>
+  )
 }))
 
 jest.mock('@Pimcore/components/language-selection/provider/use-language-selection', () => ({
@@ -78,19 +86,36 @@ jest.mock('@Pimcore/components/flex/flex', () => ({
   Flex: ({ children }: any) => <div>{children}</div>
 }))
 
+// Localizedfields::$width and ::$height are offered in the class editor and are
+// spread into the component with the rest of the definition node — the props
+// interface does not declare them yet, so the test carries the types.
+interface ContainerSettingsProps {
+  width?: number | string | null
+  height?: number | string | null
+}
+
 describe('ObjectLocalizedFields', () => {
   const child = (name: string): any => ({ name, datatype: 'data', fieldtype: 'input' })
 
-  const renderLocalizedFields = (props: Partial<ObjectLocalizedFieldsProps> = {}): void => {
-    render(
+  const renderLocalizedFields = (props: Partial<ObjectLocalizedFieldsProps> & ContainerSettingsProps = {}): HTMLElement => {
+    const { container } = render(
       <ObjectLocalizedFields
         { ...props as ObjectLocalizedFieldsProps }
         name='localizedfields'
       />
     )
+
+    return container
   }
 
   const defaultChildren = [child('firstname'), child('lastname')]
+
+  // The sizing may legitimately land on the Space, on a wrapper around it, or on
+  // both — the class definition only promises that the container ends up that
+  // size, so the whole rendered tree is searched instead of one fixed element.
+  const sizedElements = (container: HTMLElement, width: string, height: string): HTMLElement[] =>
+    Array.from(container.querySelectorAll<HTMLElement>('*'))
+      .filter((element) => element.style.width === width && element.style.height === height)
 
   // Localizedfields::$border defaults to false and $title to null, which is what
   // an untouched class definition sends — the children must stay flat.
@@ -137,5 +162,18 @@ describe('ObjectLocalizedFields', () => {
     renderLocalizedFields({ children: defaultChildren, title: '' })
 
     expect(screen.queryByTestId('card-view')).toBeNull()
+  })
+
+  // Localizedfields::$width and ::$height are persisted by the class editor and
+  // reach the renderer intact, so the container has to be sized by them — the
+  // sibling FieldContainer already applies its own the same way. Neither title
+  // nor border is set here, which is the common case: the sizing has to survive
+  // BaseView rendering the children bare.
+  it('applies the configured width and height to the container', () => {
+    const container = renderLocalizedFields({ children: defaultChildren, width: 400, height: 200 })
+
+    expect(sizedElements(container, '400px', '200px').length).toBeGreaterThan(0)
+    expect(screen.queryByText('firstname')).not.toBeNull()
+    expect(screen.queryByText('lastname')).not.toBeNull()
   })
 })

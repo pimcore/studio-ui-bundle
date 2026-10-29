@@ -18,18 +18,28 @@ import { Space } from '@Pimcore/components/space/space'
 import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
 import { Form } from '@Pimcore/components/form/form'
 import { CombinedFieldNameProvider } from '@Pimcore/modules/data-object/editor/types/object/tab-manager/tabs/edit/providers/combined-field-name-provider/combined-field-name-provider'
+import { toCssDimension } from '@Pimcore/utils/css'
+import { isNonEmptyString } from '@Pimcore/utils/type-utils'
 
 // Props for the legacy object definitions version
 export interface ObjectLocalizedFieldsProps extends AbstractObjectDataDefinition {
   children?: Array<AbstractObjectDataDefinition | AbstractObjectLayoutDefinition>
   border?: boolean
+  width?: number | string | null
+  height?: number | string | null
 }
 
 // Legacy ObjectLocalizedFields component - supports object definition arrays
-export const ObjectLocalizedFields = ({ children, noteditable, className, title, border }: ObjectLocalizedFieldsProps): React.JSX.Element => {
+export const ObjectLocalizedFields = ({ children, noteditable, className, title, border, width, height }: ObjectLocalizedFieldsProps): React.JSX.Element => {
   const { currentLanguage, hasLocalizedFields, setHasLocalizedFields } = useLanguageSelection()
 
   const isParentNotEditable = noteditable === true
+
+  // Localizedfields::$width and ::$height default to 0 and toCssDimension()
+  // maps 0/''/null to undefined, so an unconfigured container keeps rendering
+  // full width exactly as before. Same mapping the sibling FieldContainer uses.
+  const cssWidth = toCssDimension(width)
+  const cssHeight = toCssDimension(height)
 
   useEffect(() => {
     if (!hasLocalizedFields) setHasLocalizedFields(true)
@@ -47,9 +57,10 @@ export const ObjectLocalizedFields = ({ children, noteditable, className, title,
             title={ title }
           >
             <Space
-              className="w-full"
+              className={ isNonEmptyString(cssWidth) ? undefined : 'w-full' }
               direction='vertical'
               size='small'
+              style={ { height: cssHeight, width: cssWidth } }
             >
               {children?.map((child, index) => (
                 <ObjectComponent
