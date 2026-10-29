@@ -9,30 +9,26 @@
  */
 
 import { act, renderHook } from '@testing-library/react'
+import {
+  initiatedSubscription,
+  mockGridEndpoint,
+  mockInitiate,
+  mockResults,
+  mockSubscriptions,
+  nameColumns,
+  pending,
+  range,
+  reject,
+  relatedObjects,
+  requestedIds,
+  resetGridMocks,
+  resolve,
+  resolveAll
+} from './use-data-object-grids.test-utils'
 import { useDataObjectGrids } from './use-data-object-grids'
 import { VISIBLE_FIELDS_MAX_PARALLEL } from '../utils/grid-chunks'
 
-interface MockSubscription {
-  args: any
-  options: any
-  unsubscribe: jest.Mock
-  refetch: jest.Mock
-}
-
-// The query state per serialized request, as the store would hold it.
-const mockResults = new Map<string, Record<string, any>>()
-const mockSubscriptions: MockSubscription[] = []
 const mockTrackError = jest.fn()
-
-const pending = { isUninitialized: false, isLoading: true, isSuccess: false, isError: false, data: undefined }
-const uninitialized = { isUninitialized: true, isLoading: false, isSuccess: false, isError: false, data: undefined }
-
-const mockInitiate = jest.fn((args: any, options: any): MockSubscription => {
-  const subscription = { args, options, unsubscribe: jest.fn(), refetch: jest.fn() }
-  mockSubscriptions.push(subscription)
-  mockResults.set(JSON.stringify(args), { ...pending, data: mockResults.get(JSON.stringify(args))?.data })
-  return subscription
-})
 
 jest.mock('@Pimcore/app/store', () => ({
   useAppDispatch: () => (action: unknown) => action,
@@ -42,28 +38,12 @@ jest.mock('@Pimcore/app/store', () => ({
 jest.mock('@Pimcore/modules/app/error-handler', () => ({
   __esModule: true,
   default: (error: unknown) => mockTrackError(error),
-  ApiError: class {
-    constructor (public errorData: unknown) {}
-  }
+  ApiError: class { constructor (public errorData: unknown) {} }
 }))
 
 jest.mock('@Pimcore/modules/data-object/data-object-api-slice.gen', () => ({
-  api: {
-    endpoints: {
-      dataObjectGetGrid: {
-        initiate: (args: any, options: any) => mockInitiate(args, options),
-        select: (args: any) => () => mockResults.get(JSON.stringify(args)) ?? uninitialized
-      }
-    }
-  }
+  api: { endpoints: { get dataObjectGetGrid () { return mockGridEndpoint } } }
 }))
-
-const relatedObjects = (count: number, subtype: string, firstId: number = 1): any[] =>
-  Array.from({ length: count }, (_, index) => ({ id: firstId + index, type: 'object', subtype, fullPath: `/objects/${firstId + index}`, isPublished: true }))
-
-const range = (from: number, to: number): number[] => Array.from({ length: to - from + 1 }, (_, index) => from + index)
-
-const nameColumns = [{ key: 'name', type: 'dataobject.adapter', locale: null, config: [] }] as any
 
 interface GridProps {
   dataValue: any[]
@@ -83,32 +63,9 @@ const renderGrids = (dataValue: any[], classIds: string[] = ['Car'], columns: an
   return { ...rendered, rerender: (props?: GridProps) => { currentProps = props ?? currentProps; rendered.rerender(currentProps) } }
 }
 
-const requestedIds = (subscription: MockSubscription): number[] => subscription.args.body.filters.columnFilters[0].filterValue
-
-const initiatedSubscription = (index: number): MockSubscription => mockInitiate.mock.results[index].value as MockSubscription
-
-const resolve = (subscription: MockSubscription): void => {
-  const data = { items: requestedIds(subscription).map(id => ({ id, columns: [] })) }
-  mockResults.set(JSON.stringify(subscription.args), { isUninitialized: false, isLoading: false, isSuccess: true, isError: false, data })
-}
-
-const reject = (subscription: MockSubscription, error: unknown): void => {
-  mockResults.set(JSON.stringify(subscription.args), { isUninitialized: false, isLoading: false, isSuccess: false, isError: true, error, data: undefined })
-}
-
-// Settles the chunks one by one until every chunk got its data.
-const resolveAll = (rerender: () => void): void => {
-  for (let index = 0; index < mockSubscriptions.length; index++) {
-    resolve(mockSubscriptions[index])
-    act(() => { rerender() })
-  }
-}
-
 describe('useDataObjectGrids', () => {
   beforeEach(() => {
-    mockResults.clear()
-    mockSubscriptions.length = 0
-    mockInitiate.mockClear()
+    resetGridMocks()
     mockTrackError.mockClear()
   })
 
@@ -240,11 +197,12 @@ describe('useDataObjectGrids', () => {
     expect(last.unsubscribe).toHaveBeenCalledTimes(1)
   })
 
-  // The chunks after a removed row hold other ids now; their old values must not be shown for them.
-  it('requests the chunks after a removed related object again with the shifted ids', () => {
+  // The chunks after a removed row hold other ids now; they are requested again, their rows keep their values meanwhile.
+  it('keeps the values of the rows after a removed related object while their chunks reload', () => {
     const { result, rerender } = renderGrids(relatedObjects(250, 'Car'))
     resolveAll(rerender)
     const [first, second, last] = mockSubscriptions
+    const previousValues = new Map(result.current.data.map(item => [item.id, item.columns]))
     mockInitiate.mockClear()
 
     const value = relatedObjects(250, 'Car').filter(item => item.id !== 150)
@@ -257,12 +215,54 @@ describe('useDataObjectGrids', () => {
     expect(first.unsubscribe).not.toHaveBeenCalled()
     expect(second.unsubscribe).toHaveBeenCalledTimes(1)
     expect(last.unsubscribe).toHaveBeenCalledTimes(1)
-    expect(result.current.data.map(item => item.id)).toEqual(range(1, 100))
+    expect(result.current.isLoading).toBe(true)
+    expect(result.current.data.map(item => item.id)).toEqual([...range(1, 149), ...range(151, 250)])
+    result.current.data.forEach(item => { expect(item.columns).toEqual(previousValues.get(item.id)) })
+    expect(result.current.loadedCount).toBe(249)
+    expect(result.current.totalCount).toBe(249)
 
     resolve(initiatedSubscription(0))
-    act(() => { rerender({ dataValue: value, columns: nameColumns }) })
+    act(() => { rerender() })
 
-    expect(result.current.data.map(item => item.id)).toEqual([...range(1, 149), ...range(151, 201)])
+    expect(result.current.data.map(item => item.id)).toEqual([...range(1, 149), ...range(151, 250)])
+    expect(result.current.isLoading).toBe(true)
+
+    resolve(initiatedSubscription(1))
+    act(() => { rerender() })
+
+    expect(result.current.data.map(item => item.id)).toEqual([...range(1, 149), ...range(151, 250)])
+    expect(result.current.isLoading).toBe(false)
+    expect(result.current.loadedCount).toBe(249)
+  })
+
+  it('keeps the values of the last rows while the last chunk reloads for an appended related object', () => {
+    const { result, rerender } = renderGrids(relatedObjects(250, 'Car'))
+    resolveAll(rerender)
+
+    act(() => { rerender({ dataValue: relatedObjects(251, 'Car'), columns: nameColumns }) })
+
+    expect(result.current.isLoading).toBe(true)
+    expect(result.current.data.map(item => item.id)).toEqual(range(1, 250))
+    expect(result.current.data[249].columns).toEqual([{ key: 'name', value: 'default-250' }])
+    expect(result.current.loadedCount).toBe(250)
+    expect(result.current.totalCount).toBe(251)
+  })
+
+  // Values in the previous language must not be shown after a language switch.
+  it('keeps no values when the columns change', () => {
+    const { result, rerender } = renderGrids(relatedObjects(250, 'Car'))
+    resolveAll(rerender)
+
+    act(() => { rerender({ dataValue: relatedObjects(250, 'Car'), columns: [{ ...nameColumns[0], locale: 'de' }] }) })
+
+    expect(result.current.data).toEqual([])
+    expect(result.current.loadedCount).toBe(0)
+    expect(result.current.isLoading).toBe(true)
+
+    resolve(mockSubscriptions[3])
+    act(() => { rerender() })
+
+    expect(result.current.data.map(item => item.columns![0].value)).toEqual(range(1, 100).map(id => `de-${id}`))
   })
 
   it('unsubscribes every chunk on unmount', () => {

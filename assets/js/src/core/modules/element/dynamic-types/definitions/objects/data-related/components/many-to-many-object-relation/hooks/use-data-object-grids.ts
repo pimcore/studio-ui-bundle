@@ -10,7 +10,7 @@
 
 import { useEffect, useMemo, useRef } from 'react'
 import { shallowEqual } from 'react-redux'
-import { isEmpty, isNil, isUndefined, sumBy } from 'lodash'
+import { isEmpty, isNil, isUndefined, map, sumBy } from 'lodash'
 import {
   api,
   type DataObjectGetGridApiArg,
@@ -45,6 +45,7 @@ export interface IUseDataObjectGridsReturn {
   refetchAll: () => void
 }
 
+type GridItems = DataObjectGetGridApiResponse['items']
 type GridSubscription = ReturnType<ReturnType<typeof api.endpoints.dataObjectGetGrid.initiate>>
 // The app's RootState does not type the API slice it combines, the endpoint selectors expect it.
 type GridQueryState = Parameters<ReturnType<typeof api.endpoints.dataObjectGetGrid.select>>[0]
@@ -52,7 +53,7 @@ type GridQueryState = Parameters<ReturnType<typeof api.endpoints.dataObjectGetGr
 interface ChunkRequest {
   key: string
   args: DataObjectGetGridApiArg
-  size: number
+  ids: number[]
 }
 
 export const useDataObjectGrids = ({ classIds, convertClassName, columns, applyFallbackLanguages, dataValue }: IUseDataObjectGridsProps): IUseDataObjectGridsReturn => {
@@ -84,7 +85,7 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, applyF
         }
       }
 
-      return { key: JSON.stringify(args), args, size: ids.length }
+      return { key: JSON.stringify(args), args, ids }
     })
   }, [dataValue, classIds, columns, applyFallbackLanguages, convertClassName])
 
@@ -131,8 +132,50 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, applyF
   // A refetch of data already shown (e.g. after any data object save invalidated the grids) runs in the background.
   const isLoading = results.some(result => isUndefined(result.data) && !result.isError)
   const isError = results.some(result => result.isError)
-  const loadedCount = requests.reduce((count, request, index) => isUndefined(results[index].data) ? count : count + request.size, 0)
-  const totalCount = sumBy(requests, 'size')
+  const totalCount = sumBy(requests, request => request.ids.length)
+
+  // A chunk whose ids changed (a row added or removed before it) keeps its previous values until its
+  // new request returns, for the rows still in the relation. Values of other columns, e.g. in the
+  // previous language, are never kept.
+  const columnsKey = JSON.stringify(columns ?? [])
+  const previousItems = useRef<{ columnsKey: string, bySlot: GridItems[] }>({ columnsKey, bySlot: [] })
+  useEffect(() => {
+    if (previousItems.current.columnsKey !== columnsKey) {
+      previousItems.current = { columnsKey, bySlot: [] }
+    }
+    results.forEach((result, index) => {
+      if (!isUndefined(result.data)) {
+        previousItems.current.bySlot[index] = result.data.items
+      }
+    })
+  }, [results, columnsKey])
+
+  const { data, loadedCount } = useMemo(() => {
+    const keptBySlot = previousItems.current.columnsKey === columnsKey ? previousItems.current.bySlot : []
+    const relationIds = new Set(requests.flatMap(request => request.ids))
+    const freshIds = new Set(results.flatMap(result => map(result.data?.items ?? [], 'id')))
+    const keptIds = new Set<number>()
+
+    const items = results.flatMap((result, index) => {
+      if (!isUndefined(result.data)) {
+        return result.data.items
+      }
+
+      return (keptBySlot[index] ?? []).filter(item => {
+        if (isUndefined(item.id) || !relationIds.has(item.id) || freshIds.has(item.id) || keptIds.has(item.id)) {
+          return false
+        }
+        keptIds.add(item.id)
+        return true
+      })
+    })
+
+    const loaded = requests.reduce((count, request, index) => isUndefined(results[index].data)
+      ? count + request.ids.filter(id => keptIds.has(id)).length
+      : count + request.ids.length, 0)
+
+    return { data: items, loadedCount: loaded }
+  }, [results, requests, columnsKey])
 
   // Every chunk has its own request; each failure is tracked once, also when another chunk failed before.
   const trackedErrors = useRef(new WeakSet<object>())
@@ -145,7 +188,6 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, applyF
     })
   }, [results])
 
-  const data = useMemo(() => results.flatMap(result => result.data?.items ?? []), [results])
   const refetchAll = (): void => { subscriptions.current.forEach(subscription => { void subscription.refetch() }) }
 
   return { isLoading, isError, data, loadedCount, totalCount, refetchAll }
