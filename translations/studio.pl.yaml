@@ -2269,6 +2269,9 @@ reports.field-filters: Filtry pól
 reports.editor.delete.content: 'Czy na pewno chcesz usunąć niestandardowy raport "{{reportName}}"?'
 reports.editor.clone.content: Wprowadź nazwę nowego elementu (a-zA-Z-_)
 reports.editor.add.content: Wprowadź nazwę nowego elementu. Nazwa musi być alfanumeryczna i mieć co najmniej 3 znaki (a-zA-Z0-9_-)
+reports.editor.import.title: Importuj raport niestandardowy
+reports.editor.import.success: Raport niestandardowy został zaimportowany
+reports.editor.import.invalid-file: Wybierz plik eksportu JSON
 reports.editor.content.validation.message: Nazwa niestandardowego raportu jest nieprawidłowa
 reports.editor.general-settings.title: Ustawienia ogólne
 reports.editor.general-settings.name-label: Nazwa
