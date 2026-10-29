@@ -74,6 +74,13 @@ describe('pie chart', () => {
     expect(screen.getByTestId('pie-total')).toHaveTextContent(/^30\.3$/)
   })
 
+  it('keeps small nonzero totals and their tooltip percentage', () => {
+    renderPie([{ type: 'a', cnt: '1e-11' }])
+
+    expect(screen.getByTestId('pie-total')).toHaveTextContent(/^1e-11$/)
+    expect(screen.getByTestId('pie-tooltip')).toHaveTextContent('1e-11 (100%)')
+  })
+
   it('keeps the total for numeric values', () => {
     renderPie([
       { type: 'document', cnt: 6 },
