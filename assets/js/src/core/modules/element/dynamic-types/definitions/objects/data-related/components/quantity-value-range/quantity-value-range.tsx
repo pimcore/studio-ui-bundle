@@ -43,6 +43,9 @@ export interface QuantityValueRangeValue {
 
 const { useToken } = theme
 
+type Bound = 'minimum' | 'maximum'
+const bounds: Bound[] = ['minimum', 'maximum']
+
 export const QuantityValueRange = (props: QuantityValueRangeProps): React.JSX.Element => {
   const [value, setValueState] = useState<QuantityValueRangeValue>(props.value ?? { minimum: null, maximum: null, unitId: null })
   const { getSelectOptions, convertValue } = useQuantityValueUnits()
@@ -52,78 +55,100 @@ export const QuantityValueRange = (props: QuantityValueRangeProps): React.JSX.El
   const { token } = useToken()
 
   const latestValue = useRef<QuantityValueRangeValue>(value)
-  const changeCounter = useRef(0)
+  // The unit each bound's number is actually expressed in; differs from the selected unit while a conversion is pending
+  const boundUnits = useRef<Record<Bound, string | null>>({ minimum: value.unitId, maximum: value.unitId })
+  const boundVersions = useRef<Record<Bound, number>>({ minimum: 0, maximum: 0 })
 
   const setValue = (newValue: QuantityValueRangeValue): void => {
     if (!_.isEqual(newValue, latestValue.current)) {
       latestValue.current = newValue
-      changeCounter.current++
       setValueState(newValue)
       props.onChange?.(newValue.minimum === null && newValue.maximum === null && newValue.unitId === null ? null : newValue)
     }
   }
 
-  const onChangeMinimum = (newValue: ValueType | null): void => {
+  const resetBound = (bound: Bound, unitId: string | null): void => {
+    boundUnits.current[bound] = unitId
+    boundVersions.current[bound]++
+  }
+
+  const onChangeBound = (bound: Bound, newValue: ValueType | null): void => {
+    // The typed number is in the displayed unit; it also cancels the pending conversion of this bound only
+    resetBound(bound, latestValue.current.unitId)
     setValue({
-      ...value,
-      minimum: newValue ?? null
+      ...latestValue.current,
+      [bound]: newValue ?? null
     })
+  }
+
+  const onChangeMinimum = (newValue: ValueType | null): void => {
+    onChangeBound('minimum', newValue)
   }
   const onChangeMaximum = (newValue: ValueType | null): void => {
-    setValue({
-      ...value,
-      maximum: newValue ?? null
-    })
-  }
-
-  const convertBound = async (fromUnitId: string, toUnitId: string, bound: ValueType | null): Promise<ValueType | null> => {
-    if (typeof bound !== 'number') {
-      return bound
-    }
-
-    return await convertValue(fromUnitId, toUnitId, bound)
+    onChangeBound('maximum', newValue)
   }
 
   const onChangeSelect = (unitId?: string): void => {
-    const fromUnitId = value.unitId
+    const current = latestValue.current
     const newUnitId = _.isEmpty(unitId) ? null : (unitId ?? null)
 
     setValue({
-      ...value,
+      ...current,
       unitId: newUnitId
     })
 
-    if (props.autoConvert !== true || newUnitId === null || fromUnitId === null) {
-      return
-    }
+    const conversions: Array<{ bound: Bound, version: number, converted: Promise<ValueType | null> }> = []
 
-    const requestedChange = changeCounter.current
-    const { minimum, maximum } = value
+    bounds.forEach(bound => {
+      const boundValue = current[bound]
+      const fromUnitId = boundUnits.current[bound]
 
-    void Promise.all([
-      convertBound(fromUnitId, newUnitId, minimum),
-      convertBound(fromUnitId, newUnitId, maximum)
-    ]).then(([convertedMinimum, convertedMaximum]) => {
-      const failed = (typeof minimum === 'number' && convertedMinimum === null) ||
-        (typeof maximum === 'number' && convertedMaximum === null)
-
-      // Drop the answer when the user changed the field meanwhile or a bound could not be converted
-      if (failed || requestedChange !== changeCounter.current) {
+      if (props.autoConvert !== true || newUnitId === null || fromUnitId === null || fromUnitId === newUnitId || typeof boundValue !== 'number') {
+        resetBound(bound, newUnitId)
         return
       }
 
-      setValue({
-        minimum: convertedMinimum,
-        maximum: convertedMaximum,
-        unitId: newUnitId
+      // Convert from the unit the number is really in, not from the unit selected last
+      conversions.push({
+        bound,
+        version: ++boundVersions.current[bound],
+        converted: convertValue(fromUnitId, newUnitId, boundValue)
       })
+    })
+
+    if (conversions.length === 0) {
+      return
+    }
+
+    void Promise.all(conversions.map(async conversion => await conversion.converted)).then(results => {
+      // Drop the answers of bounds that were edited or converted again meanwhile
+      const valid = conversions
+        .map((conversion, index) => ({ ...conversion, result: results[index] }))
+        .filter(conversion => conversion.version === boundVersions.current[conversion.bound])
+
+      if (valid.length === 0) {
+        return
+      }
+
+      valid.forEach(conversion => { boundUnits.current[conversion.bound] = newUnitId })
+
+      // A bound that cannot be converted changes only the unit
+      if (valid.some(conversion => conversion.result === null)) {
+        return
+      }
+
+      const converted = { ...latestValue.current }
+      valid.forEach(conversion => { converted[conversion.bound] = conversion.result })
+      setValue(converted)
     })
   }
 
   useEffect(() => {
     const localValue = value.minimum === null && value.maximum === null && value.unitId === null ? null : value
     if (!_.isEqual(props.value, localValue)) {
-      setValue(props.value ?? { minimum: null, maximum: null, unitId: null })
+      const external = props.value ?? { minimum: null, maximum: null, unitId: null }
+      bounds.forEach(bound => { resetBound(bound, external.unitId) })
+      setValue(external)
     }
   }, [props.value])
 

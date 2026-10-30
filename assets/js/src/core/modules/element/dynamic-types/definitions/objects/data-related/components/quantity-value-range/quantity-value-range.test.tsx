@@ -162,9 +162,13 @@ describe('QuantityValueRange automatic conversion', () => {
     expect(numbers()).toEqual(['1', '2'])
   })
 
-  it('ignores an older pending conversion when the unit is changed again', async () => {
-    const pending: Array<(value: number) => void> = []
-    convertValue.mockImplementation(async () => await new Promise<number>(resolve => { pending.push(resolve) }))
+  const factors: Record<string, number> = { 'cm>mm': 10, 'mm>m': 0.001, 'cm>m': 0.01 }
+
+  it('converts from the unit the numbers are really in when the unit is changed again while pending', async () => {
+    const pending: Array<{ from: string, to: string, value: number, resolve: (value: number) => void }> = []
+    convertValue.mockImplementation(async (from: string, to: string, value: number) => await new Promise<number>(resolve => {
+      pending.push({ from, to, value, resolve })
+    }))
     const onChange = jest.fn()
 
     render(
@@ -176,18 +180,17 @@ describe('QuantityValueRange automatic conversion', () => {
     )
     fireEvent.click(screen.getByTestId('unit'))
     fireEvent.click(screen.getByTestId('unit-m'))
-    expect(pending).toHaveLength(4)
+    expect(pending.map(request => `${request.from}>${request.to}:${request.value}`)).toEqual(['cm>mm:1', 'cm>mm:2', 'cm>m:1', 'cm>m:2'])
 
-    // the newer conversion (mm -> m) answers first, the older one (cm -> mm) answers late
-    await act(async () => { pending[2](7); pending[3](7) })
-    await act(async () => { pending[0](99); pending[1](99) })
+    // the newer conversion answers first, the older one answers late
+    await act(async () => { pending.slice(2).forEach(request => { request.resolve(request.value * factors[`${request.from}>${request.to}`]) }) })
+    await act(async () => { pending.slice(0, 2).forEach(request => { request.resolve(request.value * factors[`${request.from}>${request.to}`]) }) })
 
-    expect(onChange).toHaveBeenLastCalledWith({ minimum: 7, maximum: 7, unitId: 'm' })
-    expect(onChange).not.toHaveBeenCalledWith(expect.objectContaining({ minimum: 99 }))
-    expect(numbers()).toEqual(['7', '7'])
+    expect(onChange).toHaveBeenLastCalledWith({ minimum: 0.01, maximum: 0.02, unitId: 'm' })
+    expect(numbers()).toEqual(['0.01', '0.02'])
   })
 
-  it('ignores a pending conversion when a bound is edited meanwhile', async () => {
+  it('still converts the untouched bound when the other bound is edited while pending', async () => {
     const pending: Array<(value: number) => void> = []
     convertValue.mockImplementation(async () => await new Promise<number>(resolve => { pending.push(resolve) }))
     const onChange = jest.fn()
@@ -203,7 +206,8 @@ describe('QuantityValueRange automatic conversion', () => {
     fireEvent.click(screen.getAllByTestId('number')[0])
     await act(async () => { pending.forEach(resolve => { resolve(99) }) })
 
-    expect(onChange).toHaveBeenLastCalledWith({ minimum: 5, maximum: 2, unitId: 'mm' })
-    expect(numbers()).toEqual(['5', '2'])
+    expect(pending).toHaveLength(2)
+    expect(onChange).toHaveBeenLastCalledWith({ minimum: 5, maximum: 99, unitId: 'mm' })
+    expect(numbers()).toEqual(['5', '99'])
   })
 })
