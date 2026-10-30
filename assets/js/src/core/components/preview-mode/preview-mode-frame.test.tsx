@@ -13,6 +13,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react'
 import { PreviewModeProvider, usePreviewMode } from './preview-mode-provider'
 import { PreviewModeBar } from './preview-mode-bar'
 import { PreviewModeSwitch } from './preview-mode-switch'
+import { useStyles } from './preview-mode-bar.styles'
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key })
@@ -52,7 +53,6 @@ jest.mock('@Pimcore/modules/element/components/language-selection/permission-bas
   )
 }))
 
-const { useStyles } = jest.requireActual('./preview-mode-bar.styles') as typeof import('./preview-mode-bar.styles')
 
 const LanguageProbe = (): React.JSX.Element => {
   const { language } = usePreviewMode()
