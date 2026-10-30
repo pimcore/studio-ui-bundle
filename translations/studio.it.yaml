@@ -366,6 +366,10 @@ grid.filter.less: Minore di
 grid.filter.more: Maggiore di
 grid.filter.string.placeholder: Cerca o incolla un elenco con un valore per riga per trovare esattamente una di queste opzioni
 grid.filter.column: 'Filtra {{column}}'
+grid.filter.operator.label: Condizione
+grid.filter.operator.value: Corrisponde al valore
+grid.filter.operator.empty: È vuoto
+grid.filter.operator.not-empty: Non è vuoto
 grid.filter.file-size-unit.kb: KB
 grid.filter.file-size-unit.mb: MB
 grid.filter.file-size-unit.gb: GB

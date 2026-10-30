@@ -60,4 +60,56 @@ describe('prepareFieldFilters', () => {
 
     expect(prepared.map((filter) => [filter.type, filter.filterValue])).toEqual([['system.id', 5], ['test.score', 0.8]])
   })
+
+  describe('operator', () => {
+    const emptyFilter: FieldFilter = { key: 'id', type: 'system.id', filterValue: undefined, operator: 'empty', locale: 'en', meta: { translationKey: 'id' } }
+
+    it('sends an operator without a value, which would not apply otherwise', () => {
+      expect(prepareFieldFilters([emptyFilter], contextWith([idColumn]))).toEqual([
+        { key: 'id', type: 'system.id', operator: 'empty', locale: 'en', filterValue: null, meta: { translationKey: 'id' } }
+      ])
+    })
+
+    it('ignores a value next to an operator', () => {
+      const prepared = prepareFieldFilters([{ ...emptyFilter, operator: 'notEmpty', filterValue: 5 }], contextWith([idColumn]))
+
+      expect(prepared).toHaveLength(1)
+      expect(prepared[0]).toMatchObject({ operator: 'notEmpty', filterValue: null })
+    })
+
+    it('uses the column type when the filter type has none of its own', () => {
+      class EmptyOnlyFilter extends TestFieldFilter {
+        getFieldFilterType (): string { return '' }
+        isFilterAvailable (): boolean { return false }
+        isEmptyFilterAvailable (): boolean { return true }
+      }
+
+      const context = {
+        ...contextWith([scoreColumn]),
+        getType: (() => new EmptyOnlyFilter('empty-only')) as unknown as ElementFilterContext['getType']
+      }
+      const prepared = prepareFieldFilters([{ ...emptyFilter, key: 'score', type: 'test.score' }], context)
+
+      expect(prepared.map((filter) => filter.type)).toEqual(['test.score'])
+    })
+
+    it('drops an operator the field cannot be searched with', () => {
+      class NoEmptyFilter extends TestFieldFilter {
+        isEmptyFilterAvailable (): boolean { return false }
+      }
+
+      const context = {
+        ...contextWith([idColumn]),
+        getType: (() => new NoEmptyFilter('system.id')) as unknown as ElementFilterContext['getType']
+      }
+
+      expect(prepareFieldFilters([emptyFilter], context)).toEqual([])
+    })
+
+    it('keeps applying value filters next to an operator filter', () => {
+      const prepared = prepareFieldFilters([emptyFilter, filters[1]], contextWith([idColumn, scoreColumn]))
+
+      expect(prepared.map((filter) => [filter.type, filter.operator])).toEqual([['system.id', 'empty'], ['test.score', undefined]])
+    })
+  })
 })

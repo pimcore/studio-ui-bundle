@@ -20,11 +20,15 @@ import {
 } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/image-gallery/image-gallery'
 import type { InheritanceOverlayType } from '@Pimcore/components/inheritance-overlay/inheritance-overlay'
 import { ImageGallery as ImageGalleryPreview } from '../../grid-cell-preview/image-gallery/image-gallery'
+import { type DynamicTypeFieldFilterAbstract } from '@sdk/modules/element'
+import { container } from '@Pimcore/app/depency-injection'
+import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 
 export type ImageObjectDataDefinition = AbstractObjectDataDefinition & ImageGalleryProps
 
 export class DynamicTypeObjectDataImageGallery extends DynamicTypeObjectDataAbstract {
   id: string = 'imageGallery'
+  dynamicTypeFieldFilterType: DynamicTypeFieldFilterAbstract = container.get(serviceIds['DynamicTypes/FieldFilter/EmptyOnly'])
   inheritedMaskOverlay: InheritanceOverlayType = 'form-item-container'
   supportsBatchAppendModes: boolean = true
   gridCellEditMode: EditMode = 'edit-modal'

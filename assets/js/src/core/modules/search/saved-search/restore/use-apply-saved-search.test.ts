@@ -151,4 +151,17 @@ describe('useApplySavedSearch', () => {
 
     expect(setSelectedColumns).toHaveBeenCalledWith([expect.objectContaining({ key: 'name', locale: 'de' })])
   })
+
+  it('restores the operator of a saved field filter, which has no value', () => {
+    const configuration = buildConfiguration([
+      { key: 'manufacturer', type: 'dataobject.relation', operator: 'empty', filterValue: null, meta: { translationKey: 'Manufacturer' } }
+    ])
+
+    const { result } = renderHook(() => useApplySavedSearch())
+    result.current(configuration)
+
+    expect(setAppliedFilters).toHaveBeenCalledWith(expect.objectContaining({
+      fieldFilters: [expect.objectContaining({ key: 'manufacturer', operator: 'empty' })]
+    }))
+  })
 })
