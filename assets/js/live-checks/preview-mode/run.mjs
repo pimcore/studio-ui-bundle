@@ -6,9 +6,11 @@
 import { spawn, spawnSync } from 'node:child_process'
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
+import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 
 const here = dirname(fileURLToPath(import.meta.url))
+const { consoleErrorMessage } = createRequire(import.meta.url)('./assertions.cjs')
 const out = process.argv[2] || '/tmp/preview-mode-live'
 const base = (process.env.SCREENS_BASE_URL || 'http://localhost').replace(/\/$/, '')
 const user = process.env.SCREENS_STUDIO_USER || 'admin'
@@ -237,6 +239,6 @@ try {
 }
 
 step = 'console errors'
-if (consoleErrors.length) await fail([...new Set(consoleErrors)].slice(0, 10).join(' | '))
+if (consoleErrorMessage(consoleErrors)) await fail(consoleErrorMessage(consoleErrors))
 console.log(`preview-mode live check green; screenshots in ${out}`)
 await quit(0)

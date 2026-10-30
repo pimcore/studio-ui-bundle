@@ -69,4 +69,7 @@ function checkTooltip (tooltip, state) {
 // run.mjs asks this before every click: Save/Apply (and Confirm migration) are never clicked.
 const isForbiddenClick = (label) => FORBIDDEN_CLICK.test(label || '')
 
-module.exports = { inspectModal, checkState, checkTooltip, isForbiddenClick }
+// The final step of run.mjs: any JS error or console.error during the run fails the check.
+const consoleErrorMessage = (errors) => (errors.length ? [...new Set(errors)].slice(0, 10).join(' | ') : null)
+
+module.exports = { inspectModal, checkState, checkTooltip, isForbiddenClick, consoleErrorMessage }

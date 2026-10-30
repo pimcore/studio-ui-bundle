@@ -10,7 +10,8 @@
 
 
 /* eslint-disable @typescript-eslint/no-require-imports */
-const { inspectModal, checkState, checkTooltip, isForbiddenClick } = require('./assertions.cjs')
+const { spawnSync } = require('node:child_process')
+const { inspectModal, checkState, checkTooltip, isForbiddenClick, consoleErrorMessage } = require('./assertions.cjs')
 
 const switchHtml = (on: boolean): string =>
   `<div><button role="switch" aria-checked="${on}"></button><span>Preview mode</span></div>`
@@ -63,5 +64,20 @@ describe('preview-mode live check assertions', () => {
     expect(isForbiddenClick(' Apply changes')).toBe(true)
     expect(isForbiddenClick('Confirm migration')).toBe(true)
     expect(isForbiddenClick('Preview item')).toBe(false)
+  })
+
+  it('AC3: any JS console error fails the run, a clean console passes', () => {
+    expect(consoleErrorMessage([])).toBeNull()
+    expect(consoleErrorMessage(['JS error: x', 'JS error: x', 'console.error: y'])).toBe('JS error: x | console.error: y')
+  })
+
+  it('AC2: a machine without Chromium exits 1 naming the step', () => {
+    const result = spawnSync(process.execPath, [`${__dirname}/run.mjs`, '/tmp/preview-mode-no-chromium'], {
+      env: { PATH: '/nonexistent' },
+      encoding: 'utf8'
+    })
+
+    expect(result.status).toBe(1)
+    expect(result.stdout).toContain('FAIL at step "start": chromium is missing')
   })
 })
