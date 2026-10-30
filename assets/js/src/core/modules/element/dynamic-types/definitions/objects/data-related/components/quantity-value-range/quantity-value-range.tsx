@@ -30,6 +30,7 @@ export interface QuantityValueRangeProps {
   unitWidth?: string | null
   Width?: string | null
   decimalPrecision?: number | null
+  autoConvert?: boolean
   disabled?: boolean
   inherited?: boolean
 }
@@ -44,7 +45,7 @@ const { useToken } = theme
 
 export const QuantityValueRange = (props: QuantityValueRangeProps): React.JSX.Element => {
   const [value, setValueState] = useState<QuantityValueRangeValue>(props.value ?? { minimum: null, maximum: null, unitId: null })
-  const { getSelectOptions } = useQuantityValueUnits()
+  const { getSelectOptions, convertValue } = useQuantityValueUnits()
   const { t } = useTranslation()
   const { styles } = useStyles()
   const fieldWidth = useFieldWidth()
@@ -70,7 +71,28 @@ export const QuantityValueRange = (props: QuantityValueRangeProps): React.JSX.El
     })
   }
 
+  const convertBound = async (fromUnitId: string, toUnitId: string, bound: ValueType | null): Promise<ValueType | null> => {
+    if (typeof bound !== 'number') {
+      return bound
+    }
+
+    return await convertValue(fromUnitId, toUnitId, bound) ?? bound
+  }
+
   const onChangeSelect = (unitId?: string): void => {
+    if (props.autoConvert === true && !_.isEmpty(unitId) && value.unitId !== null) {
+      void Promise.all([
+        convertBound(value.unitId, unitId!, value.minimum),
+        convertBound(value.unitId, unitId!, value.maximum)
+      ]).then(([minimum, maximum]) => {
+        setValue({
+          minimum,
+          maximum,
+          unitId: unitId!
+        })
+      })
+    }
+
     setValue({
       ...value,
       unitId: _.isEmpty(unitId) ? null : (unitId ?? null)
