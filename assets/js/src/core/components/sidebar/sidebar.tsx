@@ -18,7 +18,7 @@ import { SidebarContext } from './sidebar-provider'
 import { useTranslation } from 'react-i18next'
 import { isNil } from 'lodash'
 import { ContentConfigProvider } from '../content/content-config-provider'
-import { Divider } from '../split-layout/components/divider/divider'
+import { Divider } from '../page-layout/components/split/divider'
 import { useSidebarResize } from './use-sidebar-resize'
 
 export interface SidebarProps {

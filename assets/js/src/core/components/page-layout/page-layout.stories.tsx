@@ -27,7 +27,7 @@ const config: Meta = {
     docs: {
       iframeHeight: 400,
       description: {
-        component: 'The layout of a page or tab. `variant="content"` shows content with an optional top bar, bottom toolbar and sidebar. `variant="split"` shows two items side by side (item `size` in percent, `minSize`/`maxSize` in px) with an optional divider, resizing and full-width flags. `variant="config"` is the split variant for configuration screens: a 20/80 split with a 170px minimum (no maximum) for the left item, a divider and toolbar alignment.'
+        component: 'The layout of a page or tab. `variant="content"` shows content with an optional top bar, bottom toolbar and sidebar. `variant="split"` shows two items side by side (item `size` in percent, `minSize`/`maxSize` in px) with an optional divider, resizing and `fullWidth` for one item. `variant="config"` is the split variant for configuration screens: a 20/80 split with a 170px minimum (no maximum) for the left item, a divider and toolbar alignment.'
       }
     }
   },
@@ -50,7 +50,7 @@ export const SplitVariant = {
   args: {
     variant: 'split',
     withDivider: true,
-    resizeAble: true,
+    resizable: true,
     leftItem: {
       size: 25,
       minSize: 200,
@@ -67,7 +67,7 @@ export const SplitVariant = {
 export const ConfigVariant = {
   args: {
     variant: 'config',
-    resizeAble: true,
+    resizable: true,
     leftItem: {
       children: (
         <Content padded>

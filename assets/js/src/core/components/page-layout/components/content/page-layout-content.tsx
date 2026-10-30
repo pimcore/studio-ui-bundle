@@ -9,6 +9,7 @@
  */
 
 import React, { type ReactNode } from 'react'
+import cn from 'classnames'
 import { Content } from '../../../content/content'
 import { useStyles } from './page-layout-content.styles'
 
@@ -26,14 +27,13 @@ export interface PageLayoutContentProps {
 
 export const PageLayoutContent = (props: Readonly<PageLayoutContentProps>): React.JSX.Element => {
   const { styles } = useStyles()
-  const classes = ['content-toolbar-sidebar-layout', styles.ContentLayout, props.className ?? '']
-
-  if (props.renderToolbar !== undefined) {
-    classes.push('content-toolbar-sidebar-layout--with-toolbar')
-  }
 
   return (
-    <div className={ classes.join(' ') }>
+    <div
+      className={ cn('content-toolbar-sidebar-layout', styles.ContentLayout, props.className, {
+        'content-toolbar-sidebar-layout--with-toolbar': props.renderToolbar !== undefined
+      }) }
+    >
       { props.renderTopBar !== undefined && (
         <div className='content-toolbar-sidebar-layout__top-bar'>
           {props.renderTopBar}

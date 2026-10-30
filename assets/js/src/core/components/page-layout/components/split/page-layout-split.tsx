@@ -11,27 +11,22 @@
 import React, { useRef, useState } from 'react'
 import { Flex } from 'antd'
 import cn from 'classnames'
-import { Divider } from '../../../split-layout/components/divider/divider'
-import { PageLayoutPane, type PageLayoutPaneProps } from '../pane/page-layout-pane'
+import { Divider } from './divider'
+import { PageLayoutPane, type PageLayoutPaneProps } from './page-layout-pane'
 import { useStyles } from './page-layout-split.styles'
 
-export interface PageLayoutSplitOptions {
+export interface PageLayoutSplitProps {
+  variant: 'split'
   /** The item sizes are read on the first render only; later changes of `size`, `minSize` and `maxSize` are ignored. */
   leftItem: PageLayoutPaneProps
   rightItem: PageLayoutPaneProps
-  /** Shows only the left item, at full width (with both flags set, both items stay visible). */
-  leftItemFullWidth?: boolean
-  /** Shows only the right item, at full width (with both flags set, both items stay visible). */
-  rightItemFullWidth?: boolean
+  /** Shows only this item, at full width. */
+  fullWidth?: 'left' | 'right'
   withDivider?: boolean
   /** Lets the divider resize the items by mouse and arrow keys (needs `withDivider`). */
-  resizeAble?: boolean
+  resizable?: boolean
   /** Aligns the divider with a toolbar at the top of the items. */
   withToolbar?: boolean
-}
-
-export interface PageLayoutSplitProps extends PageLayoutSplitOptions {
-  variant: 'split'
 }
 
 type PaneSizing = Omit<PageLayoutPaneProps, 'children'>
@@ -41,12 +36,11 @@ const RESIZE_INCREMENT = 5 // define the amount to resize with each key press
 export const PageLayoutSplit = ({
   leftItem,
   rightItem,
+  fullWidth,
   withDivider = false,
-  resizeAble = false,
-  withToolbar = false,
-  leftItemFullWidth = false,
-  rightItemFullWidth = false
-}: Readonly<PageLayoutSplitOptions>): React.JSX.Element => {
+  resizable = false,
+  withToolbar = false
+}: Readonly<Omit<PageLayoutSplitProps, 'variant'>>): React.JSX.Element => {
   const leftItemRef = useRef<HTMLDivElement>(null)
   const rightItemRef = useRef<HTMLDivElement>(null)
   const elementRef = useRef<HTMLDivElement>(null)
@@ -104,37 +98,34 @@ export const PageLayoutSplit = ({
     }
   }
 
-  const isLeftItemFullWidth = leftItemFullWidth && !rightItemFullWidth
-  const isRightItemFullWidth = rightItemFullWidth && !leftItemFullWidth
-
   return (
     <Flex
       className={ cn('split-layout', styles.splitLayout) }
       ref={ elementRef }
     >
-      {!isRightItemFullWidth && (
+      {fullWidth !== 'right' && (
         <PageLayoutPane
           ref={ leftItemRef }
           { ...internalLeftItemSizing }
-          size={ leftItemFullWidth ? 100 : internalLeftItemSizing.size }
+          size={ fullWidth === 'left' ? 100 : internalLeftItemSizing.size }
         >
           { leftItemChildren }
         </PageLayoutPane>
       )}
 
-      {withDivider && !isLeftItemFullWidth && !isRightItemFullWidth && (
+      {withDivider && fullWidth === undefined && (
         <Divider
-          onKeyboardResize={ resizeAble ? onKeyboardResize : undefined }
-          onMouseResize={ resizeAble ? onMouseResize : undefined }
+          onKeyboardResize={ resizable ? onKeyboardResize : undefined }
+          onMouseResize={ resizable ? onMouseResize : undefined }
           withToolbar={ withToolbar }
         />
       )}
 
-      {!isLeftItemFullWidth && (
+      {fullWidth !== 'left' && (
         <PageLayoutPane
           ref={ rightItemRef }
           { ...internalRightItemSizing }
-          size={ rightItemFullWidth ? 100 : internalRightItemSizing.size }
+          size={ fullWidth === 'right' ? 100 : internalRightItemSizing.size }
         >
           { rightItemChildren }
         </PageLayoutPane>

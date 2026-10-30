@@ -9,7 +9,7 @@
  */
 
 import type React from 'react'
-import { PageLayoutPane, type PageLayoutPaneProps } from '../../../page-layout/components/pane/page-layout-pane'
+import { PageLayoutPane, type PageLayoutPaneProps } from '../../../page-layout/components/split/page-layout-pane'
 
 /**
  * @deprecated Use `PageLayoutPaneProps` instead, the item type of the `split` and `config` variants of `PageLayout`.

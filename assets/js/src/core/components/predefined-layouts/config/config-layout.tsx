@@ -8,14 +8,15 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { PageLayout, type PageLayoutSplitOptions } from '@Pimcore/components/page-layout/page-layout'
+import { PageLayout } from '@Pimcore/components/page-layout/page-layout'
+import { type SplitLayoutProps } from '@Pimcore/components/split-layout/split-layout'
 import React from 'react'
 
 /**
  * @deprecated Use `PageLayoutConfigProps` (with `variant: 'config'`) instead.
  * This type is kept for backward compatibility and will be removed in the next major version.
  */
-export interface ConfigLayoutProps extends PageLayoutSplitOptions {}
+export interface ConfigLayoutProps extends SplitLayoutProps {}
 
 /**
  * ConfigLayout - A predefined layout component for configuration interfaces
@@ -28,9 +29,9 @@ export interface ConfigLayoutProps extends PageLayoutSplitOptions {}
  * - Built-in divider and toolbar alignment (`withDivider` and `withToolbar` default to true)
  * - `leftItemFullWidth` and `rightItemFullWidth` are ignored
  *
- * @deprecated Use `PageLayout` with `variant="config"` instead; the other props and defaults are the same,
- * and it also supports the full-width flags. This alias is kept for backward compatibility and will be
- * removed in the next major version.
+ * @deprecated Use `PageLayout` with `variant="config"` instead: `resizeAble` became `resizable`, the other props
+ * and defaults are the same, and it also supports `fullWidth`. This alias is kept for backward compatibility and
+ * will be removed in the next major version.
  *
  * @example
  * ```tsx
@@ -54,7 +55,7 @@ export const ConfigLayout = (props: ConfigLayoutProps): React.JSX.Element => {
   return (
     <PageLayout
       leftItem={ leftItem }
-      resizeAble={ resizeAble }
+      resizable={ resizeAble }
       rightItem={ rightItem }
       variant="config"
       withDivider={ withDivider }
