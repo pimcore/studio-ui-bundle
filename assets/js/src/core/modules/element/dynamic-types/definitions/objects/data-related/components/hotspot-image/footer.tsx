@@ -166,7 +166,6 @@ export const HotspotImageFooter = (props: HotspotImageFooterProps): React.JSX.El
           aria-label={ t('more-actions') }
           icon={ { value: 'more' } }
           onClick={ (e) => { e.stopPropagation() } }
-          tooltip={ { title: t('more-actions') } }
         />
       </Dropdown>
     )

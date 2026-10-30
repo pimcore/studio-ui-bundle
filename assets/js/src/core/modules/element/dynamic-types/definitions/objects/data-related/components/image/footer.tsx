@@ -129,7 +129,6 @@ export const ImageFooter = (props: ImageFooterProps): React.JSX.Element => {
             aria-label={ t('more-actions') }
             icon={ { value: 'more' } }
             onClick={ (e) => { e.stopPropagation() } }
-            tooltip={ { title: t('more-actions') } }
           />
         </Dropdown>
       )

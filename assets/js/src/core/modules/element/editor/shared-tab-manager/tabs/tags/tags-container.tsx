@@ -29,7 +29,6 @@ import {
   useTagGetCollectionForElementByTypeAndIdQuery
 } from '@Pimcore/modules/element/editor/shared-tab-manager/tabs/tags/tags-api-slice-enhanced'
 import { Button } from '@Pimcore/components/button/button'
-import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 
 export const TagsTabContainer = (): React.JSX.Element => {
   const { t } = useTranslation()
@@ -53,17 +52,6 @@ export const TagsTabContainer = (): React.JSX.Element => {
       )
     : (
       <Dropdown.Button
-        buttonsRender={ ([leftButton]) => [
-          leftButton,
-          <IconButton
-            aria-label={ t('more-actions') }
-            disabled={ element?.hasChildren !== true }
-            icon={ { value: 'more' } }
-            key="more"
-            tooltip={ { title: t('more-actions') } }
-            type="default"
-          />
-        ] }
         disabled={ element?.hasChildren !== true }
         menu={ {
           items: [{

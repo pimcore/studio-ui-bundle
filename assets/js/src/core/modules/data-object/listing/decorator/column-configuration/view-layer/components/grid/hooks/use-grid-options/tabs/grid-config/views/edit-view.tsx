@@ -234,10 +234,8 @@ export const EditView = (props: EditViewProps): React.JSX.Element => {
                     }
                     >
                       <IconButton
-                        aria-label={ t('more-actions') }
                         data-testid="listing-grid-config-more-button"
                         icon={ { value: 'more' } }
-                        tooltip={ { title: t('more-actions') } }
                         type='default'
                       />
                     </Dropdown>

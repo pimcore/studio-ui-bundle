@@ -8,9 +8,8 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React, { cloneElement, isValidElement, useEffect, useRef, useState } from 'react'
+import React from 'react'
 import { Tooltip as AntTooltip, type TooltipProps } from 'antd'
-import { isNil, isUndefined } from 'lodash'
 
 /**
  * Delay in seconds before the tooltip of an action button (open, delete, search, upload, ...) appears.
@@ -19,142 +18,8 @@ import { isNil, isUndefined } from 'lodash'
  */
 export const actionTooltipDelay = 0.4
 
-type PressSource = 'pointer' | 'keyboard'
-
-// outlives the instance: a pressed trigger can re-mount under the resting pointer and get a new mouseenter
-let pressedArea: DOMRect | null = null
-
-const isInPressedArea = (x: number, y: number): boolean =>
-  pressedArea !== null && x >= pressedArea.left && x <= pressedArea.right && y >= pressedArea.top && y <= pressedArea.bottom
-
-const forgetPressedAreaOnMove = (event: MouseEvent): void => {
-  if (!isInPressedArea(event.clientX, event.clientY)) {
-    forgetPressedArea()
-  }
-}
-
-const rememberPressedArea = (element: Element): void => {
-  const area = element.getBoundingClientRect()
-  if (area.width === 0 || area.height === 0) {
-    return
-  }
-  if (pressedArea === null) {
-    document.addEventListener('mousemove', forgetPressedAreaOnMove, { capture: true, passive: true })
-  }
-  pressedArea = area
-}
-
-const forgetPressedArea = (): void => {
-  pressedArea = null
-  document.removeEventListener('mousemove', forgetPressedAreaOnMove, { capture: true })
-}
-
-const isBlank = (content: TooltipProps['title']): boolean => isNil(content) || content === '' || content === false
-
-// antd's own rule for a tooltip with nothing to show; it only applies it while `open` is uncontrolled
-const hasContent = ({ title, overlay }: TooltipProps): boolean =>
-  title === 0 || !isBlank(title) || (!isBlank(overlay) && overlay !== 0)
-
-/**
- * A press on the trigger (mouse down, click, Enter or Space) hides the tooltip, so it never covers
- * a menu, modal or popover the press opens. It stays hidden until the pointer leaves the trigger,
- * or focus leaves it after a keyboard press, and shows again on the next hover.
- */
 export const Tooltip = (props: TooltipProps): JSX.Element => {
-  const { children, open, defaultOpen = false, onOpenChange, trigger = 'hover' } = props
-  const [isHoverOpen, setIsHoverOpen] = useState(defaultOpen)
-  const [pressedBy, setPressedBy] = useState<PressSource | null>(null)
-  const pressedByRef = useRef<PressSource | null>(null)
-  const showsContent = hasContent(props)
-
-  // antd reports no open change while the content is empty, so the hover state would outlive it
-  useEffect(() => {
-    if (!showsContent) {
-      setIsHoverOpen(false)
-    }
-  }, [showsContent])
-
-  const triggers = Array.isArray(trigger) ? trigger : [trigger]
-  const hidesOnPress = isValidElement(children) && triggers.includes('hover') && triggers.every((t) => t === 'hover' || t === 'focus')
-
-  if (!hidesOnPress) {
-    return (
-      <AntTooltip { ...props } />
-    )
-  }
-
-  const isOpen = isUndefined(open) ? showsContent && isHoverOpen : open
-
-  const press = (source: PressSource): void => {
-    pressedByRef.current = source
-    setPressedBy(source)
-    setIsHoverOpen(false)
-    if (isOpen) {
-      onOpenChange?.(false)
-    }
-  }
-
-  const release = (): void => {
-    pressedByRef.current = null
-    setPressedBy(null)
-  }
-
-  const handleOpenChange = (nextOpen: boolean): void => {
-    // a hover delay that started before the press still fires after it
-    if (nextOpen && pressedByRef.current !== null) {
-      return
-    }
-    setIsHoverOpen(nextOpen)
-    onOpenChange?.(nextOpen)
-  }
-
-  const child = children as React.ReactElement
-  const childProps = child.props
-
-  const trackedChild = cloneElement(child, {
-    onMouseDown: (event: React.MouseEvent) => {
-      childProps.onMouseDown?.(event)
-      rememberPressedArea(event.currentTarget)
-      press('pointer')
-    },
-    onClick: (event: React.MouseEvent) => {
-      childProps.onClick?.(event)
-      if (pressedByRef.current === null) {
-        press(event.detail === 0 ? 'keyboard' : 'pointer')
-      }
-    },
-    onMouseEnter: (event: React.MouseEvent) => {
-      childProps.onMouseEnter?.(event)
-      if (isInPressedArea(event.clientX, event.clientY)) {
-        press('pointer')
-      }
-    },
-    onKeyDown: (event: React.KeyboardEvent) => {
-      childProps.onKeyDown?.(event)
-      if (event.key === 'Enter' || event.key === ' ') {
-        press('keyboard')
-      }
-    },
-    onMouseLeave: (event: React.MouseEvent) => {
-      childProps.onMouseLeave?.(event)
-      forgetPressedArea()
-      release()
-    },
-    onBlur: (event: React.FocusEvent) => {
-      childProps.onBlur?.(event)
-      if (pressedByRef.current === 'keyboard') {
-        release()
-      }
-    }
-  })
-
   return (
-    <AntTooltip
-      { ...props }
-      onOpenChange={ handleOpenChange }
-      open={ pressedBy === null && isOpen }
-    >
-      {trackedChild}
-    </AntTooltip>
+    <AntTooltip { ...props } />
   )
 }

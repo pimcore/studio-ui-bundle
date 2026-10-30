@@ -196,11 +196,9 @@ export const SavedSearchPanel = ({ elementType, supportsLoadedState, readOnly = 
             } }
           >
             <IconButton
-              aria-label={ t('more-actions') }
               data-testid='saved-search-more-button'
               icon={ { value: 'more' } }
               loading={ isDeleting }
-              tooltip={ { title: t('more-actions') } }
               type='default'
             />
           </Dropdown>
