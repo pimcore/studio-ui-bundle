@@ -22,12 +22,14 @@ const updateValue = jest.fn((key: string, value: ValueType) => { store.values[ke
 const updateValueWithReload = jest.fn((key: string, value: ValueType) => { store.values[key] = value })
 const removeValues = jest.fn((keys: string[]) => { keys.forEach(key => { delete store.values[key] }) }) // eslint-disable-line @typescript-eslint/no-dynamic-delete
 const setInheritanceState = jest.fn((key: string, inherited: boolean) => { store.inheritance[key] = inherited })
+let persistenceVersion = 0
 
 jest.mock('../../../hooks/use-document-editor', () => ({
   useDocumentEditor: () => ({
     getValue: (key: string) => store.values[key],
     getValues: () => ({ ...store.values }),
     getInheritanceState: (key: string) => store.inheritance[key] ?? false,
+    getPersistenceVersion: () => persistenceVersion,
     setValue,
     updateValue,
     updateValueWithReload,
@@ -42,7 +44,22 @@ describe('useEditableDialogSnapshot', () => {
   beforeEach(() => {
     store.values = { headline: input('Hello'), pageTitle: input('Page') }
     store.inheritance = { headline: false, pageTitle: false }
+    persistenceVersion = 0
     jest.clearAllMocks()
+  })
+
+  it('persists the restored state when the document was saved while the dialog was open', () => {
+    const { result } = renderHook(() => useEditableDialogSnapshot(['headline']))
+
+    store.values.headline = input('Changed')
+    // e.g. an edit on the page behind the maskless dialog autosaved the whole store, discarded value included
+    persistenceVersion++
+    result.current.restore()
+
+    expect(setValue).toHaveBeenCalledWith('headline', input('Hello'))
+    expect(updateValue).toHaveBeenCalledTimes(1)
+    expect(updateValue).toHaveBeenCalledWith('headline', input('Hello'))
+    expect(setValue.mock.invocationCallOrder[0]).toBeLessThan(updateValue.mock.invocationCallOrder[0])
   })
 
   it('reports no changes right after the snapshot was taken', () => {

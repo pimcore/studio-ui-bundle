@@ -25,7 +25,7 @@ import { useDocumentEditor } from '@Pimcore/modules/document/editor/shared-tab-m
 import { useAssetVideoThumbnailStatusQuery } from '@Pimcore/modules/asset/asset-api-slice-enhanced'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { RenderEditableOptionsContext } from '@Pimcore/modules/document/editor/shared-tab-manager/tabs/edit/components/editables-renderer/render-editable-options-context'
-import { shouldReloadForThumbnailStatus } from './utils/thumbnail-reload'
+import { hasThumbnailConversionEnded } from './utils/thumbnail-reload'
 
 const VIDEO_THUMBNAIL_POLL_INTERVAL_MS = 5000
 
@@ -63,7 +63,7 @@ export const VideoEditable = ({
   const { t } = useTranslation()
   const { styles } = useStyles()
   const { reloadIframe } = useDocumentEditor()
-  const { deferReloadOnChange } = useContext(RenderEditableOptionsContext)
+  const { deferReloadOnChange, onReloadDeferred } = useContext(RenderEditableOptionsContext)
   const [wrapperElement, setWrapperElement] = useState<HTMLDivElement | null>(null)
   const [emptyElement, setEmptyElement] = useState<HTMLDivElement | null>(null)
   const [progressElement, setProgressElement] = useState<HTMLDivElement | null>(null)
@@ -169,13 +169,20 @@ export const VideoEditable = ({
   )
 
   useEffect(() => {
-    const reloadState = { alreadyTriggered: reloadTriggeredRef.current, deferReload: deferReloadOnChange }
-
-    if (shouldReloadForThumbnailStatus(thumbnailStatus, reloadState)) {
-      reloadTriggeredRef.current = true
-      reloadIframe()
+    if (!hasThumbnailConversionEnded(thumbnailStatus, reloadTriggeredRef.current)) {
+      return
     }
-  }, [thumbnailStatus, reloadIframe, deferReloadOnChange])
+
+    reloadTriggeredRef.current = true
+
+    // Inside the editable dialog a reload would save and destroy the dialog; the dialog reloads on Save instead.
+    if (deferReloadOnChange) {
+      onReloadDeferred?.()
+      return
+    }
+
+    reloadIframe()
+  }, [thumbnailStatus, reloadIframe, deferReloadOnChange, onReloadDeferred])
 
   const showModal = (): void => {
     openModal(videoValue)

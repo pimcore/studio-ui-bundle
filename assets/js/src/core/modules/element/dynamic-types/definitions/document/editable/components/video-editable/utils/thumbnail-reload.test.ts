@@ -8,27 +8,23 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { shouldReloadForThumbnailStatus } from './thumbnail-reload'
+import { hasThumbnailConversionEnded } from './thumbnail-reload'
 
-describe('shouldReloadForThumbnailStatus', () => {
+describe('hasThumbnailConversionEnded', () => {
   it.each([
     ['finished', true],
     ['error', true],
     ['inProgress', false],
     ['queued', false]
-  ])('reloads once the conversion ended (%s → %s)', (status, expected) => {
-    expect(shouldReloadForThumbnailStatus({ status }, { alreadyTriggered: false, deferReload: false })).toBe(expected)
+  ])('reports the end of the conversion (%s → %s)', (status, expected) => {
+    expect(hasThumbnailConversionEnded({ status }, false)).toBe(expected)
   })
 
-  it('does not reload without a status', () => {
-    expect(shouldReloadForThumbnailStatus(undefined, { alreadyTriggered: false, deferReload: false })).toBe(false)
+  it('reports nothing without a status', () => {
+    expect(hasThumbnailConversionEnded(undefined, false)).toBe(false)
   })
 
-  it('reloads only once per editable instance', () => {
-    expect(shouldReloadForThumbnailStatus({ status: 'finished' }, { alreadyTriggered: true, deferReload: false })).toBe(false)
-  })
-
-  it('holds the reload back while the owner (e.g. an open editable dialog) defers reloads', () => {
-    expect(shouldReloadForThumbnailStatus({ status: 'finished' }, { alreadyTriggered: false, deferReload: true })).toBe(false)
+  it('reports the end only once per editable instance', () => {
+    expect(hasThumbnailConversionEnded({ status: 'finished' }, true)).toBe(false)
   })
 })

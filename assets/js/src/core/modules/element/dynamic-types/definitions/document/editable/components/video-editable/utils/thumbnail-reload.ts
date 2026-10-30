@@ -10,23 +10,16 @@
 
 import { isNil } from 'lodash'
 
-export interface ThumbnailReloadState {
-  /** The editable instance already refreshed the editor for this conversion. */
-  alreadyTriggered: boolean
-  /** The owner of the editable (e.g. an open editable dialog) holds reloads back. */
-  deferReload: boolean
-}
-
 /**
- * The rendered video preview is stale while a named thumbnail is still converting. Once the
- * conversion ended the editor is reloaded once, unless the owner of the editable defers reloads:
- * a reload would save and destroy an open editable dialog before the user chose Save or Cancel.
+ * The rendered video preview is stale while a named thumbnail is still converting. Reports, once per
+ * editable instance, that the conversion ended so the editor can be refreshed (or the refresh handed
+ * to the owner of the editable, e.g. an open editable dialog that reloads on Save).
  */
-export const shouldReloadForThumbnailStatus = (
+export const hasThumbnailConversionEnded = (
   thumbnailStatus: { status: string } | null | undefined,
-  { alreadyTriggered, deferReload }: ThumbnailReloadState
+  alreadyReported: boolean
 ): boolean => {
-  if (isNil(thumbnailStatus) || alreadyTriggered || deferReload) {
+  if (isNil(thumbnailStatus) || alreadyReported) {
     return false
   }
 

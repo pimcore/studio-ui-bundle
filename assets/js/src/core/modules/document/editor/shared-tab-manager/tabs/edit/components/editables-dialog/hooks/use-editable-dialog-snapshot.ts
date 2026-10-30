@@ -47,12 +47,17 @@ export const useEditableDialogSnapshot = (editableNames: string[]): UseEditableD
     getValue,
     getValues,
     getInheritanceState,
+    getPersistenceVersion,
     setValue,
     updateValue,
     updateValueWithReload,
     removeValues,
     setInheritanceState
   } = useDocumentEditor()
+
+  // Dialog edits are not persisted until Save, but any other save made while the dialog is open
+  // serializes the whole store, discarded values included. Remember where persistence stood at open.
+  const [persistenceVersionAtOpen] = useState(() => getPersistenceVersion())
 
   const isOwned = (key: string): boolean =>
     editableNames.some(name => key === name || key.startsWith(`${name}:`))
@@ -78,6 +83,19 @@ export const useEditableDialogSnapshot = (editableNames: string[]): UseEditableD
   const getChangedKeys = (): string[] =>
     union(Object.keys(snapshot), getOwnedKeys()).filter(hasChanged)
 
+  // The parent window saves the live values of the whole document, so one notification carries the
+  // entire batch. It is sent through a dialog value that still exists; the value itself is unchanged.
+  const notifyParent = (changedKeys: string[], reload: boolean): void => {
+    const key = union(changedKeys, editableNames).find(name => !isNil(getValue(name)))
+
+    if (key === undefined) {
+      return
+    }
+
+    const notify = reload ? updateValueWithReload : updateValue
+    notify(key, getValue(key))
+  }
+
   const restore = (): void => {
     const changedKeys = getChangedKeys()
     const addedKeys = changedKeys.filter(key => isNil(getSnapshot(key).value))
@@ -97,25 +115,20 @@ export const useEditableDialogSnapshot = (editableNames: string[]): UseEditableD
         setValue(key, cloneDeep(value))
       }
     })
+
+    // Something was saved while the dialog was open, so the draft may hold the discarded values:
+    // persist the restored state. A clean discard stays silent.
+    if (changedKeys.length > 0 && getPersistenceVersion() !== persistenceVersionAtOpen) {
+      notifyParent(changedKeys, false)
+    }
   }
 
-  // The parent window saves the live values of the whole document, so one notification carries the
-  // entire batch. It is sent through a dialog value that still exists; the value itself is unchanged.
   const commit = ({ reload }: CommitOptions): void => {
     const changedKeys = getChangedKeys()
 
-    if (changedKeys.length === 0) {
-      return
+    if (changedKeys.length > 0) {
+      notifyParent(changedKeys, reload)
     }
-
-    const key = union(changedKeys, editableNames).find(name => !isNil(getValue(name)))
-
-    if (key === undefined) {
-      return
-    }
-
-    const notify = reload ? updateValueWithReload : updateValue
-    notify(key, getValue(key))
   }
 
   return { getChangedKeys, restore, commit }

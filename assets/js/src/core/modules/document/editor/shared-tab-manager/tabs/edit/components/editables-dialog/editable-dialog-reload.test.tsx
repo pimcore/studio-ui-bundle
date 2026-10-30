@@ -56,6 +56,7 @@ jest.mock('../../hooks/use-document-editor', () => ({
     getValue: (key: string) => store.values[key],
     getValues: () => ({ ...store.values }),
     getInheritanceState: () => false,
+    getPersistenceVersion: () => 0,
     setValue,
     updateValue,
     updateValueWithReload,

@@ -126,6 +126,13 @@ class DocumentEditableApiImpl implements DocumentEditableApi {
 
   unregisterDynamicEditables (editableIds: string[]): void {
     for (const id of editableIds) {
+      // A definition is needed as long as its value is part of the document: the renderer may unmount
+      // before the value is serialized (e.g. a block row added inside the editable dialog, whose
+      // autosave runs after the dialog closed), and serialization transforms values by definition.
+      if (this.dynamicEditables[id]?.name in this.values) {
+        continue
+      }
+
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete this.dynamicEditables[id]
     }
