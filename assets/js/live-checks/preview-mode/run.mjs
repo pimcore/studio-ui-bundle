@@ -149,10 +149,26 @@ const switchPreview = async (on) => {
 // Expand every collapsed advanced card first (DR-P10 A will widen this to collapsed cards later).
 const expandAdvanced = () => evaluate(`(() => { const headers = ${MODAL}.querySelectorAll('.ant-collapse-header[aria-expanded=false]')
   headers.forEach((h) => h.click()); return headers.length })()`)
-const checkOnOff = async (prefix) => {
+// F18: before any card is expanded, a collapsed advanced card shows a non-empty Preview row (shot as `<prefix>-collapsed`).
+// `closeOne` (grid modal: its advanced cards open expanded): click one open header closed first, nothing is saved.
+const checkCollapsedCard = async (prefix, { closeOne = false } = {}) => {
+  step = `${prefix}: collapsed advanced card`
+  if (closeOne) {
+    const closed = await evaluate(`(() => { const h = ${MODAL}.querySelector('.stack-list-item .ant-collapse-header[aria-expanded=true]')
+      if (!h) return false; h.click(); return true })()`)
+    if (!closed) throw new Error('no advanced card to collapse, and adding an unsaved advanced column is not supported by this script')
+    await quiet()
+  }
+  const state = await evaluate(`window.__pm.inspectCollapsed(${MODAL})`)
+  console.log(`${prefix} collapsed: ${JSON.stringify(state)}`)
+  problemsOf(await evaluate(`window.__pm.checkCollapsed(${JSON.stringify(state)}, { exactlyOne: ${closeOne} })`))
+  await shot(`${prefix}-preview-collapsed`)
+}
+const checkOnOff = async (prefix, { closeOne = false } = {}) => {
   await expectState(false, `${prefix} off`)
   await shot(`${prefix}-preview-off`)
   await switchPreview(true)
+  if (prefix !== 'schema-migration') await checkCollapsedCard(prefix, { closeOne })
   await expandAdvanced()
   await quiet()
   const state = await expectState(true, `${prefix} on`)
@@ -201,7 +217,7 @@ try {
     await waitFor('the modal', `!!document.querySelector('.ant-modal')`)
     await quiet()
   })
-  await run('grid modal: preview off and on', () => checkOnOff('grid-config'))
+  await run('grid modal: preview off and on', () => checkOnOff('grid-config', { closeOne: true }))
   await run('close the Grid Configuration modal', async () => {
     await evaluate(`(() => { const c = ${MODAL}.querySelector('.ant-modal-close'); if (c) c.click(); return true })()`)
     await quiet()

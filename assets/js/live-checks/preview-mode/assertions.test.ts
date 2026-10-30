@@ -11,7 +11,7 @@
 
 /* eslint-disable @typescript-eslint/no-require-imports */
 const { spawnSync } = require('node:child_process')
-const { inspectModal, checkState, checkTooltip, isForbiddenClick, consoleErrorMessage } = require('./assertions.cjs')
+const { inspectModal, inspectCollapsed, checkCollapsed, checkState, checkTooltip, isForbiddenClick, consoleErrorMessage } = require('./assertions.cjs')
 
 const switchHtml = (on: boolean): string =>
   `<div><button role="switch" aria-checked="${on}"></button><span>Preview mode</span></div>`
@@ -57,6 +57,27 @@ describe('preview-mode live check assertions', () => {
     expect(checkTooltip('/cars/jaguar/E-Type', state)).toEqual([])
     expect(checkTooltip('/cars/bmw/M3', state)).toHaveLength(1)
     expect(checkTooltip(null, state)).toHaveLength(1)
+  })
+
+  const card = (rows: string): string => `<div class="stack-list-item"><div class="stack-list-item__collapsed-body">${rows}</div></div>`
+  const valueRow = (value: string): string =>
+    `<div data-testid="preview-mode-column-preview-row"><span>Preview</span><div>${value}</div></div>`
+
+  it('AC1: a collapsed advanced card with a non-empty Preview row passes, exactly one when asked', () => {
+    const state = inspectCollapsed(modal(card(valueRow('Jaguar'))))
+    expect(state.cards).toEqual([{ rows: 1, values: ['Jaguar'] }])
+    expect(checkCollapsed(state)).toEqual([])
+    expect(checkCollapsed(state, { exactlyOne: true })).toEqual([])
+  })
+
+  it('AC2, AC3: red case: no collapsed card, an empty row, no row and two rows are reported', () => {
+    expect(checkCollapsed(inspectCollapsed(modal(valueRow('x'))))).toEqual(['no collapsed advanced card exists'])
+    expect(checkCollapsed(inspectCollapsed(modal(card(valueRow(''))))))
+      .toEqual(['the Preview row of the collapsed advanced card is empty'])
+    expect(checkCollapsed(inspectCollapsed(modal(card('')))))
+      .toEqual(['no collapsed advanced card shows a Preview row'])
+    expect(checkCollapsed(inspectCollapsed(modal(card(valueRow('a') + valueRow('b')))), { exactlyOne: true }))
+      .toEqual([expect.stringContaining('2 Preview rows')])
   })
 
   it('AC2: Save, Apply and Confirm buttons are never clicked', () => {

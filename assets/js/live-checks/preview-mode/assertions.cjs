@@ -66,10 +66,32 @@ function checkTooltip (tooltip, state) {
   return short !== '' && last.endsWith(short) ? [] : [`short path "${state.barPath}" does not end the full path "${full}"`]
 }
 
+// Collapsed advanced cards (F18): a StackListItem shows its Preview row in `.stack-list-item__collapsed-body`, beside
+// the closed collapse, only while it is closed. One entry per such card: its Preview rows and the value of each.
+function inspectCollapsed (root) {
+  const cards = Array.from(root.querySelectorAll('.stack-list-item__collapsed-body')).map((body) => {
+    const rows = Array.from(body.querySelectorAll(ROW))
+    return { rows: rows.length, values: rows.map((r) => (r.lastElementChild ? text(r.lastElementChild) : '')) }
+  })
+  return { cards, rows: root.querySelectorAll(ROW).length }
+}
+
+// The problems of the collapsed case (an empty list = fine); `exactlyOne`: the grid modal's one closed card holds
+// exactly one Preview row.
+function checkCollapsed (state, { exactlyOne = false } = {}) {
+  if (state.cards.length === 0) return ['no collapsed advanced card exists']
+  const card = state.cards.find((c) => c.rows > 0 && c.values.some((v) => v !== ''))
+  if (card === undefined) {
+    return [state.cards.some((c) => c.rows > 0) ? 'the Preview row of the collapsed advanced card is empty' : 'no collapsed advanced card shows a Preview row']
+  }
+  if (exactlyOne && card.rows !== 1) return [`the collapsed advanced card shows ${card.rows} Preview rows, expected exactly one`]
+  return []
+}
+
 // run.mjs asks this before every click: Save/Apply (and Confirm migration) are never clicked.
 const isForbiddenClick = (label) => FORBIDDEN_CLICK.test(label || '')
 
 // The final step of run.mjs: any JS error or console.error during the run fails the check.
 const consoleErrorMessage = (errors) => (errors.length ? [...new Set(errors)].slice(0, 10).join(' | ') : null)
 
-module.exports = { inspectModal, checkState, checkTooltip, isForbiddenClick, consoleErrorMessage }
+module.exports = { inspectModal, inspectCollapsed, checkCollapsed, checkState, checkTooltip, isForbiddenClick, consoleErrorMessage }
