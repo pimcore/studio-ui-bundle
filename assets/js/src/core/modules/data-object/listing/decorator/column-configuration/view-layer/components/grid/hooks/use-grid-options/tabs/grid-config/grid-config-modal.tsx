@@ -19,7 +19,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { Space } from '@Pimcore/components/space/space'
 import { IconButton } from '@Pimcore/components/icon-button/icon-button'
 import { Content } from '@Pimcore/components/content/content'
-import { GridConfigList } from './grid-config-list'
+import { GridConfigList, type GridConfigPipelineItem } from './grid-config-list'
 import { AddColumnControls } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/components/add-column-controls/add-column-controls'
 import { FieldsToAddPanel } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/components/fields-to-add-panel/fields-to-add-panel'
 import { PipelineLayoutProvider } from './forms/advanced-column-form/pipeline-layout-provider'
@@ -31,10 +31,12 @@ import { getFallbackItem, type FallbackRow } from '@Pimcore/components/preview-m
 import { useData } from '@Pimcore/modules/element/listing/abstract/data-layer/provider/data/use-data'
 import { useClassDefinitionSelection } from '@Pimcore/modules/data-object/listing/decorator/class-definition-selection/context-layer/provider/use-class-definition-selection'
 import { useStyles } from './grid-config-modal.styles'
+import { useOpenAnimationDone } from './use-open-animation-done'
 
 export interface GridConfigModalProps extends EditViewProps {
   open?: boolean
   onOpenChange?: (open: boolean) => void
+  focusedPipelineItem?: GridConfigPipelineItem
 }
 
 const PreviewModeToolbarContent = (): React.JSX.Element => {
@@ -64,7 +66,8 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
     onColumnSelect,
     onAddAdvancedColumn,
     open = false,
-    onOpenChange
+    onOpenChange,
+    focusedPipelineItem
   } = props
 
   const { t } = useTranslation()
@@ -72,6 +75,8 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
   const { selectedClassDefinition } = useClassDefinitionSelection()
   const { styles } = useStyles()
   const [fieldsToAddOpen, setFieldsToAddOpen] = useState<boolean>(true)
+  // scrolling waits for the open animation, the zoomed-in modal would throw off the scroll position
+  const { isOpenAnimationDone, setIsOpenAnimationDone } = useOpenAnimationDone(open)
 
   const firstRow = gridData?.items?.[0] as FallbackRow | undefined
 
@@ -89,6 +94,7 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
         >
           <PipelineLayoutProvider pipelineLayout="verbose">
             <Modal
+              afterOpenChange={ setIsOpenAnimationDone }
               closable={ false }
               footer={ null }
               onCancel={ () => onOpenChange?.(false) }
@@ -123,7 +129,7 @@ export const GridConfigModal = (props: GridConfigModalProps): React.JSX.Element 
                     ) }
 
                     <div className={ styles.list }>
-                      <GridConfigList />
+                      <GridConfigList focusedPipelineItem={ isOpenAnimationDone ? focusedPipelineItem : undefined } />
                     </div>
                   </div>
                 </Content>

@@ -31,6 +31,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/documents', methods: ['GET'])]
 final class DocumentVersionsController extends AbstractController
 {
+    private const string ERROR_TEMPLATE = '@PimcoreStudioUi/backend/error.html.twig';
+
     public function __construct(
         private readonly DocumentVersionComparisonService $versionComparisonService,
         private readonly TranslatorInterface $translator,
@@ -50,7 +52,7 @@ final class DocumentVersionsController extends AbstractController
     ): Response {
 
         if (!$this->versionComparisonService->isComparisonSupported()) {
-            return $this->render('@PimcoreStudioUi/backend/error.html.twig', [
+            return $this->render(self::ERROR_TEMPLATE, [
                 'title' => $this->translator->trans('unsupported_feature', [], 'studio'),
                 'message' => $this->translator->trans('document.version.comparison.unsupported.requirements', [], 'studio'),
             ]);
@@ -73,12 +75,12 @@ final class DocumentVersionsController extends AbstractController
 
             return $this->render('@PimcoreStudioUi/backend/document-versions/diff_versions.html.twig', $viewParams);
         } catch (DocumentVersionNotFoundException $e) {
-            return $this->render('@PimcoreStudioUi/backend/error.html.twig', [
+            return $this->render(self::ERROR_TEMPLATE, [
                 'title' => $this->translator->trans('document.version.comparison.error.title', [], 'studio'),
                 'message' => $e->getMessage(),
             ]);
         } catch (DocumentVersionComparisonException $e) {
-            return $this->render('@PimcoreStudioUi/backend/error.html.twig', [
+            return $this->render(self::ERROR_TEMPLATE, [
                 'title' => $this->translator->trans('document.version.comparison.error.title', [], 'studio'),
                 'message' => 'The version comparison could not be completed. ' . $e->getMessage(),
             ]);

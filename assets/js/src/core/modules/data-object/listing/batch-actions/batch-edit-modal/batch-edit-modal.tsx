@@ -8,6 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
+/* eslint-disable max-lines */
 import React, { useEffect, useMemo, useState } from 'react'
 import { ModalFooter } from '@Pimcore/components/modal/footer/modal-footer'
 import { FieldsToAddPanel } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/components/fields-to-add-panel/fields-to-add-panel'
@@ -19,6 +20,7 @@ import { Flex } from '@Pimcore/components/flex/flex'
 import { ModalTitle } from '@Pimcore/components/modal/modal-title/modal-title'
 import { useAvailableColumns } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns'
 import { useBatchEdit } from './hooks/use-batch-edit'
+import { useApplyEnabled } from './hooks/use-apply-enabled'
 import { BatchEditListContainer } from './batch-edit-list-container'
 import { Form } from '@Pimcore/components/form/form'
 import { FieldWidthProvider } from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/providers/field-width/field-width-provider'
@@ -55,7 +57,7 @@ export interface BatchEditModalProps {
 export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: BatchEditModalProps): React.JSX.Element => {
   const { batchEdits, addOrUpdateBatchEdit, addOrUpdateBatchEdits, resetBatchEdits } = useBatchEdit()
   const [form] = Form.useForm()
-  const { selectedRows } = useRowSelection()
+  const { selectedRows, deselectRows } = useRowSelection()
   const [patchObjectsInFolder, { error: folderPatchError, isError: isFolderPatchError, isSuccess: isFolderPatchSuccess }] = useDataObjectPatchFolderByIdMutation()
   const [patchObjectsByIds, { error: idPatchError, isError: isIdPatchError, isSuccess: isIdPatchSuccess }] = useDataObjectPatchByIdMutation()
   const { useDataQueryHelper } = useSettings()
@@ -74,6 +76,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   const { openModal } = useClassificationStoreModal({ onUpdate: onClassificationStoreUpdate })
   const { availableColumns } = useAvailableColumns()
   const [fieldsToAddOpen, setFieldsToAddOpen] = useState<boolean>(true)
+  const { applyEnabled, onRowMount } = useApplyEnabled(form, batchEdits)
 
   const resetModal = (): void => {
     resetBatchEdits()
@@ -93,10 +96,6 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
   useEffect(() => {
     if (isFolderPatchSuccess || isIdPatchSuccess) {
       resetModal()
-    }
-
-    if (isIdPatchSuccess && selectedRowsCount === 1) {
-      dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_GRID_ID(id)))
     }
   }, [isFolderPatchSuccess, isIdPatchSuccess])
 
@@ -181,7 +180,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
       })
       await executionEngine.runJob(job)
     } else if (selectedRowsCount === 1) {
-      await patchObjectsByIds({
+      const response = await patchObjectsByIds({
         body: {
           data: [
             {
@@ -191,13 +190,19 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
           ]
         }
       })
+
+      if (response.error === undefined) {
+        dispatch(api.util.invalidateTags(invalidatingTags.DATA_OBJECT_GRID_ID(id)))
+        deselectRows(selectedRowsIds)
+      }
     } else {
       const job = new DataObjectBatchEditJob({
         patchObjectsByIds,
         selectedRowsIds: selectedRowsIds.map(Number),
         values,
         assetContextId: id,
-        refreshGrid
+        refreshGrid,
+        onFinish: () => { deselectRows(selectedRowsIds) }
       })
       await executionEngine.runJob(job)
     }
@@ -248,6 +253,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
                   {t('batch-edit.modal-footer.discard-all-changes')}
                 </IconTextButton>
                 <Button
+                  disabled={ !applyEnabled }
                   onClick={ handleApplyChanges }
                   type='primary'
                 >
@@ -288,7 +294,7 @@ export const BatchEditModal = ({ batchEditModalOpen, setBatchEditModalOpen }: Ba
                 form={ form }
                 onFinish={ onFormFinish }
               >
-                <BatchEditListContainer />
+                <BatchEditListContainer onRowMount={ onRowMount } />
               </Form>
             </div>
           </Flex>

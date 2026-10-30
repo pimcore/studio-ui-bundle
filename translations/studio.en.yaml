@@ -113,6 +113,8 @@ areablock.move-below: Move below
 areablock.show: Show
 areablock.hide: Hide
 areablock.new: New
+areablock.insert-above: Insert above
+areablock.insert-below: Insert below
 areablock.copy: Copy
 areablock.paste: Paste
 areablock.cut: Cut
@@ -387,6 +389,7 @@ grid.advanced-column.advancedColumns.group.date: Date
 grid.advanced-column.advancedColumns.group.string: String
 grid.advanced-column.advancedColumns.group.other: Other
 grid.advanced-column.title.placeholder: Add a title
+grid.advanced-column.expand: Expand
 grid.advanced-column.advancedColumns: Source Field
 grid.advanced-column.advancedColumns.add: Add a source
 grid.advanced-column.transformers: Transformers
@@ -1243,10 +1246,15 @@ batch-edit.no-content: There are no added columns yet
 batch-edit.modal-footer.apply-changes: Apply changes
 batch-edit.modal-footer.discard-all-changes: Discard all changes
 batch-edit.modal-footer.add-a-column: Add a column
+batch-edit.system-boolean.publish: "Publish"
+batch-edit.system-boolean.unpublish: "Unpublish"
+batch-edit.system-boolean.placeholder: "Select an action"
+batch-edit.system-boolean.required: "Choose Publish or Unpublish"
 batch-edit.append-mode.replace: Batch replace
 batch-edit.append-mode.add: Batch add
 batch-edit.append-mode.remove: Batch remove
 batch-delete.job-title: Delete
+element-move.job-title: Move
 export-csv-form.modal-title: Export CSV
 export-csv-form.export-notice: Please note that the export does not support some fields(e.g. preview, size). Press OK to continue with the export.
 export-csv-form.form-field.delimiter: Delimiter
@@ -1311,6 +1319,18 @@ element.tree.paste-only-contents: Paste only contents here
 element.tree.cut: Cut
 element.tree.cut-success-description: '{{elementType}} "{{name}}" has been cut and is ready to paste'
 element.tree.paste-cut: Paste cut-out element
+element.tree.cut-multiple: 'Cut {{count}} elements'
+element.tree.cut-multiple-success-description: '{{count}} elements have been cut and are ready to paste'
+element.tree.paste-cut-multiple: 'Paste {{count}} cut elements'
+element.tree.selection.count_one: '{{count}} element selected'
+element.tree.selection.count_other: '{{count}} elements selected'
+element.tree.selection.clear: Clear selection
+element.tree.selection.limit-reached: 'Maximum of {{limit}} elements reached'
+element.tree.drag.elements_one: '{{count}} element'
+element.tree.drag.elements_other: '{{count}} elements'
+element.tree.drag.elements-partial: '{{count}} of {{selected}} elements'
+element.tree.move.skipped-elements_one: '1 element was not moved: it is locked or you cannot edit it.'
+element.tree.move.skipped-elements_other: '{{count}} elements were not moved: they are locked or you cannot edit them.'
 element.lock: Lock
 element.lock-and-propagate-to-children: Lock and propagate to children
 element.unlock: Unlock
@@ -1331,10 +1351,13 @@ element.tree.refresh: Refresh
 element.new-folder: New Folder
 element.new-folder.validation: Please enter a valid name
 element.rename: Rename
+element.rename-folder: Rename Folder
 element.rename.label: Please enter the new name
 element.rename.validation: Please enter a valid name
 element.share-via-notification: Share via Notifications
 element.delete: Delete
+element.delete-folder: Delete Folder
+element.delete-multiple: 'Delete {{count}} elements'
 element.delete.confirmation.title: Delete item
 element.delete.confirmation.text: Do you really want to delete this item?
 element.delete.confirmation.ok: Delete permanently
@@ -1429,9 +1452,15 @@ relations.create-object.name: Name
 relations.create-object.parent: Parent
 relations.create-object.parent.placeholder: Select a parent
 relations.create-object.class: Class
+relations.visible-fields.loading: Loading visible fields…
+relations.visible-fields.loading-progress: 'Loading visible fields… ({{loaded}} of {{total}})'
+relations.visible-fields.error: The visible fields could not be loaded.
 relation: Relation
 items-limit-reached: The maximum number of items ({{maxItems}}) has been reached.
 asset-upload-type-not-allowed: The uploaded asset's type is not allowed for this field.
+relation.drop.not-allowed-elements-skipped_one: '1 element was not added: this field does not allow its type.'
+relation.drop.not-allowed-elements-skipped_other: '{{count}} elements were not added: this field does not allow their type.'
+drag-and-drop.drop.single-element-only: 'Only one element can be dropped here.'
 actions: Actions
 asset: Asset
 data-object: Data Object
@@ -1486,7 +1515,6 @@ tree.actions.user: User
 tree.actions.add-folder: New Folder
 tree.actions.add-tag: New Tag
 tree.actions.delete-tag: Delete
-tree.actions.rename-tag: Rename
 tree.actions.role: Role
 tree.actions.add-role: Add Role
 tree.actions.clone-role: Clone role
@@ -1498,7 +1526,6 @@ tag-configuration.name: Name
 tag-configuration.parent-tag: Parent Tag
 tag-configuration.create: Create
 tag-configuration.save: Save
-tag-configuration.rename: Rename tag
 tag-configuration.successful-add: Tag has been added successfully
 tag-configuration.successful-update: Tag has been updated successfully
 tag-configuration.successful-deletion: Tag has been deleted successfully
@@ -3051,3 +3078,9 @@ preview-mode.switch: Preview mode
 preview-mode.preview-item: Preview item
 preview-mode.no-item: No preview item available
 preview-mode.preview: Preview
+tag-configuration.move-under: 'Move under'
+tag-configuration.move-search-placeholder: 'Search for a tag'
+tree.actions.edit-tag: Edit
+tag-configuration.edit-tag: 'Edit "{{name}}"'
+tag-configuration.name-required: 'Please enter a tag name'
+tag-configuration.move-targets-failed: 'The list of tags could not be loaded, so only the name can be changed'

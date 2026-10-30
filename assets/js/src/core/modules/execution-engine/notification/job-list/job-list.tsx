@@ -15,7 +15,7 @@ import { useJobs } from '@Pimcore/modules/execution-engine/hooks/useJobs'
 import { useStyles } from './job-list.styles'
 
 export const JobList = (): React.JSX.Element => {
-  const { jobs } = useJobs()
+  const { visibleJobs: jobs } = useJobs()
   const { styles } = useStyles()
   const containerRef = useRef<HTMLDivElement>(null)
   const prevLengthRef = useRef(0)

@@ -151,7 +151,10 @@ const KeyedList = ({ children, value: baseValue, onChange: baseOnChange, onField
 
   // Trigger onChange when value changes, but outside of setState
   useEffect(() => {
-    if (!isEqual(value, baselineValue.current) && !isEmpty(value)) {
+    // a list that came in empty and is still empty has nothing to report: registrations of
+    // mounting fields only touch the baseline. Emptying a list that came in with entries (removing its last
+    // entry) is a real change, consumers derive their deletion markers from it.
+    if (!isEqual(value, baselineValue.current) && !(isEmpty(value) && isEmpty(initialValue))) {
       onChange(value)
     }
   }, [bufferedValue])

@@ -46,7 +46,7 @@ const withConfirmIcon = (config: ModalFuncProps): ModalFuncProps => (
  * dialogs are draggable, composing with any `modalRender` the caller already
  * provides (e.g. the form modals' autofocus render).
  */
-function withDraggableModals (modal: ModalStaticFunctions): ModalStaticFunctions {
+export function withDraggableModals (modal: ModalStaticFunctions): ModalStaticFunctions {
   const wrapped = { ...modal }
 
   DRAGGABLE_METHODS.forEach((method) => {
@@ -74,12 +74,15 @@ export function useStudioModal (): StudioModalResponse {
   const { modal: localModal } = App.useApp()
 
   return useMemo<StudioModalResponse>(() => {
-    let studioModal = localModal
+    const draggableLocalModal = withDraggableModals(localModal)
+    let studioModal = draggableLocalModal
 
     // Check if we're in an iframe and parent API is available
     if (isInIframe() && isPimcoreStudioApiAvailable()) {
       try {
-        // Get the parent window's modal instance through the studio API
+        // Get the parent window's modal instance through the studio API.
+        // The parent registers it draggable already: wrapping it here would hand
+        // a component of this window's React to the parent's React to render.
         const { modal } = getPimcoreStudioApi()
         studioModal = modal
       } catch (error) {
@@ -88,8 +91,8 @@ export function useStudioModal (): StudioModalResponse {
     }
 
     return {
-      modal: withDraggableModals(studioModal),
-      localModal: withDraggableModals(localModal)
+      modal: studioModal,
+      localModal: draggableLocalModal
     }
   }, [localModal])
 }
