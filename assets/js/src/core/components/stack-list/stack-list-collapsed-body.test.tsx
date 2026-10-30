@@ -42,7 +42,7 @@ describe('StackListItem collapsedBody', () => {
     expect(screen.getByTestId('collapsed')).toBeInTheDocument()
   })
 
-  it('AC1: hides collapsedBody while the item is open and shows it again once closed', async () => {
+  it('AC1, AC4 (real CollapseItem): hides collapsedBody while the item is open and shows it again once closed', async () => {
     renderList({ collapsedBody: <div data-testid="collapsed">Row</div>, defaultActive: true })
 
     expect(screen.queryByTestId('collapsed')).not.toBeInTheDocument()
