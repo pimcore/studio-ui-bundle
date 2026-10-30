@@ -21,6 +21,9 @@ export interface MockSubscription {
 export const mockResults = new Map<string, Record<string, any>>()
 export const mockSubscriptions: MockSubscription[] = []
 
+// Every settled request has its own id, as RTK Query gives it.
+let requestCounter = 0
+
 export const pending = { isUninitialized: false, isLoading: true, isSuccess: false, isError: false, data: undefined }
 const uninitialized = { isUninitialized: true, isLoading: false, isSuccess: false, isError: false, data: undefined }
 
@@ -58,7 +61,7 @@ export const initiatedSubscription = (index: number): MockSubscription => mockIn
 export const resolve = (subscription: MockSubscription): void => {
   const locale = subscription.args.body.columns[0]?.locale ?? 'default'
   const data = { items: requestedIds(subscription).map(id => ({ id, columns: [{ key: 'name', value: `${locale}-${id}` }] })) }
-  mockResults.set(JSON.stringify(subscription.args), { isUninitialized: false, isLoading: false, isSuccess: true, isError: false, data })
+  mockResults.set(JSON.stringify(subscription.args), { isUninitialized: false, isLoading: false, isSuccess: true, isError: false, requestId: `request-${++requestCounter}`, data })
 }
 
 export const reject = (subscription: MockSubscription, error: unknown): void => {

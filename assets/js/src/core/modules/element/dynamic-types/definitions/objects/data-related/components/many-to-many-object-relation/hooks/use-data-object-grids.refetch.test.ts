@@ -10,6 +10,7 @@
 
 import { act, renderHook } from '@testing-library/react'
 import {
+  type MockSubscription,
   mockGridEndpoint,
   mockInitiate,
   mockSubscriptions,
@@ -85,5 +86,23 @@ describe('useDataObjectGrids refetchAll', () => {
 
     expect(result.current.data.map(item => item.id)).toEqual(range(1, 450))
     expect(result.current.isLoading).toBe(false)
+  })
+
+  // The pending state of a fast request is never rendered, the cached data is fulfilled before and after it.
+  it('keeps requesting the next chunks when the first wave settles before its pending state is rendered', () => {
+    const { result, rerender } = renderGrids(relatedObjects(450, 'Car'))
+    resolveAll(rerender)
+    const initiate = mockInitiate.getMockImplementation()
+    mockInitiate.mockImplementation((args: any, options: any) => {
+      const subscription = initiate!(args, options)
+      resolve(subscription)
+      return subscription
+    })
+
+    act(() => { result.current.refetchAll() })
+    expect(mockSubscriptions.slice(5).map(requestedIds)).toEqual([range(1, 100), range(101, 200)])
+
+    act(() => { rerender() })
+    expect(mockSubscriptions.slice(7, 9).map(requestedIds)).toEqual([range(201, 300), range(301, 400)])
   })
 })

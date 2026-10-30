@@ -103,7 +103,8 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, applyF
   const [refetchRound, setRefetchRound] = useState(0)
 
   const isSettled = (index: number): boolean => results[index].isSuccess || results[index].isError
-  const settledKey = results.map((_, index) => isSettled(index) ? '1' : '0').join('')
+  // Includes the request id: a refetch can settle before its pending state is rendered, the settled flags alone stay the same then.
+  const settledKey = results.map((result, index) => isSettled(index) ? `1${result.requestId ?? ''}` : '0').join(',')
 
   // The chunks are requested in relation order with only a few requests running at the same time,
   // so the rows on top of the relation get their values first.
@@ -137,26 +138,33 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, applyF
   const isError = results.some(result => result.isError)
   const totalCount = sumBy(requests, request => request.ids.length)
 
-  // A chunk whose ids changed (a row added or removed before it) keeps its previous values until its
-  // new request returns, for the rows still in the relation. Values of other columns, e.g. in the
-  // previous language, are never kept.
+  // The last loaded item of each related object is kept until its chunk returns again, wherever the chunk
+  // boundaries moved to (a row added or removed before it, requests completing in any order). Values of
+  // other columns, e.g. in the previous language, are never kept.
   const columnsKey = JSON.stringify(columns ?? [])
-  const previousItems = useRef<{ columnsKey: string, bySlot: GridItems[] }>({ columnsKey, bySlot: [] })
+  const previousItems = useRef<{ columnsKey: string, byId: Map<number, GridItems[number]> }>({ columnsKey, byId: new Map() })
   useEffect(() => {
     if (previousItems.current.columnsKey !== columnsKey) {
-      previousItems.current = { columnsKey, bySlot: [] }
+      previousItems.current = { columnsKey, byId: new Map() }
     }
-    results.forEach((result, index) => {
-      if (!isUndefined(result.data)) {
-        previousItems.current.bySlot[index] = result.data.items
+    const relationIds = new Set(requests.flatMap(request => request.ids))
+    previousItems.current.byId.forEach((_, id) => {
+      if (!relationIds.has(id)) {
+        previousItems.current.byId.delete(id)
       }
     })
-  }, [results, columnsKey])
+    results.forEach(result => {
+      result.data?.items.forEach(item => {
+        if (!isUndefined(item.id)) {
+          previousItems.current.byId.set(item.id, item)
+        }
+      })
+    })
+  }, [results, requests, columnsKey])
 
   const { data, loadedCount } = useMemo(() => {
     // Safe: the ref is only written in the effect above, after a render, and a render with the same inputs reads the same value.
-    const keptBySlot = previousItems.current.columnsKey === columnsKey ? previousItems.current.bySlot : []
-    const relationIds = new Set(requests.flatMap(request => request.ids))
+    const keptById = previousItems.current.columnsKey === columnsKey ? previousItems.current.byId : new Map<number, GridItems[number]>()
     const freshIds = new Set(results.flatMap(result => map(result.data?.items ?? [], 'id')))
     const keptIds = new Set<number>()
 
@@ -165,12 +173,13 @@ export const useDataObjectGrids = ({ classIds, convertClassName, columns, applyF
         return result.data.items
       }
 
-      return (keptBySlot[index] ?? []).filter(item => {
-        if (isUndefined(item.id) || !relationIds.has(item.id) || freshIds.has(item.id) || keptIds.has(item.id)) {
-          return false
+      return requests[index].ids.flatMap(id => {
+        const item = keptById.get(id)
+        if (isUndefined(item) || freshIds.has(id) || keptIds.has(id)) {
+          return []
         }
-        keptIds.add(item.id)
-        return true
+        keptIds.add(id)
+        return [item]
       })
     })
 
