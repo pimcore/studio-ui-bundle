@@ -43,4 +43,9 @@ export class DynamicTypeDocumentEditableBlock extends DynamicTypeDocumentEditabl
   reloadOnChange (props: BlockEditableDefinition): boolean {
     return Boolean(props.config?.reload)
   }
+
+  // In reload mode the rows are rendered by the reload; keys and positions are read from that DOM.
+  canDeferReloadOnChange (props: BlockEditableDefinition): boolean {
+    return false
+  }
 }

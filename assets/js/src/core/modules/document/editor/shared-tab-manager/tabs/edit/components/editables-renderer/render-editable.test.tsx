@@ -16,6 +16,7 @@ import { type AbstractDocumentEditableDefinition } from '@Pimcore/modules/elemen
 
 const editableType = {
   reloadOnChange: jest.fn(() => true),
+  canDeferReloadOnChange: jest.fn(() => true),
   isEmpty: () => false,
   getEditableDataComponent: () => <FakeEditable />
 }
@@ -82,6 +83,20 @@ describe('RenderEditable reload on change', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     editableType.reloadOnChange.mockReturnValue(true)
+    editableType.canDeferReloadOnChange.mockReturnValue(true)
+  })
+
+  it('keeps reloading immediately for editables whose reload cannot be deferred', () => {
+    // Structural editables (blocks) derive their row keys from the DOM the reload renders.
+    editableType.canDeferReloadOnChange.mockReturnValue(false)
+    const onReloadDeferred = jest.fn()
+    renderEditable({ deferReloadOnChange: true, onReloadDeferred })
+
+    fireEvent.click(screen.getByText('change'))
+
+    expect(updateValueWithReload).toHaveBeenCalledWith('teaser:1.layout', { type: 'select', data: 'changed' })
+    expect(updateValue).not.toHaveBeenCalled()
+    expect(onReloadDeferred).not.toHaveBeenCalled()
   })
 
   it('saves and reloads immediately when nothing defers the reload', () => {

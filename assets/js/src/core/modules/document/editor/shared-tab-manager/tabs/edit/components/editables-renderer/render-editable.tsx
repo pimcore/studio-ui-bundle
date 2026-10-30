@@ -72,7 +72,9 @@ export const RenderEditable = ({ editableDefinition, containerRef }: RenderEdita
 
     const shouldReload = !isEqual(oldValue, newValue) && Boolean(editableType?.reloadOnChange(editableProps, oldValue, newValue))
 
-    if (shouldReload && !deferReloadOnChange) {
+    const canDeferReload = deferReloadOnChange && (editableType?.canDeferReloadOnChange(editableProps) ?? true)
+
+    if (shouldReload && !canDeferReload) {
       updateValueWithReload(editableDefinition.name, { type: editableDefinition.type, data: newValue })
       return
     }
