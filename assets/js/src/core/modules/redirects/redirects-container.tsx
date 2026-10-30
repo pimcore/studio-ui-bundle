@@ -82,6 +82,7 @@ export const RedirectsContainer = (): React.JSX.Element => {
       type: redirectData?.type ?? 'entire_uri',
       source: redirectData?.source ?? null,
       target: redirectData?.target ?? null,
+      targetType: null,
       sourceSite: null,
       targetSite: null,
       statusCode: 301,

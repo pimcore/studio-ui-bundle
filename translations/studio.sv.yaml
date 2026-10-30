@@ -1761,6 +1761,10 @@ redirects.source-site: Källsajt
 redirects.source: Källa
 redirects.target-site: Målsajt
 redirects.target: Mål
+redirects.target-type: Måltyp
+redirects.target-type.document: Dokument
+redirects.target-type.asset: Asset
+redirects.target-type.object: Data Object
 redirects.status: Status
 redirects.priority: Prioritet
 redirects.regex: RegEx

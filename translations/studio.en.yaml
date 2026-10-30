@@ -1765,6 +1765,10 @@ redirects.source-site: Source Site
 redirects.source: Source
 redirects.target-site: Target Site
 redirects.target: Target
+redirects.target-type: Target Type
+redirects.target-type.document: Document
+redirects.target-type.asset: Asset
+redirects.target-type.object: Data Object
 redirects.status: Status
 redirects.priority: Priority
 redirects.regex: RegEx

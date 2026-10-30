@@ -1761,6 +1761,10 @@ redirects.source-site: Bronsite
 redirects.source: Bron
 redirects.target-site: Doelsite
 redirects.target: Doel
+redirects.target-type: Doeltype
+redirects.target-type.document: Document
+redirects.target-type.asset: Asset
+redirects.target-type.object: Gegevensobject
 redirects.status: Status
 redirects.priority: Prioriteit
 redirects.regex: RegEx

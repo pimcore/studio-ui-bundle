@@ -27,7 +27,7 @@ interface UseRedirectsReturn {
   createLoading: boolean
   deleteRedirectById: (id: number) => Promise<{ success: boolean }>
   deleteLoading: boolean
-  updateRedirectById: (id: number, row: RedirectRow) => Promise<{ success: boolean }>
+  updateRedirectById: (id: number, row: RedirectRow) => Promise<{ success: boolean, data?: BundleSeoRedirect }>
   updateLoading: boolean
   cleanupRedirects: () => Promise<{ success: boolean }>
   cleanupLoading: boolean
@@ -80,6 +80,7 @@ export const useRedirects = (): UseRedirectsReturn => {
     source: row.source,
     targetSite: row.targetSite,
     target: row.target,
+    targetType: row.targetType,
     statusCode: row.statusCode ?? 301,
     priority: row.priority ?? 1,
     regex: row.regex ?? false,
@@ -88,10 +89,22 @@ export const useRedirects = (): UseRedirectsReturn => {
     expiry: row.expiry
   })
 
-  const updateRedirectById = async (id: number, row: RedirectRow): Promise<{ success: boolean }> => {
+  const updateRedirectById = async (id: number, row: RedirectRow): Promise<{ success: boolean, data?: BundleSeoRedirect }> => {
     try {
       const result = await updateRedirect({ id, bundleSeoRedirectUpdate: toApiRedirect(row) })
-      return { success: 'data' in result }
+
+      // the API rejects a target type that resolves to no usable element, and RTK Query
+      // reports that in result.error instead of throwing
+      if (!isUndefined(result.error)) {
+        trackError(new ApiError(result.error))
+        return { success: false }
+      }
+
+      if ('data' in result) {
+        return { success: true, data: result.data }
+      }
+
+      return { success: false }
     } catch {
       trackError(new GeneralError('Was not able to update Redirect'))
       return { success: false }

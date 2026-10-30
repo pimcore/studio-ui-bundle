@@ -1761,6 +1761,10 @@ redirects.source-site: Witryna źródłowa
 redirects.source: Źródło
 redirects.target-site: Witryna docelowa
 redirects.target: Cel
+redirects.target-type: Typ celu
+redirects.target-type.document: Dokument
+redirects.target-type.asset: Zasób
+redirects.target-type.object: Obiekt danych
 redirects.status: Status
 redirects.priority: Priorytet
 redirects.regex: RegEx
