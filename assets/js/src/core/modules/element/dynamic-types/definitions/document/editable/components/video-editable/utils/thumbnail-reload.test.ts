@@ -20,8 +20,13 @@ describe('hasThumbnailConversionEnded', () => {
     expect(hasThumbnailConversionEnded({ status }, false)).toBe(expected)
   })
 
-  it('reports nothing without a status', () => {
-    expect(hasThumbnailConversionEnded(undefined, false)).toBe(false)
+  it.each([undefined, null])('reports nothing without a status (%s)', (status) => {
+    expect(hasThumbnailConversionEnded(status, false)).toBe(false)
+  })
+
+  it('reports nothing for an unknown status', () => {
+    expect(hasThumbnailConversionEnded({ status: '' }, false)).toBe(false)
+    expect(hasThumbnailConversionEnded({ status: 'FINISHED' }, false)).toBe(false)
   })
 
   it('reports the end only once per editable instance', () => {

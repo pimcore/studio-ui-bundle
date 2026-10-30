@@ -78,4 +78,26 @@ describe('AreaEditable', () => {
     expect(screen.queryByTestId('editable-dialog')).toBeNull()
     expect(handleReloadOnClose).not.toHaveBeenCalled()
   })
+
+  it('mounts a fresh dialog when it is reopened after cancelling', () => {
+    const firstDialog = screen.getByTestId('editable-dialog')
+
+    fireEvent.click(screen.getByText('cancel'))
+    fireEvent.click(screen.getByText('open-dialog'))
+
+    const secondDialog = screen.getByTestId('editable-dialog')
+
+    expect(secondDialog).toBeInTheDocument()
+    expect(secondDialog).not.toBe(firstDialog) // a new mount takes a new snapshot of the dialog editables
+    expect(handleReloadOnClose).not.toHaveBeenCalled()
+  })
+
+  it('can be saved after a cancelled attempt', () => {
+    fireEvent.click(screen.getByText('cancel'))
+    fireEvent.click(screen.getByText('open-dialog'))
+    fireEvent.click(screen.getByText('save-and-close'))
+
+    expect(screen.queryByTestId('editable-dialog')).toBeNull()
+    expect(handleReloadOnClose).toHaveBeenCalledTimes(1)
+  })
 })

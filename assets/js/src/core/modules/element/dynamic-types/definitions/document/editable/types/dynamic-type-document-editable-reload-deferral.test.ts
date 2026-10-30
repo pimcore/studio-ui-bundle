@@ -46,4 +46,29 @@ describe('canDeferReloadOnChange', () => {
   it('is true by default for value editables such as link', () => {
     expect(new DynamicTypeDocumentEditableLink().canDeferReloadOnChange(definition)).toBe(true)
   })
+
+  it('is true for a custom editable type that does not override it', () => {
+    // Bundles extending the abstract type keep working: their reload-on-change editables are deferred inside the dialog.
+    const { DynamicTypeDocumentEditableAbstract } = jest.requireActual('../dynamic-type-document-editable-abstract')
+
+    class CustomEditable extends DynamicTypeDocumentEditableAbstract {
+      id = 'custom'
+      getEditableDataComponent (): never {
+        throw new Error('not rendered in this test')
+      }
+    }
+
+    const custom = new CustomEditable()
+
+    expect(custom.canDeferReloadOnChange(definition)).toBe(true)
+    expect(custom.canDeferReloadOnChange({ name: 'plain' } as unknown as AbstractDocumentEditableDefinition)).toBe(true)
+  })
+
+  it('does not depend on the reload configuration of the structural editables', () => {
+    const withoutReload = { name: 'teaser', config: {} } as unknown as AbstractDocumentEditableDefinition
+
+    expect(new DynamicTypeDocumentEditableBlock().canDeferReloadOnChange(withoutReload)).toBe(false)
+    expect(new DynamicTypeDocumentEditableAreablock().canDeferReloadOnChange(withoutReload)).toBe(false)
+    expect(new DynamicTypeDocumentEditableScheduledblock().canDeferReloadOnChange(withoutReload)).toBe(false)
+  })
 })

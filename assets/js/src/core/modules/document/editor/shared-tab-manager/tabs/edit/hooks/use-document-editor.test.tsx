@@ -58,4 +58,35 @@ describe('useDocumentEditor persistence', () => {
     expect(documentApi.triggerValueChangeWithReload).toHaveBeenCalledTimes(1)
     expect(result.current.getPersistenceVersion()).toBe(before + 4)
   })
+
+  it('shares the persistence counter between hook instances', () => {
+    // The dialog snapshot and the editables on the page use separate hook instances.
+    const dialog = renderHook(() => useDocumentEditor())
+    const pageEditable = renderHook(() => useDocumentEditor())
+    const before = dialog.result.current.getPersistenceVersion()
+
+    pageEditable.result.current.updateValue('pageTitle', { type: 'input', data: 'x' })
+
+    expect(dialog.result.current.getPersistenceVersion()).toBe(before + 1)
+  })
+
+  it('still counts a persistence request the parent window could not be told about', () => {
+    documentApi.triggerValueChange.mockImplementationOnce(() => { throw new Error('parent gone') })
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {})
+    const { result } = renderHook(() => useDocumentEditor())
+    const before = result.current.getPersistenceVersion()
+
+    expect(() => { result.current.updateValue('headline', { type: 'input', data: 'x' }) }).not.toThrow()
+    expect(editableStore.updateValue).toHaveBeenCalledWith('headline', { type: 'input', data: 'x' })
+    expect(result.current.getPersistenceVersion()).toBe(before + 1)
+
+    warn.mockRestore()
+  })
+
+  it('setValue fails loudly when the editable store is not available', () => {
+    (window as unknown as { PimcoreDocumentEditor: unknown }).PimcoreDocumentEditor = undefined
+    const { result } = renderHook(() => useDocumentEditor())
+
+    expect(() => { result.current.setValue('headline', { type: 'input', data: 'x' }) }).toThrow('PimcoreDocumentEditor API not available')
+  })
 })

@@ -185,4 +185,30 @@ describe('EditableDialog with reload-on-change editables', () => {
     expect(updateValueWithReload).not.toHaveBeenCalled()
     expect(onCancel).toHaveBeenCalledTimes(1)
   })
+
+  it('reloads once on save no matter how many reloads were held back', () => {
+    const { onClose } = renderDialog()
+
+    fireEvent.click(screen.getByText('change-with-reload'))
+    fireEvent.click(screen.getByText('change-with-reload'))
+    fireEvent.click(screen.getByText('change-with-reload'))
+    fireEvent.click(screen.getByText('save'))
+
+    expect(updateValueWithReload).toHaveBeenCalledTimes(1)
+    expect(updateValue).not.toHaveBeenCalled()
+    expect(onClose).toHaveBeenCalledTimes(1)
+  })
+
+  it('keeps the held-back reload while the discard confirmation is declined and reloads on a later save', () => {
+    const { onClose, onCancel } = renderDialog()
+
+    fireEvent.click(screen.getByText('change-with-reload'))
+    fireEvent.click(screen.getByText('cancel'))
+    lastConfirmConfig().onCancel?.()
+    fireEvent.click(screen.getByText('save'))
+
+    expect(updateValueWithReload).toHaveBeenCalledTimes(1)
+    expect(onClose).toHaveBeenCalledTimes(1)
+    expect(onCancel).not.toHaveBeenCalled()
+  })
 })

@@ -55,4 +55,48 @@ describe('documentEditableApi dynamic editables', () => {
     expect(documentEditableApi.getEditableDefinitions()).toEqual([])
     expect(documentEditableApi.getValues(true)['block:1.link']).toEqual({ type: 'link', data: { internal: 5 } })
   })
+
+  it('drops a kept definition once it is unregistered again after its value was removed', () => {
+    documentEditableApi.registerDynamicEditables([definition('row-1', 'block:1.link')])
+    documentEditableApi.initializeValues({ 'block:1.link': { type: 'link', data: {} } })
+
+    documentEditableApi.unregisterDynamicEditables(['row-1'])
+    expect(documentEditableApi.getEditableDefinitions().map((d: AbstractDocumentEditableDefinition) => d.id)).toEqual(['row-1'])
+
+    documentEditableApi.removeValues(['block:1.link'])
+    documentEditableApi.unregisterDynamicEditables(['row-1'])
+    documentEditableApi.initializeValues({ 'block:1.link': { type: 'link', data: { internal: 5 } } })
+
+    expect(documentEditableApi.getEditableDefinitions()).toEqual([])
+  })
+
+  it('ignores ids that were never registered', () => {
+    documentEditableApi.registerDynamicEditables([definition('row-1', 'block:1.link')])
+    documentEditableApi.initializeValues({ 'block:1.link': { type: 'link', data: {} } })
+
+    expect(() => { documentEditableApi.unregisterDynamicEditables(['unknown', 'row-1']) }).not.toThrow()
+    expect(documentEditableApi.getEditableDefinitions().map((d: AbstractDocumentEditableDefinition) => d.id)).toEqual(['row-1'])
+  })
+
+  it('replaces a kept definition when the same id is registered again', () => {
+    documentEditableApi.registerDynamicEditables([definition('row-1', 'block:1.link')])
+    documentEditableApi.initializeValues({ 'block:1.link': { type: 'link', data: {} }, 'block:2.link': { type: 'link', data: {} } })
+    documentEditableApi.unregisterDynamicEditables(['row-1'])
+
+    documentEditableApi.registerDynamicEditables([definition('row-1', 'block:2.link')])
+
+    expect(documentEditableApi.getEditableDefinitions().map((d: AbstractDocumentEditableDefinition) => d.name)).toEqual(['block:2.link'])
+  })
+
+  it('never lists a kept definition without a value, even next to the initial editables', () => {
+    (window as unknown as { editableDefinitions: unknown[] }).editableDefinitions = [definition('initial', 'headline')]
+    documentEditableApi.registerDynamicEditables([definition('row-1', 'block:1.link')])
+    documentEditableApi.initializeValues({ headline: { type: 'input', data: 'x' }, 'block:1.link': { type: 'link', data: {} } })
+    documentEditableApi.unregisterDynamicEditables(['row-1'])
+    documentEditableApi.removeValues(['block:1.link'])
+
+    expect(documentEditableApi.getEditableDefinitions().map((d: AbstractDocumentEditableDefinition) => d.id)).toEqual(['initial'])
+
+    documentEditableApi.removeValues(['headline'])
+  })
 })

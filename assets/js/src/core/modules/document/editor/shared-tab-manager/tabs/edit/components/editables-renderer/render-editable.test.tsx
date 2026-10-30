@@ -22,7 +22,10 @@ const editableType = {
 }
 
 const FakeEditable = ({ onChange }: { onChange?: (value: string) => void }): React.JSX.Element => (
-  <button onClick={ () => onChange?.('changed') }>change</button>
+  <>
+    <button onClick={ () => onChange?.('changed') }>change</button>
+    <button onClick={ () => onChange?.('initial') }>keep</button>
+  </>
 )
 
 jest.mock('@sdk/components', () => ({
@@ -163,5 +166,51 @@ describe('RenderEditable reload on change', () => {
 
     expect(updateValue).toHaveBeenCalledTimes(1)
     expect(onReloadDeferred).not.toHaveBeenCalled()
+  })
+
+  it('does not report a deferred reload when the value did not actually change', () => {
+    const onReloadDeferred = jest.fn()
+    renderEditable({ deferReloadOnChange: true, deferPersistence: true, onReloadDeferred })
+
+    fireEvent.click(screen.getByText('keep'))
+
+    expect(onReloadDeferred).not.toHaveBeenCalled()
+    expect(updateValueWithReload).not.toHaveBeenCalled()
+    expect(setValue).toHaveBeenCalledWith('teaser:1.layout', { type: 'select', data: 'initial' })
+  })
+
+  it('defers the reload without a listener for held-back reloads', () => {
+    renderEditable({ deferReloadOnChange: true })
+
+    expect(() => { fireEvent.click(screen.getByText('change')) }).not.toThrow()
+    expect(updateValue).toHaveBeenCalledWith('teaser:1.layout', { type: 'select', data: 'changed' })
+    expect(updateValueWithReload).not.toHaveBeenCalled()
+  })
+
+  it('lets the editable type decide about the deferral based on its definition', () => {
+    renderEditable({ deferReloadOnChange: true })
+
+    fireEvent.click(screen.getByText('change'))
+
+    expect(editableType.canDeferReloadOnChange).toHaveBeenCalledWith(expect.objectContaining({ name: 'teaser:1.layout', type: 'select' }))
+  })
+
+  it('does not ask the editable type about the deferral when nothing defers the reload', () => {
+    renderEditable()
+
+    fireEvent.click(screen.getByText('change'))
+
+    expect(editableType.canDeferReloadOnChange).not.toHaveBeenCalled()
+  })
+
+  it('persists through the regular update outside a deferring owner', () => {
+    editableType.reloadOnChange.mockReturnValue(false)
+    renderEditable()
+
+    fireEvent.click(screen.getByText('change'))
+
+    expect(updateValue).toHaveBeenCalledWith('teaser:1.layout', { type: 'select', data: 'changed' })
+    expect(setValue).not.toHaveBeenCalled()
+    expect(updateValueWithReload).not.toHaveBeenCalled()
   })
 })
