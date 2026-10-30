@@ -20,6 +20,8 @@ import { type StackListItemProps } from '@Pimcore/components/stack-list/stack-li
 import { type AvailableColumn } from '@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/available-columns-provider'
 import { SimpleColumnPreview, SimpleColumnPreviewsProvider } from './simple-column-preview/simple-column-preview'
 import { usePreviewModeOptional } from '@Pimcore/components/preview-mode/preview-mode-provider'
+import { ColumnPreview } from '@Pimcore/components/preview-mode/column-preview'
+import { Preview } from './forms/advanced-column-form/preview/preview'
 import { AdvancedColumnForm } from './forms/advanced-column-form/advanced-column-form'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
 import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
@@ -152,7 +154,9 @@ export const GridConfigList = ({ onExpandPipelineItem, focusedPipelineItem }: Gr
                   onChange={ (newColumn) => { onAdvancedColumnChange(newColumn, uniqueId) } }
                 />
               </PipelineItemExpandProvider>
-            )
+            ),
+            // an open card shows the form's row; a collapsed one shows this
+            ...(previewEnabled ? { collapsedBody: <ColumnPreview>{() => <Preview column={ column } />}</ColumnPreview> } : {})
           }
         : (previewEnabled ? { body: <SimpleColumnPreview column={ column } /> } : {})),
 
