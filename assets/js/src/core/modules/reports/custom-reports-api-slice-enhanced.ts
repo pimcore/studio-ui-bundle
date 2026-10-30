@@ -9,6 +9,7 @@
  */
 
 import { api as baseApi } from '@Pimcore/modules/reports/custom-reports-api-slice.gen'
+import { exportResponseHandler } from '@Pimcore/modules/reports/utils/export-response-handler'
 
 const api = baseApi.enhanceEndpoints({
   endpoints: {
@@ -18,9 +19,7 @@ const api = baseApi.enhanceEndpoints({
     customReportsConfigExport: {
       query: (args) => ({
         url: `/pimcore-studio/api/bundle/custom-reports/config/${encodeURIComponent(args.name)}/export`,
-        responseHandler: async (response): Promise<Blob> => {
-          return await response.blob()
-        }
+        responseHandler: exportResponseHandler
       }),
       providesTags: () => []
     }
