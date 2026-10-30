@@ -10,6 +10,7 @@
 
 import React from 'react'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { type TooltipProps } from 'antd'
 import { Tooltip } from './tooltip'
 
 const wait = async (ms: number): Promise<void> => {
@@ -20,12 +21,20 @@ const expectHidden = async (): Promise<void> => {
   await waitFor(() => { expect(screen.queryByRole('tooltip')).toBeNull() })
 }
 
+const tooltip = (props: TooltipProps = {}, key = 'trigger'): React.JSX.Element => (
+  <Tooltip
+    key={ key }
+    mouseEnterDelay={ 0 }
+    title="Hint"
+    { ...props }
+  >
+    <button type="button">Trigger</button>
+  </Tooltip>
+)
+
 describe('Tooltip', () => {
   it('hides on mouse down and stays hidden while the pointer stays on the button', async () => {
-    render(<Tooltip
-      mouseEnterDelay={ 0 }
-      title="Hint"
-           ><button type="button">Trigger</button></Tooltip>)
+    render(tooltip())
     const button = screen.getByRole('button')
 
     fireEvent.mouseEnter(button)
@@ -45,10 +54,7 @@ describe('Tooltip', () => {
   })
 
   it('does not open from a hover delay that started before the press', async () => {
-    render(<Tooltip
-      mouseEnterDelay={ 0.1 }
-      title="Hint"
-           ><button type="button">Trigger</button></Tooltip>)
+    render(tooltip({ mouseEnterDelay: 0.1 }))
     const button = screen.getByRole('button')
 
     fireEvent.mouseEnter(button)
@@ -59,10 +65,7 @@ describe('Tooltip', () => {
   })
 
   it.each(['Enter', ' '])('hides on the %p key and shows again only after blur', async (key) => {
-    render(<Tooltip
-      mouseEnterDelay={ 0 }
-      title="Hint"
-           ><button type="button">Trigger</button></Tooltip>)
+    render(tooltip())
     const button = screen.getByRole('button')
 
     fireEvent.mouseEnter(button)
@@ -81,10 +84,7 @@ describe('Tooltip', () => {
   })
 
   it('keeps a pointer press hidden when the button loses focus', async () => {
-    render(<Tooltip
-      mouseEnterDelay={ 0 }
-      title="Hint"
-           ><button type="button">Trigger</button></Tooltip>)
+    render(tooltip())
     const button = screen.getByRole('button')
 
     fireEvent.mouseEnter(button)
@@ -96,11 +96,30 @@ describe('Tooltip', () => {
     expect(screen.queryByRole('tooltip')).toBeNull()
   })
 
+  it('keeps it hidden when the pressed button is replaced under the resting pointer', async () => {
+    const area = { left: 0, top: 0, right: 40, bottom: 20, width: 40, height: 20, x: 0, y: 0 }
+    jest.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({ ...area, toJSON: () => area })
+    const { rerender } = render(tooltip({}, 'before-reload'))
+
+    fireEvent.mouseEnter(screen.getByRole('button'))
+    fireEvent.mouseDown(screen.getByRole('button'), { clientX: 10, clientY: 10 })
+    rerender(tooltip({}, 'after-reload'))
+    const replaced = screen.getByRole('button')
+
+    fireEvent.mouseEnter(replaced, { clientX: 10, clientY: 10 })
+    await wait(150)
+    expect(screen.queryByRole('tooltip')).toBeNull()
+
+    fireEvent.mouseMove(document, { clientX: 300, clientY: 300 })
+    fireEvent.mouseLeave(replaced)
+    fireEvent.mouseEnter(replaced, { clientX: 10, clientY: 10 })
+    expect(await screen.findByRole('tooltip')).toBeInTheDocument()
+
+    jest.restoreAllMocks()
+  })
+
   it('hides a controlled tooltip on press until the pointer leaves', async () => {
-    render(<Tooltip
-      open
-      title="Hint"
-           ><button type="button">Trigger</button></Tooltip>)
+    render(tooltip({ open: true }))
     const button = screen.getByRole('button')
     expect(await screen.findByRole('tooltip')).toBeInTheDocument()
 
@@ -112,10 +131,7 @@ describe('Tooltip', () => {
   })
 
   it('leaves click-triggered tooltips alone', async () => {
-    render(<Tooltip
-      title="Hint"
-      trigger="click"
-           ><button type="button">Trigger</button></Tooltip>)
+    render(tooltip({ trigger: 'click' }))
 
     fireEvent.click(screen.getByRole('button'))
 
@@ -123,16 +139,23 @@ describe('Tooltip', () => {
   })
 
   it('still calls the handlers of the wrapped element', () => {
-    const handlers = { onMouseDown: jest.fn(), onClick: jest.fn(), onKeyDown: jest.fn(), onMouseLeave: jest.fn(), onBlur: jest.fn() }
-    render(<Tooltip title="Hint"><button
-      type="button"
-      { ...handlers }
-                                 >Trigger</button></Tooltip>)
+    const handlers = { onMouseDown: jest.fn(), onClick: jest.fn(), onKeyDown: jest.fn(), onMouseEnter: jest.fn(), onMouseLeave: jest.fn(), onBlur: jest.fn() }
+    render(
+      <Tooltip title="Hint">
+        <button
+          type="button"
+          { ...handlers }
+        >
+          Trigger
+        </button>
+      </Tooltip>
+    )
     const button = screen.getByRole('button')
 
     fireEvent.mouseDown(button)
     fireEvent.click(button)
     fireEvent.keyDown(button, { key: 'Enter' })
+    fireEvent.mouseEnter(button)
     fireEvent.mouseLeave(button)
     fireEvent.blur(button)
 

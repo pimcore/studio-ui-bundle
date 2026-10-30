@@ -21,6 +21,35 @@ export const actionTooltipDelay = 0.4
 
 type PressSource = 'pointer' | 'keyboard'
 
+// A trigger can re-mount under the resting pointer (an editor reloading its toolbar). The new
+// instance gets a fresh mouseenter, so the pressed area is kept here, outside any instance.
+let pressedArea: DOMRect | null = null
+
+const isInPressedArea = (x: number, y: number): boolean =>
+  pressedArea !== null && x >= pressedArea.left && x <= pressedArea.right && y >= pressedArea.top && y <= pressedArea.bottom
+
+const forgetPressedAreaOnMove = (event: MouseEvent): void => {
+  if (!isInPressedArea(event.clientX, event.clientY)) {
+    forgetPressedArea()
+  }
+}
+
+const rememberPressedArea = (element: Element): void => {
+  const area = element.getBoundingClientRect()
+  if (area.width === 0 || area.height === 0) {
+    return
+  }
+  if (pressedArea === null) {
+    document.addEventListener('mousemove', forgetPressedAreaOnMove, { capture: true, passive: true })
+  }
+  pressedArea = area
+}
+
+const forgetPressedArea = (): void => {
+  pressedArea = null
+  document.removeEventListener('mousemove', forgetPressedAreaOnMove, { capture: true })
+}
+
 /**
  * A press on the trigger (mouse down, click, Enter or Space) hides the tooltip, so it never covers
  * a menu, modal or popover the press opens. It stays hidden until the pointer leaves the trigger,
@@ -68,12 +97,19 @@ export const Tooltip = (props: TooltipProps): JSX.Element => {
   const trackedChild = cloneElement(child, {
     onMouseDown: (event: React.MouseEvent) => {
       childProps.onMouseDown?.(event)
+      rememberPressedArea(event.currentTarget)
       press('pointer')
     },
     onClick: (event: React.MouseEvent) => {
       childProps.onClick?.(event)
       if (pressedByRef.current === null) {
         press(event.detail === 0 ? 'keyboard' : 'pointer')
+      }
+    },
+    onMouseEnter: (event: React.MouseEvent) => {
+      childProps.onMouseEnter?.(event)
+      if (isInPressedArea(event.clientX, event.clientY)) {
+        press('pointer')
       }
     },
     onKeyDown: (event: React.KeyboardEvent) => {
@@ -84,6 +120,7 @@ export const Tooltip = (props: TooltipProps): JSX.Element => {
     },
     onMouseLeave: (event: React.MouseEvent) => {
       childProps.onMouseLeave?.(event)
+      forgetPressedArea()
       release()
     },
     onBlur: (event: React.FocusEvent) => {
