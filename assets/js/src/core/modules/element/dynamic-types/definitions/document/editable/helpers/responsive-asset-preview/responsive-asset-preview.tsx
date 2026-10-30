@@ -98,6 +98,9 @@ export const ResponsiveAssetPreview = ({
     onImageLoad?.(event)
   }, [onImageLoad, onImageLoadedChange])
 
+  // antd Image only forwards `className` to the <img>; a plain `class` ends up on the wrapper and is overridden there
+  const { class: imgClassName, ...otherImgAttributes } = imgAttributes ?? {}
+
   const loadingSpinner = !isNil(lastImageDimensions)
     ? (
       <div className={ styles.loadingSpinner }>
@@ -127,7 +130,7 @@ export const ResponsiveAssetPreview = ({
       >
         {finalImageSrc !== undefined && (
           <Image
-            className={ styles.imageComponent }
+            className={ cn(styles.imageComponent, imgClassName) }
             fallback="/bundles/pimcorestudioui/img/fallback-image.svg"
             key={ keyRef.current }
             onLoad={ handleImageLoad }
@@ -135,7 +138,7 @@ export const ResponsiveAssetPreview = ({
             preview={ false }
             src={ finalImageSrc }
             style={ !isNil(lastImageDimensions) ? getImageDimensions(isImageLoaded, lastImageDimensions) : undefined }
-            { ...imgAttributes }
+            { ...otherImgAttributes }
           />
         )}
 
