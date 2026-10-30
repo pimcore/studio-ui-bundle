@@ -47,7 +47,7 @@ describe('preview-mode live check assertions', () => {
     expect(empty).toEqual(['no Preview row shows with preview mode on'])
   })
 
-  it('AC1: red case: a missing language switch and a wrong switch state are reported', () => {
+  it('AC4: AC1: red case: a missing language switch and a wrong switch state are reported', () => {
     const problems = checkState(inspectModal(modal(switchHtml(true) + rowHtml + barHtml)), { previewOn: false })
     expect(problems).toEqual(expect.arrayContaining(['language switch is missing', expect.stringContaining('expected off')]))
   })
