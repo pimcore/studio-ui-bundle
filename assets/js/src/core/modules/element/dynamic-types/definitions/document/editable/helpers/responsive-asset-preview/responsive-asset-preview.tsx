@@ -98,7 +98,7 @@ export const ResponsiveAssetPreview = ({
     onImageLoad?.(event)
   }, [onImageLoad, onImageLoadedChange])
 
-  // antd Image only forwards `className` to the <img>; a plain `class` ends up on the wrapper and is overridden there
+  // antd Image puts unknown props such as a plain `class` on its wrapper; only `className` reaches the <img>
   const { class: imgClassName, ...otherImgAttributes } = imgAttributes ?? {}
 
   const loadingSpinner = !isNil(lastImageDimensions)

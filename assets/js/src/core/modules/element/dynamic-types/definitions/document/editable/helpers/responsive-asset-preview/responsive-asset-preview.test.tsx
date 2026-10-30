@@ -46,7 +46,7 @@ describe('ResponsiveAssetPreview', () => {
   it('keeps the own image classes next to the class of imgAttributes', () => {
     const img = renderPreview({ class: 'my-class' })
 
-    expect(img).toHaveClass('ant-image-img', 'my-class')
+    expect(img).toHaveClass('ant-image-img', 'image-component', 'my-class')
   })
 
   it('keeps applying the alt text of imgAttributes to the img element', () => {
