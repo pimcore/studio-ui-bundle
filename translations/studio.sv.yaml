@@ -2281,6 +2281,7 @@ reports.editor.general-settings.report-class-label: Rapportklass
 reports.editor.general-settings.group-icon-class-label: Grupp Icon Class
 reports.editor.general-settings.shortcut-menu-label: Skapa genväg i menyn
 reports.editor.source-definition.title: Källdefinition
+reports.editor.source-definition.not-available: Källdefinitionen för denna rapport är inte tillgänglig. Bundlet som tillhandahåller den kanske inte är installerad.
 reports.editor.source-definition.no-content: Inga tillgängliga fält ännu. Börja med att lägga till ett fält.
 reports.editor.source-definition.select-source-definition: Välj en källdefinition
 reports.editor.source-definition.sql-select-field: SELECT (t.ex. a,b,c)*

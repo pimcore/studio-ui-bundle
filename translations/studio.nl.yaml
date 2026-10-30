@@ -2281,6 +2281,7 @@ reports.editor.general-settings.report-class-label: Rapportklasse
 reports.editor.general-settings.group-icon-class-label: Groepspictogramklasse
 reports.editor.general-settings.shortcut-menu-label: Snelkoppeling in menu aanmaken
 reports.editor.source-definition.title: Brondefinitie
+reports.editor.source-definition.not-available: De brondefinitie van dit rapport is niet beschikbaar. De bundle die deze levert, is mogelijk niet geïnstalleerd.
 reports.editor.source-definition.no-content: Nog geen velden beschikbaar. Begin met het toevoegen van een veld.
 reports.editor.source-definition.select-source-definition: Selecteer een brondefinitie
 reports.editor.source-definition.sql-select-field: SELECT (bijv. a,b,c)*
