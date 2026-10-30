@@ -108,37 +108,42 @@ const failedEmail: EmailLog = {
   subject: 'Failed message'
 }
 
+const collectionData = { totalItems: 1, items: [regularEmail] }
+const collectionResult: ReturnType<typeof useEmailLogGetCollectionQuery> = {
+  data: collectionData,
+  currentData: collectionData,
+  status: QueryStatus.fulfilled,
+  isUninitialized: false,
+  isLoading: false,
+  isFetching: false,
+  isSuccess: true,
+  isError: false,
+  refetch: jest.fn()
+}
+
+const searchData = { totalItems: 1, items: [failedEmail] }
+const searchResult: ReturnType<typeof useEmailLogSearchQuery> = {
+  data: searchData,
+  currentData: searchData,
+  status: QueryStatus.fulfilled,
+  isUninitialized: false,
+  isLoading: false,
+  isFetching: false,
+  isSuccess: true,
+  isError: false,
+  refetch: jest.fn()
+}
+
 describe('EmailLogContainer', () => {
-  it('switches from the collection endpoint to email search results', () => {
-    const collectionQuery = jest.mocked(useEmailLogGetCollectionQuery)
-    const searchQuery = jest.mocked(useEmailLogSearchQuery)
-    const collectionData = { totalItems: 1, items: [regularEmail] }
-    const collectionResult: ReturnType<typeof useEmailLogGetCollectionQuery> = {
-      data: collectionData,
-      currentData: collectionData,
-      status: QueryStatus.fulfilled,
-      isUninitialized: false,
-      isLoading: false,
-      isFetching: false,
-      isSuccess: true,
-      isError: false,
-      refetch: jest.fn()
-    }
-    const searchData = { totalItems: 1, items: [failedEmail] }
-    const searchResult: ReturnType<typeof useEmailLogSearchQuery> = {
-      data: searchData,
-      currentData: searchData,
-      status: QueryStatus.fulfilled,
-      isUninitialized: false,
-      isLoading: false,
-      isFetching: false,
-      isSuccess: true,
-      isError: false,
-      refetch: jest.fn()
-    }
+  const collectionQuery = jest.mocked(useEmailLogGetCollectionQuery)
+  const searchQuery = jest.mocked(useEmailLogSearchQuery)
+
+  beforeEach(() => {
     collectionQuery.mockReturnValue(collectionResult)
     searchQuery.mockReturnValue(searchResult)
+  })
 
+  it('switches from the collection endpoint to email search results', () => {
     render(<EmailLogContainer />)
 
     expect(collectionQuery).toHaveBeenLastCalledWith({ page: 1, pageSize: 20 }, { skip: false })
