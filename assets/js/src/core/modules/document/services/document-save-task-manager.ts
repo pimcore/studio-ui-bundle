@@ -246,8 +246,11 @@ export class DocumentSaveTaskManager {
       await this.performSave(task, onFinish)
       settlers.forEach(({ resolve }) => { resolve() })
     } catch (error) {
-      // performSave already reported the error; the callers waiting for this save get it as their result.
+      // The callers waiting for this save get the error, and so does the caller of the save that ran
+      // before it: its own save went through, but the document is not fully persisted, and reporting
+      // success would clear dirty state for edits that never reached the server.
       settlers.forEach(({ reject }) => { reject(error) })
+      throw error
     }
   }
 

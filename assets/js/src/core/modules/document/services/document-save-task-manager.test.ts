@@ -148,9 +148,25 @@ describe('DocumentSaveTaskManager queuing', () => {
     await flush()
     await flush()
 
-    expect(first.error).toBeUndefined()
     expect(second.error).toEqual(new Error('save failed'))
     expect(third.error).toEqual(new Error('save failed'))
+    // the first save went through, but the document is not fully persisted: its caller must not report success
+    expect(first.error).toEqual(new Error('save failed'))
+  })
+
+  it('rejects a manual save whose trailing autosave failed instead of reporting success', async () => {
+    const manual = settledState(manager().executeSave(SaveTaskType.Save))
+    await flush()
+    const autosave = settledState(manager().executeSave(SaveTaskType.AutoSave))
+
+    pending[0].resolve()
+    await flush()
+    pending[1].reject(new Error('autosave failed'))
+    await flush()
+    await flush()
+
+    expect(autosave.error).toEqual(new Error('autosave failed'))
+    expect(manual.error).toEqual(new Error('autosave failed'))
   })
 
   it('settles waiting autosave callers through the manual save that replaced their queued autosave', async () => {
