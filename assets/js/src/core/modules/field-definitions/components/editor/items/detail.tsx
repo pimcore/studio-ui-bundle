@@ -22,12 +22,14 @@ import { type FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { ConfigLayout, Content, ContentLayout, Flex, IconButton, Toolbar } from '@sdk/components'
 import { ApiError, trackError } from '@sdk/modules/app'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export interface ItemDetailProps {
   configuration: ConfigurationPartial
 }
 
 export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
+  const { t } = useTranslation()
   const { useDetailGeneralSettingsQuery, useDetailLayoutQuery, useDetailLayoutAccessor, customLayouts, LayoutProvider, useDetailUpdateMutation, readOnly = false } = useSettings()
   const { setDetailView } = useItems()
   const layoutResult = useDetailLayoutQuery?.({
@@ -117,8 +119,10 @@ export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
               <Toolbar>
                 <Flex gap={ 'mini' }>
                   <IconButton
+                    aria-label={ t('refresh') }
                     icon={ { value: 'refresh' } }
                     onClick={ () => { void refreshLayout() } }
+                    tooltip={ { title: t('refresh') } }
                   />
 
                   {!readOnly && <ImportExportActions />}
