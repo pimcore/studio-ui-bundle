@@ -118,7 +118,12 @@ export class DocumentSaveTaskManager {
     // Handle task queuing logic
     if (this.runningTask != null) {
       if (task === SaveTaskType.AutoSave) {
-        // Don't queue auto-saves if something is already running - they're frequent and can be skipped
+        // The running save already read its values, so edits made in the meantime would stay unsaved
+        // until the next edit. One trailing auto-save picks them all up; a queued regular save does too.
+        if (isUndefined(this.queuedTask)) {
+          this.queuedTask = { task }
+        }
+
         return
       }
 
