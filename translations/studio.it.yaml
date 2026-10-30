@@ -1448,6 +1448,7 @@ relations.create-object.name: Nome
 relations.create-object.parent: Elemento padre
 relations.create-object.parent.placeholder: Seleziona un elemento padre
 relations.create-object.class: Classe
+relations.visible-fields.loading-progress: 'Caricamento dei campi visibili… ({{loaded}} di {{total}})'
 relation: relazione
 items-limit-reached: Il numero massimo di elementi ({{maxItems}}) è stato raggiunto.
 asset-upload-type-not-allowed: Il tipo dell'asset caricato non è consentito per questo campo.

@@ -1448,6 +1448,7 @@ relations.create-object.name: Navn
 relations.create-object.parent: Overordnet
 relations.create-object.parent.placeholder: Velg et overordnet element
 relations.create-object.class: Klasse
+relations.visible-fields.loading-progress: 'Laster synlige felt… ({{loaded}} av {{total}})'
 relation: relasjon
 items-limit-reached: Maksimalt antall elementer ({{maxItems}}) er nådd.
 asset-upload-type-not-allowed: Typen til den opplastede ressursen er ikke tillatt for dette feltet.

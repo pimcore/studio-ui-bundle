@@ -1448,6 +1448,7 @@ relations.create-object.name: Nom
 relations.create-object.parent: Parent
 relations.create-object.parent.placeholder: Sélectionner un parent
 relations.create-object.class: Classe
+relations.visible-fields.loading-progress: 'Chargement des champs visibles… ({{loaded}} sur {{total}})'
 relation: relation
 items-limit-reached: Le nombre maximum d'éléments ({{maxItems}}) a été atteint.
 asset-upload-type-not-allowed: Le type de l'asset téléversé n'est pas autorisé pour ce champ.

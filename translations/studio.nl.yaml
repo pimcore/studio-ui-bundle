@@ -1448,6 +1448,7 @@ relations.create-object.name: Naam
 relations.create-object.parent: Bovenliggend
 relations.create-object.parent.placeholder: Selecteer een bovenliggend element
 relations.create-object.class: Klasse
+relations.visible-fields.loading-progress: 'Zichtbare velden laden… ({{loaded}} van {{total}})'
 relation: relatie
 items-limit-reached: "Het maximum aantal items ({{maxItems}}) is bereikt."
 asset-upload-type-not-allowed: Het type van de geüploade asset is niet toegestaan voor dit veld.
