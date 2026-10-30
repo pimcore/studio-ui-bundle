@@ -89,7 +89,10 @@ jest.mock('@Pimcore/modules/element/listing/decorators/utils/column-configuratio
 const dangerSelector = '.ant-form-item-explain-error, .ant-alert, [role="alert"], .ant-typography-danger'
 
 const withPreview = (on: boolean, children: React.ReactNode): React.JSX.Element => (
-  <PreviewModeProvider defaultEnabled={ on } fallbackItem={ { id: 9 } }>{children}</PreviewModeProvider>
+  <PreviewModeProvider
+    defaultEnabled={ on }
+    fallbackItem={ { id: 9 } }
+  >{children}</PreviewModeProvider>
 )
 
 // the path of an element up to the container: its tag and class at every level
@@ -115,7 +118,7 @@ const renderSaveFormError = async (on: boolean): Promise<{ text: string, html: s
   const { container, unmount } = render(withPreview(on, <SaveFormWithSubmit />))
   await act(async () => { fireEvent.click(screen.getByText('validate')) })
   await waitFor(() => { expect(container.querySelector('.ant-form-item-explain-error')).not.toBeNull() })
-  const error = container.querySelector('.ant-form-item-explain-error') as Element
+  const error = container.querySelector('.ant-form-item-explain-error')!
   const result = { text: error.textContent ?? '', html: error.outerHTML, position: position(error, container) }
   unmount()
   return result
@@ -161,7 +164,7 @@ describe('Grid Configuration modal: warnings and errors with preview mode on and
     const error = screen.getByText('grid.advanced-column.error-preview-data')
     expect(error.className).toContain('ant-typography-danger')
     // it sits in the same stack item as the column's tag
-    expect(error.closest('[data-testid="preview-mode-column-preview-row"]')?.parentElement).toContainElement(on.container.querySelector('.ant-tag') as HTMLElement)
+    expect(error.closest('[data-testid="preview-mode-column-preview-row"]')?.parentElement).toContainElement(on.container.querySelector('.ant-tag'))
   })
 
   describe.each([false, true])('Apply with preview %s', (on) => {
