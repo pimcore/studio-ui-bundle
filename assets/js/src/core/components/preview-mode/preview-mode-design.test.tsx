@@ -130,6 +130,22 @@ describe('preview mode design', () => {
     expect(screen.getByTestId('preview-mode-column-preview-row')).toHaveTextContent('boom')
   })
 
+  it('AC6: the bar and the column row render together in the state the screenshots show', () => {
+    render(
+      <PreviewModeProvider
+        defaultEnabled
+        fallbackItem={ { id: 9, fullpath: '/Product Data/Cars/jaguar/E-Type' } }
+      >
+        <PreviewModeBar />
+        <ColumnPreview source={ { value: <span>E-Type</span> } } />
+      </PreviewModeProvider>
+    )
+
+    expect(screen.getByText(/ID: 9/)).toHaveTextContent('.../ jaguar/ E-Type')
+    expect(screen.getByTestId('language-switch')).toBeInTheDocument()
+    expect(screen.getByTestId('preview-mode-column-preview-row')).toHaveTextContent('E-Type')
+  })
+
   it('AC4: with preview mode off there is no divider, no Preview row and no language switch', () => {
     render(
       <PreviewModeProvider>
