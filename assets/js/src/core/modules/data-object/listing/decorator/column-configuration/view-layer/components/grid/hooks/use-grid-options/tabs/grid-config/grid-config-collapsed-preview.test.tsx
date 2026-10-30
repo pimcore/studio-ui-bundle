@@ -143,6 +143,6 @@ describe('GridConfigList collapsed advanced card preview', () => {
     await userEvent.click(screen.getByText('c2'))
 
     expect(previewSpy).toHaveBeenCalledTimes(2)
-    expect(previewSpy.mock.calls.map(([arg]) => arg.body.column.config.advancedColumns[0].key).sort()).toEqual(['name', 'price'])
+    expect(previewSpy.mock.calls.map(([arg]) => arg.body.column.config.advancedColumns[0].key).sort((a: string, b: string) => a.localeCompare(b))).toEqual(['name', 'price'])
   })
 })
