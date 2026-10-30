@@ -2270,6 +2270,9 @@ reports.field-filters: Feldfilter
 reports.editor.delete.content: Möchten Sie den benutzerdefinierten Bericht "{{reportName}}" wirklich löschen?
 reports.editor.clone.content: Geben Sie den Namen des neuen Eintrags ein (a-zA-Z-_)
 reports.editor.add.content: Geben Sie den Namen des neuen Eintrags ein. Der Name muss alphanumerisch und mindestens 3 Zeichen lang sein (a-zA-Z0-9_-)
+reports.editor.import.title: Benutzerdefinierten Bericht importieren
+reports.editor.import.success: Benutzerdefinierter Bericht erfolgreich importiert
+reports.editor.import.invalid-file: Bitte wählen Sie eine JSON-Exportdatei aus
 reports.editor.content.validation.message: Der Name des benutzerdefinierten Berichts ist ungültig
 reports.editor.general-settings.title: Allgemeine Einstellungen
 reports.editor.general-settings.name-label: Name

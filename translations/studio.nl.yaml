@@ -2270,6 +2270,9 @@ reports.field-filters: Veldfilters
 reports.editor.delete.content: 'Weet je echt zeker dat je aangepast rapport "{{reportName}}" wilt verwijderen?'
 reports.editor.clone.content: Voer de naam in van het nieuwe item (a-zA-Z-_)
 reports.editor.add.content: Voer de naam in van het nieuwe item. De naam moet alfanumeriek zijn en minimaal 3 tekens lang (a-zA-Z0-9_-)
+reports.editor.import.title: Aangepast rapport importeren
+reports.editor.import.success: Aangepast rapport succesvol geïmporteerd
+reports.editor.import.invalid-file: Selecteer een JSON-exportbestand
 reports.editor.content.validation.message: De naam van het aangepaste rapport is ongeldig
 reports.editor.general-settings.title: Algemene instellingen
 reports.editor.general-settings.name-label: Naam

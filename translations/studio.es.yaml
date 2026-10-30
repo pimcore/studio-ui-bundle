@@ -2270,6 +2270,9 @@ reports.field-filters: Filtros de campo
 reports.editor.delete.content: ¿Realmente desea eliminar el informe personalizado "{{reportName}}"?
 reports.editor.clone.content: Introduzca el nombre del nuevo elemento (a-zA-Z-_)
 reports.editor.add.content: Introduzca el nombre del nuevo elemento. El nombre debe ser alfanumérico y tener al menos 3 caracteres (a-zA-Z0-9_-)
+reports.editor.import.title: Importar informe personalizado
+reports.editor.import.success: Informe personalizado importado correctamente
+reports.editor.import.invalid-file: Seleccione un archivo de exportación JSON
 reports.editor.content.validation.message: El nombre del informe personalizado no es válido
 reports.editor.general-settings.title: Configuración general
 reports.editor.general-settings.name-label: Nombre

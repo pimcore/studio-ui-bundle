@@ -2270,6 +2270,9 @@ reports.field-filters: Feltfiltre
 reports.editor.delete.content: Vil du virkelig slette egendefinert rapport "{{reportName}}"?
 reports.editor.clone.content: Oppgi navnet på det nye elementet (a-zA-Z-_)
 reports.editor.add.content: Oppgi navnet på det nye elementet. Navnet må være alfanumerisk og minst 3 tegn langt (a-zA-Z0-9_-)
+reports.editor.import.title: Importer egendefinert rapport
+reports.editor.import.success: Egendefinert rapport ble importert
+reports.editor.import.invalid-file: Velg en JSON-eksportfil
 reports.editor.content.validation.message: Rapportnavnet er ugyldig
 reports.editor.general-settings.title: Generelle innstillinger
 reports.editor.general-settings.name-label: Navn

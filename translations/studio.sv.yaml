@@ -2270,6 +2270,9 @@ reports.field-filters: Fältfilter
 reports.editor.delete.content: Vill du verkligen ta bort den anpassade rapporten "{{reportName}}"?
 reports.editor.clone.content: Ange namnet på det nya objektet (a-zA-Z-_)
 reports.editor.add.content: Ange namnet på det nya objektet. Namnet måste vara alfanumeriskt och minst 3 tecken långt (a-zA-Z0-9_-)
+reports.editor.import.title: Importera anpassad rapport
+reports.editor.import.success: Anpassad rapport importerades
+reports.editor.import.invalid-file: Välj en JSON-exportfil
 reports.editor.content.validation.message: Rapportnamnet är ogiltigt
 reports.editor.general-settings.title: Allmänna inställningar
 reports.editor.general-settings.name-label: Namn
