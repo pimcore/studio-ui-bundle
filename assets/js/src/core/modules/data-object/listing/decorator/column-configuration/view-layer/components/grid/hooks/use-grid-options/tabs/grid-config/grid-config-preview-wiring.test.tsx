@@ -10,6 +10,7 @@
 
 import fs from 'fs'
 import path from 'path'
+import { execSync } from 'child_process'
 
 // Guards the preview-mode wiring against an upstream sync (DR-U3) silently dropping it.
 const read = (file: string): string => fs.readFileSync(path.join(__dirname, file), 'utf8')
@@ -53,5 +54,23 @@ describe('AC1: preview mode stays wired into the Grid Configuration modal', () =
       }
       expect(content).not.toMatch(/^(<<<<<<<|=======|>>>>>>>)/m)
     }
+  })
+})
+
+describe('AC2: the synced tree is intact', () => {
+  it('AC2: the list has no conflict markers and keeps upstream\'s onExpandPipelineItem', () => {
+    const list = read('grid-config-list.tsx')
+    expect(list).not.toMatch(/^(<<<<<<<|=======|>>>>>>>)/m)
+    expect(list).toContain('onExpandPipelineItem')
+    expect(list).toContain('focusedPipelineItem')
+  })
+})
+
+describe('AC3: the sync stays local', () => {
+  it('AC3: the sync is a merge commit and the feature branch exists on no remote', () => {
+    const git = (args: string): string => execSync(`git ${args}`, { cwd: __dirname, encoding: 'utf8' }).trim()
+    const branch = git('rev-parse --abbrev-ref HEAD')
+    expect(git('rev-list --merges --max-count=1 --grep=2026.x HEAD')).not.toBe('')
+    expect(git(`for-each-ref --format='%(refname)' 'refs/remotes/*/${branch}'`)).toBe('')
   })
 })
