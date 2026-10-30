@@ -27,6 +27,10 @@ export class DynamicTypeFieldDefinitionImage extends DynamicTypeFieldDefinitionD
     return [...super.getGroup(), 'media']
   }
 
+  getTags (props: FieldDefinitionContext): string[] {
+    return [...super.getTags(props), 'classificationStore']
+  }
+
   getSpecificFormFields (context: FieldDefinitionContext): React.JSX.Element {
     const id = this.getId(context)
     const fieldDefinition = context.fieldDefinitions[id]

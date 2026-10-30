@@ -12,6 +12,8 @@ The following steps are necessary when updating to newer versions.
 
 - [Data Objects] The `Title` column in `Settings > Classification Store > <store> > Keys` now reads and writes the configured key title instead of the title inside the key definition. Renaming a key, editing its description, changing its type or saving its definition no longer writes the definition's title over the configured one, so a title entered in that column survives those edits. Stores where the two titles had already drifted apart show the configured title in the column from now on; a key whose configured title is empty shows an empty cell even when its definition carries a title.
 
+- [Data Objects] `Image` can now be chosen as the type of a Classification Store key in `Settings > Classification Store > <store> > Keys`, and renders as the image field on the object's Classification Store tab. The other image types (`Image Advanced`, `Image Gallery`, `External Image`) stay unavailable there.
+
 - [Listings] Search modes can contribute columns while they are applied (`SearchModeAbstract.getAdditionalColumns()`, default: none). They are shown via the new `visibleColumns` of `useSelectedColumns()`, can be filtered and reordered for the session, and are never stored in grid configurations or saved searches. A bundle with its own listing data query must request `visibleColumns` instead of `selectedColumns`, otherwise mode columns stay empty.
 
 ## Upgrade to 2026.3.3
