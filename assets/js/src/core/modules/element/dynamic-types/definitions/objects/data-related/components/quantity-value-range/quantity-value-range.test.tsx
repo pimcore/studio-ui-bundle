@@ -38,6 +38,14 @@ jest.mock('@Pimcore/components/select/select', () => ({
         data-testid="unit-m"
         onClick={ () => { props.onChange('m') } }
       />
+      <button
+        data-testid="unit-cm"
+        onClick={ () => { props.onChange('cm') } }
+      />
+      <button
+        data-testid="unit-clear"
+        onClick={ () => { props.onChange(undefined) } }
+      />
     </>
   )
 }))
@@ -209,5 +217,75 @@ describe('QuantityValueRange automatic conversion', () => {
     expect(pending).toHaveLength(2)
     expect(onChange).toHaveBeenLastCalledWith({ minimum: 5, maximum: 99, unitId: 'mm' })
     expect(numbers()).toEqual(['5', '99'])
+  })
+
+  const deferConversions = (): Array<(value: number) => void> => {
+    const pending: Array<(value: number) => void> = []
+    convertValue.mockImplementation(async () => await new Promise<number>(resolve => { pending.push(resolve) }))
+    return pending
+  }
+
+  it('keeps the original numbers when the unit is switched back while pending', async () => {
+    const pending = deferConversions()
+    const onChange = jest.fn()
+
+    render(
+      <QuantityValueRange
+        autoConvert
+        onChange={ onChange }
+        value={ { minimum: 1, maximum: 2, unitId: 'cm' } }
+      />
+    )
+    fireEvent.click(screen.getByTestId('unit'))
+    fireEvent.click(screen.getByTestId('unit-cm'))
+    await act(async () => { pending.forEach(resolve => { resolve(99) }) })
+
+    // the numbers never left cm, so the late answers of the cm>mm conversion must not be applied
+    expect(onChange).toHaveBeenLastCalledWith({ minimum: 1, maximum: 2, unitId: 'cm' })
+    expect(numbers()).toEqual(['1', '2'])
+  })
+
+  it('keeps the numbers when the unit is cleared while pending', async () => {
+    const pending = deferConversions()
+    const onChange = jest.fn()
+
+    render(
+      <QuantityValueRange
+        autoConvert
+        onChange={ onChange }
+        value={ { minimum: 1, maximum: 2, unitId: 'cm' } }
+      />
+    )
+    fireEvent.click(screen.getByTestId('unit'))
+    fireEvent.click(screen.getByTestId('unit-clear'))
+    await act(async () => { pending.forEach(resolve => { resolve(99) }) })
+
+    expect(onChange).toHaveBeenLastCalledWith({ minimum: 1, maximum: 2, unitId: null })
+    expect(numbers()).toEqual(['1', '2'])
+  })
+
+  it('drops a pending conversion when the value is replaced from outside', async () => {
+    const pending = deferConversions()
+    const onChange = jest.fn()
+
+    const { rerender } = render(
+      <QuantityValueRange
+        autoConvert
+        onChange={ onChange }
+        value={ { minimum: 1, maximum: 2, unitId: 'cm' } }
+      />
+    )
+    fireEvent.click(screen.getByTestId('unit'))
+    rerender(
+      <QuantityValueRange
+        autoConvert
+        onChange={ onChange }
+        value={ { minimum: 7, maximum: 8, unitId: 'cm' } }
+      />
+    )
+    await act(async () => { pending.forEach(resolve => { resolve(99) }) })
+
+    expect(numbers()).toEqual(['7', '8'])
+    expect(onChange).not.toHaveBeenCalledWith({ minimum: 99, maximum: 99, unitId: 'mm' })
   })
 })
