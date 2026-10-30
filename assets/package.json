@@ -27,7 +27,7 @@
     "lint": "eslint ./js",
     "lint-fix": "eslint ./js --fix",
     "lint-fix-watch": "nodemon --watch './js/**/*' --exec \"eslint ./js --fix --cache\" -e js,jsx,ts,tsx",
-    "test": "jest ./js/src --passWithNoTests",
+    "test": "jest ./js/src ./js/live-checks --passWithNoTests",
     "storybook": "storybook dev -p 6006 --no-open",
     "check-types": "tsc --noEmit",
     "check-types-watch": "tsc --noEmit --watch",
