@@ -280,19 +280,9 @@ export const GridConfigList = ({ onExpandPipelineItem, focusedPipelineItem }: Gr
   }
 
   function onLanguageSelection (uniqueId: string, column: AvailableColumn, locale: string | null): void {
-    const itemList = stackListItems.map((item) => {
-      if (item.id === uniqueId) {
-        return {
-          ...item,
-          meta: {
-            ...item.meta,
-            locale
-          }
-        }
-      }
-
-      return item
-    })
+    const itemList = stackListItems.map((item) => (
+      item.id === uniqueId ? { ...item, meta: { ...item.meta, locale } } : item
+    ))
 
     const newColumns = itemList.map((item) => item.meta)
     setColumns(newColumns)
