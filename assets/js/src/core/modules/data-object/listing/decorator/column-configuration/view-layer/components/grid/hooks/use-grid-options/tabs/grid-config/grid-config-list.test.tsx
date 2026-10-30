@@ -26,6 +26,8 @@ jest.mock('@Pimcore/modules/element/components/language-selection/permission-bas
 jest.mock('@Pimcore/modules/element/listing/decorators/utils/column-configuration/view-layer/components/search-mode-column-badge/search-mode-column-badge', () => ({
   SearchModeColumnBadge: () => null
 }))
+jest.mock('./forms/advanced-column-form/preview/preview', () => ({ Preview: () => null }))
+jest.mock('@Pimcore/components/preview-mode/column-preview', () => ({ ColumnPreview: () => null }))
 jest.mock('./forms/advanced-column-form/advanced-column-form', () => ({ AdvancedColumnForm: () => <div data-testid="advanced-form" /> }))
 jest.mock('@Pimcore/app/depency-injection', () => ({ useInjection: () => ({ getDynamicTypes: () => [] }) }))
 jest.mock('@Pimcore/modules/element/listing/decorators/utils/column-configuration/context-layer/provider/available-columns/use-available-columns', () => ({
