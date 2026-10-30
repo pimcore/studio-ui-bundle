@@ -13,6 +13,14 @@ import { act, fireEvent, render, screen } from '@testing-library/react'
 import { GridConfigModal } from './grid-config-modal'
 import { usePreviewMode } from '@Pimcore/components/preview-mode/preview-mode-provider'
 
+// the bar's language switch pulls in the whole app; its own test lives in preview-mode-design.test.tsx
+jest.mock('@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control', () => ({
+  PermissionBasedLanguageSelectionControl: () => null
+}))
+jest.mock('@Pimcore/components/language-selection/provider/use-language-selection', () => ({
+  useLanguageSelection: () => ({ currentLanguage: 'en' })
+}))
+
 jest.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }))
 jest.mock('@Pimcore/modules/ant-design/styles/create-styles', () => ({
   createStyles: () => () => ({ styles: {}, cx: () => '', theme: {} }),

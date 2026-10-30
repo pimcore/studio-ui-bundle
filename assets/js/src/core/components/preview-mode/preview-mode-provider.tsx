@@ -32,6 +32,9 @@ export interface PreviewModeContextValue {
   setItem: (item: PreviewModeItem | null) => void
   /** Used by the bar while nothing is picked */
   fallbackItem: PreviewModeFallbackItem | null
+  /** Language of the column previews, set by the bar's language switch; undefined = the current language */
+  language: string | undefined
+  setLanguage: (language: string) => void
 }
 
 const defaultValue: PreviewModeContextValue = {
@@ -39,7 +42,9 @@ const defaultValue: PreviewModeContextValue = {
   setEnabled: () => {},
   item: null,
   setItem: () => {},
-  fallbackItem: null
+  fallbackItem: null,
+  language: undefined,
+  setLanguage: () => {}
 }
 
 export const PreviewModeContext = createContext<PreviewModeContextValue | undefined>(undefined)
@@ -60,6 +65,7 @@ export const PreviewModeProvider = ({
 }: PreviewModeProviderProps): React.JSX.Element => {
   const [enabled, setEnabled] = useState<boolean>(defaultEnabled)
   const [item, setItem] = useState<PreviewModeItem | null>(null)
+  const [language, setLanguage] = useState<string | undefined>(undefined)
   const lastResetKey = useRef(resetKey)
 
   useEffect(() => {
@@ -70,8 +76,8 @@ export const PreviewModeProvider = ({
   }, [resetKey])
 
   const value = useMemo(
-    () => ({ enabled, setEnabled, item, setItem, fallbackItem }),
-    [enabled, item, fallbackItem?.id, fallbackItem?.fullpath]
+    () => ({ enabled, setEnabled, item, setItem, fallbackItem, language, setLanguage }),
+    [enabled, item, language, fallbackItem?.id, fallbackItem?.fullpath]
   )
 
   return <PreviewModeContext.Provider value={ value }>{children}</PreviewModeContext.Provider>

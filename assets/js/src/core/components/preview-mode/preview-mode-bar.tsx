@@ -14,6 +14,8 @@ import { Button } from '@Pimcore/components/button/button'
 import { Flex } from '@Pimcore/components/flex/flex'
 import { Text } from '@Pimcore/components/text/text'
 import { Tooltip } from '@Pimcore/components/tooltip/tooltip'
+import { PermissionBasedLanguageSelectionControl } from '@Pimcore/modules/element/components/language-selection/permission-based-language-selection-control'
+import { useLanguageSelection } from '@Pimcore/components/language-selection/provider/use-language-selection'
 import { useElementSelector } from '@Pimcore/modules/element/element-selector/provider/element-selector/use-element-selector'
 import { SelectionType } from '@Pimcore/modules/element/element-selector/provider/element-selector/element-selector-provider'
 import { usePreviewMode, type PreviewModeItem } from './preview-mode-provider'
@@ -22,6 +24,8 @@ import { useStyles } from './preview-mode-bar.styles'
 export interface PreviewModeBarProps {
   /** Class names the element selector is limited to */
   allowedClasses?: string[]
+  /** The language switch at the right end of the bar (default: shown) */
+  showLanguageSwitch?: boolean
 }
 
 export const truncatePath = (fullpath: string): string => {
@@ -32,8 +36,9 @@ export const truncatePath = (fullpath: string): string => {
   return `.../ ${parts[parts.length - 2]}/ ${parts[parts.length - 1]}`
 }
 
-export const PreviewModeBar = ({ allowedClasses }: PreviewModeBarProps): React.JSX.Element => {
-  const { item, setItem, fallbackItem } = usePreviewMode()
+export const PreviewModeBar = ({ allowedClasses, showLanguageSwitch = true }: PreviewModeBarProps): React.JSX.Element => {
+  const { enabled, item, setItem, fallbackItem, language, setLanguage } = usePreviewMode()
+  const { currentLanguage } = useLanguageSelection()
   const { t } = useTranslation()
   const { styles } = useStyles()
 
@@ -53,6 +58,7 @@ export const PreviewModeBar = ({ allowedClasses }: PreviewModeBarProps): React.J
   return (
     <Flex
       align="center"
+      className={ styles.bar }
       gap="extra-small"
     >
       <Button onClick={ open }>
@@ -68,6 +74,18 @@ export const PreviewModeBar = ({ allowedClasses }: PreviewModeBarProps): React.J
             </Text>
           </Tooltip>
           )}
+
+      {enabled && showLanguageSwitch && (
+        <Flex
+          style={ { flex: 1 } }
+          justify="flex-end"
+        >
+          <PermissionBasedLanguageSelectionControl
+            onChange={ (value) => { if (value !== null) setLanguage(value) } }
+            value={ language ?? currentLanguage }
+          />
+        </Flex>
+      )}
     </Flex>
   )
 }

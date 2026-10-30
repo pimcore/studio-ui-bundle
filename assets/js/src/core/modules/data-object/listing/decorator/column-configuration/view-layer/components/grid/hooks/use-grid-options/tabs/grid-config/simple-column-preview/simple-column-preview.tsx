@@ -10,6 +10,7 @@
 
 import React, { createContext, useContext, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Spin } from 'antd'
 import { createColumnHelper } from '@tanstack/react-table'
 import { Text } from '@Pimcore/components/text/text'
 import { Grid } from '@Pimcore/components/grid/grid'
@@ -50,7 +51,7 @@ export interface SimpleColumnPreviewsProviderProps {
 
 /** Loads the values of all simple columns for the preview item with a single grid request */
 export const SimpleColumnPreviewsProvider = ({ columns, children }: SimpleColumnPreviewsProviderProps): React.JSX.Element => {
-  const { enabled, item, fallbackItem } = usePreviewModeOptional()
+  const { enabled, item, fallbackItem, language: previewLanguage } = usePreviewModeOptional()
   const { selectedClassDefinition } = useClassDefinitionSelection()
   const { currentLanguage } = useLanguageSelection()
 
@@ -60,7 +61,7 @@ export const SimpleColumnPreviewsProvider = ({ columns, children }: SimpleColumn
     if (!column.localizable) {
       return undefined
     }
-    const locale = column.locale ?? currentLanguage
+    const locale = column.locale ?? previewLanguage ?? currentLanguage
     return locale === 'default' ? null : locale
   }
 
@@ -70,7 +71,7 @@ export const SimpleColumnPreviewsProvider = ({ columns, children }: SimpleColumn
     locale: getLocale(column),
     group: column.group as unknown as string[] | undefined,
     config: column.config
-  })), [columns, currentLanguage])
+  })), [columns, currentLanguage, previewLanguage])
 
   const skip = !enabled || itemId === undefined || selectedClassDefinition === undefined || requestColumns.length === 0
 
@@ -94,7 +95,7 @@ export const SimpleColumnPreviewsProvider = ({ columns, children }: SimpleColumn
     row: data?.items?.[0],
     hasItem: itemId !== undefined,
     getLocale
-  }), [isLoading, error, data, itemId, currentLanguage])
+  }), [isLoading, error, data, itemId, currentLanguage, previewLanguage])
 
   return <SimpleColumnPreviewsContext.Provider value={ value }>{children}</SimpleColumnPreviewsContext.Provider>
 }
@@ -128,7 +129,7 @@ export const SimpleColumnPreview = ({ column }: SimpleColumnPreviewProps): React
         }
 
         if (isLoading) {
-          return <ColumnPreview source={ { isLoading: true } } />
+          return <Spin size="small" />
         }
 
         if (hasError) {

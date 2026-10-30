@@ -14,6 +14,33 @@ export const useStyles = createStyles(({ token, css }) => {
   return {
     description: css`
       color: ${token.colorTextDescription};
+    `,
+
+    bar: css`
+      flex: 1;
+      min-width: 0;
+    `,
+
+    divider: css`
+      /* reaches across the padding of the stack list's body */
+      margin: 0 -${token.paddingXS}px;
+      width: auto;
+      min-width: 0;
+    `,
+
+    row: css`
+      padding: ${token.paddingXS}px ${token.paddingXXS}px 0;
+    `,
+
+    label: css`
+      color: ${token.colorTextDescription};
+      flex-shrink: 0;
+      min-width: 56px;
+    `,
+
+    value: css`
+      flex: 1;
+      min-width: 0;
     `
   }
 })

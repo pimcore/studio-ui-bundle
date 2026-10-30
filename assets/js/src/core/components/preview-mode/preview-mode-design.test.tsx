@@ -34,7 +34,7 @@ jest.mock('@Pimcore/modules/element/element-selector/provider/element-selector/u
   useElementSelector: () => ({ open: jest.fn() })
 }))
 
-jest.mock('@Pimcore/components/language-selection', () => ({
+jest.mock('@Pimcore/components/language-selection/provider/use-language-selection', () => ({
   useLanguageSelection: () => ({ currentLanguage: 'en' })
 }))
 
