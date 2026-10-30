@@ -15,7 +15,7 @@ import { Actions, type IJsonModel, type ITabRenderValues, Model, type TabNode } 
 import { useAppDispatch, useAppSelector } from '@sdk/app'
 import { selectInnerModel, selectMainWidgetContext, updateInnerModel, updateMainWidgetContext } from './widget-manager-slice'
 import { resolveMainWidgetContext } from './utils/resolve-main-widget-context'
-import { TabTitleOuterContainer } from './title/tab-title-outer-container'
+import { MainTabTitle } from './title/main-tab-title'
 import { createContextMenuItems } from '@Pimcore/modules/widget-manager/context-menu/context-menu'
 import { isEqual } from 'lodash'
 
@@ -79,7 +79,7 @@ const WidgetManagerInnerContainer = (): React.JSX.Element => {
   }, [dispatch])
 
   const onRenderTab = useCallback((node: TabNode, renderValues: ITabRenderValues): void => {
-    renderValues.content = <TabTitleOuterContainer node={ node } />
+    renderValues.content = <MainTabTitle node={ node } />
     renderValues.leading = <></>
   }, [])
 

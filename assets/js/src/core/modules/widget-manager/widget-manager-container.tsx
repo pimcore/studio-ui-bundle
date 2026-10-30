@@ -11,10 +11,12 @@
 import React, { useCallback, useEffect, useRef } from 'react'
 import { WidgetManagerView } from './widget-manager-view'
 import { widgetManagerFactory } from './utils/widget-manager-factory'
-import { Actions, type IJsonModel, type ITabRenderValues, Model, type TabNode, type TabSetNode } from 'flexlayout-react'
+import { type Action, Actions, type IJsonModel, type ITabRenderValues, Model, type TabNode, type TabSetNode } from 'flexlayout-react'
 import { useAppDispatch, useAppSelector } from '@sdk/app'
-import { selectOuterModel, updateOuterModel } from './widget-manager-slice'
+import { selectOuterModel, setActiveWidgetById, updateOuterModel } from './widget-manager-slice'
 import { TabTitleOuterContainer } from './title/tab-title-outer-container'
+import { isMainAreaMaximized } from './utils/maximize-main-widget'
+import { getSideWidgetMotion } from './hooks/use-side-widget-motion'
 
 export const WidgetManagerContainer = (): React.JSX.Element => {
   const modelJson = useAppSelector(selectOuterModel)
@@ -64,6 +66,16 @@ export const WidgetManagerContainer = (): React.JSX.Element => {
     dispatch(updateOuterModel(updatedModel.toJson()))
   }, [dispatch])
 
+  // opening a side widget while maximized also ends the mode, so the slice does both
+  const onAction = useCallback((action: Action): Action | undefined => {
+    if (isMainAreaMaximized(model) && getSideWidgetMotion(model, action) === 'opening') {
+      dispatch(setActiveWidgetById(action.data.tabNode as string))
+      return undefined
+    }
+
+    return action
+  }, [model, dispatch])
+
   const onRenderTab = useCallback((node: TabNode, renderValues: ITabRenderValues): void => {
     renderValues.content = <TabTitleOuterContainer node={ node } />
     renderValues.leading = <></>
@@ -73,6 +85,7 @@ export const WidgetManagerContainer = (): React.JSX.Element => {
     <WidgetManagerView
       factory={ widgetManagerFactory }
       model={ model }
+      onAction={ onAction }
       onModelChange={ onModelChange }
       onRenderTab={ onRenderTab }
     />

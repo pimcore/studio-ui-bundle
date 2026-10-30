@@ -19,6 +19,7 @@ import { resolveMainWidgetContext } from './utils/resolve-main-widget-context'
 import { getNextTabId } from './utils/get-next-tab-id'
 import { migrateTab, rebindTab, type ReplaceTabPayload } from './utils/replace-tab'
 import { normalizeInnerModel, restoreCollapsedRows } from './utils/restore-collapsed-rows'
+import { endMaximize, forgetMaximizeIfEnded, isLastMaximizedTab, restoreMaximizeIfMaximized, showMainWidget, toggleMaximize } from './utils/maximize-main-widget'
 import { type IconColorGroup } from '@Pimcore/components/icon/icon-color-groups-registry'
 import { type ElementIcon } from '@sdk/components'
 import { type UserPermission } from '@Pimcore/modules/auth/enums/user-permission'
@@ -34,6 +35,8 @@ export interface WidgetManagerState {
   innerModel: IJsonModel
   mainWidgetContext: MainWidgetContext
   restored: boolean
+  /** Side widgets that were open before the main area was maximized, reopened when it is restored. */
+  maximizeRestoreTabIds?: string[]
 }
 
 export interface WidgetManagerTabConfig extends Omit<IJsonTabNode, 'icon'> {
@@ -54,6 +57,20 @@ export const initialState: WidgetManagerState = {
   restored: false
 }
 
+const openOuterWidget = (state: WidgetManagerState, tab: WidgetManagerTabConfig, toNodeId: string): void => {
+  const model = Model.fromJson(state.outerModel)
+  const node = isUndefined(tab.id) ? undefined : model.getNodeById(tab.id)
+
+  if (node !== undefined) {
+    model.doAction(Actions.selectTab(node.getId()))
+  } else {
+    model.doAction(Actions.addNode(tab, toNodeId, DockLocation.CENTER, -1, true))
+  }
+
+  endMaximize(state, model)
+  state.outerModel = { ...model.toJson() }
+}
+
 const slice = createSlice({
   name: 'widget-manager',
 
@@ -62,6 +79,7 @@ const slice = createSlice({
   reducers: {
     updateOuterModel: (state, action: PayloadAction<IJsonModel>) => {
       state.outerModel = { ...action.payload }
+      forgetMaximizeIfEnded(state)
     },
 
     updateInnerModel: (state, action: PayloadAction<IJsonModel>) => {
@@ -99,11 +117,17 @@ const slice = createSlice({
       }
 
       if (isOuterModelNode) {
+        endMaximize(state, model)
         state.outerModel = { ...model.toJson() }
       } else {
+        showMainWidget(model, node)
         state.innerModel = { ...model.toJson() }
         state.mainWidgetContext = resolveMainWidgetContext(model)
       }
+    },
+
+    toggleMainWidgetMaximize: (state, action: PayloadAction<string>) => {
+      toggleMaximize(state, action.payload)
     },
 
     openMainWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
@@ -117,7 +141,7 @@ const slice = createSlice({
       if (node !== undefined) {
         model.doAction(Actions.selectTab(node.getId()))
       } else {
-        model.doAction(
+        node = model.doAction(
           Actions.addNode(
             action.payload,
             'main_tabset',
@@ -128,6 +152,7 @@ const slice = createSlice({
         )
       }
 
+      showMainWidget(model, node)
       state.innerModel = { ...model.toJson() }
       state.mainWidgetContext = resolveMainWidgetContext(model)
     },
@@ -160,78 +185,15 @@ const slice = createSlice({
     },
 
     openBottomWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
-      const model = Model.fromJson(state.outerModel)
-      let node: Node | undefined
-
-      if (action.payload.id !== undefined) {
-        node = model.getNodeById(action.payload.id)
-      }
-
-      if (node !== undefined) {
-        model.doAction(Actions.selectTab(node.getId()))
-      } else {
-        model.doAction(
-          Actions.addNode(
-            action.payload,
-            'bottom_tabset',
-            DockLocation.CENTER,
-            -1,
-            true
-          )
-        )
-      }
-
-      state.outerModel = { ...model.toJson() }
+      openOuterWidget(state, action.payload, 'bottom_tabset')
     },
 
     openLeftWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
-      const model = Model.fromJson(state.outerModel)
-      let node: Node | undefined
-
-      if (action.payload.id !== undefined) {
-        node = model.getNodeById(action.payload.id)
-      }
-
-      if (node !== undefined) {
-        model.doAction(Actions.selectTab(node.getId()))
-      } else {
-        model.doAction(
-          Actions.addNode(
-            action.payload,
-            'border_left',
-            DockLocation.CENTER,
-            -1,
-            true
-          )
-        )
-      }
-
-      state.outerModel = { ...model.toJson() }
+      openOuterWidget(state, action.payload, 'border_left')
     },
 
     openRightWidget: (state, action: PayloadAction<WidgetManagerTabConfig>) => {
-      const model = Model.fromJson(state.outerModel)
-      let node: Node | undefined
-
-      if (action.payload.id !== undefined) {
-        node = model.getNodeById(action.payload.id)
-      }
-
-      if (node !== undefined) {
-        model.doAction(Actions.selectTab(node.getId()))
-      } else {
-        model.doAction(
-          Actions.addNode(
-            action.payload,
-            'border_right',
-            DockLocation.CENTER,
-            -1,
-            true
-          )
-        )
-      }
-
-      state.outerModel = { ...model.toJson() }
+      openOuterWidget(state, action.payload, 'border_right')
     },
 
     closeWidget: (state, action: PayloadAction<string>) => {
@@ -248,8 +210,11 @@ const slice = createSlice({
         isOuterModelNode = false
       }
 
+      let endsMaximize = false
+
       if (node !== undefined) {
         const nextTabId = isOuterModelNode ? undefined : getNextTabId(node)
+        endsMaximize = !isOuterModelNode && isLastMaximizedTab(node)
 
         model.doAction(Actions.deleteTab(node.getId()))
 
@@ -263,6 +228,10 @@ const slice = createSlice({
       } else {
         state.innerModel = restoreCollapsedRows(model.toJson())
         state.mainWidgetContext = resolveMainWidgetContext(model)
+
+        if (endsMaximize) {
+          restoreMaximizeIfMaximized(state)
+        }
       }
     }
   },
@@ -295,5 +264,5 @@ injectSliceWithState({
   reducer: persistedReducer
 })
 
-export const { updateOuterModel, updateMainWidgetContext, updateInnerModel, setWidgetManagerRestored, openMainWidget, updateWidget, migrateWidget, rebindWidget, openBottomWidget, openLeftWidget, openRightWidget, setActiveWidgetById, closeWidget } = slice.actions
+export const { updateOuterModel, updateMainWidgetContext, updateInnerModel, setWidgetManagerRestored, toggleMainWidgetMaximize, openMainWidget, updateWidget, migrateWidget, rebindWidget, openBottomWidget, openLeftWidget, openRightWidget, setActiveWidgetById, closeWidget } = slice.actions
 export const { selectInnerModel, selectOuterModel, selectMainWidgetContext, selectWidgetManagerRestored } = slice.selectors

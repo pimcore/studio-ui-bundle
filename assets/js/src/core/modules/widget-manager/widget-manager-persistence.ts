@@ -15,6 +15,7 @@ import { type WidgetManagerTabConfig, type WidgetManagerState } from './widget-m
 import { container } from '@Pimcore/app/depency-injection'
 import { serviceIds } from '@Pimcore/app/config/services/service-ids'
 import { type WidgetRestorerRegistry } from './services/widget-restorer-registry'
+import { clearMaximizedTabset } from './utils/maximize-main-widget'
 import { Model, Actions, type TabNode } from 'flexlayout-react'
 import { type Reducer, type UnknownAction } from '@reduxjs/toolkit'
 import { isNil } from 'lodash'
@@ -63,6 +64,9 @@ export const createWidgetManagerPersistedReducer = (reducer: Reducer<WidgetManag
       supportedTabs.forEach(({ id, config }) => {
         model.doAction(Actions.updateNodeAttributes(id, config))
       })
+
+      // a reload always starts in the normal layout
+      clearMaximizedTabset(model)
 
       return model.toJson()
     }
