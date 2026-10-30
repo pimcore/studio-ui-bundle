@@ -1453,6 +1453,7 @@ relations.create-object.parent: Parent
 relations.create-object.parent.placeholder: Select a parent
 relations.create-object.class: Class
 relations.visible-fields.loading: Loading visible fields…
+relations.visible-fields.loading-progress: 'Loading visible fields… ({{loaded}} of {{total}})'
 relations.visible-fields.error: The visible fields could not be loaded.
 relation: Relation
 items-limit-reached: The maximum number of items ({{maxItems}}) has been reached.

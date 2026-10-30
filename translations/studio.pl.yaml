@@ -1450,6 +1450,7 @@ relations.create-object.name: Nazwa
 relations.create-object.parent: Nadrzędny
 relations.create-object.parent.placeholder: Wybierz element nadrzędny
 relations.create-object.class: Klasa
+relations.visible-fields.loading-progress: 'Ładowanie widocznych pól… ({{loaded}} z {{total}})'
 relation: relacja
 items-limit-reached: "Osiągnięto maksymalną liczbę elementów ({{maxItems}})."
 asset-upload-type-not-allowed: Typ przesłanego assetu nie jest dozwolony dla tego pola.

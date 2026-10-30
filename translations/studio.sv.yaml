@@ -1450,6 +1450,7 @@ relations.create-object.name: Namn
 relations.create-object.parent: Överordnad
 relations.create-object.parent.placeholder: Välj en överordnad
 relations.create-object.class: Klass
+relations.visible-fields.loading-progress: 'Läser in synliga fält… ({{loaded}} av {{total}})'
 relation: relation
 items-limit-reached: Maximalt antal objekt ({{maxItems}}) har nåtts.
 asset-upload-type-not-allowed: Den uppladdade assetens typ tillåts inte för det här fältet.

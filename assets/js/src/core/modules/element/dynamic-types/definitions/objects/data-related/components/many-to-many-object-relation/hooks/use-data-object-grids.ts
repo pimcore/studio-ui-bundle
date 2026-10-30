@@ -8,17 +8,25 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import { useEffect, useMemo, useRef } from 'react'
-import { map, filter, isEmpty, isNil, isUndefined } from 'lodash'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { shallowEqual } from 'react-redux'
+import { isEmpty, isNil, isUndefined, map, sumBy } from 'lodash'
 import {
+  api,
+  type DataObjectGetGridApiArg,
   type DataObjectGetGridApiResponse,
-  type GridColumnRequest,
-  useDataObjectGetGridQuery
+  type GridColumnRequest
 } from '@Pimcore/modules/data-object/data-object-api-slice.gen'
 import { type ManyToManyRelationValue } from '@Pimcore/components/many-to-many-relation'
 import { type UseClassDefinitionsReturn } from '@Pimcore/modules/data-object/utils/provider/class-defintions/use-class-definitions'
-import { isEmptyValue } from '@Pimcore/utils/type-utils'
+import { useAppDispatch, useAppSelector } from '@Pimcore/app/store'
 import trackError, { ApiError } from '@Pimcore/modules/app/error-handler'
+import {
+  buildGridChunks,
+  VISIBLE_FIELDS_CHUNK_SIZE,
+  VISIBLE_FIELDS_FIRST_CHUNK_SIZE,
+  VISIBLE_FIELDS_MAX_PARALLEL
+} from '@Pimcore/modules/element/dynamic-types/definitions/objects/data-related/components/many-to-many-object-relation/utils/grid-chunks'
 
 interface IUseDataObjectGridsProps {
   classIds?: string[]
@@ -32,59 +40,174 @@ export interface IUseDataObjectGridsReturn {
   isLoading: boolean
   isError: boolean
   data: DataObjectGetGridApiResponse['items']
+  // Related objects of the chunks that have their visible field values, out of all related objects to load.
+  loadedCount: number
+  totalCount: number
   refetchAll: () => void
 }
 
-export const useDataObjectGrids = ({ classIds, convertClassName, columns, applyFallbackLanguages, dataValue }: IUseDataObjectGridsProps): IUseDataObjectGridsReturn => {
-  const queries = (classIds ?? []).map((classId: string) => {
-    const filterValue = map(
-      filter(dataValue, { subtype: classId }),
-      'id'
-    )
+type GridItems = DataObjectGetGridApiResponse['items']
+type GridSubscription = ReturnType<ReturnType<typeof api.endpoints.dataObjectGetGrid.initiate>>
+// The app's RootState does not type the API slice it combines, the endpoint selectors expect it.
+type GridQueryState = Parameters<ReturnType<typeof api.endpoints.dataObjectGetGrid.select>>[0]
 
-    return useDataObjectGetGridQuery(
-      {
+interface ChunkRequest {
+  key: string
+  args: DataObjectGetGridApiArg
+  ids: number[]
+}
+
+export const useDataObjectGrids = ({ classIds, convertClassName, columns, applyFallbackLanguages, dataValue }: IUseDataObjectGridsProps): IUseDataObjectGridsReturn => {
+  const dispatch = useAppDispatch()
+
+  const chunkRequests = useMemo<ChunkRequest[]>(() => {
+    if (isEmpty(columns)) {
+      return []
+    }
+
+    return buildGridChunks(dataValue, classIds ?? [], VISIBLE_FIELDS_CHUNK_SIZE, VISIBLE_FIELDS_FIRST_CHUNK_SIZE).map(({ classId, ids }) => {
+      const args: DataObjectGetGridApiArg = {
         classId: convertClassName(classId)?.id ?? '',
         body: {
           folderId: 1,
           applyFallbackLanguages,
           columns,
           filters: {
-            // One page holding all related objects of the class; a fixed page size left the rows
-            // beyond it without visible field values.
             page: 1,
-            pageSize: filterValue.length,
+            pageSize: ids.length,
             includeDescendants: true,
             columnFilters: [
               {
                 type: 'system.ids',
-                filterValue
+                filterValue: ids
               }
             ]
           }
         }
-      },
-      { skip: isEmpty(columns) || isEmptyValue(filterValue), refetchOnMountOrArgChange: true }
-    )
-  })
+      }
 
-  // A refetch of data already shown (e.g. after any data object save invalidated the grids) runs in the background.
-  const isLoading = queries.some(q => q.isLoading || (q.isFetching && isUndefined(q.data)))
-  const isError = queries.some(q => q.isError)
+      return { key: JSON.stringify(args), args, ids }
+    })
+  }, [dataValue, classIds, columns, applyFallbackLanguages, convertClassName])
 
-  // Every class has its own request; each failure is tracked once, also when another class failed before.
-  const trackedErrors = useRef(new WeakSet<object>())
+  // Unchanged chunks keep their requests and selectors, e.g. when a related object is appended.
+  const requestsKey = JSON.stringify(chunkRequests.map(request => request.key))
+  const requests = useMemo(() => chunkRequests, [requestsKey])
+
+  // One selector per request, created once: a selector created on every render returns a new result every time.
+  const selectors = useMemo(() => requests.map(request => api.endpoints.dataObjectGetGrid.select(request.args)), [requests])
+  const results = useAppSelector(state => selectors.map(select => select(state as GridQueryState)), shallowEqual)
+
+  const subscriptions = useRef(new Map<string, GridSubscription>())
+  // Changes when refetchAll() released the subscriptions, so the queue requests the chunks again.
+  const [refetchRound, setRefetchRound] = useState(0)
+
+  const isSettled = (index: number): boolean => results[index].isSuccess || results[index].isError
+  // Includes the request id: a refetch can settle before its pending state is rendered, the settled flags alone stay the same then.
+  const settledKey = results.map((result, index) => isSettled(index) ? `1${result.requestId ?? ''}` : '0').join(',')
+
+  // The chunks are requested in relation order with only a few requests running at the same time,
+  // so the rows on top of the relation get their values first.
   useEffect(() => {
-    queries.forEach(q => {
-      if (q.isError && !isNil(q.error) && !trackedErrors.current.has(q.error)) {
-        trackedErrors.current.add(q.error)
-        trackError(new ApiError(q.error))
+    const neededKeys = new Set(requests.map(request => request.key))
+    subscriptions.current.forEach((subscription, key) => {
+      if (!neededKeys.has(key)) {
+        subscription.unsubscribe()
+        subscriptions.current.delete(key)
       }
     })
-  })
 
-  const data = useMemo(() => queries.flatMap(q => q.data?.items ?? []), queries.map(q => q.data))
-  const refetchAll = (): void => { queries.forEach(q => { void q.refetch() }) }
+    let running = requests.filter((request, index) => subscriptions.current.has(request.key) && !isSettled(index)).length
+    requests.forEach(request => {
+      if (running >= VISIBLE_FIELDS_MAX_PARALLEL || subscriptions.current.has(request.key)) {
+        return
+      }
 
-  return { isLoading, isError, data, refetchAll }
+      subscriptions.current.set(request.key, dispatch(api.endpoints.dataObjectGetGrid.initiate(request.args, { forceRefetch: true })))
+      running++
+    })
+  }, [requests, settledKey, refetchRound])
+
+  useEffect(() => () => {
+    subscriptions.current.forEach(subscription => { subscription.unsubscribe() })
+    subscriptions.current.clear()
+  }, [])
+
+  // A refetch of data already shown (e.g. after any data object save invalidated the grids) runs in the background.
+  const isLoading = results.some(result => isUndefined(result.data) && !result.isError)
+  const isError = results.some(result => result.isError)
+  const totalCount = sumBy(requests, request => request.ids.length)
+
+  // The last loaded item of each related object is kept until its chunk returns again, wherever the chunk
+  // boundaries moved to (a row added or removed before it, requests completing in any order). Values of
+  // other columns, e.g. in the previous language, are never kept.
+  const columnsKey = JSON.stringify(columns ?? [])
+  const previousItems = useRef<{ columnsKey: string, byId: Map<number, GridItems[number]> }>({ columnsKey, byId: new Map() })
+  useEffect(() => {
+    if (previousItems.current.columnsKey !== columnsKey) {
+      previousItems.current = { columnsKey, byId: new Map() }
+    }
+    const relationIds = new Set(requests.flatMap(request => request.ids))
+    previousItems.current.byId.forEach((_, id) => {
+      if (!relationIds.has(id)) {
+        previousItems.current.byId.delete(id)
+      }
+    })
+    results.forEach(result => {
+      result.data?.items.forEach(item => {
+        if (!isUndefined(item.id)) {
+          previousItems.current.byId.set(item.id, item)
+        }
+      })
+    })
+  }, [results, requests, columnsKey])
+
+  const { data, loadedCount } = useMemo(() => {
+    // Safe: the ref is only written in the effect above, after a render, and a render with the same inputs reads the same value.
+    const keptById = previousItems.current.columnsKey === columnsKey ? previousItems.current.byId : new Map<number, GridItems[number]>()
+    const freshIds = new Set(results.flatMap(result => map(result.data?.items ?? [], 'id')))
+    const keptIds = new Set<number>()
+
+    const items = results.flatMap((result, index) => {
+      if (!isUndefined(result.data)) {
+        return result.data.items
+      }
+
+      return requests[index].ids.flatMap(id => {
+        const item = keptById.get(id)
+        if (isUndefined(item) || freshIds.has(id) || keptIds.has(id)) {
+          return []
+        }
+        keptIds.add(id)
+        return [item]
+      })
+    })
+
+    const loaded = requests.reduce((count, request, index) => isUndefined(results[index].data)
+      ? count + request.ids.filter(id => keptIds.has(id)).length
+      : count + request.ids.length, 0)
+
+    return { data: items, loadedCount: loaded }
+  }, [results, requests, columnsKey])
+
+  // Every chunk has its own request; each failure is tracked once, also when another chunk failed before.
+  const trackedErrors = useRef(new WeakSet<object>())
+  useEffect(() => {
+    results.forEach(result => {
+      if (result.isError && !isNil(result.error) && !trackedErrors.current.has(result.error)) {
+        trackedErrors.current.add(result.error)
+        trackError(new ApiError(result.error))
+      }
+    })
+  }, [results])
+
+  // Releases the subscriptions so the queue requests every chunk again, first rows first and with at most
+  // VISIBLE_FIELDS_MAX_PARALLEL at the same time. The cached data stays visible meanwhile.
+  const refetchAll = (): void => {
+    subscriptions.current.forEach(subscription => { subscription.unsubscribe() })
+    subscriptions.current.clear()
+    setRefetchRound(round => round + 1)
+  }
+
+  return { isLoading, isError, data, loadedCount, totalCount, refetchAll }
 }
