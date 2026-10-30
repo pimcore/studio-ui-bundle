@@ -38,21 +38,23 @@ export interface EditableDialogProps {
 export const EditableDialog = ({ config, visible, onClose, onCancel, editableDefinitions }: EditableDialogProps): React.JSX.Element => {
   const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
   const editableDialogLayoutRegistry = useInjection<DynamicTypeEditableDialogLayoutRegistry>(serviceIds['DynamicTypes/EditableDialogLayoutRegistry'])
-  const { getValue, triggerSaveAndReload } = useDocumentEditor()
+  const { getValue } = useDocumentEditor()
   const { modal } = useStudioModal()
   const { t } = useTranslation()
   const { styles } = useStyles()
 
   // Only the editables rendered by this dialog are snapshotted: the window modal has no mask, so the
   // page behind it stays editable and those edits must not be rolled back by a cancelled dialog.
-  const { getChangedKeys, restore } = useEditableDialogSnapshot(editableDefinitions.map(editable => editable.name))
+  const { getChangedKeys, restore, commit } = useEditableDialogSnapshot(editableDefinitions.map(editable => editable.name))
   const confirmPending = useRef(false)
 
-  // Reload-on-change editables would save and reload the document (and thereby destroy this dialog)
-  // on every change, so their reload is held back until the dialog is saved.
+  // Changes made in the dialog stay in the editable store until Save: nothing is autosaved or marked
+  // modified while the dialog is open, and reload-on-change editables (which would save and reload
+  // the document and thereby destroy this dialog) hold their reload back until Save as well.
   const reloadDeferred = useRef(false)
   const renderOptions = useMemo<RenderEditableOptions>(() => ({
     deferReloadOnChange: true,
+    deferPersistence: true,
     onReloadDeferred: () => { reloadDeferred.current = true }
   }), [])
 
@@ -64,10 +66,7 @@ export const EditableDialog = ({ config, visible, onClose, onCancel, editableDef
     }
 
     // A dialog configured with reloadOnClose reloads through its owner anyway.
-    if (reloadDeferred.current && config.reloadOnClose !== true) {
-      triggerSaveAndReload()
-    }
-
+    commit({ reload: reloadDeferred.current && config.reloadOnClose !== true })
     onClose()
   }
 

@@ -33,8 +33,8 @@ export const EDITABLE_DEFAULT_FIELD_WIDTHS = {
 export const RenderEditable = ({ editableDefinition, containerRef }: RenderEditableProps): React.JSX.Element => {
   const documentEditableRegistry = useInjection<DynamicTypeDocumentEditableRegistry>(serviceIds['DynamicTypes/DocumentEditableRegistry'])
   const editableType = documentEditableRegistry.hasDynamicType(editableDefinition.type) ? documentEditableRegistry.getDynamicType(editableDefinition.type) : undefined
-  const { updateValue, updateValueWithReload, getValue, getInheritanceState, setInheritanceState } = useDocumentEditor()
-  const { deferReloadOnChange, onReloadDeferred } = useContext(RenderEditableOptionsContext)
+  const { setValue, updateValue, updateValueWithReload, getValue, getInheritanceState, setInheritanceState } = useDocumentEditor()
+  const { deferReloadOnChange, onReloadDeferred, deferPersistence = false } = useContext(RenderEditableOptionsContext)
   const isInherited = getInheritanceState(editableDefinition.name)
   const [localValue, setLocalValue] = useState(getValue(editableDefinition.name).data)
   const [, forceUpdate] = useState({})
@@ -83,8 +83,9 @@ export const RenderEditable = ({ editableDefinition, containerRef }: RenderEdita
       onReloadDeferred?.()
     }
 
-    updateValue(editableDefinition.name, { type: editableDefinition.type, data: newValue })
-  }, [isRequired, isInherited, deferReloadOnChange, onReloadDeferred])
+    const write = deferPersistence ? setValue : updateValue
+    write(editableDefinition.name, { type: editableDefinition.type, data: newValue })
+  }, [isRequired, isInherited, deferReloadOnChange, onReloadDeferred, deferPersistence])
 
   const renderEditableComponent = useMemo((): React.ReactElement => {
     if (isNil(editableType)) {

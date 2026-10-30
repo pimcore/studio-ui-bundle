@@ -47,18 +47,20 @@ jest.mock('@Pimcore/app/depency-injection', () => ({
 }))
 
 const store: { values: Record<string, ValueType> } = { values: {} }
+const setValue = jest.fn((key: string, value: ValueType) => { store.values[key] = value })
 const updateValue = jest.fn((key: string, value: ValueType) => { store.values[key] = value })
-const triggerSaveAndReload = jest.fn()
+const updateValueWithReload = jest.fn((key: string, value: ValueType) => { store.values[key] = value })
 
 jest.mock('../../hooks/use-document-editor', () => ({
   useDocumentEditor: () => ({
     getValue: (key: string) => store.values[key],
     getValues: () => ({ ...store.values }),
     getInheritanceState: () => false,
+    setValue,
     updateValue,
+    updateValueWithReload,
     removeValues: jest.fn(),
-    setInheritanceState: jest.fn(),
-    triggerSaveAndReload
+    setInheritanceState: jest.fn()
   })
 }))
 
@@ -76,11 +78,12 @@ jest.mock('./editable-dialog.styles', () => ({
 // reload the way RenderEditable does and writes its new value into the store.
 jest.mock('./template-aware-editable', () => ({
   TemplateAwareEditable: () => {
-    const { deferReloadOnChange, onReloadDeferred } = useContext(RenderEditableOptionsContext)
+    const { deferReloadOnChange, deferPersistence, onReloadDeferred } = useContext(RenderEditableOptionsContext)
 
     return (
       <button
         data-defer={ String(deferReloadOnChange) }
+        data-defer-persistence={ String(deferPersistence) }
         onClick={ () => {
           onReloadDeferred?.()
           store.values.layout = { type: 'select', data: 'two-columns' }
@@ -126,53 +129,59 @@ describe('EditableDialog with reload-on-change editables', () => {
     jest.clearAllMocks()
   })
 
-  it('tells its editables to hold back their reload', () => {
+  it('tells its editables to hold back their reload and their persistence', () => {
     renderDialog()
 
     expect(screen.getByText('change-with-reload').dataset.defer).toBe('true')
+    expect(screen.getByText('change-with-reload').dataset.deferPersistence).toBe('true')
   })
 
-  it('runs the held-back reload when the dialog is saved', () => {
+  it('persists with the held-back reload when the dialog is saved', () => {
     const { onClose } = renderDialog()
 
     fireEvent.click(screen.getByText('change-with-reload'))
     fireEvent.click(screen.getByText('save'))
 
-    expect(triggerSaveAndReload).toHaveBeenCalledTimes(1)
+    expect(updateValueWithReload).toHaveBeenCalledTimes(1)
+    expect(updateValueWithReload).toHaveBeenCalledWith('layout', { type: 'select', data: 'two-columns' })
+    expect(updateValue).not.toHaveBeenCalled()
     expect(onClose).toHaveBeenCalledTimes(1)
   })
 
-  it('leaves the reload to the owner when the dialog reloads on close anyway', () => {
+  it('persists without its own reload when the dialog reloads on close anyway', () => {
     const { onClose } = renderDialog(true)
 
     fireEvent.click(screen.getByText('change-with-reload'))
     fireEvent.click(screen.getByText('save'))
 
-    expect(triggerSaveAndReload).not.toHaveBeenCalled()
+    expect(updateValue).toHaveBeenCalledTimes(1)
+    expect(updateValueWithReload).not.toHaveBeenCalled()
     expect(onClose).toHaveBeenCalledTimes(1)
   })
 
-  it('does not reload when the change was reverted before saving', () => {
+  it('neither persists nor reloads when the change was reverted before saving', () => {
     const { onClose, onCancel } = renderDialog()
 
     fireEvent.click(screen.getByText('change-with-reload'))
     store.values.layout = { type: 'select', data: 'one-column' }
     fireEvent.click(screen.getByText('save'))
 
-    expect(triggerSaveAndReload).not.toHaveBeenCalled()
+    expect(updateValue).not.toHaveBeenCalled()
+    expect(updateValueWithReload).not.toHaveBeenCalled()
     expect(onClose).not.toHaveBeenCalled()
     expect(onCancel).toHaveBeenCalledTimes(1)
   })
 
-  it('does not reload when the change is discarded', () => {
+  it('neither persists nor reloads when the change is discarded', () => {
     const { onCancel } = renderDialog()
 
     fireEvent.click(screen.getByText('change-with-reload'))
     fireEvent.click(screen.getByText('cancel'))
     lastConfirmConfig().onOk?.()
 
-    expect(triggerSaveAndReload).not.toHaveBeenCalled()
-    expect(updateValue).toHaveBeenCalledWith('layout', { type: 'select', data: 'one-column' })
+    expect(setValue).toHaveBeenCalledWith('layout', { type: 'select', data: 'one-column' })
+    expect(updateValue).not.toHaveBeenCalled()
+    expect(updateValueWithReload).not.toHaveBeenCalled()
     expect(onCancel).toHaveBeenCalledTimes(1)
   })
 })

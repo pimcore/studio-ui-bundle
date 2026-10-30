@@ -20,23 +20,39 @@ interface EditableSnapshot {
 
 const EMPTY_SNAPSHOT: EditableSnapshot = { value: undefined, inherited: false }
 
+export interface CommitOptions {
+  /** Save and reload the document right away instead of scheduling the regular autosave. */
+  reload: boolean
+}
+
 export interface UseEditableDialogSnapshotReturn {
   /** Names of the dialog editables (and their nested values) whose value or inheritance state differs from the snapshot. */
   getChangedKeys: () => string[]
-  /** Writes the snapshot back for every changed editable. Editables outside the dialog are never touched. */
+  /** Writes the snapshot back for every changed editable, store-only. Editables outside the dialog are never touched. */
   restore: () => void
+  /** Persists the changes made since the snapshot: marks the document modified and saves (or saves and reloads). */
+  commit: (options: CommitOptions) => void
 }
 
 /**
- * Editables write their changes straight into the document editable store, so the dialog cannot
- * simply drop its local state when it is cancelled. This hook captures the dialog editables once,
- * when the dialog mounts, and restores exactly those editables on request.
+ * Editables inside the dialog write their changes into the document editable store only. This hook
+ * captures the dialog editables once, when the dialog mounts, and either restores exactly those
+ * editables (Cancel) or hands the batch over to the parent window for persistence (Save).
  *
  * A dialog editable owns every value nested below it, e.g. the rows of a block (`<name>:<key>.<child>`),
  * so rows added or removed while the dialog was open are rolled back as well.
  */
 export const useEditableDialogSnapshot = (editableNames: string[]): UseEditableDialogSnapshotReturn => {
-  const { getValue, getValues, getInheritanceState, updateValue, removeValues, setInheritanceState } = useDocumentEditor()
+  const {
+    getValue,
+    getValues,
+    getInheritanceState,
+    setValue,
+    updateValue,
+    updateValueWithReload,
+    removeValues,
+    setInheritanceState
+  } = useDocumentEditor()
 
   const isOwned = (key: string): boolean =>
     editableNames.some(name => key === name || key.startsWith(`${name}:`))
@@ -73,19 +89,34 @@ export const useEditableDialogSnapshot = (editableNames: string[]): UseEditableD
     changedKeys.forEach(key => {
       const { value, inherited } = getSnapshot(key)
 
-      if (isNil(value)) {
-        return
-      }
-
       if (inherited !== getInheritanceState(key)) {
         setInheritanceState(key, inherited)
       }
 
-      // Always write the value, even when only the inheritance changed: the value update is what
-      // notifies the parent window and schedules the autosave that persists the restored state.
-      updateValue(key, cloneDeep(value))
+      if (!isNil(value) && !isEqual(value, getValue(key))) {
+        setValue(key, cloneDeep(value))
+      }
     })
   }
 
-  return { getChangedKeys, restore }
+  // The parent window saves the live values of the whole document, so one notification carries the
+  // entire batch. It is sent through a dialog value that still exists; the value itself is unchanged.
+  const commit = ({ reload }: CommitOptions): void => {
+    const changedKeys = getChangedKeys()
+
+    if (changedKeys.length === 0) {
+      return
+    }
+
+    const key = union(changedKeys, editableNames).find(name => !isNil(getValue(name)))
+
+    if (key === undefined) {
+      return
+    }
+
+    const notify = reload ? updateValueWithReload : updateValue
+    notify(key, getValue(key))
+  }
+
+  return { getChangedKeys, restore, commit }
 }

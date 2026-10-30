@@ -34,12 +34,7 @@ jest.mock('@sdk/components', () => ({
       <button onClick={ onCancel }>{cancelText}</button>
     </div>
   ),
-  Card: ({ title, children }: { title?: React.ReactNode, children: React.ReactNode }) => (
-    <div>
-      <div>{title}</div>
-      {children}
-    </div>
-  )
+  Card: ({ title, children }: { title?: React.ReactNode, children: React.ReactNode }) => <div><div>{title}</div>{children}</div>
 }))
 
 jest.mock('@Pimcore/app/config/services/service-ids', () => ({
@@ -56,6 +51,7 @@ jest.mock('@Pimcore/app/depency-injection', () => ({
 }))
 
 const store: { values: Record<string, ValueType>, inheritance: Record<string, boolean> } = { values: {}, inheritance: {} }
+const setValue = jest.fn((key: string, value: ValueType) => { store.values[key] = value })
 const updateValue = jest.fn((key: string, value: ValueType) => { store.values[key] = value })
 const removeValues = jest.fn((keys: string[]) => { keys.forEach(key => { delete store.values[key] }) }) // eslint-disable-line @typescript-eslint/no-dynamic-delete
 const setInheritanceState = jest.fn((key: string, inherited: boolean) => { store.inheritance[key] = inherited })
@@ -65,10 +61,11 @@ jest.mock('../../hooks/use-document-editor', () => ({
     getValue: (key: string) => store.values[key],
     getValues: () => ({ ...store.values }),
     getInheritanceState: (key: string) => store.inheritance[key] ?? false,
+    setValue,
     updateValue,
+    updateValueWithReload: jest.fn(),
     removeValues,
-    setInheritanceState,
-    triggerSaveAndReload: jest.fn()
+    setInheritanceState
   })
 }))
 
@@ -192,7 +189,8 @@ describe('EditableDialog', () => {
       clickCancel()
       lastConfirmConfig().onOk?.()
 
-      expect(updateValue).toHaveBeenCalledWith('teaser', input('Original'))
+      expect(setValue).toHaveBeenCalledWith('teaser', input('Original'))
+      expect(updateValue).not.toHaveBeenCalled() // nothing was persisted, so nothing is sent to the parent window
       expect(onCancel).toHaveBeenCalledTimes(1)
       expect(onClose).not.toHaveBeenCalled()
     })
@@ -270,7 +268,8 @@ describe('EditableDialog', () => {
 
       expect(onClose).toHaveBeenCalledTimes(1)
       expect(onCancel).not.toHaveBeenCalled()
-      expect(updateValue).not.toHaveBeenCalled()
+      expect(updateValue).toHaveBeenCalledTimes(1) // values are in the store already; Save notifies the parent once
+      expect(updateValue).toHaveBeenCalledWith('teaser', input('Changed'))
       expect(store.values.teaser).toEqual(input('Changed'))
     })
 

@@ -18,6 +18,11 @@ export interface RenderEditableOptions {
   deferReloadOnChange: boolean
   /** Called every time a reload was held back. */
   onReloadDeferred?: () => void
+  /**
+   * Write changes into the editable store only, without marking the document as modified or
+   * scheduling an autosave. The owner persists the batch itself (the editable dialog on Save).
+   */
+  deferPersistence?: boolean
 }
 
 export const RenderEditableOptionsContext = createContext<RenderEditableOptions>({

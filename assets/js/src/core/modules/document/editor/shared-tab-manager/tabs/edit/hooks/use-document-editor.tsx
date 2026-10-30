@@ -14,6 +14,8 @@ import { DocumentContext } from '@Pimcore/modules/document/document-provider'
 import { type ValueType } from '@Pimcore/app/public-api/document-editor-iframe/editable-data/editable-data'
 
 export interface DocumentEditorContextProps {
+  /** Writes a value into the editable store only: no modified flag and no autosave in the parent window. */
+  setValue: (key: string, value: ValueType) => void
   updateValue: (key: string, value: ValueType) => void
   updateValueWithReload: (key: string, value: ValueType) => void
   triggerSaveAndReload: () => void
@@ -39,6 +41,10 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
       throw new Error('PimcoreDocumentEditor API not available')
     }
     return documentEditableApi
+  }, [])
+
+  const setValue = useCallback((key: string, value: ValueType): void => {
+    getDocumentEditableApi().updateValue(key, value)
   }, [])
 
   const updateValue = useCallback((key: string, value: ValueType): void => {
@@ -132,6 +138,7 @@ export const useDocumentEditor = (): DocumentEditorContextProps => {
   }, [id])
 
   return {
+    setValue,
     updateValue,
     updateValueWithReload,
     triggerSaveAndReload,

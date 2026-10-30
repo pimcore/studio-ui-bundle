@@ -17,7 +17,9 @@ const store: { values: Record<string, ValueType>, inheritance: Record<string, bo
   inheritance: {}
 }
 
+const setValue = jest.fn((key: string, value: ValueType) => { store.values[key] = value })
 const updateValue = jest.fn((key: string, value: ValueType) => { store.values[key] = value })
+const updateValueWithReload = jest.fn((key: string, value: ValueType) => { store.values[key] = value })
 const removeValues = jest.fn((keys: string[]) => { keys.forEach(key => { delete store.values[key] }) }) // eslint-disable-line @typescript-eslint/no-dynamic-delete
 const setInheritanceState = jest.fn((key: string, inherited: boolean) => { store.inheritance[key] = inherited })
 
@@ -26,7 +28,9 @@ jest.mock('../../../hooks/use-document-editor', () => ({
     getValue: (key: string) => store.values[key],
     getValues: () => ({ ...store.values }),
     getInheritanceState: (key: string) => store.inheritance[key] ?? false,
+    setValue,
     updateValue,
+    updateValueWithReload,
     removeValues,
     setInheritanceState
   })
@@ -81,14 +85,16 @@ describe('useEditableDialogSnapshot', () => {
     expect(result.current.getChangedKeys()).toEqual(['headline'])
   })
 
-  it('restores the value an editable had when the snapshot was taken', () => {
+  it('restores the value an editable had when the snapshot was taken without notifying the parent window', () => {
     const { result } = renderHook(() => useEditableDialogSnapshot(['headline']))
 
     store.values.headline = input('Changed')
     result.current.restore()
 
-    expect(updateValue).toHaveBeenCalledTimes(1)
-    expect(updateValue).toHaveBeenCalledWith('headline', input('Hello'))
+    expect(setValue).toHaveBeenCalledTimes(1)
+    expect(setValue).toHaveBeenCalledWith('headline', input('Hello'))
+    expect(updateValue).not.toHaveBeenCalled()
+    expect(updateValueWithReload).not.toHaveBeenCalled()
     expect(store.values.headline).toEqual(input('Hello'))
   })
 
@@ -101,7 +107,7 @@ describe('useEditableDialogSnapshot', () => {
     liveValue.nested.push('b')
     result.current.restore()
 
-    expect(updateValue).toHaveBeenCalledWith('headline', input({ text: 'Hello', nested: ['a'] }))
+    expect(setValue).toHaveBeenCalledWith('headline', input({ text: 'Hello', nested: ['a'] }))
   })
 
   it('removes a value that only came into existence while the dialog was open', () => {
@@ -112,7 +118,7 @@ describe('useEditableDialogSnapshot', () => {
     result.current.restore()
 
     expect(removeValues).toHaveBeenCalledWith(['headline'])
-    expect(updateValue).not.toHaveBeenCalled()
+    expect(setValue).not.toHaveBeenCalled()
     expect(store.values.headline).toBeUndefined()
   })
 
@@ -125,11 +131,11 @@ describe('useEditableDialogSnapshot', () => {
     result.current.restore()
 
     expect(setInheritanceState).toHaveBeenCalledWith('headline', true)
+    expect(setValue).toHaveBeenCalledWith('headline', input('Hello'))
     expect(store.inheritance.headline).toBe(true)
   })
 
-  it('writes the value again after restoring inheritance so the draft gets saved as inherited', () => {
-    // The override may already have been autosaved; only a value update schedules the next autosave.
+  it('restores only the inheritance state when the value is unchanged', () => {
     store.inheritance.headline = true
     const { result } = renderHook(() => useEditableDialogSnapshot(['headline']))
 
@@ -137,8 +143,53 @@ describe('useEditableDialogSnapshot', () => {
     result.current.restore()
 
     expect(setInheritanceState).toHaveBeenCalledWith('headline', true)
-    expect(updateValue).toHaveBeenCalledWith('headline', input('Hello'))
-    expect(setInheritanceState.mock.invocationCallOrder[0]).toBeLessThan(updateValue.mock.invocationCallOrder[0])
+    expect(setValue).not.toHaveBeenCalled()
+  })
+
+  describe('commit', () => {
+    it('notifies the parent window once for the whole batch of changes', () => {
+      store.values.subline = input('Sub')
+      const { result } = renderHook(() => useEditableDialogSnapshot(['headline', 'subline']))
+
+      store.values.headline = input('Changed')
+      store.values.subline = input('Sub changed')
+      result.current.commit({ reload: false })
+
+      expect(updateValue).toHaveBeenCalledTimes(1)
+      expect(updateValue).toHaveBeenCalledWith('headline', input('Changed'))
+      expect(updateValueWithReload).not.toHaveBeenCalled()
+    })
+
+    it('requests the save-and-reload instead when a reload was held back', () => {
+      const { result } = renderHook(() => useEditableDialogSnapshot(['headline']))
+
+      store.values.headline = input('Changed')
+      result.current.commit({ reload: true })
+
+      expect(updateValueWithReload).toHaveBeenCalledTimes(1)
+      expect(updateValueWithReload).toHaveBeenCalledWith('headline', input('Changed'))
+      expect(updateValue).not.toHaveBeenCalled()
+    })
+
+    it('notifies through another dialog value when the changed one was removed', () => {
+      store.values.subline = input('Sub')
+      const { result } = renderHook(() => useEditableDialogSnapshot(['headline', 'subline']))
+
+      delete store.values.headline
+      result.current.commit({ reload: false })
+
+      expect(updateValue).toHaveBeenCalledTimes(1)
+      expect(updateValue).toHaveBeenCalledWith('subline', input('Sub'))
+    })
+
+    it('does nothing when nothing changed', () => {
+      const { result } = renderHook(() => useEditableDialogSnapshot(['headline']))
+
+      result.current.commit({ reload: true })
+
+      expect(updateValue).not.toHaveBeenCalled()
+      expect(updateValueWithReload).not.toHaveBeenCalled()
+    })
   })
 
   describe('child editables of a dialog editable', () => {
@@ -176,8 +227,8 @@ describe('useEditableDialogSnapshot', () => {
       result.current.restore()
 
       expect(removeValues).toHaveBeenCalledWith(['teaserBlock:2.headline'])
-      expect(updateValue).toHaveBeenCalledTimes(1)
-      expect(updateValue).toHaveBeenCalledWith('teaserBlock', { type: 'block', data: ['1'] })
+      expect(setValue).toHaveBeenCalledTimes(1)
+      expect(setValue).toHaveBeenCalledWith('teaserBlock', { type: 'block', data: ['1'] })
       expect(store.values['teaserBlock:2.headline']).toBeUndefined()
       expect(store.values.teaserBlockExtra).toEqual(input('Edited on the page'))
       expect(store.values['other:1.headline']).toEqual(input('Edited on the page too'))
@@ -189,7 +240,7 @@ describe('useEditableDialogSnapshot', () => {
       delete store.values['teaserBlock:1.headline']
       result.current.restore()
 
-      expect(updateValue).toHaveBeenCalledWith('teaserBlock:1.headline', input('Row 1'))
+      expect(setValue).toHaveBeenCalledWith('teaserBlock:1.headline', input('Row 1'))
     })
   })
 
@@ -201,8 +252,8 @@ describe('useEditableDialogSnapshot', () => {
     store.values.pageTitle = input('Edited on the page')
     result.current.restore()
 
-    expect(updateValue).toHaveBeenCalledTimes(1)
-    expect(updateValue).toHaveBeenCalledWith('headline', input('Hello'))
+    expect(setValue).toHaveBeenCalledTimes(1)
+    expect(setValue).toHaveBeenCalledWith('headline', input('Hello'))
     expect(removeValues).not.toHaveBeenCalled()
     expect(setInheritanceState).not.toHaveBeenCalledWith('pageTitle', expect.anything())
     expect(store.values.subline).toEqual(input('Sub'))

@@ -50,11 +50,13 @@ jest.mock('./required-field-wrapper', () => ({
   removeRequiredStyling: jest.fn()
 }))
 
+const setValue = jest.fn()
 const updateValue = jest.fn()
 const updateValueWithReload = jest.fn()
 
 jest.mock('../../hooks/use-document-editor', () => ({
   useDocumentEditor: () => ({
+    setValue,
     updateValue,
     updateValueWithReload,
     getValue: () => ({ type: 'select', data: 'initial' }),
@@ -65,7 +67,7 @@ jest.mock('../../hooks/use-document-editor', () => ({
 
 const definition = { id: 'sel', name: 'teaser:1.layout', type: 'select', config: {} } as unknown as AbstractDocumentEditableDefinition
 
-const renderEditable = (options?: { deferReloadOnChange: boolean, onReloadDeferred?: () => void }): void => {
+const renderEditable = (options?: { deferReloadOnChange: boolean, deferPersistence?: boolean, onReloadDeferred?: () => void }): void => {
   const editable = (
     <RenderEditable
       containerRef={ React.createRef<HTMLDivElement>() }
@@ -117,6 +119,39 @@ describe('RenderEditable reload on change', () => {
     expect(updateValue).toHaveBeenCalledWith('teaser:1.layout', { type: 'select', data: 'changed' })
     expect(updateValueWithReload).not.toHaveBeenCalled()
     expect(onReloadDeferred).toHaveBeenCalledTimes(1)
+  })
+
+  it('only writes to the store when the owner defers persistence', () => {
+    editableType.reloadOnChange.mockReturnValue(false)
+    renderEditable({ deferReloadOnChange: true, deferPersistence: true })
+
+    fireEvent.click(screen.getByText('change'))
+
+    expect(setValue).toHaveBeenCalledWith('teaser:1.layout', { type: 'select', data: 'changed' })
+    expect(updateValue).not.toHaveBeenCalled()
+    expect(updateValueWithReload).not.toHaveBeenCalled()
+  })
+
+  it('writes to the store and reports the held-back reload when both reload and persistence are deferred', () => {
+    const onReloadDeferred = jest.fn()
+    renderEditable({ deferReloadOnChange: true, deferPersistence: true, onReloadDeferred })
+
+    fireEvent.click(screen.getByText('change'))
+
+    expect(setValue).toHaveBeenCalledWith('teaser:1.layout', { type: 'select', data: 'changed' })
+    expect(onReloadDeferred).toHaveBeenCalledTimes(1)
+    expect(updateValue).not.toHaveBeenCalled()
+    expect(updateValueWithReload).not.toHaveBeenCalled()
+  })
+
+  it('still saves and reloads immediately for non-deferrable editables even when persistence is deferred', () => {
+    editableType.canDeferReloadOnChange.mockReturnValue(false)
+    renderEditable({ deferReloadOnChange: true, deferPersistence: true })
+
+    fireEvent.click(screen.getByText('change'))
+
+    expect(updateValueWithReload).toHaveBeenCalledTimes(1)
+    expect(setValue).not.toHaveBeenCalled()
   })
 
   it('does not report a deferred reload for editables that would not reload anyway', () => {
