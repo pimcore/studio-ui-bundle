@@ -87,7 +87,7 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
         <Toolbar justify="space-between">
           <div>
             <IconButton
-              aria-label={ t('refresh') }
+              aria-label={ t('toolbar.reload') }
               data-testid="widget-form-refresh-button"
               disabled={ isLoading }
               icon={ { value: 'refresh' } }
@@ -103,7 +103,7 @@ export const WidgetForm = ({ form: TypeSpecificForm }: WidgetFormProps): React.J
                   })
                 }
               } }
-              tooltip={ { title: t('refresh') } }
+              tooltip={ { title: t('toolbar.reload') } }
             />
 
             <Tooltip

@@ -119,10 +119,10 @@ export const ItemDetail = (props: ItemDetailProps): React.JSX.Element => {
               <Toolbar>
                 <Flex gap={ 'mini' }>
                   <IconButton
-                    aria-label={ t('refresh') }
+                    aria-label={ t('toolbar.reload') }
                     icon={ { value: 'refresh' } }
                     onClick={ () => { void refreshLayout() } }
-                    tooltip={ { title: t('refresh') } }
+                    tooltip={ { title: t('toolbar.reload') } }
                   />
 
                   {!readOnly && <ImportExportActions />}

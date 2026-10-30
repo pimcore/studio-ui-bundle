@@ -78,10 +78,10 @@ jest.mock('@Pimcore/modules/field-definitions/components/editor/items/sidebar/mo
 describe('ItemsSidebar', () => {
   it('shows a tooltip on the refresh button and still refetches the list', async () => {
     render(<ItemsSidebar />)
-    const button = screen.getByRole('button', { name: 'refresh' })
+    const button = screen.getByRole('button', { name: 'toolbar.reload' })
 
     fireEvent.mouseEnter(button)
-    expect(await screen.findByRole('tooltip')).toHaveTextContent('refresh')
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('toolbar.reload')
 
     fireEvent.click(button)
     expect(mockRefetch).toHaveBeenCalledTimes(1)

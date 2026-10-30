@@ -93,12 +93,12 @@ export const TreeContainer = (): React.JSX.Element => {
   const toolbar = useMemo(() => (
     <Toolbar justify="space-between">
       <IconButton
-        aria-label={ t('refresh') }
+        aria-label={ t('toolbar.reload') }
         data-testid="widget-tree-refresh-button"
         icon={ { value: 'refresh' } }
         loading={ isLoading || isFetching }
         onClick={ handleRefresh }
-        tooltip={ { title: t('refresh') } }
+        tooltip={ { title: t('toolbar.reload') } }
       />
 
       <IconTextButton

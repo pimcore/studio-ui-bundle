@@ -162,6 +162,6 @@ describe('EmailLogContainer', () => {
   it('labels the refresh button and gives it the Refresh tooltip', () => {
     render(<EmailLogContainer />)
 
-    expect(screen.getByRole('button', { name: 'refresh' })).toHaveAttribute('data-tooltip', 'refresh')
+    expect(screen.getByRole('button', { name: 'toolbar.reload' })).toHaveAttribute('data-tooltip', 'toolbar.reload')
   })
 })

@@ -128,10 +128,10 @@ export const ItemDetail = (): React.JSX.Element => {
                 <Flex gap={ 'mini' }>
                   <Flex gap={ 'mini' }>
                     <IconButton
-                      aria-label={ t('refresh') }
+                      aria-label={ t('toolbar.reload') }
                       icon={ { value: 'refresh' } }
                       onClick={ () => { guard(() => { void refreshLayout() }) } }
-                      tooltip={ { title: t('refresh') } }
+                      tooltip={ { title: t('toolbar.reload') } }
                     />
 
                     {customLayouts?.ModalContent !== undefined && <CustomLayout />}

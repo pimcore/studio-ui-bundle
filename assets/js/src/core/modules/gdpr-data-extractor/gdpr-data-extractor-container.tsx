@@ -104,11 +104,11 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
           <Flex align="center">
             <Split>
               <IconButton
-                aria-label={ t('refresh') }
+                aria-label={ t('toolbar.reload') }
                 disabled={ isLoading || isFetching || provider === '' }
                 icon={ { value: 'refresh' } }
                 onClick={ () => { executeSearch() } }
-                tooltip={ { title: t('refresh') } }
+                tooltip={ { title: t('toolbar.reload') } }
               />
               <Pagination
                 current={ page }
