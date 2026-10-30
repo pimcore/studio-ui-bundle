@@ -46,6 +46,23 @@ describe('getErrorMessage', () => {
     expect(content).toMatchObject({ errorKey: validationMessage, message: validationMessage })
   })
 
+  it('passes validation errors through getContent', () => {
+    const validationErrors = [{ field: 'name', message: 'Empty', messageKey: 'validation.mandatory' }]
+    const content = new ApiError({
+      data: { errorKey: ErrorKeyTypes.ELEMENT_VALIDATION_FAILED, message: validationMessage, validationErrors }
+    }).getContent()
+
+    expect(content).toMatchObject({ validationErrors })
+  })
+
+  it('omits validationErrors for older backends', () => {
+    const content = new ApiError({
+      data: { errorKey: ErrorKeyTypes.ELEMENT_VALIDATION_FAILED, message: validationMessage }
+    }).getContent()
+
+    expect(content).not.toHaveProperty('validationErrors')
+  })
+
   it('translates any other error key', () => {
     const content = new ApiError({
       data: { errorKey: 'error_permission_denied', message: 'Permission denied' }
