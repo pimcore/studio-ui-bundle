@@ -19,6 +19,12 @@ const tree = <p>tree</p>
 const form = <p>form</p>
 
 // The content and split variants are tested next to their components.
+describe('PageLayout', () => {
+  it('is a memoized component', () => {
+    expect(PageLayout).toHaveProperty('$$typeof', Symbol.for('react.memo'))
+  })
+})
+
 describe('PageLayout config variant', () => {
   it('defaults to a 20/80 split with a 170px minimum, a fixed divider and toolbar alignment', () => {
     const { container } = render(

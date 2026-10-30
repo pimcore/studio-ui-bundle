@@ -8,7 +8,7 @@
  *  @license    Pimcore Open Core License (POCL)
  */
 
-import React from 'react'
+import React, { memo } from 'react'
 import { PageLayoutContent, type PageLayoutContentProps } from './components/content/page-layout-content'
 import { PageLayoutSplit, type PageLayoutSplitProps } from './components/split/page-layout-split'
 
@@ -21,6 +21,25 @@ export interface PageLayoutConfigProps extends Omit<PageLayoutSplitProps, 'varia
 }
 
 export type PageLayoutProps = PageLayoutContentProps | PageLayoutSplitProps | PageLayoutConfigProps
+
+const Component = (props: Readonly<PageLayoutProps>): React.JSX.Element => {
+  switch (props.variant) {
+    case 'split':
+      return <PageLayoutSplit { ...props } />
+    case 'config':
+      return (
+        <PageLayoutSplit
+          { ...props }
+          leftItem={ { size: 20, minSize: 170, ...props.leftItem } }
+          rightItem={ { size: 80, ...props.rightItem } }
+          withDivider={ props.withDivider ?? true }
+          withToolbar={ props.withToolbar ?? true }
+        />
+      )
+    default:
+      return <PageLayoutContent { ...props } />
+  }
+}
 
 /**
  * PageLayout - the layout of a page or tab, in one of three variants:
@@ -48,21 +67,4 @@ export type PageLayoutProps = PageLayoutContentProps | PageLayoutSplitProps | Pa
  * />
  * ```
  */
-export const PageLayout = (props: Readonly<PageLayoutProps>): React.JSX.Element => {
-  switch (props.variant) {
-    case 'split':
-      return <PageLayoutSplit { ...props } />
-    case 'config':
-      return (
-        <PageLayoutSplit
-          { ...props }
-          leftItem={ { size: 20, minSize: 170, ...props.leftItem } }
-          rightItem={ { size: 80, ...props.rightItem } }
-          withDivider={ props.withDivider ?? true }
-          withToolbar={ props.withToolbar ?? true }
-        />
-      )
-    default:
-      return <PageLayoutContent { ...props } />
-  }
-}
+export const PageLayout = memo(Component)
