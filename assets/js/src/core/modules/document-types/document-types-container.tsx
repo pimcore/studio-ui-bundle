@@ -81,11 +81,11 @@ export const DocumentTypesContainer = (): React.JSX.Element => {
       renderToolbar={
         <Toolbar theme="secondary">
           <IconButton
-            aria-label={ t('refresh') }
+            aria-label={ t('toolbar.reload') }
             disabled={ documentTypesFetching }
             icon={ { value: 'refresh' } }
             onClick={ handleRefetch }
-            tooltip={ { title: t('refresh') } }
+            tooltip={ { title: t('toolbar.reload') } }
           ></IconButton>
         </Toolbar> }
       renderTopBar={

@@ -144,11 +144,11 @@ export const RedirectsToolbar = ({
             <Split>
               <Flex align='center'>
                 <IconButton
-                  aria-label={ t('refresh') }
+                  aria-label={ t('toolbar.reload') }
                   disabled={ redirectsFetching }
                   icon={ { value: 'refresh' } }
                   onClick={ onRefresh }
-                  tooltip={ { title: t('refresh') } }
+                  tooltip={ { title: t('toolbar.reload') } }
                   variant='minimal'
                 />
               </Flex>
@@ -164,11 +164,11 @@ export const RedirectsToolbar = ({
           : (
             <Flex align='center'>
               <IconButton
-                aria-label={ t('refresh') }
+                aria-label={ t('toolbar.reload') }
                 disabled={ redirectsFetching }
                 icon={ { value: 'refresh' } }
                 onClick={ onRefresh }
-                tooltip={ { title: t('refresh') } }
+                tooltip={ { title: t('toolbar.reload') } }
               />
             </Flex>
             )}
