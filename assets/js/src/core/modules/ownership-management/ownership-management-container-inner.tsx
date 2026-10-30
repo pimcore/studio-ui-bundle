@@ -280,9 +280,11 @@ const OwnershipManagementView = (): React.JSX.Element => {
 
           <Flex align="center">
             <IconButton
+              aria-label={ t('refresh') }
               disabled={ isDataLoading }
               icon={ { value: 'refresh' } }
               onClick={ () => { refresh() } }
+              tooltip={ { title: t('refresh') } }
             />
 
             {total > 0 && (

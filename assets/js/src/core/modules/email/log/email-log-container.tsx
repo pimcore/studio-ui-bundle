@@ -71,6 +71,7 @@ export const EmailLogContainer = (): React.JSX.Element => {
           theme='secondary'
         >
           <IconButton
+            aria-label={ t('refresh') }
             data-testid="email-log-refresh-button"
             disabled={ isRTKLoading || isLoading }
             icon={ { value: 'refresh' } }
@@ -82,6 +83,7 @@ export const EmailLogContainer = (): React.JSX.Element => {
                 )
               )
             } }
+            tooltip={ { title: t('refresh') } }
           />
           <Pagination
             current={ currentPage }

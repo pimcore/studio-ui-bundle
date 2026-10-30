@@ -62,7 +62,13 @@ jest.mock('@Pimcore/components/title/title', () => ({
 }))
 
 jest.mock('@Pimcore/components/icon-button/icon-button', () => ({
-  IconButton: () => null
+  IconButton: ({ 'aria-label': ariaLabel, tooltip }: { 'aria-label'?: string, tooltip?: { title?: string } }) => (
+    <button
+      aria-label={ ariaLabel }
+      data-tooltip={ tooltip?.title }
+      type="button"
+    />
+  )
 }))
 
 jest.mock('@Pimcore/components/pagination/pagination', () => ({
@@ -151,5 +157,11 @@ describe('EmailLogContainer', () => {
     )
     expect(screen.getByTestId('email-log-items').textContent).toBe('2')
     expect(screen.getByTestId('email-log-total').textContent).toBe('1')
+  })
+
+  it('labels the refresh button and gives it the Refresh tooltip', () => {
+    render(<EmailLogContainer />)
+
+    expect(screen.getByRole('button', { name: 'refresh' })).toHaveAttribute('data-tooltip', 'refresh')
   })
 })

@@ -81,6 +81,7 @@ export const SelectOptionForm = ({ selectOption }: SelectOptionFormProps): React
         <Toolbar justify="space-between">
           <div>
             <IconButton
+              aria-label={ t('refresh') }
               disabled={ isLoading }
               icon={ { value: 'refresh' } }
               onClick={ async () => {
@@ -92,7 +93,7 @@ export const SelectOptionForm = ({ selectOption }: SelectOptionFormProps): React
                   form.setFieldsValue(fresh)
                 }
               } }
-              title={ t('refresh') }
+              tooltip={ { title: t('refresh') } }
             />
 
             <Tooltip

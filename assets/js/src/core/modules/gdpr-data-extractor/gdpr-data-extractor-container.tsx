@@ -104,9 +104,11 @@ export const GDPRDataExtractorContainer = (): React.JSX.Element => {
           <Flex align="center">
             <Split>
               <IconButton
+                aria-label={ t('refresh') }
                 disabled={ isLoading || isFetching || provider === '' }
                 icon={ { value: 'refresh' } }
                 onClick={ () => { executeSearch() } }
+                tooltip={ { title: t('refresh') } }
               />
               <Pagination
                 current={ page }

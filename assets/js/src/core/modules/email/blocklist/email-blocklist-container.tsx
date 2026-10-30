@@ -59,6 +59,7 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
           theme='secondary'
         >
           <IconButton
+            aria-label={ t('refresh') }
             disabled={ isLoading || isRTKLoading }
             icon={ { value: 'refresh' } }
             onClick={ () => {
@@ -69,6 +70,7 @@ export const EmailBlocklistContainer = (): React.JSX.Element => {
                 )
               )
             } }
+            tooltip={ { title: t('refresh') } }
           />
           <Pagination
             current={ currentPage }
